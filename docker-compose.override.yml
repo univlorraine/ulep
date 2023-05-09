@@ -1,0 +1,25 @@
+version: "3.4"
+
+services:
+  api:
+    build:
+      context: ./api
+      target: dev
+    volumes:
+      - ./api:/srv/app
+    ports:
+        - ${API_PORT:-3000}:3000
+  
+  auth:
+    command: start-dev
+    ports:
+        - ${AUTH_PORT:-8080}:8080
+  
+  database:
+    ports:
+      - 5432:5432
+
+  minio:
+    ports:
+      - ${MINIO_PORT:-9000}:9000
+      - ${MINIO_CONSOLE_PORT:-9001}:9001

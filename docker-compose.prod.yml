@@ -1,0 +1,21 @@
+version: "3.4"
+
+# Production environment override
+services:
+  auth:
+    command: start
+    environment:
+      KEYCLOAK_ADMIN: ${KEYCLOAK_USER}
+      KEYCLOAK_ADMIN_PASSWORD: ${KEYCLOAK_PASSWORD}
+
+  minio:
+    environment:
+      MINIO_ROOT_USER: ${MINIO_USER}
+      MINIO_ROOT_PASSWORD: ${MINIO_PASSWORD}
+      MINIO_SERVER_URL: https://storage.${DOMAIN_NAME}
+      MINIO_BROWSER_REDIRECT_URL: https://storage-console.${DOMAIN_NAME}
+
+  database:
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
