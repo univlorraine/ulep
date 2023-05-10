@@ -4,6 +4,9 @@ DOCKER_COMP = docker compose
 # Docker containers
 NEST_CONT = $(DOCKER_COMP) exec api
 
+# Executables
+PNPM = $(NEST_CONT) pnpm
+
 help: ## Outputs this help screen
 	@grep -E '(^[a-zA-Z0-9\./_-]+:.*?##.*$$)|(^##)' $(MAKEFILE_LIST) | awk 'BEGIN {FS = ":.*?## "}{printf "\033[32m%-30s\033[0m %s\n", $$1, $$2}' | sed -e 's/\[32m##/[33m/'
 
@@ -28,3 +31,24 @@ logs: ## Show live logs
 ## —— Api ————————————————————————————————————————————————————————————————
 sh: ## Connect to the NEST container
 	@$(NEST_CONT) sh
+
+lint: ## Lint the code
+	@$(NEST_CONT) pnpm run lint
+
+lint-fix: ## Lint the code and fix issues
+	@$(NEST_CONT) pnpm run lint:fix
+
+migration-generate: ## Generates a new migration file with sql needs to be executed to update schema.
+	@$(NEST_CONT) npx typeorm migration:generate -d dist/adapters/persistence/configuration.js src/database/migrations/$(name)
+
+migration-run: ## Runs all pending migrations.
+	@$(NEST_CONT) npx typeorm migration:run -d dist/adapters/persistence/configuration.js
+
+migration-revert: ## Reverts last executed migration.
+	@$(NEST_CONT) npx typeorm migration:revert -d dist/adapters/persistence/configuration.js
+
+schema-drop: ## Drops all tables in the database.
+	@$(NEST_CONT) npx typeorm schema:drop -d dist/adapters/persistence/configuration.js
+
+db-purge: ## Drops all tables in the database and runs all migrations.
+	make schema-drop && make migration-run

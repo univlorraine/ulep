@@ -5,7 +5,16 @@ services:
     build:
       context: ./api
       target: prod
-    
+    depends_on:
+      - database
+    restart: unless-stopped
+    environment:
+      POSTGRES_HOST: database
+      POSTGRES_PORT: 5432
+      POSTGRES_DB: ${POSTGRES_DB:-postgres}
+      POSTGRES_USER: ${POSTGRES_USER:-postgres}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-!ChangeMe!}
+      
   auth:
     image: quay.io/keycloak/keycloak:latest
     depends_on:
@@ -38,6 +47,22 @@ services:
     environment:
       MINIO_ROOT_USER: ${MINIO_USER:-minio}
       MINIO_ROOT_PASSWORD: ${MINIO_PASSWORD:-!ChangeMe!}
+
+  # weblate:
+  #   image: weblate/weblate:latest
+  #   depends_on:
+  #     - database
+  #   ports:
+  #     - 8999:8080
+  #   environment:
+  #     WEBLATE_SITE_DOMAIN: ${DOMAIN_NAME:-localhost}
+  #     WEBLATE_ADMIN_NAME: ${WEBLATE_USER:-admin}
+  #     WEBLATE_ADMIN_PASSWORD: ${WEBLATE_PASSWORD:-!ChangeMe!}
+  #     POSTGRES_USER: ${POSTGRES_USER:-postgres}
+  #     POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-!ChangeMe!}
+  #     POSTGRES_HOST: database
+  #     POSTGRES_PORT: 5432
+  #     POSTGRES_DATABASE: ${WEBLATE_DB:-weblate} # ? TODO use custom schema
     
 volumes:
   db_data:
