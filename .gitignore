@@ -1,2 +1,16 @@
+# Project
 /.env
 algorithm
+
+# System Files
+.DS_Store
+Thumbs.db
+
+# IDE - VSCode
+*.code-workspace
+/.vscode
+.vscode/*
+!.vscode/settings.json
+!.vscode/tasks.json
+!.vscode/launch.json
+!.vscode/extensions.json
