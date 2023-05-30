@@ -1,12 +1,4 @@
-This setup specializes the OAuth2.
-
-Keycloak does offer a full OpenID Connect implementation, but the implementation is rather labor intensive to implement.
-
-The api is configured to get an access token instead, and assume that the access token contains the necessary user details for authentication.
-
-The integrity of the authentication process is followed by public key verification for the `access_token` along with OpenID Connect specification `aud` field checking.
-
-To set up, please take the following steps:
+Keycloak does offer a full OpenID Connect implementation. To set up, please take the following steps:
 
 1. Create a new Keycloak client in the Clients section:
 

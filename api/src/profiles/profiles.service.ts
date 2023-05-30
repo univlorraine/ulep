@@ -11,13 +11,17 @@ export class ProfilesService {
     private profilesRepository: Repository<Profile>,
   ) {}
 
-  create(createProfileDto: CreateProfileDto): Promise<Profile> {
-    return this.profilesRepository.save(
-      this.profilesRepository.create(createProfileDto),
-    );
+  async create(createProfileDto: CreateProfileDto): Promise<Profile> {
+    return this.profilesRepository.create({
+      gender: createProfileDto.gender,
+      firstName: createProfileDto.firstName,
+      lastName: createProfileDto.lastName,
+      email: createProfileDto.email,
+      birthday: createProfileDto.birthday.toString(),
+    });
   }
 
-  findOne(fields: FindOptionsWhere<Profile>): Promise<Profile | null> {
+  async findOne(fields: FindOptionsWhere<Profile>): Promise<Profile | null> {
     return this.profilesRepository.findOne({
       where: fields,
     });

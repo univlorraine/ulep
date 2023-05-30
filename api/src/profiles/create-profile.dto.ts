@@ -1,7 +1,18 @@
+import { IsEmail, IsString, IsDate } from 'class-validator';
+
 export class CreateProfileDto {
+  @IsEmail()
   email: string;
+
+  @IsString()
   gender: string;
+
+  @IsString()
   firstName: string;
+
+  @IsString()
   lastName: string;
-  birthday: string;
+
+  @IsDate()
+  birthday: Date;
 }
