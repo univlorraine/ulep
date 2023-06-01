@@ -1,5 +1,5 @@
 import { DataSourceOptions } from 'typeorm';
-import { dataSourceOptions } from './common/persistence/configuration';
+import { dataSourceOptions } from './providers/persistance/configuration';
 
 export type Configuration = {
   port: number;

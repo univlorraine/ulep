@@ -1,14 +1,11 @@
 import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
-import { ConfigService } from '@nestjs/config';
 import { ValidationPipe } from '@nestjs/common';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
   app.useGlobalPipes(new ValidationPipe());
-
-  const configuration = app.get(ConfigService);
 
   const swagger = new DocumentBuilder()
     .setTitle('eTandems API')
@@ -17,8 +14,8 @@ async function bootstrap() {
     .build();
 
   const document = SwaggerModule.createDocument(app, swagger);
-  SwaggerModule.setup('api', app, document);
+  SwaggerModule.setup('docs', app, document);
 
-  await app.listen(configuration.get('port'));
+  await app.listen(3000);
 }
 bootstrap();

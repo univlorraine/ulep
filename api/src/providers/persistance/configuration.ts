@@ -9,7 +9,7 @@ export const dataSourceOptions: DataSourceOptions = {
   database: process.env.POSTGRES_DATABASE,
   entities: ['./dist/**/*.entity.{ts,js}'],
   migrationsTableName: 'migrations',
-  migrations: ['dist/adapters/persistence/migrations/*.{ts,js}'],
+  migrations: ['dist/**/migrations/*.{ts,js}'],
   synchronize: false,
 };
 

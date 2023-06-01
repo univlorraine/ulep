@@ -1,30 +1,15 @@
-import {
-  Body,
-  Controller,
-  Get,
-  HttpCode,
-  HttpStatus,
-  Post,
-  UseGuards,
-} from '@nestjs/common';
-import { CreateProfileDto } from './create-profile.dto';
-import { ProfilesService } from './profiles.service';
-import Profile from './profiles.entity';
-import { AuthenticationGuard } from 'src/common/authentication/authentication.guard';
+import { Body, Controller, Post } from '@nestjs/common';
+import { ApiOperation } from '@nestjs/swagger';
+import { CreateProfileUsecase } from './usecases/create-profile.usecase';
+import { CreateProfileRequest } from './dtos/create-profile.request';
 
-@UseGuards(AuthenticationGuard)
 @Controller('profiles')
 export class ProfilesController {
-  constructor(private readonly profilesService: ProfilesService) {}
+  constructor(private readonly createProfileUsecase: CreateProfileUsecase) {}
 
   @Post()
-  @HttpCode(HttpStatus.CREATED)
-  create(@Body() createProfileDto: CreateProfileDto): Promise<Profile> {
-    return this.profilesService.create(createProfileDto);
-  }
-
-  @Get()
-  async findAll(): Promise<Profile[]> {
-    return [];
+  @ApiOperation({ summary: 'Create Profile ressource' })
+  async create(@Body() body: CreateProfileRequest): Promise<void> {
+    return this.createProfileUsecase.execute({ email: body.email });
   }
 }
