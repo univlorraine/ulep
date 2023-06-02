@@ -1,11 +1,15 @@
-import { NestFactory } from '@nestjs/core';
+import { HttpAdapterHost, NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 import { ValidationPipe } from '@nestjs/common';
+import { ConfigService } from '@nestjs/config';
+import { PrismaClientExceptionFilter } from './shared/errors/prisma-exceptions.filter';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
-  app.useGlobalPipes(new ValidationPipe());
+  const configuration = app.get(ConfigService);
+
+  app.useGlobalPipes(new ValidationPipe({ whitelist: true }));
 
   const swagger = new DocumentBuilder()
     .setTitle('eTandems API')
@@ -16,6 +20,9 @@ async function bootstrap() {
   const document = SwaggerModule.createDocument(app, swagger);
   SwaggerModule.setup('docs', app, document);
 
-  await app.listen(3000);
+  const { httpAdapter } = app.get(HttpAdapterHost);
+  app.useGlobalFilters(new PrismaClientExceptionFilter(httpAdapter));
+
+  await app.listen(configuration.get('port'));
 }
 bootstrap();

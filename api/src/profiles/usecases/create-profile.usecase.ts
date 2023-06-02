@@ -1,7 +1,6 @@
-import { Injectable } from '@nestjs/common';
-import { InjectRepository } from '@nestjs/typeorm';
-import { ProfileEntity } from 'src/providers/persistance/entities/profile.entity';
-import { Repository } from 'typeorm';
+import { Inject, Injectable } from '@nestjs/common';
+import { ProfileRepository } from '../domain/profiles.repository';
+import Profile from '../domain/profile';
 
 export class CreateProfileCommand {
   email: string;
@@ -10,13 +9,11 @@ export class CreateProfileCommand {
 @Injectable()
 export class CreateProfileUsecase {
   constructor(
-    @InjectRepository(ProfileEntity)
-    private readonly profilesRepository: Repository<ProfileEntity>,
+    @Inject('profile.repository')
+    private readonly profileRepository: ProfileRepository,
   ) {}
 
   async execute({ email }: CreateProfileCommand): Promise<void> {
-    await this.profilesRepository.save(
-      this.profilesRepository.create({ email }),
-    );
+    await this.profileRepository.createProfile(new Profile(email));
   }
 }

@@ -1,11 +1,16 @@
-import { Module } from '@nestjs/common';
-import { ProfilesRepository } from './persistance/repositories/profiles.repository';
-import { TypeOrmModule } from '@nestjs/typeorm';
-import { ProfileEntity } from './persistance/entities/profile.entity';
+import { Module, Provider } from '@nestjs/common';
+import { PrismaService } from './persistance/prisma.service';
+import { PrismaProfileRepository } from './persistance/repositories/profiles.repository';
+
+const providers: Provider[] = [
+  {
+    provide: 'profile.repository',
+    useClass: PrismaProfileRepository,
+  },
+];
 
 @Module({
-  imports: [TypeOrmModule.forFeature([ProfileEntity])],
-  providers: [ProfilesRepository],
-  exports: [ProfilesRepository],
+  providers: [PrismaService, ...providers],
+  exports: [...providers],
 })
 export class ProvidersModule {}

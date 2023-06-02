@@ -1,12 +1,11 @@
 import { Module } from '@nestjs/common';
-import { ProfilesController } from './profiles.controller';
+import { ProfilesController } from './application/profiles.controller';
 import { CreateProfileUsecase } from './usecases/create-profile.usecase';
-import { TypeOrmModule } from '@nestjs/typeorm';
-import { ProfileEntity } from 'src/providers/persistance/entities/profile.entity';
+import { ProvidersModule } from 'src/providers/providers.module';
 
 @Module({
-  imports: [TypeOrmModule.forFeature([ProfileEntity])],
+  imports: [ProvidersModule],
   controllers: [ProfilesController],
   providers: [CreateProfileUsecase],
 })
-export class ProfilesModule {}
+export class ProfilesModule { }
