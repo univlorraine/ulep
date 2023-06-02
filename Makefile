@@ -39,16 +39,16 @@ lint-fix: ## Lint the code and fix issues
 	@$(NEST_CONT) pnpm run lint:fix
 
 migration-generate: ## Generates a new migration file with sql needs to be executed to update schema.
-	@$(NEST_CONT) npx typeorm migration:generate -d dist/adapters/persistence/configuration.js src/database/migrations/$(name)
+	@$(NEST_CONT) npx typeorm migration:generate -d dist/providers/persistance/configuration.js src/providers/persistance/migrations/$(name)
 
 migration-run: ## Runs all pending migrations.
-	@$(NEST_CONT) npx typeorm migration:run -d dist/adapters/persistence/configuration.js
+	@$(NEST_CONT) npx typeorm migration:run -d dist/providers/persistance/configuration.js
 
 migration-revert: ## Reverts last executed migration.
-	@$(NEST_CONT) npx typeorm migration:revert -d dist/adapters/persistence/configuration.js
+	@$(NEST_CONT) npx typeorm migration:revert -d dist/providers/persistance/configuration.js
 
 schema-drop: ## Drops all tables in the database.
-	@$(NEST_CONT) npx typeorm schema:drop -d dist/adapters/persistence/configuration.js
+	@$(NEST_CONT) npx typeorm schema:drop -d dist/providers/persistance/configuration.js
 
 db-purge: ## Drops all tables in the database and runs all migrations.
 	make schema-drop && make migration-run

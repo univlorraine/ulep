@@ -1,0 +1,7 @@
+{
+  "name": "etandem",
+  "integrations": {
+    "capacitor": {}
+  },
+  "type": "react-vite"
+}
