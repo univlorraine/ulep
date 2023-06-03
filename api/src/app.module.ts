@@ -1,12 +1,15 @@
 import { Module } from '@nestjs/common';
-import { ProfilesModule } from './profiles/profiles.module';
+import { ProfilesModule } from './core/profiles/profiles.module';
 import { ConfigModule } from '@nestjs/config';
-import configuration from './configuration';
+import { AuthenticationModule } from './core/authentication/authentication.module';
+import { UploadsModule } from './core/uploads/uploads.module';
 
 @Module({
   imports: [
-    ConfigModule.forRoot({ isGlobal: true, load: [configuration] }),
+    ConfigModule.forRoot({ isGlobal: true }),
     ProfilesModule,
+    AuthenticationModule,
+    UploadsModule,
   ],
 })
-export class AppModule {}
+export class AppModule { }

@@ -12,3 +12,12 @@ model Profile {
   email     String   @unique
   createdAt DateTime @default(now())
 }
+
+model Media {
+  id        String   @id @default(uuid())
+  name      String
+  bucket    String
+  mime      String
+  size      Int
+  createdAt DateTime @default(now())
+}

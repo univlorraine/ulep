@@ -1,5 +1,5 @@
 import Profile from './profile';
 
 export interface ProfileRepository {
-  createProfile: (profile: Profile) => Promise<void>;
+  save: (profile: Profile) => Promise<void>;
 }

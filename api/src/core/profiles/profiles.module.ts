@@ -8,4 +8,4 @@ import { ProvidersModule } from 'src/providers/providers.module';
   controllers: [ProfilesController],
   providers: [CreateProfileUsecase],
 })
-export class ProfilesModule { }
+export class ProfilesModule {}
