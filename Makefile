@@ -2,10 +2,7 @@
 DOCKER_COMP = docker compose
 
 # Docker containers
-NEST_CONT = $(DOCKER_COMP) exec api
-
-# Executables
-PNPM = $(NEST_CONT) pnpm
+NEST = $(DOCKER_COMP) exec api
 
 help: ## Outputs this help screen
 	@grep -E '(^[a-zA-Z0-9\./_-]+:.*?##.*$$)|(^##)' $(MAKEFILE_LIST) | awk 'BEGIN {FS = ":.*?## "}{printf "\033[32m%-30s\033[0m %s\n", $$1, $$2}' | sed -e 's/\[32m##/[33m/'
@@ -30,25 +27,10 @@ logs: ## Show live logs
 
 ## —— Api ————————————————————————————————————————————————————————————————
 sh: ## Connect to the NEST container
-	@$(NEST_CONT) sh
+	@$(NEST) sh
 
-lint: ## Lint the code
-	@$(NEST_CONT) pnpm run lint
+lint: ## Lint the code and fix issues
+	@$(NEST) pnpm lint
 
-lint-fix: ## Lint the code and fix issues
-	@$(NEST_CONT) pnpm run lint:fix
-
-migration-generate: ## Generates a new migration file with sql needs to be executed to update schema.
-	@$(NEST_CONT) npx typeorm migration:generate -d dist/providers/persistance/configuration.js src/providers/persistance/migrations/$(name)
-
-migration-run: ## Runs all pending migrations.
-	@$(NEST_CONT) npx typeorm migration:run -d dist/providers/persistance/configuration.js
-
-migration-revert: ## Reverts last executed migration.
-	@$(NEST_CONT) npx typeorm migration:revert -d dist/providers/persistance/configuration.js
-
-schema-drop: ## Drops all tables in the database.
-	@$(NEST_CONT) npx typeorm schema:drop -d dist/providers/persistance/configuration.js
-
-db-purge: ## Drops all tables in the database and runs all migrations.
-	make schema-drop && make migration-run
+migration: ## Create a migration from changes in schema and apply it to the database.
+	@$(NEST) pnpm migrate
