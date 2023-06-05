@@ -14,9 +14,9 @@
             buildForAnalyzing = "YES">
             <BuildableReference
                BuildableIdentifier = "primary"
-               BlueprintIdentifier = "DFED42962A2DF3D8005F5C5F"
-               BuildableName = "staging.app"
-               BlueprintName = "staging"
+               BlueprintIdentifier = "DFED42A82A2DF3E1005F5C5F"
+               BuildableName = "prod.app"
+               BlueprintName = "prod"
                ReferencedContainer = "container:App.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
@@ -47,15 +47,6 @@
       savedToolIdentifier = ""
       useCustomWorkingDirectory = "NO"
       debugDocumentVersioning = "YES">
-      <MacroExpansion>
-         <BuildableReference
-            BuildableIdentifier = "primary"
-            BlueprintIdentifier = "DFED42962A2DF3D8005F5C5F"
-            BuildableName = "staging.app"
-            BlueprintName = "staging"
-            ReferencedContainer = "container:App.xcodeproj">
-         </BuildableReference>
-      </MacroExpansion>
    </ProfileAction>
    <AnalyzeAction
       buildConfiguration = "Debug">
