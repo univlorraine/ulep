@@ -1,0 +1,26 @@
+{
+    "root": true,
+    "extends": [
+        "@thetribe/eslint-config-react-typescript",
+        "plugin:react/recommended",
+        "plugin:cypress/recommended"
+    ],
+    "parserOptions": {
+        "project": "./tsconfig.json"
+    },
+    "env": {
+        "browser": true
+    },
+    "plugins": [
+        "@typescript-eslint",
+        "cypress"
+  ],
+  "rules":{
+    "no-useless-constructor": "off"
+  },
+    "settings": {
+        "import/parsers": {
+            "@typescript-eslint/parser": [".ts", ".tsx"]
+        }
+    }
+}
