@@ -12,9 +12,11 @@ import {
     IonHeader,
     IonToolbar,
 } from '@ionic/react';
+import { useTranslation } from 'react-i18next';
 import CircleAvatar from '../components/CircleAvatar';
 
 export function LoginPage() {
+    const { t } = useTranslation();
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [showLoading, hideLoading] = useIonLoading();
@@ -44,16 +46,16 @@ export function LoginPage() {
                     <CircleAvatar backgroundImage="./assets/avatar.svg" />
                     {/* Header */}
                     <div className="ion-text-center">
-                        <h1>Se connecter</h1>
+                        <h1>{t('login_page.title')}</h1>
                     </div>
                     <div className="ion-text-center">
-                        <p>Welcome back! Sign in using your social account or email to continue us</p>
+                        <p>{t('login_page.subtitle')}</p>
                     </div>
                     {/* Form */}
                     <div className="ion-padding-top">
                         <form onSubmit={handleLogin}>
                             <IonItem>
-                                <IonLabel position="stacked">Email</IonLabel>
+                                <IonLabel position="stacked">{t('global.email')}</IonLabel>
                                 <IonInput
                                     value={email}
                                     name="email"
@@ -63,7 +65,7 @@ export function LoginPage() {
                                 ></IonInput>
                             </IonItem>
                             <IonItem>
-                                <IonLabel position="stacked">Mot de passe</IonLabel>
+                                <IonLabel position="stacked">{t('global.password')}</IonLabel>
                                 <IonInput
                                     value={password}
                                     name="password"
@@ -73,7 +75,7 @@ export function LoginPage() {
                                 ></IonInput>
                             </IonItem>
                             <div className="ion-text-center ion-padding-top">
-                                <IonButton type="submit">SE CONNECTER</IonButton>
+                                <IonButton type="submit">{t('login_page.button')}</IonButton>
                             </div>
                         </form>
                     </div>

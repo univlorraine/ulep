@@ -3,6 +3,7 @@ import { IonReactRouter } from '@ionic/react-router';
 import OfflineRouter from './presentation/router/OfflineRouter';
 import { useEffect } from 'react';
 import { Device } from '@capacitor/device';
+import { useTranslation } from 'react-i18next';
 
 /* Core CSS required for Ionic components to work properly */
 import '@ionic/react/css/core.css';
@@ -26,11 +27,11 @@ import './theme/variables.css';
 setupIonicReact();
 
 const App: React.FC = () => {
+    const { i18n } = useTranslation();
     useEffect(() => {
         const getLanguage = async () => {
             const language = await Device.getLanguageCode();
-            //TODO: In next PR, add langage to i18n adapter
-            console.log(language.value);
+            i18n.changeLanguage(language.value);
         };
         getLanguage();
     }, []);
