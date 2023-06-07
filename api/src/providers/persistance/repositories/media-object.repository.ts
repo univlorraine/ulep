@@ -5,7 +5,7 @@ import MediaObject from 'src/core/uploads/domain/media-object';
 
 @Injectable()
 export class PrismaMediaObjectRepository implements MediaObjectRepository {
-  constructor(private readonly prisma: PrismaService) { }
+  constructor(private readonly prisma: PrismaService) {}
 
   async of(id: string): Promise<MediaObject | null> {
     const result = await this.prisma.media.findUnique({ where: { id } });

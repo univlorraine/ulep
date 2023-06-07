@@ -1,38 +1,26 @@
 import {
   CanActivate,
   ExecutionContext,
-  HttpException,
-  HttpStatus,
-  Inject,
   Injectable,
   UnauthorizedException,
 } from '@nestjs/common';
-
-import { AuthenticationService } from '../domain/authentication.service';
 import { Request } from 'express';
+import { KeycloakClient } from './keycloak.client';
 
 @Injectable()
 export class AuthenticationGuard implements CanActivate {
-  constructor(
-    @Inject('auth.service')
-    private readonly authenticationService: AuthenticationService,
-  ) {}
+  constructor(private readonly keycloak: KeycloakClient) {}
 
   async canActivate(context: ExecutionContext): Promise<boolean> {
     const request: Request = context.switchToHttp().getRequest();
     const token = this.extractTokenFromHeader(request);
 
-    if (!token) {
-      throw new UnauthorizedException();
+    if (token) {
+      request['userinfo'] = await this.keycloak.userInfo(token);
+      return true;
     }
 
-    try {
-      // Store the user on the request object if we want to retrieve it from the controllers
-      request['user'] = await this.authenticationService.authenticate(token);
-      return true;
-    } catch (e) {
-      throw new HttpException(e.message, HttpStatus.UNAUTHORIZED);
-    }
+    throw new UnauthorizedException();
   }
 
   private extractTokenFromHeader(request: Request): string | undefined {
