@@ -8,7 +8,7 @@ export default class MediaObject {
     private readonly bucket: string,
     private readonly mimetype: string,
     private readonly size: number,
-  ) { }
+  ) {}
 
   static image(file: Express.Multer.File): MediaObject {
     const id = v4();

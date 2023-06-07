@@ -50,3 +50,10 @@ export interface CreateUserProps {
   roles: string[];
   origin?: string;
 }
+
+export interface GetUsersProps {
+  email?: string;
+  first?: number;
+  max?: number;
+  enabled?: boolean;
+}

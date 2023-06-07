@@ -4,7 +4,7 @@ export class KeycloakException extends HttpException {}
 
 export class InvalidCredentialsException extends KeycloakException {
   constructor() {
-    super(`Invalid credentials`, 401);
+    super('Invalid credentials', 401);
   }
 }
 

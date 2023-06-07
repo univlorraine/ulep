@@ -1,10 +1,6 @@
 import { KeycloakClient } from '@app/keycloak';
 import { Injectable, Logger } from '@nestjs/common';
-
-export enum Role {
-  USER = 'user',
-  ADMIN = 'admin',
-}
+import { Role, User } from '../domain/user';
 
 export type CreateUserCommand = {
   email: string;
@@ -18,16 +14,21 @@ export class CreateUserUsecase {
 
   constructor(private readonly keycloak: KeycloakClient) {}
 
-  async execute(command: CreateUserCommand) {
+  async execute(command: CreateUserCommand): Promise<User> {
     const { email, password, role } = command;
+    const roles = [role] ?? [Role.USER];
 
-    await this.keycloak.createUser({
+    const keycloakUser = await this.keycloak.createUser({
       email,
       password,
-      roles: [role] ?? [Role.USER],
+      roles,
       enabled: true,
       emailVerified: false,
       origin: 'api',
     });
+
+    const user = User.signUp(keycloakUser.id, keycloakUser.email, roles);
+
+    return user;
   }
 }

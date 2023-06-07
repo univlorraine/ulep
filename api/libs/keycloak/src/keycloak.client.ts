@@ -10,6 +10,7 @@ import {
 } from './keycloak.errors';
 import {
   CreateUserProps,
+  GetUsersProps,
   KeycloakCertsResponse,
   KeycloakUserInfoResponse,
   UserRepresentation,
@@ -132,9 +133,9 @@ export class KeycloakClient {
   }
 
   /*
-   * Creates a new user in Keycloak
+   * Creates a new user in Keycloak.
    */
-  async createUser(props: CreateUserProps): Promise<void> {
+  async createUser(props: CreateUserProps): Promise<UserRepresentation> {
     const response = await fetch(
       `${this.configuration.baseUrl}/admin/realms/${this.configuration.realm}/users`,
       {
@@ -165,27 +166,56 @@ export class KeycloakClient {
     );
 
     if (!response.ok) {
-      // TODO: parse error message from response
+      this.logger.error(JSON.stringify(await response.json()));
       throw new UserAlreadyExistException();
     }
 
-    return;
+    const user = await this.getUsers({ email: props.email, max: 1 });
+
+    return user[0];
   }
 
   /*
    * Retrieves all users from Keycloak
+   * Params:
+   *  - email: email of the user
+   *  - first: pagination offset
+   *  - max: maximum results size (defaults to 100)
+   *  - enabled: boolean representing if user is enabled or not
    */
-  async getUsers(): Promise<UserRepresentation[]> {
-    const response = await fetch(
+  async getUsers({
+    email,
+    first,
+    max,
+    enabled,
+  }: GetUsersProps): Promise<UserRepresentation[]> {
+    const url = new URL(
       `${this.configuration.baseUrl}/admin/realms/${this.configuration.realm}/users`,
-      {
-        method: 'GET',
-        headers: {
-          'Content-Type': 'application/json',
-          Authorization: `Bearer ${await this.getAccessToken()}`,
-        },
-      },
     );
+
+    if (email) {
+      url.searchParams.append('email', email);
+    }
+
+    if (enabled) {
+      url.searchParams.append('enabled', enabled.toString());
+    }
+
+    if (first) {
+      url.searchParams.append('first', first.toString());
+    }
+
+    if (max) {
+      url.searchParams.append('max', max.toString());
+    }
+
+    const response = await fetch(url.toString(), {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${await this.getAccessToken()}`,
+      },
+    });
 
     const users = await response.json();
 
