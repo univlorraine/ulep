@@ -7,7 +7,7 @@ import Profile from 'src/core/profiles/domain/profile';
 export class PrismaProfileRepository implements ProfileRepository {
   private readonly logger = new Logger(PrismaProfileRepository.name);
 
-  constructor(private readonly prisma: PrismaService) { }
+  constructor(private readonly prisma: PrismaService) {}
 
   async save(profile: Profile): Promise<void> {
     await this.prisma.profile.create({ data: { email: profile.getEmail() } });
