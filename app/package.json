@@ -6,8 +6,8 @@
     "scripts": {
         "dev": "vite",
         "build": "tsc && vite build",
-        "build:android": "npx cap sync android && npx cap open android",
-        "build:ios": "npx cap sync ios ios && npx cap open ios",
+        "build:android": "npx cap sync android && ionic capacitor run android -l --external",
+        "build:ios": "npx cap sync ios ios && ionic capacitor run ios -l --external",
         "preview": "vite preview",
         "test.e2e": "cypress run",
         "test.unit": "vitest",
