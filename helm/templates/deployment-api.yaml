@@ -1,0 +1,76 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name:  "deployment-{{ .Values.name }}-{{ .Values.api.name }}"
+  labels:
+    {{- include "etandem.labels" . | nindent 4 }}
+spec:
+  {{- if not .Values.api.autoscaling.enabled }}
+  replicas: {{ .Values.api.replicaCount }}
+  {{- end }}
+  selector:
+    matchLabels:
+      {{- include "etandem.selectorLabels" . | nindent 6 }}
+      app.kubernetes.io/type: "{{ .Values.api.name }}"
+  template:
+    metadata:
+      {{- with .Values.podAnnotations }}
+      annotations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      labels:
+        {{- include "etandem.selectorLabels" . | nindent 8 }}
+        app.kubernetes.io/type: "{{ .Values.api.name }}"
+    spec:
+      {{- with .Values.imagePullSecrets }}
+      imagePullSecrets:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      serviceAccountName: {{ include "etandem.serviceAccountName" . }}
+      securityContext:
+        {{- toYaml .Values.podSecurityContext | nindent 8 }}
+      containers:
+        - name: {{ .Chart.Name }}
+          securityContext:
+            {{- toYaml .Values.securityContext | nindent 12 }}
+          image: "{{ .Values.api.image.repository }}:{{ .Values.api.image.tag | default .Chart.AppVersion }}"
+          imagePullPolicy: {{ .Values.api.image.pullPolicy }}
+          ports:
+            - name: direct
+              containerPort: 3000
+              protocol: TCP
+          # livenessProbe:
+          #   httpGet:
+          #     path: /
+          #     port: http
+          # readinessProbe:
+          #   httpGet:
+          #     path: /
+          #     port: http
+          resources:
+            {{- toYaml .Values.resources | nindent 12 }}
+          env:
+            - name: DATABASE_URL
+              value: "postgresql://{{ .Values.postgresUser }}:{{ .Values.postgresPassword }}@database:5432/{{ .Values.postgresDB }}?schema=public"
+            - name: KEYCLOAK_BASE_URL
+              value: "http://{{ .Values.api.env.keycloakBaseUrl }}.{{ .Values.domain }}"
+            - name: KEYCLOAK_REALM
+              value: "{{ .Values.api.env.keycloackRealm }}"
+            - name: MINIO_URL
+              value: "http://{{ .Values.api.env.minioUrl }}.{{ .Values.domain }}:9000"
+            - name: MINIO_ACCESS_KEY
+              value: "{{ .Values.api.env.minioAccessKey }}"
+            - name: MINIO_SECRET_KEY
+              value: "{{ .Values.api.env.minioSecretKey }}"
+      {{- with .Values.nodeSelector }}
+      nodeSelector:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.affinity }}
+      affinity:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.tolerations }}
+      tolerations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
