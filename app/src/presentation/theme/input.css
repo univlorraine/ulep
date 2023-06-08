@@ -1,0 +1,11 @@
+ion-input.text {
+    --background: #f2f4f7;
+    --border-radius: 5px;
+    --color: #000;
+    --padding-start: 16px;
+    --placeholder-color: #000;
+    --placeholder-opacity: 0.8;
+    --highlight-color-focused: '#000';
+    height: 50px;
+    font-size: 16px;
+}

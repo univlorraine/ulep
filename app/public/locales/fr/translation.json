@@ -5,7 +5,10 @@
     },
     "login_page": {
         "button": "Se connecter",
-        "subtitle": "Bienvenue ! Connectez-vous à l'aide de votre compte social ou de votre adresse e-mail pour continuer à vous connecter.",
+        "forgot": "Mot de passe oublié ?",
+        "invalid_email": "Email invalide",
+        "invalid_password": "Mot de passe invalide",
+        "subtitle": "Connecte-toi avec tes identifiants de l’université pour continuer à utiliser l’application",
         "title": "Se connecter"
     }
 }
