@@ -34,3 +34,7 @@ plugins/
 
 # Ionic/Capacitor specific
 dist/
+
+# Cypress
+cypress/videos
+cypress/screenshots
