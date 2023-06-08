@@ -22,6 +22,12 @@ async function bootstrap() {
 
   const { httpAdapter } = app.get(HttpAdapterHost);
   app.useGlobalFilters(new PrismaClientExceptionFilter(httpAdapter));
+  app.enableCors({
+    allowedHeaders: ['Content-Type', 'Authorization', 'Range'],
+    exposedHeaders: ['Content-Range'],
+    origin: [process.env.ADMIN_URL],
+    methods: ['GET', 'HEAD', 'OPTIONS', 'POST', 'PUT', 'DELETE'],
+  });
 
   await app.listen(configuration.get('port'));
 }

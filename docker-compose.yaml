@@ -9,6 +9,7 @@ services:
       - database
     restart: unless-stopped
     environment:
+      ADMIN_URL: ${ADMIN_URL:-http://localhost/3001}
       DATABASE_URL: postgresql://${POSTGRES_USER:-postgres}:${POSTGRES_PASSWORD:-!ChangeMe!}@database:5432/${POSTGRES_DB:-postgres}?schema=public
       KEYCLOAK_BASE_URL: ${KEYCLOAK_BASE_URL:-http://auth:8080}
       KEYCLOAK_REALM: ${KEYCLOAK_REALM:-etandem}
@@ -24,6 +25,8 @@ services:
       context: ./admin
       args:
         UID: ${uid:-1000}
+    environment:
+      REACT_APP_API_URL: ${REACT_APP_API_URL:-http://localhost/3000}
     volumes:
         - ./admin:/usr/src/project/admin
     depends_on:
