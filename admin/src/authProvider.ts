@@ -34,7 +34,7 @@ const authProvider = (): AuthProvider => ({
     checkError: async () => {},
     getPermissions: async () => {},
     login: async ({ email, password }) => {
-        const response = await http('POST', `${process.env.REACT_APP_API_URL}/authentication/token`, {
+        const response = await http('POST', `${process.env.REACT_APP_API_URL}authentication/token`, {
             headers: {
                 'Content-Type': 'application/json',
             },
