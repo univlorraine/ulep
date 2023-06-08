@@ -8,16 +8,134 @@ generator client {
 }
 
 model Profile {
-  id        String   @id @default(uuid())
-  email     String   @unique
-  createdAt DateTime @default(now())
+  id                String          @id @default(uuid())
+  email             String          @unique
+  firstname         String
+  lastname          String
+  birthdate         DateTime
+  gender            Gender
+  role              Role
+  metadata          Json            // availibility, goals, meetingFrequency, department, diploma, bio, interests, etc.
+  organization      Organization    @relation(fields: [organizationId], references: [id])
+  organizationId    String
+  nationality       CountryCode     @relation(fields: [nationalityId], references: [id])
+  nationalityId     String
+  languages         Language[]
+  matches           ProfileMatch[]
+  tandems           ProfileTandem[]
+  createdAt         DateTime        @default(now())
+}
+
+model LanguageCode {
+  id                String          @id @default(uuid())
+  code              String
+  languages         Language[]
+  createdAt         DateTime        @default(now())
+}
+
+model CountryCode {
+  id                String          @id @default(uuid())
+  code              String
+  profiles          Profile[]
+  createdAt         DateTime        @default(now())
+}
+
+model Language {
+  id               String           @id @default(uuid())
+  profileId        String
+  profile          Profile          @relation(fields: [profileId], references: [id])
+  languageCode     LanguageCode     @relation(fields: [languageCodeId], references: [id])
+  languageCodeId   String
+  isNative         Boolean
+  proficiencyLevel String
+  createdAt        DateTime         @default(now())
+}
+
+model Match {
+  id              String            @id @default(uuid())
+  profiles        ProfileMatch[]
+  score           Float
+  createdAt       DateTime          @default(now())
+}
+
+model ProfileMatch {
+  profileId       String            @id
+  matchId         String
+  profile         Profile           @relation(fields: [profileId], references: [id])
+  match           Match             @relation(fields: [matchId], references: [id])
+  createdAt       DateTime          @default(now())
+}
+
+model Tandem {
+  id              String            @id @default(uuid())
+  profiles        ProfileTandem[]
+  isActive        Boolean
+  createdAt       DateTime          @default(now())
+}
+
+model ProfileTandem {
+  profileId       String            @id
+  tandemId        String
+  profile         Profile           @relation(fields: [profileId], references: [id])
+  tandem          Tandem            @relation(fields: [tandemId], references: [id])
+  createdAt       DateTime          @default(now())
+}
+
+model Organization {
+  id              String            @id @default(uuid())
+  profiles        Profile[]
+  name            String
+  createdAt       DateTime          @default(now())
 }
 
 model Media {
-  id        String   @id @default(uuid())
-  name      String
-  bucket    String
-  mime      String
-  size      Int
-  createdAt DateTime @default(now())
+  id              String            @id @default(uuid())
+  name            String
+  bucket          String
+  mime            String
+  size            Int
+  createdAt       DateTime          @default(now())
+}
+
+enum Role {
+  STAFF
+  STUDENT
+}
+
+enum Gender {
+  MALE
+  FEMALE
+  OTHER
+}
+
+enum DayOfWeek {
+  MONDAY
+  TUESDAY
+  WEDNESDAY
+  THURSDAY
+  FRIDAY
+  SATURDAY
+  SUNDAY
+}
+
+enum AvailabilityLevel {
+  NOT_AVAILABLE
+  SOMEWHAT_AVAILABLE
+  VERY_AVAILABLE
+}
+
+enum MeetingFrequency {
+  ONCE_A_WEEK
+  TWICE_A_WEEK
+  THREE_TIMES_A_WEEK
+  TWICE_A_MONTH
+  THREE_TIMES_A_MONTH
+}
+
+enum Goal {
+  SPEAK_LIKE_NATIVE
+  IMPROVE_LEVEL
+  ORAL_PRACTICE
+  PREPARE_TRAVEL_ABROAD
+  GET_CERTIFICATION
 }
