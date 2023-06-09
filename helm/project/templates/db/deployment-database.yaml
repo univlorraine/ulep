@@ -1,7 +1,7 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name:  "deployment-{{ .Values.name }}-{{ .Values.database.name }}"
+  name:  "{{ include "etandem.fullname" . }}-{{ .Values.database.name }}"
   labels:
     {{- include "etandem.labels" . | nindent 4 }}
 spec:
@@ -10,7 +10,8 @@ spec:
   {{- end }}
   selector:
     matchLabels:
-      {{- include "etandem.selectorLabels" . | nindent 6 }}
+      app.kubernetes.io/name: "{{ include "etandem.name" . }}-{{ .Values.database.name }}"
+      app.kubernetes.io/instance: "{{ .Release.Name }}"
   template:
     metadata:
       {{- with .Values.podAnnotations }}
@@ -18,7 +19,8 @@ spec:
         {{- toYaml . | nindent 8 }}
       {{- end }}
       labels:
-        {{- include "etandem.selectorLabels" . | nindent 8 }}
+        app.kubernetes.io/name: "{{ include "etandem.name" . }}-{{ .Values.database.name }}"
+        app.kubernetes.io/instance: "{{ .Release.Name }}"
     spec:
       {{- with .Values.imagePullSecrets }}
       imagePullSecrets:
@@ -31,20 +33,23 @@ spec:
         - name: {{ .Chart.Name }}
           securityContext:
             {{- toYaml .Values.securityContext | nindent 12 }}
-          image: "{{ .Values.database.image.repository }}:{{ .Values.database.image.tag | default .Chart.AppVersion }}"
+          image: "{{ .Values.database.image.repository }}:{{ .Values.database.image.tag }}"
           imagePullPolicy: {{ .Values.database.image.pullPolicy }}
           ports:
             - name: direct
               containerPort: 5432
               protocol: TCP
-          # livenessProbe:
-          #   httpGet:
-          #     path: /
-          #     port: http
-          # readinessProbe:
-          #   httpGet:
-          #     path: /
-          #     port: http
+          readinessProbe:
+            exec:
+              command: ["psql", "-w", "-U", "{{ .Values.postgresUser }}", "-d", "{{ .Values.postgresDB }}", "-c", "SELECT 1"]
+            initialDelaySeconds: 60
+            periodSeconds: 60
+            timeoutSeconds: 2
+          livenessProbe:
+            exec:
+              command: ["psql", "-w", "-U", "{{ .Values.postgresUser }}", "-d", "{{ .Values.postgresDB }}", "-c", "SELECT 1"]
+            initialDelaySeconds: 120
+            timeoutSeconds: 2
           resources:
             {{- toYaml .Values.resources | nindent 12 }}
           env:
@@ -54,6 +59,17 @@ spec:
               value: "{{ .Values.postgresUser }}"
             - name: POSTGRES_PASSWORD
               value: "{{ .Values.postgresPassword }}"
+            - name: PGPASSWORD
+              value: "{{ .Values.postgresPassword }}"
+          volumeMounts:
+          - mountPath: /docker-entrypoint-initdb.d
+            name: "{{ .Values.database.name }}-data"
+      volumes:
+      - name: "{{ .Values.database.name }}-data"
+        # persistentVolumeClaim:
+        #   claimName:  "{{ include "etandem.fullname" . }}-pvc-{{ .Values.database.name }}"
+        configMap:
+          name: "init-{{ include "etandem.name" . }}-{{ .Values.database.name }}"
       {{- with .Values.nodeSelector }}
       nodeSelector:
         {{- toYaml . | nindent 8 }}

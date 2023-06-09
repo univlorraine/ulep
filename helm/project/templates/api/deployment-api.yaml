@@ -1,7 +1,7 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name:  "deployment-{{ .Values.name }}-{{ .Values.api.name }}"
+  name:  "{{ include "etandem.fullname" . }}-{{ .Values.api.name }}"
   labels:
     {{- include "etandem.labels" . | nindent 4 }}
 spec:
@@ -10,8 +10,8 @@ spec:
   {{- end }}
   selector:
     matchLabels:
-      {{- include "etandem.selectorLabels" . | nindent 6 }}
-      app.kubernetes.io/type: "{{ .Values.api.name }}"
+      app.kubernetes.io/name: "{{ include "etandem.name" . }}-{{ .Values.api.name }}"
+      app.kubernetes.io/instance: "{{ .Release.Name }}"
   template:
     metadata:
       {{- with .Values.podAnnotations }}
@@ -19,8 +19,8 @@ spec:
         {{- toYaml . | nindent 8 }}
       {{- end }}
       labels:
-        {{- include "etandem.selectorLabels" . | nindent 8 }}
-        app.kubernetes.io/type: "{{ .Values.api.name }}"
+        app.kubernetes.io/name: "{{ include "etandem.name" . }}-{{ .Values.api.name }}"
+        app.kubernetes.io/instance: "{{ .Release.Name }}"
     spec:
       {{- with .Values.imagePullSecrets }}
       imagePullSecrets:
@@ -51,11 +51,19 @@ spec:
             {{- toYaml .Values.resources | nindent 12 }}
           env:
             - name: DATABASE_URL
-              value: "postgresql://{{ .Values.postgresUser }}:{{ .Values.postgresPassword }}@database:5432/{{ .Values.postgresDB }}?schema=public"
+              value: "postgresql://{{ .Values.postgresUser }}:{{ .Values.postgresPassword }}@{{ include "etandem.name" . }}-{{ .Values.database.name }}:{{ .Values.database.service.port }}/{{ .Values.postgresDB }}?schema=public"
             - name: KEYCLOAK_BASE_URL
               value: "http://{{ .Values.api.env.keycloakBaseUrl }}.{{ .Values.domain }}"
             - name: KEYCLOAK_REALM
               value: "{{ .Values.api.env.keycloackRealm }}"
+            - name: KEYCLOAK_ADMIN
+              value: "{{ .Values.api.env.keycloackAdmin }}"
+            - name: KEYCLOAK_ADMIN_PASSWORD
+              value: "{{ .Values.api.env.keycloackAdminPassword }}"
+            - name: KEYCLOAK_CLIENT_ID
+              value: "{{ .Values.api.env.keycloackClientId }}"
+            - name: KEYCLOAK_CLIENT_SECRET
+              value: "{{ .Values.api.env.keycloackClientSecret }}"
             - name: MINIO_URL
               value: "http://{{ .Values.api.env.minioUrl }}.{{ .Values.domain }}:9000"
             - name: MINIO_ACCESS_KEY

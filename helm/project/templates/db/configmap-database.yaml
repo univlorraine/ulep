@@ -1,0 +1,7 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: "init-{{ include "etandem.name" . }}-{{ .Values.database.name }}"
+data:
+  db.sql: |
+    CREATE SCHEMA IF NOT EXISTS keycloak;

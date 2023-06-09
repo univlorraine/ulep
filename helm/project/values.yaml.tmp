@@ -7,8 +7,8 @@
 name: "etandem"
 postgresDB: postgres
 postgresUser: postgres
-postgresPassword: "!ChangeMe!"
-domain: "local"
+postgresPassword: ""
+domain: ""
 
 ############## API ##############
 api:
@@ -23,9 +23,13 @@ api:
   env:
     keycloakBaseUrl: auth
     keycloackRealm: etandem
+    keycloackAdmin: admin
+    keycloackAdminPassword: ""
+    keycloackClientId: api
+    keycloackClientSecret: 
     minioUrl: minio
     minioAccessKey: "minio"
-    minioSecretKey: "!ChangeMe!"
+    minioSecretKey: ""
 
   autoscaling:
     enabled: false
@@ -35,21 +39,22 @@ api:
     # targetMemoryUtilizationPercentage: 80
   service:
     type: ClusterIP
-    port: 80
+    port: 443
 
   ingress:
     enabled: true
     className: ""
     annotations: 
-      # kubernetes.io/ingress.class: nginx
-      # kubernetes.io/tls-acme: "true"
+      kubernetes.io/ingress.class: nginx
+      kubernetes.io/tls-acme: "true"
+      cert-manager.io/issuer: "letsencrypt"
     hosts:
       - host: api
         paths: [/]
-    # tls:
-    #   - secretName: etendem-tls
-    #     hosts:
-    #       - api
+    tls:
+      - secretName: etendem-tls
+        hosts:
+          - api
 ############## API ##############
 
 ############## AUTH ##############
@@ -64,10 +69,8 @@ auth:
 
   env:
     keycloackAdmin: admin
-    keycloackAdminPassword: "!ChangeMe!"
+    keycloackAdminPassword: ""
     kcDB: postgres
-    kcDBUsername: postgres
-    kcDBPassword: "!ChangeMe!"
     kcDBSchema: keycloak
 
   autoscaling:
@@ -78,7 +81,7 @@ auth:
     # targetMemoryUtilizationPercentage: 80
   service:
     type: ClusterIP
-    port: 5432
+    port: 8080
 
   ingress:
     enabled: false
@@ -107,6 +110,11 @@ database:
 
   env: {}
 
+  pv:
+    storage: 5Gi
+    volumeMode: Filesystem
+    storageClassName: scw-bssd
+
   autoscaling:
     enabled: false
     minReplicas: 1
@@ -118,11 +126,11 @@ database:
     port: 5432
 
   ingress:
-    enabled: true
+    enabled: false
     # className: ""
-    annotations: {}
-      # kubernetes.io/ingress.class: nginx
-      # kubernetes.io/tls-acme: "true"
+    annotations: 
+      kubernetes.io/ingress.class: nginx
+      kubernetes.io/tls-acme: "true"
     hosts:
       - host: database
         paths: [/]
@@ -144,7 +152,7 @@ minio:
 
   env:
     minioRootUser: minio
-    minioRootPassword: "!ChangeMe!"
+    minioRootPassword: ""
 
   autoscaling:
     enabled: false
@@ -154,14 +162,15 @@ minio:
     # targetMemoryUtilizationPercentage: 80
   service:
     type: ClusterIP
-    port: 80
+    port: 443
 
   ingress:
     enabled: true
     # className: ""
-    annotations: {}
-      # kubernetes.io/ingress.class: nginx
-      # kubernetes.io/tls-acme: "true"
+    annotations:
+      kubernetes.io/ingress.class: nginx
+      kubernetes.io/tls-acme: "true"
+      cert-manager.io/issuer: "letsencrypt"
     hosts:
       - host: minio
         paths: [/]

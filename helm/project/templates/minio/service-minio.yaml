@@ -1,7 +1,7 @@
 apiVersion: v1
 kind: Service
 metadata:
-  name: "{{ .Values.name }}-{{ .Values.minio.name }}"
+  name: "{{ include "etandem.fullname" . }}-{{ .Values.minio.name }}"
   labels:
     {{- include "etandem.labels" . | nindent 4 }}
 spec:
@@ -16,4 +16,5 @@ spec:
       protocol: TCP
       name: direct
   selector:
-    {{- include "etandem.selectorLabels" . | nindent 4 }}
+    app.kubernetes.io/name: "{{ include "etandem.name" . }}-{{ .Values.minio.name }}"
+    app.kubernetes.io/instance: "{{ .Release.Name }}"
