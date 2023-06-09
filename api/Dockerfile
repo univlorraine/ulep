@@ -26,7 +26,7 @@ FROM deps as dev
 EXPOSE 3000
 ENV PORT 3000
 
-CMD ["sh", "-c", "pnpm install -r --offline; pnpm start:dev"]
+CMD ["sh", "-c", "npx prisma db push --accept-data-loss && npx prisma generate && pnpm install -r --offline; pnpm start:dev"]
 
 FROM builder_base AS builder
 
@@ -53,4 +53,4 @@ EXPOSE 3000
 
 ENV PORT 3000
 
-CMD ["node", "dist/main"]
+CMD ["npx", "prisma", "db", "push", "--accept-data-loss", "&&", "npx", "prisma", "generate", "&&", "node", "dist/main"]

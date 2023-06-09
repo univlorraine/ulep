@@ -2,10 +2,9 @@ version: "3.4"
 
 services:
   api:
-    # build:
-    #   context: ./api
-    #   target: prod
-    image: etandem-api:latest
+    build:
+      context: ./api
+      target: prod
     depends_on:
       - database
     restart: unless-stopped
