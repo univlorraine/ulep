@@ -3,6 +3,7 @@ import { PrismaService } from './persistance/prisma.service';
 import { PrismaProfileRepository } from './persistance/repositories/profiles.repository';
 import { MinioService } from './storage/minio.service';
 import { PrismaMediaObjectRepository } from './persistance/repositories/media-object.repository';
+import { OrganizationRepository } from './persistance/repositories/organization.repository';
 
 export const STORAGE_SERVICE = 'storage.service';
 export const PROFILE_REPOSITORY = 'profile.repository';
@@ -21,6 +22,7 @@ const providers: Provider[] = [
     provide: MEDIA_OBJECT_REPOSITORY,
     useClass: PrismaMediaObjectRepository,
   },
+  OrganizationRepository,
 ];
 
 @Module({

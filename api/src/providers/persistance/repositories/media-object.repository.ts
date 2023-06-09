@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { PrismaService } from '../prisma.service';
-import { MediaObjectRepository } from 'src/core/uploads/domain/media-object.repository';
-import MediaObject from 'src/core/uploads/domain/media-object';
+import { MediaObjectRepository } from 'src/core/ports/media-object.repository';
+import MediaObject from 'src/core/models/media-object';
 
 @Injectable()
 export class PrismaMediaObjectRepository implements MediaObjectRepository {
@@ -33,5 +33,9 @@ export class PrismaMediaObjectRepository implements MediaObjectRepository {
         size: instance.getSize(),
       },
     });
+  }
+
+  async delete(instance: MediaObject): Promise<void> {
+    await this.prisma.media.delete({ where: { id: instance.getId() } });
   }
 }

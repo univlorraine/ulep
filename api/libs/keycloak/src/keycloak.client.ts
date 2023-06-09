@@ -1,4 +1,10 @@
-import { Inject, Injectable, Logger } from '@nestjs/common';
+import {
+  BadRequestException,
+  HttpException,
+  Inject,
+  Injectable,
+  Logger,
+} from '@nestjs/common';
 import * as jwt from 'jsonwebtoken';
 import {
   KEYCLOAK_CONFIGURATION,
@@ -61,6 +67,37 @@ export class KeycloakClient {
     const { access_token, refresh_token } = await response.json();
 
     return { accessToken: access_token, refreshToken: refresh_token };
+  }
+
+  /*
+   * Set up a new password for the user.
+   */
+  async resetPassword(userId: string, password: string): Promise<void> {
+    const response = await fetch(
+      `${this.configuration.baseUrl}/admin/realms/${this.configuration.realm}/users/${userId}/reset-password`,
+      {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${await this.getAccessToken()}`,
+        },
+        body: JSON.stringify({
+          type: 'password',
+          value: password,
+          temporary: false,
+        }),
+      },
+    );
+
+    if (response.status === 404) {
+      throw new BadRequestException({ message: 'User not found' });
+    }
+
+    if (!response.ok) {
+      throw new HttpException({ message: 'Service unvailable' }, 500);
+    }
+
+    return;
   }
 
   /*
@@ -158,7 +195,7 @@ export class KeycloakClient {
             },
           ],
           attributes: {
-            roles: props.roles,
+            role: props.role,
             origin: props.origin,
           },
         }),
