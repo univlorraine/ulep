@@ -1,5 +1,5 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { Organization } from './organization.dto';
+import { UniversityDto } from './university.dto';
 import { Image } from './image.dto';
 
 export class Profile {
@@ -15,8 +15,8 @@ export class Profile {
   @ApiProperty()
   lastname: string;
 
-  @ApiProperty({ type: Organization })
-  organization: Organization;
+  @ApiProperty({ type: UniversityDto })
+  organization: UniversityDto;
 
   @ApiProperty({ type: Image, readOnly: true })
   avatar?: Image;
