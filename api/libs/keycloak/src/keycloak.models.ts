@@ -47,7 +47,7 @@ export interface CreateUserProps {
   emailVerified: boolean;
   firstName?: string;
   lastName?: string;
-  role: string;
+  roles: string[];
   origin?: string;
 }
 

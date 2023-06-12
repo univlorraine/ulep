@@ -1,10 +1,11 @@
 import { KeycloakClient } from '@app/keycloak';
 import { Injectable } from '@nestjs/common';
-import { User } from '../../models/user';
+import { Role, User } from '../../models/user';
 
 export type CreateUserCommand = {
   email: string;
   password: string;
+  roles: Role[];
 };
 
 @Injectable()
@@ -12,12 +13,12 @@ export class CreateUserUsecase {
   constructor(private readonly keycloak: KeycloakClient) {}
 
   async execute(command: CreateUserCommand) {
-    const { email, password } = command;
+    const { email, password, roles } = command;
 
     const keycloakUser = await this.keycloak.createUser({
       email,
       password,
-      role: 'user',
+      roles,
       enabled: true,
       emailVerified: false,
       origin: 'api',

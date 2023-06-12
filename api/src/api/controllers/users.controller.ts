@@ -14,6 +14,7 @@ import * as Swagger from '@nestjs/swagger';
 import { UserRead, UserCreate, ResetPasswordRequest } from '../dtos/users.dto';
 import { CreateUserUsecase } from 'src/core/usecases/users/create-user.usecase';
 import { ResetPasswordUsecase } from 'src/core/usecases/users/reset-password.usecase';
+import { Role } from 'src/core/models/user';
 
 @Controller('users')
 @Swagger.ApiTags('Users')
@@ -46,7 +47,12 @@ export class UsersController {
   @Swagger.ApiOperation({ summary: 'Create user ressource' })
   @Swagger.ApiOkResponse({ type: UserRead })
   async create(@Body() { email, password }: UserCreate): Promise<UserRead> {
-    const user = await this.createUserUsecase.execute({ email, password });
+    // TODO: get roles from the request body if admin authenticated
+    const user = await this.createUserUsecase.execute({
+      email,
+      password,
+      roles: [Role.USER],
+    });
 
     return { id: user.getId(), email: user.getEmail() };
   }
@@ -57,7 +63,7 @@ export class UsersController {
     @Param('id', ParseUUIDPipe) id: string,
     @Body() { password }: ResetPasswordRequest,
   ): Promise<void> {
-    await this.resetPasswordUsecase.execute({ id, password: 'password' });
+    await this.resetPasswordUsecase.execute({ id, password });
 
     return;
   }
