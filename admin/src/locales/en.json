@@ -1,0 +1,6 @@
+{
+    "connect": "Connect",
+    "email": "Email",
+    "loginError": "Wrong email / password",
+    "password": "Password"
+}
