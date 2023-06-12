@@ -4,15 +4,20 @@ services:
   api:
     build:
       context: ./api
-      target: dev
+      target: api_dev
     volumes:
       - ./api:/srv/app
     ports:
-        - ${API_PORT:-3000}:3000
+      - ${API_PORT:-3000}:3000
 
   admin:
+    build:
+      context: ./admin
+      target: admin_dev
+    volumes:
+      - ./admin:/src/app
     ports:
-      - 3001:3001
+      - ${ADMIN_PORT:-3001}:3000
 
   auth:
     command: start-dev
