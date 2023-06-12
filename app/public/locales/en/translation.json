@@ -1,0 +1,11 @@
+{
+    "global": {
+        "email": "Email",
+        "password": "Password"
+    },
+    "login_page": {
+        "button": "Login",
+        "subtitle": "Welcome back! Sign in using your social account or email to continue us",
+        "title": "Login"
+    }
+}

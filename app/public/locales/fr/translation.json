@@ -1,0 +1,11 @@
+{
+    "global": {
+        "email": "Email",
+        "password": "Mot de passe"
+    },
+    "login_page": {
+        "button": "Se connecter",
+        "subtitle": "Bienvenue ! Connectez-vous à l'aide de votre compte social ou de votre adresse e-mail pour continuer à vous connecter.",
+        "title": "Se connecter"
+    }
+}
