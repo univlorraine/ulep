@@ -1,15 +1,11 @@
 import { Injectable, Logger } from '@nestjs/common';
 import { PrismaService } from '../prisma.service';
-import { ProfileRepository } from 'src/core/profiles/domain/profiles.repository';
-import Profile from 'src/core/profiles/domain/profile';
 
 @Injectable()
-export class PrismaProfileRepository implements ProfileRepository {
+export class PrismaProfileRepository {
   private readonly logger = new Logger(PrismaProfileRepository.name);
 
   constructor(private readonly prisma: PrismaService) {}
-
-  save: (profile: Profile) => Promise<void>;
 
   async findByLanguage(languageCode: string) {
     const entries = await this.prisma.language.findMany({

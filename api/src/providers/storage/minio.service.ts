@@ -2,8 +2,8 @@ import { Injectable } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import * as Minio from 'minio';
 import { ContentTypeException } from 'src/shared/errors/content-type.exception';
-import MediaObject from 'src/core/uploads/domain/media-object';
-import { StorageService } from 'src/core/uploads/domain/storage.service';
+import MediaObject from 'src/core/models/media-object';
+import { StorageService } from 'src/core/ports/storage.service';
 
 /*
  * This is the implementation of the StorageService interface.
