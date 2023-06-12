@@ -9,12 +9,16 @@ services:
       - ./api:/srv/app
     ports:
         - ${API_PORT:-3000}:3000
-  
+
+  admin:
+    ports:
+      - 3001:3001
+
   auth:
     command: start-dev
     ports:
         - ${AUTH_PORT:-8080}:8080
-  
+
   database:
     ports:
       - 5432:5432

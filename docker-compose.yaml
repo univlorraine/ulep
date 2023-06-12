@@ -19,7 +19,15 @@ services:
       MINIO_URL: ${MINIO_URL:-http://minio:9000}
       MINIO_ACCESS_KEY: ${MINIO_USER:-minio}
       MINIO_SECRET_KEY: ${MINIO_PASSWORD:-!ChangeMe!}
-      
+  admin:
+    build:
+      context: ./admin
+      args:
+        UID: ${uid:-1000}
+    volumes:
+        - ./admin:/usr/src/project/admin
+    depends_on:
+        - database
   auth:
     image: quay.io/keycloak/keycloak:latest
     depends_on:
@@ -32,7 +40,7 @@ services:
       KC_DB_PASSWORD: ${POSTGRES_PASSWORD:-!ChangeMe!}
       KC_DB_URL: jdbc:postgresql://database:5432/${POSTGRES_DB:-postgres}
       KC_DB_SCHEMA: keycloak
-    
+
   database:
     image: postgres:${POSTGRES_VERSION:-14}-alpine
     environment:
@@ -68,6 +76,6 @@ services:
   #     POSTGRES_HOST: database
   #     POSTGRES_PORT: 5432
   #     POSTGRES_DATABASE: ${WEBLATE_DB:-weblate} # ? TODO use custom schema
-    
+
 volumes:
   db_data:
