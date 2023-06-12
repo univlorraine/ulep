@@ -9,12 +9,16 @@ import {
   Param,
   ParseUUIDPipe,
   Put,
+  Response,
+  Query,
 } from '@nestjs/common';
 import * as Swagger from '@nestjs/swagger';
 import { UserRead, UserCreate, ResetPasswordRequest } from '../dtos/users.dto';
 import { CreateUserUsecase } from 'src/core/usecases/users/create-user.usecase';
 import { ResetPasswordUsecase } from 'src/core/usecases/users/reset-password.usecase';
 import { Role } from 'src/core/models/user';
+import { PaginationDto } from 'src/api/dtos/pagination.dto';
+import { GetUsersUsecase } from 'src/core/usecases/users/get-users.usecase';
 
 @Controller('users')
 @Swagger.ApiTags('Users')
@@ -23,6 +27,7 @@ export class UsersController {
 
   constructor(
     private readonly createUserUsecase: CreateUserUsecase,
+    private readonly getUsersUsecase: GetUsersUsecase,
     private readonly resetPasswordUsecase: ResetPasswordUsecase,
   ) {}
 
@@ -31,8 +36,26 @@ export class UsersController {
     summary: 'Retrieve the collection of User ressource.',
   })
   @Swagger.ApiOkResponse({ type: UserRead, isArray: true })
-  async getCollection(): Promise<UserRead[]> {
-    throw new Error('Not implemented');
+  async getCollection(
+    @Response() res,
+    @Query() { filter, page, limit }: PaginationDto,
+  ): Promise<void> {
+    const result = await this.getUsersUsecase.execute({
+      filter,
+      page,
+      limit,
+    });
+
+    res
+      .set({
+        'Content-range': `bytes ${page * limit}-${page * limit + limit}/${
+          result.total
+        } `,
+      })
+      .json({
+        items: result.items.map(UserRead.fromDomain),
+        total: result.total,
+      });
   }
 
   @Get(':id')

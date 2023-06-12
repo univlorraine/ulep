@@ -1,5 +1,6 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { IsEmail, IsNotEmpty, IsString, MinLength } from 'class-validator';
+import { User } from 'src/core/models/user';
 
 export class UserRead {
   @ApiProperty({ readOnly: true })
@@ -9,6 +10,10 @@ export class UserRead {
   @IsNotEmpty()
   @ApiProperty({ uniqueItems: true, example: 'mail@example.com' })
   email: string;
+
+  static fromDomain(instance: User): UserRead {
+    return { id: instance.getId(), email: instance.getEmail() };
+  }
 }
 
 export class UserCreate {
