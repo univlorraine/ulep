@@ -1,13 +1,27 @@
 import React from 'react';
-import { List, Datagrid, TextField } from 'react-admin';
+import { Filter, TextInput, useTranslate, List, Datagrid, TextField } from 'react-admin';
 
-const UserList = (props: any) => (
-    <List {...props}>
-        <Datagrid>
-            <TextField source="id" />
-            <TextField source="email" />
-        </Datagrid>
-    </List>
-);
+const UserFilter = (props: any) => {
+    const translate = useTranslate();
+
+    return (
+        <Filter {...props}>
+            <TextInput label={translate('users.searchEmail')} source="email" alwaysOn />
+        </Filter>
+    );
+};
+
+const UserList = (props: any) => {
+    const translate = useTranslate();
+
+    return (
+        <List filters={<UserFilter />} title={translate('users.userListTitle')} {...props}>
+            <Datagrid>
+                <TextField sortable={false} source="id" />
+                <TextField sortable={false} source="email" />
+            </Datagrid>
+        </List>
+    );
+};
 
 export default UserList;

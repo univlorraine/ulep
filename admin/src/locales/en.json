@@ -1,6 +1,12 @@
 {
-    "connect": "Connect",
-    "email": "Email",
-    "loginError": "Wrong email / password",
-    "password": "Password"
+    "login": {
+        "connect": "Connect",
+        "email": "Email",
+        "loginError": "Wrong email / password",
+        "password": "Password"
+    },
+    "users": {
+        "searchEmail": "Search email",
+        "userListTitle": "Users"
+    }
 }
