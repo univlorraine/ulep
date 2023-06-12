@@ -10,4 +10,4 @@ const UserList = (props: ListProps) => (
     </List>
 );
 
-export { UserList };
+export default UserList;
