@@ -1,4 +1,4 @@
-import { AuthProvider, fetchUtils } from 'react-admin';
+import { fetchUtils } from 'react-admin';
 
 const http = async (method: string, path: string, init: Omit<RequestInit, 'method'> = {}) => {
     const response = await fetch(path, {
@@ -27,13 +27,13 @@ export const httpClient = (url: string, options: any = {}) => {
     return fetchUtils.fetchJson(url, newOptions);
 };
 
-const authProvider = (): AuthProvider => ({
+const authProvider = () => ({
     checkAuth: () => (localStorage.getItem('accessToken')
         ? Promise.resolve()
         : Promise.reject()),
     checkError: async () => {},
     getPermissions: async () => {},
-    login: async ({ email, password }) => {
+    login: async ({ email, password }: { email: string, password: string}) => {
         const response = await http('POST', `${process.env.REACT_APP_API_URL}/authentication/token`, {
             headers: {
                 'Content-Type': 'application/json',

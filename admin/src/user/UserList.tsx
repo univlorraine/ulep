@@ -1,7 +1,7 @@
 import React from 'react';
-import { List, ListProps, Datagrid, TextField } from 'react-admin';
+import { List, Datagrid, TextField } from 'react-admin';
 
-const UserList = (props: ListProps) => (
+const UserList = (props: any) => (
     <List {...props}>
         <Datagrid>
             <TextField source="id" />
