@@ -1,0 +1,11 @@
+ion-button.confirm {
+    --background: #000;
+    --background-focused: #000;
+    --border-radius: 5px;
+    --color: #fff;
+    height: 50px;
+}
+
+ion-button.confirm:active {
+    --background: #a7a7a7;
+}

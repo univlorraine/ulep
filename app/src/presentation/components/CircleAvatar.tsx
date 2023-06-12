@@ -1,23 +1,17 @@
+import './CircleAvatar.css';
 interface CircleAvatarProps {
     backgroundImage: string;
     color?: string;
     radius?: string;
 }
 
-const CircleAvatar: React.FC<CircleAvatarProps> = ({ backgroundImage, color = '#272931', radius = '50%' }) => {
+const CircleAvatar: React.FC<CircleAvatarProps> = ({ backgroundImage, color = '#F8F9FA' }) => {
     const avatarStyle = {
         backgroundColor: color,
-        borderRadius: radius,
-        width: '70px',
-        height: '70px',
-        margin: '0 auto',
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'center',
     };
 
     return (
-        <div style={avatarStyle}>
+        <div className="avatarView" style={avatarStyle}>
             <img src={backgroundImage} alt="avatar" className="avatar" />
         </div>
     );

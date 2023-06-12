@@ -22,7 +22,10 @@ import '@ionic/react/css/flex-utils.css';
 import '@ionic/react/css/display.css';
 
 /* Theme variables */
-import './theme/variables.css';
+import './presentation/theme/button.css';
+import './presentation/theme/input.css';
+import './presentation/theme/margin.css';
+import './presentation/theme/variables.css';
 
 setupIonicReact();
 
