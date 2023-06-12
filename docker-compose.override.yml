@@ -15,7 +15,7 @@ services:
       context: ./admin
       target: admin_dev
     volumes:
-      - ./admin:/src/app
+      - ./admin:/srv/app
     ports:
       - ${ADMIN_PORT:-3001}:3000
 
