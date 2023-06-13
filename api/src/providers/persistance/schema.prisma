@@ -90,7 +90,7 @@ model Organization {
   name            String            @unique
   country         CountryCode       @relation(fields: [countryId], references: [id])
   countryId       String
-  timezone        String
+  timezone        Timezone
   admissionStart  DateTime
   admissionEnd    DateTime
   createdAt       DateTime          @default(now())
