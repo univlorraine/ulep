@@ -1,6 +1,9 @@
 {
     "root": true,
-    "extends": "@thetribe/eslint-config-react-typescript",
+    "extends": [
+        "@thetribe/eslint-config-react-typescript",
+        "plugin:react/recommended"
+    ],
     "parserOptions": {
         "project": "./tsconfig.json"
     },

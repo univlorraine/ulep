@@ -1,14 +1,24 @@
-import simpleRestProvider from 'ra-data-simple-rest';
 import React from 'react';
-import { Admin, Resource } from 'react-admin';
-import { UserList } from './admin/user';
+import { Admin, Resource, useTranslate } from 'react-admin';
 import LoginPage from './auth/LoginPage';
-import authProvider from './authProvider';
+import authProvider from './providers/authProvider';
+import customDataProvider from './providers/customDataProvider';
+import i18nProvider from './providers/i18nProvider';
+import UserList from './user/UserList';
 
-const App = () => (
-    <Admin authProvider={authProvider()} dataProvider={simpleRestProvider('/')} loginPage={LoginPage}>
-        <Resource list={UserList} name="users" />
-    </Admin>
-);
+const App = () => {
+    const translate = useTranslate();
+
+    return (
+        <Admin
+            authProvider={authProvider()}
+            dataProvider={customDataProvider}
+            i18nProvider={i18nProvider}
+            loginPage={LoginPage}
+        >
+            <Resource list={UserList} name="users" options={{ label: translate('users.userListTitle') }} />
+        </Admin>
+    );
+};
 
 export default App;

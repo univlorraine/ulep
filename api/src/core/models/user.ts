@@ -4,13 +4,13 @@ export enum Role {
 }
 
 export class User {
-  private constructor(
+  constructor(
     private id: string,
     private email: string,
-    private role: Role,
+    private role: Role[],
   ) {}
 
-  static signUp(id: string, email: string, role?: Role): User {
+  static signUp(id: string, email: string, role?: Role[]): User {
     return new User(id, email, role);
   }
 
@@ -22,8 +22,8 @@ export class User {
     return this.email;
   }
 
-  public getRole(): Role {
+  public getRole(): Role[] {
     // guarantee every user at least has role USER
-    return this.role || Role.USER;
+    return this.role || [Role.USER];
   }
 }

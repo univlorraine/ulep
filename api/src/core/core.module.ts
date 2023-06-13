@@ -8,9 +8,11 @@ import { UpdateUniversityUsecase } from './usecases/universities/update-universi
 import { GetUniversitiesUsecase } from './usecases/universities/get-universities.usecase';
 import { DeleteUniversityUsecase } from './usecases/universities/delete-university.usecase';
 import { GetUniversityUsecase } from './usecases/universities/get-university.usecase';
+import { GetUsersUsecase } from 'src/core/usecases/users/get-users.usecase';
 
 const usecases = [
   CreateUserUsecase,
+  GetUsersUsecase,
   ResetPasswordUsecase,
   UploadImageUsecase,
   GetUniversitiesUsecase,

@@ -1,7 +1,7 @@
 import { Card, CardContent, TextField, Button } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 import React from 'react';
-import { useLogin, useNotify, Notification } from 'react-admin';
+import { useTranslate, useLogin, useNotify, Notification } from 'react-admin';
 
 const useStyles = makeStyles(() => ({
     button: {
@@ -32,6 +32,7 @@ const useStyles = makeStyles(() => ({
 
 const LoginPage = () => {
     const classes = useStyles();
+    const translate = useTranslate();
     const [email, setEmail] = React.useState('');
     const [password, setPassword] = React.useState('');
     const login = useLogin();
@@ -39,7 +40,7 @@ const LoginPage = () => {
 
     const submit = (e: any) => {
         e.preventDefault();
-        login({ email, password }).catch(() => notify('Email ou mot de passe invalide'));
+        login({ email, password }).catch(() => notify(translate('login.loginError')));
     };
 
     return (
@@ -47,7 +48,7 @@ const LoginPage = () => {
             <Card className={classes.card}>
                 <CardContent>
                     <form className={classes.form} onSubmit={submit}>
-                        <p>Email</p>
+                        <p>{translate('login.email')}</p>
                         <TextField
                             className={classes.input}
                             id="email"
@@ -59,11 +60,11 @@ const LoginPage = () => {
                             fullWidth
                             required
                         />
-                        <p>Mot de passe</p>
+                        <p>{translate('login.password')}</p>
                         <TextField
                             className={classes.input}
                             id="password"
-                            name="password"
+                            name={translate('login.password')}
                             onChange={(e: any) => setPassword(e.target.value)}
                             type="password"
                             value={password}
@@ -77,7 +78,7 @@ const LoginPage = () => {
                             variant="contained"
                             fullWidth
                         >
-                            Connexion
+                            {translate('login.connect')}
                         </Button>
                     </form>
                 </CardContent>
