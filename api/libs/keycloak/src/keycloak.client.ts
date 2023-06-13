@@ -195,7 +195,7 @@ export class KeycloakClient {
             },
           ],
           attributes: {
-            role: props.role,
+            role: props.roles,
             origin: props.origin,
           },
         }),

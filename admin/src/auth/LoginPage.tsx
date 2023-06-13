@@ -40,7 +40,7 @@ const LoginPage = () => {
 
     const submit = (e: any) => {
         e.preventDefault();
-        login({ email, password }).catch(() => notify(translate('loginError')));
+        login({ email, password }).catch(() => notify(translate('login.loginError')));
     };
 
     return (
@@ -48,7 +48,7 @@ const LoginPage = () => {
             <Card className={classes.card}>
                 <CardContent>
                     <form className={classes.form} onSubmit={submit}>
-                        <p>{translate('email')}</p>
+                        <p>{translate('login.email')}</p>
                         <TextField
                             className={classes.input}
                             id="email"
@@ -60,11 +60,11 @@ const LoginPage = () => {
                             fullWidth
                             required
                         />
-                        <p>{translate('password')}</p>
+                        <p>{translate('login.password')}</p>
                         <TextField
                             className={classes.input}
                             id="password"
-                            name={translate('password')}
+                            name={translate('login.password')}
                             onChange={(e: any) => setPassword(e.target.value)}
                             type="password"
                             value={password}
@@ -78,7 +78,7 @@ const LoginPage = () => {
                             variant="contained"
                             fullWidth
                         >
-                            {translate('connect')}
+                            {translate('login.connect')}
                         </Button>
                     </form>
                 </CardContent>

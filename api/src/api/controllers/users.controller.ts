@@ -9,12 +9,17 @@ import {
   Param,
   ParseUUIDPipe,
   Put,
+  Response,
+  Query,
 } from '@nestjs/common';
 import * as Swagger from '@nestjs/swagger';
 import { UserRead, UserCreate, ResetPasswordRequest } from '../dtos/users.dto';
 import { CreateUserUsecase } from 'src/core/usecases/users/create-user.usecase';
 import { ResetPasswordUsecase } from 'src/core/usecases/users/reset-password.usecase';
-import { Role } from 'src/core/models/user';
+import { Role, User } from 'src/core/models/user';
+import { GetUsersUsecase } from 'src/core/usecases/users/get-users.usecase';
+import { GetUsersPaginationDto } from 'src/api/dtos/get-users-pagination.dto';
+import { Paginator } from 'src/shared/types/paginator';
 
 @Controller('users')
 @Swagger.ApiTags('Users')
@@ -23,6 +28,7 @@ export class UsersController {
 
   constructor(
     private readonly createUserUsecase: CreateUserUsecase,
+    private readonly getUsersUsecase: GetUsersUsecase,
     private readonly resetPasswordUsecase: ResetPasswordUsecase,
   ) {}
 
@@ -30,9 +36,24 @@ export class UsersController {
   @Swagger.ApiOperation({
     summary: 'Retrieve the collection of User ressource.',
   })
-  @Swagger.ApiOkResponse({ type: UserRead, isArray: true })
-  async getCollection(): Promise<UserRead[]> {
-    throw new Error('Not implemented');
+  @Swagger.ApiOkResponse({ type: Paginator, isArray: true })
+  async getCollection(
+    @Query() { email, page, limit }: GetUsersPaginationDto,
+  ): Promise<Paginator<User>> {
+    const result = await this.getUsersUsecase.execute({
+      email,
+      page,
+      limit,
+    });
+
+    const resultAllUsers = await this.getUsersUsecase.execute({ email });
+    return new Paginator(
+      result.items,
+      (page - 1) * limit,
+      limit,
+      result.total,
+      resultAllUsers.total,
+    );
   }
 
   @Get(':id')

@@ -1,30 +1,24 @@
-import simpleRestProvider from 'ra-data-simple-rest';
 import React from 'react';
-import { Admin, Resource, AppBar, Toolbar, TitlePortal, LocalesMenuButton } from 'react-admin';
+import { Admin, Resource, useTranslate } from 'react-admin';
 import LoginPage from './auth/LoginPage';
-import authProvider, { httpClient } from './providers/authProvider';
+import authProvider from './providers/authProvider';
+import customDataProvider from './providers/customDataProvider';
 import i18nProvider from './providers/i18nProvider';
 import UserList from './user/UserList';
 
-export const ULAppBar = () => (
-    <AppBar>
-        <Toolbar>
-            <TitlePortal />
-            <LocalesMenuButton />
-        </Toolbar>
-    </AppBar>
-);
+const App = () => {
+    const translate = useTranslate();
 
-const App = () => (
-    <Admin
-        authProvider={authProvider()}
-        dataProvider={simpleRestProvider(`${process.env.REACT_APP_API_URL}`, httpClient)}
-        i18nProvider={i18nProvider}
-        layout={ULAppBar}
-        loginPage={LoginPage}
-    >
-        <Resource list={UserList} name="users" />
-    </Admin>
-);
+    return (
+        <Admin
+            authProvider={authProvider()}
+            dataProvider={customDataProvider}
+            i18nProvider={i18nProvider}
+            loginPage={LoginPage}
+        >
+            <Resource list={UserList} name="users" options={{ label: translate('users.userListTitle') }} />
+        </Admin>
+    );
+};
 
 export default App;
