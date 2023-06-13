@@ -17,8 +17,8 @@ import { UserRead, UserCreate, ResetPasswordRequest } from '../dtos/users.dto';
 import { CreateUserUsecase } from 'src/core/usecases/users/create-user.usecase';
 import { ResetPasswordUsecase } from 'src/core/usecases/users/reset-password.usecase';
 import { Role } from 'src/core/models/user';
-import { PaginationDto } from 'src/api/dtos/pagination.dto';
 import { GetUsersUsecase } from 'src/core/usecases/users/get-users.usecase';
+import { GetUsersPaginationDto } from 'src/api/dtos/get-users-pagination.dto';
 
 @Controller('users')
 @Swagger.ApiTags('Users')
@@ -38,19 +38,19 @@ export class UsersController {
   @Swagger.ApiOkResponse({ type: UserRead, isArray: true })
   async getCollection(
     @Response() res,
-    @Query() { filter, page, limit }: PaginationDto,
+    @Query() { email, page, limit }: GetUsersPaginationDto,
   ): Promise<void> {
     const result = await this.getUsersUsecase.execute({
-      filter,
+      email,
       page,
       limit,
     });
 
+    const resultMaxUsers = await this.getUsersUsecase.execute({ email });
+
     res
       .set({
-        'Content-range': `bytes ${page * limit}-${page * limit + limit}/${
-          result.total
-        } `,
+        'Content-range': `bytes ${result.firstIndex}-${result.lastIndex}/${resultMaxUsers.total}`,
       })
       .json({
         items: result.items.map(UserRead.fromDomain),

@@ -1,12 +1,12 @@
 import { GetUsersProps, KeycloakClient } from '@app/keycloak';
 import { Injectable, Logger } from '@nestjs/common';
 import { User } from 'src/core/models/user';
-import { Collection } from 'src/shared/types/collection';
+import { Paginator } from 'src/shared/types/paginator';
 
 export class GetUsersCommand {
-  filter: string;
-  page: number;
-  limit: number;
+  email?: string;
+  page?: number;
+  limit?: number;
 }
 
 @Injectable()
@@ -15,13 +15,22 @@ export class GetUsersUsecase {
 
   constructor(private readonly keycloak: KeycloakClient) {}
 
-  async execute(command: GetUsersCommand): Promise<Collection<User>> {
-    const { filter, page, limit } = command;
-    const offset = (page - 1) * limit;
-    const payload: GetUsersProps = { first: offset, max: limit };
+  async execute(command: GetUsersCommand): Promise<Paginator<User>> {
+    const { email, page, limit } = command;
+    const payload: GetUsersProps = {};
+    let offset = 0;
 
-    if (filter) {
-      payload.email = filter;
+    if (page && limit) {
+      offset = (page - 1) * limit;
+      payload.first = offset;
+    }
+
+    if (email) {
+      payload.email = email;
+    }
+
+    if (limit) {
+      payload.max = limit;
     }
 
     const result = await this.keycloak.getUsers(payload);
@@ -30,6 +39,6 @@ export class GetUsersUsecase {
       User.signUp(keycloakUser.id, keycloakUser.email),
     );
 
-    return { items: users, total: users.length };
+    return new Paginator(users, offset, limit, users.length);
   }
 }
