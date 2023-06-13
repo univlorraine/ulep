@@ -35,8 +35,8 @@ export class GetUsersUsecase {
 
     const result = await this.keycloak.getUsers(payload);
 
-    const users = result.map((keycloakUser) =>
-      User.signUp(keycloakUser.id, keycloakUser.email),
+    const users = result.map(
+      (keycloakUser) => new User(keycloakUser.id, keycloakUser.email, []),
     );
 
     return new Paginator(users, offset, limit, users.length);
