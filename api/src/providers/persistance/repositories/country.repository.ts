@@ -2,6 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { Country } from 'src/core/models/country';
 import { CountryRepository } from 'src/core/ports/country.repository';
 import { PrismaService } from '../prisma.service';
+import { Collection } from 'src/shared/types/collection';
 
 @Injectable()
 export class PrismaCountryRepository implements CountryRepository {
@@ -19,6 +20,16 @@ export class PrismaCountryRepository implements CountryRepository {
     }
 
     return country;
+  }
+
+  async findAll(): Promise<Collection<Country>> {
+    const countries = await this.prisma.countryCode.findMany();
+
+    if (!countries) {
+      return { items: [], total: 0 };
+    }
+
+    return { items: countries, total: countries.length };
   }
 
   async where(query: {
