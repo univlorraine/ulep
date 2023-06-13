@@ -1,29 +1,37 @@
 import { v4 } from 'uuid';
+import { Country } from './country';
+import { Organization } from '@prisma/client';
 
-export class University {
-  #id: string;
+export interface CreateUniversityProps {
+  name: string;
+  timezone: string;
+  country: Country;
+  admissionStart: Date;
+  admissionEnd: Date;
+}
 
-  #name: string;
+export class University implements Organization {
+  id: string;
 
-  constructor(id: string, name: string) {
-    this.#id = id;
-    this.#name = name;
-  }
+  name: string;
 
-  static create(name: string): University {
+  country: Country;
+
+  timezone: string;
+
+  admissionStart: Date;
+
+  admissionEnd: Date;
+
+  createdAt: Date;
+
+  static create(props: CreateUniversityProps): University {
     const id = v4();
-    return new University(id, name);
+
+    return { id, ...props, countryId: props.country.id, createdAt: new Date() };
   }
 
-  get id(): string {
-    return this.#id;
-  }
-
-  get name(): string {
-    return this.#name;
-  }
-
-  set name(name: string) {
-    this.#name = name;
+  get countryId(): string {
+    return this.country.id;
   }
 }

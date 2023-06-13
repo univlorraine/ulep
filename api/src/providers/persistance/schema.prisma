@@ -28,15 +28,18 @@ model Profile {
 
 model LanguageCode {
   id                String          @id @default(uuid())
-  code              String
+  code              String          @unique
+  name              String
   languages         Language[]
   createdAt         DateTime        @default(now())
 }
 
 model CountryCode {
   id                String          @id @default(uuid())
-  code              String
+  code              String          @unique
+  name              String
   profiles          Profile[]
+  organizations     Organization[]
   createdAt         DateTime        @default(now())
 }
 
@@ -85,6 +88,11 @@ model Organization {
   id              String            @id @default(uuid())
   profiles        Profile[]
   name            String            @unique
+  country         CountryCode       @relation(fields: [countryId], references: [id])
+  countryId       String
+  timezone        String
+  admissionStart  DateTime
+  admissionEnd    DateTime
   createdAt       DateTime          @default(now())
 }
 
