@@ -1,7 +1,7 @@
 import { GetUsersProps, KeycloakClient } from '@app/keycloak';
 import { Injectable, Logger } from '@nestjs/common';
 import { User } from 'src/core/models/user';
-import { Paginator } from 'src/shared/types/paginator';
+import { Collection } from 'src/shared/types/collection';
 
 export class GetUsersCommand {
   email?: string;
@@ -15,7 +15,7 @@ export class GetUsersUsecase {
 
   constructor(private readonly keycloak: KeycloakClient) {}
 
-  async execute(command: GetUsersCommand): Promise<Paginator<User>> {
+  async execute(command: GetUsersCommand): Promise<Collection<User>> {
     const { email, page, limit } = command;
     const payload: GetUsersProps = {};
     let offset = 0;
@@ -39,6 +39,6 @@ export class GetUsersUsecase {
       (keycloakUser) => new User(keycloakUser.id, keycloakUser.email, []),
     );
 
-    return new Paginator(users, offset, limit, users.length);
+    return { items: users, total: users.length };
   }
 }

@@ -16,9 +16,10 @@ import * as Swagger from '@nestjs/swagger';
 import { UserRead, UserCreate, ResetPasswordRequest } from '../dtos/users.dto';
 import { CreateUserUsecase } from 'src/core/usecases/users/create-user.usecase';
 import { ResetPasswordUsecase } from 'src/core/usecases/users/reset-password.usecase';
-import { Role } from 'src/core/models/user';
+import { Role, User } from 'src/core/models/user';
 import { GetUsersUsecase } from 'src/core/usecases/users/get-users.usecase';
 import { GetUsersPaginationDto } from 'src/api/dtos/get-users-pagination.dto';
+import { Paginator } from 'src/shared/types/paginator';
 
 @Controller('users')
 @Swagger.ApiTags('Users')
@@ -35,27 +36,24 @@ export class UsersController {
   @Swagger.ApiOperation({
     summary: 'Retrieve the collection of User ressource.',
   })
-  @Swagger.ApiOkResponse({ type: UserRead, isArray: true })
+  @Swagger.ApiOkResponse({ type: Paginator, isArray: true })
   async getCollection(
-    @Response() res,
     @Query() { email, page, limit }: GetUsersPaginationDto,
-  ): Promise<void> {
+  ): Promise<Paginator<User>> {
     const result = await this.getUsersUsecase.execute({
       email,
       page,
       limit,
     });
 
-    const resultMaxUsers = await this.getUsersUsecase.execute({ email });
-
-    res
-      .set({
-        'Content-range': `bytes ${result.firstIndex}-${result.lastIndex}/${resultMaxUsers.total}`,
-      })
-      .json({
-        items: result.items.map(UserRead.fromDomain),
-        total: result.total,
-      });
+    const resultAllUsers = await this.getUsersUsecase.execute({ email });
+    return new Paginator(
+      result.items,
+      (page - 1) * limit,
+      limit,
+      result.total,
+      resultAllUsers.total,
+    );
   }
 
   @Get(':id')
