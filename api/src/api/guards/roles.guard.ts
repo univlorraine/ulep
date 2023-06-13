@@ -36,7 +36,12 @@ export class RolesGuard implements CanActivate {
     const user = await this.keycloak.userInfo(token);
     request['user'] = user;
 
-    return this.hasRoles(user, roles);
+    const granted = this.hasRoles(user, roles);
+    if (!granted) {
+      throw new UnauthorizedException();
+    }
+
+    return true;
   }
 
   private extractTokenFromHeader(request: Request): string | undefined {
