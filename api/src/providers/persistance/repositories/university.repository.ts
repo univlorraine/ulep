@@ -9,13 +9,16 @@ export class PrismaUniversityRepository implements UniversityRepository {
   constructor(private readonly prisma: PrismaService) {}
 
   async of(id: string): Promise<University | null> {
-    const result = await this.prisma.organization.findUnique({ where: { id } });
+    const result = await this.prisma.organization.findUnique({
+      where: { id },
+      include: { country: true },
+    });
 
     if (!result) {
       return null;
     }
 
-    return new University(result.id, result.name);
+    return result;
   }
 
   async findAll(offset = 0, limit = 30): Promise<Collection<University>> {
@@ -29,11 +32,21 @@ export class PrismaUniversityRepository implements UniversityRepository {
     const items = await this.prisma.organization.findMany({
       skip: offset,
       take: limit,
+      include: { country: true },
     });
 
-    const universities = items.map(
-      (item) => new University(item.id, item.name),
-    );
+    const universities: University[] = items.map((item) => {
+      return {
+        id: item.id,
+        name: item.name,
+        timezone: item.timezone,
+        country: item.country,
+        countryId: item.countryId,
+        admissionStart: item.admissionStart,
+        admissionEnd: item.admissionEnd,
+        createdAt: item.createdAt,
+      };
+    });
 
     return { items: universities, total: count };
   }
@@ -41,20 +54,33 @@ export class PrismaUniversityRepository implements UniversityRepository {
   async findByName(name: string): Promise<University | null> {
     const result = await this.prisma.organization.findUnique({
       where: { name },
+      include: { country: true },
     });
 
     if (!result) {
       return null;
     }
 
-    return new University(result.id, result.name);
+    return result;
   }
 
-  async save({ id, name }: University): Promise<void> {
+  async save(university: University): Promise<void> {
     await this.prisma.organization.upsert({
-      where: { id },
-      update: { name },
-      create: { id, name },
+      where: { id: university.id },
+      update: {
+        name: university.name,
+        timezone: university.timezone,
+        countryId: university.countryId,
+        admissionStart: university.admissionStart,
+        admissionEnd: university.admissionEnd,
+      },
+      create: {
+        name: university.name,
+        timezone: university.timezone,
+        countryId: university.countryId,
+        admissionStart: university.admissionStart,
+        admissionEnd: university.admissionEnd,
+      },
     });
   }
 

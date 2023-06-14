@@ -14,7 +14,7 @@ import {
   InvalidCredentialsException,
   UserAlreadyExistException,
 } from './keycloak.errors';
-import {
+import RoleRepresentation, {
   CreateUserProps,
   GetUsersProps,
   KeycloakCertsResponse,
@@ -195,7 +195,6 @@ export class KeycloakClient {
             },
           ],
           attributes: {
-            role: props.roles,
             origin: props.origin,
           },
         }),
@@ -207,9 +206,13 @@ export class KeycloakClient {
       throw new UserAlreadyExistException();
     }
 
-    const user = await this.getUsers({ email: props.email, max: 1 });
+    const user = await this.getUserByEmail(props.email);
 
-    return user[0];
+    for (const role of props.roles) {
+      await this.addRealmRoleToUser(user.id, role);
+    }
+
+    return user;
   }
 
   /*
@@ -257,6 +260,80 @@ export class KeycloakClient {
     const users = await response.json();
 
     return users;
+  }
+
+  async getUserByEmail(email: string): Promise<UserRepresentation> {
+    const users = await this.getUsers({ email, max: 1 });
+
+    if (users.length === 0) {
+      throw new Error('User not found');
+    }
+
+    return users[0];
+  }
+
+  /*
+   * Add realm-level role mappings to the user
+   */
+  async addRealmRoleToUser(userId: string, roleName: string): Promise<void> {
+    const role = await this.getRealmRole(roleName);
+
+    await fetch(
+      `${this.configuration.baseUrl}/admin/realms/${this.configuration.realm}/users/${userId}/role-mappings/realm`,
+      {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${await this.getAccessToken()}`,
+        },
+        body: JSON.stringify([
+          {
+            id: role.id,
+            name: role.name,
+          },
+        ]),
+      },
+    );
+  }
+
+  /*
+   * Get a role by name
+   */
+  private async getRealmRole(roleName: string): Promise<RoleRepresentation> {
+    const response = await fetch(
+      `${this.configuration.baseUrl}/admin/realms/${this.configuration.realm}/roles/${roleName}`,
+      {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${await this.getAccessToken()}`,
+        },
+      },
+    );
+
+    const role = await response.json();
+
+    return role;
+  }
+
+  /*
+   * Get all roles for the realm
+   */
+  private async getRealmRoles(): Promise<RoleRepresentation[]> {
+    const response = await fetch(
+      `${this.configuration.baseUrl}/admin/realms/${this.configuration.realm}/roles`,
+      {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${await this.getAccessToken()}`,
+        },
+      },
+    );
+
+    const roles = await response.json();
+
+    return roles;
   }
 
   /*
