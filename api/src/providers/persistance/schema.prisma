@@ -28,15 +28,18 @@ model Profile {
 
 model LanguageCode {
   id                String          @id @default(uuid())
-  code              String
+  code              String          @unique
+  name              String
   languages         Language[]
   createdAt         DateTime        @default(now())
 }
 
 model CountryCode {
   id                String          @id @default(uuid())
-  code              String
+  code              String          @unique
+  name              String
   profiles          Profile[]
+  organizations     Organization[]
   createdAt         DateTime        @default(now())
 }
 
@@ -85,6 +88,11 @@ model Organization {
   id              String            @id @default(uuid())
   profiles        Profile[]
   name            String            @unique
+  country         CountryCode       @relation(fields: [countryId], references: [id])
+  countryId       String
+  timezone        Timezone
+  admissionStart  DateTime
+  admissionEnd    DateTime
   createdAt       DateTime          @default(now())
 }
 
@@ -138,4 +146,46 @@ enum Goal {
   ORAL_PRACTICE
   PREPARE_TRAVEL_ABROAD
   GET_CERTIFICATION
+}
+
+enum Timezone {
+  UTC-12:00
+  UTC-11:00
+  UTC-10:00
+  UTC-09:30
+  UTC-09:00
+  UTC-08:00
+  UTC-07:00
+  UTC-06:00
+  UTC-05:00
+  UTC-04:30
+  UTC-04:00
+  UTC-03:30
+  UTC-03:00
+  UTC-02:00
+  UTC-01:00
+  UTC±00:00
+  UTC+01:00
+  UTC+02:00
+  UTC+03:00
+  UTC+03:30
+  UTC+04:00
+  UTC+04:30
+  UTC+05:00
+  UTC+05:30
+  UTC+05:45
+  UTC+06:00
+  UTC+06:30
+  UTC+07:00
+  UTC+08:00
+  UTC+08:45
+  UTC+09:00
+  UTC+09:30
+  UTC+10:00
+  UTC+10:30
+  UTC+11:00
+  UTC+12:00
+  UTC+12:45
+  UTC+13:00
+  UTC+14:00
 }
