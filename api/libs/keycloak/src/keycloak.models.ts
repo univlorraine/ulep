@@ -3,8 +3,11 @@ export interface KeycloakUserInfoResponse {
   sub: string;
   email: string;
   email_verified: boolean;
-  origin?: string;
-  roles?: string[];
+  realm_access: RealmAccess;
+}
+
+export interface RealmAccess {
+  roles: string[];
 }
 
 export interface UserRepresentation {
@@ -29,6 +32,29 @@ interface UserProfileAttributeMetadata {
   readOnly: boolean;
   annotations: { [index: string]: any };
   validators: { [index: string]: { [index: string]: any } };
+}
+
+export default interface RoleRepresentation {
+  id?: string;
+  name?: string;
+  description?: string;
+  scopeParamRequired?: boolean;
+  composite?: boolean;
+  composites?: Composites;
+  clientRole?: boolean;
+  containerId?: string;
+  attributes?: { [index: string]: string[] };
+}
+
+export interface Composites {
+  realm?: string[];
+  client?: { [index: string]: string[] };
+  application?: { [index: string]: string[] };
+}
+
+export interface RoleMappingPayload extends RoleRepresentation {
+  id: string;
+  name: string;
 }
 
 export interface KeycloakCertsResponse {

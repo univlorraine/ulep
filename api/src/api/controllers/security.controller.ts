@@ -1,5 +1,5 @@
-import { KeycloakClient } from '@app/keycloak';
-import { Body, Controller, Post } from '@nestjs/common';
+import * as Keycloak from '@app/keycloak';
+import { Body, Controller, Post, Logger } from '@nestjs/common';
 import {
   LoginRequest,
   RefreshTokenRequest,
@@ -10,7 +10,9 @@ import * as Swagger from '@nestjs/swagger';
 @Controller('authentication')
 @Swagger.ApiTags('Authentication')
 export class SecurityController {
-  constructor(private readonly keycloak: KeycloakClient) {}
+  private readonly logger = new Logger(SecurityController.name);
+
+  constructor(private readonly keycloak: Keycloak.KeycloakClient) {}
 
   @Post('token')
   @Swagger.ApiOperation({ summary: 'Request a JWT token.' })

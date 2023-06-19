@@ -7,6 +7,7 @@ import { UsersController } from './controllers/users.controller';
 import { HealthController } from './controllers/health.controller';
 import { TerminusModule } from '@nestjs/terminus';
 import { CountriesController } from 'src/api/controllers/countries.controller';
+import { RolesGuard } from './guards/roles.guard';
 
 @Module({
   imports: [CoreModule, TerminusModule],
@@ -17,6 +18,12 @@ import { CountriesController } from 'src/api/controllers/countries.controller';
     UsersController,
     LanguagesController,
     UniversityController,
+  ],
+  providers: [
+    {
+      provide: 'APP_GUARD',
+      useClass: RolesGuard,
+    },
   ],
 })
 export class ApiModule {}
