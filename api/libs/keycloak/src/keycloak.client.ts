@@ -21,6 +21,7 @@ import RoleRepresentation, {
   KeycloakUserInfoResponse,
   UserRepresentation,
 } from './keycloak.models';
+import { Client, Issuer, TokenSet } from 'openid-client';
 
 export interface Credentials {
   accessToken: string;
@@ -33,10 +34,30 @@ export interface Credentials {
 export class KeycloakClient {
   private readonly logger = new Logger(KeycloakClient.name);
 
+  private issuerClient?: Client;
+  private tokenSet?: TokenSet;
+
   constructor(
     @Inject(KEYCLOAK_CONFIGURATION)
     private readonly configuration: KeycloakConfiguration,
   ) {}
+
+  private async initialize(): Promise<void> {
+    const keycloakIssuer = await Issuer.discover(
+      `${this.configuration.baseUrl}/realms/master`,
+    );
+
+    this.issuerClient = new keycloakIssuer.Client({
+      client_id: 'admin-cli',
+      token_endpoint_auth_method: 'none',
+    });
+
+    this.tokenSet = await this.issuerClient.grant({
+      grant_type: 'password',
+      username: this.configuration.username,
+      password: this.configuration.password,
+    });
+  }
 
   /*
    * Returns the access token and refresh token.
@@ -339,24 +360,16 @@ export class KeycloakClient {
   /*
    * Retrieves admin access token from Keycloak
    */
-  private async getAccessToken(): Promise<string> {
-    const response = await fetch(
-      `${this.configuration.baseUrl}/realms/master/protocol/openid-connect/token`,
-      {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-        body: new URLSearchParams({
-          username: this.configuration.username,
-          password: this.configuration.password,
-          grant_type: 'password',
-          client_id: 'admin-cli',
-        }),
-      },
-    );
+  public async getAccessToken(): Promise<string> {
+    if (!this.tokenSet) {
+      await this.initialize();
+    }
 
-    const { access_token } = await response.json();
+    if (this.tokenSet.expired()) {
+      this.issuerClient.refresh(this.tokenSet.refresh_token);
+    }
 
-    return access_token;
+    return this.tokenSet.access_token;
   }
 
   /*
