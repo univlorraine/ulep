@@ -20,7 +20,10 @@ import { DeleteUniversityUsecase } from 'src/core/usecases/universities/delete-u
 import { GetUniversityUsecase } from 'src/core/usecases/universities/get-university.usecase';
 import { University } from 'src/core/models/university';
 import { CreateUniversityUsecase } from 'src/core/usecases/universities/create-university.usecase';
-import { UniversityRead, UniversityWrite } from '../dtos/university.dto';
+import { UniversityResponse } from '../dtos/university/university.response';
+import { CreateUniversityRequest } from '../dtos/university/create-university.request';
+import { UpdateUniversityRequest } from '../dtos/university/update-university.request';
+import { CollectionResponse } from '../decorators/collection.decorator';
 
 @Controller('universities')
 @Swagger.ApiTags('Universities')
@@ -39,52 +42,56 @@ export class UniversityController {
   @Swagger.ApiOperation({
     summary: 'Retrieve the collection of University ressource.',
   })
-  @Swagger.ApiOkResponse({ type: UniversityRead, isArray: true })
+  @CollectionResponse(UniversityResponse)
   async getCollection(
     @Query() { page, limit }: PaginationDto,
-  ): Promise<Collection<UniversityRead>> {
+  ): Promise<Collection<UniversityResponse>> {
     const result = await this.getUniversitiesUsecase.execute({ page, limit });
 
-    return {
-      items: result.items.map(UniversityRead.fromDomain),
-      total: result.total,
-    };
+    return new Collection<UniversityResponse>(
+      result.items.map(UniversityResponse.fromDomain),
+      result.totalItems,
+    );
   }
 
   @Get(':id')
   @Swagger.ApiOperation({ summary: 'Retrieve a University ressource.' })
-  @Swagger.ApiOkResponse({ type: UniversityRead })
+  @Swagger.ApiOkResponse({ type: UniversityResponse })
   @Swagger.ApiNotFoundResponse({ description: 'Resource not found' })
   async getItem(
     @Param('id', ParseUUIDPipe) id: string,
-  ): Promise<UniversityRead> {
+  ): Promise<UniversityResponse> {
     const instance = await this.getUniversityUsecase.execute({ id });
 
-    return UniversityRead.fromDomain(instance);
+    return UniversityResponse.fromDomain(instance);
   }
 
   @Post()
   @Swagger.ApiOperation({ summary: 'Creates a University ressource.' })
-  @Swagger.ApiCreatedResponse({ type: UniversityRead })
-  async create(@Body() body: UniversityWrite): Promise<UniversityRead> {
+  @Swagger.ApiCreatedResponse({ type: UniversityResponse })
+  async create(
+    @Body() body: CreateUniversityRequest,
+  ): Promise<UniversityResponse> {
     const instance = await this.createUniversityUsecase.execute(body);
 
-    return UniversityRead.fromDomain(instance);
+    return UniversityResponse.fromDomain(instance);
   }
 
   @Patch(':id')
   @Swagger.ApiOperation({ summary: 'Updates a University ressource.' })
-  @Swagger.ApiCreatedResponse({ type: UniversityRead })
+  @Swagger.ApiCreatedResponse({ type: UniversityResponse })
   async update(
     @Param('id', ParseUUIDPipe) id: string,
-    @Body() body: UniversityWrite,
-  ): Promise<UniversityRead> {
+    @Body() body: UpdateUniversityRequest,
+  ): Promise<UniversityResponse> {
     const instance = await this.updateUniversityUsecase.execute({
       id,
       name: body.name,
+      admissionStart: body.admissionStart,
+      admissionEnd: body.admissionEnd,
     });
 
-    return UniversityRead.fromDomain(instance);
+    return UniversityResponse.fromDomain(instance);
   }
 
   @Delete(':id')

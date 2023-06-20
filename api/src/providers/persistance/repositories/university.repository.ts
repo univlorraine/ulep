@@ -1,14 +1,15 @@
 import { Injectable } from '@nestjs/common';
-import { UniversityRepository } from 'src/core/ports/university.repository';
 import { PrismaService } from '../prisma.service';
 import { University } from 'src/core/models/university';
 import { Collection } from 'src/shared/types/collection';
+import { universityMapper } from 'src/providers/persistance/mappers/university.mapper';
+import { UniversityRepository } from 'src/core/ports/university.repository';
 
 @Injectable()
 export class PrismaUniversityRepository implements UniversityRepository {
   constructor(private readonly prisma: PrismaService) {}
 
-  async of(id: string): Promise<University | null> {
+  async ofId(id: string): Promise<University | null> {
     const result = await this.prisma.organization.findUnique({
       where: { id },
       include: { country: true },
@@ -18,7 +19,7 @@ export class PrismaUniversityRepository implements UniversityRepository {
       return null;
     }
 
-    return result;
+    return universityMapper(result);
   }
 
   async findAll(offset = 0, limit = 30): Promise<Collection<University>> {
@@ -26,7 +27,7 @@ export class PrismaUniversityRepository implements UniversityRepository {
 
     // If skip is out of range, return an empty array
     if (offset >= count) {
-      return { items: [], total: count };
+      return { items: [], totalItems: count };
     }
 
     const items = await this.prisma.organization.findMany({
@@ -35,23 +36,14 @@ export class PrismaUniversityRepository implements UniversityRepository {
       include: { country: true },
     });
 
-    const universities: University[] = items.map((item) => {
-      return {
-        id: item.id,
-        name: item.name,
-        timezone: item.timezone,
-        country: item.country,
-        countryId: item.countryId,
-        admissionStart: item.admissionStart,
-        admissionEnd: item.admissionEnd,
-        createdAt: item.createdAt,
-      };
-    });
+    const universities: University[] = items.map((item) =>
+      universityMapper(item),
+    );
 
-    return { items: universities, total: count };
+    return { items: universities, totalItems: count };
   }
 
-  async findByName(name: string): Promise<University | null> {
+  async ofName(name: string): Promise<University | null> {
     const result = await this.prisma.organization.findUnique({
       where: { name },
       include: { country: true },
@@ -61,7 +53,7 @@ export class PrismaUniversityRepository implements UniversityRepository {
       return null;
     }
 
-    return result;
+    return universityMapper(result);
   }
 
   async save(university: University): Promise<void> {
@@ -70,14 +62,14 @@ export class PrismaUniversityRepository implements UniversityRepository {
       update: {
         name: university.name,
         timezone: university.timezone,
-        countryId: university.countryId,
+        countryId: university.country.id,
         admissionStart: university.admissionStart,
         admissionEnd: university.admissionEnd,
       },
       create: {
         name: university.name,
         timezone: university.timezone,
-        countryId: university.countryId,
+        countryId: university.country.id,
         admissionStart: university.admissionStart,
         admissionEnd: university.admissionEnd,
       },

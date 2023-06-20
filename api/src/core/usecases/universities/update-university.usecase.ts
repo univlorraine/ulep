@@ -11,6 +11,8 @@ import { UNIVERSITY_REPOSITORY } from 'src/providers/providers.module';
 export class UpdateUniversityCommand {
   id: string;
   name?: string;
+  admissionStart?: Date;
+  admissionEnd?: Date;
 }
 
 @Injectable()
@@ -21,18 +23,26 @@ export class UpdateUniversityUsecase {
   ) {}
 
   async execute(command: UpdateUniversityCommand): Promise<University> {
-    const instance = await this.universityRepository.of(command.id);
+    const instance = await this.universityRepository.ofId(command.id);
     if (!instance) {
       throw new NotFoundException(`University ${command.id} not found`);
     }
 
-    const university = await this.universityRepository.findByName(command.name);
+    const university = await this.universityRepository.ofName(command.name);
     if (university && university.id !== command.id) {
       throw new BadRequestException({ message: 'Field name must be unique' });
     }
 
     if (command.name) {
       instance.name = command.name;
+    }
+
+    if (command.admissionStart) {
+      instance.admissionStart = command.admissionStart;
+    }
+
+    if (command.admissionEnd) {
+      instance.admissionEnd = command.admissionEnd;
     }
 
     await this.universityRepository.save(instance);

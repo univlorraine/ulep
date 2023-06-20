@@ -25,7 +25,7 @@ export class CreateUniversityUsecase {
   ) {}
 
   async execute(command: CreateUniversityCommand): Promise<University> {
-    const university = await this.universityRepository.findByName(command.name);
+    const university = await this.universityRepository.ofName(command.name);
     if (university) {
       throw new BadRequestException({ message: 'University already exists' });
     }

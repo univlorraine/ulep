@@ -3,6 +3,7 @@ import { Country } from 'src/core/models/country';
 import { CountryRepository } from 'src/core/ports/country.repository';
 import { PrismaService } from '../prisma.service';
 import { Collection } from 'src/shared/types/collection';
+import { countryMapper } from 'src/providers/persistance/mappers/country.mapper';
 
 @Injectable()
 export class PrismaCountryRepository implements CountryRepository {
@@ -19,17 +20,20 @@ export class PrismaCountryRepository implements CountryRepository {
       return null;
     }
 
-    return country;
+    return countryMapper(country);
   }
 
   async findAll(): Promise<Collection<Country>> {
     const countries = await this.prisma.countryCode.findMany();
 
     if (!countries) {
-      return { items: [], total: 0 };
+      return { items: [], totalItems: 0 };
     }
 
-    return { items: countries, total: countries.length };
+    return {
+      items: countries.map(countryMapper),
+      totalItems: countries.length,
+    };
   }
 
   async where(query: {
@@ -47,6 +51,6 @@ export class PrismaCountryRepository implements CountryRepository {
       return null;
     }
 
-    return country;
+    return countryMapper(country);
   }
 }

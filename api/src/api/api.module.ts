@@ -1,23 +1,27 @@
 import { Module } from '@nestjs/common';
-import { LanguagesController } from './controllers/languages.controller';
+import { LanguageController } from './controllers/language.controller';
 import { CoreModule } from 'src/core/core.module';
 import { UniversityController } from './controllers/university.controller';
 import { SecurityController } from './controllers/security.controller';
-import { UsersController } from './controllers/users.controller';
+import { UserController } from './controllers/user.controller';
 import { HealthController } from './controllers/health.controller';
 import { TerminusModule } from '@nestjs/terminus';
-import { CountriesController } from 'src/api/controllers/countries.controller';
+import { CountryController } from 'src/api/controllers/country.controller';
+import { ProfileController } from './controllers/profile.controller';
 import { RolesGuard } from './guards/roles.guard';
+import { UploadsController } from './controllers/uploads.controller';
 
 @Module({
   imports: [CoreModule, TerminusModule],
   controllers: [
-    CountriesController,
+    CountryController,
     HealthController,
+    LanguageController,
+    ProfileController,
     SecurityController,
-    UsersController,
-    LanguagesController,
     UniversityController,
+    UploadsController,
+    UserController,
   ],
   providers: [
     {

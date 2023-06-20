@@ -1,19 +1,35 @@
-import { CountryCode } from '@prisma/client';
 import { v4 } from 'uuid';
 
-export interface CreateCountryProps {
+export interface CountryProps {
   name: string;
   code: string;
 }
 
-export class Country implements CountryCode {
-  id: string;
-  code: string;
-  name: string;
-  createdAt: Date;
+export class Country {
+  #id: string;
+  #code: string;
+  #name: string;
 
-  static create(props: CreateCountryProps): Country {
+  constructor(props: { id: string } & CountryProps) {
+    this.#id = props.id;
+    this.#code = props.code;
+    this.#name = props.name;
+  }
+
+  static create(props: CountryProps): Country {
     const id = v4();
-    return { id, ...props, createdAt: new Date() };
+    return new Country({ id, ...props });
+  }
+
+  get id(): string {
+    return this.#id;
+  }
+
+  get code(): string {
+    return this.#code;
+  }
+
+  get name(): string {
+    return this.#name;
   }
 }

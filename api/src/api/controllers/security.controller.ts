@@ -1,11 +1,9 @@
 import * as Keycloak from '@app/keycloak';
 import { Body, Controller, Post, Logger } from '@nestjs/common';
-import {
-  LoginRequest,
-  RefreshTokenRequest,
-  LoginResponse,
-} from '../dtos/security.dto';
 import * as Swagger from '@nestjs/swagger';
+import { TokensResponse } from '../dtos/tokens/tokens.response';
+import { TokensRequest } from '../dtos/tokens/tokens.request';
+import { RefreshTokenRequest } from '../dtos/tokens/refresh-token.request';
 
 @Controller('authentication')
 @Swagger.ApiTags('Authentication')
@@ -16,10 +14,10 @@ export class SecurityController {
 
   @Post('token')
   @Swagger.ApiOperation({ summary: 'Request a JWT token.' })
-  @Swagger.ApiOkResponse({ type: LoginResponse })
+  @Swagger.ApiOkResponse({ type: TokensResponse })
   async login(
-    @Body() { email, password }: LoginRequest,
-  ): Promise<LoginResponse> {
+    @Body() { email, password }: TokensRequest,
+  ): Promise<TokensResponse> {
     const credentials = await this.keycloak.getCredentials(email, password);
 
     return credentials;
@@ -27,10 +25,10 @@ export class SecurityController {
 
   @Post('refresh-token')
   @Swagger.ApiOperation({ summary: 'Request a JWT token.' })
-  @Swagger.ApiOkResponse({ type: LoginResponse })
+  @Swagger.ApiOkResponse({ type: TokensResponse })
   async refreshToken(
     @Body() { token }: RefreshTokenRequest,
-  ): Promise<LoginResponse> {
+  ): Promise<TokensResponse> {
     const credentials = await this.keycloak.refreshToken(token);
 
     return credentials;

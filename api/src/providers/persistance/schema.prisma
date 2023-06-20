@@ -20,6 +20,7 @@ model Profile {
   organizationId    String
   nationality       CountryCode     @relation(fields: [nationalityId], references: [id])
   nationalityId     String
+  avatar            MediaObject?
   languages         Language[]
   matches           ProfileMatch[]
   tandems           ProfileTandem[]
@@ -30,6 +31,7 @@ model LanguageCode {
   id                String          @id @default(uuid())
   code              String          @unique
   name              String
+  isEnable          Boolean         @default(true)
   languages         Language[]
   createdAt         DateTime        @default(now())
 }
@@ -90,19 +92,21 @@ model Organization {
   name            String            @unique
   country         CountryCode       @relation(fields: [countryId], references: [id])
   countryId       String
-  timezone        Timezone
+  timezone        String
   admissionStart  DateTime
   admissionEnd    DateTime
   createdAt       DateTime          @default(now())
 }
 
-model Media {
+model MediaObject {
   id              String            @id @default(uuid())
   name            String
   bucket          String
   mime            String
   size            Int
   createdAt       DateTime          @default(now())
+  profile         Profile           @relation(fields: [profileId], references: [id], onDelete: Cascade)
+  profileId       String            @unique
 }
 
 enum Role {
@@ -116,30 +120,6 @@ enum Gender {
   OTHER
 }
 
-enum DayOfWeek {
-  MONDAY
-  TUESDAY
-  WEDNESDAY
-  THURSDAY
-  FRIDAY
-  SATURDAY
-  SUNDAY
-}
-
-enum AvailabilityLevel {
-  NOT_AVAILABLE
-  SOMEWHAT_AVAILABLE
-  VERY_AVAILABLE
-}
-
-enum MeetingFrequency {
-  ONCE_A_WEEK
-  TWICE_A_WEEK
-  THREE_TIMES_A_WEEK
-  TWICE_A_MONTH
-  THREE_TIMES_A_MONTH
-}
-
 enum Goal {
   SPEAK_LIKE_NATIVE
   IMPROVE_LEVEL
@@ -148,44 +128,10 @@ enum Goal {
   GET_CERTIFICATION
 }
 
-enum Timezone {
-  UTC-12:00
-  UTC-11:00
-  UTC-10:00
-  UTC-09:30
-  UTC-09:00
-  UTC-08:00
-  UTC-07:00
-  UTC-06:00
-  UTC-05:00
-  UTC-04:30
-  UTC-04:00
-  UTC-03:30
-  UTC-03:00
-  UTC-02:00
-  UTC-01:00
-  UTC±00:00
-  UTC+01:00
-  UTC+02:00
-  UTC+03:00
-  UTC+03:30
-  UTC+04:00
-  UTC+04:30
-  UTC+05:00
-  UTC+05:30
-  UTC+05:45
-  UTC+06:00
-  UTC+06:30
-  UTC+07:00
-  UTC+08:00
-  UTC+08:45
-  UTC+09:00
-  UTC+09:30
-  UTC+10:00
-  UTC+10:30
-  UTC+11:00
-  UTC+12:00
-  UTC+12:45
-  UTC+13:00
-  UTC+14:00
+enum MeetingFrequency {
+  ONCE_A_WEEK
+  TWICE_A_WEEK
+  THREE_TIMES_A_WEEK
+  TWICE_A_MONTH
+  THREE_TIMES_A_MONTH
 }

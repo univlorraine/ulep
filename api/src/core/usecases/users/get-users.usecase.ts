@@ -36,9 +36,9 @@ export class GetUsersUsecase {
     const result = await this.keycloak.getUsers(payload);
 
     const users = result.map(
-      (keycloakUser) => new User(keycloakUser.id, keycloakUser.email, []),
+      (user) => new User({ id: user.id, email: user.email }),
     );
 
-    return { items: users, total: users.length };
+    return { items: users, totalItems: users.length };
   }
 }

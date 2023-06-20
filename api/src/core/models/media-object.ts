@@ -1,41 +1,61 @@
 import { ContentTypeException } from 'src/shared/errors/content-type.exception';
 import { v4 } from 'uuid';
 
+export interface MediaObjectProps {
+  id: string;
+  name: string;
+  bucket: string;
+  mimetype: string;
+  size: number;
+}
+
 export default class MediaObject {
-  constructor(
-    private readonly id: string,
-    private readonly name: string,
-    private readonly bucket: string,
-    private readonly mimetype: string,
-    private readonly size: number,
-  ) {}
+  #id: string;
+  #name: string;
+  #bucket: string;
+  #mimetype: string;
+  #size: number;
+
+  constructor(props: { id: string } & MediaObjectProps) {
+    this.#id = props.id;
+    this.#name = props.name;
+    this.#bucket = props.bucket;
+    this.#mimetype = props.mimetype;
+    this.#size = props.size;
+  }
 
   static image(file: Express.Multer.File): MediaObject {
     const id = v4();
     const extension = this.getFileExtension(file.mimetype);
     const name = `${id}${extension}`;
 
-    return new MediaObject(id, name, 'images', file.mimetype, file.size);
+    return new MediaObject({
+      id,
+      name,
+      bucket: 'images',
+      mimetype: file.mimetype,
+      size: file.size,
+    });
   }
 
-  getId(): string {
-    return this.id;
+  get id(): string {
+    return this.#id;
   }
 
-  getName(): string {
-    return this.name;
+  get name(): string {
+    return this.#name;
   }
 
-  getBucket(): string {
-    return this.bucket;
+  get bucket(): string {
+    return this.#bucket;
   }
 
-  getMimetype(): string {
-    return this.mimetype;
+  get mimetype(): string {
+    return this.#mimetype;
   }
 
-  getSize(): number {
-    return this.size;
+  get size(): number {
+    return this.#size;
   }
 
   private static getFileExtension(contentType: string): string {

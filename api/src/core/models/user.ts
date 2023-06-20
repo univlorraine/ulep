@@ -1,29 +1,39 @@
+export interface UserProps {
+  id: string;
+  email: string;
+  roles?: Role[];
+}
+
 export enum Role {
   USER = 'user',
   ADMIN = 'admin',
 }
 
 export class User {
-  constructor(
-    private id: string,
-    private email: string,
-    private role: Role[],
-  ) {}
+  #id: string;
+  #email: string;
+  #roles: Role[];
 
-  static signUp(id: string, email: string, role?: Role[]): User {
-    return new User(id, email, role);
+  constructor(props: UserProps) {
+    this.#id = props.id;
+    this.#email = props.email;
+    this.#roles = props.roles || [Role.USER];
   }
 
-  public getId(): string {
-    return this.id;
+  static signUp(id: string, email: string, roles?: Role[]): User {
+    return new User({ id, email, roles });
   }
 
-  public getEmail(): string {
-    return this.email;
+  get id(): string {
+    return this.#id;
   }
 
-  public getRole(): Role[] {
+  get email(): string {
+    return this.#email;
+  }
+
+  get roles(): Role[] {
     // guarantee every user at least has role USER
-    return this.role || [Role.USER];
+    return this.#roles || [Role.USER];
   }
 }

@@ -16,7 +16,7 @@ export class GetUniversityUsecase {
 
   async execute(command: GetUniversityCommand): Promise<University> {
     const { id } = command;
-    const university = await this.universityRepository.of(id);
+    const university = await this.universityRepository.ofId(id);
 
     if (!university) {
       throw new NotFoundException();

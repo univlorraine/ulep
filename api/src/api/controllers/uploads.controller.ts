@@ -3,24 +3,38 @@ import {
   Logger,
   Post,
   UploadedFile,
+  UseGuards,
   UseInterceptors,
 } from '@nestjs/common';
 import { FileInterceptor } from '@nestjs/platform-express';
-import { ApiOperation, ApiTags } from '@nestjs/swagger';
+import * as Swagger from '@nestjs/swagger';
 import { UploadImageUsecase } from '../../core/usecases/uploads/upload-image.usecase';
+import { User } from '../decorators/user.decorator';
+import { KeycloakUserInfoResponse } from '@app/keycloak';
+import { AuthenticationGuard } from '../guards/authentication.guard';
+import { UploadResponse } from '../dtos/media/upload.response';
 
 @Controller('uploads')
-@ApiTags('Uploads')
+@Swagger.ApiTags('Uploads')
 export class UploadsController {
   private readonly logger = new Logger(UploadsController.name);
 
   constructor(private readonly uploadImageUsecase: UploadImageUsecase) {}
 
   @Post('images')
+  @UseGuards(AuthenticationGuard)
   @UseInterceptors(FileInterceptor('file'))
-  @ApiOperation({ summary: 'Upload image' })
-  async uploadFile(@UploadedFile() file: Express.Multer.File) {
-    await this.uploadImageUsecase.execute(file);
-    return;
+  @Swagger.ApiOperation({ summary: 'Upload image' })
+  @Swagger.ApiOkResponse({ type: UploadResponse })
+  async uploadFile(
+    @UploadedFile() file: Express.Multer.File,
+    @User() user: KeycloakUserInfoResponse,
+  ) {
+    const upload = await this.uploadImageUsecase.execute({
+      profileId: user.sub,
+      file,
+    });
+
+    return upload;
   }
 }

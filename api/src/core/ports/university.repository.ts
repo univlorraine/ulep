@@ -2,9 +2,9 @@ import { Collection } from 'src/shared/types/collection';
 import { University } from '../models/university';
 
 export interface UniversityRepository {
-  of: (id: string) => Promise<University | null>;
+  ofId: (id: string) => Promise<University | null>;
 
-  findByName: (name: string) => Promise<University | null>;
+  ofName: (name: string) => Promise<University | null>;
 
   save: (university: University) => Promise<void>;
 

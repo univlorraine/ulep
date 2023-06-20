@@ -41,11 +41,7 @@ export class MinioService implements StorageService {
   }
 
   async getUrl(object: MediaObject): Promise<string> {
-    return this.minioClient.presignedUrl(
-      'GET',
-      object.getBucket(),
-      object.getName(),
-    );
+    return this.minioClient.presignedUrl('GET', object.bucket, object.name);
   }
 
   async createBucketIfNotExist(bucketName: string): Promise<void> {
