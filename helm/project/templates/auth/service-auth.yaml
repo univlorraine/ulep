@@ -8,9 +8,17 @@ spec:
   type: {{ .Values.auth.service.type }}
   ports:
     - port: {{ .Values.auth.service.port }}
-      targetPort: direct
+      targetPort: http
       protocol: TCP
-      name: direct
+      name: http
+    # - port: 8080
+    #   targetPort: http
+    #   protocol: TCP
+    #   name: http
+    - port: 9990
+      targetPort: admin
+      protocol: TCP
+      name: admin
   selector:
     app.kubernetes.io/name: "{{ include "etandem.name" . }}-{{ .Values.auth.name }}"
     app.kubernetes.io/instance: "{{ .Release.Name }}"

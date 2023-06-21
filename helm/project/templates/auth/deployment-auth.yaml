@@ -29,6 +29,20 @@ spec:
       serviceAccountName: {{ include "etandem.serviceAccountName" . }}
       securityContext:
         {{- toYaml .Values.podSecurityContext | nindent 8 }}
+      initContainers:
+        - name: wait-for-database
+          image: actions/pg_isready
+          command: ["/bin/bash","-c"]
+          args: ["set -x; while [ $(pg_isready -d $DB_NAME -h $HOST_NAME -p $DB_PORT -U $DB_USER -q; echo $?) -ne 0 ]; do sleep 5; done"]          
+          env:
+            - name: DB_NAME
+              value: "{{ .Values.postgresDB }}"
+            - name: HOST_NAME
+              value: "{{ include "etandem.name" . }}-{{ .Values.database.name }}.{{ include "etandem.name" . }}"
+            - name: DB_PORT
+              value: "{{ .Values.database.service.port }}"
+            - name: DB_USER
+              value: "{{ .Values.postgresUser }}"
       containers:
         - name: {{ .Chart.Name }}
           securityContext:
@@ -37,27 +51,31 @@ spec:
           imagePullPolicy: {{ .Values.auth.image.pullPolicy }}
           args:
             - start-dev
+            - --proxy
+            - edge
+            - --health-enabled
+            - 'true'
           ports:
             - name: http
               containerPort: 8080
               protocol: TCP
             - name: https
-              containerPort: 443
+              containerPort: 8443
               protocol: TCP
             - name: admin
               containerPort: 9990
               protocol: TCP
-          livenessProbe:
-            httpGet:
-              path: /health/ready
-              port: admin
-            initialDelaySeconds: 90
-          readinessProbe:
-            httpGet:
-              path: /health/ready
-              port: admin
-            periodSeconds: 30
-            initialDelaySeconds: 90
+          # livenessProbe:
+          #   httpGet:
+          #     path: /health/ready
+          #     port: http
+          #   initialDelaySeconds: 90
+          # readinessProbe:
+          #   httpGet:
+          #     path: /health/ready
+          #     port: http
+          #   periodSeconds: 30
+          #   initialDelaySeconds: 90
           resources:
             {{- toYaml .Values.resources | nindent 12 }}
           env:
@@ -72,9 +90,13 @@ spec:
             - name: KC_DB_PASSWORD
               value: "{{ .Values.postgresPassword }}"
             - name: KC_DB_URL
-              value: "jdbc:postgresql://etandem-database:5432/{{ .Values.postgresDB }}"
+              value: "jdbc:postgresql://{{ include "etandem.name" . }}-{{ .Values.database.name }}.{{ include "etandem.name" . }}:{{ .Values.database.service.port }}/{{ .Values.postgresDB }}"
             - name: KC_DB_SCHEMA
               value: "{{ .Values.auth.env.kcDBSchema }}"
+            - name: PROXY_ADDRESS_FORWARDING
+              value: "{{ .Values.auth.env.proxyAddressForwarding }}"
+            - name: KEYCLOAK_HOSTNAME
+              value: "{{ .Values.auth.env.keycloakHostname }}.{{ .Values.domain }}"
       {{- with .Values.nodeSelector }}
       nodeSelector:
         {{- toYaml . | nindent 8 }}

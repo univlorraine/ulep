@@ -62,12 +62,13 @@ spec:
             - name: PGPASSWORD
               value: "{{ .Values.postgresPassword }}"
           volumeMounts:
-          - mountPath: /docker-entrypoint-initdb.d
-            name: "{{ .Values.database.name }}-data"
+          - name: "configmap-{{ include "etandem.name" . }}-{{ .Values.database.name }}"
+            mountPath: /docker-entrypoint-initdb.d
       volumes:
       - name: "{{ .Values.database.name }}-data"
-        # persistentVolumeClaim:
-        #   claimName:  "{{ include "etandem.fullname" . }}-pvc-{{ .Values.database.name }}"
+        persistentVolumeClaim:
+          claimName:  "{{ include "etandem.name" . }}-pvc-{{ .Values.database.name }}"
+      - name: "configmap-{{ include "etandem.name" . }}-{{ .Values.database.name }}"
         configMap:
           name: "init-{{ include "etandem.name" . }}-{{ .Values.database.name }}"
       {{- with .Values.nodeSelector }}

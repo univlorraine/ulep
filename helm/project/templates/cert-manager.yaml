@@ -1,0 +1,13 @@
+apiVersion: cert-manager.io/v1
+kind: Certificate
+metadata:
+  name: etandem-certmanager
+spec:
+  secretName: etandem-tls
+  dnsNames:
+    - "api.{{ .Values.domain }}"
+    - "auth.{{ .Values.domain }}"
+    - "minio.{{ .Values.domain }}"
+  issuerRef:
+    name: letsencrypt
+    kind: ClusterIssuer
