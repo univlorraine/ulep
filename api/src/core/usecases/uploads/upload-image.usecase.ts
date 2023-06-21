@@ -32,8 +32,8 @@ export class UploadImageUsecase {
     const previousImage = profile.avatar;
     profile.avatar = MediaObject.image(command.file);
 
-    await this.uploadAvatar(profile, command.file);
     await this.deletePreviousImage(previousImage);
+    await this.uploadAvatar(profile, command.file);
 
     return profile.avatar;
   }

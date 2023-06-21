@@ -22,7 +22,9 @@ async function bootstrap() {
 
   const { httpAdapter } = app.get(HttpAdapterHost);
   // Pipes
-  app.useGlobalPipes(new ValidationPipe({ forbidUnknownValues: true }));
+  app.useGlobalPipes(
+    new ValidationPipe({ forbidUnknownValues: true, transform: true }),
+  );
   // Filters
   app.useGlobalFilters(new PrismaClientExceptionFilter(httpAdapter));
   app.useGlobalFilters(new DomainErrorFilter(httpAdapter));

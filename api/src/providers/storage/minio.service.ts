@@ -40,7 +40,7 @@ export class MinioService implements StorageService {
     await this.minioClient.putObject(bucket, name, file.buffer, file.size);
   }
 
-  async getUrl(object: MediaObject): Promise<string> {
+  async getPresignedUrl(object: MediaObject): Promise<string> {
     return this.minioClient.presignedUrl('GET', object.bucket, object.name);
   }
 

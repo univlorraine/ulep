@@ -29,12 +29,15 @@ export class UploadsController {
   async uploadFile(
     @UploadedFile() file: Express.Multer.File,
     @User() user: KeycloakUserInfoResponse,
-  ) {
+  ): Promise<UploadResponse> {
     const upload = await this.uploadImageUsecase.execute({
       profileId: user.sub,
       file,
     });
 
-    return upload;
+    return {
+      id: upload.id,
+      url: `${process.env.MINIO_PUBLIC_URL}/${upload.bucket}/${upload.name}`,
+    };
   }
 }

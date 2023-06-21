@@ -64,7 +64,9 @@ export class ProfileResponse {
       goals: profile.goals,
       meetingFrequency: profile.meetingFrequency,
       bios: profile.bios,
-      avatar: profile.avatar && profile.avatar.name,
+      avatar:
+        profile.avatar &&
+        `${process.env.MINIO_PUBLIC_URL}/${profile.avatar.bucket}/${profile.avatar.name}`,
     };
   }
 }

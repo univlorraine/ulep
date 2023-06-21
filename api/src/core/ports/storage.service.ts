@@ -9,5 +9,5 @@ export interface StorageService {
 
   deleteFile(bucket: string, name: string): Promise<void>;
 
-  getUrl(object: MediaObject): Promise<string>;
+  getPresignedUrl(object: MediaObject): Promise<string>;
 }
