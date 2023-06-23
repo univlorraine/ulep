@@ -1,8 +1,8 @@
 import { Inject, Injectable, Logger } from '@nestjs/common';
-import { University } from 'src/core/models/university';
-import { UniversityRepository } from 'src/core/ports/university.repository';
-import { UNIVERSITY_REPOSITORY } from 'src/providers/providers.module';
-import { Collection } from 'src/shared/types/collection';
+import { University } from '../../models/university';
+import { UniversityRepository } from '../../ports/university.repository';
+import { UNIVERSITY_REPOSITORY } from '../../../providers/providers.module';
+import { Collection } from '../../../shared/types/collection';
 
 export class GetUniversitiesCommand {
   page: number;

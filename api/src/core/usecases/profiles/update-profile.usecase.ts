@@ -2,15 +2,15 @@ import { Inject, Injectable } from '@nestjs/common';
 import {
   ProfileDoesNotExist,
   UniversityDoesNotExist,
-} from 'src/core/errors/RessourceDoesNotExist';
-import { Goal, MeetingFrequency, Profile } from 'src/core/models/profile';
-import { University } from 'src/core/models/university';
-import { ProfileRepository } from 'src/core/ports/profile.repository';
-import { UniversityRepository } from 'src/core/ports/university.repository';
+} from '../../errors/RessourceDoesNotExist';
+import { Goal, MeetingFrequency, Profile } from '../../models/profile';
+import { University } from '../../models/university';
+import { ProfileRepository } from '../../ports/profile.repository';
+import { UniversityRepository } from '../../ports/university.repository';
 import {
   PROFILE_REPOSITORY,
   UNIVERSITY_REPOSITORY,
-} from 'src/providers/providers.module';
+} from '../../../providers/providers.module';
 
 export type UpdateProfileCommand = {
   id: string;

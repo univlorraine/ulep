@@ -1,12 +1,8 @@
-import {
-  BadRequestException,
-  Inject,
-  Injectable,
-  NotFoundException,
-} from '@nestjs/common';
-import { University } from 'src/core/models/university';
-import { UniversityRepository } from 'src/core/ports/university.repository';
-import { UNIVERSITY_REPOSITORY } from 'src/providers/providers.module';
+import { ConflictException, Inject, Injectable } from '@nestjs/common';
+import { University } from '../../models/university';
+import { UniversityRepository } from '../../ports/university.repository';
+import { UNIVERSITY_REPOSITORY } from '../../../providers/providers.module';
+import { UniversityDoesNotExist } from '../../../core/errors/RessourceDoesNotExist';
 
 export class UpdateUniversityCommand {
   id: string;
@@ -25,12 +21,12 @@ export class UpdateUniversityUsecase {
   async execute(command: UpdateUniversityCommand): Promise<University> {
     const instance = await this.universityRepository.ofId(command.id);
     if (!instance) {
-      throw new NotFoundException(`University ${command.id} not found`);
+      throw UniversityDoesNotExist.withIdOf(command.id);
     }
 
     const university = await this.universityRepository.ofName(command.name);
     if (university && university.id !== command.id) {
-      throw new BadRequestException({ message: 'Field name must be unique' });
+      throw new ConflictException({ message: 'Field name must be unique' });
     }
 
     if (command.name) {

@@ -1,8 +1,8 @@
 import { Inject, Injectable } from '@nestjs/common';
-import { RessourceAlreadyExists } from 'src/core/errors/RessourceAlreadyExists';
-import { Language } from 'src/core/models/language';
-import { LanguageRepository } from 'src/core/ports/language.repository';
-import { LANGUAGE_REPOSITORY } from 'src/providers/providers.module';
+import { RessourceAlreadyExists } from '../../errors/RessourceAlreadyExists';
+import { Language } from '../../models/language';
+import { LanguageRepository } from '../../ports/language.repository';
+import { LANGUAGE_REPOSITORY } from '../../../providers/providers.module';
 
 export class CreateLanguageCommand {
   id: string;

@@ -1,4 +1,4 @@
-import { ContentTypeException } from 'src/shared/errors/content-type.exception';
+import { ContentTypeException } from '../../shared/errors/content-type.exception';
 import { v4 } from 'uuid';
 
 export interface MediaObjectProps {

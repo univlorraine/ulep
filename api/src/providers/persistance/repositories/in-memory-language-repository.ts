@@ -1,6 +1,6 @@
-import { Language } from 'src/core/models/language';
-import { LanguageRepository } from 'src/core/ports/language.repository';
-import { Collection } from 'src/shared/types/collection';
+import { Language } from '../../../core/models/language';
+import { LanguageRepository } from '../../../core/ports/language.repository';
+import { Collection } from '../../../shared/types/collection';
 
 export class InMemoryLanguageRepository implements LanguageRepository {
   #languages: Language[] = [];
@@ -17,9 +17,9 @@ export class InMemoryLanguageRepository implements LanguageRepository {
     return this.#languages;
   }
 
-  async all(offset?: number, limit?: number): Promise<Collection<Language>> {
+  async all(offset: number, limit: number): Promise<Collection<Language>> {
     return {
-      items: this.#languages.slice(offset, limit),
+      items: this.#languages.slice(offset, offset + limit),
       totalItems: this.#languages.length,
     };
   }
@@ -29,6 +29,10 @@ export class InMemoryLanguageRepository implements LanguageRepository {
   }
 
   async where(query: { code?: string }): Promise<Language> {
+    if (!query.code) {
+      throw new Error('Missing code');
+    }
+
     return this.#languages.find((language) => language.code === query.code);
   }
 

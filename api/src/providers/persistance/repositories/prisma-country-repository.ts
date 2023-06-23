@@ -1,9 +1,9 @@
 import { Injectable } from '@nestjs/common';
-import { Country } from 'src/core/models/country';
-import { CountryRepository } from 'src/core/ports/country.repository';
+import { Country } from '../../../core/models/country';
+import { CountryRepository } from '../../../core/ports/country.repository';
 import { PrismaService } from '../prisma.service';
-import { Collection } from 'src/shared/types/collection';
-import { countryMapper } from 'src/providers/persistance/mappers/country.mapper';
+import { Collection } from '../../../shared/types/collection';
+import { countryMapper } from '../mappers/country.mapper';
 
 @Injectable()
 export class PrismaCountryRepository implements CountryRepository {

@@ -7,7 +7,7 @@ import {
 } from '@nestjs/common';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
-import { Collection } from 'src/shared/types/collection';
+import { Collection } from '../../shared/types/collection';
 
 @Injectable()
 export class CollectionInterceptor implements NestInterceptor {

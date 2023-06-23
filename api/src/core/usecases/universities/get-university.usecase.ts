@@ -1,7 +1,8 @@
-import { Inject, Injectable, NotFoundException } from '@nestjs/common';
-import { University } from 'src/core/models/university';
-import { UniversityRepository } from 'src/core/ports/university.repository';
-import { UNIVERSITY_REPOSITORY } from 'src/providers/providers.module';
+import { Inject, Injectable } from '@nestjs/common';
+import { University } from '../../models/university';
+import { UniversityRepository } from '../../ports/university.repository';
+import { UNIVERSITY_REPOSITORY } from '../../../providers/providers.module';
+import { UniversityDoesNotExist } from '../../../core/errors/RessourceDoesNotExist';
 
 export class GetUniversityCommand {
   id: string;
@@ -19,7 +20,7 @@ export class GetUniversityUsecase {
     const university = await this.universityRepository.ofId(id);
 
     if (!university) {
-      throw new NotFoundException();
+      throw UniversityDoesNotExist.withIdOf(id);
     }
 
     return university;

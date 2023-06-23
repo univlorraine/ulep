@@ -1,8 +1,8 @@
 import { Inject, Injectable, Logger } from '@nestjs/common';
-import { Country } from 'src/core/models/country';
-import { CountryRepository } from 'src/core/ports/country.repository';
-import { COUNTRY_REPOSITORY } from 'src/providers/providers.module';
-import { Collection } from 'src/shared/types/collection';
+import { Country } from '../../models/country';
+import { CountryRepository } from '../../ports/country.repository';
+import { COUNTRY_REPOSITORY } from '../../../providers/providers.module';
+import { Collection } from '../../../shared/types/collection';
 
 @Injectable()
 export class GetCountriesUsecase {

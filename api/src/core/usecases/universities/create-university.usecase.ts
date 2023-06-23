@@ -1,11 +1,13 @@
-import { BadRequestException, Inject, Injectable } from '@nestjs/common';
-import { University } from 'src/core/models/university';
-import { CountryRepository } from 'src/core/ports/country.repository';
-import { UniversityRepository } from 'src/core/ports/university.repository';
+import { Inject, Injectable } from '@nestjs/common';
+import { University } from '../../models/university';
+import { CountryRepository } from '../../ports/country.repository';
+import { UniversityRepository } from '../../ports/university.repository';
 import {
   COUNTRY_REPOSITORY,
   UNIVERSITY_REPOSITORY,
-} from 'src/providers/providers.module';
+} from '../../../providers/providers.module';
+import { UniversityAlreadyExists } from '../../errors/RessourceAlreadyExists';
+import { CountryDoesNotExist } from '../../errors/RessourceDoesNotExist';
 
 export class CreateUniversityCommand {
   name: string;
@@ -27,14 +29,14 @@ export class CreateUniversityUsecase {
   async execute(command: CreateUniversityCommand): Promise<University> {
     const university = await this.universityRepository.ofName(command.name);
     if (university) {
-      throw new BadRequestException({ message: 'University already exists' });
+      throw UniversityAlreadyExists.withNameOf(command.name);
     }
 
     const country = await this.countryRepository.where({
       code: command.countryCode,
     });
     if (!country) {
-      throw new BadRequestException({ message: 'Country not found' });
+      throw CountryDoesNotExist.withCodeOf(command.countryCode);
     }
 
     const instance = University.create({

@@ -7,7 +7,7 @@ import {
   IsString,
   IsUUID,
 } from 'class-validator';
-import { Goal, MeetingFrequency } from 'src/core/models/profile';
+import { Goal, MeetingFrequency } from '../../../core/models/profile';
 
 export class CreateProfileRequest {
   @ApiProperty()

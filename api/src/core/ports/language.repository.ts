@@ -1,4 +1,4 @@
-import { Collection } from 'src/shared/types/collection';
+import { Collection } from '../../shared/types/collection';
 import { Language } from '../models/language';
 
 export interface LanguageRepository {

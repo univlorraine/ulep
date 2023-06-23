@@ -1,5 +1,5 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { Language } from 'src/core/models/language';
+import { Language } from '../../../core/models/language';
 
 export class LanguageResponse {
   @ApiProperty({ readOnly: true })

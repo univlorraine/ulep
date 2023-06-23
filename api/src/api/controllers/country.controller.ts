@@ -1,9 +1,9 @@
 import { Controller, Get } from '@nestjs/common';
-import { GetCountriesUsecase } from 'src/core/usecases/countries/get-countries.usecase';
+import { GetCountriesUsecase } from '../../core/usecases/countries/get-countries.usecase';
 import * as Swagger from '@nestjs/swagger';
 import { CountryResponse } from '../dtos/countries/country.response';
 import { CollectionResponse } from '../decorators/collection.decorator';
-import { Collection } from 'src/shared/types/collection';
+import { Collection } from '../../shared/types/collection';
 
 @Controller('countries')
 @Swagger.ApiTags('Countries')

@@ -1,5 +1,5 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { User } from 'src/core/models/user';
+import { User } from '../../../core/models/user';
 
 export class UserResponse {
   @ApiProperty({ readOnly: true })

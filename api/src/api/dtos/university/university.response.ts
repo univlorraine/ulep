@@ -1,5 +1,5 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { University } from 'src/core/models/university';
+import { University } from '../../../core/models/university';
 import { CountryResponse } from '../countries/country.response';
 
 export class UniversityResponse {

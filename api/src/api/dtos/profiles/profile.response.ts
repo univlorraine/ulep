@@ -1,6 +1,6 @@
 import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
 import { Gender, Role } from '@prisma/client';
-import { Goal, MeetingFrequency, Profile } from 'src/core/models/profile';
+import { Goal, MeetingFrequency, Profile } from '../../../core/models/profile';
 import { UniversityResponse } from '../university/university.response';
 
 export class ProfileResponse {

@@ -1,9 +1,9 @@
 import { Injectable } from '@nestjs/common';
 import { PrismaService } from '../prisma.service';
-import { University } from 'src/core/models/university';
-import { Collection } from 'src/shared/types/collection';
-import { universityMapper } from 'src/providers/persistance/mappers/university.mapper';
-import { UniversityRepository } from 'src/core/ports/university.repository';
+import { University } from '../../../core/models/university';
+import { Collection } from '../../../shared/types/collection';
+import { universityMapper } from '../mappers/university.mapper';
+import { UniversityRepository } from '../../../core/ports/university.repository';
 
 @Injectable()
 export class PrismaUniversityRepository implements UniversityRepository {

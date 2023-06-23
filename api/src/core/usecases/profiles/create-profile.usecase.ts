@@ -1,19 +1,19 @@
 import { Inject, Injectable, Logger } from '@nestjs/common';
 import { Gender, Role } from '@prisma/client';
-import { ProfileAlreadyExists } from 'src/core/errors/RessourceAlreadyExists';
+import { ProfileAlreadyExists } from '../../errors/RessourceAlreadyExists';
 import {
   CountryDoesNotExist,
   UniversityDoesNotExist,
-} from 'src/core/errors/RessourceDoesNotExist';
-import { Goal, MeetingFrequency, Profile } from 'src/core/models/profile';
-import { CountryRepository } from 'src/core/ports/country.repository';
-import { ProfileRepository } from 'src/core/ports/profile.repository';
-import { UniversityRepository } from 'src/core/ports/university.repository';
+} from '../../errors/RessourceDoesNotExist';
+import { Goal, MeetingFrequency, Profile } from '../../models/profile';
+import { CountryRepository } from '../../ports/country.repository';
+import { ProfileRepository } from '../../ports/profile.repository';
+import { UniversityRepository } from '../../ports/university.repository';
 import {
   COUNTRY_REPOSITORY,
   PROFILE_REPOSITORY,
   UNIVERSITY_REPOSITORY,
-} from 'src/providers/providers.module';
+} from '../../../providers/providers.module';
 
 export class CreateProfileCommand {
   id: string;

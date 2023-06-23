@@ -1,8 +1,8 @@
 import * as Prisma from '@prisma/client';
-import { Profile } from 'src/core/models/profile';
+import { Profile } from '../../../core/models/profile';
 import { universityMapper } from './university.mapper';
 import { countryMapper } from './country.mapper';
-import MediaObject from 'src/core/models/media-object';
+import MediaObject from '../../../core/models/media-object';
 
 type ProfileEntity = Prisma.Profile & {
   organization: Prisma.Organization & { country: Prisma.CountryCode };

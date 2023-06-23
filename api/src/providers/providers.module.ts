@@ -1,11 +1,11 @@
 import { Module, Provider } from '@nestjs/common';
 import { PrismaService } from './persistance/prisma.service';
-import { PrismaProfileRepository } from './persistance/repositories/profile.repository';
+import { PrismaProfileRepository } from './persistance/repositories/prisma-profile-repository';
 import { MinioService } from './storage/minio.service';
-import { PrismaMediaObjectRepository } from './persistance/repositories/media-object.repository';
-import { PrismaUniversityRepository } from './persistance/repositories/university.repository';
-import { PrismaCountryRepository } from './persistance/repositories/country.repository';
-import { PrismaLanguageRepository } from './persistance/repositories/language-repository';
+import { PrismaMediaObjectRepository } from './persistance/repositories/prisma-media-object-repository';
+import { PrismaUniversityRepository } from './persistance/repositories/prisma-university-repository';
+import { PrismaCountryRepository } from './persistance/repositories/prisma-country-repository';
+import { PrismaLanguageRepository } from './persistance/repositories/prisma-language-repository';
 
 export const STORAGE_SERVICE = 'storage.service';
 export const PROFILE_REPOSITORY = 'profile.repository';

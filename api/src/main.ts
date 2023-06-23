@@ -4,7 +4,7 @@ import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 import { ValidationPipe } from '@nestjs/common';
 import { PrismaClientExceptionFilter } from './shared/errors/prisma-exceptions.filter';
 import { ConfigService } from '@nestjs/config';
-import { CollectionInterceptor } from 'src/api/interceptors/collection.interceptor';
+import { CollectionInterceptor } from './api/interceptors/collection.interceptor';
 import { DomainErrorFilter } from './api/interceptors/domain-error.interceptor';
 
 async function bootstrap() {

@@ -1,4 +1,3 @@
-import e from 'express';
 import { DomainError, DomainErrorCode } from './errors';
 
 export class RessourceDoesNotExist extends DomainError {
@@ -14,6 +13,16 @@ export class RessourceDoesNotExist extends DomainError {
   }
 }
 
+export class LanguageDoesNotExist extends RessourceDoesNotExist {
+  constructor(public readonly field: string, public readonly value: string) {
+    super('Language', field, value);
+  }
+
+  static withIdOf(id: string): RessourceDoesNotExist {
+    return new LanguageDoesNotExist('id', id);
+  }
+}
+
 export class CountryDoesNotExist extends RessourceDoesNotExist {
   constructor(public readonly field: string, public readonly value: string) {
     super('Country', field, value);
@@ -21,6 +30,10 @@ export class CountryDoesNotExist extends RessourceDoesNotExist {
 
   static withIdOf(id: string): RessourceDoesNotExist {
     return new CountryDoesNotExist('id', id);
+  }
+
+  static withCodeOf(code: string): RessourceDoesNotExist {
+    return new CountryDoesNotExist('code', code);
   }
 }
 

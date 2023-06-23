@@ -1,8 +1,8 @@
 import { Inject, Injectable } from '@nestjs/common';
-import { RessourceAlreadyExists } from 'src/core/errors/RessourceAlreadyExists';
-import { Language } from 'src/core/models/language';
-import { LanguageRepository } from 'src/core/ports/language.repository';
-import { LANGUAGE_REPOSITORY } from 'src/providers/providers.module';
+import { Language } from '../../models/language';
+import { LanguageRepository } from '../../ports/language.repository';
+import { LANGUAGE_REPOSITORY } from '../../../providers/providers.module';
+import { LanguageDoesNotExist } from '../../errors/RessourceDoesNotExist';
 
 export class UpdateLanguageCommand {
   id: string;
@@ -22,7 +22,7 @@ export class UpdateLanguageUsecase {
     const language = await this.languageRepository.of(id);
 
     if (!language) {
-      throw RessourceAlreadyExists.withIdOf('Language', id);
+      throw LanguageDoesNotExist.withIdOf(id);
     }
 
     language.isEnable = isEnable;

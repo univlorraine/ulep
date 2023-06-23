@@ -1,7 +1,7 @@
 import { GetUsersProps, KeycloakClient } from '@app/keycloak';
 import { Injectable, Logger } from '@nestjs/common';
-import { User } from 'src/core/models/user';
-import { Collection } from 'src/shared/types/collection';
+import { User } from '../../models/user';
+import { Collection } from '../../../shared/types/collection';
 
 export class GetUsersCommand {
   email?: string;

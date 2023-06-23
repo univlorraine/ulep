@@ -1,7 +1,7 @@
 import { Inject, Injectable } from '@nestjs/common';
-import { UniversityDoesNotExist } from 'src/core/errors/RessourceDoesNotExist';
-import { UniversityRepository } from 'src/core/ports/university.repository';
-import { UNIVERSITY_REPOSITORY } from 'src/providers/providers.module';
+import { UniversityDoesNotExist } from '../../errors/RessourceDoesNotExist';
+import { UniversityRepository } from '../../ports/university.repository';
+import { UNIVERSITY_REPOSITORY } from '../../../providers/providers.module';
 
 export class DeleteUniversityCommand {
   id: string;

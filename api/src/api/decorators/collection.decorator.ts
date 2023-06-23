@@ -1,6 +1,6 @@
 import { Type, applyDecorators } from '@nestjs/common';
 import { ApiExtraModels, ApiOkResponse, getSchemaPath } from '@nestjs/swagger';
-import { Collection } from 'src/shared/types/collection';
+import { Collection } from '../../shared/types/collection';
 
 export const CollectionResponse = <T extends Type<unknown>>(type: T) =>
   applyDecorators(

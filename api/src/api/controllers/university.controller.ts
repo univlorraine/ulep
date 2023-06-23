@@ -12,14 +12,13 @@ import {
   Logger,
 } from '@nestjs/common';
 import * as Swagger from '@nestjs/swagger';
-import { UpdateUniversityUsecase } from 'src/core/usecases/universities/update-university.usecase';
+import { UpdateUniversityUsecase } from '../../core/usecases/universities/update-university.usecase';
 import { PaginationDto } from '../dtos/pagination.dto';
-import { GetUniversitiesUsecase } from 'src/core/usecases/universities/get-universities.usecase';
-import { Collection } from 'src/shared/types/collection';
-import { DeleteUniversityUsecase } from 'src/core/usecases/universities/delete-university.usecase';
-import { GetUniversityUsecase } from 'src/core/usecases/universities/get-university.usecase';
-import { University } from 'src/core/models/university';
-import { CreateUniversityUsecase } from 'src/core/usecases/universities/create-university.usecase';
+import { GetUniversitiesUsecase } from '../../core/usecases/universities/get-universities.usecase';
+import { Collection } from '../../shared/types/collection';
+import { DeleteUniversityUsecase } from '../../core/usecases/universities/delete-university.usecase';
+import { GetUniversityUsecase } from '../../core/usecases/universities/get-university.usecase';
+import { CreateUniversityUsecase } from '../../core/usecases/universities/create-university.usecase';
 import { UniversityResponse } from '../dtos/university/university.response';
 import { CreateUniversityRequest } from '../dtos/university/create-university.request';
 import { UpdateUniversityRequest } from '../dtos/university/update-university.request';

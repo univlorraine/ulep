@@ -13,17 +13,16 @@ import {
 } from '@nestjs/common';
 import * as Swagger from '@nestjs/swagger';
 import { LanguageResponse } from '../dtos/languages/language.response';
-import { CreateLanguageUsecase } from 'src/core/usecases/languages/create-language.usecase';
-import { GetLanguagesUsecase } from 'src/core/usecases/languages/get-languages.usecase';
+import { CreateLanguageUsecase } from '../../core/usecases/languages/create-language.usecase';
+import { GetLanguagesUsecase } from '../../core/usecases/languages/get-languages.usecase';
 import { PaginationDto } from '../dtos/pagination.dto';
 import {
   CreateLanguageRequest,
   UpdateLanguageRequest,
 } from '../dtos/languages/create-language.request';
-import { UpdateLanguageUsecase } from 'src/core/usecases/languages/update-language.usecase';
-import { RessourceAlreadyExists } from 'src/core/errors/RessourceAlreadyExists';
+import { UpdateLanguageUsecase } from '../../core/usecases/languages/update-language.usecase';
 import { CollectionResponse } from '../decorators/collection.decorator';
-import { Collection } from 'src/shared/types/collection';
+import { Collection } from '../../shared/types/collection';
 
 @Controller('languages')
 @Swagger.ApiTags('Languages')

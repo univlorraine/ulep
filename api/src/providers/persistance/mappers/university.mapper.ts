@@ -1,5 +1,5 @@
 import * as Prisma from '@prisma/client';
-import { University } from 'src/core/models/university';
+import { University } from '../../../core/models/university';
 import { countryMapper } from './country.mapper';
 
 type OrganizationEntity = Prisma.Organization & {

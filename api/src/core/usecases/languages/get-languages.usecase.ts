@@ -1,6 +1,6 @@
 import { Inject, Injectable } from '@nestjs/common';
-import { LanguageRepository } from 'src/core/ports/language.repository';
-import { LANGUAGE_REPOSITORY } from 'src/providers/providers.module';
+import { LanguageRepository } from '../../ports/language.repository';
+import { LANGUAGE_REPOSITORY } from '../../../providers/providers.module';
 
 export class GetLanguagesCommand {
   page: number;
@@ -17,6 +17,7 @@ export class GetLanguagesUsecase {
   async execute(command: GetLanguagesCommand) {
     const { page, limit } = command;
     const offset = (page - 1) * limit;
+
     const result = await this.languageRepository.all(offset, limit);
 
     return result;

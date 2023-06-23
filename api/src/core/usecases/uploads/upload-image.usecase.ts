@@ -6,10 +6,10 @@ import {
   MEDIA_OBJECT_REPOSITORY,
   PROFILE_REPOSITORY,
   STORAGE_SERVICE,
-} from 'src/providers/providers.module';
-import { ProfileRepository } from 'src/core/ports/profile.repository';
-import { Profile } from 'src/core/models/profile';
-import { ProfileDoesNotExist } from 'src/core/errors/RessourceDoesNotExist';
+} from '../../../providers/providers.module';
+import { ProfileRepository } from '../../ports/profile.repository';
+import { Profile } from '../../models/profile';
+import { ProfileDoesNotExist } from '../../errors/RessourceDoesNotExist';
 
 export class UploadImageCommand {
   profileId: string;

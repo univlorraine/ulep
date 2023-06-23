@@ -12,20 +12,20 @@ import {
   Logger,
 } from '@nestjs/common';
 import * as Swagger from '@nestjs/swagger';
-import { GetProfilesUsecase } from 'src/core/usecases/profiles/get-profiles.usecase';
-import { GetProfileUsecase } from 'src/core/usecases/profiles/get-profile.usecase';
-import { CreateProfileUsecase } from 'src/core/usecases/profiles/create-profile.usecase';
+import { GetProfilesUsecase } from '../../core/usecases/profiles/get-profiles.usecase';
+import { GetProfileUsecase } from '../../core/usecases/profiles/get-profile.usecase';
+import { CreateProfileUsecase } from '../../core/usecases/profiles/create-profile.usecase';
 import { User } from '../decorators/user.decorator';
 import { KeycloakUserInfoResponse } from '@app/keycloak';
 import { AuthenticationGuard } from '../guards/authentication.guard';
 import { ProfileResponse } from '../dtos/profiles/profile.response';
 import { CreateProfileRequest } from '../dtos/profiles/create-profile.request';
 import { PaginationDto } from '../dtos/pagination.dto';
-import { Collection } from 'src/shared/types/collection';
+import { Collection } from '../../shared/types/collection';
 import { CollectionResponse } from '../decorators/collection.decorator';
-import { UpdateProfileUsecase } from 'src/core/usecases/profiles/update-profile.usecase';
+import { UpdateProfileUsecase } from '../../core/usecases/profiles/update-profile.usecase';
 import { UpdateProfileRequest } from '../dtos/profiles/update-profile.request';
-import { DeleteProfileUsecase } from 'src/core/usecases/profiles/delete-profile.usecase';
+import { DeleteProfileUsecase } from '../../core/usecases/profiles/delete-profile.usecase';
 
 @Controller('profiles')
 @Swagger.ApiTags('Profiles')

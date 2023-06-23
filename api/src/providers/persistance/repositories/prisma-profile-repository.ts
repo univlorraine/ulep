@@ -1,9 +1,9 @@
 import { Injectable } from '@nestjs/common';
 import { PrismaService } from '../prisma.service';
-import { ProfileRepository } from 'src/core/ports/profile.repository';
+import { ProfileRepository } from '../../../core/ports/profile.repository';
 import { profileMapper } from '../mappers/profile.mapper';
-import { Profile } from 'src/core/models/profile';
-import { Collection } from 'src/shared/types/collection';
+import { Profile } from '../../../core/models/profile';
+import { Collection } from '../../../shared/types/collection';
 
 @Injectable()
 export class PrismaProfileRepository implements ProfileRepository {

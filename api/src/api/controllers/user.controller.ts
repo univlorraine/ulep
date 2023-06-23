@@ -12,16 +12,16 @@ import {
   Query,
 } from '@nestjs/common';
 import * as Swagger from '@nestjs/swagger';
-import { CreateUserUsecase } from 'src/core/usecases/users/create-user.usecase';
-import { ResetPasswordUsecase } from 'src/core/usecases/users/reset-password.usecase';
-import { Role, User } from 'src/core/models/user';
-import { GetUsersUsecase } from 'src/core/usecases/users/get-users.usecase';
+import { CreateUserUsecase } from '../../core/usecases/users/create-user.usecase';
+import { ResetPasswordUsecase } from '../../core/usecases/users/reset-password.usecase';
+import { Role } from '../../core/models/user';
+import { GetUsersUsecase } from '../../core/usecases/users/get-users.usecase';
 import { UserResponse } from '../dtos/users/user.response';
 import { CreateUserRequest } from '../dtos/users/create-user.request';
 import { ResetPasswordRequest } from '../dtos/users/reset-password.request';
 import { PaginationDto } from '../dtos/pagination.dto';
 import { CollectionResponse } from '../decorators/collection.decorator';
-import { Collection } from 'src/shared/types/collection';
+import { Collection } from '../../shared/types/collection';
 
 @Controller('users')
 @Swagger.ApiTags('Users')

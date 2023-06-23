@@ -1,5 +1,5 @@
 import * as Prisma from '@prisma/client';
-import { Country } from 'src/core/models/country';
+import { Country } from '../../../core/models/country';
 
 export const countryMapper = (instance: Prisma.CountryCode): Country => {
   return new Country({

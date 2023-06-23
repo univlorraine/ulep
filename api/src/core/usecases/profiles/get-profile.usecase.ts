@@ -1,7 +1,7 @@
 import { Inject, Injectable } from '@nestjs/common';
-import { ProfileDoesNotExist } from 'src/core/errors/RessourceDoesNotExist';
-import { ProfileRepository } from 'src/core/ports/profile.repository';
-import { PROFILE_REPOSITORY } from 'src/providers/providers.module';
+import { ProfileDoesNotExist } from '../../errors/RessourceDoesNotExist';
+import { ProfileRepository } from '../../ports/profile.repository';
+import { PROFILE_REPOSITORY } from '../../../providers/providers.module';
 
 export type GetProfileCommand = {
   id: string;

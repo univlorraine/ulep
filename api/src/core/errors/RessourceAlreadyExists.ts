@@ -30,3 +30,13 @@ export class ProfileAlreadyExists extends RessourceAlreadyExists {
     return new ProfileAlreadyExists('email', email);
   }
 }
+
+export class UniversityAlreadyExists extends RessourceAlreadyExists {
+  constructor(public readonly field: string, public readonly value: string) {
+    super('University', field, value);
+  }
+
+  static withNameOf(name: string): UniversityAlreadyExists {
+    return new UniversityAlreadyExists('name', name);
+  }
+}

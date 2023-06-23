@@ -1,8 +1,8 @@
 import { Injectable } from '@nestjs/common';
 import { PrismaService } from '../prisma.service';
-import { MediaObjectRepository } from 'src/core/ports/media-object.repository';
-import MediaObject from 'src/core/models/media-object';
-import { Profile } from 'src/core/models/profile';
+import { MediaObjectRepository } from '../../../core/ports/media-object.repository';
+import MediaObject from '../../../core/models/media-object';
+import { Profile } from '../../../core/models/profile';
 
 @Injectable()
 export class PrismaMediaObjectRepository implements MediaObjectRepository {

@@ -1,6 +1,6 @@
 import { Inject, Injectable } from '@nestjs/common';
-import { ProfileRepository } from 'src/core/ports/profile.repository';
-import { PROFILE_REPOSITORY } from 'src/providers/providers.module';
+import { ProfileRepository } from '../../ports/profile.repository';
+import { PROFILE_REPOSITORY } from '../../../providers/providers.module';
 
 export class GetProfilesCommand {
   page: number;

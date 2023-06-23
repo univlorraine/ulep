@@ -1,4 +1,4 @@
-import { Collection } from 'src/shared/types/collection';
+import { Collection } from '../../shared/types/collection';
 import { University } from '../models/university';
 
 export interface UniversityRepository {

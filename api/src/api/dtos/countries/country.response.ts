@@ -1,5 +1,5 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { Country } from 'src/core/models/country';
+import { Country } from '../../../core/models/country';
 
 export class CountryResponse {
   @ApiProperty()

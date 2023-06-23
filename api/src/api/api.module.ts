@@ -1,12 +1,12 @@
 import { Module } from '@nestjs/common';
 import { LanguageController } from './controllers/language.controller';
-import { CoreModule } from 'src/core/core.module';
+import { CoreModule } from '../core/core.module';
 import { UniversityController } from './controllers/university.controller';
 import { SecurityController } from './controllers/security.controller';
 import { UserController } from './controllers/user.controller';
 import { HealthController } from './controllers/health.controller';
 import { TerminusModule } from '@nestjs/terminus';
-import { CountryController } from 'src/api/controllers/country.controller';
+import { CountryController } from './controllers/country.controller';
 import { ProfileController } from './controllers/profile.controller';
 import { RolesGuard } from './guards/roles.guard';
 import { UploadsController } from './controllers/uploads.controller';

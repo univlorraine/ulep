@@ -1,6 +1,6 @@
 import { ApiPropertyOptional } from '@nestjs/swagger';
 import { IsEnum, IsOptional, IsUUID } from 'class-validator';
-import { Goal, MeetingFrequency } from 'src/core/models/profile';
+import { Goal, MeetingFrequency } from '../../../core/models/profile';
 
 export class UpdateProfileRequest {
   @ApiPropertyOptional()
