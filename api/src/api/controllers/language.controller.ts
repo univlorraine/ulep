@@ -10,6 +10,7 @@ import {
   ParseUUIDPipe,
   Logger,
   Query,
+  SerializeOptions,
 } from '@nestjs/common';
 import * as Swagger from '@nestjs/swagger';
 import { LanguageResponse } from '../dtos/languages/language.response';
@@ -55,6 +56,7 @@ export class LanguageController {
   }
 
   @Post()
+  @SerializeOptions({ groups: ['read', 'language:read'] })
   @Swagger.ApiOperation({ summary: 'Creates a Language ressource.' })
   @Swagger.ApiCreatedResponse({ type: LanguageResponse })
   @Swagger.ApiResponse({ status: 400, description: 'Invalid input' })
@@ -70,6 +72,7 @@ export class LanguageController {
   }
 
   @Patch(':id')
+  @SerializeOptions({ groups: ['read', 'language:read'] })
   @Swagger.ApiOperation({ summary: 'Updates a Language ressource.' })
   @Swagger.ApiCreatedResponse({ type: LanguageResponse })
   @Swagger.ApiResponse({ status: 400, description: 'Invalid input' })

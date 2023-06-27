@@ -78,6 +78,7 @@ export interface CreateUserProps {
 }
 
 export interface GetUsersProps {
+  id?: string;
   email?: string;
   first?: number;
   max?: number;

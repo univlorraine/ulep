@@ -8,105 +8,119 @@ generator client {
 }
 
 model Profile {
-  id                String          @id @default(uuid())
-  email             String          @unique
-  firstname         String
-  lastname          String
-  birthdate         DateTime
-  gender            Gender
-  role              Role
-  metadata          Json            // availibility, goals, meetingFrequency, department, diploma, bio, interests, etc.
-  organization      Organization    @relation(fields: [organizationId], references: [id])
-  organizationId    String
-  nationality       CountryCode     @relation(fields: [nationalityId], references: [id])
-  nationalityId     String
-  avatar            MediaObject?
-  languages         Language[]
-  matches           ProfileMatch[]
-  tandems           ProfileTandem[]
-  createdAt         DateTime        @default(now())
+  id                    String              @id @default(uuid())
+  email                 String              @unique
+  firstname             String
+  lastname              String
+  birthdate             DateTime
+  gender                Gender
+  role                  Role
+  metadata              Json // availability, goals, meetingFrequency, department, diploma, bio, interests, etc.
+  organization          Organization        @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  organizationId        String
+  nationality           CountryCode         @relation(fields: [nationalityId], references: [id])
+  nationalityId         String
+  avatar                MediaObject?
+  nativeLanguage        NativeLanguage?
+  learningLanguage      LearningLanguage?
+  matches               ProfileMatch[]
+  tandems               ProfileTandem[]
+  createdAt             DateTime            @default(now())
 }
 
 model LanguageCode {
-  id                String          @id @default(uuid())
-  code              String          @unique
-  name              String
-  isEnable          Boolean         @default(true)
-  languages         Language[]
-  createdAt         DateTime        @default(now())
+  id                    String              @id @default(uuid())
+  code                  String              @unique
+  name                  String
+  isEnable              Boolean             @default(true)
+  nativeLanguages       NativeLanguage[]
+  learningLanguages     LearningLanguage[]
+  createdAt             DateTime            @default(now())
+}
+
+model NativeLanguage {
+  id                    String              @id @default(uuid())
+  profile               Profile             @relation(fields: [profileId], references: [id], onDelete: Cascade)
+  profileId             String              @unique
+  languageCode          LanguageCode        @relation(fields: [languageCodeId], references: [id], onDelete: Cascade)
+  languageCodeId        String
+  createdAt             DateTime            @default(now())
+
+  @@unique([profileId, languageCodeId])
+}
+
+model LearningLanguage {
+  id                    String              @id @default(uuid())
+  profile               Profile             @relation(fields: [profileId], references: [id], onDelete: Cascade)
+  profileId             String              @unique
+  languageCode          LanguageCode        @relation(fields: [languageCodeId], references: [id], onDelete: Cascade)
+  languageCodeId        String
+  proficiencyLevel      String
+  createdAt             DateTime            @default(now())
+
+  @@unique([profileId, languageCodeId])
 }
 
 model CountryCode {
-  id                String          @id @default(uuid())
-  code              String          @unique
-  name              String
-  profiles          Profile[]
-  organizations     Organization[]
-  createdAt         DateTime        @default(now())
-}
-
-model Language {
-  id               String           @id @default(uuid())
-  profileId        String
-  profile          Profile          @relation(fields: [profileId], references: [id])
-  languageCode     LanguageCode     @relation(fields: [languageCodeId], references: [id])
-  languageCodeId   String
-  isNative         Boolean
-  proficiencyLevel String
-  createdAt        DateTime         @default(now())
+  id                    String              @id @default(uuid())
+  code                  String              @unique
+  name                  String
+  profiles              Profile[]
+  organizations         Organization[]
+  createdAt             DateTime            @default(now())
 }
 
 model Match {
-  id              String            @id @default(uuid())
-  profiles        ProfileMatch[]
-  score           Float
-  createdAt       DateTime          @default(now())
+  id                    String              @id @default(uuid())
+  profiles              ProfileMatch[]
+  score                 Float
+  createdAt             DateTime            @default(now())
 }
 
 model ProfileMatch {
-  profileId       String            @id
-  matchId         String
-  profile         Profile           @relation(fields: [profileId], references: [id])
-  match           Match             @relation(fields: [matchId], references: [id])
-  createdAt       DateTime          @default(now())
+  profileId             String              @id
+  matchId               String
+  profile               Profile             @relation(fields: [profileId], references: [id], onDelete: Cascade)
+  match                 Match               @relation(fields: [matchId], references: [id], onDelete: Cascade)
+  createdAt             DateTime            @default(now())
 }
 
 model Tandem {
-  id              String            @id @default(uuid())
-  profiles        ProfileTandem[]
-  isActive        Boolean
-  createdAt       DateTime          @default(now())
+  id                    String              @id @default(uuid())
+  profiles              ProfileTandem[]
+  isActive              Boolean
+  createdAt             DateTime            @default(now())
 }
 
 model ProfileTandem {
-  profileId       String            @id
-  tandemId        String
-  profile         Profile           @relation(fields: [profileId], references: [id])
-  tandem          Tandem            @relation(fields: [tandemId], references: [id])
-  createdAt       DateTime          @default(now())
+  profileId             String              @id
+  tandemId              String
+  profile               Profile             @relation(fields: [profileId], references: [id], onDelete: Cascade)
+  tandem                Tandem              @relation(fields: [tandemId], references: [id], onDelete: Cascade)
+  createdAt             DateTime            @default(now())
 }
 
 model Organization {
-  id              String            @id @default(uuid())
-  profiles        Profile[]
-  name            String            @unique
-  country         CountryCode       @relation(fields: [countryId], references: [id])
-  countryId       String
-  timezone        String
-  admissionStart  DateTime
-  admissionEnd    DateTime
-  createdAt       DateTime          @default(now())
+  id                    String              @id @default(uuid())
+  profiles              Profile[]
+  name                  String              @unique
+  country               CountryCode         @relation(fields: [countryId], references: [id])
+  countryId             String
+  timezone              String
+  admissionStart        DateTime
+  admissionEnd          DateTime
+  createdAt             DateTime            @default(now())
 }
 
 model MediaObject {
-  id              String            @id @default(uuid())
-  name            String
-  bucket          String
-  mime            String
-  size            Int
-  createdAt       DateTime          @default(now())
-  profile         Profile           @relation(fields: [profileId], references: [id], onDelete: Cascade)
-  profileId       String            @unique
+  id                    String              @id @default(uuid())
+  name                  String
+  bucket                String
+  mime                  String
+  size                  Int
+  createdAt             DateTime            @default(now())
+  profile               Profile             @relation(fields: [profileId], references: [id], onDelete: Cascade)
+  profileId             String              @unique
 }
 
 enum Role {

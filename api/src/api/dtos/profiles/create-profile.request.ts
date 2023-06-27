@@ -7,7 +7,11 @@ import {
   IsString,
   IsUUID,
 } from 'class-validator';
-import { Goal, MeetingFrequency } from '../../../core/models/profile';
+import {
+  Goal,
+  LanguageLevel,
+  MeetingFrequency,
+} from '../../../core/models/profile';
 
 export class CreateProfileRequest {
   @ApiProperty()
@@ -39,6 +43,18 @@ export class CreateProfileRequest {
   @ApiProperty()
   @IsUUID()
   nationality: string;
+
+  @ApiProperty()
+  @IsUUID()
+  learningLanguage: string;
+
+  @ApiProperty()
+  @IsEnum(LanguageLevel)
+  proficiencyLevel: LanguageLevel;
+
+  @ApiProperty()
+  @IsUUID()
+  nativeLanguage: string;
 
   @ApiProperty({ enum: Goal, isArray: true })
   @IsEnum(Goal, { each: true })

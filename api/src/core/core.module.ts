@@ -1,4 +1,4 @@
-import { Module } from '@nestjs/common';
+import { Module, Provider } from '@nestjs/common';
 import { CreateUserUsecase } from './usecases/users/create-user.usecase';
 import { ProvidersModule } from '../providers/providers.module';
 import { UploadImageUsecase } from './usecases/uploads/upload-image.usecase';
@@ -18,11 +18,15 @@ import { GetLanguagesUsecase } from './usecases/languages/get-languages.usecase'
 import { UpdateLanguageUsecase } from './usecases/languages/update-language.usecase';
 import { UpdateProfileUsecase } from './usecases/profiles/update-profile.usecase';
 import { DeleteProfileUsecase } from './usecases/profiles/delete-profile.usecase';
+import { CqrsModule } from '@nestjs/cqrs';
+import { NewProfileCreatedEventHandler } from './events/NewProfileCreatedEventHandler';
+import { GetUserUsecase } from './usecases/users/get-user.usecase';
 
-const usecases = [
+const usecases: Provider[] = [
   // Users
   CreateUserUsecase,
   GetUsersUsecase,
+  GetUserUsecase,
   ResetPasswordUsecase,
   // Countries
   GetCountriesUsecase,
@@ -45,9 +49,11 @@ const usecases = [
   UpdateLanguageUsecase,
 ];
 
+const eventHandlers: Provider[] = [NewProfileCreatedEventHandler];
+
 @Module({
-  imports: [ProvidersModule],
-  providers: [...usecases],
+  imports: [CqrsModule, ProvidersModule],
+  providers: [...usecases, ...eventHandlers],
   exports: [...usecases],
 })
 export class CoreModule {}

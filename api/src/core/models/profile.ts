@@ -19,6 +19,26 @@ export enum MeetingFrequency {
   THREE_TIMES_A_MONTH = 'THREE_TIMES_A_MONTH',
 }
 
+export enum LanguageLevel {
+  A1 = 'A1',
+  A2 = 'A2',
+  B1 = 'B1',
+  B2 = 'B2',
+  C1 = 'C1',
+  C2 = 'C2',
+}
+
+export class NativeLanguage {
+  id: string;
+  code: string;
+}
+
+export class LearningLanguage {
+  id: string;
+  code: string;
+  proficiencyLevel: LanguageLevel;
+}
+
 export type CreateProfileProps = {
   id: string;
   email: string;
@@ -29,6 +49,8 @@ export type CreateProfileProps = {
   gender: Gender;
   university: University;
   nationality: Country;
+  nativeLanguage: NativeLanguage;
+  learningLanguage: LearningLanguage;
   goals: Goal[];
   meetingFrequency: MeetingFrequency;
   bios?: string;
@@ -54,6 +76,10 @@ export class Profile {
 
   #nationality: Country;
 
+  #nativeLanguage: NativeLanguage;
+
+  #learningLanguage: LearningLanguage;
+
   #goals: Goal[];
 
   #meetingFrequency: MeetingFrequency;
@@ -72,10 +98,12 @@ export class Profile {
     this.role = props.role;
     this.university = props.university;
     this.nationality = props.nationality;
-    this.#goals = props.goals;
-    this.#meetingFrequency = props.meetingFrequency;
-    this.#bios = props.bios;
-    this.#avatar = props.avatar;
+    this.nativeLanguage = props.nativeLanguage;
+    this.learningLanguage = props.learningLanguage;
+    this.goals = props.goals;
+    this.meetingFrequency = props.meetingFrequency;
+    this.bios = props.bios;
+    this.avatar = props.avatar;
   }
 
   get id(): string {
@@ -160,6 +188,36 @@ export class Profile {
 
   set nationality(country: Country) {
     this.#nationality = country;
+  }
+
+  get nativeLanguage(): NativeLanguage {
+    return this.#nativeLanguage;
+  }
+
+  set nativeLanguage(nativeLanguage: NativeLanguage) {
+    if (
+      this.#learningLanguage &&
+      nativeLanguage.code === this.learningLanguage.code
+    ) {
+      throw new Error('Native and languages cannot be the same');
+    }
+
+    this.#nativeLanguage = nativeLanguage;
+  }
+
+  get learningLanguage(): LearningLanguage {
+    return this.#learningLanguage;
+  }
+
+  set learningLanguage(learningLanguage: LearningLanguage) {
+    if (
+      this.#nativeLanguage &&
+      learningLanguage.code === this.nativeLanguage.code
+    ) {
+      throw new Error('Native and languages cannot be the same');
+    }
+
+    this.#learningLanguage = learningLanguage;
   }
 
   get avatar(): MediaObject | undefined {

@@ -56,3 +56,13 @@ export class ProfileDoesNotExist extends RessourceDoesNotExist {
     return new ProfileDoesNotExist('id', id);
   }
 }
+
+export class UserDoesNotExist extends RessourceDoesNotExist {
+  constructor(public readonly field: string, public readonly value: string) {
+    super('User', field, value);
+  }
+
+  static withIdOf(id: string): RessourceDoesNotExist {
+    return new UserDoesNotExist('id', id);
+  }
+}

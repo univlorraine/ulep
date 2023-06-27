@@ -20,7 +20,7 @@ export class SecurityController {
   ): Promise<TokensResponse> {
     const credentials = await this.keycloak.getCredentials(email, password);
 
-    return credentials;
+    return new TokensResponse(credentials);
   }
 
   @Post('refresh-token')
@@ -31,6 +31,6 @@ export class SecurityController {
   ): Promise<TokensResponse> {
     const credentials = await this.keycloak.refreshToken(token);
 
-    return credentials;
+    return new TokensResponse(credentials);
   }
 }

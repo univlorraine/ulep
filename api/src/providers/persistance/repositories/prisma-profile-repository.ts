@@ -9,7 +9,8 @@ import { Collection } from '../../../shared/types/collection';
 export class PrismaProfileRepository implements ProfileRepository {
   private readonly _include = {
     organization: { include: { country: true } },
-    languages: true,
+    learningLanguage: { include: { languageCode: true } },
+    nativeLanguage: { include: { languageCode: true } },
     nationality: true,
     avatar: true,
   };
@@ -45,11 +46,7 @@ export class PrismaProfileRepository implements ProfileRepository {
   async ofLanguage(languageId: string) {
     const entries = await this.prisma.profile.findMany({
       where: {
-        languages: {
-          some: {
-            id: languageId,
-          },
-        },
+        learningLanguage: { id: languageId },
       },
       include: this._include,
     });
@@ -85,6 +82,25 @@ export class PrismaProfileRepository implements ProfileRepository {
       birthdate: new Date(profile.birthdate),
       gender: profile.gender,
       role: profile.role,
+      nativeLanguage: {
+        create: {
+          languageCode: {
+            connect: {
+              code: profile.nativeLanguage.code,
+            },
+          },
+        },
+      },
+      learningLanguage: {
+        create: {
+          languageCode: {
+            connect: {
+              code: profile.learningLanguage.code,
+            },
+          },
+          proficiencyLevel: profile.learningLanguage.proficiencyLevel,
+        },
+      },
       metadata: {
         goals: profile.goals,
         meetingFrequency: profile.meetingFrequency,

@@ -10,6 +10,7 @@ import {
   UseGuards,
   Query,
   Logger,
+  SerializeOptions,
 } from '@nestjs/common';
 import * as Swagger from '@nestjs/swagger';
 import { GetProfilesUsecase } from '../../core/usecases/profiles/get-profiles.usecase';
@@ -60,6 +61,7 @@ export class ProfileController {
   }
 
   @Get(':id')
+  @SerializeOptions({ groups: ['read', 'profile:read'] })
   @Swagger.ApiOperation({ summary: 'Retrieve a Profile ressource.' })
   @Swagger.ApiOkResponse({ type: ProfileResponse })
   @Swagger.ApiNotFoundResponse({ description: 'Resource not found' })
@@ -72,6 +74,7 @@ export class ProfileController {
   }
 
   @Post()
+  @SerializeOptions({ groups: ['read', 'profile:read'] })
   @UseGuards(AuthenticationGuard)
   @Swagger.ApiOperation({ summary: 'Creates a Profile ressource.' })
   @Swagger.ApiCreatedResponse({ type: ProfileResponse })
@@ -90,6 +93,7 @@ export class ProfileController {
   }
 
   @Patch(':id')
+  @SerializeOptions({ groups: ['read', 'profile:read'] })
   @Swagger.ApiOperation({ summary: 'Updates a Profile ressource.' })
   @Swagger.ApiCreatedResponse({ type: ProfileResponse })
   @Swagger.ApiResponse({ status: 400, description: 'Invalid input' })

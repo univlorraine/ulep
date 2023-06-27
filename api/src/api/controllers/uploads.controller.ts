@@ -35,9 +35,9 @@ export class UploadsController {
       file,
     });
 
-    return {
+    return new UploadResponse({
       id: upload.id,
       url: `${process.env.MINIO_PUBLIC_URL}/${upload.bucket}/${upload.name}`,
-    };
+    });
   }
 }

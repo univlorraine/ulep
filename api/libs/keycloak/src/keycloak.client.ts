@@ -245,6 +245,7 @@ export class KeycloakClient {
    *  - enabled: boolean representing if user is enabled or not
    */
   async getUsers({
+    id,
     email,
     first,
     max,
@@ -253,6 +254,10 @@ export class KeycloakClient {
     const url = new URL(
       `${this.configuration.baseUrl}/admin/realms/${this.configuration.realm}/users`,
     );
+
+    if (id) {
+      url.searchParams.append('id', id);
+    }
 
     if (email) {
       url.searchParams.append('email', email);
@@ -281,6 +286,16 @@ export class KeycloakClient {
     const users = await response.json();
 
     return users;
+  }
+
+  async getUserById(id: string): Promise<UserRepresentation> {
+    const users = await this.getUsers({ id, max: 1 });
+
+    if (users.length === 0) {
+      throw new Error('User not found');
+    }
+
+    return users[0];
   }
 
   async getUserByEmail(email: string): Promise<UserRepresentation> {
