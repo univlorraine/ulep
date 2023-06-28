@@ -63,8 +63,16 @@ spec:
           env:
             - name: MINIO_ROOT_USER
               value: "{{ .Values.minio.env.minioRootUser }}"
-            - name: MINIO_ROOT_PASSWORD
-              value: "{{ .Values.minio.env.minioRootPassword }}"
+          envFrom: 
+            - secretRef: 
+                name: "{{ include "etandem.fullname" . }}-secret-{{ .Values.minio.name }}"
+          volumeMounts:
+          - name: "{{ .Values.database.name }}-data"
+            mountPath: /data
+      volumes:
+      - name: "{{ .Values.database.name }}-data"
+        persistentVolumeClaim:
+          claimName:  "{{ include "etandem.name" . }}-pvc-{{ .Values.minio.name }}"
       {{- with .Values.nodeSelector }}
       nodeSelector:
         {{- toYaml . | nindent 8 }}

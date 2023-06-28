@@ -7,29 +7,29 @@
 name: "etandem"
 postgresDB: postgres
 postgresUser: postgres
-postgresPassword: ""
-domain: ""
+postgresPassword: 
+domain:
 
 ############## API ##############
 api:
-  name: "api"
+  name: api
   replicaCount: 1
 
   image:
-    repository: etandem-api
-    tag: latest
-    pullPolicy: IfNotPresent
+    repository: yatsukino/test-api
+    tag: amd
+    pullPolicy: Always
 
   env:
     keycloakBaseUrl: auth
     keycloackRealm: etandem
     keycloackAdmin: admin
-    keycloackAdminPassword: ""
+    keycloackAdminPassword: 
     keycloackClientId: api
     keycloackClientSecret: 
     minioUrl: minio
     minioAccessKey: "minio"
-    minioSecretKey: ""
+    minioSecretKey: 
 
   autoscaling:
     enabled: false
@@ -45,16 +45,16 @@ api:
     enabled: true
     className: ""
     annotations: 
+      cert-manager.io/issuer: letsencrypt
       kubernetes.io/ingress.class: nginx
       kubernetes.io/tls-acme: "true"
-      cert-manager.io/issuer: "letsencrypt"
     hosts:
       - host: api
         paths: [/]
-    tls:
-      - secretName: etendem-tls
-        hosts:
-          - api
+    # tls:
+    #   - secretName: etendem-tls
+    #     hosts:
+    #       - api
 ############## API ##############
 
 ############## AUTH ##############
@@ -69,9 +69,11 @@ auth:
 
   env:
     keycloackAdmin: admin
-    keycloackAdminPassword: ""
+    keycloackAdminPassword: 
     kcDB: postgres
     kcDBSchema: keycloak
+    keycloakHostname: auth
+    proxyAddressForwarding: true
 
   autoscaling:
     enabled: false
@@ -81,21 +83,22 @@ auth:
     # targetMemoryUtilizationPercentage: 80
   service:
     type: ClusterIP
-    port: 8080
+    port: 443
 
   ingress:
-    enabled: false
-    # className: ""
-    annotations: {}
-      # kubernetes.io/ingress.class: nginx
-      # kubernetes.io/tls-acme: "true"
+    enabled: true
+    className: ""
+    annotations: 
+      cert-manager.io/issuer: letsencrypt
+      kubernetes.io/ingress.class: nginx
+      kubernetes.io/tls-acme: "true"
     hosts:
       - host: auth
         paths: [/]
-    tls: 
-      - secretName: etendem-tls
-        hosts:
-          - auth
+    # tls: 
+    #   - secretName: etendem-tls
+    #     hosts:
+    #       - auth
 ############## AUTH ##############
 
 ############## DATABASE ##############
@@ -111,9 +114,15 @@ database:
   env: {}
 
   pv:
-    storage: 5Gi
+    storage: 10Gi
     volumeMode: Filesystem
     storageClassName: scw-bssd
+    csi:
+      enabled: true
+      driver: csi.scaleway.com
+      volumeHandle: fr-par-2/6922c455-e37d-40c4-8e6c-9fb3613e89a0
+      key: topology.csi.scaleway.com/zone
+      zone: fr-par-2
 
   autoscaling:
     enabled: false
@@ -129,6 +138,7 @@ database:
     enabled: false
     # className: ""
     annotations: 
+      cert-manager.io/issuer: letsencrypt
       kubernetes.io/ingress.class: nginx
       kubernetes.io/tls-acme: "true"
     hosts:
@@ -152,7 +162,15 @@ minio:
 
   env:
     minioRootUser: minio
-    minioRootPassword: ""
+    minioRootPassword: 
+
+  pv:
+    storage: 40Gi
+    volumeMode: Filesystem
+    storageClassName: scw-bssd
+    csi:
+      enabled: true
+      zone: fr-par-2
 
   autoscaling:
     enabled: false
@@ -162,31 +180,31 @@ minio:
     # targetMemoryUtilizationPercentage: 80
   service:
     type: ClusterIP
-    port: 443
+    port: 80
 
   ingress:
     enabled: true
-    # className: ""
+    className: ""
     annotations:
+      cert-manager.io/issuer: letsencrypt
       kubernetes.io/ingress.class: nginx
       kubernetes.io/tls-acme: "true"
-      cert-manager.io/issuer: "letsencrypt"
+      kubernetes.io/ingress.allow-http: "true"
+      kubernetes.io/ingress.global-static-ip-name: ""
+      nginx.ingress.kubernetes.io/secure-backends: "true"
+      nginx.ingress.kubernetes.io/backend-protocol: "HTTPS"
+      nginx.ingress.kubernetes.io/whitelist-source-range: 0.0.0.0/0
+
     hosts:
       - host: minio
         paths: [/]
-    tls: 
-      - secretName: etendem-tls
-        hosts:
-          - minio
+    # tls: 
+    #   - secretName: etendem-tls
+    #     hosts:
+    #       - minio
 ############## MINIO ##############
 
-############## WEBLATE ##############
-
-############## WEBLATE ##############
-
-
 ############## INIT SPEC ##############
-
 
 serviceAccount:
   # Specifies whether a service account should be created
@@ -216,18 +234,6 @@ securityContext: {}
 
 
 resources: {}
-  # We usually recommend not to specify default resources and to leave this as a conscious
-  # choice for the user. This also increases chances charts run on environments with little
-  # resources, such as Minikube. If you do want to specify resources, uncomment the following
-  # lines, adjust them as necessary, and remove the curly braces after 'resources:'.
-  # limits:
-  #   cpu: 100m
-  #   memory: 128Mi
-  # requests:
-  #   cpu: 100m
-  #   memory: 128Mi
-
-
 
 nodeSelector: {}
 

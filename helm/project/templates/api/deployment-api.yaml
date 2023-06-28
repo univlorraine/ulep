@@ -65,25 +65,20 @@ spec:
             {{- toYaml .Values.resources | nindent 12 }}
           env:
             - name: DATABASE_URL
-              value: "postgresql://{{ .Values.postgresUser }}:{{ .Values.postgresPassword }}@{{ include "etandem.name" . }}-{{ .Values.database.name }}.{{ include "etandem.name" . }}:{{ .Values.database.service.port }}/{{ .Values.postgresDB }}?schema=public"
+              value: "postgresql://{{ .Values.postgresUser }}:$(PGPASSWORD)@{{ include "etandem.name" . }}-{{ .Values.database.name }}.{{ include "etandem.name" . }}:{{ .Values.database.service.port }}/{{ .Values.postgresDB }}?schema=public"
             - name: KEYCLOAK_BASE_URL
               value: "http://{{ .Values.api.env.keycloakBaseUrl }}.{{ .Values.domain }}"
             - name: KEYCLOAK_REALM
               value: "{{ .Values.api.env.keycloackRealm }}"
             - name: KEYCLOAK_ADMIN
               value: "{{ .Values.api.env.keycloackAdmin }}"
-            - name: KEYCLOAK_ADMIN_PASSWORD
-              value: "{{ .Values.api.env.keycloackAdminPassword }}"
             - name: KEYCLOAK_CLIENT_ID
               value: "{{ .Values.api.env.keycloackClientId }}"
-            - name: KEYCLOAK_CLIENT_SECRET
-              value: "{{ .Values.api.env.keycloackClientSecret }}"
             - name: MINIO_URL
               value: "http://{{ .Values.api.env.minioUrl }}.{{ .Values.domain }}:9000"
-            - name: MINIO_ACCESS_KEY
-              value: "{{ .Values.api.env.minioAccessKey }}"
-            - name: MINIO_SECRET_KEY
-              value: "{{ .Values.api.env.minioSecretKey }}"
+          envFrom: 
+            - secretRef: 
+                name: "{{ include "etandem.fullname" . }}-secret-{{ .Values.api.name }}"
       {{- with .Values.nodeSelector }}
       nodeSelector:
         {{- toYaml . | nindent 8 }}

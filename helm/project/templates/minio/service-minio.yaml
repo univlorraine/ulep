@@ -11,7 +11,7 @@ spec:
       targetPort: http
       protocol: TCP
       name: http
-    - port: 9001
+    - port: 9000
       targetPort: direct
       protocol: TCP
       name: direct

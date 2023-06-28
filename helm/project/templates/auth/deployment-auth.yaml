@@ -81,14 +81,10 @@ spec:
           env:
             - name: KEYCLOAK_ADMIN
               value: "{{ .Values.auth.env.keycloackAdmin }}"
-            - name: KEYCLOAK_ADMIN_PASSWORD
-              value: "{{ .Values.auth.env.keycloackAdminPassword }}"
             - name: KC_DB
               value: "{{ .Values.auth.env.kcDB }}"
             - name: KC_DB_USERNAME
               value: "{{ .Values.postgresUser }}"
-            - name: KC_DB_PASSWORD
-              value: "{{ .Values.postgresPassword }}"
             - name: KC_DB_URL
               value: "jdbc:postgresql://{{ include "etandem.name" . }}-{{ .Values.database.name }}.{{ include "etandem.name" . }}:{{ .Values.database.service.port }}/{{ .Values.postgresDB }}"
             - name: KC_DB_SCHEMA
@@ -97,6 +93,9 @@ spec:
               value: "{{ .Values.auth.env.proxyAddressForwarding }}"
             - name: KEYCLOAK_HOSTNAME
               value: "{{ .Values.auth.env.keycloakHostname }}.{{ .Values.domain }}"
+          envFrom: 
+            - secretRef: 
+                name: "{{ include "etandem.fullname" . }}-secret-{{ .Values.auth.name }}"
       {{- with .Values.nodeSelector }}
       nodeSelector:
         {{- toYaml . | nindent 8 }}

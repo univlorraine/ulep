@@ -1,16 +1,16 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name:  "{{ include "etandem.fullname" . }}-{{ .Values.database.name }}"
+  name:  "{{ include "etandem-weblate.fullname" . }}-{{ .Values.database.name }}"
   labels:
-    {{- include "etandem.labels" . | nindent 4 }}
+    {{- include "etandem-weblate.labels" . | nindent 4 }}
 spec:
   {{- if not .Values.database.autoscaling.enabled }}
   replicas: {{ .Values.database.replicaCount }}
   {{- end }}
   selector:
     matchLabels:
-      app.kubernetes.io/name: "{{ include "etandem.name" . }}-{{ .Values.database.name }}"
+      app.kubernetes.io/name: "{{ include "etandem-weblate.name" . }}-{{ .Values.database.name }}"
       app.kubernetes.io/instance: "{{ .Release.Name }}"
   template:
     metadata:
@@ -19,14 +19,14 @@ spec:
         {{- toYaml . | nindent 8 }}
       {{- end }}
       labels:
-        app.kubernetes.io/name: "{{ include "etandem.name" . }}-{{ .Values.database.name }}"
+        app.kubernetes.io/name: "{{ include "etandem-weblate.name" . }}-{{ .Values.database.name }}"
         app.kubernetes.io/instance: "{{ .Release.Name }}"
     spec:
       {{- with .Values.imagePullSecrets }}
       imagePullSecrets:
         {{- toYaml . | nindent 8 }}
       {{- end }}
-      serviceAccountName: {{ include "etandem.serviceAccountName" . }}
+      serviceAccountName: {{ include "etandem-weblate.serviceAccountName" . }}
       securityContext:
         {{- toYaml .Values.podSecurityContext | nindent 8 }}
       containers:
@@ -51,7 +51,7 @@ spec:
             initialDelaySeconds: 120
             timeoutSeconds: 2
           resources:
-            {{- toYaml .Values.resources | nindent 12 }}
+            {{- toYaml .Values.weblate.resources | nindent 12 }}
           env:
             - name: POSTGRES_DB
               value: "{{ .Values.postgresDB }}"
@@ -61,19 +61,14 @@ spec:
               value: /var/lib/postgresql/data/pgdata
           envFrom: 
             - secretRef: 
-                name: "{{ include "etandem.fullname" . }}-secret-{{ .Values.database.name }}"
+                name: "{{ include "etandem-weblate.fullname" . }}-secret-{{ .Values.database.name }}"
           volumeMounts:
-          - name: "configmap-{{ include "etandem.name" . }}-{{ .Values.database.name }}"
-            mountPath: /docker-entrypoint-initdb.d
           - name: "{{ .Values.database.name }}-data"
             mountPath: /var/lib/postgresql/data
       volumes:
       - name: "{{ .Values.database.name }}-data"
         persistentVolumeClaim:
-          claimName:  "{{ include "etandem.name" . }}-pvc-{{ .Values.database.name }}"
-      - name: "configmap-{{ include "etandem.name" . }}-{{ .Values.database.name }}"
-        configMap:
-          name: "init-{{ include "etandem.name" . }}-{{ .Values.database.name }}"
+          claimName:  "{{ include "etandem-weblate.name" . }}-pvc-{{ .Values.database.name }}"
       {{- with .Values.nodeSelector }}
       nodeSelector:
         {{- toYaml . | nindent 8 }}
