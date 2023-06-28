@@ -27,14 +27,12 @@ import {
   UNIVERSITY_REPOSITORY,
   USER_REPOSITORY,
 } from '../../../providers/providers.module';
-import { EventBus } from '@nestjs/cqrs';
-import { NewProfileCreatedEvent } from 'src/core/events/NewProfileCreatedEvent';
-import { LanguageRepository } from 'src/core/ports/language.repository';
-import { University } from 'src/core/models/university';
-import { Country } from 'src/core/models/country';
-import { Language } from 'src/core/models/language';
-import { User } from 'src/core/models/user';
-import { UserRepository } from 'src/core/ports/user.repository';
+import { LanguageRepository } from '../../ports/language.repository';
+import { University } from '../../models/university';
+import { Country } from '../../models/country';
+import { Language } from '../../models/language';
+import { User } from '../../models/user';
+import { UserRepository } from '../../ports/user.repository';
 
 export class CreateProfileCommand {
   id: string;
@@ -69,7 +67,6 @@ export class CreateProfileUsecase {
     private readonly countryRepository: CountryRepository,
     @Inject(LANGUAGE_REPOSITORY)
     private readonly languageRepository: LanguageRepository,
-    private readonly eventBus: EventBus,
   ) {}
 
   async execute(command: CreateProfileCommand): Promise<Profile> {
@@ -114,7 +111,7 @@ export class CreateProfileUsecase {
 
     await this.profileRepository.save(instance);
 
-    this.eventBus.publish(NewProfileCreatedEvent.fromProfile(instance));
+    // this.eventBus.publish(NewProfileCreatedEvent.fromProfile(instance));
 
     return instance;
   }

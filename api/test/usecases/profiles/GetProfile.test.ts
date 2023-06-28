@@ -1,48 +1,25 @@
-import seedDefinedNumberOfProfiles from '../../seeders/profiles';
-import { Country } from '../../../src/core/models/country';
-import { University } from '../../../src/core/models/university';
-import { InMemoryCountryRepository } from '../../../src/providers/persistance/repositories/in-memory-country-repository';
 import { InMemoryProfileRepository } from '../../../src/providers/persistance/repositories/in-memory-profile-repository';
-import { InMemoryUniversityRepository } from '../../../src/providers/persistance/repositories/in-memory-university-repository';
 import { GetProfileUsecase } from '../../../src/core/usecases/profiles/get-profile.usecase';
 import { ProfileDoesNotExist } from '../../../src/core/errors/RessourceDoesNotExist';
+import seedDefinedNumberOfUsers from '../../seeders/users';
+import seedDefinedUsersProfiles from '../../seeders/profiles';
 
 describe('GetProfile', () => {
   const profileRepository = new InMemoryProfileRepository();
-  const universityRepository = new InMemoryUniversityRepository();
-  const countryRepository = new InMemoryCountryRepository();
   const getProfileUsecase = new GetProfileUsecase(profileRepository);
 
-  const country = new Country({
-    id: 'uuid-1',
-    name: 'United Kingdom',
-    code: 'UK',
-  });
-
-  const university = new University({
-    id: 'uuid-1',
-    name: 'University of Oxford',
-    country,
-    timezone: 'Europe/London',
-    admissionStart: new Date('2020-01-01'),
-    admissionEnd: new Date('2020-12-31'),
-  });
+  const users = seedDefinedNumberOfUsers(1);
 
   beforeEach(() => {
     profileRepository.reset();
-    universityRepository.reset();
-    countryRepository.reset();
-    countryRepository.init([country]);
-    universityRepository.init([university]);
   });
 
   it('should get a profile', async () => {
-    profileRepository.init(
-      seedDefinedNumberOfProfiles(1, (x: number) => `uuid-${x}`),
-    );
+    const profiles = seedDefinedUsersProfiles(users);
+    profileRepository.init(profiles);
 
     const profile = await getProfileUsecase.execute({
-      id: 'uuid-1',
+      id: profiles[0].id,
     });
 
     expect(profile).toBeDefined();

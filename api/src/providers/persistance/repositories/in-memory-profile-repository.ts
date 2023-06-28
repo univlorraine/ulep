@@ -1,5 +1,5 @@
-import { Profile } from 'src/core/models/profile';
-import { Collection } from 'src/shared/types/collection';
+import { Profile } from '../../../core/models/profile';
+import { Collection } from '../../../shared/types/collection';
 import { ProfileRepository } from '../../../core/ports/profile.repository';
 
 export class InMemoryProfileRepository implements ProfileRepository {

@@ -1,8 +1,8 @@
 import { Inject, Injectable, Logger } from '@nestjs/common';
 import { User } from '../../models/user';
 import { Collection } from '../../../shared/types/collection';
-import { UserRepository } from 'src/core/ports/user.repository';
-import { USER_REPOSITORY } from 'src/providers/providers.module';
+import { UserRepository } from '../../ports/user.repository';
+import { USER_REPOSITORY } from '../../../providers/providers.module';
 
 export class GetUsersCommand {
   page?: number;

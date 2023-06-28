@@ -1,8 +1,8 @@
 import { Credentials, KeycloakClient } from '@app/keycloak';
 import { Inject, Injectable } from '@nestjs/common';
-import { UserDoesNotExist } from 'src/core/errors/RessourceDoesNotExist';
-import { UserRepository } from 'src/core/ports/user.repository';
-import { USER_REPOSITORY } from 'src/providers/providers.module';
+import { UserDoesNotExist } from '../../errors/RessourceDoesNotExist';
+import { UserRepository } from '../../ports/user.repository';
+import { USER_REPOSITORY } from '../../../providers/providers.module';
 
 export class GetTokensCommand {
   email: string;
@@ -21,7 +21,7 @@ export class GetTokensUsecase {
 
     const user = await this.userRepository.ofEmail(email);
     if (!user) {
-      throw UserDoesNotExist.withIdOf(email);
+      throw UserDoesNotExist.withEmailOf(email);
     }
 
     const credentials = await this.keycloak.getCredentials(email, password);

@@ -69,4 +69,8 @@ export class UserDoesNotExist extends RessourceDoesNotExist {
   static withIdOf(id: string): RessourceDoesNotExist {
     return new UserDoesNotExist('id', id);
   }
+
+  static withEmailOf(email: string): RessourceDoesNotExist {
+    return new UserDoesNotExist('email', email);
+  }
 }

@@ -1,7 +1,7 @@
 import { Inject, Injectable } from '@nestjs/common';
-import { UserDoesNotExist } from 'src/core/errors/RessourceDoesNotExist';
-import { UserRepository } from 'src/core/ports/user.repository';
-import { USER_REPOSITORY } from 'src/providers/providers.module';
+import { UserDoesNotExist } from '../../errors/RessourceDoesNotExist';
+import { UserRepository } from '../../ports/user.repository';
+import { USER_REPOSITORY } from '../../../providers/providers.module';
 
 export type GetUserCommand = {
   id: string;

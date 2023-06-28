@@ -1,11 +1,15 @@
+import { faker } from '@faker-js/faker';
+import { User } from '../../src/core/models/user';
 import { Country } from '../../src/core/models/country';
-import { Goal, MeetingFrequency, Profile } from '../../src/core/models/profile';
+import {
+  Goal,
+  LanguageLevel,
+  MeetingFrequency,
+  Profile,
+} from '../../src/core/models/profile';
 import { University } from '../../src/core/models/university';
 
-const seedDefinedNumberOfProfiles = (
-  count: number,
-  id: (index: number) => string = (index: number) => `${index}`,
-): Profile[] => {
+const seedDefinedUsersProfiles = (user: User[]): Profile[] => {
   const profile: Profile[] = [];
 
   const country = new Country({
@@ -23,12 +27,12 @@ const seedDefinedNumberOfProfiles = (
     admissionEnd: new Date('2020-12-31'),
   });
 
-  let i = count;
+  let i = user.length;
 
   while (i > 0) {
     const instance = new Profile({
-      id: id(i),
-      email: 'jane.doe@mail.com',
+      id: faker.string.uuid(),
+      user: user[i - 1],
       firstname: 'Jane',
       lastname: 'Doe',
       birthdate: new Date('1988-01-01'),
@@ -36,6 +40,15 @@ const seedDefinedNumberOfProfiles = (
       gender: 'FEMALE',
       university: university,
       nationality: country,
+      nativeLanguage: {
+        id: '1',
+        code: 'EN',
+      },
+      learningLanguage: {
+        id: '2',
+        code: 'FR',
+        proficiencyLevel: LanguageLevel.B2,
+      },
       goals: [Goal.ORAL_PRACTICE],
       meetingFrequency: MeetingFrequency.ONCE_A_WEEK,
       bios: 'Lorem ipsum dolor sit amet',
@@ -49,4 +62,4 @@ const seedDefinedNumberOfProfiles = (
   return profile;
 };
 
-export default seedDefinedNumberOfProfiles;
+export default seedDefinedUsersProfiles;
