@@ -1,4 +1,10 @@
-import { Inject, Injectable, Logger } from '@nestjs/common';
+import {
+  BadRequestException,
+  HttpException,
+  Inject,
+  Injectable,
+  Logger,
+} from '@nestjs/common';
 import * as jwt from 'jsonwebtoken';
 import {
   KEYCLOAK_CONFIGURATION,
@@ -8,13 +14,14 @@ import {
   InvalidCredentialsException,
   UserAlreadyExistException,
 } from './keycloak.errors';
-import {
+import RoleRepresentation, {
   CreateUserProps,
   GetUsersProps,
   KeycloakCertsResponse,
   KeycloakUserInfoResponse,
   UserRepresentation,
 } from './keycloak.models';
+import { Client, Issuer, TokenSet } from 'openid-client';
 
 export interface Credentials {
   accessToken: string;
@@ -27,10 +34,30 @@ export interface Credentials {
 export class KeycloakClient {
   private readonly logger = new Logger(KeycloakClient.name);
 
+  private issuerClient?: Client;
+  private tokenSet?: TokenSet;
+
   constructor(
     @Inject(KEYCLOAK_CONFIGURATION)
     private readonly configuration: KeycloakConfiguration,
   ) {}
+
+  private async initialize(): Promise<void> {
+    const keycloakIssuer = await Issuer.discover(
+      `${this.configuration.baseUrl}/realms/master`,
+    );
+
+    this.issuerClient = new keycloakIssuer.Client({
+      client_id: 'admin-cli',
+      token_endpoint_auth_method: 'none',
+    });
+
+    this.tokenSet = await this.issuerClient.grant({
+      grant_type: 'password',
+      username: this.configuration.username,
+      password: this.configuration.password,
+    });
+  }
 
   /*
    * Returns the access token and refresh token.
@@ -61,6 +88,37 @@ export class KeycloakClient {
     const { access_token, refresh_token } = await response.json();
 
     return { accessToken: access_token, refreshToken: refresh_token };
+  }
+
+  /*
+   * Set up a new password for the user.
+   */
+  async resetPassword(userId: string, password: string): Promise<void> {
+    const response = await fetch(
+      `${this.configuration.baseUrl}/admin/realms/${this.configuration.realm}/users/${userId}/reset-password`,
+      {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${await this.getAccessToken()}`,
+        },
+        body: JSON.stringify({
+          type: 'password',
+          value: password,
+          temporary: false,
+        }),
+      },
+    );
+
+    if (response.status === 404) {
+      throw new BadRequestException({ message: 'User not found' });
+    }
+
+    if (!response.ok) {
+      throw new HttpException({ message: 'Service unvailable' }, 500);
+    }
+
+    return;
   }
 
   /*
@@ -158,7 +216,6 @@ export class KeycloakClient {
             },
           ],
           attributes: {
-            roles: props.roles,
             origin: props.origin,
           },
         }),
@@ -170,9 +227,13 @@ export class KeycloakClient {
       throw new UserAlreadyExistException();
     }
 
-    const user = await this.getUsers({ email: props.email, max: 1 });
+    const user = await this.getUserByEmail(props.email);
 
-    return user[0];
+    for (const role of props.roles) {
+      await this.addRealmRoleToUser(user.id, role);
+    }
+
+    return user;
   }
 
   /*
@@ -222,27 +283,93 @@ export class KeycloakClient {
     return users;
   }
 
+  async getUserByEmail(email: string): Promise<UserRepresentation> {
+    const users = await this.getUsers({ email, max: 1 });
+
+    if (users.length === 0) {
+      throw new Error('User not found');
+    }
+
+    return users[0];
+  }
+
   /*
-   * Retrieves admin access token from Keycloak
+   * Add realm-level role mappings to the user
    */
-  private async getAccessToken(): Promise<string> {
-    const response = await fetch(
-      `${this.configuration.baseUrl}/realms/master/protocol/openid-connect/token`,
+  async addRealmRoleToUser(userId: string, roleName: string): Promise<void> {
+    const role = await this.getRealmRole(roleName);
+
+    await fetch(
+      `${this.configuration.baseUrl}/admin/realms/${this.configuration.realm}/users/${userId}/role-mappings/realm`,
       {
         method: 'POST',
-        headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-        body: new URLSearchParams({
-          username: this.configuration.username,
-          password: this.configuration.password,
-          grant_type: 'password',
-          client_id: 'admin-cli',
-        }),
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${await this.getAccessToken()}`,
+        },
+        body: JSON.stringify([
+          {
+            id: role.id,
+            name: role.name,
+          },
+        ]),
+      },
+    );
+  }
+
+  /*
+   * Get a role by name
+   */
+  private async getRealmRole(roleName: string): Promise<RoleRepresentation> {
+    const response = await fetch(
+      `${this.configuration.baseUrl}/admin/realms/${this.configuration.realm}/roles/${roleName}`,
+      {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${await this.getAccessToken()}`,
+        },
       },
     );
 
-    const { access_token } = await response.json();
+    const role = await response.json();
 
-    return access_token;
+    return role;
+  }
+
+  /*
+   * Get all roles for the realm
+   */
+  private async getRealmRoles(): Promise<RoleRepresentation[]> {
+    const response = await fetch(
+      `${this.configuration.baseUrl}/admin/realms/${this.configuration.realm}/roles`,
+      {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${await this.getAccessToken()}`,
+        },
+      },
+    );
+
+    const roles = await response.json();
+
+    return roles;
+  }
+
+  /*
+   * Retrieves admin access token from Keycloak
+   */
+  public async getAccessToken(): Promise<string> {
+    if (!this.tokenSet) {
+      await this.initialize();
+    }
+
+    if (this.tokenSet.expired()) {
+      this.issuerClient.refresh(this.tokenSet.refresh_token);
+    }
+
+    return this.tokenSet.access_token;
   }
 
   /*

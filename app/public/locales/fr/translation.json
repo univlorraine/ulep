@@ -1,0 +1,14 @@
+{
+    "global": {
+        "email": "Email",
+        "password": "Mot de passe"
+    },
+    "login_page": {
+        "button": "Se connecter",
+        "forgot": "Mot de passe oublié ?",
+        "invalid_email": "Email invalide",
+        "invalid_password": "Mot de passe invalide",
+        "subtitle": "Connecte-toi avec tes identifiants de l’université pour continuer à utiliser l’application",
+        "title": "Se connecter"
+    }
+}

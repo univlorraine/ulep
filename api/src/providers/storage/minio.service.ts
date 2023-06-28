@@ -1,9 +1,9 @@
 import { Injectable } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import * as Minio from 'minio';
-import { ContentTypeException } from 'src/shared/errors/content-type.exception';
-import MediaObject from 'src/core/uploads/domain/media-object';
-import { StorageService } from 'src/core/uploads/domain/storage.service';
+import { ContentTypeException } from '../../shared/errors/content-type.exception';
+import MediaObject from '../../core/models/media-object';
+import { StorageService } from '../../core/ports/storage.service';
 
 /*
  * This is the implementation of the StorageService interface.
@@ -40,12 +40,8 @@ export class MinioService implements StorageService {
     await this.minioClient.putObject(bucket, name, file.buffer, file.size);
   }
 
-  async getUrl(object: MediaObject): Promise<string> {
-    return this.minioClient.presignedUrl(
-      'GET',
-      object.getBucket(),
-      object.getName(),
-    );
+  async getPresignedUrl(object: MediaObject): Promise<string> {
+    return this.minioClient.presignedUrl('GET', object.bucket, object.name);
   }
 
   async createBucketIfNotExist(bucketName: string): Promise<void> {

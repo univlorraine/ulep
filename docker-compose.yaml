@@ -4,11 +4,12 @@ services:
   api:
     build:
       context: ./api
-      target: prod
+      target: api_prod
     depends_on:
       - database
     restart: unless-stopped
     environment:
+      ADMIN_URL: ${ADMIN_URL:-http://localhost/3001}
       DATABASE_URL: postgresql://${POSTGRES_USER:-postgres}:${POSTGRES_PASSWORD:-!ChangeMe!}@database:5432/${POSTGRES_DB:-postgres}?schema=public
       KEYCLOAK_BASE_URL: ${KEYCLOAK_BASE_URL:-http://auth:8080}
       KEYCLOAK_REALM: ${KEYCLOAK_REALM:-etandem}
@@ -19,7 +20,17 @@ services:
       MINIO_URL: ${MINIO_URL:-http://minio:9000}
       MINIO_ACCESS_KEY: ${MINIO_USER:-minio}
       MINIO_SECRET_KEY: ${MINIO_PASSWORD:-!ChangeMe!}
+      MINIO_PUBLIC_URL: ${MINIO_PUBLIC_URL:-http://localhost:9000}
 
+  admin:
+    build:
+      context: ./admin
+      target: admin_prod
+    depends_on:
+      - api
+    environment:
+      REACT_APP_API_URL: ${REACT_APP_API_URL:-http://localhost/3000}
+  
   auth:
     image: quay.io/keycloak/keycloak:latest
     depends_on:
@@ -68,6 +79,6 @@ services:
   #     POSTGRES_HOST: database
   #     POSTGRES_PORT: 5432
   #     POSTGRES_DATABASE: ${WEBLATE_DB:-weblate} # ? TODO use custom schema
-    
+
 volumes:
   db_data:

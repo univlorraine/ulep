@@ -24,6 +24,7 @@ docker compose up --detach
 
 This will build and run the project on your localhost. You now have access to the following services:
 
+- [Admin](http://localhost:3001)
 - [Api](http://localhost:3000)
 - [Keycloak](http://localhost:8080)
 - [Minio](http://localhost:9000)
@@ -47,5 +48,5 @@ You might also need roles, which can be added from Roles -> Add Role. Once creat
 
 ## Additional information
 
-TODO: Tell users more about the project: where to find more information, how to contribute, how to file issues, what response they can expect 
+TODO: Tell users more about the project: where to find more information, how to contribute, how to file issues, what response they can expect
 from the authors, and more.

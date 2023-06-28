@@ -1,0 +1,12 @@
+{
+    "login": {
+        "connect": "Connection",
+        "email": "Email",
+        "loginError": "Mauvais email ou mot de passe",
+        "password": "Mot de passe"
+    },
+    "users": {
+        "searchEmail": "Chercher par email",
+        "userListTitle": "Utilisateurs"
+    }
+}

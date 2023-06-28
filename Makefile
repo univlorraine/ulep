@@ -34,3 +34,6 @@ lint: ## Lint the code and fix issues
 
 migration: ## Create a migration from changes in schema and apply it to the database.
 	@$(NEST) pnpm migrate
+
+seed: ## Seed the database with test data
+	@$(NEST) pnpm seed

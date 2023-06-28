@@ -1,0 +1,20 @@
+.bottomContainer {
+    background-color: white;
+    bottom: 0;
+    display: flex;
+    flex-direction: column;
+    left: 0;
+    position: absolute;
+    margin-top: auto;
+    right: 0;
+}
+
+.forgot {
+    color: #000;
+    text-decoration: underline;
+    text-transform: uppercase;
+}
+
+.main-content {
+    height: 90%;
+}

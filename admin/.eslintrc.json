@@ -1,0 +1,21 @@
+{
+    "root": true,
+    "extends": [
+        "@thetribe/eslint-config-react-typescript",
+        "plugin:react/recommended"
+    ],
+    "parserOptions": {
+        "project": "./tsconfig.json"
+    },
+    "env": {
+        "browser": true
+    },
+    "overrides": [
+        {
+            "files": ["**/*.test.{ts,tsx}"],
+            "env": {
+                "jest": true
+            }
+        }
+    ]
+}
