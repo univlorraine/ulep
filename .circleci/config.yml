@@ -1,0 +1,67 @@
+version: 2.1
+
+orbs:
+  node: circleci/node@4.1
+  docker: circleci/docker@1.6
+
+executors:
+  node-executor:
+    docker:
+      - image: cimg/node:18
+
+commands:
+  pnpm-install:
+    steps:
+      - restore_cache:
+          name: Restore pnpm Package Cache
+          keys:
+            - pnpm-packages-{{ checksum "pnpm-lock.yaml" }}
+      - run:
+          name: Install pnpm package manager
+          command: |
+            curl -L https://pnpm.js.org/pnpm.js | node - add --global pnpm@8.6.0
+      - run:
+          name: Install Dependencies
+          command: |
+            pnpm install
+      - save_cache:
+          name: Save pnpm Package Cache
+          key: pnpm-packages-{{ checksum "pnpm-lock.yaml" }}
+          paths:
+            - node_modules
+
+jobs:
+  install:
+    executor: node-executor
+    working_directory: ~/api
+    steps:
+      - checkout
+      - pnpm-install
+  lint:
+    executor: node-executor
+    working_directory: ~/api
+    steps:
+      - checkout
+      - run:
+          name: Lint code
+          command: pnpm run lint
+  test:
+    executor: node-executor
+    working_directory: ~/api
+    steps:
+      - checkout
+      - run:
+          name: Run tests
+          command: pnpm run test
+
+workflows:
+  version: 2
+  check_api:
+    jobs:
+      - install
+      - lint:
+          requires:
+            - install
+      - test:
+          requires:
+            - lint
