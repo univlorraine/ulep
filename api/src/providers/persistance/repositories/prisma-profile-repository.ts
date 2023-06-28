@@ -8,6 +8,7 @@ import { Collection } from '../../../shared/types/collection';
 @Injectable()
 export class PrismaProfileRepository implements ProfileRepository {
   private readonly _include = {
+    user: true,
     organization: { include: { country: true } },
     learningLanguage: { include: { languageCode: true } },
     nativeLanguage: { include: { languageCode: true } },
@@ -20,19 +21,6 @@ export class PrismaProfileRepository implements ProfileRepository {
   async ofId(id: string) {
     const entry = await this.prisma.profile.findUnique({
       where: { id },
-      include: this._include,
-    });
-
-    if (!entry) {
-      return null;
-    }
-
-    return profileMapper(entry);
-  }
-
-  async ofEmail(email: string) {
-    const entry = await this.prisma.profile.findUnique({
-      where: { email },
       include: this._include,
     });
 
@@ -76,7 +64,9 @@ export class PrismaProfileRepository implements ProfileRepository {
   async save(profile: Profile): Promise<void> {
     const payload = {
       id: profile.id,
-      email: profile.email,
+      user: {
+        connect: { id: profile.user.id },
+      },
       firstname: profile.firstname,
       lastname: profile.lastname,
       birthdate: new Date(profile.birthdate),

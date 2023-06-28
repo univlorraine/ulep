@@ -7,9 +7,19 @@ generator client {
   provider = "prisma-client-js"
 }
 
+model UserEntity {
+  id                    String              @id
+  email                 String              @unique
+  roles                 String[]
+  profile               Profile?
+
+  @@map("users")
+}
+
 model Profile {
   id                    String              @id @default(uuid())
-  email                 String              @unique
+  user                  UserEntity          @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId                String              @unique
   firstname             String
   lastname              String
   birthdate             DateTime

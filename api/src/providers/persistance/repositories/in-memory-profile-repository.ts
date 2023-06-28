@@ -17,10 +17,6 @@ export class InMemoryProfileRepository implements ProfileRepository {
     return this.#profiles.find((profile) => profile.id === id);
   }
 
-  async ofEmail(email: string): Promise<Profile> {
-    return this.#profiles.find((profile) => profile.email === email);
-  }
-
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   async ofLanguage(languageId: string): Promise<Profile[]> {
     throw new Error('Method not implemented.');

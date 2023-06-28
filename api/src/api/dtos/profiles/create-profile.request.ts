@@ -15,6 +15,10 @@ import {
 
 export class CreateProfileRequest {
   @ApiProperty()
+  @IsUUID()
+  id: string;
+
+  @ApiProperty()
   @IsString()
   @IsNotEmpty()
   firstname: string;
@@ -45,7 +49,7 @@ export class CreateProfileRequest {
   nationality: string;
 
   @ApiProperty()
-  @IsUUID()
+  @IsNotEmpty()
   learningLanguage: string;
 
   @ApiProperty()
@@ -53,7 +57,7 @@ export class CreateProfileRequest {
   proficiencyLevel: LanguageLevel;
 
   @ApiProperty()
-  @IsUUID()
+  @IsNotEmpty()
   nativeLanguage: string;
 
   @ApiProperty({ enum: Goal, isArray: true })

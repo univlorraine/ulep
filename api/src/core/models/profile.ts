@@ -2,6 +2,7 @@ import { Gender, Role } from '@prisma/client';
 import { University } from './university';
 import MediaObject from './media-object';
 import { Country } from './country';
+import { User } from './user';
 
 export enum Goal {
   SPEAK_LIKE_NATIVE = 'SPEAK_LIKE_NATIVE',
@@ -41,7 +42,7 @@ export class LearningLanguage {
 
 export type CreateProfileProps = {
   id: string;
-  email: string;
+  user: User;
   firstname: string;
   lastname: string;
   birthdate: Date;
@@ -60,7 +61,7 @@ export type CreateProfileProps = {
 export class Profile {
   #id: string;
 
-  #email: string;
+  #user: User;
 
   #firstname: string;
 
@@ -90,7 +91,7 @@ export class Profile {
 
   constructor(props: CreateProfileProps) {
     this.#id = props.id;
-    this.email = props.email;
+    this.#user = props.user;
     this.firstname = props.firstname;
     this.lastname = props.lastname;
     this.birthdate = props.birthdate;
@@ -110,16 +111,8 @@ export class Profile {
     return this.#id;
   }
 
-  get email(): string {
-    return this.#email;
-  }
-
-  set email(email: string) {
-    if ('' === email.trim()) {
-      throw new Error('Email cannot be empty');
-    }
-
-    this.#email = email;
+  get user(): User {
+    return this.#user;
   }
 
   get firstname(): string {

@@ -24,16 +24,12 @@ export class InMemoryLanguageRepository implements LanguageRepository {
     };
   }
 
-  async of(id: string): Promise<Language> {
+  async ofId(id: string): Promise<Language> {
     return this.#languages.find((language) => language.id === id);
   }
 
-  async where(query: { code?: string }): Promise<Language> {
-    if (!query.code) {
-      throw new Error('Missing code');
-    }
-
-    return this.#languages.find((language) => language.code === query.code);
+  async ofCode(code: string): Promise<Language> {
+    return this.#languages.find((language) => language.code === code);
   }
 
   async save(language: Language): Promise<void> {

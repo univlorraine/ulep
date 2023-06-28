@@ -19,7 +19,9 @@ export class AuthenticationGuard implements CanActivate {
     const token = this.extractTokenFromHeader(request);
 
     if (token) {
-      request['user'] = await this.keycloak.userInfo(token);
+      const userInfo = await this.keycloak.userInfo(token);
+      request['user'] = userInfo.sub;
+
       return true;
     }
 

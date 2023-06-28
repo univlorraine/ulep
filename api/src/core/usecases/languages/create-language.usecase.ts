@@ -19,10 +19,7 @@ export class CreateLanguageUsecase {
   ) {}
 
   async execute(command: CreateLanguageCommand): Promise<Language> {
-    const language = await this.languageRepository.where({
-      code: command.code,
-    });
-
+    const language = await this.languageRepository.ofCode(command.code);
     if (language) {
       throw new RessourceAlreadyExists('Language', 'code', command.code);
     }

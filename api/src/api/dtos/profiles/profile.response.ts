@@ -69,7 +69,7 @@ export class ProfileResponse {
   static fromDomain(profile: Profile): ProfileResponse {
     return new ProfileResponse({
       id: profile.id,
-      email: profile.email,
+      email: profile.user.email,
       firstname: profile.firstname,
       lastname: profile.lastname,
       birthdate: profile.birthdate,

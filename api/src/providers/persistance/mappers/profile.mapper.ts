@@ -3,8 +3,10 @@ import { LanguageLevel, Profile } from '../../../core/models/profile';
 import { universityMapper } from './university.mapper';
 import { countryMapper } from './country.mapper';
 import MediaObject from '../../../core/models/media-object';
+import { userMapper } from './user.mapper';
 
 type ProfileEntity = Prisma.Profile & {
+  user: Prisma.UserEntity;
   organization: Prisma.Organization & {
     country: Prisma.CountryCode;
   };
@@ -21,7 +23,7 @@ type ProfileEntity = Prisma.Profile & {
 export const profileMapper = (instance: ProfileEntity): Profile => {
   return new Profile({
     id: instance.id,
-    email: instance.email,
+    user: userMapper(instance.user),
     firstname: instance.firstname,
     lastname: instance.lastname,
     birthdate: instance.birthdate,

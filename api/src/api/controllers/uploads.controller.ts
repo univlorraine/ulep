@@ -9,8 +9,7 @@ import {
 import { FileInterceptor } from '@nestjs/platform-express';
 import * as Swagger from '@nestjs/swagger';
 import { UploadImageUsecase } from '../../core/usecases/uploads/upload-image.usecase';
-import { User } from '../decorators/user.decorator';
-import { KeycloakUserInfoResponse } from '@app/keycloak';
+import { UserContext } from '../decorators/user-context.decorator';
 import { AuthenticationGuard } from '../guards/authentication.guard';
 import { UploadResponse } from '../dtos/media/upload.response';
 
@@ -19,7 +18,7 @@ import { UploadResponse } from '../dtos/media/upload.response';
 export class UploadsController {
   private readonly logger = new Logger(UploadsController.name);
 
-  constructor(private readonly uploadImageUsecase: UploadImageUsecase) {}
+  constructor(private readonly uploadImageUsecase: UploadImageUsecase) { }
 
   @Post('images')
   @UseGuards(AuthenticationGuard)
@@ -28,12 +27,9 @@ export class UploadsController {
   @Swagger.ApiOkResponse({ type: UploadResponse })
   async uploadFile(
     @UploadedFile() file: Express.Multer.File,
-    @User() user: KeycloakUserInfoResponse,
+    @UserContext() userId: string,
   ): Promise<UploadResponse> {
-    const upload = await this.uploadImageUsecase.execute({
-      profileId: user.sub,
-      file,
-    });
+    const upload = await this.uploadImageUsecase.execute({ userId, file });
 
     return new UploadResponse({
       id: upload.id,

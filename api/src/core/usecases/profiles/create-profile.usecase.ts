@@ -1,10 +1,15 @@
-import { Inject, Injectable, Logger } from '@nestjs/common';
+import {
+  BadRequestException,
+  Inject,
+  Injectable,
+  Logger,
+} from '@nestjs/common';
 import { Gender, Role } from '@prisma/client';
-import { ProfileAlreadyExists } from '../../errors/RessourceAlreadyExists';
 import {
   CountryDoesNotExist,
   LanguageDoesNotExist,
   UniversityDoesNotExist,
+  UserDoesNotExist,
 } from '../../errors/RessourceDoesNotExist';
 import {
   Goal,
@@ -20,6 +25,7 @@ import {
   LANGUAGE_REPOSITORY,
   PROFILE_REPOSITORY,
   UNIVERSITY_REPOSITORY,
+  USER_REPOSITORY,
 } from '../../../providers/providers.module';
 import { EventBus } from '@nestjs/cqrs';
 import { NewProfileCreatedEvent } from 'src/core/events/NewProfileCreatedEvent';
@@ -27,10 +33,12 @@ import { LanguageRepository } from 'src/core/ports/language.repository';
 import { University } from 'src/core/models/university';
 import { Country } from 'src/core/models/country';
 import { Language } from 'src/core/models/language';
+import { User } from 'src/core/models/user';
+import { UserRepository } from 'src/core/ports/user.repository';
 
 export class CreateProfileCommand {
   id: string;
-  email: string;
+  userId: string;
   firstname: string;
   lastname: string;
   birthdate: Date;
@@ -53,6 +61,8 @@ export class CreateProfileUsecase {
   constructor(
     @Inject(PROFILE_REPOSITORY)
     private readonly profileRepository: ProfileRepository,
+    @Inject(USER_REPOSITORY)
+    private readonly userRepository: UserRepository,
     @Inject(UNIVERSITY_REPOSITORY)
     private readonly universityRepository: UniversityRepository,
     @Inject(COUNTRY_REPOSITORY)
@@ -63,7 +73,8 @@ export class CreateProfileUsecase {
   ) {}
 
   async execute(command: CreateProfileCommand): Promise<Profile> {
-    await this.assertProfileDoesNotExistWithEmail(command.email);
+    const user = await this.tryToFindTheUserOfId(command.userId);
+    // TODO : check if the user is already linked to a profile
 
     const university = await this.tryToFindTheUniversityOfId(
       command.university,
@@ -71,16 +82,23 @@ export class CreateProfileUsecase {
 
     const nationality = await this.tryToFindTheCountryOfId(command.nationality);
 
-    const learningLanguage = await this.tryToFindTheLanguageOfId(
+    const learningLanguage = await this.tryToFindTheLanguageOfCode(
       command.learningLanguage,
     );
 
-    const nativeLanguage = await this.tryToFindTheLanguageOfId(
+    const nativeLanguage = await this.tryToFindTheLanguageOfCode(
       command.nativeLanguage,
     );
 
+    if (nativeLanguage.id === learningLanguage.id) {
+      throw new BadRequestException(
+        'Native language and learning language cannot be the same',
+      );
+    }
+
     const instance = new Profile({
       ...command,
+      user,
       university,
       nationality,
       learningLanguage: {
@@ -101,13 +119,13 @@ export class CreateProfileUsecase {
     return instance;
   }
 
-  private async assertProfileDoesNotExistWithEmail(
-    email: string,
-  ): Promise<void> {
-    const profile = await this.profileRepository.ofEmail(email);
-    if (profile) {
-      throw ProfileAlreadyExists.withEmailOf(email);
+  private async tryToFindTheUserOfId(id: string): Promise<User> {
+    const user = await this.userRepository.ofId(id);
+    if (!user) {
+      throw UserDoesNotExist.withIdOf(id);
     }
+
+    return user;
   }
 
   private async tryToFindTheUniversityOfId(id: string): Promise<University> {
@@ -128,10 +146,10 @@ export class CreateProfileUsecase {
     return country;
   }
 
-  private async tryToFindTheLanguageOfId(id: string): Promise<Language> {
-    const language = await this.languageRepository.of(id);
+  private async tryToFindTheLanguageOfCode(code: string): Promise<Language> {
+    const language = await this.languageRepository.ofCode(code);
     if (!language) {
-      throw LanguageDoesNotExist.withIdOf(id);
+      throw LanguageDoesNotExist.withCodeOf(code);
     }
 
     return language;

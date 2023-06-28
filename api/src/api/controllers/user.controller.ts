@@ -67,7 +67,7 @@ export class UserController {
     return new UserResponse({
       id: user.id,
       email: user.email,
-      roles: user.attributes.roles,
+      roles: user.roles.map((role) => role.toString()),
     });
   }
 
@@ -82,7 +82,7 @@ export class UserController {
     const user = await this.createUserUsecase.execute({
       email,
       password,
-      roles: [Role.USER],
+      roles: [Role.ROLE_USER],
     });
 
     return UserResponse.fromDomain(user);

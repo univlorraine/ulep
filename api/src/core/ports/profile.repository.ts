@@ -4,8 +4,6 @@ import { Profile } from '../models/profile';
 export interface ProfileRepository {
   ofId: (id: string) => Promise<Profile | null>;
 
-  ofEmail: (email: string) => Promise<Profile | null>;
-
   ofLanguage: (languageId: string) => Promise<Profile[]>;
 
   save: (profile: Profile) => Promise<void>;

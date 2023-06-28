@@ -6,15 +6,21 @@ import { PrismaMediaObjectRepository } from './persistance/repositories/prisma-m
 import { PrismaUniversityRepository } from './persistance/repositories/prisma-university-repository';
 import { PrismaCountryRepository } from './persistance/repositories/prisma-country-repository';
 import { PrismaLanguageRepository } from './persistance/repositories/prisma-language-repository';
+import { PrismaUserRepository } from './persistance/repositories/prisma-user-repository';
 
-export const STORAGE_SERVICE = 'storage.service';
-export const PROFILE_REPOSITORY = 'profile.repository';
 export const COUNTRY_REPOSITORY = 'country.repository';
-export const UNIVERSITY_REPOSITORY = 'university.repository';
-export const MEDIA_OBJECT_REPOSITORY = 'media-object.repository';
 export const LANGUAGE_REPOSITORY = 'language.repository';
+export const MEDIA_OBJECT_REPOSITORY = 'media-object.repository';
+export const PROFILE_REPOSITORY = 'profile.repository';
+export const STORAGE_SERVICE = 'storage.service';
+export const UNIVERSITY_REPOSITORY = 'university.repository';
+export const USER_REPOSITORY = 'user.repository';
 
 const providers: Provider[] = [
+  {
+    provide: USER_REPOSITORY,
+    useClass: PrismaUserRepository,
+  },
   {
     provide: STORAGE_SERVICE,
     useClass: MinioService,

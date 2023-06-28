@@ -16,8 +16,7 @@ import * as Swagger from '@nestjs/swagger';
 import { GetProfilesUsecase } from '../../core/usecases/profiles/get-profiles.usecase';
 import { GetProfileUsecase } from '../../core/usecases/profiles/get-profile.usecase';
 import { CreateProfileUsecase } from '../../core/usecases/profiles/create-profile.usecase';
-import { User } from '../decorators/user.decorator';
-import { KeycloakUserInfoResponse } from '@app/keycloak';
+import { UserContext } from '../decorators/user-context.decorator';
 import { AuthenticationGuard } from '../guards/authentication.guard';
 import { ProfileResponse } from '../dtos/profiles/profile.response';
 import { CreateProfileRequest } from '../dtos/profiles/create-profile.request';
@@ -39,7 +38,7 @@ export class ProfileController {
     private readonly createProfileUsecase: CreateProfileUsecase,
     private readonly updateProfileUsecase: UpdateProfileUsecase,
     private readonly deleteProfileUsecase: DeleteProfileUsecase,
-  ) {}
+  ) { }
 
   @Get()
   @Swagger.ApiOperation({
@@ -81,11 +80,10 @@ export class ProfileController {
   @Swagger.ApiResponse({ status: 400, description: 'Invalid input' })
   async create(
     @Body() body: CreateProfileRequest,
-    @User() user: KeycloakUserInfoResponse,
+    @UserContext() userId: string,
   ): Promise<ProfileResponse> {
     const profile = await this.createProfileUsecase.execute({
-      id: user.sub,
-      email: user.email,
+      userId,
       ...body,
     });
 

@@ -21,21 +21,16 @@ import { DeleteProfileUsecase } from './usecases/profiles/delete-profile.usecase
 import { CqrsModule } from '@nestjs/cqrs';
 import { NewProfileCreatedEventHandler } from './events/NewProfileCreatedEventHandler';
 import { GetUserUsecase } from './usecases/users/get-user.usecase';
+import { GetTokensUsecase } from './usecases/tokens/get-tokens.usecase';
+import { RefreshTokensUsecase } from './usecases/tokens/refresh-tokens.usecase';
 
 const usecases: Provider[] = [
-  // Users
-  CreateUserUsecase,
-  GetUsersUsecase,
-  GetUserUsecase,
-  ResetPasswordUsecase,
   // Countries
   GetCountriesUsecase,
-  // Universities
-  GetUniversitiesUsecase,
-  GetUniversityUsecase,
-  CreateUniversityUsecase,
-  UpdateUniversityUsecase,
-  DeleteUniversityUsecase,
+  // Languages
+  CreateLanguageUsecase,
+  GetLanguagesUsecase,
+  UpdateLanguageUsecase,
   // Profiles
   UploadImageUsecase,
   GetProfilesUsecase,
@@ -43,10 +38,20 @@ const usecases: Provider[] = [
   CreateProfileUsecase,
   UpdateProfileUsecase,
   DeleteProfileUsecase,
-  // Languages
-  CreateLanguageUsecase,
-  GetLanguagesUsecase,
-  UpdateLanguageUsecase,
+  // Universities
+  GetUniversitiesUsecase,
+  GetUniversityUsecase,
+  CreateUniversityUsecase,
+  UpdateUniversityUsecase,
+  DeleteUniversityUsecase,
+  // Tokens
+  GetTokensUsecase,
+  RefreshTokensUsecase,
+  // Users
+  CreateUserUsecase,
+  GetUsersUsecase,
+  GetUserUsecase,
+  ResetPasswordUsecase,
 ];
 
 const eventHandlers: Provider[] = [NewProfileCreatedEventHandler];

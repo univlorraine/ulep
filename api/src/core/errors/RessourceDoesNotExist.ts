@@ -21,6 +21,10 @@ export class LanguageDoesNotExist extends RessourceDoesNotExist {
   static withIdOf(id: string): RessourceDoesNotExist {
     return new LanguageDoesNotExist('id', id);
   }
+
+  static withCodeOf(code: string): RessourceDoesNotExist {
+    return new LanguageDoesNotExist('code', code);
+  }
 }
 
 export class CountryDoesNotExist extends RessourceDoesNotExist {

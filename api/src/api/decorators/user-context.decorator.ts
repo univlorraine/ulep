@@ -1,8 +1,7 @@
-import { KeycloakUserInfoResponse } from '@app/keycloak';
 import { ExecutionContext, createParamDecorator } from '@nestjs/common';
 
-export const User = createParamDecorator(
-  (_, context: ExecutionContext): KeycloakUserInfoResponse => {
+export const UserContext = createParamDecorator(
+  (_, context: ExecutionContext): string => {
     const request = context.switchToHttp().getRequest();
 
     if (!request.user) {

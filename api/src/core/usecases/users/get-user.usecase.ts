@@ -1,6 +1,7 @@
-import { KeycloakClient } from '@app/keycloak';
-import { Injectable } from '@nestjs/common';
+import { Inject, Injectable } from '@nestjs/common';
 import { UserDoesNotExist } from 'src/core/errors/RessourceDoesNotExist';
+import { UserRepository } from 'src/core/ports/user.repository';
+import { USER_REPOSITORY } from 'src/providers/providers.module';
 
 export type GetUserCommand = {
   id: string;
@@ -8,10 +9,12 @@ export type GetUserCommand = {
 
 @Injectable()
 export class GetUserUsecase {
-  constructor(private readonly keycloak: KeycloakClient) {}
+  constructor(
+    @Inject(USER_REPOSITORY) private readonly userRepository: UserRepository,
+  ) {}
 
   async execute(command: GetUserCommand) {
-    const user = await this.keycloak.getUserById(command.id);
+    const user = await this.userRepository.ofId(command.id);
 
     if (!user) {
       throw UserDoesNotExist.withIdOf(command.id);

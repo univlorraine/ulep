@@ -58,8 +58,26 @@ const createOrganization = async () => {
   });
 };
 
-const createProfiles = async (count: number): Promise<void> => {
+const createUsers = async (count: number): Promise<Prisma.UserEntity[]> => {
+  const users: Prisma.UserEntity[] = [];
+
   for (let i = 0; i < count; i++) {
+    const user = await prisma.userEntity.create({
+      data: {
+        id: faker.string.uuid(),
+        email: faker.internet.email(),
+        roles: { set: ['ROLE_USER'] },
+      },
+    });
+
+    users.push(user);
+  }
+
+  return users;
+};
+
+const createProfiles = async (users: Prisma.UserEntity[]): Promise<void> => {
+  for (const user of users) {
     const countryCode: string = faker.helpers.arrayElement(countriesCodes).code;
     const nativeLanguageCode = mapCountryCodeToLanguageCode(countryCode);
     const availableLanguagesCodes: string[] = languagesCodes
@@ -68,7 +86,7 @@ const createProfiles = async (count: number): Promise<void> => {
 
     await prisma.profile.create({
       data: {
-        email: faker.internet.email(),
+        user: { connect: { id: user.id } },
         firstname: faker.person.firstName(),
         lastname: faker.person.lastName(),
         birthdate: faker.date.birthdate(),
@@ -103,7 +121,8 @@ const load = async () => {
     await createCountries();
     await createLanguages();
     await createOrganization();
-    await createProfiles(1000);
+    const users = await createUsers(1000);
+    await createProfiles(users);
   } catch (e) {
     console.error(e);
     process.exit(1);
