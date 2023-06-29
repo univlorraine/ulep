@@ -1,15 +1,17 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { Gender, Role } from '@prisma/client';
 import {
+  ArrayMaxSize,
   IsDateString,
   IsEnum,
+  IsIn,
   IsNotEmpty,
   IsString,
   IsUUID,
 } from 'class-validator';
 import {
   Goal,
-  LanguageLevel,
+  CEFRLevel,
   MeetingFrequency,
 } from '../../../core/models/profile';
 
@@ -53,8 +55,8 @@ export class CreateProfileRequest {
   learningLanguage: string;
 
   @ApiProperty()
-  @IsEnum(LanguageLevel)
-  proficiencyLevel: LanguageLevel;
+  @IsIn(['A1', 'A2', 'B1', 'B2', 'C1', 'C2'])
+  proficiencyLevel: CEFRLevel;
 
   @ApiProperty()
   @IsNotEmpty()
@@ -67,6 +69,13 @@ export class CreateProfileRequest {
   @ApiProperty({ enum: MeetingFrequency })
   @IsEnum(MeetingFrequency)
   meetingFrequency: MeetingFrequency;
+
+  @ApiProperty()
+  @ArrayMaxSize(5)
+  interests: string[];
+
+  @ApiProperty()
+  preferSameGender: boolean;
 
   @ApiProperty()
   bios?: string;

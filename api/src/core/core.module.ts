@@ -18,11 +18,11 @@ import { GetLanguagesUsecase } from './usecases/languages/get-languages.usecase'
 import { UpdateLanguageUsecase } from './usecases/languages/update-language.usecase';
 import { UpdateProfileUsecase } from './usecases/profiles/update-profile.usecase';
 import { DeleteProfileUsecase } from './usecases/profiles/delete-profile.usecase';
-import { CqrsModule } from '@nestjs/cqrs';
 import { NewProfileCreatedEventHandler } from './events/NewProfileCreatedEventHandler';
 import { GetUserUsecase } from './usecases/users/get-user.usecase';
 import { GetTokensUsecase } from './usecases/tokens/get-tokens.usecase';
 import { RefreshTokensUsecase } from './usecases/tokens/refresh-tokens.usecase';
+import { MatchService } from './services/MatchService';
 
 const usecases: Provider[] = [
   // Countries
@@ -56,9 +56,11 @@ const usecases: Provider[] = [
 
 const eventHandlers: Provider[] = [NewProfileCreatedEventHandler];
 
+const services: Provider[] = [MatchService];
+
 @Module({
-  imports: [CqrsModule, ProvidersModule],
-  providers: [...usecases, ...eventHandlers],
+  imports: [ProvidersModule],
+  providers: [...usecases, ...eventHandlers, ...services],
   exports: [...usecases],
 })
 export class CoreModule {}

@@ -38,7 +38,7 @@ export class ProfileController {
     private readonly createProfileUsecase: CreateProfileUsecase,
     private readonly updateProfileUsecase: UpdateProfileUsecase,
     private readonly deleteProfileUsecase: DeleteProfileUsecase,
-  ) { }
+  ) {}
 
   @Get()
   @Swagger.ApiOperation({

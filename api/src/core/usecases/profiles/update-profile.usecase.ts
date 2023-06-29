@@ -43,7 +43,10 @@ export class UpdateProfileUsecase {
     }
 
     if (command.meetingFrequency) {
-      profile.meetingFrequency = command.meetingFrequency;
+      profile.preferences = {
+        ...profile.preferences,
+        meetingFrequency: command.meetingFrequency,
+      };
     }
 
     if (command.bios) {

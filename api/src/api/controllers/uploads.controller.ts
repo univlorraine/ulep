@@ -18,7 +18,7 @@ import { UploadResponse } from '../dtos/media/upload.response';
 export class UploadsController {
   private readonly logger = new Logger(UploadsController.name);
 
-  constructor(private readonly uploadImageUsecase: UploadImageUsecase) { }
+  constructor(private readonly uploadImageUsecase: UploadImageUsecase) {}
 
   @Post('images')
   @UseGuards(AuthenticationGuard)

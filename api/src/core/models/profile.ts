@@ -20,25 +20,27 @@ export enum MeetingFrequency {
   THREE_TIMES_A_MONTH = 'THREE_TIMES_A_MONTH',
 }
 
-export enum LanguageLevel {
-  A1 = 'A1',
-  A2 = 'A2',
-  B1 = 'B1',
-  B2 = 'B2',
-  C1 = 'C1',
-  C2 = 'C2',
-}
+export type CEFRLevel = 'A1' | 'A2' | 'B1' | 'B2' | 'C1' | 'C2';
 
-export class NativeLanguage {
+export type ProfilePreferences = {
+  meetingFrequency: MeetingFrequency;
+  sameGender: boolean;
+};
+
+export type NativeLanguage = {
   id: string;
   code: string;
-}
+};
 
-export class LearningLanguage {
+export type LearningLanguage = {
   id: string;
   code: string;
-  proficiencyLevel: LanguageLevel;
-}
+  level: CEFRLevel;
+};
+
+// export type Preferences = {
+//   sameGender: boolean;
+// };
 
 export type CreateProfileProps = {
   id: string;
@@ -53,8 +55,9 @@ export type CreateProfileProps = {
   nativeLanguage: NativeLanguage;
   learningLanguage: LearningLanguage;
   goals: Goal[];
-  meetingFrequency: MeetingFrequency;
+  interests: string[];
   bios?: string;
+  preferences: ProfilePreferences;
   avatar?: MediaObject;
 };
 
@@ -83,9 +86,11 @@ export class Profile {
 
   #goals: Goal[];
 
-  #meetingFrequency: MeetingFrequency;
+  #interests: string[];
 
   #bios?: string;
+
+  #preferences: ProfilePreferences;
 
   #avatar?: MediaObject;
 
@@ -102,8 +107,9 @@ export class Profile {
     this.nativeLanguage = props.nativeLanguage;
     this.learningLanguage = props.learningLanguage;
     this.goals = props.goals;
-    this.meetingFrequency = props.meetingFrequency;
+    this.interests = props.interests;
     this.bios = props.bios;
+    this.preferences = props.preferences;
     this.avatar = props.avatar;
   }
 
@@ -229,12 +235,15 @@ export class Profile {
     this.#goals = goals;
   }
 
-  get meetingFrequency(): MeetingFrequency {
-    return this.#meetingFrequency;
+  get interests(): string[] {
+    return this.#interests;
   }
 
-  set meetingFrequency(meetingFrequency: MeetingFrequency) {
-    this.#meetingFrequency = meetingFrequency;
+  set interests(interests: string[]) {
+    if (5 < interests.length) {
+      throw new Error('Max 5 interests allowed');
+    }
+    this.#interests = interests;
   }
 
   get bios(): string | undefined {
@@ -243,6 +252,14 @@ export class Profile {
 
   set bios(bios: string | undefined) {
     this.#bios = bios;
+  }
+
+  get preferences(): ProfilePreferences {
+    return this.#preferences;
+  }
+
+  set preferences(preferences: ProfilePreferences) {
+    this.#preferences = preferences;
   }
 
   get age(): number {

@@ -1,4 +1,14 @@
-export const countries = [
+import { PrismaClient } from '@prisma/client';
+
+export const createCountries = async (prisma: PrismaClient) => {
+  for (const country of countriesCodes) {
+    await prisma.countryCode.create({
+      data: { code: country.code, name: country.name },
+    });
+  }
+};
+
+const countriesCodes = [
   { code: 'AF', name: 'Afghanistan' },
   { code: 'AX', name: 'Åland Islands' },
   { code: 'AL', name: 'Albania' },

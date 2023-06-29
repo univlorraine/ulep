@@ -88,13 +88,15 @@ export class PrismaProfileRepository implements ProfileRepository {
               code: profile.learningLanguage.code,
             },
           },
-          proficiencyLevel: profile.learningLanguage.proficiencyLevel,
+          proficiencyLevel: profile.learningLanguage.level,
         },
       },
       metadata: {
         goals: profile.goals,
-        meetingFrequency: profile.meetingFrequency,
+        meetingFrequency: profile.preferences.meetingFrequency,
+        interests: profile.interests,
         bios: profile.bios,
+        preferSameGender: profile.preferences.sameGender,
       },
       organization: {
         connect: {

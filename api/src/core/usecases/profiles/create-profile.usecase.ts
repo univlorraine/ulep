@@ -13,7 +13,7 @@ import {
 } from '../../errors/RessourceDoesNotExist';
 import {
   Goal,
-  LanguageLevel,
+  CEFRLevel,
   MeetingFrequency,
   Profile,
 } from '../../models/profile';
@@ -22,6 +22,7 @@ import { ProfileRepository } from '../../ports/profile.repository';
 import { UniversityRepository } from '../../ports/university.repository';
 import {
   COUNTRY_REPOSITORY,
+  EVENT_BUS,
   LANGUAGE_REPOSITORY,
   PROFILE_REPOSITORY,
   UNIVERSITY_REPOSITORY,
@@ -33,6 +34,8 @@ import { Country } from '../../models/country';
 import { Language } from '../../models/language';
 import { User } from '../../models/user';
 import { UserRepository } from '../../ports/user.repository';
+import { EventBus } from 'src/core/events/event-bus';
+import { NewProfileCreatedEvent } from 'src/core/events/NewProfileCreatedEvent';
 
 export class CreateProfileCommand {
   id: string;
@@ -45,10 +48,12 @@ export class CreateProfileCommand {
   university: string;
   nationality: string;
   learningLanguage: string;
-  proficiencyLevel: LanguageLevel;
+  proficiencyLevel: CEFRLevel;
   nativeLanguage: string;
   goals: Goal[];
   meetingFrequency: MeetingFrequency;
+  interests: string[];
+  preferSameGender: boolean;
   bios?: string;
 }
 
@@ -67,6 +72,8 @@ export class CreateProfileUsecase {
     private readonly countryRepository: CountryRepository,
     @Inject(LANGUAGE_REPOSITORY)
     private readonly languageRepository: LanguageRepository,
+    @Inject(EVENT_BUS)
+    private readonly eventBus: EventBus,
   ) {}
 
   async execute(command: CreateProfileCommand): Promise<Profile> {
@@ -101,17 +108,21 @@ export class CreateProfileUsecase {
       learningLanguage: {
         id: learningLanguage.id,
         code: learningLanguage.code,
-        proficiencyLevel: command.proficiencyLevel,
+        level: command.proficiencyLevel,
       },
       nativeLanguage: {
         id: nativeLanguage.id,
         code: nativeLanguage.code,
       },
+      preferences: {
+        meetingFrequency: command.meetingFrequency,
+        sameGender: command.preferSameGender,
+      },
     });
 
     await this.profileRepository.save(instance);
 
-    // this.eventBus.publish(NewProfileCreatedEvent.fromProfile(instance));
+    this.eventBus.publish(NewProfileCreatedEvent.fromProfile(instance));
 
     return instance;
   }

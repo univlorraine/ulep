@@ -7,6 +7,8 @@ import { PrismaUniversityRepository } from './persistance/repositories/prisma-un
 import { PrismaCountryRepository } from './persistance/repositories/prisma-country-repository';
 import { PrismaLanguageRepository } from './persistance/repositories/prisma-language-repository';
 import { PrismaUserRepository } from './persistance/repositories/prisma-user-repository';
+import { NestEventBus } from './events/NestEventBus';
+import { CqrsModule } from '@nestjs/cqrs';
 
 export const COUNTRY_REPOSITORY = 'country.repository';
 export const LANGUAGE_REPOSITORY = 'language.repository';
@@ -15,6 +17,7 @@ export const PROFILE_REPOSITORY = 'profile.repository';
 export const STORAGE_SERVICE = 'storage.service';
 export const UNIVERSITY_REPOSITORY = 'university.repository';
 export const USER_REPOSITORY = 'user.repository';
+export const EVENT_BUS = 'event.bus';
 
 const providers: Provider[] = [
   {
@@ -45,9 +48,14 @@ const providers: Provider[] = [
     provide: LANGUAGE_REPOSITORY,
     useClass: PrismaLanguageRepository,
   },
+  {
+    provide: EVENT_BUS,
+    useClass: NestEventBus,
+  },
 ];
 
 @Module({
+  imports: [CqrsModule],
   providers: [PrismaService, ...providers],
   exports: [...providers],
 })

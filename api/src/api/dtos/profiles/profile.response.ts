@@ -4,6 +4,30 @@ import { Goal, MeetingFrequency, Profile } from '../../../core/models/profile';
 import { UniversityResponse } from '../university/university.response';
 import { Expose, Transform } from 'class-transformer';
 
+class NativeLanguageResponse {
+  @ApiProperty()
+  @Expose({ groups: ['read'] })
+  code: string;
+
+  constructor(partial: Partial<ProfileResponse>) {
+    Object.assign(this, partial);
+  }
+}
+
+class LearningLanguageResponse {
+  @ApiProperty()
+  @Expose({ groups: ['read'] })
+  code: string;
+
+  @ApiProperty()
+  @Expose({ groups: ['read'] })
+  level: string;
+
+  constructor(partial: Partial<ProfileResponse>) {
+    Object.assign(this, partial);
+  }
+}
+
 export class ProfileResponse {
   @ApiProperty()
   @Expose({ groups: ['read'] })
@@ -40,11 +64,13 @@ export class ProfileResponse {
 
   @ApiProperty()
   @Expose({ groups: ['read'] })
-  nativeLanguage: string;
+  @Transform(({ value }) => new NativeLanguageResponse(value))
+  nativeLanguage: NativeLanguageResponse;
 
   @ApiProperty()
   @Expose({ groups: ['read'] })
-  learningLanguage: string;
+  @Transform(({ value }) => new LearningLanguageResponse(value))
+  learningLanguage: LearningLanguageResponse;
 
   @ApiProperty({ enum: Goal, isArray: true })
   @Expose({ groups: ['read'] })
@@ -87,10 +113,15 @@ export class ProfileResponse {
         admissionStart: profile.university.admissionStart,
         admissionEnd: profile.university.admissionEnd,
       },
-      nativeLanguage: profile.nativeLanguage.code,
-      learningLanguage: profile.learningLanguage.code,
+      nativeLanguage: {
+        code: profile.nativeLanguage.code,
+      },
+      learningLanguage: {
+        code: profile.learningLanguage.code,
+        level: profile.learningLanguage.level.toString(),
+      },
       goals: profile.goals,
-      meetingFrequency: profile.meetingFrequency,
+      meetingFrequency: profile.preferences.meetingFrequency,
       bios: profile.bios,
       avatar:
         profile.avatar &&
