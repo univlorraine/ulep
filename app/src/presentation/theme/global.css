@@ -1,0 +1,17 @@
+@import url('https://fonts.googleapis.com/css?family=Roboto&display=swap');
+
+.ios .content-wrapper {
+    padding-top: 25px;
+}
+
+.container {
+    display: flex;
+    align-items: center;
+    height: 100%;
+    justify-content: center;
+    flex-direction: column;
+}
+
+.yellow-background {
+    background-color: #fdee66;
+}
