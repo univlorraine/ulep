@@ -5,6 +5,9 @@
         "loginError": "Mauvais email ou mot de passe",
         "password": "Mot de passe"
     },
+    "profiles": {
+        "label": "Profiles"
+    },
     "users": {
         "searchEmail": "Chercher par email",
         "userListTitle": "Utilisateurs"

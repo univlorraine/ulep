@@ -38,10 +38,6 @@ export type LearningLanguage = {
   level: CEFRLevel;
 };
 
-// export type Preferences = {
-//   sameGender: boolean;
-// };
-
 export type CreateProfileProps = {
   id: string;
   user: User;
@@ -54,8 +50,8 @@ export type CreateProfileProps = {
   nationality: Country;
   nativeLanguage: NativeLanguage;
   learningLanguage: LearningLanguage;
-  goals: Goal[];
-  interests: string[];
+  goals: Set<Goal>;
+  interests: Set<string>;
   bios?: string;
   preferences: ProfilePreferences;
   avatar?: MediaObject;
@@ -84,9 +80,9 @@ export class Profile {
 
   #learningLanguage: LearningLanguage;
 
-  #goals: Goal[];
+  #goals: Set<Goal>;
 
-  #interests: string[];
+  #interests: Set<string>;
 
   #bios?: string;
 
@@ -227,20 +223,20 @@ export class Profile {
     this.#avatar = avatar;
   }
 
-  get goals(): Goal[] {
-    return this.#goals || [];
+  get goals(): Set<Goal> {
+    return this.#goals;
   }
 
-  set goals(goals: Goal[]) {
+  set goals(goals: Set<Goal>) {
     this.#goals = goals;
   }
 
-  get interests(): string[] {
+  get interests(): Set<string> {
     return this.#interests;
   }
 
-  set interests(interests: string[]) {
-    if (5 < interests.length) {
+  set interests(interests: Set<string>) {
+    if (5 < interests.size) {
       throw new Error('Max 5 interests allowed');
     }
     this.#interests = interests;
@@ -264,7 +260,7 @@ export class Profile {
 
   get age(): number {
     const now = new Date();
-    const birthdate = this.birthdate;
+    const birthdate = this.#birthdate;
     let age = now.getFullYear() - birthdate.getFullYear();
     const month = now.getMonth() - birthdate.getMonth();
     if (month < 0 || (0 === month && now.getDate() < birthdate.getDate())) {

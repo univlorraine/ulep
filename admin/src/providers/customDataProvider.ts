@@ -1,5 +1,6 @@
 import simpleRestProvider from 'ra-data-simple-rest';
-import { httpClient } from './authProvider';
+import { fetchUtils } from 'react-admin';
+import jwtManager from './jwtManager';
 
 interface Params {
     filter: {
@@ -10,6 +11,20 @@ interface Params {
       perPage: string;
     };
   }
+
+const httpClient = (url: string, options: any = {}) => {
+    const newOptions = options;
+    if (!newOptions.headers) {
+        newOptions.headers = new Headers({ Accept: 'application/json' });
+    }
+    const token = jwtManager.getToken();
+
+    if (token) {
+        newOptions.headers.set('Authorization', `Bearer ${token}`);
+    }
+
+    return fetchUtils.fetchJson(url, newOptions);
+};
 
 const dataProvider = simpleRestProvider(`${process.env.REACT_APP_API_URL}`, httpClient);
 

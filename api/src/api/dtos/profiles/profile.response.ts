@@ -47,7 +47,7 @@ export class ProfileResponse {
 
   @ApiProperty()
   @Expose({ groups: ['read'] })
-  birthdate: Date;
+  age: number;
 
   @ApiProperty({ enum: Gender })
   @Expose({ groups: ['read'] })
@@ -80,6 +80,10 @@ export class ProfileResponse {
   @Expose({ groups: ['read'] })
   meetingFrequency: MeetingFrequency;
 
+  @ApiProperty({ isArray: true })
+  @Expose({ groups: ['read'] })
+  interests: string[];
+
   @ApiProperty()
   @Expose({ groups: ['read'] })
   bios?: string;
@@ -98,7 +102,7 @@ export class ProfileResponse {
       email: profile.user.email,
       firstname: profile.firstname,
       lastname: profile.lastname,
-      birthdate: profile.birthdate,
+      age: profile.age,
       role: profile.role,
       gender: profile.gender,
       university: {
@@ -120,7 +124,8 @@ export class ProfileResponse {
         code: profile.learningLanguage.code,
         level: profile.learningLanguage.level.toString(),
       },
-      goals: profile.goals,
+      goals: Array.from(profile.goals),
+      interests: Array.from(profile.interests),
       meetingFrequency: profile.preferences.meetingFrequency,
       bios: profile.bios,
       avatar:

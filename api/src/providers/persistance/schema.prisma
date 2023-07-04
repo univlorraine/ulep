@@ -7,10 +7,9 @@ generator client {
   provider = "prisma-client-js"
 }
 
-model UserEntity {
+model User {
   id                    String              @id
   email                 String              @unique
-  roles                 String[]
   profile               Profile?
 
   @@map("users")
@@ -18,7 +17,7 @@ model UserEntity {
 
 model Profile {
   id                    String              @id @default(uuid())
-  user                  UserEntity          @relation(fields: [userId], references: [id], onDelete: Cascade)
+  user                  User                @relation(fields: [userId], references: [id], onDelete: Cascade)
   userId                String              @unique
   firstname             String
   lastname              String
@@ -33,8 +32,7 @@ model Profile {
   avatar                MediaObject?
   nativeLanguage        NativeLanguage?
   learningLanguage      LearningLanguage?
-  matches               ProfileMatch[]
-  tandems               ProfileTandem[]
+  // tandems               ProfileTandem[]
   createdAt             DateTime            @default(now())
 }
 
@@ -80,35 +78,20 @@ model CountryCode {
   createdAt             DateTime            @default(now())
 }
 
-model Match {
-  id                    String              @id @default(uuid())
-  profiles              ProfileMatch[]
-  score                 Float
-  createdAt             DateTime            @default(now())
-}
+// model Tandem {
+//   id                    String              @id @default(uuid())
+//   profiles              ProfileTandem[]
+//   isActive              Boolean
+//   createdAt             DateTime            @default(now())
+// }
 
-model ProfileMatch {
-  profileId             String              @id
-  matchId               String
-  profile               Profile             @relation(fields: [profileId], references: [id], onDelete: Cascade)
-  match                 Match               @relation(fields: [matchId], references: [id], onDelete: Cascade)
-  createdAt             DateTime            @default(now())
-}
-
-model Tandem {
-  id                    String              @id @default(uuid())
-  profiles              ProfileTandem[]
-  isActive              Boolean
-  createdAt             DateTime            @default(now())
-}
-
-model ProfileTandem {
-  profileId             String              @id
-  tandemId              String
-  profile               Profile             @relation(fields: [profileId], references: [id], onDelete: Cascade)
-  tandem                Tandem              @relation(fields: [tandemId], references: [id], onDelete: Cascade)
-  createdAt             DateTime            @default(now())
-}
+// model ProfileTandem {
+//   profileId             String              @id
+//   tandemId              String
+//   profile               Profile             @relation(fields: [profileId], references: [id], onDelete: Cascade)
+//   tandem                Tandem              @relation(fields: [tandemId], references: [id], onDelete: Cascade)
+//   createdAt             DateTime            @default(now())
+// }
 
 model Organization {
   id                    String              @id @default(uuid())

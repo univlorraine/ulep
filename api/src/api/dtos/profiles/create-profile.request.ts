@@ -32,7 +32,7 @@ export class CreateProfileRequest {
 
   @ApiProperty()
   @IsDateString()
-  birthdate: Date;
+  birthdate: string;
 
   @ApiProperty({ enum: Role })
   @IsEnum(Role)

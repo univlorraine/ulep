@@ -59,6 +59,10 @@ export class ProfileDoesNotExist extends RessourceDoesNotExist {
   static withIdOf(id: string): RessourceDoesNotExist {
     return new ProfileDoesNotExist('id', id);
   }
+
+  static forUser(id: string): RessourceDoesNotExist {
+    return new ProfileDoesNotExist('user', id);
+  }
 }
 
 export class UserDoesNotExist extends RessourceDoesNotExist {

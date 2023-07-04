@@ -14,16 +14,3 @@ export const createLanguages = async (prisma: PrismaClient) => {
     });
   }
 };
-
-// export const mapCountryCodeToLanguageCode = (countryCode: string): string => {
-//   switch (countryCode) {
-//     case 'DE':
-//       return 'DE';
-//     case 'FR':
-//       return 'FR';
-//     case 'CN':
-//       return 'ZH';
-//     default:
-//       return 'EN';
-//   }
-// };

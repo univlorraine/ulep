@@ -1,4 +1,3 @@
-import { KeycloakClient } from '@app/keycloak';
 import {
   CanActivate,
   ExecutionContext,
@@ -7,25 +6,26 @@ import {
   UnauthorizedException,
 } from '@nestjs/common';
 import { Request } from 'express';
+import { KeycloakAuthenticator } from 'src/core/services/authentication/authenticator';
 
 @Injectable()
 export class AuthenticationGuard implements CanActivate {
   private readonly logger = new Logger(AuthenticationGuard.name);
 
-  constructor(private readonly keycloak: KeycloakClient) {}
+  constructor(private readonly authenticator: KeycloakAuthenticator) {}
 
   async canActivate(context: ExecutionContext): Promise<boolean> {
     const request: Request = context.switchToHttp().getRequest();
     const token = this.extractTokenFromHeader(request);
 
-    if (token) {
-      const userInfo = await this.keycloak.userInfo(token);
-      request['user'] = userInfo.sub;
-
-      return true;
+    if (!token) {
+      throw new UnauthorizedException();
     }
 
-    throw new UnauthorizedException();
+    const user = await this.authenticator.authenticate(token);
+    request['user'] = user;
+
+    return true;
   }
 
   private extractTokenFromHeader(request: Request): string | undefined {

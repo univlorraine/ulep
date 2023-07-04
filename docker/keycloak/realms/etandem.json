@@ -1,0 +1,49 @@
+{
+  "realm": "etandem",
+  "enabled": true,
+  "registrationAllowed": true,
+  "registrationEmailAsUsername": true,
+  "accessTokenLifespan": 600,
+  "accessCodeLifespan": 600,
+  "requiredCredentials": [
+    "password"
+  ],
+  "clients": [
+    {
+      "clientId": "api",
+      "name": "API",
+      "clientAuthenticatorType": "client-secret",
+      "secret": "bN49BuApmmtAODeOWOG8iKOOuJdN3KE6",
+      "bearerOnly": true
+    },
+    {
+      "clientId": "react-admin",
+      "name": "admin",
+      "clientAuthenticatorType": "client-secret",
+      "secret": "uKBywX2HlxfvKgxZoKZrbiBSx49CST6W",
+      "protocol": "openid-connect",
+      "standardFlowEnabled": true,
+      "directAccessGrantsEnabled": true,
+      "redirectUris": [
+        "http://localhost:3001/auth-callback"
+      ]
+    }
+  ],
+  "users": [
+    {
+      "username": "Jane Doe",
+      "enabled": true,
+      "emailVerified": false,
+      "firstName": "Jane",
+      "lastName": "Doe",
+      "email": "jane.doe@ulep.io",
+      "credentials": [
+        {
+          "type": "password",
+          "value": "admin",
+          "temporary": false
+        }
+      ]
+    }
+  ]
+}

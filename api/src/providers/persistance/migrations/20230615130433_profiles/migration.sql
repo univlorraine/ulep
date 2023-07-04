@@ -13,7 +13,6 @@ CREATE TYPE "MeetingFrequency" AS ENUM ('ONCE_A_WEEK', 'TWICE_A_WEEK', 'THREE_TI
 -- CreateTable
 CREATE TABLE "Profile" (
     "id" TEXT NOT NULL,
-    "email" TEXT NOT NULL,
     "firstname" TEXT NOT NULL,
     "lastname" TEXT NOT NULL,
     "birthdate" TIMESTAMP(3) NOT NULL,
@@ -27,11 +26,8 @@ CREATE TABLE "Profile" (
     CONSTRAINT "Profile_pkey" PRIMARY KEY ("id")
 );
 
--- CreateIndex
-CREATE UNIQUE INDEX "Profile_email_key" ON "Profile"("email");
-
 -- AddForeignKey
-ALTER TABLE "Profile" ADD CONSTRAINT "Profile_organizationId_fkey" FOREIGN KEY ("organizationId") REFERENCES "Organization"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE "Profile" ADD CONSTRAINT "Profile_organizationId_fkey" FOREIGN KEY ("organizationId") REFERENCES "Organization"("id") ON DELETE CASCADE ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE "Profile" ADD CONSTRAINT "Profile_nationalityId_fkey" FOREIGN KEY ("nationalityId") REFERENCES "CountryCode"("id") ON DELETE RESTRICT ON UPDATE CASCADE;

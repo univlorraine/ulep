@@ -1,17 +1,42 @@
 import { Injectable } from '@nestjs/common';
-import { CEFRLevel, Profile } from '../models/profile';
+import { CEFRLevel, Profile } from '../../models/profile';
+
+export type Coeficients = {
+  level: number;
+  age: number;
+  status: number;
+  goals: number;
+  interests: number;
+  gender: number;
+  university: number;
+  unpaired: number;
+};
 
 @Injectable()
 export class MatchService {
-  private readonly LEVEL_COEFICIENT: number = 0.7;
-  private readonly AGE_BONUS: number = 0.05;
-  private readonly STATUS_BONUS: number = 0.05;
-  private readonly GOALS_BONUS: number = 0.015;
-  private readonly SAME_GENDER_BONUS: number = 0.05;
-  private readonly UNIVERSITY_BONUS: number = 0.1;
-  private readonly UNPAIRED_BONUS: number = 0.05;
+  #coeficients: Coeficients = {
+    level: 0.7,
+    age: 0.0375,
+    status: 0.0375,
+    goals: 0.0375,
+    interests: 0.0375,
+    gender: 0.0375,
+    university: 0.075,
+    unpaired: 0.0375,
+  };
 
-  // TODO: CENTRES INTERETS
+  public set coeficients(coeficients: Coeficients) {
+    const sum = Object.values(coeficients).reduce((a, b) => a + b, 0);
+    if (sum !== 1) {
+      throw new Error('The sum of all coeficients must be equal to 1');
+    }
+    this.#coeficients = coeficients;
+  }
+
+  public get coeficients(): Coeficients {
+    return this.#coeficients;
+  }
+
   public computeMatchScore(profile1: Profile, profile2: Profile): number {
     // If both profiles have the same native language, set score to 0
     if (profile1.nativeLanguage.code === profile2.nativeLanguage.code) {
@@ -27,7 +52,7 @@ export class MatchService {
     );
 
     // Compute initial score based on levels, similar levels give higher score
-    let score = this.LEVEL_COEFICIENT * (1 - Math.abs(level1 - level2));
+    let score = this.coeficients.level * (1 - Math.abs(level1 - level2));
 
     // Apply the bonus
     score = this.applyAgeBonus(profile1, profile2, score);
@@ -35,6 +60,7 @@ export class MatchService {
     score = this.applySameGoalsBonus(profile1, profile2, score);
     score = this.applySameGenderBonus(profile1, profile2, score);
     score = this.applySameUniversityBonus(profile1, profile2, score);
+    score = this.applySameInterestBonus(profile1, profile2, score);
     // score = this.applyUnpairedLastSessionBonus(..., score);
 
     return score;
@@ -72,7 +98,9 @@ export class MatchService {
     if (profile1.age > 50) {
       // Apply the age bonus if the age of the second profile is greater than 45
       // If the second profile is 45 or younger, return the original score
-      return profile2.age > 45 ? this.applyBonus(score, this.AGE_BONUS) : score;
+      return profile2.age > 45
+        ? this.applyBonus(score, this.coeficients.age)
+        : score;
     }
     // If the age of the first profile is greater than 30 (but not greater than 50,
     // because of the previous condition)
@@ -80,14 +108,14 @@ export class MatchService {
       // Apply the age bonus if the age difference between the profiles is between -10 and 10 (inclusive)
       // If the age difference is outside this range, return the original score
       return -10 <= ageDiff && ageDiff <= 10
-        ? this.applyBonus(score, this.AGE_BONUS)
+        ? this.applyBonus(score, this.coeficients.age)
         : score;
     }
     // If the age of the first profile is 30 or younger
     // Apply the age bonus if the age difference between the profiles is between -3 and 3 (inclusive)
     // If the age difference is outside this range, return the original score
     return -3 <= ageDiff && ageDiff <= 3
-      ? this.applyBonus(score, this.AGE_BONUS)
+      ? this.applyBonus(score, this.coeficients.age)
       : score;
   }
 
@@ -99,7 +127,7 @@ export class MatchService {
   ): number {
     // If the status of the two profiles is the same apply a bonus to the score.
     if (profile_1.role === profile_2.role) {
-      return this.applyBonus(score, this.STATUS_BONUS);
+      return this.applyBonus(score, this.coeficients.status);
     }
 
     return score;
@@ -109,7 +137,7 @@ export class MatchService {
   private applySameGenderBonus(
     profile1: Profile,
     profile2: Profile,
-    normalizedScore: number,
+    score: number,
   ): number {
     // Check if profile_1 prefers to be matched with someone of the same gender
     const prefersSameGender =
@@ -122,30 +150,35 @@ export class MatchService {
     // Apply bonus if profile_1 prefers same gender and their genders match,
     // or if both profiles do not care about gender
     if ((prefersSameGender && gendersMatch) || doesNotCareAboutGender) {
-      return this.applyBonus(normalizedScore, this.SAME_GENDER_BONUS);
+      return this.applyBonus(score, this.coeficients.gender);
     }
     // Return the original score if none of the conditions for bonus apply
-    return normalizedScore;
+    return score;
   }
 
   // Apply bonus if profiles share the same goals
   private applySameGoalsBonus(
     profile1: Profile,
     profile2: Profile,
-    normalizedScore: number,
+    score: number,
   ): number {
-    let score = normalizedScore;
+    const similarity = this.computeSimilarity(profile1.goals, profile2.goals);
 
-    const goals1 = profile1.goals;
-    const goals2 = profile2.goals;
+    return this.applyBonus(score, this.coeficients.goals * similarity);
+  }
 
-    const commonGoals = goals1.filter((goal) => goals2.includes(goal));
+  // Apply bonus if profiles share the same interests
+  private applySameInterestBonus(
+    profile1: Profile,
+    profile2: Profile,
+    score: number,
+  ): number {
+    const similarity = this.computeSimilarity(
+      profile1.interests,
+      profile2.interests,
+    );
 
-    for (let i = 0; i < commonGoals.length; i += 1) {
-      score = this.applyBonus(score, this.GOALS_BONUS);
-    }
-
-    return score;
+    return this.applyBonus(score, this.coeficients.interests * similarity);
   }
 
   // Apply bonus if profiles share the same university
@@ -162,7 +195,7 @@ export class MatchService {
 
     // If both profiles share the same university, apply the bonus
     if (sharesUniversity) {
-      return this.applyBonus(score, this.UNIVERSITY_BONUS);
+      return this.applyBonus(score, this.coeficients.university);
     }
 
     return score;
@@ -174,10 +207,21 @@ export class MatchService {
   ): number {
     // Apply the bonus if profile2 was not paired last session
     if (!profile2wasPairedLastSession) {
-      return this.applyBonus(score, this.UNPAIRED_BONUS);
+      return this.applyBonus(score, this.coeficients.unpaired);
     }
 
     return score;
+  }
+
+  private computeSimilarity(set1: Set<string>, set2: Set<string>): number {
+    const intersection = new Set([...set1].filter((x) => set2.has(x)));
+    const union = new Set([...set1, ...set2]);
+
+    if (union.size === 0) {
+      return 0;
+    }
+
+    return intersection.size / union.size;
   }
 
   private applyBonus(currentScore: number, bonus: number): number {

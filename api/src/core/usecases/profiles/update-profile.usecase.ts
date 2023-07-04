@@ -15,7 +15,7 @@ import {
 export type UpdateProfileCommand = {
   id: string;
   university?: string;
-  goals?: Goal[];
+  goals?: Set<Goal>;
   meetingFrequency?: MeetingFrequency;
   bios?: string;
 };

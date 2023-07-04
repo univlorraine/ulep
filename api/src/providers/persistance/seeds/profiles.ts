@@ -1,5 +1,5 @@
 import { faker } from '@faker-js/faker';
-import { Gender, PrismaClient, Role, UserEntity } from '@prisma/client';
+import { Gender, PrismaClient, Role, User } from '@prisma/client';
 import { Goal } from '../../../core/models/profile';
 
 const levels = ['A1', 'A2', 'B1', 'B2', 'C1', 'C2'];
@@ -95,15 +95,14 @@ const enumToList = (_enum: unknown): string[] => {
 const createUsers = async (
   count: number,
   prisma: PrismaClient,
-): Promise<UserEntity[]> => {
-  const users: UserEntity[] = [];
+): Promise<User[]> => {
+  const users: User[] = [];
 
   for (let i = 0; i < count; i++) {
-    const user = await prisma.userEntity.create({
+    const user = await prisma.user.create({
       data: {
         id: faker.string.uuid(),
         email: faker.internet.email(),
-        roles: { set: ['ROLE_USER'] },
       },
     });
 

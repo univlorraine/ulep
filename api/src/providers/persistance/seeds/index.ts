@@ -9,7 +9,7 @@ const prisma = new Prisma.PrismaClient();
 const load = async () => {
   try {
     await prisma.profile.deleteMany();
-    await prisma.userEntity.deleteMany();
+    await prisma.user.deleteMany();
     await prisma.organization.deleteMany();
     await prisma.countryCode.deleteMany();
     await prisma.languageCode.deleteMany();

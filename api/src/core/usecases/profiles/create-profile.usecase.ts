@@ -22,7 +22,6 @@ import { ProfileRepository } from '../../ports/profile.repository';
 import { UniversityRepository } from '../../ports/university.repository';
 import {
   COUNTRY_REPOSITORY,
-  EVENT_BUS,
   LANGUAGE_REPOSITORY,
   PROFILE_REPOSITORY,
   UNIVERSITY_REPOSITORY,
@@ -34,15 +33,14 @@ import { Country } from '../../models/country';
 import { Language } from '../../models/language';
 import { User } from '../../models/user';
 import { UserRepository } from '../../ports/user.repository';
-import { EventBus } from 'src/core/events/event-bus';
-import { NewProfileCreatedEvent } from 'src/core/events/NewProfileCreatedEvent';
+import { ProfileAlreadyExists } from 'src/core/errors/RessourceAlreadyExists';
 
 export class CreateProfileCommand {
   id: string;
   userId: string;
   firstname: string;
   lastname: string;
-  birthdate: Date;
+  birthdate: string;
   role: Role;
   gender: Gender;
   university: string;
@@ -50,9 +48,9 @@ export class CreateProfileCommand {
   learningLanguage: string;
   proficiencyLevel: CEFRLevel;
   nativeLanguage: string;
-  goals: Goal[];
+  goals: Set<Goal>;
   meetingFrequency: MeetingFrequency;
-  interests: string[];
+  interests: Set<string>;
   preferSameGender: boolean;
   bios?: string;
 }
@@ -72,13 +70,11 @@ export class CreateProfileUsecase {
     private readonly countryRepository: CountryRepository,
     @Inject(LANGUAGE_REPOSITORY)
     private readonly languageRepository: LanguageRepository,
-    @Inject(EVENT_BUS)
-    private readonly eventBus: EventBus,
   ) {}
 
   async execute(command: CreateProfileCommand): Promise<Profile> {
     const user = await this.tryToFindTheUserOfId(command.userId);
-    // TODO : check if the user is already linked to a profile
+    await this.assertProfileDoesNotExistForUser(user);
 
     const university = await this.tryToFindTheUniversityOfId(
       command.university,
@@ -103,6 +99,7 @@ export class CreateProfileUsecase {
     const instance = new Profile({
       ...command,
       user,
+      birthdate: new Date(command.birthdate),
       university,
       nationality,
       learningLanguage: {
@@ -122,9 +119,14 @@ export class CreateProfileUsecase {
 
     await this.profileRepository.save(instance);
 
-    this.eventBus.publish(NewProfileCreatedEvent.fromProfile(instance));
-
     return instance;
+  }
+
+  private async assertProfileDoesNotExistForUser(user: User): Promise<void> {
+    const profile = await this.profileRepository.ofUser(user.id);
+    if (profile) {
+      throw ProfileAlreadyExists.withUserIdOf(user.id);
+    }
   }
 
   private async tryToFindTheUserOfId(id: string): Promise<User> {

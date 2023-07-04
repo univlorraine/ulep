@@ -6,7 +6,7 @@ import MediaObject from '../../../core/models/media-object';
 import { userMapper } from './user.mapper';
 
 type ProfileEntity = Prisma.Profile & {
-  user: Prisma.UserEntity;
+  user: Prisma.User;
   organization: Prisma.Organization & {
     country: Prisma.CountryCode;
   };
@@ -40,8 +40,8 @@ export const profileMapper = (instance: ProfileEntity): Profile => {
       id: instance.nativeLanguage.id,
       code: instance.nativeLanguage.languageCode.code,
     },
-    goals: instance.metadata['goals'],
-    interests: instance.metadata['interests'],
+    goals: new Set(instance.metadata['goals']),
+    interests: new Set(instance.metadata['interests']),
     bios: instance.metadata['bios'],
     preferences: {
       meetingFrequency: instance.metadata['meetingFrequency'],

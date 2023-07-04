@@ -1,6 +1,6 @@
 import { KeycloakClient } from '@app/keycloak';
 import { Inject, Injectable } from '@nestjs/common';
-import { Role, User } from '../../models/user';
+import { UserRole, User } from '../../models/user';
 import { USER_REPOSITORY } from '../../../providers/providers.module';
 import { UserRepository } from '../../ports/user.repository';
 import { UserAlreadyExists } from '../../errors/RessourceAlreadyExists';
@@ -8,7 +8,7 @@ import { UserAlreadyExists } from '../../errors/RessourceAlreadyExists';
 export type CreateUserCommand = {
   email: string;
   password: string;
-  roles: Role[];
+  roles?: UserRole[];
 };
 
 @Injectable()

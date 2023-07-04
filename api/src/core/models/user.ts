@@ -1,26 +1,26 @@
 export interface UserProps {
   id: string;
   email: string;
-  roles?: Role[];
+  roles?: UserRole[];
 }
 
-export enum Role {
-  ROLE_USER = 'ROLE_USER',
-  ROLE_ADMIN = 'ROLE_ADMIN',
+export enum UserRole {
+  ADMIN = 'admin',
+  USER = 'user',
 }
 
 export class User {
   #id: string;
   #email: string;
-  #roles: Role[];
+  #roles: UserRole[];
 
   constructor(props: UserProps) {
     this.#id = props.id;
     this.email = props.email;
-    this.roles = props.roles || [Role.ROLE_USER];
+    this.roles = props.roles || [UserRole.USER];
   }
 
-  static signUp(id: string, email: string, roles?: Role[]): User {
+  static signUp(id: string, email: string, roles?: UserRole[]): User {
     return new User({ id, email, roles });
   }
 
@@ -40,12 +40,12 @@ export class User {
     this.#email = email;
   }
 
-  get roles(): Role[] {
+  get roles(): UserRole[] {
     // guarantee every user at least has role USER
-    return this.#roles || [Role.ROLE_USER];
+    return this.#roles || [UserRole.USER];
   }
 
-  set roles(roles: Role[]) {
+  set roles(roles: UserRole[]) {
     this.#roles = roles;
   }
 }

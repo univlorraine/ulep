@@ -10,6 +10,7 @@ import { CountryController } from './controllers/country.controller';
 import { ProfileController } from './controllers/profile.controller';
 import { RolesGuard } from './guards/roles.guard';
 import { UploadsController } from './controllers/uploads.controller';
+import { MatchController } from './controllers/match.controller';
 
 @Module({
   imports: [CoreModule, TerminusModule],
@@ -17,6 +18,7 @@ import { UploadsController } from './controllers/uploads.controller';
     CountryController,
     HealthController,
     LanguageController,
+    MatchController,
     ProfileController,
     SecurityController,
     UniversityController,
