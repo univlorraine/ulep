@@ -6,7 +6,7 @@ import { LoginPage } from '../pages/Login';
 
 const OfflineRouter: React.FC = () => (
     <IonRouterOutlet>
-        <Route exact path="/home">
+        <Route exact path="/">
             <Home />
         </Route>
         <Route exact path="/login">
