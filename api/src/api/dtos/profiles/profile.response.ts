@@ -59,7 +59,7 @@ export class ProfileResponse {
   university: UniversityResponse;
 
   @ApiProperty({ enum: Role })
-  @Expose({ groups: ['profile:read'] })
+  @Expose({ groups: ['read'] })
   role: Role;
 
   @ApiProperty()

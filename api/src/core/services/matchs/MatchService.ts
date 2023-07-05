@@ -38,11 +38,6 @@ export class MatchService {
   }
 
   public computeMatchScore(profile1: Profile, profile2: Profile): number {
-    // If both profiles have the same native language, set score to 0
-    if (profile1.nativeLanguage.code === profile2.nativeLanguage.code) {
-      return 0;
-    }
-
     const level1: number = this.normalizeCEFRLevel(
       profile1.learningLanguage.level,
     );
@@ -50,6 +45,12 @@ export class MatchService {
     const level2: number = this.normalizeCEFRLevel(
       profile2.learningLanguage.level,
     );
+
+    // Only if both profiles are beginners, we authorize "discovery" tandems.
+    const beginnerLevel = this.normalizeCEFRLevel('B1');
+    if (level1 < beginnerLevel !== level2 < beginnerLevel) {
+      return 0;
+    }
 
     // Compute initial score based on levels, similar levels give higher score
     let score = this.coeficients.level * (1 - Math.abs(level1 - level2));
@@ -187,9 +188,6 @@ export class MatchService {
     profile2: Profile,
     score: number,
   ): number {
-    // TODO: Throw an exception if tandem and dont shares the same university
-    // TODO: Check if profile2 is from 'UL'. in that case, we should apply the bonus anyway
-
     // Check if both profiles share the same university
     const sharesUniversity = profile1.university.id === profile2.university.id;
 
