@@ -1,13 +1,17 @@
+import { IonRouterOutlet } from '@ionic/react';
 import React from 'react';
 import { Route } from 'react-router-dom';
-import { IonRouterOutlet } from '@ionic/react';
-import Home from '../pages/Home';
+import ConnectPage from '../pages/ConnectPage';
+import Home from '../pages/HomePage';
 import { LoginPage } from '../pages/Login';
 
 const OfflineRouter: React.FC = () => (
     <IonRouterOutlet>
         <Route exact path="/">
             <Home />
+        </Route>
+        <Route exact path="/connect">
+            <ConnectPage />
         </Route>
         <Route exact path="/login">
             <LoginPage />

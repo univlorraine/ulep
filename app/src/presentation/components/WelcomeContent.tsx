@@ -1,4 +1,5 @@
 import { IonContent } from '@ionic/react';
+import './WelcomeContent.css';
 
 interface HomeTheme {
     color: string;
@@ -12,21 +13,25 @@ const themes: HomeTheme[] = [
     { color: '#E0897C', fontSize: '50px', image: 'china-bubble' },
 ];
 
-const WelcomeContent = () => {
+interface WelcomeContentProps {
+    onPress?: () => void;
+}
+
+const WelcomeContent: React.FC<WelcomeContentProps> = ({ onPress }) => {
     const currentTheme = themes[Math.floor(Math.random() * themes.length)];
     //TODO: Add mising logo on the top
     return (
         <IonContent>
             <div style={{ backgroundColor: currentTheme.color }} className="content-wrapper container">
-                <img src={`./assets/${currentTheme.image}.svg`} alt="bubble" className="bubble" />
+                <img src={`./assets/${currentTheme.image}.svg`} alt="bubble" />
                 <p className="welcome-text">
                     Bienvenue sur (e)Tandem,
                     <p className="welcome-subtext">le meilleur moyen de pratiquer une langue</p>
                 </p>
 
-                <div className="button">
+                <button className="button" disabled={!onPress} onClick={onPress}>
                     <p className="button-text">Apprends une nouvelle langue en tandem</p>
-                </div>
+                </button>
             </div>
         </IonContent>
     );

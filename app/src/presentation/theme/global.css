@@ -4,12 +4,21 @@
     padding-top: 25px;
 }
 
+.ion-page {
+    background-color: white;
+}
+
 .container {
     display: flex;
     align-items: center;
     height: 100%;
     justify-content: center;
     flex-direction: column;
+}
+
+.no-gutters {
+    --ion-grid-padding: 0;
+    --ion-grid-column-padding: 0;
 }
 
 .yellow-background {
