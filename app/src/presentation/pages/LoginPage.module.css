@@ -15,6 +15,22 @@
     text-transform: uppercase;
 }
 
+.icons {
+    background-color: #f8f9fa;
+    height: 70px;
+    width: 70px;
+}
+
 .main-content {
     height: 90%;
+}
+
+.title {
+    color: #000;
+    font-family: 'Roboto', sans-serif;
+    font-size: 37px;
+    font-style: normal;
+    font-weight: 700;
+    line-height: 40px;
+    text-align: center;
 }

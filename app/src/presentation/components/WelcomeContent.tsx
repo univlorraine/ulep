@@ -1,5 +1,5 @@
 import { IonContent } from '@ionic/react';
-import './WelcomeContent.css';
+import style from './WelcomeContent.module.css';
 
 interface HomeTheme {
     color: string;
@@ -22,15 +22,15 @@ const WelcomeContent: React.FC<WelcomeContentProps> = ({ onPress }) => {
     //TODO: Add mising logo on the top
     return (
         <IonContent>
-            <div style={{ backgroundColor: currentTheme.color }} className="content-wrapper container">
-                <img src={`./assets/${currentTheme.image}.svg`} alt="bubble" />
-                <p className="welcome-text">
+            <div style={{ backgroundColor: currentTheme.color }} className="container">
+                <img src={`./assets/${currentTheme.image}.svg`} alt="bubble" className={style.bubble} />
+                <p className={style['welcome-text']}>
                     Bienvenue sur (e)Tandem,
-                    <p className="welcome-subtext">le meilleur moyen de pratiquer une langue</p>
+                    <p className={style['welcome-subtext']}>le meilleur moyen de pratiquer une langue</p>
                 </p>
 
-                <button className="button" disabled={!onPress} onClick={onPress}>
-                    <p className="button-text">Apprends une nouvelle langue en tandem</p>
+                <button className={style.button} disabled={!onPress} onClick={onPress}>
+                    <p className={style['button-text']}>Apprends une nouvelle langue en tandem</p>
                 </button>
             </div>
         </IonContent>

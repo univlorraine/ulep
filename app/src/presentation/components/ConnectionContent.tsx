@@ -1,7 +1,7 @@
 import { isPlatform } from '@ionic/react';
 import { useTranslation } from 'react-i18next';
 import CircleAvatar from './CircleAvatar';
-import './ConnectionContent.css';
+import style from './ConnectionContent.module.css';
 
 interface ConnectionContentProps {
     onLoginPressed: () => void;
@@ -12,32 +12,40 @@ const ConnectionContent: React.FC<ConnectionContentProps> = ({ onLoginPressed, o
     const { t } = useTranslation();
     const isHybrid = isPlatform('hybrid');
     return (
-        <div className={`outer-div ${isHybrid ? 'hybrid-outer-div-padding' : 'web-outer-div-padding '}`}>
+        <div
+            className={`${style['outer-div']}
+            ${isHybrid ? style['hybrid-outer-div-padding'] : style['web-outer-div-padding']}`}
+        >
             <div
-                className={`connect-div ${
-                    isHybrid ? 'hybrid-div-padding hybrid-connect-div' : 'web-div-padding web-connect-div'
+                className={`${style['connect-div']} ${
+                    isHybrid
+                        ? `${style['hybrid-div-padding']} ${style['hybrid-connect-div']}`
+                        : `${style['web-div-padding']} ${style['web-connect-div']}`
                 }`}
             >
                 <CircleAvatar
                     backgroundImage="/public/assets/avatar.svg"
                     height={76}
-                    viewClassName="icons"
+                    viewClassName={style.icons}
                     width={76}
                 />
-                <p className="title">{t('connection_page.connect_title')}</p>
+                <p className={style.title}>{t('connection_page.connect_title')}</p>
                 <button className="primary-button" onClick={onLoginPressed}>
                     {t('connection_page.connect_button')}
                 </button>
             </div>
 
-            <div className={`signup-div ${isHybrid ? 'hybrid-div-padding' : 'web-div-padding'}`}>
+            <div
+                className={`${style['signup-div']}
+             ${isHybrid ? style['hybrid-div-padding'] : style['web-div-padding']}`}
+            >
                 <CircleAvatar
                     backgroundImage="/public/assets/create-account-logo.svg"
                     height={76}
-                    viewClassName="icons"
+                    viewClassName={style.icons}
                     width={76}
                 />
-                <p className="title">{t('connection_page.signup_title')}</p>
+                <p className={style.title}>{t('connection_page.signup_title')}</p>
                 <button className="primary-button" onClick={onSignUpPressed}>
                     {t('connection_page.signup_button')}
                 </button>

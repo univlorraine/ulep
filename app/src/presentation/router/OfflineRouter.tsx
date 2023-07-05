@@ -3,7 +3,7 @@ import React from 'react';
 import { Route } from 'react-router-dom';
 import ConnectPage from '../pages/ConnectPage';
 import Home from '../pages/HomePage';
-import { LoginPage } from '../pages/Login';
+import LoginPage from '../pages/LoginPage';
 
 const OfflineRouter: React.FC = () => (
     <IonRouterOutlet>

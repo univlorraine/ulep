@@ -1,26 +1,26 @@
-import { useState } from 'react';
 import {
     IonButton,
     IonContent,
+    IonFooter,
     IonInput,
     IonLabel,
     IonList,
     IonPage,
-    useIonToast,
-    useIonLoading,
-    IonFooter,
     IonRouterLink,
+    useIonLoading,
+    useIonToast,
 } from '@ionic/react';
+import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import CircleAvatar from '../components/CircleAvatar';
 import { useHistory } from 'react-router';
-import './Login.css';
+import CircleAvatar from '../components/CircleAvatar';
+import style from './LoginPage.module.css';
 
-export function LoginPage() {
+const LoginPage = () => {
     const { t } = useTranslation();
     const history = useHistory();
-    const [email, setEmail] = useState('');
-    const [password, setPassword] = useState('');
+    const [email, setEmail] = useState<string>('');
+    const [password, setPassword] = useState<string>('');
     const [showLoading, hideLoading] = useIonLoading();
     const [showToast] = useIonToast();
 
@@ -44,12 +44,17 @@ export function LoginPage() {
                 <IonButton fill="clear" onClick={() => history.goBack()}>
                     <img alt="goBack" src="/assets/left-chevron.svg" />
                 </IonButton>
-                <IonList className="main-content" inset={true}>
+                <IonList className={style['main-content']} inset={true}>
                     {/* Avatar */}
-                    <CircleAvatar backgroundImage="./assets/avatar.svg" />
+                    <CircleAvatar
+                        backgroundImage="./assets/avatar.svg"
+                        height={36}
+                        viewClassName={style['icons']}
+                        width={36}
+                    />
                     {/* Header */}
-                    <div className="ion-text-center">
-                        <h1>{t('login_page.title')}</h1>
+                    <div className={`ion-text-center`}>
+                        <h1 className={style.title}>{t('login_page.title')}</h1>
                     </div>
                     <div className="ion-text-center">
                         <p>{t('login_page.subtitle')}</p>
@@ -62,7 +67,7 @@ export function LoginPage() {
                                 className="text small-margin-top large-margin-bottom"
                                 errorText={t('login_page.invalid_email') || ''}
                                 name="email"
-                                onIonChange={(e) => setEmail(e.detail.value ?? '')}
+                                onIonChange={(e) => setEmail((e.detail.value as string) ?? '')}
                                 type="email"
                                 value={email}
                                 required
@@ -72,18 +77,16 @@ export function LoginPage() {
                                 className="text small-margin-top"
                                 errorText={t('login_page.invalid_password') || ''}
                                 name="password"
-                                onIonChange={(e) => setPassword(e.detail.value ?? '')}
+                                onIonChange={(e) => setPassword((e.detail.value as string) ?? '')}
                                 type="password"
                                 value={password}
                                 required
                             ></IonInput>
-                            <div className="bottomContainer">
-                                <IonButton className="confirm" type="submit">
-                                    {t('login_page.button')}
-                                </IonButton>
+                            <div className={style['bottomContainer']}>
+                                <button className="primary-button">{t('login_page.button')}</button>
 
                                 <IonRouterLink
-                                    className="forgot large-margin-top"
+                                    className={`${style['forgot']} large-margin-top`}
                                     routerLink="/autre-page"
                                     style={{ textAlign: 'center' }}
                                 >
@@ -97,4 +100,6 @@ export function LoginPage() {
             <IonFooter style={{ border: 'none' }}></IonFooter>
         </IonPage>
     );
-}
+};
+
+export default LoginPage;
