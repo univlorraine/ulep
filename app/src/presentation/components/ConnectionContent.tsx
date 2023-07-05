@@ -1,13 +1,15 @@
 import { isPlatform } from '@ionic/react';
+import { useTranslation } from 'react-i18next';
 import CircleAvatar from './CircleAvatar';
 import './ConnectionContent.css';
 
-interface ConenxionContentProps {
+interface ConnectionContentProps {
     onLoginPressed: () => void;
     onSignUpPressed: () => void;
 }
 
-const ConnexionContent: React.FC<ConenxionContentProps> = ({ onLoginPressed, onSignUpPressed }) => {
+const ConnectionContent: React.FC<ConnectionContentProps> = ({ onLoginPressed, onSignUpPressed }) => {
+    const { t } = useTranslation();
     const isHybrid = isPlatform('hybrid');
     return (
         <div className={`outer-div ${isHybrid ? 'hybrid-outer-div-padding' : 'web-outer-div-padding '}`}>
@@ -22,9 +24,9 @@ const ConnexionContent: React.FC<ConenxionContentProps> = ({ onLoginPressed, onS
                     viewClassName="icons"
                     width={76}
                 />
-                <p className="title">As-tu déjà un compte ?</p>
+                <p className="title">{t('connection_page.connect_title')}</p>
                 <button className="primary-button" onClick={onLoginPressed}>
-                    Se connecter
+                    {t('connection_page.connect_button')}
                 </button>
             </div>
 
@@ -35,13 +37,13 @@ const ConnexionContent: React.FC<ConenxionContentProps> = ({ onLoginPressed, onS
                     viewClassName="icons"
                     width={76}
                 />
-                <p className="title">Première fois sur l’application ?</p>
+                <p className="title">{t('connection_page.signup_title')}</p>
                 <button className="primary-button" onClick={onSignUpPressed}>
-                    Créer un compte
+                    {t('connection_page.signup_button')}
                 </button>
             </div>
         </div>
     );
 };
 
-export default ConnexionContent;
+export default ConnectionContent;
