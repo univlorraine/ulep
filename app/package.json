@@ -28,6 +28,7 @@
         "@ionic/react-router": "^7.0.0",
         "@types/react-router": "^5.1.20",
         "@types/react-router-dom": "^5.3.3",
+        "easy-peasy": "^6.0.1",
         "i18next": "^22.5.1",
         "i18next-http-backend": "^2.2.1",
         "ionicons": "^7.0.0",

@@ -41,10 +41,10 @@ const WelcomeContent: React.FC<WelcomeContentProps> = ({ onPress }) => {
                     alt="bubble"
                     className={`${isPlatform('hybrid') ? style['hybrid-bubble'] : style['web-bubble']}`}
                 />
-                <p className={style['welcome-text']}>
+                <span className={style['welcome-text']}>
                     Bienvenue sur (e)Tandem,
                     <p className={style['welcome-subtext']}>le meilleur moyen de pratiquer une langue</p>
-                </p>
+                </span>
 
                 <button className={style.button} disabled={!onPress} onClick={onPress}>
                     <p className={style['button-text']}>Apprends une nouvelle langue en tandem</p>

@@ -13,11 +13,13 @@ import {
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useHistory } from 'react-router';
+import { useConfig } from '../../../context/ConfigurationContext';
 import CircleAvatar from '../CircleAvatar';
 import style from './LoginForm.module.css';
 
 const LoginForm = () => {
     const { t } = useTranslation();
+    const { loginUsecase } = useConfig();
     const history = useHistory();
     const [email, setEmail] = useState<string>('');
     const [password, setPassword] = useState<string>('');
@@ -29,9 +31,12 @@ const LoginForm = () => {
         e.preventDefault();
         await showLoading();
         try {
-            console.log('test');
-            // TODO
-            await showToast({ message: 'Hello world' });
+            const result = await loginUsecase.execute(email, password);
+            if (result instanceof Error) {
+                await showToast({ message: result.message });
+            }
+
+            await showToast({ message: 'Connexion réussi' });
         } catch (e: any) {
             await showToast({ message: e.error_description || e.message, duration: 5000 });
         } finally {
@@ -71,6 +76,7 @@ const LoginForm = () => {
                                 {t('global.email')}
                             </IonLabel>
                             <IonInput
+                                label=""
                                 className="text small-margin-top large-margin-bottom"
                                 errorText={t('login_page.invalid_email') || ''}
                                 name="email"
@@ -83,6 +89,7 @@ const LoginForm = () => {
                                 {t('global.password')}
                             </IonLabel>
                             <IonInput
+                                label=""
                                 className="text small-margin-top"
                                 errorText={t('login_page.invalid_password') || ''}
                                 name="password"
