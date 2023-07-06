@@ -30,14 +30,13 @@ const LoginForm = () => {
     const handleLogin = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
         await showLoading();
-        try {
-            await loginUsecase.execute(email, password);
+        const result = await loginUsecase.execute(email, password);
+        if (result instanceof Error) {
+            await showToast({ message: t(result.message), duration: 5000 });
+        } else {
             await showToast({ message: 'Connexion réussi' }); // TODO: change this later
-        } catch (e: any) {
-            await showToast({ message: t(e.message), duration: 5000 });
-        } finally {
-            await hideLoading();
         }
+        await hideLoading();
     };
 
     return (
