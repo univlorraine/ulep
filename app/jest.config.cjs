@@ -15,5 +15,6 @@ module.exports = {
     moduleNameMapper: {
         '^@/(.*)$': '<rootDir>/src/$1',
     },
+    collectCoverageFrom: ['src/domain/usecases/*.ts'],
     coveragePathIgnorePatterns: ['<rootDir>/__tests__/mocks/'],
 };
