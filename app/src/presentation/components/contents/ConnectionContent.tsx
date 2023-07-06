@@ -1,6 +1,6 @@
 import { isPlatform } from '@ionic/react';
 import { useTranslation } from 'react-i18next';
-import CircleAvatar from './CircleAvatar';
+import CircleAvatar from '../CircleAvatar';
 import style from './ConnectionContent.module.css';
 
 interface ConnectionContentProps {

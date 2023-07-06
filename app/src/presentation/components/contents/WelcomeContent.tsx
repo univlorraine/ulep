@@ -22,7 +22,7 @@ const WelcomeContent: React.FC<WelcomeContentProps> = ({ onPress }) => {
     //TODO: Add mising logo on the top
     return (
         <IonContent>
-            <div style={{ backgroundColor: currentTheme.color }} className="container">
+            <div style={{ backgroundColor: currentTheme.color }} className="content-wrapper container">
                 <img src={`./assets/${currentTheme.image}.svg`} alt="bubble" className={style.bubble} />
                 <p className={style['welcome-text']}>
                     Bienvenue sur (e)Tandem,

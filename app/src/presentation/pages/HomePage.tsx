@@ -1,7 +1,7 @@
 import { IonCol, IonPage, IonRow, isPlatform } from '@ionic/react';
 import { useHistory } from 'react-router';
-import ConnexionContent from '../components/ConnectionContent';
-import WelcomeContent from '../components/WelcomeContent';
+import ConnexionContent from '../components/contents/ConnectionContent';
+import WelcomeContent from '../components/contents/WelcomeContent';
 
 const HomePage: React.FC = () => {
     const history = useHistory();
