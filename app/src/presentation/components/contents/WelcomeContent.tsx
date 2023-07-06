@@ -9,14 +9,9 @@ interface HomeTheme {
 }
 
 const themes: HomeTheme[] = [
-    {
-        background: '/assets/backgrounds/background-yellow.png',
-        color: '#FDEE66',
-        fontSize: '28px',
-        image: 'bonjour-bubble',
-    },
-    { background: '/assets/backgrounds/background-blue.png', color: '#B4C2DE', fontSize: '60px', image: 'hi-bubble' },
-    { background: '/assets/backgrounds/background-red.png', color: '#E0897C', fontSize: '50px', image: 'china-bubble' },
+    { background: 'background-yellow', color: '#FDEE66', fontSize: '28px', image: 'bonjour-bubble' },
+    { background: 'background-blue', color: '#B4C2DE', fontSize: '60px', image: 'hi-bubble' },
+    { background: 'background-red', color: '#E0897C', fontSize: '50px', image: 'china-bubble' },
 ];
 
 interface WelcomeContentProps {
@@ -27,7 +22,7 @@ const WelcomeContent: React.FC<WelcomeContentProps> = ({ onPress }) => {
     const currentTheme = themes[Math.floor(Math.random() * themes.length)];
     const backgroundStyle = {
         backgroundColor: currentTheme.color,
-        backgroundImage: `url('${currentTheme.background}')`,
+        backgroundImage: `url('/assets/backgrounds/${currentTheme.background}.png')`,
         backgroundPosition: isPlatform('hybrid') ? '-100px top' : 'right top', // Negative position for "outside box" effect
         backgroundRepeat: 'no-repeat',
         backgroundSize: isPlatform('hybrid') ? '150%' : '100%', // Increase size on mobile for "outside box" effect
