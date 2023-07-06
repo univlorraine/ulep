@@ -15,7 +15,7 @@ export type Coeficients = {
 @Injectable()
 export class MatchService {
   #coeficients: Coeficients = {
-    level: 0.7,
+    level: 0.7375,
     age: 0.0375,
     status: 0.0375,
     goals: 0.0375,
