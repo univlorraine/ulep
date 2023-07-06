@@ -24,7 +24,7 @@
 
 .hybrid-bubble {
     height: 224px;
-    margin-bottom: -80px; /* negative because *-bubble.svg has a natural margin in it */
+    margin-bottom: -60px; /* negative because *-bubble.svg has a natural margin in it */
     width: 224px;
 }
 
@@ -43,7 +43,7 @@
 
 .web-bubble {
     height: 292px;
-    margin-bottom: -80px; /* negative because *-bubble.svg has a natural margin in it */
+    margin-bottom: -60px; /* negative because *-bubble.svg has a natural margin in it */
     width: 292px;
 }
 

@@ -31,14 +31,10 @@ const LoginForm = () => {
         e.preventDefault();
         await showLoading();
         try {
-            const result = await loginUsecase.execute(email, password);
-            if (result instanceof Error) {
-                await showToast({ message: result.message });
-            }
-
-            await showToast({ message: 'Connexion réussi' });
+            await loginUsecase.execute(email, password);
+            await showToast({ message: 'Connexion réussi' }); // TODO: change this later
         } catch (e: any) {
-            await showToast({ message: e.error_description || e.message, duration: 5000 });
+            await showToast({ message: t(e.message), duration: 5000 });
         } finally {
             await hideLoading();
         }

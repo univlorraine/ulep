@@ -9,7 +9,7 @@ interface LoginCommand {
 class LoginUsecase implements LoginUsecaseInterface {
     constructor(private readonly domainHttpAdapter: DomainHttpAdapter, private readonly setTokens: Function) {}
 
-    async execute(email: string, password: string): Promise<any> {
+    async execute(email: string, password: string): Promise<void> {
         try {
             const httpRepsonse: HttpResponse<LoginCommand> = await this.domainHttpAdapter.post(
                 '/authentication/token',
@@ -17,24 +17,24 @@ class LoginUsecase implements LoginUsecaseInterface {
             );
 
             if (!httpRepsonse.parsedBody || !httpRepsonse.parsedBody.accessToken) {
-                return new Error('errors.global');
+                throw new Error('errors.global');
             }
 
             return this.setTokens(httpRepsonse.parsedBody.accessToken, httpRepsonse.parsedBody.refreshToken);
         } catch (error: any) {
             if (!error || !error.status) {
-                return new Error('errors.global');
+                throw new Error('errors.global');
             }
 
             if (error.status === 401) {
-                return new Error('errors.userWrongCredentials');
+                throw new Error('errors.userWrongCredentials');
             }
 
             if (error.status === 404) {
-                return new Error('errors.userDoesntExist');
+                throw new Error('errors.userDoesntExist');
             }
 
-            return new Error('errors.global');
+            throw new Error('errors.global');
         }
     }
 }
