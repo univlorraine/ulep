@@ -4,7 +4,6 @@ import {
     IonHeader,
     IonInput,
     IonLabel,
-    IonList,
     IonRouterLink,
     isPlatform,
     useIonLoading,
@@ -47,11 +46,11 @@ const LoginForm = () => {
                 </IonButton>
             </IonHeader>
             <IonContent>
-                <IonList
+                <form
                     className={`${style['main-content']} ${
                         !isPlatform('hybrid') ? style['web-main-content-padding'] : ''
                     }`}
-                    inset={true}
+                    onSubmit={handleLogin}
                 >
                     <CircleAvatar
                         backgroundImage="./assets/avatar.svg"
@@ -65,52 +64,48 @@ const LoginForm = () => {
                     <div className="ion-text-center">
                         <p className={style.subtitle}>{t('login_page.subtitle')}</p>
                     </div>
-                    <div className="ion-padding-top">
-                        <form onSubmit={handleLogin}>
-                            <IonLabel className="input-label" position="stacked">
-                                {t('global.email')}
-                            </IonLabel>
-                            <IonInput
-                                label=""
-                                className="text small-margin-top large-margin-bottom"
-                                errorText={t('login_page.invalid_email') || ''}
-                                name="email"
-                                onIonChange={(e) => setEmail((e.detail.value as string) ?? '')}
-                                type="email"
-                                value={email}
-                                required
-                            ></IonInput>
-                            <IonLabel className="input-label" position="stacked">
-                                {t('global.password')}
-                            </IonLabel>
-                            <IonInput
-                                label=""
-                                className="text small-margin-top"
-                                errorText={t('login_page.invalid_password') || ''}
-                                name="password"
-                                onIonChange={(e) => setPassword((e.detail.value as string) ?? '')}
-                                type="password"
-                                value={password}
-                                required
-                            ></IonInput>
-                            <div
-                                className={`${style['bottom-container']} ${
-                                    !isHybrid ? style['web-bottom-container-padding'] : ''
-                                }`}
-                            >
-                                <button className="primary-button">{t('login_page.button')}</button>
+                    <IonLabel className="input-label" position="stacked">
+                        {t('global.email')}
+                    </IonLabel>
+                    <IonInput
+                        label=""
+                        className="text small-margin-top large-margin-bottom"
+                        errorText={t('login_page.invalid_email') || ''}
+                        name="email"
+                        onIonChange={(e) => setEmail((e.detail.value as string) ?? '')}
+                        type="email"
+                        value={email}
+                        required
+                    ></IonInput>
+                    <IonLabel className="input-label" position="stacked">
+                        {t('global.password')}
+                    </IonLabel>
+                    <IonInput
+                        label=""
+                        className="text small-margin-top"
+                        errorText={t('login_page.invalid_password') || ''}
+                        name="password"
+                        onIonChange={(e) => setPassword((e.detail.value as string) ?? '')}
+                        type="password"
+                        value={password}
+                        required
+                    ></IonInput>
+                    <div
+                        className={`${style['bottom-container']} ${
+                            !isHybrid ? style['web-bottom-container-padding'] : ''
+                        }`}
+                    >
+                        <button className="primary-button">{t('login_page.button')}</button>
 
-                                <IonRouterLink
-                                    className={`${style['forgot']} large-margin-top`}
-                                    routerLink="/autre-page"
-                                    style={{ textAlign: 'center' }}
-                                >
-                                    {t('login_page.forgot')}
-                                </IonRouterLink>
-                            </div>
-                        </form>
+                        <IonRouterLink
+                            className={`${style['forgot']} large-margin-top`}
+                            routerLink="/autre-page"
+                            style={{ textAlign: 'center' }}
+                        >
+                            {t('login_page.forgot')}
+                        </IonRouterLink>
                     </div>
-                </IonList>
+                </form>
             </IonContent>
         </div>
     );
