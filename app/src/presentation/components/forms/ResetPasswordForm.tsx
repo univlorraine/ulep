@@ -2,13 +2,19 @@ import { IonButton, IonContent, IonHeader, useIonLoading, useIonToast } from '@i
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useHistory } from 'react-router';
+import { useConfig } from '../../../context/ConfigurationContext';
 import { isPasswordCorrect } from '../../utils';
 import CircleAvatar from '../CircleAvatar';
 import TextInput from '../TextInput';
 import style from './Form.module.css';
 
-const ResetPasswordForm = () => {
+interface ResetPasswordFormProps {
+    id: string;
+}
+
+const ResetPasswordForm: React.FC<ResetPasswordFormProps> = ({ id }) => {
     const { t } = useTranslation();
+    const { resetPasswordUsecase } = useConfig();
     const history = useHistory();
     const [newPassword, setNewPassword] = useState<string>('');
     const [newPasswordError, setNewPasswordError] = useState<string>('');
@@ -29,7 +35,7 @@ const ResetPasswordForm = () => {
             await hideLoading();
             return setPasswordConfirmError('reset_password_page.confirm_password_error');
         }
-        const result: any = []; // TODO: call reset password route
+        const result = await resetPasswordUsecase.execute(id, newPassword);
         if (result instanceof Error) {
             await showToast({ message: t(result.message), duration: 5000 });
         } else {

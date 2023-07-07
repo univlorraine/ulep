@@ -1,6 +1,6 @@
-import { DomainHttpAdapterInterface } from '../../../src/adapter/DomainHttpAdapter';
+import { HttpAdapterInterface } from '../../../src/adapter/DomainHttpAdapter';
 
-class DomainHttpAdapter implements DomainHttpAdapterInterface {
+class HttpAdapter implements HttpAdapterInterface {
     private error: any = null;
 
     private json: any = null;
@@ -40,4 +40,4 @@ class DomainHttpAdapter implements DomainHttpAdapterInterface {
     }
 }
 
-export default DomainHttpAdapter;
+export default HttpAdapter;

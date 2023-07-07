@@ -25,7 +25,7 @@ const OfflineRouter: React.FC = () => (
         <Route exact path="/login">
             <LoginPage />
         </Route>
-        <Route exact path="/reset-password">
+        <Route exact path="/reset-password/:id">
             <ResetPasswordPage />
         </Route>
     </IonRouterOutlet>

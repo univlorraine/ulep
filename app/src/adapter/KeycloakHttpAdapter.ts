@@ -1,13 +1,7 @@
 import BaseHttpAdapter, { Body } from './BaseHttpAdapter';
+import { HttpAdapterInterface } from './DomainHttpAdapter';
 
-export interface HttpAdapterInterface {
-    get: (path: string, args?: RequestInit) => Promise<Response>;
-    post: (path: string, body: Body, args?: RequestInit, contentType?: string) => Promise<Response>;
-    put: (path: string, body: Body, args?: RequestInit) => Promise<Response>;
-    delete: (path: string, args?: RequestInit) => Promise<Response>;
-}
-
-class DomainHttpAdapter extends BaseHttpAdapter implements HttpAdapterInterface {
+class KeycloakHttpAdapter extends BaseHttpAdapter implements HttpAdapterInterface {
     accessToken: string = '';
 
     apiUrl: string = '';
@@ -41,4 +35,4 @@ class DomainHttpAdapter extends BaseHttpAdapter implements HttpAdapterInterface 
     }
 }
 
-export default DomainHttpAdapter;
+export default KeycloakHttpAdapter;

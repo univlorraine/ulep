@@ -1,5 +1,6 @@
 import { HttpResponse } from '../../adapter/BaseHttpAdapter';
-import { DomainHttpAdapterInterface } from '../../adapter/DomainHttpAdapter';
+import { HttpAdapterInterface } from '../../adapter/DomainHttpAdapter';
+import LoginUsecaseInterface from '../interfaces/LoginUsecase.interface';
 
 interface LoginCommand {
     accessToken: string;
@@ -7,7 +8,7 @@ interface LoginCommand {
 }
 
 class LoginUsecase implements LoginUsecaseInterface {
-    constructor(private readonly domainHttpAdapter: DomainHttpAdapterInterface, private readonly setTokens: Function) {}
+    constructor(private readonly domainHttpAdapter: HttpAdapterInterface, private readonly setTokens: Function) {}
 
     async execute(email: string, password: string): Promise<void | Error> {
         try {
