@@ -4,14 +4,14 @@ import WebLayout from '../components/WebLayout';
 import ConnexionContent from '../components/contents/ConnectionContent';
 import WelcomeContent from '../components/contents/WelcomeContent';
 import useWindowDimensions from '../hooks/useWindowDimensions';
-import { HYBRID_WIDTH } from '../utils';
+import { HYBRID_MAX_WIDTH } from '../utils';
 
 const HomePage: React.FC = () => {
     const history = useHistory();
     const { width } = useWindowDimensions();
     return (
         <IonPage>
-            {width < HYBRID_WIDTH ? (
+            {width < HYBRID_MAX_WIDTH ? (
                 <WelcomeContent onPress={() => history.push('/connect')} />
             ) : (
                 <WebLayout

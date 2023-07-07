@@ -1,5 +1,6 @@
 import { IonContent } from '@ionic/react';
 import useWindowDimensions from '../../hooks/useWindowDimensions';
+import { HYBRID_MAX_WIDTH } from '../../utils';
 import style from './WelcomeContent.module.css';
 
 interface HomeTheme {
@@ -22,7 +23,7 @@ interface WelcomeContentProps {
 const WelcomeContent: React.FC<WelcomeContentProps> = ({ onPress }) => {
     const currentTheme = themes[Math.floor(Math.random() * themes.length)];
     const { width } = useWindowDimensions();
-    const isHybrid = width < 768;
+    const isHybrid = width < HYBRID_MAX_WIDTH;
     const backgroundStyle = {
         backgroundColor: currentTheme.color,
         backgroundImage: `url('/assets/backgrounds/${currentTheme.background}.png')`,

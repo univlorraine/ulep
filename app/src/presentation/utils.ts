@@ -1,1 +1,1 @@
-export const HYBRID_WIDTH = 768;
+export const HYBRID_MAX_WIDTH = 768;

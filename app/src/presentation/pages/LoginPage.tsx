@@ -3,13 +3,13 @@ import WebLayout from '../components/WebLayout';
 import WelcomeContent from '../components/contents/WelcomeContent';
 import LoginForm from '../components/forms/LoginForm';
 import useWindowDimensions from '../hooks/useWindowDimensions';
-import { HYBRID_WIDTH } from '../utils';
+import { HYBRID_MAX_WIDTH } from '../utils';
 
 const LoginPage: React.FC = () => {
     const { width } = useWindowDimensions();
     return (
         <IonPage>
-            {width < HYBRID_WIDTH ? (
+            {width < HYBRID_MAX_WIDTH ? (
                 <LoginForm />
             ) : (
                 <WebLayout leftComponent={<WelcomeContent />} rightComponent={<LoginForm />} />
