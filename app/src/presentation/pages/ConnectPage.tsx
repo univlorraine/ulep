@@ -1,6 +1,6 @@
 import { IonPage } from '@ionic/react';
 import { useHistory } from 'react-router';
-import ConnexionContent from '../components/ConnectionContent';
+import ConnexionContent from '../components/contents/ConnectionContent';
 
 const ConnectPage: React.FC = () => {
     const history = useHistory();

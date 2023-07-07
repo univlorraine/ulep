@@ -1,4 +1,4 @@
-import './CircleAvatar.css';
+import style from './CircleAvatar.module.css';
 interface CircleAvatarProps {
     backgroundImage: string;
     height?: number;
@@ -8,8 +8,8 @@ interface CircleAvatarProps {
 
 const CircleAvatar: React.FC<CircleAvatarProps> = ({ backgroundImage, height, viewClassName, width }) => {
     return (
-        <div className={`avatarView ${viewClassName}`}>
-            <img src={backgroundImage} style={{ height, width }} alt="avatar" className="avatar" />
+        <div className={`${style.avatarView} ${viewClassName}`}>
+            <img src={backgroundImage} style={{ height, width }} alt="avatar" className={style.avatar} />
         </div>
     );
 };

@@ -1,4 +1,9 @@
 {
+    "errors": {
+        "global": "Une erreur est survenue",
+        "userDoesntExist": "L'utilisateur n'existe pas",
+        "userWrongCredentials": "Le mot de passe ou l'email est incorrect"
+    },
     "global": {
         "email": "Email",
         "password": "Mot de passe"

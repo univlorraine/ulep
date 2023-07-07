@@ -1,26 +1,28 @@
-import { IonCol, IonPage, IonRow, isPlatform } from '@ionic/react';
+import { IonPage } from '@ionic/react';
 import { useHistory } from 'react-router';
-import ConnexionContent from '../components/ConnectionContent';
-import WelcomeContent from '../components/WelcomeContent';
+import WebLayout from '../components/WebLayout';
+import ConnexionContent from '../components/contents/ConnectionContent';
+import WelcomeContent from '../components/contents/WelcomeContent';
+import useWindowDimensions from '../hooks/useWindowDimensions';
+import { HYBRID_MAX_WIDTH } from '../utils';
 
 const HomePage: React.FC = () => {
     const history = useHistory();
+    const { width } = useWindowDimensions();
     return (
         <IonPage>
-            {isPlatform('hybrid') ? (
+            {width < HYBRID_MAX_WIDTH ? (
                 <WelcomeContent onPress={() => history.push('/connect')} />
             ) : (
-                <IonRow className="no-gutters">
-                    <IonCol size="6">
-                        <WelcomeContent />
-                    </IonCol>
-                    <IonCol size="6">
+                <WebLayout
+                    leftComponent={<WelcomeContent />}
+                    rightComponent={
                         <ConnexionContent
                             onLoginPressed={() => history.push('/login')}
                             onSignUpPressed={() => history.push('/login')}
                         />
-                    </IonCol>
-                </IonRow>
+                    }
+                />
             )}
         </IonPage>
     );
