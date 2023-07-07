@@ -15,7 +15,7 @@ import {
 export type UpdateProfileCommand = {
   id: string;
   university?: string;
-  goals?: Goal[];
+  goals?: Set<Goal>;
   meetingFrequency?: MeetingFrequency;
   bios?: string;
 };
@@ -43,7 +43,10 @@ export class UpdateProfileUsecase {
     }
 
     if (command.meetingFrequency) {
-      profile.meetingFrequency = command.meetingFrequency;
+      profile.preferences = {
+        ...profile.preferences,
+        meetingFrequency: command.meetingFrequency,
+      };
     }
 
     if (command.bios) {

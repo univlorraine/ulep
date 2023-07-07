@@ -10,14 +10,14 @@ export class PrismaUserRepository implements UserRepository {
   constructor(private readonly prisma: PrismaService) {}
 
   async all(offset?: number, limit?: number): Promise<Collection<User>> {
-    const count = await this.prisma.userEntity.count();
+    const count = await this.prisma.user.count();
 
     // If skip is out of range, return an empty array
     if (offset >= count) {
       return { items: [], totalItems: count };
     }
 
-    const users = await this.prisma.userEntity.findMany({
+    const users = await this.prisma.user.findMany({
       skip: offset,
       take: limit,
     });
@@ -29,7 +29,7 @@ export class PrismaUserRepository implements UserRepository {
   }
 
   async ofId(id: string): Promise<User> {
-    const user = await this.prisma.userEntity.findUnique({ where: { id } });
+    const user = await this.prisma.user.findUnique({ where: { id } });
 
     if (!user) {
       return null;
@@ -39,7 +39,7 @@ export class PrismaUserRepository implements UserRepository {
   }
 
   async ofEmail(email: string): Promise<User> {
-    const user = await this.prisma.userEntity.findUnique({ where: { email } });
+    const user = await this.prisma.user.findUnique({ where: { email } });
 
     if (!user) {
       return null;
@@ -49,11 +49,10 @@ export class PrismaUserRepository implements UserRepository {
   }
 
   async save(user: User): Promise<void> {
-    await this.prisma.userEntity.create({
+    await this.prisma.user.create({
       data: {
         id: user.id,
         email: user.email,
-        roles: user.roles.map((role) => role.toString()),
       },
     });
   }

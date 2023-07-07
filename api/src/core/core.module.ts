@@ -18,11 +18,12 @@ import { GetLanguagesUsecase } from './usecases/languages/get-languages.usecase'
 import { UpdateLanguageUsecase } from './usecases/languages/update-language.usecase';
 import { UpdateProfileUsecase } from './usecases/profiles/update-profile.usecase';
 import { DeleteProfileUsecase } from './usecases/profiles/delete-profile.usecase';
-import { CqrsModule } from '@nestjs/cqrs';
-import { NewProfileCreatedEventHandler } from './events/NewProfileCreatedEventHandler';
 import { GetUserUsecase } from './usecases/users/get-user.usecase';
 import { GetTokensUsecase } from './usecases/tokens/get-tokens.usecase';
 import { RefreshTokensUsecase } from './usecases/tokens/refresh-tokens.usecase';
+import { MatchService } from './services/matchs/MatchService';
+import { KeycloakAuthenticator } from './services/authentication/authenticator';
+import { GetMatchsByProfileIdUsecase } from './usecases/matchs/GetMatchsByProfileId';
 
 const usecases: Provider[] = [
   // Countries
@@ -31,6 +32,8 @@ const usecases: Provider[] = [
   CreateLanguageUsecase,
   GetLanguagesUsecase,
   UpdateLanguageUsecase,
+  // Matches
+  GetMatchsByProfileIdUsecase,
   // Profiles
   UploadImageUsecase,
   GetProfilesUsecase,
@@ -54,11 +57,11 @@ const usecases: Provider[] = [
   ResetPasswordUsecase,
 ];
 
-const eventHandlers: Provider[] = [NewProfileCreatedEventHandler];
+const services: Provider[] = [KeycloakAuthenticator, MatchService];
 
 @Module({
-  imports: [CqrsModule, ProvidersModule],
-  providers: [...usecases, ...eventHandlers],
-  exports: [...usecases],
+  imports: [ProvidersModule],
+  providers: [...usecases, ...services],
+  exports: [...usecases, ...services],
 })
 export class CoreModule {}

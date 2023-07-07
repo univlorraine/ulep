@@ -12,13 +12,14 @@ import { UploadImageUsecase } from '../../core/usecases/uploads/upload-image.use
 import { UserContext } from '../decorators/user-context.decorator';
 import { AuthenticationGuard } from '../guards/authentication.guard';
 import { UploadResponse } from '../dtos/media/upload.response';
+import { User } from 'src/core/models/user';
 
 @Controller('uploads')
 @Swagger.ApiTags('Uploads')
 export class UploadsController {
   private readonly logger = new Logger(UploadsController.name);
 
-  constructor(private readonly uploadImageUsecase: UploadImageUsecase) { }
+  constructor(private readonly uploadImageUsecase: UploadImageUsecase) {}
 
   @Post('images')
   @UseGuards(AuthenticationGuard)
@@ -27,9 +28,12 @@ export class UploadsController {
   @Swagger.ApiOkResponse({ type: UploadResponse })
   async uploadFile(
     @UploadedFile() file: Express.Multer.File,
-    @UserContext() userId: string,
+    @UserContext() user: User,
   ): Promise<UploadResponse> {
-    const upload = await this.uploadImageUsecase.execute({ userId, file });
+    const upload = await this.uploadImageUsecase.execute({
+      userId: user.id,
+      file,
+    });
 
     return new UploadResponse({
       id: upload.id,

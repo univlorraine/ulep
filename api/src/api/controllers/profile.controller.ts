@@ -15,7 +15,10 @@ import {
 import * as Swagger from '@nestjs/swagger';
 import { GetProfilesUsecase } from '../../core/usecases/profiles/get-profiles.usecase';
 import { GetProfileUsecase } from '../../core/usecases/profiles/get-profile.usecase';
-import { CreateProfileUsecase } from '../../core/usecases/profiles/create-profile.usecase';
+import {
+  CreateProfileCommand,
+  CreateProfileUsecase,
+} from '../../core/usecases/profiles/create-profile.usecase';
 import { UserContext } from '../decorators/user-context.decorator';
 import { AuthenticationGuard } from '../guards/authentication.guard';
 import { ProfileResponse } from '../dtos/profiles/profile.response';
@@ -23,9 +26,13 @@ import { CreateProfileRequest } from '../dtos/profiles/create-profile.request';
 import { PaginationDto } from '../dtos/pagination.dto';
 import { Collection } from '../../shared/types/collection';
 import { CollectionResponse } from '../decorators/collection.decorator';
-import { UpdateProfileUsecase } from '../../core/usecases/profiles/update-profile.usecase';
+import {
+  UpdateProfileCommand,
+  UpdateProfileUsecase,
+} from '../../core/usecases/profiles/update-profile.usecase';
 import { UpdateProfileRequest } from '../dtos/profiles/update-profile.request';
 import { DeleteProfileUsecase } from '../../core/usecases/profiles/delete-profile.usecase';
+import { User } from 'src/core/models/user';
 
 @Controller('profiles')
 @Swagger.ApiTags('Profiles')
@@ -38,9 +45,10 @@ export class ProfileController {
     private readonly createProfileUsecase: CreateProfileUsecase,
     private readonly updateProfileUsecase: UpdateProfileUsecase,
     private readonly deleteProfileUsecase: DeleteProfileUsecase,
-  ) { }
+  ) {}
 
   @Get()
+  @UseGuards(AuthenticationGuard)
   @Swagger.ApiOperation({
     summary: 'Retrieve the collection of Profile ressource.',
   })
@@ -80,12 +88,15 @@ export class ProfileController {
   @Swagger.ApiResponse({ status: 400, description: 'Invalid input' })
   async create(
     @Body() body: CreateProfileRequest,
-    @UserContext() userId: string,
+    @UserContext() user: User,
   ): Promise<ProfileResponse> {
-    const profile = await this.createProfileUsecase.execute({
-      userId,
+    const command: CreateProfileCommand = {
+      userId: user.id,
       ...body,
-    });
+      goals: new Set(body.goals),
+      interests: new Set(body.interests),
+    };
+    const profile = await this.createProfileUsecase.execute(command);
 
     return ProfileResponse.fromDomain(profile);
   }
@@ -99,10 +110,12 @@ export class ProfileController {
     @Param('id', ParseUUIDPipe) id: string,
     @Body() body: UpdateProfileRequest,
   ) {
-    const profile = await this.updateProfileUsecase.execute({
+    const command: UpdateProfileCommand = {
       id,
       ...body,
-    });
+      goals: new Set(body.goals),
+    };
+    const profile = await this.updateProfileUsecase.execute(command);
 
     return ProfileResponse.fromDomain(profile);
   }

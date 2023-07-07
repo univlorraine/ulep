@@ -13,7 +13,7 @@ import {
 } from '../../errors/RessourceDoesNotExist';
 import {
   Goal,
-  LanguageLevel,
+  CEFRLevel,
   MeetingFrequency,
   Profile,
 } from '../../models/profile';
@@ -33,22 +33,25 @@ import { Country } from '../../models/country';
 import { Language } from '../../models/language';
 import { User } from '../../models/user';
 import { UserRepository } from '../../ports/user.repository';
+import { ProfileAlreadyExists } from 'src/core/errors/RessourceAlreadyExists';
 
 export class CreateProfileCommand {
   id: string;
   userId: string;
   firstname: string;
   lastname: string;
-  birthdate: Date;
+  birthdate: string;
   role: Role;
   gender: Gender;
   university: string;
   nationality: string;
   learningLanguage: string;
-  proficiencyLevel: LanguageLevel;
+  proficiencyLevel: CEFRLevel;
   nativeLanguage: string;
-  goals: Goal[];
+  goals: Set<Goal>;
   meetingFrequency: MeetingFrequency;
+  interests: Set<string>;
+  preferSameGender: boolean;
   bios?: string;
 }
 
@@ -71,7 +74,7 @@ export class CreateProfileUsecase {
 
   async execute(command: CreateProfileCommand): Promise<Profile> {
     const user = await this.tryToFindTheUserOfId(command.userId);
-    // TODO : check if the user is already linked to a profile
+    await this.assertProfileDoesNotExistForUser(user);
 
     const university = await this.tryToFindTheUniversityOfId(
       command.university,
@@ -96,24 +99,34 @@ export class CreateProfileUsecase {
     const instance = new Profile({
       ...command,
       user,
+      birthdate: new Date(command.birthdate),
       university,
       nationality,
       learningLanguage: {
         id: learningLanguage.id,
         code: learningLanguage.code,
-        proficiencyLevel: command.proficiencyLevel,
+        level: command.proficiencyLevel,
       },
       nativeLanguage: {
         id: nativeLanguage.id,
         code: nativeLanguage.code,
       },
+      preferences: {
+        meetingFrequency: command.meetingFrequency,
+        sameGender: command.preferSameGender,
+      },
     });
 
     await this.profileRepository.save(instance);
 
-    // this.eventBus.publish(NewProfileCreatedEvent.fromProfile(instance));
-
     return instance;
+  }
+
+  private async assertProfileDoesNotExistForUser(user: User): Promise<void> {
+    const profile = await this.profileRepository.ofUser(user.id);
+    if (profile) {
+      throw ProfileAlreadyExists.withUserIdOf(user.id);
+    }
   }
 
   private async tryToFindTheUserOfId(id: string): Promise<User> {

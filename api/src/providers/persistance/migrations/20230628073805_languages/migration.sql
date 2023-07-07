@@ -32,13 +32,13 @@ CREATE UNIQUE INDEX "LearningLanguage_profileId_key" ON "LearningLanguage"("prof
 CREATE UNIQUE INDEX "LearningLanguage_profileId_languageCodeId_key" ON "LearningLanguage"("profileId", "languageCodeId");
 
 -- AddForeignKey
-ALTER TABLE "NativeLanguage" ADD CONSTRAINT "NativeLanguage_profileId_fkey" FOREIGN KEY ("profileId") REFERENCES "Profile"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE "NativeLanguage" ADD CONSTRAINT "NativeLanguage_profileId_fkey" FOREIGN KEY ("profileId") REFERENCES "Profile"("id") ON DELETE CASCADE ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "NativeLanguage" ADD CONSTRAINT "NativeLanguage_languageCodeId_fkey" FOREIGN KEY ("languageCodeId") REFERENCES "LanguageCode"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE "NativeLanguage" ADD CONSTRAINT "NativeLanguage_languageCodeId_fkey" FOREIGN KEY ("languageCodeId") REFERENCES "LanguageCode"("id") ON DELETE CASCADE ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "LearningLanguage" ADD CONSTRAINT "LearningLanguage_profileId_fkey" FOREIGN KEY ("profileId") REFERENCES "Profile"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE "LearningLanguage" ADD CONSTRAINT "LearningLanguage_profileId_fkey" FOREIGN KEY ("profileId") REFERENCES "Profile"("id") ON DELETE CASCADE ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "LearningLanguage" ADD CONSTRAINT "LearningLanguage_languageCodeId_fkey" FOREIGN KEY ("languageCodeId") REFERENCES "LanguageCode"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE "LearningLanguage" ADD CONSTRAINT "LearningLanguage_languageCodeId_fkey" FOREIGN KEY ("languageCodeId") REFERENCES "LanguageCode"("id") ON DELETE CASCADE ON UPDATE CASCADE;

@@ -1,6 +1,6 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { Type } from 'class-transformer';
-import { IsDate, IsNotEmpty, IsString } from 'class-validator';
+import { IsDate, IsNotEmpty, IsString, IsTimeZone } from 'class-validator';
 import { IsAfterThan } from '../../validators/dates.validator';
 
 // TODO: Add validation on dates (admissionStart < admissionEnd)
@@ -11,7 +11,7 @@ export class CreateUniversityRequest {
   name: string;
 
   @ApiProperty()
-  @IsString()
+  @IsTimeZone()
   timezone: string;
 
   @ApiProperty()

@@ -1,10 +1,9 @@
 import * as Prisma from '@prisma/client';
-import { Role, User } from '../../../core/models/user';
+import { User } from '../../../core/models/user';
 
-export const userMapper = (instance: Prisma.UserEntity): User => {
+export const userMapper = (instance: Prisma.User): User => {
   return new User({
     id: instance.id,
     email: instance.email,
-    roles: instance.roles.map((role) => Role[role]),
   });
 };

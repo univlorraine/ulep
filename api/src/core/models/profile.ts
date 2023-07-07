@@ -20,25 +20,23 @@ export enum MeetingFrequency {
   THREE_TIMES_A_MONTH = 'THREE_TIMES_A_MONTH',
 }
 
-export enum LanguageLevel {
-  A1 = 'A1',
-  A2 = 'A2',
-  B1 = 'B1',
-  B2 = 'B2',
-  C1 = 'C1',
-  C2 = 'C2',
-}
+export type CEFRLevel = 'A1' | 'A2' | 'B1' | 'B2' | 'C1' | 'C2';
 
-export class NativeLanguage {
+export type ProfilePreferences = {
+  meetingFrequency: MeetingFrequency;
+  sameGender: boolean;
+};
+
+export type NativeLanguage = {
   id: string;
   code: string;
-}
+};
 
-export class LearningLanguage {
+export type LearningLanguage = {
   id: string;
   code: string;
-  proficiencyLevel: LanguageLevel;
-}
+  level: CEFRLevel;
+};
 
 export type CreateProfileProps = {
   id: string;
@@ -52,9 +50,10 @@ export type CreateProfileProps = {
   nationality: Country;
   nativeLanguage: NativeLanguage;
   learningLanguage: LearningLanguage;
-  goals: Goal[];
-  meetingFrequency: MeetingFrequency;
+  goals: Set<Goal>;
+  interests: Set<string>;
   bios?: string;
+  preferences: ProfilePreferences;
   avatar?: MediaObject;
 };
 
@@ -81,11 +80,13 @@ export class Profile {
 
   #learningLanguage: LearningLanguage;
 
-  #goals: Goal[];
+  #goals: Set<Goal>;
 
-  #meetingFrequency: MeetingFrequency;
+  #interests: Set<string>;
 
   #bios?: string;
+
+  #preferences: ProfilePreferences;
 
   #avatar?: MediaObject;
 
@@ -102,8 +103,9 @@ export class Profile {
     this.nativeLanguage = props.nativeLanguage;
     this.learningLanguage = props.learningLanguage;
     this.goals = props.goals;
-    this.meetingFrequency = props.meetingFrequency;
+    this.interests = props.interests;
     this.bios = props.bios;
+    this.preferences = props.preferences;
     this.avatar = props.avatar;
   }
 
@@ -221,20 +223,23 @@ export class Profile {
     this.#avatar = avatar;
   }
 
-  get goals(): Goal[] {
-    return this.#goals || [];
+  get goals(): Set<Goal> {
+    return this.#goals;
   }
 
-  set goals(goals: Goal[]) {
+  set goals(goals: Set<Goal>) {
     this.#goals = goals;
   }
 
-  get meetingFrequency(): MeetingFrequency {
-    return this.#meetingFrequency;
+  get interests(): Set<string> {
+    return this.#interests;
   }
 
-  set meetingFrequency(meetingFrequency: MeetingFrequency) {
-    this.#meetingFrequency = meetingFrequency;
+  set interests(interests: Set<string>) {
+    if (5 < interests.size) {
+      throw new Error('Max 5 interests allowed');
+    }
+    this.#interests = interests;
   }
 
   get bios(): string | undefined {
@@ -245,9 +250,17 @@ export class Profile {
     this.#bios = bios;
   }
 
+  get preferences(): ProfilePreferences {
+    return this.#preferences;
+  }
+
+  set preferences(preferences: ProfilePreferences) {
+    this.#preferences = preferences;
+  }
+
   get age(): number {
     const now = new Date();
-    const birthdate = this.birthdate;
+    const birthdate = this.#birthdate;
     let age = now.getFullYear() - birthdate.getFullYear();
     const month = now.getMonth() - birthdate.getMonth();
     if (month < 0 || (0 === month && now.getDate() < birthdate.getDate())) {

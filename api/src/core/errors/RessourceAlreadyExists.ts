@@ -39,6 +39,10 @@ export class ProfileAlreadyExists extends RessourceAlreadyExists {
   static withEmailOf(email: string): ProfileAlreadyExists {
     return new ProfileAlreadyExists('email', email);
   }
+
+  static withUserIdOf(userId: string): ProfileAlreadyExists {
+    return new ProfileAlreadyExists('userId', userId);
+  }
 }
 
 export class UniversityAlreadyExists extends RessourceAlreadyExists {

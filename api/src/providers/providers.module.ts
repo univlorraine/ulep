@@ -8,6 +8,7 @@ import { PrismaCountryRepository } from './persistance/repositories/prisma-count
 import { PrismaLanguageRepository } from './persistance/repositories/prisma-language-repository';
 import { PrismaUserRepository } from './persistance/repositories/prisma-user-repository';
 
+export const AUTHENTICATOR = 'authenticator';
 export const COUNTRY_REPOSITORY = 'country.repository';
 export const LANGUAGE_REPOSITORY = 'language.repository';
 export const MEDIA_OBJECT_REPOSITORY = 'media-object.repository';
@@ -48,6 +49,7 @@ const providers: Provider[] = [
 ];
 
 @Module({
+  imports: [],
   providers: [PrismaService, ...providers],
   exports: [...providers],
 })

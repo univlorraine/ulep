@@ -1,12 +1,12 @@
 import * as Prisma from '@prisma/client';
-import { LanguageLevel, Profile } from '../../../core/models/profile';
+import { CEFRLevel, Profile } from '../../../core/models/profile';
 import { universityMapper } from './university.mapper';
 import { countryMapper } from './country.mapper';
 import MediaObject from '../../../core/models/media-object';
 import { userMapper } from './user.mapper';
 
 type ProfileEntity = Prisma.Profile & {
-  user: Prisma.UserEntity;
+  user: Prisma.User;
   organization: Prisma.Organization & {
     country: Prisma.CountryCode;
   };
@@ -34,16 +34,19 @@ export const profileMapper = (instance: ProfileEntity): Profile => {
     learningLanguage: {
       id: instance.learningLanguage.id,
       code: instance.learningLanguage.languageCode.code,
-      proficiencyLevel:
-        LanguageLevel[instance.learningLanguage.proficiencyLevel],
+      level: instance.learningLanguage.proficiencyLevel as CEFRLevel,
     },
     nativeLanguage: {
       id: instance.nativeLanguage.id,
       code: instance.nativeLanguage.languageCode.code,
     },
-    goals: instance.metadata['goals'],
-    meetingFrequency: instance.metadata['meetingFrequency'],
+    goals: new Set(instance.metadata['goals']),
+    interests: new Set(instance.metadata['interests']),
     bios: instance.metadata['bios'],
+    preferences: {
+      meetingFrequency: instance.metadata['meetingFrequency'],
+      sameGender: instance.metadata['preferSameGender'] ?? false,
+    },
     avatar: instance.avatar
       ? new MediaObject({
           id: instance.avatar.id,

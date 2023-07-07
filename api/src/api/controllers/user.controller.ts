@@ -15,7 +15,7 @@ import {
 import * as Swagger from '@nestjs/swagger';
 import { CreateUserUsecase } from '../../core/usecases/users/create-user.usecase';
 import { ResetPasswordUsecase } from '../../core/usecases/users/reset-password.usecase';
-import { Role } from '../../core/models/user';
+import { UserRole } from '../../core/models/user';
 import { GetUsersUsecase } from '../../core/usecases/users/get-users.usecase';
 import { UserResponse } from '../dtos/users/user.response';
 import { CreateUserRequest } from '../dtos/users/create-user.request';
@@ -82,7 +82,6 @@ export class UserController {
     const user = await this.createUserUsecase.execute({
       email,
       password,
-      roles: [Role.ROLE_USER],
     });
 
     return UserResponse.fromDomain(user);

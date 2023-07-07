@@ -9,7 +9,7 @@ services:
       - database
     restart: unless-stopped
     environment:
-      ADMIN_URL: ${ADMIN_URL:-http://localhost/3001}
+      ADMIN_URL: ${ADMIN_URL:-http://localhost:3001}
       DATABASE_URL: postgresql://${POSTGRES_USER:-postgres}:${POSTGRES_PASSWORD:-!ChangeMe!}@database:5432/${POSTGRES_DB:-postgres}?schema=public
       KEYCLOAK_BASE_URL: ${KEYCLOAK_BASE_URL:-http://auth:8080}
       KEYCLOAK_REALM: ${KEYCLOAK_REALM:-etandem}
@@ -29,12 +29,18 @@ services:
     depends_on:
       - api
     environment:
-      REACT_APP_API_URL: ${REACT_APP_API_URL:-http://localhost/3000}
+      REACT_APP_API_URL: ${REACT_APP_API_URL:-http://localhost:3000}
+      REACT_APP_KEYCLOAK_URL: ${REACT_APP_KEYCLOAK_URL:-http://localhost:8080}
+      REACT_APP_KEYCLOAK_REALM: ${REACT_APP_KEYCLOAK_REALM:-etandem}
+      REACT_APP_KEYCLOAK_CLIENT_ID: ${REACT_APP_KEYCLOAK_CLIENT_ID:-react-admin}
+      REACT_APP_KEYCLOAK_CLIENT_SECRET: ${REACT_APP_KEYCLOAK_CLIENT_SECRET:-uKBywX2HlxfvKgxZoKZrbiBSx49CST6W}
   
   auth:
-    image: quay.io/keycloak/keycloak:latest
+    image: quay.io/keycloak/keycloak:21.1.2
     depends_on:
         - database
+    volumes:
+      - ./docker/keycloak/providers:/opt/keycloak/providers
     environment:
       KEYCLOAK_ADMIN: ${KEYCLOAK_USER:-admin}
       KEYCLOAK_ADMIN_PASSWORD: ${KEYCLOAK_PASSWORD:-!ChangeMe!}
