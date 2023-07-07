@@ -1,4 +1,5 @@
-import { IonContent, isPlatform } from '@ionic/react';
+import { IonContent } from '@ionic/react';
+import useWindowDimensions from '../../hooks/useWindowDimensions';
 import style from './WelcomeContent.module.css';
 
 interface HomeTheme {
@@ -20,22 +21,20 @@ interface WelcomeContentProps {
 
 const WelcomeContent: React.FC<WelcomeContentProps> = ({ onPress }) => {
     const currentTheme = themes[Math.floor(Math.random() * themes.length)];
+    const { width } = useWindowDimensions();
+    const isHybrid = width < 768;
     const backgroundStyle = {
         backgroundColor: currentTheme.color,
         backgroundImage: `url('/assets/backgrounds/${currentTheme.background}.png')`,
-        backgroundPosition: isPlatform('hybrid') ? '-100px top' : 'right top', // Negative position for "outside box" effect
+        backgroundPosition: isHybrid ? '-100px top' : 'right top', // Negative position for "outside box" effect
         backgroundRepeat: 'no-repeat',
-        backgroundSize: isPlatform('hybrid') ? '150%' : '100%', // Increase size on mobile for "outside box" effect
+        backgroundSize: isHybrid ? '150%' : '100%', // Increase size on mobile for "outside box" effect
     };
     //TODO: Add mising logo on the top
     return (
         <IonContent>
             <div style={backgroundStyle} className={`content-wrapper container`}>
-                <img
-                    src={`./assets/${currentTheme.image}.svg`}
-                    alt="bubble"
-                    className={`${isPlatform('hybrid') ? style['hybrid-bubble'] : style['web-bubble']}`}
-                />
+                <img src={`./assets/${currentTheme.image}.svg`} alt="bubble" className={style['bubble']} />
                 <span className={style['welcome-text']}>
                     Bienvenue sur (e)Tandem,
                     <p className={style['welcome-subtext']}>le meilleur moyen de pratiquer une langue</p>

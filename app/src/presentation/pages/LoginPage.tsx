@@ -1,21 +1,18 @@
-import { IonCol, IonPage, IonRow, isPlatform } from '@ionic/react';
+import { IonPage } from '@ionic/react';
+import WebLayout from '../components/WebLayout';
 import WelcomeContent from '../components/contents/WelcomeContent';
 import LoginForm from '../components/forms/LoginForm';
+import useWindowDimensions from '../hooks/useWindowDimensions';
+import { HYBRID_WIDTH } from '../utils';
 
 const LoginPage: React.FC = () => {
+    const { width } = useWindowDimensions();
     return (
         <IonPage>
-            {isPlatform('hybrid') ? (
+            {width < HYBRID_WIDTH ? (
                 <LoginForm />
             ) : (
-                <IonRow className="no-gutters" style={{ height: '100%' }}>
-                    <IonCol size="6">
-                        <WelcomeContent />
-                    </IonCol>
-                    <IonCol size="6">
-                        <LoginForm />
-                    </IonCol>
-                </IonRow>
+                <WebLayout leftComponent={<WelcomeContent />} rightComponent={<LoginForm />} />
             )}
         </IonPage>
     );

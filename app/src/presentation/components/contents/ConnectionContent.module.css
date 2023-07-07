@@ -7,23 +7,13 @@
     height: 50%;
     justify-content: center;
     overflow: auto; /* to avoid collapse effect */
+    padding: 0px 25px;
     width: 100%;
 }
 
 .connect-div {
     background-color: #fdee66;
-}
-
-.hybrid-connect-div {
     margin-bottom: 10px;
-}
-
-.hybrid-div-padding {
-    padding: 0 25px;
-}
-
-.hybrid-outer-div-padding {
-    padding: 20px;
 }
 
 .icons {
@@ -38,6 +28,7 @@
     justify-content: space-evenly;
     height: 100vh;
     box-sizing: border-box;
+    padding: 20px;
 }
 
 .signup-div {
@@ -54,14 +45,17 @@
     line-height: 25px;
 }
 
-.web-connect-div {
-    margin-bottom: 20px;
-}
+@media (min-width: 768px) {
+    .connect-div,
+    .signup-div {
+        padding: 0 118px;
+    }
 
-.web-div-padding {
-    padding: 0px 118px;
-}
+    .outer-div {
+        padding: 60px;
+    }
 
-.web-outer-div-padding {
-    padding: 60px;
+    .connect-div {
+        margin-bottom: 20px;
+    }
 }

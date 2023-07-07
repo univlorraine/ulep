@@ -1,4 +1,3 @@
-import { isPlatform } from '@ionic/react';
 import { useTranslation } from 'react-i18next';
 import CircleAvatar from '../CircleAvatar';
 import style from './ConnectionContent.module.css';
@@ -10,19 +9,9 @@ interface ConnectionContentProps {
 
 const ConnectionContent: React.FC<ConnectionContentProps> = ({ onLoginPressed, onSignUpPressed }) => {
     const { t } = useTranslation();
-    const isHybrid = isPlatform('hybrid');
     return (
-        <div
-            className={`${style['outer-div']}
-            ${isHybrid ? style['hybrid-outer-div-padding'] : style['web-outer-div-padding']}`}
-        >
-            <div
-                className={`${style['connect-div']} ${
-                    isHybrid
-                        ? `${style['hybrid-div-padding']} ${style['hybrid-connect-div']}`
-                        : `${style['web-div-padding']} ${style['web-connect-div']}`
-                }`}
-            >
+        <div className={style['outer-div']}>
+            <div className={style['connect-div']}>
                 <CircleAvatar
                     backgroundImage="/public/assets/avatar.svg"
                     height={76}
@@ -35,10 +24,7 @@ const ConnectionContent: React.FC<ConnectionContentProps> = ({ onLoginPressed, o
                 </button>
             </div>
 
-            <div
-                className={`${style['signup-div']}
-             ${isHybrid ? style['hybrid-div-padding'] : style['web-div-padding']}`}
-            >
+            <div className={style['signup-div']}>
                 <CircleAvatar
                     backgroundImage="/public/assets/create-account-logo.svg"
                     height={76}

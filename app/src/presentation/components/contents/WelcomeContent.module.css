@@ -22,10 +22,17 @@
     text-transform: uppercase;
 }
 
-.hybrid-bubble {
+.bubble {
     height: 224px;
     margin-bottom: -60px; /* negative because *-bubble.svg has a natural margin in it */
     width: 224px;
+}
+
+@media (min-width: 768px) {
+    .bubble {
+        height: 292px;
+        width: 292px;
+    }
 }
 
 .logo {
@@ -39,12 +46,6 @@
     background: url('./assets/background.png') no-repeat;
     background-position: top center;
     top: 0;
-}
-
-.web-bubble {
-    height: 292px;
-    margin-bottom: -60px; /* negative because *-bubble.svg has a natural margin in it */
-    width: 292px;
 }
 
 .welcome-subtext {
