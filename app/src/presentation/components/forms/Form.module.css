@@ -20,6 +20,7 @@
 .icons {
     background-color: #f8f9fa;
     height: 70px;
+    margin-top: 20px;
     width: 70px;
 }
 
@@ -51,6 +52,10 @@
 }
 
 @media (min-width: 768px) {
+    .icons {
+        margin-top: 88px;
+    }
+
     .main-content {
         padding: 0 60px;
     }

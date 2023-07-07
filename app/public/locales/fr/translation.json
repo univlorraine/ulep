@@ -4,6 +4,11 @@
         "userDoesntExist": "L'utilisateur n'existe pas",
         "userWrongCredentials": "Le mot de passe ou l'email est incorrect"
     },
+    "forgot_password_page": {
+        "button": "Envoyer",
+        "invalid_email": "Email invalide",
+        "title": "Entre ton email"
+    },
     "global": {
         "email": "Email",
         "password": "Mot de passe"

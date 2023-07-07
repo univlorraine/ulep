@@ -1,4 +1,5 @@
 import { IonContent } from '@ionic/react';
+import { useEffect, useState } from 'react';
 import useWindowDimensions from '../../hooks/useWindowDimensions';
 import { HYBRID_MAX_WIDTH } from '../../utils';
 import style from './WelcomeContent.module.css';
@@ -21,9 +22,14 @@ interface WelcomeContentProps {
 }
 
 const WelcomeContent: React.FC<WelcomeContentProps> = ({ onPress }) => {
-    const currentTheme = themes[Math.floor(Math.random() * themes.length)];
+    const [currentTheme, setCurrentTheme] = useState<HomeTheme>(themes[0]);
     const { width } = useWindowDimensions();
     const isHybrid = width < HYBRID_MAX_WIDTH;
+
+    useEffect(() => {
+        setCurrentTheme(themes[Math.floor(Math.random() * themes.length)]);
+    }, []);
+
     const backgroundStyle = {
         backgroundColor: currentTheme.color,
         backgroundImage: `url('/assets/backgrounds/${currentTheme.background}.png')`,
