@@ -19,6 +19,7 @@ RUN pnpm fetch
 
 COPY --link . .
 RUN pnpm install --offline --frozen-lockfile
+RUN pnpm prisma generate
 
 # Development image
 FROM api_deps as api_dev

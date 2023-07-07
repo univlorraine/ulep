@@ -1,0 +1,77 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name:  "{{ include "etandem.fullname" . }}-{{ .Values.admin.name }}"
+  labels:
+    {{- include "etandem.labels" . | nindent 4 }}
+spec:
+  {{- if not .Values.admin.autoscaling.enabled }}
+  replicas: {{ .Values.admin.replicaCount }}
+  {{- end }}
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: "{{ include "etandem.name" . }}-{{ .Values.admin.name }}"
+      app.kubernetes.io/instance: "{{ .Release.Name }}"
+  template:
+    metadata:
+      {{- with .Values.podAnnotations }}
+      annotations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      labels:
+        app.kubernetes.io/name: "{{ include "etandem.name" . }}-{{ .Values.admin.name }}"
+        app.kubernetes.io/instance: "{{ .Release.Name }}"
+    spec:
+      {{- with .Values.imagePullSecrets }}
+      imagePullSecrets:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      serviceAccountName: {{ include "etandem.serviceAccountName" . }}
+      securityContext:
+        {{- toYaml .Values.podSecurityContext | nindent 8 }}
+      # initContainers:
+      # - name: wait-for-database
+      #   image: actions/pg_isready
+      #   command: ["/bin/bash","-c"]
+      #   args: ["set -x; while [ $(pg_isready -d $DB_NAME -h $HOST_NAME -p $DB_PORT -U $DB_USER -q; echo $?) -ne 0 ]; do sleep 5; done"]          
+      #   env:
+      #     - name: REACT_APP_API_URL
+      #       value: "https://{{ .Values. }}"
+      containers:
+        - name: {{ .Chart.Name }}
+          securityContext:
+            {{- toYaml .Values.securityContext | nindent 12 }}
+          image: "{{ .Values.admin.image.repository }}:{{ .Values.admin.image.tag | default .Chart.AppVersion }}"
+          imagePullPolicy: {{ .Values.admin.image.pullPolicy }}
+          ports:
+            - name: http
+              containerPort: 3000
+              protocol: TCP
+          # livenessProbe:
+          #   httpGet:
+          #     path: /
+          #     port: http
+          # readinessProbe:
+          #   httpGet:
+          #     path: /
+          #     port: http
+          resources:
+            {{- toYaml .Values.resources | nindent 12 }}
+          env:
+            - name: REACT_APP_API_URL
+              value: "https://{{ .Values.api.name }}.{{ .Values.domain }}"
+          envFrom: 
+            - secretRef: 
+                name: "{{ include "etandem.fullname" . }}-secret-{{ .Values.admin.name }}"
+      {{- with .Values.nodeSelector }}
+      nodeSelector:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.affinity }}
+      affinity:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.tolerations }}
+      tolerations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
