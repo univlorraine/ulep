@@ -6,13 +6,14 @@ const ProfileList = (props: any) => {
 
     return (
         <List title={translate('profiles.label')} {...props}>
-            <Datagrid>
+            <Datagrid rowClick="show">
                 <TextField sortable={false} source="lastname" />
                 <TextField sortable={false} source="firstname" />
+                <TextField sortable={false} source="university.name" />
+                <TextField source="role" />
                 <TextField sortable={false} source="age" />
-                <TextField sortable={false} source="nativeLanguage.code" />
+                <TextField source="nativeLanguage.code" sortable />
                 <TextField sortable={false} source="learningLanguage.code" />
-                <TextField sortable={false} source="goals" />
             </Datagrid>
         </List>
     );

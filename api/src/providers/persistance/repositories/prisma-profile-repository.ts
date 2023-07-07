@@ -7,6 +7,7 @@ import {
 import { profileMapper } from '../mappers/profile.mapper';
 import { Profile } from '../../../core/models/profile';
 import { Collection } from '../../../shared/types/collection';
+import { StringFilter } from 'src/shared/types/filters';
 
 @Injectable()
 export class PrismaProfileRepository implements ProfileRepository {
@@ -63,8 +64,14 @@ export class PrismaProfileRepository implements ProfileRepository {
     return entries.map(profileMapper);
   }
 
-  async findAll(offset?: number, limit?: number): Promise<Collection<Profile>> {
-    const count = await this.prisma.profile.count();
+  async findAll(
+    offset?: number,
+    limit?: number,
+    where?: { lastname?: StringFilter },
+  ): Promise<Collection<Profile>> {
+    const count = await this.prisma.profile.count({
+      where: { ...where },
+    });
 
     // If skip is out of range, return an empty array
     if (offset >= count) {
@@ -72,6 +79,7 @@ export class PrismaProfileRepository implements ProfileRepository {
     }
 
     const items = await this.prisma.profile.findMany({
+      where: { ...where },
       skip: offset,
       take: limit,
       include: this._include,

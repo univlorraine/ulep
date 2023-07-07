@@ -1,12 +1,12 @@
 import { faker } from '@faker-js/faker';
 import { Gender, PrismaClient, Role, User } from '@prisma/client';
-import { Goal } from '../../../core/models/profile';
+import { Goal, MeetingFrequency } from '../../../core/models/profile';
 
-const levels = ['A1', 'A2', 'B1', 'B2', 'C1', 'C2'];
+const levels = ['A1', 'A2', 'B1', 'B2', 'C1'];
 
-const countriesCodes = ['DE', 'FR', 'CN'];
+const countriesCodes = ['DE', 'FR'];
 
-const languagesCodes = ['DE', 'FR', 'ZH'];
+const languagesCodes = ['DE', 'FR'];
 
 const interests = [
   // SPORTS
@@ -160,6 +160,7 @@ export const createProfiles = async (
             max: 1,
           }),
           preferSameGender: faker.datatype.boolean(),
+          meetingFrequency: faker.helpers.enumValue(MeetingFrequency),
         },
       },
       include: { nationality: true },

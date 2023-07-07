@@ -6,7 +6,8 @@
         "password": "Password"
     },
     "profiles": {
-        "label": "Profiles"
+        "label": "Profiles",
+        "searchLastname": "Lastname"
     },
     "users": {
         "searchEmail": "Search email",

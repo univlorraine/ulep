@@ -1,5 +1,6 @@
 import simpleRestProvider from 'ra-data-simple-rest';
 import { fetchUtils } from 'react-admin';
+import { http } from './authProvider';
 import jwtManager from './jwtManager';
 
 interface Params {
@@ -52,7 +53,25 @@ const customDataProvider = {
 
         const result = await response.json();
 
-        return { data: result.items, total: result.total };
+        return { data: result.items, total: result.totalItems };
+    },
+    getMatchs: async (profileId: string) => {
+        const response = await http(
+            'GET',
+            `${process.env.REACT_APP_API_URL}/matches?id=${profileId}`,
+            {
+                headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${jwtManager.getToken()}` },
+
+            },
+        );
+
+        if (!response.ok) {
+            throw new Error(`API request failed with status ${response.status}`);
+        }
+
+        const result = await response.json();
+
+        return result.items;
     },
 };
 

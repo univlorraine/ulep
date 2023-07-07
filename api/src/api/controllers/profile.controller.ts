@@ -48,17 +48,21 @@ export class ProfileController {
   ) {}
 
   @Get()
-  @UseGuards(AuthenticationGuard)
+  // @UseGuards(AuthenticationGuard)
   @Swagger.ApiOperation({
     summary: 'Retrieve the collection of Profile ressource.',
   })
   @CollectionResponse(ProfileResponse)
   async getCollection(
     @Query() { page, limit }: PaginationDto,
+    @Query('lastname') lastname?: string,
   ): Promise<Collection<ProfileResponse>> {
     const profiles = await this.getProfilesUsecase.execute({
       page: page,
       limit: limit,
+      filters: {
+        lastname: lastname ? { contains: lastname } : undefined,
+      },
     });
 
     return new Collection<ProfileResponse>(
