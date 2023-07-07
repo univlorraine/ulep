@@ -1,6 +1,6 @@
 {
     "login": {
-        "connect": "Connection",
+        "connect": "Connexion",
         "email": "Email",
         "loginError": "Mauvais email ou mot de passe",
         "password": "Mot de passe"

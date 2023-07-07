@@ -3,6 +3,7 @@ import React from 'react';
 import { Route } from 'react-router-dom';
 import ConnectPage from '../pages/ConnectPage';
 import ForgotPasswordPage from '../pages/ForgotPasswordPage';
+import ForgotPasswordSentPage from '../pages/ForgotPasswordSentPage';
 import Home from '../pages/HomePage';
 import LoginPage from '../pages/LoginPage';
 
@@ -16,6 +17,9 @@ const OfflineRouter: React.FC = () => (
         </Route>
         <Route exact path="/forgot-password">
             <ForgotPasswordPage />
+        </Route>
+        <Route exact path="/forgot-password/sent">
+            <ForgotPasswordSentPage />
         </Route>
         <Route exact path="/login">
             <LoginPage />

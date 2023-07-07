@@ -9,6 +9,14 @@
         "invalid_email": "Email invalide",
         "title": "Entre ton email"
     },
+    "forgot_password_sent_page": {
+        "button": "Renvoyer l'email",
+        "footer_first_line": "Tu n'as pas reçu d'email",
+        "footer_second_line": "Vérifie ton dossier de spam ou réessaie avec une addresse email valide.",
+        "forgot": "Plus tard",
+        "subtitle": "Nous avons envoyé les instructions de récupération du mot de passe par email",
+        "title": "Consulte tes emails"
+    },
     "global": {
         "email": "Email",
         "password": "Mot de passe"

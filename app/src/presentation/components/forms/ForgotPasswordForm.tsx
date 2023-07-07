@@ -1,13 +1,4 @@
-import {
-    IonButton,
-    IonContent,
-    IonHeader,
-    IonInput,
-    IonLabel,
-    isPlatform,
-    useIonLoading,
-    useIonToast,
-} from '@ionic/react';
+import { IonButton, IonContent, IonHeader, IonInput, IonLabel, useIonLoading, useIonToast } from '@ionic/react';
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useHistory } from 'react-router';
@@ -28,7 +19,7 @@ const ForgotPasswordForm = () => {
         if (result instanceof Error) {
             await showToast({ message: t(result.message), duration: 5000 });
         } else {
-            await history.push(''); //TODO: navigate to email sent
+            await history.push('/forgot-password/sent');
         }
         await hideLoading();
     };

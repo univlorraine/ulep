@@ -86,7 +86,7 @@ const LoginForm = () => {
                     <div className={style['bottom-container']}>
                         <button className="primary-button">{t('login_page.button')}</button>
 
-                        <IonRouterLink className={`${style['forgot']} large-margin-top`} routerLink="/forgot-password">
+                        <IonRouterLink className="secondary-button large-margin-top" routerLink="/forgot-password">
                             {t('login_page.forgot')}
                         </IonRouterLink>
                     </div>
