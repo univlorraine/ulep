@@ -1,11 +1,13 @@
 import { IonPage, IonRouterLink } from '@ionic/react';
 import { useTranslation } from 'react-i18next';
+import { useHistory } from 'react-router';
 import CircleAvatar from '../components/CircleAvatar';
 import useWindowDimensions from '../hooks/useWindowDimensions';
 import { BACKGROUND_HYBRID_STYLE_INLINE, BACKGROUND_WEB_STYLE_INLINE, HYBRID_MAX_WIDTH } from '../utils';
 import style from './css/ForgotPasswordSentPage.module.css';
 
 const ForgotPasswordSentPage: React.FC = () => {
+    const history = useHistory();
     const { t } = useTranslation();
     const { width } = useWindowDimensions();
     const isHybrid = width < HYBRID_MAX_WIDTH;
@@ -32,7 +34,9 @@ const ForgotPasswordSentPage: React.FC = () => {
                         width={150}
                     />
                     <div className={style.button}>
-                        <button className="primary-button">{t('forgot_password_sent_page.button')}</button>
+                        <button className="primary-button" onClick={() => history.push('/reset-password')}>
+                            {t('forgot_password_sent_page.button')}
+                        </button>
                     </div>
                     <IonRouterLink className={`secondary-button large-margin-top`} routerLink="/login">
                         {t('forgot_password_sent_page.forgot')}

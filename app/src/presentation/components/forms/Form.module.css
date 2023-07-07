@@ -5,6 +5,11 @@
     margin-top: auto;
 }
 
+.form-container {
+    display: flex;
+    flex-direction: column;
+}
+
 .icons {
     background-color: #f8f9fa;
     height: 70px;

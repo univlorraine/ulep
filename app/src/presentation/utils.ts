@@ -11,3 +11,9 @@ export const BACKGROUND_WEB_STYLE_INLINE = {
     backgroundRepeat: 'no-repeat',
     backgroundSize: '100%',
 };
+
+export const isPasswordCorrect = (password: string) => {
+    const regex = /((?=.*\d)|(?=.*\W+))(?![.\n])(?=.*[A-Z])(?=.*[a-z]).*$/;
+
+    return regex.test(password);
+};

@@ -29,7 +29,6 @@ import '@ionic/react/css/text-transformation.css';
 /* Theme variables */
 import './presentation/theme/button.css';
 import './presentation/theme/global.css';
-import './presentation/theme/input.css';
 import './presentation/theme/margin.css';
 import './presentation/theme/variables.css';
 

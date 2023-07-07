@@ -34,5 +34,13 @@
         "invalid_password": "Mot de passe invalide",
         "subtitle": "Connecte-toi avec tes identifiants de l’université pour continuer à utiliser l’application",
         "title": "Se connecter"
+    },
+    "reset_password_page": {
+        "button": "Valider",
+        "confirm_password_title": "Confirmer le nouveau mot de passe",
+        "confirm_password_error": "Les deux mots de passe doivent être identiques",
+        "new_password_title": "Entrer un nouveau mot de passe",
+        "new_password_error": "Doit contenir un chiffre, un majuscule et une minuscule",
+        "title": "Nouveau mot de passe"
     }
 }

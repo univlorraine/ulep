@@ -1,8 +1,9 @@
-import { IonButton, IonContent, IonHeader, IonInput, IonLabel, useIonLoading, useIonToast } from '@ionic/react';
+import { IonButton, IonContent, IonHeader, useIonLoading, useIonToast } from '@ionic/react';
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useHistory } from 'react-router';
 import CircleAvatar from '../CircleAvatar';
+import TextInput from '../TextInput';
 import style from './Form.module.css';
 
 const ForgotPasswordForm = () => {
@@ -42,19 +43,7 @@ const ForgotPasswordForm = () => {
                     <div className={`ion-text-center`}>
                         <h1 className={style.title}>{t('forgot_password_page.title')}</h1>
                     </div>
-                    <IonLabel className="input-label" position="stacked">
-                        {t('global.email')}
-                    </IonLabel>
-                    <IonInput
-                        label=""
-                        className="text small-margin-top large-margin-bottom"
-                        errorText={t('forgot_password_page.invalid_email') || ''}
-                        name="email"
-                        onIonChange={(e) => setEmail((e.detail.value as string) ?? '')}
-                        type="email"
-                        value={email}
-                        required
-                    ></IonInput>
+                    <TextInput onChange={setEmail} title={t('global.email')} value={email} type="email" />
                     <div className={style['bottom-container']}>
                         <button className="primary-button">{t('forgot_password_page.button')}</button>
                     </div>

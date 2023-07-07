@@ -33,10 +33,12 @@ const WelcomeContent: React.FC<WelcomeContentProps> = ({ onPress }) => {
     const backgroundStyle = isHybrid
         ? {
               backgroundImage: `url('/assets/backgrounds/${currentTheme.background}.png')`,
+              backgroundColor: currentTheme.color,
               ...BACKGROUND_HYBRID_STYLE_INLINE,
           }
         : {
               backgroundImage: `url('/assets/backgrounds/${currentTheme.background}.png')`,
+              backgroundColor: currentTheme.color,
               ...BACKGROUND_WEB_STYLE_INLINE,
           };
     //TODO: Add mising logo on the top

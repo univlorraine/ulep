@@ -6,6 +6,7 @@ import ForgotPasswordPage from '../pages/ForgotPasswordPage';
 import ForgotPasswordSentPage from '../pages/ForgotPasswordSentPage';
 import Home from '../pages/HomePage';
 import LoginPage from '../pages/LoginPage';
+import ResetPasswordPage from '../pages/ResetPasswordPage';
 
 const OfflineRouter: React.FC = () => (
     <IonRouterOutlet>
@@ -23,6 +24,9 @@ const OfflineRouter: React.FC = () => (
         </Route>
         <Route exact path="/login">
             <LoginPage />
+        </Route>
+        <Route exact path="/reset-password">
+            <ResetPasswordPage />
         </Route>
     </IonRouterOutlet>
 );
