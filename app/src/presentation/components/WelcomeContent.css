@@ -1,0 +1,58 @@
+.bubble {
+    height: 224px;
+    margin-bottom: -80px; /* negative because *-bubble.svg has a natural margin in it */
+    width: 224px;
+}
+
+.button {
+    background-color: white;
+    border-radius: 5px;
+    bottom: 50px;
+    margin-left: 20px;
+    margin-right: 20px;
+    padding-left: 10px;
+    padding-right: 10px;
+    position: absolute;
+}
+
+.button-text {
+    color: #000;
+    font-family: 'Roboto', sans-serif;
+    font-size: 16px;
+    font-style: normal;
+    font-weight: 700;
+    line-height: normal;
+    margin-bottom: 15px;
+    margin-top: 15px;
+    text-align: center;
+    text-transform: uppercase;
+}
+
+.logo {
+    height: 64px;
+    width: 180px;
+}
+
+.welcome-subtext {
+    align-self: center;
+    color: #000;
+    font-family: 'Roboto', sans-serif;
+    font-size: 16px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: 20px;
+    padding-left: 20px;
+    padding-right: 20px;
+    text-align: center;
+}
+
+.welcome-text {
+    color: #000;
+    font-family: 'Roboto', sans-serif;
+    font-size: 37px;
+    font-style: normal;
+    font-weight: 700;
+    line-height: 40px;
+    text-align: center;
+    width: 280px;
+}

@@ -14,7 +14,7 @@ describe('UpdateLanguage', () => {
   });
 
   it('Should persist the changes', async () => {
-    let language = await languageRepository.of('uuid-1');
+    let language = await languageRepository.ofId('uuid-1');
     expect(language.isEnable).toBe(true);
 
     await updateLanguagesUsecase.execute({
@@ -22,7 +22,7 @@ describe('UpdateLanguage', () => {
       isEnable: false,
     });
 
-    language = await languageRepository.of('uuid-1');
+    language = await languageRepository.ofId('uuid-1');
     expect(language.isEnable).toBe(false);
   });
 

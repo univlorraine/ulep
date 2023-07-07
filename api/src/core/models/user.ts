@@ -1,26 +1,26 @@
 export interface UserProps {
   id: string;
   email: string;
-  roles?: Role[];
+  roles?: UserRole[];
 }
 
-export enum Role {
-  USER = 'user',
+export enum UserRole {
   ADMIN = 'admin',
+  USER = 'user',
 }
 
 export class User {
   #id: string;
   #email: string;
-  #roles: Role[];
+  #roles: UserRole[];
 
   constructor(props: UserProps) {
     this.#id = props.id;
-    this.#email = props.email;
-    this.#roles = props.roles || [Role.USER];
+    this.email = props.email;
+    this.roles = props.roles || [UserRole.USER];
   }
 
-  static signUp(id: string, email: string, roles?: Role[]): User {
+  static signUp(id: string, email: string, roles?: UserRole[]): User {
     return new User({ id, email, roles });
   }
 
@@ -32,8 +32,20 @@ export class User {
     return this.#email;
   }
 
-  get roles(): Role[] {
+  set email(email: string) {
+    if ('' === email.trim()) {
+      throw new Error('Email cannot be empty');
+    }
+
+    this.#email = email;
+  }
+
+  get roles(): UserRole[] {
     // guarantee every user at least has role USER
-    return this.#roles || [Role.USER];
+    return this.#roles || [UserRole.USER];
+  }
+
+  set roles(roles: UserRole[]) {
+    this.#roles = roles;
   }
 }

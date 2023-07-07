@@ -21,6 +21,10 @@ export class LanguageDoesNotExist extends RessourceDoesNotExist {
   static withIdOf(id: string): RessourceDoesNotExist {
     return new LanguageDoesNotExist('id', id);
   }
+
+  static withCodeOf(code: string): RessourceDoesNotExist {
+    return new LanguageDoesNotExist('code', code);
+  }
 }
 
 export class CountryDoesNotExist extends RessourceDoesNotExist {
@@ -54,5 +58,23 @@ export class ProfileDoesNotExist extends RessourceDoesNotExist {
 
   static withIdOf(id: string): RessourceDoesNotExist {
     return new ProfileDoesNotExist('id', id);
+  }
+
+  static forUser(id: string): RessourceDoesNotExist {
+    return new ProfileDoesNotExist('user', id);
+  }
+}
+
+export class UserDoesNotExist extends RessourceDoesNotExist {
+  constructor(public readonly field: string, public readonly value: string) {
+    super('User', field, value);
+  }
+
+  static withIdOf(id: string): RessourceDoesNotExist {
+    return new UserDoesNotExist('id', id);
+  }
+
+  static withEmailOf(email: string): RessourceDoesNotExist {
+    return new UserDoesNotExist('email', email);
   }
 }

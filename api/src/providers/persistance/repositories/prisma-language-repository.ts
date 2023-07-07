@@ -9,10 +9,24 @@ import { languageMapper } from '../mappers/language.mapper';
 export class PrismaLanguageRepository implements LanguageRepository {
   constructor(private readonly prisma: PrismaService) {}
 
-  async of(id: string): Promise<Language | null> {
+  async ofId(id: string): Promise<Language | null> {
     const language = await this.prisma.languageCode.findUnique({
       where: {
         id: id,
+      },
+    });
+
+    if (!language) {
+      return null;
+    }
+
+    return languageMapper(language);
+  }
+
+  async ofCode(code: string): Promise<Language | null> {
+    const language = await this.prisma.languageCode.findUnique({
+      where: {
+        code: code,
       },
     });
 
@@ -38,20 +52,6 @@ export class PrismaLanguageRepository implements LanguageRepository {
       items: languages.map(languageMapper),
       totalItems: total,
     };
-  }
-
-  async where(query: { code?: string }): Promise<Language | null> {
-    const instance = await this.prisma.languageCode.findFirst({
-      where: {
-        code: query.code,
-      },
-    });
-
-    if (!instance) {
-      return null;
-    }
-
-    return languageMapper(instance);
   }
 
   async save(language: Language): Promise<void> {

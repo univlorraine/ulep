@@ -17,6 +17,16 @@ export class RessourceAlreadyExists extends DomainError {
   }
 }
 
+export class UserAlreadyExists extends RessourceAlreadyExists {
+  constructor(public readonly field: string, public readonly value: string) {
+    super('User', field, value);
+  }
+
+  static withEmailOf(email: string): UserAlreadyExists {
+    return new UserAlreadyExists('email', email);
+  }
+}
+
 export class ProfileAlreadyExists extends RessourceAlreadyExists {
   constructor(public readonly field: string, public readonly value: string) {
     super('Profile', field, value);
@@ -28,6 +38,10 @@ export class ProfileAlreadyExists extends RessourceAlreadyExists {
 
   static withEmailOf(email: string): ProfileAlreadyExists {
     return new ProfileAlreadyExists('email', email);
+  }
+
+  static withUserIdOf(userId: string): ProfileAlreadyExists {
+    return new ProfileAlreadyExists('userId', userId);
   }
 }
 

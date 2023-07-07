@@ -1,12 +1,17 @@
 import { Collection } from '../../shared/types/collection';
 import { Profile } from '../models/profile';
 
+export type ProfileFilters = {
+  nativeLanguageCode: string;
+  learningLanguageCode: string;
+};
+
 export interface ProfileRepository {
   ofId: (id: string) => Promise<Profile | null>;
 
-  ofEmail: (email: string) => Promise<Profile | null>;
+  ofUser: (id: string) => Promise<Profile | null>;
 
-  ofLanguage: (languageId: string) => Promise<Profile[]>;
+  where: (filters: ProfileFilters) => Promise<Profile[]>;
 
   save: (profile: Profile) => Promise<void>;
 

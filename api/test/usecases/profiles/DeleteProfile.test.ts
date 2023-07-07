@@ -1,7 +1,8 @@
+import seedDefinedNumberOfUsers from '../../seeders/users';
 import { ProfileDoesNotExist } from '../../../src/core/errors/RessourceDoesNotExist';
 import { DeleteProfileUsecase } from '../../../src/core/usecases/profiles/delete-profile.usecase';
 import { InMemoryProfileRepository } from '../../../src/providers/persistance/repositories/in-memory-profile-repository';
-import seedDefinedNumberOfProfiles from '../../seeders/profiles';
+import seedDefinedUsersProfiles from '../../seeders/profiles';
 
 describe('DeleteProfile', () => {
   const profileRepository = new InMemoryProfileRepository();
@@ -12,15 +13,15 @@ describe('DeleteProfile', () => {
   });
 
   it('should delete a profile', async () => {
-    profileRepository.init(
-      seedDefinedNumberOfProfiles(1, (x: number) => `uuid-${x}`),
-    );
+    const users = seedDefinedNumberOfUsers(1);
+    const profiles = seedDefinedUsersProfiles(users);
+    profileRepository.init(profiles);
 
-    await deleteProfileUsecase.execute({ id: 'uuid-1' });
+    await deleteProfileUsecase.execute({ id: profiles[0].id });
 
-    const profiles = await profileRepository.findAll();
+    const profilesAfterDelete = await profileRepository.findAll();
 
-    expect(profiles.items).toHaveLength(0);
+    expect(profilesAfterDelete.items).toHaveLength(0);
   });
 
   it('should throw an error if profile does not exist', async () => {

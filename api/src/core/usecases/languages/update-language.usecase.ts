@@ -19,7 +19,7 @@ export class UpdateLanguageUsecase {
   async execute(command: UpdateLanguageCommand): Promise<Language> {
     const { id, isEnable } = command;
 
-    const language = await this.languageRepository.of(id);
+    const language = await this.languageRepository.ofId(id);
 
     if (!language) {
       throw LanguageDoesNotExist.withIdOf(id);

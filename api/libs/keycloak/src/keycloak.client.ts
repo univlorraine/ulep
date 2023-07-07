@@ -60,6 +60,44 @@ export class KeycloakClient {
   }
 
   /*
+   * Validates the access token and returns the payload
+   */
+  async authenticate(accessToken: string): Promise<KeycloakUserInfoResponse> {
+    const token = jwt.decode(accessToken, { complete: true });
+
+    const keyId = token.header.kid;
+
+    const publicKey = await this.getPublicKey(keyId);
+
+    return jwt.verify(accessToken, publicKey, {
+      algorithms: ['RS256'],
+    });
+  }
+
+  /*
+   * Fetches the public key from Keycloak to sign the token
+   */
+  private async getPublicKey(keyId: string): Promise<string> {
+    const response = await fetch(
+      `${this.configuration.baseUrl}/realms/${this.configuration.realm}/protocol/openid-connect/certs`,
+      { method: 'GET' },
+    );
+
+    const { keys }: KeycloakCertsResponse = await response.json();
+
+    const key = keys.find((k) => k.kid === keyId);
+
+    if (!key) {
+      // Token is probably so old, Keycloak doesn't even advertise the corresponding public key anymore
+      throw new InvalidCredentialsException();
+    }
+
+    const publicKey = `-----BEGIN CERTIFICATE-----\r\n${key.x5c}\r\n-----END CERTIFICATE-----`;
+
+    return publicKey;
+  }
+
+  /*
    * Returns the access token and refresh token.
    * Throws HttpException (409) if the credentials are invalid.
    */
@@ -151,21 +189,6 @@ export class KeycloakClient {
   }
 
   /*
-   * Validates the access token and returns the payload
-   */
-  async authenticate(accessToken: string): Promise<KeycloakUserInfoResponse> {
-    const token = jwt.decode(accessToken, { complete: true });
-
-    const keyId = token.header.kid;
-
-    const publicKey = await this.getPublicKey(keyId);
-
-    return jwt.verify(accessToken, publicKey, {
-      algorithms: ['RS256'],
-    });
-  }
-
-  /*
    * Let Keycloak validate the access token and return the userinfo.
    */
   async userInfo(accessToken: string): Promise<KeycloakUserInfoResponse> {
@@ -180,8 +203,9 @@ export class KeycloakClient {
       },
     );
 
-    if (!response.ok) {
-      this.logger.error(JSON.stringify(await response.json()));
+    this.logger.debug(response.status);
+
+    if (response.status === 401) {
       throw new InvalidCredentialsException();
     }
 
@@ -245,6 +269,7 @@ export class KeycloakClient {
    *  - enabled: boolean representing if user is enabled or not
    */
   async getUsers({
+    id,
     email,
     first,
     max,
@@ -253,6 +278,10 @@ export class KeycloakClient {
     const url = new URL(
       `${this.configuration.baseUrl}/admin/realms/${this.configuration.realm}/users`,
     );
+
+    if (id) {
+      url.searchParams.append('id', id);
+    }
 
     if (email) {
       url.searchParams.append('email', email);
@@ -281,6 +310,16 @@ export class KeycloakClient {
     const users = await response.json();
 
     return users;
+  }
+
+  async getUserById(id: string): Promise<UserRepresentation> {
+    const users = await this.getUsers({ id, max: 1 });
+
+    if (users.length === 0) {
+      throw new Error('User not found');
+    }
+
+    return users[0];
   }
 
   async getUserByEmail(email: string): Promise<UserRepresentation> {
@@ -370,28 +409,5 @@ export class KeycloakClient {
     }
 
     return this.tokenSet.access_token;
-  }
-
-  /*
-   * Fetches the public key from Keycloak to sign the token
-   */
-  private async getPublicKey(keyId: string): Promise<string> {
-    const response = await fetch(
-      `${this.configuration.baseUrl}/realms/${this.configuration.realm}/protocol/openid-connect/certs`,
-      { method: 'GET' },
-    );
-
-    const { keys }: KeycloakCertsResponse = await response.json();
-
-    const key = keys.find((k) => k.kid === keyId);
-
-    if (!key) {
-      // Token is probably so old, Keycloak doesn't even advertise the corresponding public key anymore
-      throw new InvalidCredentialsException();
-    }
-
-    const publicKey = `-----BEGIN CERTIFICATE-----\r\n${key.x5c}\r\n-----END CERTIFICATE-----`;
-
-    return publicKey;
   }
 }

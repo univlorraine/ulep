@@ -21,7 +21,7 @@ describe('CreateLanguage', () => {
       isEnable: true,
     });
 
-    const language = await languageRepository.of('uuid');
+    const language = await languageRepository.ofId('uuid');
 
     expect(language).toBeDefined();
     expect(language.code).toBe('ES');

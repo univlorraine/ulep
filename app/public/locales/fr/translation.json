@@ -3,6 +3,12 @@
         "email": "Email",
         "password": "Mot de passe"
     },
+    "connection_page": {
+        "connect_title": "As-tu déjà un compte ? ",
+        "connect_button": "Se connecter",
+        "signup_title": "Première fois sur l'application ?",
+        "signup_button": "Créer un compte"
+    },
     "login_page": {
         "button": "Se connecter",
         "forgot": "Mot de passe oublié ?",

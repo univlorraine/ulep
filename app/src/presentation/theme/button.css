@@ -1,3 +1,17 @@
+.primary-button {
+    background-color: #000;
+    border: none;
+    border-radius: 5px;
+    color: white;
+    font-family: 'Roboto', sans-serif;
+    font-size: 16px;
+    font-weight: 700;
+    height: 50px;
+    padding: 10px 10px;
+    text-transform: uppercase;
+    width: 100%;
+}
+
 ion-button.confirm {
     --background: #000;
     --background-focused: #000;

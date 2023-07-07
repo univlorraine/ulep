@@ -10,11 +10,12 @@ import {
   Put,
   Response,
   Query,
+  SerializeOptions,
 } from '@nestjs/common';
 import * as Swagger from '@nestjs/swagger';
 import { CreateUserUsecase } from '../../core/usecases/users/create-user.usecase';
 import { ResetPasswordUsecase } from '../../core/usecases/users/reset-password.usecase';
-import { Role } from '../../core/models/user';
+import { UserRole } from '../../core/models/user';
 import { GetUsersUsecase } from '../../core/usecases/users/get-users.usecase';
 import { UserResponse } from '../dtos/users/user.response';
 import { CreateUserRequest } from '../dtos/users/create-user.request';
@@ -22,6 +23,7 @@ import { ResetPasswordRequest } from '../dtos/users/reset-password.request';
 import { PaginationDto } from '../dtos/pagination.dto';
 import { CollectionResponse } from '../decorators/collection.decorator';
 import { Collection } from '../../shared/types/collection';
+import { GetUserUsecase } from 'src/core/usecases/users/get-user.usecase';
 
 @Controller('users')
 @Swagger.ApiTags('Users')
@@ -31,12 +33,13 @@ export class UserController {
   constructor(
     private readonly createUserUsecase: CreateUserUsecase,
     private readonly getUsersUsecase: GetUsersUsecase,
+    private readonly getUserUsecase: GetUserUsecase,
     private readonly resetPasswordUsecase: ResetPasswordUsecase,
   ) {}
 
   @Get()
   @Swagger.ApiOperation({
-    summary: 'Retrieve the collection of User ressource.',
+    summary: 'Retrieve the collection of user ressource.',
   })
   @CollectionResponse(UserResponse)
   async getCollection(
@@ -53,7 +56,23 @@ export class UserController {
     );
   }
 
+  @Get(':id')
+  @SerializeOptions({ groups: ['read', 'user:read'] })
+  @Swagger.ApiOperation({ summary: 'Retrieve a user ressource.' })
+  @Swagger.ApiOkResponse({ type: UserResponse })
+  @Swagger.ApiNotFoundResponse({ description: 'Resource not found' })
+  async getItem(@Param('id', ParseUUIDPipe) id: string): Promise<UserResponse> {
+    const user = await this.getUserUsecase.execute({ id });
+
+    return new UserResponse({
+      id: user.id,
+      email: user.email,
+      roles: user.roles.map((role) => role.toString()),
+    });
+  }
+
   @Post()
+  @SerializeOptions({ groups: ['read', 'user:read'] })
   @Swagger.ApiOperation({ summary: 'Create user ressource' })
   @Swagger.ApiOkResponse({ type: UserResponse })
   async create(
@@ -63,14 +82,13 @@ export class UserController {
     const user = await this.createUserUsecase.execute({
       email,
       password,
-      roles: [Role.USER],
     });
 
     return UserResponse.fromDomain(user);
   }
 
   @Put(':id/reset-password')
-  @Swagger.ApiOperation({ summary: 'Update a User password.' })
+  @Swagger.ApiOperation({ summary: 'Update a user password.' })
   async resetPassword(
     @Param('id', ParseUUIDPipe) id: string,
     @Body() { password }: ResetPasswordRequest,

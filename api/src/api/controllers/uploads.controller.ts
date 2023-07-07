@@ -9,10 +9,10 @@ import {
 import { FileInterceptor } from '@nestjs/platform-express';
 import * as Swagger from '@nestjs/swagger';
 import { UploadImageUsecase } from '../../core/usecases/uploads/upload-image.usecase';
-import { User } from '../decorators/user.decorator';
-import { KeycloakUserInfoResponse } from '@app/keycloak';
+import { UserContext } from '../decorators/user-context.decorator';
 import { AuthenticationGuard } from '../guards/authentication.guard';
 import { UploadResponse } from '../dtos/media/upload.response';
+import { User } from 'src/core/models/user';
 
 @Controller('uploads')
 @Swagger.ApiTags('Uploads')
@@ -28,16 +28,16 @@ export class UploadsController {
   @Swagger.ApiOkResponse({ type: UploadResponse })
   async uploadFile(
     @UploadedFile() file: Express.Multer.File,
-    @User() user: KeycloakUserInfoResponse,
+    @UserContext() user: User,
   ): Promise<UploadResponse> {
     const upload = await this.uploadImageUsecase.execute({
-      profileId: user.sub,
+      userId: user.id,
       file,
     });
 
-    return {
+    return new UploadResponse({
       id: upload.id,
       url: `${process.env.MINIO_PUBLIC_URL}/${upload.bucket}/${upload.name}`,
-    };
+    });
   }
 }

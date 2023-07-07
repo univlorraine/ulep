@@ -1,4 +1,4 @@
-import { Module } from '@nestjs/common';
+import { Module, Provider } from '@nestjs/common';
 import { CreateUserUsecase } from './usecases/users/create-user.usecase';
 import { ProvidersModule } from '../providers/providers.module';
 import { UploadImageUsecase } from './usecases/uploads/upload-image.usecase';
@@ -18,20 +18,22 @@ import { GetLanguagesUsecase } from './usecases/languages/get-languages.usecase'
 import { UpdateLanguageUsecase } from './usecases/languages/update-language.usecase';
 import { UpdateProfileUsecase } from './usecases/profiles/update-profile.usecase';
 import { DeleteProfileUsecase } from './usecases/profiles/delete-profile.usecase';
+import { GetUserUsecase } from './usecases/users/get-user.usecase';
+import { GetTokensUsecase } from './usecases/tokens/get-tokens.usecase';
+import { RefreshTokensUsecase } from './usecases/tokens/refresh-tokens.usecase';
+import { MatchService } from './services/matchs/MatchService';
+import { KeycloakAuthenticator } from './services/authentication/authenticator';
+import { GetMatchsByProfileIdUsecase } from './usecases/matchs/GetMatchsByProfileId';
 
-const usecases = [
-  // Users
-  CreateUserUsecase,
-  GetUsersUsecase,
-  ResetPasswordUsecase,
+const usecases: Provider[] = [
   // Countries
   GetCountriesUsecase,
-  // Universities
-  GetUniversitiesUsecase,
-  GetUniversityUsecase,
-  CreateUniversityUsecase,
-  UpdateUniversityUsecase,
-  DeleteUniversityUsecase,
+  // Languages
+  CreateLanguageUsecase,
+  GetLanguagesUsecase,
+  UpdateLanguageUsecase,
+  // Matches
+  GetMatchsByProfileIdUsecase,
   // Profiles
   UploadImageUsecase,
   GetProfilesUsecase,
@@ -39,15 +41,27 @@ const usecases = [
   CreateProfileUsecase,
   UpdateProfileUsecase,
   DeleteProfileUsecase,
-  // Languages
-  CreateLanguageUsecase,
-  GetLanguagesUsecase,
-  UpdateLanguageUsecase,
+  // Universities
+  GetUniversitiesUsecase,
+  GetUniversityUsecase,
+  CreateUniversityUsecase,
+  UpdateUniversityUsecase,
+  DeleteUniversityUsecase,
+  // Tokens
+  GetTokensUsecase,
+  RefreshTokensUsecase,
+  // Users
+  CreateUserUsecase,
+  GetUsersUsecase,
+  GetUserUsecase,
+  ResetPasswordUsecase,
 ];
+
+const services: Provider[] = [KeycloakAuthenticator, MatchService];
 
 @Module({
   imports: [ProvidersModule],
-  providers: [...usecases],
-  exports: [...usecases],
+  providers: [...usecases, ...services],
+  exports: [...usecases, ...services],
 })
 export class CoreModule {}

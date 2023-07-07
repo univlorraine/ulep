@@ -1,6 +1,9 @@
 import { Injectable } from '@nestjs/common';
 import { PrismaService } from '../prisma.service';
-import { ProfileRepository } from '../../../core/ports/profile.repository';
+import {
+  ProfileFilters,
+  ProfileRepository,
+} from '../../../core/ports/profile.repository';
 import { profileMapper } from '../mappers/profile.mapper';
 import { Profile } from '../../../core/models/profile';
 import { Collection } from '../../../shared/types/collection';
@@ -8,8 +11,10 @@ import { Collection } from '../../../shared/types/collection';
 @Injectable()
 export class PrismaProfileRepository implements ProfileRepository {
   private readonly _include = {
+    user: true,
     organization: { include: { country: true } },
-    languages: true,
+    learningLanguage: { include: { languageCode: true } },
+    nativeLanguage: { include: { languageCode: true } },
     nationality: true,
     avatar: true,
   };
@@ -29,9 +34,9 @@ export class PrismaProfileRepository implements ProfileRepository {
     return profileMapper(entry);
   }
 
-  async ofEmail(email: string) {
+  async ofUser(id: string): Promise<Profile> {
     const entry = await this.prisma.profile.findUnique({
-      where: { email },
+      where: { userId: id },
       include: this._include,
     });
 
@@ -42,13 +47,14 @@ export class PrismaProfileRepository implements ProfileRepository {
     return profileMapper(entry);
   }
 
-  async ofLanguage(languageId: string) {
+  async where(props: ProfileFilters) {
     const entries = await this.prisma.profile.findMany({
       where: {
-        languages: {
-          some: {
-            id: languageId,
-          },
+        nativeLanguage: {
+          is: { languageCode: { code: props.nativeLanguageCode } },
+        },
+        learningLanguage: {
+          is: { languageCode: { code: props.learningLanguageCode } },
         },
       },
       include: this._include,
@@ -79,16 +85,39 @@ export class PrismaProfileRepository implements ProfileRepository {
   async save(profile: Profile): Promise<void> {
     const payload = {
       id: profile.id,
-      email: profile.email,
+      user: {
+        connect: { id: profile.user.id },
+      },
       firstname: profile.firstname,
       lastname: profile.lastname,
       birthdate: new Date(profile.birthdate),
       gender: profile.gender,
       role: profile.role,
+      nativeLanguage: {
+        create: {
+          languageCode: {
+            connect: {
+              code: profile.nativeLanguage.code,
+            },
+          },
+        },
+      },
+      learningLanguage: {
+        create: {
+          languageCode: {
+            connect: {
+              code: profile.learningLanguage.code,
+            },
+          },
+          proficiencyLevel: profile.learningLanguage.level,
+        },
+      },
       metadata: {
-        goals: profile.goals,
-        meetingFrequency: profile.meetingFrequency,
+        goals: Array.from(profile.goals),
+        meetingFrequency: profile.preferences.meetingFrequency,
+        interests: Array.from(profile.interests),
         bios: profile.bios,
+        preferSameGender: profile.preferences.sameGender,
       },
       organization: {
         connect: {
@@ -111,42 +140,5 @@ export class PrismaProfileRepository implements ProfileRepository {
 
   async delete(profile: Profile): Promise<void> {
     await this.prisma.profile.delete({ where: { id: profile.id } });
-  }
-
-  async findMatchs(id: string) {
-    const matches = await this.prisma.match.findMany({
-      where: {
-        profiles: {
-          some: {
-            profileId: id,
-          },
-        },
-      },
-      include: {
-        profiles: true,
-      },
-    });
-
-    return matches;
-  }
-
-  async addProfileToMatch(matchId: string, profileId: string) {
-    const match = await this.prisma.match.findUnique({
-      where: { id: matchId },
-      include: { profiles: true },
-    });
-
-    // if match already has 2 profiles throw error
-    if (match.profiles.length >= 2) {
-      throw new Error('Match already has 2 profiles');
-    }
-
-    // Ajoute le profil au match
-    await this.prisma.profileMatch.create({
-      data: {
-        matchId: matchId,
-        profileId: profileId,
-      },
-    });
   }
 }

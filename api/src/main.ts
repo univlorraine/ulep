@@ -1,7 +1,7 @@
-import { HttpAdapterHost, NestFactory } from '@nestjs/core';
+import { HttpAdapterHost, NestFactory, Reflector } from '@nestjs/core';
 import { AppModule } from './app.module';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
-import { ValidationPipe } from '@nestjs/common';
+import { ClassSerializerInterceptor, ValidationPipe } from '@nestjs/common';
 import { PrismaClientExceptionFilter } from './shared/errors/prisma-exceptions.filter';
 import { ConfigService } from '@nestjs/config';
 import { CollectionInterceptor } from './api/interceptors/collection.interceptor';
@@ -29,6 +29,12 @@ async function bootstrap() {
   app.useGlobalFilters(new PrismaClientExceptionFilter(httpAdapter));
   app.useGlobalFilters(new DomainErrorFilter(httpAdapter));
   // Interceptors
+  app.useGlobalInterceptors(
+    new ClassSerializerInterceptor(app.get(Reflector), {
+      strategy: 'excludeAll',
+      groups: ['read'],
+    }),
+  );
   app.useGlobalInterceptors(new CollectionInterceptor());
   // CORS
   app.enableCors({

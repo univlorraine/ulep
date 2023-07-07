@@ -5,6 +5,9 @@
         "loginError": "Wrong email / password",
         "password": "Password"
     },
+    "profiles": {
+        "label": "Profiles"
+    },
     "users": {
         "searchEmail": "Search email",
         "userListTitle": "Users"

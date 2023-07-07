@@ -12,7 +12,7 @@ import { Profile } from '../../models/profile';
 import { ProfileDoesNotExist } from '../../errors/RessourceDoesNotExist';
 
 export class UploadImageCommand {
-  profileId: string;
+  userId: string;
   file: Express.Multer.File;
 }
 
@@ -28,7 +28,7 @@ export class UploadImageUsecase {
   ) {}
 
   async execute(command: UploadImageCommand): Promise<MediaObject> {
-    const profile = await this.tryToFindTheProfilerOfId(command.profileId);
+    const profile = await this.tryToFindTheProfileOfId(command.userId);
     const previousImage = profile.avatar;
     profile.avatar = MediaObject.image(command.file);
 
@@ -38,7 +38,7 @@ export class UploadImageUsecase {
     return profile.avatar;
   }
 
-  private async tryToFindTheProfilerOfId(id: string): Promise<Profile> {
+  private async tryToFindTheProfileOfId(id: string): Promise<Profile> {
     const instance = await this.profileRepository.ofId(id);
     if (!instance) {
       throw ProfileDoesNotExist.withIdOf(id);

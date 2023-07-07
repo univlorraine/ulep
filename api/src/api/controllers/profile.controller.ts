@@ -10,22 +10,29 @@ import {
   UseGuards,
   Query,
   Logger,
+  SerializeOptions,
 } from '@nestjs/common';
 import * as Swagger from '@nestjs/swagger';
 import { GetProfilesUsecase } from '../../core/usecases/profiles/get-profiles.usecase';
 import { GetProfileUsecase } from '../../core/usecases/profiles/get-profile.usecase';
-import { CreateProfileUsecase } from '../../core/usecases/profiles/create-profile.usecase';
-import { User } from '../decorators/user.decorator';
-import { KeycloakUserInfoResponse } from '@app/keycloak';
+import {
+  CreateProfileCommand,
+  CreateProfileUsecase,
+} from '../../core/usecases/profiles/create-profile.usecase';
+import { UserContext } from '../decorators/user-context.decorator';
 import { AuthenticationGuard } from '../guards/authentication.guard';
 import { ProfileResponse } from '../dtos/profiles/profile.response';
 import { CreateProfileRequest } from '../dtos/profiles/create-profile.request';
 import { PaginationDto } from '../dtos/pagination.dto';
 import { Collection } from '../../shared/types/collection';
 import { CollectionResponse } from '../decorators/collection.decorator';
-import { UpdateProfileUsecase } from '../../core/usecases/profiles/update-profile.usecase';
+import {
+  UpdateProfileCommand,
+  UpdateProfileUsecase,
+} from '../../core/usecases/profiles/update-profile.usecase';
 import { UpdateProfileRequest } from '../dtos/profiles/update-profile.request';
 import { DeleteProfileUsecase } from '../../core/usecases/profiles/delete-profile.usecase';
+import { User } from 'src/core/models/user';
 
 @Controller('profiles')
 @Swagger.ApiTags('Profiles')
@@ -41,6 +48,7 @@ export class ProfileController {
   ) {}
 
   @Get()
+  @UseGuards(AuthenticationGuard)
   @Swagger.ApiOperation({
     summary: 'Retrieve the collection of Profile ressource.',
   })
@@ -60,6 +68,7 @@ export class ProfileController {
   }
 
   @Get(':id')
+  @SerializeOptions({ groups: ['read', 'profile:read'] })
   @Swagger.ApiOperation({ summary: 'Retrieve a Profile ressource.' })
   @Swagger.ApiOkResponse({ type: ProfileResponse })
   @Swagger.ApiNotFoundResponse({ description: 'Resource not found' })
@@ -72,24 +81,28 @@ export class ProfileController {
   }
 
   @Post()
+  @SerializeOptions({ groups: ['read', 'profile:read'] })
   @UseGuards(AuthenticationGuard)
   @Swagger.ApiOperation({ summary: 'Creates a Profile ressource.' })
   @Swagger.ApiCreatedResponse({ type: ProfileResponse })
   @Swagger.ApiResponse({ status: 400, description: 'Invalid input' })
   async create(
     @Body() body: CreateProfileRequest,
-    @User() user: KeycloakUserInfoResponse,
+    @UserContext() user: User,
   ): Promise<ProfileResponse> {
-    const profile = await this.createProfileUsecase.execute({
-      id: user.sub,
-      email: user.email,
+    const command: CreateProfileCommand = {
+      userId: user.id,
       ...body,
-    });
+      goals: new Set(body.goals),
+      interests: new Set(body.interests),
+    };
+    const profile = await this.createProfileUsecase.execute(command);
 
     return ProfileResponse.fromDomain(profile);
   }
 
   @Patch(':id')
+  @SerializeOptions({ groups: ['read', 'profile:read'] })
   @Swagger.ApiOperation({ summary: 'Updates a Profile ressource.' })
   @Swagger.ApiCreatedResponse({ type: ProfileResponse })
   @Swagger.ApiResponse({ status: 400, description: 'Invalid input' })
@@ -97,10 +110,12 @@ export class ProfileController {
     @Param('id', ParseUUIDPipe) id: string,
     @Body() body: UpdateProfileRequest,
   ) {
-    const profile = await this.updateProfileUsecase.execute({
+    const command: UpdateProfileCommand = {
       id,
       ...body,
-    });
+      goals: new Set(body.goals),
+    };
+    const profile = await this.updateProfileUsecase.execute(command);
 
     return ProfileResponse.fromDomain(profile);
   }

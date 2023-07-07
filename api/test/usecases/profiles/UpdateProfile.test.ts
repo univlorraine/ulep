@@ -1,6 +1,6 @@
-import seedDefinedNumberOfProfiles from '../../seeders/profiles';
 import {
   Goal,
+  LanguageLevel,
   MeetingFrequency,
   Profile,
 } from '../../../src/core/models/profile';
@@ -14,6 +14,8 @@ import {
 import { UpdateProfileUsecase } from '../../../src/core/usecases/profiles/update-profile.usecase';
 import seedDefinedNumberOfCountries from '../../seeders/countries';
 import seedDefinedNumberOfUniversities from '../../seeders/universities';
+import seedDefinedNumberOfUsers from '../../seeders/users';
+import seedDefinedUsersProfiles from '../../seeders/profiles';
 
 describe('UpdateProfile', () => {
   const profileRepository = new InMemoryProfileRepository();
@@ -23,6 +25,8 @@ describe('UpdateProfile', () => {
     profileRepository,
     universityRepository,
   );
+
+  const users = seedDefinedNumberOfUsers(10);
 
   const countries = seedDefinedNumberOfCountries(
     10,
@@ -38,14 +42,17 @@ describe('UpdateProfile', () => {
     profileRepository.reset();
     universityRepository.reset();
     countryRepository.reset();
+
     countryRepository.init(countries);
     universityRepository.init(universities);
   });
 
   it('should update a profile', async () => {
+    const user = users[0];
+
     const instance = new Profile({
       id: 'uuid-1',
-      email: 'jane.doe@mail.com',
+      user: user,
       firstname: 'Jane',
       lastname: 'Doe',
       birthdate: new Date('1988-01-01'),
@@ -53,6 +60,15 @@ describe('UpdateProfile', () => {
       gender: 'FEMALE',
       university: universities[0],
       nationality: countries[0],
+      nativeLanguage: {
+        id: 'uuid-1',
+        code: 'FR',
+      },
+      learningLanguage: {
+        id: 'uuid-2',
+        code: 'EN',
+        proficiencyLevel: LanguageLevel.B2,
+      },
       goals: [Goal.ORAL_PRACTICE],
       meetingFrequency: MeetingFrequency.ONCE_A_WEEK,
       bios: 'Lorem ipsum dolor sit amet',
@@ -88,12 +104,11 @@ describe('UpdateProfile', () => {
 
   it('should throw an error if the university does not exist', async () => {
     try {
-      profileRepository.init(
-        seedDefinedNumberOfProfiles(1, (x: number) => `uuid-${x}`),
-      );
+      const profiles = seedDefinedUsersProfiles(users);
+      profileRepository.init(profiles);
 
       await updateProfileUsecase.execute({
-        id: 'uuid-1',
+        id: profiles[0].id,
         university: 'uuid-that-does-not-exist',
         goals: [Goal.PREPARE_TRAVEL_ABROAD],
         meetingFrequency: MeetingFrequency.TWICE_A_WEEK,

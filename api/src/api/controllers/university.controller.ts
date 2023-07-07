@@ -10,6 +10,7 @@ import {
   ParseUUIDPipe,
   Query,
   Logger,
+  SerializeOptions,
 } from '@nestjs/common';
 import * as Swagger from '@nestjs/swagger';
 import { UpdateUniversityUsecase } from '../../core/usecases/universities/update-university.usecase';
@@ -54,6 +55,7 @@ export class UniversityController {
   }
 
   @Get(':id')
+  @SerializeOptions({ groups: ['read', 'university:read'] })
   @Swagger.ApiOperation({ summary: 'Retrieve a University ressource.' })
   @Swagger.ApiOkResponse({ type: UniversityResponse })
   @Swagger.ApiNotFoundResponse({ description: 'Resource not found' })
@@ -66,6 +68,7 @@ export class UniversityController {
   }
 
   @Post()
+  @SerializeOptions({ groups: ['read', 'university:read'] })
   @Swagger.ApiOperation({ summary: 'Creates a University ressource.' })
   @Swagger.ApiCreatedResponse({ type: UniversityResponse })
   async create(
@@ -77,6 +80,7 @@ export class UniversityController {
   }
 
   @Patch(':id')
+  @SerializeOptions({ groups: ['read', 'university:read'] })
   @Swagger.ApiOperation({ summary: 'Updates a University ressource.' })
   @Swagger.ApiCreatedResponse({ type: UniversityResponse })
   async update(
