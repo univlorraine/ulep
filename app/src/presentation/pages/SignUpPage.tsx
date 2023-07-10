@@ -5,7 +5,7 @@ const SignUpPage: React.FC = () => {
     return (
         <IonPage>
             <IonHeader>
-                <ProgressBar color="#FDEE66" percentage={5} />
+                <ProgressBar color="#FDEE66" percentage={13} />
             </IonHeader>
         </IonPage>
     );
