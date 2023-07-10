@@ -7,7 +7,11 @@ import CircleAvatar from '../CircleAvatar';
 import TextInput from '../TextInput';
 import style from './Form.module.css';
 
-const LoginForm = () => {
+interface LoginFormProps {
+    goBack: () => void;
+}
+
+const LoginForm: React.FC<LoginFormProps> = ({goBack}) => {
     const { t } = useTranslation();
     const { loginUsecase } = useConfig();
     const history = useHistory();
@@ -31,7 +35,7 @@ const LoginForm = () => {
     return (
         <div className="container">
             <IonHeader className="ion-no-border">
-                <IonButton fill="clear" onClick={() => history.goBack()}>
+                <IonButton fill="clear" onClick={goBack}>
                     <img alt="goBack" src="/assets/left-chevron.svg" />
                 </IonButton>
             </IonHeader>
