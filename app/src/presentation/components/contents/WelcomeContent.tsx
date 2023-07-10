@@ -1,6 +1,7 @@
 import { IonContent } from '@ionic/react';
+import { useEffect, useState } from 'react';
 import useWindowDimensions from '../../hooks/useWindowDimensions';
-import { HYBRID_MAX_WIDTH } from '../../utils';
+import { BACKGROUND_HYBRID_STYLE_INLINE, BACKGROUND_WEB_STYLE_INLINE, HYBRID_MAX_WIDTH } from '../../utils';
 import style from './WelcomeContent.module.css';
 
 interface HomeTheme {
@@ -21,16 +22,25 @@ interface WelcomeContentProps {
 }
 
 const WelcomeContent: React.FC<WelcomeContentProps> = ({ onPress }) => {
-    const currentTheme = themes[Math.floor(Math.random() * themes.length)];
+    const [currentTheme, setCurrentTheme] = useState<HomeTheme>(themes[0]);
     const { width } = useWindowDimensions();
     const isHybrid = width < HYBRID_MAX_WIDTH;
-    const backgroundStyle = {
-        backgroundColor: currentTheme.color,
-        backgroundImage: `url('/assets/backgrounds/${currentTheme.background}.png')`,
-        backgroundPosition: isHybrid ? '-100px top' : 'right top', // Negative position for "outside box" effect
-        backgroundRepeat: 'no-repeat',
-        backgroundSize: isHybrid ? '150%' : '100%', // Increase size on mobile for "outside box" effect
-    };
+
+    useEffect(() => {
+        setCurrentTheme(themes[Math.floor(Math.random() * themes.length)]);
+    }, []);
+
+    const backgroundStyle = isHybrid
+        ? {
+              backgroundImage: `url('/assets/backgrounds/${currentTheme.background}.png')`,
+              backgroundColor: currentTheme.color,
+              ...BACKGROUND_HYBRID_STYLE_INLINE,
+          }
+        : {
+              backgroundImage: `url('/assets/backgrounds/${currentTheme.background}.png')`,
+              backgroundColor: currentTheme.color,
+              ...BACKGROUND_WEB_STYLE_INLINE,
+          };
     //TODO: Add mising logo on the top
     return (
         <IonContent>

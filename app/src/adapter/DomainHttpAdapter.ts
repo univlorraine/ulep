@@ -1,13 +1,13 @@
 import BaseHttpAdapter, { Body } from './BaseHttpAdapter';
 
-export interface DomainHttpAdapterInterface {
+export interface HttpAdapterInterface {
     get: (path: string, args?: RequestInit) => Promise<Response>;
     post: (path: string, body: Body, args?: RequestInit, contentType?: string) => Promise<Response>;
     put: (path: string, body: Body, args?: RequestInit) => Promise<Response>;
     delete: (path: string, args?: RequestInit) => Promise<Response>;
 }
 
-class DomainHttpAdapter extends BaseHttpAdapter implements DomainHttpAdapterInterface {
+class DomainHttpAdapter extends BaseHttpAdapter implements HttpAdapterInterface {
     accessToken: string = '';
 
     apiUrl: string = '';

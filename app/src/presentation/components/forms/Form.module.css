@@ -5,21 +5,15 @@
     margin-top: auto;
 }
 
-.forgot {
-    color: #000;
-    text-align: center;
-    font-family: 'Roboto', sans-serif;
-    font-style: normal;
-    font-size: 16px;
-    font-weight: 700;
-    line-height: normal;
-    text-decoration-line: underline;
-    text-transform: uppercase;
+.form-container {
+    display: flex;
+    flex-direction: column;
 }
 
 .icons {
     background-color: #f8f9fa;
     height: 70px;
+    margin-top: 20px;
     width: 70px;
 }
 
@@ -51,6 +45,10 @@
 }
 
 @media (min-width: 768px) {
+    .icons {
+        margin-top: 88px;
+    }
+
     .main-content {
         padding: 0 60px;
     }

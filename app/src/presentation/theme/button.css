@@ -12,6 +12,18 @@
     width: 100%;
 }
 
+.secondary-button {
+    color: #000;
+    text-align: center;
+    font-family: 'Roboto', sans-serif;
+    font-style: normal;
+    font-size: 16px;
+    font-weight: 700;
+    line-height: normal;
+    text-decoration-line: underline;
+    text-transform: uppercase;
+}
+
 ion-button.confirm {
     --background: #000;
     --background-focused: #000;

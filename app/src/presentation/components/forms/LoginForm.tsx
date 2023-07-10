@@ -1,21 +1,17 @@
-import {
-    IonButton,
-    IonContent,
-    IonHeader,
-    IonInput,
-    IonLabel,
-    IonRouterLink,
-    useIonLoading,
-    useIonToast,
-} from '@ionic/react';
+import { IonButton, IonContent, IonHeader, IonRouterLink, useIonLoading, useIonToast } from '@ionic/react';
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useHistory } from 'react-router';
 import { useConfig } from '../../../context/ConfigurationContext';
 import CircleAvatar from '../CircleAvatar';
+import TextInput from '../TextInput';
 import style from './Form.module.css';
 
-const LoginForm = () => {
+interface LoginFormProps {
+    goBack: () => void;
+}
+
+const LoginForm: React.FC<LoginFormProps> = ({goBack}) => {
     const { t } = useTranslation();
     const { loginUsecase } = useConfig();
     const history = useHistory();
@@ -39,7 +35,7 @@ const LoginForm = () => {
     return (
         <div className="container">
             <IonHeader className="ion-no-border">
-                <IonButton fill="clear" onClick={() => history.goBack()}>
+                <IonButton fill="clear" onClick={goBack}>
                     <img alt="goBack" src="/assets/left-chevron.svg" />
                 </IonButton>
             </IonHeader>
@@ -57,36 +53,12 @@ const LoginForm = () => {
                     <div className="ion-text-center">
                         <p className={style.subtitle}>{t('login_page.subtitle')}</p>
                     </div>
-                    <IonLabel className="input-label" position="stacked">
-                        {t('global.email')}
-                    </IonLabel>
-                    <IonInput
-                        label=""
-                        className="text small-margin-top large-margin-bottom"
-                        errorText={t('login_page.invalid_email') || ''}
-                        name="email"
-                        onIonChange={(e) => setEmail((e.detail.value as string) ?? '')}
-                        type="email"
-                        value={email}
-                        required
-                    ></IonInput>
-                    <IonLabel className="input-label" position="stacked">
-                        {t('global.password')}
-                    </IonLabel>
-                    <IonInput
-                        label=""
-                        className="text small-margin-top"
-                        errorText={t('login_page.invalid_password') || ''}
-                        name="password"
-                        onIonChange={(e) => setPassword((e.detail.value as string) ?? '')}
-                        type="password"
-                        value={password}
-                        required
-                    ></IonInput>
+                    <TextInput onChange={setEmail} title={t('global.email')} type="email" value={email} />
+                    <TextInput onChange={setPassword} title={t('global.password')} type="password" value={password} />
                     <div className={style['bottom-container']}>
                         <button className="primary-button">{t('login_page.button')}</button>
 
-                        <IonRouterLink className={`${style['forgot']} large-margin-top`} routerLink="/forgot-password">
+                        <IonRouterLink className="secondary-button large-margin-top" routerLink="/forgot-password">
                             {t('login_page.forgot')}
                         </IonRouterLink>
                     </div>
