@@ -12,6 +12,7 @@ model User {
   id                    String              @id
   email                 String              @unique
   profile               Profile?
+  reports               Report[]
 
   @@map("users")
 }
@@ -115,6 +116,27 @@ model MediaObject {
   createdAt             DateTime            @default(now())
   profile               Profile             @relation(fields: [profileId], references: [id], onDelete: Cascade)
   profileId             String              @unique
+}
+
+model Report {
+  id                    String              @id @default(uuid())
+  content               String
+  categoryId            String
+  userId                String
+  category              ReportCategory      @relation(fields: [categoryId], references: [id])
+  user                  User                @relation(fields: [userId], references: [id])
+  createdAt             DateTime            @default(now())
+  updatedAt             DateTime            @updatedAt
+
+  @@map("reports")
+}
+
+model ReportCategory {
+  id                    String              @id @default(uuid())
+  name                  String              @unique
+  reports               Report[]            // Category to Reports relation, one category can have many reports
+
+  @@map("report_categories")
 }
 
 enum Role {

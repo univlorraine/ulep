@@ -26,6 +26,15 @@ import { KeycloakAuthenticator } from './services/authentication/authenticator';
 import { GetMatchsByProfileIdUsecase } from './usecases/matchs/GetMatchsByProfileId';
 import { GetLanguageUsecase } from './usecases/languages/get-language.usecase';
 import { GetCountryUsecase } from './usecases/countries/get-country.usecase';
+import {
+  CreateReportCategoryUsecase,
+  CreateReportUsecase,
+  DeleteReportUsecase,
+  GetReportCategoriesUsecase,
+  GetReportUsecase,
+  GetReportsUsecase,
+} from './usecases/reports';
+import { DeleteReportCategoryUsecase } from './usecases/reports/delete-category.usecase';
 
 const usecases: Provider[] = [
   // Countries
@@ -45,6 +54,14 @@ const usecases: Provider[] = [
   CreateProfileUsecase,
   UpdateProfileUsecase,
   DeleteProfileUsecase,
+  // Reports
+  CreateReportUsecase,
+  CreateReportCategoryUsecase,
+  DeleteReportUsecase,
+  DeleteReportCategoryUsecase,
+  GetReportsUsecase,
+  GetReportUsecase,
+  GetReportCategoriesUsecase,
   // Universities
   GetUniversitiesUsecase,
   GetUniversityUsecase,

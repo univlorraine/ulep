@@ -14,7 +14,9 @@
       "name": "API",
       "clientAuthenticatorType": "client-secret",
       "secret": "bN49BuApmmtAODeOWOG8iKOOuJdN3KE6",
-      "bearerOnly": true
+      "bearerOnly": false,
+      "standardFlowEnabled": false,
+      "directAccessGrantsEnabled": true
     },
     {
       "clientId": "react-admin",

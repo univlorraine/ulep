@@ -1,7 +1,9 @@
 import { Controller, Get, Res } from '@nestjs/common';
+import * as Swagger from '@nestjs/swagger';
 import { GetProfilesUsecase } from 'src/core/usecases/profiles/get-profiles.usecase';
 
 @Controller('export')
+@Swagger.ApiExcludeController()
 export class ExportController {
   constructor(private readonly getProfilesUsecase: GetProfilesUsecase) {}
 

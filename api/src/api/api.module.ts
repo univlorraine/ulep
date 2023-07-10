@@ -12,6 +12,8 @@ import { RolesGuard } from './guards/roles.guard';
 import { UploadsController } from './controllers/uploads.controller';
 import { MatchController } from './controllers/match.controller';
 import { ExportController } from './controllers/export.controller';
+import { ReportController } from './controllers/report.controller';
+import { ReportCategoriesController } from './controllers/report-categories.controller';
 
 @Module({
   imports: [CoreModule, TerminusModule],
@@ -22,6 +24,8 @@ import { ExportController } from './controllers/export.controller';
     LanguageController,
     MatchController,
     ProfileController,
+    ReportController,
+    ReportCategoriesController,
     SecurityController,
     UniversityController,
     UploadsController,
