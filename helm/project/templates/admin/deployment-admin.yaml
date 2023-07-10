@@ -29,14 +29,6 @@ spec:
       serviceAccountName: {{ include "etandem.serviceAccountName" . }}
       securityContext:
         {{- toYaml .Values.podSecurityContext | nindent 8 }}
-      # initContainers:
-      # - name: wait-for-database
-      #   image: actions/pg_isready
-      #   command: ["/bin/bash","-c"]
-      #   args: ["set -x; while [ $(pg_isready -d $DB_NAME -h $HOST_NAME -p $DB_PORT -U $DB_USER -q; echo $?) -ne 0 ]; do sleep 5; done"]          
-      #   env:
-      #     - name: REACT_APP_API_URL
-      #       value: "https://{{ .Values. }}"
       containers:
         - name: {{ .Chart.Name }}
           securityContext:
@@ -60,6 +52,12 @@ spec:
           env:
             - name: REACT_APP_API_URL
               value: "https://{{ .Values.api.name }}.{{ .Values.domain }}"
+            - name: REACT_APP_KEYCLOAK_URL
+              value: "https://{{ .Values.auth.name }}.{{ .Values.domain }}"
+            - name: REACT_APP_KEYCLOAK_REALM
+              value: "{{ .Values.api.env.keycloakRealm }}"
+            - name: REACT_APP_KEYCLOAK_CLIENT_ID
+              value: "react-admin"
           envFrom: 
             - secretRef: 
                 name: "{{ include "etandem.fullname" . }}-secret-{{ .Values.admin.name }}"

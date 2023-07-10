@@ -8,9 +8,9 @@ spec:
   type: {{ .Values.admin.service.type }}
   ports:
     - port: {{ .Values.admin.service.port }}
-      targetPort: direct
+      targetPort: http
       protocol: TCP
-      name: direct
+      name: http
   selector:
     app.kubernetes.io/name: "{{ include "etandem.name" . }}-{{ .Values.admin.name }}"
     app.kubernetes.io/instance: "{{ .Release.Name }}"

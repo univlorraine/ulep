@@ -67,10 +67,10 @@ spec:
             - secretRef: 
                 name: "{{ include "etandem.fullname" . }}-secret-{{ .Values.minio.name }}"
           volumeMounts:
-          - name: "{{ .Values.database.name }}-data"
+          - name: "{{ .Values.minio.name }}-data"
             mountPath: /data
       volumes:
-      - name: "{{ .Values.database.name }}-data"
+      - name: "{{ .Values.minio.name }}-data"
         persistentVolumeClaim:
           claimName:  "{{ include "etandem.name" . }}-pvc-{{ .Values.minio.name }}"
       {{- with .Values.nodeSelector }}
