@@ -14,7 +14,7 @@ const getConfigContextValue = (
     const keycloakHttpAdapter = new KeycloakHttpAdapter(import.meta.env.VITE_KEYCLOAK_URL ?? '', accessToken);
 
     const loginUsecase = new LoginUsecase(domainHttpAdapter, setTokens);
-    const resetPasswordUsecase = new ResetPasswordUsecase(keycloakHttpAdapter);
+    const resetPasswordUsecase = new ResetPasswordUsecase(domainHttpAdapter);
     return {
         loginUsecase,
         resetPasswordUsecase,

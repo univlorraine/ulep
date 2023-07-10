@@ -3,13 +3,13 @@ import { HttpAdapterInterface } from '../../adapter/DomainHttpAdapter';
 import ResetPasswordUsecaseInterface from '../interfaces/ResetPasswordUsecase.interface';
 
 class ResetPasswordUsecase implements ResetPasswordUsecaseInterface {
-    constructor(private readonly keycloakHttpAdapter: HttpAdapterInterface) {}
+    constructor(private readonly domainHttpAdapter: HttpAdapterInterface) {}
 
     async execute(id: string, password: string): Promise<void | Error> {
         try {
-            const httpRepsonse: HttpResponse<any> = await this.keycloakHttpAdapter.put(
-                `/admin/realms/etandem/users/${id}/reset-password`,
-                { temporary: false, type: 'password', value: password }
+            const httpRepsonse: HttpResponse<any> = await this.domainHttpAdapter.put(
+                `/users/${id}/reset-password`,
+                { password }
             );
 
             if (!httpRepsonse.parsedBody) {
