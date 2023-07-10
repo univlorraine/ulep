@@ -1,0 +1,108 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name:  "{{ include "etandem-weblate.fullname" . }}-{{ .Values.weblate.name }}"
+  labels:
+    {{- include "etandem-weblate.labels" . | nindent 4 }}
+spec:
+  {{- if not .Values.weblate.autoscaling.enabled }}
+  replicas: {{ .Values.weblate.replicaCount }}
+  {{- end }}
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: "{{ include "etandem-weblate.name" . }}-{{ .Values.weblate.name }}"
+      app.kubernetes.io/instance: "{{ .Release.Name }}"
+  template:
+    metadata:
+      {{- with .Values.podAnnotations }}
+      annotations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      labels:
+        app.kubernetes.io/name: "{{ include "etandem-weblate.name" . }}-{{ .Values.weblate.name }}"
+        app.kubernetes.io/instance: "{{ .Release.Name }}"
+    spec:
+      {{- with .Values.imagePullSecrets }}
+      imagePullSecrets:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      serviceAccountName: {{ include "etandem-weblate.serviceAccountName" . }}
+      securityContext:
+        {{- toYaml .Values.podSecurityContext | nindent 8 }}
+      initContainers:
+        - name: volume-mount-hack
+          image: busybox
+          command: ["sh", "-c", "chown -R 1000:1000 /app/data"]
+          volumeMounts:
+          - name: "{{ .Values.weblate.name }}-data"
+            mountPath: /app/data
+      containers:
+        - name: {{ .Chart.Name }}
+          securityContext:
+            {{- toYaml .Values.securityContext | nindent 12 }}
+          image: "{{ .Values.weblate.image.repository }}:{{ .Values.weblate.image.tag }}"
+          imagePullPolicy: {{ .Values.weblate.image.pullPolicy }}
+          ports:
+            - name: http
+              containerPort: 8080
+              protocol: TCP
+          # livenessProbe:
+          #   httpGet:
+          #     path: /minio/health/live
+          #     port: https
+          #   initialDelaySeconds: 30
+          # readinessProbe:
+          #   httpGet:
+          #     path: /minio/health/live
+          #     port: https
+          #   initialDelaySeconds: 30
+          #   periodSeconds: 60
+          resources:
+            {{- toYaml .Values.resources | nindent 12 }}
+          env:
+            - name: WEBLATE_SITE_DOMAIN
+              value: "{{ .Values.weblate.env.site }}.{{ .Values.domain }}"
+            - name: WEBLATE_EMAIL_HOST
+              value: "{{ .Values.weblate.env.emailHost }}"
+            - name: WEBLATE_EMAIL_PORT
+              value: "{{ .Values.weblate.env.emailPort }}"
+            - name: WEBLATE_ALLOWED_HOSTS
+              value: "{{ .Values.weblate.env.allowedHost }}"
+            - name: WEBLATE_SERVER_EMAIL
+              value: "{{ .Values.weblate.env.serverEmail }}"
+            - name: WEBLATE_DEFAULT_FROM_EMAIL
+              value: "{{ .Values.weblate.env.defaultFromEmail }}"
+            - name: WEBLATE_ADMIN_EMAIL
+              value: "{{ .Values.weblate.env.adminEmail }}"
+            - name: POSTGRES_DATABASE
+              value: "{{ .Values.postgresDB }}"
+            - name: POSTGRES_USER
+              value: "{{ .Values.postgresUser }}"
+            - name: POSTGRES_PORT
+              value: "{{ .Values.database.service.port }}"
+            - name: POSTGRES_HOST
+              value: "{{ include "etandem-weblate.fullname" . }}-{{ .Values.database.name }}.etandem"
+            - name: REDIS_HOST
+              value: "{{ include "etandem-weblate.fullname" . }}-{{ .Values.redis.name }}.etandem"
+          envFrom: 
+            - secretRef: 
+                name: "{{ include "etandem-weblate.fullname" . }}-secret-{{ .Values.weblate.name }}"
+          volumeMounts:
+          - name: "{{ .Values.weblate.name }}-data"
+            mountPath: /app/data
+      volumes:
+      - name: "{{ .Values.weblate.name }}-data"
+        persistentVolumeClaim:
+          claimName:  "{{ include "etandem-weblate.name" . }}-pvc-{{ .Values.weblate.name }}"
+      {{- with .Values.nodeSelector }}
+      nodeSelector:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.affinity }}
+      affinity:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.tolerations }}
+      tolerations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}

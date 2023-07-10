@@ -1,0 +1,123 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name:  "{{ include "etandem.fullname" . }}-{{ .Values.auth.name }}"
+  labels:
+    {{- include "etandem.labels" . | nindent 4 }}
+spec:
+  {{- if not .Values.auth.autoscaling.enabled }}
+  replicas: {{ .Values.auth.replicaCount }}
+  {{- end }}
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: "{{ include "etandem.name" . }}-{{ .Values.auth.name }}"
+      app.kubernetes.io/instance: "{{ .Release.Name }}"
+  template:
+    metadata:
+      {{- with .Values.podAnnotations }}
+      annotations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      labels:
+        app.kubernetes.io/name: "{{ include "etandem.name" . }}-{{ .Values.auth.name }}"
+        app.kubernetes.io/instance: "{{ .Release.Name }}"
+    spec:
+      {{- with .Values.imagePullSecrets }}
+      imagePullSecrets:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      serviceAccountName: {{ include "etandem.serviceAccountName" . }}
+      securityContext:
+        {{- toYaml .Values.podSecurityContext | nindent 8 }}
+      initContainers:
+        - name: wait-for-database
+          image: actions/pg_isready
+          command: ["/bin/bash","-c"]
+          args: ["set -x; while [ $(pg_isready -d $DB_NAME -h $HOST_NAME -p $DB_PORT -U $DB_USER -q; echo $?) -ne 0 ]; do sleep 5; done"]          
+          env:
+            - name: DB_NAME
+              value: "{{ .Values.global.postgresql.auth.database }}"
+            - name: HOST_NAME
+              value: "{{ include "etandem.name" . }}-postgresql.{{ include "etandem.name" . }}"
+            - name: DB_PORT
+              value: "{{ .Values.database.service.port }}"
+            - name: DB_USER
+              value: "{{ .Values.global.postgresql.auth.username }}"
+      containers:
+        - name: {{ .Chart.Name }}
+          securityContext:
+            {{- toYaml .Values.securityContext | nindent 12 }}
+          image: "{{ .Values.auth.image.repository }}:{{ .Values.auth.image.tag | default .Chart.AppVersion }}"
+          imagePullPolicy: {{ .Values.auth.image.pullPolicy }}
+          args:
+            - start-dev
+            - --proxy
+            - edge
+            - --health-enabled
+            - 'true'
+            - --import-realm
+          ports:
+            - name: http
+              containerPort: 8080
+              protocol: TCP
+            - name: https
+              containerPort: 8443
+              protocol: TCP
+            - name: admin
+              containerPort: 9990
+              protocol: TCP
+          # livenessProbe:
+          #   httpGet:
+          #     path: /health/ready
+          #     port: http
+          #   initialDelaySeconds: 90
+          # readinessProbe:
+          #   httpGet:
+          #     path: /health/ready
+          #     port: http
+          #   periodSeconds: 30
+          #   initialDelaySeconds: 90
+          resources:
+            {{- toYaml .Values.resources | nindent 12 }}
+          env:
+            - name: KEYCLOAK_ADMIN
+              value: "{{ .Values.auth.env.keycloackAdmin }}"
+            - name: KC_DB
+              value: "{{ .Values.auth.env.kcDB }}"
+            - name: KC_DB_USERNAME
+              value: "{{ .Values.global.postgresql.auth.username }}"
+            - name: KC_DB_URL
+              value: "jdbc:postgresql://{{ include "etandem.name" . }}-postgresql.{{ include "etandem.name" . }}:{{ .Values.database.service.port }}/{{ .Values.global.postgresql.auth.database }}"
+            - name: KC_DB_SCHEMA
+              value: "{{ .Values.auth.env.kcDBSchema }}"
+            - name: PROXY_ADDRESS_FORWARDING
+              value: "{{ .Values.auth.env.proxyAddressForwarding }}"
+            - name: KEYCLOAK_HOSTNAME
+              value: "{{ .Values.auth.env.keycloakHostname }}.{{ .Values.domain }}"
+          envFrom: 
+            - secretRef: 
+                name: "{{ include "etandem.fullname" . }}-secret-{{ .Values.auth.name }}"
+          volumeMounts:
+          - name: "{{ .Values.auth.name }}-realm"
+            mountPath: /opt/keycloak/data/import
+          - name: "{{ .Values.auth.name }}-providers"
+            mountPath: /opt/keycloak/providers
+      volumes:
+      - name: "{{ .Values.auth.name }}-realm"
+        configMap:
+          name: "{{ include "etandem.name" . }}-realm-{{ .Values.admin.name }}"
+      - name: "{{ .Values.auth.name }}-providers"
+        configMap:
+          name: "{{ include "etandem.name" . }}-providers-{{ .Values.admin.name }}"
+      {{- with .Values.nodeSelector }}
+      nodeSelector:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.affinity }}
+      affinity:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.tolerations }}
+      tolerations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}

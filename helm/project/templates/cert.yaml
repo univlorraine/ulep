@@ -1,0 +1,47 @@
+apiVersion: cert-manager.io/v1
+kind: Certificate
+metadata:
+  name: "{{ .Values.name }}"
+spec:
+  dnsNames:
+  - "{{ .Values.api.name }}.{{ .Values.domain }}"
+  issuerRef:
+    name: {{ .Values.issuerName }}
+    kind: ClusterIssuer
+  secretName: "{{ .Values.api.tls.secretName }}"
+
+apiVersion: cert-manager.io/v1
+kind: Certificate
+metadata:
+  name: "{{ .Values.name }}"
+spec:
+  dnsNames:
+  - "{{ .Values.admin.name }}.{{ .Values.domain }}"
+  issuerRef:
+    name: {{ .Values.issuerName }}
+    kind: ClusterIssuer
+  secretName: "{{ .Values.admin.tls.secretName }}"
+
+  apiVersion: cert-manager.io/v1
+kind: Certificate
+metadata:
+  name: "{{ .Values.name }}"
+spec:
+  dnsNames:
+  - "{{ .Values.auth.name }}.{{ .Values.domain }}"
+  issuerRef:
+    name: {{ .Values.issuerName }}
+    kind: ClusterIssuer
+  secretName: "{{ .Values.auth.tls.secretName }}"
+
+  apiVersion: cert-manager.io/v1
+kind: Certificate
+metadata:
+  name: "{{ .Values.name }}"
+spec:
+  dnsNames:
+  - "{{ .Values.minio.name }}.{{ .Values.domain }}"
+  issuerRef:
+    name: {{ .Values.issuerName }}
+    kind: ClusterIssuer
+  secretName: "{{ .Values.minio.tls.secretName }}"

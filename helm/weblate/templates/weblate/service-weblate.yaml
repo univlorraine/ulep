@@ -1,0 +1,16 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: "{{ include "etandem-weblate.fullname" . }}-{{ .Values.weblate.name }}"
+  labels:
+    {{- include "etandem-weblate.labels" . | nindent 4 }}
+spec:
+  type: {{ .Values.weblate.service.type }}
+  ports:
+    - port: {{ .Values.weblate.service.port }}
+      targetPort: http
+      protocol: TCP
+      name: http
+  selector:
+    app.kubernetes.io/name: "{{ include "etandem-weblate.name" . }}-{{ .Values.weblate.name }}"
+    app.kubernetes.io/instance: "{{ .Release.Name }}"

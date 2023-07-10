@@ -1,0 +1,14 @@
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: "{{ include "etandem-weblate.fullname" . }}-pvc-{{ .Values.weblate.name }}"
+  annotations:
+    "helm.sh/resource-policy": keep
+spec:
+  # volumeMode: Block
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: "{{ .Values.weblate.pv.storage }}"
+  storageClassName: "{{ .Values.weblate.pv.storageClassName }}"
