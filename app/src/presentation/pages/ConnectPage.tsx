@@ -8,7 +8,7 @@ const ConnectPage: React.FC = () => {
         <IonPage>
             <ConnexionContent
                 onLoginPressed={() => history.push('/login')}
-                onSignUpPressed={() => history.push('/login')}
+                onSignUpPressed={() => history.push('/signup')}
             />
         </IonPage>
     );
