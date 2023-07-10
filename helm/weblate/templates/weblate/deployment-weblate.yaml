@@ -61,7 +61,7 @@ spec:
             {{- toYaml .Values.resources | nindent 12 }}
           env:
             - name: WEBLATE_SITE_DOMAIN
-              value: "{{ .Values.weblate.env.siteDomain }}"
+              value: "{{ .Values.weblate.env.site }}.{{ .Values.domain }}"
             - name: WEBLATE_EMAIL_HOST
               value: "{{ .Values.weblate.env.emailHost }}"
             - name: WEBLATE_EMAIL_PORT
