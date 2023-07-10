@@ -19,7 +19,7 @@ const HomePage: React.FC = () => {
                     rightComponent={
                         <ConnexionContent
                             onLoginPressed={() => history.push('/login')}
-                            onSignUpPressed={() => history.push('/login')}
+                            onSignUpPressed={() => history.push('/signup')}
                         />
                     }
                 />
