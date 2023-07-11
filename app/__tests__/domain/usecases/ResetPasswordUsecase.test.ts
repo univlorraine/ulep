@@ -19,10 +19,8 @@ describe('ResetPasswordUsecase', () => {
         adapter.mockJson({ parsedBody: {} });
         await usecase.execute('id', 'password');
         expect(adapter.put).toHaveBeenCalledTimes(1);
-        expect(adapter.put).toHaveBeenCalledWith('/admin/realms/etandem/users/id/reset-password', {
-            temporary: false,
-            type: 'password',
-            value: 'password',
+        expect(adapter.put).toHaveBeenCalledWith('/users/id/reset-password', {
+            password: 'password',
         });
     });
 

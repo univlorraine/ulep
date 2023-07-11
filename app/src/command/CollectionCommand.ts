@@ -1,4 +1,4 @@
-interface CollectionCommand<T> {
+export interface CollectionCommand<T> {
     items: T[];
     totalItems: number;
 }

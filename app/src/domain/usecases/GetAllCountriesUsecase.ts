@@ -1,5 +1,6 @@
 import { HttpResponse } from '../../adapter/BaseHttpAdapter';
 import { HttpAdapterInterface } from '../../adapter/DomainHttpAdapter';
+import { CollectionCommand } from '../../command/CollectionCommand';
 import CountryCommand, { countryCommandToDomain } from '../../command/CountryCommand';
 import Country from '../entities/Country';
 import GetAllCountriesUsecaseInterface from '../interfaces/GetAllCountriesUsecase.interface';

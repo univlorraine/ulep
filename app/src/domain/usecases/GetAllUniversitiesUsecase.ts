@@ -1,5 +1,6 @@
 import { HttpResponse } from '../../adapter/BaseHttpAdapter';
 import { HttpAdapterInterface } from '../../adapter/DomainHttpAdapter';
+import { CollectionCommand } from '../../command/CollectionCommand';
 import UniversityCommand, { universityCommandToDomain } from '../../command/UniversityCommand';
 import University from '../entities/University';
 import GetAllUniversitiesUsecaseInterface from '../interfaces/GetAllUniversitiesUsecase.interface';
