@@ -81,9 +81,9 @@ spec:
             - name: POSTGRES_PORT
               value: "{{ .Values.database.service.port }}"
             - name: POSTGRES_HOST
-              value: "{{ include "etandem-weblate.fullname" . }}-{{ .Values.database.name }}.etandem"
+              value: "{{ include "etandem-weblate.fullname" . }}-{{ .Values.database.name }}.{{ include "etandem-weblate.fullname" . }}"
             - name: REDIS_HOST
-              value: "{{ include "etandem-weblate.fullname" . }}-{{ .Values.redis.name }}.etandem"
+              value: "{{ include "etandem-weblate.fullname" . }}-{{ .Values.redis.name }}.{{ include "etandem-weblate.fullname" . }}"
           envFrom: 
             - secretRef: 
                 name: "{{ include "etandem-weblate.fullname" . }}-secret-{{ .Values.weblate.name }}"

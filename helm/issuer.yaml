@@ -6,10 +6,10 @@ metadata:
 spec:
   acme:
     server: https://acme-v02.api.letsencrypt.org/directory
-    email: ""
+    email: "nathan.payre@thetribe.io"
     privateKeySecretRef:
       name: letsencrypt
     solvers:
     - http01:
         ingress:
-          class: nginx
+          class: traefik
