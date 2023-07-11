@@ -11,6 +11,7 @@
     justify-content: space-between;
     line-height: 20px;
     width: 100%;
+    z-index: 99;
 }
 
 .container {
@@ -37,6 +38,7 @@
     overflow: auto;
     position: absolute;
     width: 100%;
+    z-index: 100;
 }
 
 .submenu {

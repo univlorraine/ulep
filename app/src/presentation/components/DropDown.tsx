@@ -1,25 +1,25 @@
 import React, { useState } from 'react';
 import styles from './DropDown.module.css';
 
-interface DropDownItem {
+export interface DropDownItem<T> {
     title: string;
-    value: any;
+    value: T;
 }
 
 interface DropdownProps {
     onChange: (value: any) => void;
-    options: DropDownItem[];
+    options: DropDownItem<any>[];
     placeholder?: string | null;
     title?: string | null;
 }
 
 const Dropdown: React.FC<DropdownProps> = ({ onChange, options, placeholder, title }) => {
     const [isOpen, setIsOpen] = useState<boolean>(false);
-    const [selectedOption, setSelectedOption] = useState<DropDownItem | undefined>(
+    const [selectedOption, setSelectedOption] = useState<DropDownItem<any> | undefined>(
         !placeholder ? options[0] : undefined
     );
 
-    const handleOptionClick = (item: DropDownItem) => {
+    const handleOptionClick = (item: DropDownItem<any>) => {
         setSelectedOption(item);
         onChange(item.value);
         setIsOpen(false);

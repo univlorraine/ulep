@@ -1,5 +1,6 @@
 import DomainHttpAdapter from '../adapter/DomainHttpAdapter';
 import KeycloakHttpAdapter from '../adapter/KeycloakHttpAdapter';
+import GetAllCountriesUsecase from '../domain/usecases/GetAllCountriesUsecase';
 import LoginUsecase from '../domain/usecases/LoginUsecase';
 import ResetPasswordUsecase from '../domain/usecases/ResetPasswordUsecase';
 import { ConfigContextValueType } from './configurationContextTypes';
@@ -13,9 +14,11 @@ const getConfigContextValue = (
     const domainHttpAdapter = new DomainHttpAdapter(import.meta.env.VITE_API_URL ?? '', accessToken);
     const keycloakHttpAdapter = new KeycloakHttpAdapter(import.meta.env.VITE_KEYCLOAK_URL ?? '', accessToken);
 
+    const getAllCountries = new GetAllCountriesUsecase(domainHttpAdapter);
     const loginUsecase = new LoginUsecase(domainHttpAdapter, setTokens);
     const resetPasswordUsecase = new ResetPasswordUsecase(domainHttpAdapter);
     return {
+        getAllCountries,
         loginUsecase,
         resetPasswordUsecase,
     };

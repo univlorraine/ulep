@@ -1,9 +1,11 @@
-import { IonContent, IonPage } from '@ionic/react';
-import { useState } from 'react';
+import { IonContent, IonPage, useIonToast } from '@ionic/react';
+import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useHistory } from 'react-router';
+import { useConfig } from '../../context/ConfigurationContext';
+import Country from '../../domain/entities/Country';
 import roles from '../../domain/entities/roles';
-import Dropdown from '../components/DropDown';
+import Dropdown, { DropDownItem } from '../components/DropDown';
 import Header from '../components/Header';
 import RadioButton from '../components/RadioButton';
 import TextInput from '../components/TextInput';
@@ -11,13 +13,30 @@ import styles from './SignUpPage.module.css';
 
 const SignUpPage: React.FC = () => {
     const { t } = useTranslation();
+    const { getAllCountries } = useConfig();
+    const [showToast] = useIonToast();
     const history = useHistory();
-    const [country, setCountry] = useState<string>('');
+    const [countries, setCountries] = useState<DropDownItem<Country>[]>([]);
+    const [country, setCountry] = useState<Country>();
     const [department, setDepartment] = useState<string>('');
     const [diplome, setDiplome] = useState<string>('');
     const [selectedRole, setSelectedRole] = useState<roles>();
     const [staffFunction, setStaffFunction] = useState<string>('');
     const [university, setUniversity] = useState<string>('');
+
+    const getSignUpData = async () => {
+        const result = await getAllCountries.execute();
+
+        if (result instanceof Error) {
+            return await showToast({ message: t(result.message), duration: 1000 });
+        }
+
+        return setCountries(result.map((country) => ({ title: country.name, value: country })));
+    };
+
+    useEffect(() => {
+        getSignUpData();
+    }, []);
 
     return (
         <IonPage>
@@ -41,7 +60,7 @@ const SignUpPage: React.FC = () => {
 
                     <Dropdown
                         onChange={setCountry}
-                        options={[{ title: 'a', value: 'a' }]}
+                        options={countries}
                         placeholder={t('signup_page.country_placeholder')}
                         title={t('global.country')}
                     />
