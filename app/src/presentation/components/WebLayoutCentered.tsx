@@ -20,7 +20,7 @@ const WebLayoutCentered: React.FC<WebLayoutCenteredProps> = ({ children }) => {
                         src="public/assets/backgrounds/background-yellow.png"
                     />
                 )}
-                {children}
+                <div className="page">{children}</div>
             </IonContent>
         </IonPage>
     );

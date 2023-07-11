@@ -69,78 +69,70 @@ const SignUpPage: React.FC = () => {
 
     return (
         <WebLayoutCentered>
-            <div className={styles.page}>
-                <div className={styles.container}>
-                    <Header progressColor="#FDEE66" progressPercentage={12} title={t('global.create_account_title')} />
-                    <div className={styles.body}>
-                        <div>
-                            <h1 className={styles.title}>{t('signup_page.title')}</h1>
+            <div className={styles.container}>
+                <Header progressColor="#FDEE66" progressPercentage={12} title={t('global.create_account_title')} />
+                <div className={styles.body}>
+                    <h1 className={styles.title}>{t('signup_page.title')}</h1>
 
-                            <h2 className={styles.subtitle}>{t('signup_page.profile_title')}</h2>
+                    <h2 className={styles.subtitle}>{t('signup_page.profile_title')}</h2>
 
-                            <RadioButton
-                                isSelected={selectedRole === 'STUDENT'}
-                                onPressed={() => setSelectedRole('STUDENT')}
-                                name={t('signup_page.student_role')}
-                            />
-                            <RadioButton
-                                isSelected={selectedRole === 'STAFF'}
-                                onPressed={() => setSelectedRole('STAFF')}
-                                name={t('signup_page.staff_role')}
-                            />
+                    <RadioButton
+                        isSelected={selectedRole === 'STUDENT'}
+                        onPressed={() => setSelectedRole('STUDENT')}
+                        name={t('signup_page.student_role')}
+                    />
+                    <RadioButton
+                        isSelected={selectedRole === 'STAFF'}
+                        onPressed={() => setSelectedRole('STAFF')}
+                        name={t('signup_page.staff_role')}
+                    />
 
-                            <Dropdown
-                                onChange={setCountry}
-                                options={countries}
-                                placeholder={t('signup_page.country_placeholder')}
-                                title={t('global.country')}
-                            />
+                    <Dropdown
+                        onChange={setCountry}
+                        options={countries}
+                        placeholder={t('signup_page.country_placeholder')}
+                        title={t('global.country')}
+                    />
 
-                            <Dropdown
-                                onChange={setUniversity}
-                                options={universities}
-                                title={t('signup_page.university_title')}
-                            />
+                    <Dropdown
+                        onChange={setUniversity}
+                        options={universities}
+                        title={t('signup_page.university_title')}
+                    />
 
-                            {selectedRole !== 'STAFF' && (
-                                <button className="tertiary-button large-margin-top" onClick={() => null}>
-                                    {t('signup_page.sso_button')}
-                                </button>
-                            )}
+                    {selectedRole !== 'STAFF' && (
+                        <button className="tertiary-button large-margin-top" onClick={() => null}>
+                            {t('signup_page.sso_button')}
+                        </button>
+                    )}
 
-                            {selectedRole === 'STUDENT' && <div className={styles.separator} />}
+                    {selectedRole === 'STUDENT' && <div className={styles.separator} />}
 
-                            {selectedRole && (
-                                <TextInput
-                                    onChange={setDepartment}
-                                    title={t('signup_page.department_title')}
-                                    value={department}
-                                />
-                            )}
+                    {selectedRole && (
+                        <TextInput
+                            onChange={setDepartment}
+                            title={t('signup_page.department_title')}
+                            value={department}
+                        />
+                    )}
 
-                            {selectedRole === 'STAFF' && (
-                                <TextInput
-                                    onChange={setStaffFunction}
-                                    title={t('signup_page.function_title')}
-                                    value={staffFunction}
-                                />
-                            )}
+                    {selectedRole === 'STAFF' && (
+                        <TextInput
+                            onChange={setStaffFunction}
+                            title={t('signup_page.function_title')}
+                            value={staffFunction}
+                        />
+                    )}
 
-                            {selectedRole === 'STUDENT' && (
-                                <TextInput
-                                    onChange={setDiplome}
-                                    title={t('signup_page.diplome_title')}
-                                    value={diplome}
-                                />
-                            )}
-                        </div>
-                        {displayError && <ErrorMessage description={t('signup_page.error')} />}
-                        <div>
-                            {!selectedRole && <p className={styles.information}>{t('signup_page.footer')}</p>}
-                            <button className="primary-button large-margin-bottom" onClick={continueSignUp}>
-                                {t('signup_page.validate_button')}
-                            </button>
-                        </div>
+                    {selectedRole === 'STUDENT' && (
+                        <TextInput onChange={setDiplome} title={t('signup_page.diplome_title')} value={diplome} />
+                    )}
+                    {displayError && <ErrorMessage description={t('signup_page.error')} />}
+                    <div className={styles['bottom-container']}>
+                        {!selectedRole && <p className={styles.information}>{t('signup_page.footer')}</p>}
+                        <button className="primary-button large-margin-bottom" onClick={continueSignUp}>
+                            {t('signup_page.validate_button')}
+                        </button>
                     </div>
                 </div>
             </div>
