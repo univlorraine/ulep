@@ -16,7 +16,7 @@ interface DropdownProps {
 const Dropdown: React.FC<DropdownProps> = ({ onChange, options, placeholder, title }) => {
     const [isOpen, setIsOpen] = useState<boolean>(false);
     const [selectedOption, setSelectedOption] = useState<DropDownItem<any> | undefined>(
-        !placeholder ? options[0] : undefined
+        placeholder === undefined ? options[0] : undefined
     );
 
     const handleOptionClick = (item: DropDownItem<any>) => {

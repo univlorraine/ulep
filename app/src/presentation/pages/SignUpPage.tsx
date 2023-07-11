@@ -4,6 +4,7 @@ import { useTranslation } from 'react-i18next';
 import { useHistory } from 'react-router';
 import { useConfig } from '../../context/ConfigurationContext';
 import Country from '../../domain/entities/Country';
+import University from '../../domain/entities/University';
 import roles from '../../domain/entities/roles';
 import Dropdown, { DropDownItem } from '../components/DropDown';
 import Header from '../components/Header';
@@ -13,7 +14,7 @@ import styles from './SignUpPage.module.css';
 
 const SignUpPage: React.FC = () => {
     const { t } = useTranslation();
-    const { getAllCountries } = useConfig();
+    const { getAllCountries, getAllUniversities } = useConfig();
     const [showToast] = useIonToast();
     const history = useHistory();
     const [countries, setCountries] = useState<DropDownItem<Country>[]>([]);
@@ -22,16 +23,26 @@ const SignUpPage: React.FC = () => {
     const [diplome, setDiplome] = useState<string>('');
     const [selectedRole, setSelectedRole] = useState<roles>();
     const [staffFunction, setStaffFunction] = useState<string>('');
+    const [universities, setUniversities] = useState<DropDownItem<University>[]>([]);
     const [university, setUniversity] = useState<string>('');
 
     const getSignUpData = async () => {
-        const result = await getAllCountries.execute();
+        const [countriesResult, universityResult] = await Promise.all([
+            getAllCountries.execute(),
+            getAllUniversities.execute(),
+        ]);
 
-        if (result instanceof Error) {
-            return await showToast({ message: t(result.message), duration: 1000 });
+        if (countriesResult instanceof Error) {
+            return await showToast({ message: t(countriesResult.message), duration: 1000 });
         }
 
-        return setCountries(result.map((country) => ({ title: country.name, value: country })));
+        if (universityResult instanceof Error) {
+            return await showToast({ message: t(universityResult.message), duration: 1000 });
+        }
+
+        setCountries(countriesResult.map((country) => ({ title: country.name, value: country })));
+
+        return setUniversities(universityResult.map((university) => ({ title: university.name, value: university })));
     };
 
     useEffect(() => {
@@ -67,7 +78,7 @@ const SignUpPage: React.FC = () => {
 
                     <Dropdown
                         onChange={setUniversity}
-                        options={[{ title: 'a', value: 'a' }]}
+                        options={universities}
                         title={t('signup_page.university_title')}
                     />
 
