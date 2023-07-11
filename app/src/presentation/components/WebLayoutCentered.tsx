@@ -12,7 +12,7 @@ const WebLayoutCentered: React.FC<WebLayoutCenteredProps> = ({ children }) => {
     const isHybrid = width < HYBRID_MAX_WIDTH;
     return (
         <IonPage>
-            <IonContent>
+            <IonContent className="ion-background-yellow">
                 {!isHybrid && (
                     <img
                         alt="background"

@@ -9,6 +9,10 @@
     background-color: white;
 }
 
+.ion-background-yellow {
+    --ion-background-color: #fdee66;
+}
+
 .background-image {
     position: absolute;
     transform: rotate(-60deg) scale(1.4) translateY(-10px) translateX(100px);

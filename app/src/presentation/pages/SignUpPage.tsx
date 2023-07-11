@@ -69,7 +69,7 @@ const SignUpPage: React.FC = () => {
 
     return (
         <WebLayoutCentered>
-            <div className={styles['page']}>
+            <div className={styles.page}>
                 <div className={styles.container}>
                     <Header progressColor="#FDEE66" progressPercentage={12} title={t('global.create_account_title')} />
                     <div className={styles.body}>
