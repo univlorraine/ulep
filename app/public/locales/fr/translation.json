@@ -18,6 +18,7 @@
         "title": "Consulte tes emails"
     },
     "global": {
+        "country": "Pays",
         "create_account_title": "Création de compte",
         "email": "Email",
         "password": "Mot de passe"
@@ -45,7 +46,17 @@
         "title": "Nouveau mot de passe"
     },
     "signup_page": {
-        "staff_role": "Étudiant·e",
-        "student_role": "Personnel de l'université"
+        "country_placeholder": "Sélectionne un pays dans la liste",
+        "department_title": "Département",
+        "diplome_title": "Diplôme",
+        "fonction_title": "Fonction",
+        "footer": "Votre université n'est pas encore partenaire de l'Université de Lorraine ? Contactez-nous à email@contact.fr",
+        "profile_title": "Mon profil",
+        "sso_button": "M’authentifier",
+        "staff_role": "Personnel de l'université",
+        "student_role": "Étudiant·e",
+        "title": "Mon profil",
+        "university_title": "Établissement",
+        "validate_button": "valider et continuer"
     }
 }

@@ -15,6 +15,7 @@
 .separator {
     background-color: black;
     height: 1px;
+    margin: 20px 0px;
     width: 100%;
 }
 

@@ -42,3 +42,12 @@
 .submenu {
     padding: 5px;
 }
+
+.title {
+    color: #000;
+    font-family: 'Maven Pro', sans-serif;
+    font-size: 16px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: 20px;
+}
