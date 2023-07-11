@@ -9,6 +9,12 @@
     background-color: white;
 }
 
+.background-image {
+    position: absolute;
+    transform: rotate(-60deg) scale(1.4) translateY(-10px) translateX(100px);
+    z-index: 0;
+}
+
 .container {
     display: flex;
     align-items: center;

@@ -31,7 +31,7 @@ const Dropdown: React.FC<DropdownProps> = ({ onChange, options, placeholder, tit
             <div className={styles.container}>
                 <button className={styles.button} onClick={() => setIsOpen(!isOpen)}>
                     {selectedOption ? selectedOption.title : placeholder}
-                    <img alt="arrow-down" src="/public/assets/arrow-down.svg" />
+                    <img alt="arrow-down" src="/assets/arrow-down.svg" />
                 </button>
                 {isOpen && (
                     <div className={styles.menu}>

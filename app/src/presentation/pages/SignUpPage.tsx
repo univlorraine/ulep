@@ -10,13 +10,17 @@ import Dropdown, { DropDownItem } from '../components/DropDown';
 import Header from '../components/Header';
 import RadioButton from '../components/RadioButton';
 import TextInput from '../components/TextInput';
-import styles from './SignUpPage.module.css';
+import useWindowDimensions from '../hooks/useWindowDimensions';
+import { HYBRID_MAX_WIDTH } from '../utils';
+import styles from './css/SignUpPage.module.css';
 
 const SignUpPage: React.FC = () => {
     const { t } = useTranslation();
     const { getAllCountries, getAllUniversities } = useConfig();
     const [showToast] = useIonToast();
     const history = useHistory();
+    const { width } = useWindowDimensions();
+    const isHybrid = width < HYBRID_MAX_WIDTH;
     const [countries, setCountries] = useState<DropDownItem<Country>[]>([]);
     const [country, setCountry] = useState<Country>();
     const [department, setDepartment] = useState<string>('');
@@ -51,69 +55,91 @@ const SignUpPage: React.FC = () => {
 
     return (
         <IonPage>
-            <Header progressColor="#FDEE66" progressPercentage={12} title={t('global.create_account_title')} />
             <IonContent>
-                <div className={styles.container}>
-                    <h1 className={styles.title}>{t('signup_page.title')}</h1>
-
-                    <h2 className={styles.subtitle}>{t('signup_page.profile_title')}</h2>
-
-                    <RadioButton
-                        isSelected={selectedRole === 'STUDENT'}
-                        onPressed={() => setSelectedRole('STUDENT')}
-                        name={t('signup_page.student_role')}
+                {!isHybrid && (
+                    <img
+                        alt="background"
+                        className="background-image"
+                        src="public/assets/backgrounds/background-yellow.png"
                     />
-                    <RadioButton
-                        isSelected={selectedRole === 'STAFF'}
-                        onPressed={() => setSelectedRole('STAFF')}
-                        name={t('signup_page.staff_role')}
-                    />
-
-                    <Dropdown
-                        onChange={setCountry}
-                        options={countries}
-                        placeholder={t('signup_page.country_placeholder')}
-                        title={t('global.country')}
-                    />
-
-                    <Dropdown
-                        onChange={setUniversity}
-                        options={universities}
-                        title={t('signup_page.university_title')}
-                    />
-
-                    {selectedRole !== 'STAFF' && (
-                        <button className="tertiary-button large-margin-top" onClick={() => null}>
-                            {t('signup_page.sso_button')}
-                        </button>
-                    )}
-
-                    {selectedRole === 'STUDENT' && <div className={styles.separator} />}
-
-                    {selectedRole && (
-                        <TextInput
-                            onChange={setDepartment}
-                            title={t('signup_page.department_title')}
-                            value={department}
+                )}
+                <div className={styles['page']}>
+                    <div className={styles.container}>
+                        <Header
+                            progressColor="#FDEE66"
+                            progressPercentage={12}
+                            title={t('global.create_account_title')}
                         />
-                    )}
+                        <div className={styles.body}>
+                            <div>
+                                <h1 className={styles.title}>{t('signup_page.title')}</h1>
 
-                    {selectedRole === 'STAFF' && (
-                        <TextInput
-                            onChange={setStaffFunction}
-                            title={t('signup_page.function_title')}
-                            value={staffFunction}
-                        />
-                    )}
+                                <h2 className={styles.subtitle}>{t('signup_page.profile_title')}</h2>
 
-                    {selectedRole === 'STUDENT' && (
-                        <TextInput onChange={setDiplome} title={t('signup_page.diplome_title')} value={diplome} />
-                    )}
+                                <RadioButton
+                                    isSelected={selectedRole === 'STUDENT'}
+                                    onPressed={() => setSelectedRole('STUDENT')}
+                                    name={t('signup_page.student_role')}
+                                />
+                                <RadioButton
+                                    isSelected={selectedRole === 'STAFF'}
+                                    onPressed={() => setSelectedRole('STAFF')}
+                                    name={t('signup_page.staff_role')}
+                                />
 
-                    {!selectedRole && <p className={styles.information}>{t('signup_page.footer')}</p>}
-                    <button className="primary-button large-margin-bottom" onClick={() => null}>
-                        {t('signup_page.validate_button')}
-                    </button>
+                                <Dropdown
+                                    onChange={setCountry}
+                                    options={countries}
+                                    placeholder={t('signup_page.country_placeholder')}
+                                    title={t('global.country')}
+                                />
+
+                                <Dropdown
+                                    onChange={setUniversity}
+                                    options={universities}
+                                    title={t('signup_page.university_title')}
+                                />
+
+                                {selectedRole !== 'STAFF' && (
+                                    <button className="tertiary-button large-margin-top" onClick={() => null}>
+                                        {t('signup_page.sso_button')}
+                                    </button>
+                                )}
+
+                                {selectedRole === 'STUDENT' && <div className={styles.separator} />}
+
+                                {selectedRole && (
+                                    <TextInput
+                                        onChange={setDepartment}
+                                        title={t('signup_page.department_title')}
+                                        value={department}
+                                    />
+                                )}
+
+                                {selectedRole === 'STAFF' && (
+                                    <TextInput
+                                        onChange={setStaffFunction}
+                                        title={t('signup_page.function_title')}
+                                        value={staffFunction}
+                                    />
+                                )}
+
+                                {selectedRole === 'STUDENT' && (
+                                    <TextInput
+                                        onChange={setDiplome}
+                                        title={t('signup_page.diplome_title')}
+                                        value={diplome}
+                                    />
+                                )}
+                            </div>
+                            <div>
+                            {!selectedRole && <p className={styles.information}>{t('signup_page.footer')}</p>}
+                            <button className="primary-button large-margin-bottom" onClick={() => null}>
+                                {t('signup_page.validate_button')}
+                            </button>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </IonContent>
         </IonPage>
