@@ -23,7 +23,6 @@ import { UserContext } from '../decorators/user-context.decorator';
 import { AuthenticationGuard } from '../guards/authentication.guard';
 import { ProfileResponse } from '../dtos/profiles/profile.response';
 import { CreateProfileRequest } from '../dtos/profiles/create-profile.request';
-import { PaginationDto } from '../dtos/pagination.dto';
 import { Collection } from '../../shared/types/collection';
 import { CollectionResponse } from '../decorators/collection.decorator';
 import {
@@ -32,7 +31,9 @@ import {
 } from '../../core/usecases/profiles/update-profile.usecase';
 import { UpdateProfileRequest } from '../dtos/profiles/update-profile.request';
 import { DeleteProfileUsecase } from '../../core/usecases/profiles/delete-profile.usecase';
-import { User } from 'src/core/models/user';
+import { User, UserRole } from 'src/core/models/user';
+import { ProfileQueryFilter } from '../dtos/profiles/profiles-filters';
+import { Roles } from '../decorators/roles.decorator';
 
 @Controller('profiles')
 @Swagger.ApiTags('Profiles')
@@ -48,20 +49,19 @@ export class ProfileController {
   ) {}
 
   @Get()
-  // @UseGuards(AuthenticationGuard)
+  @Roles([UserRole.USER])
   @Swagger.ApiOperation({
     summary: 'Retrieve the collection of Profile ressource.',
   })
   @CollectionResponse(ProfileResponse)
   async getCollection(
-    @Query() { page, limit }: PaginationDto,
-    @Query('lastname') lastname?: string,
+    @Query() { page, limit, email }: ProfileQueryFilter,
   ): Promise<Collection<ProfileResponse>> {
     const profiles = await this.getProfilesUsecase.execute({
       page: page,
       limit: limit,
-      filters: {
-        lastname: lastname ? { contains: lastname } : undefined,
+      email: {
+        equals: email,
       },
     });
 

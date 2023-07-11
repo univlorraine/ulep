@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, Logger } from '@nestjs/common';
 import { PrismaService } from '../prisma.service';
 import {
   ProfileFilters,
@@ -67,10 +67,14 @@ export class PrismaProfileRepository implements ProfileRepository {
   async findAll(
     offset?: number,
     limit?: number,
-    where?: { lastname?: StringFilter },
+    where?: { email?: StringFilter },
   ): Promise<Collection<Profile>> {
     const count = await this.prisma.profile.count({
-      where: { ...where },
+      where: {
+        user: {
+          email: where?.email,
+        },
+      },
     });
 
     // If skip is out of range, return an empty array
@@ -79,7 +83,11 @@ export class PrismaProfileRepository implements ProfileRepository {
     }
 
     const items = await this.prisma.profile.findMany({
-      where: { ...where },
+      where: {
+        user: {
+          email: where?.email,
+        },
+      },
       skip: offset,
       take: limit,
       include: this._include,

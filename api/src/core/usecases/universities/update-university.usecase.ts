@@ -24,12 +24,12 @@ export class UpdateUniversityUsecase {
       throw UniversityDoesNotExist.withIdOf(command.id);
     }
 
-    const university = await this.universityRepository.ofName(command.name);
-    if (university && university.id !== command.id) {
-      throw new ConflictException({ message: 'Field name must be unique' });
-    }
-
     if (command.name) {
+      const university = await this.universityRepository.ofName(command.name);
+      if (university && university.id !== command.id) {
+        throw new ConflictException({ message: 'Field name must be unique' });
+      }
+
       instance.name = command.name;
     }
 

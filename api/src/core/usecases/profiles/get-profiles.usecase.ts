@@ -6,7 +6,7 @@ import { StringFilter } from 'src/shared/types/filters';
 export class GetProfilesCommand {
   page: number;
   limit: number;
-  filters?: { lastname?: StringFilter };
+  email?: StringFilter;
 }
 
 @Injectable()
@@ -19,11 +19,9 @@ export class GetProfilesUsecase {
   async execute(command: GetProfilesCommand) {
     const { page, limit } = command;
     const offset = (page - 1) * limit;
-    const result = await this.profileRepository.findAll(
-      offset,
-      limit,
-      command.filters,
-    );
+    const result = await this.profileRepository.findAll(offset, limit, {
+      email: command.email,
+    });
 
     return result;
   }

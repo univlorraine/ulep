@@ -22,10 +22,14 @@ export class AuthenticationGuard implements CanActivate {
       throw new UnauthorizedException();
     }
 
-    const user = await this.authenticator.authenticate(token);
-    request['user'] = user;
+    try {
+      const user = await this.authenticator.authenticate(token);
+      request['user'] = user;
 
-    return true;
+      return true;
+    } catch (error) {
+      throw new UnauthorizedException();
+    }
   }
 
   private extractTokenFromHeader(request: Request): string | undefined {

@@ -1,6 +1,6 @@
 /* eslint-disable prettier/prettier */
 import { Injectable } from '@nestjs/common';
-import { CEFRLevel, Profile } from '../../models/profile';
+import { Profile } from '../../models/profile';
 import { MatchScores } from 'src/core/models/match';
 
 export type Coeficients = {
@@ -13,8 +13,6 @@ export type Coeficients = {
   university: number;
 };
 
-const LEVELS_COUNT = 6;
-
 @Injectable()
 export class MatchService {
 
@@ -26,26 +24,6 @@ export class MatchService {
     interests: 0.05,
     gender: 0.05,
     university: 0.05,
-  };
-
-  languageLevelMatrix: { [key: string]: { [key: string]: number } } = {
-    A0: { A0: 0, A1: 1, A2: 1, B1: 2, B2: 2, C1: 2, C2: 2 },
-    A1: { A0: 1, A1: 2, A2: 2, B1: 3, B2: 3, C1: 3, C2: 3 },
-    A2: { A0: 1, A1: 2, A2: 2, B1: 4, B2: 4, C1: 4, C2: 4 },
-    B1: { A0: 2, A1: 3, A2: 4, B1: 5, B2: 5, C1: 5, C2: 5 },
-    B2: { A0: 2, A1: 3, A2: 4, B1: 5, B2: 5, C1: 5, C2: 5 },
-    C1: { A0: 2, A1: 3, A2: 4, B1: 5, B2: 5, C1: 5, C2: 5 },
-    C2: { A0: 2, A1: 3, A2: 4, B1: 5, B2: 5, C1: 5, C2: 5 },
-  };
-
-  discoveryLanguageLevelMatrix: { [key: string]: { [key: string]: number } } = {
-    A0: { A0: 0, A1: 2, A2: 2, B1: 5, B2: 5, C1: 5, C2: 5 },
-    A1: { A0: 2, A1: 2, A2: 2, B1: 5, B2: 5, C1: 5, C2: 5 },
-    A2: { A0: 2, A1: 2, A2: 5, B1: 5, B2: 5, C1: 5, C2: 5 },
-    B1: { A0: 6, A1: 6, A2: 5, B1: 4, B2: 4, C1: 4, C2: 4 },
-    B2: { A0: 6, A1: 6, A2: 5, B1: 4, B2: 4, C1: 4, C2: 4 },
-    C1: { A0: 6, A1: 6, A2: 5, B1: 4, B2: 4, C1: 4, C2: 4 },
-    C2: { A0: 6, A1: 6, A2: 5, B1: 4, B2: 4, C1: 4, C2: 4 },
   };
 
   public set coeficients(coeficients: Coeficients) {
@@ -72,11 +50,35 @@ export class MatchService {
     return { level, age, status, goals, interests, gender, university };
   }
 
-  private computeLanguageLevel(profile1: Profile, profile2: Profile) {
+  private computeLanguageLevel(profile1: Profile, profile2: Profile, isDiscovery = false): number {
+    const levelsCount = isDiscovery ? 6 : 5;
+
+    const languageLevelMatrix: { [key: string]: { [key: string]: number } } = {
+      A0: { A0: 0, A1: 1, A2: 1, B1: 2, B2: 2, C1: 2, C2: 2 },
+      A1: { A0: 1, A1: 2, A2: 2, B1: 3, B2: 3, C1: 3, C2: 3 },
+      A2: { A0: 1, A1: 2, A2: 2, B1: 4, B2: 4, C1: 4, C2: 4 },
+      B1: { A0: 2, A1: 3, A2: 4, B1: 5, B2: 5, C1: 5, C2: 5 },
+      B2: { A0: 2, A1: 3, A2: 4, B1: 5, B2: 5, C1: 5, C2: 5 },
+      C1: { A0: 2, A1: 3, A2: 4, B1: 5, B2: 5, C1: 5, C2: 5 },
+      C2: { A0: 2, A1: 3, A2: 4, B1: 5, B2: 5, C1: 5, C2: 5 },
+    };
+
+    const discoveryLanguageLevelMatrix: { [key: string]: { [key: string]: number } } = {
+      A0: { A0: 0, A1: 2, A2: 2, B1: 5, B2: 5, C1: 5, C2: 5 },
+      A1: { A0: 2, A1: 2, A2: 2, B1: 5, B2: 5, C1: 5, C2: 5 },
+      A2: { A0: 2, A1: 2, A2: 5, B1: 5, B2: 5, C1: 5, C2: 5 },
+      B1: { A0: 6, A1: 6, A2: 5, B1: 4, B2: 4, C1: 4, C2: 4 },
+      B2: { A0: 6, A1: 6, A2: 5, B1: 4, B2: 4, C1: 4, C2: 4 },
+      C1: { A0: 6, A1: 6, A2: 5, B1: 4, B2: 4, C1: 4, C2: 4 },
+      C2: { A0: 6, A1: 6, A2: 5, B1: 4, B2: 4, C1: 4, C2: 4 },
+    };
+
     const level1 = profile1.learningLanguage.level;
     const level2 = profile2.learningLanguage.level;
 
-    return this.coeficients.level * (this.languageLevelMatrix[level1][level2] / LEVELS_COUNT);
+    const level = isDiscovery ? discoveryLanguageLevelMatrix[level1][level2] : languageLevelMatrix[level1][level2];
+
+    return this.coeficients.level * (level / levelsCount);
   }
 
   // Apply bunus if ages match criteria

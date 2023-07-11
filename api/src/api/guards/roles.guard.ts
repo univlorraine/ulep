@@ -1,4 +1,3 @@
-import { KeycloakClient, KeycloakUserInfoResponse } from '@app/keycloak';
 import {
   CanActivate,
   ExecutionContext,
@@ -8,6 +7,8 @@ import {
 } from '@nestjs/common';
 import { Reflector } from '@nestjs/core';
 import { Request } from 'express';
+import { User, UserRole } from 'src/core/models/user';
+import { KeycloakAuthenticator } from 'src/core/services/authentication/authenticator';
 
 @Injectable()
 export class RolesGuard implements CanActivate {
@@ -15,13 +16,13 @@ export class RolesGuard implements CanActivate {
 
   constructor(
     private readonly reflector: Reflector,
-    private readonly keycloak: KeycloakClient,
+    private readonly authenticator: KeycloakAuthenticator,
   ) {}
 
   async canActivate(context: ExecutionContext): Promise<boolean> {
-    const roles = this.reflector.get<string[]>('roles', context.getHandler());
+    const roles = this.reflector.get<UserRole[]>('roles', context.getHandler());
 
-    // No roles defined for this route
+    // If no roles defined for this route, authorize access
     if (!roles) {
       return true;
     }
@@ -29,18 +30,30 @@ export class RolesGuard implements CanActivate {
     const request = context.switchToHttp().getRequest();
     const token = this.extractTokenFromHeader(request);
 
+    // If no token is provided, deny access
     if (!token) {
       throw new UnauthorizedException();
     }
 
-    const user = await this.keycloak.userInfo(token);
-    request['user'] = user;
+    let user: User | undefined;
 
-    const granted = this.hasRoles(user, roles);
-    if (!granted) {
+    try {
+      user = await this.authenticator.authenticate(token);
+      // Save the user info in the request object
+      request['user'] = user;
+    } catch (_) {
+      // If an error occurred during user info retrieval, deny access
       throw new UnauthorizedException();
     }
 
+    const isUserGranted = this.hasRoles(user, roles);
+
+    // If the user does not have the required roles, deny access
+    if (!isUserGranted) {
+      throw new UnauthorizedException();
+    }
+
+    // If everything is fine, authorize access
     return true;
   }
 
@@ -49,7 +62,7 @@ export class RolesGuard implements CanActivate {
     return type === 'Bearer' ? token : undefined;
   }
 
-  private hasRoles(user: KeycloakUserInfoResponse, roles: string[]): boolean {
-    return roles.every((role) => user.realm_access.roles.includes(role));
+  private hasRoles(user: User, roles: UserRole[]): boolean {
+    return roles.every((role) => user.roles.includes(role));
   }
 }

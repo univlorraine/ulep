@@ -1,22 +1,25 @@
-import { ApiProperty } from '@nestjs/swagger';
+import { ApiPropertyOptional } from '@nestjs/swagger';
 import { Type } from 'class-transformer';
-import { IsDate, IsNotEmpty, IsString } from 'class-validator';
+import { IsDate, IsNotEmpty, IsOptional, IsString } from 'class-validator';
 import { IsAfterThan } from '../../validators/dates.validator';
 
 export class UpdateUniversityRequest {
-  @ApiProperty()
+  @ApiPropertyOptional()
   @IsString()
   @IsNotEmpty()
+  @IsOptional()
   name: string;
 
-  @ApiProperty()
+  @ApiPropertyOptional()
   @Type(() => Date)
   @IsDate()
+  @IsOptional()
   admissionStart: Date;
 
-  @ApiProperty()
+  @ApiPropertyOptional()
   @Type(() => Date)
   @IsDate()
   @IsAfterThan('admissionStart')
+  @IsOptional()
   admissionEnd: Date;
 }

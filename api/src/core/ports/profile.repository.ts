@@ -19,7 +19,7 @@ export interface ProfileRepository {
   findAll: (
     offset?: number,
     limit?: number,
-    where?: { lastname?: StringFilter },
+    where?: { email?: StringFilter },
   ) => Promise<Collection<Profile>>;
 
   delete: (profile: Profile) => Promise<void>;
