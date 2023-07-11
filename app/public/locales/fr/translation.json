@@ -21,6 +21,7 @@
         "country": "Pays",
         "create_account_title": "Création de compte",
         "email": "Email",
+        "error": "Erreur",
         "password": "Mot de passe"
     },
     "connection_page": {
@@ -49,6 +50,7 @@
         "country_placeholder": "Sélectionne un pays dans la liste",
         "department_title": "Département",
         "diplome_title": "Diplôme",
+        "error": "Vous ne pourrez pas aller plus loin dans le processus d’inscription",
         "function_title": "Fonction",
         "footer": "Votre université n'est pas encore partenaire de l'Université de Lorraine ? Contactez-nous à email@contact.fr",
         "profile_title": "Mon profil",
