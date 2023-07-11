@@ -3,8 +3,8 @@ import { useTranslation } from 'react-i18next';
 import style from './TextInput.module.css';
 
 interface TextInputProps {
-    errorMessage?: string;
-    placeholder?: string;
+    errorMessage?: string | null;
+    placeholder?: string | null;
     onChange: (text: string) => void;
     title: string;
     type?: 'password' | 'email' | 'text';
@@ -22,7 +22,7 @@ const TextInput: React.FC<TextInputProps> = ({ errorMessage, onChange, placehold
                     className={style.input}
                     name="newPassword"
                     onChange={(e) => onChange(e.target.value)}
-                    placeholder={placeholder}
+                    placeholder={placeholder ?? ''}
                     type={showPasword ? 'text' : type}
                     value={value}
                     required
@@ -33,7 +33,7 @@ const TextInput: React.FC<TextInputProps> = ({ errorMessage, onChange, placehold
                     </button>
                 )}
             </div>
-            {errorMessage && <p className={style['input-label-error']}>{t(errorMessage)}</p>}
+            {errorMessage && <p className={style['input-label-error']}>{errorMessage}</p>}
         </div>
     );
 };

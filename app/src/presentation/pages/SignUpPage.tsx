@@ -12,7 +12,7 @@ import Header from '../components/Header';
 import RadioButton from '../components/RadioButton';
 import TextInput from '../components/TextInput';
 import WebLayoutCentered from '../components/WebLayoutCentered';
-import styles from './css/SignUpPage.module.css';
+import styles from './css/SignUp.module.css';
 
 const SignUpPage: React.FC = () => {
     const { t } = useTranslation();
@@ -101,7 +101,10 @@ const SignUpPage: React.FC = () => {
                     />
 
                     {selectedRole !== 'STAFF' && (
-                        <button className="tertiary-button large-margin-top" onClick={() => null}>
+                        <button
+                            className="tertiary-button large-margin-top"
+                            onClick={() => history.push('./signup/informations')}
+                        >
                             {t('signup_page.sso_button')}
                         </button>
                     )}

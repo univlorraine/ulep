@@ -24,6 +24,7 @@
 }
 
 .secondary-button {
+    background: none;
     color: #000;
     text-align: center;
     font-family: 'Roboto', sans-serif;

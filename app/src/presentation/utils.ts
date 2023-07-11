@@ -17,3 +17,15 @@ export const isPasswordCorrect = (password: string) => {
 
     return regex.test(password);
 };
+
+export const isEmailCorrect = (email: string) => {
+    const regex = /^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/;
+
+    return regex.test(email);
+};
+
+export const isNameCorrect = (firstname: string) => {
+    const regex = /^[a-zA-Zà-ÿÀ-Ý-]+$/;
+
+    return regex.test(firstname);
+};

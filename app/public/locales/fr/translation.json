@@ -18,11 +18,18 @@
         "title": "Consulte tes emails"
     },
     "global": {
+        "age": "Âge",
+        "binary": "Non binaire",
         "country": "Pays",
         "create_account_title": "Création de compte",
         "email": "Email",
         "error": "Erreur",
-        "password": "Mot de passe"
+        "firstname": "Prénom",
+        "gender": "Genre",
+        "lastname": "Nom",
+        "men": "Masculin",
+        "password": "Mot de passe",
+        "woman": "Féminin"
     },
     "connection_page": {
         "connect_title": "As-tu déjà un compte ? ",
@@ -45,6 +52,25 @@
         "new_password_title": "Entrer un nouveau mot de passe",
         "new_password_error": "Doit contenir un chiffre, un majuscule et une minuscule",
         "title": "Nouveau mot de passe"
+    },
+    "signup_informations_page": {
+        "confirm_password": "Confirme ton mot de passe",
+        "error_age": "Veuillez saisir un âge valide",
+        "error_confirm_password": "Les mots de passes ne sont pas identiques",
+        "error_email": "Veuillez saisir un email valide",
+        "error_firstname": "Veuillez saisir un prénom valide",
+        "error_gender": "Veuillez choisir un genre",
+        "error_lastname": "Veuillez saisir un nom valide",
+        "error_password": "Veuillez saisir un mot de passe valide",
+        "photo": "Ajouter une photo",
+        "placeholder_age": "Entre ton âge",
+        "placeholder_confirm_password": "Confirme ton mot de passe",
+        "placeholder_email": "Ajoute ton email",
+        "placeholder_firstname": "Entre ton prénom ici",
+        "placeholder_name": "Entre ton nom ici",
+        "placeholder_password": "Entre ton mot de passe",
+        "title": "Créer mon profil",
+        "validate_button": "valider et continuer"
     },
     "signup_page": {
         "country_placeholder": "Sélectionne un pays dans la liste",
