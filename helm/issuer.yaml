@@ -6,7 +6,7 @@ metadata:
 spec:
   acme:
     server: https://acme-v02.api.letsencrypt.org/directory
-    email: "nathan.payre@thetribe.io"
+    email: ""
     privateKeySecretRef:
       name: letsencrypt
     solvers:
