@@ -26,8 +26,8 @@ api:
   replicaCount: 1 # OPTIONNEL
 
   image:
-    repository: "" # REQUIRED
-    tag: "" # REQUIRED
+    repository: "rg.fr-par.scw.cloud/ulep/api-dev" # REQUIRED
+    tag: "amd" # REQUIRED
     pullPolicy: Always # OPTIONNEL
 
   env:
@@ -169,8 +169,8 @@ admin:
   replicaCount: 1
 
   image:
-    repository: "" # REQUIRED
-    tag: "" # REQUIRED
+    repository: "rg.fr-par.scw.cloud/ulep/admin-dev" # REQUIRED
+    tag: "amd" # REQUIRED
     pullPolicy: IfNotPresent
 
   env: 
