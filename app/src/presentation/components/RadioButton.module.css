@@ -1,0 +1,35 @@
+.container {
+    align-items: center;
+    background: none;
+    display: flex;
+    flex-direction: row;
+    margin: 0px 0px;
+}
+
+.inner-circle {
+    border: 1px solid black;
+    border-radius: 50%;
+    height: 8px;
+    width: 8px;
+}
+
+.name {
+    color: #000;
+    font-family: 'Maven Pro', sans-serif;
+    font-size: 16px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: 2px;
+    margin-left: 10px;
+}
+
+.outer-circle {
+    align-items: center;
+    background-color: white;
+    border: 1px solid black;
+    border-radius: 50%;
+    display: flex;
+    height: 24px;
+    justify-content: center;
+    width: 24px;
+}

@@ -5,6 +5,7 @@
         "userWrongCredentials": "Le mot de passe ou l'email est incorrect"
     },
     "global": {
+        "create_account_title": "Création de compte",
         "email": "Email",
         "password": "Mot de passe"
     },
@@ -21,5 +22,10 @@
         "invalid_password": "Mot de passe invalide",
         "subtitle": "Connecte-toi avec tes identifiants de l’université pour continuer à utiliser l’application",
         "title": "Se connecter"
+    },
+
+    "signup_page": {
+        "staff_role": "Étudiant·e",
+        "student_role": "Personnel de l'université"
     }
 }
