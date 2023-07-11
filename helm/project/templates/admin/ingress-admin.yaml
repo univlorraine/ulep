@@ -1,0 +1,48 @@
+{{- if .Values.admin.ingress.enabled -}}
+{{- $svcPort := .Values.admin.service.port -}}
+{{- if semverCompare ">=1.19-0" .Capabilities.KubeVersion.GitVersion -}}
+apiVersion: networking.k8s.io/v1
+{{- else if semverCompare ">=1.14-0" .Capabilities.KubeVersion.GitVersion -}}
+apiVersion: networking.k8s.io/v1beta1
+{{- else -}}
+apiVersion: extensions/v1beta1
+{{- end }}
+kind: Ingress
+metadata:
+  name: "{{ .Values.name }}-{{ .Values.admin.name }}"
+  labels:
+    {{- include "etandem.labels" . | nindent 4 }}
+  {{- with .Values.admin.ingress.annotations }}
+  annotations:
+    {{- toYaml . | nindent 4 }}
+  {{- end }}
+spec:
+  ingressClassName: nginx
+  {{- if .Values.admin.ingress.tls }}
+  tls:
+    {{- range .Values.admin.ingress.tls }}
+    - hosts:
+        {{- range .hosts }}        
+        {{ $fqdn := printf "%s.%s" . $.Values.domain -}}
+        - {{ $fqdn }}
+        {{- end }}
+      secretName: {{ .secretName }}
+    {{- end }}
+  {{- end }}
+  rules:
+    {{- range .Values.admin.ingress.hosts }}
+    {{ $fqdn := printf "%s.%s" .host $.Values.domain -}}
+    - host: {{ $fqdn }}
+      http:
+        paths:
+        {{- range .paths }}
+          - path: {{ . | quote}}
+            pathType: Prefix
+            backend:
+              service:
+                name: "{{ $.Values.name }}-{{ $.Values.admin.name }}"
+                port:
+                  number: {{ $svcPort }}
+          {{- end }}
+      {{- end }}
+{{- end }}

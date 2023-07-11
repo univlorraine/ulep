@@ -11,11 +11,13 @@ import { ProfileController } from './controllers/profile.controller';
 import { RolesGuard } from './guards/roles.guard';
 import { UploadsController } from './controllers/uploads.controller';
 import { MatchController } from './controllers/match.controller';
+import { ExportController } from './controllers/export.controller';
 
 @Module({
   imports: [CoreModule, TerminusModule],
   controllers: [
     CountryController,
+    ExportController,
     HealthController,
     LanguageController,
     MatchController,

@@ -1,0 +1,97 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name:  "{{ include "etandem.fullname" . }}-{{ .Values.api.name }}"
+  labels:
+    {{- include "etandem.labels" . | nindent 4 }}
+spec:
+  {{- if not .Values.api.autoscaling.enabled }}
+  replicas: {{ .Values.api.replicaCount }}
+  {{- end }}
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: "{{ include "etandem.name" . }}-{{ .Values.api.name }}"
+      app.kubernetes.io/instance: "{{ .Release.Name }}"
+  template:
+    metadata:
+      {{- with .Values.podAnnotations }}
+      annotations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      labels:
+        app.kubernetes.io/name: "{{ include "etandem.name" . }}-{{ .Values.api.name }}"
+        app.kubernetes.io/instance: "{{ .Release.Name }}"
+    spec:
+      {{- with .Values.imagePullSecrets }}
+      imagePullSecrets:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      serviceAccountName: {{ include "etandem.serviceAccountName" . }}
+      securityContext:
+        {{- toYaml .Values.podSecurityContext | nindent 8 }}
+      initContainers:
+      - name: wait-for-database
+        image: actions/pg_isready
+        command: ["/bin/bash","-c"]
+        args: ["set -x; while [ $(pg_isready -d $DB_NAME -h $HOST_NAME -p $DB_PORT -U $DB_USER -q; echo $?) -ne 0 ]; do sleep 5; done"]          
+        env:
+          - name: DB_NAME
+            value: "{{ .Values.global.postgresql.auth.database }}"
+          - name: HOST_NAME
+            value: "{{ include "etandem.name" . }}-postgresql.{{ include "etandem.name" . }}"
+          - name: DB_PORT
+            value: "{{ .Values.database.service.port }}"
+          - name: DB_USER
+            value: "{{ .Values.global.postgresql.auth.username }}"
+      containers:
+        - name: {{ .Chart.Name }}
+          securityContext:
+            {{- toYaml .Values.securityContext | nindent 12 }}
+          image: "{{ .Values.api.image.repository }}:{{ .Values.api.image.tag | default .Chart.AppVersion }}"
+          imagePullPolicy: {{ .Values.api.image.pullPolicy }}
+          command: ["/bin/sh","-c"]
+          args: ["pnpm install; pnpm migrate; pnpm start:dev"]
+          ports:
+            - name: direct
+              containerPort: 3000
+              protocol: TCP
+          # livenessProbe:
+          #   httpGet:
+          #     path: /
+          #     port: http
+          # readinessProbe:
+          #   httpGet:
+          #     path: /
+          #     port: http
+          resources:
+            {{- toYaml .Values.resources | nindent 12 }}
+          env:
+            - name: ADMIN_URL
+              value: "https://{{ .Values.api.env.adminUrl }}.{{ .Values.domain }}"
+            - name: DATABASE_URL
+              value: "postgresql://{{ .Values.global.postgresql.auth.username }}:$(PGPASSWORD)@{{ include "etandem.name" . }}-postgresql.{{ include "etandem.name" . }}:{{ .Values.database.service.port }}/{{ .Values.global.postgresql.auth.database }}?schema=public"
+            - name: KEYCLOAK_BASE_URL
+              value: "https://{{ .Values.api.env.keycloakBaseUrl }}.{{ .Values.domain }}"
+            - name: KEYCLOAK_REALM
+              value: "{{ .Values.api.env.keycloakRealm }}"
+            - name: KEYCLOAK_ADMIN
+              value: "{{ .Values.api.env.keycloakAdmin }}"
+            - name: KEYCLOAK_CLIENT_ID
+              value: "{{ .Values.api.env.keycloakClientId }}"
+            - name: MINIO_URL
+              value: "https://{{ .Values.api.env.minioUrl }}.{{ .Values.domain }}"
+          envFrom: 
+            - secretRef: 
+                name: "{{ include "etandem.fullname" . }}-secret-{{ .Values.api.name }}"
+      {{- with .Values.nodeSelector }}
+      nodeSelector:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.affinity }}
+      affinity:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.tolerations }}
+      tolerations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}

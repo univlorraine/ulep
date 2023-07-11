@@ -11,6 +11,7 @@ import {
   Logger,
   Query,
   SerializeOptions,
+  Put,
 } from '@nestjs/common';
 import * as Swagger from '@nestjs/swagger';
 import { LanguageResponse } from '../dtos/languages/language.response';
@@ -24,6 +25,7 @@ import {
 import { UpdateLanguageUsecase } from '../../core/usecases/languages/update-language.usecase';
 import { CollectionResponse } from '../decorators/collection.decorator';
 import { Collection } from '../../shared/types/collection';
+import { GetLanguageUsecase } from 'src/core/usecases/languages/get-language.usecase';
 
 @Controller('languages')
 @Swagger.ApiTags('Languages')
@@ -32,6 +34,7 @@ export class LanguageController {
 
   constructor(
     private readonly getLanguagesUsecase: GetLanguagesUsecase,
+    private readonly getLanguageUsecase: GetLanguageUsecase,
     private readonly createLanguageUsecase: CreateLanguageUsecase,
     private readonly updateLanguageUsecase: UpdateLanguageUsecase,
   ) {}
@@ -55,6 +58,19 @@ export class LanguageController {
     );
   }
 
+  @Get(':id')
+  @SerializeOptions({ groups: ['read', 'language:read'] })
+  @Swagger.ApiOperation({ summary: 'Retrieve a Language ressource.' })
+  @Swagger.ApiOkResponse({ type: LanguageResponse })
+  @Swagger.ApiNotFoundResponse({ description: 'Resource not found' })
+  async getItem(
+    @Param('id', ParseUUIDPipe) id: string,
+  ): Promise<LanguageResponse> {
+    const instance = await this.getLanguageUsecase.execute({ id });
+
+    return LanguageResponse.fromDomain(instance);
+  }
+
   @Post()
   @SerializeOptions({ groups: ['read', 'language:read'] })
   @Swagger.ApiOperation({ summary: 'Creates a Language ressource.' })
@@ -71,7 +87,7 @@ export class LanguageController {
     return LanguageResponse.fromDomain(language);
   }
 
-  @Patch(':id')
+  @Put(':id')
   @SerializeOptions({ groups: ['read', 'language:read'] })
   @Swagger.ApiOperation({ summary: 'Updates a Language ressource.' })
   @Swagger.ApiCreatedResponse({ type: LanguageResponse })

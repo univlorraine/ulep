@@ -1,0 +1,243 @@
+# Default values for etandem.
+# This is a YAML-formatted file.
+# Declare variables to be passed into your templates.
+
+############## GLOBAL ##############
+
+name: "etandem" # REQUIRED
+domain: exemple.com # REQUIRED 
+issuerName: letsencrypt # REQUIRED 
+global:
+  postgresql: 
+    auth:
+      username: postgres # FIXE
+      database: postgres # FIXE
+      password: AZE123aze # REQUIRED
+      postgresPassword: AZE123aze # REQUIRED
+
+postgresql:
+  primary:
+    initdb: 
+      scriptsConfigMap: init-etandem-database # REQUIRED
+
+############## API ##############
+api:
+  name: api # REQUIRED
+  replicaCount: 1 # OPTIONNEL
+
+  image:
+    repository: "" # REQUIRED
+    tag: "" # REQUIRED
+    pullPolicy: Always # OPTIONNEL
+
+  env:
+    adminUrl: admin # FIXE 
+    keycloakBaseUrl: auth # FIXE
+    keycloakRealm: etandem # FIXE
+    keycloakAdmin: admin # REQUIRED
+    keycloakAdminPassword: AZE123aze # REQUIRED
+    keycloakClientId: api # FIXE
+    keycloakClientSecret: "" # REQUIRED 
+    minioUrl: minio # FIXE
+    minioAccessKey: "minio" # FIXE
+    minioSecretKey: AZE123aze # REQUIRED
+
+  autoscaling:
+    enabled: false
+    minReplicas: 1
+    maxReplicas: 100
+    targetCPUUtilizationPercentage: 80
+    # targetMemoryUtilizationPercentage: 80
+  service:
+    type: ClusterIP
+    port: 443
+
+  ingress:
+    enabled: true
+    className: ""
+    annotations: 
+      kubernetes.io/ingress.class: "nginx"
+      cert-manager.io/cluster-issuer: "letsencrypt"
+      kubernetes.io/tls-acme: "true"
+    hosts:
+      - host: api
+        paths: [/]
+    tls:
+      - secretName: api-etandem-tls
+        hosts:
+          - api
+############## API ##############
+
+############## AUTH ##############
+auth:
+  name: auth # REQUIRED
+  replicaCount: 1
+
+  image:
+    repository: "quay.io/keycloak/keycloak" # REQUIRED
+    tag: "21.1" # REQUIRED
+    pullPolicy: IfNotPresent
+
+  env:
+    keycloackAdmin: admin # FIXE
+    keycloackAdminPassword: AZE123aze # REQUIRED
+    kcDB: postgres # FIXE
+    kcDBSchema: keycloak # FIXE
+    keycloakHostname: auth # FIXE
+    proxyAddressForwarding: true 
+
+  realmFile: # REQUIRED (fichier json)
+
+  autoscaling:
+    enabled: false
+    minReplicas: 1
+    maxReplicas: 100
+    targetCPUUtilizationPercentage: 80
+    # targetMemoryUtilizationPercentage: 80
+  service:
+    type: ClusterIP
+    port: 443
+
+  ingress:
+    enabled: true
+    className: ""
+    annotations: 
+      kubernetes.io/ingress.class: "nginx"
+      cert-manager.io/cluster-issuer: "letsencrypt"
+      kubernetes.io/tls-acme: "true"
+    hosts:
+      - host: auth
+        paths: [/]
+    tls: 
+      - secretName: auth-etandem-tls
+        hosts:
+          - auth
+############## AUTH ##############
+
+############## MINIO ##############
+minio:
+  name: minio # FIXE
+  replicaCount: 1
+
+  image:
+    repository: "minio/minio" # REQUIRED
+    tag: "RELEASE.2023-06-02T23-17-26Z.fips" # REQUIRED
+    pullPolicy: IfNotPresent
+
+  env:
+    minioRootUser: minio # FIXE
+    minioRootPassword: AZE123aze # REQUIRED
+
+  pv:
+    storage: 40Gi
+    volumeMode: Filesystem
+    storageClassName: scw-bssd
+    csi:
+      enabled: true
+      zone: fr-par-2
+
+  autoscaling:
+    enabled: false
+    minReplicas: 1
+    maxReplicas: 100
+    targetCPUUtilizationPercentage: 80
+    # targetMemoryUtilizationPercentage: 80
+  service:
+    type: ClusterIP
+    port: 80
+
+  ingress:
+    enabled: true
+    className: ""
+    annotations:
+      kubernetes.io/ingress.class: "nginx"
+      cert-manager.io/cluster-issuer: "letsencrypt"
+      kubernetes.io/tls-acme: "true"
+
+    hosts:
+      - host: minio
+        paths: [/]
+    tls: 
+      - secretName: minio-etandem-tls
+        hosts:
+          - minio
+############## MINIO ##############
+
+############## ADMIN ##############
+admin:
+  name: admin # REQUIRED
+  replicaCount: 1
+
+  image:
+    repository: "" # REQUIRED
+    tag: "" # REQUIRED
+    pullPolicy: IfNotPresent
+
+  env: 
+    keycloakRealm: etandem # FIXE
+    keycloakClientId: react-admin # FIXE
+    keycloakClientSecret: "" # REQUIRED
+
+  autoscaling:
+    enabled: false
+    minReplicas: 1
+    maxReplicas: 100
+    targetCPUUtilizationPercentage: 80
+    # targetMemoryUtilizationPercentage: 80
+  service:
+    type: ClusterIP
+    port: 80
+
+  ingress:
+    enabled: true
+    className: ""
+    annotations:
+      kubernetes.io/ingress.class: "nginx"
+      cert-manager.io/cluster-issuer: "letsencrypt"
+      kubernetes.io/tls-acme: "true"
+
+    hosts:
+      - host: admin
+        paths: [/]
+    tls: 
+      - secretName: admin-etandem-tls 
+        hosts:
+          - admin
+############## ADMIN ##############
+
+############## INIT SPEC ##############
+
+serviceAccount:
+  # Specifies whether a service account should be created
+  create: true
+  # Annotations to add to the service account
+  annotations: {}
+  # The name of the service account to use.
+  # If not set and create is true, a name is generated using the fullname template
+  name: ""
+
+imagePullSecrets: []
+nameOverride: ""
+fullnameOverride: ""
+
+podAnnotations: {}
+
+podSecurityContext: {}
+  # fsGroup: 2000
+
+securityContext: {}
+  # capabilities:
+  #   drop:
+  #   - ALL
+  # readOnlyRootFilesystem: true
+  # runAsNonRoot: true
+  # runAsUser: 1000
+
+
+resources: {}
+
+nodeSelector: {}
+
+tolerations: []
+
+affinity: {}

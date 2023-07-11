@@ -101,6 +101,7 @@ export class UniversityController {
   @Swagger.ApiOperation({ summary: 'Deletes a University ressource.' })
   @Swagger.ApiOkResponse()
   async remove(@Param('id', ParseUUIDPipe) id: string) {
+    // TODO: throw exception if university is related to a profile
     await this.deleteUniversityUsecase.execute({ id });
   }
 }

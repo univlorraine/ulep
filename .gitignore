@@ -14,3 +14,5 @@ Thumbs.db
 !.vscode/tasks.json
 !.vscode/launch.json
 !.vscode/extensions.json
+values.yaml
+helm/project/old

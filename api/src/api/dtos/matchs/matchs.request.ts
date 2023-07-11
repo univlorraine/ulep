@@ -1,8 +1,12 @@
-import { ApiPropertyOptional } from '@nestjs/swagger';
+import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
 import { Type } from 'class-transformer';
-import { IsInt, IsOptional, Min } from 'class-validator';
+import { IsInt, IsOptional, IsUUID, Min } from 'class-validator';
 
 export class GetMatchsRequest {
+  @ApiProperty({ description: 'The profile id' })
+  @IsUUID()
+  readonly id: string;
+
   @ApiPropertyOptional({ minimum: 1, default: 5 })
   @Type(() => Number)
   @IsInt()

@@ -1,0 +1,190 @@
+# Default values for etandem.
+# This is a YAML-formatted file.
+# Declare variables to be passed into your templates.
+
+############## GLOBAL ##############
+
+name: "etandem-weblate" # REQUIRED
+domain: exemple.com # REQUIRED
+postgresDB: weblate # FIXE
+postgresUser: weblate # FIXE
+postgresPassword: "" # REQUIRED
+
+############## WEBLATE ##############
+weblate:
+  name: "weblate" # FIXE
+  replicaCount: 1
+
+  image:
+    repository: "weblate/weblate" # FIXE
+    tag: "4.18" # REQUIRED
+    pullPolicy: IfNotPresent
+
+  env:
+    siteDomain: weblate # FIXE
+    serverEmail: "" # REQUIRED
+    defaultFromEmail: "" # REQUIRED
+    emailHost: "" # REQUIRED
+    adminEmail: "" # REQUIRED
+    emailHostUser: "" # REQUIRED
+    emailHostPassword: "" # REQUIRED
+    emailPort: 587 # REQUIRED
+    allowedHost: '*' # OPTIONNEL
+    adminPassword: "" # REQUIRED
+  
+  pv:
+    storage: 5Gi # 5Gi recommandé
+    volumeMode: Filesystem
+    storageClassName: scw-bssd
+
+  autoscaling:
+    enabled: false
+    minReplicas: 1
+    maxReplicas: 100
+    targetCPUUtilizationPercentage: 80
+    # targetMemoryUtilizationPercentage: 80
+  service:
+    type: ClusterIP
+    port: 80
+
+  # FIXE
+  resources: 
+    limits:
+      cpu: "3" 
+      memory: 4000Mi
+    requests:
+      cpu: "2"
+      memory: 3000Mi
+
+  # FIXE
+  ingress:
+    enabled: true
+    # className: ""
+    annotations:
+      kubernetes.io/ingress.class: nginx
+      kubernetes.io/tls-acme: "true"
+      cert-manager.io/issuer: "letsencrypt"
+    hosts:
+      - host: weblate
+        paths: [/]
+    tls: 
+      - secretName: etendem-weblate-tls
+        hosts:
+          - weblate
+############## WEBLATE ##############
+
+
+############## DATABASE ##############
+database:
+  name: "database" # FIXE
+  replicaCount: 1
+
+  image:
+    repository: "postgres" # FIXE
+    tag: "15.3-alpine" # REQUIRED
+    pullPolicy: IfNotPresent
+
+  env: {}
+
+  pv:
+    storage: 5Gi # 5Gi recommandé
+    volumeMode: Filesystem
+    storageClassName: scw-bssd
+
+  autoscaling:
+    enabled: false
+    minReplicas: 1
+    maxReplicas: 100
+    targetCPUUtilizationPercentage: 80
+    # targetMemoryUtilizationPercentage: 80
+  service:
+    type: ClusterIP
+    port: 5432
+
+  ingress:
+    enabled: false
+    # className: ""
+    annotations: 
+      kubernetes.io/ingress.class: nginx
+      kubernetes.io/tls-acme: "true"
+    hosts:
+      - host: database
+        paths: [/]
+    # tls: 
+    #   - secretName: etendem-tls
+    #     hosts:
+    #       - database
+############## DATABASE ##############
+
+############## REDIS ##############
+redis:
+  name: "redis" # FIXE
+  replicaCount: 1
+
+  image:
+    repository: "redis" # FIXE
+    tag: "7.0" # REQUIRED
+    pullPolicy: IfNotPresent
+
+  env: {}
+
+  autoscaling:
+    enabled: false
+    minReplicas: 1
+    maxReplicas: 100
+    targetCPUUtilizationPercentage: 80
+    # targetMemoryUtilizationPercentage: 80
+
+  # FIXE
+  service:
+    type: ClusterIP
+    port: 6379
+
+  ingress:
+    enabled: false
+    # className: ""
+    annotations: 
+      kubernetes.io/ingress.class: nginx
+      kubernetes.io/tls-acme: "true"
+    hosts:
+      - host: database
+        paths: [/]
+    # tls: 
+    #   - secretName: etendem-tls
+    #     hosts:
+    #       - database
+############## DATABASE ##############
+
+############## INIT SPEC ##############
+
+
+serviceAccount:
+  # Specifies whether a service account should be created
+  create: true
+  # Annotations to add to the service account
+  annotations: {}
+  # The name of the service account to use.
+  # If not set and create is true, a name is generated using the fullname template
+  name: ""
+
+imagePullSecrets: []
+nameOverride: ""
+fullnameOverride: ""
+
+podAnnotations: {}
+
+podSecurityContext: {}
+  # fsGroup: 2000
+
+securityContext: {}
+
+resources: {}
+
+nodeSelector: {}
+
+tolerations: 
+  - key: "node.kubernetes.io/memory-pressure"
+    operator: "Exists"
+    effect: "NoSchedule"
+
+affinity: {}

@@ -1,5 +1,5 @@
 import LoginUsecase from '../../../src/domain/usecases/LoginUsecase';
-import DomainHttpAdapter from '../../mocks/adapters/DomainHttpAdapter';
+import DomainHttpAdapter from '../../mocks/adapters/HttpAdapter';
 
 describe('loginUsecase', () => {
     let adapter: DomainHttpAdapter;

@@ -5,7 +5,7 @@ const KEYCLOAK_REALM = process.env.REACT_APP_KEYCLOAK_REALM;
 const KEYCLOAK_CLIENT_ID = process.env.REACT_APP_KEYCLOAK_CLIENT_ID;
 const KEYCLOAK_CLIENT_SECRET = process.env.REACT_APP_KEYCLOAK_CLIENT_SECRET;
 
-const http = async (method: string, path: string, init: Omit<RequestInit, 'method'> = {}) => {
+export const http = async (method: string, path: string, init: Omit<RequestInit, 'method'> = {}) => {
     const response = await fetch(path, {
         ...init,
         method,

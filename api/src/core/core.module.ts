@@ -24,13 +24,17 @@ import { RefreshTokensUsecase } from './usecases/tokens/refresh-tokens.usecase';
 import { MatchService } from './services/matchs/MatchService';
 import { KeycloakAuthenticator } from './services/authentication/authenticator';
 import { GetMatchsByProfileIdUsecase } from './usecases/matchs/GetMatchsByProfileId';
+import { GetLanguageUsecase } from './usecases/languages/get-language.usecase';
+import { GetCountryUsecase } from './usecases/countries/get-country.usecase';
 
 const usecases: Provider[] = [
   // Countries
   GetCountriesUsecase,
+  GetCountryUsecase,
   // Languages
   CreateLanguageUsecase,
   GetLanguagesUsecase,
+  GetLanguageUsecase,
   UpdateLanguageUsecase,
   // Matches
   GetMatchsByProfileIdUsecase,

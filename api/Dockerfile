@@ -19,6 +19,7 @@ RUN pnpm fetch
 
 COPY --link . .
 RUN pnpm install --offline --frozen-lockfile
+RUN pnpm prisma generate
 
 # Development image
 FROM api_deps as api_dev
@@ -26,7 +27,7 @@ FROM api_deps as api_dev
 EXPOSE 3000
 ENV PORT 3000
 
-CMD ["sh", "-c", "pnpm install; pnpm start:dev"]
+CMD ["sh", "-c", "pnpm start:dev"]
 
 # Build stage
 FROM api_base AS api_builder

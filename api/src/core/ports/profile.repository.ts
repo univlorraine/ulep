@@ -1,3 +1,4 @@
+import { StringFilter } from 'src/shared/types/filters';
 import { Collection } from '../../shared/types/collection';
 import { Profile } from '../models/profile';
 
@@ -15,7 +16,11 @@ export interface ProfileRepository {
 
   save: (profile: Profile) => Promise<void>;
 
-  findAll: (offset?: number, limit?: number) => Promise<Collection<Profile>>;
+  findAll: (
+    offset?: number,
+    limit?: number,
+    where?: { lastname?: StringFilter },
+  ) => Promise<Collection<Profile>>;
 
   delete: (profile: Profile) => Promise<void>;
 }

@@ -3,53 +3,54 @@ import { Profile } from './profile';
 export type CreateMatchProps = {
   owner: Profile;
   target: Profile;
-  score: number;
+  scores: MatchScores;
+};
+
+export type MatchScores = {
+  level: number;
+  age: number;
+  status: number;
+  goals: number;
+  interests: number;
+  gender: number;
+  university: number;
 };
 
 export class Match {
   #owner: Profile;
   #target: Profile;
-  #score: number;
+  #scores: MatchScores;
+  #total: number;
 
   constructor(props: CreateMatchProps) {
-    this.#owner = props.owner;
-    this.#target = props.target;
-    this.#score = props.score;
-  }
-
-  set owner(owner: Profile) {
-    if (owner.id === this.#target.id) {
+    if (props.owner.id === props.target.id) {
       throw new Error('Owner cannot be the same as target');
     }
 
-    this.#owner = owner;
+    const total = Object.values(props.scores).reduce((a, b) => a + b, 0);
+    if (total < 0 || 1 < total) {
+      throw new Error('Score must be between 0 and 1');
+    }
+
+    this.#owner = props.owner;
+    this.#target = props.target;
+    this.#scores = props.scores;
+    this.#total = total;
   }
 
   get owner() {
     return this.#owner;
   }
 
-  set target(target: Profile) {
-    if (target.id === this.#owner.id) {
-      throw new Error('Target cannot be the same as owner');
-    }
-
-    this.#target = target;
-  }
-
   get target() {
     return this.#target;
   }
 
-  set score(score: number) {
-    if (score < 0 || 1 < score) {
-      throw new Error('Score must be between 0 and 1');
-    }
-
-    this.#score = score;
+  get scores(): MatchScores {
+    return this.#scores;
   }
 
-  get score() {
-    return this.#score;
+  get total(): number {
+    return this.#total;
   }
 }
