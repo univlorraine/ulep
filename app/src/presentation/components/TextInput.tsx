@@ -19,6 +19,7 @@ const TextInput: React.FC<TextInputProps> = ({ errorMessage, onChange, placehold
             <p className={style['input-label']}>{title}</p>
             <div className={`${style['input-wrapper']} ${errorMessage ? style['input-error'] : style['input-text']}`}>
                 <input
+                    autoComplete={'off'}
                     className={style.input}
                     name="newPassword"
                     onChange={(e) => onChange(e.target.value)}
