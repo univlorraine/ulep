@@ -17,6 +17,10 @@
     color: white;
 }
 
+.primary-button.disabled {
+    background-color: #a7a7a7;
+}
+
 .tertiary-button {
     background-color: #fff;
     border: 1px solid black;
@@ -34,6 +38,16 @@
     line-height: normal;
     text-decoration-line: underline;
     text-transform: uppercase;
+}
+
+.checkbox {
+    display: flex;
+    width: 24px;
+    height: 24px;
+    justify-content: center;
+    align-items: center;
+    flex-shrink: 0;
+    margin-right: 16px;
 }
 
 ion-button.confirm {

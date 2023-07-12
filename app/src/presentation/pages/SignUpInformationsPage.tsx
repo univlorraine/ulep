@@ -25,7 +25,19 @@ const SignUpInformationsPage: React.FC = () => {
     const [password, setPassword] = useState<string>('');
     const [confirmPassword, setConfirmPassword] = useState<string>('');
     const [profilePicture, setProfilePicture] = useState<string>();
+    const [CGUChecked, setCGUChecked] = useState<boolean>(false);
     const [errorMessage, setErrorMessage] = useState<{ type: string; message: string }>();
+
+    const allFieldHasValue = () =>
+        !email ||
+        !password ||
+        !confirmPassword ||
+        !gender ||
+        !age ||
+        !firstname ||
+        !lastname ||
+        !profilePicture ||
+        !CGUChecked;
 
     const openGallery = async () => {
         const image = await Camera.getPhoto({
@@ -167,9 +179,17 @@ const SignUpInformationsPage: React.FC = () => {
                         value={confirmPassword}
                     />
 
+                    <label className={`${styles.cgu} large-margin-vertical`}>
+                        <input className="checkbox" type="checkbox" onChange={() => setCGUChecked(!CGUChecked)} />
+                        {t('signup_informations_page.cgu')}
+                    </label>
+
                     <div className={styles['bottom-container']}>
                         <button
-                            className="primary-button small-margin-top large-margin-bottom"
+                            className={`primary-button small-margin-top large-margin-bottom ${
+                                allFieldHasValue() ? 'disabled' : ''
+                            }`}
+                            disabled={allFieldHasValue()}
                             onClick={continueSignUp}
                         >
                             {t('signup_informations_page.validate_button')}

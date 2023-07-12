@@ -55,6 +55,7 @@
     },
     "signup_informations_page": {
         "confirm_password": "Confirme ton mot de passe",
+        "cgu": "Accepter les conditions d'utilisation et la politique de confidentialité pour utiliser l'application.",
         "error_age": "Veuillez saisir un âge valide",
         "error_confirm_password": "Les mots de passes ne sont pas identiques",
         "error_email": "Veuillez saisir un email valide",
