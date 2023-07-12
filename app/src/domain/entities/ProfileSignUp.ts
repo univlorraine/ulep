@@ -1,4 +1,5 @@
 import Country from './Country';
+import Language from './Language';
 import University from './University';
 import gender from './gender';
 import roles from './roles';
@@ -20,9 +21,13 @@ class ProfileSignUp {
 
     private _lastname?: string;
 
+    private _nativeLanguage?: Language;
+
     private _password?: string;
 
     private _profilePicture?: string;
+
+    private otherLaguages?: Language[];
 
     private _role?: roles;
 
@@ -62,6 +67,14 @@ class ProfileSignUp {
 
     set lastname(lastname: string) {
         this._lastname = lastname;
+    }
+
+    set nativeLanguage(nativeLanguage: Language) {
+        this._nativeLanguage = nativeLanguage;
+    }
+
+    set otherLanguages(otherLanguages: Language[]) {
+        this.otherLaguages = otherLanguages;
     }
 
     set password(password: string) {

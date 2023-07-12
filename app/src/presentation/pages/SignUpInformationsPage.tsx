@@ -83,7 +83,7 @@ const SignUpInformationsPage: React.FC = () => {
 
         updateProfileSignUp({ firstname, lastname, gender, age, email, password, profilePicture });
 
-        //TODO: add navigate
+        return history.push('/signup/languages');
     };
 
     return (

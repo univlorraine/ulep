@@ -14,7 +14,7 @@ interface ResetPasswordFormProps {
 
 const ResetPasswordForm: React.FC<ResetPasswordFormProps> = ({ id }) => {
     const { t } = useTranslation();
-    const { resetPasswordUsecase } = useConfig();
+    const { resetPassword } = useConfig();
     const history = useHistory();
     const [newPassword, setNewPassword] = useState<string>('');
     const [newPasswordError, setNewPasswordError] = useState<string | null>('');
@@ -35,7 +35,7 @@ const ResetPasswordForm: React.FC<ResetPasswordFormProps> = ({ id }) => {
             await hideLoading();
             return setPasswordConfirmError(t('reset_password_page.confirm_password_error'));
         }
-        const result = await resetPasswordUsecase.execute(id, newPassword);
+        const result = await resetPassword.execute(id, newPassword);
         if (result instanceof Error) {
             await showToast({ message: t(result.message), duration: 5000 });
         } else {

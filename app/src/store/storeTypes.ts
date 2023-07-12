@@ -1,5 +1,6 @@
 import { Action, createTypedHooks } from 'easy-peasy';
 import Country from '../domain/entities/Country';
+import Language from '../domain/entities/Language';
 import ProfileSignUp from '../domain/entities/ProfileSignUp';
 import University from '../domain/entities/University';
 import gender from '../domain/entities/gender';
@@ -19,6 +20,8 @@ export interface SignUpStorePayload {
     firstname?: string;
     gender?: gender;
     lastname?: string;
+    nativeLanguage?: Language;
+    otherLanguages?: Language[];
     password?: string;
     profilePicture?: string;
     role?: roles;
