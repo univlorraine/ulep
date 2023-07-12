@@ -17,7 +17,7 @@ metadata:
     {{- toYaml . | nindent 4 }}
   {{- end }}
 spec:
-  ingressClassName: nginx
+  ingressClassName: traefik
   {{- if .Values.weblate.ingress.tls }}
   tls:
     {{- range .Values.weblate.ingress.tls }}
