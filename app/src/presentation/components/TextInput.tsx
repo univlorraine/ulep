@@ -1,5 +1,4 @@
 import { useState } from 'react';
-import { useTranslation } from 'react-i18next';
 import style from './TextInput.module.css';
 
 interface TextInputProps {
@@ -12,7 +11,6 @@ interface TextInputProps {
 }
 
 const TextInput: React.FC<TextInputProps> = ({ errorMessage, onChange, placeholder, title, type, value }) => {
-    const { t } = useTranslation();
     const [showPasword, setShowPassword] = useState<boolean>(false);
     return (
         <div className="large-margin-bottom">
