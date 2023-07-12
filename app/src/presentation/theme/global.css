@@ -9,6 +9,16 @@
     background-color: white;
 }
 
+.ion-background-yellow {
+    --ion-background-color: #fdee66;
+}
+
+.background-image {
+    position: absolute;
+    transform: rotate(-60deg) scale(1.4) translateY(-10px) translateX(100px);
+    z-index: 0;
+}
+
 .container {
     display: flex;
     align-items: center;
@@ -22,6 +32,24 @@
     --ion-grid-column-padding: 0;
 }
 
+.page {
+    height: 100%;
+}
+
 .yellow-background {
     background-color: #fdee66;
+}
+
+@media (min-width: 768px) {
+    .page {
+        align-items: center;
+        background-color: #fdee66; /* TODO: change this later*/
+        display: flex;
+        flex-direction: column;
+        min-height: 100vh;
+        height: auto;
+        padding-top: 64px;
+        width: 100%;
+        z-index: 2;
+    }
 }
