@@ -49,7 +49,7 @@ export class ProfileController {
   ) {}
 
   @Get()
-  @Roles([UserRole.USER])
+  // @Roles([UserRole.USER])
   @Swagger.ApiOperation({
     summary: 'Retrieve the collection of Profile ressource.',
   })
@@ -97,6 +97,7 @@ export class ProfileController {
     const command: CreateProfileCommand = {
       userId: user.id,
       ...body,
+      birthdate: body.birthdate,
       goals: new Set(body.goals),
       interests: new Set(body.interests),
     };

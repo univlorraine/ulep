@@ -2,12 +2,14 @@ import { ApiProperty } from '@nestjs/swagger';
 import { Gender, Role } from '@prisma/client';
 import {
   ArrayMaxSize,
-  IsDateString,
   IsEnum,
   IsIn,
+  IsInt,
   IsNotEmpty,
   IsString,
   IsUUID,
+  Max,
+  Min,
 } from 'class-validator';
 import {
   Goal,
@@ -31,8 +33,10 @@ export class CreateProfileRequest {
   lastname: string;
 
   @ApiProperty()
-  @IsDateString()
-  birthdate: string;
+  @IsInt()
+  @Min(16)
+  @Max(80)
+  age: number;
 
   @ApiProperty({ enum: Role })
   @IsEnum(Role)
@@ -79,4 +83,12 @@ export class CreateProfileRequest {
 
   @ApiProperty()
   bios?: string;
+
+  get birthdate(): string {
+    const currentDate: Date = new Date();
+    const birthYear: number = currentDate.getFullYear() - this.age;
+    const birthDate: Date = new Date(`${birthYear}-01-01`);
+
+    return birthDate.toISOString();
+  }
 }

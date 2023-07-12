@@ -52,8 +52,6 @@ export class Server {
 
   private addCORSConfiguration(app: NestExpressApplication): void {
     app.enableCors({
-      allowedHeaders: ['Content-Type', 'Authorization', 'Range'],
-      exposedHeaders: ['Content-Range'],
       origin: ['*'],
       methods: ['GET', 'HEAD', 'OPTIONS', 'POST', 'PUT', 'DELETE'],
     });
