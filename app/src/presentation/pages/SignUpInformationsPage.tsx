@@ -1,7 +1,9 @@
+import { Camera, CameraResultType, CameraSource } from '@capacitor/camera';
 import { useIonToast } from '@ionic/react';
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useHistory } from 'react-router';
+import gender from '../../domain/entities/gender';
 import { useStoreActions } from '../../store/storeTypes';
 import Header from '../components/Header';
 import RadioButton from '../components/RadioButton';
@@ -17,13 +19,27 @@ const SignUpInformationsPage: React.FC = () => {
     const updateProfileSignUp = useStoreActions((state) => state.updateProfileSignUp);
     const [firstname, setFirstname] = useState<string>('');
     const [lastname, setLastname] = useState<string>('');
-    const [gender, setGender] = useState<string>('');
+    const [gender, setGender] = useState<gender>();
     const [age, setAge] = useState<number>();
     const [email, setEmail] = useState<string>('');
     const [password, setPassword] = useState<string>('');
     const [confirmPassword, setConfirmPassword] = useState<string>('');
-    const [profilePicture, setProfilePicture] = useState<string>('');
+    const [profilePicture, setProfilePicture] = useState<string>();
     const [errorMessage, setErrorMessage] = useState<{ type: string; message: string }>();
+
+    const openGallery = async () => {
+        console.error('test');
+        const image = await Camera.getPhoto({
+            quality: 90,
+            allowEditing: true,
+            resultType: CameraResultType.Uri,
+            source: CameraSource.Photos,
+        });
+
+        if (image.webPath) {
+            setProfilePicture(image.webPath);
+        }
+    };
 
     const continueSignUp = async () => {
         if (!firstname || !isNameCorrect(firstname)) {
@@ -66,9 +82,15 @@ const SignUpInformationsPage: React.FC = () => {
                 <div className={styles.body}>
                     <h1 className={styles.title}>{t('signup_informations_page.title')}</h1>
 
-                    <button className="secondary-button">
-                        <img alt="plus" className={styles.image} src="assets/plus.svg" />
-                        <p>{t('signup_informations_page.photo')}</p>
+                    <button className="secondary-button" onClick={() => openGallery()}>
+                        <img alt="plus" className={styles.image} src={profilePicture ?? 'assets/plus.svg'} />
+                        <p>
+                            {t(
+                                profilePicture
+                                    ? 'signup_informations_page.photo_selected'
+                                    : 'signup_informations_page.photo'
+                            )}
+                        </p>
                     </button>
 
                     <TextInput
@@ -89,24 +111,24 @@ const SignUpInformationsPage: React.FC = () => {
                         value={lastname}
                     />
 
-                    <div className="large-margin-bottom">
-                        <h2 className={styles.subtitle}>{t('global.gender')}</h2>
+                    <div className="margin-bottom ">
+                        <h2 className={`${styles.subtitle} no-margin-top`}>{t('global.gender')}</h2>
 
                         <RadioButton
-                            isSelected={gender === 'women'}
-                            onPressed={() => setGender('women')}
+                            isSelected={gender === 'FEMALE'}
+                            onPressed={() => setGender('FEMALE')}
                             name={t('global.woman')}
                         />
 
                         <RadioButton
-                            isSelected={gender === 'men'}
-                            onPressed={() => setGender('men')}
+                            isSelected={gender === 'MALE'}
+                            onPressed={() => setGender('MALE')}
                             name={t('global.men')}
                         />
 
                         <RadioButton
-                            isSelected={gender === 'binary'}
-                            onPressed={() => setGender('binary')}
+                            isSelected={gender === 'OTHER'}
+                            onPressed={() => setGender('OTHER')}
                             name={t('global.binary')}
                         />
                     </div>

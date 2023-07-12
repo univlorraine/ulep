@@ -14,11 +14,7 @@ const WebLayoutCentered: React.FC<WebLayoutCenteredProps> = ({ children }) => {
         <IonPage>
             <IonContent className="ion-background-yellow">
                 {!isHybrid && (
-                    <img
-                        alt="background"
-                        className="background-image"
-                        src="public/assets/backgrounds/background-yellow.png"
-                    />
+                    <img alt="background" className="background-image" src="assets/backgrounds/background-yellow.png" />
                 )}
                 <div className="page">{children}</div>
             </IonContent>

@@ -1,5 +1,6 @@
 import Country from './Country';
 import University from './University';
+import gender from './gender';
 import roles from './roles';
 
 class ProfileSignUp {
@@ -15,7 +16,7 @@ class ProfileSignUp {
 
     private _firstname?: string;
 
-    private _gender?: string;
+    private _gender?: gender;
 
     private _lastname?: string;
 
@@ -55,7 +56,7 @@ class ProfileSignUp {
         this._firstname = firstname;
     }
 
-    set gender(gender: string) {
+    set gender(gender: gender) {
         this._gender = gender;
     }
 

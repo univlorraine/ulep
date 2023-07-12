@@ -2,6 +2,7 @@ import { Action, createTypedHooks } from 'easy-peasy';
 import Country from '../domain/entities/Country';
 import ProfileSignUp from '../domain/entities/ProfileSignUp';
 import University from '../domain/entities/University';
+import gender from '../domain/entities/gender';
 import roles from '../domain/entities/roles';
 
 export interface TokenStorePayload {
@@ -16,7 +17,7 @@ export interface SignUpStorePayload {
     diplome?: string;
     email?: string;
     firstname?: string;
-    gender?: string;
+    gender?: gender;
     lastname?: string;
     password?: string;
     profilePicture?: string;

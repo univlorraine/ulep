@@ -63,6 +63,7 @@
         "error_lastname": "Veuillez saisir un nom valide",
         "error_password": "Veuillez saisir un mot de passe valide",
         "photo": "Ajouter une photo",
+        "photo_selected": "Modifier",
         "placeholder_age": "Entre ton âge",
         "placeholder_confirm_password": "Confirme ton mot de passe",
         "placeholder_email": "Ajoute ton email",

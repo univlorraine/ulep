@@ -12,12 +12,7 @@ const ConnectionContent: React.FC<ConnectionContentProps> = ({ onLoginPressed, o
     return (
         <div className={style['outer-div']}>
             <div className={style['connect-div']}>
-                <CircleAvatar
-                    backgroundImage="/public/assets/avatar.svg"
-                    height={76}
-                    viewClassName={style.icons}
-                    width={76}
-                />
+                <CircleAvatar backgroundImage="/assets/avatar.svg" height={76} viewClassName={style.icons} width={76} />
                 <p className={style.title}>{t('connection_page.connect_title')}</p>
                 <button className="primary-button" onClick={onLoginPressed}>
                     {t('connection_page.connect_button')}
@@ -26,7 +21,7 @@ const ConnectionContent: React.FC<ConnectionContentProps> = ({ onLoginPressed, o
 
             <div className={style['signup-div']}>
                 <CircleAvatar
-                    backgroundImage="/public/assets/create-account-logo.svg"
+                    backgroundImage="/assets/create-account-logo.svg"
                     height={76}
                     viewClassName={style.icons}
                     width={76}
