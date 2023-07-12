@@ -2,11 +2,11 @@ import { ApiProperty } from '@nestjs/swagger';
 import { Expose } from 'class-transformer';
 
 export class TokensResponse {
-  @ApiProperty()
+  @ApiProperty({ type: 'string' })
   @Expose({ groups: ['read'] })
   accessToken: string;
 
-  @ApiProperty()
+  @ApiProperty({ type: 'string' })
   @Expose({ groups: ['read'] })
   refreshToken: string;
 

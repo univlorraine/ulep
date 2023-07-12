@@ -52,15 +52,14 @@ export class Server {
 
   private addCORSConfiguration(app: NestExpressApplication): void {
     app.enableCors({
-      origin: ['*'],
-      methods: ['GET', 'HEAD', 'OPTIONS', 'POST', 'PUT', 'DELETE'],
+      // origin: ['*'],
+      // methods: ['GET', 'HEAD', 'OPTIONS', 'POST', 'PUT', 'DELETE'],
     });
   }
 
   private buildAPIDocumentation(app: NestExpressApplication): void {
     const options = new DocumentBuilder()
-      .setTitle('eTandems API')
-      .setDescription('The eTandems API')
+      .setTitle('ULEP API')
       .setVersion('1.0.0')
       // .addBearerAuth({ ... })
       .build();

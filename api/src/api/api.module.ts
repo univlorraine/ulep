@@ -14,6 +14,7 @@ import { MatchController } from './controllers/match.controller';
 import { ExportController } from './controllers/export.controller';
 import { ReportController } from './controllers/report.controller';
 import { ReportCategoriesController } from './controllers/report-categories.controller';
+import { UuidProvider } from './services/uuid-provider';
 
 @Module({
   imports: [CoreModule, TerminusModule],
@@ -36,6 +37,7 @@ import { ReportCategoriesController } from './controllers/report-categories.cont
       provide: 'APP_GUARD',
       useClass: RolesGuard,
     },
+    UuidProvider,
   ],
 })
 export class ApiModule {}

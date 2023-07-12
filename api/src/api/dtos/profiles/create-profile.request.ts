@@ -2,6 +2,7 @@ import { ApiProperty } from '@nestjs/swagger';
 import { Gender, Role } from '@prisma/client';
 import {
   ArrayMaxSize,
+  // IsDateString,
   IsEnum,
   IsIn,
   IsInt,
@@ -18,7 +19,7 @@ import {
 } from '../../../core/models/profile';
 
 export class CreateProfileRequest {
-  @ApiProperty()
+  @ApiProperty({ type: 'string', format: 'uuid' })
   @IsUUID()
   id: string;
 
@@ -32,7 +33,11 @@ export class CreateProfileRequest {
   @IsNotEmpty()
   lastname: string;
 
-  @ApiProperty()
+  // @ApiProperty()
+  // @IsDateString()
+  // birthdate: string;
+
+  @ApiProperty({ type: 'integer', minimum: 16, maximum: 80 })
   @IsInt()
   @Min(16)
   @Max(80)
@@ -46,11 +51,11 @@ export class CreateProfileRequest {
   @IsEnum(Gender)
   gender: Gender;
 
-  @ApiProperty()
+  @ApiProperty({ type: 'string', format: 'uuid' })
   @IsUUID()
   university: string;
 
-  @ApiProperty()
+  @ApiProperty({ type: 'string', format: 'uuid' })
   @IsUUID()
   nationality: string;
 
@@ -74,7 +79,7 @@ export class CreateProfileRequest {
   @IsEnum(MeetingFrequency)
   meetingFrequency: MeetingFrequency;
 
-  @ApiProperty()
+  @ApiProperty({ example: ['music', 'sports', 'movies'] })
   @ArrayMaxSize(5)
   interests: string[];
 
@@ -87,7 +92,8 @@ export class CreateProfileRequest {
   get birthdate(): string {
     const currentDate: Date = new Date();
     const birthYear: number = currentDate.getFullYear() - this.age;
-    const birthDate: Date = new Date(`${birthYear}-01-01`);
+    const birthDate: Date = new Date();
+    birthDate.setFullYear(birthYear);
 
     return birthDate.toISOString();
   }

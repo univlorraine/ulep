@@ -3,7 +3,11 @@ import { Type } from 'class-transformer';
 import { IsInt, IsOptional, IsUUID, Min } from 'class-validator';
 
 export class GetMatchsRequest {
-  @ApiProperty({ description: 'The profile id' })
+  @ApiProperty({
+    type: 'string',
+    format: 'uuid',
+    description: 'The profile id',
+  })
   @IsUUID()
   readonly id: string;
 

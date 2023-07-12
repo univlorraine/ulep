@@ -4,13 +4,13 @@ import {
   Delete,
   Get,
   Param,
-  Patch,
   Post,
   ParseUUIDPipe,
   UseGuards,
   Query,
   Logger,
   SerializeOptions,
+  Put,
 } from '@nestjs/common';
 import * as Swagger from '@nestjs/swagger';
 import { GetProfilesUsecase } from '../../core/usecases/profiles/get-profiles.usecase';
@@ -49,7 +49,7 @@ export class ProfileController {
   ) {}
 
   @Get()
-  // @Roles([UserRole.USER])
+  @Roles([UserRole.USER])
   @Swagger.ApiOperation({
     summary: 'Retrieve the collection of Profile ressource.',
   })
@@ -106,7 +106,7 @@ export class ProfileController {
     return ProfileResponse.fromDomain(profile);
   }
 
-  @Patch(':id')
+  @Put(':id')
   @SerializeOptions({ groups: ['read', 'profile:read'] })
   @Swagger.ApiOperation({ summary: 'Updates a Profile ressource.' })
   @Swagger.ApiCreatedResponse({ type: ProfileResponse })

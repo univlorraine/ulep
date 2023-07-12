@@ -4,15 +4,19 @@ import { CountryResponse } from '../countries/country.response';
 import { Expose, Transform } from 'class-transformer';
 
 export class UniversityResponse {
-  @ApiProperty()
+  @ApiProperty({ type: 'string', format: 'uuid' })
   @Expose({ groups: ['read'] })
   id: string;
 
-  @ApiProperty()
+  @ApiProperty({ type: 'string', example: 'Université de Lorraine' })
   @Expose({ groups: ['read'] })
   name: string;
 
-  @ApiProperty()
+  @ApiProperty({
+    type: 'string',
+    description: 'IANA Time Zone',
+    example: 'Europe/Paris',
+  })
   @Expose({ groups: ['university:read'] })
   timezone: string;
 

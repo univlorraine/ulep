@@ -3,19 +3,31 @@ import { Language } from '../../../core/models/language';
 import { Expose } from 'class-transformer';
 
 export class LanguageResponse {
-  @ApiProperty({ readOnly: true })
+  @ApiProperty({ type: 'string', format: 'uuid' })
   @Expose({ groups: ['read'] })
   id: string;
 
-  @ApiProperty()
+  @ApiProperty({
+    type: 'string',
+    description: 'ISO 639-1 code',
+    example: 'FR',
+  })
   @Expose({ groups: ['read'] })
   code: string;
 
-  @ApiProperty()
+  @ApiProperty({
+    type: 'string',
+    description: 'Language name',
+    example: 'French',
+  })
   @Expose({ groups: ['read'] })
   name: string;
 
-  @ApiProperty()
+  @ApiProperty({
+    type: 'boolean',
+    description: 'Language availability',
+    example: true,
+  })
   @Expose({ groups: ['read'] })
   enabled: boolean;
 

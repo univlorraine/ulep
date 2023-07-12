@@ -5,25 +5,42 @@ import { IsAfterThan } from '../../validators/dates.validator';
 
 // TODO: Add validation on dates (admissionStart < admissionEnd)
 export class CreateUniversityRequest {
-  @ApiProperty()
+  @ApiProperty({
+    type: 'string',
+    example: 'France',
+  })
   @IsString()
   @IsNotEmpty()
   name: string;
 
-  @ApiProperty()
+  @ApiProperty({
+    type: 'string',
+    description: 'IANA Time Zone',
+    example: 'Europe/Paris',
+  })
   @IsTimeZone()
   timezone: string;
 
-  @ApiProperty()
+  @ApiProperty({
+    type: 'string',
+    description: 'ISO 3166-1 code',
+    example: 'FR',
+  })
   @IsString()
   countryCode: string;
 
-  @ApiProperty()
+  @ApiProperty({
+    type: 'string',
+    format: 'date',
+  })
   @Type(() => Date)
   @IsDate()
   admissionStart: Date;
 
-  @ApiProperty()
+  @ApiProperty({
+    type: 'string',
+    format: 'date',
+  })
   @Type(() => Date)
   @IsDate()
   @IsAfterThan('admissionStart')

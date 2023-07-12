@@ -10,6 +10,7 @@ import {
   Logger,
   Query,
   SerializeOptions,
+  Put,
 } from '@nestjs/common';
 import * as Swagger from '@nestjs/swagger';
 import { LanguageResponse } from '../dtos/languages/language.response';
@@ -85,7 +86,7 @@ export class LanguageController {
     return LanguageResponse.fromDomain(language);
   }
 
-  @Patch(':id')
+  @Put(':id')
   @SerializeOptions({ groups: ['read', 'language:read'] })
   @Swagger.ApiOperation({ summary: 'Updates a Language ressource.' })
   @Swagger.ApiCreatedResponse({ type: LanguageResponse })

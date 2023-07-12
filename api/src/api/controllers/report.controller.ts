@@ -27,6 +27,7 @@ import { Collection } from 'src/shared/types/collection';
 import { UserContext } from '../decorators/user-context.decorator';
 import { User } from 'src/core/models/user';
 import { AuthenticationGuard } from '../guards/authentication.guard';
+import { UuidProvider } from '../services/uuid-provider';
 
 @Controller('reports')
 @Swagger.ApiTags('Reports')
@@ -38,6 +39,7 @@ export class ReportController {
     private readonly deleteReportUsecase: DeleteReportUsecase,
     private readonly getReportsUsecase: GetReportsUsecase,
     private readonly getReportUsecase: GetReportUsecase,
+    private readonly uuidProvider: UuidProvider,
   ) {}
 
   @Get()
@@ -64,6 +66,7 @@ export class ReportController {
 
   @Get(':id')
   @Swagger.ApiOperation({ summary: 'Retrieve a Report ressource.' })
+  @Swagger.ApiOkResponse({ type: ReportResponse })
   async getOne(
     @Param('id', ParseUUIDPipe) id: string,
   ): Promise<ReportResponse> {
@@ -80,6 +83,7 @@ export class ReportController {
     @Body() body: CreateReportRequest,
   ): Promise<void> {
     await this.createReportUsecase.execute({
+      id: this.uuidProvider.generate(),
       userId: user.id,
       ...body,
     });

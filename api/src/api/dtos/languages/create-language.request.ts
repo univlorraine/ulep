@@ -10,16 +10,24 @@ import {
 
 // TODO Add isAvailable false
 export class CreateLanguageRequest {
-  @ApiProperty()
+  @ApiProperty({ type: 'string', format: 'uuid' })
   @IsUUID()
   id: string;
 
-  @ApiProperty()
+  @ApiProperty({
+    type: 'string',
+    description: 'Language name',
+    example: 'French',
+  })
   @IsString()
   @IsNotEmpty()
   name: string;
 
-  @ApiProperty()
+  @ApiProperty({
+    type: 'string',
+    description: 'ISO 639-1 code',
+    example: 'FR',
+  })
   @IsString()
   @IsNotEmpty()
   code: string;

@@ -5,7 +5,11 @@ import { UniversityResponse } from '../university/university.response';
 import { Expose, Transform } from 'class-transformer';
 
 class NativeLanguageResponse {
-  @ApiProperty()
+  @ApiProperty({
+    type: 'string',
+    description: 'ISO 639-1 code',
+    example: 'FR',
+  })
   @Expose({ groups: ['read'] })
   code: string;
 
@@ -15,11 +19,19 @@ class NativeLanguageResponse {
 }
 
 class LearningLanguageResponse {
-  @ApiProperty()
+  @ApiProperty({
+    type: 'string',
+    description: 'ISO 639-1 code',
+    example: 'FR',
+  })
   @Expose({ groups: ['read'] })
   code: string;
 
-  @ApiProperty()
+  @ApiProperty({
+    type: 'string',
+    description: 'CEFR level',
+    example: 'A1',
+  })
   @Expose({ groups: ['read'] })
   level: string;
 
@@ -29,23 +41,23 @@ class LearningLanguageResponse {
 }
 
 export class ProfileResponse {
-  @ApiProperty()
+  @ApiProperty({ type: 'string', format: 'uuid' })
   @Expose({ groups: ['read'] })
   id: string;
 
-  @ApiProperty()
+  @ApiProperty({ type: 'string', format: 'email' })
   @Expose({ groups: ['profile:read'] })
   email: string;
 
-  @ApiProperty()
+  @ApiProperty({ type: 'string', example: 'John' })
   @Expose({ groups: ['read'] })
   firstname: string;
 
-  @ApiProperty()
+  @ApiProperty({ type: 'string', example: 'Doe' })
   @Expose({ groups: ['read'] })
   lastname: string;
 
-  @ApiProperty()
+  @ApiProperty({ type: 'number', example: 20 })
   @Expose({ groups: ['read'] })
   age: number;
 
@@ -80,7 +92,7 @@ export class ProfileResponse {
   @Expose({ groups: ['read'] })
   meetingFrequency: MeetingFrequency;
 
-  @ApiProperty({ isArray: true })
+  @ApiProperty({ isArray: true, example: ['music', 'sport'] })
   @Expose({ groups: ['read'] })
   interests: string[];
 
@@ -88,7 +100,7 @@ export class ProfileResponse {
   @Expose({ groups: ['read'] })
   bios?: string;
 
-  @ApiPropertyOptional()
+  @ApiPropertyOptional({ type: 'string', format: 'uri' })
   @Expose({ groups: ['read'] })
   avatar?: string;
 

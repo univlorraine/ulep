@@ -2,11 +2,11 @@ import { ApiProperty } from '@nestjs/swagger';
 import { Expose } from 'class-transformer';
 
 export class UploadResponse {
-  @ApiProperty()
+  @ApiProperty({ type: 'string', format: 'uuid' })
   @Expose({ groups: ['read'] })
   id: string;
 
-  @ApiProperty()
+  @ApiProperty({ type: 'string', format: 'url' })
   @Expose({ groups: ['read'] })
   url: string;
 

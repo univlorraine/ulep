@@ -3,15 +3,19 @@ import { Country } from '../../../core/models/country';
 import { Expose } from 'class-transformer';
 
 export class CountryResponse {
-  @ApiProperty()
+  @ApiProperty({ type: 'string', format: 'uuid' })
   @Expose({ groups: ['read'] })
   id: string;
 
-  @ApiProperty()
+  @ApiProperty({
+    type: 'string',
+    description: 'ISO 3166-1 code',
+    example: 'FR',
+  })
   @Expose({ groups: ['read'] })
   code: string;
 
-  @ApiProperty()
+  @ApiProperty({ type: 'string', example: 'France' })
   @Expose({ groups: ['read'] })
   name: string;
 
