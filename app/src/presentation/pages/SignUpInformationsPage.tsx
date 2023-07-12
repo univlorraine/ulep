@@ -5,6 +5,7 @@ import { useTranslation } from 'react-i18next';
 import { useHistory } from 'react-router';
 import gender from '../../domain/entities/gender';
 import { useStoreActions } from '../../store/storeTypes';
+import Checkbox from '../components/Checkbox';
 import Header from '../components/Header';
 import RadioButton from '../components/RadioButton';
 import TextInput from '../components/TextInput';
@@ -179,10 +180,11 @@ const SignUpInformationsPage: React.FC = () => {
                         value={confirmPassword}
                     />
 
-                    <label className={`${styles.cgu} large-margin-vertical`}>
-                        <input className="checkbox" type="checkbox" onChange={() => setCGUChecked(!CGUChecked)} />
-                        {t('signup_informations_page.cgu')}
-                    </label>
+                    <Checkbox
+                        isSelected={CGUChecked}
+                        onPressed={() => setCGUChecked(!CGUChecked)}
+                        name={t('signup_informations_page.cgu')}
+                    />
 
                     <div className={styles['bottom-container']}>
                         <button
