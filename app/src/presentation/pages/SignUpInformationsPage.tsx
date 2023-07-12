@@ -28,10 +28,8 @@ const SignUpInformationsPage: React.FC = () => {
     const [errorMessage, setErrorMessage] = useState<{ type: string; message: string }>();
 
     const openGallery = async () => {
-        console.error('test');
         const image = await Camera.getPhoto({
             quality: 90,
-            allowEditing: true,
             resultType: CameraResultType.Uri,
             source: CameraSource.Photos,
         });

@@ -64,7 +64,6 @@ const SignUpPage: React.FC = () => {
             return setDisplayError(true);
         }
 
-        console.log(profile);
         updateProfileSignUp({ country, department, diplome, role: selectedRole, staffFunction, university });
 
         return history.push('/signup/informations');
