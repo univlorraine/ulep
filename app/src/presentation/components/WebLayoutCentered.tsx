@@ -16,7 +16,7 @@ const WebLayoutCentered: React.FC<WebLayoutCenteredProps> = ({ children }) => {
                 {!isHybrid && (
                     <img alt="background" className="background-image" src="assets/backgrounds/background-yellow.png" />
                 )}
-                <div className="page">{children}</div>
+                <div className="page content-wrapper">{children}</div>
             </IonContent>
         </IonPage>
     );

@@ -23,6 +23,7 @@
 .image {
     align-self: center;
     border-radius: 50%;
+    object-fit: cover;
     height: 110px;
     width: 110px;
 }
