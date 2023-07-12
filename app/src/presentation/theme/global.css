@@ -27,6 +27,12 @@
     flex-direction: column;
 }
 
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}
+
 .no-gutters {
     --ion-grid-padding: 0;
     --ion-grid-column-padding: 0;

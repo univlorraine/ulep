@@ -6,6 +6,7 @@ import { useConfig } from '../../context/ConfigurationContext';
 import Country from '../../domain/entities/Country';
 import University from '../../domain/entities/University';
 import roles from '../../domain/entities/roles';
+import { useStoreActions, useStoreState } from '../../store/storeTypes';
 import Dropdown, { DropDownItem } from '../components/DropDown';
 import ErrorMessage from '../components/ErrorMessage';
 import Header from '../components/Header';
@@ -17,6 +18,8 @@ import styles from './css/SignUp.module.css';
 const SignUpPage: React.FC = () => {
     const { t } = useTranslation();
     const { getAllCountries, getAllUniversities } = useConfig();
+    const updateProfileSignUp = useStoreActions((state) => state.updateProfileSignUp);
+    const profile = useStoreState((state) => state.profileSignUp);
     const [showToast] = useIonToast();
     const history = useHistory();
     const [countries, setCountries] = useState<DropDownItem<Country>[]>([]);
@@ -26,7 +29,7 @@ const SignUpPage: React.FC = () => {
     const [selectedRole, setSelectedRole] = useState<roles>();
     const [staffFunction, setStaffFunction] = useState<string>('');
     const [universities, setUniversities] = useState<DropDownItem<University>[]>([]);
-    const [university, setUniversity] = useState<string>('');
+    const [university, setUniversity] = useState<University>();
     const [displayError, setDisplayError] = useState<boolean>(false);
 
     const getSignUpData = async () => {
@@ -44,6 +47,7 @@ const SignUpPage: React.FC = () => {
         }
 
         setCountries(countriesResult.map((country) => ({ title: country.name, value: country })));
+        setUniversity(universityResult[0]);
 
         return setUniversities(universityResult.map((university) => ({ title: university.name, value: university })));
     };
@@ -60,7 +64,10 @@ const SignUpPage: React.FC = () => {
             return setDisplayError(true);
         }
 
-        return null; //TODO: Update with navigation
+        console.log(profile);
+        updateProfileSignUp({ country, department, diplome, role: selectedRole, staffFunction, university });
+
+        return history.push('/signup/informations');
     };
 
     useEffect(() => {

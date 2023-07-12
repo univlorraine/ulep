@@ -2,6 +2,7 @@ import { useIonToast } from '@ionic/react';
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useHistory } from 'react-router';
+import { useStoreActions } from '../../store/storeTypes';
 import Header from '../components/Header';
 import RadioButton from '../components/RadioButton';
 import TextInput from '../components/TextInput';
@@ -13,10 +14,11 @@ const SignUpInformationsPage: React.FC = () => {
     const { t } = useTranslation();
     const [showToast] = useIonToast();
     const history = useHistory();
+    const updateProfileSignUp = useStoreActions((state) => state.updateProfileSignUp);
     const [firstname, setFirstname] = useState<string>('');
     const [lastname, setLastname] = useState<string>('');
     const [gender, setGender] = useState<string>('');
-    const [age, setAge] = useState<string>('');
+    const [age, setAge] = useState<number>();
     const [email, setEmail] = useState<string>('');
     const [password, setPassword] = useState<string>('');
     const [confirmPassword, setConfirmPassword] = useState<string>('');
@@ -51,6 +53,10 @@ const SignUpInformationsPage: React.FC = () => {
         if (password !== confirmPassword) {
             return setErrorMessage({ type: 'confirm', message: t('signup_informations_page.error_confirm') });
         }
+
+        updateProfileSignUp({ firstname, lastname, gender, age, email, password, profilePicture });
+
+        //TODO: add navigate
     };
 
     return (
@@ -107,11 +113,11 @@ const SignUpInformationsPage: React.FC = () => {
 
                     <TextInput
                         errorMessage={errorMessage?.type === 'age' ? errorMessage.message : undefined}
-                        onChange={setAge}
+                        onChange={(age: string) => setAge(Number(age))}
                         placeholder={t('signup_informations_page.placeholder_age')}
                         title={t('global.age')}
                         type="text"
-                        value={age}
+                        value={age ? `${age}` : ''}
                     />
 
                     <TextInput

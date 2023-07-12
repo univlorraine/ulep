@@ -15,7 +15,6 @@ interface DropdownProps<T> {
 
 const Dropdown: React.FC<DropdownProps<any>> = ({ onChange, options, placeholder, title }) => {
     const [isOpen, setIsOpen] = useState<boolean>(false);
-    console.log(placeholder);
     const [selectedOption, setSelectedOption] = useState<DropDownItem<any> | undefined>(
         !placeholder ? options[0] : undefined
     );
@@ -44,7 +43,7 @@ const Dropdown: React.FC<DropdownProps<any>> = ({ onChange, options, placeholder
                     <div className={styles.menu}>
                         {options.map((option) => {
                             return (
-                                <div key={option.value} className={styles.submenu}>
+                                <div key={option.title} className={styles.submenu}>
                                     <button className={styles.item} onClick={() => handleOptionClick(option)}>
                                         {option.title}
                                     </button>

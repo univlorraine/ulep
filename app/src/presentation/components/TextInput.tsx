@@ -7,7 +7,7 @@ interface TextInputProps {
     placeholder?: string | null;
     onChange: (text: string) => void;
     title: string;
-    type?: 'password' | 'email' | 'text';
+    type?: 'email' | 'number' | 'password' | 'text';
     value: string;
 }
 
