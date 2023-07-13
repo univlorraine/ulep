@@ -6,7 +6,7 @@ import { useConfig } from '../../context/ConfigurationContext';
 import Country from '../../domain/entities/Country';
 import University from '../../domain/entities/University';
 import roles from '../../domain/entities/roles';
-import { useStoreActions, useStoreState } from '../../store/storeTypes';
+import { useStoreActions } from '../../store/storeTypes';
 import Dropdown, { DropDownItem } from '../components/DropDown';
 import ErrorMessage from '../components/ErrorMessage';
 import RadioButton from '../components/RadioButton';
@@ -18,7 +18,6 @@ const SignUpPage: React.FC = () => {
     const { t } = useTranslation();
     const { getAllCountries, getAllUniversities } = useConfig();
     const updateProfileSignUp = useStoreActions((state) => state.updateProfileSignUp);
-    const profile = useStoreState((state) => state.profileSignUp);
     const [showToast] = useIonToast();
     const history = useHistory();
     const [countries, setCountries] = useState<DropDownItem<Country>[]>([]);
