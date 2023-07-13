@@ -40,16 +40,6 @@
     text-transform: uppercase;
 }
 
-.checkbox {
-    display: flex;
-    width: 24px;
-    height: 24px;
-    justify-content: center;
-    align-items: center;
-    flex-shrink: 0;
-    margin-right: 16px;
-}
-
 ion-button.confirm {
     --background: #000;
     --background-focused: #000;
