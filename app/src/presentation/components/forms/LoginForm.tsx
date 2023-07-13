@@ -11,9 +11,9 @@ interface LoginFormProps {
     goBack: () => void;
 }
 
-const LoginForm: React.FC<LoginFormProps> = ({goBack}) => {
+const LoginForm: React.FC<LoginFormProps> = ({ goBack }) => {
     const { t } = useTranslation();
-    const { loginUsecase } = useConfig();
+    const { login } = useConfig();
     const history = useHistory();
     const [email, setEmail] = useState<string>('');
     const [password, setPassword] = useState<string>('');
@@ -23,7 +23,7 @@ const LoginForm: React.FC<LoginFormProps> = ({goBack}) => {
     const handleLogin = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
         await showLoading();
-        const result = await loginUsecase.execute(email, password);
+        const result = await login.execute(email, password);
         if (result instanceof Error) {
             await showToast({ message: t(result.message), duration: 5000 });
         } else {

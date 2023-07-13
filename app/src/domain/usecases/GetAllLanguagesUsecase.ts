@@ -1,0 +1,28 @@
+import { HttpResponse } from '../../adapter/BaseHttpAdapter';
+import { HttpAdapterInterface } from '../../adapter/DomainHttpAdapter';
+import { CollectionCommand } from '../../command/CollectionCommand';
+import LanguageCommand, { languageCommandToDomain } from '../../command/LanguageCommand';
+import Language from '../entities/Language';
+import GetAllLanguagesUsecaseInterface from '../interfaces/GetAllLanguagesUsecase.interface';
+
+class GetAllLanguagesUsecase implements GetAllLanguagesUsecaseInterface {
+    constructor(private readonly domainHttpAdapter: HttpAdapterInterface) {}
+
+    async execute(): Promise<Language[] | Error> {
+        try {
+            const httpRepsonse: HttpResponse<CollectionCommand<LanguageCommand>> = await this.domainHttpAdapter.get(
+                `/languages`
+            );
+
+            if (!httpRepsonse.parsedBody || !httpRepsonse.parsedBody.items) {
+                return new Error('errors.global');
+            }
+
+            return httpRepsonse.parsedBody.items.map((language) => languageCommandToDomain(language));
+        } catch (error: any) {
+            return new Error('errors.global');
+        }
+    }
+}
+
+export default GetAllLanguagesUsecase;
