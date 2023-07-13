@@ -14,8 +14,6 @@ class GetAllUniversitiesUsecase implements GetAllUniversitiesUsecaseInterface {
                 `/universities`
             );
 
-            console.log(httpRepsonse.parsedBody);
-
             if (!httpRepsonse.parsedBody || !httpRepsonse.parsedBody.items) {
                 return new Error('errors.global');
             }

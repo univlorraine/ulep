@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import styles from './DropDown.module.css';
 
 export interface DropDownItem<T> {
@@ -6,18 +6,24 @@ export interface DropDownItem<T> {
     value: T;
 }
 
-interface DropdownProps {
-    onChange: (value: any) => void;
-    options: DropDownItem<any>[];
+interface DropdownProps<T> {
+    onChange: (value: T) => void;
+    options: DropDownItem<T>[];
     placeholder?: string | null;
     title?: string | null;
 }
 
-const Dropdown: React.FC<DropdownProps> = ({ onChange, options, placeholder, title }) => {
+const Dropdown: React.FC<DropdownProps<any>> = ({ onChange, options, placeholder, title }) => {
     const [isOpen, setIsOpen] = useState<boolean>(false);
     const [selectedOption, setSelectedOption] = useState<DropDownItem<any> | undefined>(
-        placeholder === undefined ? options[0] : undefined
+        !placeholder ? options[0] : undefined
     );
+
+    useEffect(() => {
+        if (!placeholder && options.length > 0) {
+            setSelectedOption(options[0]);
+        }
+    }, [placeholder, options]);
 
     const handleOptionClick = (item: DropDownItem<any>) => {
         setSelectedOption(item);
@@ -37,7 +43,7 @@ const Dropdown: React.FC<DropdownProps> = ({ onChange, options, placeholder, tit
                     <div className={styles.menu}>
                         {options.map((option) => {
                             return (
-                                <div key={option.value} className={styles.submenu}>
+                                <div key={option.title} className={styles.submenu}>
                                     <button className={styles.item} onClick={() => handleOptionClick(option)}>
                                         {option.title}
                                     </button>

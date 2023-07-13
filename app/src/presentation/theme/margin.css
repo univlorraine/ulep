@@ -1,3 +1,31 @@
+.no-margin {
+    margin: 0px;
+}
+
+.no-margin-top {
+    margin-top: 0px;
+}
+
+.no-margin-bottom {
+    margin-bottom: 0px;
+}
+
+.no-margin-left {
+    margin-left: 0px;
+}
+
+.no-margin-right {
+    margin-right: 0px;
+}
+
+.no-margin-vertical {
+    margin: 0px 0px 0px 0px;
+}
+
+.no-margin-right {
+    margin: 0px 0px 0px 0px;
+}
+
 .small-margin {
     margin: 4px;
 }

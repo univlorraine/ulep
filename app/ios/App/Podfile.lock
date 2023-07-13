@@ -3,6 +3,8 @@ PODS:
     - CapacitorCordova
   - CapacitorApp (5.0.2):
     - Capacitor
+  - CapacitorCamera (5.0.5):
+    - Capacitor
   - CapacitorCordova (5.0.4)
   - CapacitorDevice (5.0.2):
     - Capacitor
@@ -20,6 +22,7 @@ PODS:
 DEPENDENCIES:
   - "Capacitor (from `../../node_modules/.pnpm/@capacitor+ios@5.0.4_@capacitor+core@5.0.4/node_modules/@capacitor/ios`)"
   - "CapacitorApp (from `../../node_modules/.pnpm/@capacitor+app@5.0.2_@capacitor+core@5.0.4/node_modules/@capacitor/app`)"
+  - "CapacitorCamera (from `../../node_modules/.pnpm/@capacitor+camera@5.0.5_@capacitor+core@5.0.4/node_modules/@capacitor/camera`)"
   - "CapacitorCordova (from `../../node_modules/.pnpm/@capacitor+ios@5.0.4_@capacitor+core@5.0.4/node_modules/@capacitor/ios`)"
   - "CapacitorDevice (from `../../node_modules/.pnpm/@capacitor+device@5.0.2_@capacitor+core@5.0.4/node_modules/@capacitor/device`)"
   - "CapacitorHaptics (from `../../node_modules/.pnpm/@capacitor+haptics@5.0.2_@capacitor+core@5.0.4/node_modules/@capacitor/haptics`)"
@@ -33,6 +36,8 @@ EXTERNAL SOURCES:
     :path: "../../node_modules/.pnpm/@capacitor+ios@5.0.4_@capacitor+core@5.0.4/node_modules/@capacitor/ios"
   CapacitorApp:
     :path: "../../node_modules/.pnpm/@capacitor+app@5.0.2_@capacitor+core@5.0.4/node_modules/@capacitor/app"
+  CapacitorCamera:
+    :path: "../../node_modules/.pnpm/@capacitor+camera@5.0.5_@capacitor+core@5.0.4/node_modules/@capacitor/camera"
   CapacitorCordova:
     :path: "../../node_modules/.pnpm/@capacitor+ios@5.0.4_@capacitor+core@5.0.4/node_modules/@capacitor/ios"
   CapacitorDevice:
@@ -51,6 +56,7 @@ EXTERNAL SOURCES:
 SPEC CHECKSUMS:
   Capacitor: d3d4463573438b9fa65326d1f3549da6f4c21634
   CapacitorApp: 28fef1fd75b2b3686e875216806fb8416d421097
+  CapacitorCamera: 834aade2952a06bd1e46c078d1068a980f37f8c9
   CapacitorCordova: b1fe6bf1f36974a8e4a9044b342d22d49c0996d6
   CapacitorDevice: 980e172f6fbfa0a945c73f908adc74b5a031e7d4
   CapacitorHaptics: 864585542a435bd41eaabf7f30d9ff5ec03024d3
@@ -59,6 +65,6 @@ SPEC CHECKSUMS:
   CapacitorSplashScreen: e563abf6d590bfe0269515ccc9d8bc03c41f32e9
   CapacitorStatusBar: 48f2899f6846cc7d8431b251ebfc58e1c10e3d58
 
-PODFILE CHECKSUM: 1951608ca91d5ba5b86ada207804c59aa7285197
+PODFILE CHECKSUM: ffa4aa9b46fa1d77d7b17feaaa0cad758eb1b49e
 
 COCOAPODS: 1.12.1

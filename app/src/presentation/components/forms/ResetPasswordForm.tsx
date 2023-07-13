@@ -17,9 +17,9 @@ const ResetPasswordForm: React.FC<ResetPasswordFormProps> = ({ id }) => {
     const { resetPasswordUsecase } = useConfig();
     const history = useHistory();
     const [newPassword, setNewPassword] = useState<string>('');
-    const [newPasswordError, setNewPasswordError] = useState<string>('');
+    const [newPasswordError, setNewPasswordError] = useState<string | null>('');
     const [passwordConfirm, setPasswordConfirm] = useState<string>('');
-    const [passwordConfirmError, setPasswordConfirmError] = useState<string>('');
+    const [passwordConfirmError, setPasswordConfirmError] = useState<string | null>('');
     const [showLoading, hideLoading] = useIonLoading();
     const [showToast] = useIonToast();
 
@@ -28,12 +28,12 @@ const ResetPasswordForm: React.FC<ResetPasswordFormProps> = ({ id }) => {
         await showLoading();
         if (!isPasswordCorrect(newPassword)) {
             await hideLoading();
-            return setNewPasswordError('reset_password_page.new_password_error');
+            return setNewPasswordError(t('reset_password_page.new_password_error'));
         }
 
         if (newPassword !== passwordConfirm) {
             await hideLoading();
-            return setPasswordConfirmError('reset_password_page.confirm_password_error');
+            return setPasswordConfirmError(t('reset_password_page.confirm_password_error'));
         }
         const result = await resetPasswordUsecase.execute(id, newPassword);
         if (result instanceof Error) {

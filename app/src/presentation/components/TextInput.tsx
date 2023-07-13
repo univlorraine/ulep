@@ -1,28 +1,27 @@
 import { useState } from 'react';
-import { useTranslation } from 'react-i18next';
 import style from './TextInput.module.css';
 
 interface TextInputProps {
-    errorMessage?: string;
-    placeholder?: string;
+    errorMessage?: string | null;
+    placeholder?: string | null;
     onChange: (text: string) => void;
     title: string;
-    type?: 'password' | 'email' | 'text';
+    type?: 'email' | 'number' | 'password' | 'text';
     value: string;
 }
 
 const TextInput: React.FC<TextInputProps> = ({ errorMessage, onChange, placeholder, title, type, value }) => {
-    const { t } = useTranslation();
     const [showPasword, setShowPassword] = useState<boolean>(false);
     return (
         <div className="large-margin-bottom">
             <p className={style['input-label']}>{title}</p>
             <div className={`${style['input-wrapper']} ${errorMessage ? style['input-error'] : style['input-text']}`}>
                 <input
+                    autoComplete={'off'}
                     className={style.input}
                     name="newPassword"
                     onChange={(e) => onChange(e.target.value)}
-                    placeholder={placeholder}
+                    placeholder={placeholder ?? ''}
                     type={showPasword ? 'text' : type}
                     value={value}
                     required
@@ -33,7 +32,7 @@ const TextInput: React.FC<TextInputProps> = ({ errorMessage, onChange, placehold
                     </button>
                 )}
             </div>
-            {errorMessage && <p className={style['input-label-error']}>{t(errorMessage)}</p>}
+            {errorMessage && <p className={style['input-label-error']}>{errorMessage}</p>}
         </div>
     );
 };

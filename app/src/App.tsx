@@ -7,8 +7,7 @@ import { useTranslation } from 'react-i18next';
 import { ConfigContext } from './context/ConfigurationContext';
 import getConfigContextValue from './context/getConfigurationContextValue';
 import OfflineRouter from './presentation/router/OfflineRouter';
-import tokenStore from './store/tokenStore';
-import { useStoreActions, useStoreState } from './store/tokenStoreTypes';
+import { useStoreActions, useStoreState } from './store/storeTypes';
 
 /* Core CSS required for Ionic components to work properly */
 import '@ionic/react/css/core.css';
@@ -31,6 +30,7 @@ import './presentation/theme/button.css';
 import './presentation/theme/global.css';
 import './presentation/theme/margin.css';
 import './presentation/theme/variables.css';
+import Store from './store/store';
 
 setupIonicReact();
 
@@ -66,7 +66,7 @@ const App: React.FC = () => {
 
     return (
         <IonApp>
-            <StoreProvider store={tokenStore}>
+            <StoreProvider store={Store}>
                 <AppContext />
             </StoreProvider>
         </IonApp>
