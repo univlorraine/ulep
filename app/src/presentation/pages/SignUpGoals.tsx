@@ -80,7 +80,7 @@ const SignUpGoals: React.FC = () => {
                         })}
                     </div>
                 </div>
-                <div className={`${goalsStyles['bottom-container']} large-margin-bottom`}>
+                <div className={`${goalsStyles['bottom-container']} large-margin-top large-margin-bottom`}>
                     <button
                         className={`tertiary-button`}
                         disabled={goals.length === 0}
