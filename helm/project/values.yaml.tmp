@@ -26,8 +26,8 @@ api:
   replicaCount: 1 # OPTIONNEL
 
   image:
-    repository: "" # REQUIRED
-    tag: "" # REQUIRED
+    repository: "rg.fr-par.scw.cloud/ulep/api-dev" # REQUIRED
+    tag: "amd" # REQUIRED
     pullPolicy: Always # OPTIONNEL
 
   env:
@@ -56,14 +56,14 @@ api:
     enabled: true
     className: ""
     annotations: 
-      kubernetes.io/ingress.class: "nginx"
+      kubernetes.io/ingress.class: "traefik"
       cert-manager.io/cluster-issuer: "letsencrypt"
       kubernetes.io/tls-acme: "true"
     hosts:
       - host: api
         paths: [/]
     tls:
-      - secretName: api-etandem-tls
+      - secretName: etandem-tls
         hosts:
           - api
 ############## API ##############
@@ -96,7 +96,7 @@ auth:
     # targetMemoryUtilizationPercentage: 80
   service:
     type: ClusterIP
-    port: 443
+    port: 80
 
   ingress:
     enabled: true
@@ -109,7 +109,7 @@ auth:
       - host: auth
         paths: [/]
     tls: 
-      - secretName: auth-etandem-tls
+      - secretName: etandem-tls
         hosts:
           - auth
 ############## AUTH ##############
@@ -150,7 +150,7 @@ minio:
     enabled: true
     className: ""
     annotations:
-      kubernetes.io/ingress.class: "nginx"
+      kubernetes.io/ingress.class: "traefik"
       cert-manager.io/cluster-issuer: "letsencrypt"
       kubernetes.io/tls-acme: "true"
 
@@ -158,7 +158,7 @@ minio:
       - host: minio
         paths: [/]
     tls: 
-      - secretName: minio-etandem-tls
+      - secretName: etandem-tls
         hosts:
           - minio
 ############## MINIO ##############
@@ -169,8 +169,8 @@ admin:
   replicaCount: 1
 
   image:
-    repository: "" # REQUIRED
-    tag: "" # REQUIRED
+    repository: "rg.fr-par.scw.cloud/ulep/admin-dev" # REQUIRED
+    tag: "amd" # REQUIRED
     pullPolicy: IfNotPresent
 
   env: 
@@ -192,7 +192,7 @@ admin:
     enabled: true
     className: ""
     annotations:
-      kubernetes.io/ingress.class: "nginx"
+      kubernetes.io/ingress.class: "traefik"
       cert-manager.io/cluster-issuer: "letsencrypt"
       kubernetes.io/tls-acme: "true"
 
@@ -200,7 +200,7 @@ admin:
       - host: admin
         paths: [/]
     tls: 
-      - secretName: admin-etandem-tls 
+      - secretName: etandem-tls 
         hosts:
           - admin
 ############## ADMIN ##############
@@ -216,7 +216,8 @@ serviceAccount:
   # If not set and create is true, a name is generated using the fullname template
   name: ""
 
-imagePullSecrets: []
+imagePullSecrets: 
+  - name: "registrypullsecret" # FIXE
 nameOverride: ""
 fullnameOverride: ""
 

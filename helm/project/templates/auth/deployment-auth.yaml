@@ -33,14 +33,12 @@ spec:
         - name: wait-for-database
           image: actions/pg_isready
           command: ["/bin/bash","-c"]
-          args: ["set -x; while [ $(pg_isready -d $DB_NAME -h $HOST_NAME -p $DB_PORT -U $DB_USER -q; echo $?) -ne 0 ]; do sleep 5; done"]          
+          args: ["set -x; while [ $(pg_isready -d $DB_NAME -h $HOST_NAME -p 5432 -U $DB_USER -q; echo $?) -ne 0 ]; do sleep 5; done"]          
           env:
             - name: DB_NAME
               value: "{{ .Values.global.postgresql.auth.database }}"
             - name: HOST_NAME
               value: "{{ include "etandem.name" . }}-postgresql.{{ include "etandem.name" . }}"
-            - name: DB_PORT
-              value: "{{ .Values.database.service.port }}"
             - name: DB_USER
               value: "{{ .Values.global.postgresql.auth.username }}"
       containers:
@@ -87,7 +85,7 @@ spec:
             - name: KC_DB_USERNAME
               value: "{{ .Values.global.postgresql.auth.username }}"
             - name: KC_DB_URL
-              value: "jdbc:postgresql://{{ include "etandem.name" . }}-postgresql.{{ include "etandem.name" . }}:{{ .Values.database.service.port }}/{{ .Values.global.postgresql.auth.database }}"
+              value: "jdbc:postgresql://{{ include "etandem.name" . }}-postgresql.{{ include "etandem.name" . }}:5432/{{ .Values.global.postgresql.auth.database }}"
             - name: KC_DB_SCHEMA
               value: "{{ .Values.auth.env.kcDBSchema }}"
             - name: PROXY_ADDRESS_FORWARDING
