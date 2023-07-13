@@ -10,7 +10,7 @@ export class PrismaCountryRepository implements CountryRepository {
   constructor(private readonly prisma: PrismaService) {}
 
   async of(id: string): Promise<Country | null> {
-    const country = await this.prisma.countryCode.findUnique({
+    const country = await this.prisma.country.findUnique({
       where: {
         id: id,
       },
@@ -24,7 +24,7 @@ export class PrismaCountryRepository implements CountryRepository {
   }
 
   async findAll(): Promise<Collection<Country>> {
-    const countries = await this.prisma.countryCode.findMany();
+    const countries = await this.prisma.country.findMany();
 
     if (!countries) {
       return { items: [], totalItems: 0 };
@@ -40,7 +40,7 @@ export class PrismaCountryRepository implements CountryRepository {
     code?: string;
     name?: string;
   }): Promise<Country | null> {
-    const country = await this.prisma.countryCode.findFirst({
+    const country = await this.prisma.country.findFirst({
       where: {
         code: query.code,
         name: query.name,

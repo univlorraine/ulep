@@ -1,31 +1,31 @@
 import { Injectable, Logger } from '@nestjs/common';
 import { PrismaService } from '../prisma.service';
-import {
-  ProfileFilters,
-  ProfileRepository,
-} from '../../../core/ports/profile.repository';
+import { ProfileRepository } from '../../../core/ports/profile.repository';
 import { profileMapper } from '../mappers/profile.mapper';
 import { Profile } from '../../../core/models/profile';
 import { Collection } from '../../../shared/types/collection';
 import { StringFilter } from 'src/shared/types/filters';
 
+const Relations = {
+  user: true,
+  university: { include: { country: true } },
+  nationality: true,
+  nativeLanguage: true,
+  masteredLanguages: { include: { language: true } },
+  learningLanguage: true,
+  avatar: true,
+};
+
 @Injectable()
 export class PrismaProfileRepository implements ProfileRepository {
-  private readonly _include = {
-    user: true,
-    organization: { include: { country: true } },
-    learningLanguage: { include: { languageCode: true } },
-    nativeLanguage: { include: { languageCode: true } },
-    nationality: true,
-    avatar: true,
-  };
+  private readonly logger = new Logger(PrismaProfileRepository.name);
 
   constructor(private readonly prisma: PrismaService) {}
 
   async ofId(id: string) {
     const entry = await this.prisma.profile.findUnique({
       where: { id },
-      include: this._include,
+      include: Relations,
     });
 
     if (!entry) {
@@ -38,7 +38,7 @@ export class PrismaProfileRepository implements ProfileRepository {
   async ofUser(id: string): Promise<Profile> {
     const entry = await this.prisma.profile.findUnique({
       where: { userId: id },
-      include: this._include,
+      include: Relations,
     });
 
     if (!entry) {
@@ -48,17 +48,16 @@ export class PrismaProfileRepository implements ProfileRepository {
     return profileMapper(entry);
   }
 
-  async where(props: ProfileFilters) {
+  async where(props: {
+    nativeLanguageCode: string;
+    learningLanguageCode: string;
+  }) {
     const entries = await this.prisma.profile.findMany({
       where: {
-        nativeLanguage: {
-          is: { languageCode: { code: props.nativeLanguageCode } },
-        },
-        learningLanguage: {
-          is: { languageCode: { code: props.learningLanguageCode } },
-        },
+        nativeLanguage: { is: { code: props.nativeLanguageCode } },
+        learningLanguage: { is: { code: props.learningLanguageCode } },
       },
-      include: this._include,
+      include: Relations,
     });
 
     return entries.map(profileMapper);
@@ -90,7 +89,7 @@ export class PrismaProfileRepository implements ProfileRepository {
       },
       skip: offset,
       take: limit,
-      include: this._include,
+      include: Relations,
     });
 
     const profiles = items.map(profileMapper);
@@ -106,28 +105,20 @@ export class PrismaProfileRepository implements ProfileRepository {
       },
       firstname: profile.firstname,
       lastname: profile.lastname,
-      birthdate: new Date(profile.birthdate),
+      age: profile.age,
       gender: profile.gender,
       role: profile.role,
       nativeLanguage: {
-        create: {
-          languageCode: {
-            connect: {
-              code: profile.nativeLanguage.code,
-            },
-          },
+        connect: {
+          code: profile.nativeLanguage.code,
         },
       },
       learningLanguage: {
-        create: {
-          languageCode: {
-            connect: {
-              code: profile.learningLanguage.code,
-            },
-          },
-          proficiencyLevel: profile.learningLanguage.level,
+        connect: {
+          code: profile.learningLanguage.code,
         },
       },
+      learningLanguageLevel: profile.learningLanguageLevel,
       metadata: {
         goals: Array.from(profile.goals),
         meetingFrequency: profile.preferences.meetingFrequency,
@@ -135,7 +126,7 @@ export class PrismaProfileRepository implements ProfileRepository {
         bios: profile.bios,
         preferSameGender: profile.preferences.sameGender,
       },
-      organization: {
+      university: {
         connect: {
           id: profile.university.id,
         },
@@ -146,6 +137,8 @@ export class PrismaProfileRepository implements ProfileRepository {
         },
       },
     };
+
+    this.logger.debug(payload.learningLanguageLevel);
 
     await this.prisma.profile.upsert({
       where: { id: profile.id },

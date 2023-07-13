@@ -28,7 +28,7 @@ export class ExportController {
         role: item.role,
         native_language: item.nativeLanguage.code,
         learning_language: item.learningLanguage.code,
-        level: item.learningLanguage.level,
+        level: item.learningLanguageLevel,
         goal: Array.from(item.goals).join(','),
         interests: Array.from(item.interests).join(','),
         same_gender: item.preferences.sameGender ? 1 : 0,

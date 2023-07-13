@@ -5,7 +5,7 @@ import { LANGUAGE_REPOSITORY } from '../../../providers/providers.module';
 import { LanguageDoesNotExist } from '../../errors/RessourceDoesNotExist';
 
 export class UpdateLanguageCommand {
-  id: string;
+  code: string;
   isEnable: boolean;
 }
 
@@ -17,18 +17,22 @@ export class UpdateLanguageUsecase {
   ) {}
 
   async execute(command: UpdateLanguageCommand): Promise<Language> {
-    const { id, isEnable } = command;
+    const { code, isEnable } = command;
 
-    const language = await this.languageRepository.ofId(id);
-
-    if (!language) {
-      throw LanguageDoesNotExist.withIdOf(id);
-    }
+    const language = await this.tryToFindTheLanguageOfCode(code);
 
     language.isEnable = isEnable;
 
     await this.languageRepository.save(language);
 
+    return language;
+  }
+
+  private async tryToFindTheLanguageOfCode(code: string): Promise<Language> {
+    const language = await this.languageRepository.ofCode(code);
+    if (!language) {
+      throw LanguageDoesNotExist.withCodeOf(code);
+    }
     return language;
   }
 }

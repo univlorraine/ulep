@@ -24,10 +24,6 @@ export class InMemoryLanguageRepository implements LanguageRepository {
     };
   }
 
-  async ofId(id: string): Promise<Language> {
-    return this.#languages.find((language) => language.id === id);
-  }
-
   async ofCode(code: string): Promise<Language> {
     return this.#languages.find((language) => language.code === code);
   }

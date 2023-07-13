@@ -1,8 +1,6 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { Gender, Role } from '@prisma/client';
 import {
   ArrayMaxSize,
-  // IsDateString,
   IsEnum,
   IsIn,
   IsInt,
@@ -16,6 +14,8 @@ import {
   Goal,
   CEFRLevel,
   MeetingFrequency,
+  Role,
+  Gender,
 } from '../../../core/models/profile';
 
 export class CreateProfileRequest {
@@ -32,10 +32,6 @@ export class CreateProfileRequest {
   @IsString()
   @IsNotEmpty()
   lastname: string;
-
-  // @ApiProperty()
-  // @IsDateString()
-  // birthdate: string;
 
   @ApiProperty({ type: 'integer', minimum: 16, maximum: 80 })
   @IsInt()
@@ -88,13 +84,4 @@ export class CreateProfileRequest {
 
   @ApiProperty()
   bios?: string;
-
-  get birthdate(): string {
-    const currentDate: Date = new Date();
-    const birthYear: number = currentDate.getFullYear() - this.age;
-    const birthDate: Date = new Date();
-    birthDate.setFullYear(birthYear);
-
-    return birthDate.toISOString();
-  }
 }

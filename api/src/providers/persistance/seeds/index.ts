@@ -10,9 +10,9 @@ const load = async () => {
   try {
     await prisma.profile.deleteMany();
     await prisma.user.deleteMany();
-    await prisma.organization.deleteMany();
-    await prisma.countryCode.deleteMany();
-    await prisma.languageCode.deleteMany();
+    await prisma.university.deleteMany();
+    await prisma.country.deleteMany();
+    await prisma.language.deleteMany();
 
     await createCountries(prisma);
     await createLanguages(prisma);

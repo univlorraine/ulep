@@ -1,6 +1,8 @@
+import { User } from './user';
+
 export type CreateReportProps = {
   id: string;
-  ownerId: string;
+  owner: User;
   category: ReportCategory;
   content: string;
 };
@@ -13,7 +15,7 @@ export type ReportCategory = {
 export class Report {
   #id: string;
 
-  #ownerId: string;
+  #owner: User;
 
   #category: ReportCategory;
 
@@ -21,7 +23,7 @@ export class Report {
 
   constructor(props: CreateReportProps) {
     this.#id = props.id;
-    this.#ownerId = props.ownerId;
+    this.#owner = props.owner;
     this.#content = props.content;
     this.#category = props.category;
   }
@@ -34,8 +36,8 @@ export class Report {
     return this.#id;
   }
 
-  get ownerId(): string {
-    return this.#ownerId;
+  get owner(): User {
+    return this.#owner;
   }
 
   get category(): ReportCategory {

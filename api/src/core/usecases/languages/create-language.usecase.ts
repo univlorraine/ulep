@@ -5,7 +5,6 @@ import { LanguageRepository } from '../../ports/language.repository';
 import { LANGUAGE_REPOSITORY } from '../../../providers/providers.module';
 
 export class CreateLanguageCommand {
-  id: string;
   code: string;
   name: string;
   isEnable: boolean;
@@ -19,15 +18,19 @@ export class CreateLanguageUsecase {
   ) {}
 
   async execute(command: CreateLanguageCommand): Promise<Language> {
-    const language = await this.languageRepository.ofCode(command.code);
-    if (language) {
-      throw new RessourceAlreadyExists('Language', 'code', command.code);
-    }
+    await this.assertLanguageDoesNotExistForCode(command.code);
 
     const instance = new Language({ ...command });
 
     await this.languageRepository.save(instance);
 
     return instance;
+  }
+
+  private async assertLanguageDoesNotExistForCode(code: string): Promise<void> {
+    const language = await this.languageRepository.ofCode(code);
+    if (language) {
+      throw new RessourceAlreadyExists('Language', 'code', code);
+    }
   }
 }

@@ -1,6 +1,11 @@
 import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
-import { Gender, Role } from '@prisma/client';
-import { Goal, MeetingFrequency, Profile } from '../../../core/models/profile';
+import {
+  Gender,
+  Goal,
+  MeetingFrequency,
+  Profile,
+  Role,
+} from '../../../core/models/profile';
 import { UniversityResponse } from '../university/university.response';
 import { Expose, Transform } from 'class-transformer';
 
@@ -134,7 +139,7 @@ export class ProfileResponse {
       },
       learningLanguage: {
         code: profile.learningLanguage.code,
-        level: profile.learningLanguage.level.toString(),
+        level: profile.learningLanguageLevel.toString(),
       },
       goals: Array.from(profile.goals),
       interests: Array.from(profile.interests),

@@ -1,5 +1,3 @@
-import { v4 } from 'uuid';
-
 export interface LanguageProps {
   name: string;
   code: string;
@@ -7,25 +5,18 @@ export interface LanguageProps {
 }
 
 export class Language {
-  #id: string;
   #name: string;
   #code: string;
   #isEnable: boolean;
 
-  constructor(props: { id: string } & LanguageProps) {
-    this.#id = props.id;
+  constructor(props: LanguageProps) {
     this.#name = props.name;
     this.#code = props.code;
     this.#isEnable = props.isEnable;
   }
 
   static create(props: LanguageProps) {
-    const id = v4();
-    return new Language({ id, ...props });
-  }
-
-  get id() {
-    return this.#id;
+    return new Language({ ...props });
   }
 
   get name() {

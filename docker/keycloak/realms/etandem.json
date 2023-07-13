@@ -30,22 +30,5 @@
         "http://localhost:3001/auth-callback"
       ]
     }
-  ],
-  "users": [
-    {
-      "username": "Jane Doe",
-      "enabled": true,
-      "emailVerified": false,
-      "firstName": "Jane",
-      "lastName": "Doe",
-      "email": "jane.doe@ulep.io",
-      "credentials": [
-        {
-          "type": "password",
-          "value": "admin",
-          "temporary": false
-        }
-      ]
-    }
   ]
 }

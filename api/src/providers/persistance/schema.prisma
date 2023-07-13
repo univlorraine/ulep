@@ -23,61 +23,73 @@ model Profile {
   userId                String              @unique
   firstname             String
   lastname              String
-  birthdate             DateTime
-  gender                Gender
-  role                  Role
+  age                   Int
+  gender                String
+  role                  String
   metadata              Json // availability, goals, meetingFrequency, department, diploma, bio, interests, etc.
-  organization          Organization        @relation(fields: [organizationId], references: [id], onDelete: Cascade)
-  organizationId        String
-  nationality           CountryCode         @relation(fields: [nationalityId], references: [id])
+  university            University          @relation(fields: [universityId], references: [id], onDelete: Cascade)
+  universityId          String
+  nationality           Country             @relation(fields: [nationalityId], references: [id])
   nationalityId         String
   avatar                MediaObject?
-  nativeLanguage        NativeLanguage?
-  learningLanguage      LearningLanguage?
+  nativeLanguage        Language            @relation("NativeLanguage", fields: [nativeLanguageCode], references: [code])
+  nativeLanguageCode    String
+  learningLanguage      Language            @relation("LearningLanguage", fields: [learningLanguageCode], references: [code])
+  learningLanguageCode  String
+  learningLanguageLevel String
+  masteredLanguages     MasteredLanguage[]
+  preferences           LearningPreference? @relation(fields: [preferencesId], references: [id])
+  preferencesId         String?             @unique
   // tandems               ProfileTandem[]
   createdAt             DateTime            @default(now())
+
+  @@map("profiles")
+  @@index([nativeLanguageCode], name: "native_language_code")
+  @@index([learningLanguageCode], name: "learning_language_code")
+  @@index([universityId], name: "university_id")
 }
 
-model LanguageCode {
-  id                    String              @id @default(uuid())
-  code                  String              @unique
+model Language {
+  code                  String              @id
   name                  String
-  isEnable              Boolean             @default(true)
-  nativeLanguages       NativeLanguage[]
-  learningLanguages     LearningLanguage[]
-  createdAt             DateTime            @default(now())
+  isAvailable           Boolean
+  nativeSpeakers        Profile[]           @relation("NativeLanguage")
+  learningUsers         Profile[]           @relation("LearningLanguage")
+  masteredByUsers       MasteredLanguage[]
+
+  @@map("languages")
 }
 
-model NativeLanguage {
+// Many to many relation between Profile and Language
+model MasteredLanguage {
+  profileId             String
+  languageCode          String
+  profile               Profile             @relation(fields: [profileId], references: [id])
+  language              Language            @relation(fields: [languageCode], references: [code])
+
+  @@id([profileId, languageCode])
+  @@map("mastered_languages")
+}
+
+model LearningPreference {
   id                    String              @id @default(uuid())
-  profile               Profile             @relation(fields: [profileId], references: [id], onDelete: Cascade)
-  profileId             String              @unique
-  languageCode          LanguageCode        @relation(fields: [languageCodeId], references: [id], onDelete: Cascade)
-  languageCodeId        String
-  createdAt             DateTime            @default(now())
+  sameGender            Boolean
+  remote                Boolean             @default(true)
+  profile               Profile?
+  // TODO: meetingFrequency, goals, etc.
 
-  @@unique([profileId, languageCodeId])
+  @@map("learning_preferences")
 }
 
-model LearningLanguage {
-  id                    String              @id @default(uuid())
-  profile               Profile             @relation(fields: [profileId], references: [id], onDelete: Cascade)
-  profileId             String              @unique
-  languageCode          LanguageCode        @relation(fields: [languageCodeId], references: [id], onDelete: Cascade)
-  languageCodeId        String
-  proficiencyLevel      String
-  createdAt             DateTime            @default(now())
-
-  @@unique([profileId, languageCodeId])
-}
-
-model CountryCode {
+model Country {
   id                    String              @id @default(uuid())
   code                  String              @unique
   name                  String
   profiles              Profile[]
-  organizations         Organization[]
+  universities          University[]
   createdAt             DateTime            @default(now())
+
+  @@map("countries")
 }
 
 // model Tandem {
@@ -95,16 +107,18 @@ model CountryCode {
 //   createdAt             DateTime            @default(now())
 // }
 
-model Organization {
+model University {
   id                    String              @id @default(uuid())
   profiles              Profile[]
   name                  String              @unique
-  country               CountryCode         @relation(fields: [countryId], references: [id])
+  country               Country             @relation(fields: [countryId], references: [id])
   countryId             String
   timezone              String
   admissionStart        DateTime
   admissionEnd          DateTime
   createdAt             DateTime            @default(now())
+
+  @@map("universities")
 }
 
 model MediaObject {
@@ -116,6 +130,8 @@ model MediaObject {
   createdAt             DateTime            @default(now())
   profile               Profile             @relation(fields: [profileId], references: [id], onDelete: Cascade)
   profileId             String              @unique
+
+  @@map("media_objects")
 }
 
 model Report {
@@ -137,31 +153,4 @@ model ReportCategory {
   reports               Report[]            // Category to Reports relation, one category can have many reports
 
   @@map("report_categories")
-}
-
-enum Role {
-  STAFF
-  STUDENT
-}
-
-enum Gender {
-  MALE
-  FEMALE
-  OTHER
-}
-
-enum Goal {
-  SPEAK_LIKE_NATIVE
-  IMPROVE_LEVEL
-  ORAL_PRACTICE
-  PREPARE_TRAVEL_ABROAD
-  GET_CERTIFICATION
-}
-
-enum MeetingFrequency {
-  ONCE_A_WEEK
-  TWICE_A_WEEK
-  THREE_TIMES_A_WEEK
-  TWICE_A_MONTH
-  THREE_TIMES_A_MONTH
 }

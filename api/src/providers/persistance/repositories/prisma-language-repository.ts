@@ -9,22 +9,8 @@ import { languageMapper } from '../mappers/language.mapper';
 export class PrismaLanguageRepository implements LanguageRepository {
   constructor(private readonly prisma: PrismaService) {}
 
-  async ofId(id: string): Promise<Language | null> {
-    const language = await this.prisma.languageCode.findUnique({
-      where: {
-        id: id,
-      },
-    });
-
-    if (!language) {
-      return null;
-    }
-
-    return languageMapper(language);
-  }
-
   async ofCode(code: string): Promise<Language | null> {
-    const language = await this.prisma.languageCode.findUnique({
+    const language = await this.prisma.language.findUnique({
       where: {
         code: code,
       },
@@ -38,8 +24,8 @@ export class PrismaLanguageRepository implements LanguageRepository {
   }
 
   async all(offset?: number, limit?: number): Promise<Collection<Language>> {
-    const total = await this.prisma.languageCode.count();
-    const languages = await this.prisma.languageCode.findMany({
+    const total = await this.prisma.language.count();
+    const languages = await this.prisma.language.findMany({
       skip: offset,
       take: limit,
     });
@@ -55,22 +41,21 @@ export class PrismaLanguageRepository implements LanguageRepository {
   }
 
   async save(language: Language): Promise<void> {
-    const { id, name, code, isEnable } = language;
+    const { name, code, isEnable } = language;
 
-    await this.prisma.languageCode.upsert({
+    await this.prisma.language.upsert({
       where: {
-        id: id,
+        code: code,
       },
       update: {
         name: name,
         code: code,
-        isEnable: isEnable,
+        isAvailable: isEnable,
       },
       create: {
-        id: id,
         name: name,
         code: code,
-        isEnable: isEnable,
+        isAvailable: isEnable,
       },
     });
   }

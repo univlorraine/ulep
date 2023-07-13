@@ -1,7 +1,7 @@
 import { PrismaClient } from '@prisma/client';
 
 export const createUniversities = async (prisma: PrismaClient) => {
-  await prisma.organization.create({
+  await prisma.university.create({
     data: {
       name: 'Université de Lorraine',
       country: { connect: { code: 'FR' } },

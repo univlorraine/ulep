@@ -2,7 +2,7 @@ import { PrismaClient } from '@prisma/client';
 
 export const createCountries = async (prisma: PrismaClient) => {
   for (const country of countriesCodes) {
-    await prisma.countryCode.create({
+    await prisma.country.create({
       data: { code: country.code, name: country.name },
     });
   }

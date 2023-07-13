@@ -4,7 +4,7 @@ import { LANGUAGE_REPOSITORY } from '../../../providers/providers.module';
 import { LanguageDoesNotExist } from 'src/core/errors/RessourceDoesNotExist';
 
 export class GetLanguageCommand {
-  id: string;
+  code: string;
 }
 
 @Injectable()
@@ -15,10 +15,10 @@ export class GetLanguageUsecase {
   ) {}
 
   async execute(command: GetLanguageCommand) {
-    const result = await this.languageRepository.ofId(command.id);
+    const result = await this.languageRepository.ofCode(command.code);
 
     if (!result) {
-      throw LanguageDoesNotExist.withIdOf(command.id);
+      throw LanguageDoesNotExist.withCodeOf(command.code);
     }
 
     return result;

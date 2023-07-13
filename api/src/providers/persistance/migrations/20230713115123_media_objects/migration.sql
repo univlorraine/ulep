@@ -1,5 +1,5 @@
 -- CreateTable
-CREATE TABLE "MediaObject" (
+CREATE TABLE "media_objects" (
     "id" TEXT NOT NULL,
     "name" TEXT NOT NULL,
     "bucket" TEXT NOT NULL,
@@ -7,5 +7,5 @@ CREATE TABLE "MediaObject" (
     "size" INTEGER NOT NULL,
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
 
-    CONSTRAINT "MediaObject_pkey" PRIMARY KEY ("id")
+    CONSTRAINT "media_objects_pkey" PRIMARY KEY ("id")
 );

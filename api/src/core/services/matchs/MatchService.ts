@@ -73,8 +73,8 @@ export class MatchService {
       C2: { A0: 6, A1: 6, A2: 5, B1: 4, B2: 4, C1: 4, C2: 4 },
     };
 
-    const level1 = profile1.learningLanguage.level;
-    const level2 = profile2.learningLanguage.level;
+    const level1 = profile1.learningLanguageLevel;
+    const level2 = profile2.learningLanguageLevel;
 
     const level = isDiscovery ? discoveryLanguageLevelMatrix[level1][level2] : languageLevelMatrix[level1][level2];
 

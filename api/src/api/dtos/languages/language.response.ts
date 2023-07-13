@@ -3,10 +3,6 @@ import { Language } from '../../../core/models/language';
 import { Expose } from 'class-transformer';
 
 export class LanguageResponse {
-  @ApiProperty({ type: 'string', format: 'uuid' })
-  @Expose({ groups: ['read'] })
-  id: string;
-
   @ApiProperty({
     type: 'string',
     description: 'ISO 639-1 code',
@@ -37,7 +33,6 @@ export class LanguageResponse {
 
   static fromDomain(language: Language): LanguageResponse {
     return new LanguageResponse({
-      id: language.id,
       code: language.code,
       name: language.name,
       enabled: language.isEnable,

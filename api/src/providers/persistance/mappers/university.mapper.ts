@@ -2,8 +2,8 @@ import * as Prisma from '@prisma/client';
 import { University } from '../../../core/models/university';
 import { countryMapper } from './country.mapper';
 
-type OrganizationEntity = Prisma.Organization & {
-  country: Prisma.CountryCode;
+type OrganizationEntity = Prisma.University & {
+  country: Prisma.Country;
 };
 
 export const universityMapper = (instance: OrganizationEntity): University => {

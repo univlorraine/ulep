@@ -97,7 +97,6 @@ export class ProfileController {
     const command: CreateProfileCommand = {
       userId: user.id,
       ...body,
-      birthdate: body.birthdate,
       goals: new Set(body.goals),
       interests: new Set(body.interests),
     };

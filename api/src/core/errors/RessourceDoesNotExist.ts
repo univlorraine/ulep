@@ -18,10 +18,6 @@ export class LanguageDoesNotExist extends RessourceDoesNotExist {
     super('Language', field, value);
   }
 
-  static withIdOf(id: string): RessourceDoesNotExist {
-    return new LanguageDoesNotExist('id', id);
-  }
-
   static withCodeOf(code: string): RessourceDoesNotExist {
     return new LanguageDoesNotExist('code', code);
   }

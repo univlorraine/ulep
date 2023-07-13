@@ -3,6 +3,7 @@ import { Expose } from 'class-transformer';
 import { Report, ReportCategory } from '../../../core/models/report';
 import { IsString, IsNotEmpty, IsUUID, IsOptional } from 'class-validator';
 import { PaginationDto } from '../pagination.dto';
+import { UserResponse } from '../users/user.response';
 
 export class ReportCategoryResponse {
   @ApiProperty({ type: 'string', format: 'uuid' })
@@ -27,9 +28,9 @@ export class ReportResponse {
   @Expose({ groups: ['read'] })
   id: string;
 
-  @ApiProperty({ type: 'string', format: 'uuid' })
+  @ApiProperty()
   @Expose({ groups: ['read'] })
-  user: string;
+  user: UserResponse;
 
   @ApiProperty()
   @Expose({ groups: ['read'] })
@@ -49,7 +50,10 @@ export class ReportResponse {
   static fromDomain(report: Report): ReportResponse {
     return new ReportResponse({
       id: report.id,
-      user: report.ownerId,
+      user: new UserResponse({
+        id: report.owner.id,
+        email: report.owner.email,
+      }),
       category: new ReportCategoryResponse({
         id: report.category.id,
         name: report.category.name,

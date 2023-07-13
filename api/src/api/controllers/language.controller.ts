@@ -4,9 +4,7 @@ import {
   Controller,
   Get,
   Param,
-  Patch,
   Post,
-  ParseUUIDPipe,
   Logger,
   Query,
   SerializeOptions,
@@ -57,15 +55,13 @@ export class LanguageController {
     );
   }
 
-  @Get(':id')
+  @Get(':code')
   @SerializeOptions({ groups: ['read', 'language:read'] })
   @Swagger.ApiOperation({ summary: 'Retrieve a Language ressource.' })
   @Swagger.ApiOkResponse({ type: LanguageResponse })
   @Swagger.ApiNotFoundResponse({ description: 'Resource not found' })
-  async getItem(
-    @Param('id', ParseUUIDPipe) id: string,
-  ): Promise<LanguageResponse> {
-    const instance = await this.getLanguageUsecase.execute({ id });
+  async getItem(@Param('code') code: string): Promise<LanguageResponse> {
+    const instance = await this.getLanguageUsecase.execute({ code });
 
     return LanguageResponse.fromDomain(instance);
   }
@@ -77,7 +73,6 @@ export class LanguageController {
   @Swagger.ApiResponse({ status: 400, description: 'Invalid input' })
   async create(@Body() body: CreateLanguageRequest): Promise<LanguageResponse> {
     const language = await this.createLanguageUsecase.execute({
-      id: body.id,
       name: body.name,
       code: body.code,
       isEnable: body.enabled,
@@ -86,17 +81,17 @@ export class LanguageController {
     return LanguageResponse.fromDomain(language);
   }
 
-  @Put(':id')
+  @Put(':code')
   @SerializeOptions({ groups: ['read', 'language:read'] })
   @Swagger.ApiOperation({ summary: 'Updates a Language ressource.' })
   @Swagger.ApiCreatedResponse({ type: LanguageResponse })
   @Swagger.ApiResponse({ status: 400, description: 'Invalid input' })
   async update(
-    @Param('id', ParseUUIDPipe) id: string,
+    @Param('code') code: string,
     @Body() { enabled }: UpdateLanguageRequest,
   ) {
     const language = await this.updateLanguageUsecase.execute({
-      id: id,
+      code: code,
       isEnable: enabled,
     });
 

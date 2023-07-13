@@ -1,4 +1,3 @@
-import { Gender, Role } from '@prisma/client';
 import { University } from './university';
 import MediaObject from './media-object';
 import { Country } from './country';
@@ -20,6 +19,17 @@ export enum MeetingFrequency {
   THREE_TIMES_A_MONTH = 'THREE_TIMES_A_MONTH',
 }
 
+export enum Role {
+  STUDENT = 'STUDENT',
+  TEACHER = 'TEACHER',
+}
+
+export enum Gender {
+  MALE = 'MALE',
+  FEMALE = 'FEMALE',
+  OTHER = 'OTHER',
+}
+
 export type CEFRLevel = 'A1' | 'A2' | 'B1' | 'B2' | 'C1' | 'C2';
 
 export type ProfilePreferences = {
@@ -27,15 +37,8 @@ export type ProfilePreferences = {
   sameGender: boolean;
 };
 
-export type NativeLanguage = {
-  id: string;
+export type Language = {
   code: string;
-};
-
-export type LearningLanguage = {
-  id: string;
-  code: string;
-  level: CEFRLevel;
 };
 
 export type CreateProfileProps = {
@@ -43,13 +46,15 @@ export type CreateProfileProps = {
   user: User;
   firstname: string;
   lastname: string;
-  birthdate: Date;
+  age: number;
   role: Role;
   gender: Gender;
   university: University;
   nationality: Country;
-  nativeLanguage: NativeLanguage;
-  learningLanguage: LearningLanguage;
+  nativeLanguage: Language;
+  masteredLanguages: Language[];
+  learningLanguage: Language;
+  learningLanguageLevel: CEFRLevel;
   goals: Set<Goal>;
   interests: Set<string>;
   bios?: string;
@@ -66,7 +71,7 @@ export class Profile {
 
   #lastname: string;
 
-  #birthdate: Date;
+  #age: number;
 
   #gender: Gender;
 
@@ -76,9 +81,13 @@ export class Profile {
 
   #nationality: Country;
 
-  #nativeLanguage: NativeLanguage;
+  #nativeLanguage: Language;
 
-  #learningLanguage: LearningLanguage;
+  #masteredLanguages: Language[];
+
+  #learningLanguage: Language;
+
+  #learningLanguageLevel: CEFRLevel;
 
   #goals: Set<Goal>;
 
@@ -95,18 +104,22 @@ export class Profile {
     this.#user = props.user;
     this.firstname = props.firstname;
     this.lastname = props.lastname;
-    this.birthdate = props.birthdate;
+    this.age = props.age;
     this.gender = props.gender;
     this.role = props.role;
     this.university = props.university;
     this.nationality = props.nationality;
-    this.nativeLanguage = props.nativeLanguage;
-    this.learningLanguage = props.learningLanguage;
+    this.#nativeLanguage = props.nativeLanguage;
+    this.#masteredLanguages = props.masteredLanguages;
+    this.#learningLanguage = props.learningLanguage;
+    this.#learningLanguageLevel = props.learningLanguageLevel;
     this.goals = props.goals;
     this.interests = props.interests;
     this.bios = props.bios;
     this.preferences = props.preferences;
     this.avatar = props.avatar;
+
+    this.assertLanguesAreUnique();
   }
 
   get id(): string {
@@ -141,16 +154,16 @@ export class Profile {
     this.#lastname = lastname;
   }
 
-  get birthdate(): Date {
-    return this.#birthdate;
+  get age(): number {
+    return this.#age;
   }
 
-  set birthdate(birthdate: Date) {
-    if (new Date() < birthdate) {
-      throw new Error('Birthdate cannot be in the future');
+  set age(age: number) {
+    if (age < 16 || age > 100) {
+      throw new Error('Age must be between 18 and 100');
     }
 
-    this.#birthdate = birthdate;
+    this.#age = age;
   }
 
   get gender(): Gender {
@@ -185,34 +198,42 @@ export class Profile {
     this.#nationality = country;
   }
 
-  get nativeLanguage(): NativeLanguage {
+  get nativeLanguage(): Language {
     return this.#nativeLanguage;
   }
 
-  set nativeLanguage(nativeLanguage: NativeLanguage) {
-    if (
-      this.#learningLanguage &&
-      nativeLanguage.code === this.learningLanguage.code
-    ) {
-      throw new Error('Native and languages cannot be the same');
-    }
-
+  set nativeLanguage(nativeLanguage: Language) {
     this.#nativeLanguage = nativeLanguage;
+
+    this.assertLanguesAreUnique();
   }
 
-  get learningLanguage(): LearningLanguage {
+  get masteredLanguages(): Language[] {
+    return this.#masteredLanguages;
+  }
+
+  set masteredLanguages(masteredLanguages: Language[]) {
+    this.#masteredLanguages = masteredLanguages;
+
+    this.assertLanguesAreUnique();
+  }
+
+  get learningLanguage(): Language {
     return this.#learningLanguage;
   }
 
-  set learningLanguage(learningLanguage: LearningLanguage) {
-    if (
-      this.#nativeLanguage &&
-      learningLanguage.code === this.nativeLanguage.code
-    ) {
-      throw new Error('Native and languages cannot be the same');
-    }
-
+  set learningLanguage(learningLanguage: Language) {
     this.#learningLanguage = learningLanguage;
+
+    this.assertLanguesAreUnique();
+  }
+
+  get learningLanguageLevel(): CEFRLevel {
+    return this.#learningLanguageLevel;
+  }
+
+  set learningLanguageLevel(learningLanguageLevel: CEFRLevel) {
+    this.#learningLanguageLevel = learningLanguageLevel;
   }
 
   get avatar(): MediaObject | undefined {
@@ -258,15 +279,25 @@ export class Profile {
     this.#preferences = preferences;
   }
 
-  get age(): number {
-    const now = new Date();
-    const birthdate = this.#birthdate;
-    let age = now.getFullYear() - birthdate.getFullYear();
-    const month = now.getMonth() - birthdate.getMonth();
-    if (month < 0 || (0 === month && now.getDate() < birthdate.getDate())) {
-      age--;
+  private assertLanguesAreUnique(): void {
+    if (this.#nativeLanguage.code === this.#learningLanguage.code) {
+      throw new Error('Native and learning languages cannot be the same');
     }
 
-    return age;
+    if (
+      this.#masteredLanguages.some(
+        (language) => language.code === this.#nativeLanguage?.code,
+      )
+    ) {
+      throw new Error('Native and mastered languages cannot be the same');
+    }
+
+    if (
+      this.#masteredLanguages.some(
+        (language) => language.code === this.#learningLanguage?.code,
+      )
+    ) {
+      throw new Error('Learning and mastered languages cannot be the same');
+    }
   }
 }

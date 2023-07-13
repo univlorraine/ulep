@@ -1,19 +1,9 @@
 import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
 import { Type } from 'class-transformer';
-import {
-  IsBoolean,
-  IsNotEmpty,
-  IsOptional,
-  IsString,
-  IsUUID,
-} from 'class-validator';
+import { IsBoolean, IsNotEmpty, IsOptional, IsString } from 'class-validator';
 
 // TODO Add isAvailable false
 export class CreateLanguageRequest {
-  @ApiProperty({ type: 'string', format: 'uuid' })
-  @IsUUID()
-  id: string;
-
   @ApiProperty({
     type: 'string',
     description: 'Language name',
@@ -27,6 +17,7 @@ export class CreateLanguageRequest {
     type: 'string',
     description: 'ISO 639-1 code',
     example: 'FR',
+    uniqueItems: true,
   })
   @IsString()
   @IsNotEmpty()

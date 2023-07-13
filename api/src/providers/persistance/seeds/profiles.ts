@@ -1,6 +1,11 @@
 import { faker } from '@faker-js/faker';
-import { Gender, PrismaClient, Role, User } from '@prisma/client';
-import { Goal, MeetingFrequency } from '../../../core/models/profile';
+import * as Prisma from '@prisma/client';
+import {
+  Gender,
+  Goal,
+  MeetingFrequency,
+  Role,
+} from '../../../core/models/profile';
 
 const levels = ['A1', 'A2', 'B1', 'B2', 'C1'];
 
@@ -94,9 +99,9 @@ const enumToList = (_enum: unknown): string[] => {
 
 const createUsers = async (
   count: number,
-  prisma: PrismaClient,
-): Promise<User[]> => {
-  const users: User[] = [];
+  prisma: Prisma.PrismaClient,
+): Promise<Prisma.User[]> => {
+  const users: Prisma.User[] = [];
 
   for (let i = 0; i < count; i++) {
     const user = await prisma.user.create({
@@ -114,7 +119,7 @@ const createUsers = async (
 
 export const createProfiles = async (
   count: number,
-  prisma: PrismaClient,
+  prisma: Prisma.PrismaClient,
 ): Promise<void> => {
   const users = await createUsers(count, prisma);
 
@@ -130,26 +135,22 @@ export const createProfiles = async (
         user: { connect: { id: user.id } },
         firstname: faker.person.firstName(),
         lastname: faker.person.lastName(),
-        birthdate: faker.date.birthdate(),
+        age: faker.number.int({ min: 16, max: 64 }),
         gender: faker.helpers.enumValue(Gender),
         role: faker.helpers.enumValue(Role),
         nationality: { connect: { code: countryCode } },
         nativeLanguage: {
-          create: {
-            languageCode: { connect: { code: nativeLanguageCode } },
+          connect: {
+            code: nativeLanguageCode,
           },
         },
         learningLanguage: {
-          create: {
-            languageCode: {
-              connect: {
-                code: faker.helpers.arrayElement(availableLanguagesCodes),
-              },
-            },
-            proficiencyLevel: faker.helpers.arrayElement(levels),
+          connect: {
+            code: faker.helpers.arrayElement(availableLanguagesCodes),
           },
         },
-        organization: { connect: { name: 'Université de Lorraine' } },
+        learningLanguageLevel: faker.helpers.arrayElement(levels),
+        university: { connect: { name: 'Université de Lorraine' } },
         metadata: {
           interests: faker.helpers.arrayElements(interests, {
             min: 1,

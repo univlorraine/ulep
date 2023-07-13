@@ -4,9 +4,7 @@ import { Language } from '../models/language';
 export interface LanguageRepository {
   all: (offset?: number, limit?: number) => Promise<Collection<Language>>;
 
-  ofId: (id: string) => Promise<Language | null>;
-
-  ofCode: (id: string) => Promise<Language | null>;
+  ofCode: (code: string) => Promise<Language | null>;
 
   save: (language: Language) => Promise<void>;
 }

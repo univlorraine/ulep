@@ -6,6 +6,11 @@ import { StringFilter } from '../../../shared/types/filters';
 import { Collection } from 'src/shared/types/collection';
 import { Injectable, Logger } from '@nestjs/common';
 
+const Relations = {
+  category: true,
+  user: true,
+};
+
 @Injectable()
 export class PrismaReportRepository implements ReportRepository {
   private readonly logger = new Logger(PrismaReportRepository.name);
@@ -15,7 +20,7 @@ export class PrismaReportRepository implements ReportRepository {
   async ofId(id: string): Promise<Report> {
     const report = await this.prisma.report.findUnique({
       where: { id },
-      include: { category: true },
+      include: Relations,
     });
 
     return reportMapper(report);
@@ -38,7 +43,7 @@ export class PrismaReportRepository implements ReportRepository {
       skip: offset,
       take: limit,
       where: { category },
-      include: { category: true },
+      include: Relations,
     });
 
     return { items: reports.map(reportMapper), totalItems: count };
@@ -56,7 +61,7 @@ export class PrismaReportRepository implements ReportRepository {
         },
         user: {
           connect: {
-            id: report.ownerId,
+            id: report.owner.id,
           },
         },
       },

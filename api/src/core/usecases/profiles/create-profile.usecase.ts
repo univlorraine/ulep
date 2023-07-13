@@ -1,10 +1,4 @@
-import {
-  BadRequestException,
-  Inject,
-  Injectable,
-  Logger,
-} from '@nestjs/common';
-import { Gender, Role } from '@prisma/client';
+import { Inject, Injectable, Logger } from '@nestjs/common';
 import {
   CountryDoesNotExist,
   LanguageDoesNotExist,
@@ -13,6 +7,8 @@ import {
 } from '../../errors/RessourceDoesNotExist';
 import {
   Goal,
+  Gender,
+  Role,
   CEFRLevel,
   MeetingFrequency,
   Profile,
@@ -40,7 +36,7 @@ export class CreateProfileCommand {
   userId: string;
   firstname: string;
   lastname: string;
-  birthdate: string;
+  age: number;
   role: Role;
   gender: Gender;
   university: string;
@@ -90,27 +86,19 @@ export class CreateProfileUsecase {
       command.nativeLanguage,
     );
 
-    if (nativeLanguage.id === learningLanguage.id) {
-      throw new BadRequestException(
-        'Native language and learning language cannot be the same',
-      );
-    }
-
     const instance = new Profile({
       ...command,
       user,
-      birthdate: new Date(command.birthdate),
       university,
       nationality,
-      learningLanguage: {
-        id: learningLanguage.id,
-        code: learningLanguage.code,
-        level: command.proficiencyLevel,
-      },
       nativeLanguage: {
-        id: nativeLanguage.id,
         code: nativeLanguage.code,
       },
+      learningLanguage: {
+        code: learningLanguage.code,
+      },
+      learningLanguageLevel: command.proficiencyLevel,
+      masteredLanguages: [],
       preferences: {
         meetingFrequency: command.meetingFrequency,
         sameGender: command.preferSameGender,
