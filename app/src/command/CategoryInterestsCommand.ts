@@ -6,7 +6,7 @@ interface CategoryInterestsCommand {
     interests: string[];
 }
 
-export const goalCommandToDomain = (command: CategoryInterestsCommand) => {
+export const ategoryInterestsCommandToDomain = (command: CategoryInterestsCommand) => {
     return new CategoryInterests(command.id, command.name, command.interests);
 };
 
