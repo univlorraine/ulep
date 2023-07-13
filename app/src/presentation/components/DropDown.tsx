@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import styles from './DropDown.module.css';
 
 export interface DropDownItem<T> {
@@ -13,7 +13,7 @@ interface DropdownProps<T> {
     title?: string | null;
 }
 
-const Dropdown: React.FC<DropdownProps<any>> = ({ onChange, options, placeholder, title }) => {
+const Dropdown = <T,>({ onChange, options, placeholder, title }: DropdownProps<T>) => {
     const [isOpen, setIsOpen] = useState<boolean>(false);
     const [selectedOption, setSelectedOption] = useState<DropDownItem<any> | undefined>(
         !placeholder ? options[0] : undefined
