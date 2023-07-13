@@ -87,7 +87,7 @@ spec:
             - name: KC_DB_USERNAME
               value: "{{ .Values.global.postgresql.auth.username }}"
             - name: KC_DB_URL
-              value: "jdbc:postgresql://{{ include "etandem.name" . }}-postgresql.{{ include "etandem.name" . }}:{{ .Values.database.service.port }}/{{ .Values.global.postgresql.auth.database }}"
+              value: "jdbc:postgresql://{{ include "etandem.name" . }}-postgresql.{{ include "etandem.name" . }}:5432/{{ .Values.global.postgresql.auth.database }}"
             - name: KC_DB_SCHEMA
               value: "{{ .Values.auth.env.kcDBSchema }}"
             - name: PROXY_ADDRESS_FORWARDING

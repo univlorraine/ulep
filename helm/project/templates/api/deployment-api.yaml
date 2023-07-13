@@ -40,7 +40,7 @@ spec:
           - name: HOST_NAME
             value: "{{ include "etandem.name" . }}-postgresql.{{ include "etandem.name" . }}"
           - name: DB_PORT
-            value: "{{ .Values.database.service.port }}"
+            value: 5432
           - name: DB_USER
             value: "{{ .Values.global.postgresql.auth.username }}"
       containers:
