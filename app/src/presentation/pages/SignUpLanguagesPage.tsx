@@ -6,7 +6,6 @@ import { useConfig } from '../../context/ConfigurationContext';
 import Language from '../../domain/entities/Language';
 import { useStoreActions } from '../../store/storeTypes';
 import Dropdown, { DropDownItem } from '../components/DropDown';
-import Header from '../components/Header';
 import WebLayoutCentered from '../components/WebLayoutCentered';
 import styles from './css/SignUp.module.css';
 
@@ -49,49 +48,46 @@ const SignUpLanguagesPage: React.FC = () => {
     }, []);
 
     return (
-        <WebLayoutCentered>
-            <div className={styles.container}>
-                <Header progressColor="#FDEE66" progressPercentage={36} title={t('global.create_account_title')} />
-                <div className={styles.body}>
-                    <h1 className={styles.title}>{t('signup_languages_page.title')}</h1>
+        <WebLayoutCentered headerColor="#FDEE66" headerPercentage={36} headerTitle={t('global.create_account_title')}>
+            <div className={styles.body}>
+                <h1 className={styles.title}>{t('signup_languages_page.title')}</h1>
 
-                    <Dropdown
-                        onChange={setMyLanguage}
-                        options={languages}
-                        placeholder={t('signup_languages_page.placeholder_primary_language')}
-                        title={t('signup_languages_page.language')}
-                    />
+                <Dropdown
+                    onChange={setMyLanguage}
+                    options={languages}
+                    placeholder={t('signup_languages_page.placeholder_primary_language')}
+                    title={t('signup_languages_page.language')}
+                />
 
-                    <Dropdown
-                        onChange={(item) => pushOtherLanguage(item, 0)}
-                        options={languages.filter(
-                            (language) =>
-                                language.title !== myLanguage?.name &&
-                                (!otherLanguages[1] || otherLanguages[1].name !== language.title)
-                        )}
-                        placeholder={t('signup_languages_page.placeholder_first_optional_language')}
-                        title={t('signup_languages_page.other_languages')}
-                    />
+                <Dropdown
+                    onChange={(item) => pushOtherLanguage(item, 0)}
+                    options={languages.filter(
+                        (language) =>
+                            language.title !== myLanguage?.name &&
+                            (!otherLanguages[1] || otherLanguages[1].name !== language.title)
+                    )}
+                    placeholder={t('signup_languages_page.placeholder_first_optional_language')}
+                    title={t('signup_languages_page.other_languages')}
+                />
 
-                    <Dropdown
-                        onChange={(item) => pushOtherLanguage(item, 1)}
-                        options={languages.filter(
-                            (language) =>
-                                language.title !== myLanguage?.name &&
-                                (!otherLanguages[0] || otherLanguages[0].name !== language.title)
-                        )}
-                        placeholder={t('signup_languages_page.placeholder_second_optional_language')}
-                    />
+                <Dropdown
+                    onChange={(item) => pushOtherLanguage(item, 1)}
+                    options={languages.filter(
+                        (language) =>
+                            language.title !== myLanguage?.name &&
+                            (!otherLanguages[0] || otherLanguages[0].name !== language.title)
+                    )}
+                    placeholder={t('signup_languages_page.placeholder_second_optional_language')}
+                />
 
-                    <div className={styles['bottom-container']}>
-                        <button
-                            disabled={!myLanguage}
-                            className={`primary-button large-margin-bottom ${!myLanguage ? 'disabled' : ''}`}
-                            onClick={continueSignUp}
-                        >
-                            {t('signup_languages_page.validate_button')}
-                        </button>
-                    </div>
+                <div className={styles['bottom-container']}>
+                    <button
+                        disabled={!myLanguage}
+                        className={`primary-button large-margin-bottom ${!myLanguage ? 'disabled' : ''}`}
+                        onClick={continueSignUp}
+                    >
+                        {t('signup_languages_page.validate_button')}
+                    </button>
                 </div>
             </div>
         </WebLayoutCentered>

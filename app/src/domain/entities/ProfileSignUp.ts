@@ -1,4 +1,5 @@
 import Country from './Country';
+import Goal from './Goal';
 import Language from './Language';
 import University from './University';
 import gender from './gender';
@@ -18,6 +19,8 @@ class ProfileSignUp {
     private _firstname?: string;
 
     private _gender?: gender;
+
+    private _goals?: Goal[];
 
     private _lastname?: string;
 
@@ -63,6 +66,10 @@ class ProfileSignUp {
 
     set gender(gender: gender) {
         this._gender = gender;
+    }
+
+    set goals(goals: Goal[]) {
+        this._goals = goals;
     }
 
     set lastname(lastname: string) {
