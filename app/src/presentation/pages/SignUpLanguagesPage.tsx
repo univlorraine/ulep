@@ -40,7 +40,7 @@ const SignUpLanguagesPage: React.FC = () => {
             nativeLanguage: myLanguage,
             otherLanguages: otherLanguages.filter(Boolean),
         });
-        //Todo : Navigate to next page
+        history.push('/signup/goals');
     };
 
     useEffect(() => {

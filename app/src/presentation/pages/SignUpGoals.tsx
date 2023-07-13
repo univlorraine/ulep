@@ -30,7 +30,6 @@ const SignUpGoals: React.FC = () => {
 
     const goalPressed = (item: Goal) => {
         const currentGoals = [...userGoals];
-        console.log(currentGoals);
         const index = currentGoals.findIndex((goal) => goal.id === item.id);
 
         if (index !== -1) {
@@ -44,6 +43,8 @@ const SignUpGoals: React.FC = () => {
 
     const continueSignUp = async () => {
         updateProfileSignUp({ goals });
+
+        //Todo: add navigate later
     };
 
     useEffect(() => {
@@ -81,15 +82,15 @@ const SignUpGoals: React.FC = () => {
                 </div>
                 <div className={`${goalsStyles['bottom-container']} large-margin-bottom`}>
                     <button
-                        className={`tertiary-button ${goals.length === 0 ? 'disabled' : ''}`}
+                        className={`tertiary-button`}
                         disabled={goals.length === 0}
                         onClick={() => history.push('/')} //TODO: Change history push later
                     >
                         {t('signup_goals_page.pass_button')}
                     </button>
                     <button
-                        className={`primary-button ${goals.length === 0 ? 'disabled' : ''}`}
-                        disabled={goals.length === 0}
+                        className={`primary-button ${userGoals.length === 0 ? 'disabled' : ''}`}
+                        disabled={userGoals.length === 0}
                         onClick={continueSignUp}
                     >
                         {t('signup_goals_page.validate_button')}
