@@ -159,8 +159,8 @@ export class Profile {
   }
 
   set age(age: number) {
-    if (age < 16 || age > 100) {
-      throw new Error('Age must be between 18 and 100');
+    if (age < 1) {
+      throw new Error('Age must be greater than 0');
     }
 
     this.#age = age;

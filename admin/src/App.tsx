@@ -30,11 +30,11 @@ const App = () => {
                 options={{ label: translate('profiles.label') }}
                 {...profiles}
             />
-            {/* <Resource
+            <Resource
                 name="countries"
                 options={{ label: 'Countries' }}
                 {...countries}
-            /> */}
+            />
             <Resource
                 name="languages"
                 options={{ label: 'Languages' }}

@@ -33,7 +33,7 @@ export class CreateProfileRequest {
   @IsNotEmpty()
   lastname: string;
 
-  @ApiProperty({ type: 'integer', minimum: 16, maximum: 80 })
+  @ApiProperty({ type: 'integer', minimum: 1 })
   @IsInt()
   @Min(16)
   @Max(80)
