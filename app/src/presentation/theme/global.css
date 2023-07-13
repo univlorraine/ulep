@@ -19,6 +19,15 @@
     z-index: 0;
 }
 
+.white-centered-div {
+    background-color: white;
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+    height: auto;
+    z-index: 1;
+}
+
 .container {
     display: flex;
     align-items: center;
@@ -47,6 +56,10 @@ input::-webkit-inner-spin-button {
 }
 
 @media (min-width: 768px) {
+    .container {
+        min-height: calc(100vh - 64px);
+    }
+
     .page {
         align-items: center;
         background-color: #fdee66; /* TODO: change this later*/

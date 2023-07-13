@@ -11,15 +11,6 @@
     margin-top: auto;
 }
 
-.container {
-    background-color: white;
-    display: flex;
-    flex-direction: column;
-    min-height: 100vh;
-    height: auto;
-    z-index: 1;
-}
-
 .image {
     align-self: center;
     border-radius: 50%;
@@ -71,9 +62,6 @@
 }
 
 @media (min-width: 768px) {
-    .container {
-        min-height: calc(100vh - 64px);
-    }
     .body {
         padding: 0px 64px;
         width: 660px;

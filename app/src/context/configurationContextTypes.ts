@@ -1,4 +1,5 @@
 import GetAllCountriesUsecaseInterface from '../domain/interfaces/GetAllCountriesUsecase.interface';
+import GetAllGoalsUsecaseInterface from '../domain/interfaces/GetAllGoalsUsecase.interface';
 import GetAllLanguagesUsecaseInterface from '../domain/interfaces/GetAllLanguagesUsecase.interface';
 import GetAllUniversitiesUsecaseInterface from '../domain/interfaces/GetAllUniversitiesUsecase.interface';
 import LoginUsecaseInterface from '../domain/interfaces/LoginUsecase.interface';
@@ -6,6 +7,7 @@ import ResetPasswordUsecaseInterface from '../domain/interfaces/ResetPasswordUse
 
 export interface ConfigContextValueType {
     getAllCountries: GetAllCountriesUsecaseInterface;
+    getAllGoals: GetAllGoalsUsecaseInterface;
     getAllLanguages: GetAllLanguagesUsecaseInterface;
     getAllUniversities: GetAllUniversitiesUsecaseInterface;
     login: LoginUsecaseInterface;

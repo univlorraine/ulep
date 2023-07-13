@@ -53,6 +53,12 @@
         "new_password_error": "Doit contenir un chiffre, un majuscule et une minuscule",
         "title": "Nouveau mot de passe"
     },
+    "signup_goals_page": {
+        "pass_button": "Passer",
+        "subtitle": "Quels sont tes objectifs ? Nous allons t’aider à les atteindre !",
+        "title": "Objectifs",
+        "validate_button": "Suivant"
+    },
     "signup_languages_page": {
         "language": "Ma langue",
         "other_languages": "Autres langues maitrisées - C1 min/Bilingue (optionnel)",

@@ -6,7 +6,6 @@ import { useHistory } from 'react-router';
 import gender from '../../domain/entities/gender';
 import { useStoreActions } from '../../store/storeTypes';
 import Checkbox from '../components/Checkbox';
-import Header from '../components/Header';
 import RadioButton from '../components/RadioButton';
 import TextInput from '../components/TextInput';
 import WebLayoutCentered from '../components/WebLayoutCentered';
@@ -87,116 +86,113 @@ const SignUpInformationsPage: React.FC = () => {
     };
 
     return (
-        <WebLayoutCentered>
-            <div className={styles.container}>
-                <Header progressColor="#FDEE66" progressPercentage={24} title={t('global.create_account_title')} />
-                <div className={styles.body}>
-                    <h1 className={styles.title}>{t('signup_informations_page.title')}</h1>
+        <WebLayoutCentered headerColor="#FDEE66" headerPercentage={24} headerTitle={t('global.create_account_title')}>
+            <div className={styles.body}>
+                <h1 className={styles.title}>{t('signup_informations_page.title')}</h1>
 
-                    <button className="secondary-button" onClick={() => openGallery()}>
-                        <img alt="plus" className={styles.image} src={profilePicture ?? 'assets/plus.svg'} />
-                        <p>
-                            {t(
-                                profilePicture
-                                    ? 'signup_informations_page.photo_selected'
-                                    : 'signup_informations_page.photo'
-                            )}
-                        </p>
+                <button className="secondary-button" onClick={() => openGallery()}>
+                    <img alt="plus" className={styles.image} src={profilePicture ?? 'assets/plus.svg'} />
+                    <p>
+                        {t(
+                            profilePicture
+                                ? 'signup_informations_page.photo_selected'
+                                : 'signup_informations_page.photo'
+                        )}
+                    </p>
+                </button>
+
+                <TextInput
+                    errorMessage={errorMessage?.type === 'firstname' ? errorMessage.message : undefined}
+                    onChange={setFirstname}
+                    placeholder={t('signup_informations_page.placeholder_firstname')}
+                    title={t('global.firstname')}
+                    type="text"
+                    value={firstname}
+                />
+
+                <TextInput
+                    errorMessage={errorMessage?.type === 'lastname' ? errorMessage.message : undefined}
+                    onChange={setLastname}
+                    placeholder={t('signup_informations_page.placeholder_name')}
+                    title={t('global.lastname')}
+                    type="text"
+                    value={lastname}
+                />
+
+                <div className="margin-bottom ">
+                    <h2 className={`${styles.subtitle} no-margin-top`}>{t('global.gender')}</h2>
+
+                    <RadioButton
+                        isSelected={gender === 'FEMALE'}
+                        onPressed={() => setGender('FEMALE')}
+                        name={t('global.woman')}
+                    />
+
+                    <RadioButton
+                        isSelected={gender === 'MALE'}
+                        onPressed={() => setGender('MALE')}
+                        name={t('global.men')}
+                    />
+
+                    <RadioButton
+                        isSelected={gender === 'OTHER'}
+                        onPressed={() => setGender('OTHER')}
+                        name={t('global.binary')}
+                    />
+                </div>
+
+                <TextInput
+                    errorMessage={errorMessage?.type === 'age' ? errorMessage.message : undefined}
+                    onChange={(age: string) => setAge(Number(age))}
+                    placeholder={t('signup_informations_page.placeholder_age')}
+                    title={t('global.age')}
+                    type="text"
+                    value={age ? `${age}` : ''}
+                />
+
+                <TextInput
+                    errorMessage={errorMessage?.type === 'email' ? errorMessage.message : undefined}
+                    onChange={setEmail}
+                    placeholder={t('signup_informations_page.placeholder_email')}
+                    title={t('global.email')}
+                    type="email"
+                    value={email}
+                />
+
+                <TextInput
+                    errorMessage={errorMessage?.type === 'password' ? errorMessage.message : undefined}
+                    onChange={setPassword}
+                    placeholder={t('signup_informations_page.placeholder_password')}
+                    title={t('global.password')}
+                    type="password"
+                    value={password}
+                />
+
+                <TextInput
+                    errorMessage={errorMessage?.type === 'confirm' ? errorMessage.message : undefined}
+                    onChange={setConfirmPassword}
+                    placeholder={t('signup_informations_page.placeholder_confirm_password')}
+                    title={t('signup_informations_page.confirm_password')}
+                    type="password"
+                    value={confirmPassword}
+                />
+
+                <Checkbox
+                    isSelected={CGUChecked}
+                    onPressed={() => setCGUChecked(!CGUChecked)}
+                    name={t('signup_informations_page.cgu')}
+                />
+
+                <div className={styles['bottom-container']}>
+                    <button
+                        className={`primary-button small-margin-top large-margin-bottom ${
+                            allFieldHasValue() ? 'disabled' : ''
+                        }`}
+                        disabled={allFieldHasValue()}
+                        onClick={continueSignUp}
+                    >
+                        {t('signup_informations_page.validate_button')}
                     </button>
-
-                    <TextInput
-                        errorMessage={errorMessage?.type === 'firstname' ? errorMessage.message : undefined}
-                        onChange={setFirstname}
-                        placeholder={t('signup_informations_page.placeholder_firstname')}
-                        title={t('global.firstname')}
-                        type="text"
-                        value={firstname}
-                    />
-
-                    <TextInput
-                        errorMessage={errorMessage?.type === 'lastname' ? errorMessage.message : undefined}
-                        onChange={setLastname}
-                        placeholder={t('signup_informations_page.placeholder_name')}
-                        title={t('global.lastname')}
-                        type="text"
-                        value={lastname}
-                    />
-
-                    <div className="margin-bottom ">
-                        <h2 className={`${styles.subtitle} no-margin-top`}>{t('global.gender')}</h2>
-
-                        <RadioButton
-                            isSelected={gender === 'FEMALE'}
-                            onPressed={() => setGender('FEMALE')}
-                            name={t('global.woman')}
-                        />
-
-                        <RadioButton
-                            isSelected={gender === 'MALE'}
-                            onPressed={() => setGender('MALE')}
-                            name={t('global.men')}
-                        />
-
-                        <RadioButton
-                            isSelected={gender === 'OTHER'}
-                            onPressed={() => setGender('OTHER')}
-                            name={t('global.binary')}
-                        />
-                    </div>
-
-                    <TextInput
-                        errorMessage={errorMessage?.type === 'age' ? errorMessage.message : undefined}
-                        onChange={(age: string) => setAge(Number(age))}
-                        placeholder={t('signup_informations_page.placeholder_age')}
-                        title={t('global.age')}
-                        type="text"
-                        value={age ? `${age}` : ''}
-                    />
-
-                    <TextInput
-                        errorMessage={errorMessage?.type === 'email' ? errorMessage.message : undefined}
-                        onChange={setEmail}
-                        placeholder={t('signup_informations_page.placeholder_email')}
-                        title={t('global.email')}
-                        type="email"
-                        value={email}
-                    />
-
-                    <TextInput
-                        errorMessage={errorMessage?.type === 'password' ? errorMessage.message : undefined}
-                        onChange={setPassword}
-                        placeholder={t('signup_informations_page.placeholder_password')}
-                        title={t('global.password')}
-                        type="password"
-                        value={password}
-                    />
-
-                    <TextInput
-                        errorMessage={errorMessage?.type === 'confirm' ? errorMessage.message : undefined}
-                        onChange={setConfirmPassword}
-                        placeholder={t('signup_informations_page.placeholder_confirm_password')}
-                        title={t('signup_informations_page.confirm_password')}
-                        type="password"
-                        value={confirmPassword}
-                    />
-
-                    <Checkbox
-                        isSelected={CGUChecked}
-                        onPressed={() => setCGUChecked(!CGUChecked)}
-                        name={t('signup_informations_page.cgu')}
-                    />
-
-                    <div className={styles['bottom-container']}>
-                        <button
-                            className={`primary-button small-margin-top large-margin-bottom ${
-                                allFieldHasValue() ? 'disabled' : ''
-                            }`}
-                            disabled={allFieldHasValue()}
-                            onClick={continueSignUp}
-                        >
-                            {t('signup_informations_page.validate_button')}
-                        </button>
-                    </div>
                 </div>
             </div>
         </WebLayoutCentered>
