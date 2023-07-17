@@ -63,7 +63,15 @@
         "title": "Nouveau mot de passe"
     },
     "signup_availabilities_page": {
-        "AVAIBLE": "Peu disponible",
+        "AVAILABLE": "Peu disponible",
+        "modal": {
+            "note": "Note",
+            "pass_button": "Passer",
+            "private_text": "Visible uniquement par le gestionnaire",
+            "send_button": "Envoyer",
+            "title_note": "Souhaites-tu ajouter une note ?",
+            "validate_button": "Valider"
+        },
         "subtitle": "Tes disponibilités nous servent à trouver un tandem qui te correspond. ",
         "timezone": "Fuseau horaire",
         "title": "Tes disponibilités",

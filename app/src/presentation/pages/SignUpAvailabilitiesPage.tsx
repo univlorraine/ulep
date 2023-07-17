@@ -1,11 +1,12 @@
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useHistory } from 'react-router';
-import { getInitialAviability } from '../../domain/entities/Availability';
+import { getInitialAviability, occurence } from '../../domain/entities/Availability';
 import { AvailabilitesSignUp } from '../../domain/entities/ProfileSignUp';
 import { useStoreActions } from '../../store/storeTypes';
 import Dropdown from '../components/DropDown';
 import WebLayoutCentered from '../components/WebLayoutCentered';
+import AvailabilityModal from '../components/modals/AvailabilityModal';
 import styles from './css/SignUp.module.css';
 import availabilitiesStyles from './css/SignUpAvailabilities.module.css';
 
@@ -25,11 +26,29 @@ const SignUpAvailabilitiesPage: React.FC = () => {
     const updateProfileSignUp = useStoreActions((state) => state.updateProfileSignUp);
     const [timzeone, setTimezone] = useState<string>(''); //TODO: use university timezone on start
     const [availabilities, setAvailabilities] = useState<AvailabilitesSignUp>(initialAvailabilities);
+    const [openModal, setOpenModal] = useState<{ id: string; occurence: occurence } | null>();
 
     const continueSignUp = async () => {
         updateProfileSignUp({ availabilities });
 
         history.push('/signup/interests');
+    };
+
+    const updateAvailabilities = (occurence: occurence, note?: string, isPrivate?: boolean) => {
+        if (!openModal || !openModal) {
+            return;
+        }
+        const currentAvailabilities = { ...availabilities };
+        const key = openModal.id as keyof AvailabilitesSignUp;
+        currentAvailabilities[key].occurence = occurence;
+        if (note) {
+            currentAvailabilities[key].note = note;
+        }
+        if (isPrivate !== undefined) {
+            currentAvailabilities[key].occurence = occurence;
+        }
+        setAvailabilities(currentAvailabilities);
+        return setOpenModal(undefined);
     };
 
     return (
@@ -60,17 +79,21 @@ const SignUpAvailabilitiesPage: React.FC = () => {
                             case 'AVAILABLE':
                                 color = '#FF8700';
                                 break;
-                            case 'UNVAVAILABLE':
+                            case 'UNAVAILABLE':
                                 color = '#F60C36';
                                 break;
                             default:
                                 color = '#00FF47';
                         }
                         return (
-                            <div key={availabilityKey} className={availabilitiesStyles['day-container']}>
+                            <button
+                                key={availabilityKey}
+                                className={availabilitiesStyles['day-container']}
+                                onClick={() => setOpenModal({ id: availabilityKey, occurence: status })}
+                            >
                                 <span
                                     className={availabilitiesStyles['availability-day']}
-                                    style={{ color: status === 'UNVAVAILABLE' ? '#767676' : 'black' }}
+                                    style={{ color: status === 'UNAVAILABLE' ? '#767676' : 'black' }}
                                 >
                                     {t(`days.${availabilityKey}`)}
                                 </span>
@@ -78,12 +101,12 @@ const SignUpAvailabilitiesPage: React.FC = () => {
                                     <div style={{ backgroundColor: color }} className={availabilitiesStyles.dot} />
                                     <span
                                         className={availabilitiesStyles['availability-status']}
-                                        style={{ color: status === 'UNVAVAILABLE' ? '#767676' : 'black' }}
+                                        style={{ color: status === 'UNAVAILABLE' ? '#767676' : 'black' }}
                                     >
                                         {t(`signup_availabilities_page.${status}`)}
                                     </span>
                                 </div>
-                            </div>
+                            </button>
                         );
                     })}
                 </div>
@@ -92,6 +115,13 @@ const SignUpAvailabilitiesPage: React.FC = () => {
                         {t('signup_availabilities_page.validate_button')}
                     </button>
                 </div>
+                <AvailabilityModal
+                    currentOccurence={openModal?.occurence}
+                    onClose={() => setOpenModal(undefined)}
+                    onValidate={updateAvailabilities}
+                    isVisible={!!openModal}
+                    title={t(`days.${openModal?.id}`)}
+                />
             </div>
         </WebLayoutCentered>
     );

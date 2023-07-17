@@ -1,4 +1,4 @@
-type occurence = 'UNVAVAILABLE' | 'AVAILABLE' | 'VERY_AVAILABLE';
+export type occurence = 'UNAVAILABLE' | 'AVAILABLE' | 'VERY_AVAILABLE';
 
 class Availability {
     constructor(private _occurence: occurence, private _note?: string, private _isPrivate?: boolean) {}
