@@ -40,7 +40,7 @@ const SignUpBiographyPage: React.FC = () => {
     };
 
     return (
-        <WebLayoutCentered headerColor="#FDEE66" headerPercentage={48} headerTitle={t('global.create_account_title')}>
+        <WebLayoutCentered headerColor="#FDEE66" headerPercentage={72} headerTitle={t('global.create_account_title')}>
             <div className={styles.body}>
                 <div className={biographyStyles.content}>
                     <h1 className={biographyStyles.title}>{t('signup_biography_page.title')}</h1>
