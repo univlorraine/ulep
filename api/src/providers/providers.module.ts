@@ -8,6 +8,7 @@ import { PrismaCountryRepository } from './persistance/repositories/prisma-count
 import { PrismaLanguageRepository } from './persistance/repositories/prisma-language-repository';
 import { PrismaUserRepository } from './persistance/repositories/prisma-user-repository';
 import { PrismaReportRepository } from './persistance/repositories/prisma-report-repository';
+import { PrismaTandemRepository } from './persistance/repositories/prisma-tandem-repository';
 
 export const AUTHENTICATOR = 'authenticator';
 export const COUNTRY_REPOSITORY = 'country.repository';
@@ -16,6 +17,7 @@ export const MEDIA_OBJECT_REPOSITORY = 'media-object.repository';
 export const PROFILE_REPOSITORY = 'profile.repository';
 export const REPORT_REPOSITORY = 'report.repository';
 export const STORAGE_SERVICE = 'storage.service';
+export const TANDEM_REPOSITORY = 'tandem.repository';
 export const UNIVERSITY_REPOSITORY = 'university.repository';
 export const USER_REPOSITORY = 'user.repository';
 
@@ -39,6 +41,10 @@ const providers: Provider[] = [
   {
     provide: REPORT_REPOSITORY,
     useClass: PrismaReportRepository,
+  },
+  {
+    provide: TANDEM_REPOSITORY,
+    useClass: PrismaTandemRepository,
   },
   {
     provide: UNIVERSITY_REPOSITORY,
