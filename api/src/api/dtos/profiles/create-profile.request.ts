@@ -35,8 +35,7 @@ export class CreateProfileRequest {
 
   @ApiProperty({ type: 'integer', minimum: 1 })
   @IsInt()
-  @Min(16)
-  @Max(80)
+  @Min(1)
   age: number;
 
   @ApiProperty({ enum: Role })
