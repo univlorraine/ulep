@@ -1,4 +1,13 @@
 {
+    "days": {
+        "monday": "Lundi",
+        "tuesday": "Mardi",
+        "wednesday": "Mercredi",
+        "thursday": "Jeudi",
+        "friday": "Vendredi",
+        "saturday": "Samedi",
+        "sunday": "Dimanche"
+    },
     "errors": {
         "global": "Une erreur est survenue",
         "userDoesntExist": "L'utilisateur n'existe pas",
@@ -52,6 +61,15 @@
         "new_password_title": "Entrer un nouveau mot de passe",
         "new_password_error": "Doit contenir un chiffre, un majuscule et une minuscule",
         "title": "Nouveau mot de passe"
+    },
+    "signup_availabilities_page": {
+        "AVAIBLE": "Peu disponible",
+        "subtitle": "Tes disponibilités nous servent à trouver un tandem qui te correspond. ",
+        "timezone": "Fuseau horaire",
+        "title": "Tes disponibilités",
+        "UNAVAILABLE": "Pas disponible",
+        "validate_button": "Valider et continuer",
+        "VERY_AVAILABLE": "Très disponible"
     },
     "signup_biography_page": {
         "error_message": "Minimum 10 caractères",

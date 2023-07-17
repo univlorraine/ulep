@@ -1,3 +1,4 @@
+import Availability from './Availability';
 import Country from './Country';
 import Goal from './Goal';
 import Language from './Language';
@@ -12,8 +13,20 @@ export interface BiographySignUp {
     travel: string;
 }
 
+export interface AvailabilitesSignUp {
+    monday: Availability;
+    tuesday: Availability;
+    wednesday: Availability;
+    thursday: Availability;
+    friday: Availability;
+    saturday: Availability;
+    sunday: Availability;
+}
+
 class ProfileSignUp {
     private _age?: number;
+
+    private _availabilities?: AvailabilitesSignUp;
 
     private _biography?: BiographySignUp;
 
@@ -53,6 +66,10 @@ class ProfileSignUp {
 
     set age(age: number) {
         this._age = age;
+    }
+
+    set availabilities(availabilities: AvailabilitesSignUp) {
+        this._availabilities = availabilities;
     }
 
     set biography(biography: BiographySignUp) {

@@ -18,6 +18,7 @@ const Store = createStore<TokenStoreTypes>(
         updateProfileSignUp: action((state, payload) => {
             const profile = state.profileSignUp;
             if (payload.age) profile.age = payload.age;
+            if (payload.availabilities) profile.availabilities = payload.availabilities;
             if (payload.biography) profile.biography = payload.biography;
             if (payload.country) profile.country = payload.country;
             if (payload.department) profile.department = payload.department;
