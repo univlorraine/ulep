@@ -22,6 +22,8 @@ class ProfileSignUp {
 
     private _goals?: Goal[];
 
+    private _interests?: string[];
+
     private _lastname?: string;
 
     private _nativeLanguage?: Language;
@@ -70,6 +72,10 @@ class ProfileSignUp {
 
     set goals(goals: Goal[]) {
         this._goals = goals;
+    }
+
+    set interests(interests: string[]) {
+        this._interests = interests;
     }
 
     set lastname(lastname: string) {

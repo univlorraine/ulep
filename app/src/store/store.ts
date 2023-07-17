@@ -25,6 +25,7 @@ const Store = createStore<TokenStoreTypes>(
             if (payload.firstname) profile.firstname = payload.firstname;
             if (payload.gender) profile.gender = payload.gender;
             if (payload.goals) profile.goals = payload.goals;
+            if (payload.interests) profile.interests = payload.interests;
             if (payload.lastname) profile.lastname = payload.lastname;
             if (payload.nativeLanguage) profile.nativeLanguage = payload.nativeLanguage;
             if (payload.otherLanguages) profile.otherLanguages = payload.otherLanguages;

@@ -66,7 +66,7 @@
         "placeholder_first_optional_language": "Vous pouvez selectionner une première langue maîtrisée",
         "placeholder_second_optional_language": "Vous pouvez selectionner une seconde langue maîtrisée",
         "title": "Langues parlées",
-        "validate_button": "valider et continuer"
+        "validate_button": "Valider et continuer"
     },
     "signup_informations_page": {
         "confirm_password": "Confirme ton mot de passe",
@@ -87,7 +87,12 @@
         "placeholder_name": "Entre ton nom ici",
         "placeholder_password": "Entre ton mot de passe",
         "title": "Créer mon profil",
-        "validate_button": "valider et continuer"
+        "validate_button": "Valider et continuer"
+    },
+    "signup_interests_page": {
+        "subtitle": "Tes centres d’intérêts nous servent à trouver un tandem qui te correspond.",
+        "title": "Choisis au moins 5 centres d’intérêts",
+        "validate_button": "Valider et continuer"
     },
     "signup_page": {
         "country_placeholder": "Sélectionne un pays dans la liste",
@@ -102,6 +107,6 @@
         "student_role": "Étudiant·e",
         "title": "Mon profil",
         "university_title": "Établissement",
-        "validate_button": "valider et continuer"
+        "validate_button": "Valider et continuer"
     }
 }

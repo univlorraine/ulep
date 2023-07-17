@@ -21,6 +21,7 @@ export interface SignUpStorePayload {
     firstname?: string;
     gender?: gender;
     goals?: Goal[];
+    interests?: string[];
     lastname?: string;
     nativeLanguage?: Language;
     otherLanguages?: Language[];

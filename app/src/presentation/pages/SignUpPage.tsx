@@ -89,14 +89,18 @@ const SignUpPage: React.FC = () => {
                     name={t('signup_page.staff_role')}
                 />
 
-                <Dropdown
+                <Dropdown<Country>
                     onChange={setCountry}
                     options={countries}
                     placeholder={t('signup_page.country_placeholder')}
                     title={t('global.country')}
                 />
 
-                <Dropdown onChange={setUniversity} options={universities} title={t('signup_page.university_title')} />
+                <Dropdown<University>
+                    onChange={setUniversity}
+                    options={universities}
+                    title={t('signup_page.university_title')}
+                />
 
                 {selectedRole !== 'STAFF' && (
                     <button

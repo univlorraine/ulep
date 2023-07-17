@@ -44,7 +44,7 @@ const SignUpGoals: React.FC = () => {
     const continueSignUp = async () => {
         updateProfileSignUp({ goals });
 
-        //Todo: add navigate later
+        history.push('/signup/interests');
     };
 
     useEffect(() => {
@@ -84,7 +84,7 @@ const SignUpGoals: React.FC = () => {
                     <button
                         className={`tertiary-button`}
                         disabled={goals.length === 0}
-                        onClick={() => history.push('/')} //TODO: Change history push later
+                        onClick={() => history.push('/signup/interests')}
                     >
                         {t('signup_goals_page.pass_button')}
                     </button>

@@ -52,14 +52,14 @@ const SignUpLanguagesPage: React.FC = () => {
             <div className={styles.body}>
                 <h1 className={styles.title}>{t('signup_languages_page.title')}</h1>
 
-                <Dropdown
+                <Dropdown<Language>
                     onChange={setMyLanguage}
                     options={languages}
                     placeholder={t('signup_languages_page.placeholder_primary_language')}
                     title={t('signup_languages_page.language')}
                 />
 
-                <Dropdown
+                <Dropdown<Language>
                     onChange={(item) => pushOtherLanguage(item, 0)}
                     options={languages.filter(
                         (language) =>
@@ -70,7 +70,7 @@ const SignUpLanguagesPage: React.FC = () => {
                     title={t('signup_languages_page.other_languages')}
                 />
 
-                <Dropdown
+                <Dropdown<Language>
                     onChange={(item) => pushOtherLanguage(item, 1)}
                     options={languages.filter(
                         (language) =>
