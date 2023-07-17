@@ -28,6 +28,16 @@ const TextInput: React.FC<TextInputProps> = ({ errorMessage, onChange, placehold
                         value={value}
                         required
                     />
+
+                    {type === 'password' && (
+                        <button
+                            className={style['eye-button']}
+                            type="button"
+                            onClick={() => setShowPassword(!showPasword)}
+                        >
+                            <img src="/assets/eye.svg" />
+                        </button>
+                    )}
                 </div>
             ) : (
                 <textarea
@@ -40,11 +50,6 @@ const TextInput: React.FC<TextInputProps> = ({ errorMessage, onChange, placehold
                     value={value}
                     required
                 />
-            )}
-            {type === 'password' && (
-                <button className={style['eye-button']} type="button" onClick={() => setShowPassword(!showPasword)}>
-                    <img src="/assets/eye.svg" />
-                </button>
             )}
             {errorMessage && <p className={style['input-label-error']}>{errorMessage}</p>}
         </div>
