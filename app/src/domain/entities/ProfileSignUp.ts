@@ -5,8 +5,17 @@ import University from './University';
 import gender from './gender';
 import roles from './roles';
 
+export interface BiographySignUp {
+    incredible: string;
+    place: string;
+    power: string;
+    travel: string;
+}
+
 class ProfileSignUp {
     private _age?: number;
+
+    private _biography?: BiographySignUp;
 
     private _country?: Country;
 
@@ -44,6 +53,10 @@ class ProfileSignUp {
 
     set age(age: number) {
         this._age = age;
+    }
+
+    set biography(biography: BiographySignUp) {
+        this._biography = biography;
     }
 
     set country(country: Country) {

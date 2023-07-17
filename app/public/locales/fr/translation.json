@@ -53,6 +53,20 @@
         "new_password_error": "Doit contenir un chiffre, un majuscule et une minuscule",
         "title": "Nouveau mot de passe"
     },
+    "signup_biography_page": {
+        "error_message": "Minimum 10 caractères",
+        "incredible_placeholder": "Lorem ipsum...",
+        "incredible_title": "😲 Quelque chose d’incroyable qui te soit arrivé",
+        "place_placeholder": "Lorem ipsum...",
+        "place_title": "🏖️ Ton endroit préféré c’est...",
+        "power_placeholder": "Lorem ipsum...",
+        "power_title": "⚡ Ton super pouvoir c’est...",
+        "subtitle": "Sois créatif, tes réponses pourront être lues par ton tandem pour faciliter votre première discussion :)",
+        "title": "Pour que ton tandem te connaisse un peu mieux...",
+        "travel_placeholder": "Lorem ipsum...",
+        "travel_title": "🌎️ Ta meilleure anecdote de voyage",
+        "validate_button": "Suivant"
+    },
     "signup_goals_page": {
         "pass_button": "Passer",
         "subtitle": "Quels sont tes objectifs ? Nous allons t’aider à les atteindre !",

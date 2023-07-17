@@ -9,7 +9,7 @@ import WebLayoutCentered from '../components/WebLayoutCentered';
 import styles from './css/SignUp.module.css';
 import goalsStyles from './css/SignUpGoals.module.css';
 
-const SignUpGoals: React.FC = () => {
+const SignUpGoalsPage: React.FC = () => {
     const { t } = useTranslation();
     const { getAllGoals } = useConfig();
     const [showToast] = useIonToast();
@@ -80,7 +80,7 @@ const SignUpGoals: React.FC = () => {
                         })}
                     </div>
                 </div>
-                <div className={`${goalsStyles['bottom-container']} large-margin-bottom`}>
+                <div className={`${goalsStyles['bottom-container']} large-margin-top large-margin-bottom`}>
                     <button
                         className={`tertiary-button`}
                         disabled={goals.length === 0}
@@ -101,4 +101,4 @@ const SignUpGoals: React.FC = () => {
     );
 };
 
-export default SignUpGoals;
+export default SignUpGoalsPage;
