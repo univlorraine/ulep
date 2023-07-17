@@ -6,7 +6,7 @@ interface TextInputProps {
     placeholder?: string | null;
     onChange: (text: string) => void;
     title: string;
-    type?: 'email' | 'number' | 'password' | 'text';
+    type?: 'email' | 'number' | 'password' | 'text' | 'text-area';
     value: string;
 }
 
@@ -15,23 +15,37 @@ const TextInput: React.FC<TextInputProps> = ({ errorMessage, onChange, placehold
     return (
         <div className="large-margin-bottom">
             <p className={style['input-label']}>{title}</p>
-            <div className={`${style['input-wrapper']} ${errorMessage ? style['input-error'] : style['input-text']}`}>
-                <input
-                    autoComplete={'off'}
-                    className={style.input}
-                    name="newPassword"
+            {type !== 'text-area' ? (
+                <div
+                    className={`${style['input-wrapper']} ${errorMessage ? style['input-error'] : style['input-text']}`}
+                >
+                    <input
+                        autoComplete="off"
+                        className={style.input}
+                        onChange={(e) => onChange(e.target.value)}
+                        placeholder={placeholder ?? ''}
+                        type={showPasword ? 'text' : type}
+                        value={value}
+                        required
+                    />
+                </div>
+            ) : (
+                <textarea
+                    className={`${style['area-text']} ${
+                        errorMessage ? style['area-text-error'] : style['area-text-text']
+                    }`}
+                    maxLength={200}
                     onChange={(e) => onChange(e.target.value)}
                     placeholder={placeholder ?? ''}
-                    type={showPasword ? 'text' : type}
                     value={value}
                     required
                 />
-                {type === 'password' && (
-                    <button className={style['eye-button']} type="button" onClick={() => setShowPassword(!showPasword)}>
-                        <img src="/assets/eye.svg" />
-                    </button>
-                )}
-            </div>
+            )}
+            {type === 'password' && (
+                <button className={style['eye-button']} type="button" onClick={() => setShowPassword(!showPasword)}>
+                    <img src="/assets/eye.svg" />
+                </button>
+            )}
             {errorMessage && <p className={style['input-label-error']}>{errorMessage}</p>}
         </div>
     );
