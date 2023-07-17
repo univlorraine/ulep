@@ -40,7 +40,7 @@ model Profile {
   masteredLanguages     MasteredLanguage[]
   preferences           LearningPreference? @relation(fields: [preferencesId], references: [id])
   preferencesId         String?             @unique
-  // tandems               ProfileTandem[]
+  tandems               ProfilesOnTandems[]
   createdAt             DateTime            @default(now())
 
   @@map("profiles")
@@ -92,21 +92,6 @@ model Country {
   @@map("countries")
 }
 
-// model Tandem {
-//   id                    String              @id @default(uuid())
-//   profiles              ProfileTandem[]
-//   isActive              Boolean
-//   createdAt             DateTime            @default(now())
-// }
-
-// model ProfileTandem {
-//   profileId             String              @id
-//   tandemId              String
-//   profile               Profile             @relation(fields: [profileId], references: [id], onDelete: Cascade)
-//   tandem                Tandem              @relation(fields: [tandemId], references: [id], onDelete: Cascade)
-//   createdAt             DateTime            @default(now())
-// }
-
 model University {
   id                    String              @id @default(uuid())
   profiles              Profile[]
@@ -119,6 +104,25 @@ model University {
   createdAt             DateTime            @default(now())
 
   @@map("universities")
+}
+
+model Tandem {
+  id                    String              @id @default(uuid())
+  startDate             DateTime
+  endDate               DateTime
+  profiles              ProfilesOnTandems[]
+
+  @@map("tandems")
+}
+
+model ProfilesOnTandems {
+  profile               Profile            @relation(fields: [profileId], references: [id], onDelete: Cascade)
+  profileId             String
+  tandem                Tandem             @relation(fields: [tandemId], references: [id], onDelete: Cascade)
+  tandemId              String
+
+  @@id([profileId, tandemId])
+  @@map("profiles_on_tandems")
 }
 
 model MediaObject {
