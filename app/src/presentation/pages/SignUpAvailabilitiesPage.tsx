@@ -31,7 +31,7 @@ const SignUpAvailabilitiesPage: React.FC = () => {
     const continueSignUp = async () => {
         updateProfileSignUp({ availabilities });
 
-        history.push('/signup/interests');
+        history.push('/signup/frequency');
     };
 
     const updateAvailabilities = (occurence: occurence, note?: string, isPrivate?: boolean) => {
@@ -54,7 +54,7 @@ const SignUpAvailabilitiesPage: React.FC = () => {
     return (
         <WebLayoutCentered headerColor="#FDEE66" headerPercentage={84} headerTitle={t('global.create_account_title')}>
             <div className={styles.body}>
-                <div className={availabilitiesStyles.content}>
+                <div>
                     <h1 className={availabilitiesStyles.title}>{t('signup_availabilities_page.title')}</h1>
                     <span className={availabilitiesStyles.subtitle}>{t('signup_availabilities_page.subtitle')}</span>
 

@@ -93,6 +93,16 @@
         "travel_title": "🌎️ Ta meilleure anecdote de voyage",
         "validate_button": "Suivant"
     },
+    "signup_frequency_page": {
+        "ONCE_A_WEEK": "1 fois / semaine",
+        "subtitle": "Fréquence des rencontres",
+        "THREE_TIMES_A_MONTH": "3 fois / mois",
+        "THREE_TIMES_A_WEEK": "3 fois / semaine",
+        "title": "Tes disponibilités",
+        "TWICE_A_MONTH": "2 fois / mois",
+        "TWICE_A_WEEK": "2 fois / semaine",
+        "validate_button": "Valider et continuer"
+    },
     "signup_goals_page": {
         "pass_button": "Passer",
         "subtitle": "Quels sont tes objectifs ? Nous allons t’aider à les atteindre !",

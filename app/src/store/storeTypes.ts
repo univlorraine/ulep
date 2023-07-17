@@ -2,7 +2,7 @@ import { Action, createTypedHooks } from 'easy-peasy';
 import Country from '../domain/entities/Country';
 import Goal from '../domain/entities/Goal';
 import Language from '../domain/entities/Language';
-import ProfileSignUp, { AvailabilitesSignUp, BiographySignUp } from '../domain/entities/ProfileSignUp';
+import ProfileSignUp, { AvailabilitesSignUp, BiographySignUp, frequency } from '../domain/entities/ProfileSignUp';
 import University from '../domain/entities/University';
 import gender from '../domain/entities/gender';
 import roles from '../domain/entities/roles';
@@ -20,6 +20,7 @@ export interface SignUpStorePayload {
     department?: string;
     diplome?: string;
     email?: string;
+    frequency?: frequency;
     firstname?: string;
     gender?: gender;
     goals?: Goal[];

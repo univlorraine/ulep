@@ -9,9 +9,9 @@ import LoginPage from '../pages/LoginPage';
 import ResetPasswordPage from '../pages/ResetPasswordPage';
 import SignUpAvailabilitiesPage from '../pages/SignUpAvailabilitiesPage';
 import SignUpBiographyPage from '../pages/SignUpBiographyPage';
+import SignUpFrequencyPage from '../pages/SignUpFrequencyPage';
 import SignUpGoals from '../pages/SignUpGoalsPage';
 import SignUpInformationsPage from '../pages/SignUpInformationsPage';
-import SignUpInterestsPage from '../pages/SignUpInterestsPage';
 import SignUpLanguagesPage from '../pages/SignUpLanguagesPage';
 import SignUpPage from '../pages/SignUpPage';
 
@@ -44,8 +44,11 @@ const OfflineRouter: React.FC = () => (
         <Route exact path="/signup/biography">
             <SignUpBiographyPage />
         </Route>
-        <Route exact path="/signup/interests">
-            <SignUpInterestsPage />
+        <Route exact path="/signup/biography">
+            <SignUpBiographyPage />
+        </Route>
+        <Route exact path="/signup/frequency">
+            <SignUpFrequencyPage />
         </Route>
         <Route exact path="/signup/goals">
             <SignUpGoals />

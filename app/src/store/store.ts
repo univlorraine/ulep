@@ -25,6 +25,7 @@ const Store = createStore<TokenStoreTypes>(
             if (payload.diplome) profile.diplome = payload.diplome;
             if (payload.email) profile.email = payload.email;
             if (payload.firstname) profile.firstname = payload.firstname;
+            if (payload.frequency) profile.frequency = payload.frequency;
             if (payload.gender) profile.gender = payload.gender;
             if (payload.goals) profile.goals = payload.goals;
             if (payload.interests) profile.interests = payload.interests;

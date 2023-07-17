@@ -6,6 +6,7 @@ import University from './University';
 import gender from './gender';
 import roles from './roles';
 
+export type frequency = 'ONCE_A_WEEK' | 'TWICE_A_WEEK' | 'THREE_TIMES_A_WEEK' | 'TWICE_A_MONTH' | 'THREE_TIMES_A_MONTH';
 export interface BiographySignUp {
     incredible: string;
     place: string;
@@ -39,6 +40,8 @@ class ProfileSignUp {
     private _email?: string;
 
     private _firstname?: string;
+
+    private _frequency?: frequency;
 
     private _gender?: gender;
 
@@ -94,6 +97,10 @@ class ProfileSignUp {
 
     set firstname(firstname: string) {
         this._firstname = firstname;
+    }
+
+    set frequency(frequency: frequency) {
+        this._frequency = frequency;
     }
 
     set gender(gender: gender) {
