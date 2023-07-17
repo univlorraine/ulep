@@ -27,9 +27,16 @@ const SignUpBiographyPage: React.FC = () => {
         } else if (travelBiography.length < 10) {
             return setErrorMessage({ id: 'travel', value: t('signup_biography_page.error_message') });
         }
-        updateProfileSignUp({});
+        updateProfileSignUp({
+            biography: {
+                incredible: incredibleBiography,
+                place: placeBiography,
+                power: powerBiography,
+                travel: travelBiography,
+            },
+        });
 
-        history.push('/signup/interests');
+        history.push('/signup/interests'); // TODO: change this
     };
 
     return (
