@@ -29,10 +29,10 @@ export class ReportCategoriesController {
   async getCategories(): Promise<Collection<ReportCategoryResponse>> {
     const categories = await this.getReportCategoriesUsecase.execute();
 
-    return new Collection(
-      categories.map(ReportCategoryResponse.fromDomain),
-      categories.length,
-    );
+    return new Collection({
+      items: categories.map(ReportCategoryResponse.fromDomain),
+      totalItems: categories.length,
+    });
   }
 
   @Post()

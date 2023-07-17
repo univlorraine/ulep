@@ -50,10 +50,10 @@ export class UserController {
       limit,
     });
 
-    return new Collection<UserResponse>(
-      result.items.map(UserResponse.fromDomain),
-      result.totalItems,
-    );
+    return new Collection<UserResponse>({
+      items: result.items.map(UserResponse.fromDomain),
+      totalItems: result.totalItems,
+    });
   }
 
   @Get(':id')

@@ -35,6 +35,8 @@ import {
   GetReportsUsecase,
 } from './usecases/reports';
 import { DeleteReportCategoryUsecase } from './usecases/reports/delete-category.usecase';
+import { CreateTandemUsecase } from './usecases/tandems/create-tandem.usecase';
+import { GetTandemsUsecase } from './usecases/tandems/get-tandems.usecase';
 
 const usecases: Provider[] = [
   // Countries
@@ -62,15 +64,18 @@ const usecases: Provider[] = [
   GetReportsUsecase,
   GetReportUsecase,
   GetReportCategoriesUsecase,
+  // Tandems
+  CreateTandemUsecase,
+  GetTandemsUsecase,
+  // Tokens
+  GetTokensUsecase,
+  RefreshTokensUsecase,
   // Universities
   GetUniversitiesUsecase,
   GetUniversityUsecase,
   CreateUniversityUsecase,
   UpdateUniversityUsecase,
   DeleteUniversityUsecase,
-  // Tokens
-  GetTokensUsecase,
-  RefreshTokensUsecase,
   // Users
   CreateUserUsecase,
   GetUsersUsecase,

@@ -49,10 +49,10 @@ export class LanguageController {
       limit: limit,
     });
 
-    return new Collection<LanguageResponse>(
-      collection.items.map(LanguageResponse.fromDomain),
-      collection.totalItems,
-    );
+    return new Collection<LanguageResponse>({
+      items: collection.items.map(LanguageResponse.fromDomain),
+      totalItems: collection.totalItems,
+    });
   }
 
   @Get(':code')

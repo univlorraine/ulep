@@ -9,7 +9,7 @@ import { Collection } from 'src/shared/types/collection';
 export class PrismaTandemRepository implements TandemsRepository {
   constructor(private readonly prisma: PrismaService) {}
 
-  async create(tandem: Tandem): Promise<void> {
+  async save(tandem: Tandem): Promise<void> {
     await this.prisma.tandem.create({
       data: {
         id: tandem.id,
@@ -35,9 +35,6 @@ export class PrismaTandemRepository implements TandemsRepository {
             gt: currentDate,
           },
         },
-      },
-      include: {
-        tandem: true,
       },
     });
 

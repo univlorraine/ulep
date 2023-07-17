@@ -15,6 +15,7 @@ import { ExportController } from './controllers/export.controller';
 import { ReportController } from './controllers/report.controller';
 import { ReportCategoriesController } from './controllers/report-categories.controller';
 import { UuidProvider } from './services/uuid-provider';
+import { TandemController } from './controllers/tandem.controller';
 
 @Module({
   imports: [CoreModule, TerminusModule],
@@ -28,6 +29,7 @@ import { UuidProvider } from './services/uuid-provider';
     ReportController,
     ReportCategoriesController,
     SecurityController,
+    TandemController,
     UniversityController,
     UploadsController,
     UserController,

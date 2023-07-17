@@ -42,10 +42,10 @@ export class GetMatchsByProfileIdUsecase {
       matchs.push(match);
     }
 
-    return new Collection<Match>(
-      matchs.sort((a, b) => b.total - a.total).slice(0, count),
-      matchs.length,
-    );
+    return new Collection<Match>({
+      items: matchs.sort((a, b) => b.total - a.total).slice(0, count),
+      totalItems: matchs.length,
+    });
   }
 
   private async tryToFindTheProfileOf(id: string): Promise<Profile> {

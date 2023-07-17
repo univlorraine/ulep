@@ -22,10 +22,10 @@ export class CountryController {
   async getCollection(): Promise<Collection<CountryResponse>> {
     const countries = await this.getCountriesUsecase.execute();
 
-    return new Collection<CountryResponse>(
-      countries.items.map(CountryResponse.fromDomain),
-      countries.totalItems,
-    );
+    return new Collection<CountryResponse>({
+      items: countries.items.map(CountryResponse.fromDomain),
+      totalItems: countries.totalItems,
+    });
   }
 
   @Get(':id')

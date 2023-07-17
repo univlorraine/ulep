@@ -65,10 +65,10 @@ export class ProfileController {
       },
     });
 
-    return new Collection<ProfileResponse>(
-      profiles.items.map(ProfileResponse.fromDomain),
-      profiles.totalItems,
-    );
+    return new Collection<ProfileResponse>({
+      items: profiles.items.map(ProfileResponse.fromDomain),
+      totalItems: profiles.totalItems,
+    });
   }
 
   @Get(':id')

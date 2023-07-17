@@ -7,6 +7,7 @@ export const domainErrorToHttpStatusCode: Record<DomainErrorCode, HttpStatus> =
   {
     [DomainErrorCode.RESSOURCE_NOT_FOUND]: HttpStatus.NOT_FOUND,
     [DomainErrorCode.RESSOURCE_ALREADY_EXIST]: HttpStatus.BAD_REQUEST,
+    [DomainErrorCode.BAD_REQUEST]: HttpStatus.BAD_REQUEST,
   };
 
 @Catch(DomainError)

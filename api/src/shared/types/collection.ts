@@ -7,8 +7,7 @@ export class Collection<T> {
   @Expose({ groups: ['read'] })
   totalItems: number;
 
-  constructor(items: T[], totalItems: number) {
-    this.items = items;
-    this.totalItems = totalItems;
+  constructor(partial: Partial<Collection<T>>) {
+    Object.assign(this, partial);
   }
 }

@@ -48,10 +48,10 @@ export class UniversityController {
   ): Promise<Collection<UniversityResponse>> {
     const result = await this.getUniversitiesUsecase.execute({ page, limit });
 
-    return new Collection<UniversityResponse>(
-      result.items.map(UniversityResponse.fromDomain),
-      result.totalItems,
-    );
+    return new Collection<UniversityResponse>({
+      items: result.items.map(UniversityResponse.fromDomain),
+      totalItems: result.totalItems,
+    });
   }
 
   @Get(':id')

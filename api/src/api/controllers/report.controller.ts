@@ -58,10 +58,10 @@ export class ReportController {
 
     const reports = await this.getReportsUsecase.execute(command);
 
-    return new Collection(
-      reports.items.map(ReportResponse.fromDomain),
-      reports.totalItems,
-    );
+    return new Collection({
+      items: reports.items.map(ReportResponse.fromDomain),
+      totalItems: reports.totalItems,
+    });
   }
 
   @Get(':id')

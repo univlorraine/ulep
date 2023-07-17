@@ -26,9 +26,9 @@ export class MatchController {
       count,
     });
 
-    return new Collection<MatchResponse>(
-      matches.items.map(MatchResponse.fromDomain),
-      matches.totalItems,
-    );
+    return new Collection<MatchResponse>({
+      items: matches.items.map(MatchResponse.fromDomain),
+      totalItems: matches.totalItems,
+    });
   }
 }

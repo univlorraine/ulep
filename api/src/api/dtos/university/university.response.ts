@@ -17,7 +17,7 @@ export class UniversityResponse {
     description: 'IANA Time Zone',
     example: 'Europe/Paris',
   })
-  @Expose({ groups: ['university:read'] })
+  @Expose({ groups: ['read'] })
   timezone: string;
 
   @ApiProperty()
