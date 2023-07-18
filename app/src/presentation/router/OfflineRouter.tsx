@@ -15,6 +15,7 @@ import SignUpInformationsPage from '../pages/SignUpInformationsPage';
 import SignUpInterestsPage from '../pages/SignUpInterestsPage';
 import SignUpLanguagesPage from '../pages/SignUpLanguagesPage';
 import SignUpPage from '../pages/SignUpPage';
+import SignupFinalPage from '../pages/SignupFinalPage';
 
 const OfflineRouter: React.FC = () => (
     <IonRouterOutlet>
@@ -47,6 +48,9 @@ const OfflineRouter: React.FC = () => (
         </Route>
         <Route exact path="/signup/frequency">
             <SignUpFrequencyPage />
+        </Route>
+        <Route exact path="/signup/end">
+            <SignupFinalPage />
         </Route>
         <Route exact path="/signup/goals">
             <SignUpGoals />

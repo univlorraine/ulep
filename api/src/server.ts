@@ -1,11 +1,11 @@
+import { ClassSerializerInterceptor, ValidationPipe } from '@nestjs/common';
 import { HttpAdapterHost, NestFactory, Reflector } from '@nestjs/core';
 import { NestExpressApplication } from '@nestjs/platform-express';
-import { AppModule } from './app.module';
 import { DocumentBuilder, OpenAPIObject, SwaggerModule } from '@nestjs/swagger';
-import { ClassSerializerInterceptor, ValidationPipe } from '@nestjs/common';
-import { PrismaClientExceptionFilter } from './shared/errors/prisma-exceptions.filter';
-import { DomainErrorFilter } from './api/interceptors/domain-error.interceptor';
 import { CollectionInterceptor } from './api/interceptors/collection.interceptor';
+import { DomainErrorFilter } from './api/interceptors/domain-error.interceptor';
+import { AppModule } from './app.module';
+import { PrismaClientExceptionFilter } from './shared/errors/prisma-exceptions.filter';
 
 export class Server {
   #port: number;
@@ -54,7 +54,7 @@ export class Server {
     app.enableCors({
       allowedHeaders: ['Content-Type', 'Authorization', 'Range'],
       exposedHeaders: ['Content-Range'],
-      origin: ['*'],
+      origin: '*',
       methods: ['GET', 'HEAD', 'OPTIONS', 'POST', 'PUT', 'DELETE'],
     });
   }
