@@ -23,7 +23,7 @@ const TextInput: React.FC<TextInputProps> = ({
     const [showPasword, setShowPassword] = useState<boolean>(false);
     return (
         <div className={`${style.container} large-margin-bottom`}>
-            <p className={style['input-label']}>{title}</p>
+            <span className={style['input-label']}>{title}</span>
             {type !== 'text-area' ? (
                 <div
                     className={`${style['input-wrapper']} ${errorMessage ? style['input-error'] : style['input-text']}`}

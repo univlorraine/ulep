@@ -44,7 +44,7 @@ const SignUpInterestsPage: React.FC = () => {
     const continueSignUp = async () => {
         updateProfileSignUp({ interests: userInterests });
 
-        history.push('./signup/biography');
+        history.push('/signup/biography');
     };
 
     useEffect(() => {
