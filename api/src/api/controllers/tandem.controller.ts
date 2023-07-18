@@ -7,12 +7,14 @@ import { GetTandemsUsecase } from 'src/core/usecases/tandems/get-tandems.usecase
 import { CollectionResponse } from '../decorators/collection.decorator';
 import { PaginationDto } from '../dtos/pagination.dto';
 import { Collection } from 'src/shared/types/collection';
+import { GenerateTandemsUsecase } from 'src/core/usecases/tandems/generate-tandems.usecase';
 
 @Controller('tandems')
 @Swagger.ApiTags('Tandems')
 export class TandemController {
   constructor(
     private readonly uuidProvider: UuidProvider,
+    private readonly generateTandemsUsecase: GenerateTandemsUsecase,
     private readonly getTandemsUsecase: GetTandemsUsecase,
     private readonly createTandemUsecase: CreateTandemUsecase,
   ) {}
@@ -40,5 +42,20 @@ export class TandemController {
       id: this.uuidProvider.generate(),
       ...body,
     });
+  }
+
+  @Post('generate')
+  @Swagger.ApiOperation({ summary: 'Generate Tandems' })
+  async generate(): Promise<TandemResponse[]> {
+    const tandems = await this.generateTandemsUsecase.execute();
+
+    return tandems.map(
+      (tandem) =>
+        new TandemResponse({
+          profiles: tandem.profiles.map((profile) => profile.id),
+          status: 'draft',
+          score: tandem.score,
+        }),
+    );
   }
 }

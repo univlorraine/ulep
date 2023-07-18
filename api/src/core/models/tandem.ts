@@ -1,28 +1,23 @@
 import { DomainError } from '../errors/errors';
 import { Profile } from './profile';
 
+export type TandemStatus = 'active' | 'inactive' | 'draft';
+
 export type CreateTandemProps = {
   id: string;
   profiles: Profile[];
-  startDate: Date;
-  endDate: Date;
+  status: TandemStatus;
 };
 
 export class Tandem {
   #id: string;
   #profiles: Profile[];
-  #startDate: Date;
-  #endDate: Date;
+  #status: TandemStatus;
 
   constructor(props: CreateTandemProps) {
-    if (props.endDate < props.startDate) {
-      throw new Error('End date must be after start date');
-    }
-
     this.#id = props.id;
     this.profiles = props.profiles;
-    this.#startDate = props.startDate;
-    this.#endDate = props.endDate;
+    this.#status = props.status;
   }
 
   static create(props: CreateTandemProps): Tandem {
@@ -58,27 +53,11 @@ export class Tandem {
     return this.#profiles;
   }
 
-  set startDate(startDate: Date) {
-    if (startDate > this.#endDate) {
-      throw new DomainError('Start date must be before end date');
-    }
-
-    this.#startDate = startDate;
+  set status(status: TandemStatus) {
+    this.#status = status;
   }
 
-  get startDate(): Date {
-    return this.#startDate;
-  }
-
-  set endDate(endDate: Date) {
-    if (endDate < this.#startDate) {
-      throw new DomainError('End date must be after start date');
-    }
-
-    this.#endDate = endDate;
-  }
-
-  get endDate(): Date {
-    return this.#endDate;
+  get status(): TandemStatus {
+    return this.#status;
   }
 }

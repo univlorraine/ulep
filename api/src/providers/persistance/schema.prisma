@@ -108,11 +108,11 @@ model University {
 
 model Tandem {
   id                    String              @id @default(uuid())
-  startDate             DateTime
-  endDate               DateTime
+  status                String              @default("active") // Either active or inactive
   profiles              ProfilesOnTandems[]
 
   @@map("tandems")
+  @@index([status], name: "status")
 }
 
 model ProfilesOnTandems {

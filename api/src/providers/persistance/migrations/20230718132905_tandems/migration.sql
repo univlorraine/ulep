@@ -1,8 +1,7 @@
 -- CreateTable
 CREATE TABLE "tandems" (
     "id" TEXT NOT NULL,
-    "startDate" TIMESTAMP(3) NOT NULL,
-    "endDate" TIMESTAMP(3) NOT NULL,
+    "status" TEXT NOT NULL DEFAULT 'active',
 
     CONSTRAINT "tandems_pkey" PRIMARY KEY ("id")
 );
@@ -14,6 +13,9 @@ CREATE TABLE "profiles_on_tandems" (
 
     CONSTRAINT "profiles_on_tandems_pkey" PRIMARY KEY ("profileId","tandemId")
 );
+
+-- CreateIndex
+CREATE INDEX "status" ON "tandems"("status");
 
 -- AddForeignKey
 ALTER TABLE "profiles_on_tandems" ADD CONSTRAINT "profiles_on_tandems_profileId_fkey" FOREIGN KEY ("profileId") REFERENCES "profiles"("id") ON DELETE CASCADE ON UPDATE CASCADE;

@@ -63,6 +63,6 @@ const providers: Provider[] = [
 @Module({
   imports: [],
   providers: [PrismaService, ...providers],
-  exports: [...providers],
+  exports: [PrismaService, ...providers],
 })
 export class ProvidersModule {}

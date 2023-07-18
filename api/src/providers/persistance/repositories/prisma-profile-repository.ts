@@ -54,6 +54,9 @@ export class PrismaProfileRepository implements ProfileRepository {
   }) {
     const entries = await this.prisma.profile.findMany({
       where: {
+        tandems: {
+          none: { tandem: { status: 'active' } },
+        },
         nativeLanguage: { is: { code: props.nativeLanguageCode } },
         learningLanguage: { is: { code: props.learningLanguageCode } },
       },

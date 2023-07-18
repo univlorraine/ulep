@@ -1,3 +1,4 @@
+import { DomainError } from '../errors/errors';
 import { Profile } from './profile';
 
 export type CreateMatchProps = {
@@ -24,12 +25,16 @@ export class Match {
 
   constructor(props: CreateMatchProps) {
     if (props.owner.id === props.target.id) {
-      throw new Error('Owner cannot be the same as target');
+      throw new DomainError('Owner cannot be the same as target');
     }
 
-    const total = Object.values(props.scores).reduce((a, b) => a + b, 0);
+    let total = Object.values(props.scores).reduce((a, b) => a + b, 0);
+    total = parseFloat(total.toFixed(2));
+
     if (total < 0 || 1 < total) {
-      throw new Error('Score must be between 0 and 1');
+      throw new DomainError(
+        `The sum of all scores must be between 0 and 1, got ${total}.`,
+      );
     }
 
     this.#owner = props.owner;

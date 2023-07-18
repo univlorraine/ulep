@@ -1,67 +1,36 @@
 import { ApiProperty, PartialType } from '@nestjs/swagger';
-import { Expose, Type } from 'class-transformer';
-import { ArrayNotEmpty, IsDate } from 'class-validator';
-import { IsAfterThan } from 'src/api/validators/dates.validator';
+import { Expose } from 'class-transformer';
+import { ArrayNotEmpty, IsIn } from 'class-validator';
 import { Tandem } from 'src/core/models/tandem';
 
 export class CreateTandemRequest {
-  @ApiProperty({
-    type: 'string',
-    isArray: true,
-    description: 'List of profile ids',
-  })
+  @ApiProperty({ type: 'string', isArray: true })
   @ArrayNotEmpty()
   profiles: string[];
 
-  @ApiProperty({
-    type: 'string',
-    format: 'date',
-  })
-  @Type(() => Date)
-  @IsDate()
-  startDate: Date;
-
-  @ApiProperty({
-    type: 'string',
-    format: 'date',
-  })
-  @Type(() => Date)
-  @IsDate()
-  @IsAfterThan('startDate')
-  endDate: Date;
+  @ApiProperty({ type: 'string', enum: ['active', 'inactive'] })
+  @IsIn(['active', 'inactive'])
+  status: 'active' | 'inactive';
 }
 
 export class UpdateTandemRequest extends PartialType(CreateTandemRequest) {}
 
 export class TandemResponse {
-  @ApiProperty({
-    type: 'string',
-    format: 'uuid',
-  })
+  @ApiProperty({ type: 'string', format: 'uuid', nullable: true })
   @Expose({ groups: ['read'] })
-  id: string;
+  id: string | null = null;
 
-  @ApiProperty({
-    type: 'string',
-    format: 'uuid',
-    isArray: true,
-  })
+  @ApiProperty({ type: 'string', format: 'uuid', isArray: true })
   @Expose({ groups: ['read'] })
   profiles: string[];
 
-  @ApiProperty({
-    type: 'string',
-    format: 'date',
-  })
+  @ApiProperty({ type: 'string', enum: ['active', 'inactive', 'draft'] })
   @Expose({ groups: ['read'] })
-  startDate: Date;
+  status: string;
 
-  @ApiProperty({
-    type: 'string',
-    format: 'date',
-  })
+  @ApiProperty({ type: 'number', nullable: true })
   @Expose({ groups: ['read'] })
-  endDate: Date;
+  score: number | null = null;
 
   constructor(partial: Partial<TandemResponse>) {
     Object.assign(this, partial);
@@ -71,8 +40,7 @@ export class TandemResponse {
     return new TandemResponse({
       id: tandem.id,
       profiles: tandem.profiles.map((profile) => profile.id),
-      startDate: tandem.startDate,
-      endDate: tandem.endDate,
+      status: tandem.status,
     });
   }
 }

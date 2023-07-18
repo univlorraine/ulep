@@ -1,5 +1,8 @@
 import { Injectable } from '@nestjs/common';
-import { LanguageRepository } from '../../../core/ports/language.repository';
+import {
+  LanguageCombination,
+  LanguageRepository,
+} from '../../../core/ports/language.repository';
 import { PrismaService } from '../prisma.service';
 import { Collection } from '../../../shared/types/collection';
 import { Language } from '../../../core/models/language';
@@ -38,6 +41,20 @@ export class PrismaLanguageRepository implements LanguageRepository {
       items: languages.map(languageMapper),
       totalItems: total,
     };
+  }
+
+  async getUniqueCombinations(): Promise<LanguageCombination[]> {
+    const languages = await this.prisma.$queryRaw`
+    SELECT l1.code AS learninglanguage, l2.code AS nativelanguage
+    FROM languages AS l1
+    CROSS JOIN languages AS l2
+    WHERE l1.code > l2.code;
+    `;
+
+    return (languages as any[]).map((item) => ({
+      learningLanguage: item.learninglanguage,
+      nativeLanguage: item.nativelanguage,
+    }));
   }
 
   async save(language: Language): Promise<void> {

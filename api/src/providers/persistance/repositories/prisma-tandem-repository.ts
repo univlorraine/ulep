@@ -13,27 +13,22 @@ export class PrismaTandemRepository implements TandemsRepository {
     await this.prisma.tandem.create({
       data: {
         id: tandem.id,
-        startDate: tandem.startDate,
-        endDate: tandem.endDate,
         profiles: {
           create: tandem.profiles.map((profile) => ({
             profile: { connect: { id: profile.id } },
           })),
         },
+        status: tandem.status,
       },
     });
   }
 
   async hasActiveTandem(profileId: string): Promise<boolean> {
-    const currentDate = new Date();
-
     const activeTandems = await this.prisma.profilesOnTandems.findMany({
       where: {
         profileId: profileId,
         tandem: {
-          endDate: {
-            gt: currentDate,
-          },
+          status: { equals: 'active' },
         },
       },
     });
@@ -45,10 +40,8 @@ export class PrismaTandemRepository implements TandemsRepository {
     offset?: number,
     limit?: number,
   ): Promise<Collection<Tandem>> {
-    const currentDate = new Date();
-
     const count = await this.prisma.tandem.count({
-      where: { endDate: { gt: currentDate } },
+      where: { status: { equals: 'active' } },
     });
 
     if (offset >= count) {
@@ -56,7 +49,7 @@ export class PrismaTandemRepository implements TandemsRepository {
     }
 
     const activeTandems = await this.prisma.tandem.findMany({
-      where: { endDate: { gt: currentDate } },
+      where: { status: { equals: 'active' } },
       skip: offset,
       take: limit,
       include: {
@@ -82,9 +75,8 @@ export class PrismaTandemRepository implements TandemsRepository {
       items: activeTandems.map((tandem) => {
         return new Tandem({
           id: tandem.id,
-          startDate: tandem.startDate,
-          endDate: tandem.endDate,
           profiles: tandem.profiles.map((p) => profileMapper(p.profile)),
+          status: tandem.status as 'active' | 'inactive',
         });
       }),
       totalItems: count,
@@ -93,9 +85,7 @@ export class PrismaTandemRepository implements TandemsRepository {
 
   async delete(tandemId: string): Promise<void> {
     await this.prisma.tandem.delete({
-      where: {
-        id: tandemId,
-      },
+      where: { id: tandemId },
     });
   }
 }

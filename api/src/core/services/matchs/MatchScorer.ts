@@ -1,7 +1,8 @@
 /* eslint-disable prettier/prettier */
 import { Injectable } from '@nestjs/common';
 import { Profile } from '../../models/profile';
-import { MatchScores } from 'src/core/models/match';
+import { Match, MatchScores } from 'src/core/models/match';
+import { DomainError } from 'src/core/errors/errors';
 
 export type Coeficients = {
   level: number;
@@ -13,8 +14,12 @@ export type Coeficients = {
   university: number;
 };
 
+export interface IMatchScorer {
+  computeMatchScore(profile1: Profile, profile2: Profile): Match;
+}
+
 @Injectable()
-export class MatchService {
+export class MatchScorer implements IMatchScorer {
 
   #coeficients: Coeficients = {
     level: 0.7,
@@ -29,7 +34,7 @@ export class MatchService {
   public set coeficients(coeficients: Coeficients) {
     const sum = Object.values(coeficients).reduce((a, b) => a + b, 0);
     if (sum !== 1) {
-      throw new Error('The sum of all coeficients must be equal to 1');
+      throw new DomainError('The sum of all coeficients must be equal to 1, got ' + sum + '.');
     }
     this.#coeficients = coeficients;
   }
@@ -38,16 +43,18 @@ export class MatchService {
     return this.#coeficients;
   }
 
-  public computeMatchScore(profile1: Profile, profile2: Profile): MatchScores {
-    const level = this.computeLanguageLevel(profile1, profile2);
-    const age = this.computeAgeBonus(profile1, profile2);
-    const status = this.computeSameRolesBonus(profile1, profile2);
-    const goals = this.computeSameGoalsBonus(profile1, profile2);
-    const gender = this.computeSameGenderBonus(profile1, profile2);
-    const university = this.computeSameUniversityBonus(profile1, profile2);
-    const interests = this.computeSameInterestBonus(profile1, profile2);
+  public computeMatchScore(profile1: Profile, profile2: Profile): Match {
+    const scores: MatchScores = {
+      level: this.computeLanguageLevel(profile1, profile2),
+      age: this.computeAgeBonus(profile1, profile2),
+      status: this.computeSameRolesBonus(profile1, profile2),
+      goals: this.computeSameGoalsBonus(profile1, profile2),
+      university: this.computeSameUniversityBonus(profile1, profile2),
+      gender: this.computeSameGenderBonus(profile1, profile2),
+      interests: this.computeSameInterestBonus(profile1, profile2),
+    };
 
-    return { level, age, status, goals, interests, gender, university };
+    return new Match({ owner: profile1, target: profile2, scores });
   }
 
   private computeLanguageLevel(profile1: Profile, profile2: Profile, isDiscovery = false): number {

@@ -13,8 +13,7 @@ import {
 export type CreateTandemCommand = {
   id: string;
   profiles: string[];
-  startDate: Date;
-  endDate: Date;
+  status: 'active' | 'inactive';
 };
 
 @Injectable()
@@ -40,8 +39,7 @@ export class CreateTandemUsecase {
     const tandem = Tandem.create({
       id: command.id,
       profiles: profiles,
-      startDate: command.startDate,
-      endDate: command.endDate,
+      status: command.status,
     });
 
     await this.tandemsRepository.save(tandem);

@@ -3,7 +3,7 @@ import { ProfileDoesNotExist } from 'src/core/errors/RessourceDoesNotExist';
 import { Match } from 'src/core/models/match';
 import { Profile } from 'src/core/models/profile';
 import { ProfileRepository } from 'src/core/ports/profile.repository';
-import { MatchService } from 'src/core/services/matchs/MatchService';
+import { MatchScorer } from 'src/core/services/matchs/MatchScorer';
 import { PROFILE_REPOSITORY } from 'src/providers/providers.module';
 import { Collection } from 'src/shared/types/collection';
 
@@ -19,7 +19,7 @@ export class GetMatchsByProfileIdUsecase {
   constructor(
     @Inject(PROFILE_REPOSITORY)
     private readonly profileRepository: ProfileRepository,
-    private readonly matchService: MatchService,
+    private readonly matchService: MatchScorer,
   ) {}
 
   async execute({
@@ -36,9 +36,7 @@ export class GetMatchsByProfileIdUsecase {
     const matchs: Match[] = [];
 
     for (const target of targets) {
-      const scores = this.matchService.computeMatchScore(owner, target);
-
-      const match = new Match({ owner, target, scores });
+      const match = this.matchService.computeMatchScore(owner, target);
       matchs.push(match);
     }
 

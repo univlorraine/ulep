@@ -21,7 +21,7 @@ import { DeleteProfileUsecase } from './usecases/profiles/delete-profile.usecase
 import { GetUserUsecase } from './usecases/users/get-user.usecase';
 import { GetTokensUsecase } from './usecases/tokens/get-tokens.usecase';
 import { RefreshTokensUsecase } from './usecases/tokens/refresh-tokens.usecase';
-import { MatchService } from './services/matchs/MatchService';
+import { MatchScorer } from './services/matchs/MatchScorer';
 import { KeycloakAuthenticator } from './services/authentication/authenticator';
 import { GetMatchsByProfileIdUsecase } from './usecases/matchs/GetMatchsByProfileId';
 import { GetLanguageUsecase } from './usecases/languages/get-language.usecase';
@@ -37,6 +37,7 @@ import {
 import { DeleteReportCategoryUsecase } from './usecases/reports/delete-category.usecase';
 import { CreateTandemUsecase } from './usecases/tandems/create-tandem.usecase';
 import { GetTandemsUsecase } from './usecases/tandems/get-tandems.usecase';
+import { GenerateTandemsUsecase } from './usecases/tandems/generate-tandems.usecase';
 
 const usecases: Provider[] = [
   // Countries
@@ -66,6 +67,7 @@ const usecases: Provider[] = [
   GetReportCategoriesUsecase,
   // Tandems
   CreateTandemUsecase,
+  GenerateTandemsUsecase,
   GetTandemsUsecase,
   // Tokens
   GetTokensUsecase,
@@ -83,7 +85,7 @@ const usecases: Provider[] = [
   ResetPasswordUsecase,
 ];
 
-const services: Provider[] = [KeycloakAuthenticator, MatchService];
+const services: Provider[] = [KeycloakAuthenticator, MatchScorer];
 
 @Module({
   imports: [ProvidersModule],

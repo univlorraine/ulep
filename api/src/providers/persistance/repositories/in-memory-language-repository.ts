@@ -1,5 +1,8 @@
 import { Language } from '../../../core/models/language';
-import { LanguageRepository } from '../../../core/ports/language.repository';
+import {
+  LanguageCombination,
+  LanguageRepository,
+} from '../../../core/ports/language.repository';
 import { Collection } from '../../../shared/types/collection';
 
 export class InMemoryLanguageRepository implements LanguageRepository {
@@ -22,6 +25,10 @@ export class InMemoryLanguageRepository implements LanguageRepository {
       items: this.#languages.slice(offset, offset + limit),
       totalItems: this.#languages.length,
     };
+  }
+
+  async getUniqueCombinations(): Promise<LanguageCombination[]> {
+    return [];
   }
 
   async ofCode(code: string): Promise<Language> {
