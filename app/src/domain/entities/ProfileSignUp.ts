@@ -95,6 +95,10 @@ class ProfileSignUp {
         this._email = email;
     }
 
+    get firstname(): string | undefined {
+        return this._firstname;
+    }
+
     set firstname(firstname: string) {
         this._firstname = firstname;
     }
@@ -129,6 +133,10 @@ class ProfileSignUp {
 
     set password(password: string) {
         this._password = password;
+    }
+
+    get profilePicture(): string | undefined {
+        return this._profilePicture;
     }
 
     set profilePicture(profilePicture: string) {

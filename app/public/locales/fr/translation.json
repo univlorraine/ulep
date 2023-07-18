@@ -93,6 +93,12 @@
         "travel_title": "🌎️ Ta meilleure anecdote de voyage",
         "validate_button": "Suivant"
     },
+    "signup_end_page": {
+        "account": "ton compte est prêt 🎉",
+        "description": "Penchons-nous maintenant sur la langue que tu souhaites travailler.",
+        "thanks": "Merci",
+        "validate_button": "Continuer"
+    },
     "signup_frequency_page": {
         "ONCE_A_WEEK": "1 fois / semaine",
         "subtitle": "Fréquence des rencontres",
