@@ -1,0 +1,71 @@
+.availability-container {
+    align-items: center;
+    display: flex;
+    flex-direction: row;
+}
+
+.availability-day,
+.availability-status {
+    font-family: 'Maven Pro';
+    font-size: 16px;
+    font-style: normal;
+    line-height: 20px;
+}
+
+.availability-day {
+    font-weight: 400;
+}
+
+.availability-status {
+    font-weight: 500;
+    margin-left: 8px;
+}
+
+.day-container {
+    align-items: center;
+    background-color: #f2f4f7;
+    border-radius: 5px;
+    display: flex;
+    flex-direction: row;
+    height: 60px;
+    justify-content: space-between;
+    margin-bottom: 10px;
+    padding: 0px 20px;
+    width: 100%;
+}
+
+.dot {
+    border-radius: 50%;
+    height: 10px;
+    width: 10px;
+}
+
+.separator {
+    background-color: black;
+    height: 1px;
+    margin: 30px 0px;
+    opacity: 0.10000000149011612;
+    width: 100%;
+}
+
+.subtitle {
+    align-self: center;
+    color: #000;
+    font-family: 'Maven Pro', sans-serif;
+    font-size: 16px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: 20px;
+    margin-bottom: 28px;
+}
+
+.title {
+    align-self: center;
+    color: #000;
+    text-align: center;
+    font-family: 'Roboto', sans-serif;
+    font-size: 37px;
+    font-style: normal;
+    font-weight: 700;
+    line-height: 40px;
+}

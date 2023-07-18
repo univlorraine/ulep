@@ -18,7 +18,7 @@
     font-size: 16px;
     font-family: 'Maven Pro', sans-serif;
     font-weight: 500;
-    padding-left: 16px;
+    padding: 16px;
 }
 
 .area-text-error {
@@ -29,6 +29,10 @@
 .area-text-text {
     background-color: #f2f4f7;
     border-width: 0px;
+}
+
+.container {
+    width: 100%;
 }
 
 .eye-button {
@@ -96,7 +100,7 @@ input:focus {
     font-size: 16px;
     font-style: normal;
     font-weight: 400;
-    line-height: 1px;
+    line-height: 20px;
 }
 
 .input-label-error {

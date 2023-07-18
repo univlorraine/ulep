@@ -1,3 +1,4 @@
+import Availability from './Availability';
 import Country from './Country';
 import Goal from './Goal';
 import Language from './Language';
@@ -5,6 +6,7 @@ import University from './University';
 import gender from './gender';
 import roles from './roles';
 
+export type frequency = 'ONCE_A_WEEK' | 'TWICE_A_WEEK' | 'THREE_TIMES_A_WEEK' | 'TWICE_A_MONTH' | 'THREE_TIMES_A_MONTH';
 export interface BiographySignUp {
     incredible: string;
     place: string;
@@ -12,8 +14,20 @@ export interface BiographySignUp {
     travel: string;
 }
 
+export interface AvailabilitesSignUp {
+    monday: Availability;
+    tuesday: Availability;
+    wednesday: Availability;
+    thursday: Availability;
+    friday: Availability;
+    saturday: Availability;
+    sunday: Availability;
+}
+
 class ProfileSignUp {
     private _age?: number;
+
+    private _availabilities?: AvailabilitesSignUp;
 
     private _biography?: BiographySignUp;
 
@@ -26,6 +40,8 @@ class ProfileSignUp {
     private _email?: string;
 
     private _firstname?: string;
+
+    private _frequency?: frequency;
 
     private _gender?: gender;
 
@@ -55,6 +71,10 @@ class ProfileSignUp {
         this._age = age;
     }
 
+    set availabilities(availabilities: AvailabilitesSignUp) {
+        this._availabilities = availabilities;
+    }
+
     set biography(biography: BiographySignUp) {
         this._biography = biography;
     }
@@ -77,6 +97,10 @@ class ProfileSignUp {
 
     set firstname(firstname: string) {
         this._firstname = firstname;
+    }
+
+    set frequency(frequency: frequency) {
+        this._frequency = frequency;
     }
 
     set gender(gender: gender) {

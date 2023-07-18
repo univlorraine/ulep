@@ -1,4 +1,13 @@
 {
+    "days": {
+        "monday": "Lundi",
+        "tuesday": "Mardi",
+        "wednesday": "Mercredi",
+        "thursday": "Jeudi",
+        "friday": "Vendredi",
+        "saturday": "Samedi",
+        "sunday": "Dimanche"
+    },
     "errors": {
         "global": "Une erreur est survenue",
         "userDoesntExist": "L'utilisateur n'existe pas",
@@ -53,6 +62,23 @@
         "new_password_error": "Doit contenir un chiffre, un majuscule et une minuscule",
         "title": "Nouveau mot de passe"
     },
+    "signup_availabilities_page": {
+        "AVAILABLE": "Peu disponible",
+        "modal": {
+            "note": "Note",
+            "pass_button": "Passer",
+            "private_text": "Visible uniquement par le gestionnaire",
+            "send_button": "Envoyer",
+            "title_note": "Souhaites-tu ajouter une note ?",
+            "validate_button": "Valider"
+        },
+        "subtitle": "Tes disponibilités nous servent à trouver un tandem qui te correspond. ",
+        "timezone": "Fuseau horaire",
+        "title": "Tes disponibilités",
+        "UNAVAILABLE": "Pas disponible",
+        "validate_button": "Valider et continuer",
+        "VERY_AVAILABLE": "Très disponible"
+    },
     "signup_biography_page": {
         "error_message": "Minimum 10 caractères",
         "incredible_placeholder": "Lorem ipsum...",
@@ -66,6 +92,16 @@
         "travel_placeholder": "Lorem ipsum...",
         "travel_title": "🌎️ Ta meilleure anecdote de voyage",
         "validate_button": "Suivant"
+    },
+    "signup_frequency_page": {
+        "ONCE_A_WEEK": "1 fois / semaine",
+        "subtitle": "Fréquence des rencontres",
+        "THREE_TIMES_A_MONTH": "3 fois / mois",
+        "THREE_TIMES_A_WEEK": "3 fois / semaine",
+        "title": "Tes disponibilités",
+        "TWICE_A_MONTH": "2 fois / mois",
+        "TWICE_A_WEEK": "2 fois / semaine",
+        "validate_button": "Valider et continuer"
     },
     "signup_goals_page": {
         "pass_button": "Passer",

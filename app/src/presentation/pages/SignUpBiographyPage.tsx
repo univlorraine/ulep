@@ -36,7 +36,7 @@ const SignUpBiographyPage: React.FC = () => {
             },
         });
 
-        history.push('/signup/interests'); // TODO: change this
+        history.push('/signup/availabilities');
     };
 
     return (

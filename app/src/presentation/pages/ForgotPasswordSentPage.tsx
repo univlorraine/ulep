@@ -4,7 +4,7 @@ import { useHistory } from 'react-router';
 import CircleAvatar from '../components/CircleAvatar';
 import useWindowDimensions from '../hooks/useWindowDimensions';
 import { BACKGROUND_HYBRID_STYLE_INLINE, BACKGROUND_WEB_STYLE_INLINE, HYBRID_MAX_WIDTH } from '../utils';
-import style from './css/ForgotPasswordSentPage.module.css';
+import style from './css/ForgotPasswordSent.module.css';
 
 const ForgotPasswordSentPage: React.FC = () => {
     const history = useHistory();

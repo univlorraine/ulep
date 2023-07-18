@@ -2,6 +2,7 @@ import { useState } from 'react';
 import style from './TextInput.module.css';
 
 interface TextInputProps {
+    customHeight?: number;
     errorMessage?: string | null;
     placeholder?: string | null;
     onChange: (text: string) => void;
@@ -10,11 +11,19 @@ interface TextInputProps {
     value: string;
 }
 
-const TextInput: React.FC<TextInputProps> = ({ errorMessage, onChange, placeholder, title, type, value }) => {
+const TextInput: React.FC<TextInputProps> = ({
+    customHeight,
+    errorMessage,
+    onChange,
+    placeholder,
+    title,
+    type,
+    value,
+}) => {
     const [showPasword, setShowPassword] = useState<boolean>(false);
     return (
-        <div className="large-margin-bottom">
-            <p className={style['input-label']}>{title}</p>
+        <div className={`${style.container} large-margin-bottom`}>
+            <span className={style['input-label']}>{title}</span>
             {type !== 'text-area' ? (
                 <div
                     className={`${style['input-wrapper']} ${errorMessage ? style['input-error'] : style['input-text']}`}
@@ -24,6 +33,7 @@ const TextInput: React.FC<TextInputProps> = ({ errorMessage, onChange, placehold
                         className={style.input}
                         onChange={(e) => onChange(e.target.value)}
                         placeholder={placeholder ?? ''}
+                        style={{ height: customHeight }}
                         type={showPasword ? 'text' : type}
                         value={value}
                         required
@@ -47,6 +57,7 @@ const TextInput: React.FC<TextInputProps> = ({ errorMessage, onChange, placehold
                     maxLength={200}
                     onChange={(e) => onChange(e.target.value)}
                     placeholder={placeholder ?? ''}
+                    style={{ height: customHeight }}
                     value={value}
                     required
                 />
