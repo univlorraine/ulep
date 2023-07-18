@@ -1,12 +1,12 @@
 import { InMemoryLanguageRepository } from '../../../src/providers/persistance/repositories/in-memory-language-repository';
-import seedDefinedNumberOfLanguages from '../../seeders/languages';
+import { seedDefinedLanguages } from '../../seeders/languages';
 import { UpdateLanguageUsecase } from '../../../src/core/usecases/languages/update-language.usecase';
 import { LanguageDoesNotExist } from '../../../src/core/errors/RessourceDoesNotExist';
 
 describe('UpdateLanguage', () => {
   const languageRepository = new InMemoryLanguageRepository();
   const updateLanguagesUsecase = new UpdateLanguageUsecase(languageRepository);
-  const languages = seedDefinedNumberOfLanguages(1, (index) => `uuid-${index}`);
+  const languages = seedDefinedLanguages(['FR', 'EN', 'ES']);
 
   beforeEach(() => {
     languageRepository.reset();
@@ -14,22 +14,22 @@ describe('UpdateLanguage', () => {
   });
 
   it('Should persist the changes', async () => {
-    let language = await languageRepository.ofId('uuid-1');
+    let language = await languageRepository.ofCode('FR');
     expect(language.isEnable).toBe(true);
 
     await updateLanguagesUsecase.execute({
-      id: 'uuid-1',
+      code: 'FR',
       isEnable: false,
     });
 
-    language = await languageRepository.ofId('uuid-1');
+    language = await languageRepository.ofCode('FR');
     expect(language.isEnable).toBe(false);
   });
 
   it('Should throw an error if the language does not exists', async () => {
     try {
       await updateLanguagesUsecase.execute({
-        id: 'uuid',
+        code: 'DE',
         isEnable: false,
       });
     } catch (error) {

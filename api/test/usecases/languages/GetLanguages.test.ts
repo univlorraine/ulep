@@ -1,6 +1,6 @@
 import { InMemoryLanguageRepository } from '../../../src/providers/persistance/repositories/in-memory-language-repository';
 import { GetLanguagesUsecase } from '../../../src/core/usecases/languages/get-languages.usecase';
-import seedDefinedNumberOfLanguages from '../../seeders/languages';
+import { seedDefinedNumberOfLanguages } from '../../seeders/languages';
 import { Collection } from '../../../src/shared/types/collection';
 import { Language } from '../../../src/core/models/language';
 
@@ -17,7 +17,7 @@ describe('GetLanguages', () => {
     const ITEMS_COUNT = 100;
     const NB_PAGES = Math.floor(ITEMS_COUNT / ITEMS_PER_PAGE);
     const REST = 100 % ITEMS_PER_PAGE;
-    languageRepository.init(seedDefinedNumberOfLanguages(ITEMS_COUNT));
+    languageRepository.init(seedDefinedNumberOfLanguages(100));
 
     const result: Collection<Language>[] = [];
 

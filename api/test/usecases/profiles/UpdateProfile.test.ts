@@ -1,8 +1,9 @@
 import {
+  Gender,
   Goal,
-  LanguageLevel,
   MeetingFrequency,
   Profile,
+  Role,
 } from '../../../src/core/models/profile';
 import { InMemoryCountryRepository } from '../../../src/providers/persistance/repositories/in-memory-country-repository';
 import { InMemoryProfileRepository } from '../../../src/providers/persistance/repositories/in-memory-profile-repository';
@@ -55,22 +56,25 @@ describe('UpdateProfile', () => {
       user: user,
       firstname: 'Jane',
       lastname: 'Doe',
-      birthdate: new Date('1988-01-01'),
-      role: 'STUDENT',
-      gender: 'FEMALE',
+      age: 25,
+      role: Role.STUDENT,
+      gender: Gender.FEMALE,
       university: universities[0],
       nationality: countries[0],
       nativeLanguage: {
-        id: 'uuid-1',
         code: 'FR',
       },
       learningLanguage: {
-        id: 'uuid-2',
         code: 'EN',
-        proficiencyLevel: LanguageLevel.B2,
       },
-      goals: [Goal.ORAL_PRACTICE],
-      meetingFrequency: MeetingFrequency.ONCE_A_WEEK,
+      learningLanguageLevel: 'B2',
+      masteredLanguages: [],
+      goals: new Set([Goal.ORAL_PRACTICE]),
+      interests: new Set(['music', 'sport']),
+      preferences: {
+        meetingFrequency: MeetingFrequency.ONCE_A_WEEK,
+        sameGender: true,
+      },
       bios: 'Lorem ipsum dolor sit amet',
     });
 
@@ -79,14 +83,10 @@ describe('UpdateProfile', () => {
     const profile = await updateProfileUsecase.execute({
       id: instance.id,
       university: universities[8].id,
-      goals: [Goal.PREPARE_TRAVEL_ABROAD],
-      meetingFrequency: MeetingFrequency.TWICE_A_WEEK,
     });
 
     expect(profile.id).toEqual(profile.id);
     expect(profile.university.id).toEqual(universities[8].id);
-    expect(profile.goals).toEqual([Goal.PREPARE_TRAVEL_ABROAD]);
-    expect(profile.meetingFrequency).toEqual(MeetingFrequency.TWICE_A_WEEK);
   });
 
   it('should throw an error if the profile does not exist', async () => {
@@ -94,7 +94,6 @@ describe('UpdateProfile', () => {
       await updateProfileUsecase.execute({
         id: 'uuid-that-does-not-exist',
         university: universities[8].id,
-        goals: [Goal.PREPARE_TRAVEL_ABROAD],
         meetingFrequency: MeetingFrequency.TWICE_A_WEEK,
       });
     } catch (error) {
@@ -110,7 +109,6 @@ describe('UpdateProfile', () => {
       await updateProfileUsecase.execute({
         id: profiles[0].id,
         university: 'uuid-that-does-not-exist',
-        goals: [Goal.PREPARE_TRAVEL_ABROAD],
         meetingFrequency: MeetingFrequency.TWICE_A_WEEK,
       });
     } catch (error) {

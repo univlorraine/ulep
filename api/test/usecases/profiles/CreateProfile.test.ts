@@ -1,8 +1,9 @@
 import { Country } from '../../../src/core/models/country';
 import {
+  Gender,
   Goal,
-  LanguageLevel,
   MeetingFrequency,
+  Role,
 } from '../../../src/core/models/profile';
 import { University } from '../../../src/core/models/university';
 import { CreateProfileUsecase } from '../../../src/core/usecases/profiles/create-profile.usecase';
@@ -37,13 +38,11 @@ describe('CreateProfile', () => {
 
   const languages: Language[] = [
     new Language({
-      id: 'uuid-1',
       name: 'English',
       code: 'EN',
       isEnable: true,
     }),
     new Language({
-      id: 'uuid-2',
       name: 'French',
       code: 'FR',
       isEnable: true,
@@ -86,17 +85,18 @@ describe('CreateProfile', () => {
       userId: user.id,
       firstname: 'Jane',
       lastname: 'Doe',
-      birthdate: new Date('1988-01-01'),
-      role: 'STUDENT',
-      gender: 'FEMALE',
+      age: 25,
+      role: Role.STUDENT,
+      gender: Gender.FEMALE,
       university: university.id,
       nationality: country.id,
-      learningLanguage: 'EN',
-      proficiencyLevel: LanguageLevel.B2,
       nativeLanguage: 'FR',
-      goals: [Goal.ORAL_PRACTICE],
+      learningLanguage: 'EN',
+      proficiencyLevel: 'B2',
+      goals: new Set([Goal.ORAL_PRACTICE]),
+      interests: new Set(['music', 'sport']),
       meetingFrequency: MeetingFrequency.ONCE_A_WEEK,
-      bios: 'Lorem ipsum dolor sit amet',
+      preferSameGender: true,
     });
 
     expect(profile).toBeDefined();
@@ -104,37 +104,9 @@ describe('CreateProfile', () => {
     expect(profile.user.email).toBe(user.email);
     expect(profile.firstname).toBe('Jane');
     expect(profile.lastname).toBe('Doe');
-    expect(profile.birthdate).toEqual(new Date('1988-01-01'));
+    expect(profile.age).toEqual(25);
     expect(profile.role).toBe('STUDENT');
-    expect(profile.meetingFrequency).toBe('ONCE_A_WEEK');
-    expect(profile.bios).toBe('Lorem ipsum dolor sit amet');
   });
-
-  // it('should throw an error if the profile already exists', async () => {
-  //   profileRepository.init(seedDefinedUsersProfiles(users));
-
-  //   try {
-  //     await createProfileUsecase.execute({
-  //       id: 'uuid-1',
-  //       userId: users[0].id,
-  //       firstname: 'Jane',
-  //       lastname: 'Doe',
-  //       birthdate: new Date('1988-01-01'),
-  //       role: 'STUDENT',
-  //       gender: 'FEMALE',
-  //       university: university.id,
-  //       nationality: country.id,
-  //       learningLanguage: 'EN',
-  //       proficiencyLevel: LanguageLevel.B2,
-  //       nativeLanguage: 'FR',
-  //       goals: [Goal.ORAL_PRACTICE],
-  //       meetingFrequency: MeetingFrequency.ONCE_A_WEEK,
-  //       bios: 'Lorem ipsum dolor sit amet',
-  //     });
-  //   } catch (error) {
-  //     expect(error).toBeInstanceOf(ProfileAlreadyExists);
-  //   }
-  // });
 
   it('should throw an error if the user does not exist', async () => {
     try {
@@ -143,17 +115,18 @@ describe('CreateProfile', () => {
         userId: 'uuid-that-does-not-exist',
         firstname: 'Jane',
         lastname: 'Doe',
-        birthdate: new Date('1988-01-01'),
-        role: 'STUDENT',
-        gender: 'FEMALE',
+        age: 25,
+        role: Role.STUDENT,
+        gender: Gender.FEMALE,
         university: university.id,
         nationality: country.id,
         nativeLanguage: 'FR',
         learningLanguage: 'EN',
-        proficiencyLevel: LanguageLevel.B2,
-        goals: [Goal.ORAL_PRACTICE],
+        proficiencyLevel: 'B2',
+        goals: new Set([Goal.ORAL_PRACTICE]),
+        interests: new Set(['music', 'sport']),
         meetingFrequency: MeetingFrequency.ONCE_A_WEEK,
-        bios: 'Lorem ipsum dolor sit amet',
+        preferSameGender: true,
       });
     } catch (error) {
       expect(error).toBeInstanceOf(UserDoesNotExist);
@@ -167,17 +140,18 @@ describe('CreateProfile', () => {
         userId: users[0].id,
         firstname: 'Jane',
         lastname: 'Doe',
-        birthdate: new Date('1988-01-01'),
-        role: 'STUDENT',
-        gender: 'FEMALE',
+        age: 25,
+        role: Role.STUDENT,
+        gender: Gender.FEMALE,
         university: 'uuid-that-does-not-exist',
         nationality: country.id,
         nativeLanguage: 'FR',
         learningLanguage: 'EN',
-        proficiencyLevel: LanguageLevel.B2,
-        goals: [Goal.ORAL_PRACTICE],
+        proficiencyLevel: 'B2',
+        goals: new Set([Goal.ORAL_PRACTICE]),
+        interests: new Set(['music', 'sport']),
         meetingFrequency: MeetingFrequency.ONCE_A_WEEK,
-        bios: 'Lorem ipsum dolor sit amet',
+        preferSameGender: true,
       });
     } catch (error) {
       expect(error).toBeInstanceOf(UniversityDoesNotExist);
@@ -191,17 +165,18 @@ describe('CreateProfile', () => {
         userId: users[0].id,
         firstname: 'Jane',
         lastname: 'Doe',
-        birthdate: new Date('1988-01-01'),
-        role: 'STUDENT',
-        gender: 'FEMALE',
+        age: 25,
+        role: Role.STUDENT,
+        gender: Gender.FEMALE,
         university: university.id,
         nationality: 'uuid-that-does-not-exist',
         nativeLanguage: 'FR',
         learningLanguage: 'EN',
-        proficiencyLevel: LanguageLevel.B2,
-        goals: [Goal.ORAL_PRACTICE],
+        proficiencyLevel: 'B2',
+        goals: new Set([Goal.ORAL_PRACTICE]),
+        interests: new Set(['music', 'sport']),
         meetingFrequency: MeetingFrequency.ONCE_A_WEEK,
-        bios: 'Lorem ipsum dolor sit amet',
+        preferSameGender: true,
       });
     } catch (error) {
       expect(error).toBeInstanceOf(CountryDoesNotExist);

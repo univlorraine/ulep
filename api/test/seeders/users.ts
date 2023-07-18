@@ -1,5 +1,5 @@
 import { faker } from '@faker-js/faker';
-import { Role, User } from '../../src/core/models/user';
+import { User, UserRole } from '../../src/core/models/user';
 
 const seedDefinedNumberOfUsers = (
   count: number,
@@ -12,7 +12,7 @@ const seedDefinedNumberOfUsers = (
     const instance = new User({
       id: id(i),
       email: faker.internet.email(),
-      roles: [Role.ROLE_USER],
+      roles: [UserRole.USER],
     });
 
     users.push(instance);

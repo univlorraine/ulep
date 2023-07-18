@@ -2,10 +2,11 @@ import { faker } from '@faker-js/faker';
 import { User } from '../../src/core/models/user';
 import { Country } from '../../src/core/models/country';
 import {
+  Gender,
   Goal,
-  LanguageLevel,
   MeetingFrequency,
   Profile,
+  Role,
 } from '../../src/core/models/profile';
 import { University } from '../../src/core/models/university';
 
@@ -35,22 +36,28 @@ const seedDefinedUsersProfiles = (user: User[]): Profile[] => {
       user: user[i - 1],
       firstname: 'Jane',
       lastname: 'Doe',
-      birthdate: new Date('1988-01-01'),
-      role: 'STUDENT',
-      gender: 'FEMALE',
+      age: 25,
+      role: faker.helpers.arrayElement([Role.STUDENT, Role.TEACHER]),
+      gender: faker.helpers.arrayElement([Gender.MALE, Gender.FEMALE]),
       university: university,
       nationality: country,
       nativeLanguage: {
-        id: '1',
+        code: 'FR',
+      },
+      masteredLanguages: [],
+      learningLanguage: {
         code: 'EN',
       },
-      learningLanguage: {
-        id: '2',
-        code: 'FR',
-        proficiencyLevel: LanguageLevel.B2,
+      learningLanguageLevel: 'B2',
+      goals: new Set([Goal.ORAL_PRACTICE]),
+      interests: new Set(['music', 'sport']),
+      preferences: {
+        meetingFrequency: faker.helpers.arrayElement([
+          MeetingFrequency.ONCE_A_WEEK,
+          MeetingFrequency.TWICE_A_WEEK,
+        ]),
+        sameGender: faker.datatype.boolean(),
       },
-      goals: [Goal.ORAL_PRACTICE],
-      meetingFrequency: MeetingFrequency.ONCE_A_WEEK,
       bios: 'Lorem ipsum dolor sit amet',
     });
 

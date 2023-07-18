@@ -1,7 +1,7 @@
 import { Inject, Injectable } from '@nestjs/common';
 import { ProfileRepository } from '../../ports/profile.repository';
 import { PROFILE_REPOSITORY } from '../../../providers/providers.module';
-import { StringFilter } from 'src/shared/types/filters';
+import { StringFilter } from '../../../shared/types/filters';
 
 export class GetProfilesCommand {
   page: number;

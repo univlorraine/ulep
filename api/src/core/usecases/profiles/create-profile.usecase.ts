@@ -29,7 +29,7 @@ import { Country } from '../../models/country';
 import { Language } from '../../models/language';
 import { User } from '../../models/user';
 import { UserRepository } from '../../ports/user.repository';
-import { ProfileAlreadyExists } from 'src/core/errors/RessourceAlreadyExists';
+import { ProfileAlreadyExists } from '../../errors/RessourceAlreadyExists';
 
 export class CreateProfileCommand {
   id: string;
