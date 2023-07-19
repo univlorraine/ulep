@@ -22,7 +22,6 @@ const WebLayoutCentered: React.FC<WebLayoutCenteredProps> = ({
 }) => {
     const { width } = useWindowDimensions();
     const isHybrid = width < HYBRID_MAX_WIDTH;
-    console.log(backgroundIconColor);
     return (
         <IonPage>
             <IonContent>
