@@ -1,15 +1,21 @@
 import { IonRouterLink } from '@ionic/react';
 import { useTranslation } from 'react-i18next';
 import { useHistory } from 'react-router';
+import { useConfig } from '../../context/ConfigurationContext';
 import CircleAvatar from '../components/CircleAvatar';
 import SuccessLayout from '../components/SuccessLayout';
 import style from './css/ForgotPasswordSent.module.css';
 
 const ForgotPasswordSentPage: React.FC = () => {
     const history = useHistory();
+    const { configuration } = useConfig();
     const { t } = useTranslation();
     return (
-        <SuccessLayout backgroundColorCode="#b6aa43" color={'yellow'} colorCode={'#fdee66'}>
+        <SuccessLayout
+            backgroundIconColor={configuration.primaryBackgroundImageColor}
+            backgroundColorCode={configuration.primaryDarkColor}
+            colorCode={configuration.primaryColor}
+        >
             <>
                 <h1 className={`${style.text} ${style.title}`}>{t('forgot_password_sent_page.title')}</h1>
                 <p className={`${style.text} ${style.subtitle}`}>{t('forgot_password_sent_page.subtitle')}</p>

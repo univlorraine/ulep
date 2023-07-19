@@ -26,6 +26,7 @@ import '@ionic/react/css/text-alignment.css';
 import '@ionic/react/css/text-transformation.css';
 
 /* Theme variables */
+import Configuration from './domain/entities/Confirguration';
 import './presentation/theme/button.css';
 import './presentation/theme/global.css';
 import './presentation/theme/margin.css';
@@ -40,13 +41,33 @@ const AppContext = () => {
     const refreshToken = useStoreState((state) => state.refreshToken);
     const setTokens = useStoreActions((state) => state.setTokens);
     const deleteTokens = useStoreActions((state) => state.removeTokens);
+    const configuration = new Configuration(
+        'Université de Lorraine',
+        'Université de Lorraine',
+        'contact@email.com',
+        '#FDEE66',
+        '#B6AA43',
+        '#EDDF5E',
+        '#8BC4C4',
+        '#4B7676',
+        '#7CB8B8'
+    );
+
+    useEffect(() => {
+        document.documentElement.style.setProperty('--primary-color', configuration.primaryColor);
+        document.documentElement.style.setProperty('--primary-dark-color', configuration.primaryDarkColor);
+        document.documentElement.style.setProperty('--secondary-color', configuration.secondaryColor);
+        document.documentElement.style.setProperty('--secondary-dark-color', configuration.secondaryDarkColor);
+    }, []);
 
     if (!rehydrated) {
         return <div />;
     }
 
     return (
-        <ConfigContext.Provider value={getConfigContextValue(accessToken, refreshToken, setTokens, deleteTokens)}>
+        <ConfigContext.Provider
+            value={getConfigContextValue(accessToken, refreshToken, setTokens, deleteTokens, configuration)}
+        >
             <IonReactRouter>
                 <OfflineRouter />
             </IonReactRouter>

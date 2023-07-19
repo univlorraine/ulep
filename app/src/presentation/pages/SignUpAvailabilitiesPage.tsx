@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useHistory } from 'react-router';
+import { useConfig } from '../../context/ConfigurationContext';
 import { getInitialAviability, occurence } from '../../domain/entities/Availability';
 import { AvailabilitesSignUp } from '../../domain/entities/ProfileSignUp';
 import { useStoreActions } from '../../store/storeTypes';
@@ -22,14 +23,15 @@ const initialAvailabilities: AvailabilitesSignUp = {
 
 const SignUpAvailabilitiesPage: React.FC = () => {
     const { t } = useTranslation();
+    const { configuration } = useConfig();
     const history = useHistory();
     const updateProfileSignUp = useStoreActions((state) => state.updateProfileSignUp);
-    const [timzeone, setTimezone] = useState<string>(''); //TODO: use university timezone on start
+    const [timezone, setTimezone] = useState<string>(''); //TODO: use university timezone on start
     const [availabilities, setAvailabilities] = useState<AvailabilitesSignUp>(initialAvailabilities);
     const [openModal, setOpenModal] = useState<{ id: string; occurence: occurence } | null>();
 
     const continueSignUp = async () => {
-        updateProfileSignUp({ availabilities });
+        updateProfileSignUp({ availabilities, timezone });
 
         history.push('/signup/frequency');
     };
@@ -52,7 +54,12 @@ const SignUpAvailabilitiesPage: React.FC = () => {
     };
 
     return (
-        <WebLayoutCentered headerColor="#FDEE66" headerPercentage={84} headerTitle={t('global.create_account_title')}>
+        <WebLayoutCentered
+            backgroundIconColor={configuration.primaryBackgroundImageColor}
+            headerColor={configuration.primaryColor}
+            headerPercentage={84}
+            headerTitle={t('global.create_account_title')}
+        >
             <div className={styles.body}>
                 <div>
                     <h1 className={availabilitiesStyles.title}>{t('signup_availabilities_page.title')}</h1>
@@ -62,7 +69,8 @@ const SignUpAvailabilitiesPage: React.FC = () => {
 
                     <Dropdown<string>
                         onChange={setTimezone}
-                        options={Intl.supportedValuesOf('timeZone').map((timzeone) => ({
+                        //@ts-ignore
+                        options={Intl.supportedValuesOf('timeZone').map((timzeone: string) => ({
                             title: timzeone,
                             value: timzeone,
                         }))}

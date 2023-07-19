@@ -16,7 +16,7 @@ import styles from './css/SignUp.module.css';
 
 const SignUpPage: React.FC = () => {
     const { t } = useTranslation();
-    const { getAllCountries, getAllUniversities } = useConfig();
+    const { configuration, getAllCountries, getAllUniversities } = useConfig();
     const updateProfileSignUp = useStoreActions((state) => state.updateProfileSignUp);
     const [showToast] = useIonToast();
     const history = useHistory();
@@ -72,7 +72,12 @@ const SignUpPage: React.FC = () => {
     }, []);
 
     return (
-        <WebLayoutCentered headerColor="#FDEE66" headerPercentage={12} headerTitle={t('global.create_account_title')}>
+        <WebLayoutCentered
+            backgroundIconColor={configuration.primaryBackgroundImageColor}
+            headerColor={configuration.primaryColor}
+            headerPercentage={12}
+            headerTitle={t('global.create_account_title')}
+        >
             <div className={styles.body}>
                 <h1 className={styles.title}>{t('signup_page.title')}</h1>
 
@@ -130,7 +135,11 @@ const SignUpPage: React.FC = () => {
                 )}
                 {displayError && <ErrorMessage description={t('signup_page.error')} />}
                 <div className={styles['bottom-container']}>
-                    {!selectedRole && <p className={styles.information}>{t('signup_page.footer')}</p>}
+                    {!selectedRole && (
+                        <p className={styles.information}>{`${t('signup_page.footer_university')}${
+                            configuration.mainUniversityName
+                        } ? ${t('signup_page.footer_email')} ${configuration.emailContact}`}</p>
+                    )}
                     <button className="primary-button large-margin-bottom" onClick={continueSignUp}>
                         {t('signup_page.validate_button')}
                     </button>

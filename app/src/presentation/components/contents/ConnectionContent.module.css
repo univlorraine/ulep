@@ -12,7 +12,7 @@
 }
 
 .connect-div {
-    background-color: #fdee66;
+    background-color: var(--primary-color);
     margin-bottom: 10px;
 }
 
@@ -32,7 +32,7 @@
 }
 
 .signup-div {
-    background-color: #b4c2de;
+    background-color: var(--secondary-color);
 }
 
 .title {

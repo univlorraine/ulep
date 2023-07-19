@@ -63,6 +63,8 @@ class ProfileSignUp {
 
     private _staffFunction?: string;
 
+    private _timezone?: string;
+
     private _university?: University;
 
     constructor() {}
@@ -95,8 +97,8 @@ class ProfileSignUp {
         this._email = email;
     }
 
-    get firstname(): string | undefined {
-        return this._firstname;
+    get firstname(): string {
+        return this._firstname ?? '';
     }
 
     set firstname(firstname: string) {
@@ -135,8 +137,8 @@ class ProfileSignUp {
         this._password = password;
     }
 
-    get profilePicture(): string | undefined {
-        return this._profilePicture;
+    get profilePicture(): string {
+        return this._profilePicture ?? '';
     }
 
     set profilePicture(profilePicture: string) {
@@ -153,6 +155,10 @@ class ProfileSignUp {
 
     set university(university: University) {
         this._university = university;
+    }
+
+    set timezone(timezone: string) {
+        this._timezone = timezone;
     }
 }
 

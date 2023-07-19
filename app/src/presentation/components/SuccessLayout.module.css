@@ -1,10 +1,28 @@
-.main-content {
+.children-content {
     align-items: center;
-    background-color: #fdee66;
     display: flex;
     height: 100%;
     flex-direction: column;
+    position: relative;
+    z-index: 2;
+}
+
+.image {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%) scale(1.5);
+    z-index: 1;
+}
+
+.main-content {
+    align-items: center;
+    display: flex;
+    height: 100%;
+    flex-direction: column;
+    position: relative;
     padding: 20 0px;
+    overflow: hidden;
 }
 
 .web-content {
@@ -13,13 +31,18 @@
 }
 
 @media (min-width: 768px) {
+    .image {
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%) scale(1.5);
+        z-index: 1;
+    }
     .main-content {
         box-shadow: 0px 4px 24px 0px rgba(0, 0, 0, 0.25);
         padding: 0px 60px;
     }
 
     .web-content {
-        background-color: #b6aa43;
         align-items: center;
         display: flex;
         justify-content: center;

@@ -2,7 +2,7 @@ apply plugin: 'com.android.application'
 
 // get version code from the specified property argument `-PversionCode` during the build call
 def getMyVersionCode = { ->
-    return project.hasProperty('versionCode') ? versionCode.toInteger() : -1
+    return project.hasProperty('versionCode') ? versionCode.toInteger() : 1
 }
 
 // get version name from the specified property argument `-PversionName` during the build call
@@ -37,7 +37,7 @@ android {
                 storePassword System.getenv()["CM_KEYSTORE_PASSWORD"]
                 keyAlias System.getenv()["CM_KEY_ALIAS"]
                 keyPassword System.getenv()["CM_KEY_PASSWORD"]
-            } 
+            }
             // else {
             //     keyAlias keystoreProperties['keyAlias']
             //     keyPassword keystoreProperties['keyPassword']

@@ -1,3 +1,4 @@
+import Configuration from '../domain/entities/Confirguration';
 import GetAllCategoriesInterestUsecaseInterface from '../domain/interfaces/GetAllCategoriesInterestsUsecase.interface';
 import GetAllCountriesUsecaseInterface from '../domain/interfaces/GetAllCountriesUsecase.interface';
 import GetAllGoalsUsecaseInterface from '../domain/interfaces/GetAllGoalsUsecase.interface';
@@ -7,6 +8,7 @@ import LoginUsecaseInterface from '../domain/interfaces/LoginUsecase.interface';
 import ResetPasswordUsecaseInterface from '../domain/interfaces/ResetPasswordUsecase.interface';
 
 export interface ConfigContextValueType {
+    configuration: Configuration;
     getAllCategoriesInterests: GetAllCategoriesInterestUsecaseInterface;
     getAllCountries: GetAllCountriesUsecaseInterface;
     getAllGoals: GetAllGoalsUsecaseInterface;

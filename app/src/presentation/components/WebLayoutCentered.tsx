@@ -1,10 +1,12 @@
 import { IonContent, IonPage } from '@ionic/react';
 import { ReactElement } from 'react';
+import { ReactComponent as Background } from '../../../public/assets/background.svg';
 import useWindowDimensions from '../hooks/useWindowDimensions';
 import { HYBRID_MAX_WIDTH } from '../utils';
 import Header from './Header';
 
 interface WebLayoutCenteredProps {
+    backgroundIconColor: string;
     headerColor: string;
     headerPercentage: number;
     headerTitle: string;
@@ -12,6 +14,7 @@ interface WebLayoutCenteredProps {
 }
 
 const WebLayoutCentered: React.FC<WebLayoutCenteredProps> = ({
+    backgroundIconColor,
     headerColor,
     headerPercentage,
     headerTitle,
@@ -19,13 +22,12 @@ const WebLayoutCentered: React.FC<WebLayoutCenteredProps> = ({
 }) => {
     const { width } = useWindowDimensions();
     const isHybrid = width < HYBRID_MAX_WIDTH;
+    console.log(backgroundIconColor);
     return (
         <IonPage>
-            <IonContent className="ion-background-yellow">
-                {!isHybrid && (
-                    <img alt="background" className="background-image" src="assets/backgrounds/background-yellow.png" />
-                )}
-                <div className="page content-wrapper">
+            <IonContent>
+                {!isHybrid && <Background style={{ color: backgroundIconColor }} className="background-image" />}
+                <div style={{ backgroundColor: headerColor }} className="page content-wrapper">
                     <div className="white-centered-div">
                         <Header progressColor={headerColor} progressPercentage={headerPercentage} title={headerTitle} />
                         {children}

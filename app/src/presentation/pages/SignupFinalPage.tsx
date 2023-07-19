@@ -1,5 +1,6 @@
 import { useTranslation } from 'react-i18next';
 import { useHistory } from 'react-router';
+import { useConfig } from '../../context/ConfigurationContext';
 import { useStoreState } from '../../store/storeTypes';
 import SuccessLayout from '../components/SuccessLayout';
 import styles from './css/SignUpFinalPage.module.css';
@@ -7,11 +8,15 @@ import styles from './css/SignUpFinalPage.module.css';
 const SignupFinalPage: React.FC = () => {
     const { t } = useTranslation();
     const history = useHistory();
+    const { configuration } = useConfig();
     const profileSignUp = useStoreState((payload) => payload.profileSignUp);
-    const image = profileSignUp.profilePicture;
 
     return (
-        <SuccessLayout backgroundColorCode="#b6aa43" color={'yellow'} colorCode={'#fdee66'}>
+        <SuccessLayout
+            backgroundIconColor={configuration.primaryBackgroundImageColor}
+            backgroundColorCode={configuration.primaryDarkColor}
+            colorCode={configuration.primaryColor}
+        >
             <div className={styles.container}>
                 <h1 className={styles.title}>{`${t('signup_end_page.thanks')} ${profileSignUp.firstname}, ${t(
                     'signup_end_page.account'
