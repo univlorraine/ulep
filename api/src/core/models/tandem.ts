@@ -1,3 +1,4 @@
+/* eslint-disable prettier/prettier */
 import { DomainError } from '../errors/errors';
 import { Profile } from './profile';
 
@@ -38,8 +39,8 @@ export class Tandem {
     }
 
     if (
-      profiles[0].learningLanguage.code !== profiles[1].nativeLanguage.code ||
-      profiles[1].learningLanguage.code !== profiles[0].nativeLanguage.code
+      profiles[0].languages.learningLanguage !== profiles[1].languages.nativeLanguage ||
+      profiles[1].languages.learningLanguage !== profiles[0].languages.nativeLanguage
     ) {
       throw new DomainError(
         'Leanring language and native language missmatch between profiles',

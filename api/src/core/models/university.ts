@@ -1,10 +1,13 @@
 import { v4 } from 'uuid';
-import { Country } from './country';
+import { Language } from './language';
 
 export interface UniversityProps {
   name: string;
+  website?: string;
+  parent?: string;
+  campus: string[];
+  languages: Language[];
   timezone: string;
-  country: Country;
   admissionStart: Date;
   admissionEnd: Date;
 }
@@ -14,7 +17,13 @@ export class University {
 
   #name: string;
 
-  #country: Country;
+  #website?: string;
+
+  #parent?: string;
+
+  #campus: string[];
+
+  #languages: Language[];
 
   #timezone: string;
 
@@ -25,7 +34,10 @@ export class University {
   constructor(props: { id: string } & UniversityProps) {
     this.#id = props.id;
     this.#name = props.name;
-    this.#country = props.country;
+    this.#website = props.website;
+    this.#parent = props.parent;
+    this.#campus = props.campus;
+    this.#languages = props.languages;
     this.#timezone = props.timezone;
     this.#admissionStart = props.admissionStart;
     this.#admissionEnd = props.admissionEnd;
@@ -49,8 +61,24 @@ export class University {
     return this.#name;
   }
 
-  get country(): Country {
-    return this.#country;
+  get website(): string | undefined {
+    return this.#website;
+  }
+
+  get parent(): string | undefined {
+    return this.#parent;
+  }
+
+  get campus(): string[] {
+    return this.#campus;
+  }
+
+  set languages(languages: Language[]) {
+    this.#languages = languages;
+  }
+
+  get languages(): Language[] {
+    return this.#languages;
   }
 
   get timezone(): string {

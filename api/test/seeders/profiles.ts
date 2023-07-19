@@ -1,6 +1,5 @@
 import { faker } from '@faker-js/faker';
 import { User } from '../../src/core/models/user';
-import { Country } from '../../src/core/models/country';
 import {
   Gender,
   Goal,
@@ -13,17 +12,16 @@ import { University } from '../../src/core/models/university';
 const seedDefinedUsersProfiles = (user: User[]): Profile[] => {
   const profile: Profile[] = [];
 
-  const country = new Country({
-    id: '1',
-    name: 'United Kingdom',
-    code: 'UK',
-  });
-
   const university = new University({
     id: '1',
-    name: 'University of Oxford',
-    country,
-    timezone: 'Europe/London',
+    name: 'Université de Lorraine',
+    website: 'https://univ-lorraine.fr',
+    campus: ['Nancy', 'Metz'],
+    languages: [
+      { name: 'French', code: 'FR' },
+      { name: 'English', code: 'EN' },
+    ],
+    timezone: 'Europe/Paris',
     admissionStart: new Date('2020-01-01'),
     admissionEnd: new Date('2020-12-31'),
   });
@@ -34,31 +32,33 @@ const seedDefinedUsersProfiles = (user: User[]): Profile[] => {
     const instance = new Profile({
       id: faker.string.uuid(),
       user: user[i - 1],
-      firstname: 'Jane',
-      lastname: 'Doe',
-      age: 25,
       role: faker.helpers.arrayElement([Role.STUDENT, Role.TEACHER]),
-      gender: faker.helpers.arrayElement([Gender.MALE, Gender.FEMALE]),
       university: university,
-      nationality: country,
-      nativeLanguage: {
-        code: 'FR',
+      languages: {
+        nativeLanguage: 'FR',
+        masteredLanguages: ['ES'],
+        learningLanguage: 'EN',
+        learningLanguageLevel: 'B2',
       },
-      masteredLanguages: [],
-      learningLanguage: {
-        code: 'EN',
+      personalInformation: {
+        age: 25,
+        gender: faker.helpers.arrayElement([
+          Gender.MALE,
+          Gender.FEMALE,
+          Gender.OTHER,
+        ]),
+        interests: new Set(['music', 'sport']),
+        bio: 'Lorem ipsum dolor sit amet',
       },
-      learningLanguageLevel: 'B2',
-      goals: new Set([Goal.ORAL_PRACTICE]),
-      interests: new Set(['music', 'sport']),
       preferences: {
+        learningType: 'ETANDEM',
         meetingFrequency: faker.helpers.arrayElement([
           MeetingFrequency.ONCE_A_WEEK,
           MeetingFrequency.TWICE_A_WEEK,
         ]),
         sameGender: faker.datatype.boolean(),
+        goals: new Set([Goal.ORAL_PRACTICE]),
       },
-      bios: 'Lorem ipsum dolor sit amet',
     });
 
     profile.push(instance);

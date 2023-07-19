@@ -13,17 +13,17 @@ import {
   SerializeOptions,
 } from '@nestjs/common';
 import * as Swagger from '@nestjs/swagger';
-import { UpdateUniversityUsecase } from '../../core/usecases/universities/update-university.usecase';
 import { PaginationDto } from '../dtos/pagination.dto';
 import { GetUniversitiesUsecase } from '../../core/usecases/universities/get-universities.usecase';
 import { Collection } from '../../shared/types/collection';
 import { DeleteUniversityUsecase } from '../../core/usecases/universities/delete-university.usecase';
 import { GetUniversityUsecase } from '../../core/usecases/universities/get-university.usecase';
 import { CreateUniversityUsecase } from '../../core/usecases/universities/create-university.usecase';
-import { UniversityResponse } from '../dtos/university/university.response';
-import { CreateUniversityRequest } from '../dtos/university/create-university.request';
-import { UpdateUniversityRequest } from '../dtos/university/update-university.request';
 import { CollectionResponse } from '../decorators/collection.decorator';
+import {
+  CreateUniversityRequest,
+  UniversityResponse,
+} from '../dtos/university';
 
 @Controller('universities')
 @Swagger.ApiTags('Universities')
@@ -34,7 +34,6 @@ export class UniversityController {
     private readonly getUniversityUsecase: GetUniversityUsecase,
     private readonly getUniversitiesUsecase: GetUniversitiesUsecase,
     private readonly createUniversityUsecase: CreateUniversityUsecase,
-    private readonly updateUniversityUsecase: UpdateUniversityUsecase,
     private readonly deleteUniversityUsecase: DeleteUniversityUsecase,
   ) {}
 
@@ -75,24 +74,6 @@ export class UniversityController {
     @Body() body: CreateUniversityRequest,
   ): Promise<UniversityResponse> {
     const instance = await this.createUniversityUsecase.execute(body);
-
-    return UniversityResponse.fromDomain(instance);
-  }
-
-  @Patch(':id')
-  @SerializeOptions({ groups: ['read', 'university:read'] })
-  @Swagger.ApiOperation({ summary: 'Updates a University ressource.' })
-  @Swagger.ApiCreatedResponse({ type: UniversityResponse })
-  async update(
-    @Param('id', ParseUUIDPipe) id: string,
-    @Body() body: UpdateUniversityRequest,
-  ): Promise<UniversityResponse> {
-    const instance = await this.updateUniversityUsecase.execute({
-      id,
-      name: body.name,
-      admissionStart: body.admissionStart,
-      admissionEnd: body.admissionEnd,
-    });
 
     return UniversityResponse.fromDomain(instance);
   }

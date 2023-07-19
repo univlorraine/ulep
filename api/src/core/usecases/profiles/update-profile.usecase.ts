@@ -39,7 +39,7 @@ export class UpdateProfileUsecase {
     }
 
     if (command.goals) {
-      profile.goals = command.goals;
+      profile.preferences = { ...profile.preferences, goals: command.goals };
     }
 
     if (command.meetingFrequency) {
@@ -50,7 +50,10 @@ export class UpdateProfileUsecase {
     }
 
     if (command.bios) {
-      profile.bios = command.bios;
+      profile.personalInformation = {
+        ...profile.personalInformation,
+        bio: command.bios,
+      };
     }
 
     await this.profileRepository.save(profile);

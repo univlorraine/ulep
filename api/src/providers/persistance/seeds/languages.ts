@@ -1,10 +1,10 @@
 import { PrismaClient } from '@prisma/client';
 
-const languagesCodes = [
-  { code: 'EN', name: 'English', isAvailable: true },
-  { code: 'DE', name: 'German', isAvailable: true },
-  { code: 'FR', name: 'French', isAvailable: true },
-  { code: 'ZH', name: 'Chinese', isAvailable: false },
+export const languagesCodes = [
+  { code: 'EN', name: 'English' },
+  { code: 'DE', name: 'German' },
+  { code: 'FR', name: 'French' },
+  { code: 'ZH', name: 'Chinese' },
 ];
 
 export const createLanguages = async (prisma: PrismaClient) => {

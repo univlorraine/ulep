@@ -17,7 +17,6 @@ describe('CreateLanguage', () => {
     await createLanguagesUsecase.execute({
       code: 'DE',
       name: 'German',
-      isEnable: true,
     });
 
     const language = await languageRepository.ofCode('DE');
@@ -25,7 +24,6 @@ describe('CreateLanguage', () => {
     expect(language).toBeDefined();
     expect(language.code).toBe('DE');
     expect(language.name).toBe('German');
-    expect(language.isEnable).toBe(true);
   });
 
   it('Should throw an error if the language code already exists', async () => {
@@ -33,7 +31,6 @@ describe('CreateLanguage', () => {
       await createLanguagesUsecase.execute({
         code: 'FR',
         name: 'French',
-        isEnable: true,
       });
     } catch (error) {
       expect(error).toBeInstanceOf(RessourceAlreadyExists);

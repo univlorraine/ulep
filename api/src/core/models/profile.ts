@@ -1,7 +1,7 @@
 import { University } from './university';
 import MediaObject from './media-object';
-import { Country } from './country';
 import { User } from './user';
+import { DomainError } from '../errors/errors';
 
 export enum Goal {
   SPEAK_LIKE_NATIVE = 'SPEAK_LIKE_NATIVE',
@@ -30,35 +30,39 @@ export enum Gender {
   OTHER = 'OTHER',
 }
 
-export type CEFRLevel = 'A1' | 'A2' | 'B1' | 'B2' | 'C1' | 'C2';
+export type CEFRLevel = 'A0' | 'A1' | 'A2' | 'B1' | 'B2' | 'C1' | 'C2';
 
-export type ProfilePreferences = {
+export type LearningType = 'ETANDEM' | 'TANDEM' | 'BOTH';
+
+export type LearningPreferences = {
+  learningType: LearningType;
   meetingFrequency: MeetingFrequency;
   sameGender: boolean;
+  goals: Set<Goal>;
 };
 
-export type Language = {
-  code: string;
+export type PersonalInformation = {
+  age: number;
+  gender: Gender;
+  interests: Set<string>;
+  bio?: string;
+};
+
+export type Languages = {
+  nativeLanguage: string;
+  masteredLanguages: string[];
+  learningLanguage: string;
+  learningLanguageLevel: CEFRLevel;
 };
 
 export type CreateProfileProps = {
   id: string;
   user: User;
-  firstname: string;
-  lastname: string;
-  age: number;
   role: Role;
-  gender: Gender;
   university: University;
-  nationality: Country;
-  nativeLanguage: Language;
-  masteredLanguages: Language[];
-  learningLanguage: Language;
-  learningLanguageLevel: CEFRLevel;
-  goals: Set<Goal>;
-  interests: Set<string>;
-  bios?: string;
-  preferences: ProfilePreferences;
+  personalInformation: PersonalInformation;
+  languages: Languages;
+  preferences: LearningPreferences;
   avatar?: MediaObject;
 };
 
@@ -67,57 +71,27 @@ export class Profile {
 
   #user: User;
 
-  #firstname: string;
-
-  #lastname: string;
-
-  #age: number;
-
-  #gender: Gender;
+  #personalInformation: PersonalInformation;
 
   #role: Role;
 
   #university: University;
 
-  #nationality: Country;
+  #languages: Languages;
 
-  #nativeLanguage: Language;
-
-  #masteredLanguages: Language[];
-
-  #learningLanguage: Language;
-
-  #learningLanguageLevel: CEFRLevel;
-
-  #goals: Set<Goal>;
-
-  #interests: Set<string>;
-
-  #bios?: string;
-
-  #preferences: ProfilePreferences;
+  #preferences: LearningPreferences;
 
   #avatar?: MediaObject;
 
   constructor(props: CreateProfileProps) {
     this.#id = props.id;
     this.#user = props.user;
-    this.firstname = props.firstname;
-    this.lastname = props.lastname;
-    this.age = props.age;
-    this.gender = props.gender;
-    this.role = props.role;
-    this.university = props.university;
-    this.nationality = props.nationality;
-    this.#nativeLanguage = props.nativeLanguage;
-    this.#masteredLanguages = props.masteredLanguages;
-    this.#learningLanguage = props.learningLanguage;
-    this.#learningLanguageLevel = props.learningLanguageLevel;
-    this.goals = props.goals;
-    this.interests = props.interests;
-    this.bios = props.bios;
-    this.preferences = props.preferences;
-    this.avatar = props.avatar;
+    this.#personalInformation = props.personalInformation;
+    this.#role = props.role;
+    this.#university = props.university;
+    this.#languages = props.languages;
+    this.#preferences = props.preferences;
+    this.#avatar = props.avatar;
 
     this.assertLanguesAreUnique();
   }
@@ -130,48 +104,16 @@ export class Profile {
     return this.#user;
   }
 
-  get firstname(): string {
-    return this.#firstname;
+  get personalInformation(): PersonalInformation {
+    return this.#personalInformation;
   }
 
-  set firstname(firstname: string) {
-    if ('' === firstname.trim()) {
-      throw new Error('Firstname cannot be empty');
+  set personalInformation(personalInformation: PersonalInformation) {
+    if (personalInformation.age < 1) {
+      throw new DomainError('Age must be greater than 0');
     }
 
-    this.#firstname = firstname;
-  }
-
-  get lastname(): string {
-    return this.#lastname;
-  }
-
-  set lastname(lastname: string) {
-    if ('' === lastname.trim()) {
-      throw new Error('Lastname cannot be empty');
-    }
-
-    this.#lastname = lastname;
-  }
-
-  get age(): number {
-    return this.#age;
-  }
-
-  set age(age: number) {
-    if (age < 1) {
-      throw new Error('Age must be greater than 0');
-    }
-
-    this.#age = age;
-  }
-
-  get gender(): Gender {
-    return this.#gender;
-  }
-
-  set gender(gender: Gender) {
-    this.#gender = gender;
+    this.#personalInformation = personalInformation;
   }
 
   get role(): Role {
@@ -190,50 +132,21 @@ export class Profile {
     this.#university = university;
   }
 
-  get nationality(): Country {
-    return this.#nationality;
+  get languages(): Languages {
+    return this.#languages;
   }
 
-  set nationality(country: Country) {
-    this.#nationality = country;
-  }
-
-  get nativeLanguage(): Language {
-    return this.#nativeLanguage;
-  }
-
-  set nativeLanguage(nativeLanguage: Language) {
-    this.#nativeLanguage = nativeLanguage;
-
+  set languages(languages: Languages) {
+    this.#languages = languages;
     this.assertLanguesAreUnique();
   }
 
-  get masteredLanguages(): Language[] {
-    return this.#masteredLanguages;
+  get preferences(): LearningPreferences {
+    return this.#preferences;
   }
 
-  set masteredLanguages(masteredLanguages: Language[]) {
-    this.#masteredLanguages = masteredLanguages;
-
-    this.assertLanguesAreUnique();
-  }
-
-  get learningLanguage(): Language {
-    return this.#learningLanguage;
-  }
-
-  set learningLanguage(learningLanguage: Language) {
-    this.#learningLanguage = learningLanguage;
-
-    this.assertLanguesAreUnique();
-  }
-
-  get learningLanguageLevel(): CEFRLevel {
-    return this.#learningLanguageLevel;
-  }
-
-  set learningLanguageLevel(learningLanguageLevel: CEFRLevel) {
-    this.#learningLanguageLevel = learningLanguageLevel;
+  set preferences(preferences: LearningPreferences) {
+    this.#preferences = preferences;
   }
 
   get avatar(): MediaObject | undefined {
@@ -244,59 +157,19 @@ export class Profile {
     this.#avatar = avatar;
   }
 
-  get goals(): Set<Goal> {
-    return this.#goals;
-  }
-
-  set goals(goals: Set<Goal>) {
-    this.#goals = goals;
-  }
-
-  get interests(): Set<string> {
-    return this.#interests;
-  }
-
-  set interests(interests: Set<string>) {
-    if (5 < interests.size) {
-      throw new Error('Max 5 interests allowed');
-    }
-    this.#interests = interests;
-  }
-
-  get bios(): string | undefined {
-    return this.#bios;
-  }
-
-  set bios(bios: string | undefined) {
-    this.#bios = bios;
-  }
-
-  get preferences(): ProfilePreferences {
-    return this.#preferences;
-  }
-
-  set preferences(preferences: ProfilePreferences) {
-    this.#preferences = preferences;
-  }
-
   private assertLanguesAreUnique(): void {
-    if (this.#nativeLanguage.code === this.#learningLanguage.code) {
+    // eslint-disable-next-line prettier/prettier
+    const { nativeLanguage, masteredLanguages, learningLanguage } = this.#languages;
+
+    if (nativeLanguage === learningLanguage) {
       throw new Error('Native and learning languages cannot be the same');
     }
 
-    if (
-      this.#masteredLanguages.some(
-        (language) => language.code === this.#nativeLanguage?.code,
-      )
-    ) {
+    if (masteredLanguages.includes(nativeLanguage)) {
       throw new Error('Native and mastered languages cannot be the same');
     }
 
-    if (
-      this.#masteredLanguages.some(
-        (language) => language.code === this.#learningLanguage?.code,
-      )
-    ) {
+    if (masteredLanguages.includes(learningLanguage)) {
       throw new Error('Learning and mastered languages cannot be the same');
     }
   }

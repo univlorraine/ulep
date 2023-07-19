@@ -23,20 +23,6 @@ export class LanguageDoesNotExist extends RessourceDoesNotExist {
   }
 }
 
-export class CountryDoesNotExist extends RessourceDoesNotExist {
-  constructor(public readonly field: string, public readonly value: string) {
-    super('Country', field, value);
-  }
-
-  static withIdOf(id: string): RessourceDoesNotExist {
-    return new CountryDoesNotExist('id', id);
-  }
-
-  static withCodeOf(code: string): RessourceDoesNotExist {
-    return new CountryDoesNotExist('code', code);
-  }
-}
-
 export class UniversityDoesNotExist extends RessourceDoesNotExist {
   constructor(public readonly field: string, public readonly value: string) {
     super('University', field, value);

@@ -4,14 +4,12 @@ import { PrismaProfileRepository } from './persistance/repositories/prisma-profi
 import { MinioService } from './storage/minio.service';
 import { PrismaMediaObjectRepository } from './persistance/repositories/prisma-media-object-repository';
 import { PrismaUniversityRepository } from './persistance/repositories/prisma-university-repository';
-import { PrismaCountryRepository } from './persistance/repositories/prisma-country-repository';
 import { PrismaLanguageRepository } from './persistance/repositories/prisma-language-repository';
 import { PrismaUserRepository } from './persistance/repositories/prisma-user-repository';
 import { PrismaReportRepository } from './persistance/repositories/prisma-report-repository';
 import { PrismaTandemRepository } from './persistance/repositories/prisma-tandem-repository';
 
 export const AUTHENTICATOR = 'authenticator';
-export const COUNTRY_REPOSITORY = 'country.repository';
 export const LANGUAGE_REPOSITORY = 'language.repository';
 export const MEDIA_OBJECT_REPOSITORY = 'media-object.repository';
 export const PROFILE_REPOSITORY = 'profile.repository';
@@ -33,10 +31,6 @@ const providers: Provider[] = [
   {
     provide: PROFILE_REPOSITORY,
     useClass: PrismaProfileRepository,
-  },
-  {
-    provide: COUNTRY_REPOSITORY,
-    useClass: PrismaCountryRepository,
   },
   {
     provide: REPORT_REPOSITORY,

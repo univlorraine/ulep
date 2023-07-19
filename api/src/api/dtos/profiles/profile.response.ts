@@ -6,15 +6,10 @@ import {
   Profile,
   Role,
 } from '../../../core/models/profile';
-import { UniversityResponse } from '../university/university.response';
 import { Expose, Transform } from 'class-transformer';
 
 class NativeLanguageResponse {
-  @ApiProperty({
-    type: 'string',
-    description: 'ISO 639-1 code',
-    example: 'FR',
-  })
+  @ApiProperty({ type: 'string', example: 'FR' })
   @Expose({ groups: ['read'] })
   code: string;
 
@@ -24,19 +19,11 @@ class NativeLanguageResponse {
 }
 
 class LearningLanguageResponse {
-  @ApiProperty({
-    type: 'string',
-    description: 'ISO 639-1 code',
-    example: 'FR',
-  })
+  @ApiProperty({ type: 'string', example: 'FR' })
   @Expose({ groups: ['read'] })
   code: string;
 
-  @ApiProperty({
-    type: 'string',
-    description: 'CEFR level',
-    example: 'A1',
-  })
+  @ApiProperty({ type: 'string', example: 'A1' })
   @Expose({ groups: ['read'] })
   level: string;
 
@@ -70,10 +57,9 @@ export class ProfileResponse {
   @Expose({ groups: ['read'] })
   gender: Gender;
 
-  @ApiProperty()
+  @ApiProperty({ type: 'string', format: 'uuid' })
   @Expose({ groups: ['read'] })
-  @Transform(({ value }) => new UniversityResponse(value))
-  university: UniversityResponse;
+  university: string;
 
   @ApiProperty({ enum: Role })
   @Expose({ groups: ['read'] })
@@ -117,34 +103,23 @@ export class ProfileResponse {
     return new ProfileResponse({
       id: profile.id,
       email: profile.user.email,
-      firstname: profile.firstname,
-      lastname: profile.lastname,
-      age: profile.age,
+      firstname: profile.user.firstname,
+      lastname: profile.user.lastname,
+      age: profile.personalInformation.age,
       role: profile.role,
-      gender: profile.gender,
-      university: {
-        id: profile.university.id,
-        name: profile.university.name,
-        timezone: profile.university.timezone,
-        country: {
-          id: profile.university.country.id,
-          code: profile.university.country.code,
-          name: profile.university.country.name,
-        },
-        admissionStart: profile.university.admissionStart,
-        admissionEnd: profile.university.admissionEnd,
-      },
+      gender: profile.personalInformation.gender,
+      university: profile.university.id,
       nativeLanguage: {
-        code: profile.nativeLanguage.code,
+        code: profile.languages.nativeLanguage,
       },
       learningLanguage: {
-        code: profile.learningLanguage.code,
-        level: profile.learningLanguageLevel.toString(),
+        code: profile.languages.learningLanguage,
+        level: profile.languages.learningLanguageLevel,
       },
-      goals: Array.from(profile.goals),
-      interests: Array.from(profile.interests),
+      goals: Array.from(profile.preferences.goals),
+      interests: Array.from(profile.personalInformation.interests),
       meetingFrequency: profile.preferences.meetingFrequency,
-      bios: profile.bios,
+      bios: profile.personalInformation.bio,
       avatar:
         profile.avatar &&
         `${process.env.MINIO_PUBLIC_URL}/${profile.avatar.bucket}/${profile.avatar.name}`,

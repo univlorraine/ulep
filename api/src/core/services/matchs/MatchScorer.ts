@@ -44,6 +44,10 @@ export class MatchScorer implements IMatchScorer {
   }
 
   public computeMatchScore(profile1: Profile, profile2: Profile): Match {
+    if (profile1.id === profile2.id) {
+      throw new DomainError('Cannot compute match score between the same profile.');
+    }
+
     const scores: MatchScores = {
       level: this.computeLanguageLevel(profile1, profile2),
       age: this.computeAgeBonus(profile1, profile2),
@@ -80,8 +84,8 @@ export class MatchScorer implements IMatchScorer {
       C2: { A0: 6, A1: 6, A2: 5, B1: 4, B2: 4, C1: 4, C2: 4 },
     };
 
-    const level1 = profile1.learningLanguageLevel;
-    const level2 = profile2.learningLanguageLevel;
+    const level1 = profile1.languages.learningLanguageLevel;
+    const level2 = profile2.languages.learningLanguageLevel;
 
     const level = isDiscovery ? discoveryLanguageLevelMatrix[level1][level2] : languageLevelMatrix[level1][level2];
 
@@ -91,16 +95,16 @@ export class MatchScorer implements IMatchScorer {
   // Apply bunus if ages match criteria
   private computeAgeBonus(profile1: Profile, profile2: Profile): number {
     // Compute the absolute age difference between the two profiles
-    const ageDiff: number = Math.abs(profile1.age - profile2.age);
+    const ageDiff: number = Math.abs(profile1.personalInformation.age - profile2.personalInformation.age);
     // If the age of the first profile is greater than 50
-    if (profile1.age > 50) {
+    if (profile1.personalInformation.age > 50) {
       // Apply the age bonus if the age of the second profile is greater than 45
       // If the second profile is 45 or younger, return the original score
-      return profile2.age > 45 ? this.coeficients.age : 0;
+      return profile2.personalInformation.age > 45 ? this.coeficients.age : 0;
     }
     // If the age of the first profile is greater than 30 (but not greater than 50,
     // because of the previous condition)
-    if (profile1.age > 30) {
+    if (profile1.personalInformation.age > 30) {
       // Apply the age bonus if the age difference between the profiles is between -10 and 10 (inclusive)
       // If the age difference is outside this range, return the original score
       return ageDiff >= -10 && ageDiff <= 10 ? this.coeficients.age : 0;
@@ -129,7 +133,7 @@ export class MatchScorer implements IMatchScorer {
     // Check if both profiles do not care about gender
     const doesNotCareAboutGender = !prefersSameGender1 && !prefersSameGender2;
     // Check if the genders of the two profiles match
-    const gendersMatch = profile1.gender === profile2.gender;
+    const gendersMatch = profile1.personalInformation.gender === profile2.personalInformation.gender;
     // Apply bonus if one profile prefer the same gender and their genders match,
     // or if both profiles do not care about gender
     if (
@@ -144,7 +148,7 @@ export class MatchScorer implements IMatchScorer {
 
   // Apply bonus if profiles share the same goals
   private computeSameGoalsBonus(profile1: Profile, profile2: Profile): number {
-    const similarity = this.computeSimilarity(profile1.goals, profile2.goals);
+    const similarity = this.computeSimilarity(profile1.preferences.goals, profile2.preferences.goals);
 
     return this.coeficients.goals * similarity;
   }
@@ -155,8 +159,8 @@ export class MatchScorer implements IMatchScorer {
     profile2: Profile,
   ): number {
     const similarity = this.computeSimilarity(
-      profile1.interests,
-      profile2.interests,
+      profile1.personalInformation.interests,
+      profile2.personalInformation.interests,
     );
 
     return this.coeficients.interests * similarity;

@@ -28,10 +28,7 @@ export class GetMatchsByProfileIdUsecase {
   }: GetMatchsByProfileIdCommand): Promise<Collection<Match>> {
     const owner = await this.tryToFindTheProfileOf(profileId);
 
-    const targets = await this.profileRepository.where({
-      nativeLanguageCode: owner.learningLanguage.code,
-      learningLanguageCode: owner.nativeLanguage.code,
-    });
+    const targets = await this.profileRepository.availableProfiles();
 
     const matchs: Match[] = [];
 

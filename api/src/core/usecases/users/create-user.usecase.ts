@@ -7,6 +7,8 @@ import { UserRepository } from '../../ports/user.repository';
 export type CreateUserCommand = {
   email: string;
   password: string;
+  firstname?: string;
+  lastname?: string;
   roles?: UserRole[];
 };
 
@@ -18,11 +20,13 @@ export class CreateUserUsecase {
   ) {}
 
   async execute(command: CreateUserCommand) {
-    const { email, password, roles } = command;
+    const { email, password, roles, firstname, lastname } = command;
 
     const keycloakUser = await this.keycloak.createUser({
       email,
       password,
+      firstName: firstname,
+      lastName: lastname,
       roles: roles ?? [],
       enabled: true,
       emailVerified: false,

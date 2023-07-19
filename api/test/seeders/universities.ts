@@ -1,4 +1,3 @@
-import { Country } from '../../src/core/models/country';
 import { University } from '../../src/core/models/university';
 
 const seedDefinedNumberOfUniversities = (
@@ -13,8 +12,13 @@ const seedDefinedNumberOfUniversities = (
     const instance = new University({
       id: id(i),
       name: 'Université de Lorraine',
+      website: 'https://univ-lorraine.fr',
+      campus: ['Nancy', 'Metz'],
+      languages: [
+        { name: 'French', code: 'FR' },
+        { name: 'English', code: 'EN' },
+      ],
       timezone: 'Europe/Paris',
-      country: new Country({ id: 'uuid', code: 'FR', name: 'France' }),
       admissionStart: new Date('2000-01-01'),
       admissionEnd: new Date('2000-12-31'),
     });

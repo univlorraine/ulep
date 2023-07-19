@@ -5,9 +5,7 @@ import {
   IsIn,
   IsInt,
   IsNotEmpty,
-  IsString,
   IsUUID,
-  Max,
   Min,
 } from 'class-validator';
 import {
@@ -17,21 +15,12 @@ import {
   Role,
   Gender,
 } from '../../../core/models/profile';
+import { CreateProfileCommand } from 'src/core/usecases/profiles/create-profile.usecase';
 
-export class CreateProfileRequest {
+export class CreateProfileRequest implements Omit<CreateProfileCommand, 'id'> {
   @ApiProperty({ type: 'string', format: 'uuid' })
   @IsUUID()
-  id: string;
-
-  @ApiProperty()
-  @IsString()
-  @IsNotEmpty()
-  firstname: string;
-
-  @ApiProperty()
-  @IsString()
-  @IsNotEmpty()
-  lastname: string;
+  userId: string;
 
   @ApiProperty({ type: 'integer', minimum: 1 })
   @IsInt()
@@ -50,17 +39,17 @@ export class CreateProfileRequest {
   @IsUUID()
   university: string;
 
-  @ApiProperty({ type: 'string', format: 'uuid' })
-  @IsUUID()
-  nationality: string;
-
   @ApiProperty()
   @IsNotEmpty()
   learningLanguage: string;
 
   @ApiProperty()
-  @IsIn(['A1', 'A2', 'B1', 'B2', 'C1', 'C2'])
+  @IsIn(['A0', 'A1', 'A2', 'B1', 'B2', 'C1', 'C2'])
   proficiencyLevel: CEFRLevel;
+
+  @ApiProperty({ enum: ['ETANDEM', 'TANDEM', 'BOTH'] })
+  @IsIn(['ETANDEM', 'TANDEM', 'BOTH'])
+  learningType: 'ETANDEM' | 'TANDEM' | 'BOTH';
 
   @ApiProperty()
   @IsNotEmpty()

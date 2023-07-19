@@ -1,3 +1,4 @@
+import { Language } from 'src/core/models/language';
 import { University } from '../../../core/models/university';
 import { UniversityRepository } from '../../../core/ports/university.repository';
 import { Injectable } from '@nestjs/common';
@@ -26,7 +27,26 @@ export class InMemoryUniversityRepository implements UniversityRepository {
     return this.#universities.find((university) => university.name === name);
   }
 
-  async save(university: University): Promise<void> {
+  async addLanguage(language: Language, university: University): Promise<void> {
+    const index = this.#universities.findIndex((u) => u.id === university.id);
+
+    if (index !== -1) {
+      const university = this.#universities[index];
+      university.languages = [...university.languages, language];
+    }
+  }
+
+  async removeLanguage(code: string, university: University): Promise<void> {
+    const index = this.#universities.findIndex((u) => u.id === university.id);
+
+    if (index !== -1) {
+      this.#universities[index].languages = this.#universities[
+        index
+      ].languages.filter((l) => l.code !== code);
+    }
+  }
+
+  async create(university: University): Promise<void> {
     this.#universities.push(university);
   }
 

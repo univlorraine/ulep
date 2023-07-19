@@ -6,11 +6,10 @@ export const seedDefinedNumberOfLanguages = (count: number): Language[] => {
   let i = count;
 
   while (i > 0) {
-    const instance = new Language({
+    const instance = {
       code: `L${i}`,
       name: 'French',
-      isEnable: true,
-    });
+    };
 
     languages.push(instance);
 
@@ -24,11 +23,10 @@ export const seedDefinedLanguages = (codes: string[]): Language[] => {
   const languages: Language[] = [];
 
   codes.forEach((code) => {
-    const instance = new Language({
+    const instance = {
       code,
       name: 'French',
-      isEnable: true,
-    });
+    };
 
     languages.push(instance);
   });

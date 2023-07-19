@@ -3,29 +3,13 @@ import { Language } from '../../../core/models/language';
 import { Expose } from 'class-transformer';
 
 export class LanguageResponse {
-  @ApiProperty({
-    type: 'string',
-    description: 'ISO 639-1 code',
-    example: 'FR',
-  })
+  @ApiProperty({ type: 'string', example: 'FR' })
   @Expose({ groups: ['read'] })
   code: string;
 
-  @ApiProperty({
-    type: 'string',
-    description: 'Language name',
-    example: 'French',
-  })
+  @ApiProperty({ type: 'string', example: 'French' })
   @Expose({ groups: ['read'] })
   name: string;
-
-  @ApiProperty({
-    type: 'boolean',
-    description: 'Language availability',
-    example: true,
-  })
-  @Expose({ groups: ['read'] })
-  enabled: boolean;
 
   constructor(partial: Partial<LanguageResponse>) {
     Object.assign(this, partial);
@@ -35,7 +19,6 @@ export class LanguageResponse {
     return new LanguageResponse({
       code: language.code,
       name: language.name,
-      enabled: language.isEnable,
     });
   }
 }

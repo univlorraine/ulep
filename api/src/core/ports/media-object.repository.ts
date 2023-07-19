@@ -1,10 +1,10 @@
 import MediaObject from '../models/media-object';
-import { Profile } from '../models/profile';
+import { User } from '../models/user';
 
 export interface MediaObjectRepository {
   of: (id: string) => Promise<MediaObject | null>;
 
-  saveProfileImage: (profile: Profile) => Promise<void>;
+  saveAvatar: (user: User, object: MediaObject) => Promise<void>;
 
   delete: (object: MediaObject) => Promise<void>;
 }

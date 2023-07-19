@@ -1,6 +1,5 @@
 import { Inject, Injectable, Logger } from '@nestjs/common';
 import {
-  CountryDoesNotExist,
   LanguageDoesNotExist,
   UniversityDoesNotExist,
   UserDoesNotExist,
@@ -13,11 +12,9 @@ import {
   MeetingFrequency,
   Profile,
 } from '../../models/profile';
-import { CountryRepository } from '../../ports/country.repository';
 import { ProfileRepository } from '../../ports/profile.repository';
 import { UniversityRepository } from '../../ports/university.repository';
 import {
-  COUNTRY_REPOSITORY,
   LANGUAGE_REPOSITORY,
   PROFILE_REPOSITORY,
   UNIVERSITY_REPOSITORY,
@@ -25,7 +22,6 @@ import {
 } from '../../../providers/providers.module';
 import { LanguageRepository } from '../../ports/language.repository';
 import { University } from '../../models/university';
-import { Country } from '../../models/country';
 import { Language } from '../../models/language';
 import { User } from '../../models/user';
 import { UserRepository } from '../../ports/user.repository';
@@ -34,19 +30,17 @@ import { ProfileAlreadyExists } from '../../errors/RessourceAlreadyExists';
 export class CreateProfileCommand {
   id: string;
   userId: string;
-  firstname: string;
-  lastname: string;
   age: number;
   role: Role;
   gender: Gender;
   university: string;
-  nationality: string;
   learningLanguage: string;
   proficiencyLevel: CEFRLevel;
   nativeLanguage: string;
-  goals: Set<Goal>;
+  learningType: 'ETANDEM' | 'TANDEM' | 'BOTH';
+  goals: Goal[];
   meetingFrequency: MeetingFrequency;
-  interests: Set<string>;
+  interests: string[];
   preferSameGender: boolean;
   bios?: string;
 }
@@ -62,8 +56,6 @@ export class CreateProfileUsecase {
     private readonly userRepository: UserRepository,
     @Inject(UNIVERSITY_REPOSITORY)
     private readonly universityRepository: UniversityRepository,
-    @Inject(COUNTRY_REPOSITORY)
-    private readonly countryRepository: CountryRepository,
     @Inject(LANGUAGE_REPOSITORY)
     private readonly languageRepository: LanguageRepository,
   ) {}
@@ -76,32 +68,41 @@ export class CreateProfileUsecase {
       command.university,
     );
 
-    const nationality = await this.tryToFindTheCountryOfId(command.nationality);
-
     const learningLanguage = await this.tryToFindTheLanguageOfCode(
       command.learningLanguage,
     );
+
+    // If the university does not support the learning language, throw an error
+    if (!university.languages.includes(learningLanguage)) {
+      throw LanguageDoesNotExist.withCodeOf(learningLanguage.code);
+    }
 
     const nativeLanguage = await this.tryToFindTheLanguageOfCode(
       command.nativeLanguage,
     );
 
     const instance = new Profile({
-      ...command,
+      id: command.id,
       user,
+      role: command.role,
       university,
-      nationality,
-      nativeLanguage: {
-        code: nativeLanguage.code,
+      personalInformation: {
+        age: command.age,
+        gender: command.gender,
+        interests: new Set(command.interests),
+        bio: command.bios,
       },
-      learningLanguage: {
-        code: learningLanguage.code,
+      languages: {
+        nativeLanguage: nativeLanguage.code,
+        masteredLanguages: [],
+        learningLanguage: learningLanguage.code,
+        learningLanguageLevel: command.proficiencyLevel,
       },
-      learningLanguageLevel: command.proficiencyLevel,
-      masteredLanguages: [],
       preferences: {
+        learningType: command.learningType,
         meetingFrequency: command.meetingFrequency,
         sameGender: command.preferSameGender,
+        goals: new Set(command.goals),
       },
     });
 
@@ -133,15 +134,6 @@ export class CreateProfileUsecase {
     }
 
     return university;
-  }
-
-  private async tryToFindTheCountryOfId(id: string): Promise<Country> {
-    const country = await this.countryRepository.of(id);
-    if (!country) {
-      throw CountryDoesNotExist.withIdOf(id);
-    }
-
-    return country;
   }
 
   private async tryToFindTheLanguageOfCode(code: string): Promise<Language> {

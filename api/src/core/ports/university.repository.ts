@@ -1,4 +1,5 @@
 import { Collection } from '../../shared/types/collection';
+import { Language } from '../models/language';
 import { University } from '../models/university';
 
 export interface UniversityRepository {
@@ -6,7 +7,11 @@ export interface UniversityRepository {
 
   ofName: (name: string) => Promise<University | null>;
 
-  save: (university: University) => Promise<void>;
+  addLanguage(language: Language, university: University): Promise<void>;
+
+  removeLanguage(code: string, university: University): Promise<void>;
+
+  create(university: University): Promise<void>;
 
   delete: (university: University) => Promise<void>;
 

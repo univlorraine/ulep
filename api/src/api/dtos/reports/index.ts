@@ -4,6 +4,7 @@ import { Report, ReportCategory } from '../../../core/models/report';
 import { IsString, IsNotEmpty, IsUUID, IsOptional } from 'class-validator';
 import { PaginationDto } from '../pagination.dto';
 import { UserResponse } from '../users/user.response';
+import { CreateReportCommand } from 'src/core/usecases/reports/create-report.usecase';
 
 export class ReportCategoryResponse {
   @ApiProperty({ type: 'string', format: 'uuid' })
@@ -63,7 +64,7 @@ export class ReportResponse {
   }
 }
 
-export class CreateReportRequest {
+export class CreateReportRequest implements Omit<CreateReportCommand, 'id'> {
   @ApiProperty({ type: 'string', example: 'unresponsive_tandem' })
   @IsUUID()
   category: string;
@@ -75,6 +76,10 @@ export class CreateReportRequest {
   @IsString()
   @IsNotEmpty()
   content: string;
+
+  @ApiProperty({ type: 'string', format: 'uuid' })
+  @IsUUID()
+  userId: string;
 }
 
 export class CreateReportCategoryRequest {

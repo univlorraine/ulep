@@ -1,14 +1,10 @@
-import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
-import { Type } from 'class-transformer';
-import { IsBoolean, IsNotEmpty, IsOptional, IsString } from 'class-validator';
+import { ApiProperty } from '@nestjs/swagger';
+import { IsNotEmpty, IsString } from 'class-validator';
+import { CreateLanguageCommand } from 'src/core/usecases/languages/create-language.usecase';
+import { UpdateLanguageCommand } from 'src/core/usecases/languages/update-language.usecase';
 
-// TODO Add isAvailable false
-export class CreateLanguageRequest {
-  @ApiProperty({
-    type: 'string',
-    description: 'Language name',
-    example: 'French',
-  })
+export class CreateLanguageRequest implements CreateLanguageCommand {
+  @ApiProperty({ type: 'string', example: 'French' })
   @IsString()
   @IsNotEmpty()
   name: string;
@@ -22,15 +18,13 @@ export class CreateLanguageRequest {
   @IsString()
   @IsNotEmpty()
   code: string;
-
-  @ApiPropertyOptional({ default: false })
-  @Type(() => Boolean)
-  @IsOptional()
-  enabled: boolean;
 }
 
-export class UpdateLanguageRequest {
-  @ApiProperty()
-  @IsBoolean()
-  enabled: boolean;
+export class UpdateLanguageRequest
+  implements Omit<UpdateLanguageCommand, 'code'>
+{
+  @ApiProperty({ type: 'string', example: 'French' })
+  @IsString()
+  @IsNotEmpty()
+  name: string;
 }

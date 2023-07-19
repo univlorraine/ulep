@@ -5,15 +5,17 @@ import { profileMapper } from '../mappers/profile.mapper';
 import { Profile } from '../../../core/models/profile';
 import { Collection } from '../../../shared/types/collection';
 import { StringFilter } from 'src/shared/types/filters';
+import { UniversityRelations } from './prisma-university-repository';
 
-const Relations = {
+export const ProfilesRelations = {
   user: true,
-  university: { include: { country: true } },
-  nationality: true,
+  university: {
+    include: UniversityRelations,
+  },
   nativeLanguage: true,
   masteredLanguages: { include: { language: true } },
   learningLanguage: true,
-  avatar: true,
+  preferences: true,
 };
 
 @Injectable()
@@ -25,7 +27,7 @@ export class PrismaProfileRepository implements ProfileRepository {
   async ofId(id: string) {
     const entry = await this.prisma.profile.findUnique({
       where: { id },
-      include: Relations,
+      include: ProfilesRelations,
     });
 
     if (!entry) {
@@ -38,7 +40,7 @@ export class PrismaProfileRepository implements ProfileRepository {
   async ofUser(id: string): Promise<Profile> {
     const entry = await this.prisma.profile.findUnique({
       where: { userId: id },
-      include: Relations,
+      include: ProfilesRelations,
     });
 
     if (!entry) {
@@ -48,19 +50,14 @@ export class PrismaProfileRepository implements ProfileRepository {
     return profileMapper(entry);
   }
 
-  async where(props: {
-    nativeLanguageCode: string;
-    learningLanguageCode: string;
-  }) {
+  async availableProfiles(): Promise<Profile[]> {
     const entries = await this.prisma.profile.findMany({
       where: {
         tandems: {
           none: { tandem: { status: 'active' } },
         },
-        nativeLanguage: { is: { code: props.nativeLanguageCode } },
-        learningLanguage: { is: { code: props.learningLanguageCode } },
       },
-      include: Relations,
+      include: ProfilesRelations,
     });
 
     return entries.map(profileMapper);
@@ -92,7 +89,7 @@ export class PrismaProfileRepository implements ProfileRepository {
       },
       skip: offset,
       take: limit,
-      include: Relations,
+      include: ProfilesRelations,
     });
 
     const profiles = items.map(profileMapper);
@@ -106,38 +103,39 @@ export class PrismaProfileRepository implements ProfileRepository {
       user: {
         connect: { id: profile.user.id },
       },
-      firstname: profile.firstname,
-      lastname: profile.lastname,
-      age: profile.age,
-      gender: profile.gender,
+      university: {
+        connect: { id: profile.university.id },
+      },
+      age: profile.personalInformation.age,
+      gender: profile.personalInformation.gender,
       role: profile.role,
       nativeLanguage: {
-        connect: {
-          code: profile.nativeLanguage.code,
-        },
+        connect: { code: profile.languages.nativeLanguage },
       },
       learningLanguage: {
-        connect: {
-          code: profile.learningLanguage.code,
-        },
+        connect: { code: profile.languages.learningLanguage },
       },
-      learningLanguageLevel: profile.learningLanguageLevel,
+      learningLanguageLevel: profile.languages.learningLanguageLevel,
       metadata: {
-        goals: Array.from(profile.goals),
-        meetingFrequency: profile.preferences.meetingFrequency,
-        interests: Array.from(profile.interests),
-        bios: profile.bios,
-        preferSameGender: profile.preferences.sameGender,
+        interests: Array.from(profile.personalInformation.interests),
+        bios: profile.personalInformation.bio,
       },
-      university: {
-        connect: {
-          id: profile.university.id,
-        },
-      },
-      nationality: {
-        connect: {
-          id: profile.nationality.id,
-        },
+    };
+
+    const preferences = {
+      type: profile.preferences.learningType,
+      sameGender: profile.preferences.sameGender,
+      goal: profile.preferences.goals[0], // TODO: Fix this
+      frequency: profile.preferences.meetingFrequency,
+      availability: {
+        // TODO
+        tuesday: true,
+        monday: true,
+        wednesday: true,
+        thursday: true,
+        friday: true,
+        saturday: true,
+        sunday: true,
       },
     };
 
@@ -145,8 +143,14 @@ export class PrismaProfileRepository implements ProfileRepository {
 
     await this.prisma.profile.upsert({
       where: { id: profile.id },
-      update: payload,
-      create: payload,
+      update: {
+        ...payload,
+        preferences: { update: preferences },
+      },
+      create: {
+        ...payload,
+        preferences: { create: preferences },
+      },
     });
   }
 

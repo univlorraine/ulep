@@ -7,7 +7,7 @@ import {
   Role,
 } from '../../../core/models/profile';
 
-const levels = ['A1', 'A2', 'B1', 'B2', 'C1'];
+const levels = ['A0', 'A1', 'A2', 'B1', 'B2', 'C1'];
 
 const countriesCodes = ['DE', 'FR'];
 
@@ -133,12 +133,10 @@ export const createProfiles = async (
     await prisma.profile.create({
       data: {
         user: { connect: { id: user.id } },
-        firstname: faker.person.firstName(),
-        lastname: faker.person.lastName(),
         age: faker.number.int({ min: 16, max: 64 }),
         gender: faker.helpers.enumValue(Gender),
         role: faker.helpers.enumValue(Role),
-        nationality: { connect: { code: countryCode } },
+        university: { connect: { name: 'Université de Lorraine' } },
         nativeLanguage: {
           connect: {
             code: nativeLanguageCode,
@@ -150,21 +148,30 @@ export const createProfiles = async (
           },
         },
         learningLanguageLevel: faker.helpers.arrayElement(levels),
-        university: { connect: { name: 'Université de Lorraine' } },
+        preferences: {
+          create: {
+            type: 'ETANDEM',
+            sameGender: faker.datatype.boolean(),
+            goal: faker.helpers.arrayElement(enumToList(Goal)),
+            frequency: faker.helpers.enumValue(MeetingFrequency),
+            availability: {
+              tuesday: true,
+              monday: true,
+              wednesday: true,
+              thursday: true,
+              friday: true,
+              saturday: true,
+              sunday: true,
+            },
+          },
+        },
         metadata: {
           interests: faker.helpers.arrayElements(interests, {
             min: 1,
             max: 5,
           }),
-          goals: faker.helpers.arrayElements(enumToList(Goal), {
-            min: 1,
-            max: 1,
-          }),
-          preferSameGender: faker.datatype.boolean(),
-          meetingFrequency: faker.helpers.enumValue(MeetingFrequency),
         },
       },
-      include: { nationality: true },
     });
   }
 };

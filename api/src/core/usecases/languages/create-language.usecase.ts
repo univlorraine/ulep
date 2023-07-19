@@ -7,7 +7,6 @@ import { LANGUAGE_REPOSITORY } from '../../../providers/providers.module';
 export class CreateLanguageCommand {
   code: string;
   name: string;
-  isEnable: boolean;
 }
 
 @Injectable()
@@ -20,7 +19,7 @@ export class CreateLanguageUsecase {
   async execute(command: CreateLanguageCommand): Promise<Language> {
     await this.assertLanguageDoesNotExistForCode(command.code);
 
-    const instance = new Language({ ...command });
+    const instance = { ...command };
 
     await this.languageRepository.save(instance);
 

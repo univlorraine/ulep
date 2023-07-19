@@ -12,7 +12,7 @@ export interface ProfileRepository {
 
   ofUser: (id: string) => Promise<Profile | null>;
 
-  where: (filters: ProfileFilters) => Promise<Profile[]>;
+  availableProfiles: () => Promise<Profile[]>;
 
   save: (profile: Profile) => Promise<void>;
 

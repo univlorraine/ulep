@@ -2,7 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { PrismaService } from '../prisma.service';
 import { MediaObjectRepository } from '../../../core/ports/media-object.repository';
 import MediaObject from '../../../core/models/media-object';
-import { Profile } from '../../../core/models/profile';
+import { User } from 'src/core/models/user';
 
 @Injectable()
 export class PrismaMediaObjectRepository implements MediaObjectRepository {
@@ -24,17 +24,17 @@ export class PrismaMediaObjectRepository implements MediaObjectRepository {
     });
   }
 
-  async saveProfileImage(profile: Profile): Promise<void> {
+  async saveAvatar(user: User, object: MediaObject): Promise<void> {
     await this.prisma.mediaObject.create({
       data: {
-        id: profile.avatar.id,
-        name: profile.avatar.name,
-        bucket: profile.avatar.bucket,
-        mime: profile.avatar.mimetype,
-        size: profile.avatar.size,
-        profile: {
+        id: object.id,
+        name: object.name,
+        bucket: object.bucket,
+        mime: object.mimetype,
+        size: object.size,
+        user: {
           connect: {
-            id: profile.id,
+            id: user.id,
           },
         },
       },

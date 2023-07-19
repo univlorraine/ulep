@@ -1,9 +1,6 @@
 import { Profile } from '../../../core/models/profile';
 import { Collection } from '../../../shared/types/collection';
-import {
-  ProfileFilters,
-  ProfileRepository,
-} from '../../../core/ports/profile.repository';
+import { ProfileRepository } from '../../../core/ports/profile.repository';
 
 export class InMemoryProfileRepository implements ProfileRepository {
   #profiles: Profile[] = [];
@@ -24,12 +21,9 @@ export class InMemoryProfileRepository implements ProfileRepository {
     return this.#profiles.find((profile) => profile.user.id === id);
   }
 
-  async where(filters: ProfileFilters): Promise<Profile[]> {
-    return this.#profiles.filter(
-      (profile) =>
-        profile.nativeLanguage.code === filters.nativeLanguageCode &&
-        profile.learningLanguage.code === filters.learningLanguageCode,
-    );
+  async availableProfiles(): Promise<Profile[]> {
+    // TODO
+    return this.#profiles;
   }
 
   async save(profile: Profile): Promise<void> {

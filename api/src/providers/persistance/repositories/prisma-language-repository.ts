@@ -58,22 +58,14 @@ export class PrismaLanguageRepository implements LanguageRepository {
   }
 
   async save(language: Language): Promise<void> {
-    const { name, code, isEnable } = language;
+    const { code } = language;
 
     await this.prisma.language.upsert({
       where: {
         code: code,
       },
-      update: {
-        name: name,
-        code: code,
-        isAvailable: isEnable,
-      },
-      create: {
-        name: name,
-        code: code,
-        isAvailable: isEnable,
-      },
+      update: language,
+      create: language,
     });
   }
 }

@@ -1,9 +1,6 @@
 import { Inject, Injectable } from '@nestjs/common';
 import { Profile } from 'src/core/models/profile';
-import {
-  LanguageCombination,
-  LanguageRepository,
-} from 'src/core/ports/language.repository';
+import { LanguageRepository } from 'src/core/ports/language.repository';
 import { ProfileRepository } from 'src/core/ports/profile.repository';
 import {
   IMatchScorer,
@@ -27,34 +24,22 @@ export class GenerateTandemsUsecase {
   ) {}
 
   async execute(): Promise<{ profiles: Profile[]; score: number }[]> {
-    const languages = await this.languageRepository.getUniqueCombinations();
-    const tandems: { profiles: Profile[]; score: number }[] = [];
-
-    for (const language of languages) {
-      const { groupA, groupB } = await this.findGroups(language);
-      const pairs = this.createTandems(groupA, groupB);
-      tandems.push(...pairs);
-    }
+    const profiles = await this.profilesRepository.availableProfiles();
+    const groups = await this.findGroups(profiles);
+    const tandems = this.createTandems(groups.groupA, groups.groupB);
 
     return tandems;
   }
 
-  private async findGroups(languages: LanguageCombination) {
-    const learners = await this.profilesRepository.where({
-      nativeLanguageCode: languages.nativeLanguage,
-      learningLanguageCode: languages.learningLanguage,
-    });
+  // TODO: this should be in a ProfilesPairer service
+  // TODO: order profiles by priority (central, roles, goals)
+  private async findGroups(profiles: Profile[]) {
+    const midIndex: number = Math.ceil(profiles.length / 2);
 
-    const speakers = await this.profilesRepository.where({
-      nativeLanguageCode: languages.learningLanguage,
-      learningLanguageCode: languages.nativeLanguage,
-    });
+    const groupA = profiles.slice(0, midIndex);
+    const groupB = profiles.slice(midIndex);
 
-    if (learners.length > speakers.length) {
-      return { groupA: speakers, groupB: learners };
-    }
-
-    return { groupA: learners, groupB: speakers };
+    return { groupA, groupB };
   }
 
   private createTandems(groupA: Profile[], groupB: Profile[]) {

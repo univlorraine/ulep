@@ -72,11 +72,7 @@ export class LanguageController {
   @Swagger.ApiCreatedResponse({ type: LanguageResponse })
   @Swagger.ApiResponse({ status: 400, description: 'Invalid input' })
   async create(@Body() body: CreateLanguageRequest): Promise<LanguageResponse> {
-    const language = await this.createLanguageUsecase.execute({
-      name: body.name,
-      code: body.code,
-      isEnable: body.enabled,
-    });
+    const language = await this.createLanguageUsecase.execute({ ...body });
 
     return LanguageResponse.fromDomain(language);
   }
@@ -88,11 +84,11 @@ export class LanguageController {
   @Swagger.ApiResponse({ status: 400, description: 'Invalid input' })
   async update(
     @Param('code') code: string,
-    @Body() { enabled }: UpdateLanguageRequest,
+    @Body() request: UpdateLanguageRequest,
   ) {
     const language = await this.updateLanguageUsecase.execute({
       code: code,
-      isEnable: enabled,
+      ...request,
     });
 
     return LanguageResponse.fromDomain(language);

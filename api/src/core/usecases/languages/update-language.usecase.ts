@@ -6,7 +6,7 @@ import { LanguageDoesNotExist } from '../../errors/RessourceDoesNotExist';
 
 export class UpdateLanguageCommand {
   code: string;
-  isEnable: boolean;
+  name: string;
 }
 
 @Injectable()
@@ -17,11 +17,11 @@ export class UpdateLanguageUsecase {
   ) {}
 
   async execute(command: UpdateLanguageCommand): Promise<Language> {
-    const { code, isEnable } = command;
+    const { code } = command;
 
     const language = await this.tryToFindTheLanguageOfCode(code);
 
-    language.isEnable = isEnable;
+    language.name = command.name;
 
     await this.languageRepository.save(language);
 

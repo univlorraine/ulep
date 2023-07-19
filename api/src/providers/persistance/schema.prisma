@@ -4,60 +4,95 @@ datasource db {
 }
 
 generator client {
-  provider = "prisma-client-js"
+  provider      = "prisma-client-js"
   binaryTargets = ["native", "linux-musl-openssl-3.0.x"]
 }
 
 model User {
   id                    String              @id
   email                 String              @unique
+  firstname             String?
+  lastname              String?
+  avatar                MediaObject?        @relation(fields: [avatarId], references: [id], onDelete: Cascade)
+  avatarId              String?             @unique
   profile               Profile?
   reports               Report[]
 
   @@map("users")
 }
 
+model Language {
+  code                    String               @id
+  name                    String
+  UniversityLanguages     UniversityLanguage[]
+  nativeSpeakers          Profile[]            @relation("NativeLanguage")
+  learningUsers           Profile[]            @relation("LearningLanguage")
+  masteredByUsers         MasteredLanguage[]
+
+  @@map("languages")
+}
+
+model University {
+  id                    String              @id @default(uuid())
+  name                  String              @unique
+  timezone              String
+  admissionStart        DateTime
+  admissionEnd          DateTime
+  website               String?
+  resourcesUrl          String?
+  createdAt             DateTime            @default(now())
+  parent                University?         @relation("partners", fields: [parentId], references: [id], onDelete: Cascade)
+  parentId              String?
+  children              University[]        @relation("partners")
+  campuses              Campus[]
+  languages             UniversityLanguage[]
+  profiles              Profile[]
+
+  @@map("universities")
+}
+
+model Campus {
+  id                    String              @id @default(uuid())
+  name                  String
+  universityId          String
+  university            University          @relation(fields: [universityId], references: [id], onDelete: Cascade)
+}
+
+model UniversityLanguage {
+  university            University          @relation(fields: [universityId], references: [id], onDelete: Cascade)
+  universityId          String
+  language              Language            @relation(fields: [languageCode], references: [code], onDelete: Cascade)
+  languageCode          String
+
+  @@id([universityId, languageCode])
+  @@map("universities_languages")
+}
+
 model Profile {
   id                    String              @id @default(uuid())
   user                  User                @relation(fields: [userId], references: [id], onDelete: Cascade)
   userId                String              @unique
-  firstname             String
-  lastname              String
   age                   Int
   gender                String
   role                  String
-  metadata              Json // availability, goals, meetingFrequency, department, diploma, bio, interests, etc.
+  metadata              Json // department, diploma, bio, etc.
   university            University          @relation(fields: [universityId], references: [id], onDelete: Cascade)
   universityId          String
-  nationality           Country             @relation(fields: [nationalityId], references: [id])
-  nationalityId         String
-  avatar                MediaObject?
   nativeLanguage        Language            @relation("NativeLanguage", fields: [nativeLanguageCode], references: [code])
   nativeLanguageCode    String
-  learningLanguage      Language            @relation("LearningLanguage", fields: [learningLanguageCode], references: [code])
-  learningLanguageCode  String
+  learningLanguage      Language?           @relation("LearningLanguage", fields: [learningLanguageCode], references: [code])
+  learningLanguageCode  String?
   learningLanguageLevel String
   masteredLanguages     MasteredLanguage[]
-  preferences           LearningPreference? @relation(fields: [preferencesId], references: [id])
-  preferencesId         String?             @unique
+  preferences           LearningPreference  @relation(fields: [preferencesId], references: [id], onDelete: Cascade)
+  preferencesId         String              @unique
   tandems               ProfilesOnTandems[]
   createdAt             DateTime            @default(now())
 
-  @@map("profiles")
   @@index([nativeLanguageCode], name: "native_language_code")
   @@index([learningLanguageCode], name: "learning_language_code")
   @@index([universityId], name: "university_id")
-}
-
-model Language {
-  code                  String              @id
-  name                  String
-  isAvailable           Boolean
-  nativeSpeakers        Profile[]           @relation("NativeLanguage")
-  learningUsers         Profile[]           @relation("LearningLanguage")
-  masteredByUsers       MasteredLanguage[]
-
-  @@map("languages")
+  @@map("profiles")
 }
 
 // Many to many relation between Profile and Language
@@ -73,37 +108,15 @@ model MasteredLanguage {
 
 model LearningPreference {
   id                    String              @id @default(uuid())
+  profile               Profile?
+  type                  String
   sameGender            Boolean
   remote                Boolean             @default(true)
-  profile               Profile?
-  // TODO: meetingFrequency, goals, etc.
+  goal                  String
+  frequency             String
+  availability          Json
 
   @@map("learning_preferences")
-}
-
-model Country {
-  id                    String              @id @default(uuid())
-  code                  String              @unique
-  name                  String
-  profiles              Profile[]
-  universities          University[]
-  createdAt             DateTime            @default(now())
-
-  @@map("countries")
-}
-
-model University {
-  id                    String              @id @default(uuid())
-  profiles              Profile[]
-  name                  String              @unique
-  country               Country             @relation(fields: [countryId], references: [id])
-  countryId             String
-  timezone              String
-  admissionStart        DateTime
-  admissionEnd          DateTime
-  createdAt             DateTime            @default(now())
-
-  @@map("universities")
 }
 
 model Tandem {
@@ -111,8 +124,8 @@ model Tandem {
   status                String              @default("active") // Either active or inactive
   profiles              ProfilesOnTandems[]
 
-  @@map("tandems")
   @@index([status], name: "status")
+  @@map("tandems")
 }
 
 model ProfilesOnTandems {
@@ -132,8 +145,7 @@ model MediaObject {
   mime                  String
   size                  Int
   createdAt             DateTime            @default(now())
-  profile               Profile             @relation(fields: [profileId], references: [id], onDelete: Cascade)
-  profileId             String              @unique
+  user                  User?
 
   @@map("media_objects")
 }

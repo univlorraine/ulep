@@ -19,7 +19,6 @@ import {
   CreateProfileCommand,
   CreateProfileUsecase,
 } from '../../core/usecases/profiles/create-profile.usecase';
-import { UserContext } from '../decorators/user-context.decorator';
 import { AuthenticationGuard } from '../guards/authentication.guard';
 import { ProfileResponse } from '../dtos/profiles/profile.response';
 import { CreateProfileRequest } from '../dtos/profiles/create-profile.request';
@@ -31,9 +30,10 @@ import {
 } from '../../core/usecases/profiles/update-profile.usecase';
 import { UpdateProfileRequest } from '../dtos/profiles/update-profile.request';
 import { DeleteProfileUsecase } from '../../core/usecases/profiles/delete-profile.usecase';
-import { User, UserRole } from 'src/core/models/user';
+import { UserRole } from 'src/core/models/user';
 import { ProfileQueryFilter } from '../dtos/profiles/profiles-filters';
 import { Roles } from '../decorators/roles.decorator';
+import { UuidProvider } from '../services/uuid-provider';
 
 @Controller('profiles')
 @Swagger.ApiTags('Profiles')
@@ -41,6 +41,7 @@ export class ProfileController {
   private readonly logger = new Logger(ProfileController.name);
 
   constructor(
+    private readonly uuidProvider: UuidProvider,
     private readonly getProfilesUsecase: GetProfilesUsecase,
     private readonly getProfileUsecase: GetProfileUsecase,
     private readonly createProfileUsecase: CreateProfileUsecase,
@@ -90,15 +91,10 @@ export class ProfileController {
   @Swagger.ApiOperation({ summary: 'Creates a Profile ressource.' })
   @Swagger.ApiCreatedResponse({ type: ProfileResponse })
   @Swagger.ApiResponse({ status: 400, description: 'Invalid input' })
-  async create(
-    @Body() body: CreateProfileRequest,
-    @UserContext() user: User,
-  ): Promise<ProfileResponse> {
+  async create(@Body() body: CreateProfileRequest): Promise<ProfileResponse> {
     const command: CreateProfileCommand = {
-      userId: user.id,
+      id: this.uuidProvider.generate(),
       ...body,
-      goals: new Set(body.goals),
-      interests: new Set(body.interests),
     };
     const profile = await this.createProfileUsecase.execute(command);
 

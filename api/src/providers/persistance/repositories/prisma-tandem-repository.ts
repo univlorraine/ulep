@@ -4,6 +4,7 @@ import { Tandem } from '../../../core/models/tandem';
 import { PrismaService } from '../prisma.service';
 import { profileMapper } from '../mappers/profile.mapper';
 import { Collection } from 'src/shared/types/collection';
+import { ProfilesRelations } from './prisma-profile-repository';
 
 @Injectable()
 export class PrismaTandemRepository implements TandemsRepository {
@@ -56,15 +57,7 @@ export class PrismaTandemRepository implements TandemsRepository {
         profiles: {
           include: {
             profile: {
-              include: {
-                user: true,
-                university: { include: { country: true } },
-                nationality: true,
-                nativeLanguage: true,
-                masteredLanguages: { include: { language: true } },
-                learningLanguage: true,
-                avatar: true,
-              },
+              include: ProfilesRelations,
             },
           },
         },

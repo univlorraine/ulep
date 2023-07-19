@@ -2,6 +2,7 @@ import { Inject, Injectable } from '@nestjs/common';
 import { LanguageRepository } from '../../ports/language.repository';
 import { LANGUAGE_REPOSITORY } from '../../../providers/providers.module';
 
+// TODO: university filter
 export class GetLanguagesCommand {
   page: number;
   limit: number;
