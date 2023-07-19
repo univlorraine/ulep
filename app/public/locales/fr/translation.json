@@ -175,6 +175,15 @@
     "signup_pairing_other_languages_page": {
         "joker_checkbox": "Langue joker",
         "joker_description": "Tu souhaites aider quelqu'un avec son français tout en découvrant une langue étrangère",
+        "selected_language": {
+            "explain_first": "Nous sommes désolés, la langue hindi n'est pas disponible pour le moment.",
+            "explain_second": "Trouver un tandem pourrait prendre plus de temps et tu seras sur liste d'attente.",
+            "explain_third": "Nous travaillons pour ajouter de nouvelles langues, mais cela pourrait prendre jusqu'à un an ou plus si nous ne trouvons pas suffisamment de participants. Merci pour ta patience et ta compréhension.",
+            "language": "Langue souhaitée",
+            "subtitle": "Quelle langue veux-tu travailler avec ton tandem ?",
+            "title": "Choix de la langue",
+            "validate_button": "Demander l'ajout de cette langue"
+        },
         "subtitle": "Choisis tes préférences",
         "title": "Choix de la langue",
         "validate_button": "Valider et continuer"
