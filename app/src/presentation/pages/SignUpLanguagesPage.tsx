@@ -11,7 +11,7 @@ import styles from './css/SignUp.module.css';
 
 const SignUpLanguagesPage: React.FC = () => {
     const { t } = useTranslation();
-    const { getAllLanguages } = useConfig();
+    const { configuration, getAllLanguages } = useConfig();
     const updateProfileSignUp = useStoreActions((state) => state.updateProfileSignUp);
     const [showToast] = useIonToast();
     const history = useHistory();
@@ -48,7 +48,12 @@ const SignUpLanguagesPage: React.FC = () => {
     }, []);
 
     return (
-        <WebLayoutCentered headerColor="#FDEE66" headerPercentage={36} headerTitle={t('global.create_account_title')}>
+        <WebLayoutCentered
+            backgroundIconColor={configuration.primaryBackgroundImageColor}
+            headerColor={configuration.primaryColor}
+            headerPercentage={36}
+            headerTitle={t('global.create_account_title')}
+        >
             <div className={styles.body}>
                 <h1 className={styles.title}>{t('signup_languages_page.title')}</h1>
 

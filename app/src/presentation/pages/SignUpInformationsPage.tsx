@@ -3,6 +3,7 @@ import { useIonToast } from '@ionic/react';
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useHistory } from 'react-router';
+import { useConfig } from '../../context/ConfigurationContext';
 import gender from '../../domain/entities/gender';
 import { useStoreActions } from '../../store/storeTypes';
 import Checkbox from '../components/Checkbox';
@@ -14,6 +15,7 @@ import styles from './css/SignUp.module.css';
 
 const SignUpInformationsPage: React.FC = () => {
     const { t } = useTranslation();
+    const { configuration } = useConfig();
     const [showToast] = useIonToast();
     const history = useHistory();
     const updateProfileSignUp = useStoreActions((state) => state.updateProfileSignUp);
@@ -86,7 +88,12 @@ const SignUpInformationsPage: React.FC = () => {
     };
 
     return (
-        <WebLayoutCentered headerColor="#FDEE66" headerPercentage={24} headerTitle={t('global.create_account_title')}>
+        <WebLayoutCentered
+            backgroundIconColor={configuration.primaryBackgroundImageColor}
+            headerColor={configuration.primaryColor}
+            headerPercentage={24}
+            headerTitle={t('global.create_account_title')}
+        >
             <div className={styles.body}>
                 <h1 className={styles.title}>{t('signup_informations_page.title')}</h1>
 

@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useHistory } from 'react-router';
+import { useConfig } from '../../context/ConfigurationContext';
 import { useStoreActions } from '../../store/storeTypes';
 import TextInput from '../components/TextInput';
 import WebLayoutCentered from '../components/WebLayoutCentered';
@@ -9,6 +10,7 @@ import biographyStyles from './css/SignUpBiography.module.css';
 
 const SignUpBiographyPage: React.FC = () => {
     const { t } = useTranslation();
+    const { configuration } = useConfig();
     const history = useHistory();
     const updateProfileSignUp = useStoreActions((state) => state.updateProfileSignUp);
     const [errorMessage, setErrorMessage] = useState<{ id: string; value: string }>();
@@ -40,7 +42,12 @@ const SignUpBiographyPage: React.FC = () => {
     };
 
     return (
-        <WebLayoutCentered headerColor="#FDEE66" headerPercentage={72} headerTitle={t('global.create_account_title')}>
+        <WebLayoutCentered
+            backgroundIconColor={configuration.primaryBackgroundImageColor}
+            headerColor={configuration.primaryColor}
+            headerPercentage={72}
+            headerTitle={t('global.create_account_title')}
+        >
             <div className={styles.body}>
                 <div className={biographyStyles.content}>
                     <h1 className={biographyStyles.title}>{t('signup_biography_page.title')}</h1>

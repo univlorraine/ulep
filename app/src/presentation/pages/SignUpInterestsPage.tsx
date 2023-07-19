@@ -11,7 +11,7 @@ import interestStyle from './css/SignUpInterests.module.css';
 
 const SignUpInterestsPage: React.FC = () => {
     const { t } = useTranslation();
-    const { getAllCategoriesInterests } = useConfig();
+    const { configuration, getAllCategoriesInterests } = useConfig();
     const [showToast] = useIonToast();
     const history = useHistory();
     const updateProfileSignUp = useStoreActions((state) => state.updateProfileSignUp);
@@ -52,7 +52,12 @@ const SignUpInterestsPage: React.FC = () => {
     }, []);
 
     return (
-        <WebLayoutCentered headerColor="#FDEE66" headerPercentage={60} headerTitle={t('global.create_account_title')}>
+        <WebLayoutCentered
+            backgroundIconColor={configuration.primaryBackgroundImageColor}
+            headerColor={configuration.primaryColor}
+            headerPercentage={60}
+            headerTitle={t('global.create_account_title')}
+        >
             <div className={styles.body}>
                 <div>
                     <h1 className={interestStyle.title}>{t('signup_interests_page.title')}</h1>

@@ -36,6 +36,7 @@ const Store = createStore<TokenStoreTypes>(
             if (payload.profilePicture) profile.profilePicture = payload.profilePicture;
             if (payload.role) profile.role = payload.role;
             if (payload.staffFunction) profile.staffFunction = payload.staffFunction;
+            if (payload.timezone) profile.timezone = payload.timezone;
             if (payload.university) profile.university = payload.university;
         }),
     })

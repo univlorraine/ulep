@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useHistory } from 'react-router';
+import { useConfig } from '../../context/ConfigurationContext';
 import { frequency } from '../../domain/entities/ProfileSignUp';
 import { useStoreActions } from '../../store/storeTypes';
 import WebLayoutCentered from '../components/WebLayoutCentered';
@@ -17,6 +18,7 @@ const frequencies: frequency[] = [
 
 const SignUpFrequencyPage: React.FC = () => {
     const { t } = useTranslation();
+    const { configuration } = useConfig();
     const history = useHistory();
     const updateProfileSignUp = useStoreActions((state) => state.updateProfileSignUp);
     const [frequency, setFrequency] = useState<frequency>();
@@ -24,11 +26,16 @@ const SignUpFrequencyPage: React.FC = () => {
     const continueSignUp = async () => {
         updateProfileSignUp({ frequency });
 
-        history.push('./signup/biography'); //TODO: change this
+        history.push('./signup/end');
     };
 
     return (
-        <WebLayoutCentered headerColor="#FDEE66" headerPercentage={97} headerTitle={t('global.create_account_title')}>
+        <WebLayoutCentered
+        backgroundIconColor={configuration.primaryBackgroundImageColor}
+            headerColor={configuration.primaryColor}
+            headerPercentage={97}
+            headerTitle={t('global.create_account_title')}
+        >
             <div className={styles.body}>
                 <div className={frequencyStyle.container}>
                     <h1 className={frequencyStyle.title}>{t('signup_frequency_page.title')}</h1>

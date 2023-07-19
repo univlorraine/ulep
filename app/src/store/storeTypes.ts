@@ -32,6 +32,7 @@ export interface SignUpStorePayload {
     profilePicture?: string;
     role?: roles;
     staffFunction?: string;
+    timezone?: string;
     university?: University;
 }
 

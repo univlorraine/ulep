@@ -15,7 +15,7 @@ import SignUpInformationsPage from '../pages/SignUpInformationsPage';
 import SignUpInterestsPage from '../pages/SignUpInterestsPage';
 import SignUpLanguagesPage from '../pages/SignUpLanguagesPage';
 import SignUpPage from '../pages/SignUpPage';
-import SignupFinalPage from '../pages/SignupFinalPage';
+import SignupFinalPage from '../pages/SignUpFinalPage';
 
 const OfflineRouter: React.FC = () => (
     <IonRouterOutlet>

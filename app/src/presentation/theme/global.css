@@ -51,10 +51,6 @@ input::-webkit-inner-spin-button {
     height: 100%;
 }
 
-.yellow-background {
-    background-color: #fdee66;
-}
-
 @media (min-width: 768px) {
     .container {
         min-height: calc(100vh - 64px);
@@ -62,7 +58,6 @@ input::-webkit-inner-spin-button {
 
     .page {
         align-items: center;
-        background-color: #fdee66; /* TODO: change this later*/
         display: flex;
         flex-direction: column;
         min-height: 100vh;

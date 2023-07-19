@@ -11,7 +11,7 @@ import goalsStyles from './css/SignUpGoals.module.css';
 
 const SignUpGoalsPage: React.FC = () => {
     const { t } = useTranslation();
-    const { getAllGoals } = useConfig();
+    const { configuration, getAllGoals } = useConfig();
     const [showToast] = useIonToast();
     const history = useHistory();
     const updateProfileSignUp = useStoreActions((state) => state.updateProfileSignUp);
@@ -52,7 +52,12 @@ const SignUpGoalsPage: React.FC = () => {
     }, []);
 
     return (
-        <WebLayoutCentered headerColor="#FDEE66" headerPercentage={48} headerTitle={t('global.create_account_title')}>
+        <WebLayoutCentered
+            backgroundIconColor={configuration.primaryBackgroundImageColor}
+            headerColor={configuration.primaryColor}
+            headerPercentage={48}
+            headerTitle={t('global.create_account_title')}
+        >
             <div className={styles.body}>
                 <div className={goalsStyles.content}>
                     <h1 className={goalsStyles.title}>{t('signup_goals_page.title')}</h1>
