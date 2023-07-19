@@ -3,9 +3,10 @@ interface CheckboxProps {
     isSelected: boolean;
     onPressed: () => void;
     name: string | null;
+    textClass?: string;
 }
 
-const Checkbox: React.FC<CheckboxProps> = ({ isSelected, onPressed, name }) => {
+const Checkbox: React.FC<CheckboxProps> = ({ isSelected, onPressed, name, textClass }) => {
     return (
         <div className={styles.container} onClick={onPressed}>
             <div
@@ -14,7 +15,7 @@ const Checkbox: React.FC<CheckboxProps> = ({ isSelected, onPressed, name }) => {
             >
                 {isSelected && <img alt="check" className={styles.image} src="/assets/check.svg" />}
             </div>
-            {name}
+            <span className={textClass}>{name}</span>
         </div>
     );
 };

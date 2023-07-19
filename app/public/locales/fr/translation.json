@@ -171,5 +171,12 @@
         "subtitle": "Quelle langue veux-tu travailler avec ton tandem ?",
         "title": "Choix de la langue",
         "validate_button": "Valider et continuer"
+    },
+    "signup_pairing_other_languages_page": {
+        "joker_checkbox": "Langue joker",
+        "joker_description": "Tu souhaites aider quelqu'un avec son français tout en découvrant une langue étrangère",
+        "subtitle": "Choisis tes préférences",
+        "title": "Choix de la langue",
+        "validate_button": "Valider et continuer"
     }
 }
