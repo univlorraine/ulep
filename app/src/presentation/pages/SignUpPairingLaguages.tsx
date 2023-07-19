@@ -36,7 +36,7 @@ const SignUpPairingLaguages: React.FC = () => {
 
     const continueSignUp = async () => {
         updateProfileSignUp({ learningLanguage: selectedLaguage });
-        history.push('/signup/availabilities');
+        history.push('/signup/'); // TODO: Change this
     };
 
     useEffect(() => {
