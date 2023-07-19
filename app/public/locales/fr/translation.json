@@ -38,6 +38,7 @@
         "lastname": "Nom",
         "men": "Masculin",
         "password": "Mot de passe",
+        "pairing_title": "Appariement",
         "woman": "Féminin"
     },
     "connection_page": {
@@ -164,6 +165,11 @@
         "student_role": "Étudiant·e",
         "title": "Mon profil",
         "university_title": "Établissement",
+        "validate_button": "Valider et continuer"
+    },
+    "signup_pairing_languages_page": {
+        "subtitle": "Quelle langue veux-tu travailler avec ton tandem ?",
+        "title": "Choix de la langue",
         "validate_button": "Valider et continuer"
     }
 }
