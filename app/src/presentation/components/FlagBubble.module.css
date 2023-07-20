@@ -1,6 +1,5 @@
 .country {
-    color: #000;
-    font-family: Maven Pro;
+    font-family: 'Maven Pro';
     font-size: 13px;
     font-style: normal;
     font-weight: 500;
@@ -28,4 +27,8 @@
     min-height: 95px;
     min-height: 95px;
     width: 95px;
+}
+
+.language-container:disabled {
+    color: inherit;
 }

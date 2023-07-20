@@ -46,7 +46,7 @@ const PairingUnavailableLanguagePage: React.FC = () => {
                         <div className={styles['image-container']}>
                             <img className={styles.image} alt="avatar" src={profileSignUp.profilePicture}></img>
                             <div className={styles.bubble}>
-                                <FlagBubble language={language} isSelected disabled />
+                                <FlagBubble language={language} textColor="white" isSelected disabled />
                             </div>
                         </div>
                         <p className={styles.description}>
@@ -60,7 +60,7 @@ const PairingUnavailableLanguagePage: React.FC = () => {
                 {!askingStudents ||
                     (isLastStep && (
                         <>
-                            <FlagBubble language={language} isSelected disabled />
+                            <FlagBubble language={language} textColor="white" isSelected disabled />
                             <span className={styles.title}>{`${t('pairing_unavailable_language_page.title')}`}</span>
                             <p className={styles.description}>{t('pairing_unavailable_language_page.subtitle')}</p>
                             <span className={styles.description}>{t('pairing_unavailable_language_page.luck')}</span>

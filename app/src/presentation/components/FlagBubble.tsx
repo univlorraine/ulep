@@ -8,9 +8,10 @@ interface FlagBubbleProps {
     language: Language;
     isSelected: boolean;
     onPressed?: (language: Language) => void;
+    textColor?: string;
 }
 
-const FlagBubble: React.FC<FlagBubbleProps> = ({ disabled, isSelected, language, onPressed }) => {
+const FlagBubble: React.FC<FlagBubbleProps> = ({ disabled, isSelected, language, onPressed, textColor = 'black' }) => {
     const { configuration } = useConfig();
     return (
         <button
@@ -23,7 +24,9 @@ const FlagBubble: React.FC<FlagBubbleProps> = ({ disabled, isSelected, language,
             onClick={() => (onPressed ? onPressed(language) : null)}
         >
             <span className={styles.flag}>{codeCountryToFlag(language.code.toLowerCase())}</span>
-            <span className={styles.country}>{language.name}</span>
+            <span className={styles.country} style={{ color: textColor }}>
+                {language.name}
+            </span>
         </button>
     );
 };
