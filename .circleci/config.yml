@@ -1,67 +1,161 @@
 version: 2.1
 
 orbs:
-  node: circleci/node@4.1
+  node: circleci/node@5.1.0
   docker: circleci/docker@1.6
 
 executors:
   node-executor:
     docker:
-      - image: cimg/node:18
+      - image: cimg/node:18.16.1
 
 commands:
-  pnpm-install:
+  pnpm-install-api:
     steps:
-      - restore_cache:
-          name: Restore pnpm Package Cache
-          keys:
-            - pnpm-packages-{{ checksum "pnpm-lock.yaml" }}
       - run:
           name: Install pnpm package manager
           command: |
-            curl -L https://pnpm.js.org/pnpm.js | node - add --global pnpm@8.6.0
+            cd api && npm i pnpm@8.6.9
+
+jobs:
+##### API #####
+  install-api:
+    executor: node-executor
+    working_directory: ~/api
+    steps:
+      - checkout
+      - pnpm-install-api
+  lint-api:
+    executor: node-executor
+    working_directory: ~/api
+    steps:
+      - checkout
       - run:
           name: Install Dependencies
           command: |
-            pnpm install
-      - save_cache:
-          name: Save pnpm Package Cache
-          key: pnpm-packages-{{ checksum "pnpm-lock.yaml" }}
-          paths:
-            - node_modules
-
-jobs:
-  install:
-    executor: node-executor
-    working_directory: ~/api
-    steps:
-      - checkout
-      - pnpm-install
-  lint:
-    executor: node-executor
-    working_directory: ~/api
-    steps:
-      - checkout
+            cd api && pnpm install --no-frozen-lockfile
       - run:
           name: Lint code
-          command: pnpm run lint
-  test:
+          command: cd api && pnpm lint
+  test-api:
     executor: node-executor
     working_directory: ~/api
     steps:
       - checkout
       - run:
+          name: Install Dependencies
+          command: cd api && pnpm install --no-frozen-lockfile
+      - run:
           name: Run tests
-          command: pnpm run test
-
+          command: cd api && pnpm run test
+  build-docker-api:
+    executor: node-executor
+    working_directory: ~/api
+    steps:
+      - checkout
+      - setup_remote_docker:
+          version: 20.10.14
+      - run:
+          name: Install Dependencies
+          command: |
+            cd api && pnpm i --no-frozen-lockfile
+      - run:
+          name: Run build image
+          command: |
+            export DOCKER_BUILDKIT=1
+            if [ "$CIRCLE_BRANCH" = "main" ]
+            then cd admin && docker build --platform=linux/amd64 --target=api_prod -t rg.fr-par.scw.cloud/ulep/api-prod:latest -t rg.fr-par.scw.cloud/ulep/api-prod:1.0.$CIRCLE_BUILD_NUM .
+            else cd admin && docker build --platform=linux/amd64 --target=api_dev -t rg.fr-par.scw.cloud/ulep/api-dev:latest -t rg.fr-par.scw.cloud/ulep/api-dev:1.0.$CIRCLE_BUILD_NUM .
+            fi
+      - run:
+          name: push docker image
+          command: |
+            echo "$DOCKER_PASS" | docker login rg.fr-par.scw.cloud/ulep -u nologin --password-stdin
+            if [ "$CIRCLE_BRANCH" = "main" ]
+            then docker push rg.fr-par.scw.cloud/ulep/api-prod:latest && docker push rg.fr-par.scw.cloud/ulep/api-prod:1.0.$CIRCLE_BUILD_NUM
+            else docker push rg.fr-par.scw.cloud/ulep/api-dev:latest && docker push rg.fr-par.scw.cloud/ulep/api-dev:1.0.$CIRCLE_BUILD_NUM
+            fi
+##### ADMIN #####
+  lint-admin:
+    executor: node-executor
+    working_directory: ~/api
+    steps:
+      - checkout
+      - run:
+          name: Install Dependencies
+          command: |
+            cd admin && pnpm i --no-frozen-lockfile
+      - run:
+          name: Lint code
+          command: cd admin && pnpm run lint
+  tsc-build-admin:
+    executor: node-executor
+    working_directory: ~/api
+    steps:
+      - checkout
+      - run:
+          name: Install Dependencies
+          command: cd admin && pnpm i --no-frozen-lockfile
+      - run:
+          name: Run build
+          command: cd admin && pnpm run build
+  build-docker-admin:
+    executor: node-executor
+    working_directory: ~/api
+    steps:
+      - checkout
+      - setup_remote_docker:
+          version: 20.10.14
+      - run:
+          name: Install Dependencies
+          command: |
+            cd admin && pnpm i --no-frozen-lockfile
+      - run:
+          name: Run build image
+          command: |
+            export DOCKER_BUILDKIT=1
+            if [ "$CIRCLE_BRANCH" = "main" ]
+            then cd admin && docker build --platform=linux/amd64 --target=api_prod -t rg.fr-par.scw.cloud/ulep/admin-prod:latest -t rg.fr-par.scw.cloud/ulep/admin-prod:1.0.$CIRCLE_BUILD_NUM .
+            else cd admin && docker build --platform=linux/amd64 --target=admin_dev -t rg.fr-par.scw.cloud/ulep/admin-dev:latest -t rg.fr-par.scw.cloud/ulep/admin-dev:1.0.$CIRCLE_BUILD_NUM .
+            fi
+      - run:
+          name: push docker image
+          command: |
+            echo "$DOCKER_PASS" | docker login rg.fr-par.scw.cloud/ulep -u nologin --password-stdin
+            if [ "$CIRCLE_BRANCH" = "main" ]
+            then docker push rg.fr-par.scw.cloud/ulep/admin-prod:latest && docker push rg.fr-par.scw.cloud/ulep/admin-prod:1.0.$CIRCLE_BUILD_NUM
+            else docker push rg.fr-par.scw.cloud/ulep/admin-dev:latest && docker push rg.fr-par.scw.cloud/ulep/admin-dev:1.0.$CIRCLE_BUILD_NUM
+            fi
 workflows:
   version: 2
   check_api:
     jobs:
-      - install
-      - lint:
+      - install-api
+      - lint-api:
           requires:
-            - install
-      - test:
+            - install-api
+      - test-api:
           requires:
-            - lint
+            - lint-api
+      - build-docker-api:
+          requires:
+            - lint-api
+            - test-api
+          filters:
+            branches:
+              only:
+                - develop
+                - main
+  check_admin:
+    jobs:
+      - lint-admin
+      - tsc-build-admin
+      - build-docker-admin:
+          requires:
+            - tsc-build-admin
+            - lint-admin
+          filters:
+            branches:
+              only:
+                - develop
+                - main
