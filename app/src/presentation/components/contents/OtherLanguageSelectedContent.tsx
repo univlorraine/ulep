@@ -1,24 +1,28 @@
-import { useState } from 'react';
+import { useIonToast } from '@ionic/react';
 import { useTranslation } from 'react-i18next';
+import { useConfig } from '../../../context/ConfigurationContext';
 import Language from '../../../domain/entities/Language';
 import { codeCountryToFlag } from '../../utils';
 import otherLanguagesSelectedStyles from './OtherLanguageSelectedContent.module.css';
 
 interface OtherLanguageSelectedContentProps {
     language: Language;
-    onNextStep: () => void;
+    onNextStep: (askingStudents: number) => void;
 }
 
 const OtherLanguageSelectedContent: React.FC<OtherLanguageSelectedContentProps> = ({ language, onNextStep }) => {
     const { t } = useTranslation();
-    const [selectedLaguage, setSelectedLanguage] = useState<Language>();
+    const { askForLanguage } = useConfig();
+    const [showToast] = useIonToast();
 
-    const nextStep = () => {
-        if (!selectedLaguage) {
-            return null;
+    const nextStep = async () => {
+        const result = await askForLanguage.execute(language);
+
+        if (result instanceof Error) {
+            return await showToast({ message: t(result.message), duration: 1000 });
         }
-        //TODO: Ask for add language ( and get number of call )
-        return onNextStep();
+
+        return onNextStep(result);
     };
     return (
         <>
