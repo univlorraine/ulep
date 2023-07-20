@@ -68,7 +68,7 @@ const PairingLaguages: React.FC = () => {
                                     />
                                 );
                             })}
-                        {!profileSignUp.university?.isCentral && (
+                        {profileSignUp.university?.isCentral && (
                             <button
                                 style={{ background: 'none' }}
                                 onClick={() => history.push('/signup/pairing/other-languages')}
