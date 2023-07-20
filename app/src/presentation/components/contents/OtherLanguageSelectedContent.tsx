@@ -24,7 +24,7 @@ const OtherLanguageSelectedContent: React.FC<OtherLanguageSelectedContentProps> 
                     {t('pairing_other_languages_page.selected_language.language')}
                 </p>
                 <div className={otherLanguagesSelectedStyles['language-container']}>{`${codeCountryToFlag(
-                    language.code
+                    language.code.toLowerCase()
                 )} ${language.name}`}</div>
 
                 <img alt="FAQ" className={otherLanguagesSelectedStyles.image} src="/assets/FAQ.svg" />

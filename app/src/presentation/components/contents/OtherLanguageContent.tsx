@@ -23,19 +23,21 @@ const OtherLanguageContent: React.FC<OtherLanguageContentProps> = ({ languages, 
     return (
         <>
             <div className={pairingOtherLanguagesStyles.content}>
-                <h1 className={pairingOtherLanguagesStyles.title}>{t('pairing_other_languages_page.title')}</h1>
-                <p className={pairingOtherLanguagesStyles.subtitle}>{t('pairing_other_languages_page.subtitle')}</p>
+                <h1 className={pairingOtherLanguagesStyles.title}>{t('signup_pairing_other_languages_page.title')}</h1>
+                <p className={pairingOtherLanguagesStyles.subtitle}>
+                    {t('signup_pairing_other_languages_page.subtitle')}
+                </p>
 
                 <div className={pairingOtherLanguagesStyles['joker-container']}>
                     <img alt="dice" src="/assets/dice.svg" />
                     <div className={pairingOtherLanguagesStyles['joker-text-container']}>
                         <p className={pairingOtherLanguagesStyles['joker-description']}>
-                            {t('pairing_other_languages_page.joker_description')}
+                            {t('signup_pairing_other_languages_page.joker_description')}
                         </p>
                         <Checkbox
                             isSelected={selectedLaguage?.code === 'joker'}
                             onPressed={() => setSelectedLanguage(new Language('joker', 'joker', true))}
-                            name={t('pairing_other_languages_page.joker_checkbox')}
+                            name={t('signup_pairing_other_languages_page.joker_checkbox')}
                             textClass={pairingOtherLanguagesStyles['checkbox-text']}
                         />
                     </div>
@@ -62,7 +64,7 @@ const OtherLanguageContent: React.FC<OtherLanguageContentProps> = ({ languages, 
                     disabled={!selectedLaguage}
                     onClick={nextStep}
                 >
-                    {t('pairing_other_languages_page.validate_button')}
+                    {t('signup_pairing_other_languages_page.validate_button')}
                 </button>
             </div>
         </>

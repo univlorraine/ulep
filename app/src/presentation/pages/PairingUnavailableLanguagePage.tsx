@@ -49,12 +49,14 @@ const PairingUnavailableLanguagePage: React.FC = () => {
                                 <FlagBubble language={language} textColor="white" isSelected disabled />
                             </div>
                         </div>
-                        <p className={styles.description}>
-                            {t('pairing_unavailable_language_page.not_alone.description')}
-                        </p>
-                        <button className="primary-button" onClick={() => setIsLastStep(true)}>
-                            {t('pairing_unavailable_language_page.not_alone.validate_button')}
-                        </button>
+                        <div className={styles['button-container']}>
+                            <p className={styles.description}>
+                                {t('pairing_unavailable_language_page.not_alone.description')}
+                            </p>
+                            <button className={'primary-button large-margin-top'} onClick={() => setIsLastStep(true)}>
+                                {t('pairing_unavailable_language_page.not_alone.validate_button')}
+                            </button>
+                        </div>
                     </>
                 )}
                 {!askingStudents ||
