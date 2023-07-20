@@ -19,6 +19,13 @@
     z-index: 0;
 }
 
+.background-image-container {
+    height: 100%;
+    overflow: hidden;
+    position: absolute;
+    width: 100%;
+}
+
 .white-centered-div {
     background-color: white;
     display: flex;
