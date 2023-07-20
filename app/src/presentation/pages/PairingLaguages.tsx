@@ -5,10 +5,10 @@ import { useHistory } from 'react-router';
 import { useConfig } from '../../context/ConfigurationContext';
 import Language from '../../domain/entities/Language';
 import { useStoreActions, useStoreState } from '../../store/storeTypes';
+import FlagBubble from '../components/FlagBubble';
 import WebLayoutCentered from '../components/WebLayoutCentered';
-import { codeCountryToFlag } from '../utils';
-import styles from './css/SignUp.module.css';
 import pairingLanguagesStyles from './css/PairingLanguages.module.css';
+import styles from './css/SignUp.module.css';
 
 const PairingLaguages: React.FC = () => {
     const { t } = useTranslation();
@@ -21,13 +21,14 @@ const PairingLaguages: React.FC = () => {
     const [selectedLaguage, setSelectedLanguage] = useState<Language>();
 
     const getLanguages = async () => {
-        let result = await getAllLanguages.execute();
+        let result = await getAllLanguages.execute(); // TODO: Change this later, use university ( profileSignUp.primaryLanguages )
 
         if (result instanceof Error) {
             return await showToast({ message: t(result.message), duration: 1000 });
         }
 
         if (!profileSignUp.university?.isCentral) {
+            // TODO: Remove this later, use university ( profileSignUp.primaryLanguages )
             result = result.filter((language) => language.code === 'FR' || language.code === 'EN');
         }
 
@@ -36,7 +37,7 @@ const PairingLaguages: React.FC = () => {
 
     const continueSignUp = async () => {
         updateProfileSignUp({ learningLanguage: selectedLaguage });
-        history.push('/signup/'); // TODO: Change this
+        history.push('/signup/'); // TODO: Change this, navigate to next step
     };
 
     useEffect(() => {
@@ -52,42 +53,27 @@ const PairingLaguages: React.FC = () => {
         >
             <div className={styles.body}>
                 <div className={pairingLanguagesStyles.content}>
-                    <h1 className={pairingLanguagesStyles.title}>{t('signup_pairing_languages_page.title')}</h1>
-                    <p className={pairingLanguagesStyles.subtitle}>{t('signup_pairing_languages_page.subtitle')}</p>
+                    <h1 className={pairingLanguagesStyles.title}>{t('pairing_languages_page.title')}</h1>
+                    <p className={pairingLanguagesStyles.subtitle}>{t('pairing_languages_page.subtitle')}</p>
 
                     <div className={pairingLanguagesStyles['languages-container']}>
                         {languages
                             .filter((language) => language.enabled)
                             .map((language) => {
                                 return (
-                                    <button
-                                        key={language.code}
-                                        className={pairingLanguagesStyles['language-container']}
-                                        style={{
-                                            backgroundColor:
-                                                selectedLaguage?.code === language.code
-                                                    ? configuration.secondaryDarkColor
-                                                    : configuration.secondaryColor,
-                                        }}
-                                        onClick={() => setSelectedLanguage(language)}
-                                    >
-                                        <span className={pairingLanguagesStyles.flag}>
-                                            {codeCountryToFlag(language.code.toLowerCase())}
-                                        </span>
-                                        <span className={pairingLanguagesStyles.country}>{language.name}</span>
-                                    </button>
+                                    <FlagBubble
+                                        isSelected={selectedLaguage?.code === language.code}
+                                        language={language}
+                                        onPressed={setSelectedLanguage}
+                                    />
                                 );
                             })}
-                        {profileSignUp.university?.isCentral && (
+                        {!profileSignUp.university?.isCentral && (
                             <button
                                 style={{ background: 'none' }}
                                 onClick={() => history.push('/signup/pairing/other-languages')}
                             >
-                                <img
-                                    alt="plus"
-                                    className={pairingLanguagesStyles['language-container']}
-                                    src={'assets/plus.svg'}
-                                />
+                                <img alt="plus" className={pairingLanguagesStyles.image} src={'assets/plus.svg'} />
                             </button>
                         )}
                     </div>
@@ -98,7 +84,7 @@ const PairingLaguages: React.FC = () => {
                         disabled={!selectedLaguage}
                         onClick={continueSignUp}
                     >
-                        {t('signup_pairing_languages_page.validate_button')}
+                        {t('pairing_languages_page.validate_button')}
                     </button>
                 </div>
             </div>

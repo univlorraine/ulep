@@ -67,7 +67,7 @@ class ProfileSignUp {
 
     private _timezone?: string;
 
-    private _university?: University;
+    private _university?: University | undefined;
 
     constructor() {}
 
@@ -163,7 +163,7 @@ class ProfileSignUp {
         return this._university;
     }
 
-    set university(university: University) {
+    set university(university: University | undefined) {
         this._university = university;
     }
 

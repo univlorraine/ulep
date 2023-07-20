@@ -55,6 +55,42 @@
         "subtitle": "Connecte-toi avec tes identifiants de l’université pour continuer à utiliser l’application",
         "title": "Se connecter"
     },
+    "pairing_languages_page": {
+        "subtitle": "Quelle langue veux-tu travailler avec ton tandem ?",
+        "title": "Choix de la langue",
+        "validate_button": "Valider et continuer"
+    },
+    "pairing_other_languages_page": {
+        "joker_checkbox": "Langue joker",
+        "joker_description": "Tu souhaites aider quelqu'un avec son français tout en découvrant une langue étrangère",
+        "selected_language": {
+            "explain_first": "Nous sommes désolés, la langue hindi n'est pas disponible pour le moment.",
+            "explain_second": "Trouver un tandem pourrait prendre plus de temps et tu seras sur liste d'attente.",
+            "explain_third": "Nous travaillons pour ajouter de nouvelles langues, mais cela pourrait prendre jusqu'à un an ou plus si nous ne trouvons pas suffisamment de participants. Merci pour ta patience et ta compréhension.",
+            "language": "Langue souhaitée",
+            "subtitle": "Quelle langue veux-tu travailler avec ton tandem ?",
+            "title": "Choix de la langue",
+            "validate_button": "Demander l'ajout de cette langue"
+        },
+        "subtitle": "Choisis tes préférences",
+        "title": "Choix de la langue",
+        "validate_button": "Valider et continuer"
+    },
+    "pairing_unavailable_language_page": {
+        "luck": "Bonne chance !",
+        "next_button": "Choisir une autre langue",
+        "next_title": "Je souhaite choisir une autre langue",
+        "not_alone": {
+            "description": "Cependant, Il semblerait que trouver un tandem pour cette langue soit plus complexe. Dans l’attente, nous te proposons de choisir une langue disponible ou de consulter les ressources pédagogiques disponibles",
+            "subtitle": "Plusieurs personnes ont fait une demande spéciale pour",
+            "title": "Tu n’es pas seul·e,",
+            "validate_button": "Continuer"
+        },
+        "ressource_button": "VOIR LES RESSOURCES DISPONIBLES",
+        "ressource_title": "Les ressources pour m’aider",
+        "subtitle": "Trouve des ressources et des groupes de discussion en ligne pour apprendre la langue par toi-même.",
+        "title": "Langue non disponible en tandem"
+    },
     "reset_password_page": {
         "button": "Valider",
         "confirm_password_title": "Confirmer le nouveau mot de passe",
@@ -165,27 +201,6 @@
         "student_role": "Étudiant·e",
         "title": "Mon profil",
         "university_title": "Établissement",
-        "validate_button": "Valider et continuer"
-    },
-    "signup_pairing_languages_page": {
-        "subtitle": "Quelle langue veux-tu travailler avec ton tandem ?",
-        "title": "Choix de la langue",
-        "validate_button": "Valider et continuer"
-    },
-    "signup_pairing_other_languages_page": {
-        "joker_checkbox": "Langue joker",
-        "joker_description": "Tu souhaites aider quelqu'un avec son français tout en découvrant une langue étrangère",
-        "selected_language": {
-            "explain_first": "Nous sommes désolés, la langue hindi n'est pas disponible pour le moment.",
-            "explain_second": "Trouver un tandem pourrait prendre plus de temps et tu seras sur liste d'attente.",
-            "explain_third": "Nous travaillons pour ajouter de nouvelles langues, mais cela pourrait prendre jusqu'à un an ou plus si nous ne trouvons pas suffisamment de participants. Merci pour ta patience et ta compréhension.",
-            "language": "Langue souhaitée",
-            "subtitle": "Quelle langue veux-tu travailler avec ton tandem ?",
-            "title": "Choix de la langue",
-            "validate_button": "Demander l'ajout de cette langue"
-        },
-        "subtitle": "Choisis tes préférences",
-        "title": "Choix de la langue",
         "validate_button": "Valider et continuer"
     }
 }

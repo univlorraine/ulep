@@ -8,6 +8,7 @@ import Home from '../pages/HomePage';
 import LoginPage from '../pages/LoginPage';
 import PairingLaguages from '../pages/PairingLaguages';
 import PairingOtherLanguagesPage from '../pages/PairingOtherLanguagesPage';
+import PairingUnavailableLanguagePage from '../pages/PairingUnavailableLanguagePage';
 import ResetPasswordPage from '../pages/ResetPasswordPage';
 import SignUpAvailabilitiesPage from '../pages/SignUpAvailabilitiesPage';
 import SignUpBiographyPage from '../pages/SignUpBiographyPage';
@@ -35,6 +36,15 @@ const OfflineRouter: React.FC = () => (
         </Route>
         <Route exact path="/login">
             <LoginPage />
+        </Route>
+        <Route exact path="/signup/pairing/languages">
+            <PairingLaguages />
+        </Route>
+        <Route exact path="/signup/pairing/other-languages">
+            <PairingOtherLanguagesPage />
+        </Route>
+        <Route exact path="/signup/pairing/unavailable-language">
+            <PairingUnavailableLanguagePage />
         </Route>
         <Route exact path="/reset-password/:id">
             <ResetPasswordPage />
@@ -65,12 +75,6 @@ const OfflineRouter: React.FC = () => (
         </Route>
         <Route exact path="/signup/informations">
             <SignUpInformationsPage />
-        </Route>
-        <Route exact path="/signup/pairing/languages">
-            <PairingLaguages />
-        </Route>
-        <Route exact path="/signup/pairing/other-languages">
-            <PairingOtherLanguagesPage />
         </Route>
     </IonRouterOutlet>
 );

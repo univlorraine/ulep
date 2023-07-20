@@ -1,29 +1,13 @@
-.country {
-    color: #000;
-    font-family: Maven Pro;
-    font-size: 13px;
-    font-style: normal;
-    font-weight: 500;
-    line-height: 17.3px;
-    text-align: center;
-}
-
-.flag {
-    text-align: center;
-    font-size: 39.354px;
-    font-style: normal;
-    font-weight: 900;
-    line-height: 24.737px;
-}
-
-.language-container {
+.image {
     align-items: center;
     border-radius: 50%;
     display: flex;
     flex-direction: column;
     height: 95px;
     justify-content: center;
-    margin: 10px;
+    margin: 5px;
+    min-height: 95px;
+    min-height: 95px;
     width: 95px;
 }
 
