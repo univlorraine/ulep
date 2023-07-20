@@ -98,11 +98,7 @@ const SignUpBiographyPage: React.FC = () => {
                     </div>
                 </div>
                 <div className={`${biographyStyles['bottom-container']} large-margin-top large-margin-bottom`}>
-                    <button
-                        className={`primary-button $false ? 'disabled' : ''}`}
-                        disabled={false}
-                        onClick={continueSignUp}
-                    >
+                    <button className={`primary-button`} onClick={continueSignUp}>
                         {t('signup_biography_page.validate_button')}
                     </button>
                 </div>

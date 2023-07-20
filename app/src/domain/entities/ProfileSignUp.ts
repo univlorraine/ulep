@@ -49,6 +49,8 @@ class ProfileSignUp {
 
     private _interests?: string[];
 
+    private _learningLanguage?: Language;
+
     private _lastname?: string;
 
     private _nativeLanguage?: Language;
@@ -125,6 +127,10 @@ class ProfileSignUp {
         this._lastname = lastname;
     }
 
+    set learningLanguage(learningLanguage: Language) {
+        this._learningLanguage = learningLanguage;
+    }
+
     set nativeLanguage(nativeLanguage: Language) {
         this._nativeLanguage = nativeLanguage;
     }
@@ -151,6 +157,10 @@ class ProfileSignUp {
 
     set staffFunction(staffFunction: string) {
         this._staffFunction = staffFunction;
+    }
+
+    get university(): University | undefined {
+        return this._university;
     }
 
     set university(university: University) {

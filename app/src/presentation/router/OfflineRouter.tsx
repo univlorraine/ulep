@@ -9,13 +9,14 @@ import LoginPage from '../pages/LoginPage';
 import ResetPasswordPage from '../pages/ResetPasswordPage';
 import SignUpAvailabilitiesPage from '../pages/SignUpAvailabilitiesPage';
 import SignUpBiographyPage from '../pages/SignUpBiographyPage';
+import SignupFinalPage from '../pages/SignUpFinalPage';
 import SignUpFrequencyPage from '../pages/SignUpFrequencyPage';
 import SignUpGoals from '../pages/SignUpGoalsPage';
 import SignUpInformationsPage from '../pages/SignUpInformationsPage';
 import SignUpInterestsPage from '../pages/SignUpInterestsPage';
 import SignUpLanguagesPage from '../pages/SignUpLanguagesPage';
 import SignUpPage from '../pages/SignUpPage';
-import SignupFinalPage from '../pages/SignUpFinalPage';
+import SignUpPairingLaguages from '../pages/SignUpPairingLaguages';
 
 const OfflineRouter: React.FC = () => (
     <IonRouterOutlet>
@@ -63,6 +64,9 @@ const OfflineRouter: React.FC = () => (
         </Route>
         <Route exact path="/signup/informations">
             <SignUpInformationsPage />
+        </Route>
+        <Route exact path="/signup/pairing/languages">
+            <SignUpPairingLaguages />
         </Route>
     </IonRouterOutlet>
 );

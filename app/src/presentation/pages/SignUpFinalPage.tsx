@@ -23,7 +23,7 @@ const SignupFinalPage: React.FC = () => {
                 )}`}</h1>
                 <img className={styles.image} alt="avatar" src={profileSignUp.profilePicture} />
                 <p className={styles.description}>{t('signup_end_page.description')}</p>
-                <button className="primary-button" onClick={() => history.push('/')}>
+                <button className="primary-button" onClick={() => history.push('/signup/pairing/languages')}>
                     {t('signup_end_page.validate_button')}
                 </button>
             </div>
