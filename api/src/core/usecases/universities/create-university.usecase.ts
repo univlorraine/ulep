@@ -6,11 +6,11 @@ import {
   UNIVERSITY_REPOSITORY,
 } from '../../../providers/providers.module';
 import { UniversityAlreadyExists } from '../../errors/RessourceAlreadyExists';
-import { LanguageRepository } from 'src/core/ports/language.repository';
+import { LanguageRepository } from '../../ports/language.repository';
 import {
   LanguageDoesNotExist,
   UniversityDoesNotExist,
-} from 'src/core/errors/RessourceDoesNotExist';
+} from '../../errors/RessourceDoesNotExist';
 
 export class CreateUniversityCommand {
   name: string;

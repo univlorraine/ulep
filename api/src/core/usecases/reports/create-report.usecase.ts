@@ -1,13 +1,13 @@
+import { Inject, Injectable } from '@nestjs/common';
 import { ReportRepository } from '../../ports/report.repository';
 import { Report, ReportCategory } from '../../models/report';
-import { RessourceDoesNotExist } from 'src/core/errors/RessourceDoesNotExist';
-import { Inject, Injectable } from '@nestjs/common';
+import { RessourceDoesNotExist } from '../../errors/RessourceDoesNotExist';
 import {
   REPORT_REPOSITORY,
   USER_REPOSITORY,
-} from 'src/providers/providers.module';
-import { UserRepository } from 'src/core/ports/user.repository';
-import { User } from 'src/core/models/user';
+} from '../../../providers/providers.module';
+import { UserRepository } from '../../ports/user.repository';
+import { User } from '../../models/user';
 
 export type CreateReportCommand = {
   id: string;

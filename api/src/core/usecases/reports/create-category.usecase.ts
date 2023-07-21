@@ -1,7 +1,7 @@
-import { RessourceAlreadyExists } from 'src/core/errors/RessourceAlreadyExists';
+import { RessourceAlreadyExists } from '../../errors/RessourceAlreadyExists';
 import { ReportRepository } from '../../ports/report.repository';
 import { Inject, Injectable } from '@nestjs/common';
-import { REPORT_REPOSITORY } from 'src/providers/providers.module';
+import { REPORT_REPOSITORY } from '../../../providers/providers.module';
 
 export type CreateReportCategoryCommand = {
   name: string;

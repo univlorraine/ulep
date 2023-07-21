@@ -1,7 +1,7 @@
 import { Inject, Injectable } from '@nestjs/common';
 import { RessourceDoesNotExist } from '../../errors/RessourceDoesNotExist';
 import { ReportRepository } from '../../ports/report.repository';
-import { REPORT_REPOSITORY } from 'src/providers/providers.module';
+import { REPORT_REPOSITORY } from '../../../providers/providers.module';
 
 export type DeleteReportCategoryCommand = {
   id: string;

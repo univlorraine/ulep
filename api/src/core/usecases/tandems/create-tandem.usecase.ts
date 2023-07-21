@@ -1,10 +1,10 @@
 import { Inject, Injectable, Logger } from '@nestjs/common';
-import { ProfileDoesNotExist } from 'src/core/errors/RessourceDoesNotExist';
-import { ProfileIsAlreadyInActiveTandemError } from 'src/core/errors/TandemExceptions';
-import { Profile } from 'src/core/models/profile';
-import { Tandem } from 'src/core/models/tandem';
-import { ProfileRepository } from 'src/core/ports/profile.repository';
-import { TandemsRepository } from 'src/core/ports/tandems.repository';
+import { ProfileDoesNotExist } from '../../errors/RessourceDoesNotExist';
+import { ProfileIsAlreadyInActiveTandemError } from '../../errors/TandemExceptions';
+import { Profile } from '../../models/profile';
+import { Tandem } from '../../models/tandem';
+import { ProfileRepository } from '../../ports/profile.repository';
+import { TandemsRepository } from '../../ports/tandems.repository';
 import {
   PROFILE_REPOSITORY,
   TANDEM_REPOSITORY,

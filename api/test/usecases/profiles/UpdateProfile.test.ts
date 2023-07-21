@@ -5,7 +5,6 @@ import {
   Profile,
   Role,
 } from '../../../src/core/models/profile';
-import { InMemoryCountryRepository } from '../../../src/providers/persistance/repositories/in-memory-country-repository';
 import { InMemoryProfileRepository } from '../../../src/providers/persistance/repositories/in-memory-profile-repository';
 import { InMemoryUniversityRepository } from '../../../src/providers/persistance/repositories/in-memory-university-repository';
 import {
@@ -13,7 +12,6 @@ import {
   UniversityDoesNotExist,
 } from '../../../src/core/errors/RessourceDoesNotExist';
 import { UpdateProfileUsecase } from '../../../src/core/usecases/profiles/update-profile.usecase';
-import seedDefinedNumberOfCountries from '../../seeders/countries';
 import seedDefinedNumberOfUniversities from '../../seeders/universities';
 import seedDefinedNumberOfUsers from '../../seeders/users';
 import seedDefinedUsersProfiles from '../../seeders/profiles';
@@ -21,18 +19,12 @@ import seedDefinedUsersProfiles from '../../seeders/profiles';
 describe('UpdateProfile', () => {
   const profileRepository = new InMemoryProfileRepository();
   const universityRepository = new InMemoryUniversityRepository();
-  const countryRepository = new InMemoryCountryRepository();
   const updateProfileUsecase = new UpdateProfileUsecase(
     profileRepository,
     universityRepository,
   );
 
   const users = seedDefinedNumberOfUsers(10);
-
-  const countries = seedDefinedNumberOfCountries(
-    10,
-    (x: number) => `uuid-${x}`,
-  );
 
   const universities = seedDefinedNumberOfUniversities(
     10,
@@ -42,9 +34,6 @@ describe('UpdateProfile', () => {
   beforeEach(() => {
     profileRepository.reset();
     universityRepository.reset();
-    countryRepository.reset();
-
-    countryRepository.init(countries);
     universityRepository.init(universities);
   });
 
@@ -54,28 +43,25 @@ describe('UpdateProfile', () => {
     const instance = new Profile({
       id: 'uuid-1',
       user: user,
-      firstname: 'Jane',
-      lastname: 'Doe',
-      age: 25,
       role: Role.STUDENT,
-      gender: Gender.FEMALE,
       university: universities[0],
-      nationality: countries[0],
-      nativeLanguage: {
-        code: 'FR',
+      personalInformation: {
+        age: 25,
+        gender: Gender.FEMALE,
+        interests: new Set(['music', 'sport']),
       },
-      learningLanguage: {
-        code: 'EN',
+      languages: {
+        nativeLanguage: 'FR',
+        masteredLanguages: [],
+        learningLanguage: 'EN',
+        learningLanguageLevel: 'B2',
       },
-      learningLanguageLevel: 'B2',
-      masteredLanguages: [],
-      goals: new Set([Goal.ORAL_PRACTICE]),
-      interests: new Set(['music', 'sport']),
       preferences: {
-        meetingFrequency: MeetingFrequency.ONCE_A_WEEK,
-        sameGender: true,
+        learningType: 'ETANDEM',
+        meetingFrequency: MeetingFrequency.TWICE_A_WEEK,
+        sameGender: false,
+        goals: new Set([Goal.SPEAK_LIKE_NATIVE]),
       },
-      bios: 'Lorem ipsum dolor sit amet',
     });
 
     profileRepository.init([instance]);
