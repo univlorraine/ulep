@@ -1,0 +1,39 @@
+.image {
+    align-items: center;
+    border-radius: 50%;
+    display: flex;
+    flex-direction: column;
+    height: 95px;
+    justify-content: center;
+    margin: 5px;
+    min-height: 95px;
+    min-height: 95px;
+    width: 95px;
+}
+
+.languages-container {
+    display: flex;
+    flex-wrap: wrap;
+    margin-bottom: 30px;
+}
+
+.subtitle {
+    color: #000;
+    font-family: 'Maven Pro', sans-serif;
+    font-size: 16px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: 20px;
+    text-align: center;
+}
+
+.title {
+    align-self: center;
+    color: #000;
+    text-align: center;
+    font-family: 'Roboto', sans-serif;
+    font-size: 37px;
+    font-style: normal;
+    font-weight: 700;
+    line-height: 40px;
+}

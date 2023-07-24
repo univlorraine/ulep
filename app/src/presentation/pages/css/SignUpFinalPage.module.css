@@ -4,12 +4,12 @@
     flex-direction: column;
     justify-content: center;
     height: 100%;
-    padding: 80px 110px;
+    padding: 0px 20px;
 }
 
 .description {
     color: #000;
-    font-family: Maven Pro;
+    font-family: 'Maven Pro';
     font-size: 16px;
     font-style: normal;
     font-weight: 400;
@@ -26,7 +26,7 @@
 
 .title {
     color: #000;
-    font-family: Roboto;
+    font-family: 'Roboto';
     font-size: 37px;
     font-style: normal;
     font-weight: 700;

@@ -1,0 +1,74 @@
+import { useState } from 'react';
+import { useTranslation } from 'react-i18next';
+import Language from '../../../domain/entities/Language';
+import Checkbox from '../Checkbox';
+import pairingOtherLanguagesStyles from './OtherLanguageContent.module.css';
+
+interface OtherLanguageContentProps {
+    languages: Language[];
+    onLanguageSelected: (language: Language) => void;
+}
+
+const OtherLanguageContent: React.FC<OtherLanguageContentProps> = ({ languages, onLanguageSelected }) => {
+    const { t } = useTranslation();
+    const [selectedLaguage, setSelectedLanguage] = useState<Language>();
+
+    const nextStep = () => {
+        if (!selectedLaguage) {
+            return null;
+        }
+
+        return onLanguageSelected(selectedLaguage);
+    };
+    return (
+        <>
+            <div className={pairingOtherLanguagesStyles.content}>
+                <h1 className={pairingOtherLanguagesStyles.title}>{t('signup_pairing_other_languages_page.title')}</h1>
+                <p className={pairingOtherLanguagesStyles.subtitle}>
+                    {t('signup_pairing_other_languages_page.subtitle')}
+                </p>
+
+                <div className={pairingOtherLanguagesStyles['joker-container']}>
+                    <img alt="dice" src="/assets/dice.svg" />
+                    <div className={pairingOtherLanguagesStyles['joker-text-container']}>
+                        <p className={pairingOtherLanguagesStyles['joker-description']}>
+                            {t('signup_pairing_other_languages_page.joker_description')}
+                        </p>
+                        <Checkbox
+                            isSelected={selectedLaguage?.code === 'joker'}
+                            onPressed={() => setSelectedLanguage(new Language('joker', 'joker', true))}
+                            name={t('signup_pairing_other_languages_page.joker_checkbox')}
+                            textClass={pairingOtherLanguagesStyles['checkbox-text']}
+                        />
+                    </div>
+                </div>
+
+                <div className={pairingOtherLanguagesStyles['other-checkbox-container']}>
+                    {languages.map((language) => {
+                        return (
+                            <div key={language.code} style={{ marginBottom: 20 }}>
+                                <Checkbox
+                                    isSelected={language.code === selectedLaguage?.code}
+                                    onPressed={() => setSelectedLanguage(language)}
+                                    name={language.name}
+                                    textClass={pairingOtherLanguagesStyles['checkbox-text']}
+                                />
+                            </div>
+                        );
+                    })}
+                </div>
+            </div>
+            <div className={`${pairingOtherLanguagesStyles['bottom-container']} large-margin-top large-margin-bottom`}>
+                <button
+                    className={`primary-button ${!selectedLaguage ? 'disabled' : ''}`}
+                    disabled={!selectedLaguage}
+                    onClick={nextStep}
+                >
+                    {t('signup_pairing_other_languages_page.validate_button')}
+                </button>
+            </div>
+        </>
+    );
+};
+
+export default OtherLanguageContent;

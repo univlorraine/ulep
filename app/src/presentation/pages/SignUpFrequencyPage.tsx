@@ -26,12 +26,12 @@ const SignUpFrequencyPage: React.FC = () => {
     const continueSignUp = async () => {
         updateProfileSignUp({ frequency });
 
-        history.push('./signup/end');
+        history.push('/signup/end');
     };
 
     return (
         <WebLayoutCentered
-        backgroundIconColor={configuration.primaryBackgroundImageColor}
+            backgroundIconColor={configuration.primaryBackgroundImageColor}
             headerColor={configuration.primaryColor}
             headerPercentage={97}
             headerTitle={t('global.create_account_title')}
@@ -44,6 +44,7 @@ const SignUpFrequencyPage: React.FC = () => {
                     {frequencies.map((freq) => {
                         return (
                             <button
+                                key={freq}
                                 className={frequencyStyle['frequency-container']}
                                 onClick={() => setFrequency(freq)}
                                 style={{ background: freq !== frequency ? '#F2F4F7' : '#FDEE66' }}
