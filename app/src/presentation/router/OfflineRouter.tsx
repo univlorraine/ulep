@@ -11,6 +11,7 @@ import PairingLaguagesPage from '../pages/PairingLaguagesPage';
 import PairingLevelPage from '../pages/PairingLevelPage';
 import PairingOtherLanguagesPage from '../pages/PairingOtherLanguagesPage';
 import PairingPedagogyPage from '../pages/PairingPedagogyPage';
+import PairingSelectLevelPage from '../pages/PairingSelectLevelPage';
 import PairingUnavailableLanguagePage from '../pages/PairingUnavailableLanguagePage';
 import ResetPasswordPage from '../pages/ResetPasswordPage';
 import SignUpAvailabilitiesPage from '../pages/SignUpAvailabilitiesPage';
@@ -54,6 +55,9 @@ const OfflineRouter: React.FC = () => (
         </Route>
         <Route exact path="/signup/pairing/other-languages">
             <PairingOtherLanguagesPage />
+        </Route>
+        <Route exact path="/signup/pairing/level/select">
+            <PairingSelectLevelPage />
         </Route>
         <Route exact path="/signup/pairing/unavailable-language">
             <PairingUnavailableLanguagePage />
