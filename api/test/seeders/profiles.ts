@@ -1,12 +1,6 @@
 import { faker } from '@faker-js/faker';
 import { User } from '../../src/core/models/user';
-import {
-  Gender,
-  Goal,
-  MeetingFrequency,
-  Profile,
-  Role,
-} from '../../src/core/models/profile';
+import { Gender, Profile, Role } from '../../src/core/models/profile';
 import { University } from '../../src/core/models/university';
 
 const seedDefinedUsersProfiles = (user: User[]): Profile[] => {
@@ -47,17 +41,17 @@ const seedDefinedUsersProfiles = (user: User[]): Profile[] => {
           Gender.FEMALE,
           Gender.OTHER,
         ]),
-        interests: new Set(['music', 'sport']),
+        interests: ['music', 'sport'],
         bio: 'Lorem ipsum dolor sit amet',
       },
       preferences: {
         learningType: 'ETANDEM',
         meetingFrequency: faker.helpers.arrayElement([
-          MeetingFrequency.ONCE_A_WEEK,
-          MeetingFrequency.TWICE_A_WEEK,
+          'ONCE_A_WEEK',
+          'TWICE_A_WEEK',
         ]),
         sameGender: faker.datatype.boolean(),
-        goals: new Set([Goal.ORAL_PRACTICE]),
+        goals: ['ORAL_PRACTICE'],
       },
     });
 

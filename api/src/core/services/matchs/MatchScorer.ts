@@ -48,8 +48,10 @@ export class MatchScorer implements IMatchScorer {
       throw new DomainError('Cannot compute match score between the same profile.');
     }
 
+    const isDiscovery = !profile1.languages.learningLanguage || !profile2.languages.learningLanguage;
+
     const scores: MatchScores = {
-      level: this.computeLanguageLevel(profile1, profile2),
+      level: this.computeLanguageLevel(profile1, profile2, isDiscovery),
       age: this.computeAgeBonus(profile1, profile2),
       status: this.computeSameRolesBonus(profile1, profile2),
       goals: this.computeSameGoalsBonus(profile1, profile2),
@@ -148,7 +150,10 @@ export class MatchScorer implements IMatchScorer {
 
   // Apply bonus if profiles share the same goals
   private computeSameGoalsBonus(profile1: Profile, profile2: Profile): number {
-    const similarity = this.computeSimilarity(profile1.preferences.goals, profile2.preferences.goals);
+    const similarity = this.computeSimilarity(
+      new Set(profile1.preferences.goals),
+      new Set(profile2.preferences.goals),
+    );
 
     return this.coeficients.goals * similarity;
   }
@@ -159,8 +164,8 @@ export class MatchScorer implements IMatchScorer {
     profile2: Profile,
   ): number {
     const similarity = this.computeSimilarity(
-      profile1.personalInformation.interests,
-      profile2.personalInformation.interests,
+      new Set(profile1.personalInformation.interests),
+      new Set(profile2.personalInformation.interests),
     );
 
     return this.coeficients.interests * similarity;

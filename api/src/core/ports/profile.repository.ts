@@ -3,8 +3,10 @@ import { Collection } from '../../shared/types/collection';
 import { Profile } from '../models/profile';
 
 export type ProfileFilters = {
-  nativeLanguageCode: string;
-  learningLanguageCode: string;
+  nativeLanguageCode: {
+    equals?: string;
+    not?: string;
+  };
 };
 
 export interface ProfileRepository {
@@ -12,9 +14,11 @@ export interface ProfileRepository {
 
   ofUser: (id: string) => Promise<Profile | null>;
 
-  availableProfiles: () => Promise<Profile[]>;
+  availableProfiles: (filters?: ProfileFilters) => Promise<Profile[]>;
 
-  save: (profile: Profile) => Promise<void>;
+  create: (profile: Profile) => Promise<void>;
+
+  update: (profile: Profile) => Promise<void>;
 
   findAll: (
     offset?: number,

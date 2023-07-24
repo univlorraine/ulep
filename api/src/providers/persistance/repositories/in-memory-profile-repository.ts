@@ -26,8 +26,15 @@ export class InMemoryProfileRepository implements ProfileRepository {
     return this.#profiles;
   }
 
-  async save(profile: Profile): Promise<void> {
+  async create(profile: Profile): Promise<void> {
     this.#profiles.push(profile);
+  }
+
+  async update(profile: Profile): Promise<void> {
+    const index = this.#profiles.findIndex((p) => p.id === profile.id);
+    if (index !== -1) {
+      this.#profiles[index] = profile;
+    }
   }
 
   async findAll(offset?: number, limit?: number): Promise<Collection<Profile>> {

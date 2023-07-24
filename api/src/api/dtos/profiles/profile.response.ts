@@ -1,11 +1,5 @@
 import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
-import {
-  Gender,
-  Goal,
-  MeetingFrequency,
-  Profile,
-  Role,
-} from '../../../core/models/profile';
+import { Gender, Profile, Role } from '../../../core/models/profile';
 import { Expose, Transform } from 'class-transformer';
 
 class NativeLanguageResponse {
@@ -19,9 +13,9 @@ class NativeLanguageResponse {
 }
 
 class LearningLanguageResponse {
-  @ApiProperty({ type: 'string', example: 'FR' })
+  @ApiPropertyOptional({ type: 'string', example: 'FR' })
   @Expose({ groups: ['read'] })
-  code: string;
+  code?: string;
 
   @ApiProperty({ type: 'string', example: 'A1' })
   @Expose({ groups: ['read'] })
@@ -41,13 +35,13 @@ export class ProfileResponse {
   @Expose({ groups: ['profile:read'] })
   email: string;
 
-  @ApiProperty({ type: 'string', example: 'John' })
+  @ApiPropertyOptional({ type: 'string', example: 'John' })
   @Expose({ groups: ['read'] })
-  firstname: string;
+  firstname?: string;
 
-  @ApiProperty({ type: 'string', example: 'Doe' })
+  @ApiPropertyOptional({ type: 'string', example: 'Doe' })
   @Expose({ groups: ['read'] })
-  lastname: string;
+  lastname?: string;
 
   @ApiProperty({ type: 'number', example: 20 })
   @Expose({ groups: ['read'] })
@@ -75,13 +69,13 @@ export class ProfileResponse {
   @Transform(({ value }) => new LearningLanguageResponse(value))
   learningLanguage: LearningLanguageResponse;
 
-  @ApiProperty({ enum: Goal, isArray: true })
+  @ApiProperty({ type: 'string', isArray: true })
   @Expose({ groups: ['read'] })
-  goals: Goal[];
+  goals: string[];
 
-  @ApiProperty({ enum: MeetingFrequency })
+  @ApiProperty({ type: 'string' })
   @Expose({ groups: ['read'] })
-  meetingFrequency: MeetingFrequency;
+  meetingFrequency: string;
 
   @ApiProperty({ isArray: true, example: ['music', 'sport'] })
   @Expose({ groups: ['read'] })
@@ -116,8 +110,8 @@ export class ProfileResponse {
         code: profile.languages.learningLanguage,
         level: profile.languages.learningLanguageLevel,
       },
-      goals: Array.from(profile.preferences.goals),
-      interests: Array.from(profile.personalInformation.interests),
+      goals: profile.preferences.goals,
+      interests: profile.personalInformation.interests,
       meetingFrequency: profile.preferences.meetingFrequency,
       bios: profile.personalInformation.bio,
       avatar:

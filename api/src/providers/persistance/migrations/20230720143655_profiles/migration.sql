@@ -29,10 +29,6 @@ CREATE TABLE "learning_preferences" (
     "id" TEXT NOT NULL,
     "type" TEXT NOT NULL,
     "sameGender" BOOLEAN NOT NULL,
-    "remote" BOOLEAN NOT NULL DEFAULT true,
-    "goal" TEXT NOT NULL,
-    "frequency" TEXT NOT NULL,
-    "availability" JSONB NOT NULL,
 
     CONSTRAINT "learning_preferences_pkey" PRIMARY KEY ("id")
 );

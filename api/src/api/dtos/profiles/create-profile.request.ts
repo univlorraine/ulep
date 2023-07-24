@@ -1,20 +1,15 @@
-import { ApiProperty } from '@nestjs/swagger';
+import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
 import {
   ArrayMaxSize,
   IsEnum,
   IsIn,
   IsInt,
   IsNotEmpty,
+  IsOptional,
   IsUUID,
   Min,
 } from 'class-validator';
-import {
-  Goal,
-  CEFRLevel,
-  MeetingFrequency,
-  Role,
-  Gender,
-} from '../../../core/models/profile';
+import { CEFRLevel, Role, Gender } from '../../../core/models/profile';
 import { CreateProfileCommand } from 'src/core/usecases/profiles/create-profile.usecase';
 
 export class CreateProfileRequest implements Omit<CreateProfileCommand, 'id'> {
@@ -39,11 +34,21 @@ export class CreateProfileRequest implements Omit<CreateProfileCommand, 'id'> {
   @IsUUID()
   university: string;
 
-  @ApiProperty()
+  @ApiProperty({ type: 'string', example: 'FR' })
   @IsNotEmpty()
-  learningLanguage: string;
+  nativeLanguage: string;
 
-  @ApiProperty()
+  @ApiPropertyOptional({ type: 'string', example: ['FR'] })
+  @IsNotEmpty({ each: true })
+  @IsOptional()
+  masteredLanguages?: string[];
+
+  @ApiPropertyOptional({ type: 'string', example: 'EN' })
+  @IsNotEmpty()
+  @IsOptional()
+  learningLanguage?: string;
+
+  @ApiProperty({ type: 'string', example: 'B2' })
   @IsIn(['A0', 'A1', 'A2', 'B1', 'B2', 'C1', 'C2'])
   proficiencyLevel: CEFRLevel;
 
@@ -51,20 +56,22 @@ export class CreateProfileRequest implements Omit<CreateProfileCommand, 'id'> {
   @IsIn(['ETANDEM', 'TANDEM', 'BOTH'])
   learningType: 'ETANDEM' | 'TANDEM' | 'BOTH';
 
-  @ApiProperty()
+  @ApiProperty({
+    type: 'string',
+    isArray: true,
+    example: ['SPEAK_LIKE_NATIVE'],
+  })
+  @ArrayMaxSize(5)
+  @IsNotEmpty({ each: true })
+  goals: string[];
+
+  @ApiProperty({ type: 'string', example: 'ONCE_A_WEEK' })
   @IsNotEmpty()
-  nativeLanguage: string;
-
-  @ApiProperty({ enum: Goal, isArray: true })
-  @IsEnum(Goal, { each: true })
-  goals: Goal[];
-
-  @ApiProperty({ enum: MeetingFrequency })
-  @IsEnum(MeetingFrequency)
-  meetingFrequency: MeetingFrequency;
+  meetingFrequency: string;
 
   @ApiProperty({ example: ['music', 'sports', 'movies'] })
   @ArrayMaxSize(5)
+  @IsNotEmpty({ each: true })
   interests: string[];
 
   @ApiProperty()

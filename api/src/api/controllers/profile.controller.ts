@@ -113,8 +113,8 @@ export class ProfileController {
     const command: UpdateProfileCommand = {
       id,
       ...body,
-      goals: new Set(body.goals),
     };
+
     const profile = await this.updateProfileUsecase.execute(command);
 
     return ProfileResponse.fromDomain(profile);

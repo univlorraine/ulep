@@ -1,28 +1,13 @@
-import {
-  Gender,
-  Goal,
-  MeetingFrequency,
-  Profile,
-  Role,
-} from '../../../src/core/models/profile';
+import { Gender, Profile, Role } from '../../../src/core/models/profile';
 import { InMemoryProfileRepository } from '../../../src/providers/persistance/repositories/in-memory-profile-repository';
-import { InMemoryUniversityRepository } from '../../../src/providers/persistance/repositories/in-memory-university-repository';
-import {
-  ProfileDoesNotExist,
-  UniversityDoesNotExist,
-} from '../../../src/core/errors/RessourceDoesNotExist';
+import { ProfileDoesNotExist } from '../../../src/core/errors/RessourceDoesNotExist';
 import { UpdateProfileUsecase } from '../../../src/core/usecases/profiles/update-profile.usecase';
 import seedDefinedNumberOfUniversities from '../../seeders/universities';
 import seedDefinedNumberOfUsers from '../../seeders/users';
-import seedDefinedUsersProfiles from '../../seeders/profiles';
 
 describe('UpdateProfile', () => {
   const profileRepository = new InMemoryProfileRepository();
-  const universityRepository = new InMemoryUniversityRepository();
-  const updateProfileUsecase = new UpdateProfileUsecase(
-    profileRepository,
-    universityRepository,
-  );
+  const updateProfileUsecase = new UpdateProfileUsecase(profileRepository);
 
   const users = seedDefinedNumberOfUsers(10);
 
@@ -33,8 +18,6 @@ describe('UpdateProfile', () => {
 
   beforeEach(() => {
     profileRepository.reset();
-    universityRepository.reset();
-    universityRepository.init(universities);
   });
 
   it('should update a profile', async () => {
@@ -48,7 +31,7 @@ describe('UpdateProfile', () => {
       personalInformation: {
         age: 25,
         gender: Gender.FEMALE,
-        interests: new Set(['music', 'sport']),
+        interests: ['music', 'sport'],
       },
       languages: {
         nativeLanguage: 'FR',
@@ -58,9 +41,9 @@ describe('UpdateProfile', () => {
       },
       preferences: {
         learningType: 'ETANDEM',
-        meetingFrequency: MeetingFrequency.TWICE_A_WEEK,
+        meetingFrequency: 'TWICE_A_WEEK',
         sameGender: false,
-        goals: new Set([Goal.SPEAK_LIKE_NATIVE]),
+        goals: ['ORAL_PRACTICE'],
       },
     });
 
@@ -68,37 +51,21 @@ describe('UpdateProfile', () => {
 
     const profile = await updateProfileUsecase.execute({
       id: instance.id,
-      university: universities[8].id,
+      proficiencyLevel: 'C1',
     });
 
     expect(profile.id).toEqual(profile.id);
-    expect(profile.university.id).toEqual(universities[8].id);
+    expect(profile.languages.learningLanguageLevel).toEqual('C1');
   });
 
   it('should throw an error if the profile does not exist', async () => {
     try {
       await updateProfileUsecase.execute({
         id: 'uuid-that-does-not-exist',
-        university: universities[8].id,
-        meetingFrequency: MeetingFrequency.TWICE_A_WEEK,
+        proficiencyLevel: 'C1',
       });
     } catch (error) {
       expect(error).toBeInstanceOf(ProfileDoesNotExist);
-    }
-  });
-
-  it('should throw an error if the university does not exist', async () => {
-    try {
-      const profiles = seedDefinedUsersProfiles(users);
-      profileRepository.init(profiles);
-
-      await updateProfileUsecase.execute({
-        id: profiles[0].id,
-        university: 'uuid-that-does-not-exist',
-        meetingFrequency: MeetingFrequency.TWICE_A_WEEK,
-      });
-    } catch (error) {
-      expect(error).toBeInstanceOf(UniversityDoesNotExist);
     }
   });
 });

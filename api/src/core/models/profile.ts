@@ -2,22 +2,7 @@ import { University } from './university';
 import MediaObject from './media-object';
 import { User } from './user';
 import { DomainError } from '../errors/errors';
-
-export enum Goal {
-  SPEAK_LIKE_NATIVE = 'SPEAK_LIKE_NATIVE',
-  IMPROVE_LEVEL = 'IMPROVE_LEVEL',
-  ORAL_PRACTICE = 'ORAL_PRACTICE',
-  PREPARE_TRAVEL_ABROAD = 'PREPARE_TRAVEL_ABROAD',
-  GET_CERTIFICATION = 'GET_CERTIFICATION',
-}
-
-export enum MeetingFrequency {
-  ONCE_A_WEEK = 'ONCE_A_WEEK',
-  TWICE_A_WEEK = 'TWICE_A_WEEK',
-  THREE_TIMES_A_WEEK = 'THREE_TIMES_A_WEEK',
-  TWICE_A_MONTH = 'TWICE_A_MONTH',
-  THREE_TIMES_A_MONTH = 'THREE_TIMES_A_MONTH',
-}
+import { ProfileLanguagesException } from '../errors/ProfileExceptions';
 
 export enum Role {
   STUDENT = 'STUDENT',
@@ -36,22 +21,22 @@ export type LearningType = 'ETANDEM' | 'TANDEM' | 'BOTH';
 
 export type LearningPreferences = {
   learningType: LearningType;
-  meetingFrequency: MeetingFrequency;
+  meetingFrequency: string;
   sameGender: boolean;
-  goals: Set<Goal>;
+  goals: string[];
 };
 
 export type PersonalInformation = {
   age: number;
   gender: Gender;
-  interests: Set<string>;
+  interests: string[];
   bio?: string;
 };
 
 export type Languages = {
   nativeLanguage: string;
   masteredLanguages: string[];
-  learningLanguage: string;
+  learningLanguage?: string;
   learningLanguageLevel: CEFRLevel;
 };
 
@@ -86,14 +71,12 @@ export class Profile {
   constructor(props: CreateProfileProps) {
     this.#id = props.id;
     this.#user = props.user;
-    this.#personalInformation = props.personalInformation;
-    this.#role = props.role;
-    this.#university = props.university;
-    this.#languages = props.languages;
-    this.#preferences = props.preferences;
-    this.#avatar = props.avatar;
-
-    this.assertLanguesAreUnique();
+    this.personalInformation = props.personalInformation;
+    this.role = props.role;
+    this.university = props.university;
+    this.languages = props.languages;
+    this.preferences = props.preferences;
+    this.avatar = props.avatar;
   }
 
   get id(): string {
@@ -138,7 +121,12 @@ export class Profile {
 
   set languages(languages: Languages) {
     this.#languages = languages;
+
     this.assertLanguesAreUnique();
+
+    if (!languages.learningLanguage) {
+      this.#languages.learningLanguageLevel = 'A0';
+    }
   }
 
   get preferences(): LearningPreferences {
@@ -161,16 +149,22 @@ export class Profile {
     // eslint-disable-next-line prettier/prettier
     const { nativeLanguage, masteredLanguages, learningLanguage } = this.#languages;
 
-    if (nativeLanguage === learningLanguage) {
-      throw new Error('Native and learning languages cannot be the same');
+    if (learningLanguage && nativeLanguage === learningLanguage) {
+      throw new ProfileLanguagesException(
+        'Native and learning languages cannot be the same',
+      );
     }
 
     if (masteredLanguages.includes(nativeLanguage)) {
-      throw new Error('Native and mastered languages cannot be the same');
+      throw new ProfileLanguagesException(
+        'Native and mastered languages cannot be the same',
+      );
     }
 
-    if (masteredLanguages.includes(learningLanguage)) {
-      throw new Error('Learning and mastered languages cannot be the same');
+    if (learningLanguage && masteredLanguages.includes(learningLanguage)) {
+      throw new ProfileLanguagesException(
+        'Learning and mastered languages cannot be the same',
+      );
     }
   }
 }

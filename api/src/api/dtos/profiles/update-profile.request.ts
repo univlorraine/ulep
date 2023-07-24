@@ -1,24 +1,10 @@
-import { ApiPropertyOptional } from '@nestjs/swagger';
-import { IsEnum, IsOptional, IsUUID } from 'class-validator';
-import { Goal, MeetingFrequency } from '../../../core/models/profile';
+import { ApiProperty } from '@nestjs/swagger';
+import { IsIn } from 'class-validator';
+import { CEFRLevel } from 'src/core/models/profile';
+import { UpdateProfileCommand } from 'src/core/usecases/profiles/update-profile.usecase';
 
-export class UpdateProfileRequest {
-  @ApiPropertyOptional()
-  @IsOptional()
-  @IsUUID()
-  university?: string;
-
-  @ApiPropertyOptional({ enum: Goal, isArray: true })
-  @IsOptional()
-  @IsEnum(Goal, { each: true })
-  goals?: Goal[];
-
-  @ApiPropertyOptional({ enum: MeetingFrequency })
-  @IsOptional()
-  @IsEnum(MeetingFrequency)
-  meetingFrequency?: MeetingFrequency;
-
-  @ApiPropertyOptional()
-  @IsOptional()
-  bios?: string;
+export class UpdateProfileRequest implements Omit<UpdateProfileCommand, 'id'> {
+  @ApiProperty({ type: 'string', example: 'B2' })
+  @IsIn(['A0', 'A1', 'A2', 'B1', 'B2', 'C1', 'C2'])
+  proficiencyLevel: CEFRLevel;
 }

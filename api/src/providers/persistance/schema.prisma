@@ -125,10 +125,6 @@ model LearningPreference {
   profile               Profile?
   type                  String
   sameGender            Boolean
-  remote                Boolean             @default(true)
-  goal                  String
-  frequency             String
-  availability          Json
 
   @@map("learning_preferences")
 }

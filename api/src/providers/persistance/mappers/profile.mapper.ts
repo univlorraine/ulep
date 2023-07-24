@@ -2,9 +2,7 @@ import * as Prisma from '@prisma/client';
 import {
   CEFRLevel,
   Gender,
-  Goal,
   LearningType,
-  MeetingFrequency,
   Profile,
   Role,
 } from '../../../core/models/profile';
@@ -31,7 +29,7 @@ export const profileMapper = (instance: ProfileEntity): Profile => {
     personalInformation: {
       age: instance.age,
       gender: Gender[instance.gender],
-      interests: new Set(instance.metadata['interests']),
+      interests: instance.metadata['interests'],
       bio: instance.metadata['bios'],
     },
     languages: {
@@ -44,9 +42,9 @@ export const profileMapper = (instance: ProfileEntity): Profile => {
     },
     preferences: {
       learningType: instance.preferences.type as LearningType,
-      meetingFrequency: MeetingFrequency[instance.preferences.frequency],
+      meetingFrequency: instance.metadata['frequency'],
       sameGender: instance.preferences.sameGender,
-      goals: new Set([Goal[instance.preferences.goal]]),
+      goals: instance.metadata['goals'],
     },
   });
 };

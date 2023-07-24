@@ -1,6 +1,9 @@
-import { Injectable, Logger } from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
 import { PrismaService } from '../prisma.service';
-import { ProfileRepository } from '../../../core/ports/profile.repository';
+import {
+  ProfileFilters,
+  ProfileRepository,
+} from '../../../core/ports/profile.repository';
 import { profileMapper } from '../mappers/profile.mapper';
 import { Profile } from '../../../core/models/profile';
 import { Collection } from '../../../shared/types/collection';
@@ -20,8 +23,6 @@ export const ProfilesRelations = {
 
 @Injectable()
 export class PrismaProfileRepository implements ProfileRepository {
-  private readonly logger = new Logger(PrismaProfileRepository.name);
-
   constructor(private readonly prisma: PrismaService) {}
 
   async ofId(id: string) {
@@ -50,12 +51,13 @@ export class PrismaProfileRepository implements ProfileRepository {
     return profileMapper(entry);
   }
 
-  async availableProfiles(): Promise<Profile[]> {
+  async availableProfiles(filters?: ProfileFilters): Promise<Profile[]> {
     const entries = await this.prisma.profile.findMany({
       where: {
         tandems: {
           none: { tandem: { status: 'active' } },
         },
+        nativeLanguageCode: filters?.nativeLanguageCode,
       },
       include: ProfilesRelations,
     });
@@ -97,59 +99,52 @@ export class PrismaProfileRepository implements ProfileRepository {
     return { items: profiles, totalItems: count };
   }
 
-  async save(profile: Profile): Promise<void> {
-    const payload = {
-      id: profile.id,
-      user: {
-        connect: { id: profile.user.id },
+  async create(profile: Profile): Promise<void> {
+    await this.prisma.profile.create({
+      data: {
+        id: profile.id,
+        user: {
+          connect: { id: profile.user.id },
+        },
+        age: profile.personalInformation.age,
+        gender: profile.personalInformation.gender,
+        role: profile.role,
+        university: {
+          connect: { id: profile.university.id },
+        },
+        nativeLanguage: {
+          connect: { code: profile.languages.nativeLanguage },
+        },
+        learningLanguage: {
+          connect: { code: profile.languages.learningLanguage },
+        },
+        learningLanguageLevel: profile.languages.learningLanguageLevel,
+        masteredLanguages: {
+          create: profile.languages.masteredLanguages.map((language) => ({
+            languageCode: language,
+          })),
+        },
+        preferences: {
+          create: {
+            type: profile.preferences.learningType,
+            sameGender: profile.preferences.sameGender,
+          },
+        },
+        metadata: {
+          frequency: profile.preferences.meetingFrequency,
+          goals: profile.preferences.goals,
+          interests: profile.personalInformation.interests,
+          bios: profile.personalInformation.bio,
+        },
       },
-      university: {
-        connect: { id: profile.university.id },
-      },
-      age: profile.personalInformation.age,
-      gender: profile.personalInformation.gender,
-      role: profile.role,
-      nativeLanguage: {
-        connect: { code: profile.languages.nativeLanguage },
-      },
-      learningLanguage: {
-        connect: { code: profile.languages.learningLanguage },
-      },
-      learningLanguageLevel: profile.languages.learningLanguageLevel,
-      metadata: {
-        interests: Array.from(profile.personalInformation.interests),
-        bios: profile.personalInformation.bio,
-      },
-    };
+    });
+  }
 
-    const preferences = {
-      type: profile.preferences.learningType,
-      sameGender: profile.preferences.sameGender,
-      goal: profile.preferences.goals[0], // TODO: Fix this
-      frequency: profile.preferences.meetingFrequency,
-      availability: {
-        // TODO
-        tuesday: true,
-        monday: true,
-        wednesday: true,
-        thursday: true,
-        friday: true,
-        saturday: true,
-        sunday: true,
-      },
-    };
-
-    this.logger.debug(payload.learningLanguageLevel);
-
-    await this.prisma.profile.upsert({
+  async update(profile: Profile): Promise<void> {
+    await this.prisma.profile.update({
       where: { id: profile.id },
-      update: {
-        ...payload,
-        preferences: { update: preferences },
-      },
-      create: {
-        ...payload,
-        preferences: { create: preferences },
+      data: {
+        learningLanguageLevel: profile.languages.learningLanguageLevel,
       },
     });
   }

@@ -1,11 +1,6 @@
 import { faker } from '@faker-js/faker';
 import * as Prisma from '@prisma/client';
-import {
-  Gender,
-  Goal,
-  MeetingFrequency,
-  Role,
-} from '../../../core/models/profile';
+import { Gender, Role } from '../../../core/models/profile';
 
 const levels = ['A0', 'A1', 'A2', 'B1', 'B2', 'C1'];
 
@@ -93,9 +88,9 @@ const mapCountryCodeToLanguageCode = (countryCode: string): string => {
   }
 };
 
-const enumToList = (_enum: unknown): string[] => {
-  return Object.entries(_enum).map(([, v]) => v.toUpperCase());
-};
+// const enumToList = (_enum: unknown): string[] => {
+//   return Object.entries(_enum).map(([, v]) => v.toUpperCase());
+// };
 
 const createUsers = async (
   count: number,
@@ -152,24 +147,30 @@ export const createProfiles = async (
           create: {
             type: 'ETANDEM',
             sameGender: faker.datatype.boolean(),
-            goal: faker.helpers.arrayElement(enumToList(Goal)),
-            frequency: faker.helpers.enumValue(MeetingFrequency),
-            availability: {
-              tuesday: true,
-              monday: true,
-              wednesday: true,
-              thursday: true,
-              friday: true,
-              saturday: true,
-              sunday: true,
-            },
           },
         },
         metadata: {
+          frequency: faker.helpers.arrayElement([
+            'ONCE_A_WEEK',
+            'TWICE_A_WEEK',
+            'THREE_TIMES_A_WEEK',
+            'TWICE_A_MONTH',
+            'THREE_TIMES_A_MONTH',
+          ]),
+          availability: {
+            tuesday: true,
+            monday: true,
+            wednesday: true,
+            thursday: true,
+            friday: true,
+            saturday: true,
+            sunday: true,
+          },
           interests: faker.helpers.arrayElements(interests, {
             min: 1,
             max: 5,
           }),
+          bios: faker.lorem.paragraph(),
         },
       },
     });
