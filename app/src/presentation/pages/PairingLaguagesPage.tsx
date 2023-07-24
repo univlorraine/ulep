@@ -1,9 +1,10 @@
 import { useIonToast } from '@ionic/react';
 import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { useHistory } from 'react-router';
+import { Redirect, useHistory } from 'react-router';
 import { useConfig } from '../../context/ConfigurationContext';
 import Language from '../../domain/entities/Language';
+import { UniversityJsonInterface, UniversityJsonToDomain } from '../../domain/entities/University';
 import { useStoreActions, useStoreState } from '../../store/storeTypes';
 import FlagBubble from '../components/FlagBubble';
 import WebLayoutCentered from '../components/WebLayoutCentered';
@@ -20,19 +21,21 @@ const PairingLaguagesPage: React.FC = () => {
     const [languages, setLanguages] = useState<Language[]>([]);
     const [selectedLaguage, setSelectedLanguage] = useState<Language>();
 
+    if (!profileSignUp.university) {
+        return <Redirect to={'/signup'} />;
+    }
+
+    const university = UniversityJsonToDomain(profileSignUp.university as unknown as UniversityJsonInterface); // Easy peasy remove getter and setter in stored object
+
     const getLanguages = async () => {
-        let result = await getAllLanguages.execute(); // TODO: Change this later, use university ( profileSignUp.primaryLanguages )
+        let result = await getAllLanguages.execute();
 
         if (result instanceof Error) {
             return await showToast({ message: t(result.message), duration: 1000 });
         }
 
-        if (!profileSignUp.university?.isCentral) {
-            // TODO: Remove this later, use university ( profileSignUp.primaryLanguages )
-            result = result.filter((language) => language.code === 'FR' || language.code === 'EN');
-        }
-
-        return setLanguages(result);
+        const universityLanguages = result.filter((language) => university.languageCodes.includes(language.code));
+        return setLanguages(universityLanguages);
     };
 
     const continueSignUp = async () => {
@@ -57,18 +60,16 @@ const PairingLaguagesPage: React.FC = () => {
                     <p className={pairingLanguagesStyles.subtitle}>{t('pairing_languages_page.subtitle')}</p>
 
                     <div className={pairingLanguagesStyles['languages-container']}>
-                        {languages
-                            .filter((language) => language.enabled)
-                            .map((language) => {
-                                return (
-                                    <FlagBubble
-                                        isSelected={selectedLaguage?.code === language.code}
-                                        language={language}
-                                        onPressed={setSelectedLanguage}
-                                    />
-                                );
-                            })}
-                        {profileSignUp.university?.isCentral && (
+                        {languages.map((language) => {
+                            return (
+                                <FlagBubble
+                                    isSelected={selectedLaguage?.code === language.code}
+                                    language={language}
+                                    onPressed={setSelectedLanguage}
+                                />
+                            );
+                        })}
+                        {university.isCentral && (
                             <button
                                 style={{ background: 'none' }}
                                 onClick={() => history.push('/signup/pairing/other-languages')}

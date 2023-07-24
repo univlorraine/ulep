@@ -1,10 +1,11 @@
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { useHistory } from 'react-router';
+import { Redirect, useHistory } from 'react-router';
 import { useConfig } from '../../context/ConfigurationContext';
 import { getInitialAviability, occurence } from '../../domain/entities/Availability';
 import { AvailabilitesSignUp } from '../../domain/entities/ProfileSignUp';
-import { useStoreActions } from '../../store/storeTypes';
+import { UniversityJsonInterface, UniversityJsonToDomain } from '../../domain/entities/University';
+import { useStoreActions, useStoreState } from '../../store/storeTypes';
 import Dropdown from '../components/DropDown';
 import WebLayoutCentered from '../components/WebLayoutCentered';
 import AvailabilityModal from '../components/modals/AvailabilityModal';
@@ -26,9 +27,17 @@ const SignUpAvailabilitiesPage: React.FC = () => {
     const { configuration } = useConfig();
     const history = useHistory();
     const updateProfileSignUp = useStoreActions((state) => state.updateProfileSignUp);
-    const [timezone, setTimezone] = useState<string>(''); //TODO: use university timezone on start
+    const profileSignUp = useStoreState((state) => state.profileSignUp);
+    // @ts-ignore
+    const [timezone, setTimezone] = useState<string>(profileSignUp._timezone);
     const [availabilities, setAvailabilities] = useState<AvailabilitesSignUp>(initialAvailabilities);
     const [openModal, setOpenModal] = useState<{ id: string; occurence: occurence } | null>();
+
+    if (!profileSignUp.university) {
+        return <Redirect to={'/signup'} />;
+    }
+
+    const university = UniversityJsonToDomain(profileSignUp.university as unknown as UniversityJsonInterface); // Easy peasy remove getter and setter in stored object
 
     const continueSignUp = async () => {
         updateProfileSignUp({ availabilities, timezone });
@@ -74,6 +83,7 @@ const SignUpAvailabilitiesPage: React.FC = () => {
                             title: timzeone,
                             value: timzeone,
                         }))}
+                        placeholder={university.timezone}
                         title={t('signup_availabilities_page.timezone')}
                     />
 
