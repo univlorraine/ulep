@@ -5,6 +5,7 @@ import Language from '../domain/entities/Language';
 import ProfileSignUp, { AvailabilitesSignUp, BiographySignUp, frequency } from '../domain/entities/ProfileSignUp';
 import University from '../domain/entities/University';
 import gender from '../domain/entities/gender';
+import pedagogy from '../domain/entities/pedagogy';
 import roles from '../domain/entities/roles';
 
 export interface TokenStorePayload {
@@ -30,8 +31,10 @@ export interface SignUpStorePayload {
     nativeLanguage?: Language;
     otherLanguages?: Language[];
     password?: string;
+    pedagogy?: pedagogy;
     profilePicture?: string;
     role?: roles;
+    site?: string;
     staffFunction?: string;
     timezone?: string;
     university?: University;

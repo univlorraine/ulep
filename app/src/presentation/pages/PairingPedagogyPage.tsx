@@ -1,0 +1,123 @@
+import { useState } from 'react';
+import { useTranslation } from 'react-i18next';
+import { Redirect, useHistory } from 'react-router';
+import { useConfig } from '../../context/ConfigurationContext';
+import { UniversityJsonInterface, UniversityJsonToDomain } from '../../domain/entities/University';
+import pedagogy from '../../domain/entities/pedagogy';
+import { useStoreActions, useStoreState } from '../../store/storeTypes';
+import WebLayoutCentered from '../components/WebLayoutCentered';
+import SitesModal from '../components/modals/SitesModal';
+import pairingPedagogyStyles from './css/PairingPedagogy.module.css';
+import styles from './css/SignUp.module.css';
+
+interface PedagogieData {
+    color: string;
+    title: string;
+    button: string;
+    value: pedagogy;
+    display?: boolean;
+}
+
+const PairingPedagogyPage: React.FC = () => {
+    const { t } = useTranslation();
+    const { configuration } = useConfig();
+    const history = useHistory();
+    const updateProfileSignUp = useStoreActions((state) => state.updateProfileSignUp);
+    const profileSignUp = useStoreState((state) => state.profileSignUp);
+    const [pedagogySelected, setPedagogySelected] = useState<pedagogy>();
+
+    if (!profileSignUp.university) {
+        return <Redirect to={'/signup'} />;
+    }
+
+    const university = UniversityJsonToDomain(profileSignUp.university as unknown as UniversityJsonInterface); // Easy peasy remove getter and setter in stored object
+
+    const pedagogiesData: PedagogieData[] = [
+        {
+            color: '#8BC4C4',
+            title: t('pairing_pedagogy_page.tandem_title'),
+            button: t('pairing_pedagogy_page.tandem_button'),
+            value: 'TANDEM',
+            display: university.isCentral,
+        },
+        {
+            color: '#7997C6',
+            title: t('pairing_pedagogy_page.etandem_title'),
+            button: t('pairing_pedagogy_page.etandem_button'),
+            value: 'ETANDEM',
+            display: true,
+        },
+        {
+            color: '#5DABC6',
+            title: t('pairing_pedagogy_page.both_title'),
+            button: t('pairing_pedagogy_page.both_button'),
+            value: 'BOTH',
+            display: university.isCentral,
+        },
+    ];
+
+    const onPedagogyPressed = (pedagogy: pedagogy) => {
+        if (pedagogy !== 'ETANDEM' && university && university.sites.length > 1) {
+            return setPedagogySelected(pedagogy);
+        }
+
+        if (pedagogy !== 'ETANDEM' && university && university.sites.length === 1) {
+            updateProfileSignUp({ pedagogy, site: university.sites[0] });
+            return history.push('/signup/'); // TODO: navigate to next step
+        }
+
+        updateProfileSignUp({ pedagogy });
+        return history.push('/signup/'); // TODO: navigate to next step
+    };
+
+    const onSiteValidated = (site: string) => {
+        updateProfileSignUp({ pedagogy: pedagogySelected, site });
+        return history.push('/signup/'); // TODO: navigate to next step
+    };
+
+    return (
+        <WebLayoutCentered
+            backgroundIconColor={configuration.secondaryBackgroundImageColor}
+            headerColor={configuration.secondaryColor}
+            headerPercentage={24}
+            headerTitle={t('global.pairing_title')}
+        >
+            <div className={styles.body}>
+                <div className={pairingPedagogyStyles.content}>
+                    <h1 className={pairingPedagogyStyles.title}>{t('pairing_pedagogy_page.title')}</h1>
+                    <p className={pairingPedagogyStyles.subtitle}>{t('pairing_pedagogy_page.subtitle')}</p>
+
+                    {pedagogiesData.map((pedagogyData) => {
+                        if (!pedagogyData.display) {
+                            return;
+                        }
+
+                        return (
+                            <div
+                                key={pedagogyData.value}
+                                className={pairingPedagogyStyles['pedagogy-container']}
+                                style={{ backgroundColor: pedagogyData.color }}
+                            >
+                                <span className={pairingPedagogyStyles['pedagogy-text']}>{pedagogyData.title}</span>
+                                <button
+                                    className="primary-button"
+                                    onClick={() => onPedagogyPressed(pedagogyData.value)}
+                                >
+                                    {pedagogyData.button}
+                                </button>
+                            </div>
+                        );
+                    })}
+                </div>
+                <SitesModal
+                    isVisible={!!pedagogySelected}
+                    onClose={() => setPedagogySelected(undefined)}
+                    onValidate={onSiteValidated}
+                    sites={university.sites}
+                />
+            </div>
+        </WebLayoutCentered>
+    );
+};
+
+export default PairingPedagogyPage;

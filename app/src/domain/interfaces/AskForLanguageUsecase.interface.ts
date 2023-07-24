@@ -1,6 +1,6 @@
 import Language from '../entities/Language';
 
-interface AskForLanguageUsecaseUsecaseInterface {
+interface AskForLanguageUsecaseInterface {
     execute(language: Language): Promise<number | Error>;
 }
-export default AskForLanguageUsecaseUsecaseInterface;
+export default AskForLanguageUsecaseInterface;
