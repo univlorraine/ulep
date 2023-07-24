@@ -20,8 +20,8 @@ const PairingLevelPage: React.FC = () => {
         >
             <div className={styles.body}>
                 <div className={pairingPedagogyStyles.content}>
-                    <h1 className={pairingPedagogyStyles.title}>{t('pairing_pedagogy_page.title')}</h1>
-                    <p className={pairingPedagogyStyles.subtitle}>{t('pairing_pedagogy_page.subtitle')}</p>
+                    <h1 className={pairingPedagogyStyles.title}>{t('pairing_level_page.title')}</h1>
+                    <p className={pairingPedagogyStyles.subtitle}>{t('pairing_level_page.subtitle')}</p>
 
                     <ColoredCard<undefined>
                         buttonName={t('pairing_level_page.know_button')}
