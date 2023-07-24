@@ -6,6 +6,7 @@ import Language from '../../domain/entities/Language';
 import { useStoreState } from '../../store/storeTypes';
 import FlagBubble from '../components/FlagBubble';
 import SuccessLayout from '../components/SuccessLayout';
+import LanguageSelectedContent from '../components/contents/LanguageSelectedContent';
 import styles from './css/PairingUnavailableLanguage.module.css';
 
 interface PairingUnavailableLanguageState {
@@ -38,26 +39,12 @@ const PairingUnavailableLanguagePage: React.FC = () => {
         >
             <div className={styles.container}>
                 {askingStudents && !isLastStep && (
-                    <>
-                        <h1 className={styles.title}>{`${t('pairing_unavailable_language_page.not_alone.title')}`}</h1>
-                        <span className={styles.subtitle}>{`${t(
-                            'pairing_unavailable_language_page.not_alone.subtitle'
-                        )} ${language.name}`}</span>
-                        <div className={styles['image-container']}>
-                            <img className={styles.image} alt="avatar" src={profileSignUp.profilePicture}></img>
-                            <div className={styles.bubble}>
-                                <FlagBubble language={language} textColor="white" isSelected disabled />
-                            </div>
-                        </div>
-                        <div className={styles['button-container']}>
-                            <p className={styles.description}>
-                                {t('pairing_unavailable_language_page.not_alone.description')}
-                            </p>
-                            <button className={'primary-button large-margin-top'} onClick={() => setIsLastStep(true)}>
-                                {t('pairing_unavailable_language_page.not_alone.validate_button')}
-                            </button>
-                        </div>
-                    </>
+                    <LanguageSelectedContent
+                        language={language}
+                        mode={'unavailable'}
+                        profilePicture={profileSignUp.profilePicture}
+                        onNextPressed={() => setIsLastStep(true)}
+                    />
                 )}
                 {!askingStudents ||
                     (isLastStep && (

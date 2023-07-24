@@ -20,6 +20,7 @@ import SignUpInterestsPage from '../pages/SignUpInterestsPage';
 import SignUpLanguagesPage from '../pages/SignUpLanguagesPage';
 import SignUpPage from '../pages/SignUpPage';
 import PairingPedagogyPage from '../pages/PairingPedagogyPage';
+import PairingConfirmLanguagePage from '../pages/PairingConfirmLanguagePage';
 
 const OfflineRouter: React.FC = () => (
     <IonRouterOutlet>
@@ -43,6 +44,9 @@ const OfflineRouter: React.FC = () => (
         </Route>
         <Route exact path="/signup/pairing/pedagogy">
             <PairingPedagogyPage />
+        </Route>
+        <Route exact path="/signup/pairing/language/confirm">
+            <PairingConfirmLanguagePage />
         </Route>
         <Route exact path="/signup/pairing/other-languages">
             <PairingOtherLanguagesPage />

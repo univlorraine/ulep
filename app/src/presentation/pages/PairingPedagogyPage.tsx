@@ -63,16 +63,16 @@ const PairingPedagogyPage: React.FC = () => {
 
         if (pedagogy !== 'ETANDEM' && university && university.sites.length === 1) {
             updateProfileSignUp({ pedagogy, site: university.sites[0] });
-            return history.push('/signup/'); // TODO: navigate to next step
+            return history.push('/signup/pairing/language/confirm');
         }
 
         updateProfileSignUp({ pedagogy });
-        return history.push('/signup/'); // TODO: navigate to next step
+        return history.push('/signup/pairing/language/confirm');
     };
 
     const onSiteValidated = (site: string) => {
         updateProfileSignUp({ pedagogy: pedagogySelected, site });
-        return history.push('/signup/'); // TODO: navigate to next step
+        return history.push('/signup/pairing/language/confirm');
     };
 
     return (

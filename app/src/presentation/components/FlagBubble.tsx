@@ -23,7 +23,7 @@ const FlagBubble: React.FC<FlagBubbleProps> = ({ disabled, isSelected, language,
             }}
             onClick={() => (onPressed ? onPressed(language) : null)}
         >
-            <span className={styles.flag}>{codeCountryToFlag(language.code.toLowerCase())}</span>
+            <span className={styles.flag}>{codeCountryToFlag(language.code)}</span>
             <span className={styles.country} style={{ color: textColor }}>
                 {language.name}
             </span>
