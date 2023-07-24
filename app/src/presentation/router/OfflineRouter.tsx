@@ -6,8 +6,11 @@ import ForgotPasswordPage from '../pages/ForgotPasswordPage';
 import ForgotPasswordSentPage from '../pages/ForgotPasswordSentPage';
 import Home from '../pages/HomePage';
 import LoginPage from '../pages/LoginPage';
+import PairingConfirmLanguagePage from '../pages/PairingConfirmLanguagePage';
 import PairingLaguagesPage from '../pages/PairingLaguagesPage';
+import PairingLevelPage from '../pages/PairingLevelPage';
 import PairingOtherLanguagesPage from '../pages/PairingOtherLanguagesPage';
+import PairingPedagogyPage from '../pages/PairingPedagogyPage';
 import PairingUnavailableLanguagePage from '../pages/PairingUnavailableLanguagePage';
 import ResetPasswordPage from '../pages/ResetPasswordPage';
 import SignUpAvailabilitiesPage from '../pages/SignUpAvailabilitiesPage';
@@ -19,8 +22,6 @@ import SignUpInformationsPage from '../pages/SignUpInformationsPage';
 import SignUpInterestsPage from '../pages/SignUpInterestsPage';
 import SignUpLanguagesPage from '../pages/SignUpLanguagesPage';
 import SignUpPage from '../pages/SignUpPage';
-import PairingPedagogyPage from '../pages/PairingPedagogyPage';
-import PairingConfirmLanguagePage from '../pages/PairingConfirmLanguagePage';
 
 const OfflineRouter: React.FC = () => (
     <IonRouterOutlet>
@@ -47,6 +48,9 @@ const OfflineRouter: React.FC = () => (
         </Route>
         <Route exact path="/signup/pairing/language/confirm">
             <PairingConfirmLanguagePage />
+        </Route>
+        <Route exact path="/signup/pairing/level">
+            <PairingLevelPage />
         </Route>
         <Route exact path="/signup/pairing/other-languages">
             <PairingOtherLanguagesPage />

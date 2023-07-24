@@ -5,6 +5,7 @@ import { useConfig } from '../../context/ConfigurationContext';
 import { UniversityJsonInterface, UniversityJsonToDomain } from '../../domain/entities/University';
 import pedagogy from '../../domain/entities/pedagogy';
 import { useStoreActions, useStoreState } from '../../store/storeTypes';
+import ColoredCard from '../components/ColoredCard';
 import WebLayoutCentered from '../components/WebLayoutCentered';
 import SitesModal from '../components/modals/SitesModal';
 import pairingPedagogyStyles from './css/PairingPedagogy.module.css';
@@ -93,19 +94,13 @@ const PairingPedagogyPage: React.FC = () => {
                         }
 
                         return (
-                            <div
-                                key={pedagogyData.value}
-                                className={pairingPedagogyStyles['pedagogy-container']}
-                                style={{ backgroundColor: pedagogyData.color }}
-                            >
-                                <span className={pairingPedagogyStyles['pedagogy-text']}>{pedagogyData.title}</span>
-                                <button
-                                    className="primary-button"
-                                    onClick={() => onPedagogyPressed(pedagogyData.value)}
-                                >
-                                    {pedagogyData.button}
-                                </button>
-                            </div>
+                            <ColoredCard<pedagogy>
+                                buttonName={pedagogyData.button}
+                                color={pedagogyData.color}
+                                onPressed={onPedagogyPressed}
+                                title={pedagogyData.title}
+                                value={pedagogyData.value}
+                            />
                         );
                     })}
                 </div>

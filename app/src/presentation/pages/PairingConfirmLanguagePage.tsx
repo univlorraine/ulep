@@ -40,7 +40,7 @@ const PairingConfirmLanguagePage: React.FC = () => {
     };
 
     const continueSignUp = async () => {
-        history.push('/signup/'); //TODO: next step
+        history.push('/signup/pairing/level');
     };
 
     if (isConfirmed) {

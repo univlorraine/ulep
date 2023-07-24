@@ -77,6 +77,15 @@
         "title": "Choix de la langue",
         "validate_button": "Valider et continuer"
     },
+    "pairing_level_page": {
+        "know_button": "Go",
+        "know_title": "Je connais mon niveau ( A1, C2 )",
+        "subtitle": "Comment décrirais-tu ton niveau ?",
+        "title": "Ton niveau",
+        "unknow_button": "FAIRE LE TEST (10min max)",
+        "unknow_title": "J’aimerais connaitre mon niveau",
+        "validate_button": "Valider et continuer"
+    },
     "pairing_other_languages_page": {
         "joker_checkbox": "Langue joker",
         "joker_description": "Tu souhaites aider quelqu'un avec son français tout en découvrant une langue étrangère",
