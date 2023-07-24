@@ -25,7 +25,7 @@ const PairingLevelPage: React.FC = () => {
                     <ColoredCard<undefined>
                         buttonName={t('pairing_level_page.know_button')}
                         color={'#8BC4C4'}
-                        onPressed={() => history.push('/signup/')}
+                        onPressed={() => history.push('/signup/pairing/level/select')}
                         title={t('pairing_level_page.know_title')}
                         value={undefined}
                     />
