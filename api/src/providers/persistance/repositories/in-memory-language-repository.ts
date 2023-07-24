@@ -7,6 +7,7 @@ import { Collection } from '../../../shared/types/collection';
 
 export class InMemoryLanguageRepository implements LanguageRepository {
   #languages: Language[] = [];
+  #requests: { [code: string]: string[] } = {};
 
   init(languages: Language[]): void {
     this.#languages = languages;
@@ -37,5 +38,13 @@ export class InMemoryLanguageRepository implements LanguageRepository {
 
   async save(language: Language): Promise<void> {
     this.#languages.push(language);
+  }
+
+  async addRequest(code: string, user: string): Promise<void> {
+    this.#requests[code] = [...(this.#requests[code] || []), user];
+  }
+
+  async countRequests(code: string): Promise<number> {
+    return this.#requests[code]?.length || 0;
   }
 }

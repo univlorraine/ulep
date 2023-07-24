@@ -14,4 +14,8 @@ export interface LanguageRepository {
   getUniqueCombinations: () => Promise<LanguageCombination[]>;
 
   save: (language: Language) => Promise<void>;
+
+  addRequest(code: string, user: string): Promise<void>;
+
+  countRequests(code: string): Promise<number>;
 }

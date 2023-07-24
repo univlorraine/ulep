@@ -68,4 +68,21 @@ export class PrismaLanguageRepository implements LanguageRepository {
       create: language,
     });
   }
+
+  async addRequest(code: string, user: string): Promise<void> {
+    await this.prisma.languageRequest.create({
+      data: {
+        language: { connect: { code: code } },
+        user: { connect: { id: user } },
+      },
+    });
+  }
+
+  async countRequests(code: string): Promise<number> {
+    return await this.prisma.languageRequest.count({
+      where: {
+        languageCode: code,
+      },
+    });
+  }
 }

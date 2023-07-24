@@ -35,6 +35,7 @@ import { DeleteReportCategoryUsecase } from './usecases/reports/delete-category.
 import { CreateTandemUsecase } from './usecases/tandems/create-tandem.usecase';
 import { GetTandemsUsecase } from './usecases/tandems/get-tandems.usecase';
 import { GenerateTandemsUsecase } from './usecases/tandems/generate-tandems.usecase';
+import { AddLanguageRequestUsecase } from './usecases/languages/add-request.usecase';
 
 const usecases: Provider[] = [
   // Languages
@@ -42,6 +43,7 @@ const usecases: Provider[] = [
   GetLanguagesUsecase,
   GetLanguageUsecase,
   UpdateLanguageUsecase,
+  AddLanguageRequestUsecase,
   // Matches
   GetMatchsByProfileIdUsecase,
   // Profiles

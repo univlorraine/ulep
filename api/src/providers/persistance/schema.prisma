@@ -17,6 +17,7 @@ model User {
   avatarId              String?             @unique
   profile               Profile?
   reports               Report[]
+  requests              LanguageRequest[]
 
   @@map("users")
 }
@@ -28,8 +29,21 @@ model Language {
   nativeSpeakers          Profile[]            @relation("NativeLanguage")
   learningUsers           Profile[]            @relation("LearningLanguage")
   masteredByUsers         MasteredLanguage[]
+  requests                LanguageRequest[]
 
   @@map("languages")
+}
+
+model LanguageRequest {
+  id                     String               @id @default(uuid())
+  createdAt              DateTime             @default(now())
+  languageCode           String
+  language               Language             @relation(fields: [languageCode], references: [code], onDelete: Cascade)
+  userId                 String
+  user                   User                 @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@map("language_requests")
+  @@unique([languageCode, userId])
 }
 
 model University {

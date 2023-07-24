@@ -9,6 +9,7 @@ import {
   Query,
   SerializeOptions,
   Put,
+  UseGuards,
 } from '@nestjs/common';
 import * as Swagger from '@nestjs/swagger';
 import { LanguageResponse } from '../dtos/languages/language.response';
@@ -23,6 +24,11 @@ import { UpdateLanguageUsecase } from '../../core/usecases/languages/update-lang
 import { CollectionResponse } from '../decorators/collection.decorator';
 import { Collection } from '../../shared/types/collection';
 import { GetLanguageUsecase } from 'src/core/usecases/languages/get-language.usecase';
+import { AddLanguageRequestUsecase } from 'src/core/usecases/languages/add-request.usecase';
+import { LanguageRequestsCountResponse } from '../dtos/languages/requests-count.response';
+import { UserContext } from '../decorators/user-context.decorator';
+import { User } from 'src/core/models/user';
+import { AuthenticationGuard } from '../guards/authentication.guard';
 
 @Controller('languages')
 @Swagger.ApiTags('Languages')
@@ -34,6 +40,7 @@ export class LanguageController {
     private readonly getLanguageUsecase: GetLanguageUsecase,
     private readonly createLanguageUsecase: CreateLanguageUsecase,
     private readonly updateLanguageUsecase: UpdateLanguageUsecase,
+    private readonly addLanguageRequestUsecase: AddLanguageRequestUsecase,
   ) {}
 
   @Get()
@@ -75,6 +82,24 @@ export class LanguageController {
     const language = await this.createLanguageUsecase.execute({ ...body });
 
     return LanguageResponse.fromDomain(language);
+  }
+
+  @Post(':code/requests')
+  @SerializeOptions({ groups: ['read'] })
+  @UseGuards(AuthenticationGuard)
+  @Swagger.ApiOperation({ summary: 'Add new requests .' })
+  @Swagger.ApiCreatedResponse({ type: LanguageRequestsCountResponse })
+  @Swagger.ApiResponse({ status: 400, description: 'Invalid input' })
+  async addRequest(
+    @Param('code') code: string,
+    @UserContext() user: User,
+  ): Promise<LanguageRequestsCountResponse> {
+    const count = await this.addLanguageRequestUsecase.execute({
+      code,
+      userId: user.id,
+    });
+
+    return new LanguageRequestsCountResponse(count);
   }
 
   @Put(':code')
