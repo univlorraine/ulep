@@ -71,8 +71,8 @@ const SignUpAvailabilitiesPage: React.FC = () => {
         >
             <div className={styles.body}>
                 <div>
-                    <h1 className={availabilitiesStyles.title}>{t('signup_availabilities_page.title')}</h1>
-                    <span className={availabilitiesStyles.subtitle}>{t('signup_availabilities_page.subtitle')}</span>
+                    <h1 className="title">{t('signup_availabilities_page.title')}</h1>
+                    <span className="subtitle">{t('signup_availabilities_page.subtitle')}</span>
 
                     <div className={availabilitiesStyles.separator} />
 

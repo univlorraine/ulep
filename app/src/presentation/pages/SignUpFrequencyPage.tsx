@@ -38,8 +38,8 @@ const SignUpFrequencyPage: React.FC = () => {
         >
             <div className={styles.body}>
                 <div className={frequencyStyle.container}>
-                    <h1 className={frequencyStyle.title}>{t('signup_frequency_page.title')}</h1>
-                    <span className={frequencyStyle.subtitle}>{t('signup_frequency_page.subtitle')}</span>
+                    <h1 className="title">{t('signup_frequency_page.title')}</h1>
+                    <span className="subtitle">{t('signup_frequency_page.subtitle')}</span>
 
                     {frequencies.map((freq) => {
                         return (

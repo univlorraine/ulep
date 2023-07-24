@@ -49,9 +49,9 @@ const SignUpBiographyPage: React.FC = () => {
             headerTitle={t('global.create_account_title')}
         >
             <div className={styles.body}>
-                <div className={biographyStyles.content}>
-                    <h1 className={biographyStyles.title}>{t('signup_biography_page.title')}</h1>
-                    <h2 className={biographyStyles.subtitle}>{t('signup_biography_page.subtitle')}</h2>
+                <div>
+                    <h1 className="title">{t('signup_biography_page.title')}</h1>
+                    <h2 className="subtitle">{t('signup_biography_page.subtitle')}</h2>
 
                     <div className={biographyStyles['input-container']}>
                         <TextInput

@@ -50,7 +50,7 @@ const PairingUnavailableLanguagePage: React.FC = () => {
                     (isLastStep && (
                         <>
                             <FlagBubble language={language} textColor="white" isSelected disabled />
-                            <span className={styles.title}>{`${t('pairing_unavailable_language_page.title')}`}</span>
+                            <span className="title">{`${t('pairing_unavailable_language_page.title')}`}</span>
                             <p className={styles.description}>{t('pairing_unavailable_language_page.subtitle')}</p>
                             <span className={styles.description}>{t('pairing_unavailable_language_page.luck')}</span>
                             <div className={styles['bottom-container']}>

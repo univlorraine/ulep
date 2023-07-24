@@ -8,7 +8,6 @@ import { useStoreActions, useStoreState } from '../../store/storeTypes';
 import ColoredCard from '../components/ColoredCard';
 import WebLayoutCentered from '../components/WebLayoutCentered';
 import SitesModal from '../components/modals/SitesModal';
-import pairingPedagogyStyles from './css/PairingPedagogy.module.css';
 import styles from './css/SignUp.module.css';
 
 interface PedagogieData {
@@ -84,9 +83,9 @@ const PairingPedagogyPage: React.FC = () => {
             headerTitle={t('global.pairing_title')}
         >
             <div className={styles.body}>
-                <div className={pairingPedagogyStyles.content}>
-                    <h1 className={pairingPedagogyStyles.title}>{t('pairing_pedagogy_page.title')}</h1>
-                    <p className={pairingPedagogyStyles.subtitle}>{t('pairing_pedagogy_page.subtitle')}</p>
+                <div>
+                    <h1 className="title">{t('pairing_pedagogy_page.title')}</h1>
+                    <p className="subtitle">{t('pairing_pedagogy_page.subtitle')}</p>
 
                     {pedagogiesData.map((pedagogyData) => {
                         if (!pedagogyData.display) {

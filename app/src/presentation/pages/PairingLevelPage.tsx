@@ -3,7 +3,6 @@ import { useHistory } from 'react-router';
 import { useConfig } from '../../context/ConfigurationContext';
 import ColoredCard from '../components/ColoredCard';
 import WebLayoutCentered from '../components/WebLayoutCentered';
-import pairingPedagogyStyles from './css/PairingPedagogy.module.css';
 import styles from './css/SignUp.module.css';
 
 const PairingLevelPage: React.FC = () => {
@@ -19,9 +18,9 @@ const PairingLevelPage: React.FC = () => {
             headerTitle={t('global.pairing_title')}
         >
             <div className={styles.body}>
-                <div className={pairingPedagogyStyles.content}>
-                    <h1 className={pairingPedagogyStyles.title}>{t('pairing_level_page.title')}</h1>
-                    <p className={pairingPedagogyStyles.subtitle}>{t('pairing_level_page.subtitle')}</p>
+                <div>
+                    <h1 className="title">{t('pairing_level_page.title')}</h1>
+                    <p className="subtitle">{t('pairing_level_page.subtitle')}</p>
 
                     <ColoredCard<undefined>
                         buttonName={t('pairing_level_page.know_button')}

@@ -70,9 +70,9 @@ const PairingConfirmLanguagePage: React.FC = () => {
             headerTitle={t('global.pairing_title')}
         >
             <div className={styles.body}>
-                <div className={confirmLanguagesStyles.content}>
-                    <h1 className={confirmLanguagesStyles.title}>{t('pairing_confirm_language_page.title')}</h1>
-                    <p className={confirmLanguagesStyles.subtitle}>{t('pairing_confirm_language_page.subtitle')}</p>
+                <div>
+                    <h1 className="title">{t('pairing_confirm_language_page.title')}</h1>
+                    <p className="subtitle">{t('pairing_confirm_language_page.subtitle')}</p>
                     <span>{t('pairing_confirm_language_page.language_title')}</span>
                     <div className={confirmLanguagesStyles['language-container']}>
                         {` ${codeCountryToFlag(learningLanguage.code)} ${learningLanguage.name}`}

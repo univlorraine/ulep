@@ -113,6 +113,13 @@
         "tandem_title": "J’apprends avec mon binôme en présentiel",
         "title": "Pédagogie"
     },
+    "pairing_select_level_page": {
+        "no_knowledge": "Aucune connaissance",
+        "subtitle": "Quel est ton niveau ?",
+        "test_button": "Je ne sais plus, faire le test",
+        "title": "Ton niveau",
+        "validate_button": "Valider et continuer"
+    },
     "pairing_unavailable_language_page": {
         "luck": "Bonne chance !",
         "next_button": "Choisir une autre langue",
