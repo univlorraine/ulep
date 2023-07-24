@@ -4,6 +4,7 @@ import Goal from './Goal';
 import Language from './Language';
 import University from './University';
 import gender from './gender';
+import pedagogie from './pedagogy';
 import roles from './roles';
 
 export type frequency = 'ONCE_A_WEEK' | 'TWICE_A_WEEK' | 'THREE_TIMES_A_WEEK' | 'TWICE_A_MONTH' | 'THREE_TIMES_A_MONTH';
@@ -57,11 +58,15 @@ class ProfileSignUp {
 
     private _password?: string;
 
+    private _pedagogy?: pedagogie;
+
     private _profilePicture?: string;
 
     private otherLaguages?: Language[];
 
     private _role?: roles;
+
+    private _site?: string;
 
     private _staffFunction?: string;
 
@@ -143,6 +148,10 @@ class ProfileSignUp {
         this._password = password;
     }
 
+    set pedagogy(pedagogy: pedagogie) {
+        this._pedagogy = pedagogy;
+    }
+
     get profilePicture(): string {
         return this._profilePicture ?? '';
     }
@@ -153,6 +162,10 @@ class ProfileSignUp {
 
     set role(role: roles) {
         this._role = role;
+    }
+
+    set site(site: string) {
+        this._site = site;
     }
 
     set staffFunction(staffFunction: string) {

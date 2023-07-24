@@ -30,9 +30,13 @@ const OtherLanguageSelectedContent: React.FC<OtherLanguageSelectedContentProps> 
                 <img alt="FAQ" className={otherLanguagesSelectedStyles.image} src="/assets/FAQ.svg" />
 
                 <p className={otherLanguagesSelectedStyles.explaination}>
-                    {t('pairing_other_languages_page.selected_language.explain_first')} <br />
+                    {`${t('pairing_other_languages_page.selected_language.explain_first_start')} ${language.name} ${t(
+                        'pairing_other_languages_page.selected_language.explain_first_end'
+                    )}`}
                     <br />
-                    {t('pairing_other_languages_page.selected_language.explain_second')} <br />
+                    <br />
+                    {t('pairing_other_languages_page.selected_language.explain_second')}
+                    <br />
                     <br />
                     {t('pairing_other_languages_page.selected_language.explain_third')}
                 </p>

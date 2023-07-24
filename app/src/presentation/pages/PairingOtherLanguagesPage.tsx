@@ -29,8 +29,7 @@ const PairingOtherLanguagesPage: React.FC = () => {
 
     const onOtherLanguageSelected = async (language: Language) => {
         if (language.code === 'joker') {
-            //Maybe ask api to get a random language ( most asked ? )
-            return history.push('/signup/'); // we dont update signUpProfile because joker is null in api
+            return history.push('/signup/pairing/pedagogy'); // we dont update signUpProfile because joker is null in api
         }
 
         setSelectedLanguage(language);

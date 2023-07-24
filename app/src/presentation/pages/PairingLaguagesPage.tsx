@@ -10,7 +10,7 @@ import WebLayoutCentered from '../components/WebLayoutCentered';
 import pairingLanguagesStyles from './css/PairingLanguages.module.css';
 import styles from './css/SignUp.module.css';
 
-const PairingLaguages: React.FC = () => {
+const PairingLaguagesPage: React.FC = () => {
     const { t } = useTranslation();
     const { configuration, getAllLanguages } = useConfig();
     const [showToast] = useIonToast();
@@ -37,7 +37,7 @@ const PairingLaguages: React.FC = () => {
 
     const continueSignUp = async () => {
         updateProfileSignUp({ learningLanguage: selectedLaguage });
-        history.push('/signup/'); // TODO: Change this, navigate to next step
+        history.push('/signup/pairing/pedagogy');
     };
 
     useEffect(() => {
@@ -92,4 +92,4 @@ const PairingLaguages: React.FC = () => {
     );
 };
 
-export default PairingLaguages;
+export default PairingLaguagesPage;

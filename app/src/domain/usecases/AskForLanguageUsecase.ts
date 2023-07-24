@@ -1,7 +1,7 @@
 import { HttpAdapterInterface } from '../../adapter/DomainHttpAdapter';
-import AskForLanguageUsecaseUsecaseInterface from '../interfaces/AskForLanguageUsecase.interface';
+import AskForLanguageUsecaseInterface from '../interfaces/AskForLanguageUsecase.interface';
 
-class AskForLanguageUsecase implements AskForLanguageUsecaseUsecaseInterface {
+class AskForLanguageUsecase implements AskForLanguageUsecaseInterface {
     constructor(private readonly domainHttpAdapter: HttpAdapterInterface) {}
 
     async execute(): Promise<number | Error> {
