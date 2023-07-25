@@ -72,6 +72,16 @@
         "title": "Choix de la langue",
         "validate_button": "Confirmer"
     },
+    "pairing_quizz_description_page": {
+        "A1": "Je débute l’apprentissage de cette langue",
+        "A2": "Je peux me présenter simplement dans la langue",
+        "B1": "Je peux participer à n’importe quelle conversation de la vie quotidienne",
+        "C1": "Je peux tout comprendre, y compris l’humour. Je m’exprime avec aisance sur n’importe quel sujet, que ce soit sur un ton soutenu ou informel.",
+        "pass_button": "Passer",
+        "subtitle": "Comment décrirais-tu ton niveau de langue ?",
+        "title": "Ton niveau",
+        "validate_button": "Valider et continuer"
+    },
     "pairing_quizz_introduction_page": {
         "description": "Passe au niveau suivant une fois terminé",
         "subtitle": "Découvre ton niveau en répondant à quelques questions",

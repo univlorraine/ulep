@@ -30,7 +30,7 @@ const PairingSelectLevelPage: React.FC = () => {
                         onClick={() => setSelectedLevel('A0')}
                         style={{ backgroundColor: selectedLevel === 'A0' ? configuration.secondaryColor : '#F2F4F7' }}
                     >
-                        {'AO'} <br /> {t('pairing_select_level_page.no_knowledge')}
+                        {'A0'} <br /> {t('pairing_select_level_page.no_knowledge')}
                     </button>
                     <div className={pairingSelectLevelStyles['levels-container']}>
                         {levels.map((level) => {
