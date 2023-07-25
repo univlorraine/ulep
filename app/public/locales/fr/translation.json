@@ -32,6 +32,7 @@
         "country": "Pays",
         "create_account_title": "Création de compte",
         "email": "Email",
+        "etandem": "Etandem",
         "error": "Erreur",
         "firstname": "Prénom",
         "gender": "Genre",
@@ -39,6 +40,8 @@
         "men": "Masculin",
         "password": "Mot de passe",
         "pairing_title": "Appariement",
+        "tandem": "Tandem",
+        "tandem_etandem": "Tandem / Etandem",
         "woman": "Féminin"
     },
     "connection_page": {
@@ -54,6 +57,20 @@
         "invalid_password": "Mot de passe invalide",
         "subtitle": "Connecte-toi avec tes identifiants de l’université pour continuer à utiliser l’application",
         "title": "Se connecter"
+    },
+    "pairing_confirm_language_page": {
+        "language_title": "Langue souhaitée",
+        "mode_meet": "Mode de rencontre",
+        "not_alone": {
+            "description": "Vérifions ton niveau ensemble !",
+            "description_title": "Nice,",
+            "subtitle": "Plusieurs personnes veulent s’exercer",
+            "title": "Tu n’es pas seul·e,",
+            "validate_button": "Confirmer"
+        },
+        "subtitle": "Confirme tes options",
+        "title": "Choix de la langue",
+        "validate_button": "Confirmer"
     },
     "pairing_languages_page": {
         "subtitle": "Quelle langue veux-tu travailler avec ton tandem ?",
@@ -93,7 +110,7 @@
         "next_title": "Je souhaite choisir une autre langue",
         "not_alone": {
             "description": "Cependant, Il semblerait que trouver un tandem pour cette langue soit plus complexe. Dans l’attente, nous te proposons de choisir une langue disponible ou de consulter les ressources pédagogiques disponibles",
-            "subtitle": "Plusieurs personnes ont fait une demande spéciale pour",
+            "subtitle": "Plusieurs personnes ont fait une demande spéciale",
             "title": "Tu n’es pas seul·e,",
             "validate_button": "Continuer"
         },

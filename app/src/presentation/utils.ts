@@ -176,8 +176,8 @@ export const isNameCorrect = (firstname: string) => {
 
 export const codeCountryToFlag = (countryCode: string) => {
     const countriesMap = new Map(countriesCodeWithFlags);
-    if (countriesMap.has(countryCode)) {
-        return countriesMap.get(countryCode);
+    if (countriesMap.has(countryCode.toLocaleLowerCase())) {
+        return countriesMap.get(countryCode.toLowerCase());
     }
 
     return '🌐';

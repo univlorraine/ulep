@@ -132,7 +132,11 @@ class ProfileSignUp {
         this._lastname = lastname;
     }
 
-    set learningLanguage(learningLanguage: Language) {
+    get learningLanguage(): Language | undefined {
+        return this._learningLanguage;
+    }
+
+    set learningLanguage(learningLanguage: Language | undefined) {
         this._learningLanguage = learningLanguage;
     }
 
@@ -146,6 +150,10 @@ class ProfileSignUp {
 
     set password(password: string) {
         this._password = password;
+    }
+
+    get pedagogy(): pedagogie | undefined {
+        return this._pedagogy;
     }
 
     set pedagogy(pedagogy: pedagogie) {
