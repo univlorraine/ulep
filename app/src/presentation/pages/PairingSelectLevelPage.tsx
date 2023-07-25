@@ -50,7 +50,9 @@ const PairingSelectLevelPage: React.FC = () => {
                     </div>
                 </div>
                 <div>
-                    <button className="primary-button">{t('pairing_select_level_page.validate_button')}</button>
+                    <button className={`primary-button ${!selectedLevel ? 'disabled' : ''}`} disabled={!selectedLevel}>
+                        {t('pairing_select_level_page.validate_button')}
+                    </button>
                     <button className="secondary-button large-margin-vertical">
                         {t('pairing_select_level_page.test_button')}
                     </button>
