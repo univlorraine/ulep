@@ -1,9 +1,11 @@
 import { useIonToast } from '@ionic/react';
 import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { useHistory } from 'react-router';
+import { Redirect, useHistory } from 'react-router';
 import { useConfig } from '../../context/ConfigurationContext';
 import Language from '../../domain/entities/Language';
+import { UniversityJsonInterface, UniversityJsonToDomain } from '../../domain/entities/University';
+import { useStoreState } from '../../store/storeTypes';
 import WebLayoutCentered from '../components/WebLayoutCentered';
 import OtherLanguageContent from '../components/contents/OtherLanguageContent';
 import OtherLanguageSelectedContent from '../components/contents/OtherLanguageSelectedContent';
@@ -13,16 +15,25 @@ const PairingOtherLanguagesPage: React.FC = () => {
     const { t } = useTranslation();
     const { askForLanguage, configuration, getAllLanguages } = useConfig();
     const [showToast] = useIonToast();
+    const profileSignUp = useStoreState((state) => state.profileSignUp);
     const history = useHistory();
     const [languages, setLanguages] = useState<Language[]>([]);
     const [selectedLanguage, setSelectedLanguage] = useState<Language>();
 
+    if (!profileSignUp.university) {
+        return <Redirect to={'/signup'} />;
+    }
+
+    const university = UniversityJsonToDomain(profileSignUp.university as unknown as UniversityJsonInterface); // Easy peasy remove getter and setter in stored object
+
     const getLanguages = async () => {
-        let result = await getAllLanguages.execute(); // TODO: Change this later, use university ( profileSignUp.secondaryLanguages )
+        let result = await getAllLanguages.execute();
 
         if (result instanceof Error) {
             return await showToast({ message: t(result.message), duration: 1000 });
         }
+
+        result = result.filter((language) => !university.languageCodes.includes(language.code));
 
         return setLanguages(result);
     };
@@ -50,7 +61,6 @@ const PairingOtherLanguagesPage: React.FC = () => {
             askingStudents: result,
             codeLanguage: selectedLanguage.code,
             nameLanguage: selectedLanguage.name,
-            enabledLanguage: selectedLanguage.enabled,
         });
     };
 

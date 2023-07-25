@@ -21,14 +21,14 @@ const PairingUnavailableLanguagePage: React.FC = () => {
     const history = useHistory();
     const [isLastStep, setIsLastStep] = useState<boolean>(false);
     const location = useLocation<PairingUnavailableLanguageState>();
-    const { askingStudents, codeLanguage, nameLanguage, enabledLanguage } = location.state || {};
+    const { askingStudents, codeLanguage, nameLanguage } = location.state || {};
     const profileSignUp = useStoreState((payload) => payload.profileSignUp);
 
     if (!codeLanguage || !nameLanguage) {
         return <Redirect to="/signup/pairing/languages" />;
     }
 
-    const language = new Language(codeLanguage, nameLanguage, enabledLanguage);
+    const language = new Language(codeLanguage, nameLanguage);
 
     return (
         <SuccessLayout
