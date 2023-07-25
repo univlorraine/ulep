@@ -38,11 +38,14 @@
         "gender": "Genre",
         "lastname": "Nom",
         "men": "Masculin",
+        "no": "Non",
         "password": "Mot de passe",
         "pairing_title": "Appariement",
+        "question": "Question",
         "tandem": "Tandem",
         "tandem_etandem": "Tandem / Etandem",
-        "woman": "Féminin"
+        "woman": "Féminin",
+        "yes": "Oui"
     },
     "connection_page": {
         "connect_title": "As-tu déjà un compte ? ",
@@ -88,6 +91,10 @@
         "time": "ça prendra 10 min max",
         "title": "Ton niveau",
         "validate_button": "Commencer"
+    },
+    "pairing_quizz_page": {
+        "subtitle": "Réponds aux questions suivantes",
+        "title": "Ton niveau"
     },
     "pairing_languages_page": {
         "subtitle": "Quelle langue veux-tu travailler avec ton tandem ?",

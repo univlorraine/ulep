@@ -1,0 +1,63 @@
+.button-container {
+    display: flex;
+    flex-direction: row;
+    gap: 10px;
+}
+
+.count-question {
+    color: #000;
+    font-family: 'Roboto';
+    font-size: 57px;
+    font-style: normal;
+    font-weight: 700;
+    line-height: 39px;
+}
+
+.current-question {
+    color: #fff;
+    font-family: 'Roboto';
+    font-size: 57px;
+    font-style: normal;
+    font-weight: 700;
+    line-height: 39px;
+    text-align: center;
+}
+
+.level-container {
+    align-items: center;
+    background-color: #eceded;
+    border-radius: 5px;
+    color: #000;
+    display: flex;
+    flex-direction: row;
+    font-family: 'Roboto';
+    font-size: 20px;
+    font-style: normal;
+    font-weight: 700;
+    gap: 10px;
+    line-height: 25px;
+    letter-spacing: -0.6px;
+    margin: 30px 0px;
+    padding: 10px 16px;
+    text-transform: uppercase;
+    text-align: center;
+}
+
+.question-container {
+    align-items: center;
+    display: flex;
+    flex-direction: column;
+    border-radius: 5px;
+    background-color: var(--secondary-color);
+    padding: 24px;
+}
+
+.question-title {
+    color: #000;
+    font-family: 'Maven Pro';
+    font-size: 16px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: 20px;
+    text-align: center;
+}
