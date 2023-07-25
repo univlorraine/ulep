@@ -31,6 +31,7 @@ const Store = createStore<TokenStoreTypes>(
             if (payload.interests) profile.interests = payload.interests;
             if (payload.lastname) profile.lastname = payload.lastname;
             if (payload.learningLanguage) profile.learningLanguage = payload.learningLanguage;
+            if (payload.learningLanguageLevel) profile.learningLanguageLevel = payload.learningLanguageLevel;
             if (payload.nativeLanguage) profile.nativeLanguage = payload.nativeLanguage;
             if (payload.otherLanguages) profile.otherLanguages = payload.otherLanguages;
             if (payload.password) profile.password = payload.password;

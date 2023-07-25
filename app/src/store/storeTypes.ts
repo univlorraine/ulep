@@ -28,6 +28,7 @@ export interface SignUpStorePayload {
     interests?: string[];
     lastname?: string;
     learningLanguage?: Language;
+    learningLanguageLevel?: string;
     nativeLanguage?: Language;
     otherLanguages?: Language[];
     password?: string;

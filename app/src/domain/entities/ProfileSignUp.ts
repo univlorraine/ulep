@@ -52,6 +52,8 @@ class ProfileSignUp {
 
     private _learningLanguage?: Language;
 
+    private _learningLanguageLevel?: string;
+
     private _lastname?: string;
 
     private _nativeLanguage?: Language;
@@ -138,6 +140,10 @@ class ProfileSignUp {
 
     set learningLanguage(learningLanguage: Language | undefined) {
         this._learningLanguage = learningLanguage;
+    }
+
+    set learningLanguageLevel(learningLanguageLevel: string) {
+        this._learningLanguageLevel = learningLanguageLevel;
     }
 
     set nativeLanguage(nativeLanguage: Language) {
