@@ -7,6 +7,7 @@ import GetAllCountriesUsecase from '../domain/usecases/GetAllCountriesUsecase';
 import GetAllGoalsUsecase from '../domain/usecases/GetAllGoalsUsecase';
 import GetAllLanguagesUsecase from '../domain/usecases/GetAllLanguagesUsecase';
 import GetAllUniversitiesUsecase from '../domain/usecases/GetAllUniversitiesUsecase';
+import GetQuizzByLevelUsecase from '../domain/usecases/GetQuizzByLevelUsecase';
 import LoginUsecase from '../domain/usecases/LoginUsecase';
 import ResetPasswordUsecase from '../domain/usecases/ResetPasswordUsecase';
 import { ConfigContextValueType } from './configurationContextTypes';
@@ -27,6 +28,7 @@ const getConfigContextValue = (
     const getAllGoals = new GetAllGoalsUsecase(domainHttpAdapter);
     const getAllLanguages = new GetAllLanguagesUsecase(domainHttpAdapter);
     const getAllUniversities = new GetAllUniversitiesUsecase(domainHttpAdapter);
+    const getQuizzByLevel = new GetQuizzByLevelUsecase(domainHttpAdapter);
     const login = new LoginUsecase(domainHttpAdapter, setTokens);
     const resetPassword = new ResetPasswordUsecase(domainHttpAdapter);
 
@@ -38,6 +40,7 @@ const getConfigContextValue = (
         getAllGoals,
         getAllLanguages,
         getAllUniversities,
+        getQuizzByLevel,
         login,
         resetPassword,
     };

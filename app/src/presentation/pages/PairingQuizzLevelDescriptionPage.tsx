@@ -1,13 +1,17 @@
+import { useIonToast } from '@ionic/react';
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useConfig } from '../../context/ConfigurationContext';
+import Question from '../../domain/entities/Question';
 import WebLayoutCentered from '../components/WebLayoutCentered';
 import quizzDescriptionStyle from './css/PairingQuizzLevelDescription.module.css';
 import styles from './css/SignUp.module.css';
 
 const PairingQuizzLevelDescriptionPage = () => {
-    const { configuration } = useConfig();
+    const { configuration, getQuizzByLevel } = useConfig();
+    const [showToast] = useIonToast();
     const { t } = useTranslation();
+    const [questions, setQuestions] = useState<Question[]>([]);
     const [selectQuizz, setSelectQuizz] = useState<string>();
 
     const quizzData = [
@@ -17,10 +21,18 @@ const PairingQuizzLevelDescriptionPage = () => {
         { value: 'C1', title: t('pairing_quizz_description_page.C1') },
     ];
 
-    const askQuizz = (level: string | undefined) => {
+    const askQuizz = async (level: string | undefined) => {
         if (!level) {
             return;
         }
+
+        const result = await getQuizzByLevel.execute(level);
+
+        if (result instanceof Error) {
+            return await showToast({ message: t(result.message), duration: 5000 });
+        }
+
+        setQuestions(result);
     };
 
     return (
