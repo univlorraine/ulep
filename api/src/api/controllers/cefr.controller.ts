@@ -27,4 +27,11 @@ export class CEFRController {
       GetCEFRQuestionsResponse.fromDomain(question),
     );
   }
+
+  @Get('levels')
+  @Swagger.ApiOperation({ summary: 'Find all the levels' })
+  @Swagger.ApiOkResponse({ type: String, isArray: true })
+  getLevels(): CEFRLevel[] {
+    return Object.values(CEFRLevel);
+  }
 }
