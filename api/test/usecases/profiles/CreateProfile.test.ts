@@ -13,6 +13,7 @@ import { InMemoryLanguageRepository } from '../../../src/providers/persistance/r
 import seedDefinedNumberOfUsers from '../../seeders/users';
 import { Language } from '../../../src/core/models/language';
 import { ProfileLanguagesException } from '../../../src/core/errors/ProfileExceptions';
+import { CEFRLevel } from '../../../src/core/models/cefr';
 
 describe('CreateProfile', () => {
   const userRepository = new InMemoryUserRepository();
@@ -71,7 +72,7 @@ describe('CreateProfile', () => {
       university: university.id,
       nativeLanguage: 'FR',
       learningLanguage: 'EN',
-      proficiencyLevel: 'B2',
+      proficiencyLevel: CEFRLevel.B2,
       learningType: 'ETANDEM',
       goals: ['ORAL_PRACTICE'],
       interests: ['music', 'sport'],
@@ -96,7 +97,7 @@ describe('CreateProfile', () => {
         university: university.id,
         nativeLanguage: 'FR',
         learningLanguage: 'EN',
-        proficiencyLevel: 'B2',
+        proficiencyLevel: CEFRLevel.B2,
         learningType: 'ETANDEM',
         goals: ['ORAL_PRACTICE'],
         interests: ['music', 'sport'],
@@ -125,7 +126,7 @@ describe('CreateProfile', () => {
         university: 'uuid-that-does-not-exist',
         nativeLanguage: 'FR',
         learningLanguage: 'EN',
-        proficiencyLevel: 'B2',
+        proficiencyLevel: CEFRLevel.B2,
         learningType: 'ETANDEM',
         goals: ['ORAL_PRACTICE'],
         interests: ['music', 'sport'],
@@ -154,7 +155,7 @@ describe('CreateProfile', () => {
         university: university.id,
         nativeLanguage: 'FR',
         learningLanguage: 'ZH',
-        proficiencyLevel: 'B2',
+        proficiencyLevel: CEFRLevel.B2,
         learningType: 'ETANDEM',
         goals: ['ORAL_PRACTICE'],
         interests: ['music', 'sport'],
@@ -177,7 +178,7 @@ describe('CreateProfile', () => {
       gender: Gender.FEMALE,
       university: university.id,
       nativeLanguage: 'FR',
-      proficiencyLevel: 'B2',
+      proficiencyLevel: CEFRLevel.B2,
       learningType: 'ETANDEM',
       goals: ['ORAL_PRACTICE'],
       interests: ['music', 'sport'],
@@ -201,7 +202,7 @@ describe('CreateProfile', () => {
         university: university.id,
         nativeLanguage: 'FR',
         learningLanguage: 'JA',
-        proficiencyLevel: 'B2',
+        proficiencyLevel: CEFRLevel.B2,
         learningType: 'ETANDEM',
         goals: ['ORAL_PRACTICE'],
         interests: ['music', 'sport'],
@@ -228,7 +229,7 @@ describe('CreateProfile', () => {
         university: university.id,
         nativeLanguage: 'FR',
         learningLanguage: 'FR',
-        proficiencyLevel: 'B2',
+        proficiencyLevel: CEFRLevel.B2,
         learningType: 'ETANDEM',
         goals: ['ORAL_PRACTICE'],
         interests: ['music', 'sport'],
@@ -256,7 +257,7 @@ describe('CreateProfile', () => {
         nativeLanguage: 'FR',
         learningLanguage: 'EN',
         masteredLanguages: ['FR'],
-        proficiencyLevel: 'B2',
+        proficiencyLevel: CEFRLevel.B2,
         learningType: 'ETANDEM',
         goals: ['ORAL_PRACTICE'],
         interests: ['music', 'sport'],
@@ -284,7 +285,7 @@ describe('CreateProfile', () => {
         nativeLanguage: 'FR',
         learningLanguage: 'EN',
         masteredLanguages: ['EN'],
-        proficiencyLevel: 'B2',
+        proficiencyLevel: CEFRLevel.B2,
         learningType: 'ETANDEM',
         goals: ['ORAL_PRACTICE'],
         interests: ['music', 'sport'],

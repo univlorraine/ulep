@@ -4,6 +4,7 @@ import { ProfileDoesNotExist } from '../../../src/core/errors/RessourceDoesNotEx
 import { UpdateProfileUsecase } from '../../../src/core/usecases/profiles/update-profile.usecase';
 import seedDefinedNumberOfUniversities from '../../seeders/universities';
 import seedDefinedNumberOfUsers from '../../seeders/users';
+import { CEFRLevel } from '../../../src/core/models/cefr';
 
 describe('UpdateProfile', () => {
   const profileRepository = new InMemoryProfileRepository();
@@ -37,7 +38,7 @@ describe('UpdateProfile', () => {
         nativeLanguage: 'FR',
         masteredLanguages: [],
         learningLanguage: 'EN',
-        learningLanguageLevel: 'B2',
+        learningLanguageLevel: CEFRLevel.B2,
       },
       preferences: {
         learningType: 'ETANDEM',
@@ -51,7 +52,7 @@ describe('UpdateProfile', () => {
 
     const profile = await updateProfileUsecase.execute({
       id: instance.id,
-      proficiencyLevel: 'C1',
+      proficiencyLevel: CEFRLevel.C1,
     });
 
     expect(profile.id).toEqual(profile.id);
@@ -62,7 +63,7 @@ describe('UpdateProfile', () => {
     try {
       await updateProfileUsecase.execute({
         id: 'uuid-that-does-not-exist',
-        proficiencyLevel: 'C1',
+        proficiencyLevel: CEFRLevel.C1,
       });
     } catch (error) {
       expect(error).toBeInstanceOf(ProfileDoesNotExist);

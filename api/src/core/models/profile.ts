@@ -3,6 +3,7 @@ import MediaObject from './media-object';
 import { User } from './user';
 import { DomainError } from '../errors/errors';
 import { ProfileLanguagesException } from '../errors/ProfileExceptions';
+import { CEFRLevel } from './cefr';
 
 export enum Role {
   STUDENT = 'STUDENT',
@@ -14,8 +15,6 @@ export enum Gender {
   FEMALE = 'FEMALE',
   OTHER = 'OTHER',
 }
-
-export type CEFRLevel = 'A0' | 'A1' | 'A2' | 'B1' | 'B2' | 'C1' | 'C2';
 
 export type LearningType = 'ETANDEM' | 'TANDEM' | 'BOTH';
 
@@ -125,7 +124,7 @@ export class Profile {
     this.assertLanguesAreUnique();
 
     if (!languages.learningLanguage) {
-      this.#languages.learningLanguageLevel = 'A0';
+      this.#languages.learningLanguageLevel = CEFRLevel.A0;
     }
   }
 

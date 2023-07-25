@@ -16,10 +16,12 @@ import { ReportCategoriesController } from './controllers/report-categories.cont
 import { UuidProvider } from './services/uuid-provider';
 import { TandemController } from './controllers/tandem.controller';
 import { CountryController } from './controllers/country.controller';
+import { CEFRController } from './controllers/cefr.controller';
 
 @Module({
   imports: [CoreModule, TerminusModule],
   controllers: [
+    CEFRController,
     CountryController,
     ExportController,
     HealthController,

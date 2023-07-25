@@ -38,8 +38,11 @@ import { GenerateTandemsUsecase } from './usecases/tandems/generate-tandems.usec
 import { AddLanguageRequestUsecase } from './usecases/languages/add-request.usecase';
 import { CreateCountryUsecase } from './usecases/countries/create-country.usecase';
 import { GetCountriesUsecase } from './usecases/countries/get-countries.usecase';
+import { GetCEFRTestUsecase } from './usecases/administration/get-cefr-test.usecase';
 
 const usecases: Provider[] = [
+  // Administration
+  GetCEFRTestUsecase,
   // Countries
   CreateCountryUsecase,
   GetCountriesUsecase,

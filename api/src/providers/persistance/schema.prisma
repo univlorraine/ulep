@@ -188,3 +188,22 @@ model Country {
 
   @@map("countries")
 }
+
+model CEFRTest {
+  id                    String              @id @default(uuid())
+  level                 String              @unique
+  questions             CEFRQuestion[]
+
+  @@map("cefr_tests")
+  @@index([level], name: "level")
+}
+
+model CEFRQuestion {
+  id                    String              @id @default(uuid())
+  value                 String
+  answer                Boolean
+  test                  CEFRTest            @relation(fields: [testId], references: [id], onDelete: Cascade)
+  testId                String
+
+  @@map("cefr_questions")
+}

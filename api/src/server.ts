@@ -28,7 +28,11 @@ export class Server {
 
   private addGlobalPipes(app: NestExpressApplication): void {
     app.useGlobalPipes(
-      new ValidationPipe({ forbidUnknownValues: true, transform: true }),
+      new ValidationPipe({
+        transform: true,
+        whitelist: true,
+        forbidNonWhitelisted: true,
+      }),
     );
   }
 
