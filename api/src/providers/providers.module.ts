@@ -9,8 +9,10 @@ import { PrismaUserRepository } from './persistance/repositories/prisma-user-rep
 import { PrismaReportRepository } from './persistance/repositories/prisma-report-repository';
 import { PrismaTandemRepository } from './persistance/repositories/prisma-tandem-repository';
 import { PrismaCountryRepository } from './persistance/repositories/prisma-country-repository';
+import { PrismaCEFRRepository } from './persistance/repositories/prisma-cefr-repository';
 
 export const AUTHENTICATOR = 'authenticator';
+export const CEFR_REPOSITORY = 'cefr.repository';
 export const COUNTRY_REPOSITORY = 'country.repository';
 export const LANGUAGE_REPOSITORY = 'language.repository';
 export const MEDIA_OBJECT_REPOSITORY = 'media-object.repository';
@@ -22,6 +24,10 @@ export const UNIVERSITY_REPOSITORY = 'university.repository';
 export const USER_REPOSITORY = 'user.repository';
 
 const providers: Provider[] = [
+  {
+    provide: CEFR_REPOSITORY,
+    useClass: PrismaCEFRRepository,
+  },
   {
     provide: COUNTRY_REPOSITORY,
     useClass: PrismaCountryRepository,

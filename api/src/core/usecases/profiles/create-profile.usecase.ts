@@ -4,7 +4,7 @@ import {
   UniversityDoesNotExist,
   UserDoesNotExist,
 } from '../../errors/RessourceDoesNotExist';
-import { Gender, Role, CEFRLevel, Profile } from '../../models/profile';
+import { Gender, Role, Profile } from '../../models/profile';
 import { ProfileRepository } from '../../ports/profile.repository';
 import { UniversityRepository } from '../../ports/university.repository';
 import {
@@ -20,6 +20,7 @@ import { User } from '../../models/user';
 import { UserRepository } from '../../ports/user.repository';
 import { ProfileAlreadyExists } from '../../errors/RessourceAlreadyExists';
 import { ProfileLanguagesException } from '../../errors/ProfileExceptions';
+import { CEFRLevel } from 'src/core/models/cefr';
 
 export class CreateProfileCommand {
   id: string;
