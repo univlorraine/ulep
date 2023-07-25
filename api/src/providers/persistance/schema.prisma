@@ -180,3 +180,11 @@ model ReportCategory {
 
   @@map("report_categories")
 }
+
+model Country {
+  code                  String              @id
+  name                  String
+  createdAt             DateTime            @default(now())
+
+  @@map("countries")
+}

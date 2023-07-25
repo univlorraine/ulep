@@ -36,8 +36,13 @@ import { CreateTandemUsecase } from './usecases/tandems/create-tandem.usecase';
 import { GetTandemsUsecase } from './usecases/tandems/get-tandems.usecase';
 import { GenerateTandemsUsecase } from './usecases/tandems/generate-tandems.usecase';
 import { AddLanguageRequestUsecase } from './usecases/languages/add-request.usecase';
+import { CreateCountryUsecase } from './usecases/countries/create-country.usecase';
+import { GetCountriesUsecase } from './usecases/countries/get-countries.usecase';
 
 const usecases: Provider[] = [
+  // Countries
+  CreateCountryUsecase,
+  GetCountriesUsecase,
   // Languages
   CreateLanguageUsecase,
   GetLanguagesUsecase,

@@ -2,6 +2,7 @@ import * as Prisma from '@prisma/client';
 import { createLanguages } from './languages';
 import { createUniversities } from './universities';
 import { createProfiles } from './profiles';
+import { createCountries } from './countries';
 
 const prisma = new Prisma.PrismaClient();
 
@@ -11,8 +12,10 @@ const load = async () => {
     await prisma.user.deleteMany();
     await prisma.university.deleteMany();
     await prisma.language.deleteMany();
+    await prisma.country.deleteMany();
     await prisma.tandem.deleteMany();
 
+    await createCountries(prisma);
     await createLanguages(prisma);
     await createUniversities(prisma);
     await createProfiles(1000, prisma);
