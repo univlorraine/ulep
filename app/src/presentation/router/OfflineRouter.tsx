@@ -12,7 +12,7 @@ import PairingLevelPage from '../pages/PairingLevelPage';
 import PairingOtherLanguagesPage from '../pages/PairingOtherLanguagesPage';
 import PairingPedagogyPage from '../pages/PairingPedagogyPage';
 import PairingQuizzIntroductionPage from '../pages/PairingQuizzIntroductionPage';
-import PairingQuizzLevelDescriptionPage from '../pages/PairingQuizzLevelDescriptionPage';
+import PairingQuizzPage from '../pages/PairingQuizzPage';
 import PairingSelectLevelPage from '../pages/PairingSelectLevelPage';
 import PairingUnavailableLanguagePage from '../pages/PairingUnavailableLanguagePage';
 import ResetPasswordPage from '../pages/ResetPasswordPage';
@@ -61,8 +61,8 @@ const OfflineRouter: React.FC = () => (
         <Route exact path="/signup/pairing/language/quizz/introduction">
             <PairingQuizzIntroductionPage />
         </Route>
-        <Route exact path="/signup/pairing/language/quizz/description">
-            <PairingQuizzLevelDescriptionPage />
+        <Route exact path="/signup/pairing/language/quizz">
+            <PairingQuizzPage />
         </Route>
         <Route exact path="/signup/pairing/level/select">
             <PairingSelectLevelPage />

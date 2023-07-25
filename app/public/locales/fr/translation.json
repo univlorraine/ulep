@@ -96,6 +96,12 @@
         "subtitle": "Réponds aux questions suivantes",
         "title": "Ton niveau"
     },
+    "pairing_quizz_validated_page": {
+        "description": "Continue sur ta lancée",
+        "next_button": "Cool, la suite",
+        "title": "Ton niveau",
+        "validated": "Validé"
+    },
     "pairing_languages_page": {
         "subtitle": "Quelle langue veux-tu travailler avec ton tandem ?",
         "title": "Choix de la langue",

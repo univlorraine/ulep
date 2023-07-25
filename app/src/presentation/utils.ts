@@ -182,3 +182,41 @@ export const codeCountryToFlag = (countryCode: string) => {
 
     return '🌐';
 };
+
+export const getPreviousLevel = (level: string) => {
+    switch (level) {
+        case 'A1':
+            return 'A0';
+        case 'A2':
+            return 'A1';
+        case 'B1':
+            return 'A2';
+        case 'B2':
+            return 'B1';
+        case 'C1':
+            return 'B2';
+        case 'C2':
+            return 'C1';
+        default:
+            return 'A0';
+    }
+};
+
+export const getNextLevel = (level: string) => {
+    switch (level) {
+        case 'A0':
+            return 'A1';
+        case 'A1':
+            return 'A2';
+        case 'A2':
+            return 'B1';
+        case 'B1':
+            return 'B2';
+        case 'B2':
+            return 'C1';
+        case 'C1':
+            return 'C2';
+        default:
+            return 'A0';
+    }
+};

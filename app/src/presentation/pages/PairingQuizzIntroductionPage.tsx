@@ -1,4 +1,5 @@
 import { useTranslation } from 'react-i18next';
+import { useHistory } from 'react-router';
 import { useConfig } from '../../context/ConfigurationContext';
 import WebLayoutCentered from '../components/WebLayoutCentered';
 import quizzIntroductionStyle from './css/PairingQuizzIntroduction.module.css';
@@ -6,6 +7,7 @@ import styles from './css/SignUp.module.css';
 
 const PairingQuizzIntroductionPage = ({}) => {
     const { configuration } = useConfig();
+    const history = useHistory();
     const { t } = useTranslation();
 
     return (
@@ -26,7 +28,10 @@ const PairingQuizzIntroductionPage = ({}) => {
                     <div className={quizzIntroductionStyle.time}>{t('pairing_quizz_introduction_page.time')}</div>
                 </div>
                 <div>
-                    <button className="primary-button large-margin-bottom">
+                    <button
+                        className="primary-button large-margin-bottom"
+                        onClick={() => history.push('/signup/pairing/language/quizz')}
+                    >
                         {t('pairing_quizz_introduction_page.validate_button')}
                     </button>
                 </div>
