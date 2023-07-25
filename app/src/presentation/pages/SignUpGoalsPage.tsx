@@ -60,8 +60,8 @@ const SignUpGoalsPage: React.FC = () => {
         >
             <div className={styles.body}>
                 <div className={goalsStyles.content}>
-                    <h1 className={goalsStyles.title}>{t('signup_goals_page.title')}</h1>
-                    <span className={goalsStyles.subtitle}>{t('signup_goals_page.subtitle')}</span>
+                    <h1 className="title">{t('signup_goals_page.title')}</h1>
+                    <span className="subtitle">{t('signup_goals_page.subtitle')}</span>
 
                     <div className={goalsStyles['goals-container']}>
                         {goals.map((goal) => {

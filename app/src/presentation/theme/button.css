@@ -38,6 +38,7 @@
     line-height: normal;
     text-decoration-line: underline;
     text-transform: uppercase;
+    width: 100%;
 }
 
 ion-button.confirm {

@@ -58,6 +58,27 @@ input::-webkit-inner-spin-button {
     height: 100%;
 }
 
+.subtitle {
+    color: #000;
+    font-family: 'Maven Pro', sans-serif;
+    font-size: 16px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: 20px;
+    text-align: center;
+}
+
+.title {
+    align-self: center;
+    color: #000;
+    text-align: center;
+    font-family: 'Roboto', sans-serif;
+    font-size: 37px;
+    font-style: normal;
+    font-weight: 700;
+    line-height: 40px;
+}
+
 @media (min-width: 768px) {
     .container {
         min-height: calc(100vh - 64px);

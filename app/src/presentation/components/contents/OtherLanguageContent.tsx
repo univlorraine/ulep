@@ -23,8 +23,8 @@ const OtherLanguageContent: React.FC<OtherLanguageContentProps> = ({ languages, 
     return (
         <>
             <div className={pairingOtherLanguagesStyles.content}>
-                <h1 className={pairingOtherLanguagesStyles.title}>{t('pairing_other_languages_page.title')}</h1>
-                <p className={pairingOtherLanguagesStyles.subtitle}>{t('pairing_other_languages_page.subtitle')}</p>
+                <h1 className="title">{t('pairing_other_languages_page.title')}</h1>
+                <p className="subtitle">{t('pairing_other_languages_page.subtitle')}</p>
 
                 <div className={pairingOtherLanguagesStyles['joker-container']}>
                     <img alt="dice" src="/assets/dice.svg" />

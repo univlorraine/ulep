@@ -13,12 +13,8 @@ const OtherLanguageSelectedContent: React.FC<OtherLanguageSelectedContentProps> 
     return (
         <>
             <div className={otherLanguagesSelectedStyles.content}>
-                <h1 className={otherLanguagesSelectedStyles.title}>
-                    {t('pairing_other_languages_page.selected_language.title')}
-                </h1>
-                <p className={otherLanguagesSelectedStyles.subtitle}>
-                    {t('pairing_other_languages_page.selected_language.subtitle')}
-                </p>
+                <h1 className="title">{t('pairing_other_languages_page.selected_language.title')}</h1>
+                <p className="subtitle">{t('pairing_other_languages_page.selected_language.subtitle')}</p>
 
                 <p className={otherLanguagesSelectedStyles['language-title']}>
                     {t('pairing_other_languages_page.selected_language.language')}

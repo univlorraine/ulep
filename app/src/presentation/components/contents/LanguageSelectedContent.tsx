@@ -20,8 +20,8 @@ const LanguageSelectedContent: React.FC<LanguageSelectedContentProps> = ({
 
     return (
         <div className={styles.container}>
-            <h1 className={styles.title}>{`${t(`pairing_${mode}_language_page.not_alone.title`)}`}</h1>
-            <span className={styles.subtitle}>{`${t(`pairing_${mode}_language_page.not_alone.subtitle`)}`}</span>
+            <h1 className="title">{`${t(`pairing_${mode}_language_page.not_alone.title`)}`}</h1>
+            <span className="subtitle">{`${t(`pairing_${mode}_language_page.not_alone.subtitle`)}`}</span>
             <div className={styles['image-container']}>
                 <img className={styles.image} alt="avatar" src={profilePicture}></img>
                 <div className={styles.bubble}>

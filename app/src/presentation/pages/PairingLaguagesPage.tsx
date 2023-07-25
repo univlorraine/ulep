@@ -56,8 +56,8 @@ const PairingLaguagesPage: React.FC = () => {
         >
             <div className={styles.body}>
                 <div className={pairingLanguagesStyles.content}>
-                    <h1 className={pairingLanguagesStyles.title}>{t('pairing_languages_page.title')}</h1>
-                    <p className={pairingLanguagesStyles.subtitle}>{t('pairing_languages_page.subtitle')}</p>
+                    <h1 className="title">{t('pairing_languages_page.title')}</h1>
+                    <p className="subtitle">{t('pairing_languages_page.subtitle')}</p>
 
                     <div className={pairingLanguagesStyles['languages-container']}>
                         {languages.map((language) => {

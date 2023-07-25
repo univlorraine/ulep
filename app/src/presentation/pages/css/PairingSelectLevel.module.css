@@ -1,0 +1,19 @@
+.level-container {
+    background: #f2f4f7;
+    border-radius: 10px;
+    color: #000;
+    font-family: 'Maven Pro';
+    font-size: 16px;
+    font-style: normal;
+    font-weight: 500;
+    height: 80px;
+    line-height: 20px;
+    margin-bottom: 10px;
+    text-align: center;
+    width: 100%;
+}
+
+.levels-container {
+    column-count: 2;
+    column-gap: 10px;
+}

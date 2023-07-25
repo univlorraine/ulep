@@ -60,8 +60,8 @@ const SignUpInterestsPage: React.FC = () => {
         >
             <div className={styles.body}>
                 <div>
-                    <h1 className={interestStyle.title}>{t('signup_interests_page.title')}</h1>
-                    <h2 className={interestStyle.subtitle}>{t('signup_interests_page.subtitle')}</h2>
+                    <h1 className="title">{t('signup_interests_page.title')}</h1>
+                    <h2 className="subtitle">{t('signup_interests_page.subtitle')}</h2>
 
                     {catergoriesInterests.map((categoryInterest) => {
                         return (
