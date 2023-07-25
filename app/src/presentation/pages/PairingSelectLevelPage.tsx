@@ -53,7 +53,10 @@ const PairingSelectLevelPage: React.FC = () => {
                     <button className={`primary-button ${!selectedLevel ? 'disabled' : ''}`} disabled={!selectedLevel}>
                         {t('pairing_select_level_page.validate_button')}
                     </button>
-                    <button className="secondary-button large-margin-vertical">
+                    <button
+                        className="secondary-button large-margin-vertical"
+                        onClick={() => history.push('/signup/pairing/language/quizz/introduction')}
+                    >
                         {t('pairing_select_level_page.test_button')}
                     </button>
                 </div>

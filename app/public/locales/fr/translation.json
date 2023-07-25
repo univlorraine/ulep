@@ -72,6 +72,13 @@
         "title": "Choix de la langue",
         "validate_button": "Confirmer"
     },
+    "pairing_quizz_introduction_page": {
+        "description": "Passe au niveau suivant une fois terminé",
+        "subtitle": "Découvre ton niveau en répondant à quelques questions",
+        "time": "ça prendra 10 min max",
+        "title": "Ton niveau",
+        "validate_button": "Commencer"
+    },
     "pairing_languages_page": {
         "subtitle": "Quelle langue veux-tu travailler avec ton tandem ?",
         "title": "Choix de la langue",
