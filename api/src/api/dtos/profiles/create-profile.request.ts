@@ -9,8 +9,9 @@ import {
   IsUUID,
   Min,
 } from 'class-validator';
-import { CEFRLevel, Role, Gender } from '../../../core/models/profile';
+import { Role, Gender } from '../../../core/models/profile';
 import { CreateProfileCommand } from 'src/core/usecases/profiles/create-profile.usecase';
+import { CEFRLevel } from 'src/core/models/cefr';
 
 export class CreateProfileRequest implements Omit<CreateProfileCommand, 'id'> {
   @ApiProperty({ type: 'string', format: 'uuid' })
@@ -48,8 +49,8 @@ export class CreateProfileRequest implements Omit<CreateProfileCommand, 'id'> {
   @IsOptional()
   learningLanguage?: string;
 
-  @ApiProperty({ type: 'string', example: 'B2' })
-  @IsIn(['A0', 'A1', 'A2', 'B1', 'B2', 'C1', 'C2'])
+  @ApiProperty({ enum: CEFRLevel, example: 'B2' })
+  @IsEnum(CEFRLevel)
   proficiencyLevel: CEFRLevel;
 
   @ApiProperty({ enum: ['ETANDEM', 'TANDEM', 'BOTH'] })

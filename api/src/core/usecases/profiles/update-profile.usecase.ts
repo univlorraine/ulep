@@ -1,8 +1,9 @@
 import { Inject, Injectable } from '@nestjs/common';
 import { ProfileDoesNotExist } from '../../errors/RessourceDoesNotExist';
-import { CEFRLevel, Profile } from '../../models/profile';
+import { Profile } from '../../models/profile';
 import { ProfileRepository } from '../../ports/profile.repository';
 import { PROFILE_REPOSITORY } from '../../../providers/providers.module';
+import { CEFRLevel } from 'src/core/models/cefr';
 
 export type UpdateProfileCommand = {
   id: string;

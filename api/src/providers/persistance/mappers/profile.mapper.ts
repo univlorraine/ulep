@@ -1,6 +1,5 @@
 import * as Prisma from '@prisma/client';
 import {
-  CEFRLevel,
   Gender,
   LearningType,
   Profile,
@@ -8,6 +7,7 @@ import {
 } from '../../../core/models/profile';
 import { UniversitySnapshot, universityMapper } from './university.mapper';
 import { userMapper } from './user.mapper';
+import { CEFRLevel } from 'src/core/models/cefr';
 
 type ProfileEntity = Prisma.Profile & {
   user: Prisma.User;
