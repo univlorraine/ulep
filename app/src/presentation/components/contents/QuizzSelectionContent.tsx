@@ -1,18 +1,24 @@
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useConfig } from '../../../context/ConfigurationContext';
+import cefr from '../../../domain/entities/cefr';
 import styles from './QuizzSelectionContent.module.css';
 
+interface QuizzDataInterface {
+    value: cefr;
+    title: string;
+}
+
 interface QuizzSelectionContentProps {
-    onQuizzSelected: (level: string | undefined) => Promise<void>;
+    onQuizzSelected: (level: cefr | undefined) => Promise<void>;
 }
 
 const QuizzSelectionContent: React.FC<QuizzSelectionContentProps> = ({ onQuizzSelected }) => {
     const { configuration } = useConfig();
     const { t } = useTranslation();
-    const [selectQuizz, setSelectQuizz] = useState<string>();
+    const [selectQuizz, setSelectQuizz] = useState<cefr>();
 
-    const quizzData = [
+    const quizzData: QuizzDataInterface[] = [
         { value: 'A1', title: t('pairing_quizz_description_page.A1') },
         { value: 'A2', title: t('pairing_quizz_description_page.A2') },
         { value: 'B1', title: t('pairing_quizz_description_page.B1') },
@@ -27,6 +33,7 @@ const QuizzSelectionContent: React.FC<QuizzSelectionContentProps> = ({ onQuizzSe
                 {quizzData.map((quizz, index) => {
                     return (
                         <button
+                            key={quizz.value}
                             className={styles['level-container']}
                             onClick={() => setSelectQuizz(quizz.value)}
                             style={{

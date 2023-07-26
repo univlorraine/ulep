@@ -7,6 +7,7 @@ import University from '../domain/entities/University';
 import gender from '../domain/entities/gender';
 import pedagogy from '../domain/entities/pedagogy';
 import roles from '../domain/entities/roles';
+import cefr from '../domain/entities/cefr';
 
 export interface TokenStorePayload {
     accessToken: string;
@@ -28,7 +29,7 @@ export interface SignUpStorePayload {
     interests?: string[];
     lastname?: string;
     learningLanguage?: Language;
-    learningLanguageLevel?: string;
+    learningLanguageLevel?: cefr;
     nativeLanguage?: Language;
     otherLanguages?: Language[];
     password?: string;

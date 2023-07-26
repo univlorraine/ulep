@@ -13,6 +13,7 @@ import QuizzSelectionContent from '../components/contents/QuizzSelectionContent'
 import QuizzValidatedContent from '../components/contents/QuizzValidatedContent';
 import { getNextLevel, getPreviousLevel } from '../utils';
 import styles from './css/SignUp.module.css';
+import cefr from '../../domain/entities/cefr';
 
 const PairingQuizzPage = () => {
     const { configuration, getQuizzByLevel } = useConfig();
@@ -22,7 +23,7 @@ const PairingQuizzPage = () => {
     const updateProfileSignUp = useStoreActions((state) => state.updateProfileSignUp);
     const profileSignUp = useStoreState((state) => state.profileSignUp);
     const [questions, setQuestions] = useState<Question[]>([]);
-    const [currentQuizz, setCurrentQuizz] = useState<string>('');
+    const [currentQuizz, setCurrentQuizz] = useState<cefr | undefined>();
     const [displayNextQuizz, setDisplayNextQuizz] = useState<boolean>(false);
 
     if (!profileSignUp.learningLanguage) {
@@ -32,7 +33,7 @@ const PairingQuizzPage = () => {
     // @ts-ignore
     const learningLanguage = new Language(profileSignUp.learningLanguage._code, profileSignUp.learningLanguage._name);
 
-    const askQuizz = async (level: string | undefined) => {
+    const askQuizz = async (level: cefr | undefined) => {
         if (!level) {
             return;
         }
@@ -72,7 +73,7 @@ const PairingQuizzPage = () => {
         return history.push('/signup/pairing/language/quizz/end');
     };
 
-    if (displayNextQuizz) {
+    if (displayNextQuizz && currentQuizz) {
         return (
             <SuccessLayout
                 backgroundColorCode={configuration.secondaryDarkColor}

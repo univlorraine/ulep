@@ -1,3 +1,5 @@
+import cefr from '../domain/entities/cefr';
+
 const countriesCodeWithFlags: [string, string][] = [
     ['aa', '🇪🇹'], // Afar - Ethiopia
     ['ab', '🇬🇪'], // Abkhaz - Georgia
@@ -183,7 +185,7 @@ export const codeCountryToFlag = (countryCode: string) => {
     return '🌐';
 };
 
-export const getPreviousLevel = (level: string) => {
+export const getPreviousLevel = (level: cefr) => {
     switch (level) {
         case 'A1':
             return 'A0';
@@ -202,7 +204,7 @@ export const getPreviousLevel = (level: string) => {
     }
 };
 
-export const getNextLevel = (level: string) => {
+export const getNextLevel = (level: cefr) => {
     switch (level) {
         case 'A0':
             return 'A1';
