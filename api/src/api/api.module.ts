@@ -15,10 +15,12 @@ import { ReportController } from './controllers/report.controller';
 import { ReportCategoriesController } from './controllers/report-categories.controller';
 import { UuidProvider } from './services/uuid-provider';
 import { TandemController } from './controllers/tandem.controller';
+import { CountryController } from './controllers/country.controller';
 
 @Module({
   imports: [CoreModule, TerminusModule],
   controllers: [
+    CountryController,
     ExportController,
     HealthController,
     LanguageController,
