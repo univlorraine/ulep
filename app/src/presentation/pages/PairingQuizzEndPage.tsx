@@ -13,8 +13,6 @@ const PairingQuizzEndPage = ({}) => {
     const profileSignUp = useStoreState((state) => state.profileSignUp);
     const { t } = useTranslation();
 
-    console.log(profileSignUp);
-
     if (!profileSignUp.learningLanguage || !profileSignUp.learningLanguageLevel) {
         return <Redirect to="/signup/pairing/languages" />;
     }
