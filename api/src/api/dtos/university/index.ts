@@ -20,11 +20,6 @@ export class CreateUniversityRequest implements CreateUniversityCommand {
   @IsNotEmpty()
   name: string;
 
-  @ApiPropertyOptional({ type: 'string', format: 'url' })
-  @IsUrl()
-  @IsOptional()
-  website?: string;
-
   @ApiPropertyOptional({ type: 'string', format: 'uuid' })
   @IsUUID()
   @IsOptional()
@@ -52,6 +47,16 @@ export class CreateUniversityRequest implements CreateUniversityCommand {
   @IsDate()
   @IsAfterThan('admissionStart')
   admissionEnd: Date;
+
+  @ApiPropertyOptional({ type: 'string', format: 'url' })
+  @IsUrl()
+  @IsOptional()
+  website?: string;
+
+  @ApiPropertyOptional({ type: 'string', format: 'url' })
+  @IsUrl()
+  @IsOptional()
+  resourcesUrl?: string;
 }
 
 export class UniversityResponse {
@@ -62,10 +67,6 @@ export class UniversityResponse {
   @ApiProperty({ type: 'string', example: 'Université de Lorraine' })
   @Expose({ groups: ['read'] })
   name: string;
-
-  @ApiPropertyOptional({ type: 'string', format: 'url' })
-  @Expose({ groups: ['read'] })
-  website?: string;
 
   @ApiPropertyOptional({ type: 'string', format: 'uuid' })
   @Expose({ groups: ['read'] })
@@ -91,6 +92,14 @@ export class UniversityResponse {
   @Expose({ groups: ['university:read'] })
   admissionEnd: Date;
 
+  @ApiPropertyOptional({ type: 'string', format: 'url' })
+  @Expose({ groups: ['read'] })
+  website?: string;
+
+  @ApiPropertyOptional({ type: 'string', format: 'url' })
+  @Expose({ groups: ['read'] })
+  resourcesUrl?: string;
+
   constructor(partial: Partial<UniversityResponse>) {
     Object.assign(this, partial);
   }
@@ -99,13 +108,14 @@ export class UniversityResponse {
     return new UniversityResponse({
       id: domain.id,
       name: domain.name,
-      website: domain.website,
       parent: domain.parent,
       timezone: domain.timezone,
       languages: domain.languages.map((language: Language) => language.code),
       campus: domain.campus,
       admissionStart: domain.admissionStart,
       admissionEnd: domain.admissionEnd,
+      website: domain.website,
+      resourcesUrl: domain.resourcesUrl,
     });
   }
 }
