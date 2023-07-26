@@ -3,21 +3,20 @@ import { Language } from './language';
 
 export interface UniversityProps {
   name: string;
-  website?: string;
   parent?: string;
   campus: string[];
   languages: Language[];
   timezone: string;
   admissionStart: Date;
   admissionEnd: Date;
+  website?: string;
+  resourcesUrl?: string;
 }
 
 export class University {
   #id: string;
 
   #name: string;
-
-  #website?: string;
 
   #parent?: string;
 
@@ -31,16 +30,21 @@ export class University {
 
   #admissionEnd: Date;
 
+  #website?: string;
+
+  #resourcesUrl?: string;
+
   constructor(props: { id: string } & UniversityProps) {
     this.#id = props.id;
     this.#name = props.name;
-    this.#website = props.website;
     this.#parent = props.parent;
     this.#campus = props.campus;
     this.#languages = props.languages;
     this.#timezone = props.timezone;
     this.#admissionStart = props.admissionStart;
     this.#admissionEnd = props.admissionEnd;
+    this.#website = props.website;
+    this.#resourcesUrl = props.resourcesUrl;
   }
 
   static create(props: UniversityProps): University {
@@ -59,10 +63,6 @@ export class University {
 
   get name(): string {
     return this.#name;
-  }
-
-  get website(): string | undefined {
-    return this.#website;
   }
 
   get parent(): string | undefined {
@@ -99,5 +99,13 @@ export class University {
 
   get admissionEnd(): Date {
     return this.#admissionEnd;
+  }
+
+  get website(): string | undefined {
+    return this.#website;
+  }
+
+  get resourcesUrl(): string | undefined {
+    return this.#resourcesUrl;
   }
 }
