@@ -15,7 +15,7 @@ const PairingQuizzEndPage = ({}) => {
 
     console.log(profileSignUp);
 
-    if (!profileSignUp.learningLanguage) {
+    if (!profileSignUp.learningLanguage || !profileSignUp.learningLanguageLevel) {
         return <Redirect to="/signup/pairing/languages" />;
     }
 
