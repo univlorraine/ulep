@@ -1,10 +1,12 @@
 import { Body, Controller, Post, Logger } from '@nestjs/common';
 import * as Swagger from '@nestjs/swagger';
-import { TokensResponse } from '../dtos/tokens/tokens.response';
-import { TokensRequest } from '../dtos/tokens/tokens.request';
-import { RefreshTokenRequest } from '../dtos/tokens/refresh-token.request';
+import { TokensResponse } from '../dtos/security/tokens.response';
+import { TokensRequest } from '../dtos/security/tokens.request';
+import { RefreshTokenRequest } from '../dtos/security/refresh-token.request';
 import { GetTokensUsecase } from 'src/core/usecases/tokens/get-tokens.usecase';
 import { RefreshTokensUsecase } from 'src/core/usecases/tokens/refresh-tokens.usecase';
+import { ResetPasswordUsecase } from 'src/core/usecases/users/reset-password.usecase';
+import { ResetPasswordRequest } from '../dtos/security/reset-password.request';
 
 @Controller('authentication')
 @Swagger.ApiTags('Authentication')
@@ -14,6 +16,7 @@ export class SecurityController {
   constructor(
     private readonly getTokensUsecase: GetTokensUsecase,
     private readonly refreshTokensUsecase: RefreshTokensUsecase,
+    private readonly resetPasswordUsecase: ResetPasswordUsecase,
   ) {}
 
   @Post('token')
@@ -39,5 +42,13 @@ export class SecurityController {
     const credentials = await this.refreshTokensUsecase.execute({ token });
 
     return new TokensResponse(credentials);
+  }
+
+  @Post('reset-password')
+  @Swagger.ApiOperation({ summary: 'Send email to reset user password' })
+  async resetPassword(@Body() body: ResetPasswordRequest): Promise<void> {
+    await this.resetPasswordUsecase.execute({ ...body });
+
+    return;
   }
 }
