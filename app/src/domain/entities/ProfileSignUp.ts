@@ -71,7 +71,7 @@ class ProfileSignUp {
 
     private _sameAge?: boolean;
 
-    private _sameGander?: boolean;
+    private _sameGender?: boolean;
 
     private _site?: string;
 
@@ -192,7 +192,7 @@ class ProfileSignUp {
     }
 
     set sameGender(sameGender: boolean) {
-        this._sameGander = sameGender;
+        this._sameGender = sameGender;
     }
 
     set site(site: string) {
