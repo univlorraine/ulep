@@ -2,6 +2,7 @@ import { faker } from '@faker-js/faker';
 import { User } from '../../src/core/models/user';
 import { Gender, Profile, Role } from '../../src/core/models/profile';
 import { University } from '../../src/core/models/university';
+import { CEFRLevel } from '../../src/core/models/cefr';
 
 const seedDefinedUsersProfiles = (user: User[]): Profile[] => {
   const profile: Profile[] = [];
@@ -32,7 +33,7 @@ const seedDefinedUsersProfiles = (user: User[]): Profile[] => {
         nativeLanguage: 'FR',
         masteredLanguages: ['ES'],
         learningLanguage: 'EN',
-        learningLanguageLevel: 'B2',
+        learningLanguageLevel: CEFRLevel.B2,
       },
       personalInformation: {
         age: 25,

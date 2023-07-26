@@ -14,13 +14,14 @@ import {
 
 export class CreateUniversityCommand {
   name: string;
-  website?: string;
   parent?: string;
   campus: string[];
   timezone: string;
   languageCodes: string[];
   admissionStart: Date;
   admissionEnd: Date;
+  website?: string;
+  resourcesUrl?: string;
 }
 
 // TODO: Add validation for languages and central (only one university central is authorized)
@@ -51,13 +52,14 @@ export class CreateUniversityUsecase {
 
     const instance = University.create({
       name: command.name,
-      website: command.website,
       parent: command.parent,
       campus: command.campus,
       timezone: command.timezone,
       languages: languages,
       admissionStart: command.admissionStart,
       admissionEnd: command.admissionEnd,
+      website: command.website,
+      resourcesUrl: command.resourcesUrl,
     });
 
     await this.universityRepository.create(instance);

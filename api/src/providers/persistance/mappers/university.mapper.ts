@@ -22,8 +22,9 @@ export const universityMapper = (instance: UniversitySnapshot): University => {
         code: l.language.code,
       };
     }),
-    website: instance.website,
     admissionStart: instance.admissionStart,
     admissionEnd: instance.admissionEnd,
+    website: instance.website,
+    resourcesUrl: instance.resourcesUrl,
   });
 };
