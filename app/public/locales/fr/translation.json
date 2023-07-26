@@ -96,9 +96,12 @@
         "subtitle": "Réponds aux questions suivantes",
         "title": "Ton niveau"
     },
-    "pairing_quizz_validated_page": {
+    "pairing_quizz_validation": {
         "description": "Continue sur ta lancée",
+        "description_next_step": "Tandem de choc ! De nombreux profils potentiels",
         "next_button": "Cool, la suite",
+        "next_step_button": "C'est compris !",
+        "subtitle": "Super, passons à tes préférences !",
         "title": "Ton niveau",
         "validated": "Validé"
     },

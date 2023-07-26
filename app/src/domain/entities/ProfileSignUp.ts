@@ -143,7 +143,11 @@ class ProfileSignUp {
         this._learningLanguage = learningLanguage;
     }
 
-    set learningLanguageLevel(learningLanguageLevel: cefr) {
+    get learningLanguageLevel(): cefr | undefined {
+        return this._learningLanguageLevel;
+    }
+
+    set learningLanguageLevel(learningLanguageLevel: cefr | undefined) {
         this._learningLanguageLevel = learningLanguageLevel;
     }
 

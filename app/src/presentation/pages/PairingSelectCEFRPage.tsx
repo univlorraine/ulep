@@ -2,17 +2,25 @@ import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useHistory } from 'react-router';
 import { useConfig } from '../../context/ConfigurationContext';
+import cefr from '../../domain/entities/cefr';
+import { useStoreActions } from '../../store/storeTypes';
 import WebLayoutCentered from '../components/WebLayoutCentered';
 import pairingSelectLevelStyles from './css/PairingSelectLevel.module.css';
 import styles from './css/SignUp.module.css';
 
-const PairingSelectLevelPage: React.FC = () => {
+const PairingSelectCEFRPage: React.FC = () => {
     const { t } = useTranslation();
     const { configuration } = useConfig();
+    const updateProfileSignUp = useStoreActions((state) => state.updateProfileSignUp);
     const history = useHistory();
-    const [selectedLevel, setSelectedLevel] = useState<string>();
+    const [selectedLevel, setSelectedLevel] = useState<cefr>();
 
-    const levels = ['A1', 'A2', 'B1', 'B2', 'C1', 'C2'];
+    const levels: cefr[] = ['A1', 'A2', 'B1', 'B2', 'C1', 'C2'];
+
+    const onValidateCefr = () => {
+        updateProfileSignUp({ learningLanguageLevel: selectedLevel });
+        return history.push('/signup/pairing/language/quizz/end');
+    };
 
     return (
         <WebLayoutCentered
@@ -50,7 +58,11 @@ const PairingSelectLevelPage: React.FC = () => {
                     </div>
                 </div>
                 <div>
-                    <button className={`primary-button ${!selectedLevel ? 'disabled' : ''}`} disabled={!selectedLevel}>
+                    <button
+                        className={`primary-button ${!selectedLevel ? 'disabled' : ''}`}
+                        disabled={!selectedLevel}
+                        onClick={onValidateCefr}
+                    >
                         {t('pairing_select_level_page.validate_button')}
                     </button>
                     <button
@@ -65,4 +77,4 @@ const PairingSelectLevelPage: React.FC = () => {
     );
 };
 
-export default PairingSelectLevelPage;
+export default PairingSelectCEFRPage;
