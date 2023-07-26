@@ -69,6 +69,10 @@ class ProfileSignUp {
 
     private _role?: roles;
 
+    private _sameAge?: boolean;
+
+    private _sameGander?: boolean;
+
     private _site?: string;
 
     private _staffFunction?: string;
@@ -181,6 +185,14 @@ class ProfileSignUp {
 
     set role(role: roles) {
         this._role = role;
+    }
+
+    set sameAge(sameAge: boolean) {
+        this._sameAge = sameAge;
+    }
+
+    set sameGender(sameGender: boolean) {
+        this._sameGander = sameGender;
     }
 
     set site(site: string) {

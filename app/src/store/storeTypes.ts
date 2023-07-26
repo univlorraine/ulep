@@ -36,6 +36,8 @@ export interface SignUpStorePayload {
     pedagogy?: pedagogy;
     profilePicture?: string;
     role?: roles;
+    sameAge?: boolean;
+    sameGender?: boolean;
     site?: string;
     staffFunction?: string;
     timezone?: string;
