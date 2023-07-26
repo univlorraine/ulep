@@ -75,6 +75,15 @@
         "title": "Choix de la langue",
         "validate_button": "Confirmer"
     },
+    "pairing_options_page": {
+        "certificat": "Certificat",
+        "pass_button": "Passer",
+        "program": "Programme spécifique",
+        "program_subtitle": "*Lorem ipsum, em ipsumem ipsum ",
+        "same_tandem": "J'ai déjà participé au programme et je souhaite continuer avec la même personne",
+        "title": "Mes options",
+        "validate_button": "Valider et continuer"
+    },
     "pairing_preference_page": {
         "none": "Pas de préférence",
         "same_age": "Même âge que moi uniquement",

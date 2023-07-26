@@ -4,7 +4,7 @@ import { useHistory } from 'react-router';
 import { useConfig } from '../../context/ConfigurationContext';
 import { useStoreActions } from '../../store/storeTypes';
 import WebLayoutCentered from '../components/WebLayoutCentered';
-import pairingPreferenceStyles from './css/PairingPreferencePage.module.css';
+import pairingPreferenceStyles from './css/PairingPreference.module.css';
 import styles from './css/SignUp.module.css';
 
 const PairingPreferencePage: React.FC = () => {
@@ -22,7 +22,7 @@ const PairingPreferencePage: React.FC = () => {
 
     const onNextStepPressed = () => {
         updateProfileSignUp({ sameAge, sameGender });
-        return history.push('/signup/'); //Todo: change this on next PR
+        return history.push('/signup/pairing/options');
     };
 
     return (

@@ -4,10 +4,10 @@ import Goal from '../domain/entities/Goal';
 import Language from '../domain/entities/Language';
 import ProfileSignUp, { AvailabilitesSignUp, BiographySignUp, frequency } from '../domain/entities/ProfileSignUp';
 import University from '../domain/entities/University';
+import cefr from '../domain/entities/cefr';
 import gender from '../domain/entities/gender';
 import pedagogy from '../domain/entities/pedagogy';
 import roles from '../domain/entities/roles';
-import cefr from '../domain/entities/cefr';
 
 export interface TokenStorePayload {
     accessToken: string;
@@ -27,6 +27,8 @@ export interface SignUpStorePayload {
     gender?: gender;
     goals?: Goal[];
     interests?: string[];
+    isForCertificate?: boolean;
+    isForProgram?: boolean;
     lastname?: string;
     learningLanguage?: Language;
     learningLanguageLevel?: cefr;
@@ -38,6 +40,7 @@ export interface SignUpStorePayload {
     role?: roles;
     sameAge?: boolean;
     sameGender?: boolean;
+    sameTandem?: boolean;
     site?: string;
     staffFunction?: string;
     timezone?: string;
