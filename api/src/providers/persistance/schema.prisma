@@ -125,10 +125,6 @@ model LearningPreference {
   profile               Profile?
   type                  String
   sameGender            Boolean
-  remote                Boolean             @default(true)
-  goal                  String
-  frequency             String
-  availability          Json
 
   @@map("learning_preferences")
 }
@@ -183,4 +179,31 @@ model ReportCategory {
   reports               Report[]            // Category to Reports relation, one category can have many reports
 
   @@map("report_categories")
+}
+
+model Country {
+  code                  String              @id
+  name                  String
+  createdAt             DateTime            @default(now())
+
+  @@map("countries")
+}
+
+model CEFRTest {
+  id                    String              @id @default(uuid())
+  level                 String              @unique
+  questions             CEFRQuestion[]
+
+  @@map("cefr_tests")
+  @@index([level], name: "level")
+}
+
+model CEFRQuestion {
+  id                    String              @id @default(uuid())
+  value                 String
+  answer                Boolean
+  test                  CEFRTest            @relation(fields: [testId], references: [id], onDelete: Cascade)
+  testId                String
+
+  @@map("cefr_questions")
 }

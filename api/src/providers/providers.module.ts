@@ -8,8 +8,12 @@ import { PrismaLanguageRepository } from './persistance/repositories/prisma-lang
 import { PrismaUserRepository } from './persistance/repositories/prisma-user-repository';
 import { PrismaReportRepository } from './persistance/repositories/prisma-report-repository';
 import { PrismaTandemRepository } from './persistance/repositories/prisma-tandem-repository';
+import { PrismaCountryRepository } from './persistance/repositories/prisma-country-repository';
+import { PrismaCEFRRepository } from './persistance/repositories/prisma-cefr-repository';
 
 export const AUTHENTICATOR = 'authenticator';
+export const CEFR_REPOSITORY = 'cefr.repository';
+export const COUNTRY_REPOSITORY = 'country.repository';
 export const LANGUAGE_REPOSITORY = 'language.repository';
 export const MEDIA_OBJECT_REPOSITORY = 'media-object.repository';
 export const PROFILE_REPOSITORY = 'profile.repository';
@@ -20,6 +24,14 @@ export const UNIVERSITY_REPOSITORY = 'university.repository';
 export const USER_REPOSITORY = 'user.repository';
 
 const providers: Provider[] = [
+  {
+    provide: CEFR_REPOSITORY,
+    useClass: PrismaCEFRRepository,
+  },
+  {
+    provide: COUNTRY_REPOSITORY,
+    useClass: PrismaCountryRepository,
+  },
   {
     provide: USER_REPOSITORY,
     useClass: PrismaUserRepository,
@@ -57,6 +69,6 @@ const providers: Provider[] = [
 @Module({
   imports: [],
   providers: [PrismaService, ...providers],
-  exports: [PrismaService, ...providers],
+  exports: [...providers],
 })
 export class ProvidersModule {}

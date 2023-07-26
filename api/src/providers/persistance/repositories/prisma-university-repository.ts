@@ -106,6 +106,8 @@ export class PrismaUniversityRepository implements UniversityRepository {
         timezone: university.timezone,
         admissionStart: university.admissionStart,
         admissionEnd: university.admissionEnd,
+        website: university.website,
+        resourcesUrl: university.resourcesUrl,
       },
     });
   }

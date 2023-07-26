@@ -4,14 +4,7 @@ import {
   UniversityDoesNotExist,
   UserDoesNotExist,
 } from '../../errors/RessourceDoesNotExist';
-import {
-  Goal,
-  Gender,
-  Role,
-  CEFRLevel,
-  MeetingFrequency,
-  Profile,
-} from '../../models/profile';
+import { Gender, Role, Profile } from '../../models/profile';
 import { ProfileRepository } from '../../ports/profile.repository';
 import { UniversityRepository } from '../../ports/university.repository';
 import {
@@ -26,6 +19,8 @@ import { Language } from '../../models/language';
 import { User } from '../../models/user';
 import { UserRepository } from '../../ports/user.repository';
 import { ProfileAlreadyExists } from '../../errors/RessourceAlreadyExists';
+import { ProfileLanguagesException } from '../../errors/ProfileExceptions';
+import { CEFRLevel } from 'src/core/models/cefr';
 
 export class CreateProfileCommand {
   id: string;
@@ -34,12 +29,13 @@ export class CreateProfileCommand {
   role: Role;
   gender: Gender;
   university: string;
-  learningLanguage: string;
+  learningLanguage?: string;
   proficiencyLevel: CEFRLevel;
   nativeLanguage: string;
+  masteredLanguages?: string[];
   learningType: 'ETANDEM' | 'TANDEM' | 'BOTH';
-  goals: Goal[];
-  meetingFrequency: MeetingFrequency;
+  goals: string[];
+  meetingFrequency: string;
   interests: string[];
   preferSameGender: boolean;
   bios?: string;
@@ -68,18 +64,21 @@ export class CreateProfileUsecase {
       command.university,
     );
 
-    const learningLanguage = await this.tryToFindTheLanguageOfCode(
-      command.learningLanguage,
-    );
-
-    // If the university does not support the learning language, throw an error
-    if (!university.languages.includes(learningLanguage)) {
-      throw LanguageDoesNotExist.withCodeOf(learningLanguage.code);
-    }
-
     const nativeLanguage = await this.tryToFindTheLanguageOfCode(
       command.nativeLanguage,
     );
+
+    let learningLanguage: Language | null = null;
+    if (command.learningLanguage) {
+      learningLanguage = await this.tryToFindTheLanguageOfCode(
+        command.learningLanguage,
+      );
+
+      this.assertLearningLanguageIsSupportedByUniversity(
+        university,
+        learningLanguage,
+      );
+    }
 
     const instance = new Profile({
       id: command.id,
@@ -89,24 +88,26 @@ export class CreateProfileUsecase {
       personalInformation: {
         age: command.age,
         gender: command.gender,
-        interests: new Set(command.interests),
+        interests: command.interests,
         bio: command.bios,
       },
       languages: {
         nativeLanguage: nativeLanguage.code,
-        masteredLanguages: [],
-        learningLanguage: learningLanguage.code,
+        masteredLanguages: command.masteredLanguages || [],
+        learningLanguage: learningLanguage?.code,
         learningLanguageLevel: command.proficiencyLevel,
       },
       preferences: {
         learningType: command.learningType,
         meetingFrequency: command.meetingFrequency,
         sameGender: command.preferSameGender,
-        goals: new Set(command.goals),
+        goals: command.goals,
       },
     });
 
-    await this.profileRepository.save(instance);
+    this.logger.debug(JSON.stringify(instance.preferences.goals));
+
+    await this.profileRepository.create(instance);
 
     return instance;
   }
@@ -143,5 +144,20 @@ export class CreateProfileUsecase {
     }
 
     return language;
+  }
+
+  private assertLearningLanguageIsSupportedByUniversity(
+    university: University,
+    language: Language,
+  ): void {
+    const languages = university.languages.map((language) =>
+      language.code.toUpperCase(),
+    );
+
+    if (!languages.includes(language.code.toUpperCase())) {
+      throw new ProfileLanguagesException(
+        'Learning language is not supported by the university',
+      );
+    }
   }
 }

@@ -1,9 +1,4 @@
-import {
-  Gender,
-  Goal,
-  MeetingFrequency,
-  Role,
-} from '../../../src/core/models/profile';
+import { Gender, Role } from '../../../src/core/models/profile';
 import { University } from '../../../src/core/models/university';
 import { CreateProfileUsecase } from '../../../src/core/usecases/profiles/create-profile.usecase';
 import { InMemoryProfileRepository } from '../../../src/providers/persistance/repositories/in-memory-profile-repository';
@@ -17,6 +12,8 @@ import { InMemoryUserRepository } from '../../../src/providers/persistance/repos
 import { InMemoryLanguageRepository } from '../../../src/providers/persistance/repositories/in-memory-language-repository';
 import seedDefinedNumberOfUsers from '../../seeders/users';
 import { Language } from '../../../src/core/models/language';
+import { ProfileLanguagesException } from '../../../src/core/errors/ProfileExceptions';
+import { CEFRLevel } from '../../../src/core/models/cefr';
 
 describe('CreateProfile', () => {
   const userRepository = new InMemoryUserRepository();
@@ -35,6 +32,7 @@ describe('CreateProfile', () => {
   const languages: Language[] = [
     { name: 'English', code: 'EN' },
     { name: 'French', code: 'FR' },
+    { name: 'Japanese', code: 'JA' },
   ];
 
   const university = new University({
@@ -42,7 +40,10 @@ describe('CreateProfile', () => {
     name: 'University of Oxford',
     campus: ['Oxford'],
     website: 'https://ox.ac.uk',
-    languages: languages,
+    languages: [
+      { name: 'English', code: 'EN' },
+      { name: 'French', code: 'FR' },
+    ],
     timezone: 'Europe/London',
     admissionStart: new Date('2020-01-01'),
     admissionEnd: new Date('2020-12-31'),
@@ -71,11 +72,11 @@ describe('CreateProfile', () => {
       university: university.id,
       nativeLanguage: 'FR',
       learningLanguage: 'EN',
-      proficiencyLevel: 'B2',
+      proficiencyLevel: CEFRLevel.B2,
       learningType: 'ETANDEM',
-      goals: [Goal.ORAL_PRACTICE],
+      goals: ['ORAL_PRACTICE'],
       interests: ['music', 'sport'],
-      meetingFrequency: MeetingFrequency.ONCE_A_WEEK,
+      meetingFrequency: 'ONCE_A_WEEK',
       preferSameGender: true,
     });
 
@@ -84,6 +85,8 @@ describe('CreateProfile', () => {
   });
 
   it('should throw an error if the user does not exist', async () => {
+    let exception: Error | null = null;
+
     try {
       await createProfileUsecase.execute({
         id: 'uuid-1',
@@ -94,19 +97,23 @@ describe('CreateProfile', () => {
         university: university.id,
         nativeLanguage: 'FR',
         learningLanguage: 'EN',
-        proficiencyLevel: 'B2',
+        proficiencyLevel: CEFRLevel.B2,
         learningType: 'ETANDEM',
-        goals: [Goal.ORAL_PRACTICE],
+        goals: ['ORAL_PRACTICE'],
         interests: ['music', 'sport'],
-        meetingFrequency: MeetingFrequency.ONCE_A_WEEK,
+        meetingFrequency: 'ONCE_A_WEEK',
         preferSameGender: true,
       });
     } catch (error) {
-      expect(error).toBeInstanceOf(UserDoesNotExist);
+      exception = error;
     }
+
+    expect(exception).toBeInstanceOf(UserDoesNotExist);
   });
 
   it('should throw an error if the university does not exist', async () => {
+    let exception: Error | null = null;
+
     try {
       const user = users[0];
 
@@ -119,19 +126,23 @@ describe('CreateProfile', () => {
         university: 'uuid-that-does-not-exist',
         nativeLanguage: 'FR',
         learningLanguage: 'EN',
-        proficiencyLevel: 'B2',
+        proficiencyLevel: CEFRLevel.B2,
         learningType: 'ETANDEM',
-        goals: [Goal.ORAL_PRACTICE],
+        goals: ['ORAL_PRACTICE'],
         interests: ['music', 'sport'],
-        meetingFrequency: MeetingFrequency.ONCE_A_WEEK,
+        meetingFrequency: 'ONCE_A_WEEK',
         preferSameGender: true,
       });
     } catch (error) {
-      expect(error).toBeInstanceOf(UniversityDoesNotExist);
+      exception = error;
     }
+
+    expect(exception).toBeInstanceOf(UniversityDoesNotExist);
   });
 
   it('should throw an error if the language is not available', async () => {
+    let exception: Error | null = null;
+
     try {
       const user = users[0];
 
@@ -144,15 +155,147 @@ describe('CreateProfile', () => {
         university: university.id,
         nativeLanguage: 'FR',
         learningLanguage: 'ZH',
-        proficiencyLevel: 'B2',
+        proficiencyLevel: CEFRLevel.B2,
         learningType: 'ETANDEM',
-        goals: [Goal.ORAL_PRACTICE],
+        goals: ['ORAL_PRACTICE'],
         interests: ['music', 'sport'],
-        meetingFrequency: MeetingFrequency.ONCE_A_WEEK,
+        meetingFrequency: 'ONCE_A_WEEK',
         preferSameGender: true,
       });
     } catch (error) {
-      expect(error).toBeInstanceOf(LanguageDoesNotExist);
+      exception = error;
     }
+
+    expect(exception).toBeInstanceOf(LanguageDoesNotExist);
+  });
+
+  it('when learning language is null, level should be A0', async () => {
+    const profile = await createProfileUsecase.execute({
+      id: 'uuid-1',
+      userId: users[0].id,
+      age: 25,
+      role: Role.STUDENT,
+      gender: Gender.FEMALE,
+      university: university.id,
+      nativeLanguage: 'FR',
+      proficiencyLevel: CEFRLevel.B2,
+      learningType: 'ETANDEM',
+      goals: ['ORAL_PRACTICE'],
+      interests: ['music', 'sport'],
+      meetingFrequency: 'ONCE_A_WEEK',
+      preferSameGender: true,
+    });
+
+    expect(profile.languages.learningLanguageLevel).toBe('A0');
+  });
+
+  it('should throw an error if university do not accept learning language', async () => {
+    let exception: Error | null = null;
+
+    try {
+      await createProfileUsecase.execute({
+        id: 'uuid-1',
+        userId: users[0].id,
+        age: 25,
+        role: Role.STUDENT,
+        gender: Gender.FEMALE,
+        university: university.id,
+        nativeLanguage: 'FR',
+        learningLanguage: 'JA',
+        proficiencyLevel: CEFRLevel.B2,
+        learningType: 'ETANDEM',
+        goals: ['ORAL_PRACTICE'],
+        interests: ['music', 'sport'],
+        meetingFrequency: 'ONCE_A_WEEK',
+        preferSameGender: true,
+      });
+    } catch (error) {
+      exception = error;
+    }
+
+    expect(exception).toBeInstanceOf(ProfileLanguagesException);
+  });
+
+  it('should throw an error if learningLanguage and nativeLanguage are equals', async () => {
+    let exception: Error | null = null;
+
+    try {
+      await createProfileUsecase.execute({
+        id: 'uuid-1',
+        userId: users[0].id,
+        age: 25,
+        role: Role.STUDENT,
+        gender: Gender.FEMALE,
+        university: university.id,
+        nativeLanguage: 'FR',
+        learningLanguage: 'FR',
+        proficiencyLevel: CEFRLevel.B2,
+        learningType: 'ETANDEM',
+        goals: ['ORAL_PRACTICE'],
+        interests: ['music', 'sport'],
+        meetingFrequency: 'ONCE_A_WEEK',
+        preferSameGender: true,
+      });
+    } catch (error) {
+      exception = error;
+    }
+
+    expect(exception).toBeInstanceOf(ProfileLanguagesException);
+  });
+
+  it('should throw an error if mastered languages contains native language', async () => {
+    let exception: Error | null = null;
+
+    try {
+      await createProfileUsecase.execute({
+        id: 'uuid-1',
+        userId: users[0].id,
+        age: 25,
+        role: Role.STUDENT,
+        gender: Gender.FEMALE,
+        university: university.id,
+        nativeLanguage: 'FR',
+        learningLanguage: 'EN',
+        masteredLanguages: ['FR'],
+        proficiencyLevel: CEFRLevel.B2,
+        learningType: 'ETANDEM',
+        goals: ['ORAL_PRACTICE'],
+        interests: ['music', 'sport'],
+        meetingFrequency: 'ONCE_A_WEEK',
+        preferSameGender: true,
+      });
+    } catch (error) {
+      exception = error;
+    }
+
+    expect(exception).toBeInstanceOf(ProfileLanguagesException);
+  });
+
+  it('should throw an error if mastered languages contains learning language', async () => {
+    let exception: Error | null = null;
+
+    try {
+      await createProfileUsecase.execute({
+        id: 'uuid-1',
+        userId: users[0].id,
+        age: 25,
+        role: Role.STUDENT,
+        gender: Gender.FEMALE,
+        university: university.id,
+        nativeLanguage: 'FR',
+        learningLanguage: 'EN',
+        masteredLanguages: ['EN'],
+        proficiencyLevel: CEFRLevel.B2,
+        learningType: 'ETANDEM',
+        goals: ['ORAL_PRACTICE'],
+        interests: ['music', 'sport'],
+        meetingFrequency: 'ONCE_A_WEEK',
+        preferSameGender: true,
+      });
+    } catch (error) {
+      exception = error;
+    }
+
+    expect(exception).toBeInstanceOf(ProfileLanguagesException);
   });
 });
