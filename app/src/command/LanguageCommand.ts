@@ -5,6 +5,11 @@ interface LanguageCommand {
     name: string;
 }
 
+export interface LanguageAskedCommand {
+    code: string;
+    count: number;
+}
+
 export const languageCommandToDomain = (command: LanguageCommand) => {
     return new Language(command.code, command.name);
 };

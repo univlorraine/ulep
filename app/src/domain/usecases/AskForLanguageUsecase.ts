@@ -1,24 +1,24 @@
+import { HttpResponse } from '../../adapter/BaseHttpAdapter';
 import { HttpAdapterInterface } from '../../adapter/DomainHttpAdapter';
+import { LanguageAskedCommand } from '../../command/LanguageCommand';
+import Language from '../entities/Language';
 import AskForLanguageUsecaseInterface from '../interfaces/AskForLanguageUsecase.interface';
 
 class AskForLanguageUsecase implements AskForLanguageUsecaseInterface {
     constructor(private readonly domainHttpAdapter: HttpAdapterInterface) {}
 
-    async execute(): Promise<number | Error> {
+    async execute(language: Language): Promise<number | Error> {
         try {
-            //TODO: CURRENTLY MOCK DATA
-            /*const httpRepsonse: HttpResponse<CollectionCommand<CategoryInterestsCommand>> = await this.domainHttpAdapter.post(
-                `/interests`
+            const httpRepsonse: HttpResponse<LanguageAskedCommand> = await this.domainHttpAdapter.post(
+                `/laguages/${language.code}/requests`,
+                {}
             );
 
-            if (!httpRepsonse.parsedBody || !httpRepsonse.parsedBody.items) {
+            if (!httpRepsonse.parsedBody) {
                 return new Error('errors.global');
             }
 
-            return ;
-            */
-
-            return 200; // BECAUSE THERE IS 200 PPL ASKING
+            return httpRepsonse.parsedBody.count;
         } catch (error: any) {
             return new Error('errors.global');
         }
