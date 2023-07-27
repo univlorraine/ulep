@@ -1,20 +1,17 @@
-import { CollectionCommand } from '../../../src/command/CollectionCommand';
-import LanguageCommand from '../../../src/command/LanguageCommand';
+import { LanguageAskedCommand } from '../../../src/command/LanguageCommand';
 import Language from '../../../src/domain/entities/Language';
-import GetAllLanguagesUsecase from '../../../src/domain/usecases/GetAllLanguagesUsecase';
+import AskForLanguageUsecase from '../../../src/domain/usecases/AskForLanguageUsecase';
 import DomainHttpAdapter from '../../mocks/adapters/HttpAdapter';
 
-const usecaseResponse: CollectionCommand<LanguageCommand> = {
-    items: [{ code: 'code', name: 'name' }],
-    totalItems: 1,
-};
+const usecaseResponse: LanguageAskedCommand = { code: 'FR', count: 10 };
+const languagePayload = new Language('FR', 'Français');
 
-describe('getAllLanguages', () => {
+describe('getAllCountries', () => {
     let adapter: DomainHttpAdapter;
-    let usecase: GetAllLanguagesUsecase;
+    let usecase: AskForLanguageUsecase;
     beforeAll(() => {
         adapter = new DomainHttpAdapter();
-        usecase = new GetAllLanguagesUsecase(adapter);
+        usecase = new AskForLanguageUsecase(adapter);
     });
 
     afterEach(() => {
@@ -23,11 +20,11 @@ describe('getAllLanguages', () => {
 
     it('execute function must call DomainHttpAdapter with specific path and params', async () => {
         expect.assertions(2);
-        jest.spyOn(adapter, 'get');
+        jest.spyOn(adapter, 'post');
         adapter.mockJson({ parsedBody: usecaseResponse });
-        await usecase.execute();
-        expect(adapter.get).toHaveBeenCalledTimes(1);
-        expect(adapter.get).toHaveBeenCalledWith('/languages');
+        await usecase.execute(languagePayload);
+        expect(adapter.post).toHaveBeenCalledTimes(1);
+        expect(adapter.post).toHaveBeenCalledWith(`/laguages/${languagePayload.code}/requests`, {});
     });
 
     it('execute must return an expected response', async () => {
@@ -35,8 +32,8 @@ describe('getAllLanguages', () => {
 
         adapter.mockJson({ parsedBody: usecaseResponse });
 
-        const result = (await usecase.execute()) as Language[];
-        expect(result).toHaveLength(1);
+        const result = await usecase.execute(languagePayload);
+        expect(result).toBe(10);
     });
 
     it('execute must return an expected response without parsed body', async () => {
@@ -44,14 +41,14 @@ describe('getAllLanguages', () => {
 
         adapter.mockJson({});
 
-        const result = await usecase.execute();
+        const result = await usecase.execute(languagePayload);
         expect(result).toBeInstanceOf(Error);
     });
 
     it('execute must return an error if adapter return an error without status', async () => {
         expect.assertions(1);
         adapter.mockError({});
-        const result = await usecase.execute();
+        const result = await usecase.execute(languagePayload);
         expect(result).toStrictEqual(new Error('errors.global'));
     });
 });

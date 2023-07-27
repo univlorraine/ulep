@@ -5,7 +5,6 @@ import { useHistory } from 'react-router';
 import { useConfig } from '../../context/ConfigurationContext';
 import Country from '../../domain/entities/Country';
 import University from '../../domain/entities/University';
-import roles from '../../domain/entities/roles';
 import { useStoreActions } from '../../store/storeTypes';
 import Dropdown, { DropDownItem } from '../components/DropDown';
 import ErrorMessage from '../components/ErrorMessage';
@@ -24,7 +23,7 @@ const SignUpPage: React.FC = () => {
     const [country, setCountry] = useState<Country>();
     const [department, setDepartment] = useState<string>('');
     const [diplome, setDiplome] = useState<string>('');
-    const [selectedRole, setSelectedRole] = useState<roles>();
+    const [selectedRole, setSelectedRole] = useState<Role>();
     const [staffFunction, setStaffFunction] = useState<string>('');
     const [universities, setUniversities] = useState<DropDownItem<University>[]>([]);
     const [university, setUniversity] = useState<University>();

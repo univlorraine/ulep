@@ -3,7 +3,6 @@ import { useTranslation } from 'react-i18next';
 import { Redirect, useHistory } from 'react-router';
 import { useConfig } from '../../context/ConfigurationContext';
 import { UniversityJsonInterface, UniversityJsonToDomain } from '../../domain/entities/University';
-import pedagogy from '../../domain/entities/pedagogy';
 import { useStoreActions, useStoreState } from '../../store/storeTypes';
 import ColoredCard from '../components/ColoredCard';
 import WebLayoutCentered from '../components/WebLayoutCentered';
@@ -14,7 +13,7 @@ interface PedagogieData {
     color: string;
     title: string;
     button: string;
-    value: pedagogy;
+    value: Pedagogy;
     display?: boolean;
 }
 
@@ -24,7 +23,7 @@ const PairingPedagogyPage: React.FC = () => {
     const history = useHistory();
     const updateProfileSignUp = useStoreActions((state) => state.updateProfileSignUp);
     const profileSignUp = useStoreState((state) => state.profileSignUp);
-    const [pedagogySelected, setPedagogySelected] = useState<pedagogy>();
+    const [pedagogySelected, setPedagogySelected] = useState<Pedagogy>();
 
     if (!profileSignUp.university) {
         return <Redirect to={'/signup'} />;
@@ -56,7 +55,7 @@ const PairingPedagogyPage: React.FC = () => {
         },
     ];
 
-    const onPedagogyPressed = (pedagogy: pedagogy) => {
+    const onPedagogyPressed = (pedagogy: Pedagogy) => {
         if (pedagogy !== 'ETANDEM' && university && university.sites.length > 1) {
             return setPedagogySelected(pedagogy);
         }
@@ -93,7 +92,7 @@ const PairingPedagogyPage: React.FC = () => {
                         }
 
                         return (
-                            <ColoredCard<pedagogy>
+                            <ColoredCard<Pedagogy>
                                 buttonName={pedagogyData.button}
                                 color={pedagogyData.color}
                                 onPressed={onPedagogyPressed}

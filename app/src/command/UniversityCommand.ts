@@ -5,7 +5,7 @@ interface UniversityCommand {
     campus: string[];
     languages: string[];
     name: string;
-    parent: string;
+    parent: string | undefined;
     timezone: string;
     website: string;
 }

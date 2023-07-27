@@ -3,7 +3,6 @@ import { useTranslation } from 'react-i18next';
 import { Redirect, useHistory } from 'react-router';
 import { useConfig } from '../../context/ConfigurationContext';
 import Language from '../../domain/entities/Language';
-import pedagogy from '../../domain/entities/pedagogy';
 import { useStoreState } from '../../store/storeTypes';
 import SuccessLayout from '../components/SuccessLayout';
 import WebLayoutCentered from '../components/WebLayoutCentered';
@@ -26,7 +25,7 @@ const PairingConfirmLanguagePage: React.FC = () => {
     // @ts-ignore
     const learningLanguage = new Language(profileSignUp.learningLanguage._code, profileSignUp.learningLanguage._name);
 
-    const pedagogyToTitle = (pedagogy: pedagogy | undefined) => {
+    const pedagogyToTitle = (pedagogy: Pedagogy | undefined) => {
         switch (pedagogy) {
             case 'BOTH':
                 return t('global.tandem_etandem');

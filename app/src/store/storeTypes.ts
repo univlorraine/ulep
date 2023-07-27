@@ -2,12 +2,9 @@ import { Action, createTypedHooks } from 'easy-peasy';
 import Country from '../domain/entities/Country';
 import Goal from '../domain/entities/Goal';
 import Language from '../domain/entities/Language';
-import ProfileSignUp, { AvailabilitesSignUp, BiographySignUp, frequency } from '../domain/entities/ProfileSignUp';
+import ProfileSignUp, { AvailabilitesSignUp, BiographySignUp } from '../domain/entities/ProfileSignUp';
 import University from '../domain/entities/University';
 import cefr from '../domain/entities/cefr';
-import gender from '../domain/entities/gender';
-import pedagogy from '../domain/entities/pedagogy';
-import roles from '../domain/entities/roles';
 
 export interface TokenStorePayload {
     accessToken: string;
@@ -22,9 +19,9 @@ export interface SignUpStorePayload {
     department?: string;
     diplome?: string;
     email?: string;
-    frequency?: frequency;
+    frequency?: MeetFrequency;
     firstname?: string;
-    gender?: gender;
+    gender?: Gender;
     goals?: Goal[];
     interests?: string[];
     isForCertificate?: boolean;
@@ -35,9 +32,9 @@ export interface SignUpStorePayload {
     nativeLanguage?: Language;
     otherLanguages?: Language[];
     password?: string;
-    pedagogy?: pedagogy;
+    pedagogy?: Pedagogy;
     profilePicture?: string;
-    role?: roles;
+    role?: Role;
     sameAge?: boolean;
     sameGender?: boolean;
     sameTandem?: boolean;
