@@ -2,13 +2,12 @@ import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useHistory } from 'react-router';
 import { useConfig } from '../../context/ConfigurationContext';
-import { frequency } from '../../domain/entities/ProfileSignUp';
 import { useStoreActions } from '../../store/storeTypes';
 import WebLayoutCentered from '../components/WebLayoutCentered';
 import styles from './css/SignUp.module.css';
 import frequencyStyle from './css/SignUpFrequency.module.css';
 
-const frequencies: frequency[] = [
+const frequencies: MeetFrequency[] = [
     'ONCE_A_WEEK',
     'TWICE_A_WEEK',
     'THREE_TIMES_A_WEEK',
@@ -21,7 +20,7 @@ const SignUpFrequencyPage: React.FC = () => {
     const { configuration } = useConfig();
     const history = useHistory();
     const updateProfileSignUp = useStoreActions((state) => state.updateProfileSignUp);
-    const [frequency, setFrequency] = useState<frequency>();
+    const [frequency, setFrequency] = useState<MeetFrequency>();
 
     const continueSignUp = async () => {
         updateProfileSignUp({ frequency });

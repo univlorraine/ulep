@@ -4,7 +4,6 @@ import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useHistory } from 'react-router';
 import { useConfig } from '../../context/ConfigurationContext';
-import gender from '../../domain/entities/gender';
 import { useStoreActions } from '../../store/storeTypes';
 import Checkbox from '../components/Checkbox';
 import RadioButton from '../components/RadioButton';
@@ -21,7 +20,7 @@ const SignUpInformationsPage: React.FC = () => {
     const updateProfileSignUp = useStoreActions((state) => state.updateProfileSignUp);
     const [firstname, setFirstname] = useState<string>('');
     const [lastname, setLastname] = useState<string>('');
-    const [gender, setGender] = useState<gender>();
+    const [gender, setGender] = useState<Gender>();
     const [age, setAge] = useState<number>();
     const [email, setEmail] = useState<string>('');
     const [password, setPassword] = useState<string>('');

@@ -3,11 +3,7 @@ import Country from './Country';
 import Goal from './Goal';
 import Language from './Language';
 import University from './University';
-import gender from './gender';
-import pedagogie from './pedagogy';
-import roles from './roles';
 
-export type frequency = 'ONCE_A_WEEK' | 'TWICE_A_WEEK' | 'THREE_TIMES_A_WEEK' | 'TWICE_A_MONTH' | 'THREE_TIMES_A_MONTH';
 export interface BiographySignUp {
     incredible: string;
     place: string;
@@ -42,9 +38,9 @@ class ProfileSignUp {
 
     private _firstname?: string;
 
-    private _frequency?: frequency;
+    private _frequency?: MeetFrequency;
 
-    private _gender?: gender;
+    private _gender?: Gender;
 
     private _goals?: Goal[];
 
@@ -58,13 +54,13 @@ class ProfileSignUp {
 
     private _password?: string;
 
-    private _pedagogy?: pedagogie;
+    private _pedagogy?: Pedagogy;
 
     private _profilePicture?: string;
 
     private otherLaguages?: Language[];
 
-    private _role?: roles;
+    private _role?: Role;
 
     private _site?: string;
 
@@ -112,11 +108,11 @@ class ProfileSignUp {
         this._firstname = firstname;
     }
 
-    set frequency(frequency: frequency) {
+    set frequency(frequency: MeetFrequency) {
         this._frequency = frequency;
     }
 
-    set gender(gender: gender) {
+    set gender(gender: Gender) {
         this._gender = gender;
     }
 
@@ -152,11 +148,11 @@ class ProfileSignUp {
         this._password = password;
     }
 
-    get pedagogy(): pedagogie | undefined {
+    get pedagogy(): Pedagogy | undefined {
         return this._pedagogy;
     }
 
-    set pedagogy(pedagogy: pedagogie) {
+    set pedagogy(pedagogy: Pedagogy | undefined) {
         this._pedagogy = pedagogy;
     }
 
@@ -168,7 +164,7 @@ class ProfileSignUp {
         this._profilePicture = profilePicture;
     }
 
-    set role(role: roles) {
+    set role(role: Role) {
         this._role = role;
     }
 
