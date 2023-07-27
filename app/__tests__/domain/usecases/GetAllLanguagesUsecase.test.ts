@@ -5,7 +5,7 @@ import GetAllLanguagesUsecase from '../../../src/domain/usecases/GetAllLanguages
 import DomainHttpAdapter from '../../mocks/adapters/HttpAdapter';
 
 const usecaseResponse: CollectionCommand<LanguageCommand> = {
-    items: [{ id: 'id', name: 'name', code: 'code', enabled: true }],
+    items: [{ code: 'code', name: 'name' }],
     totalItems: 1,
 };
 

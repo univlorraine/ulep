@@ -5,7 +5,17 @@ import GetAllUniversitiesUsecase from '../../../src/domain/usecases/GetAllUniver
 import DomainHttpAdapter from '../../mocks/adapters/HttpAdapter';
 
 const usecaseResponse: CollectionCommand<UniversityCommand> = {
-    items: [{ id: 'id', name: 'name' }],
+    items: [
+        {
+            id: 'id',
+            name: 'name',
+            campus: ['Campus A', 'Campus B'],
+            languages: ['FR', 'CN'],
+            parent: undefined,
+            timezone: 'timezone',
+            website: 'website',
+        },
+    ],
     totalItems: 1,
 };
 
