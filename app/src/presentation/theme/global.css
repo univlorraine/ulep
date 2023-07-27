@@ -84,13 +84,17 @@ input::-webkit-inner-spin-button {
         min-height: calc(100vh - 64px);
     }
 
+    .white-centered-div {
+        min-height: 90vh;
+    }
+
     .page {
         align-items: center;
         display: flex;
         flex-direction: column;
         min-height: 100vh;
         height: auto;
-        padding-top: 64px;
+        padding: 64px 0px;
         width: 100%;
         z-index: 2;
     }

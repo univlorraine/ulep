@@ -93,22 +93,26 @@ const SignUpPage: React.FC = () => {
                     name={t('signup_page.staff_role')}
                 />
 
-                <Dropdown<Country>
-                    onChange={setCountry}
-                    options={countries}
-                    placeholder={t('signup_page.country_placeholder')}
-                    title={t('global.country')}
-                />
+                <div className="large-margin-top">
+                    <Dropdown<Country>
+                        onChange={setCountry}
+                        options={countries}
+                        placeholder={t('signup_page.country_placeholder')}
+                        title={t('global.country')}
+                    />
+                </div>
 
-                <Dropdown<University>
-                    onChange={setUniversity}
-                    options={universities}
-                    title={t('signup_page.university_title')}
-                />
+                <div className="large-margin-top">
+                    <Dropdown<University>
+                        onChange={setUniversity}
+                        options={universities}
+                        title={t('signup_page.university_title')}
+                    />
+                </div>
 
                 {selectedRole !== 'STAFF' && (
                     <button
-                        className="tertiary-button large-margin-top"
+                        className="tertiary-button large-margin-vertical"
                         onClick={() => history.push('./signup/informations')}
                     >
                         {t('signup_page.sso_button')}
@@ -118,7 +122,13 @@ const SignUpPage: React.FC = () => {
                 {selectedRole === 'STUDENT' && <div className={styles.separator} />}
 
                 {selectedRole && (
-                    <TextInput onChange={setDepartment} title={t('signup_page.department_title')} value={department} />
+                    <div className="large-margin-top">
+                        <TextInput
+                            onChange={setDepartment}
+                            title={t('signup_page.department_title')}
+                            value={department}
+                        />
+                    </div>
                 )}
 
                 {selectedRole === 'STAFF' && (
@@ -135,11 +145,14 @@ const SignUpPage: React.FC = () => {
                 {displayError && <ErrorMessage description={t('signup_page.error')} />}
                 <div className={styles['bottom-container']}>
                     {!selectedRole && (
-                        <p className={styles.information}>{`${t('signup_page.footer_university')}${
-                            configuration.mainUniversityName
-                        } ? ${t('signup_page.footer_email')} ${configuration.emailContact}`}</p>
+                        <p className={styles.information}>
+                            {`${t('signup_page.footer_university')}${configuration.mainUniversityName} ? ${t(
+                                'signup_page.footer_email'
+                            )} `}
+                            <a href={`mailto:${configuration.emailContact}`}>{configuration.emailContact}</a>
+                        </p>
                     )}
-                    <button className="primary-button large-margin-bottom" onClick={continueSignUp}>
+                    <button className="primary-button" onClick={continueSignUp}>
                         {t('signup_page.validate_button')}
                     </button>
                 </div>

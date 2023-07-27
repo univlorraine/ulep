@@ -33,7 +33,7 @@ const Dropdown = <T,>({ onChange, options, placeholder, title }: DropdownProps<T
 
     return (
         <div>
-            <p className={styles.title}>{title}</p>
+            <span className={styles.title}>{title}</span>
             <div className={styles.container}>
                 <button className={styles.button} onClick={() => setIsOpen(!isOpen)}>
                     {selectedOption ? selectedOption.title : placeholder}
