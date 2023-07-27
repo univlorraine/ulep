@@ -11,9 +11,10 @@ import PairingLaguagesPage from '../pages/PairingLaguagesPage';
 import PairingLevelPage from '../pages/PairingLevelPage';
 import PairingOtherLanguagesPage from '../pages/PairingOtherLanguagesPage';
 import PairingPedagogyPage from '../pages/PairingPedagogyPage';
+import PairingQuizzEndPage from '../pages/PairingQuizzEndPage';
 import PairingQuizzIntroductionPage from '../pages/PairingQuizzIntroductionPage';
 import PairingQuizzPage from '../pages/PairingQuizzPage';
-import PairingSelectLevelPage from '../pages/PairingSelectLevelPage';
+import PairingSelectCEFRPage from '../pages/PairingSelectCEFRPage';
 import PairingUnavailableLanguagePage from '../pages/PairingUnavailableLanguagePage';
 import ResetPasswordPage from '../pages/ResetPasswordPage';
 import SignUpAvailabilitiesPage from '../pages/SignUpAvailabilitiesPage';
@@ -58,6 +59,9 @@ const OfflineRouter: React.FC = () => (
         <Route exact path="/signup/pairing/other-languages">
             <PairingOtherLanguagesPage />
         </Route>
+        <Route exact path="/signup/pairing/language/quizz/end">
+            <PairingQuizzEndPage />
+        </Route>
         <Route exact path="/signup/pairing/language/quizz/introduction">
             <PairingQuizzIntroductionPage />
         </Route>
@@ -65,7 +69,7 @@ const OfflineRouter: React.FC = () => (
             <PairingQuizzPage />
         </Route>
         <Route exact path="/signup/pairing/level/select">
-            <PairingSelectLevelPage />
+            <PairingSelectCEFRPage />
         </Route>
         <Route exact path="/signup/pairing/unavailable-language">
             <PairingUnavailableLanguagePage />

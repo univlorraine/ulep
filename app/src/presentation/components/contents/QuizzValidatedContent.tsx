@@ -5,16 +5,23 @@ import styles from './QuizzValidatedContent.module.css';
 
 interface QuizzValidatedContentProps {
     language: Language;
-    onNextQuizz: () => void;
+    onNextQuizz?: () => void;
+    onNextStep?: () => void;
     quizzLevel: string;
 }
 
-const QuizzValidatedContent: React.FC<QuizzValidatedContentProps> = ({ language, onNextQuizz, quizzLevel }) => {
+const QuizzValidatedContent: React.FC<QuizzValidatedContentProps> = ({
+    language,
+    onNextQuizz,
+    onNextStep,
+    quizzLevel,
+}) => {
     const { t } = useTranslation();
 
     return (
         <div className={styles.container}>
-            <h1 className="title">{`${t(`pairing_quizz_validated_page.title`)}`}</h1>
+            <h1 className="title">{`${t(`pairing_quizz_validation.title`)}`}</h1>
+            {onNextStep && <p className="subtitle">{t(`pairing_quizz_validation.subtitle`)}</p>}
             <div className={styles['image-container']}>
                 <img className={styles.image} alt="avatar" src="/assets/trophie.svg"></img>
                 <div className={styles.bubble}>
@@ -23,12 +30,23 @@ const QuizzValidatedContent: React.FC<QuizzValidatedContentProps> = ({ language,
             </div>
             <div className={styles['level-container']}>
                 <img alt="quizz" src="/assets/quizz.svg" />
-                {`${quizzLevel} ${t('pairing_quizz_validated_page.validated')}`}
+                {`${quizzLevel} ${t('pairing_quizz_validation.validated')}`}
             </div>
-            <p className={styles.description}>{t('pairing_quizz_validated_page.description')}</p>
-            <button className="secondary-button" onClick={onNextQuizz}>
-                {t('pairing_quizz_validated_page.next_button')}
-            </button>
+            <p className={styles.description}>
+                {onNextStep
+                    ? t('pairing_quizz_validation.description_next_step')
+                    : t('pairing_quizz_validation.description')}
+            </p>
+            {onNextQuizz && (
+                <button className="secondary-button" onClick={onNextQuizz}>
+                    {t('pairing_quizz_validation.next_button')}
+                </button>
+            )}
+            {onNextStep && (
+                <button className="primary-button" onClick={onNextStep}>
+                    {t('pairing_quizz_validation.next_step_button')}
+                </button>
+            )}
         </div>
     );
 };
