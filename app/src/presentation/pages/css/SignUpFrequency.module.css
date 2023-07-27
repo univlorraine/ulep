@@ -1,3 +1,7 @@
+.bottom-container {
+    margin-bottom: 40px;
+}
+
 .container {
     align-items: center;
     display: flex;

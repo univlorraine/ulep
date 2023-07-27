@@ -21,6 +21,10 @@
     margin-left: 8px;
 }
 
+.bottom-container {
+    margin-bottom: 40px;
+}
+
 .day-container {
     align-items: center;
     background-color: #f2f4f7;

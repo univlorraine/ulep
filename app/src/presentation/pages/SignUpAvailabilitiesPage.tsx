@@ -128,7 +128,7 @@ const SignUpAvailabilitiesPage: React.FC = () => {
                         );
                     })}
                 </div>
-                <div className={`${availabilitiesStyles['bottom-container']} large-margin-top large-margin-bottom`}>
+                <div className={`${availabilitiesStyles['bottom-container']} large-margin-top`}>
                     <button className="primary-button" onClick={continueSignUp}>
                         {t('signup_availabilities_page.validate_button')}
                     </button>

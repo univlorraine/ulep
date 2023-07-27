@@ -89,7 +89,7 @@ const SignUpInterestsPage: React.FC = () => {
                         );
                     })}
                 </div>
-                <div className={`${styles['bottom-container']} large-margin-bottom`}>
+                <div className={`${styles['bottom-container']}`}>
                     <button
                         className={`primary-button ${userInterests.length < 5 ? 'disabled' : ''}`}
                         disabled={userInterests.length < 5}

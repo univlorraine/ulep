@@ -78,7 +78,7 @@ const SignUpInformationsPage: React.FC = () => {
         }
 
         if (password !== confirmPassword) {
-            return setErrorMessage({ type: 'confirm', message: t('signup_informations_page.error_confirm') });
+            return setErrorMessage({ type: 'confirm', message: t('signup_informations_page.error_confirm_password') });
         }
 
         updateProfileSignUp({ firstname, lastname, gender, age, email, password, profilePicture });
@@ -125,36 +125,36 @@ const SignUpInformationsPage: React.FC = () => {
                     value={lastname}
                 />
 
-                <div className="margin-bottom ">
-                    <h2 className={`${styles.subtitle} no-margin-top`}>{t('global.gender')}</h2>
+                <h2 className={`${styles.subtitle} no-margin-top`}>{t('global.gender')}</h2>
 
-                    <RadioButton
-                        isSelected={gender === 'FEMALE'}
-                        onPressed={() => setGender('FEMALE')}
-                        name={t('global.woman')}
-                    />
+                <RadioButton
+                    isSelected={gender === 'FEMALE'}
+                    onPressed={() => setGender('FEMALE')}
+                    name={t('global.woman')}
+                />
 
-                    <RadioButton
-                        isSelected={gender === 'MALE'}
-                        onPressed={() => setGender('MALE')}
-                        name={t('global.men')}
-                    />
+                <RadioButton
+                    isSelected={gender === 'MALE'}
+                    onPressed={() => setGender('MALE')}
+                    name={t('global.men')}
+                />
 
-                    <RadioButton
-                        isSelected={gender === 'OTHER'}
-                        onPressed={() => setGender('OTHER')}
-                        name={t('global.binary')}
+                <RadioButton
+                    isSelected={gender === 'OTHER'}
+                    onPressed={() => setGender('OTHER')}
+                    name={t('global.binary')}
+                />
+
+                <div className="margin-top">
+                    <TextInput
+                        errorMessage={errorMessage?.type === 'age' ? errorMessage.message : undefined}
+                        onChange={(age: string) => setAge(Number(age))}
+                        placeholder={t('signup_informations_page.placeholder_age')}
+                        title={t('global.age')}
+                        type="text"
+                        value={age ? `${age}` : ''}
                     />
                 </div>
-
-                <TextInput
-                    errorMessage={errorMessage?.type === 'age' ? errorMessage.message : undefined}
-                    onChange={(age: string) => setAge(Number(age))}
-                    placeholder={t('signup_informations_page.placeholder_age')}
-                    title={t('global.age')}
-                    type="text"
-                    value={age ? `${age}` : ''}
-                />
 
                 <TextInput
                     errorMessage={errorMessage?.type === 'email' ? errorMessage.message : undefined}
