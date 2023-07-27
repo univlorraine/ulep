@@ -51,6 +51,10 @@ class ProfileSignUp {
 
     private _interests?: string[];
 
+    private _isForCertificate?: boolean;
+
+    private _isForProgram?: boolean;
+
     private _learningLanguage?: Language;
 
     private _learningLanguageLevel?: cefr;
@@ -72,6 +76,8 @@ class ProfileSignUp {
     private _sameAge?: boolean;
 
     private _sameGender?: boolean;
+
+    private _sameTandem?: boolean;
 
     private _site?: string;
 
@@ -135,6 +141,14 @@ class ProfileSignUp {
         this._interests = interests;
     }
 
+    set isForCertificate(isForCertificate: boolean) {
+        this._isForCertificate = isForCertificate;
+    }
+
+    set isForProgram(isForProgram: boolean) {
+        this._isForProgram = isForProgram;
+    }
+
     set lastname(lastname: string) {
         this._lastname = lastname;
     }
@@ -193,6 +207,10 @@ class ProfileSignUp {
 
     set sameGender(sameGender: boolean) {
         this._sameGender = sameGender;
+    }
+
+    set sameTandem(sameTandem: boolean) {
+        this._sameTandem = sameTandem;
     }
 
     set site(site: string) {
