@@ -3,6 +3,7 @@ import Country from './Country';
 import Goal from './Goal';
 import Language from './Language';
 import University from './University';
+import cefr from './cefr';
 import gender from './gender';
 import pedagogie from './pedagogy';
 import roles from './roles';
@@ -51,6 +52,8 @@ class ProfileSignUp {
     private _interests?: string[];
 
     private _learningLanguage?: Language;
+
+    private _learningLanguageLevel?: cefr;
 
     private _lastname?: string;
 
@@ -138,6 +141,10 @@ class ProfileSignUp {
 
     set learningLanguage(learningLanguage: Language | undefined) {
         this._learningLanguage = learningLanguage;
+    }
+
+    set learningLanguageLevel(learningLanguageLevel: cefr) {
+        this._learningLanguageLevel = learningLanguageLevel;
     }
 
     set nativeLanguage(nativeLanguage: Language) {
