@@ -1,9 +1,9 @@
 apiVersion: v1
 kind: Service
 metadata:
-  name: "{{ include "etandem-weblate.fullname" . }}-{{ .Values.weblate.name }}"
+  name: "{{ .Values.name }}-{{ .Values.weblate.name }}"
   labels:
-    {{- include "etandem-weblate.labels" . | nindent 4 }}
+    {{- include "ulep-weblate.labels" . | nindent 4 }}
 spec:
   type: {{ .Values.weblate.service.type }}
   ports:
@@ -12,5 +12,5 @@ spec:
       protocol: TCP
       name: http
   selector:
-    app.kubernetes.io/name: "{{ include "etandem-weblate.name" . }}-{{ .Values.weblate.name }}"
+    app.kubernetes.io/name: "{{ .Values.name }}-{{ .Values.weblate.name }}"
     app.kubernetes.io/instance: "{{ .Release.Name }}"

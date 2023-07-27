@@ -5,6 +5,7 @@ import GetAllCountriesUsecaseInterface from '../domain/interfaces/GetAllCountrie
 import GetAllGoalsUsecaseInterface from '../domain/interfaces/GetAllGoalsUsecase.interface';
 import GetAllLanguagesUsecaseInterface from '../domain/interfaces/GetAllLanguagesUsecase.interface';
 import GetAllUniversitiesUsecaseInterface from '../domain/interfaces/GetAllUniversitiesUsecase.interface';
+import GetQuizzByLevelUsecaseInterface from '../domain/interfaces/GetQuizzByLevelUsecase.interface';
 import LoginUsecaseInterface from '../domain/interfaces/LoginUsecase.interface';
 import ResetPasswordUsecaseInterface from '../domain/interfaces/ResetPasswordUsecase.interface';
 
@@ -16,6 +17,7 @@ export interface ConfigContextValueType {
     getAllGoals: GetAllGoalsUsecaseInterface;
     getAllLanguages: GetAllLanguagesUsecaseInterface;
     getAllUniversities: GetAllUniversitiesUsecaseInterface;
+    getQuizzByLevel: GetQuizzByLevelUsecaseInterface;
     login: LoginUsecaseInterface;
     resetPassword: ResetPasswordUsecaseInterface;
 }

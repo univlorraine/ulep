@@ -38,11 +38,14 @@
         "gender": "Genre",
         "lastname": "Nom",
         "men": "Masculin",
+        "no": "Non",
         "password": "Mot de passe",
         "pairing_title": "Appariement",
+        "question": "Question",
         "tandem": "Tandem",
         "tandem_etandem": "Tandem / Etandem",
-        "woman": "Féminin"
+        "woman": "Féminin",
+        "yes": "Oui"
     },
     "connection_page": {
         "connect_title": "As-tu déjà un compte ? ",
@@ -71,6 +74,61 @@
         "subtitle": "Confirme tes options",
         "title": "Choix de la langue",
         "validate_button": "Confirmer"
+    },
+    "pairing_final_page": {
+        "congratulation": "Félicitations",
+        "congratulation_text": "Nous avons à présent toutes les informations pour te trouver un tandem.",
+        "language_title": "Langue souhaitée",
+        "mode_meet": "Mode de rencontre",
+        "tandem": "tandem",
+        "title": "Nice, c’est terminé !",
+        "validate_button": "Continuer"
+    },
+    "pairing_options_page": {
+        "certificat": "Certificat",
+        "pass_button": "Passer",
+        "program": "Programme spécifique",
+        "program_subtitle": "*Lorem ipsum, em ipsumem ipsum ",
+        "same_tandem": "J'ai déjà participé au programme et je souhaite continuer avec la même personne",
+        "title": "Mes options",
+        "validate_button": "Valider et continuer"
+    },
+    "pairing_preference_page": {
+        "none": "Pas de préférence",
+        "same_age": "Même âge que moi uniquement",
+        "same_gender": "Même genre que moi uniquement",
+        "title": "Mes préférences",
+        "validate_button": "Valider et continuer"
+    },
+    "pairing_quizz_description_page": {
+        "A1": "Je débute l’apprentissage de cette langue",
+        "A2": "Je peux me présenter simplement dans la langue",
+        "B1": "Je peux participer à n’importe quelle conversation de la vie quotidienne",
+        "C1": "Je peux tout comprendre, y compris l’humour. Je m’exprime avec aisance sur n’importe quel sujet, que ce soit sur un ton soutenu ou informel.",
+        "pass_button": "Passer",
+        "subtitle": "Comment décrirais-tu ton niveau de langue ?",
+        "title": "Ton niveau",
+        "validate_button": "Valider et continuer"
+    },
+    "pairing_quizz_introduction_page": {
+        "description": "Passe au niveau suivant une fois terminé",
+        "subtitle": "Découvre ton niveau en répondant à quelques questions",
+        "time": "ça prendra 10 min max",
+        "title": "Ton niveau",
+        "validate_button": "Commencer"
+    },
+    "pairing_quizz_page": {
+        "subtitle": "Réponds aux questions suivantes",
+        "title": "Ton niveau"
+    },
+    "pairing_quizz_validation": {
+        "description": "Continue sur ta lancée",
+        "description_next_step": "Tandem de choc ! De nombreux profils potentiels",
+        "next_button": "Cool, la suite",
+        "next_step_button": "C'est compris !",
+        "subtitle": "Super, passons à tes préférences !",
+        "title": "Ton niveau",
+        "validated": "Validé"
     },
     "pairing_languages_page": {
         "subtitle": "Quelle langue veux-tu travailler avec ton tandem ?",

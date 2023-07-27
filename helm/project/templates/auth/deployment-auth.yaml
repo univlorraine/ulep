@@ -38,7 +38,7 @@ spec:
             - name: DB_NAME
               value: "{{ .Values.global.postgresql.auth.database }}"
             - name: HOST_NAME
-              value: "{{ include "etandem.name" . }}-postgresql.{{ include "etandem.name" . }}"
+              value: "{{ include "etandem.name" . }}-postgresql.{{ .Release.Namespace }}"
             - name: DB_USER
               value: "{{ .Values.global.postgresql.auth.username }}"
       containers:
@@ -85,7 +85,7 @@ spec:
             - name: KC_DB_USERNAME
               value: "{{ .Values.global.postgresql.auth.username }}"
             - name: KC_DB_URL
-              value: "jdbc:postgresql://{{ include "etandem.name" . }}-postgresql.{{ include "etandem.name" . }}:5432/{{ .Values.global.postgresql.auth.database }}"
+              value: "jdbc:postgresql://{{ include "etandem.name" . }}-postgresql.{{ .Release.Namespace }}:5432/{{ .Values.global.postgresql.auth.database }}"
             - name: KC_DB_SCHEMA
               value: "{{ .Values.auth.env.kcDBSchema }}"
             - name: PROXY_ADDRESS_FORWARDING

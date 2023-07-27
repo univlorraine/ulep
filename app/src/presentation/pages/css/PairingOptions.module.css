@@ -1,0 +1,33 @@
+.content {
+    margin-top: 40px;
+}
+
+.preference-container {
+    align-items: center;
+    border-radius: 5px;
+    display: flex;
+    flex-direction: column;
+    height: 60px;
+    justify-content: center;
+    margin-bottom: 10px;
+    padding: 20px;
+    width: 100%;
+}
+
+.preference-text {
+    color: black;
+    font-family: 'Maven Pro';
+    font-size: 16px;
+    font-style: normal;
+    font-weight: 500;
+    line-height: 20px;
+}
+
+.preference-description {
+    color: black;
+    font-family: 'Maven Pro';
+    font-size: 13px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: 17.3px;
+}

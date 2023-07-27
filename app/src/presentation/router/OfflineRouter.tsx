@@ -9,9 +9,14 @@ import LoginPage from '../pages/LoginPage';
 import PairingConfirmLanguagePage from '../pages/PairingConfirmLanguagePage';
 import PairingLaguagesPage from '../pages/PairingLaguagesPage';
 import PairingLevelPage from '../pages/PairingLevelPage';
+import PairingOptionsPage from '../pages/PairingOptionsPage';
 import PairingOtherLanguagesPage from '../pages/PairingOtherLanguagesPage';
 import PairingPedagogyPage from '../pages/PairingPedagogyPage';
-import PairingSelectLevelPage from '../pages/PairingSelectLevelPage';
+import PairingPreferencePage from '../pages/PairingPreferencePage';
+import PairingQuizzEndPage from '../pages/PairingQuizzEndPage';
+import PairingQuizzIntroductionPage from '../pages/PairingQuizzIntroductionPage';
+import PairingQuizzPage from '../pages/PairingQuizzPage';
+import PairingSelectCEFRPage from '../pages/PairingSelectCEFRPage';
 import PairingUnavailableLanguagePage from '../pages/PairingUnavailableLanguagePage';
 import ResetPasswordPage from '../pages/ResetPasswordPage';
 import SignUpAvailabilitiesPage from '../pages/SignUpAvailabilitiesPage';
@@ -23,6 +28,7 @@ import SignUpInformationsPage from '../pages/SignUpInformationsPage';
 import SignUpInterestsPage from '../pages/SignUpInterestsPage';
 import SignUpLanguagesPage from '../pages/SignUpLanguagesPage';
 import SignUpPage from '../pages/SignUpPage';
+import PairingFinalPage from '../pages/PairingFinalPage';
 
 const OfflineRouter: React.FC = () => (
     <IonRouterOutlet>
@@ -44,11 +50,17 @@ const OfflineRouter: React.FC = () => (
         <Route exact path="/signup/pairing/languages">
             <PairingLaguagesPage />
         </Route>
+        <Route exact path="/signup/pairing/options">
+            <PairingOptionsPage />
+        </Route>
         <Route exact path="/signup/pairing/pedagogy">
             <PairingPedagogyPage />
         </Route>
         <Route exact path="/signup/pairing/language/confirm">
             <PairingConfirmLanguagePage />
+        </Route>
+        <Route exact path="/signup/pairing/end">
+            <PairingFinalPage />
         </Route>
         <Route exact path="/signup/pairing/level">
             <PairingLevelPage />
@@ -56,8 +68,20 @@ const OfflineRouter: React.FC = () => (
         <Route exact path="/signup/pairing/other-languages">
             <PairingOtherLanguagesPage />
         </Route>
+        <Route exact path="/signup/pairing/preference">
+            <PairingPreferencePage />
+        </Route>
+        <Route exact path="/signup/pairing/language/quizz/end">
+            <PairingQuizzEndPage />
+        </Route>
+        <Route exact path="/signup/pairing/language/quizz/introduction">
+            <PairingQuizzIntroductionPage />
+        </Route>
+        <Route exact path="/signup/pairing/language/quizz">
+            <PairingQuizzPage />
+        </Route>
         <Route exact path="/signup/pairing/level/select">
-            <PairingSelectLevelPage />
+            <PairingSelectCEFRPage />
         </Route>
         <Route exact path="/signup/pairing/unavailable-language">
             <PairingUnavailableLanguagePage />

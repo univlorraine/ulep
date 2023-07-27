@@ -1,9 +1,9 @@
 apiVersion: v1
 kind: Pod
 metadata:
-  name: "{{ include "etandem-weblate.fullname" . }}-test-connection"
+  name: "{{ include "ulep-weblate.fullname" . }}-test-connection"
   labels:
-    {{- include "etandem-weblate.labels" . | nindent 4 }}
+    {{- include "ulep-weblate.labels" . | nindent 4 }}
   annotations:
     "helm.sh/hook": test
 spec:
@@ -11,5 +11,5 @@ spec:
     - name: wget
       image: busybox
       command: ['wget']
-      args: ['{{ include "etandem-weblate.fullname" . }}:{{ .Values.weblate.service.port }}']
+      args: ['{{ include "ulep-weblate.fullname" . }}:{{ .Values.weblate.service.port }}']
   restartPolicy: Never

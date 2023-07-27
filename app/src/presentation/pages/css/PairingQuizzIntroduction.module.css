@@ -1,0 +1,35 @@
+.container {
+    align-items: center;
+    display: flex;
+    flex-direction: column;
+}
+
+.description {
+    color: #000;
+    font-family: 'Maven Pro';
+    font-size: 16px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: 20px;
+    text-align: center;
+}
+
+.image {
+    height: 225px;
+    margin: 20px 0px;
+    width: 225px;
+}
+
+.time {
+    background-color: #eceded;
+    color: #000;
+    font-family: 'Roboto';
+    font-size: 20px;
+    font-style: normal;
+    font-weight: 700;
+    line-height: 25px;
+    letter-spacing: -0.6px;
+    padding: 12px;
+    text-align: center;
+    text-transform: uppercase;
+}

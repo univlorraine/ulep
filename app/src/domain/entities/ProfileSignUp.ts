@@ -3,6 +3,7 @@ import Country from './Country';
 import Goal from './Goal';
 import Language from './Language';
 import University from './University';
+import cefr from './cefr';
 
 export interface BiographySignUp {
     incredible: string;
@@ -46,7 +47,13 @@ class ProfileSignUp {
 
     private _interests?: string[];
 
+    private _isForCertificate?: boolean;
+
+    private _isForProgram?: boolean;
+
     private _learningLanguage?: Language;
+
+    private _learningLanguageLevel?: cefr;
 
     private _lastname?: string;
 
@@ -61,6 +68,12 @@ class ProfileSignUp {
     private otherLaguages?: Language[];
 
     private _role?: Role;
+
+    private _sameAge?: boolean;
+
+    private _sameGender?: boolean;
+
+    private _sameTandem?: boolean;
 
     private _site?: string;
 
@@ -124,6 +137,14 @@ class ProfileSignUp {
         this._interests = interests;
     }
 
+    set isForCertificate(isForCertificate: boolean) {
+        this._isForCertificate = isForCertificate;
+    }
+
+    set isForProgram(isForProgram: boolean) {
+        this._isForProgram = isForProgram;
+    }
+
     set lastname(lastname: string) {
         this._lastname = lastname;
     }
@@ -134,6 +155,14 @@ class ProfileSignUp {
 
     set learningLanguage(learningLanguage: Language | undefined) {
         this._learningLanguage = learningLanguage;
+    }
+
+    get learningLanguageLevel(): cefr | undefined {
+        return this._learningLanguageLevel;
+    }
+
+    set learningLanguageLevel(learningLanguageLevel: cefr | undefined) {
+        this._learningLanguageLevel = learningLanguageLevel;
     }
 
     set nativeLanguage(nativeLanguage: Language) {
@@ -166,6 +195,18 @@ class ProfileSignUp {
 
     set role(role: Role) {
         this._role = role;
+    }
+
+    set sameAge(sameAge: boolean) {
+        this._sameAge = sameAge;
+    }
+
+    set sameGender(sameGender: boolean) {
+        this._sameGender = sameGender;
+    }
+
+    set sameTandem(sameTandem: boolean) {
+        this._sameTandem = sameTandem;
     }
 
     set site(site: string) {
