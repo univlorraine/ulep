@@ -30,7 +30,7 @@ const PairingQuizzEndPage = ({}) => {
             <div className={styles.body}>
                 <QuizzValidatedContent
                     language={learningLanguage}
-                    onNextStep={() => history.push('/signup')}
+                    onNextStep={() => history.push('/signup/pairing/preference')}
                     quizzLevel={profileSignUp.learningLanguageLevel}
                 />
             </div>

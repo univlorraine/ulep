@@ -75,6 +75,13 @@
         "title": "Choix de la langue",
         "validate_button": "Confirmer"
     },
+    "pairing_preference_page": {
+        "none": "Pas de préférence",
+        "same_age": "Même âge que moi uniquement",
+        "same_gender": "Même genre que moi uniquement",
+        "title": "Mes préférences",
+        "validate_button": "Valider et continuer"
+    },
     "pairing_quizz_description_page": {
         "A1": "Je débute l’apprentissage de cette langue",
         "A2": "Je peux me présenter simplement dans la langue",
