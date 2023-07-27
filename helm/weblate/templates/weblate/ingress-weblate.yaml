@@ -11,7 +11,7 @@ kind: Ingress
 metadata:
   name: "{{ .Values.name }}-{{ .Values.weblate.name }}"
   labels:
-    {{- include "etandem-weblate.labels" . | nindent 4 }}
+    {{- include "ulep-weblate.labels" . | nindent 4 }}
   {{- with .Values.weblate.ingress.annotations }}
   annotations:
     {{- toYaml . | nindent 4 }}

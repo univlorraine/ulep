@@ -4,13 +4,18 @@
 
 ############## GLOBAL ##############
 
-name: "etandem-weblate" # REQUIRED
-domain: exemple.com # REQUIRED
-postgresDB: weblate # FIXE
-postgresUser: weblate # FIXE
-postgresPassword: "" # REQUIRED
+name: "ulep-weblate" # REQUIRED
+domain: "" # REQUIRED
 issuerName: letsencrypt
-
+global:
+  postgresql: 
+    auth:
+      username: weblate # FIXE
+      database: weblate # FIXE
+      password:  # REQUIRED
+      postgresPassword: # REQUIRED
+  redis: 
+    password:  # REQUIRED
 ############## WEBLATE ##############
 weblate:
   name: "weblate" # FIXE
@@ -60,7 +65,7 @@ weblate:
   # FIXE
   ingress:
     enabled: true
-    # className: ""
+    className: traefik
     annotations:
       kubernetes.io/ingress.class: traefik
       kubernetes.io/tls-acme: "true"
@@ -69,95 +74,11 @@ weblate:
       - host: weblate
         paths: [/]
     tls: 
-      - secretName: etendem-weblate-tls
-        hosts:
+      - hosts:
           - weblate
 ############## WEBLATE ##############
 
-
-############## DATABASE ##############
-database:
-  name: "database" # FIXE
-  replicaCount: 1
-
-  image:
-    repository: "postgres" # FIXE
-    tag: "15.3-alpine" # REQUIRED
-    pullPolicy: IfNotPresent
-
-  env: {}
-
-  pv:
-    storage: 5Gi # 5Gi recommandé
-    volumeMode: Filesystem
-    storageClassName: scw-bssd
-
-  autoscaling:
-    enabled: false
-    minReplicas: 1
-    maxReplicas: 100
-    targetCPUUtilizationPercentage: 80
-    # targetMemoryUtilizationPercentage: 80
-  service:
-    type: ClusterIP
-    port: 5432
-
-  ingress:
-    enabled: false
-    # className: ""
-    annotations: 
-      kubernetes.io/ingress.class: nginx
-      kubernetes.io/tls-acme: "true"
-    hosts:
-      - host: database
-        paths: [/]
-    # tls: 
-    #   - secretName: etendem-tls
-    #     hosts:
-    #       - database
-############## DATABASE ##############
-
-############## REDIS ##############
-redis:
-  name: "redis" # FIXE
-  replicaCount: 1
-
-  image:
-    repository: "redis" # FIXE
-    tag: "7.0" # REQUIRED
-    pullPolicy: IfNotPresent
-
-  env: {}
-
-  autoscaling:
-    enabled: false
-    minReplicas: 1
-    maxReplicas: 100
-    targetCPUUtilizationPercentage: 80
-    # targetMemoryUtilizationPercentage: 80
-
-  # FIXE
-  service:
-    type: ClusterIP
-    port: 6379
-
-  ingress:
-    enabled: false
-    # className: ""
-    annotations: 
-      kubernetes.io/ingress.class: nginx
-      kubernetes.io/tls-acme: "true"
-    hosts:
-      - host: database
-        paths: [/]
-    # tls: 
-    #   - secretName: etendem-tls
-    #     hosts:
-    #       - database
-############## DATABASE ##############
-
 ############## INIT SPEC ##############
-
 
 serviceAccount:
   # Specifies whether a service account should be created

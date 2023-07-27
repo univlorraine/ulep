@@ -1,16 +1,16 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name:  "{{ include "etandem-weblate.fullname" . }}-{{ .Values.weblate.name }}"
+  name:  "{{ .Values.name }}-{{ .Values.weblate.name }}"
   labels:
-    {{- include "etandem-weblate.labels" . | nindent 4 }}
+    {{- include "ulep-weblate.labels" . | nindent 4 }}
 spec:
   {{- if not .Values.weblate.autoscaling.enabled }}
   replicas: {{ .Values.weblate.replicaCount }}
   {{- end }}
   selector:
     matchLabels:
-      app.kubernetes.io/name: "{{ include "etandem-weblate.name" . }}-{{ .Values.weblate.name }}"
+      app.kubernetes.io/name: "{{ .Values.name }}-{{ .Values.weblate.name }}"
       app.kubernetes.io/instance: "{{ .Release.Name }}"
   template:
     metadata:
@@ -19,14 +19,14 @@ spec:
         {{- toYaml . | nindent 8 }}
       {{- end }}
       labels:
-        app.kubernetes.io/name: "{{ include "etandem-weblate.name" . }}-{{ .Values.weblate.name }}"
+        app.kubernetes.io/name: "{{ .Values.name }}-{{ .Values.weblate.name }}"
         app.kubernetes.io/instance: "{{ .Release.Name }}"
     spec:
       {{- with .Values.imagePullSecrets }}
       imagePullSecrets:
         {{- toYaml . | nindent 8 }}
       {{- end }}
-      serviceAccountName: {{ include "etandem-weblate.serviceAccountName" . }}
+      serviceAccountName: {{ include "ulep-weblate.serviceAccountName" . }}
       securityContext:
         {{- toYaml .Values.podSecurityContext | nindent 8 }}
       initContainers:
@@ -71,29 +71,31 @@ spec:
             - name: WEBLATE_SERVER_EMAIL
               value: "{{ .Values.weblate.env.serverEmail }}"
             - name: WEBLATE_DEFAULT_FROM_EMAIL
-              value: "{{ .Values.weblate.env.defaultFromEmail }}"
+              value: "{{ .Values.weblate.env.serverEmail }}"
             - name: WEBLATE_ADMIN_EMAIL
               value: "{{ .Values.weblate.env.adminEmail }}"
             - name: POSTGRES_DATABASE
-              value: "{{ .Values.postgresDB }}"
+              value: "{{ .Values.global.postgresql.auth.database }}"
             - name: POSTGRES_USER
-              value: "{{ .Values.postgresUser }}"
+              value: "{{ .Values.global.postgresql.auth.username }}"
             - name: POSTGRES_PORT
-              value: "{{ .Values.database.service.port }}"
+              value: "5432"
             - name: POSTGRES_HOST
-              value: "{{ include "etandem-weblate.fullname" . }}-{{ .Values.database.name }}.{{ include "etandem-weblate.fullname" . }}"
+              value: "{{ .Values.name }}-postgresql.{{ .Release.Namespace }}"
             - name: REDIS_HOST
-              value: "{{ include "etandem-weblate.fullname" . }}-{{ .Values.redis.name }}.{{ include "etandem-weblate.fullname" . }}"
+              value: "{{ .Values.name }}-redis-master.{{ .Release.Namespace }}"
+            - name: REDIS_PASSWORD
+              value: "{{ .Values.global.redis.password }}"
           envFrom: 
             - secretRef: 
-                name: "{{ include "etandem-weblate.fullname" . }}-secret-{{ .Values.weblate.name }}"
+                name: "{{ .Values.name }}-secret-{{ .Values.weblate.name }}"
           volumeMounts:
           - name: "{{ .Values.weblate.name }}-data"
             mountPath: /app/data
       volumes:
       - name: "{{ .Values.weblate.name }}-data"
         persistentVolumeClaim:
-          claimName:  "{{ include "etandem-weblate.name" . }}-pvc-{{ .Values.weblate.name }}"
+          claimName:  "{{ .Values.name }}-pvc-{{ .Values.weblate.name }}"
       {{- with .Values.nodeSelector }}
       nodeSelector:
         {{- toYaml . | nindent 8 }}

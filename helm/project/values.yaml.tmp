@@ -28,7 +28,7 @@ api:
   image:
     repository: "rg.fr-par.scw.cloud/ulep/api-dev" # REQUIRED
     tag: "amd" # REQUIRED
-    pullPolicy: Always # OPTIONNEL
+    pullPolicy: IfNotPresent # OPTIONNEL
 
   env:
     adminUrl: admin # FIXE 
@@ -130,11 +130,7 @@ minio:
 
   pv:
     storage: 40Gi
-    volumeMode: Filesystem
     storageClassName: scw-bssd
-    csi:
-      enabled: true
-      zone: fr-par-2
 
   autoscaling:
     enabled: false
@@ -200,7 +196,6 @@ admin:
       - host: admin
         paths: [/]
     tls: 
-      - secretName: etandem-tls 
         hosts:
           - admin
 ############## ADMIN ##############

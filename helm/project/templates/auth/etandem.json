@@ -1,0 +1,49 @@
+{
+"realm": "etandem",
+"enabled": true,
+"registrationAllowed": true,
+"registrationEmailAsUsername": true,
+"accessTokenLifespan": 600,
+"accessCodeLifespan": 600,
+"requiredCredentials": [
+    "password"
+],
+"clients": [
+    {
+    "clientId": "api",
+    "name": "API",
+    "clientAuthenticatorType": "client-secret",
+    "secret": "{{ .Values.api.env.keycloakClientSecret }}",
+    "bearerOnly": true
+    },
+    {
+    "clientId": "react-admin",
+    "name": "admin",
+    "clientAuthenticatorType": "client-secret",
+    "secret": "{{ .Values.admin.env.keycloakClientSecret }}",
+    "protocol": "openid-connect",
+    "standardFlowEnabled": true,
+    "directAccessGrantsEnabled": true,
+    "redirectUris": ["*"],
+    "webOrigins": ["*"],
+    "adminUrl": "https://{{ .Values.auth.env.adminUrl }}.{{ .Values.domain }}"
+    }
+],
+"users": [
+    {
+    "username": "Jane Doe",
+    "enabled": true,
+    "emailVerified": false,
+    "firstName": "Jane",
+    "lastName": "Doe",
+    "email": "jane.doe@ulep.io",
+    "credentials": [
+        {
+        "type": "password",
+        "value": "admin",
+        "temporary": false
+        }
+    ]
+    }
+]
+}
