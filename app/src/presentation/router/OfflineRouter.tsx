@@ -28,6 +28,7 @@ import SignUpInformationsPage from '../pages/SignUpInformationsPage';
 import SignUpInterestsPage from '../pages/SignUpInterestsPage';
 import SignUpLanguagesPage from '../pages/SignUpLanguagesPage';
 import SignUpPage from '../pages/SignUpPage';
+import PairingFinalPage from '../pages/PairingFinalPage';
 
 const OfflineRouter: React.FC = () => (
     <IonRouterOutlet>
@@ -57,6 +58,9 @@ const OfflineRouter: React.FC = () => (
         </Route>
         <Route exact path="/signup/pairing/language/confirm">
             <PairingConfirmLanguagePage />
+        </Route>
+        <Route exact path="/signup/pairing/end">
+            <PairingFinalPage />
         </Route>
         <Route exact path="/signup/pairing/level">
             <PairingLevelPage />

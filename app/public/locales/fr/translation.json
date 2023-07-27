@@ -75,6 +75,15 @@
         "title": "Choix de la langue",
         "validate_button": "Confirmer"
     },
+    "pairing_final_page": {
+        "congratulation": "Félicitations",
+        "congratulation_text": "Nous avons à présent toutes les informations pour te trouver un tandem.",
+        "language_title": "Langue souhaitée",
+        "mode_meet": "Mode de rencontre",
+        "tandem": "tandem",
+        "title": "Nice, c’est terminé !",
+        "validate_button": "Continuer"
+    },
     "pairing_options_page": {
         "certificat": "Certificat",
         "pass_button": "Passer",
