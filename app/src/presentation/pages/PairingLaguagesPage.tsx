@@ -79,7 +79,7 @@ const PairingLaguagesPage: React.FC = () => {
                         )}
                     </div>
                 </div>
-                <div className={`${pairingLanguagesStyles['bottom-container']} large-margin-top large-margin-bottom`}>
+                <div className={`extra-large-margin-bottom`}>
                     <button
                         className={`primary-button ${!selectedLaguage ? 'disabled' : ''}`}
                         disabled={!selectedLaguage}

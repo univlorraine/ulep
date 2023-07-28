@@ -26,8 +26,9 @@
 .image {
     border-radius: 50%;
     height: 225px;
-    width: 225px;
     margin: 16px 0px;
+    object-fit: cover;
+    width: 225px;
 }
 
 .image-container {

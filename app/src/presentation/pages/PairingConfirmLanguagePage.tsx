@@ -39,7 +39,10 @@ const PairingConfirmLanguagePage: React.FC = () => {
     };
 
     const continueSignUp = async () => {
-        history.push('/signup/pairing/level');
+        if (profileSignUp.learningLanguageLevel) {
+            return history.push('/signup/pairing/preference');
+        }
+        return history.push('/signup/pairing/level');
     };
 
     if (isConfirmed) {

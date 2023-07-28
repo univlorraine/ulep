@@ -34,7 +34,7 @@ const OtherLanguageContent: React.FC<OtherLanguageContentProps> = ({ languages, 
                         </p>
                         <Checkbox
                             isSelected={selectedLaguage?.code === 'joker'}
-                            onPressed={() => setSelectedLanguage(new Language('joker', 'joker'))}
+                            onPressed={() => setSelectedLanguage(new Language('Joker', 'Joker'))}
                             name={t('pairing_other_languages_page.joker_checkbox')}
                             textClass={pairingOtherLanguagesStyles['checkbox-text']}
                         />
@@ -56,7 +56,7 @@ const OtherLanguageContent: React.FC<OtherLanguageContentProps> = ({ languages, 
                     })}
                 </div>
             </div>
-            <div className={`${pairingOtherLanguagesStyles['bottom-container']} large-margin-top large-margin-bottom`}>
+            <div className={`large-margin-top extra-large-margin-bottom`}>
                 <button
                     className={`primary-button ${!selectedLaguage ? 'disabled' : ''}`}
                     disabled={!selectedLaguage}

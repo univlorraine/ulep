@@ -109,3 +109,31 @@
 .large-margin-right {
     margin: 0px 16px 0px 16px;
 }
+
+.extra-large-margin {
+    margin: 40px;
+}
+
+.extra-large-margin-top {
+    margin-top: 40px;
+}
+
+.extra-large-margin-bottom {
+    margin-bottom: 40px;
+}
+
+.extra-large-margin-left {
+    margin-left: 40px;
+}
+
+.extra-large-margin-right {
+    margin-right: 40px;
+}
+
+.extra-large-margin-vertical {
+    margin: 40px 0px 40px 0px;
+}
+
+.extra-large-margin-right {
+    margin: 0px 40px 0px 40px;
+}
