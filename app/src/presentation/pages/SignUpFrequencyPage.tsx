@@ -55,7 +55,7 @@ const SignUpFrequencyPage: React.FC = () => {
                         );
                     })}
                 </div>
-                <div className={`${styles['bottom-container']}`}>
+                <div className="extra-large-margin-bottom">
                     <button
                         className={`primary-button ${frequency === undefined ? 'disabled' : ''}`}
                         disabled={frequency === undefined}

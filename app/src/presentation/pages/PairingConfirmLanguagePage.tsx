@@ -86,7 +86,7 @@ const PairingConfirmLanguagePage: React.FC = () => {
                         <img alt="tandem" src="/assets/tandem.svg" />
                     </div>
                 </div>
-                <div className={`${confirmLanguagesStyles['bottom-container']} large-margin-top large-margin-bottom`}>
+                <div className={`large-margin-top extra-large-margin-bottom`}>
                     <button className={`primary-button `} onClick={() => setIsConfirmed(true)}>
                         {t('pairing_confirm_language_page.validate_button')}
                     </button>
