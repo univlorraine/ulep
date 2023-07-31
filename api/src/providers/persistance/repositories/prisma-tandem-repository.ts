@@ -1,22 +1,20 @@
 import { Injectable } from '@nestjs/common';
+import { Collection, PrismaService } from '@app/common';
 import { TandemsRepository } from '../../../core/ports/tandems.repository';
-import { Tandem } from '../../../core/models/tandem';
-import { PrismaService } from '../prisma.service';
-import { profileMapper } from '../mappers/profile.mapper';
-import { Collection } from 'src/shared/types/collection';
-import { ProfilesRelations } from './prisma-profile-repository';
+import { Tandem, TandemStatus } from '../../../core/models';
+import { ProfilesRelations, profileMapper } from '../mappers';
 
 @Injectable()
 export class PrismaTandemRepository implements TandemsRepository {
   constructor(private readonly prisma: PrismaService) {}
 
   async save(tandem: Tandem): Promise<void> {
-    await this.prisma.tandem.create({
+    await this.prisma.tandems.create({
       data: {
         id: tandem.id,
-        profiles: {
+        Profiles: {
           create: tandem.profiles.map((profile) => ({
-            profile: { connect: { id: profile.id } },
+            Profile: { connect: { id: profile.id } },
           })),
         },
         status: tandem.status,
@@ -27,8 +25,8 @@ export class PrismaTandemRepository implements TandemsRepository {
   async hasActiveTandem(profileId: string): Promise<boolean> {
     const activeTandems = await this.prisma.profilesOnTandems.findMany({
       where: {
-        profileId: profileId,
-        tandem: {
+        profile_id: profileId,
+        Tandem: {
           status: { equals: 'active' },
         },
       },
@@ -41,7 +39,7 @@ export class PrismaTandemRepository implements TandemsRepository {
     offset?: number,
     limit?: number,
   ): Promise<Collection<Tandem>> {
-    const count = await this.prisma.tandem.count({
+    const count = await this.prisma.tandems.count({
       where: { status: { equals: 'active' } },
     });
 
@@ -49,14 +47,14 @@ export class PrismaTandemRepository implements TandemsRepository {
       return { items: [], totalItems: count };
     }
 
-    const activeTandems = await this.prisma.tandem.findMany({
+    const activeTandems = await this.prisma.tandems.findMany({
       where: { status: { equals: 'active' } },
       skip: offset,
       take: limit,
       include: {
-        profiles: {
+        Profiles: {
           include: {
-            profile: {
+            Profile: {
               include: ProfilesRelations,
             },
           },
@@ -68,8 +66,8 @@ export class PrismaTandemRepository implements TandemsRepository {
       items: activeTandems.map((tandem) => {
         return new Tandem({
           id: tandem.id,
-          profiles: tandem.profiles.map((p) => profileMapper(p.profile)),
-          status: tandem.status as 'active' | 'inactive',
+          profiles: tandem.Profiles.map((p) => profileMapper(p.Profile)),
+          status: TandemStatus[tandem.status],
         });
       }),
       totalItems: count,
@@ -77,7 +75,7 @@ export class PrismaTandemRepository implements TandemsRepository {
   }
 
   async delete(tandemId: string): Promise<void> {
-    await this.prisma.tandem.delete({
+    await this.prisma.tandems.delete({
       where: { id: tandemId },
     });
   }

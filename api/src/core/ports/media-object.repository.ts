@@ -1,10 +1,13 @@
-import MediaObject from '../models/media-object';
-import { User } from '../models/user';
+import { MediaObject, User } from '../models';
+
+export const MEDIA_OBJECT_REPOSITORY = 'media-object.repository';
 
 export interface MediaObjectRepository {
-  of: (id: string) => Promise<MediaObject | null>;
-
   saveAvatar: (user: User, object: MediaObject) => Promise<void>;
 
-  delete: (object: MediaObject) => Promise<void>;
+  findAll(): Promise<MediaObject[]>;
+
+  findOne(id: string): Promise<MediaObject | null>;
+
+  remove(id: string): Promise<void>;
 }

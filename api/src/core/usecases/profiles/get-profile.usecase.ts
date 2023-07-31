@@ -1,7 +1,9 @@
 import { Inject, Injectable } from '@nestjs/common';
-import { ProfileDoesNotExist } from '../../errors/RessourceDoesNotExist';
-import { ProfileRepository } from '../../ports/profile.repository';
-import { PROFILE_REPOSITORY } from '../../../providers/providers.module';
+import {
+  PROFILE_REPOSITORY,
+  ProfileRepository,
+} from '../../ports/profile.repository';
+import { RessourceDoesNotExist } from 'src/core/errors';
 
 export type GetProfileCommand = {
   id: string;
@@ -18,7 +20,7 @@ export class GetProfileUsecase {
     const profile = await this.profileRepository.ofId(command.id);
 
     if (!profile) {
-      throw ProfileDoesNotExist.withIdOf(command.id);
+      throw new RessourceDoesNotExist();
     }
 
     return profile;

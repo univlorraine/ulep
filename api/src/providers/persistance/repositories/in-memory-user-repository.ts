@@ -1,6 +1,6 @@
-import { User } from '../../../core/models/user';
-import { UserRepository } from '../../../core/ports/user.repository';
-import { Collection } from '../../../shared/types/collection';
+import { Collection } from '@app/common';
+import { User } from 'src/core/models/user.model';
+import { UserRepository } from 'src/core/ports/user.repository';
 
 export class InMemoryUserRepository implements UserRepository {
   #users: User[] = [];
@@ -17,7 +17,19 @@ export class InMemoryUserRepository implements UserRepository {
     this.#users = [];
   }
 
-  async all(offset?: number, limit?: number): Promise<Collection<User>> {
+  async create(user: User): Promise<User> {
+    const index = this.#users.findIndex((u) => u.id === user.id);
+
+    if (index !== -1) {
+      this.#users[index] = user;
+    } else {
+      this.#users.push(user);
+    }
+
+    return user;
+  }
+
+  async findAll(offset?: number, limit?: number): Promise<Collection<User>> {
     return {
       items: this.#users.slice(offset, offset + limit),
       totalItems: this.#users.length,
@@ -32,13 +44,19 @@ export class InMemoryUserRepository implements UserRepository {
     return this.#users.find((user) => user.email === email);
   }
 
-  async save(user: User): Promise<void> {
-    const index = this.#users.findIndex((u) => u.id === user.id);
+  async update(id: string, age: number): Promise<void> {
+    const index = this.#users.findIndex((u) => u.id === id);
 
     if (index !== -1) {
-      this.#users[index] = user;
-    } else {
-      this.#users.push(user);
+      this.#users[index].age = age;
+    }
+  }
+
+  async remove(id: string): Promise<void> {
+    const index = this.#users.findIndex((u) => u.id === id);
+
+    if (index !== -1) {
+      this.#users.splice(index, 1);
     }
   }
 }

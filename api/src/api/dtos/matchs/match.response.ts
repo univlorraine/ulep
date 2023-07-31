@@ -1,7 +1,7 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { Expose, Type } from 'class-transformer';
-import { Match } from 'src/core/models/match';
-import { ProfileResponse } from '../profiles/profile.response';
+import { ProfileResponse } from '../profiles';
+import { Match } from 'src/core/models/matchs.model';
 
 class MatchScoreDto {
   @ApiProperty()

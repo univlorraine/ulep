@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/ban-types */
 import {
   registerDecorator,
   ValidationOptions,
@@ -9,6 +8,7 @@ export function IsAfterThan(
   property: string,
   validationOptions?: ValidationOptions,
 ) {
+  // eslint-disable-next-line @typescript-eslint/ban-types
   return (object: Object, propertyName: string) => {
     registerDecorator({
       name: 'isAfterThan',

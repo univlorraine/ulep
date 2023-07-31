@@ -1,17 +1,20 @@
-import { Country } from '../../../core/models/country';
-import { Collection } from '../../../shared/types/collection';
-import { CountryRepository } from '../../../core/ports/country.repository';
 import { Injectable } from '@nestjs/common';
+import {
+  CountryFilters,
+  CountryRepository,
+} from '../../../core/ports/country.repository';
+import { CountryCode } from 'src/core/models/country-code.model';
+import { Collection } from '@app/common';
 
 @Injectable()
-export class InMemoryCountryRepository implements CountryRepository {
-  #countries: Country[] = [];
+export class InMemoryCountryCodesRepository implements CountryRepository {
+  #countries: CountryCode[] = [];
 
-  get countries(): Country[] {
+  get countries(): CountryCode[] {
     return this.#countries;
   }
 
-  init(countries: Country[]): void {
+  init(countries: CountryCode[]): void {
     this.#countries = countries;
   }
 
@@ -19,22 +22,34 @@ export class InMemoryCountryRepository implements CountryRepository {
     this.#countries = [];
   }
 
-  async findAll(): Promise<Collection<Country>> {
+  async all({ page, limit }: CountryFilters): Promise<Collection<CountryCode>> {
+    const offset = page > 0 ? (page - 1) * limit : 0;
+    const totalItems = this.#countries.length;
+
     return {
-      items: this.#countries,
-      totalItems: this.#countries.length,
+      items: this.#countries.slice(
+        offset,
+        Math.min(offset + limit, totalItems),
+      ),
+      totalItems: totalItems,
     };
   }
 
-  async ofCode(code: string): Promise<Country> {
+  async ofId(id: string): Promise<CountryCode> {
+    return this.#countries.find((country) => country.id === id);
+  }
+
+  async ofCode(code: string): Promise<CountryCode | null> {
     return this.#countries.find((country) => country.code === code);
   }
 
-  async save(country: Country): Promise<void> {
-    if (this.#countries.find((c) => c.code === country.code)) {
+  async toogleStatus(id: string, enable: boolean): Promise<void> {
+    const country = this.#countries.find((country) => country.id === id);
+
+    if (!country) {
       return;
     }
 
-    this.#countries.push(country);
+    country.enable = enable;
   }
 }

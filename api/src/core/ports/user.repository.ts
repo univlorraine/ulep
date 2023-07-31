@@ -1,12 +1,16 @@
-import { Collection } from 'src/shared/types/collection';
-import { User } from '../models/user';
+import { Collection } from '@app/common';
+import { User } from '../models';
+
+export const USER_REPOSITORY = 'user.repository';
 
 export interface UserRepository {
-  all(offset?: number, limit?: number): Promise<Collection<User>>;
+  create(user: User): Promise<User>;
+
+  findAll(offset?: number, limit?: number): Promise<Collection<User>>;
 
   ofId(id: string): Promise<User | null>;
 
-  ofEmail(email: string): Promise<User | null>;
+  update(id: string, age: number): Promise<void>;
 
-  save(user: User): Promise<void>;
+  remove(id: string): Promise<void>;
 }

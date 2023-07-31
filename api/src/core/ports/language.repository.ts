@@ -1,19 +1,13 @@
-import { Collection } from '../../shared/types/collection';
-import { Language } from '../models/language';
+import { Language } from '../models';
 
-export type LanguageCombination = {
-  learningLanguage: string;
-  nativeLanguage: string;
-};
+export const LANGUAGE_REPOSITORY = 'language-code.repository';
 
 export interface LanguageRepository {
-  all: (offset?: number, limit?: number) => Promise<Collection<Language>>;
+  ofId(id: string): Promise<Language>;
 
-  ofCode: (code: string) => Promise<Language | null>;
+  ofCode(code: string): Promise<Language>;
 
-  getUniqueCombinations: () => Promise<LanguageCombination[]>;
-
-  save: (language: Language) => Promise<void>;
+  all(): Promise<Language[]>;
 
   addRequest(code: string, user: string): Promise<void>;
 

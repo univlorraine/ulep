@@ -18,10 +18,10 @@ import {
 import RoleRepresentation, {
   CreateUserProps,
   GetUsersProps,
-  KeycloakCertsResponse,
   KeycloakEmailAction,
-  KeycloakUserInfoResponse,
+  KeycloakCertsResponse,
   UserRepresentation,
+  KeycloakUser,
 } from './keycloak.models';
 import { Client, Issuer, TokenSet } from 'openid-client';
 
@@ -64,7 +64,7 @@ export class KeycloakClient {
   /*
    * Validates the access token and returns the payload
    */
-  async authenticate(accessToken: string): Promise<KeycloakUserInfoResponse> {
+  async authenticate(accessToken: string): Promise<KeycloakUser> {
     const token = jwt.decode(accessToken, { complete: true });
 
     const keyId = token.header.kid;
@@ -234,7 +234,7 @@ export class KeycloakClient {
   /*
    * Let Keycloak validate the access token and return the userinfo.
    */
-  async userInfo(accessToken: string): Promise<KeycloakUserInfoResponse> {
+  async userInfo(accessToken: string): Promise<KeycloakUser> {
     const response = await fetch(
       `${this.configuration.baseUrl}/realms/${this.configuration.realm}/protocol/openid-connect/userinfo`,
       {

@@ -1,19 +1,27 @@
-import { Collection } from '../../shared/types/collection';
-import { Language } from '../models/language';
-import { University } from '../models/university';
+import { Language, University } from '../models';
+
+export const UNIVERSITY_REPOSITORY = 'university.repository';
 
 export interface UniversityRepository {
-  ofId: (id: string) => Promise<University | null>;
+  create(university: University): Promise<University>;
 
-  ofName: (name: string) => Promise<University | null>;
+  findAll(): Promise<University[]>;
+
+  findUniversityCentral(): Promise<University | null>;
+
+  findPartners(): Promise<University[]>;
+
+  ofId(id: string): Promise<University | null>;
+
+  ofName(name: string): Promise<University | null>;
+
+  languages(id: string): Promise<Language[]>;
 
   addLanguage(language: Language, university: University): Promise<void>;
 
-  removeLanguage(code: string, university: University): Promise<void>;
+  removeLanguage(language: Language, university: University): Promise<void>;
 
-  create(university: University): Promise<void>;
+  update(id: string, name: string): Promise<void>;
 
-  delete: (university: University) => Promise<void>;
-
-  findAll: (offset?: number, limit?: number) => Promise<Collection<University>>;
+  remove(id: string): Promise<void>;
 }

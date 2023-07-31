@@ -1,15 +1,15 @@
 // TODO: add attributes mappers in keycloak addministration
-export type KeycloakEmailAction =
-  | 'VERIFY_EMAIL'
-  | 'UPDATE_PASSWORD'
-  | 'UPDATE_PROFILE';
-
-export interface KeycloakUserInfoResponse {
+export interface KeycloakUser {
   sub: string;
   email: string;
   email_verified: boolean;
   realm_access: RealmAccess;
 }
+
+export type KeycloakEmailAction =
+  | 'VERIFY_EMAIL'
+  | 'UPDATE_PASSWORD'
+  | 'UPDATE_PROFILE';
 
 export interface RealmAccess {
   roles: string[];

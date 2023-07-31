@@ -1,18 +1,15 @@
 import { Controller, Get, Query, UseGuards } from '@nestjs/common';
 import * as Swagger from '@nestjs/swagger';
-import { CollectionResponse } from '../decorators/collection.decorator';
-import { AuthenticationGuard } from '../guards/authentication.guard';
-import { MatchResponse } from '../dtos/matchs/match.response';
-import { GetMatchsByProfileIdUsecase } from 'src/core/usecases/matchs/GetMatchsByProfileId';
-import { GetMatchsRequest } from '../dtos/matchs/matchs.request';
-import { Collection } from 'src/shared/types/collection';
+import { GetMatchsRequest, MatchResponse } from '../dtos';
+import { Collection } from '@app/common';
+import { CollectionResponse } from '../decorators';
+import { AuthenticationGuard } from '../guards';
+import { GetUserMatchUsecase } from '../../core/usecases/tandem/get-users-matchs.usecase';
 
 @Controller('matches')
 @Swagger.ApiTags('Matches')
 export class MatchController {
-  constructor(
-    private getMatchsByProfileIdUsecase: GetMatchsByProfileIdUsecase,
-  ) {}
+  constructor(private getUserMatchUsecase: GetUserMatchUsecase) {}
 
   @Get()
   @UseGuards(AuthenticationGuard)
@@ -20,11 +17,8 @@ export class MatchController {
     summary: 'Retrieve the collection of Match ressource.',
   })
   @CollectionResponse(MatchResponse)
-  async getByProfileId(@Query() { id, count }: GetMatchsRequest) {
-    const matches = await this.getMatchsByProfileIdUsecase.execute({
-      profileId: id,
-      count,
-    });
+  async getByUserId(@Query() { id, count }: GetMatchsRequest) {
+    const matches = await this.getUserMatchUsecase.execute({ id, count });
 
     return new Collection<MatchResponse>({
       items: matches.items.map(MatchResponse.fromDomain),

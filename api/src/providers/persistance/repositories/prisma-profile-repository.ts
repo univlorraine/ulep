@@ -1,32 +1,18 @@
 import { Injectable } from '@nestjs/common';
-import { PrismaService } from '../prisma.service';
+import { StringFilter, Collection, PrismaService } from '@app/common';
 import {
   ProfileFilters,
   ProfileRepository,
-} from '../../../core/ports/profile.repository';
-import { profileMapper } from '../mappers/profile.mapper';
-import { Profile } from '../../../core/models/profile';
-import { Collection } from '../../../shared/types/collection';
-import { StringFilter } from 'src/shared/types/filters';
-import { UniversityRelations } from './prisma-university-repository';
-
-export const ProfilesRelations = {
-  user: true,
-  university: {
-    include: UniversityRelations,
-  },
-  nativeLanguage: true,
-  masteredLanguages: { include: { language: true } },
-  learningLanguage: true,
-  preferences: true,
-};
+} from 'src/core/ports/profile.repository';
+import { Profile } from 'src/core/models';
+import { ProfilesRelations, profileMapper } from '../mappers';
 
 @Injectable()
 export class PrismaProfileRepository implements ProfileRepository {
   constructor(private readonly prisma: PrismaService) {}
 
-  async ofId(id: string) {
-    const entry = await this.prisma.profile.findUnique({
+  async ofId(id: string): Promise<Profile | null> {
+    const entry = await this.prisma.profiles.findUnique({
       where: { id },
       include: ProfilesRelations,
     });
@@ -38,9 +24,9 @@ export class PrismaProfileRepository implements ProfileRepository {
     return profileMapper(entry);
   }
 
-  async ofUser(id: string): Promise<Profile> {
-    const entry = await this.prisma.profile.findUnique({
-      where: { userId: id },
+  async ofUser(id: string): Promise<Profile | null> {
+    const entry = await this.prisma.profiles.findUnique({
+      where: { user_id: id },
       include: ProfilesRelations,
     });
 
@@ -51,13 +37,16 @@ export class PrismaProfileRepository implements ProfileRepository {
     return profileMapper(entry);
   }
 
-  async availableProfiles(filters?: ProfileFilters): Promise<Profile[]> {
-    const entries = await this.prisma.profile.findMany({
+  async availableOnly(filters?: ProfileFilters): Promise<Profile[]> {
+    const entries = await this.prisma.profiles.findMany({
       where: {
-        tandems: {
-          none: { tandem: { status: 'active' } },
+        Tandems: {
+          none: { Tandem: { status: 'active' } },
         },
-        nativeLanguageCode: filters?.nativeLanguageCode,
+        NativeLanguage: {
+          isNot: { code: filters?.nativeLanguageCode?.not },
+          is: { code: filters?.nativeLanguageCode?.equals },
+        },
       },
       include: ProfilesRelations,
     });
@@ -65,17 +54,50 @@ export class PrismaProfileRepository implements ProfileRepository {
     return entries.map(profileMapper);
   }
 
+  async create(profile: Profile): Promise<void> {
+    await this.prisma.profiles.create({
+      data: {
+        id: profile.id,
+        learning_type: profile.preferences.learningType,
+        same_gender: profile.preferences.sameGender,
+        same_age: profile.preferences.sameAge,
+        meeting_frequency: profile.preferences.meetingFrequency,
+        bio: profile.bio,
+        User: {
+          connect: { id: profile.user.id },
+        },
+        NativeLanguage: {
+          connect: { id: profile.languages.native.id },
+        },
+        LearningLanguage: {
+          connect: { id: profile.languages.learning.id },
+        },
+        level: profile.languages.learning.level,
+        MasteredLanguages: {
+          create: profile.languages.mastered.map((language) => {
+            return { LanguageCode: { connect: { code: language.code } } };
+          }),
+        },
+        Goals: {
+          connect: profile.preferences.goals.map((goal) => ({ id: goal.id })),
+        },
+        Interests: {
+          connect: profile.interests.map((interest) => ({ id: interest.id })),
+        },
+        metadata: {
+          // TODO
+        },
+      },
+    });
+  }
+
   async findAll(
     offset?: number,
     limit?: number,
     where?: { email?: StringFilter },
   ): Promise<Collection<Profile>> {
-    const count = await this.prisma.profile.count({
-      where: {
-        user: {
-          email: where?.email,
-        },
-      },
+    const count = await this.prisma.profiles.count({
+      where: { User: { email: where?.email } },
     });
 
     // If skip is out of range, return an empty array
@@ -83,73 +105,29 @@ export class PrismaProfileRepository implements ProfileRepository {
       return { items: [], totalItems: count };
     }
 
-    const items = await this.prisma.profile.findMany({
-      where: {
-        user: {
-          email: where?.email,
-        },
-      },
+    const users = await this.prisma.profiles.findMany({
+      where: { User: { email: where?.email } },
       skip: offset,
       take: limit,
       include: ProfilesRelations,
     });
 
-    const profiles = items.map(profileMapper);
-
-    return { items: profiles, totalItems: count };
-  }
-
-  async create(profile: Profile): Promise<void> {
-    await this.prisma.profile.create({
-      data: {
-        id: profile.id,
-        user: {
-          connect: { id: profile.user.id },
-        },
-        age: profile.personalInformation.age,
-        gender: profile.personalInformation.gender,
-        role: profile.role,
-        university: {
-          connect: { id: profile.university.id },
-        },
-        nativeLanguage: {
-          connect: { code: profile.languages.nativeLanguage },
-        },
-        learningLanguage: profile.languages.learningLanguage && {
-          connect: { code: profile.languages.learningLanguage },
-        },
-        learningLanguageLevel: profile.languages.learningLanguageLevel,
-        masteredLanguages: {
-          create: profile.languages.masteredLanguages.map((language) => ({
-            languageCode: language,
-          })),
-        },
-        preferences: {
-          create: {
-            type: profile.preferences.learningType,
-            sameGender: profile.preferences.sameGender,
-          },
-        },
-        metadata: {
-          frequency: profile.preferences.meetingFrequency,
-          goals: profile.preferences.goals,
-          interests: profile.personalInformation.interests,
-          bios: profile.personalInformation.bio,
-        },
-      },
-    });
+    return {
+      items: users.map(profileMapper),
+      totalItems: count,
+    };
   }
 
   async update(profile: Profile): Promise<void> {
-    await this.prisma.profile.update({
+    await this.prisma.profiles.update({
       where: { id: profile.id },
       data: {
-        learningLanguageLevel: profile.languages.learningLanguageLevel,
+        // TODO
       },
     });
   }
 
   async delete(profile: Profile): Promise<void> {
-    await this.prisma.profile.delete({ where: { id: profile.id } });
+    await this.prisma.profiles.delete({ where: { id: profile.id } });
   }
 }

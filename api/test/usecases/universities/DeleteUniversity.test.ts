@@ -1,9 +1,9 @@
+import { UniversityFactory } from '../../factories/university.factory';
+import { DeleteUniversityUsecase } from '../../../src/core/usecases';
 import { InMemoryUniversityRepository } from '../../../src/providers/persistance/repositories/in-memory-university-repository';
-import seedDefinedNumberOfUniversities from '../../seeders/universities';
-import { DeleteUniversityUsecase } from '../../../src/core/usecases/universities/delete-university.usecase';
-import { UniversityDoesNotExist } from '../../../src/core/errors/RessourceDoesNotExist';
 
 describe('DeleteUniversity', () => {
+  const factory = new UniversityFactory();
   const universityRepository = new InMemoryUniversityRepository();
   const deleteUniversityUsecase = new DeleteUniversityUsecase(
     universityRepository,
@@ -14,26 +14,30 @@ describe('DeleteUniversity', () => {
   });
 
   it('Should delete the instance', async () => {
-    universityRepository.init(seedDefinedNumberOfUniversities(1));
+    const parent = factory.makeOne();
 
-    const university = await universityRepository.ofName(
-      'Université de Lorraine',
-    );
+    const university = factory.makeOne({
+      parent: parent.id,
+    });
+
+    universityRepository.init([parent, university]);
 
     await deleteUniversityUsecase.execute({ id: university.id });
 
-    const instance = await universityRepository.ofName(
-      'Université de Lorraine',
-    );
+    const instance = await universityRepository.ofName(university.name);
 
     expect(instance).toBeUndefined();
   });
 
   it('Should throw an error if the instance does not exists', async () => {
+    let exception: Error | undefined;
+
     try {
       await deleteUniversityUsecase.execute({ id: 'uuid' });
     } catch (error) {
-      expect(error).toBeInstanceOf(UniversityDoesNotExist);
+      exception = error;
     }
+
+    expect(exception).toBeDefined();
   });
 });

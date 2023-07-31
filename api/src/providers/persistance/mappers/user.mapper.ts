@@ -1,20 +1,42 @@
 import * as Prisma from '@prisma/client';
-import { User } from '../../../core/models/user';
+import {
+  UniversityRelations,
+  UniversitySnapshot,
+  universityMapper,
+} from './university.mapper';
+import { Gender, MediaObject, Role, User } from 'src/core/models';
 
-export const userMapper = (instance: Prisma.User): User => {
-  return new User({
-    id: instance.id,
-    email: instance.email,
-    firstname: instance.firstname,
-    lastname: instance.lastname,
-    // avatar:
-    //   instance.avatar &&
-    //   new MediaObject({
-    //     id: instance.avatar.id,
-    //     name: instance.avatar.name,
-    //     bucket: instance.avatar.bucket,
-    //     mimetype: instance.avatar.mime,
-    //     size: instance.avatar.size,
-    //   }),
-  });
+export const UserRelations = {
+  Organization: { include: UniversityRelations },
+  Nationality: true,
+  Avatar: true,
+};
+
+export type UserSnapshot = Prisma.Users & {
+  Organization: UniversitySnapshot;
+  Nationality?: Prisma.CountryCodes;
+  Avatar: Prisma.MediaObjects;
+};
+
+export const userMapper = (snapshot: UserSnapshot): User => {
+  return {
+    id: snapshot.id,
+    email: snapshot.email,
+    firstname: snapshot.firstname,
+    lastname: snapshot.lastname,
+    gender: snapshot.gender as Gender,
+    age: snapshot.age,
+    country: snapshot.Nationality?.code,
+    role: snapshot.role as Role,
+    university: universityMapper(snapshot.Organization),
+    avatar:
+      snapshot.Avatar &&
+      new MediaObject({
+        id: snapshot.Avatar.id,
+        name: snapshot.Avatar.name,
+        bucket: snapshot.Avatar.bucket,
+        mimetype: snapshot.Avatar.mime,
+        size: snapshot.Avatar.size,
+      }),
+  };
 };

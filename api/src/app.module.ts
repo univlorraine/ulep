@@ -1,9 +1,8 @@
-import { KeycloakModule } from '@app/keycloak';
 import { Module } from '@nestjs/common';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { configuration } from './configuration';
 import { ApiModule } from './api/api.module';
-import { CoreModule } from './core/core.module';
+import { KeycloakModule } from '@app/keycloak';
 
 @Module({
   imports: [
@@ -15,7 +14,6 @@ import { CoreModule } from './core/core.module';
       inject: [ConfigService],
     }),
     ApiModule,
-    CoreModule,
   ],
 })
 export class AppModule {}

@@ -1,43 +1,45 @@
 import { Inject, Injectable, Logger } from '@nestjs/common';
+import { RessourceAlreadyExists, RessourceDoesNotExist } from 'src/core/errors';
+import { UnsuportedLanguageException } from 'src/core/errors/unsuported-language.exception';
 import {
-  LanguageDoesNotExist,
-  UniversityDoesNotExist,
-  UserDoesNotExist,
-} from '../../errors/RessourceDoesNotExist';
-import { Gender, Role, Profile } from '../../models/profile';
-import { ProfileRepository } from '../../ports/profile.repository';
-import { UniversityRepository } from '../../ports/university.repository';
+  Interest,
+  Language,
+  LearningType,
+  ProficiencyLevel,
+  Profile,
+  University,
+  User,
+} from 'src/core/models';
+import {
+  INTEREST_REPOSITORY,
+  InterestRepository,
+} from 'src/core/ports/interest.repository';
 import {
   LANGUAGE_REPOSITORY,
+  LanguageRepository,
+} from 'src/core/ports/language.repository';
+import {
   PROFILE_REPOSITORY,
-  UNIVERSITY_REPOSITORY,
+  ProfileRepository,
+} from 'src/core/ports/profile.repository';
+import {
   USER_REPOSITORY,
-} from '../../../providers/providers.module';
-import { LanguageRepository } from '../../ports/language.repository';
-import { University } from '../../models/university';
-import { Language } from '../../models/language';
-import { User } from '../../models/user';
-import { UserRepository } from '../../ports/user.repository';
-import { ProfileAlreadyExists } from '../../errors/RessourceAlreadyExists';
-import { ProfileLanguagesException } from '../../errors/ProfileExceptions';
-import { CEFRLevel } from 'src/core/models/cefr';
+  UserRepository,
+} from 'src/core/ports/user.repository';
 
 export class CreateProfileCommand {
   id: string;
-  userId: string;
-  age: number;
-  role: Role;
-  gender: Gender;
-  university: string;
-  learningLanguage?: string;
-  proficiencyLevel: CEFRLevel;
-  nativeLanguage: string;
-  masteredLanguages?: string[];
-  learningType: 'ETANDEM' | 'TANDEM' | 'BOTH';
-  goals: string[];
+  user: string;
+  nativeLanguageCode: string;
+  learningLanguageCode?: string;
+  proficiencyLevel: ProficiencyLevel;
+  masteredLanguageCodes?: string[];
+  learningType: LearningType;
+  goals: string[]; // TODO validate and parse uuids
   meetingFrequency: string;
   interests: string[];
-  preferSameGender: boolean;
+  sameGender: boolean;
+  sameAge: boolean;
   bios?: string;
 }
 
@@ -46,117 +48,117 @@ export class CreateProfileUsecase {
   private readonly logger = new Logger(CreateProfileUsecase.name);
 
   constructor(
-    @Inject(PROFILE_REPOSITORY)
-    private readonly profileRepository: ProfileRepository,
     @Inject(USER_REPOSITORY)
-    private readonly userRepository: UserRepository,
-    @Inject(UNIVERSITY_REPOSITORY)
-    private readonly universityRepository: UniversityRepository,
+    private readonly usersRepository: UserRepository,
+    @Inject(PROFILE_REPOSITORY)
+    private readonly profilesRepository: ProfileRepository,
     @Inject(LANGUAGE_REPOSITORY)
     private readonly languageRepository: LanguageRepository,
+    @Inject(INTEREST_REPOSITORY)
+    private readonly interestsRepository: InterestRepository,
   ) {}
 
   async execute(command: CreateProfileCommand): Promise<Profile> {
-    const user = await this.tryToFindTheUserOfId(command.userId);
-    await this.assertProfileDoesNotExistForUser(user);
+    const user = await this.tryToFindTheUserOfId(command.user);
 
-    const university = await this.tryToFindTheUniversityOfId(
-      command.university,
+    await this.assertProfileDoesNotExistForUser(user.id);
+
+    const interests = await Promise.all(
+      command.interests.map((id) => this.tryToFindTheInterestOfId(id)),
     );
 
-    const nativeLanguage = await this.tryToFindTheLanguageOfCode(
-      command.nativeLanguage,
+    const nativeLanguage = await this.tryToFindTheLanguageOfId(
+      command.nativeLanguageCode,
+    );
+
+    const masteredLanguages = await Promise.all(
+      (command.masteredLanguageCodes ?? []).map(this.tryToFindTheLanguageOfId),
     );
 
     let learningLanguage: Language | null = null;
-    if (command.learningLanguage) {
-      learningLanguage = await this.tryToFindTheLanguageOfCode(
-        command.learningLanguage,
+    if (command.learningLanguageCode) {
+      learningLanguage = await this.tryToFindTheLanguageOfId(
+        command.learningLanguageCode,
       );
 
-      this.assertLearningLanguageIsSupportedByUniversity(
-        university,
-        learningLanguage,
+      this.assertLanguageIsSupportedByUniversity(
+        user.university,
+        learningLanguage.code,
       );
     }
 
-    const instance = new Profile({
+    const profile = new Profile({
       id: command.id,
-      user,
-      role: command.role,
-      university,
-      personalInformation: {
-        age: command.age,
-        gender: command.gender,
-        interests: command.interests,
-        bio: command.bios,
-      },
+      user: user,
       languages: {
-        nativeLanguage: nativeLanguage.code,
-        masteredLanguages: command.masteredLanguages || [],
-        learningLanguage: learningLanguage?.code,
-        learningLanguageLevel: command.proficiencyLevel,
+        native: nativeLanguage,
+        learning: {
+          id: learningLanguage?.id,
+          code: learningLanguage?.code,
+          level: command.proficiencyLevel,
+        },
+        mastered: masteredLanguages,
       },
       preferences: {
         learningType: command.learningType,
+        goals: [], // TODO
+        sameAge: command.sameAge,
+        sameGender: command.sameGender,
         meetingFrequency: command.meetingFrequency,
-        sameGender: command.preferSameGender,
-        goals: command.goals,
       },
+      interests: interests,
     });
 
-    this.logger.debug(JSON.stringify(instance.preferences.goals));
+    await this.profilesRepository.create(profile);
 
-    await this.profileRepository.create(instance);
-
-    return instance;
-  }
-
-  private async assertProfileDoesNotExistForUser(user: User): Promise<void> {
-    const profile = await this.profileRepository.ofUser(user.id);
-    if (profile) {
-      throw ProfileAlreadyExists.withUserIdOf(user.id);
-    }
+    return profile;
   }
 
   private async tryToFindTheUserOfId(id: string): Promise<User> {
-    const user = await this.userRepository.ofId(id);
+    const user = await this.usersRepository.ofId(id);
     if (!user) {
-      throw UserDoesNotExist.withIdOf(id);
+      throw new RessourceDoesNotExist();
     }
 
     return user;
   }
 
-  private async tryToFindTheUniversityOfId(id: string): Promise<University> {
-    const university = await this.universityRepository.ofId(id);
-    if (!university) {
-      throw UniversityDoesNotExist.withIdOf(id);
+  private async assertProfileDoesNotExistForUser(id: string): Promise<void> {
+    const profile = await this.profilesRepository.ofUser(id);
+    if (profile) {
+      throw new RessourceAlreadyExists();
     }
-
-    return university;
   }
 
-  private async tryToFindTheLanguageOfCode(code: string): Promise<Language> {
-    const language = await this.languageRepository.ofCode(code);
+  private async tryToFindTheInterestOfId(id: string): Promise<Interest> {
+    const interest = await this.interestsRepository.interestOfId(id);
+    if (!interest) {
+      throw new RessourceDoesNotExist();
+    }
+
+    return interest;
+  }
+
+  private async tryToFindTheLanguageOfId(id: string): Promise<Language> {
+    const language = await this.languageRepository.ofCode(id);
     if (!language) {
-      throw LanguageDoesNotExist.withCodeOf(code);
+      throw new RessourceDoesNotExist();
     }
 
-    return language;
+    return { ...language };
   }
 
-  private assertLearningLanguageIsSupportedByUniversity(
+  private assertLanguageIsSupportedByUniversity(
     university: University,
-    language: Language,
+    languageCode: string,
   ): void {
     const languages = university.languages.map((language) =>
       language.code.toUpperCase(),
     );
 
-    if (!languages.includes(language.code.toUpperCase())) {
-      throw new ProfileLanguagesException(
-        'Learning language is not supported by the university',
+    if (!languages.includes(languageCode.toUpperCase())) {
+      throw new UnsuportedLanguageException(
+        `The language is not supported by the university`,
       );
     }
   }

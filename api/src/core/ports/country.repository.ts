@@ -1,15 +1,21 @@
-import { SortOrder } from 'src/shared/types/filters';
-import { Collection } from '../../shared/types/collection';
-import { Country } from '../models/country';
+import { Collection, SortOrder } from '@app/common';
+import { CountryCode } from '../models';
+
+export const COUNTRY_REPOSITORY = 'country.repository';
 
 export type CountryFilters = {
+  where?: { enable?: boolean };
   orderBy?: { name: SortOrder };
+  page?: number;
+  limit?: number;
 };
 
 export interface CountryRepository {
-  findAll: (filters: CountryFilters) => Promise<Collection<Country>>;
+  all(filters: CountryFilters): Promise<Collection<CountryCode>>;
 
-  ofCode: (code: string) => Promise<Country | null>;
+  ofId(id: string): Promise<CountryCode | null>;
 
-  save: (country: Country) => Promise<void>;
+  ofCode(code: string): Promise<CountryCode | null>;
+
+  toogleStatus(id: string, enable: boolean): Promise<void>;
 }

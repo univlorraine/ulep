@@ -1,44 +1,50 @@
 import { Module, Provider } from '@nestjs/common';
-import { PrismaService } from './persistance/prisma.service';
-import { PrismaProfileRepository } from './persistance/repositories/prisma-profile-repository';
-import { MinioService } from './storage/minio.service';
+import { PrismaService } from '@app/common';
+import { COUNTRY_REPOSITORY } from 'src/core/ports/country.repository';
+import { PrismaCountryCodeRepository } from './persistance/repositories/prisma-country.repository';
+import { INTEREST_REPOSITORY } from 'src/core/ports/interest.repository';
+import { LANGUAGE_REPOSITORY } from 'src/core/ports/language.repository';
+import { PrismaLanguageRepository } from './persistance/repositories/prisma-language.repository';
+import { MEDIA_OBJECT_REPOSITORY } from 'src/core/ports/media-object.repository';
 import { PrismaMediaObjectRepository } from './persistance/repositories/prisma-media-object-repository';
-import { PrismaUniversityRepository } from './persistance/repositories/prisma-university-repository';
-import { PrismaLanguageRepository } from './persistance/repositories/prisma-language-repository';
-import { PrismaUserRepository } from './persistance/repositories/prisma-user-repository';
-import { PrismaReportRepository } from './persistance/repositories/prisma-report-repository';
+import { PROFICIENCY_REPOSITORY } from 'src/core/ports/proficiency.repository';
+import { PrismaProficiencyRepository } from './persistance/repositories/prisma-proficiency.repository';
+import { PROFILE_REPOSITORY } from 'src/core/ports/profile.repository';
+import { PrismaProfileRepository } from './persistance/repositories/prisma-profile-repository';
+import { REPORT_REPOSITORY } from 'src/core/ports/report.repository';
+import { PrismaReportRepository } from './persistance/repositories/prisma-report.repository';
+import { STORAGE_INTERFACE } from 'src/core/ports/storage.interface';
+import { MinioStorage } from './storage/minio.storage';
+import { TANDEM_REPOSITORY } from 'src/core/ports/tandems.repository';
 import { PrismaTandemRepository } from './persistance/repositories/prisma-tandem-repository';
-import { PrismaCountryRepository } from './persistance/repositories/prisma-country-repository';
-import { PrismaCEFRRepository } from './persistance/repositories/prisma-cefr-repository';
-
-export const AUTHENTICATOR = 'authenticator';
-export const CEFR_REPOSITORY = 'cefr.repository';
-export const COUNTRY_REPOSITORY = 'country.repository';
-export const LANGUAGE_REPOSITORY = 'language.repository';
-export const MEDIA_OBJECT_REPOSITORY = 'media-object.repository';
-export const PROFILE_REPOSITORY = 'profile.repository';
-export const REPORT_REPOSITORY = 'report.repository';
-export const STORAGE_SERVICE = 'storage.service';
-export const TANDEM_REPOSITORY = 'tandem.repository';
-export const UNIVERSITY_REPOSITORY = 'university.repository';
-export const USER_REPOSITORY = 'user.repository';
+import { UNIVERSITY_REPOSITORY } from 'src/core/ports/university.repository';
+import { PrismaUniversityRepository } from './persistance/repositories/prisma-university.repository';
+import { USER_REPOSITORY } from 'src/core/ports/user.repository';
+import { PrismaUserRepository } from './persistance/repositories/prisma-user.repository';
+import { UUID_PROVIDER } from 'src/core/ports/uuid.provider';
+import { UuidProvider } from './services/uuid.provider';
+import { PrismaInterestRepository } from './persistance/repositories/prisma-interest.repository';
 
 const providers: Provider[] = [
   {
-    provide: CEFR_REPOSITORY,
-    useClass: PrismaCEFRRepository,
-  },
-  {
     provide: COUNTRY_REPOSITORY,
-    useClass: PrismaCountryRepository,
+    useClass: PrismaCountryCodeRepository,
   },
   {
-    provide: USER_REPOSITORY,
-    useClass: PrismaUserRepository,
+    provide: INTEREST_REPOSITORY,
+    useClass: PrismaInterestRepository,
   },
   {
-    provide: STORAGE_SERVICE,
-    useClass: MinioService,
+    provide: LANGUAGE_REPOSITORY,
+    useClass: PrismaLanguageRepository,
+  },
+  {
+    provide: MEDIA_OBJECT_REPOSITORY,
+    useClass: PrismaMediaObjectRepository,
+  },
+  {
+    provide: PROFICIENCY_REPOSITORY,
+    useClass: PrismaProficiencyRepository,
   },
   {
     provide: PROFILE_REPOSITORY,
@@ -49,6 +55,10 @@ const providers: Provider[] = [
     useClass: PrismaReportRepository,
   },
   {
+    provide: STORAGE_INTERFACE,
+    useClass: MinioStorage,
+  },
+  {
     provide: TANDEM_REPOSITORY,
     useClass: PrismaTandemRepository,
   },
@@ -57,12 +67,12 @@ const providers: Provider[] = [
     useClass: PrismaUniversityRepository,
   },
   {
-    provide: MEDIA_OBJECT_REPOSITORY,
-    useClass: PrismaMediaObjectRepository,
+    provide: USER_REPOSITORY,
+    useClass: PrismaUserRepository,
   },
   {
-    provide: LANGUAGE_REPOSITORY,
-    useClass: PrismaLanguageRepository,
+    provide: UUID_PROVIDER,
+    useClass: UuidProvider,
   },
 ];
 

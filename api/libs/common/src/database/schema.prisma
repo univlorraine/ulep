@@ -1,0 +1,343 @@
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+generator client {
+  provider      = "prisma-client-js"
+  binaryTargets = ["native", "linux-musl-openssl-3.0.x"]
+}
+
+model CountryCodes {
+  id                 String               @id @default(uuid())
+  name               String
+  code               String
+  emoji              String
+  enable             Boolean              @default(true)
+  created_at         DateTime             @default(now())
+  updated_at         DateTime             @updatedAt
+  Users              Users[]
+
+  @@unique([name])
+  @@unique([code])
+  @@index([code])
+  @@map("country_codes")
+}
+
+model LanguageCodes {
+  id                 String               @id @default(uuid())
+  name               String
+  code               String
+  created_at         DateTime             @default(now())
+  updated_at         DateTime             @updatedAt
+  Organisations      Organizations[]
+  NativeLanguages    Profiles[]           @relation("NativeLanguage")
+  LearningLanguage   Profiles[]           @relation("LearningLanguage")
+  MasteredLanguages  MasteredLanguages[]
+  SuggestedLanguages SuggestedLanguages[]
+  Translations       Translations[]
+  TextContents       TextContent[]
+
+  @@unique([name])
+  @@unique([code])
+  @@index([code])
+  @@map("language_codes")
+}
+
+//  * ****************************************************
+//  * Universities
+//  * ****************************************************
+model Organizations {
+  id                 String          @id @default(uuid())
+  parent_id          String?
+  name               String
+  timezone           String
+  admissionStartDate DateTime
+  admissionEndDate   DateTime
+  created_at         DateTime        @default(now())
+  updated_at         DateTime        @updatedAt
+  website            String?
+  // Resource URL
+  resource           String?
+  Parent             Organizations?  @relation("Organizations", fields: [parent_id], references: [id], onDelete: Cascade)
+  Childrens          Organizations[] @relation("Organizations")
+  Users              Users[]
+  Languages          LanguageCodes[]
+  Places             Places[]
+
+  @@unique([name])
+  @@map("organizations")
+}
+
+model Places {
+  id              String        @id @default(uuid())
+  name            String
+  organization_id String
+  created_at      DateTime      @default(now())
+  updated_at      DateTime      @updatedAt
+  Organization    Organizations @relation(fields: [organization_id], references: [id], onDelete: Cascade)
+
+  @@unique([name])
+  @@map("places")
+}
+
+model SuggestedLanguages {
+  id               String        @id @default(uuid())
+  language_code_id String
+  user_id          String
+  created_at       DateTime      @default(now())
+  updated_at       DateTime      @updatedAt
+  LanguageCode     LanguageCodes @relation(fields: [language_code_id], references: [id], onDelete: Cascade)
+
+  @@unique([language_code_id, user_id])
+  @@map("suggested_languages")
+}
+
+//  * ****************************************************
+//  * Users
+//  * ****************************************************
+model Users {
+  id                 String        @id @default(uuid())
+  provider           String        @default("email")
+  organization_id    String
+  email              String
+  firstname          String
+  lastname           String
+  age                Int
+  gender             String
+  role               String
+  deactivated        Boolean       @default(false)
+  deactivated_reason String?
+  country_code_id    String?
+  image_id           String?       @unique
+  created_at         DateTime      @default(now())
+  updated_at         DateTime      @updatedAt
+  Organization       Organizations @relation(fields: [organization_id], references: [id], onDelete: Cascade)
+  Nationality        CountryCodes? @relation(fields: [country_code_id], references: [id], onDelete: SetNull)
+  Avatar             MediaObjects? @relation(fields: [image_id], references: [id], onDelete: Cascade)
+  Reports            Reports[]
+  Profiles           Profiles?
+
+  @@unique([email])
+  @@map("users")
+}
+
+//  * ****************************************************
+//  * Media Objects
+//  * ****************************************************
+model MediaObjects {
+  id         String   @id @default(uuid())
+  name       String
+  bucket     String
+  mime       String
+  size       Int
+  created_at DateTime @default(now())
+  updated_at DateTime @updatedAt
+  User       Users?
+
+  @@unique([name, bucket])
+  @@map("media_objects")
+}
+
+//  * ****************************************************
+//  * Translations
+//  * ****************************************************
+model TextContent {
+  id                   String                @id @default(uuid())
+  text                 String
+  language_id          String
+  created_at           DateTime              @default(now())
+  updated_at           DateTime              @updatedAt
+  LanguageCode         LanguageCodes         @relation(fields: [language_id], references: [id], onDelete: Cascade)
+  ProficiencyQuestions ProficiencyQuestions?
+  ReportCategories     ReportCategories?
+  InterestCategories   InterestCategories?
+  Interests            Interests?
+  Goals                Goals?
+  Translations         Translations[]
+
+  @@map("text_content")
+}
+
+model Translations {
+  text_content_id String
+  language_id     String
+  text            String
+  created_at      DateTime      @default(now())
+  updated_at      DateTime      @updatedAt
+  LanguageCode    LanguageCodes @relation(fields: [language_id], references: [id])
+  TextContent     TextContent   @relation(fields: [text_content_id], references: [id], onDelete: Cascade)
+
+  @@unique([text_content_id, language_id])
+  @@index([text_content_id])
+  @@index([language_id])
+  @@map("translations")
+}
+
+//  * ****************************************************
+//  * Proficiency
+//  * ****************************************************
+model ProficiencyTests {
+  id         String                 @id @default(uuid())
+  level      String
+  created_at DateTime               @default(now())
+  updated_at DateTime               @updatedAt
+  Questions  ProficiencyQuestions[]
+
+  @@unique([level])
+  @@map("proficiency_tests")
+}
+
+model ProficiencyQuestions {
+  id              String           @id @default(uuid())
+  test_id         String
+  text_content_id String
+  answer          Boolean          @default(true)
+  created_at      DateTime         @default(now())
+  updated_at      DateTime         @updatedAt
+  ProficiencyTest ProficiencyTests @relation(fields: [test_id], references: [id], onDelete: Cascade)
+  TextContent     TextContent      @relation(fields: [text_content_id], references: [id], onDelete: Cascade)
+
+  @@unique([text_content_id])
+  @@map("proficiency_questions")
+}
+
+//  * ****************************************************
+//  * Reports
+//  * ****************************************************
+model Reports {
+  id         String           @id @default(uuid())
+  content    String
+  categoryId String
+  status     String           @default("OPEN")
+  userId     String
+  createdAt  DateTime         @default(now())
+  updatedAt  DateTime         @updatedAt
+  Category   ReportCategories @relation(fields: [categoryId], references: [id], onDelete: Cascade)
+  User       Users            @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([categoryId], name: "category_id")
+  @@index([userId], name: "user_id")
+  @@map("reports")
+}
+
+model ReportCategories {
+  id              String      @id @default(uuid())
+  text_content_id String
+  created_at      DateTime    @default(now())
+  updated_at      DateTime    @updatedAt
+  TextContent     TextContent @relation(fields: [text_content_id], references: [id], onDelete: Cascade)
+  Reports         Reports[]
+
+  @@unique([text_content_id])
+  @@map("report_categories")
+}
+
+//  * ****************************************************
+//  * Pofiles
+//  * ****************************************************
+model Profiles {
+  id                        String              @id @default(uuid())
+  user_id                   String
+  native_language_code_id   String
+  learning_language_code_id String?
+  level                     String
+  learning_type             String
+  same_gender               Boolean
+  same_age                  Boolean
+  meeting_frequency         String
+  bio                       String?
+  metadata                  Json
+  created_at                DateTime            @default(now())
+  updated_at                DateTime            @updatedAt
+  User                      Users               @relation(fields: [user_id], references: [id], onDelete: Cascade)
+  NativeLanguage            LanguageCodes       @relation("NativeLanguage", fields: [native_language_code_id], references: [id])
+  LearningLanguage          LanguageCodes?      @relation("LearningLanguage", fields: [learning_language_code_id], references: [id])
+  MasteredLanguages         MasteredLanguages[]
+  Goals                     Goals[]
+  Interests                 Interests[]
+  Tandems                   ProfilesOnTandems[]
+
+  @@unique([user_id])
+  @@index([native_language_code_id], name: "native_language_code")
+  @@index([learning_language_code_id], name: "learning_language_code")
+  @@map("profiles")
+}
+
+// Many to many relation between Profiles and LanguageCodes
+model MasteredLanguages {
+  profile_id       String
+  language_code_id String
+  created_at       DateTime      @default(now())
+  updated_at       DateTime      @updatedAt
+  Profile          Profiles      @relation(fields: [profile_id], references: [id])
+  LanguageCode     LanguageCodes @relation(fields: [language_code_id], references: [id])
+
+  @@id([profile_id, language_code_id])
+  @@map("mastered_languages")
+}
+
+model Goals {
+  id              String      @id @default(uuid())
+  text_content_id String
+  created_at      DateTime    @default(now())
+  updated_at      DateTime    @updatedAt
+  TextContent     TextContent @relation(fields: [text_content_id], references: [id], onDelete: Cascade)
+  Profiles        Profiles[]
+
+  @@unique([text_content_id])
+  @@map("goals")
+}
+
+//  * ****************************************************
+//  * Interests
+//  * ****************************************************
+model Interests {
+  id              String             @id @default(uuid())
+  category_id     String
+  text_content_id String
+  created_at      DateTime           @default(now())
+  updated_at      DateTime           @updatedAt
+  Category        InterestCategories @relation(fields: [category_id], references: [id], onDelete: Cascade)
+  TextContent     TextContent        @relation(fields: [text_content_id], references: [id], onDelete: Cascade)
+  Profiles        Profiles[]
+
+  @@unique([text_content_id])
+  @@map("interests")
+}
+
+model InterestCategories {
+  id              String      @id @default(uuid())
+  text_content_id String
+  created_at      DateTime    @default(now())
+  updated_at      DateTime    @updatedAt
+  TextContent     TextContent @relation(fields: [text_content_id], references: [id], onDelete: Cascade)
+  Interests       Interests[]
+
+  @@unique([text_content_id])
+  @@map("interests_categories")
+}
+
+//  * ****************************************************
+//  * Tandems
+//  * ****************************************************
+model Tandems {
+  id         String              @id @default(uuid())
+  status     String              @default("ACTIVE")
+  created_at DateTime            @default(now())
+  updated_at DateTime            @updatedAt
+  Profiles   ProfilesOnTandems[]
+
+  @@index([status], name: "status")
+  @@map("tandems")
+}
+
+model ProfilesOnTandems {
+  profile_id String
+  tandem_id  String
+  Profile    Profiles @relation(fields: [profile_id], references: [id], onDelete: Cascade)
+  Tandem     Tandems  @relation(fields: [tandem_id], references: [id], onDelete: Cascade)
+
+  @@id([profile_id, tandem_id])
+  @@map("profiles_on_tandems")
+}

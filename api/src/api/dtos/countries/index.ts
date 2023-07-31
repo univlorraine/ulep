@@ -1,35 +1,53 @@
-import { ApiProperty } from '@nestjs/swagger';
-import { Country } from '../../../core/models/country';
-import { Expose } from 'class-transformer';
-import { IsNotEmpty, IsString } from 'class-validator';
-import { CreateCountryCommand } from 'src/core/usecases/countries/create-country.usecase';
+import * as Swagger from '@nestjs/swagger';
+import { Expose, Transform } from 'class-transformer';
+import { IsBoolean, IsOptional } from 'class-validator';
+import { CountryCode } from 'src/core/models';
+import { PaginationDto } from '../pagination';
+import { UpdateCountryStatusCommand } from 'src/core/usecases';
 
-export class CreateCountryRequest implements CreateCountryCommand {
-  @ApiProperty({ type: 'string', example: 'FR' })
-  @IsString()
-  @IsNotEmpty()
-  code: string;
-
-  @ApiProperty({ type: 'string', example: 'France' })
-  @IsString()
-  @IsNotEmpty()
-  name: string;
+export class UpdateCountryRequest
+  implements Omit<UpdateCountryStatusCommand, 'id'>
+{
+  @Swagger.ApiProperty({ type: 'boolean' })
+  @Transform(({ value }) => value === 'true')
+  @IsBoolean()
+  enable: boolean;
 }
 
 export class CountryResponse {
-  @ApiProperty({ type: 'string', example: 'FR' })
+  @Swagger.ApiProperty({ type: 'string', format: 'uuid' })
+  @Expose({ groups: ['read'] })
+  id: string;
+
+  @Swagger.ApiProperty({ type: 'string', example: 'FR' })
   @Expose({ groups: ['read'] })
   code: string;
 
-  @ApiProperty({ type: 'string', example: 'France' })
+  @Swagger.ApiProperty({ type: 'string', example: 'France' })
   @Expose({ groups: ['read', 'country:read'] })
   name: string;
+
+  @Swagger.ApiProperty({ type: 'string', example: '🇫🇷' })
+  @Expose({ groups: ['read', 'country:read'] })
+  emoji: string;
+
+  @Swagger.ApiProperty({ type: 'boolean', example: true })
+  @Expose({ groups: ['read', 'country:read'] })
+  enable: boolean;
 
   constructor(partial: Partial<CountryResponse>) {
     Object.assign(this, partial);
   }
 
-  static fromDomain(country: Country): CountryResponse {
-    return new CountryResponse({ code: country.code, name: country.name });
+  static fromDomain(country: CountryCode): CountryResponse {
+    return new CountryResponse({ ...country });
   }
+}
+
+export class GetCountriesQueryParams extends PaginationDto {
+  @Swagger.ApiPropertyOptional()
+  @Transform(({ value }) => value === 'true')
+  @IsBoolean()
+  @IsOptional()
+  readonly enable?: boolean;
 }

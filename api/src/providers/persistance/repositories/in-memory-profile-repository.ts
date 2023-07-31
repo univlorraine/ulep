@@ -1,6 +1,6 @@
-import { Profile } from '../../../core/models/profile';
-import { Collection } from '../../../shared/types/collection';
+import { Collection } from '@app/common';
 import { ProfileRepository } from '../../../core/ports/profile.repository';
+import { Profile } from '../../../core/models/profile.model';
 
 export class InMemoryProfileRepository implements ProfileRepository {
   #profiles: Profile[] = [];
@@ -21,7 +21,7 @@ export class InMemoryProfileRepository implements ProfileRepository {
     return this.#profiles.find((profile) => profile.user.id === id);
   }
 
-  async availableProfiles(): Promise<Profile[]> {
+  async availableOnly(): Promise<Profile[]> {
     // TODO
     return this.#profiles;
   }

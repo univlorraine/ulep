@@ -1,26 +1,33 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
 import {
   Controller,
   Get,
   Post,
   Body,
-  Logger,
+  Patch,
   Param,
-  ParseUUIDPipe,
-  Put,
-  Response,
+  Delete,
+  Logger,
   Query,
-  SerializeOptions,
+  UseGuards,
+  ParseUUIDPipe,
 } from '@nestjs/common';
 import * as Swagger from '@nestjs/swagger';
-import { CreateUserUsecase } from '../../core/usecases/users/create-user.usecase';
-import { GetUsersUsecase } from '../../core/usecases/users/get-users.usecase';
-import { UserResponse } from '../dtos/users/user.response';
-import { CreateUserRequest } from '../dtos/users/create-user.request';
-import { PaginationDto } from '../dtos/pagination.dto';
-import { CollectionResponse } from '../decorators/collection.decorator';
-import { Collection } from '../../shared/types/collection';
-import { GetUserUsecase } from 'src/core/usecases/users/get-user.usecase';
+import { Collection } from '@app/common';
+import {
+  UserResponse,
+  CreateUserRequest,
+  UpdateUserRequest,
+  PaginationDto,
+} from '../dtos';
+import {
+  CreateUserUsecase,
+  DeleteUserUsecase,
+  GetUsersUsecase,
+  GetUserUsecase,
+  UpdateUserUsecase,
+} from '../../core/usecases/user';
+import { CollectionResponse } from '../decorators';
+import { AuthenticationGuard } from '../guards';
 
 @Controller('users')
 @Swagger.ApiTags('Users')
@@ -31,55 +38,58 @@ export class UserController {
     private readonly createUserUsecase: CreateUserUsecase,
     private readonly getUsersUsecase: GetUsersUsecase,
     private readonly getUserUsecase: GetUserUsecase,
+    private readonly updateUserUsecase: UpdateUserUsecase,
+    private readonly deleteUserUsecase: DeleteUserUsecase,
   ) {}
 
+  @Post()
+  @Swagger.ApiOperation({ summary: 'Create a new User ressource.' })
+  @Swagger.ApiCreatedResponse({ type: UserResponse })
+  async create(@Body() body: CreateUserRequest) {
+    const instance = await this.createUserUsecase.execute({ ...body });
+
+    return UserResponse.fromDomain(instance);
+  }
+
   @Get()
-  @Swagger.ApiOperation({
-    summary: 'Retrieve the collection of user ressource.',
-  })
+  @Swagger.ApiOperation({ summary: 'Collection of User ressource.' })
   @CollectionResponse(UserResponse)
-  async getCollection(
-    @Query() { page, limit }: PaginationDto,
-  ): Promise<Collection<UserResponse>> {
-    const result = await this.getUsersUsecase.execute({
+  async findAll(@Query() { page, limit }: PaginationDto) {
+    const instances = await this.getUsersUsecase.execute({
       page,
       limit,
     });
 
     return new Collection<UserResponse>({
-      items: result.items.map(UserResponse.fromDomain),
-      totalItems: result.totalItems,
+      items: instances.items.map(UserResponse.fromDomain),
+      totalItems: instances.totalItems,
     });
   }
 
   @Get(':id')
-  @SerializeOptions({ groups: ['read', 'user:read'] })
-  @Swagger.ApiOperation({ summary: 'Retrieve a user ressource.' })
+  @Swagger.ApiOperation({ summary: 'User ressource.' })
   @Swagger.ApiOkResponse({ type: UserResponse })
-  @Swagger.ApiNotFoundResponse({ description: 'Resource not found' })
-  async getItem(@Param('id', ParseUUIDPipe) id: string): Promise<UserResponse> {
-    const user = await this.getUserUsecase.execute({ id });
+  async findOne(@Param('id', ParseUUIDPipe) id: string) {
+    const instance = await this.getUserUsecase.execute(id);
 
-    return new UserResponse({
-      id: user.id,
-      email: user.email,
-      roles: user.roles.map((role) => role.toString()),
-    });
+    return UserResponse.fromDomain({ id, ...instance });
   }
 
-  @Post()
-  @SerializeOptions({ groups: ['read', 'user:read'] })
-  @Swagger.ApiOperation({ summary: 'Create user ressource' })
-  @Swagger.ApiOkResponse({ type: UserResponse })
-  async create(
-    @Body() { email, password }: CreateUserRequest,
-  ): Promise<UserResponse> {
-    // TODO: get roles from the request body if admin authenticated
-    const user = await this.createUserUsecase.execute({
-      email,
-      password,
-    });
+  @Patch(':id')
+  @Swagger.ApiOperation({ summary: 'Updates a User ressource.' })
+  @Swagger.ApiOkResponse()
+  async update(
+    @Param('id', ParseUUIDPipe) id: string,
+    @Body() request: UpdateUserRequest,
+  ) {
+    await this.updateUserUsecase.execute({ id, ...request });
+  }
 
-    return UserResponse.fromDomain(user);
+  @Delete(':id')
+  @UseGuards(AuthenticationGuard)
+  @Swagger.ApiOperation({ summary: 'Deletes a User ressource.' })
+  @Swagger.ApiOkResponse()
+  remove(@Param('id', ParseUUIDPipe) id: string) {
+    return this.deleteUserUsecase.execute({ id });
   }
 }

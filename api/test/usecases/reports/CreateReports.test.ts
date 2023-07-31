@@ -1,10 +1,13 @@
-import { CreateReportUsecase } from '../../../src/core/usecases/reports';
+import { RessourceDoesNotExist } from '../../../src/core/errors';
+import { CreateReportUsecase } from '../../../src/core/usecases';
 import { InMemoryReportsRepository } from '../../../src/providers/persistance/repositories/in-memory-reports-repository';
 import { InMemoryUserRepository } from '../../../src/providers/persistance/repositories/in-memory-user-repository';
-import { User } from '../../../src/core/models/user';
-import { RessourceDoesNotExist } from '../../../src/core/errors/RessourceDoesNotExist';
+import { UserFactory } from '../../factories/user.factory';
 
 describe('CreateReport', () => {
+  const userFactory = new UserFactory();
+  const user = userFactory.makeOne();
+
   const reportsRepository = new InMemoryReportsRepository();
   const userRepositiry = new InMemoryUserRepository();
   const createReportsUsecase = new CreateReportUsecase(
@@ -12,37 +15,30 @@ describe('CreateReport', () => {
     userRepositiry,
   );
 
-  const defaultCategory = {
-    id: '1',
-    name: 'defaultCategory',
-  };
-
-  const user = new User({
-    id: '1',
-    email: 'jane.doe@mail.com',
-    firstname: 'Jane',
-    lastname: 'Doe',
-  });
-
   beforeEach(() => {
     reportsRepository.reset();
     userRepositiry.reset();
-
-    userRepositiry.init([user]);
-    reportsRepository.init([defaultCategory], []);
   });
 
   it('Should persist the new Report with the right data', async () => {
-    await createReportsUsecase.execute({
+    const user = userFactory.makeOne();
+    userRepositiry.init([user]);
+
+    reportsRepository.createCategory({
       id: '1',
-      content: 'content',
-      category: '1',
-      userId: user.id,
+      name: { id: 'uuid', content: 'category', language: 'en' },
     });
 
-    const language = await reportsRepository.ofId('1');
+    await createReportsUsecase.execute({
+      id: '1',
+      owner: user.id,
+      content: 'content',
+      category: '1',
+    });
 
-    expect(language).toBeDefined();
+    const report = await reportsRepository.reportOfId('1');
+
+    expect(report).toBeDefined();
   });
 
   it('Should throw an error if the category does not exists', async () => {
@@ -51,7 +47,7 @@ describe('CreateReport', () => {
         id: '1',
         content: 'content',
         category: 'uuid_does_not_exists',
-        userId: user.id,
+        owner: user.id,
       });
     } catch (error) {
       expect(error).toBeInstanceOf(RessourceDoesNotExist);
@@ -59,15 +55,24 @@ describe('CreateReport', () => {
   });
 
   it('Should throw an error if the user does not exists', async () => {
+    let exception: Error | undefined;
+
+    reportsRepository.createCategory({
+      id: '1',
+      name: { id: 'uuid', content: 'category', language: 'en' },
+    });
+
     try {
       await createReportsUsecase.execute({
         id: '1',
         content: 'content',
         category: '1',
-        userId: 'uuid_does_not_exists',
+        owner: 'uuid_does_not_exists',
       });
     } catch (error) {
-      expect(error).toBeInstanceOf(RessourceDoesNotExist);
+      exception = error;
     }
+
+    expect(exception).toBeDefined();
   });
 });

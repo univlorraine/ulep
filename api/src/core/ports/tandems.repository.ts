@@ -1,5 +1,7 @@
-import { Collection } from '../../shared/types/collection';
-import { Tandem } from '../models/tandem';
+import { Collection } from '@app/common';
+import { Tandem } from '../models';
+
+export const TANDEM_REPOSITORY = 'tandem.repository';
 
 export interface TandemsRepository {
   save(tandem: Tandem): Promise<void>;

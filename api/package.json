@@ -86,14 +86,17 @@
     "coverageDirectory": "./coverage",
     "testEnvironment": "node",
     "roots": [
-      "<rootDir>/test/"
+      "<rootDir>/test/",
+      "<rootDir>/libs/"
     ],
     "moduleNameMapper": {
-      "^@app/keycloak(|/.*)$": "<rootDir>/libs/keycloak/src/$1"
+      "^@app/keycloak(|/.*)$": "<rootDir>/libs/keycloak/src/$1",
+      "^@app/common(|/.*)$": "<rootDir>/libs/common/src/$1",
+      "^src(|/.*)$": "<rootDir>/src/$1"
     }
   },
   "prisma": {
-    "schema": "src/providers/persistance/schema.prisma",
-    "seed": "ts-node src/providers/persistance/seeds/index.ts"
+    "schema": "libs/common/src/database/schema.prisma",
+    "seed": "ts-node libs/common/src/database/seeds/index.ts"
   }
 }

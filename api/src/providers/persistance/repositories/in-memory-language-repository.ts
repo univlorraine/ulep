@@ -1,9 +1,5 @@
-import { Language } from '../../../core/models/language';
-import {
-  LanguageCombination,
-  LanguageRepository,
-} from '../../../core/ports/language.repository';
-import { Collection } from '../../../shared/types/collection';
+import { Language } from 'src/core/models/language.model';
+import { LanguageRepository } from 'src/core/ports/language.repository';
 
 export class InMemoryLanguageRepository implements LanguageRepository {
   #languages: Language[] = [];
@@ -17,27 +13,30 @@ export class InMemoryLanguageRepository implements LanguageRepository {
     this.#languages = [];
   }
 
-  get languages(): Language[] {
-    return this.#languages;
+  create(language: Language): Promise<Language> {
+    this.#languages.push(language);
+
+    return Promise.resolve(language);
   }
 
-  async all(offset: number, limit: number): Promise<Collection<Language>> {
-    return {
-      items: this.#languages.slice(offset, offset + limit),
-      totalItems: this.#languages.length,
-    };
-  }
-
-  async getUniqueCombinations(): Promise<LanguageCombination[]> {
-    return [];
+  ofId(languageId: string): Promise<Language> {
+    return Promise.resolve(
+      this.#languages.find((language) => language.id === languageId),
+    );
   }
 
   async ofCode(code: string): Promise<Language> {
     return this.#languages.find((language) => language.code === code);
   }
 
-  async save(language: Language): Promise<void> {
-    this.#languages.push(language);
+  async all(): Promise<Language[]> {
+    return this.#languages;
+  }
+
+  remove(language: Language): Promise<void> {
+    this.#languages = this.#languages.filter((l) => l.id !== language.id);
+
+    return Promise.resolve();
   }
 
   async addRequest(code: string, user: string): Promise<void> {

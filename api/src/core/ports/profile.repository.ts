@@ -1,6 +1,7 @@
-import { StringFilter } from 'src/shared/types/filters';
-import { Collection } from '../../shared/types/collection';
-import { Profile } from '../models/profile';
+import { Collection, StringFilter } from '@app/common';
+import { Profile } from '../models';
+
+export const PROFILE_REPOSITORY = 'profile.repository';
 
 export type ProfileFilters = {
   nativeLanguageCode: {
@@ -12,9 +13,9 @@ export type ProfileFilters = {
 export interface ProfileRepository {
   ofId: (id: string) => Promise<Profile | null>;
 
-  ofUser: (id: string) => Promise<Profile | null>;
+  ofUser: (userId: string) => Promise<Profile | null>;
 
-  availableProfiles: (filters?: ProfileFilters) => Promise<Profile[]>;
+  availableOnly: (filters?: ProfileFilters) => Promise<Profile[]>;
 
   create: (profile: Profile) => Promise<void>;
 

@@ -1,3 +1,4 @@
+import { Collection } from '@app/common';
 import {
   CallHandler,
   ExecutionContext,
@@ -5,9 +6,7 @@ import {
   Logger,
   NestInterceptor,
 } from '@nestjs/common';
-import { Observable } from 'rxjs';
-import { map } from 'rxjs/operators';
-import { Collection } from '../../shared/types/collection';
+import { Observable, map } from 'rxjs';
 
 @Injectable()
 export class CollectionInterceptor implements NestInterceptor {

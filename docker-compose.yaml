@@ -10,7 +10,7 @@ services:
     restart: unless-stopped
     environment:
       ADMIN_URL: ${ADMIN_URL:-http://localhost:3001}
-      DATABASE_URL: postgresql://${POSTGRES_USER:-postgres}:${POSTGRES_PASSWORD:-!ChangeMe!}@database:5432/${POSTGRES_DB:-postgres}?schema=public
+      DATABASE_URL: postgresql://${POSTGRES_USER:-postgres}:${POSTGRES_PASSWORD:-!ChangeMe!}@database:5432/${POSTGRES_DB:-ulep}?schema=public
       KEYCLOAK_BASE_URL: ${KEYCLOAK_BASE_URL:-http://auth:8080}
       KEYCLOAK_REALM: ${KEYCLOAK_REALM:-etandem}
       KEYCLOAK_ADMIN: ${KEYCLOAK_ADMIN:-admin}
@@ -48,13 +48,13 @@ services:
       KC_DB: postgres
       KC_DB_USERNAME: ${POSTGRES_USER:-postgres}
       KC_DB_PASSWORD: ${POSTGRES_PASSWORD:-!ChangeMe!}
-      KC_DB_URL: jdbc:postgresql://database:5432/${POSTGRES_DB:-postgres}
+      KC_DB_URL: jdbc:postgresql://database:5432/${POSTGRES_DB:-ulep}
       KC_DB_SCHEMA: keycloak
 
   database:
     image: postgres:${POSTGRES_VERSION:-14}-alpine
     environment:
-      POSTGRES_DB: ${POSTGRES_DB:-postgres}
+      POSTGRES_DB: ${POSTGRES_DB:-ulep}
       POSTGRES_USER: ${POSTGRES_USER:-postgres}
       # You should definitely change the password in production
       POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-!ChangeMe!}

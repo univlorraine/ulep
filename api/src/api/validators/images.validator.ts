@@ -1,5 +1,3 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
-/* eslint-disable @typescript-eslint/ban-types */
 import {
   registerDecorator,
   ValidationOptions,
@@ -14,6 +12,7 @@ export function IsImage(
   options: IsImageOptions,
   validationOptions?: ValidationOptions,
 ) {
+  // eslint-disable-next-line @typescript-eslint/ban-types
   return function (object: Object, propertyName: string) {
     return registerDecorator({
       name: 'isImage',
@@ -22,6 +21,7 @@ export function IsImage(
       constraints: [],
       options: validationOptions,
       validator: {
+        // eslint-disable-next-line @typescript-eslint/no-unused-vars
         validate(value: any, args: ValidationArguments) {
           return (
             value?.mimetype && (options?.mime ?? []).includes(value?.mimetype)

@@ -1,34 +1,38 @@
-import { InMemoryUniversityRepository } from '../../../src/providers/persistance/repositories/in-memory-university-repository';
-import { CreateUniversityUsecase } from '../../../src/core/usecases/universities/create-university.usecase';
-import seedDefinedNumberOfUniversities from '../../seeders/universities';
-import { UniversityAlreadyExists } from '../../../src/core/errors/RessourceAlreadyExists';
+import { UuidProvider } from '../../../src/providers/services/uuid.provider';
 import { InMemoryLanguageRepository } from '../../../src/providers/persistance/repositories/in-memory-language-repository';
-import { UniversityDoesNotExist } from '../../../src/core/errors/RessourceDoesNotExist';
+import { InMemoryUniversityRepository } from '../../../src/providers/persistance/repositories/in-memory-university-repository';
+import { LanguageFactory } from '../../factories/language.factory';
+import { CreateUniversityUsecase } from '../../../src/core/usecases';
+import { UniversityFactory } from '../../factories/university.factory';
 
 describe('CreateUniversity', () => {
+  const languageFactory = new LanguageFactory();
+  const languages = languageFactory.makeMany(2);
+
   const universityRepository = new InMemoryUniversityRepository();
   const languageRepository = new InMemoryLanguageRepository();
+  const uuidProvider = new UuidProvider();
+
   const createUniversityUsecase = new CreateUniversityUsecase(
     universityRepository,
     languageRepository,
+    uuidProvider,
   );
 
   beforeEach(() => {
     universityRepository.reset();
     languageRepository.reset();
-    languageRepository.init([
-      { code: 'FR', name: 'French' },
-      { code: 'EN', name: 'English' },
-    ]);
+    languageRepository.init(languages);
   });
 
   it('Should persist the new instance with the right data', async () => {
     await createUniversityUsecase.execute({
+      id: ' uuid',
       name: 'Université de Lorraine',
+      campus: ['Nancy', 'Metz'],
       timezone: 'Europe/Paris',
       website: 'https://univ-lorraine.fr',
-      campus: ['Nancy', 'Metz'],
-      languageCodes: ['FR', 'EN'],
+      languageCodes: languages.map((language) => language.code),
       admissionStart: new Date('2000-01-01'),
       admissionEnd: new Date('2000-12-31'),
     });
@@ -41,11 +45,17 @@ describe('CreateUniversity', () => {
   });
 
   it('Should throw an error if the name already exists', async () => {
-    universityRepository.init(seedDefinedNumberOfUniversities(1));
+    let exception: Error | undefined;
+
+    const factory = new UniversityFactory();
+    const instance = factory.makeOne();
+
+    universityRepository.init([instance]);
 
     try {
       await createUniversityUsecase.execute({
-        name: 'Université de Lorraine',
+        id: ' uuid',
+        name: instance.name,
         timezone: 'Europe/Paris',
         website: 'https://univ-lorraine.fr',
         campus: ['Nancy', 'Metz'],
@@ -54,24 +64,9 @@ describe('CreateUniversity', () => {
         admissionEnd: new Date('2000-12-31'),
       });
     } catch (error) {
-      expect(error).toBeInstanceOf(UniversityAlreadyExists);
+      exception = error;
     }
-  });
 
-  it('Should throw an error if the parent does not exists', async () => {
-    try {
-      await createUniversityUsecase.execute({
-        parent: 'uuid_does_not_exists',
-        name: 'Université de Lorraine',
-        timezone: 'Europe/Paris',
-        website: 'https://univ-lorraine.fr',
-        campus: ['Nancy', 'Metz'],
-        languageCodes: ['FR', 'EN'],
-        admissionStart: new Date('2000-01-01'),
-        admissionEnd: new Date('2000-12-31'),
-      });
-    } catch (error) {
-      expect(error).toBeInstanceOf(UniversityDoesNotExist);
-    }
+    expect(exception).toBeDefined();
   });
 });

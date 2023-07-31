@@ -1,27 +1,23 @@
-import { StringFilter } from 'src/shared/types/filters';
-import { Collection } from '../../shared/types/collection';
-import { Report, ReportCategory } from '../models/report';
+import { Report, ReportCategory, ReportStatus } from '../models';
+
+export const REPORT_REPOSITORY = 'report.repository';
 
 export interface ReportRepository {
-  ofId(id: string): Promise<Report | null>;
+  createReport(report: Report): Promise<Report>;
 
-  where(
-    offset?: number,
-    limit?: number,
-    category?: { name: StringFilter },
-  ): Promise<Collection<Report>>;
+  createCategory(category: ReportCategory): Promise<ReportCategory>;
 
-  save(report: Report): Promise<void>;
+  reportsByStatus(status: ReportStatus): Promise<Report[]>;
 
-  delete(id: string): Promise<void>;
+  reportOfId(id: string): Promise<Report | null>;
 
   categories(): Promise<ReportCategory[]>;
 
   categoryOfId(id: string): Promise<ReportCategory | null>;
 
-  categoryOfName(name: string): Promise<ReportCategory | null>;
+  updateReport(id: string, status: ReportStatus): Promise<void>;
 
-  createCategory(name: string): Promise<string>;
+  deleteReport(instance: Report): Promise<void>;
 
-  deleteCategory(id: string): Promise<void>;
+  deleteCategory(instance: ReportCategory): Promise<void>;
 }

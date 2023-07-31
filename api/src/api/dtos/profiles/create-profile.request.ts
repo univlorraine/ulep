@@ -1,83 +1,64 @@
-import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
+import * as Swagger from '@nestjs/swagger';
+import { ApiPropertyOptional } from '@nestjs/swagger';
 import {
   ArrayMaxSize,
   IsEnum,
-  IsIn,
-  IsInt,
   IsNotEmpty,
   IsOptional,
   IsUUID,
-  Min,
 } from 'class-validator';
-import { Role, Gender } from '../../../core/models/profile';
+import { LearningType } from 'src/core/models/learning-preferences';
+import { ProficiencyLevel } from 'src/core/models/proficiency.model';
 import { CreateProfileCommand } from 'src/core/usecases/profiles/create-profile.usecase';
-import { CEFRLevel } from 'src/core/models/cefr';
 
-export class CreateProfileRequest implements Omit<CreateProfileCommand, 'id'> {
-  @ApiProperty({ type: 'string', format: 'uuid' })
+export class CreateProfileRequest
+  implements Omit<CreateProfileCommand, 'user'>
+{
+  @Swagger.ApiProperty({ type: 'string', format: 'uuid' })
   @IsUUID()
-  userId: string;
+  id: string;
 
-  @ApiProperty({ type: 'integer', minimum: 1 })
-  @IsInt()
-  @Min(1)
-  age: number;
-
-  @ApiProperty({ enum: Role })
-  @IsEnum(Role)
-  role: Role;
-
-  @ApiProperty({ enum: Gender })
-  @IsEnum(Gender)
-  gender: Gender;
-
-  @ApiProperty({ type: 'string', format: 'uuid' })
-  @IsUUID()
-  university: string;
-
-  @ApiProperty({ type: 'string', example: 'FR' })
+  @Swagger.ApiProperty({ type: 'string', example: 'FR' })
   @IsNotEmpty()
-  nativeLanguage: string;
-
-  @ApiPropertyOptional({ type: 'string', example: ['FR'] })
-  @IsNotEmpty({ each: true })
-  @IsOptional()
-  masteredLanguages?: string[];
+  nativeLanguageCode: string;
 
   @ApiPropertyOptional({ type: 'string', example: 'EN' })
   @IsNotEmpty()
   @IsOptional()
-  learningLanguage?: string;
+  learningLanguageCode?: string;
 
-  @ApiProperty({ enum: CEFRLevel, example: 'B2' })
-  @IsEnum(CEFRLevel)
-  proficiencyLevel: CEFRLevel;
+  @Swagger.ApiProperty({ enum: ProficiencyLevel, example: 'B2' })
+  @IsEnum(ProficiencyLevel)
+  proficiencyLevel: ProficiencyLevel;
 
-  @ApiProperty({ enum: ['ETANDEM', 'TANDEM', 'BOTH'] })
-  @IsIn(['ETANDEM', 'TANDEM', 'BOTH'])
-  learningType: 'ETANDEM' | 'TANDEM' | 'BOTH';
-
-  @ApiProperty({
-    type: 'string',
-    isArray: true,
-    example: ['SPEAK_LIKE_NATIVE'],
-  })
-  @ArrayMaxSize(5)
+  @ApiPropertyOptional({ type: 'string', example: ['FR'] })
   @IsNotEmpty({ each: true })
+  @IsOptional()
+  masteredLanguageCodes?: string[];
+
+  @Swagger.ApiProperty({ enum: LearningType })
+  @IsEnum(LearningType)
+  learningType: LearningType;
+
+  @Swagger.ApiProperty({ type: 'string', isArray: true, format: 'uuid' })
+  @IsUUID('4', { each: true })
   goals: string[];
 
-  @ApiProperty({ type: 'string', example: 'ONCE_A_WEEK' })
+  @Swagger.ApiProperty({ type: 'string', example: 'ONCE_A_WEEK' })
   @IsNotEmpty()
   meetingFrequency: string;
 
-  @ApiProperty({ example: ['music', 'sports', 'movies'] })
+  @Swagger.ApiProperty({ example: ['music', 'sports', 'movies'] })
   @ArrayMaxSize(5)
   @IsNotEmpty({ each: true })
   interests: string[];
 
-  @ApiProperty()
-  preferSameGender: boolean;
+  @Swagger.ApiProperty()
+  sameGender: boolean;
 
-  @ApiProperty()
+  @Swagger.ApiProperty()
+  sameAge: boolean;
+
+  @Swagger.ApiProperty()
   bios?: string;
 }

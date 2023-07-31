@@ -1,47 +1,36 @@
 import { Module } from '@nestjs/common';
-import { LanguageController } from './controllers/language.controller';
-import { CoreModule } from '../core/core.module';
-import { UniversityController } from './controllers/university.controller';
-import { SecurityController } from './controllers/security.controller';
-import { UserController } from './controllers/user.controller';
-import { HealthController } from './controllers/health.controller';
 import { TerminusModule } from '@nestjs/terminus';
-import { ProfileController } from './controllers/profile.controller';
-import { RolesGuard } from './guards/roles.guard';
-import { UploadsController } from './controllers/uploads.controller';
+import { CoreModule } from 'src/core/core.module';
+import { HealthController } from './controllers/health.controller';
+import { InterestController } from './controllers/interest.controller';
+import { LanguageController } from './controllers/language.controller';
 import { MatchController } from './controllers/match.controller';
-import { ExportController } from './controllers/export.controller';
+import { ProficiencyController } from './controllers/proficiency.controller';
 import { ReportController } from './controllers/report.controller';
-import { ReportCategoriesController } from './controllers/report-categories.controller';
-import { UuidProvider } from './services/uuid-provider';
+import { SecurityController } from './controllers/security.controller';
 import { TandemController } from './controllers/tandem.controller';
-import { CountryController } from './controllers/country.controller';
-import { CEFRController } from './controllers/cefr.controller';
+import { UniversityController } from './controllers/university.controller';
+import { UploadsController } from './controllers/upload.controller';
+import { UserController } from './controllers/user.controller';
+import { ProfileController } from './controllers/profile.controller';
+import { CountryController } from './controllers/county.controller';
 
 @Module({
   imports: [CoreModule, TerminusModule],
   controllers: [
-    CEFRController,
     CountryController,
-    ExportController,
     HealthController,
+    InterestController,
     LanguageController,
     MatchController,
+    ProficiencyController,
     ProfileController,
     ReportController,
-    ReportCategoriesController,
     SecurityController,
     TandemController,
     UniversityController,
     UploadsController,
     UserController,
-  ],
-  providers: [
-    {
-      provide: 'APP_GUARD',
-      useClass: RolesGuard,
-    },
-    UuidProvider,
   ],
 })
 export class ApiModule {}

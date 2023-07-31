@@ -1,88 +1,137 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
 import {
-  Body,
   Controller,
-  Delete,
   Get,
-  Param,
-  Patch,
   Post,
-  ParseUUIDPipe,
-  Query,
+  Body,
+  Patch,
+  Param,
+  Delete,
   Logger,
+  ParseUUIDPipe,
   SerializeOptions,
 } from '@nestjs/common';
 import * as Swagger from '@nestjs/swagger';
-import { PaginationDto } from '../dtos/pagination.dto';
-import { GetUniversitiesUsecase } from '../../core/usecases/universities/get-universities.usecase';
-import { Collection } from '../../shared/types/collection';
-import { DeleteUniversityUsecase } from '../../core/usecases/universities/delete-university.usecase';
-import { GetUniversityUsecase } from '../../core/usecases/universities/get-university.usecase';
-import { CreateUniversityUsecase } from '../../core/usecases/universities/create-university.usecase';
-import { CollectionResponse } from '../decorators/collection.decorator';
 import {
-  CreateUniversityRequest,
   UniversityResponse,
-} from '../dtos/university';
+  CreateUniversityRequest,
+  UpdateUniversityNameRequest,
+  CreateUniversityLanguageRequest,
+  LanguageResponse,
+} from '../dtos';
+import {
+  CreateUniversityUsecase,
+  CreatePartnerUniversityUsecase,
+  CreateLanguageUsecase,
+  DeleteUniversityUsecase,
+  GetUniversityUsecase,
+  GetUniversitiesUsecase,
+  GetLanguagesUsecase,
+  UpdateUniversityNameUsecase,
+  DeleteLanguageUsecase,
+} from '../../core/usecases/university';
 
+// TODO: languages add/remove
 @Controller('universities')
 @Swagger.ApiTags('Universities')
 export class UniversityController {
-  private readonly logger = new Logger(UniversityController.name);
-
   constructor(
+    private readonly createUniversityUsecase: CreateUniversityUsecase,
+    private readonly createPartnerUniversityUsecase: CreatePartnerUniversityUsecase,
+    private readonly createLanguageUsecase: CreateLanguageUsecase,
     private readonly getUniversityUsecase: GetUniversityUsecase,
     private readonly getUniversitiesUsecase: GetUniversitiesUsecase,
-    private readonly createUniversityUsecase: CreateUniversityUsecase,
+    private readonly getLanguagesUsecase: GetLanguagesUsecase,
+    private readonly updateUniversityNameUsecase: UpdateUniversityNameUsecase,
     private readonly deleteUniversityUsecase: DeleteUniversityUsecase,
+    private readonly deleteLanguageUsecase: DeleteLanguageUsecase,
   ) {}
 
-  @Get()
-  @Swagger.ApiOperation({
-    summary: 'Retrieve the collection of University ressource.',
-  })
-  @CollectionResponse(UniversityResponse)
-  async getCollection(
-    @Query() { page, limit }: PaginationDto,
-  ): Promise<Collection<UniversityResponse>> {
-    const result = await this.getUniversitiesUsecase.execute({ page, limit });
+  // TODO: only admin can create a university
+  @Post()
+  @Swagger.ApiOperation({ summary: 'Create a new University ressource.' })
+  @Swagger.ApiCreatedResponse({ type: UniversityResponse })
+  async create(@Body() body: CreateUniversityRequest) {
+    const instance = await this.createUniversityUsecase.execute(body);
 
-    return new Collection<UniversityResponse>({
-      items: result.items.map(UniversityResponse.fromDomain),
-      totalItems: result.totalItems,
-    });
+    return UniversityResponse.fromUniversity(instance);
+  }
+
+  // TODO: only admin can create new universities
+  @Post('partners')
+  @Swagger.ApiOperation({ summary: 'Create a new University ressource.' })
+  @Swagger.ApiCreatedResponse({ type: UniversityResponse })
+  async createPartnerUniversity(@Body() body: CreateUniversityRequest) {
+    const instance = await this.createPartnerUniversityUsecase.execute(body);
+
+    return UniversityResponse.fromUniversity(instance);
+  }
+
+  @Post('languages')
+  @Swagger.ApiOperation({ summary: 'Create a new Language ressource.' })
+  @Swagger.ApiCreatedResponse({ type: LanguageResponse })
+  async createLanguage(@Body() body: CreateUniversityLanguageRequest) {
+    const instance = await this.createLanguageUsecase.execute(body);
+
+    return LanguageResponse.fromLanguage(instance);
+  }
+
+  @Get()
+  @Swagger.ApiOperation({ summary: 'Collection of University ressource.' })
+  @Swagger.ApiOkResponse({ type: UniversityResponse, isArray: true })
+  async findPartners() {
+    const instances = await this.getUniversitiesUsecase.execute();
+
+    return instances.map(UniversityResponse.fromUniversity);
   }
 
   @Get(':id')
   @SerializeOptions({ groups: ['read', 'university:read'] })
-  @Swagger.ApiOperation({ summary: 'Retrieve a University ressource.' })
+  @Swagger.ApiOperation({ summary: 'University ressource.' })
   @Swagger.ApiOkResponse({ type: UniversityResponse })
-  @Swagger.ApiNotFoundResponse({ description: 'Resource not found' })
-  async getItem(
+  async findOne(@Param('id', ParseUUIDPipe) id: string) {
+    const instance = await this.getUniversityUsecase.execute(id);
+
+    return UniversityResponse.fromUniversity(instance);
+  }
+
+  @Get(':id/languages')
+  @Swagger.ApiOperation({ summary: 'Collection of Language ressource.' })
+  @Swagger.ApiOkResponse({ type: UniversityResponse, isArray: true })
+  async findLanguages(@Param('id', ParseUUIDPipe) id: string) {
+    const instances = await this.getLanguagesUsecase.execute({
+      university: id,
+    });
+
+    return instances.map(LanguageResponse.fromLanguage);
+  }
+
+  // TODO: only admin can update a university
+  @Patch(':id')
+  @Swagger.ApiOperation({ summary: 'Updates a University ressource.' })
+  @Swagger.ApiOkResponse()
+  async update(
     @Param('id', ParseUUIDPipe) id: string,
-  ): Promise<UniversityResponse> {
-    const instance = await this.getUniversityUsecase.execute({ id });
-
-    return UniversityResponse.fromDomain(instance);
+    @Body() request: UpdateUniversityNameRequest,
+  ) {
+    await this.updateUniversityNameUsecase.execute({ id, ...request });
   }
 
-  @Post()
-  @SerializeOptions({ groups: ['read', 'university:read'] })
-  @Swagger.ApiOperation({ summary: 'Creates a University ressource.' })
-  @Swagger.ApiCreatedResponse({ type: UniversityResponse })
-  async create(
-    @Body() body: CreateUniversityRequest,
-  ): Promise<UniversityResponse> {
-    const instance = await this.createUniversityUsecase.execute(body);
-
-    return UniversityResponse.fromDomain(instance);
-  }
-
+  // TODO: only admin can delete a university
   @Delete(':id')
   @Swagger.ApiOperation({ summary: 'Deletes a University ressource.' })
   @Swagger.ApiOkResponse()
-  async remove(@Param('id', ParseUUIDPipe) id: string) {
-    // TODO: throw exception if university is related to a profile
-    await this.deleteUniversityUsecase.execute({ id });
+  remove(@Param('id') id: string) {
+    return this.deleteUniversityUsecase.execute({ id });
+  }
+
+  // TODO: only admin can delete a language
+  @Delete(':university/languages/:id')
+  @Swagger.ApiOperation({ summary: 'Deletes a Language ressource.' })
+  @Swagger.ApiOkResponse()
+  removeLanguage(
+    @Param('university', ParseUUIDPipe) university: string,
+    @Param('id', ParseUUIDPipe) id: string,
+  ) {
+    return this.deleteLanguageUsecase.execute({ id, university });
   }
 }

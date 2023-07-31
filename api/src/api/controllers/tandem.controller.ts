@@ -1,19 +1,22 @@
 import { Body, Controller, Get, Post, Query } from '@nestjs/common';
 import * as Swagger from '@nestjs/swagger';
-import { CreateTandemUsecase } from 'src/core/usecases/tandems/create-tandem.usecase';
-import { CreateTandemRequest, TandemResponse } from '../dtos/tandems';
-import { UuidProvider } from '../services/uuid-provider';
-import { GetTandemsUsecase } from 'src/core/usecases/tandems/get-tandems.usecase';
-import { CollectionResponse } from '../decorators/collection.decorator';
-import { PaginationDto } from '../dtos/pagination.dto';
-import { Collection } from 'src/shared/types/collection';
-import { GenerateTandemsUsecase } from 'src/core/usecases/tandems/generate-tandems.usecase';
+import { Collection } from '@app/common';
+import { CollectionResponse } from '../decorators';
+import { CreateTandemUsecase } from '../../core/usecases/tandem/create-tandem.usecase';
+import { GenerateTandemsUsecase } from '../../core/usecases/tandem/generate-tandems.usecase';
+import { GetTandemsUsecase } from '../../core/usecases/tandem/get-tandems.usecase';
+import { TandemStatus } from '../../core/models/tandem.model';
+import {
+  CreateTandemRequest,
+  PaginationDto,
+  ProfileResponse,
+  TandemResponse,
+} from '../dtos';
 
 @Controller('tandems')
 @Swagger.ApiTags('Tandems')
 export class TandemController {
   constructor(
-    private readonly uuidProvider: UuidProvider,
     private readonly generateTandemsUsecase: GenerateTandemsUsecase,
     private readonly getTandemsUsecase: GetTandemsUsecase,
     private readonly createTandemUsecase: CreateTandemUsecase,
@@ -38,10 +41,7 @@ export class TandemController {
   @Post()
   @Swagger.ApiOperation({ summary: 'Creates a Tandem ressource.' })
   async create(@Body() body: CreateTandemRequest): Promise<void> {
-    await this.createTandemUsecase.execute({
-      id: this.uuidProvider.generate(),
-      ...body,
-    });
+    await this.createTandemUsecase.execute({ ...body });
   }
 
   @Post('generate')
@@ -52,8 +52,8 @@ export class TandemController {
     return tandems.map(
       (tandem) =>
         new TandemResponse({
-          profiles: tandem.profiles.map((profile) => profile.id),
-          status: 'draft',
+          profiles: tandem.profiles.map(ProfileResponse.fromDomain),
+          status: TandemStatus.DRAFT,
           score: tandem.score,
         }),
     );

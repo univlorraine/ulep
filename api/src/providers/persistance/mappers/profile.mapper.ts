@@ -1,50 +1,75 @@
 import * as Prisma from '@prisma/client';
+import { LearningType, ProficiencyLevel, Profile } from 'src/core/models';
 import {
-  Gender,
-  LearningType,
-  Profile,
-  Role,
-} from '../../../core/models/profile';
-import { UniversitySnapshot, universityMapper } from './university.mapper';
-import { userMapper } from './user.mapper';
-import { CEFRLevel } from 'src/core/models/cefr';
+  TextContentRelations,
+  TextContentSnapshot,
+  textContentMapper,
+} from './translation.mapper';
+import { UserRelations, UserSnapshot, userMapper } from './user.mapper';
 
-type ProfileEntity = Prisma.Profile & {
-  user: Prisma.User;
-  university: UniversitySnapshot;
-  nativeLanguage: Prisma.Language;
-  learningLanguage: Prisma.Language;
-  masteredLanguages: (Prisma.MasteredLanguage & {
-    language: Prisma.Language;
-  })[];
-  preferences: Prisma.LearningPreference;
+export const ProfilesRelations = {
+  User: {
+    include: UserRelations,
+  },
+  Goals: true,
+  Interests: {
+    include: {
+      TextContent: TextContentRelations,
+      Category: { include: { TextContent: TextContentRelations } },
+    },
+  },
+  NativeLanguage: true,
+  LearningLanguage: true,
+  MasteredLanguages: { include: { LanguageCode: true } },
 };
 
-export const profileMapper = (instance: ProfileEntity): Profile => {
+export type ProfileSnapshot = Prisma.Profiles & {
+  User: UserSnapshot;
+  Goals: Prisma.Goals[];
+  Interests: (Prisma.Interests & {
+    TextContent: TextContentSnapshot;
+    Category: Prisma.InterestCategories & { TextContent: TextContentSnapshot };
+  })[];
+  NativeLanguage: Prisma.LanguageCodes;
+  LearningLanguage: Prisma.LanguageCodes;
+  MasteredLanguages: (Prisma.MasteredLanguages & {
+    LanguageCode: Prisma.LanguageCodes;
+  })[];
+};
+
+export const profileMapper = (instance: ProfileSnapshot): Profile => {
   return new Profile({
     id: instance.id,
-    user: userMapper(instance.user),
-    role: Role[instance.role],
-    university: universityMapper(instance.university),
-    personalInformation: {
-      age: instance.age,
-      gender: Gender[instance.gender],
-      interests: instance.metadata['interests'],
-      bio: instance.metadata['bios'],
-    },
+    user: userMapper(instance.User),
     languages: {
-      nativeLanguage: instance.nativeLanguageCode,
-      masteredLanguages: instance.masteredLanguages.map(
-        (language) => language.languageCode,
-      ),
-      learningLanguage: instance.learningLanguageCode,
-      learningLanguageLevel: instance.learningLanguageLevel as CEFRLevel,
+      native: {
+        id: instance.NativeLanguage.id,
+        code: instance.NativeLanguage.code,
+      },
+      mastered: instance.MasteredLanguages.map((language) => ({
+        id: language.LanguageCode.id,
+        code: language.LanguageCode.code,
+      })),
+      learning: {
+        id: instance.LearningLanguage.id,
+        code: instance.LearningLanguage.code,
+        level: ProficiencyLevel[instance.level],
+      },
     },
     preferences: {
-      learningType: instance.preferences.type as LearningType,
-      meetingFrequency: instance.metadata['frequency'],
-      sameGender: instance.preferences.sameGender,
-      goals: instance.metadata['goals'],
+      learningType: LearningType[instance.learning_type],
+      meetingFrequency: instance.meeting_frequency,
+      sameAge: instance.same_age,
+      sameGender: instance.same_gender,
+      goals: [], // TODO: Fix this
     },
+    interests: instance.Interests.map((interest) => ({
+      id: interest.id,
+      name: textContentMapper(interest.TextContent),
+      category: {
+        id: interest.Category.id,
+        name: textContentMapper(interest.Category.TextContent),
+      },
+    })),
   });
 };

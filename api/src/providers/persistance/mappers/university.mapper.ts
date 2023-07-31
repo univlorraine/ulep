@@ -1,30 +1,33 @@
 import * as Prisma from '@prisma/client';
-import { University } from '../../../core/models/university';
+import { University } from 'src/core/models';
 
-export type UniversitySnapshot = Prisma.University & {
-  campuses: Prisma.Campus[];
-  parent: Prisma.University | null;
-  languages: (Prisma.UniversityLanguage & {
-    language: Prisma.Language;
-  })[];
+export const UniversityRelations = {
+  Places: true,
+  Languages: true,
 };
 
-export const universityMapper = (instance: UniversitySnapshot): University => {
+export type UniversitySnapshot = Prisma.Organizations & {
+  Places: Prisma.Places[];
+  Languages: Prisma.LanguageCodes[];
+};
+
+export const universityMapper = (snapshot: UniversitySnapshot): University => {
   return new University({
-    id: instance.id,
-    name: instance.name,
-    parent: instance.parentId,
-    campus: instance.campuses.map((c) => c.name),
-    timezone: instance.timezone,
-    languages: instance.languages.map((l) => {
+    id: snapshot.id,
+    name: snapshot.name,
+    parent: snapshot.parent_id,
+    campus: snapshot.Places.map((place) => place.name),
+    timezone: snapshot.timezone,
+    languages: snapshot.Languages.map((language) => {
       return {
-        name: l.language.name,
-        code: l.language.code,
+        id: language.id,
+        code: language.code,
+        name: language.name,
       };
     }),
-    admissionStart: instance.admissionStart,
-    admissionEnd: instance.admissionEnd,
-    website: instance.website,
-    resourcesUrl: instance.resourcesUrl,
+    admissionStart: snapshot.admissionStartDate,
+    admissionEnd: snapshot.admissionEndDate,
+    website: snapshot.website,
+    resourcesUrl: snapshot.resource,
   });
 };

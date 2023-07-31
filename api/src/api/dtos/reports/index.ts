@@ -1,17 +1,64 @@
-import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
+import * as Swagger from '@nestjs/swagger';
 import { Expose } from 'class-transformer';
-import { Report, ReportCategory } from '../../../core/models/report';
-import { IsString, IsNotEmpty, IsUUID, IsOptional } from 'class-validator';
-import { PaginationDto } from '../pagination.dto';
-import { UserResponse } from '../users/user.response';
-import { CreateReportCommand } from 'src/core/usecases/reports/create-report.usecase';
+import { IsString, IsNotEmpty, IsUUID, IsEnum, Length } from 'class-validator';
+import {
+  Report,
+  ReportCategory,
+  ReportStatus,
+} from 'src/core/models/report.model';
+import {
+  CreateReportCategoryCommand,
+  CreateReportCommand,
+  UpdateReportStatusCommand,
+} from 'src/core/usecases/report';
+
+export class CreateReportCategoryRequest
+  implements CreateReportCategoryCommand {
+  @Swagger.ApiProperty({ type: 'string', format: 'uuid' })
+  @IsUUID()
+  id: string;
+
+  @Swagger.ApiProperty({ type: 'string' })
+  @IsString()
+  @IsNotEmpty()
+  name: string;
+
+  // TODO: get the language code from the request headers
+  @Swagger.ApiProperty({ type: 'string', example: 'FR' })
+  @IsString()
+  @Length(2, 2)
+  languageCode: string;
+}
+
+export class CreateReportRequest implements Omit<CreateReportCommand, 'owner'> {
+  @Swagger.ApiProperty({ type: 'string', format: 'uuid' })
+  @IsUUID()
+  id: string;
+
+  @Swagger.ApiProperty({ type: 'string', format: 'uuid' })
+  @IsUUID()
+  category: string;
+
+  @Swagger.ApiProperty({ type: 'string' })
+  @IsString()
+  @IsNotEmpty()
+  content: string;
+}
+
+export class UpdateReportStatusRequest
+  implements Omit<UpdateReportStatusCommand, 'id'>
+{
+  @Swagger.ApiProperty({ type: 'string', enum: ReportStatus })
+  @IsEnum(ReportStatus)
+  status: ReportStatus;
+}
 
 export class ReportCategoryResponse {
-  @ApiProperty({ type: 'string', format: 'uuid' })
+  @Swagger.ApiProperty({ type: 'string', format: 'uuid' })
   @Expose({ groups: ['read'] })
   id: string;
 
-  @ApiProperty({ type: 'string', example: 'unresponsive_tandem' })
+  @Swagger.ApiProperty({ type: 'string' })
   @Expose({ groups: ['read'] })
   name: string;
 
@@ -19,28 +66,32 @@ export class ReportCategoryResponse {
     Object.assign(this, partial);
   }
 
-  static fromDomain(instance: ReportCategory): ReportCategoryResponse {
-    return new ReportCategoryResponse({ id: instance.id, name: instance.name });
+  static fromDomain(entity: ReportCategory): ReportCategoryResponse {
+    return new ReportCategoryResponse({
+      id: entity.id,
+      name: entity.name.content,
+    });
   }
 }
 
 export class ReportResponse {
-  @ApiProperty({ type: 'string', format: 'uuid' })
+  @Swagger.ApiProperty({ type: 'string', format: 'uuid' })
   @Expose({ groups: ['read'] })
   id: string;
 
-  @ApiProperty()
+  @Swagger.ApiProperty({ type: 'string' })
   @Expose({ groups: ['read'] })
-  user: UserResponse;
+  owner: string;
 
-  @ApiProperty()
+  @Swagger.ApiProperty()
   @Expose({ groups: ['read'] })
   category: ReportCategoryResponse;
 
-  @ApiProperty({
-    type: 'string',
-    example: 'The user is not responding to my messages',
-  })
+  @Swagger.ApiProperty({ type: 'string', enum: ReportStatus })
+  @Expose({ groups: ['read'] })
+  status: ReportStatus;
+
+  @Swagger.ApiProperty({ type: 'string' })
   @Expose({ groups: ['read'] })
   content: string;
 
@@ -48,54 +99,13 @@ export class ReportResponse {
     Object.assign(this, partial);
   }
 
-  static fromDomain(report: Report): ReportResponse {
+  static fromDomain(instance: Report): ReportResponse {
     return new ReportResponse({
-      id: report.id,
-      user: new UserResponse({
-        id: report.owner.id,
-        email: report.owner.email,
-      }),
-      category: new ReportCategoryResponse({
-        id: report.category.id,
-        name: report.category.name,
-      }),
-      content: report.content,
+      id: instance.id,
+      owner: instance.owner,
+      category: ReportCategoryResponse.fromDomain(instance.category),
+      status: instance.status,
+      content: instance.content,
     });
   }
-}
-
-export class CreateReportRequest implements Omit<CreateReportCommand, 'id'> {
-  @ApiProperty({ type: 'string', example: 'unresponsive_tandem' })
-  @IsUUID()
-  category: string;
-
-  @ApiProperty({
-    type: 'string',
-    example: 'The user is not responding to my messages',
-  })
-  @IsString()
-  @IsNotEmpty()
-  content: string;
-
-  @ApiProperty({ type: 'string', format: 'uuid' })
-  @IsUUID()
-  userId: string;
-}
-
-export class CreateReportCategoryRequest {
-  @ApiProperty({ type: 'string', example: 'unresponsive_tandem' })
-  @IsString()
-  @IsNotEmpty()
-  name: string;
-}
-
-export class ReportQueryFilter extends PaginationDto {
-  @ApiPropertyOptional({
-    description: 'The category name',
-    example: 'unresponsive_tandem',
-  })
-  @IsString()
-  @IsNotEmpty()
-  @IsOptional()
-  category: string;
 }
