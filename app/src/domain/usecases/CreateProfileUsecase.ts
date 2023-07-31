@@ -1,7 +1,4 @@
-import { HttpResponse } from '../../adapter/BaseHttpAdapter';
 import { HttpAdapterInterface } from '../../adapter/DomainHttpAdapter';
-import ProfileCommand, { profileCommandToDomain } from '../../command/ProfileCommand';
-import Profile from '../entities/Profile';
 import CreateProfileUsecaseInterface from '../interfaces/CreateProfileUsecase.interface';
 
 class CreateProfileUsecase implements CreateProfileUsecaseInterface {
@@ -22,9 +19,10 @@ class CreateProfileUsecase implements CreateProfileUsecaseInterface {
         interests: string[],
         preferSameGender: boolean,
         bios: string[]
-    ): Promise<Profile | Error> {
+    ): Promise<undefined | Error> {
         try {
             //TODO: Change this later when api will be ready
+            /*
             const httpRepsonse: HttpResponse<ProfileCommand> = await this.domainHttpAdapter.post(`/profiles/`, {
                 age,
                 role,
@@ -46,7 +44,8 @@ class CreateProfileUsecase implements CreateProfileUsecaseInterface {
                 return new Error('errors.global');
             }
 
-            return this.setProfile(profileCommandToDomain(httpRepsonse.parsedBody));
+            return this.setProfile(profileCommandToDomain(httpRepsonse.parsedBody));*/
+            return;
         } catch (error: any) {
             return new Error('errors.global');
         }

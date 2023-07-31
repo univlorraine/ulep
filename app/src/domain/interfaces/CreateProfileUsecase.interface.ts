@@ -1,5 +1,3 @@
-import Profile from '../entities/Profile';
-
 interface CreateProfileUsecaseInterface {
     execute(
         age: number,
@@ -16,6 +14,6 @@ interface CreateProfileUsecaseInterface {
         interests: string[],
         preferSameGender: boolean,
         bios: string[]
-    ): Promise<Profile | Error>;
+    ): Promise<undefined | Error>;
 }
 export default CreateProfileUsecaseInterface;
