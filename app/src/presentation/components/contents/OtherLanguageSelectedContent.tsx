@@ -37,7 +37,7 @@ const OtherLanguageSelectedContent: React.FC<OtherLanguageSelectedContentProps> 
                     {t('pairing_other_languages_page.selected_language.explain_third')}
                 </p>
             </div>
-            <div className={`${otherLanguagesSelectedStyles['bottom-container']} large-margin-top large-margin-bottom`}>
+            <div className={`large-margin-top extra-large-margin-bottom`}>
                 <button className={`primary-button `} onClick={onNextStep}>
                     {t('pairing_other_languages_page.selected_language.validate_button')}
                 </button>

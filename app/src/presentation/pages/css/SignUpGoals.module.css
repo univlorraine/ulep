@@ -1,5 +1,6 @@
 .bottom-container {
     margin-top: auto;
+    margin-bottom: 40px;
     display: flex;
     flex-direction: row;
 }
@@ -27,11 +28,11 @@
 .goal-container {
     align-items: center;
     border-radius: 5px;
+    cursor: pointer;
     display: flex;
     height: 80px;
     margin-bottom: 10px;
     width: 100%;
-    cursor: pointer;
 }
 
 .goals-container {

@@ -65,7 +65,7 @@ const PairingPreferencePage: React.FC = () => {
                         </button>
                     </div>
                 </div>
-                <button className="primary-button large-margin-bottom" onClick={onNextStepPressed}>
+                <button className="primary-button extra-large-margin-bottom" onClick={onNextStepPressed}>
                     {t('pairing_preference_page.validate_button')}
                 </button>
             </div>

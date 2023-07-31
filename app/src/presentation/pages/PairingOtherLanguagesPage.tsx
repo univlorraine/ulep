@@ -5,7 +5,7 @@ import { Redirect, useHistory } from 'react-router';
 import { useConfig } from '../../context/ConfigurationContext';
 import Language from '../../domain/entities/Language';
 import { UniversityJsonInterface, UniversityJsonToDomain } from '../../domain/entities/University';
-import { useStoreState } from '../../store/storeTypes';
+import { useStoreActions, useStoreState } from '../../store/storeTypes';
 import WebLayoutCentered from '../components/WebLayoutCentered';
 import OtherLanguageContent from '../components/contents/OtherLanguageContent';
 import OtherLanguageSelectedContent from '../components/contents/OtherLanguageSelectedContent';
@@ -16,6 +16,7 @@ const PairingOtherLanguagesPage: React.FC = () => {
     const { askForLanguage, configuration, getAllLanguages } = useConfig();
     const [showToast] = useIonToast();
     const profileSignUp = useStoreState((state) => state.profileSignUp);
+    const updateProfileSignUp = useStoreActions((state) => state.updateProfileSignUp);
     const history = useHistory();
     const [languages, setLanguages] = useState<Language[]>([]);
     const [selectedLanguage, setSelectedLanguage] = useState<Language>();
@@ -40,10 +41,11 @@ const PairingOtherLanguagesPage: React.FC = () => {
 
     const onOtherLanguageSelected = async (language: Language) => {
         if (language.code === 'joker') {
-            return history.push('/signup/pairing/pedagogy'); // we dont update signUpProfile because joker is null in api
+            updateProfileSignUp({ learningLanguage: language, learningLanguageLevel: 'A0' });
+            return history.push('/signup/pairing/pedagogy');
         }
 
-        setSelectedLanguage(language);
+        return setSelectedLanguage(language);
     };
 
     const onLanguageAsked = async () => {
