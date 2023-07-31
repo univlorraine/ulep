@@ -18,7 +18,7 @@ const PrivateRoute: React.FC<PrivateRouteProps> = ({ component: Component, ...pr
                 ) : (
                     <Redirect
                         to={{
-                            pathname: '/signup', // Mettez ici la route vers laquelle vous voulez rediriger si le token n'existe pas
+                            pathname: '/signup',
                             state: { from: props.location },
                         }}
                     />
