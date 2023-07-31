@@ -8,7 +8,7 @@ class CreateProfileUsecase implements CreateProfileUsecaseInterface {
     constructor(private readonly domainHttpAdapter: HttpAdapterInterface, private readonly setProfile: Function) {}
 
     async execute(
-        age: string,
+        age: number,
         role: Role,
         gender: Gender,
         universityId: string,

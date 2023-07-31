@@ -2,7 +2,7 @@ import Profile from '../entities/Profile';
 
 interface CreateProfileUsecaseInterface {
     execute(
-        age: string,
+        age: number,
         role: Role,
         gender: Gender,
         universityId: string,
