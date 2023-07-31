@@ -6,7 +6,7 @@ import WebLayoutCentered from '../components/WebLayoutCentered';
 import QuizzValidatedContent from '../components/contents/QuizzValidatedContent';
 import styles from './css/SignUp.module.css';
 
-const PairingQuizzEndPage = ({}) => {
+const PairingQuizzEndPage: React.FC = ({}) => {
     const { configuration } = useConfig();
     const history = useHistory();
     const profileSignUp = useStoreState((state) => state.profileSignUp);

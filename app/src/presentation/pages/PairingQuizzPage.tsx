@@ -4,6 +4,7 @@ import { useTranslation } from 'react-i18next';
 import { Redirect, useHistory } from 'react-router';
 import { useConfig } from '../../context/ConfigurationContext';
 import Question from '../../domain/entities/Question';
+import cefr from '../../domain/entities/cefr';
 import { useStoreActions, useStoreState } from '../../store/storeTypes';
 import SuccessLayout from '../components/SuccessLayout';
 import WebLayoutCentered from '../components/WebLayoutCentered';
@@ -13,7 +14,7 @@ import QuizzValidatedContent from '../components/contents/QuizzValidatedContent'
 import { getNextLevel, getPreviousLevel } from '../utils';
 import styles from './css/SignUp.module.css';
 
-const PairingQuizzPage = () => {
+const PairingQuizzPage: React.FC = () => {
     const { configuration, getQuizzByLevel } = useConfig();
     const history = useHistory();
     const [showToast] = useIonToast();

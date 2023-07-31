@@ -1,8 +1,9 @@
+import CameraAdapter from '../adapter/CameraAdapter';
 import DomainHttpAdapter from '../adapter/DomainHttpAdapter';
-import KeycloakHttpAdapter from '../adapter/KeycloakHttpAdapter';
 import Configuration from '../domain/entities/Confirguration';
 import AskForLanguageUsecase from '../domain/usecases/AskForLanguageUsecase';
 import CreateProfileUsecase from '../domain/usecases/CreateProfileUsecase';
+import CreateUserUsecase from '../domain/usecases/CreateUserUsecase';
 import GetAllCategoriesInterestssUsecase from '../domain/usecases/GetAllCategoriesInterestsUsecase';
 import GetAllCountriesUsecase from '../domain/usecases/GetAllCountriesUsecase';
 import GetAllGoalsUsecase from '../domain/usecases/GetAllGoalsUsecase';
@@ -21,8 +22,8 @@ const getConfigContextValue = (
     removeTokens: Function,
     configuration: Configuration
 ): ConfigContextValueType => {
+    const cameraAdapter = new CameraAdapter();
     const domainHttpAdapter = new DomainHttpAdapter(import.meta.env.VITE_API_URL ?? '', accessToken);
-    const keycloakHttpAdapter = new KeycloakHttpAdapter(import.meta.env.VITE_KEYCLOAK_URL ?? '', accessToken);
 
     const askForLanguage = new AskForLanguageUsecase(domainHttpAdapter);
     const createProfile = new CreateProfileUsecase(domainHttpAdapter, setProfile);
@@ -35,10 +36,14 @@ const getConfigContextValue = (
     const login = new LoginUsecase(domainHttpAdapter, setTokens);
     const resetPassword = new ResetPasswordUsecase(domainHttpAdapter);
 
+    const createUser = new CreateUserUsecase(domainHttpAdapter, login);
+
     return {
         askForLanguage,
         createProfile,
+        cameraAdapter,
         configuration,
+        createUser,
         getAllCategoriesInterests,
         getAllCountries,
         getAllGoals,

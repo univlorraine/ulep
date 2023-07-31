@@ -1,10 +1,9 @@
-import { Camera, CameraResultType, CameraSource } from '@capacitor/camera';
 import { useIonToast } from '@ionic/react';
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useHistory } from 'react-router';
 import { useConfig } from '../../context/ConfigurationContext';
-import { useStoreActions } from '../../store/storeTypes';
+import { useStoreActions, useStoreState } from '../../store/storeTypes';
 import Checkbox from '../components/Checkbox';
 import RadioButton from '../components/RadioButton';
 import TextInput from '../components/TextInput';
@@ -14,9 +13,10 @@ import styles from './css/SignUp.module.css';
 
 const SignUpInformationsPage: React.FC = () => {
     const { t } = useTranslation();
-    const { configuration } = useConfig();
+    const { cameraAdapter, configuration, createUser } = useConfig();
     const [showToast] = useIonToast();
     const history = useHistory();
+    const profileSignUp = useStoreState((store) => store.profileSignUp);
     const updateProfileSignUp = useStoreActions((state) => state.updateProfileSignUp);
     const [firstname, setFirstname] = useState<string>('');
     const [lastname, setLastname] = useState<string>('');
@@ -25,7 +25,7 @@ const SignUpInformationsPage: React.FC = () => {
     const [email, setEmail] = useState<string>('');
     const [password, setPassword] = useState<string>('');
     const [confirmPassword, setConfirmPassword] = useState<string>('');
-    const [profilePicture, setProfilePicture] = useState<string>();
+    const [profilePicture, setProfilePicture] = useState<File>();
     const [CGUChecked, setCGUChecked] = useState<boolean>(false);
     const [errorMessage, setErrorMessage] = useState<{ type: string; message: string }>();
 
@@ -41,15 +41,7 @@ const SignUpInformationsPage: React.FC = () => {
         !CGUChecked;
 
     const openGallery = async () => {
-        const image = await Camera.getPhoto({
-            quality: 90,
-            resultType: CameraResultType.Uri,
-            source: CameraSource.Photos,
-        });
-
-        if (image.webPath) {
-            setProfilePicture(image.webPath);
-        }
+        setProfilePicture(await cameraAdapter.getPictureFromGallery());
     };
 
     const continueSignUp = async () => {
@@ -81,7 +73,37 @@ const SignUpInformationsPage: React.FC = () => {
             return setErrorMessage({ type: 'confirm', message: t('signup_informations_page.error_confirm_password') });
         }
 
-        updateProfileSignUp({ firstname, lastname, gender, age, email, password, profilePicture });
+        if (!profileSignUp.university || !profileSignUp.country || !profilePicture) {
+            await showToast({ message: t('errors.global'), duration: 1000 });
+            return history.push('/signup/');
+        }
+
+        const result = createUser.execute(
+            email,
+            password,
+            firstname,
+            lastname,
+            gender,
+            age,
+            profileSignUp.university,
+            profileSignUp.role,
+            profileSignUp.country.code,
+            profilePicture
+        );
+
+        if (result instanceof Error) {
+            return await showToast({ message: t(result.message), duration: 1000 });
+        }
+
+        updateProfileSignUp({
+            firstname,
+            lastname,
+            gender,
+            age,
+            email,
+            password,
+            profilePicture: profilePicture ? URL.createObjectURL(profilePicture) : undefined,
+        });
 
         return history.push('/signup/languages');
     };
@@ -97,7 +119,11 @@ const SignUpInformationsPage: React.FC = () => {
                 <h1 className={styles.title}>{t('signup_informations_page.title')}</h1>
 
                 <button className="secondary-button" onClick={() => openGallery()}>
-                    <img alt="plus" className={styles.image} src={profilePicture ?? 'assets/plus.svg'} />
+                    <img
+                        alt="plus"
+                        className={styles.image}
+                        src={profilePicture ? URL.createObjectURL(profilePicture) : 'assets/plus.svg'}
+                    />
                     <p>
                         {t(
                             profilePicture

@@ -22,14 +22,14 @@ import PairingUnavailableLanguagePage from '../pages/PairingUnavailableLanguageP
 import ResetPasswordPage from '../pages/ResetPasswordPage';
 import SignUpAvailabilitiesPage from '../pages/SignUpAvailabilitiesPage';
 import SignUpBiographyPage from '../pages/SignUpBiographyPage';
-import SignupFinalPage from '../pages/SignUpFinalPage';
 import SignUpFrequencyPage from '../pages/SignUpFrequencyPage';
-import SignUpGoals from '../pages/SignUpGoalsPage';
+import SignUpGoalsPage from '../pages/SignUpGoalsPage';
 import SignUpInformationsPage from '../pages/SignUpInformationsPage';
 import SignUpInterestsPage from '../pages/SignUpInterestsPage';
 import SignUpLanguagesPage from '../pages/SignUpLanguagesPage';
 import SignUpPage from '../pages/SignUpPage';
 import WelcomePage from '../pages/WelcomePage';
+import PrivateRoute from './PrivateRoute';
 
 const OfflineRouter: React.FC = () => (
     <IonRouterOutlet>
@@ -51,75 +51,37 @@ const OfflineRouter: React.FC = () => (
         <Route exact path="/login">
             <LoginPage />
         </Route>
-        <Route exact path="/signup/pairing/languages">
-            <PairingLaguagesPage />
-        </Route>
-        <Route exact path="/signup/pairing/options">
-            <PairingOptionsPage />
-        </Route>
-        <Route exact path="/signup/pairing/pedagogy">
-            <PairingPedagogyPage />
-        </Route>
-        <Route exact path="/signup/pairing/language/confirm">
-            <PairingConfirmLanguagePage />
-        </Route>
-        <Route exact path="/signup/pairing/end">
-            <PairingFinalPage />
-        </Route>
-        <Route exact path="/signup/pairing/level">
-            <PairingLevelPage />
-        </Route>
-        <Route exact path="/signup/pairing/other-languages">
-            <PairingOtherLanguagesPage />
-        </Route>
-        <Route exact path="/signup/pairing/preference">
-            <PairingPreferencePage />
-        </Route>
-        <Route exact path="/signup/pairing/language/quizz/end">
-            <PairingQuizzEndPage />
-        </Route>
-        <Route exact path="/signup/pairing/language/quizz/introduction">
-            <PairingQuizzIntroductionPage />
-        </Route>
-        <Route exact path="/signup/pairing/language/quizz">
-            <PairingQuizzPage />
-        </Route>
-        <Route exact path="/signup/pairing/level/select">
-            <PairingSelectCEFRPage />
-        </Route>
-        <Route exact path="/signup/pairing/unavailable-language">
-            <PairingUnavailableLanguagePage />
-        </Route>
         <Route exact path="/reset-password/:id">
             <ResetPasswordPage />
         </Route>
         <Route exact path="/signup">
             <SignUpPage />
         </Route>
-        <Route exact path="/signup/availabilities">
-            <SignUpAvailabilitiesPage />
-        </Route>
-        <Route exact path="/signup/biography">
-            <SignUpBiographyPage />
-        </Route>
-        <Route exact path="/signup/frequency">
-            <SignUpFrequencyPage />
-        </Route>
-        <Route exact path="/signup/end">
-            <SignupFinalPage />
-        </Route>
-        <Route exact path="/signup/goals">
-            <SignUpGoals />
-        </Route>
-        <Route exact path="/signup/interests">
-            <SignUpInterestsPage />
-        </Route>
-        <Route exact path="/signup/languages">
-            <SignUpLanguagesPage />
-        </Route>
-        <Route exact path="/signup/informations">
-            <SignUpInformationsPage />
-        </Route>
+        <PrivateRoute exact component={PairingLaguagesPage} path="/signup/pairing/languages" />
+        <PrivateRoute exact component={PairingOptionsPage} path="/signup/pairing/options" />
+        <PrivateRoute exact component={PairingPedagogyPage} path="/signup/pairing/pedagogy" />
+        <PrivateRoute exact component={PairingConfirmLanguagePage} path="/signup/pairing/language/confirm" />
+        <PrivateRoute exact component={PairingFinalPage} path="/signup/pairing/end" />
+        <PrivateRoute exact component={PairingLevelPage} path="/signup/pairing/level" />
+        <PrivateRoute exact component={PairingOtherLanguagesPage} path="/signup/pairing/other-languages" />
+        <PrivateRoute exact component={PairingPreferencePage} path="/signup/pairing/preference" />
+        <PrivateRoute exact component={PairingQuizzEndPage} path="/signup/pairing/language/quizz/end" />
+        <PrivateRoute
+            exact
+            component={PairingQuizzIntroductionPage}
+            path="/signup/pairing/language/quizz/introduction"
+        />
+        <PrivateRoute exact component={PairingQuizzPage} path="/signup/pairing/language/quizz" />
+        <PrivateRoute exact component={PairingSelectCEFRPage} path="/signup/pairing/level/select" />
+        <PrivateRoute exact component={PairingUnavailableLanguagePage} path="/signup/pairing/unavailable-language" />
+        <PrivateRoute exact component={SignUpAvailabilitiesPage} path="/signup/availabilities" />
+        <PrivateRoute exact component={SignUpBiographyPage} path="/signup/biography" />
+        <PrivateRoute exact component={SignUpFrequencyPage} path="/signup/frequency" />
+        <PrivateRoute exact component={SignUpGoalsPage} path="/signup/end" />
+        <PrivateRoute exact component={SignUpGoalsPage} path="/signup/goals" />
+        <PrivateRoute exact component={SignUpInterestsPage} path="/signup/interests" />
+        <PrivateRoute exact component={SignUpLanguagesPage} path="/signup/languages" />
+        <Route exact component={SignUpInformationsPage} path="/signup/informations" />
     </IonRouterOutlet>
 );
 
