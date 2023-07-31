@@ -19,10 +19,11 @@ class CreateUserUsecase implements CreateUserUsecaseInterface {
         age: number,
         university: University,
         role: Role,
-        countryCode: string
+        countryCode: string,
+        avatar: File
     ): Promise<void | Error> {
         try {
-            const httpRepsonse: HttpResponse<undefined> = await this.domainHttpAdapter.post(`/users/`, {
+            const body = {
                 email,
                 password,
                 firstname,
@@ -32,7 +33,14 @@ class CreateUserUsecase implements CreateUserUsecaseInterface {
                 university: university.id,
                 role,
                 countryCode,
-            });
+                avatar,
+            };
+            const httpRepsonse: HttpResponse<undefined> = await this.domainHttpAdapter.post(
+                `/users/`,
+                body,
+                {},
+                'multipart/form-data'
+            );
 
             if (!httpRepsonse.parsedBody) {
                 return new Error('errors.global');

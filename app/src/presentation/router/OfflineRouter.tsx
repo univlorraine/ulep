@@ -77,7 +77,7 @@ const OfflineRouter: React.FC = () => (
         <PrivateRoute exact component={SignUpGoalsPage} path="/signup/goals" />
         <PrivateRoute exact component={SignUpInterestsPage} path="/signup/interests" />
         <PrivateRoute exact component={SignUpLanguagesPage} path="/signup/languages" />
-        <PrivateRoute exact component={SignUpInformationsPage} path="/signup/informations" />
+        <Route exact component={SignUpInformationsPage} path="/signup/informations" />
     </IonRouterOutlet>
 );
 

@@ -10,7 +10,8 @@ interface CreateUserUsecaseInterface {
         age: number,
         university: University,
         role: Role,
-        countryCode: string
+        countryCode: string,
+        avatar: File
     ): Promise<void | Error>;
 }
 export default CreateUserUsecaseInterface;

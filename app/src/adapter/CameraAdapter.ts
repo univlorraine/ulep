@@ -10,9 +10,12 @@ class CameraAdapter implements CameraAdapterInterface {
         });
 
         if (image.webPath) {
-            return image.webPath;
+            const response = await fetch(image.webPath);
+            const blob = await response.blob();
+            const file = new File([blob], 'avatar', { type: blob.type });
+            return file;
         }
-        return image.path;
+        return undefined;
     };
 }
 

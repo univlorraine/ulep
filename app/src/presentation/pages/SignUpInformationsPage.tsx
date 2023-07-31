@@ -25,7 +25,7 @@ const SignUpInformationsPage: React.FC = () => {
     const [email, setEmail] = useState<string>('');
     const [password, setPassword] = useState<string>('');
     const [confirmPassword, setConfirmPassword] = useState<string>('');
-    const [profilePicture, setProfilePicture] = useState<string>();
+    const [profilePicture, setProfilePicture] = useState<File>();
     const [CGUChecked, setCGUChecked] = useState<boolean>(false);
     const [errorMessage, setErrorMessage] = useState<{ type: string; message: string }>();
 
@@ -73,7 +73,8 @@ const SignUpInformationsPage: React.FC = () => {
             return setErrorMessage({ type: 'confirm', message: t('signup_informations_page.error_confirm') });
         }
 
-        if (!profileSignUp.university || !profileSignUp.country) {
+        console.log(profilePicture, profileSignUp, !profileSignUp.university, !profilePicture, !profileSignUp.country);
+        if (!profileSignUp.university || !profileSignUp.country || !profilePicture) {
             await showToast({ message: t('errors.global'), duration: 1000 });
             return history.push('/signup/');
         }
@@ -87,14 +88,23 @@ const SignUpInformationsPage: React.FC = () => {
             age,
             profileSignUp.university,
             profileSignUp.role,
-            profileSignUp.country.code
+            profileSignUp.country.code,
+            profilePicture
         );
 
         if (result instanceof Error) {
             return await showToast({ message: t(result.message), duration: 1000 });
         }
 
-        updateProfileSignUp({ firstname, lastname, gender, age, email, password, profilePicture });
+        updateProfileSignUp({
+            firstname,
+            lastname,
+            gender,
+            age,
+            email,
+            password,
+            profilePicture: profilePicture ? URL.createObjectURL(profilePicture) : undefined,
+        });
 
         return history.push('/signup/languages');
     };
@@ -110,7 +120,11 @@ const SignUpInformationsPage: React.FC = () => {
                 <h1 className={styles.title}>{t('signup_informations_page.title')}</h1>
 
                 <button className="secondary-button" onClick={() => openGallery()}>
-                    <img alt="plus" className={styles.image} src={profilePicture ?? 'assets/plus.svg'} />
+                    <img
+                        alt="plus"
+                        className={styles.image}
+                        src={profilePicture ? URL.createObjectURL(profilePicture) : 'assets/plus.svg'}
+                    />
                     <p>
                         {t(
                             profilePicture
