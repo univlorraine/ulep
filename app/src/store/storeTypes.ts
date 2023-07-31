@@ -4,7 +4,6 @@ import Goal from '../domain/entities/Goal';
 import Language from '../domain/entities/Language';
 import ProfileSignUp, { AvailabilitesSignUp, BiographySignUp } from '../domain/entities/ProfileSignUp';
 import University from '../domain/entities/University';
-import cefr from '../domain/entities/cefr';
 
 export interface TokenStorePayload {
     accessToken: string;
@@ -28,7 +27,7 @@ export interface SignUpStorePayload {
     isForProgram?: boolean;
     lastname?: string;
     learningLanguage?: Language;
-    learningLanguageLevel?: cefr;
+    learningLanguageLevel?: CEFR;
     nativeLanguage?: Language;
     otherLanguages?: Language[];
     password?: string;

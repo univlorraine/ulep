@@ -1,4 +1,5 @@
 declare global {
+    type CEFR = 'A0' | 'A1' | 'A2' | 'B1' | 'B2' | 'C1' | 'C2';
     type Gender = 'MALE' | 'FEMALE' | 'OTHER';
     type MeetFrequency =
         | 'ONCE_A_WEEK'

@@ -3,7 +3,6 @@ import Country from './Country';
 import Goal from './Goal';
 import Language from './Language';
 import University from './University';
-import cefr from './cefr';
 
 export interface BiographySignUp {
     incredible: string;
@@ -53,7 +52,7 @@ class ProfileSignUp {
 
     private _learningLanguage?: Language;
 
-    private _learningLanguageLevel?: cefr;
+    private _learningLanguageLevel?: CEFR;
 
     private _lastname?: string;
 
@@ -157,11 +156,11 @@ class ProfileSignUp {
         this._learningLanguage = learningLanguage;
     }
 
-    get learningLanguageLevel(): cefr | undefined {
+    get learningLanguageLevel(): CEFR | undefined {
         return this._learningLanguageLevel;
     }
 
-    set learningLanguageLevel(learningLanguageLevel: cefr | undefined) {
+    set learningLanguageLevel(learningLanguageLevel: CEFR | undefined) {
         this._learningLanguageLevel = learningLanguageLevel;
     }
 
