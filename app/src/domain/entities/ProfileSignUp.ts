@@ -64,7 +64,7 @@ class ProfileSignUp {
 
     public profilePicture?: string;
 
-    public otherLaguages?: Language[];
+    public otherLanguages?: Language[];
 
     public role?: Role;
 

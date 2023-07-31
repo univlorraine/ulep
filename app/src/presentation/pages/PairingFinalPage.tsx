@@ -27,7 +27,7 @@ const PairingFinalPage: React.FC = () => {
             !profileSignUp.gender ||
             !profileSignUp.university ||
             !profileSignUp.nativeLanguage ||
-            !profileSignUp.otherLaguages ||
+            !profileSignUp.otherLanguages ||
             !profileSignUp.learningLanguage ||
             !profileSignUp.learningLanguageLevel ||
             !profileSignUp.pedagogy ||
@@ -44,7 +44,7 @@ const PairingFinalPage: React.FC = () => {
             profileSignUp.gender,
             profileSignUp.university.id,
             profileSignUp.nativeLanguage.code,
-            profileSignUp.otherLaguages.map((language) => language.code),
+            profileSignUp.otherLanguages.map((language) => language.code),
             profileSignUp.learningLanguage.code,
             profileSignUp.learningLanguageLevel,
             profileSignUp.pedagogy,

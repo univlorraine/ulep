@@ -42,7 +42,7 @@ const PairingUnavailableLanguagePage: React.FC = () => {
                     <LanguageSelectedContent
                         language={language}
                         mode={'unavailable'}
-                        profilePicture={profileSignUp.profilePicture}
+                        profilePicture={profileSignUp.profilePicture!}
                         onNextPressed={() => setIsLastStep(true)}
                     />
                 )}

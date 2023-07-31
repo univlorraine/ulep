@@ -52,7 +52,7 @@ const PairingConfirmLanguagePage: React.FC = () => {
                     <LanguageSelectedContent
                         language={profileSignUp.learningLanguage}
                         mode={'confirm'}
-                        profilePicture={profileSignUp.profilePicture}
+                        profilePicture={profileSignUp.profilePicture!}
                         onNextPressed={continueSignUp}
                     />
                 </div>
