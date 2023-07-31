@@ -5,6 +5,7 @@ import DomainHttpAdapter from '../../mocks/adapters/HttpAdapter';
 import LoginUsecase from '../../mocks/usecase/LoginUsecase';
 
 const university = new University('id', 'name', false, ['FR', 'CN'], 'timezone', ['Site A']);
+const file = new File(['Bits'], 'name');
 describe('createUserUsecase', () => {
     let adapter: DomainHttpAdapter;
     let usecase: CreateUserUsecase;
@@ -23,19 +24,36 @@ describe('createUserUsecase', () => {
         expect.assertions(2);
         jest.spyOn(adapter, 'post');
         adapter.mockJson({ parsedBody: {} });
-        await usecase.execute('email', 'password', 'firstname', 'lastname', 'MALE', 22, university, 'STUDENT', 'FR');
+        await usecase.execute(
+            'email',
+            'password',
+            'firstname',
+            'lastname',
+            'MALE',
+            22,
+            university,
+            'STUDENT',
+            'FR',
+            file
+        );
         expect(adapter.post).toHaveBeenCalledTimes(1);
-        expect(adapter.post).toHaveBeenCalledWith('/users/', {
-            email: 'email',
-            password: 'password',
-            firstname: 'firstname',
-            lastname: 'lastname',
-            gender: 'MALE',
-            age: 22,
-            university: university.id,
-            role: 'STUDENT',
-            countryCode: 'FR',
-        });
+        expect(adapter.post).toHaveBeenCalledWith(
+            '/users/',
+            {
+                email: 'email',
+                password: 'password',
+                firstname: 'firstname',
+                lastname: 'lastname',
+                gender: 'MALE',
+                age: 22,
+                university: university.id,
+                role: 'STUDENT',
+                countryCode: 'FR',
+                avatar: file,
+            },
+            {},
+            'multipart/form-data'
+        );
     });
 
     it('execute must return an expected response', async () => {
@@ -44,7 +62,18 @@ describe('createUserUsecase', () => {
         adapter.mockJson({ parsedBody: {} });
         const spyExecute = jest.spyOn(mockedLogin, 'execute');
 
-        await usecase.execute('email', 'password', 'firstname', 'lastname', 'MALE', 22, university, 'STUDENT', 'FR');
+        await usecase.execute(
+            'email',
+            'password',
+            'firstname',
+            'lastname',
+            'MALE',
+            22,
+            university,
+            'STUDENT',
+            'FR',
+            file
+        );
         expect(spyExecute).toHaveBeenCalledTimes(1);
         expect(spyExecute).toHaveBeenCalledWith('email', 'password');
     });
@@ -61,7 +90,8 @@ describe('createUserUsecase', () => {
             22,
             university,
             'STUDENT',
-            'FR'
+            'FR',
+            file
         );
         expect(result).toStrictEqual(new Error('errors.global'));
     });
@@ -78,7 +108,8 @@ describe('createUserUsecase', () => {
             22,
             university,
             'STUDENT',
-            'FR'
+            'FR',
+            file
         );
         expect(result).toStrictEqual(new Error('errors.global'));
     });
