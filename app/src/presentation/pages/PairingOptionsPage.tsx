@@ -64,14 +64,11 @@ const PairingOptionsPage: React.FC = () => {
                         </button>
                     </div>
                 </div>
-                <div>
+                <div className="extra-large-margin-bottom">
                     <button className="primary-button large-margin-bottom" onClick={onNextStepPressed}>
                         {t('pairing_options_page.validate_button')}
                     </button>
-                    <button
-                        className="secondary-button large-margin-bottom"
-                        onClick={() => history.push('/signup/pairing/end')}
-                    >
+                    <button className="secondary-button" onClick={() => history.push('/signup/pairing/end')}>
                         {t('pairing_options_page.pass_button')}
                     </button>
                 </div>

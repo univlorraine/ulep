@@ -66,7 +66,7 @@ const QuizzSelectionContent: React.FC<QuizzSelectionContentProps> = ({ onQuizzSe
                 >
                     {t('pairing_quizz_description_page.validate_button')}
                 </button>
-                <button className="secondary-button large-margin-bottom" onClick={() => onQuizzSelected('A0')}>
+                <button className="secondary-button extra-large-margin-bottom" onClick={() => onQuizzSelected('A0')}>
                     {t('pairing_quizz_description_page.pass_button')}
                 </button>
             </div>

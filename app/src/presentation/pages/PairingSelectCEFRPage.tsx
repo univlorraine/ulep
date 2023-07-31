@@ -56,7 +56,7 @@ const PairingSelectCEFRPage: React.FC = () => {
                         })}
                     </div>
                 </div>
-                <div>
+                <div className="extra-large-margin-bottom">
                     <button
                         className={`primary-button ${!selectedLevel ? 'disabled' : ''}`}
                         disabled={!selectedLevel}
@@ -65,7 +65,7 @@ const PairingSelectCEFRPage: React.FC = () => {
                         {t('pairing_select_level_page.validate_button')}
                     </button>
                     <button
-                        className="secondary-button large-margin-vertical"
+                        className="secondary-button large-margin-top"
                         onClick={() => history.push('/signup/pairing/language/quizz/introduction')}
                     >
                         {t('pairing_select_level_page.test_button')}

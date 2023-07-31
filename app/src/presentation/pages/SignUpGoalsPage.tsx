@@ -63,7 +63,7 @@ const SignUpGoalsPage: React.FC = () => {
                     <h1 className="title">{t('signup_goals_page.title')}</h1>
                     <span className="subtitle">{t('signup_goals_page.subtitle')}</span>
 
-                    <div className={goalsStyles['goals-container']}>
+                    <div className={`${goalsStyles['goals-container']} large-margin-top`}>
                         {goals.map((goal) => {
                             return (
                                 <div
@@ -85,7 +85,7 @@ const SignUpGoalsPage: React.FC = () => {
                         })}
                     </div>
                 </div>
-                <div className={`${goalsStyles['bottom-container']} large-margin-top large-margin-bottom`}>
+                <div className={`${goalsStyles['bottom-container']} large-margin-top`}>
                     <button
                         className={`tertiary-button`}
                         disabled={goals.length === 0}

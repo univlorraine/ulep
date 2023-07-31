@@ -9,6 +9,7 @@
 
 .bottom-container {
     margin-top: auto;
+    margin-bottom: 40px;
 }
 
 .image {
@@ -32,7 +33,7 @@
 .separator {
     background-color: black;
     height: 1px;
-    margin: 30px 0px;
+    margin-top: 10px;
     width: 100%;
 }
 

@@ -39,7 +39,10 @@ const PairingConfirmLanguagePage: React.FC = () => {
     };
 
     const continueSignUp = async () => {
-        history.push('/signup/pairing/level');
+        if (profileSignUp.learningLanguageLevel) {
+            return history.push('/signup/pairing/preference');
+        }
+        return history.push('/signup/pairing/level');
     };
 
     if (isConfirmed) {
@@ -83,7 +86,7 @@ const PairingConfirmLanguagePage: React.FC = () => {
                         <img alt="tandem" src="/assets/tandem.svg" />
                     </div>
                 </div>
-                <div className={`${confirmLanguagesStyles['bottom-container']} large-margin-top large-margin-bottom`}>
+                <div className={`large-margin-top extra-large-margin-bottom`}>
                     <button className={`primary-button `} onClick={() => setIsConfirmed(true)}>
                         {t('pairing_confirm_language_page.validate_button')}
                     </button>
