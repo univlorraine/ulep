@@ -22,7 +22,7 @@ class CreateUserUsecase implements CreateUserUsecaseInterface {
         avatar: File
     ): Promise<void | Error> {
         try {
-            //TODO: Change this when api will be ready
+            //TODO: Change this when api will be ready ( test is ignored too)
             /*
             const body = {
                 email,
