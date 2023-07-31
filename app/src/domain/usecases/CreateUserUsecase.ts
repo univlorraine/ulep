@@ -1,4 +1,3 @@
-import { HttpResponse } from '../../adapter/BaseHttpAdapter';
 import { HttpAdapterInterface } from '../../adapter/DomainHttpAdapter';
 import University from '../entities/University';
 import CreateUserUsecaseInterface from '../interfaces/CreateUserUsecase.interface';
@@ -23,6 +22,8 @@ class CreateUserUsecase implements CreateUserUsecaseInterface {
         avatar: File
     ): Promise<void | Error> {
         try {
+            //TODO: Change this when api will be ready
+            /*
             const body = {
                 email,
                 password,
@@ -33,7 +34,7 @@ class CreateUserUsecase implements CreateUserUsecaseInterface {
                 university: university.id,
                 role,
                 countryCode,
-                avatar,
+                avatar
             };
             const httpRepsonse: HttpResponse<undefined> = await this.domainHttpAdapter.post(
                 `/users/`,
@@ -46,7 +47,8 @@ class CreateUserUsecase implements CreateUserUsecaseInterface {
                 return new Error('errors.global');
             }
 
-            return this.login.execute(email, password);
+            return this.login.execute(email, password);*/
+            return;
         } catch (error: any) {
             return new Error('errors.global');
         }

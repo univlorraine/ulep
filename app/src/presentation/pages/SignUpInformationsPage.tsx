@@ -73,7 +73,6 @@ const SignUpInformationsPage: React.FC = () => {
             return setErrorMessage({ type: 'confirm', message: t('signup_informations_page.error_confirm') });
         }
 
-        console.log(profilePicture, profileSignUp, !profileSignUp.university, !profilePicture, !profileSignUp.country);
         if (!profileSignUp.university || !profileSignUp.country || !profilePicture) {
             await showToast({ message: t('errors.global'), duration: 1000 });
             return history.push('/signup/');
