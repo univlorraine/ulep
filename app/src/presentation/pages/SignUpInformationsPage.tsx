@@ -70,7 +70,7 @@ const SignUpInformationsPage: React.FC = () => {
         }
 
         if (password !== confirmPassword) {
-            return setErrorMessage({ type: 'confirm', message: t('signup_informations_page.error_confirm') });
+            return setErrorMessage({ type: 'confirm', message: t('signup_informations_page.error_confirm_password') });
         }
 
         if (!profileSignUp.university || !profileSignUp.country || !profilePicture) {
@@ -151,7 +151,7 @@ const SignUpInformationsPage: React.FC = () => {
                     value={lastname}
                 />
 
-                <div className="margin-bottom ">
+                <div className="margin-bottom">
                     <h2 className={`${styles.subtitle} no-margin-top`}>{t('global.gender')}</h2>
 
                     <RadioButton

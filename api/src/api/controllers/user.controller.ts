@@ -14,12 +14,9 @@ import {
 } from '@nestjs/common';
 import * as Swagger from '@nestjs/swagger';
 import { CreateUserUsecase } from '../../core/usecases/users/create-user.usecase';
-import { ResetPasswordUsecase } from '../../core/usecases/users/reset-password.usecase';
-import { UserRole } from '../../core/models/user';
 import { GetUsersUsecase } from '../../core/usecases/users/get-users.usecase';
 import { UserResponse } from '../dtos/users/user.response';
 import { CreateUserRequest } from '../dtos/users/create-user.request';
-import { ResetPasswordRequest } from '../dtos/users/reset-password.request';
 import { PaginationDto } from '../dtos/pagination.dto';
 import { CollectionResponse } from '../decorators/collection.decorator';
 import { Collection } from '../../shared/types/collection';
@@ -34,7 +31,6 @@ export class UserController {
     private readonly createUserUsecase: CreateUserUsecase,
     private readonly getUsersUsecase: GetUsersUsecase,
     private readonly getUserUsecase: GetUserUsecase,
-    private readonly resetPasswordUsecase: ResetPasswordUsecase,
   ) {}
 
   @Get()
@@ -85,16 +81,5 @@ export class UserController {
     });
 
     return UserResponse.fromDomain(user);
-  }
-
-  @Put(':id/reset-password')
-  @Swagger.ApiOperation({ summary: 'Update a user password.' })
-  async resetPassword(
-    @Param('id', ParseUUIDPipe) id: string,
-    @Body() { password }: ResetPasswordRequest,
-  ): Promise<void> {
-    await this.resetPasswordUsecase.execute({ id, password });
-
-    return;
   }
 }

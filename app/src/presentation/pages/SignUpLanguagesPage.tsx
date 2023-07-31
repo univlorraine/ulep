@@ -57,23 +57,27 @@ const SignUpLanguagesPage: React.FC = () => {
             <div className={styles.body}>
                 <h1 className={styles.title}>{t('signup_languages_page.title')}</h1>
 
-                <Dropdown<Language>
-                    onChange={setMyLanguage}
-                    options={languages}
-                    placeholder={t('signup_languages_page.placeholder_primary_language')}
-                    title={t('signup_languages_page.language')}
-                />
+                <div className="large-margin-bottom">
+                    <Dropdown<Language>
+                        onChange={setMyLanguage}
+                        options={languages}
+                        placeholder={t('signup_languages_page.placeholder_primary_language')}
+                        title={t('signup_languages_page.language')}
+                    />
+                </div>
 
-                <Dropdown<Language>
-                    onChange={(item) => pushOtherLanguage(item, 0)}
-                    options={languages.filter(
-                        (language) =>
-                            language.title !== myLanguage?.name &&
-                            (!otherLanguages[1] || otherLanguages[1].name !== language.title)
-                    )}
-                    placeholder={t('signup_languages_page.placeholder_first_optional_language')}
-                    title={t('signup_languages_page.other_languages')}
-                />
+                <div className="margin-bottom">
+                    <Dropdown<Language>
+                        onChange={(item) => pushOtherLanguage(item, 0)}
+                        options={languages.filter(
+                            (language) =>
+                                language.title !== myLanguage?.name &&
+                                (!otherLanguages[1] || otherLanguages[1].name !== language.title)
+                        )}
+                        placeholder={t('signup_languages_page.placeholder_first_optional_language')}
+                        title={t('signup_languages_page.other_languages')}
+                    />
+                </div>
 
                 <Dropdown<Language>
                     onChange={(item) => pushOtherLanguage(item, 1)}

@@ -1,4 +1,9 @@
 // TODO: add attributes mappers in keycloak addministration
+export type KeycloakEmailAction =
+  | 'VERIFY_EMAIL'
+  | 'UPDATE_PASSWORD'
+  | 'UPDATE_PROFILE';
+
 export interface KeycloakUserInfoResponse {
   sub: string;
   email: string;

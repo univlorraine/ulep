@@ -97,7 +97,7 @@ const SignUpBiographyPage: React.FC = () => {
                         />
                     </div>
                 </div>
-                <div className={`${biographyStyles['bottom-container']} large-margin-top large-margin-bottom`}>
+                <div className={`${biographyStyles['bottom-container']} large-margin-top extra-large-margin-bottom`}>
                     <button className={`primary-button`} onClick={continueSignUp}>
                         {t('signup_biography_page.validate_button')}
                     </button>

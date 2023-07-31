@@ -38,7 +38,7 @@ const SignUpFrequencyPage: React.FC = () => {
             <div className={styles.body}>
                 <div className={frequencyStyle.container}>
                     <h1 className="title">{t('signup_frequency_page.title')}</h1>
-                    <span className="subtitle">{t('signup_frequency_page.subtitle')}</span>
+                    <span className="subtitle large-margin-bottom">{t('signup_frequency_page.subtitle')}</span>
 
                     {frequencies.map((freq) => {
                         return (
@@ -55,7 +55,7 @@ const SignUpFrequencyPage: React.FC = () => {
                         );
                     })}
                 </div>
-                <div className={`${styles['bottom-container']} large-margin-bottom`}>
+                <div className="extra-large-margin-bottom">
                     <button
                         className={`primary-button ${frequency === undefined ? 'disabled' : ''}`}
                         disabled={frequency === undefined}

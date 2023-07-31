@@ -29,7 +29,7 @@ const PairingQuizzIntroductionPage: React.FC = ({}) => {
                 </div>
                 <div>
                     <button
-                        className="primary-button large-margin-bottom"
+                        className="primary-button extra-large-margin-bottom"
                         onClick={() => history.push('/signup/pairing/language/quizz')}
                     >
                         {t('pairing_quizz_introduction_page.validate_button')}

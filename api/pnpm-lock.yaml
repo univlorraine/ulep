@@ -44,6 +44,9 @@ dependencies:
   openid-client:
     specifier: ^5.4.2
     version: 5.4.2
+  qs:
+    specifier: ^6.11.2
+    version: 6.11.2
   reflect-metadata:
     specifier: ^0.1.13
     version: 0.1.13
@@ -4519,7 +4522,6 @@ packages:
     engines: {node: '>=0.6'}
     dependencies:
       side-channel: 1.0.4
-    dev: true
 
   /query-string@7.1.3:
     resolution: {integrity: sha512-hh2WYhq4fi8+b+/2Kg9CEge4fDPvHS534aOOvOZeQ3+Vf2mCFsaFBYj0i+iXcAq6I9Vzp5fjMFBlONvayDC1qg==}
