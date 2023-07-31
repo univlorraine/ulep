@@ -6,7 +6,7 @@ import { useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import { ConfigContext } from './context/ConfigurationContext';
 import getConfigContextValue from './context/getConfigurationContextValue';
-import OfflineRouter from './presentation/router/OfflineRouter';
+import Router from './presentation/router/Router';
 import { useStoreActions, useStoreState } from './store/storeTypes';
 
 /* Core CSS required for Ionic components to work properly */
@@ -70,7 +70,7 @@ const AppContext = () => {
             value={getConfigContextValue(accessToken, refreshToken, setProfile, setTokens, deleteTokens, configuration)}
         >
             <IonReactRouter>
-                <OfflineRouter />
+                <Router />
             </IonReactRouter>
         </ConfigContext.Provider>
     );

@@ -4,9 +4,10 @@ import { Route } from 'react-router-dom';
 import ConnectPage from '../pages/ConnectPage';
 import ForgotPasswordPage from '../pages/ForgotPasswordPage';
 import ForgotPasswordSentPage from '../pages/ForgotPasswordSentPage';
-import Home from '../pages/HomePage';
+import HomePage from '../pages/HomePage';
 import LoginPage from '../pages/LoginPage';
 import PairingConfirmLanguagePage from '../pages/PairingConfirmLanguagePage';
+import PairingFinalPage from '../pages/PairingFinalPage';
 import PairingLaguagesPage from '../pages/PairingLaguagesPage';
 import PairingLevelPage from '../pages/PairingLevelPage';
 import PairingOptionsPage from '../pages/PairingOptionsPage';
@@ -28,12 +29,15 @@ import SignUpInformationsPage from '../pages/SignUpInformationsPage';
 import SignUpInterestsPage from '../pages/SignUpInterestsPage';
 import SignUpLanguagesPage from '../pages/SignUpLanguagesPage';
 import SignUpPage from '../pages/SignUpPage';
-import PairingFinalPage from '../pages/PairingFinalPage';
+import WelcomePage from '../pages/WelcomePage';
 
 const OfflineRouter: React.FC = () => (
     <IonRouterOutlet>
         <Route exact path="/">
-            <Home />
+            <WelcomePage />
+        </Route>
+        <Route exact path="/home">
+            <HomePage />
         </Route>
         <Route exact path="/connect">
             <ConnectPage />
