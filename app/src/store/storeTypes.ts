@@ -2,6 +2,7 @@ import { Action, createTypedHooks } from 'easy-peasy';
 import Country from '../domain/entities/Country';
 import Goal from '../domain/entities/Goal';
 import Language from '../domain/entities/Language';
+import Profile from '../domain/entities/Profile';
 import ProfileSignUp, { AvailabilitesSignUp, BiographySignUp } from '../domain/entities/ProfileSignUp';
 import University from '../domain/entities/University';
 
@@ -43,11 +44,16 @@ export interface SignUpStorePayload {
     university?: University;
 }
 
+interface ProfileStorePayload {
+    profile: Profile;
+}
 interface StoreInterface {
     accessToken: string;
     refreshToken: string;
+    setProfile: Action<StoreInterface, ProfileStorePayload>;
     setTokens: Action<StoreInterface, TokenStorePayload>;
     removeTokens: Action<StoreInterface>;
+    profile: Profile | undefined;
     profileSignUp: ProfileSignUp;
     updateProfileSignUp: Action<StoreInterface, SignUpStorePayload>;
 }

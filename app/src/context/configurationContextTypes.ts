@@ -1,5 +1,6 @@
 import Configuration from '../domain/entities/Confirguration';
 import AskForLanguageUsecaseInterface from '../domain/interfaces/AskForLanguageUsecase.interface';
+import CreateProfileUsecaseInterface from '../domain/interfaces/CreateProfileUsecase.interface';
 import GetAllCategoriesInterestUsecaseInterface from '../domain/interfaces/GetAllCategoriesInterestsUsecase.interface';
 import GetAllCountriesUsecaseInterface from '../domain/interfaces/GetAllCountriesUsecase.interface';
 import GetAllGoalsUsecaseInterface from '../domain/interfaces/GetAllGoalsUsecase.interface';
@@ -12,6 +13,7 @@ import ResetPasswordUsecaseInterface from '../domain/interfaces/ResetPasswordUse
 export interface ConfigContextValueType {
     askForLanguage: AskForLanguageUsecaseInterface;
     configuration: Configuration;
+    createProfile: CreateProfileUsecaseInterface;
     getAllCategoriesInterests: GetAllCategoriesInterestUsecaseInterface;
     getAllCountries: GetAllCountriesUsecaseInterface;
     getAllGoals: GetAllGoalsUsecaseInterface;

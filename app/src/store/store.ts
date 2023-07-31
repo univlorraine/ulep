@@ -6,6 +6,9 @@ const Store = createStore<TokenStoreTypes>(
     persist({
         accessToken: '',
         refreshToken: '',
+        setProfile: action((state, payload) => {
+            state.profile = payload.profile;
+        }),
         setTokens: action((state, payload) => {
             state.accessToken = payload.accessToken ? payload.accessToken : state.accessToken;
             state.refreshToken = payload.refreshToken ? payload.refreshToken : state.refreshToken;
@@ -14,6 +17,7 @@ const Store = createStore<TokenStoreTypes>(
             state.accessToken = '';
             state.refreshToken = '';
         }),
+        profile: undefined,
         profileSignUp: new ProfileSignUp(),
         updateProfileSignUp: action((state, payload) => {
             const profile = state.profileSignUp;

@@ -39,6 +39,7 @@ const AppContext = () => {
     const rehydrated = useStoreRehydrated();
     const accessToken = useStoreState((state) => state.accessToken);
     const refreshToken = useStoreState((state) => state.refreshToken);
+    const setProfile = useStoreActions((state) => state.setProfile);
     const setTokens = useStoreActions((state) => state.setTokens);
     const deleteTokens = useStoreActions((state) => state.removeTokens);
     const configuration = new Configuration(
@@ -66,7 +67,7 @@ const AppContext = () => {
 
     return (
         <ConfigContext.Provider
-            value={getConfigContextValue(accessToken, refreshToken, setTokens, deleteTokens, configuration)}
+            value={getConfigContextValue(accessToken, refreshToken, setProfile, setTokens, deleteTokens, configuration)}
         >
             <IonReactRouter>
                 <OfflineRouter />

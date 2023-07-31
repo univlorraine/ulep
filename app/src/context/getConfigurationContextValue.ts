@@ -2,6 +2,7 @@ import DomainHttpAdapter from '../adapter/DomainHttpAdapter';
 import KeycloakHttpAdapter from '../adapter/KeycloakHttpAdapter';
 import Configuration from '../domain/entities/Confirguration';
 import AskForLanguageUsecase from '../domain/usecases/AskForLanguageUsecase';
+import CreateProfileUsecase from '../domain/usecases/CreateProfileUsecase';
 import GetAllCategoriesInterestssUsecase from '../domain/usecases/GetAllCategoriesInterestsUsecase';
 import GetAllCountriesUsecase from '../domain/usecases/GetAllCountriesUsecase';
 import GetAllGoalsUsecase from '../domain/usecases/GetAllGoalsUsecase';
@@ -15,6 +16,7 @@ import { ConfigContextValueType } from './configurationContextTypes';
 const getConfigContextValue = (
     accessToken: string,
     refreshToken: string,
+    setProfile: Function,
     setTokens: Function,
     removeTokens: Function,
     configuration: Configuration
@@ -23,6 +25,7 @@ const getConfigContextValue = (
     const keycloakHttpAdapter = new KeycloakHttpAdapter(import.meta.env.VITE_KEYCLOAK_URL ?? '', accessToken);
 
     const askForLanguage = new AskForLanguageUsecase(domainHttpAdapter);
+    const createProfile = new CreateProfileUsecase(domainHttpAdapter, setProfile);
     const getAllCategoriesInterests = new GetAllCategoriesInterestssUsecase(domainHttpAdapter);
     const getAllCountries = new GetAllCountriesUsecase(domainHttpAdapter);
     const getAllGoals = new GetAllGoalsUsecase(domainHttpAdapter);
@@ -34,6 +37,7 @@ const getConfigContextValue = (
 
     return {
         askForLanguage,
+        createProfile,
         configuration,
         getAllCategoriesInterests,
         getAllCountries,
