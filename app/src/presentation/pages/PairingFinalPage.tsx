@@ -24,13 +24,18 @@ const PairingFinalPage: React.FC = () => {
             !profileSignUp.role ||
             !profileSignUp.gender ||
             !profileSignUp.university ||
+            !profileSignUp.nativeLanguage ||
+            !profileSignUp.otherLaguages ||
             !profileSignUp.learningLanguage ||
             !profileSignUp.learningLanguageLevel ||
             !profileSignUp.pedagogy ||
             !profileSignUp.goals ||
+            !profileSignUp.frequency ||
+            !profileSignUp.interests ||
             !profileSignUp.biography
         ) {
-            return history.push('/signup/');
+            console.log(profileSignUp);
+            return await showToast({ message: t('errors.global'), duration: 1000 });
         }
         const result = await createProfile.execute(
             profileSignUp.age,
@@ -38,14 +43,14 @@ const PairingFinalPage: React.FC = () => {
             profileSignUp.gender,
             profileSignUp.university.id,
             profileSignUp.nativeLanguage.code,
-            profileSignUp.otherLanguages.map((language) => language.code),
+            profileSignUp.otherLaguages.map((language) => language.code),
             profileSignUp.learningLanguage.code,
             profileSignUp.learningLanguageLevel,
             profileSignUp.pedagogy,
             profileSignUp.goals.map((goal) => goal.id),
             profileSignUp.frequency,
             profileSignUp.interests,
-            profileSignUp.sameGender,
+            !!profileSignUp.sameGender,
             [
                 profileSignUp.biography.incredible,
                 profileSignUp.biography.place,
@@ -57,6 +62,8 @@ const PairingFinalPage: React.FC = () => {
         if (result instanceof Error) {
             return await showToast({ message: t(result.message), duration: 1000 });
         }
+
+        return history.push('/home');
     };
 
     return (
