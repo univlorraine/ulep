@@ -3,7 +3,6 @@ import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Redirect, useHistory } from 'react-router';
 import { useConfig } from '../../context/ConfigurationContext';
-import Language from '../../domain/entities/Language';
 import Question from '../../domain/entities/Question';
 import { useStoreActions, useStoreState } from '../../store/storeTypes';
 import SuccessLayout from '../components/SuccessLayout';
@@ -28,9 +27,6 @@ const PairingQuizzPage = () => {
     if (!profileSignUp.learningLanguage) {
         return <Redirect to="/signup/pairing/languages" />;
     }
-
-    // @ts-ignore
-    const learningLanguage = new Language(profileSignUp.learningLanguage._code, profileSignUp.learningLanguage._name);
 
     const askQuizz = async (level: CEFR | undefined) => {
         if (!level) {
@@ -81,7 +77,7 @@ const PairingQuizzPage = () => {
             >
                 <div className={styles.body}>
                     <QuizzValidatedContent
-                        language={learningLanguage}
+                        language={profileSignUp.learningLanguage}
                         onNextQuizz={() => askQuizz(getNextLevel(currentQuizz))}
                         quizzLevel={currentQuizz}
                     />
