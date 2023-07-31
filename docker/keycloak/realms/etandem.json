@@ -8,6 +8,13 @@
   "requiredCredentials": [
     "password"
   ],
+  "smtpServer": {
+    "starttls": "false",
+    "port": "1025",
+    "host": "mailer",
+    "from": "contact@ulep.io",
+    "ssl": "false"
+  },
   "clients": [
     {
       "clientId": "api",

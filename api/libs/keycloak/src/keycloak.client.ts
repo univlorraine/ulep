@@ -6,6 +6,7 @@ import {
   Logger,
 } from '@nestjs/common';
 import * as jwt from 'jsonwebtoken';
+import * as qs from 'querystring';
 import {
   KEYCLOAK_CONFIGURATION,
   KeycloakConfiguration,
@@ -18,6 +19,7 @@ import RoleRepresentation, {
   CreateUserProps,
   GetUsersProps,
   KeycloakCertsResponse,
+  KeycloakEmailAction,
   KeycloakUserInfoResponse,
   UserRepresentation,
 } from './keycloak.models';
@@ -126,6 +128,47 @@ export class KeycloakClient {
     const { access_token, refresh_token } = await response.json();
 
     return { accessToken: access_token, refreshToken: refresh_token };
+  }
+
+  async executeActionEmail(
+    actions: KeycloakEmailAction[],
+    user: string,
+    redirectUri?: string,
+  ): Promise<void> {
+    let url = `${this.configuration.baseUrl}/admin/realms/${this.configuration.realm}/users/${user}/execute-actions-email`;
+
+    if (redirectUri) {
+      const query = {
+        redirect_uri: redirectUri,
+        client_id: this.configuration.clientId,
+      };
+
+      url = `${url}?${qs.stringify(query)}`;
+    }
+
+    const response = await fetch(url, {
+      method: 'PUT',
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${await this.getAccessToken()}`,
+      },
+      body: JSON.stringify(actions),
+    });
+
+    if (response.status === 404) {
+      // Do not throw an error if the user is not found
+      return;
+    }
+
+    if (response.status === 400) {
+      throw new BadRequestException({ message: 'Invalid redirect uri.' });
+    }
+
+    if (!response.ok) {
+      throw new HttpException({ message: 'Service unvailable' }, 500);
+    }
+
+    return;
   }
 
   /*
