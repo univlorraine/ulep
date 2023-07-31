@@ -17,7 +17,17 @@ class BaseHttpAdapter {
     }
 
     post(path: string, body: Body, args: RequestInit = {}, contentType = 'application/json'): Promise<Response> {
-        return this.http(path, { ...args, method: 'post', body: JSON.stringify(body) }, contentType);
+        let encodedBody: any;
+
+        if (contentType === 'multipart/form-data') {
+            encodedBody = new FormData();
+            Object.keys(body).forEach((key) => {
+                encodedBody.append(key, body[key]);
+            });
+        } else {
+            encodedBody = JSON.stringify(body);
+        }
+        return this.http(path, { ...args, method: 'post', body: encodedBody }, contentType);
     }
 
     put(path: string, body: Body, args: RequestInit = {}): Promise<Response> {

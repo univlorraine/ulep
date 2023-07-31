@@ -2,7 +2,6 @@ import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Redirect, useHistory } from 'react-router';
 import { useConfig } from '../../context/ConfigurationContext';
-import { UniversityJsonInterface, UniversityJsonToDomain } from '../../domain/entities/University';
 import { useStoreActions, useStoreState } from '../../store/storeTypes';
 import ColoredCard from '../components/ColoredCard';
 import WebLayoutCentered from '../components/WebLayoutCentered';
@@ -29,15 +28,13 @@ const PairingPedagogyPage: React.FC = () => {
         return <Redirect to={'/signup'} />;
     }
 
-    const university = UniversityJsonToDomain(profileSignUp.university as unknown as UniversityJsonInterface); // Easy peasy remove getter and setter in stored object
-
     const pedagogiesData: PedagogieData[] = [
         {
             color: '#8BC4C4',
             title: t('pairing_pedagogy_page.tandem_title'),
             button: t('pairing_pedagogy_page.tandem_button'),
             value: 'TANDEM',
-            display: university.isCentral,
+            display: profileSignUp.university.isCentral,
         },
         {
             color: '#7997C6',
@@ -51,17 +48,17 @@ const PairingPedagogyPage: React.FC = () => {
             title: t('pairing_pedagogy_page.both_title'),
             button: t('pairing_pedagogy_page.both_button'),
             value: 'BOTH',
-            display: university.isCentral,
+            display: profileSignUp.university.isCentral,
         },
     ];
 
     const onPedagogyPressed = (pedagogy: Pedagogy) => {
-        if (pedagogy !== 'ETANDEM' && university && university.sites.length > 1) {
+        if (pedagogy !== 'ETANDEM' && profileSignUp.university && profileSignUp.university.sites.length > 1) {
             return setPedagogySelected(pedagogy);
         }
 
-        if (pedagogy !== 'ETANDEM' && university && university.sites.length === 1) {
-            updateProfileSignUp({ pedagogy, site: university.sites[0] });
+        if (pedagogy !== 'ETANDEM' && profileSignUp.university && profileSignUp.university.sites.length === 1) {
+            updateProfileSignUp({ pedagogy, site: profileSignUp.university.sites[0] });
             return history.push('/signup/pairing/language/confirm');
         }
 
@@ -106,7 +103,7 @@ const PairingPedagogyPage: React.FC = () => {
                     isVisible={!!pedagogySelected}
                     onClose={() => setPedagogySelected(undefined)}
                     onValidate={onSiteValidated}
-                    sites={university.sites}
+                    sites={profileSignUp.university.sites}
                 />
             </div>
         </WebLayoutCentered>

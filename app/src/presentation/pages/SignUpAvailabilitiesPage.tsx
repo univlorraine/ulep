@@ -4,7 +4,6 @@ import { Redirect, useHistory } from 'react-router';
 import { useConfig } from '../../context/ConfigurationContext';
 import { getInitialAviability, occurence } from '../../domain/entities/Availability';
 import { AvailabilitesSignUp } from '../../domain/entities/ProfileSignUp';
-import { UniversityJsonInterface, UniversityJsonToDomain } from '../../domain/entities/University';
 import { useStoreActions, useStoreState } from '../../store/storeTypes';
 import Dropdown from '../components/DropDown';
 import WebLayoutCentered from '../components/WebLayoutCentered';
@@ -36,8 +35,6 @@ const SignUpAvailabilitiesPage: React.FC = () => {
     if (!profileSignUp.university) {
         return <Redirect to={'/signup'} />;
     }
-
-    const university = UniversityJsonToDomain(profileSignUp.university as unknown as UniversityJsonInterface); // Easy peasy remove getter and setter in stored object
 
     const continueSignUp = async () => {
         updateProfileSignUp({ availabilities, timezone });
@@ -83,7 +80,7 @@ const SignUpAvailabilitiesPage: React.FC = () => {
                             title: timzeone,
                             value: timzeone,
                         }))}
-                        placeholder={university.timezone}
+                        placeholder={profileSignUp.university.timezone}
                         title={t('signup_availabilities_page.timezone')}
                     />
 

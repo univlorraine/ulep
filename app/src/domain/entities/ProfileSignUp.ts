@@ -97,7 +97,11 @@ class ProfileSignUp {
         this._biography = biography;
     }
 
-    set country(country: Country) {
+    get country(): Country | undefined {
+        return this._country;
+    }
+
+    set country(country: Country | undefined) {
         this._country = country;
     }
 

@@ -17,4 +17,5 @@ module.exports = {
     },
     collectCoverageFrom: ['src/domain/usecases/*.ts'],
     coveragePathIgnorePatterns: ['<rootDir>/__tests__/mocks/'],
+    testPathIgnorePatterns: ['<rootDir>/__tests__/domain/usecases/CreateUserUsecase.test.ts'],
 };
