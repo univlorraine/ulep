@@ -5,6 +5,7 @@ import { Redirect, useHistory } from 'react-router';
 import { useConfig } from '../../context/ConfigurationContext';
 import Language from '../../domain/entities/Language';
 import Question from '../../domain/entities/Question';
+import cefr from '../../domain/entities/cefr';
 import { useStoreActions, useStoreState } from '../../store/storeTypes';
 import SuccessLayout from '../components/SuccessLayout';
 import WebLayoutCentered from '../components/WebLayoutCentered';
@@ -13,9 +14,8 @@ import QuizzSelectionContent from '../components/contents/QuizzSelectionContent'
 import QuizzValidatedContent from '../components/contents/QuizzValidatedContent';
 import { getNextLevel, getPreviousLevel } from '../utils';
 import styles from './css/SignUp.module.css';
-import cefr from '../../domain/entities/cefr';
 
-const PairingQuizzPage = () => {
+const PairingQuizzPage: React.FC = () => {
     const { configuration, getQuizzByLevel } = useConfig();
     const history = useHistory();
     const [showToast] = useIonToast();

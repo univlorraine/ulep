@@ -5,7 +5,7 @@ import WebLayoutCentered from '../components/WebLayoutCentered';
 import quizzIntroductionStyle from './css/PairingQuizzIntroduction.module.css';
 import styles from './css/SignUp.module.css';
 
-const PairingQuizzIntroductionPage = ({}) => {
+const PairingQuizzIntroductionPage: React.FC = ({}) => {
     const { configuration } = useConfig();
     const history = useHistory();
     const { t } = useTranslation();
