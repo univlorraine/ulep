@@ -18,6 +18,8 @@ const PairingFinalPage: React.FC = () => {
     if (!profileSignUp.learningLanguage || !profileSignUp.university) {
         return <Redirect to="/signup/pairing/languages" />;
     }
+
+    //TODO: Update this when api will be ready
     const nextStep = async () => {
         if (
             !profileSignUp.age ||
@@ -34,7 +36,6 @@ const PairingFinalPage: React.FC = () => {
             !profileSignUp.interests ||
             !profileSignUp.biography
         ) {
-            console.log(profileSignUp);
             return await showToast({ message: t('errors.global'), duration: 1000 });
         }
         const result = await createProfile.execute(
