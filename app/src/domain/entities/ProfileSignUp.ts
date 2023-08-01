@@ -3,7 +3,6 @@ import Country from './Country';
 import Goal from './Goal';
 import Language from './Language';
 import University from './University';
-import cefr from './cefr';
 
 export interface BiographySignUp {
     incredible: string;
@@ -23,215 +22,67 @@ export interface AvailabilitesSignUp {
 }
 
 class ProfileSignUp {
-    private _age?: number;
+    public age?: number;
 
-    private _availabilities?: AvailabilitesSignUp;
+    public availabilities?: AvailabilitesSignUp;
 
-    private _biography?: BiographySignUp;
+    public biography?: BiographySignUp;
 
-    private _country?: Country;
+    public country?: Country;
 
-    private _department?: string;
+    public department?: string;
 
-    private _diplome?: string;
+    public diplome?: string;
 
-    private _email?: string;
+    public email?: string;
 
-    private _firstname?: string;
+    public firstname?: string;
 
-    private _frequency?: MeetFrequency;
+    public frequency?: MeetFrequency;
 
-    private _gender?: Gender;
+    public gender?: Gender;
 
-    private _goals?: Goal[];
+    public goals?: Goal[];
 
-    private _interests?: string[];
+    public interests?: string[];
 
-    private _isForCertificate?: boolean;
+    public isForCertificate?: boolean;
 
-    private _isForProgram?: boolean;
+    public isForProgram?: boolean;
 
-    private _learningLanguage?: Language;
+    public learningLanguage?: Language;
 
-    private _learningLanguageLevel?: cefr;
+    public learningLanguageLevel?: CEFR;
 
-    private _lastname?: string;
+    public lastname?: string;
 
-    private _nativeLanguage?: Language;
+    public nativeLanguage?: Language;
 
-    private _password?: string;
+    public password?: string;
 
-    private _pedagogy?: Pedagogy;
+    public pedagogy?: Pedagogy;
 
-    private _profilePicture?: string;
+    public profilePicture?: string;
 
-    private otherLaguages?: Language[];
+    public otherLanguages?: Language[];
 
-    private _role?: Role;
+    public role?: Role;
 
-    private _sameAge?: boolean;
+    public sameAge?: boolean;
 
-    private _sameGender?: boolean;
+    public sameGender?: boolean;
 
-    private _sameTandem?: boolean;
+    public sameTandem?: boolean;
 
-    private _site?: string;
+    public site?: string;
 
-    private _staffFunction?: string;
+    public staffFunction?: string;
 
-    private _timezone?: string;
+    public timezone?: string;
 
-    private _university?: University | undefined;
+    public university?: University | undefined;
 
     constructor() {}
-
-    set age(age: number) {
-        this._age = age;
-    }
-
-    set availabilities(availabilities: AvailabilitesSignUp) {
-        this._availabilities = availabilities;
-    }
-
-    set biography(biography: BiographySignUp) {
-        this._biography = biography;
-    }
-
-    get country(): Country | undefined {
-        return this._country;
-    }
-
-    set country(country: Country | undefined) {
-        this._country = country;
-    }
-
-    set department(department: string) {
-        this._department = department;
-    }
-
-    set diplome(diplome: string) {
-        this._diplome = diplome;
-    }
-
-    set email(email: string) {
-        this._email = email;
-    }
-
-    get firstname(): string {
-        return this._firstname ?? '';
-    }
-
-    set firstname(firstname: string) {
-        this._firstname = firstname;
-    }
-
-    set frequency(frequency: MeetFrequency) {
-        this._frequency = frequency;
-    }
-
-    set gender(gender: Gender) {
-        this._gender = gender;
-    }
-
-    set goals(goals: Goal[]) {
-        this._goals = goals;
-    }
-
-    set interests(interests: string[]) {
-        this._interests = interests;
-    }
-
-    set isForCertificate(isForCertificate: boolean) {
-        this._isForCertificate = isForCertificate;
-    }
-
-    set isForProgram(isForProgram: boolean) {
-        this._isForProgram = isForProgram;
-    }
-
-    set lastname(lastname: string) {
-        this._lastname = lastname;
-    }
-
-    get learningLanguage(): Language | undefined {
-        return this._learningLanguage;
-    }
-
-    set learningLanguage(learningLanguage: Language | undefined) {
-        this._learningLanguage = learningLanguage;
-    }
-
-    get learningLanguageLevel(): cefr | undefined {
-        return this._learningLanguageLevel;
-    }
-
-    set learningLanguageLevel(learningLanguageLevel: cefr | undefined) {
-        this._learningLanguageLevel = learningLanguageLevel;
-    }
-
-    set nativeLanguage(nativeLanguage: Language) {
-        this._nativeLanguage = nativeLanguage;
-    }
-
-    set otherLanguages(otherLanguages: Language[]) {
-        this.otherLaguages = otherLanguages;
-    }
-
-    set password(password: string) {
-        this._password = password;
-    }
-
-    get pedagogy(): Pedagogy | undefined {
-        return this._pedagogy;
-    }
-
-    set pedagogy(pedagogy: Pedagogy | undefined) {
-        this._pedagogy = pedagogy;
-    }
-
-    get profilePicture(): string {
-        return this._profilePicture ?? '';
-    }
-
-    set profilePicture(profilePicture: string) {
-        this._profilePicture = profilePicture;
-    }
-
-    set role(role: Role) {
-        this._role = role;
-    }
-
-    set sameAge(sameAge: boolean) {
-        this._sameAge = sameAge;
-    }
-
-    set sameGender(sameGender: boolean) {
-        this._sameGender = sameGender;
-    }
-
-    set sameTandem(sameTandem: boolean) {
-        this._sameTandem = sameTandem;
-    }
-
-    set site(site: string) {
-        this._site = site;
-    }
-
-    set staffFunction(staffFunction: string) {
-        this._staffFunction = staffFunction;
-    }
-
-    get university(): University | undefined {
-        return this._university;
-    }
-
-    set university(university: University | undefined) {
-        this._university = university;
-    }
-
-    set timezone(timezone: string) {
-        this._timezone = timezone;
-    }
 }
 
 export default ProfileSignUp;

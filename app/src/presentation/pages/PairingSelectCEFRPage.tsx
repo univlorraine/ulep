@@ -2,7 +2,6 @@ import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useHistory } from 'react-router';
 import { useConfig } from '../../context/ConfigurationContext';
-import cefr from '../../domain/entities/cefr';
 import { useStoreActions } from '../../store/storeTypes';
 import WebLayoutCentered from '../components/WebLayoutCentered';
 import pairingSelectLevelStyles from './css/PairingSelectLevel.module.css';
@@ -13,9 +12,9 @@ const PairingSelectCEFRPage: React.FC = () => {
     const { configuration } = useConfig();
     const updateProfileSignUp = useStoreActions((state) => state.updateProfileSignUp);
     const history = useHistory();
-    const [selectedLevel, setSelectedLevel] = useState<cefr>();
+    const [selectedLevel, setSelectedLevel] = useState<CEFR>();
 
-    const levels: cefr[] = ['A1', 'A2', 'B1', 'B2', 'C1', 'C2'];
+    const levels: CEFR[] = ['A1', 'A2', 'B1', 'B2', 'C1', 'C2'];
 
     const onValidateCefr = () => {
         updateProfileSignUp({ learningLanguageLevel: selectedLevel });

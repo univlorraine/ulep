@@ -1,7 +1,6 @@
 import { useTranslation } from 'react-i18next';
 import { Redirect, useHistory } from 'react-router';
 import { useConfig } from '../../context/ConfigurationContext';
-import Language from '../../domain/entities/Language';
 import { useStoreState } from '../../store/storeTypes';
 import WebLayoutCentered from '../components/WebLayoutCentered';
 import QuizzValidatedContent from '../components/contents/QuizzValidatedContent';
@@ -17,9 +16,6 @@ const PairingQuizzEndPage: React.FC = ({}) => {
         return <Redirect to="/signup/pairing/languages" />;
     }
 
-    // @ts-ignore
-    const learningLanguage = new Language(profileSignUp.learningLanguage._code, profileSignUp.learningLanguage._name);
-
     return (
         <WebLayoutCentered
             backgroundIconColor={configuration.secondaryBackgroundImageColor}
@@ -29,7 +25,7 @@ const PairingQuizzEndPage: React.FC = ({}) => {
         >
             <div className={styles.body}>
                 <QuizzValidatedContent
-                    language={learningLanguage}
+                    language={profileSignUp.learningLanguage}
                     onNextStep={() => history.push('/signup/pairing/preference')}
                     quizzLevel={profileSignUp.learningLanguageLevel}
                 />

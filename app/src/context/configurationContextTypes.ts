@@ -1,6 +1,7 @@
 import CameraAdapterInterface from '../adapter/interfaces/CameraAdapter.interface';
 import Configuration from '../domain/entities/Confirguration';
 import AskForLanguageUsecaseInterface from '../domain/interfaces/AskForLanguageUsecase.interface';
+import CreateProfileUsecaseInterface from '../domain/interfaces/CreateProfileUsecase.interface';
 import CreateUserUsecaseInterface from '../domain/interfaces/CreateUserUsecase.interface';
 import GetAllCategoriesInterestUsecaseInterface from '../domain/interfaces/GetAllCategoriesInterestsUsecase.interface';
 import GetAllCountriesUsecaseInterface from '../domain/interfaces/GetAllCountriesUsecase.interface';
@@ -15,6 +16,7 @@ export interface ConfigContextValueType {
     askForLanguage: AskForLanguageUsecaseInterface;
     cameraAdapter: CameraAdapterInterface;
     configuration: Configuration;
+    createProfile: CreateProfileUsecaseInterface;
     createUser: CreateUserUsecaseInterface;
     getAllCategoriesInterests: GetAllCategoriesInterestUsecaseInterface;
     getAllCountries: GetAllCountriesUsecaseInterface;

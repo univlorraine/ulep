@@ -2,6 +2,7 @@ import CameraAdapter from '../adapter/CameraAdapter';
 import DomainHttpAdapter from '../adapter/DomainHttpAdapter';
 import Configuration from '../domain/entities/Confirguration';
 import AskForLanguageUsecase from '../domain/usecases/AskForLanguageUsecase';
+import CreateProfileUsecase from '../domain/usecases/CreateProfileUsecase';
 import CreateUserUsecase from '../domain/usecases/CreateUserUsecase';
 import GetAllCategoriesInterestssUsecase from '../domain/usecases/GetAllCategoriesInterestsUsecase';
 import GetAllCountriesUsecase from '../domain/usecases/GetAllCountriesUsecase';
@@ -16,6 +17,7 @@ import { ConfigContextValueType } from './configurationContextTypes';
 const getConfigContextValue = (
     accessToken: string,
     refreshToken: string,
+    setProfile: Function,
     setTokens: Function,
     removeTokens: Function,
     configuration: Configuration
@@ -24,6 +26,7 @@ const getConfigContextValue = (
     const domainHttpAdapter = new DomainHttpAdapter(import.meta.env.VITE_API_URL ?? '', accessToken);
 
     const askForLanguage = new AskForLanguageUsecase(domainHttpAdapter);
+    const createProfile = new CreateProfileUsecase(domainHttpAdapter, setProfile);
     const getAllCategoriesInterests = new GetAllCategoriesInterestssUsecase(domainHttpAdapter);
     const getAllCountries = new GetAllCountriesUsecase(domainHttpAdapter);
     const getAllGoals = new GetAllGoalsUsecase(domainHttpAdapter);
@@ -37,6 +40,7 @@ const getConfigContextValue = (
 
     return {
         askForLanguage,
+        createProfile,
         cameraAdapter,
         configuration,
         createUser,

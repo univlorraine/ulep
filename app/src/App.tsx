@@ -6,7 +6,7 @@ import { useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import { ConfigContext } from './context/ConfigurationContext';
 import getConfigContextValue from './context/getConfigurationContextValue';
-import OfflineRouter from './presentation/router/OfflineRouter';
+import Router from './presentation/router/Router';
 import { useStoreActions, useStoreState } from './store/storeTypes';
 
 /* Core CSS required for Ionic components to work properly */
@@ -39,6 +39,7 @@ const AppContext = () => {
     const rehydrated = useStoreRehydrated();
     const accessToken = useStoreState((state) => state.accessToken);
     const refreshToken = useStoreState((state) => state.refreshToken);
+    const setProfile = useStoreActions((state) => state.setProfile);
     const setTokens = useStoreActions((state) => state.setTokens);
     const deleteTokens = useStoreActions((state) => state.removeTokens);
     const configuration = new Configuration(
@@ -66,10 +67,10 @@ const AppContext = () => {
 
     return (
         <ConfigContext.Provider
-            value={getConfigContextValue(accessToken, refreshToken, setTokens, deleteTokens, configuration)}
+            value={getConfigContextValue(accessToken, refreshToken, setProfile, setTokens, deleteTokens, configuration)}
         >
             <IonReactRouter>
-                <OfflineRouter />
+                <Router />
             </IonReactRouter>
         </ConfigContext.Provider>
     );

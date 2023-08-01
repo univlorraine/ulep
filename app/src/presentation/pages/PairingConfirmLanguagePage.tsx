@@ -2,7 +2,6 @@ import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Redirect, useHistory } from 'react-router';
 import { useConfig } from '../../context/ConfigurationContext';
-import Language from '../../domain/entities/Language';
 import { useStoreState } from '../../store/storeTypes';
 import SuccessLayout from '../components/SuccessLayout';
 import WebLayoutCentered from '../components/WebLayoutCentered';
@@ -21,9 +20,6 @@ const PairingConfirmLanguagePage: React.FC = () => {
     if (!profileSignUp.learningLanguage) {
         return <Redirect to="/signup" />;
     }
-
-    // @ts-ignore
-    const learningLanguage = new Language(profileSignUp.learningLanguage._code, profileSignUp.learningLanguage._name);
 
     const pedagogyToTitle = (pedagogy: Pedagogy | undefined) => {
         switch (pedagogy) {
@@ -54,9 +50,9 @@ const PairingConfirmLanguagePage: React.FC = () => {
             >
                 <div className={styles.body}>
                     <LanguageSelectedContent
-                        language={learningLanguage}
+                        language={profileSignUp.learningLanguage}
                         mode={'confirm'}
-                        profilePicture={profileSignUp.profilePicture}
+                        profilePicture={profileSignUp.profilePicture!}
                         onNextPressed={continueSignUp}
                     />
                 </div>
@@ -77,12 +73,16 @@ const PairingConfirmLanguagePage: React.FC = () => {
                     <p className="subtitle">{t('pairing_confirm_language_page.subtitle')}</p>
                     <span>{t('pairing_confirm_language_page.language_title')}</span>
                     <div className={confirmLanguagesStyles['language-container']}>
-                        {` ${codeCountryToFlag(learningLanguage.code)} ${learningLanguage.name}`}
+                        {` ${codeCountryToFlag(profileSignUp.learningLanguage.code)} ${
+                            profileSignUp.learningLanguage.name
+                        }`}
                     </div>
                     <div className={confirmLanguagesStyles['mode-container']}>
                         <p className={confirmLanguagesStyles['mode-text']}>{`${t(
                             'pairing_confirm_language_page.mode_meet'
-                        )} ${pedagogyToTitle(profileSignUp.pedagogy)}  ${codeCountryToFlag(learningLanguage.code)}`}</p>
+                        )} ${pedagogyToTitle(profileSignUp.pedagogy)}  ${codeCountryToFlag(
+                            profileSignUp.learningLanguage.code
+                        )}`}</p>
                         <img alt="tandem" src="/assets/tandem.svg" />
                     </div>
                 </div>

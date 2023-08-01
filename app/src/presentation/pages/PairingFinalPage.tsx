@@ -1,7 +1,7 @@
+import { useIonToast } from '@ionic/react';
 import { useTranslation } from 'react-i18next';
 import { Redirect, useHistory } from 'react-router';
 import { useConfig } from '../../context/ConfigurationContext';
-import Language from '../../domain/entities/Language';
 import { useStoreState } from '../../store/storeTypes';
 import FlagBubble from '../components/FlagBubble';
 import SuccessLayout from '../components/SuccessLayout';
@@ -11,15 +11,61 @@ import styles from './css/PairingFinalPage.module.css';
 const PairingFinalPage: React.FC = () => {
     const { t } = useTranslation();
     const history = useHistory();
-    const { configuration } = useConfig();
+    const { configuration, createProfile } = useConfig();
+    const [showToast] = useIonToast();
     const profileSignUp = useStoreState((payload) => payload.profileSignUp);
 
-    if (!profileSignUp.learningLanguage) {
+    if (!profileSignUp.learningLanguage || !profileSignUp.university) {
         return <Redirect to="/signup/pairing/languages" />;
     }
 
-    // @ts-ignore
-    const learningLanguage = new Language(profileSignUp.learningLanguage._code, profileSignUp.learningLanguage._name);
+    //TODO: Update this when api will be ready
+    const nextStep = async () => {
+        if (
+            !profileSignUp.age ||
+            !profileSignUp.role ||
+            !profileSignUp.gender ||
+            !profileSignUp.university ||
+            !profileSignUp.nativeLanguage ||
+            !profileSignUp.otherLanguages ||
+            !profileSignUp.learningLanguage ||
+            !profileSignUp.learningLanguageLevel ||
+            !profileSignUp.pedagogy ||
+            !profileSignUp.goals ||
+            !profileSignUp.frequency ||
+            !profileSignUp.interests ||
+            !profileSignUp.biography
+        ) {
+            return await showToast({ message: t('errors.global'), duration: 1000 });
+        }
+        const result = await createProfile.execute(
+            profileSignUp.age,
+            profileSignUp.role,
+            profileSignUp.gender,
+            profileSignUp.university.id,
+            profileSignUp.nativeLanguage.code,
+            profileSignUp.otherLanguages.map((language) => language.code),
+            profileSignUp.learningLanguage.code,
+            profileSignUp.learningLanguageLevel,
+            profileSignUp.pedagogy,
+            profileSignUp.goals.map((goal) => goal.id),
+            profileSignUp.frequency,
+            profileSignUp.interests,
+            !!profileSignUp.sameGender,
+            [
+                profileSignUp.biography.incredible,
+                profileSignUp.biography.place,
+                profileSignUp.biography.power,
+                profileSignUp.biography.travel,
+            ]
+        );
+
+        if (result instanceof Error) {
+            return await showToast({ message: t(result.message), duration: 1000 });
+        }
+
+        return history.push('/home');
+    };
 
     return (
         <SuccessLayout
@@ -32,20 +78,17 @@ const PairingFinalPage: React.FC = () => {
                 <div className={styles['image-container']}>
                     <img className={styles.image} alt="avatar" src={profileSignUp.profilePicture}></img>
                     <div className={styles.bubble}>
-                        <FlagBubble language={learningLanguage} textColor="white" isSelected disabled />
+                        <FlagBubble language={profileSignUp.learningLanguage} textColor="white" isSelected disabled />
                     </div>
                 </div>
                 <div className={`${styles['tandem-container']}`}>{`${t('global.tandem')} ${
-                    learningLanguage.name
-                } ${codeCountryToFlag(learningLanguage.code)}`}</div>
+                    profileSignUp.learningLanguage.name
+                } ${codeCountryToFlag(profileSignUp.learningLanguage.code)}`}</div>
                 <span className={`${styles.description} large-margin-top`}>{`${t(
                     'pairing_final_page.congratulation'
                 )},`}</span>
                 <span className={styles.description}>{t('pairing_final_page.congratulation_text')}</span>
-                <button
-                    className="primary-button large-margin-top"
-                    onClick={() => history.push('/signup/pairing/languages')}
-                >
+                <button className="primary-button large-margin-top" onClick={nextStep}>
                     {t('pairing_final_page.validate_button')}
                 </button>
             </div>

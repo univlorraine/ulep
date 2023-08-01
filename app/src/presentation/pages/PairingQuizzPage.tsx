@@ -3,9 +3,7 @@ import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Redirect, useHistory } from 'react-router';
 import { useConfig } from '../../context/ConfigurationContext';
-import Language from '../../domain/entities/Language';
 import Question from '../../domain/entities/Question';
-import cefr from '../../domain/entities/cefr';
 import { useStoreActions, useStoreState } from '../../store/storeTypes';
 import SuccessLayout from '../components/SuccessLayout';
 import WebLayoutCentered from '../components/WebLayoutCentered';
@@ -23,17 +21,14 @@ const PairingQuizzPage: React.FC = () => {
     const updateProfileSignUp = useStoreActions((state) => state.updateProfileSignUp);
     const profileSignUp = useStoreState((state) => state.profileSignUp);
     const [questions, setQuestions] = useState<Question[]>([]);
-    const [currentQuizz, setCurrentQuizz] = useState<cefr | undefined>();
+    const [currentQuizz, setCurrentQuizz] = useState<CEFR | undefined>();
     const [displayNextQuizz, setDisplayNextQuizz] = useState<boolean>(false);
 
     if (!profileSignUp.learningLanguage) {
         return <Redirect to="/signup/pairing/languages" />;
     }
 
-    // @ts-ignore
-    const learningLanguage = new Language(profileSignUp.learningLanguage._code, profileSignUp.learningLanguage._name);
-
-    const askQuizz = async (level: cefr | undefined) => {
+    const askQuizz = async (level: CEFR | undefined) => {
         if (!level) {
             return;
         }
@@ -82,7 +77,7 @@ const PairingQuizzPage: React.FC = () => {
             >
                 <div className={styles.body}>
                     <QuizzValidatedContent
-                        language={learningLanguage}
+                        language={profileSignUp.learningLanguage}
                         onNextQuizz={() => askQuizz(getNextLevel(currentQuizz))}
                         quizzLevel={currentQuizz}
                     />
