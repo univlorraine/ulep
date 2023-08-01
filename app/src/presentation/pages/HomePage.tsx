@@ -7,6 +7,7 @@ import Profile from '../../domain/entities/Profile';
 import Tandem from '../../domain/entities/Tandem';
 import HomeHeader from '../components/HomeHeader';
 import DraftTandemContent from '../components/contents/DraftTandemContent';
+import NotFoundTandemContent from '../components/contents/NotFoundTandemContent';
 import Modal from '../components/modals/Modal';
 import TandemList from '../components/tandems/TandemList';
 import WaitingTandemList from '../components/tandems/WaitingTandemList';
@@ -91,8 +92,19 @@ const HomePage: React.FC = () => {
                     </div>
                 </div>
             </IonContent>
-            <Modal isVisible={!!selectedTandem} onClose={() => setSelectedTandem(undefined)} hideWhiteBackground>
+            <Modal
+                isVisible={!!selectedTandem && selectedTandem.status === 'DRAFT'}
+                onClose={() => setSelectedTandem(undefined)}
+                hideWhiteBackground
+            >
                 <DraftTandemContent onClose={() => setSelectedTandem(undefined)} />
+            </Modal>
+            <Modal
+                isVisible={!!selectedTandem && selectedTandem.status === 'UNACTIVE'}
+                onClose={() => setSelectedTandem(undefined)}
+                hideWhiteBackground
+            >
+                <NotFoundTandemContent onClose={() => setSelectedTandem(undefined)} onFindNewTandem={() => null} />
             </Modal>
         </IonPage>
     );

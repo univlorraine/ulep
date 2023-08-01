@@ -63,6 +63,12 @@
             "subtitle": "Tu recevras une notification  lorsqu’un tandem te sera proposé",
             "title": "Un peu de patience"
         },
+        "tandem_not_found": {
+            "button": "Allons-y",
+            "button_pass": "Passer",
+            "subtitle": "Fais une demande pour une autre langue ou réessaie le semestre prochain",
+            "title": "Nous n’avons pas pu trouver de tandem disponible"
+        },
         "waiting_tandem": {
             "button": "Faire une nouvelle demande",
             "tandem_draft": "En attente d'un tandem",

@@ -3,7 +3,7 @@ import { ReactComponent as Background } from '../../../../public/assets/backgrou
 import { useConfig } from '../../../context/ConfigurationContext';
 import useWindowDimensions from '../../hooks/useWindowDimensions';
 import { HYBRID_MAX_WIDTH } from '../../utils';
-import styles from './DraftTandemContent.module.css';
+import styles from './TandemContent.module.css';
 
 interface DraftTandemContentProps {
     onClose: () => void;
