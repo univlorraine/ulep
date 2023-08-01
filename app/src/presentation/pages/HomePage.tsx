@@ -1,7 +1,10 @@
-import { IonContent, IonPage } from '@ionic/react';
+import { IonContent, IonPage, useIonToast } from '@ionic/react';
+import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useHistory } from 'react-router';
+import { useConfig } from '../../context/ConfigurationContext';
 import Profile from '../../domain/entities/Profile';
+import Tandem from '../../domain/entities/Tandem';
 import HomeHeader from '../components/HomeHeader';
 import useWindowDimensions from '../hooks/useWindowDimensions';
 import { HYBRID_MAX_WIDTH } from '../utils';
@@ -29,8 +32,26 @@ const profile = new Profile(
 const HomePage: React.FC = () => {
     const { t } = useTranslation();
     const history = useHistory();
+    const { getAllTandems } = useConfig();
+    const [showToast] = useIonToast();
     const currentDate = new Date();
     const { width } = useWindowDimensions();
+    const [tandems, setTandems] = useState<Tandem[]>([]);
+
+    const getHomeData = async () => {
+        const result = await getAllTandems.execute();
+
+        if (result instanceof Error) {
+            return await showToast({ message: t(result.message), duration: 5000 });
+        }
+
+        setTandems(result);
+    };
+
+    useEffect(() => {
+        getHomeData();
+    }, []);
+
     const formattedDate = `${currentDate.getFullYear()}-${currentDate.getDate().toString().padStart(2, '0')}-${(
         currentDate.getMonth() + 1
     )
@@ -54,6 +75,7 @@ const HomePage: React.FC = () => {
                         )}
                     </div>
                     {width < HYBRID_MAX_WIDTH && <div className={styles.separator} />}
+                    <div></div>
                 </div>
             </IonContent>
         </IonPage>

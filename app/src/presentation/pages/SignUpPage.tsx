@@ -10,7 +10,7 @@ import Dropdown, { DropDownItem } from '../components/DropDown';
 import ErrorMessage from '../components/ErrorMessage';
 import RadioButton from '../components/RadioButton';
 import TextInput from '../components/TextInput';
-import WebLayoutCentered from '../components/WebLayoutCentered';
+import WebLayoutCentered from '../components/layout/WebLayoutCentered';
 import styles from './css/SignUp.module.css';
 
 const SignUpPage: React.FC = () => {

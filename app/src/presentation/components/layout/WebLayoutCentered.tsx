@@ -1,9 +1,9 @@
 import { IonContent, IonPage } from '@ionic/react';
 import { ReactElement } from 'react';
-import { ReactComponent as Background } from '../../../public/assets/background.svg';
-import useWindowDimensions from '../hooks/useWindowDimensions';
-import { HYBRID_MAX_WIDTH } from '../utils';
-import Header from './Header';
+import { ReactComponent as Background } from '../../../../public/assets/background.svg';
+import useWindowDimensions from '../../hooks/useWindowDimensions';
+import { HYBRID_MAX_WIDTH } from '../../utils';
+import Header from '../Header';
 
 interface WebLayoutCenteredProps {
     backgroundIconColor: string;

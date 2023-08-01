@@ -5,11 +5,11 @@ import { Redirect, useHistory } from 'react-router';
 import { useConfig } from '../../context/ConfigurationContext';
 import Question from '../../domain/entities/Question';
 import { useStoreActions, useStoreState } from '../../store/storeTypes';
-import SuccessLayout from '../components/SuccessLayout';
-import WebLayoutCentered from '../components/WebLayoutCentered';
 import QuizzContent from '../components/contents/QuizzContent';
 import QuizzSelectionContent from '../components/contents/QuizzSelectionContent';
 import QuizzValidatedContent from '../components/contents/QuizzValidatedContent';
+import SuccessLayout from '../components/layout/SuccessLayout';
+import WebLayoutCentered from '../components/layout/WebLayoutCentered';
 import { getNextLevel, getPreviousLevel } from '../utils';
 import styles from './css/SignUp.module.css';
 

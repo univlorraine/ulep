@@ -3,7 +3,7 @@ import { useTranslation } from 'react-i18next';
 import { useHistory } from 'react-router';
 import { useConfig } from '../../context/ConfigurationContext';
 import CircleAvatar from '../components/CircleAvatar';
-import SuccessLayout from '../components/SuccessLayout';
+import SuccessLayout from '../components/layout/SuccessLayout';
 import style from './css/ForgotPasswordSent.module.css';
 
 const ForgotPasswordSentPage: React.FC = () => {

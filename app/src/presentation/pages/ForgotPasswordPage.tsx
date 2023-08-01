@@ -1,7 +1,7 @@
 import { IonPage } from '@ionic/react';
-import WebLayout from '../components/WebLayout';
 import WelcomeContent from '../components/contents/WelcomeContent';
 import ForgotPasswordForm from '../components/forms/ForgotPasswordForm';
+import WebLayout from '../components/layout/WebLayout';
 import useWindowDimensions from '../hooks/useWindowDimensions';
 import { HYBRID_MAX_WIDTH } from '../utils';
 

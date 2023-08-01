@@ -5,7 +5,7 @@ import { useHistory } from 'react-router';
 import { useConfig } from '../../context/ConfigurationContext';
 import Goal from '../../domain/entities/Goal';
 import { useStoreActions } from '../../store/storeTypes';
-import WebLayoutCentered from '../components/WebLayoutCentered';
+import WebLayoutCentered from '../components/layout/WebLayoutCentered';
 import styles from './css/SignUp.module.css';
 import goalsStyles from './css/SignUpGoals.module.css';
 

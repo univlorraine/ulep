@@ -6,7 +6,7 @@ import { useConfig } from '../../context/ConfigurationContext';
 import Language from '../../domain/entities/Language';
 import { useStoreActions, useStoreState } from '../../store/storeTypes';
 import FlagBubble from '../components/FlagBubble';
-import WebLayoutCentered from '../components/WebLayoutCentered';
+import WebLayoutCentered from '../components/layout/WebLayoutCentered';
 import pairingLanguagesStyles from './css/PairingLanguages.module.css';
 import styles from './css/SignUp.module.css';
 

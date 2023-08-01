@@ -4,7 +4,7 @@ import { Redirect, useHistory } from 'react-router';
 import { useConfig } from '../../context/ConfigurationContext';
 import { useStoreState } from '../../store/storeTypes';
 import FlagBubble from '../components/FlagBubble';
-import SuccessLayout from '../components/SuccessLayout';
+import SuccessLayout from '../components/layout/SuccessLayout';
 import { codeCountryToFlag } from '../utils';
 import styles from './css/PairingFinalPage.module.css';
 

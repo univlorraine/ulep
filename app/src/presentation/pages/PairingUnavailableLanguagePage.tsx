@@ -5,8 +5,8 @@ import { useConfig } from '../../context/ConfigurationContext';
 import Language from '../../domain/entities/Language';
 import { useStoreState } from '../../store/storeTypes';
 import FlagBubble from '../components/FlagBubble';
-import SuccessLayout from '../components/SuccessLayout';
 import LanguageSelectedContent from '../components/contents/LanguageSelectedContent';
+import SuccessLayout from '../components/layout/SuccessLayout';
 import styles from './css/PairingUnavailableLanguage.module.css';
 
 interface PairingUnavailableLanguageState {

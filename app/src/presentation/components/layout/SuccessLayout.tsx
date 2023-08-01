@@ -1,6 +1,6 @@
 import { IonPage } from '@ionic/react';
 import { ReactElement } from 'react';
-import { ReactComponent as Background } from '../../../public/assets/background.svg';
+import { ReactComponent as Background } from '../../../../public/assets/background.svg';
 import styles from './SuccessLayout.module.css';
 
 interface SuccessLayoutProps {

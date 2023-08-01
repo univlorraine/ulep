@@ -6,7 +6,7 @@ import { useConfig } from '../../context/ConfigurationContext';
 import Language from '../../domain/entities/Language';
 import { useStoreActions } from '../../store/storeTypes';
 import Dropdown, { DropDownItem } from '../components/DropDown';
-import WebLayoutCentered from '../components/WebLayoutCentered';
+import WebLayoutCentered from '../components/layout/WebLayoutCentered';
 import styles from './css/SignUp.module.css';
 
 const SignUpLanguagesPage: React.FC = () => {

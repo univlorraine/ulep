@@ -2,7 +2,7 @@ import { useTranslation } from 'react-i18next';
 import { useHistory } from 'react-router';
 import { useConfig } from '../../context/ConfigurationContext';
 import { useStoreState } from '../../store/storeTypes';
-import SuccessLayout from '../components/SuccessLayout';
+import SuccessLayout from '../components/layout/SuccessLayout';
 import styles from './css/SignUpFinalPage.module.css';
 
 const SignupFinalPage: React.FC = () => {
