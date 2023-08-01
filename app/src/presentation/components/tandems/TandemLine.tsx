@@ -6,6 +6,7 @@ import styles from './TandemLine.module.css';
 interface TandemLineProps {
     language: Language;
     profile?: Profile;
+    onPressed: () => void;
     status: TandemStatus;
 }
 
@@ -25,10 +26,10 @@ const getTitleFromStatusAndProfile = (status: TandemStatus, hasProfile: boolean)
     return '';
 };
 
-const TandemLine: React.FC<TandemLineProps> = ({ language, profile, status }) => {
+const TandemLine: React.FC<TandemLineProps> = ({ language, profile, onPressed, status }) => {
     const { t } = useTranslation();
     return (
-        <div className={styles.container}>
+        <button className={styles.container} onClick={onPressed}>
             <div className={styles['left-container']}>
                 <div className={styles['flag-container']}>
                     <span className={styles.flag}>{language.getFlag()}</span>
@@ -36,7 +37,7 @@ const TandemLine: React.FC<TandemLineProps> = ({ language, profile, status }) =>
                 <span className={styles.title}>{t(getTitleFromStatusAndProfile(status, !!profile))}</span>
             </div>
             <img alt="arrow-right" src="/assets/arrow-right.svg" />
-        </div>
+        </button>
     );
 };
 

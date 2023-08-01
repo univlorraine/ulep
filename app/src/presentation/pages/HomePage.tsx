@@ -6,6 +6,8 @@ import { useConfig } from '../../context/ConfigurationContext';
 import Profile from '../../domain/entities/Profile';
 import Tandem from '../../domain/entities/Tandem';
 import HomeHeader from '../components/HomeHeader';
+import DraftTandemContent from '../components/contents/DraftTandemContent';
+import Modal from '../components/modals/Modal';
 import TandemList from '../components/tandems/TandemList';
 import WaitingTandemList from '../components/tandems/WaitingTandemList';
 import useWindowDimensions from '../hooks/useWindowDimensions';
@@ -39,6 +41,7 @@ const HomePage: React.FC = () => {
     const currentDate = new Date();
     const { width } = useWindowDimensions();
     const [tandems, setTandems] = useState<Tandem[]>([]);
+    const [selectedTandem, setSelectedTandem] = useState<Tandem>();
 
     const getHomeData = async () => {
         const result = await getAllTandems.execute();
@@ -79,10 +82,18 @@ const HomePage: React.FC = () => {
                     {width < HYBRID_MAX_WIDTH && <div className={styles.separator} />}
                     <div className={styles.content}>
                         <TandemList studentId={profile.id} tandems={tandems} />
-                        <WaitingTandemList onNewTandemAsked={() => null} studentId={profile.id} tandems={tandems} />
+                        <WaitingTandemList
+                            onTandemPressed={setSelectedTandem}
+                            onNewTandemAsked={() => null}
+                            studentId={profile.id}
+                            tandems={tandems}
+                        />
                     </div>
                 </div>
             </IonContent>
+            <Modal isVisible={!!selectedTandem} onClose={() => setSelectedTandem(undefined)} hideWhiteBackground>
+                <DraftTandemContent onClose={() => setSelectedTandem(undefined)} />
+            </Modal>
         </IonPage>
     );
 };

@@ -58,6 +58,11 @@
         "tandem": {
             "title": "Mes tandems"
         },
+        "tandem_draft": {
+            "button": "C'est compris !",
+            "subtitle": "Tu recevras une notification  lorsqu’un tandem te sera proposé",
+            "title": "Un peu de patience"
+        },
         "waiting_tandem": {
             "button": "Faire une nouvelle demande",
             "tandem_draft": "En attente d'un tandem",
