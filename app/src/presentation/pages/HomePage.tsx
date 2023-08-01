@@ -1,5 +1,63 @@
+import { IonContent, IonPage } from '@ionic/react';
+import { useTranslation } from 'react-i18next';
+import { useHistory } from 'react-router';
+import Profile from '../../domain/entities/Profile';
+import HomeHeader from '../components/HomeHeader';
+import useWindowDimensions from '../hooks/useWindowDimensions';
+import { HYBRID_MAX_WIDTH } from '../utils';
+import styles from './css/Home.module.css';
+
+//TODO: Change this when create Profile will be done
+const profile = new Profile(
+    'id',
+    'email',
+    'firstname',
+    'lastname',
+    22,
+    'MALE',
+    'id',
+    'STUDENT',
+    'FR',
+    'CN',
+    ['goal'],
+    'ONCE_A_WEEK',
+    ['interest'],
+    ['bios'],
+    '/assets/avatar.svg'
+);
+
 const HomePage: React.FC = () => {
-    return <div style={{ backgroundColor: 'red' }} />;
+    const { t } = useTranslation();
+    const history = useHistory();
+    const currentDate = new Date();
+    const { width } = useWindowDimensions();
+    const formattedDate = `${currentDate.getFullYear()}-${currentDate.getDate().toString().padStart(2, '0')}-${(
+        currentDate.getMonth() + 1
+    )
+        .toString()
+        .padStart(2, '0')}`;
+    return (
+        <IonPage>
+            {width >= HYBRID_MAX_WIDTH && <HomeHeader avatar={profile.avatar} onPicturePressed={() => null} />}
+            <IonContent>
+                <div className={styles.container}>
+                    <div className={styles['header']}>
+                        <div className={styles['hello-container']}>
+                            <span className={styles.date}>{formattedDate}</span>
+                            <span className={styles.hello}>{`${t('global.hello')} ${profile.firstname}`}</span>
+                        </div>
+                        {width < HYBRID_MAX_WIDTH && (
+                            <button className={styles['avatar-container']} onClick={() => history.push('/home')}>
+                                <img alt="avatar" className={styles.avatar} src={profile.avatar} />
+                                <img alt="arrow-down" src="/assets/arrow-down.svg" />
+                            </button>
+                        )}
+                    </div>
+                    {width < HYBRID_MAX_WIDTH && <div className={styles.separator} />}
+                </div>
+            </IonContent>
+        </IonPage>
+    );
 };
 
 export default HomePage;

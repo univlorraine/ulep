@@ -28,13 +28,12 @@ import SignUpInformationsPage from '../pages/SignUpInformationsPage';
 import SignUpInterestsPage from '../pages/SignUpInterestsPage';
 import SignUpLanguagesPage from '../pages/SignUpLanguagesPage';
 import SignUpPage from '../pages/SignUpPage';
-import WelcomePage from '../pages/WelcomePage';
 import PrivateRoute from './PrivateRoute';
 
 const OfflineRouter: React.FC = () => (
     <IonRouterOutlet>
         <Route exact path="/">
-            <WelcomePage />
+            <HomePage />
         </Route>
         <Route exact path="/home">
             <HomePage />
