@@ -55,6 +55,9 @@
         "signup_button": "Créer un compte"
     },
     "home_page": {
+        "tandem": {
+            "title": "Mes tandems"
+        },
         "waiting_tandem": {
             "button": "Faire une nouvelle demande",
             "tandem_draft": "En attente d'un tandem",

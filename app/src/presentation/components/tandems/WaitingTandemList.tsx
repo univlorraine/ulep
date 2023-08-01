@@ -19,6 +19,7 @@ const WaitingTandemList: React.FC<WaitingTandemListProps> = ({ onNewTandemAsked,
                     .map((tandem) => {
                         return (
                             <TandemLine
+                                key={tandem.id}
                                 language={tandem.language}
                                 profile={tandem.profiles.find((tandemProfile) => tandemProfile.id !== studentId)}
                                 status={tandem.status}

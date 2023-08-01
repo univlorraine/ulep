@@ -6,6 +6,7 @@ import { useConfig } from '../../context/ConfigurationContext';
 import Profile from '../../domain/entities/Profile';
 import Tandem from '../../domain/entities/Tandem';
 import HomeHeader from '../components/HomeHeader';
+import TandemList from '../components/tandems/TandemList';
 import WaitingTandemList from '../components/tandems/WaitingTandemList';
 import useWindowDimensions from '../hooks/useWindowDimensions';
 import { HYBRID_MAX_WIDTH } from '../utils';
@@ -77,6 +78,7 @@ const HomePage: React.FC = () => {
                     </div>
                     {width < HYBRID_MAX_WIDTH && <div className={styles.separator} />}
                     <div className={styles.content}>
+                        <TandemList studentId={profile.id} tandems={tandems} />
                         <WaitingTandemList onNewTandemAsked={() => null} studentId={profile.id} tandems={tandems} />
                     </div>
                 </div>
