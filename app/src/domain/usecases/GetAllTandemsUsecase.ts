@@ -42,10 +42,10 @@ class GetAllTandemsUsecase implements GetAllTandemsUsecaseInterface {
                             '/assets/avatar.svg'
                         ),
                     ],
-                    new Language('FR', 'Fraçais'),
+                    new Language('FR', '🇫🇷 Fraçais'),
                     'ACTIVE'
                 ),
-                new Tandem('id3', [], new Language('CN', 'Chinois'), 'DRAFT'),
+                new Tandem('id3', [], new Language('CN', '🇨🇳 Chinois'), 'DRAFT'),
                 new Tandem(
                     'id4',
                     [
@@ -67,10 +67,10 @@ class GetAllTandemsUsecase implements GetAllTandemsUsecaseInterface {
                             '/assets/avatar.svg'
                         ),
                     ],
-                    new Language('CN', 'Chinois'),
+                    new Language('CN', '🇨🇳 Chinois'),
                     'UNACTIVE'
                 ),
-                new Tandem('id5', [], new Language('CN', 'Chinois'), 'UNACTIVE'),
+                new Tandem('id5', [], new Language('CN', '🇨🇳 Chinois'), 'UNACTIVE'),
             ];
         } catch (error: any) {
             return new Error('errors.global');
