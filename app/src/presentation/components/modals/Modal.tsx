@@ -3,7 +3,7 @@ import styles from './Modal.module.css';
 
 interface ModalProps {
     children: ReactElement;
-    hideWhiteBackground: boolean;
+    hideWhiteBackground?: boolean;
     isVisible: boolean;
     onClose: () => void;
 }
