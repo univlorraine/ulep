@@ -9,16 +9,16 @@ class AskForLanguageUsecase implements AskForLanguageUsecaseInterface {
 
     async execute(language: Language): Promise<number | Error> {
         try {
-            const httpRepsonse: HttpResponse<LanguageAskedCommand> = await this.domainHttpAdapter.post(
+            const httpResponse: HttpResponse<LanguageAskedCommand> = await this.domainHttpAdapter.post(
                 `/laguages/${language.code}/requests`,
                 {}
             );
 
-            if (!httpRepsonse.parsedBody) {
+            if (!httpResponse.parsedBody) {
                 return new Error('errors.global');
             }
 
-            return httpRepsonse.parsedBody.count;
+            return httpResponse.parsedBody.count;
         } catch (error: any) {
             return new Error('errors.global');
         }

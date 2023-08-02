@@ -8,15 +8,15 @@ class GetAllGoalsUsecase implements GetAllGoalsUsecaseInterface {
     async execute(): Promise<Goal[] | Error> {
         try {
             //TODO: CURRENTLY MOCK DATA
-            /*const httpRepsonse: HttpResponse<CollectionCommand<GoalCommand>> = await this.domainHttpAdapter.get(
+            /*const httpResponse: HttpResponse<CollectionCommand<GoalCommand>> = await this.domainHttpAdapter.get(
                 `/goals`
             );
 
-            if (!httpRepsonse.parsedBody || !httpRepsonse.parsedBody.items) {
+            if (!httpResponse.parsedBody || !httpResponse.parsedBody.items) {
                 return new Error('errors.global');
             }
 
-            return httpRepsonse.parsedBody.items.map((goal) => goalCommandToDomain(goal));
+            return httpResponse.parsedBody.items.map((goal) => goalCommandToDomain(goal));
             */
 
             return [

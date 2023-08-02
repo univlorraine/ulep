@@ -40,8 +40,9 @@ const HomePage: React.FC = () => {
     const [showToast] = useIonToast();
     const currentDate = new Date();
     const { width } = useWindowDimensions();
-    const [tandems, setTandems] = useState<Tandem[]>([]);
+    const [displayReport, setDisplayReport] = useState<boolean>(false);
     const [selectedTandem, setSelectedTandem] = useState<Tandem>();
+    const [tandems, setTandems] = useState<Tandem[]>([]);
 
     const getHomeData = async () => {
         const result = await getAllTandems.execute();

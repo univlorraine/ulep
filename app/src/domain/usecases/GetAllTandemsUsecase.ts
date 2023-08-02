@@ -11,15 +11,15 @@ class GetAllTandemsUsecase implements GetAllTandemsUsecaseInterface {
         try {
             //TODO: replace mocked data when api will be ready
             /*
-            const httpRepsonse: HttpResponse<CollectionCommand<TandemCommand>> = await this.domainHttpAdapter.get(
+            const httpResponse: HttpResponse<CollectionCommand<TandemCommand>> = await this.domainHttpAdapter.get(
                 `/tandems`
             );
 
-            if (!httpRepsonse.parsedBody || !httpRepsonse.parsedBody.items) {
+            if (!httpResponse.parsedBody || !httpResponse.parsedBody.items) {
                 return new Error('errors.global');
             }
 
-            return tandemCommandToDomain(httpRepsonse.parsedBody.items);*/
+            return tandemCommandToDomain(httpResponse.parsedBody.items);*/
             return [
                 new Tandem(
                     'id2',

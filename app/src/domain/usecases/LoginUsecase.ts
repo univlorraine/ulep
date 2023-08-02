@@ -12,16 +12,19 @@ class LoginUsecase implements LoginUsecaseInterface {
 
     async execute(email: string, password: string): Promise<void | Error> {
         try {
-            const httpRepsonse: HttpResponse<LoginCommand> = await this.domainHttpAdapter.post(
+            const httpResponse: HttpResponse<LoginCommand> = await this.domainHttpAdapter.post(
                 '/authentication/token',
-                { email, password }
+                {
+                    email,
+                    password,
+                }
             );
 
-            if (!httpRepsonse.parsedBody || !httpRepsonse.parsedBody.accessToken) {
+            if (!httpResponse.parsedBody || !httpResponse.parsedBody.accessToken) {
                 return new Error('errors.global');
             }
 
-            return this.setTokens(httpRepsonse.parsedBody.accessToken, httpRepsonse.parsedBody.refreshToken);
+            return this.setTokens(httpResponse.parsedBody.accessToken, httpResponse.parsedBody.refreshToken);
         } catch (error: any) {
             if (!error || !error.status) {
                 return new Error('errors.global');

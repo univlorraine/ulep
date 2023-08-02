@@ -8,15 +8,15 @@ class GetQuizzByLevelUsecase implements GetQuizzByLevelUsecaseInterface {
     constructor(private readonly domainHttpAdapter: HttpAdapterInterface) {}
     async execute(level: CEFR): Promise<Question[] | Error> {
         try {
-            const httpRepsonse: HttpResponse<QuestionCommand[]> = await this.domainHttpAdapter.get(
+            const httpResponse: HttpResponse<QuestionCommand[]> = await this.domainHttpAdapter.get(
                 `/cefr/questions/${level}`
             );
 
-            if (!httpRepsonse.parsedBody) {
+            if (!httpResponse.parsedBody) {
                 return new Error('errors.global');
             }
 
-            return quizzCommandToDomain(httpRepsonse.parsedBody);
+            return quizzCommandToDomain(httpResponse.parsedBody);
         } catch (error: any) {
             return new Error('errors.global');
         }
