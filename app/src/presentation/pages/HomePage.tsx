@@ -6,8 +6,7 @@ import { useConfig } from '../../context/ConfigurationContext';
 import Profile from '../../domain/entities/Profile';
 import Tandem from '../../domain/entities/Tandem';
 import HomeHeader from '../components/HomeHeader';
-import DraftTandemContent from '../components/contents/DraftTandemContent';
-import NotFoundTandemContent from '../components/contents/NotFoundTandemContent';
+import TandemStatusContent from '../components/contents/TandemStatusContent';
 import Modal from '../components/modals/Modal';
 import TandemList from '../components/tandems/TandemList';
 import WaitingTandemList from '../components/tandems/WaitingTandemList';
@@ -93,18 +92,17 @@ const HomePage: React.FC = () => {
                 </div>
             </IonContent>
             <Modal
-                isVisible={!!selectedTandem && selectedTandem.status === 'DRAFT'}
+                isVisible={
+                    !!selectedTandem && (selectedTandem.status === 'DRAFT' || selectedTandem.status === 'UNACTIVE')
+                }
                 onClose={() => setSelectedTandem(undefined)}
                 hideWhiteBackground
             >
-                <DraftTandemContent onClose={() => setSelectedTandem(undefined)} />
-            </Modal>
-            <Modal
-                isVisible={!!selectedTandem && selectedTandem.status === 'UNACTIVE'}
-                onClose={() => setSelectedTandem(undefined)}
-                hideWhiteBackground
-            >
-                <NotFoundTandemContent onClose={() => setSelectedTandem(undefined)} onFindNewTandem={() => null} />
+                <TandemStatusContent
+                    onClose={() => setSelectedTandem(undefined)}
+                    onFindNewTandem={() => null}
+                    status={selectedTandem?.status}
+                />
             </Modal>
         </IonPage>
     );
