@@ -60,7 +60,7 @@ const OfflineRouter: React.FC = () => (
         <Route exact path="/signup">
             <SignUpPage />
         </Route>
-        <MobileRoute exact component={ProfilePage} path={'/profile'} />
+        <MobileRoute exact component={ProfilePage} path={'/profil'} />
         <MobileRoute exact component={ReportPage} path={'/report'} />
         <MobileRoute exact component={TandemStatusPage} path={'/tandem-status'} />
         <PrivateRoute exact component={PairingLaguagesPage} path="/signup/pairing/languages" />

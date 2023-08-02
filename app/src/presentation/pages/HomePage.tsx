@@ -57,7 +57,7 @@ const HomePage: React.FC = () => {
         setTandems(result);
     };
 
-    const onProfilePressed = () => (isHybrid ? history.push('/profile') : setDisplayProfile(true));
+    const onProfilePressed = () => (isHybrid ? history.push('/profil') : setDisplayProfile(true));
     const onReportPressed = () => (isHybrid ? history.push('/report') : setDisplayReport(true));
 
     const onTandemPressed = (tandem: Tandem) =>
