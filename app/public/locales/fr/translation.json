@@ -27,6 +27,7 @@
         "title": "Consulte tes emails"
     },
     "global": {
+        "account": "Compte",
         "age": "Âge",
         "binary": "Non binaire",
         "country": "Pays",
@@ -55,6 +56,13 @@
         "signup_button": "Créer un compte"
     },
     "home_page": {
+        "report": {
+            "category_title": "Dis-nous ce qu'il s'est passé ?",
+            "note": "Note",
+            "report_button": "Signaler un problème",
+            "send_button": "Envoyer",
+            "title": "Signaler"
+        },
         "tandem": {
             "title": "Mes tandems"
         },

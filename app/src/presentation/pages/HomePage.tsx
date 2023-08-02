@@ -89,6 +89,16 @@ const HomePage: React.FC = () => {
                             tandems={tandems}
                         />
                     </div>
+                    <div className={styles['report-container']}>
+                        <button className={`tertiary-button ${styles.report}`}>
+                            {
+                                <>
+                                    <img alt="report" className="margin-right" src="/assets/report.svg" />
+                                    <span>{t('home_page.report.report_button')}</span>
+                                </>
+                            }
+                        </button>
+                    </div>
                 </div>
             </IonContent>
             <Modal
