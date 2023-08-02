@@ -6,7 +6,6 @@ import {
   Patch,
   Param,
   Delete,
-  Logger,
   ParseUUIDPipe,
   SerializeOptions,
 } from '@nestjs/common';
@@ -15,13 +14,14 @@ import {
   UniversityResponse,
   CreateUniversityRequest,
   UpdateUniversityNameRequest,
-  CreateUniversityLanguageRequest,
+  AddUniversityLanguageRequest,
   LanguageResponse,
+  UpdateUniversityPartnerRequest,
 } from '../dtos';
 import {
   CreateUniversityUsecase,
   CreatePartnerUniversityUsecase,
-  CreateLanguageUsecase,
+  AddLanguageUsecase,
   DeleteUniversityUsecase,
   GetUniversityUsecase,
   GetUniversitiesUsecase,
@@ -37,7 +37,7 @@ export class UniversityController {
   constructor(
     private readonly createUniversityUsecase: CreateUniversityUsecase,
     private readonly createPartnerUniversityUsecase: CreatePartnerUniversityUsecase,
-    private readonly createLanguageUsecase: CreateLanguageUsecase,
+    private readonly addLanguageUsecase: AddLanguageUsecase,
     private readonly getUniversityUsecase: GetUniversityUsecase,
     private readonly getUniversitiesUsecase: GetUniversitiesUsecase,
     private readonly getLanguagesUsecase: GetLanguagesUsecase,
@@ -57,20 +57,32 @@ export class UniversityController {
   }
 
   // TODO: only admin can create new universities
-  @Post('partners')
+  @Post(':id/partners')
   @Swagger.ApiOperation({ summary: 'Create a new University ressource.' })
   @Swagger.ApiCreatedResponse({ type: UniversityResponse })
-  async createPartnerUniversity(@Body() body: CreateUniversityRequest) {
-    const instance = await this.createPartnerUniversityUsecase.execute(body);
+  async createPartnerUniversity(
+    @Param('id', ParseUUIDPipe) id: string,
+    @Body() body: UpdateUniversityPartnerRequest,
+  ) {
+    const instance = await this.createPartnerUniversityUsecase.execute({
+      parent: id,
+      ...body,
+    });
 
     return UniversityResponse.fromUniversity(instance);
   }
 
-  @Post('languages')
+  @Post(':id/languages')
   @Swagger.ApiOperation({ summary: 'Create a new Language ressource.' })
   @Swagger.ApiCreatedResponse({ type: LanguageResponse })
-  async createLanguage(@Body() body: CreateUniversityLanguageRequest) {
-    const instance = await this.createLanguageUsecase.execute(body);
+  async createLanguage(
+    @Param('id', ParseUUIDPipe) id: string,
+    @Body() body: AddUniversityLanguageRequest,
+  ) {
+    const instance = await this.addLanguageUsecase.execute({
+      university: id,
+      ...body,
+    });
 
     return LanguageResponse.fromLanguage(instance);
   }

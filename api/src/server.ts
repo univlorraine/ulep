@@ -1,4 +1,8 @@
-import { ClassSerializerInterceptor, ValidationPipe } from '@nestjs/common';
+import {
+  ClassSerializerInterceptor,
+  INestApplication,
+  ValidationPipe,
+} from '@nestjs/common';
 import { HttpAdapterHost, NestFactory, Reflector } from '@nestjs/core';
 import { NestExpressApplication } from '@nestjs/platform-express';
 import { DocumentBuilder, OpenAPIObject, SwaggerModule } from '@nestjs/swagger';
@@ -7,13 +11,7 @@ import { DomainErrorFilter, PrismaClientExceptionFilter } from './api/filters';
 import { CollectionInterceptor } from './api/interceptors';
 
 export class Server {
-  #port: number;
-
-  constructor(port: number) {
-    this.#port = port;
-  }
-
-  public async run(): Promise<void> {
+  public async run(port: number): Promise<void> {
     const app = await NestFactory.create<NestExpressApplication>(AppModule);
 
     this.addGlobalPipes(app);
@@ -22,10 +20,10 @@ export class Server {
     this.addCORSConfiguration(app);
     this.buildAPIDocumentation(app);
 
-    await app.listen(this.#port);
+    await app.listen(port);
   }
 
-  private addGlobalPipes(app: NestExpressApplication): void {
+  protected addGlobalPipes(app: INestApplication): void {
     app.useGlobalPipes(
       new ValidationPipe({
         transform: true,
@@ -35,14 +33,14 @@ export class Server {
     );
   }
 
-  private addGlobalFilters(app: NestExpressApplication): void {
+  protected addGlobalFilters(app: INestApplication): void {
     const { httpAdapter } = app.get(HttpAdapterHost);
 
     app.useGlobalFilters(new PrismaClientExceptionFilter(httpAdapter));
     app.useGlobalFilters(new DomainErrorFilter(httpAdapter));
   }
 
-  private addGlobalInterceptors(app: NestExpressApplication): void {
+  protected addGlobalInterceptors(app: INestApplication): void {
     app.useGlobalInterceptors(
       new ClassSerializerInterceptor(app.get(Reflector), {
         strategy: 'excludeAll',
@@ -53,7 +51,7 @@ export class Server {
     app.useGlobalInterceptors(new CollectionInterceptor());
   }
 
-  private addCORSConfiguration(app: NestExpressApplication): void {
+  protected addCORSConfiguration(app: INestApplication): void {
     app.enableCors({
       allowedHeaders: ['Content-Type', 'Authorization', 'Range'],
       exposedHeaders: ['Content-Range'],
@@ -62,7 +60,7 @@ export class Server {
     });
   }
 
-  private buildAPIDocumentation(app: NestExpressApplication): void {
+  protected buildAPIDocumentation(app: INestApplication): void {
     const options = new DocumentBuilder()
       .setTitle('ULEP API')
       .setVersion('1.0.0')

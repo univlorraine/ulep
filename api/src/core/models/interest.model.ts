@@ -8,6 +8,5 @@ export class InterestCategory {
 
 export class Interest {
   id: string;
-  category?: InterestCategory;
   name: TextContent;
 }

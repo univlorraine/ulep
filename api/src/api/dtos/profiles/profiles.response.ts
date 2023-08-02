@@ -76,17 +76,17 @@ export class ProfileResponse {
       id: profile.id,
       user: UserResponse.fromDomain(profile.user),
       nativeLanguage: {
-        code: profile.languages.native.code,
+        code: profile.nativeLanguage.code,
       },
       learningLanguage: {
-        code: profile.languages.learning.code,
-        level: profile.languages.learning.level,
+        code: profile.learningLanguage.code,
+        level: profile.level,
       },
       goals: [], // TODO
       interests: profile.interests.map(
         (interest) => new InterestResponse({ id: interest.name.content }),
       ),
-      meetingFrequency: profile.preferences.meetingFrequency,
+      meetingFrequency: profile.meetingFrequency,
       bios: profile.bio,
     });
   }

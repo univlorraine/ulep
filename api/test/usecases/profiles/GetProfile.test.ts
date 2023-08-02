@@ -1,9 +1,11 @@
+import {
+  InterestFactory,
+  LanguageFactory,
+  UniversityFactory,
+  UserFactory,
+} from '@app/common';
 import { InMemoryProfileRepository } from '../../../src/providers/persistance/repositories/in-memory-profile-repository';
 import { GetProfileUsecase } from '../../../src/core/usecases/profiles/get-profile.usecase';
-import { UserFactory } from '../../factories/user.factory';
-import { UniversityFactory } from '../../factories/university.factory';
-import { LanguageFactory } from '../../factories/language.factory';
-import { InterestFactory } from '../../factories/interest.factory';
 import { LearningType, ProficiencyLevel, Profile } from 'src/core/models';
 
 describe('GetProfile', () => {

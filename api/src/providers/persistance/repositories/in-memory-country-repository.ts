@@ -22,16 +22,35 @@ export class InMemoryCountryCodesRepository implements CountryRepository {
     this.#countries = [];
   }
 
-  async all({ page, limit }: CountryFilters): Promise<Collection<CountryCode>> {
-    const offset = page > 0 ? (page - 1) * limit : 0;
-    const totalItems = this.#countries.length;
+  async all(filters: CountryFilters): Promise<Collection<CountryCode>> {
+    let countries = this.#countries;
+
+    if (filters.where?.enable) {
+      countries = countries.filter(
+        (country) => country.enable === filters.where.enable,
+      );
+    }
+
+    const offset = filters.page > 0 ? (filters.page - 1) * filters.limit : 0;
+    if (offset >= countries.length) {
+      return { items: [], totalItems: countries.length };
+    }
+
+    countries = countries.sort((a, b) => {
+      if (filters.orderBy?.name === 'asc') {
+        return a.name.localeCompare(b.name);
+      }
+
+      if (filters.orderBy?.name === 'desc') {
+        return b.name.localeCompare(a.name);
+      }
+
+      return 0;
+    });
 
     return {
-      items: this.#countries.slice(
-        offset,
-        Math.min(offset + limit, totalItems),
-      ),
-      totalItems: totalItems,
+      items: countries.slice(offset, offset + filters.limit),
+      totalItems: countries.length,
     };
   }
 

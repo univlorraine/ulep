@@ -19,7 +19,7 @@ export class CreateUniversityCommand {
   name: string;
   campus: string[];
   timezone: string;
-  languageCodes: string[];
+  languages: string[];
   admissionStart: Date;
   admissionEnd: Date;
   website?: string;
@@ -35,11 +35,11 @@ export class CreateUniversityUsecase {
     private readonly languageRepository: LanguageRepository,
     @Inject(UUID_PROVIDER)
     private readonly uuidProvider: UuidProviderInterface,
-  ) { }
+  ) {}
 
   async execute(command: CreateUniversityCommand) {
-    const rootUniversity = await this.universityRepository.findUniversityCentral();
-    if (rootUniversity) {
+    const universities = await this.universityRepository.findAll();
+    if (universities.length > 0) {
       throw new DomainError({ message: 'Central university already exists' });
     }
 
@@ -49,9 +49,7 @@ export class CreateUniversityUsecase {
     }
 
     const languageCodes = await Promise.all(
-      command.languageCodes.map((code) =>
-        this.tryToFindTheLanguageOfCode(code),
-      ),
+      command.languages.map((code) => this.tryToFindTheLanguageOfCode(code)),
     );
 
     const university = University.create({

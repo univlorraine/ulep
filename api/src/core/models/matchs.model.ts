@@ -18,10 +18,10 @@ export type MatchScores = {
 };
 
 export class Match {
-  #owner: Profile;
-  #target: Profile;
-  #scores: MatchScores;
-  #total: number;
+  readonly owner: Profile;
+  readonly target: Profile;
+  readonly scores: MatchScores;
+  readonly total: number;
 
   constructor(props: CreateMatchProps) {
     if (props.owner.id === props.target.id) {
@@ -39,25 +39,9 @@ export class Match {
       });
     }
 
-    this.#owner = props.owner;
-    this.#target = props.target;
-    this.#scores = props.scores;
-    this.#total = total;
-  }
-
-  get owner() {
-    return this.#owner;
-  }
-
-  get target() {
-    return this.#target;
-  }
-
-  get scores(): MatchScores {
-    return this.#scores;
-  }
-
-  get total(): number {
-    return this.#total;
+    this.owner = props.owner;
+    this.target = props.target;
+    this.scores = props.scores;
+    this.total = total;
   }
 }

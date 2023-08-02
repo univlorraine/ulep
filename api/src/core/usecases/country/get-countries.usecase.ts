@@ -22,11 +22,13 @@ export class GetCountriesUsecase {
   async execute(
     command: GetCountriesCommand,
   ): Promise<Collection<CountryCode>> {
+    const { enable, page = 1, limit = 30 } = command;
+
     const result = await this.countryRepository.all({
-      where: { enable: command.enable },
+      where: { enable },
       orderBy: { name: 'asc' },
-      page: command.page,
-      limit: command.limit,
+      page: page,
+      limit: limit,
     });
 
     return result;

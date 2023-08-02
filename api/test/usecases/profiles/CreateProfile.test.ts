@@ -1,14 +1,16 @@
-import { InterestFactory } from '../../factories/interest.factory';
+import {
+  InterestFactory,
+  LanguageFactory,
+  UniversityFactory,
+  UserFactory,
+} from '@app/common';
 import { CreateProfileUsecase } from '../../../src/core/usecases';
 import { InMemoryInterestRepository } from '../../../src/providers/persistance/repositories/in-memory-interest.repository';
 import { InMemoryLanguageRepository } from '../../../src/providers/persistance/repositories/in-memory-language-repository';
 import { InMemoryProfileRepository } from '../../../src/providers/persistance/repositories/in-memory-profile-repository';
 import { InMemoryUniversityRepository } from '../../../src/providers/persistance/repositories/in-memory-university-repository';
 import { InMemoryUserRepository } from '../../../src/providers/persistance/repositories/in-memory-user-repository';
-import { UserFactory } from '../../factories/user.factory';
-import { LanguageFactory } from '../../factories/language.factory';
 import { LearningType, ProficiencyLevel } from '../../../src/core/models';
-import { UniversityFactory } from '../../factories/university.factory';
 import {
   RessourceDoesNotExist,
   UnsuportedLanguageException,
@@ -105,7 +107,7 @@ describe('CreateProfile', () => {
         user: 'uuid-that-does-not-exist',
         nativeLanguageCode: languages[0].code,
         learningLanguageCode: languages[1].code,
-        proficiencyLevel: ProficiencyLevel.B2,
+        level: ProficiencyLevel.B2,
         learningType: LearningType.ETANDEM,
         goals: [],
         meetingFrequency: 'ONCE_A_WEEK',
@@ -126,7 +128,7 @@ describe('CreateProfile', () => {
       id: 'uuid-1',
       user: user.id,
       nativeLanguageCode: nativeLanguage.code,
-      proficiencyLevel: ProficiencyLevel.B2,
+      level: ProficiencyLevel.B2,
       learningType: LearningType.ETANDEM,
       goals: [],
       meetingFrequency: 'ONCE_A_WEEK',
@@ -148,7 +150,7 @@ describe('CreateProfile', () => {
         user: user.id,
         nativeLanguageCode: nativeLanguage.code,
         learningLanguageCode: unvailableLanguage.code,
-        proficiencyLevel: ProficiencyLevel.B2,
+        level: ProficiencyLevel.B2,
         learningType: LearningType.ETANDEM,
         goals: [],
         meetingFrequency: 'ONCE_A_WEEK',
@@ -173,7 +175,7 @@ describe('CreateProfile', () => {
         user: user.id,
         nativeLanguageCode: nativeLanguage.code,
         learningLanguageCode: nativeLanguage.code,
-        proficiencyLevel: ProficiencyLevel.B2,
+        level: ProficiencyLevel.B2,
         learningType: LearningType.ETANDEM,
         goals: [],
         meetingFrequency: 'ONCE_A_WEEK',
@@ -198,7 +200,7 @@ describe('CreateProfile', () => {
         user: user.id,
         nativeLanguageCode: nativeLanguage.code,
         learningLanguageCode: learningLanguage.code,
-        proficiencyLevel: ProficiencyLevel.B2,
+        level: ProficiencyLevel.B2,
         masteredLanguageCodes: [nativeLanguage.code],
         learningType: LearningType.ETANDEM,
         goals: [],
@@ -224,7 +226,7 @@ describe('CreateProfile', () => {
         user: user.id,
         nativeLanguageCode: nativeLanguage.code,
         learningLanguageCode: learningLanguage.code,
-        proficiencyLevel: ProficiencyLevel.B2,
+        level: ProficiencyLevel.B2,
         masteredLanguageCodes: [learningLanguage.code],
         learningType: LearningType.ETANDEM,
         goals: [],

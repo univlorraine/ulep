@@ -1,113 +1,97 @@
 import { ProfileLanguagesException } from '../errors/profile-exceptions';
 import { Interest } from './interest.model';
-import { Language, LearningLanguage } from './language.model';
-import { LearningPreferences } from './learning-preferences';
+import { Language } from './language.model';
+import { Goals, LearningType } from './learning-preferences';
 import { ProficiencyLevel } from './proficiency.model';
 import { User } from './user.model';
-
-export type Languages = {
-  native: Language;
-  mastered: Language[];
-  learning?: LearningLanguage;
-};
 
 export type CreateProfileProps = {
   id: string;
   user: User;
-  languages: Languages;
-  preferences: LearningPreferences;
+  nativeLanguage: Language;
+  masteredLanguages: Language[];
+  learningLanguage?: Language;
+  level: ProficiencyLevel;
+  learningType: LearningType;
+  meetingFrequency: string;
+  sameGender: boolean;
+  sameAge: boolean;
+  goals: Goals[];
   interests: Interest[];
   bio?: string;
 };
 
 export class Profile {
-  #id: string;
-  #user: User;
-  #languages: Languages;
-  #preferences: LearningPreferences;
-  #interests: Interest[];
-  #bio?: string;
+  readonly id: string;
+
+  readonly user: User;
+
+  readonly nativeLanguage: Language;
+
+  readonly masteredLanguages: Language[];
+
+  readonly learningLanguage?: Language;
+
+  readonly level: ProficiencyLevel;
+
+  readonly learningType: LearningType;
+
+  readonly meetingFrequency: string;
+
+  readonly sameGender: boolean;
+
+  readonly sameAge: boolean;
+
+  readonly goals: Goals[];
+
+  readonly interests: Interest[];
+
+  readonly bio?: string;
 
   constructor(props: CreateProfileProps) {
-    this.#id = props.id;
-    this.#user = props.user;
-    this.#interests = props.interests;
-    this.#bio = props.bio;
-    this.languages = props.languages;
-    this.preferences = props.preferences;
-  }
-
-  get id(): string {
-    return this.#id;
-  }
-
-  get user(): User {
-    return this.#user;
-  }
-
-  get university(): string {
-    return this.#user.university.id;
-  }
-
-  get role(): string {
-    return this.#user.role;
-  }
-
-  get age(): number {
-    return this.#user.age;
-  }
-
-  get gender(): string {
-    return this.#user.gender;
-  }
-
-  get languages(): Languages {
-    return this.#languages;
-  }
-
-  set languages(languages: Languages) {
-    this.#languages = languages;
+    this.id = props.id;
+    this.user = props.user;
+    this.nativeLanguage = props.nativeLanguage;
+    this.masteredLanguages = [...props.masteredLanguages];
+    this.learningLanguage = props.learningLanguage;
+    this.level = props.level;
+    this.learningType = props.learningType;
+    this.meetingFrequency = props.meetingFrequency;
+    this.sameGender = props.sameGender;
+    this.sameAge = props.sameAge;
+    this.goals = [...props.goals];
+    this.interests = [...props.interests];
+    this.bio = props.bio;
 
     this.assertLanguesAreUnique();
 
-    if (!languages.learning.code) {
-      this.#languages.learning.level = ProficiencyLevel.A0;
+    if (!props.learningLanguage.code) {
+      this.level = ProficiencyLevel.A0;
     }
   }
 
-  get preferences(): LearningPreferences {
-    return this.#preferences;
-  }
+  protected assertLanguesAreUnique(): void {
+    const masteredLanguages = this.masteredLanguages.map((l) => l.code);
 
-  set preferences(preferences: LearningPreferences) {
-    this.#preferences = preferences;
-  }
-
-  get interests(): Interest[] {
-    return this.#interests;
-  }
-
-  get bio(): string | undefined {
-    return this.#bio;
-  }
-
-  private assertLanguesAreUnique(): void {
-    const { native, mastered, learning } = this.#languages;
-    const masteredLanguages = mastered.map((l) => l.code);
-
-    if (learning && native.code === learning.code) {
+    if (
+      this.learningLanguage &&
+      this.nativeLanguage.code === this.learningLanguage.code
+    ) {
       throw new ProfileLanguagesException(
         'Native and learning languages cannot be the same',
       );
     }
 
-    if (masteredLanguages.includes(native.code)) {
+    if (masteredLanguages.includes(this.nativeLanguage.code)) {
       throw new ProfileLanguagesException(
         'Native and mastered languages cannot be the same',
       );
     }
 
-    if (learning && masteredLanguages.includes(learning.code)) {
+    if (
+      this.learningLanguage &&
+      masteredLanguages.includes(this.learningLanguage.code)
+    ) {
       throw new ProfileLanguagesException(
         'Learning and mastered languages cannot be the same',
       );

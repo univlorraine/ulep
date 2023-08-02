@@ -29,12 +29,8 @@ export class InMemoryUniversityRepository implements UniversityRepository {
     return this.#universities;
   }
 
-  async findUniversityCentral(): Promise<University> {
-    return this.#universities.find((university) => !university.parent);
-  }
-
-  async findPartners(): Promise<University[]> {
-    return this.#universities.filter((university) => !!university.parent);
+  async havePartners(id: string): Promise<boolean> {
+    return this.#universities.some((university) => university.parent === id);
   }
 
   async ofId(id: string): Promise<University> {
@@ -45,18 +41,15 @@ export class InMemoryUniversityRepository implements UniversityRepository {
     return this.#universities.find((university) => university.name === name);
   }
 
-  async languages(id: string): Promise<Language[]> {
-    const university = await this.ofId(id);
-
-    return university?.languages || [];
-  }
-
   async addLanguage(language: Language, university: University): Promise<void> {
     const index = this.#universities.findIndex((u) => u.id === university.id);
 
     if (index !== -1) {
       const university = this.#universities[index];
-      university.languages = [...university.languages, language];
+      this.#universities[index] = {
+        ...university,
+        languages: [...university.languages, language],
+      };
     }
   }
 
@@ -67,9 +60,11 @@ export class InMemoryUniversityRepository implements UniversityRepository {
     const index = this.#universities.findIndex((u) => u.id === university.id);
 
     if (index !== -1) {
-      this.#universities[index].languages = this.#universities[
-        index
-      ].languages.filter((l) => l.code !== language.code);
+      const university = this.#universities[index];
+      this.#universities[index] = {
+        ...university,
+        languages: university.languages.filter((l) => l.code !== language.code),
+      };
     }
   }
 
@@ -77,7 +72,11 @@ export class InMemoryUniversityRepository implements UniversityRepository {
     const index = this.#universities.findIndex((u) => u.id === id);
 
     if (index !== -1) {
-      this.#universities[index].name = name;
+      const university = this.#universities[index];
+      this.#universities[index] = {
+        ...university,
+        name,
+      };
     }
   }
 

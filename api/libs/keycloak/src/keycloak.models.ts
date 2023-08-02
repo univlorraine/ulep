@@ -1,5 +1,5 @@
 // TODO: add attributes mappers in keycloak addministration
-export interface KeycloakUser {
+export class KeycloakUser {
   sub: string;
   email: string;
   email_verified: boolean;

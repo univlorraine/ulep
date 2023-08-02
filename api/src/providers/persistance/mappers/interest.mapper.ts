@@ -20,9 +20,5 @@ export const interestMapper = (snapshot: InterestSnapshot): Interest => {
   return {
     id: snapshot.id,
     name: textContentMapper(snapshot.TextContent),
-    category: {
-      id: snapshot.Category.id,
-      name: textContentMapper(snapshot.Category.TextContent),
-    },
   };
 };

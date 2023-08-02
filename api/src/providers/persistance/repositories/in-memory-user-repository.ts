@@ -48,7 +48,10 @@ export class InMemoryUserRepository implements UserRepository {
     const index = this.#users.findIndex((u) => u.id === id);
 
     if (index !== -1) {
-      this.#users[index].age = age;
+      this.#users[index] = {
+        ...this.#users[index],
+        age,
+      };
     }
   }
 

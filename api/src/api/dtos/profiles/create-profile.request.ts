@@ -29,7 +29,7 @@ export class CreateProfileRequest
 
   @Swagger.ApiProperty({ enum: ProficiencyLevel, example: 'B2' })
   @IsEnum(ProficiencyLevel)
-  proficiencyLevel: ProficiencyLevel;
+  level: ProficiencyLevel;
 
   @ApiPropertyOptional({ type: 'string', example: ['FR'] })
   @IsNotEmpty({ each: true })

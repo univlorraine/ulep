@@ -32,7 +32,13 @@ export class InMemoryReportsRepository implements ReportRepository {
   }
 
   async reportOfId(id: string): Promise<Report> {
-    return this.#reports.find((report) => report.id === id);
+    const index = this.#reports.findIndex((report) => report.id === id);
+
+    if (index !== -1) {
+      return this.#reports[index];
+    }
+
+    return null;
   }
 
   async categories(): Promise<ReportCategory[]> {
@@ -40,14 +46,21 @@ export class InMemoryReportsRepository implements ReportRepository {
   }
 
   async categoryOfId(id: string): Promise<ReportCategory> {
-    return this.#categories.find((category) => category.id === id);
+    const index = this.#categories.findIndex((category) => category.id === id);
+
+    if (index !== -1) {
+      return this.#categories[index];
+    }
+
+    return null;
   }
 
   async updateReport(id: string, status: ReportStatus): Promise<void> {
     const index = this.#reports.findIndex((report) => report.id === id);
 
     if (index !== -1) {
-      this.#reports[index].status = status;
+      const report = this.#reports[index];
+      this.#reports[index] = { ...report, status };
     }
   }
 

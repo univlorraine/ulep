@@ -10,18 +10,22 @@ export interface MediaObjectProps {
 }
 
 export class MediaObject {
-  #id: string;
-  #name: string;
-  #bucket: string;
-  #mimetype: string;
-  #size: number;
+  readonly id: string;
+
+  readonly name: string;
+
+  readonly bucket: string;
+
+  readonly mimetype: string;
+
+  readonly size: number;
 
   constructor(props: { id: string } & MediaObjectProps) {
-    this.#id = props.id;
-    this.#name = props.name;
-    this.#bucket = props.bucket;
-    this.#mimetype = props.mimetype;
-    this.#size = props.size;
+    this.id = props.id;
+    this.name = props.name;
+    this.bucket = props.bucket;
+    this.mimetype = props.mimetype;
+    this.size = props.size;
   }
 
   static image(file: Express.Multer.File): MediaObject {
@@ -36,26 +40,6 @@ export class MediaObject {
       mimetype: file.mimetype,
       size: file.size,
     });
-  }
-
-  get id(): string {
-    return this.#id;
-  }
-
-  get name(): string {
-    return this.#name;
-  }
-
-  get bucket(): string {
-    return this.#bucket;
-  }
-
-  get mimetype(): string {
-    return this.#mimetype;
-  }
-
-  get size(): number {
-    return this.#size;
   }
 
   get url(): string {

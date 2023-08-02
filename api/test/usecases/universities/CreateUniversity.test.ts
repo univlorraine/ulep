@@ -1,9 +1,8 @@
+import { LanguageFactory, UniversityFactory } from '@app/common';
 import { UuidProvider } from '../../../src/providers/services/uuid.provider';
 import { InMemoryLanguageRepository } from '../../../src/providers/persistance/repositories/in-memory-language-repository';
 import { InMemoryUniversityRepository } from '../../../src/providers/persistance/repositories/in-memory-university-repository';
-import { LanguageFactory } from '../../factories/language.factory';
 import { CreateUniversityUsecase } from '../../../src/core/usecases';
-import { UniversityFactory } from '../../factories/university.factory';
 
 describe('CreateUniversity', () => {
   const languageFactory = new LanguageFactory();

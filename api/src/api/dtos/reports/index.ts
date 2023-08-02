@@ -13,7 +13,8 @@ import {
 } from 'src/core/usecases/report';
 
 export class CreateReportCategoryRequest
-  implements CreateReportCategoryCommand {
+  implements CreateReportCategoryCommand
+{
   @Swagger.ApiProperty({ type: 'string', format: 'uuid' })
   @IsUUID()
   id: string;

@@ -12,6 +12,7 @@ import {
 import { LanguageResponse } from '../languages';
 import { University } from 'src/core/models/university.model';
 import {
+  CreatePartnerUniversityCommand,
   CreateUniversityCommand,
   UpdateUniversityNameCommand,
 } from 'src/core/usecases/university';
@@ -37,7 +38,7 @@ export class CreateUniversityRequest implements CreateUniversityCommand {
 
   @Swagger.ApiProperty({ type: 'string', isArray: true, example: ['FR'] })
   @IsString({ each: true })
-  languageCodes: string[];
+  languages: string[];
 
   @Swagger.ApiProperty({ type: 'string', format: 'date' })
   @Type(() => Date)
@@ -68,6 +69,33 @@ export class UpdateUniversityNameRequest
   @IsString()
   @IsNotEmpty()
   name: string;
+}
+
+export class UpdateUniversityPartnerRequest
+  implements Omit<CreatePartnerUniversityCommand, 'parent'>
+{
+  @Swagger.ApiProperty({ type: 'string' })
+  @IsString()
+  @IsNotEmpty()
+  name: string;
+
+  @Swagger.ApiProperty({ type: 'string', isArray: true })
+  @IsString({ each: true })
+  campus: string[];
+
+  @Swagger.ApiProperty({ type: 'string', example: 'Europe/Paris' })
+  @IsTimeZone()
+  timezone: string;
+
+  @Swagger.ApiPropertyOptional({ type: 'string', format: 'url' })
+  @IsUrl()
+  @IsOptional()
+  website?: string;
+
+  @Swagger.ApiPropertyOptional({ type: 'string', format: 'url' })
+  @IsUrl()
+  @IsOptional()
+  resourcesUrl?: string;
 }
 
 export class UniversityResponse {

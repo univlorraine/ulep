@@ -18,13 +18,21 @@ export class DeleteUniversityUsecase {
 
   async execute(command: DeleteUniversityCommand) {
     const instance = await this.universityRepository.ofId(command.id);
-
     if (!instance) {
       throw new RessourceDoesNotExist();
     }
 
     if (!instance.parent) {
       throw new DomainError({ message: 'Cannot delete root university' });
+    }
+
+    const havePartners = await this.universityRepository.havePartners(
+      command.id,
+    );
+    if (havePartners) {
+      throw new DomainError({
+        message: 'Cannot delete university with partners',
+      });
     }
 
     return this.universityRepository.remove(command.id);

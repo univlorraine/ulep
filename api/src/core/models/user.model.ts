@@ -12,7 +12,7 @@ export enum Role {
   STAFF = 'STAFF',
 }
 
-export class User {
+export type UserProps = {
   id: string;
   email: string;
   firstname: string;
@@ -23,4 +23,39 @@ export class User {
   role: Role;
   country: string;
   avatar?: MediaObject;
+};
+
+export class User {
+  readonly id: string;
+
+  readonly email: string;
+
+  readonly firstname: string;
+
+  readonly lastname: string;
+
+  readonly gender: Gender;
+
+  readonly age: number;
+
+  readonly university: University;
+
+  readonly role: Role;
+
+  readonly country: string;
+
+  readonly avatar?: MediaObject;
+
+  constructor(props: UserProps) {
+    this.id = props.id;
+    this.email = props.email;
+    this.firstname = props.firstname;
+    this.lastname = props.lastname;
+    this.gender = props.gender;
+    this.age = props.age;
+    this.university = props.university;
+    this.role = props.role;
+    this.country = props.country;
+    this.avatar = props.avatar;
+  }
 }

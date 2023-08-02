@@ -18,7 +18,7 @@ export class UpdateCountryStatusUsecase {
   ) {}
 
   async execute(command: UpdateCountryStatusCommand): Promise<void> {
-    const country = await this.repository.ofCode(command.id);
+    const country = await this.repository.ofId(command.id);
 
     if (!country) {
       throw new RessourceDoesNotExist();

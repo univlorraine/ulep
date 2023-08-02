@@ -7,15 +7,11 @@ export interface UniversityRepository {
 
   findAll(): Promise<University[]>;
 
-  findUniversityCentral(): Promise<University | null>;
-
-  findPartners(): Promise<University[]>;
+  havePartners(id: string): Promise<boolean>;
 
   ofId(id: string): Promise<University | null>;
 
   ofName(name: string): Promise<University | null>;
-
-  languages(id: string): Promise<Language[]>;
 
   addLanguage(language: Language, university: University): Promise<void>;
 

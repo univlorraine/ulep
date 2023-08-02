@@ -1,6 +1,6 @@
-import { FindAllLanguageCodeUsecase } from '../../../src/core/usecases';
-import { InMemoryLanguageRepository } from '../../../src/providers/persistance/repositories/in-memory-language-repository';
-import { LanguageFactory } from '../../factories/language.factory';
+import { LanguageFactory } from '@app/common';
+import { FindAllLanguageCodeUsecase } from 'src/core/usecases';
+import { InMemoryLanguageRepository } from 'src/providers/persistance/repositories/in-memory-language-repository';
 
 describe('GetLanguages', () => {
   const repository = new InMemoryLanguageRepository();

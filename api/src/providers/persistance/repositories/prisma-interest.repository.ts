@@ -14,11 +14,14 @@ export class PrismaInterestRepository implements InterestRepository {
 
   constructor(private readonly prisma: PrismaService) {}
 
-  async createInterest(interest: Interest): Promise<Interest> {
+  async createInterest(
+    interest: Interest,
+    category: string,
+  ): Promise<Interest> {
     await this.prisma.interests.create({
       data: {
         id: interest.id,
-        Category: { connect: { id: interest.category.id } },
+        Category: { connect: { id: category } },
         TextContent: {
           create: {
             text: interest.name.content,
@@ -60,10 +63,6 @@ export class PrismaInterestRepository implements InterestRepository {
     return {
       id: interest.id,
       name: textContentMapper(interest.TextContent),
-      category: {
-        id: interest.Category.id,
-        name: textContentMapper(interest.Category.TextContent),
-      },
     };
   }
 

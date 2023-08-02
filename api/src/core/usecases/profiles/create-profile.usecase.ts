@@ -32,7 +32,7 @@ export class CreateProfileCommand {
   user: string;
   nativeLanguageCode: string;
   learningLanguageCode?: string;
-  proficiencyLevel: ProficiencyLevel;
+  level: ProficiencyLevel;
   masteredLanguageCodes?: string[];
   learningType: LearningType;
   goals: string[]; // TODO validate and parse uuids
@@ -88,25 +88,13 @@ export class CreateProfileUsecase {
     }
 
     const profile = new Profile({
-      id: command.id,
+      ...command,
       user: user,
-      languages: {
-        native: nativeLanguage,
-        learning: {
-          id: learningLanguage?.id,
-          code: learningLanguage?.code,
-          level: command.proficiencyLevel,
-        },
-        mastered: masteredLanguages,
-      },
-      preferences: {
-        learningType: command.learningType,
-        goals: [], // TODO
-        sameAge: command.sameAge,
-        sameGender: command.sameGender,
-        meetingFrequency: command.meetingFrequency,
-      },
-      interests: interests,
+      nativeLanguage,
+      masteredLanguages,
+      learningLanguage,
+      goals: [], // TODO
+      interests,
     });
 
     await this.profilesRepository.create(profile);

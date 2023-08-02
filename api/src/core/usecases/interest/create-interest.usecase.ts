@@ -7,7 +7,11 @@ import {
   UUID_PROVIDER,
   UuidProviderInterface,
 } from '../../ports/uuid.provider';
-import { RessourceAlreadyExists } from 'src/core/errors';
+import { RessourceDoesNotExist } from 'src/core/errors';
+import {
+  LANGUAGE_REPOSITORY,
+  LanguageRepository,
+} from 'src/core/ports/language.repository';
 
 export class CreateInterestCommand {
   id: string;
@@ -21,26 +25,33 @@ export class CreateInterestUsecase {
   constructor(
     @Inject(INTEREST_REPOSITORY)
     private readonly repository: InterestRepository,
+    @Inject(LANGUAGE_REPOSITORY)
+    private readonly languageRepository: LanguageRepository,
     @Inject(UUID_PROVIDER)
     private readonly uuidProvider: UuidProviderInterface,
   ) {}
 
   async execute(command: CreateInterestCommand) {
     const category = await this.repository.categoryOfId(command.category);
-
     if (!category) {
-      throw new RessourceAlreadyExists();
+      throw new RessourceDoesNotExist('Category does not exist');
     }
 
-    return this.repository.createInterest({
-      id: command.id,
-      category,
-      name: {
-        id: this.uuidProvider.generate(),
-        content: command.name,
-        language: command.languageCode,
-        translations: [],
+    const language = await this.languageRepository.ofCode(command.languageCode);
+    if (!language) {
+      throw new RessourceDoesNotExist();
+    }
+
+    return this.repository.createInterest(
+      {
+        id: command.id,
+        name: {
+          id: this.uuidProvider.generate(),
+          content: command.name,
+          language: command.languageCode,
+        },
       },
-    });
+      command.category,
+    );
   }
 }

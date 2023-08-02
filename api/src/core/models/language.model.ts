@@ -1,11 +1,17 @@
-import { ProficiencyLevel } from './proficiency.model';
-
-export class Language {
+export type LanguageProps = {
   id: string;
   code: string;
   name?: string;
-}
-
-export type LearningLanguage = Language & {
-  level: ProficiencyLevel;
 };
+
+export class Language {
+  readonly id: string;
+  readonly code: string;
+  readonly name?: string;
+
+  constructor(props: LanguageProps) {
+    this.id = props.id;
+    this.code = props.code;
+    this.name = props.name;
+  }
+}

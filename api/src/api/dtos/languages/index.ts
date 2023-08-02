@@ -1,22 +1,15 @@
 import * as Swagger from '@nestjs/swagger';
 import { Expose } from 'class-transformer';
-import { IsString, IsUUID, Length } from 'class-validator';
+import { IsUUID } from 'class-validator';
 import { Language } from 'src/core/models/language.model';
-import { CreateLanguageCommand } from 'src/core/usecases/university';
+import { AddLanguageCommand } from 'src/core/usecases/university';
 
-export class CreateUniversityLanguageRequest implements CreateLanguageCommand {
+export class AddUniversityLanguageRequest
+  implements Omit<AddLanguageCommand, 'university'>
+{
   @Swagger.ApiProperty({ type: 'string', format: 'uuid' })
   @IsUUID()
-  university: string;
-
-  @Swagger.ApiProperty({ type: 'string', example: 'FR' })
-  @IsString()
-  @Length(2, 2)
-  code: string;
-
-  @Swagger.ApiProperty({ type: 'string', example: 'French' })
-  @IsString()
-  name: string;
+  language: string;
 }
 
 export class LanguageResponse {

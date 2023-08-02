@@ -1,5 +1,5 @@
 import * as Swagger from '@nestjs/swagger';
-import { Expose, Transform } from 'class-transformer';
+import { Expose } from 'class-transformer';
 import { IsString, IsNotEmpty, IsUUID, Length } from 'class-validator';
 import {
   CreateInterestCategoryCommand,

@@ -1,8 +1,8 @@
+import { UserFactory } from '@app/common';
 import { RessourceDoesNotExist } from '../../../src/core/errors';
 import { CreateReportUsecase } from '../../../src/core/usecases';
 import { InMemoryReportsRepository } from '../../../src/providers/persistance/repositories/in-memory-reports-repository';
 import { InMemoryUserRepository } from '../../../src/providers/persistance/repositories/in-memory-user-repository';
-import { UserFactory } from '../../factories/user.factory';
 
 describe('CreateReport', () => {
   const userFactory = new UserFactory();

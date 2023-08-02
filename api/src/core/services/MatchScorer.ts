@@ -47,7 +47,7 @@ export class MatchScorer implements IMatchScorer {
       throw new SameProfilesError();
     }
 
-    const isDiscovery = !profile1.languages.learning || !profile2.languages.learning;
+    const isDiscovery = !profile1.learningLanguage || !profile2.learningLanguage;
 
     const scores: MatchScores = {
       level: this.computeLanguageLevel(profile1, profile2, isDiscovery),
@@ -85,8 +85,8 @@ export class MatchScorer implements IMatchScorer {
       C2: { A0: 6, A1: 6, A2: 5, B1: 4, B2: 4, C1: 4, C2: 4 },
     };
 
-    const level1 = profile1.languages.learning.level;
-    const level2 = profile2.languages.learning.level;
+    const level1 = profile1.level;
+    const level2 = profile2.level;
 
     const level = isDiscovery ? discoveryLanguageLevelMatrix[level1][level2] : languageLevelMatrix[level1][level2];
 
@@ -96,16 +96,16 @@ export class MatchScorer implements IMatchScorer {
   // Apply bunus if ages match criteria
   private computeAgeBonus(profile1: Profile, profile2: Profile): number {
     // Compute the absolute age difference between the two profiles
-    const ageDiff: number = Math.abs(profile1.age - profile2.age);
+    const ageDiff: number = Math.abs(profile1.user.age - profile2.user.age);
     // If the age of the first profile is greater than 50
-    if (profile1.age > 50) {
+    if (profile1.user.age > 50) {
       // Apply the age bonus if the age of the second profile is greater than 45
       // If the second profile is 45 or younger, return the original score
-      return profile2.age > 45 ? this.coeficients.age : 0;
+      return profile2.user.age > 45 ? this.coeficients.age : 0;
     }
     // If the age of the first profile is greater than 30 (but not greater than 50,
     // because of the previous condition)
-    if (profile1.age > 30) {
+    if (profile1.user.age > 30) {
       // Apply the age bonus if the age difference between the profiles is between -10 and 10 (inclusive)
       // If the age difference is outside this range, return the original score
       return ageDiff >= -10 && ageDiff <= 10 ? this.coeficients.age : 0;
@@ -119,7 +119,7 @@ export class MatchScorer implements IMatchScorer {
   // Apply bonus if profiles share the same status
   private computeSameRolesBonus(profile1: Profile, profile2: Profile): number {
     // If the status of the two profiles is the same apply a bonus to the score.
-    if (profile1.role === profile2.role) {
+    if (profile1.user.role === profile2.user.role) {
       return this.coeficients.status;
     }
 
@@ -129,12 +129,12 @@ export class MatchScorer implements IMatchScorer {
   // Apply bonus if profiles dont share the same gender
   private computeSameGenderBonus(profile1: Profile, profile2: Profile): number {
     // Check if either profile prefers to be matched with someone of the same gender
-    const prefersSameGender1 = profile1.preferences.sameGender;
-    const prefersSameGender2 = profile2.preferences.sameGender;
+    const prefersSameGender1 = profile1.sameGender;
+    const prefersSameGender2 = profile2.sameGender;
     // Check if both profiles do not care about gender
     const doesNotCareAboutGender = !prefersSameGender1 && !prefersSameGender2;
     // Check if the genders of the two profiles match
-    const gendersMatch = profile1.gender === profile2.gender;
+    const gendersMatch = profile1.user.gender === profile2.user.gender;
     // Apply bonus if one profile prefer the same gender and their genders match,
     // or if both profiles do not care about gender
     if (
@@ -150,8 +150,8 @@ export class MatchScorer implements IMatchScorer {
   // Apply bonus if profiles share the same goals
   private computeSameGoalsBonus(profile1: Profile, profile2: Profile): number {
     const similarity = this.computeSimilarity(
-      new Set(profile1.preferences.goals.map((goal) => goal.id)),
-      new Set(profile2.preferences.goals.map((goal) => goal.id)),
+      new Set(profile1.goals.map((goal) => goal.id)),
+      new Set(profile2.goals.map((goal) => goal.id)),
     );
 
     return this.coeficients.goals * similarity;
@@ -176,7 +176,7 @@ export class MatchScorer implements IMatchScorer {
     profile2: Profile,
   ): number {
     // Check if both profiles share the same university
-    const sharesUniversity = profile1.university === profile2.university;
+    const sharesUniversity = profile1.user.university === profile2.user.university;
 
     // If both profiles share the same university, apply the bonus
     if (sharesUniversity) {

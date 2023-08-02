@@ -41,28 +41,24 @@ export const profileMapper = (instance: ProfileSnapshot): Profile => {
   return new Profile({
     id: instance.id,
     user: userMapper(instance.User),
-    languages: {
-      native: {
-        id: instance.NativeLanguage.id,
-        code: instance.NativeLanguage.code,
-      },
-      mastered: instance.MasteredLanguages.map((language) => ({
-        id: language.LanguageCode.id,
-        code: language.LanguageCode.code,
-      })),
-      learning: {
-        id: instance.LearningLanguage.id,
-        code: instance.LearningLanguage.code,
-        level: ProficiencyLevel[instance.level],
-      },
+    nativeLanguage: {
+      id: instance.NativeLanguage.id,
+      code: instance.NativeLanguage.code,
     },
-    preferences: {
-      learningType: LearningType[instance.learning_type],
-      meetingFrequency: instance.meeting_frequency,
-      sameAge: instance.same_age,
-      sameGender: instance.same_gender,
-      goals: [], // TODO: Fix this
+    masteredLanguages: instance.MasteredLanguages.map((language) => ({
+      id: language.LanguageCode.id,
+      code: language.LanguageCode.code,
+    })),
+    learningLanguage: {
+      id: instance.LearningLanguage.id,
+      code: instance.LearningLanguage.code,
     },
+    level: ProficiencyLevel[instance.level],
+    learningType: LearningType[instance.learning_type],
+    meetingFrequency: instance.meeting_frequency,
+    sameAge: instance.same_age,
+    sameGender: instance.same_gender,
+    goals: [], // TODO: Fix this
     interests: instance.Interests.map((interest) => ({
       id: interest.id,
       name: textContentMapper(interest.TextContent),
@@ -71,5 +67,6 @@ export const profileMapper = (instance: ProfileSnapshot): Profile => {
         name: textContentMapper(interest.Category.TextContent),
       },
     })),
+    bio: instance.bio,
   });
 };

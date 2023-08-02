@@ -19,9 +19,13 @@ export class PrismaProficiencyRepository implements ProficiencyRepository {
 
   constructor(private readonly prisma: PrismaService) {}
 
-  async createTest(level: ProficiencyLevel): Promise<ProficiencyTest> {
+  async createTest(
+    id: string,
+    level: ProficiencyLevel,
+  ): Promise<ProficiencyTest> {
     const test = await this.prisma.proficiencyTests.create({
       data: {
+        id,
         level,
       },
       include: {

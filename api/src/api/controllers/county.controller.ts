@@ -1,4 +1,12 @@
-import { Body, Controller, Get, Param, Patch, Query } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Get,
+  Param,
+  ParseUUIDPipe,
+  Patch,
+  Query,
+} from '@nestjs/common';
 import * as Swagger from '@nestjs/swagger';
 import { Collection } from '@app/common';
 import { CollectionResponse } from '../decorators';
@@ -36,10 +44,10 @@ export class CountryController {
     });
   }
 
-  @Patch('id')
+  @Patch(':id')
   @Swagger.ApiOperation({ summary: 'Update a Country ressource.' })
   async update(
-    @Param('id') id: string,
+    @Param('id', ParseUUIDPipe) id: string,
     @Body() body: UpdateCountryRequest,
   ): Promise<void> {
     await this.updateCountryStatusUsecase.execute({ id, ...body });

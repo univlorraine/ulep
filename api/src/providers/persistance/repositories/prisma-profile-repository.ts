@@ -58,28 +58,28 @@ export class PrismaProfileRepository implements ProfileRepository {
     await this.prisma.profiles.create({
       data: {
         id: profile.id,
-        learning_type: profile.preferences.learningType,
-        same_gender: profile.preferences.sameGender,
-        same_age: profile.preferences.sameAge,
-        meeting_frequency: profile.preferences.meetingFrequency,
+        learning_type: profile.learningType,
+        same_gender: profile.sameGender,
+        same_age: profile.sameAge,
+        meeting_frequency: profile.meetingFrequency,
         bio: profile.bio,
         User: {
           connect: { id: profile.user.id },
         },
         NativeLanguage: {
-          connect: { id: profile.languages.native.id },
+          connect: { id: profile.nativeLanguage.id },
         },
         LearningLanguage: {
-          connect: { id: profile.languages.learning.id },
+          connect: { id: profile.learningLanguage.id },
         },
-        level: profile.languages.learning.level,
+        level: profile.level,
         MasteredLanguages: {
-          create: profile.languages.mastered.map((language) => {
+          create: profile.masteredLanguages.map((language) => {
             return { LanguageCode: { connect: { code: language.code } } };
           }),
         },
         Goals: {
-          connect: profile.preferences.goals.map((goal) => ({ id: goal.id })),
+          connect: profile.goals.map((goal) => ({ id: goal.id })),
         },
         Interests: {
           connect: profile.interests.map((interest) => ({ id: interest.id })),

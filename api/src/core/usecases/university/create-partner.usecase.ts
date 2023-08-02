@@ -11,12 +11,10 @@ import {
 } from 'src/core/ports/uuid.provider';
 
 export class CreatePartnerUniversityCommand {
-  id: string;
+  parent: string;
   name: string;
   campus: string[];
   timezone: string;
-  admissionStart: Date;
-  admissionEnd: Date;
   website?: string;
   resourcesUrl?: string;
 }
@@ -28,11 +26,11 @@ export class CreatePartnerUniversityUsecase {
     private readonly universityRepository: UniversityRepository,
     @Inject(UUID_PROVIDER)
     private readonly uuidProvider: UuidProviderInterface,
-  ) { }
+  ) {}
 
   async execute(command: CreatePartnerUniversityCommand) {
-    const rootUniversity = await this.universityRepository.findUniversityCentral();
-    if (!rootUniversity) {
+    const central = await this.universityRepository.ofId(command.parent);
+    if (!central) {
       throw new DomainError({ message: 'Central university does not exists' });
     }
 
@@ -42,18 +40,14 @@ export class CreatePartnerUniversityUsecase {
     }
 
     const university = University.create({
-      id: command.id,
+      id: this.uuidProvider.generate(),
       name: command.name,
-      parent: rootUniversity.id,
+      parent: central.id,
       campus: command.campus,
       timezone: command.timezone,
-      languages: rootUniversity.languages.map((language) => ({
-        id: this.uuidProvider.generate(),
-        code: language.code,
-        name: language.name,
-      })),
-      admissionStart: command.admissionStart,
-      admissionEnd: command.admissionEnd,
+      languages: central.languages,
+      admissionStart: central.admissionStart,
+      admissionEnd: central.admissionEnd,
       website: command.website,
       resourcesUrl: command.resourcesUrl,
     });

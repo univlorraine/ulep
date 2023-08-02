@@ -3,30 +3,39 @@ import { InterestRepository } from 'src/core/ports/interest.repository';
 
 export class InMemoryInterestRepository implements InterestRepository {
   #categories: InterestCategory[] = [];
-  #interests: Interest[] = [];
 
   get interests(): Interest[] {
-    return this.#interests;
+    return this.#categories.reduce(
+      (interests, category) => [...interests, ...(category.interests ?? [])],
+      [],
+    );
   }
 
   get categories(): InterestCategory[] {
     return this.#categories;
   }
 
-  init(interests: Interest[] = [], categories: InterestCategory[] = []): void {
-    this.#interests = interests;
+  init(categories: InterestCategory[] = []): void {
     this.#categories = categories;
   }
 
   reset(): void {
-    this.#interests = [];
     this.#categories = [];
   }
 
-  createInterest(interest: Interest): Promise<Interest> {
-    this.#interests.push(interest);
+  async createInterest(
+    interest: Interest,
+    category: string,
+  ): Promise<Interest> {
+    const instance = await this.categoryOfId(category);
 
-    return Promise.resolve(interest);
+    if (!instance) {
+      throw new Error('Interest category does not exist');
+    }
+
+    instance.interests = [...(instance.interests ?? []), interest];
+
+    return interest;
   }
 
   createCategory(category: InterestCategory): Promise<InterestCategory> {
@@ -36,7 +45,7 @@ export class InMemoryInterestRepository implements InterestRepository {
   }
 
   async interestOfId(id: string): Promise<Interest> {
-    const interest = this.#interests.find((interest) => interest.id === id);
+    const interest = this.interests.find((interest) => interest.id === id);
 
     if (!interest) {
       return null;
@@ -60,7 +69,15 @@ export class InMemoryInterestRepository implements InterestRepository {
   }
 
   async deleteInterest(instance: Interest): Promise<void> {
-    const index = this.#interests.findIndex(
+    const category = this.#categories.find((category) =>
+      category.interests.some((interest) => interest.id === instance.id),
+    );
+
+    if (!category) {
+      return;
+    }
+
+    const index = category.interests.findIndex(
       (interest) => interest.id === instance.id,
     );
 
@@ -68,7 +85,7 @@ export class InMemoryInterestRepository implements InterestRepository {
       return;
     }
 
-    this.#interests.splice(index, 1);
+    category.interests.splice(index, 1);
   }
 
   async deleteCategory(instance: InterestCategory): Promise<void> {

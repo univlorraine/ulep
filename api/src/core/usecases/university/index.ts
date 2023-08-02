@@ -1,4 +1,4 @@
-export * from './create-language.usecase';
+export * from './add-language.usecase';
 export * from './create-university.usecase';
 export * from './create-partner.usecase';
 export * from './delete-language.usecase';

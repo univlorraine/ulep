@@ -6,7 +6,6 @@ import {
   universityMapper,
 } from '../mappers/university.mapper';
 import { Language, University } from 'src/core/models';
-import { LanguageCodes } from '@prisma/client';
 
 @Injectable()
 export class PrismaUniversityRepository implements UniversityRepository {
@@ -58,19 +57,12 @@ export class PrismaUniversityRepository implements UniversityRepository {
     return universityMapper(university);
   }
 
-  async findPartners(): Promise<University[]> {
-    const rootUniversity = await this.findUniversityCentral();
-
-    if (!rootUniversity) {
-      return [];
-    }
-
-    const partnerUniversities = await this.prisma.organizations.findMany({
-      where: { parent_id: rootUniversity.id },
-      include: UniversityRelations,
+  async havePartners(id: string): Promise<boolean> {
+    const count = await this.prisma.organizations.count({
+      where: { parent_id: id },
     });
 
-    return partnerUniversities.map(universityMapper);
+    return count > 0;
   }
 
   async ofId(id: string): Promise<University | null> {

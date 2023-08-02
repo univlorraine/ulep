@@ -25,14 +25,14 @@ export class ExportController {
         university: item.user.university.name,
         age: item.user.age,
         gender: item.user.gender,
-        role: item.role,
-        native_language: item.languages.native.code,
-        learning_language: item.languages.learning?.code,
-        level: item.languages.learning?.level,
+        role: item.user.role,
+        native_language: item.nativeLanguage.code,
+        learning_language: item.learningLanguage?.code,
+        level: item.level,
         // goal: item.preferences.goals.map((g) => g.name.content).join(', '),
         interests: item.interests.map((i) => i.name.content).join(', '),
-        same_gender: item.preferences.sameGender ? 1 : 0,
-        meeting_frequency: item.preferences.meetingFrequency,
+        same_gender: item.sameGender ? 1 : 0,
+        meeting_frequency: item.meetingFrequency,
       };
 
       rows.push(row);

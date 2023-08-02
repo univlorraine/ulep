@@ -28,7 +28,7 @@ export class GetUserMatchUsecase {
 
     const targets = await this.profileRepository.availableOnly({
       nativeLanguageCode: {
-        not: owner.languages.native.code,
+        not: owner.nativeLanguage.code,
       },
     });
 

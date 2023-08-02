@@ -14,6 +14,8 @@ import { UploadsController } from './controllers/upload.controller';
 import { UserController } from './controllers/user.controller';
 import { ProfileController } from './controllers/profile.controller';
 import { CountryController } from './controllers/county.controller';
+import { AUTHENTICATOR } from './services/authenticator.interface';
+import { KeycloakAuthenticator } from './services/keycloak.authenticator';
 
 @Module({
   imports: [CoreModule, TerminusModule],
@@ -31,6 +33,12 @@ import { CountryController } from './controllers/county.controller';
     UniversityController,
     UploadsController,
     UserController,
+  ],
+  providers: [
+    {
+      provide: AUTHENTICATOR,
+      useClass: KeycloakAuthenticator,
+    },
   ],
 })
 export class ApiModule {}

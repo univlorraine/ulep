@@ -7,7 +7,7 @@ import {
 export const PROFICIENCY_REPOSITORY = 'proficiency.repository';
 
 export interface ProficiencyRepository {
-  createTest(level: ProficiencyLevel): Promise<ProficiencyTest>;
+  createTest(id: string, level: ProficiencyLevel): Promise<ProficiencyTest>;
 
   findAllTests(): Promise<ProficiencyTest[]>;
 

@@ -10,14 +10,38 @@ export enum ProficiencyLevel {
   C2 = 'C2',
 }
 
-export class ProficiencyTest {
+export type ProficiencyTestProps = {
   id: string;
   level: ProficiencyLevel;
   questions: ProficiencyQuestion[];
-}
+};
 
-export class ProficiencyQuestion {
+export type ProficiencyQuestionProps = {
   id: string;
   text: TextContent;
   answer: boolean;
+};
+
+export class ProficiencyTest {
+  readonly id: string;
+  readonly level: ProficiencyLevel;
+  readonly questions: ProficiencyQuestion[];
+
+  constructor(props: ProficiencyTestProps) {
+    this.id = props.id;
+    this.level = props.level;
+    this.questions = props.questions;
+  }
+}
+
+export class ProficiencyQuestion {
+  readonly id: string;
+  readonly text: TextContent;
+  readonly answer: boolean;
+
+  constructor(props: ProficiencyQuestionProps) {
+    this.id = props.id;
+    this.text = props.text;
+    this.answer = props.answer;
+  }
 }

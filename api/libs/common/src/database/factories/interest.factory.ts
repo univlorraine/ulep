@@ -1,5 +1,5 @@
 import { faker } from '@faker-js/faker';
-import { Interest, InterestCategory } from '../../src/core/models';
+import { Interest, InterestCategory } from '../../../../../src/core/models';
 import { ModelFactory } from './model.factory';
 
 export class InterestFactory extends ModelFactory<Interest> {

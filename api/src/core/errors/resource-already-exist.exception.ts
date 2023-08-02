@@ -1,10 +1,10 @@
 import { DomainError, DomainErrorCode } from './domain.exception';
 
 export class RessourceAlreadyExists extends DomainError {
-  constructor() {
+  constructor(message?: string, code?: DomainErrorCode) {
     super({
-      code: DomainErrorCode.RESSOURCE_ALREADY_EXIST,
-      message: `Resource already exists`,
+      code: code ?? DomainErrorCode.RESSOURCE_ALREADY_EXIST,
+      message: message ?? `Resource already exists`,
     });
   }
 }

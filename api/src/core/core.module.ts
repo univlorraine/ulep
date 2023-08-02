@@ -5,7 +5,7 @@ import {
   AddLanguageRequestUsecase,
   CreateInterestCategoryUsecase,
   CreateInterestUsecase,
-  CreateLanguageUsecase,
+  AddLanguageUsecase,
   CreatePartnerUniversityUsecase,
   CreateProfileUsecase,
   CreateQuestionUsecase,
@@ -93,7 +93,7 @@ const usecases: Provider[] = [
   GetTandemsUsecase,
   GetUserMatchUsecase,
   // Universities
-  CreateLanguageUsecase,
+  AddLanguageUsecase,
   CreatePartnerUniversityUsecase,
   CreateUniversityUsecase,
   DeleteLanguageUsecase,
@@ -117,4 +117,4 @@ const services: Provider[] = [MatchScorer];
   providers: [...usecases, ...services],
   exports: [...usecases, ...services],
 })
-export class CoreModule {}
+export class CoreModule { }

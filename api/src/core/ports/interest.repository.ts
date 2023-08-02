@@ -3,7 +3,7 @@ import { Interest, InterestCategory } from '../models';
 export const INTEREST_REPOSITORY = 'interest.repository';
 
 export interface InterestRepository {
-  createInterest(interest: Interest): Promise<Interest>;
+  createInterest(interest: Interest, category: string): Promise<Interest>;
 
   createCategory(category: InterestCategory): Promise<InterestCategory>;
 

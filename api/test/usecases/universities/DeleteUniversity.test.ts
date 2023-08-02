@@ -1,4 +1,4 @@
-import { UniversityFactory } from '../../factories/university.factory';
+import { UniversityFactory } from '@app/common';
 import { DeleteUniversityUsecase } from '../../../src/core/usecases';
 import { InMemoryUniversityRepository } from '../../../src/providers/persistance/repositories/in-memory-university-repository';
 

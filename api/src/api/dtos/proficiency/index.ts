@@ -1,6 +1,13 @@
 import * as Swagger from '@nestjs/swagger';
-import { Expose } from 'class-transformer';
-import { IsString, IsNotEmpty, IsUUID, IsEnum, Length } from 'class-validator';
+import { Expose, Transform } from 'class-transformer';
+import {
+  IsString,
+  IsNotEmpty,
+  IsUUID,
+  IsEnum,
+  Length,
+  IsBoolean,
+} from 'class-validator';
 import {
   ProficiencyLevel,
   ProficiencyQuestion,
@@ -22,7 +29,7 @@ export class CreateQuestionRequest implements CreateQuestionCommand {
   @IsUUID()
   id: string;
 
-  @Swagger.ApiProperty({ type: 'string', enum: ProficiencyLevel })
+  @Swagger.ApiProperty({ type: 'string', format: 'uuid' })
   @IsUUID()
   test: string;
 
@@ -37,9 +44,10 @@ export class CreateQuestionRequest implements CreateQuestionCommand {
   @Length(2, 2)
   languageCode: string;
 
-  @Swagger.ApiProperty({ type: 'boolean' })
-  @IsNotEmpty()
-  answer: boolean;
+  @Swagger.ApiPropertyOptional({ type: 'boolean' })
+  @Transform(({ value }) => value ?? true)
+  @IsBoolean()
+  answer = true;
 }
 
 export class ProficiencyTestResponse {
@@ -63,7 +71,7 @@ export class ProficiencyTestResponse {
     return new ProficiencyTestResponse({
       id: test.id,
       level: test.level,
-      questions: test.questions.map(
+      questions: (test.questions ?? []).map(
         ProficiencyQuestionResponse.fromProficiencyQuestion,
       ),
     });

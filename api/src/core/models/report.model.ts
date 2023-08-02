@@ -6,9 +6,20 @@ export enum ReportStatus {
   CLOSED = 'CLOSED',
 }
 
-export interface ReportCategory {
+export type CreateReportCategoryProps = {
   id: string;
   name: TextContent;
+};
+
+export class ReportCategory {
+  readonly id: string;
+
+  readonly name: TextContent;
+
+  constructor(props: CreateReportCategoryProps) {
+    this.id = props.id;
+    this.name = props.name;
+  }
 }
 
 export type CreateReportProps = {
@@ -20,49 +31,25 @@ export type CreateReportProps = {
 };
 
 export class Report {
-  #id: string;
+  readonly id: string;
 
-  #owner: string;
+  readonly owner: string;
 
-  #category: ReportCategory;
+  readonly category: ReportCategory;
 
-  #status: ReportStatus;
+  readonly status: ReportStatus;
 
-  #content: string;
+  readonly content: string;
 
   constructor(props: CreateReportProps) {
-    this.#id = props.id;
-    this.#owner = props.owner;
-    this.#category = props.category;
-    this.#status = props.status;
-    this.#content = props.content;
+    this.id = props.id;
+    this.owner = props.owner;
+    this.category = props.category;
+    this.status = props.status;
+    this.content = props.content;
   }
 
   static create(props: CreateReportProps): Report {
     return new Report({ ...props });
-  }
-
-  get id(): string {
-    return this.#id;
-  }
-
-  get owner(): string {
-    return this.#owner;
-  }
-
-  get category(): ReportCategory {
-    return this.#category;
-  }
-
-  set status(status: ReportStatus) {
-    this.#status = status;
-  }
-
-  get status(): ReportStatus {
-    return this.#status;
-  }
-
-  get content(): string {
-    return this.#content;
   }
 }
