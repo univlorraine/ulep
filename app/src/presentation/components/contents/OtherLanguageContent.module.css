@@ -33,6 +33,7 @@
     column-count: 1;
     margin-top: 40px;
 }
+
 @media (min-width: 768px) {
     .other-checkbox-container {
         column-count: 2;
