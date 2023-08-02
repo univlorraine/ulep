@@ -59,7 +59,7 @@
         "profile": {
             "disconnect": "Se déconnecter",
             "edit": "Editer mon profil",
-            "parameter": "Paramètres",
+            "parameters": "Paramètres",
             "title": "Profile"
         },
         "report": {
