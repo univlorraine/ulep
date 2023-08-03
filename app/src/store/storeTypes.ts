@@ -53,10 +53,10 @@ interface UpdateProfile {
 }
 interface StoreInterface {
     accessToken: string;
+    logout: Action<StoreInterface>;
     refreshToken: string;
     setProfile: Action<StoreInterface, ProfileStorePayload>;
     setTokens: Action<StoreInterface, TokenStorePayload>;
-    removeTokens: Action<StoreInterface>;
     profile: Profile | undefined;
     profileSignUp: ProfileSignUp;
     updateProfile: Action<StoreInterface, UpdateProfile>;

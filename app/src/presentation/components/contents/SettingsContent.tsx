@@ -3,6 +3,7 @@ import { useTranslation } from 'react-i18next';
 import Switch from 'react-switch';
 import Dropdown from '../DropDown';
 import styles from './SettingsContent.module.css';
+import { useStoreActions } from '../../../store/storeTypes';
 
 interface SettingsContentProps {
     onBackPressed: () => void;
@@ -10,6 +11,7 @@ interface SettingsContentProps {
 
 const SettingsContent: React.FC<SettingsContentProps> = ({ onBackPressed }) => {
     const { i18n, t } = useTranslation();
+    const logout = useStoreActions((store) => store.logout);
     const [notificationStatus, setNotificationStatus] = useState<boolean>(true);
 
     return (
@@ -54,7 +56,7 @@ const SettingsContent: React.FC<SettingsContentProps> = ({ onBackPressed }) => {
                 <span>{t('home_page.settings.unsubscribe')}</span>
                 <img alt="right-arrow" src="/assets/arrow-right.svg" />
             </button>
-            <button className={styles['setting-container']}>
+            <button className={styles['setting-container']} onClick={() => logout()}>
                 <span>{t('home_page.settings.logout')}</span>
                 <img alt="right-arrow" src="/assets/arrow-right.svg" />
             </button>

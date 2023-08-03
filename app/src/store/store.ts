@@ -8,13 +8,15 @@ const Store = createStore<TokenStoreTypes>(
         refreshToken: '',
         setProfile: action((state, payload) => {
             state.profile = payload.profile;
+            state.profileSignUp = new ProfileSignUp();
         }),
         setTokens: action((state, payload) => {
             state.accessToken = payload.accessToken ? payload.accessToken : state.accessToken;
             state.refreshToken = payload.refreshToken ? payload.refreshToken : state.refreshToken;
         }),
-        removeTokens: action((state) => {
+        logout: action((state) => {
             state.accessToken = '';
+            state.profile = undefined;
             state.refreshToken = '';
         }),
         profile: undefined,

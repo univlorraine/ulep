@@ -23,7 +23,7 @@ const getConfigContextValue = (
     refreshToken: string,
     setProfile: Function,
     setTokens: Function,
-    removeTokens: Function,
+    logout: Function,
     configuration: Configuration
 ): ConfigContextValueType => {
     const cameraAdapter = new CameraAdapter();
