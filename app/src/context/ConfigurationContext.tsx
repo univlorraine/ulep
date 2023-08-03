@@ -9,7 +9,6 @@ export const ConfigContext = createContext<ConfigContextValueType>(
         '',
         () => null,
         () => null,
-        () => null,
         new Configuration(
             'Université de Lorraine',
             'Université de Lorraine',

@@ -1,6 +1,7 @@
 import CameraAdapter from '../adapter/CameraAdapter';
 import DomainHttpAdapter from '../adapter/DomainHttpAdapter';
 import Configuration from '../domain/entities/Confirguration';
+import AskForAccountDeletion from '../domain/usecases/AskForAccountDeletionUsecase';
 import AskForLanguageUsecase from '../domain/usecases/AskForLanguageUsecase';
 import CreateProfileUsecase from '../domain/usecases/CreateProfileUsecase';
 import CreateReportUsecase from '../domain/usecases/CreateReportUsecase';
@@ -23,12 +24,12 @@ const getConfigContextValue = (
     refreshToken: string,
     setProfile: Function,
     setTokens: Function,
-    logout: Function,
     configuration: Configuration
 ): ConfigContextValueType => {
     const cameraAdapter = new CameraAdapter();
     const domainHttpAdapter = new DomainHttpAdapter(import.meta.env.VITE_API_URL ?? '', accessToken);
 
+    const askForAccountDeletion = new AskForAccountDeletion(domainHttpAdapter);
     const askForLanguage = new AskForLanguageUsecase(domainHttpAdapter);
     const createProfile = new CreateProfileUsecase(domainHttpAdapter, setProfile);
     const createReport = new CreateReportUsecase(domainHttpAdapter);
@@ -47,6 +48,7 @@ const getConfigContextValue = (
     const createUser = new CreateUserUsecase(domainHttpAdapter, login);
 
     return {
+        askForAccountDeletion,
         askForLanguage,
         cameraAdapter,
         configuration,
