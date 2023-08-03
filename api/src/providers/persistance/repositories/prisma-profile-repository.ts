@@ -79,7 +79,7 @@ export class PrismaProfileRepository implements ProfileRepository {
           }),
         },
         Goals: {
-          connect: profile.goals.map((goal) => ({ id: goal.id })),
+          connect: profile.objectives.map((goal) => ({ id: goal.id })),
         },
         Interests: {
           connect: profile.interests.map((interest) => ({ id: interest.id })),

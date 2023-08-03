@@ -1,9 +1,14 @@
 import { Inject, Injectable, Logger } from '@nestjs/common';
-import { RessourceAlreadyExists, RessourceDoesNotExist } from 'src/core/errors';
+import {
+  DomainErrorCode,
+  RessourceAlreadyExists,
+  RessourceDoesNotExist,
+} from 'src/core/errors';
 import { UnsuportedLanguageException } from 'src/core/errors/unsuported-language.exception';
 import {
   Interest,
   Language,
+  LearningObjective,
   LearningType,
   ProficiencyLevel,
   Profile,
@@ -18,6 +23,10 @@ import {
   LANGUAGE_REPOSITORY,
   LanguageRepository,
 } from 'src/core/ports/language.repository';
+import {
+  LearningObjectiveRepository,
+  OBJECTIVE_REPOSITORY,
+} from 'src/core/ports/objective.repository';
 import {
   PROFILE_REPOSITORY,
   ProfileRepository,
@@ -35,7 +44,7 @@ export class CreateProfileCommand {
   level: ProficiencyLevel;
   masteredLanguageCodes?: string[];
   learningType: LearningType;
-  goals: string[]; // TODO validate and parse uuids
+  objectives: string[];
   meetingFrequency: string;
   interests: string[];
   sameGender: boolean;
@@ -56,6 +65,8 @@ export class CreateProfileUsecase {
     private readonly languageRepository: LanguageRepository,
     @Inject(INTEREST_REPOSITORY)
     private readonly interestsRepository: InterestRepository,
+    @Inject(OBJECTIVE_REPOSITORY)
+    private readonly objectiveRepository: LearningObjectiveRepository,
   ) {}
 
   async execute(command: CreateProfileCommand): Promise<Profile> {
@@ -87,13 +98,17 @@ export class CreateProfileUsecase {
       );
     }
 
+    const objectives = await Promise.all(
+      command.objectives.map((id) => this.tryToFindTheObjectiveOfId(id)),
+    );
+
     const profile = new Profile({
       ...command,
       user: user,
       nativeLanguage,
       masteredLanguages,
       learningLanguage,
-      goals: [], // TODO
+      objectives,
       interests,
     });
 
@@ -149,5 +164,19 @@ export class CreateProfileUsecase {
         `The language is not supported by the university`,
       );
     }
+  }
+
+  private async tryToFindTheObjectiveOfId(
+    id: string,
+  ): Promise<LearningObjective> {
+    const objective = await this.objectiveRepository.ofId(id);
+    if (!objective) {
+      throw new RessourceDoesNotExist(
+        'The objective does not exist',
+        DomainErrorCode.BAD_REQUEST,
+      );
+    }
+
+    return objective;
   }
 }

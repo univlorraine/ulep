@@ -24,6 +24,7 @@ export class PrismaInterestRepository implements InterestRepository {
         Category: { connect: { id: category } },
         TextContent: {
           create: {
+            id: interest.name.id,
             text: interest.name.content,
             LanguageCode: { connect: { code: interest.name.language } },
           },
@@ -40,6 +41,7 @@ export class PrismaInterestRepository implements InterestRepository {
         id: category.id,
         TextContent: {
           create: {
+            id: category.name.id,
             text: category.name.content,
             LanguageCode: { connect: { code: category.name.language } },
           },

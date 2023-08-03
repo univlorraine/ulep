@@ -1,9 +1,15 @@
 import { ProfileLanguagesException } from '../errors/profile-exceptions';
 import { Interest } from './interest.model';
 import { Language } from './language.model';
-import { Goals, LearningType } from './learning-preferences';
+import { LearningObjective } from './objective.model';
 import { ProficiencyLevel } from './proficiency.model';
 import { User } from './user.model';
+
+export enum LearningType {
+  ETANDEM = 'ETANDEM',
+  TANDEM = 'TANDEM',
+  BOTH = 'BOTH',
+}
 
 export type CreateProfileProps = {
   id: string;
@@ -16,7 +22,7 @@ export type CreateProfileProps = {
   meetingFrequency: string;
   sameGender: boolean;
   sameAge: boolean;
-  goals: Goals[];
+  objectives: LearningObjective[];
   interests: Interest[];
   bio?: string;
 };
@@ -42,7 +48,7 @@ export class Profile {
 
   readonly sameAge: boolean;
 
-  readonly goals: Goals[];
+  readonly objectives: LearningObjective[];
 
   readonly interests: Interest[];
 
@@ -59,7 +65,7 @@ export class Profile {
     this.meetingFrequency = props.meetingFrequency;
     this.sameGender = props.sameGender;
     this.sameAge = props.sameAge;
-    this.goals = [...props.goals];
+    this.objectives = [...props.objectives];
     this.interests = [...props.interests];
     this.bio = props.bio;
 

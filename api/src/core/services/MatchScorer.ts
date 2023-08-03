@@ -150,8 +150,8 @@ export class MatchScorer implements IMatchScorer {
   // Apply bonus if profiles share the same goals
   private computeSameGoalsBonus(profile1: Profile, profile2: Profile): number {
     const similarity = this.computeSimilarity(
-      new Set(profile1.goals.map((goal) => goal.id)),
-      new Set(profile2.goals.map((goal) => goal.id)),
+      new Set(profile1.objectives.map((goal) => goal.id)),
+      new Set(profile2.objectives.map((goal) => goal.id)),
     );
 
     return this.coeficients.goals * similarity;

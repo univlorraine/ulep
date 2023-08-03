@@ -24,6 +24,8 @@ import { PrismaUserRepository } from './persistance/repositories/prisma-user.rep
 import { UUID_PROVIDER } from 'src/core/ports/uuid.provider';
 import { UuidProvider } from './services/uuid.provider';
 import { PrismaInterestRepository } from './persistance/repositories/prisma-interest.repository';
+import { OBJECTIVE_REPOSITORY } from 'src/core/ports/objective.repository';
+import { PrismaObjectiveRepository } from './persistance/repositories/prisma-objective.repository';
 
 const providers: Provider[] = [
   {
@@ -41,6 +43,10 @@ const providers: Provider[] = [
   {
     provide: MEDIA_OBJECT_REPOSITORY,
     useClass: PrismaMediaObjectRepository,
+  },
+  {
+    provide: OBJECTIVE_REPOSITORY,
+    useClass: PrismaObjectiveRepository,
   },
   {
     provide: PROFICIENCY_REPOSITORY,

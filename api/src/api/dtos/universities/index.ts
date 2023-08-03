@@ -115,7 +115,7 @@ export class UniversityResponse {
   @Expose({ groups: ['read'] })
   timezone: string;
 
-  @Swagger.ApiProperty()
+  @Swagger.ApiProperty({ type: LanguageResponse, isArray: true })
   @Expose({ groups: ['read'] })
   languages: LanguageResponse[];
 

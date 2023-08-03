@@ -49,6 +49,10 @@ import {
   UpdateUniversityNameUsecase,
   UpdateUserUsecase,
   UploadAvatarUsecase,
+  CreateObjectiveUsecase,
+  DeleteObjectiveUsecase,
+  FindAllObjectiveUsecase,
+  FindOneObjectiveUsecase,
 } from './usecases';
 
 const usecases: Provider[] = [
@@ -66,6 +70,11 @@ const usecases: Provider[] = [
   FindAllLanguageCodeUsecase,
   // Media
   UploadAvatarUsecase,
+  // Objectives
+  CreateObjectiveUsecase,
+  DeleteObjectiveUsecase,
+  FindAllObjectiveUsecase,
+  FindOneObjectiveUsecase,
   // Proficiency
   CreateQuestionUsecase,
   CreateTestUsecase,
@@ -117,4 +126,4 @@ const services: Provider[] = [MatchScorer];
   providers: [...usecases, ...services],
   exports: [...usecases, ...services],
 })
-export class CoreModule { }
+export class CoreModule {}

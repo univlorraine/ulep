@@ -9,14 +9,14 @@ generator client {
 }
 
 model CountryCodes {
-  id                 String               @id @default(uuid())
-  name               String
-  code               String
-  emoji              String
-  enable             Boolean              @default(true)
-  created_at         DateTime             @default(now())
-  updated_at         DateTime             @updatedAt
-  Users              Users[]
+  id         String   @id @default(uuid())
+  name       String
+  code       String
+  emoji      String
+  enable     Boolean  @default(true)
+  created_at DateTime @default(now())
+  updated_at DateTime @updatedAt
+  Users      Users[]
 
   @@unique([name])
   @@unique([code])
@@ -153,7 +153,7 @@ model TextContent {
   ReportCategories     ReportCategories?
   InterestCategories   InterestCategories?
   Interests            Interests?
-  Goals                Goals?
+  Goals                LearningObjectives?
   Translations         Translations[]
 
   @@map("text_content")
@@ -237,7 +237,7 @@ model ReportCategories {
 //  * Pofiles
 //  * ****************************************************
 model Profiles {
-  id                        String              @id @default(uuid())
+  id                        String               @id @default(uuid())
   user_id                   String
   native_language_code_id   String
   learning_language_code_id String?
@@ -248,13 +248,13 @@ model Profiles {
   meeting_frequency         String
   bio                       String?
   metadata                  Json
-  created_at                DateTime            @default(now())
-  updated_at                DateTime            @updatedAt
-  User                      Users               @relation(fields: [user_id], references: [id], onDelete: Cascade)
-  NativeLanguage            LanguageCodes       @relation("NativeLanguage", fields: [native_language_code_id], references: [id])
-  LearningLanguage          LanguageCodes?      @relation("LearningLanguage", fields: [learning_language_code_id], references: [id])
+  created_at                DateTime             @default(now())
+  updated_at                DateTime             @updatedAt
+  User                      Users                @relation(fields: [user_id], references: [id], onDelete: Cascade)
+  NativeLanguage            LanguageCodes        @relation("NativeLanguage", fields: [native_language_code_id], references: [id])
+  LearningLanguage          LanguageCodes?       @relation("LearningLanguage", fields: [learning_language_code_id], references: [id])
   MasteredLanguages         MasteredLanguages[]
-  Goals                     Goals[]
+  Goals                     LearningObjectives[]
   Interests                 Interests[]
   Tandems                   ProfilesOnTandems[]
 
@@ -277,7 +277,7 @@ model MasteredLanguages {
   @@map("mastered_languages")
 }
 
-model Goals {
+model LearningObjectives {
   id              String      @id @default(uuid())
   text_content_id String
   created_at      DateTime    @default(now())

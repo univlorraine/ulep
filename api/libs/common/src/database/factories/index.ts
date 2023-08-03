@@ -2,6 +2,7 @@ export * from './country.factory';
 export * from './interest.factory';
 export * from './language.factory';
 export * from './model.factory';
+export * from './objective.factory';
 export * from './profiles.factory';
 export * from './reports.factory';
 export * from './university.factory';

@@ -24,7 +24,7 @@ export class ProfileFactory extends ModelFactory<Profile> {
       ]),
       sameGender: faker.datatype.boolean(),
       sameAge: faker.datatype.boolean(),
-      goals: [],
+      objectives: [],
       interests: [],
       bio: faker.lorem.paragraph(),
     };

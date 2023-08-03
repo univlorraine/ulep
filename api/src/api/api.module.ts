@@ -16,6 +16,7 @@ import { ProfileController } from './controllers/profile.controller';
 import { CountryController } from './controllers/county.controller';
 import { AUTHENTICATOR } from './services/authenticator.interface';
 import { KeycloakAuthenticator } from './services/keycloak.authenticator';
+import { ObjectiveController } from './controllers/objective.controller';
 
 @Module({
   imports: [CoreModule, TerminusModule],
@@ -25,6 +26,7 @@ import { KeycloakAuthenticator } from './services/keycloak.authenticator';
     InterestController,
     LanguageController,
     MatchController,
+    ObjectiveController,
     ProficiencyController,
     ProfileController,
     ReportController,

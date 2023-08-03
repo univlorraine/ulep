@@ -3,6 +3,7 @@ import { Expose, Transform } from 'class-transformer';
 import { InterestResponse } from 'src/api/dtos/interests';
 import { Profile } from 'src/core/models/profile.model';
 import { UserResponse } from '../users';
+import { ObjectiveResponse } from '../objective';
 
 class NativeLanguageResponse {
   @ApiProperty({ type: 'string', example: 'FR' })
@@ -47,15 +48,15 @@ export class ProfileResponse {
   @Transform(({ value }) => new LearningLanguageResponse(value))
   learningLanguage: LearningLanguageResponse;
 
-  @ApiProperty({ type: 'string', isArray: true })
+  @ApiProperty({ type: ObjectiveResponse, isArray: true })
   @Expose({ groups: ['read'] })
-  goals: string[];
+  objectives: ObjectiveResponse[];
 
   @ApiProperty({ type: 'string' })
   @Expose({ groups: ['read'] })
   meetingFrequency: string;
 
-  @ApiProperty({ isArray: true })
+  @ApiProperty({ type: InterestResponse, isArray: true })
   @Expose({ groups: ['read'] })
   interests: InterestResponse[];
 
@@ -82,10 +83,8 @@ export class ProfileResponse {
         code: profile.learningLanguage.code,
         level: profile.level,
       },
-      goals: [], // TODO
-      interests: profile.interests.map(
-        (interest) => new InterestResponse({ id: interest.name.content }),
-      ),
+      objectives: profile.objectives.map(ObjectiveResponse.fromDomain),
+      interests: profile.interests.map(InterestResponse.fromDomain),
       meetingFrequency: profile.meetingFrequency,
       bios: profile.bio,
     });

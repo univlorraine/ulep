@@ -31,7 +31,7 @@ describe('CreateUniversity', () => {
       campus: ['Nancy', 'Metz'],
       timezone: 'Europe/Paris',
       website: 'https://univ-lorraine.fr',
-      languageCodes: languages.map((language) => language.code),
+      languages: languages.map((language) => language.code),
       admissionStart: new Date('2000-01-01'),
       admissionEnd: new Date('2000-12-31'),
     });
@@ -58,7 +58,7 @@ describe('CreateUniversity', () => {
         timezone: 'Europe/Paris',
         website: 'https://univ-lorraine.fr',
         campus: ['Nancy', 'Metz'],
-        languageCodes: ['FR', 'EN'],
+        languages: ['FR', 'EN'],
         admissionStart: new Date('2000-01-01'),
         admissionEnd: new Date('2000-12-31'),
       });

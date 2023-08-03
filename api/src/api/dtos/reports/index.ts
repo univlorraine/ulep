@@ -1,5 +1,5 @@
 import * as Swagger from '@nestjs/swagger';
-import { Expose } from 'class-transformer';
+import { Expose, Transform } from 'class-transformer';
 import { IsString, IsNotEmpty, IsUUID, IsEnum, Length } from 'class-validator';
 import {
   Report,
@@ -26,6 +26,7 @@ export class CreateReportCategoryRequest
 
   // TODO: get the language code from the request headers
   @Swagger.ApiProperty({ type: 'string', example: 'FR' })
+  @Transform(({ value }) => value?.toLowerCase())
   @IsString()
   @Length(2, 2)
   languageCode: string;

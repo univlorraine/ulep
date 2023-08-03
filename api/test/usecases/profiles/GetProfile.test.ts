@@ -38,21 +38,15 @@ describe('GetProfile', () => {
   const profile = new Profile({
     id: 'uuid-1',
     user: user,
-    languages: {
-      native: nativeLanguage,
-      learning: {
-        ...learningLanguage,
-        level: ProficiencyLevel.B2,
-      },
-      mastered: [],
-    },
-    preferences: {
-      learningType: LearningType.ETANDEM,
-      meetingFrequency: 'ONCE_A_WEEK',
-      sameGender: false,
-      sameAge: false,
-      goals: [],
-    },
+    nativeLanguage,
+    learningLanguage,
+    level: ProficiencyLevel.B2,
+    masteredLanguages: [],
+    learningType: LearningType.ETANDEM,
+    meetingFrequency: 'ONCE_A_WEEK',
+    sameGender: false,
+    sameAge: false,
+    objectives: [],
     interests: [interest],
   });
 

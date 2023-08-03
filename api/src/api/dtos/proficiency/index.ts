@@ -40,6 +40,7 @@ export class CreateQuestionRequest implements CreateQuestionCommand {
 
   // TODO: get the language code from the request headers
   @Swagger.ApiProperty({ type: 'string' })
+  @Transform(({ value }) => value?.toLowerCase())
   @IsString()
   @Length(2, 2)
   languageCode: string;
@@ -48,34 +49,6 @@ export class CreateQuestionRequest implements CreateQuestionCommand {
   @Transform(({ value }) => value ?? true)
   @IsBoolean()
   answer = true;
-}
-
-export class ProficiencyTestResponse {
-  @Swagger.ApiProperty({ type: 'string', format: 'uuid' })
-  @Expose({ groups: ['read'] })
-  id: string;
-
-  @Swagger.ApiProperty({ type: 'string', enum: ProficiencyLevel })
-  @Expose({ groups: ['read'] })
-  level: ProficiencyLevel;
-
-  @Swagger.ApiProperty({ isArray: true })
-  @Expose({ groups: ['test:read'] })
-  questions: ProficiencyQuestionResponse[];
-
-  constructor(partial: Partial<ProficiencyTestResponse>) {
-    Object.assign(this, partial);
-  }
-
-  static fromProficiencyTest(test: ProficiencyTest): ProficiencyTestResponse {
-    return new ProficiencyTestResponse({
-      id: test.id,
-      level: test.level,
-      questions: (test.questions ?? []).map(
-        ProficiencyQuestionResponse.fromProficiencyQuestion,
-      ),
-    });
-  }
 }
 
 export class ProficiencyQuestionResponse {
@@ -103,6 +76,34 @@ export class ProficiencyQuestionResponse {
       id: question.id,
       value: question.text.content,
       answer: question.answer,
+    });
+  }
+}
+
+export class ProficiencyTestResponse {
+  @Swagger.ApiProperty({ type: 'string', format: 'uuid' })
+  @Expose({ groups: ['read'] })
+  id: string;
+
+  @Swagger.ApiProperty({ type: 'string', enum: ProficiencyLevel })
+  @Expose({ groups: ['read'] })
+  level: ProficiencyLevel;
+
+  @Swagger.ApiProperty({ type: ProficiencyQuestionResponse, isArray: true })
+  @Expose({ groups: ['test:read'] })
+  questions: ProficiencyQuestionResponse[];
+
+  constructor(partial: Partial<ProficiencyTestResponse>) {
+    Object.assign(this, partial);
+  }
+
+  static fromProficiencyTest(test: ProficiencyTest): ProficiencyTestResponse {
+    return new ProficiencyTestResponse({
+      id: test.id,
+      level: test.level,
+      questions: (test.questions ?? []).map(
+        ProficiencyQuestionResponse.fromProficiencyQuestion,
+      ),
     });
   }
 }

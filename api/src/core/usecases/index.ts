@@ -2,6 +2,7 @@ export * from './country';
 export * from './interest';
 export * from './language';
 export * from './media';
+export * from './objective';
 export * from './proficiency';
 export * from './profiles';
 export * from './report';

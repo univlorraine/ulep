@@ -7,8 +7,7 @@ import {
   IsOptional,
   IsUUID,
 } from 'class-validator';
-import { LearningType } from 'src/core/models/learning-preferences';
-import { ProficiencyLevel } from 'src/core/models/proficiency.model';
+import { ProficiencyLevel, LearningType } from 'src/core/models';
 import { CreateProfileCommand } from 'src/core/usecases/profiles/create-profile.usecase';
 
 export class CreateProfileRequest
@@ -42,7 +41,7 @@ export class CreateProfileRequest
 
   @Swagger.ApiProperty({ type: 'string', isArray: true, format: 'uuid' })
   @IsUUID('4', { each: true })
-  goals: string[];
+  objectives: string[];
 
   @Swagger.ApiProperty({ type: 'string', example: 'ONCE_A_WEEK' })
   @IsNotEmpty()

@@ -109,7 +109,7 @@ describe('CreateProfile', () => {
         learningLanguageCode: languages[1].code,
         level: ProficiencyLevel.B2,
         learningType: LearningType.ETANDEM,
-        goals: [],
+        objectives: [],
         meetingFrequency: 'ONCE_A_WEEK',
         interests: [interest.id],
         sameGender: true,
@@ -130,7 +130,7 @@ describe('CreateProfile', () => {
       nativeLanguageCode: nativeLanguage.code,
       level: ProficiencyLevel.B2,
       learningType: LearningType.ETANDEM,
-      goals: [],
+      objectives: [],
       meetingFrequency: 'ONCE_A_WEEK',
       interests: [interest.id],
       sameGender: true,
@@ -138,7 +138,7 @@ describe('CreateProfile', () => {
       bios: 'I am a student',
     });
 
-    expect(profile.languages.learning.level).toBe(ProficiencyLevel.A0);
+    expect(profile.level).toBe(ProficiencyLevel.A0);
   });
 
   it('should throw an error if university do not accept learning language', async () => {
@@ -152,7 +152,7 @@ describe('CreateProfile', () => {
         learningLanguageCode: unvailableLanguage.code,
         level: ProficiencyLevel.B2,
         learningType: LearningType.ETANDEM,
-        goals: [],
+        objectives: [],
         meetingFrequency: 'ONCE_A_WEEK',
         interests: [interest.id],
         sameGender: true,
@@ -177,7 +177,7 @@ describe('CreateProfile', () => {
         learningLanguageCode: nativeLanguage.code,
         level: ProficiencyLevel.B2,
         learningType: LearningType.ETANDEM,
-        goals: [],
+        objectives: [],
         meetingFrequency: 'ONCE_A_WEEK',
         interests: [interest.id],
         sameGender: true,
@@ -203,7 +203,7 @@ describe('CreateProfile', () => {
         level: ProficiencyLevel.B2,
         masteredLanguageCodes: [nativeLanguage.code],
         learningType: LearningType.ETANDEM,
-        goals: [],
+        objectives: [],
         meetingFrequency: 'ONCE_A_WEEK',
         interests: [interest.id],
         sameGender: true,
@@ -229,7 +229,7 @@ describe('CreateProfile', () => {
         level: ProficiencyLevel.B2,
         masteredLanguageCodes: [learningLanguage.code],
         learningType: LearningType.ETANDEM,
-        goals: [],
+        objectives: [],
         meetingFrequency: 'ONCE_A_WEEK',
         interests: [interest.id],
         sameGender: true,

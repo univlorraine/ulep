@@ -1,5 +1,5 @@
 import * as Swagger from '@nestjs/swagger';
-import { Expose } from 'class-transformer';
+import { Expose, Transform } from 'class-transformer';
 import { IsString, IsNotEmpty, IsUUID, Length } from 'class-validator';
 import {
   CreateInterestCategoryCommand,
@@ -21,6 +21,7 @@ export class CreateInterestCategoryRequest
 
   // TODO: get the language code from the request headers
   @Swagger.ApiProperty({ type: 'string', example: 'FR' })
+  @Transform(({ value }) => value?.toLowerCase())
   @IsString()
   @Length(2, 2)
   languageCode: string;
@@ -42,35 +43,10 @@ export class CreateInterestRequest implements CreateInterestCommand {
 
   // TODO: get the language code from the request headers
   @Swagger.ApiProperty({ type: 'string', example: 'FR' })
+  @Transform(({ value }) => value?.toLowerCase())
   @IsString()
   @Length(2, 2)
   languageCode: string;
-}
-
-export class InterestCategoryResponse {
-  @Swagger.ApiProperty({ type: 'string', format: 'uuid' })
-  @Expose({ groups: ['read'] })
-  id: string;
-
-  @Swagger.ApiProperty({ type: 'string' })
-  @Expose({ groups: ['read'] })
-  name: string;
-
-  @Swagger.ApiPropertyOptional({ isArray: true })
-  @Expose({ groups: ['category:read'] })
-  interests: InterestResponse[];
-
-  constructor(partial: Partial<InterestCategoryResponse>) {
-    Object.assign(this, partial);
-  }
-
-  static fromDomain(category: InterestCategory) {
-    return new InterestCategoryResponse({
-      id: category.id,
-      name: category.name.content,
-      interests: category.interests?.map(InterestResponse.fromDomain),
-    });
-  }
 }
 
 export class InterestResponse {
@@ -90,6 +66,32 @@ export class InterestResponse {
     return new InterestResponse({
       id: interest.id,
       name: interest.name.content,
+    });
+  }
+}
+
+export class InterestCategoryResponse {
+  @Swagger.ApiProperty({ type: 'string', format: 'uuid' })
+  @Expose({ groups: ['read'] })
+  id: string;
+
+  @Swagger.ApiProperty({ type: 'string' })
+  @Expose({ groups: ['read'] })
+  name: string;
+
+  @Swagger.ApiPropertyOptional({ type: InterestResponse, isArray: true })
+  @Expose({ groups: ['category:read'] })
+  interests: InterestResponse[];
+
+  constructor(partial: Partial<InterestCategoryResponse>) {
+    Object.assign(this, partial);
+  }
+
+  static fromDomain(category: InterestCategory) {
+    return new InterestCategoryResponse({
+      id: category.id,
+      name: category.name.content,
+      interests: category.interests?.map(InterestResponse.fromDomain),
     });
   }
 }
