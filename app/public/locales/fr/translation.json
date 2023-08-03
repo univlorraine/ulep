@@ -354,5 +354,11 @@
         "title": "Mon profil",
         "university_title": "Établissement",
         "validate_button": "Valider et continuer"
+    },
+    "suspended_page": {
+        "contact_us": "Contacte-nous pour plus d'informations.",
+        "subtitle": "Nous sommes désolés, mais ton compte a été suspendu pour non-respect de nos règles et conditions d'utilisation.",
+        "title": "Compte suspendu",
+        "validate_button": "Nous contacter"
     }
 }
