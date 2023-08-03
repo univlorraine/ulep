@@ -9,7 +9,7 @@ interface SettingsContentProps {
 }
 
 const SettingsContent: React.FC<SettingsContentProps> = ({ onBackPressed }) => {
-    const { t } = useTranslation();
+    const { i18n, t } = useTranslation();
     const [notificationStatus, setNotificationStatus] = useState<boolean>(true);
 
     return (
@@ -21,11 +21,11 @@ const SettingsContent: React.FC<SettingsContentProps> = ({ onBackPressed }) => {
 
             <div className="large-margin-vertical">
                 <Dropdown
-                    onChange={() => null}
+                    onChange={(value) => i18n.changeLanguage(value)}
                     options={[
-                        { title: 'Français', value: 'Français' },
-                        { title: 'English', value: 'English' },
-                        { title: 'Chinease', value: 'Chinease' },
+                        { title: 'French', value: 'fr' },
+                        { title: 'English', value: 'en' },
+                        { title: 'Chinese', value: 'cn' },
                     ]}
                     title={t('home_page.settings.language')}
                 />
