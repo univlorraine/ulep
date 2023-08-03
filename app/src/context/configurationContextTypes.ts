@@ -14,6 +14,7 @@ import GetAllReportCategoriesUsecaseInterface from '../domain/interfaces/GetAlll
 import GetQuizzByLevelUsecaseInterface from '../domain/interfaces/GetQuizzByLevelUsecase.interface';
 import LoginUsecaseInterface from '../domain/interfaces/LoginUsecase.interface';
 import ResetPasswordUsecaseInterface from '../domain/interfaces/ResetPasswordUsecase.interface';
+import UpdateAvatarUsecaseInterface from '../domain/interfaces/UpdateAvatarUsecase.interface';
 
 export interface ConfigContextValueType {
     askForLanguage: AskForLanguageUsecaseInterface;
@@ -32,4 +33,5 @@ export interface ConfigContextValueType {
     getQuizzByLevel: GetQuizzByLevelUsecaseInterface;
     login: LoginUsecaseInterface;
     resetPassword: ResetPasswordUsecaseInterface;
+    updateAvatar: UpdateAvatarUsecaseInterface;
 }
