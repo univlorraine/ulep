@@ -1,8 +1,8 @@
 import { IonPage } from '@ionic/react';
 import { useHistory } from 'react-router';
-import WebLayout from '../components/WebLayout';
 import ConnexionContent from '../components/contents/ConnectionContent';
 import WelcomeContent from '../components/contents/WelcomeContent';
+import WebLayout from '../components/layout/WebLayout';
 import useWindowDimensions from '../hooks/useWindowDimensions';
 import { HYBRID_MAX_WIDTH } from '../utils';
 

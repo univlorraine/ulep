@@ -44,6 +44,22 @@
     flex-direction: column;
 }
 
+.home-card {
+    background-color: white;
+    border-radius: 5px;
+    display: flex;
+    flex-direction: column;
+}
+
+.home-card-title {
+    color: #000;
+    font-family: 'Roboto';
+    font-size: 20px;
+    font-style: normal;
+    font-weight: 700;
+    line-height: 25px;
+}
+
 input::-webkit-outer-spin-button,
 input::-webkit-inner-spin-button {
     -webkit-appearance: none;
@@ -85,8 +101,8 @@ input::-webkit-inner-spin-button {
         min-height: calc(100vh - 64px);
     }
 
-    .white-centered-div {
-        min-height: 90vh;
+    .home-card {
+        padding: 20px;
     }
 
     .page {
@@ -98,5 +114,9 @@ input::-webkit-inner-spin-button {
         padding: 64px 0px;
         width: 100%;
         z-index: 2;
+    }
+
+    .white-centered-div {
+        min-height: 90vh;
     }
 }

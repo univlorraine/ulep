@@ -8,6 +8,7 @@ import GetAllCategoriesInterestssUsecase from '../domain/usecases/GetAllCategori
 import GetAllCountriesUsecase from '../domain/usecases/GetAllCountriesUsecase';
 import GetAllGoalsUsecase from '../domain/usecases/GetAllGoalsUsecase';
 import GetAllLanguagesUsecase from '../domain/usecases/GetAllLanguagesUsecase';
+import GetAllTandemsUsecase from '../domain/usecases/GetAllTandemsUsecase';
 import GetAllUniversitiesUsecase from '../domain/usecases/GetAllUniversitiesUsecase';
 import GetQuizzByLevelUsecase from '../domain/usecases/GetQuizzByLevelUsecase';
 import LoginUsecase from '../domain/usecases/LoginUsecase';
@@ -31,6 +32,7 @@ const getConfigContextValue = (
     const getAllCountries = new GetAllCountriesUsecase(domainHttpAdapter);
     const getAllGoals = new GetAllGoalsUsecase(domainHttpAdapter);
     const getAllLanguages = new GetAllLanguagesUsecase(domainHttpAdapter);
+    const getAllTandems = new GetAllTandemsUsecase(domainHttpAdapter);
     const getAllUniversities = new GetAllUniversitiesUsecase(domainHttpAdapter);
     const getQuizzByLevel = new GetQuizzByLevelUsecase(domainHttpAdapter);
     const login = new LoginUsecase(domainHttpAdapter, setTokens);
@@ -48,6 +50,7 @@ const getConfigContextValue = (
         getAllCountries,
         getAllGoals,
         getAllLanguages,
+        getAllTandems,
         getAllUniversities,
         getQuizzByLevel,
         login,

@@ -6,7 +6,7 @@ import { getInitialAviability, occurence } from '../../domain/entities/Availabil
 import { AvailabilitesSignUp } from '../../domain/entities/ProfileSignUp';
 import { useStoreActions, useStoreState } from '../../store/storeTypes';
 import Dropdown from '../components/DropDown';
-import WebLayoutCentered from '../components/WebLayoutCentered';
+import WebLayoutCentered from '../components/layout/WebLayoutCentered';
 import AvailabilityModal from '../components/modals/AvailabilityModal';
 import styles from './css/SignUp.module.css';
 import availabilitiesStyles from './css/SignUpAvailabilities.module.css';

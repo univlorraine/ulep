@@ -4,7 +4,7 @@ import { Redirect, useHistory } from 'react-router';
 import { useConfig } from '../../context/ConfigurationContext';
 import { useStoreActions, useStoreState } from '../../store/storeTypes';
 import ColoredCard from '../components/ColoredCard';
-import WebLayoutCentered from '../components/WebLayoutCentered';
+import WebLayoutCentered from '../components/layout/WebLayoutCentered';
 import SitesModal from '../components/modals/SitesModal';
 import styles from './css/SignUp.module.css';
 

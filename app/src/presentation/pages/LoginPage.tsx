@@ -1,10 +1,10 @@
 import { IonPage } from '@ionic/react';
-import WebLayout from '../components/WebLayout';
+import { useHistory } from 'react-router';
 import WelcomeContent from '../components/contents/WelcomeContent';
 import LoginForm from '../components/forms/LoginForm';
+import WebLayout from '../components/layout/WebLayout';
 import useWindowDimensions from '../hooks/useWindowDimensions';
 import { HYBRID_MAX_WIDTH } from '../utils';
-import { useHistory } from 'react-router';
 
 const LoginPage: React.FC = () => {
     const { width } = useWindowDimensions();
@@ -14,7 +14,10 @@ const LoginPage: React.FC = () => {
             {width < HYBRID_MAX_WIDTH ? (
                 <LoginForm goBack={() => history.push('/connect')} />
             ) : (
-                <WebLayout leftComponent={<WelcomeContent />} rightComponent={<LoginForm goBack={() => history.push('/')} />} />
+                <WebLayout
+                    leftComponent={<WelcomeContent />}
+                    rightComponent={<LoginForm goBack={() => history.push('/')} />}
+                />
             )}
         </IonPage>
     );

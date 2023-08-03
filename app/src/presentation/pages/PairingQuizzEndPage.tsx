@@ -2,8 +2,8 @@ import { useTranslation } from 'react-i18next';
 import { Redirect, useHistory } from 'react-router';
 import { useConfig } from '../../context/ConfigurationContext';
 import { useStoreState } from '../../store/storeTypes';
-import WebLayoutCentered from '../components/WebLayoutCentered';
 import QuizzValidatedContent from '../components/contents/QuizzValidatedContent';
+import WebLayoutCentered from '../components/layout/WebLayoutCentered';
 import styles from './css/SignUp.module.css';
 
 const PairingQuizzEndPage: React.FC = ({}) => {

@@ -1,7 +1,7 @@
 import { useTranslation } from 'react-i18next';
 import { useHistory } from 'react-router';
 import { useConfig } from '../../context/ConfigurationContext';
-import WebLayoutCentered from '../components/WebLayoutCentered';
+import WebLayoutCentered from '../components/layout/WebLayoutCentered';
 import quizzIntroductionStyle from './css/PairingQuizzIntroduction.module.css';
 import styles from './css/SignUp.module.css';
 

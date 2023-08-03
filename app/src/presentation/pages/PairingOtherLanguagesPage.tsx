@@ -5,9 +5,9 @@ import { Redirect, useHistory } from 'react-router';
 import { useConfig } from '../../context/ConfigurationContext';
 import Language from '../../domain/entities/Language';
 import { useStoreActions, useStoreState } from '../../store/storeTypes';
-import WebLayoutCentered from '../components/WebLayoutCentered';
 import OtherLanguageContent from '../components/contents/OtherLanguageContent';
 import OtherLanguageSelectedContent from '../components/contents/OtherLanguageSelectedContent';
+import WebLayoutCentered from '../components/layout/WebLayoutCentered';
 import styles from './css/SignUp.module.css';
 
 const PairingOtherLanguagesPage: React.FC = () => {
