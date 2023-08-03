@@ -45,8 +45,33 @@ export class MinioStorage implements StorageInterface {
 
   private async createBucketIfNotExist(bucketName: string): Promise<void> {
     const bucketExists = await this.minioClient.bucketExists(bucketName);
-    if (!bucketExists) {
-      await this.minioClient.makeBucket(bucketName, 'eu-west-1');
+
+    if (bucketExists) {
+      return;
     }
+
+    this.minioClient.makeBucket(bucketName, 'eu-west-1', (error) => {
+      if (error) throw error; // TODO: custom error
+
+      return this.addPolicyToBucket(bucketName);
+    });
+  }
+
+  private async addPolicyToBucket(bucket: string) {
+    await this.minioClient.setBucketPolicy(
+      bucket,
+      JSON.stringify({
+        Version: '2012-10-17',
+        Statement: [
+          {
+            Sid: 'AddPerm',
+            Effect: 'Allow',
+            Principal: '*',
+            Action: ['s3:GetObject'],
+            Resource: [`arn:aws:s3:::${bucket}/*`],
+          },
+        ],
+      }),
+    );
   }
 }
