@@ -47,6 +47,10 @@ export interface SignUpStorePayload {
 interface ProfileStorePayload {
     profile: Profile;
 }
+
+interface UpdateProfile {
+    avatar: string;
+}
 interface StoreInterface {
     accessToken: string;
     refreshToken: string;
@@ -55,6 +59,7 @@ interface StoreInterface {
     removeTokens: Action<StoreInterface>;
     profile: Profile | undefined;
     profileSignUp: ProfileSignUp;
+    updateProfile: Action<StoreInterface, UpdateProfile>;
     updateProfileSignUp: Action<StoreInterface, SignUpStorePayload>;
 }
 

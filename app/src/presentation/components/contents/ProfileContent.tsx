@@ -1,6 +1,7 @@
 import { useIonToast } from '@ionic/react';
 import { useTranslation } from 'react-i18next';
 import { useConfig } from '../../../context/ConfigurationContext';
+import { useStoreActions } from '../../../store/storeTypes';
 import styles from './ProfileContent.module.css';
 
 interface ProfileContentProps {
@@ -22,6 +23,7 @@ const ProfileContent: React.FC<ProfileContentProps> = ({
 }) => {
     const { t } = useTranslation();
     const [showToast] = useIonToast();
+    const updateProfile = useStoreActions((store) => store.updateProfile);
     const { cameraAdapter, updateAvatar } = useConfig();
 
     //TODO: test this when api will be ready
@@ -34,8 +36,8 @@ const ProfileContent: React.FC<ProfileContentProps> = ({
             if (result instanceof Error) {
                 return await showToast({ message: t(result.message), duration: 5000 });
             }
+            return updateProfile({ avatar: result });
         }
-        return;
     };
 
     return (

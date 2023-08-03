@@ -14,7 +14,7 @@ class Profile {
         public readonly frequency: MeetFrequency,
         public readonly interests: string[],
         public readonly bios: string[],
-        public readonly avatar: string
+        public avatar: string
     ) {}
 }
 
