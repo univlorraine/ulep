@@ -6,7 +6,7 @@ interface ModalProps {
     hideWhiteBackground?: boolean;
     isVisible: boolean;
     onClose: () => void;
-    position: 'center' | 'flex-end' | 'flex-start';
+    position?: 'center' | 'flex-end' | 'flex-start';
 }
 
 const Modal: React.FC<ModalProps> = ({ children, hideWhiteBackground, isVisible, onClose, position = 'center' }) => {
