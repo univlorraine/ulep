@@ -35,62 +35,75 @@ import TandemStatusPage from '../pages/mobile/TandemStatusPage';
 import MobileRoute from './MobileRoute';
 import PrivateRoute from './PrivateRoute';
 
-const OfflineRouter: React.FC = () => (
-    <IonRouterOutlet>
-        <Route exact path="/">
-            <HomePage />
-        </Route>
-        <Route exact path="/home">
-            <HomePage />
-        </Route>
-        <Route exact path="/connect">
-            <ConnectPage />
-        </Route>
-        <Route exact path="/forgot-password">
-            <ForgotPasswordPage />
-        </Route>
-        <Route exact path="/forgot-password/sent">
-            <ForgotPasswordSentPage />
-        </Route>
-        <Route exact path="/login">
-            <LoginPage />
-        </Route>
-        <Route exact path="/reset-password/:id">
-            <ResetPasswordPage />
-        </Route>
-        <Route exact path="/signup">
-            <SignUpPage />
-        </Route>
-        <MobileRoute exact component={ProfilePage} path={'/profil'} />
-        <MobileRoute exact component={ReportPage} path={'/report'} />
-        <MobileRoute exact component={SettingsPage} path={'/settings'} />
-        <MobileRoute exact component={TandemStatusPage} path={'/tandem-status'} />
-        <PrivateRoute exact component={PairingLaguagesPage} path="/signup/pairing/languages" />
-        <PrivateRoute exact component={PairingOptionsPage} path="/signup/pairing/options" />
-        <PrivateRoute exact component={PairingPedagogyPage} path="/signup/pairing/pedagogy" />
-        <PrivateRoute exact component={PairingConfirmLanguagePage} path="/signup/pairing/language/confirm" />
-        <PrivateRoute exact component={PairingFinalPage} path="/signup/pairing/end" />
-        <PrivateRoute exact component={PairingLevelPage} path="/signup/pairing/level" />
-        <PrivateRoute exact component={PairingOtherLanguagesPage} path="/signup/pairing/other-languages" />
-        <PrivateRoute exact component={PairingPreferencePage} path="/signup/pairing/preference" />
-        <PrivateRoute exact component={PairingQuizzEndPage} path="/signup/pairing/language/quizz/end" />
-        <PrivateRoute
-            exact
-            component={PairingQuizzIntroductionPage}
-            path="/signup/pairing/language/quizz/introduction"
-        />
-        <PrivateRoute exact component={PairingQuizzPage} path="/signup/pairing/language/quizz" />
-        <PrivateRoute exact component={PairingSelectCEFRPage} path="/signup/pairing/level/select" />
-        <PrivateRoute exact component={PairingUnavailableLanguagePage} path="/signup/pairing/unavailable-language" />
-        <PrivateRoute exact component={SignUpAvailabilitiesPage} path="/signup/availabilities" />
-        <PrivateRoute exact component={SignUpBiographyPage} path="/signup/biography" />
-        <PrivateRoute exact component={SignUpFrequencyPage} path="/signup/frequency" />
-        <PrivateRoute exact component={SignUpGoalsPage} path="/signup/end" />
-        <PrivateRoute exact component={SignUpGoalsPage} path="/signup/goals" />
-        <PrivateRoute exact component={SignUpInterestsPage} path="/signup/interests" />
-        <PrivateRoute exact component={SignUpLanguagesPage} path="/signup/languages" />
-        <Route exact component={SignUpInformationsPage} path="/signup/informations" />
-    </IonRouterOutlet>
-);
+const OfflineRouter: React.FC = () => {
+    //TODO: Update this when suspended variable will be in profile
+    /*const profile = useStoreState((store) => store.profile);
+
+    if (profile && profile.suspended) {
+        return <SuspendedPage />;
+    }*/
+
+    return (
+        <IonRouterOutlet>
+            <Route exact path="/">
+                <HomePage />
+            </Route>
+            <Route exact path="/home">
+                <HomePage />
+            </Route>
+            <Route exact path="/connect">
+                <ConnectPage />
+            </Route>
+            <Route exact path="/forgot-password">
+                <ForgotPasswordPage />
+            </Route>
+            <Route exact path="/forgot-password/sent">
+                <ForgotPasswordSentPage />
+            </Route>
+            <Route exact path="/login">
+                <LoginPage />
+            </Route>
+            <Route exact path="/reset-password/:id">
+                <ResetPasswordPage />
+            </Route>
+            <Route exact path="/signup">
+                <SignUpPage />
+            </Route>
+            <MobileRoute exact component={ProfilePage} path={'/profil'} />
+            <MobileRoute exact component={ReportPage} path={'/report'} />
+            <MobileRoute exact component={SettingsPage} path={'/settings'} />
+            <MobileRoute exact component={TandemStatusPage} path={'/tandem-status'} />
+            <PrivateRoute exact component={PairingLaguagesPage} path="/signup/pairing/languages" />
+            <PrivateRoute exact component={PairingOptionsPage} path="/signup/pairing/options" />
+            <PrivateRoute exact component={PairingPedagogyPage} path="/signup/pairing/pedagogy" />
+            <PrivateRoute exact component={PairingConfirmLanguagePage} path="/signup/pairing/language/confirm" />
+            <PrivateRoute exact component={PairingFinalPage} path="/signup/pairing/end" />
+            <PrivateRoute exact component={PairingLevelPage} path="/signup/pairing/level" />
+            <PrivateRoute exact component={PairingOtherLanguagesPage} path="/signup/pairing/other-languages" />
+            <PrivateRoute exact component={PairingPreferencePage} path="/signup/pairing/preference" />
+            <PrivateRoute exact component={PairingQuizzEndPage} path="/signup/pairing/language/quizz/end" />
+            <PrivateRoute
+                exact
+                component={PairingQuizzIntroductionPage}
+                path="/signup/pairing/language/quizz/introduction"
+            />
+            <PrivateRoute exact component={PairingQuizzPage} path="/signup/pairing/language/quizz" />
+            <PrivateRoute exact component={PairingSelectCEFRPage} path="/signup/pairing/level/select" />
+            <PrivateRoute
+                exact
+                component={PairingUnavailableLanguagePage}
+                path="/signup/pairing/unavailable-language"
+            />
+            <PrivateRoute exact component={SignUpAvailabilitiesPage} path="/signup/availabilities" />
+            <PrivateRoute exact component={SignUpBiographyPage} path="/signup/biography" />
+            <PrivateRoute exact component={SignUpFrequencyPage} path="/signup/frequency" />
+            <PrivateRoute exact component={SignUpGoalsPage} path="/signup/end" />
+            <PrivateRoute exact component={SignUpGoalsPage} path="/signup/goals" />
+            <PrivateRoute exact component={SignUpInterestsPage} path="/signup/interests" />
+            <PrivateRoute exact component={SignUpLanguagesPage} path="/signup/languages" />
+            <Route exact component={SignUpInformationsPage} path="/signup/informations" />
+        </IonRouterOutlet>
+    );
+};
 
 export default OfflineRouter;
