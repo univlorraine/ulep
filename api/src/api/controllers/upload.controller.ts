@@ -12,20 +12,20 @@ import { MediaObjectResponse } from '../dtos';
 import { UploadAvatarUsecase } from 'src/core/usecases/media';
 import { CurrentUser } from '../decorators';
 import { AuthenticationGuard } from '../guards';
+import { ImagesFilePipe } from '../validators/images.validator';
 
 @Controller('uploads')
 @Swagger.ApiTags('Uploads')
 export class UploadsController {
   constructor(private readonly uploadAvatarUsecase: UploadAvatarUsecase) {}
 
-  // TODO: post avatar with user's resource
   @Post('avatar')
   @UseGuards(AuthenticationGuard)
   @UseInterceptors(FileInterceptor('file'))
   @Swagger.ApiOperation({ summary: 'Upload image' })
   @Swagger.ApiOkResponse({ type: MediaObjectResponse })
   async uploadFile(
-    @UploadedFile() file: Express.Multer.File,
+    @UploadedFile(new ImagesFilePipe()) file: Express.Multer.File,
     @CurrentUser() user: KeycloakUser,
   ): Promise<MediaObjectResponse> {
     const upload = await this.uploadAvatarUsecase.execute({

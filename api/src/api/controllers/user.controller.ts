@@ -10,14 +10,16 @@ import {
   Query,
   UseGuards,
   ParseUUIDPipe,
+  UseInterceptors,
+  UploadedFile,
 } from '@nestjs/common';
 import * as Swagger from '@nestjs/swagger';
 import { Collection } from '@app/common';
 import {
   UserResponse,
   CreateUserRequest,
-  UpdateUserRequest,
   PaginationDto,
+  UpdateUserRequest,
 } from '../dtos';
 import {
   CreateUserUsecase,
@@ -28,6 +30,9 @@ import {
 } from '../../core/usecases/user';
 import { CollectionResponse } from '../decorators';
 import { AuthenticationGuard } from '../guards';
+import { FileInterceptor } from '@nestjs/platform-express';
+import { ImagesFilePipe } from '../validators/images.validator';
+import { UploadAvatarUsecase } from 'src/core/usecases';
 
 @Controller('users')
 @Swagger.ApiTags('Users')
@@ -36,6 +41,7 @@ export class UserController {
 
   constructor(
     private readonly createUserUsecase: CreateUserUsecase,
+    private readonly uploadAvatarUsecase: UploadAvatarUsecase,
     private readonly getUsersUsecase: GetUsersUsecase,
     private readonly getUserUsecase: GetUserUsecase,
     private readonly updateUserUsecase: UpdateUserUsecase,
@@ -43,12 +49,26 @@ export class UserController {
   ) {}
 
   @Post()
+  @UseInterceptors(FileInterceptor('file'))
   @Swagger.ApiOperation({ summary: 'Create a new User ressource.' })
+  @Swagger.ApiConsumes('multipart/form-data')
   @Swagger.ApiCreatedResponse({ type: UserResponse })
-  async create(@Body() body: CreateUserRequest) {
-    const instance = await this.createUserUsecase.execute({ ...body });
+  async create(
+    @Body() body: CreateUserRequest,
+    @UploadedFile(new ImagesFilePipe()) file: Express.Multer.File,
+  ) {
+    let user = await this.createUserUsecase.execute({ ...body });
 
-    return UserResponse.fromDomain(instance);
+    if (file) {
+      const upload = await this.uploadAvatarUsecase.execute({
+        userId: user.id,
+        file,
+      });
+
+      user = { ...user, avatar: upload };
+    }
+
+    return UserResponse.fromDomain(user);
   }
 
   @Get()

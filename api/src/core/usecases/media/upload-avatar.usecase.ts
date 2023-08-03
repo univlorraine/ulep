@@ -10,7 +10,7 @@ import {
   StorageInterface,
 } from '../../ports/storage.interface';
 import { MediaObject, User } from 'src/core/models';
-import { RessourceDoesNotExist, UnauthorizedOperation } from 'src/core/errors';
+import { UnauthorizedOperation } from 'src/core/errors';
 
 export class UploadAvatarCommand {
   userId: string;

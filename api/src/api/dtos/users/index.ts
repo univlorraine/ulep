@@ -1,5 +1,5 @@
 import * as Swagger from '@nestjs/swagger';
-import { Expose } from 'class-transformer';
+import { Expose, Transform } from 'class-transformer';
 import {
   IsString,
   IsNotEmpty,
@@ -14,11 +14,11 @@ import {
 import { UniversityResponse } from '../universities';
 import { CreateUserCommand, UpdateUserCommand } from 'src/core/usecases/user';
 import { Gender, Role, User } from 'src/core/models/user.model';
+import { MediaObjectResponse } from '../medias';
 
 export class CreateUserRequest implements CreateUserCommand {
   @Swagger.ApiProperty({ type: 'string', format: 'email' })
   @IsEmail()
-  @IsNotEmpty()
   email: string;
 
   @Swagger.ApiProperty({ type: 'string', format: 'password' })
@@ -44,6 +44,7 @@ export class CreateUserRequest implements CreateUserCommand {
   gender: Gender;
 
   @Swagger.ApiProperty({ type: 'number' })
+  @Transform(({ value }) => Number(value))
   @IsInt()
   @Min(1)
   age: number;
@@ -111,6 +112,10 @@ export class UserResponse {
   @Expose({ groups: ['read'] })
   deactivated: boolean;
 
+  @Swagger.ApiPropertyOptional({ type: MediaObjectResponse })
+  @Expose({ groups: ['read'] })
+  avatar?: MediaObjectResponse;
+
   constructor(partial: Partial<UserResponse>) {
     Object.assign(this, partial);
   }
@@ -127,6 +132,9 @@ export class UserResponse {
       role: user.role,
       country: user.country,
       deactivated: user.deactivated,
+      avatar: user.avatar
+        ? MediaObjectResponse.fromMediaObject(user.avatar)
+        : null,
     });
   }
 }
