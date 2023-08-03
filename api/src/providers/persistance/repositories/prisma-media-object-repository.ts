@@ -24,6 +24,26 @@ export class PrismaMediaObjectRepository implements MediaObjectRepository {
     });
   }
 
+  async avatarOfUser(userId: string): Promise<MediaObject | null> {
+    const mediaObject = await this.prisma.mediaObjects.findFirst({
+      where: {
+        User: { id: userId },
+      },
+    });
+
+    if (!mediaObject) {
+      return null;
+    }
+
+    return new MediaObject({
+      id: mediaObject.id,
+      name: mediaObject.name,
+      bucket: mediaObject.bucket,
+      mimetype: mediaObject.mime,
+      size: mediaObject.size,
+    });
+  }
+
   async findAll(): Promise<MediaObject[]> {
     const instances = await this.prisma.mediaObjects.findMany();
 

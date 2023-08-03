@@ -21,7 +21,7 @@ const load = async () => {
     await createCountries(prisma);
     await createLanguageCodes(prisma);
     await createUniversities(prisma);
-    await createUsers(1000, prisma);
+    // await createUsers(1000, prisma);
     await createProficiencyTests(prisma);
     await createInterests(prisma);
   } catch (e) {

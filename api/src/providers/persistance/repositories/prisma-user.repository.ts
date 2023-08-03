@@ -21,6 +21,7 @@ export class PrismaUserRepository implements UserRepository {
         gender: user.gender,
         role: user.role,
         Nationality: { connect: { code: user.country } },
+        deactivated: user.deactivated,
       },
       include: {
         Organization: { include: UniversityRelations },

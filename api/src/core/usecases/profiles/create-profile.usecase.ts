@@ -35,9 +35,12 @@ import {
   USER_REPOSITORY,
   UserRepository,
 } from 'src/core/ports/user.repository';
+import {
+  UUID_PROVIDER,
+  UuidProviderInterface,
+} from 'src/core/ports/uuid.provider';
 
 export class CreateProfileCommand {
-  id: string;
   user: string;
   nativeLanguageCode: string;
   learningLanguageCode?: string;
@@ -67,6 +70,8 @@ export class CreateProfileUsecase {
     private readonly interestsRepository: InterestRepository,
     @Inject(OBJECTIVE_REPOSITORY)
     private readonly objectiveRepository: LearningObjectiveRepository,
+    @Inject(UUID_PROVIDER)
+    private readonly uuidProvider: UuidProviderInterface,
   ) {}
 
   async execute(command: CreateProfileCommand): Promise<Profile> {
@@ -104,6 +109,7 @@ export class CreateProfileUsecase {
 
     const profile = new Profile({
       ...command,
+      id: this.uuidProvider.generate(),
       user: user,
       nativeLanguage,
       masteredLanguages,

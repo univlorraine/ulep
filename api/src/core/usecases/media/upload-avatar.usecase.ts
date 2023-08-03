@@ -10,7 +10,7 @@ import {
   StorageInterface,
 } from '../../ports/storage.interface';
 import { MediaObject, User } from 'src/core/models';
-import { RessourceDoesNotExist } from 'src/core/errors';
+import { RessourceDoesNotExist, UnauthorizedOperation } from 'src/core/errors';
 
 export class UploadAvatarCommand {
   userId: string;
@@ -30,9 +30,13 @@ export class UploadAvatarUsecase {
 
   async execute(command: UploadAvatarCommand) {
     const user = await this.tryToFindTheUserOfId(command.userId);
-    const previousImage = user.avatar;
 
-    await this.deletePreviousAvatar(previousImage);
+    const previousImage = await this.tryToFindTheAvatarOfUser(user);
+
+    if (previousImage) {
+      await this.deletePreviousAvatar(previousImage);
+    }
+
     const avatar = await this.upload(user, command.file);
 
     return avatar;
@@ -41,10 +45,14 @@ export class UploadAvatarUsecase {
   private async tryToFindTheUserOfId(id: string): Promise<User> {
     const instance = await this.userRepository.ofId(id);
     if (!instance) {
-      throw new RessourceDoesNotExist();
+      throw new UnauthorizedOperation();
     }
 
     return instance;
+  }
+
+  private tryToFindTheAvatarOfUser(user: User): Promise<MediaObject | null> {
+    return this.mediaObjectRepository.avatarOfUser(user.id);
   }
 
   private async upload(

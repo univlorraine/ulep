@@ -107,6 +107,10 @@ export class UserResponse {
   @Expose({ groups: ['read'] })
   country: string;
 
+  @Swagger.ApiProperty({ type: 'boolean' })
+  @Expose({ groups: ['read'] })
+  deactivated: boolean;
+
   constructor(partial: Partial<UserResponse>) {
     Object.assign(this, partial);
   }
@@ -122,6 +126,7 @@ export class UserResponse {
       university: UniversityResponse.fromUniversity(user.university),
       role: user.role,
       country: user.country,
+      deactivated: user.deactivated,
     });
   }
 }

@@ -1,4 +1,9 @@
 import {
+  FileTypeValidator,
+  MaxFileSizeValidator,
+  ParseFilePipe,
+} from '@nestjs/common';
+import {
   registerDecorator,
   ValidationOptions,
   ValidationArguments,
@@ -30,4 +35,15 @@ export function IsImage(
       },
     });
   };
+}
+
+export class ImageFilePipe extends ParseFilePipe {
+  constructor() {
+    super({
+      validators: [
+        new MaxFileSizeValidator({ maxSize: 1000 }),
+        new FileTypeValidator({ fileType: '^(image/(jpg|png|jpeg))$' }),
+      ],
+    });
+  }
 }

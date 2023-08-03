@@ -114,7 +114,7 @@ model Users {
   updated_at         DateTime      @updatedAt
   Organization       Organizations @relation(fields: [organization_id], references: [id], onDelete: Cascade)
   Nationality        CountryCodes? @relation(fields: [country_code_id], references: [id], onDelete: SetNull)
-  Avatar             MediaObjects? @relation(fields: [image_id], references: [id], onDelete: Cascade)
+  Avatar             MediaObjects? @relation(fields: [image_id], references: [id])
   Reports            Reports[]
   Profiles           Profiles?
 

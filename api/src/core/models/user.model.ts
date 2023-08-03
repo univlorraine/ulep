@@ -23,6 +23,7 @@ export type UserProps = {
   role: Role;
   country: string;
   avatar?: MediaObject;
+  deactivated: boolean;
 };
 
 export class User {
@@ -46,6 +47,8 @@ export class User {
 
   readonly avatar?: MediaObject;
 
+  readonly deactivated: boolean;
+
   constructor(props: UserProps) {
     this.id = props.id;
     this.email = props.email;
@@ -57,5 +60,6 @@ export class User {
     this.role = props.role;
     this.country = props.country;
     this.avatar = props.avatar;
+    this.deactivated = props.deactivated;
   }
 }

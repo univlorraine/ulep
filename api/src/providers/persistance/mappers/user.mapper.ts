@@ -38,5 +38,6 @@ export const userMapper = (snapshot: UserSnapshot): User => {
         mimetype: snapshot.Avatar.mime,
         size: snapshot.Avatar.size,
       }),
+    deactivated: snapshot.deactivated,
   };
 };
