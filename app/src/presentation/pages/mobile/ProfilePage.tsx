@@ -28,15 +28,10 @@ const ProfilePage: React.FC = () => {
         <IonPage>
             <ProfileContent
                 onClose={() => history.goBack()}
-                onDisconnectPressed={function (): void {
-                    throw new Error('Function not implemented.');
-                }}
-                onEditPressed={function (): void {
-                    throw new Error('Function not implemented.');
-                }}
                 onParameterPressed={function (): void {
                     throw new Error('Function not implemented.');
                 }}
+                onDisconnectPressed={() => null}
                 profileFirstname={profile.firstname}
                 profileLastname={profile.lastname}
                 profilePicture={profile.avatar}

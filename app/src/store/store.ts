@@ -19,6 +19,10 @@ const Store = createStore<TokenStoreTypes>(
         }),
         profile: undefined,
         profileSignUp: new ProfileSignUp(),
+        updateProfile: action((state, payload) => {
+            const profile = state.profile;
+            if (profile && payload.avatar) profile.avatar = payload.avatar;
+        }),
         updateProfileSignUp: action((state, payload) => {
             const profile = state.profileSignUp;
             if (payload.age) profile.age = payload.age;

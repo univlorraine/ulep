@@ -23,9 +23,6 @@ const ProfileModal: React.FC<ProfileModalProps> = ({
                 onDisconnectPressed={function (): void {
                     throw new Error('Function not implemented.');
                 }}
-                onEditPressed={function (): void {
-                    throw new Error('Function not implemented.');
-                }}
                 onParameterPressed={function (): void {
                     throw new Error('Function not implemented.');
                 }}
