@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import ProfileContent from '../contents/ProfileContent';
-import SettingsContent from '../contents/settingsContent';
+import SettingsContent from '../contents/SettingsContent';
 import Modal from './Modal';
 
 interface ProfileModalProps {
