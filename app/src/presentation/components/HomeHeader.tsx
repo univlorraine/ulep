@@ -15,7 +15,7 @@ const HomeHeader: React.FC<HomeHeaderProps> = ({ avatar, onPicturePressed }) => 
                     <div className={styles['header-separator']} />
                     <span className={styles['app-name']}>ULEP</span>
                 </div>
-                <button className={styles['avatar-container']}>
+                <button className={styles['avatar-container']} onClick={onPicturePressed}>
                     <img alt="avatar" className={styles.avatar} src={avatar} />
                     <img alt="arrow-down" src="/assets/arrow-down.svg" />
                 </button>

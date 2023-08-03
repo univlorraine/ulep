@@ -28,6 +28,7 @@ import SignUpInformationsPage from '../pages/SignUpInformationsPage';
 import SignUpInterestsPage from '../pages/SignUpInterestsPage';
 import SignUpLanguagesPage from '../pages/SignUpLanguagesPage';
 import SignUpPage from '../pages/SignUpPage';
+import ProfilePage from '../pages/mobile/ProfilePage';
 import ReportPage from '../pages/mobile/ReportPage';
 import TandemStatusPage from '../pages/mobile/TandemStatusPage';
 import MobileRoute from './MobileRoute';
@@ -59,6 +60,7 @@ const OfflineRouter: React.FC = () => (
         <Route exact path="/signup">
             <SignUpPage />
         </Route>
+        <MobileRoute exact component={ProfilePage} path={'/profil'} />
         <MobileRoute exact component={ReportPage} path={'/report'} />
         <MobileRoute exact component={TandemStatusPage} path={'/tandem-status'} />
         <PrivateRoute exact component={PairingLaguagesPage} path="/signup/pairing/languages" />

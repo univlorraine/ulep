@@ -56,6 +56,12 @@
         "signup_button": "Créer un compte"
     },
     "home_page": {
+        "profile": {
+            "disconnect": "Se déconnecter",
+            "edit": "Editer mon profil",
+            "parameters": "Paramètres",
+            "title": "Profile"
+        },
         "report": {
             "category_title": "Dis-nous ce qu'il s'est passé ?",
             "note": "Note",

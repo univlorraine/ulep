@@ -6,6 +6,7 @@ import { useConfig } from '../../context/ConfigurationContext';
 import Profile from '../../domain/entities/Profile';
 import Tandem from '../../domain/entities/Tandem';
 import HomeHeader from '../components/HomeHeader';
+import ProfileModal from '../components/modals/ProfileModal';
 import ReportModal from '../components/modals/ReportModal';
 import TandemStatusModal from '../components/modals/TandemStatusModal';
 import TandemList from '../components/tandems/TandemList';
@@ -41,6 +42,7 @@ const HomePage: React.FC = () => {
     const currentDate = new Date();
     const { width } = useWindowDimensions();
     const isHybrid = width < HYBRID_MAX_WIDTH;
+    const [displayProfile, setDisplayProfile] = useState<boolean>(false);
     const [displayReport, setDisplayReport] = useState<boolean>(false);
     const [selectedTandem, setSelectedTandem] = useState<Tandem>();
     const [tandems, setTandems] = useState<Tandem[]>([]);
@@ -55,10 +57,11 @@ const HomePage: React.FC = () => {
         setTandems(result);
     };
 
+    const onProfilePressed = () => (isHybrid ? history.push('/profil') : setDisplayProfile(true));
+    const onReportPressed = () => (isHybrid ? history.push('/report') : setDisplayReport(true));
+
     const onTandemPressed = (tandem: Tandem) =>
         !isHybrid ? setSelectedTandem(tandem) : history.push('/tandem-status', { tandem });
-
-    const onReportPressed = () => (isHybrid ? history.push('/report') : setDisplayReport(true));
 
     useEffect(() => {
         getHomeData();
@@ -71,7 +74,7 @@ const HomePage: React.FC = () => {
         .padStart(2, '0')}`;
     return (
         <IonPage>
-            {width >= HYBRID_MAX_WIDTH && <HomeHeader avatar={profile.avatar} onPicturePressed={() => null} />}
+            {!isHybrid && <HomeHeader avatar={profile.avatar} onPicturePressed={onProfilePressed} />}
             <IonContent>
                 <div className={styles.container}>
                     <div className={styles['header']}>
@@ -79,8 +82,8 @@ const HomePage: React.FC = () => {
                             <span className={styles.date}>{formattedDate}</span>
                             <span className={styles.hello}>{`${t('global.hello')} ${profile.firstname}`}</span>
                         </div>
-                        {!isHybrid && (
-                            <button className={styles['avatar-container']} onClick={() => history.push('/home')}>
+                        {isHybrid && (
+                            <button className={styles['avatar-container']} onClick={onProfilePressed}>
                                 <img alt="avatar" className={styles.avatar} src={profile.avatar} />
                                 <img alt="arrow-down" src="/assets/arrow-down.svg" />
                             </button>
@@ -119,6 +122,13 @@ const HomePage: React.FC = () => {
                         status={selectedTandem?.status}
                     />
                     <ReportModal isVisible={displayReport} onClose={() => setDisplayReport(false)} />
+                    <ProfileModal
+                        isVisible={displayProfile}
+                        onClose={() => setDisplayProfile(false)}
+                        profileFirstname={profile.firstname}
+                        profileLastname={profile.lastname}
+                        profilePicture={profile.avatar}
+                    />
                 </>
             )}
         </IonPage>
