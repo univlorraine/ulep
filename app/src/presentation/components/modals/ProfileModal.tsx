@@ -24,9 +24,6 @@ const ProfileModal: React.FC<ProfileModalProps> = ({
             {!displaySettings ? (
                 <ProfileContent
                     onClose={onClose}
-                    onDisconnectPressed={function (): void {
-                        throw new Error('Function not implemented.');
-                    }}
                     onParameterPressed={() => setDisplaySettings(true)}
                     profileFirstname={profileFirstname}
                     profileLastname={profileLastname}

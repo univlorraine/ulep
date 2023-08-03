@@ -29,7 +29,6 @@ const ProfilePage: React.FC = () => {
             <ProfileContent
                 onClose={() => history.goBack()}
                 onParameterPressed={() => history.push('/settings')}
-                onDisconnectPressed={() => null}
                 profileFirstname={profile.firstname}
                 profileLastname={profile.lastname}
                 profilePicture={profile.avatar}

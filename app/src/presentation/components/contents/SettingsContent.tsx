@@ -1,6 +1,9 @@
+import { useIonToast } from '@ionic/react';
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import Switch from 'react-switch';
+import { useConfig } from '../../../context/ConfigurationContext';
+import { useStoreActions } from '../../../store/storeTypes';
 import Dropdown from '../DropDown';
 import styles from './SettingsContent.module.css';
 
@@ -10,7 +13,19 @@ interface SettingsContentProps {
 
 const SettingsContent: React.FC<SettingsContentProps> = ({ onBackPressed }) => {
     const { i18n, t } = useTranslation();
+    const { askForAccountDeletion } = useConfig();
+    const [showToast] = useIonToast();
+    const logout = useStoreActions((store) => store.logout);
     const [notificationStatus, setNotificationStatus] = useState<boolean>(true);
+
+    const onDeletionAsked = async () => {
+        const result = await askForAccountDeletion.execute();
+
+        if (result instanceof Error) {
+            return await showToast({ message: t(result.message), duration: 1000 });
+        }
+        return await showToast({ message: t('home_page.settings.deletion'), duration: 1000 });
+    };
 
     return (
         <div className={styles.container}>
@@ -50,11 +65,11 @@ const SettingsContent: React.FC<SettingsContentProps> = ({ onBackPressed }) => {
             </a>
 
             <span className={styles.subtitle}>{t('home_page.settings.account')}</span>
-            <button className={styles['setting-container']}>
+            <button className={styles['setting-container']} onClick={onDeletionAsked}>
                 <span>{t('home_page.settings.unsubscribe')}</span>
                 <img alt="right-arrow" src="/assets/arrow-right.svg" />
             </button>
-            <button className={styles['setting-container']}>
+            <button className={styles['setting-container']} onClick={() => logout()}>
                 <span>{t('home_page.settings.logout')}</span>
                 <img alt="right-arrow" src="/assets/arrow-right.svg" />
             </button>

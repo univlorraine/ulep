@@ -6,7 +6,6 @@ import styles from './ProfileContent.module.css';
 
 interface ProfileContentProps {
     onClose: () => void;
-    onDisconnectPressed: () => void;
     onParameterPressed: () => void;
     profileFirstname: string;
     profileLastname: string;
@@ -15,7 +14,6 @@ interface ProfileContentProps {
 
 const ProfileContent: React.FC<ProfileContentProps> = ({
     onClose,
-    onDisconnectPressed,
     onParameterPressed,
     profileFirstname,
     profileLastname,
@@ -23,7 +21,7 @@ const ProfileContent: React.FC<ProfileContentProps> = ({
 }) => {
     const { t } = useTranslation();
     const [showToast] = useIonToast();
-    const updateProfile = useStoreActions((store) => store.updateProfile);
+    const { logout, updateProfile } = useStoreActions((store) => store);
     const { cameraAdapter, updateAvatar } = useConfig();
 
     //TODO: test this when api will be ready
@@ -68,7 +66,7 @@ const ProfileContent: React.FC<ProfileContentProps> = ({
                     <img alt="arrow-right" src="/assets/arrow-right.svg" />
                 </button>
 
-                <button className={styles.button} onClick={onDisconnectPressed}>
+                <button className={styles.button} onClick={() => logout()}>
                     <div className={styles['button-container']}>
                         <img alt="disconnect" src="/assets/small-avatar.svg" />
                         <span className="margin-left">{t('home_page.profile.disconnect')}</span>
