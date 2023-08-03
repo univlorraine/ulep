@@ -1,4 +1,6 @@
+import { useState } from 'react';
 import ProfileContent from '../contents/ProfileContent';
+import SettingsContent from '../contents/settingsContent';
 import Modal from './Modal';
 
 interface ProfileModalProps {
@@ -16,23 +18,23 @@ const ProfileModal: React.FC<ProfileModalProps> = ({
     profileLastname,
     profilePicture,
 }) => {
+    const [displaySettings, setDisplaySettings] = useState<boolean>(false);
     return (
         <Modal isVisible={isVisible} onClose={onClose} position="flex-end" hideWhiteBackground>
-            <ProfileContent
-                onClose={onClose}
-                onDisconnectPressed={function (): void {
-                    throw new Error('Function not implemented.');
-                }}
-                onEditPressed={function (): void {
-                    throw new Error('Function not implemented.');
-                }}
-                onParameterPressed={function (): void {
-                    throw new Error('Function not implemented.');
-                }}
-                profileFirstname={profileFirstname}
-                profileLastname={profileLastname}
-                profilePicture={profilePicture}
-            />
+            {!displaySettings ? (
+                <ProfileContent
+                    onClose={onClose}
+                    onDisconnectPressed={function (): void {
+                        throw new Error('Function not implemented.');
+                    }}
+                    onParameterPressed={() => setDisplaySettings(true)}
+                    profileFirstname={profileFirstname}
+                    profileLastname={profileLastname}
+                    profilePicture={profilePicture}
+                />
+            ) : (
+                <SettingsContent onBackPressed={() => setDisplaySettings(false)} />
+            )}
         </Modal>
     );
 };

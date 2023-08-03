@@ -28,9 +28,7 @@ const ProfilePage: React.FC = () => {
         <IonPage>
             <ProfileContent
                 onClose={() => history.goBack()}
-                onParameterPressed={function (): void {
-                    throw new Error('Function not implemented.');
-                }}
+                onParameterPressed={() => history.push('/settings')}
                 onDisconnectPressed={() => null}
                 profileFirstname={profile.firstname}
                 profileLastname={profile.lastname}
