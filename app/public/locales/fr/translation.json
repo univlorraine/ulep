@@ -69,6 +69,17 @@
             "send_button": "Envoyer",
             "title": "Signaler"
         },
+        "settings": {
+            "account": "Mon compte",
+            "CGU": "Condition d'utilisation",
+            "confidentiality": "Politique de confidentalité",
+            "language": "Langue de l'application",
+            "logout": "Se déconnecter",
+            "notifications": "Notifications",
+            "other": "Autres paramètres",
+            "title": "Paramètres",
+            "unsubscribe": "Se désinscrire"
+        },
         "tandem": {
             "title": "Mes tandems"
         },
