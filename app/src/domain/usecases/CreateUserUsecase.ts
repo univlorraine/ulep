@@ -36,14 +36,14 @@ class CreateUserUsecase implements CreateUserUsecaseInterface {
                 countryCode,
                 avatar
             };
-            const httpRepsonse: HttpResponse<undefined> = await this.domainHttpAdapter.post(
+            const httpResponse: HttpResponse<undefined> = await this.domainHttpAdapter.post(
                 `/users/`,
                 body,
                 {},
                 'multipart/form-data'
             );
 
-            if (!httpRepsonse.parsedBody) {
+            if (!httpResponse.parsedBody) {
                 return new Error('errors.global');
             }
 

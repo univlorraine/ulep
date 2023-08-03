@@ -6,8 +6,8 @@ import { useConfig } from '../../context/ConfigurationContext';
 import Profile from '../../domain/entities/Profile';
 import Tandem from '../../domain/entities/Tandem';
 import HomeHeader from '../components/HomeHeader';
-import TandemStatusContent from '../components/contents/TandemStatusContent';
-import Modal from '../components/modals/Modal';
+import ReportModal from '../components/modals/ReportModal';
+import TandemStatusModal from '../components/modals/TandemStatusModal';
 import TandemList from '../components/tandems/TandemList';
 import WaitingTandemList from '../components/tandems/WaitingTandemList';
 import useWindowDimensions from '../hooks/useWindowDimensions';
@@ -40,8 +40,10 @@ const HomePage: React.FC = () => {
     const [showToast] = useIonToast();
     const currentDate = new Date();
     const { width } = useWindowDimensions();
-    const [tandems, setTandems] = useState<Tandem[]>([]);
+    const isHybrid = width < HYBRID_MAX_WIDTH;
+    const [displayReport, setDisplayReport] = useState<boolean>(false);
     const [selectedTandem, setSelectedTandem] = useState<Tandem>();
+    const [tandems, setTandems] = useState<Tandem[]>([]);
 
     const getHomeData = async () => {
         const result = await getAllTandems.execute();
@@ -52,6 +54,11 @@ const HomePage: React.FC = () => {
 
         setTandems(result);
     };
+
+    const onTandemPressed = (tandem: Tandem) =>
+        !isHybrid ? setSelectedTandem(tandem) : history.push('/tandem-status', { tandem });
+
+    const onReportPressed = () => (isHybrid ? history.push('/report') : setDisplayReport(true));
 
     useEffect(() => {
         getHomeData();
@@ -72,38 +79,48 @@ const HomePage: React.FC = () => {
                             <span className={styles.date}>{formattedDate}</span>
                             <span className={styles.hello}>{`${t('global.hello')} ${profile.firstname}`}</span>
                         </div>
-                        {width < HYBRID_MAX_WIDTH && (
+                        {!isHybrid && (
                             <button className={styles['avatar-container']} onClick={() => history.push('/home')}>
                                 <img alt="avatar" className={styles.avatar} src={profile.avatar} />
                                 <img alt="arrow-down" src="/assets/arrow-down.svg" />
                             </button>
                         )}
                     </div>
-                    {width < HYBRID_MAX_WIDTH && <div className={styles.separator} />}
+                    {isHybrid && <div className={styles.separator} />}
                     <div className={styles.content}>
                         <TandemList studentId={profile.id} tandems={tandems} />
                         <WaitingTandemList
-                            onTandemPressed={setSelectedTandem}
+                            onTandemPressed={onTandemPressed}
                             onNewTandemAsked={() => null}
                             studentId={profile.id}
                             tandems={tandems}
                         />
                     </div>
+                    <div className={styles['report-container']}>
+                        <button className={`tertiary-button ${styles.report}`} onClick={onReportPressed}>
+                            {
+                                <>
+                                    <img alt="report" className="margin-right" src="/assets/report.svg" />
+                                    <span>{t('home_page.report.report_button')}</span>
+                                </>
+                            }
+                        </button>
+                    </div>
                 </div>
             </IonContent>
-            <Modal
-                isVisible={
-                    !!selectedTandem && (selectedTandem.status === 'DRAFT' || selectedTandem.status === 'UNACTIVE')
-                }
-                onClose={() => setSelectedTandem(undefined)}
-                hideWhiteBackground
-            >
-                <TandemStatusContent
-                    onClose={() => setSelectedTandem(undefined)}
-                    onFindNewTandem={() => null}
-                    status={selectedTandem?.status}
-                />
-            </Modal>
+            {!isHybrid && (
+                <>
+                    <TandemStatusModal
+                        isVisible={
+                            !!selectedTandem &&
+                            (selectedTandem.status === 'DRAFT' || selectedTandem.status === 'UNACTIVE')
+                        }
+                        onClose={() => setSelectedTandem(undefined)}
+                        status={selectedTandem?.status}
+                    />
+                    <ReportModal isVisible={displayReport} onClose={() => setDisplayReport(false)} />
+                </>
+            )}
         </IonPage>
     );
 };

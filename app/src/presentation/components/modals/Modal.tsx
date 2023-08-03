@@ -15,7 +15,8 @@ const Modal: React.FC<ModalProps> = ({ children, hideWhiteBackground, isVisible,
 
     return (
         <div className={styles.modal}>
-            <div className={!hideWhiteBackground ? styles['modal-content'] : ''}>{children}</div>
+            {!hideWhiteBackground && <div className={styles['modal-content']}>{children}</div>}
+            {hideWhiteBackground && children}
         </div>
     );
 };

@@ -10,15 +10,15 @@ class GetAllCountriesUsecase implements GetAllCountriesUsecaseInterface {
 
     async execute(): Promise<Country[] | Error> {
         try {
-            const httpRepsonse: HttpResponse<CollectionCommand<CountryCommand>> = await this.domainHttpAdapter.get(
+            const httpResponse: HttpResponse<CollectionCommand<CountryCommand>> = await this.domainHttpAdapter.get(
                 `/countries`
             );
 
-            if (!httpRepsonse.parsedBody || !httpRepsonse.parsedBody.items) {
+            if (!httpResponse.parsedBody || !httpResponse.parsedBody.items) {
                 return new Error('errors.global');
             }
 
-            return httpRepsonse.parsedBody.items.map((country) => countryCommandToDomain(country));
+            return httpResponse.parsedBody.items.map((country) => countryCommandToDomain(country));
         } catch (error: any) {
             return new Error('errors.global');
         }

@@ -10,15 +10,15 @@ class GetAllLanguagesUsecase implements GetAllLanguagesUsecaseInterface {
 
     async execute(): Promise<Language[] | Error> {
         try {
-            const httpRepsonse: HttpResponse<CollectionCommand<LanguageCommand>> = await this.domainHttpAdapter.get(
+            const httpResponse: HttpResponse<CollectionCommand<LanguageCommand>> = await this.domainHttpAdapter.get(
                 `/languages`
             );
 
-            if (!httpRepsonse.parsedBody || !httpRepsonse.parsedBody.items) {
+            if (!httpResponse.parsedBody || !httpResponse.parsedBody.items) {
                 return new Error('errors.global');
             }
 
-            return httpRepsonse.parsedBody.items.map((language) => languageCommandToDomain(language));
+            return httpResponse.parsedBody.items.map((language) => languageCommandToDomain(language));
         } catch (error: any) {
             return new Error('errors.global');
         }

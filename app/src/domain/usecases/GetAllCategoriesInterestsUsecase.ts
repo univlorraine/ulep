@@ -2,21 +2,22 @@ import { HttpAdapterInterface } from '../../adapter/DomainHttpAdapter';
 import CategoryInterests from '../entities/CategoryInterests';
 import GetAllCategoriesInterestsUsecaseInterface from '../interfaces/GetAllCategoriesInterestsUsecase.interface';
 
+//TODO: rename CategoriesInterests to InterestCategories
 class GetAllCategoriesInterestssUsecase implements GetAllCategoriesInterestsUsecaseInterface {
     constructor(private readonly domainHttpAdapter: HttpAdapterInterface) {}
 
     async execute(): Promise<CategoryInterests[] | Error> {
         try {
             //TODO: CURRENTLY MOCK DATA
-            /*const httpRepsonse: HttpResponse<CollectionCommand<CategoryInterestsCommand>> = await this.domainHttpAdapter.get(
+            /*const httpResponse: HttpResponse<CollectionCommand<CategoryInterestsCommand>> = await this.domainHttpAdapter.get(
                 `/interests`
             );
 
-            if (!httpRepsonse.parsedBody || !httpRepsonse.parsedBody.items) {
+            if (!httpResponse.parsedBody || !httpResponse.parsedBody.items) {
                 return new Error('errors.global');
             }
 
-            return httpRepsonse.parsedBody.items.map((goal) => goalCommandToDomain(goal));
+            return httpResponse.parsedBody.items.map((goal) => goalCommandToDomain(goal));
             */
 
             return [

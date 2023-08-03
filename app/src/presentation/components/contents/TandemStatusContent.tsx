@@ -3,7 +3,7 @@ import { ReactComponent as Background } from '../../../../public/assets/backgrou
 import { useConfig } from '../../../context/ConfigurationContext';
 import useWindowDimensions from '../../hooks/useWindowDimensions';
 import { HYBRID_MAX_WIDTH } from '../../utils';
-import styles from './TandemContent.module.css';
+import styles from './TandemStatusContent.module.css';
 
 interface TandemStatusContentProps {
     onFindNewTandem: () => void;

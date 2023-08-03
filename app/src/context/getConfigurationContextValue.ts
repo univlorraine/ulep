@@ -3,11 +3,13 @@ import DomainHttpAdapter from '../adapter/DomainHttpAdapter';
 import Configuration from '../domain/entities/Confirguration';
 import AskForLanguageUsecase from '../domain/usecases/AskForLanguageUsecase';
 import CreateProfileUsecase from '../domain/usecases/CreateProfileUsecase';
+import CreateReportUsecase from '../domain/usecases/CreateReportUsecase';
 import CreateUserUsecase from '../domain/usecases/CreateUserUsecase';
 import GetAllCategoriesInterestssUsecase from '../domain/usecases/GetAllCategoriesInterestsUsecase';
 import GetAllCountriesUsecase from '../domain/usecases/GetAllCountriesUsecase';
 import GetAllGoalsUsecase from '../domain/usecases/GetAllGoalsUsecase';
 import GetAllLanguagesUsecase from '../domain/usecases/GetAllLanguagesUsecase';
+import GetAllReportCategoriesUsecase from '../domain/usecases/GetAllReportCategoriesUsecase';
 import GetAllTandemsUsecase from '../domain/usecases/GetAllTandemsUsecase';
 import GetAllUniversitiesUsecase from '../domain/usecases/GetAllUniversitiesUsecase';
 import GetQuizzByLevelUsecase from '../domain/usecases/GetQuizzByLevelUsecase';
@@ -28,10 +30,12 @@ const getConfigContextValue = (
 
     const askForLanguage = new AskForLanguageUsecase(domainHttpAdapter);
     const createProfile = new CreateProfileUsecase(domainHttpAdapter, setProfile);
+    const createReport = new CreateReportUsecase(domainHttpAdapter);
     const getAllCategoriesInterests = new GetAllCategoriesInterestssUsecase(domainHttpAdapter);
     const getAllCountries = new GetAllCountriesUsecase(domainHttpAdapter);
     const getAllGoals = new GetAllGoalsUsecase(domainHttpAdapter);
     const getAllLanguages = new GetAllLanguagesUsecase(domainHttpAdapter);
+    const getAllReportCategories = new GetAllReportCategoriesUsecase(domainHttpAdapter);
     const getAllTandems = new GetAllTandemsUsecase(domainHttpAdapter);
     const getAllUniversities = new GetAllUniversitiesUsecase(domainHttpAdapter);
     const getQuizzByLevel = new GetQuizzByLevelUsecase(domainHttpAdapter);
@@ -42,14 +46,16 @@ const getConfigContextValue = (
 
     return {
         askForLanguage,
-        createProfile,
         cameraAdapter,
         configuration,
+        createProfile,
+        createReport,
         createUser,
         getAllCategoriesInterests,
         getAllCountries,
         getAllGoals,
         getAllLanguages,
+        getAllReportCategories,
         getAllTandems,
         getAllUniversities,
         getQuizzByLevel,

@@ -23,7 +23,7 @@ class CreateProfileUsecase implements CreateProfileUsecaseInterface {
         try {
             //TODO: Change this later when api will be ready
             /*
-            const httpRepsonse: HttpResponse<ProfileCommand> = await this.domainHttpAdapter.post(`/profiles/`, {
+            const httpResponse: HttpResponse<ProfileCommand> = await this.domainHttpAdapter.post(`/profiles/`, {
                 age,
                 role,
                 gender,
@@ -40,11 +40,11 @@ class CreateProfileUsecase implements CreateProfileUsecaseInterface {
                 bios,
             });
 
-            if (!httpRepsonse.parsedBody) {
+            if (!httpResponse.parsedBody) {
                 return new Error('errors.global');
             }
 
-            return this.setProfile(profileCommandToDomain(httpRepsonse.parsedBody));*/
+            return this.setProfile(profileCommandToDomain(httpResponse.parsedBody));*/
             return;
         } catch (error: any) {
             return new Error('errors.global');

@@ -54,6 +54,23 @@
     flex-direction: column;
 }
 
+.report-container {
+    align-self: center;
+    align-items: center;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    padding-bottom: 40px;
+    width: 100%;
+}
+
+.report {
+    align-items: center;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+}
+
 .separator {
     background-color: #ebebeb;
     height: 1px;
@@ -70,5 +87,15 @@
     .content {
         grid-template-columns: repeat(2, 1fr);
         margin-top: 20px;
+    }
+
+    .report-container {
+        align-self: center;
+        align-items: center;
+        display: flex;
+        flex-direction: row;
+        justify-content: center;
+        margin-top: 48px;
+        width: 410px;
     }
 }
