@@ -1,4 +1,5 @@
 import { useTranslation } from 'react-i18next';
+import { AvatarSvg, CreateAccountSvg } from '../../../assets';
 import CircleAvatar from '../CircleAvatar';
 import style from './ConnectionContent.module.css';
 
@@ -14,7 +15,7 @@ const ConnectionContent: React.FC<ConnectionContentProps> = ({ onLoginPressed, o
             <div className={style['connect-div']}>
                 <CircleAvatar
                     alt="avatar"
-                    backgroundImage="/assets/avatar.svg"
+                    backgroundImage={AvatarSvg}
                     height={76}
                     viewClassName={style.icons}
                     width={76}
@@ -28,7 +29,7 @@ const ConnectionContent: React.FC<ConnectionContentProps> = ({ onLoginPressed, o
             <div className={style['signup-div']}>
                 <CircleAvatar
                     alt="create-account"
-                    backgroundImage="/assets/create-account-logo.svg"
+                    backgroundImage={CreateAccountSvg}
                     height={76}
                     viewClassName={style.icons}
                     width={76}
