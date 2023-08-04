@@ -3,13 +3,14 @@ import styles from './TandemBubble.module.css';
 
 interface TandemBubbleProps {
     language: Language;
+    onTandemPressed: () => void;
     profileAvatar?: string;
     profileName?: string;
 }
 
-const TandemBubble: React.FC<TandemBubbleProps> = ({ language, profileAvatar, profileName }) => {
+const TandemBubble: React.FC<TandemBubbleProps> = ({ language, onTandemPressed, profileAvatar, profileName }) => {
     return (
-        <div className={styles.container}>
+        <button className={styles.container} onClick={onTandemPressed}>
             <div className={styles.profile}>
                 <img alt="tandem-avatar" className={styles.avatar} src={profileAvatar} />
                 <span className={styles.name}>{profileName}</span>
@@ -17,7 +18,7 @@ const TandemBubble: React.FC<TandemBubbleProps> = ({ language, profileAvatar, pr
             <div className={styles['flag-container']}>
                 <span className={styles.flag}>{language.getFlag()}</span>
             </div>
-        </div>
+        </button>
     );
 };
 

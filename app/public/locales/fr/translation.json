@@ -95,6 +95,18 @@
             "subtitle": "Fais une demande pour une autre langue ou réessaie le semestre prochain",
             "title": "Nous n’avons pas pu trouver de tandem disponible"
         },
+        "tandem_validated": {
+            "availabilities": "Ses dispos",
+            "availabilities_note": "Note sur ses disponibilités",
+            "goals": "Objectifs",
+            "interests": "Centre d'intérêts",
+            "incredible": "😲 Quelque chose d'incroyable qui lui est arrivé",
+            "languages": "Langues parlées",
+            "place": "🏖️ Son endroit préféré",
+            "power": "⚡️ Son super pouvoir",
+            "title": "Nous avons trouvé ton tandem 🎉",
+            "travel": "✈ Ses voyages"
+        },
         "waiting_tandem": {
             "button": "Faire une nouvelle demande",
             "tandem_draft": "En attente d'un tandem",

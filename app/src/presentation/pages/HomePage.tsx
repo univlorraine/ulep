@@ -8,6 +8,7 @@ import Tandem from '../../domain/entities/Tandem';
 import HomeHeader from '../components/HomeHeader';
 import ProfileModal from '../components/modals/ProfileModal';
 import ReportModal from '../components/modals/ReportModal';
+import TandemProfileModal from '../components/modals/TandemProfileModal';
 import TandemStatusModal from '../components/modals/TandemStatusModal';
 import TandemList from '../components/tandems/TandemList';
 import WaitingTandemList from '../components/tandems/WaitingTandemList';
@@ -58,10 +59,19 @@ const HomePage: React.FC = () => {
     };
 
     const onProfilePressed = () => (isHybrid ? history.push('/profil') : setDisplayProfile(true));
+
     const onReportPressed = () => (isHybrid ? history.push('/report') : setDisplayReport(true));
 
     const onTandemPressed = (tandem: Tandem) =>
         !isHybrid ? setSelectedTandem(tandem) : history.push('/tandem-status', { tandem });
+
+    const onValidatedTandemPressed = (tandem: Tandem) =>
+        !isHybrid
+            ? setSelectedTandem(tandem)
+            : history.push('/tandem-profil', {
+                  profile: tandem.profiles.find((tandemProfile) => tandemProfile.id !== profile.id),
+                  language: tandem.language,
+              });
 
     useEffect(() => {
         getHomeData();
@@ -91,7 +101,11 @@ const HomePage: React.FC = () => {
                     </div>
                     {isHybrid && <div className={styles.separator} />}
                     <div className={styles.content}>
-                        <TandemList studentId={profile.id} tandems={tandems} />
+                        <TandemList
+                            onTandemPressed={onValidatedTandemPressed}
+                            studentId={profile.id}
+                            tandems={tandems}
+                        />
                         <WaitingTandemList
                             onTandemPressed={onTandemPressed}
                             onNewTandemAsked={() => null}
@@ -113,6 +127,14 @@ const HomePage: React.FC = () => {
             </IonContent>
             {!isHybrid && (
                 <>
+                    <ReportModal isVisible={displayReport} onClose={() => setDisplayReport(false)} />
+                    <ProfileModal
+                        isVisible={displayProfile}
+                        onClose={() => setDisplayProfile(false)}
+                        profileFirstname={profile.firstname}
+                        profileLastname={profile.lastname}
+                        profilePicture={profile.avatar}
+                    />
                     <TandemStatusModal
                         isVisible={
                             !!selectedTandem &&
@@ -121,13 +143,11 @@ const HomePage: React.FC = () => {
                         onClose={() => setSelectedTandem(undefined)}
                         status={selectedTandem?.status}
                     />
-                    <ReportModal isVisible={displayReport} onClose={() => setDisplayReport(false)} />
-                    <ProfileModal
-                        isVisible={displayProfile}
-                        onClose={() => setDisplayProfile(false)}
-                        profileFirstname={profile.firstname}
-                        profileLastname={profile.lastname}
-                        profilePicture={profile.avatar}
+                    <TandemProfileModal
+                        isVisible={!!selectedTandem && selectedTandem.status === 'ACTIVE'}
+                        language={selectedTandem?.language}
+                        onClose={() => setSelectedTandem(undefined)}
+                        profile={selectedTandem?.profiles.find((tandemProfile) => tandemProfile.id !== profile.id)}
                     />
                 </>
             )}

@@ -1,0 +1,85 @@
+.avatar {
+    border-radius: 50%;
+    height: 125px;
+    object-fit: cover;
+    width: 125px;
+}
+
+.bubble {
+    background-color: white;
+    border-radius: 50%;
+    left: -6px;
+    padding: 12px;
+    position: absolute;
+    top: 0;
+}
+
+.card,
+.card1,
+.card2 {
+    border-radius: 12px;
+    height: 250px;
+    padding: 20px;
+    width: 200px;
+    z-index: 1;
+}
+
+.card {
+    background: var(--secondary-dark-color);
+    z-index: 2;
+}
+
+.card1 {
+    background: var(--secondary-color);
+    position: absolute;
+    transform: rotate(-6deg);
+}
+
+.card2 {
+    background: white;
+    position: absolute;
+    transform: rotate(-12deg);
+}
+
+.container {
+    align-items: center;
+    display: flex;
+    position: relative;
+    justify-content: center;
+    width: 100%;
+}
+
+.content {
+    align-items: center;
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    justify-content: center;
+    position: relative;
+    width: 100%;
+}
+
+.name,
+.university-name {
+    color: #fff;
+    font-family: 'Maven Pro';
+    font-size: 16px;
+    font-style: normal;
+    line-height: 20px;
+    text-align: center;
+}
+
+.name {
+    font-weight: 500;
+}
+
+.text-container {
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 20px;
+    margin-top: auto;
+}
+
+.university-name {
+    font-weight: 400;
+}
