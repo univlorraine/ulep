@@ -6,7 +6,6 @@ import {
   Patch,
   Param,
   Delete,
-  Logger,
   Query,
   UseGuards,
   ParseUUIDPipe,
@@ -20,8 +19,10 @@ import {
   CreateUserRequest,
   PaginationDto,
   UpdateUserRequest,
+  AskForAccountDeletionRequest,
 } from '../dtos';
 import {
+  AskForAccountDeletionUsecase,
   CreateUserUsecase,
   DeleteUserUsecase,
   GetUsersUsecase,
@@ -37,9 +38,8 @@ import { UploadAvatarUsecase } from 'src/core/usecases';
 @Controller('users')
 @Swagger.ApiTags('Users')
 export class UserController {
-  private readonly logger = new Logger(UserController.name);
-
   constructor(
+    private readonly askForAccountDeletionUsecase: AskForAccountDeletionUsecase,
     private readonly createUserUsecase: CreateUserUsecase,
     private readonly uploadAvatarUsecase: UploadAvatarUsecase,
     private readonly getUsersUsecase: GetUsersUsecase,
@@ -103,6 +103,17 @@ export class UserController {
     @Body() request: UpdateUserRequest,
   ) {
     await this.updateUserUsecase.execute({ id, ...request });
+  }
+
+  @Post(':id/ask-deletion')
+  @UseGuards(AuthenticationGuard)
+  @Swagger.ApiOperation({ summary: 'Ask for account deletion.' })
+  @Swagger.ApiOkResponse()
+  async askForAccountDeletion(
+    @Param('id', ParseUUIDPipe) id: string,
+    @Body() { reason }: AskForAccountDeletionRequest,
+  ) {
+    await this.askForAccountDeletionUsecase.execute({ user: id, reason });
   }
 
   @Delete(':id')

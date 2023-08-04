@@ -5,6 +5,7 @@ export type LearningObjectiveProps = {
   name: TextContent;
 };
 
+// TODO: Add image (svg)
 export class LearningObjective {
   readonly id: string;
   readonly name: TextContent;

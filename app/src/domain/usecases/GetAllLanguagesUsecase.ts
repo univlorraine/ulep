@@ -5,6 +5,9 @@ import LanguageCommand, { languageCommandToDomain } from '../../command/Language
 import Language from '../entities/Language';
 import GetAllLanguagesUsecaseInterface from '../interfaces/GetAllLanguagesUsecase.interface';
 
+// TODO(herve): Validate the usecase, cause there is 2 ways to do this:
+// 1. Use /languages to get all existing languages
+// 2. Use /universities/{id}/languages to get all languages available for a specific university
 class GetAllLanguagesUsecase implements GetAllLanguagesUsecaseInterface {
     constructor(private readonly domainHttpAdapter: HttpAdapterInterface) {}
 

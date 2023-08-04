@@ -19,8 +19,16 @@ export class PrismaCountryCodeRepository implements CountryRepository {
       },
     });
 
-    const offset = filters.page > 0 ? (filters.page - 1) * filters.limit : 0;
-    if (offset >= count) {
+    let offset: number | undefined;
+    let limit: number | undefined;
+
+    if (filters.pagination) {
+      limit = filters.pagination.limit;
+      const page = filters.pagination.page;
+      offset = page > 0 ? (page - 1) * limit : 0;
+    }
+
+    if (offset && offset >= count) {
       return { items: [], totalItems: count };
     }
 
@@ -32,7 +40,7 @@ export class PrismaCountryCodeRepository implements CountryRepository {
         name: filters.orderBy?.name,
       },
       skip: offset,
-      take: filters.limit,
+      take: limit,
     });
 
     return {

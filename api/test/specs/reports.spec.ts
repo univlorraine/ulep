@@ -98,7 +98,6 @@ describe('Reports', () => {
       .post('/reports')
       .set('Authorization', `Bearer ${keycloakUser.sub}`)
       .send({
-        id: '4be22c64-e341-4199-9175-1c43fdce3eed',
         category: category.id,
         content: 'test',
       })

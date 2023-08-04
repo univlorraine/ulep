@@ -31,7 +31,13 @@ export class InMemoryCountryCodesRepository implements CountryRepository {
       );
     }
 
-    const offset = filters.page > 0 ? (filters.page - 1) * filters.limit : 0;
+    if (!filters.pagination) {
+      return { items: countries, totalItems: countries.length };
+    }
+
+    const { page, limit } = filters.pagination;
+
+    const offset = page > 0 ? (page - 1) * limit : 0;
     if (offset >= countries.length) {
       return { items: [], totalItems: countries.length };
     }
@@ -49,7 +55,7 @@ export class InMemoryCountryCodesRepository implements CountryRepository {
     });
 
     return {
-      items: countries.slice(offset, offset + filters.limit),
+      items: countries.slice(offset, offset + limit),
       totalItems: countries.length,
     };
   }

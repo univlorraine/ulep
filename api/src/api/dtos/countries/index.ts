@@ -45,9 +45,15 @@ export class CountryResponse {
 }
 
 export class GetCountriesQueryParams extends PaginationDto {
-  @Swagger.ApiPropertyOptional()
-  @Transform(({ value }) => value === 'true')
+  @Swagger.ApiPropertyOptional({ default: true })
+  @Transform(({ value }) => (value ? value === 'true' : true))
   @IsBoolean()
   @IsOptional()
-  readonly enable?: boolean;
+  enable?: boolean;
+
+  @Swagger.ApiPropertyOptional({ default: true })
+  @Transform(({ value }) => (value ? value === 'true' : true))
+  @IsBoolean()
+  @IsOptional()
+  pagination?: boolean;
 }

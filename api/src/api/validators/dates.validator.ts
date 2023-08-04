@@ -8,8 +8,7 @@ export function IsAfterThan(
   property: string,
   validationOptions?: ValidationOptions,
 ) {
-  // eslint-disable-next-line @typescript-eslint/ban-types
-  return (object: Object, propertyName: string) => {
+  return (object: any, propertyName: string) => {
     registerDecorator({
       name: 'isAfterThan',
       target: object.constructor,

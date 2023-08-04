@@ -1,6 +1,9 @@
 import { Injectable } from '@nestjs/common';
 import { Collection, PrismaService } from '@app/common';
-import { TandemsRepository } from '../../../core/ports/tandems.repository';
+import {
+  FindWhereProps,
+  TandemsRepository,
+} from '../../../core/ports/tandems.repository';
 import { Tandem, TandemStatus } from '../../../core/models';
 import { ProfilesRelations, profileMapper } from '../mappers';
 
@@ -27,7 +30,7 @@ export class PrismaTandemRepository implements TandemsRepository {
       where: {
         profile_id: profileId,
         Tandem: {
-          status: { equals: 'active' },
+          status: { equals: TandemStatus.ACTIVE },
         },
       },
     });
@@ -35,35 +38,36 @@ export class PrismaTandemRepository implements TandemsRepository {
     return activeTandems.length > 0;
   }
 
-  async findAllActiveTandems(
-    offset?: number,
-    limit?: number,
-  ): Promise<Collection<Tandem>> {
+  async findWhere(props: FindWhereProps): Promise<Collection<Tandem>> {
     const count = await this.prisma.tandems.count({
-      where: { status: { equals: 'active' } },
+      where: {
+        status: props.status ? { equals: props.status } : undefined,
+        Profiles: props.profileId
+          ? { some: { profile_id: props.profileId } }
+          : undefined,
+      },
     });
 
-    if (offset >= count) {
+    if (props.offset >= count) {
       return { items: [], totalItems: count };
     }
 
-    const activeTandems = await this.prisma.tandems.findMany({
-      where: { status: { equals: 'active' } },
-      skip: offset,
-      take: limit,
+    const tandems = await this.prisma.tandems.findMany({
+      where: {
+        status: props.status ? { equals: props.status } : undefined,
+        Profiles: props.profileId
+          ? { some: { profile_id: props.profileId } }
+          : undefined,
+      },
+      skip: props.offset,
+      take: props.limit,
       include: {
-        Profiles: {
-          include: {
-            Profile: {
-              include: ProfilesRelations,
-            },
-          },
-        },
+        Profiles: { include: { Profile: { include: ProfilesRelations } } },
       },
     });
 
     return {
-      items: activeTandems.map((tandem) => {
+      items: tandems.map((tandem) => {
         return new Tandem({
           id: tandem.id,
           profiles: tandem.Profiles.map((p) => profileMapper(p.Profile)),

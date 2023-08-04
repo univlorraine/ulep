@@ -1,6 +1,7 @@
 import { INestApplication } from '@nestjs/common';
 import { Server } from 'src/server';
 
+// TODO(herve): Fix loading providers module make the ci fail.
 export class TestServer extends Server {
   constructor(private app: INestApplication) {
     super();
@@ -10,6 +11,7 @@ export class TestServer extends Server {
     return new TestServer(app);
   }
 
+  // TODO(herve): We could overide all providers instead of beforeAll test method.
   async run(): Promise<void> {
     super.addGlobalPipes(this.app);
     super.addGlobalFilters(this.app);

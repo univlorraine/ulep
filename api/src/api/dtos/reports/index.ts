@@ -35,10 +35,6 @@ export class CreateReportCategoryRequest
 export class CreateReportRequest implements Omit<CreateReportCommand, 'owner'> {
   @Swagger.ApiProperty({ type: 'string', format: 'uuid' })
   @IsUUID()
-  id: string;
-
-  @Swagger.ApiProperty({ type: 'string', format: 'uuid' })
-  @IsUUID()
   category: string;
 
   @Swagger.ApiProperty({ type: 'string' })

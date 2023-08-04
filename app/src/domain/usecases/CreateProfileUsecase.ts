@@ -5,10 +5,10 @@ class CreateProfileUsecase implements CreateProfileUsecaseInterface {
     constructor(private readonly domainHttpAdapter: HttpAdapterInterface, private readonly setProfile: Function) {}
 
     async execute(
-        age: number,
-        role: Role,
-        gender: Gender,
-        universityId: string,
+        age: number, // TODO(herve): Should be in User entity
+        role: Role, // TODO(herve): Should be in User entity
+        gender: Gender, // TODO(herve): Should be in User entity
+        universityId: string, // TODO(herve): Should be in User entity
         nativeLanguage: string,
         masteredLanguages: string[],
         learningLanguageCode: string,
@@ -28,12 +28,12 @@ class CreateProfileUsecase implements CreateProfileUsecaseInterface {
                 role,
                 gender,
                 university: universityId,
-                nativeLanguage,
-                masteredLanguages,
+                nativeLanguageCode: nativeLanguage,
+                masteredLanguageCodes: masteredLanguages,
                 learningLanguageCode,
-                proficiencyLevel: cefrLevel,
+                level: cefrLevel,
                 learningType,
-                goals,
+                objectives: goals,
                 meetingFrequency,
                 interests,
                 preferSameGender,

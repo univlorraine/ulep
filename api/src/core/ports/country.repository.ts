@@ -6,8 +6,7 @@ export const COUNTRY_REPOSITORY = 'country.repository';
 export type CountryFilters = {
   where?: { enable?: boolean };
   orderBy?: { name: SortOrder };
-  page?: number;
-  limit?: number;
+  pagination?: { page: number; limit: number };
 };
 
 export interface CountryRepository {

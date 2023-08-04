@@ -20,7 +20,6 @@ import {
   ReportResponse,
   CreateReportRequest,
   UpdateReportStatusRequest,
-  InterestCategoryResponse,
   CreateReportCategoryRequest,
   ReportCategoryResponse,
 } from '../dtos';
@@ -55,7 +54,7 @@ export class ReportController {
   // TODO: only admin can create a category
   @Post('categories')
   @Swagger.ApiOperation({ summary: 'Create a new Category ressource.' })
-  @Swagger.ApiCreatedResponse({ type: InterestCategoryResponse })
+  @Swagger.ApiCreatedResponse({ type: ReportCategoryResponse })
   async createCategory(@Body() body: CreateReportCategoryRequest) {
     const instance = await this.createReportCategoryUsecase.execute(body);
 
@@ -65,7 +64,7 @@ export class ReportController {
   // TODO: only connected users can access this route
   @Get('categories')
   @Swagger.ApiOperation({ summary: 'Collection of Category ressource.' })
-  @Swagger.ApiOkResponse({ type: InterestCategoryResponse, isArray: true })
+  @Swagger.ApiOkResponse({ type: ReportCategoryResponse, isArray: true })
   async findAllCategories() {
     const instances = await this.findReportCategoriesUsecase.execute();
 

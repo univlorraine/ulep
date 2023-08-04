@@ -1,7 +1,10 @@
 import { Injectable } from '@nestjs/common';
-import { TandemsRepository } from '../../../core/ports/tandems.repository';
 import { Collection } from '@app/common';
-import { Tandem, TandemStatus } from 'src/core/models/tandem.model';
+import {
+  FindWhereProps,
+  TandemsRepository,
+} from '../../../core/ports/tandems.repository';
+import { Tandem, TandemStatus } from '../../../core/models';
 
 @Injectable()
 export class InMemoryTandemRepository implements TandemsRepository {
@@ -33,17 +36,21 @@ export class InMemoryTandemRepository implements TandemsRepository {
     return profileIsInActiveTandem;
   }
 
-  findAllActiveTandems(
-    offset?: number,
-    limit?: number,
-  ): Promise<Collection<Tandem>> {
-    const activeTandems = this.#tandems.filter(
-      (tandem) => tandem.status === TandemStatus.ACTIVE,
-    );
+  async findWhere(props: FindWhereProps): Promise<Collection<Tandem>> {
+    const { status, offset, limit } = props;
 
-    return Promise.resolve({
-      items: activeTandems.slice(offset, offset + limit),
-      totalItems: activeTandems.length,
-    });
+    let tandems = this.#tandems;
+    if (status) {
+      tandems = tandems.filter((tandem) => tandem.status === status);
+    }
+
+    if (offset > tandems.length) {
+      return { items: [], totalItems: tandems.length };
+    }
+
+    return {
+      items: tandems.slice(offset, offset + limit),
+      totalItems: tandems.length,
+    };
   }
 }

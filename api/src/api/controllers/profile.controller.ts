@@ -15,12 +15,14 @@ import {
   CreateProfileUsecase,
   GetProfileUsecase,
   GetProfilesUsecase,
+  GetTandemsForProfileUsecase,
 } from 'src/core/usecases';
 import { AuthenticationGuard } from '../guards';
 import {
   CreateProfileRequest,
   ProfileQueryFilter,
   ProfileResponse,
+  UserTandemResponse,
 } from '../dtos';
 import { Collection } from '@app/common';
 import { CollectionResponse, CurrentUser } from '../decorators';
@@ -35,6 +37,7 @@ export class ProfileController {
     private readonly createProfileUsecase: CreateProfileUsecase,
     private readonly getProfilesUsecase: GetProfilesUsecase,
     private readonly getProfileUsecase: GetProfileUsecase,
+    private readonly getTandemsForProfileUsecase: GetTandemsForProfileUsecase,
   ) {}
 
   @Post()
@@ -76,6 +79,24 @@ export class ProfileController {
       items: profiles.items.map(ProfileResponse.fromDomain),
       totalItems: profiles.totalItems,
     });
+  }
+
+  @Get(':id/tandems')
+  // @UseGuards(AuthenticationGuard)
+  @Swagger.ApiOperation({
+    summary: 'Retrieve the collection of Tandem ressource.',
+  })
+  @Swagger.ApiOkResponse({ type: UserTandemResponse, isArray: true })
+  async getTandems(
+    @Param('id', ParseUUIDPipe) id: string,
+  ): Promise<UserTandemResponse[]> {
+    const tandems = await this.getTandemsForProfileUsecase.execute({
+      profile: id,
+    });
+
+    return tandems.items.map((tandem) =>
+      UserTandemResponse.fromDomain(id, tandem),
+    );
   }
 
   @Get(':id')
