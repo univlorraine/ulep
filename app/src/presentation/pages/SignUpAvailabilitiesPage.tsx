@@ -3,15 +3,16 @@ import { useTranslation } from 'react-i18next';
 import { Redirect, useHistory } from 'react-router';
 import { useConfig } from '../../context/ConfigurationContext';
 import { getInitialAviability, occurence } from '../../domain/entities/Availability';
-import { AvailabilitesSignUp } from '../../domain/entities/ProfileSignUp';
+import { Availabilites } from '../../domain/entities/ProfileSignUp';
 import { useStoreActions, useStoreState } from '../../store/storeTypes';
+import AvailabilityLine from '../components/AvailabilityLine';
 import Dropdown from '../components/DropDown';
 import WebLayoutCentered from '../components/layout/WebLayoutCentered';
 import AvailabilityModal from '../components/modals/AvailabilityModal';
 import styles from './css/SignUp.module.css';
 import availabilitiesStyles from './css/SignUpAvailabilities.module.css';
 
-const initialAvailabilities: AvailabilitesSignUp = {
+const initialAvailabilities: Availabilites = {
     monday: getInitialAviability(),
     tuesday: getInitialAviability(),
     wednesday: getInitialAviability(),
@@ -29,7 +30,7 @@ const SignUpAvailabilitiesPage: React.FC = () => {
     const profileSignUp = useStoreState((state) => state.profileSignUp);
     // @ts-ignore
     const [timezone, setTimezone] = useState<string>(profileSignUp._timezone);
-    const [availabilities, setAvailabilities] = useState<AvailabilitesSignUp>(initialAvailabilities);
+    const [availabilities, setAvailabilities] = useState<Availabilites>(initialAvailabilities);
     const [openModal, setOpenModal] = useState<{ id: string; occurence: occurence } | null>();
 
     if (!profileSignUp.university) {
@@ -47,7 +48,7 @@ const SignUpAvailabilitiesPage: React.FC = () => {
             return;
         }
         const currentAvailabilities = { ...availabilities };
-        const key = openModal.id as keyof AvailabilitesSignUp;
+        const key = openModal.id as keyof Availabilites;
         currentAvailabilities[key].occurence = occurence;
         if (note) {
             currentAvailabilities[key].note = note;
@@ -87,41 +88,12 @@ const SignUpAvailabilitiesPage: React.FC = () => {
                     <div className={availabilitiesStyles.separator} />
 
                     {Object.keys(availabilities).map((availabilityKey) => {
-                        let color: string;
-                        const status = availabilities[availabilityKey as keyof AvailabilitesSignUp].occurence;
-
-                        switch (status) {
-                            case 'AVAILABLE':
-                                color = '#FF8700';
-                                break;
-                            case 'UNAVAILABLE':
-                                color = '#F60C36';
-                                break;
-                            default:
-                                color = '#00FF47';
-                        }
                         return (
-                            <button
-                                key={availabilityKey}
-                                className={availabilitiesStyles['day-container']}
-                                onClick={() => setOpenModal({ id: availabilityKey, occurence: status })}
-                            >
-                                <span
-                                    className={availabilitiesStyles['availability-day']}
-                                    style={{ color: status === 'UNAVAILABLE' ? '#767676' : 'black' }}
-                                >
-                                    {t(`days.${availabilityKey}`)}
-                                </span>
-                                <div className={availabilitiesStyles['availability-container']}>
-                                    <div style={{ backgroundColor: color }} className={availabilitiesStyles.dot} />
-                                    <span
-                                        className={availabilitiesStyles['availability-status']}
-                                        style={{ color: status === 'UNAVAILABLE' ? '#767676' : 'black' }}
-                                    >
-                                        {t(`signup_availabilities_page.${status}`)}
-                                    </span>
-                                </div>
-                            </button>
+                            <AvailabilityLine
+                                availability={availabilities[availabilityKey as keyof Availabilites]}
+                                day={availabilityKey}
+                                onPress={(item) => setOpenModal(item)}
+                            />
                         );
                     })}
                 </div>

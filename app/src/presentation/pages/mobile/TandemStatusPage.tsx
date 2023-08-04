@@ -3,13 +3,13 @@ import { Redirect, useHistory, useLocation } from 'react-router';
 import Tandem from '../../../domain/entities/Tandem';
 import TandemStatusContent from '../../components/contents/TandemStatusContent';
 
-interface PairingUnavailableLanguageState {
+interface TandemStatusPageState {
     tandem: Tandem;
 }
 
 const TandemStatusPage: React.FC = () => {
     const history = useHistory();
-    const location = useLocation<PairingUnavailableLanguageState>();
+    const location = useLocation<TandemStatusPageState>();
     const { tandem } = location.state || {};
 
     if (!tandem) {

@@ -3,7 +3,7 @@ import Country from '../domain/entities/Country';
 import Goal from '../domain/entities/Goal';
 import Language from '../domain/entities/Language';
 import Profile from '../domain/entities/Profile';
-import ProfileSignUp, { AvailabilitesSignUp, BiographySignUp } from '../domain/entities/ProfileSignUp';
+import ProfileSignUp, { Availabilites, BiographySignUp } from '../domain/entities/ProfileSignUp';
 import University from '../domain/entities/University';
 
 export interface TokenStorePayload {
@@ -13,7 +13,7 @@ export interface TokenStorePayload {
 
 export interface SignUpStorePayload {
     age?: number;
-    availabilities?: AvailabilitesSignUp;
+    availabilities?: Availabilites;
     biography?: BiographySignUp;
     country?: Country;
     department?: string;

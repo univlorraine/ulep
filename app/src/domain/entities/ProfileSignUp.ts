@@ -11,7 +11,7 @@ export interface BiographySignUp {
     travel: string;
 }
 
-export interface AvailabilitesSignUp {
+export interface Availabilites {
     monday: Availability;
     tuesday: Availability;
     wednesday: Availability;
@@ -24,7 +24,7 @@ export interface AvailabilitesSignUp {
 class ProfileSignUp {
     public age?: number;
 
-    public availabilities?: AvailabilitesSignUp;
+    public availabilities?: Availabilites;
 
     public biography?: BiographySignUp;
 
