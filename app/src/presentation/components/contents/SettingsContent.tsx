@@ -13,7 +13,7 @@ interface SettingsContentProps {
 
 const SettingsContent: React.FC<SettingsContentProps> = ({ onBackPressed }) => {
     const { i18n, t } = useTranslation();
-    const { askForAccountDeletion } = useConfig();
+    const { askForAccountDeletion, updateNotificationPermission } = useConfig();
     const [showToast] = useIonToast();
     const logout = useStoreActions((store) => store.logout);
     const [notificationStatus, setNotificationStatus] = useState<boolean>(true);
@@ -25,6 +25,17 @@ const SettingsContent: React.FC<SettingsContentProps> = ({ onBackPressed }) => {
             return await showToast({ message: t(result.message), duration: 1000 });
         }
         return await showToast({ message: t('home_page.settings.deletion'), duration: 1000 });
+    };
+
+    //TODO: test this when api will be ready
+    const onUpdateNotification = async () => {
+        const result = await updateNotificationPermission.execute(!notificationStatus);
+
+        if (result instanceof Error) {
+            return await showToast({ message: t(result.message), duration: 1000 });
+        }
+
+        return setNotificationStatus(true);
     };
 
     return (
@@ -49,7 +60,7 @@ const SettingsContent: React.FC<SettingsContentProps> = ({ onBackPressed }) => {
             <button className={styles['setting-container']}>
                 <span>{t('home_page.settings.notifications')}</span>
                 <Switch
-                    onChange={setNotificationStatus}
+                    onChange={() => onUpdateNotification()}
                     checked={notificationStatus}
                     uncheckedIcon={false}
                     checkedIcon={false}

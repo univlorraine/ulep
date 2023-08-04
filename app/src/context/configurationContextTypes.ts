@@ -16,6 +16,7 @@ import GetQuizzByLevelUsecaseInterface from '../domain/interfaces/GetQuizzByLeve
 import LoginUsecaseInterface from '../domain/interfaces/LoginUsecase.interface';
 import ResetPasswordUsecaseInterface from '../domain/interfaces/ResetPasswordUsecase.interface';
 import UpdateAvatarUsecaseInterface from '../domain/interfaces/UpdateAvatarUsecase.interface';
+import UpdateNotificationPermissionUsecaseInterface from '../domain/interfaces/UpdateNotificationPermissionUsecase.interface';
 
 export interface ConfigContextValueType {
     askForAccountDeletion: AskForAccountDeletionUsecaseInterface;
@@ -36,4 +37,5 @@ export interface ConfigContextValueType {
     login: LoginUsecaseInterface;
     resetPassword: ResetPasswordUsecaseInterface;
     updateAvatar: UpdateAvatarUsecaseInterface;
+    updateNotificationPermission: UpdateNotificationPermissionUsecaseInterface;
 }
