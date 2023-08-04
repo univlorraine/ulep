@@ -17,6 +17,17 @@ You can use this project with Docker. Simply go to the project directory and run
 ```bash
 docker compose build --pull --no-cache
 ```
+Note: replace !Changeme! by your own values in [docker-compose.yml](./docker-compose.yaml)
+
+If you launch the project locally (i.e. with dev [docker-compose.override.yml](./docker-compose.override.yml) file), install node_modules for [api](./api/) and [admin](./admin/) projects before launching containers:
+```bash
+cd api
+pnpm install
+cd ../admin
+pnpm install
+```
+
+Then, start project:
 
 ```bash
 docker compose up --detach
