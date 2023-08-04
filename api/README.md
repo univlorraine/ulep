@@ -32,6 +32,10 @@
 $ pnpm install
 ```
 
+## Configuration
+
+Create an environment file `.env`, which specify needed environment variables values (for example `DATABASE_URL`).
+
 ## Running the app
 
 ```bash
