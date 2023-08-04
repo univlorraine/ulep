@@ -40,6 +40,20 @@ This will build and run the project on your localhost. You now have access to th
 - [Keycloak](http://localhost:8080)
 - [Minio](http://localhost:9000)
 
+## Database initilization
+
+To perform the following actions you can either configure the api locally (i.e. run the commands in [api folder](./api), with database configuration) or connect to a running api container.
+
+To initialize database schema, run the migrations: 
+```bash
+pnpm migrate
+```
+
+To seed database:
+```bash
+pnpm seed
+```
+
 ## Keycloak
 
 1. Setting up Keycloak
@@ -50,6 +64,8 @@ Now create a realm. A realm in Keycloak is the equivalent of a tenant. It allows
 Give your realm a name and click Create.
 
 Next, create a client. Clients in Keycloak are entities that can request Keycloak to authenticate a user. Go to Clients -> Create, fill in the necessary details, and save.
+
+Note: For development, a realm is available [here](./docker/keycloak/realms/etandem.json) and integrate base API / admin clients.
 
 2. User and Role Creation
 
