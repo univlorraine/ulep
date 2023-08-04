@@ -9,6 +9,7 @@ import FlagBubble from '../components/FlagBubble';
 import WebLayoutCentered from '../components/layout/WebLayoutCentered';
 import pairingLanguagesStyles from './css/PairingLanguages.module.css';
 import styles from './css/SignUp.module.css';
+import { PlusSvg } from '../../assets';
 
 const PairingLaguagesPage: React.FC = () => {
     const { t } = useTranslation();
@@ -73,7 +74,7 @@ const PairingLaguagesPage: React.FC = () => {
                                 style={{ background: 'none' }}
                                 onClick={() => history.push('/signup/pairing/other-languages')}
                             >
-                                <img alt="plus" className={pairingLanguagesStyles.image} src={'assets/plus.svg'} />
+                                <img alt="plus" className={pairingLanguagesStyles.image} src={PlusSvg} />
                             </button>
                         )}
                     </div>

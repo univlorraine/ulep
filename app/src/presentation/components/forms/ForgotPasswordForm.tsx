@@ -2,6 +2,7 @@ import { IonButton, IonContent, IonHeader, useIonLoading, useIonToast } from '@i
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useHistory } from 'react-router';
+import { LeftChevronSvg } from '../../../assets';
 import CircleAvatar from '../CircleAvatar';
 import TextInput from '../TextInput';
 import style from './Form.module.css';
@@ -29,7 +30,7 @@ const ForgotPasswordForm = () => {
         <div className="container">
             <IonHeader className="ion-no-border">
                 <IonButton fill="clear" onClick={() => history.goBack()}>
-                    <img alt="goBack" src="/assets/left-chevron.svg" />
+                    <img alt="goBack" src={LeftChevronSvg} />
                 </IonButton>
             </IonHeader>
             <IonContent>

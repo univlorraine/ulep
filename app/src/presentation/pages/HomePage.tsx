@@ -2,6 +2,7 @@ import { IonContent, IonPage, useIonToast } from '@ionic/react';
 import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useHistory } from 'react-router';
+import { ArrowDownSvg, ReportSvg } from '../../assets';
 import { useConfig } from '../../context/ConfigurationContext';
 import Profile from '../../domain/entities/Profile';
 import Tandem from '../../domain/entities/Tandem';
@@ -95,7 +96,7 @@ const HomePage: React.FC = () => {
                         {isHybrid && (
                             <button className={styles['avatar-container']} onClick={onProfilePressed}>
                                 <img alt="avatar" className={styles.avatar} src={profile.avatar} />
-                                <img alt="arrow-down" src="/assets/arrow-down.svg" />
+                                <img alt="arrow-down" src={ArrowDownSvg} />
                             </button>
                         )}
                     </div>
@@ -117,7 +118,7 @@ const HomePage: React.FC = () => {
                         <button className={`tertiary-button ${styles.report}`} onClick={onReportPressed}>
                             {
                                 <>
-                                    <img alt="report" className="margin-right" src="/assets/report.svg" />
+                                    <img alt="report" className="margin-right" src={ReportSvg} />
                                     <span>{t('home_page.report.report_button')}</span>
                                 </>
                             }

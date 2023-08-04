@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
+import { QuizzSvg } from '../../../assets';
 import Question from '../../../domain/entities/Question';
 import styles from './QuizzContent.module.css';
 
@@ -40,7 +41,7 @@ const QuizzContent: React.FC<QuizzContentProps> = ({ onQuizzOver, questions, qui
                         {`/${questions.length}`}
                     </span>
                     <div className={styles['level-container']}>
-                        <img alt="quizz" src="/assets/quizz.svg" />
+                        <img alt="quizz" src={QuizzSvg} />
                         {quizzLevel}
                     </div>
                     <span className={styles['question-title']}>{questions[currentIndex].question}</span>

@@ -9,6 +9,7 @@ import WebLayoutCentered from '../components/layout/WebLayoutCentered';
 import { codeCountryToFlag } from '../utils';
 import confirmLanguagesStyles from './css/PairingConfirmLanguage.module.css';
 import styles from './css/SignUp.module.css';
+import { TandemSvg } from '../../assets';
 
 const PairingConfirmLanguagePage: React.FC = () => {
     const { t } = useTranslation();
@@ -83,7 +84,7 @@ const PairingConfirmLanguagePage: React.FC = () => {
                         )} ${pedagogyToTitle(profileSignUp.pedagogy)}  ${codeCountryToFlag(
                             profileSignUp.learningLanguage.code
                         )}`}</p>
-                        <img alt="tandem" src="/assets/tandem.svg" />
+                        <img alt="tandem" src={TandemSvg} />
                     </div>
                 </div>
                 <div className={`large-margin-top extra-large-margin-bottom`}>

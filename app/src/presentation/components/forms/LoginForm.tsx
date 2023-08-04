@@ -2,6 +2,7 @@ import { IonButton, IonContent, IonHeader, IonRouterLink, useIonLoading, useIonT
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useHistory } from 'react-router';
+import { LeftChevronSvg } from '../../../assets';
 import { useConfig } from '../../../context/ConfigurationContext';
 import CircleAvatar from '../CircleAvatar';
 import TextInput from '../TextInput';
@@ -36,7 +37,7 @@ const LoginForm: React.FC<LoginFormProps> = ({ goBack }) => {
         <div className="container">
             <IonHeader className="ion-no-border">
                 <IonButton fill="clear" onClick={goBack}>
-                    <img alt="goBack" src="/assets/left-chevron.svg" />
+                    <img alt="goBack" src={LeftChevronSvg} />
                 </IonButton>
             </IonHeader>
             <IonContent>

@@ -1,6 +1,7 @@
 import { useIonToast } from '@ionic/react';
 import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
+import { ArrowLeftSvg, CloseBlackSvg } from '../../../assets';
 import { useConfig } from '../../../context/ConfigurationContext';
 import ReportCategory from '../../../domain/entities/ReportCategory';
 import useWindowDimensions from '../../hooks/useWindowDimensions';
@@ -60,7 +61,7 @@ const ReportContent: React.FC<ReportContentProps> = ({ onGoBack, onReportSent })
             <div className={styles.header}>
                 {isHybrid ? (
                     <button className={styles['back-button']} onClick={onGoBack}>
-                        <img alt="go-back" src="/assets/left-arrow.svg" />
+                        <img alt="go-back" src={ArrowLeftSvg} />
                     </button>
                 ) : (
                     <div />
@@ -68,7 +69,7 @@ const ReportContent: React.FC<ReportContentProps> = ({ onGoBack, onReportSent })
                 <span>{t('global.account')}</span>
                 {!isHybrid ? (
                     <button className={styles['back-button']} onClick={onGoBack}>
-                        <img alt="go-back" src="/assets/close_black.svg" />
+                        <img alt="go-back" src={CloseBlackSvg} />
                     </button>
                 ) : (
                     <div />
