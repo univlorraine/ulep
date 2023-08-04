@@ -24,7 +24,7 @@ export type CreateProfileProps = {
   sameAge: boolean;
   objectives: LearningObjective[];
   interests: Interest[];
-  bio?: string;
+  biography?: { [key: string]: string };
 };
 
 export class Profile {
@@ -52,7 +52,7 @@ export class Profile {
 
   readonly interests: Interest[];
 
-  readonly bio?: string;
+  readonly biography?: { [key: string]: string };
 
   constructor(props: CreateProfileProps) {
     this.id = props.id;
@@ -67,7 +67,7 @@ export class Profile {
     this.sameAge = props.sameAge;
     this.objectives = [...props.objectives];
     this.interests = [...props.interests];
-    this.bio = props.bio;
+    this.biography = props.biography;
 
     this.assertLanguesAreUnique();
 

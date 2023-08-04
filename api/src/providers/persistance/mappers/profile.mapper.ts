@@ -11,7 +11,7 @@ export const ProfilesRelations = {
   User: {
     include: UserRelations,
   },
-  LearningObjectives: {
+  Goals: {
     include: { TextContent: TextContentRelations },
   },
   Interests: {
@@ -27,7 +27,7 @@ export const ProfilesRelations = {
 
 export type ProfileSnapshot = Prisma.Profiles & {
   User: UserSnapshot;
-  LearningObjectives: (Prisma.LearningObjectives & {
+  Goals: (Prisma.LearningObjectives & {
     TextContent: TextContentSnapshot;
   })[];
   Interests: (Prisma.Interests & {
@@ -62,7 +62,7 @@ export const profileMapper = (instance: ProfileSnapshot): Profile => {
     meetingFrequency: instance.meeting_frequency,
     sameAge: instance.same_age,
     sameGender: instance.same_gender,
-    objectives: instance.LearningObjectives.map((objective) => ({
+    objectives: instance.Goals.map((objective) => ({
       id: objective.id,
       name: textContentMapper(objective.TextContent),
     })),
@@ -74,6 +74,11 @@ export const profileMapper = (instance: ProfileSnapshot): Profile => {
         name: textContentMapper(interest.Category.TextContent),
       },
     })),
-    bio: instance.bio,
+    biography: {
+      superpower: instance.bio['superpower'],
+      favoritePlace: instance.bio['favoritePlace'],
+      experience: instance.bio['experience'],
+      anecdote: instance.bio['anecdote'],
+    },
   });
 };

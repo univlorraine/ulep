@@ -50,11 +50,8 @@ export class MinioStorage implements StorageInterface {
       return;
     }
 
-    this.minioClient.makeBucket(bucketName, 'eu-west-1', (error) => {
-      if (error) throw error; // TODO: custom error
-
-      return this.addPolicyToBucket(bucketName);
-    });
+    await this.minioClient.makeBucket(bucketName, 'eu-west-1');
+    await this.addPolicyToBucket(bucketName);
   }
 
   private async addPolicyToBucket(bucket: string) {

@@ -2,13 +2,18 @@ import * as Swagger from '@nestjs/swagger';
 import { ApiPropertyOptional } from '@nestjs/swagger';
 import {
   ArrayMaxSize,
+  IsBoolean,
   IsEnum,
   IsNotEmpty,
+  IsObject,
   IsOptional,
   IsUUID,
+  ValidateNested,
 } from 'class-validator';
 import { ProficiencyLevel, LearningType } from 'src/core/models';
 import { CreateProfileCommand } from 'src/core/usecases/profiles/create-profile.usecase';
+import { BiographyDto } from './biography';
+import { Transform, Type } from 'class-transformer';
 
 export class CreateProfileRequest
   implements Omit<CreateProfileCommand, 'user'>
@@ -17,10 +22,12 @@ export class CreateProfileRequest
   @IsUUID()
   id: string;
 
+  // TODO(herve): we should use ids instead of codes
   @Swagger.ApiProperty({ type: 'string', example: 'FR' })
   @IsNotEmpty()
   nativeLanguageCode: string;
 
+  // TODO(herve): we should use ids instead of codes
   @ApiPropertyOptional({ type: 'string', example: 'EN' })
   @IsNotEmpty()
   @IsOptional()
@@ -30,6 +37,7 @@ export class CreateProfileRequest
   @IsEnum(ProficiencyLevel)
   level: ProficiencyLevel;
 
+  // TODO(herve): we should use ids instead of codes
   @ApiPropertyOptional({ type: 'string', example: ['FR'] })
   @IsNotEmpty({ each: true })
   @IsOptional()
@@ -47,17 +55,22 @@ export class CreateProfileRequest
   @IsNotEmpty()
   meetingFrequency: string;
 
-  @Swagger.ApiProperty({ example: ['music', 'sports', 'movies'] })
+  @Swagger.ApiProperty({ type: 'string', format: 'uuid', isArray: true })
   @ArrayMaxSize(5)
   @IsNotEmpty({ each: true })
   interests: string[];
 
   @Swagger.ApiProperty()
+  @IsBoolean()
   sameGender: boolean;
 
   @Swagger.ApiProperty()
+  @IsBoolean()
   sameAge: boolean;
 
-  @Swagger.ApiProperty()
-  bios?: string;
+  @Swagger.ApiProperty({ type: BiographyDto })
+  @Transform(({ value }) => new BiographyDto(value))
+  @IsObject()
+  @ValidateNested()
+  biography: BiographyDto;
 }

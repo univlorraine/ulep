@@ -12,6 +12,10 @@ export class PrismaLanguageRepository implements LanguageRepository {
       where: { id },
     });
 
+    if (!languageCode) {
+      return null;
+    }
+
     return {
       id: languageCode.id,
       code: languageCode.code,
@@ -23,6 +27,10 @@ export class PrismaLanguageRepository implements LanguageRepository {
     const languageCode = await this.prisma.languageCodes.findUnique({
       where: { code },
     });
+
+    if (!languageCode) {
+      return null;
+    }
 
     return {
       id: languageCode.id,
