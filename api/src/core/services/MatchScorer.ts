@@ -42,12 +42,20 @@ export class MatchScorer implements IMatchScorer {
     return this.#coeficients;
   }
 
+  // TODO: TANDEM / ETANDEM
+  // TODO: Use interest categories similarity instead of interests
   public computeMatchScore(profile1: Profile, profile2: Profile): Match {
     if (profile1.id === profile2.id) {
       throw new SameProfilesError();
     }
 
-    const isDiscovery = !profile1.learningLanguage || !profile2.learningLanguage;
+    const isDiscovery = !profile1.learningLanguage;
+
+    const languages = [profile2.nativeLanguage, ...profile2.masteredLanguages].map(l => l.id);
+   
+    if (!isDiscovery && !languages.includes(profile1.learningLanguage.id)) {
+      return new Match({ owner: profile1, target: profile2, scores: MatchScores.empty() });
+    }
 
     const scores: MatchScores = {
       level: this.computeLanguageLevel(profile1, profile2, isDiscovery),
@@ -65,6 +73,7 @@ export class MatchScorer implements IMatchScorer {
   private computeLanguageLevel(profile1: Profile, profile2: Profile, isDiscovery = false): number {
     const levelsCount = isDiscovery ? 6 : 5;
 
+    // TODO(herve): validate this matrix
     const languageLevelMatrix: { [key: string]: { [key: string]: number } } = {
       A0: { A0: 0, A1: 1, A2: 1, B1: 2, B2: 2, C1: 2, C2: 2 },
       A1: { A0: 1, A1: 2, A2: 2, B1: 3, B2: 3, C1: 3, C2: 3 },
@@ -75,6 +84,7 @@ export class MatchScorer implements IMatchScorer {
       C2: { A0: 2, A1: 3, A2: 4, B1: 5, B2: 5, C1: 5, C2: 5 },
     };
 
+    // TODO(herve): validate this matrix
     const discoveryLanguageLevelMatrix: { [key: string]: { [key: string]: number } } = {
       A0: { A0: 0, A1: 2, A2: 2, B1: 5, B2: 5, C1: 5, C2: 5 },
       A1: { A0: 2, A1: 2, A2: 2, B1: 5, B2: 5, C1: 5, C2: 5 },

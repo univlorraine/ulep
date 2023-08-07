@@ -1,10 +1,10 @@
 import { Injectable } from '@nestjs/common';
-import { TandemsRepository } from '../../../core/ports/tandems.repository';
+import { TandemRepository } from '../../../core/ports/tandems.repository';
 import { Collection } from '@app/common';
 import { Tandem, TandemStatus } from 'src/core/models/tandem.model';
 
 @Injectable()
-export class InMemoryTandemRepository implements TandemsRepository {
+export class InMemoryTandemRepository implements TandemRepository {
   #tandems: Tandem[] = [];
 
   init(tandems: Tandem[]): void {

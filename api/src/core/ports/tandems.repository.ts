@@ -3,7 +3,7 @@ import { Tandem } from '../models';
 
 export const TANDEM_REPOSITORY = 'tandem.repository';
 
-export interface TandemsRepository {
+export interface TandemRepository {
   save(tandem: Tandem): Promise<void>;
 
   hasActiveTandem(profileId: string): Promise<boolean>;

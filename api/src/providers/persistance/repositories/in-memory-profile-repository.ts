@@ -1,5 +1,8 @@
 import { Collection } from '@app/common';
-import { ProfileRepository } from '../../../core/ports/profile.repository';
+import {
+  MaxTandemsCountAndLanguageProps,
+  ProfileRepository,
+} from '../../../core/ports/profile.repository';
 import { Profile } from '../../../core/models/profile.model';
 
 export class InMemoryProfileRepository implements ProfileRepository {
@@ -21,9 +24,16 @@ export class InMemoryProfileRepository implements ProfileRepository {
     return this.#profiles.find((profile) => profile.user.id === id);
   }
 
-  async availableOnly(): Promise<Profile[]> {
-    // TODO
-    return this.#profiles;
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  async whereMaxTandemsCount(max: number): Promise<Profile[]> {
+    throw new Error('Method not implemented.');
+  }
+
+  async whereMaxTandemsCountAndLanguage(
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    props: MaxTandemsCountAndLanguageProps,
+  ): Promise<Profile[]> {
+    throw new Error('Method not implemented.');
   }
 
   async create(profile: Profile): Promise<void> {

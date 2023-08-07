@@ -19,17 +19,16 @@ export class GetUserMatchUsecase {
 
   constructor(
     @Inject(PROFILE_REPOSITORY)
-    private readonly profileRepository: ProfileRepository,
+    private readonly repository: ProfileRepository,
     private readonly matchService: MatchScorer,
   ) {}
 
   async execute(command: GetUserMatchCommand): Promise<Collection<Match>> {
     const owner = await this.tryToFindTheProfileOf(command.id);
 
-    const targets = await this.profileRepository.availableOnly({
-      nativeLanguageCode: {
-        not: owner.nativeLanguage.code,
-      },
+    const targets = await this.repository.whereMaxTandemsCountAndLanguage({
+      tandemsCount: 3,
+      nativeLanguage: { not: owner.nativeLanguage.id },
     });
 
     const matchs: Match[] = [];
@@ -48,7 +47,7 @@ export class GetUserMatchUsecase {
   }
 
   private async tryToFindTheProfileOf(id: string): Promise<Profile> {
-    const instance = await this.profileRepository.ofId(id);
+    const instance = await this.repository.ofId(id);
 
     if (!instance) {
       throw new RessourceDoesNotExist();
