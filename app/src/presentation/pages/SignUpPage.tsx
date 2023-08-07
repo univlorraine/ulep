@@ -43,7 +43,12 @@ const SignUpPage: React.FC = () => {
             return await showToast({ message: t(universityResult.message), duration: 1000 });
         }
 
-        setCountries(countriesResult.map((country) => ({ title: country.name, value: country })));
+        setCountries(
+            countriesResult.map((country) => ({
+                title: `${country.emoji ? country.emoji + ' ' : ''}${country.name}`,
+                value: country,
+            }))
+        );
         setUniversity(universityResult[0]);
 
         return setUniversities(universityResult.map((university) => ({ title: university.name, value: university })));

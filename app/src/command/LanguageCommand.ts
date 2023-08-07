@@ -1,6 +1,7 @@
 import Language from '../domain/entities/Language';
 
 interface LanguageCommand {
+    id: string;
     code: string;
     name: string;
 }
