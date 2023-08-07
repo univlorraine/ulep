@@ -79,7 +79,7 @@ const SignUpInformationsPage: React.FC = () => {
             return history.push('/signup/');
         }
 
-        const result = createUser.execute(
+        const result = await createUser.execute(
             email,
             password,
             firstname,

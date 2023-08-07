@@ -11,8 +11,8 @@ const Store = createStore<TokenStoreTypes>(
             state.profileSignUp = new ProfileSignUp();
         }),
         setTokens: action((state, payload) => {
-            state.accessToken = payload.accessToken ? payload.accessToken : state.accessToken;
-            state.refreshToken = payload.refreshToken ? payload.refreshToken : state.refreshToken;
+            state.accessToken = payload.accessToken ?? state.accessToken;
+            state.refreshToken = payload.refreshToken ?? state.refreshToken;
         }),
         logout: action((state) => {
             state.accessToken = '';

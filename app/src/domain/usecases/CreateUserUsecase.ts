@@ -54,13 +54,12 @@ class CreateUserUsecase implements CreateUserUsecaseInterface {
                 {},
                 'multipart/form-data'
             );
-            console.log(httpResponse);
 
             if (!httpResponse.parsedBody) {
                 return new Error('errors.global');
             }
 
-            return this.login.execute(email, password);
+            return await this.login.execute(email, password);
         } catch (error: any) {
             console.log(error);
             return new Error('errors.global');
