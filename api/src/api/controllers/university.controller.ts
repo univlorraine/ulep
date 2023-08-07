@@ -8,6 +8,7 @@ import {
   Delete,
   ParseUUIDPipe,
   SerializeOptions,
+  UseGuards,
 } from '@nestjs/common';
 import * as Swagger from '@nestjs/swagger';
 import {
@@ -29,6 +30,9 @@ import {
   UpdateUniversityNameUsecase,
   DeleteLanguageUsecase,
 } from '../../core/usecases/university';
+import { Roles } from '../decorators/roles.decorator';
+import { configuration } from 'src/configuration';
+import { AuthenticationGuard } from '../guards';
 
 // TODO: languages add/remove
 @Controller('universities')
@@ -46,8 +50,9 @@ export class UniversityController {
     private readonly deleteLanguageUsecase: DeleteLanguageUsecase,
   ) {}
 
-  // TODO: only admin can create a university
   @Post()
+  @Roles(configuration().adminRole)
+  @UseGuards(AuthenticationGuard)
   @Swagger.ApiOperation({ summary: 'Create a new University ressource.' })
   @Swagger.ApiCreatedResponse({ type: UniversityResponse })
   async create(@Body() body: CreateUniversityRequest) {
@@ -56,7 +61,8 @@ export class UniversityController {
     return UniversityResponse.fromUniversity(instance);
   }
 
-  // TODO: only admin can create new universities
+  @Roles(configuration().adminRole)
+  @UseGuards(AuthenticationGuard)
   @Post(':id/partners')
   @Swagger.ApiOperation({ summary: 'Create a new University ressource.' })
   @Swagger.ApiCreatedResponse({ type: UniversityResponse })
@@ -117,8 +123,9 @@ export class UniversityController {
     return instances.map(LanguageResponse.fromLanguage);
   }
 
-  // TODO: only admin can update a university
   @Patch(':id')
+  @Roles(configuration().adminRole)
+  @UseGuards(AuthenticationGuard)
   @Swagger.ApiOperation({ summary: 'Updates a University ressource.' })
   @Swagger.ApiOkResponse()
   async update(
@@ -128,16 +135,18 @@ export class UniversityController {
     await this.updateUniversityNameUsecase.execute({ id, ...request });
   }
 
-  // TODO: only admin can delete a university
   @Delete(':id')
+  @Roles(configuration().adminRole)
+  @UseGuards(AuthenticationGuard)
   @Swagger.ApiOperation({ summary: 'Deletes a University ressource.' })
   @Swagger.ApiOkResponse()
   remove(@Param('id') id: string) {
     return this.deleteUniversityUsecase.execute({ id });
   }
 
-  // TODO: only admin can delete a language
   @Delete(':university/languages/:id')
+  @Roles(configuration().adminRole)
+  @UseGuards(AuthenticationGuard)
   @Swagger.ApiOperation({ summary: 'Deletes a Language ressource.' })
   @Swagger.ApiOkResponse()
   removeLanguage(
