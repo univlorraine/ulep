@@ -34,6 +34,8 @@ import { AuthenticationGuard } from '../guards';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { ImagesFilePipe } from '../validators/images.validator';
 import { UploadAvatarUsecase } from 'src/core/usecases';
+import { Roles } from '../decorators/roles.decorator';
+import { configuration } from 'src/configuration';
 
 @Controller('users')
 @Swagger.ApiTags('Users')
@@ -72,6 +74,8 @@ export class UserController {
   }
 
   @Get()
+  @Roles(configuration().adminRole)
+  @UseGuards(AuthenticationGuard)
   @Swagger.ApiOperation({ summary: 'Collection of User ressource.' })
   @CollectionResponse(UserResponse)
   async findAll(@Query() { page, limit }: PaginationDto) {
@@ -87,6 +91,8 @@ export class UserController {
   }
 
   @Get(':id')
+  @Roles(configuration().adminRole)
+  @UseGuards(AuthenticationGuard)
   @Swagger.ApiOperation({ summary: 'User ressource.' })
   @Swagger.ApiOkResponse({ type: UserResponse })
   async findOne(@Param('id', ParseUUIDPipe) id: string) {
@@ -96,6 +102,7 @@ export class UserController {
   }
 
   @Patch(':id')
+  @UseGuards(AuthenticationGuard)
   @Swagger.ApiOperation({ summary: 'Updates a User ressource.' })
   @Swagger.ApiOkResponse()
   async update(
@@ -117,6 +124,7 @@ export class UserController {
   }
 
   @Delete(':id')
+  @Roles(configuration().adminRole)
   @UseGuards(AuthenticationGuard)
   @Swagger.ApiOperation({ summary: 'Deletes a User ressource.' })
   @Swagger.ApiOkResponse()

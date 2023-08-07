@@ -28,6 +28,7 @@ export class LanguageController {
   ) {}
 
   @Get()
+  @UseGuards(AuthenticationGuard)
   @Swagger.ApiOperation({ summary: 'Collection of LanguageCode ressource.' })
   @Swagger.ApiOkResponse({ type: LanguageCodeResponse, isArray: true })
   async findAll() {

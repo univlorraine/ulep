@@ -8,6 +8,7 @@ import {
   Logger,
   SerializeOptions,
   ParseUUIDPipe,
+  UseGuards,
 } from '@nestjs/common';
 import * as Swagger from '@nestjs/swagger';
 import {
@@ -28,6 +29,9 @@ import {
 } from 'src/core/usecases/proficiency';
 import { ParseProficiencyLevelPipe } from '../validators';
 import { ProficiencyLevel } from 'src/core/models';
+import { AuthenticationGuard } from '../guards';
+import { Roles } from '../decorators/roles.decorator';
+import { configuration } from 'src/configuration';
 
 @Controller('proficiency')
 @Swagger.ApiTags('Proficiency')
@@ -45,8 +49,9 @@ export class ProficiencyController {
     private readonly getLevelsUsecase: GetLevelsUsecase,
   ) {}
 
-  // TODO: only admin can create a test
   @Post('tests')
+  @Roles(configuration().adminRole)
+  @UseGuards(AuthenticationGuard)
   @Swagger.ApiOperation({ summary: 'Create a new Test ressource.' })
   @Swagger.ApiCreatedResponse({ type: ProficiencyTestResponse })
   async create(@Body() body: CreateTestRequest) {
@@ -55,8 +60,9 @@ export class ProficiencyController {
     return ProficiencyTestResponse.fromProficiencyTest(instance);
   }
 
-  // TODO: only connected users can access this route
   @Get('tests')
+  @Roles(configuration().adminRole)
+  @UseGuards(AuthenticationGuard)
   @Swagger.ApiOperation({ summary: 'Collection of Test ressource.' })
   @Swagger.ApiOkResponse({ type: ProficiencyTestResponse, isArray: true })
   async findAll() {
@@ -65,8 +71,9 @@ export class ProficiencyController {
     return instances.map(ProficiencyTestResponse.fromProficiencyTest);
   }
 
-  // TODO: only connected users can access this route
   @Get('tests/:id')
+  @Roles(configuration().adminRole)
+  @UseGuards(AuthenticationGuard)
   @SerializeOptions({ groups: ['read', 'test:read'] })
   @Swagger.ApiOperation({ summary: 'Test ressource.' })
   @Swagger.ApiOkResponse({ type: ProficiencyTestResponse })
@@ -76,8 +83,9 @@ export class ProficiencyController {
     return ProficiencyTestResponse.fromProficiencyTest(instance);
   }
 
-  // TODO: only admin can delete a test
   @Delete('tests/:id')
+  @Roles(configuration().adminRole)
+  @UseGuards(AuthenticationGuard)
   @Swagger.ApiOperation({ summary: 'Deletes a Test ressource.' })
   @Swagger.ApiOkResponse()
   remove(@Param('id', ParseUUIDPipe) id: string) {
@@ -85,6 +93,7 @@ export class ProficiencyController {
   }
 
   @Get('questions/:level')
+  @UseGuards(AuthenticationGuard)
   @Swagger.ApiOperation({ summary: 'Collection of Question ressource.' })
   @Swagger.ApiParam({ name: 'level', enum: ProficiencyLevel })
   @Swagger.ApiOkResponse({ type: ProficiencyQuestionResponse, isArray: true })
@@ -96,8 +105,9 @@ export class ProficiencyController {
     return instances.map(ProficiencyQuestionResponse.fromProficiencyQuestion);
   }
 
-  // TODO: only admin can create a question
   @Post('questions')
+  @Roles(configuration().adminRole)
+  @UseGuards(AuthenticationGuard)
   @Swagger.ApiOperation({ summary: 'Create a new Question ressource.' })
   @Swagger.ApiCreatedResponse({ type: ProficiencyQuestionResponse })
   async createQuestion(@Body() body: CreateQuestionRequest) {
@@ -106,8 +116,9 @@ export class ProficiencyController {
     return ProficiencyQuestionResponse.fromProficiencyQuestion(instance);
   }
 
-  // TODO: only admin can delete a question
   @Delete('questions/:id')
+  @Roles(configuration().adminRole)
+  @UseGuards(AuthenticationGuard)
   @Swagger.ApiOperation({ summary: 'Deletes a Question ressource.' })
   @Swagger.ApiOkResponse()
   removeQuestion(@Param('id', ParseUUIDPipe) id: string) {
@@ -115,6 +126,8 @@ export class ProficiencyController {
   }
 
   @Get('levels')
+  @Roles(configuration().adminRole)
+  @UseGuards(AuthenticationGuard)
   @Swagger.ApiOperation({ summary: 'Proficiency Levels.' })
   @Swagger.ApiOkResponse({ type: String, isArray: true })
   async levels() {
