@@ -16,6 +16,8 @@ import {
 import { AuthenticationGuard } from '../guards';
 import { CurrentUser } from '../decorators';
 import { KeycloakUser } from '@app/keycloak';
+import { configuration } from 'src/configuration';
+import { Roles } from '../decorators/roles.decorator';
 
 @Controller('languages')
 @Swagger.ApiTags('Languages')
@@ -28,6 +30,7 @@ export class LanguageController {
   ) {}
 
   @Get()
+  @UseGuards(AuthenticationGuard)
   @Swagger.ApiOperation({ summary: 'Collection of LanguageCode ressource.' })
   @Swagger.ApiOkResponse({ type: LanguageCodeResponse, isArray: true })
   async findAll() {

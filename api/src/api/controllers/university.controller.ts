@@ -53,6 +53,8 @@ export class UniversityController {
   @Post()
   @Roles(configuration().adminRole)
   @UseGuards(AuthenticationGuard)
+  @Roles(configuration().adminRole)
+  @UseGuards(AuthenticationGuard)
   @Swagger.ApiOperation({ summary: 'Create a new University ressource.' })
   @Swagger.ApiCreatedResponse({ type: UniversityResponse })
   async create(@Body() body: CreateUniversityRequest) {
@@ -61,9 +63,9 @@ export class UniversityController {
     return UniversityResponse.fromUniversity(instance);
   }
 
+  @Post(':id/partners')
   @Roles(configuration().adminRole)
   @UseGuards(AuthenticationGuard)
-  @Post(':id/partners')
   @Swagger.ApiOperation({ summary: 'Create a new University ressource.' })
   @Swagger.ApiCreatedResponse({ type: UniversityResponse })
   async createPartnerUniversity(
@@ -79,6 +81,8 @@ export class UniversityController {
   }
 
   @Post(':id/languages')
+  @Roles(configuration().adminRole)
+  @UseGuards(AuthenticationGuard)
   @Swagger.ApiOperation({ summary: 'Create a new Language ressource.' })
   @Swagger.ApiCreatedResponse({ type: LanguageResponse })
   async createLanguage(
@@ -103,6 +107,8 @@ export class UniversityController {
   }
 
   @Get(':id')
+  @Roles(configuration().adminRole)
+  @UseGuards(AuthenticationGuard)
   @SerializeOptions({ groups: ['read', 'university:read'] })
   @Swagger.ApiOperation({ summary: 'University ressource.' })
   @Swagger.ApiOkResponse({ type: UniversityResponse })
@@ -113,6 +119,8 @@ export class UniversityController {
   }
 
   @Get(':id/languages')
+  @Roles(configuration().adminRole)
+  @UseGuards(AuthenticationGuard)
   @Swagger.ApiOperation({ summary: 'Collection of Language ressource.' })
   @Swagger.ApiOkResponse({ type: UniversityResponse, isArray: true })
   async findLanguages(@Param('id', ParseUUIDPipe) id: string) {

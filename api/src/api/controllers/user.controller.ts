@@ -11,7 +11,6 @@ import {
   ParseUUIDPipe,
   UseInterceptors,
   UploadedFile,
-  SetMetadata,
 } from '@nestjs/common';
 import * as Swagger from '@nestjs/swagger';
 import { Collection } from '@app/common';
@@ -92,6 +91,8 @@ export class UserController {
   }
 
   @Get(':id')
+  @Roles(configuration().adminRole)
+  @UseGuards(AuthenticationGuard)
   @Swagger.ApiOperation({ summary: 'User ressource.' })
   @Swagger.ApiOkResponse({ type: UserResponse })
   async findOne(@Param('id', ParseUUIDPipe) id: string) {
@@ -122,6 +123,7 @@ export class UserController {
   }
 
   @Delete(':id')
+  @Roles(configuration().adminRole)
   @UseGuards(AuthenticationGuard)
   @Swagger.ApiOperation({ summary: 'Deletes a User ressource.' })
   @Swagger.ApiOkResponse()
