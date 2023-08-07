@@ -27,7 +27,7 @@ describe('getAllCountries', () => {
         adapter.mockJson({ parsedBody: usecaseResponse });
         await usecase.execute();
         expect(adapter.get).toHaveBeenCalledTimes(1);
-        expect(adapter.get).toHaveBeenCalledWith('/countries');
+        expect(adapter.get).toHaveBeenCalledWith('/countries?enable=true&pagination=false');
     });
 
     it('execute must return an expected response', async () => {

@@ -27,7 +27,7 @@ describe('getAllReportCategories', () => {
         adapter.mockJson({ parsedBody: usecaseResponse });
         await usecase.execute();
         expect(adapter.get).toHaveBeenCalledTimes(1);
-        expect(adapter.get).toHaveBeenCalledWith('/report-categories');
+        expect(adapter.get).toHaveBeenCalledWith('/reports/categories');
     });
 
     it('execute must return an expected response', async () => {
