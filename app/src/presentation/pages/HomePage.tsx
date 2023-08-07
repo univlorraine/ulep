@@ -1,11 +1,11 @@
 import { IonContent, IonPage, useIonToast } from '@ionic/react';
 import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { useHistory } from 'react-router';
+import { Redirect, useHistory } from 'react-router';
 import { ArrowDownSvg, ReportSvg } from '../../assets';
 import { useConfig } from '../../context/ConfigurationContext';
-import Profile from '../../domain/entities/Profile';
 import Tandem from '../../domain/entities/Tandem';
+import { useStoreState } from '../../store/storeTypes';
 import HomeHeader from '../components/HomeHeader';
 import ProfileModal from '../components/modals/ProfileModal';
 import ReportModal from '../components/modals/ReportModal';
@@ -17,25 +17,6 @@ import useWindowDimensions from '../hooks/useWindowDimensions';
 import { HYBRID_MAX_WIDTH } from '../utils';
 import styles from './css/Home.module.css';
 
-//TODO: Change this when create Profile will be done
-const profile = new Profile(
-    'id',
-    'email',
-    'firstname',
-    'lastname',
-    22,
-    'male',
-    'id',
-    'student',
-    'FR',
-    'CN',
-    ['goal'],
-    'ONCE_A_WEEK',
-    ['interest'],
-    ['bios'],
-    '/assets/avatar.svg'
-);
-
 const HomePage: React.FC = () => {
     const { t } = useTranslation();
     const history = useHistory();
@@ -44,10 +25,15 @@ const HomePage: React.FC = () => {
     const currentDate = new Date();
     const { width } = useWindowDimensions();
     const isHybrid = width < HYBRID_MAX_WIDTH;
+    const profile = useStoreState((state) => state.profile);
     const [displayProfile, setDisplayProfile] = useState<boolean>(false);
     const [displayReport, setDisplayReport] = useState<boolean>(false);
     const [selectedTandem, setSelectedTandem] = useState<Tandem>();
     const [tandems, setTandems] = useState<Tandem[]>([]);
+
+    if (!profile) {
+        return <Redirect to={'/signup'} />;
+    }
 
     const getHomeData = async () => {
         const result = await getAllTandems.execute();
@@ -70,7 +56,7 @@ const HomePage: React.FC = () => {
         !isHybrid
             ? setSelectedTandem(tandem)
             : history.push('/tandem-profil', {
-                  profile: tandem.profiles.find((tandemProfile) => tandemProfile.id !== profile.id),
+                  profile: tandem.partner,
                   language: tandem.language,
               });
 
@@ -85,17 +71,17 @@ const HomePage: React.FC = () => {
         .padStart(2, '0')}`;
     return (
         <IonPage>
-            {!isHybrid && <HomeHeader avatar={profile.avatar} onPicturePressed={onProfilePressed} />}
+            {!isHybrid && <HomeHeader avatar={profile.user.avatar} onPicturePressed={onProfilePressed} />}
             <IonContent>
                 <div className={styles.container}>
                     <div className={styles['header']}>
                         <div className={styles['hello-container']}>
                             <span className={styles.date}>{formattedDate}</span>
-                            <span className={styles.hello}>{`${t('global.hello')} ${profile.firstname}`}</span>
+                            <span className={styles.hello}>{`${t('global.hello')} ${profile.user.firstname}`}</span>
                         </div>
                         {isHybrid && (
                             <button className={styles['avatar-container']} onClick={onProfilePressed}>
-                                <img alt="avatar" className={styles.avatar} src={profile.avatar} />
+                                <img alt="avatar" className={styles.avatar} src={profile.user.avatar} />
                                 <img alt="arrow-down" src={ArrowDownSvg} />
                             </button>
                         )}
@@ -132,9 +118,9 @@ const HomePage: React.FC = () => {
                     <ProfileModal
                         isVisible={displayProfile}
                         onClose={() => setDisplayProfile(false)}
-                        profileFirstname={profile.firstname}
-                        profileLastname={profile.lastname}
-                        profilePicture={profile.avatar}
+                        profileFirstname={profile.user.firstname}
+                        profileLastname={profile.user.lastname}
+                        profilePicture={profile.user.avatar}
                     />
                     <TandemStatusModal
                         isVisible={
@@ -148,7 +134,7 @@ const HomePage: React.FC = () => {
                         isVisible={!!selectedTandem && selectedTandem.status === 'ACTIVE'}
                         language={selectedTandem?.language}
                         onClose={() => setSelectedTandem(undefined)}
-                        profile={selectedTandem?.profiles.find((tandemProfile) => tandemProfile.id !== profile.id)}
+                        profile={selectedTandem?.partner}
                     />
                 </>
             )}

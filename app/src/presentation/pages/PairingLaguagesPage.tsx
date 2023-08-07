@@ -63,6 +63,7 @@ const PairingLaguagesPage: React.FC = () => {
                         {languages.map((language) => {
                             return (
                                 <FlagBubble
+                                    key={language.code}
                                     isSelected={selectedLaguage?.code === language.code}
                                     language={language}
                                     onPressed={setSelectedLanguage}

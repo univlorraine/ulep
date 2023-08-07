@@ -10,6 +10,7 @@
 .avatar {
     border-radius: 50%;
     height: 60px;
+    object-fit: cover;
     width: 60px;
 }
 

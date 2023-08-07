@@ -59,7 +59,7 @@ const PairingFinalPage: React.FC = () => {
             return await showToast({ message: t(result.message), duration: 1000 });
         }
 
-        return history.push('/home');
+        return history.replace('/home');
     };
 
     return (

@@ -1,47 +1,44 @@
+import { Interest } from '../domain/entities/CategoryInterests';
 import Profile from '../domain/entities/Profile';
-//TODO: Change this later when api will be ready
+import { goalCommandToDomain } from './GoalCommand';
+import UserCommand, { userCommandToDomain } from './UserCommand';
+
 interface ProfileCommand {
     id: string;
-    email: string;
-    firstname: string;
-    lastname: string;
-    age: number;
-    gender: string;
-    university: string;
-    role: string;
+    interests: { id: string; name: string }[];
     nativeLanguage: {
         code: string;
-        name: string;
     };
     learningLanguage: {
         code: string;
-        name: string;
         level: string;
     };
-    goals: string[];
+    objectives: { id: string; name: string }[];
     meetingFrequency: string;
-    interests: string[];
-    bios: string[];
-    avatar: string;
+    biography: {
+        anecdote: string;
+        experience: string;
+        favoritePlace: string;
+        superpower: string;
+    };
+    user: UserCommand;
 }
 
 export const profileCommandToDomain = (command: ProfileCommand) => {
     return new Profile(
         command.id,
-        command.email,
-        command.firstname,
-        command.lastname,
-        command.age,
-        command.gender as Gender,
-        command.university,
-        command.role as Role,
         command.nativeLanguage.code,
         command.learningLanguage.code,
-        command.goals,
+        command.objectives.map((goal) => goalCommandToDomain({ ...goal, image: '' })),
         command.meetingFrequency as MeetFrequency,
-        command.interests,
-        command.bios,
-        command.avatar
+        command.interests.map((interest) => new Interest(interest.id, interest.name)),
+        {
+            anecdote: command.biography.anecdote,
+            experience: command.biography.experience,
+            favoritePlace: command.biography.favoritePlace,
+            superpower: command.biography.superpower,
+        },
+        userCommandToDomain(command.user)
     );
 };
 

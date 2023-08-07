@@ -1,37 +1,23 @@
 import { IonPage } from '@ionic/react';
-import { useHistory } from 'react-router';
-import Profile from '../../../domain/entities/Profile';
+import { Redirect, useHistory } from 'react-router';
+import { useStoreState } from '../../../store/storeTypes';
 import ProfileContent from '../../components/contents/ProfileContent';
-
-//TODO: Change this when create Profile will be done
-const profile = new Profile(
-    'id',
-    'email',
-    'firstname',
-    'lastname',
-    22,
-    'male',
-    'id',
-    'student',
-    'FR',
-    'CN',
-    ['goal'],
-    'ONCE_A_WEEK',
-    ['interest'],
-    ['bios'],
-    '/assets/avatar.svg'
-);
 
 const ProfilePage: React.FC = () => {
     const history = useHistory();
+    const profile = useStoreState((state) => state.profile);
+
+    if (!profile) {
+        return <Redirect to={'/signup'} />;
+    }
     return (
         <IonPage>
             <ProfileContent
                 onClose={() => history.goBack()}
                 onParameterPressed={() => history.push('/settings')}
-                profileFirstname={profile.firstname}
-                profileLastname={profile.lastname}
-                profilePicture={profile.avatar}
+                profileFirstname={profile.user.firstname}
+                profileLastname={profile.user.lastname}
+                profilePicture={profile.user.avatar}
             />
         </IonPage>
     );

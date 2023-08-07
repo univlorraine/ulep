@@ -1,20 +1,17 @@
+import { Interest } from './CategoryInterests';
+import Goal from './Goal';
+import User from './User';
+
 class Profile {
     constructor(
         public readonly id: string,
-        public readonly email: string,
-        public readonly firstname: string,
-        public readonly lastname: string,
-        public readonly age: number,
-        public readonly gender: Gender,
-        public readonly universityId: string,
-        public readonly role: Role,
         public readonly nativeLanguageCode: string,
         public readonly learningLanguageCode: string,
-        public readonly goals: string[],
+        public readonly goals: Goal[],
         public readonly frequency: MeetFrequency,
-        public readonly interests: string[],
-        public readonly bios: string[],
-        public avatar: string
+        public readonly interests: Interest[],
+        public readonly biography: { anecdote: string; experience: string; favoritePlace: string; superpower: string },
+        public user: User
     ) {}
 }
 

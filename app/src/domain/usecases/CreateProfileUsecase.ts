@@ -46,7 +46,9 @@ class CreateProfileUsecase implements CreateProfileUsecaseInterface {
                 return new Error('errors.global');
             }
 
-            return this.setProfile(profileCommandToDomain(httpResponse.parsedBody));
+            const profile = profileCommandToDomain(httpResponse.parsedBody);
+
+            return await this.setProfile({ profile });
         } catch (error: any) {
             return new Error('errors.global');
         }

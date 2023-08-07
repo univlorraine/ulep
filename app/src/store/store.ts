@@ -8,7 +8,6 @@ const Store = createStore<TokenStoreTypes>(
         refreshToken: '',
         setProfile: action((state, payload) => {
             state.profile = payload.profile;
-            state.profileSignUp = new ProfileSignUp();
         }),
         setTokens: action((state, payload) => {
             state.accessToken = payload.accessToken ?? state.accessToken;
@@ -26,7 +25,7 @@ const Store = createStore<TokenStoreTypes>(
         profileSignUp: new ProfileSignUp(),
         updateProfile: action((state, payload) => {
             const profile = state.profile;
-            if (profile && payload.avatar) profile.avatar = payload.avatar;
+            if (profile && payload.avatar) profile.user.avatar = payload.avatar;
         }),
         updateProfileSignUp: action((state, payload) => {
             const profile = state.profileSignUp;

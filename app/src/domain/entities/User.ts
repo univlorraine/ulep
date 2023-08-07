@@ -3,7 +3,7 @@ import University from './University';
 class User {
     constructor(
         public readonly id: string,
-        public readonly avatar: string,
+        public avatar: string,
         public readonly email: string,
         public readonly firstname: string,
         public readonly lastname: string,

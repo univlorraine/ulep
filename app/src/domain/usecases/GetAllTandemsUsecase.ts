@@ -28,58 +28,7 @@ class GetAllTandemsUsecase implements GetAllTandemsUsecaseInterface {
             }
 
             return tandemCommandToDomain(httpResponse.parsedBody.items);*/
-            return [
-                new Tandem(
-                    'id2',
-                    [
-                        new Profile(
-                            'id2',
-                            'email',
-                            'firstname',
-                            'lastname',
-                            22,
-                            'MALE',
-                            'id',
-                            'STUDENT',
-                            'FR',
-                            'CN',
-                            ['goal'],
-                            'ONCE_A_WEEK',
-                            ['interest'],
-                            ['bios'],
-                            '/assets/avatar.svg'
-                        ),
-                    ],
-                    new Language('FR', '🇫🇷 Fraçais'),
-                    'ACTIVE'
-                ),
-                new Tandem('id3', [], new Language('CN', '🇨🇳 Chinois'), 'DRAFT'),
-                new Tandem(
-                    'id4',
-                    [
-                        new Profile(
-                            'id4',
-                            'email',
-                            'firstname',
-                            'lastname',
-                            22,
-                            'MALE',
-                            'id',
-                            'STUDENT',
-                            'FR',
-                            'CN',
-                            ['goal'],
-                            'ONCE_A_WEEK',
-                            ['interest'],
-                            ['bios'],
-                            '/assets/avatar.svg'
-                        ),
-                    ],
-                    new Language('CN', '🇨🇳 Chinois'),
-                    'UNACTIVE'
-                ),
-                new Tandem('id5', [], new Language('CN', '🇨🇳 Chinois'), 'UNACTIVE'),
-            ];
+            return [];
         } catch (error: any) {
             return new Error('errors.global');
         }
