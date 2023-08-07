@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
+import { DiceSvg } from '../../../assets';
 import Language from '../../../domain/entities/Language';
 import Checkbox from '../Checkbox';
 import pairingOtherLanguagesStyles from './OtherLanguageContent.module.css';
@@ -27,7 +28,7 @@ const OtherLanguageContent: React.FC<OtherLanguageContentProps> = ({ languages, 
                 <p className="subtitle">{t('pairing_other_languages_page.subtitle')}</p>
 
                 <div className={pairingOtherLanguagesStyles['joker-container']}>
-                    <img alt="dice" src="/assets/dice.svg" />
+                    <img alt="dice" src={DiceSvg} />
                     <div className={pairingOtherLanguagesStyles['joker-text-container']}>
                         <p className={pairingOtherLanguagesStyles['joker-description']}>
                             {t('pairing_other_languages_page.joker_description')}

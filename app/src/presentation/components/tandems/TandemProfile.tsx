@@ -1,6 +1,7 @@
 import React from 'react';
 import { useTranslation } from 'react-i18next';
-import { ReactComponent as Background } from '../../../../public/assets/background.svg';
+import { ArrowLeftSvg, CloseBlackSvg } from '../../../assets';
+import { ReactComponent as Background } from '../../../assets/background.svg';
 import { useConfig } from '../../../context/ConfigurationContext';
 import { getInitialAviability } from '../../../domain/entities/Availability';
 import Language from '../../../domain/entities/Language';
@@ -68,7 +69,7 @@ const TandemProfile: React.FC<TandemProfileProps> = ({ language, onClose, profil
                 style={{ justifyContent: !isHybrid ? 'flex-end' : 'flex-start' }}
                 onClick={onClose}
             >
-                <img alt="back" src={`/assets/${!isHybrid ? 'close_black' : 'left-arrow'}.svg`} />
+                <img alt="back" src={!isHybrid ? CloseBlackSvg : ArrowLeftSvg} />
             </button>
             <div className={styles.content}>
                 <span className="title extra-large-margin-bottom">{t(`home_page.tandem_validated.title`)}</span>

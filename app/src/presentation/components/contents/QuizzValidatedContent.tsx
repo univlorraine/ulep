@@ -1,4 +1,5 @@
 import { useTranslation } from 'react-i18next';
+import { QuizzSvg, TrophieSvg } from '../../../assets';
 import Language from '../../../domain/entities/Language';
 import FlagBubble from '../FlagBubble';
 import styles from './QuizzValidatedContent.module.css';
@@ -23,13 +24,13 @@ const QuizzValidatedContent: React.FC<QuizzValidatedContentProps> = ({
             <h1 className="title">{`${t(`pairing_quizz_validation.title`)}`}</h1>
             {onNextStep && <p className="subtitle">{t(`pairing_quizz_validation.subtitle`)}</p>}
             <div className={styles['image-container']}>
-                <img className={styles.image} alt="avatar" src="/assets/trophie.svg"></img>
+                <img className={styles.image} alt="avatar" src={TrophieSvg}></img>
                 <div className={styles.bubble}>
                     <FlagBubble language={language} textColor="white" isSelected disabled />
                 </div>
             </div>
             <div className={styles['level-container']}>
-                <img alt="quizz" src="/assets/quizz.svg" />
+                <img alt="quizz" src={QuizzSvg} />
                 {`${quizzLevel} ${t('pairing_quizz_validation.validated')}`}
             </div>
             <p className={styles.description}>

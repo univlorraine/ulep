@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { EyeSvg } from '../../assets';
 import style from './TextInput.module.css';
 
 interface TextInputProps {
@@ -45,7 +46,7 @@ const TextInput: React.FC<TextInputProps> = ({
                             type="button"
                             onClick={() => setShowPassword(!showPasword)}
                         >
-                            <img src="/assets/eye.svg" />
+                            <img alt="eye" src={EyeSvg} />
                         </button>
                     )}
                 </div>

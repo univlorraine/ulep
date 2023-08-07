@@ -1,7 +1,8 @@
-import { IonBackButton, IonHeader } from '@ionic/react';
-import ProgressBar from './ProgressBar';
+import { IonHeader } from '@ionic/react';
 import { useHistory } from 'react-router';
+import { LeftChevronSvg } from '../../assets';
 import styles from './Header.module.css';
+import ProgressBar from './ProgressBar';
 
 interface HeaderProps {
     progressColor: string;
@@ -16,7 +17,7 @@ const Header: React.FC<HeaderProps> = ({ progressColor, progressPercentage, titl
             <ProgressBar color={progressColor} percentage={progressPercentage} />
             <div className={styles.container}>
                 <button className={styles['image-div']} onClick={() => history.goBack()}>
-                    <img alt="goBack" className={styles.image} src="/assets/left-chevron.svg" />
+                    <img alt="goBack" className={styles.image} src={LeftChevronSvg} />
                 </button>
                 <h1 className={styles.title}>{title}</h1>
                 <div />

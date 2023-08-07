@@ -2,6 +2,7 @@ import { IonButton, IonContent, IonHeader, useIonLoading, useIonToast } from '@i
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useHistory } from 'react-router';
+import { LeftChevronSvg } from '../../../assets';
 import { useConfig } from '../../../context/ConfigurationContext';
 import { isPasswordCorrect } from '../../utils';
 import CircleAvatar from '../CircleAvatar';
@@ -62,7 +63,7 @@ const ResetPasswordForm: React.FC<ResetPasswordFormProps> = ({ id }) => {
         <div className="container">
             <IonHeader className="ion-no-border">
                 <IonButton fill="clear" onClick={() => history.goBack()}>
-                    <img alt="goBack" src="/assets/left-chevron.svg" />
+                    <img alt="goBack" src={LeftChevronSvg} />
                 </IonButton>
             </IonHeader>
             <IonContent>
