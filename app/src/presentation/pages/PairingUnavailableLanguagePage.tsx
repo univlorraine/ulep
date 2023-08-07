@@ -12,6 +12,7 @@ import styles from './css/PairingUnavailableLanguage.module.css';
 interface PairingUnavailableLanguageState {
     askingStudents: number;
     codeLanguage: string;
+    idLanguage: string;
     nameLanguage: string;
     enabledLanguage: boolean;
 }
@@ -22,14 +23,14 @@ const PairingUnavailableLanguagePage: React.FC = () => {
     const history = useHistory();
     const [isLastStep, setIsLastStep] = useState<boolean>(false);
     const location = useLocation<PairingUnavailableLanguageState>();
-    const { askingStudents, codeLanguage, nameLanguage } = location.state || {};
+    const { askingStudents, idLanguage, codeLanguage, nameLanguage } = location.state || {};
     const profileSignUp = useStoreState((payload) => payload.profileSignUp);
 
     if (!codeLanguage || !nameLanguage) {
         return <Redirect to="/signup/pairing/languages" />;
     }
 
-    const language = new Language(codeLanguage, nameLanguage);
+    const language = new Language(idLanguage, codeLanguage, nameLanguage);
 
     return (
         <SuccessLayout

@@ -1,6 +1,6 @@
 import CategoryInterests from '../entities/CategoryInterests';
 
-interface GetAllCategoriesInterestUsecaseInterface {
+interface GetAllInterestCategoriessUsecaseInterface {
     execute(): Promise<CategoryInterests[] | Error>;
 }
-export default GetAllCategoriesInterestUsecaseInterface;
+export default GetAllInterestCategoriessUsecaseInterface;

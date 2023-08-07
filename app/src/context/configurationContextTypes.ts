@@ -5,9 +5,9 @@ import AskForLanguageUsecaseInterface from '../domain/interfaces/AskForLanguageU
 import CreateProfileUsecaseInterface from '../domain/interfaces/CreateProfileUsecase.interface';
 import CreateReportUsecaseInterface from '../domain/interfaces/CreateReportUsecase.interface';
 import CreateUserUsecaseInterface from '../domain/interfaces/CreateUserUsecase.interface';
-import GetAllCategoriesInterestUsecaseInterface from '../domain/interfaces/GetAllCategoriesInterestsUsecase.interface';
 import GetAllCountriesUsecaseInterface from '../domain/interfaces/GetAllCountriesUsecase.interface';
 import GetAllGoalsUsecaseInterface from '../domain/interfaces/GetAllGoalsUsecase.interface';
+import GetAllInterestCategoriessUsecase from '../domain/interfaces/GetAllInterestCategoriessUsecase.interface';
 import GetAllLanguagesUsecaseInterface from '../domain/interfaces/GetAllLanguagesUsecase.interface';
 import GetAllTandemsUsecaseInterface from '../domain/interfaces/GetAllTandemsUsecase.interface';
 import GetAllUniversitiesUsecaseInterface from '../domain/interfaces/GetAllUniversitiesUsecase.interface';
@@ -26,9 +26,9 @@ export interface ConfigContextValueType {
     createProfile: CreateProfileUsecaseInterface;
     createReport: CreateReportUsecaseInterface;
     createUser: CreateUserUsecaseInterface;
-    getAllCategoriesInterests: GetAllCategoriesInterestUsecaseInterface;
     getAllCountries: GetAllCountriesUsecaseInterface;
     getAllGoals: GetAllGoalsUsecaseInterface;
+    getAllInterestCategories: GetAllInterestCategoriessUsecase;
     getAllLanguages: GetAllLanguagesUsecaseInterface;
     getAllReportCategories: GetAllReportCategoriesUsecaseInterface;
     getAllTandems: GetAllTandemsUsecaseInterface;

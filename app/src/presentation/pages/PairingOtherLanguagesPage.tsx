@@ -31,7 +31,7 @@ const PairingOtherLanguagesPage: React.FC = () => {
             return await showToast({ message: t(result.message), duration: 1000 });
         }
 
-        result = result.filter((language) => !profileSignUp.university!.languageCodes.includes(language.code));
+        result = result.filter((language) => !profileSignUp.university!.languages.includes(language.code));
 
         return setLanguages(result);
     };

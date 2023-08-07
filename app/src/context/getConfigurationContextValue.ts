@@ -6,9 +6,9 @@ import AskForLanguageUsecase from '../domain/usecases/AskForLanguageUsecase';
 import CreateProfileUsecase from '../domain/usecases/CreateProfileUsecase';
 import CreateReportUsecase from '../domain/usecases/CreateReportUsecase';
 import CreateUserUsecase from '../domain/usecases/CreateUserUsecase';
-import GetAllCategoriesInterestssUsecase from '../domain/usecases/GetAllCategoriesInterestsUsecase';
 import GetAllCountriesUsecase from '../domain/usecases/GetAllCountriesUsecase';
 import GetAllGoalsUsecase from '../domain/usecases/GetAllGoalsUsecase';
+import GetAllInterestCategoriesUsecase from '../domain/usecases/GetAllInterestCategoriessUsecase';
 import GetAllLanguagesUsecase from '../domain/usecases/GetAllLanguagesUsecase';
 import GetAllReportCategoriesUsecase from '../domain/usecases/GetAllReportCategoriesUsecase';
 import GetAllTandemsUsecase from '../domain/usecases/GetAllTandemsUsecase';
@@ -34,7 +34,7 @@ const getConfigContextValue = (
     const askForLanguage = new AskForLanguageUsecase(domainHttpAdapter);
     const createProfile = new CreateProfileUsecase(domainHttpAdapter, setProfile);
     const createReport = new CreateReportUsecase(domainHttpAdapter);
-    const getAllCategoriesInterests = new GetAllCategoriesInterestssUsecase(domainHttpAdapter);
+    const getAllInterestCategories = new GetAllInterestCategoriesUsecase(domainHttpAdapter);
     const getAllCountries = new GetAllCountriesUsecase(domainHttpAdapter);
     const getAllGoals = new GetAllGoalsUsecase(domainHttpAdapter);
     const getAllLanguages = new GetAllLanguagesUsecase(domainHttpAdapter);
@@ -57,7 +57,7 @@ const getConfigContextValue = (
         createProfile,
         createReport,
         createUser,
-        getAllCategoriesInterests,
+        getAllInterestCategories,
         getAllCountries,
         getAllGoals,
         getAllLanguages,

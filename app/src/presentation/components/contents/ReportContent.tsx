@@ -17,7 +17,7 @@ interface ReportContentProps {
 
 const ReportContent: React.FC<ReportContentProps> = ({ onGoBack, onReportSent }) => {
     const { t } = useTranslation();
-    const { createReport, getAllCategoriesInterests } = useConfig();
+    const { createReport, getAllReportCategories } = useConfig();
     const [showToast] = useIonToast();
     const [reportCategories, setReportCategories] = useState<DropDownItem<ReportCategory>[]>([]);
     const [selectedCategory, setSelectedCategory] = useState<ReportCategory>();
@@ -26,7 +26,7 @@ const ReportContent: React.FC<ReportContentProps> = ({ onGoBack, onReportSent })
     const isHybrid = width < HYBRID_MAX_WIDTH;
 
     const getCategories = async () => {
-        const result = await getAllCategoriesInterests.execute();
+        const result = await getAllReportCategories.execute();
 
         if (result instanceof Error) {
             return await showToast({ message: t(result.message), duration: 1000 });
