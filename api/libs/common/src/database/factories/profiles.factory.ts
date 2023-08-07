@@ -26,7 +26,12 @@ export class ProfileFactory extends ModelFactory<Profile> {
       sameAge: faker.datatype.boolean(),
       objectives: [],
       interests: [],
-      bio: faker.lorem.paragraph(),
+      biography: {
+        superpower: faker.lorem.sentence(),
+        favoritePlace: faker.lorem.sentence(),
+        experience: faker.lorem.sentence(),
+        anecdote: faker.lorem.sentence(),
+      },
     };
   }
 }

@@ -83,17 +83,19 @@ export class CreateProfileUsecase {
       command.interests.map((id) => this.tryToFindTheInterestOfId(id)),
     );
 
-    const nativeLanguage = await this.tryToFindTheLanguageOfId(
+    const nativeLanguage = await this.tryToFindTheLanguageOfCode(
       command.nativeLanguageCode,
     );
 
     const masteredLanguages = await Promise.all(
-      (command.masteredLanguageCodes ?? []).map(this.tryToFindTheLanguageOfId),
+      (command.masteredLanguageCodes ?? []).map(
+        this.tryToFindTheLanguageOfCode,
+      ),
     );
 
     let learningLanguage: Language | null = null;
     if (command.learningLanguageCode) {
-      learningLanguage = await this.tryToFindTheLanguageOfId(
+      learningLanguage = await this.tryToFindTheLanguageOfCode(
         command.learningLanguageCode,
       );
 
@@ -148,8 +150,8 @@ export class CreateProfileUsecase {
     return interest;
   }
 
-  private async tryToFindTheLanguageOfId(id: string): Promise<Language> {
-    const language = await this.languageRepository.ofCode(id);
+  private async tryToFindTheLanguageOfCode(code: string): Promise<Language> {
+    const language = await this.languageRepository.ofCode(code.toLowerCase());
     if (!language) {
       throw new RessourceDoesNotExist();
     }

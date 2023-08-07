@@ -4,6 +4,7 @@ import { InterestResponse } from 'src/api/dtos/interests';
 import { Profile } from 'src/core/models/profile.model';
 import { UserResponse } from '../users';
 import { ObjectiveResponse } from '../objective';
+import { BiographyDto } from './biography';
 
 class NativeLanguageResponse {
   @ApiProperty({ type: 'string', example: 'FR' })
@@ -60,13 +61,9 @@ export class ProfileResponse {
   @Expose({ groups: ['read'] })
   interests: InterestResponse[];
 
-  @ApiProperty()
+  @ApiProperty({ type: BiographyDto, nullable: true })
   @Expose({ groups: ['read'] })
-  bios?: string;
-
-  @ApiPropertyOptional({ type: 'string', format: 'uri' })
-  @Expose({ groups: ['read'] })
-  avatar?: string;
+  biography?: BiographyDto;
 
   constructor(partial: Partial<ProfileResponse>) {
     Object.assign(this, partial);
@@ -86,7 +83,8 @@ export class ProfileResponse {
       objectives: profile.objectives.map(ObjectiveResponse.fromDomain),
       interests: profile.interests.map(InterestResponse.fromDomain),
       meetingFrequency: profile.meetingFrequency,
-      bios: profile.bio,
+      biography:
+        profile.biography && BiographyDto.fromDomain(profile.biography),
     });
   }
 }

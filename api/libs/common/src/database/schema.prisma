@@ -246,8 +246,7 @@ model Profiles {
   same_gender               Boolean
   same_age                  Boolean
   meeting_frequency         String
-  bio                       String?
-  metadata                  Json
+  bio                       Json
   created_at                DateTime             @default(now())
   updated_at                DateTime             @updatedAt
   User                      Users                @relation(fields: [user_id], references: [id], onDelete: Cascade)
