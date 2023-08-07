@@ -1,40 +1,40 @@
 version: "3.4"
 
 services:
-  api:
-    build:
-      context: ./api
-      target: api_dev
-    volumes:
-      - ./api:/srv/app
-    ports:
-      - ${API_PORT:-3000}:3000
+    api:
+        build:
+            context: ./api
+            target: api_dev
+        volumes:
+            - ./api:/srv/app
+        ports:
+            - ${API_PORT:-3000}:3000
 
-  admin:
-    build:
-      context: ./admin
-      target: admin_dev
-    volumes:
-      - ./admin:/srv/app
-    ports:
-      - ${ADMIN_PORT:-3001}:3000
+    admin:
+        build:
+            context: ./admin
+            target: admin_dev
+        volumes:
+            - ./admin:/srv/app
+        ports:
+            - ${ADMIN_PORT:-3001}:3000
 
-  auth:
-    command: start-dev
-    ports:
-        - ${AUTH_PORT:-8080}:8080
+    auth:
+        command: start-dev --import-realm
+        ports:
+            - ${AUTH_PORT:-8080}:8080
 
-  database:
-    ports:
-      - 5432:5432
+    database:
+        ports:
+            - 5432:5432
 
-  minio:
-    ports:
-      - ${MINIO_PORT:-9000}:9000
-      - ${MINIO_CONSOLE_PORT:-9001}:9001
-  
-  mailer:
-    image: schickling/mailcatcher
-    ports:
-      - "1025:1025"
-      - "1080:1080"
+    minio:
+        ports:
+            - ${MINIO_PORT:-9000}:9000
+            - ${MINIO_CONSOLE_PORT:-9001}:9001
+
+    mailer:
+        image: schickling/mailcatcher
+        ports:
+            - "1025:1025"
+            - "1080:1080"

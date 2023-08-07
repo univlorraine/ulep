@@ -39,13 +39,18 @@ class BaseHttpAdapter {
     }
 
     async http<T>(path: string, args: RequestInit, contentType = 'application/json'): Promise<HttpResponse<T>> {
+        const headers: Record<string, string> = {
+            ...(args.headers as Record<string, string>),
+            Accept: 'application/json',
+        };
+
+        if (contentType !== 'multipart/form-data') {
+            headers['Content-Type'] = contentType;
+        }
+
         const request = new Request(path, {
             ...args,
-            headers: {
-                ...args.headers,
-                Accept: 'application/json',
-                'Content-Type': contentType,
-            },
+            headers,
         });
 
         return new Promise((resolve, reject) => {

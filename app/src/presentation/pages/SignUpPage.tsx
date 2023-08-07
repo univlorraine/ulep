@@ -59,8 +59,8 @@ const SignUpPage: React.FC = () => {
             !university ||
             !country ||
             !selectedRole ||
-            (selectedRole === 'STUDENT' && !diplome) ||
-            (selectedRole === 'STAFF' && !staffFunction) ||
+            (selectedRole === 'student' && !diplome) ||
+            (selectedRole === 'staff' && !staffFunction) ||
             !department
         ) {
             return setDisplayError(true);
@@ -88,13 +88,13 @@ const SignUpPage: React.FC = () => {
                 <h2 className={styles.subtitle}>{t('signup_page.profile_title')}</h2>
 
                 <RadioButton
-                    isSelected={selectedRole === 'STUDENT'}
-                    onPressed={() => setSelectedRole('STUDENT')}
+                    isSelected={selectedRole === 'student'}
+                    onPressed={() => setSelectedRole('student')}
                     name={t('signup_page.student_role')}
                 />
                 <RadioButton
-                    isSelected={selectedRole === 'STAFF'}
-                    onPressed={() => setSelectedRole('STAFF')}
+                    isSelected={selectedRole === 'staff'}
+                    onPressed={() => setSelectedRole('staff')}
                     name={t('signup_page.staff_role')}
                 />
 
@@ -115,7 +115,7 @@ const SignUpPage: React.FC = () => {
                     />
                 </div>
 
-                {selectedRole !== 'STAFF' && (
+                {selectedRole !== 'staff' && (
                     <button
                         className="tertiary-button large-margin-vertical"
                         onClick={() => history.push('./signup/informations')}
@@ -124,7 +124,7 @@ const SignUpPage: React.FC = () => {
                     </button>
                 )}
 
-                {selectedRole === 'STUDENT' && <div className={styles.separator} />}
+                {selectedRole === 'student' && <div className={styles.separator} />}
 
                 {selectedRole && (
                     <div className="large-margin-top">
@@ -136,7 +136,7 @@ const SignUpPage: React.FC = () => {
                     </div>
                 )}
 
-                {selectedRole === 'STAFF' && (
+                {selectedRole === 'staff' && (
                     <TextInput
                         onChange={setStaffFunction}
                         title={t('signup_page.function_title')}
@@ -144,7 +144,7 @@ const SignUpPage: React.FC = () => {
                     />
                 )}
 
-                {selectedRole === 'STUDENT' && (
+                {selectedRole === 'student' && (
                     <TextInput onChange={setDiplome} title={t('signup_page.diplome_title')} value={diplome} />
                 )}
                 {displayError && <ErrorMessage description={t('signup_page.error')} />}

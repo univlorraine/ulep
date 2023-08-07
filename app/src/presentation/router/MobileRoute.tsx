@@ -17,7 +17,7 @@ const MobileRoute: React.FC<PrivateRouteProps> = ({ component: Component, ...pro
         <Route
             {...props}
             render={(props) =>
-                isHybrid ? (
+                token && isHybrid ? (
                     <Component {...props} />
                 ) : (
                     <Redirect
