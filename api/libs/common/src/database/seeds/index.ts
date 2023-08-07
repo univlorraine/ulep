@@ -5,6 +5,8 @@ import { createUsers } from './users';
 import { createCountries } from './countries';
 import { createProficiencyTests } from './proficiency';
 import { createInterests } from './interests';
+import { createLearningObjectives } from './objective';
+import { createProfiles } from './profiles';
 
 const prisma = new Prisma.PrismaClient();
 
@@ -16,14 +18,19 @@ const load = async () => {
     await prisma.countryCodes.deleteMany();
     await prisma.proficiencyTests.deleteMany();
     await prisma.interestCategories.deleteMany();
+    await prisma.interests.deleteMany();
+    await prisma.learningObjectives.deleteMany();
+    await prisma.textContent.deleteMany();
     await prisma.tandems.deleteMany();
 
     await createCountries(prisma);
     await createLanguageCodes(prisma);
     await createUniversities(prisma);
-    // await createUsers(1000, prisma);
     await createProficiencyTests(prisma);
     await createInterests(prisma);
+    await createLearningObjectives(prisma);
+    await createUsers(1000, prisma);
+    await createProfiles(1000, prisma);
   } catch (e) {
     console.error(e);
     process.exit(1);

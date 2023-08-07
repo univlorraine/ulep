@@ -62,7 +62,7 @@ export class PrismaProfileRepository implements ProfileRepository {
         same_gender: profile.sameGender,
         same_age: profile.sameAge,
         meeting_frequency: profile.meetingFrequency,
-        bio: profile.bio,
+        bio: profile.biography,
         User: {
           connect: { id: profile.user.id },
         },
@@ -83,9 +83,6 @@ export class PrismaProfileRepository implements ProfileRepository {
         },
         Interests: {
           connect: profile.interests.map((interest) => ({ id: interest.id })),
-        },
-        metadata: {
-          // TODO
         },
       },
     });
