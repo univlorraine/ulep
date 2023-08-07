@@ -63,7 +63,7 @@ Give your realm a name and click Create.
 
 Next, create a client. Clients in Keycloak are entities that can request Keycloak to authenticate a user. Go to Clients -> Create, fill in the necessary details, and save.
 
-Note: For development, a realm is available [here](./docker/keycloak/realms/etandem.json) and integrate base API / admin clients.
+Note: a realm is available [here](./docker/keycloak/realms/etandem.json) and integrate base API / admin clients. It should be loaded automatically at start of container.
 
 2. User and Role Creation
 
