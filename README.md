@@ -42,16 +42,14 @@ This will build and run the project on your localhost. You now have access to th
 
 ## Database initilization
 
-To perform the following actions you can either configure the api locally (i.e. run the commands in [api folder](./api), with database configuration) or connect to a running api container.
-
 To initialize database schema, run the migrations: 
 ```bash
-pnpm migrate
+make migrate
 ```
 
 To seed database:
 ```bash
-pnpm seed
+make seed
 ```
 
 ## Keycloak
