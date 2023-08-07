@@ -7,9 +7,10 @@ import GetAllLanguagesUsecaseInterface from '../interfaces/GetAllLanguagesUsecas
 class GetAllLanguagesUsecase implements GetAllLanguagesUsecaseInterface {
     constructor(private readonly domainHttpAdapter: HttpAdapterInterface) {}
 
-    async execute(): Promise<Language[] | Error> {
+    async execute(universityId?: string): Promise<Language[] | Error> {
         try {
-            const httpResponse: HttpResponse<LanguageCommand[]> = await this.domainHttpAdapter.get(`/languages`);
+            const route = universityId ? `/universities/${universityId}/languages` : '/languages';
+            const httpResponse: HttpResponse<LanguageCommand[]> = await this.domainHttpAdapter.get(route);
 
             if (!httpResponse.parsedBody || !httpResponse.parsedBody) {
                 return new Error('errors.global');
