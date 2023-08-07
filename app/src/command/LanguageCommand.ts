@@ -12,7 +12,7 @@ export interface LanguageAskedCommand {
 }
 
 export const languageCommandToDomain = (command: LanguageCommand) => {
-    return new Language(command.code, command.name);
+    return new Language(command.id, command.code, command.name);
 };
 
 export default LanguageCommand;

@@ -61,7 +61,6 @@ class CreateUserUsecase implements CreateUserUsecaseInterface {
 
             return await this.login.execute(email, password);
         } catch (error: any) {
-            console.log(error);
             return new Error('errors.global');
         }
     }

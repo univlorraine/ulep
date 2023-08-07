@@ -1,5 +1,5 @@
 class Language {
-    constructor(public readonly code: string, public readonly name: string) {}
+    constructor(public readonly id: string, public readonly code: string, public readonly name: string) {}
 
     getFlag(): string {
         const flagEmojiRegex = /^[\u{1F1E6}-\u{1F1FF}]{2}$/u;
