@@ -1,5 +1,6 @@
 import { HttpResponse } from '../../adapter/BaseHttpAdapter';
 import { HttpAdapterInterface } from '../../adapter/DomainHttpAdapter';
+import UserCommand, { userCommandToDomain } from '../../command/UserCommand';
 import University from '../entities/University';
 import CreateUserUsecaseInterface from '../interfaces/CreateUserUsecase.interface';
 import LoginUsecaseInterface from '../interfaces/LoginUsecase.interface';
@@ -7,7 +8,8 @@ import LoginUsecaseInterface from '../interfaces/LoginUsecase.interface';
 class CreateUserUsecase implements CreateUserUsecaseInterface {
     constructor(
         private readonly domainHttpAdapter: HttpAdapterInterface,
-        private readonly login: LoginUsecaseInterface
+        private readonly login: LoginUsecaseInterface,
+        private readonly setUser: Function
     ) {}
 
     async execute(
@@ -48,7 +50,7 @@ class CreateUserUsecase implements CreateUserUsecaseInterface {
                 countryCode,
             };
 
-            const httpResponse: HttpResponse<undefined> = await this.domainHttpAdapter.post(
+            const httpResponse: HttpResponse<UserCommand> = await this.domainHttpAdapter.post(
                 `/users`,
                 body,
                 {},
@@ -58,6 +60,8 @@ class CreateUserUsecase implements CreateUserUsecaseInterface {
             if (!httpResponse.parsedBody) {
                 return new Error('errors.global');
             }
+
+            this.setUser({ user: userCommandToDomain(httpResponse.parsedBody) });
 
             return await this.login.execute(email, password);
         } catch (error: any) {

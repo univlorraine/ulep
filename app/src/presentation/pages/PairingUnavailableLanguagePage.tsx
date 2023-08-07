@@ -24,9 +24,10 @@ const PairingUnavailableLanguagePage: React.FC = () => {
     const [isLastStep, setIsLastStep] = useState<boolean>(false);
     const location = useLocation<PairingUnavailableLanguageState>();
     const { askingStudents, idLanguage, codeLanguage, nameLanguage } = location.state || {};
-    const profileSignUp = useStoreState((payload) => payload.profileSignUp);
+    const profileSignUp = useStoreState((state) => state.profileSignUp);
+    const user = useStoreState((state) => state.user);
 
-    if (!codeLanguage || !nameLanguage) {
+    if (!codeLanguage || !nameLanguage || !user) {
         return <Redirect to="/signup/pairing/languages" />;
     }
 
@@ -43,7 +44,7 @@ const PairingUnavailableLanguagePage: React.FC = () => {
                     <LanguageSelectedContent
                         language={language}
                         mode={'unavailable'}
-                        profilePicture={profileSignUp.profilePicture!}
+                        profilePicture={user.avatar}
                         onNextPressed={() => setIsLastStep(true)}
                     />
                 )}

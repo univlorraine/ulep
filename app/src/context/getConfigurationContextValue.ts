@@ -25,6 +25,7 @@ const getConfigContextValue = (
     refreshToken: string,
     setProfile: Function,
     setTokens: Function,
+    setUser: Function,
     configuration: Configuration
 ): ConfigContextValueType => {
     const cameraAdapter = new CameraAdapter();
@@ -47,7 +48,7 @@ const getConfigContextValue = (
     const updateAvatar = new UpdateAvatarUsecase(domainHttpAdapter);
     const updateNotificationPermission = new UpdateNotificationPermissionUsecase(domainHttpAdapter);
 
-    const createUser = new CreateUserUsecase(domainHttpAdapter, login);
+    const createUser = new CreateUserUsecase(domainHttpAdapter, login, setUser);
 
     return {
         askForAccountDeletion,

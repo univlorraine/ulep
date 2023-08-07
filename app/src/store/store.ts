@@ -14,6 +14,9 @@ const Store = createStore<TokenStoreTypes>(
             state.accessToken = payload.accessToken ?? state.accessToken;
             state.refreshToken = payload.refreshToken ?? state.refreshToken;
         }),
+        setUser: action((state, payload) => {
+            state.user = payload.user ?? state.user;
+        }),
         logout: action((state) => {
             state.accessToken = '';
             state.profile = undefined;
@@ -60,6 +63,7 @@ const Store = createStore<TokenStoreTypes>(
             if (payload.timezone) profile.timezone = payload.timezone;
             if (payload.university) profile.university = payload.university;
         }),
+        user: undefined,
     })
 );
 
