@@ -2,9 +2,9 @@ import { HttpResponse } from '../../adapter/BaseHttpAdapter';
 import { HttpAdapterInterface } from '../../adapter/DomainHttpAdapter';
 import CategoryInterestsCommand, { categoryInterestsCommandToDomain } from '../../command/CategoryInterestsCommand';
 import CategoryInterests from '../entities/CategoryInterests';
-import GetAllInterestCategoriessUsecaseInterface from '../interfaces/GetAllInterestCategoriessUsecase.interface';
+import GetAllInterestCategoriesUsecaseInterface from '../interfaces/GetAllInterestCategoriesUsecase.interface';
 
-class GetAllInterestCategoriessUsecase implements GetAllInterestCategoriessUsecaseInterface {
+class GetAllInterestCategoriesUsecase implements GetAllInterestCategoriesUsecaseInterface {
     constructor(private readonly domainHttpAdapter: HttpAdapterInterface) {}
 
     async execute(): Promise<CategoryInterests[] | Error> {
@@ -24,4 +24,4 @@ class GetAllInterestCategoriessUsecase implements GetAllInterestCategoriessUseca
     }
 }
 
-export default GetAllInterestCategoriessUsecase;
+export default GetAllInterestCategoriesUsecase;

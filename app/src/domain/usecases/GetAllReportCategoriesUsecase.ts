@@ -1,6 +1,5 @@
 import { HttpResponse } from '../../adapter/BaseHttpAdapter';
 import { HttpAdapterInterface } from '../../adapter/DomainHttpAdapter';
-import { CollectionCommand } from '../../command/CollectionCommand';
 import ReportCategoryCommand, { reportCategoriesCommandToDomain } from '../../command/ReportCategoryCommand';
 import ReportCategory from '../entities/ReportCategory';
 import GetAllReportCategoriesUsecaseInterface from '../interfaces/GetAlllReportCategoriesUsecase.interface';
@@ -11,14 +10,15 @@ class GetAllReportCategoriesUsecase implements GetAllReportCategoriesUsecaseInte
 
     async execute(): Promise<ReportCategory[] | Error> {
         try {
-            const httpResponse: HttpResponse<CollectionCommand<ReportCategoryCommand>> =
-                await this.domainHttpAdapter.get(`/reports/categories`);
+            const httpResponse: HttpResponse<ReportCategoryCommand[]> = await this.domainHttpAdapter.get(
+                `/reports/categories`
+            );
 
-            if (!httpResponse.parsedBody || !httpResponse.parsedBody.items) {
+            if (!httpResponse.parsedBody) {
                 return new Error('errors.global');
             }
 
-            return reportCategoriesCommandToDomain(httpResponse.parsedBody.items);
+            return reportCategoriesCommandToDomain(httpResponse.parsedBody);
         } catch (error: any) {
             return new Error('errors.global');
         }

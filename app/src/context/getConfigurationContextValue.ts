@@ -8,7 +8,7 @@ import CreateReportUsecase from '../domain/usecases/CreateReportUsecase';
 import CreateUserUsecase from '../domain/usecases/CreateUserUsecase';
 import GetAllCountriesUsecase from '../domain/usecases/GetAllCountriesUsecase';
 import GetAllGoalsUsecase from '../domain/usecases/GetAllGoalsUsecase';
-import GetAllInterestCategoriesUsecase from '../domain/usecases/GetAllInterestCategoriessUsecase';
+import GetAllInterestCategoriesUsecase from '../domain/usecases/GetAllInterestCategoriesUsecase';
 import GetAllLanguagesUsecase from '../domain/usecases/GetAllLanguagesUsecase';
 import GetAllReportCategoriesUsecase from '../domain/usecases/GetAllReportCategoriesUsecase';
 import GetAllTandemsUsecase from '../domain/usecases/GetAllTandemsUsecase';

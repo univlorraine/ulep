@@ -7,7 +7,7 @@ import CreateReportUsecaseInterface from '../domain/interfaces/CreateReportUseca
 import CreateUserUsecaseInterface from '../domain/interfaces/CreateUserUsecase.interface';
 import GetAllCountriesUsecaseInterface from '../domain/interfaces/GetAllCountriesUsecase.interface';
 import GetAllGoalsUsecaseInterface from '../domain/interfaces/GetAllGoalsUsecase.interface';
-import GetAllInterestCategoriessUsecase from '../domain/interfaces/GetAllInterestCategoriessUsecase.interface';
+import GetAllInterestCategoriessUsecase from '../domain/interfaces/GetAllInterestCategoriesUsecase.interface';
 import GetAllLanguagesUsecaseInterface from '../domain/interfaces/GetAllLanguagesUsecase.interface';
 import GetAllTandemsUsecaseInterface from '../domain/interfaces/GetAllTandemsUsecase.interface';
 import GetAllUniversitiesUsecaseInterface from '../domain/interfaces/GetAllUniversitiesUsecase.interface';
