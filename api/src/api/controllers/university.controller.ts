@@ -53,8 +53,6 @@ export class UniversityController {
   @Post()
   @Roles(configuration().adminRole)
   @UseGuards(AuthenticationGuard)
-  @Roles(configuration().adminRole)
-  @UseGuards(AuthenticationGuard)
   @Swagger.ApiOperation({ summary: 'Create a new University ressource.' })
   @Swagger.ApiCreatedResponse({ type: UniversityResponse })
   async create(@Body() body: CreateUniversityRequest) {

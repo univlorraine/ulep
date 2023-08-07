@@ -102,6 +102,7 @@ export class UserController {
   }
 
   @Patch(':id')
+  @UseGuards(AuthenticationGuard)
   @Swagger.ApiOperation({ summary: 'Updates a User ressource.' })
   @Swagger.ApiOkResponse()
   async update(
