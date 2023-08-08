@@ -22,3 +22,5 @@ export interface LearningLanguage {
   language: Language;
   level: ProficiencyLevel;
 }
+
+export const JOKER_LANGUAGE_CODE = '*';

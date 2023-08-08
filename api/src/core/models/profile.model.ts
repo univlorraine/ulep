@@ -1,7 +1,12 @@
 import { ProfileLanguagesException } from '../errors/profile-exceptions';
 import { Interest } from './interest.model';
-import { Language, LearningLanguage } from './language.model';
+import {
+  JOKER_LANGUAGE_CODE,
+  Language,
+  LearningLanguage,
+} from './language.model';
 import { LearningObjective } from './objective.model';
+import { ProficiencyLevel } from './proficiency.model';
 import { User } from './user.model';
 
 export enum LearningType {
@@ -51,11 +56,21 @@ export class Profile {
   readonly biography?: { [key: string]: string };
 
   constructor(props: CreateProfileProps) {
+    const learningLanguages = [...props.learningLanguages].map(
+      (learningLanguage) => ({
+        language: learningLanguage.language,
+        level:
+          learningLanguage.language.code !== JOKER_LANGUAGE_CODE
+            ? learningLanguage.level
+            : ProficiencyLevel.A0,
+      }),
+    );
+
     this.id = props.id;
     this.user = props.user;
     this.nativeLanguage = props.nativeLanguage;
     this.masteredLanguages = [...props.masteredLanguages];
-    this.learningLanguages = [...props.learningLanguages];
+    this.learningLanguages = learningLanguages;
     this.learningType = props.learningType;
     this.meetingFrequency = props.meetingFrequency;
     this.sameGender = props.sameGender;
@@ -65,13 +80,6 @@ export class Profile {
     this.biography = props.biography;
 
     this.assertLanguesAreUnique();
-
-    // TODO: manage joker new way. Need more info on how it will be specified by user.
-
-    // // We set level to A0 for joker language
-    // if (!props.learningLanguage?.code) {
-    //   this.level = ProficiencyLevel.A0;
-    // }
   }
 
   protected assertLanguesAreUnique(): void {

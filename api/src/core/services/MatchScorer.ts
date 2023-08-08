@@ -1,3 +1,4 @@
+import { JOKER_LANGUAGE_CODE, LearningLanguage } from 'src/core/models';
 /* eslint-disable prettier/prettier */
 import { Injectable } from '@nestjs/common';
 import { Match, MatchScores, ProficiencyLevel, Profile } from '../models';
@@ -44,12 +45,13 @@ export class MatchScorer implements IMatchScorer {
 
   // TODO: TANDEM / ETANDEM
   // TODO: Use interest categories similarity instead of interests
+  // TODO(multipleLearningLanguage): manage multiple learning language
   public computeMatchScore(profile1: Profile, profile2: Profile): Match {
     if (profile1.id === profile2.id) {
       throw new SameProfilesError();
     }
 
-    const isDiscovery = profile1.learningLanguages.length <= 0;
+    const isDiscovery = profile1.learningLanguages?.[0].language.code === JOKER_LANGUAGE_CODE;
 
     const languages = [profile2.nativeLanguage, ...profile2.masteredLanguages].map(l => l.id);
    
@@ -95,6 +97,7 @@ export class MatchScorer implements IMatchScorer {
       C2: { A0: 6, A1: 6, A2: 5, B1: 4, B2: 4, C1: 4, C2: 4 },
     };
 
+    // TODO(multipleLearningLanguage): manage multiple learning language
     const level1 = profile1.learningLanguages?.[0]?.level;
     // We approximate native and mastered language of user equals to a level between B1 and C2.
     // Score matrix have the same score for all these profile2 levels so we take B2 arbitrary here.

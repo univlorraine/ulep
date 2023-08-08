@@ -1,10 +1,12 @@
 import * as Swagger from '@nestjs/swagger';
-import { IsEnum, IsString } from 'class-validator';
+import { IsEnum, IsNotEmpty, IsOptional, IsString } from 'class-validator';
 import { LearningLanguage, ProficiencyLevel } from 'src/core/models';
 
 export class LearningLanguageDto {
   @Swagger.ApiProperty({ type: 'string', example: 'EN' })
   @IsString()
+  @IsNotEmpty()
+  @IsOptional()
   code: string;
 
   @Swagger.ApiProperty({ enum: ProficiencyLevel, example: 'B2' })

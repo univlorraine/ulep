@@ -7,6 +7,7 @@ import {
 import { UnsuportedLanguageException } from 'src/core/errors/unsuported-language.exception';
 import {
   Interest,
+  JOKER_LANGUAGE_CODE,
   Language,
   LearningObjective,
   LearningType,
@@ -98,12 +99,16 @@ export class CreateProfileUsecase {
     const learningLanguages = await Promise.all(
       command.learningLanguages.map(async (learningLanguage) => {
         const language = await this.tryToFindTheLanguageOfCode(
-          learningLanguage.code,
+          learningLanguage.code || JOKER_LANGUAGE_CODE,
         );
-        this.assertLanguageIsSupportedByUniversity(
-          user.university,
-          learningLanguage.code,
-        );
+
+        if (learningLanguage.code) {
+          this.assertLanguageIsSupportedByUniversity(
+            user.university,
+            learningLanguage.code,
+          );
+        }
+
         return {
           language,
           level: learningLanguage.level,

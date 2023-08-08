@@ -5,6 +5,7 @@ import { Profile } from 'src/core/models/profile.model';
 import { UserResponse } from '../users';
 import { ObjectiveResponse } from '../objective';
 import { BiographyDto } from './biography';
+import { JOKER_LANGUAGE_CODE } from 'src/core/models';
 
 class NativeLanguageResponse {
   @ApiProperty({ type: 'string', example: 'FR' })
@@ -78,7 +79,10 @@ export class ProfileResponse {
         code: profile.nativeLanguage.code,
       },
       learningLanguages: profile.learningLanguages.map((learningLanguage) => ({
-        code: learningLanguage.language.code,
+        code:
+          learningLanguage.language.code === JOKER_LANGUAGE_CODE
+            ? null
+            : learningLanguage.language.code,
         level: learningLanguage.level,
       })),
       objectives: profile.objectives.map(ObjectiveResponse.fromDomain),
