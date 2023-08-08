@@ -3,7 +3,7 @@ import { IsEmail, IsOptional } from 'class-validator';
 import { PaginationDto } from '../pagination';
 import { SortOrder } from '@app/common';
 
-export type ProfileQuerySortKey = 'firstname' | 'lastname';
+export type ProfileQuerySortKey = 'email' | 'firstname' | 'lastname' | 'role';
 export class ProfileQueryFilter extends PaginationDto {
   @ApiPropertyOptional({ type: 'string', format: 'email' })
   @IsEmail()
@@ -12,9 +12,9 @@ export class ProfileQueryFilter extends PaginationDto {
 
   @ApiPropertyOptional({ type: 'string' })
   @IsOptional()
-  sortKey: ProfileQuerySortKey;
+  field: ProfileQuerySortKey;
 
   @ApiPropertyOptional({ type: 'string' })
   @IsOptional()
-  sortOrder: SortOrder;
+  order: SortOrder;
 }
