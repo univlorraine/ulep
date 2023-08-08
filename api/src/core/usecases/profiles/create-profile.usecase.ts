@@ -139,7 +139,7 @@ export class CreateProfileUsecase {
   private async tryToFindTheUserOfId(id: string): Promise<User> {
     const user = await this.usersRepository.ofId(id);
     if (!user) {
-      throw new RessourceDoesNotExist();
+      throw new RessourceDoesNotExist('User does not exist');
     }
 
     return user;
@@ -155,7 +155,7 @@ export class CreateProfileUsecase {
   private async tryToFindTheInterestOfId(id: string): Promise<Interest> {
     const interest = await this.interestsRepository.interestOfId(id);
     if (!interest) {
-      throw new RessourceDoesNotExist();
+      throw new RessourceDoesNotExist('Interest does not exist');
     }
 
     return interest;
@@ -164,7 +164,7 @@ export class CreateProfileUsecase {
   private async tryToFindTheLanguageOfCode(code: string): Promise<Language> {
     const language = await this.languageRepository.ofCode(code.toLowerCase());
     if (!language) {
-      throw new RessourceDoesNotExist();
+      throw new RessourceDoesNotExist('Language does not exist');
     }
 
     return { ...language };

@@ -42,12 +42,12 @@ export class CreateUserUsecase {
   async execute(command: CreateUserCommand) {
     const university = await this.universityRepository.ofId(command.university);
     if (!university) {
-      throw new RessourceDoesNotExist();
+      throw new RessourceDoesNotExist('University does not exist');
     }
 
     const country = await this.countryRepository.ofCode(command.countryCode);
     if (!country) {
-      throw new RessourceDoesNotExist();
+      throw new RessourceDoesNotExist('Country code does not exist');
     }
 
     const keycloakUser = await this.keycloak.createUser({
