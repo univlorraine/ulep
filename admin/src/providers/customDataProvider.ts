@@ -53,8 +53,8 @@ const customDataProvider = {
         }
 
         if (params.sort) {
-            url.searchParams.append('sortKey', params.sort.field.split('.')[1]);
-            url.searchParams.append('sortOrder', params.sort.order.toLowerCase());
+            url.searchParams.append('field', params.sort.field.split('.')[1]);
+            url.searchParams.append('order', params.sort.order.toLowerCase());
         }
 
         if (params.filter.email) {
