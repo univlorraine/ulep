@@ -1,4 +1,5 @@
 import { useTranslation } from 'react-i18next';
+import { CloseSvg } from '../../assets';
 import styles from './ErrorMessage.module.css';
 
 interface ErrorMessageProps {
@@ -9,7 +10,7 @@ const ErrorMessage: React.FC<ErrorMessageProps> = ({ description }) => {
     const { t } = useTranslation();
     return (
         <div className={styles.container}>
-            <img alt="error" className={styles.image} src="/assets/close.svg" />
+            <img alt="error" className={styles.image} src={CloseSvg} />
             <div className={styles.title}>
                 {t('global.error')} <br />
                 <span className={styles.description}>{description}</span>

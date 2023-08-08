@@ -1,15 +1,19 @@
 import { Collection } from '@app/common';
-import { Tandem } from '../models';
+import { Tandem, TandemStatus } from '../models';
 
 export const TANDEM_REPOSITORY = 'tandem.repository';
+
+export type FindWhereProps = {
+  status?: TandemStatus;
+  profileId?: string;
+  offset?: number;
+  limit?: number;
+};
 
 export interface TandemRepository {
   save(tandem: Tandem): Promise<void>;
 
   hasActiveTandem(profileId: string): Promise<boolean>;
 
-  findAllActiveTandems(
-    offset?: number,
-    limit?: number,
-  ): Promise<Collection<Tandem>>;
+  findWhere(props: FindWhereProps): Promise<Collection<Tandem>>;
 }

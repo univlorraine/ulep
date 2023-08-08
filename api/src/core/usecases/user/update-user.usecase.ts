@@ -21,6 +21,9 @@ export class UpdateUserUsecase {
       throw new RessourceDoesNotExist();
     }
 
-    return this.userRepository.update(command.id, command.age);
+    return this.userRepository.update({
+      ...instance,
+      age: command.age,
+    });
   }
 }

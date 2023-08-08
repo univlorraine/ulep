@@ -9,7 +9,7 @@ class GetAllGoalsUsecase implements GetAllGoalsUsecaseInterface {
         try {
             //TODO: CURRENTLY MOCK DATA
             /*const httpResponse: HttpResponse<CollectionCommand<GoalCommand>> = await this.domainHttpAdapter.get(
-                `/goals`
+                `/objectives`
             );
 
             if (!httpResponse.parsedBody || !httpResponse.parsedBody.items) {

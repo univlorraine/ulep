@@ -10,7 +10,7 @@ class GetAllCategoriesInterestssUsecase implements GetAllCategoriesInterestsUsec
         try {
             //TODO: CURRENTLY MOCK DATA
             /*const httpResponse: HttpResponse<CollectionCommand<CategoryInterestsCommand>> = await this.domainHttpAdapter.get(
-                `/interests`
+                `/interests/categories`
             );
 
             if (!httpResponse.parsedBody || !httpResponse.parsedBody.items) {

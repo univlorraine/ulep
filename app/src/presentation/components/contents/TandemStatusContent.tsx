@@ -1,5 +1,6 @@
 import { useTranslation } from 'react-i18next';
-import { ReactComponent as Background } from '../../../../public/assets/background.svg';
+import { ArrowLeftSvg, ClockSvg, CloseBlackSvg, TandemNotFoundSvg } from '../../../assets';
+import { ReactComponent as Background } from '../../../assets/background.svg';
 import { useConfig } from '../../../context/ConfigurationContext';
 import useWindowDimensions from '../../hooks/useWindowDimensions';
 import { HYBRID_MAX_WIDTH } from '../../utils';
@@ -25,14 +26,14 @@ const TandemStatusContent: React.FC<TandemStatusContentProps> = ({ onFindNewTand
                 style={{ justifyContent: !isHybrid ? 'flex-end' : 'flex-start' }}
                 onClick={onClose}
             >
-                <img alt="left-arrow" src={`/assets/${!isHybrid ? 'close_black' : 'left-arrow'}.svg`} />
+                <img alt="left-arrow" src={!isHybrid ? CloseBlackSvg : ArrowLeftSvg} />
             </button>
             <div className={styles.content}>
                 <span className="title extra-large-margin-bottom">{t(`home_page.tandem_${tradKey}.title`)}</span>
                 <img
                     alt="clock"
                     className="extra-large-margin-bottom"
-                    src={`/assets/${status === 'DRAFT' ? 'clock' : 'tandem_not_found'}.svg`}
+                    src={status === 'DRAFT' ? ClockSvg : TandemNotFoundSvg}
                 />
                 <span className="subtitle extra-large-margin-bottom">{t(`home_page.tandem_${tradKey}.subtitle`)}</span>
                 {status === 'UNACTIVE' && (

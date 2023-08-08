@@ -13,16 +13,22 @@ interface Params {
     };
   }
 
-const httpClient = (url: string, options: any = {}) => {
+const httpClientOptions = (options: any = {}) => {
     const newOptions = options;
     if (!newOptions.headers) {
         newOptions.headers = new Headers({ Accept: 'application/json' });
     }
-    const token = jwtManager.getToken();
 
+    const token = jwtManager.getToken();
     if (token) {
         newOptions.headers.set('Authorization', `Bearer ${token}`);
     }
+
+    return newOptions;
+};
+
+const httpClient = (url: string, options: any = {}) => {
+    const newOptions = httpClientOptions(options);
 
     return fetchUtils.fetchJson(url, newOptions);
 };
@@ -45,7 +51,8 @@ const customDataProvider = {
         if (params.filter.email) {
             url.searchParams.append('filter', params.filter.email);
         }
-        const response = await fetch(url);
+
+        const response = await fetch(url, httpClientOptions());
 
         if (!response.ok) {
             throw new Error(`API request failed with status ${response.status}`);
@@ -59,10 +66,7 @@ const customDataProvider = {
         const response = await http(
             'GET',
             `${process.env.REACT_APP_API_URL}/matches?id=${profileId}`,
-            {
-                headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${jwtManager.getToken()}` },
-
-            },
+            httpClientOptions(),
         );
 
         if (!response.ok) {

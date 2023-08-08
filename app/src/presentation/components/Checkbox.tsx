@@ -1,3 +1,4 @@
+import { CheckSvg } from '../../assets';
 import styles from './Checkbox.module.css';
 interface CheckboxProps {
     isSelected: boolean;
@@ -13,7 +14,7 @@ const Checkbox: React.FC<CheckboxProps> = ({ isSelected, onPressed, name, textCl
                 style={{ backgroundColor: !isSelected ? 'white' : 'black' }}
                 className={isSelected ? styles['checkbox-selected'] : styles['checkbox-unselected']}
             >
-                {isSelected && <img alt="check" className={styles.image} src="/assets/check.svg" />}
+                {isSelected && <img alt="check" className={styles.image} src={CheckSvg} />}
             </div>
             <span className={textClass}>{name}</span>
         </div>

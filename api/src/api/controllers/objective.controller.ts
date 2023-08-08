@@ -6,6 +6,7 @@ import {
   Param,
   Delete,
   Logger,
+  UseGuards,
 } from '@nestjs/common';
 import * as Swagger from '@nestjs/swagger';
 import { ObjectiveResponse, CreateObjectiveRequest } from '../dtos/objective';
@@ -15,6 +16,9 @@ import {
   FindAllObjectiveUsecase,
   FindOneObjectiveUsecase,
 } from '../../core/usecases/objective';
+import { AuthenticationGuard } from '../guards';
+import { Roles } from '../decorators/roles.decorator';
+import { configuration } from 'src/configuration';
 
 @Controller('objectives')
 @Swagger.ApiTags('Objectives')
@@ -29,6 +33,8 @@ export class ObjectiveController {
   ) {}
 
   @Post()
+  @Roles(configuration().adminRole)
+  @UseGuards(AuthenticationGuard)
   @Swagger.ApiOperation({ summary: 'Create a new Objective ressource.' })
   @Swagger.ApiCreatedResponse({ type: ObjectiveResponse })
   async create(@Body() body: CreateObjectiveRequest) {
@@ -38,6 +44,7 @@ export class ObjectiveController {
   }
 
   @Get()
+  @UseGuards(AuthenticationGuard)
   @Swagger.ApiOperation({ summary: 'Collection of Objective ressource.' })
   @Swagger.ApiOkResponse({ type: ObjectiveResponse, isArray: true })
   async findAll() {
@@ -47,6 +54,8 @@ export class ObjectiveController {
   }
 
   @Get(':id')
+  @Roles(configuration().adminRole)
+  @UseGuards(AuthenticationGuard)
   @Swagger.ApiOperation({ summary: 'Objective ressource.' })
   @Swagger.ApiOkResponse({ type: ObjectiveResponse })
   async findOne(@Param('id') id: string) {
@@ -56,6 +65,8 @@ export class ObjectiveController {
   }
 
   @Delete(':id')
+  @Roles(configuration().adminRole)
+  @UseGuards(AuthenticationGuard)
   @Swagger.ApiOperation({ summary: 'Deletes a Objective ressource.' })
   @Swagger.ApiOkResponse()
   remove(@Param('id') id: string) {

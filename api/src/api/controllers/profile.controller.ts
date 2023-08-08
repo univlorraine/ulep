@@ -15,16 +15,20 @@ import {
   CreateProfileUsecase,
   GetProfileUsecase,
   GetProfilesUsecase,
+  GetTandemsForProfileUsecase,
 } from 'src/core/usecases';
 import { AuthenticationGuard } from '../guards';
 import {
   CreateProfileRequest,
   ProfileQueryFilter,
   ProfileResponse,
+  UserTandemResponse,
 } from '../dtos';
 import { Collection } from '@app/common';
 import { CollectionResponse, CurrentUser } from '../decorators';
 import { KeycloakUser } from '@app/keycloak';
+import { configuration } from 'src/configuration';
+import { Roles } from '../decorators/roles.decorator';
 
 @Controller('profiles')
 @Swagger.ApiTags('Profiles')
@@ -35,9 +39,11 @@ export class ProfileController {
     private readonly createProfileUsecase: CreateProfileUsecase,
     private readonly getProfilesUsecase: GetProfilesUsecase,
     private readonly getProfileUsecase: GetProfileUsecase,
+    private readonly getTandemsForProfileUsecase: GetTandemsForProfileUsecase,
   ) {}
 
   @Post()
+  @UseGuards(AuthenticationGuard)
   @SerializeOptions({ groups: ['read', 'profile:read'] })
   @UseGuards(AuthenticationGuard)
   @Swagger.ApiOperation({ summary: 'Creates a Profile ressource.' })
@@ -56,6 +62,7 @@ export class ProfileController {
   }
 
   @Get()
+  @Roles(configuration().adminRole)
   @UseGuards(AuthenticationGuard)
   @Swagger.ApiOperation({
     summary: 'Retrieve the collection of Profile ressource.',
@@ -78,7 +85,27 @@ export class ProfileController {
     });
   }
 
+  @Get(':id/tandems')
+  @UseGuards(AuthenticationGuard)
+  @Swagger.ApiOperation({
+    summary: 'Retrieve the collection of Tandem ressource.',
+  })
+  @Swagger.ApiOkResponse({ type: UserTandemResponse, isArray: true })
+  async getTandems(
+    @Param('id', ParseUUIDPipe) id: string,
+  ): Promise<UserTandemResponse[]> {
+    const tandems = await this.getTandemsForProfileUsecase.execute({
+      profile: id,
+    });
+
+    return tandems.items.map((tandem) =>
+      UserTandemResponse.fromDomain(id, tandem),
+    );
+  }
+
   @Get(':id')
+  @Roles(configuration().adminRole)
+  @UseGuards(AuthenticationGuard)
   @SerializeOptions({ groups: ['read', 'profile:read'] })
   @Swagger.ApiOperation({ summary: 'Retrieve a Profile ressource.' })
   @Swagger.ApiOkResponse({ type: ProfileResponse })

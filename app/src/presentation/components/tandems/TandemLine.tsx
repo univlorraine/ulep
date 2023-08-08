@@ -1,4 +1,5 @@
 import { useTranslation } from 'react-i18next';
+import { ArrowRightSvg } from '../../../assets';
 import Language from '../../../domain/entities/Language';
 import Profile from '../../../domain/entities/Profile';
 import styles from './TandemLine.module.css';
@@ -36,7 +37,7 @@ const TandemLine: React.FC<TandemLineProps> = ({ language, profile, onPressed, s
                 </div>
                 <span className={styles.title}>{t(getTitleFromStatusAndProfile(status, !!profile))}</span>
             </div>
-            <img alt="arrow-right" src="/assets/arrow-right.svg" />
+            <img alt="arrow-right" src={ArrowRightSvg} />
         </button>
     );
 };

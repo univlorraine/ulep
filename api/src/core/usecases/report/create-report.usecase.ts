@@ -5,14 +5,13 @@ import {
 } from '../../ports/report.repository';
 import { Report, ReportStatus } from '../../models/report.model';
 import { USER_REPOSITORY, UserRepository } from '../../ports/user.repository';
+import { DomainErrorCode, RessourceDoesNotExist } from 'src/core/errors';
 import {
-  DomainErrorCode,
-  RessourceAlreadyExists,
-  RessourceDoesNotExist,
-} from 'src/core/errors';
+  UUID_PROVIDER,
+  UuidProviderInterface,
+} from 'src/core/ports/uuid.provider';
 
 export class CreateReportCommand {
-  id: string;
   owner: string;
   category: string;
   content: string;
@@ -25,14 +24,11 @@ export class CreateReportUsecase {
     private readonly reportRepository: ReportRepository,
     @Inject(USER_REPOSITORY)
     private readonly userRepository: UserRepository,
+    @Inject(UUID_PROVIDER)
+    private readonly uuidProvider: UuidProviderInterface,
   ) {}
 
   async execute(command: CreateReportCommand): Promise<Report> {
-    const instance = await this.reportRepository.reportOfId(command.id);
-    if (instance) {
-      throw new RessourceAlreadyExists(`Report already exists`);
-    }
-
     const category = await this.reportRepository.categoryOfId(command.category);
     if (!category) {
       throw new RessourceDoesNotExist(
@@ -47,7 +43,12 @@ export class CreateReportUsecase {
     }
 
     return this.reportRepository.createReport(
-      Report.create({ ...command, category, status: ReportStatus.OPEN }),
+      Report.create({
+        id: this.uuidProvider.generate(),
+        ...command,
+        category,
+        status: ReportStatus.OPEN,
+      }),
     );
   }
 }

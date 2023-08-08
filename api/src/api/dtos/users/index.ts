@@ -10,9 +10,14 @@ import {
   Min,
   Matches,
   Length,
+  IsOptional,
 } from 'class-validator';
 import { UniversityResponse } from '../universities';
-import { CreateUserCommand, UpdateUserCommand } from 'src/core/usecases/user';
+import {
+  AskForAccountDeletionCommand,
+  CreateUserCommand,
+  UpdateUserCommand,
+} from 'src/core/usecases/user';
 import { Gender, Role, User } from 'src/core/models/user.model';
 import { MediaObjectResponse } from '../medias';
 
@@ -61,7 +66,7 @@ export class CreateUserRequest implements CreateUserCommand {
   @Swagger.ApiProperty({ type: 'string', example: 'FR' })
   @IsString()
   @Length(2, 2)
-  country: string;
+  countryCode: string;
 }
 
 export class UpdateUserRequest implements Omit<UpdateUserCommand, 'id'> {
@@ -69,6 +74,16 @@ export class UpdateUserRequest implements Omit<UpdateUserCommand, 'id'> {
   @IsInt()
   @Min(1)
   age: number;
+}
+
+export class AskForAccountDeletionRequest
+  implements Omit<AskForAccountDeletionCommand, 'user'>
+{
+  @Swagger.ApiPropertyOptional({ type: 'string' })
+  @IsString()
+  @IsNotEmpty()
+  @IsOptional()
+  reason: string;
 }
 
 export class UserResponse {

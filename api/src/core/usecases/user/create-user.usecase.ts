@@ -24,7 +24,7 @@ export class CreateUserCommand {
   age: number;
   university: string;
   role: Role;
-  country: string;
+  countryCode: string;
 }
 
 @Injectable()
@@ -45,7 +45,7 @@ export class CreateUserUsecase {
       throw new RessourceDoesNotExist();
     }
 
-    const country = await this.countryRepository.ofCode(command.country);
+    const country = await this.countryRepository.ofCode(command.countryCode);
     if (!country) {
       throw new RessourceDoesNotExist();
     }

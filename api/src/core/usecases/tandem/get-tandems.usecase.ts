@@ -1,6 +1,6 @@
-import { Inject, Injectable, Logger } from '@nestjs/common';
+import { Inject, Injectable } from '@nestjs/common';
 import { Collection } from '@app/common';
-import { Tandem } from 'src/core/models';
+import { Tandem, TandemStatus } from 'src/core/models';
 import {
   TANDEM_REPOSITORY,
   TandemRepository,
@@ -13,20 +13,20 @@ export class GetTandemsCommand {
 
 @Injectable()
 export class GetTandemsUsecase {
-  private readonly logger = new Logger(GetTandemsUsecase.name);
-
   constructor(
     @Inject(TANDEM_REPOSITORY)
     private readonly tandemsRepository: TandemRepository,
   ) {}
 
   async execute(command: GetTandemsCommand): Promise<Collection<Tandem>> {
-    const { page, limit } = command;
+    const { page = 1, limit = 30 } = command;
     const offset = (page - 1) * limit;
-    const result = await this.tandemsRepository.findAllActiveTandems(
+
+    const result = await this.tandemsRepository.findWhere({
+      status: TandemStatus.ACTIVE,
       offset,
       limit,
-    );
+    });
 
     return result;
   }

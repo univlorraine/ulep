@@ -1,4 +1,5 @@
 import { useTranslation } from 'react-i18next';
+import { FAQSvg } from '../../../assets';
 import Language from '../../../domain/entities/Language';
 import { codeCountryToFlag } from '../../utils';
 import otherLanguagesSelectedStyles from './OtherLanguageSelectedContent.module.css';
@@ -23,7 +24,7 @@ const OtherLanguageSelectedContent: React.FC<OtherLanguageSelectedContentProps> 
                     language.code
                 )} ${language.name}`}</div>
 
-                <img alt="FAQ" className={otherLanguagesSelectedStyles.image} src="/assets/FAQ.svg" />
+                <img alt="FAQ" className={otherLanguagesSelectedStyles.image} src={FAQSvg} />
 
                 <p className={otherLanguagesSelectedStyles.explaination}>
                     {`${t('pairing_other_languages_page.selected_language.explain_first_start')} ${language.name} ${t(

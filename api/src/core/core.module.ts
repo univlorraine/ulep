@@ -53,6 +53,8 @@ import {
   DeleteObjectiveUsecase,
   FindAllObjectiveUsecase,
   FindOneObjectiveUsecase,
+  AskForAccountDeletionUsecase,
+  GetTandemsForProfileUsecase,
 } from './usecases';
 
 const usecases: Provider[] = [
@@ -97,6 +99,7 @@ const usecases: Provider[] = [
   CreateProfileUsecase,
   CreateTandemUsecase,
   GenerateTandemsUsecase,
+  GetTandemsForProfileUsecase,
   GetProfilesUsecase,
   GetProfileUsecase,
   GetTandemsUsecase,
@@ -112,6 +115,7 @@ const usecases: Provider[] = [
   GetUniversityUsecase,
   UpdateUniversityNameUsecase,
   // Users
+  AskForAccountDeletionUsecase,
   CreateUserUsecase,
   DeleteUserUsecase,
   GetUsersUsecase,

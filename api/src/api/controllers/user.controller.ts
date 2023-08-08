@@ -6,7 +6,6 @@ import {
   Patch,
   Param,
   Delete,
-  Logger,
   Query,
   UseGuards,
   ParseUUIDPipe,
@@ -20,8 +19,10 @@ import {
   CreateUserRequest,
   PaginationDto,
   UpdateUserRequest,
+  AskForAccountDeletionRequest,
 } from '../dtos';
 import {
+  AskForAccountDeletionUsecase,
   CreateUserUsecase,
   DeleteUserUsecase,
   GetUsersUsecase,
@@ -33,13 +34,14 @@ import { AuthenticationGuard } from '../guards';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { ImagesFilePipe } from '../validators/images.validator';
 import { UploadAvatarUsecase } from 'src/core/usecases';
+import { Roles } from '../decorators/roles.decorator';
+import { configuration } from 'src/configuration';
 
 @Controller('users')
 @Swagger.ApiTags('Users')
 export class UserController {
-  private readonly logger = new Logger(UserController.name);
-
   constructor(
+    private readonly askForAccountDeletionUsecase: AskForAccountDeletionUsecase,
     private readonly createUserUsecase: CreateUserUsecase,
     private readonly uploadAvatarUsecase: UploadAvatarUsecase,
     private readonly getUsersUsecase: GetUsersUsecase,
@@ -72,6 +74,8 @@ export class UserController {
   }
 
   @Get()
+  @Roles(configuration().adminRole)
+  @UseGuards(AuthenticationGuard)
   @Swagger.ApiOperation({ summary: 'Collection of User ressource.' })
   @CollectionResponse(UserResponse)
   async findAll(@Query() { page, limit }: PaginationDto) {
@@ -87,6 +91,8 @@ export class UserController {
   }
 
   @Get(':id')
+  @Roles(configuration().adminRole)
+  @UseGuards(AuthenticationGuard)
   @Swagger.ApiOperation({ summary: 'User ressource.' })
   @Swagger.ApiOkResponse({ type: UserResponse })
   async findOne(@Param('id', ParseUUIDPipe) id: string) {
@@ -96,6 +102,7 @@ export class UserController {
   }
 
   @Patch(':id')
+  @UseGuards(AuthenticationGuard)
   @Swagger.ApiOperation({ summary: 'Updates a User ressource.' })
   @Swagger.ApiOkResponse()
   async update(
@@ -105,7 +112,19 @@ export class UserController {
     await this.updateUserUsecase.execute({ id, ...request });
   }
 
+  @Post(':id/ask-deletion')
+  @UseGuards(AuthenticationGuard)
+  @Swagger.ApiOperation({ summary: 'Ask for account deletion.' })
+  @Swagger.ApiOkResponse()
+  async askForAccountDeletion(
+    @Param('id', ParseUUIDPipe) id: string,
+    @Body() { reason }: AskForAccountDeletionRequest,
+  ) {
+    await this.askForAccountDeletionUsecase.execute({ user: id, reason });
+  }
+
   @Delete(':id')
+  @Roles(configuration().adminRole)
   @UseGuards(AuthenticationGuard)
   @Swagger.ApiOperation({ summary: 'Deletes a User ressource.' })
   @Swagger.ApiOkResponse()

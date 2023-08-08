@@ -32,7 +32,7 @@ describe('Countries', () => {
     await app.teardown();
   });
 
-  test('GetCollection', async () => {
+  test('GetCollection with default pagination', async () => {
     const countries = factory.makeMany(100);
     repository.init(countries);
 
@@ -42,6 +42,34 @@ describe('Countries', () => {
 
     const { items, totalItems } = body;
     expect(items).toHaveLength(30);
+    expect(totalItems).toEqual(100);
+  });
+
+  // get collection with pagination
+  test('GetCollection with pagination', async () => {
+    const countries = factory.makeMany(100);
+    repository.init(countries);
+
+    const { body } = await request(app.getHttpServer())
+      .get('/countries?page=2&limit=10')
+      .expect(200);
+
+    const { items, totalItems } = body;
+    expect(items).toHaveLength(10);
+    expect(totalItems).toEqual(100);
+  });
+
+  // get collection without pagination
+  test('GetCollection without pagination', async () => {
+    const countries = factory.makeMany(100);
+    repository.init(countries);
+
+    const { body } = await request(app.getHttpServer())
+      .get('/countries?pagination=false')
+      .expect(200);
+
+    const { items, totalItems } = body;
+    expect(items).toHaveLength(100);
     expect(totalItems).toEqual(100);
   });
 

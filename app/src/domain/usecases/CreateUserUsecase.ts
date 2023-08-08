@@ -25,6 +25,7 @@ class CreateUserUsecase implements CreateUserUsecaseInterface {
             //TODO: Change this when api will be ready ( test is ignored too)
             /*
             const body = {
+                file: avatar,
                 email,
                 password,
                 firstname,
@@ -34,10 +35,9 @@ class CreateUserUsecase implements CreateUserUsecaseInterface {
                 university: university.id,
                 role,
                 countryCode,
-                avatar
             };
             const httpResponse: HttpResponse<undefined> = await this.domainHttpAdapter.post(
-                `/users/`,
+                `/users`,
                 body,
                 {},
                 'multipart/form-data'

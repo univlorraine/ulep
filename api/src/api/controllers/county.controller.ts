@@ -6,6 +6,7 @@ import {
   ParseUUIDPipe,
   Patch,
   Query,
+  UseGuards,
 } from '@nestjs/common';
 import * as Swagger from '@nestjs/swagger';
 import { Collection } from '@app/common';
@@ -19,6 +20,9 @@ import {
   GetCountriesQueryParams,
   UpdateCountryRequest,
 } from '../dtos';
+import { configuration } from 'src/configuration';
+import { Roles } from '../decorators/roles.decorator';
+import { AuthenticationGuard } from '../guards';
 
 @Controller('countries')
 @Swagger.ApiTags('Countries')
@@ -45,6 +49,8 @@ export class CountryController {
   }
 
   @Patch(':id')
+  @Roles(configuration().adminRole)
+  @UseGuards(AuthenticationGuard)
   @Swagger.ApiOperation({ summary: 'Update a Country ressource.' })
   async update(
     @Param('id', ParseUUIDPipe) id: string,

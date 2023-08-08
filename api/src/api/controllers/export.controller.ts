@@ -1,6 +1,9 @@
-import { Controller, Get, Res } from '@nestjs/common';
+import { Controller, Get, Res, UseGuards } from '@nestjs/common';
 import * as Swagger from '@nestjs/swagger';
 import { GetProfilesUsecase } from 'src/core/usecases/profiles/get-profiles.usecase';
+import { Roles } from '../decorators/roles.decorator';
+import { configuration } from 'src/configuration';
+import { AuthenticationGuard } from '../guards';
 
 @Controller('export')
 @Swagger.ApiExcludeController()
@@ -8,6 +11,8 @@ export class ExportController {
   constructor(private readonly getProfilesUsecase: GetProfilesUsecase) {}
 
   @Get('profiles')
+  @Roles(configuration().adminRole)
+  @UseGuards(AuthenticationGuard)
   async profiles(@Res() response: any): Promise<any> {
     const data = await this.getProfilesUsecase.execute({
       page: 1,

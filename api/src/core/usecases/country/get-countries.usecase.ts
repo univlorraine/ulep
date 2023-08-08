@@ -8,6 +8,7 @@ import {
 
 export class GetCountriesCommand {
   enable?: boolean;
+  pagination?: boolean;
   page?: number;
   limit?: number;
 }
@@ -22,13 +23,12 @@ export class GetCountriesUsecase {
   async execute(
     command: GetCountriesCommand,
   ): Promise<Collection<CountryCode>> {
-    const { enable, page = 1, limit = 30 } = command;
+    const { enable, pagination = true, page = 1, limit = 30 } = command;
 
     const result = await this.countryRepository.all({
       where: { enable },
       orderBy: { name: 'asc' },
-      page: page,
-      limit: limit,
+      pagination: pagination ? { page, limit } : undefined,
     });
 
     return result;

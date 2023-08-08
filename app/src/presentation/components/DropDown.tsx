@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react';
+import { ArrowDownSvg } from '../../assets';
 import styles from './DropDown.module.css';
 
 export interface DropDownItem<T> {
@@ -37,7 +38,7 @@ const Dropdown = <T,>({ onChange, options, placeholder, title }: DropdownProps<T
             <div className={styles.container}>
                 <button className={styles.button} onClick={() => setIsOpen(!isOpen)}>
                     {selectedOption ? selectedOption.title : placeholder}
-                    <img alt="arrow-down" src="/assets/arrow-down.svg" />
+                    <img alt="arrow-down" src={ArrowDownSvg} />
                 </button>
                 {isOpen && (
                     <div className={styles.menu}>

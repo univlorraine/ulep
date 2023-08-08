@@ -22,6 +22,7 @@ export class PrismaUserRepository implements UserRepository {
         role: user.role,
         Nationality: { connect: { code: user.country } },
         deactivated: user.deactivated,
+        deactivated_reason: user.deactivatedReason,
       },
       include: {
         Organization: { include: UniversityRelations },
@@ -67,10 +68,20 @@ export class PrismaUserRepository implements UserRepository {
     return userMapper(instance);
   }
 
-  async update(id: string, age: number): Promise<void> {
+  async update(user: User): Promise<void> {
     await this.prisma.users.update({
-      where: { id },
-      data: { age },
+      where: { id: user.id },
+      data: {
+        Organization: { connect: { id: user.university.id } },
+        firstname: user.firstname,
+        lastname: user.lastname,
+        age: user.age,
+        gender: user.gender,
+        role: user.role,
+        Nationality: { connect: { code: user.country } },
+        deactivated: user.deactivated,
+        deactivated_reason: user.deactivatedReason,
+      },
     });
   }
 

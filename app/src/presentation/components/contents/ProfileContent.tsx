@@ -1,5 +1,6 @@
 import { useIonToast } from '@ionic/react';
 import { useTranslation } from 'react-i18next';
+import { ArrowLeftSvg, ArrowRightSvg, EditSvg, ParameterSvg, SmallAvatarSvg } from '../../../assets';
 import { useConfig } from '../../../context/ConfigurationContext';
 import { useStoreActions } from '../../../store/storeTypes';
 import styles from './ProfileContent.module.css';
@@ -42,7 +43,7 @@ const ProfileContent: React.FC<ProfileContentProps> = ({
         <div className={styles.container}>
             <div>
                 <button className={styles['back-button']} onClick={onClose}>
-                    <img alt="arrow-left" src="/assets/left-arrow.svg" />
+                    <img alt="arrow-left" src={ArrowLeftSvg} />
                 </button>
             </div>
             <div className={styles.content}>
@@ -52,26 +53,26 @@ const ProfileContent: React.FC<ProfileContentProps> = ({
 
                 <button className={`${styles.button} margin-bottom`} onClick={changeAvatar}>
                     <div className={styles['button-container']}>
-                        <img alt="edit" src="/assets/edit.svg" />
+                        <img alt="edit" src={EditSvg} />
                         <span className="margin-left">{t('home_page.profile.edit')}</span>
                     </div>
-                    <img alt="arrow-right" src="/assets/arrow-right.svg" />
+                    <img alt="arrow-right" src={ArrowRightSvg} />
                 </button>
 
                 <button className={`${styles.button} margin-bottom`} onClick={onParameterPressed}>
                     <div className={styles['button-container']}>
-                        <img alt="parameter" src="/assets/parameter.svg" />
+                        <img alt="parameter" src={ParameterSvg} />
                         <span className="margin-left">{t('home_page.profile.parameters')}</span>
                     </div>
-                    <img alt="arrow-right" src="/assets/arrow-right.svg" />
+                    <img alt="arrow-right" src={ArrowRightSvg} />
                 </button>
 
                 <button className={styles.button} onClick={() => logout()}>
                     <div className={styles['button-container']}>
-                        <img alt="disconnect" src="/assets/small-avatar.svg" />
+                        <img alt="disconnect" src={SmallAvatarSvg} />
                         <span className="margin-left">{t('home_page.profile.disconnect')}</span>
                     </div>
-                    <img alt="arrow-right" src="/assets/arrow-right.svg" />
+                    <img alt="arrow-right" src={ArrowRightSvg} />
                 </button>
             </div>
         </div>

@@ -3,6 +3,7 @@ import { KeycloakConfiguration } from '@app/keycloak';
 export type Configuration = {
   port: number;
   keycloak: KeycloakConfiguration;
+  adminRole: string;
 };
 
 export const configuration = (): Configuration => ({
@@ -15,4 +16,5 @@ export const configuration = (): Configuration => ({
     clientId: process.env.KEYCLOAK_CLIENT_ID,
     clientSecret: process.env.KEYCLOAK_CLIENT_SECRET,
   },
+  adminRole: process.env.ADMIN_ROLE || 'admin',
 });
