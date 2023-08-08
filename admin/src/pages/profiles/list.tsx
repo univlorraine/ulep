@@ -7,10 +7,10 @@ const ProfileList = (props: any) => {
     return (
         <List title={translate('profiles.label')} {...props}>
             <Datagrid rowClick="show">
-                <TextField label={translate('profiles.role')} sortable={false} source="user.role" />
-                <TextField label={translate('profiles.lastname')} sortable={false} source="user.lastname" />
-                <TextField label={translate('profiles.firstname')} sortable={false} source="user.firstname" />
-                <TextField label={translate('profiles.email')} sortable={false} source="user.email" />
+                <TextField label={translate('profiles.role')} source="user.role" sortable />
+                <TextField label={translate('profiles.lastname')} source="user.lastname" sortable />
+                <TextField label={translate('profiles.firstname')} source="user.firstname" sortable />
+                <TextField label={translate('profiles.email')} source="user.email" sortable />
                 <TextField label={translate('profiles.university')} sortable={false} source="user.university.name" />
                 <TextField
                     label={translate('profiles.native_language')}
@@ -26,7 +26,6 @@ const ProfileList = (props: any) => {
                         <ChipField source="code" />
                     </SingleFieldList>
                 </ArrayField>
-                {/* <BooleanField sortable={false} source="certificate" /> */}
             </Datagrid>
         </List>
     );

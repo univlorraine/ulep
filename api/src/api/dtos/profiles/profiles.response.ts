@@ -89,11 +89,6 @@ export class ProfileResponse {
   }
 
   static fromDomain(profile: Profile): ProfileResponse {
-    console.log(
-      profile.masteredLanguages.map((masteredLanguage) => ({
-        code: masteredLanguage.code,
-      })),
-    );
     return new ProfileResponse({
       id: profile.id,
       user: UserResponse.fromDomain(profile.user),
