@@ -1,23 +1,20 @@
-import { CollectionCommand } from '../../../src/command/CollectionCommand';
 import UniversityCommand from '../../../src/command/UniversityCommand';
+import Language from '../../../src/domain/entities/Language';
 import University from '../../../src/domain/entities/University';
 import GetAllUniversitiesUsecase from '../../../src/domain/usecases/GetAllUniversitiesUsecase';
 import DomainHttpAdapter from '../../mocks/adapters/HttpAdapter';
 
-const usecaseResponse: CollectionCommand<UniversityCommand> = {
-    items: [
-        {
-            id: 'id',
-            name: 'name',
-            campus: ['Campus A', 'Campus B'],
-            languages: ['FR', 'CN'],
-            parent: undefined,
-            timezone: 'timezone',
-            website: 'website',
-        },
-    ],
-    totalItems: 1,
-};
+const usecaseResponse: UniversityCommand[] = [
+    {
+        id: 'id',
+        name: 'name',
+        sites: ['Campus A', 'Campus B'],
+        languages: [new Language('id', 'FR', 'French'), new Language('id2', 'CN', 'Chinese')],
+        parent: undefined,
+        timezone: 'timezone',
+        website: 'website',
+    },
+];
 
 describe('getAllUniversities', () => {
     let adapter: DomainHttpAdapter;

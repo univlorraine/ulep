@@ -1,16 +1,18 @@
-import LanguageCommand from '../../../src/command/LanguageCommand';
-import Language from '../../../src/domain/entities/Language';
-import GetAllLanguagesUsecase from '../../../src/domain/usecases/GetAllLanguagesUsecase';
+import CategoryInterestsCommand from '../../../src/command/CategoryInterestsCommand';
+import CategoryInterests from '../../../src/domain/entities/CategoryInterests';
+import GetAllInterestCategoriesUsecase from '../../../src/domain/usecases/GetAllInterestCategoriesUsecase';
 import DomainHttpAdapter from '../../mocks/adapters/HttpAdapter';
 
-const usecaseResponse: LanguageCommand[] = [{ id: 'ID', code: 'code', name: 'name' }];
+const usecaseResponse: CategoryInterestsCommand[] = [
+    { id: 'id', name: 'name', interests: [{ id: 'id', name: 'name' }] },
+];
 
-describe('getAllLanguages', () => {
+describe('getAllGoals', () => {
     let adapter: DomainHttpAdapter;
-    let usecase: GetAllLanguagesUsecase;
+    let usecase: GetAllInterestCategoriesUsecase;
     beforeAll(() => {
         adapter = new DomainHttpAdapter();
-        usecase = new GetAllLanguagesUsecase(adapter);
+        usecase = new GetAllInterestCategoriesUsecase(adapter);
     });
 
     afterEach(() => {
@@ -23,16 +25,7 @@ describe('getAllLanguages', () => {
         adapter.mockJson({ parsedBody: usecaseResponse });
         await usecase.execute();
         expect(adapter.get).toHaveBeenCalledTimes(1);
-        expect(adapter.get).toHaveBeenCalledWith('/languages');
-    });
-
-    it('execute function must call DomainHttpAdapter with universityId', async () => {
-        expect.assertions(2);
-        jest.spyOn(adapter, 'get');
-        adapter.mockJson({ parsedBody: usecaseResponse });
-        await usecase.execute('id');
-        expect(adapter.get).toHaveBeenCalledTimes(1);
-        expect(adapter.get).toHaveBeenCalledWith('/universities/id/languages');
+        expect(adapter.get).toHaveBeenCalledWith('/interests/categories');
     });
 
     it('execute must return an expected response', async () => {
@@ -40,7 +33,7 @@ describe('getAllLanguages', () => {
 
         adapter.mockJson({ parsedBody: usecaseResponse });
 
-        const result = (await usecase.execute()) as Language[];
+        const result = (await usecase.execute()) as CategoryInterests[];
         expect(result).toHaveLength(1);
     });
 

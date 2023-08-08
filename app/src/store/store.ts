@@ -20,6 +20,7 @@ const Store = createStore<TokenStoreTypes>(
             state.accessToken = '';
             state.profile = undefined;
             state.refreshToken = '';
+            state.user = undefined;
         }),
         profile: undefined,
         profileSignUp: new ProfileSignUp(),

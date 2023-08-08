@@ -5,7 +5,7 @@ import GetAllCountriesUsecase from '../../../src/domain/usecases/GetAllCountries
 import DomainHttpAdapter from '../../mocks/adapters/HttpAdapter';
 
 const usecaseResponse: CollectionCommand<CountryCommand> = {
-    items: [{ id: 'id', name: 'name', code: 'code' }],
+    items: [{ id: 'id', name: 'name', code: 'code', emoji: '🤖' }],
     totalItems: 1,
 };
 

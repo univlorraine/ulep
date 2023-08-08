@@ -1,16 +1,16 @@
-import LanguageCommand from '../../../src/command/LanguageCommand';
-import Language from '../../../src/domain/entities/Language';
-import GetAllLanguagesUsecase from '../../../src/domain/usecases/GetAllLanguagesUsecase';
+import GoalCommand from '../../../src/command/GoalCommand';
+import Goal from '../../../src/domain/entities/Goal';
+import GetAllGoalsUsecase from '../../../src/domain/usecases/GetAllGoalsUsecase';
 import DomainHttpAdapter from '../../mocks/adapters/HttpAdapter';
 
-const usecaseResponse: LanguageCommand[] = [{ id: 'ID', code: 'code', name: 'name' }];
+const usecaseResponse: GoalCommand[] = [{ id: 'id', name: 'name', image: '' }];
 
-describe('getAllLanguages', () => {
+describe('getAllGoals', () => {
     let adapter: DomainHttpAdapter;
-    let usecase: GetAllLanguagesUsecase;
+    let usecase: GetAllGoalsUsecase;
     beforeAll(() => {
         adapter = new DomainHttpAdapter();
-        usecase = new GetAllLanguagesUsecase(adapter);
+        usecase = new GetAllGoalsUsecase(adapter);
     });
 
     afterEach(() => {
@@ -23,16 +23,7 @@ describe('getAllLanguages', () => {
         adapter.mockJson({ parsedBody: usecaseResponse });
         await usecase.execute();
         expect(adapter.get).toHaveBeenCalledTimes(1);
-        expect(adapter.get).toHaveBeenCalledWith('/languages');
-    });
-
-    it('execute function must call DomainHttpAdapter with universityId', async () => {
-        expect.assertions(2);
-        jest.spyOn(adapter, 'get');
-        adapter.mockJson({ parsedBody: usecaseResponse });
-        await usecase.execute('id');
-        expect(adapter.get).toHaveBeenCalledTimes(1);
-        expect(adapter.get).toHaveBeenCalledWith('/universities/id/languages');
+        expect(adapter.get).toHaveBeenCalledWith('/objectives');
     });
 
     it('execute must return an expected response', async () => {
@@ -40,7 +31,7 @@ describe('getAllLanguages', () => {
 
         adapter.mockJson({ parsedBody: usecaseResponse });
 
-        const result = (await usecase.execute()) as Language[];
+        const result = (await usecase.execute()) as Goal[];
         expect(result).toHaveLength(1);
     });
 
