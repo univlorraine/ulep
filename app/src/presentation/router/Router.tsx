@@ -35,6 +35,7 @@ import TandemProfilePage from '../pages/mobile/TandemProfilePage';
 import TandemStatusPage from '../pages/mobile/TandemStatusPage';
 import MobileRoute from './MobileRoute';
 import PrivateRoute from './PrivateRoute';
+import WelcomePage from '../pages/WelcomePage';
 
 const OfflineRouter: React.FC = () => {
     //TODO: Update this when suspended variable will be in profile
@@ -47,7 +48,7 @@ const OfflineRouter: React.FC = () => {
     return (
         <IonRouterOutlet>
             <Route exact path="/">
-                <HomePage />
+                <WelcomePage />
             </Route>
             <Route exact path="/home">
                 <HomePage />

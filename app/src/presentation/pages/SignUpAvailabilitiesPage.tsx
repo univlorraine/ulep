@@ -9,6 +9,7 @@ import AvailabilityLine from '../components/AvailabilityLine';
 import Dropdown from '../components/DropDown';
 import WebLayoutCentered from '../components/layout/WebLayoutCentered';
 import AvailabilityModal from '../components/modals/AvailabilityModal';
+import AvailabilityNoteModal from '../components/modals/AvailabilityNoteModal';
 import styles from './css/SignUp.module.css';
 import availabilitiesStyles from './css/SignUpAvailabilities.module.css';
 
@@ -29,26 +30,27 @@ const SignUpAvailabilitiesPage: React.FC = () => {
     const updateProfileSignUp = useStoreActions((state) => state.updateProfileSignUp);
     const profileSignUp = useStoreState((state) => state.profileSignUp);
     // @ts-ignore
-    const [timezone, setTimezone] = useState<string>(profileSignUp._timezone);
+    const [timezone, setTimezone] = useState<string>(profileSignUp.university.timezone);
     const [availabilities, setAvailabilities] = useState<Availabilites>(initialAvailabilities);
-    const [openModal, setOpenModal] = useState<{ id: string; occurence: occurence } | null>();
+    const [openAvailabilityModal, setOpenAvailabilityModal] = useState<{ id: string; occurence: occurence } | null>();
+    const [openFinalModal, setOpenFinalModal] = useState<boolean>(false);
 
     if (!profileSignUp.university) {
         return <Redirect to={'/signup'} />;
     }
 
-    const continueSignUp = async () => {
-        updateProfileSignUp({ availabilities, timezone });
+    const continueSignUp = async (note?: string, isPrivate?: boolean) => {
+        updateProfileSignUp({ availabilities, availabilityNote: note, availabilityNotePrivate: isPrivate, timezone });
 
         history.push('/signup/frequency');
     };
 
     const updateAvailabilities = (occurence: occurence, note?: string, isPrivate?: boolean) => {
-        if (!openModal || !openModal) {
+        if (!openAvailabilityModal) {
             return;
         }
         const currentAvailabilities = { ...availabilities };
-        const key = openModal.id as keyof Availabilites;
+        const key = openAvailabilityModal.id as keyof Availabilites;
         currentAvailabilities[key].occurence = occurence;
         if (note) {
             currentAvailabilities[key].note = note;
@@ -57,7 +59,7 @@ const SignUpAvailabilitiesPage: React.FC = () => {
             currentAvailabilities[key].occurence = occurence;
         }
         setAvailabilities(currentAvailabilities);
-        return setOpenModal(undefined);
+        return setOpenAvailabilityModal(undefined);
     };
 
     return (
@@ -92,22 +94,27 @@ const SignUpAvailabilitiesPage: React.FC = () => {
                             <AvailabilityLine
                                 availability={availabilities[availabilityKey as keyof Availabilites]}
                                 day={availabilityKey}
-                                onPress={(item) => setOpenModal(item)}
+                                onPress={(item) => setOpenAvailabilityModal(item)}
                             />
                         );
                     })}
                 </div>
                 <div className={`large-margin-top extra-large-margin-bottom`}>
-                    <button className="primary-button" onClick={continueSignUp}>
+                    <button className="primary-button" onClick={() => setOpenFinalModal(true)}>
                         {t('signup_availabilities_page.validate_button')}
                     </button>
                 </div>
                 <AvailabilityModal
-                    currentOccurence={openModal?.occurence}
-                    onClose={() => setOpenModal(undefined)}
+                    currentOccurence={openAvailabilityModal?.occurence}
+                    onClose={() => setOpenAvailabilityModal(undefined)}
                     onValidate={updateAvailabilities}
-                    isVisible={!!openModal}
-                    title={t(`days.${openModal?.id}`)}
+                    isVisible={!!openAvailabilityModal}
+                    title={t(`days.${openAvailabilityModal?.id}`)}
+                />
+                <AvailabilityNoteModal
+                    isVisible={openFinalModal}
+                    onClose={() => setOpenFinalModal(false)}
+                    onValidate={continueSignUp}
                 />
             </div>
         </WebLayoutCentered>

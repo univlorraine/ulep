@@ -14,6 +14,8 @@ export interface TokenStorePayload {
 export interface SignUpStorePayload {
     age?: number;
     availabilities?: Availabilites;
+    availabilityNote?: string;
+    availabilityNotePrivate?: boolean;
     biography?: BiographySignUp;
     country?: Country;
     department?: string;

@@ -26,6 +26,10 @@ class ProfileSignUp {
 
     public availabilities?: Availabilites;
 
+    public availabilityNote?: string;
+
+    public availabilityNotePrivate?: boolean;
+
     public biography?: BiographySignUp;
 
     public country?: Country;
