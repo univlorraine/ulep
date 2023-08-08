@@ -99,10 +99,10 @@ export class CreateProfileUsecase {
     const learningLanguages = await Promise.all(
       command.learningLanguages.map(async (learningLanguage) => {
         const language = await this.tryToFindTheLanguageOfCode(
-          learningLanguage.code || JOKER_LANGUAGE_CODE,
+          learningLanguage.code,
         );
 
-        if (learningLanguage.code) {
+        if (learningLanguage.code !== JOKER_LANGUAGE_CODE) {
           this.assertLanguageIsSupportedByUniversity(
             user.university,
             learningLanguage.code,

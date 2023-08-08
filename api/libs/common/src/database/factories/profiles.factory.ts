@@ -17,7 +17,7 @@ export class ProfileFactory extends ModelFactory<Profile> {
         'ONCE_A_WEEK',
         'TWICE_A_WEEK',
       ]),
-      learningLanguages: [], // TODO
+      learningLanguages: [],
       sameGender: faker.datatype.boolean(),
       sameAge: faker.datatype.boolean(),
       objectives: [],
