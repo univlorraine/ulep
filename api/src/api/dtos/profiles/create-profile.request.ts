@@ -11,7 +11,7 @@ import {
   ValidateNested,
   IsArray,
 } from 'class-validator';
-import { LearningType, LearningLanguage } from 'src/core/models';
+import { LearningType } from 'src/core/models';
 import { CreateProfileCommand } from 'src/core/usecases/profiles/create-profile.usecase';
 import { BiographyDto } from './biography';
 import { Transform } from 'class-transformer';
@@ -33,7 +33,7 @@ export class CreateProfileRequest
   @IsArray()
   @Transform(({ value }) => value.map((val) => new LearningLanguageDto(val)))
   @ValidateNested()
-  learningLanguages: LearningLanguage[];
+  learningLanguages: LearningLanguageDto[];
 
   // TODO(herve): we should use ids instead of codes
   @ApiPropertyOptional({ type: 'string', example: ['FR'] })

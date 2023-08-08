@@ -37,6 +37,7 @@ model LanguageCodes {
   SuggestedLanguages SuggestedLanguages[]
   Translations       Translations[]
   TextContents       TextContent[]
+  LearningLanguages  LearningLanguages[]
 
   @@unique([name])
   @@unique([code])
@@ -252,6 +253,7 @@ model Profiles {
   User                      Users                @relation(fields: [user_id], references: [id], onDelete: Cascade)
   NativeLanguage            LanguageCodes        @relation("NativeLanguage", fields: [native_language_code_id], references: [id])
   LearningLanguage          LanguageCodes?       @relation("LearningLanguage", fields: [learning_language_code_id], references: [id])
+  LearningLanguages         LearningLanguages[]
   MasteredLanguages         MasteredLanguages[]
   Goals                     LearningObjectives[]
   Interests                 Interests[]
@@ -286,6 +288,19 @@ model LearningObjectives {
 
   @@unique([text_content_id])
   @@map("goals")
+}
+
+model LearningLanguages {
+  profile_id       String
+  language_code_id String
+  created_at       DateTime      @default(now())
+  updated_at       DateTime      @updatedAt
+  level            String
+  Profile          Profiles      @relation(fields: [profile_id], references: [id])
+  LanguageCode     LanguageCodes @relation(fields: [language_code_id], references: [id])
+
+  @@id([profile_id, language_code_id])
+  @@map("learning_languages")
 }
 
 //  * ****************************************************

@@ -106,6 +106,16 @@ export class PrismaProfileRepository implements ProfileRepository {
         LearningLanguage: profile.learningLanguage?.id && {
           connect: { id: profile.learningLanguage.id },
         },
+        LearningLanguages: {
+          create: profile.learningLanguages.map((learningLanguage) => {
+            return {
+              LanguageCode: {
+                connect: { code: learningLanguage.language.code },
+              },
+              level: learningLanguage.level,
+            };
+          }),
+        },
         level: profile.level,
         MasteredLanguages: {
           create: profile.masteredLanguages.map((language) => {

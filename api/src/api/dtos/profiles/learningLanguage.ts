@@ -16,6 +16,9 @@ export class LearningLanguageDto {
   }
 
   static fromDomain(learningLanguage: LearningLanguage): LearningLanguageDto {
-    return new LearningLanguageDto(learningLanguage);
+    return new LearningLanguageDto({
+      code: learningLanguage.language.code,
+      level: learningLanguage.level,
+    });
   }
 }

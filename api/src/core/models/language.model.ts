@@ -19,8 +19,6 @@ export class Language {
 }
 
 export interface LearningLanguage {
-  // Learning language code
-  code: string;
-  // level
+  language: Language;
   level: ProficiencyLevel;
 }
