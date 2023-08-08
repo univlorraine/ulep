@@ -10,7 +10,7 @@ export type FindWhereProps = {
   limit?: number;
 };
 
-export interface TandemsRepository {
+export interface TandemRepository {
   save(tandem: Tandem): Promise<void>;
 
   hasActiveTandem(profileId: string): Promise<boolean>;

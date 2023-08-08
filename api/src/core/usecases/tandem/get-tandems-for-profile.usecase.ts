@@ -6,7 +6,7 @@ import {
 } from 'src/core/ports/profile.repository';
 import {
   TANDEM_REPOSITORY,
-  TandemsRepository,
+  TandemRepository,
 } from 'src/core/ports/tandems.repository';
 
 export class GetTandemsForProfileCommand {
@@ -19,7 +19,7 @@ export class GetTandemsForProfileUsecase {
     @Inject(PROFILE_REPOSITORY)
     private readonly profileRepository: ProfileRepository,
     @Inject(TANDEM_REPOSITORY)
-    private readonly tandemRepository: TandemsRepository,
+    private readonly tandemRepository: TandemRepository,
   ) {}
 
   async execute(command: GetTandemsForProfileCommand) {

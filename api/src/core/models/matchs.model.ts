@@ -7,15 +7,37 @@ export type CreateMatchProps = {
   scores: MatchScores;
 };
 
-export type MatchScores = {
-  level: number;
-  age: number;
-  status: number;
-  goals: number;
-  interests: number;
-  gender: number;
-  university: number;
-};
+export class MatchScores {
+  readonly level: number;
+  readonly age: number;
+  readonly status: number;
+  readonly goals: number;
+  readonly interests: number;
+  readonly gender: number;
+  readonly university: number;
+
+  constructor(props: MatchScores) {
+    this.level = props.level;
+    this.age = props.age;
+    this.status = props.status;
+    this.goals = props.goals;
+    this.interests = props.interests;
+    this.gender = props.gender;
+    this.university = props.university;
+  }
+
+  static empty(): MatchScores {
+    return new MatchScores({
+      level: 0,
+      age: 0,
+      status: 0,
+      goals: 0,
+      interests: 0,
+      gender: 0,
+      university: 0,
+    });
+  }
+}
 
 export class Match {
   readonly owner: Profile;

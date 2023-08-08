@@ -3,7 +3,7 @@ import { Collection } from '@app/common';
 import { Tandem, TandemStatus } from 'src/core/models';
 import {
   TANDEM_REPOSITORY,
-  TandemsRepository,
+  TandemRepository,
 } from 'src/core/ports/tandems.repository';
 
 export class GetTandemsCommand {
@@ -15,7 +15,7 @@ export class GetTandemsCommand {
 export class GetTandemsUsecase {
   constructor(
     @Inject(TANDEM_REPOSITORY)
-    private readonly tandemsRepository: TandemsRepository,
+    private readonly tandemsRepository: TandemRepository,
   ) {}
 
   async execute(command: GetTandemsCommand): Promise<Collection<Tandem>> {

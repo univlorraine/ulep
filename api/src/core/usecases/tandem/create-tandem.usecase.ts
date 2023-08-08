@@ -8,7 +8,7 @@ import {
 } from 'src/core/ports/profile.repository';
 import {
   TANDEM_REPOSITORY,
-  TandemsRepository,
+  TandemRepository,
 } from 'src/core/ports/tandems.repository';
 
 export type CreateTandemCommand = {
@@ -25,7 +25,7 @@ export class CreateTandemUsecase {
     @Inject(PROFILE_REPOSITORY)
     private readonly profilesRepository: ProfileRepository,
     @Inject(TANDEM_REPOSITORY)
-    private readonly tandemsRepository: TandemsRepository,
+    private readonly tandemsRepository: TandemRepository,
   ) {}
 
   async execute(command: CreateTandemCommand): Promise<void> {
