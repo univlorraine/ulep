@@ -71,7 +71,8 @@ export class Profile {
 
     this.assertLanguesAreUnique();
 
-    if (!props.learningLanguage.code) {
+    // We set level to A0 for joker language
+    if (!props.learningLanguage?.code) {
       this.level = ProficiencyLevel.A0;
     }
   }

@@ -44,7 +44,7 @@ export class ProfileResponse {
   @Transform(({ value }) => new NativeLanguageResponse(value))
   nativeLanguage: NativeLanguageResponse;
 
-  @ApiProperty()
+  @ApiProperty({ nullable: true })
   @Expose({ groups: ['read'] })
   @Transform(({ value }) => new LearningLanguageResponse(value))
   learningLanguage: LearningLanguageResponse;
@@ -77,7 +77,7 @@ export class ProfileResponse {
         code: profile.nativeLanguage.code,
       },
       learningLanguage: {
-        code: profile.learningLanguage.code,
+        code: profile.learningLanguage?.code,
         level: profile.level,
       },
       objectives: profile.objectives.map(ObjectiveResponse.fromDomain),

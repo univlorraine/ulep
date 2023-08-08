@@ -1,3 +1,5 @@
+import { ProficiencyLevel } from './proficiency.model';
+
 export type LanguageProps = {
   id: string;
   code: string;
@@ -14,4 +16,11 @@ export class Language {
     this.code = props.code;
     this.name = props.name;
   }
+}
+
+export interface LearningLanguage {
+  // Learning language code
+  code: string;
+  // level
+  level: ProficiencyLevel;
 }

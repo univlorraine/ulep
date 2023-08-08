@@ -103,7 +103,7 @@ export class PrismaProfileRepository implements ProfileRepository {
         NativeLanguage: {
           connect: { id: profile.nativeLanguage.id },
         },
-        LearningLanguage: {
+        LearningLanguage: profile.learningLanguage?.id && {
           connect: { id: profile.learningLanguage.id },
         },
         level: profile.level,

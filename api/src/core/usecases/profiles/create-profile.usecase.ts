@@ -8,6 +8,7 @@ import { UnsuportedLanguageException } from 'src/core/errors/unsuported-language
 import {
   Interest,
   Language,
+  LearningLanguage,
   LearningObjective,
   LearningType,
   ProficiencyLevel,
@@ -43,9 +44,8 @@ import {
 export class CreateProfileCommand {
   user: string;
   nativeLanguageCode: string;
-  learningLanguageCode?: string;
-  level: ProficiencyLevel;
   masteredLanguageCodes?: string[];
+  learningLanguages: LearningLanguage[];
   learningType: LearningType;
   objectives: string[];
   meetingFrequency: string;
@@ -88,21 +88,25 @@ export class CreateProfileUsecase {
     );
 
     const masteredLanguages = await Promise.all(
-      (command.masteredLanguageCodes ?? []).map(
-        this.tryToFindTheLanguageOfCode,
+      (command.masteredLanguageCodes ?? []).map((code) =>
+        this.tryToFindTheLanguageOfCode(code),
       ),
     );
 
+    // TODO: adapt with several learning langages
     let learningLanguage: Language | null = null;
-    if (command.learningLanguageCode) {
+    let level: ProficiencyLevel | null = null;
+    if (command.learningLanguages.length > 0) {
       learningLanguage = await this.tryToFindTheLanguageOfCode(
-        command.learningLanguageCode,
+        command.learningLanguages[0].code,
       );
 
       this.assertLanguageIsSupportedByUniversity(
         user.university,
         learningLanguage.code,
       );
+
+      level = command.learningLanguages[0].level;
     }
 
     const objectives = await Promise.all(
@@ -118,6 +122,7 @@ export class CreateProfileUsecase {
       learningLanguage,
       objectives,
       interests,
+      level,
     });
 
     await this.profilesRepository.create(profile);
