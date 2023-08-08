@@ -16,6 +16,16 @@ class NativeLanguageResponse {
   }
 }
 
+class MasteredLanguageResponse {
+  @ApiProperty({ type: 'string', example: 'FR' })
+  @Expose({ groups: ['read'] })
+  code: string;
+
+  constructor(partial: Partial<ProfileResponse>) {
+    Object.assign(this, partial);
+  }
+}
+
 class LearningLanguageResponse {
   @ApiPropertyOptional({ type: 'string', example: 'FR' })
   @Expose({ groups: ['read'] })
@@ -36,13 +46,22 @@ export class ProfileResponse {
   id: string;
 
   @ApiProperty()
-  @Expose({ groups: ['profile:read'] })
+  @Expose({ groups: ['read'] })
   user: UserResponse;
 
   @ApiProperty()
   @Expose({ groups: ['read'] })
   @Transform(({ value }) => new NativeLanguageResponse(value))
   nativeLanguage: NativeLanguageResponse;
+
+  @ApiProperty()
+  @Expose({ groups: ['read'] })
+  @Transform(({ value }) =>
+    value.map(
+      (masteredLanguage) => new MasteredLanguageResponse(masteredLanguage),
+    ),
+  )
+  masteredLanguages: MasteredLanguageResponse[];
 
   @ApiProperty()
   @Expose({ groups: ['read'] })
@@ -70,12 +89,20 @@ export class ProfileResponse {
   }
 
   static fromDomain(profile: Profile): ProfileResponse {
+    console.log(
+      profile.masteredLanguages.map((masteredLanguage) => ({
+        code: masteredLanguage.code,
+      })),
+    );
     return new ProfileResponse({
       id: profile.id,
       user: UserResponse.fromDomain(profile.user),
       nativeLanguage: {
         code: profile.nativeLanguage.code,
       },
+      masteredLanguages: profile.masteredLanguages.map((masteredLanguage) => ({
+        code: masteredLanguage.code,
+      })),
       learningLanguage: {
         code: profile.learningLanguage.code,
         level: profile.level,
