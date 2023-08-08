@@ -12,9 +12,9 @@ export class ProfileQueryFilter extends PaginationDto {
 
   @ApiPropertyOptional({ type: 'string' })
   @IsOptional()
-  field: ProfileQuerySortKey;
+  field?: ProfileQuerySortKey;
 
   @ApiPropertyOptional({ type: 'string' })
   @IsOptional()
-  order: SortOrder;
+  order?: SortOrder;
 }

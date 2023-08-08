@@ -140,7 +140,7 @@ export class PrismaProfileRepository implements ProfileRepository {
     const users = await this.prisma.profiles.findMany({
       where: { User: { email: where?.email } },
       skip: offset,
-      orderBy: { User: orderBy },
+      orderBy: orderBy ? { User: orderBy } : undefined,
       take: limit,
       include: ProfilesRelations,
     });
