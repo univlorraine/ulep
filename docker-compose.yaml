@@ -42,6 +42,7 @@ services:
     volumes:
       - ./docker/keycloak/providers:/opt/keycloak/providers
       - ./docker/keycloak/realms:/opt/keycloak/data/import
+    command: start --import-realm
     environment:
       KEYCLOAK_ADMIN: ${KEYCLOAK_USER:-admin}
       KEYCLOAK_ADMIN_PASSWORD: ${KEYCLOAK_PASSWORD:-!ChangeMe!}

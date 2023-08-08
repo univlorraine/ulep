@@ -2,6 +2,12 @@
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
+## Configuration
+
+Some environment variables are needed in order for this project to run successfuly.
+
+You can create an env file (e.g. `.env.local`) containing those variables.
+
 ## Available Scripts
 
 In the project directory, you can run:
