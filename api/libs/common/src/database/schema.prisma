@@ -32,7 +32,6 @@ model LanguageCodes {
   updated_at         DateTime             @updatedAt
   Organisations      Organizations[]
   NativeLanguages    Profiles[]           @relation("NativeLanguage")
-  LearningLanguage   Profiles[]           @relation("LearningLanguage")
   MasteredLanguages  MasteredLanguages[]
   SuggestedLanguages SuggestedLanguages[]
   Translations       Translations[]
@@ -238,30 +237,26 @@ model ReportCategories {
 //  * Pofiles
 //  * ****************************************************
 model Profiles {
-  id                        String               @id @default(uuid())
-  user_id                   String
-  native_language_code_id   String
-  learning_language_code_id String?
-  level                     String
-  learning_type             String
-  same_gender               Boolean
-  same_age                  Boolean
-  meeting_frequency         String
-  bio                       Json
-  created_at                DateTime             @default(now())
-  updated_at                DateTime             @updatedAt
-  User                      Users                @relation(fields: [user_id], references: [id], onDelete: Cascade)
-  NativeLanguage            LanguageCodes        @relation("NativeLanguage", fields: [native_language_code_id], references: [id])
-  LearningLanguage          LanguageCodes?       @relation("LearningLanguage", fields: [learning_language_code_id], references: [id])
-  LearningLanguages         LearningLanguages[]
-  MasteredLanguages         MasteredLanguages[]
-  Goals                     LearningObjectives[]
-  Interests                 Interests[]
-  Tandems                   ProfilesOnTandems[]
+  id                      String               @id @default(uuid())
+  user_id                 String
+  native_language_code_id String
+  learning_type           String
+  same_gender             Boolean
+  same_age                Boolean
+  meeting_frequency       String
+  bio                     Json
+  created_at              DateTime             @default(now())
+  updated_at              DateTime             @updatedAt
+  User                    Users                @relation(fields: [user_id], references: [id], onDelete: Cascade)
+  NativeLanguage          LanguageCodes        @relation("NativeLanguage", fields: [native_language_code_id], references: [id])
+  LearningLanguages       LearningLanguages[]
+  MasteredLanguages       MasteredLanguages[]
+  Goals                   LearningObjectives[]
+  Interests               Interests[]
+  Tandems                 ProfilesOnTandems[]
 
   @@unique([user_id])
   @@index([native_language_code_id], name: "native_language_code")
-  @@index([learning_language_code_id], name: "learning_language_code")
   @@map("profiles")
 }
 

@@ -103,9 +103,6 @@ export class PrismaProfileRepository implements ProfileRepository {
         NativeLanguage: {
           connect: { id: profile.nativeLanguage.id },
         },
-        LearningLanguage: profile.learningLanguage?.id && {
-          connect: { id: profile.learningLanguage.id },
-        },
         LearningLanguages: {
           create: profile.learningLanguages.map((learningLanguage) => {
             return {
@@ -116,7 +113,6 @@ export class PrismaProfileRepository implements ProfileRepository {
             };
           }),
         },
-        level: profile.level,
         MasteredLanguages: {
           create: profile.masteredLanguages.map((language) => {
             return { LanguageCode: { connect: { code: language.code } } };

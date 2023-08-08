@@ -95,25 +95,13 @@ export class CreateProfileUsecase {
       ),
     );
 
-    // TODO: adapt with several learning langages
-    let learningLanguage: Language | null = null;
-    let level: ProficiencyLevel | null = null;
-    if (command.learningLanguages.length > 0) {
-      learningLanguage = await this.tryToFindTheLanguageOfCode(
-        command.learningLanguages[0].code,
-      );
-
-      this.assertLanguageIsSupportedByUniversity(
-        user.university,
-        learningLanguage.code,
-      );
-
-      level = command.learningLanguages[0].level;
-    }
-
     const learningLanguages = await Promise.all(
       command.learningLanguages.map(async (learningLanguage) => {
         const language = await this.tryToFindTheLanguageOfCode(
+          learningLanguage.code,
+        );
+        this.assertLanguageIsSupportedByUniversity(
+          user.university,
           learningLanguage.code,
         );
         return {
@@ -133,11 +121,9 @@ export class CreateProfileUsecase {
       user: user,
       nativeLanguage,
       masteredLanguages,
-      learningLanguage,
       learningLanguages,
       objectives,
       interests,
-      level,
     });
 
     await this.profilesRepository.create(profile);

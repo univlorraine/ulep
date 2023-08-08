@@ -2,7 +2,6 @@ import { ProfileLanguagesException } from '../errors/profile-exceptions';
 import { Interest } from './interest.model';
 import { Language, LearningLanguage } from './language.model';
 import { LearningObjective } from './objective.model';
-import { ProficiencyLevel } from './proficiency.model';
 import { User } from './user.model';
 
 export enum LearningType {
@@ -16,9 +15,7 @@ export type CreateProfileProps = {
   user: User;
   nativeLanguage: Language;
   masteredLanguages: Language[];
-  learningLanguage?: Language;
   learningLanguages: LearningLanguage[];
-  level: ProficiencyLevel;
   learningType: LearningType;
   meetingFrequency: string;
   sameGender: boolean;
@@ -37,10 +34,7 @@ export class Profile {
 
   readonly masteredLanguages: Language[];
 
-  readonly learningLanguage?: Language;
   readonly learningLanguages: LearningLanguage[];
-
-  readonly level: ProficiencyLevel;
 
   readonly learningType: LearningType;
 
@@ -61,9 +55,7 @@ export class Profile {
     this.user = props.user;
     this.nativeLanguage = props.nativeLanguage;
     this.masteredLanguages = [...props.masteredLanguages];
-    this.learningLanguage = props.learningLanguage;
     this.learningLanguages = [...props.learningLanguages];
-    this.level = props.level;
     this.learningType = props.learningType;
     this.meetingFrequency = props.meetingFrequency;
     this.sameGender = props.sameGender;
@@ -74,10 +66,12 @@ export class Profile {
 
     this.assertLanguesAreUnique();
 
-    // We set level to A0 for joker language
-    if (!props.learningLanguage?.code) {
-      this.level = ProficiencyLevel.A0;
-    }
+    // TODO: manage joker new way. Need more info on how it will be specified by user.
+
+    // // We set level to A0 for joker language
+    // if (!props.learningLanguage?.code) {
+    //   this.level = ProficiencyLevel.A0;
+    // }
   }
 
   protected assertLanguesAreUnique(): void {
