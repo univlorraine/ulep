@@ -73,7 +73,10 @@ export class ProfileController {
   ): Promise<Collection<ProfileResponse>> {
     const profiles = await this.getProfilesUsecase.execute({
       page: page,
-      orderBy: field && order ? { [field]: order } : undefined,
+      orderBy: {
+        field,
+        order,
+      },
       limit: limit,
       where: where
         ? {

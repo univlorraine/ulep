@@ -23,6 +23,23 @@ interface ProfilesParams {
     }
 }
 
+const handleOrderField = (field?: string) => {
+    switch (field) {
+        case 'user.email':
+            return 'email';
+        case 'user.firstname':
+            return 'firstname';
+        case 'user.lastname':
+            return 'lastname';
+        case 'user.role':
+            return 'role';
+        case 'user.university.name':
+            return 'university';
+        default:
+            return undefined;
+    }
+};
+
 const ProfilesQuery = (params: ProfilesParams): string => {
     const query = {
         where: {
@@ -39,7 +56,7 @@ const ProfilesQuery = (params: ProfilesParams): string => {
         },
         page: params.pagination.page,
         limit: params.pagination.perPage,
-        field: params.sort.field,
+        field: handleOrderField(params.sort.field),
         order: params.sort.order.toLowerCase(),
     };
 

@@ -1,8 +1,8 @@
 import { Injectable } from '@nestjs/common';
-import { Collection, PrismaService, SortOrderType } from '@app/common';
+import { Collection, PrismaService } from '@app/common';
 import {
   MaxTandemsCountAndLanguageProps,
-  ProfileQuerySortKey,
+  ProfileQueryOrderBy,
   ProfileQueryWhere,
   ProfileRepository,
 } from 'src/core/ports/profile.repository';
@@ -127,26 +127,28 @@ export class PrismaProfileRepository implements ProfileRepository {
   async findAll(
     offset?: number,
     limit?: number,
-    orderBy?: SortOrderType<ProfileQuerySortKey>,
+    orderBy?: ProfileQueryOrderBy,
     where?: ProfileQueryWhere,
   ): Promise<Collection<Profile>> {
+    const wherePayload = where
+      ? {
+          User: {
+            country_code_id: where.user.country,
+            email: where.user.email,
+            firstname: where.user.firstname,
+            lastname: where.user.lastname,
+            organization_id: where.user.university,
+            role: where.user.role,
+          },
+          MasteredLanguages: {
+            every: { LanguageCode: { code: where.masteredLanguageCode } },
+          },
+          NativeLanguage: { code: where.nativeLanguageCode },
+        }
+      : {};
+
     const count = await this.prisma.profiles.count({
-      where: where
-        ? {
-            User: {
-              country_code_id: where.user.country,
-              email: where.user.email,
-              firstname: where.user.firstname,
-              lastname: where.user.lastname,
-              organization_id: where.user.university,
-              role: where.user.role,
-            },
-            MasteredLanguages: {
-              every: { LanguageCode: { code: where.masteredLanguageCode } },
-            },
-            NativeLanguage: { code: where.nativeLanguageCode },
-          }
-        : {},
+      where: wherePayload,
     });
 
     // If skip is out of range, return an empty array
@@ -154,25 +156,17 @@ export class PrismaProfileRepository implements ProfileRepository {
       return { items: [], totalItems: count };
     }
 
+    let order;
+    if (orderBy.field === 'university') {
+      order = { User: { Organization: { name: orderBy.order } } };
+    } else {
+      order = { User: { [orderBy.field]: orderBy.order } };
+    }
+
     const users = await this.prisma.profiles.findMany({
-      where: where
-        ? {
-            User: {
-              country_code_id: where.user.country,
-              email: where.user.email,
-              firstname: where.user.firstname,
-              lastname: where.user.lastname,
-              organization_id: where.user.university,
-              role: where.user.role,
-            },
-            MasteredLanguages: {
-              every: { LanguageCode: { code: where.masteredLanguageCode } },
-            },
-            NativeLanguage: { code: where.nativeLanguageCode },
-          }
-        : {},
+      where: wherePayload,
       skip: offset,
-      orderBy: orderBy ? { User: orderBy } : undefined,
+      orderBy: order,
       take: limit,
       include: ProfilesRelations,
     });

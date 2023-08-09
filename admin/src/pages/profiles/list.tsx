@@ -65,7 +65,11 @@ const ProfileList = (props: any) => {
                 <TextField label={translate('profiles.lastname')} source="user.lastname" sortable />
                 <TextField label={translate('profiles.firstname')} source="user.firstname" sortable />
                 <TextField label={translate('profiles.email')} source="user.email" sortable />
-                <TextField label={translate('profiles.university')} sortable={false} source="user.university.name" />
+                <TextField
+                    label={translate('profiles.university')}
+                    source="user.university.name"
+                    sortable
+                />
                 <TextField
                     label={translate('profiles.native_language')}
                     sortable={false}

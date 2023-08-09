@@ -1,7 +1,7 @@
 import { Inject, Injectable } from '@nestjs/common';
-import { SortOrderType } from '@app/common';
 import {
   PROFILE_REPOSITORY,
+  ProfileQueryOrderBy,
   ProfileQueryWhere,
   ProfileRepository,
 } from '../../ports/profile.repository';
@@ -9,7 +9,7 @@ import {
 export class GetProfilesCommand {
   page: number;
   limit: number;
-  orderBy?: SortOrderType<string>;
+  orderBy?: ProfileQueryOrderBy;
   where?: ProfileQueryWhere;
 }
 

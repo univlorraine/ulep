@@ -2,7 +2,13 @@ import { ApiPropertyOptional } from '@nestjs/swagger';
 import { IsOptional } from 'class-validator';
 import { PaginationDto } from '../pagination';
 import { SortOrder } from '@app/common';
-import { ProfileQuerySortKey } from 'src/core/ports/profile.repository';
+
+export type ProfileQuerySortKey =
+  | 'email'
+  | 'firstname'
+  | 'lastname'
+  | 'role'
+  | 'university';
 
 class ProfileQueryWhere {
   user: {

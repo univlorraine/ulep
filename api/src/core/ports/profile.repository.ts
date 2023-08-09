@@ -1,4 +1,4 @@
-import { Collection, SortOrderType, StringFilter } from '@app/common';
+import { Collection, SortOrder, StringFilter } from '@app/common';
 import { Profile } from '../models';
 
 export const PROFILE_REPOSITORY = 'profile.repository';
@@ -9,8 +9,6 @@ export type MaxTandemsCountAndLanguageProps = {
     not: string;
   };
 };
-
-export type ProfileQuerySortKey = 'email' | 'firstname' | 'lastname' | 'role';
 
 export interface ProfileQueryWhere {
   user: {
@@ -23,6 +21,11 @@ export interface ProfileQueryWhere {
   };
   masteredLanguageCode?: string;
   nativeLanguageCode?: string;
+}
+
+export interface ProfileQueryOrderBy {
+  field?: string;
+  order: SortOrder;
 }
 
 export interface ProfileRepository {
@@ -43,7 +46,7 @@ export interface ProfileRepository {
   findAll: (
     offset?: number,
     limit?: number,
-    orderBy?: SortOrderType<ProfileQuerySortKey>,
+    orderBy?: ProfileQueryOrderBy,
     where?: ProfileQueryWhere,
   ) => Promise<Collection<Profile>>;
 
