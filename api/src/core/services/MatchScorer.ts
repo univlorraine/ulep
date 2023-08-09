@@ -51,7 +51,7 @@ export class MatchScorer implements IMatchScorer {
       throw new SameProfilesError();
     }
 
-    const isDiscovery = profile1.learningLanguages?.[0].language.code === JOKER_LANGUAGE_CODE;
+    const isDiscovery = profile1.learningLanguages?.[0]?.language.code === JOKER_LANGUAGE_CODE;
 
     const languages = [profile2.nativeLanguage, ...profile2.masteredLanguages].map(l => l.id);
    
