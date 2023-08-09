@@ -27,7 +27,7 @@ const WaitingTandemList: React.FC<WaitingTandemListProps> = ({
                             <TandemLine
                                 key={tandem.id}
                                 language={tandem.language}
-                                profile={tandem.profiles.find((tandemProfile) => tandemProfile.id !== studentId)}
+                                profile={tandem.partner}
                                 onPressed={() => onTandemPressed(tandem)}
                                 status={tandem.status}
                             />

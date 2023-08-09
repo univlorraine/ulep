@@ -15,7 +15,6 @@ class GetQuizzByLevelUsecase implements GetQuizzByLevelUsecaseInterface {
             if (!httpResponse.parsedBody) {
                 return new Error('errors.global');
             }
-
             return quizzCommandToDomain(httpResponse.parsedBody);
         } catch (error: any) {
             return new Error('errors.global');

@@ -5,6 +5,7 @@ import Language from '../domain/entities/Language';
 import Profile from '../domain/entities/Profile';
 import ProfileSignUp, { Availabilites, BiographySignUp } from '../domain/entities/ProfileSignUp';
 import University from '../domain/entities/University';
+import User from '../domain/entities/User';
 
 export interface TokenStorePayload {
     accessToken: string;
@@ -53,16 +54,22 @@ interface ProfileStorePayload {
 interface UpdateProfile {
     avatar: string;
 }
+
+interface UserStorePayload {
+    user: User;
+}
 interface StoreInterface {
     accessToken: string;
     logout: Action<StoreInterface>;
     refreshToken: string;
     setProfile: Action<StoreInterface, ProfileStorePayload>;
     setTokens: Action<StoreInterface, TokenStorePayload>;
+    setUser: Action<StoreInterface, UserStorePayload>;
     profile: Profile | undefined;
     profileSignUp: ProfileSignUp;
     updateProfile: Action<StoreInterface, UpdateProfile>;
     updateProfileSignUp: Action<StoreInterface, SignUpStorePayload>;
+    user: User | undefined;
 }
 
 const typedHooks = createTypedHooks<StoreInterface>();

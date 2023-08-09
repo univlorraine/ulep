@@ -1,12 +1,11 @@
-import { CollectionCommand } from '../../../src/command/CollectionCommand';
 import QuestionCommand from '../../../src/command/QuestionCommand';
 import Question from '../../../src/domain/entities/Question';
 import GetQuizzByLevelUsecase from '../../../src/domain/usecases/GetQuizzByLevelUsecase';
 import DomainHttpAdapter from '../../mocks/adapters/HttpAdapter';
 
 const usecaseResponse: QuestionCommand[] = [
-    { question: 'question', answer: true },
-    { question: 'question2', answer: true },
+    { id: 'id', value: 'question', answer: true },
+    { id: 'id2', value: 'question2', answer: true },
 ];
 
 describe('getQuizzByLevel', () => {

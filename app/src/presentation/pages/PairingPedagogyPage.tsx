@@ -27,7 +27,6 @@ const PairingPedagogyPage: React.FC = () => {
     if (!profileSignUp.university) {
         return <Redirect to={'/signup'} />;
     }
-
     const pedagogiesData: PedagogieData[] = [
         {
             color: '#8BC4C4',
@@ -90,6 +89,7 @@ const PairingPedagogyPage: React.FC = () => {
 
                         return (
                             <ColoredCard<Pedagogy>
+                                key={pedagogyData.title}
                                 buttonName={pedagogyData.button}
                                 color={pedagogyData.color}
                                 onPressed={onPedagogyPressed}

@@ -24,7 +24,10 @@ class LoginUsecase implements LoginUsecaseInterface {
                 return new Error('errors.global');
             }
 
-            return this.setTokens(httpResponse.parsedBody.accessToken, httpResponse.parsedBody.refreshToken);
+            return this.setTokens({
+                accessToken: httpResponse.parsedBody.accessToken,
+                refreshToken: httpResponse.parsedBody.refreshToken,
+            });
         } catch (error: any) {
             if (!error || !error.status) {
                 return new Error('errors.global');

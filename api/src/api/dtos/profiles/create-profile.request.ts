@@ -1,7 +1,9 @@
 import * as Swagger from '@nestjs/swagger';
 import { ApiPropertyOptional } from '@nestjs/swagger';
+import { Transform } from 'class-transformer';
 import {
   ArrayMaxSize,
+  ArrayMinSize,
   IsBoolean,
   IsEnum,
   IsNotEmpty,
@@ -14,7 +16,6 @@ import {
 import { LearningType } from 'src/core/models';
 import { CreateProfileCommand } from 'src/core/usecases/profiles/create-profile.usecase';
 import { BiographyDto } from './biography';
-import { Transform } from 'class-transformer';
 import { LearningLanguageDto } from './learningLanguage';
 
 export class CreateProfileRequest
@@ -54,7 +55,8 @@ export class CreateProfileRequest
   meetingFrequency: string;
 
   @Swagger.ApiProperty({ type: 'string', format: 'uuid', isArray: true })
-  @ArrayMaxSize(5)
+  @ArrayMaxSize(10)
+  @ArrayMinSize(5)
   @IsNotEmpty({ each: true })
   interests: string[];
 

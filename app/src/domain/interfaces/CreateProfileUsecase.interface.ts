@@ -1,19 +1,19 @@
+import { BiographySignUp } from '../entities/ProfileSignUp';
+
 interface CreateProfileUsecaseInterface {
     execute(
-        age: number,
-        role: Role,
-        gender: Gender,
-        universityId: string,
-        nativeLanguage: string,
-        masteredLanguages: string[],
+        id: string,
+        nativeLanguageCode: string,
+        masteredLanguageCodes: string[],
         learningLanguageCode: string,
         cefrLevel: string,
         learningType: Pedagogy,
         goals: string[],
         meetingFrequency: MeetFrequency,
         interests: string[],
+        preferSameAge: boolean,
         preferSameGender: boolean,
-        bios: string[]
+        bios: BiographySignUp
     ): Promise<undefined | Error>;
 }
 export default CreateProfileUsecaseInterface;

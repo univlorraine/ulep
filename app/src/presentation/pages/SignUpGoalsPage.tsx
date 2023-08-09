@@ -2,6 +2,7 @@ import { useIonToast } from '@ionic/react';
 import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useHistory } from 'react-router';
+import { WritingSkillSvg } from '../../assets';
 import { useConfig } from '../../context/ConfigurationContext';
 import Goal from '../../domain/entities/Goal';
 import { useStoreActions } from '../../store/storeTypes';
@@ -18,6 +19,7 @@ const SignUpGoalsPage: React.FC = () => {
     const [goals, setGoals] = useState<Goal[]>([]);
     const [userGoals, setUserGoals] = useState<Goal[]>([]);
 
+    //TODO: Update Api to get image url rather than static image
     const getGoals = async () => {
         const result = await getAllGoals.execute();
 
@@ -78,8 +80,8 @@ const SignUpGoalsPage: React.FC = () => {
                                                 : '#FDEE66',
                                     }}
                                 >
-                                    <img alt={goal.id} className={goalsStyles.image} src={goal.image} />
-                                    <span className={goalsStyles.description}>{goal.description}</span>
+                                    <img alt={goal.id} className={goalsStyles.image} src={WritingSkillSvg} />
+                                    <span className={goalsStyles.description}>{goal.name}</span>
                                 </div>
                             );
                         })}
