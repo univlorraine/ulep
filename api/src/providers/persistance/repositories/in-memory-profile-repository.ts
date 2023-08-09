@@ -5,15 +5,23 @@ import {
 } from '../../../core/ports/profile.repository';
 import { Profile } from '../../../core/models/profile.model';
 
+// TODO: remove #profiles in favor of #profilesMap when possible (Map better suitable
+// for inMemory adapter)
+
 export class InMemoryProfileRepository implements ProfileRepository {
   #profiles: Profile[] = [];
+  #profilesMap: Map<string, Profile> = new Map();
 
   init(profiles: Profile[]): void {
     this.#profiles = profiles;
+    this.#profilesMap = new Map(
+      profiles.map((profile) => [profile.id, profile]),
+    );
   }
 
   reset(): void {
     this.#profiles = [];
+    this.#profilesMap = new Map();
   }
 
   async ofId(id: string): Promise<Profile> {
@@ -26,7 +34,8 @@ export class InMemoryProfileRepository implements ProfileRepository {
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   async whereMaxTandemsCount(max: number): Promise<Profile[]> {
-    throw new Error('Method not implemented.');
+    // TODO: add in memory way to add number of tandem per profile
+    return Array.from(this.#profilesMap.values());
   }
 
   async whereMaxTandemsCountAndLanguage(
