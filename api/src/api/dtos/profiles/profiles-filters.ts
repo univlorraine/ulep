@@ -1,15 +1,23 @@
 import { ApiPropertyOptional } from '@nestjs/swagger';
-import { IsEmail, IsOptional } from 'class-validator';
+import { IsOptional } from 'class-validator';
 import { PaginationDto } from '../pagination';
 import { SortOrder } from '@app/common';
+import { ProfileQuerySortKey } from 'src/core/ports/profile.repository';
 
-export type ProfileQuerySortKey = 'email' | 'firstname' | 'lastname' | 'role';
+class ProfileQueryWhere {
+  user: {
+    country?: string;
+    email?: string;
+    firstname?: string;
+    lastname?: string;
+    role?: string;
+    university?: string;
+  };
+  masteredLanguageCode?: string;
+  nativeLanguageCode?: string;
+}
+
 export class ProfileQueryFilter extends PaginationDto {
-  @ApiPropertyOptional({ type: 'string', format: 'email' })
-  @IsEmail()
-  @IsOptional()
-  email: string;
-
   @ApiPropertyOptional({ type: 'string' })
   @IsOptional()
   field?: ProfileQuerySortKey;
@@ -17,4 +25,8 @@ export class ProfileQueryFilter extends PaginationDto {
   @ApiPropertyOptional({ type: 'string' })
   @IsOptional()
   order?: SortOrder;
+
+  @ApiPropertyOptional({ type: 'string' })
+  @IsOptional()
+  where: ProfileQueryWhere;
 }

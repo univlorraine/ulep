@@ -34,10 +34,10 @@ const customDataProvider = {
 
         switch (resource) {
             case 'countries':
-                CountriesQuery(url, params);
+                url.search = CountriesQuery(params);
                 break;
             case 'profiles':
-                ProfilesQuery(url, params);
+                url.search = ProfilesQuery(params);
                 break;
             default:
                 break;
@@ -51,9 +51,17 @@ const customDataProvider = {
 
         const result = await response.json();
 
-        if (resource === 'languages') {
-            console.warn(result.items[0]);
+        return { data: result.items, total: result.totalItems };
+    },
+    getMany: async (resource: string) => {
+        const url = new URL(`${process.env.REACT_APP_API_URL}/${resource}`);
+        const response = await fetch(url, httpClientOptions());
+
+        if (!response.ok) {
+            throw new Error(`API request failed with status ${response.status}`);
         }
+
+        const result = await response.json();
 
         return { data: result.items, total: result.totalItems };
     },

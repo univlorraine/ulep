@@ -1,7 +1,9 @@
 import { Injectable } from '@nestjs/common';
-import { StringFilter, Collection, PrismaService } from '@app/common';
+import { Collection, PrismaService, SortOrderType } from '@app/common';
 import {
   MaxTandemsCountAndLanguageProps,
+  ProfileQuerySortKey,
+  ProfileQueryWhere,
   ProfileRepository,
 } from 'src/core/ports/profile.repository';
 import { Profile } from 'src/core/models';
@@ -125,11 +127,26 @@ export class PrismaProfileRepository implements ProfileRepository {
   async findAll(
     offset?: number,
     limit?: number,
-    orderBy?: { [key: string]: string },
-    where?: { email?: StringFilter },
+    orderBy?: SortOrderType<ProfileQuerySortKey>,
+    where?: ProfileQueryWhere,
   ): Promise<Collection<Profile>> {
     const count = await this.prisma.profiles.count({
-      where: { User: { email: where?.email } },
+      where: where
+        ? {
+            User: {
+              country_code_id: where.user.country,
+              email: where.user.email,
+              firstname: where.user.firstname,
+              lastname: where.user.lastname,
+              organization_id: where.user.university,
+              role: where.user.role,
+            },
+            MasteredLanguages: {
+              every: { LanguageCode: { code: where.masteredLanguageCode } },
+            },
+            NativeLanguage: { code: where.nativeLanguageCode },
+          }
+        : {},
     });
 
     // If skip is out of range, return an empty array
@@ -138,7 +155,22 @@ export class PrismaProfileRepository implements ProfileRepository {
     }
 
     const users = await this.prisma.profiles.findMany({
-      where: { User: { email: where?.email } },
+      where: where
+        ? {
+            User: {
+              country_code_id: where.user.country,
+              email: where.user.email,
+              firstname: where.user.firstname,
+              lastname: where.user.lastname,
+              organization_id: where.user.university,
+              role: where.user.role,
+            },
+            MasteredLanguages: {
+              every: { LanguageCode: { code: where.masteredLanguageCode } },
+            },
+            NativeLanguage: { code: where.nativeLanguageCode },
+          }
+        : {},
       skip: offset,
       orderBy: orderBy ? { User: orderBy } : undefined,
       take: limit,

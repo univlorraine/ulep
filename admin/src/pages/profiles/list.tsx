@@ -13,21 +13,19 @@ const ProfileFilter = (props: any) => {
 
     return (
         <Filter {...props}>
-            <TextInput label={translate('profiles.firstname')} source="user.firstname" alwaysOn />
-            <TextInput label={translate('profiles.lastname')} source="user.lastname" alwaysOn />
-            <TextInput label={translate('profiles.email')} source="email" alwaysOn />
+            <TextInput label={translate('profiles.firstname')} source="user.firstname" />
+            <TextInput label={translate('profiles.lastname')} source="user.lastname" />
+            <TextInput label={translate('profiles.email')} source="user.email" />
             <ReferenceInput
                 reference="countries"
                 source="user.country"
-                alwaysOn
             >
-                <SelectInput optionText="name" />
+                <SelectInput optionText="name" optionValue="code" />
             </ReferenceInput>
             <ReferenceInput
                 label={translate('profiles.university')}
                 reference="universities"
                 source="user.university"
-                alwaysOn
             >
                 <SelectInput optionText="name" />
             </ReferenceInput>
@@ -35,26 +33,23 @@ const ProfileFilter = (props: any) => {
                 label={translate('profiles.native_language')}
                 reference="languages"
                 source="nativeLanguageCode"
-                alwaysOn
             >
-                <SelectInput optionText="code" />
+                <SelectInput optionText="code" optionValue="code" />
             </ReferenceInput>
             <ReferenceInput
-                label={translate('profiles.mastered_language')}
+                label={translate('profiles.mastered_languages')}
                 reference="languages"
-                source="masteredLanguageCodes"
-                alwaysOn
+                source="masteredLanguageCode"
             >
-                <SelectInput optionText="code" />
+                <SelectInput optionText="code" optionValue="code" />
             </ReferenceInput>
             <SelectInput
                 choices={[
-                    { id: 'STUDENT', name: translate('Student') },
-                    { id: 'STAFF', name: translate('Staff') },
+                    { id: 'STUDENT', name: translate('global.Student') },
+                    { id: 'STAFF', name: translate('global.Staff') },
                 ]}
                 label={translate('profiles.role')}
                 source="user.role"
-                alwaysOn
             />
         </Filter>
     );

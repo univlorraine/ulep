@@ -1,47 +1,49 @@
+import qsAdapter from '../providers/qsAdapter';
+
 interface ProfilesParams {
     filter: {
-        country: string,
-        email: string,
-        role: string,
+        user: {
+            country?: string,
+            email?: string,
+            firstname?: string,
+            lastname?: string,
+            role?: string,
+            university?: string,
+        },
+        masteredLanguageCode?: string,
+        nativeLanguageCode?: string,
     },
     pagination: {
         page: string;
         perPage: string;
     },
     sort: {
-        field: string,
+        field?: string,
         order: string,
     }
 }
 
-const ProfilesQuery = (url: URL, params: ProfilesParams) => {
-    if (params.pagination.page) {
-        url.searchParams.append('page', params.pagination.page);
-    }
+const ProfilesQuery = (params: ProfilesParams): string => {
+    const query = {
+        where: {
+            user: params.filter.user ? {
+                country: params.filter.user.country,
+                email: params.filter.user.email,
+                firstname: params.filter.user.firstname,
+                lastname: params.filter.user.lastname,
+                role: params.filter.user.role,
+                university: params.filter.user.university,
+            } : {},
+            masteredLanguageCode: params.filter.masteredLanguageCode,
+            nativeLanguageCode: params.filter.nativeLanguageCode,
+        },
+        page: params.pagination.page,
+        limit: params.pagination.perPage,
+        field: params.sort.field,
+        order: params.sort.order.toLowerCase(),
+    };
 
-    if (params.pagination.perPage) {
-        url.searchParams.append('limit', params.pagination.perPage);
-    }
-
-    if (params.sort.field && params.sort.field.indexOf('.') !== -1) {
-        url.searchParams.append('field', params.sort.field.split('.')[1]);
-    }
-
-    if (params.sort.order) {
-        url.searchParams.append('order', params.sort.order.toLowerCase());
-    }
-
-    if (params.filter.country) {
-        url.searchParams.append('country', params.filter.country);
-    }
-
-    if (params.filter.email) {
-        url.searchParams.append('email', params.filter.email);
-    }
-
-    if (params.filter.role) {
-        url.searchParams.append('role', params.filter.role);
-    }
+    return (new URLSearchParams(qsAdapter().stringify(query)).toString());
 };
 
 export default ProfilesQuery;

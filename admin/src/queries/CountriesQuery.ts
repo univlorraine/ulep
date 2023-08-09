@@ -1,21 +1,19 @@
+import qsAdapter from '../providers/qsAdapter';
+
 interface CountriesParams {
     enable?: boolean;
     pagination?: boolean;
     order?: 'ASC' | 'DESC';
 }
 
-const CountriesQuery = (url: URL, params: CountriesParams) => {
-    if (params.enable) {
-        url.searchParams.append('enable', params.enable.toString());
-    }
+const CountriesQuery = (params: CountriesParams) => {
+    const query = {
+        enable: params.enable ? params.enable.toString() : undefined,
+        pagination: params.pagination ? params.pagination.toString() : undefined,
+        order: params.order?.toLowerCase(),
+    };
 
-    if (params.pagination) {
-        url.searchParams.append('pagination', params.pagination.toString());
-    }
-
-    if (params.order) {
-        url.searchParams.append('order', params.order);
-    }
+    return (new URLSearchParams(qsAdapter().stringify(query)).toString());
 };
 
 export default CountriesQuery;
