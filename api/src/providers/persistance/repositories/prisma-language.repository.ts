@@ -37,7 +37,10 @@ export class PrismaLanguageRepository implements LanguageRepository {
 
     const languageCodes = await this.prisma.languageCodes.findMany();
 
-    return new Collection<Language>({items: languageCodes.map(languageMapper), totalItems: count };
+    return new Collection<Language>({
+      items: languageCodes.map(languageMapper),
+      totalItems: count,
+    });
   }
 
   async addRequest(code: string, user: string): Promise<void> {
