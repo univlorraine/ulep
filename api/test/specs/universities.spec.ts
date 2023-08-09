@@ -14,6 +14,8 @@ import { InMemoryUserRepository } from 'src/providers/persistance/repositories/i
 import { USER_REPOSITORY } from 'src/core/ports/user.repository';
 import { InMemoryUniversityRepository } from 'src/providers/persistance/repositories/in-memory-university-repository';
 import { UNIVERSITY_REPOSITORY } from 'src/core/ports/university.repository';
+import { AuthenticationGuard } from 'src/api/guards';
+import { TestAuthGuard } from '../utils/TestAuthGuard';
 
 describe('Languages', () => {
   let app: TestServer;
@@ -44,6 +46,8 @@ describe('Languages', () => {
       .useValue(languageRepository)
       .overrideProvider(USER_REPOSITORY)
       .useValue(userRepositoy)
+      .overrideGuard(AuthenticationGuard)
+      .useValue(TestAuthGuard)
       .overrideProvider(AUTHENTICATOR)
       .useValue(authenticator)
       .compile();

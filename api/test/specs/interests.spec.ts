@@ -9,8 +9,10 @@ import {
 import { InMemoryInterestRepository } from 'src/providers/persistance/repositories/in-memory-interest.repository';
 import { INTEREST_REPOSITORY } from 'src/core/ports/interest.repository';
 import { TestServer } from './test.server';
+import { TestAuthGuard } from '../utils/TestAuthGuard';
 import { InMemoryLanguageRepository } from 'src/providers/persistance/repositories/in-memory-language-repository';
 import { LANGUAGE_REPOSITORY } from 'src/core/ports/language.repository';
+import { AuthenticationGuard } from 'src/api/guards';
 
 describe('Interests', () => {
   let app: TestServer;
@@ -33,6 +35,8 @@ describe('Interests', () => {
       .useValue(repository)
       .overrideProvider(LANGUAGE_REPOSITORY)
       .useValue(languageRepository)
+      .overrideGuard(AuthenticationGuard)
+      .useValue(TestAuthGuard)
       .compile();
 
     app = TestServer.create(module.createNestApplication());

@@ -1,6 +1,7 @@
 import { faker } from '@faker-js/faker';
 import * as Prisma from '@prisma/client';
 import { ProfileFactory } from '../factories';
+import { ProficiencyLevel } from '../../../../../src/core/models';
 
 const mapCountryCodeToLanguageCode = (countryCode: string): string => {
   switch (countryCode) {
@@ -13,6 +14,11 @@ const mapCountryCodeToLanguageCode = (countryCode: string): string => {
     default:
       return 'en';
   }
+};
+
+const enumValue = <T>(_enum: unknown): T => {
+  const entries = Object.entries(_enum).map(([, v]) => v.toUpperCase());
+  return faker.helpers.arrayElement(entries) as T;
 };
 
 export const createProfiles = async (
@@ -38,7 +44,7 @@ export const createProfiles = async (
       faker.helpers.arrayElement(countries).code,
     );
 
-    const availableLanguagesCodes = user.Organization.Languages.filter(
+    const availableLanguages = user.Organization.Languages.filter(
       (language) => language.code !== nativeLanguageCode,
     );
 
@@ -58,14 +64,16 @@ export const createProfiles = async (
           })),
         },
         LearningLanguages: {
-          create: instance.learningLanguages.map((learningLanguage) => {
-            return {
-              LanguageCode: {
-                connect: { code: learningLanguage.language.code },
-              },
-              level: learningLanguage.level,
-            };
-          }),
+          create: faker.helpers
+            .arrayElements(availableLanguages)
+            .map((learningLanguage) => {
+              return {
+                LanguageCode: {
+                  connect: { code: learningLanguage.code },
+                },
+                level: enumValue(ProficiencyLevel),
+              };
+            }),
         },
         learning_type: instance.learningType,
         same_gender: instance.sameGender,

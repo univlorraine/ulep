@@ -12,6 +12,7 @@ const prisma = new Prisma.PrismaClient();
 
 const load = async () => {
   try {
+    await prisma.learningLanguages.deleteMany();
     await prisma.users.deleteMany();
     await prisma.organizations.deleteMany();
     await prisma.languageCodes.deleteMany();
