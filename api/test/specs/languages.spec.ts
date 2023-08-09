@@ -5,6 +5,8 @@ import { InMemoryLanguageRepository } from 'src/providers/persistance/repositori
 import { LanguageFactory } from '@app/common';
 import { LANGUAGE_REPOSITORY } from 'src/core/ports/language.repository';
 import { TestServer } from './test.server';
+import { AuthenticationGuard } from 'src/api/guards';
+import { TestAuthGuard } from '../utils/TestAuthGuard';
 
 describe('Languages', () => {
   let app: TestServer;
@@ -18,6 +20,8 @@ describe('Languages', () => {
     })
       .overrideProvider(LANGUAGE_REPOSITORY)
       .useValue(repository)
+      .overrideGuard(AuthenticationGuard)
+      .useValue(TestAuthGuard)
       .compile();
 
     app = TestServer.create(module.createNestApplication());

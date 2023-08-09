@@ -12,6 +12,8 @@ import { ProficiencyLevel } from 'src/core/models';
 import { LanguageFactory } from '@app/common';
 import { InMemoryLanguageRepository } from 'src/providers/persistance/repositories/in-memory-language-repository';
 import { LANGUAGE_REPOSITORY } from 'src/core/ports/language.repository';
+import { AuthenticationGuard } from 'src/api/guards';
+import { TestAuthGuard } from '../utils/TestAuthGuard';
 
 describe('Proficiency', () => {
   let app: TestServer;
@@ -34,6 +36,8 @@ describe('Proficiency', () => {
       .useValue(repository)
       .overrideProvider(LANGUAGE_REPOSITORY)
       .useValue(languageRepository)
+      .overrideGuard(AuthenticationGuard)
+      .useValue(TestAuthGuard)
       .compile();
 
     app = TestServer.create(module.createNestApplication());

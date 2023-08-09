@@ -1,12 +1,19 @@
 import * as request from 'supertest';
 import { Test } from '@nestjs/testing';
 import { AppModule } from 'src/app.module';
-import { LanguageFactory, LearningObjectiveFactory } from '@app/common';
+import {
+  KeycloakUserFactory,
+  LanguageFactory,
+  LearningObjectiveFactory,
+} from '@app/common';
 import { TestServer } from './test.server';
 import { InMemoryLearningObjectiveRepository } from 'src/providers/persistance/repositories/in-memory-objective.repository';
 import { InMemoryLanguageRepository } from 'src/providers/persistance/repositories/in-memory-language-repository';
 import { OBJECTIVE_REPOSITORY } from 'src/core/ports/objective.repository';
 import { LANGUAGE_REPOSITORY } from 'src/core/ports/language.repository';
+import { AuthenticationGuard } from 'src/api/guards';
+import { TestAuthGuard } from '../utils/TestAuthGuard';
+import { AUTHENTICATOR, InMemoryAuthenticator } from 'src/api/services';
 
 describe('Objectives', () => {
   let app: TestServer;
@@ -18,6 +25,9 @@ describe('Objectives', () => {
   const objectiveFactory = new LearningObjectiveFactory();
   const repository = new InMemoryLearningObjectiveRepository();
 
+  const { keycloakUser } = new KeycloakUserFactory().makeOne();
+  const authenticator = new InMemoryAuthenticator(keycloakUser);
+
   beforeAll(async () => {
     languageRepository.init([language]);
 
@@ -28,6 +38,10 @@ describe('Objectives', () => {
       .useValue(repository)
       .overrideProvider(LANGUAGE_REPOSITORY)
       .useValue(languageRepository)
+      .overrideProvider(AUTHENTICATOR)
+      .useValue(authenticator)
+      .overrideGuard(AuthenticationGuard)
+      .useValue(TestAuthGuard)
       .compile();
 
     app = TestServer.create(module.createNestApplication());

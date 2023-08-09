@@ -5,6 +5,8 @@ import { CountryFactory } from '@app/common';
 import { COUNTRY_REPOSITORY } from 'src/core/ports/country.repository';
 import { InMemoryCountryCodesRepository } from 'src/providers/persistance/repositories/in-memory-country-repository';
 import { TestServer } from './test.server';
+import { TestAuthGuard } from '../utils/TestAuthGuard';
+import { AuthenticationGuard } from 'src/api/guards';
 
 describe('Countries', () => {
   let app: TestServer;
@@ -18,6 +20,8 @@ describe('Countries', () => {
     })
       .overrideProvider(COUNTRY_REPOSITORY)
       .useValue(repository)
+      .overrideGuard(AuthenticationGuard)
+      .useValue(TestAuthGuard)
       .compile();
 
     app = TestServer.create(module.createNestApplication());
