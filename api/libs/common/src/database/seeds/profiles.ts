@@ -47,11 +47,6 @@ export const createProfiles = async (
         User: { connect: { id: user.id } },
         NativeLanguage: { connect: { code: nativeLanguageCode } },
         // MasteredLanguages: {},
-        LearningLanguage: {
-          connect: {
-            id: faker.helpers.arrayElement(availableLanguagesCodes).id,
-          },
-        },
         Goals: {
           connect: faker.helpers.arrayElements(objectives, 2).map((it) => ({
             id: it.id,
@@ -62,7 +57,16 @@ export const createProfiles = async (
             id: it.id,
           })),
         },
-        level: instance.level,
+        LearningLanguages: {
+          create: instance.learningLanguages.map((learningLanguage) => {
+            return {
+              LanguageCode: {
+                connect: { code: learningLanguage.language.code },
+              },
+              level: learningLanguage.level,
+            };
+          }),
+        },
         learning_type: instance.learningType,
         same_gender: instance.sameGender,
         same_age: instance.sameAge,

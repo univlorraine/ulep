@@ -7,6 +7,7 @@ import {
 import { UnsuportedLanguageException } from 'src/core/errors/unsuported-language.exception';
 import {
   Interest,
+  JOKER_LANGUAGE_CODE,
   Language,
   LearningObjective,
   LearningType,
@@ -43,9 +44,11 @@ import {
 export class CreateProfileCommand {
   user: string;
   nativeLanguageCode: string;
-  learningLanguageCode?: string;
-  level: ProficiencyLevel;
   masteredLanguageCodes?: string[];
+  learningLanguages: {
+    code: string;
+    level: ProficiencyLevel;
+  }[];
   learningType: LearningType;
   objectives: string[];
   meetingFrequency: string;
@@ -88,22 +91,30 @@ export class CreateProfileUsecase {
     );
 
     const masteredLanguages = await Promise.all(
-      (command.masteredLanguageCodes ?? []).map(
-        this.tryToFindTheLanguageOfCode,
+      (command.masteredLanguageCodes ?? []).map((code) =>
+        this.tryToFindTheLanguageOfCode(code),
       ),
     );
 
-    let learningLanguage: Language | null = null;
-    if (command.learningLanguageCode) {
-      learningLanguage = await this.tryToFindTheLanguageOfCode(
-        command.learningLanguageCode,
-      );
+    const learningLanguages = await Promise.all(
+      command.learningLanguages.map(async (learningLanguage) => {
+        const language = await this.tryToFindTheLanguageOfCode(
+          learningLanguage.code,
+        );
 
-      this.assertLanguageIsSupportedByUniversity(
-        user.university,
-        learningLanguage.code,
-      );
-    }
+        if (learningLanguage.code !== JOKER_LANGUAGE_CODE) {
+          this.assertLanguageIsSupportedByUniversity(
+            user.university,
+            learningLanguage.code,
+          );
+        }
+
+        return {
+          language,
+          level: learningLanguage.level,
+        };
+      }),
+    );
 
     const objectives = await Promise.all(
       command.objectives.map((id) => this.tryToFindTheObjectiveOfId(id)),
@@ -115,7 +126,7 @@ export class CreateProfileUsecase {
       user: user,
       nativeLanguage,
       masteredLanguages,
-      learningLanguage,
+      learningLanguages,
       objectives,
       interests,
     });
@@ -128,7 +139,7 @@ export class CreateProfileUsecase {
   private async tryToFindTheUserOfId(id: string): Promise<User> {
     const user = await this.usersRepository.ofId(id);
     if (!user) {
-      throw new RessourceDoesNotExist();
+      throw new RessourceDoesNotExist('User does not exist');
     }
 
     return user;
@@ -144,7 +155,7 @@ export class CreateProfileUsecase {
   private async tryToFindTheInterestOfId(id: string): Promise<Interest> {
     const interest = await this.interestsRepository.interestOfId(id);
     if (!interest) {
-      throw new RessourceDoesNotExist();
+      throw new RessourceDoesNotExist('Interest does not exist');
     }
 
     return interest;
@@ -153,7 +164,7 @@ export class CreateProfileUsecase {
   private async tryToFindTheLanguageOfCode(code: string): Promise<Language> {
     const language = await this.languageRepository.ofCode(code.toLowerCase());
     if (!language) {
-      throw new RessourceDoesNotExist();
+      throw new RessourceDoesNotExist('Language does not exist');
     }
 
     return { ...language };

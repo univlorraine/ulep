@@ -1,6 +1,10 @@
 import { ProfileLanguagesException } from '../errors/profile-exceptions';
 import { Interest } from './interest.model';
-import { Language } from './language.model';
+import {
+  JOKER_LANGUAGE_CODE,
+  Language,
+  LearningLanguage,
+} from './language.model';
 import { LearningObjective } from './objective.model';
 import { ProficiencyLevel } from './proficiency.model';
 import { User } from './user.model';
@@ -16,8 +20,7 @@ export type CreateProfileProps = {
   user: User;
   nativeLanguage: Language;
   masteredLanguages: Language[];
-  learningLanguage?: Language;
-  level: ProficiencyLevel;
+  learningLanguages: LearningLanguage[];
   learningType: LearningType;
   meetingFrequency: string;
   sameGender: boolean;
@@ -36,9 +39,7 @@ export class Profile {
 
   readonly masteredLanguages: Language[];
 
-  readonly learningLanguage?: Language;
-
-  readonly level: ProficiencyLevel;
+  readonly learningLanguages: LearningLanguage[];
 
   readonly learningType: LearningType;
 
@@ -55,12 +56,21 @@ export class Profile {
   readonly biography?: { [key: string]: string };
 
   constructor(props: CreateProfileProps) {
+    const learningLanguages = [...props.learningLanguages].map(
+      (learningLanguage) => ({
+        language: learningLanguage.language,
+        level:
+          learningLanguage.language.code !== JOKER_LANGUAGE_CODE
+            ? learningLanguage.level
+            : ProficiencyLevel.A0,
+      }),
+    );
+
     this.id = props.id;
     this.user = props.user;
     this.nativeLanguage = props.nativeLanguage;
     this.masteredLanguages = [...props.masteredLanguages];
-    this.learningLanguage = props.learningLanguage;
-    this.level = props.level;
+    this.learningLanguages = learningLanguages;
     this.learningType = props.learningType;
     this.meetingFrequency = props.meetingFrequency;
     this.sameGender = props.sameGender;
@@ -70,36 +80,36 @@ export class Profile {
     this.biography = props.biography;
 
     this.assertLanguesAreUnique();
-
-    if (!props.learningLanguage.code) {
-      this.level = ProficiencyLevel.A0;
-    }
   }
 
   protected assertLanguesAreUnique(): void {
-    const masteredLanguages = this.masteredLanguages.map((l) => l.code);
+    const masteredLanguagesCodes = this.masteredLanguages.map((l) => l.code);
 
     if (
-      this.learningLanguage &&
-      this.nativeLanguage.code === this.learningLanguage.code
+      this.learningLanguages.length &&
+      this.learningLanguages.some(
+        (learningLanguage) =>
+          learningLanguage.language.code === this.nativeLanguage.code,
+      )
     ) {
       throw new ProfileLanguagesException(
-        'Native and learning languages cannot be the same',
+        'Native language cannot be a learning language',
       );
     }
 
-    if (masteredLanguages.includes(this.nativeLanguage.code)) {
+    if (masteredLanguagesCodes.includes(this.nativeLanguage.code)) {
       throw new ProfileLanguagesException(
-        'Native and mastered languages cannot be the same',
+        'Native language cannot be a mastered language',
       );
     }
 
-    if (
-      this.learningLanguage &&
-      masteredLanguages.includes(this.learningLanguage.code)
-    ) {
+    const intersectionMasteredAndLearningLanguages =
+      this.learningLanguages.filter((learningLanguage) =>
+        masteredLanguagesCodes.includes(learningLanguage.language.code),
+      );
+    if (intersectionMasteredAndLearningLanguages.length > 0) {
       throw new ProfileLanguagesException(
-        'Learning and mastered languages cannot be the same',
+        'A language cannot be in learning and mastered languages',
       );
     }
   }

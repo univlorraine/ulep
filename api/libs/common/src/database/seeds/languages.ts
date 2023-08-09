@@ -1405,6 +1405,13 @@ const isoCodes = {
     name: 'Zulu',
     wikiUrl: 'https://en.wikipedia.org/wiki/Zulu_language',
   },
+  '*': {
+    iso6391: '*',
+    iso6392: '*',
+    family: 'joker',
+    name: 'joker',
+    wikiUrl: '*',
+  },
 };
 
 export const createLanguageCodes = async (prisma: PrismaClient) => {
