@@ -32,11 +32,11 @@ model LanguageCodes {
   updated_at         DateTime             @updatedAt
   Organisations      Organizations[]
   NativeLanguages    Profiles[]           @relation("NativeLanguage")
-  LearningLanguage   Profiles[]           @relation("LearningLanguage")
   MasteredLanguages  MasteredLanguages[]
   SuggestedLanguages SuggestedLanguages[]
   Translations       Translations[]
   TextContents       TextContent[]
+  LearningLanguages  LearningLanguages[]
 
   @@unique([name])
   @@unique([code])
@@ -237,29 +237,26 @@ model ReportCategories {
 //  * Pofiles
 //  * ****************************************************
 model Profiles {
-  id                        String               @id @default(uuid())
-  user_id                   String
-  native_language_code_id   String
-  learning_language_code_id String?
-  level                     String
-  learning_type             String
-  same_gender               Boolean
-  same_age                  Boolean
-  meeting_frequency         String
-  bio                       Json
-  created_at                DateTime             @default(now())
-  updated_at                DateTime             @updatedAt
-  User                      Users                @relation(fields: [user_id], references: [id], onDelete: Cascade)
-  NativeLanguage            LanguageCodes        @relation("NativeLanguage", fields: [native_language_code_id], references: [id])
-  LearningLanguage          LanguageCodes?       @relation("LearningLanguage", fields: [learning_language_code_id], references: [id])
-  MasteredLanguages         MasteredLanguages[]
-  Goals                     LearningObjectives[]
-  Interests                 Interests[]
-  Tandems                   ProfilesOnTandems[]
+  id                      String               @id @default(uuid())
+  user_id                 String
+  native_language_code_id String
+  learning_type           String
+  same_gender             Boolean
+  same_age                Boolean
+  meeting_frequency       String
+  bio                     Json
+  created_at              DateTime             @default(now())
+  updated_at              DateTime             @updatedAt
+  User                    Users                @relation(fields: [user_id], references: [id], onDelete: Cascade)
+  NativeLanguage          LanguageCodes        @relation("NativeLanguage", fields: [native_language_code_id], references: [id])
+  LearningLanguages       LearningLanguages[]
+  MasteredLanguages       MasteredLanguages[]
+  Goals                   LearningObjectives[]
+  Interests               Interests[]
+  Tandems                 ProfilesOnTandems[]
 
   @@unique([user_id])
   @@index([native_language_code_id], name: "native_language_code")
-  @@index([learning_language_code_id], name: "learning_language_code")
   @@map("profiles")
 }
 
@@ -286,6 +283,19 @@ model LearningObjectives {
 
   @@unique([text_content_id])
   @@map("goals")
+}
+
+model LearningLanguages {
+  profile_id       String
+  language_code_id String
+  created_at       DateTime      @default(now())
+  updated_at       DateTime      @updatedAt
+  level            String
+  Profile          Profiles      @relation(fields: [profile_id], references: [id])
+  LanguageCode     LanguageCodes @relation(fields: [language_code_id], references: [id])
+
+  @@id([profile_id, language_code_id])
+  @@map("learning_languages")
 }
 
 //  * ****************************************************

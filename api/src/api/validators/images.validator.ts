@@ -12,7 +12,7 @@ export type ImagesFileOptions = {
 export class ImagesFilePipe extends ParseFilePipe {
   constructor(options?: ImagesFileOptions) {
     const sizeValidator = new MaxFileSizeValidator({
-      maxSize: options?.maxSize ?? 50000,
+      maxSize: options?.maxSize ?? 1000000,
     });
 
     const mimeValidator = new FileTypeValidator({

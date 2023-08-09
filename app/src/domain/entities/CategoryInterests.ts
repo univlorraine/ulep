@@ -1,17 +1,9 @@
+export class Interest {
+    constructor(public readonly id: string, public readonly name: string) {}
+}
+
 class CategoryInterests {
-    constructor(private readonly _id: string, private readonly _name: string, private readonly _interests: string[]) {}
-
-    get id(): string {
-        return this._id;
-    }
-
-    get name(): string {
-        return this._name;
-    }
-
-    get interests(): string[] {
-        return this._interests;
-    }
+    constructor(public readonly id: string, public readonly name: string, public readonly interests: Interest[]) {}
 }
 
 export default CategoryInterests;

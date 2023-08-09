@@ -22,12 +22,14 @@ import PairingUnavailableLanguagePage from '../pages/PairingUnavailableLanguageP
 import ResetPasswordPage from '../pages/ResetPasswordPage';
 import SignUpAvailabilitiesPage from '../pages/SignUpAvailabilitiesPage';
 import SignUpBiographyPage from '../pages/SignUpBiographyPage';
+import SignupFinalPage from '../pages/SignUpFinalPage';
 import SignUpFrequencyPage from '../pages/SignUpFrequencyPage';
 import SignUpGoalsPage from '../pages/SignUpGoalsPage';
 import SignUpInformationsPage from '../pages/SignUpInformationsPage';
 import SignUpInterestsPage from '../pages/SignUpInterestsPage';
 import SignUpLanguagesPage from '../pages/SignUpLanguagesPage';
 import SignUpPage from '../pages/SignUpPage';
+import WelcomePage from '../pages/WelcomePage';
 import ProfilePage from '../pages/mobile/ProfilePage';
 import ReportPage from '../pages/mobile/ReportPage';
 import SettingsPage from '../pages/mobile/SettingsPage';
@@ -35,7 +37,6 @@ import TandemProfilePage from '../pages/mobile/TandemProfilePage';
 import TandemStatusPage from '../pages/mobile/TandemStatusPage';
 import MobileRoute from './MobileRoute';
 import PrivateRoute from './PrivateRoute';
-import WelcomePage from '../pages/WelcomePage';
 
 const OfflineRouter: React.FC = () => {
     //TODO: Update this when suspended variable will be in profile
@@ -100,7 +101,7 @@ const OfflineRouter: React.FC = () => {
             <PrivateRoute exact component={SignUpAvailabilitiesPage} path="/signup/availabilities" />
             <PrivateRoute exact component={SignUpBiographyPage} path="/signup/biography" />
             <PrivateRoute exact component={SignUpFrequencyPage} path="/signup/frequency" />
-            <PrivateRoute exact component={SignUpGoalsPage} path="/signup/end" />
+            <PrivateRoute exact component={SignupFinalPage} path="/signup/end" />
             <PrivateRoute exact component={SignUpGoalsPage} path="/signup/goals" />
             <PrivateRoute exact component={SignUpInterestsPage} path="/signup/interests" />
             <PrivateRoute exact component={SignUpLanguagesPage} path="/signup/languages" />

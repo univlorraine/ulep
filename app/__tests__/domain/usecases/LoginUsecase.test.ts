@@ -31,7 +31,7 @@ describe('loginUsecase', () => {
 
         await usecase.execute('email', 'password');
         expect(mockedSetTokens).toHaveBeenCalledTimes(1);
-        expect(mockedSetTokens).toHaveBeenCalledWith('accessToken', 'refreshToken');
+        expect(mockedSetTokens).toHaveBeenCalledWith({ accessToken: 'accessToken', refreshToken: 'refreshToken' });
     });
 
     it('execute must return an expected response without parsed body', async () => {

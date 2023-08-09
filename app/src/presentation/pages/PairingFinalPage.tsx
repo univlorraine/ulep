@@ -13,9 +13,10 @@ const PairingFinalPage: React.FC = () => {
     const history = useHistory();
     const { configuration, createProfile } = useConfig();
     const [showToast] = useIonToast();
-    const profileSignUp = useStoreState((payload) => payload.profileSignUp);
+    const profileSignUp = useStoreState((state) => state.profileSignUp);
+    const user = useStoreState((state) => state.user);
 
-    if (!profileSignUp.learningLanguage || !profileSignUp.university) {
+    if (!profileSignUp.learningLanguage || !profileSignUp.university || !user) {
         return <Redirect to="/signup/pairing/languages" />;
     }
 
@@ -38,11 +39,9 @@ const PairingFinalPage: React.FC = () => {
         ) {
             return await showToast({ message: t('errors.global'), duration: 1000 });
         }
+
         const result = await createProfile.execute(
-            profileSignUp.age,
-            profileSignUp.role,
-            profileSignUp.gender,
-            profileSignUp.university.id,
+            user.id,
             profileSignUp.nativeLanguage.code,
             profileSignUp.otherLanguages.map((language) => language.code),
             profileSignUp.learningLanguage.code,
@@ -51,20 +50,16 @@ const PairingFinalPage: React.FC = () => {
             profileSignUp.goals.map((goal) => goal.id),
             profileSignUp.frequency,
             profileSignUp.interests,
+            !!profileSignUp.sameAge,
             !!profileSignUp.sameGender,
-            [
-                profileSignUp.biography.incredible,
-                profileSignUp.biography.place,
-                profileSignUp.biography.power,
-                profileSignUp.biography.travel,
-            ]
+            profileSignUp.biography
         );
 
         if (result instanceof Error) {
             return await showToast({ message: t(result.message), duration: 1000 });
         }
 
-        return history.push('/home');
+        return history.replace('/home');
     };
 
     return (
@@ -76,7 +71,7 @@ const PairingFinalPage: React.FC = () => {
             <div className={styles.container}>
                 <h1 className="title">{t('pairing_final_page.title')}</h1>
                 <div className={styles['image-container']}>
-                    <img className={styles.image} alt="avatar" src={profileSignUp.profilePicture}></img>
+                    <img className={styles.image} alt="avatar" src={user.avatar}></img>
                     <div className={styles.bubble}>
                         <FlagBubble language={profileSignUp.learningLanguage} textColor="white" isSelected disabled />
                     </div>

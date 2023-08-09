@@ -1,4 +1,5 @@
 import { Inject, Injectable } from '@nestjs/common';
+import { JOKER_LANGUAGE_CODE } from 'src/core/models';
 import {
   LANGUAGE_REPOSITORY,
   LanguageRepository,
@@ -12,6 +13,9 @@ export class FindAllLanguageCodeUsecase {
   ) {}
 
   async execute() {
-    return this.languageRepository.all();
+    const languages = await this.languageRepository.all();
+    return languages.filter(
+      (language) => language.code !== JOKER_LANGUAGE_CODE,
+    );
   }
 }

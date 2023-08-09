@@ -4,7 +4,7 @@ import ProfileCommand, { profileCommandToDomain } from './ProfileCommand';
 
 interface TandemCommand {
     id: string;
-    profiles: ProfileCommand[];
+    partner: ProfileCommand;
     language: LanguageCommand;
     status: TandemStatus;
 }
@@ -14,7 +14,7 @@ export const tandemCommandToDomain = (command: TandemCommand[]) => {
         (tandem) =>
             new Tandem(
                 tandem.id,
-                tandem.profiles.map((profile) => profileCommandToDomain(profile)),
+                profileCommandToDomain(tandem.partner),
                 languageCommandToDomain(tandem.language),
                 tandem.status
             )

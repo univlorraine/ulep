@@ -17,7 +17,7 @@ const QuizzContent: React.FC<QuizzContentProps> = ({ onQuizzOver, questions, qui
 
     const answer = (answer: boolean) => {
         const currentAnswers = [...answers];
-        currentAnswers[currentIndex] = answer === questions[currentIndex].answser;
+        currentAnswers[currentIndex] = answer === questions[currentIndex].answer;
         setAnswers(currentAnswers);
 
         if (currentIndex === questions.length - 1) {

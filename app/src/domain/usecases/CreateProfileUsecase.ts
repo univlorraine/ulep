@@ -1,14 +1,14 @@
+import { HttpResponse } from '../../adapter/BaseHttpAdapter';
 import { HttpAdapterInterface } from '../../adapter/DomainHttpAdapter';
+import ProfileCommand, { profileCommandToDomain } from '../../command/ProfileCommand';
+import { BiographySignUp } from '../entities/ProfileSignUp';
 import CreateProfileUsecaseInterface from '../interfaces/CreateProfileUsecase.interface';
 
 class CreateProfileUsecase implements CreateProfileUsecaseInterface {
     constructor(private readonly domainHttpAdapter: HttpAdapterInterface, private readonly setProfile: Function) {}
 
     async execute(
-        age: number, // TODO(herve): Should be in User entity
-        role: Role, // TODO(herve): Should be in User entity
-        gender: Gender, // TODO(herve): Should be in User entity
-        universityId: string, // TODO(herve): Should be in User entity
+        id: string,
         nativeLanguage: string,
         masteredLanguages: string[],
         learningLanguageCode: string,
@@ -17,17 +17,13 @@ class CreateProfileUsecase implements CreateProfileUsecaseInterface {
         goals: string[],
         meetingFrequency: MeetFrequency,
         interests: string[],
+        preferSameAge: boolean,
         preferSameGender: boolean,
-        bios: string[]
+        biography: BiographySignUp
     ): Promise<undefined | Error> {
         try {
-            //TODO: Change this later when api will be ready
-            /*
             const httpResponse: HttpResponse<ProfileCommand> = await this.domainHttpAdapter.post(`/profiles/`, {
-                age,
-                role,
-                gender,
-                university: universityId,
+                id,
                 nativeLanguageCode: nativeLanguage,
                 masteredLanguageCodes: masteredLanguages,
                 learningLanguageCode,
@@ -36,16 +32,23 @@ class CreateProfileUsecase implements CreateProfileUsecaseInterface {
                 objectives: goals,
                 meetingFrequency,
                 interests,
-                preferSameGender,
-                bios,
+                sameAge: preferSameAge,
+                sameGender: preferSameGender,
+                biography: {
+                    superpower: biography.power,
+                    favoritePlace: biography.place,
+                    experience: biography.travel,
+                    anecdote: biography.incredible,
+                },
             });
 
             if (!httpResponse.parsedBody) {
                 return new Error('errors.global');
             }
 
-            return this.setProfile(profileCommandToDomain(httpResponse.parsedBody));*/
-            return;
+            const profile = profileCommandToDomain(httpResponse.parsedBody);
+
+            return await this.setProfile({ profile });
         } catch (error: any) {
             return new Error('errors.global');
         }

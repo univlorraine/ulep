@@ -41,6 +41,7 @@ const AppContext = () => {
     const refreshToken = useStoreState((state) => state.refreshToken);
     const setProfile = useStoreActions((state) => state.setProfile);
     const setTokens = useStoreActions((state) => state.setTokens);
+    const setUser = useStoreActions((state) => state.setUser);
     const configuration = new Configuration(
         'Université de Lorraine',
         'Université de Lorraine',
@@ -66,7 +67,7 @@ const AppContext = () => {
 
     return (
         <ConfigContext.Provider
-            value={getConfigContextValue(accessToken, refreshToken, setProfile, setTokens, configuration)}
+            value={getConfigContextValue(accessToken, refreshToken, setProfile, setTokens, setUser, configuration)}
         >
             <IonReactRouter>
                 <Router />

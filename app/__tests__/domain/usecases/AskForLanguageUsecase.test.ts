@@ -4,7 +4,7 @@ import AskForLanguageUsecase from '../../../src/domain/usecases/AskForLanguageUs
 import DomainHttpAdapter from '../../mocks/adapters/HttpAdapter';
 
 const usecaseResponse: LanguageAskedCommand = { code: 'FR', count: 10 };
-const languagePayload = new Language('FR', 'Français');
+const languagePayload = new Language('id', 'FR', 'Français');
 
 describe('getAllCountries', () => {
     let adapter: DomainHttpAdapter;
@@ -24,7 +24,7 @@ describe('getAllCountries', () => {
         adapter.mockJson({ parsedBody: usecaseResponse });
         await usecase.execute(languagePayload);
         expect(adapter.post).toHaveBeenCalledTimes(1);
-        expect(adapter.post).toHaveBeenCalledWith(`/laguages/${languagePayload.code}/requests`, {});
+        expect(adapter.post).toHaveBeenCalledWith(`/languages/${languagePayload.code}/requests`, {});
     });
 
     it('execute must return an expected response', async () => {

@@ -2,6 +2,7 @@ import { useIonToast } from '@ionic/react';
 import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Redirect, useHistory } from 'react-router';
+import { PlusSvg } from '../../assets';
 import { useConfig } from '../../context/ConfigurationContext';
 import Language from '../../domain/entities/Language';
 import { useStoreActions, useStoreState } from '../../store/storeTypes';
@@ -9,7 +10,6 @@ import FlagBubble from '../components/FlagBubble';
 import WebLayoutCentered from '../components/layout/WebLayoutCentered';
 import pairingLanguagesStyles from './css/PairingLanguages.module.css';
 import styles from './css/SignUp.module.css';
-import { PlusSvg } from '../../assets';
 
 const PairingLaguagesPage: React.FC = () => {
     const { t } = useTranslation();
@@ -26,14 +26,14 @@ const PairingLaguagesPage: React.FC = () => {
     }
 
     const getLanguages = async () => {
-        let result = await getAllLanguages.execute();
+        let result = await getAllLanguages.execute(profileSignUp.university?.id);
 
         if (result instanceof Error) {
             return await showToast({ message: t(result.message), duration: 1000 });
         }
 
         const universityLanguages = result.filter((language) =>
-            profileSignUp.university!.languageCodes.includes(language.code)
+            profileSignUp.university!.languages.findIndex((lang) => lang.code === language.code)
         );
         return setLanguages(universityLanguages);
     };
@@ -63,6 +63,7 @@ const PairingLaguagesPage: React.FC = () => {
                         {languages.map((language) => {
                             return (
                                 <FlagBubble
+                                    key={language.code}
                                     isSelected={selectedLaguage?.code === language.code}
                                     language={language}
                                     onPressed={setSelectedLanguage}
