@@ -16,4 +16,6 @@ export interface TandemRepository {
   hasActiveTandem(profileId: string): Promise<boolean>;
 
   findWhere(props: FindWhereProps): Promise<Collection<Tandem>>;
+
+  getExistingTandems(): Promise<Tandem[]>;
 }

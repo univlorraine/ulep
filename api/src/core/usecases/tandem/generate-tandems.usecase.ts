@@ -1,5 +1,5 @@
 import { Inject, Injectable } from '@nestjs/common';
-import { Profile, TandemStatus } from 'src/core/models';
+import { Profile, Tandem, TandemStatus } from 'src/core/models';
 import {
   PROFILE_REPOSITORY,
   ProfileRepository,
@@ -33,22 +33,31 @@ export class GenerateTandemsUsecase {
 
     const groups = await this.findGroups(profiles);
 
-    const tandems = this.createTandems(groups.groupA, groups.groupB);
+    // Do not re-recreate existing tandems
+    const existingTandems = await this.tandemsRepository.getExistingTandems();
 
-    for (const tandem of tandems) {
+    const pairs = this.createTandemsPairs(
+      groups.groupA,
+      groups.groupB,
+      existingTandems,
+    );
+
+    for (const pair of pairs) {
       // TODO: this should be an argument of the usecase
-      if (tandem.score < 0.5) {
+      if (pair.score < 0.5) {
         continue;
       }
 
-      await this.tandemsRepository.save({
+      const tandem = new Tandem({
         id: this.uuidProvider.generate(),
-        profiles: tandem.profiles,
+        profiles: pair.profiles,
         status: TandemStatus.DRAFT,
       });
+
+      await this.tandemsRepository.save(tandem);
     }
 
-    return tandems;
+    return pairs;
   }
 
   // TODO: this should be in a ProfilesPairer service
@@ -62,10 +71,15 @@ export class GenerateTandemsUsecase {
     return { groupA, groupB };
   }
 
-  private createTandems(groupA: Profile[], groupB: Profile[]) {
+  private createTandemsPairs(
+    groupA: Profile[],
+    groupB: Profile[],
+    existingTandems: Tandem[],
+  ) {
     const pairs = new ProfilesPairer(
       groupA,
       groupB,
+      existingTandems,
       this.scorer,
     ).findStablePairs();
 
