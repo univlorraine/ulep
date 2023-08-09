@@ -102,15 +102,9 @@ export class ProfileResponse {
       nativeLanguage: {
         code: profile.nativeLanguage.code,
       },
-<<<<<<< HEAD
       masteredLanguages: profile.masteredLanguages.map((masteredLanguage) => ({
         code: masteredLanguage.code,
       })),
-      learningLanguage: {
-        code: profile.learningLanguage.code,
-        level: profile.level,
-      },
-=======
       learningLanguages: profile.learningLanguages.map((learningLanguage) => ({
         code:
           learningLanguage.language.code === JOKER_LANGUAGE_CODE
@@ -118,7 +112,6 @@ export class ProfileResponse {
             : learningLanguage.language.code,
         level: learningLanguage.level,
       })),
->>>>>>> develop
       objectives: profile.objectives.map(ObjectiveResponse.fromDomain),
       interests: profile.interests.map(InterestResponse.fromDomain),
       meetingFrequency: profile.meetingFrequency,
