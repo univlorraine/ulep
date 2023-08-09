@@ -79,7 +79,7 @@ const SignUpInformationsPage: React.FC = () => {
             return history.push('/signup/');
         }
 
-        const result = createUser.execute(
+        const result = await createUser.execute(
             email,
             password,
             firstname,
@@ -156,20 +156,20 @@ const SignUpInformationsPage: React.FC = () => {
                     <h2 className={`${styles.subtitle} no-margin-top`}>{t('global.gender')}</h2>
 
                     <RadioButton
-                        isSelected={gender === 'FEMALE'}
-                        onPressed={() => setGender('FEMALE')}
+                        isSelected={gender === 'female'}
+                        onPressed={() => setGender('female')}
                         name={t('global.woman')}
                     />
 
                     <RadioButton
-                        isSelected={gender === 'MALE'}
-                        onPressed={() => setGender('MALE')}
+                        isSelected={gender === 'male'}
+                        onPressed={() => setGender('male')}
                         name={t('global.men')}
                     />
 
                     <RadioButton
-                        isSelected={gender === 'OTHER'}
-                        onPressed={() => setGender('OTHER')}
+                        isSelected={gender === 'other'}
+                        onPressed={() => setGender('other')}
                         name={t('global.binary')}
                     />
                 </div>

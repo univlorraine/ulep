@@ -1,4 +1,6 @@
+import { HttpResponse } from '../../adapter/BaseHttpAdapter';
 import { HttpAdapterInterface } from '../../adapter/DomainHttpAdapter';
+import GoalCommand, { goalCommandToDomain } from '../../command/GoalCommand';
 import Goal from '../entities/Goal';
 import GetAllGoalsUsecaseInterface from '../interfaces/GetAllGoalsUsecase.interface';
 
@@ -7,25 +9,13 @@ class GetAllGoalsUsecase implements GetAllGoalsUsecaseInterface {
 
     async execute(): Promise<Goal[] | Error> {
         try {
-            //TODO: CURRENTLY MOCK DATA
-            /*const httpResponse: HttpResponse<CollectionCommand<GoalCommand>> = await this.domainHttpAdapter.get(
-                `/objectives`
-            );
+            const httpResponse: HttpResponse<GoalCommand[]> = await this.domainHttpAdapter.get(`/objectives`);
 
-            if (!httpResponse.parsedBody || !httpResponse.parsedBody.items) {
+            if (!httpResponse.parsedBody) {
                 return new Error('errors.global');
             }
 
-            return httpResponse.parsedBody.items.map((goal) => goalCommandToDomain(goal));
-            */
-
-            return [
-                new Goal('1', '/assets/group_conversation.svg', 'Découvrir une nouvelle langue'),
-                new Goal('2', '/assets/pin.svg', 'Découvrir une culture'),
-                new Goal('3', '/assets/oral_skill.svg', 'Améliorer mes compétences orales'),
-                new Goal('4', '/assets/writing_skill.svg', 'Améliorer mes compétences écrites'),
-                new Goal('5', '/assets/trophie.svg', 'Obtenir un certificat (e)Tandem'),
-            ];
+            return httpResponse.parsedBody.map((goal) => goalCommandToDomain(goal));
         } catch (error: any) {
             return new Error('errors.global');
         }

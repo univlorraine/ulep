@@ -1,13 +1,9 @@
-import { CollectionCommand } from '../../../src/command/CollectionCommand';
 import LanguageCommand from '../../../src/command/LanguageCommand';
 import Language from '../../../src/domain/entities/Language';
 import GetAllLanguagesUsecase from '../../../src/domain/usecases/GetAllLanguagesUsecase';
 import DomainHttpAdapter from '../../mocks/adapters/HttpAdapter';
 
-const usecaseResponse: CollectionCommand<LanguageCommand> = {
-    items: [{ code: 'code', name: 'name' }],
-    totalItems: 1,
-};
+const usecaseResponse: LanguageCommand[] = [{ id: 'ID', code: 'code', name: 'name' }];
 
 describe('getAllLanguages', () => {
     let adapter: DomainHttpAdapter;
@@ -28,6 +24,15 @@ describe('getAllLanguages', () => {
         await usecase.execute();
         expect(adapter.get).toHaveBeenCalledTimes(1);
         expect(adapter.get).toHaveBeenCalledWith('/languages');
+    });
+
+    it('execute function must call DomainHttpAdapter with universityId', async () => {
+        expect.assertions(2);
+        jest.spyOn(adapter, 'get');
+        adapter.mockJson({ parsedBody: usecaseResponse });
+        await usecase.execute('id');
+        expect(adapter.get).toHaveBeenCalledTimes(1);
+        expect(adapter.get).toHaveBeenCalledWith('/universities/id/languages');
     });
 
     it('execute must return an expected response', async () => {

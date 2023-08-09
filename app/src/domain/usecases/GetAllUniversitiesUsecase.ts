@@ -1,6 +1,5 @@
 import { HttpResponse } from '../../adapter/BaseHttpAdapter';
 import { HttpAdapterInterface } from '../../adapter/DomainHttpAdapter';
-import { CollectionCommand } from '../../command/CollectionCommand';
 import UniversityCommand, { universityCommandToDomain } from '../../command/UniversityCommand';
 import University from '../entities/University';
 import GetAllUniversitiesUsecaseInterface from '../interfaces/GetAllUniversitiesUsecase.interface';
@@ -10,15 +9,13 @@ class GetAllUniversitiesUsecase implements GetAllUniversitiesUsecaseInterface {
 
     async execute(): Promise<University[] | Error> {
         try {
-            const httpResponse: HttpResponse<CollectionCommand<UniversityCommand>> = await this.domainHttpAdapter.get(
-                `/universities`
-            );
+            const httpResponse: HttpResponse<UniversityCommand[]> = await this.domainHttpAdapter.get(`/universities`);
 
-            if (!httpResponse.parsedBody || !httpResponse.parsedBody.items) {
+            if (!httpResponse.parsedBody || !httpResponse.parsedBody) {
                 return new Error('errors.global');
             }
 
-            return httpResponse.parsedBody.items.map((university) => universityCommandToDomain(university));
+            return httpResponse.parsedBody.map((university) => universityCommandToDomain(university));
         } catch (error: any) {
             return new Error('errors.global');
         }

@@ -92,6 +92,7 @@ const SignUpAvailabilitiesPage: React.FC = () => {
                     {Object.keys(availabilities).map((availabilityKey) => {
                         return (
                             <AvailabilityLine
+                                key={availabilityKey}
                                 availability={availabilities[availabilityKey as keyof Availabilites]}
                                 day={availabilityKey}
                                 onPress={(item) => setOpenAvailabilityModal(item)}

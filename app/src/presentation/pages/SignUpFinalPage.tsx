@@ -9,7 +9,8 @@ const SignupFinalPage: React.FC = () => {
     const { t } = useTranslation();
     const history = useHistory();
     const { configuration } = useConfig();
-    const profileSignUp = useStoreState((payload) => payload.profileSignUp);
+    const profileSignUp = useStoreState((state) => state.profileSignUp);
+    const user = useStoreState((state) => state.user);
 
     return (
         <SuccessLayout
@@ -21,7 +22,7 @@ const SignupFinalPage: React.FC = () => {
                 <h1 className={styles.title}>{`${t('signup_end_page.thanks')} ${profileSignUp.firstname}, ${t(
                     'signup_end_page.account'
                 )}`}</h1>
-                <img className={styles.image} alt="avatar" src={profileSignUp.profilePicture} />
+                <img className={styles.image} alt="avatar" src={user?.avatar} />
                 <p className={styles.description}>{t('signup_end_page.description')}</p>
                 <button className="primary-button" onClick={() => history.push('/signup/pairing/languages')}>
                     {t('signup_end_page.validate_button')}

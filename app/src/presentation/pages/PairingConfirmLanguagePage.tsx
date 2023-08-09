@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Redirect, useHistory } from 'react-router';
+import { TandemSvg } from '../../assets';
 import { useConfig } from '../../context/ConfigurationContext';
 import { useStoreState } from '../../store/storeTypes';
 import LanguageSelectedContent from '../components/contents/LanguageSelectedContent';
@@ -9,16 +10,16 @@ import WebLayoutCentered from '../components/layout/WebLayoutCentered';
 import { codeCountryToFlag } from '../utils';
 import confirmLanguagesStyles from './css/PairingConfirmLanguage.module.css';
 import styles from './css/SignUp.module.css';
-import { TandemSvg } from '../../assets';
 
 const PairingConfirmLanguagePage: React.FC = () => {
     const { t } = useTranslation();
     const { configuration } = useConfig();
     const history = useHistory();
     const profileSignUp = useStoreState((state) => state.profileSignUp);
+    const user = useStoreState((state) => state.user);
     const [isConfirmed, setIsConfirmed] = useState<boolean>(false);
 
-    if (!profileSignUp.learningLanguage) {
+    if (!profileSignUp.learningLanguage || !user) {
         return <Redirect to="/signup" />;
     }
 
@@ -53,7 +54,7 @@ const PairingConfirmLanguagePage: React.FC = () => {
                     <LanguageSelectedContent
                         language={profileSignUp.learningLanguage}
                         mode={'confirm'}
-                        profilePicture={profileSignUp.profilePicture!}
+                        profilePicture={user.avatar}
                         onNextPressed={continueSignUp}
                     />
                 </div>

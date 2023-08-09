@@ -45,7 +45,6 @@ export class ProfileController {
   @Post()
   @UseGuards(AuthenticationGuard)
   @SerializeOptions({ groups: ['read', 'profile:read'] })
-  @UseGuards(AuthenticationGuard)
   @Swagger.ApiOperation({ summary: 'Creates a Profile ressource.' })
   @Swagger.ApiCreatedResponse({ type: ProfileResponse })
   @Swagger.ApiResponse({ status: 400, description: 'Invalid input' })

@@ -8,22 +8,25 @@ const Store = createStore<TokenStoreTypes>(
         refreshToken: '',
         setProfile: action((state, payload) => {
             state.profile = payload.profile;
-            state.profileSignUp = new ProfileSignUp();
         }),
         setTokens: action((state, payload) => {
-            state.accessToken = payload.accessToken ? payload.accessToken : state.accessToken;
-            state.refreshToken = payload.refreshToken ? payload.refreshToken : state.refreshToken;
+            state.accessToken = payload.accessToken ?? state.accessToken;
+            state.refreshToken = payload.refreshToken ?? state.refreshToken;
+        }),
+        setUser: action((state, payload) => {
+            state.user = payload.user ?? state.user;
         }),
         logout: action((state) => {
             state.accessToken = '';
             state.profile = undefined;
             state.refreshToken = '';
+            state.user = undefined;
         }),
         profile: undefined,
         profileSignUp: new ProfileSignUp(),
         updateProfile: action((state, payload) => {
             const profile = state.profile;
-            if (profile && payload.avatar) profile.avatar = payload.avatar;
+            if (profile && payload.avatar) profile.user.avatar = payload.avatar;
         }),
         updateProfileSignUp: action((state, payload) => {
             const profile = state.profileSignUp;
@@ -60,6 +63,7 @@ const Store = createStore<TokenStoreTypes>(
             if (payload.timezone) profile.timezone = payload.timezone;
             if (payload.university) profile.university = payload.university;
         }),
+        user: undefined,
     })
 );
 

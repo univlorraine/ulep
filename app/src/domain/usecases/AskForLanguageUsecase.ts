@@ -10,7 +10,7 @@ class AskForLanguageUsecase implements AskForLanguageUsecaseInterface {
     async execute(language: Language): Promise<number | Error> {
         try {
             const httpResponse: HttpResponse<LanguageAskedCommand> = await this.domainHttpAdapter.post(
-                `/laguages/${language.code}/requests`,
+                `/languages/${language.code}/requests`,
                 {}
             );
 

@@ -36,9 +36,10 @@ export class Tandem {
       throw new InvalidTandemError('Tandem must have two different profiles');
     }
 
+    // TODO(multipleLearningLanguage): manage multiple learning language
     if (
-      this.profiles[0].learningLanguage?.code !== this.profiles[1].nativeLanguage.code ||
-      this.profiles[1].learningLanguage?.code !== this.profiles[0].nativeLanguage.code
+      this.profiles[0].learningLanguages?.[0]?.language.code !== this.profiles[1].nativeLanguage.code ||
+      this.profiles[1].learningLanguages?.[0]?.language.code !== this.profiles[0].nativeLanguage.code
     ) {
       throw new InvalidTandemError(
         'Leanring language and native language missmatch between profiles',

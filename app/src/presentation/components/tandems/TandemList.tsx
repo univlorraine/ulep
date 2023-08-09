@@ -24,13 +24,8 @@ const TandemList: React.FC<TandemListProps> = ({ onTandemPressed, studentId, tan
                                     key={tandem.id}
                                     language={tandem.language}
                                     onTandemPressed={() => onTandemPressed(tandem)}
-                                    profileAvatar={
-                                        tandem.profiles.find((profileTandem) => profileTandem.id !== studentId)?.avatar
-                                    }
-                                    profileName={
-                                        tandem.profiles.find((profileTandem) => profileTandem.id !== studentId)
-                                            ?.firstname
-                                    }
+                                    profileAvatar={tandem.partner.user.avatar}
+                                    profileName={tandem.partner.user.firstname}
                                 />
                             );
                         })}

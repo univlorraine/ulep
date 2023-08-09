@@ -74,10 +74,10 @@ const TandemProfile: React.FC<TandemProfileProps> = ({ language, onClose, profil
             <div className={styles.content}>
                 <span className="title extra-large-margin-bottom">{t(`home_page.tandem_validated.title`)}</span>
                 <TandemCard
-                    avatar={profile.avatar}
-                    fistname={profile.firstname}
+                    avatar={profile.user.avatar}
+                    fistname={profile.user.firstname}
                     language={language}
-                    lastname={profile.lastname}
+                    lastname={profile.user.lastname}
                     university={university}
                 />
                 <span className={styles.category}>{t(`home_page.tandem_validated.goals`)}</span>

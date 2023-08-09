@@ -40,8 +40,10 @@
 }
 
 .image {
+    border-radius: 50%;
     height: 194px;
     width: 194px;
+    object-fit: cover;
 }
 
 .name {

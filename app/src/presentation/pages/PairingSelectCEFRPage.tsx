@@ -43,6 +43,7 @@ const PairingSelectCEFRPage: React.FC = () => {
                         {levels.map((level) => {
                             return (
                                 <button
+                                    key={level}
                                     className={pairingSelectLevelStyles['level-container']}
                                     onClick={() => setSelectedLevel(level)}
                                     style={{

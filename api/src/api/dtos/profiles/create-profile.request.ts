@@ -1,7 +1,9 @@
 import * as Swagger from '@nestjs/swagger';
 import { ApiPropertyOptional } from '@nestjs/swagger';
+import { Transform } from 'class-transformer';
 import {
   ArrayMaxSize,
+  ArrayMinSize,
   IsBoolean,
   IsEnum,
   IsNotEmpty,
@@ -9,11 +11,12 @@ import {
   IsOptional,
   IsUUID,
   ValidateNested,
+  IsArray,
 } from 'class-validator';
-import { ProficiencyLevel, LearningType } from 'src/core/models';
+import { LearningType } from 'src/core/models';
 import { CreateProfileCommand } from 'src/core/usecases/profiles/create-profile.usecase';
 import { BiographyDto } from './biography';
-import { Transform, Type } from 'class-transformer';
+import { LearningLanguageDto } from './learningLanguage';
 
 export class CreateProfileRequest
   implements Omit<CreateProfileCommand, 'user'>
@@ -27,15 +30,11 @@ export class CreateProfileRequest
   @IsNotEmpty()
   nativeLanguageCode: string;
 
-  // TODO(herve): we should use ids instead of codes
-  @ApiPropertyOptional({ type: 'string', example: 'EN' })
-  @IsNotEmpty()
-  @IsOptional()
-  learningLanguageCode?: string;
-
-  @Swagger.ApiProperty({ enum: ProficiencyLevel, example: 'B2' })
-  @IsEnum(ProficiencyLevel)
-  level: ProficiencyLevel;
+  @Swagger.ApiProperty({ type: () => [LearningLanguageDto] })
+  @IsArray()
+  @Transform(({ value }) => value.map((val) => new LearningLanguageDto(val)))
+  @ValidateNested()
+  learningLanguages: LearningLanguageDto[];
 
   // TODO(herve): we should use ids instead of codes
   @ApiPropertyOptional({ type: 'string', example: ['FR'] })
@@ -56,7 +55,8 @@ export class CreateProfileRequest
   meetingFrequency: string;
 
   @Swagger.ApiProperty({ type: 'string', format: 'uuid', isArray: true })
-  @ArrayMaxSize(5)
+  @ArrayMaxSize(10)
+  @ArrayMinSize(5)
   @IsNotEmpty({ each: true })
   interests: string[];
 
