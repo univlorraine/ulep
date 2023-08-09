@@ -3,10 +3,10 @@ import { Profile } from '../models';
 
 export const PROFILE_REPOSITORY = 'profile.repository';
 
-export type ProfileFilters = {
-  nativeLanguageCode: {
-    equals?: string;
-    not?: string;
+export type MaxTandemsCountAndLanguageProps = {
+  tandemsCount: number;
+  nativeLanguage: {
+    not: string;
   };
 };
 
@@ -15,7 +15,11 @@ export interface ProfileRepository {
 
   ofUser: (userId: string) => Promise<Profile | null>;
 
-  availableOnly: (filters?: ProfileFilters) => Promise<Profile[]>;
+  whereMaxTandemsCount: (max: number) => Promise<Profile[]>;
+
+  whereMaxTandemsCountAndLanguage: (
+    props: MaxTandemsCountAndLanguageProps,
+  ) => Promise<Profile[]>;
 
   create: (profile: Profile) => Promise<void>;
 

@@ -1,4 +1,4 @@
-import { Body, Controller, Get, Post, Query } from '@nestjs/common';
+import { Body, Controller, Get, Post, Query, UseGuards } from '@nestjs/common';
 import * as Swagger from '@nestjs/swagger';
 import { Collection } from '@app/common';
 import { CollectionResponse } from '../decorators';
@@ -12,6 +12,9 @@ import {
   ProfileResponse,
   TandemResponse,
 } from '../dtos';
+import { Roles } from '../decorators/roles.decorator';
+import { configuration } from 'src/configuration';
+import { AuthenticationGuard } from '../guards';
 
 @Controller('tandems')
 @Swagger.ApiTags('Tandems')
@@ -23,6 +26,8 @@ export class TandemController {
   ) {}
 
   @Get()
+  @Roles(configuration().adminRole)
+  @UseGuards(AuthenticationGuard)
   @Swagger.ApiOperation({
     summary: 'Retrieve the collection of Tandem ressource.',
   })
@@ -39,12 +44,16 @@ export class TandemController {
   }
 
   @Post()
+  @Roles(configuration().adminRole)
+  @UseGuards(AuthenticationGuard)
   @Swagger.ApiOperation({ summary: 'Creates a Tandem ressource.' })
   async create(@Body() body: CreateTandemRequest): Promise<void> {
     await this.createTandemUsecase.execute({ ...body });
   }
 
   @Post('generate')
+  @Roles(configuration().adminRole)
+  @UseGuards(AuthenticationGuard)
   @Swagger.ApiOperation({ summary: 'Generate Tandems' })
   async generate(): Promise<TandemResponse[]> {
     const tandems = await this.generateTandemsUsecase.execute();

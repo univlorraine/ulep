@@ -34,6 +34,8 @@ import {
   UpdateReportStatusUsecase,
 } from '../../core/usecases/report';
 import { ReportStatus } from '../../core/models/report.model';
+import { configuration } from 'src/configuration';
+import { Roles } from '../decorators/roles.decorator';
 
 @Controller('reports')
 @Swagger.ApiTags('Reports')
@@ -51,8 +53,9 @@ export class ReportController {
     private readonly deleteReportUsecase: DeleteReportUsecase,
   ) {}
 
-  // TODO: only admin can create a category
   @Post('categories')
+  @Roles(configuration().adminRole)
+  @UseGuards(AuthenticationGuard)
   @Swagger.ApiOperation({ summary: 'Create a new Category ressource.' })
   @Swagger.ApiCreatedResponse({ type: ReportCategoryResponse })
   async createCategory(@Body() body: CreateReportCategoryRequest) {
@@ -61,8 +64,8 @@ export class ReportController {
     return ReportCategoryResponse.fromDomain(instance);
   }
 
-  // TODO: only connected users can access this route
   @Get('categories')
+  @UseGuards(AuthenticationGuard)
   @Swagger.ApiOperation({ summary: 'Collection of Category ressource.' })
   @Swagger.ApiOkResponse({ type: ReportCategoryResponse, isArray: true })
   async findAllCategories() {
@@ -71,15 +74,15 @@ export class ReportController {
     return instances.map(ReportCategoryResponse.fromDomain);
   }
 
-  // TODO: only admin can delete a category
   @Delete('categories/:id')
+  @Roles(configuration().adminRole)
+  @UseGuards(AuthenticationGuard)
   @Swagger.ApiOperation({ summary: 'Deletes a Category ressource.' })
   @Swagger.ApiOkResponse()
   removeCategory(@Param('id', ParseUUIDPipe) id: string) {
     return this.deleteReportCategoryUsecase.execute({ id });
   }
 
-  // TODO: only connected users can create a report
   @Post()
   @UseGuards(AuthenticationGuard)
   @Swagger.ApiOperation({ summary: 'Create a new Report ressource.' })
@@ -98,6 +101,8 @@ export class ReportController {
 
   // TODO: add pagination
   @Get()
+  @Roles(configuration().adminRole)
+  @UseGuards(AuthenticationGuard)
   @Swagger.ApiOperation({ summary: 'Collection of Report ressource.' })
   @Swagger.ApiOkResponse({ type: ReportResponse, isArray: true })
   async findByStatus(
@@ -112,6 +117,8 @@ export class ReportController {
 
   // TODO: only admin or owner can get report
   @Get(':id')
+  @Roles(configuration().adminRole)
+  @UseGuards(AuthenticationGuard)
   @Swagger.ApiOperation({ summary: 'Report ressource.' })
   @Swagger.ApiOkResponse({ type: ReportResponse })
   async findOneReport(@Param('id', ParseUUIDPipe) id: string) {
@@ -120,8 +127,9 @@ export class ReportController {
     return ReportResponse.fromDomain(instance);
   }
 
-  // TODO: only admin can update report
   @Patch(':id')
+  @Roles(configuration().adminRole)
+  @UseGuards(AuthenticationGuard)
   @Swagger.ApiOperation({ summary: 'Updates a Report ressource.' })
   @Swagger.ApiOkResponse()
   async updateReport(
@@ -131,8 +139,9 @@ export class ReportController {
     await this.updateReportStatusUsecase.execute({ id, ...request });
   }
 
-  // TODO: only admin can delete report
   @Delete(':id')
+  @Roles(configuration().adminRole)
+  @UseGuards(AuthenticationGuard)
   @Swagger.ApiOperation({ summary: 'Deletes a Report ressource.' })
   @Swagger.ApiOkResponse()
   removeReport(@Param('id', ParseUUIDPipe) id: string) {

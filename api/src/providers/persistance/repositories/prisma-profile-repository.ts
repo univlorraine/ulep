@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { StringFilter, Collection, PrismaService } from '@app/common';
 import {
-  ProfileFilters,
+  MaxTandemsCountAndLanguageProps,
   ProfileRepository,
 } from 'src/core/ports/profile.repository';
 import { Profile } from 'src/core/models';
@@ -37,21 +37,55 @@ export class PrismaProfileRepository implements ProfileRepository {
     return profileMapper(entry);
   }
 
-  async availableOnly(filters?: ProfileFilters): Promise<Profile[]> {
-    const entries = await this.prisma.profiles.findMany({
-      where: {
-        Tandems: {
-          none: { Tandem: { status: 'active' } },
-        },
-        NativeLanguage: {
-          isNot: { code: filters?.nativeLanguageCode?.not },
-          is: { code: filters?.nativeLanguageCode?.equals },
-        },
-      },
+  async whereMaxTandemsCountAndLanguage(
+    props: MaxTandemsCountAndLanguageProps,
+  ): Promise<Profile[]> {
+    const result: any[] = await this.prisma.$queryRaw`
+    SELECT p.id
+    FROM profiles p
+    LEFT JOIN (
+      SELECT pot.profile_id, COUNT(*) AS tandem_count
+      FROM profiles_on_tandems pot
+      JOIN tandems t ON pot.tandem_id = t.id
+      WHERE t.status != 'INACTIVE'
+      GROUP BY pot.profile_id
+    ) AS tandems_count ON p.id = tandems_count.profile_id
+    WHERE (tandems_count.tandem_count < ${props.tandemsCount} OR tandems_count.tandem_count IS NULL)
+      AND p.native_language_code_id != ${props.nativeLanguage.not}
+  `;
+
+    const profileIds = result.map((row) => row.id);
+
+    const profiles = await this.prisma.profiles.findMany({
+      where: { id: { in: profileIds } },
       include: ProfilesRelations,
     });
 
-    return entries.map(profileMapper);
+    return profiles.map(profileMapper);
+  }
+
+  async whereMaxTandemsCount(max: number): Promise<Profile[]> {
+    const result: any[] = await this.prisma.$queryRaw`
+    SELECT p.id
+    FROM profiles p
+    LEFT JOIN (
+      SELECT pot.profile_id, COUNT(*) AS tandem_count
+      FROM profiles_on_tandems pot
+      JOIN tandems t ON pot.tandem_id = t.id
+      WHERE t.status != 'INACTIVE'
+      GROUP BY pot.profile_id
+    ) AS tandems_count ON p.id = tandems_count.profile_id
+    WHERE tandems_count.tandem_count < ${max} OR tandems_count.tandem_count IS NULL
+  `;
+
+    const profileIds = result.map((row) => row.id);
+
+    const profiles = await this.prisma.profiles.findMany({
+      where: { id: { in: profileIds } },
+      include: ProfilesRelations,
+    });
+
+    return profiles.map(profileMapper);
   }
 
   async create(profile: Profile): Promise<void> {
@@ -69,10 +103,16 @@ export class PrismaProfileRepository implements ProfileRepository {
         NativeLanguage: {
           connect: { id: profile.nativeLanguage.id },
         },
-        LearningLanguage: {
-          connect: { id: profile.learningLanguage.id },
+        LearningLanguages: {
+          create: profile.learningLanguages.map((learningLanguage) => {
+            return {
+              LanguageCode: {
+                connect: { code: learningLanguage.language.code },
+              },
+              level: learningLanguage.level,
+            };
+          }),
         },
-        level: profile.level,
         MasteredLanguages: {
           create: profile.masteredLanguages.map((language) => {
             return { LanguageCode: { connect: { code: language.code } } };

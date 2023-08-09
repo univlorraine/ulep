@@ -11,10 +11,12 @@ import {
   IsOptional,
   IsUUID,
   ValidateNested,
+  IsArray,
 } from 'class-validator';
-import { LearningType, ProficiencyLevel } from 'src/core/models';
+import { LearningType } from 'src/core/models';
 import { CreateProfileCommand } from 'src/core/usecases/profiles/create-profile.usecase';
 import { BiographyDto } from './biography';
+import { LearningLanguageDto } from './learningLanguage';
 
 export class CreateProfileRequest
   implements Omit<CreateProfileCommand, 'user'>
@@ -28,15 +30,11 @@ export class CreateProfileRequest
   @IsNotEmpty()
   nativeLanguageCode: string;
 
-  // TODO(herve): we should use ids instead of codes
-  @ApiPropertyOptional({ type: 'string', example: 'EN' })
-  @IsNotEmpty()
-  @IsOptional()
-  learningLanguageCode?: string;
-
-  @Swagger.ApiProperty({ enum: ProficiencyLevel, example: 'B2' })
-  @IsEnum(ProficiencyLevel)
-  level: ProficiencyLevel;
+  @Swagger.ApiProperty({ type: () => [LearningLanguageDto] })
+  @IsArray()
+  @Transform(({ value }) => value.map((val) => new LearningLanguageDto(val)))
+  @ValidateNested()
+  learningLanguages: LearningLanguageDto[];
 
   // TODO(herve): we should use ids instead of codes
   @ApiPropertyOptional({ type: 'string', example: ['FR'] })

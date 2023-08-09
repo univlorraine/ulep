@@ -6,6 +6,7 @@ import {
   textContentMapper,
 } from './translation.mapper';
 import { UserRelations, UserSnapshot, userMapper } from './user.mapper';
+import { languageMapper } from './language.mapper';
 
 export const ProfilesRelations = {
   User: {
@@ -21,8 +22,8 @@ export const ProfilesRelations = {
     },
   },
   NativeLanguage: true,
-  LearningLanguage: true,
   MasteredLanguages: { include: { LanguageCode: true } },
+  LearningLanguages: { include: { LanguageCode: true } },
 };
 
 export type ProfileSnapshot = Prisma.Profiles & {
@@ -35,7 +36,9 @@ export type ProfileSnapshot = Prisma.Profiles & {
     Category: Prisma.InterestCategories & { TextContent: TextContentSnapshot };
   })[];
   NativeLanguage: Prisma.LanguageCodes;
-  LearningLanguage: Prisma.LanguageCodes;
+  LearningLanguages: (Prisma.LearningLanguages & {
+    LanguageCode: Prisma.LanguageCodes;
+  })[];
   MasteredLanguages: (Prisma.MasteredLanguages & {
     LanguageCode: Prisma.LanguageCodes;
   })[];
@@ -53,11 +56,10 @@ export const profileMapper = (instance: ProfileSnapshot): Profile => {
       id: language.LanguageCode.id,
       code: language.LanguageCode.code,
     })),
-    learningLanguage: {
-      id: instance.LearningLanguage.id,
-      code: instance.LearningLanguage.code,
-    },
-    level: ProficiencyLevel[instance.level],
+    learningLanguages: instance.LearningLanguages.map((learningLanguage) => ({
+      level: ProficiencyLevel[learningLanguage.level],
+      language: languageMapper(learningLanguage.LanguageCode),
+    })),
     learningType: LearningType[instance.learning_type],
     meetingFrequency: instance.meeting_frequency,
     sameAge: instance.same_age,

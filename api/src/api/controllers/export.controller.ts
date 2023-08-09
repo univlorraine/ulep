@@ -1,6 +1,9 @@
-import { Controller, Get, Res } from '@nestjs/common';
+import { Controller, Get, Res, UseGuards } from '@nestjs/common';
 import * as Swagger from '@nestjs/swagger';
 import { GetProfilesUsecase } from 'src/core/usecases/profiles/get-profiles.usecase';
+import { Roles } from '../decorators/roles.decorator';
+import { configuration } from 'src/configuration';
+import { AuthenticationGuard } from '../guards';
 
 @Controller('export')
 @Swagger.ApiExcludeController()
@@ -8,6 +11,8 @@ export class ExportController {
   constructor(private readonly getProfilesUsecase: GetProfilesUsecase) {}
 
   @Get('profiles')
+  @Roles(configuration().adminRole)
+  @UseGuards(AuthenticationGuard)
   async profiles(@Res() response: any): Promise<any> {
     const data = await this.getProfilesUsecase.execute({
       page: 1,
@@ -27,8 +32,8 @@ export class ExportController {
         gender: item.user.gender,
         role: item.user.role,
         native_language: item.nativeLanguage.code,
-        learning_language: item.learningLanguage?.code,
-        level: item.level,
+        learning_language: item.learningLanguages?.[0]?.language.code,
+        level: item.learningLanguages?.[0]?.level,
         // goal: item.preferences.goals.map((g) => g.name.content).join(', '),
         interests: item.interests.map((i) => i.name.content).join(', '),
         same_gender: item.sameGender ? 1 : 0,

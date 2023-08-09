@@ -11,12 +11,14 @@ import {
   AUTHENTICATOR,
   AuthenticatorInterface,
 } from '../services/authenticator.interface';
+import { Reflector } from '@nestjs/core';
 
 @Injectable()
 export class AuthenticationGuard implements CanActivate {
   constructor(
     @Inject(AUTHENTICATOR)
     private readonly authenticator: AuthenticatorInterface,
+    private readonly reflector: Reflector,
   ) {}
 
   async canActivate(context: ExecutionContext): Promise<boolean> {
@@ -31,7 +33,14 @@ export class AuthenticationGuard implements CanActivate {
       const user = await this.authenticate(token);
       request['user'] = user;
 
-      return true;
+      const roles = this.reflector.get<string[]>('roles', context.getHandler());
+      if (!roles) {
+        return true;
+      }
+
+      return roles.some(
+        (requiredRole) => user.realm_access.roles.indexOf(requiredRole) > -1,
+      );
     } catch (error) {
       throw new UnauthorizedException();
     }

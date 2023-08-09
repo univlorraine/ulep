@@ -1,13 +1,11 @@
 import { Injectable } from '@nestjs/common';
+import { TandemRepository } from '../../../core/ports/tandems.repository';
 import { Collection } from '@app/common';
-import {
-  FindWhereProps,
-  TandemsRepository,
-} from '../../../core/ports/tandems.repository';
+import { FindWhereProps } from '../../../core/ports/tandems.repository';
 import { Tandem, TandemStatus } from '../../../core/models';
 
 @Injectable()
-export class InMemoryTandemRepository implements TandemsRepository {
+export class InMemoryTandemRepository implements TandemRepository {
   #tandems: Tandem[] = [];
 
   init(tandems: Tandem[]): void {

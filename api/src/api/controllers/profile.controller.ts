@@ -27,6 +27,8 @@ import {
 import { Collection } from '@app/common';
 import { CollectionResponse, CurrentUser } from '../decorators';
 import { KeycloakUser } from '@app/keycloak';
+import { configuration } from 'src/configuration';
+import { Roles } from '../decorators/roles.decorator';
 
 @Controller('profiles')
 @Swagger.ApiTags('Profiles')
@@ -41,8 +43,8 @@ export class ProfileController {
   ) {}
 
   @Post()
-  @SerializeOptions({ groups: ['read', 'profile:read'] })
   @UseGuards(AuthenticationGuard)
+  @SerializeOptions({ groups: ['read', 'profile:read'] })
   @Swagger.ApiOperation({ summary: 'Creates a Profile ressource.' })
   @Swagger.ApiCreatedResponse({ type: ProfileResponse })
   @Swagger.ApiResponse({ status: 400, description: 'Invalid input' })
@@ -59,6 +61,7 @@ export class ProfileController {
   }
 
   @Get()
+  @Roles(configuration().adminRole)
   @UseGuards(AuthenticationGuard)
   @Swagger.ApiOperation({
     summary: 'Retrieve the collection of Profile ressource.',
@@ -82,7 +85,7 @@ export class ProfileController {
   }
 
   @Get(':id/tandems')
-  // @UseGuards(AuthenticationGuard)
+  @UseGuards(AuthenticationGuard)
   @Swagger.ApiOperation({
     summary: 'Retrieve the collection of Tandem ressource.',
   })
@@ -100,6 +103,8 @@ export class ProfileController {
   }
 
   @Get(':id')
+  @Roles(configuration().adminRole)
+  @UseGuards(AuthenticationGuard)
   @SerializeOptions({ groups: ['read', 'profile:read'] })
   @Swagger.ApiOperation({ summary: 'Retrieve a Profile ressource.' })
   @Swagger.ApiOkResponse({ type: ProfileResponse })

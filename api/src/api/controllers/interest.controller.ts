@@ -8,6 +8,7 @@ import {
   Logger,
   ParseUUIDPipe,
   SerializeOptions,
+  UseGuards,
 } from '@nestjs/common';
 import * as Swagger from '@nestjs/swagger';
 import {
@@ -23,6 +24,9 @@ import {
   DeleteInterestUsecase,
   GetInterestsByCategoriesUsecase,
 } from '../../core/usecases/interest';
+import { AuthenticationGuard } from '../guards';
+import { configuration } from 'src/configuration';
+import { Roles } from '../decorators/roles.decorator';
 
 @Controller('interests')
 @Swagger.ApiTags('Interests')
@@ -38,6 +42,8 @@ export class InterestController {
   ) {}
 
   @Post()
+  @Roles(configuration().adminRole)
+  @UseGuards(AuthenticationGuard)
   @Swagger.ApiOperation({ summary: 'Create a new Interest ressource.' })
   @Swagger.ApiCreatedResponse({ type: InterestResponse })
   async createInterest(@Body() body: CreateInterestRequest) {
@@ -47,6 +53,8 @@ export class InterestController {
   }
 
   @Post('categories')
+  @Roles(configuration().adminRole)
+  @UseGuards(AuthenticationGuard)
   @Swagger.ApiOperation({ summary: 'Create a new Category ressource.' })
   @Swagger.ApiCreatedResponse({ type: InterestResponse })
   async createCategory(@Body() body: CreateInterestCategoryRequest) {
@@ -56,6 +64,7 @@ export class InterestController {
   }
 
   @Get('categories')
+  @UseGuards(AuthenticationGuard)
   @SerializeOptions({ groups: ['read', 'category:read'] })
   @Swagger.ApiOperation({ summary: 'Collection of Interest ressource.' })
   @Swagger.ApiOkResponse({ type: InterestCategoryResponse, isArray: true })
@@ -66,6 +75,8 @@ export class InterestController {
   }
 
   @Delete(':id')
+  @Roles(configuration().adminRole)
+  @UseGuards(AuthenticationGuard)
   @Swagger.ApiOperation({ summary: 'Deletes a Interest ressource.' })
   @Swagger.ApiOkResponse()
   remove(@Param('id', ParseUUIDPipe) id: string) {
@@ -73,6 +84,8 @@ export class InterestController {
   }
 
   @Delete('categories/:id')
+  @Roles(configuration().adminRole)
+  @UseGuards(AuthenticationGuard)
   @Swagger.ApiOperation({ summary: 'Deletes a Category ressource.' })
   @Swagger.ApiOkResponse()
   removeCategory(@Param('id', ParseUUIDPipe) id: string) {

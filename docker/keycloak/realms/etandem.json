@@ -37,5 +37,18 @@
         "http://localhost:3001/auth-callback"
       ]
     }
-  ]
+  ],
+  "roles": {
+    "realm": [
+      {
+        "id": "4451442a-a6cc-40cf-bf4a-4128cca5dcd5",
+        "name": "admin",
+        "description": "",
+        "composite": false,
+        "clientRole": false,
+        "containerId": "616eb353-7524-4a46-9cf3-44612cba6c90",
+        "attributes": {}
+      }
+    ]
+  }
 }

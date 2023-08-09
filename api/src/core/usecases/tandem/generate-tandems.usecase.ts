@@ -1,9 +1,17 @@
 import { Inject, Injectable } from '@nestjs/common';
-import { Profile } from 'src/core/models';
+import { Profile, TandemStatus } from 'src/core/models';
 import {
   PROFILE_REPOSITORY,
   ProfileRepository,
 } from 'src/core/ports/profile.repository';
+import {
+  TANDEM_REPOSITORY,
+  TandemRepository,
+} from 'src/core/ports/tandems.repository';
+import {
+  UUID_PROVIDER,
+  UuidProviderInterface,
+} from 'src/core/ports/uuid.provider';
 import { IMatchScorer, MatchScorer } from 'src/core/services/MatchScorer';
 import { ProfilesPairer } from 'src/core/services/ProfilesPairer';
 
@@ -14,12 +22,31 @@ export class GenerateTandemsUsecase {
   constructor(
     @Inject(PROFILE_REPOSITORY)
     private readonly profilesRepository: ProfileRepository,
+    @Inject(TANDEM_REPOSITORY)
+    private readonly tandemsRepository: TandemRepository,
+    @Inject(UUID_PROVIDER)
+    private readonly uuidProvider: UuidProviderInterface,
   ) {}
 
   async execute(): Promise<{ profiles: Profile[]; score: number }[]> {
-    const profiles = await this.profilesRepository.availableOnly();
+    const profiles = await this.profilesRepository.whereMaxTandemsCount(3);
+
     const groups = await this.findGroups(profiles);
+
     const tandems = this.createTandems(groups.groupA, groups.groupB);
+
+    for (const tandem of tandems) {
+      // TODO: this should be an argument of the usecase
+      if (tandem.score < 0.5) {
+        continue;
+      }
+
+      await this.tandemsRepository.save({
+        id: this.uuidProvider.generate(),
+        profiles: tandem.profiles,
+        status: TandemStatus.DRAFT,
+      });
+    }
 
     return tandems;
   }
