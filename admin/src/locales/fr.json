@@ -6,8 +6,15 @@
         "password": "Mot de passe"
     },
     "profiles": {
+        "email": "Email",
+        "firstname": "Prénom",
         "label": "Profiles",
-        "searchLastname": "Chercher par nom"
+        "lastname": "Nom",
+        "mastered_languages": "Langues maîtrisés",
+        "native_language": "Langue native",
+        "role": "Role",
+        "searchLastname": "Chercher par nom",
+        "university": "Université"
     },
     "users": {
         "searchEmail": "Chercher par email",

@@ -1,5 +1,6 @@
-import { Collection, StringFilter } from '@app/common';
+import { Collection, SortOrderType, StringFilter } from '@app/common';
 import { Profile } from '../models';
+import { ProfileQuerySortKey } from 'src/api/dtos';
 
 export const PROFILE_REPOSITORY = 'profile.repository';
 
@@ -28,6 +29,7 @@ export interface ProfileRepository {
   findAll: (
     offset?: number,
     limit?: number,
+    orderBy?: SortOrderType<ProfileQuerySortKey>,
     where?: { email?: StringFilter },
   ) => Promise<Collection<Profile>>;
 

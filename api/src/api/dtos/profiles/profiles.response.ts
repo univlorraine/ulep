@@ -17,6 +17,16 @@ class NativeLanguageResponse {
   }
 }
 
+class MasteredLanguageResponse {
+  @ApiProperty({ type: 'string', example: 'FR' })
+  @Expose({ groups: ['read'] })
+  code: string;
+
+  constructor(partial: Partial<ProfileResponse>) {
+    Object.assign(this, partial);
+  }
+}
+
 class LearningLanguageResponse {
   @ApiPropertyOptional({ type: 'string', example: 'FR' })
   @Expose({ groups: ['read'] })
@@ -37,7 +47,7 @@ export class ProfileResponse {
   id: string;
 
   @ApiProperty()
-  @Expose({ groups: ['profile:read'] })
+  @Expose({ groups: ['read'] })
   user: UserResponse;
 
   @ApiProperty({ type: () => [LearningLanguageResponse] })
@@ -50,6 +60,20 @@ export class ProfileResponse {
   @Expose({ groups: ['read'] })
   @Transform(({ value }) => new NativeLanguageResponse(value))
   nativeLanguage: NativeLanguageResponse;
+
+  @ApiProperty()
+  @Expose({ groups: ['read'] })
+  @Transform(({ value }) =>
+    value.map(
+      (masteredLanguage) => new MasteredLanguageResponse(masteredLanguage),
+    ),
+  )
+  masteredLanguages: MasteredLanguageResponse[];
+
+  @ApiProperty()
+  @Expose({ groups: ['read'] })
+  @Transform(({ value }) => new LearningLanguageResponse(value))
+  learningLanguage: LearningLanguageResponse;
 
   @ApiProperty({ type: ObjectiveResponse, isArray: true })
   @Expose({ groups: ['read'] })
@@ -78,6 +102,15 @@ export class ProfileResponse {
       nativeLanguage: {
         code: profile.nativeLanguage.code,
       },
+<<<<<<< HEAD
+      masteredLanguages: profile.masteredLanguages.map((masteredLanguage) => ({
+        code: masteredLanguage.code,
+      })),
+      learningLanguage: {
+        code: profile.learningLanguage.code,
+        level: profile.level,
+      },
+=======
       learningLanguages: profile.learningLanguages.map((learningLanguage) => ({
         code:
           learningLanguage.language.code === JOKER_LANGUAGE_CODE
@@ -85,6 +118,7 @@ export class ProfileResponse {
             : learningLanguage.language.code,
         level: learningLanguage.level,
       })),
+>>>>>>> develop
       objectives: profile.objectives.map(ObjectiveResponse.fromDomain),
       interests: profile.interests.map(InterestResponse.fromDomain),
       meetingFrequency: profile.meetingFrequency,

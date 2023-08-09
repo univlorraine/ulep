@@ -1,5 +1,5 @@
 import React from 'react';
-import { useTranslate, List, Datagrid, TextField } from 'react-admin';
+import { ChipField, SingleFieldList, ArrayField, Datagrid, List, TextField, useTranslate } from 'react-admin';
 
 const ProfileList = (props: any) => {
     const translate = useTranslate();
@@ -7,13 +7,25 @@ const ProfileList = (props: any) => {
     return (
         <List title={translate('profiles.label')} {...props}>
             <Datagrid rowClick="show">
-                <TextField sortable={false} source="lastname" />
-                <TextField sortable={false} source="firstname" />
-                <TextField sortable={false} source="university.name" />
-                <TextField source="role" />
-                <TextField sortable={false} source="age" />
-                <TextField source="nativeLanguage.code" sortable />
-                <TextField sortable={false} source="learningLanguage.code" />
+                <TextField label={translate('profiles.role')} source="user.role" sortable />
+                <TextField label={translate('profiles.lastname')} source="user.lastname" sortable />
+                <TextField label={translate('profiles.firstname')} source="user.firstname" sortable />
+                <TextField label={translate('profiles.email')} source="user.email" sortable />
+                <TextField label={translate('profiles.university')} sortable={false} source="user.university.name" />
+                <TextField
+                    label={translate('profiles.native_language')}
+                    sortable={false}
+                    source="nativeLanguage.code"
+                />
+                <ArrayField
+                    label={translate('profiles.mastered_languages')}
+                    sortable={false}
+                    source="masteredLanguages"
+                >
+                    <SingleFieldList>
+                        <ChipField source="code" />
+                    </SingleFieldList>
+                </ArrayField>
             </Datagrid>
         </List>
     );

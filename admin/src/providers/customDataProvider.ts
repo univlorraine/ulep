@@ -10,7 +10,11 @@ interface Params {
     pagination: {
       page: string;
       perPage: string;
-    };
+    },
+    sort: {
+        field: string,
+        order: string,
+    }
   }
 
 const httpClientOptions = (options: any = {}) => {
@@ -46,6 +50,14 @@ const customDataProvider = {
 
         if (params.pagination.perPage) {
             url.searchParams.append('limit', params.pagination.perPage);
+        }
+
+        if (params.sort.field && params.sort.field.indexOf('.') !== -1) {
+            url.searchParams.append('field', params.sort.field.split('.')[1]);
+        }
+
+        if (params.sort.order) {
+            url.searchParams.append('order', params.sort.order.toLowerCase());
         }
 
         if (params.filter.email) {

@@ -131,6 +131,7 @@ export class PrismaProfileRepository implements ProfileRepository {
   async findAll(
     offset?: number,
     limit?: number,
+    orderBy?: { [key: string]: string },
     where?: { email?: StringFilter },
   ): Promise<Collection<Profile>> {
     const count = await this.prisma.profiles.count({
@@ -145,6 +146,7 @@ export class PrismaProfileRepository implements ProfileRepository {
     const users = await this.prisma.profiles.findMany({
       where: { User: { email: where?.email } },
       skip: offset,
+      orderBy: orderBy ? { User: orderBy } : undefined,
       take: limit,
       include: ProfilesRelations,
     });
