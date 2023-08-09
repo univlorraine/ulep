@@ -1,5 +1,5 @@
 import { Injectable } from '@nestjs/common';
-import { PrismaService } from '@app/common';
+import { Collection, PrismaService } from '@app/common';
 import { UniversityRepository } from 'src/core/ports/university.repository';
 import {
   UniversityRelations,
@@ -36,12 +36,17 @@ export class PrismaUniversityRepository implements UniversityRepository {
     return university;
   }
 
-  async findAll(): Promise<University[]> {
+  async findAll(): Promise<Collection<University>> {
+    const count = await this.prisma.organizations.count();
+
     const universities = await this.prisma.organizations.findMany({
       include: UniversityRelations,
     });
 
-    return universities.map(universityMapper);
+    return new Collection<University>({
+      items: universities.map(universityMapper),
+      totalItems: count,
+    });
   }
 
   async findUniversityCentral(): Promise<University | null> {

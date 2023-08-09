@@ -1,4 +1,8 @@
 {
+    "global": {
+        "Staff": "Personnel",
+        "Student": "Etudiant"
+    },
     "login": {
         "connect": "Connexion",
         "email": "Email",

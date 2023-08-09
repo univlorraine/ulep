@@ -1,21 +1,9 @@
 import simpleRestProvider from 'ra-data-simple-rest';
 import { fetchUtils } from 'react-admin';
+import CountriesQuery from '../queries/CountriesQuery';
+import ProfilesQuery from '../queries/ProfilesQuery';
 import { http } from './authProvider';
 import jwtManager from './jwtManager';
-
-interface Params {
-    filter: {
-        email: string,
-    },
-    pagination: {
-      page: string;
-      perPage: string;
-    },
-    sort: {
-        field: string,
-        order: string,
-    }
-  }
 
 const httpClientOptions = (options: any = {}) => {
     const newOptions = options;
@@ -41,27 +29,18 @@ const dataProvider = simpleRestProvider(`${process.env.REACT_APP_API_URL}`, http
 
 const customDataProvider = {
     ...dataProvider,
-    getList: async (resource: string, params: Params) => {
+    getList: async (resource: string, params: any) => {
         const url = new URL(`${process.env.REACT_APP_API_URL}/${resource}`);
 
-        if (params.pagination.page) {
-            url.searchParams.append('page', params.pagination.page);
-        }
-
-        if (params.pagination.perPage) {
-            url.searchParams.append('limit', params.pagination.perPage);
-        }
-
-        if (params.sort.field && params.sort.field.indexOf('.') !== -1) {
-            url.searchParams.append('field', params.sort.field.split('.')[1]);
-        }
-
-        if (params.sort.order) {
-            url.searchParams.append('order', params.sort.order.toLowerCase());
-        }
-
-        if (params.filter.email) {
-            url.searchParams.append('filter', params.filter.email);
+        switch (resource) {
+            case 'countries':
+                CountriesQuery(url, params);
+                break;
+            case 'profiles':
+                ProfilesQuery(url, params);
+                break;
+            default:
+                break;
         }
 
         const response = await fetch(url, httpClientOptions());
@@ -71,6 +50,10 @@ const customDataProvider = {
         }
 
         const result = await response.json();
+
+        if (resource === 'languages') {
+            console.warn(result.items[0]);
+        }
 
         return { data: result.items, total: result.totalItems };
     },

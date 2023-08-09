@@ -8,14 +8,15 @@ import {
   UseGuards,
 } from '@nestjs/common';
 import * as Swagger from '@nestjs/swagger';
-import { LanguageCodeResponse, LanguageRequestsCountResponse } from '../dtos';
+import { LanguageRequestsCountResponse, LanguageResponse } from '../dtos';
 import {
   AddLanguageRequestUsecase,
   FindAllLanguageCodeUsecase,
 } from 'src/core/usecases/language';
 import { AuthenticationGuard } from '../guards';
-import { CurrentUser } from '../decorators';
+import { CollectionResponse, CurrentUser } from '../decorators';
 import { KeycloakUser } from '@app/keycloak';
+import { Collection } from '@app/common';
 
 @Controller('languages')
 @Swagger.ApiTags('Languages')
@@ -29,12 +30,18 @@ export class LanguageController {
 
   @Get()
   @UseGuards(AuthenticationGuard)
+  @CollectionResponse(LanguageResponse)
   @Swagger.ApiOperation({ summary: 'Collection of LanguageCode ressource.' })
-  @Swagger.ApiOkResponse({ type: LanguageCodeResponse, isArray: true })
+  @Swagger.ApiOkResponse({ type: LanguageResponse, isArray: true })
   async findAll() {
-    const instances = await this.findAllLanguagesUsecase.execute();
+    const languages = await this.findAllLanguagesUsecase.execute();
 
-    return instances.map((instance) => new LanguageCodeResponse(instance));
+    return new Collection<LanguageResponse>({
+      items: languages.items.map((language) =>
+        LanguageResponse.fromLanguage(language),
+      ),
+      totalItems: languages.totalItems,
+    });
   }
 
   @Post(':code/requests')

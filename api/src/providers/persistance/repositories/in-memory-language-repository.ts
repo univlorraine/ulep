@@ -1,3 +1,4 @@
+import { Collection } from '@app/common';
 import { Language } from 'src/core/models/language.model';
 import { LanguageRepository } from 'src/core/ports/language.repository';
 
@@ -29,8 +30,11 @@ export class InMemoryLanguageRepository implements LanguageRepository {
     return this.#languages.find((language) => language.code === code);
   }
 
-  async all(): Promise<Language[]> {
-    return this.#languages;
+  async all(): Promise<Collection<Language>> {
+    return new Collection<Language>({
+      items: this.#languages,
+      totalItems: this.#languages.length,
+    });
   }
 
   remove(language: Language): Promise<void> {

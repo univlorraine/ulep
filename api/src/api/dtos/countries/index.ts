@@ -4,6 +4,8 @@ import { IsBoolean, IsOptional } from 'class-validator';
 import { CountryCode } from 'src/core/models';
 import { PaginationDto } from '../pagination';
 import { UpdateCountryStatusCommand } from 'src/core/usecases';
+import { ApiPropertyOptional } from '@nestjs/swagger';
+import { SortOrder } from '@app/common';
 
 export class UpdateCountryRequest
   implements Omit<UpdateCountryStatusCommand, 'id'>
@@ -56,4 +58,8 @@ export class GetCountriesQueryParams extends PaginationDto {
   @IsBoolean()
   @IsOptional()
   pagination?: boolean;
+
+  @ApiPropertyOptional({ type: 'string' })
+  @IsOptional()
+  order?: SortOrder;
 }
