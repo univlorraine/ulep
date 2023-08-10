@@ -31,16 +31,15 @@ export class GenerateTandemsUsecase {
   async execute(): Promise<{ profiles: Profile[]; score: number }[]> {
     const profiles = await this.profilesRepository.whereMaxTandemsCount(3);
 
-    const groups = await this.findGroups(profiles);
-
-    // Do not re-recreate existing tandems
     const existingTandems = await this.tandemsRepository.getExistingTandems();
+    const profileIdsAlreadyInTandem =
+      this.getProfileIdsFromTandem(existingTandems);
 
-    const pairs = this.createTandemsPairs(
-      groups.groupA,
-      groups.groupB,
-      existingTandems,
+    const groups = await this.findGroups(
+      profiles.filter((profile) => !profileIdsAlreadyInTandem.has(profile.id)),
     );
+
+    const pairs = this.createTandemsPairs(groups.groupA, groups.groupB);
 
     for (const pair of pairs) {
       // TODO: this should be an argument of the usecase
@@ -71,15 +70,10 @@ export class GenerateTandemsUsecase {
     return { groupA, groupB };
   }
 
-  private createTandemsPairs(
-    groupA: Profile[],
-    groupB: Profile[],
-    existingTandems: Tandem[],
-  ) {
+  private createTandemsPairs(groupA: Profile[], groupB: Profile[]) {
     const pairs = new ProfilesPairer(
       groupA,
       groupB,
-      existingTandems,
       this.scorer,
     ).findStablePairs();
 
@@ -87,5 +81,20 @@ export class GenerateTandemsUsecase {
       profiles: [pair.proposer, pair.acceptor],
       score: pair.score,
     }));
+  }
+
+  private getProfileIdsFromTandem(tandems: Tandem[]): Set<string> {
+    const profileIds = new Set<string>();
+    for (const tandem of tandems) {
+      const profile1Id = tandem.profiles[0].id;
+      const profile2Id = tandem.profiles[1].id;
+      if (!profileIds.has(profile1Id)) {
+        profileIds.add(profile1Id);
+      }
+      if (!profileIds.has(profile2Id)) {
+        profileIds.add(profile2Id);
+      }
+    }
+    return profileIds;
   }
 }

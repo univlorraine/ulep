@@ -1,4 +1,3 @@
-import { Tandem } from '../models';
 import { Profile } from '../models/profile.model';
 import { IMatchScorer } from './MatchScorer';
 
@@ -12,18 +11,12 @@ export class ProfilesPairer {
   private proposerPreferences: Map<number, Preferences>;
   // Mapping from each acceptor index to its preferences
   private acceptorPreferences: Map<number, Preferences>;
-  // Mapping for each user its existing tandems
-  private profilesExistingTandems: Map<string, string[]>;
 
   constructor(
     private readonly proposers: Profile[],
     private readonly acceptors: Profile[],
-    private readonly existingTandems: Tandem[],
     private readonly matchScorer: IMatchScorer,
   ) {
-    this.profilesExistingTandems =
-      this.generateExistingTandems(existingTandems);
-
     this.proposerPreferences = this.generatePreferences(
       this.proposers,
       this.acceptors,
@@ -32,27 +25,6 @@ export class ProfilesPairer {
       this.acceptors,
       this.proposers,
     );
-  }
-
-  private generateExistingTandems(
-    existingTandems: Tandem[],
-  ): Map<string, string[]> {
-    const res = new Map<string, string[]>();
-
-    // TODO: factorize code bellow
-    for (const tandem of existingTandems) {
-      const [profile1, profile2] = tandem.profiles;
-      const value1 = res.has(profile1.id)
-        ? [...res.get(profile1.id), profile2.id]
-        : [profile2.id];
-      res.set(profile1.id, value1);
-      const value2 = res.has(profile2.id)
-        ? [...res.get(profile2.id), profile1.id]
-        : [profile1.id];
-      res.set(profile2.id, value2);
-    }
-
-    return res;
   }
 
   /*
@@ -70,15 +42,6 @@ export class ProfilesPairer {
       // Compute the score for each profile in group 2 and sort them by score
       const preference = group2
         .map((profile2, index2) => {
-          // TODO: check if should have same size or if can filter here
-          if (this.profilesExistingTandems.has(profile1.id)) {
-            const alreadyInTandemWithProfiles =
-              this.profilesExistingTandems.get(profile1.id);
-            if (alreadyInTandemWithProfiles.includes(profile2.id)) {
-              return { score: -1, index: index2 };
-            }
-          }
-
           const score = this.matchScorer.computeMatchScore(profile1, profile2);
           scores.set(index2, score.total);
 
