@@ -1,5 +1,6 @@
 import { Collection } from '@app/common';
 import {
+  GetProfilesUsableForTandemsGenerationProps,
   MaxTandemsCountAndLanguageProps,
   ProfileRepository,
 } from '../../../core/ports/profile.repository';
@@ -28,10 +29,15 @@ export class InMemoryProfileRepository implements ProfileRepository {
     }
   }
 
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  async whereMaxTandemsCount(max: number): Promise<Profile[]> {
+  async getProfilesUsableForTandemsGeneration(
+    props: GetProfilesUsableForTandemsGenerationProps,
+  ): Promise<Profile[]> {
     // TODO: add in memory way to add number of tandem per profile
-    return Array.from(this.#profiles.values());
+
+    const items = Array.from(this.#profiles.values());
+    return items.filter((profile) =>
+      props.universityIds.includes(profile.user.university.id),
+    );
   }
 
   async whereMaxTandemsCountAndLanguage(

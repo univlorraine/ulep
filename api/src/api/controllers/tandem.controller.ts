@@ -56,7 +56,9 @@ export class TandemController {
   @UseGuards(AuthenticationGuard)
   @Swagger.ApiOperation({ summary: 'Generate Tandems' })
   async generate(): Promise<TandemResponse[]> {
-    const tandems = await this.generateTandemsUsecase.execute();
+    const tandems = await this.generateTandemsUsecase.execute({
+      univerisityIds: ['TODO'],
+    });
 
     return tandems.map(
       (tandem) =>

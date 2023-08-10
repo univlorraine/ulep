@@ -11,12 +11,19 @@ export type MaxTandemsCountAndLanguageProps = {
   };
 };
 
+export type GetProfilesUsableForTandemsGenerationProps = {
+  maxTandemPerProfile: number;
+  universityIds: string[];
+};
+
 export interface ProfileRepository {
   ofId: (id: string) => Promise<Profile | null>;
 
   ofUser: (userId: string) => Promise<Profile | null>;
 
-  whereMaxTandemsCount: (max: number) => Promise<Profile[]>;
+  getProfilesUsableForTandemsGeneration: (
+    props: GetProfilesUsableForTandemsGenerationProps,
+  ) => Promise<Profile[]>;
 
   whereMaxTandemsCountAndLanguage: (
     props: MaxTandemsCountAndLanguageProps,

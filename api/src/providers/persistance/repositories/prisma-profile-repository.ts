@@ -1,6 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { StringFilter, Collection, PrismaService } from '@app/common';
 import {
+  GetProfilesUsableForTandemsGenerationProps,
   MaxTandemsCountAndLanguageProps,
   ProfileRepository,
 } from 'src/core/ports/profile.repository';
@@ -64,7 +65,11 @@ export class PrismaProfileRepository implements ProfileRepository {
     return profiles.map(profileMapper);
   }
 
-  async whereMaxTandemsCount(max: number): Promise<Profile[]> {
+  // TODO: implement and test with DB
+  async getProfilesUsableForTandemsGeneration({
+    maxTandemPerProfile,
+    universityIds,
+  }: GetProfilesUsableForTandemsGenerationProps): Promise<Profile[]> {
     const result: any[] = await this.prisma.$queryRaw`
     SELECT p.id
     FROM profiles p
@@ -75,7 +80,7 @@ export class PrismaProfileRepository implements ProfileRepository {
       WHERE t.status != 'INACTIVE'
       GROUP BY pot.profile_id
     ) AS tandems_count ON p.id = tandems_count.profile_id
-    WHERE tandems_count.tandem_count < ${max} OR tandems_count.tandem_count IS NULL
+    WHERE tandems_count.tandem_count < ${maxTandemPerProfile} OR tandems_count.tandem_count IS NULL
   `;
 
     const profileIds = result.map((row) => row.id);
