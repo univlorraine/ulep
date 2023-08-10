@@ -15,6 +15,7 @@ import {
 import { Roles } from '../decorators/roles.decorator';
 import { configuration } from 'src/configuration';
 import { AuthenticationGuard } from '../guards';
+import { GenerateTandemsRequest } from '../dtos/tandems/generate-tandems.request';
 
 @Controller('tandems')
 @Swagger.ApiTags('Tandems')
@@ -55,10 +56,10 @@ export class TandemController {
   @Roles(configuration().adminRole)
   @UseGuards(AuthenticationGuard)
   @Swagger.ApiOperation({ summary: 'Generate Tandems' })
-  async generate(): Promise<TandemResponse[]> {
-    const tandems = await this.generateTandemsUsecase.execute({
-      univerisityIds: ['TODO'],
-    });
+  async generate(
+    @Body() body: GenerateTandemsRequest,
+  ): Promise<TandemResponse[]> {
+    const tandems = await this.generateTandemsUsecase.execute({ ...body });
 
     return tandems.map(
       (tandem) =>
