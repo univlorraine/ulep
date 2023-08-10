@@ -206,6 +206,10 @@ export class MatchScorer implements IMatchScorer {
     const intersection = new Set([...set1].filter(x => set2.has(x)));
     const union = new Set([...set1, ...set2]);
 
+    if (union.size === 0) {
+      return 0;
+    }
+
     return intersection.size / union.size;
   }
 
