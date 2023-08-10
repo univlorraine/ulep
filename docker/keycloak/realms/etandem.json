@@ -38,6 +38,24 @@
       ]
     }
   ],
+  "groups": [{
+    "id": "02736a0f-4679-4329-a877-2ce87aaea569",
+    "name": "Administrators",
+    "path": "/Administrators",
+    "attributes": {},
+    "realmRoles": ["admin"],
+    "clientRoles": {},
+    "subGroups": []
+ },
+ {
+    "id": "eba50e06-d584-4fc8-9d6b-908169202cea",
+    "name": "Managers",
+    "path": "/Managers",
+    "attributes": {},
+    "realmRoles": ["manager"],
+    "clientRoles": {},
+    "subGroups": []
+ }],
   "roles": {
     "realm": [
       {
