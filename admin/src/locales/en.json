@@ -28,6 +28,14 @@
         "university": "University"
     },
     "report_category": {
+        "create": {
+            "content": "Content",
+            "name": "Name of the new category",
+            "new_translation": "New translation",
+            "save": "Save",
+            "title": "Creation of a new category",
+            "translations": "Translations of the new category"
+        },
         "label": "Categories report"
     },
     "universities": {

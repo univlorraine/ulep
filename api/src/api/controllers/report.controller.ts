@@ -64,6 +64,7 @@ export class ReportController {
     const instance = await this.createReportCategoryUsecase.execute({
       languageCode,
       name: body.name,
+      translations: body.translations,
     });
 
     return ReportCategoryResponse.fromDomain(instance);

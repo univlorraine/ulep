@@ -28,6 +28,14 @@
         "university": "Université"
     },
     "report_categories": {
+        "create": {
+            "content": "Contenu",
+            "name": "Nom de la nouvelle catégorie",
+            "new_translation": "Nouvelle traduction",
+            "save": "Enregistrer",
+            "title": "Création d'une nouvelle catégorie",
+            "translations": "Traductions de la nouvelle catégorie"
+        },
         "label": "Categories de signalement"
     },
     "universities": {

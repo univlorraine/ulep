@@ -1,6 +1,14 @@
 import * as Swagger from '@nestjs/swagger';
 import { Expose } from 'class-transformer';
-import { IsString, IsNotEmpty, IsUUID, IsEnum } from 'class-validator';
+import {
+  IsString,
+  IsNotEmpty,
+  IsUUID,
+  IsEnum,
+  IsOptional,
+  IsArray,
+} from 'class-validator';
+import { Translation } from 'src/core/models';
 import {
   Report,
   ReportCategory,
@@ -16,6 +24,11 @@ export class CreateReportCategoryRequest {
   @IsString()
   @IsNotEmpty()
   name: string;
+
+  @Swagger.ApiPropertyOptional({ type: 'array' })
+  @IsOptional()
+  @IsArray()
+  translations?: Translation[];
 }
 
 export class CreateReportRequest implements Omit<CreateReportCommand, 'owner'> {

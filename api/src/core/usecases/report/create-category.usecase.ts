@@ -1,5 +1,5 @@
 import { Inject, Injectable } from '@nestjs/common';
-import { ReportCategory } from '../../models';
+import { ReportCategory, Translation } from '../../models';
 import {
   UUID_PROVIDER,
   UuidProviderInterface,
@@ -21,6 +21,7 @@ import {
 export class CreateReportCategoryCommand {
   name: string;
   languageCode: string;
+  translations?: Translation[];
 }
 
 @Injectable()
@@ -54,7 +55,7 @@ export class CreateReportCategoryUsecase {
         id: this.uuidProvider.generate(),
         content: command.name,
         language: command.languageCode,
-        translations: [],
+        translations: command.translations,
       },
     });
   }
