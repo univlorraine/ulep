@@ -5,37 +5,33 @@ import {
 } from '../../../core/ports/profile.repository';
 import { Profile } from '../../../core/models/profile.model';
 
-// TODO: remove #profiles in favor of #profilesMap when possible (Map better suitable
-// for inMemory adapter)
-
 export class InMemoryProfileRepository implements ProfileRepository {
-  #profiles: Profile[] = [];
-  #profilesMap: Map<string, Profile> = new Map();
+  #profiles: Map<string, Profile> = new Map();
 
   init(profiles: Profile[]): void {
-    this.#profiles = profiles;
-    this.#profilesMap = new Map(
-      profiles.map((profile) => [profile.id, profile]),
-    );
+    this.#profiles = new Map(profiles.map((profile) => [profile.id, profile]));
   }
 
   reset(): void {
-    this.#profiles = [];
-    this.#profilesMap = new Map();
+    this.#profiles = new Map();
   }
 
   async ofId(id: string): Promise<Profile> {
-    return this.#profiles.find((profile) => profile.id === id);
+    return this.#profiles.get(id);
   }
 
   async ofUser(id: string): Promise<Profile> {
-    return this.#profiles.find((profile) => profile.user.id === id);
+    for (const profile of this.#profiles.values()) {
+      if (profile.user.id === id) {
+        return profile;
+      }
+    }
   }
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   async whereMaxTandemsCount(max: number): Promise<Profile[]> {
     // TODO: add in memory way to add number of tandem per profile
-    return Array.from(this.#profilesMap.values());
+    return Array.from(this.#profiles.values());
   }
 
   async whereMaxTandemsCountAndLanguage(
@@ -46,27 +42,25 @@ export class InMemoryProfileRepository implements ProfileRepository {
   }
 
   async create(profile: Profile): Promise<void> {
-    this.#profiles.push(profile);
+    this.#profiles.set(profile.id, profile);
   }
 
   async update(profile: Profile): Promise<void> {
-    const index = this.#profiles.findIndex((p) => p.id === profile.id);
-    if (index !== -1) {
-      this.#profiles[index] = profile;
+    if (this.#profiles.has(profile.id)) {
+      this.#profiles.set(profile.id, profile);
     }
   }
 
   async findAll(offset?: number, limit?: number): Promise<Collection<Profile>> {
+    const allItems = Array.from(this.#profiles.values());
+
     return {
-      items: this.#profiles.slice(offset, offset + limit),
-      totalItems: this.#profiles.length,
+      items: allItems.slice(offset, offset + limit),
+      totalItems: allItems.length,
     };
   }
 
   async delete(profile: Profile): Promise<void> {
-    const index = this.#profiles.findIndex((p) => p.id === profile.id);
-    if (index !== -1) {
-      this.#profiles.splice(index, 1);
-    }
+    this.#profiles.delete(profile.id);
   }
 }
