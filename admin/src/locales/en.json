@@ -1,7 +1,13 @@
 {
+    "countries": {
+        "label": "Countries"
+    },
     "global": {
         "Staff": "Staff",
         "Student": "Student"
+    },
+    "languages": {
+        "label": "Languages"
     },
     "login": {
         "connect": "Connect",
@@ -20,6 +26,12 @@
         "role": "Role",
         "searchLastname": "Lastname",
         "university": "University"
+    },
+    "report_category": {
+        "label": "Categories report"
+    },
+    "universities": {
+        "label": "Universities"
     },
     "users": {
         "searchEmail": "Search email",

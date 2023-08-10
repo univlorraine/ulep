@@ -1,7 +1,13 @@
 {
+    "countries": {
+        "label": "Pays"
+    },
     "global": {
         "Staff": "Personnel",
         "Student": "Etudiant"
+    },
+    "languages": {
+        "label": "Langues"
     },
     "login": {
         "connect": "Connexion",
@@ -20,6 +26,12 @@
         "role": "Role",
         "searchLastname": "Chercher par nom",
         "university": "Université"
+    },
+    "report_categories": {
+        "label": "Categories de signalement"
+    },
+    "universities": {
+        "label": "Universités"
     },
     "users": {
         "searchEmail": "Chercher par email",

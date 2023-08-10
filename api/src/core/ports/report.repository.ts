@@ -1,3 +1,4 @@
+import { Collection } from '@app/common';
 import { Report, ReportCategory, ReportStatus } from '../models';
 
 export const REPORT_REPOSITORY = 'report.repository';
@@ -11,7 +12,7 @@ export interface ReportRepository {
 
   reportOfId(id: string): Promise<Report | null>;
 
-  categories(): Promise<ReportCategory[]>;
+  categories(): Promise<Collection<ReportCategory>>;
 
   categoryOfId(id: string): Promise<ReportCategory | null>;
 

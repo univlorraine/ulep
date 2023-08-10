@@ -36,6 +36,7 @@ import {
 import { ReportStatus } from '../../core/models/report.model';
 import { configuration } from 'src/configuration';
 import { Roles } from '../decorators/roles.decorator';
+import { Collection } from '@app/common';
 
 @Controller('reports')
 @Swagger.ApiTags('Reports')
@@ -75,7 +76,10 @@ export class ReportController {
   async findAllCategories() {
     const instances = await this.findReportCategoriesUsecase.execute();
 
-    return instances.map(ReportCategoryResponse.fromDomain);
+    return new Collection<ReportCategoryResponse>({
+      items: instances.items.map(ReportCategoryResponse.fromDomain),
+      totalItems: instances.totalItems,
+    });
   }
 
   @Delete('categories/:id')
