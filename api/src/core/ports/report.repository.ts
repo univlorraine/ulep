@@ -15,6 +15,8 @@ export interface ReportRepository {
 
   categoryOfId(id: string): Promise<ReportCategory | null>;
 
+  categoryOfName(name: string): Promise<ReportCategory | null>;
+
   updateReport(id: string, status: ReportStatus): Promise<void>;
 
   deleteReport(instance: Report): Promise<void>;

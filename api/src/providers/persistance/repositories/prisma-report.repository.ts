@@ -107,6 +107,19 @@ export class PrismaReportRepository implements ReportRepository {
     return reportCategoryMapper(reportCategory);
   }
 
+  async categoryOfName(name: string): Promise<ReportCategory> {
+    const reportCategory = await this.prisma.reportCategories.findFirst({
+      where: { TextContent: { text: { equals: name } } },
+      include: { TextContent: TextContentRelations },
+    });
+
+    if (!reportCategory) {
+      return null;
+    }
+
+    return reportCategoryMapper(reportCategory);
+  }
+
   async updateReport(id: string, status: ReportStatus): Promise<void> {
     await this.prisma.reports.update({
       where: { id },

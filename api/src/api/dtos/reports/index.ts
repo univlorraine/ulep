@@ -1,35 +1,21 @@
 import * as Swagger from '@nestjs/swagger';
-import { Expose, Transform } from 'class-transformer';
-import { IsString, IsNotEmpty, IsUUID, IsEnum, Length } from 'class-validator';
+import { Expose } from 'class-transformer';
+import { IsString, IsNotEmpty, IsUUID, IsEnum } from 'class-validator';
 import {
   Report,
   ReportCategory,
   ReportStatus,
 } from 'src/core/models/report.model';
 import {
-  CreateReportCategoryCommand,
   CreateReportCommand,
   UpdateReportStatusCommand,
 } from 'src/core/usecases/report';
 
-export class CreateReportCategoryRequest
-  implements CreateReportCategoryCommand
-{
-  @Swagger.ApiProperty({ type: 'string', format: 'uuid' })
-  @IsUUID()
-  id: string;
-
+export class CreateReportCategoryRequest {
   @Swagger.ApiProperty({ type: 'string' })
   @IsString()
   @IsNotEmpty()
   name: string;
-
-  // TODO: get the language code from the request headers
-  @Swagger.ApiProperty({ type: 'string', example: 'FR' })
-  @Transform(({ value }) => value?.toLowerCase())
-  @IsString()
-  @Length(2, 2)
-  languageCode: string;
 }
 
 export class CreateReportRequest implements Omit<CreateReportCommand, 'owner'> {
@@ -64,6 +50,7 @@ export class ReportCategoryResponse {
     Object.assign(this, partial);
   }
 
+  //TODO(marvyn): Change this to get name as requested in header
   static fromDomain(entity: ReportCategory): ReportCategoryResponse {
     return new ReportCategoryResponse({
       id: entity.id,

@@ -19,7 +19,6 @@ import {
 } from 'src/core/ports/language.repository';
 
 export class CreateReportCategoryCommand {
-  id: string;
   name: string;
   languageCode: string;
 }
@@ -36,7 +35,7 @@ export class CreateReportCategoryUsecase {
   ) {}
 
   async execute(command: CreateReportCategoryCommand): Promise<ReportCategory> {
-    const instance = await this.repository.categoryOfId(command.id);
+    const instance = await this.repository.categoryOfName(command.name);
     if (instance) {
       throw new RessourceAlreadyExists('Category already exists');
     }
@@ -50,7 +49,7 @@ export class CreateReportCategoryUsecase {
     }
 
     return this.repository.createCategory({
-      id: command.id,
+      id: this.uuidProvider.generate(),
       name: {
         id: this.uuidProvider.generate(),
         content: command.name,

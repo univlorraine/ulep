@@ -59,7 +59,11 @@ export class ReportController {
   @Swagger.ApiOperation({ summary: 'Create a new Category ressource.' })
   @Swagger.ApiCreatedResponse({ type: ReportCategoryResponse })
   async createCategory(@Body() body: CreateReportCategoryRequest) {
-    const instance = await this.createReportCategoryUsecase.execute(body);
+    const languageCode = configuration().defaultTranslation;
+    const instance = await this.createReportCategoryUsecase.execute({
+      languageCode,
+      name: body.name,
+    });
 
     return ReportCategoryResponse.fromDomain(instance);
   }
