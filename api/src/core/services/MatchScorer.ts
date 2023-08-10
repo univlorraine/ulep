@@ -1,4 +1,4 @@
-import { JOKER_LANGUAGE_CODE } from 'src/core/models';
+import { JOKER_LANGUAGE_CODE, LearningType } from 'src/core/models';
 /* eslint-disable prettier/prettier */
 import { Injectable } from '@nestjs/common';
 import { Match, MatchScores, ProficiencyLevel, Profile } from '../models';
@@ -70,6 +70,12 @@ export class MatchScorer implements IMatchScorer {
     if ((profile1.sameGender || profile2.sameGender)
       && profile1.user.gender !== profile2.user.gender
     ) {
+      return new Match({ owner: profile1, target: profile2, scores: MatchScores.empty() });
+    }
+
+    if (profile1.learningType !== profile2.learningType && (
+        profile1.learningType !== LearningType.BOTH && profile2.learningType !== LearningType.BOTH
+    )) {
       return new Match({ owner: profile1, target: profile2, scores: MatchScores.empty() });
     }
 

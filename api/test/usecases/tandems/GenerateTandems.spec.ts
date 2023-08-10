@@ -1,4 +1,5 @@
 import { faker } from '@faker-js/faker';
+import e from 'express';
 import {
   Gender,
   Language,
@@ -17,6 +18,7 @@ import { InMemoryProfileRepository } from 'src/providers/persistance/repositorie
 import { InMemoryTandemRepository } from 'src/providers/persistance/repositories/in-memory-tandem-repository';
 import { UuidProvider } from 'src/providers/services/uuid.provider';
 
+// Note: profile comparison is based on profiles ID
 const checkTandemArrayContainsTandem = (
   tandems: Tandem[],
   tandemProfiles: { a: Profile; b: Profile },
@@ -36,6 +38,7 @@ const checkTandemArrayContainsTandem = (
   return tandemStatus ? matchingTandem.status === tandemStatus : true;
 };
 
+// Note: profile comparison is based on profiles ID
 const checkTandemArrayNotContainsTandem = (
   tandems: Tandem[],
   tandemProfiles: { a: Profile; b: Profile },
@@ -527,7 +530,7 @@ describe('GenerateTandem UC', () => {
         deactivated: false,
         deactivatedReason: '',
       }),
-      id: 'FR1',
+      id: 'MALE1',
       nativeLanguage: french,
       masteredLanguages: [],
       learningType: LearningType.BOTH,
@@ -565,7 +568,7 @@ describe('GenerateTandem UC', () => {
         deactivated: false,
         deactivatedReason: '',
       }),
-      id: 'EN1',
+      id: 'FEMALE',
       nativeLanguage: english,
       masteredLanguages: [],
       learningType: LearningType.BOTH,
@@ -607,5 +610,328 @@ describe('GenerateTandem UC', () => {
         b: female,
       }),
     ).toBeTruthy();
+  });
+
+  describe('should not generate tandems of incompatible learning type', () => {
+    // French learning english in tandem
+    const frenchTandem = new Profile({
+      user: new User({
+        id: 'user1',
+        email: '',
+        firstname: '',
+        lastname: '',
+        gender: Gender.MALE,
+        age: 19,
+        university: centralUniversity,
+        role: Role.STUDENT,
+        country: 'FR',
+        avatar: null,
+        deactivated: false,
+        deactivatedReason: '',
+      }),
+      id: 'FR_TANDEM',
+      nativeLanguage: french,
+      masteredLanguages: [],
+      learningType: LearningType.TANDEM,
+      meetingFrequency: 'ONCE_A_WEEK',
+      learningLanguages: [
+        {
+          language: english,
+          level: ProficiencyLevel.B2,
+        },
+      ],
+      sameGender: false,
+      sameAge: false,
+      objectives: [],
+      interests: [],
+      biography: {
+        superpower: faker.lorem.sentence(),
+        favoritePlace: faker.lorem.sentence(),
+        experience: faker.lorem.sentence(),
+        anecdote: faker.lorem.sentence(),
+      },
+    });
+
+    // English learning french in tandem
+    const englishTandem = new Profile({
+      user: new User({
+        id: 'user2',
+        email: '',
+        firstname: '',
+        lastname: '',
+        gender: Gender.MALE,
+        age: 19,
+        university: centralUniversity,
+        role: Role.STUDENT,
+        country: 'EN',
+        avatar: null,
+        deactivated: false,
+        deactivatedReason: '',
+      }),
+      id: 'EN_TANDEM',
+      nativeLanguage: english,
+      masteredLanguages: [],
+      learningType: LearningType.TANDEM,
+      meetingFrequency: 'ONCE_A_WEEK',
+      learningLanguages: [
+        {
+          language: french,
+          level: ProficiencyLevel.B2,
+        },
+      ],
+      sameGender: false,
+      sameAge: false,
+      objectives: [],
+      interests: [],
+      biography: {
+        superpower: faker.lorem.sentence(),
+        favoritePlace: faker.lorem.sentence(),
+        experience: faker.lorem.sentence(),
+        anecdote: faker.lorem.sentence(),
+      },
+    });
+
+    // French learning english in etandem
+    const frenchEtandem = new Profile({
+      user: new User({
+        id: 'user3',
+        email: '',
+        firstname: '',
+        lastname: '',
+        gender: Gender.MALE,
+        age: 19,
+        university: centralUniversity,
+        role: Role.STUDENT,
+        country: 'FR',
+        avatar: null,
+        deactivated: false,
+        deactivatedReason: '',
+      }),
+      id: 'FR_ETANDEM',
+      nativeLanguage: french,
+      masteredLanguages: [],
+      learningType: LearningType.ETANDEM,
+      meetingFrequency: 'ONCE_A_WEEK',
+      learningLanguages: [
+        {
+          language: english,
+          level: ProficiencyLevel.B2,
+        },
+      ],
+      sameGender: false,
+      sameAge: false,
+      objectives: [],
+      interests: [],
+      biography: {
+        superpower: faker.lorem.sentence(),
+        favoritePlace: faker.lorem.sentence(),
+        experience: faker.lorem.sentence(),
+        anecdote: faker.lorem.sentence(),
+      },
+    });
+
+    // English learning french in etandem
+    const englishEtandem = new Profile({
+      user: new User({
+        id: 'user4',
+        email: '',
+        firstname: '',
+        lastname: '',
+        gender: Gender.MALE,
+        age: 19,
+        university: centralUniversity,
+        role: Role.STUDENT,
+        country: 'EN',
+        avatar: null,
+        deactivated: false,
+        deactivatedReason: '',
+      }),
+      id: 'EN_ETANDEM',
+      nativeLanguage: english,
+      masteredLanguages: [],
+      learningType: LearningType.ETANDEM,
+      meetingFrequency: 'ONCE_A_WEEK',
+      learningLanguages: [
+        {
+          language: french,
+          level: ProficiencyLevel.B2,
+        },
+      ],
+      sameGender: false,
+      sameAge: false,
+      objectives: [],
+      interests: [],
+      biography: {
+        superpower: faker.lorem.sentence(),
+        favoritePlace: faker.lorem.sentence(),
+        experience: faker.lorem.sentence(),
+        anecdote: faker.lorem.sentence(),
+      },
+    });
+
+    // French learning english in whatever mode
+    const frenchBoth = new Profile({
+      user: new User({
+        id: 'user5',
+        email: '',
+        firstname: '',
+        lastname: '',
+        gender: Gender.MALE,
+        age: 19,
+        university: centralUniversity,
+        role: Role.STUDENT,
+        country: 'FR',
+        avatar: null,
+        deactivated: false,
+        deactivatedReason: '',
+      }),
+      id: 'FR_BOTH',
+      nativeLanguage: french,
+      masteredLanguages: [],
+      learningType: LearningType.BOTH,
+      meetingFrequency: 'ONCE_A_WEEK',
+      learningLanguages: [
+        {
+          language: english,
+          level: ProficiencyLevel.B2,
+        },
+      ],
+      sameGender: false,
+      sameAge: false,
+      objectives: [],
+      interests: [],
+      biography: {
+        superpower: faker.lorem.sentence(),
+        favoritePlace: faker.lorem.sentence(),
+        experience: faker.lorem.sentence(),
+        anecdote: faker.lorem.sentence(),
+      },
+    });
+
+    // English learning french in whatever mode
+    const englishBoth = new Profile({
+      user: new User({
+        id: 'user4',
+        email: '',
+        firstname: '',
+        lastname: '',
+        gender: Gender.MALE,
+        age: 19,
+        university: centralUniversity,
+        role: Role.STUDENT,
+        country: 'EN',
+        avatar: null,
+        deactivated: false,
+        deactivatedReason: '',
+      }),
+      id: 'EN_BOTH',
+      nativeLanguage: english,
+      masteredLanguages: [],
+      learningType: LearningType.BOTH,
+      meetingFrequency: 'ONCE_A_WEEK',
+      learningLanguages: [
+        {
+          language: french,
+          level: ProficiencyLevel.B2,
+        },
+      ],
+      sameGender: false,
+      sameAge: false,
+      objectives: [],
+      interests: [],
+      biography: {
+        superpower: faker.lorem.sentence(),
+        favoritePlace: faker.lorem.sentence(),
+        experience: faker.lorem.sentence(),
+        anecdote: faker.lorem.sentence(),
+      },
+    });
+
+    const tandemsRepository = new InMemoryTandemRepository();
+    const uuidProvider = new UuidProvider();
+    const uc = new GenerateTandemsUsecase(
+      profilesRepository,
+      tandemsRepository,
+      uuidProvider,
+    );
+
+    beforeEach(() => {
+      profilesRepository.reset();
+      tandemsRepository.reset();
+    });
+
+    test('Tandem - Tandem', async () => {
+      profilesRepository.init([frenchTandem, englishTandem]);
+      await uc.execute();
+      const tandems = await tandemsRepository.getExistingTandems();
+      expect(
+        checkTandemArrayContainsTandem(tandems, {
+          a: frenchTandem,
+          b: englishTandem,
+        }),
+      ).toBeTruthy();
+    });
+
+    test('Etandem - ETandem', async () => {
+      profilesRepository.init([frenchEtandem, englishEtandem]);
+      await uc.execute();
+      const tandems = await tandemsRepository.getExistingTandems();
+      expect(
+        checkTandemArrayContainsTandem(tandems, {
+          a: frenchEtandem,
+          b: englishEtandem,
+        }),
+      ).toBeTruthy();
+    });
+
+    test('Both - whatever', async () => {
+      profilesRepository.init([frenchBoth, englishTandem]);
+      await uc.execute();
+      let tandems = await tandemsRepository.getExistingTandems();
+      expect(
+        checkTandemArrayContainsTandem(tandems, {
+          a: frenchBoth,
+          b: englishTandem,
+        }),
+      ).toBeTruthy();
+
+      profilesRepository.reset();
+      tandemsRepository.reset();
+
+      profilesRepository.init([frenchBoth, englishEtandem]);
+      await uc.execute();
+      tandems = await tandemsRepository.getExistingTandems();
+      expect(
+        checkTandemArrayContainsTandem(tandems, {
+          a: frenchBoth,
+          b: englishEtandem,
+        }),
+      ).toBeTruthy();
+
+      profilesRepository.reset();
+      tandemsRepository.reset();
+
+      profilesRepository.init([frenchBoth, englishBoth]);
+      await uc.execute();
+      tandems = await tandemsRepository.getExistingTandems();
+      expect(
+        checkTandemArrayContainsTandem(tandems, {
+          a: frenchBoth,
+          b: englishBoth,
+        }),
+      ).toBeTruthy();
+    });
+
+    test('Tandem - ETandem', async () => {
+      profilesRepository.init([frenchTandem, englishEtandem]);
+      await uc.execute();
+      const tandems = await tandemsRepository.getExistingTandems();
+      expect(
+        checkTandemArrayNotContainsTandem(tandems, {
+          a: frenchTandem,
+          b: englishEtandem,
+        }),
+      ).toBeTruthy();
+    });
   });
 });
