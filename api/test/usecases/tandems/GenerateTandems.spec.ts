@@ -1,12 +1,15 @@
-import { UserFactory } from '@app/common';
 import { faker } from '@faker-js/faker';
 import {
+  Gender,
   Language,
   LearningType,
   ProficiencyLevel,
   Profile,
+  Role,
   Tandem,
   TandemStatus,
+  University,
+  User,
 } from 'src/core/models';
 import { GenerateTandemsUsecase } from 'src/core/usecases';
 import { InMemoryLanguageRepository } from 'src/providers/persistance/repositories/in-memory-language-repository';
@@ -31,7 +34,6 @@ const checkTandemArrayContainsTandemWithProfiles = (
 
 describe('GenerateTandem UC', () => {
   const languageRepository = new InMemoryLanguageRepository();
-  const userFactory = new UserFactory();
   const french = new Language({
     id: faker.string.uuid(),
     code: 'fr',
@@ -53,6 +55,15 @@ describe('GenerateTandem UC', () => {
     name: 'deutch',
   });
   const profilesRepository = new InMemoryProfileRepository();
+  const centralUniversity = new University({
+    id: 'university1',
+    name: 'university 1',
+    campus: ['lorraine', 'strasbourg'],
+    languages: [french, english, spanish, deutch],
+    timezone: 'GMT+1',
+    admissionStart: new Date(),
+    admissionEnd: new Date(),
+  });
   beforeAll(() => {
     languageRepository.init([french, english, spanish, deutch]);
   });
@@ -63,8 +74,21 @@ describe('GenerateTandem UC', () => {
 
   test('should generate tandems', async () => {
     const french1 = new Profile({
-      user: userFactory.makeOne(),
-      id: faker.string.uuid(),
+      user: new User({
+        id: 'user1',
+        email: '',
+        firstname: '',
+        lastname: '',
+        gender: Gender.MALE,
+        age: 19,
+        university: centralUniversity,
+        role: Role.STAFF,
+        country: 'FR',
+        avatar: null,
+        deactivated: false,
+        deactivatedReason: '',
+      }),
+      id: 'FR1',
       nativeLanguage: french,
       masteredLanguages: [],
       learningType: LearningType.BOTH,
@@ -72,62 +96,6 @@ describe('GenerateTandem UC', () => {
       learningLanguages: [
         {
           language: english,
-          level: ProficiencyLevel.B1,
-        },
-      ],
-      sameGender: false,
-      sameAge: false,
-      objectives: [],
-      interests: [],
-      biography: {
-        superpower: faker.lorem.sentence(),
-        favoritePlace: faker.lorem.sentence(),
-        experience: faker.lorem.sentence(),
-        anecdote: faker.lorem.sentence(),
-      },
-    });
-    const french2 = new Profile({
-      user: userFactory.makeOne(),
-      id: faker.string.uuid(),
-      nativeLanguage: french,
-      masteredLanguages: [deutch],
-      learningType: LearningType.BOTH,
-      meetingFrequency: 'ONCE_A_WEEK',
-      learningLanguages: [
-        {
-          language: spanish,
-          level: ProficiencyLevel.A2,
-        },
-        {
-          language: english,
-          level: ProficiencyLevel.C1,
-        },
-      ],
-      sameGender: false,
-      sameAge: false,
-      objectives: [],
-      interests: [],
-      biography: {
-        superpower: faker.lorem.sentence(),
-        favoritePlace: faker.lorem.sentence(),
-        experience: faker.lorem.sentence(),
-        anecdote: faker.lorem.sentence(),
-      },
-    });
-    const french3 = new Profile({
-      user: userFactory.makeOne(),
-      id: faker.string.uuid(),
-      nativeLanguage: french,
-      masteredLanguages: [],
-      learningType: LearningType.BOTH,
-      meetingFrequency: 'ONCE_A_WEEK',
-      learningLanguages: [
-        {
-          language: english,
-          level: ProficiencyLevel.B1,
-        },
-        {
-          language: deutch,
           level: ProficiencyLevel.B2,
         },
       ],
@@ -142,9 +110,96 @@ describe('GenerateTandem UC', () => {
         anecdote: faker.lorem.sentence(),
       },
     });
+    const french2 = new Profile({
+      user: new User({
+        id: 'user2',
+        email: '',
+        firstname: '',
+        lastname: '',
+        gender: Gender.FEMALE,
+        age: 20,
+        university: centralUniversity,
+        role: Role.STUDENT,
+        country: 'FR',
+        avatar: null,
+        deactivated: false,
+        deactivatedReason: '',
+      }),
+      id: 'FR2',
+      nativeLanguage: french,
+      masteredLanguages: [deutch],
+      learningType: LearningType.BOTH,
+      meetingFrequency: 'ONCE_A_WEEK',
+      learningLanguages: [
+        {
+          language: spanish,
+          level: ProficiencyLevel.A2,
+        },
+      ],
+      sameGender: false,
+      sameAge: false,
+      objectives: [],
+      interests: [],
+      biography: {
+        superpower: faker.lorem.sentence(),
+        favoritePlace: faker.lorem.sentence(),
+        experience: faker.lorem.sentence(),
+        anecdote: faker.lorem.sentence(),
+      },
+    });
+    const french3 = new Profile({
+      user: new User({
+        id: 'user3',
+        email: '',
+        firstname: '',
+        lastname: '',
+        gender: Gender.MALE,
+        age: 19,
+        university: centralUniversity,
+        role: Role.STAFF,
+        country: 'FR',
+        avatar: null,
+        deactivated: false,
+        deactivatedReason: '',
+      }),
+      id: 'FR3',
+      nativeLanguage: french,
+      masteredLanguages: [],
+      learningType: LearningType.BOTH,
+      meetingFrequency: 'ONCE_A_WEEK',
+      learningLanguages: [
+        {
+          language: english,
+          level: ProficiencyLevel.A1,
+        },
+      ],
+      sameGender: false,
+      sameAge: false,
+      objectives: [],
+      interests: [],
+      biography: {
+        superpower: faker.lorem.sentence(),
+        favoritePlace: faker.lorem.sentence(),
+        experience: faker.lorem.sentence(),
+        anecdote: faker.lorem.sentence(),
+      },
+    });
     const spain1 = new Profile({
-      user: userFactory.makeOne(),
-      id: faker.string.uuid(),
+      user: new User({
+        id: 'user4',
+        email: '',
+        firstname: '',
+        lastname: '',
+        gender: Gender.MALE,
+        age: 22,
+        university: centralUniversity,
+        role: Role.STUDENT,
+        country: 'ES',
+        avatar: null,
+        deactivated: false,
+        deactivatedReason: '',
+      }),
+      id: 'SP1',
       nativeLanguage: spanish,
       masteredLanguages: [],
       learningType: LearningType.BOTH,
@@ -167,19 +222,28 @@ describe('GenerateTandem UC', () => {
       },
     });
     const spain2 = new Profile({
-      user: userFactory.makeOne(),
-      id: faker.string.uuid(),
+      user: new User({
+        id: 'user5',
+        email: '',
+        firstname: '',
+        lastname: '',
+        gender: Gender.FEMALE,
+        age: 19,
+        university: centralUniversity,
+        role: Role.STUDENT,
+        country: 'ES',
+        avatar: null,
+        deactivated: false,
+        deactivatedReason: '',
+      }),
+      id: 'SP2',
       nativeLanguage: spanish,
-      masteredLanguages: [],
+      masteredLanguages: [english],
       learningType: LearningType.BOTH,
       meetingFrequency: 'ONCE_A_WEEK',
       learningLanguages: [
         {
           language: french,
-          level: ProficiencyLevel.C1,
-        },
-        {
-          language: english,
           level: ProficiencyLevel.B2,
         },
       ],
@@ -195,8 +259,21 @@ describe('GenerateTandem UC', () => {
       },
     });
     const english1 = new Profile({
-      user: userFactory.makeOne(),
-      id: faker.string.uuid(),
+      user: new User({
+        id: 'user6',
+        email: '',
+        firstname: '',
+        lastname: '',
+        gender: Gender.MALE,
+        age: 19,
+        university: centralUniversity,
+        role: Role.STUDENT,
+        country: 'EN',
+        avatar: null,
+        deactivated: false,
+        deactivatedReason: '',
+      }),
+      id: 'EN1',
       nativeLanguage: english,
       masteredLanguages: [],
       learningType: LearningType.BOTH,
@@ -205,10 +282,6 @@ describe('GenerateTandem UC', () => {
         {
           language: french,
           level: ProficiencyLevel.C2,
-        },
-        {
-          language: spanish,
-          level: ProficiencyLevel.A0,
         },
       ],
       sameGender: false,
@@ -223,8 +296,21 @@ describe('GenerateTandem UC', () => {
       },
     });
     const english2 = new Profile({
-      user: userFactory.makeOne(),
-      id: faker.string.uuid(),
+      user: new User({
+        id: 'user7',
+        email: '',
+        firstname: '',
+        lastname: '',
+        gender: Gender.MALE,
+        age: 28,
+        university: centralUniversity,
+        role: Role.STAFF,
+        country: 'EN',
+        avatar: null,
+        deactivated: false,
+        deactivatedReason: '',
+      }),
+      id: 'EN2',
       nativeLanguage: english,
       masteredLanguages: [],
       learningType: LearningType.BOTH,
@@ -247,10 +333,23 @@ describe('GenerateTandem UC', () => {
       },
     });
     const deutch1 = new Profile({
-      user: userFactory.makeOne(),
-      id: faker.string.uuid(),
+      user: new User({
+        id: 'user8',
+        email: '',
+        firstname: '',
+        lastname: '',
+        gender: Gender.FEMALE,
+        age: 25,
+        university: centralUniversity,
+        role: Role.STUDENT,
+        country: 'DE',
+        avatar: null,
+        deactivated: false,
+        deactivatedReason: '',
+      }),
+      id: 'DE',
       nativeLanguage: deutch,
-      masteredLanguages: [],
+      masteredLanguages: [spanish],
       learningType: LearningType.BOTH,
       meetingFrequency: 'ONCE_A_WEEK',
       learningLanguages: [
@@ -298,15 +397,25 @@ describe('GenerateTandem UC', () => {
 
     const tandems = await tandemsRepository.getExistingTandems();
 
+    expect(tandems.length).toBe(3);
+
     for (const tandem of tandems) {
       expect(tandem.status).toBe(TandemStatus.DRAFT);
     }
 
     expect(
       checkTandemArrayContainsTandemWithProfiles(tandems, {
-        a: french3,
-        b: english2,
-      }),
+        a: french1,
+        b: english1,
+      }) &&
+        checkTandemArrayContainsTandemWithProfiles(tandems, {
+          a: french2,
+          b: spain2,
+        }) &&
+        checkTandemArrayContainsTandemWithProfiles(tandems, {
+          a: french3,
+          b: english2,
+        }),
     ).toBeTruthy();
   });
 });
