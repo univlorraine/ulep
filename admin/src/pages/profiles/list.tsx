@@ -17,31 +17,47 @@ const ProfileFilter = (props: any) => {
             <TextInput label={translate('profiles.lastname')} source="user.lastname" />
             <TextInput label={translate('profiles.email')} source="user.email" />
             <ReferenceInput
+                label={translate('profiles.country')}
                 reference="countries"
                 source="user.country"
             >
-                <SelectInput optionText="name" optionValue="code" />
+                <SelectInput
+                    label={translate('profiles.country')}
+                    optionText="name"
+                    optionValue="code"
+                />
             </ReferenceInput>
             <ReferenceInput
                 label={translate('profiles.university')}
                 reference="universities"
                 source="user.university"
             >
-                <SelectInput optionText="name" />
+                <SelectInput
+                    label={translate('profiles.university')}
+                    optionText="name"
+                />
             </ReferenceInput>
             <ReferenceInput
                 label={translate('profiles.native_language')}
                 reference="languages"
                 source="nativeLanguageCode"
             >
-                <SelectInput optionText="code" optionValue="code" />
+                <SelectInput
+                    label={translate('profiles.native_language')}
+                    optionText="code"
+                    optionValue="code"
+                />
             </ReferenceInput>
             <ReferenceInput
                 label={translate('profiles.mastered_languages')}
                 reference="languages"
                 source="masteredLanguageCode"
             >
-                <SelectInput optionText="code" optionValue="code" />
+                <SelectInput
+                    label={translate('profiles.mastered_languages')}
+                    optionText="code"
+                    optionValue="code"
+                />
             </ReferenceInput>
             <SelectInput
                 choices={[

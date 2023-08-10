@@ -10,6 +10,7 @@
         "password": "Mot de passe"
     },
     "profiles": {
+        "country": "Pays",
         "email": "Email",
         "firstname": "Prénom",
         "label": "Profiles",
