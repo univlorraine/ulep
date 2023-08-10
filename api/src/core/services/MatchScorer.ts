@@ -67,6 +67,12 @@ export class MatchScorer implements IMatchScorer {
       return new Match({ owner: profile1, target: profile2, scores: MatchScores.empty() });
     }
 
+    if ((profile1.sameGender || profile2.sameGender)
+      && profile1.user.gender !== profile2.user.gender
+    ) {
+      return new Match({ owner: profile1, target: profile2, scores: MatchScores.empty() });
+    }
+
     const scores: MatchScores = {
       level: this.computeLanguageLevel(profile1, profile2, isDiscovery),
       age: this.computeAgeBonus(profile1, profile2),

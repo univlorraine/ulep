@@ -36,6 +36,18 @@ const checkTandemArrayContainsTandem = (
   return tandemStatus ? matchingTandem.status === tandemStatus : true;
 };
 
+const checkTandemArrayNotContainsTandem = (
+  tandems: Tandem[],
+  tandemProfiles: { a: Profile; b: Profile },
+) =>
+  !tandems.some((tandem) => {
+    const tandemProfileIds = tandem.profiles.map((profile) => profile.id);
+    return (
+      tandemProfileIds.includes(tandemProfiles.a.id) &&
+      tandemProfileIds.includes(tandemProfiles.b.id)
+    );
+  });
+
 describe('GenerateTandem UC', () => {
   const languageRepository = new InMemoryLanguageRepository();
   const french = new Language({
@@ -495,6 +507,105 @@ describe('GenerateTandem UC', () => {
           },
           TandemStatus.DRAFT,
         ),
+    ).toBeTruthy();
+  });
+
+  test('should not generate tandem with user of 2 different gender if they will to be in same gender tandem', async () => {
+    // Male speaking french and learning english
+    const male = new Profile({
+      user: new User({
+        id: 'user1',
+        email: '',
+        firstname: '',
+        lastname: '',
+        gender: Gender.MALE,
+        age: 19,
+        university: centralUniversity,
+        role: Role.STUDENT,
+        country: 'FR',
+        avatar: null,
+        deactivated: false,
+        deactivatedReason: '',
+      }),
+      id: 'FR1',
+      nativeLanguage: french,
+      masteredLanguages: [],
+      learningType: LearningType.BOTH,
+      meetingFrequency: 'ONCE_A_WEEK',
+      learningLanguages: [
+        {
+          language: english,
+          level: ProficiencyLevel.B2,
+        },
+      ],
+      sameGender: false,
+      sameAge: false,
+      objectives: [],
+      interests: [],
+      biography: {
+        superpower: faker.lorem.sentence(),
+        favoritePlace: faker.lorem.sentence(),
+        experience: faker.lorem.sentence(),
+        anecdote: faker.lorem.sentence(),
+      },
+    });
+    // Female speaking english and learning french
+    const female = new Profile({
+      user: new User({
+        id: 'user1',
+        email: '',
+        firstname: '',
+        lastname: '',
+        gender: Gender.FEMALE,
+        age: 19,
+        university: centralUniversity,
+        role: Role.STUDENT,
+        country: 'EN',
+        avatar: null,
+        deactivated: false,
+        deactivatedReason: '',
+      }),
+      id: 'EN1',
+      nativeLanguage: english,
+      masteredLanguages: [],
+      learningType: LearningType.BOTH,
+      meetingFrequency: 'ONCE_A_WEEK',
+      learningLanguages: [
+        {
+          language: french,
+          level: ProficiencyLevel.B2,
+        },
+      ],
+      sameGender: true,
+      sameAge: false,
+      objectives: [],
+      interests: [],
+      biography: {
+        superpower: faker.lorem.sentence(),
+        favoritePlace: faker.lorem.sentence(),
+        experience: faker.lorem.sentence(),
+        anecdote: faker.lorem.sentence(),
+      },
+    });
+    profilesRepository.init([male, female]);
+
+    const tandemsRepository = new InMemoryTandemRepository();
+    const uuidProvider = new UuidProvider();
+
+    const uc = new GenerateTandemsUsecase(
+      profilesRepository,
+      tandemsRepository,
+      uuidProvider,
+    );
+
+    await uc.execute();
+
+    const tandems = await tandemsRepository.getExistingTandems();
+    expect(
+      checkTandemArrayNotContainsTandem(tandems, {
+        a: male,
+        b: female,
+      }),
     ).toBeTruthy();
   });
 });
