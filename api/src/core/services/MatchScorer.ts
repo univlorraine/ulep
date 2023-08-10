@@ -53,9 +53,14 @@ export class MatchScorer implements IMatchScorer {
 
     const isDiscovery = profile1.learningLanguages?.[0]?.language.code === JOKER_LANGUAGE_CODE;
 
-    const languages = [profile2.nativeLanguage, ...profile2.masteredLanguages].map(l => l.id);
+    const languageIdsSpokenByProfile1 = [profile1.nativeLanguage, ...profile1.masteredLanguages].map(l => l.id);
+    const languageIdsSpokenByProfile2 = [profile2.nativeLanguage, ...profile2.masteredLanguages].map(l => l.id);
    
-    if (!isDiscovery && !languages.includes(profile1.learningLanguages?.[0]?.language.id)) {
+
+    if (!isDiscovery && (
+      !languageIdsSpokenByProfile1.includes(profile2.learningLanguages?.[0]?.language.id) ||
+      !languageIdsSpokenByProfile2.includes(profile1.learningLanguages?.[0]?.language.id)
+    )) {
       return new Match({ owner: profile1, target: profile2, scores: MatchScores.empty() });
     }
 

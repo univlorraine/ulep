@@ -36,13 +36,16 @@ export class Tandem {
       throw new InvalidTandemError('Tandem must have two different profiles');
     }
 
+
+    const languagesSpokeByProfile1 = [this.profiles[0].nativeLanguage.code, ...this.profiles[0].masteredLanguages.map(language => language.code)];
+    const languagesSpokeByProfile2 = [this.profiles[1].nativeLanguage.code, ...this.profiles[1].masteredLanguages.map(language => language.code)];
     // TODO(multipleLearningLanguage): manage multiple learning language
     if (
-      this.profiles[0].learningLanguages?.[0]?.language.code !== this.profiles[1].nativeLanguage.code ||
-      this.profiles[1].learningLanguages?.[0]?.language.code !== this.profiles[0].nativeLanguage.code
+      !languagesSpokeByProfile1.includes(this.profiles[1].learningLanguages?.[0]?.language.code) ||
+      !languagesSpokeByProfile2.includes(this.profiles[0].learningLanguages?.[0]?.language.code)
     ) {
       throw new InvalidTandemError(
-        'Leanring language and native language missmatch between profiles',
+        `Learning language and native/mastered language missmatch between profiles ${this.profiles[0].id} and ${this.profiles[1].id}`,
       );
     }
   }
