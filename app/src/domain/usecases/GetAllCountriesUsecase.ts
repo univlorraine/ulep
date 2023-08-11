@@ -11,7 +11,9 @@ class GetAllCountriesUsecase implements GetAllCountriesUsecaseInterface {
     async execute(): Promise<Country[] | Error> {
         try {
             const httpResponse: HttpResponse<CollectionCommand<CountryCommand>> = await this.domainHttpAdapter.get(
-                `/countries?enable=true&pagination=false`
+                `/countries?enable=true&pagination=false`,
+                {},
+                false
             );
 
             if (!httpResponse.parsedBody || !httpResponse.parsedBody.items) {

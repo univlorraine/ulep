@@ -23,13 +23,20 @@ import { ConfigContextValueType } from './configurationContextTypes';
 const getConfigContextValue = (
     accessToken: string,
     refreshToken: string,
+    removeTokens: Function,
     setProfile: Function,
     setTokens: Function,
     setUser: Function,
     configuration: Configuration
 ): ConfigContextValueType => {
     const cameraAdapter = new CameraAdapter();
-    const domainHttpAdapter = new DomainHttpAdapter(import.meta.env.VITE_API_URL ?? '', accessToken);
+    const domainHttpAdapter = new DomainHttpAdapter(
+        import.meta.env.VITE_API_URL ?? '',
+        accessToken,
+        refreshToken,
+        removeTokens,
+        setTokens
+    );
 
     const askForAccountDeletion = new AskForAccountDeletion(domainHttpAdapter);
     const askForLanguage = new AskForLanguageUsecase(domainHttpAdapter);

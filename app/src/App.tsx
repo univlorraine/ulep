@@ -38,6 +38,7 @@ setupIonicReact();
 const AppContext = () => {
     const rehydrated = useStoreRehydrated();
     const accessToken = useStoreState((state) => state.accessToken);
+    const logout = useStoreActions((state) => state.logout);
     const refreshToken = useStoreState((state) => state.refreshToken);
     const setProfile = useStoreActions((state) => state.setProfile);
     const setTokens = useStoreActions((state) => state.setTokens);
@@ -67,7 +68,15 @@ const AppContext = () => {
 
     return (
         <ConfigContext.Provider
-            value={getConfigContextValue(accessToken, refreshToken, setProfile, setTokens, setUser, configuration)}
+            value={getConfigContextValue(
+                accessToken,
+                refreshToken,
+                logout,
+                setProfile,
+                setTokens,
+                setUser,
+                configuration
+            )}
         >
             <IonReactRouter>
                 <Router />

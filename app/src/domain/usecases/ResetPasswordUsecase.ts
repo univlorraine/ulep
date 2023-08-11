@@ -7,9 +7,14 @@ class ResetPasswordUsecase implements ResetPasswordUsecaseInterface {
 
     async execute(id: string, password: string): Promise<void | Error> {
         try {
-            const httpResponse: HttpResponse<any> = await this.domainHttpAdapter.put(`/users/${id}/reset-password`, {
-                password,
-            });
+            const httpResponse: HttpResponse<any> = await this.domainHttpAdapter.put(
+                `/users/${id}/reset-password`,
+                {
+                    password,
+                },
+                {},
+                false
+            );
 
             if (!httpResponse.parsedBody) {
                 return new Error('errors.global');

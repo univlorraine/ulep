@@ -17,7 +17,10 @@ class LoginUsecase implements LoginUsecaseInterface {
                 {
                     email,
                     password,
-                }
+                },
+                {},
+                undefined,
+                false
             );
 
             if (!httpResponse.parsedBody || !httpResponse.parsedBody.accessToken) {

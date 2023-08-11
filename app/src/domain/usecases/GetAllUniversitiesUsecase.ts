@@ -10,7 +10,11 @@ class GetAllUniversitiesUsecase implements GetAllUniversitiesUsecaseInterface {
 
     async execute(): Promise<University[] | Error> {
         try {
-            const httpResponse: HttpResponse<CollectionCommand<UniversityCommand>> = await this.domainHttpAdapter.get(`/universities`);
+            const httpResponse: HttpResponse<CollectionCommand<UniversityCommand>> = await this.domainHttpAdapter.get(
+                `/universities`,
+                {},
+                false
+            );
 
             if (!httpResponse.parsedBody || !httpResponse.parsedBody.items) {
                 return new Error('errors.global');
