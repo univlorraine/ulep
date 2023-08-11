@@ -12,6 +12,7 @@ import {
   University,
   User,
 } from 'src/core/models';
+import { Campus } from 'src/core/models/campus.model';
 import { GenerateTandemsUsecase } from 'src/core/usecases';
 import { InMemoryProfileRepository } from 'src/providers/persistance/repositories/in-memory-profile-repository';
 import { InMemoryTandemRepository } from 'src/providers/persistance/repositories/in-memory-tandem-repository';
@@ -83,10 +84,20 @@ describe('GenerateTandem UC', () => {
     name: 'deutch',
   });
 
+  const lorraineCampus = new Campus({
+    id: 'campusLorraine',
+    name: 'campus Lorraine',
+    universityId: 'university1',
+  });
+  const strasbourgCampus = new Campus({
+    id: 'campusStrasbourg',
+    name: 'campus Strasbourg',
+    universityId: 'university1',
+  });
   const centralUniversity = new University({
     id: 'university1',
     name: 'university 1',
-    campus: ['lorraine', 'strasbourg'],
+    campus: [lorraineCampus, strasbourgCampus],
     languages: [french, english, spanish, deutch],
     timezone: 'GMT+1',
     admissionStart: new Date(),
@@ -634,6 +645,7 @@ describe('GenerateTandem UC', () => {
         experience: faker.lorem.sentence(),
         anecdote: faker.lorem.sentence(),
       },
+      campus: lorraineCampus,
     });
 
     // English learning french in tandem
@@ -673,6 +685,47 @@ describe('GenerateTandem UC', () => {
         experience: faker.lorem.sentence(),
         anecdote: faker.lorem.sentence(),
       },
+      campus: lorraineCampus,
+    });
+
+    // English learning french in tandem
+    const englishTandemOtherSite = new Profile({
+      user: new User({
+        id: 'user2',
+        email: '',
+        firstname: '',
+        lastname: '',
+        gender: Gender.MALE,
+        age: 19,
+        university: centralUniversity,
+        role: Role.STUDENT,
+        country: 'EN',
+        avatar: null,
+        deactivated: false,
+        deactivatedReason: '',
+      }),
+      id: 'EN_TANDEM',
+      nativeLanguage: english,
+      masteredLanguages: [],
+      learningType: LearningType.TANDEM,
+      meetingFrequency: 'ONCE_A_WEEK',
+      learningLanguages: [
+        {
+          language: french,
+          level: ProficiencyLevel.B2,
+        },
+      ],
+      sameGender: false,
+      sameAge: false,
+      objectives: [],
+      interests: [],
+      biography: {
+        superpower: faker.lorem.sentence(),
+        favoritePlace: faker.lorem.sentence(),
+        experience: faker.lorem.sentence(),
+        anecdote: faker.lorem.sentence(),
+      },
+      campus: strasbourgCampus,
     });
 
     // French learning english in etandem
@@ -921,22 +974,51 @@ describe('GenerateTandem UC', () => {
         }),
       ).toBeTruthy();
     });
+
+    test('should not generate on site tandem if users are not in same campus', async () => {
+      profilesRepository.init([frenchTandem, englishTandemOtherSite]);
+      await uc.execute({
+        universityIds: [centralUniversity.id],
+      });
+      const tandems = await tandemsRepository.getExistingTandems();
+      expect(
+        checkTandemArrayNotContainsTandem(tandems, {
+          a: frenchTandem,
+          b: englishTandemOtherSite,
+        }),
+      ).toBeTruthy();
+    });
   });
 
   test('should generate tandem only for selected universities', async () => {
+    const campus1 = new Campus({
+      id: 'campus1',
+      name: 'campus 1',
+      universityId: 'subsidiary1',
+    });
+    const campus2 = new Campus({
+      id: 'campus2',
+      name: 'campus 2',
+      universityId: 'subsidiary1',
+    });
     const subsidiaryUniveristy1 = new University({
       id: 'subsidiary1',
       name: 'Subsidiary university 1',
-      campus: ['somewhere', 'over', 'the rainbow'],
+      campus: [campus1, campus2],
       languages: [french, english, deutch],
       timezone: 'GMT+1',
       admissionStart: new Date(),
       admissionEnd: new Date(),
     });
+    const campusMadrid = new Campus({
+      id: 'campusMadrid',
+      name: 'campus Madrid',
+      universityId: 'subsidiary2',
+    });
     const subsidiaryUniveristy2 = new University({
       id: 'subsidiary2',
       name: 'Subsidiary university 2',
-      campus: ['madrid'],
+      campus: [campusMadrid],
       languages: [spanish],
       timezone: 'GMT+1',
       admissionStart: new Date(),

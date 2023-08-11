@@ -17,7 +17,7 @@ import { UNIVERSITY_REPOSITORY } from 'src/core/ports/university.repository';
 import { AuthenticationGuard } from 'src/api/guards';
 import { TestAuthGuard } from '../utils/TestAuthGuard';
 
-describe('Languages', () => {
+describe('Universities', () => {
   let app: TestServer;
 
   const userRepositoy = new InMemoryUserRepository();
@@ -74,7 +74,7 @@ describe('Languages', () => {
       .send({
         id: '4be22c64-e341-4199-9175-1c43fdce3eed',
         name: 'University of Oxford',
-        campus: ['Oxford'],
+        campusNames: ['Oxford'],
         timezone: 'Europe/London',
         languages: ['en', 'fr'],
         admissionStart: '2021-01-01',
@@ -96,7 +96,7 @@ describe('Languages', () => {
       .send({
         id: '4be22c64-e341-4199-9175-1c43fdce3eed',
         name: 'University of Oxford',
-        campus: ['Oxford'],
+        campusNames: ['Oxford'],
         timezone: 'Europe/London',
         languages: ['en', 'fr'],
         admissionStart: '2021-01-01',
@@ -115,7 +115,7 @@ describe('Languages', () => {
       .send({
         id: '4be22c64-e341-4199-9175-1c43fdce3eed',
         name: 'University of Oxford',
-        campus: ['Oxford'],
+        campusNames: ['Oxford'],
         timezone: 'Europe/London',
         languages: ['en', 'fr'],
         admissionStart: '2021-12-31',
@@ -136,7 +136,6 @@ describe('Languages', () => {
       .set('Authorization', `Bearer ${keycloakUser.sub}`)
       .send({
         name: 'University of Oxford',
-        campus: ['Oxford'],
         timezone: 'Europe/London',
         website: 'https://www.ox.ac.uk/',
       })
@@ -154,14 +153,15 @@ describe('Languages', () => {
       .set('Authorization', `Bearer ${keycloakUser.sub}`)
       .send({
         name: 'University of Oxford',
-        campus: ['Oxford'],
         timezone: 'Europe/London',
         website: 'https://www.ox.ac.uk/',
       })
       .expect(201);
 
     const universities = await repository.findAll();
-    const universityCreated = universities.find((u) => u.id !== university.id);
+    const universityCreated = universities.items.find(
+      (u) => u.id !== university.id,
+    );
 
     expect(universityCreated.languages).toEqual(university.languages);
     expect(universityCreated.admissionStart).toEqual(university.admissionStart);
@@ -231,7 +231,7 @@ describe('Languages', () => {
       .set('Authorization', `Bearer ${keycloakUser.sub}`)
       .expect(200);
 
-    expect(response.body).toEqual(
+    expect(response.body.items).toEqual(
       expect.arrayContaining([
         expect.objectContaining({
           id: university.id,

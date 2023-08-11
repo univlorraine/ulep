@@ -73,4 +73,8 @@ export class CreateProfileRequest
   @IsObject()
   @ValidateNested()
   biography: BiographyDto;
+
+  @Swagger.ApiProperty({ type: 'string' })
+  @IsUUID()
+  campusId: string;
 }

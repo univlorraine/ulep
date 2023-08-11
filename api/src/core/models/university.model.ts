@@ -1,10 +1,11 @@
+import { Campus } from './campus.model';
 import { Language } from './language.model';
 
 export interface UniversityProps {
   id: string;
   name: string;
   parent?: string;
-  campus: string[];
+  campus: Campus[];
   languages: Language[];
   timezone: string;
   admissionStart: Date;
@@ -20,7 +21,7 @@ export class University {
 
   readonly parent?: string;
 
-  readonly campus: string[];
+  readonly campus: Campus[];
 
   readonly languages: Language[];
 

@@ -1,6 +1,7 @@
 import { Inject, Injectable } from '@nestjs/common';
 import { DomainError, RessourceDoesNotExist } from 'src/core/errors';
 import { University } from 'src/core/models';
+import { Campus } from 'src/core/models/campus.model';
 import {
   LANGUAGE_REPOSITORY,
   LanguageRepository,
@@ -17,7 +18,7 @@ import {
 export class CreateUniversityCommand {
   id: string;
   name: string;
-  campus: string[];
+  campusNames: string[];
   timezone: string;
   languages: string[];
   admissionStart: Date;
@@ -56,7 +57,14 @@ export class CreateUniversityUsecase {
       id: command.id,
       name: command.name,
       parent: null,
-      campus: command.campus,
+      campus: command.campusNames.map(
+        (campusName) =>
+          new Campus({
+            id: this.uuidProvider.generate(),
+            name: campusName,
+            universityId: command.id,
+          }),
+      ),
       timezone: command.timezone,
       languages: languageCodes.map((language) => ({
         id: this.uuidProvider.generate(),

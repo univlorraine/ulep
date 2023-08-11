@@ -13,7 +13,6 @@ import {
 export class CreatePartnerUniversityCommand {
   parent: string;
   name: string;
-  campus: string[];
   timezone: string;
   website?: string;
   resourcesUrl?: string;
@@ -43,7 +42,7 @@ export class CreatePartnerUniversityUsecase {
       id: this.uuidProvider.generate(),
       name: command.name,
       parent: central.id,
-      campus: command.campus,
+      campus: [],
       timezone: command.timezone,
       languages: central.languages,
       admissionStart: central.admissionStart,

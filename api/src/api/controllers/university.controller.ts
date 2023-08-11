@@ -17,7 +17,7 @@ import {
   UpdateUniversityNameRequest,
   AddUniversityLanguageRequest,
   LanguageResponse,
-  UpdateUniversityPartnerRequest,
+  CreateUniversityPartnerRequest,
 } from '../dtos';
 import {
   CreateUniversityUsecase,
@@ -65,11 +65,13 @@ export class UniversityController {
   @Post(':id/partners')
   @Roles(configuration().adminRole)
   @UseGuards(AuthenticationGuard)
-  @Swagger.ApiOperation({ summary: 'Create a new University ressource.' })
+  @Swagger.ApiOperation({
+    summary: 'Create a new partner University ressource.',
+  })
   @Swagger.ApiCreatedResponse({ type: UniversityResponse })
   async createPartnerUniversity(
     @Param('id', ParseUUIDPipe) id: string,
-    @Body() body: UpdateUniversityPartnerRequest,
+    @Body() body: CreateUniversityPartnerRequest,
   ) {
     const instance = await this.createPartnerUniversityUsecase.execute({
       parent: id,

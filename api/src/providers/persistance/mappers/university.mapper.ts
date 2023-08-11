@@ -1,5 +1,6 @@
 import * as Prisma from '@prisma/client';
 import { University } from 'src/core/models';
+import { campusMapper } from './campus.mapper';
 
 export const UniversityRelations = {
   Places: true,
@@ -16,7 +17,7 @@ export const universityMapper = (snapshot: UniversitySnapshot): University => {
     id: snapshot.id,
     name: snapshot.name,
     parent: snapshot.parent_id,
-    campus: snapshot.Places.map((place) => place.name),
+    campus: snapshot.Places.map((place) => campusMapper(place)),
     timezone: snapshot.timezone,
     languages: snapshot.Languages.map((language) => {
       return {

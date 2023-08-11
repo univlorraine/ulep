@@ -6,6 +6,7 @@ import { UserResponse } from '../users';
 import { ObjectiveResponse } from '../objective';
 import { BiographyDto } from './biography';
 import { JOKER_LANGUAGE_CODE } from 'src/core/models';
+import { CampusResponse } from '../campus';
 
 class NativeLanguageResponse {
   @ApiProperty({ type: 'string', example: 'FR' })
@@ -91,6 +92,10 @@ export class ProfileResponse {
   @Expose({ groups: ['read'] })
   biography?: BiographyDto;
 
+  @ApiProperty({ type: CampusResponse, nullable: true })
+  @Expose({ groups: ['read'] })
+  campus: CampusResponse;
+
   constructor(partial: Partial<ProfileResponse>) {
     Object.assign(this, partial);
   }
@@ -117,6 +122,7 @@ export class ProfileResponse {
       meetingFrequency: profile.meetingFrequency,
       biography:
         profile.biography && BiographyDto.fromDomain(profile.biography),
+      campus: profile.campus && CampusResponse.fromCampus(profile.campus),
     });
   }
 }

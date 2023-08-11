@@ -17,6 +17,7 @@ import {
   UpdateUniversityNameCommand,
 } from 'src/core/usecases/university';
 import { IsAfterThan } from 'src/api/validators';
+import { CampusResponse } from '../campus';
 
 export class CreateUniversityRequest implements CreateUniversityCommand {
   @Swagger.ApiProperty({ type: 'string', format: 'uuid' })
@@ -30,7 +31,7 @@ export class CreateUniversityRequest implements CreateUniversityCommand {
 
   @Swagger.ApiProperty({ type: 'string', isArray: true })
   @IsString({ each: true })
-  campus: string[];
+  campusNames: string[];
 
   @Swagger.ApiProperty({ type: 'string', example: 'Europe/Paris' })
   @IsTimeZone()
@@ -71,17 +72,13 @@ export class UpdateUniversityNameRequest
   name: string;
 }
 
-export class UpdateUniversityPartnerRequest
+export class CreateUniversityPartnerRequest
   implements Omit<CreatePartnerUniversityCommand, 'parent'>
 {
   @Swagger.ApiProperty({ type: 'string' })
   @IsString()
   @IsNotEmpty()
   name: string;
-
-  @Swagger.ApiProperty({ type: 'string', isArray: true })
-  @IsString({ each: true })
-  campus: string[];
 
   @Swagger.ApiProperty({ type: 'string', example: 'Europe/Paris' })
   @IsTimeZone()
@@ -119,9 +116,9 @@ export class UniversityResponse {
   @Expose({ groups: ['read'] })
   languages: LanguageResponse[];
 
-  @Swagger.ApiProperty({ type: 'string', isArray: true })
+  @Swagger.ApiProperty({ type: CampusResponse, isArray: true })
   @Expose({ groups: ['read'] })
-  sites: string[];
+  sites: CampusResponse[];
 
   @Swagger.ApiProperty()
   @Expose({ groups: ['university:read'] })
@@ -150,7 +147,7 @@ export class UniversityResponse {
       parent: university.parent,
       timezone: university.timezone,
       languages: university.languages.map(LanguageResponse.fromLanguage),
-      sites: university.campus,
+      sites: university.campus.map(CampusResponse.fromCampus),
       admissionStart: university.admissionStart,
       admissionEnd: university.admissionEnd,
       website: university.website,

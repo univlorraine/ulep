@@ -10,8 +10,25 @@ export const createUsers = async (
   const users: Prisma.Users[] = [];
 
   const universities = await prisma.organizations.findMany();
+  const [centralUniversity, partnerUniversities] = universities.reduce(
+    (accumulator, university) => {
+      if (university.parent_id) {
+        accumulator[1].push(university);
+      } else {
+        accumulator[0] = university;
+      }
+      return accumulator;
+    },
+    [null, []],
+  );
 
   for (let i = 0; i < count; i++) {
+    let universityId = centralUniversity.id;
+    if (i % 4 === 0) {
+      // We randomly assign a partner university each 4 user. Otherwise he's part of central university
+      universityId = faker.helpers.arrayElement(partnerUniversities).id;
+    }
+
     const user = await prisma.users.create({
       data: {
         id: faker.string.uuid(),
@@ -23,7 +40,7 @@ export const createUsers = async (
         role: faker.helpers.arrayElement(['STUDENT', 'STAFF']),
         Organization: {
           connect: {
-            id: faker.helpers.arrayElement(universities).id,
+            id: universityId,
           },
         },
         Nationality: {
