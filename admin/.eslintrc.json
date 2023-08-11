@@ -2,9 +2,9 @@
     "root": true,
     "extends": [
         "@thetribe/eslint-config-react-typescript",
-        "plugin:react/recommended",
-        "plugin:cypress/recommended"
+        "plugin:react/recommended"
     ],
+    "parser": "@typescript-eslint/parser",
     "parserOptions": {
         "project": "./tsconfig.json"
     },
@@ -15,7 +15,9 @@
         "@typescript-eslint"
   ],
   "rules":{
-    "no-useless-constructor": "off"
+    "no-useless-constructor": "off",
+    "no-empty-function": "off",
+    "no-undef": "off"
   },
     "settings": {
         "import/parsers": {
