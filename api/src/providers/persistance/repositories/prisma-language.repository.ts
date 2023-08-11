@@ -1,5 +1,5 @@
 import { Injectable } from '@nestjs/common';
-import { PrismaService } from '@app/common';
+import { Collection, PrismaService } from '@app/common';
 import { Language } from 'src/core/models';
 import { LanguageRepository } from 'src/core/ports/language.repository';
 import { languageMapper } from '../mappers/language.mapper';
@@ -32,10 +32,15 @@ export class PrismaLanguageRepository implements LanguageRepository {
     return languageMapper(languageCode);
   }
 
-  async all(): Promise<Language[]> {
+  async all(): Promise<Collection<Language>> {
+    const count = await this.prisma.languageCodes.count();
+
     const languageCodes = await this.prisma.languageCodes.findMany();
 
-    return languageCodes.map(languageMapper);
+    return new Collection<Language>({
+      items: languageCodes.map(languageMapper),
+      totalItems: count,
+    });
   }
 
   async addRequest(code: string, user: string): Promise<void> {

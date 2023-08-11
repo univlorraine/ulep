@@ -1,4 +1,4 @@
-import { Collection } from '@app/common';
+import { Collection, SortOrder } from '@app/common';
 import { Inject, Injectable } from '@nestjs/common';
 import { CountryCode } from 'src/core/models';
 import {
@@ -8,6 +8,7 @@ import {
 
 export class GetCountriesCommand {
   enable?: boolean;
+  order?: SortOrder;
   pagination?: boolean;
   page?: number;
   limit?: number;
@@ -23,11 +24,11 @@ export class GetCountriesUsecase {
   async execute(
     command: GetCountriesCommand,
   ): Promise<Collection<CountryCode>> {
-    const { enable, pagination = true, page = 1, limit = 30 } = command;
+    const { enable, pagination = true, page = 1, limit = 30, order } = command;
 
     const result = await this.countryRepository.all({
       where: { enable },
-      orderBy: { name: 'asc' },
+      orderBy: { name: order ?? 'asc' },
       pagination: pagination ? { page, limit } : undefined,
     });
 

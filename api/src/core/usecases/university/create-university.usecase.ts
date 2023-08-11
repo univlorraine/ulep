@@ -39,7 +39,7 @@ export class CreateUniversityUsecase {
 
   async execute(command: CreateUniversityCommand) {
     const universities = await this.universityRepository.findAll();
-    if (universities.length > 0) {
+    if (universities.items.length > 0) {
       throw new DomainError({ message: 'Central university already exists' });
     }
 

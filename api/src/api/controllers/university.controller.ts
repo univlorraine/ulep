@@ -33,6 +33,7 @@ import {
 import { Roles } from '../decorators/roles.decorator';
 import { configuration } from 'src/configuration';
 import { AuthenticationGuard } from '../guards';
+import { Collection } from '@app/common';
 
 // TODO: languages add/remove
 @Controller('universities')
@@ -99,9 +100,14 @@ export class UniversityController {
   @Swagger.ApiOperation({ summary: 'Collection of University ressource.' })
   @Swagger.ApiOkResponse({ type: UniversityResponse, isArray: true })
   async findPartners() {
-    const instances = await this.getUniversitiesUsecase.execute();
+    const universities = await this.getUniversitiesUsecase.execute();
 
-    return instances.map(UniversityResponse.fromUniversity);
+    return new Collection<UniversityResponse>({
+      items: universities.items.map((university) =>
+        UniversityResponse.fromUniversity(university),
+      ),
+      totalItems: universities.totalItems,
+    });
   }
 
   @Get(':id')

@@ -1,15 +1,16 @@
 import { Inject, Injectable } from '@nestjs/common';
-import { SortOrderType, StringFilter } from '@app/common';
 import {
   PROFILE_REPOSITORY,
+  ProfileQueryOrderBy,
+  ProfileQueryWhere,
   ProfileRepository,
 } from '../../ports/profile.repository';
 
 export class GetProfilesCommand {
   page: number;
   limit: number;
-  orderBy?: SortOrderType<string>;
-  email?: StringFilter;
+  orderBy?: ProfileQueryOrderBy;
+  where?: ProfileQueryWhere;
 }
 
 @Injectable()
@@ -20,15 +21,13 @@ export class GetProfilesUsecase {
   ) {}
 
   async execute(command: GetProfilesCommand) {
-    const { page, orderBy, limit } = command;
+    const { page, orderBy, limit, where } = command;
     const offset = (page - 1) * limit;
     const result = await this.profileRepository.findAll(
       offset,
       limit,
       orderBy,
-      {
-        email: command.email,
-      },
+      where,
     );
 
     return result;

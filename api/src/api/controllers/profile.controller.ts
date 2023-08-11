@@ -68,15 +68,29 @@ export class ProfileController {
   })
   @CollectionResponse(ProfileResponse)
   async getCollection(
-    @Query() { page, limit, email, field, order }: ProfileQueryFilter,
+    @Query() { page, limit, field, order, where }: ProfileQueryFilter,
   ): Promise<Collection<ProfileResponse>> {
     const profiles = await this.getProfilesUsecase.execute({
       page: page,
-      orderBy: field && order ? { [field]: order } : undefined,
-      limit: limit,
-      email: {
-        equals: email,
+      orderBy: {
+        field,
+        order,
       },
+      limit: limit,
+      where: where
+        ? {
+            user: {
+              country: { equals: where.user?.country },
+              email: { contains: where.user?.email },
+              firstname: { contains: where.user?.firstname },
+              lastname: { contains: where.user?.lastname },
+              role: { equals: where.user?.role },
+              university: { equals: where.user?.university },
+            },
+            masteredLanguageCode: where.masteredLanguageCode,
+            nativeLanguageCode: where.nativeLanguageCode,
+          }
+        : undefined,
     });
 
     return new Collection<ProfileResponse>({
