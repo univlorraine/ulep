@@ -7,6 +7,7 @@ import {
 } from './translation.mapper';
 import { UserRelations, UserSnapshot, userMapper } from './user.mapper';
 import { languageMapper } from './language.mapper';
+import { campusMapper } from './campus.mapper';
 
 export const ProfilesRelations = {
   User: {
@@ -24,6 +25,7 @@ export const ProfilesRelations = {
   NativeLanguage: true,
   MasteredLanguages: { include: { LanguageCode: true } },
   LearningLanguages: { include: { LanguageCode: true } },
+  Campus: true,
 };
 
 export type ProfileSnapshot = Prisma.Profiles & {
@@ -42,6 +44,7 @@ export type ProfileSnapshot = Prisma.Profiles & {
   MasteredLanguages: (Prisma.MasteredLanguages & {
     LanguageCode: Prisma.LanguageCodes;
   })[];
+  Campus: Prisma.Places;
 };
 
 export const profileMapper = (instance: ProfileSnapshot): Profile => {
@@ -82,5 +85,6 @@ export const profileMapper = (instance: ProfileSnapshot): Profile => {
       experience: instance.bio['experience'],
       anecdote: instance.bio['anecdote'],
     },
+    campus: instance.Campus && campusMapper(instance.Campus),
   });
 };

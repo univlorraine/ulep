@@ -18,7 +18,10 @@ export class PrismaUniversityRepository implements UniversityRepository {
         name: university.name,
         parent_id: university.parent,
         Places: {
-          create: university.campus.map((name) => ({ name })),
+          create: university.campus.map((campus) => ({
+            id: campus.id,
+            name: campus.name,
+          })),
         },
         Languages: {
           connect: university.languages.map((language) => ({

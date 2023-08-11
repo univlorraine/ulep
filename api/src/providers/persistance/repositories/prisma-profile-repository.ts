@@ -134,6 +134,9 @@ export class PrismaProfileRepository implements ProfileRepository {
         Interests: {
           connect: profile.interests.map((interest) => ({ id: interest.id })),
         },
+        Campus: profile.campus && {
+          connect: { id: profile.campus.id },
+        },
       },
     });
   }

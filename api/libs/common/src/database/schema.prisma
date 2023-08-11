@@ -76,6 +76,7 @@ model Places {
   created_at      DateTime      @default(now())
   updated_at      DateTime      @updatedAt
   Organization    Organizations @relation(fields: [organization_id], references: [id], onDelete: Cascade)
+  Profiles        Profiles[]
 
   @@unique([name])
   @@map("places")
@@ -245,9 +246,11 @@ model Profiles {
   same_age                Boolean
   meeting_frequency       String
   bio                     Json
+  campus_id               String?
   created_at              DateTime             @default(now())
   updated_at              DateTime             @updatedAt
   User                    Users                @relation(fields: [user_id], references: [id], onDelete: Cascade)
+  Campus                  Places?              @relation(fields: [campus_id], references: [id])
   NativeLanguage          LanguageCodes        @relation("NativeLanguage", fields: [native_language_code_id], references: [id])
   LearningLanguages       LearningLanguages[]
   MasteredLanguages       MasteredLanguages[]

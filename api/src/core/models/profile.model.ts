@@ -1,4 +1,5 @@
 import { ProfileLanguagesException } from '../errors/profile-exceptions';
+import { Campus } from './campus.model';
 import { Interest } from './interest.model';
 import {
   JOKER_LANGUAGE_CODE,
@@ -28,6 +29,7 @@ export type CreateProfileProps = {
   objectives: LearningObjective[];
   interests: Interest[];
   biography?: { [key: string]: string };
+  campus?: Campus;
 };
 
 export class Profile {
@@ -55,6 +57,8 @@ export class Profile {
 
   readonly biography?: { [key: string]: string };
 
+  readonly campus?: Campus;
+
   constructor(props: CreateProfileProps) {
     const learningLanguages = [...props.learningLanguages].map(
       (learningLanguage) => ({
@@ -78,6 +82,7 @@ export class Profile {
     this.objectives = [...props.objectives];
     this.interests = [...props.interests];
     this.biography = props.biography;
+    this.campus = props.campus;
 
     this.assertLanguesAreUnique();
   }

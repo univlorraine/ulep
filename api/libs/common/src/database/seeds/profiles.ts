@@ -1,7 +1,7 @@
 import { faker } from '@faker-js/faker';
 import * as Prisma from '@prisma/client';
 import { ProfileFactory } from '../factories';
-import { ProficiencyLevel } from '../../../../../src/core/models';
+import { LearningType, ProficiencyLevel } from '../../../../../src/core/models';
 
 const enumValue = <T>(_enum: unknown): T => {
   const entries = Object.entries(_enum).map(([, v]) => v.toUpperCase());
@@ -19,13 +19,22 @@ export const createProfiles = async (
 
   const users = await prisma.users.findMany({
     include: {
-      Organization: { include: { Languages: true } },
+      Organization: {
+        include: {
+          Languages: true,
+          Places: true,
+        },
+      },
     },
     take: count,
   });
   const languages = await prisma.languageCodes.findMany();
   const objectives = await prisma.learningObjectives.findMany();
   const interest = await prisma.interests.findMany();
+  const universities = await prisma.organizations.findMany();
+  const centralUniversity = universities.find(
+    (university) => !university.parent_id,
+  );
 
   for (const [index, user] of users.entries()) {
     const instance = profileFactory.makeOne();
@@ -72,6 +81,16 @@ export const createProfiles = async (
       }
     }
 
+    const campus =
+      user.Organization.id === centralUniversity.id
+        ? faker.helpers.arrayElement(user.Organization.Places)
+        : undefined;
+
+    const learningType =
+      user.Organization.id === centralUniversity.id
+        ? faker.helpers.enumValue(LearningType)
+        : LearningType.ETANDEM;
+
     await prisma.profiles.create({
       data: {
         User: { connect: { id: user.id } },
@@ -97,11 +116,14 @@ export const createProfiles = async (
             };
           }),
         },
-        learning_type: instance.learningType,
+        learning_type: learningType,
         same_gender: instance.sameGender,
         same_age: instance.sameAge,
         meeting_frequency: instance.meetingFrequency,
         bio: instance.biography,
+        Campus: campus && {
+          connect: { id: campus.id },
+        },
       },
     });
   }

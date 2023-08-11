@@ -4,6 +4,7 @@ import {
   RessourceAlreadyExists,
   RessourceDoesNotExist,
 } from 'src/core/errors';
+import { ProfileCampusException } from 'src/core/errors/profile-exceptions';
 import { UnsuportedLanguageException } from 'src/core/errors/unsuported-language.exception';
 import {
   Interest,
@@ -56,6 +57,7 @@ export class CreateProfileCommand {
   sameGender: boolean;
   sameAge: boolean;
   bios?: string;
+  campusId?: string;
 }
 
 @Injectable()
@@ -81,6 +83,21 @@ export class CreateProfileUsecase {
     const user = await this.tryToFindTheUserOfId(command.user);
 
     await this.assertProfileDoesNotExistForUser(user.id);
+
+    if (command.learningType === LearningType.TANDEM && !command.campusId) {
+      throw new ProfileCampusException(
+        'A campus is required for tandem learningType',
+      );
+    }
+
+    const campus = user.university.campus.find(
+      (campus) => campus.id === command.campusId,
+    );
+    if (!campus) {
+      throw new ProfileCampusException(
+        `${command.campusId} not part of user's university`,
+      );
+    }
 
     const interests = await Promise.all(
       command.interests.map((id) => this.tryToFindTheInterestOfId(id)),
@@ -129,6 +146,7 @@ export class CreateProfileUsecase {
       learningLanguages,
       objectives,
       interests,
+      campus,
     });
 
     await this.profilesRepository.create(profile);

@@ -5,3 +5,9 @@ export class ProfileLanguagesException extends DomainError {
     super({ message });
   }
 }
+
+export class ProfileCampusException extends DomainError {
+  constructor(message: string) {
+    super({ message });
+  }
+}
