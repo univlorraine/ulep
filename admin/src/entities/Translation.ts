@@ -1,5 +1,5 @@
 class Translation {
-    constructor(public content: string, public language: string) {}
+    constructor(public content: string, public language: TranslatedLanguage) {}
 }
 
 export default Translation;

@@ -53,7 +53,12 @@ export class Server {
 
   protected addCORSConfiguration(app: INestApplication): void {
     app.enableCors({
-      allowedHeaders: ['Content-Type', 'Authorization', 'Range'],
+      allowedHeaders: [
+        'Content-Type',
+        'Authorization',
+        'Range',
+        'Language-code',
+      ],
       exposedHeaders: ['Content-Range'],
       origin: '*',
       methods: ['GET', 'HEAD', 'OPTIONS', 'POST', 'PUT', 'DELETE'],

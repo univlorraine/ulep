@@ -42,6 +42,12 @@ export class PrismaReportRepository implements ReportRepository {
           create: {
             text: category.name.content,
             LanguageCode: { connect: { code: category.name.language } },
+            Translations: {
+              create: category.name.translations?.map((translation) => ({
+                text: translation.content,
+                LanguageCode: { connect: { code: translation.language } },
+              })),
+            },
           },
         },
       },

@@ -63,11 +63,28 @@ export class ReportCategoryResponse {
     Object.assign(this, partial);
   }
 
-  //TODO(marvyn): Change this to get name as requested in header
-  static fromDomain(entity: ReportCategory): ReportCategoryResponse {
+  static fromDomain(
+    entity: ReportCategory,
+    languageCode?: string,
+  ): ReportCategoryResponse {
+    let name;
+
+    if (!languageCode) {
+      name = entity.name.content;
+    } else {
+      const translationIndex = entity.name.translations.findIndex(
+        (translation) => translation.language === languageCode,
+      );
+
+      name =
+        translationIndex > -1
+          ? entity.name.translations[translationIndex].content
+          : entity.name.content;
+    }
+
     return new ReportCategoryResponse({
       id: entity.id,
-      name: entity.name.content,
+      name: name,
     });
   }
 }

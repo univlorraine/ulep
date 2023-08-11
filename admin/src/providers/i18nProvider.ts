@@ -6,7 +6,11 @@ import customEN from '../locales/en.json';
 import customFR from '../locales/fr.json';
 
 const i18nProvider = polyglotI18nProvider(
-    (locale) => (locale === 'fr' ? { ...fr, ...customFR } : { ...en, ...customEN }),
+    (locale) => {
+        localStorage.setItem('locale', locale);
+
+        return locale === 'fr' ? { ...fr, ...customFR } : { ...en, ...customEN };
+    },
     resolveBrowserLocale(),
     [{ locale: 'en', name: 'English' }, { locale: 'fr', name: 'Français' }],
 );

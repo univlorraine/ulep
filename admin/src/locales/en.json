@@ -27,7 +27,7 @@
         "searchLastname": "Lastname",
         "university": "University"
     },
-    "report_category": {
+    "report_categories": {
         "create": {
             "content": "Content",
             "error": "Error on category creation",

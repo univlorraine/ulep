@@ -10,6 +10,7 @@ import {
   UseGuards,
   Query,
   ParseUUIDPipe,
+  Headers,
 } from '@nestjs/common';
 import * as Swagger from '@nestjs/swagger';
 import { KeycloakUser } from '@app/keycloak';
@@ -74,11 +75,16 @@ export class ReportController {
   @UseGuards(AuthenticationGuard)
   @Swagger.ApiOperation({ summary: 'Collection of Category ressource.' })
   @Swagger.ApiOkResponse({ type: ReportCategoryResponse, isArray: true })
-  async findAllCategories() {
+  async findAllCategories(@Headers('Language-code') languageCode?: string) {
     const instances = await this.findReportCategoriesUsecase.execute();
-
+    const code =
+      configuration().defaultTranslation !== languageCode
+        ? languageCode
+        : undefined;
     return new Collection<ReportCategoryResponse>({
-      items: instances.items.map(ReportCategoryResponse.fromDomain),
+      items: instances.items.map((category) =>
+        ReportCategoryResponse.fromDomain(category, code),
+      ),
       totalItems: instances.totalItems,
     });
   }

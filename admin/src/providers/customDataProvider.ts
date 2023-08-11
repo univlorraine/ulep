@@ -15,6 +15,7 @@ const httpClientOptions = (options: any = {}) => {
     if (token) {
         newOptions.headers.set('Authorization', `Bearer ${token}`);
     }
+    if (localStorage.getItem('locale')) { newOptions.headers.set('Language-code', localStorage.getItem('locale')); }
 
     return newOptions;
 };
@@ -42,7 +43,6 @@ const customDataProvider = {
             default:
                 break;
         }
-
         const response = await fetch(url, httpClientOptions());
 
         if (!response.ok) {
