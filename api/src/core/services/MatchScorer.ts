@@ -59,7 +59,7 @@ export class MatchScorer implements IMatchScorer {
     const languageIdsSpokenByProfile2 = [profile2.nativeLanguage, ...profile2.masteredLanguages].map(l => l.id);
    
 
-    // TODO: add other forbidden rules (ex: gender equality, tandem/etandem, etc)
+    // Check compatibility between learning languages and known languages of profiles
     if (!isDiscovery && (
       !languageIdsSpokenByProfile1.includes(profile2.learningLanguages?.[0]?.language.id) ||
       !languageIdsSpokenByProfile2.includes(profile1.learningLanguages?.[0]?.language.id)
@@ -67,15 +67,28 @@ export class MatchScorer implements IMatchScorer {
       return new Match({ owner: profile1, target: profile2, scores: MatchScores.empty() });
     }
 
+    // Check forbidden case of same gender
     if ((profile1.sameGender || profile2.sameGender)
       && profile1.user.gender !== profile2.user.gender
     ) {
       return new Match({ owner: profile1, target: profile2, scores: MatchScores.empty() });
     }
 
+    // Check incompatibilities between learning types
     if (profile1.learningType !== profile2.learningType && (
         profile1.learningType !== LearningType.BOTH && profile2.learningType !== LearningType.BOTH
     )) {
+      return new Match({ owner: profile1, target: profile2, scores: MatchScores.empty() });
+    }
+
+    // Check same campus if tandem
+    if (
+      profile1.learningType === LearningType.TANDEM
+      && (
+        (!profile1.campus || !profile2.campus)
+        || (profile1.campus.id !== profile2.campus.id)
+      )
+     ) {
       return new Match({ owner: profile1, target: profile2, scores: MatchScores.empty() });
     }
 

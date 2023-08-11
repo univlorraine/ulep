@@ -645,6 +645,7 @@ describe('GenerateTandem UC', () => {
         experience: faker.lorem.sentence(),
         anecdote: faker.lorem.sentence(),
       },
+      campus: lorraineCampus,
     });
 
     // English learning french in tandem
@@ -684,6 +685,47 @@ describe('GenerateTandem UC', () => {
         experience: faker.lorem.sentence(),
         anecdote: faker.lorem.sentence(),
       },
+      campus: lorraineCampus,
+    });
+
+    // English learning french in tandem
+    const englishTandemOtherSite = new Profile({
+      user: new User({
+        id: 'user2',
+        email: '',
+        firstname: '',
+        lastname: '',
+        gender: Gender.MALE,
+        age: 19,
+        university: centralUniversity,
+        role: Role.STUDENT,
+        country: 'EN',
+        avatar: null,
+        deactivated: false,
+        deactivatedReason: '',
+      }),
+      id: 'EN_TANDEM',
+      nativeLanguage: english,
+      masteredLanguages: [],
+      learningType: LearningType.TANDEM,
+      meetingFrequency: 'ONCE_A_WEEK',
+      learningLanguages: [
+        {
+          language: french,
+          level: ProficiencyLevel.B2,
+        },
+      ],
+      sameGender: false,
+      sameAge: false,
+      objectives: [],
+      interests: [],
+      biography: {
+        superpower: faker.lorem.sentence(),
+        favoritePlace: faker.lorem.sentence(),
+        experience: faker.lorem.sentence(),
+        anecdote: faker.lorem.sentence(),
+      },
+      campus: strasbourgCampus,
     });
 
     // French learning english in etandem
@@ -929,6 +971,20 @@ describe('GenerateTandem UC', () => {
         checkTandemArrayNotContainsTandem(tandems, {
           a: frenchTandem,
           b: englishEtandem,
+        }),
+      ).toBeTruthy();
+    });
+
+    test('should not generate on site tandem if users are not in same campus', async () => {
+      profilesRepository.init([frenchTandem, englishTandemOtherSite]);
+      await uc.execute({
+        universityIds: [centralUniversity.id],
+      });
+      const tandems = await tandemsRepository.getExistingTandems();
+      expect(
+        checkTandemArrayNotContainsTandem(tandems, {
+          a: frenchTandem,
+          b: englishTandemOtherSite,
         }),
       ).toBeTruthy();
     });
