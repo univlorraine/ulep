@@ -10,7 +10,7 @@ const TranslationLanguagePicker: React.FC<TranslationLanguagePickerProps> = ({ o
     <FormControl>
         <Select
             id="language-picker"
-            onChange={(value) => onChange(value.target.value as TranslatedLanguage)}
+            onChange={(language) => onChange(language.target.value as TranslatedLanguage)}
             sx={{ mx: 4, my: 2 }}
             value={value}
             variant="standard"

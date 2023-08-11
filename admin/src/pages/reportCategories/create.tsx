@@ -1,8 +1,8 @@
 import { Button, Input, Typography, Box } from '@mui/material';
 import React, { useState } from 'react';
-import { Create, useTranslate, useCreate, useNotify, useRedirect, ReferenceInput, SelectInput } from 'react-admin';
-import Translation from '../../entities/Translation';
+import { Create, useTranslate, useCreate, useNotify, useRedirect } from 'react-admin';
 import TranslationLanguagePicker from '../../components/TranslationLanguagePicker';
+import Translation from '../../entities/Translation';
 
 const CreateReportCategory = () => {
     const translate = useTranslate();
@@ -67,8 +67,10 @@ const CreateReportCategory = () => {
                 </Typography>
                 {translations.map((item, index) => (
                     <Box key={item.index} alignItems="center" display="flex" flexDirection="row">
-                        <TranslationLanguagePicker onChange={(value: TranslatedLanguage) => onTraductionLanguageAdded(value, index)}
-                         value={translations[index].item.language} />
+                        <TranslationLanguagePicker
+                            onChange={(value: TranslatedLanguage) => onTraductionLanguageAdded(value, index)}
+                            value={translations[index].item.language}
+                        />
                         <Input
                             name={`Content${item.index}`}
                             onChange={(e) => onTraductionContentAdded(e.target.value, index)}
