@@ -52,7 +52,7 @@ class DomainHttpAdapter extends BaseHttpAdapter implements HttpAdapterInterface 
     }
 
     async get(path: string, args: RequestInit = {}, isTokenNeeded = true): Promise<Response> {
-        const isTokenValid = isTokenNeeded && this.handleTokens();
+        const isTokenValid = !isTokenNeeded || this.handleTokens();
 
         if (!isTokenValid) {
             throw new Error('errors.global');
@@ -76,7 +76,7 @@ class DomainHttpAdapter extends BaseHttpAdapter implements HttpAdapterInterface 
         contentType = 'application/json',
         isTokenNeeded = true
     ): Promise<Response> {
-        const isTokenValid = isTokenNeeded && this.handleTokens();
+        const isTokenValid = !isTokenNeeded || this.handleTokens();
 
         if (!isTokenValid) {
             throw new Error('errors.global');
@@ -85,7 +85,7 @@ class DomainHttpAdapter extends BaseHttpAdapter implements HttpAdapterInterface 
     }
 
     async put(path: string, body: Body, args: RequestInit = {}, isTokenNeeded = true): Promise<Response> {
-        const isTokenValid = isTokenNeeded && this.handleTokens();
+        const isTokenValid = !isTokenNeeded || this.handleTokens();
 
         if (!isTokenValid) {
             throw new Error('errors.global');
