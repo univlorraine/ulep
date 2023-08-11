@@ -49,7 +49,7 @@ export class TandemController {
   @UseGuards(AuthenticationGuard)
   @Swagger.ApiOperation({ summary: 'Creates a Tandem ressource.' })
   async create(@Body() body: CreateTandemRequest): Promise<void> {
-    await this.createTandemUsecase.execute({ ...body });
+    await this.createTandemUsecase.execute(body);
   }
 
   @Post('generate')
@@ -59,7 +59,7 @@ export class TandemController {
   async generate(
     @Body() body: GenerateTandemsRequest,
   ): Promise<TandemResponse[]> {
-    const tandems = await this.generateTandemsUsecase.execute({ ...body });
+    const tandems = await this.generateTandemsUsecase.execute(body);
 
     return tandems.map(
       (tandem) =>
