@@ -77,4 +77,14 @@ export class CreateProfileRequest
   @Swagger.ApiProperty({ type: 'string' })
   @IsUUID()
   campusId: string;
+
+  @Swagger.ApiProperty()
+  @IsBoolean()
+  @IsOptional()
+  certificateOption?: boolean;
+
+  @Swagger.ApiProperty()
+  @IsBoolean()
+  @IsOptional()
+  specificProgram?: boolean;
 }

@@ -107,6 +107,8 @@ export class PrismaProfileRepository implements ProfileRepository {
         same_age: profile.sameAge,
         meeting_frequency: profile.meetingFrequency,
         bio: profile.biography,
+        certificate_option: profile.certificateOption,
+        specific_program: profile.specificProgram,
         User: {
           connect: { id: profile.user.id },
         },

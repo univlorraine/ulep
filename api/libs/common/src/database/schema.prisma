@@ -247,6 +247,8 @@ model Profiles {
   meeting_frequency       String
   bio                     Json
   campus_id               String?
+  certificate_option      Boolean?
+  specific_program        Boolean?
   created_at              DateTime             @default(now())
   updated_at              DateTime             @updatedAt
   User                    Users                @relation(fields: [user_id], references: [id], onDelete: Cascade)

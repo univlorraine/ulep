@@ -96,6 +96,14 @@ export class ProfileResponse {
   @Expose({ groups: ['read'] })
   campus: CampusResponse;
 
+  @ApiProperty({ type: 'boolean' })
+  @Expose({ groups: ['read'] })
+  certificateOption: boolean;
+
+  @ApiProperty({ type: 'boolean' })
+  @Expose({ groups: ['read'] })
+  specificProgram: boolean;
+
   constructor(partial: Partial<ProfileResponse>) {
     Object.assign(this, partial);
   }
@@ -123,6 +131,8 @@ export class ProfileResponse {
       biography:
         profile.biography && BiographyDto.fromDomain(profile.biography),
       campus: profile.campus && CampusResponse.fromCampus(profile.campus),
+      certificateOption: profile.certificateOption,
+      specificProgram: profile.specificProgram,
     });
   }
 }
