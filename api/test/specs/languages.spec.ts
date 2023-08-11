@@ -44,6 +44,6 @@ describe('Languages', () => {
       .get('/languages')
       .expect(200);
 
-    expect(body).toHaveLength(10);
+    expect(body.items).toHaveLength(10);
   });
 });
