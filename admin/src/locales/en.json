@@ -30,6 +30,7 @@
     "report_category": {
         "create": {
             "content": "Content",
+            "error": "Error on category creation",
             "name": "Name of the new category",
             "new_translation": "New translation",
             "save": "Save",

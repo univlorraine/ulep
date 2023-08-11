@@ -30,6 +30,7 @@
     "report_categories": {
         "create": {
             "content": "Contenu",
+            "error": "Une erreur est survenue pendant la création de la catégorie",
             "name": "Nom de la nouvelle catégorie",
             "new_translation": "Nouvelle traduction",
             "save": "Enregistrer",

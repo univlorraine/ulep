@@ -1,11 +1,13 @@
 import { Button, Input, Typography, Box } from '@mui/material';
 import React, { useState } from 'react';
-import { Create, useTranslate, useCreate } from 'react-admin';
+import { Create, useTranslate, useCreate, useNotify, useRedirect } from 'react-admin';
 import Translation from '../../entities/Translation';
 
 const CreateReportCategory = () => {
     const translate = useTranslate();
     const [create] = useCreate();
+    const redirect = useRedirect();
+    const notify = useNotify();
     const [name, setName] = useState<string>();
     const [translations, setTranslations] = useState<{index: number, item: Translation}[]>([]);
 
@@ -14,9 +16,20 @@ const CreateReportCategory = () => {
         const payload = { name,
             translations: translations.map((translation) => translation.item)
                 .filter((translation) => translation.content && translation.language) };
-        await create('reports/categories', { data: payload });
+        try {
+            return await create('reports/categories', { data: payload }, {
+                onSettled: (data: any, error: Error) => {
+                    if (!error) {
+                        return redirect('/reports/categories');
+                    }
 
-        // TODO: handle error and navigation
+                    return notify('report_categories.create.error');
+                },
+
+            });
+        } catch (err) {
+            return notify('report_categories.create.error');
+        }
     };
 
     const onTraductionLanguageAdded = (value: string, index: number) => {
