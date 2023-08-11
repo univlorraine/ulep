@@ -51,4 +51,10 @@ export class InMemoryTandemRepository implements TandemRepository {
       totalItems: tandems.length,
     };
   }
+
+  async getExistingTandems(): Promise<Tandem[]> {
+    return this.#tandems.filter(
+      (tandem) => tandem.status !== TandemStatus.INACTIVE,
+    );
+  }
 }

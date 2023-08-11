@@ -81,4 +81,23 @@ export class PrismaTandemRepository implements TandemRepository {
       where: { id: tandemId },
     });
   }
+
+  async getExistingTandems(): Promise<Tandem[]> {
+    const tandems = await this.prisma.tandems.findMany({
+      where: {
+        status: { not: 'INACTIVE' },
+      },
+      include: {
+        Profiles: { include: { Profile: { include: ProfilesRelations } } },
+      },
+    });
+    // TODO: optimize with an object TandemSummary which would not including profile relations
+    return tandems.map((tandem) => {
+      return new Tandem({
+        id: tandem.id,
+        profiles: tandem.Profiles.map((p) => profileMapper(p.Profile)),
+        status: TandemStatus[tandem.status],
+      });
+    });
+  }
 }

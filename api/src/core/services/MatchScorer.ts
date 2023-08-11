@@ -1,4 +1,4 @@
-import { JOKER_LANGUAGE_CODE, LearningLanguage } from 'src/core/models';
+import { JOKER_LANGUAGE_CODE } from 'src/core/models';
 /* eslint-disable prettier/prettier */
 import { Injectable } from '@nestjs/common';
 import { Match, MatchScores, ProficiencyLevel, Profile } from '../models';
@@ -51,11 +51,19 @@ export class MatchScorer implements IMatchScorer {
       throw new SameProfilesError();
     }
 
+    // TODO: incldue other cases in discovery mode (ex: learning asian language, low level in learning language).
+    // Algorithm should be adapted to consider learingLanguages for both user in that case
     const isDiscovery = profile1.learningLanguages?.[0]?.language.code === JOKER_LANGUAGE_CODE;
 
-    const languages = [profile2.nativeLanguage, ...profile2.masteredLanguages].map(l => l.id);
+    const languageIdsSpokenByProfile1 = [profile1.nativeLanguage, ...profile1.masteredLanguages].map(l => l.id);
+    const languageIdsSpokenByProfile2 = [profile2.nativeLanguage, ...profile2.masteredLanguages].map(l => l.id);
    
-    if (!isDiscovery && !languages.includes(profile1.learningLanguages?.[0]?.language.id)) {
+
+    // TODO: add other forbidden rules (ex: gender equality, tandem/etandem, etc)
+    if (!isDiscovery && (
+      !languageIdsSpokenByProfile1.includes(profile2.learningLanguages?.[0]?.language.id) ||
+      !languageIdsSpokenByProfile2.includes(profile1.learningLanguages?.[0]?.language.id)
+    )) {
       return new Match({ owner: profile1, target: profile2, scores: MatchScores.empty() });
     }
 
@@ -205,6 +213,10 @@ export class MatchScorer implements IMatchScorer {
   private computeSimilarity(set1: Set<string>, set2: Set<string>): number {
     const intersection = new Set([...set1].filter(x => set2.has(x)));
     const union = new Set([...set1, ...set2]);
+
+    if (union.size === 0) {
+      return 0;
+    }
 
     return intersection.size / union.size;
   }

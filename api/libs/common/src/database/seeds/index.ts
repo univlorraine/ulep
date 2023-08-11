@@ -30,8 +30,8 @@ const load = async () => {
     await createProficiencyTests(prisma);
     await createInterests(prisma);
     await createLearningObjectives(prisma);
-    await createUsers(5, prisma);
-    await createProfiles(5, prisma);
+    await createUsers(100, prisma);
+    await createProfiles(100, prisma);
   } catch (e) {
     console.error(e);
     process.exit(1);
