@@ -1,8 +1,10 @@
 import { Injectable } from '@nestjs/common';
-import { StringFilter, Collection, PrismaService } from '@app/common';
+import { Collection, PrismaService } from '@app/common';
 import {
   GetProfilesUsableForTandemsGenerationProps,
   MaxTandemsCountAndLanguageProps,
+  ProfileQueryOrderBy,
+  ProfileQueryWhere,
   ProfileRepository,
 } from 'src/core/ports/profile.repository';
 import { Profile } from 'src/core/models';
@@ -139,11 +141,28 @@ export class PrismaProfileRepository implements ProfileRepository {
   async findAll(
     offset?: number,
     limit?: number,
-    orderBy?: { [key: string]: string },
-    where?: { email?: StringFilter },
+    orderBy?: ProfileQueryOrderBy,
+    where?: ProfileQueryWhere,
   ): Promise<Collection<Profile>> {
+    const wherePayload = where
+      ? {
+          User: {
+            country_code_id: where.user.country,
+            email: where.user.email,
+            firstname: where.user.firstname,
+            lastname: where.user.lastname,
+            organization_id: where.user.university,
+            role: where.user.role,
+          },
+          MasteredLanguages: {
+            every: { LanguageCode: { code: where.masteredLanguageCode } },
+          },
+          NativeLanguage: { code: where.nativeLanguageCode },
+        }
+      : {};
+
     const count = await this.prisma.profiles.count({
-      where: { User: { email: where?.email } },
+      where: wherePayload,
     });
 
     // If skip is out of range, return an empty array
@@ -151,10 +170,17 @@ export class PrismaProfileRepository implements ProfileRepository {
       return { items: [], totalItems: count };
     }
 
+    let order;
+    if (orderBy.field === 'university') {
+      order = { User: { Organization: { name: orderBy.order } } };
+    } else if (orderBy.field) {
+      order = { User: { [orderBy.field]: orderBy.order } };
+    }
+
     const users = await this.prisma.profiles.findMany({
-      where: { User: { email: where?.email } },
+      where: wherePayload,
       skip: offset,
-      orderBy: orderBy ? { User: orderBy } : undefined,
+      orderBy: order,
       take: limit,
       include: ProfilesRelations,
     });

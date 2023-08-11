@@ -1,21 +1,9 @@
 import simpleRestProvider from 'ra-data-simple-rest';
 import { fetchUtils } from 'react-admin';
+import CountriesQuery from '../queries/CountriesQuery';
+import ProfilesQuery from '../queries/ProfilesQuery';
 import { http } from './authProvider';
 import jwtManager from './jwtManager';
-
-interface Params {
-    filter: {
-        email: string,
-    },
-    pagination: {
-      page: string;
-      perPage: string;
-    },
-    sort: {
-        field: string,
-        order: string,
-    }
-  }
 
 const httpClientOptions = (options: any = {}) => {
     const newOptions = options;
@@ -41,29 +29,32 @@ const dataProvider = simpleRestProvider(`${process.env.REACT_APP_API_URL}`, http
 
 const customDataProvider = {
     ...dataProvider,
-    getList: async (resource: string, params: Params) => {
+    getList: async (resource: string, params: any) => {
         const url = new URL(`${process.env.REACT_APP_API_URL}/${resource}`);
 
-        if (params.pagination.page) {
-            url.searchParams.append('page', params.pagination.page);
+        switch (resource) {
+            case 'countries':
+                url.search = CountriesQuery(params);
+                break;
+            case 'profiles':
+                url.search = ProfilesQuery(params);
+                break;
+            default:
+                break;
         }
 
-        if (params.pagination.perPage) {
-            url.searchParams.append('limit', params.pagination.perPage);
+        const response = await fetch(url, httpClientOptions());
+
+        if (!response.ok) {
+            throw new Error(`API request failed with status ${response.status}`);
         }
 
-        if (params.sort.field && params.sort.field.indexOf('.') !== -1) {
-            url.searchParams.append('field', params.sort.field.split('.')[1]);
-        }
+        const result = await response.json();
 
-        if (params.sort.order) {
-            url.searchParams.append('order', params.sort.order.toLowerCase());
-        }
-
-        if (params.filter.email) {
-            url.searchParams.append('filter', params.filter.email);
-        }
-
+        return { data: result.items, total: result.totalItems };
+    },
+    getMany: async (resource: string) => {
+        const url = new URL(`${process.env.REACT_APP_API_URL}/${resource}`);
         const response = await fetch(url, httpClientOptions());
 
         if (!response.ok) {

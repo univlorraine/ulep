@@ -1,9 +1,10 @@
+import { CollectionCommand } from '../../../src/command/CollectionCommand';
 import LanguageCommand from '../../../src/command/LanguageCommand';
 import Language from '../../../src/domain/entities/Language';
 import GetAllLanguagesUsecase from '../../../src/domain/usecases/GetAllLanguagesUsecase';
 import DomainHttpAdapter from '../../mocks/adapters/HttpAdapter';
 
-const usecaseResponse: LanguageCommand[] = [{ id: 'ID', code: 'code', name: 'name' }];
+const usecaseResponse: CollectionCommand<LanguageCommand> = {items: [{ id: 'ID', code: 'code', name: 'name' }], totalItems: 1};
 
 describe('getAllLanguages', () => {
     let adapter: DomainHttpAdapter;

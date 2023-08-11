@@ -1,10 +1,11 @@
+import { CollectionCommand } from '../../../src/command/CollectionCommand';
 import UniversityCommand from '../../../src/command/UniversityCommand';
 import Language from '../../../src/domain/entities/Language';
 import University from '../../../src/domain/entities/University';
 import GetAllUniversitiesUsecase from '../../../src/domain/usecases/GetAllUniversitiesUsecase';
 import DomainHttpAdapter from '../../mocks/adapters/HttpAdapter';
 
-const usecaseResponse: UniversityCommand[] = [
+const usecaseResponse: CollectionCommand<UniversityCommand> = {items: [
     {
         id: 'id',
         name: 'name',
@@ -14,7 +15,7 @@ const usecaseResponse: UniversityCommand[] = [
         timezone: 'timezone',
         website: 'website',
     },
-];
+], totalItems: 1};
 
 describe('getAllUniversities', () => {
     let adapter: DomainHttpAdapter;

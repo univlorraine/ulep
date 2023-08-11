@@ -1,3 +1,4 @@
+import { Collection } from '@app/common';
 import { Language, University } from '../models';
 
 export const UNIVERSITY_REPOSITORY = 'university.repository';
@@ -5,7 +6,7 @@ export const UNIVERSITY_REPOSITORY = 'university.repository';
 export interface UniversityRepository {
   create(university: University): Promise<University>;
 
-  findAll(): Promise<University[]>;
+  findAll(): Promise<Collection<University>>;
 
   havePartners(id: string): Promise<boolean>;
 

@@ -1,4 +1,8 @@
 {
+    "global": {
+        "Staff": "Personnel",
+        "Student": "Etudiant"
+    },
     "login": {
         "connect": "Connexion",
         "email": "Email",
@@ -6,6 +10,7 @@
         "password": "Mot de passe"
     },
     "profiles": {
+        "country": "Pays",
         "email": "Email",
         "firstname": "Prénom",
         "label": "Profiles",

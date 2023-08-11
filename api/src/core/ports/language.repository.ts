@@ -1,3 +1,4 @@
+import { Collection } from '@app/common';
 import { Language } from '../models';
 
 export const LANGUAGE_REPOSITORY = 'language-code.repository';
@@ -7,7 +8,7 @@ export interface LanguageRepository {
 
   ofCode(code: string): Promise<Language>;
 
-  all(): Promise<Language[]>;
+  all(): Promise<Collection<Language>>;
 
   addRequest(code: string, user: string): Promise<void>;
 

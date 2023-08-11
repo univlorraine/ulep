@@ -1,3 +1,4 @@
+import { Collection } from '@app/common';
 import { Injectable } from '@nestjs/common';
 import { Language } from 'src/core/models/language.model';
 import { University } from 'src/core/models/university.model';
@@ -25,8 +26,11 @@ export class InMemoryUniversityRepository implements UniversityRepository {
     return university;
   }
 
-  async findAll(): Promise<University[]> {
-    return this.#universities;
+  async findAll(): Promise<Collection<University>> {
+    return new Collection<University>({
+      items: this.#universities,
+      totalItems: this.#universities.length,
+    });
   }
 
   async havePartners(id: string): Promise<boolean> {
