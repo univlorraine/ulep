@@ -40,8 +40,6 @@ const customDataProvider = {
             throw new Error(`API request failed with status ${response.status}`);
         }
 
-        const result = await response.json();
-
         return { data: params.id };
 
     },
@@ -58,7 +56,7 @@ const customDataProvider = {
             })
         )
 
-        return {data: response};
+        return { data: response };
     },
     getList: async (resource: string, params: any) => {
         const url = new URL(`${process.env.REACT_APP_API_URL}/${resource}`);
