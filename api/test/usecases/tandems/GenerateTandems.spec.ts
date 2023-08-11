@@ -12,6 +12,7 @@ import {
   University,
   User,
 } from 'src/core/models';
+import { Campus } from 'src/core/models/campus.model';
 import { GenerateTandemsUsecase } from 'src/core/usecases';
 import { InMemoryProfileRepository } from 'src/providers/persistance/repositories/in-memory-profile-repository';
 import { InMemoryTandemRepository } from 'src/providers/persistance/repositories/in-memory-tandem-repository';
@@ -83,10 +84,20 @@ describe('GenerateTandem UC', () => {
     name: 'deutch',
   });
 
+  const lorraineCampus = new Campus({
+    id: 'campusLorraine',
+    name: 'campus Lorraine',
+    universityId: 'university1',
+  });
+  const strasbourgCampus = new Campus({
+    id: 'campusStrasbourg',
+    name: 'campus Strasbourg',
+    universityId: 'university1',
+  });
   const centralUniversity = new University({
     id: 'university1',
     name: 'university 1',
-    campus: ['lorraine', 'strasbourg'],
+    campus: [lorraineCampus, strasbourgCampus],
     languages: [french, english, spanish, deutch],
     timezone: 'GMT+1',
     admissionStart: new Date(),
@@ -924,19 +935,34 @@ describe('GenerateTandem UC', () => {
   });
 
   test('should generate tandem only for selected universities', async () => {
+    const campus1 = new Campus({
+      id: 'campus1',
+      name: 'campus 1',
+      universityId: 'subsidiary1',
+    });
+    const campus2 = new Campus({
+      id: 'campus2',
+      name: 'campus 2',
+      universityId: 'subsidiary1',
+    });
     const subsidiaryUniveristy1 = new University({
       id: 'subsidiary1',
       name: 'Subsidiary university 1',
-      campus: ['somewhere', 'over', 'the rainbow'],
+      campus: [campus1, campus2],
       languages: [french, english, deutch],
       timezone: 'GMT+1',
       admissionStart: new Date(),
       admissionEnd: new Date(),
     });
+    const campusMadrid = new Campus({
+      id: 'campusMadrid',
+      name: 'campus Madrid',
+      universityId: 'subsidiary2',
+    });
     const subsidiaryUniveristy2 = new University({
       id: 'subsidiary2',
       name: 'Subsidiary university 2',
-      campus: ['madrid'],
+      campus: [campusMadrid],
       languages: [spanish],
       timezone: 'GMT+1',
       admissionStart: new Date(),
