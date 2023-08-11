@@ -1,11 +1,13 @@
 import { Injectable } from '@nestjs/common';
 import { StringFilter, Collection, PrismaService } from '@app/common';
 import {
+  GetProfilesUsableForTandemsGenerationProps,
   MaxTandemsCountAndLanguageProps,
   ProfileRepository,
 } from 'src/core/ports/profile.repository';
 import { Profile } from 'src/core/models';
 import { ProfilesRelations, profileMapper } from '../mappers';
+import { Prisma } from '@prisma/client';
 
 @Injectable()
 export class PrismaProfileRepository implements ProfileRepository {
@@ -64,19 +66,25 @@ export class PrismaProfileRepository implements ProfileRepository {
     return profiles.map(profileMapper);
   }
 
-  async whereMaxTandemsCount(max: number): Promise<Profile[]> {
+  async getProfilesUsableForTandemsGeneration({
+    maxTandemPerProfile,
+    universityIds,
+  }: GetProfilesUsableForTandemsGenerationProps): Promise<Profile[]> {
     const result: any[] = await this.prisma.$queryRaw`
-    SELECT p.id
-    FROM profiles p
-    LEFT JOIN (
-      SELECT pot.profile_id, COUNT(*) AS tandem_count
-      FROM profiles_on_tandems pot
-      JOIN tandems t ON pot.tandem_id = t.id
-      WHERE t.status != 'INACTIVE'
-      GROUP BY pot.profile_id
-    ) AS tandems_count ON p.id = tandems_count.profile_id
-    WHERE tandems_count.tandem_count < ${max} OR tandems_count.tandem_count IS NULL
-  `;
+      SELECT p.id
+      FROM profiles p
+      LEFT JOIN users u ON p.user_id = u.id
+      LEFT JOIN (
+        SELECT pot.profile_id, COUNT(*) AS tandem_count
+        FROM profiles_on_tandems pot
+        JOIN tandems t ON pot.tandem_id = t.id
+        WHERE t.status != 'INACTIVE'
+        GROUP BY pot.profile_id
+      ) AS tandems_count ON p.id = tandems_count.profile_id
+      WHERE u.organization_id IN (${Prisma.join(universityIds)}) AND (
+        tandems_count.tandem_count < ${maxTandemPerProfile} OR tandems_count.tandem_count IS NULL
+      )
+    `;
 
     const profileIds = result.map((row) => row.id);
 

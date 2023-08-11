@@ -15,6 +15,10 @@ import {
 import { IMatchScorer, MatchScorer } from 'src/core/services/MatchScorer';
 import { ProfilesPairer } from 'src/core/services/ProfilesPairer';
 
+export type GenerateTandemsCommand = {
+  universityIds: string[];
+};
+
 @Injectable()
 export class GenerateTandemsUsecase {
   private readonly scorer: IMatchScorer = new MatchScorer();
@@ -28,8 +32,14 @@ export class GenerateTandemsUsecase {
     private readonly uuidProvider: UuidProviderInterface,
   ) {}
 
-  async execute(): Promise<{ profiles: Profile[]; score: number }[]> {
-    const profiles = await this.profilesRepository.whereMaxTandemsCount(3);
+  async execute(
+    command: GenerateTandemsCommand,
+  ): Promise<{ profiles: Profile[]; score: number }[]> {
+    const profiles =
+      await this.profilesRepository.getProfilesUsableForTandemsGeneration({
+        maxTandemPerProfile: 3,
+        universityIds: command.universityIds,
+      });
 
     const existingTandems = await this.tandemsRepository.getExistingTandems();
     const profileIdsAlreadyInTandem =
