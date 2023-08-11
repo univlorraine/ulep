@@ -1,12 +1,12 @@
 import * as Swagger from '@nestjs/swagger';
 import { Expose } from 'class-transformer';
 import {
-  IsString,
-  IsNotEmpty,
-  IsUUID,
-  IsEnum,
-  IsOptional,
   IsArray,
+  IsEnum,
+  IsNotEmpty,
+  IsOptional,
+  IsString,
+  IsUUID,
 } from 'class-validator';
 import { Translation } from 'src/core/models';
 import {
@@ -72,14 +72,11 @@ export class ReportCategoryResponse {
     if (!languageCode) {
       name = entity.name.content;
     } else {
-      const translationIndex = entity.name.translations.findIndex(
+      const translation = entity.name.translations.find(
         (translation) => translation.language === languageCode,
-      );
+      )?.content;
 
-      name =
-        translationIndex > -1
-          ? entity.name.translations[translationIndex].content
-          : entity.name.content;
+      name = translation || entity.name.content;
     }
 
     return new ReportCategoryResponse({
