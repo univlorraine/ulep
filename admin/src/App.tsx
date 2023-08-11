@@ -5,7 +5,6 @@ import countries from './pages/countries';
 import languages from './pages/languages';
 import profiles from './pages/profiles';
 import universities from './pages/universities';
-import users from './pages/users';
 import authProvider from './providers/authProvider';
 import customDataProvider from './providers/customDataProvider';
 import i18nProvider from './providers/i18nProvider';
@@ -20,11 +19,6 @@ const App = () => {
             i18nProvider={i18nProvider}
             loginPage={LoginPage}
         >
-            <Resource
-                name="users"
-                options={{ label: translate('users.userListTitle') }}
-                {...users}
-            />
             <Resource
                 name="profiles"
                 options={{ label: translate('profiles.label') }}
