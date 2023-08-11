@@ -15,6 +15,7 @@ const httpClientOptions = (options: any = {}) => {
     if (token) {
         newOptions.headers.set('Authorization', `Bearer ${token}`);
     }
+
     if (localStorage.getItem('locale')) { newOptions.headers.set('Language-code', localStorage.getItem('locale')); }
 
     return newOptions;
@@ -30,6 +31,35 @@ const dataProvider = simpleRestProvider(`${process.env.REACT_APP_API_URL}`, http
 
 const customDataProvider = {
     ...dataProvider,
+    delete: async (resource: string, params: any) => {
+        const url = new URL(`${process.env.REACT_APP_API_URL}/${resource}/${params.id}`);
+
+        const response = await fetch(url, httpClientOptions({method: 'DELETE'}));
+
+        if (!response.ok) {
+            throw new Error(`API request failed with status ${response.status}`);
+        }
+
+        const result = await response.json();
+
+        return { data: params.id };
+
+    },
+    deleteMany: async (resource: string, params: any) => {
+        const response = await Promise.all(
+            params.ids.map(async (id: string) => {
+                const url = new URL(`${process.env.REACT_APP_API_URL}/${resource}/${id}`);
+
+                const response = await fetch(url, httpClientOptions({method: 'DELETE'}));
+                if (!response.ok) {
+                    throw new Error(`API request failed with status ${response.status}`);
+                }
+                return id;
+            })
+        )
+
+        return {data: response};
+    },
     getList: async (resource: string, params: any) => {
         const url = new URL(`${process.env.REACT_APP_API_URL}/${resource}`);
 
