@@ -10,6 +10,11 @@ export type MaxTandemsCountAndLanguageProps = {
   };
 };
 
+export type GetProfilesUsableForTandemsGenerationProps = {
+  maxTandemPerProfile: number;
+  universityIds: string[];
+};
+
 export interface ProfileQueryWhere {
   user: {
     country?: StringFilter;
@@ -33,7 +38,9 @@ export interface ProfileRepository {
 
   ofUser: (userId: string) => Promise<Profile | null>;
 
-  whereMaxTandemsCount: (max: number) => Promise<Profile[]>;
+  getProfilesUsableForTandemsGeneration: (
+    props: GetProfilesUsableForTandemsGenerationProps,
+  ) => Promise<Profile[]>;
 
   whereMaxTandemsCountAndLanguage: (
     props: MaxTandemsCountAndLanguageProps,
