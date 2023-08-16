@@ -1,3 +1,4 @@
+import Campus from './Campus';
 import Language from './Language';
 
 class University {
@@ -7,7 +8,7 @@ class University {
         public readonly isCentral: boolean,
         public readonly languages: Language[],
         public readonly timezone: string,
-        public readonly sites: string[]
+        public readonly sites: Campus[]
     ) {}
 }
 

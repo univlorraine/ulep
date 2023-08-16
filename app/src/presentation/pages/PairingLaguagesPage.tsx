@@ -32,8 +32,10 @@ const PairingLaguagesPage: React.FC = () => {
             return await showToast({ message: t(result.message), duration: 1000 });
         }
 
-        const universityLanguages = result.filter((language) =>
-            profileSignUp.university!.languages.findIndex((lang) => lang.code === language.code)
+        const universityLanguages = result.filter(
+            (language) =>
+                profileSignUp.nativeLanguage?.code !== language.code &&
+                !profileSignUp.otherLanguages?.find((otherLanguage) => language.code === otherLanguage.code)
         );
         return setLanguages(universityLanguages);
     };

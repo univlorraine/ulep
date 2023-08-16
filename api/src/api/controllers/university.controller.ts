@@ -1,39 +1,39 @@
+import { Collection } from '@app/common';
 import {
-  Controller,
-  Get,
-  Post,
   Body,
-  Patch,
-  Param,
+  Controller,
   Delete,
+  Get,
+  Param,
   ParseUUIDPipe,
+  Patch,
+  Post,
   SerializeOptions,
   UseGuards,
 } from '@nestjs/common';
 import * as Swagger from '@nestjs/swagger';
+import { configuration } from 'src/configuration';
 import {
-  UniversityResponse,
-  CreateUniversityRequest,
-  UpdateUniversityNameRequest,
-  AddUniversityLanguageRequest,
-  LanguageResponse,
-  CreateUniversityPartnerRequest,
-} from '../dtos';
-import {
-  CreateUniversityUsecase,
-  CreatePartnerUniversityUsecase,
   AddLanguageUsecase,
-  DeleteUniversityUsecase,
-  GetUniversityUsecase,
-  GetUniversitiesUsecase,
-  GetLanguagesUsecase,
-  UpdateUniversityNameUsecase,
+  CreatePartnerUniversityUsecase,
+  CreateUniversityUsecase,
   DeleteLanguageUsecase,
+  DeleteUniversityUsecase,
+  GetLanguagesUsecase,
+  GetUniversitiesUsecase,
+  GetUniversityUsecase,
+  UpdateUniversityNameUsecase,
 } from '../../core/usecases/university';
 import { Roles } from '../decorators/roles.decorator';
-import { configuration } from 'src/configuration';
+import {
+  AddUniversityLanguageRequest,
+  CreateUniversityPartnerRequest,
+  CreateUniversityRequest,
+  LanguageResponse,
+  UniversityResponse,
+  UpdateUniversityNameRequest,
+} from '../dtos';
 import { AuthenticationGuard } from '../guards';
-import { Collection } from '@app/common';
 
 // TODO: languages add/remove
 @Controller('universities')
@@ -125,7 +125,6 @@ export class UniversityController {
   }
 
   @Get(':id/languages')
-  @Roles(configuration().adminRole)
   @UseGuards(AuthenticationGuard)
   @Swagger.ApiOperation({ summary: 'Collection of Language ressource.' })
   @Swagger.ApiOkResponse({ type: UniversityResponse, isArray: true })
@@ -134,7 +133,10 @@ export class UniversityController {
       university: id,
     });
 
-    return instances.map(LanguageResponse.fromLanguage);
+    return new Collection<LanguageResponse>({
+      items: instances.map(LanguageResponse.fromLanguage),
+      totalItems: instances.length,
+    });
   }
 
   @Patch(':id')

@@ -1,5 +1,6 @@
 import { useIonToast } from '@ionic/react';
 import { useTranslation } from 'react-i18next';
+import { useHistory } from 'react-router';
 import { ArrowLeftSvg, ArrowRightSvg, EditSvg, ParameterSvg, SmallAvatarSvg } from '../../../assets';
 import { useConfig } from '../../../context/ConfigurationContext';
 import { useStoreActions } from '../../../store/storeTypes';
@@ -21,6 +22,7 @@ const ProfileContent: React.FC<ProfileContentProps> = ({
     profilePicture,
 }) => {
     const { t } = useTranslation();
+    const history = useHistory();
     const [showToast] = useIonToast();
     const { logout, updateProfile } = useStoreActions((store) => store);
     const { cameraAdapter, updateAvatar } = useConfig();
@@ -37,6 +39,11 @@ const ProfileContent: React.FC<ProfileContentProps> = ({
             }
             return updateProfile({ avatar: result });
         }
+    };
+
+    const disconnect = () => {
+        logout();
+        return history.replace('/');
     };
 
     return (
@@ -67,7 +74,7 @@ const ProfileContent: React.FC<ProfileContentProps> = ({
                     <img alt="arrow-right" src={ArrowRightSvg} />
                 </button>
 
-                <button className={styles.button} onClick={() => logout()}>
+                <button className={styles.button} onClick={disconnect}>
                     <div className={styles['button-container']}>
                         <img alt="disconnect" src={SmallAvatarSvg} />
                         <span className="margin-left">{t('home_page.profile.disconnect')}</span>

@@ -52,7 +52,10 @@ const PairingFinalPage: React.FC = () => {
             profileSignUp.interests,
             !!profileSignUp.sameAge,
             !!profileSignUp.sameGender,
-            profileSignUp.biography
+            profileSignUp.biography,
+            !!profileSignUp.isForCertificate,
+            !!profileSignUp.isForProgram,
+            profileSignUp.campus?.id
         );
 
         if (result instanceof Error) {

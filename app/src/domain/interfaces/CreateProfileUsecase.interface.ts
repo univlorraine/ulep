@@ -13,7 +13,10 @@ interface CreateProfileUsecaseInterface {
         interests: string[],
         preferSameAge: boolean,
         preferSameGender: boolean,
-        bios: BiographySignUp
+        bios: BiographySignUp,
+        isForCertificate: boolean,
+        isForProgram: boolean,
+        campusId?: string
     ): Promise<undefined | Error>;
 }
 export default CreateProfileUsecaseInterface;

@@ -44,7 +44,8 @@ const SignUpGoalsPage: React.FC = () => {
     };
 
     const continueSignUp = async () => {
-        updateProfileSignUp({ goals });
+        console.log(userGoals);
+        updateProfileSignUp({ goals: userGoals });
 
         history.push('/signup/interests');
     };
