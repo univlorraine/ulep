@@ -29,7 +29,7 @@ const getConfigContextValue = (
     configuration: Configuration
 ): ConfigContextValueType => {
     const cameraAdapter = new CameraAdapter();
-    const domainHttpAdapter = new DomainHttpAdapter(import.meta.env.VITE_API_URL ?? '', accessToken);
+    const domainHttpAdapter = new DomainHttpAdapter(import.meta.env.VITE_API_URL ?? '', accessToken, refreshToken);
 
     const askForAccountDeletion = new AskForAccountDeletion(domainHttpAdapter);
     const askForLanguage = new AskForLanguageUsecase(domainHttpAdapter);

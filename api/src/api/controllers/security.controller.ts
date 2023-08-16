@@ -1,5 +1,5 @@
 import { KeycloakClient } from '@app/keycloak';
-import { Body, Controller, Post, Logger, UseGuards } from '@nestjs/common';
+import { Body, Controller, Logger, Post } from '@nestjs/common';
 import * as Swagger from '@nestjs/swagger';
 import {
   BearerTokensRequest,
@@ -7,7 +7,6 @@ import {
   RefreshTokenRequest,
   ResetPasswordRequest,
 } from '../dtos';
-import { AuthenticationGuard } from '../guards';
 
 @Controller('authentication')
 @Swagger.ApiTags('Authentication')
@@ -31,7 +30,6 @@ export class SecurityController {
   }
 
   @Post('refresh-token')
-  @UseGuards(AuthenticationGuard)
   @Swagger.ApiOperation({ summary: 'Request a JWT token.' })
   @Swagger.ApiOkResponse({ type: BearerTokensResponse })
   async refreshToken(

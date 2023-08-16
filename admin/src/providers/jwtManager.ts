@@ -1,31 +1,37 @@
-import jwtDecode from 'jwt-decode';
+import jwtDecode from "jwt-decode";
 
 type Payload = {
     exp: number;
-}
+};
+
+type Tokens = "access_token" | "refresh_token";
 
 const jwtManager = () => {
-    const getToken = () => {
-        const token = localStorage.getItem('token');
-        if (!token) {
+    const getToken = (token: Tokens) => {
+        const refreshToken = localStorage.getItem(token);
+        if (!refreshToken) {
             return null;
         }
 
-        const payload: Payload = jwtDecode(token);
+        const payload: Payload = jwtDecode(refreshToken);
         if (payload.exp < new Date().getTime() / 1000) {
-            localStorage.removeItem('token');
-
             return null;
         }
 
-        return token;
+        return refreshToken;
     };
 
-    const setToken = (token: string) => localStorage.setItem('token', token);
+    const setTokens = (accessToken: string, refreshToken: string) => {
+        localStorage.setItem("access_token", accessToken);
+        localStorage.setItem("refresh_token", refreshToken);
+    };
 
-    const ereaseToken = () => localStorage.removeItem('token');
+    const ereaseTokens = () => {
+        localStorage.removeItem("access_token");
+        localStorage.removeItem("refresh_token");
+    };
 
-    return { getToken, setToken, ereaseToken };
+    return { getToken, setTokens, ereaseTokens };
 };
 
 export default jwtManager();

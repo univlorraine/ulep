@@ -54,7 +54,8 @@ class CreateUserUsecase implements CreateUserUsecaseInterface {
                 `/users`,
                 body,
                 {},
-                'multipart/form-data'
+                'multipart/form-data',
+                false
             );
 
             if (!httpResponse.parsedBody) {
