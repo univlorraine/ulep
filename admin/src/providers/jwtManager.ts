@@ -1,10 +1,10 @@
-import jwtDecode from "jwt-decode";
+import jwtDecode from 'jwt-decode';
 
 type Payload = {
     exp: number;
 };
 
-type Tokens = "access_token" | "refresh_token";
+type Tokens = 'access_token' | 'refresh_token';
 
 const jwtManager = () => {
     const getToken = (token: Tokens) => {
@@ -22,13 +22,13 @@ const jwtManager = () => {
     };
 
     const setTokens = (accessToken: string, refreshToken: string) => {
-        localStorage.setItem("access_token", accessToken);
-        localStorage.setItem("refresh_token", refreshToken);
+        localStorage.setItem('access_token', accessToken);
+        localStorage.setItem('refresh_token', refreshToken);
     };
 
     const ereaseTokens = () => {
-        localStorage.removeItem("access_token");
-        localStorage.removeItem("refresh_token");
+        localStorage.removeItem('access_token');
+        localStorage.removeItem('refresh_token');
     };
 
     return { getToken, setTokens, ereaseTokens };

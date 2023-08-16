@@ -11,7 +11,7 @@ const httpClientOptions = (options: any = {}) => {
         newOptions.headers = new Headers({ Accept: 'application/json' });
     }
 
-    const token = jwtManager.getToken();
+    const token = jwtManager.getToken('access_token');
     if (token) {
         newOptions.headers.set('Authorization', `Bearer ${token}`);
     }

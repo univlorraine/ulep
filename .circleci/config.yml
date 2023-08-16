@@ -8,6 +8,9 @@ executors:
   node-executor:
     docker:
       - image: cimg/node:18.16.1
+      - image: cimg/postgres:14.0
+        environment:
+          POSTGRES_USER: postgres
 
 commands:
   pnpm-install-api:
