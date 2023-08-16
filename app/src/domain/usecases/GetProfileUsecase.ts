@@ -9,7 +9,7 @@ class GetProfileUsecase implements GetProfileUsecaseInterface {
     async execute(): Promise<Profile | Error> {
         try {
             const httpResponse: HttpResponse<ProfileCommand> = await this.domainHttpAdapter.get(
-                `/profiles/user`,
+                `/profiles/me`,
                 undefined,
                 false
             );
