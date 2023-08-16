@@ -12,7 +12,9 @@ import GetAllLanguagesUsecaseInterface from '../domain/interfaces/GetAllLanguage
 import GetAllTandemsUsecaseInterface from '../domain/interfaces/GetAllTandemsUsecase.interface';
 import GetAllUniversitiesUsecaseInterface from '../domain/interfaces/GetAllUniversitiesUsecase.interface';
 import GetAllReportCategoriesUsecaseInterface from '../domain/interfaces/GetAlllReportCategoriesUsecase.interface';
+import GetProfileUsecaseInterface from '../domain/interfaces/GetProfileUsecase.interface';
 import GetQuizzByLevelUsecaseInterface from '../domain/interfaces/GetQuizzByLevelUsecase.interface';
+import GetUserUsecaseInterface from '../domain/interfaces/GetUserUsecase.interface';
 import LoginUsecaseInterface from '../domain/interfaces/LoginUsecase.interface';
 import ResetPasswordUsecaseInterface from '../domain/interfaces/ResetPasswordUsecase.interface';
 import UpdateAvatarUsecaseInterface from '../domain/interfaces/UpdateAvatarUsecase.interface';
@@ -33,7 +35,9 @@ export interface ConfigContextValueType {
     getAllReportCategories: GetAllReportCategoriesUsecaseInterface;
     getAllTandems: GetAllTandemsUsecaseInterface;
     getAllUniversities: GetAllUniversitiesUsecaseInterface;
+    getProfile: GetProfileUsecaseInterface;
     getQuizzByLevel: GetQuizzByLevelUsecaseInterface;
+    getUser: GetUserUsecaseInterface;
     login: LoginUsecaseInterface;
     resetPassword: ResetPasswordUsecaseInterface;
     updateAvatar: UpdateAvatarUsecaseInterface;

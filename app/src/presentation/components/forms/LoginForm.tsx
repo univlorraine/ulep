@@ -1,21 +1,21 @@
 import { IonButton, IonContent, IonHeader, IonRouterLink, useIonLoading, useIonToast } from '@ionic/react';
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { useHistory } from 'react-router';
-import { LeftChevronSvg } from '../../../assets';
+import { AvatarSvg, LeftChevronSvg } from '../../../assets';
 import { useConfig } from '../../../context/ConfigurationContext';
+import { Tokens } from '../../../domain/interfaces/LoginUsecase.interface';
 import CircleAvatar from '../CircleAvatar';
 import TextInput from '../TextInput';
 import style from './Form.module.css';
 
 interface LoginFormProps {
     goBack: () => void;
+    onLogin: (tokens: Tokens) => void;
 }
 
-const LoginForm: React.FC<LoginFormProps> = ({ goBack }) => {
+const LoginForm: React.FC<LoginFormProps> = ({ goBack, onLogin }) => {
     const { t } = useTranslation();
     const { login } = useConfig();
-    const history = useHistory();
     const [email, setEmail] = useState<string>('');
     const [password, setPassword] = useState<string>('');
     const [showLoading, hideLoading] = useIonLoading();
@@ -26,10 +26,9 @@ const LoginForm: React.FC<LoginFormProps> = ({ goBack }) => {
         await showLoading();
         const result = await login.execute(email, password);
         if (result instanceof Error) {
-            await showToast({ message: t(result.message), duration: 5000 });
-        } else {
-            await showToast({ message: 'Connexion réussi' }); // TODO: change this later
+            return await showToast({ message: t(result.message), duration: 5000 });
         }
+        onLogin(result);
         await hideLoading();
     };
 
@@ -42,12 +41,7 @@ const LoginForm: React.FC<LoginFormProps> = ({ goBack }) => {
             </IonHeader>
             <IonContent>
                 <form className={style['main-content']} onSubmit={handleLogin}>
-                    <CircleAvatar
-                        backgroundImage="./assets/avatar.svg"
-                        height={36}
-                        viewClassName={style['icons']}
-                        width={36}
-                    />
+                    <CircleAvatar backgroundImage={AvatarSvg} height={36} viewClassName={style['icons']} width={36} />
                     <div className={`ion-text-center`}>
                         <h1 className={style.title}>{t('login_page.title')}</h1>
                     </div>

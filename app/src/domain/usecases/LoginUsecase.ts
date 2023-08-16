@@ -1,6 +1,6 @@
 import { HttpResponse } from '../../adapter/BaseHttpAdapter';
 import { HttpAdapterInterface } from '../../adapter/DomainHttpAdapter';
-import LoginUsecaseInterface from '../interfaces/LoginUsecase.interface';
+import LoginUsecaseInterface, { Tokens } from '../interfaces/LoginUsecase.interface';
 
 interface LoginCommand {
     accessToken: string;
@@ -10,7 +10,7 @@ interface LoginCommand {
 class LoginUsecase implements LoginUsecaseInterface {
     constructor(private readonly domainHttpAdapter: HttpAdapterInterface, private readonly setTokens: Function) {}
 
-    async execute(email: string, password: string): Promise<void | Error> {
+    async execute(email: string, password: string): Promise<Tokens | Error> {
         try {
             const httpResponse: HttpResponse<LoginCommand> = await this.domainHttpAdapter.post(
                 '/authentication/token',
@@ -27,10 +27,14 @@ class LoginUsecase implements LoginUsecaseInterface {
                 return new Error('errors.global');
             }
 
-            return this.setTokens({
+            const tokens = {
                 accessToken: httpResponse.parsedBody.accessToken,
                 refreshToken: httpResponse.parsedBody.refreshToken,
-            });
+            };
+
+            this.setTokens(tokens);
+
+            return tokens;
         } catch (error: any) {
             if (!error || !error.status) {
                 return new Error('errors.global');

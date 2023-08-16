@@ -91,14 +91,16 @@ export class CreateProfileUsecase {
         'A campus is required for tandem learningType',
       );
     }
-
-    const campus = user.university.campus.find(
-      (campus) => campus.id === command.campusId,
-    );
-    if (!campus) {
-      throw new ProfileCampusException(
-        `${command.campusId} not part of user's university`,
+    let campus;
+    if (command.campusId) {
+      campus = user.university.campus.find(
+        (campus) => campus.id === command.campusId,
       );
+      if (!campus) {
+        throw new ProfileCampusException(
+          `${command.campusId} not part of user's university`,
+        );
+      }
     }
 
     const interests = await Promise.all(

@@ -13,7 +13,9 @@ import GetAllLanguagesUsecase from '../domain/usecases/GetAllLanguagesUsecase';
 import GetAllReportCategoriesUsecase from '../domain/usecases/GetAllReportCategoriesUsecase';
 import GetAllTandemsUsecase from '../domain/usecases/GetAllTandemsUsecase';
 import GetAllUniversitiesUsecase from '../domain/usecases/GetAllUniversitiesUsecase';
+import GetProfileByUserIdUsecase from '../domain/usecases/GetProfileUsecase';
 import GetQuizzByLevelUsecase from '../domain/usecases/GetQuizzByLevelUsecase';
+import GetUserUsecase from '../domain/usecases/GetUserUsecase';
 import LoginUsecase from '../domain/usecases/LoginUsecase';
 import ResetPasswordUsecase from '../domain/usecases/ResetPasswordUsecase';
 import UpdateAvatarUsecase from '../domain/usecases/UpdateAvatarUsecase';
@@ -42,7 +44,9 @@ const getConfigContextValue = (
     const getAllReportCategories = new GetAllReportCategoriesUsecase(domainHttpAdapter);
     const getAllTandems = new GetAllTandemsUsecase(domainHttpAdapter);
     const getAllUniversities = new GetAllUniversitiesUsecase(domainHttpAdapter);
+    const getProfile = new GetProfileByUserIdUsecase(domainHttpAdapter);
     const getQuizzByLevel = new GetQuizzByLevelUsecase(domainHttpAdapter);
+    const getUser = new GetUserUsecase(domainHttpAdapter);
     const login = new LoginUsecase(domainHttpAdapter, setTokens);
     const resetPassword = new ResetPasswordUsecase(domainHttpAdapter);
     const updateAvatar = new UpdateAvatarUsecase(domainHttpAdapter);
@@ -65,7 +69,9 @@ const getConfigContextValue = (
         getAllReportCategories,
         getAllTandems,
         getAllUniversities,
+        getProfile,
         getQuizzByLevel,
+        getUser,
         login,
         resetPassword,
         updateAvatar,

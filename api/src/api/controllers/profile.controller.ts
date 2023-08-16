@@ -1,34 +1,35 @@
+import { Collection } from '@app/common';
+import { KeycloakUser } from '@app/keycloak';
 import {
   Body,
   Controller,
   Get,
-  Param,
-  Post,
-  ParseUUIDPipe,
-  UseGuards,
-  Query,
   Logger,
+  Param,
+  ParseUUIDPipe,
+  Post,
+  Query,
   SerializeOptions,
+  UseGuards,
 } from '@nestjs/common';
 import * as Swagger from '@nestjs/swagger';
+import { configuration } from 'src/configuration';
 import {
   CreateProfileUsecase,
+  GetProfileByUserIdUsecase,
   GetProfileUsecase,
   GetProfilesUsecase,
   GetTandemsForProfileUsecase,
 } from 'src/core/usecases';
-import { AuthenticationGuard } from '../guards';
+import { CollectionResponse, CurrentUser } from '../decorators';
+import { Roles } from '../decorators/roles.decorator';
 import {
   CreateProfileRequest,
   ProfileQueryFilter,
   ProfileResponse,
   UserTandemResponse,
 } from '../dtos';
-import { Collection } from '@app/common';
-import { CollectionResponse, CurrentUser } from '../decorators';
-import { KeycloakUser } from '@app/keycloak';
-import { configuration } from 'src/configuration';
-import { Roles } from '../decorators/roles.decorator';
+import { AuthenticationGuard } from '../guards';
 
 @Controller('profiles')
 @Swagger.ApiTags('Profiles')
@@ -38,6 +39,7 @@ export class ProfileController {
   constructor(
     private readonly createProfileUsecase: CreateProfileUsecase,
     private readonly getProfilesUsecase: GetProfilesUsecase,
+    private readonly getProfileByUserIdUsecase: GetProfileByUserIdUsecase,
     private readonly getProfileUsecase: GetProfileUsecase,
     private readonly getTandemsForProfileUsecase: GetTandemsForProfileUsecase,
   ) {}
@@ -117,8 +119,25 @@ export class ProfileController {
     );
   }
 
+  @Get('user')
+  @UseGuards(AuthenticationGuard)
+  @SerializeOptions({ groups: ['read', 'profile:read'] })
+  @Swagger.ApiOperation({
+    summary: 'Retrieve a Profile ressource by his userId.',
+  })
+  @Swagger.ApiOkResponse({ type: ProfileResponse })
+  @Swagger.ApiNotFoundResponse({ description: 'Resource not found' })
+  async getItemByUserId(
+    @CurrentUser() user: KeycloakUser,
+  ): Promise<ProfileResponse> {
+    const profile = await this.getProfileByUserIdUsecase.execute({
+      id: user.sub,
+    });
+
+    return ProfileResponse.fromDomain(profile);
+  }
+
   @Get(':id')
-  @Roles(configuration().adminRole)
   @UseGuards(AuthenticationGuard)
   @SerializeOptions({ groups: ['read', 'profile:read'] })
   @Swagger.ApiOperation({ summary: 'Retrieve a Profile ressource.' })
