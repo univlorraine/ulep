@@ -25,12 +25,12 @@ class CreateProfileUsecase implements CreateProfileUsecaseInterface {
         campusId?: string
     ): Promise<undefined | Error> {
         try {
+            console.log(goals);
             const httpResponse: HttpResponse<ProfileCommand> = await this.domainHttpAdapter.post(`/profiles/`, {
                 id,
                 nativeLanguageCode: nativeLanguage,
                 masteredLanguageCodes: masteredLanguages,
-                learningLanguageCode,
-                level: cefrLevel,
+                learningLanguages: [{ code: learningLanguageCode, level: cefrLevel }],
                 learningType,
                 objectives: goals,
                 meetingFrequency,
