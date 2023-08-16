@@ -4,6 +4,7 @@ import { Transform } from 'class-transformer';
 import {
   ArrayMaxSize,
   ArrayMinSize,
+  IsArray,
   IsBoolean,
   IsEnum,
   IsNotEmpty,
@@ -11,7 +12,6 @@ import {
   IsOptional,
   IsUUID,
   ValidateNested,
-  IsArray,
 } from 'class-validator';
 import { LearningType } from 'src/core/models';
 import { CreateProfileCommand } from 'src/core/usecases/profiles/create-profile.usecase';
@@ -21,10 +21,6 @@ import { LearningLanguageDto } from './learningLanguage';
 export class CreateProfileRequest
   implements Omit<CreateProfileCommand, 'user'>
 {
-  @Swagger.ApiProperty({ type: 'string', format: 'uuid' })
-  @IsUUID()
-  id: string;
-
   // TODO(herve): we should use ids instead of codes
   @Swagger.ApiProperty({ type: 'string', example: 'FR' })
   @IsNotEmpty()
@@ -76,7 +72,8 @@ export class CreateProfileRequest
 
   @Swagger.ApiProperty({ type: 'string' })
   @IsUUID()
-  campusId: string;
+  @IsOptional()
+  campusId?: string;
 
   @Swagger.ApiProperty()
   @IsBoolean()

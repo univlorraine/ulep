@@ -5,19 +5,19 @@ import {
   ProfileRepository,
 } from '../../ports/profile.repository';
 
-export type GetProfileCommand = {
+export type GetProfileUserIdCommand = {
   id: string;
 };
 
 @Injectable()
-export class GetProfileUsecase {
+export class GetProfileByUserIdUsecase {
   constructor(
     @Inject(PROFILE_REPOSITORY)
     private readonly profileRepository: ProfileRepository,
   ) {}
 
-  async execute(command: GetProfileCommand) {
-    const profile = await this.profileRepository.ofId(command.id);
+  async execute(command: GetProfileUserIdCommand) {
+    const profile = await this.profileRepository.ofUser(command.id);
 
     if (!profile) {
       throw new RessourceDoesNotExist();

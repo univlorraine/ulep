@@ -1,41 +1,42 @@
-import {
-  Controller,
-  Get,
-  Post,
-  Body,
-  Patch,
-  Param,
-  Delete,
-  Query,
-  UseGuards,
-  ParseUUIDPipe,
-  UseInterceptors,
-  UploadedFile,
-} from '@nestjs/common';
-import * as Swagger from '@nestjs/swagger';
 import { Collection } from '@app/common';
+import { KeycloakUser } from '@app/keycloak';
 import {
-  UserResponse,
-  CreateUserRequest,
-  PaginationDto,
-  UpdateUserRequest,
-  AskForAccountDeletionRequest,
-} from '../dtos';
+  Body,
+  Controller,
+  Delete,
+  Get,
+  Param,
+  ParseUUIDPipe,
+  Patch,
+  Post,
+  Query,
+  UploadedFile,
+  UseGuards,
+  UseInterceptors,
+} from '@nestjs/common';
+import { FileInterceptor } from '@nestjs/platform-express';
+import * as Swagger from '@nestjs/swagger';
+import { configuration } from 'src/configuration';
+import { UploadAvatarUsecase } from 'src/core/usecases';
 import {
   AskForAccountDeletionUsecase,
   CreateUserUsecase,
   DeleteUserUsecase,
-  GetUsersUsecase,
   GetUserUsecase,
+  GetUsersUsecase,
   UpdateUserUsecase,
 } from '../../core/usecases/user';
-import { CollectionResponse } from '../decorators';
-import { AuthenticationGuard } from '../guards';
-import { FileInterceptor } from '@nestjs/platform-express';
-import { ImagesFilePipe } from '../validators/images.validator';
-import { UploadAvatarUsecase } from 'src/core/usecases';
+import { CollectionResponse, CurrentUser } from '../decorators';
 import { Roles } from '../decorators/roles.decorator';
-import { configuration } from 'src/configuration';
+import {
+  AskForAccountDeletionRequest,
+  CreateUserRequest,
+  PaginationDto,
+  UpdateUserRequest,
+  UserResponse,
+} from '../dtos';
+import { AuthenticationGuard } from '../guards';
+import { ImagesFilePipe } from '../validators/images.validator';
 
 @Controller('users')
 @Swagger.ApiTags('Users')
@@ -88,6 +89,17 @@ export class UserController {
       items: instances.items.map(UserResponse.fromDomain),
       totalItems: instances.totalItems,
     });
+  }
+
+  @Get('me')
+  @UseGuards(AuthenticationGuard)
+  @Swagger.ApiOperation({ summary: 'User ressource.' })
+  @Swagger.ApiOkResponse({ type: UserResponse })
+  async findMe(@CurrentUser() user: KeycloakUser) {
+    const id = user.sub;
+    const instance = await this.getUserUsecase.execute(id);
+
+    return UserResponse.fromDomain({ id, ...instance });
   }
 
   @Get(':id')

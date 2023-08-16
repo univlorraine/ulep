@@ -72,16 +72,17 @@ describe('createProfile', () => {
             ['interestsId'],
             true,
             true,
-            biography
+            biography,
+            true,
+            true
         );
         expect(adapter.post).toHaveBeenCalledTimes(1);
         expect(adapter.post).toHaveBeenCalledWith('/profiles/', {
             id: 'id',
             nativeLanguageCode: 'FR',
             masteredLanguageCodes: ['CN'],
-            learningLanguageCode: 'ES',
+            learningLanguages: [{ code: 'ES', level: 'A0' }],
             learningType: 'TANDEM',
-            level: 'A0',
             objectives: ['goalId'],
             meetingFrequency: 'ONCE_A_WEEK',
             interests: ['interestsId'],
@@ -93,6 +94,9 @@ describe('createProfile', () => {
                 experience: biography.travel,
                 anecdote: biography.incredible,
             },
+            campusId: undefined,
+            certificateOption: true,
+            specificProgram: true,
         });
     });
 
@@ -113,7 +117,9 @@ describe('createProfile', () => {
             ['interestsId'],
             true,
             true,
-            biography
+            biography,
+            true,
+            true
         );
         expect(mockedSetProfile).toHaveBeenCalledTimes(1);
         expect(result).toBeUndefined();
@@ -136,7 +142,9 @@ describe('createProfile', () => {
             ['interestsId'],
             true,
             true,
-            biography
+            biography,
+            true,
+            true
         );
         expect(result).toBeInstanceOf(Error);
     });
@@ -156,7 +164,9 @@ describe('createProfile', () => {
             ['interestsId'],
             true,
             true,
-            biography
+            biography,
+            true,
+            true
         );
         expect(result).toStrictEqual(new Error('errors.global'));
     });

@@ -19,9 +19,14 @@ describe('ResetPasswordUsecase', () => {
         adapter.mockJson({ parsedBody: {} });
         await usecase.execute('id', 'password');
         expect(adapter.put).toHaveBeenCalledTimes(1);
-        expect(adapter.put).toHaveBeenCalledWith('/users/id/reset-password', {
-            password: 'password',
-        });
+        expect(adapter.put).toHaveBeenCalledWith(
+            '/users/id/reset-password',
+            {
+                password: 'password',
+            },
+            {},
+            false
+        );
     });
 
     it('execute must return an expected response without parsed body', async () => {

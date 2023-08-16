@@ -12,7 +12,6 @@ interface AvailabilityModalProps {
 }
 
 const SitesModal: React.FC<AvailabilityModalProps> = ({ isVisible, onClose, onValidate, sites }) => {
-    console.log(sites);
     const { t } = useTranslation();
     const [currentCampus, setCurrentCampus] = useState<Campus>();
     return (
