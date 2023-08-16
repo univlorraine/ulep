@@ -86,5 +86,7 @@ export const profileMapper = (instance: ProfileSnapshot): Profile => {
       anecdote: instance.bio['anecdote'],
     },
     campus: instance.Campus && campusMapper(instance.Campus),
+    certificateOption: instance.certificate_option,
+    specificProgram: instance.specific_program,
   });
 };

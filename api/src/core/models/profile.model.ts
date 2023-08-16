@@ -30,6 +30,8 @@ export type CreateProfileProps = {
   interests: Interest[];
   biography?: { [key: string]: string };
   campus?: Campus;
+  certificateOption?: boolean;
+  specificProgram?: boolean;
 };
 
 export class Profile {
@@ -59,6 +61,10 @@ export class Profile {
 
   readonly campus?: Campus;
 
+  readonly certificateOption?: boolean;
+
+  readonly specificProgram?: boolean;
+
   constructor(props: CreateProfileProps) {
     const learningLanguages = [...props.learningLanguages].map(
       (learningLanguage) => ({
@@ -83,6 +89,8 @@ export class Profile {
     this.interests = [...props.interests];
     this.biography = props.biography;
     this.campus = props.campus;
+    this.certificateOption = props.certificateOption;
+    this.specificProgram = props.specificProgram;
 
     this.assertLanguesAreUnique();
   }

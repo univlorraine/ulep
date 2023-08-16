@@ -58,6 +58,8 @@ export class CreateProfileCommand {
   sameAge: boolean;
   bios?: string;
   campusId?: string;
+  certificateOption?: boolean;
+  specificProgram?: boolean;
 }
 
 @Injectable()
