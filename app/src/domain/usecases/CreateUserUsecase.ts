@@ -64,7 +64,9 @@ class CreateUserUsecase implements CreateUserUsecaseInterface {
 
             this.setUser({ user: userCommandToDomain(httpResponse.parsedBody) });
 
-            return await this.login.execute(email, password);
+            await this.login.execute(email, password);
+
+            return;
         } catch (error: any) {
             return new Error('errors.global');
         }

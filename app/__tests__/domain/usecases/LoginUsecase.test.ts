@@ -21,7 +21,13 @@ describe('loginUsecase', () => {
         adapter.mockJson({ parsedBody: { accessToken: 'accessToken', refreshToken: 'refreshToken' } });
         await usecase.execute('email', 'password');
         expect(adapter.post).toHaveBeenCalledTimes(1);
-        expect(adapter.post).toHaveBeenCalledWith('/authentication/token', { email: 'email', password: 'password' });
+        expect(adapter.post).toHaveBeenCalledWith(
+            '/authentication/token',
+            { email: 'email', password: 'password' },
+            {},
+            undefined,
+            false
+        );
     });
 
     it('execute must return an expected response', async () => {

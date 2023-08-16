@@ -30,7 +30,7 @@ const university = new University(
     false,
     [new Language('id', 'FR', 'French'), new Language('id2', 'CN', 'Chinese')],
     'timezone',
-    ['Site A']
+    [{ id: 'id', name: 'Site A' }]
 );
 const file = new File(['Bits'], 'name');
 describe('createUserUsecase', () => {
@@ -81,7 +81,8 @@ describe('createUserUsecase', () => {
                 file: file,
             },
             {},
-            'multipart/form-data'
+            'multipart/form-data',
+            false
         );
     });
 

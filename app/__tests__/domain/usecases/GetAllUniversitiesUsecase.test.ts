@@ -5,17 +5,23 @@ import University from '../../../src/domain/entities/University';
 import GetAllUniversitiesUsecase from '../../../src/domain/usecases/GetAllUniversitiesUsecase';
 import DomainHttpAdapter from '../../mocks/adapters/HttpAdapter';
 
-const usecaseResponse: CollectionCommand<UniversityCommand> = {items: [
-    {
-        id: 'id',
-        name: 'name',
-        sites: ['Campus A', 'Campus B'],
-        languages: [new Language('id', 'FR', 'French'), new Language('id2', 'CN', 'Chinese')],
-        parent: undefined,
-        timezone: 'timezone',
-        website: 'website',
-    },
-], totalItems: 1};
+const usecaseResponse: CollectionCommand<UniversityCommand> = {
+    items: [
+        {
+            id: 'id',
+            name: 'name',
+            sites: [
+                { id: 'id', name: 'Campus A' },
+                { id: 'id2', name: 'Campus B' },
+            ],
+            languages: [new Language('id', 'FR', 'French'), new Language('id2', 'CN', 'Chinese')],
+            parent: undefined,
+            timezone: 'timezone',
+            website: 'website',
+        },
+    ],
+    totalItems: 1,
+};
 
 describe('getAllUniversities', () => {
     let adapter: DomainHttpAdapter;
@@ -35,7 +41,7 @@ describe('getAllUniversities', () => {
         adapter.mockJson({ parsedBody: usecaseResponse });
         await usecase.execute();
         expect(adapter.get).toHaveBeenCalledTimes(1);
-        expect(adapter.get).toHaveBeenCalledWith('/universities');
+        expect(adapter.get).toHaveBeenCalledWith('/universities', {}, false);
     });
 
     it('execute must return an expected response', async () => {
