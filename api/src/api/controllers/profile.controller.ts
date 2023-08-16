@@ -119,11 +119,11 @@ export class ProfileController {
     );
   }
 
-  @Get('user')
+  @Get('me')
   @UseGuards(AuthenticationGuard)
   @SerializeOptions({ groups: ['read', 'profile:read'] })
   @Swagger.ApiOperation({
-    summary: 'Retrieve a Profile ressource by his userId.',
+    summary: 'Retrieve a Profile from user id.',
   })
   @Swagger.ApiOkResponse({ type: ProfileResponse })
   @Swagger.ApiNotFoundResponse({ description: 'Resource not found' })
@@ -138,6 +138,7 @@ export class ProfileController {
   }
 
   @Get(':id')
+  @Roles(configuration().adminRole)
   @UseGuards(AuthenticationGuard)
   @SerializeOptions({ groups: ['read', 'profile:read'] })
   @Swagger.ApiOperation({ summary: 'Retrieve a Profile ressource.' })

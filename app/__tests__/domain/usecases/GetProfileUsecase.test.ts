@@ -58,7 +58,7 @@ describe('getProfile', () => {
         adapter.mockJson({ parsedBody: {} });
         await usecase.execute();
         expect(adapter.get).toHaveBeenCalledTimes(1);
-        expect(adapter.get).toHaveBeenCalledWith('/profiles/user', undefined, false);
+        expect(adapter.get).toHaveBeenCalledWith('/profiles/me', undefined, false);
     });
 
     it('execute must return an expected response', async () => {
