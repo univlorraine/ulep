@@ -15,8 +15,8 @@ export interface HttpAdapterInterface {
 }
 
 interface RefreshUsecaseCommand {
-    access_token: string;
-    refresh_token: string;
+    accessToken: string;
+    refreshToken: string;
 }
 
 class DomainHttpAdapter extends BaseHttpAdapter implements HttpAdapterInterface {
@@ -26,23 +26,11 @@ class DomainHttpAdapter extends BaseHttpAdapter implements HttpAdapterInterface 
 
     refreshToken: string = '';
 
-    removeTokens: Function;
-
-    setTokens: Function;
-
-    constructor(
-        apiUrl: string,
-        accessToken: string,
-        refreshToken: string,
-        removeTokens: Function,
-        setTokens: Function
-    ) {
+    constructor(apiUrl: string, accessToken: string, refreshToken: string) {
         super();
         this.accessToken = accessToken;
         this.apiUrl = apiUrl;
         this.refreshToken = refreshToken;
-        this.removeTokens = removeTokens;
-        this.setTokens = setTokens;
     }
 
     private getHeaders(): any {
@@ -52,7 +40,7 @@ class DomainHttpAdapter extends BaseHttpAdapter implements HttpAdapterInterface 
     }
 
     async get(path: string, args: RequestInit = {}, isTokenNeeded = true): Promise<Response> {
-        const isTokenValid = !isTokenNeeded || this.handleTokens();
+        const isTokenValid = !isTokenNeeded || (await this.handleTokens());
 
         if (!isTokenValid) {
             throw new Error('errors.global');
@@ -61,7 +49,7 @@ class DomainHttpAdapter extends BaseHttpAdapter implements HttpAdapterInterface 
     }
 
     async delete(path: string, args: RequestInit = {}, isTokenNeeded = true): Promise<Response> {
-        const isTokenValid = isTokenNeeded && this.handleTokens();
+        const isTokenValid = isTokenNeeded && (await this.handleTokens());
 
         if (!isTokenValid) {
             throw new Error('errors.global');
@@ -76,7 +64,7 @@ class DomainHttpAdapter extends BaseHttpAdapter implements HttpAdapterInterface 
         contentType = 'application/json',
         isTokenNeeded = true
     ): Promise<Response> {
-        const isTokenValid = !isTokenNeeded || this.handleTokens();
+        const isTokenValid = !isTokenNeeded || (await this.handleTokens());
 
         if (!isTokenValid) {
             throw new Error('errors.global');
@@ -85,7 +73,7 @@ class DomainHttpAdapter extends BaseHttpAdapter implements HttpAdapterInterface 
     }
 
     async put(path: string, body: Body, args: RequestInit = {}, isTokenNeeded = true): Promise<Response> {
-        const isTokenValid = !isTokenNeeded || this.handleTokens();
+        const isTokenValid = !isTokenNeeded || (await this.handleTokens());
 
         if (!isTokenValid) {
             throw new Error('errors.global');
@@ -113,12 +101,12 @@ class DomainHttpAdapter extends BaseHttpAdapter implements HttpAdapterInterface 
             { token: this.refreshToken }
         );
 
-        if (!response.parsedBody || !response.parsedBody.access_token) {
-            this.removeTokens();
+        if (!response.parsedBody || !response.parsedBody.accessToken) {
             return false;
         }
 
-        this.setTokens(response.parsedBody.access_token, response.parsedBody.refresh_token);
+        this.accessToken = response.parsedBody.accessToken;
+        this.refreshToken = response.parsedBody.refreshToken;
         return true;
     };
 }
