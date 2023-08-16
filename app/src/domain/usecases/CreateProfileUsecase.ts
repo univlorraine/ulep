@@ -19,7 +19,10 @@ class CreateProfileUsecase implements CreateProfileUsecaseInterface {
         interests: string[],
         preferSameAge: boolean,
         preferSameGender: boolean,
-        biography: BiographySignUp
+        biography: BiographySignUp,
+        isForCertificate: boolean,
+        isForProgram: boolean,
+        campusId?: string
     ): Promise<undefined | Error> {
         try {
             const httpResponse: HttpResponse<ProfileCommand> = await this.domainHttpAdapter.post(`/profiles/`, {
@@ -40,6 +43,9 @@ class CreateProfileUsecase implements CreateProfileUsecaseInterface {
                     experience: biography.travel,
                     anecdote: biography.incredible,
                 },
+                campusId: campusId,
+                certificateOption: isForCertificate,
+                specificProgram: isForProgram,
             });
 
             if (!httpResponse.parsedBody) {

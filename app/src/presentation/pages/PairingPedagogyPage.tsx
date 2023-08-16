@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Redirect, useHistory } from 'react-router';
 import { useConfig } from '../../context/ConfigurationContext';
+import Campus from '../../domain/entities/Campus';
 import { useStoreActions, useStoreState } from '../../store/storeTypes';
 import ColoredCard from '../components/ColoredCard';
 import WebLayoutCentered from '../components/layout/WebLayoutCentered';
@@ -57,7 +58,7 @@ const PairingPedagogyPage: React.FC = () => {
         }
 
         if (pedagogy !== 'ETANDEM' && profileSignUp.university && profileSignUp.university.sites.length === 1) {
-            updateProfileSignUp({ pedagogy, site: profileSignUp.university.sites[0] });
+            updateProfileSignUp({ pedagogy, campus: profileSignUp.university.sites[0] });
             return history.push('/signup/pairing/language/confirm');
         }
 
@@ -65,8 +66,8 @@ const PairingPedagogyPage: React.FC = () => {
         return history.push('/signup/pairing/language/confirm');
     };
 
-    const onSiteValidated = (site: string) => {
-        updateProfileSignUp({ pedagogy: pedagogySelected, site });
+    const onSiteValidated = (campus?: Campus) => {
+        updateProfileSignUp({ pedagogy: pedagogySelected, campus });
         return history.push('/signup/pairing/language/confirm');
     };
 

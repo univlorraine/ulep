@@ -1,4 +1,5 @@
 import Availability from './Availability';
+import Campus from './Campus';
 import Country from './Country';
 import Goal from './Goal';
 import Language from './Language';
@@ -31,6 +32,8 @@ class ProfileSignUp {
     public availabilityNotePrivate?: boolean;
 
     public biography?: BiographySignUp;
+
+    public campus?: Campus;
 
     public country?: Country;
 
@@ -77,8 +80,6 @@ class ProfileSignUp {
     public sameGender?: boolean;
 
     public sameTandem?: boolean;
-
-    public site?: string;
 
     public staffFunction?: string;
 

@@ -1,4 +1,5 @@
 import { Action, createTypedHooks } from 'easy-peasy';
+import Campus from '../domain/entities/Campus';
 import Country from '../domain/entities/Country';
 import Goal from '../domain/entities/Goal';
 import Language from '../domain/entities/Language';
@@ -18,6 +19,7 @@ export interface SignUpStorePayload {
     availabilityNote?: string;
     availabilityNotePrivate?: boolean;
     biography?: BiographySignUp;
+    campus?: Campus;
     country?: Country;
     department?: string;
     diplome?: string;
@@ -41,7 +43,6 @@ export interface SignUpStorePayload {
     sameAge?: boolean;
     sameGender?: boolean;
     sameTandem?: boolean;
-    site?: string;
     staffFunction?: string;
     timezone?: string;
     university?: University;

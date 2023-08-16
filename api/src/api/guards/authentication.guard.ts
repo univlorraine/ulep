@@ -6,12 +6,12 @@ import {
   Injectable,
   UnauthorizedException,
 } from '@nestjs/common';
+import { Reflector } from '@nestjs/core';
 import { Request } from 'express';
 import {
   AUTHENTICATOR,
   AuthenticatorInterface,
 } from '../services/authenticator.interface';
-import { Reflector } from '@nestjs/core';
 
 @Injectable()
 export class AuthenticationGuard implements CanActivate {
