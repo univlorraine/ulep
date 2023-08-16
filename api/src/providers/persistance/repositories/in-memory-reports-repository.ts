@@ -1,3 +1,4 @@
+import { Collection } from '@app/common';
 import { Report, ReportCategory, ReportStatus } from 'src/core/models';
 import { ReportRepository } from 'src/core/ports/report.repository';
 
@@ -41,8 +42,11 @@ export class InMemoryReportsRepository implements ReportRepository {
     return null;
   }
 
-  async categories(): Promise<ReportCategory[]> {
-    return this.#categories;
+  async categories(): Promise<Collection<ReportCategory>> {
+    return new Collection<ReportCategory>({
+      items: this.#categories,
+      totalItems: this.#categories.length,
+    });
   }
 
   async categoryOfId(id: string): Promise<ReportCategory> {
@@ -53,6 +57,12 @@ export class InMemoryReportsRepository implements ReportRepository {
     }
 
     return null;
+  }
+
+  categoryOfName(name: string): Promise<ReportCategory> {
+    return Promise.resolve(
+      this.#categories.find((category) => category.name.content === name),
+    );
   }
 
   async updateReport(id: string, status: ReportStatus): Promise<void> {

@@ -4,18 +4,24 @@
         "@thetribe/eslint-config-react-typescript",
         "plugin:react/recommended"
     ],
+    "parser": "@typescript-eslint/parser",
     "parserOptions": {
         "project": "./tsconfig.json"
     },
     "env": {
         "browser": true
     },
-    "overrides": [
-        {
-            "files": ["**/*.test.{ts,tsx}"],
-            "env": {
-                "jest": true
-            }
+    "plugins": [
+        "@typescript-eslint"
+  ],
+  "rules":{
+    "no-useless-constructor": "off",
+    "no-empty-function": "off",
+    "no-undef": "off"
+  },
+    "settings": {
+        "import/parsers": {
+            "@typescript-eslint/parser": [".ts", ".tsx"]
         }
-    ]
+    }
 }

@@ -1,41 +1,43 @@
+import { Collection } from '@app/common';
+import { KeycloakUser } from '@app/keycloak';
 import {
-  Controller,
-  Get,
-  Post,
   Body,
-  Patch,
-  Param,
+  Controller,
   Delete,
+  Get,
+  Headers,
   Logger,
-  UseGuards,
-  Query,
+  Param,
   ParseUUIDPipe,
+  Patch,
+  Post,
+  Query,
+  UseGuards,
 } from '@nestjs/common';
 import * as Swagger from '@nestjs/swagger';
-import { KeycloakUser } from '@app/keycloak';
-import { ReportStatusesPipe } from '../validators';
-import { CurrentUser } from '../decorators';
-import { AuthenticationGuard } from '../guards';
-import {
-  ReportResponse,
-  CreateReportRequest,
-  UpdateReportStatusRequest,
-  CreateReportCategoryRequest,
-  ReportCategoryResponse,
-} from '../dtos';
+import { configuration } from 'src/configuration';
+import { ReportStatus } from '../../core/models/report.model';
 import {
   CreateReportCategoryUsecase,
   CreateReportUsecase,
   DeleteReportCategoryUsecase,
   DeleteReportUsecase,
   GetCategoriesUsecase,
-  GetReportsByStatusUsecase,
   GetReportUsecase,
+  GetReportsByStatusUsecase,
   UpdateReportStatusUsecase,
 } from '../../core/usecases/report';
-import { ReportStatus } from '../../core/models/report.model';
-import { configuration } from 'src/configuration';
+import { CurrentUser } from '../decorators';
 import { Roles } from '../decorators/roles.decorator';
+import {
+  CreateReportCategoryRequest,
+  CreateReportRequest,
+  ReportCategoryResponse,
+  ReportResponse,
+  UpdateReportStatusRequest,
+} from '../dtos';
+import { AuthenticationGuard } from '../guards';
+import { ReportStatusesPipe } from '../validators';
 
 @Controller('reports')
 @Swagger.ApiTags('Reports')
@@ -59,7 +61,12 @@ export class ReportController {
   @Swagger.ApiOperation({ summary: 'Create a new Category ressource.' })
   @Swagger.ApiCreatedResponse({ type: ReportCategoryResponse })
   async createCategory(@Body() body: CreateReportCategoryRequest) {
-    const instance = await this.createReportCategoryUsecase.execute(body);
+    const languageCode = configuration().defaultTranslationLanguage;
+    const instance = await this.createReportCategoryUsecase.execute({
+      languageCode,
+      name: body.name,
+      translations: body.translations,
+    });
 
     return ReportCategoryResponse.fromDomain(instance);
   }
@@ -68,10 +75,18 @@ export class ReportController {
   @UseGuards(AuthenticationGuard)
   @Swagger.ApiOperation({ summary: 'Collection of Category ressource.' })
   @Swagger.ApiOkResponse({ type: ReportCategoryResponse, isArray: true })
-  async findAllCategories() {
+  async findAllCategories(@Headers('Language-code') languageCode?: string) {
     const instances = await this.findReportCategoriesUsecase.execute();
-
-    return instances.map(ReportCategoryResponse.fromDomain);
+    const code =
+      configuration().defaultTranslationLanguage !== languageCode
+        ? languageCode
+        : undefined;
+    return new Collection<ReportCategoryResponse>({
+      items: instances.items.map((category) =>
+        ReportCategoryResponse.fromDomain(category, code),
+      ),
+      totalItems: instances.totalItems,
+    });
   }
 
   @Delete('categories/:id')

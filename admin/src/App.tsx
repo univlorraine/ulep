@@ -4,6 +4,7 @@ import LoginPage from './pages/auth/login';
 import countries from './pages/countries';
 import languages from './pages/languages';
 import profiles from './pages/profiles';
+import reportCategories from './pages/reportCategories';
 import universities from './pages/universities';
 import authProvider from './providers/authProvider';
 import customDataProvider from './providers/customDataProvider';
@@ -26,19 +27,24 @@ const App = () => {
             />
             <Resource
                 name="countries"
-                options={{ label: 'Countries' }}
+                options={{ label: translate('countries.label') }}
                 {...countries}
             />
             <Resource
                 name="languages"
-                options={{ label: 'Languages' }}
+                options={{ label: translate('languages.label') }}
                 {...languages}
             />
             <Resource
                 name="universities"
-                options={{ label: 'Universités' }}
+                options={{ label: translate('universities.label') }}
                 recordRepresentation="name"
                 {...universities}
+            />
+            <Resource
+                name="reports/categories"
+                options={{ label: translate('report_categories.label') }}
+                {...reportCategories}
             />
         </Admin>
     );

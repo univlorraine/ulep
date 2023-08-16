@@ -1,35 +1,34 @@
 import * as Swagger from '@nestjs/swagger';
-import { Expose, Transform } from 'class-transformer';
-import { IsString, IsNotEmpty, IsUUID, IsEnum, Length } from 'class-validator';
+import { Expose } from 'class-transformer';
+import {
+  IsArray,
+  IsEnum,
+  IsNotEmpty,
+  IsOptional,
+  IsString,
+  IsUUID,
+} from 'class-validator';
+import { Translation } from 'src/core/models';
 import {
   Report,
   ReportCategory,
   ReportStatus,
 } from 'src/core/models/report.model';
 import {
-  CreateReportCategoryCommand,
   CreateReportCommand,
   UpdateReportStatusCommand,
 } from 'src/core/usecases/report';
 
-export class CreateReportCategoryRequest
-  implements CreateReportCategoryCommand
-{
-  @Swagger.ApiProperty({ type: 'string', format: 'uuid' })
-  @IsUUID()
-  id: string;
-
+export class CreateReportCategoryRequest {
   @Swagger.ApiProperty({ type: 'string' })
   @IsString()
   @IsNotEmpty()
   name: string;
 
-  // TODO: get the language code from the request headers
-  @Swagger.ApiProperty({ type: 'string', example: 'FR' })
-  @Transform(({ value }) => value?.toLowerCase())
-  @IsString()
-  @Length(2, 2)
-  languageCode: string;
+  @Swagger.ApiPropertyOptional({ type: 'array' })
+  @IsOptional()
+  @IsArray()
+  translations?: Translation[];
 }
 
 export class CreateReportRequest implements Omit<CreateReportCommand, 'owner'> {
@@ -64,10 +63,25 @@ export class ReportCategoryResponse {
     Object.assign(this, partial);
   }
 
-  static fromDomain(entity: ReportCategory): ReportCategoryResponse {
+  static fromDomain(
+    entity: ReportCategory,
+    languageCode?: string,
+  ): ReportCategoryResponse {
+    let name;
+
+    if (!languageCode) {
+      name = entity.name.content;
+    } else {
+      const translation = entity.name.translations.find(
+        (translation) => translation.language === languageCode,
+      )?.content;
+
+      name = translation || entity.name.content;
+    }
+
     return new ReportCategoryResponse({
       id: entity.id,
-      name: entity.name.content,
+      name: name,
     });
   }
 }

@@ -4,6 +4,7 @@ export type Configuration = {
   port: number;
   keycloak: KeycloakConfiguration;
   adminRole: string;
+  defaultTranslationLanguage: string;
 };
 
 export const configuration = (): Configuration => ({
@@ -17,4 +18,5 @@ export const configuration = (): Configuration => ({
     clientSecret: process.env.KEYCLOAK_CLIENT_SECRET,
   },
   adminRole: process.env.ADMIN_ROLE || 'admin',
+  defaultTranslationLanguage: process.env.DEFAULT_TRANSLATION_LANGUAGE || 'fr',
 });

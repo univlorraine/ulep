@@ -1,4 +1,4 @@
-import { PrismaService } from '@app/common';
+import { Collection, PrismaService } from '@app/common';
 import { Injectable } from '@nestjs/common';
 import { TextContentRelations } from '../mappers/translation.mapper';
 import { ReportRepository } from 'src/core/ports/report.repository';
@@ -42,6 +42,12 @@ export class PrismaReportRepository implements ReportRepository {
           create: {
             text: category.name.content,
             LanguageCode: { connect: { code: category.name.language } },
+            Translations: {
+              create: category.name.translations?.map((translation) => ({
+                text: translation.content,
+                LanguageCode: { connect: { code: translation.language } },
+              })),
+            },
           },
         },
       },
@@ -79,7 +85,9 @@ export class PrismaReportRepository implements ReportRepository {
     return reportMapper(report);
   }
 
-  async categories(): Promise<ReportCategory[]> {
+  async categories(): Promise<Collection<ReportCategory>> {
+    const count = await this.prisma.reportCategories.count();
+
     const reportCategories = await this.prisma.reportCategories.findMany({
       include: {
         TextContent: {
@@ -91,12 +99,28 @@ export class PrismaReportRepository implements ReportRepository {
       },
     });
 
-    return reportCategories.map(reportCategoryMapper);
+    return new Collection<ReportCategory>({
+      items: reportCategories.map(reportCategoryMapper),
+      totalItems: count,
+    });
   }
 
   async categoryOfId(id: string): Promise<ReportCategory> {
     const reportCategory = await this.prisma.reportCategories.findUnique({
       where: { id },
+      include: { TextContent: TextContentRelations },
+    });
+
+    if (!reportCategory) {
+      return null;
+    }
+
+    return reportCategoryMapper(reportCategory);
+  }
+
+  async categoryOfName(name: string): Promise<ReportCategory> {
+    const reportCategory = await this.prisma.reportCategories.findFirst({
+      where: { TextContent: { text: { equals: name } } },
       include: { TextContent: TextContentRelations },
     });
 

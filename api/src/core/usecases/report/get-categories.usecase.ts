@@ -4,6 +4,7 @@ import {
   REPORT_REPOSITORY,
   ReportRepository,
 } from 'src/core/ports/report.repository';
+import { Collection } from '@app/common';
 
 @Injectable()
 export class GetCategoriesUsecase {
@@ -12,7 +13,7 @@ export class GetCategoriesUsecase {
     private readonly repository: ReportRepository,
   ) {}
 
-  async execute(): Promise<ReportCategory[]> {
+  async execute(): Promise<Collection<ReportCategory>> {
     return this.repository.categories();
   }
 }
