@@ -40,7 +40,7 @@ const payload: ProfileCommand = {
     },
 };
 
-describe('createProfile', () => {
+describe('getProfile', () => {
     let adapter: DomainHttpAdapter;
     let usecase: GetProfileUsecase;
     beforeAll(() => {

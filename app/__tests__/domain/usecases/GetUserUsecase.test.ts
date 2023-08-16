@@ -21,7 +21,7 @@ const payload: UserCommand = {
     deactivated: false,
 };
 
-describe('createProfile', () => {
+describe('getUser', () => {
     let adapter: DomainHttpAdapter;
     let usecase: GetUserUsecase;
     beforeAll(() => {
