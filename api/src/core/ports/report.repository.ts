@@ -3,12 +3,13 @@ import { Report, ReportCategory, ReportStatus } from '../models';
 
 export const REPORT_REPOSITORY = 'report.repository';
 
+export type ReportQuerySortKey = 'firstname' | 'lastname' | 'university';
 export interface ReportQueryWhere {
   status?: StringFilter;
 }
 
 export interface ReportQueryOrderBy {
-  field?: string;
+  field?: ReportQuerySortKey;
   order: SortOrder;
 }
 

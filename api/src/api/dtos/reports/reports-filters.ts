@@ -1,25 +1,24 @@
 import * as Swagger from '@nestjs/swagger';
 import { SortOrder } from '@app/common';
-import { ApiPropertyOptional } from '@nestjs/swagger';
-import { IsOptional } from 'class-validator';
+import { IsEnum, IsOptional } from 'class-validator';
 import { PaginationDto } from 'src/api/dtos/pagination';
 import { ReportStatus } from 'src/core/models';
-
-export type ReportQuerySortKey = 'firstname' | 'lastname' | 'university';
+import { ReportQuerySortKey } from 'src/core/ports/report.repository';
 
 export class GetReportsQueryParams extends PaginationDto {
-  @Swagger.ApiProperty({ type: ReportStatus })
-  @ApiPropertyOptional({ type: 'string' })
+  @Swagger.ApiPropertyOptional({ type: ReportStatus })
   @IsOptional()
+  @IsEnum(ReportStatus)
   status?: ReportStatus;
 
-  @Swagger.ApiProperty({ type: 'string' })
-  @ApiPropertyOptional({ type: 'string' })
+  @Swagger.ApiPropertyOptional({
+    type: 'string',
+    enum: ['firstname', 'lastname', 'university'],
+  })
   @IsOptional()
   field?: ReportQuerySortKey;
 
-  @Swagger.ApiProperty({ type: 'string' })
-  @ApiPropertyOptional({ type: 'string' })
+  @Swagger.ApiPropertyOptional({ type: 'string' })
   @IsOptional()
   order?: SortOrder;
 }

@@ -9,7 +9,7 @@ import {
   IsUUID,
 } from 'class-validator';
 import { UserResponse } from 'src/api/dtos/users';
-import { Translation, User } from 'src/core/models';
+import { Translation } from 'src/core/models';
 import {
   Report,
   ReportCategory,
@@ -104,7 +104,7 @@ export class ReportResponse {
   @Expose({ groups: ['read'] })
   content: string;
 
-  @Swagger.ApiProperty({ type: User })
+  @Swagger.ApiProperty({ type: UserResponse })
   @Expose({ groups: ['read'] })
   user: UserResponse;
 
