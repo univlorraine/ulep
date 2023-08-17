@@ -42,8 +42,8 @@ WORKDIR /srv/app
 
 ENV NODE_ENV production
 
-RUN addgroup --system --gid 1001 nodejs \
-	adduser --system --uid 1001 react
+RUN addgroup -S -g 1001 nodejs
+RUN adduser -S -u 1001 react
 
 COPY --from=admin_builder --link --chown=react:nodejs /srv/app/build ./build
 

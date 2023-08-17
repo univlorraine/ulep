@@ -12,3 +12,5 @@ spec:
     name: "{{ .Values.issuerName }}"
     kind: ClusterIssuer
   secretName: "{{ .Values.name }}-tls"
+  duration: 2160h # 90d
+  renewBefore: 360h # 15d

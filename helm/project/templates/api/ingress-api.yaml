@@ -26,7 +26,7 @@ spec:
         {{ $fqdn := printf "%s.%s" . $.Values.domain -}}
         - {{ $fqdn }}
         {{- end }}
-      secretName: {{ .secretName }}
+      secretName: "{{ $.Values.name }}-tls"
     {{- end }}
   {{- end }}
   rules:

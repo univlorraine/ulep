@@ -44,8 +44,8 @@ WORKDIR /srv/app
 
 ENV NODE_ENV production
 
-RUN addgroup --system --gid 1001 nodejs \
-	adduser --system --uid 1001 nestjs
+RUN addgroup -S -g 1001 nodejs
+RUN adduser -S -u 1001 nestjs
 
 COPY --from=api_builder --link /srv/app/dist ./dist
 

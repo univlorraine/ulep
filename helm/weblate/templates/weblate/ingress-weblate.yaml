@@ -17,7 +17,7 @@ metadata:
     {{- toYaml . | nindent 4 }}
   {{- end }}
 spec:
-  ingressClassName: traefik
+  ingressClassName: "{{ .Values.weblate.ingress.className }}"
   {{- if .Values.weblate.ingress.tls }}
   tls:
     {{- range .Values.weblate.ingress.tls }}
@@ -26,7 +26,7 @@ spec:
         {{ $fqdn := printf "%s.%s" . $.Values.domain -}}
         - {{ $fqdn }}
         {{- end }}
-      secretName: {{ .secretName }}
+      secretName: "{{ $.Values.name }}-tls"
     {{- end }}
   {{- end }}
   rules:

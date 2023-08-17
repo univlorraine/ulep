@@ -62,6 +62,8 @@ spec:
           env:
             - name: WEBLATE_SITE_DOMAIN
               value: "{{ .Values.weblate.env.site }}.{{ .Values.domain }}"
+            - name: WEBLATE_ENABLE_HTTPS
+              value: "true"
             - name: WEBLATE_EMAIL_HOST
               value: "{{ .Values.weblate.env.emailHost }}"
             - name: WEBLATE_EMAIL_PORT
@@ -84,8 +86,8 @@ spec:
               value: "{{ .Values.name }}-postgresql.{{ .Release.Namespace }}"
             - name: REDIS_HOST
               value: "{{ .Values.name }}-redis-master.{{ .Release.Namespace }}"
-            - name: REDIS_PASSWORD
-              value: "{{ .Values.global.redis.password }}"
+            - name: WEBLATE_REGISTRATION_OPEN
+              value: "0"
           envFrom: 
             - secretRef: 
                 name: "{{ .Values.name }}-secret-{{ .Values.weblate.name }}"

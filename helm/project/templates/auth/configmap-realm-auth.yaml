@@ -4,4 +4,4 @@ metadata:
   name: "{{ .Values.name }}-realm-{{ .Values.admin.name }}"
 data:
   etandem.json: |-
-{{ tpl (.Files.Get "./etandem.json") . | indent 4 }}
+{{- tpl ($.Files.Get "etandem.json") . | nindent 6 -}}
