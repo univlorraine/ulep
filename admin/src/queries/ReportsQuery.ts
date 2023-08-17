@@ -29,13 +29,12 @@ const handleOrderField = (field?: string) => {
 
 const ReportsQuery = (params: ReportsParams): string => {
     const query = {
-        where: { status: params.filter.status },
+        status: params.filter.status,
         page: params.pagination.page,
         limit: params.pagination.perPage,
         field: handleOrderField(params.sort.field),
         order: params.sort.order.toLowerCase(),
     };
-    console.warn(params);
 
     return new URLSearchParams(qsAdapter().stringify(query)).toString();
 };

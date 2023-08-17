@@ -84,7 +84,6 @@ const customDataProvider = {
         }
 
         const result = await response.json();
-        console.warn(result);
 
         return { data: result.items, total: result.totalItems };
     },
