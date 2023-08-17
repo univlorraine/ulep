@@ -69,7 +69,7 @@ jobs:
             # if [ "$CIRCLE_BRANCH" = "main" ]
             # then cd api && docker build --platform=linux/amd64 --target=api_prod -t rg.fr-par.scw.cloud/ulep/api-prod:latest -t rg.fr-par.scw.cloud/ulep/api-prod:1.0.<< pipeline.number >> .
             cd api && docker build --platform=linux/amd64 --target=api_prod -t rg.fr-par.scw.cloud/ulep/api-prod:latest -t rg.fr-par.scw.cloud/ulep/api-prod:1.0.<< pipeline.number >> .
-            cd api && docker build --platform=linux/amd64 --target=api_dev -t rg.fr-par.scw.cloud/ulep/api-dev:latest -t rg.fr-par.scw.cloud/ulep/api-dev:1.0.<< pipeline.number >> .
+            docker build --platform=linux/amd64 --target=api_dev -t rg.fr-par.scw.cloud/ulep/api-dev:latest -t rg.fr-par.scw.cloud/ulep/api-dev:1.0.<< pipeline.number >> .
             # else cd api && docker build --platform=linux/amd64 --target=api_dev -t rg.fr-par.scw.cloud/ulep/api-dev:latest -t rg.fr-par.scw.cloud/ulep/api-dev:1.0.<< pipeline.number >> .
             # fi
       - run:
@@ -124,7 +124,7 @@ jobs:
             # if [ "$CIRCLE_BRANCH" = "main" ]
             # then cd admin && docker build --platform=linux/amd64 --target=admin_prod -t rg.fr-par.scw.cloud/ulep/admin-prod:latest -t rg.fr-par.scw.cloud/ulep/admin-prod:1.0.<< pipeline.number >> .
             cd admin && docker build --platform=linux/amd64 --target=admin_prod -t rg.fr-par.scw.cloud/ulep/admin-prod:latest -t rg.fr-par.scw.cloud/ulep/admin-prod:1.0.<< pipeline.number >> .
-            cd admin && docker build --platform=linux/amd64 --target=admin_dev -t rg.fr-par.scw.cloud/ulep/admin-dev:latest -t rg.fr-par.scw.cloud/ulep/admin-dev:1.0.<< pipeline.number >> .
+            docker build --platform=linux/amd64 --target=admin_dev -t rg.fr-par.scw.cloud/ulep/admin-dev:latest -t rg.fr-par.scw.cloud/ulep/admin-dev:1.0.<< pipeline.number >> .
             # else cd admin && docker build --platform=linux/amd64 --target=admin_dev -t rg.fr-par.scw.cloud/ulep/admin-dev:latest -t rg.fr-par.scw.cloud/ulep/admin-dev:1.0.<< pipeline.number >> .
             # fi
       - run:
