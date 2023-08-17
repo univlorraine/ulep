@@ -33,13 +33,25 @@ export class ObjectiveResponse {
     Object.assign(this, partial);
   }
 
-  static fromDomain(instance: LearningObjective) {
+  static fromDomain(instance: LearningObjective, languageCode?: string) {
+    let name;
+
+    if (!languageCode) {
+      name = instance.name.content;
+    } else {
+      const translation = instance.name.translations.find(
+        (translation) => translation.language === languageCode,
+      )?.content;
+
+      name = translation || instance.name.content;
+    }
+
     return new ObjectiveResponse({
       id: instance.id,
       image: instance.image
         ? MediaObjectResponse.fromMediaObject(instance.image)
         : null,
-      name: instance.name.content,
+      name,
     });
   }
 }

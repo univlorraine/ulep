@@ -9,6 +9,7 @@ import {
   UseGuards,
   UploadedFile,
   UseInterceptors,
+  Headers,
 } from '@nestjs/common';
 import * as Swagger from '@nestjs/swagger';
 import { ObjectiveResponse, CreateObjectiveRequest } from '../dtos/objective';
@@ -26,6 +27,7 @@ import { UploadObjectiveImageUsecase } from 'src/core/usecases/media/upload-obje
 import { FileInterceptor } from '@nestjs/platform-express';
 import { TranslationsJsonPipe } from 'src/api/pipes/TranslationsJsonPipe';
 import { Translation } from 'src/core/models';
+import { Collection } from '@app/common';
 
 @Controller('objectives')
 @Swagger.ApiTags('Objectives')
@@ -66,8 +68,6 @@ export class ObjectiveController {
         file,
       });
 
-      console.log(file, upload);
-
       objective = { ...objective, image: upload };
     }
 
@@ -78,10 +78,18 @@ export class ObjectiveController {
   @UseGuards(AuthenticationGuard)
   @Swagger.ApiOperation({ summary: 'Collection of Objective ressource.' })
   @Swagger.ApiOkResponse({ type: ObjectiveResponse, isArray: true })
-  async findAll() {
+  async findAll(@Headers('Language-code') languageCode?: string) {
     const instances = await this.findAllObjectiveUsecase.execute();
-
-    return instances.map(ObjectiveResponse.fromDomain);
+    const code =
+      configuration().defaultTranslationLanguage !== languageCode
+        ? languageCode
+        : undefined;
+    return new Collection<ObjectiveResponse>({
+      items: instances.map((instance) =>
+        ObjectiveResponse.fromDomain(instance, code),
+      ),
+      totalItems: instances.length,
+    });
   }
 
   @Get(':id')
@@ -89,10 +97,17 @@ export class ObjectiveController {
   @UseGuards(AuthenticationGuard)
   @Swagger.ApiOperation({ summary: 'Objective ressource.' })
   @Swagger.ApiOkResponse({ type: ObjectiveResponse })
-  async findOne(@Param('id') id: string) {
+  async findOne(
+    @Param('id') id: string,
+    @Headers('Language-code') languageCode?: string,
+  ) {
+    const code =
+      configuration().defaultTranslationLanguage !== languageCode
+        ? languageCode
+        : undefined;
     const instance = await this.findOneObjectiveUsecase.execute(id);
 
-    return ObjectiveResponse.fromDomain(instance);
+    return ObjectiveResponse.fromDomain(instance, code);
   }
 
   @Delete(':id')
