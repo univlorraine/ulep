@@ -1,11 +1,7 @@
 {
     "root": true,
-    "extends": [
-        "@thetribe/eslint-config-react-typescript",
-        "plugin:react/recommended",
-        "prettier/@typescript-eslint",
-        "prettier"
-    ],
+    "parser": "@typescript-eslint/parser",
+    "extends": ["@thetribe/eslint-config-react-typescript", "plugin:react/recommended", "prettier"],
     "parserOptions": {
         "project": "./tsconfig.json"
     },
@@ -14,9 +10,27 @@
     },
     "plugins": ["@typescript-eslint", "prettier"],
     "rules": {
+        "@typescript-eslint/no-unused-vars": [
+            "error",
+            {
+                "vars": "all",
+                "args": "after-used",
+                "ignoreRestSiblings": true
+            }
+        ],
+        "no-empty-function": "off",
+        "no-useless-constructor": "off",
         "prettier/prettier": "error",
         "no-unused-vars": ["error", { "varsIgnorePattern": "React" }]
     },
+    "overrides": [
+        {
+            "files": ["*.ts", "*.tsx"],
+            "rules": {
+                "no-undef": "off"
+            }
+        }
+    ],
     "settings": {
         "import/parsers": {
             "@typescript-eslint/parser": [".ts", ".tsx"]
