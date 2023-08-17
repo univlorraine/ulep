@@ -16,6 +16,15 @@ export class InMemoryReportsRepository implements ReportRepository {
     this.#reports = [];
   }
 
+  async all(offset: number, limit: number): Promise<Collection<Report>> {
+    const allItems = Array.from(this.#reports.values());
+
+    return {
+      items: allItems.slice(offset, offset + limit),
+      totalItems: allItems.length,
+    };
+  }
+
   async createReport(report: Report): Promise<Report> {
     this.#reports.push(report);
 

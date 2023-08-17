@@ -3,12 +3,12 @@ import { Datagrid, List, TextField } from 'react-admin';
 
 const ReportList = () => (
     <List bulkActionButtons={false} exporter={false} pagination={false}>
-        <Datagrid rowClick="edit">
+        <Datagrid>
             <TextField source="user.lastname" />
             <TextField source="user.firstname" />
             <TextField source="user.university.name" />
-            <TextField source="user.university.name" />
-            <TextField source="user.university.name" />
+            <TextField source="status" />
+            <TextField source="content" />
         </Datagrid>
     </List>
 );

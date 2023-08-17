@@ -37,6 +37,7 @@ import {
 } from '../dtos';
 import { AuthenticationGuard } from '../guards';
 import { GetReportsQueryParams } from 'src/api/dtos/reports/reports-filters';
+import { ReportStatus } from 'src/core/models';
 
 @Controller('reports')
 @Swagger.ApiTags('Reports')
@@ -125,13 +126,13 @@ export class ReportController {
       limit,
       orderBy: { order, field },
       page,
-      where: status ? { status: { equals: status } } : undefined,
+      where: status ? { status: { equals: ReportStatus[status] } } : undefined,
     });
 
-    return {
+    return new Collection<ReportResponse>({
       items: instances.items.map(ReportResponse.fromDomain),
       totalItems: instances.totalItems,
-    };
+    });
   }
 
   // TODO: only admin or owner can get report

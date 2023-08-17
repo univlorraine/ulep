@@ -48,6 +48,7 @@ export class CreateReportUsecase {
         ...command,
         category,
         status: ReportStatus.OPEN,
+        user: owner,
       }),
     );
   }

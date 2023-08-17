@@ -42,14 +42,7 @@ export class PrismaReportRepository implements ReportRepository {
       skip: offset,
       orderBy: order,
       take: limit,
-      include: {
-        User: true,
-        Category: {
-          include: {
-            TextContent: TextContentRelations,
-          },
-        },
-      },
+      include: ReportRelations,
     });
 
     return new Collection<Report>({
@@ -63,7 +56,7 @@ export class PrismaReportRepository implements ReportRepository {
       data: {
         User: {
           connect: {
-            id: report.owner,
+            id: report.user.id,
           },
         },
         Category: {

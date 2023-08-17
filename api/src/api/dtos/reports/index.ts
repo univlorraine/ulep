@@ -8,7 +8,8 @@ import {
   IsString,
   IsUUID,
 } from 'class-validator';
-import { Translation } from 'src/core/models';
+import { UserResponse } from 'src/api/dtos/users';
+import { Translation, User } from 'src/core/models';
 import {
   Report,
   ReportCategory,
@@ -91,10 +92,6 @@ export class ReportResponse {
   @Expose({ groups: ['read'] })
   id: string;
 
-  @Swagger.ApiProperty({ type: 'string' })
-  @Expose({ groups: ['read'] })
-  owner: string;
-
   @Swagger.ApiProperty()
   @Expose({ groups: ['read'] })
   category: ReportCategoryResponse;
@@ -107,6 +104,10 @@ export class ReportResponse {
   @Expose({ groups: ['read'] })
   content: string;
 
+  @Swagger.ApiProperty({ type: User })
+  @Expose({ groups: ['read'] })
+  user: UserResponse;
+
   constructor(partial: Partial<ReportResponse>) {
     Object.assign(this, partial);
   }
@@ -114,10 +115,10 @@ export class ReportResponse {
   static fromDomain(instance: Report): ReportResponse {
     return new ReportResponse({
       id: instance.id,
-      owner: instance.owner,
       category: ReportCategoryResponse.fromDomain(instance.category),
       status: instance.status,
       content: instance.content,
+      user: UserResponse.fromDomain(instance.user),
     });
   }
 }

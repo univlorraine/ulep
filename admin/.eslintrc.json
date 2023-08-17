@@ -1,14 +1,20 @@
 {
     "root": true,
-    "extends": ["@thetribe/eslint-config-react-typescript", "plugin:react/recommended"],
+    "extends": [
+        "@thetribe/eslint-config-react-typescript",
+        "plugin:react/recommended",
+        "prettier/@typescript-eslint",
+        "prettier"
+    ],
     "parserOptions": {
         "project": "./tsconfig.json"
     },
     "env": {
         "browser": true
     },
-    "plugins": ["@typescript-eslint"],
+    "plugins": ["@typescript-eslint", "prettier"],
     "rules": {
+        "prettier/prettier": "error",
         "no-unused-vars": ["error", { "varsIgnorePattern": "React" }]
     },
     "settings": {
