@@ -1,7 +1,11 @@
 import { Collection, PrismaService } from '@app/common';
 import { Injectable } from '@nestjs/common';
 import { TextContentRelations } from '../mappers/translation.mapper';
-import { ReportRepository } from 'src/core/ports/report.repository';
+import {
+  ReportQueryOrderBy,
+  ReportQueryWhere,
+  ReportRepository,
+} from 'src/core/ports/report.repository';
 import { Report, ReportCategory, ReportStatus } from 'src/core/models';
 import {
   ReportRelations,
@@ -12,6 +16,47 @@ import {
 @Injectable()
 export class PrismaReportRepository implements ReportRepository {
   constructor(private readonly prisma: PrismaService) {}
+
+  async all(
+    offset?: number,
+    limit?: number,
+    orderBy?: ReportQueryOrderBy,
+    where?: ReportQueryWhere,
+  ): Promise<Collection<Report>> {
+    const count = await this.prisma.reports.count({ where });
+
+    // If skip is out of range, return an empty array
+    if (offset >= count) {
+      return { items: [], totalItems: count };
+    }
+
+    let order;
+    if (orderBy.field === 'university') {
+      order = { User: { Organization: { name: orderBy.order } } };
+    } else if (orderBy.field) {
+      order = { User: { [orderBy.field]: orderBy.order } };
+    }
+
+    const reports = await this.prisma.reports.findMany({
+      where,
+      skip: offset,
+      orderBy: order,
+      take: limit,
+      include: {
+        User: true,
+        Category: {
+          include: {
+            TextContent: TextContentRelations,
+          },
+        },
+      },
+    });
+
+    return new Collection<Report>({
+      items: reports.map(reportMapper),
+      totalItems: count,
+    });
+  }
 
   async createReport(report: Report): Promise<Report> {
     await this.prisma.reports.create({
