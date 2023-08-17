@@ -4,17 +4,17 @@ import { TextField, Show, TabbedShowLayout, Tab, useDataProvider, useRecordConte
 
 interface Match {
     profile: {
-      id: string;
-      firstname: string;
-      lastname: string;
-      age: number;
-      gender: string;
-      role: string;
-      learningLanguage: {
-        code: string;
-        level: string;
-      };
-      goals: string[];
+        id: string;
+        firstname: string;
+        lastname: string;
+        age: number;
+        gender: string;
+        role: string;
+        learningLanguage: {
+            code: string;
+            level: string;
+        };
+        goals: string[];
     };
     score: {
         level: number;
@@ -26,7 +26,7 @@ interface Match {
         university: number;
         total: number;
     };
-  }
+}
 
 interface MatchTableProps {
     matchs: Match[];
@@ -78,9 +78,15 @@ const MatchTable: React.FC<MatchTableProps> = ({ matchs }) => (
 const Title = () => {
     const record = useRecordContext();
 
-    if (!record) { return null; }
+    if (!record) {
+        return null;
+    }
 
-    return <span>{record.firstname} {record.lastname}</span>;
+    return (
+        <span>
+            {record.firstname} {record.lastname}
+        </span>
+    );
 };
 
 const ProfileShow = (props: any) => {
@@ -91,18 +97,27 @@ const ProfileShow = (props: any) => {
     const [error, setError] = useState<string | null>(null);
 
     useEffect(() => {
-        dataProvider.getMatchs(id).then((data: Match[]) => {
-            setMatchs(data);
-            setLoading(false);
-        }).catch((e: Error) => {
-            setLoading(false);
-            setError(e.message);
-        });
+        dataProvider
+            .getMatchs(id)
+            .then((data: Match[]) => {
+                setMatchs(data);
+                setLoading(false);
+            })
+            .catch((e: Error) => {
+                setLoading(false);
+                setError(e.message);
+            });
     }, []);
 
-    if (loading) { return <div>Loading...</div>; }
-    if (error) { return <div>{error}</div>; }
-    if (!matchs) { return null; }
+    if (loading) {
+        return <div>Loading...</div>;
+    }
+    if (error) {
+        return <div>{error}</div>;
+    }
+    if (!matchs) {
+        return null;
+    }
 
     return (
         <Show title={<Title />} {...props}>

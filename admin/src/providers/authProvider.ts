@@ -19,22 +19,18 @@ export const http = async (method: string, path: string, init: Omit<RequestInit,
 };
 
 const authProvider = () => ({
-    login: async ({ email, password }: { email: string, password: string }) => {
-        const response = await http(
-            'POST',
-            `${KEYCLOAK_URL}/realms/${KEYCLOAK_REALM}/protocol/openid-connect/token`,
-            {
-                headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-                body: new URLSearchParams({
-                    username: email,
-                    password,
-                    grant_type: 'password',
-                    client_id: KEYCLOAK_CLIENT_ID!,
-                    client_secret: KEYCLOAK_CLIENT_SECRET!,
-                    scope: 'openid',
-                }),
-            },
-        );
+    login: async ({ email, password }: { email: string; password: string }) => {
+        const response = await http('POST', `${KEYCLOAK_URL}/realms/${KEYCLOAK_REALM}/protocol/openid-connect/token`, {
+            headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+            body: new URLSearchParams({
+                username: email,
+                password,
+                grant_type: 'password',
+                client_id: KEYCLOAK_CLIENT_ID!,
+                client_secret: KEYCLOAK_CLIENT_SECRET!,
+                scope: 'openid',
+            }),
+        });
 
         const payload = await response.json();
         jwtManager.setTokens(payload.access_token, payload.refresh_token);
@@ -55,19 +51,15 @@ const authProvider = () => ({
             return Promise.reject();
         }
 
-        const response = await http(
-            'POST',
-            `${KEYCLOAK_URL}/realms/${KEYCLOAK_REALM}/protocol/openid-connect/token`,
-            {
-                headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-                body: new URLSearchParams({
-                    grant_type: 'refresh_token',
-                    client_id: KEYCLOAK_CLIENT_ID!,
-                    client_secret: KEYCLOAK_CLIENT_SECRET!,
-                    refresh_token: refreshToken,
-                }),
-            },
-        );
+        const response = await http('POST', `${KEYCLOAK_URL}/realms/${KEYCLOAK_REALM}/protocol/openid-connect/token`, {
+            headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+            body: new URLSearchParams({
+                grant_type: 'refresh_token',
+                client_id: KEYCLOAK_CLIENT_ID!,
+                client_secret: KEYCLOAK_CLIENT_SECRET!,
+                refresh_token: refreshToken,
+            }),
+        });
 
         const payload = await response.json();
         jwtManager.setTokens(payload.access_token, payload.refresh_token);

@@ -71,13 +71,7 @@ const LoginPage = () => {
                             fullWidth
                             required
                         />
-                        <Button
-                            className={classes.button}
-                            color="primary"
-                            type="submit"
-                            variant="contained"
-                            fullWidth
-                        >
+                        <Button className={classes.button} color="primary" type="submit" variant="contained" fullWidth>
                             {translate('login.connect')}
                         </Button>
                     </form>

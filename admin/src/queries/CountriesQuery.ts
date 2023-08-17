@@ -13,7 +13,7 @@ const CountriesQuery = (params: CountriesParams) => {
         order: params.order?.toLowerCase(),
     };
 
-    return (new URLSearchParams(qsAdapter().stringify(query)).toString());
+    return new URLSearchParams(qsAdapter().stringify(query)).toString();
 };
 
 export default CountriesQuery;

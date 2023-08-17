@@ -1,7 +1,5 @@
 import React from 'react';
-import { FunctionField } from 'react-admin';
-import { useTranslate, Filter, SelectInput } from 'react-admin';
-import { Datagrid, List, TextField } from 'react-admin';
+import { FunctionField, useTranslate, Filter, SelectInput, Datagrid, List, TextField } from 'react-admin';
 
 const ReportFilter = (props: any) => {
     const translate = useTranslate();
@@ -25,7 +23,7 @@ const ReportList = () => {
     const translate = useTranslate();
 
     return (
-        <List filters={<ReportFilter />} exporter={false}>
+        <List exporter={false} filters={<ReportFilter />}>
             <Datagrid>
                 <TextField label={translate('global.lastname')} source="user.lastname" />
                 <TextField label={translate('global.firstname')} source="user.firstname" />
