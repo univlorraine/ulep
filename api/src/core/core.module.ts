@@ -57,6 +57,7 @@ import {
   UpdateUserUsecase,
   UploadAvatarUsecase,
 } from './usecases';
+import { UploadObjectiveImageUsecase } from 'src/core/usecases/media/upload-objective-image.usecase';
 
 const usecases: Provider[] = [
   // Countries
@@ -73,6 +74,7 @@ const usecases: Provider[] = [
   FindAllLanguageCodeUsecase,
   // Media
   UploadAvatarUsecase,
+  UploadObjectiveImageUsecase,
   // Objectives
   CreateObjectiveUsecase,
   DeleteObjectiveUsecase,

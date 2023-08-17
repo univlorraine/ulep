@@ -135,6 +135,7 @@ model MediaObjects {
   created_at DateTime @default(now())
   updated_at DateTime @updatedAt
   User       Users?
+  Goal       LearningObjectives?
 
   @@unique([name, bucket])
   @@map("media_objects")
@@ -235,7 +236,7 @@ model ReportCategories {
 }
 
 //  * ****************************************************
-//  * Pofiles
+//  * Profiles
 //  * ****************************************************
 model Profiles {
   id                      String               @id @default(uuid())
@@ -281,9 +282,11 @@ model MasteredLanguages {
 model LearningObjectives {
   id              String      @id @default(uuid())
   text_content_id String
+  image_id        String?      @unique
   created_at      DateTime    @default(now())
   updated_at      DateTime    @updatedAt
   TextContent     TextContent @relation(fields: [text_content_id], references: [id], onDelete: Cascade)
+  Image           MediaObjects? @relation(fields: [image_id], references: [id])
   Profiles        Profiles[]
 
   @@unique([text_content_id])

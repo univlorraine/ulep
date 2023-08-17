@@ -1,31 +1,29 @@
 import * as Swagger from '@nestjs/swagger';
-import { Expose, Transform } from 'class-transformer';
-import { IsString, IsNotEmpty, IsUUID, Length } from 'class-validator';
-import { CreateObjectiveCommand } from '../../../core/usecases';
-import { LearningObjective } from 'src/core/models';
+import { Expose } from 'class-transformer';
+import { IsString, IsNotEmpty, IsArray, IsOptional } from 'class-validator';
+import { MediaObjectResponse } from 'src/api/dtos/medias';
+import { LearningObjective, Translation } from 'src/core/models';
 
-export class CreateObjectiveRequest implements CreateObjectiveCommand {
-  @Swagger.ApiProperty({ type: 'string', format: 'uuid' })
-  @IsUUID()
-  id: string;
-
+export class CreateObjectiveRequest {
   @Swagger.ApiProperty({ type: 'string' })
   @IsString()
   @IsNotEmpty()
   name: string;
 
-  // TODO: get the language code from the request headers
-  @Swagger.ApiProperty({ type: 'string' })
-  @Transform(({ value }) => value?.toLowerCase())
-  @IsString()
-  @Length(2, 2)
-  languageCode: string;
+  @Swagger.ApiPropertyOptional({ type: 'array' })
+  @IsOptional()
+  @IsArray()
+  translations?: Translation[];
 }
 
 export class ObjectiveResponse {
   @Swagger.ApiProperty({ type: 'string', format: 'uuid' })
   @Expose({ groups: ['read'] })
   id: string;
+
+  @Swagger.ApiPropertyOptional({ type: MediaObjectResponse })
+  @Expose({ groups: ['read'] })
+  image: MediaObjectResponse;
 
   @Swagger.ApiProperty({ type: 'string' })
   @Expose({ groups: ['read'] })
@@ -38,6 +36,9 @@ export class ObjectiveResponse {
   static fromDomain(instance: LearningObjective) {
     return new ObjectiveResponse({
       id: instance.id,
+      image: instance.image
+        ? MediaObjectResponse.fromMediaObject(instance.image)
+        : null,
       name: instance.name.content,
     });
   }

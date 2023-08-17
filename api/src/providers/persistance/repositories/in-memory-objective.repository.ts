@@ -32,6 +32,18 @@ export class InMemoryLearningObjectiveRepository
     return Promise.resolve(this.#objectives[index]);
   }
 
+  ofName(name: string): Promise<LearningObjective> {
+    const index = this.#objectives.findIndex(
+      (objective) => objective.name.content === name,
+    );
+
+    if (index === -1) {
+      return Promise.resolve(null);
+    }
+
+    return Promise.resolve(this.#objectives[index]);
+  }
+
   all(): Promise<LearningObjective[]> {
     return Promise.resolve(this.#objectives);
   }

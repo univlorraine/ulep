@@ -45,7 +45,6 @@ export class MinioStorage implements StorageInterface {
 
   private async createBucketIfNotExist(bucketName: string): Promise<void> {
     const bucketExists = await this.minioClient.bucketExists(bucketName);
-
     if (bucketExists) {
       return;
     }

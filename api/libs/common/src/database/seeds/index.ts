@@ -5,8 +5,8 @@ import { createUsers } from './users';
 import { createCountries } from './countries';
 import { createProficiencyTests } from './proficiency';
 import { createInterests } from './interests';
-import { createLearningObjectives } from './objective';
 import { createProfiles } from './profiles';
+import { createLearningObjectives } from '@app/common/database/seeds/objective';
 
 const prisma = new Prisma.PrismaClient();
 

@@ -17,6 +17,12 @@ export class PrismaObjectiveRepository implements LearningObjectiveRepository {
             id: instance.name.id,
             text: instance.name.content,
             LanguageCode: { connect: { code: instance.name.language } },
+            Translations: {
+              create: instance.name.translations?.map((translation) => ({
+                text: translation.content,
+                LanguageCode: { connect: { code: translation.language } },
+              })),
+            },
           },
         },
       },
@@ -34,6 +40,24 @@ export class PrismaObjectiveRepository implements LearningObjectiveRepository {
   async ofId(id: string): Promise<LearningObjective | null> {
     const objective = await this.prisma.learningObjectives.findUnique({
       where: { id },
+      include: {
+        TextContent: TextContentRelations,
+      },
+    });
+
+    if (!objective) {
+      return null;
+    }
+
+    return {
+      id: objective.id,
+      name: textContentMapper(objective.TextContent),
+    };
+  }
+
+  async ofName(name: string): Promise<LearningObjective | null> {
+    const objective = await this.prisma.learningObjectives.findFirst({
+      where: { TextContent: { text: { equals: name } } },
       include: {
         TextContent: TextContentRelations,
       },
