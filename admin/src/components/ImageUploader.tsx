@@ -3,10 +3,11 @@ import Button from '@mui/material/Button';
 import React, { useRef, useState } from 'react';
 
 interface ImageUploaderProps {
+    image?: string;
     onImageSelect: (file: File) => void;
 }
 
-const ImageUploader: React.FC<ImageUploaderProps> = ({ onImageSelect }) => {
+const ImageUploader: React.FC<ImageUploaderProps> = ({ image, onImageSelect }) => {
     const [isDragOver, setDragOver] = useState<boolean>(false);
     const [currentFile, setCurrentFile] = useState<File>();
     const fileInputRef = useRef<HTMLInputElement>(null);
@@ -59,6 +60,8 @@ const ImageUploader: React.FC<ImageUploaderProps> = ({ onImageSelect }) => {
                 style={{ display: 'none' }}
                 type="file"
             />
+
+            {image && !currentFile && <img alt="preview" src={image} style={{ height: 150, width: 150 }} />}
 
             {!currentFile &&
                 (isDragOver ? (
