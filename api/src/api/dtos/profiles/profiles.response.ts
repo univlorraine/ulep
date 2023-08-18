@@ -125,7 +125,9 @@ export class ProfileResponse {
             : learningLanguage.language.code,
         level: learningLanguage.level,
       })),
-      objectives: profile.objectives.map(ObjectiveResponse.fromDomain),
+      objectives: profile.objectives.map((objective) =>
+        ObjectiveResponse.fromDomain(objective),
+      ),
       interests: profile.interests.map(InterestResponse.fromDomain),
       meetingFrequency: profile.meetingFrequency,
       biography:

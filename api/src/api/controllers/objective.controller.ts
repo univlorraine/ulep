@@ -12,7 +12,11 @@ import {
   Headers,
 } from '@nestjs/common';
 import * as Swagger from '@nestjs/swagger';
-import { ObjectiveResponse, CreateObjectiveRequest } from '../dtos/objective';
+import {
+  ObjectiveResponse,
+  CreateObjectiveRequest,
+  GetObjectiveResponse,
+} from '../dtos/objective';
 import {
   CreateObjectiveUsecase,
   DeleteObjectiveUsecase,
@@ -63,8 +67,6 @@ export class ObjectiveController {
         file,
       });
 
-      console.log(upload);
-
       objective = { ...objective, image: upload };
     }
 
@@ -81,7 +83,6 @@ export class ObjectiveController {
       configuration().defaultTranslationLanguage !== languageCode
         ? languageCode
         : undefined;
-    console.log(instances);
     return new Collection<ObjectiveResponse>({
       items: instances.map((instance) =>
         ObjectiveResponse.fromDomain(instance, code),
@@ -94,18 +95,11 @@ export class ObjectiveController {
   @Roles(configuration().adminRole)
   @UseGuards(AuthenticationGuard)
   @Swagger.ApiOperation({ summary: 'Objective ressource.' })
-  @Swagger.ApiOkResponse({ type: ObjectiveResponse })
-  async findOne(
-    @Param('id') id: string,
-    @Headers('Language-code') languageCode?: string,
-  ) {
-    const code =
-      configuration().defaultTranslationLanguage !== languageCode
-        ? languageCode
-        : undefined;
+  @Swagger.ApiOkResponse({ type: GetObjectiveResponse })
+  async findOne(@Param('id') id: string) {
     const instance = await this.findOneObjectiveUsecase.execute(id);
 
-    return ObjectiveResponse.fromDomain(instance, code);
+    return GetObjectiveResponse.fromDomain(instance);
   }
 
   @Delete(':id')

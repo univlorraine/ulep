@@ -6,7 +6,7 @@ import { createCountries } from './countries';
 import { createProficiencyTests } from './proficiency';
 import { createInterests } from './interests';
 import { createProfiles } from './profiles';
-import { createLearningObjectives } from '@app/common/database/seeds/objective';
+import { createLearningObjectives } from './objective';
 
 const prisma = new Prisma.PrismaClient();
 
