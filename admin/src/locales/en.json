@@ -5,6 +5,7 @@
     "global": {
         "content": "Content",
         "firstname": "Firstname",
+        "image": "Image",
         "lastname": "Lastname",
         "new_translation": "New translation",
         "save": "Save",

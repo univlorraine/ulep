@@ -56,7 +56,7 @@ const customDataProvider = {
 
         const result = await response.json();
 
-        return { data: result.id };
+        return { data: result };
     },
     delete: async (resource: string, params: any) => {
         const url = new URL(`${process.env.REACT_APP_API_URL}/${resource}/${params.id}`);
