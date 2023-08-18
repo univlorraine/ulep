@@ -35,7 +35,7 @@ export class UploadObjectiveImageUsecase {
     const objective = await this.tryToFindObjective(command.id);
     const previousImage = await this.tryToFindTheImageOfObjective(objective);
     if (previousImage) {
-      await this.deletePreviousAvatar(previousImage);
+      await this.deletePreviousObjectiveImage(previousImage);
     }
 
     const image = await this.upload(objective, command.file);
@@ -69,7 +69,7 @@ export class UploadObjectiveImageUsecase {
     return image;
   }
 
-  private async deletePreviousAvatar(image: MediaObject | null) {
+  private async deletePreviousObjectiveImage(image: MediaObject | null) {
     if (!image) return;
     await this.storageInterface.deleteFile(image.bucket, image.name);
     await this.mediaObjectRepository.remove(image.id);

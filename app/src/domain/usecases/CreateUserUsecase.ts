@@ -1,9 +1,9 @@
-import { HttpResponse } from '../../adapter/BaseHttpAdapter';
-import { HttpAdapterInterface } from '../../adapter/DomainHttpAdapter';
-import UserCommand, { userCommandToDomain } from '../../command/UserCommand';
-import University from '../entities/University';
-import CreateUserUsecaseInterface from '../interfaces/CreateUserUsecase.interface';
-import LoginUsecaseInterface from '../interfaces/LoginUsecase.interface';
+import { HttpResponse } from "../../adapter/BaseHttpAdapter";
+import { HttpAdapterInterface } from "../../adapter/DomainHttpAdapter";
+import UserCommand, { userCommandToDomain } from "../../command/UserCommand";
+import University from "../entities/University";
+import CreateUserUsecaseInterface from "../interfaces/CreateUserUsecase.interface";
+import LoginUsecaseInterface from "../interfaces/LoginUsecase.interface";
 
 class CreateUserUsecase implements CreateUserUsecaseInterface {
     constructor(
@@ -25,18 +25,6 @@ class CreateUserUsecase implements CreateUserUsecaseInterface {
         avatar: File
     ): Promise<void | Error> {
         try {
-            const formData = new FormData();
-            formData.append('file', avatar);
-            formData.append('email', email);
-            formData.append('password', password);
-            formData.append('firstname', firstname);
-            formData.append('lastname', lastname);
-            formData.append('gender', gender);
-            formData.append('age', age.toString());
-            formData.append('university', university.id);
-            formData.append('role', role);
-            formData.append('countryCode', countryCode);
-
             const body = {
                 file: avatar,
                 email,
@@ -50,25 +38,28 @@ class CreateUserUsecase implements CreateUserUsecaseInterface {
                 countryCode,
             };
 
-            const httpResponse: HttpResponse<UserCommand> = await this.domainHttpAdapter.post(
-                `/users`,
-                body,
-                {},
-                'multipart/form-data',
-                false
-            );
+            const httpResponse: HttpResponse<UserCommand> =
+                await this.domainHttpAdapter.post(
+                    `/users`,
+                    body,
+                    {},
+                    "multipart/form-data",
+                    false
+                );
 
             if (!httpResponse.parsedBody) {
-                return new Error('errors.global');
+                return new Error("errors.global");
             }
 
-            this.setUser({ user: userCommandToDomain(httpResponse.parsedBody) });
+            this.setUser({
+                user: userCommandToDomain(httpResponse.parsedBody),
+            });
 
             await this.login.execute(email, password);
 
             return;
         } catch (error: any) {
-            return new Error('errors.global');
+            return new Error("errors.global");
         }
     }
 }

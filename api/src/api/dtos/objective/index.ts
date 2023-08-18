@@ -46,6 +46,12 @@ export class ObjectiveResponse {
       name = translation || instance.name.content;
     }
 
+    console.warn(
+      instance.image
+        ? MediaObjectResponse.fromMediaObject(instance.image)
+        : null,
+    );
+
     return new ObjectiveResponse({
       id: instance.id,
       image: instance.image

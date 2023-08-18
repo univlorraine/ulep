@@ -25,8 +25,6 @@ import { configuration } from 'src/configuration';
 import { ImagesFilePipe } from 'src/api/validators';
 import { UploadObjectiveImageUsecase } from 'src/core/usecases/media/upload-objective-image.usecase';
 import { FileInterceptor } from '@nestjs/platform-express';
-import { TranslationsJsonPipe } from 'src/api/pipes/TranslationsJsonPipe';
-import { Translation } from 'src/core/models';
 import { Collection } from '@app/common';
 
 @Controller('objectives')
@@ -50,14 +48,11 @@ export class ObjectiveController {
   @Swagger.ApiCreatedResponse({ type: ObjectiveResponse })
   async create(
     @Body() body: CreateObjectiveRequest,
-    @Body('translations', new TranslationsJsonPipe())
-    translations: Translation[],
     @UploadedFile(new ImagesFilePipe()) file: Express.Multer.File,
   ) {
     const languageCode = configuration().defaultTranslationLanguage;
     let objective = await this.createObjectiveUsecase.execute({
       ...body,
-      translations,
       file,
       languageCode,
     });
@@ -67,6 +62,8 @@ export class ObjectiveController {
         id: objective.id,
         file,
       });
+
+      console.log(upload);
 
       objective = { ...objective, image: upload };
     }
@@ -84,6 +81,7 @@ export class ObjectiveController {
       configuration().defaultTranslationLanguage !== languageCode
         ? languageCode
         : undefined;
+    console.log(instances);
     return new Collection<ObjectiveResponse>({
       items: instances.map((instance) =>
         ObjectiveResponse.fromDomain(instance, code),
