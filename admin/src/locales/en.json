@@ -3,10 +3,14 @@
         "label": "Countries"
     },
     "global": {
+        "content": "Content",
         "firstname": "Firstname",
         "lastname": "Lastname",
+        "new_translation": "New translation",
+        "save": "Save",
         "staff": "Staff",
         "student": "Student",
+        "translations": "Translations",
         "university": "University"
     },
     "languages": {
@@ -17,6 +21,16 @@
         "email": "Email",
         "loginError": "Wrong email / password",
         "password": "Password"
+    },
+    "objectives": {
+        "create": {
+            "error": "An error occurred while creating the objective",
+            "image": "New objective image",
+            "name": "Name of new objective",
+            "title": "Creating a new objective"
+        },
+        "label": "Objectives",
+        "name": "Name"
     },
     "profiles": {
         "country": "Country",
@@ -37,13 +51,9 @@
     },
     "report_categories": {
         "create": {
-            "content": "Content",
             "error": "Error on category creation",
             "name": "Name of the new category",
-            "new_translation": "New translation",
-            "save": "Save",
-            "title": "Creation of a new category",
-            "translations": "Translations of the new category"
+            "title": "Creation of a new category"
         },
         "label": "Categories report"
     },

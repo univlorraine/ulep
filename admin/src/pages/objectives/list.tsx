@@ -1,12 +1,16 @@
 import React from 'react';
-import { List, Datagrid, TextField } from 'react-admin';
+import { useTranslate, List, Datagrid, TextField } from 'react-admin';
 
-const ObjectivesList = () => (
-    <List bulkActionButtons={false} exporter={false} pagination={false}>
-        <Datagrid>
-            <TextField source="name" />
-        </Datagrid>
-    </List>
-);
+const ObjectivesList = () => {
+    const translate = useTranslate();
+
+    return (
+        <List bulkActionButtons={false} exporter={false} pagination={false}>
+            <Datagrid>
+                <TextField label={translate('objectives.name')} source="name" />
+            </Datagrid>
+        </List>
+    );
+};
 
 export default ObjectivesList;

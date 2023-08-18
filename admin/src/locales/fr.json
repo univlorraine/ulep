@@ -3,10 +3,14 @@
         "label": "Pays"
     },
     "global": {
+        "content": "Contenu",
         "firstname": "Prénom",
         "lastname": "Nom",
+        "new_translation": "Nouvelle traduction",
+        "save": "Enregistrer",
         "staff": "Personnel",
         "student": "Etudiant",
+        "translations": "Traductions",
         "university": "Université"
     },
     "languages": {
@@ -17,6 +21,16 @@
         "email": "Email",
         "loginError": "Mauvais email ou mot de passe",
         "password": "Mot de passe"
+    },
+    "objectives": {
+        "create": {
+            "error": "Une erreur est survenue pendant la création de l'objectif",
+            "image": "Image du nouvel objectif",
+            "name": "Nom du nouvel objectif",
+            "title": "Création d'une nouvel objectif"
+        },
+        "label": "Objectifs",
+        "name": "Nom"
     },
     "profiles": {
         "country": "Pays",
@@ -37,13 +51,9 @@
     },
     "report_categories": {
         "create": {
-            "content": "Contenu",
             "error": "Une erreur est survenue pendant la création de la catégorie",
             "name": "Nom de la nouvelle catégorie",
-            "new_translation": "Nouvelle traduction",
-            "save": "Enregistrer",
-            "title": "Création d'une nouvelle catégorie",
-            "translations": "Traductions de la nouvelle catégorie"
+            "title": "Création d'une nouvelle catégorie"
         },
         "label": "Categories de signalement"
     },
