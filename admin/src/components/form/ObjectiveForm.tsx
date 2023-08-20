@@ -6,7 +6,11 @@ import ImageUploader from '../ImageUploader';
 import TranslationForm from '../TranslationForm';
 
 interface ObjectiveFormProps {
-    handleSubmit: (name: string, file: File, translations: { index: number; item: Translation }[]) => Promise<void>;
+    handleSubmit: (
+        name: string,
+        translations: { index: number; item: Translation; file?: File }[],
+        file?: File
+    ) => Promise<void>;
     name?: string;
     image?: string;
     tranlsations?: { index: number; item: Translation }[];
@@ -21,15 +25,15 @@ const ObjectiveForm: React.FC<ObjectiveFormProps> = ({ handleSubmit, name, image
     );
 
     const sumbit = async () => {
-        if (!currentName || !file) {
+        if (!currentName) {
             return;
         }
 
-        await handleSubmit(currentName, file, currentTranslations);
+        await handleSubmit(currentName, currentTranslations, file);
     };
 
     return (
-        <Box component="form" onSubmit={sumbit} sx={{ m: 4, width: 300 }} noValidate>
+        <Box component="form" sx={{ m: 4, width: 300 }} noValidate>
             <Typography variant="subtitle1">{translate('objectives.create.name')}</Typography>
 
             <Box alignItems="center" display="flex" flexDirection="row">
@@ -51,9 +55,10 @@ const ObjectiveForm: React.FC<ObjectiveFormProps> = ({ handleSubmit, name, image
             </Box>
             <Button
                 color="primary"
-                disabled={!file && !name}
+                disabled={!name}
+                onClick={sumbit}
                 sx={{ mt: 4, width: 300 }}
-                type="submit"
+                type="button"
                 variant="contained"
             >
                 <span>{translate('global.save')}</span>

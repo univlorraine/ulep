@@ -10,12 +10,14 @@ import {
   UploadedFile,
   UseInterceptors,
   Headers,
+  Put,
 } from '@nestjs/common';
 import * as Swagger from '@nestjs/swagger';
 import {
   ObjectiveResponse,
   CreateObjectiveRequest,
   GetObjectiveResponse,
+  UpdateObjectiveRequest,
 } from '../dtos/objective';
 import {
   CreateObjectiveUsecase,
@@ -30,6 +32,7 @@ import { ImagesFilePipe } from 'src/api/validators';
 import { UploadObjectiveImageUsecase } from 'src/core/usecases/media/upload-objective-image.usecase';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { Collection } from '@app/common';
+import { UpdateObjectiveUsecase } from 'src/core/usecases/objective/update-objective.usecase';
 
 @Controller('objectives')
 @Swagger.ApiTags('Objectives')
@@ -41,6 +44,7 @@ export class ObjectiveController {
     private readonly findAllObjectiveUsecase: FindAllObjectiveUsecase,
     private readonly findOneObjectiveUsecase: FindOneObjectiveUsecase,
     private readonly deleteObjectiveUsecase: DeleteObjectiveUsecase,
+    private readonly updateObjectiveUsecase: UpdateObjectiveUsecase,
     private readonly uploadObjectiveImageUsecase: UploadObjectiveImageUsecase,
   ) {}
 
@@ -57,7 +61,6 @@ export class ObjectiveController {
     const languageCode = configuration().defaultTranslationLanguage;
     let objective = await this.createObjectiveUsecase.execute({
       ...body,
-      file,
       languageCode,
     });
 
@@ -109,5 +112,33 @@ export class ObjectiveController {
   @Swagger.ApiOkResponse()
   remove(@Param('id') id: string) {
     return this.deleteObjectiveUsecase.execute({ id });
+  }
+
+  @Put()
+  @Roles(configuration().adminRole)
+  @UseInterceptors(FileInterceptor('file'))
+  @UseGuards(AuthenticationGuard)
+  @Swagger.ApiOperation({ summary: 'Update a new Objective ressource.' })
+  @Swagger.ApiCreatedResponse({ type: ObjectiveResponse })
+  async update(
+    @Body() body: UpdateObjectiveRequest,
+    @UploadedFile(new ImagesFilePipe()) file?: Express.Multer.File,
+  ) {
+    const languageCode = configuration().defaultTranslationLanguage;
+    let objective = await this.updateObjectiveUsecase.execute({
+      ...body,
+      languageCode,
+    });
+
+    if (file) {
+      const upload = await this.uploadObjectiveImageUsecase.execute({
+        id: objective.id,
+        file,
+      });
+
+      objective = { ...objective, image: upload };
+    }
+
+    return ObjectiveResponse.fromDomain(objective);
   }
 }

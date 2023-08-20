@@ -23,4 +23,10 @@ export class ImagesFilePipe extends ParseFilePipe {
       validators: [sizeValidator, mimeValidator],
     });
   }
+
+  transform(value: any) {
+    if (!value) return value;
+
+    return super.transform(value);
+  }
 }

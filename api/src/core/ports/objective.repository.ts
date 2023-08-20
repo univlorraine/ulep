@@ -12,4 +12,6 @@ export interface LearningObjectiveRepository {
   all(): Promise<LearningObjective[]>;
 
   delete(id: string): Promise<void>;
+
+  update(instance: LearningObjective): Promise<LearningObjective>;
 }

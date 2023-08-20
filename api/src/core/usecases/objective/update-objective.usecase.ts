@@ -1,41 +1,32 @@
 import { Inject, Injectable } from '@nestjs/common';
-import {
-  DomainErrorCode,
-  RessourceAlreadyExists,
-  RessourceDoesNotExist,
-} from 'src/core/errors';
+import { DomainErrorCode, RessourceDoesNotExist } from 'src/core/errors';
 import { Translation } from 'src/core/models';
 import { LANGUAGE_REPOSITORY } from 'src/core/ports/language.repository';
 import {
   OBJECTIVE_REPOSITORY,
   LearningObjectiveRepository,
 } from 'src/core/ports/objective.repository';
-import {
-  UUID_PROVIDER,
-  UuidProviderInterface,
-} from 'src/core/ports/uuid.provider';
 
-export class CreateObjectiveCommand {
-  languageCode: string;
+export class UpdateObjectiveCommand {
+  id: string;
   name: string;
+  languageCode: string;
   translations?: Translation[];
 }
 
 @Injectable()
-export class CreateObjectiveUsecase {
+export class UpdateObjectiveUsecase {
   constructor(
     @Inject(OBJECTIVE_REPOSITORY)
     private readonly objectiveRepository: LearningObjectiveRepository,
     @Inject(LANGUAGE_REPOSITORY)
     private readonly languageRepository,
-    @Inject(UUID_PROVIDER)
-    private readonly uuidProvider: UuidProviderInterface,
   ) {}
 
-  async execute(command: CreateObjectiveCommand) {
-    const instance = await this.objectiveRepository.ofName(command.name);
-    if (instance) {
-      throw new RessourceAlreadyExists();
+  async execute(command: UpdateObjectiveCommand) {
+    const instance = await this.objectiveRepository.ofId(command.id);
+    if (!instance) {
+      throw new RessourceDoesNotExist();
     }
 
     const language = await this.languageRepository.ofCode(command.languageCode);
@@ -46,10 +37,10 @@ export class CreateObjectiveUsecase {
       );
     }
 
-    return this.objectiveRepository.create({
-      id: this.uuidProvider.generate(),
+    return this.objectiveRepository.update({
+      id: command.id,
       name: {
-        id: this.uuidProvider.generate(),
+        id: instance.name.id,
         content: command.name,
         language: language.code,
         translations: command.translations,

@@ -58,6 +58,26 @@ const customDataProvider = {
 
         return { data: result };
     },
+    update: async (resource: string, params: any) => {
+        const url = new URL(`${process.env.REACT_APP_API_URL}/${resource}`);
+        let body;
+
+        if (params.data instanceof FormData) {
+            body = params.data;
+        } else {
+            body = JSON.stringify(params.data);
+        }
+
+        const response = await fetch(url, httpClientOptions({ method: 'PUT', body }));
+
+        if (!response.ok) {
+            throw new Error(`API request failed with status ${response.status}`);
+        }
+
+        const result = await response.json();
+
+        return { data: result };
+    },
     delete: async (resource: string, params: any) => {
         const url = new URL(`${process.env.REACT_APP_API_URL}/${resource}/${params.id}`);
 

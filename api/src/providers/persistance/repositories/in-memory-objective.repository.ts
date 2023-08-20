@@ -59,4 +59,18 @@ export class InMemoryLearningObjectiveRepository
 
     return Promise.resolve();
   }
+
+  update(updatedInstance: LearningObjective): Promise<LearningObjective> {
+    const index = this.#objectives.findIndex(
+      (obj) => obj.id === updatedInstance.id,
+    );
+
+    if (index === -1) {
+      return Promise.reject(null);
+    }
+
+    this.#objectives[index] = updatedInstance;
+
+    return Promise.resolve(updatedInstance);
+  }
 }

@@ -81,4 +81,32 @@ export class PrismaObjectiveRepository implements LearningObjectiveRepository {
     await this.prisma.learningObjectives.delete({ where: { id } });
     await this.prisma.textContent.delete({ where: { id: objectve.name.id } });
   }
+
+  async update(instance: LearningObjective): Promise<LearningObjective> {
+    await this.prisma.textContent.update({
+      where: {
+        id: instance.name.id,
+      },
+      data: {
+        text: instance.name.content,
+        LanguageCode: { connect: { code: instance.name.language } },
+        Translations: {
+          deleteMany: {},
+          create: instance.name.translations?.map((translation) => ({
+            text: translation.content,
+            LanguageCode: { connect: { code: translation.language } },
+          })),
+        },
+      },
+    });
+
+    const objective = await this.prisma.learningObjectives.findUnique({
+      where: {
+        id: instance.id,
+      },
+      include: ObjectivesRelations,
+    });
+
+    return objectiveMapper(objective);
+  }
 }

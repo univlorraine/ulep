@@ -17,6 +17,23 @@ export class CreateObjectiveRequest {
   translations?: Translation[];
 }
 
+export class UpdateObjectiveRequest {
+  @Swagger.ApiProperty({ type: 'string', format: 'uuid' })
+  @IsString()
+  @IsNotEmpty()
+  id: string;
+
+  @Swagger.ApiProperty({ type: 'string' })
+  @IsString()
+  @IsNotEmpty()
+  name: string;
+
+  @Swagger.ApiPropertyOptional({ type: 'array' })
+  @IsOptional()
+  @IsArray()
+  translations?: Translation[];
+}
+
 export class GetObjectiveResponse {
   @Swagger.ApiProperty({ type: 'string', format: 'uuid' })
   @Expose({ groups: ['read'] })

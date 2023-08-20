@@ -11,12 +11,14 @@ const EditObjective = () => {
     const notify = useNotify();
 
     const handleSubmit = async (
+        id: string,
         newName: string,
-        newFile: File,
-        newTranslations: { index: number; item: Translation }[]
+        newTranslations: { index: number; item: Translation }[],
+        newFile?: File
     ) => {
         const formData = new FormData();
-        formData.append('name', newName || '');
+        formData.append('id', id);
+        formData.append('name', newName);
         if (newFile) {
             formData.append('file', newFile);
         }
@@ -55,7 +57,11 @@ const EditObjective = () => {
                 label="objective"
                 render={(record: Objective) => (
                     <ObjectiveForm
-                        handleSubmit={handleSubmit}
+                        handleSubmit={(
+                            name: string,
+                            translations: { index: number; item: Translation }[],
+                            file?: File
+                        ) => handleSubmit(record.id, name, translations, file)}
                         name={record.name.content}
                         tranlsations={record.name.translations.map((translation, index) => ({
                             index,
