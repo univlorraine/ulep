@@ -1,9 +1,10 @@
 import { Box, Typography, Input } from '@mui/material';
 import React, { useState } from 'react';
 import { Button, useTranslate } from 'react-admin';
+import MediaObject from '../../entities/MediaObject';
 import Translation from '../../entities/Translation';
 import ImageUploader from '../ImageUploader';
-import TranslationForm from '../TranslationForm';
+import TranslationForm from './TranslationForm';
 
 interface ObjectiveFormProps {
     handleSubmit: (
@@ -12,7 +13,7 @@ interface ObjectiveFormProps {
         file?: File
     ) => Promise<void>;
     name?: string;
-    image?: string;
+    image?: MediaObject;
     tranlsations?: { index: number; item: Translation }[];
 }
 
@@ -55,7 +56,7 @@ const ObjectiveForm: React.FC<ObjectiveFormProps> = ({ handleSubmit, name, image
             </Box>
             <Button
                 color="primary"
-                disabled={!name}
+                disabled={!currentName}
                 onClick={sumbit}
                 sx={{ mt: 4, width: 300 }}
                 type="button"

@@ -31,7 +31,10 @@
             "title": "Creating a new objective"
         },
         "label": "Objectives",
-        "name": "Name"
+        "name": "Name",
+        "update": {
+            "title": "Update an objective"
+        }
     },
     "profiles": {
         "country": "Country",
@@ -60,6 +63,11 @@
     },
     "universities": {
         "label": "Universities"
+    },
+    "uploader": {
+        "drag_drop": "Drag and drop your image or",
+        "drop_image": "Drop iamge here",
+        "select_image": "Select an image"
     },
     "users": {
         "searchEmail": "Search email",

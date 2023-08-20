@@ -9,7 +9,7 @@ const CreateObjective = () => {
     const redirect = useRedirect();
     const notify = useNotify();
 
-    const handleSubmit = async (name: string, file: File, translations: { index: number; item: Translation }[]) => {
+    const handleSubmit = async (name: string, translations: { index: number; item: Translation }[], file?: File) => {
         const formData = new FormData();
         formData.append('name', name || '');
         if (file) {

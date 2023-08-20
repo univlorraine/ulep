@@ -52,7 +52,7 @@ const EditObjective = () => {
     };
 
     return (
-        <Edit title={translate('objectives.create.title')}>
+        <Edit title={translate('objectives.update.title')}>
             <WithRecord
                 label="objective"
                 render={(record: Objective) => (
@@ -62,6 +62,7 @@ const EditObjective = () => {
                             translations: { index: number; item: Translation }[],
                             file?: File
                         ) => handleSubmit(record.id, name, translations, file)}
+                        image={record.image}
                         name={record.name.content}
                         tranlsations={record.name.translations.map((translation, index) => ({
                             index,

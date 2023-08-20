@@ -1,8 +1,8 @@
 import { Typography, Box, Input } from '@mui/material';
 import React from 'react';
 import { Button, useTranslate } from 'react-admin';
-import Translation from '../entities/Translation';
-import TranslationLanguagePicker from './TranslationLanguagePicker';
+import Translation from '../../entities/Translation';
+import TranslationLanguagePicker from '../TranslationLanguagePicker';
 
 interface TranslationFormProps {
     setTranslations: (translations: { index: number; item: Translation }[]) => void;

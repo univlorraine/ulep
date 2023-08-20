@@ -1,13 +1,16 @@
 import { Box, Typography } from '@mui/material';
 import Button from '@mui/material/Button';
 import React, { useRef, useState } from 'react';
+import { useTranslate } from 'react-admin';
+import MediaObject from '../entities/MediaObject';
 
 interface ImageUploaderProps {
-    image?: string;
+    image?: MediaObject;
     onImageSelect: (file: File) => void;
 }
 
 const ImageUploader: React.FC<ImageUploaderProps> = ({ image, onImageSelect }) => {
+    const translate = useTranslate();
     const [isDragOver, setDragOver] = useState<boolean>(false);
     const [currentFile, setCurrentFile] = useState<File>();
     const fileInputRef = useRef<HTMLInputElement>(null);
@@ -61,16 +64,21 @@ const ImageUploader: React.FC<ImageUploaderProps> = ({ image, onImageSelect }) =
                 type="file"
             />
 
-            {image && !currentFile && <img alt="preview" src={image} style={{ height: 150, width: 150 }} />}
+            {image && !currentFile && (
+                <Button onClick={() => fileInputRef.current?.click()}>
+                    <img alt="preview" src={image.url} style={{ height: 150, width: 150 }} />
+                </Button>
+            )}
 
             {!currentFile &&
+                !image &&
                 (isDragOver ? (
-                    <Typography variant="body1">Lâchez l&aposimage ici</Typography>
+                    <Typography variant="body1">{translate('uploader.drop_image')}</Typography>
                 ) : (
                     <>
-                        <Typography variant="body1">Glissez et déposez une image ou</Typography>
+                        <Typography variant="body1">{translate('uploader.drag_drop')}</Typography>
                         <Button onClick={() => fileInputRef.current?.click()}>
-                            <span>Choisissez une image</span>
+                            <span>{translate('uploader.select_image')}</span>
                         </Button>
                     </>
                 ))}

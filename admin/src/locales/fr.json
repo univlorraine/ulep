@@ -31,7 +31,10 @@
             "title": "Création d'une nouvel objectif"
         },
         "label": "Objectifs",
-        "name": "Nom"
+        "name": "Nom",
+        "update": {
+            "title": "Mise à jour d'un objectif"
+        }
     },
     "profiles": {
         "country": "Pays",
@@ -60,6 +63,11 @@
     },
     "universities": {
         "label": "Universités"
+    },
+    "uploader": {
+        "drag_drop": "Glissez et déposez une image ou",
+        "drop_image": "Lâche l'image ici",
+        "select_image": "Choisissez une image"
     },
     "users": {
         "searchEmail": "Chercher par email",

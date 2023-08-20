@@ -1,7 +1,7 @@
 import { Button, Input, Typography, Box } from '@mui/material';
 import React, { useState } from 'react';
 import { Create, useTranslate, useCreate, useNotify, useRedirect } from 'react-admin';
-import TranslationForm from '../../components/TranslationForm';
+import TranslationForm from '../../components/form/TranslationForm';
 import Translation from '../../entities/Translation';
 
 const CreateReportCategory = () => {
