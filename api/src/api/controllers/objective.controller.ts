@@ -33,6 +33,7 @@ import { UploadObjectiveImageUsecase } from 'src/core/usecases/media/upload-obje
 import { FileInterceptor } from '@nestjs/platform-express';
 import { Collection } from '@app/common';
 import { UpdateObjectiveUsecase } from 'src/core/usecases/objective/update-objective.usecase';
+import { DeleteObjectiveImageUsecase } from 'src/core/usecases/media/delete-objective-image.usecase';
 
 @Controller('objectives')
 @Swagger.ApiTags('Objectives')
@@ -41,6 +42,7 @@ export class ObjectiveController {
 
   constructor(
     private readonly createObjectiveUsecase: CreateObjectiveUsecase,
+    private readonly deleteObjectiveImageUsecase: DeleteObjectiveImageUsecase,
     private readonly findAllObjectiveUsecase: FindAllObjectiveUsecase,
     private readonly findOneObjectiveUsecase: FindOneObjectiveUsecase,
     private readonly deleteObjectiveUsecase: DeleteObjectiveUsecase,
@@ -110,7 +112,9 @@ export class ObjectiveController {
   @UseGuards(AuthenticationGuard)
   @Swagger.ApiOperation({ summary: 'Deletes a Objective ressource.' })
   @Swagger.ApiOkResponse()
-  remove(@Param('id') id: string) {
+  async remove(@Param('id') id: string) {
+    await this.deleteObjectiveImageUsecase.execute({ id });
+
     return this.deleteObjectiveUsecase.execute({ id });
   }
 
