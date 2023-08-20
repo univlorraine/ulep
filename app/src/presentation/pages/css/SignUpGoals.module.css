@@ -18,7 +18,7 @@
 
 .description {
     color: #000;
-    font-family: 'Maven Pro', sans-serif;
+    font-family: "Maven Pro", sans-serif;
     font-size: 16px;
     font-style: normal;
     font-weight: 500;
@@ -40,5 +40,7 @@
 }
 
 .image {
+    height: 50px;
     margin: 0px 16px;
+    width: 50px;
 }

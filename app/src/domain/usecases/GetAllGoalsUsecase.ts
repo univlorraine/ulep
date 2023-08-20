@@ -1,23 +1,27 @@
-import { HttpResponse } from '../../adapter/BaseHttpAdapter';
-import { HttpAdapterInterface } from '../../adapter/DomainHttpAdapter';
-import GoalCommand, { goalCommandToDomain } from '../../command/GoalCommand';
-import Goal from '../entities/Goal';
-import GetAllGoalsUsecaseInterface from '../interfaces/GetAllGoalsUsecase.interface';
+import { HttpResponse } from "../../adapter/BaseHttpAdapter";
+import { HttpAdapterInterface } from "../../adapter/DomainHttpAdapter";
+import { CollectionCommand } from "../../command/CollectionCommand";
+import GoalCommand, { goalCommandToDomain } from "../../command/GoalCommand";
+import Goal from "../entities/Goal";
+import GetAllGoalsUsecaseInterface from "../interfaces/GetAllGoalsUsecase.interface";
 
 class GetAllGoalsUsecase implements GetAllGoalsUsecaseInterface {
     constructor(private readonly domainHttpAdapter: HttpAdapterInterface) {}
 
     async execute(): Promise<Goal[] | Error> {
         try {
-            const httpResponse: HttpResponse<GoalCommand[]> = await this.domainHttpAdapter.get(`/objectives`);
+            const httpResponse: HttpResponse<CollectionCommand<GoalCommand>> =
+                await this.domainHttpAdapter.get(`/objectives`);
 
-            if (!httpResponse.parsedBody) {
-                return new Error('errors.global');
+            if (!httpResponse.parsedBody || !httpResponse.parsedBody.items) {
+                return new Error("errors.global");
             }
 
-            return httpResponse.parsedBody.map((goal) => goalCommandToDomain(goal));
+            return httpResponse.parsedBody.items.map((goal) =>
+                goalCommandToDomain(goal)
+            );
         } catch (error: any) {
-            return new Error('errors.global');
+            return new Error("errors.global");
         }
     }
 }
