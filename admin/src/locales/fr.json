@@ -1,13 +1,20 @@
 {
+    "count_suggested_languages": {
+        "label": "Total langues demandées",
+        "total": "Total"
+    },
     "countries": {
         "label": "Pays"
     },
     "global": {
         "content": "Contenu",
+        "email": "Email",
         "firstname": "Prénom",
         "image": "Image",
+        "language": "Langue",
         "lastname": "Nom",
         "new_translation": "Nouvelle traduction",
+        "role": "Role",
         "save": "Enregistrer",
         "staff": "Personnel",
         "student": "Etudiant",
@@ -19,7 +26,6 @@
     },
     "login": {
         "connect": "Connexion",
-        "email": "Email",
         "loginError": "Mauvais email ou mot de passe",
         "password": "Mot de passe"
     },
@@ -38,11 +44,9 @@
     },
     "profiles": {
         "country": "Pays",
-        "email": "Email",
         "label": "Profiles",
         "mastered_languages": "Langues maîtrisés",
         "native_language": "Langue native",
-        "role": "Role",
         "searchLastname": "Chercher par nom"
     },
     "reports": {
@@ -60,6 +64,9 @@
             "title": "Création d'une nouvelle catégorie"
         },
         "label": "Categories de signalement"
+    },
+    "suggested_languages": {
+        "label": "Langues demandées"
     },
     "universities": {
         "label": "Universités"

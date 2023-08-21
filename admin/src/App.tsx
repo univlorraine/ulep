@@ -1,12 +1,14 @@
 import React from 'react';
 import { Admin, Resource, useTranslate } from 'react-admin';
 import LoginPage from './pages/auth/login';
+import countSuggestedLanguages from './pages/count-suggested-languages';
 import countries from './pages/countries';
 import languages from './pages/languages';
 import objectives from './pages/objectives';
 import profiles from './pages/profiles';
 import reports from './pages/report';
 import reportCategories from './pages/reportCategories';
+import suggestedLanguages from './pages/suggested-languages';
 import universities from './pages/universities';
 import authProvider from './providers/authProvider';
 import customDataProvider from './providers/customDataProvider';
@@ -25,6 +27,16 @@ const App = () => {
             <Resource name="profiles" options={{ label: translate('profiles.label') }} {...profiles} />
             <Resource name="countries" options={{ label: translate('countries.label') }} {...countries} />
             <Resource name="languages" options={{ label: translate('languages.label') }} {...languages} />
+            <Resource
+                name="languages/requests"
+                options={{ label: translate('suggested_languages.label') }}
+                {...suggestedLanguages}
+            />
+            <Resource
+                name="languages/requests/count"
+                options={{ label: translate('count_suggested_languages.label') }}
+                {...countSuggestedLanguages}
+            />
             <Resource name="objectives" options={{ label: translate('objectives.label') }} {...objectives} />
             <Resource
                 name="universities"

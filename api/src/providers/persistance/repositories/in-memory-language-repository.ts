@@ -1,10 +1,10 @@
 import { Collection } from '@app/common';
-import { Language } from 'src/core/models/language.model';
+import { Language, SuggestedLanguage } from 'src/core/models/language.model';
 import { LanguageRepository } from 'src/core/ports/language.repository';
 
 export class InMemoryLanguageRepository implements LanguageRepository {
   #languages: Language[] = [];
-  #requests: { [code: string]: string[] } = {};
+  #requests: SuggestedLanguage[] = [];
 
   init(languages: Language[]): void {
     this.#languages = languages;
@@ -35,6 +35,47 @@ export class InMemoryLanguageRepository implements LanguageRepository {
       items: this.#languages,
       totalItems: this.#languages.length,
     });
+  }
+
+  async allRequests(
+    offset?: number,
+    limit?: number,
+  ): Promise<Collection<SuggestedLanguage>> {
+    const allItems = Array.from(this.#requests.values());
+
+    return {
+      items: allItems.slice(offset, offset + limit),
+      totalItems: allItems.length,
+    };
+  }
+
+  countAllRequests(
+    offset?: number,
+    limit?: number,
+  ): Promise<Collection<{ language: Language; count: number }>> {
+    const languageCounts: {
+      [key: string]: { language: Language; count: number };
+    } = this.#requests.reduce((acc, request) => {
+      const languageCode = request.language.code;
+      if (!acc[languageCode]) {
+        acc[languageCode] = { language: request.language, count: 0 };
+      }
+      acc[languageCode].count += 1;
+      return acc;
+    }, {});
+
+    const sortedLanguages = Object.values(languageCounts).sort(
+      (a, b) => b.count - a.count,
+    );
+
+    const paginatedResults = sortedLanguages.slice(offset, offset + limit);
+
+    return Promise.resolve(
+      new Collection<{ language: Language; count: number }>({
+        items: paginatedResults,
+        totalItems: sortedLanguages.length,
+      }),
+    );
   }
 
   remove(language: Language): Promise<void> {

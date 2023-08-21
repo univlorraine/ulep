@@ -24,16 +24,18 @@ import {
   DeleteObjectiveUsecase,
   FindAllObjectiveUsecase,
   FindOneObjectiveUsecase,
+  UpdateObjectiveUsecase,
 } from '../../core/usecases/objective';
 import { AuthenticationGuard } from '../guards';
 import { Roles } from '../decorators/roles.decorator';
 import { configuration } from 'src/configuration';
 import { ImagesFilePipe } from 'src/api/validators';
-import { UploadObjectiveImageUsecase } from 'src/core/usecases/media/upload-objective-image.usecase';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { Collection } from '@app/common';
-import { UpdateObjectiveUsecase } from 'src/core/usecases/objective/update-objective.usecase';
-import { DeleteObjectiveImageUsecase } from 'src/core/usecases/media/delete-objective-image.usecase';
+import {
+  DeleteObjectiveImageUsecase,
+  UploadObjectiveImageUsecase,
+} from 'src/core/usecases/media';
 
 @Controller('objectives')
 @Swagger.ApiTags('Objectives')

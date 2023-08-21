@@ -89,6 +89,7 @@ model SuggestedLanguages {
   created_at       DateTime      @default(now())
   updated_at       DateTime      @updatedAt
   LanguageCode     LanguageCodes @relation(fields: [language_code_id], references: [id], onDelete: Cascade)
+  User             Users         @relation(fields: [user_id], references: [id], onDelete: Cascade)
 
   @@unique([language_code_id, user_id])
   @@map("suggested_languages")
@@ -118,6 +119,7 @@ model Users {
   Avatar             MediaObjects? @relation(fields: [image_id], references: [id])
   Reports            Reports[]
   Profiles           Profiles?
+  SuggestedLanguages  SuggestedLanguages[]
 
   @@unique([email])
   @@map("users")

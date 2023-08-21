@@ -4,11 +4,18 @@ import {
   Logger,
   Param,
   Post,
+  Query,
   SerializeOptions,
   UseGuards,
 } from '@nestjs/common';
 import * as Swagger from '@nestjs/swagger';
-import { LanguageRequestsCountResponse, LanguageResponse } from '../dtos';
+import {
+  AllSuggestedLanguageCountResponse,
+  LanguageRequestsCountResponse,
+  LanguageResponse,
+  PaginationDto,
+  SuggestedLanguageResponse,
+} from '../dtos';
 import {
   AddLanguageRequestUsecase,
   FindAllLanguageCodeUsecase,
@@ -17,6 +24,11 @@ import { AuthenticationGuard } from '../guards';
 import { CollectionResponse, CurrentUser } from '../decorators';
 import { KeycloakUser } from '@app/keycloak';
 import { Collection } from '@app/common';
+import { FindAllSuggestedLanguageParams } from 'src/api/dtos/language-code/suggested-language-filters';
+import { FindAllSuggestedLanguageUsecase } from 'src/core/usecases/language/find-all-suggested-language.usecase';
+import { Roles } from 'src/api/decorators/roles.decorator';
+import { configuration } from 'src/configuration';
+import { CountAllSuggestedLanguageUsecase } from 'src/core/usecases/language/count-all-suggested-language.usecase';
 
 @Controller('languages')
 @Swagger.ApiTags('Languages')
@@ -24,7 +36,9 @@ export class LanguageController {
   private readonly logger = new Logger(LanguageController.name);
 
   constructor(
+    private readonly countAllSuggestedLanguageUsecase: CountAllSuggestedLanguageUsecase,
     private readonly findAllLanguagesUsecase: FindAllLanguageCodeUsecase,
+    private readonly findAllSuggestedLanguageUsecase: FindAllSuggestedLanguageUsecase,
     private readonly addLanguageRequestUsecase: AddLanguageRequestUsecase,
   ) {}
 
@@ -41,6 +55,56 @@ export class LanguageController {
         LanguageResponse.fromLanguage(language),
       ),
       totalItems: languages.totalItems,
+    });
+  }
+
+  @Get('requests')
+  @Roles(configuration().adminRole)
+  @UseGuards(AuthenticationGuard)
+  @CollectionResponse(SuggestedLanguageResponse)
+  @Swagger.ApiOperation({
+    summary: 'Collection of Suggested languages ressource.',
+  })
+  @Swagger.ApiOkResponse({ type: SuggestedLanguageResponse, isArray: true })
+  async findAllRequests(
+    @Query() { field, limit, order, page }: FindAllSuggestedLanguageParams,
+  ) {
+    const suggestedLanguages =
+      await this.findAllSuggestedLanguageUsecase.execute({
+        orderBy: { order, field },
+        limit,
+        page,
+      });
+
+    return new Collection<SuggestedLanguageResponse>({
+      items: suggestedLanguages.items.map(SuggestedLanguageResponse.fromDomain),
+      totalItems: suggestedLanguages.totalItems,
+    });
+  }
+
+  @Get('requests/count')
+  @Roles(configuration().adminRole)
+  @UseGuards(AuthenticationGuard)
+  @CollectionResponse(AllSuggestedLanguageCountResponse)
+  @Swagger.ApiOperation({
+    summary: 'Collection of Suggested languages by number ressource.',
+  })
+  @Swagger.ApiOkResponse({
+    type: AllSuggestedLanguageCountResponse,
+    isArray: true,
+  })
+  async countAllSuggestedLanguages(@Query() { limit, page }: PaginationDto) {
+    const countSuggestedLanguages =
+      await this.countAllSuggestedLanguageUsecase.execute({
+        limit,
+        page,
+      });
+
+    return new Collection<AllSuggestedLanguageCountResponse>({
+      items: countSuggestedLanguages.items.map(
+        AllSuggestedLanguageCountResponse.fromDomain,
+      ),
+      totalItems: countSuggestedLanguages.totalItems,
     });
   }
 
