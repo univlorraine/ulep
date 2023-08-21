@@ -1,46 +1,46 @@
-import ProfileCommand from '../../../src/command/ProfileCommand';
-import Profile from '../../../src/domain/entities/Profile';
-import GetProfileUsecase from '../../../src/domain/usecases/GetProfileUsecase';
-import DomainHttpAdapter from '../../mocks/adapters/HttpAdapter';
+import ProfileCommand from "../../../src/command/ProfileCommand";
+import Profile from "../../../src/domain/entities/Profile";
+import GetProfileUsecase from "../../../src/domain/usecases/GetProfileUsecase";
+import DomainHttpAdapter from "../../mocks/adapters/HttpAdapter";
 
 const payload: ProfileCommand = {
-    id: 'id',
-    interests: [{ id: 'interestId', name: 'name' }],
+    id: "id",
+    interests: [{ id: "interestId", name: "name" }],
     nativeLanguage: {
-        code: 'FR',
+        code: "FR",
     },
     learningLanguage: {
-        code: 'CN',
-        level: 'AO',
+        code: "CN",
+        level: "AO",
     },
-    objectives: [{ id: 'id', name: 'name' }],
-    meetingFrequency: 'ONCE_A_WEEK',
+    objectives: [{ id: "id", name: "name", image: { id: "id", url: "url" } }],
+    meetingFrequency: "ONCE_A_WEEK",
     biography: {
-        anecdote: 'anecdote',
-        experience: 'experience',
-        favoritePlace: 'place',
-        superpower: 'power',
+        anecdote: "anecdote",
+        experience: "experience",
+        favoritePlace: "place",
+        superpower: "power",
     },
     user: {
-        id: 'userId',
-        avatar: { id: 'avatarId', url: 'url' },
-        email: 'email',
-        firstname: 'firstname',
-        lastname: 'lastname',
+        id: "userId",
+        avatar: { id: "avatarId", url: "url" },
+        email: "email",
+        firstname: "firstname",
+        lastname: "lastname",
         university: {
-            id: 'universityId',
-            languages: [{ id: 'id', code: 'FR', name: 'name' }],
-            name: 'name',
+            id: "universityId",
+            languages: [{ id: "id", code: "FR", name: "name" }],
+            name: "name",
             parent: undefined,
             sites: [],
-            timezone: 'timezone',
-            website: 'site',
+            timezone: "timezone",
+            website: "site",
         },
         deactivated: false,
     },
 };
 
-describe('getProfile', () => {
+describe("getProfile", () => {
     let adapter: DomainHttpAdapter;
     let usecase: GetProfileUsecase;
     beforeAll(() => {
@@ -52,16 +52,20 @@ describe('getProfile', () => {
         jest.clearAllMocks();
     });
 
-    it('execute function must call DomainHttpAdapter with specific path and params', async () => {
+    it("execute function must call DomainHttpAdapter with specific path and params", async () => {
         expect.assertions(2);
-        jest.spyOn(adapter, 'get');
+        jest.spyOn(adapter, "get");
         adapter.mockJson({ parsedBody: {} });
         await usecase.execute();
         expect(adapter.get).toHaveBeenCalledTimes(1);
-        expect(adapter.get).toHaveBeenCalledWith('/profiles/me', undefined, false);
+        expect(adapter.get).toHaveBeenCalledWith(
+            "/profiles/me",
+            undefined,
+            false
+        );
     });
 
-    it('execute must return an expected response', async () => {
+    it("execute must return an expected response", async () => {
         expect.assertions(1);
 
         adapter.mockJson({ parsedBody: payload });
@@ -70,7 +74,7 @@ describe('getProfile', () => {
         expect(result).toBeInstanceOf(Profile);
     });
 
-    it('execute must return an expected response without parsed body', async () => {
+    it("execute must return an expected response without parsed body", async () => {
         expect.assertions(1);
 
         adapter.mockJson({});
@@ -79,10 +83,10 @@ describe('getProfile', () => {
         expect(result).toBeInstanceOf(Error);
     });
 
-    it('execute must return an error if adapter return an error without status', async () => {
+    it("execute must return an error if adapter return an error without status", async () => {
         expect.assertions(1);
         adapter.mockError({});
         const result = await usecase.execute();
-        expect(result).toStrictEqual(new Error('errors.global'));
+        expect(result).toStrictEqual(new Error("errors.global"));
     });
 });
