@@ -28,7 +28,7 @@ const LoginForm: React.FC<LoginFormProps> = ({ goBack, onLogin }) => {
         if (result instanceof Error) {
             return await showToast({ message: t(result.message), duration: 5000 });
         }
-        onLogin(result);
+        await onLogin(result);
         await hideLoading();
     };
 

@@ -32,7 +32,7 @@ class LoginUsecase implements LoginUsecaseInterface {
                 refreshToken: httpResponse.parsedBody.refreshToken,
             };
 
-            this.setTokens(tokens);
+            await this.setTokens(tokens);
 
             return tokens;
         } catch (error: any) {

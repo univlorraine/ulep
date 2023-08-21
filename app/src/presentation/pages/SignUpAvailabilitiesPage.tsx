@@ -110,7 +110,7 @@ const SignUpAvailabilitiesPage: React.FC = () => {
                     onClose={() => setOpenAvailabilityModal(undefined)}
                     onValidate={updateAvailabilities}
                     isVisible={!!openAvailabilityModal}
-                    title={t(`days.${openAvailabilityModal?.id}`)}
+                    title={openAvailabilityModal ? t(`days.${openAvailabilityModal?.id}`) : ''}
                 />
                 <AvailabilityNoteModal
                     isVisible={openFinalModal}
