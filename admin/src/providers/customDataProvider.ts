@@ -2,6 +2,7 @@ import simpleRestProvider from 'ra-data-simple-rest';
 import { fetchUtils } from 'react-admin';
 import CountriesQuery from '../queries/CountriesQuery';
 import ProfilesQuery from '../queries/ProfilesQuery';
+import ReportsQuery from '../queries/ReportsQuery';
 import { http } from './authProvider';
 import jwtManager from './jwtManager';
 
@@ -16,7 +17,9 @@ const httpClientOptions = (options: any = {}) => {
         newOptions.headers.set('Authorization', `Bearer ${token}`);
     }
 
-    if (localStorage.getItem('locale')) { newOptions.headers.set('Language-code', localStorage.getItem('locale')); }
+    if (localStorage.getItem('locale')) {
+        newOptions.headers.set('Language-code', localStorage.getItem('locale'));
+    }
 
     return newOptions;
 };
@@ -53,7 +56,7 @@ const customDataProvider = {
                 }
 
                 return id;
-            }),
+            })
         );
 
         return { data: response };
@@ -67,6 +70,9 @@ const customDataProvider = {
                 break;
             case 'profiles':
                 url.search = ProfilesQuery(params);
+                break;
+            case 'reports':
+                url.search = ReportsQuery(params);
                 break;
             default:
                 break;
@@ -97,7 +103,7 @@ const customDataProvider = {
         const response = await http(
             'GET',
             `${process.env.REACT_APP_API_URL}/matches?id=${profileId}`,
-            httpClientOptions(),
+            httpClientOptions()
         );
 
         if (!response.ok) {

@@ -16,7 +16,6 @@ import {
 } from '@nestjs/common';
 import * as Swagger from '@nestjs/swagger';
 import { configuration } from 'src/configuration';
-import { ReportStatus } from '../../core/models/report.model';
 import {
   CreateReportCategoryUsecase,
   CreateReportUsecase,
@@ -37,7 +36,8 @@ import {
   UpdateReportStatusRequest,
 } from '../dtos';
 import { AuthenticationGuard } from '../guards';
-import { ReportStatusesPipe } from '../validators';
+import { GetReportsQueryParams } from 'src/api/dtos/reports/reports-filters';
+import { ReportStatus } from 'src/core/models';
 
 @Controller('reports')
 @Swagger.ApiTags('Reports')
@@ -114,20 +114,25 @@ export class ReportController {
     return ReportResponse.fromDomain(instance);
   }
 
-  // TODO: add pagination
   @Get()
   @Roles(configuration().adminRole)
   @UseGuards(AuthenticationGuard)
   @Swagger.ApiOperation({ summary: 'Collection of Report ressource.' })
   @Swagger.ApiOkResponse({ type: ReportResponse, isArray: true })
   async findByStatus(
-    @Query('status', ReportStatusesPipe) status: ReportStatus,
+    @Query() { field, limit, order, page, status }: GetReportsQueryParams,
   ) {
-    const instances = await this.getReportsByStatusUsecase.execute(
-      ReportStatus[status],
-    );
+    const instances = await this.getReportsByStatusUsecase.execute({
+      limit,
+      orderBy: { order, field },
+      page,
+      where: status ? { status: { equals: ReportStatus[status] } } : undefined,
+    });
 
-    return instances.map(ReportResponse.fromDomain);
+    return new Collection<ReportResponse>({
+      items: instances.items.map(ReportResponse.fromDomain),
+      totalItems: instances.totalItems,
+    });
   }
 
   // TODO: only admin or owner can get report

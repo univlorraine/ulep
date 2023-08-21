@@ -73,12 +73,12 @@ export class ProfileController {
     @Query() { page, limit, field, order, where }: ProfileQueryFilter,
   ): Promise<Collection<ProfileResponse>> {
     const profiles = await this.getProfilesUsecase.execute({
-      page: page,
+      page,
       orderBy: {
         field,
         order,
       },
-      limit: limit,
+      limit,
       where: where
         ? {
             user: {

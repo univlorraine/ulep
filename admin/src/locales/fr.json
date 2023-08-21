@@ -3,8 +3,11 @@
         "label": "Pays"
     },
     "global": {
-        "Staff": "Personnel",
-        "Student": "Etudiant"
+        "firstname": "Prénom",
+        "lastname": "Nom",
+        "staff": "Personnel",
+        "student": "Etudiant",
+        "university": "Université"
     },
     "languages": {
         "label": "Langues"
@@ -18,14 +21,19 @@
     "profiles": {
         "country": "Pays",
         "email": "Email",
-        "firstname": "Prénom",
         "label": "Profiles",
-        "lastname": "Nom",
         "mastered_languages": "Langues maîtrisés",
         "native_language": "Langue native",
         "role": "Role",
-        "searchLastname": "Chercher par nom",
-        "university": "Université"
+        "searchLastname": "Chercher par nom"
+    },
+    "reports": {
+        "CLOSED": "Fermé",
+        "content": "Contenu",
+        "IN_PROGRESS": "En cours",
+        "label": "Signalements",
+        "OPEN": "Ouvert",
+        "status": "État"
     },
     "report_categories": {
         "create": {

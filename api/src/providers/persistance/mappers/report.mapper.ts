@@ -5,9 +5,14 @@ import {
   textContentMapper,
 } from './translation.mapper';
 import { Report, ReportCategory, ReportStatus } from 'src/core/models';
+import {
+  UserRelations,
+  UserSnapshot,
+  userMapper,
+} from 'src/providers/persistance/mappers/user.mapper';
 
 export const ReportRelations = {
-  User: true,
+  User: { include: UserRelations },
   Category: {
     include: {
       TextContent: TextContentRelations,
@@ -21,7 +26,7 @@ export type ReportCategorySnapshot = Prisma.ReportCategories & {
 
 export type ReportSnapshot = Prisma.Reports & {
   Category: ReportCategorySnapshot;
-  User: Prisma.Users;
+  User: UserSnapshot;
 };
 
 export const reportCategoryMapper = (
@@ -36,12 +41,12 @@ export const reportCategoryMapper = (
 export const reportMapper = (snapshot: ReportSnapshot): Report => {
   return new Report({
     id: snapshot.id,
-    owner: snapshot.User.id,
     category: {
       id: snapshot.Category.id,
       name: textContentMapper(snapshot.Category.TextContent),
     },
     status: ReportStatus[snapshot.status],
     content: snapshot.content,
+    user: userMapper(snapshot.User),
   });
 };

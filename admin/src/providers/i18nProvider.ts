@@ -12,7 +12,10 @@ const i18nProvider = polyglotI18nProvider(
         return locale === 'fr' ? { ...fr, ...customFR } : { ...en, ...customEN };
     },
     resolveBrowserLocale(),
-    [{ locale: 'en', name: 'English' }, { locale: 'fr', name: 'Français' }],
+    [
+        { locale: 'en', name: 'English' },
+        { locale: 'fr', name: 'Français' },
+    ]
 );
 
 export default i18nProvider;

@@ -10,7 +10,6 @@ export class ReportFactory extends ModelFactory<Report> {
   getDefaults(): Partial<Report> {
     return {
       id: faker.string.uuid(),
-      owner: faker.string.uuid(),
       status: ReportStatus.OPEN,
       content: faker.lorem.sentence(),
     };

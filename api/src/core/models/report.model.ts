@@ -1,3 +1,4 @@
+import { User } from 'src/core/models/user.model';
 import { TextContent } from './translation.model';
 
 export enum ReportStatus {
@@ -24,16 +25,14 @@ export class ReportCategory {
 
 export type CreateReportProps = {
   id: string;
-  owner: string;
   category: ReportCategory;
   status: ReportStatus;
   content: string;
+  user: User;
 };
 
 export class Report {
   readonly id: string;
-
-  readonly owner: string;
 
   readonly category: ReportCategory;
 
@@ -41,12 +40,14 @@ export class Report {
 
   readonly content: string;
 
+  readonly user: User;
+
   constructor(props: CreateReportProps) {
     this.id = props.id;
-    this.owner = props.owner;
     this.category = props.category;
     this.status = props.status;
     this.content = props.content;
+    this.user = props.user;
   }
 
   static create(props: CreateReportProps): Report {

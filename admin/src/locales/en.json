@@ -3,8 +3,11 @@
         "label": "Countries"
     },
     "global": {
-        "Staff": "Staff",
-        "Student": "Student"
+        "firstname": "Firstname",
+        "lastname": "Lastname",
+        "staff": "Staff",
+        "student": "Student",
+        "university": "University"
     },
     "languages": {
         "label": "Languages"
@@ -18,14 +21,19 @@
     "profiles": {
         "country": "Country",
         "email": "Email",
-        "firstname": "Firstname",
         "label": "Profiles",
-        "lastname": "Lastname",
         "mastered_languages": "Mastered languages",
         "native_language": "Native language",
         "role": "Role",
-        "searchLastname": "Lastname",
-        "university": "University"
+        "searchLastname": "Lastname"
+    },
+    "reports": {
+        "closed": "Closed",
+        "content": "Content",
+        "in_progress": "In progress",
+        "label": "Reports",
+        "open": "Open",
+        "status": "Status"
     },
     "report_categories": {
         "create": {
