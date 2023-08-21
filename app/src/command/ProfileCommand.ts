@@ -13,7 +13,11 @@ interface ProfileCommand {
         code: string;
         level: string;
     };
-    objectives: { id: string; name: string }[];
+    objectives: {
+        id: string;
+        name: string;
+        image: { id: string; url: string };
+    }[];
     meetingFrequency: string;
     biography: {
         anecdote: string;
@@ -29,7 +33,7 @@ export const profileCommandToDomain = (command: ProfileCommand) => {
         command.id,
         command.nativeLanguage.code,
         command.learningLanguage.code,
-        command.objectives.map((goal) => goalCommandToDomain({ ...goal, image: '' })),
+        command.objectives.map((goal) => goalCommandToDomain(goal)),
         command.meetingFrequency as MeetFrequency,
         command.interests.map((interest) => new Interest(interest.id, interest.name)),
         {

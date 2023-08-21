@@ -1,7 +1,7 @@
 import { Button, Input, Typography, Box } from '@mui/material';
 import React, { useState } from 'react';
 import { Create, useTranslate, useCreate, useNotify, useRedirect } from 'react-admin';
-import TranslationLanguagePicker from '../../components/TranslationLanguagePicker';
+import TranslationForm from '../../components/form/TranslationForm';
 import Translation from '../../entities/Translation';
 
 const CreateReportCategory = () => {
@@ -41,18 +41,6 @@ const CreateReportCategory = () => {
         }
     };
 
-    const onTraductionLanguageAdded = (value: TranslatedLanguage, index: number) => {
-        const currentTraductions = [...translations];
-        currentTraductions[index].item.language = value;
-        setTranslations(currentTraductions);
-    };
-
-    const onTraductionContentAdded = (value: string, index: number) => {
-        const currentTraductions = [...translations];
-        currentTraductions[index].item.content = value;
-        setTranslations(currentTraductions);
-    };
-
     return (
         <Create title={translate('report_categories.create.title')}>
             <Box component="form" onSubmit={handleSubmit} sx={{ m: 4 }} noValidate>
@@ -63,47 +51,15 @@ const CreateReportCategory = () => {
                     <Input
                         name="Content"
                         onChange={(e) => setName(e.target.value)}
-                        placeholder={translate('report_categories.create.content')}
+                        placeholder={translate('global.content')}
                         required
                     />
                 </Box>
 
-                <Typography variant="subtitle1">{translate('report_categories.create.translations')}</Typography>
-                {translations.map((item, index) => (
-                    <Box key={item.index} alignItems="center" display="flex" flexDirection="row">
-                        <TranslationLanguagePicker
-                            onChange={(value: TranslatedLanguage) => onTraductionLanguageAdded(value, index)}
-                            value={translations[index].item.language}
-                        />
-                        <Input
-                            name={`Content${item.index}`}
-                            onChange={(e) => onTraductionContentAdded(e.target.value, index)}
-                            placeholder={translate('report_categories.create.content')}
-                            value={translations[index].item.content}
-                        />
-                    </Box>
-                ))}
-
-                <Box alignContent="flex-start" display="flex" flexDirection="column" sx={{ width: 300 }}>
-                    <Button
-                        onClick={() =>
-                            setTranslations([
-                                ...translations,
-                                {
-                                    index: translations.length + 1,
-                                    item: new Translation('', 'en'),
-                                },
-                            ])
-                        }
-                        type="button"
-                    >
-                        {translate('report_categories.create.new_translation')}
-                    </Button>
-
-                    <Button color="primary" sx={{ mt: 4 }} type="submit" variant="contained">
-                        {translate('report_categories.create.save')}
-                    </Button>
-                </Box>
+                <TranslationForm setTranslations={setTranslations} translations={translations} />
+                <Button color="primary" sx={{ mt: 4 }} type="submit" variant="contained">
+                    {translate('global.save')}
+                </Button>
             </Box>
         </Create>
     );

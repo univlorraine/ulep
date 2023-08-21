@@ -7,9 +7,18 @@ import {
   Delete,
   Logger,
   UseGuards,
+  UploadedFile,
+  UseInterceptors,
+  Headers,
+  Put,
 } from '@nestjs/common';
 import * as Swagger from '@nestjs/swagger';
-import { ObjectiveResponse, CreateObjectiveRequest } from '../dtos/objective';
+import {
+  ObjectiveResponse,
+  CreateObjectiveRequest,
+  GetObjectiveResponse,
+  UpdateObjectiveRequest,
+} from '../dtos/objective';
 import {
   CreateObjectiveUsecase,
   DeleteObjectiveUsecase,
@@ -19,6 +28,12 @@ import {
 import { AuthenticationGuard } from '../guards';
 import { Roles } from '../decorators/roles.decorator';
 import { configuration } from 'src/configuration';
+import { ImagesFilePipe } from 'src/api/validators';
+import { UploadObjectiveImageUsecase } from 'src/core/usecases/media/upload-objective-image.usecase';
+import { FileInterceptor } from '@nestjs/platform-express';
+import { Collection } from '@app/common';
+import { UpdateObjectiveUsecase } from 'src/core/usecases/objective/update-objective.usecase';
+import { DeleteObjectiveImageUsecase } from 'src/core/usecases/media/delete-objective-image.usecase';
 
 @Controller('objectives')
 @Swagger.ApiTags('Objectives')
@@ -27,41 +42,69 @@ export class ObjectiveController {
 
   constructor(
     private readonly createObjectiveUsecase: CreateObjectiveUsecase,
+    private readonly deleteObjectiveImageUsecase: DeleteObjectiveImageUsecase,
     private readonly findAllObjectiveUsecase: FindAllObjectiveUsecase,
     private readonly findOneObjectiveUsecase: FindOneObjectiveUsecase,
     private readonly deleteObjectiveUsecase: DeleteObjectiveUsecase,
+    private readonly updateObjectiveUsecase: UpdateObjectiveUsecase,
+    private readonly uploadObjectiveImageUsecase: UploadObjectiveImageUsecase,
   ) {}
 
   @Post()
   @Roles(configuration().adminRole)
+  @UseInterceptors(FileInterceptor('file'))
   @UseGuards(AuthenticationGuard)
   @Swagger.ApiOperation({ summary: 'Create a new Objective ressource.' })
   @Swagger.ApiCreatedResponse({ type: ObjectiveResponse })
-  async create(@Body() body: CreateObjectiveRequest) {
-    const instance = await this.createObjectiveUsecase.execute(body);
+  async create(
+    @Body() body: CreateObjectiveRequest,
+    @UploadedFile(new ImagesFilePipe()) file: Express.Multer.File,
+  ) {
+    const languageCode = configuration().defaultTranslationLanguage;
+    let objective = await this.createObjectiveUsecase.execute({
+      ...body,
+      languageCode,
+    });
 
-    return ObjectiveResponse.fromDomain(instance);
+    if (file) {
+      const upload = await this.uploadObjectiveImageUsecase.execute({
+        id: objective.id,
+        file,
+      });
+
+      objective = { ...objective, image: upload };
+    }
+
+    return ObjectiveResponse.fromDomain(objective);
   }
 
   @Get()
   @UseGuards(AuthenticationGuard)
   @Swagger.ApiOperation({ summary: 'Collection of Objective ressource.' })
   @Swagger.ApiOkResponse({ type: ObjectiveResponse, isArray: true })
-  async findAll() {
+  async findAll(@Headers('Language-code') languageCode?: string) {
     const instances = await this.findAllObjectiveUsecase.execute();
-
-    return instances.map(ObjectiveResponse.fromDomain);
+    const code =
+      configuration().defaultTranslationLanguage !== languageCode
+        ? languageCode
+        : undefined;
+    return new Collection<ObjectiveResponse>({
+      items: instances.map((instance) =>
+        ObjectiveResponse.fromDomain(instance, code),
+      ),
+      totalItems: instances.length,
+    });
   }
 
   @Get(':id')
   @Roles(configuration().adminRole)
   @UseGuards(AuthenticationGuard)
   @Swagger.ApiOperation({ summary: 'Objective ressource.' })
-  @Swagger.ApiOkResponse({ type: ObjectiveResponse })
+  @Swagger.ApiOkResponse({ type: GetObjectiveResponse })
   async findOne(@Param('id') id: string) {
     const instance = await this.findOneObjectiveUsecase.execute(id);
 
-    return ObjectiveResponse.fromDomain(instance);
+    return GetObjectiveResponse.fromDomain(instance);
   }
 
   @Delete(':id')
@@ -69,7 +112,37 @@ export class ObjectiveController {
   @UseGuards(AuthenticationGuard)
   @Swagger.ApiOperation({ summary: 'Deletes a Objective ressource.' })
   @Swagger.ApiOkResponse()
-  remove(@Param('id') id: string) {
+  async remove(@Param('id') id: string) {
+    await this.deleteObjectiveImageUsecase.execute({ id });
+
     return this.deleteObjectiveUsecase.execute({ id });
+  }
+
+  @Put()
+  @Roles(configuration().adminRole)
+  @UseInterceptors(FileInterceptor('file'))
+  @UseGuards(AuthenticationGuard)
+  @Swagger.ApiOperation({ summary: 'Update a new Objective ressource.' })
+  @Swagger.ApiCreatedResponse({ type: ObjectiveResponse })
+  async update(
+    @Body() body: UpdateObjectiveRequest,
+    @UploadedFile(new ImagesFilePipe()) file?: Express.Multer.File,
+  ) {
+    const languageCode = configuration().defaultTranslationLanguage;
+    let objective = await this.updateObjectiveUsecase.execute({
+      ...body,
+      languageCode,
+    });
+
+    if (file) {
+      const upload = await this.uploadObjectiveImageUsecase.execute({
+        id: objective.id,
+        file,
+      });
+
+      objective = { ...objective, image: upload };
+    }
+
+    return ObjectiveResponse.fromDomain(objective);
   }
 }

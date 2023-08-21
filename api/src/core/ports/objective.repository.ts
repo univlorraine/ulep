@@ -7,7 +7,11 @@ export interface LearningObjectiveRepository {
 
   ofId(id: string): Promise<LearningObjective | null>;
 
+  ofName(name: string): Promise<LearningObjective | null>;
+
   all(): Promise<LearningObjective[]>;
 
   delete(id: string): Promise<void>;
+
+  update(instance: LearningObjective): Promise<LearningObjective>;
 }

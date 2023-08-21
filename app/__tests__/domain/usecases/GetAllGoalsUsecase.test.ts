@@ -1,9 +1,13 @@
+import { CollectionCommand } from '../../../src/command/CollectionCommand';
 import GoalCommand from '../../../src/command/GoalCommand';
 import Goal from '../../../src/domain/entities/Goal';
 import GetAllGoalsUsecase from '../../../src/domain/usecases/GetAllGoalsUsecase';
 import DomainHttpAdapter from '../../mocks/adapters/HttpAdapter';
 
-const usecaseResponse: GoalCommand[] = [{ id: 'id', name: 'name', image: '' }];
+const usecaseResponse: CollectionCommand<GoalCommand> = {
+    items: [{ id: 'id', name: 'name', image: { id: 'id', url: 'url' } }],
+    totalItems: 1,
+};
 
 describe('getAllGoals', () => {
     let adapter: DomainHttpAdapter;

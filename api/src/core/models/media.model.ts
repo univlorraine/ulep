@@ -28,7 +28,7 @@ export class MediaObject {
     this.size = props.size;
   }
 
-  static image(file: Express.Multer.File): MediaObject {
+  static image(file: Express.Multer.File, bucketName = 'images'): MediaObject {
     const id = v4();
     const extension = this.getFileExtension(file.mimetype);
     const name = `${id}${extension}`;
@@ -36,7 +36,7 @@ export class MediaObject {
     return new MediaObject({
       id,
       name,
-      bucket: 'images',
+      bucket: bucketName,
       mimetype: file.mimetype,
       size: file.size,
     });
