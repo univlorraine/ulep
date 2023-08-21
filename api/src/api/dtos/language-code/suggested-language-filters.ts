@@ -5,7 +5,10 @@ import { PaginationDto } from 'src/api/dtos/pagination';
 import { SuggestedLanguageOrderKey } from 'src/core/ports/language.repository';
 
 export class FindAllSuggestedLanguageParams extends PaginationDto {
-  @Swagger.ApiProperty({ type: 'string' })
+  @Swagger.ApiProperty({
+    type: 'string',
+    enum: ['email', 'firstname', 'lastname', 'role', 'code'],
+  })
   @IsOptional()
   field?: SuggestedLanguageOrderKey;
 

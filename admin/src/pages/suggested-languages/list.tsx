@@ -6,7 +6,7 @@ const SuggestedLanguagesList = () => {
 
     return (
         <List exporter={false}>
-            <Datagrid bulkActionButtons={false} rowClick="edit">
+            <Datagrid bulkActionButtons={false}>
                 <TextField label={translation('global.firstname')} source="user.firstname" />
                 <TextField label={translation('global.lastname')} source="user.lastname" />
                 <TextField label={translation('global.role')} source="user.role" />

@@ -58,7 +58,9 @@ export class LanguageController {
   @Roles(configuration().adminRole)
   @UseGuards(AuthenticationGuard)
   @CollectionResponse(SuggestedLanguageResponse)
-  @Swagger.ApiOperation({ summary: 'Collection of LanguageCode ressource.' })
+  @Swagger.ApiOperation({
+    summary: 'Collection of Suggested languages ressource.',
+  })
   @Swagger.ApiOkResponse({ type: SuggestedLanguageResponse, isArray: true })
   async findAllRequests(
     @Query() { field, limit, order, page }: FindAllSuggestedLanguageParams,
@@ -71,9 +73,7 @@ export class LanguageController {
       });
 
     return new Collection<SuggestedLanguageResponse>({
-      items: suggestedLanguages.items.map((language) =>
-        SuggestedLanguageResponse.fromDomain(language),
-      ),
+      items: suggestedLanguages.items.map(SuggestedLanguageResponse.fromDomain),
       totalItems: suggestedLanguages.totalItems,
     });
   }

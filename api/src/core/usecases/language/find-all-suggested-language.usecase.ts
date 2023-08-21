@@ -6,9 +6,9 @@ import {
 } from 'src/core/ports/language.repository';
 
 export class FindAllSuggestedLanguageCommand {
-  page: number;
   limit: number;
   orderBy?: SuggestedLanguageQueryOrderBy;
+  page: number;
 }
 
 @Injectable()
