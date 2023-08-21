@@ -4,10 +4,12 @@
     },
     "global": {
         "content": "Content",
+        "email": "Email",
         "firstname": "Firstname",
         "image": "Image",
         "lastname": "Lastname",
         "new_translation": "New translation",
+        "role": "Role",
         "save": "Save",
         "staff": "Staff",
         "student": "Student",
@@ -19,7 +21,6 @@
     },
     "login": {
         "connect": "Connect",
-        "email": "Email",
         "loginError": "Wrong email / password",
         "password": "Password"
     },
@@ -38,11 +39,9 @@
     },
     "profiles": {
         "country": "Country",
-        "email": "Email",
         "label": "Profiles",
         "mastered_languages": "Mastered languages",
         "native_language": "Native language",
-        "role": "Role",
         "searchLastname": "Lastname"
     },
     "reports": {
@@ -60,6 +59,10 @@
             "title": "Creation of a new category"
         },
         "label": "Categories report"
+    },
+    "suggested_languages": {
+        "label": "Asked languages",
+        "language": "Language"
     },
     "universities": {
         "label": "Universities"
