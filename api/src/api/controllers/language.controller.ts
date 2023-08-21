@@ -87,7 +87,7 @@ export class LanguageController {
   @UseGuards(AuthenticationGuard)
   @CollectionResponse(AllSuggestedLanguageCountResponse)
   @Swagger.ApiOperation({
-    summary: 'Collection of Suggested languages ressource.',
+    summary: 'Collection of Suggested languages by number ressource.',
   })
   @Swagger.ApiOkResponse({
     type: AllSuggestedLanguageCountResponse,
