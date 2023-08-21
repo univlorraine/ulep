@@ -1,10 +1,10 @@
 import { Collection } from '@app/common';
-import { Language } from 'src/core/models/language.model';
+import { Language, SuggestedLanguage } from 'src/core/models/language.model';
 import { LanguageRepository } from 'src/core/ports/language.repository';
 
 export class InMemoryLanguageRepository implements LanguageRepository {
   #languages: Language[] = [];
-  #requests: { [code: string]: string[] } = {};
+  #requests: SuggestedLanguage[] = [];
 
   init(languages: Language[]): void {
     this.#languages = languages;
@@ -35,6 +35,18 @@ export class InMemoryLanguageRepository implements LanguageRepository {
       items: this.#languages,
       totalItems: this.#languages.length,
     });
+  }
+
+  async allRequests(
+    offset?: number,
+    limit?: number,
+  ): Promise<Collection<SuggestedLanguage>> {
+    const allItems = Array.from(this.#requests.values());
+
+    return {
+      items: allItems.slice(offset, offset + limit),
+      totalItems: allItems.length,
+    };
   }
 
   remove(language: Language): Promise<void> {

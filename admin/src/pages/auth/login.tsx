@@ -48,7 +48,7 @@ const LoginPage = () => {
             <Card className={classes.card}>
                 <CardContent>
                     <form className={classes.form} onSubmit={submit}>
-                        <p>{translate('login.email')}</p>
+                        <p>{translate('global.email')}</p>
                         <TextField
                             className={classes.input}
                             id="email"

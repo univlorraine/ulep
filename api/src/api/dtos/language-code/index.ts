@@ -1,5 +1,7 @@
 import * as Swagger from '@nestjs/swagger';
 import { Expose } from 'class-transformer';
+import { UserResponse } from 'src/api/dtos/users';
+import { Language, SuggestedLanguage } from 'src/core/models';
 
 export class LanguageCodeResponse {
   @Swagger.ApiProperty({ type: 'string', format: 'uuid' })
@@ -17,6 +19,14 @@ export class LanguageCodeResponse {
   constructor(partial: Partial<LanguageCodeResponse>) {
     Object.assign(this, partial);
   }
+
+  static fromDomain(instance: Language): LanguageCodeResponse {
+    return new LanguageCodeResponse({
+      id: instance.id,
+      code: instance.code,
+      name: instance.name,
+    });
+  }
 }
 
 export class LanguageRequestsCountResponse {
@@ -30,5 +40,31 @@ export class LanguageRequestsCountResponse {
 
   constructor(partial: Partial<LanguageRequestsCountResponse>) {
     Object.assign(this, partial);
+  }
+}
+
+export class SuggestedLanguageResponse {
+  @Swagger.ApiProperty({ type: 'string', format: 'uuid' })
+  @Expose({ groups: ['read'] })
+  id: string;
+
+  @Swagger.ApiProperty({ type: LanguageCodeResponse })
+  @Expose({ groups: ['read'] })
+  language: LanguageCodeResponse;
+
+  @Swagger.ApiProperty({ type: UserResponse })
+  @Expose({ groups: ['read'] })
+  user: UserResponse;
+
+  constructor(partial: Partial<SuggestedLanguageResponse>) {
+    Object.assign(this, partial);
+  }
+
+  static fromDomain(instance: SuggestedLanguage): SuggestedLanguageResponse {
+    return new SuggestedLanguageResponse({
+      id: instance.id,
+      language: LanguageCodeResponse.fromDomain(instance.language),
+      user: UserResponse.fromDomain(instance.user),
+    });
   }
 }

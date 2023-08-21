@@ -60,6 +60,7 @@ import {
 import { UploadObjectiveImageUsecase } from 'src/core/usecases/media/upload-objective-image.usecase';
 import { UpdateObjectiveUsecase } from 'src/core/usecases/objective/update-objective.usecase';
 import { DeleteObjectiveImageUsecase } from 'src/core/usecases/media/delete-objective-image.usecase';
+import { FindAllSuggestedLanguageUsecase } from 'src/core/usecases/language/find-all-suggested-language.usecase';
 
 const usecases: Provider[] = [
   // Countries
@@ -74,6 +75,7 @@ const usecases: Provider[] = [
   // Languages
   AddLanguageRequestUsecase,
   FindAllLanguageCodeUsecase,
+  FindAllSuggestedLanguageUsecase,
   // Media
   DeleteObjectiveImageUsecase,
   UploadAvatarUsecase,
