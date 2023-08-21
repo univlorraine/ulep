@@ -68,3 +68,27 @@ export class SuggestedLanguageResponse {
     });
   }
 }
+
+export class AllSuggestedLanguageCountResponse {
+  @Swagger.ApiProperty({ type: LanguageCodeResponse })
+  @Expose({ groups: ['read'] })
+  language: LanguageCodeResponse;
+
+  @Swagger.ApiProperty()
+  @Expose({ groups: ['read'] })
+  count: number;
+
+  constructor(partial: Partial<AllSuggestedLanguageCountResponse>) {
+    Object.assign(this, partial);
+  }
+
+  static fromDomain(instance: {
+    language: Language;
+    count: number;
+  }): AllSuggestedLanguageCountResponse {
+    return new AllSuggestedLanguageCountResponse({
+      language: LanguageCodeResponse.fromDomain(instance.language),
+      count: instance.count,
+    });
+  }
+}

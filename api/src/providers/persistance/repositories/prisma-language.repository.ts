@@ -11,9 +11,17 @@ import {
   suggestedLanguageMapper,
 } from '../mappers/language.mapper';
 
+type CountAllSuggestedLanguagesResult = {
+  id: string;
+  name: string;
+  code: string;
+  count: number;
+};
+
 @Injectable()
 export class PrismaLanguageRepository implements LanguageRepository {
   constructor(private readonly prisma: PrismaService) {}
+
   async allRequests(
     offset?: number,
     limit?: number,
@@ -42,6 +50,42 @@ export class PrismaLanguageRepository implements LanguageRepository {
     return new Collection<SuggestedLanguage>({
       items: suggestedLanguages.map(suggestedLanguageMapper),
       totalItems: count,
+    });
+  }
+
+  async countAllRequests(
+    offset?: number,
+    limit?: number,
+  ): Promise<Collection<{ language: Language; count: number }>> {
+    const countResult: { count: number }[] = await this.prisma.$queryRaw`
+    SELECT COUNT(*) as count FROM (
+        SELECT s.language_code_id
+        FROM suggested_languages s
+        JOIN language_codes l ON s.language_code_id = l.id
+        GROUP BY l.id, s.language_code_id
+    ) as groupedLanguages
+`;
+
+    const results: CountAllSuggestedLanguagesResult[] = await this.prisma
+      .$queryRaw`
+    SELECT l.id, l.name, l.code, COUNT(s.language_code_id) as count
+    FROM suggested_languages s
+    JOIN language_codes l ON s.language_code_id = l.id
+    GROUP BY l.id
+    ORDER BY count ASC
+    LIMIT ${limit} OFFSET ${offset}
+`;
+
+    return new Collection<{ language: Language; count: number }>({
+      items: results.map((result) => ({
+        language: new Language({
+          id: result.id,
+          name: result.name,
+          code: result.code,
+        }),
+        count: Number(result.count),
+      })),
+      totalItems: Number(countResult[0].count),
     });
   }
 
