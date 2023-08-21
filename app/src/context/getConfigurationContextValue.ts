@@ -31,7 +31,11 @@ const getConfigContextValue = (
     configuration: Configuration
 ): ConfigContextValueType => {
     const cameraAdapter = new CameraAdapter();
-    const domainHttpAdapter = new DomainHttpAdapter(import.meta.env.VITE_API_URL ?? '', accessToken, refreshToken);
+    const domainHttpAdapter = new DomainHttpAdapter(
+        import.meta.env.VITE_API_URL ?? 'https://api.ulep.thestaging.io',
+        accessToken,
+        refreshToken
+    );
 
     const askForAccountDeletion = new AskForAccountDeletion(domainHttpAdapter);
     const askForLanguage = new AskForLanguageUsecase(domainHttpAdapter);

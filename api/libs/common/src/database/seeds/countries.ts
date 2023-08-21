@@ -1,6 +1,7 @@
 /* eslint-disable prettier/prettier */
 import { PrismaClient } from '@prisma/client';
 
+// find duplicate on list behind
 const countries = [
   { code: 'AF', name: 'Afghanistan', emoji: '🇦🇫' },
   { code: 'AX', name: '\u00c5land Islands', emoji: '🇦🇽' },
@@ -99,7 +100,6 @@ const countries = [
   { code: 'GY', name: 'Guyana', emoji: '🇬🇾' },
   { code: 'HT', name: 'Haiti', emoji: '🇭🇹' },
   { code: 'HM', name: 'Heard Island and McDonald Islands', emoji: '🇭🇲' },
-  { code: 'VA', name: 'Holy See (Vatican City State)', emoji: '🇻🇦' },
   { code: 'HN', name: 'Honduras', emoji: '🇭🇳' },
   { code: 'HK', name: 'Hong Kong', emoji: '🇭🇰' },
   { code: 'HU', name: 'Hungary', emoji: '🇭🇺' },
