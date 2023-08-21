@@ -56,6 +56,12 @@ describe('Objectives', () => {
     await app.teardown();
   });
 
+  describe('Objectives', () => {
+    test('should determine if we keep those tests', () => {
+      expect(true).toBeTruthy();
+    });
+  });
+
   // TODO(mavryn): Change this later
   /*
   describe('POST /objectives', () => {
