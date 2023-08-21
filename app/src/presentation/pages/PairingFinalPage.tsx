@@ -31,7 +31,6 @@ const PairingFinalPage: React.FC = () => {
             !profileSignUp.learningLanguage ||
             !profileSignUp.learningLanguageLevel ||
             !profileSignUp.pedagogy ||
-            !profileSignUp.goals ||
             !profileSignUp.frequency ||
             !profileSignUp.interests ||
             !profileSignUp.biography
@@ -45,7 +44,7 @@ const PairingFinalPage: React.FC = () => {
             profileSignUp.learningLanguage.code,
             profileSignUp.learningLanguageLevel,
             profileSignUp.pedagogy,
-            profileSignUp.goals.map((goal) => goal.id),
+            profileSignUp.goals?.map((goal) => goal.id) || [],
             profileSignUp.frequency,
             profileSignUp.interests,
             !!profileSignUp.sameAge,

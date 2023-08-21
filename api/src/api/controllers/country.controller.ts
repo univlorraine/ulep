@@ -40,10 +40,7 @@ export class CountryController {
   async getCollection(
     @Query() params: GetCountriesQueryParams,
   ): Promise<Collection<CountryResponse>> {
-    console.log('before get');
     const countries = await this.getCountriesUsecase.execute({ ...params });
-    console.log('after get');
-    console.log(countries);
 
     return new Collection<CountryResponse>({
       items: countries.items.map(CountryResponse.fromDomain),

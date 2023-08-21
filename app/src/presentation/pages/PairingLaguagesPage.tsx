@@ -2,7 +2,7 @@ import { useIonToast } from '@ionic/react';
 import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Redirect, useHistory } from 'react-router';
-import { PlusSvg } from '../../assets';
+import { PlusPng } from '../../assets';
 import { useConfig } from '../../context/ConfigurationContext';
 import Language from '../../domain/entities/Language';
 import { useStoreActions, useStoreState } from '../../store/storeTypes';
@@ -77,7 +77,7 @@ const PairingLaguagesPage: React.FC = () => {
                                 style={{ background: 'none' }}
                                 onClick={() => history.push('/signup/pairing/other-languages')}
                             >
-                                <img alt="plus" className={pairingLanguagesStyles.image} src={PlusSvg} />
+                                <img alt="plus" className={pairingLanguagesStyles.image} src={PlusPng} />
                             </button>
                         )}
                     </div>

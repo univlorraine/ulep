@@ -1,7 +1,7 @@
 import { IonButton, IonContent, IonHeader, IonRouterLink, useIonLoading, useIonToast } from '@ionic/react';
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { AvatarSvg, LeftChevronSvg } from '../../../assets';
+import { AvatarPng, LeftChevronSvg } from '../../../assets';
 import { useConfig } from '../../../context/ConfigurationContext';
 import { Tokens } from '../../../domain/interfaces/LoginUsecase.interface';
 import CircleAvatar from '../CircleAvatar';
@@ -41,7 +41,7 @@ const LoginForm: React.FC<LoginFormProps> = ({ goBack, onLogin }) => {
             </IonHeader>
             <IonContent>
                 <form className={style['main-content']} onSubmit={handleLogin}>
-                    <CircleAvatar backgroundImage={AvatarSvg} height={36} viewClassName={style['icons']} width={36} />
+                    <CircleAvatar backgroundImage={AvatarPng} height={36} viewClassName={style['icons']} width={36} />
                     <div className={`ion-text-center`}>
                         <h1 className={style.title}>{t('login_page.title')}</h1>
                     </div>

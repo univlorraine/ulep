@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Redirect, useHistory } from 'react-router';
-import { TandemSvg } from '../../assets';
+import { TandemPng } from '../../assets';
 import { useConfig } from '../../context/ConfigurationContext';
 import { useStoreState } from '../../store/storeTypes';
 import LanguageSelectedContent from '../components/contents/LanguageSelectedContent';
@@ -85,7 +85,7 @@ const PairingConfirmLanguagePage: React.FC = () => {
                         )} ${pedagogyToTitle(profileSignUp.pedagogy)}  ${codeCountryToFlag(
                             profileSignUp.learningLanguage.code
                         )}`}</p>
-                        <img alt="tandem" src={TandemSvg} />
+                        <img alt="tandem" src={TandemPng} />
                     </div>
                 </div>
                 <div className={`large-margin-top extra-large-margin-bottom`}>

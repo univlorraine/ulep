@@ -2,7 +2,7 @@ import { IonButton, IonContent, IonHeader, useIonLoading, useIonToast } from '@i
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useHistory } from 'react-router';
-import { LeftChevronSvg } from '../../../assets';
+import { AvatarPng, LeftChevronSvg } from '../../../assets';
 import CircleAvatar from '../CircleAvatar';
 import TextInput from '../TextInput';
 import style from './Form.module.css';
@@ -35,12 +35,7 @@ const ForgotPasswordForm = () => {
             </IonHeader>
             <IonContent>
                 <form className={style['main-content']} onSubmit={handleForgotPassword}>
-                    <CircleAvatar
-                        backgroundImage="./assets/avatar.svg"
-                        height={36}
-                        viewClassName={style['icons']}
-                        width={36}
-                    />
+                    <CircleAvatar backgroundImage={AvatarPng} height={36} viewClassName={style['icons']} width={36} />
                     <div className={`ion-text-center`}>
                         <h1 className={style.title}>{t('forgot_password_page.title')}</h1>
                     </div>

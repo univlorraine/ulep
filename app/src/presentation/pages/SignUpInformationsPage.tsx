@@ -2,7 +2,7 @@ import { useIonToast } from '@ionic/react';
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useHistory } from 'react-router';
-import { PlusSvg } from '../../assets';
+import { PlusPng } from '../../assets';
 import { useConfig } from '../../context/ConfigurationContext';
 import { useStoreActions, useStoreState } from '../../store/storeTypes';
 import Checkbox from '../components/Checkbox';
@@ -123,7 +123,7 @@ const SignUpInformationsPage: React.FC = () => {
                     <img
                         alt="plus"
                         className={styles.image}
-                        src={profilePicture ? URL.createObjectURL(profilePicture) : PlusSvg}
+                        src={profilePicture ? URL.createObjectURL(profilePicture) : PlusPng}
                     />
                     <p>
                         {t(
