@@ -1,6 +1,7 @@
 import React from 'react';
 import { Admin, Resource, useTranslate } from 'react-admin';
 import LoginPage from './pages/auth/login';
+import countSuggestedLanguages from './pages/count-suggested-languages';
 import countries from './pages/countries';
 import languages from './pages/languages';
 import objectives from './pages/objectives';
@@ -30,6 +31,11 @@ const App = () => {
                 name="languages/requests"
                 options={{ label: translate('suggested_languages.label') }}
                 {...suggestedLanguages}
+            />
+            <Resource
+                name="languages/requests/count"
+                options={{ label: translate('count_suggested_languages.label') }}
+                {...countSuggestedLanguages}
             />
             <Resource name="objectives" options={{ label: translate('objectives.label') }} {...objectives} />
             <Resource

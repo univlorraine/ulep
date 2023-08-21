@@ -70,6 +70,10 @@ export class SuggestedLanguageResponse {
 }
 
 export class AllSuggestedLanguageCountResponse {
+  @Swagger.ApiProperty({ type: 'string', format: 'uuid' })
+  @Expose({ groups: ['read'] })
+  id: string;
+
   @Swagger.ApiProperty({ type: LanguageCodeResponse })
   @Expose({ groups: ['read'] })
   language: LanguageCodeResponse;
@@ -87,6 +91,7 @@ export class AllSuggestedLanguageCountResponse {
     count: number;
   }): AllSuggestedLanguageCountResponse {
     return new AllSuggestedLanguageCountResponse({
+      id: instance.language.id,
       language: LanguageCodeResponse.fromDomain(instance.language),
       count: instance.count,
     });
