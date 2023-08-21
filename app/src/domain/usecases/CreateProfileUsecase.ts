@@ -8,7 +8,6 @@ class CreateProfileUsecase implements CreateProfileUsecaseInterface {
     constructor(private readonly domainHttpAdapter: HttpAdapterInterface, private readonly setProfile: Function) {}
 
     async execute(
-        id: string,
         nativeLanguage: string,
         masteredLanguages: string[],
         learningLanguageCode: string,
@@ -26,7 +25,6 @@ class CreateProfileUsecase implements CreateProfileUsecaseInterface {
     ): Promise<undefined | Error> {
         try {
             const httpResponse: HttpResponse<ProfileCommand> = await this.domainHttpAdapter.post(`/profiles/`, {
-                id,
                 nativeLanguageCode: nativeLanguage,
                 masteredLanguageCodes: masteredLanguages,
                 learningLanguages: [{ code: learningLanguageCode, level: cefrLevel }],

@@ -20,7 +20,6 @@ const PairingFinalPage: React.FC = () => {
         return <Redirect to="/signup/pairing/languages" />;
     }
 
-    //TODO: Update this when api will be ready
     const nextStep = async () => {
         if (
             !profileSignUp.age ||
@@ -41,7 +40,6 @@ const PairingFinalPage: React.FC = () => {
         }
 
         const result = await createProfile.execute(
-            user.id,
             profileSignUp.nativeLanguage.code,
             profileSignUp.otherLanguages.map((language) => language.code),
             profileSignUp.learningLanguage.code,

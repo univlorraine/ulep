@@ -2,7 +2,6 @@ import { BiographySignUp } from '../entities/ProfileSignUp';
 
 interface CreateProfileUsecaseInterface {
     execute(
-        id: string,
         nativeLanguageCode: string,
         masteredLanguageCodes: string[],
         learningLanguageCode: string,

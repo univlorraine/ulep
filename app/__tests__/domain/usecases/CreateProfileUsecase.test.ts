@@ -66,7 +66,6 @@ describe('createProfile', () => {
         jest.spyOn(adapter, 'post');
         adapter.mockJson({ parsedBody: {} });
         await usecase.execute(
-            'id',
             'FR',
             ['CN'],
             'ES',
@@ -83,7 +82,6 @@ describe('createProfile', () => {
         );
         expect(adapter.post).toHaveBeenCalledTimes(1);
         expect(adapter.post).toHaveBeenCalledWith('/profiles/', {
-            id: 'id',
             nativeLanguageCode: 'FR',
             masteredLanguageCodes: ['CN'],
             learningLanguages: [{ code: 'ES', level: 'A0' }],
@@ -111,7 +109,6 @@ describe('createProfile', () => {
         adapter.mockJson({ parsedBody: payload });
 
         const result = await usecase.execute(
-            'id',
             'FR',
             ['CN'],
             'ES',
@@ -136,7 +133,6 @@ describe('createProfile', () => {
         adapter.mockJson({});
 
         const result = await usecase.execute(
-            'id',
             'FR',
             ['CN'],
             'ES',
@@ -158,7 +154,6 @@ describe('createProfile', () => {
         expect.assertions(1);
         adapter.mockError({});
         const result = await usecase.execute(
-            'id',
             'FR',
             ['CN'],
             'ES',
