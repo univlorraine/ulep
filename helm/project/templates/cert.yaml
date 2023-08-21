@@ -8,6 +8,7 @@ spec:
     - "{{ .Values.minio.name }}.{{ .Values.domain }}"
     - "{{ .Values.admin.name }}.{{ .Values.domain }}"
     - "{{ .Values.auth.name }}.{{ .Values.domain }}"
+    - "{{ .Values.webapp.name }}.{{ .Values.domain }}"
   issuerRef:
     name: "{{ .Values.issuerName }}"
     kind: ClusterIssuer

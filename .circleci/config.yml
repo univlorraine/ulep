@@ -137,6 +137,23 @@ jobs:
             # else docker push rg.fr-par.scw.cloud/ulep/admin-dev:latest && docker push rg.fr-par.scw.cloud/ulep/admin-dev:1.0.<< pipeline.number >>
             docker push rg.fr-par.scw.cloud/ulep/admin-dev:latest && docker push rg.fr-par.scw.cloud/ulep/admin-dev:1.0.<< pipeline.number >>
             # fi
+
+  build-docker-webapp:
+    executor: node-executor
+    working_directory: ~/api
+    steps:
+      - checkout
+      - setup_remote_docker:
+          version: 20.10.14
+      - run:
+          name: Run build image
+          command: |
+            cd app && docker build --platform=linux/amd64 -t rg.fr-par.scw.cloud/ulep/webapp:latest -t rg.fr-par.scw.cloud/ulep/webapp:1.0.<< pipeline.number >> .
+      - run:
+          name: push docker image
+          command: |
+            echo "$DOCKER_PASS" | docker login rg.fr-par.scw.cloud/ulep -u nologin --password-stdin
+            docker push rg.fr-par.scw.cloud/ulep/webapp:latest && docker push rg.fr-par.scw.cloud/ulep/webapp:1.0.<< pipeline.number >>
 workflows:
   version: 2
   check_api:
@@ -165,6 +182,14 @@ workflows:
           requires:
             - tsc-build-admin
             - lint-admin
+          filters:
+            branches:
+              only:
+                - develop
+                - main
+  build_webapp:
+    jobs:
+      - build-docker-webapp:
           filters:
             branches:
               only:
