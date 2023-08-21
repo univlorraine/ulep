@@ -1,9 +1,13 @@
+import { CollectionCommand } from '../../../src/command/CollectionCommand';
 import ReportCategoryCommand from '../../../src/command/ReportCategoryCommand';
 import ReportCategory from '../../../src/domain/entities/ReportCategory';
 import GetAllReportCategoriesUsecase from '../../../src/domain/usecases/GetAllReportCategoriesUsecase';
 import DomainHttpAdapter from '../../mocks/adapters/HttpAdapter';
 
-const usecaseResponse: ReportCategoryCommand[] = [{ id: 'id', name: 'name' }];
+const usecaseResponse: CollectionCommand<ReportCategoryCommand> = {
+    items: [{ id: 'id', name: 'name' }],
+    totalItems: 1,
+};
 
 describe('getAllReportCategories', () => {
     let adapter: DomainHttpAdapter;
