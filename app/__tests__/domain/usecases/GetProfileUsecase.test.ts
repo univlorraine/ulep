@@ -13,7 +13,7 @@ const payload: ProfileCommand = {
         code: 'CN',
         level: 'AO',
     },
-    objectives: [{ id: 'id', name: 'name' }],
+    objectives: [{ id: 'id', name: 'name', image: { id: 'id', url: 'url' } }],
     meetingFrequency: 'ONCE_A_WEEK',
     biography: {
         anecdote: 'anecdote',

@@ -3,7 +3,12 @@ import { BiographySignUp } from '../../../src/domain/entities/ProfileSignUp';
 import CreateProfileUsecase from '../../../src/domain/usecases/CreateProfileUsecase';
 import DomainHttpAdapter from '../../mocks/adapters/HttpAdapter';
 
-const biography = { incredible: 'incredible', place: 'place', power: 'power', travel: 'travel' } as BiographySignUp;
+const biography = {
+    incredible: 'incredible',
+    place: 'place',
+    power: 'power',
+    travel: 'travel',
+} as BiographySignUp;
 
 const payload: ProfileCommand = {
     id: 'id',
@@ -15,7 +20,7 @@ const payload: ProfileCommand = {
         code: 'CN',
         level: 'AO',
     },
-    objectives: [{ id: 'id', name: 'name' }],
+    objectives: [{ id: 'id', name: 'name', image: { id: 'id', url: 'url' } }],
     meetingFrequency: 'ONCE_A_WEEK',
     biography: {
         anecdote: 'anecdote',

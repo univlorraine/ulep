@@ -27,7 +27,7 @@ weblate:
     pullPolicy: IfNotPresent
 
   env:
-    siteDomain: weblate # FIXE
+    site: weblate # FIXE
     serverEmail: "" # REQUIRED
     defaultFromEmail: "" # REQUIRED
     emailHost: "" # REQUIRED

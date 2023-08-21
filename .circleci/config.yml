@@ -66,18 +66,22 @@ jobs:
           name: Run build image
           command: |
             export DOCKER_BUILDKIT=1
-            if [ "$CIRCLE_BRANCH" = "main" ]
-            then cd api && docker build --platform=linux/amd64 --target=api_prod -t rg.fr-par.scw.cloud/ulep/api-prod:latest -t rg.fr-par.scw.cloud/ulep/api-prod:1.0.$CIRCLE_BUILD_NUM .
-            else cd api && docker build --platform=linux/amd64 --target=api_dev -t rg.fr-par.scw.cloud/ulep/api-dev:latest -t rg.fr-par.scw.cloud/ulep/api-dev:1.0.$CIRCLE_BUILD_NUM .
-            fi
+            # if [ "$CIRCLE_BRANCH" = "main" ]
+            # then cd api && docker build --platform=linux/amd64 --target=api_prod -t rg.fr-par.scw.cloud/ulep/api-prod:latest -t rg.fr-par.scw.cloud/ulep/api-prod:1.0.<< pipeline.number >> .
+            cd api && docker build --platform=linux/amd64 --target=api_prod -t rg.fr-par.scw.cloud/ulep/api-prod:latest -t rg.fr-par.scw.cloud/ulep/api-prod:1.0.<< pipeline.number >> .
+            docker build --platform=linux/amd64 --target=api_dev -t rg.fr-par.scw.cloud/ulep/api-dev:latest -t rg.fr-par.scw.cloud/ulep/api-dev:1.0.<< pipeline.number >> .
+            # else cd api && docker build --platform=linux/amd64 --target=api_dev -t rg.fr-par.scw.cloud/ulep/api-dev:latest -t rg.fr-par.scw.cloud/ulep/api-dev:1.0.<< pipeline.number >> .
+            # fi
       - run:
           name: push docker image
           command: |
             echo "$DOCKER_PASS" | docker login rg.fr-par.scw.cloud/ulep -u nologin --password-stdin
-            if [ "$CIRCLE_BRANCH" = "main" ]
-            then docker push rg.fr-par.scw.cloud/ulep/api-prod:latest && docker push rg.fr-par.scw.cloud/ulep/api-prod:1.0.$CIRCLE_BUILD_NUM
-            else docker push rg.fr-par.scw.cloud/ulep/api-dev:latest && docker push rg.fr-par.scw.cloud/ulep/api-dev:1.0.$CIRCLE_BUILD_NUM
-            fi
+            # if [ "$CIRCLE_BRANCH" = "main" ]
+            # then docker push rg.fr-par.scw.cloud/ulep/api-prod:latest && docker push rg.fr-par.scw.cloud/ulep/api-prod:1.0.<< pipeline.number >>
+            docker push rg.fr-par.scw.cloud/ulep/api-prod:latest && docker push rg.fr-par.scw.cloud/ulep/api-prod:1.0.<< pipeline.number >>
+            docker push rg.fr-par.scw.cloud/ulep/api-dev:latest && docker push rg.fr-par.scw.cloud/ulep/api-dev:1.0.<< pipeline.number >>
+            # else docker push rg.fr-par.scw.cloud/ulep/api-dev:latest && docker push rg.fr-par.scw.cloud/ulep/api-dev:1.0.<< pipeline.number >>
+            # fi
 ##### ADMIN #####
   lint-admin:
     executor: node-executor
@@ -117,18 +121,22 @@ jobs:
           name: Run build image
           command: |
             export DOCKER_BUILDKIT=1
-            if [ "$CIRCLE_BRANCH" = "main" ]
-            then cd admin && docker build --platform=linux/amd64 --target=admin_prod -t rg.fr-par.scw.cloud/ulep/admin-prod:latest -t rg.fr-par.scw.cloud/ulep/admin-prod:1.0.$CIRCLE_BUILD_NUM .
-            else cd admin && docker build --platform=linux/amd64 --target=admin_dev -t rg.fr-par.scw.cloud/ulep/admin-dev:latest -t rg.fr-par.scw.cloud/ulep/admin-dev:1.0.$CIRCLE_BUILD_NUM .
-            fi
+            # if [ "$CIRCLE_BRANCH" = "main" ]
+            # then cd admin && docker build --platform=linux/amd64 --target=admin_prod -t rg.fr-par.scw.cloud/ulep/admin-prod:latest -t rg.fr-par.scw.cloud/ulep/admin-prod:1.0.<< pipeline.number >> .
+            cd admin && docker build --platform=linux/amd64 --target=admin_prod -t rg.fr-par.scw.cloud/ulep/admin-prod:latest -t rg.fr-par.scw.cloud/ulep/admin-prod:1.0.<< pipeline.number >> .
+            docker build --platform=linux/amd64 --target=admin_dev -t rg.fr-par.scw.cloud/ulep/admin-dev:latest -t rg.fr-par.scw.cloud/ulep/admin-dev:1.0.<< pipeline.number >> .
+            # else cd admin && docker build --platform=linux/amd64 --target=admin_dev -t rg.fr-par.scw.cloud/ulep/admin-dev:latest -t rg.fr-par.scw.cloud/ulep/admin-dev:1.0.<< pipeline.number >> .
+            # fi
       - run:
           name: push docker image
           command: |
             echo "$DOCKER_PASS" | docker login rg.fr-par.scw.cloud/ulep -u nologin --password-stdin
-            if [ "$CIRCLE_BRANCH" = "main" ]
-            then docker push rg.fr-par.scw.cloud/ulep/admin-prod:latest && docker push rg.fr-par.scw.cloud/ulep/admin-prod:1.0.$CIRCLE_BUILD_NUM
-            else docker push rg.fr-par.scw.cloud/ulep/admin-dev:latest && docker push rg.fr-par.scw.cloud/ulep/admin-dev:1.0.$CIRCLE_BUILD_NUM
-            fi
+            # if [ "$CIRCLE_BRANCH" = "main" ]
+            docker push rg.fr-par.scw.cloud/ulep/admin-prod:latest && docker push rg.fr-par.scw.cloud/ulep/admin-prod:1.0.<< pipeline.number >>
+            # then docker push rg.fr-par.scw.cloud/ulep/admin-prod:latest && docker push rg.fr-par.scw.cloud/ulep/admin-prod:1.0.<< pipeline.number >>
+            # else docker push rg.fr-par.scw.cloud/ulep/admin-dev:latest && docker push rg.fr-par.scw.cloud/ulep/admin-dev:1.0.<< pipeline.number >>
+            docker push rg.fr-par.scw.cloud/ulep/admin-dev:latest && docker push rg.fr-par.scw.cloud/ulep/admin-dev:1.0.<< pipeline.number >>
+            # fi
 workflows:
   version: 2
   check_api:

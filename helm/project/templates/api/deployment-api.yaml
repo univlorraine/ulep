@@ -48,7 +48,7 @@ spec:
           image: "{{ .Values.api.image.repository }}:{{ .Values.api.image.tag | default .Chart.AppVersion }}"
           imagePullPolicy: {{ .Values.api.image.pullPolicy }}
           command: ["/bin/sh","-c"]
-          args: ["pnpm install; pnpm migrate; pnpm start:dev"]
+          args: ["pnpx prisma migrate deploy; pnpm seed; pnpm build; pnpm start:dev"]
           ports:
             - name: direct
               containerPort: 3000

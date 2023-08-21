@@ -3,6 +3,13 @@ import { Profile } from '../models';
 
 export const PROFILE_REPOSITORY = 'profile.repository';
 
+export type ProfileQuerySortKey =
+  | 'email'
+  | 'firstname'
+  | 'lastname'
+  | 'role'
+  | 'university';
+
 export type MaxTandemsCountAndLanguageProps = {
   tandemsCount: number;
   nativeLanguage: {
@@ -29,7 +36,7 @@ export interface ProfileQueryWhere {
 }
 
 export interface ProfileQueryOrderBy {
-  field?: string;
+  field?: ProfileQuerySortKey;
   order: SortOrder;
 }
 
