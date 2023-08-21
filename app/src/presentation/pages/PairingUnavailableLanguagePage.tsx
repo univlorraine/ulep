@@ -24,7 +24,6 @@ const PairingUnavailableLanguagePage: React.FC = () => {
     const [isLastStep, setIsLastStep] = useState<boolean>(false);
     const location = useLocation<PairingUnavailableLanguageState>();
     const { askingStudents, idLanguage, codeLanguage, nameLanguage } = location.state || {};
-    const profileSignUp = useStoreState((state) => state.profileSignUp);
     const user = useStoreState((state) => state.user);
 
     if (!codeLanguage || !nameLanguage || !user) {
@@ -40,7 +39,7 @@ const PairingUnavailableLanguagePage: React.FC = () => {
             colorCode={configuration.secondaryColor}
         >
             <div className={styles.container}>
-                {askingStudents && !isLastStep && (
+                {askingStudents > 0 && !isLastStep && (
                     <LanguageSelectedContent
                         language={language}
                         mode={'unavailable'}
@@ -48,38 +47,37 @@ const PairingUnavailableLanguagePage: React.FC = () => {
                         onNextPressed={() => setIsLastStep(true)}
                     />
                 )}
-                {!askingStudents ||
-                    (isLastStep && (
-                        <>
-                            <FlagBubble language={language} textColor="white" isSelected disabled />
-                            <span className="title">{`${t('pairing_unavailable_language_page.title')}`}</span>
-                            <p className={styles.description}>{t('pairing_unavailable_language_page.subtitle')}</p>
-                            <span className={styles.description}>{t('pairing_unavailable_language_page.luck')}</span>
-                            <div className={styles['bottom-container']}>
-                                <p className={styles['button-title']}>
-                                    {t('pairing_unavailable_language_page.next_title')}
-                                </p>
-                                <div className={styles['button-container']}>
-                                    <button
-                                        className="primary-button"
-                                        onClick={() => history.push('/signup/pairing/languages')}
-                                    >
-                                        {t('pairing_unavailable_language_page.next_button')}
-                                    </button>
-                                </div>
+                {(askingStudents === 0 || isLastStep) && (
+                    <>
+                        <FlagBubble language={language} textColor="white" isSelected disabled />
+                        <span className="title">{`${t('pairing_unavailable_language_page.title')}`}</span>
+                        <p className={styles.description}>{t('pairing_unavailable_language_page.subtitle')}</p>
+                        <span className={styles.description}>{t('pairing_unavailable_language_page.luck')}</span>
+                        <div className={styles['bottom-container']}>
+                            <p className={styles['button-title']}>
+                                {t('pairing_unavailable_language_page.next_title')}
+                            </p>
+                            <div className={styles['button-container']}>
+                                <button
+                                    className="primary-button"
+                                    onClick={() => history.push('/signup/pairing/languages')}
+                                >
+                                    {t('pairing_unavailable_language_page.next_button')}
+                                </button>
                             </div>
-                            <div className={styles['bottom-container']}>
-                                <p className={styles['button-title']}>
-                                    {t('pairing_unavailable_language_page.ressource_title')}
-                                </p>
-                                <div className={styles['button-container']}>
-                                    <button className="primary-button">
-                                        {t('pairing_unavailable_language_page.ressource_button')}
-                                    </button>
-                                </div>
+                        </div>
+                        <div className={styles['bottom-container']}>
+                            <p className={styles['button-title']}>
+                                {t('pairing_unavailable_language_page.ressource_title')}
+                            </p>
+                            <div className={styles['button-container']}>
+                                <button className="primary-button">
+                                    {t('pairing_unavailable_language_page.ressource_button')}
+                                </button>
                             </div>
-                        </>
-                    ))}
+                        </div>
+                    </>
+                )}
             </div>
         </SuccessLayout>
     );

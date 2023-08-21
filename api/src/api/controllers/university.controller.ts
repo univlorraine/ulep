@@ -105,9 +105,7 @@ export class UniversityController {
     const universities = await this.getUniversitiesUsecase.execute();
 
     return new Collection<UniversityResponse>({
-      items: universities.items.map((university) =>
-        UniversityResponse.fromUniversity(university),
-      ),
+      items: universities.items.map(UniversityResponse.fromUniversity),
       totalItems: universities.totalItems,
     });
   }

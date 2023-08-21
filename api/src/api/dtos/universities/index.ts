@@ -105,7 +105,7 @@ export class UniversityResponse {
   name: string;
 
   @Swagger.ApiPropertyOptional({ type: 'string', format: 'uuid' })
-  @Expose({ groups: ['university:read'] })
+  @Expose({ groups: ['read'] })
   parent?: string;
 
   @Swagger.ApiProperty({ type: 'string', example: 'Europe/Paris' })
@@ -141,6 +141,7 @@ export class UniversityResponse {
   }
 
   static fromUniversity(university: University) {
+    console.log(university.parent);
     return new UniversityResponse({
       id: university.id,
       name: university.name,
