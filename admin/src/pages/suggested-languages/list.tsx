@@ -11,7 +11,7 @@ const SuggestedLanguagesList = () => {
                 <TextField label={translation('global.lastname')} source="user.lastname" />
                 <TextField label={translation('global.role')} source="user.role" />
                 <TextField label={translation('global.email')} source="user.email" />
-                <TextField label={translation('suggested_languages.language')} source="language.code" />
+                <TextField label={translation('global.language')} source="language.code" />
             </Datagrid>
         </List>
     );

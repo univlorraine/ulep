@@ -1,4 +1,8 @@
 {
+    "count_suggested_languages": {
+        "label": "Total langues demandées",
+        "total": "Total"
+    },
     "countries": {
         "label": "Pays"
     },
@@ -7,6 +11,7 @@
         "email": "Email",
         "firstname": "Prénom",
         "image": "Image",
+        "language": "Langue",
         "lastname": "Nom",
         "new_translation": "Nouvelle traduction",
         "role": "Role",
@@ -61,8 +66,7 @@
         "label": "Categories de signalement"
     },
     "suggested_languages": {
-        "label": "Langues demandées",
-        "language": "Langue"
+        "label": "Langues demandées"
     },
     "universities": {
         "label": "Universités"

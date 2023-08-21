@@ -16,9 +16,7 @@ export interface SuggestedLanguageQueryOrderBy {
 }
 
 export interface LanguageRepository {
-  ofId(id: string): Promise<Language>;
-
-  ofCode(code: string): Promise<Language>;
+  addRequest(code: string, user: string): Promise<void>;
 
   all(): Promise<Collection<Language>>;
 
@@ -28,7 +26,14 @@ export interface LanguageRepository {
     orderBy?: SuggestedLanguageQueryOrderBy,
   ): Promise<Collection<SuggestedLanguage>>;
 
-  addRequest(code: string, user: string): Promise<void>;
+  countAllRequests(
+    offset?: number,
+    limit?: number,
+  ): Promise<Collection<{ language: Language; count: number }>>;
 
   countRequests(code: string): Promise<number>;
+
+  ofId(id: string): Promise<Language>;
+
+  ofCode(code: string): Promise<Language>;
 }
