@@ -1,9 +1,46 @@
-Will replace generateTandemAlgorithm when ready.
+# Global
 
-Pre-requisites implementing changes in algorithm : 
-- pair must be symetric (thus paire's score must be symetric)
+## Constraints
+
+Base constraints:
+
+- A pair must concern at least one user from central university
+- User must learn from each other (principle 1)
+
+## Forbidden rules
+
+There are forbidden rules:
+- User wanting "tandem" mode must be paired with user wanting "tandem" mode, users must be on same site
+- user which specified same gender cannot be paired with someone of different gender
+
+### Bonuses
+
+We'll try to create strong pairs based on 2 points: similarity and complementarity.
+
+Bonus points on similarity for:
+
+- Same motivation: aims to get a certificate
+- Age: aims to have close ages
+- Interests: aims to have same interests
+- statuses / roles: students with students and staff with staff
+
 
 # Global routine
+
+Global routine will provide suggestions for global tandem creation.
+
+It should respect all global rules
+
+## First implementation: naive routine
+
+At first, the global routine will be naive.
+It will compute the score of all possible pairs and will extract the best pairs.
+It will retry until it found acceptable pairs.
+
+Pair will be extracted for user by date of inscription.
+In a second time, other priorities could be introduced in the order of pair extration. Such as :
+1. Staff before student
+2. Specific program before
 
 ```plantuml
 start
@@ -26,10 +63,6 @@ repeat
                 if (profile1 != profile2 AND {profile1, profile2} NOT IN possiblePairs) then (yes)
                     if ({profile1, profile2} match forbidden condition OR (profile1 ET profile2) do not belong to central university) then (no) 
                         :score = computeScore(profile1, profile2);
-                        if (score > scoreTreshold) then (yes)
-                            :add ({profile1, profile2}, score) to possiblePairs;
-                        else (no)
-                        endif
                     else (yes)
                     endif
                 else (no)
@@ -39,17 +72,10 @@ repeat
         :sortedPossiblePairs = sort possiblePairs by pair score;
     end group
 
-    :sortedProfilesToPair = profilesToPair sorted by :
-        1. Profiles following specific program 
-        2. Personnal before student;
-    note
-        Clarification: we find a pair in priority for personnal,
-        then for profiles following specific program
-    endnote
+    :sortedProfilesToPair = profilesToPair sorted by inscription date;
 
-
-    :createdPairs = [];
     group Global routine: find best combinaisons among possible pairs
+        :createdPairs = [];
         repeat :profile1 = select next profile1 in sortedProfilesToPair;
             :bestPairForProfile = find first pair containing profile1 in sortedPossiblePairs;
 
@@ -100,9 +126,9 @@ end
 Then
 $$ score = languageCoeficient * {learningScore(profile1, profile2) + learningScore(profile2, profile1) \over 2}$$
 
-## Bonus
+## Bonus scores
 
-### Age bonus
+### Age
 
 Age bonus for profile1 and profile2 is determined with following function:
 ```plantuml
@@ -142,23 +168,23 @@ start
 end
 ```
 
-### Roles bonus
+### Roles
 
 TODO
 
-### Goals bonus
+### Goals
 
 TODO
 
-### University bonus
+### University
 
 TODO
 
-### Gender bonus
+### Gender
 
 TODO
 
-### Interests bonus
+### Interests
 
 TODO
 
