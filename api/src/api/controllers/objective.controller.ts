@@ -11,6 +11,7 @@ import {
   UseInterceptors,
   Headers,
   Put,
+  ParseUUIDPipe,
 } from '@nestjs/common';
 import * as Swagger from '@nestjs/swagger';
 import {
@@ -103,7 +104,7 @@ export class ObjectiveController {
   @UseGuards(AuthenticationGuard)
   @Swagger.ApiOperation({ summary: 'Objective ressource.' })
   @Swagger.ApiOkResponse({ type: GetObjectiveResponse })
-  async findOne(@Param('id') id: string) {
+  async findOne(@Param('id', ParseUUIDPipe) id: string) {
     const instance = await this.findOneObjectiveUsecase.execute(id);
 
     return GetObjectiveResponse.fromDomain(instance);

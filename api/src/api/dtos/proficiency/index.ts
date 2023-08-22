@@ -5,22 +5,21 @@ import {
   IsNotEmpty,
   IsUUID,
   IsEnum,
-  Length,
   IsBoolean,
   IsArray,
   IsOptional,
 } from 'class-validator';
-import { textContentTranslationResponse } from 'src/api/dtos/text-content';
+import {
+  TextContentResponse,
+  textContentTranslationResponse,
+} from 'src/api/dtos/text-content';
 import { Translation } from 'src/core/models';
 import {
   ProficiencyLevel,
   ProficiencyQuestion,
   ProficiencyTest,
 } from 'src/core/models/proficiency.model';
-import {
-  CreateQuestionCommand,
-  CreateTestCommand,
-} from 'src/core/usecases/proficiency';
+import { CreateTestCommand } from 'src/core/usecases/proficiency';
 
 export class CreateTestRequest implements CreateTestCommand {
   @Swagger.ApiProperty({ type: 'string', enum: ProficiencyLevel })
@@ -30,8 +29,8 @@ export class CreateTestRequest implements CreateTestCommand {
 
 export class CreateQuestionRequest {
   @Swagger.ApiProperty({ type: 'string', format: 'uuid' })
-  @IsUUID()
-  test: string;
+  @IsNotEmpty()
+  level: ProficiencyLevel;
 
   @Swagger.ApiProperty({ type: 'string', uniqueItems: true })
   @IsString()
@@ -47,6 +46,64 @@ export class CreateQuestionRequest {
   @Transform(({ value }) => value ?? true)
   @IsBoolean()
   answer = true;
+}
+
+export class UpdateQuestionRequest {
+  @Swagger.ApiProperty({ type: 'string', format: 'uuid' })
+  @IsUUID()
+  id: string;
+
+  @Swagger.ApiProperty({ type: 'string', enum: ProficiencyLevel })
+  @IsNotEmpty()
+  level: ProficiencyLevel;
+
+  @Swagger.ApiProperty({ type: 'string', uniqueItems: true })
+  @IsString()
+  @IsNotEmpty()
+  value: string;
+
+  @Swagger.ApiPropertyOptional({ type: 'array' })
+  @IsOptional()
+  @IsArray()
+  translations?: Translation[];
+
+  @Swagger.ApiPropertyOptional({ type: 'boolean' })
+  @Transform(({ value }) => value ?? true)
+  @IsBoolean()
+  answer = true;
+}
+
+export class GetProficiencyQuestionResponse {
+  @Swagger.ApiProperty({ type: 'string', format: 'uuid' })
+  @Expose({ groups: ['read'] })
+  id: string;
+
+  @Swagger.ApiProperty({ type: 'string', uniqueItems: true })
+  @Expose({ groups: ['read'] })
+  value: TextContentResponse;
+
+  @Swagger.ApiProperty({ type: 'boolean' })
+  @Expose({ groups: ['read'] })
+  answer: boolean;
+
+  @Swagger.ApiProperty({ type: 'string', enum: ProficiencyLevel })
+  @Expose({ groups: ['read'] })
+  level: ProficiencyLevel;
+
+  constructor(partial: Partial<GetProficiencyQuestionResponse>) {
+    Object.assign(this, partial);
+  }
+
+  static fromProficiencyQuestion(
+    question: ProficiencyQuestion,
+  ): GetProficiencyQuestionResponse {
+    return new GetProficiencyQuestionResponse({
+      id: question.id,
+      value: TextContentResponse.fromDomain(question.text),
+      answer: question.answer,
+      level: question.level,
+    });
+  }
 }
 
 export class ProficiencyQuestionResponse {

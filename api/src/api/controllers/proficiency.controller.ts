@@ -11,13 +11,16 @@ import {
   UseGuards,
   Headers,
   Query,
+  Put,
 } from '@nestjs/common';
 import * as Swagger from '@nestjs/swagger';
 import {
   CreateQuestionRequest,
   CreateTestRequest,
+  GetProficiencyQuestionResponse,
   ProficiencyQuestionResponse,
   ProficiencyTestResponse,
+  UpdateQuestionRequest,
 } from '../dtos';
 import {
   CreateQuestionUsecase,
@@ -25,6 +28,7 @@ import {
   DeleteQuestionUsecase,
   DeleteTestUsecase,
   GetLevelsUsecase,
+  GetQuestionUsecase,
   GetQuestionsByLevelUsecase,
   GetQuestionsUsecase,
   GetTestUsecase,
@@ -37,6 +41,7 @@ import { Roles } from '../decorators/roles.decorator';
 import { configuration } from 'src/configuration';
 import { GetProficiencyQueryParams } from 'src/api/dtos/proficiency/proficiency-filters';
 import { Collection } from '@app/common';
+import { UpdateQuestionUsecase } from 'src/core/usecases/proficiency/update-question.usecase';
 
 @Controller('proficiency')
 @Swagger.ApiTags('Proficiency')
@@ -47,12 +52,14 @@ export class ProficiencyController {
     private readonly createTestUsecase: CreateTestUsecase,
     private readonly getTestsUsecase: GetTestsUsecase,
     private readonly getTestUsecase: GetTestUsecase,
+    private readonly getQuestionUsecase: GetQuestionUsecase,
     private readonly getQuestionsUsecase: GetQuestionsUsecase,
     private readonly getQuestionsByLevelUsecase: GetQuestionsByLevelUsecase,
     private readonly deleteTestUsecase: DeleteTestUsecase,
     private readonly createQuestionUsecase: CreateQuestionUsecase,
     private readonly deleteQuestionUsecase: DeleteQuestionUsecase,
     private readonly getLevelsUsecase: GetLevelsUsecase,
+    private readonly updateQuestionUsecase: UpdateQuestionUsecase,
   ) {}
 
   @Post('tests')
@@ -106,7 +113,7 @@ export class ProficiencyController {
     return this.deleteTestUsecase.execute({ id });
   }
 
-  @Get('questions/:level')
+  @Get('questions/level/:level')
   @UseGuards(AuthenticationGuard)
   @Swagger.ApiOperation({ summary: 'Collection of Question ressource.' })
   @Swagger.ApiParam({ name: 'level', enum: ProficiencyLevel })
@@ -147,6 +154,17 @@ export class ProficiencyController {
     });
   }
 
+  @Get('questions/:id')
+  @Roles(configuration().adminRole)
+  @UseGuards(AuthenticationGuard)
+  @Swagger.ApiOperation({ summary: 'Get a Question ressource.' })
+  @Swagger.ApiOkResponse({ type: GetProficiencyQuestionResponse })
+  async findQuestion(@Param('id', ParseUUIDPipe) id: string) {
+    const instance = await this.getQuestionUsecase.execute({ id });
+
+    return GetProficiencyQuestionResponse.fromProficiencyQuestion(instance);
+  }
+
   @Post('questions')
   @Roles(configuration().adminRole)
   @UseGuards(AuthenticationGuard)
@@ -155,6 +173,21 @@ export class ProficiencyController {
   async createQuestion(@Body() body: CreateQuestionRequest) {
     const languageCode = configuration().defaultTranslationLanguage;
     const instance = await this.createQuestionUsecase.execute({
+      ...body,
+      languageCode,
+    });
+
+    return ProficiencyQuestionResponse.fromProficiencyQuestion(instance);
+  }
+
+  @Put('questions')
+  @Roles(configuration().adminRole)
+  @UseGuards(AuthenticationGuard)
+  @Swagger.ApiOperation({ summary: 'Get a Question ressource.' })
+  @Swagger.ApiCreatedResponse({ type: ProficiencyQuestionResponse })
+  async updateQuestion(@Body() body: UpdateQuestionRequest) {
+    const languageCode = configuration().defaultTranslationLanguage;
+    const instance = await this.updateQuestionUsecase.execute({
       ...body,
       languageCode,
     });

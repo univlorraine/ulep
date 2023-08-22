@@ -145,7 +145,7 @@ export class PrismaProficiencyRepository implements ProficiencyRepository {
   async questionOfId(id: string): Promise<ProficiencyQuestion> {
     const question = await this.prisma.proficiencyQuestions.findUnique({
       where: { id },
-      include: { TextContent: TextContentRelations },
+      include: ProficiencyQuestionRelations,
     });
 
     if (!question) {
@@ -155,10 +155,39 @@ export class PrismaProficiencyRepository implements ProficiencyRepository {
     return proficiencyQuestionMapper(question);
   }
 
-  async updateQuestion(question: ProficiencyQuestion): Promise<void> {
-    throw new Error(
-      'Method not implemented, should be implemented in translations repository ?',
-    );
+  async updateQuestion(
+    question: ProficiencyQuestion,
+  ): Promise<ProficiencyQuestion> {
+    await this.prisma.textContent.update({
+      where: {
+        id: question.text.id,
+      },
+      data: {
+        text: question.text.content,
+        LanguageCode: { connect: { code: question.text.language } },
+        Translations: {
+          deleteMany: {},
+          create: question.text.translations?.map((translation) => ({
+            text: translation.content,
+            LanguageCode: { connect: { code: translation.language } },
+          })),
+        },
+      },
+    });
+
+    const questionUpdated = await this.prisma.proficiencyQuestions.update({
+      where: {
+        id: question.id,
+      },
+      data: {
+        ProficiencyTest: {
+          connect: { level: question.level },
+        },
+      },
+      include: ProficiencyQuestionRelations,
+    });
+
+    return proficiencyQuestionMapper(questionUpdated);
   }
 
   async removeQuestion(id: string): Promise<void> {

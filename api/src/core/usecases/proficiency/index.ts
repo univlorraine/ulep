@@ -7,3 +7,5 @@ export * from './get-questions-by-level.usecase';
 export * from './get-test.usecase';
 export * from './get-levels.usecase';
 export * from './get-questions.usecase';
+export * from './get-question.usecase';
+export * from './update-question.usecase';

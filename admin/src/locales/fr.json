@@ -39,6 +39,7 @@
         "label": "Objectifs",
         "name": "Nom",
         "update": {
+            "error": "Une erreur est survenue pendant la mise à jour d'un objectif",
             "title": "Mise à jour d'un objectif"
         }
     },
@@ -57,7 +58,11 @@
         },
         "label": "Questions",
         "level": "Niveau",
-        "question": "Question"
+        "question": "Question",
+        "update": {
+            "error": "Une erreur est survenue pendant la mise à jour de la question",
+            "title": "Mise à jour d'une question"
+        }
     },
     "reports": {
         "CLOSED": "Fermé",

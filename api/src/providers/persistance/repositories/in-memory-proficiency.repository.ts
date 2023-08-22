@@ -87,7 +87,9 @@ export class InMemoryProficiencyRepository implements ProficiencyRepository {
       .find((question) => question.id === id);
   }
 
-  async updateQuestion(question: ProficiencyQuestion): Promise<void> {
+  async updateQuestion(
+    question: ProficiencyQuestion,
+  ): Promise<ProficiencyQuestion> {
     const index = this.#tests.findIndex((test) =>
       test.questions?.some((question) => question.id === question.id),
     );
@@ -109,6 +111,8 @@ export class InMemoryProficiencyRepository implements ProficiencyRepository {
         question.id === questionToUpdate.id ? question : questionToUpdate,
       ),
     });
+
+    return Promise.resolve(questionToUpdate);
   }
 
   async removeQuestion(id: string): Promise<void> {

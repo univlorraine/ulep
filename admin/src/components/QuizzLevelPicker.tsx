@@ -9,9 +9,9 @@ interface QuizzLevelPickerProps {
 }
 
 const QuizzLevelPicker: React.FC<QuizzLevelPickerProps> = ({ onChange, value }) => {
-    const { data } = useGetList('proficiency/tests');
+    const { data, isLoading } = useGetList('proficiency/tests');
 
-    if (!data) {
+    if (isLoading || !data) {
         return <div />;
     }
 
@@ -25,7 +25,7 @@ const QuizzLevelPicker: React.FC<QuizzLevelPickerProps> = ({ onChange, value }) 
                 variant="standard"
             >
                 {data.map((quizz: Quizz) => (
-                    <MenuItem key={quizz.id} value={quizz.id}>
+                    <MenuItem key={quizz.id} value={quizz.level}>
                         {quizz.level}
                     </MenuItem>
                 ))}

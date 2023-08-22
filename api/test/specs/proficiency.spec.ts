@@ -150,7 +150,7 @@ describe('Proficiency', () => {
     repository.init([test]);
 
     const { body } = await request(app.getHttpServer())
-      .get(`/proficiency/questions/A1`)
+      .get(`/proficiency/questions/level/A1`)
       .expect(200);
 
     expect(body).toHaveLength(2);

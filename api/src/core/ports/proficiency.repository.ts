@@ -31,7 +31,7 @@ export interface ProficiencyRepository {
 
   questionOfId(id: string): Promise<ProficiencyQuestion | null>;
 
-  updateQuestion(question: ProficiencyQuestion): Promise<void>;
+  updateQuestion(question: ProficiencyQuestion): Promise<ProficiencyQuestion>;
 
   removeQuestion(id: string): Promise<void>;
 }

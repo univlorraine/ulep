@@ -10,12 +10,12 @@ const CreateQuestion = () => {
     const notify = useNotify();
 
     const handleSubmit = async (
-        test: string,
+        level: string,
         question: string,
         translations: { index: number; item: Translation }[]
     ) => {
         const payload = {
-            test,
+            level,
             value: question,
             translations: translations
                 .map((translation) => translation.item)

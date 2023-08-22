@@ -39,6 +39,7 @@
         "label": "Objectives",
         "name": "Name",
         "update": {
+            "error": "An error occurred while updating the objective",
             "title": "Update an objective"
         }
     },
@@ -57,7 +58,11 @@
         },
         "label": "Questions",
         "level": "Level",
-        "question": "Question"
+        "question": "Question",
+        "update": {
+            "error": "An error occurred while updating the question",
+            "title": "Update a question"
+        }
     },
     "reports": {
         "closed": "Closed",
