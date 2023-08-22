@@ -28,10 +28,8 @@ const Dropdown = <T,>({ onChange, options, placeholder, title }: DropdownProps<T
             }
         };
 
-        // Ajouter l'écouteur d'événement lors du montage du composant
         document.addEventListener('mousedown', handleClickOutside);
 
-        // Supprimer l'écouteur d'événement lors du démontage du composant
         return () => {
             document.removeEventListener('mousedown', handleClickOutside);
         };

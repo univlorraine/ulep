@@ -1,7 +1,6 @@
 /* eslint-disable prettier/prettier */
 import { PrismaClient } from '@prisma/client';
 
-// find duplicate on list behind
 const countries = [
   { code: 'AF', name: 'Afghanistan', emoji: '🇦🇫' },
   { code: 'AX', name: '\u00c5land Islands', emoji: '🇦🇽' },

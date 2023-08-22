@@ -141,7 +141,6 @@ export class UniversityResponse {
   }
 
   static fromUniversity(university: University) {
-    console.log(university.parent);
     return new UniversityResponse({
       id: university.id,
       name: university.name,

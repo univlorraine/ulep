@@ -18,7 +18,7 @@ const PrivateRoute: React.FC<PrivateRouteProps> = ({ component: Component, ...pr
                 ) : (
                     <Redirect
                         to={{
-                            pathname: '/signup',
+                            pathname: '/',
                             state: { from: props.location },
                         }}
                     />
