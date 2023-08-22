@@ -34,7 +34,7 @@ const ObjectiveForm: React.FC<ObjectiveFormProps> = ({ handleSubmit, name, image
     };
 
     return (
-        <Box component="form" sx={{ m: 4, width: 300 }} noValidate>
+        <Box component="form" sx={{ m: 4 }} noValidate>
             <Typography variant="subtitle1">{translate('objectives.create.name')}</Typography>
 
             <Box alignItems="center" display="flex" flexDirection="row">
@@ -43,6 +43,7 @@ const ObjectiveForm: React.FC<ObjectiveFormProps> = ({ handleSubmit, name, image
                     name="Content"
                     onChange={(e) => setCurrentName(e.target.value)}
                     placeholder={translate('global.content')}
+                    sx={{ width: '80%' }}
                     value={currentName}
                     required
                 />

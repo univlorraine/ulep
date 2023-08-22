@@ -39,7 +39,7 @@ const QuestionForm: React.FC<QuestionFormProps> = ({ handleSubmit, name, level, 
     };
 
     return (
-        <Box component="form" sx={{ m: 4, width: 300 }} noValidate>
+        <Box component="form" sx={{ m: 4 }} noValidate>
             <Typography variant="subtitle1">{translate('questions.create.level')}</Typography>
             <QuizzLevelPicker onChange={setCurrentLevel} value={currentLevel} />
             <Typography variant="subtitle1">{translate('questions.create.name')}</Typography>
@@ -49,7 +49,9 @@ const QuestionForm: React.FC<QuestionFormProps> = ({ handleSubmit, name, level, 
                     name="Content"
                     onChange={(e) => setCurrentName(e.target.value)}
                     placeholder={translate('global.content')}
+                    sx={{ width: '80%' }}
                     value={currentName}
+                    multiline
                     required
                 />
             </Box>

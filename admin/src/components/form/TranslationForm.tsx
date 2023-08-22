@@ -37,6 +37,7 @@ const TranslationForm: React.FC<TranslationFormProps> = ({ setTranslations, tran
                         name={`Content${item.index}`}
                         onChange={(e) => onTraductionContentAdded(e.target.value, index)}
                         placeholder={translate('global.content')}
+                        sx={{ width: '80%' }}
                         value={translations[index].item.content}
                     />
                 </Box>

@@ -25,19 +25,10 @@ const EditQuestion = () => {
                 .filter((translation) => translation.content && translation.language),
         };
         try {
-            return await update(
-                'proficiency/questions',
-                { data: payload },
-                {
-                    onSettled: (data: any, error: Error) => {
-                        if (!error) {
-                            return redirect('proficiency/questions');
-                        }
+            const result = await update('proficiency/questions', { data: payload });
+            redirect('/proficiency/questions');
 
-                        return notify('questions.update.error');
-                    },
-                }
-            );
+            return result;
         } catch (err) {
             console.error(err);
 

@@ -31,19 +31,10 @@ const EditObjective = () => {
                 formData.append(`translations[${index}][language]`, translation.language);
             });
         try {
-            return await update(
-                'objectives',
-                { data: formData },
-                {
-                    onSettled: (data: any, err: Error) => {
-                        if (!err) {
-                            return redirect('/objectives');
-                        }
+            const result = await update('objectives', { data: formData });
+            redirect('/objectives');
 
-                        return notify('objectives.create.error');
-                    },
-                }
-            );
+            return result;
         } catch (err) {
             console.error(err);
 

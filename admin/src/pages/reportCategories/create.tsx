@@ -21,19 +21,10 @@ const CreateReportCategory = () => {
                 .filter((translation) => translation.content && translation.language),
         };
         try {
-            return await create(
-                'reports/categories',
-                { data: payload },
-                {
-                    onSettled: (data: any, error: Error) => {
-                        if (!error) {
-                            return redirect('/reports/categories');
-                        }
+            const result = await create('reports/categories', { data: payload });
+            redirect('/reports/categories');
 
-                        return notify('report_categories.create.error');
-                    },
-                }
-            );
+            return result;
         } catch (err) {
             console.error(err);
 
@@ -52,6 +43,7 @@ const CreateReportCategory = () => {
                         name="Content"
                         onChange={(e) => setName(e.target.value)}
                         placeholder={translate('global.content')}
+                        sx={{ width: '80%' }}
                         required
                     />
                 </Box>

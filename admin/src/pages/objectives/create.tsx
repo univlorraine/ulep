@@ -24,19 +24,10 @@ const CreateObjective = () => {
                 formData.append(`translations[${index}][language]`, translation.language);
             });
         try {
-            return await create(
-                'objectives',
-                { data: formData },
-                {
-                    onSettled: (data: any, error: Error) => {
-                        if (!error) {
-                            return redirect('/objectives');
-                        }
+            const result = await create('objectives', { data: formData });
+            redirect('/objectives');
 
-                        return notify('objectives.create.error');
-                    },
-                }
-            );
+            return result;
         } catch (err) {
             console.error(err);
 

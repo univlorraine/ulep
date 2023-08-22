@@ -54,6 +54,7 @@ const ImageUploader: React.FC<ImageUploaderProps> = ({ image, onImageSelect }) =
                 alignItems: 'center',
                 justifyContent: 'center',
                 minHeight: 150,
+                width: 300,
             }}
         >
             <input

@@ -22,19 +22,10 @@ const CreateQuestion = () => {
                 .filter((translation) => translation.content && translation.language),
         };
         try {
-            return await create(
-                'proficiency/questions',
-                { data: payload },
-                {
-                    onSettled: (data: any, error: Error) => {
-                        if (!error) {
-                            return redirect('proficiency/questions');
-                        }
+            const result = await create('proficiency/questions', { data: payload });
+            redirect('/proficiency/questions');
 
-                        return notify('report_categories.create.error');
-                    },
-                }
-            );
+            return result;
         } catch (err) {
             console.error(err);
 
