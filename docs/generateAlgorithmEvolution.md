@@ -123,7 +123,7 @@ start
     else (no)
     endif
 
-    if (profile1.age > 30 || profile2.age > 30) then (yes)
+    if (profile1.age > 30 OR profile2.age > 30) then (yes)
         if (ageDifference <= 10) then (yes)
             :score = ageCoeficient;
             stop

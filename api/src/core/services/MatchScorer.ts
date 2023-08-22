@@ -145,23 +145,33 @@ export class MatchScorer implements IMatchScorer {
   private computeAgeBonus(profile1: Profile, profile2: Profile): number {
     // Compute the absolute age difference between the two profiles
     const ageDiff: number = Math.abs(profile1.user.age - profile2.user.age);
-    // If the age of the first profile is greater than 50
-    if (profile1.user.age > 50) {
-      // Apply the age bonus if the age of the second profile is greater than 45
-      // If the second profile is 45 or younger, return the original score
-      return profile2.user.age > 45 ? this.coeficients.age : 0;
+
+    // If age of one of profile is greater than 50
+    if (profile1.user.age > 50 || profile2.user.age > 50) {
+      // Apply the age bonus if the age of the second profile is greater than 45 or vice versa
+      // If the other profile is 45 or younger, return the original score
+      if (
+        (profile1.user.age > 50 && profile2.user.age > 45)
+        || (profile2.user.age > 50 && profile1.user.age > 45)
+      ) {
+        return this.coeficients.age;  
+      } else {
+        return 0;
+      }
     }
+
     // If the age of the first profile is greater than 30 (but not greater than 50,
     // because of the previous condition)
-    if (profile1.user.age > 30) {
-      // Apply the age bonus if the age difference between the profiles is between -10 and 10 (inclusive)
+    if (profile1.user.age > 30 || profile2.user.age > 30) {
+      // Apply the age bonus if the age difference between the profiles is inferior or equal to 10
       // If the age difference is outside this range, return the original score
-      return ageDiff >= -10 && ageDiff <= 10 ? this.coeficients.age : 0;
+      return ageDiff <= 10 ? this.coeficients.age : 0;
     }
+
     // If the age of the first profile is 30 or younger
-    // Apply the age bonus if the age difference between the profiles is between -3 and 3 (inclusive)
+    // Apply the age bonus if the age difference between the profiles is inferior or equal to 3
     // If the age difference is outside this range, return the original score
-    return ageDiff >= -3 && ageDiff <= 3 ? this.coeficients.age : 0;
+    return ageDiff <= 3 ? this.coeficients.age : 0;
   }
 
   // Apply bonus if profiles share the same status
