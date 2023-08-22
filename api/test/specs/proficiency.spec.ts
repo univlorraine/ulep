@@ -26,7 +26,7 @@ describe('Proficiency', () => {
   const repository = new InMemoryProficiencyRepository();
 
   beforeAll(async () => {
-    const language = languageFactory.makeOne({ code: 'en' });
+    const language = languageFactory.makeOne({ code: 'fr' });
     languageRepository.init([language]);
 
     const module = await Test.createTestingModule({
