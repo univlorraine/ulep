@@ -20,6 +20,10 @@ class AskForLanguageUsecase implements AskForLanguageUsecaseInterface {
 
             return httpResponse.parsedBody.count;
         } catch (error: any) {
+            if (error.status === 409) {
+                return new Error('errors.ask_language.conflit');
+            }
+
             return new Error('errors.global');
         }
     }

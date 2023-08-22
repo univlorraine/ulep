@@ -5,6 +5,7 @@ import { useConfig } from '../../context/ConfigurationContext';
 import CircleAvatar from '../components/CircleAvatar';
 import SuccessLayout from '../components/layout/SuccessLayout';
 import style from './css/ForgotPasswordSent.module.css';
+import { MailBoxPng } from '../../assets';
 
 const ForgotPasswordSentPage: React.FC = () => {
     const history = useHistory();
@@ -21,7 +22,7 @@ const ForgotPasswordSentPage: React.FC = () => {
                 <p className={`${style.text} ${style.subtitle}`}>{t('forgot_password_sent_page.subtitle')}</p>
                 <CircleAvatar
                     alt="mailbox"
-                    backgroundImage="./assets/mailbox.svg"
+                    backgroundImage={MailBoxPng}
                     height={150}
                     viewClassName={style.icon}
                     width={150}

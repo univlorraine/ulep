@@ -105,7 +105,7 @@ export class UniversityResponse {
   name: string;
 
   @Swagger.ApiPropertyOptional({ type: 'string', format: 'uuid' })
-  @Expose({ groups: ['university:read'] })
+  @Expose({ groups: ['read'] })
   parent?: string;
 
   @Swagger.ApiProperty({ type: 'string', example: 'Europe/Paris' })

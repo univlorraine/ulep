@@ -1,18 +1,22 @@
 .checkbox-text {
     color: #000;
-    font-family: Maven Pro;
+    font-family: 'Maven Pro';
     font-size: 16px;
     font-style: normal;
     font-weight: 500;
     line-height: 20px;
 }
 
+.dice {
+    align-self: center;
+    height: 90px;
+    width: 90px;
+}
+
 .joker-container {
     background-color: var(--secondary-color);
     border-radius: 5px;
-    display: flex;
-    flex-direction: row;
-    padding: 30px 20px;
+    padding: 10px 20px;
     width: 100%;
 }
 
@@ -23,6 +27,12 @@
     font-style: normal;
     font-weight: 400;
     line-height: 20px;
+}
+
+.joker-image-container {
+    display: flex;
+    flex-direction: row;
+    margin-bottom: 10px;
 }
 
 .joker-text-container {
@@ -38,5 +48,9 @@
     .other-checkbox-container {
         column-count: 2;
         margin-top: 40px;
+    }
+
+    .joker-image-container {
+        margin-bottom: 0px;
     }
 }

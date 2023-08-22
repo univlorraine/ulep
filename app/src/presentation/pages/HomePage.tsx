@@ -5,7 +5,7 @@ import { Redirect, useHistory } from 'react-router';
 import { ArrowDownSvg, ReportSvg } from '../../assets';
 import { useConfig } from '../../context/ConfigurationContext';
 import Tandem from '../../domain/entities/Tandem';
-import { useStoreState } from '../../store/storeTypes';
+import { useStoreActions, useStoreState } from '../../store/storeTypes';
 import HomeHeader from '../components/HomeHeader';
 import ProfileModal from '../components/modals/ProfileModal';
 import ReportModal from '../components/modals/ReportModal';
@@ -22,6 +22,7 @@ const HomePage: React.FC = () => {
     const history = useHistory();
     const { getAllTandems } = useConfig();
     const [showToast] = useIonToast();
+    const logout = useStoreActions((store) => store.logout);
     const currentDate = new Date();
     const { width } = useWindowDimensions();
     const isHybrid = width < HYBRID_MAX_WIDTH;
@@ -34,6 +35,11 @@ const HomePage: React.FC = () => {
     if (!profile) {
         return <Redirect to={'/signup'} />;
     }
+
+    const onDisconnect = () => {
+        logout();
+        return history.replace('/');
+    };
 
     const getHomeData = async () => {
         const result = await getAllTandems.execute();
@@ -118,6 +124,7 @@ const HomePage: React.FC = () => {
                     <ProfileModal
                         isVisible={displayProfile}
                         onClose={() => setDisplayProfile(false)}
+                        onDisconnect={onDisconnect}
                         profileFirstname={profile.user.firstname}
                         profileLastname={profile.user.lastname}
                         profilePicture={profile.user.avatar}

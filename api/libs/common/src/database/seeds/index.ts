@@ -7,6 +7,7 @@ import { createProficiencyTests } from './proficiency';
 import { createInterests } from './interests';
 import { createProfiles } from './profiles';
 import { createLearningObjectives } from './objective';
+import { createReportCategories } from './report';
 
 const prisma = new Prisma.PrismaClient();
 
@@ -27,6 +28,7 @@ const load = async () => {
     await createCountries(prisma);
     await createLanguageCodes(prisma);
     await createUniversities(prisma);
+    await createReportCategories(prisma);
     await createProficiencyTests(prisma);
     await createInterests(prisma);
     await createLearningObjectives(prisma);

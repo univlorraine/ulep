@@ -99,7 +99,6 @@ const countries = [
   { code: 'GY', name: 'Guyana', emoji: '🇬🇾' },
   { code: 'HT', name: 'Haiti', emoji: '🇭🇹' },
   { code: 'HM', name: 'Heard Island and McDonald Islands', emoji: '🇭🇲' },
-  { code: 'VA', name: 'Holy See (Vatican City State)', emoji: '🇻🇦' },
   { code: 'HN', name: 'Honduras', emoji: '🇭🇳' },
   { code: 'HK', name: 'Hong Kong', emoji: '🇭🇰' },
   { code: 'HU', name: 'Hungary', emoji: '🇭🇺' },

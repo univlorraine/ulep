@@ -1,9 +1,11 @@
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { DiceSvg } from '../../../assets';
+import { DicePng } from '../../../assets';
 import Language from '../../../domain/entities/Language';
 import Checkbox from '../Checkbox';
 import pairingOtherLanguagesStyles from './OtherLanguageContent.module.css';
+import useWindowDimensions from '../../hooks/useWindowDimensions';
+import { HYBRID_MAX_WIDTH } from '../../utils';
 
 interface OtherLanguageContentProps {
     languages: Language[];
@@ -13,6 +15,8 @@ interface OtherLanguageContentProps {
 const OtherLanguageContent: React.FC<OtherLanguageContentProps> = ({ languages, onLanguageSelected }) => {
     const { t } = useTranslation();
     const [selectedLaguage, setSelectedLanguage] = useState<Language>();
+    const { width } = useWindowDimensions();
+    const isHybrid = width < HYBRID_MAX_WIDTH;
 
     const nextStep = () => {
         if (!selectedLaguage) {
@@ -28,18 +32,30 @@ const OtherLanguageContent: React.FC<OtherLanguageContentProps> = ({ languages, 
                 <p className="subtitle">{t('pairing_other_languages_page.subtitle')}</p>
 
                 <div className={pairingOtherLanguagesStyles['joker-container']}>
-                    <img alt="dice" src={DiceSvg} />
-                    <div className={pairingOtherLanguagesStyles['joker-text-container']}>
-                        <p className={pairingOtherLanguagesStyles['joker-description']}>
-                            {t('pairing_other_languages_page.joker_description')}
-                        </p>
+                    <div className={pairingOtherLanguagesStyles['joker-image-container']}>
+                        <img alt="dice" className={pairingOtherLanguagesStyles.dice} src={DicePng} />
+                        <div className={pairingOtherLanguagesStyles['joker-text-container']}>
+                            <p className={pairingOtherLanguagesStyles['joker-description']}>
+                                {t('pairing_other_languages_page.joker_description')}
+                            </p>
+                            {!isHybrid && (
+                                <Checkbox
+                                    isSelected={selectedLaguage?.code === 'joker'}
+                                    onPressed={() => setSelectedLanguage(new Language('joker', 'Joker', 'Joker'))}
+                                    name={t('pairing_other_languages_page.joker_checkbox')}
+                                    textClass={pairingOtherLanguagesStyles['checkbox-text']}
+                                />
+                            )}
+                        </div>
+                    </div>
+                    {isHybrid && (
                         <Checkbox
                             isSelected={selectedLaguage?.code === 'joker'}
                             onPressed={() => setSelectedLanguage(new Language('joker', 'Joker', 'Joker'))}
                             name={t('pairing_other_languages_page.joker_checkbox')}
                             textClass={pairingOtherLanguagesStyles['checkbox-text']}
                         />
-                    </div>
+                    )}
                 </div>
 
                 <div className={pairingOtherLanguagesStyles['other-checkbox-container']}>

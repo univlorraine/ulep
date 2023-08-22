@@ -288,7 +288,6 @@ export class KeycloakClient {
         }),
       },
     );
-
     if (!response.ok) {
       this.logger.error(JSON.stringify(await response.json()));
       throw new UserAlreadyExistException();

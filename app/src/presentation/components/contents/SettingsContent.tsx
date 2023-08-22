@@ -10,13 +10,13 @@ import styles from './SettingsContent.module.css';
 
 interface SettingsContentProps {
     onBackPressed: () => void;
+    onDisconnect: () => void;
 }
 
-const SettingsContent: React.FC<SettingsContentProps> = ({ onBackPressed }) => {
+const SettingsContent: React.FC<SettingsContentProps> = ({ onBackPressed, onDisconnect }) => {
     const { i18n, t } = useTranslation();
     const { askForAccountDeletion, updateNotificationPermission } = useConfig();
     const [showToast] = useIonToast();
-    const logout = useStoreActions((store) => store.logout);
     const [notificationStatus, setNotificationStatus] = useState<boolean>(true);
 
     const onDeletionAsked = async () => {
@@ -81,7 +81,7 @@ const SettingsContent: React.FC<SettingsContentProps> = ({ onBackPressed }) => {
                 <span>{t('home_page.settings.unsubscribe')}</span>
                 <img alt="right-arrow" src={ArrowRightSvg} />
             </button>
-            <button className={styles['setting-container']} onClick={() => logout()}>
+            <button className={styles['setting-container']} onClick={onDisconnect}>
                 <span>{t('home_page.settings.logout')}</span>
                 <img alt="right-arrow" src={ArrowRightSvg} />
             </button>

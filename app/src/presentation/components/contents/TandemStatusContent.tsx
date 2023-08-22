@@ -1,5 +1,5 @@
 import { useTranslation } from 'react-i18next';
-import { ArrowLeftSvg, ClockSvg, CloseBlackSvg, TandemNotFoundSvg } from '../../../assets';
+import { ArrowLeftSvg, ClockPng, CloseBlackSvg, TandemNotFoundPng } from '../../../assets';
 import { ReactComponent as Background } from '../../../assets/background.svg';
 import { useConfig } from '../../../context/ConfigurationContext';
 import useWindowDimensions from '../../hooks/useWindowDimensions';
@@ -33,7 +33,7 @@ const TandemStatusContent: React.FC<TandemStatusContentProps> = ({ onFindNewTand
                 <img
                     alt="clock"
                     className="extra-large-margin-bottom"
-                    src={status === 'DRAFT' ? ClockSvg : TandemNotFoundSvg}
+                    src={status === 'DRAFT' ? ClockPng : TandemNotFoundPng}
                 />
                 <span className="subtitle extra-large-margin-bottom">{t(`home_page.tandem_${tradKey}.subtitle`)}</span>
                 {status === 'UNACTIVE' && (

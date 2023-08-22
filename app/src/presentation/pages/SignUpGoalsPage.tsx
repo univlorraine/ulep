@@ -1,23 +1,21 @@
-import { useIonToast } from "@ionic/react";
-import { useEffect, useState } from "react";
-import { useTranslation } from "react-i18next";
-import { useHistory } from "react-router";
-import { WritingSkillSvg } from "../../assets";
-import { useConfig } from "../../context/ConfigurationContext";
-import Goal from "../../domain/entities/Goal";
-import { useStoreActions } from "../../store/storeTypes";
-import WebLayoutCentered from "../components/layout/WebLayoutCentered";
-import styles from "./css/SignUp.module.css";
-import goalsStyles from "./css/SignUpGoals.module.css";
+import { useIonToast } from '@ionic/react';
+import { useEffect, useState } from 'react';
+import { useTranslation } from 'react-i18next';
+import { useHistory } from 'react-router';
+import { WritingSkillPng } from '../../assets';
+import { useConfig } from '../../context/ConfigurationContext';
+import Goal from '../../domain/entities/Goal';
+import { useStoreActions } from '../../store/storeTypes';
+import WebLayoutCentered from '../components/layout/WebLayoutCentered';
+import styles from './css/SignUp.module.css';
+import goalsStyles from './css/SignUpGoals.module.css';
 
 const SignUpGoalsPage: React.FC = () => {
     const { t } = useTranslation();
     const { configuration, getAllGoals } = useConfig();
     const [showToast] = useIonToast();
     const history = useHistory();
-    const updateProfileSignUp = useStoreActions(
-        (state) => state.updateProfileSignUp
-    );
+    const updateProfileSignUp = useStoreActions((state) => state.updateProfileSignUp);
     const [goals, setGoals] = useState<Goal[]>([]);
     const [userGoals, setUserGoals] = useState<Goal[]>([]);
 
@@ -49,7 +47,7 @@ const SignUpGoalsPage: React.FC = () => {
     const continueSignUp = async () => {
         updateProfileSignUp({ goals: userGoals });
 
-        history.push("/signup/interests");
+        history.push('/signup/interests');
     };
 
     useEffect(() => {
@@ -61,66 +59,53 @@ const SignUpGoalsPage: React.FC = () => {
             backgroundIconColor={configuration.primaryBackgroundImageColor}
             headerColor={configuration.primaryColor}
             headerPercentage={48}
-            headerTitle={t("global.create_account_title")}
+            headerTitle={t('global.create_account_title')}
         >
             <div className={styles.body}>
                 <div className={goalsStyles.content}>
-                    <h1 className="title">{t("signup_goals_page.title")}</h1>
-                    <span className="subtitle">
-                        {t("signup_goals_page.subtitle")}
-                    </span>
+                    <h1 className="title">{t('signup_goals_page.title')}</h1>
+                    <span className="subtitle">{t('signup_goals_page.subtitle')}</span>
 
-                    <div
-                        className={`${goalsStyles["goals-container"]} large-margin-top`}
-                    >
+                    <div className={`${goalsStyles['goals-container']} large-margin-top`}>
                         {goals.map((goal) => {
                             return (
                                 <div
                                     key={goal.id}
-                                    className={goalsStyles["goal-container"]}
+                                    className={goalsStyles['goal-container']}
                                     onClick={() => goalPressed(goal)}
                                     style={{
                                         backgroundColor:
                                             userGoals.length === 0 ||
-                                            userGoals.findIndex(
-                                                (userGoal) =>
-                                                    userGoal.id === goal.id
-                                            ) === -1
-                                                ? "#F2F4F7"
-                                                : "#FDEE66",
+                                            userGoals.findIndex((userGoal) => userGoal.id === goal.id) === -1
+                                                ? '#F2F4F7'
+                                                : '#FDEE66',
                                     }}
                                 >
                                     <img
                                         alt={goal.id}
                                         className={goalsStyles.image}
-                                        src={goal.image ?? WritingSkillSvg}
+                                        src={goal.image ?? WritingSkillPng}
                                     />
-                                    <span className={goalsStyles.description}>
-                                        {goal.name}
-                                    </span>
+                                    <span className={goalsStyles.description}>{goal.name}</span>
                                 </div>
                             );
                         })}
                     </div>
                 </div>
-                <div
-                    className={`${goalsStyles["bottom-container"]} large-margin-top`}
-                >
+                <div className={`${goalsStyles['bottom-container']} large-margin-top`}>
                     <button
                         className={`tertiary-button`}
                         disabled={goals.length === 0}
-                        onClick={() => history.push("/signup/interests")}
+                        onClick={() => history.push('/signup/interests')}
                     >
-                        {t("signup_goals_page.pass_button")}
+                        {t('signup_goals_page.pass_button')}
                     </button>
                     <button
-                        className={`primary-button ${
-                            userGoals.length === 0 ? "disabled" : ""
-                        }`}
+                        className={`primary-button ${userGoals.length === 0 ? 'disabled' : ''}`}
                         disabled={userGoals.length === 0}
                         onClick={continueSignUp}
                     >
-                        {t("signup_goals_page.validate_button")}
+                        {t('signup_goals_page.validate_button')}
                     </button>
                 </div>
             </div>

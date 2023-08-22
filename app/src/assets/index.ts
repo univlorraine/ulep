@@ -1,7 +1,7 @@
-import FAQSvg from './FAQ.svg';
+import FAQPng from './FAQ.png';
 import ArrowDownSvg from './arrow-down.svg';
 import ArrowRightSvg from './arrow-right.svg';
-import AvatarSvg from './avatar.svg';
+import AvatarPng from './avatar.png';
 import BackgroundSvg from './background.svg';
 import BackgroundBluePng from './backgrounds/background-blue.png';
 import BackgroundRedPng from './backgrounds/background-red.png';
@@ -9,38 +9,35 @@ import BackgroundYellowPng from './backgrounds/background-yellow.png';
 import BonjourBubbleSvg from './bonjour-bubble.svg';
 import CheckSvg from './check.svg';
 import ChineseBubble from './china-bubble.svg';
-import ClockSvg from './clock.svg';
+import ClockPng from './clock.png';
 import CloseSvg from './close.svg';
 import CloseBlackSvg from './close_black.svg';
-import CreateAccountSvg from './create-account-logo.svg';
-import DiceSvg from './dice.svg';
-import EditSvg from './edit.svg';
+import CreateAccountPng from './create-account-logo.png';
+import DicePng from './dice.png';
+import EditPng from './edit.png';
 import EyeSvg from './eye.svg';
-import GroupConversationSvg from './group_conversation.svg';
 import HiBubbleSvg from './hi-bubble.svg';
 import ArrowLeftSvg from './left-arrow.svg';
 import LeftChevronSvg from './left-chevron.svg';
 import LogoTextSvg from './logo-text.svg';
 import LogoSvg from './logo.svg';
-import MailBoxSvg from './mailbox.svg';
-import OralSkillSvg from './oral_skill.svg';
-import ParameterSvg from './parameter.svg';
-import PinSvg from './pin.svg';
-import PlusSvg from './plus.svg';
-import QuizzSvg from './quizz.svg';
+import MailBoxPng from './mailbox.png';
+import ParameterPng from './parameter.png';
+import PlusPng from './plus.png';
+import QuizzPng from './quizz.png';
 import ReportSvg from './report.svg';
-import SmallAvatarSvg from './small-avatar.svg';
-import StarSvg from './star.svg';
-import TandemSvg from './tandem.svg';
-import TandemNotFoundSvg from './tandem_not_found.svg';
-import TrophieSvg from './trophie.svg';
-import WritingSkillSvg from './writing_skill.svg';
+import SmallAvatarPng from './small-avatar.png';
+import StarPng from './star.png';
+import TandemPng from './tandem.png';
+import TandemNotFoundPng from './tandem_not_found.png';
+import TrophiePng from './trophie.png';
+import WritingSkillPng from './writing_skill.png';
 
 export {
     ArrowDownSvg,
     ArrowLeftSvg,
     ArrowRightSvg,
-    AvatarSvg,
+    AvatarPng,
     BackgroundBluePng,
     BackgroundRedPng,
     BackgroundSvg,
@@ -48,30 +45,27 @@ export {
     BonjourBubbleSvg,
     CheckSvg,
     ChineseBubble,
-    ClockSvg,
+    ClockPng,
     CloseBlackSvg,
     CloseSvg,
-    CreateAccountSvg,
-    DiceSvg,
-    EditSvg,
+    CreateAccountPng,
+    DicePng,
+    EditPng,
     EyeSvg,
-    FAQSvg,
-    GroupConversationSvg,
+    FAQPng,
     HiBubbleSvg,
     LeftChevronSvg,
     LogoSvg,
     LogoTextSvg,
-    MailBoxSvg,
-    OralSkillSvg,
-    ParameterSvg,
-    PinSvg,
-    PlusSvg,
-    QuizzSvg,
+    MailBoxPng,
+    ParameterPng,
+    PlusPng,
+    QuizzPng,
     ReportSvg,
-    SmallAvatarSvg,
-    StarSvg,
-    TandemNotFoundSvg,
-    TandemSvg,
-    TrophieSvg,
-    WritingSkillSvg,
+    SmallAvatarPng,
+    StarPng,
+    TandemNotFoundPng,
+    TandemPng,
+    TrophiePng,
+    WritingSkillPng,
 };

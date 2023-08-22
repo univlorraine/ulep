@@ -56,6 +56,7 @@ const PairingOtherLanguagesPage: React.FC = () => {
         const result = await askForLanguage.execute(selectedLanguage);
 
         if (result instanceof Error) {
+            setSelectedLanguage(undefined);
             return await showToast({ message: t(result.message), duration: 1000 });
         }
 

@@ -1,7 +1,7 @@
 import { useIonToast } from '@ionic/react';
 import { useTranslation } from 'react-i18next';
 import { useHistory } from 'react-router';
-import { ArrowLeftSvg, ArrowRightSvg, EditSvg, ParameterSvg, SmallAvatarSvg } from '../../../assets';
+import { ArrowLeftSvg, ArrowRightSvg, EditPng, ParameterPng, SmallAvatarPng } from '../../../assets';
 import { useConfig } from '../../../context/ConfigurationContext';
 import { useStoreActions } from '../../../store/storeTypes';
 import styles from './ProfileContent.module.css';
@@ -60,7 +60,7 @@ const ProfileContent: React.FC<ProfileContentProps> = ({
 
                 <button className={`${styles.button} margin-bottom`} onClick={changeAvatar}>
                     <div className={styles['button-container']}>
-                        <img alt="edit" src={EditSvg} />
+                        <img alt="edit" src={EditPng} />
                         <span className="margin-left">{t('home_page.profile.edit')}</span>
                     </div>
                     <img alt="arrow-right" src={ArrowRightSvg} />
@@ -68,7 +68,7 @@ const ProfileContent: React.FC<ProfileContentProps> = ({
 
                 <button className={`${styles.button} margin-bottom`} onClick={onParameterPressed}>
                     <div className={styles['button-container']}>
-                        <img alt="parameter" src={ParameterSvg} />
+                        <img alt="parameter" src={ParameterPng} />
                         <span className="margin-left">{t('home_page.profile.parameters')}</span>
                     </div>
                     <img alt="arrow-right" src={ArrowRightSvg} />
@@ -76,7 +76,7 @@ const ProfileContent: React.FC<ProfileContentProps> = ({
 
                 <button className={styles.button} onClick={disconnect}>
                     <div className={styles['button-container']}>
-                        <img alt="disconnect" src={SmallAvatarSvg} />
+                        <img alt="disconnect" src={SmallAvatarPng} />
                         <span className="margin-left">{t('home_page.profile.disconnect')}</span>
                     </div>
                     <img alt="arrow-right" src={ArrowRightSvg} />

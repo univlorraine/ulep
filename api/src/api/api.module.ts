@@ -13,7 +13,7 @@ import { UniversityController } from './controllers/university.controller';
 import { UploadsController } from './controllers/upload.controller';
 import { UserController } from './controllers/user.controller';
 import { ProfileController } from './controllers/profile.controller';
-import { CountryController } from './controllers/county.controller';
+import { CountryController } from './controllers/country.controller';
 import { AUTHENTICATOR } from './services/authenticator.interface';
 import { KeycloakAuthenticator } from './services/keycloak.authenticator';
 import { ObjectiveController } from './controllers/objective.controller';

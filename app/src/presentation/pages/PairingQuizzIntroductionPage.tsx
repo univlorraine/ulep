@@ -1,6 +1,6 @@
 import { useTranslation } from 'react-i18next';
 import { useHistory } from 'react-router';
-import { StarSvg } from '../../assets';
+import { StarPng } from '../../assets';
 import { useConfig } from '../../context/ConfigurationContext';
 import WebLayoutCentered from '../components/layout/WebLayoutCentered';
 import quizzIntroductionStyle from './css/PairingQuizzIntroduction.module.css';
@@ -22,7 +22,7 @@ const PairingQuizzIntroductionPage: React.FC = ({}) => {
                 <div className={quizzIntroductionStyle.container}>
                     <h1 className="title">{t('pairing_quizz_introduction_page.title')}</h1>
                     <p className="subtitle">{t('pairing_quizz_introduction_page.subtitle')}</p>
-                    <img alt="star" className={quizzIntroductionStyle.image} src={StarSvg} />
+                    <img alt="star" className={quizzIntroductionStyle.image} src={StarPng} />
                     <p className={quizzIntroductionStyle.description}>
                         {t('pairing_quizz_introduction_page.description')}
                     </p>
