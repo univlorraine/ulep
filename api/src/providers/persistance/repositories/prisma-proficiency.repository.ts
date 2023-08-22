@@ -11,6 +11,7 @@ import {
   proficiencyQuestionMapper,
   proficiencyTestMapper,
   TextContentRelations,
+  ProficiencyQuestionRelations,
 } from '../mappers';
 
 @Injectable()
@@ -66,7 +67,9 @@ export class PrismaProficiencyRepository implements ProficiencyRepository {
     limit?: number,
     level?: ProficiencyLevel,
   ): Promise<Collection<ProficiencyQuestion>> {
-    const count = await this.prisma.proficiencyQuestions.count();
+    const count = await this.prisma.proficiencyQuestions.count({
+      where: level ? { ProficiencyTest: { level } } : undefined,
+    });
 
     // If skip is out of range, return an empty array
     if (offset >= count) {
@@ -77,7 +80,8 @@ export class PrismaProficiencyRepository implements ProficiencyRepository {
       where: level ? { ProficiencyTest: { level } } : undefined,
       skip: offset,
       take: limit,
-      include: { TextContent: TextContentRelations },
+      orderBy: { ProficiencyTest: { level: 'asc' } },
+      include: ProficiencyQuestionRelations,
     });
 
     return new Collection<ProficiencyQuestion>({

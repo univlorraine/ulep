@@ -1,3 +1,4 @@
+import { Collection } from '@app/common';
 import {
   ProficiencyLevel,
   ProficiencyTest,
@@ -7,6 +8,7 @@ import { ProficiencyRepository } from 'src/core/ports/proficiency.repository';
 
 export class InMemoryProficiencyRepository implements ProficiencyRepository {
   #tests: ProficiencyTest[] = [];
+  #questions: ProficiencyQuestion[] = [];
 
   init(tests: ProficiencyTest[] = []): void {
     this.#tests = tests;
@@ -31,6 +33,19 @@ export class InMemoryProficiencyRepository implements ProficiencyRepository {
     return this.#tests;
   }
 
+  findAllQuestions(
+    offset?: number,
+    limit?: number,
+    where?: ProficiencyLevel,
+  ): Promise<Collection<ProficiencyQuestion>> {
+    const filteredQuestions = this.#questions.filter(
+      (question) => question.level === where,
+    );
+    return Promise.resolve({
+      items: filteredQuestions.slice(offset, offset + limit),
+      totalItems: filteredQuestions.length,
+    });
+  }
   async testOfId(id: string): Promise<ProficiencyTest> {
     return this.#tests.find((test) => test.id === id);
   }

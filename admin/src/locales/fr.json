@@ -49,6 +49,11 @@
         "native_language": "Langue native",
         "searchLastname": "Chercher par nom"
     },
+    "questions": {
+        "label": "Questions",
+        "level": "Niveau",
+        "question": "Question"
+    },
     "reports": {
         "CLOSED": "Fermé",
         "content": "Contenu",

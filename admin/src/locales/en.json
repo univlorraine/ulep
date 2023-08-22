@@ -49,6 +49,11 @@
         "native_language": "Native language",
         "searchLastname": "Lastname"
     },
+    "questions": {
+        "label": "Questions",
+        "level": "Level",
+        "question": "Question"
+    },
     "reports": {
         "closed": "Closed",
         "content": "Content",

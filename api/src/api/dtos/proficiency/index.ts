@@ -65,6 +65,10 @@ export class ProficiencyQuestionResponse {
   @Expose({ groups: ['read'] })
   answer: boolean;
 
+  @Swagger.ApiProperty({ type: 'string', enum: ProficiencyLevel })
+  @Expose({ groups: ['read'] })
+  level: ProficiencyLevel;
+
   constructor(partial: Partial<ProficiencyQuestionResponse>) {
     Object.assign(this, partial);
   }
@@ -78,6 +82,7 @@ export class ProficiencyQuestionResponse {
       id: question.id,
       value: name,
       answer: question.answer,
+      level: question.level,
     });
   }
 }

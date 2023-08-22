@@ -77,9 +77,12 @@ export class ProficiencyController {
       configuration().defaultTranslationLanguage !== languageCode
         ? languageCode
         : undefined;
-    return instances.map((instance) =>
-      ProficiencyTestResponse.fromProficiencyTest(instance, code),
-    );
+    return new Collection<ProficiencyTestResponse>({
+      items: instances.map((instance) =>
+        ProficiencyTestResponse.fromProficiencyTest(instance, code),
+      ),
+      totalItems: instances.length,
+    });
   }
 
   @Get('tests/:id')
@@ -123,7 +126,7 @@ export class ProficiencyController {
   @Swagger.ApiOperation({ summary: 'Collection of Question ressource.' })
   @Swagger.ApiOkResponse({ type: ProficiencyQuestionResponse, isArray: true })
   async findQuestions(
-    @Query() { limit, page, quizzLevel }: GetProficiencyQueryParams,
+    @Query() { limit, page, level }: GetProficiencyQueryParams,
     @Headers('Language-code') languageCode?: string,
   ) {
     const code =
@@ -133,7 +136,7 @@ export class ProficiencyController {
     const instances = await this.getQuestionsUsecase.execute({
       limit,
       page,
-      where: quizzLevel,
+      where: level,
     });
 
     return new Collection<ProficiencyQuestionResponse>({

@@ -18,12 +18,18 @@ export const ProficiencyTestRelations = {
   },
 };
 
+export const ProficiencyQuestionRelations = {
+  TextContent: TextContentRelations,
+  ProficiencyTest: true,
+};
+
 export type ProficiencyTestSnapshot = Prisma.ProficiencyTests & {
   Questions: ProficiencyQuestionSnapshot[];
 };
 
 export type ProficiencyQuestionSnapshot = Prisma.ProficiencyQuestions & {
   TextContent: TextContentSnapshot;
+  ProficiencyTest?: Prisma.ProficiencyTests;
 };
 
 export const proficiencyTestMapper = (
@@ -43,5 +49,6 @@ export const proficiencyQuestionMapper = (
     id: snapshot.id,
     text: textContentMapper(snapshot.TextContent),
     answer: snapshot.answer,
+    level: snapshot.ProficiencyTest?.level as ProficiencyLevel,
   };
 };
