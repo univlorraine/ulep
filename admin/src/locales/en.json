@@ -50,6 +50,11 @@
         "searchLastname": "Lastname"
     },
     "questions": {
+        "create": {
+            "error": "Error on question creation",
+            "level": "Select question level",
+            "name": "Create a new question"
+        },
         "label": "Questions",
         "level": "Level",
         "question": "Question"

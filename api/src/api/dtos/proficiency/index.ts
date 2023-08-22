@@ -7,8 +7,11 @@ import {
   IsEnum,
   Length,
   IsBoolean,
+  IsArray,
+  IsOptional,
 } from 'class-validator';
 import { textContentTranslationResponse } from 'src/api/dtos/text-content';
+import { Translation } from 'src/core/models';
 import {
   ProficiencyLevel,
   ProficiencyQuestion,
@@ -25,11 +28,7 @@ export class CreateTestRequest implements CreateTestCommand {
   level: ProficiencyLevel;
 }
 
-export class CreateQuestionRequest implements CreateQuestionCommand {
-  @Swagger.ApiProperty({ type: 'string', format: 'uuid' })
-  @IsUUID()
-  id: string;
-
+export class CreateQuestionRequest {
   @Swagger.ApiProperty({ type: 'string', format: 'uuid' })
   @IsUUID()
   test: string;
@@ -39,12 +38,10 @@ export class CreateQuestionRequest implements CreateQuestionCommand {
   @IsNotEmpty()
   value: string;
 
-  // TODO: get the language code from the request headers
-  @Swagger.ApiProperty({ type: 'string' })
-  @Transform(({ value }) => value?.toLowerCase())
-  @IsString()
-  @Length(2, 2)
-  languageCode: string;
+  @Swagger.ApiPropertyOptional({ type: 'array' })
+  @IsOptional()
+  @IsArray()
+  translations?: Translation[];
 
   @Swagger.ApiPropertyOptional({ type: 'boolean' })
   @Transform(({ value }) => value ?? true)

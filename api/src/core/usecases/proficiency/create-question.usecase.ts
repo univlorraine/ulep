@@ -12,11 +12,12 @@ import {
   LANGUAGE_REPOSITORY,
   LanguageRepository,
 } from 'src/core/ports/language.repository';
+import { Translation } from 'src/core/models';
 
 export class CreateQuestionCommand {
-  id: string;
   test: string;
   value: string;
+  translations?: Translation[];
   languageCode: string;
   answer: boolean;
 }
@@ -44,12 +45,12 @@ export class CreateQuestionUsecase {
     }
 
     return this.proficiencyRepository.createQuestion(test.id, {
-      id: command.id,
+      id: this.uuidProvider.generate(),
       text: {
         id: this.uuidProvider.generate(),
         content: command.value,
         language: command.languageCode,
-        translations: [],
+        translations: command.translations,
       },
       answer: command.answer,
     });

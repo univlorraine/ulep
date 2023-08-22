@@ -50,6 +50,11 @@
         "searchLastname": "Chercher par nom"
     },
     "questions": {
+        "create": {
+            "error": "Une erreur est survenue pendant la création de la question",
+            "level": "Selection du niveau de la question",
+            "name": "Création d'une nouvelle question"
+        },
         "label": "Questions",
         "level": "Niveau",
         "question": "Question"

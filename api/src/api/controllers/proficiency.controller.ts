@@ -153,7 +153,11 @@ export class ProficiencyController {
   @Swagger.ApiOperation({ summary: 'Create a new Question ressource.' })
   @Swagger.ApiCreatedResponse({ type: ProficiencyQuestionResponse })
   async createQuestion(@Body() body: CreateQuestionRequest) {
-    const instance = await this.createQuestionUsecase.execute(body);
+    const languageCode = configuration().defaultTranslationLanguage;
+    const instance = await this.createQuestionUsecase.execute({
+      ...body,
+      languageCode,
+    });
 
     return ProficiencyQuestionResponse.fromProficiencyQuestion(instance);
   }

@@ -125,6 +125,12 @@ export class PrismaProficiencyRepository implements ProficiencyRepository {
               create: {
                 text: question.text.content,
                 LanguageCode: { connect: { code: question.text.language } },
+                Translations: {
+                  create: question.text.translations?.map((translation) => ({
+                    text: translation.content,
+                    LanguageCode: { connect: { code: translation.language } },
+                  })),
+                },
               },
             },
             answer: question.answer,

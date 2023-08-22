@@ -55,7 +55,7 @@ const TranslationForm: React.FC<TranslationFormProps> = ({ setTranslations, tran
                     }
                     type="button"
                 >
-                    {translate('global.new_translation')}
+                    <>{translate('global.new_translation')}</>
                 </Button>
             </Box>
         </div>
