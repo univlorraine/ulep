@@ -1,3 +1,5 @@
+# Global routine
+
 ```plantuml
 start
 :profileToPair = Profiles from selected universities not in tandem;
@@ -61,3 +63,45 @@ Note current restrictions that will probably be challenged or  be lifted later:
 - 1 tandem proposition per profile
 - Priorities
 - Discover langage only with joker language
+- Manage several learning langages
+
+
+# Score computation
+
+
+Computation of pair(profile1, profile2).
+Note: score of pair is not symetric.
+
+```plantuml
+start
+:
+    profile1.learningLanguage = learningLanuage of profile 1
+    profile2.learningLanguage = learningLanuage of profile 2
+    profile1.spokenLanguages = native langages + mastered langages of profile 1
+    profile2.spokenLanguages = native langages + mastered langages of profile 2
+    isDiscoveryMode = profile1.learningLanguage == Joker
+;
+
+
+group forbbiden cases
+    if (not isDiscoveryMode AND (profile1.learningLanguage NOT IN profile2.spokenLanguages OR profile2.learningLanguage NOT IN profile1.spokenLanguages)) then (true)
+        stop
+    endif
+    if ((profile 1 requested same gender OR profile 2 requested same gender) AND profile1.gender != profile2.gender) then (true)
+        stop
+    endif
+    if ((profile1.learningType != profile2.learningType) AND profile1.learningType !== "BOTH" && profile2.learningType !== "BOTH") then (true)
+        stop
+    endif
+    if ((profile1.learningType == "TANDEM") AND (profile1.campus !== profile2.campus)) then (true)
+        stop
+    endif
+end group
+floating note: if alogrithm is stopped at this point score = 0
+
+:compute scores for languageLevel, age, status, goals, universigty, gender and interests;
+
+:return scores and SUM(scores);
+
+end
+```
