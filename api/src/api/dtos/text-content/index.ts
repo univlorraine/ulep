@@ -55,3 +55,18 @@ export class TextContentResponse {
     });
   }
 }
+
+export const textContentTranslationResponse = (
+  textContent: TextContent,
+  languageCode: string,
+) => {
+  if (!languageCode) {
+    return textContent.content;
+  } else {
+    const translation = textContent.translations.find(
+      (translation) => translation.language === languageCode,
+    )?.content;
+
+    return translation || textContent.content;
+  }
+};

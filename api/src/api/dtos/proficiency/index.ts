@@ -8,6 +8,7 @@ import {
   Length,
   IsBoolean,
 } from 'class-validator';
+import { textContentTranslationResponse } from 'src/api/dtos/text-content';
 import {
   ProficiencyLevel,
   ProficiencyQuestion,
@@ -68,13 +69,14 @@ export class ProficiencyQuestionResponse {
     Object.assign(this, partial);
   }
 
-  // TODO: add languageCode parameter
   static fromProficiencyQuestion(
     question: ProficiencyQuestion,
+    languageCode?: string,
   ): ProficiencyQuestionResponse {
+    const name = textContentTranslationResponse(question.text, languageCode);
     return new ProficiencyQuestionResponse({
       id: question.id,
-      value: question.text.content,
+      value: name,
       answer: question.answer,
     });
   }
@@ -97,12 +99,18 @@ export class ProficiencyTestResponse {
     Object.assign(this, partial);
   }
 
-  static fromProficiencyTest(test: ProficiencyTest): ProficiencyTestResponse {
+  static fromProficiencyTest(
+    test: ProficiencyTest,
+    languageCode?: string,
+  ): ProficiencyTestResponse {
     return new ProficiencyTestResponse({
       id: test.id,
       level: test.level,
-      questions: (test.questions ?? []).map(
-        ProficiencyQuestionResponse.fromProficiencyQuestion,
+      questions: (test.questions ?? []).map((question) =>
+        ProficiencyQuestionResponse.fromProficiencyQuestion(
+          question,
+          languageCode,
+        ),
       ),
     });
   }

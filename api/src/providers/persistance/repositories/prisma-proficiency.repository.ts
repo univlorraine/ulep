@@ -1,5 +1,5 @@
 import { Injectable, Logger } from '@nestjs/common';
-import { PrismaService } from '@app/common';
+import { Collection, PrismaService } from '@app/common';
 import { ProficiencyRepository } from 'src/core/ports/proficiency.repository';
 import {
   ProficiencyLevel,
@@ -59,6 +59,31 @@ export class PrismaProficiencyRepository implements ProficiencyRepository {
     }
 
     return proficiencyTestMapper(test);
+  }
+
+  async findAllQuestions(
+    offset?: number,
+    limit?: number,
+    level?: ProficiencyLevel,
+  ): Promise<Collection<ProficiencyQuestion>> {
+    const count = await this.prisma.proficiencyQuestions.count();
+
+    // If skip is out of range, return an empty array
+    if (offset >= count) {
+      return { items: [], totalItems: count };
+    }
+
+    const questions = await this.prisma.proficiencyQuestions.findMany({
+      where: level ? { ProficiencyTest: { level } } : undefined,
+      skip: offset,
+      take: limit,
+      include: { TextContent: TextContentRelations },
+    });
+
+    return new Collection<ProficiencyQuestion>({
+      items: questions.map(proficiencyQuestionMapper),
+      totalItems: count,
+    });
   }
 
   async testOfLevel(level: ProficiencyLevel): Promise<ProficiencyTest> {

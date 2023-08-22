@@ -8,6 +8,7 @@ import {
   IsString,
   IsUUID,
 } from 'class-validator';
+import { textContentTranslationResponse } from 'src/api/dtos/text-content';
 import { UserResponse } from 'src/api/dtos/users';
 import { Translation } from 'src/core/models';
 import {
@@ -68,17 +69,7 @@ export class ReportCategoryResponse {
     entity: ReportCategory,
     languageCode?: string,
   ): ReportCategoryResponse {
-    let name;
-
-    if (!languageCode) {
-      name = entity.name.content;
-    } else {
-      const translation = entity.name.translations.find(
-        (translation) => translation.language === languageCode,
-      )?.content;
-
-      name = translation || entity.name.content;
-    }
+    const name = textContentTranslationResponse(entity.name, languageCode);
 
     return new ReportCategoryResponse({
       id: entity.id,

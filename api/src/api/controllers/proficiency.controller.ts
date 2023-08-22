@@ -9,6 +9,8 @@ import {
   SerializeOptions,
   ParseUUIDPipe,
   UseGuards,
+  Headers,
+  Query,
 } from '@nestjs/common';
 import * as Swagger from '@nestjs/swagger';
 import {
@@ -24,6 +26,7 @@ import {
   DeleteTestUsecase,
   GetLevelsUsecase,
   GetQuestionsByLevelUsecase,
+  GetQuestionsUsecase,
   GetTestUsecase,
   GetTestsUsecase,
 } from 'src/core/usecases/proficiency';
@@ -32,6 +35,8 @@ import { ProficiencyLevel } from 'src/core/models';
 import { AuthenticationGuard } from '../guards';
 import { Roles } from '../decorators/roles.decorator';
 import { configuration } from 'src/configuration';
+import { GetProficiencyQueryParams } from 'src/api/dtos/proficiency/proficiency-filters';
+import { Collection } from '@app/common';
 
 @Controller('proficiency')
 @Swagger.ApiTags('Proficiency')
@@ -42,6 +47,7 @@ export class ProficiencyController {
     private readonly createTestUsecase: CreateTestUsecase,
     private readonly getTestsUsecase: GetTestsUsecase,
     private readonly getTestUsecase: GetTestUsecase,
+    private readonly getQuestionsUsecase: GetQuestionsUsecase,
     private readonly getQuestionsByLevelUsecase: GetQuestionsByLevelUsecase,
     private readonly deleteTestUsecase: DeleteTestUsecase,
     private readonly createQuestionUsecase: CreateQuestionUsecase,
@@ -65,10 +71,15 @@ export class ProficiencyController {
   @UseGuards(AuthenticationGuard)
   @Swagger.ApiOperation({ summary: 'Collection of Test ressource.' })
   @Swagger.ApiOkResponse({ type: ProficiencyTestResponse, isArray: true })
-  async findAll() {
+  async findAll(@Headers('Language-code') languageCode?: string) {
     const instances = await this.getTestsUsecase.execute();
-
-    return instances.map(ProficiencyTestResponse.fromProficiencyTest);
+    const code =
+      configuration().defaultTranslationLanguage !== languageCode
+        ? languageCode
+        : undefined;
+    return instances.map((instance) =>
+      ProficiencyTestResponse.fromProficiencyTest(instance, code),
+    );
   }
 
   @Get('tests/:id')
@@ -102,7 +113,35 @@ export class ProficiencyController {
   ) {
     const instances = await this.getQuestionsByLevelUsecase.execute({ level });
 
-    return instances.map(ProficiencyQuestionResponse.fromProficiencyQuestion);
+    return instances.map((proficiency) =>
+      ProficiencyQuestionResponse.fromProficiencyQuestion(proficiency),
+    );
+  }
+
+  @Get('questions')
+  @UseGuards(AuthenticationGuard)
+  @Swagger.ApiOperation({ summary: 'Collection of Question ressource.' })
+  @Swagger.ApiOkResponse({ type: ProficiencyQuestionResponse, isArray: true })
+  async findQuestions(
+    @Query() { limit, page, quizzLevel }: GetProficiencyQueryParams,
+    @Headers('Language-code') languageCode?: string,
+  ) {
+    const code =
+      configuration().defaultTranslationLanguage !== languageCode
+        ? languageCode
+        : undefined;
+    const instances = await this.getQuestionsUsecase.execute({
+      limit,
+      page,
+      where: quizzLevel,
+    });
+
+    return new Collection<ProficiencyQuestionResponse>({
+      items: instances.items.map((question) =>
+        ProficiencyQuestionResponse.fromProficiencyQuestion(question, code),
+      ),
+      totalItems: instances.totalItems,
+    });
   }
 
   @Post('questions')
