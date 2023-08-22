@@ -166,7 +166,7 @@ describe('Proficiency', () => {
     await request(app.getHttpServer())
       .post(`/proficiency/questions`)
       .send({
-        level: test.level,
+        level: ProficiencyLevel.A1,
         value: "I can ask and respond to someone's news.",
       })
       .expect(201);
