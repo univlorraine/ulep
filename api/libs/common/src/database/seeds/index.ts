@@ -19,11 +19,11 @@ const load = async () => {
     await prisma.languageCodes.deleteMany();
     await prisma.countryCodes.deleteMany();
     await prisma.proficiencyTests.deleteMany();
-    await prisma.reportCategories.deleteMany();
     await prisma.interestCategories.deleteMany();
     await prisma.interests.deleteMany();
     await prisma.learningObjectives.deleteMany();
     await prisma.textContent.deleteMany();
+    await prisma.reportCategories.deleteMany();
     await prisma.tandems.deleteMany();
 
     await createCountries(prisma);

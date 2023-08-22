@@ -43,10 +43,10 @@ const EditQuestion = () => {
                 render={(record: Question) => (
                     <QuestionForm
                         handleSubmit={(
-                            test: string,
+                            level: string,
                             name: string,
                             translations: { index: number; item: Translation; file?: File | undefined }[]
-                        ) => handleSubmit(record.id, test, name, translations)}
+                        ) => handleSubmit(record.id, level, name, translations)}
                         level={record.level}
                         name={record.value.content}
                         tranlsations={record.value.translations?.map((translation: Translation, index: number) => ({
