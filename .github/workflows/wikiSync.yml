@@ -8,9 +8,9 @@ jobs:
     runs-on: ubuntu-latest
     name: Git Repo Sync
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
         with:
-          repository: thetribeio/etandem.wiki
+          repository: ${{github.repository}}.wiki
       - name: Add remote
         run: git remote add origin-new https://${{ secrets.TARGET_USERNAME }}:${{ secrets.TARGET_TOKEN }}@gitlab.univ-lorraine.fr/dn-sied/pleiades/ulep.wiki.git
         shell: bash
