@@ -40,7 +40,7 @@ const PairingOtherLanguagesPage: React.FC = () => {
     };
 
     const onOtherLanguageSelected = async (language: Language) => {
-        if (language.code === 'joker') {
+        if (language.code === '*') {
             updateProfileSignUp({ learningLanguage: language, learningLanguageLevel: 'A0' });
             return history.push('/signup/pairing/pedagogy');
         }

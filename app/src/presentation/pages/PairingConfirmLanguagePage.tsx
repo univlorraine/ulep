@@ -1,11 +1,8 @@
-import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Redirect, useHistory } from 'react-router';
 import { TandemPng } from '../../assets';
 import { useConfig } from '../../context/ConfigurationContext';
 import { useStoreState } from '../../store/storeTypes';
-import LanguageSelectedContent from '../components/contents/LanguageSelectedContent';
-import SuccessLayout from '../components/layout/SuccessLayout';
 import WebLayoutCentered from '../components/layout/WebLayoutCentered';
 import { codeCountryToFlag } from '../utils';
 import confirmLanguagesStyles from './css/PairingConfirmLanguage.module.css';
@@ -17,7 +14,6 @@ const PairingConfirmLanguagePage: React.FC = () => {
     const history = useHistory();
     const profileSignUp = useStoreState((state) => state.profileSignUp);
     const user = useStoreState((state) => state.user);
-    const [isConfirmed, setIsConfirmed] = useState<boolean>(false);
 
     if (!profileSignUp.learningLanguage || !user) {
         return <Redirect to="/signup" />;
@@ -37,30 +33,8 @@ const PairingConfirmLanguagePage: React.FC = () => {
     };
 
     const continueSignUp = async () => {
-        if (profileSignUp.learningLanguageLevel) {
-            return history.push('/signup/pairing/preference');
-        }
-        return history.push('/signup/pairing/level');
+        return history.push('/signup/pairing/level/start');
     };
-
-    if (isConfirmed) {
-        return (
-            <SuccessLayout
-                backgroundColorCode={configuration.secondaryDarkColor}
-                backgroundIconColor={configuration.secondaryBackgroundImageColor}
-                colorCode={configuration.secondaryColor}
-            >
-                <div className={styles.body}>
-                    <LanguageSelectedContent
-                        language={profileSignUp.learningLanguage}
-                        mode={'confirm'}
-                        profilePicture={user.avatar}
-                        onNextPressed={continueSignUp}
-                    />
-                </div>
-            </SuccessLayout>
-        );
-    }
 
     return (
         <WebLayoutCentered
@@ -89,7 +63,7 @@ const PairingConfirmLanguagePage: React.FC = () => {
                     </div>
                 </div>
                 <div className={`large-margin-top extra-large-margin-bottom`}>
-                    <button className={`primary-button `} onClick={() => setIsConfirmed(true)}>
+                    <button className={`primary-button `} onClick={continueSignUp}>
                         {t('pairing_confirm_language_page.validate_button')}
                     </button>
                 </div>

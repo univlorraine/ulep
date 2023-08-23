@@ -8,8 +8,7 @@ const SettingsPage: React.FC = () => {
     const logout = useStoreActions((store) => store.logout);
 
     const onDisconnect = () => {
-        logout();
-        return history.replace('/');
+        return logout();
     };
     return (
         <IonPage>

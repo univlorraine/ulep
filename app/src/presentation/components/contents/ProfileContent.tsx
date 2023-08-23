@@ -42,8 +42,7 @@ const ProfileContent: React.FC<ProfileContentProps> = ({
     };
 
     const disconnect = () => {
-        logout();
-        return history.replace('/');
+        return logout();
     };
 
     return (

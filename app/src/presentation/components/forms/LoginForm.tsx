@@ -3,17 +3,15 @@ import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { AvatarPng, LeftChevronSvg } from '../../../assets';
 import { useConfig } from '../../../context/ConfigurationContext';
-import { Tokens } from '../../../domain/interfaces/LoginUsecase.interface';
 import CircleAvatar from '../CircleAvatar';
 import TextInput from '../TextInput';
 import style from './Form.module.css';
 
 interface LoginFormProps {
     goBack: () => void;
-    onLogin: (tokens: Tokens) => void;
 }
 
-const LoginForm: React.FC<LoginFormProps> = ({ goBack, onLogin }) => {
+const LoginForm: React.FC<LoginFormProps> = ({ goBack }) => {
     const { t } = useTranslation();
     const { login } = useConfig();
     const [email, setEmail] = useState<string>('');
@@ -26,9 +24,9 @@ const LoginForm: React.FC<LoginFormProps> = ({ goBack, onLogin }) => {
         await showLoading();
         const result = await login.execute(email, password);
         if (result instanceof Error) {
+            await hideLoading();
             return await showToast({ message: t(result.message), duration: 5000 });
         }
-        onLogin(result);
         await hideLoading();
     };
 

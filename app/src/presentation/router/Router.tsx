@@ -37,6 +37,7 @@ import TandemProfilePage from '../pages/mobile/TandemProfilePage';
 import TandemStatusPage from '../pages/mobile/TandemStatusPage';
 import MobileRoute from './MobileRoute';
 import PrivateRoute from './PrivateRoute';
+import PairingLevelStartPage from '../pages/PairingLevelStartPage';
 
 const OfflineRouter: React.FC = () => {
     //TODO: Update this when suspended variable will be in profile
@@ -83,6 +84,7 @@ const OfflineRouter: React.FC = () => {
             <PrivateRoute exact component={PairingConfirmLanguagePage} path="/signup/pairing/language/confirm" />
             <PrivateRoute exact component={PairingFinalPage} path="/signup/pairing/end" />
             <PrivateRoute exact component={PairingLevelPage} path="/signup/pairing/level" />
+            <PrivateRoute exact component={PairingLevelStartPage} path="/signup/pairing/level/start" />
             <PrivateRoute exact component={PairingOtherLanguagesPage} path="/signup/pairing/other-languages" />
             <PrivateRoute exact component={PairingPreferencePage} path="/signup/pairing/preference" />
             <PrivateRoute exact component={PairingQuizzEndPage} path="/signup/pairing/language/quizz/end" />
