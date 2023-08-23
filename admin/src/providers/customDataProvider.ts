@@ -2,6 +2,7 @@ import simpleRestProvider from 'ra-data-simple-rest';
 import { fetchUtils } from 'react-admin';
 import CountriesQuery from '../queries/CountriesQuery';
 import ProfilesQuery from '../queries/ProfilesQuery';
+import QuestionsQuery from '../queries/QuestionsQuery';
 import ReportsQuery from '../queries/ReportsQuery';
 import { http } from './authProvider';
 import jwtManager from './jwtManager';
@@ -117,6 +118,9 @@ const customDataProvider = {
                 break;
             case 'reports':
                 url.search = ReportsQuery(params);
+                break;
+            case 'proficiency/questions':
+                url.search = QuestionsQuery(params);
                 break;
             default:
                 break;

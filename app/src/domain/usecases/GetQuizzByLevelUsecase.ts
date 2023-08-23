@@ -9,7 +9,7 @@ class GetQuizzByLevelUsecase implements GetQuizzByLevelUsecaseInterface {
     async execute(level: CEFR): Promise<Question[] | Error> {
         try {
             const httpResponse: HttpResponse<QuestionCommand[]> = await this.domainHttpAdapter.get(
-                `/proficiency/questions/${level}`
+                `/proficiency/questions/level/${level}`
             );
 
             if (!httpResponse.parsedBody) {

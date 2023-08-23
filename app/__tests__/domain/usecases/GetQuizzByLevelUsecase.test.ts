@@ -26,7 +26,7 @@ describe('getQuizzByLevel', () => {
         adapter.mockJson({ parsedBody: usecaseResponse });
         await usecase.execute('A1');
         expect(adapter.get).toHaveBeenCalledTimes(1);
-        expect(adapter.get).toHaveBeenCalledWith('/proficiency/questions/A1');
+        expect(adapter.get).toHaveBeenCalledWith('/proficiency/questions/level/A1');
     });
 
     it('execute must return an expected response', async () => {

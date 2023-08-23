@@ -77,13 +77,9 @@ export class ReportController {
   @Swagger.ApiOkResponse({ type: ReportCategoryResponse, isArray: true })
   async findAllCategories(@Headers('Language-code') languageCode?: string) {
     const instances = await this.findReportCategoriesUsecase.execute();
-    const code =
-      configuration().defaultTranslationLanguage !== languageCode
-        ? languageCode
-        : undefined;
     return new Collection<ReportCategoryResponse>({
       items: instances.items.map((category) =>
-        ReportCategoryResponse.fromDomain(category, code),
+        ReportCategoryResponse.fromDomain(category, languageCode),
       ),
       totalItems: instances.totalItems,
     });

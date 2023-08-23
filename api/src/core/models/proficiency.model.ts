@@ -20,6 +20,7 @@ export type ProficiencyQuestionProps = {
   id: string;
   text: TextContent;
   answer: boolean;
+  level?: ProficiencyLevel;
 };
 
 export class ProficiencyTest {
@@ -38,10 +39,12 @@ export class ProficiencyQuestion {
   readonly id: string;
   readonly text: TextContent;
   readonly answer: boolean;
+  readonly level?: ProficiencyLevel;
 
   constructor(props: ProficiencyQuestionProps) {
     this.id = props.id;
     this.text = props.text;
     this.answer = props.answer;
+    this.level = props.level;
   }
 }

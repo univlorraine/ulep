@@ -1,3 +1,4 @@
+import { Collection } from '@app/common';
 import {
   ProficiencyLevel,
   ProficiencyQuestion,
@@ -17,6 +18,12 @@ export interface ProficiencyRepository {
 
   removeTest(level: ProficiencyLevel): Promise<void>;
 
+  findAllQuestions(
+    offset?: number,
+    limit?: number,
+    where?: ProficiencyLevel,
+  ): Promise<Collection<ProficiencyQuestion>>;
+
   createQuestion(
     testId: string,
     question: ProficiencyQuestion,
@@ -24,7 +31,7 @@ export interface ProficiencyRepository {
 
   questionOfId(id: string): Promise<ProficiencyQuestion | null>;
 
-  updateQuestion(question: ProficiencyQuestion): Promise<void>;
+  updateQuestion(question: ProficiencyQuestion): Promise<ProficiencyQuestion>;
 
   removeQuestion(id: string): Promise<void>;
 }

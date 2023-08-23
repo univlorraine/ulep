@@ -1,8 +1,9 @@
 import React from 'react';
 import { useTranslate, useNotify, useRedirect, useUpdate, Edit, WithRecord } from 'react-admin';
 import ObjectiveForm from '../../components/form/ObjectiveForm';
+import IndexedTranslation from '../../entities/IndexedTranslation';
 import Objective from '../../entities/Objective';
-import Translation from '../../entities/Translation';
+import indexedTranslationsToTranslations from '../../utils/indexedTranslationsToTranslations';
 
 const EditObjective = () => {
     const translate = useTranslate();
@@ -10,12 +11,7 @@ const EditObjective = () => {
     const redirect = useRedirect();
     const notify = useNotify();
 
-    const handleSubmit = async (
-        id: string,
-        newName: string,
-        newTranslations: { index: number; item: Translation }[],
-        newFile?: File
-    ) => {
+    const handleSubmit = async (id: string, newName: string, newTranslations: IndexedTranslation[], newFile?: File) => {
         const formData = new FormData();
         formData.append('id', id);
         formData.append('name', newName);
@@ -23,31 +19,28 @@ const EditObjective = () => {
             formData.append('file', newFile);
         }
 
-        newTranslations
-            .map((translation) => translation.item)
-            .filter((translation) => translation.content && translation.language)
-            .forEach((translation, index) => {
-                formData.append(`translations[${index}][content]`, translation.content);
-                formData.append(`translations[${index}][language]`, translation.language);
-            });
+        indexedTranslationsToTranslations(newTranslations).forEach((translation, index) => {
+            formData.append(`translations[${index}][content]`, translation.content);
+            formData.append(`translations[${index}][language]`, translation.language);
+        });
         try {
             return await update(
                 'objectives',
                 { data: formData },
                 {
-                    onSettled: (data: any, err: Error) => {
-                        if (!err) {
+                    onSettled: (data: any, error: Error) => {
+                        if (!error) {
                             return redirect('/objectives');
                         }
 
-                        return notify('objectives.create.error');
+                        return notify('objectives.edit.error');
                     },
                 }
             );
         } catch (err) {
             console.error(err);
 
-            return notify('objectives.create.error');
+            return notify('objectives.edit.error');
         }
     };
 
@@ -57,17 +50,14 @@ const EditObjective = () => {
                 label="objective"
                 render={(record: Objective) => (
                     <ObjectiveForm
-                        handleSubmit={(
-                            name: string,
-                            translations: { index: number; item: Translation }[],
-                            file?: File
-                        ) => handleSubmit(record.id, name, translations, file)}
+                        handleSubmit={(name: string, translations: IndexedTranslation[], file?: File) =>
+                            handleSubmit(record.id, name, translations, file)
+                        }
                         image={record.image}
                         name={record.name.content}
-                        tranlsations={record.name.translations.map((translation, index) => ({
-                            index,
-                            item: translation,
-                        }))}
+                        tranlsations={record.name.translations.map(
+                            (translation, index) => new IndexedTranslation(index, translation)
+                        )}
                     />
                 )}
             />
