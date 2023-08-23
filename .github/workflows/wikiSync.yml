@@ -17,9 +17,12 @@ jobs:
       - name: checkout to main wiki
         run: git checkout -b main
         shell: bash
-      - name: status wiki
-        run: git status
+      - name: pull main gitlab wiki
+        run: git pull origin-new 
+        shell: bash
+      - name: merge master github to main
+        run: git merge master 
         shell: bash
       - name: Push main wiki
-        run: git push origin-new main
+        run: git push origin-new main -f
         shell: bash
