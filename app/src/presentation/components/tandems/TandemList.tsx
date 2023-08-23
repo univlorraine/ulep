@@ -5,11 +5,10 @@ import styles from './TandemList.module.css';
 
 interface TandemListProps {
     onTandemPressed: (tandem: Tandem) => void;
-    studentId: string;
     tandems: Tandem[];
 }
 
-const TandemList: React.FC<TandemListProps> = ({ onTandemPressed, studentId, tandems }) => {
+const TandemList: React.FC<TandemListProps> = ({ onTandemPressed, tandems }) => {
     const { t } = useTranslation();
     return (
         <div className="home-card">
@@ -24,8 +23,8 @@ const TandemList: React.FC<TandemListProps> = ({ onTandemPressed, studentId, tan
                                     key={tandem.id}
                                     language={tandem.language}
                                     onTandemPressed={() => onTandemPressed(tandem)}
-                                    profileAvatar={tandem.partner.user.avatar}
-                                    profileName={tandem.partner.user.firstname}
+                                    profileAvatar={tandem.partner?.user.avatar}
+                                    profileName={tandem.partner?.user.firstname}
                                 />
                             );
                         })}

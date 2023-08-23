@@ -94,15 +94,10 @@ const HomePage: React.FC = () => {
                     </div>
                     {isHybrid && <div className={styles.separator} />}
                     <div className={styles.content}>
-                        <TandemList
-                            onTandemPressed={onValidatedTandemPressed}
-                            studentId={profile.id}
-                            tandems={tandems}
-                        />
+                        <TandemList onTandemPressed={onValidatedTandemPressed} tandems={tandems} />
                         <WaitingTandemList
                             onTandemPressed={onTandemPressed}
                             onNewTandemAsked={() => null}
-                            studentId={profile.id}
                             tandems={tandems}
                         />
                     </div>
