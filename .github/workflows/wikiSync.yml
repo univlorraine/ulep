@@ -8,14 +8,15 @@ jobs:
     runs-on: ubuntu-latest
     name: Git Repo Sync
     steps:
-    - uses: actions/checkout@v2
-      with:
-        repository: thetribeio/etandem.wiki
-    - uses: wangchucheng/git-repo-sync@v0.1.0
-      with:
-        # Such as https://github.com/wangchucheng/git-repo-sync.git
-        target-url: https://gitlab.univ-lorraine.fr/dn-sied/pleiades/ulep.wiki.git
-        # Such as wangchucheng
-        target-username: ${{ secrets.TARGET_USERNAME }}
-          # You can store token in your project's 'Setting > Secrets' and reference the name here. Such as ${{ secrets.ACCESS\_TOKEN }}
-        target-token: ${{ secrets.TARGET_TOKEN }}
+      - uses: actions/checkout@v2
+        with:
+          repository: thetribeio/etandem.wiki
+      - name: Add remote
+        run: git remote add origin-new https://${{ secrets.TARGET_USERNAME }}:${{ secrets.TARGET_TOKEN }}@gitlab.univ-lorraine.fr/dn-sied/pleiades/ulep.wiki.git
+        shell: bash
+      - name: merge master to main wiki
+        run: git checkout main && git merge master
+        shell: bash
+      - name: Push main wiki
+        run: git push origin-new main
+        shell: bash
