@@ -17,6 +17,9 @@ jobs:
       - name: checkout to main wiki
         run: git checkout -b main
         shell: bash
+      - name: git config
+        run: git config pull.rebase false
+        shell: bash
       - name: pull main gitlab wiki
         run: git pull origin-new main
         shell: bash
