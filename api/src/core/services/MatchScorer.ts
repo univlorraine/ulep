@@ -43,7 +43,6 @@ export class MatchScorer implements IMatchScorer {
     return this.#coeficients;
   }
 
-  // TODO: TANDEM / ETANDEM
   // TODO: Use interest categories similarity instead of interests
   // TODO(multipleLearningLanguage): manage multiple learning language
   public computeMatchScore(profile1: Profile, profile2: Profile): Match {
@@ -93,7 +92,7 @@ export class MatchScorer implements IMatchScorer {
     }
 
     const scores: MatchScores = {
-      level: this.computeLanguageLevel(profile1, profile2, isDiscovery),
+      level: this.computeLanguageLevel(profile1, profile2),
       age: this.computeAgeBonus(profile1, profile2),
       status: this.computeSameRolesBonus(profile1, profile2),
       goals: this.computeSameGoalsBonus(profile1, profile2),
@@ -105,40 +104,15 @@ export class MatchScorer implements IMatchScorer {
     return new Match({ owner: profile1, target: profile2, scores });
   }
 
-  private computeLanguageLevel(profile1: Profile, profile2: Profile, isDiscovery = false): number {
-    const levelsCount = isDiscovery ? 6 : 5;
+  private computeLanguageLevel(profile1: Profile, profile2: Profile): number {
+    const profile1LearningLanguageIsDiscovery = profile1.learningLanguages?.[0]?.language.code === JOKER_LANGUAGE_CODE;
+    const learningScoreProfile1 = this.computeLearningScore(profile1, profile1LearningLanguageIsDiscovery);
 
-    // TODO(herve): validate this matrix
-    const languageLevelMatrix: { [key: string]: { [key: string]: number } } = {
-      A0: { A0: 0, A1: 1, A2: 1, B1: 2, B2: 2, C1: 2, C2: 2 },
-      A1: { A0: 1, A1: 2, A2: 2, B1: 3, B2: 3, C1: 3, C2: 3 },
-      A2: { A0: 1, A1: 2, A2: 2, B1: 4, B2: 4, C1: 4, C2: 4 },
-      B1: { A0: 2, A1: 3, A2: 4, B1: 5, B2: 5, C1: 5, C2: 5 },
-      B2: { A0: 2, A1: 3, A2: 4, B1: 5, B2: 5, C1: 5, C2: 5 },
-      C1: { A0: 2, A1: 3, A2: 4, B1: 5, B2: 5, C1: 5, C2: 5 },
-      C2: { A0: 2, A1: 3, A2: 4, B1: 5, B2: 5, C1: 5, C2: 5 },
-    };
+    const profile2LearningLanguageIsDiscovery = profile2.learningLanguages?.[0]?.language.code === JOKER_LANGUAGE_CODE;
+    const learningScoreProfile2 = this.computeLearningScore(profile2, profile2LearningLanguageIsDiscovery);
 
-    // TODO(herve): validate this matrix
-    const discoveryLanguageLevelMatrix: { [key: string]: { [key: string]: number } } = {
-      A0: { A0: 0, A1: 2, A2: 2, B1: 5, B2: 5, C1: 5, C2: 5 },
-      A1: { A0: 2, A1: 2, A2: 2, B1: 5, B2: 5, C1: 5, C2: 5 },
-      A2: { A0: 2, A1: 2, A2: 5, B1: 5, B2: 5, C1: 5, C2: 5 },
-      B1: { A0: 6, A1: 6, A2: 5, B1: 4, B2: 4, C1: 4, C2: 4 },
-      B2: { A0: 6, A1: 6, A2: 5, B1: 4, B2: 4, C1: 4, C2: 4 },
-      C1: { A0: 6, A1: 6, A2: 5, B1: 4, B2: 4, C1: 4, C2: 4 },
-      C2: { A0: 6, A1: 6, A2: 5, B1: 4, B2: 4, C1: 4, C2: 4 },
-    };
 
-    // TODO(multipleLearningLanguage): manage multiple learning language
-    const level1 = profile1.learningLanguages?.[0]?.level;
-    // We approximate native and mastered language of user equals to a level between B1 and C2.
-    // Score matrix have the same score for all these profile2 levels so we take B2 arbitrary here.
-    const level2 = ProficiencyLevel.B2
-
-    const level = isDiscovery ? discoveryLanguageLevelMatrix[level1][level2] : languageLevelMatrix[level1][level2];
-
-    return this.coeficients.level * (level / levelsCount);
+    return this.coeficients.level * ((learningScoreProfile1 + learningScoreProfile2) / 2);
   }
 
   // Apply bunus if ages match criteria
@@ -256,7 +230,41 @@ export class MatchScorer implements IMatchScorer {
     return intersection.size / union.size;
   }
 
-  private applyBonus(currentScore: number, bonus: number): number {
-    return Math.min(1, currentScore + bonus);
+  private computeLearningScore(profile1: Profile, isDiscovery: boolean): number {
+    const levelsCount = isDiscovery ? 6 : 5;
+
+    // TODO(herve): validate this matrix
+    const languageLevelMatrix: { [key: string]: { [key: string]: number } } = {
+      A0: { A0: 0, A1: 1, A2: 1, B1: 2, B2: 2, C1: 2, C2: 2 },
+      A1: { A0: 1, A1: 2, A2: 2, B1: 3, B2: 3, C1: 3, C2: 3 },
+      A2: { A0: 1, A1: 2, A2: 2, B1: 4, B2: 4, C1: 4, C2: 4 },
+      B1: { A0: 2, A1: 3, A2: 4, B1: 5, B2: 5, C1: 5, C2: 5 },
+      B2: { A0: 2, A1: 3, A2: 4, B1: 5, B2: 5, C1: 5, C2: 5 },
+      C1: { A0: 2, A1: 3, A2: 4, B1: 5, B2: 5, C1: 5, C2: 5 },
+      C2: { A0: 2, A1: 3, A2: 4, B1: 5, B2: 5, C1: 5, C2: 5 },
+    };
+
+    // TODO(herve): validate this matrix
+    const discoveryLanguageLevelMatrix: { [key: string]: { [key: string]: number } } = {
+      A0: { A0: 0, A1: 2, A2: 2, B1: 5, B2: 5, C1: 5, C2: 5 },
+      A1: { A0: 2, A1: 2, A2: 2, B1: 5, B2: 5, C1: 5, C2: 5 },
+      A2: { A0: 2, A1: 2, A2: 5, B1: 5, B2: 5, C1: 5, C2: 5 },
+      B1: { A0: 6, A1: 6, A2: 5, B1: 4, B2: 4, C1: 4, C2: 4 },
+      B2: { A0: 6, A1: 6, A2: 5, B1: 4, B2: 4, C1: 4, C2: 4 },
+      C1: { A0: 6, A1: 6, A2: 5, B1: 4, B2: 4, C1: 4, C2: 4 },
+      C2: { A0: 6, A1: 6, A2: 5, B1: 4, B2: 4, C1: 4, C2: 4 },
+    };
+
+    // TODO(multipleLearningLanguage): manage multiple learning language
+    const level1 = profile1.learningLanguages?.[0]?.level;
+    // We approximate native and mastered language of user equals to a level between B1 and C2.
+    // Score matrix have the same score for all these profile2 levels so we take B2 arbitrary here.
+    const level2 = ProficiencyLevel.B2
+
+    const level = isDiscovery
+      ? discoveryLanguageLevelMatrix[level1][level2]
+      : languageLevelMatrix[level1][level2];
+
+    return level / levelsCount;
   }
 }
