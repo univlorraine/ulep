@@ -15,13 +15,10 @@ jobs:
         run: git remote add origin-new https://${{ secrets.TARGET_USERNAME }}:${{ secrets.TARGET_TOKEN }}@gitlab.univ-lorraine.fr/dn-sied/pleiades/ulep.wiki.git
         shell: bash
       - name: checkout to main wiki
-        run: git branch -a
+        run: git checkout -b main
         shell: bash
-      - name: checkout to main wiki
+      - name: status wiki
         run: git status
-        shell: bash
-      - name: merge master github to main gitlab
-        run: git merge master
         shell: bash
       - name: Push main wiki
         run: git push origin-new main
