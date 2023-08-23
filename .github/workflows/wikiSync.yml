@@ -18,7 +18,7 @@ jobs:
         run: git checkout -b main
         shell: bash
       - name: pull main gitlab wiki
-        run: git pull origin-new 
+        run: git pull origin-new main
         shell: bash
       - name: merge master github to main
         run: git merge master 
