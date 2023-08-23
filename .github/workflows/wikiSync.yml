@@ -14,15 +14,18 @@ jobs:
       - name: Add remote
         run: git remote add origin-new https://${{ secrets.TARGET_USERNAME }}:${{ secrets.TARGET_TOKEN }}@gitlab.univ-lorraine.fr/dn-sied/pleiades/ulep.wiki.git
         shell: bash
+      - name: unshallow fetch wiki
+        run: git fetch --unshallow
+        shell: bash
       - name: checkout to main wiki
         run: git checkout -b main
         shell: bash
-      - name: git config
-        run: git config pull.rebase false
-        shell: bash
-      - name: pull main gitlab wiki
-        run: git pull origin-new main
-        shell: bash
+      #- name: git config
+      #  run: git config pull.rebase false
+      #  shell: bash
+      #- name: pull main gitlab wiki
+      #  run: git pull origin-new main
+      #  shell: bash
       - name: merge master github to main
         run: git merge master 
         shell: bash
