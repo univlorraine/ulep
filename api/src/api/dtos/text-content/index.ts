@@ -1,5 +1,6 @@
 import * as Swagger from '@nestjs/swagger';
 import { Expose } from 'class-transformer';
+import { configuration } from 'src/configuration';
 import { TextContent, Translation } from 'src/core/models';
 
 export class TranslationResponse {
@@ -55,3 +56,22 @@ export class TextContentResponse {
     });
   }
 }
+
+export const textContentTranslationResponse = (
+  textContent: TextContent,
+  languageCode: string,
+) => {
+  const code =
+    configuration().defaultTranslationLanguage !== languageCode
+      ? languageCode
+      : undefined;
+  if (!code) {
+    return textContent.content;
+  } else {
+    const translation = textContent.translations.find(
+      (translation) => translation.language === code,
+    )?.content;
+
+    return translation || textContent.content;
+  }
+};

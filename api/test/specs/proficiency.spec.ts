@@ -26,7 +26,7 @@ describe('Proficiency', () => {
   const repository = new InMemoryProficiencyRepository();
 
   beforeAll(async () => {
-    const language = languageFactory.makeOne({ code: 'en' });
+    const language = languageFactory.makeOne({ code: 'fr' });
     languageRepository.init([language]);
 
     const module = await Test.createTestingModule({
@@ -86,8 +86,8 @@ describe('Proficiency', () => {
       .get('/proficiency/tests')
       .expect(200);
 
-    expect(body).toHaveLength(2);
-    expect(body).toEqual([
+    expect(body.items).toHaveLength(2);
+    expect(body.items).toEqual([
       {
         id: A1.id,
         level: A1.level,
@@ -150,7 +150,7 @@ describe('Proficiency', () => {
     repository.init([test]);
 
     const { body } = await request(app.getHttpServer())
-      .get(`/proficiency/questions/A1`)
+      .get(`/proficiency/questions/level/A1`)
       .expect(200);
 
     expect(body).toHaveLength(2);
@@ -166,10 +166,8 @@ describe('Proficiency', () => {
     await request(app.getHttpServer())
       .post(`/proficiency/questions`)
       .send({
-        id: 'e8cd3534-e197-4f81-a8e6-b9e1db1c558c',
-        test: test.id,
+        level: ProficiencyLevel.A1,
         value: "I can ask and respond to someone's news.",
-        languageCode: 'en',
       })
       .expect(201);
 

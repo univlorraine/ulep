@@ -11,6 +11,7 @@ import {
   UseInterceptors,
   Headers,
   Put,
+  ParseUUIDPipe,
 } from '@nestjs/common';
 import * as Swagger from '@nestjs/swagger';
 import {
@@ -86,13 +87,9 @@ export class ObjectiveController {
   @Swagger.ApiOkResponse({ type: ObjectiveResponse, isArray: true })
   async findAll(@Headers('Language-code') languageCode?: string) {
     const instances = await this.findAllObjectiveUsecase.execute();
-    const code =
-      configuration().defaultTranslationLanguage !== languageCode
-        ? languageCode
-        : undefined;
     return new Collection<ObjectiveResponse>({
       items: instances.map((instance) =>
-        ObjectiveResponse.fromDomain(instance, code),
+        ObjectiveResponse.fromDomain(instance, languageCode),
       ),
       totalItems: instances.length,
     });
@@ -103,7 +100,7 @@ export class ObjectiveController {
   @UseGuards(AuthenticationGuard)
   @Swagger.ApiOperation({ summary: 'Objective ressource.' })
   @Swagger.ApiOkResponse({ type: GetObjectiveResponse })
-  async findOne(@Param('id') id: string) {
+  async findOne(@Param('id', ParseUUIDPipe) id: string) {
     const instance = await this.findOneObjectiveUsecase.execute(id);
 
     return GetObjectiveResponse.fromDomain(instance);

@@ -1,36 +1,42 @@
 import { Box, Typography, Input } from '@mui/material';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Button, useTranslate } from 'react-admin';
 import IndexedTranslation from '../../entities/IndexedTranslation';
-import MediaObject from '../../entities/MediaObject';
-import ImageUploader from '../ImageUploader';
+import QuizzLevelPicker from '../QuizzLevelPicker';
 import TranslationForm from './TranslationForm';
 
-interface ObjectiveFormProps {
-    handleSubmit: (name: string, translations: IndexedTranslation[], file?: File) => Promise<void>;
+interface QuestionFormProps {
+    handleSubmit: (level: string, name: string, translations: IndexedTranslation[]) => Promise<void>;
     name?: string;
-    image?: MediaObject;
-    tranlsations?: IndexedTranslation[];
+    level?: string;
+    translations?: IndexedTranslation[];
 }
 
-const ObjectiveForm: React.FC<ObjectiveFormProps> = ({ handleSubmit, name, image, tranlsations }) => {
+const QuestionForm: React.FC<QuestionFormProps> = ({ handleSubmit, name, level, translations }) => {
     const translate = useTranslate();
     const [currentName, setCurrentName] = useState<string | undefined>(name || '');
-    const [file, setFile] = useState<File>();
-    const [currentTranslations, setCurrentTranslations] = useState<IndexedTranslation[]>(tranlsations ?? []);
+    const [currentLevel, setCurrentLevel] = useState<string | undefined>(level || '');
+    const [currentTranslations, setCurrentTranslations] = useState<IndexedTranslation[]>(translations ?? []);
+
+    useEffect(() => {
+        setCurrentName(name || '');
+        setCurrentLevel(level || '');
+        setCurrentTranslations(translations ?? []);
+    }, [name, level, translations]);
 
     const sumbit = async () => {
-        if (!currentName) {
+        if (!currentLevel || !currentName) {
             return;
         }
 
-        await handleSubmit(currentName, currentTranslations, file);
+        await handleSubmit(currentLevel, currentName, currentTranslations);
     };
 
     return (
         <Box component="form" sx={{ m: 4 }} noValidate>
-            <Typography variant="subtitle1">{translate('objectives.create.name')}</Typography>
-
+            <Typography variant="subtitle1">{translate('questions.create.level')}</Typography>
+            <QuizzLevelPicker onChange={setCurrentLevel} value={currentLevel} />
+            <Typography variant="subtitle1">{translate('questions.create.name')}</Typography>
             <Box alignItems="center" display="flex" flexDirection="row">
                 <Input name="Language" sx={{ mx: 4, my: 2, width: 40 }} value="FR" />
                 <Input
@@ -39,19 +45,16 @@ const ObjectiveForm: React.FC<ObjectiveFormProps> = ({ handleSubmit, name, image
                     placeholder={translate('global.content')}
                     sx={{ width: '80%' }}
                     value={currentName}
+                    multiline
                     required
                 />
             </Box>
-            <Typography sx={{ mt: 4 }} variant="subtitle1">
-                {translate('objectives.create.image')}
-            </Typography>
-            <ImageUploader image={image} onImageSelect={setFile} />
             <Box sx={{ mt: 4 }}>
                 <TranslationForm setTranslations={setCurrentTranslations} translations={currentTranslations} />
             </Box>
             <Button
                 color="primary"
-                disabled={!currentName}
+                disabled={!currentLevel || !currentName}
                 onClick={sumbit}
                 sx={{ mt: 4, width: 300 }}
                 type="button"
@@ -63,4 +66,4 @@ const ObjectiveForm: React.FC<ObjectiveFormProps> = ({ handleSubmit, name, image
     );
 };
 
-export default ObjectiveForm;
+export default QuestionForm;

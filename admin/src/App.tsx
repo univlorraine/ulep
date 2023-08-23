@@ -6,6 +6,7 @@ import countries from './pages/countries';
 import languages from './pages/languages';
 import objectives from './pages/objectives';
 import profiles from './pages/profiles';
+import questions from './pages/questions';
 import reports from './pages/report';
 import reportCategories from './pages/reportCategories';
 import suggestedLanguages from './pages/suggested-languages';
@@ -38,6 +39,7 @@ const App = () => {
                 {...countSuggestedLanguages}
             />
             <Resource name="objectives" options={{ label: translate('objectives.label') }} {...objectives} />
+            <Resource name="proficiency/questions" options={{ label: translate('questions.label') }} {...questions} />
             <Resource
                 name="universities"
                 options={{ label: translate('universities.label') }}

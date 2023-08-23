@@ -2,7 +2,10 @@ import * as Swagger from '@nestjs/swagger';
 import { Expose } from 'class-transformer';
 import { IsString, IsNotEmpty, IsArray, IsOptional } from 'class-validator';
 import { MediaObjectResponse } from 'src/api/dtos/medias';
-import { TextContentResponse } from 'src/api/dtos/text-content';
+import {
+  TextContentResponse,
+  textContentTranslationResponse,
+} from 'src/api/dtos/text-content';
 import { LearningObjective, Translation } from 'src/core/models';
 
 export class CreateObjectiveRequest {
@@ -79,17 +82,7 @@ export class ObjectiveResponse {
   }
 
   static fromDomain(instance: LearningObjective, languageCode?: string) {
-    let name;
-
-    if (!languageCode) {
-      name = instance.name.content;
-    } else {
-      const translation = instance.name.translations.find(
-        (translation) => translation.language === languageCode,
-      )?.content;
-
-      name = translation || instance.name.content;
-    }
+    const name = textContentTranslationResponse(instance.name, languageCode);
 
     return new ObjectiveResponse({
       id: instance.id,

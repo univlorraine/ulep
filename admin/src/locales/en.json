@@ -30,6 +30,9 @@
         "password": "Password"
     },
     "objectives": {
+        "edit": {
+            "error": "An error occurred while updating the objective"
+        },
         "create": {
             "error": "An error occurred while creating the objective",
             "image": "New objective image",
@@ -39,6 +42,7 @@
         "label": "Objectives",
         "name": "Name",
         "update": {
+            "error": "An error occurred while updating the objective",
             "title": "Update an objective"
         }
     },
@@ -48,6 +52,20 @@
         "mastered_languages": "Mastered languages",
         "native_language": "Native language",
         "searchLastname": "Lastname"
+    },
+    "questions": {
+        "create": {
+            "error": "Error on question creation",
+            "level": "Select question level",
+            "name": "Create a new question"
+        },
+        "label": "Questions",
+        "level": "Level",
+        "question": "Question",
+        "update": {
+            "error": "An error occurred while updating the question",
+            "title": "Update a question"
+        }
     },
     "reports": {
         "closed": "Closed",

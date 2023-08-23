@@ -5,18 +5,21 @@ import {
   IsNotEmpty,
   IsUUID,
   IsEnum,
-  Length,
   IsBoolean,
+  IsArray,
+  IsOptional,
 } from 'class-validator';
+import {
+  TextContentResponse,
+  textContentTranslationResponse,
+} from 'src/api/dtos/text-content';
+import { Translation } from 'src/core/models';
 import {
   ProficiencyLevel,
   ProficiencyQuestion,
   ProficiencyTest,
 } from 'src/core/models/proficiency.model';
-import {
-  CreateQuestionCommand,
-  CreateTestCommand,
-} from 'src/core/usecases/proficiency';
+import { CreateTestCommand } from 'src/core/usecases/proficiency';
 
 export class CreateTestRequest implements CreateTestCommand {
   @Swagger.ApiProperty({ type: 'string', enum: ProficiencyLevel })
@@ -24,31 +27,83 @@ export class CreateTestRequest implements CreateTestCommand {
   level: ProficiencyLevel;
 }
 
-export class CreateQuestionRequest implements CreateQuestionCommand {
+export class CreateQuestionRequest {
   @Swagger.ApiProperty({ type: 'string', format: 'uuid' })
-  @IsUUID()
-  id: string;
-
-  @Swagger.ApiProperty({ type: 'string', format: 'uuid' })
-  @IsUUID()
-  test: string;
+  @IsNotEmpty()
+  level: ProficiencyLevel;
 
   @Swagger.ApiProperty({ type: 'string', uniqueItems: true })
   @IsString()
   @IsNotEmpty()
   value: string;
 
-  // TODO: get the language code from the request headers
-  @Swagger.ApiProperty({ type: 'string' })
-  @Transform(({ value }) => value?.toLowerCase())
-  @IsString()
-  @Length(2, 2)
-  languageCode: string;
+  @Swagger.ApiPropertyOptional({ type: 'array' })
+  @IsOptional()
+  @IsArray()
+  translations?: Translation[];
 
   @Swagger.ApiPropertyOptional({ type: 'boolean' })
   @Transform(({ value }) => value ?? true)
   @IsBoolean()
   answer = true;
+}
+
+export class UpdateQuestionRequest {
+  @Swagger.ApiProperty({ type: 'string', format: 'uuid' })
+  @IsUUID()
+  id: string;
+
+  @Swagger.ApiProperty({ type: 'string', enum: ProficiencyLevel })
+  @IsNotEmpty()
+  level: ProficiencyLevel;
+
+  @Swagger.ApiProperty({ type: 'string', uniqueItems: true })
+  @IsString()
+  @IsNotEmpty()
+  value: string;
+
+  @Swagger.ApiPropertyOptional({ type: 'array' })
+  @IsOptional()
+  @IsArray()
+  translations?: Translation[];
+
+  @Swagger.ApiPropertyOptional({ type: 'boolean' })
+  @Transform(({ value }) => value ?? true)
+  @IsBoolean()
+  answer = true;
+}
+
+export class GetProficiencyQuestionResponse {
+  @Swagger.ApiProperty({ type: 'string', format: 'uuid' })
+  @Expose({ groups: ['read'] })
+  id: string;
+
+  @Swagger.ApiProperty({ type: 'string', uniqueItems: true })
+  @Expose({ groups: ['read'] })
+  value: TextContentResponse;
+
+  @Swagger.ApiProperty({ type: 'boolean' })
+  @Expose({ groups: ['read'] })
+  answer: boolean;
+
+  @Swagger.ApiProperty({ type: 'string', enum: ProficiencyLevel })
+  @Expose({ groups: ['read'] })
+  level: ProficiencyLevel;
+
+  constructor(partial: Partial<GetProficiencyQuestionResponse>) {
+    Object.assign(this, partial);
+  }
+
+  static fromProficiencyQuestion(
+    question: ProficiencyQuestion,
+  ): GetProficiencyQuestionResponse {
+    return new GetProficiencyQuestionResponse({
+      id: question.id,
+      value: TextContentResponse.fromDomain(question.text),
+      answer: question.answer,
+      level: question.level,
+    });
+  }
 }
 
 export class ProficiencyQuestionResponse {
@@ -64,18 +119,24 @@ export class ProficiencyQuestionResponse {
   @Expose({ groups: ['read'] })
   answer: boolean;
 
+  @Swagger.ApiProperty({ type: 'string', enum: ProficiencyLevel })
+  @Expose({ groups: ['read'] })
+  level: ProficiencyLevel;
+
   constructor(partial: Partial<ProficiencyQuestionResponse>) {
     Object.assign(this, partial);
   }
 
-  // TODO: add languageCode parameter
   static fromProficiencyQuestion(
     question: ProficiencyQuestion,
+    languageCode?: string,
   ): ProficiencyQuestionResponse {
+    const name = textContentTranslationResponse(question.text, languageCode);
     return new ProficiencyQuestionResponse({
       id: question.id,
-      value: question.text.content,
+      value: name,
       answer: question.answer,
+      level: question.level,
     });
   }
 }
@@ -97,12 +158,18 @@ export class ProficiencyTestResponse {
     Object.assign(this, partial);
   }
 
-  static fromProficiencyTest(test: ProficiencyTest): ProficiencyTestResponse {
+  static fromProficiencyTest(
+    test: ProficiencyTest,
+    languageCode?: string,
+  ): ProficiencyTestResponse {
     return new ProficiencyTestResponse({
       id: test.id,
       level: test.level,
-      questions: (test.questions ?? []).map(
-        ProficiencyQuestionResponse.fromProficiencyQuestion,
+      questions: (test.questions ?? []).map((question) =>
+        ProficiencyQuestionResponse.fromProficiencyQuestion(
+          question,
+          languageCode,
+        ),
       ),
     });
   }

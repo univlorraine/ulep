@@ -3,10 +3,6 @@ import {
   PROFICIENCY_REPOSITORY,
   ProficiencyRepository,
 } from '../../ports/proficiency.repository';
-import {
-  UUID_PROVIDER,
-  UuidProviderInterface,
-} from '../../ports/uuid.provider';
 import { RessourceDoesNotExist } from 'src/core/errors';
 import {
   LANGUAGE_REPOSITORY,
@@ -14,7 +10,8 @@ import {
 } from 'src/core/ports/language.repository';
 import { ProficiencyLevel, Translation } from 'src/core/models';
 
-export class CreateQuestionCommand {
+export class UpdateQuestionCommand {
+  id: string;
   level: ProficiencyLevel;
   value: string;
   translations?: Translation[];
@@ -23,17 +20,21 @@ export class CreateQuestionCommand {
 }
 
 @Injectable()
-export class CreateQuestionUsecase {
+export class UpdateQuestionUsecase {
   constructor(
     @Inject(PROFICIENCY_REPOSITORY)
     private readonly proficiencyRepository: ProficiencyRepository,
     @Inject(LANGUAGE_REPOSITORY)
     private readonly languageRepository: LanguageRepository,
-    @Inject(UUID_PROVIDER)
-    private readonly uuidProvider: UuidProviderInterface,
   ) {}
 
-  async execute(command: CreateQuestionCommand) {
+  async execute(command: UpdateQuestionCommand) {
+    const question = await this.proficiencyRepository.questionOfId(command.id);
+
+    if (!question) {
+      throw new RessourceDoesNotExist();
+    }
+
     const test = await this.proficiencyRepository.testOfLevel(command.level);
     if (!test) {
       throw new RessourceDoesNotExist();
@@ -44,15 +45,16 @@ export class CreateQuestionUsecase {
       throw new RessourceDoesNotExist();
     }
 
-    return this.proficiencyRepository.createQuestion(test.id, {
-      id: this.uuidProvider.generate(),
+    return this.proficiencyRepository.updateQuestion({
+      id: command.id,
       text: {
-        id: this.uuidProvider.generate(),
+        id: question.text.id,
         content: command.value,
         language: command.languageCode,
         translations: command.translations,
       },
       answer: command.answer,
+      level: command.level,
     });
   }
 }

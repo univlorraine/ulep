@@ -1,12 +1,13 @@
 import { Typography, Box, Input } from '@mui/material';
 import React from 'react';
 import { Button, useTranslate } from 'react-admin';
+import IndexedTranslation from '../../entities/IndexedTranslation';
 import Translation from '../../entities/Translation';
 import TranslationLanguagePicker from '../TranslationLanguagePicker';
 
 interface TranslationFormProps {
-    setTranslations: (translations: { index: number; item: Translation }[]) => void;
-    translations: { index: number; item: Translation }[];
+    setTranslations: (translations: IndexedTranslation[]) => void;
+    translations: IndexedTranslation[];
 }
 
 const TranslationForm: React.FC<TranslationFormProps> = ({ setTranslations, translations }) => {
@@ -14,13 +15,13 @@ const TranslationForm: React.FC<TranslationFormProps> = ({ setTranslations, tran
 
     const onTraductionLanguageAdded = (value: TranslatedLanguage, index: number) => {
         const currentTraductions = [...translations];
-        currentTraductions[index].item.language = value;
+        currentTraductions[index].translation.language = value;
         setTranslations(currentTraductions);
     };
 
     const onTraductionContentAdded = (value: string, index: number) => {
         const currentTraductions = [...translations];
-        currentTraductions[index].item.content = value;
+        currentTraductions[index].translation.content = value;
         setTranslations(currentTraductions);
     };
 
@@ -31,13 +32,14 @@ const TranslationForm: React.FC<TranslationFormProps> = ({ setTranslations, tran
                 <Box key={item.index} alignItems="center" display="flex" flexDirection="row">
                     <TranslationLanguagePicker
                         onChange={(value: TranslatedLanguage) => onTraductionLanguageAdded(value, index)}
-                        value={translations[index].item.language}
+                        value={translations[index].translation.language}
                     />
                     <Input
                         name={`Content${item.index}`}
                         onChange={(e) => onTraductionContentAdded(e.target.value, index)}
                         placeholder={translate('global.content')}
-                        value={translations[index].item.content}
+                        sx={{ width: '80%' }}
+                        value={translations[index].translation.content}
                     />
                 </Box>
             ))}
@@ -49,13 +51,13 @@ const TranslationForm: React.FC<TranslationFormProps> = ({ setTranslations, tran
                             ...translations,
                             {
                                 index: translations.length + 1,
-                                item: new Translation('', 'en'),
+                                translation: new Translation('', 'en'),
                             },
                         ])
                     }
                     type="button"
                 >
-                    {translate('global.new_translation')}
+                    <>{translate('global.new_translation')}</>
                 </Button>
             </Box>
         </div>
