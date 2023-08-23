@@ -1,29 +1,23 @@
 import { Box, Typography, Input } from '@mui/material';
 import React, { useState } from 'react';
 import { Button, useTranslate } from 'react-admin';
+import IndexedTranslation from '../../entities/IndexedTranslation';
 import MediaObject from '../../entities/MediaObject';
-import Translation from '../../entities/Translation';
 import ImageUploader from '../ImageUploader';
 import TranslationForm from './TranslationForm';
 
 interface ObjectiveFormProps {
-    handleSubmit: (
-        name: string,
-        translations: { index: number; item: Translation; file?: File }[],
-        file?: File
-    ) => Promise<void>;
+    handleSubmit: (name: string, translations: IndexedTranslation[], file?: File) => Promise<void>;
     name?: string;
     image?: MediaObject;
-    tranlsations?: { index: number; item: Translation }[];
+    tranlsations?: IndexedTranslation[];
 }
 
 const ObjectiveForm: React.FC<ObjectiveFormProps> = ({ handleSubmit, name, image, tranlsations }) => {
     const translate = useTranslate();
     const [currentName, setCurrentName] = useState<string | undefined>(name || '');
     const [file, setFile] = useState<File>();
-    const [currentTranslations, setCurrentTranslations] = useState<{ index: number; item: Translation }[]>(
-        tranlsations ?? []
-    );
+    const [currentTranslations, setCurrentTranslations] = useState<IndexedTranslation[]>(tranlsations ?? []);
 
     const sumbit = async () => {
         if (!currentName) {

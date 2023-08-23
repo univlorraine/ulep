@@ -1,34 +1,28 @@
 import { Box, Typography, Input } from '@mui/material';
 import React, { useEffect, useState } from 'react';
 import { Button, useTranslate } from 'react-admin';
-import Translation from '../../entities/Translation';
+import IndexedTranslation from '../../entities/IndexedTranslation';
 import QuizzLevelPicker from '../QuizzLevelPicker';
 import TranslationForm from './TranslationForm';
 
 interface QuestionFormProps {
-    handleSubmit: (
-        level: string,
-        name: string,
-        translations: { index: number; item: Translation; file?: File }[]
-    ) => Promise<void>;
+    handleSubmit: (level: string, name: string, translations: IndexedTranslation[]) => Promise<void>;
     name?: string;
     level?: string;
-    tranlsations?: { index: number; item: Translation }[];
+    translations?: IndexedTranslation[];
 }
 
-const QuestionForm: React.FC<QuestionFormProps> = ({ handleSubmit, name, level, tranlsations }) => {
+const QuestionForm: React.FC<QuestionFormProps> = ({ handleSubmit, name, level, translations }) => {
     const translate = useTranslate();
     const [currentName, setCurrentName] = useState<string | undefined>(name || '');
     const [currentLevel, setCurrentLevel] = useState<string | undefined>(level || '');
-    const [currentTranslations, setCurrentTranslations] = useState<{ index: number; item: Translation }[]>(
-        tranlsations ?? []
-    );
+    const [currentTranslations, setCurrentTranslations] = useState<IndexedTranslation[]>(translations ?? []);
 
     useEffect(() => {
         setCurrentName(name || '');
         setCurrentLevel(level || '');
-        setCurrentTranslations(tranlsations ?? []);
-    }, [name, level, tranlsations]);
+        setCurrentTranslations(translations ?? []);
+    }, [name, level, translations]);
 
     const sumbit = async () => {
         if (!currentLevel || !currentName) {

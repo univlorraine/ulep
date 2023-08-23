@@ -87,13 +87,9 @@ export class ObjectiveController {
   @Swagger.ApiOkResponse({ type: ObjectiveResponse, isArray: true })
   async findAll(@Headers('Language-code') languageCode?: string) {
     const instances = await this.findAllObjectiveUsecase.execute();
-    const code =
-      configuration().defaultTranslationLanguage !== languageCode
-        ? languageCode
-        : undefined;
     return new Collection<ObjectiveResponse>({
       items: instances.map((instance) =>
-        ObjectiveResponse.fromDomain(instance, code),
+        ObjectiveResponse.fromDomain(instance, languageCode),
       ),
       totalItems: instances.length,
     });

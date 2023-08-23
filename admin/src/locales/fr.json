@@ -30,6 +30,9 @@
         "password": "Mot de passe"
     },
     "objectives": {
+        "edit": {
+            "error": "Une erreur est survenue pendant la mise à jour de l'objectif"
+        },
         "create": {
             "error": "Une erreur est survenue pendant la création de l'objectif",
             "image": "Image du nouvel objectif",

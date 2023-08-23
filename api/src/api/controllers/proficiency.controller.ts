@@ -68,9 +68,9 @@ export class ProficiencyController {
   @Swagger.ApiOperation({ summary: 'Create a new Test ressource.' })
   @Swagger.ApiCreatedResponse({ type: ProficiencyTestResponse })
   async create(@Body() body: CreateTestRequest) {
-    const instance = await this.createTestUsecase.execute(body);
+    const test = await this.createTestUsecase.execute(body);
 
-    return ProficiencyTestResponse.fromProficiencyTest(instance);
+    return ProficiencyTestResponse.fromProficiencyTest(test);
   }
 
   @Get('tests')
@@ -79,16 +79,12 @@ export class ProficiencyController {
   @Swagger.ApiOperation({ summary: 'Collection of Test ressource.' })
   @Swagger.ApiOkResponse({ type: ProficiencyTestResponse, isArray: true })
   async findAll(@Headers('Language-code') languageCode?: string) {
-    const instances = await this.getTestsUsecase.execute();
-    const code =
-      configuration().defaultTranslationLanguage !== languageCode
-        ? languageCode
-        : undefined;
+    const tests = await this.getTestsUsecase.execute();
     return new Collection<ProficiencyTestResponse>({
-      items: instances.map((instance) =>
-        ProficiencyTestResponse.fromProficiencyTest(instance, code),
+      items: tests.map((instance) =>
+        ProficiencyTestResponse.fromProficiencyTest(instance, languageCode),
       ),
-      totalItems: instances.length,
+      totalItems: tests.length,
     });
   }
 
@@ -99,9 +95,9 @@ export class ProficiencyController {
   @Swagger.ApiOperation({ summary: 'Test ressource.' })
   @Swagger.ApiOkResponse({ type: ProficiencyTestResponse })
   async findOne(@Param('id', ParseUUIDPipe) id: string) {
-    const instance = await this.getTestUsecase.execute({ id });
+    const test = await this.getTestUsecase.execute({ id });
 
-    return ProficiencyTestResponse.fromProficiencyTest(instance);
+    return ProficiencyTestResponse.fromProficiencyTest(test);
   }
 
   @Delete('tests/:id')
@@ -121,10 +117,10 @@ export class ProficiencyController {
   async findQuestionsByLevel(
     @Param('level', ParseProficiencyLevelPipe) level: ProficiencyLevel,
   ) {
-    const instances = await this.getQuestionsByLevelUsecase.execute({ level });
+    const questions = await this.getQuestionsByLevelUsecase.execute({ level });
 
-    return instances.map((proficiency) =>
-      ProficiencyQuestionResponse.fromProficiencyQuestion(proficiency),
+    return questions.map((question) =>
+      ProficiencyQuestionResponse.fromProficiencyQuestion(question),
     );
   }
 
@@ -140,17 +136,17 @@ export class ProficiencyController {
       configuration().defaultTranslationLanguage !== languageCode
         ? languageCode
         : undefined;
-    const instances = await this.getQuestionsUsecase.execute({
+    const questions = await this.getQuestionsUsecase.execute({
       limit,
       page,
       where: level,
     });
 
     return new Collection<ProficiencyQuestionResponse>({
-      items: instances.items.map((question) =>
+      items: questions.items.map((question) =>
         ProficiencyQuestionResponse.fromProficiencyQuestion(question, code),
       ),
-      totalItems: instances.totalItems,
+      totalItems: questions.totalItems,
     });
   }
 
@@ -160,9 +156,9 @@ export class ProficiencyController {
   @Swagger.ApiOperation({ summary: 'Get a Question ressource.' })
   @Swagger.ApiOkResponse({ type: GetProficiencyQuestionResponse })
   async findQuestion(@Param('id', ParseUUIDPipe) id: string) {
-    const instance = await this.getQuestionUsecase.execute({ id });
+    const question = await this.getQuestionUsecase.execute({ id });
 
-    return GetProficiencyQuestionResponse.fromProficiencyQuestion(instance);
+    return GetProficiencyQuestionResponse.fromProficiencyQuestion(question);
   }
 
   @Post('questions')
@@ -172,27 +168,27 @@ export class ProficiencyController {
   @Swagger.ApiCreatedResponse({ type: ProficiencyQuestionResponse })
   async createQuestion(@Body() body: CreateQuestionRequest) {
     const languageCode = configuration().defaultTranslationLanguage;
-    const instance = await this.createQuestionUsecase.execute({
+    const question = await this.createQuestionUsecase.execute({
       ...body,
       languageCode,
     });
 
-    return ProficiencyQuestionResponse.fromProficiencyQuestion(instance);
+    return ProficiencyQuestionResponse.fromProficiencyQuestion(question);
   }
 
   @Put('questions')
   @Roles(configuration().adminRole)
   @UseGuards(AuthenticationGuard)
-  @Swagger.ApiOperation({ summary: 'Get a Question ressource.' })
+  @Swagger.ApiOperation({ summary: 'Update a Question ressource.' })
   @Swagger.ApiCreatedResponse({ type: ProficiencyQuestionResponse })
   async updateQuestion(@Body() body: UpdateQuestionRequest) {
     const languageCode = configuration().defaultTranslationLanguage;
-    const instance = await this.updateQuestionUsecase.execute({
+    const question = await this.updateQuestionUsecase.execute({
       ...body,
       languageCode,
     });
 
-    return ProficiencyQuestionResponse.fromProficiencyQuestion(instance);
+    return ProficiencyQuestionResponse.fromProficiencyQuestion(question);
   }
 
   @Delete('questions/:id')

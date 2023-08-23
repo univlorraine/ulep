@@ -16,8 +16,6 @@ export class GetQuestionUsecase {
   ) {}
 
   async execute(command: GetQuestionCommand) {
-    const question = await this.repository.questionOfId(command.id);
-
-    return question;
+    return await this.repository.questionOfId(command.id);
   }
 }

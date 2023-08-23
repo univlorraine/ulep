@@ -1,7 +1,8 @@
 import React from 'react';
 import { Create, useTranslate, useCreate, useNotify, useRedirect } from 'react-admin';
 import QuestionForm from '../../components/form/QuestionForm';
-import Translation from '../../entities/Translation';
+import IndexedTranslation from '../../entities/IndexedTranslation';
+import indexedTranslationsToTranslations from '../../utils/indexedTranslationsToTranslations';
 
 const CreateQuestion = () => {
     const translate = useTranslate();
@@ -9,27 +10,30 @@ const CreateQuestion = () => {
     const redirect = useRedirect();
     const notify = useNotify();
 
-    const handleSubmit = async (
-        level: string,
-        question: string,
-        translations: { index: number; item: Translation }[]
-    ) => {
+    const handleSubmit = async (level: string, question: string, translations: IndexedTranslation[]) => {
         const payload = {
             level,
             value: question,
-            translations: translations
-                .map((translation) => translation.item)
-                .filter((translation) => translation.content && translation.language),
+            translations: indexedTranslationsToTranslations(translations),
         };
         try {
-            const result = await create('proficiency/questions', { data: payload });
-            redirect('/proficiency/questions');
+            return await create(
+                'proficiency/questions',
+                { data: payload },
+                {
+                    onSettled: (data: any, error: Error) => {
+                        if (!error) {
+                            return redirect('/proficiency/questions');
+                        }
 
-            return result;
+                        return notify('questions.create.error');
+                    },
+                }
+            );
         } catch (err) {
             console.error(err);
 
-            return notify('report_categories.create.error');
+            return notify('questions.create.error');
         }
     };
 

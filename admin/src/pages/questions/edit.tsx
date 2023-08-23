@@ -1,8 +1,10 @@
 import React from 'react';
 import { useTranslate, useNotify, useRedirect, useUpdate, Edit, WithRecord } from 'react-admin';
 import QuestionForm from '../../components/form/QuestionForm';
+import IndexedTranslation from '../../entities/IndexedTranslation';
 import Question from '../../entities/Question';
 import Translation from '../../entities/Translation';
+import indexedTranslationsToTranslations from '../../utils/indexedTranslationsToTranslations';
 
 const EditQuestion = () => {
     const translate = useTranslate();
@@ -14,15 +16,13 @@ const EditQuestion = () => {
         id: string,
         newLevel: string,
         newQuestion: string,
-        newTranslations: { index: number; item: Translation }[]
+        newTranslations: IndexedTranslation[]
     ) => {
         const payload = {
             id,
             level: newLevel,
             value: newQuestion,
-            translations: newTranslations
-                .map((translation) => translation.item)
-                .filter((translation) => translation.content && translation.language),
+            translations: indexedTranslationsToTranslations(newTranslations),
         };
         try {
             const result = await update('proficiency/questions', { data: payload });
@@ -42,17 +42,14 @@ const EditQuestion = () => {
                 label="proficiency/questions"
                 render={(record: Question) => (
                     <QuestionForm
-                        handleSubmit={(
-                            level: string,
-                            name: string,
-                            translations: { index: number; item: Translation; file?: File | undefined }[]
-                        ) => handleSubmit(record.id, level, name, translations)}
+                        handleSubmit={(level: string, name: string, translations: IndexedTranslation[]) =>
+                            handleSubmit(record.id, level, name, translations)
+                        }
                         level={record.level}
                         name={record.value.content}
-                        tranlsations={record.value.translations?.map((translation: Translation, index: number) => ({
-                            index,
-                            item: translation,
-                        }))}
+                        translations={record.value.translations?.map(
+                            (translation: Translation, index: number) => new IndexedTranslation(index, translation)
+                        )}
                     />
                 )}
             />
