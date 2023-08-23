@@ -5,7 +5,7 @@
 ############## GLOBAL ##############
 
 name: "ulep-weblate" # REQUIRED
-domain: "" # REQUIRED
+domain: "exemple.com" # REQUIRED
 issuerName: letsencrypt
 global:
   postgresql: 

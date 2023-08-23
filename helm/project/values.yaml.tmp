@@ -4,7 +4,7 @@
 
 ############## GLOBAL ##############
 
-name: "etandem" # REQUIRED
+name: "ulep" # REQUIRED
 domain: exemple.com # REQUIRED 
 issuerName: letsencrypt # REQUIRED 
 global:
@@ -18,7 +18,7 @@ global:
 postgresql:
   primary:
     initdb: 
-      scriptsConfigMap: init-etandem-database # REQUIRED
+      scriptsConfigMap: init-database # REQUIRED
 
 ############## API ##############
 api:
@@ -27,8 +27,8 @@ api:
 
   image:
     repository: "rg.fr-par.scw.cloud/ulep/api-dev" # REQUIRED
-    tag: "amd" # REQUIRED
-    pullPolicy: IfNotPresent # OPTIONNEL
+    tag: "latest" # REQUIRED
+    pullPolicy: Always # OPTIONNEL
 
   env:
     adminUrl: admin # FIXE 
@@ -50,11 +50,11 @@ api:
     # targetMemoryUtilizationPercentage: 80
   service:
     type: ClusterIP
-    port: 443
+    port: 80
 
   ingress:
     enabled: true
-    className: ""
+    className: traefik
     annotations: 
       kubernetes.io/ingress.class: "traefik"
       cert-manager.io/cluster-issuer: "letsencrypt"
@@ -63,8 +63,7 @@ api:
       - host: api
         paths: [/]
     tls:
-      - secretName: etandem-tls
-        hosts:
+      - hosts:
           - api
 ############## API ##############
 
@@ -86,8 +85,6 @@ auth:
     keycloakHostname: auth # FIXE
     proxyAddressForwarding: true 
 
-  realmFile: # REQUIRED (fichier json)
-
   autoscaling:
     enabled: false
     minReplicas: 1
@@ -100,17 +97,16 @@ auth:
 
   ingress:
     enabled: true
-    className: ""
+    className: traefik
     annotations: 
-      kubernetes.io/ingress.class: "nginx"
+      kubernetes.io/ingress.class: "traefik"
       cert-manager.io/cluster-issuer: "letsencrypt"
       kubernetes.io/tls-acme: "true"
     hosts:
       - host: auth
         paths: [/]
     tls: 
-      - secretName: etandem-tls
-        hosts:
+      - hosts:
           - auth
 ############## AUTH ##############
 
@@ -144,7 +140,7 @@ minio:
 
   ingress:
     enabled: true
-    className: ""
+    className: traefik
     annotations:
       kubernetes.io/ingress.class: "traefik"
       cert-manager.io/cluster-issuer: "letsencrypt"
@@ -154,8 +150,7 @@ minio:
       - host: minio
         paths: [/]
     tls: 
-      - secretName: etandem-tls
-        hosts:
+      - hosts:
           - minio
 ############## MINIO ##############
 
@@ -166,8 +161,8 @@ admin:
 
   image:
     repository: "rg.fr-par.scw.cloud/ulep/admin-dev" # REQUIRED
-    tag: "amd" # REQUIRED
-    pullPolicy: IfNotPresent
+    tag: "latest" # REQUIRED
+    pullPolicy: Always
 
   env: 
     keycloakRealm: etandem # FIXE
@@ -186,7 +181,7 @@ admin:
 
   ingress:
     enabled: true
-    className: ""
+    className: traefik
     annotations:
       kubernetes.io/ingress.class: "traefik"
       cert-manager.io/cluster-issuer: "letsencrypt"
@@ -196,9 +191,48 @@ admin:
       - host: admin
         paths: [/]
     tls: 
-        hosts:
+      - hosts:
           - admin
 ############## ADMIN ##############
+
+
+############## WEBAPP ##############
+webapp:
+  name: "webapp"
+  replicaCount: 1
+
+  image:
+    repository: "rg.fr-par.scw.cloud/ulep/webapp"
+    tag: "latest"
+    pullPolicy: Always
+
+  env: 
+    apiUrl: api
+
+  autoscaling:
+    enabled: false
+    minReplicas: 1
+    maxReplicas: 100
+    targetCPUUtilizationPercentage: 80
+    # targetMemoryUtilizationPercentage: 80
+  service:
+    type: ClusterIP
+    port: 80
+
+  ingress:
+    enabled: true
+    className: traefik
+    annotations:
+      kubernetes.io/ingress.class: "traefik"
+      cert-manager.io/cluster-issuer: "letsencrypt"
+      kubernetes.io/tls-acme: "true"
+    hosts:
+      - host: webapp
+        paths: [/]
+    tls: 
+      - hosts:
+          - webapp
+############## WEBAPP ##############
 
 ############## INIT SPEC ##############
 
@@ -213,6 +247,7 @@ serviceAccount:
 
 imagePullSecrets: 
   - name: "registrypullsecret" # FIXE
+
 nameOverride: ""
 fullnameOverride: ""
 
