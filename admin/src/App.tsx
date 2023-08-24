@@ -14,6 +14,8 @@ import universities from './pages/universities';
 import authProvider from './providers/authProvider';
 import customDataProvider from './providers/customDataProvider';
 import i18nProvider from './providers/i18nProvider';
+import interests from './pages/interests';
+import categoryInterest from './pages/category-interest';
 
 const App = () => {
     const translate = useTranslate();
@@ -37,6 +39,12 @@ const App = () => {
                 name="languages/requests/count"
                 options={{ label: translate('count_suggested_languages.label') }}
                 {...countSuggestedLanguages}
+            />
+            <Resource name="interests" options={{ label: translate('objectives.label') }} {...interests} />
+            <Resource
+                name="interests/categories"
+                options={{ label: translate('interest_categories.label') }}
+                {...categoryInterest}
             />
             <Resource name="objectives" options={{ label: translate('objectives.label') }} {...objectives} />
             <Resource name="proficiency/questions" options={{ label: translate('questions.label') }} {...questions} />
