@@ -12,11 +12,12 @@ import {
   LANGUAGE_REPOSITORY,
   LanguageRepository,
 } from 'src/core/ports/language.repository';
+import { Translation } from 'src/core/models';
 
 export class CreateInterestCategoryCommand {
-  id: string;
   name: string;
   languageCode: string;
+  translations?: Translation[];
 }
 
 @Injectable()
@@ -31,7 +32,7 @@ export class CreateInterestCategoryUsecase {
   ) {}
 
   async execute(command: CreateInterestCategoryCommand) {
-    const instance = await this.repository.categoryOfId(command.id);
+    const instance = await this.repository.categoryOfName(command.name);
     if (instance) {
       throw new RessourceAlreadyExists();
     }
@@ -42,7 +43,7 @@ export class CreateInterestCategoryUsecase {
     }
 
     return this.repository.createCategory({
-      id: command.id,
+      id: this.uuidProvider.generate(),
       name: {
         id: this.uuidProvider.generate(),
         content: command.name,

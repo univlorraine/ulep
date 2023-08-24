@@ -1,11 +1,12 @@
-import { PrismaService } from '@app/common';
+import { Collection, PrismaService, SortOrder } from '@app/common';
 import { Injectable, Logger } from '@nestjs/common';
 import { Interest, InterestCategory } from 'src/core/models';
 import { InterestRepository } from 'src/core/ports/interest.repository';
 import {
+  InterestCategoryRelations,
   IterestsRelations,
-  TextContentRelations,
-  textContentMapper,
+  interestCategoryMapper,
+  interestMapper,
 } from '../mappers';
 
 @Injectable()
@@ -62,51 +63,53 @@ export class PrismaInterestRepository implements InterestRepository {
       return null;
     }
 
-    return {
-      id: interest.id,
-      name: textContentMapper(interest.TextContent),
-    };
+    return interestMapper(interest);
   }
 
   async categoryOfId(id: string): Promise<InterestCategory | null> {
     const category = await this.prisma.interestCategories.findUnique({
       where: { id },
-      include: {
-        TextContent: TextContentRelations,
-        Interests: { include: { TextContent: TextContentRelations } },
-      },
+      include: InterestCategoryRelations,
     });
 
     if (!category) {
       return null;
     }
 
-    return {
-      id: category.id,
-      name: textContentMapper(category.TextContent),
-      interests: category.Interests.map((interest) => ({
-        id: interest.id,
-        name: textContentMapper(interest.TextContent),
-      })),
-    };
+    return interestCategoryMapper(category);
   }
 
-  async interestByCategories(): Promise<InterestCategory[]> {
-    const categories = await this.prisma.interestCategories.findMany({
-      include: {
-        TextContent: TextContentRelations,
-        Interests: { include: { TextContent: TextContentRelations } },
-      },
+  async categoryOfName(name: string): Promise<InterestCategory | null> {
+    const category = await this.prisma.interestCategories.findFirst({
+      where: { TextContent: { text: name } },
+      include: InterestCategoryRelations,
     });
 
-    return categories.map((category) => ({
-      id: category.id,
-      name: textContentMapper(category.TextContent),
-      interests: category.Interests.map((interest) => ({
-        id: interest.id,
-        name: textContentMapper(interest.TextContent),
-      })),
-    }));
+    if (!category) {
+      return null;
+    }
+
+    return interestCategoryMapper(category);
+  }
+
+  async interestByCategories(
+    offset?: number,
+    limit?: number,
+    order?: SortOrder,
+  ): Promise<Collection<InterestCategory>> {
+    const count = await this.prisma.interestCategories.count();
+
+    const categories = await this.prisma.interestCategories.findMany({
+      skip: offset,
+      orderBy: { TextContent: { text: order } },
+      take: limit,
+      include: InterestCategoryRelations,
+    });
+
+    return new Collection<InterestCategory>({
+      items: categories.map(interestCategoryMapper),
+      totalItems: count,
+    });
   }
 
   async deleteInterest(instance: Interest): Promise<void> {
@@ -117,5 +120,63 @@ export class PrismaInterestRepository implements InterestRepository {
   async deleteCategory(instance: InterestCategory): Promise<void> {
     // As we have a foreign key with cascade delete, we don't need to delete the category.
     await this.prisma.textContent.delete({ where: { id: instance.name.id } });
+  }
+
+  async updateInterest(interest: Interest): Promise<Interest> {
+    await this.prisma.textContent.update({
+      where: {
+        id: interest.name.id,
+      },
+      data: {
+        text: interest.name.content,
+        LanguageCode: { connect: { code: interest.name.language } },
+        Translations: {
+          deleteMany: {},
+          create: interest.name.translations?.map((translation) => ({
+            text: translation.content,
+            LanguageCode: { connect: { code: translation.language } },
+          })),
+        },
+      },
+    });
+    const newInterest = await this.prisma.interests.findUnique({
+      where: {
+        id: interest.id,
+      },
+      include: IterestsRelations,
+    });
+
+    return interestMapper(newInterest);
+  }
+
+  async updateInterestCategory(
+    interestCategory: InterestCategory,
+  ): Promise<InterestCategory> {
+    await this.prisma.textContent.update({
+      where: {
+        id: interestCategory.name.id,
+      },
+      data: {
+        text: interestCategory.name.content,
+        LanguageCode: { connect: { code: interestCategory.name.language } },
+        Translations: {
+          deleteMany: {},
+          create: interestCategory.name.translations?.map((translation) => ({
+            text: translation.content,
+            LanguageCode: { connect: { code: translation.language } },
+          })),
+        },
+      },
+    });
+    const newInterestCategory = await this.prisma.interestCategories.findUnique(
+      {
+        where: {
+          id: interestCategory.id,
+        },
+        include: InterestCategoryRelations,
+      },
+    );
+
+    return interestCategoryMapper(newInterestCategory);
   }
 }
