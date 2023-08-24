@@ -16,7 +16,15 @@ export class MatchScores {
   readonly gender: number;
   readonly university: number;
 
-  constructor(props: MatchScores) {
+  constructor(props: {
+    level: number;
+    age: number;
+    status: number;
+    goals: number;
+    interests: number;
+    gender: number;
+    university: number;
+  }) {
     this.level = props.level;
     this.age = props.age;
     this.status = props.status;
@@ -24,6 +32,17 @@ export class MatchScores {
     this.interests = props.interests;
     this.gender = props.gender;
     this.university = props.university;
+  }
+
+  get total() {
+    return (
+      this.age +
+      this.age +
+      this.status +
+      this.goals +
+      this.gender +
+      this.university
+    );
   }
 
   static empty(): MatchScores {

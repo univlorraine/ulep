@@ -43,6 +43,7 @@ export const createProfiles = async (
     const availableLanguages = user.Organization.Languages.filter(
       (language) => language.code !== nativeLanguageCode.toLowerCase(),
     );
+    let masteredLanguages = [];
     let learningLanguages = faker.helpers
       .arrayElements(availableLanguages)
       .map((learningLanguage) => ({
@@ -50,7 +51,7 @@ export const createProfiles = async (
         level: enumValue(ProficiencyLevel),
       }));
 
-    if (index % 10 === 0) {
+    if (index % 5 === 0) {
       // Force one of 10 learning french
       const frenchLanguage = availableLanguages.find(
         (language) => language.code === FRENCH_LANGUAGE_CODE,
@@ -80,6 +81,18 @@ export const createProfiles = async (
         ];
       }
     }
+    if (index % 10 === 0) {
+      // Force one of 10 to master some languages
+      masteredLanguages = faker.helpers
+        .arrayElements(languages, faker.number.int({ max: 3 }))
+        .filter(
+          (language) =>
+            !learningLanguages.some(
+              (learningLanguage) =>
+                learningLanguage.language.id === language.id,
+            ),
+        );
+    }
 
     const campus =
       user.Organization.id === centralUniversity.id
@@ -95,7 +108,11 @@ export const createProfiles = async (
       data: {
         User: { connect: { id: user.id } },
         NativeLanguage: { connect: { code: nativeLanguageCode } },
-        // MasteredLanguages: {},
+        MasteredLanguages: {
+          create: masteredLanguages.map((language) => ({
+            language_code_id: language.id,
+          })),
+        },
         Goals: {
           connect: faker.helpers.arrayElements(objectives, 2).map((it) => ({
             id: it.id,

@@ -92,7 +92,7 @@ export class MatchScorer implements IMatchScorer {
       return new Match({ owner: profile1, target: profile2, scores: MatchScores.empty() });
     }
 
-    const scores: MatchScores = {
+    const scores: MatchScores = new MatchScores({
       level: this.computeLanguageLevel(profile1, profile2),
       age: this.computeAgeBonus(profile1, profile2),
       status: this.computeSameRolesBonus(profile1, profile2),
@@ -100,7 +100,7 @@ export class MatchScorer implements IMatchScorer {
       university: this.computeSameUniversityBonus(profile1, profile2),
       gender: this.computeSameGenderBonus(profile1, profile2),
       interests: this.computeSameInterestBonus(profile1, profile2),
-    };
+    });
 
     return new Match({ owner: profile1, target: profile2, scores });
   }
