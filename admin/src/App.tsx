@@ -8,7 +8,7 @@ import objectives from './pages/objectives';
 import profiles from './pages/profiles';
 import questions from './pages/questions';
 import reports from './pages/report';
-import reportCategories from './pages/reportCategories';
+import reportCategories from './pages/report-categories';
 import suggestedLanguages from './pages/suggested-languages';
 import universities from './pages/universities';
 import authProvider from './providers/authProvider';
