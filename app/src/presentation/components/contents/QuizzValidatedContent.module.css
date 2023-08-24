@@ -4,6 +4,11 @@
     left: -30px;
 }
 
+.button {
+    margin-top: auto;
+    margin-bottom: 40px;
+}
+
 .container {
     align-items: center;
     display: flex;

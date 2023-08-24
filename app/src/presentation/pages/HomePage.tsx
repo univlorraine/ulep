@@ -32,13 +32,12 @@ const HomePage: React.FC = () => {
     const [selectedTandem, setSelectedTandem] = useState<Tandem>();
     const [tandems, setTandems] = useState<Tandem[]>([]);
 
-    if (!profile) {
-        return <Redirect to={'/signup'} />;
-    }
+    useEffect(() => {
+        getHomeData();
+    }, []);
 
     const onDisconnect = () => {
-        logout();
-        return history.replace('/');
+        return logout();
     };
 
     const getHomeData = async () => {
@@ -66,15 +65,16 @@ const HomePage: React.FC = () => {
                   language: tandem.language,
               });
 
-    useEffect(() => {
-        getHomeData();
-    }, []);
-
     const formattedDate = `${currentDate.getFullYear()}-${currentDate.getDate().toString().padStart(2, '0')}-${(
         currentDate.getMonth() + 1
     )
         .toString()
         .padStart(2, '0')}`;
+
+    if (!profile) {
+        return <Redirect to={'/'} />;
+    }
+
     return (
         <IonPage>
             {!isHybrid && <HomeHeader avatar={profile.user.avatar} onPicturePressed={onProfilePressed} />}
@@ -94,15 +94,10 @@ const HomePage: React.FC = () => {
                     </div>
                     {isHybrid && <div className={styles.separator} />}
                     <div className={styles.content}>
-                        <TandemList
-                            onTandemPressed={onValidatedTandemPressed}
-                            studentId={profile.id}
-                            tandems={tandems}
-                        />
+                        <TandemList onTandemPressed={onValidatedTandemPressed} tandems={tandems} />
                         <WaitingTandemList
                             onTandemPressed={onTandemPressed}
                             onNewTandemAsked={() => null}
-                            studentId={profile.id}
                             tandems={tandems}
                         />
                     </div>

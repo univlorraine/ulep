@@ -40,8 +40,8 @@ const OtherLanguageContent: React.FC<OtherLanguageContentProps> = ({ languages, 
                             </p>
                             {!isHybrid && (
                                 <Checkbox
-                                    isSelected={selectedLaguage?.code === 'joker'}
-                                    onPressed={() => setSelectedLanguage(new Language('joker', 'Joker', 'Joker'))}
+                                    isSelected={selectedLaguage?.code === '*'}
+                                    onPressed={() => setSelectedLanguage(new Language('joker', '*', 'Joker'))}
                                     name={t('pairing_other_languages_page.joker_checkbox')}
                                     textClass={pairingOtherLanguagesStyles['checkbox-text']}
                                 />

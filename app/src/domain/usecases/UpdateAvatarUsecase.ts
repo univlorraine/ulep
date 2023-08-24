@@ -10,7 +10,7 @@ class UpdateAvatarUsecase implements UpdateAvatarUsecaseInterface {
         try {
             const httpResponse: HttpResponse<AvatarCommand> = await this.domainHttpAdapter.post(
                 `/uploads/avatar`,
-                { avatar },
+                { file: avatar },
                 {},
                 'multipart/form-data'
             );

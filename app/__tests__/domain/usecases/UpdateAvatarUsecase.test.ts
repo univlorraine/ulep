@@ -20,7 +20,7 @@ describe('updateAvatar', () => {
         adapter.mockJson({ parsedBody: {} });
         await usecase.execute(file);
         expect(adapter.post).toHaveBeenCalledTimes(1);
-        expect(adapter.post).toHaveBeenCalledWith('/uploads/avatar', { avatar: file }, {}, 'multipart/form-data');
+        expect(adapter.post).toHaveBeenCalledWith('/uploads/avatar', { file }, {}, 'multipart/form-data');
     });
 
     it('execute must return an expected response', async () => {

@@ -1,6 +1,5 @@
 import { useIonToast } from '@ionic/react';
 import { useTranslation } from 'react-i18next';
-import { useHistory } from 'react-router';
 import { ArrowLeftSvg, ArrowRightSvg, EditPng, ParameterPng, SmallAvatarPng } from '../../../assets';
 import { useConfig } from '../../../context/ConfigurationContext';
 import { useStoreActions } from '../../../store/storeTypes';
@@ -22,12 +21,10 @@ const ProfileContent: React.FC<ProfileContentProps> = ({
     profilePicture,
 }) => {
     const { t } = useTranslation();
-    const history = useHistory();
     const [showToast] = useIonToast();
     const { logout, updateProfile } = useStoreActions((store) => store);
     const { cameraAdapter, updateAvatar } = useConfig();
 
-    //TODO: test this when api will be ready
     const changeAvatar = async () => {
         const avatarFile = await cameraAdapter.getPictureFromGallery();
 
@@ -42,8 +39,7 @@ const ProfileContent: React.FC<ProfileContentProps> = ({
     };
 
     const disconnect = () => {
-        logout();
-        return history.replace('/');
+        return logout();
     };
 
     return (

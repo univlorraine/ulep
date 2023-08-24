@@ -44,7 +44,7 @@ const QuizzValidatedContent: React.FC<QuizzValidatedContentProps> = ({
                 </button>
             )}
             {onNextStep && (
-                <button className="primary-button" onClick={onNextStep}>
+                <button className={`primary-button ${styles.button}`} onClick={onNextStep}>
                     {t('pairing_quizz_validation.next_step_button')}
                 </button>
             )}
