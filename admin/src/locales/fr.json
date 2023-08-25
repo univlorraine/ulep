@@ -45,7 +45,10 @@
         },
         "interests": "Intérêts",
         "label": "Catégorie d'intérêts",
-        "name": "Nom"
+        "name": "Nom",
+        "update": {
+            "title": "Mise à jour d'une catégorie d'intérêt"
+        }
     },
     "languages": {
         "label": "Langues"

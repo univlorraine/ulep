@@ -19,10 +19,19 @@ const EditInterest = () => {
             translations: indexedTranslationsToTranslations(newTranslations),
         };
         try {
-            const result = await update('interests', { data: payload });
-            redirect('/interests/categories');
+            return await update(
+                'interests',
+                { data: payload },
+                {
+                    onSettled: (data: any, error: Error) => {
+                        if (!error) {
+                            return redirect('/interests/categories');
+                        }
 
-            return result;
+                        return notify('interests.create.error');
+                    },
+                }
+            );
         } catch (err) {
             console.error(err);
 

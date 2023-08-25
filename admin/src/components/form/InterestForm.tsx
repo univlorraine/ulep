@@ -23,7 +23,7 @@ const InterestForm: React.FC<InterestFormProps> = ({ handleSubmit, name, transla
     }, [name, translations]);
 
     return (
-        <Box component="form" onSubmit={() => handleSubmit(newName, newTranslations)} sx={{ m: 4 }} noValidate>
+        <Box component="form" sx={{ m: 4 }} noValidate>
             <Typography variant="subtitle1">{translate(`${tradKey}.create.name`)}</Typography>
 
             <Box alignItems="center" display="flex" flexDirection="row">
@@ -39,7 +39,12 @@ const InterestForm: React.FC<InterestFormProps> = ({ handleSubmit, name, transla
             </Box>
 
             <TranslationForm setTranslations={setTranslations} translations={newTranslations} />
-            <Button color="primary" sx={{ mt: 4 }} type="submit" variant="contained">
+            <Button
+                color="primary"
+                sx={{ mt: 4 }}
+                onClick={() => handleSubmit(newName, newTranslations)}
+                variant="contained"
+            >
                 <>{translate('global.save')}</>
             </Button>
         </Box>

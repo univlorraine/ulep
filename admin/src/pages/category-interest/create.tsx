@@ -15,10 +15,19 @@ const CreateInterestCategory = () => {
             translations: indexedTranslationsToTranslations(translations),
         };
         try {
-            const result = await create('interests/categories', { data: payload });
-            redirect('/interests/categories');
+            return await create(
+                'interests/categories',
+                { data: payload },
+                {
+                    onSettled: (data: any, error: Error) => {
+                        if (!error) {
+                            return redirect('/interests/categories');
+                        }
 
-            return result;
+                        return notify('interest_categories.create.error');
+                    },
+                }
+            );
         } catch (err) {
             console.error(err);
 

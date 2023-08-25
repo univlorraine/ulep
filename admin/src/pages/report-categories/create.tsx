@@ -13,8 +13,7 @@ const CreateReportCategory = () => {
     const [name, setName] = useState<string>();
     const [translations, setTranslations] = useState<IndexedTranslation[]>([]);
 
-    const handleSubmit = async (event: React.FormEvent) => {
-        event.preventDefault();
+    const handleSubmit = async () => {
         const payload = {
             name,
             translations: indexedTranslationsToTranslations(translations),
@@ -33,7 +32,7 @@ const CreateReportCategory = () => {
 
     return (
         <Create title={translate('report_categories.create.title')}>
-            <Box component="form" onSubmit={handleSubmit} sx={{ m: 4 }} noValidate>
+            <Box component="form" sx={{ m: 4 }} noValidate>
                 <Typography variant="subtitle1">{translate('report_categories.create.name')}</Typography>
 
                 <Box alignItems="center" display="flex" flexDirection="row">
@@ -48,7 +47,7 @@ const CreateReportCategory = () => {
                 </Box>
 
                 <TranslationForm setTranslations={setTranslations} translations={translations} />
-                <Button color="primary" sx={{ mt: 4 }} type="submit" variant="contained">
+                <Button color="primary" sx={{ mt: 4 }} onClick={() => handleSubmit()} variant="contained">
                     {translate('global.save')}
                 </Button>
             </Box>

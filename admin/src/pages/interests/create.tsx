@@ -11,7 +11,6 @@ const CreateInterest = () => {
     const notify = useNotify();
     const { state } = useLocation();
     const category = state?.category;
-    console.warn(category);
 
     const handleSubmit = async (name: string, translations: IndexedTranslation[]) => {
         const payload = {
@@ -20,10 +19,19 @@ const CreateInterest = () => {
             translations: indexedTranslationsToTranslations(translations),
         };
         try {
-            const result = await create('interests', { data: payload });
-            redirect('/interests/categories');
+            return await create(
+                'interests',
+                { data: payload },
+                {
+                    onSettled: (data: any, error: Error) => {
+                        if (!error) {
+                            return redirect('/interests/categories');
+                        }
 
-            return result;
+                        return notify('interests.create.error');
+                    },
+                }
+            );
         } catch (err) {
             console.error(err);
 

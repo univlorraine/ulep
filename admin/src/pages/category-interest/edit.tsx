@@ -19,10 +19,17 @@ const EditInterestCategory = () => {
             translations: indexedTranslationsToTranslations(newTranslations),
         };
         try {
-            const result = await update('interests/categories', { data: payload });
-            redirect('/interests/categories');
+            return await update(
+                'interests/categories',
+                { data: payload },
+                {
+                    onSettled: (data: any, error: Error) => {
+                        redirect('/interests/categories');
 
-            return result;
+                        return notify('interest_categories.create.error');
+                    },
+                }
+            );
         } catch (err) {
             console.error(err);
 
