@@ -2,40 +2,35 @@ import { Create, useTranslate, useCreate, useNotify, useRedirect } from 'react-a
 import IndexedTranslation from '../../entities/IndexedTranslation';
 import indexedTranslationsToTranslations from '../../utils/indexedTranslationsToTranslations';
 import InterestForm from '../../components/form/InterestForm';
-import { useLocation } from 'react-router-dom';
 
-const CreateInterest = () => {
+const CreateInterestCategory = () => {
     const translate = useTranslate();
     const [create] = useCreate();
     const redirect = useRedirect();
     const notify = useNotify();
-    const { state } = useLocation();
-    const category = state?.category;
-    console.warn(category);
 
     const handleSubmit = async (name: string, translations: IndexedTranslation[]) => {
         const payload = {
             name,
-            category,
             translations: indexedTranslationsToTranslations(translations),
         };
         try {
-            const result = await create('interests', { data: payload });
+            const result = await create('interests/categories', { data: payload });
             redirect('/interests/categories');
 
             return result;
         } catch (err) {
             console.error(err);
 
-            return notify('interests.create.error');
+            return notify('interest_categories.create.error');
         }
     };
 
     return (
-        <Create title={translate('interests.create.title')}>
-            <InterestForm handleSubmit={handleSubmit} tradKey="interests" />
+        <Create title={translate('interest_categories.create.title')}>
+            <InterestForm handleSubmit={handleSubmit} tradKey="interest_categories" />
         </Create>
     );
 };
 
-export default CreateInterest;
+export default CreateInterestCategory;

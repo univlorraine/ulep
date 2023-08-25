@@ -12,7 +12,7 @@ import {
     Datagrid,
 } from 'react-admin';
 
-const InterestShowAction = () => {
+const InterestCategoryShowAction = () => {
     const redirect = useRedirect();
 
     return (
@@ -23,11 +23,11 @@ const InterestShowAction = () => {
     );
 };
 
-const InterestShow = () => {
+const InterestCategoryShow = () => {
     const translate = useTranslate();
 
     return (
-        <Show actions={<InterestShowAction />} title={translate('interests.label')}>
+        <Show actions={<InterestCategoryShowAction />} title={translate('interest_categories.label')}>
             <SimpleShowLayout>
                 <TextField label={translate('interests.show.name')} source="name.content" />
 
@@ -42,4 +42,4 @@ const InterestShow = () => {
     );
 };
 
-export default InterestShow;
+export default InterestCategoryShow;
