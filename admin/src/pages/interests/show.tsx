@@ -1,7 +1,6 @@
 import React from 'react';
-import { useRedirect } from 'react-admin';
-import { DeleteButton } from 'react-admin';
 import {
+    DeleteButton,
     TopToolbar,
     EditButton,
     useTranslate,
@@ -12,16 +11,12 @@ import {
     Datagrid,
 } from 'react-admin';
 
-const InterestShowAction = () => {
-    const redirect = useRedirect();
-
-    return (
-        <TopToolbar>
-            <EditButton />
-            <DeleteButton redirect="/interests/categories" />
-        </TopToolbar>
-    );
-};
+const InterestShowAction = () => (
+    <TopToolbar>
+        <EditButton />
+        <DeleteButton redirect="/interests/categories" />
+    </TopToolbar>
+);
 
 const InterestShow = () => {
     const translate = useTranslate();

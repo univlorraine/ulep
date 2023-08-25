@@ -2,9 +2,9 @@ import React from 'react';
 import { useTranslate, useNotify, useRedirect, useUpdate, Edit, WithRecord } from 'react-admin';
 import InterestForm from '../../components/form/InterestForm';
 import IndexedTranslation from '../../entities/IndexedTranslation';
+import InterestCategory from '../../entities/InterestCategory';
 import Translation from '../../entities/Translation';
 import indexedTranslationsToTranslations from '../../utils/indexedTranslationsToTranslations';
-import InterestCategory from '../../entities/InterestCategory';
 
 const EditInterestCategory = () => {
     const translate = useTranslate();
@@ -23,7 +23,7 @@ const EditInterestCategory = () => {
                 'interests/categories',
                 { data: payload },
                 {
-                    onSettled: (data: any, error: Error) => {
+                    onSettled: () => {
                         redirect('/interests/categories');
 
                         return notify('interest_categories.create.error');
@@ -47,10 +47,10 @@ const EditInterestCategory = () => {
                             handleSubmit(record.id, name, translations)
                         }
                         name={record.name.content}
+                        tradKey="interest_categories"
                         translations={record.name.translations?.map(
                             (translation: Translation, index: number) => new IndexedTranslation(index, translation)
                         )}
-                        tradKey="interest_categories"
                     />
                 )}
             />

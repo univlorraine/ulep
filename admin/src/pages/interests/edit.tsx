@@ -49,10 +49,10 @@ const EditInterest = () => {
                             handleSubmit(record.id, name, translations)
                         }
                         name={record.name.content}
+                        tradKey="interests"
                         translations={record.name.translations?.map(
                             (translation: Translation, index: number) => new IndexedTranslation(index, translation)
                         )}
-                        tradKey="interests"
                     />
                 )}
             />

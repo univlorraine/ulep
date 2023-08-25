@@ -1,8 +1,10 @@
 import React from 'react';
 import { Admin, Resource, useTranslate } from 'react-admin';
 import LoginPage from './pages/auth/login';
+import categoryInterest from './pages/category-interest';
 import countSuggestedLanguages from './pages/count-suggested-languages';
 import countries from './pages/countries';
+import interests from './pages/interests';
 import languages from './pages/languages';
 import objectives from './pages/objectives';
 import profiles from './pages/profiles';
@@ -14,8 +16,6 @@ import universities from './pages/universities';
 import authProvider from './providers/authProvider';
 import customDataProvider from './providers/customDataProvider';
 import i18nProvider from './providers/i18nProvider';
-import interests from './pages/interests';
-import categoryInterest from './pages/category-interest';
 
 const App = () => {
     const translate = useTranslate();

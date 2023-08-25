@@ -1,9 +1,8 @@
 import { Box, Typography, Input } from '@mui/material';
-import { Button } from 'react-admin';
-import TranslationForm from './TranslationForm';
 import React, { useEffect, useState } from 'react';
-import { useTranslate } from 'react-admin';
+import { Button, useTranslate } from 'react-admin';
 import IndexedTranslation from '../../entities/IndexedTranslation';
+import TranslationForm from './TranslationForm';
 
 interface InterestFormProps {
     handleSubmit: (name: string, translations: IndexedTranslation[]) => void;
@@ -41,8 +40,8 @@ const InterestForm: React.FC<InterestFormProps> = ({ handleSubmit, name, transla
             <TranslationForm setTranslations={setTranslations} translations={newTranslations} />
             <Button
                 color="primary"
-                sx={{ mt: 4 }}
                 onClick={() => handleSubmit(newName, newTranslations)}
+                sx={{ mt: 4 }}
                 variant="contained"
             >
                 <>{translate('global.save')}</>

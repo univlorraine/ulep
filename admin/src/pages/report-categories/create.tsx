@@ -47,7 +47,7 @@ const CreateReportCategory = () => {
                 </Box>
 
                 <TranslationForm setTranslations={setTranslations} translations={translations} />
-                <Button color="primary" sx={{ mt: 4 }} onClick={() => handleSubmit()} variant="contained">
+                <Button color="primary" onClick={() => handleSubmit()} sx={{ mt: 4 }} variant="contained">
                     {translate('global.save')}
                 </Button>
             </Box>

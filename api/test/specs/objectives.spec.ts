@@ -1,11 +1,6 @@
-import * as request from 'supertest';
 import { Test } from '@nestjs/testing';
 import { AppModule } from 'src/app.module';
-import {
-  KeycloakUserFactory,
-  LanguageFactory,
-  LearningObjectiveFactory,
-} from '@app/common';
+import { KeycloakUserFactory, LanguageFactory } from '@app/common';
 import { TestServer } from './test.server';
 import { InMemoryLearningObjectiveRepository } from 'src/providers/persistance/repositories/in-memory-objective.repository';
 import { InMemoryLanguageRepository } from 'src/providers/persistance/repositories/in-memory-language-repository';
@@ -22,7 +17,6 @@ describe('Objectives', () => {
   const languageRepository = new InMemoryLanguageRepository();
   const language = languageFactory.makeOne({ code: 'en' });
 
-  const objectiveFactory = new LearningObjectiveFactory();
   const repository = new InMemoryLearningObjectiveRepository();
 
   const { keycloakUser } = new KeycloakUserFactory().makeOne();

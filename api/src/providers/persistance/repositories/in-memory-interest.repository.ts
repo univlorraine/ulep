@@ -115,12 +115,10 @@ export class InMemoryInterestRepository implements InterestRepository {
 
     return Promise.resolve(category);
   }
-  updateInterest(interest: Interest): Promise<Interest> {
+  updateInterest(): Promise<Interest> {
     throw new Error('Method not implemented.');
   }
-  updateInterestCategory(
-    category: InterestCategory,
-  ): Promise<InterestCategory> {
+  updateInterestCategory(): Promise<InterestCategory> {
     throw new Error('Method not implemented.');
   }
 }

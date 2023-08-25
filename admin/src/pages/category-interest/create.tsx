@@ -1,7 +1,8 @@
+import React from 'react';
 import { Create, useTranslate, useCreate, useNotify, useRedirect } from 'react-admin';
+import InterestForm from '../../components/form/InterestForm';
 import IndexedTranslation from '../../entities/IndexedTranslation';
 import indexedTranslationsToTranslations from '../../utils/indexedTranslationsToTranslations';
-import InterestForm from '../../components/form/InterestForm';
 
 const CreateInterestCategory = () => {
     const translate = useTranslate();
