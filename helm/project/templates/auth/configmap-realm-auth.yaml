@@ -1,7 +1,7 @@
 kind: ConfigMap
 apiVersion: v1
 metadata:
-  name: "{{ .Values.name }}-realm-{{ .Values.admin.name }}"
+  name: "{{ .Values.name }}-realm-{{ .Values.auth.name }}"
 data:
   etandem.json: |-
 {{- tpl ($.Files.Get "etandem.json") . | nindent 6 -}}
