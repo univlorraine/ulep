@@ -436,15 +436,15 @@ describe('GenerateTandem UC', () => {
     expect(
       checkTandemArrayContainsTandem(tandems, {
         a: french1,
-        b: english1,
+        b: spain2,
       }) &&
         checkTandemArrayContainsTandem(tandems, {
           a: french2,
-          b: spain2,
+          b: deutch1,
         }) &&
         checkTandemArrayContainsTandem(tandems, {
           a: french3,
-          b: english2,
+          b: english1,
         }),
     ).toBeTruthy();
   });
