@@ -34,17 +34,6 @@ export class MatchScores {
     this.university = props.university;
   }
 
-  get total() {
-    return (
-      this.age +
-      this.age +
-      this.status +
-      this.goals +
-      this.gender +
-      this.university
-    );
-  }
-
   static empty(): MatchScores {
     return new MatchScores({
       level: 0,
