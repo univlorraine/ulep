@@ -154,17 +154,21 @@ export class InterestController {
   @Roles(configuration().adminRole)
   @UseGuards(AuthenticationGuard)
   @Swagger.ApiOperation({ summary: 'Update an Interest ressource.' })
-  @Swagger.ApiOkResponse()
-  updateInterest(@Body() body: UpdateInterestRequest) {
-    return this.updateInterestUsecase.execute(body);
+  @Swagger.ApiOkResponse({ type: InterestResponse })
+  async updateInterest(@Body() body: UpdateInterestRequest) {
+    const interest = await this.updateInterestUsecase.execute(body);
+
+    return InterestResponse.fromDomain(interest);
   }
 
   @Put('categories')
   @Roles(configuration().adminRole)
   @UseGuards(AuthenticationGuard)
   @Swagger.ApiOperation({ summary: 'Update an Category ressource.' })
-  @Swagger.ApiOkResponse()
-  updateInterestCategory(@Body() body: UpdateInterestRequest) {
-    return this.updateIterestCategoryUsecase.execute(body);
+  @Swagger.ApiOkResponse({ type: InterestCategoryResponse })
+  async updateInterestCategory(@Body() body: UpdateInterestRequest) {
+    const categorie = await this.updateIterestCategoryUsecase.execute(body);
+
+    return InterestCategoryResponse.fromDomain(categorie);
   }
 }
