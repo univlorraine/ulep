@@ -1,3 +1,4 @@
+import { Collection } from '@app/common';
 import { Interest, InterestCategory } from 'src/core/models';
 import { InterestRepository } from 'src/core/ports/interest.repository';
 
@@ -64,8 +65,11 @@ export class InMemoryInterestRepository implements InterestRepository {
     return category;
   }
 
-  async interestByCategories(): Promise<InterestCategory[]> {
-    return this.#categories;
+  async interestByCategories(): Promise<Collection<InterestCategory>> {
+    return new Collection<InterestCategory>({
+      items: this.#categories,
+      totalItems: this.#categories.length,
+    });
   }
 
   async deleteInterest(instance: Interest): Promise<void> {
@@ -98,5 +102,25 @@ export class InMemoryInterestRepository implements InterestRepository {
     }
 
     this.#categories.splice(index, 1);
+  }
+
+  categoryOfName(name: string): Promise<InterestCategory> {
+    const category = this.#categories.find(
+      (category) => category.name.content === name,
+    );
+
+    if (!category) {
+      return null;
+    }
+
+    return Promise.resolve(category);
+  }
+  updateInterest(interest: Interest): Promise<Interest> {
+    throw new Error('Method not implemented.');
+  }
+  updateInterestCategory(
+    category: InterestCategory,
+  ): Promise<InterestCategory> {
+    throw new Error('Method not implemented.');
   }
 }

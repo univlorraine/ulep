@@ -28,6 +28,12 @@ export class PrismaInterestRepository implements InterestRepository {
             id: interest.name.id,
             text: interest.name.content,
             LanguageCode: { connect: { code: interest.name.language } },
+            Translations: {
+              create: interest.name.translations?.map((translation) => ({
+                text: translation.content,
+                LanguageCode: { connect: { code: translation.language } },
+              })),
+            },
           },
         },
       },
@@ -45,6 +51,12 @@ export class PrismaInterestRepository implements InterestRepository {
             id: category.name.id,
             text: category.name.content,
             LanguageCode: { connect: { code: category.name.language } },
+            Translations: {
+              create: category.name.translations?.map((translation) => ({
+                text: translation.content,
+                LanguageCode: { connect: { code: translation.language } },
+              })),
+            },
           },
         },
       },

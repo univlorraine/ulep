@@ -33,6 +33,7 @@ import {
   GenerateTandemsUsecase,
   GetCategoriesUsecase,
   GetCountriesUsecase,
+  GetInterestCategoryUsecase,
   GetInterestUsecase,
   GetInterestsByCategoriesUsecase,
   GetLanguagesUsecase,
@@ -80,6 +81,7 @@ const usecases: Provider[] = [
   DeleteInterestUsecase,
   GetInterestsByCategoriesUsecase,
   GetInterestUsecase,
+  GetInterestCategoryUsecase,
   UpdateInterestCategoryUsecase,
   UpdateInterestUsecase,
   // Languages

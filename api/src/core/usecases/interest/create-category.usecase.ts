@@ -48,7 +48,7 @@ export class CreateInterestCategoryUsecase {
         id: this.uuidProvider.generate(),
         content: command.name,
         language: command.languageCode,
-        translations: [],
+        translations: command.translations,
       },
     });
   }

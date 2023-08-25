@@ -21,12 +21,14 @@ import {
   CreateInterestCategoryRequest,
   GetInterestResponse,
   UpdateInterestRequest,
+  GetInterestCategoryResponse,
 } from '../dtos/interests';
 import {
   CreateInterestCategoryUsecase,
   CreateInterestUsecase,
   DeleteInterestCategoryUsecase,
   DeleteInterestUsecase,
+  GetInterestCategoryUsecase,
   GetInterestUsecase,
   GetInterestsByCategoriesUsecase,
   UpdateInterestCategoryUsecase,
@@ -47,6 +49,7 @@ export class InterestController {
     private readonly createInterestUsecase: CreateInterestUsecase,
     private readonly createCategoryUsecase: CreateInterestCategoryUsecase,
     private readonly getInterest: GetInterestUsecase,
+    private readonly getInterestCategory: GetInterestCategoryUsecase,
     private readonly getInterestsByCategoriesUsecase: GetInterestsByCategoriesUsecase,
     private readonly deleteCategoryUsecase: DeleteInterestCategoryUsecase,
     private readonly deleteInterestUsecase: DeleteInterestUsecase,
@@ -110,12 +113,23 @@ export class InterestController {
   @Get(':id')
   @UseGuards(AuthenticationGuard)
   @SerializeOptions({ groups: ['read', 'category:read'] })
-  @Swagger.ApiOperation({ summary: 'Collection of Interest ressource.' })
+  @Swagger.ApiOperation({ summary: 'Get Interest ressource.' })
   @Swagger.ApiOkResponse({ type: GetInterestResponse, isArray: true })
   async findOne(@Param('id', ParseUUIDPipe) id: string) {
     const interest = await this.getInterest.execute({ id });
 
     return GetInterestResponse.fromDomain(interest);
+  }
+
+  @Get('categories/:id')
+  @UseGuards(AuthenticationGuard)
+  @SerializeOptions({ groups: ['read', 'category:read'] })
+  @Swagger.ApiOperation({ summary: 'Get Category ressource.' })
+  @Swagger.ApiOkResponse({ type: GetInterestCategoryResponse, isArray: true })
+  async findOnecategory(@Param('id', ParseUUIDPipe) id: string) {
+    const interest = await this.getInterestCategory.execute({ id });
+
+    return GetInterestCategoryResponse.fromDomain(interest);
   }
 
   @Delete(':id')
@@ -145,7 +159,7 @@ export class InterestController {
     return this.updateInterestUsecase.execute(body);
   }
 
-  @Put()
+  @Put('categories')
   @Roles(configuration().adminRole)
   @UseGuards(AuthenticationGuard)
   @Swagger.ApiOperation({ summary: 'Update an Category ressource.' })

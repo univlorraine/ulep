@@ -101,6 +101,27 @@ export class GetInterestResponse {
   }
 }
 
+export class GetInterestCategoryResponse {
+  @Swagger.ApiProperty({ type: 'string', format: 'uuid' })
+  @Expose({ groups: ['read'] })
+  id: string;
+
+  @Swagger.ApiProperty({ type: TextContentResponse })
+  @Expose({ groups: ['read'] })
+  name: TextContentResponse;
+
+  constructor(partial: Partial<GetInterestCategoryResponse>) {
+    Object.assign(this, partial);
+  }
+
+  static fromDomain(category: InterestCategory) {
+    return new GetInterestResponse({
+      id: category.id,
+      name: TextContentResponse.fromDomain(category.name),
+    });
+  }
+}
+
 export class InterestCategoryResponse {
   @Swagger.ApiProperty({ type: 'string', format: 'uuid' })
   @Expose({ groups: ['read'] })
@@ -120,7 +141,6 @@ export class InterestCategoryResponse {
 
   static fromDomain(category: InterestCategory, languageCode?: string) {
     const name = textContentTranslationResponse(category.name, languageCode);
-
     return new InterestCategoryResponse({
       id: category.id,
       name: name,
