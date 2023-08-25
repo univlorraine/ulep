@@ -28,8 +28,8 @@ export const createUsers = async (
     const universityId = centralUniversity.id;
 
     let nationality = 'FR';
-    if (i % 20 === 0) {
-      // 1 of 20 doesn't have french nationality
+    if (i % 5 === 0) {
+      // 1 of 5 doesn't have french nationality
       nationality = faker.helpers.arrayElement(foreignCountriesCodes);
     }
 

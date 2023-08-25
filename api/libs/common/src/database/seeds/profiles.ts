@@ -9,31 +9,13 @@ const enumValue = <T>(_enum: unknown): T => {
 };
 
 export const createProfiles = async (
-  count: number,
   prisma: Prisma.PrismaClient,
 ): Promise<void> => {
   const profileFactory = new ProfileFactory();
 
-  //   masteredLanguages
-  // learningLanguages
-  // objectives
-  // interests
-
   const languages = await prisma.languageCodes.findMany();
   const objectives = await prisma.learningObjectives.findMany();
   const interest = await prisma.interests.findMany();
-  const universities = await prisma.organizations.findMany();
-  // const [centralUniversity, partnerUniversities] = universities.reduce(
-  //   (accumulator, university) => {
-  //     if (university.parent_id) {
-  //       accumulator[1].push(university);
-  //     } else {
-  //       accumulator[0] = university;
-  //     }
-  //     return accumulator;
-  //   },
-  //   [null, []],
-  // );
 
   const users = await prisma.users.findMany({
     include: {
@@ -45,16 +27,10 @@ export const createProfiles = async (
       },
       Nationality: true,
     },
-    take: count,
   });
 
   for (const [index, user] of users.entries()) {
     const instance = profileFactory.makeOne();
-
-    //   masteredLanguages
-    // learningLanguages
-    // objectives
-    // interests
 
     let nativeLanguageCode;
     switch (user.Nationality.code) {
