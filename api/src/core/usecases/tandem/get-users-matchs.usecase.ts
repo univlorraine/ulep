@@ -14,6 +14,8 @@ export type GetUserMatchCommand = {
   count?: number;
 };
 
+const DEFAULT_NB_USER_MATCHES = 5;
+
 @Injectable()
 export class GetUserMatchUsecase {
   private readonly logger = new Logger(GetUserMatchUsecase.name);
@@ -37,19 +39,21 @@ export class GetUserMatchUsecase {
       spokenLanguageId: owner.learningLanguages?.[0].language.id,
     });
 
-    const matchs: Match[] = [];
+    const potentialMatchs: Match[] = [];
 
     for (const target of targets) {
       if (target.id === owner.id) continue;
 
       const match = this.matchService.computeMatchScore(owner, target);
-      matchs.push(match);
+      potentialMatchs.push(match);
     }
+
+    const matchs = potentialMatchs
+      .filter((match) => match.total > 0)
+      .sort((a, b) => b.total - a.total);
+
     return new Collection<Match>({
-      items: matchs
-        .filter((match) => match.scores.total > 0)
-        .sort((a, b) => b.total - a.total)
-        .slice(0, command.count),
+      items: matchs.slice(0, command.count || DEFAULT_NB_USER_MATCHES),
       totalItems: matchs.length,
     });
   }
