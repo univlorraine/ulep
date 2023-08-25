@@ -30,7 +30,7 @@ ENV PORT 3000
 CMD ["sh", "-c", "pnpm start:dev"]
 
 # Build stage
-FROM api_base AS api_builder
+FROM api_deps AS api_builder
 
 COPY --link . .
 COPY --from=api_deps --link /srv/app/node_modules ./node_modules
@@ -38,7 +38,7 @@ COPY --from=api_deps --link /srv/app/node_modules ./node_modules
 RUN pnpm run build
 
 # Production image, copy all the files and run nest
-FROM node:18-alpine AS api_prod
+FROM api_base AS api_prod
 
 WORKDIR /srv/app
 
@@ -48,6 +48,7 @@ RUN addgroup -S -g 1001 nodejs
 RUN adduser -S -u 1001 nestjs
 
 COPY --from=api_builder --link /srv/app/dist ./dist
+COPY --from=api_builder --link /srv/app/node_modules ./node_modules
 
 USER nestjs
 
@@ -56,3 +57,10 @@ EXPOSE 3000
 ENV PORT 3000
 
 CMD ["node", "dist/main"]
+
+# Production image, copy all the files and run nest
+FROM api_deps AS api_init
+
+RUN apk add --no-cache postgresql
+
+CMD ["sh", "-c", "set -x; while [ $(pg_isready -d $DB_NAME -h $HOST_NAME -p 5432 -U $DB_USER -q; echo $?) -ne 0 ]; do sleep 5; done; pnpx prisma migrate deploy; pnpm seed"]

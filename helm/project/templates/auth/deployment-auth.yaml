@@ -48,11 +48,13 @@ spec:
           image: "{{ .Values.auth.image.repository }}:{{ .Values.auth.image.tag | default .Chart.AppVersion }}"
           imagePullPolicy: {{ .Values.auth.image.pullPolicy }}
           args:
-            - start-dev
+            - start
             - --proxy
             - edge
             - --health-enabled
             - 'true'
+            - --hostname
+            - "{{ .Values.auth.env.keycloakHostname }}.{{ .Values.domain }}"
             - --import-realm
           ports:
             - name: http
@@ -85,7 +87,7 @@ spec:
             - name: KC_DB_USERNAME
               value: "{{ .Values.global.postgresql.auth.username }}"
             - name: KC_DB_URL
-              value: "jdbc:postgresql://{{ include "etandem.name" . }}-postgresql.{{ .Release.Namespace }}:5432/{{ .Values.global.postgresql.auth.database }}"
+              value: "jdbc:postgresql://{{ .Values.name }}-postgresql.{{ .Release.Namespace }}:5432/{{ .Values.global.postgresql.auth.database }}"
             - name: KC_DB_SCHEMA
               value: "{{ .Values.auth.env.kcDBSchema }}"
             - name: PROXY_ADDRESS_FORWARDING
@@ -103,10 +105,10 @@ spec:
       volumes:
       - name: "{{ .Values.auth.name }}-realm"
         configMap:
-          name: "{{ include "etandem.name" . }}-realm-{{ .Values.admin.name }}"
+          name: "{{ include "etandem.name" . }}-realm-{{ .Values.auth.name }}"
       - name: "{{ .Values.auth.name }}-providers"
         configMap:
-          name: "{{ include "etandem.name" . }}-providers-{{ .Values.admin.name }}"
+          name: "{{ include "etandem.name" . }}-providers-{{ .Values.auth.name }}"
       {{- with .Values.nodeSelector }}
       nodeSelector:
         {{- toYaml . | nindent 8 }}

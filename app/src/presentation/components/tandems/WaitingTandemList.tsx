@@ -5,16 +5,10 @@ import TandemLine from './TandemLine';
 interface WaitingTandemListProps {
     onNewTandemAsked: () => void;
     onTandemPressed: (tandem: Tandem) => void;
-    studentId: string;
     tandems: Tandem[];
 }
 
-const WaitingTandemList: React.FC<WaitingTandemListProps> = ({
-    onNewTandemAsked,
-    onTandemPressed,
-    studentId,
-    tandems,
-}) => {
+const WaitingTandemList: React.FC<WaitingTandemListProps> = ({ onNewTandemAsked, onTandemPressed, tandems }) => {
     const { t } = useTranslation();
     return (
         <div className="home-card">

@@ -206,8 +206,7 @@ webapp:
     tag: "latest"
     pullPolicy: Always
 
-  env: 
-    apiUrl: api
+  env: {}
 
   autoscaling:
     enabled: false

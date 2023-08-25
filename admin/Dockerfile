@@ -47,4 +47,4 @@ RUN adduser -S -u 1001 react
 
 COPY --from=admin_builder --link --chown=react:nodejs /srv/app/build ./build
 
-CMD ["node", "/build"]
+CMD ["node", "./build/main"]

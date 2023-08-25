@@ -47,9 +47,6 @@ spec:
           #   httpGet:
           #     path: /
           #     port: http
-          env:
-            - name: VITE_API_URL
-              value: "https://{{ .Values.webapp.env.apiUrl }}.{{ .Values.domain }}"
           resources:
             {{- toYaml .Values.resources | nindent 12 }}
       {{- with .Values.nodeSelector }}

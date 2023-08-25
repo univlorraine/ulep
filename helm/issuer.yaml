@@ -8,7 +8,7 @@ spec:
     server: https://acme-v02.api.letsencrypt.org/directory
     email: "" # REQUIRED
     privateKeySecretRef:
-      name: letsencrypt
+      name: letsencrypt-account-key
     solvers:
     - http01:
         ingress:
