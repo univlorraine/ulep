@@ -67,8 +67,8 @@ repeat
                     endif
                 else (no)
                 endif
-            repeat while (next profile2 in group B?)
-        repeat while (next profile1 in group A?)
+            repeat while (next profile2 in profilesToPair?)
+        repeat while (next profile1 in profilesToPair?)
         :sortedPossiblePairs = sort possiblePairs by pair score;
     end group
 
