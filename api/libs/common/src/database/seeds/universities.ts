@@ -10,7 +10,7 @@ export const createUniversities = async (prisma: PrismaClient) => {
   const centralUniversityId = 'b511f9d1-ce7e-40b5-a630-ecb99f4e9f59';
   await prisma.organizations.create({
     data: {
-      id: centralUniversityId,
+      id: UniversitySeedIDs.CENTRAL
       name: 'Université de Lorraine',
       Languages: {
         connect: [{ code: 'fr' }, { code: 'de' }, { code: 'en' }],
