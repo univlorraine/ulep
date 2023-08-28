@@ -42,7 +42,7 @@ export class GenerateTandemsUsecase {
         universityIds: command.universityIds,
       });
 
-    // Generate all possible pairs with score
+    // Generate all possible pairs
     const possiblePairs: Match[] = [];
     for (let i = 0; i < profiles.length; i++) {
       const profileToPair = profiles[i];
@@ -50,19 +50,23 @@ export class GenerateTandemsUsecase {
       for (let j = i + 1; j < profiles.length; j++) {
         const potentialPairProfile = profiles[j];
 
-        // TODO: check forbidden case (ex: already refused, other)
-        const match = this.scorer.computeMatchScore(
-          profileToPair,
-          potentialPairProfile,
-        );
+        if (
+          profileToPair.user.university.isCentralUniversity() ||
+          potentialPairProfile.user.university.isCentralUniversity()
+        ) {
+          const match = this.scorer.computeMatchScore(
+            profileToPair,
+            potentialPairProfile,
+          );
 
-        if (match.total > TRESHOLD_VIABLE_PAIR) {
-          possiblePairs.push(match);
+          if (match.total > TRESHOLD_VIABLE_PAIR) {
+            possiblePairs.push(match);
+          }
         }
       }
     }
 
-    // TODO: sort by query time + priorities
+    // TODO: sort by inscription time + priorities
     const sortedProfiles = profiles;
 
     let sortedPossiblePairs = possiblePairs.sort((a, b) => b.total - a.total);
