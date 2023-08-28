@@ -1,37 +1,32 @@
 import * as Swagger from '@nestjs/swagger';
-import { Expose, Transform } from 'class-transformer';
-import { IsString, IsNotEmpty, IsUUID, Length } from 'class-validator';
+import { Expose } from 'class-transformer';
 import {
-  CreateInterestCategoryCommand,
-  CreateInterestCommand,
-} from '../../../core/usecases/interest';
+  IsString,
+  IsNotEmpty,
+  IsUUID,
+  IsArray,
+  IsOptional,
+} from 'class-validator';
 import { Interest, InterestCategory } from 'src/core/models/interest.model';
+import {
+  TextContentResponse,
+  textContentTranslationResponse,
+} from 'src/api/dtos/text-content';
+import { Translation } from 'src/core/models';
 
-export class CreateInterestCategoryRequest
-  implements CreateInterestCategoryCommand
-{
-  @Swagger.ApiProperty({ type: 'string', format: 'uuid' })
-  @IsUUID()
-  id: string;
-
+export class CreateInterestCategoryRequest {
   @Swagger.ApiProperty({ type: 'string' })
   @IsString()
   @IsNotEmpty()
   name: string;
 
-  // TODO: get the language code from the request headers
-  @Swagger.ApiProperty({ type: 'string', example: 'FR' })
-  @Transform(({ value }) => value?.toLowerCase())
-  @IsString()
-  @Length(2, 2)
-  languageCode: string;
+  @Swagger.ApiPropertyOptional({ type: 'array' })
+  @IsOptional()
+  @IsArray()
+  translations?: Translation[];
 }
 
-export class CreateInterestRequest implements CreateInterestCommand {
-  @Swagger.ApiProperty({ type: 'string', format: 'uuid' })
-  @IsUUID()
-  id: string;
-
+export class CreateInterestRequest {
   @Swagger.ApiProperty({ type: 'string', format: 'uuid' })
   @IsUUID()
   category: string;
@@ -41,12 +36,26 @@ export class CreateInterestRequest implements CreateInterestCommand {
   @IsNotEmpty()
   name: string;
 
-  // TODO: get the language code from the request headers
-  @Swagger.ApiProperty({ type: 'string', example: 'FR' })
-  @Transform(({ value }) => value?.toLowerCase())
+  @Swagger.ApiPropertyOptional({ type: 'array' })
+  @IsOptional()
+  @IsArray()
+  translations?: Translation[];
+}
+
+export class UpdateInterestRequest {
+  @Swagger.ApiProperty({ type: 'string', format: 'uuid' })
+  @IsUUID()
+  id: string;
+
+  @Swagger.ApiProperty({ type: 'string' })
   @IsString()
-  @Length(2, 2)
-  languageCode: string;
+  @IsNotEmpty()
+  name: string;
+
+  @Swagger.ApiPropertyOptional({ type: 'array' })
+  @IsOptional()
+  @IsArray()
+  translations?: Translation[];
 }
 
 export class InterestResponse {
@@ -62,10 +71,53 @@ export class InterestResponse {
     Object.assign(this, partial);
   }
 
-  static fromDomain(interest: Interest) {
+  static fromDomain(interest: Interest, languageCode?: string) {
+    const name = textContentTranslationResponse(interest.name, languageCode);
     return new InterestResponse({
       id: interest.id,
-      name: interest.name.content,
+      name: name,
+    });
+  }
+}
+
+export class GetInterestResponse {
+  @Swagger.ApiProperty({ type: 'string', format: 'uuid' })
+  @Expose({ groups: ['read'] })
+  id: string;
+
+  @Swagger.ApiProperty({ type: TextContentResponse })
+  @Expose({ groups: ['read'] })
+  name: TextContentResponse;
+
+  constructor(partial: Partial<GetInterestResponse>) {
+    Object.assign(this, partial);
+  }
+
+  static fromDomain(interest: Interest) {
+    return new GetInterestResponse({
+      id: interest.id,
+      name: TextContentResponse.fromDomain(interest.name),
+    });
+  }
+}
+
+export class GetInterestCategoryResponse {
+  @Swagger.ApiProperty({ type: 'string', format: 'uuid' })
+  @Expose({ groups: ['read'] })
+  id: string;
+
+  @Swagger.ApiProperty({ type: TextContentResponse })
+  @Expose({ groups: ['read'] })
+  name: TextContentResponse;
+
+  constructor(partial: Partial<GetInterestCategoryResponse>) {
+    Object.assign(this, partial);
+  }
+
+  static fromDomain(category: InterestCategory) {
+    return new GetInterestResponse({
+      id: category.id,
+      name: TextContentResponse.fromDomain(category.name),
     });
   }
 }
@@ -87,11 +139,14 @@ export class InterestCategoryResponse {
     Object.assign(this, partial);
   }
 
-  static fromDomain(category: InterestCategory) {
+  static fromDomain(category: InterestCategory, languageCode?: string) {
+    const name = textContentTranslationResponse(category.name, languageCode);
     return new InterestCategoryResponse({
       id: category.id,
-      name: category.name.content,
-      interests: category.interests?.map(InterestResponse.fromDomain),
+      name: name,
+      interests: category.interests?.map((interest) =>
+        InterestResponse.fromDomain(interest, languageCode),
+      ),
     });
   }
 }

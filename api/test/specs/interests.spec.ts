@@ -25,7 +25,7 @@ describe('Interests', () => {
   const languageRepository = new InMemoryLanguageRepository();
 
   beforeAll(async () => {
-    const language = languageFactory.makeOne({ code: 'en' });
+    const language = languageFactory.makeOne({ code: 'fr' });
     languageRepository.init([language]);
 
     const module = await Test.createTestingModule({
@@ -57,9 +57,8 @@ describe('Interests', () => {
     const { body } = await request(app.getHttpServer())
       .post('/interests/categories')
       .send({
-        id: category.id,
         name: category.name.content,
-        languageCode: category.name.language,
+        translations: [],
       })
       .expect(201);
 
@@ -77,10 +76,9 @@ describe('Interests', () => {
     const { body } = await request(app.getHttpServer())
       .post('/interests')
       .send({
-        id: '4be22c64-e341-4199-9175-1c43fdce3eed',
         category: category.id,
         name: 'test',
-        languageCode: 'en',
+        translations: [],
       })
       .expect(201);
 
@@ -95,10 +93,9 @@ describe('Interests', () => {
     await request(app.getHttpServer())
       .post('/interests')
       .send({
-        id: 'da60293b-0542-42cb-ab27-456551da13b6',
         category: 'b1204f49-1b5e-4978-8691-34c670e9c34a',
         name: 'test',
-        languageCode: 'en',
+        translations: [],
       })
       .expect(404);
   });
@@ -116,9 +113,9 @@ describe('Interests', () => {
       .get(`/interests/categories`)
       .expect(200);
 
-    expect(body[0]).toHaveProperty('id');
-    expect(body[0]).toHaveProperty('name');
-    expect(body[0]).toHaveProperty('interests');
+    expect(body.items[0]).toHaveProperty('id');
+    expect(body.items[0]).toHaveProperty('name');
+    expect(body.items[0]).toHaveProperty('interests');
   });
 
   test('delete interest should succeed', async () => {

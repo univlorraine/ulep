@@ -3,6 +3,13 @@ import {
   INTEREST_REPOSITORY,
   InterestRepository,
 } from '../../ports/interest.repository';
+import { SortOrder } from '@app/common';
+
+interface GetInterestsByCategoriesCommand {
+  order?: SortOrder;
+  limit?: number;
+  page?: number;
+}
 
 @Injectable()
 export class GetInterestsByCategoriesUsecase {
@@ -11,7 +18,9 @@ export class GetInterestsByCategoriesUsecase {
     private readonly interestRepository: InterestRepository,
   ) {}
 
-  async execute() {
-    return this.interestRepository.interestByCategories();
+  async execute(command: GetInterestsByCategoriesCommand) {
+    const { page = 1, limit = 30, order } = command;
+    const offset = (page - 1) * limit;
+    return this.interestRepository.interestByCategories(offset, limit, order);
   }
 }

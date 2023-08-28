@@ -12,12 +12,13 @@ import {
   LANGUAGE_REPOSITORY,
   LanguageRepository,
 } from 'src/core/ports/language.repository';
+import { Translation } from 'src/core/models';
 
 export class CreateInterestCommand {
-  id: string;
   category: string;
-  name: string;
   languageCode: string;
+  name: string;
+  translations?: Translation[];
 }
 
 @Injectable()
@@ -44,11 +45,12 @@ export class CreateInterestUsecase {
 
     return this.repository.createInterest(
       {
-        id: command.id,
+        id: this.uuidProvider.generate(),
         name: {
           id: this.uuidProvider.generate(),
           content: command.name,
           language: command.languageCode,
+          translations: command.translations,
         },
       },
       command.category,

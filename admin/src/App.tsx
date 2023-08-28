@@ -1,14 +1,16 @@
 import React from 'react';
 import { Admin, Resource, useTranslate } from 'react-admin';
 import LoginPage from './pages/auth/login';
+import categoryInterest from './pages/category-interest';
 import countSuggestedLanguages from './pages/count-suggested-languages';
 import countries from './pages/countries';
+import interests from './pages/interests';
 import languages from './pages/languages';
 import objectives from './pages/objectives';
 import profiles from './pages/profiles';
 import questions from './pages/questions';
 import reports from './pages/report';
-import reportCategories from './pages/reportCategories';
+import reportCategories from './pages/report-categories';
 import suggestedLanguages from './pages/suggested-languages';
 import universities from './pages/universities';
 import authProvider from './providers/authProvider';
@@ -37,6 +39,12 @@ const App = () => {
                 name="languages/requests/count"
                 options={{ label: translate('count_suggested_languages.label') }}
                 {...countSuggestedLanguages}
+            />
+            <Resource name="interests" options={{ label: translate('objectives.label') }} {...interests} />
+            <Resource
+                name="interests/categories"
+                options={{ label: translate('interest_categories.label') }}
+                {...categoryInterest}
             />
             <Resource name="objectives" options={{ label: translate('objectives.label') }} {...objectives} />
             <Resource name="proficiency/questions" options={{ label: translate('questions.label') }} {...questions} />

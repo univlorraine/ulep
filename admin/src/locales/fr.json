@@ -21,6 +21,35 @@
         "translations": "Traductions",
         "university": "Université"
     },
+    "interests": {
+        "create": {
+            "error": "Une erreur est survenue pendant la création de l'intérêt",
+            "name": "Nom du nouvel intérêt",
+            "title": "Création d'une nouvel intérêt"
+        },
+        "label": "Intérêts",
+        "show": {
+            "name": "Nom",
+            "label": "Intérêt"
+        },
+        "update": {
+            "error": "Une erreur est survenue pendant la mise à jour d'un intérêt",
+            "title": "Mise à jour d'un intérêt"
+        }
+    },
+    "interest_categories": {
+        "create": {
+            "error": "Une erreur est survenue pendant la création de la catégorie d'intérêt",
+            "name": "Nom de la nouvelle catégorie",
+            "title": "Création d'une nouvelle catégorie"
+        },
+        "interests": "Intérêts",
+        "label": "Catégorie d'intérêts",
+        "name": "Nom",
+        "update": {
+            "title": "Mise à jour d'une catégorie d'intérêt"
+        }
+    },
     "languages": {
         "label": "Langues"
     },

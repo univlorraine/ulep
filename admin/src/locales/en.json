@@ -21,6 +21,35 @@
         "translations": "Translations",
         "university": "University"
     },
+    "interests": {
+        "create": {
+            "error": "An error occurred while creating the interest",
+            "name": "Name of new interest",
+            "title": "Creating a new interest"
+        },
+        "label": "Interests",
+        "show": {
+            "name": "Name",
+            "label": "Interests"
+        },
+        "update": {
+            "error": "An error occurred while updating the interest",
+            "title": "Update an interest"
+        }
+    },
+    "interest_categories": {
+        "create": {
+            "error": "An error occurred while creating the interest category",
+            "name": "Name of new interest category",
+            "title": "Creating a new interest category"
+        },
+        "interests": "Interests",
+        "label": "Interest categories",
+        "name": "Name",
+        "update": {
+            "title": "Update an interest category"
+        }
+    },
     "languages": {
         "label": "Languages"
     },

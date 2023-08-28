@@ -1,3 +1,4 @@
+import { Collection, SortOrder } from '@app/common';
 import { Interest, InterestCategory } from '../models';
 
 export const INTEREST_REPOSITORY = 'interest.repository';
@@ -11,9 +12,19 @@ export interface InterestRepository {
 
   categoryOfId(id: string): Promise<InterestCategory | null>;
 
-  interestByCategories(): Promise<InterestCategory[]>;
+  categoryOfName(name: string): Promise<InterestCategory | null>;
+
+  interestByCategories(
+    offset?: number,
+    limit?: number,
+    order?: SortOrder,
+  ): Promise<Collection<InterestCategory>>;
 
   deleteInterest(instance: Interest): Promise<void>;
 
   deleteCategory(instance: InterestCategory): Promise<void>;
+
+  updateInterest(interest: Interest): Promise<Interest>;
+
+  updateInterestCategory(category: InterestCategory): Promise<InterestCategory>;
 }
