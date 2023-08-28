@@ -8,14 +8,14 @@ const enumValue = <T>(_enum: unknown): T => {
   return faker.helpers.arrayElement(entries) as T;
 };
 
-const FRENCH_LANGUAGE_CODE = 'fr';
-const ENGLISH_LANGUAGE_CODE = 'en';
-
 export const createProfiles = async (
-  count: number,
   prisma: Prisma.PrismaClient,
 ): Promise<void> => {
   const profileFactory = new ProfileFactory();
+
+  const languages = await prisma.languageCodes.findMany();
+  const objectives = await prisma.learningObjectives.findMany();
+  const interest = await prisma.interests.findMany();
 
   const users = await prisma.users.findMany({
     include: {
@@ -25,77 +25,74 @@ export const createProfiles = async (
           Places: true,
         },
       },
+      Nationality: true,
     },
-    take: count,
   });
-  const languages = await prisma.languageCodes.findMany();
-  const objectives = await prisma.learningObjectives.findMany();
-  const interest = await prisma.interests.findMany();
-  const universities = await prisma.organizations.findMany();
-  const centralUniversity = universities.find(
-    (university) => !university.parent_id,
-  );
 
   for (const [index, user] of users.entries()) {
     const instance = profileFactory.makeOne();
 
-    let nativeLanguageCode = faker.helpers.arrayElement(languages).code;
-    const availableLanguages = user.Organization.Languages.filter(
-      (language) => language.code !== nativeLanguageCode.toLowerCase(),
-    );
-    let learningLanguages = faker.helpers
-      .arrayElements(availableLanguages)
-      .map((learningLanguage) => ({
-        language: learningLanguage,
+    let nativeLanguageCode;
+    switch (user.Nationality.code) {
+      case 'FR':
+        nativeLanguageCode = 'fr';
+        break;
+      case 'EN':
+        nativeLanguageCode = 'en';
+        break;
+      case 'DE':
+        nativeLanguageCode = 'de';
+        break;
+      default:
+        nativeLanguageCode = faker.helpers.arrayElement(languages).code;
+        break;
+    }
+
+    const learningLanguages = faker.helpers
+      .arrayElements(
+        user.Organization.Languages.filter(
+          (language) => language.code !== nativeLanguageCode,
+        ),
+      )
+      .map((language) => ({
+        language: language,
         level: enumValue(ProficiencyLevel),
       }));
 
-    if (index % 10 === 0) {
-      // Force one of 10 learning french
-      const frenchLanguage = availableLanguages.find(
-        (language) => language.code === FRENCH_LANGUAGE_CODE,
+    let masteredLanguages = [];
+    if (index % 20 === 0) {
+      // 1 of 20 spoke other languages
+      masteredLanguages = faker.helpers.arrayElements(
+        languages.filter(
+          (language) =>
+            language.code !== nativeLanguageCode &&
+            !learningLanguages.some(
+              (learningLanguage) =>
+                learningLanguage.language.code === language.code,
+            ),
+        ),
+        faker.number.int({ max: 3 }),
       );
-      learningLanguages = [
-        {
-          language: frenchLanguage,
-          level: enumValue(ProficiencyLevel),
-        },
-      ];
-    } else if (index % 4 === 0) {
-      // Force on of 4 to be french
-      nativeLanguageCode = FRENCH_LANGUAGE_CODE;
-      learningLanguages = learningLanguages.filter(
-        (learningLanguage) =>
-          learningLanguage.language.code !== FRENCH_LANGUAGE_CODE,
-      );
-      if (learningLanguages.length === 0) {
-        const englishLanguage = availableLanguages.find(
-          (language) => language.code === ENGLISH_LANGUAGE_CODE,
-        );
-        learningLanguages = [
-          {
-            language: englishLanguage,
-            level: enumValue(ProficiencyLevel),
-          },
-        ];
-      }
     }
 
-    const campus =
-      user.Organization.id === centralUniversity.id
-        ? faker.helpers.arrayElement(user.Organization.Places)
-        : undefined;
+    const isCentralUniversity = !user.Organization.parent_id;
+    const campus = isCentralUniversity
+      ? faker.helpers.arrayElement(user.Organization.Places)
+      : undefined;
 
-    const learningType =
-      user.Organization.id === centralUniversity.id
-        ? faker.helpers.enumValue(LearningType)
-        : LearningType.ETANDEM;
+    const learningType = isCentralUniversity
+      ? faker.helpers.enumValue(LearningType)
+      : LearningType.ETANDEM;
 
     await prisma.profiles.create({
       data: {
         User: { connect: { id: user.id } },
         NativeLanguage: { connect: { code: nativeLanguageCode } },
-        // MasteredLanguages: {},
+        MasteredLanguages: {
+          create: masteredLanguages.map((language) => ({
+            language_code_id: language.id,
+          })),
+        },
         Goals: {
           connect: faker.helpers.arrayElements(objectives, 2).map((it) => ({
             id: it.id,

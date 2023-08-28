@@ -14,6 +14,7 @@ const prisma = new Prisma.PrismaClient();
 const load = async () => {
   try {
     await prisma.learningLanguages.deleteMany();
+    await prisma.masteredLanguages.deleteMany();
     await prisma.users.deleteMany();
     await prisma.organizations.deleteMany();
     await prisma.translations.deleteMany();
@@ -34,8 +35,8 @@ const load = async () => {
     await createProficiencyTests(prisma);
     await createInterests(prisma);
     await createLearningObjectives(prisma);
-    await createUsers(100, prisma);
-    await createProfiles(100, prisma);
+    await createUsers(200, 100, prisma);
+    await createProfiles(prisma);
   } catch (e) {
     console.error(e);
     process.exit(1);

@@ -16,7 +16,15 @@ export class MatchScores {
   readonly gender: number;
   readonly university: number;
 
-  constructor(props: MatchScores) {
+  constructor(props: {
+    level: number;
+    age: number;
+    status: number;
+    goals: number;
+    interests: number;
+    gender: number;
+    university: number;
+  }) {
     this.level = props.level;
     this.age = props.age;
     this.status = props.status;
