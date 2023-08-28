@@ -36,7 +36,7 @@ export const createUniversities = async (prisma: PrismaClient) => {
   });
   await prisma.organizations.create({
     data: {
-      id: '60ea6e0d-e654-47bf-9bbf-58b3c375b339',
+      id: UniversitySeedIDs.BIRMINGHAM,
       name: 'Université de Birmingham',
       Languages: {
         connect: [{ code: 'fr' }],
