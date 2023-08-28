@@ -34,14 +34,14 @@ export class GenerateTandemsUsecase {
     private readonly uuidProvider: UuidProviderInterface,
   ) {}
 
-  // TODO: add score in Tandem ???
-
   async execute(command: GenerateTandemsCommand): Promise<Tandem[]> {
     const profiles =
       await this.profilesRepository.getProfilesUsableForTandemsGeneration({
         maxTandemPerProfile: 1, // TODO: change when multi-language
         universityIds: command.universityIds,
       });
+    // TODO: check how to manage draft tandems (override them when re-generating ?)
+
     this.logger.debug(
       `Found ${
         profiles.length
@@ -76,8 +76,22 @@ export class GenerateTandemsUsecase {
 
     this.logger.debug(`Computed ${possiblePairs.length} potential pairs`);
 
-    // TODO: sort by inscription time + priorities
-    const sortedProfiles = profiles;
+    const sortedProfiles = profiles
+      .sort(
+        (a, b) =>
+          // sort by register time
+          a.createdAt?.getTime() - b.createdAt?.getTime(),
+      )
+      .sort((a, b) => {
+        // Sort by central university first
+        if (
+          a.user.university.isCentralUniversity() ===
+          b.user.university.isCentralUniversity()
+        ) {
+          return 0;
+        }
+        return a.user.university.isCentralUniversity() ? -1 : 1;
+      });
 
     let sortedPossiblePairs = possiblePairs.sort((a, b) => b.total - a.total);
     const pairedProfilesId = new Set();

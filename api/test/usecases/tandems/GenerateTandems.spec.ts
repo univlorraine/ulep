@@ -1223,4 +1223,146 @@ describe('GenerateTandem UC', () => {
       }),
     ).toBeTruthy();
   });
+
+  test('should generate tandem for user from central university that registered first', async () => {
+    const subsidiaryUniveristy1 = new University({
+      id: 'subsidiary1',
+      name: 'Subsidiary university 1',
+      parent: centralUniversity.id,
+      campus: [],
+      languages: [french, english, deutch],
+      timezone: 'GMT+1',
+      admissionStart: new Date(),
+      admissionEnd: new Date(),
+    });
+    const firstUser = new Profile({
+      user: new User({
+        id: 'user1',
+        email: '',
+        firstname: '',
+        lastname: '',
+        gender: Gender.MALE,
+        age: 19,
+        university: centralUniversity,
+        role: Role.STUDENT,
+        country: 'FR',
+        avatar: null,
+        deactivated: false,
+        deactivatedReason: '',
+      }),
+      id: 'FR_1',
+      nativeLanguage: french,
+      masteredLanguages: [],
+      learningType: LearningType.ETANDEM,
+      meetingFrequency: 'ONCE_A_WEEK',
+      learningLanguages: [
+        {
+          language: english,
+          level: ProficiencyLevel.B2,
+        },
+      ],
+      sameGender: false,
+      sameAge: false,
+      objectives: [],
+      interests: [],
+      biography: {
+        superpower: faker.lorem.sentence(),
+        favoritePlace: faker.lorem.sentence(),
+        experience: faker.lorem.sentence(),
+        anecdote: faker.lorem.sentence(),
+      },
+      createdAt: new Date('2023-08-28T10:00:00.000Z'),
+    });
+    // second user is better match but register later
+    const secondUser = new Profile({
+      user: new User({
+        id: 'user2',
+        email: '',
+        firstname: '',
+        lastname: '',
+        gender: Gender.FEMALE,
+        age: 50,
+        university: centralUniversity,
+        role: Role.STAFF,
+        country: 'FR',
+        avatar: null,
+        deactivated: false,
+        deactivatedReason: '',
+      }),
+      id: 'FR_2',
+      nativeLanguage: french,
+      masteredLanguages: [],
+      learningType: LearningType.ETANDEM,
+      meetingFrequency: 'ONCE_A_WEEK',
+      learningLanguages: [
+        {
+          language: english,
+          level: ProficiencyLevel.B2,
+        },
+      ],
+      sameGender: false,
+      sameAge: false,
+      objectives: [],
+      interests: [],
+      biography: {
+        superpower: faker.lorem.sentence(),
+        favoritePlace: faker.lorem.sentence(),
+        experience: faker.lorem.sentence(),
+        anecdote: faker.lorem.sentence(),
+      },
+      createdAt: new Date('2023-08-12T10:00:00.000Z'),
+    });
+    const match = new Profile({
+      user: new User({
+        id: 'user3',
+        email: '',
+        firstname: '',
+        lastname: '',
+        gender: Gender.MALE,
+        age: 19,
+        university: subsidiaryUniveristy1,
+        role: Role.STUDENT,
+        country: 'EN',
+        avatar: null,
+        deactivated: false,
+        deactivatedReason: '',
+      }),
+      id: 'EN_1',
+      nativeLanguage: english,
+      masteredLanguages: [],
+      learningType: LearningType.ETANDEM,
+      meetingFrequency: 'ONCE_A_WEEK',
+      learningLanguages: [
+        {
+          language: french,
+          level: ProficiencyLevel.B2,
+        },
+      ],
+      sameGender: false,
+      sameAge: false,
+      objectives: [],
+      interests: [],
+      biography: {
+        superpower: faker.lorem.sentence(),
+        favoritePlace: faker.lorem.sentence(),
+        experience: faker.lorem.sentence(),
+        anecdote: faker.lorem.sentence(),
+      },
+      createdAt: new Date('2023-08-04T10:00:00.000Z'),
+    });
+
+    profilesRepository.init([firstUser, match, secondUser]);
+
+    await uc.execute({
+      universityIds: [centralUniversity.id, subsidiaryUniveristy1.id],
+    });
+
+    const tandems = await tandemsRepository.getExistingTandems();
+    expect(
+      checkTandemArrayContainsTandem(tandems, {
+        a: match,
+        b: secondUser,
+      }),
+    ).toBeTruthy();
+  });
 });
