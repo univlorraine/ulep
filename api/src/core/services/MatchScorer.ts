@@ -50,19 +50,20 @@ export class MatchScorer implements IMatchScorer {
       throw new SameProfilesError();
     }
 
-    // TODO: incldue other cases in discovery mode (ex: learning asian language, low level in learning language).
+    // TODO: include other cases in discovery mode (ex: learning asian language, low level in learning language).
     // Algorithm should be adapted to consider learingLanguages for both user in that case
-    const isDiscovery = profile1.learningLanguages?.[0]?.language.code === JOKER_LANGUAGE_CODE;
+    const profile1LearningLanguageIsDiscovery = profile1.learningLanguages?.[0]?.language.code === JOKER_LANGUAGE_CODE;
+    const profile2LearningLanguageIsDiscovery = profile2.learningLanguages?.[0]?.language.code === JOKER_LANGUAGE_CODE;
 
     const languageIdsSpokenByProfile1 = [profile1.nativeLanguage, ...profile1.masteredLanguages].map(l => l.id);
     const languageIdsSpokenByProfile2 = [profile2.nativeLanguage, ...profile2.masteredLanguages].map(l => l.id);
    
 
     // Check compatibility between learning languages and known languages of profiles
-    if (!isDiscovery && (
-      !languageIdsSpokenByProfile1.includes(profile2.learningLanguages?.[0]?.language.id) ||
-      !languageIdsSpokenByProfile2.includes(profile1.learningLanguages?.[0]?.language.id)
-    )) {
+    if (
+      (!profile2LearningLanguageIsDiscovery && !languageIdsSpokenByProfile1.includes(profile2.learningLanguages?.[0]?.language.id))
+      || (!profile1LearningLanguageIsDiscovery && !languageIdsSpokenByProfile2.includes(profile1.learningLanguages?.[0]?.language.id))
+    ) {
       return new Match({ owner: profile1, target: profile2, scores: MatchScores.empty() });
     }
 
@@ -91,7 +92,7 @@ export class MatchScorer implements IMatchScorer {
       return new Match({ owner: profile1, target: profile2, scores: MatchScores.empty() });
     }
 
-    const scores: MatchScores = {
+    const scores: MatchScores = new MatchScores({
       level: this.computeLanguageLevel(profile1, profile2),
       age: this.computeAgeBonus(profile1, profile2),
       status: this.computeSameRolesBonus(profile1, profile2),
@@ -99,7 +100,7 @@ export class MatchScorer implements IMatchScorer {
       university: this.computeSameUniversityBonus(profile1, profile2),
       gender: this.computeSameGenderBonus(profile1, profile2),
       interests: this.computeSameInterestBonus(profile1, profile2),
-    };
+    });
 
     return new Match({ owner: profile1, target: profile2, scores });
   }

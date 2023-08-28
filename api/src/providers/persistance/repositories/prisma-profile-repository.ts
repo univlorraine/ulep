@@ -41,7 +41,7 @@ export class PrismaProfileRepository implements ProfileRepository {
     return profileMapper(entry);
   }
 
-  async whereMaxTandemsCountAndLanguage(
+  async whereMaxTandemsCountAndSpokeLanguage(
     props: MaxTandemsCountAndLanguageProps,
   ): Promise<Profile[]> {
     const result: any[] = await this.prisma.$queryRaw`
@@ -54,8 +54,12 @@ export class PrismaProfileRepository implements ProfileRepository {
       WHERE t.status != 'INACTIVE'
       GROUP BY pot.profile_id
     ) AS tandems_count ON p.id = tandems_count.profile_id
-    WHERE (tandems_count.tandem_count < ${props.tandemsCount} OR tandems_count.tandem_count IS NULL)
-      AND p.native_language_code_id != ${props.nativeLanguage.not}
+    LEFT JOIN mastered_languages ml on ml.profile_id = p.id
+    WHERE (
+      tandems_count.tandem_count < ${props.tandemsCount} OR tandems_count.tandem_count IS NULL
+    ) AND (
+      p.native_language_code_id = ${props.spokenLanguageId} OR ml.language_code_id = ${props.spokenLanguageId}
+    )
   `;
 
     const profileIds = result.map((row) => row.id);

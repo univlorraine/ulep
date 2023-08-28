@@ -30,21 +30,23 @@ CMD ["pnpm", "start"]
 
 # Build stage
 FROM admin_base AS admin_builder
+WORKDIR /srv/app
+
 COPY --link . .
 COPY --from=admin_deps --link /srv/app/node_modules ./node_modules
 
 RUN pnpm run build
 
-# Production stage
-FROM node:18-alpine AS admin_prod
-
-WORKDIR /srv/app
+FROM admin_builder AS admin_prod
 
 ENV NODE_ENV production
 
 RUN addgroup -S -g 1001 nodejs
-RUN adduser -S -u 1001 react
+RUN adduser -S -u 1001 nestjs
+RUN npm i -g serve
 
-COPY --from=admin_builder --link --chown=react:nodejs /srv/app/build ./build
+EXPOSE 80
 
-CMD ["node", "./build/main"]
+ENV PORT 80
+
+CMD ["bash", "-c", "serve -s build -l 80"]

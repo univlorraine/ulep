@@ -1,13 +1,19 @@
 import { PrismaClient } from '@prisma/client';
 
+export enum UniversitySeedIDs {
+  CENTRAL = 'b511f9d1-ce7e-40b5-a630-ecb99f4e9f59',
+  BIRMINGHAM = '60ea6e0d-e654-47bf-9bbf-58b3c375b339',
+  FRANCFORT = '0747d187-7b02-479b-8ce3-faccac2a20c9',
+}
+
 export const createUniversities = async (prisma: PrismaClient) => {
   const centralUniversityId = 'b511f9d1-ce7e-40b5-a630-ecb99f4e9f59';
   await prisma.organizations.create({
     data: {
-      id: centralUniversityId,
+      id: UniversitySeedIDs.CENTRAL
       name: 'Université de Lorraine',
       Languages: {
-        connect: [{ code: 'fr' }, { code: 'en' }],
+        connect: [{ code: 'fr' }, { code: 'de' }, { code: 'en' }],
       },
       Places: {
         create: [
@@ -30,10 +36,10 @@ export const createUniversities = async (prisma: PrismaClient) => {
   });
   await prisma.organizations.create({
     data: {
-      id: '60ea6e0d-e654-47bf-9bbf-58b3c375b339',
+      id: UniversitySeedIDs.BIRMINGHAM,
       name: 'Université de Birmingham',
       Languages: {
-        connect: [{ code: 'fr' }, { code: 'en' }],
+        connect: [{ code: 'fr' }],
       },
       timezone: 'Europe/London',
       parent_id: centralUniversityId,
@@ -45,17 +51,17 @@ export const createUniversities = async (prisma: PrismaClient) => {
   });
   await prisma.organizations.create({
     data: {
-      id: '0747d187-7b02-479b-8ce3-faccac2a20c9',
-      name: 'Université de Madrid',
+      id: UniversitySeedIDs.FRANCFORT,
+      name: 'Université de Francfort',
       Languages: {
-        connect: [{ code: 'fr' }, { code: 'en' }, { code: 'es' }],
+        connect: [{ code: 'fr' }, { code: 'en' }],
       },
-      timezone: 'Europe/Madrid',
+      timezone: 'Europe/Berlin',
       parent_id: centralUniversityId,
       admissionStartDate: new Date('2023-01-02'),
       admissionEndDate: new Date('2023-12-30'),
-      website: 'https://www.birmingham.ac.uk',
-      resource: 'https://www.univ-lorraine.fr/birm',
+      website: 'https://www.toto.de',
+      resource: 'https://www.univ-lorraine.fr/fran',
     },
   });
 };

@@ -12,9 +12,7 @@ export type ProfileQuerySortKey =
 
 export type MaxTandemsCountAndLanguageProps = {
   tandemsCount: number;
-  nativeLanguage: {
-    not: string;
-  };
+  spokenLanguageId: string;
 };
 
 export type GetProfilesUsableForTandemsGenerationProps = {
@@ -49,7 +47,7 @@ export interface ProfileRepository {
     props: GetProfilesUsableForTandemsGenerationProps,
   ) => Promise<Profile[]>;
 
-  whereMaxTandemsCountAndLanguage: (
+  whereMaxTandemsCountAndSpokeLanguage: (
     props: MaxTandemsCountAndLanguageProps,
   ) => Promise<Profile[]>;
 
