@@ -22,6 +22,14 @@ export class InMemoryTandemRepository implements TandemRepository {
     return Promise.resolve();
   }
 
+  saveMany(tandems: Tandem[]): Promise<void> {
+    for (const tandem of tandems) {
+      this.#tandems.push(tandem);
+    }
+
+    return Promise.resolve();
+  }
+
   async hasActiveTandem(profileId: string): Promise<boolean> {
     const activeTandems = this.#tandems.filter(
       (tandem) => tandem.status === TandemStatus.ACTIVE,

@@ -121,8 +121,6 @@ export class GenerateTandemsUsecase {
       });
 
       tandems.push(tandem);
-      // TODO: check if saveMany better
-      await this.tandemsRepository.save(tandem);
 
       sortedPossiblePairs = sortedPossiblePairs.filter(
         (possiblePair) =>
@@ -135,6 +133,8 @@ export class GenerateTandemsUsecase {
       pairedProfilesId.add(pair.owner.id);
       pairedProfilesId.add(pair.target.id);
     }
+
+    await this.tandemsRepository.saveMany(tandems);
 
     this.logger.debug(`Generated ${tandems.length} tandems`);
     return tandems;
