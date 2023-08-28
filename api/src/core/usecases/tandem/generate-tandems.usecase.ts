@@ -1,4 +1,4 @@
-import { Inject, Injectable } from '@nestjs/common';
+import { Inject, Injectable, Logger } from '@nestjs/common';
 import { Match, Tandem, TandemStatus } from 'src/core/models';
 import {
   PROFILE_REPOSITORY,
@@ -23,6 +23,7 @@ const TRESHOLD_VIABLE_PAIR = 0;
 @Injectable()
 export class GenerateTandemsUsecase {
   private readonly scorer: IMatchScorer = new MatchScorer();
+  private readonly logger = new Logger(GenerateTandemsUsecase.name);
 
   constructor(
     @Inject(PROFILE_REPOSITORY)
@@ -41,6 +42,13 @@ export class GenerateTandemsUsecase {
         maxTandemPerProfile: 1, // TODO: change when multi-language
         universityIds: command.universityIds,
       });
+    this.logger.debug(
+      `Found ${
+        profiles.length
+      } potential profiles for universities ${command.universityIds.join(
+        ', ',
+      )}`,
+    );
 
     // Generate all possible pairs
     const possiblePairs: Match[] = [];
@@ -65,6 +73,8 @@ export class GenerateTandemsUsecase {
         }
       }
     }
+
+    this.logger.debug(`Computed ${possiblePairs.length} potential pairs`);
 
     // TODO: sort by inscription time + priorities
     const sortedProfiles = profiles;
@@ -112,6 +122,7 @@ export class GenerateTandemsUsecase {
       pairedProfilesId.add(pair.target.id);
     }
 
+    this.logger.debug(`Generated ${tandems.length} tandems`);
     return tandems;
   }
 }
