@@ -4,7 +4,7 @@ import { Interest, InterestCategory } from 'src/core/models';
 import { InterestRepository } from 'src/core/ports/interest.repository';
 import {
   InterestCategoryRelations,
-  IterestsRelations,
+  InterestsRelations,
   interestCategoryMapper,
   interestMapper,
 } from '../mappers';
@@ -68,7 +68,7 @@ export class PrismaInterestRepository implements InterestRepository {
   async interestOfId(id: string): Promise<Interest | null> {
     const interest = await this.prisma.interests.findUnique({
       where: { id },
-      include: IterestsRelations,
+      include: InterestsRelations,
     });
 
     if (!interest) {
@@ -155,7 +155,7 @@ export class PrismaInterestRepository implements InterestRepository {
       where: {
         id: interest.id,
       },
-      include: IterestsRelations,
+      include: InterestsRelations,
     });
 
     return interestMapper(newInterest);

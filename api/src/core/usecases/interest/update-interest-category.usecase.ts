@@ -20,17 +20,17 @@ export class UpdateInterestCategoryUsecase {
   ) {}
 
   async execute(command: UpdateInterestCategoryCommand) {
-    const interest = await this.repository.categoryOfId(command.id);
-    if (!interest) {
+    const category = await this.repository.categoryOfId(command.id);
+    if (!category) {
       throw new RessourceDoesNotExist('Category does not exist');
     }
 
     return this.repository.updateInterestCategory({
-      id: interest.id,
+      id: category.id,
       name: {
-        id: interest.name.id,
+        id: category.name.id,
         content: command.name,
-        language: interest.name.language,
+        language: category.name.language,
         translations: command.translations,
       },
     });
