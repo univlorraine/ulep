@@ -1,5 +1,6 @@
 import React from 'react';
 import {
+    BooleanField,
     SelectInput,
     ReferenceInput,
     Filter,
@@ -69,6 +70,7 @@ const ProfileList = (props: any) => {
                     sortable={false}
                     source="nativeLanguage.code"
                 />
+                <BooleanField label={translate('profiles.certificate')} source="certificateOption" sortable={false} />
                 <ArrayField
                     label={translate('profiles.mastered_languages')}
                     sortable={false}
@@ -79,6 +81,7 @@ const ProfileList = (props: any) => {
                     </SingleFieldList>
                 </ArrayField>
             </Datagrid>
+            <BooleanField label={translate('profiles.certificate')} source="certificateOption" sortable={false} />
         </List>
     );
 };

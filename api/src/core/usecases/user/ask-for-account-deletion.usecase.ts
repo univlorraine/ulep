@@ -25,7 +25,6 @@ export class AskForAccountDeletionUsecase {
 
     await this.userRepository.update({
       ...user,
-      deactivated: true,
       deactivatedReason: command.reason,
     });
 

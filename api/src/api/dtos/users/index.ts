@@ -18,7 +18,7 @@ import {
   CreateUserCommand,
   UpdateUserCommand,
 } from 'src/core/usecases/user';
-import { Gender, Role, User } from 'src/core/models/user.model';
+import { Gender, Role, User, UserStatus } from 'src/core/models/user.model';
 import { MediaObjectResponse } from '../medias';
 
 export class CreateUserRequest implements CreateUserCommand {
@@ -123,9 +123,9 @@ export class UserResponse {
   @Expose({ groups: ['read'] })
   country: string;
 
-  @Swagger.ApiProperty({ type: 'boolean' })
+  @Swagger.ApiProperty({ type: UserStatus })
   @Expose({ groups: ['read'] })
-  deactivated: boolean;
+  status?: UserStatus;
 
   @Swagger.ApiPropertyOptional({ type: MediaObjectResponse })
   @Expose({ groups: ['read'] })
@@ -146,7 +146,7 @@ export class UserResponse {
       university: UniversityResponse.fromUniversity(user.university),
       role: user.role,
       country: user.country,
-      deactivated: user.deactivated,
+      status: user.status,
       avatar: user.avatar
         ? MediaObjectResponse.fromMediaObject(user.avatar)
         : null,

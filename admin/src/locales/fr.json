@@ -76,6 +76,7 @@
         }
     },
     "profiles": {
+        "certificate": "Certificat",
         "country": "Pays",
         "label": "Profiles",
         "mastered_languages": "Langues maîtrisés",

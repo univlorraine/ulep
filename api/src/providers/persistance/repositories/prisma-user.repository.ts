@@ -21,7 +21,6 @@ export class PrismaUserRepository implements UserRepository {
         gender: user.gender,
         role: user.role,
         Nationality: { connect: { code: user.country } },
-        deactivated: user.deactivated,
         deactivated_reason: user.deactivatedReason,
       },
       include: {
@@ -79,7 +78,7 @@ export class PrismaUserRepository implements UserRepository {
         gender: user.gender,
         role: user.role,
         Nationality: { connect: { code: user.country } },
-        deactivated: user.deactivated,
+        status: user.status,
         deactivated_reason: user.deactivatedReason,
       },
     });

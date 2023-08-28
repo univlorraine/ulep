@@ -1,5 +1,6 @@
 import { Table, TableBody, TableCell, TableHead, TableRow } from '@mui/material';
 import React, { useEffect, useState } from 'react';
+import { ArrayField, SingleFieldList, ChipField } from 'react-admin';
 import { TextField, Show, TabbedShowLayout, Tab, useDataProvider, useRecordContext, useGetRecordId } from 'react-admin';
 
 interface Match {
@@ -123,19 +124,23 @@ const ProfileShow = (props: any) => {
         <Show title={<Title />} {...props}>
             <TabbedShowLayout>
                 <TabbedShowLayout.Tab label="summary">
-                    <TextField source="email" />
-                    <TextField source="firstname" />
-                    <TextField source="lastname" />
-                    <TextField source="age" />
-                    <TextField source="gender" />
-                    <TextField source="university.name" />
-                    <TextField source="role" />
+                    <TextField source="user.email" />
+                    <TextField source="user.firstname" />
+                    <TextField source="user.lastname" />
+                    <TextField source="user.age" />
+                    <TextField source="user.gender" />
+                    <TextField source="user.university.name" />
+                    <TextField source="user.role" />
                     <TextField source="goals" />
                     <TextField source="nativeLanguage.code" />
                     <TextField source="learningLanguage.code" />
                     <TextField source="learningLanguage.level" />
                     <TextField source="meetingFrequency" />
-                    <TextField source="interests" />
+                    <ArrayField sortable={false} source="interests">
+                        <SingleFieldList>
+                            <ChipField disabled={false} onClick={undefined} source="name" />
+                        </SingleFieldList>
+                    </ArrayField>
                 </TabbedShowLayout.Tab>
                 <Tab label="Matches">
                     <MatchTable matchs={matchs} />

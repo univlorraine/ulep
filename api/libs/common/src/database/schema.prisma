@@ -108,7 +108,7 @@ model Users {
   age                Int
   gender             String
   role               String
-  deactivated        Boolean       @default(false)
+  status             String?
   deactivated_reason String?
   country_code_id    String?
   image_id           String?       @unique

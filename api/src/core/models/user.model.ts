@@ -1,6 +1,11 @@
 import { MediaObject } from './media.model';
 import { University } from './university.model';
 
+export enum UserStatus {
+  BANNED = 'BANNED',
+  REPORTED = 'REPORTED',
+}
+
 export enum Gender {
   MALE = 'MALE',
   FEMALE = 'FEMALE',
@@ -23,7 +28,7 @@ export type UserProps = {
   role: Role;
   country: string;
   avatar?: MediaObject;
-  deactivated: boolean;
+  status?: UserStatus;
   deactivatedReason?: string;
 };
 
@@ -48,7 +53,7 @@ export class User {
 
   readonly avatar?: MediaObject;
 
-  readonly deactivated: boolean;
+  readonly status?: UserStatus;
 
   readonly deactivatedReason?: string;
 
@@ -63,7 +68,7 @@ export class User {
     this.role = props.role;
     this.country = props.country;
     this.avatar = props.avatar;
-    this.deactivated = props.deactivated;
+    this.status = props.status;
     this.deactivatedReason = props.deactivatedReason;
   }
 }
