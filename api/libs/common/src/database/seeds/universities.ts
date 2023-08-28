@@ -51,7 +51,7 @@ export const createUniversities = async (prisma: PrismaClient) => {
   });
   await prisma.organizations.create({
     data: {
-      id: '0747d187-7b02-479b-8ce3-faccac2a20c9',
+      id: UniversitySeedIDs.FRANCFORT,
       name: 'Université de Francfort',
       Languages: {
         connect: [{ code: 'fr' }, { code: 'en' }],
