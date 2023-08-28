@@ -29,7 +29,7 @@ export class GetUserMatchUsecase {
   async execute(command: GetUserMatchCommand): Promise<Collection<Match>> {
     const owner = await this.tryToFindTheProfileOf(command.id);
 
-    if (owner.user.university.parent) {
+    if (!owner.user.university.isCentralUniversity()) {
       throw new ProfileIsNotInCentralUniversity(command.id);
     }
 
