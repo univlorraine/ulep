@@ -221,9 +221,9 @@ describe('GenerateTandem UC', () => {
       firstname: '',
       lastname: '',
       gender: Gender.MALE,
-      age: 22,
+      age: 48,
       university: centralUniversity,
-      role: Role.STUDENT,
+      role: Role.STAFF,
       country: 'ES',
       avatar: null,
       deactivated: false,
@@ -402,6 +402,7 @@ describe('GenerateTandem UC', () => {
 
   beforeEach(() => {
     profilesRepository.reset();
+    tandemsRepository.reset();
   });
 
   test('should generate tandems', async () => {
@@ -449,21 +450,6 @@ describe('GenerateTandem UC', () => {
   });
 
   test('should not generate tandems for user already having a tandem', async () => {
-    profilesRepository.init([
-      // 3 users from france
-      french1,
-      french2,
-      french3,
-      // 2 from spain
-      spain1,
-      spain2,
-      // 2 user from england
-      english1,
-      english2,
-      // 1 deutch
-      deutch1,
-    ]);
-
     const existingTandems = [
       new Tandem({
         id: 'tandem1',
@@ -476,6 +462,24 @@ describe('GenerateTandem UC', () => {
         status: TandemStatus.DRAFT,
       }),
     ];
+
+    profilesRepository.init(
+      [
+        // 3 users from france
+        french1,
+        french2,
+        french3,
+        // 2 from spain
+        spain1,
+        spain2,
+        // 2 user from england
+        english1,
+        english2,
+        // 1 deutch
+        deutch1,
+      ],
+      existingTandems,
+    );
     tandemsRepository.init(existingTandems);
 
     await uc.execute({
@@ -483,7 +487,6 @@ describe('GenerateTandem UC', () => {
     });
 
     const tandems = await tandemsRepository.getExistingTandems();
-
     expect(tandems.length).toBe(3);
 
     expect(

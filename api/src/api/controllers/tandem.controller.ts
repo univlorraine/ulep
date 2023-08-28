@@ -66,7 +66,7 @@ export class TandemController {
         new TandemResponse({
           profiles: tandem.profiles.map(ProfileResponse.fromDomain),
           status: TandemStatus.DRAFT,
-          score: tandem.score,
+          // score: tandem.score,
         }),
     );
   }
