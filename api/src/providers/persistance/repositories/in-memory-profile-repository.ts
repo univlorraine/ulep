@@ -40,7 +40,7 @@ export class InMemoryProfileRepository implements ProfileRepository {
     );
   }
 
-  async whereMaxTandemsCountAndLanguage(
+  async whereMaxTandemsCountAndSpokeLanguage(
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     props: MaxTandemsCountAndLanguageProps,
   ): Promise<Profile[]> {

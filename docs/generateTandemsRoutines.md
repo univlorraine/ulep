@@ -24,6 +24,35 @@ Bonus points on similarity for:
 - Interests: aims to have same interests
 - statuses / roles: students with students and staff with staff
 
+# Single routine
+
+Single routine will provide tandem suggestions for a single user.
+
+```plantuml
+start
+:get profile;
+
+if (user from central university) then (yes)
+    :potentialProfiles = get profiles not in tandem with native or mastered
+    languages containing profile's learning language;
+
+    :potentialMatches = [];
+    repeat :for potentialProfile in potentialProfiles;
+        :score = computeScore(profile, potentialProfile);
+        
+        if (score > 0) then (yes)
+            :add (potentialProfile, score) to potentialMatches;
+        else (no)
+        endif
+    repeat while(next potentialProfile ?)
+
+    :sort potentialMatches by score;
+    :return 5 best potential matches;
+else (no)
+    stop
+endif
+end
+```
 
 # Global routine
 
@@ -61,7 +90,7 @@ repeat
         repeat :profile1 = select next profile in profilesToPair;
             repeat :profile2 = select next profile in profilesToPair;
                 if (profile1 != profile2 AND {profile1, profile2} NOT IN possiblePairs) then (yes)
-                    if ({profile1, profile2} match forbidden condition OR (profile1 ET profile2) do not belong to central university) then (no) 
+                    if (profile1 et profile2 DO NOT BELONG to central university) then (no) 
                         :score = computeScore(profile1, profile2);
                     else (yes)
                     endif
@@ -106,6 +135,66 @@ Note current restrictions that will probably be challenged or  be lifted later:
 
 # Score computation
 
+We check forbbiden rules (which leads to null score) before really computing score
+
+```plantuml
+start
+
+group language complementarity
+    if (learning language of profile 1 MATCH spoken languages of profile 2) then (yes)
+        if (learning language of profile 2 MATCH spoken languages of profile 1) then (yes)
+        else (no)
+            if (profile 2 learning language is a discovery) then (yes)
+            else (no)
+                :score = 0;
+                stop
+            endif
+        endif
+    else (no)
+        if (profile 1 learning language is a discovery) then (yes)
+        else (no)
+            :score = 0;
+            stop
+        endif
+    endif
+end group
+
+group gender similarity
+    if (profile1 or profile 2 want same gender) then (yes)
+        if (profile1 and profile2 has same gender) then (yes)
+        else (no)
+            :score = 0;
+            stop
+        endif
+    else (no)
+    endif
+end group
+
+group learning type
+    if (profile1 and profile 2 wants different learning types) then (yes)
+        if (profile 1 and profile 2 are in "BOTH" learning type) then (yes)
+        else (no)
+            :score = 0;
+            stop
+        endif
+    else (no)
+    endif
+
+    if (profile 1 has "TANDEM" learning type) then (yes)
+        if (profile1 and profile2 are on same site) then (yes)
+        else (no)
+            :score = 0;
+            stop
+        endif
+    else (no)
+    endif
+end group
+
+:compute score;
+end
+```
+
+Score is then computed with formula:
 $$score_{total} = score_{language} + bonus_{age} + bonus_{roles} + bonus_{goals} + bonus_{university} + bonus_{gender} + bonus_{interests}$$
 
 ## Language score

@@ -1,16 +1,7 @@
 import { Chip } from '@material-ui/core';
 import { Typography } from '@mui/material';
-import React, { useEffect } from 'react';
-import {
-    useTranslate,
-    FunctionField,
-    ArrayField,
-    List,
-    Datagrid,
-    CreateButton,
-    TopToolbar,
-    useRefresh,
-} from 'react-admin';
+import React from 'react';
+import { useTranslate, FunctionField, ArrayField, List, Datagrid, CreateButton, TopToolbar } from 'react-admin';
 import { Link, useNavigate } from 'react-router-dom';
 import InterestCategory from '../../entities/InterestCategory';
 
@@ -22,12 +13,7 @@ const InterestCategoryAction = () => (
 
 const InterestCategoryList = () => {
     const translation = useTranslate();
-    const refresh = useRefresh();
     const navigate = useNavigate();
-
-    useEffect(() => {
-        refresh();
-    }, []);
 
     return (
         <List actions={<InterestCategoryAction />} exporter={false}>

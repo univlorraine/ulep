@@ -38,7 +38,7 @@ COPY --from=api_deps --link /srv/app/node_modules ./node_modules
 RUN pnpm run build
 
 # Production image, copy all the files and run nest
-FROM api_base AS api_prod
+FROM api_builder AS api_prod
 
 WORKDIR /srv/app
 
@@ -46,9 +46,6 @@ ENV NODE_ENV production
 
 RUN addgroup -S -g 1001 nodejs
 RUN adduser -S -u 1001 nestjs
-
-COPY --from=api_builder --link /srv/app/dist ./dist
-COPY --from=api_builder --link /srv/app/node_modules ./node_modules
 
 USER nestjs
 

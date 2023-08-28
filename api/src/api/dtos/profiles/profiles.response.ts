@@ -128,8 +128,8 @@ export class ProfileResponse {
       objectives: profile.objectives.map((objective) =>
         ObjectiveResponse.fromDomain(objective),
       ),
-      interests: profile.interests.map((profile) =>
-        InterestResponse.fromDomain(profile),
+      interests: profile.interests.map((interest) =>
+        InterestResponse.fromDomain(interest),
       ),
       meetingFrequency: profile.meetingFrequency,
       biography:

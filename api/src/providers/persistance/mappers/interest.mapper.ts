@@ -11,7 +11,7 @@ export const InterestCategoryRelations = {
   Interests: { include: { TextContent: TextContentRelations } },
 };
 
-export const IterestsRelations = {
+export const InterestsRelations = {
   TextContent: TextContentRelations,
   Category: { include: { TextContent: TextContentRelations } },
 };

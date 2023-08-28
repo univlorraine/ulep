@@ -13,12 +13,12 @@ interface InterestFormProps {
 
 const InterestForm: React.FC<InterestFormProps> = ({ handleSubmit, name, translations, tradKey = 'interests' }) => {
     const translate = useTranslate();
-    const [newName, setName] = useState<string>(name || '');
-    const [newTranslations, setTranslations] = useState<IndexedTranslation[]>(translations || []);
+    const [newName, setNewName] = useState<string>(name || '');
+    const [newTranslations, setNewTranslations] = useState<IndexedTranslation[]>(translations || []);
 
     useEffect(() => {
-        setName(name || '');
-        setTranslations(translations || []);
+        setNewName(name || '');
+        setNewTranslations(translations || []);
     }, [name, translations]);
 
     return (
@@ -29,7 +29,7 @@ const InterestForm: React.FC<InterestFormProps> = ({ handleSubmit, name, transla
                 <Input name="Language" sx={{ mx: 4, my: 2, width: 40 }} value="FR" />
                 <Input
                     name="Content"
-                    onChange={(e) => setName(e.target.value)}
+                    onChange={(e) => setNewName(e.target.value)}
                     placeholder={translate('global.content')}
                     sx={{ width: '80%' }}
                     value={newName}
@@ -37,7 +37,7 @@ const InterestForm: React.FC<InterestFormProps> = ({ handleSubmit, name, transla
                 />
             </Box>
 
-            <TranslationForm setTranslations={setTranslations} translations={newTranslations} />
+            <TranslationForm setTranslations={setNewTranslations} translations={newTranslations} />
             <Button
                 color="primary"
                 onClick={() => handleSubmit(newName, newTranslations)}
