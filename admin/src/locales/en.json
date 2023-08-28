@@ -7,6 +7,8 @@
         "label": "Countries"
     },
     "global": {
+        "active": "Active",
+        "banned": "Banned",
         "content": "Content",
         "email": "Email",
         "firstname": "Firstname",
@@ -14,6 +16,7 @@
         "language": "Language",
         "lastname": "Lastname",
         "new_translation": "New translation",
+        "reported": "Reported",
         "role": "Role",
         "save": "Save",
         "staff": "Staff",
@@ -76,12 +79,15 @@
         }
     },
     "profiles": {
+        "edit_status_error": "Status could not be updated",
+        "edit_status_success": "The status has been updated",
         "certificate": "Certificate",
         "country": "Country",
         "label": "Profiles",
         "mastered_languages": "Mastered languages",
         "native_language": "Native language",
-        "searchLastname": "Lastname"
+        "searchLastname": "Lastname",
+        "status": "Status"
     },
     "questions": {
         "create": {

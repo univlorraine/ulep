@@ -67,7 +67,7 @@ export class PrismaUserRepository implements UserRepository {
     return userMapper(instance);
   }
 
-  async update(user: User): Promise<void> {
+  async update(user: User): Promise<User> {
     await this.prisma.users.update({
       where: { id: user.id },
       data: {
@@ -82,6 +82,15 @@ export class PrismaUserRepository implements UserRepository {
         deactivated_reason: user.deactivatedReason,
       },
     });
+
+    const updatedUser = await this.prisma.users.findUnique({
+      where: {
+        id: user.id,
+      },
+      include: UserRelations,
+    });
+
+    return userMapper(updatedUser);
   }
 
   async remove(id: string): Promise<void> {

@@ -6,4 +6,4 @@
 */
 -- AlterTable
 ALTER TABLE "users" DROP COLUMN "deactivated",
-ADD COLUMN     "status" TEXT;
+ADD COLUMN     "status" TEXT DEFAULT 'ACTIVE';

@@ -2,6 +2,7 @@ import { MediaObject } from './media.model';
 import { University } from './university.model';
 
 export enum UserStatus {
+  ACTIVE = 'ACTIVE',
   BANNED = 'BANNED',
   REPORTED = 'REPORTED',
 }

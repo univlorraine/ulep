@@ -10,7 +10,7 @@ export interface UserRepository {
 
   ofId(id: string): Promise<User | null>;
 
-  update(user: User): Promise<void>;
+  update(user: User): Promise<User>;
 
   remove(id: string): Promise<void>;
 }

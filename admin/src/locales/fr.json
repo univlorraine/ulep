@@ -7,6 +7,8 @@
         "label": "Pays"
     },
     "global": {
+        "active": "Actif",
+        "banned": "Bannis",
         "content": "Contenu",
         "email": "Email",
         "firstname": "Prénom",
@@ -14,6 +16,7 @@
         "language": "Langue",
         "lastname": "Nom",
         "new_translation": "Nouvelle traduction",
+        "reported": "Signalé",
         "role": "Role",
         "save": "Enregistrer",
         "staff": "Personnel",
@@ -76,12 +79,15 @@
         }
     },
     "profiles": {
+        "edit_status_error": "Le status n'a pas pu être mis à jour",
+        "edit_status_success": "Le status a été mis à jour",
         "certificate": "Certificat",
         "country": "Pays",
         "label": "Profiles",
         "mastered_languages": "Langues maîtrisés",
         "native_language": "Langue native",
-        "searchLastname": "Chercher par nom"
+        "searchLastname": "Chercher par nom",
+        "status": "Status"
     },
     "questions": {
         "create": {
