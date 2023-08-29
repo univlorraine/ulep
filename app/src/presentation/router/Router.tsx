@@ -38,14 +38,15 @@ import TandemStatusPage from '../pages/mobile/TandemStatusPage';
 import MobileRoute from './MobileRoute';
 import PrivateRoute from './PrivateRoute';
 import PairingLevelStartPage from '../pages/PairingLevelStartPage';
+import { useStoreState } from '../../store/storeTypes';
+import SuspendedPage from '../pages/SuspendedPage';
 
 const OfflineRouter: React.FC = () => {
-    //TODO: Update this when suspended variable will be in profile
-    /*const profile = useStoreState((store) => store.profile);
+    const profile = useStoreState((store) => store.profile);
 
-    if (profile && profile.suspended) {
+    if (profile && profile.user.status === 'BANNED') {
         return <SuspendedPage />;
-    }*/
+    }
 
     return (
         <IonRouterOutlet>

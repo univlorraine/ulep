@@ -12,6 +12,7 @@
         "content": "Contenu",
         "email": "Email",
         "firstname": "Prénom",
+        "gender": "Genre",
         "image": "Image",
         "language": "Langue",
         "lastname": "Nom",
@@ -79,13 +80,26 @@
         }
     },
     "profiles": {
+        "biography": {
+            "anecdote": "Anecdote",
+            "experience": "Experience",
+            "favorite_place": "Lieu favoris",
+            "superpower": "Super pouvoirs"
+        },
         "edit_status_error": "Le status n'a pas pu être mis à jour",
         "edit_status_success": "Le status a été mis à jour",
+        "frequenry": "Fréquence des rencontres",
         "certificate": "Certificat",
         "country": "Pays",
+        "interests": "Centre d'intérêts",
         "label": "Profiles",
+        "learning_language": {
+            "code": "Code de langue d'apprentissage",
+            "level": "Niveau de la langue d'apprentissage"
+        },
         "mastered_languages": "Langues maîtrisés",
         "native_language": "Langue native",
+        "objectives": "Objectifs",
         "searchLastname": "Chercher par nom",
         "status": "Status"
     },

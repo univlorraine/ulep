@@ -16,6 +16,7 @@ import {
     TextField,
     useTranslate,
     FunctionField,
+    ChipField,
 } from 'react-admin';
 import User from '../../entities/User';
 
@@ -102,8 +103,8 @@ const ProfileList = (props: any) => {
                     sortable={false}
                     source="masteredLanguages"
                 >
-                    <SingleFieldList>
-                        <TextField source="code" />
+                    <SingleFieldList linkType={false}>
+                        <ChipField source="code" />
                     </SingleFieldList>
                 </ArrayField>
                 <BooleanField label={translate('profiles.certificate')} sortable={false} source="certificateOption" />
