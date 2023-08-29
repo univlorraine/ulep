@@ -53,8 +53,14 @@ export class LanguageController {
   @CollectionResponse(LanguageResponse)
   @Swagger.ApiOperation({ summary: 'Collection of LanguageCode ressource.' })
   @Swagger.ApiOkResponse({ type: LanguageResponse, isArray: true })
-  async findAll(@Query() { status }: FindAllLanguageParams) {
-    const languages = await this.findAllLanguagesUsecase.execute({ status });
+  async findAll(@Query() { status, order, field }: FindAllLanguageParams) {
+    const languages = await this.findAllLanguagesUsecase.execute({
+      status,
+      orderBy: {
+        field,
+        order,
+      },
+    });
 
     return new Collection<LanguageResponse>({
       items: languages.items.map((language) =>

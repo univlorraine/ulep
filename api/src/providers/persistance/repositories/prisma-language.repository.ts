@@ -3,6 +3,7 @@ import { Collection, PrismaService } from '@app/common';
 import { Language, LanguageStatus, SuggestedLanguage } from 'src/core/models';
 import {
   LanguageFilter,
+  LanguageQueryOrderBy,
   LanguageRepository,
   SuggestedLanguageQueryOrderBy,
 } from 'src/core/ports/language.repository';
@@ -118,7 +119,10 @@ export class PrismaLanguageRepository implements LanguageRepository {
     return languageMapper(languageCode);
   }
 
-  async all(status: LanguageFilter): Promise<Collection<Language>> {
+  async all(
+    orderBy: LanguageQueryOrderBy,
+    status: LanguageFilter,
+  ): Promise<Collection<Language>> {
     let where;
     if (status === 'PARTNER') {
       where = { secondaryUniversityActive: true };
@@ -132,6 +136,7 @@ export class PrismaLanguageRepository implements LanguageRepository {
 
     const languageCodes = await this.prisma.languageCodes.findMany({
       where,
+      orderBy: orderBy ? { [orderBy.field]: orderBy.order } : undefined,
     });
 
     return new Collection<Language>({

@@ -4,10 +4,12 @@ import { JOKER_LANGUAGE_CODE, Language } from 'src/core/models';
 import {
   LANGUAGE_REPOSITORY,
   LanguageFilter,
+  LanguageQueryOrderBy,
   LanguageRepository,
 } from 'src/core/ports/language.repository';
 
 export class FindAllLanguageCodeCommand {
+  orderBy: LanguageQueryOrderBy;
   status?: LanguageFilter;
 }
 
@@ -19,7 +21,10 @@ export class FindAllLanguageCodeUsecase {
   ) {}
 
   async execute(command: FindAllLanguageCodeCommand) {
-    const languages = await this.languageRepository.all(command.status);
+    const languages = await this.languageRepository.all(
+      command.orderBy,
+      command.status,
+    );
     return new Collection<Language>({
       items: languages.items.filter(
         (language) => language.code !== JOKER_LANGUAGE_CODE,

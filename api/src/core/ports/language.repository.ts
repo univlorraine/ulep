@@ -3,12 +3,23 @@ import { Language, LanguageStatus, SuggestedLanguage } from '../models';
 
 export const LANGUAGE_REPOSITORY = 'language-code.repository';
 
+export type LanguageQuerySortFilter =
+  | 'code'
+  | 'name'
+  | 'mainUniversityStatus'
+  | 'secondaryUniversityActive';
+
 export type SuggestedLanguageOrderKey =
   | 'email'
   | 'firstname'
   | 'lastname'
   | 'role'
   | 'code';
+
+export interface LanguageQueryOrderBy {
+  field?: LanguageQuerySortFilter;
+  order: SortOrder;
+}
 
 export type LanguageFilter = LanguageStatus | 'PARTNER';
 
@@ -20,7 +31,10 @@ export interface SuggestedLanguageQueryOrderBy {
 export interface LanguageRepository {
   addRequest(code: string, user: string): Promise<void>;
 
-  all(status?: LanguageFilter): Promise<Collection<Language>>;
+  all(
+    orderBy: LanguageQueryOrderBy,
+    status?: LanguageFilter,
+  ): Promise<Collection<Language>>;
 
   allRequests(
     offset?: number,
