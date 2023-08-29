@@ -12,8 +12,8 @@ global:
     auth:
       username: postgres # FIXE
       database: postgres # FIXE
-      password: AZE123aze # REQUIRED
-      postgresPassword: AZE123aze # REQUIRED
+      password: "" # REQUIRED
+      postgresPassword: "" # REQUIRED
 
 postgresql:
   primary:
@@ -78,8 +78,8 @@ auth:
     pullPolicy: IfNotPresent
 
   env:
-    keycloackAdmin: admin # FIXE
-    keycloackAdminPassword: AZE123aze # REQUIRED
+    keycloakAdmin: admin # FIXE
+    keycloakAdminPassword: "" # REQUIRED
     kcDB: postgres # FIXE
     kcDBSchema: keycloak # FIXE
     keycloakHostname: auth # FIXE
