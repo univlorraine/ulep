@@ -1,9 +1,11 @@
 import {
+  Body,
   Controller,
   Get,
   Logger,
   Param,
   Post,
+  Put,
   Query,
   SerializeOptions,
   UseGuards,
@@ -15,10 +17,12 @@ import {
   LanguageResponse,
   PaginationDto,
   SuggestedLanguageResponse,
+  UpdateLanguageCodeRequest,
 } from '../dtos';
 import {
   AddLanguageRequestUsecase,
   FindAllLanguageCodeUsecase,
+  UpdateLanguageCodeUsecase,
 } from 'src/core/usecases/language';
 import { AuthenticationGuard } from '../guards';
 import { CollectionResponse, CurrentUser } from '../decorators';
@@ -29,6 +33,7 @@ import { FindAllSuggestedLanguageUsecase } from 'src/core/usecases/language/find
 import { Roles } from 'src/api/decorators/roles.decorator';
 import { configuration } from 'src/configuration';
 import { CountAllSuggestedLanguageUsecase } from 'src/core/usecases/language/count-all-suggested-language.usecase';
+import { FindAllLanguageParams } from 'src/api/dtos/language-code/language-filters';
 
 @Controller('languages')
 @Swagger.ApiTags('Languages')
@@ -40,6 +45,7 @@ export class LanguageController {
     private readonly findAllLanguagesUsecase: FindAllLanguageCodeUsecase,
     private readonly findAllSuggestedLanguageUsecase: FindAllSuggestedLanguageUsecase,
     private readonly addLanguageRequestUsecase: AddLanguageRequestUsecase,
+    private readonly updateLangaugeUsecase: UpdateLanguageCodeUsecase,
   ) {}
 
   @Get()
@@ -47,8 +53,8 @@ export class LanguageController {
   @CollectionResponse(LanguageResponse)
   @Swagger.ApiOperation({ summary: 'Collection of LanguageCode ressource.' })
   @Swagger.ApiOkResponse({ type: LanguageResponse, isArray: true })
-  async findAll() {
-    const languages = await this.findAllLanguagesUsecase.execute();
+  async findAll(@Query() { status }: FindAllLanguageParams) {
+    const languages = await this.findAllLanguagesUsecase.execute({ status });
 
     return new Collection<LanguageResponse>({
       items: languages.items.map((language) =>
@@ -56,6 +62,29 @@ export class LanguageController {
       ),
       totalItems: languages.totalItems,
     });
+  }
+
+  @Put()
+  @Roles(configuration().adminRole)
+  @UseGuards(AuthenticationGuard)
+  @CollectionResponse(LanguageResponse)
+  @Swagger.ApiOperation({ summary: 'Update LanguageCode ressource.' })
+  @Swagger.ApiOkResponse({ type: LanguageResponse, isArray: true })
+  async update(
+    @Body()
+    {
+      code,
+      mainUniversityStatus,
+      secondaryUniversityActive,
+    }: UpdateLanguageCodeRequest,
+  ) {
+    const language = await this.updateLangaugeUsecase.execute({
+      code,
+      mainUniversityStatus,
+      secondaryUniversityActive,
+    });
+
+    return language;
   }
 
   @Get('requests')

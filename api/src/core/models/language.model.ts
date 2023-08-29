@@ -1,9 +1,17 @@
 import { User } from 'src/core/models';
 import { ProficiencyLevel } from './proficiency.model';
 
+export enum LanguageStatus {
+  PRIMARY = 'PRIMARY',
+  UNACTIVE = 'UNACTIVE',
+  SECONDARY = 'SECONDARY',
+}
+
 export type LanguageProps = {
   id: string;
   code: string;
+  mainUniversityStatus: LanguageStatus;
+  secondaryUniversityActive: boolean;
   name?: string;
 };
 
@@ -17,11 +25,15 @@ export class Language {
   readonly id: string;
   readonly code: string;
   readonly name?: string;
+  readonly mainUniversityStatus: LanguageStatus;
+  readonly secondaryUniversityActive: boolean;
 
   constructor(props: LanguageProps) {
     this.id = props.id;
     this.code = props.code;
     this.name = props.name;
+    this.mainUniversityStatus = props.mainUniversityStatus;
+    this.secondaryUniversityActive = props.secondaryUniversityActive;
   }
 }
 

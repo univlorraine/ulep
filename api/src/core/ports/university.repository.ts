@@ -1,5 +1,5 @@
 import { Collection } from '@app/common';
-import { Language, University } from '../models';
+import { University } from '../models';
 
 export const UNIVERSITY_REPOSITORY = 'university.repository';
 
@@ -13,10 +13,6 @@ export interface UniversityRepository {
   ofId(id: string): Promise<University | null>;
 
   ofName(name: string): Promise<University | null>;
-
-  addLanguage(language: Language, university: University): Promise<void>;
-
-  removeLanguage(language: Language, university: University): Promise<void>;
 
   update(id: string, name: string): Promise<void>;
 

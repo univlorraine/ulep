@@ -1,16 +1,6 @@
 import * as Swagger from '@nestjs/swagger';
 import { Expose } from 'class-transformer';
-import { IsUUID } from 'class-validator';
 import { Language } from 'src/core/models/language.model';
-import { AddLanguageCommand } from 'src/core/usecases/university';
-
-export class AddUniversityLanguageRequest
-  implements Omit<AddLanguageCommand, 'university'>
-{
-  @Swagger.ApiProperty({ type: 'string', format: 'uuid' })
-  @IsUUID()
-  language: string;
-}
 
 export class LanguageResponse {
   @Swagger.ApiProperty({ type: 'string', format: 'uuid' })

@@ -44,7 +44,6 @@ export class CreatePartnerUniversityUsecase {
       parent: central.id,
       campus: [],
       timezone: command.timezone,
-      languages: central.languages,
       admissionStart: central.admissionStart,
       admissionEnd: central.admissionEnd,
       website: command.website,

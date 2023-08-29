@@ -1,7 +1,8 @@
 import { Injectable } from '@nestjs/common';
 import { Collection, PrismaService } from '@app/common';
-import { Language, SuggestedLanguage } from 'src/core/models';
+import { Language, LanguageStatus, SuggestedLanguage } from 'src/core/models';
 import {
+  LanguageFilter,
   LanguageRepository,
   SuggestedLanguageQueryOrderBy,
 } from 'src/core/ports/language.repository';
@@ -16,6 +17,8 @@ type CountAllSuggestedLanguagesResult = {
   name: string;
   code: string;
   count: number;
+  mainUniversityStatus: LanguageStatus;
+  secondaryUniversityActive: boolean;
 };
 
 @Injectable()
@@ -68,7 +71,7 @@ export class PrismaLanguageRepository implements LanguageRepository {
 
     const results: CountAllSuggestedLanguagesResult[] = await this.prisma
       .$queryRaw`
-    SELECT l.id, l.name, l.code, COUNT(s.language_code_id) as count
+    SELECT l.id, l.name, l.code, l.mainUniversityStatus, l.secondaryUniversityActive COUNT(s.language_code_id) as count
     FROM suggested_languages s
     JOIN language_codes l ON s.language_code_id = l.id
     GROUP BY l.id
@@ -82,6 +85,8 @@ export class PrismaLanguageRepository implements LanguageRepository {
           id: result.id,
           name: result.name,
           code: result.code,
+          mainUniversityStatus: result.mainUniversityStatus,
+          secondaryUniversityActive: result.secondaryUniversityActive,
         }),
         count: Number(result.count),
       })),
@@ -113,10 +118,21 @@ export class PrismaLanguageRepository implements LanguageRepository {
     return languageMapper(languageCode);
   }
 
-  async all(): Promise<Collection<Language>> {
-    const count = await this.prisma.languageCodes.count();
+  async all(status: LanguageFilter): Promise<Collection<Language>> {
+    let where;
+    if (status === 'PARTNER') {
+      where = { secondaryUniversityActive: true };
+    } else if (status) {
+      where = { mainUniversityStatus: status };
+    }
 
-    const languageCodes = await this.prisma.languageCodes.findMany();
+    const count = await this.prisma.languageCodes.count({
+      where,
+    });
+
+    const languageCodes = await this.prisma.languageCodes.findMany({
+      where,
+    });
 
     return new Collection<Language>({
       items: languageCodes.map(languageMapper),
@@ -139,5 +155,21 @@ export class PrismaLanguageRepository implements LanguageRepository {
     });
 
     return count;
+  }
+
+  async update(language: Language): Promise<Language> {
+    await this.prisma.languageCodes.update({
+      where: { id: language.id },
+      data: {
+        mainUniversityStatus: language.mainUniversityStatus,
+        secondaryUniversityActive: language.secondaryUniversityActive,
+      },
+    });
+
+    const updateLanguage = await this.prisma.languageCodes.findUnique({
+      where: { id: language.id },
+    });
+
+    return languageMapper(updateLanguage);
   }
 }

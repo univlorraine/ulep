@@ -9,7 +9,6 @@ import {
   IsDate,
   IsUrl,
 } from 'class-validator';
-import { LanguageResponse } from '../languages';
 import { University } from 'src/core/models/university.model';
 import {
   CreatePartnerUniversityCommand,
@@ -36,10 +35,6 @@ export class CreateUniversityRequest implements CreateUniversityCommand {
   @Swagger.ApiProperty({ type: 'string', example: 'Europe/Paris' })
   @IsTimeZone()
   timezone: string;
-
-  @Swagger.ApiProperty({ type: 'string', isArray: true, example: ['FR'] })
-  @IsString({ each: true })
-  languages: string[];
 
   @Swagger.ApiProperty({ type: 'string', format: 'date' })
   @Type(() => Date)
@@ -112,10 +107,6 @@ export class UniversityResponse {
   @Expose({ groups: ['read'] })
   timezone: string;
 
-  @Swagger.ApiProperty({ type: LanguageResponse, isArray: true })
-  @Expose({ groups: ['read'] })
-  languages: LanguageResponse[];
-
   @Swagger.ApiProperty({ type: CampusResponse, isArray: true })
   @Expose({ groups: ['read'] })
   sites: CampusResponse[];
@@ -146,7 +137,6 @@ export class UniversityResponse {
       name: university.name,
       parent: university.parent,
       timezone: university.timezone,
-      languages: university.languages.map(LanguageResponse.fromLanguage),
       sites: university.campus.map(CampusResponse.fromCampus),
       admissionStart: university.admissionStart,
       admissionEnd: university.admissionEnd,

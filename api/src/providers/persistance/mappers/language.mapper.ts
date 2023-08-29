@@ -1,5 +1,5 @@
 import * as Prisma from '@prisma/client';
-import { Language, SuggestedLanguage } from 'src/core/models';
+import { Language, LanguageStatus, SuggestedLanguage } from 'src/core/models';
 import {
   UserRelations,
   UserSnapshot,
@@ -24,6 +24,10 @@ export const suggestedLanguageMapper = (
     language: {
       id: instance.LanguageCode.id,
       code: instance.LanguageCode.code,
+      mainUniversityStatus: instance.LanguageCode
+        .mainUniversityStatus as LanguageStatus,
+      secondaryUniversityActive:
+        instance.LanguageCode.secondaryUniversityActive,
     },
     user: userMapper(instance.User),
   });
@@ -35,4 +39,6 @@ export const languageMapper = (instance: LanguageSnapshot): Language =>
     id: instance.id,
     code: instance.code,
     name: instance.name,
+    mainUniversityStatus: instance.mainUniversityStatus as LanguageStatus,
+    secondaryUniversityActive: instance.secondaryUniversityActive,
   });

@@ -21,7 +21,6 @@ export const createProfiles = async (
     include: {
       Organization: {
         include: {
-          Languages: true,
           Places: true,
         },
       },
@@ -50,9 +49,7 @@ export const createProfiles = async (
 
     const learningLanguages = faker.helpers
       .arrayElements(
-        user.Organization.Languages.filter(
-          (language) => language.code !== nativeLanguageCode,
-        ),
+        languages.filter((language) => language.code !== nativeLanguageCode),
       )
       .map((language) => ({
         language: language,
