@@ -68,6 +68,7 @@ export class LanguageController {
   @Roles(configuration().adminRole)
   @UseGuards(AuthenticationGuard)
   @CollectionResponse(LanguageResponse)
+  @SerializeOptions({ groups: ['read', 'language:read'] })
   @Swagger.ApiOperation({ summary: 'Update LanguageCode ressource.' })
   @Swagger.ApiOkResponse({ type: LanguageResponse, isArray: true })
   async update(

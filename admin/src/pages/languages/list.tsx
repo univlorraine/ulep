@@ -6,7 +6,8 @@ const LanguageList = () => (
         <Datagrid bulkActionButtons={false} rowClick="edit">
             <TextField source="code" />
             <TextField source="name" />
-            <BooleanField source="enabled" />
+            <TextField source="mainUniversityStatus" />
+            <BooleanField source="secondaryUniversityActive" />
         </Datagrid>
     </List>
 );

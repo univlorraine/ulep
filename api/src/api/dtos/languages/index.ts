@@ -1,6 +1,6 @@
 import * as Swagger from '@nestjs/swagger';
 import { Expose } from 'class-transformer';
-import { Language } from 'src/core/models/language.model';
+import { Language, LanguageStatus } from 'src/core/models/language.model';
 
 export class LanguageResponse {
   @Swagger.ApiProperty({ type: 'string', format: 'uuid' })
@@ -15,6 +15,14 @@ export class LanguageResponse {
   @Expose({ groups: ['read'] })
   name?: string;
 
+  @Swagger.ApiPropertyOptional({ type: 'string', example: 'FR' })
+  @Expose({ groups: ['read', 'language:read'] })
+  mainUniversityStatus?: LanguageStatus;
+
+  @Swagger.ApiPropertyOptional({ type: 'boolean' })
+  @Expose({ groups: ['read', 'language:read'] })
+  secondaryUniversityActive?: boolean;
+
   constructor(partial: Partial<LanguageResponse>) {
     Object.assign(this, partial);
   }
@@ -24,6 +32,8 @@ export class LanguageResponse {
       id: language.id,
       code: language.code,
       name: language.name,
+      mainUniversityStatus: language.mainUniversityStatus,
+      secondaryUniversityActive: language.secondaryUniversityActive,
     });
   }
 }
