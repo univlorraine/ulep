@@ -16,15 +16,13 @@ export class UpdateUserUsecase {
   ) {}
 
   async execute(command: UpdateUserCommand) {
-    console.log(command);
-    const instance = await this.userRepository.ofId(command.id);
-    console.log(instance);
-    if (!instance) {
+    const user = await this.userRepository.ofId(command.id);
+    if (!user) {
       throw new RessourceDoesNotExist();
     }
 
     return this.userRepository.update({
-      ...instance,
+      ...user,
       status: command.status,
     });
   }
