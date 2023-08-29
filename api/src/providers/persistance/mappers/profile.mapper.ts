@@ -88,5 +88,6 @@ export const profileMapper = (instance: ProfileSnapshot): Profile => {
     campus: instance.Campus && campusMapper(instance.Campus),
     certificateOption: instance.certificate_option,
     specificProgram: instance.specific_program,
+    createdAt: instance.created_at,
   });
 };

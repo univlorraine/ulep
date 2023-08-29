@@ -50,10 +50,10 @@ export class InMemoryUniversityRepository implements UniversityRepository {
 
     if (index !== -1) {
       const university = this.#universities[index];
-      this.#universities[index] = {
+      this.#universities[index] = new University({
         ...university,
         languages: [...university.languages, language],
-      };
+      });
     }
   }
 
@@ -65,10 +65,10 @@ export class InMemoryUniversityRepository implements UniversityRepository {
 
     if (index !== -1) {
       const university = this.#universities[index];
-      this.#universities[index] = {
+      this.#universities[index] = new University({
         ...university,
         languages: university.languages.filter((l) => l.code !== language.code),
-      };
+      });
     }
   }
 
@@ -77,10 +77,10 @@ export class InMemoryUniversityRepository implements UniversityRepository {
 
     if (index !== -1) {
       const university = this.#universities[index];
-      this.#universities[index] = {
+      this.#universities[index] = new University({
         ...university,
         name,
-      };
+      });
     }
   }
 
