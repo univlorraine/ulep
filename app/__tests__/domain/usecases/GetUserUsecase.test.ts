@@ -18,7 +18,7 @@ const payload: UserCommand = {
         timezone: 'timezone',
         website: 'site',
     },
-    deactivated: false,
+    status: 'ACTIVE',
 };
 
 describe('getUser', () => {

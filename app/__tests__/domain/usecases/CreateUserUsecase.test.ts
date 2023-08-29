@@ -21,7 +21,7 @@ const payload: UserCommand = {
         timezone: 'timezone',
         website: 'site',
     },
-    deactivated: true,
+    status: 'ACTIVE',
 };
 
 const university = new University(

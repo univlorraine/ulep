@@ -65,7 +65,7 @@ class GetAllTandemsUsecase implements GetAllTandemsUsecaseInterface {
                                 'timezone',
                                 []
                             ),
-                            false
+                            'ACTIVE'
                         )
                     )
                 ),
@@ -101,7 +101,7 @@ class GetAllTandemsUsecase implements GetAllTandemsUsecaseInterface {
                                 'timezone',
                                 []
                             ),
-                            false
+                            'ACTIVE'
                         )
                     )
                 ),
