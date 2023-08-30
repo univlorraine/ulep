@@ -16,9 +16,8 @@ import { UniversityResponse } from '../universities';
 import {
   AskForAccountDeletionCommand,
   CreateUserCommand,
-  UpdateUserCommand,
 } from 'src/core/usecases/user';
-import { Gender, Role, User } from 'src/core/models/user.model';
+import { Gender, Role, User, UserStatus } from 'src/core/models/user.model';
 import { MediaObjectResponse } from '../medias';
 
 export class CreateUserRequest implements CreateUserCommand {
@@ -69,11 +68,15 @@ export class CreateUserRequest implements CreateUserCommand {
   countryCode: string;
 }
 
-export class UpdateUserRequest implements Omit<UpdateUserCommand, 'id'> {
-  @Swagger.ApiProperty({ type: 'number' })
-  @IsInt()
-  @Min(1)
-  age: number;
+export class UpdateUserRequest {
+  @Swagger.ApiProperty({ type: 'number', format: 'uuid' })
+  @IsUUID()
+  @IsNotEmpty()
+  id: string;
+
+  @Swagger.ApiProperty({ type: 'string', enum: UserStatus })
+  @IsOptional()
+  status?: UserStatus;
 }
 
 export class AskForAccountDeletionRequest
@@ -123,9 +126,9 @@ export class UserResponse {
   @Expose({ groups: ['read'] })
   country: string;
 
-  @Swagger.ApiProperty({ type: 'boolean' })
+  @Swagger.ApiProperty({ type: 'string', enum: UserStatus })
   @Expose({ groups: ['read'] })
-  deactivated: boolean;
+  status?: UserStatus;
 
   @Swagger.ApiPropertyOptional({ type: MediaObjectResponse })
   @Expose({ groups: ['read'] })
@@ -146,7 +149,7 @@ export class UserResponse {
       university: UniversityResponse.fromUniversity(user.university),
       role: user.role,
       country: user.country,
-      deactivated: user.deactivated,
+      status: user.status,
       avatar: user.avatar
         ? MediaObjectResponse.fromMediaObject(user.avatar)
         : null,

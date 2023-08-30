@@ -4,7 +4,7 @@ import {
   UniversitySnapshot,
   universityMapper,
 } from './university.mapper';
-import { Gender, MediaObject, Role, User } from 'src/core/models';
+import { Gender, MediaObject, Role, User, UserStatus } from 'src/core/models';
 
 export const UserRelations = {
   Organization: { include: UniversityRelations },
@@ -38,6 +38,6 @@ export const userMapper = (snapshot: UserSnapshot): User => {
         mimetype: snapshot.Avatar.mime,
         size: snapshot.Avatar.size,
       }),
-    deactivated: snapshot.deactivated,
+    status: snapshot.status as UserStatus,
   };
 };

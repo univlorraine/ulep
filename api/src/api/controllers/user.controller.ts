@@ -7,8 +7,8 @@ import {
   Get,
   Param,
   ParseUUIDPipe,
-  Patch,
   Post,
+  Put,
   Query,
   UploadedFile,
   UseGuards,
@@ -80,14 +80,14 @@ export class UserController {
   @Swagger.ApiOperation({ summary: 'Collection of User ressource.' })
   @CollectionResponse(UserResponse)
   async findAll(@Query() { page, limit }: PaginationDto) {
-    const instances = await this.getUsersUsecase.execute({
+    const users = await this.getUsersUsecase.execute({
       page,
       limit,
     });
 
     return new Collection<UserResponse>({
-      items: instances.items.map(UserResponse.fromDomain),
-      totalItems: instances.totalItems,
+      items: users.items.map(UserResponse.fromDomain),
+      totalItems: users.totalItems,
     });
   }
 
@@ -97,9 +97,9 @@ export class UserController {
   @Swagger.ApiOkResponse({ type: UserResponse })
   async findMe(@CurrentUser() user: KeycloakUser) {
     const id = user.sub;
-    const instance = await this.getUserUsecase.execute(id);
+    const me = await this.getUserUsecase.execute(id);
 
-    return UserResponse.fromDomain({ id, ...instance });
+    return UserResponse.fromDomain({ id, ...me });
   }
 
   @Get(':id')
@@ -113,15 +113,14 @@ export class UserController {
     return UserResponse.fromDomain({ id, ...instance });
   }
 
-  @Patch(':id')
+  @Put()
   @UseGuards(AuthenticationGuard)
   @Swagger.ApiOperation({ summary: 'Updates a User ressource.' })
-  @Swagger.ApiOkResponse()
-  async update(
-    @Param('id', ParseUUIDPipe) id: string,
-    @Body() request: UpdateUserRequest,
-  ) {
-    await this.updateUserUsecase.execute({ id, ...request });
+  @Swagger.ApiOkResponse({ type: UserResponse })
+  async update(@Body() body: UpdateUserRequest) {
+    const user = await this.updateUserUsecase.execute(body);
+
+    return UserResponse.fromDomain(user);
   }
 
   @Post(':id/ask-deletion')

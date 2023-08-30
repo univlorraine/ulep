@@ -1,10 +1,11 @@
 import { Inject, Injectable } from '@nestjs/common';
 import { USER_REPOSITORY, UserRepository } from '../../ports/user.repository';
 import { RessourceDoesNotExist } from 'src/core/errors';
+import { UserStatus } from 'src/core/models';
 
 export class UpdateUserCommand {
   id: string;
-  age: number;
+  status?: UserStatus;
 }
 
 @Injectable()
@@ -15,15 +16,14 @@ export class UpdateUserUsecase {
   ) {}
 
   async execute(command: UpdateUserCommand) {
-    const instance = await this.userRepository.ofId(command.id);
-
-    if (!instance) {
+    const user = await this.userRepository.ofId(command.id);
+    if (!user) {
       throw new RessourceDoesNotExist();
     }
 
     return this.userRepository.update({
-      ...instance,
-      age: command.age,
+      ...user,
+      status: command.status,
     });
   }
 }

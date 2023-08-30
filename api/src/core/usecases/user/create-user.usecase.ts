@@ -73,7 +73,6 @@ export class CreateUserUsecase {
         university: university,
         role: command.role,
         country: country.code,
-        deactivated: false,
       });
     }
 

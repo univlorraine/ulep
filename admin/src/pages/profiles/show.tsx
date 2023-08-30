@@ -1,79 +1,14 @@
-import { Table, TableBody, TableCell, TableHead, TableRow } from '@mui/material';
-import React, { useEffect, useState } from 'react';
-import { TextField, Show, TabbedShowLayout, Tab, useDataProvider, useRecordContext, useGetRecordId } from 'react-admin';
-
-interface Match {
-    profile: {
-        id: string;
-        firstname: string;
-        lastname: string;
-        age: number;
-        gender: string;
-        role: string;
-        learningLanguage: {
-            code: string;
-            level: string;
-        };
-        goals: string[];
-    };
-    score: {
-        level: number;
-        age: number;
-        status: number;
-        goals: number;
-        interests: number;
-        gender: number;
-        university: number;
-        total: number;
-    };
-}
-
-interface MatchTableProps {
-    matchs: Match[];
-}
-
-const MatchTable: React.FC<MatchTableProps> = ({ matchs }) => (
-    <Table size="small">
-        <TableHead>
-            <TableRow>
-                <TableCell>Score</TableCell>
-                <TableCell>Firstname</TableCell>
-                <TableCell>Lastname</TableCell>
-                <TableCell>Age</TableCell>
-                <TableCell>Gender</TableCell>
-                <TableCell>Role</TableCell>
-                <TableCell>Level</TableCell>
-                <TableCell>Goal</TableCell>
-                <TableCell>level</TableCell>
-                <TableCell>age</TableCell>
-                <TableCell>status</TableCell>
-                <TableCell>goals</TableCell>
-                <TableCell>interests</TableCell>
-                <TableCell>gender</TableCell>
-            </TableRow>
-        </TableHead>
-        <TableBody>
-            {matchs.map((match: Match) => (
-                <TableRow key={match.profile.id}>
-                    <TableCell>{match.score.total.toFixed(3)}</TableCell>
-                    <TableCell>{match.profile.firstname}</TableCell>
-                    <TableCell>{match.profile.lastname}</TableCell>
-                    <TableCell>{match.profile.age}</TableCell>
-                    <TableCell>{match.profile.gender}</TableCell>
-                    <TableCell>{match.profile.role}</TableCell>
-                    <TableCell>{match.profile.learningLanguage.level}</TableCell>
-                    <TableCell>{match.profile.goals}</TableCell>
-                    <TableCell>{match.score.level.toFixed(3)}</TableCell>
-                    <TableCell>{match.score.age.toFixed(3)}</TableCell>
-                    <TableCell>{match.score.status.toFixed(3)}</TableCell>
-                    <TableCell>{match.score.goals.toFixed(3)}</TableCell>
-                    <TableCell>{match.score.interests.toFixed(3)}</TableCell>
-                    <TableCell>{match.score.gender.toFixed(3)}</TableCell>
-                </TableRow>
-            ))}
-        </TableBody>
-    </Table>
-);
+import React from 'react';
+import {
+    useTranslate,
+    SimpleShowLayout,
+    ArrayField,
+    SingleFieldList,
+    ChipField,
+    TextField,
+    Show,
+    useRecordContext,
+} from 'react-admin';
 
 const Title = () => {
     const record = useRecordContext();
@@ -90,57 +25,33 @@ const Title = () => {
 };
 
 const ProfileShow = (props: any) => {
-    const id = useGetRecordId();
-    const dataProvider = useDataProvider();
-    const [matchs, setMatchs] = useState<Match[]>([]);
-    const [loading, setLoading] = useState<boolean>(true);
-    const [error, setError] = useState<string | null>(null);
-
-    useEffect(() => {
-        dataProvider
-            .getMatchs(id)
-            .then((data: Match[]) => {
-                setMatchs(data);
-                setLoading(false);
-            })
-            .catch((e: Error) => {
-                setLoading(false);
-                setError(e.message);
-            });
-    }, []);
-
-    if (loading) {
-        return <div>Loading...</div>;
-    }
-    if (error) {
-        return <div>{error}</div>;
-    }
-    if (!matchs) {
-        return null;
-    }
+    const translate = useTranslate();
 
     return (
         <Show title={<Title />} {...props}>
-            <TabbedShowLayout>
-                <TabbedShowLayout.Tab label="summary">
-                    <TextField source="email" />
-                    <TextField source="firstname" />
-                    <TextField source="lastname" />
-                    <TextField source="age" />
-                    <TextField source="gender" />
-                    <TextField source="university.name" />
-                    <TextField source="role" />
-                    <TextField source="goals" />
-                    <TextField source="nativeLanguage.code" />
-                    <TextField source="learningLanguage.code" />
-                    <TextField source="learningLanguage.level" />
-                    <TextField source="meetingFrequency" />
-                    <TextField source="interests" />
-                </TabbedShowLayout.Tab>
-                <Tab label="Matches">
-                    <MatchTable matchs={matchs} />
-                </Tab>
-            </TabbedShowLayout>
+            <SimpleShowLayout>
+                <TextField label={translate('global.email')} source="user.email" />
+                <TextField label={translate('global.firstname')} source="user.firstname" />
+                <TextField label={translate('global.lastname')} source="user.lastname" />
+                <TextField label={translate('global.age')} source="user.age" />
+                <TextField label={translate('global.gender')} source="user.gender" />
+                <TextField label={translate('global.university')} source="user.university.name" />
+                <TextField label={translate('global.role')} source="user.role" />
+                <TextField label={translate('profiles.objectives')} source="goals" />
+                <TextField label={translate('profiles.native_language')} source="nativeLanguage.code" />
+                <TextField label={translate('profiles.learning_language.code')} source="learningLanguages.code" />
+                <TextField label={translate('profiles.learning_language.level')} source="learningLanguages.language" />
+                <TextField label={translate('profiles.frequency')} source="meetingFrequency" />
+                <ArrayField label={translate('profiles.interests')} sortable={false} source="interests">
+                    <SingleFieldList linkType={false}>
+                        <ChipField clickable={false} source="name" />
+                    </SingleFieldList>
+                </ArrayField>
+                <TextField label={translate('profiles.biography.superpower')} source="biography.superpower" />
+                <TextField label={translate('profiles.biography.favorite_place')} source="biography.favoritePlace" />
+                <TextField label={translate('profiles.biography.experience')} source="biography.experience" />
+                <TextField label={translate('profiles.biography.anecdote')} source="biography.anecdote" />
+            </SimpleShowLayout>
         </Show>
     );
 };
