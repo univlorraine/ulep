@@ -4,7 +4,6 @@ import LanguageCommand, { languageCommandToDomain } from './LanguageCommand';
 
 interface UniversityCommand {
     id: string;
-    languages: LanguageCommand[];
     name: string;
     parent: string | undefined;
     sites: { id: string; name: string }[];
@@ -17,7 +16,6 @@ export const universityCommandToDomain = (command: UniversityCommand) => {
         command.id,
         command.name,
         !command.parent,
-        command.languages.map((language) => languageCommandToDomain(language)),
         command.timezone,
         command.sites.map((site) => new Campus(site.id, site.name))
     );

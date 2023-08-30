@@ -19,10 +19,19 @@ const CreateReportCategory = () => {
             translations: indexedTranslationsToTranslations(translations),
         };
         try {
-            const result = await create('reports/categories', { data: payload });
-            redirect('/reports/categories');
+            return await create(
+                'reports/categories',
+                { data: payload },
+                {
+                    onSettled: (data: any, error: Error) => {
+                        if (!error) {
+                            return redirect('/reports/categories');
+                        }
 
-            return result;
+                        return notify('report_categories.create.error');
+                    },
+                }
+            );
         } catch (err) {
             console.error(err);
 

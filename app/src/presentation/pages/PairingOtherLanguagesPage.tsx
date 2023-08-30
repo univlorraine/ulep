@@ -25,16 +25,11 @@ const PairingOtherLanguagesPage: React.FC = () => {
     }
 
     const getLanguages = async () => {
-        let result = await getAllLanguages.execute();
+        let result = await getAllLanguages.execute('SECONDARY');
 
         if (result instanceof Error) {
             return await showToast({ message: t(result.message), duration: 1000 });
         }
-
-        result = result.filter(
-            (language) =>
-                !profileSignUp.university!.languages.findIndex((lang: Language) => lang.code === language.code)
-        );
 
         return setLanguages(result);
     };

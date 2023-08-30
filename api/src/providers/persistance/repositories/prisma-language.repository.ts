@@ -73,7 +73,7 @@ export class PrismaLanguageRepository implements LanguageRepository {
 
     const results: CountAllSuggestedLanguagesResult[] = await this.prisma
       .$queryRaw`
-    SELECT l.id, l.name, l.code, l.mainUniversityStatus, l.secondaryUniversityActive COUNT(s.language_code_id) as count
+    SELECT l.id, l.name, l.code, l.mainUniversityStatus, l.secondaryUniversityActive, COUNT(s.language_code_id) as count
     FROM suggested_languages s
     JOIN language_codes l ON s.language_code_id = l.id
     GROUP BY l.id

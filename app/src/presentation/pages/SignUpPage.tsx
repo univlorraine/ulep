@@ -34,6 +34,7 @@ const SignUpPage: React.FC = () => {
             getAllCountries.execute(),
             getAllUniversities.execute(),
         ]);
+        console.warn(universityResult);
 
         if (countriesResult instanceof Error) {
             return await showToast({ message: t(countriesResult.message), duration: 1000 });

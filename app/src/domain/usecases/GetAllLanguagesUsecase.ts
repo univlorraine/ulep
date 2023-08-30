@@ -8,10 +8,12 @@ import GetAllLanguagesUsecaseInterface from '../interfaces/GetAllLanguagesUsecas
 class GetAllLanguagesUsecase implements GetAllLanguagesUsecaseInterface {
     constructor(private readonly domainHttpAdapter: HttpAdapterInterface) {}
 
-    async execute(universityId?: string): Promise<Language[] | Error> {
+    async execute(status: string): Promise<Language[] | Error> {
         try {
-            const route = universityId ? `/universities/${universityId}/languages` : '/languages';
-            const httpResponse: HttpResponse<CollectionCommand<LanguageCommand>> = await this.domainHttpAdapter.get(route);
+            let route = `/languages?${status ? `status=${status}` : ''}&pagination=false&field=name&order=asc`;
+            const httpResponse: HttpResponse<CollectionCommand<LanguageCommand>> = await this.domainHttpAdapter.get(
+                route
+            );
 
             if (!httpResponse.parsedBody || !httpResponse.parsedBody.items) {
                 return new Error('errors.global');
