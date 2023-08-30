@@ -31,7 +31,8 @@ spec:
         {{- toYaml .Values.podSecurityContext | nindent 8 }}
       initContainers:
       - name: wait-for-database-and-migrate
-        image: rg.fr-par.scw.cloud/ulep/api-init:v1
+        image: "{{ .Values.api.initImage.repository }}:{{ .Values.api.initImage.tag | default .Chart.AppVersion }}"
+        imagePullPolicy: {{ .Values.api.initImage.pullPolicy }}
         env:
           - name: DB_NAME
             value: "{{ .Values.global.postgresql.auth.database }}"
@@ -68,11 +69,11 @@ spec:
             {{- toYaml .Values.resources | nindent 12 }}
           env:
             - name: ADMIN_URL
-              value: "https://{{ .Values.api.env.adminUrl }}.{{ .Values.domain }}"
+              value: "https://{{ .Values.adminUrl }}.{{ .Values.domain }}"
             - name: DATABASE_URL
               value: "postgresql://{{ .Values.global.postgresql.auth.username }}:$(PGPASSWORD)@{{ include "etandem.name" . }}-postgresql.{{ .Release.Namespace }}:5432/{{ .Values.global.postgresql.auth.database }}?schema=public"
             - name: KEYCLOAK_BASE_URL
-              value: "https://{{ .Values.api.env.keycloakBaseUrl }}.{{ .Values.domain }}"
+              value: "https://{{ .Values.keycloakUrl }}.{{ .Values.domain }}"
             - name: KEYCLOAK_REALM
               value: "{{ .Values.api.env.keycloakRealm }}"
             - name: KEYCLOAK_ADMIN
@@ -80,8 +81,8 @@ spec:
             - name: KEYCLOAK_CLIENT_ID
               value: "{{ .Values.api.env.keycloakClientId }}"
             - name: MINIO_URL
-              value: "https://{{ .Values.api.env.minioUrl }}.{{ .Values.domain }}"
-          envFrom: 
+              value: "https://{{ .Values.minioUrl }}.{{ .Values.domain }}"
+          envFrom:
             - secretRef: 
                 name: "{{ include "etandem.fullname" . }}-secret-{{ .Values.api.name }}"
       {{- with .Values.nodeSelector }}

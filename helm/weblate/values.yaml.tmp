@@ -13,7 +13,6 @@ global:
       username: weblate # FIXE
       database: weblate # FIXE
       password:  # REQUIRED
-      postgresPassword: # REQUIRED
   redis: 
     password:  # REQUIRED
 ############## WEBLATE ##############

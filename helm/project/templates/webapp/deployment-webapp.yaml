@@ -29,6 +29,18 @@ spec:
       serviceAccountName: {{ include "etandem.serviceAccountName" . }}
       securityContext:
         {{- toYaml .Values.podSecurityContext | nindent 8 }}
+      initContainers:
+      - name: build-webapp
+        image: "{{ .Values.webapp.initImage.repository }}:{{ .Values.webapp.initImage.tag | default .Chart.AppVersion }}"
+        imagePullPolicy: {{ .Values.webapp.initImage.pullPolicy }}
+        command: ["/bin/sh"]
+        args: ["-c", "cd /app && pnpm run build:prod && cp -r /app/dist/* /usr/share/nginx/html/"]
+        env: 
+          - name: VITE_API_URL
+            value: "https://{{ .Values.apiUrl }}.{{ .Values.domain }}"
+        volumeMounts:
+          - name: "{{ .Values.webapp.name }}-build"
+            mountPath: /usr/share/nginx/html/
       containers:
         - name: {{ .Chart.Name }}
           securityContext:
@@ -49,6 +61,18 @@ spec:
           #     port: http
           resources:
             {{- toYaml .Values.resources | nindent 12 }}
+          volumeMounts:
+          - name: "{{ .Values.webapp.name }}-build"
+            mountPath: /usr/share/nginx/html/
+          - name: "{{ .Values.webapp.name }}-nginx-conf"
+            mountPath: /etc/nginx/conf.d/
+      volumes:
+      - name: "{{ .Values.webapp.name }}-build"
+        persistentVolumeClaim:
+          claimName:  "{{ .Values.name }}-pvc-{{ .Values.webapp.name }}"
+      - name: "{{ .Values.webapp.name }}-nginx-conf"
+        configMap:
+          name: "{{ .Values.name }}-nginx-conf-{{ .Values.webapp.name }}"
       {{- with .Values.nodeSelector }}
       nodeSelector:
         {{- toYaml . | nindent 8 }}
