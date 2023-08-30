@@ -5,16 +5,45 @@ import {
   ProfileRepository,
 } from '../../../core/ports/profile.repository';
 import { Profile } from '../../../core/models/profile.model';
+import { Tandem } from 'src/core/models';
 
 export class InMemoryProfileRepository implements ProfileRepository {
   #profiles: Map<string, Profile> = new Map();
+  #tandemsPerProfile: Map<string, Tandem[]> = new Map();
 
-  init(profiles: Profile[]): void {
+  init(profiles: Profile[], tandems?: Tandem[]): void {
     this.#profiles = new Map(profiles.map((profile) => [profile.id, profile]));
+
+    if (tandems) {
+      this.#tandemsPerProfile = tandems.reduce((accumulator, value) => {
+        const profile1 = value.profiles[0];
+        if (accumulator.has(profile1.id)) {
+          accumulator.set(profile1.id, [
+            ...accumulator.get(profile1.id),
+            value,
+          ]);
+        } else {
+          accumulator.set(profile1.id, [value]);
+        }
+
+        const profile2 = value.profiles[1];
+        if (accumulator.has(profile2.id)) {
+          accumulator.set(profile2.id, [
+            ...accumulator.get(profile2.id),
+            value,
+          ]);
+        } else {
+          accumulator.set(profile2.id, [value]);
+        }
+
+        return accumulator;
+      }, new Map<string, Tandem[]>());
+    }
   }
 
   reset(): void {
     this.#profiles = new Map();
+    this.#tandemsPerProfile = new Map();
   }
 
   async ofId(id: string): Promise<Profile> {
@@ -32,12 +61,17 @@ export class InMemoryProfileRepository implements ProfileRepository {
   async getProfilesUsableForTandemsGeneration(
     props: GetProfilesUsableForTandemsGenerationProps,
   ): Promise<Profile[]> {
-    // TODO: add in memory way to add number of tandem per profile
-
     const items = Array.from(this.#profiles.values());
-    return items.filter((profile) =>
-      props.universityIds.includes(profile.user.university.id),
-    );
+    return items.filter((profile) => {
+      const isInUniversities = props.universityIds.includes(
+        profile.user.university.id,
+      );
+      const hasMaxTandems = this.#tandemsPerProfile.has(profile.id)
+        ? this.#tandemsPerProfile.get(profile.id).length >=
+          props.maxTandemPerProfile
+        : false;
+      return isInUniversities && !hasMaxTandems;
+    });
   }
 
   async whereMaxTandemsCountAndSpokeLanguage(

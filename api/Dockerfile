@@ -53,7 +53,7 @@ EXPOSE 3000
 
 ENV PORT 3000
 
-CMD ["node", "dist/main"]
+CMD ["pnpm", "run", "start:prod"]
 
 # Production image, copy all the files and run nest
 FROM api_deps AS api_init

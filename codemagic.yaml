@@ -46,7 +46,7 @@ scripts:
       name: Increment build number
       script: |
           cd $CM_BUILD_DIR/app/ios/App
-          agvtool new-version -all $(($(app-store-connect get-latest-testflight-build-number "$API_ID_PREPROD") + 1))
+          agvtool new-version -all $BUILD_NUMBER
     - &add_staging_environment_file
       name: Add environment file
       script: |

@@ -23,6 +23,24 @@ export class PrismaTandemRepository implements TandemRepository {
     });
   }
 
+  async saveMany(tandems: Tandem[]): Promise<void> {
+    const tandemsToCreate = tandems.map((tandem) =>
+      this.prisma.tandems.create({
+        data: {
+          id: tandem.id,
+          Profiles: {
+            create: tandem.profiles.map((profile) => ({
+              Profile: { connect: { id: profile.id } },
+            })),
+          },
+          status: tandem.status,
+        },
+      }),
+    );
+
+    await this.prisma.$transaction(tandemsToCreate);
+  }
+
   async hasActiveTandem(profileId: string): Promise<boolean> {
     const activeTandems = await this.prisma.profilesOnTandems.findMany({
       where: {

@@ -17,10 +17,6 @@ export class TandemResponse {
   @Expose({ groups: ['read'] })
   status: TandemStatus;
 
-  @Swagger.ApiProperty({ type: 'number', nullable: true })
-  @Expose({ groups: ['read'] })
-  score: number | null = null;
-
   constructor(partial: Partial<TandemResponse>) {
     Object.assign(this, partial);
   }

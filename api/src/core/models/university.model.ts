@@ -46,4 +46,8 @@ export class University {
   static create(props: UniversityProps): University {
     return new University({ ...props });
   }
+
+  public isCentralUniversity(): boolean {
+    return !this.parent;
+  }
 }

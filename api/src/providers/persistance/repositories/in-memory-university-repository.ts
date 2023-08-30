@@ -49,10 +49,10 @@ export class InMemoryUniversityRepository implements UniversityRepository {
 
     if (index !== -1) {
       const university = this.#universities[index];
-      this.#universities[index] = {
+      this.#universities[index] = new University({
         ...university,
         name,
-      };
+      });
     }
   }
 
