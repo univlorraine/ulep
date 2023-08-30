@@ -16,7 +16,12 @@ export class PrismaUniversityRepository implements UniversityRepository {
       data: {
         id: university.id,
         name: university.name,
-        parent_id: university.parent,
+        Parent: university.parent
+          ? { connect: { id: university.parent } }
+          : undefined,
+        Country: {
+          connect: { id: university.country.id },
+        },
         Places: {
           create: university.campus.map((campus) => ({
             id: campus.id,
@@ -28,6 +33,10 @@ export class PrismaUniversityRepository implements UniversityRepository {
         admissionEndDate: university.admissionEnd,
         website: university.website,
         resource: university.resourcesUrl,
+        url_confidentiality: university.confidentialityUrl,
+        url_terms_of_use: university.termsOfUseUrl,
+        codes: university.codes,
+        domains: university.domains,
       },
     });
 

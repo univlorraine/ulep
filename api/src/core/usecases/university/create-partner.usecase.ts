@@ -1,6 +1,10 @@
 import { Inject, Injectable } from '@nestjs/common';
-import { DomainError } from 'src/core/errors';
+import { DomainError, RessourceDoesNotExist } from 'src/core/errors';
 import { University } from 'src/core/models';
+import {
+  COUNTRY_REPOSITORY,
+  CountryRepository,
+} from 'src/core/ports/country.repository';
 import {
   UNIVERSITY_REPOSITORY,
   UniversityRepository,
@@ -12,15 +16,22 @@ import {
 
 export class CreatePartnerUniversityCommand {
   parent: string;
+  countryId: string;
   name: string;
   timezone: string;
   website?: string;
   resourcesUrl?: string;
+  confidentialityUrl?: string;
+  termsOfUseUrl?: string;
+  codes?: string[];
+  domains?: string[];
 }
 
 @Injectable()
 export class CreatePartnerUniversityUsecase {
   constructor(
+    @Inject(COUNTRY_REPOSITORY)
+    private readonly countryRepository: CountryRepository,
     @Inject(UNIVERSITY_REPOSITORY)
     private readonly universityRepository: UniversityRepository,
     @Inject(UUID_PROVIDER)
@@ -33,8 +44,14 @@ export class CreatePartnerUniversityUsecase {
       throw new DomainError({ message: 'Central university does not exists' });
     }
 
-    const instance = await this.universityRepository.ofName(command.name);
-    if (instance) {
+    const country = await this.countryRepository.ofId(command.countryId);
+
+    if (!country) {
+      throw new RessourceDoesNotExist('Country does not exist');
+    }
+
+    const oldUniversity = await this.universityRepository.ofName(command.name);
+    if (oldUniversity) {
       throw new DomainError({ message: 'University name must be unique' });
     }
 
@@ -42,12 +59,17 @@ export class CreatePartnerUniversityUsecase {
       id: this.uuidProvider.generate(),
       name: command.name,
       parent: central.id,
+      country,
       campus: [],
       timezone: command.timezone,
       admissionStart: central.admissionStart,
       admissionEnd: central.admissionEnd,
       website: command.website,
       resourcesUrl: command.resourcesUrl,
+      codes: command.codes,
+      domains: command.domains,
+      confidentialityUrl: command.confidentialityUrl,
+      termsOfUseUrl: command.termsOfUseUrl,
     });
 
     return this.universityRepository.create(university);

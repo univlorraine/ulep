@@ -3,11 +3,11 @@ import { Expose, Type } from 'class-transformer';
 import {
   IsString,
   IsNotEmpty,
-  IsUUID,
   IsOptional,
   IsTimeZone,
   IsDate,
   IsUrl,
+  IsArray,
 } from 'class-validator';
 import { University } from 'src/core/models/university.model';
 import {
@@ -17,11 +17,23 @@ import {
 } from 'src/core/usecases/university';
 import { IsAfterThan } from 'src/api/validators';
 import { CampusResponse } from '../campus';
+import { CountryResponse } from 'src/api/dtos/countries';
 
 export class CreateUniversityRequest implements CreateUniversityCommand {
-  @Swagger.ApiProperty({ type: 'string', format: 'uuid' })
-  @IsUUID()
-  id: string;
+  @Swagger.ApiProperty({ type: 'string', isArray: true })
+  @IsArray()
+  @IsOptional()
+  codes?: string[];
+
+  @Swagger.ApiProperty({ type: 'string', isArray: true })
+  @IsArray()
+  @IsOptional()
+  domains?: string[];
+
+  @Swagger.ApiProperty({ type: 'string' })
+  @IsString()
+  @IsNotEmpty()
+  countryId: string;
 
   @Swagger.ApiProperty({ type: 'string' })
   @IsString()
@@ -56,6 +68,16 @@ export class CreateUniversityRequest implements CreateUniversityCommand {
   @IsUrl()
   @IsOptional()
   resourcesUrl?: string;
+
+  @Swagger.ApiProperty({ type: 'string' })
+  @IsString()
+  @IsOptional()
+  confidentialityUrl?: string;
+
+  @Swagger.ApiProperty({ type: 'string' })
+  @IsString()
+  @IsOptional()
+  termsOfUseUrl?: string;
 }
 
 export class UpdateUniversityNameRequest
@@ -70,10 +92,36 @@ export class UpdateUniversityNameRequest
 export class CreateUniversityPartnerRequest
   implements Omit<CreatePartnerUniversityCommand, 'parent'>
 {
+  @Swagger.ApiProperty({ type: 'string', format: 'array' })
+  @IsArray()
+  @IsOptional()
+  codes?: string[];
+
+  @Swagger.ApiProperty({ type: 'string', format: 'array' })
+  @IsArray()
+  @IsOptional()
+  domains?: string[];
+
+  @Swagger.ApiProperty({ type: 'string' })
+  @IsString()
+  @IsNotEmpty()
+  countryId: string;
+
   @Swagger.ApiProperty({ type: 'string' })
   @IsString()
   @IsNotEmpty()
   name: string;
+
+  @Swagger.ApiProperty({ type: 'string', format: 'date' })
+  @Type(() => Date)
+  @IsDate()
+  admissionStart: Date;
+
+  @Swagger.ApiProperty({ type: 'string', format: 'date' })
+  @Type(() => Date)
+  @IsDate()
+  @IsAfterThan('admissionStart')
+  admissionEnd: Date;
 
   @Swagger.ApiProperty({ type: 'string', example: 'Europe/Paris' })
   @IsTimeZone()
@@ -88,6 +136,16 @@ export class CreateUniversityPartnerRequest
   @IsUrl()
   @IsOptional()
   resourcesUrl?: string;
+
+  @Swagger.ApiProperty({ type: 'string' })
+  @IsString()
+  @IsOptional()
+  confidentialityUrl?: string;
+
+  @Swagger.ApiProperty({ type: 'string' })
+  @IsString()
+  @IsOptional()
+  termsOfUseUrl?: string;
 }
 
 export class UniversityResponse {
@@ -98,6 +156,10 @@ export class UniversityResponse {
   @Swagger.ApiProperty({ type: 'string', example: 'Université de Lorraine' })
   @Expose({ groups: ['read'] })
   name: string;
+
+  @Swagger.ApiProperty({ type: CountryResponse })
+  @Expose({ groups: ['read'] })
+  country: CountryResponse;
 
   @Swagger.ApiPropertyOptional({ type: 'string', format: 'uuid' })
   @Expose({ groups: ['read'] })
@@ -110,6 +172,14 @@ export class UniversityResponse {
   @Swagger.ApiProperty({ type: CampusResponse, isArray: true })
   @Expose({ groups: ['read'] })
   sites: CampusResponse[];
+
+  @Swagger.ApiProperty({ type: 'string', isArray: true })
+  @Expose({ groups: ['read'] })
+  codes: string[];
+
+  @Swagger.ApiProperty({ type: 'string', isArray: true })
+  @Expose({ groups: ['read'] })
+  domains: string[];
 
   @Swagger.ApiProperty()
   @Expose({ groups: ['university:read'] })
@@ -127,6 +197,14 @@ export class UniversityResponse {
   @Expose({ groups: ['university:read'] })
   resourcesUrl?: string;
 
+  @Swagger.ApiPropertyOptional({ type: 'string', format: 'url' })
+  @Expose({ groups: ['university:read'] })
+  confidentialityUrl?: string;
+
+  @Swagger.ApiPropertyOptional({ type: 'string', format: 'url' })
+  @Expose({ groups: ['university:read'] })
+  termsOfUse?: string;
+
   constructor(partial: Partial<UniversityResponse>) {
     Object.assign(this, partial);
   }
@@ -135,13 +213,18 @@ export class UniversityResponse {
     return new UniversityResponse({
       id: university.id,
       name: university.name,
+      country: CountryResponse.fromDomain(university.country),
       parent: university.parent,
       timezone: university.timezone,
       sites: university.campus.map(CampusResponse.fromCampus),
+      codes: university.codes,
+      domains: university.domains,
       admissionStart: university.admissionStart,
       admissionEnd: university.admissionEnd,
       website: university.website,
       resourcesUrl: university.resourcesUrl,
+      confidentialityUrl: university.confidentialityUrl,
+      termsOfUse: university.termsOfUseUrl,
     });
   }
 }
