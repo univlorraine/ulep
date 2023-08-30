@@ -1,13 +1,21 @@
 import { SortOrder } from '@app/common';
 import * as Swagger from '@nestjs/swagger';
-import { IsOptional } from 'class-validator';
+import { Transform } from 'class-transformer';
+import { IsBoolean, IsOptional } from 'class-validator';
+import { PaginationDto } from 'src/api/dtos/pagination';
 import { LanguageStatus } from 'src/core/models';
 import {
   LanguageFilter,
   LanguageQuerySortFilter,
 } from 'src/core/ports/language.repository';
 
-export class FindAllLanguageParams {
+export class FindAllLanguageParams extends PaginationDto {
+  @Swagger.ApiPropertyOptional({ default: true })
+  @Transform(({ value }) => (value ? value === 'true' : true))
+  @IsBoolean()
+  @IsOptional()
+  pagination?: boolean;
+
   @Swagger.ApiProperty({
     type: 'string',
     enum: [LanguageStatus, 'PARTNER'],

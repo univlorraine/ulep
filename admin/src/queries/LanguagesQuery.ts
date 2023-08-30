@@ -1,6 +1,10 @@
 import qsAdapter from '../providers/qsAdapter';
 
 interface LanguagesParams {
+    pagination: {
+        page: string;
+        perPage: string;
+    };
     sort: {
         field?: string;
         order: string;
@@ -9,6 +13,8 @@ interface LanguagesParams {
 
 const LanguagesQuery = (params: LanguagesParams): string => {
     const query = {
+        page: params.pagination.page,
+        limit: params.pagination.perPage,
         field: params.sort.field,
         order: params.sort.order.toLowerCase(),
     };

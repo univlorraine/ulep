@@ -91,4 +91,16 @@ export class InMemoryLanguageRepository implements LanguageRepository {
   async countRequests(code: string): Promise<number> {
     return this.#requests[code]?.length || 0;
   }
+
+  update(language: Language): Promise<Language> {
+    const index = this.#languages.findIndex((obj) => obj.id === language.id);
+
+    if (index === -1) {
+      return Promise.reject(null);
+    }
+
+    this.#languages[index] = language;
+
+    return Promise.resolve(language);
+  }
 }

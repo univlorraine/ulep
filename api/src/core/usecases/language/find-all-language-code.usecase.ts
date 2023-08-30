@@ -9,6 +9,9 @@ import {
 } from 'src/core/ports/language.repository';
 
 export class FindAllLanguageCodeCommand {
+  pagination?: boolean;
+  limit?: number;
+  page?: number;
   orderBy: LanguageQueryOrderBy;
   status?: LanguageFilter;
 }
@@ -21,9 +24,17 @@ export class FindAllLanguageCodeUsecase {
   ) {}
 
   async execute(command: FindAllLanguageCodeCommand) {
+    const {
+      pagination = true,
+      page = 1,
+      limit = 30,
+      orderBy,
+      status,
+    } = command;
     const languages = await this.languageRepository.all(
-      command.orderBy,
-      command.status,
+      orderBy,
+      status,
+      pagination ? { page, limit } : undefined,
     );
     return new Collection<Language>({
       items: languages.items.filter(

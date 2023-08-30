@@ -23,6 +23,11 @@ export interface LanguageQueryOrderBy {
 
 export type LanguageFilter = LanguageStatus | 'PARTNER';
 
+export type LanguagePagination = {
+  limit?: number;
+  page?: number;
+};
+
 export interface SuggestedLanguageQueryOrderBy {
   field?: SuggestedLanguageOrderKey;
   order: SortOrder;
@@ -34,6 +39,7 @@ export interface LanguageRepository {
   all(
     orderBy: LanguageQueryOrderBy,
     status?: LanguageFilter,
+    pagination?: LanguagePagination,
   ): Promise<Collection<Language>>;
 
   allRequests(

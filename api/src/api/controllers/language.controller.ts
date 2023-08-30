@@ -53,8 +53,14 @@ export class LanguageController {
   @CollectionResponse(LanguageResponse)
   @Swagger.ApiOperation({ summary: 'Collection of LanguageCode ressource.' })
   @Swagger.ApiOkResponse({ type: LanguageResponse, isArray: true })
-  async findAll(@Query() { status, order, field }: FindAllLanguageParams) {
+  async findAll(
+    @Query()
+    { pagination, limit, page, status, order, field }: FindAllLanguageParams,
+  ) {
     const languages = await this.findAllLanguagesUsecase.execute({
+      pagination,
+      limit,
+      page,
       status,
       orderBy: {
         field,
@@ -91,7 +97,7 @@ export class LanguageController {
       secondaryUniversityActive,
     });
 
-    return language;
+    return LanguageResponse.fromLanguage(language);
   }
 
   @Get('requests')

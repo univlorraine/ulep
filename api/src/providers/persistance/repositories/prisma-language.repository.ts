@@ -3,6 +3,7 @@ import { Collection, PrismaService } from '@app/common';
 import { Language, LanguageStatus, SuggestedLanguage } from 'src/core/models';
 import {
   LanguageFilter,
+  LanguagePagination,
   LanguageQueryOrderBy,
   LanguageRepository,
   SuggestedLanguageQueryOrderBy,
@@ -122,6 +123,7 @@ export class PrismaLanguageRepository implements LanguageRepository {
   async all(
     orderBy: LanguageQueryOrderBy,
     status: LanguageFilter,
+    pagination: LanguagePagination,
   ): Promise<Collection<Language>> {
     let where;
     if (status === 'PARTNER') {
@@ -134,7 +136,18 @@ export class PrismaLanguageRepository implements LanguageRepository {
       where,
     });
 
+    let offset: number | undefined;
+    let limit: number | undefined;
+
+    if (pagination) {
+      limit = pagination.limit;
+      const page = pagination.page;
+      offset = page > 0 ? (page - 1) * limit : 0;
+    }
+
     const languageCodes = await this.prisma.languageCodes.findMany({
+      take: limit,
+      skip: offset,
       where,
       orderBy: orderBy ? { [orderBy.field]: orderBy.order } : undefined,
     });
