@@ -76,7 +76,6 @@ describe('Universities', () => {
         name: 'University of Oxford',
         campusNames: ['Oxford'],
         timezone: 'Europe/London',
-        languages: ['en', 'fr'],
         admissionStart: '2021-01-01',
         admissionEnd: '2021-12-31',
         website: 'https://www.ox.ac.uk/',
