@@ -26,8 +26,5 @@ export const universityMapper = (snapshot: UniversitySnapshot): University => {
     admissionStart: snapshot.admissionStartDate,
     admissionEnd: snapshot.admissionEndDate,
     website: snapshot.website,
-    resourcesUrl: snapshot.resource,
-    confidentialityUrl: snapshot.url_confidentiality,
-    termsOfUseUrl: snapshot.url_terms_of_use,
   });
 };

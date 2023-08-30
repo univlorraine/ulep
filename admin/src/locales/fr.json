@@ -152,7 +152,20 @@
         "label": "Langues demandées"
     },
     "universities": {
-        "label": "Universités"
+        "label": "Universités",
+        "show": {
+            "admission_start": "Début de date d'admission",
+            "admission_end": "Fin de date d'admission",
+            "codes": "Codes d'inscriptions",
+            "confidentialityUrl": "Url des règles de confidentialités",
+            "country": "Pays de l'université",
+            "domains": "Nom de domaines autorisés",
+            "name": "Nom de l'université",
+            "resourcesUrl": "Url des ressources de langues de l'université",
+            "sites": "Campus de rencontre",
+            "timezone": "Timezone",
+            "website": "Site web de l'université"
+        }
     },
     "uploader": {
         "drag_drop": "Glissez et déposez une image ou",

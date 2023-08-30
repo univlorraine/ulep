@@ -13,9 +13,6 @@ export interface UniversityProps {
   admissionStart: Date;
   admissionEnd: Date;
   website?: string;
-  resourcesUrl?: string;
-  confidentialityUrl?: string;
-  termsOfUseUrl?: string;
 }
 
 export class University {
@@ -41,12 +38,6 @@ export class University {
 
   readonly website?: string;
 
-  readonly resourcesUrl?: string;
-
-  readonly confidentialityUrl?: string;
-
-  readonly termsOfUseUrl?: string;
-
   constructor(props: UniversityProps) {
     this.id = props.id;
     this.name = props.name;
@@ -59,9 +50,6 @@ export class University {
     this.admissionStart = props.admissionStart;
     this.admissionEnd = props.admissionEnd;
     this.website = props.website;
-    this.resourcesUrl = props.resourcesUrl;
-    this.confidentialityUrl = props.confidentialityUrl;
-    this.termsOfUseUrl = props.termsOfUseUrl;
   }
 
   static create(props: UniversityProps): University {

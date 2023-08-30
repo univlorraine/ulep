@@ -33,9 +33,6 @@ export const createUniversities = async (prisma: PrismaClient) => {
       admissionStartDate: new Date('2023-01-01'),
       admissionEndDate: new Date('2023-12-31'),
       website: 'https://www.univ-lorraine.fr/',
-      resource: 'https://www.univ-lorraine.fr/ulep',
-      url_terms_of_use: 'https://www.univ-lorraine.fr/ulep',
-      url_confidentiality: 'https://www.univ-lorraine.fr/ulep',
     },
   });
   await prisma.organizations.create({
@@ -52,7 +49,6 @@ export const createUniversities = async (prisma: PrismaClient) => {
       admissionStartDate: new Date('2023-01-02'),
       admissionEndDate: new Date('2023-12-30'),
       website: 'https://www.birmingham.ac.uk',
-      resource: 'https://www.univ-lorraine.fr/birm',
     },
   });
   await prisma.organizations.create({
@@ -69,7 +65,6 @@ export const createUniversities = async (prisma: PrismaClient) => {
       admissionStartDate: new Date('2023-01-02'),
       admissionEndDate: new Date('2023-12-30'),
       website: 'https://www.toto.de',
-      resource: 'https://www.univ-lorraine.fr/fran',
     },
   });
 };

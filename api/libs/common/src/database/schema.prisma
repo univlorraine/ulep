@@ -63,9 +63,6 @@ model Organizations {
   created_at            DateTime        @default(now())
   updated_at            DateTime        @updatedAt
   website               String?
-  url_terms_of_use      String?
-  url_confidentiality   String?
-  resource              String?
   Parent                Organizations?  @relation("Organizations", fields: [parent_id], references: [id], onDelete: Cascade)
   Childrens             Organizations[] @relation("Organizations")
   Country               CountryCodes    @relation(fields: [country_code_id], references: [id])

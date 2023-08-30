@@ -20,9 +20,6 @@ export class CreatePartnerUniversityCommand {
   name: string;
   timezone: string;
   website?: string;
-  resourcesUrl?: string;
-  confidentialityUrl?: string;
-  termsOfUseUrl?: string;
   codes?: string[];
   domains?: string[];
 }
@@ -65,11 +62,8 @@ export class CreatePartnerUniversityUsecase {
       admissionStart: central.admissionStart,
       admissionEnd: central.admissionEnd,
       website: command.website,
-      resourcesUrl: command.resourcesUrl,
       codes: command.codes,
       domains: command.domains,
-      confidentialityUrl: command.confidentialityUrl,
-      termsOfUseUrl: command.termsOfUseUrl,
     });
 
     return this.universityRepository.create(university);

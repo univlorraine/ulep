@@ -23,9 +23,6 @@ export class CreateUniversityCommand {
   admissionStart: Date;
   admissionEnd: Date;
   website?: string;
-  resourcesUrl?: string;
-  confidentialityUrl?: string;
-  termsOfUseUrl?: string;
   codes?: string[];
   domains?: string[];
 }
@@ -77,11 +74,8 @@ export class CreateUniversityUsecase {
       admissionStart: command.admissionStart,
       admissionEnd: command.admissionEnd,
       website: command.website,
-      resourcesUrl: command.resourcesUrl,
       codes: command.codes,
       domains: command.domains,
-      confidentialityUrl: command.confidentialityUrl,
-      termsOfUseUrl: command.termsOfUseUrl,
     });
 
     return this.universityRepository.create(university);

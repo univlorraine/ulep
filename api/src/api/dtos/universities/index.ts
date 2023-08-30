@@ -63,21 +63,6 @@ export class CreateUniversityRequest implements CreateUniversityCommand {
   @IsUrl()
   @IsOptional()
   website?: string;
-
-  @Swagger.ApiPropertyOptional({ type: 'string', format: 'url' })
-  @IsUrl()
-  @IsOptional()
-  resourcesUrl?: string;
-
-  @Swagger.ApiProperty({ type: 'string' })
-  @IsString()
-  @IsOptional()
-  confidentialityUrl?: string;
-
-  @Swagger.ApiProperty({ type: 'string' })
-  @IsString()
-  @IsOptional()
-  termsOfUseUrl?: string;
 }
 
 export class UpdateUniversityNameRequest
@@ -131,21 +116,6 @@ export class CreateUniversityPartnerRequest
   @IsUrl()
   @IsOptional()
   website?: string;
-
-  @Swagger.ApiPropertyOptional({ type: 'string', format: 'url' })
-  @IsUrl()
-  @IsOptional()
-  resourcesUrl?: string;
-
-  @Swagger.ApiProperty({ type: 'string' })
-  @IsString()
-  @IsOptional()
-  confidentialityUrl?: string;
-
-  @Swagger.ApiProperty({ type: 'string' })
-  @IsString()
-  @IsOptional()
-  termsOfUseUrl?: string;
 }
 
 export class UniversityResponse {
@@ -193,18 +163,6 @@ export class UniversityResponse {
   @Expose({ groups: ['university:read'] })
   website?: string;
 
-  @Swagger.ApiPropertyOptional({ type: 'string', format: 'url' })
-  @Expose({ groups: ['university:read'] })
-  resourcesUrl?: string;
-
-  @Swagger.ApiPropertyOptional({ type: 'string', format: 'url' })
-  @Expose({ groups: ['university:read'] })
-  confidentialityUrl?: string;
-
-  @Swagger.ApiPropertyOptional({ type: 'string', format: 'url' })
-  @Expose({ groups: ['university:read'] })
-  termsOfUse?: string;
-
   constructor(partial: Partial<UniversityResponse>) {
     Object.assign(this, partial);
   }
@@ -222,9 +180,6 @@ export class UniversityResponse {
       admissionStart: university.admissionStart,
       admissionEnd: university.admissionEnd,
       website: university.website,
-      resourcesUrl: university.resourcesUrl,
-      confidentialityUrl: university.confidentialityUrl,
-      termsOfUse: university.termsOfUseUrl,
     });
   }
 }
