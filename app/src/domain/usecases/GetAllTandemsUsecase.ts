@@ -57,14 +57,7 @@ class GetAllTandemsUsecase implements GetAllTandemsUsecaseInterface {
                             'email@test.fr',
                             'firstname',
                             'lastname',
-                            new University(
-                                'id',
-                                'university',
-                                true,
-                                [new Language('id', 'code', 'name')],
-                                'timezone',
-                                []
-                            ),
+                            new University('id', 'university', true, 'timezone', []),
                             'ACTIVE'
                         )
                     )
@@ -93,14 +86,7 @@ class GetAllTandemsUsecase implements GetAllTandemsUsecaseInterface {
                             'email@test.fr',
                             'firstname',
                             'lastname',
-                            new University(
-                                'id',
-                                'university',
-                                true,
-                                [new Language('id', 'code', 'name')],
-                                'timezone',
-                                []
-                            ),
+                            new University('id', 'university', true, 'timezone', []),
                             'ACTIVE'
                         )
                     )

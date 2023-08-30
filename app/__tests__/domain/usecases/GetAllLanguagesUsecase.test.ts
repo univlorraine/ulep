@@ -4,7 +4,10 @@ import Language from '../../../src/domain/entities/Language';
 import GetAllLanguagesUsecase from '../../../src/domain/usecases/GetAllLanguagesUsecase';
 import DomainHttpAdapter from '../../mocks/adapters/HttpAdapter';
 
-const usecaseResponse: CollectionCommand<LanguageCommand> = {items: [{ id: 'ID', code: 'code', name: 'name' }], totalItems: 1};
+const usecaseResponse: CollectionCommand<LanguageCommand> = {
+    items: [{ id: 'ID', code: 'code', name: 'name' }],
+    totalItems: 1,
+};
 
 describe('getAllLanguages', () => {
     let adapter: DomainHttpAdapter;
@@ -24,16 +27,16 @@ describe('getAllLanguages', () => {
         adapter.mockJson({ parsedBody: usecaseResponse });
         await usecase.execute();
         expect(adapter.get).toHaveBeenCalledTimes(1);
-        expect(adapter.get).toHaveBeenCalledWith('/languages');
+        expect(adapter.get).toHaveBeenCalledWith('/languages?pagination=false&field=name&order=asc');
     });
 
     it('execute function must call DomainHttpAdapter with universityId', async () => {
         expect.assertions(2);
         jest.spyOn(adapter, 'get');
         adapter.mockJson({ parsedBody: usecaseResponse });
-        await usecase.execute('id');
+        await usecase.execute('status');
         expect(adapter.get).toHaveBeenCalledTimes(1);
-        expect(adapter.get).toHaveBeenCalledWith('/universities/id/languages');
+        expect(adapter.get).toHaveBeenCalledWith('/languages?status=status&pagination=false&field=name&order=asc');
     });
 
     it('execute must return an expected response', async () => {

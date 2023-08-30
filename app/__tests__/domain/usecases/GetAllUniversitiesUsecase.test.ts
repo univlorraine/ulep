@@ -1,6 +1,5 @@
 import { CollectionCommand } from '../../../src/command/CollectionCommand';
 import UniversityCommand from '../../../src/command/UniversityCommand';
-import Language from '../../../src/domain/entities/Language';
 import University from '../../../src/domain/entities/University';
 import GetAllUniversitiesUsecase from '../../../src/domain/usecases/GetAllUniversitiesUsecase';
 import DomainHttpAdapter from '../../mocks/adapters/HttpAdapter';
@@ -14,7 +13,6 @@ const usecaseResponse: CollectionCommand<UniversityCommand> = {
                 { id: 'id', name: 'Campus A' },
                 { id: 'id2', name: 'Campus B' },
             ],
-            languages: [new Language('id', 'FR', 'French'), new Language('id2', 'CN', 'Chinese')],
             parent: undefined,
             timezone: 'timezone',
             website: 'website',
