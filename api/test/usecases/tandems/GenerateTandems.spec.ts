@@ -218,9 +218,9 @@ describe('GenerateTandem UC', () => {
       firstname: '',
       lastname: '',
       gender: Gender.MALE,
-      age: 22,
+      age: 48,
       university: centralUniversity,
-      role: Role.STUDENT,
+      role: Role.STAFF,
       country: 'ES',
       avatar: null,
       deactivatedReason: '',
@@ -394,6 +394,7 @@ describe('GenerateTandem UC', () => {
 
   beforeEach(() => {
     profilesRepository.reset();
+    tandemsRepository.reset();
   });
 
   test('should generate tandems', async () => {
@@ -441,21 +442,6 @@ describe('GenerateTandem UC', () => {
   });
 
   test('should not generate tandems for user already having a tandem', async () => {
-    profilesRepository.init([
-      // 3 users from france
-      french1,
-      french2,
-      french3,
-      // 2 from spain
-      spain1,
-      spain2,
-      // 2 user from england
-      english1,
-      english2,
-      // 1 deutch
-      deutch1,
-    ]);
-
     const existingTandems = [
       new Tandem({
         id: 'tandem1',
@@ -468,6 +454,24 @@ describe('GenerateTandem UC', () => {
         status: TandemStatus.DRAFT,
       }),
     ];
+
+    profilesRepository.init(
+      [
+        // 3 users from france
+        french1,
+        french2,
+        french3,
+        // 2 from spain
+        spain1,
+        spain2,
+        // 2 user from england
+        english1,
+        english2,
+        // 1 deutch
+        deutch1,
+      ],
+      existingTandems,
+    );
     tandemsRepository.init(existingTandems);
 
     await uc.execute({
@@ -475,7 +479,6 @@ describe('GenerateTandem UC', () => {
     });
 
     const tandems = await tandemsRepository.getExistingTandems();
-
     expect(tandems.length).toBe(3);
 
     expect(
@@ -866,11 +869,6 @@ describe('GenerateTandem UC', () => {
       },
     });
 
-    beforeEach(() => {
-      profilesRepository.reset();
-      tandemsRepository.reset();
-    });
-
     test('Tandem - Tandem', async () => {
       profilesRepository.init([frenchTandem, englishTandem]);
       await uc.execute({
@@ -986,6 +984,7 @@ describe('GenerateTandem UC', () => {
     const subsidiaryUniveristy1 = new University({
       id: 'subsidiary1',
       name: 'Subsidiary university 1',
+      parent: centralUniversity.id,
       campus: [campus1, campus2],
       languages: [french, english, deutch],
       timezone: 'GMT+1',
@@ -1000,6 +999,7 @@ describe('GenerateTandem UC', () => {
     const subsidiaryUniveristy2 = new University({
       id: 'subsidiary2',
       name: 'Subsidiary university 2',
+      parent: centralUniversity.id,
       campus: [campusMadrid],
       languages: [spanish],
       timezone: 'GMT+1',
@@ -1100,6 +1100,249 @@ describe('GenerateTandem UC', () => {
       checkTandemArrayNotContainsTandem(tandems, {
         a: french2,
         b: studentSubsidiary2,
+      }),
+    ).toBeTruthy();
+  });
+
+  test('Generated tandems should always have a profile from central university', async () => {
+    const subsidiaryUniveristy1 = new University({
+      id: 'subsidiary1',
+      name: 'Subsidiary university 1',
+      parent: centralUniversity.id,
+      campus: [],
+      languages: [french, english, deutch],
+      timezone: 'GMT+1',
+      admissionStart: new Date(),
+      admissionEnd: new Date(),
+    });
+
+    const profile1 = new Profile({
+      user: new User({
+        id: 's1subsidiary',
+        email: '',
+        firstname: '',
+        lastname: '',
+        gender: Gender.MALE,
+        age: 19,
+        university: subsidiaryUniveristy1,
+        role: Role.STUDENT,
+        country: 'FR',
+        avatar: null,
+        deactivated: false,
+        deactivatedReason: '',
+      }),
+      id: 'FR_SUB',
+      nativeLanguage: french,
+      masteredLanguages: [],
+      learningType: LearningType.ETANDEM,
+      meetingFrequency: 'ONCE_A_WEEK',
+      learningLanguages: [
+        {
+          language: english,
+          level: ProficiencyLevel.B2,
+        },
+      ],
+      sameGender: false,
+      sameAge: false,
+      objectives: [],
+      interests: [],
+      biography: {
+        superpower: faker.lorem.sentence(),
+        favoritePlace: faker.lorem.sentence(),
+        experience: faker.lorem.sentence(),
+        anecdote: faker.lorem.sentence(),
+      },
+    });
+    const perfectMatchForProfile1 = new Profile({
+      user: new User({
+        id: 's2subsidiary',
+        email: '',
+        firstname: '',
+        lastname: '',
+        gender: Gender.MALE,
+        age: 19,
+        university: subsidiaryUniveristy1,
+        role: Role.STUDENT,
+        country: 'EN',
+        avatar: null,
+        deactivated: false,
+        deactivatedReason: '',
+      }),
+      id: 'EN_SUB',
+      nativeLanguage: english,
+      masteredLanguages: [],
+      learningType: LearningType.ETANDEM,
+      meetingFrequency: 'ONCE_A_WEEK',
+      learningLanguages: [
+        {
+          language: french,
+          level: ProficiencyLevel.B2,
+        },
+      ],
+      sameGender: false,
+      sameAge: false,
+      objectives: [],
+      interests: [],
+      biography: {
+        superpower: faker.lorem.sentence(),
+        favoritePlace: faker.lorem.sentence(),
+        experience: faker.lorem.sentence(),
+        anecdote: faker.lorem.sentence(),
+      },
+    });
+    profilesRepository.init([profile1, perfectMatchForProfile1]);
+
+    await uc.execute({
+      universityIds: [centralUniversity.id, subsidiaryUniveristy1.id],
+    });
+
+    const tandems = await tandemsRepository.getExistingTandems();
+    expect(
+      checkTandemArrayNotContainsTandem(tandems, {
+        a: profile1,
+        b: perfectMatchForProfile1,
+      }),
+    ).toBeTruthy();
+  });
+
+  test('should generate tandem for user from central university that registered first', async () => {
+    const subsidiaryUniveristy1 = new University({
+      id: 'subsidiary1',
+      name: 'Subsidiary university 1',
+      parent: centralUniversity.id,
+      campus: [],
+      languages: [french, english, deutch],
+      timezone: 'GMT+1',
+      admissionStart: new Date(),
+      admissionEnd: new Date(),
+    });
+    const firstUser = new Profile({
+      user: new User({
+        id: 'user1',
+        email: '',
+        firstname: '',
+        lastname: '',
+        gender: Gender.MALE,
+        age: 19,
+        university: centralUniversity,
+        role: Role.STUDENT,
+        country: 'FR',
+        avatar: null,
+        deactivated: false,
+        deactivatedReason: '',
+      }),
+      id: 'FR_1',
+      nativeLanguage: french,
+      masteredLanguages: [],
+      learningType: LearningType.ETANDEM,
+      meetingFrequency: 'ONCE_A_WEEK',
+      learningLanguages: [
+        {
+          language: english,
+          level: ProficiencyLevel.B2,
+        },
+      ],
+      sameGender: false,
+      sameAge: false,
+      objectives: [],
+      interests: [],
+      biography: {
+        superpower: faker.lorem.sentence(),
+        favoritePlace: faker.lorem.sentence(),
+        experience: faker.lorem.sentence(),
+        anecdote: faker.lorem.sentence(),
+      },
+      createdAt: new Date('2023-08-28T10:00:00.000Z'),
+    });
+    // second user is better match but register later
+    const secondUser = new Profile({
+      user: new User({
+        id: 'user2',
+        email: '',
+        firstname: '',
+        lastname: '',
+        gender: Gender.FEMALE,
+        age: 50,
+        university: centralUniversity,
+        role: Role.STAFF,
+        country: 'FR',
+        avatar: null,
+        deactivated: false,
+        deactivatedReason: '',
+      }),
+      id: 'FR_2',
+      nativeLanguage: french,
+      masteredLanguages: [],
+      learningType: LearningType.ETANDEM,
+      meetingFrequency: 'ONCE_A_WEEK',
+      learningLanguages: [
+        {
+          language: english,
+          level: ProficiencyLevel.B2,
+        },
+      ],
+      sameGender: false,
+      sameAge: false,
+      objectives: [],
+      interests: [],
+      biography: {
+        superpower: faker.lorem.sentence(),
+        favoritePlace: faker.lorem.sentence(),
+        experience: faker.lorem.sentence(),
+        anecdote: faker.lorem.sentence(),
+      },
+      createdAt: new Date('2023-08-12T10:00:00.000Z'),
+    });
+    const match = new Profile({
+      user: new User({
+        id: 'user3',
+        email: '',
+        firstname: '',
+        lastname: '',
+        gender: Gender.MALE,
+        age: 19,
+        university: subsidiaryUniveristy1,
+        role: Role.STUDENT,
+        country: 'EN',
+        avatar: null,
+        deactivated: false,
+        deactivatedReason: '',
+      }),
+      id: 'EN_1',
+      nativeLanguage: english,
+      masteredLanguages: [],
+      learningType: LearningType.ETANDEM,
+      meetingFrequency: 'ONCE_A_WEEK',
+      learningLanguages: [
+        {
+          language: french,
+          level: ProficiencyLevel.B2,
+        },
+      ],
+      sameGender: false,
+      sameAge: false,
+      objectives: [],
+      interests: [],
+      biography: {
+        superpower: faker.lorem.sentence(),
+        favoritePlace: faker.lorem.sentence(),
+        experience: faker.lorem.sentence(),
+        anecdote: faker.lorem.sentence(),
+      },
+      createdAt: new Date('2023-08-04T10:00:00.000Z'),
+    });
+
+    profilesRepository.init([firstUser, match, secondUser]);
+
+    await uc.execute({
+      universityIds: [centralUniversity.id, subsidiaryUniveristy1.id],
+    });
+
+    const tandems = await tandemsRepository.getExistingTandems();
+    expect(
+      checkTandemArrayContainsTandem(tandems, {
+        a: match,
+        b: secondUser,
       }),
     ).toBeTruthy();
   });

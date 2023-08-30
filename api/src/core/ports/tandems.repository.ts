@@ -13,6 +13,8 @@ export type FindWhereProps = {
 export interface TandemRepository {
   save(tandem: Tandem): Promise<void>;
 
+  saveMany(tandems: Tandem[]): Promise<void>;
+
   hasActiveTandem(profileId: string): Promise<boolean>;
 
   findWhere(props: FindWhereProps): Promise<Collection<Tandem>>;

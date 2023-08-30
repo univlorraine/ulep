@@ -87,6 +87,7 @@ class GetAllTandemsUsecase implements GetAllTandemsUsecaseInterface {
                             'firstname',
                             'lastname',
                             new University('id', 'university', true, 'timezone', []),
+
                             'ACTIVE'
                         )
                     )
