@@ -5,10 +5,8 @@ metadata:
   annotations:
     "helm.sh/resource-policy": keep
 spec:
-  # volumeMode: Block
   accessModes:
     - ReadWriteOnce
-  # persistentVolumeReclaimPolicy: Retain
   resources:
     requests:
       storage: "{{ .Values.minio.pv.storage }}"

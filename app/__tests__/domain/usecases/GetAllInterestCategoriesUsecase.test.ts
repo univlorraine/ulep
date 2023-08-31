@@ -1,11 +1,13 @@
 import CategoryInterestsCommand from '../../../src/command/CategoryInterestsCommand';
+import { CollectionCommand } from '../../../src/command/CollectionCommand';
 import CategoryInterests from '../../../src/domain/entities/CategoryInterests';
 import GetAllInterestCategoriesUsecase from '../../../src/domain/usecases/GetAllInterestCategoriesUsecase';
 import DomainHttpAdapter from '../../mocks/adapters/HttpAdapter';
 
-const usecaseResponse: CategoryInterestsCommand[] = [
-    { id: 'id', name: 'name', interests: [{ id: 'id', name: 'name' }] },
-];
+const usecaseResponse: CollectionCommand<CategoryInterestsCommand> = {
+    items: [{ id: 'id', name: 'name', interests: [{ id: 'id', name: 'name' }] }],
+    totalItems: 1,
+};
 
 describe('getAllGoals', () => {
     let adapter: DomainHttpAdapter;

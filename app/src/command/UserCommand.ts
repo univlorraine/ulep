@@ -8,7 +8,7 @@ interface UserCommand {
     firstname: string;
     lastname: string;
     university: UniversityCommand;
-    deactivated: boolean;
+    status: UserStatus;
 }
 
 export const userCommandToDomain = (command: UserCommand) => {
@@ -19,7 +19,7 @@ export const userCommandToDomain = (command: UserCommand) => {
         command.firstname,
         command.lastname,
         universityCommandToDomain(command.university),
-        command.deactivated
+        command.status
     );
 };
 

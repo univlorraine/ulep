@@ -36,7 +36,7 @@ const payload: ProfileCommand = {
             timezone: 'timezone',
             website: 'site',
         },
-        deactivated: false,
+        status: 'ACTIVE',
     },
 };
 

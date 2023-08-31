@@ -19,7 +19,6 @@ export class UserFactory extends ModelFactory<User> {
       age: faker.number.int({ min: 16, max: 64 }),
       role: enumValue(Role),
       country: 'FR',
-      deactivated: false,
     };
   }
 }

@@ -54,7 +54,7 @@ spec:
             - --health-enabled
             - 'true'
             - --hostname
-            - "{{ .Values.auth.env.keycloakHostname }}.{{ .Values.domain }}"
+            - "{{ .Values.keycloakUrl }}.{{ .Values.domain }}"
             - --import-realm
           ports:
             - name: http
@@ -93,7 +93,7 @@ spec:
             - name: PROXY_ADDRESS_FORWARDING
               value: "{{ .Values.auth.env.proxyAddressForwarding }}"
             - name: KEYCLOAK_HOSTNAME
-              value: "{{ .Values.auth.env.keycloakHostname }}.{{ .Values.domain }}"
+              value: "{{ .Values.keycloakUrl }}.{{ .Values.domain }}"
           envFrom: 
             - secretRef: 
                 name: "{{ include "etandem.fullname" . }}-secret-{{ .Values.auth.name }}"

@@ -8,7 +8,7 @@ class User {
         public readonly firstname: string,
         public readonly lastname: string,
         public readonly university: University,
-        public readonly deactivated: boolean
+        public readonly status: UserStatus
     ) {}
 }
 

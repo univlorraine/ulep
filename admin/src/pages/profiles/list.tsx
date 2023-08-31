@@ -1,17 +1,24 @@
+import { Select, MenuItem } from '@mui/material';
 import React from 'react';
 import {
+    useRefresh,
+    useNotify,
+    useUpdate,
+    BooleanField,
     SelectInput,
     ReferenceInput,
     Filter,
     TextInput,
-    ChipField,
     SingleFieldList,
     ArrayField,
     Datagrid,
     List,
     TextField,
     useTranslate,
+    FunctionField,
+    ChipField,
 } from 'react-admin';
+import User from '../../entities/User';
 
 const ProfileFilter = (props: any) => {
     const translate = useTranslate();
@@ -55,6 +62,28 @@ const ProfileFilter = (props: any) => {
 
 const ProfileList = (props: any) => {
     const translate = useTranslate();
+    const [update] = useUpdate();
+    const refresh = useRefresh();
+    const notify = useNotify();
+
+    const onUpdateUserStatus = async (id: string, status: UserStatus) => {
+        const payload = { id, status };
+        await update(
+            'users',
+            { data: payload },
+            {
+                onSettled: (data: any, error: Error) => {
+                    if (!error) {
+                        notify('profiles.edit_status_success');
+                    } else {
+                        notify('profiles.edit_status_error');
+                    }
+
+                    return refresh();
+                },
+            }
+        );
+    };
 
     return (
         <List exporter={false} filters={<ProfileFilter />} title={translate('profiles.label')} {...props}>
@@ -74,10 +103,25 @@ const ProfileList = (props: any) => {
                     sortable={false}
                     source="masteredLanguages"
                 >
-                    <SingleFieldList>
+                    <SingleFieldList linkType={false}>
                         <ChipField source="code" />
                     </SingleFieldList>
                 </ArrayField>
+                <BooleanField label={translate('profiles.certificate')} sortable={false} source="certificateOption" />
+                <FunctionField
+                    label={translate('profiles.status')}
+                    render={(record: { user: User }) => (
+                        <Select
+                            onChange={(value) => onUpdateUserStatus(record.user.id, value.target.value as UserStatus)}
+                            onClick={(e) => e.stopPropagation()}
+                            value={record.user.status ?? 'ACTIVE'}
+                        >
+                            <MenuItem value="ACTIVE">{translate('global.active')}</MenuItem>
+                            <MenuItem value="REPORTED">{translate('global.reported')}</MenuItem>
+                            <MenuItem value="BANNED">{translate('global.banned')}</MenuItem>
+                        </Select>
+                    )}
+                />
             </Datagrid>
         </List>
     );
