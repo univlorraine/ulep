@@ -14,22 +14,17 @@ import {
 import * as Swagger from '@nestjs/swagger';
 import { configuration } from 'src/configuration';
 import {
-  AddLanguageUsecase,
   CreatePartnerUniversityUsecase,
   CreateUniversityUsecase,
-  DeleteLanguageUsecase,
   DeleteUniversityUsecase,
-  GetLanguagesUsecase,
   GetUniversitiesUsecase,
   GetUniversityUsecase,
   UpdateUniversityNameUsecase,
 } from '../../core/usecases/university';
 import { Roles } from '../decorators/roles.decorator';
 import {
-  AddUniversityLanguageRequest,
   CreateUniversityPartnerRequest,
   CreateUniversityRequest,
-  LanguageResponse,
   UniversityResponse,
   UpdateUniversityNameRequest,
 } from '../dtos';
@@ -42,13 +37,10 @@ export class UniversityController {
   constructor(
     private readonly createUniversityUsecase: CreateUniversityUsecase,
     private readonly createPartnerUniversityUsecase: CreatePartnerUniversityUsecase,
-    private readonly addLanguageUsecase: AddLanguageUsecase,
     private readonly getUniversityUsecase: GetUniversityUsecase,
     private readonly getUniversitiesUsecase: GetUniversitiesUsecase,
-    private readonly getLanguagesUsecase: GetLanguagesUsecase,
     private readonly updateUniversityNameUsecase: UpdateUniversityNameUsecase,
     private readonly deleteUniversityUsecase: DeleteUniversityUsecase,
-    private readonly deleteLanguageUsecase: DeleteLanguageUsecase,
   ) {}
 
   @Post()
@@ -81,23 +73,6 @@ export class UniversityController {
     return UniversityResponse.fromUniversity(instance);
   }
 
-  @Post(':id/languages')
-  @Roles(configuration().adminRole)
-  @UseGuards(AuthenticationGuard)
-  @Swagger.ApiOperation({ summary: 'Create a new Language ressource.' })
-  @Swagger.ApiCreatedResponse({ type: LanguageResponse })
-  async createLanguage(
-    @Param('id', ParseUUIDPipe) id: string,
-    @Body() body: AddUniversityLanguageRequest,
-  ) {
-    const instance = await this.addLanguageUsecase.execute({
-      university: id,
-      ...body,
-    });
-
-    return LanguageResponse.fromLanguage(instance);
-  }
-
   @Get()
   @Swagger.ApiOperation({ summary: 'Collection of University ressource.' })
   @Swagger.ApiOkResponse({ type: UniversityResponse, isArray: true })
@@ -122,21 +97,6 @@ export class UniversityController {
     return UniversityResponse.fromUniversity(instance);
   }
 
-  @Get(':id/languages')
-  @UseGuards(AuthenticationGuard)
-  @Swagger.ApiOperation({ summary: 'Collection of Language ressource.' })
-  @Swagger.ApiOkResponse({ type: UniversityResponse, isArray: true })
-  async findLanguages(@Param('id', ParseUUIDPipe) id: string) {
-    const instances = await this.getLanguagesUsecase.execute({
-      university: id,
-    });
-
-    return new Collection<LanguageResponse>({
-      items: instances.map(LanguageResponse.fromLanguage),
-      totalItems: instances.length,
-    });
-  }
-
   @Patch(':id')
   @Roles(configuration().adminRole)
   @UseGuards(AuthenticationGuard)
@@ -156,17 +116,5 @@ export class UniversityController {
   @Swagger.ApiOkResponse()
   remove(@Param('id') id: string) {
     return this.deleteUniversityUsecase.execute({ id });
-  }
-
-  @Delete(':university/languages/:id')
-  @Roles(configuration().adminRole)
-  @UseGuards(AuthenticationGuard)
-  @Swagger.ApiOperation({ summary: 'Deletes a Language ressource.' })
-  @Swagger.ApiOkResponse()
-  removeLanguage(
-    @Param('university', ParseUUIDPipe) university: string,
-    @Param('id', ParseUUIDPipe) id: string,
-  ) {
-    return this.deleteLanguageUsecase.execute({ id, university });
   }
 }

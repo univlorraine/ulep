@@ -1,5 +1,5 @@
 import { Inject, Injectable } from '@nestjs/common';
-import { DomainError, RessourceDoesNotExist } from 'src/core/errors';
+import { DomainError } from 'src/core/errors';
 import { University } from 'src/core/models';
 import { Campus } from 'src/core/models/campus.model';
 import {
@@ -20,7 +20,6 @@ export class CreateUniversityCommand {
   name: string;
   campusNames: string[];
   timezone: string;
-  languages: string[];
   admissionStart: Date;
   admissionEnd: Date;
   website?: string;
@@ -49,10 +48,6 @@ export class CreateUniversityUsecase {
       throw new DomainError({ message: 'University name must be unique' });
     }
 
-    const languageCodes = await Promise.all(
-      command.languages.map((code) => this.tryToFindTheLanguageOfCode(code)),
-    );
-
     const university = University.create({
       id: command.id,
       name: command.name,
@@ -66,11 +61,6 @@ export class CreateUniversityUsecase {
           }),
       ),
       timezone: command.timezone,
-      languages: languageCodes.map((language) => ({
-        id: this.uuidProvider.generate(),
-        code: language.code,
-        name: language.name,
-      })),
       admissionStart: command.admissionStart,
       admissionEnd: command.admissionEnd,
       website: command.website,
@@ -78,14 +68,5 @@ export class CreateUniversityUsecase {
     });
 
     return this.universityRepository.create(university);
-  }
-
-  private async tryToFindTheLanguageOfCode(code: string) {
-    const language = await this.languageRepository.ofCode(code);
-    if (!language) {
-      throw new RessourceDoesNotExist();
-    }
-
-    return language;
   }
 }

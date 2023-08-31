@@ -5,7 +5,7 @@ import {
   UniversityRelations,
   universityMapper,
 } from '../mappers/university.mapper';
-import { Language, University } from 'src/core/models';
+import { University } from 'src/core/models';
 
 @Injectable()
 export class PrismaUniversityRepository implements UniversityRepository {
@@ -21,11 +21,6 @@ export class PrismaUniversityRepository implements UniversityRepository {
           create: university.campus.map((campus) => ({
             id: campus.id,
             name: campus.name,
-          })),
-        },
-        Languages: {
-          connect: university.languages.map((language) => ({
-            code: language.code,
           })),
         },
         timezone: university.timezone,
@@ -97,40 +92,6 @@ export class PrismaUniversityRepository implements UniversityRepository {
     }
 
     return universityMapper(result);
-  }
-
-  async languages(id: string): Promise<Language[]> {
-    const university = await this.prisma.organizations.findUnique({
-      where: { id },
-      include: { Languages: true },
-    });
-
-    return university.Languages;
-  }
-
-  async addLanguage(language: Language, university: University): Promise<void> {
-    await this.prisma.organizations.update({
-      where: { id: university.id },
-      data: {
-        Languages: {
-          connect: { code: language.code },
-        },
-      },
-    });
-  }
-
-  async removeLanguage(
-    language: Language,
-    university: University,
-  ): Promise<void> {
-    await this.prisma.organizations.update({
-      where: { id: university.id },
-      data: {
-        Languages: {
-          disconnect: { code: language.code },
-        },
-      },
-    });
   }
 
   async update(id: string, name: string): Promise<void> {

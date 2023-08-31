@@ -55,7 +55,22 @@
         }
     },
     "languages": {
-        "label": "Langues"
+        "code": "Code de la langue",
+        "label": "Langues",
+        "name": "Nom de la langue",
+        "secondary_status": {
+            "active": "Langue proposée",
+            "title": "Disponibilité pour une université partenaire",
+            "unactive": "Langue non proposée"
+        },
+        "status": {
+            "error": "Une erreur est survenue pendant la mise à jour du status",
+            "primary": "Active en langue d'apprentissage",
+            "secondary": "Active en langue suggéré",
+            "success": "Le status a bien été mis à jour",
+            "title": "Status",
+            "unactive": "Désactivé pour l'apprentissage"
+        }
     },
     "login": {
         "connect": "Connexion",

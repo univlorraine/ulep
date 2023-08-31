@@ -25,24 +25,26 @@ model CountryCodes {
 }
 
 model LanguageCodes {
-  id                 String               @id @default(uuid())
-  name               String
-  code               String
-  created_at         DateTime             @default(now())
-  updated_at         DateTime             @updatedAt
-  Organisations      Organizations[]
-  NativeLanguages    Profiles[]           @relation("NativeLanguage")
-  MasteredLanguages  MasteredLanguages[]
-  SuggestedLanguages SuggestedLanguages[]
-  Translations       Translations[]
-  TextContents       TextContent[]
-  LearningLanguages  LearningLanguages[]
+  id                         String               @id @default(uuid())
+  name                       String
+  code                       String
+  created_at                 DateTime             @default(now())
+  updated_at                 DateTime             @updatedAt
+  mainUniversityStatus       String               @default("UNACTIVE")
+  secondaryUniversityActive  Boolean              @default(false)
+  NativeLanguages            Profiles[]           @relation("NativeLanguage")
+  MasteredLanguages          MasteredLanguages[]
+  SuggestedLanguages         SuggestedLanguages[]
+  Translations               Translations[]
+  TextContents               TextContent[]
+  LearningLanguages          LearningLanguages[]
 
   @@unique([name])
   @@unique([code])
   @@index([code])
   @@map("language_codes")
 }
+
 
 //  * ****************************************************
 //  * Universities
@@ -62,7 +64,6 @@ model Organizations {
   Parent             Organizations?  @relation("Organizations", fields: [parent_id], references: [id], onDelete: Cascade)
   Childrens          Organizations[] @relation("Organizations")
   Users              Users[]
-  Languages          LanguageCodes[]
   Places             Places[]
 
   @@unique([name])

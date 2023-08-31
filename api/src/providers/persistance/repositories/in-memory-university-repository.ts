@@ -1,6 +1,5 @@
 import { Collection } from '@app/common';
 import { Injectable } from '@nestjs/common';
-import { Language } from 'src/core/models/language.model';
 import { University } from 'src/core/models/university.model';
 import { UniversityRepository } from 'src/core/ports/university.repository';
 
@@ -43,33 +42,6 @@ export class InMemoryUniversityRepository implements UniversityRepository {
 
   async ofName(name: string): Promise<University> {
     return this.#universities.find((university) => university.name === name);
-  }
-
-  async addLanguage(language: Language, university: University): Promise<void> {
-    const index = this.#universities.findIndex((u) => u.id === university.id);
-
-    if (index !== -1) {
-      const university = this.#universities[index];
-      this.#universities[index] = new University({
-        ...university,
-        languages: [...university.languages, language],
-      });
-    }
-  }
-
-  async removeLanguage(
-    language: Language,
-    university: University,
-  ): Promise<void> {
-    const index = this.#universities.findIndex((u) => u.id === university.id);
-
-    if (index !== -1) {
-      const university = this.#universities[index];
-      this.#universities[index] = new University({
-        ...university,
-        languages: university.languages.filter((l) => l.code !== language.code),
-      });
-    }
   }
 
   async update(id: string, name: string): Promise<void> {

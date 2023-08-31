@@ -1,5 +1,10 @@
 import * as Prisma from '@prisma/client';
-import { LearningType, ProficiencyLevel, Profile } from 'src/core/models';
+import {
+  LanguageStatus,
+  LearningType,
+  ProficiencyLevel,
+  Profile,
+} from 'src/core/models';
 import {
   TextContentRelations,
   TextContentSnapshot,
@@ -54,10 +59,18 @@ export const profileMapper = (instance: ProfileSnapshot): Profile => {
     nativeLanguage: {
       id: instance.NativeLanguage.id,
       code: instance.NativeLanguage.code,
+      mainUniversityStatus: instance.NativeLanguage
+        .mainUniversityStatus as LanguageStatus,
+      secondaryUniversityActive:
+        instance.NativeLanguage.secondaryUniversityActive,
     },
     masteredLanguages: instance.MasteredLanguages.map((language) => ({
       id: language.LanguageCode.id,
       code: language.LanguageCode.code,
+      mainUniversityStatus: instance.NativeLanguage
+        .mainUniversityStatus as LanguageStatus,
+      secondaryUniversityActive:
+        instance.NativeLanguage.secondaryUniversityActive,
     })),
     learningLanguages: instance.LearningLanguages.map((learningLanguage) => ({
       level: ProficiencyLevel[learningLanguage.level],

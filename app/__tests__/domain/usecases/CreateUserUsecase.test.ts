@@ -14,7 +14,6 @@ const payload: UserCommand = {
     lastname: 'lastname',
     university: {
         id: 'universityId',
-        languages: [{ id: 'id', code: 'FR', name: 'name' }],
         name: 'name',
         parent: undefined,
         sites: [],
@@ -24,14 +23,7 @@ const payload: UserCommand = {
     status: 'ACTIVE',
 };
 
-const university = new University(
-    'id',
-    'name',
-    false,
-    [new Language('id', 'FR', 'French'), new Language('id2', 'CN', 'Chinese')],
-    'timezone',
-    [{ id: 'id', name: 'Site A' }]
-);
+const university = new University('id', 'name', false, 'timezone', [{ id: 'id', name: 'Site A' }]);
 const file = new File(['Bits'], 'name');
 describe('createUserUsecase', () => {
     let adapter: DomainHttpAdapter;

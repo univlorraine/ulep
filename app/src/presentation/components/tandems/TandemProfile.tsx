@@ -51,7 +51,7 @@ const interests = [
     '🐕 Chien',
     '👨‍✈️ Policier',
 ];
-const university = new University('id', 'Université mocké', true, [], 'timezone', []);
+const university = new University('id', 'Université mocké', true, 'timezone', []);
 
 const note = 'J’aurai peu de dispo les 2 premières semaines d’Octobre, mais après tout sera beaucoup plus simple';
 

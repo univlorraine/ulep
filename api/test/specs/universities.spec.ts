@@ -76,7 +76,6 @@ describe('Universities', () => {
         name: 'University of Oxford',
         campusNames: ['Oxford'],
         timezone: 'Europe/London',
-        languages: ['en', 'fr'],
         admissionStart: '2021-01-01',
         admissionEnd: '2021-12-31',
         website: 'https://www.ox.ac.uk/',
@@ -87,7 +86,7 @@ describe('Universities', () => {
   it('should return bad request if university central already exists', async () => {
     languageRepository.init(languages);
 
-    const university = universityFactory.makeOne({ languages });
+    const university = universityFactory.makeOne();
     repository.init([university]);
 
     await request(app.getHttpServer())
@@ -98,7 +97,6 @@ describe('Universities', () => {
         name: 'University of Oxford',
         campusNames: ['Oxford'],
         timezone: 'Europe/London',
-        languages: ['en', 'fr'],
         admissionStart: '2021-01-01',
         admissionEnd: '2021-12-31',
         website: 'https://www.ox.ac.uk/',
@@ -117,7 +115,6 @@ describe('Universities', () => {
         name: 'University of Oxford',
         campusNames: ['Oxford'],
         timezone: 'Europe/London',
-        languages: ['en', 'fr'],
         admissionStart: '2021-12-31',
         admissionEnd: '2021-01-01',
         website: 'https://www.ox.ac.uk/',
@@ -128,7 +125,7 @@ describe('Universities', () => {
   it('should create partner university', async () => {
     languageRepository.init(languages);
 
-    const university = universityFactory.makeOne({ languages });
+    const university = universityFactory.makeOne();
     repository.init([university]);
 
     await request(app.getHttpServer())
@@ -145,7 +142,7 @@ describe('Universities', () => {
   it('partner should inherit languages and dates', async () => {
     languageRepository.init(languages);
 
-    const university = universityFactory.makeOne({ languages });
+    const university = universityFactory.makeOne();
     repository.init([university]);
 
     await request(app.getHttpServer())
@@ -163,67 +160,14 @@ describe('Universities', () => {
       (u) => u.id !== university.id,
     );
 
-    expect(universityCreated.languages).toEqual(university.languages);
     expect(universityCreated.admissionStart).toEqual(university.admissionStart);
     expect(universityCreated.admissionEnd).toEqual(university.admissionEnd);
-  });
-
-  it('new language should be added to university', async () => {
-    const newLanguage = languageFactory.makeOne({ code: 'de', name: 'German' });
-    languageRepository.init([...languages, newLanguage]);
-
-    const university = universityFactory.makeOne({ languages });
-    repository.init([university]);
-
-    await request(app.getHttpServer())
-      .post(`/universities/${university.id}/languages`)
-      .set('Authorization', `Bearer ${keycloakUser.sub}`)
-      .send({ language: newLanguage.id })
-      .expect(201);
-  });
-
-  it('should return bad request if language already exists', async () => {
-    languageRepository.init(languages);
-
-    const university = universityFactory.makeOne({ languages });
-    repository.init([university]);
-
-    await request(app.getHttpServer())
-      .post(`/universities/${university.id}/languages`)
-      .set('Authorization', `Bearer ${keycloakUser.sub}`)
-      .send({ language: languages[0].id })
-      .expect(400);
-  });
-
-  it('should return bad request if language does not exist', async () => {
-    languageRepository.init(languages);
-
-    const university = universityFactory.makeOne({ languages });
-    repository.init([university]);
-
-    await request(app.getHttpServer())
-      .post(`/universities/${university.id}/languages`)
-      .set('Authorization', `Bearer ${keycloakUser.sub}`)
-      .send({ language: '4be22c64-e341-4199-9175-1c43fdce3eed' })
-      .expect(400);
-  });
-
-  it('language should be removed from university', async () => {
-    languageRepository.init(languages);
-
-    const university = universityFactory.makeOne({ languages });
-    repository.init([university]);
-
-    await request(app.getHttpServer())
-      .delete(`/universities/${university.id}/languages/${languages[0].id}`)
-      .set('Authorization', `Bearer ${keycloakUser.sub}`)
-      .expect(200);
   });
 
   it('should return all universities', async () => {
     languageRepository.init(languages);
 
-    const university = universityFactory.makeOne({ languages });
+    const university = universityFactory.makeOne();
     repository.init([university]);
 
     const response = await request(app.getHttpServer())
@@ -238,13 +182,6 @@ describe('Universities', () => {
           name: university.name,
           sites: university.campus,
           timezone: university.timezone,
-          languages: expect.arrayContaining([
-            expect.objectContaining({
-              id: languages[0].id,
-              code: languages[0].code,
-              name: languages[0].name,
-            }),
-          ]),
         }),
       ]),
     );
@@ -253,7 +190,7 @@ describe('Universities', () => {
   it('should return university by id', async () => {
     languageRepository.init(languages);
 
-    const university = universityFactory.makeOne({ languages });
+    const university = universityFactory.makeOne();
     repository.init([university]);
 
     await request(app.getHttpServer())
@@ -265,9 +202,8 @@ describe('Universities', () => {
   it('should delete university', async () => {
     languageRepository.init(languages);
 
-    const central = universityFactory.makeOne({ languages });
+    const central = universityFactory.makeOne();
     const partner = universityFactory.makeOne({
-      languages,
       parent: central.id,
     });
     repository.init([central, partner]);
@@ -281,9 +217,8 @@ describe('Universities', () => {
   it('should return bad request if university has partners', async () => {
     languageRepository.init(languages);
 
-    const central = universityFactory.makeOne({ languages });
+    const central = universityFactory.makeOne();
     const partner = universityFactory.makeOne({
-      languages,
       parent: central.id,
     });
     repository.init([central, partner]);
@@ -297,7 +232,7 @@ describe('Universities', () => {
   it('should return bad request if university is central', async () => {
     languageRepository.init(languages);
 
-    const central = universityFactory.makeOne({ languages });
+    const central = universityFactory.makeOne();
     repository.init([central]);
 
     await request(app.getHttpServer())

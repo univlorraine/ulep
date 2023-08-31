@@ -12,9 +12,6 @@ export const createUniversities = async (prisma: PrismaClient) => {
     data: {
       id: UniversitySeedIDs.CENTRAL,
       name: 'Université de Lorraine',
-      Languages: {
-        connect: [{ code: 'fr' }, { code: 'de' }, { code: 'en' }],
-      },
       Places: {
         create: [
           {
@@ -38,9 +35,6 @@ export const createUniversities = async (prisma: PrismaClient) => {
     data: {
       id: UniversitySeedIDs.BIRMINGHAM,
       name: 'Université de Birmingham',
-      Languages: {
-        connect: [{ code: 'fr' }],
-      },
       timezone: 'Europe/London',
       parent_id: centralUniversityId,
       admissionStartDate: new Date('2023-01-02'),
@@ -53,9 +47,6 @@ export const createUniversities = async (prisma: PrismaClient) => {
     data: {
       id: UniversitySeedIDs.FRANCFORT,
       name: 'Université de Francfort',
-      Languages: {
-        connect: [{ code: 'fr' }, { code: 'en' }],
-      },
       timezone: 'Europe/Berlin',
       parent_id: centralUniversityId,
       admissionStartDate: new Date('2023-01-02'),

@@ -3,7 +3,6 @@ import { ProvidersModule } from 'src/providers/providers.module';
 import { MatchScorer } from './services/MatchScorer';
 import {
   AddLanguageRequestUsecase,
-  AddLanguageUsecase,
   AskForAccountDeletionUsecase,
   CreateInterestCategoryUsecase,
   CreateInterestUsecase,
@@ -19,7 +18,6 @@ import {
   CreateUserUsecase,
   DeleteInterestCategoryUsecase,
   DeleteInterestUsecase,
-  DeleteLanguageUsecase,
   DeleteObjectiveUsecase,
   DeleteQuestionUsecase,
   DeleteReportCategoryUsecase,
@@ -36,7 +34,6 @@ import {
   GetInterestCategoryUsecase,
   GetInterestUsecase,
   GetInterestsByCategoriesUsecase,
-  GetLanguagesUsecase,
   GetLevelsUsecase,
   GetProfileByUserIdUsecase,
   GetProfileUsecase,
@@ -58,6 +55,7 @@ import {
   UpdateCountryStatusUsecase,
   UpdateInterestCategoryUsecase,
   UpdateInterestUsecase,
+  UpdateLanguageCodeUsecase,
   UpdateQuestionUsecase,
   UpdateReportStatusUsecase,
   UpdateUniversityNameUsecase,
@@ -89,6 +87,7 @@ const usecases: Provider[] = [
   CountAllSuggestedLanguageUsecase,
   FindAllLanguageCodeUsecase,
   FindAllSuggestedLanguageUsecase,
+  UpdateLanguageCodeUsecase,
   // Media
   DeleteObjectiveImageUsecase,
   UploadAvatarUsecase,
@@ -131,12 +130,9 @@ const usecases: Provider[] = [
   GetTandemsUsecase,
   GetUserMatchUsecase,
   // Universities
-  AddLanguageUsecase,
   CreatePartnerUniversityUsecase,
   CreateUniversityUsecase,
-  DeleteLanguageUsecase,
   DeleteUniversityUsecase,
-  GetLanguagesUsecase,
   GetUniversitiesUsecase,
   GetUniversityUsecase,
   UpdateUniversityNameUsecase,
