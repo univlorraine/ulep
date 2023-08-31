@@ -16,7 +16,7 @@ const PairingLevelStartPage: React.FC = () => {
     }
 
     const continueSignUp = async () => {
-        if (profileSignUp.learningLanguageLevel) {
+        if (profileSignUp.learningLanguage?.code === '*') {
             return history.push('/signup/pairing/preference');
         }
         return history.push('/signup/pairing/level');
