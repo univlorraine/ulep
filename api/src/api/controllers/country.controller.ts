@@ -53,14 +53,15 @@ export class CountryController {
 
   @Get('universities')
   @Swagger.ApiOperation({
-    summary: 'Retrieve the collection of Country ressource.',
+    summary: 'Retrieve the collection of Country with universities.',
   })
   @CollectionResponse(CountryUniversitiesResponse)
   async getCollectionCountryWithUniversities(): Promise<
     CountryUniversitiesResponse[]
   > {
-    const countries = await this.getCountriesUniversitiesUsecase.execute();
-    return countries.map((country) =>
+    const countriesWithUniversities =
+      await this.getCountriesUniversitiesUsecase.execute();
+    return countriesWithUniversities.map((country) =>
       CountryUniversitiesResponse.fromDomain(country),
     );
   }
