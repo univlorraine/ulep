@@ -1,4 +1,4 @@
-import { Action, createTypedHooks } from 'easy-peasy';
+import { Action, Store, createTypedHooks } from 'easy-peasy';
 import Campus from '../domain/entities/Campus';
 import Country from '../domain/entities/Country';
 import Goal from '../domain/entities/Goal';

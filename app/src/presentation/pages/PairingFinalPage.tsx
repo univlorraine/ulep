@@ -2,7 +2,7 @@ import { useIonToast } from '@ionic/react';
 import { useTranslation } from 'react-i18next';
 import { Redirect, useHistory } from 'react-router';
 import { useConfig } from '../../context/ConfigurationContext';
-import { useStoreState } from '../../store/storeTypes';
+import { useStoreActions, useStoreState } from '../../store/storeTypes';
 import FlagBubble from '../components/FlagBubble';
 import SuccessLayout from '../components/layout/SuccessLayout';
 import { codeCountryToFlag } from '../utils';
@@ -58,8 +58,7 @@ const PairingFinalPage: React.FC = () => {
         if (result instanceof Error) {
             return await showToast({ message: t(result.message), duration: 1000 });
         }
-
-        return history.replace('/home');
+        return (window.location.href = '/home');
     };
 
     return (
