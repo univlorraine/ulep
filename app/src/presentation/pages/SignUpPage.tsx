@@ -115,16 +115,9 @@ const SignUpPage: React.FC = () => {
                     />
                 </div>
 
-                {selectedRole !== 'staff' && (
-                    <button
-                        className="tertiary-button large-margin-vertical"
-                        onClick={() => history.push('./signup/informations')}
-                    >
-                        {t('signup_page.sso_button')}
-                    </button>
-                )}
-
-                {selectedRole === 'student' && <div className={styles.separator} />}
+                <button className="tertiary-button large-margin-vertical" onClick={() => undefined}>
+                    {t('signup_page.sso_button')}
+                </button>
 
                 {selectedRole && (
                     <div className="large-margin-top">
