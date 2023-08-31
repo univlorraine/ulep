@@ -4,7 +4,9 @@ import {
   CountryFilters,
   CountryRepository,
 } from 'src/core/ports/country.repository';
-import { CountryCode } from 'src/core/models';
+import { CountryCode, CountryWithUniversities } from 'src/core/models';
+import { countryWithUniversitiesMapper } from 'src/providers/persistance/mappers/country.mapper';
+import { UniversityRelations } from 'src/providers/persistance/mappers';
 
 @Injectable()
 export class PrismaCountryCodeRepository implements CountryRepository {
@@ -47,6 +49,17 @@ export class PrismaCountryCodeRepository implements CountryRepository {
       items: countries,
       totalItems: count,
     };
+  }
+
+  async allWithUniversities(): Promise<CountryWithUniversities[]> {
+    const countries = await this.prisma.countryCodes.findMany({
+      where: {
+        Organization: { some: {} },
+      },
+      include: { Organization: { include: UniversityRelations } },
+    });
+
+    return countries.map((country) => countryWithUniversitiesMapper(country));
   }
 
   async ofId(id: string): Promise<CountryCode> {
