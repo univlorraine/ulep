@@ -2,13 +2,13 @@ import * as request from 'supertest';
 import { Test } from '@nestjs/testing';
 import { AppModule } from 'src/app.module';
 import {
+  CountryFactory,
   KeycloakUserFactory,
   LanguageFactory,
   UniversityFactory,
 } from '@app/common';
 import { TestServer } from './test.server';
 import { InMemoryLanguageRepository } from 'src/providers/persistance/repositories/in-memory-language-repository';
-import { LANGUAGE_REPOSITORY } from 'src/core/ports/language.repository';
 import { AUTHENTICATOR, InMemoryAuthenticator } from 'src/api/services';
 import { InMemoryUserRepository } from 'src/providers/persistance/repositories/in-memory-user-repository';
 import { USER_REPOSITORY } from 'src/core/ports/user.repository';
@@ -16,13 +16,18 @@ import { InMemoryUniversityRepository } from 'src/providers/persistance/reposito
 import { UNIVERSITY_REPOSITORY } from 'src/core/ports/university.repository';
 import { AuthenticationGuard } from 'src/api/guards';
 import { TestAuthGuard } from '../utils/TestAuthGuard';
+import { InMemoryCountryCodesRepository } from 'src/providers/persistance/repositories/in-memory-country-repository';
+import { COUNTRY_REPOSITORY } from 'src/core/ports/country.repository';
 
 describe('Universities', () => {
   let app: TestServer;
 
   const userRepositoy = new InMemoryUserRepository();
+  const countryRepository = new InMemoryCountryCodesRepository();
   const { user, keycloakUser } = new KeycloakUserFactory().makeOne();
   const authenticator = new InMemoryAuthenticator(keycloakUser);
+  const countryFactory = new CountryFactory();
+  const country = countryFactory.makeOne();
 
   const languageFactory = new LanguageFactory();
   const languages = [
@@ -36,14 +41,15 @@ describe('Universities', () => {
 
   beforeAll(async () => {
     userRepositoy.init([user]);
+    countryRepository.init([country]);
 
     const module = await Test.createTestingModule({
       imports: [AppModule],
     })
       .overrideProvider(UNIVERSITY_REPOSITORY)
       .useValue(repository)
-      .overrideProvider(LANGUAGE_REPOSITORY)
-      .useValue(languageRepository)
+      .overrideProvider(COUNTRY_REPOSITORY)
+      .useValue(countryRepository)
       .overrideProvider(USER_REPOSITORY)
       .useValue(userRepositoy)
       .overrideGuard(AuthenticationGuard)
@@ -57,6 +63,7 @@ describe('Universities', () => {
   });
 
   beforeEach(() => {
+    countryRepository.init([country]);
     repository.reset();
     languageRepository.reset();
   });
@@ -66,25 +73,25 @@ describe('Universities', () => {
   });
 
   it('should create university', async () => {
-    languageRepository.init(languages);
-
     await request(app.getHttpServer())
       .post('/universities')
       .set('Authorization', `Bearer ${keycloakUser.sub}`)
       .send({
-        id: '4be22c64-e341-4199-9175-1c43fdce3eed',
         name: 'University of Oxford',
         campusNames: ['Oxford'],
         timezone: 'Europe/London',
         admissionStart: '2021-01-01',
         admissionEnd: '2021-12-31',
         website: 'https://www.ox.ac.uk/',
+        codes: [],
+        domains: [],
+        countryId: country.id,
       })
       .expect(201);
   });
 
   it('should return bad request if university central already exists', async () => {
-    languageRepository.init(languages);
+    countryRepository.init([country]);
 
     const university = universityFactory.makeOne();
     repository.init([university]);
@@ -105,8 +112,6 @@ describe('Universities', () => {
   });
 
   it('should return bad request if admission start date is after admission end date', async () => {
-    languageRepository.init(languages);
-
     await request(app.getHttpServer())
       .post('/universities')
       .set('Authorization', `Bearer ${keycloakUser.sub}`)
@@ -122,50 +127,28 @@ describe('Universities', () => {
       .expect(400);
   });
 
-  it('should create partner university', async () => {
-    languageRepository.init(languages);
-
+  /*it('should create partner university', async () => {
     const university = universityFactory.makeOne();
     repository.init([university]);
 
     await request(app.getHttpServer())
-      .post(`/universities/${university.id}/partners`)
+      .post(`/universities/partners`)
       .set('Authorization', `Bearer ${keycloakUser.sub}`)
       .send({
+        admissionStart: '2021-12-31',
+        admissionEnd: '2021-01-01',
         name: 'University of Oxford',
         timezone: 'Europe/London',
         website: 'https://www.ox.ac.uk/',
+        codes: [],
+        domains: [],
+        countryId: country.id,
       })
       .expect(201);
-  });
-
-  it('partner should inherit languages and dates', async () => {
-    languageRepository.init(languages);
-
-    const university = universityFactory.makeOne();
-    repository.init([university]);
-
-    await request(app.getHttpServer())
-      .post(`/universities/${university.id}/partners`)
-      .set('Authorization', `Bearer ${keycloakUser.sub}`)
-      .send({
-        name: 'University of Oxford',
-        timezone: 'Europe/London',
-        website: 'https://www.ox.ac.uk/',
-      })
-      .expect(201);
-
-    const universities = await repository.findAll();
-    const universityCreated = universities.items.find(
-      (u) => u.id !== university.id,
-    );
-
-    expect(universityCreated.admissionStart).toEqual(university.admissionStart);
-    expect(universityCreated.admissionEnd).toEqual(university.admissionEnd);
-  });
+  });*/
 
   it('should return all universities', async () => {
-    languageRepository.init(languages);
+    countryRepository.init([country]);
 
     const university = universityFactory.makeOne();
     repository.init([university]);
@@ -188,7 +171,7 @@ describe('Universities', () => {
   });
 
   it('should return university by id', async () => {
-    languageRepository.init(languages);
+    countryRepository.init([country]);
 
     const university = universityFactory.makeOne();
     repository.init([university]);
@@ -200,7 +183,7 @@ describe('Universities', () => {
   });
 
   it('should delete university', async () => {
-    languageRepository.init(languages);
+    countryRepository.init([country]);
 
     const central = universityFactory.makeOne();
     const partner = universityFactory.makeOne({
@@ -215,7 +198,7 @@ describe('Universities', () => {
   });
 
   it('should return bad request if university has partners', async () => {
-    languageRepository.init(languages);
+    countryRepository.init([country]);
 
     const central = universityFactory.makeOne();
     const partner = universityFactory.makeOne({

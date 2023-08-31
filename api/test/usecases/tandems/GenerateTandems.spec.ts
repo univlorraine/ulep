@@ -1,5 +1,6 @@
 import { faker } from '@faker-js/faker';
 import {
+  CountryCode,
   Gender,
   Language,
   LanguageStatus,
@@ -14,6 +15,7 @@ import {
 } from 'src/core/models';
 import { Campus } from 'src/core/models/campus.model';
 import { GenerateTandemsUsecase } from 'src/core/usecases';
+import { InMemoryCountryCodesRepository } from 'src/providers/persistance/repositories/in-memory-country-repository';
 import { InMemoryProfileRepository } from 'src/providers/persistance/repositories/in-memory-profile-repository';
 import { InMemoryTandemRepository } from 'src/providers/persistance/repositories/in-memory-tandem-repository';
 import { UuidProvider } from 'src/providers/services/uuid.provider';
@@ -53,9 +55,11 @@ const checkTandemArrayNotContainsTandem = (
 
 describe('GenerateTandem UC', () => {
   ///////// Repositories /////////
+  const countryRepository = new InMemoryCountryCodesRepository();
   const profilesRepository = new InMemoryProfileRepository();
   const tandemsRepository = new InMemoryTandemRepository();
   const uuidProvider = new UuidProvider();
+
   const uc = new GenerateTandemsUsecase(
     profilesRepository,
     tandemsRepository,
@@ -102,13 +106,26 @@ describe('GenerateTandem UC', () => {
     name: 'campus Strasbourg',
     universityId: 'university1',
   });
+  const country = {
+    id: 'id',
+    emoji: '👽',
+    name: 'France',
+    code: 'fr',
+    enable: true,
+  } as CountryCode;
+
+  countryRepository.init([country]);
+
   const centralUniversity = new University({
     id: 'university1',
+    country: country,
     name: 'university 1',
     campus: [lorraineCampus, strasbourgCampus],
     timezone: 'GMT+1',
     admissionStart: new Date(),
     admissionEnd: new Date(),
+    codes: [],
+    domains: [],
   });
 
   const french1 = new Profile({
@@ -997,6 +1014,9 @@ describe('GenerateTandem UC', () => {
       timezone: 'GMT+1',
       admissionStart: new Date(),
       admissionEnd: new Date(),
+      country,
+      codes: [],
+      domains: [],
     });
     const campusMadrid = new Campus({
       id: 'campusMadrid',
@@ -1011,6 +1031,9 @@ describe('GenerateTandem UC', () => {
       timezone: 'GMT+1',
       admissionStart: new Date(),
       admissionEnd: new Date(),
+      country,
+      codes: [],
+      domains: [],
     });
 
     const studentSubsidiary1 = new Profile({
@@ -1119,6 +1142,9 @@ describe('GenerateTandem UC', () => {
       timezone: 'GMT+1',
       admissionStart: new Date(),
       admissionEnd: new Date(),
+      country,
+      codes: [],
+      domains: [],
     });
 
     const profile1 = new Profile({
@@ -1217,6 +1243,9 @@ describe('GenerateTandem UC', () => {
       timezone: 'GMT+1',
       admissionStart: new Date(),
       admissionEnd: new Date(),
+      country,
+      codes: [],
+      domains: [],
     });
     const firstUser = new Profile({
       user: new User({
