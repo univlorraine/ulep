@@ -1,5 +1,7 @@
 import React from 'react';
 import {
+    TopToolbar,
+    EditButton,
     ArrayField,
     SingleFieldList,
     ChipField,
@@ -10,11 +12,17 @@ import {
     Show,
 } from 'react-admin';
 
+const UniversityShowAction = () => (
+    <TopToolbar>
+        <EditButton />
+    </TopToolbar>
+);
+
 const UniversityShow = (props: any) => {
     const translate = useTranslate();
 
     return (
-        <Show {...props}>
+        <Show actions={<UniversityShowAction />} {...props}>
             <SimpleShowLayout>
                 <TextField label={translate('universities.show.name')} source="name" />
                 <TextField label={translate('universities.show.country')} source="country.name" />

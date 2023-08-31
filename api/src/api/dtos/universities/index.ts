@@ -13,7 +13,7 @@ import { University } from 'src/core/models/university.model';
 import {
   CreatePartnerUniversityCommand,
   CreateUniversityCommand,
-  UpdateUniversityNameCommand,
+  UpdateUniversityCommand,
 } from 'src/core/usecases/university';
 import { IsAfterThan } from 'src/api/validators';
 import { CampusResponse } from '../campus';
@@ -65,13 +65,48 @@ export class CreateUniversityRequest implements CreateUniversityCommand {
   website?: string;
 }
 
-export class UpdateUniversityNameRequest
-  implements Omit<UpdateUniversityNameCommand, 'id'>
+export class UpdateUniversityRequest
+  implements Omit<UpdateUniversityCommand, 'id'>
 {
+  @Swagger.ApiProperty({ type: 'string', format: 'array' })
+  @IsArray()
+  @IsOptional()
+  codes: string[];
+
+  @Swagger.ApiProperty({ type: 'string', format: 'array' })
+  @IsArray()
+  @IsOptional()
+  domains: string[];
+
+  @Swagger.ApiProperty({ type: 'string' })
+  @IsString()
+  @IsNotEmpty()
+  countryId: string;
+
   @Swagger.ApiProperty({ type: 'string' })
   @IsString()
   @IsNotEmpty()
   name: string;
+
+  @Swagger.ApiProperty({ type: 'string', format: 'date' })
+  @Type(() => Date)
+  @IsDate()
+  admissionStart: Date;
+
+  @Swagger.ApiProperty({ type: 'string', format: 'date' })
+  @Type(() => Date)
+  @IsDate()
+  @IsAfterThan('admissionStart')
+  admissionEnd: Date;
+
+  @Swagger.ApiProperty({ type: 'string', example: 'Europe/Paris' })
+  @IsTimeZone()
+  timezone: string;
+
+  @Swagger.ApiPropertyOptional({ type: 'string', format: 'url' })
+  @IsUrl()
+  @IsOptional()
+  website: string;
 }
 
 export class CreateUniversityPartnerRequest

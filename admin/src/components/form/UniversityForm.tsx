@@ -2,7 +2,8 @@ import { Box, Typography, Input, Button, Table, TableBody, TableCell, TableRow }
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
-import React, { useEffect, useState } from 'react';
+import daysjs from 'dayjs';
+import React, { useState } from 'react';
 import { useTranslate, useNotify } from 'react-admin';
 import Country from '../../entities/Country';
 import isCodeValid from '../../utils/isCodeValid';
@@ -47,8 +48,8 @@ const UniversityForm: React.FC<UniversityFormProps> = ({
     const [newName, setNewName] = useState<string>(name || '');
     const [newCountry, setNewCountry] = useState<Country | undefined>(country || undefined);
     const [newTimezone, setNewTimezone] = useState<string | undefined>(timezone || '');
-    const [newAdmissionStartDate, setNewAdmissionStartDate] = useState<Date | null>(admissionStartDate || null);
-    const [newAdmissionEndDate, setNewAdmissionEndDate] = useState<Date | null>(admissionEndDate || null);
+    const [newAdmissionStartDate, setNewAdmissionStartDate] = useState<Date | null>();
+    const [newAdmissionEndDate, setNewAdmissionEndDate] = useState<Date | null>();
     const [newWebsite, setNewWebsite] = useState<string>(website || '');
     const [newCodes, setNewCodes] = useState<string[]>(codes || []);
     const [newDomains, setNewDomains] = useState<string[]>(domains || []);
@@ -89,17 +90,19 @@ const UniversityForm: React.FC<UniversityFormProps> = ({
         );
     };
 
-    useEffect(() => {
-        setNewName(name || '');
-    }, [name]);
-
     return (
         <LocalizationProvider dateAdapter={AdapterDayjs}>
             <Box sx={{ m: 4 }}>
                 <Typography variant="subtitle1">{translate('universities.create.name')}</Typography>
 
                 <Box alignItems="center" display="flex" flexDirection="row">
-                    <Input name="Name" onChange={(e) => setNewName(e.target.value)} sx={{ my: 2 }} required />
+                    <Input
+                        name="Name"
+                        onChange={(e) => setNewName(e.target.value)}
+                        sx={{ my: 2 }}
+                        value={newName}
+                        required
+                    />
                 </Box>
 
                 <Typography variant="subtitle1">{translate('universities.create.country')}</Typography>
@@ -115,6 +118,8 @@ const UniversityForm: React.FC<UniversityFormProps> = ({
                 <Typography variant="subtitle1">{translate('universities.create.admission_start')}</Typography>
                 <Box alignItems="center" display="flex" flexDirection="row">
                     <DatePicker
+                        // @ts-ignore
+                        defaultValue={daysjs(admissionStartDate)}
                         format="DD/MM/YYYY"
                         label="DD/MM/YYYY"
                         onChange={setNewAdmissionStartDate}
@@ -126,6 +131,8 @@ const UniversityForm: React.FC<UniversityFormProps> = ({
                 <Typography variant="subtitle1">{translate('universities.create.admission_end')}</Typography>
                 <Box alignItems="center" display="flex" flexDirection="row">
                     <DatePicker
+                        // @ts-ignore
+                        defaultValue={daysjs(admissionEndDate)}
                         format="DD/MM/YYYY"
                         label="DD/MM/YYYY"
                         onChange={setNewAdmissionEndDate}

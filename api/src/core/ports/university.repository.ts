@@ -16,7 +16,7 @@ export interface UniversityRepository {
 
   ofName(name: string): Promise<University | null>;
 
-  update(id: string, name: string): Promise<void>;
+  update(university: University): Promise<University>;
 
   remove(id: string): Promise<void>;
 }

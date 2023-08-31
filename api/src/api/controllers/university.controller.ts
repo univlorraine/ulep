@@ -6,8 +6,8 @@ import {
   Get,
   Param,
   ParseUUIDPipe,
-  Patch,
   Post,
+  Put,
   SerializeOptions,
   UseGuards,
 } from '@nestjs/common';
@@ -19,18 +19,16 @@ import {
   DeleteUniversityUsecase,
   GetUniversitiesUsecase,
   GetUniversityUsecase,
-  UpdateUniversityNameUsecase,
+  UpdateUniversityUsecase,
 } from '../../core/usecases/university';
 import { Roles } from '../decorators/roles.decorator';
 import {
   CreateUniversityPartnerRequest,
   CreateUniversityRequest,
   UniversityResponse,
-  UpdateUniversityNameRequest,
+  UpdateUniversityRequest,
 } from '../dtos';
 import { AuthenticationGuard } from '../guards';
-
-// TODO: languages add/remove
 @Controller('universities')
 @Swagger.ApiTags('Universities')
 export class UniversityController {
@@ -39,7 +37,7 @@ export class UniversityController {
     private readonly createPartnerUniversityUsecase: CreatePartnerUniversityUsecase,
     private readonly getUniversityUsecase: GetUniversityUsecase,
     private readonly getUniversitiesUsecase: GetUniversitiesUsecase,
-    private readonly updateUniversityNameUsecase: UpdateUniversityNameUsecase,
+    private readonly updateUniversityUsecase: UpdateUniversityUsecase,
     private readonly deleteUniversityUsecase: DeleteUniversityUsecase,
   ) {}
 
@@ -91,16 +89,21 @@ export class UniversityController {
     return UniversityResponse.fromUniversity(instance);
   }
 
-  @Patch(':id')
+  @Put(':id')
   @Roles(configuration().adminRole)
   @UseGuards(AuthenticationGuard)
   @Swagger.ApiOperation({ summary: 'Updates a University ressource.' })
   @Swagger.ApiOkResponse()
   async update(
     @Param('id', ParseUUIDPipe) id: string,
-    @Body() request: UpdateUniversityNameRequest,
+    @Body() request: UpdateUniversityRequest,
   ) {
-    await this.updateUniversityNameUsecase.execute({ id, ...request });
+    const university = await this.updateUniversityUsecase.execute({
+      id,
+      ...request,
+    });
+
+    return UniversityResponse.fromUniversity(university);
   }
 
   @Delete(':id')
