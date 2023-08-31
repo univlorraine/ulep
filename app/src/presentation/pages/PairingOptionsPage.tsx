@@ -32,6 +32,7 @@ const PairingOptionsPage: React.FC = () => {
                 <div>
                     <h1 className="title">{t('pairing_options_page.title')}</h1>
                     <div className={pairingOptionsStyles.content}>
+                        {/*
                         <button
                             className={pairingOptionsStyles['preference-container']}
                             style={{ background: sameTandem ? configuration.secondaryColor : '#F2F4F7' }}
@@ -41,6 +42,7 @@ const PairingOptionsPage: React.FC = () => {
                                 {t('pairing_options_page.same_tandem')}
                             </p>
                         </button>
+                        */}
                         <button
                             className={pairingOptionsStyles['preference-container']}
                             style={{ background: isForCertificate ? configuration.secondaryColor : '#F2F4F7' }}
