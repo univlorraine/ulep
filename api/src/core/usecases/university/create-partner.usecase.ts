@@ -15,7 +15,8 @@ import {
 } from 'src/core/ports/uuid.provider';
 
 export class CreatePartnerUniversityCommand {
-  parent: string;
+  admissionStart: Date;
+  admissionEnd: Date;
   countryId: string;
   name: string;
   timezone: string;
@@ -36,7 +37,7 @@ export class CreatePartnerUniversityUsecase {
   ) {}
 
   async execute(command: CreatePartnerUniversityCommand) {
-    const central = await this.universityRepository.ofId(command.parent);
+    const central = await this.universityRepository.findUniversityCentral();
     if (!central) {
       throw new DomainError({ message: 'Central university does not exists' });
     }
@@ -59,8 +60,8 @@ export class CreatePartnerUniversityUsecase {
       country,
       campus: [],
       timezone: command.timezone,
-      admissionStart: central.admissionStart,
-      admissionEnd: central.admissionEnd,
+      admissionStart: command.admissionStart,
+      admissionEnd: command.admissionEnd,
       website: command.website,
       codes: command.codes,
       domains: command.domains,

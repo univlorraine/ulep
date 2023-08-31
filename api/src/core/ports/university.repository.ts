@@ -8,6 +8,8 @@ export interface UniversityRepository {
 
   findAll(): Promise<Collection<University>>;
 
+  findUniversityCentral(): Promise<University>;
+
   havePartners(id: string): Promise<boolean>;
 
   ofId(id: string): Promise<University | null>;

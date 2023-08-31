@@ -54,23 +54,17 @@ export class UniversityController {
     return UniversityResponse.fromUniversity(instance);
   }
 
-  @Post(':id/partners')
+  @Post('partners')
   @Roles(configuration().adminRole)
   @UseGuards(AuthenticationGuard)
   @Swagger.ApiOperation({
     summary: 'Create a new partner University ressource.',
   })
   @Swagger.ApiCreatedResponse({ type: UniversityResponse })
-  async createPartnerUniversity(
-    @Param('id', ParseUUIDPipe) id: string,
-    @Body() body: CreateUniversityPartnerRequest,
-  ) {
-    const instance = await this.createPartnerUniversityUsecase.execute({
-      parent: id,
-      ...body,
-    });
+  async createPartnerUniversity(@Body() body: CreateUniversityPartnerRequest) {
+    const university = await this.createPartnerUniversityUsecase.execute(body);
 
-    return UniversityResponse.fromUniversity(instance);
+    return UniversityResponse.fromUniversity(university);
   }
 
   @Get()
