@@ -10,17 +10,17 @@ class GetAllCountriesUsecase implements GetAllCountriesUsecaseInterface {
 
     async execute(): Promise<Country[] | Error> {
         try {
-            const httpResponse: HttpResponse<CollectionCommand<CountryCommand>> = await this.domainHttpAdapter.get(
-                `/countries?enable=true&pagination=false`,
+            const httpResponse: HttpResponse<CountryCommand[]> = await this.domainHttpAdapter.get(
+                `/countries/universities`,
                 {},
                 false
             );
 
-            if (!httpResponse.parsedBody || !httpResponse.parsedBody.items) {
+            if (!httpResponse.parsedBody || !httpResponse.parsedBody) {
                 return new Error('errors.global');
             }
 
-            return httpResponse.parsedBody.items.map((country) => countryCommandToDomain(country));
+            return httpResponse.parsedBody.map((country) => countryCommandToDomain(country));
         } catch (error: any) {
             return new Error('errors.global');
         }
