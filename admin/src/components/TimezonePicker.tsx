@@ -15,6 +15,7 @@ const TimezonePicker: React.FC<TimezonePickerProps> = ({ onChange, value }) => (
             value={value ?? ''}
             variant="standard"
         >
+            {/* @ts-ignore */}
             {Intl.supportedValuesOf('timeZone').map((timzeone: string) => (
                 <MenuItem key={timzeone} value={timzeone}>
                     {timzeone}
