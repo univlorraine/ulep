@@ -31,6 +31,8 @@ interface UniversityFormProps {
     website?: string;
 }
 
+const styles = { my: 2, width: '100%' };
+
 const UniversityForm: React.FC<UniversityFormProps> = ({
     admissionEndDate,
     admissionStartDate,
@@ -92,14 +94,14 @@ const UniversityForm: React.FC<UniversityFormProps> = ({
 
     return (
         <LocalizationProvider dateAdapter={AdapterDayjs}>
-            <Box sx={{ m: 4 }}>
+            <Box display="flex" flexDirection="column" sx={{ m: 4 }}>
                 <Typography variant="subtitle1">{translate('universities.create.name')}</Typography>
 
                 <Box alignItems="center" display="flex" flexDirection="row">
                     <Input
                         name="Name"
                         onChange={(e) => setNewName(e.target.value)}
-                        sx={{ my: 2 }}
+                        sx={styles}
                         value={newName}
                         required
                     />
@@ -159,7 +161,7 @@ const UniversityForm: React.FC<UniversityFormProps> = ({
                         }
                     }}
                     placeholder="Ajouter un nouveau code"
-                    sx={{ my: 2 }}
+                    sx={styles}
                 />
 
                 <Typography variant="subtitle1">{translate('universities.create.domains')}</Typography>
@@ -181,13 +183,13 @@ const UniversityForm: React.FC<UniversityFormProps> = ({
                         }
                     }}
                     placeholder="Ajouter un nouveau domaine"
-                    sx={{ my: 2 }}
+                    sx={styles}
                 />
 
                 <Typography variant="subtitle1">{translate('universities.create.website')}</Typography>
 
                 <Box alignItems="center" display="flex" flexDirection="row">
-                    <Input name="Name" onChange={(e) => setNewWebsite(e.target.value)} sx={{ my: 2 }} required />
+                    <Input name="Name" onChange={(e) => setNewWebsite(e.target.value)} sx={styles} required />
                 </Box>
 
                 <Button
@@ -201,7 +203,7 @@ const UniversityForm: React.FC<UniversityFormProps> = ({
                         !newWebsite
                     }
                     onClick={onSendUniversity}
-                    sx={{ mt: 4 }}
+                    sx={styles}
                     variant="contained"
                 >
                     {translate('global.save')}

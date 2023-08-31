@@ -20,7 +20,7 @@ const CountriesPicker: React.FC<CountriesPickerProps> = ({ onChange, value }) =>
             <Select
                 id="countries-picker"
                 onChange={(country) => onChange(data.find((c: Country) => country.target.value === c.id))}
-                sx={{ my: 2, width: 300 }}
+                sx={{ my: 2, width: '100%' }}
                 value={value ? value.id : ''}
                 variant="standard"
             >
