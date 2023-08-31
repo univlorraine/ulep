@@ -4,6 +4,8 @@ import { ArrowLeftSvg, ArrowRightSvg, EditPng, ParameterPng, SmallAvatarPng } fr
 import { useConfig } from '../../../context/ConfigurationContext';
 import { useStoreActions } from '../../../store/storeTypes';
 import styles from './ProfileContent.module.css';
+import { useState } from 'react';
+import { TailSpin } from 'react-loader-spinner';
 
 interface ProfileContentProps {
     onClose: () => void;
@@ -20,8 +22,10 @@ const ProfileContent: React.FC<ProfileContentProps> = ({
     profileLastname,
     profilePicture,
 }) => {
+    const { configuration } = useConfig();
     const { t } = useTranslation();
     const [showToast] = useIonToast();
+    const [loading, setLoading] = useState<boolean>(false);
     const { logout, updateProfile } = useStoreActions((store) => store);
     const { cameraAdapter, updateAvatar } = useConfig();
 
@@ -29,12 +33,16 @@ const ProfileContent: React.FC<ProfileContentProps> = ({
         const avatarFile = await cameraAdapter.getPictureFromGallery();
 
         if (avatarFile) {
+            setLoading(true);
             const result = await updateAvatar.execute(avatarFile);
 
             if (result instanceof Error) {
+                setLoading(false);
                 return await showToast({ message: t(result.message), duration: 5000 });
             }
-            return updateProfile({ avatar: result });
+            updateProfile({ avatar: result });
+
+            return setLoading(false);
         }
     };
 
@@ -51,7 +59,20 @@ const ProfileContent: React.FC<ProfileContentProps> = ({
             </div>
             <div className={styles.content}>
                 <h1 className="title">{t('home_page.profile.title')}</h1>
-                <img alt="avatar" className={styles.image} src={profilePicture} />
+                {loading ? (
+                    <TailSpin
+                        height="150"
+                        width="150"
+                        color={configuration.primaryColor}
+                        ariaLabel="tail-spin-loading"
+                        radius="1"
+                        wrapperStyle={{}}
+                        wrapperClass=""
+                        visible={true}
+                    />
+                ) : (
+                    <img alt="avatar" className={styles.image} src={profilePicture} />
+                )}
                 <span className={styles.name}>{`${profileFirstname} ${profileLastname}`}</span>
 
                 <button className={`${styles.button} margin-bottom`} onClick={changeAvatar}>

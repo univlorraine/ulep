@@ -15,7 +15,7 @@
         "lint": "eslint"
     },
     "dependencies": {
-        "@babel/preset-env":"7.22.10",
+        "@babel/preset-env": "7.22.10",
         "@capacitor/android": "5.0.4",
         "@capacitor/app": "5.0.2",
         "@capacitor/camera": "^5.0.5",
@@ -42,6 +42,7 @@
         "react": "^18.2.0",
         "react-dom": "^18.2.0",
         "react-i18next": "^12.3.1",
+        "react-loader-spinner": "^5.4.5",
         "react-router": "^5.3.4",
         "react-router-dom": "^5.3.4",
         "react-switch": "^7.0.0"
