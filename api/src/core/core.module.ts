@@ -58,7 +58,7 @@ import {
   UpdateLanguageCodeUsecase,
   UpdateQuestionUsecase,
   UpdateReportStatusUsecase,
-  UpdateUniversityNameUsecase,
+  UpdateUniversityUsecase,
   UpdateUserUsecase,
   UploadAvatarUsecase,
 } from './usecases';
@@ -135,7 +135,7 @@ const usecases: Provider[] = [
   DeleteUniversityUsecase,
   GetUniversitiesUsecase,
   GetUniversityUsecase,
-  UpdateUniversityNameUsecase,
+  UpdateUniversityUsecase,
   // Users
   AskForAccountDeletionUsecase,
   CreateUserUsecase,

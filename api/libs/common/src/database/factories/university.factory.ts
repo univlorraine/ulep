@@ -12,7 +12,6 @@ export class UniversityFactory extends ModelFactory<University> {
       admissionStart: new Date('2020-01-01'),
       admissionEnd: new Date('2020-12-31'),
       website: faker.internet.url(),
-      resourcesUrl: faker.internet.url(),
     };
   }
 }

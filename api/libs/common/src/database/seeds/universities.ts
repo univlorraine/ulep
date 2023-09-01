@@ -7,11 +7,14 @@ export enum UniversitySeedIDs {
 }
 
 export const createUniversities = async (prisma: PrismaClient) => {
-  const centralUniversityId = 'b511f9d1-ce7e-40b5-a630-ecb99f4e9f59';
+  const countries = await prisma.countryCodes.findMany();
   await prisma.organizations.create({
     data: {
       id: UniversitySeedIDs.CENTRAL,
       name: 'Université de Lorraine',
+      Country: {
+        connect: { id: countries.find((country) => country.code === 'FR').id },
+      },
       Places: {
         create: [
           {
@@ -24,35 +27,44 @@ export const createUniversities = async (prisma: PrismaClient) => {
           },
         ],
       },
+      codes: ['23LORRAINE'],
+      domains: ['@univ-lorraine.fr'],
       timezone: 'Europe/Paris',
       admissionStartDate: new Date('2023-01-01'),
       admissionEndDate: new Date('2023-12-31'),
       website: 'https://www.univ-lorraine.fr/',
-      resource: 'https://www.univ-lorraine.fr/ulep',
     },
   });
   await prisma.organizations.create({
     data: {
       id: UniversitySeedIDs.BIRMINGHAM,
       name: 'Université de Birmingham',
+      Country: {
+        connect: { id: countries.find((country) => country.code === 'GB').id },
+      },
+      codes: ['23BIRMINGHAM'],
+      domains: ['@univ-birmingham.fr'],
       timezone: 'Europe/London',
-      parent_id: centralUniversityId,
+      Parent: { connect: { id: UniversitySeedIDs.CENTRAL } },
       admissionStartDate: new Date('2023-01-02'),
       admissionEndDate: new Date('2023-12-30'),
       website: 'https://www.birmingham.ac.uk',
-      resource: 'https://www.univ-lorraine.fr/birm',
     },
   });
   await prisma.organizations.create({
     data: {
       id: UniversitySeedIDs.FRANCFORT,
       name: 'Université de Francfort',
+      Country: {
+        connect: { id: countries.find((country) => country.code === 'DE').id },
+      },
+      codes: ['23FRANCFORT'],
+      domains: ['@univ-francfort.fr'],
       timezone: 'Europe/Berlin',
-      parent_id: centralUniversityId,
+      Parent: { connect: { id: UniversitySeedIDs.CENTRAL } },
       admissionStartDate: new Date('2023-01-02'),
       admissionEndDate: new Date('2023-12-30'),
       website: 'https://www.toto.de',
-      resource: 'https://www.univ-lorraine.fr/fran',
     },
   });
 };

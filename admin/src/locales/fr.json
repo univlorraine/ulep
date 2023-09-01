@@ -152,7 +152,36 @@
         "label": "Langues demandées"
     },
     "universities": {
-        "label": "Universités"
+        "create": {
+            "admission_end": "Fin de date d'inscription à la nouvelle université partenaire",
+            "admission_error": "La date de fin d'admission doit être après la date de début",
+            "admission_start": "Début de date d'inscription à la nouvelle université partenaire",
+            "codes": "Liste des codes pour l'inscription",
+            "codes_error": "Le code doit faire une taille de 6 min. et avoir au moins une lettre et un chiffre",
+            "country": "Pays de la nouvelle université partenaire",
+            "domains": "Liste des noms de domaines pour l'inscription",
+            "domains_error": "Le nom de domaine doit commencer par un @",
+            "name": "Nom de la nouvelle université partenaire",
+            "timezone": "Timezone de la nouvelle université partenaire",
+            "title": "Création d'une nouvelle université partenaire",
+            "website": "Site web de la nouvelle université partenaire"
+        },
+        "label": "Universités",
+        "name": "Nom de l'université",
+        "parent": "Université centrale",
+        "show": {
+            "admission_start": "Début de date d'admission",
+            "admission_end": "Fin de date d'admission",
+            "codes": "Codes d'inscriptions",
+            "confidentialityUrl": "Url des règles de confidentialités",
+            "country": "Pays de l'université",
+            "domains": "Nom de domaines autorisés",
+            "name": "Nom de l'université",
+            "resourcesUrl": "Url des ressources de langues de l'université",
+            "sites": "Campus de rencontre",
+            "timezone": "Timezone",
+            "website": "Site web de l'université"
+        }
     },
     "uploader": {
         "drag_drop": "Glissez et déposez une image ou",

@@ -16,7 +16,12 @@ export class PrismaUniversityRepository implements UniversityRepository {
       data: {
         id: university.id,
         name: university.name,
-        parent_id: university.parent,
+        Parent: university.parent
+          ? { connect: { id: university.parent } }
+          : undefined,
+        Country: {
+          connect: { id: university.country.id },
+        },
         Places: {
           create: university.campus.map((campus) => ({
             id: campus.id,
@@ -27,7 +32,8 @@ export class PrismaUniversityRepository implements UniversityRepository {
         admissionStartDate: university.admissionStart,
         admissionEndDate: university.admissionEnd,
         website: university.website,
-        resource: university.resourcesUrl,
+        codes: university.codes,
+        domains: university.domains,
       },
     });
 
@@ -94,11 +100,29 @@ export class PrismaUniversityRepository implements UniversityRepository {
     return universityMapper(result);
   }
 
-  async update(id: string, name: string): Promise<void> {
+  async update(university: University): Promise<University> {
     await this.prisma.organizations.update({
-      where: { id },
-      data: { name },
+      where: { id: university.id },
+      data: {
+        name: university.name,
+        admissionEndDate: university.admissionEnd,
+        admissionStartDate: university.admissionStart,
+        timezone: university.timezone,
+        codes: university.codes,
+        domains: university.domains,
+        website: university.website,
+        Country: {
+          connect: { id: university.country.id },
+        },
+      },
     });
+
+    const updatedUniversity = await this.prisma.organizations.findUnique({
+      where: { id: university.id },
+      include: UniversityRelations,
+    });
+
+    return universityMapper(updatedUniversity);
   }
 
   async remove(id: string): Promise<void> {
