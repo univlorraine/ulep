@@ -133,7 +133,6 @@ export class GenerateTandemsUsecase {
         learningLanguages: [pair.owner, pair.target],
         status: TandemStatus.DRAFT,
       });
-
       tandems.push(tandem);
 
       sortedPossiblePairs = sortedPossiblePairs.filter(

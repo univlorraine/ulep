@@ -8,7 +8,6 @@ import { ProfileCampusException } from 'src/core/errors/profile-exceptions';
 import { UnsuportedLanguageException } from 'src/core/errors/unsuported-language.exception';
 import {
   Interest,
-  JOKER_LANGUAGE_CODE,
   Language,
   LearningLanguage,
   LearningObjective,
@@ -124,7 +123,7 @@ export class CreateProfileUsecase {
           learningLanguage.code,
         );
 
-        if (learningLanguage.code !== JOKER_LANGUAGE_CODE) {
+        if (!language.isJokerLanguage()) {
           this.assertLanguageIsSupportedByUniversity(user.university, language);
         }
 

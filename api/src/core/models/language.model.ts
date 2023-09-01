@@ -35,6 +35,10 @@ export class Language {
     this.mainUniversityStatus = props.mainUniversityStatus;
     this.secondaryUniversityActive = props.secondaryUniversityActive;
   }
+
+  public isJokerLanguage() {
+    return this.code === JOKER_LANGUAGE_CODE;
+  }
 }
 
 export class SuggestedLanguage {

@@ -50,24 +50,12 @@ export class Tandem {
     if (profile1.id === profile2.id) {
       throw new InvalidTandemError('Tandem must have two different profiles');
     }
-
+    
     // TODO(discover): languages spoken should include learning languages
     // if discover for other learning language
-
-    // TODO(NOW+0): check profile not null
-    const languagesSpokeByProfile1 = [
-      profile1.nativeLanguage.code,
-      ...profile1.masteredLanguages.map(language => language.code)
-    ];
-    const languagesSpokeByProfile2 = [
-      profile2.nativeLanguage.code,
-      ...profile2.masteredLanguages.map(language => language.code)
-    ];
-
-    if (
-      !languagesSpokeByProfile1.includes(this.learningLanguages[1].language.code) ||
-      !languagesSpokeByProfile2.includes(this.learningLanguages[0].language.code)
-    ) {
+    if ((!this.learningLanguages[1].language.isJokerLanguage() && !profile1.isSpeakingLanguage(this.learningLanguages[1].language)) || (
+      !this.learningLanguages[0].language.isJokerLanguage() && !profile2.isSpeakingLanguage(this.learningLanguages[0].language)
+    )) {
       throw new InvalidTandemError(
         `Learning language and native/mastered language missmatch between profiles ${this.learningLanguages[0].profile.id} and ${this.learningLanguages[1].profile.id}`,
       );
