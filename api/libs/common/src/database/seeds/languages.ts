@@ -1,4 +1,5 @@
 import { PrismaClient } from '@prisma/client';
+import { LanguageStatus } from '../../../../../src/core/models';
 
 const isoCodes = {
   aa: {
@@ -237,6 +238,8 @@ const isoCodes = {
     iso6392: 'deu',
     family: 'Indo-European',
     name: 'Deutsch',
+    mainUniversityStatus: LanguageStatus.PRIMARY,
+
     wikiUrl: 'https://en.wikipedia.org/wiki/German_language',
   },
   dv: {
@@ -272,6 +275,8 @@ const isoCodes = {
     iso6392: 'eng',
     family: 'Indo-European',
     name: 'English',
+    mainUniversityStatus: LanguageStatus.PRIMARY,
+
     wikiUrl: 'https://en.wikipedia.org/wiki/English_language',
   },
   eo: {
@@ -342,6 +347,7 @@ const isoCodes = {
     iso6392: 'fra',
     family: 'Indo-European',
     name: 'Français',
+    mainUniversityStatus: LanguageStatus.PRIMARY,
     wikiUrl: 'https://en.wikipedia.org/wiki/French_language',
   },
   fy: {
@@ -1286,6 +1292,8 @@ export const createLanguageCodes = async (prisma: PrismaClient) => {
       data: {
         code: code,
         name: isoCodes[code].name,
+        mainUniversityStatus:
+          isoCodes[code]?.mainUniversityStatus || LanguageStatus.UNACTIVE,
       },
     });
   }

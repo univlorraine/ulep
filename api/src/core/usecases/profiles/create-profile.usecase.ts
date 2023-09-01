@@ -9,6 +9,7 @@ import { UnsuportedLanguageException } from 'src/core/errors/unsuported-language
 import {
   Interest,
   Language,
+  LanguageStatus,
   LearningLanguage,
   LearningObjective,
   LearningType,
@@ -196,7 +197,8 @@ export class CreateProfileUsecase {
   ): void {
     if (
       (university.parent && !language.secondaryUniversityActive) ||
-      (!university.parent && language.mainUniversityStatus !== 'PRIMARY')
+      (!university.parent &&
+        language.mainUniversityStatus !== LanguageStatus.PRIMARY)
     ) {
       throw new UnsuportedLanguageException(
         `The language is not supported by the university`,

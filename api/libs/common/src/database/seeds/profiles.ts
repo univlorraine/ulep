@@ -1,6 +1,7 @@
 import { faker } from '@faker-js/faker';
 import * as Prisma from '@prisma/client';
 import { ProfileFactory } from '../factories';
+import { LanguageStatus } from '../../../../../src/core/models';
 import { LearningType, ProficiencyLevel } from '../../../../../src/core/models';
 
 const enumValue = <T>(_enum: unknown): T => {
@@ -49,7 +50,11 @@ export const createProfiles = async (
 
     const learningLanguages = faker.helpers
       .arrayElements(
-        languages.filter((language) => language.code !== nativeLanguageCode),
+        languages.filter(
+          (language) =>
+            language.code !== nativeLanguageCode &&
+            language.mainUniversityStatus === LanguageStatus.PRIMARY,
+        ),
         { min: 1, max: 3 },
       )
       .map((language) => ({
