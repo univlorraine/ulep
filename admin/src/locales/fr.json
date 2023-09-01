@@ -133,6 +133,7 @@
         }
     },
     "reports": {
+        "category": "Catégorie de signalement",
         "CLOSED": "Fermé",
         "content": "Contenu",
         "IN_PROGRESS": "En cours",

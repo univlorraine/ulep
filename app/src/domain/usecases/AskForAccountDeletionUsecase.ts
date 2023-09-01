@@ -1,3 +1,4 @@
+import { HttpResponse } from '../../adapter/BaseHttpAdapter';
 import { HttpAdapterInterface } from '../../adapter/DomainHttpAdapter';
 
 class AskForAccountDeletion implements AskForAccountDeletion {
@@ -5,17 +6,11 @@ class AskForAccountDeletion implements AskForAccountDeletion {
 
     async execute(): Promise<void | Error> {
         try {
-            //TODO: Change this when route will be up
-            /*
-            const httpResponse: HttpResponse<LanguageAskedCommand> = await this.domainHttpAdapter.post(
-                `/users/ask-deletion`,
-                {}
-            );
+            const httpResponse: HttpResponse<void> = await this.domainHttpAdapter.post(`/reports/unsubscribe`, {});
 
             if (!httpResponse.parsedBody) {
                 return new Error('errors.global');
             }
-*/
             return;
         } catch (error: any) {
             return new Error('errors.global');

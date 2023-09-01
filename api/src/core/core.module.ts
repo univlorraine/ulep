@@ -3,7 +3,6 @@ import { ProvidersModule } from 'src/providers/providers.module';
 import { MatchScorer } from './services/MatchScorer';
 import {
   AddLanguageRequestUsecase,
-  AskForAccountDeletionUsecase,
   CreateInterestCategoryUsecase,
   CreateInterestUsecase,
   CreateObjectiveUsecase,
@@ -141,7 +140,6 @@ const usecases: Provider[] = [
   GetUniversityUsecase,
   UpdateUniversityUsecase,
   // Users
-  AskForAccountDeletionUsecase,
   CreateUserUsecase,
   DeleteUserUsecase,
   GetUsersUsecase,
