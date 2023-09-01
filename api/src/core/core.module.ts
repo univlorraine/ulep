@@ -30,6 +30,7 @@ import {
   FindOneObjectiveUsecase,
   GenerateTandemsUsecase,
   GetCategoriesUsecase,
+  GetCountriesUniversitiesUsecase,
   GetCountriesUsecase,
   GetInterestCategoryUsecase,
   GetInterestUsecase,
@@ -71,6 +72,7 @@ import { CountAllSuggestedLanguageUsecase } from 'src/core/usecases/language/cou
 const usecases: Provider[] = [
   // Countries
   GetCountriesUsecase,
+  GetCountriesUniversitiesUsecase,
   UpdateCountryStatusUsecase,
   // Interest
   CreateInterestCategoryUsecase,

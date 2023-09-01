@@ -163,7 +163,7 @@ export class UniversityResponse {
   name: string;
 
   @Swagger.ApiProperty({ type: CountryResponse })
-  @Expose({ groups: ['read'] })
+  @Expose({ groups: ['university:read'] })
   country: CountryResponse;
 
   @Swagger.ApiPropertyOptional({ type: 'string', format: 'uuid' })

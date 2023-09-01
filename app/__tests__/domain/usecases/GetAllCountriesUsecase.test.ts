@@ -4,10 +4,7 @@ import Country from '../../../src/domain/entities/Country';
 import GetAllCountriesUsecase from '../../../src/domain/usecases/GetAllCountriesUsecase';
 import DomainHttpAdapter from '../../mocks/adapters/HttpAdapter';
 
-const usecaseResponse: CollectionCommand<CountryCommand> = {
-    items: [{ id: 'id', name: 'name', code: 'code', emoji: '🤖' }],
-    totalItems: 1,
-};
+const usecaseResponse: CountryCommand[] = [{ id: 'id', name: 'name', code: 'code', emoji: '🤖', universities: [] }];
 
 describe('getAllCountries', () => {
     let adapter: DomainHttpAdapter;
@@ -27,7 +24,7 @@ describe('getAllCountries', () => {
         adapter.mockJson({ parsedBody: usecaseResponse });
         await usecase.execute();
         expect(adapter.get).toHaveBeenCalledTimes(1);
-        expect(adapter.get).toHaveBeenCalledWith('/countries?enable=true&pagination=false', {}, false);
+        expect(adapter.get).toHaveBeenCalledWith('/countries/universities', {}, false);
     });
 
     it('execute must return an expected response', async () => {
