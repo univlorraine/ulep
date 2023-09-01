@@ -215,8 +215,7 @@ export class MatchScorer implements IMatchScorer {
     profile2: Profile,
   ): number {
     // Check if both profiles share the same university
-    const sharesUniversity = profile1.user.university === profile2.user.university;
-    // TODO(NOW+1): use ID to compare
+    const sharesUniversity = profile1.user.university.id === profile2.user.university.id;
 
     // If both profiles share the same university, apply the bonus
     if (sharesUniversity) {
