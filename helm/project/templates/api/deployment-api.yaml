@@ -81,7 +81,7 @@ spec:
             - name: KEYCLOAK_CLIENT_ID
               value: "{{ .Values.api.env.keycloakClientId }}"
             - name: MINIO_URL
-              value: "https://{{ .Values.minioUrl }}.{{ .Values.domain }}"
+              value: "{{ .Values.minioUrl }}.{{ .Values.domain }}"
           envFrom:
             - secretRef: 
                 name: "{{ include "etandem.fullname" . }}-secret-{{ .Values.api.name }}"
