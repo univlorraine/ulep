@@ -66,7 +66,6 @@ export class LearningLanguage {
     id: string;
     language: Language;
     level: ProficiencyLevel;
-    tandem?: Tandem;
     profile?: Profile;
   }) {
     this.id = id;

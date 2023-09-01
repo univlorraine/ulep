@@ -32,8 +32,6 @@ export class GenerateTandemsUsecase {
   private readonly logger = new Logger(GenerateTandemsUsecase.name);
 
   constructor(
-    @Inject(PROFILE_REPOSITORY)
-    private readonly profilesRepository: ProfileRepository,
     @Inject(TANDEM_REPOSITORY)
     private readonly tandemsRepository: TandemRepository,
     @Inject(LEARNING_LANGUAGE_REPOSITORY)
@@ -49,6 +47,7 @@ export class GenerateTandemsUsecase {
       );
 
     // TODO(NOW+2): check how to manage draft tandems (override them when re-generating ?)
+    // URGENT
 
     this.logger.debug(
       `Found ${
@@ -58,8 +57,6 @@ export class GenerateTandemsUsecase {
       )}`,
     );
 
-    // TODO(NOW): DB migration clean
-
     // Generate all possible pairs
     const possiblePairs: Match[] = [];
     for (let i = 0; i < learningLanguagesToPair.length; i++) {
@@ -68,11 +65,10 @@ export class GenerateTandemsUsecase {
       for (let j = i + 1; j < learningLanguagesToPair.length; j++) {
         const potentialPairLearningLanguage = learningLanguagesToPair[j];
 
-        // TODO(NOW-0): Unit test this ?
         if (
           learningLanguageToPair.profile.id !==
           potentialPairLearningLanguage.profile.id
-        )
+        ) {
           if (
             learningLanguageToPair.profile.user.university.isCentralUniversity() ||
             potentialPairLearningLanguage.profile.user.university.isCentralUniversity()
@@ -86,6 +82,7 @@ export class GenerateTandemsUsecase {
               possiblePairs.push(match);
             }
           }
+        }
       }
     }
 

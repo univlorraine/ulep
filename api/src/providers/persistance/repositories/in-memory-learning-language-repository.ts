@@ -1,22 +1,52 @@
-import { LearningLanguage, Tandem, TandemStatus } from 'src/core/models';
+import { cp } from 'fs';
+import {
+  LearningLanguage,
+  Profile,
+  Tandem,
+  TandemStatus,
+} from 'src/core/models';
 import { LearningLanguageRepository } from 'src/core/ports/learning-language.repository';
-
-interface LearningLanguageWithTandems extends LearningLanguage {
-  tandems: Tandem[];
-}
 
 export class InMemoryLearningLanguageRepository
   implements LearningLanguageRepository
 {
-  #learningLanguages: Map<string, LearningLanguageWithTandems>;
+  #learningLanguages: Map<string, LearningLanguage>;
+  #tandemsPerLearningLanguages: Map<string, Tandem>;
 
-  constructor(learningLanguages: LearningLanguageWithTandems[]) {
-    this.#learningLanguages = new Map<string, LearningLanguageWithTandems>(
-      learningLanguages.map((learningLanguage) => [
-        learningLanguage.id,
-        learningLanguage,
-      ]),
-    );
+  init(profiles: Profile[], existingTandems?: Tandem[]) {
+    this.#learningLanguages = profiles.reduce((accumulator, profile) => {
+      for (const ll of profile.learningLanguages) {
+        accumulator.set(
+          ll.id,
+          new LearningLanguage({
+            ...ll,
+            profile: profile,
+          }),
+        );
+      }
+      return accumulator;
+    }, new Map<string, LearningLanguage>());
+
+    if (existingTandems) {
+      this.#tandemsPerLearningLanguages = existingTandems.reduce(
+        (accumulator, tandem) => {
+          for (const ll of tandem.learningLanguages) {
+            if (accumulator.has(ll.id)) {
+              throw new Error('2 tandems on same learning language');
+            } else {
+              accumulator.set(ll.id, tandem);
+            }
+          }
+          return accumulator;
+        },
+        new Map<string, Tandem>(),
+      );
+    }
+  }
+
+  reset(): void {
+    this.#learningLanguages = new Map();
+    this.#tandemsPerLearningLanguages = new Map();
   }
 
   ofId(id: string): Promise<LearningLanguage | null> {
@@ -30,15 +60,18 @@ export class InMemoryLearningLanguageRepository
 
     for (const learningLanguage of this.#learningLanguages.values()) {
       if (
-        (learningLanguage.profile?.masteredLanguages.some(
+        learningLanguage.profile?.masteredLanguages.some(
           (language) => language.id === languageId,
         ) ||
-          learningLanguage.profile?.nativeLanguage.id === languageId) &&
-        !learningLanguage.tandems.some(
-          (tandem) => tandem.status === TandemStatus.ACTIVE,
-        )
+        learningLanguage.profile?.nativeLanguage.id === languageId
       ) {
-        res.push(learningLanguage);
+        if (
+          !this.#tandemsPerLearningLanguages?.has(learningLanguage.id) ||
+          this.#tandemsPerLearningLanguages?.get(learningLanguage.id).status !==
+            TandemStatus.ACTIVE
+        ) {
+          res.push(learningLanguage);
+        }
       }
     }
 
@@ -52,7 +85,13 @@ export class InMemoryLearningLanguageRepository
       if (
         universityIds.includes(learningLanguage.profile?.user.university.id)
       ) {
-        res.push(learningLanguage);
+        if (
+          !this.#tandemsPerLearningLanguages?.has(learningLanguage.id) ||
+          this.#tandemsPerLearningLanguages?.get(learningLanguage.id).status !==
+            TandemStatus.ACTIVE
+        ) {
+          res.push(learningLanguage);
+        }
       }
     }
 
@@ -60,15 +99,12 @@ export class InMemoryLearningLanguageRepository
   }
 
   hasAnActiveTandem(id: string): Promise<boolean> {
-    const item = this.#learningLanguages.get(id);
-    if (!item) {
-      return Promise.resolve(false);
+    if (
+      this.#tandemsPerLearningLanguages?.get(id)?.status === TandemStatus.ACTIVE
+    ) {
+      return Promise.resolve(true);
     }
 
-    if (item.tandems.some((tandem) => tandem.status === TandemStatus.ACTIVE)) {
-      return Promise.resolve(false);
-    }
-
-    return Promise.resolve(true);
+    return Promise.resolve(false);
   }
 }
