@@ -265,7 +265,6 @@ model Profiles {
   MasteredLanguages       MasteredLanguages[]
   Goals                   LearningObjectives[]
   Interests               Interests[]
-  // Tandems                 ProfilesOnTandems[]
 
   @@unique([user_id])
   @@index([native_language_code_id], name: "native_language_code")

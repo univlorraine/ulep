@@ -2,20 +2,12 @@ import { Injectable } from '@nestjs/common';
 import { Collection, PrismaService } from '@app/common';
 import { TandemRepository } from '../../../core/ports/tandems.repository';
 import { FindWhereProps } from '../../../core/ports/tandems.repository';
-import { Tandem, TandemStatus } from '../../../core/models';
-import {
-  LearningLanguageRelations,
-  learningLanguageMapper,
-} from '../mappers/learningLanguage.mapper';
+import { Tandem } from '../../../core/models';
+import { TandemRelations, tandemMapper } from '../mappers/tandem.mapper';
 
 @Injectable()
 export class PrismaTandemRepository implements TandemRepository {
   constructor(private readonly prisma: PrismaService) {}
-
-  // TODO(NOW+1): tandem.mapper
-
-  // TODO(NOW+1): globally check if need to split relations and condition mappers
-  // Regarding methods / UC
 
   async save(tandem: Tandem): Promise<void> {
     await this.prisma.tandems.create({
@@ -66,23 +58,11 @@ export class PrismaTandemRepository implements TandemRepository {
       },
       skip: props.offset,
       take: props.limit,
-      include: {
-        LearningLanguages: {
-          include: LearningLanguageRelations,
-        },
-      },
+      include: TandemRelations,
     });
 
     return {
-      items: tandems.map((tandem) => {
-        return new Tandem({
-          id: tandem.id,
-          learningLanguages: tandem.LearningLanguages.map(
-            learningLanguageMapper,
-          ),
-          status: TandemStatus[tandem.status],
-        });
-      }),
+      items: tandems.map(tandemMapper),
       totalItems: count,
     };
   }
@@ -98,20 +78,9 @@ export class PrismaTandemRepository implements TandemRepository {
       where: {
         status: { not: 'INACTIVE' },
       },
-      include: {
-        LearningLanguages: {
-          include: LearningLanguageRelations,
-        },
-      },
+      include: TandemRelations,
     });
-    // TODO: optimize with an object TandemSummary which would not including profile relations
-    return tandems.map((tandem) => {
-      return new Tandem({
-        id: tandem.id,
-        learningLanguages: tandem.LearningLanguages.map(learningLanguageMapper),
-        status: TandemStatus[tandem.status],
-      });
-    });
+    return tandems.map(tandemMapper);
   }
 
   async getTandemsForProfile(profileId: string): Promise<Tandem[]> {
@@ -127,22 +96,8 @@ export class PrismaTandemRepository implements TandemRepository {
           },
         },
       },
-      include: {
-        LearningLanguages: {
-          include: LearningLanguageRelations,
-        },
-      },
+      include: TandemRelations,
     });
-
-    return tandems.map(
-      (tandem) =>
-        new Tandem({
-          id: tandem.id,
-          learningLanguages: tandem.LearningLanguages.map(
-            learningLanguageMapper,
-          ),
-          status: TandemStatus[tandem.status],
-        }),
-    );
+    return tandems.map(tandemMapper);
   }
 }

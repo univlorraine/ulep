@@ -82,7 +82,6 @@ export const profileMapper = (instance: ProfileSnapshot): Profile => {
             instance.NativeLanguage.secondaryUniversityActive,
         }),
     ),
-    // TODO(NOW+1): Check if OK to stay like this
     learningLanguages: instance.LearningLanguages.map(
       (learningLanguage) =>
         new LearningLanguage({
