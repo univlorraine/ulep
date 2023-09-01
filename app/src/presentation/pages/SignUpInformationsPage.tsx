@@ -76,7 +76,7 @@ const SignUpInformationsPage: React.FC = () => {
             return setErrorMessage({ type: 'email', message: t('signup_informations_page.error_domain') });
         }
 
-        if (profileSignUp.university.domains.length > 0 && !isCodeValid(code, profileSignUp.university.codes)) {
+        if (profileSignUp.university.codes.length > 0 && !isCodeValid(code, profileSignUp.university.codes)) {
             return setErrorMessage({ type: 'code', message: t('signup_informations_page.error_code') });
         }
 

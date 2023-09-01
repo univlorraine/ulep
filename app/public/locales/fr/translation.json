@@ -327,7 +327,7 @@
         "validate_button": "Valider et continuer"
     },
     "signup_informations_page": {
-        "code": "Code (Si vous n'avez pas d'email universitaire)",
+        "code": "Code",
         "confirm_password": "Confirme ton mot de passe",
         "cgu": "Accepter les conditions d'utilisation et la politique de confidentialité pour utiliser l'application.",
         "error_age": "Veuillez saisir un âge valide",
