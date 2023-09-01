@@ -1,4 +1,4 @@
-import { User } from 'src/core/models';
+import { Profile, Tandem, User } from 'src/core/models';
 import { ProficiencyLevel } from './proficiency.model';
 
 export enum LanguageStatus {
@@ -49,9 +49,31 @@ export class SuggestedLanguage {
   }
 }
 
-export interface LearningLanguage {
-  language: Language;
-  level: ProficiencyLevel;
+// TODO(NOW+1): move in separate file (or profile file)
+// TODO(NOW+2): rename model ?
+export class LearningLanguage {
+  readonly id: string;
+  readonly language: Language;
+  readonly level: ProficiencyLevel;
+  readonly profile?: Profile;
+
+  constructor({
+    id,
+    language,
+    level,
+    profile,
+  }: {
+    id: string;
+    language: Language;
+    level: ProficiencyLevel;
+    tandem?: Tandem;
+    profile?: Profile;
+  }) {
+    this.id = id;
+    this.language = language;
+    this.level = level;
+    this.profile = profile;
+  }
 }
 
 export const JOKER_LANGUAGE_CODE = '*';

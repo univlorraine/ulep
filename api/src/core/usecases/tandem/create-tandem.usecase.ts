@@ -1,11 +1,11 @@
 import { Inject, Injectable, Logger } from '@nestjs/common';
 import { RessourceDoesNotExist } from 'src/core/errors';
-import { ProfileIsAlreadyInActiveTandemError } from 'src/core/errors/tandem-exceptions';
-import { Profile, Tandem, TandemStatus } from 'src/core/models';
+import { LearningLanguageIsAlreadyInActiveTandemError } from 'src/core/errors/tandem-exceptions';
+import { LearningLanguage, Tandem, TandemStatus } from 'src/core/models';
 import {
-  PROFILE_REPOSITORY,
-  ProfileRepository,
-} from 'src/core/ports/profile.repository';
+  LEARNING_LANGUAGE_REPOSITORY,
+  LearningLanguageRepository,
+} from 'src/core/ports/learning-language.repository';
 import {
   TANDEM_REPOSITORY,
   TandemRepository,
@@ -13,7 +13,7 @@ import {
 
 export type CreateTandemCommand = {
   id: string;
-  profiles: string[];
+  learningLanguages: string[];
   status: TandemStatus;
 };
 
@@ -22,49 +22,58 @@ export class CreateTandemUsecase {
   private readonly logger = new Logger(CreateTandemUsecase.name);
 
   constructor(
-    @Inject(PROFILE_REPOSITORY)
-    private readonly profilesRepository: ProfileRepository,
+    @Inject(LEARNING_LANGUAGE_REPOSITORY)
+    private readonly learningLanguageRepository: LearningLanguageRepository,
     @Inject(TANDEM_REPOSITORY)
     private readonly tandemsRepository: TandemRepository,
   ) {}
 
+  // TODO(NOW+0): no ID in command
   async execute(command: CreateTandemCommand): Promise<void> {
-    const profiles = await Promise.all(
-      command.profiles.map((id) => this.tryToFindProfile(id)),
+    const learningLanguages = await Promise.all(
+      command.learningLanguages.map((id) =>
+        this.tryToFindLearningLanguages(id),
+      ),
     );
 
     await Promise.all(
-      profiles.map((profile) => this.assertProfileIsNotInActiveTandem(profile)),
+      learningLanguages.map(
+        (ll) => this.assertLearningLanguageIsNotInActiveTandem(ll),
+        // TODO(NOW+1): Will cause error in single/global routine cohabitation. Maybe we should
+        // Remove other Draft tandems concerning profile.
+      ),
     );
 
     const tandem = Tandem.create({
       id: command.id,
-      profiles: profiles,
+      learningLanguages,
       status: command.status,
     });
 
     await this.tandemsRepository.save(tandem);
   }
 
-  private async tryToFindProfile(id: string) {
-    const profile = await this.profilesRepository.ofId(id);
-
-    if (!profile) {
+  private async tryToFindLearningLanguages(id: string) {
+    const LearningLanguage = await this.learningLanguageRepository.ofId(id);
+    if (!LearningLanguage) {
       throw new RessourceDoesNotExist();
     }
 
-    return profile;
+    return LearningLanguage;
   }
 
-  private async assertProfileIsNotInActiveTandem(
-    profile: Profile,
+  private async assertLearningLanguageIsNotInActiveTandem(
+    learningLanguage: LearningLanguage,
   ): Promise<void> {
-    const hasActiveTandem = await this.tandemsRepository.hasActiveTandem(
-      profile.id,
-    );
+    const hasActiveTandem =
+      await this.learningLanguageRepository.hasAnActiveTandem(
+        learningLanguage.id,
+      );
 
     if (hasActiveTandem) {
-      throw new ProfileIsAlreadyInActiveTandemError(profile.id);
+      throw new LearningLanguageIsAlreadyInActiveTandemError(
+        learningLanguage.id,
+      );
     }
   }
 }

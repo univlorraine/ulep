@@ -10,7 +10,7 @@ export class CreateTandemRequest implements CreateTandemCommand {
 
   @Swagger.ApiProperty({ type: 'string', isArray: true })
   @ArrayNotEmpty()
-  profiles: string[];
+  learningLanguages: string[];
 
   @Swagger.ApiProperty({ type: 'string', enum: TandemStatus })
   @IsEnum(TandemStatus)

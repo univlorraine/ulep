@@ -10,6 +10,7 @@ import {
   Interest,
   JOKER_LANGUAGE_CODE,
   Language,
+  LearningLanguage,
   LearningObjective,
   LearningType,
   ProficiencyLevel,
@@ -127,10 +128,11 @@ export class CreateProfileUsecase {
           this.assertLanguageIsSupportedByUniversity(user.university, language);
         }
 
-        return {
+        return new LearningLanguage({
+          id: this.uuidProvider.generate(),
           language,
           level: learningLanguage.level,
-        };
+        });
       }),
     );
 

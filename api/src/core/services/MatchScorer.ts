@@ -1,4 +1,8 @@
-import { JOKER_LANGUAGE_CODE, LearningType } from 'src/core/models';
+import {
+  JOKER_LANGUAGE_CODE,
+  LearningLanguage,
+  LearningType,
+} from 'src/core/models';
 /* eslint-disable prettier/prettier */
 import { Injectable } from '@nestjs/common';
 import { Match, MatchScores, ProficiencyLevel, Profile } from '../models';
@@ -15,7 +19,10 @@ export type Coeficients = {
 };
 
 export interface IMatchScorer {
-  computeMatchScore(profile1: Profile, profile2: Profile): Match;
+  computeMatchScore(
+    learningLanguage1: LearningLanguage,
+    learningLanguage2: LearningLanguage
+  ): Match;
 }
 
 @Injectable()
@@ -44,41 +51,47 @@ export class MatchScorer implements IMatchScorer {
   }
 
   // TODO: Use interest categories similarity instead of interests
-  // TODO(multipleLearningLanguage): manage multiple learning language
-  public computeMatchScore(profile1: Profile, profile2: Profile): Match {
-    if (profile1.id === profile2.id) {
+  public computeMatchScore(
+    learningLanguage1: LearningLanguage,
+    learningLanguage2: LearningLanguage
+  ): Match {
+    if (learningLanguage1.profile.id === learningLanguage2.profile.id) {
       throw new SameProfilesError();
     }
 
-    // TODO: include other cases in discovery mode (ex: learning asian language, low level in learning language).
-    // Algorithm should be adapted to consider learingLanguages for both user in that case
-    const profile1LearningLanguageIsDiscovery = profile1.learningLanguages?.[0]?.language.code === JOKER_LANGUAGE_CODE;
-    const profile2LearningLanguageIsDiscovery = profile2.learningLanguages?.[0]?.language.code === JOKER_LANGUAGE_CODE;
+    // TODO: include other cases in discovery mode (ex: learning asian language, TANDEM).
+    // Algorithm should be adapted to consider learningLanguages as spoken
+    const profile1LearningLanguageIsDiscovery = learningLanguage1.language.code === JOKER_LANGUAGE_CODE;
+    const profile2LearningLanguageIsDiscovery = learningLanguage2.language.code === JOKER_LANGUAGE_CODE;
 
+    const profile1 = learningLanguage1.profile;
+    const profile2 = learningLanguage2.profile;
+    // TODO(NOW+1): see if can compute this from profile or learningLanguage model
     const languageIdsSpokenByProfile1 = [profile1.nativeLanguage, ...profile1.masteredLanguages].map(l => l.id);
     const languageIdsSpokenByProfile2 = [profile2.nativeLanguage, ...profile2.masteredLanguages].map(l => l.id);
    
 
     // Check compatibility between learning languages and known languages of profiles
+    // TODO(NOW+1): see if can compute this from profile or learningLanguage model
     if (
-      (!profile2LearningLanguageIsDiscovery && !languageIdsSpokenByProfile1.includes(profile2.learningLanguages?.[0]?.language.id))
-      || (!profile1LearningLanguageIsDiscovery && !languageIdsSpokenByProfile2.includes(profile1.learningLanguages?.[0]?.language.id))
+      (!profile2LearningLanguageIsDiscovery && !languageIdsSpokenByProfile1.includes(learningLanguage2.language.id))
+      || (!profile1LearningLanguageIsDiscovery && !languageIdsSpokenByProfile2.includes(learningLanguage1.language.id))
     ) {
-      return new Match({ owner: profile1, target: profile2, scores: MatchScores.empty() });
+      return new Match({ owner: learningLanguage1, target: learningLanguage2, scores: MatchScores.empty() });
     }
 
     // Check forbidden case of same gender
     if ((profile1.sameGender || profile2.sameGender)
       && profile1.user.gender !== profile2.user.gender
     ) {
-      return new Match({ owner: profile1, target: profile2, scores: MatchScores.empty() });
+      return new Match({ owner: learningLanguage1, target: learningLanguage2, scores: MatchScores.empty() });
     }
 
     // Check incompatibilities between learning types
     if (profile1.learningType !== profile2.learningType && (
         profile1.learningType !== LearningType.BOTH && profile2.learningType !== LearningType.BOTH
     )) {
-      return new Match({ owner: profile1, target: profile2, scores: MatchScores.empty() });
+      return new Match({ owner: learningLanguage1, target: learningLanguage2, scores: MatchScores.empty() });
     }
 
     // Check same campus if tandem
@@ -89,11 +102,11 @@ export class MatchScorer implements IMatchScorer {
         || (profile1.campus.id !== profile2.campus.id)
       )
      ) {
-      return new Match({ owner: profile1, target: profile2, scores: MatchScores.empty() });
+      return new Match({ owner: learningLanguage1, target: learningLanguage2, scores: MatchScores.empty() });
     }
 
     const scores: MatchScores = new MatchScores({
-      level: this.computeLanguageLevel(profile1, profile2),
+      level: this.computeLanguageLevel(learningLanguage1, learningLanguage2),
       age: this.computeAgeBonus(profile1, profile2),
       status: this.computeSameRolesBonus(profile1, profile2),
       goals: this.computeSameGoalsBonus(profile1, profile2),
@@ -102,15 +115,16 @@ export class MatchScorer implements IMatchScorer {
       interests: this.computeSameInterestBonus(profile1, profile2),
     });
 
-    return new Match({ owner: profile1, target: profile2, scores });
+    return new Match({ owner: learningLanguage1, target: learningLanguage2, scores });
   }
 
-  private computeLanguageLevel(profile1: Profile, profile2: Profile): number {
-    const profile1LearningLanguageIsDiscovery = profile1.learningLanguages?.[0]?.language.code === JOKER_LANGUAGE_CODE;
-    const learningScoreProfile1 = this.computeLearningScore(profile1, profile1LearningLanguageIsDiscovery);
+  private computeLanguageLevel(learningLanguage1: LearningLanguage, learningLanguage2: LearningLanguage): number {
+    // TODO(discoveryLanguage): impact
+    const profile1LearningLanguageIsDiscovery = learningLanguage1.language.code === JOKER_LANGUAGE_CODE;
+    const learningScoreProfile1 = this.computeLearningScore(learningLanguage1, profile1LearningLanguageIsDiscovery);
 
-    const profile2LearningLanguageIsDiscovery = profile2.learningLanguages?.[0]?.language.code === JOKER_LANGUAGE_CODE;
-    const learningScoreProfile2 = this.computeLearningScore(profile2, profile2LearningLanguageIsDiscovery);
+    const profile2LearningLanguageIsDiscovery = learningLanguage2.language.code === JOKER_LANGUAGE_CODE;
+    const learningScoreProfile2 = this.computeLearningScore(learningLanguage2, profile2LearningLanguageIsDiscovery);
 
 
     return this.coeficients.level * ((learningScoreProfile1 + learningScoreProfile2) / 2);
@@ -210,6 +224,7 @@ export class MatchScorer implements IMatchScorer {
   ): number {
     // Check if both profiles share the same university
     const sharesUniversity = profile1.user.university === profile2.user.university;
+    // TODO(NOW+1): use ID to compare
 
     // If both profiles share the same university, apply the bonus
     if (sharesUniversity) {
@@ -231,7 +246,7 @@ export class MatchScorer implements IMatchScorer {
     return intersection.size / union.size;
   }
 
-  private computeLearningScore(profile1: Profile, isDiscovery: boolean): number {
+  private computeLearningScore(learningLanguage: LearningLanguage, isDiscovery: boolean): number {
     const levelsCount = isDiscovery ? 6 : 5;
 
     // TODO(herve): validate this matrix
@@ -256,11 +271,12 @@ export class MatchScorer implements IMatchScorer {
       C2: { A0: 6, A1: 6, A2: 5, B1: 4, B2: 4, C1: 4, C2: 4 },
     };
 
-    // TODO(multipleLearningLanguage): manage multiple learning language
-    const level1 = profile1.learningLanguages?.[0]?.level;
+    const level1 = learningLanguage.level;
+
     // We approximate native and mastered language of user equals to a level between B1 and C2.
     // Score matrix have the same score for all these profile2 levels so we take B2 arbitrary here.
     const level2 = ProficiencyLevel.B2
+    // TODO(NOW-0): level2 should be B2 OR level profile 2 if discovery
 
     const level = isDiscovery
       ? discoveryLanguageLevelMatrix[level1][level2]

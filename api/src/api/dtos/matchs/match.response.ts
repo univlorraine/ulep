@@ -2,6 +2,7 @@ import { ApiProperty } from '@nestjs/swagger';
 import { Expose, Type } from 'class-transformer';
 import { ProfileResponse } from '../profiles';
 import { Match } from 'src/core/models/matchs.model';
+import { LearningLanguageResponse } from '../profiles/learningLanguage';
 
 class MatchScoreDto {
   @ApiProperty()
@@ -44,8 +45,8 @@ class MatchScoreDto {
 export class MatchResponse {
   @ApiProperty()
   @Expose({ groups: ['read'] })
-  @Type(() => ProfileResponse)
-  profile: ProfileResponse;
+  @Type(() => LearningLanguageResponse)
+  target: LearningLanguageResponse;
 
   @ApiProperty()
   @Expose({ groups: ['read'] })
@@ -57,7 +58,7 @@ export class MatchResponse {
 
   static fromDomain(instance: Match): MatchResponse {
     return new MatchResponse({
-      profile: ProfileResponse.fromDomain(instance.target),
+      target: LearningLanguageResponse.fromDomain(instance.target, true),
       score: new MatchScoreDto({
         level: instance.scores.level,
         age: instance.scores.age,

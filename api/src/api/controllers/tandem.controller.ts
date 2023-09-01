@@ -5,13 +5,7 @@ import { CollectionResponse } from '../decorators';
 import { CreateTandemUsecase } from '../../core/usecases/tandem/create-tandem.usecase';
 import { GenerateTandemsUsecase } from '../../core/usecases/tandem/generate-tandems.usecase';
 import { GetTandemsUsecase } from '../../core/usecases/tandem/get-tandems.usecase';
-import { TandemStatus } from '../../core/models/tandem.model';
-import {
-  CreateTandemRequest,
-  PaginationDto,
-  ProfileResponse,
-  TandemResponse,
-} from '../dtos';
+import { CreateTandemRequest, PaginationDto, TandemResponse } from '../dtos';
 import { Roles } from '../decorators/roles.decorator';
 import { configuration } from 'src/configuration';
 import { AuthenticationGuard } from '../guards';
@@ -61,12 +55,6 @@ export class TandemController {
   ): Promise<TandemResponse[]> {
     const tandems = await this.generateTandemsUsecase.execute(body);
 
-    return tandems.map(
-      (tandem) =>
-        new TandemResponse({
-          profiles: tandem.profiles.map(ProfileResponse.fromDomain),
-          status: TandemStatus.DRAFT,
-        }),
-    );
+    return tandems.map(TandemResponse.fromDomain);
   }
 }

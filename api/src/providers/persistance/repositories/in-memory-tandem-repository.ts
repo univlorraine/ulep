@@ -30,18 +30,6 @@ export class InMemoryTandemRepository implements TandemRepository {
     return Promise.resolve();
   }
 
-  async hasActiveTandem(profileId: string): Promise<boolean> {
-    const activeTandems = this.#tandems.filter(
-      (tandem) => tandem.status === TandemStatus.ACTIVE,
-    );
-
-    const profileIsInActiveTandem = activeTandems.some((tandem) =>
-      tandem.profiles.some((profile) => profile.id === profileId),
-    );
-
-    return profileIsInActiveTandem;
-  }
-
   async findWhere(props: FindWhereProps): Promise<Collection<Tandem>> {
     const { status, offset, limit } = props;
 
@@ -63,6 +51,14 @@ export class InMemoryTandemRepository implements TandemRepository {
   async getExistingTandems(): Promise<Tandem[]> {
     return this.#tandems.filter(
       (tandem) => tandem.status !== TandemStatus.INACTIVE,
+    );
+  }
+
+  async getTandemsForProfile(profileId: string): Promise<Tandem[]> {
+    return this.#tandems.filter((tandem) =>
+      tandem.learningLanguages.some(
+        (learningLanguage) => learningLanguage.profile?.id === profileId,
+      ),
     );
   }
 }

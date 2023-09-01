@@ -103,8 +103,8 @@ model SuggestedLanguages {
 //  * Users
 //  * ****************************************************
 model Users {
-  id                 String        @id @default(uuid())
-  provider           String        @default("email")
+  id                 String               @id @default(uuid())
+  provider           String               @default("email")
   organization_id    String
   email              String
   firstname          String
@@ -113,17 +113,18 @@ model Users {
   gender             String
   role               String
   status             String?      @default("ACTIVE")
+  deactivated        Boolean              @default(false)
   deactivated_reason String?
   country_code_id    String?
-  image_id           String?       @unique
-  created_at         DateTime      @default(now())
-  updated_at         DateTime      @updatedAt
-  Organization       Organizations @relation(fields: [organization_id], references: [id], onDelete: Cascade)
-  Nationality        CountryCodes? @relation(fields: [country_code_id], references: [id], onDelete: SetNull)
-  Avatar             MediaObjects? @relation(fields: [image_id], references: [id])
+  image_id           String?              @unique
+  created_at         DateTime             @default(now())
+  updated_at         DateTime             @updatedAt
+  Organization       Organizations        @relation(fields: [organization_id], references: [id], onDelete: Cascade)
+  Nationality        CountryCodes?        @relation(fields: [country_code_id], references: [id], onDelete: SetNull)
+  Avatar             MediaObjects?        @relation(fields: [image_id], references: [id])
   Reports            Reports[]
   Profiles           Profiles?
-  SuggestedLanguages  SuggestedLanguages[]
+  SuggestedLanguages SuggestedLanguages[]
 
   @@unique([email])
   @@map("users")
@@ -133,13 +134,13 @@ model Users {
 //  * Media Objects
 //  * ****************************************************
 model MediaObjects {
-  id         String   @id @default(uuid())
+  id         String              @id @default(uuid())
   name       String
   bucket     String
   mime       String
   size       Int
-  created_at DateTime @default(now())
-  updated_at DateTime @updatedAt
+  created_at DateTime            @default(now())
+  updated_at DateTime            @updatedAt
   User       Users?
   Goal       LearningObjectives?
 
@@ -265,7 +266,7 @@ model Profiles {
   MasteredLanguages       MasteredLanguages[]
   Goals                   LearningObjectives[]
   Interests               Interests[]
-  Tandems                 ProfilesOnTandems[]
+  // Tandems                 ProfilesOnTandems[]
 
   @@unique([user_id])
   @@index([native_language_code_id], name: "native_language_code")
@@ -286,12 +287,12 @@ model MasteredLanguages {
 }
 
 model LearningObjectives {
-  id              String      @id @default(uuid())
+  id              String        @id @default(uuid())
   text_content_id String
-  image_id        String?     @unique
-  created_at      DateTime    @default(now())
-  updated_at      DateTime    @updatedAt
-  TextContent     TextContent @relation(fields: [text_content_id], references: [id], onDelete: Cascade)
+  image_id        String?       @unique
+  created_at      DateTime      @default(now())
+  updated_at      DateTime      @updatedAt
+  TextContent     TextContent   @relation(fields: [text_content_id], references: [id], onDelete: Cascade)
   Image           MediaObjects? @relation(fields: [image_id], references: [id])
   Profiles        Profiles[]
 
@@ -300,15 +301,17 @@ model LearningObjectives {
 }
 
 model LearningLanguages {
+  id               String @id @default(uuid())
   profile_id       String
+  tandem_id        String?
   language_code_id String
   created_at       DateTime      @default(now())
   updated_at       DateTime      @updatedAt
   level            String
   Profile          Profiles      @relation(fields: [profile_id], references: [id])
+  Tandem           Tandems?      @relation(fields: [tandem_id], references: [id])
   LanguageCode     LanguageCodes @relation(fields: [language_code_id], references: [id])
 
-  @@id([profile_id, language_code_id])
   @@map("learning_languages")
 }
 
@@ -345,22 +348,12 @@ model InterestCategories {
 //  * Tandems
 //  * ****************************************************
 model Tandems {
-  id         String              @id @default(uuid())
-  status     String              @default("ACTIVE")
-  created_at DateTime            @default(now())
-  updated_at DateTime            @updatedAt
-  Profiles   ProfilesOnTandems[]
+  id                String              @id @default(uuid())
+  status            String              @default("ACTIVE")
+  created_at        DateTime            @default(now())
+  updated_at        DateTime            @updatedAt
+  LearningLanguages LearningLanguages[]
 
   @@index([status], name: "status")
   @@map("tandems")
-}
-
-model ProfilesOnTandems {
-  profile_id String
-  tandem_id  String
-  Profile    Profiles @relation(fields: [profile_id], references: [id], onDelete: Cascade)
-  Tandem     Tandems  @relation(fields: [tandem_id], references: [id], onDelete: Cascade)
-
-  @@id([profile_id, tandem_id])
-  @@map("profiles_on_tandems")
 }

@@ -70,13 +70,15 @@ export class Profile {
 
   constructor(props: CreateProfileProps) {
     const learningLanguages = [...props.learningLanguages].map(
-      (learningLanguage) => ({
-        language: learningLanguage.language,
-        level:
-          learningLanguage.language.code !== JOKER_LANGUAGE_CODE
-            ? learningLanguage.level
-            : ProficiencyLevel.A0,
-      }),
+      (learningLanguage) =>
+        new LearningLanguage({
+          id: learningLanguage.id,
+          language: learningLanguage.language,
+          level:
+            learningLanguage.language.code !== JOKER_LANGUAGE_CODE
+              ? learningLanguage.level
+              : ProficiencyLevel.A0,
+        }),
     );
 
     this.id = props.id;

@@ -114,9 +114,7 @@ export class ProfileController {
       profile: id,
     });
 
-    return tandems.items.map((tandem) =>
-      UserTandemResponse.fromDomain(id, tandem),
-    );
+    return tandems.map((tandem) => UserTandemResponse.fromDomain(id, tandem));
   }
 
   @Get('me')

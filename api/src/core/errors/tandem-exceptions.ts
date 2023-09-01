@@ -1,9 +1,9 @@
 import { DomainError } from './domain.exception';
 
-export class ProfileIsAlreadyInActiveTandemError extends DomainError {
-  constructor(private readonly profileId: string) {
+export class LearningLanguageIsAlreadyInActiveTandemError extends DomainError {
+  constructor(private readonly learningLanguageId: string) {
     super({
-      message: `Profile with id ${profileId} is already in an active tandem`,
+      message: `LearningLanguage with id ${learningLanguageId} is already in an active tandem`,
     });
   }
 }

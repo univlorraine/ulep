@@ -1,6 +1,7 @@
 import * as Prisma from '@prisma/client';
 import {
   LanguageStatus,
+  LearningLanguage,
   LearningType,
   ProficiencyLevel,
   Profile,
@@ -29,7 +30,12 @@ export const ProfilesRelations = {
   },
   NativeLanguage: true,
   MasteredLanguages: { include: { LanguageCode: true } },
-  LearningLanguages: { include: { LanguageCode: true } },
+  LearningLanguages: {
+    include: {
+      LanguageCode: true,
+      Tandem: true,
+    },
+  },
   Campus: true,
 };
 
@@ -72,10 +78,15 @@ export const profileMapper = (instance: ProfileSnapshot): Profile => {
       secondaryUniversityActive:
         instance.NativeLanguage.secondaryUniversityActive,
     })),
-    learningLanguages: instance.LearningLanguages.map((learningLanguage) => ({
-      level: ProficiencyLevel[learningLanguage.level],
-      language: languageMapper(learningLanguage.LanguageCode),
-    })),
+    // TODO(NOW+1): Check if OK to stay like this
+    learningLanguages: instance.LearningLanguages.map(
+      (learningLanguage) =>
+        new LearningLanguage({
+          id: learningLanguage.id,
+          level: ProficiencyLevel[learningLanguage.level],
+          language: languageMapper(learningLanguage.LanguageCode),
+        }),
+    ),
     learningType: LearningType[instance.learning_type],
     meetingFrequency: instance.meeting_frequency,
     sameAge: instance.same_age,

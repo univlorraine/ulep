@@ -1,6 +1,10 @@
 import { Inject, Injectable, Logger } from '@nestjs/common';
 import { Match, Tandem, TandemStatus } from 'src/core/models';
 import {
+  LEARNING_LANGUAGE_REPOSITORY,
+  LearningLanguageRepository,
+} from 'src/core/ports/learning-language.repository';
+import {
   PROFILE_REPOSITORY,
   ProfileRepository,
 } from 'src/core/ports/profile.repository';
@@ -20,6 +24,8 @@ export type GenerateTandemsCommand = {
 
 const TRESHOLD_VIABLE_PAIR = 0;
 
+// TODO(NOW+2): test with more data (2k users ?)
+
 @Injectable()
 export class GenerateTandemsUsecase {
   private readonly scorer: IMatchScorer = new MatchScorer();
@@ -30,84 +36,95 @@ export class GenerateTandemsUsecase {
     private readonly profilesRepository: ProfileRepository,
     @Inject(TANDEM_REPOSITORY)
     private readonly tandemsRepository: TandemRepository,
+    @Inject(LEARNING_LANGUAGE_REPOSITORY)
+    private readonly learningLanguageRepository: LearningLanguageRepository,
     @Inject(UUID_PROVIDER)
     private readonly uuidProvider: UuidProviderInterface,
   ) {}
 
   async execute(command: GenerateTandemsCommand): Promise<Tandem[]> {
-    const profiles =
-      await this.profilesRepository.getProfilesUsableForTandemsGeneration({
-        maxTandemPerProfile: 1, // TODO: change when multi-language
-        universityIds: command.universityIds,
-      });
-    // TODO: check how to manage draft tandems (override them when re-generating ?)
+    const learningLanguagesToPair =
+      await this.learningLanguageRepository.getLearningLanguagesOfUniversitiesNotInActiveTandem(
+        command.universityIds,
+      );
+
+    // TODO(NOW+2): check how to manage draft tandems (override them when re-generating ?)
 
     this.logger.debug(
       `Found ${
-        profiles.length
-      } potential profiles for universities ${command.universityIds.join(
+        learningLanguagesToPair.length
+      } potential learning languages for universities ${command.universityIds.join(
         ', ',
       )}`,
     );
 
+    // TODO(NOW): DB migration clean
+
     // Generate all possible pairs
     const possiblePairs: Match[] = [];
-    for (let i = 0; i < profiles.length; i++) {
-      const profileToPair = profiles[i];
+    for (let i = 0; i < learningLanguagesToPair.length; i++) {
+      const learningLanguageToPair = learningLanguagesToPair[i];
 
-      for (let j = i + 1; j < profiles.length; j++) {
-        const potentialPairProfile = profiles[j];
+      for (let j = i + 1; j < learningLanguagesToPair.length; j++) {
+        const potentialPairLearningLanguage = learningLanguagesToPair[j];
 
+        // TODO(NOW-0): Unit test this ?
         if (
-          profileToPair.user.university.isCentralUniversity() ||
-          potentialPairProfile.user.university.isCentralUniversity()
-        ) {
-          const match = this.scorer.computeMatchScore(
-            profileToPair,
-            potentialPairProfile,
-          );
+          learningLanguageToPair.profile.id !==
+          potentialPairLearningLanguage.profile.id
+        )
+          if (
+            learningLanguageToPair.profile.user.university.isCentralUniversity() ||
+            potentialPairLearningLanguage.profile.user.university.isCentralUniversity()
+          ) {
+            const match = this.scorer.computeMatchScore(
+              learningLanguageToPair,
+              potentialPairLearningLanguage,
+            );
 
-          if (match.total > TRESHOLD_VIABLE_PAIR) {
-            possiblePairs.push(match);
+            if (match.total > TRESHOLD_VIABLE_PAIR) {
+              possiblePairs.push(match);
+            }
           }
-        }
       }
     }
 
     this.logger.debug(`Computed ${possiblePairs.length} potential pairs`);
 
-    const sortedProfiles = profiles
+    // TODO(NOW+2): global routine found 1 pair for each perticipant first ?
+    const sortedLearningLanguages = learningLanguagesToPair
       .sort(
         (a, b) =>
+          // TODO(NOW-0): when demand has been created rather than profile
           // sort by register time
-          a.createdAt?.getTime() - b.createdAt?.getTime(),
+          a.profile.createdAt?.getTime() - b.profile.createdAt?.getTime(),
       )
       .sort((a, b) => {
         // Sort by central university first
         if (
-          a.user.university.isCentralUniversity() ===
-          b.user.university.isCentralUniversity()
+          a.profile.user.university.isCentralUniversity() ===
+          b.profile.user.university.isCentralUniversity()
         ) {
           return 0;
         }
-        return a.user.university.isCentralUniversity() ? -1 : 1;
+        return a.profile.user.university.isCentralUniversity() ? -1 : 1;
       });
 
     let sortedPossiblePairs = possiblePairs.sort((a, b) => b.total - a.total);
-    const pairedProfilesId = new Set();
+    const pairedLearningLanguageIds = new Set();
 
     // Select best pairs by priority order
     const tandems: Tandem[] = [];
-    for (const profileToPair of sortedProfiles) {
-      if (pairedProfilesId.has(profileToPair.id)) {
-        // Pair already found for this profile
+    for (const learningLanguageToPair of sortedLearningLanguages) {
+      if (pairedLearningLanguageIds.has(learningLanguageToPair.id)) {
+        // Pair already found for this learning language
         continue;
       }
 
       const pair = sortedPossiblePairs.find(
         (pair) =>
-          pair.owner.id === profileToPair.id ||
-          pair.target.id === profileToPair.id,
+          pair.owner.id === learningLanguageToPair.id ||
+          pair.target.id === learningLanguageToPair.id,
       );
       if (!pair) {
         // No viable pair found for profile
@@ -116,7 +133,7 @@ export class GenerateTandemsUsecase {
 
       const tandem = new Tandem({
         id: this.uuidProvider.generate(),
-        profiles: [pair.owner, pair.target],
+        learningLanguages: [pair.owner, pair.target],
         status: TandemStatus.DRAFT,
       });
 
@@ -130,8 +147,8 @@ export class GenerateTandemsUsecase {
           possiblePair.target.id !== pair.target.id,
       );
 
-      pairedProfilesId.add(pair.owner.id);
-      pairedProfilesId.add(pair.target.id);
+      pairedLearningLanguageIds.add(pair.owner.id);
+      pairedLearningLanguageIds.add(pair.target.id);
     }
 
     await this.tandemsRepository.saveMany(tandems);

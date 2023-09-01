@@ -2,7 +2,6 @@ import { Injectable } from '@nestjs/common';
 import { Collection, PrismaService } from '@app/common';
 import {
   GetProfilesUsableForTandemsGenerationProps,
-  MaxTandemsCountAndLanguageProps,
   ProfileQueryOrderBy,
   ProfileQueryWhere,
   ProfileRepository,
@@ -39,67 +38,6 @@ export class PrismaProfileRepository implements ProfileRepository {
     }
 
     return profileMapper(entry);
-  }
-
-  async whereMaxTandemsCountAndSpokeLanguage(
-    props: MaxTandemsCountAndLanguageProps,
-  ): Promise<Profile[]> {
-    const result: any[] = await this.prisma.$queryRaw`
-    SELECT p.id
-    FROM profiles p
-    LEFT JOIN (
-      SELECT pot.profile_id, COUNT(*) AS tandem_count
-      FROM profiles_on_tandems pot
-      JOIN tandems t ON pot.tandem_id = t.id
-      WHERE t.status != 'INACTIVE'
-      GROUP BY pot.profile_id
-    ) AS tandems_count ON p.id = tandems_count.profile_id
-    LEFT JOIN mastered_languages ml on ml.profile_id = p.id
-    WHERE (
-      tandems_count.tandem_count < ${props.tandemsCount} OR tandems_count.tandem_count IS NULL
-    ) AND (
-      p.native_language_code_id = ${props.spokenLanguageId} OR ml.language_code_id = ${props.spokenLanguageId}
-    )
-  `;
-
-    const profileIds = result.map((row) => row.id);
-
-    const profiles = await this.prisma.profiles.findMany({
-      where: { id: { in: profileIds } },
-      include: ProfilesRelations,
-    });
-
-    return profiles.map(profileMapper);
-  }
-
-  async getProfilesUsableForTandemsGeneration({
-    maxTandemPerProfile,
-    universityIds,
-  }: GetProfilesUsableForTandemsGenerationProps): Promise<Profile[]> {
-    const result: any[] = await this.prisma.$queryRaw`
-      SELECT p.id
-      FROM profiles p
-      LEFT JOIN users u ON p.user_id = u.id
-      LEFT JOIN (
-        SELECT pot.profile_id, COUNT(*) AS tandem_count
-        FROM profiles_on_tandems pot
-        JOIN tandems t ON pot.tandem_id = t.id
-        WHERE t.status != 'INACTIVE'
-        GROUP BY pot.profile_id
-      ) AS tandems_count ON p.id = tandems_count.profile_id
-      WHERE u.organization_id IN (${Prisma.join(universityIds)}) AND (
-        tandems_count.tandem_count < ${maxTandemPerProfile} OR tandems_count.tandem_count IS NULL
-      )
-    `;
-
-    const profileIds = result.map((row) => row.id);
-
-    const profiles = await this.prisma.profiles.findMany({
-      where: { id: { in: profileIds } },
-      include: ProfilesRelations,
-    });
-
-    return profiles.map(profileMapper);
   }
 
   async create(profile: Profile): Promise<void> {
