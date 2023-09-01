@@ -14,16 +14,30 @@ const payload: UserCommand = {
     lastname: 'lastname',
     university: {
         id: 'universityId',
+        admissionStart: new Date('2023-01-01T00:00:00.000Z'),
+        admissionEnd: new Date('2023-12-31T00:00:00.000Z'),
         name: 'name',
         parent: undefined,
         sites: [],
         timezone: 'timezone',
         website: 'site',
+        codes: [],
+        domains: [],
     },
     status: 'ACTIVE',
 };
 
-const university = new University('id', 'name', false, 'timezone', [{ id: 'id', name: 'Site A' }]);
+const university = new University(
+    'id',
+    'name',
+    false,
+    'timezone',
+    [{ id: 'id', name: 'Site A' }],
+    new Date('2023-01-01T00:00:00.000Z'),
+    new Date('2023-12-31T00:00:00.000Z'),
+    [],
+    []
+);
 const file = new File(['Bits'], 'name');
 describe('createUserUsecase', () => {
     let adapter: DomainHttpAdapter;

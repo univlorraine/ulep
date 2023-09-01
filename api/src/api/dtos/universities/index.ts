@@ -187,11 +187,11 @@ export class UniversityResponse {
   domains: string[];
 
   @Swagger.ApiProperty()
-  @Expose({ groups: ['university:read'] })
+  @Expose({ groups: ['read'] })
   admissionStart: Date;
 
   @Swagger.ApiProperty()
-  @Expose({ groups: ['university:read'] })
+  @Expose({ groups: ['read'] })
   admissionEnd: Date;
 
   @Swagger.ApiPropertyOptional({ type: 'string', format: 'url' })
