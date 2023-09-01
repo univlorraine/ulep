@@ -50,6 +50,7 @@ export const createProfiles = async (
     const learningLanguages = faker.helpers
       .arrayElements(
         languages.filter((language) => language.code !== nativeLanguageCode),
+        { min: 1, max: 3 },
       )
       .map((language) => ({
         language: language,
@@ -68,7 +69,7 @@ export const createProfiles = async (
                 learningLanguage.language.code === language.code,
             ),
         ),
-        faker.number.int({ max: 3 }),
+        { min: 1, max: 3 },
       );
     }
 
