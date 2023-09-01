@@ -1,6 +1,6 @@
 import { DomainError } from '../errors';
 import { LearningLanguagesMustContainsProfiles } from '../errors/match-exceptions';
-import { LearningLanguage } from './language.model';
+import { LearningLanguage } from './learning-language.model';
 
 export type CreateMatchProps = {
   owner: LearningLanguage;

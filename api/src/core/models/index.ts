@@ -12,3 +12,4 @@ export * from './tandem.model';
 export * from './translation.model';
 export * from './university.model';
 export * from './user.model';
+export * from './learning-language.model';

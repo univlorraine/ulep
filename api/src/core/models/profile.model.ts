@@ -1,7 +1,8 @@
 import { ProfileLanguagesException } from '../errors/profile-exceptions';
 import { Campus } from './campus.model';
 import { Interest } from './interest.model';
-import { Language, LearningLanguage } from './language.model';
+import { Language } from './language.model';
+import { LearningLanguage } from './learning-language.model';
 import { LearningObjective } from './objective.model';
 import { ProficiencyLevel } from './proficiency.model';
 import { User } from './user.model';

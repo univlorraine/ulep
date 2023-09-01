@@ -1,7 +1,7 @@
 /* eslint-disable prettier/prettier */
 
 import { InvalidTandemError, LearningLanguagesMustContainsProfilesForTandem } from '../errors/tandem-exceptions';
-import { LearningLanguage } from './language.model';
+import { LearningLanguage } from './learning-language.model';
 
 export enum TandemStatus {
   ACTIVE = 'ACTIVE',
