@@ -1,4 +1,5 @@
 import { DomainError } from '../errors';
+import { LearningLanguagesMustContainsProfiles } from '../errors/match-exceptions';
 import { LearningLanguage } from './language.model';
 
 export type CreateMatchProps = {
@@ -54,7 +55,10 @@ export class Match {
   readonly total: number;
 
   constructor(props: CreateMatchProps) {
-    // TODO(NOW+0): check existence of Profile ?
+    if (!props.owner.profile || !props.target.profile) {
+      throw new LearningLanguagesMustContainsProfiles();
+    }
+
     if (props.owner.profile.id === props.target.profile.id) {
       throw new DomainError({
         message: 'Owner cannot be the same as target',

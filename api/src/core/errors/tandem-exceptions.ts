@@ -8,6 +8,14 @@ export class LearningLanguageIsAlreadyInActiveTandemError extends DomainError {
   }
 }
 
+export class LearningLanguageHasNoAssociatedProfile extends DomainError {
+  constructor(private readonly learningLanguageId: string) {
+    super({
+      message: `LearningLanguage with id ${learningLanguageId} has no associated profile`,
+    });
+  }
+}
+
 export class ProfileIsNotInCentralUniversity extends DomainError {
   constructor(profileId: string) {
     super({
@@ -19,5 +27,14 @@ export class ProfileIsNotInCentralUniversity extends DomainError {
 export class InvalidTandemError extends DomainError {
   constructor(private readonly reason: string) {
     super({ message: reason });
+  }
+}
+
+export class LearningLanguagesMustContainsProfilesForTandem extends DomainError {
+  constructor() {
+    super({
+      message:
+        "Cannot create tandem if learning languages doesn't contains profiles.",
+    });
   }
 }

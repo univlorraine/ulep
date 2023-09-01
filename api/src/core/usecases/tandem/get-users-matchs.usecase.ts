@@ -1,7 +1,10 @@
 import { Collection } from '@app/common';
 import { Inject, Injectable, Logger } from '@nestjs/common';
 import { RessourceDoesNotExist } from 'src/core/errors';
-import { ProfileIsNotInCentralUniversity } from 'src/core/errors/tandem-exceptions';
+import {
+  LearningLanguageHasNoAssociatedProfile,
+  ProfileIsNotInCentralUniversity,
+} from 'src/core/errors/tandem-exceptions';
 import { LearningLanguage, Match, Profile } from 'src/core/models';
 import {
   LEARNING_LANGUAGE_REPOSITORY,
@@ -40,7 +43,9 @@ export class GetUserMatchUsecase {
     );
 
     const owner = learningLanguage.profile;
-    // TODO(NOW+0): verify if should check for profil existence
+    if (!owner) {
+      throw new LearningLanguageHasNoAssociatedProfile(command.id);
+    }
 
     if (!owner.user.university.isCentralUniversity()) {
       throw new ProfileIsNotInCentralUniversity(command.id);

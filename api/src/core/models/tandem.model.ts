@@ -1,6 +1,6 @@
 /* eslint-disable prettier/prettier */
 
-import { InvalidTandemError } from '../errors/tandem-exceptions';
+import { InvalidTandemError, LearningLanguagesMustContainsProfilesForTandem } from '../errors/tandem-exceptions';
 import { LearningLanguage } from './language.model';
 
 export enum TandemStatus {
@@ -46,7 +46,10 @@ export class Tandem {
     const profile1 = this.learningLanguages[0].profile;
     const profile2 = this.learningLanguages[1].profile;
 
-    // TODO(NOW+0): check profile not null
+    if (!profile1 || !profile2) {
+      return new LearningLanguagesMustContainsProfilesForTandem();
+    }
+
     if (profile1.id === profile2.id) {
       throw new InvalidTandemError('Tandem must have two different profiles');
     }

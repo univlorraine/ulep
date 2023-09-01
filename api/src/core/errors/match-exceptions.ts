@@ -13,3 +13,12 @@ export class SameProfilesError extends DomainError {
     super({ message: 'Cannot compute match score between the same profile.' });
   }
 }
+
+export class LearningLanguagesMustContainsProfiles extends DomainError {
+  constructor() {
+    super({
+      message:
+        "Cannot compute match score if learning languages doesn't contains profiles.",
+    });
+  }
+}
