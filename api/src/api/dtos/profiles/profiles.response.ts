@@ -6,7 +6,7 @@ import { UserResponse } from '../users';
 import { ObjectiveResponse } from '../objective';
 import { BiographyDto } from './biography';
 import { CampusResponse } from '../campus';
-import { LearningLanguageResponse } from './learningLanguage';
+import { LearningLanguageResponse } from '../learning-languages';
 
 class NativeLanguageResponse {
   @ApiProperty({ type: 'string', example: 'FR' })

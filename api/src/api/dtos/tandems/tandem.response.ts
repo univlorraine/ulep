@@ -2,9 +2,8 @@ import * as Swagger from '@nestjs/swagger';
 import { Expose } from 'class-transformer';
 import { Tandem, TandemStatus } from '../../../core/models/tandem.model';
 import { ProfileResponse } from '../profiles';
-// TODO(NOW+1): move LearningLanguageResponse into separate file
-import { LearningLanguageResponse } from '../profiles/learningLanguage';
 import { LearningLanguage } from 'src/core/models';
+import { LearningLanguageResponse } from '../learning-languages';
 
 export class TandemResponse {
   @Swagger.ApiProperty({ type: 'string', format: 'uuid', nullable: true })

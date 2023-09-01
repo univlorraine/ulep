@@ -1,22 +1,21 @@
-import * as Swagger from '@nestjs/swagger';
+import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
 import { Expose } from 'class-transformer';
-import { IsEnum, IsNotEmpty, IsOptional, IsString } from 'class-validator';
+import { ProfileResponse } from '../profiles';
 import {
   JOKER_LANGUAGE_CODE,
   LearningLanguage,
   ProficiencyLevel,
-  Profile,
 } from 'src/core/models';
-import { ProfileResponse } from './profiles.response';
+import { IsEnum, IsNotEmpty, IsOptional, IsString } from 'class-validator';
 
 export class LearningLanguageDto {
-  @Swagger.ApiProperty({ type: 'string', example: 'EN' })
+  @ApiProperty({ type: 'string', example: 'EN' })
   @IsString()
   @IsNotEmpty()
   @IsOptional()
   code: string;
 
-  @Swagger.ApiProperty({ enum: ProficiencyLevel, example: 'B2' })
+  @ApiProperty({ enum: ProficiencyLevel, example: 'B2' })
   @IsEnum(ProficiencyLevel)
   level: ProficiencyLevel;
 
@@ -33,19 +32,19 @@ export class LearningLanguageDto {
 }
 
 export class LearningLanguageResponse {
-  @Swagger.ApiProperty({ type: 'string', format: 'uuid' })
+  @ApiProperty({ type: 'string', format: 'uuid' })
   @Expose({ groups: ['read'] })
   id: string;
 
-  @Swagger.ApiPropertyOptional({ type: 'string', example: 'FR' })
+  @ApiPropertyOptional({ type: 'string', example: 'FR' })
   @Expose({ groups: ['read'] })
   code?: string;
 
-  @Swagger.ApiProperty({ type: 'string', example: 'A1' })
+  @ApiProperty({ type: 'string', example: 'A1' })
   @Expose({ groups: ['read'] })
   level: string;
 
-  @Swagger.ApiProperty({ type: Profile })
+  @ApiProperty({ type: ProfileResponse })
   @Expose({ groups: ['read'] })
   profile: ProfileResponse;
 
