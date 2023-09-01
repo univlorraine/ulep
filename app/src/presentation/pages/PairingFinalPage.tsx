@@ -58,8 +58,7 @@ const PairingFinalPage: React.FC = () => {
         if (result instanceof Error) {
             return await showToast({ message: t(result.message), duration: 1000 });
         }
-
-        return history.replace('/home');
+        return (window.location.href = '/home');
     };
 
     return (

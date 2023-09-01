@@ -3,7 +3,10 @@ import {
   CountryFilters,
   CountryRepository,
 } from '../../../core/ports/country.repository';
-import { CountryCode } from 'src/core/models/country-code.model';
+import {
+  CountryCode,
+  CountryWithUniversities,
+} from 'src/core/models/country-code.model';
 import { Collection } from '@app/common';
 
 @Injectable()
@@ -58,6 +61,11 @@ export class InMemoryCountryCodesRepository implements CountryRepository {
       items: countries.slice(offset, offset + limit),
       totalItems: countries.length,
     };
+  }
+
+  async allWithUniversities(): Promise<CountryWithUniversities[]> {
+    //TODO: update this later for tests
+    return [];
   }
 
   async ofId(id: string): Promise<CountryCode> {

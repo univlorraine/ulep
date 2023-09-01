@@ -81,7 +81,7 @@ spec:
             {{- toYaml .Values.resources | nindent 12 }}
           env:
             - name: KEYCLOAK_ADMIN
-              value: "{{ .Values.auth.env.keycloackAdmin }}"
+              value: "{{ .Values.auth.env.keycloakAdmin }}"
             - name: KC_DB
               value: "{{ .Values.auth.env.kcDB }}"
             - name: KC_DB_USERNAME

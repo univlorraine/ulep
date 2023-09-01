@@ -78,57 +78,57 @@ scripts:
           ./gradlew assembleStagingRelease \
             -PversionCode=$BUILD_NUMBER
 workflows:
-    ionic-capacitor-ios-workflow:
-        name: Build and Deploy IOS
-        max_build_duration: 120
-        instance_type: mac_pro
-        integrations:
-            app_store_connect: theTribe
-        environment:
-            ios_signing:
-                distribution_type: app_store
-                bundle_identifier: com.ionic.etandem.staging
-            vars:
-                # Ionic Xcode worskspace and scheme
-                XCODE_WORKSPACE: "ios/App/App.xcworkspace"
-                XCODE_SCHEME: "staging"
-                APP_STORE_APP_ID: $APP_STORE_APP_ID
-            node: 16.14.0
-            xcode: 14.2
-            cocoapods: 1.11.2
-        triggering:
-            events:
-                - push
-            branch_patterns:
-                - pattern: develop
-                  include: true
-                  source: true
-        scripts:
-            - *add_staging_environment_file
-            - *install_pnpm
-            - *install_pnpm_dependency
-            - *pnpm_build
-            - *update_dependency
-            - *install_cocoapod
-            - *setup_xcode
-            - *increment_build_number
-            - *build_ipa
-        artifacts:
-            - $CM_BUILD_DIR/app/build/ios/ipa/*.ipa
-            - /tmp/xcodebuild_logs/*.log
-            - $HOME/Library/Developer/Xcode/DerivedData/**/Build/**/*.app
-            - $HOME/Library/Developer/Xcode/DerivedData/**/Build/**/*.dSYM
-        publishing:
-            app_store_connect:
-                auth: integration
+    # ionic-capacitor-ios-workflow:
+    #     name: Build and Deploy IOS
+    #     max_build_duration: 120
+    #     instance_type: mac_pro
+    #     integrations:
+    #         app_store_connect: theTribe
+    #     environment:
+    #         ios_signing:
+    #             distribution_type: app_store
+    #             bundle_identifier: com.ionic.etandem.staging
+    #         vars:
+    #             # Ionic Xcode worskspace and scheme
+    #             XCODE_WORKSPACE: "ios/App/App.xcworkspace"
+    #             XCODE_SCHEME: "staging"
+    #             APP_STORE_APP_ID: $APP_STORE_APP_ID
+    #         node: 16.14.0
+    #         xcode: 14.2
+    #         cocoapods: 1.11.2
+    #     triggering:
+    #         events:
+    #             - push
+    #         branch_patterns:
+    #             - pattern: develop
+    #               include: true
+    #               source: true
+    #     scripts:
+    #         - *add_staging_environment_file
+    #         - *install_pnpm
+    #         - *install_pnpm_dependency
+    #         - *pnpm_build
+    #         - *update_dependency
+    #         - *install_cocoapod
+    #         - *setup_xcode
+    #         - *increment_build_number
+    #         - *build_ipa
+    #     artifacts:
+    #         - $CM_BUILD_DIR/app/build/ios/ipa/*.ipa
+    #         - /tmp/xcodebuild_logs/*.log
+    #         - $HOME/Library/Developer/Xcode/DerivedData/**/Build/**/*.app
+    #         - $HOME/Library/Developer/Xcode/DerivedData/**/Build/**/*.dSYM
+    #     publishing:
+    #         app_store_connect:
+    #             auth: integration
 
-                # Configuration related to TestFlight (optional)
-                # Note: This action is performed during post-processing.
-                submit_to_testflight: true
+    #             # Configuration related to TestFlight (optional)
+    #             # Note: This action is performed during post-processing.
+    #             submit_to_testflight: true
 
-                # Configuration related to App Store (optional)
-                # Note: This action is performed during post-processing.
-                submit_to_app_store: false
+    #             # Configuration related to App Store (optional)
+    #             # Note: This action is performed during post-processing.
+    #             submit_to_app_store: false
 
     ionic-capacitor-android-workflow:
         name: Build and Deploy Android

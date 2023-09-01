@@ -1,7 +1,8 @@
 import * as Swagger from '@nestjs/swagger';
 import { Expose } from 'class-transformer';
+import { IsString, IsNotEmpty, IsOptional, IsBoolean } from 'class-validator';
 import { UserResponse } from 'src/api/dtos/users';
-import { Language, SuggestedLanguage } from 'src/core/models';
+import { Language, LanguageStatus, SuggestedLanguage } from 'src/core/models';
 
 export class LanguageCodeResponse {
   @Swagger.ApiProperty({ type: 'string', format: 'uuid' })
@@ -96,4 +97,21 @@ export class AllSuggestedLanguageCountResponse {
       count: instance.count,
     });
   }
+}
+
+export class UpdateLanguageCodeRequest {
+  @Swagger.ApiProperty({ type: 'string' })
+  @IsString()
+  @IsNotEmpty()
+  code: string;
+
+  @Swagger.ApiProperty({ type: 'string', enum: LanguageStatus })
+  @IsString()
+  @IsOptional()
+  mainUniversityStatus: LanguageStatus;
+
+  @Swagger.ApiPropertyOptional({ type: 'boolean' })
+  @IsOptional()
+  @IsBoolean()
+  secondaryUniversityActive?: boolean;
 }

@@ -1,7 +1,13 @@
 import { Collection, SortOrder } from '@app/common';
-import { Language, SuggestedLanguage } from '../models';
+import { Language, LanguageStatus, SuggestedLanguage } from '../models';
 
 export const LANGUAGE_REPOSITORY = 'language-code.repository';
+
+export type LanguageQuerySortFilter =
+  | 'code'
+  | 'name'
+  | 'mainUniversityStatus'
+  | 'secondaryUniversityActive';
 
 export type SuggestedLanguageOrderKey =
   | 'email'
@@ -9,6 +15,18 @@ export type SuggestedLanguageOrderKey =
   | 'lastname'
   | 'role'
   | 'code';
+
+export interface LanguageQueryOrderBy {
+  field?: LanguageQuerySortFilter;
+  order: SortOrder;
+}
+
+export type LanguageFilter = LanguageStatus | 'PARTNER';
+
+export type LanguagePagination = {
+  limit?: number;
+  page?: number;
+};
 
 export interface SuggestedLanguageQueryOrderBy {
   field?: SuggestedLanguageOrderKey;
@@ -18,7 +36,11 @@ export interface SuggestedLanguageQueryOrderBy {
 export interface LanguageRepository {
   addRequest(code: string, user: string): Promise<void>;
 
-  all(): Promise<Collection<Language>>;
+  all(
+    orderBy: LanguageQueryOrderBy,
+    status?: LanguageFilter,
+    pagination?: LanguagePagination,
+  ): Promise<Collection<Language>>;
 
   allRequests(
     offset?: number,
@@ -36,4 +58,6 @@ export interface LanguageRepository {
   ofId(id: string): Promise<Language>;
 
   ofCode(code: string): Promise<Language>;
+
+  update(language: Language): Promise<Language>;
 }

@@ -3,7 +3,6 @@ import { ProvidersModule } from 'src/providers/providers.module';
 import { MatchScorer } from './services/MatchScorer';
 import {
   AddLanguageRequestUsecase,
-  AddLanguageUsecase,
   AskForAccountDeletionUsecase,
   CreateInterestCategoryUsecase,
   CreateInterestUsecase,
@@ -19,7 +18,6 @@ import {
   CreateUserUsecase,
   DeleteInterestCategoryUsecase,
   DeleteInterestUsecase,
-  DeleteLanguageUsecase,
   DeleteObjectiveUsecase,
   DeleteQuestionUsecase,
   DeleteReportCategoryUsecase,
@@ -32,11 +30,11 @@ import {
   FindOneObjectiveUsecase,
   GenerateTandemsUsecase,
   GetCategoriesUsecase,
+  GetCountriesUniversitiesUsecase,
   GetCountriesUsecase,
   GetInterestCategoryUsecase,
   GetInterestUsecase,
   GetInterestsByCategoriesUsecase,
-  GetLanguagesUsecase,
   GetLevelsUsecase,
   GetProfileByUserIdUsecase,
   GetProfileUsecase,
@@ -58,9 +56,10 @@ import {
   UpdateCountryStatusUsecase,
   UpdateInterestCategoryUsecase,
   UpdateInterestUsecase,
+  UpdateLanguageCodeUsecase,
   UpdateQuestionUsecase,
   UpdateReportStatusUsecase,
-  UpdateUniversityNameUsecase,
+  UpdateUniversityUsecase,
   UpdateUserUsecase,
   UploadAvatarUsecase,
 } from './usecases';
@@ -73,6 +72,7 @@ import { CountAllSuggestedLanguageUsecase } from 'src/core/usecases/language/cou
 const usecases: Provider[] = [
   // Countries
   GetCountriesUsecase,
+  GetCountriesUniversitiesUsecase,
   UpdateCountryStatusUsecase,
   // Interest
   CreateInterestCategoryUsecase,
@@ -89,6 +89,7 @@ const usecases: Provider[] = [
   CountAllSuggestedLanguageUsecase,
   FindAllLanguageCodeUsecase,
   FindAllSuggestedLanguageUsecase,
+  UpdateLanguageCodeUsecase,
   // Media
   DeleteObjectiveImageUsecase,
   UploadAvatarUsecase,
@@ -131,15 +132,12 @@ const usecases: Provider[] = [
   GetTandemsUsecase,
   GetUserMatchUsecase,
   // Universities
-  AddLanguageUsecase,
   CreatePartnerUniversityUsecase,
   CreateUniversityUsecase,
-  DeleteLanguageUsecase,
   DeleteUniversityUsecase,
-  GetLanguagesUsecase,
   GetUniversitiesUsecase,
   GetUniversityUsecase,
-  UpdateUniversityNameUsecase,
+  UpdateUniversityUsecase,
   // Users
   AskForAccountDeletionUsecase,
   CreateUserUsecase,

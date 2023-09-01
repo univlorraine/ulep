@@ -1,6 +1,5 @@
 import { Collection } from '@app/common';
 import { Injectable } from '@nestjs/common';
-import { Language } from 'src/core/models/language.model';
 import { University } from 'src/core/models/university.model';
 import { UniversityRepository } from 'src/core/ports/university.repository';
 
@@ -33,6 +32,10 @@ export class InMemoryUniversityRepository implements UniversityRepository {
     });
   }
 
+  async findUniversityCentral(): Promise<University> {
+    return this.#universities.find((university) => !university.parent);
+  }
+
   async havePartners(id: string): Promise<boolean> {
     return this.#universities.some((university) => university.parent === id);
   }
@@ -45,43 +48,14 @@ export class InMemoryUniversityRepository implements UniversityRepository {
     return this.#universities.find((university) => university.name === name);
   }
 
-  async addLanguage(language: Language, university: University): Promise<void> {
+  async update(university: University): Promise<University> {
     const index = this.#universities.findIndex((u) => u.id === university.id);
 
     if (index !== -1) {
       const university = this.#universities[index];
-      this.#universities[index] = new University({
-        ...university,
-        languages: [...university.languages, language],
-      });
+      this.#universities[index] = university;
     }
-  }
-
-  async removeLanguage(
-    language: Language,
-    university: University,
-  ): Promise<void> {
-    const index = this.#universities.findIndex((u) => u.id === university.id);
-
-    if (index !== -1) {
-      const university = this.#universities[index];
-      this.#universities[index] = new University({
-        ...university,
-        languages: university.languages.filter((l) => l.code !== language.code),
-      });
-    }
-  }
-
-  async update(id: string, name: string): Promise<void> {
-    const index = this.#universities.findIndex((u) => u.id === id);
-
-    if (index !== -1) {
-      const university = this.#universities[index];
-      this.#universities[index] = new University({
-        ...university,
-        name,
-      });
-    }
+    return university;
   }
 
   async remove(id: string): Promise<void> {

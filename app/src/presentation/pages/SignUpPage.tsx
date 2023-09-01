@@ -25,7 +25,6 @@ const SignUpPage: React.FC = () => {
     const [diplome, setDiplome] = useState<string>('');
     const [selectedRole, setSelectedRole] = useState<Role>();
     const [staffFunction, setStaffFunction] = useState<string>('');
-    const [universities, setUniversities] = useState<DropDownItem<University>[]>([]);
     const [university, setUniversity] = useState<University>();
     const [displayError, setDisplayError] = useState<boolean>(false);
 
@@ -43,15 +42,12 @@ const SignUpPage: React.FC = () => {
             return await showToast({ message: t(universityResult.message), duration: 1000 });
         }
 
-        setCountries(
+        return setCountries(
             countriesResult.map((country) => ({
                 title: `${country.emoji ? country.emoji + ' ' : ''}${country.name}`,
                 value: country,
             }))
         );
-        setUniversity(universityResult[0]);
-
-        return setUniversities(universityResult.map((university) => ({ title: university.name, value: university })));
     };
 
     const continueSignUp = () => {
@@ -110,21 +106,21 @@ const SignUpPage: React.FC = () => {
                 <div className="large-margin-top">
                     <Dropdown<University>
                         onChange={setUniversity}
-                        options={universities}
+                        options={
+                            country
+                                ? country.universities.map((university) => ({
+                                      title: university.name,
+                                      value: university,
+                                  }))
+                                : []
+                        }
                         title={t('signup_page.university_title')}
                     />
                 </div>
 
-                {selectedRole !== 'staff' && (
-                    <button
-                        className="tertiary-button large-margin-vertical"
-                        onClick={() => history.push('./signup/informations')}
-                    >
-                        {t('signup_page.sso_button')}
-                    </button>
-                )}
-
-                {selectedRole === 'student' && <div className={styles.separator} />}
+                <button className="tertiary-button large-margin-vertical" onClick={() => undefined}>
+                    {t('signup_page.sso_button')}
+                </button>
 
                 {selectedRole && (
                     <div className="large-margin-top">

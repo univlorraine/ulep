@@ -1,7 +1,9 @@
 import { faker } from '@faker-js/faker';
 import {
+  CountryCode,
   Gender,
   Language,
+  LanguageStatus,
   LearningType,
   ProficiencyLevel,
   Profile,
@@ -13,6 +15,7 @@ import {
 } from 'src/core/models';
 import { Campus } from 'src/core/models/campus.model';
 import { GenerateTandemsUsecase } from 'src/core/usecases';
+import { InMemoryCountryCodesRepository } from 'src/providers/persistance/repositories/in-memory-country-repository';
 import { InMemoryProfileRepository } from 'src/providers/persistance/repositories/in-memory-profile-repository';
 import { InMemoryTandemRepository } from 'src/providers/persistance/repositories/in-memory-tandem-repository';
 import { UuidProvider } from 'src/providers/services/uuid.provider';
@@ -52,9 +55,11 @@ const checkTandemArrayNotContainsTandem = (
 
 describe('GenerateTandem UC', () => {
   ///////// Repositories /////////
+  const countryRepository = new InMemoryCountryCodesRepository();
   const profilesRepository = new InMemoryProfileRepository();
   const tandemsRepository = new InMemoryTandemRepository();
   const uuidProvider = new UuidProvider();
+
   const uc = new GenerateTandemsUsecase(
     profilesRepository,
     tandemsRepository,
@@ -66,21 +71,29 @@ describe('GenerateTandem UC', () => {
     id: faker.string.uuid(),
     code: 'fr',
     name: 'french',
+    mainUniversityStatus: LanguageStatus.PRIMARY,
+    secondaryUniversityActive: true,
   });
   const english = new Language({
     id: faker.string.uuid(),
     code: 'en',
     name: 'english',
+    mainUniversityStatus: LanguageStatus.PRIMARY,
+    secondaryUniversityActive: true,
   });
   const spanish = new Language({
     id: faker.string.uuid(),
     code: 'es',
     name: 'spanish',
+    mainUniversityStatus: LanguageStatus.PRIMARY,
+    secondaryUniversityActive: true,
   });
   const deutch = new Language({
     id: faker.string.uuid(),
     code: 'de',
     name: 'deutch',
+    mainUniversityStatus: LanguageStatus.PRIMARY,
+    secondaryUniversityActive: true,
   });
 
   const lorraineCampus = new Campus({
@@ -93,14 +106,26 @@ describe('GenerateTandem UC', () => {
     name: 'campus Strasbourg',
     universityId: 'university1',
   });
+  const country = {
+    id: 'id',
+    emoji: '👽',
+    name: 'France',
+    code: 'fr',
+    enable: true,
+  } as CountryCode;
+
+  countryRepository.init([country]);
+
   const centralUniversity = new University({
     id: 'university1',
+    country: country,
     name: 'university 1',
     campus: [lorraineCampus, strasbourgCampus],
-    languages: [french, english, spanish, deutch],
     timezone: 'GMT+1',
     admissionStart: new Date(),
     admissionEnd: new Date(),
+    codes: [],
+    domains: [],
   });
 
   const french1 = new Profile({
@@ -986,10 +1011,12 @@ describe('GenerateTandem UC', () => {
       name: 'Subsidiary university 1',
       parent: centralUniversity.id,
       campus: [campus1, campus2],
-      languages: [french, english, deutch],
       timezone: 'GMT+1',
       admissionStart: new Date(),
       admissionEnd: new Date(),
+      country,
+      codes: [],
+      domains: [],
     });
     const campusMadrid = new Campus({
       id: 'campusMadrid',
@@ -1001,10 +1028,12 @@ describe('GenerateTandem UC', () => {
       name: 'Subsidiary university 2',
       parent: centralUniversity.id,
       campus: [campusMadrid],
-      languages: [spanish],
       timezone: 'GMT+1',
       admissionStart: new Date(),
       admissionEnd: new Date(),
+      country,
+      codes: [],
+      domains: [],
     });
 
     const studentSubsidiary1 = new Profile({
@@ -1110,10 +1139,12 @@ describe('GenerateTandem UC', () => {
       name: 'Subsidiary university 1',
       parent: centralUniversity.id,
       campus: [],
-      languages: [french, english, deutch],
       timezone: 'GMT+1',
       admissionStart: new Date(),
       admissionEnd: new Date(),
+      country,
+      codes: [],
+      domains: [],
     });
 
     const profile1 = new Profile({
@@ -1128,7 +1159,6 @@ describe('GenerateTandem UC', () => {
         role: Role.STUDENT,
         country: 'FR',
         avatar: null,
-        deactivated: false,
         deactivatedReason: '',
       }),
       id: 'FR_SUB',
@@ -1165,7 +1195,6 @@ describe('GenerateTandem UC', () => {
         role: Role.STUDENT,
         country: 'EN',
         avatar: null,
-        deactivated: false,
         deactivatedReason: '',
       }),
       id: 'EN_SUB',
@@ -1211,10 +1240,12 @@ describe('GenerateTandem UC', () => {
       name: 'Subsidiary university 1',
       parent: centralUniversity.id,
       campus: [],
-      languages: [french, english, deutch],
       timezone: 'GMT+1',
       admissionStart: new Date(),
       admissionEnd: new Date(),
+      country,
+      codes: [],
+      domains: [],
     });
     const firstUser = new Profile({
       user: new User({
@@ -1228,7 +1259,6 @@ describe('GenerateTandem UC', () => {
         role: Role.STUDENT,
         country: 'FR',
         avatar: null,
-        deactivated: false,
         deactivatedReason: '',
       }),
       id: 'FR_1',
@@ -1267,7 +1297,6 @@ describe('GenerateTandem UC', () => {
         role: Role.STAFF,
         country: 'FR',
         avatar: null,
-        deactivated: false,
         deactivatedReason: '',
       }),
       id: 'FR_2',
@@ -1305,7 +1334,6 @@ describe('GenerateTandem UC', () => {
         role: Role.STUDENT,
         country: 'EN',
         avatar: null,
-        deactivated: false,
         deactivatedReason: '',
       }),
       id: 'EN_1',

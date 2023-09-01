@@ -26,7 +26,7 @@ const PairingLaguagesPage: React.FC = () => {
     }
 
     const getLanguages = async () => {
-        let result = await getAllLanguages.execute(profileSignUp.university?.id);
+        let result = await getAllLanguages.execute('PRIMARY');
 
         if (result instanceof Error) {
             return await showToast({ message: t(result.message), duration: 1000 });

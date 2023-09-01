@@ -11,7 +11,6 @@ const payload: UserCommand = {
     lastname: 'lastname',
     university: {
         id: 'universityId',
-        languages: [{ id: 'id', code: 'FR', name: 'name' }],
         name: 'name',
         parent: undefined,
         sites: [],

@@ -9,14 +9,15 @@ generator client {
 }
 
 model CountryCodes {
-  id         String   @id @default(uuid())
-  name       String
-  code       String
-  emoji      String
-  enable     Boolean  @default(true)
-  created_at DateTime @default(now())
-  updated_at DateTime @updatedAt
-  Users      Users[]
+  id            String   @id @default(uuid())
+  name          String
+  code          String
+  emoji         String
+  enable        Boolean  @default(true)
+  created_at    DateTime @default(now())
+  updated_at    DateTime @updatedAt
+  Users         Users[]
+  Organization  Organizations[]
 
   @@unique([name])
   @@unique([code])
@@ -25,18 +26,19 @@ model CountryCodes {
 }
 
 model LanguageCodes {
-  id                 String               @id @default(uuid())
-  name               String
-  code               String
-  created_at         DateTime             @default(now())
-  updated_at         DateTime             @updatedAt
-  Organisations      Organizations[]
-  NativeLanguages    Profiles[]           @relation("NativeLanguage")
-  MasteredLanguages  MasteredLanguages[]
-  SuggestedLanguages SuggestedLanguages[]
-  Translations       Translations[]
-  TextContents       TextContent[]
-  LearningLanguages  LearningLanguages[]
+  id                         String               @id @default(uuid())
+  name                       String
+  code                       String
+  created_at                 DateTime             @default(now())
+  updated_at                 DateTime             @updatedAt
+  mainUniversityStatus       String               @default("UNACTIVE")
+  secondaryUniversityActive  Boolean              @default(false)
+  NativeLanguages            Profiles[]           @relation("NativeLanguage")
+  MasteredLanguages          MasteredLanguages[]
+  SuggestedLanguages         SuggestedLanguages[]
+  Translations               Translations[]
+  TextContents               TextContent[]
+  LearningLanguages          LearningLanguages[]
 
   @@unique([name])
   @@unique([code])
@@ -44,26 +46,28 @@ model LanguageCodes {
   @@map("language_codes")
 }
 
+
 //  * ****************************************************
 //  * Universities
 //  * ****************************************************
 model Organizations {
-  id                 String          @id @default(uuid())
-  parent_id          String?
-  name               String
-  timezone           String
-  admissionStartDate DateTime
-  admissionEndDate   DateTime
-  created_at         DateTime        @default(now())
-  updated_at         DateTime        @updatedAt
-  website            String?
-  // Resource URL
-  resource           String?
-  Parent             Organizations?  @relation("Organizations", fields: [parent_id], references: [id], onDelete: Cascade)
-  Childrens          Organizations[] @relation("Organizations")
-  Users              Users[]
-  Languages          LanguageCodes[]
-  Places             Places[]
+  id                    String          @id @default(uuid())
+  parent_id             String?
+  country_code_id       String
+  name                  String
+  codes                 String[]        @default([])
+  domains               String[]        @default([])
+  timezone              String
+  admissionStartDate    DateTime
+  admissionEndDate      DateTime
+  created_at            DateTime        @default(now())
+  updated_at            DateTime        @updatedAt
+  website               String?
+  Parent                Organizations?  @relation("Organizations", fields: [parent_id], references: [id], onDelete: Cascade)
+  Childrens             Organizations[] @relation("Organizations")
+  Country               CountryCodes    @relation(fields: [country_code_id], references: [id])
+  Users                 Users[]
+  Places                Places[]
 
   @@unique([name])
   @@map("organizations")

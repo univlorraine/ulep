@@ -12,11 +12,13 @@ import * as Swagger from '@nestjs/swagger';
 import { Collection } from '@app/common';
 import { CollectionResponse } from '../decorators';
 import {
+  GetCountriesUniversitiesUsecase,
   GetCountriesUsecase,
   UpdateCountryStatusUsecase,
 } from 'src/core/usecases';
 import {
   CountryResponse,
+  CountryUniversitiesResponse,
   GetCountriesQueryParams,
   UpdateCountryRequest,
 } from '../dtos';
@@ -28,6 +30,7 @@ import { AuthenticationGuard } from '../guards';
 @Swagger.ApiTags('Countries')
 export class CountryController {
   constructor(
+    private readonly getCountriesUniversitiesUsecase: GetCountriesUniversitiesUsecase,
     private readonly getCountriesUsecase: GetCountriesUsecase,
     private readonly updateCountryStatusUsecase: UpdateCountryStatusUsecase,
   ) {}
@@ -46,6 +49,21 @@ export class CountryController {
       items: countries.items.map(CountryResponse.fromDomain),
       totalItems: countries.totalItems,
     });
+  }
+
+  @Get('universities')
+  @Swagger.ApiOperation({
+    summary: 'Retrieve the collection of Country with universities.',
+  })
+  @CollectionResponse(CountryUniversitiesResponse)
+  async getCollectionCountryWithUniversities(): Promise<
+    CountryUniversitiesResponse[]
+  > {
+    const countriesWithUniversities =
+      await this.getCountriesUniversitiesUsecase.execute();
+    return countriesWithUniversities.map((country) =>
+      CountryUniversitiesResponse.fromDomain(country),
+    );
   }
 
   @Patch(':id')

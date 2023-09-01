@@ -124,10 +124,7 @@ export class CreateProfileUsecase {
         );
 
         if (learningLanguage.code !== JOKER_LANGUAGE_CODE) {
-          this.assertLanguageIsSupportedByUniversity(
-            user.university,
-            learningLanguage.code,
-          );
+          this.assertLanguageIsSupportedByUniversity(user.university, language);
         }
 
         return {
@@ -189,18 +186,17 @@ export class CreateProfileUsecase {
       throw new RessourceDoesNotExist('Language does not exist');
     }
 
-    return { ...language };
+    return language;
   }
 
   private assertLanguageIsSupportedByUniversity(
     university: University,
-    languageCode: string,
+    language: Language,
   ): void {
-    const languages = university.languages.map((language) =>
-      language.code.toUpperCase(),
-    );
-
-    if (!languages.includes(languageCode.toUpperCase())) {
+    if (
+      (university.parent && !language.secondaryUniversityActive) ||
+      (!university.parent && language.mainUniversityStatus !== 'PRIMARY')
+    ) {
       throw new UnsuportedLanguageException(
         `The language is not supported by the university`,
       );
