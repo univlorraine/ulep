@@ -15,6 +15,7 @@ import {
   CreateTandemUsecase,
   CreateTestUsecase,
   CreateUniversityUsecase,
+  CreateUnsubscribeReportUsecase,
   CreateUserUsecase,
   DeleteInterestCategoryUsecase,
   DeleteInterestUsecase,
@@ -114,6 +115,7 @@ const usecases: Provider[] = [
   UpdateQuestionUsecase,
   // Reports
   CreateReportCategoryUsecase,
+  CreateUnsubscribeReportUsecase,
   CreateReportUsecase,
   DeleteReportCategoryUsecase,
   DeleteReportUsecase,

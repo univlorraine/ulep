@@ -31,6 +31,8 @@ export type CreateReportProps = {
   user: User;
 };
 
+export const UNSUBSCRIBE_CATEGORY_REPORT = 'Désinscription';
+
 export class Report {
   readonly id: string;
 

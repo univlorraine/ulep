@@ -19,6 +19,7 @@ import { configuration } from 'src/configuration';
 import {
   CreateReportCategoryUsecase,
   CreateReportUsecase,
+  CreateUnsubscribeReportUsecase,
   DeleteReportCategoryUsecase,
   DeleteReportUsecase,
   GetCategoriesUsecase,
@@ -46,6 +47,7 @@ export class ReportController {
 
   constructor(
     private readonly createReportCategoryUsecase: CreateReportCategoryUsecase,
+    private readonly createUnsubscribeUsecase: CreateUnsubscribeReportUsecase,
     private readonly createReportUsecase: CreateReportUsecase,
     private readonly findReportCategoriesUsecase: GetCategoriesUsecase,
     private readonly getReportsByStatusUsecase: GetReportsByStatusUsecase,
@@ -104,6 +106,20 @@ export class ReportController {
   ) {
     const instance = await this.createReportUsecase.execute({
       ...body,
+      owner: user.sub,
+    });
+
+    return ReportResponse.fromDomain(instance);
+  }
+
+  @Post('unsubscribe')
+  @UseGuards(AuthenticationGuard)
+  @Swagger.ApiOperation({
+    summary: 'Create a new Unsubscription request.',
+  })
+  @Swagger.ApiCreatedResponse({ type: ReportResponse })
+  async createUnsubscribe(@CurrentUser() user: KeycloakUser) {
+    const instance = await this.createUnsubscribeUsecase.execute({
       owner: user.sub,
     });
 
