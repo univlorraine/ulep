@@ -72,7 +72,7 @@ export class CampusController {
   @Put()
   @Roles(configuration().adminRole)
   @UseGuards(AuthenticationGuard)
-  @Swagger.ApiOperation({ summary: 'Updates a Campus ressource.' })
+  @Swagger.ApiOperation({ summary: 'Update a Campus ressource.' })
   @Swagger.ApiOkResponse()
   async update(@Body() request: UpdateCampusRequest) {
     const campus = await this.updateCampusUsecase.execute({
@@ -85,7 +85,7 @@ export class CampusController {
   @Delete(':id')
   @Roles(configuration().adminRole)
   @UseGuards(AuthenticationGuard)
-  @Swagger.ApiOperation({ summary: 'Deletes a Campus ressource.' })
+  @Swagger.ApiOperation({ summary: 'Delete a Campus ressource.' })
   @Swagger.ApiOkResponse()
   remove(@Param('id') id: string) {
     return this.deleteCampusUsecase.execute({ id });
