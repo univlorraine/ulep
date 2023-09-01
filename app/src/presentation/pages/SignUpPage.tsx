@@ -15,7 +15,7 @@ import styles from './css/SignUp.module.css';
 
 const SignUpPage: React.FC = () => {
     const { t } = useTranslation();
-    const { configuration, getAllCountries, getAllUniversities } = useConfig();
+    const { configuration, getAllCountries } = useConfig();
     const updateProfileSignUp = useStoreActions((state) => state.updateProfileSignUp);
     const [showToast] = useIonToast();
     const history = useHistory();
@@ -29,17 +29,10 @@ const SignUpPage: React.FC = () => {
     const [displayError, setDisplayError] = useState<boolean>(false);
 
     const getSignUpData = async () => {
-        const [countriesResult, universityResult] = await Promise.all([
-            getAllCountries.execute(),
-            getAllUniversities.execute(),
-        ]);
+        const countriesResult = await getAllCountries.execute();
 
         if (countriesResult instanceof Error) {
             return await showToast({ message: t(countriesResult.message), duration: 1000 });
-        }
-
-        if (universityResult instanceof Error) {
-            return await showToast({ message: t(universityResult.message), duration: 1000 });
         }
 
         return setCountries(
@@ -61,13 +54,17 @@ const SignUpPage: React.FC = () => {
         ) {
             return setDisplayError(true);
         }
+        const now = new Date();
+        if (university.admissionEnd < now || university.admissionStart > now) {
+            return setDisplayError(true);
+        }
 
         updateProfileSignUp({ country, department, diplome, role: selectedRole, staffFunction, university });
 
         return history.push('/signup/informations');
     };
 
-    const oncountrySelected = (country: Country) => {
+    const onCountrySelected = (country: Country) => {
         setCountry(country);
         return setUniversity(country.universities[0]);
     };
@@ -101,7 +98,7 @@ const SignUpPage: React.FC = () => {
 
                 <div className="large-margin-top">
                     <Dropdown<Country>
-                        onChange={oncountrySelected}
+                        onChange={onCountrySelected}
                         options={countries}
                         placeholder={t('signup_page.country_placeholder')}
                         title={t('global.country')}
