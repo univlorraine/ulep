@@ -1,4 +1,4 @@
-import { Profile, Tandem, User } from 'src/core/models';
+import { Profile, User } from 'src/core/models';
 import { ProficiencyLevel } from './proficiency.model';
 
 export enum LanguageStatus {

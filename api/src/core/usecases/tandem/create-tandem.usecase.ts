@@ -10,9 +10,10 @@ import {
   TANDEM_REPOSITORY,
   TandemRepository,
 } from 'src/core/ports/tandems.repository';
+import { UUID_PROVIDER } from 'src/core/ports/uuid.provider';
+import { UuidProvider } from 'src/providers/services/uuid.provider';
 
 export type CreateTandemCommand = {
-  id: string;
   learningLanguages: string[];
   status: TandemStatus;
 };
@@ -26,10 +27,11 @@ export class CreateTandemUsecase {
     private readonly learningLanguageRepository: LearningLanguageRepository,
     @Inject(TANDEM_REPOSITORY)
     private readonly tandemsRepository: TandemRepository,
+    @Inject(UUID_PROVIDER)
+    private readonly uuidProvider: UuidProvider,
   ) {}
 
-  // TODO(NOW+0): no ID in command
-  async execute(command: CreateTandemCommand): Promise<void> {
+  async execute(command: CreateTandemCommand): Promise<Tandem> {
     const learningLanguages = await Promise.all(
       command.learningLanguages.map((id) =>
         this.tryToFindLearningLanguages(id),
@@ -45,12 +47,14 @@ export class CreateTandemUsecase {
     );
 
     const tandem = Tandem.create({
-      id: command.id,
+      id: this.uuidProvider.generate(),
       learningLanguages,
       status: command.status,
     });
 
     await this.tandemsRepository.save(tandem);
+
+    return tandem;
   }
 
   private async tryToFindLearningLanguages(id: string) {

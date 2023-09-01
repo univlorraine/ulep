@@ -42,8 +42,9 @@ export class TandemController {
   @Roles(configuration().adminRole)
   @UseGuards(AuthenticationGuard)
   @Swagger.ApiOperation({ summary: 'Creates a Tandem ressource.' })
-  async create(@Body() body: CreateTandemRequest): Promise<void> {
-    await this.createTandemUsecase.execute(body);
+  async create(@Body() body: CreateTandemRequest): Promise<TandemResponse> {
+    const tandem = await this.createTandemUsecase.execute(body);
+    return TandemResponse.fromDomain(tandem);
   }
 
   @Post('generate')
