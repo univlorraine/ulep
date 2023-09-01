@@ -70,6 +70,7 @@ import { CountAllSuggestedLanguageUsecase } from 'src/core/usecases/language/cou
 import {
   CreateCampusUsecase,
   DeleteCampusUsecase,
+  GetCampusByIdUsecase,
   GetCampusUsecase,
   UpdateCampusUsecase,
 } from 'src/core/usecases/campus';
@@ -79,6 +80,7 @@ const usecases: Provider[] = [
   CreateCampusUsecase,
   DeleteCampusUsecase,
   GetCampusUsecase,
+  GetCampusByIdUsecase,
   UpdateCampusUsecase,
   // Countries
   GetCountriesUsecase,

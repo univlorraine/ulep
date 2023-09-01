@@ -5,6 +5,7 @@ import {
   Delete,
   Get,
   Param,
+  ParseUUIDPipe,
   Post,
   Put,
   UseGuards,
@@ -16,6 +17,7 @@ import { AuthenticationGuard } from '../guards';
 import {
   CreateCampusUsecase,
   DeleteCampusUsecase,
+  GetCampusByIdUsecase,
   GetCampusUsecase,
   UpdateCampusUsecase,
 } from 'src/core/usecases/campus';
@@ -29,6 +31,7 @@ import {
 export class CampusController {
   constructor(
     private readonly getCampusUsecase: GetCampusUsecase,
+    private readonly getCampusByIdUsecase: GetCampusByIdUsecase,
     private readonly createCampusUsecase: CreateCampusUsecase,
     private readonly updateCampusUsecase: UpdateCampusUsecase,
     private readonly deleteCampusUsecase: DeleteCampusUsecase,
@@ -41,6 +44,15 @@ export class CampusController {
   @Swagger.ApiCreatedResponse({ type: CampusResponse })
   async create(@Body() body: CreateCampusRequest) {
     const campus = await this.createCampusUsecase.execute(body);
+
+    return CampusResponse.fromCampus(campus);
+  }
+
+  @Get(':id')
+  @Swagger.ApiOperation({ summary: 'Get a Campus ressource.' })
+  @Swagger.ApiOkResponse({ type: CampusResponse, isArray: true })
+  async findCampusById(@Param('id', ParseUUIDPipe) id: string) {
+    const campus = await this.getCampusByIdUsecase.execute({ id });
 
     return CampusResponse.fromCampus(campus);
   }

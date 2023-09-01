@@ -23,10 +23,12 @@ const EditInterestCategory = () => {
                 'interests/categories',
                 { data: payload },
                 {
-                    onSettled: () => {
-                        redirect('/interests/categories');
+                    onSettled: (data: any, error: Error) => {
+                        if (!error) {
+                            return redirect('/interests/categories');
+                        }
 
-                        return notify('interest_categories.create.error');
+                        return notify('interest_categories.update.error');
                     },
                 }
             );
