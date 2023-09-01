@@ -28,9 +28,9 @@ export class CreateCampusUsecase {
   ) {}
 
   async execute(command: CreateCampusCommand) {
-    const centrale = await this.universityRepository.findUniversityCentral();
+    const central = await this.universityRepository.findUniversityCentral();
 
-    if (!centrale) {
+    if (!central) {
       throw new DomainError({ message: 'Central university does not exists' });
     }
 
@@ -38,7 +38,7 @@ export class CreateCampusUsecase {
       new Campus({
         id: this.uuidProvider.generate(),
         name: command.name,
-        universityId: centrale.id,
+        universityId: central.id,
       }),
     );
   }
