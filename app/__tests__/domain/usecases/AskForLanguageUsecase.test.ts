@@ -45,6 +45,15 @@ describe('getAllCountries', () => {
         expect(result).toBeInstanceOf(Error);
     });
 
+    it('execute 409 response without parsed body', async () => {
+        expect.assertions(1);
+
+        adapter.mockError({ status: 409 });
+
+        const result = await usecase.execute(languagePayload);
+        expect(result).toBeInstanceOf(Error);
+    });
+
     it('execute must return an error if adapter return an error without status', async () => {
         expect.assertions(1);
         adapter.mockError({});
