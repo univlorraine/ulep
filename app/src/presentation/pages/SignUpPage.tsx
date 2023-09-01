@@ -67,6 +67,11 @@ const SignUpPage: React.FC = () => {
         return history.push('/signup/informations');
     };
 
+    const oncountrySelected = (country: Country) => {
+        setCountry(country);
+        return setUniversity(country.universities[0]);
+    };
+
     useEffect(() => {
         getSignUpData();
     }, []);
@@ -96,7 +101,7 @@ const SignUpPage: React.FC = () => {
 
                 <div className="large-margin-top">
                     <Dropdown<Country>
-                        onChange={setCountry}
+                        onChange={oncountrySelected}
                         options={countries}
                         placeholder={t('signup_page.country_placeholder')}
                         title={t('global.country')}
@@ -118,9 +123,11 @@ const SignUpPage: React.FC = () => {
                     />
                 </div>
 
-                <button className="tertiary-button large-margin-vertical" onClick={() => undefined}>
-                    {t('signup_page.sso_button')}
-                </button>
+                {university && university.isCentral && (
+                    <button className="tertiary-button large-margin-vertical" onClick={() => undefined}>
+                        {t('signup_page.sso_button')}
+                    </button>
+                )}
 
                 {selectedRole && (
                     <div className="large-margin-top">
