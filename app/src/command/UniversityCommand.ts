@@ -11,6 +11,8 @@ interface UniversityCommand {
     website: string;
     admissionStart: Date;
     admissionEnd: Date;
+    codes: string[];
+    domains: string[];
 }
 
 export const universityCommandToDomain = (command: UniversityCommand) => {
@@ -21,7 +23,9 @@ export const universityCommandToDomain = (command: UniversityCommand) => {
         command.timezone,
         command.sites.map((site) => new Campus(site.id, site.name)),
         new Date(command.admissionStart),
-        new Date(command.admissionEnd)
+        new Date(command.admissionEnd),
+        command.codes,
+        command.domains
     );
 };
 

@@ -220,3 +220,11 @@ export const getNextLevel = (level: CEFR) => {
             return 'A0';
     }
 };
+
+export const isDomainValid = (email: string, domains: string[]) => {
+    return domains.some((domain) => email.includes(domain));
+};
+
+export const isCodeValid = (code: string, codesToCheck: string[]) => {
+    return codesToCheck.some((codeToCheck) => codeToCheck === code);
+};

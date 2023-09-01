@@ -327,10 +327,13 @@
         "validate_button": "Valider et continuer"
     },
     "signup_informations_page": {
+        "code": "Code (Si vous n'avez pas d'email universitaire)",
         "confirm_password": "Confirme ton mot de passe",
         "cgu": "Accepter les conditions d'utilisation et la politique de confidentialité pour utiliser l'application.",
         "error_age": "Veuillez saisir un âge valide",
+        "error_code": "Veuillez saisir un code valide",
         "error_confirm_password": "Les mots de passes ne sont pas identiques",
+        "error_domain": "Veuillez saisir une adresse email valide",
         "error_email": "Veuillez saisir un email valide",
         "error_firstname": "Veuillez saisir un prénom valide",
         "error_gender": "Veuillez choisir un genre",
@@ -339,6 +342,7 @@
         "photo": "Ajouter une photo",
         "photo_selected": "Modifier",
         "placeholder_age": "Entre ton âge",
+        "placeholder_code": "Entre un code d'inscription",
         "placeholder_confirm_password": "Confirme ton mot de passe",
         "placeholder_email": "Ajoute ton email",
         "placeholder_firstname": "Entre ton prénom ici",

@@ -9,7 +9,7 @@ import Checkbox from '../components/Checkbox';
 import RadioButton from '../components/RadioButton';
 import TextInput from '../components/TextInput';
 import WebLayoutCentered from '../components/layout/WebLayoutCentered';
-import { isEmailCorrect, isNameCorrect, isPasswordCorrect } from '../utils';
+import { isCodeValid, isDomainValid, isEmailCorrect, isNameCorrect, isPasswordCorrect } from '../utils';
 import styles from './css/SignUp.module.css';
 
 const SignUpInformationsPage: React.FC = () => {
@@ -24,6 +24,7 @@ const SignUpInformationsPage: React.FC = () => {
     const [gender, setGender] = useState<Gender>();
     const [age, setAge] = useState<number>();
     const [email, setEmail] = useState<string>('');
+    const [code, setCode] = useState<string>('');
     const [password, setPassword] = useState<string>('');
     const [confirmPassword, setConfirmPassword] = useState<string>('');
     const [profilePicture, setProfilePicture] = useState<File>();
@@ -66,17 +67,25 @@ const SignUpInformationsPage: React.FC = () => {
             return setErrorMessage({ type: 'email', message: t('signup_informations_page.error_email') });
         }
 
+        if (!profileSignUp.university || !profileSignUp.country || !profilePicture || !profileSignUp.role) {
+            await showToast({ message: t('errors.global'), duration: 1000 });
+            return history.push('/signup/');
+        }
+
+        if (profileSignUp.university.domains.length > 0 && !isDomainValid(email, profileSignUp.university.domains)) {
+            return setErrorMessage({ type: 'email', message: t('signup_informations_page.error_domain') });
+        }
+
+        if (profileSignUp.university.domains.length > 0 && !isCodeValid(code, profileSignUp.university.codes)) {
+            return setErrorMessage({ type: 'code', message: t('signup_informations_page.error_code') });
+        }
+
         if (!password || !isPasswordCorrect(password)) {
             return setErrorMessage({ type: 'password', message: t('signup_informations_page.error_password') });
         }
 
         if (password !== confirmPassword) {
             return setErrorMessage({ type: 'confirm', message: t('signup_informations_page.error_confirm_password') });
-        }
-
-        if (!profileSignUp.university || !profileSignUp.country || !profilePicture || !profileSignUp.role) {
-            await showToast({ message: t('errors.global'), duration: 1000 });
-            return history.push('/signup/');
         }
 
         const result = await createUser.execute(
@@ -190,6 +199,15 @@ const SignUpInformationsPage: React.FC = () => {
                     title={t('global.email')}
                     type="email"
                     value={email}
+                />
+
+                <TextInput
+                    errorMessage={errorMessage?.type === 'code' ? errorMessage.message : undefined}
+                    onChange={setCode}
+                    placeholder={t('signup_informations_page.placeholder_code')}
+                    title={t('signup_informations_page.code')}
+                    type="text"
+                    value={code}
                 />
 
                 <TextInput

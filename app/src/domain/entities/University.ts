@@ -8,7 +8,9 @@ class University {
         public readonly timezone: string,
         public readonly sites: Campus[],
         public readonly admissionStart: Date,
-        public readonly admissionEnd: Date
+        public readonly admissionEnd: Date,
+        public readonly codes: string[],
+        public readonly domains: string[]
     ) {}
 }
 
