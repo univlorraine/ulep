@@ -3,6 +3,7 @@ import {
   RessourceDoesNotExist,
   UnsuportedLanguageException,
 } from 'src/core/errors';
+import { ProfileHasMaxNumberOfLearningLanguages } from 'src/core/errors/profile-exceptions';
 import {
   LanguageStatus,
   LearningLanguage,
@@ -56,7 +57,11 @@ export class CreateLearningLanguageUseCase {
       throw new RessourceDoesNotExist('Profile does not exist');
     }
 
-    // TODO(NOW): assert no more than 3 learning languages
+    if (profile.learningLanguages.length >= 3) {
+      throw new ProfileHasMaxNumberOfLearningLanguages(
+        `Profile already has ${profile.learningLanguages.length} learning languages`,
+      );
+    }
 
     const language = await this.languageRepository.ofCode(command.code);
     if (!language) {

@@ -4,7 +4,10 @@ import {
   RessourceAlreadyExists,
   RessourceDoesNotExist,
 } from 'src/core/errors';
-import { ProfileCampusException } from 'src/core/errors/profile-exceptions';
+import {
+  ProfileCampusException,
+  ProfileHasMaxNumberOfLearningLanguages,
+} from 'src/core/errors/profile-exceptions';
 import { UnsuportedLanguageException } from 'src/core/errors/unsuported-language.exception';
 import {
   Interest,
@@ -117,6 +120,12 @@ export class CreateProfileUsecase {
         this.tryToFindTheLanguageOfCode(code),
       ),
     );
+
+    if (command.learningLanguages.length > 3) {
+      throw new ProfileHasMaxNumberOfLearningLanguages(
+        `Only 3 learning languages are accepted per profile`,
+      );
+    }
 
     const learningLanguages = await Promise.all(
       command.learningLanguages.map(async (learningLanguage) => {
