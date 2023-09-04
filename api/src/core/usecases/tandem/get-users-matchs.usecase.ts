@@ -27,8 +27,6 @@ const DEFAULT_NB_USER_MATCHES = 5;
 export class GetUserMatchUsecase {
   private readonly logger = new Logger(GetUserMatchUsecase.name);
 
-  // TODO(NOW+2): see if should include organization as UC command
-
   constructor(
     @Inject(LEARNING_LANGUAGE_REPOSITORY)
     private readonly learningLanguageRepository: LearningLanguageRepository,

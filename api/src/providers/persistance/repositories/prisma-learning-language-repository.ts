@@ -7,8 +7,6 @@ import {
   learningLanguageMapper,
 } from '../mappers/learningLanguage.mapper';
 
-// TODO(NOW+1): common where clause
-
 @Injectable()
 export class PrismaLearningLanguageRepository
   implements LearningLanguageRepository

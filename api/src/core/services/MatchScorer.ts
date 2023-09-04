@@ -86,7 +86,7 @@ export class MatchScorer implements IMatchScorer {
   }
 
   private computeLanguageLevel(learningLanguage1: LearningLanguage, learningLanguage2: LearningLanguage): number {
-    // TODO(discoveryLanguage): impact in score
+    // TODO(discovery): impact in score
     const profile1LearningLanguageIsDiscovery = learningLanguage1.language.isJokerLanguage();
     const learningScoreProfile1 = this.computeLearningScore(learningLanguage1, profile1LearningLanguageIsDiscovery);
 
@@ -266,7 +266,7 @@ export class MatchScorer implements IMatchScorer {
     
     // Check joker language have a match in available languages spoken by other profile
     if (learningLanguage1.language.isJokerLanguage()) {
-      // TODO(discovery): check impact on these assertion
+      // TODO(discovery): check impact on these assertions
       const potentialLanguagesToLearnFromProfile2 = availableLanguages.filter(language => profile2.isSpeakingLanguage(language))
       if (potentialLanguagesToLearnFromProfile2.length === 0) {
         return false;

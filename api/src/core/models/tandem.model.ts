@@ -54,7 +54,7 @@ export class Tandem {
       throw new InvalidTandemError('Tandem must have two different profiles');
     }
     
-    // TODO(discover): languages spoken should include learning languages
+    // TODO(discovery): languages spoken should include learning languages
     // if discover for other learning language
     if ((!this.learningLanguages[1].language.isJokerLanguage() && !profile1.isSpeakingLanguage(this.learningLanguages[1].language)) || (
       !this.learningLanguages[0].language.isJokerLanguage() && !profile2.isSpeakingLanguage(this.learningLanguages[0].language)

@@ -39,10 +39,8 @@ export class CreateTandemUsecase {
     );
 
     await Promise.all(
-      learningLanguages.map(
-        (ll) => this.assertLearningLanguageIsNotInActiveTandem(ll),
-        // TODO(NOW+1): Will cause error in single/global routine cohabitation. Maybe we should
-        // Remove other Draft tandems concerning profile.
+      learningLanguages.map((ll) =>
+        this.assertLearningLanguageIsNotInActiveTandem(ll),
       ),
     );
 

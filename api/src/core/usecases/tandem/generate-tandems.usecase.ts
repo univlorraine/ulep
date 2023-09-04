@@ -24,8 +24,6 @@ export type GenerateTandemsCommand = {
 
 const TRESHOLD_VIABLE_PAIR = 0;
 
-// TODO(NOW+2): test with more data (2k users ?)
-
 @Injectable()
 export class GenerateTandemsUsecase {
   private readonly scorer: IMatchScorer = new MatchScorer();
@@ -47,9 +45,6 @@ export class GenerateTandemsUsecase {
       await this.learningLanguageRepository.getLearningLanguagesOfUniversitiesNotInActiveTandem(
         command.universityIds,
       );
-
-    // TODO(NOW+2): check how to manage draft tandems (override them when re-generating ?)
-    // URGENT
 
     this.logger.debug(
       `Found ${
