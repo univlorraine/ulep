@@ -24,6 +24,8 @@ export type GenerateTandemsCommand = {
 
 const TRESHOLD_VIABLE_PAIR = 0;
 
+// TODO(SOON): check if should add loop to generate / find pairs
+
 @Injectable()
 export class GenerateTandemsUsecase {
   private readonly scorer: IMatchScorer = new MatchScorer();

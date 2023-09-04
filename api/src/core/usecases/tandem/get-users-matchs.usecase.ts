@@ -51,7 +51,7 @@ export class GetUserMatchUsecase {
     if (learningLanguage.language.isJokerLanguage()) {
       targets =
         await this.learningLanguageRepository.getLearningLanguagesOfOtherProfileNotInActiveTandem(
-          learningLanguage.language.id,
+          owner.id,
         );
     } else {
       // TODO(discovery): search for profiles learning the language too
