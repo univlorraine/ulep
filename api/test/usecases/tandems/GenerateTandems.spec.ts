@@ -1301,7 +1301,7 @@ describe('GenerateTandem UC', () => {
     ).toBeTruthy();
   });
 
-  test('should generate tandem for user from central university that registered first', async () => {
+  test('should generate tandem for learning languages first registered from central university', async () => {
     const subsidiaryUniveristy1 = new University({
       id: 'subsidiary1',
       name: 'Subsidiary university 1',
@@ -1334,11 +1334,12 @@ describe('GenerateTandem UC', () => {
       learningType: LearningType.ETANDEM,
       meetingFrequency: 'ONCE_A_WEEK',
       learningLanguages: [
-        {
+        new LearningLanguage({
           id: 'FR_1-LL_EN_B2',
           language: english,
           level: ProficiencyLevel.B2,
-        },
+          createdAt: new Date('2023-08-28T10:00:00.000Z'),
+        }),
       ],
       sameGender: false,
       sameAge: false,
@@ -1350,7 +1351,6 @@ describe('GenerateTandem UC', () => {
         experience: faker.lorem.sentence(),
         anecdote: faker.lorem.sentence(),
       },
-      createdAt: new Date('2023-08-28T10:00:00.000Z'),
     });
     // second user is better match but register later
     const secondUser = new Profile({
@@ -1373,11 +1373,12 @@ describe('GenerateTandem UC', () => {
       learningType: LearningType.ETANDEM,
       meetingFrequency: 'ONCE_A_WEEK',
       learningLanguages: [
-        {
+        new LearningLanguage({
           id: 'FR_2-LL_EN_B2',
           language: english,
           level: ProficiencyLevel.B2,
-        },
+          createdAt: new Date('2023-08-12T10:00:00.000Z'),
+        }),
       ],
       sameGender: false,
       sameAge: false,
@@ -1389,7 +1390,6 @@ describe('GenerateTandem UC', () => {
         experience: faker.lorem.sentence(),
         anecdote: faker.lorem.sentence(),
       },
-      createdAt: new Date('2023-08-12T10:00:00.000Z'),
     });
     const match = new Profile({
       user: new User({
@@ -1411,11 +1411,12 @@ describe('GenerateTandem UC', () => {
       learningType: LearningType.ETANDEM,
       meetingFrequency: 'ONCE_A_WEEK',
       learningLanguages: [
-        {
+        new LearningLanguage({
           id: 'EN_1-LL_FR_B2',
           language: french,
           level: ProficiencyLevel.B2,
-        },
+          createdAt: new Date('2023-08-04T10:00:00.000Z'),
+        }),
       ],
       sameGender: false,
       sameAge: false,
@@ -1427,7 +1428,6 @@ describe('GenerateTandem UC', () => {
         experience: faker.lorem.sentence(),
         anecdote: faker.lorem.sentence(),
       },
-      createdAt: new Date('2023-08-04T10:00:00.000Z'),
     });
 
     learningLanguageRepository.init([firstUser, match, secondUser]);

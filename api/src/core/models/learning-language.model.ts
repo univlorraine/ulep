@@ -7,21 +7,25 @@ export class LearningLanguage {
   readonly language: Language;
   readonly level: ProficiencyLevel;
   readonly profile?: Profile;
+  readonly createdAt?: Date;
 
   constructor({
     id,
     language,
     level,
     profile,
+    createdAt,
   }: {
     id: string;
     language: Language;
     level: ProficiencyLevel;
     profile?: Profile;
+    createdAt?: Date;
   }) {
     this.id = id;
     this.language = language;
     this.level = level;
     this.profile = profile;
+    this.createdAt = createdAt;
   }
 }

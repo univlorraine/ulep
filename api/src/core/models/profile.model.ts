@@ -69,8 +69,7 @@ export class Profile {
     const learningLanguages = [...props.learningLanguages].map(
       (learningLanguage) =>
         new LearningLanguage({
-          id: learningLanguage.id,
-          language: learningLanguage.language,
+          ...learningLanguage,
           level: learningLanguage.language.isJokerLanguage()
             ? ProficiencyLevel.A0
             : learningLanguage.level,

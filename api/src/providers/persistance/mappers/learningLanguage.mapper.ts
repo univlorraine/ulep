@@ -27,5 +27,6 @@ export const learningLanguageMapper = (
     language: languageMapper(instance.LanguageCode),
     level: ProficiencyLevel[instance.level],
     profile: profileMapper(instance.Profile),
+    createdAt: instance.created_at,
   });
 };

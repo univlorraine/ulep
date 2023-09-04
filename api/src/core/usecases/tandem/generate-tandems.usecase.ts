@@ -94,13 +94,11 @@ export class GenerateTandemsUsecase {
 
     this.logger.debug(`Computed ${possiblePairs.length} potential pairs`);
 
-    // TODO(NOW+2): global routine found 1 pair for each perticipant first ?
     const sortedLearningLanguages = learningLanguagesToPair
       .sort(
         (a, b) =>
-          // TODO(NOW-0): when demand has been created rather than profile
-          // sort by register time
-          a.profile.createdAt?.getTime() - b.profile.createdAt?.getTime(),
+          // sort by first created learning languages
+          a.createdAt?.getTime() - b.createdAt?.getTime(),
       )
       .sort((a, b) => {
         // Sort by central university first
