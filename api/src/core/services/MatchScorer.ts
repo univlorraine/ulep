@@ -267,12 +267,18 @@ export class MatchScorer implements IMatchScorer {
     // Check joker language have a match in available languages spoken by other profile
     if (learningLanguage1.language.isJokerLanguage()) {
       // TODO(discovery): check impact on these assertions
-      const potentialLanguagesToLearnFromProfile2 = availableLanguages.filter(language => profile2.isSpeakingLanguage(language))
+      const availableLanguagesForProfile = profile1.user.university.isCentralUniversity()
+        ? availableLanguages
+        : availableLanguages.filter(language => language.secondaryUniversityActive);
+      const potentialLanguagesToLearnFromProfile2 = availableLanguagesForProfile.filter(language => profile2.isSpeakingLanguage(language))
       if (potentialLanguagesToLearnFromProfile2.length === 0) {
         return false;
       }
     } else if (learningLanguage2.language.isJokerLanguage()) {
-      const potentialLanguagesToLearnFromProfile1 = availableLanguages.filter(language => profile1.isSpeakingLanguage(language))
+      const availableLanguagesForProfile = profile2.user.university.isCentralUniversity()
+      ? availableLanguages
+      : availableLanguages.filter(language => language.secondaryUniversityActive);
+      const potentialLanguagesToLearnFromProfile1 = availableLanguagesForProfile.filter(language => profile1.isSpeakingLanguage(language))
       if (potentialLanguagesToLearnFromProfile1.length === 0) {
         return false;
       }
