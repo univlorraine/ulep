@@ -1,5 +1,4 @@
 import Campus from './Campus';
-import Language from './Language';
 
 class University {
     constructor(
@@ -7,7 +6,11 @@ class University {
         public readonly name: string,
         public readonly isCentral: boolean,
         public readonly timezone: string,
-        public readonly sites: Campus[]
+        public readonly sites: Campus[],
+        public readonly admissionStart: Date,
+        public readonly admissionEnd: Date,
+        public readonly codes: string[],
+        public readonly domains: string[]
     ) {}
 }
 

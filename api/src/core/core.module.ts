@@ -68,8 +68,21 @@ import { UpdateObjectiveUsecase } from 'src/core/usecases/objective/update-objec
 import { DeleteObjectiveImageUsecase } from 'src/core/usecases/media/delete-objective-image.usecase';
 import { FindAllSuggestedLanguageUsecase } from 'src/core/usecases/language/find-all-suggested-language.usecase';
 import { CountAllSuggestedLanguageUsecase } from 'src/core/usecases/language/count-all-suggested-language.usecase';
+import {
+  CreateCampusUsecase,
+  DeleteCampusUsecase,
+  GetCampusByIdUsecase,
+  GetCampusUsecase,
+  UpdateCampusUsecase,
+} from 'src/core/usecases/campus';
 
 const usecases: Provider[] = [
+  //Campus
+  CreateCampusUsecase,
+  DeleteCampusUsecase,
+  GetCampusUsecase,
+  GetCampusByIdUsecase,
+  UpdateCampusUsecase,
   // Countries
   GetCountriesUsecase,
   GetCountriesUniversitiesUsecase,

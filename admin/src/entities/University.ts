@@ -1,3 +1,4 @@
+import Campus from './Campus';
 import Country from './Country';
 
 interface University {
@@ -8,7 +9,7 @@ interface University {
     timezone: string;
     admissionStart: Date;
     admissionEnd: Date;
-    sites: { id: string; name: string }[];
+    sites: Campus[];
     codes: string[];
     domains: string[];
     website: string;

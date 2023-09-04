@@ -6,7 +6,7 @@ const UniversityList = (props: any) => {
     const translate = useTranslate();
 
     return (
-        <List exporter={false} pagination={false} title="Universités" {...props}>
+        <List exporter={false} pagination={false} title={translate('universities.label')} {...props}>
             <Datagrid rowClick="show">
                 <TextField label={translate('universities.name')} source="name" />
                 <FunctionField
