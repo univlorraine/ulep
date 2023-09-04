@@ -20,6 +20,7 @@ import {
   GetProfileUsecase,
   GetProfilesUsecase,
   GetTandemsForProfileUsecase,
+  CreateLearningLanguageUseCase,
 } from 'src/core/usecases';
 import { CollectionResponse, CurrentUser } from '../decorators';
 import { Roles } from '../decorators/roles.decorator';
@@ -28,6 +29,8 @@ import {
   ProfileQueryFilter,
   ProfileResponse,
   UserTandemResponse,
+  LearningLanguageDto,
+  LearningLanguageResponse,
 } from '../dtos';
 import { AuthenticationGuard } from '../guards';
 
@@ -42,6 +45,7 @@ export class ProfileController {
     private readonly getProfileByUserIdUsecase: GetProfileByUserIdUsecase,
     private readonly getProfileUsecase: GetProfileUsecase,
     private readonly getTandemsForProfileUsecase: GetTandemsForProfileUsecase,
+    private readonly createLearningLanguageUsecase: CreateLearningLanguageUseCase,
   ) {}
 
   @Post()
@@ -148,5 +152,23 @@ export class ProfileController {
     const profile = await this.getProfileUsecase.execute({ id });
 
     return ProfileResponse.fromDomain(profile);
+  }
+
+  @Post(':id/learning-language')
+  @UseGuards(AuthenticationGuard)
+  @SerializeOptions({ groups: ['read', 'profile:read'] })
+  @Swagger.ApiOperation({ summary: 'Add a learning languages to a Profile' })
+  @Swagger.ApiOkResponse({ type: LearningLanguageResponse })
+  @Swagger.ApiNotFoundResponse({ description: 'Resource not found' })
+  async addLearningLanguage(
+    @Param('id', ParseUUIDPipe) id: string,
+    @Body() body: LearningLanguageDto,
+  ): Promise<LearningLanguageResponse> {
+    const learningLanguage = await this.createLearningLanguageUsecase.execute({
+      ...body,
+      profileId: id,
+    });
+
+    return LearningLanguageResponse.fromDomain(learningLanguage);
   }
 }

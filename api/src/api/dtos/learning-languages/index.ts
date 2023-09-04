@@ -20,7 +20,9 @@ export class LearningLanguageDto {
   level: ProficiencyLevel;
 
   constructor(partial: Partial<LearningLanguageDto>) {
-    Object.assign(this, partial, { code: partial.code || JOKER_LANGUAGE_CODE });
+    Object.assign(this, partial, {
+      code: partial?.code || JOKER_LANGUAGE_CODE,
+    });
   }
 
   static fromDomain(learningLanguage: LearningLanguage): LearningLanguageDto {

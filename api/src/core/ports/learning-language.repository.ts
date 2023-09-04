@@ -5,6 +5,8 @@ export const LEARNING_LANGUAGE_REPOSITORY = 'learning-language.repository';
 export interface LearningLanguageRepository {
   ofId: (id: string) => Promise<LearningLanguage | null>;
 
+  create: (learningLanguage: LearningLanguage) => Promise<void>;
+
   getLearningLanguagesOfProfileSpeakingAndNotInActiveTandem: (
     languageId: string,
   ) => Promise<LearningLanguage[]>;

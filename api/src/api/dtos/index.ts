@@ -2,6 +2,7 @@ export * from './countries';
 export * from './interests';
 export * from './languages';
 export * from './language-code';
+export * from './learning-languages';
 export * from './matchs';
 export * from './medias';
 export * from './pagination';

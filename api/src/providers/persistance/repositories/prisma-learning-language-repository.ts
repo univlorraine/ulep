@@ -26,6 +26,25 @@ export class PrismaLearningLanguageRepository
     return learningLanguageMapper(res);
   }
 
+  async create(item: LearningLanguage): Promise<void> {
+    await this.prisma.learningLanguages.create({
+      data: {
+        id: item.id,
+        Profile: {
+          connect: {
+            id: item.profile.id,
+          },
+        },
+        LanguageCode: {
+          connect: {
+            id: item.language.id,
+          },
+        },
+        level: item.level,
+      },
+    });
+  }
+
   async getLearningLanguagesOfProfileSpeakingAndNotInActiveTandem(
     spokenLanguageId: string,
   ): Promise<LearningLanguage[]> {
