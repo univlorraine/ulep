@@ -29,7 +29,7 @@ import { PrismaObjectiveRepository } from './persistance/repositories/prisma-obj
 import { CAMPUS_REPOSITORY } from 'src/core/ports/campus.repository';
 import { PrismaCampusRepository } from 'src/providers/persistance/repositories/prisma-campus.repository';
 import { LEARNING_LANGUAGE_REPOSITORY } from 'src/core/ports/learning-language.repository';
-import { PrismaLearningLanguageRepositosry } from './persistance/repositories/prisma-learning-language-repository';
+import { PrismaLearningLanguageRepository } from './persistance/repositories/prisma-learning-language-repository';
 
 const providers: Provider[] = [
   {
