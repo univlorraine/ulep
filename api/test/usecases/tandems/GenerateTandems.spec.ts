@@ -17,6 +17,7 @@ import {
 import { Campus } from 'src/core/models/campus.model';
 import { GenerateTandemsUsecase } from 'src/core/usecases';
 import { InMemoryCountryCodesRepository } from 'src/providers/persistance/repositories/in-memory-country-repository';
+import { InMemoryLanguageRepository } from 'src/providers/persistance/repositories/in-memory-language-repository';
 import { InMemoryLearningLanguageRepository } from 'src/providers/persistance/repositories/in-memory-learning-language-repository';
 import { InMemoryTandemRepository } from 'src/providers/persistance/repositories/in-memory-tandem-repository';
 import { UuidProvider } from 'src/providers/services/uuid.provider';
@@ -60,11 +61,13 @@ describe('GenerateTandem UC', () => {
   const tandemsRepository = new InMemoryTandemRepository();
   const learningLanguageRepository = new InMemoryLearningLanguageRepository();
   const uuidProvider = new UuidProvider();
+  const languageRepository = new InMemoryLanguageRepository();
 
   const uc = new GenerateTandemsUsecase(
     tandemsRepository,
     learningLanguageRepository,
     uuidProvider,
+    languageRepository,
   );
 
   ///////// Data /////////
@@ -96,6 +99,28 @@ describe('GenerateTandem UC', () => {
     mainUniversityStatus: LanguageStatus.PRIMARY,
     secondaryUniversityActive: true,
   });
+  const joker = new Language({
+    id: faker.string.uuid(),
+    code: '*',
+    name: 'joker',
+    mainUniversityStatus: LanguageStatus.PRIMARY,
+    secondaryUniversityActive: true,
+  });
+  const otherLanguage = new Language({
+    id: faker.string.uuid(),
+    code: 'ot',
+    name: 'other',
+    mainUniversityStatus: LanguageStatus.UNACTIVE,
+    secondaryUniversityActive: false,
+  });
+  languageRepository.init([
+    french,
+    english,
+    spanish,
+    deutch,
+    joker,
+    otherLanguage,
+  ]);
 
   const lorraineCampus = new Campus({
     id: 'campusLorraine',
@@ -1416,6 +1441,99 @@ describe('GenerateTandem UC', () => {
       checkTandemArrayContainsTandem(tandems, {
         a: match.learningLanguages[0],
         b: secondUser.learningLanguages[0],
+      }),
+    ).toBeTruthy();
+  });
+
+  test('joker language should only match with spoken language supported by univeristy', async () => {
+    const profileLearningJoker = new Profile({
+      user: new User({
+        id: 'user1',
+        email: '',
+        firstname: '',
+        lastname: '',
+        gender: Gender.MALE,
+        age: 19,
+        university: centralUniversity,
+        role: Role.STUDENT,
+        country: 'FR',
+        avatar: null,
+        deactivatedReason: '',
+      }),
+      id: 'FR_JOKER',
+      nativeLanguage: french,
+      masteredLanguages: [],
+      learningType: LearningType.ETANDEM,
+      meetingFrequency: 'ONCE_A_WEEK',
+      learningLanguages: [
+        {
+          id: 'FR_1-LL_JOKER',
+          language: joker,
+          level: ProficiencyLevel.A0,
+        },
+      ],
+      sameGender: false,
+      sameAge: false,
+      objectives: [],
+      interests: [],
+      biography: {
+        superpower: faker.lorem.sentence(),
+        favoritePlace: faker.lorem.sentence(),
+        experience: faker.lorem.sentence(),
+        anecdote: faker.lorem.sentence(),
+      },
+      createdAt: new Date('2023-08-04T10:00:00.000Z'),
+    });
+    const potentialMatch = new Profile({
+      user: new User({
+        id: 'user2',
+        email: '',
+        firstname: '',
+        lastname: '',
+        gender: Gender.MALE,
+        age: 19,
+        university: centralUniversity,
+        role: Role.STUDENT,
+        country: 'KS',
+        avatar: null,
+        deactivatedReason: '',
+      }),
+      id: 'KS',
+      nativeLanguage: otherLanguage,
+      masteredLanguages: [],
+      learningType: LearningType.ETANDEM,
+      meetingFrequency: 'ONCE_A_WEEK',
+      learningLanguages: [
+        {
+          id: 'KS-LL_FR',
+          language: french,
+          level: ProficiencyLevel.B2,
+        },
+      ],
+      sameGender: false,
+      sameAge: false,
+      objectives: [],
+      interests: [],
+      biography: {
+        superpower: faker.lorem.sentence(),
+        favoritePlace: faker.lorem.sentence(),
+        experience: faker.lorem.sentence(),
+        anecdote: faker.lorem.sentence(),
+      },
+      createdAt: new Date('2023-08-04T10:00:00.000Z'),
+    });
+
+    learningLanguageRepository.init([profileLearningJoker, potentialMatch]);
+
+    await uc.execute({
+      universityIds: [centralUniversity.id],
+    });
+
+    const tandems = await tandemsRepository.getExistingTandems();
+    expect(
+      checkTandemArrayNotContainsTandem(tandems, {
+        a: profileLearningJoker.learningLanguages[0],
+        b: potentialMatch.learningLanguages[0],
       }),
     ).toBeTruthy();
   });

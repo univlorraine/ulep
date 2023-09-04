@@ -7,6 +7,8 @@ import {
   learningLanguageMapper,
 } from '../mappers/learningLanguage.mapper';
 
+// TODO(NOW+1): common where clause
+
 @Injectable()
 export class PrismaLearningLanguageRepository
   implements LearningLanguageRepository
@@ -122,5 +124,40 @@ export class PrismaLearningLanguageRepository
     });
 
     return !!res;
+  }
+
+  async getLearningLanguagesOfOtherProfileNotInActiveTandem(
+    profileId: string,
+  ): Promise<LearningLanguage[]> {
+    const res = await this.prisma.learningLanguages.findMany({
+      where: {
+        Profile: {
+          id: {
+            not: {
+              equals: profileId,
+            },
+          },
+        },
+        OR: [
+          {
+            Tandem: {
+              is: null,
+            },
+          },
+          {
+            Tandem: {
+              status: {
+                not: {
+                  equals: TandemStatus.ACTIVE,
+                },
+              },
+            },
+          },
+        ],
+      },
+      include: LearningLanguageRelations,
+    });
+
+    return res.map(learningLanguageMapper);
   }
 }

@@ -1283,6 +1283,7 @@ const isoCodes = {
     family: 'joker',
     name: 'joker',
     wikiUrl: '*',
+    mainUniversityStatus: LanguageStatus.PRIMARY,
   },
 };
 

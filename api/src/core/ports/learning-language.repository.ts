@@ -13,5 +13,9 @@ export interface LearningLanguageRepository {
     universityIds: string[],
   ) => Promise<LearningLanguage[]>;
 
+  getLearningLanguagesOfOtherProfileNotInActiveTandem: (
+    profileId: string,
+  ) => Promise<LearningLanguage[]>;
+
   hasAnActiveTandem: (id: string) => Promise<boolean>;
 }

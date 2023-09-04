@@ -242,7 +242,7 @@ export class MatchScorer implements IMatchScorer {
     // We approximate native and mastered language of user equals to a level between B1 and C2.
     // Score matrix have the same score for all these profile2 levels so we take B2 arbitrary here.
     const level2 = ProficiencyLevel.B2
-    // TODO(NOW-0): level2 should be B2 OR level profile 2 if discovery
+    // TODO(discovery): level2 should be B2 OR level profile 2 if discovery
 
     const level = isDiscovery
       ? discoveryLanguageLevelMatrix[level1][level2]

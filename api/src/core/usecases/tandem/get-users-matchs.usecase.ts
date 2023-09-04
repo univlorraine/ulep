@@ -5,15 +5,15 @@ import {
   LearningLanguageHasNoAssociatedProfile,
   ProfileIsNotInCentralUniversity,
 } from 'src/core/errors/tandem-exceptions';
-import { LearningLanguage, Match, Profile } from 'src/core/models';
+import { LearningLanguage, Match } from 'src/core/models';
+import {
+  LANGUAGE_REPOSITORY,
+  LanguageRepository,
+} from 'src/core/ports/language.repository';
 import {
   LEARNING_LANGUAGE_REPOSITORY,
   LearningLanguageRepository,
 } from 'src/core/ports/learning-language.repository';
-import {
-  PROFILE_REPOSITORY,
-  ProfileRepository,
-} from 'src/core/ports/profile.repository';
 import { MatchScorer } from 'src/core/services/MatchScorer';
 
 export type GetUserMatchCommand = {
@@ -30,10 +30,10 @@ export class GetUserMatchUsecase {
   // TODO(NOW+2): see if should include organization as UC command
 
   constructor(
-    @Inject(PROFILE_REPOSITORY)
-    private readonly profileRepository: ProfileRepository,
     @Inject(LEARNING_LANGUAGE_REPOSITORY)
     private readonly learningLanguageRepository: LearningLanguageRepository,
+    @Inject(LANGUAGE_REPOSITORY)
+    private readonly languageRepository: LanguageRepository,
     private readonly matchService: MatchScorer,
   ) {}
 
@@ -45,18 +45,26 @@ export class GetUserMatchUsecase {
     const owner = learningLanguage.profile;
     if (!owner) {
       throw new LearningLanguageHasNoAssociatedProfile(command.id);
-    }
-
-    if (!owner.user.university.isCentralUniversity()) {
+    } else if (!owner.user.university.isCentralUniversity()) {
       throw new ProfileIsNotInCentralUniversity(command.id);
     }
 
-    // TODO: in case of discovery, search for profiles learning the language too
-    // TODO(NOW-0): manage joker language (just get learningLanguages not in Active tandem)
-    const targets =
-      await this.learningLanguageRepository.getLearningLanguagesOfProfileSpeakingAndNotInActiveTandem(
-        learningLanguage.language.id,
-      );
+    let targets = [];
+    if (learningLanguage.language.isJokerLanguage()) {
+      targets =
+        await this.learningLanguageRepository.getLearningLanguagesOfOtherProfileNotInActiveTandem(
+          learningLanguage.language.id,
+        );
+    } else {
+      // TODO(discovery): search for profiles learning the language too
+      targets =
+        await this.learningLanguageRepository.getLearningLanguagesOfProfileSpeakingAndNotInActiveTandem(
+          learningLanguage.language.id,
+        );
+    }
+
+    const languagesThatCanBeLearnt =
+      await this.languageRepository.getLanguagesProposedToLearning();
 
     this.logger.debug(
       `Found ${targets.length} potential learningLanguages match for learningLanguage ${command.id}`,
@@ -70,6 +78,7 @@ export class GetUserMatchUsecase {
       const match = this.matchService.computeMatchScore(
         learningLanguage,
         target,
+        languagesThatCanBeLearnt,
       );
 
       potentialMatchs.push(match);

@@ -107,4 +107,24 @@ export class InMemoryLearningLanguageRepository
 
     return Promise.resolve(false);
   }
+
+  getLearningLanguagesOfOtherProfileNotInActiveTandem(
+    profileId: string,
+  ): Promise<LearningLanguage[]> {
+    const res = [];
+
+    for (const learningLanguage of this.#learningLanguages.values()) {
+      if (learningLanguage.profile.id !== profileId) {
+        if (
+          !this.#tandemsPerLearningLanguages?.has(learningLanguage.id) ||
+          this.#tandemsPerLearningLanguages?.get(learningLanguage.id).status !==
+            TandemStatus.ACTIVE
+        ) {
+          res.push(learningLanguage);
+        }
+      }
+    }
+
+    return Promise.resolve(res);
+  }
 }
