@@ -1,9 +1,9 @@
-import { HttpResponse } from "../../adapter/BaseHttpAdapter";
-import { HttpAdapterInterface } from "../../adapter/DomainHttpAdapter";
-import UserCommand, { userCommandToDomain } from "../../command/UserCommand";
-import University from "../entities/University";
-import CreateUserUsecaseInterface from "../interfaces/CreateUserUsecase.interface";
-import LoginUsecaseInterface from "../interfaces/LoginUsecase.interface";
+import { HttpResponse } from '../../adapter/BaseHttpAdapter';
+import { HttpAdapterInterface } from '../../adapter/DomainHttpAdapter';
+import UserCommand, { userCommandToDomain } from '../../command/UserCommand';
+import University from '../entities/University';
+import CreateUserUsecaseInterface from '../interfaces/CreateUserUsecase.interface';
+import LoginUsecaseInterface from '../interfaces/LoginUsecase.interface';
 
 class CreateUserUsecase implements CreateUserUsecaseInterface {
     constructor(
@@ -18,6 +18,7 @@ class CreateUserUsecase implements CreateUserUsecaseInterface {
         firstname: string,
         lastname: string,
         gender: Gender,
+        code: string,
         age: number,
         university: University,
         role: Role,
@@ -32,23 +33,23 @@ class CreateUserUsecase implements CreateUserUsecaseInterface {
                 firstname,
                 lastname,
                 gender,
+                code,
                 age,
                 university: university.id,
                 role,
                 countryCode,
             };
 
-            const httpResponse: HttpResponse<UserCommand> =
-                await this.domainHttpAdapter.post(
-                    `/users`,
-                    body,
-                    {},
-                    "multipart/form-data",
-                    false
-                );
+            const httpResponse: HttpResponse<UserCommand> = await this.domainHttpAdapter.post(
+                `/users`,
+                body,
+                {},
+                'multipart/form-data',
+                false
+            );
 
             if (!httpResponse.parsedBody) {
-                return new Error("errors.global");
+                return new Error('errors.global');
             }
 
             this.setUser({
@@ -58,8 +59,21 @@ class CreateUserUsecase implements CreateUserUsecaseInterface {
             await this.login.execute(email, password);
 
             return;
-        } catch (error: any) {
-            return new Error("errors.global");
+        } catch (err: any) {
+            const error = err.error;
+
+            if (!error || !error.statusCode) {
+                return new Error('errors.global');
+            }
+
+            if (error.statusCode === 400 && error.message === 'Domain is invalid') {
+                return new Error('signup_informations_page.error_domain');
+            }
+
+            if (error.statusCode === 400 && error.message === 'Code is invalid') {
+                return new Error('signup_informations_page.error_code');
+            }
+            return new Error('errors.global');
         }
     }
 }

@@ -1,5 +1,4 @@
 import UserCommand from '../../../src/command/UserCommand';
-import Language from '../../../src/domain/entities/Language';
 import University from '../../../src/domain/entities/University';
 import LoginUsecaseInterface from '../../../src/domain/interfaces/LoginUsecase.interface';
 import CreateUserUsecase from '../../../src/domain/usecases/CreateUserUsecase';
@@ -21,8 +20,6 @@ const payload: UserCommand = {
         sites: [],
         timezone: 'timezone',
         website: 'site',
-        codes: [],
-        domains: [],
     },
     status: 'ACTIVE',
 };
@@ -34,9 +31,7 @@ const university = new University(
     'timezone',
     [{ id: 'id', name: 'Site A' }],
     new Date('2023-01-01T00:00:00.000Z'),
-    new Date('2023-12-31T00:00:00.000Z'),
-    [],
-    []
+    new Date('2023-12-31T00:00:00.000Z')
 );
 const file = new File(['Bits'], 'name');
 describe('createUserUsecase', () => {
@@ -65,6 +60,7 @@ describe('createUserUsecase', () => {
             'firstname',
             'lastname',
             'male',
+            'CODE',
             22,
             university,
             'student',
@@ -80,6 +76,7 @@ describe('createUserUsecase', () => {
                 firstname: 'firstname',
                 lastname: 'lastname',
                 gender: 'male',
+                code: 'CODE',
                 age: 22,
                 university: university.id,
                 role: 'student',
@@ -104,6 +101,7 @@ describe('createUserUsecase', () => {
             'firstname',
             'lastname',
             'male',
+            'CODE',
             22,
             university,
             'student',
@@ -124,6 +122,7 @@ describe('createUserUsecase', () => {
             'firstname',
             'lastname',
             'male',
+            'CODE',
             22,
             university,
             'student',
@@ -142,6 +141,7 @@ describe('createUserUsecase', () => {
             'firstname',
             'lastname',
             'male',
+            'CODE',
             22,
             university,
             'student',
@@ -160,6 +160,7 @@ describe('createUserUsecase', () => {
             'firstname',
             'lastname',
             'male',
+            'CODE',
             22,
             university,
             'student',
@@ -167,5 +168,62 @@ describe('createUserUsecase', () => {
             file
         );
         expect(result).toStrictEqual(new Error('errors.global'));
+    });
+
+    it('execute must return an error if adapter has unexpected error body', async () => {
+        expect.assertions(1);
+        adapter.mockError({ error: { statusCode: 500 } });
+        const result = await usecase.execute(
+            'email',
+            'password',
+            'firstname',
+            'lastname',
+            'male',
+            'CODE',
+            22,
+            university,
+            'student',
+            'FR',
+            file
+        );
+        expect(result).toStrictEqual(new Error('signup_informations_page.error_code'));
+    });
+
+    it('execute must return an error if adapter has code 400 with code error message', async () => {
+        expect.assertions(1);
+        adapter.mockError({ error: { statusCode: 400, message: 'Code is invalid' } });
+        const result = await usecase.execute(
+            'email',
+            'password',
+            'firstname',
+            'lastname',
+            'male',
+            'CODE',
+            22,
+            university,
+            'student',
+            'FR',
+            file
+        );
+        expect(result).toStrictEqual(new Error('signup_informations_page.error_code'));
+    });
+
+    it('execute must return an error if adapter has code 400 with domain error message', async () => {
+        expect.assertions(1);
+        adapter.mockError({ error: { statusCode: 400, message: 'Domain is invalid' } });
+        const result = await usecase.execute(
+            'email',
+            'password',
+            'firstname',
+            'lastname',
+            'male',
+            'CODE',
+            22,
+            university,
+            'student',
+            'FR',
+            file
+        );
+        expect(result).toStrictEqual(new Error('signup_informations_page.error_domain'));
     });
 });

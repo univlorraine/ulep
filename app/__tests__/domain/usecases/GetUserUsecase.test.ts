@@ -18,8 +18,6 @@ const payload: UserCommand = {
         website: 'site',
         admissionStart: new Date('2023-01-01T00:00:00.000Z'),
         admissionEnd: new Date('2023-12-31T00:00:00.000Z'),
-        codes: [],
-        domains: [],
     },
     status: 'ACTIVE',
 };
