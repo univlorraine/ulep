@@ -41,11 +41,11 @@ api:
   env:
     keycloakRealm: etandem # FIXE
     keycloakAdmin: admin # REQUIRED
-    keycloakAdminPassword: AZE123aze # REQUIRED
+    keycloakAdminPassword: &keycloakAdminPassword AZE123aze # REQUIRED
     keycloakClientId: api # FIXE
-    keycloakClientSecret: "" # REQUIRED 
-    minioAccessKey: "minio" # FIXE
-    minioSecretKey: AZE123aze # REQUIRED
+    keycloakClientSecret: &keycloakClientSecret "" # REQUIRED 
+    minioAccessKey: &minioAccessKey minio # FIXE
+    minioSecretKey: &minioSecretKey AZE123aze # REQUIRED
 
   autoscaling:
     enabled: false
@@ -84,7 +84,7 @@ auth:
 
   env:
     keycloakAdmin: admin # FIXE
-    keycloakAdminPassword: "" # REQUIRED
+    keycloakAdminPassword: *keycloakAdminPassword # REQUIRED
     kcDB: postgres # FIXE
     kcDBSchema: keycloak # FIXE
     proxyAddressForwarding: true 
@@ -125,8 +125,8 @@ minio:
     pullPolicy: IfNotPresent
 
   env:
-    minioRootUser: minio # FIXE
-    minioRootPassword: "" # REQUIRED
+    minioRootUser: *minioAccessKey # FIXE
+    minioRootPassword: *minioSecretKey # REQUIRED
 
   pv:
     storage: 40Gi
@@ -171,7 +171,7 @@ admin:
   env: 
     keycloakRealm: etandem # FIXE
     keycloakClientId: react-admin # FIXE
-    keycloakClientSecret: "" # REQUIRED
+    keycloakClientSecret: *keycloakClientSecret # REQUIRED
 
   autoscaling:
     enabled: false

@@ -4,14 +4,13 @@ metadata:
   name: "{{ .Values.name }}"
 spec:
   dnsNames:
-    - "{{ .Values.api.name }}.{{ .Values.domain }}"
-    - "{{ .Values.minio.name }}.{{ .Values.domain }}"
-    - "{{ .Values.admin.name }}.{{ .Values.domain }}"
-    - "{{ .Values.auth.name }}.{{ .Values.domain }}"
-    - "{{ .Values.webapp.name }}.{{ .Values.domain }}"
+    - "{{ .Values.apiUrl }}.{{ .Values.domain }}"
+    - "{{ .Values.minioUrl }}.{{ .Values.domain }}"
+    - "{{ .Values.minioApiUrl }}.{{ .Values.domain }}"
+    - "{{ .Values.adminUrl }}.{{ .Values.domain }}"
+    - "{{ .Values.keycloakUrl }}.{{ .Values.domain }}"
+    - "{{ .Values.webappUrl }}.{{ .Values.domain }}"
   issuerRef:
     name: "{{ .Values.issuerName }}"
     kind: ClusterIssuer
   secretName: "{{ .Values.name }}-tls"
-  duration: 2160h # 90d
-  renewBefore: 360h # 15d
