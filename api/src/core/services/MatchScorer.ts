@@ -274,7 +274,8 @@ export class MatchScorer implements IMatchScorer {
       if (potentialLanguagesToLearnFromProfile2.length === 0) {
         return false;
       }
-    } else if (learningLanguage2.language.isJokerLanguage()) {
+    }
+    if (learningLanguage2.language.isJokerLanguage()) {
       const availableLanguagesForProfile = profile2.user.university.isCentralUniversity()
       ? availableLanguages
       : availableLanguages.filter(language => language.secondaryUniversityActive);
@@ -308,7 +309,8 @@ export class MatchScorer implements IMatchScorer {
 
     // Check same campus if tandem
     if (
-      profile1.learningType === LearningType.TANDEM
+      (profile1.learningType === LearningType.TANDEM
+        || profile2.learningType === LearningType.TANDEM)
       && (
         (!profile1.campus || !profile2.campus)
         || (profile1.campus.id !== profile2.campus.id)
