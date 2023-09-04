@@ -60,4 +60,6 @@ export interface LanguageRepository {
   ofCode(code: string): Promise<Language>;
 
   update(language: Language): Promise<Language>;
+
+  getLanguagesProposedToLearning(): Promise<Language[]>;
 }

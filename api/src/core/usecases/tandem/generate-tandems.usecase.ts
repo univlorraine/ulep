@@ -1,13 +1,13 @@
 import { Inject, Injectable, Logger } from '@nestjs/common';
 import { Match, Tandem, TandemStatus } from 'src/core/models';
 import {
+  LANGUAGE_REPOSITORY,
+  LanguageRepository,
+} from 'src/core/ports/language.repository';
+import {
   LEARNING_LANGUAGE_REPOSITORY,
   LearningLanguageRepository,
 } from 'src/core/ports/learning-language.repository';
-import {
-  PROFILE_REPOSITORY,
-  ProfileRepository,
-} from 'src/core/ports/profile.repository';
 import {
   TANDEM_REPOSITORY,
   TandemRepository,
@@ -38,6 +38,8 @@ export class GenerateTandemsUsecase {
     private readonly learningLanguageRepository: LearningLanguageRepository,
     @Inject(UUID_PROVIDER)
     private readonly uuidProvider: UuidProviderInterface,
+    @Inject(LANGUAGE_REPOSITORY)
+    private readonly languageRepository: LanguageRepository,
   ) {}
 
   async execute(command: GenerateTandemsCommand): Promise<Tandem[]> {
@@ -56,6 +58,9 @@ export class GenerateTandemsUsecase {
         ', ',
       )}`,
     );
+
+    const languagesThatCanBeLearnt =
+      await this.languageRepository.getLanguagesProposedToLearning();
 
     // Generate all possible pairs
     const possiblePairs: Match[] = [];
@@ -76,6 +81,7 @@ export class GenerateTandemsUsecase {
             const match = this.scorer.computeMatchScore(
               learningLanguageToPair,
               potentialPairLearningLanguage,
+              languagesThatCanBeLearnt,
             );
 
             if (match.total > TRESHOLD_VIABLE_PAIR) {
