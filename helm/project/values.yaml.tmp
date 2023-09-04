@@ -22,6 +22,7 @@ postgresql:
 apiUrl: &apiUrl api
 adminUrl: &adminUrl admin
 minioUrl: &minioUrl minio
+minioApiUrl: &minioApiUrl minio-api
 keycloakUrl: &keycloakUrl auth
 webappUrl: &webappUrl webapp
 ############## API ##############
@@ -140,7 +141,7 @@ minio:
     # targetMemoryUtilizationPercentage: 80
   service:
     type: ClusterIP
-    port: 80
+    port: &svcPort 80
 
   ingress:
     enabled: true
@@ -153,9 +154,15 @@ minio:
     hosts:
       - host: *minioUrl
         paths: [/]
+        port: *svcPort
+      - host: *minioApiUrl
+        paths: [/]
+        port: 9000
     tls: 
       - hosts:
           - *minioUrl
+      - hosts:
+          - *minioApiUrl
 ############## MINIO ##############
 
 ############## ADMIN ##############
