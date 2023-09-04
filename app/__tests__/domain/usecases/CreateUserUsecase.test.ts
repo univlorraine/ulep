@@ -186,7 +186,7 @@ describe('createUserUsecase', () => {
             'FR',
             file
         );
-        expect(result).toStrictEqual(new Error('signup_informations_page.error_code'));
+        expect(result).toStrictEqual(new Error('errors.global'));
     });
 
     it('execute must return an error if adapter has code 400 with code error message', async () => {
