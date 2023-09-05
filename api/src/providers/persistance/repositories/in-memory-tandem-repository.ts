@@ -61,4 +61,12 @@ export class InMemoryTandemRepository implements TandemRepository {
       ),
     );
   }
+
+  deleteTandemNotLinkedToLearningLangues(): Promise<number> {
+    const length = this.#tandems.length;
+    this.#tandems = this.#tandems.filter(
+      (tandem) => tandem.learningLanguages?.length <= 0,
+    );
+    return Promise.resolve(length - this.#tandems.length);
+  }
 }

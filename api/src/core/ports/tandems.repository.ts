@@ -19,4 +19,6 @@ export interface TandemRepository {
   getExistingTandems(): Promise<Tandem[]>;
 
   getTandemsForProfile(profileId: string): Promise<Tandem[]>;
+
+  deleteTandemNotLinkedToLearningLangues(): Promise<number>;
 }
