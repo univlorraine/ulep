@@ -112,4 +112,22 @@ export class PrismaTandemRepository implements TandemRepository {
 
     return res.count;
   }
+
+  async deleteTandemLinkedToLearningLanguages(
+    learningLanguageIds: string[],
+  ): Promise<number> {
+    const res = await this.prisma.tandems.deleteMany({
+      where: {
+        LearningLanguages: {
+          some: {
+            id: {
+              in: learningLanguageIds,
+            },
+          },
+        },
+      },
+    });
+
+    return res.count;
+  }
 }
