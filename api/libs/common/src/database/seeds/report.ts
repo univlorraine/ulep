@@ -33,12 +33,14 @@ export const createReportCategories = async (
         TextContent: {
           create: {
             text: category.text,
-            Translations: {
-              create: category.translations?.map((translation) => ({
-                text: translation.content,
-                LanguageCode: { connect: { code: translation.code } },
-              })),
-            },
+            Translations: category.translations
+              ? {
+                  create: category.translations?.map((translation) => ({
+                    text: translation.content,
+                    LanguageCode: { connect: { code: translation.code } },
+                  })),
+                }
+              : undefined,
             LanguageCode: { connect: { code: 'fr' } },
           },
         },

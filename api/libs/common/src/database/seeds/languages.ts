@@ -666,7 +666,6 @@ const isoCodes = {
     name: 'Luganda',
     wikiUrl: 'https://en.wikipedia.org/wiki/Luganda',
   },
-  // ...continuing
   li: {
     iso6391: 'li',
     iso6392: 'lim',
@@ -834,13 +833,6 @@ const isoCodes = {
     family: 'Indo-European',
     name: 'Norsk',
     wikiUrl: 'https://en.wikipedia.org/wiki/Norwegian_language',
-  },
-  nr: {
-    iso6391: 'nr',
-    iso6392: 'nbl',
-    family: 'Niger–Congo',
-    name: 'isiNdebele',
-    wikiUrl: 'https://en.wikipedia.org/wiki/Southern_Ndebele_language',
   },
   nv: {
     iso6391: 'nv',
@@ -1136,7 +1128,6 @@ const isoCodes = {
     name: 'Türkmen',
     wikiUrl: 'https://en.wikipedia.org/wiki/Turkmen_language',
   },
-  // ...continuing
   tl: {
     iso6391: 'tl',
     iso6392: 'tgl',
@@ -1193,7 +1184,6 @@ const isoCodes = {
     name: 'Reo Tahiti',
     wikiUrl: 'https://en.wikipedia.org/wiki/Tahitian_language',
   },
-  // ...continuing
   ug: {
     iso6391: 'ug',
     iso6392: 'uig',
@@ -1263,6 +1253,12 @@ const isoCodes = {
     family: 'Indo-European',
     name: 'ייִדיש',
     wikiUrl: 'https://en.wikipedia.org/wiki/Yiddish',
+  },
+  zh: {
+    iso6391: 'zh',
+    iso6392: 'zho',
+    name: '中文, 汉语, 漢語',
+    wikiUrl: 'https://fr.wikipedia.org/wiki/Langues_chinoises',
   },
   zu: {
     iso6391: 'zu',
