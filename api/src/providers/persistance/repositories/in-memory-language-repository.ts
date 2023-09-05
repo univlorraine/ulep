@@ -1,5 +1,10 @@
 import { Collection } from '@app/common';
-import { Language, SuggestedLanguage } from 'src/core/models/language.model';
+import {
+  Language,
+  LanguageStatus,
+  SuggestedLanguage,
+} from 'src/core/models/language.model';
+
 import { LanguageRepository } from 'src/core/ports/language.repository';
 
 export class InMemoryLanguageRepository implements LanguageRepository {
@@ -102,5 +107,12 @@ export class InMemoryLanguageRepository implements LanguageRepository {
     this.#languages[index] = language;
 
     return Promise.resolve(language);
+  }
+
+  getLanguagesProposedToLearning(): Promise<Language[]> {
+    const res = this.#languages.filter(
+      (language) => language.mainUniversityStatus === LanguageStatus.PRIMARY,
+    );
+    return Promise.resolve(res);
   }
 }

@@ -5,8 +5,8 @@ import {
   ProfileRepository,
 } from 'src/core/ports/profile.repository';
 import {
-  TANDEM_REPOSITORY,
   TandemRepository,
+  TANDEM_REPOSITORY,
 } from 'src/core/ports/tandems.repository';
 
 export class GetTandemsForProfileCommand {
@@ -24,14 +24,13 @@ export class GetTandemsForProfileUsecase {
 
   async execute(command: GetTandemsForProfileCommand) {
     const profile = await this.profileRepository.ofId(command.profile);
-
     if (!profile) {
       throw new RessourceDoesNotExist();
     }
 
-    const tandems = await this.tandemRepository.findWhere({
-      profileId: profile.id,
-    });
+    const tandems = await this.tandemRepository.getTandemsForProfile(
+      profile.id,
+    );
 
     return tandems;
   }

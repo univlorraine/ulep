@@ -5,6 +5,7 @@ import {
   AddLanguageRequestUsecase,
   CreateInterestCategoryUsecase,
   CreateInterestUsecase,
+  CreateLearningLanguageUseCase,
   CreateObjectiveUsecase,
   CreatePartnerUniversityUsecase,
   CreateProfileUsecase,
@@ -135,14 +136,16 @@ const usecases: Provider[] = [
   GetReportUsecase,
   GetReportsByStatusUsecase,
   UpdateReportStatusUsecase,
-  // Tandems
+  // Profiles
   CreateProfileUsecase,
-  CreateTandemUsecase,
-  GenerateTandemsUsecase,
   GetTandemsForProfileUsecase,
   GetProfileByUserIdUsecase,
   GetProfilesUsecase,
   GetProfileUsecase,
+  CreateLearningLanguageUseCase,
+  // Tandems
+  CreateTandemUsecase,
+  GenerateTandemsUsecase,
   GetTandemsUsecase,
   GetUserMatchUsecase,
   // Universities

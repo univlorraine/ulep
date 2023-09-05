@@ -21,14 +21,14 @@ export const suggestedLanguageMapper = (
 ): SuggestedLanguage =>
   new SuggestedLanguage({
     id: instance.id,
-    language: {
+    language: new Language({
       id: instance.LanguageCode.id,
       code: instance.LanguageCode.code,
       mainUniversityStatus: instance.LanguageCode
         .mainUniversityStatus as LanguageStatus,
       secondaryUniversityActive:
         instance.LanguageCode.secondaryUniversityActive,
-    },
+    }),
     user: userMapper(instance.User),
   });
 

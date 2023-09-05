@@ -1,6 +1,6 @@
 import { Inject, Injectable } from '@nestjs/common';
 import { RessourceDoesNotExist } from 'src/core/errors';
-import { LanguageStatus } from 'src/core/models';
+import { Language, LanguageStatus } from 'src/core/models';
 import {
   LANGUAGE_REPOSITORY,
   LanguageRepository,
@@ -26,14 +26,16 @@ export class UpdateLanguageCodeUsecase {
       throw new RessourceDoesNotExist();
     }
 
-    return await this.languageRepository.update({
-      ...language,
-      mainUniversityStatus:
-        command.mainUniversityStatus ?? language.mainUniversityStatus,
-      secondaryUniversityActive:
-        command.secondaryUniversityActive !== undefined
-          ? command.secondaryUniversityActive
-          : language.secondaryUniversityActive,
-    });
+    return await this.languageRepository.update(
+      new Language({
+        ...language,
+        mainUniversityStatus:
+          command.mainUniversityStatus ?? language.mainUniversityStatus,
+        secondaryUniversityActive:
+          command.secondaryUniversityActive !== undefined
+            ? command.secondaryUniversityActive
+            : language.secondaryUniversityActive,
+      }),
+    );
   }
 }

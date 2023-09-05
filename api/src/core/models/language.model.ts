@@ -1,5 +1,4 @@
 import { User } from 'src/core/models';
-import { ProficiencyLevel } from './proficiency.model';
 
 export enum LanguageStatus {
   PRIMARY = 'PRIMARY',
@@ -35,6 +34,10 @@ export class Language {
     this.mainUniversityStatus = props.mainUniversityStatus;
     this.secondaryUniversityActive = props.secondaryUniversityActive;
   }
+
+  public isJokerLanguage() {
+    return this.code === JOKER_LANGUAGE_CODE;
+  }
 }
 
 export class SuggestedLanguage {
@@ -47,11 +50,6 @@ export class SuggestedLanguage {
     this.language = props.language;
     this.user = props.user;
   }
-}
-
-export interface LearningLanguage {
-  language: Language;
-  level: ProficiencyLevel;
 }
 
 export const JOKER_LANGUAGE_CODE = '*';

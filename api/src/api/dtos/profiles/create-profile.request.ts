@@ -16,7 +16,7 @@ import {
 import { LearningType } from 'src/core/models';
 import { CreateProfileCommand } from 'src/core/usecases/profiles/create-profile.usecase';
 import { BiographyDto } from './biography';
-import { LearningLanguageDto } from './learningLanguage';
+import { LearningLanguageDto } from '../learning-languages';
 
 export class CreateProfileRequest
   implements Omit<CreateProfileCommand, 'user'>

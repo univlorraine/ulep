@@ -1,11 +1,8 @@
 import { ProfileLanguagesException } from '../errors/profile-exceptions';
 import { Campus } from './campus.model';
 import { Interest } from './interest.model';
-import {
-  JOKER_LANGUAGE_CODE,
-  Language,
-  LearningLanguage,
-} from './language.model';
+import { Language } from './language.model';
+import { LearningLanguage } from './learning-language.model';
 import { LearningObjective } from './objective.model';
 import { ProficiencyLevel } from './proficiency.model';
 import { User } from './user.model';
@@ -70,13 +67,13 @@ export class Profile {
 
   constructor(props: CreateProfileProps) {
     const learningLanguages = [...props.learningLanguages].map(
-      (learningLanguage) => ({
-        language: learningLanguage.language,
-        level:
-          learningLanguage.language.code !== JOKER_LANGUAGE_CODE
-            ? learningLanguage.level
-            : ProficiencyLevel.A0,
-      }),
+      (learningLanguage) =>
+        new LearningLanguage({
+          ...learningLanguage,
+          level: learningLanguage.language.isJokerLanguage()
+            ? ProficiencyLevel.A0
+            : learningLanguage.level,
+        }),
     );
 
     this.id = props.id;
@@ -129,5 +126,12 @@ export class Profile {
         'A language cannot be in learning and mastered languages',
       );
     }
+  }
+
+  public isSpeakingLanguage(language: Language): boolean {
+    const spokenLanguages = [this.nativeLanguage, ...this.masteredLanguages];
+    return spokenLanguages.some(
+      (spokenLanguage) => spokenLanguage.id === language.id,
+    );
   }
 }

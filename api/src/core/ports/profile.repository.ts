@@ -43,14 +43,6 @@ export interface ProfileRepository {
 
   ofUser: (userId: string) => Promise<Profile | null>;
 
-  getProfilesUsableForTandemsGeneration: (
-    props: GetProfilesUsableForTandemsGenerationProps,
-  ) => Promise<Profile[]>;
-
-  whereMaxTandemsCountAndSpokeLanguage: (
-    props: MaxTandemsCountAndLanguageProps,
-  ) => Promise<Profile[]>;
-
   create: (profile: Profile) => Promise<void>;
 
   update: (profile: Profile) => Promise<void>;
