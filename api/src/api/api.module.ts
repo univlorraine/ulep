@@ -17,10 +17,12 @@ import { CountryController } from './controllers/country.controller';
 import { AUTHENTICATOR } from './services/authenticator.interface';
 import { KeycloakAuthenticator } from './services/keycloak.authenticator';
 import { ObjectiveController } from './controllers/objective.controller';
+import { CampusController } from 'src/api/controllers/campus.controller';
 
 @Module({
   imports: [CoreModule, TerminusModule],
   controllers: [
+    CampusController,
     CountryController,
     HealthController,
     InterestController,

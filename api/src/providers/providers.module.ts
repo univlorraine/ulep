@@ -26,8 +26,14 @@ import { UuidProvider } from './services/uuid.provider';
 import { PrismaInterestRepository } from './persistance/repositories/prisma-interest.repository';
 import { OBJECTIVE_REPOSITORY } from 'src/core/ports/objective.repository';
 import { PrismaObjectiveRepository } from './persistance/repositories/prisma-objective.repository';
+import { CAMPUS_REPOSITORY } from 'src/core/ports/campus.repository';
+import { PrismaCampusRepository } from 'src/providers/persistance/repositories/prisma-campus.repository';
 
 const providers: Provider[] = [
+  {
+    provide: CAMPUS_REPOSITORY,
+    useClass: PrismaCampusRepository,
+  },
   {
     provide: COUNTRY_REPOSITORY,
     useClass: PrismaCountryCodeRepository,

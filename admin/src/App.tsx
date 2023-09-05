@@ -1,6 +1,7 @@
 import React from 'react';
 import { Admin, Resource, useTranslate } from 'react-admin';
 import LoginPage from './pages/auth/login';
+import campus from './pages/campus';
 import categoryInterest from './pages/category-interest';
 import countSuggestedLanguages from './pages/count-suggested-languages';
 import countries from './pages/countries';
@@ -47,6 +48,7 @@ const App = () => {
                 {...categoryInterest}
             />
             <Resource name="objectives" options={{ label: translate('objectives.label') }} {...objectives} />
+            <Resource name="campus" options={{ label: translate('campus.label') }} {...campus} />
             <Resource name="proficiency/questions" options={{ label: translate('questions.label') }} {...questions} />
             <Resource
                 name="universities"

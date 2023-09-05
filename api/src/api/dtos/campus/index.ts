@@ -1,7 +1,26 @@
 import * as Swagger from '@nestjs/swagger';
 import { Expose } from 'class-transformer';
-import { IsUUID } from 'class-validator';
+import { IsNotEmpty, IsOptional, IsString, IsUUID } from 'class-validator';
 import { Campus } from 'src/core/models/campus.model';
+
+export class CreateCampusRequest {
+  @Swagger.ApiProperty({ type: 'string' })
+  @IsString()
+  @IsNotEmpty()
+  name: string;
+}
+
+export class UpdateCampusRequest {
+  @Swagger.ApiProperty({ type: 'string', format: 'uuid' })
+  @IsUUID()
+  @IsNotEmpty()
+  id: string;
+
+  @Swagger.ApiProperty({ type: 'string' })
+  @IsString()
+  @IsOptional()
+  name?: string;
+}
 
 export class CampusResponse {
   @Swagger.ApiProperty({ type: 'string', format: 'uuid' })

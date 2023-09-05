@@ -1,4 +1,13 @@
 {
+    "campus": {
+        "label": "Campus",
+        "name": "Nom des campus de l'université principale",
+        "update": {
+            "error": "Une erreur est survenue pendant la mise à jour d'un campus",
+            "name": "Nom du campus",
+            "title": "Mise à jour d'un campus"
+        }
+    },
     "count_suggested_languages": {
         "label": "Total langues demandées",
         "total": "Total"
