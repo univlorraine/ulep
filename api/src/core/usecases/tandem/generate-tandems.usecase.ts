@@ -109,7 +109,7 @@ export class GenerateTandemsUsecase {
       });
 
     let sortedPossiblePairs = possiblePairs.sort((a, b) => b.total - a.total);
-    const pairedLearningLanguageIds = new Set();
+    const pairedLearningLanguageIds = new Set<string>();
 
     // Select best pairs by priority order
     const tandems: Tandem[] = [];
@@ -149,6 +149,12 @@ export class GenerateTandemsUsecase {
     }
 
     await this.tandemsRepository.saveMany(tandems);
+
+    const countDeletedTandems =
+      await this.tandemsRepository.deleteTandemNotLinkedToLearningLangues();
+    this.logger.debug(
+      `Removed ${countDeletedTandems} tandems for learning languages in tandems proposal`,
+    );
 
     this.logger.debug(`Generated ${tandems.length} tandems`);
     return tandems;

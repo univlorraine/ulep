@@ -19,6 +19,7 @@ import { MatchScorer } from 'src/core/services/MatchScorer';
 export type GetUserMatchCommand = {
   id: string;
   count?: number;
+  universityIds: string[];
 };
 
 const DEFAULT_NB_USER_MATCHES = 5;
@@ -50,14 +51,16 @@ export class GetUserMatchUsecase {
     let targets = [];
     if (learningLanguage.language.isJokerLanguage()) {
       targets =
-        await this.learningLanguageRepository.getLearningLanguagesOfOtherProfileNotInActiveTandem(
+        await this.learningLanguageRepository.getLearningLanguagesOfOtherProfileFromUniversitiesNotInActiveTandem(
           owner.id,
+          command.universityIds,
         );
     } else {
       // TODO(discovery): search for profiles learning the language too
       targets =
-        await this.learningLanguageRepository.getLearningLanguagesOfProfileSpeakingAndNotInActiveTandem(
+        await this.learningLanguageRepository.getLearningLanguagesOfProfileSpeakingAndNotInActiveTandemFromUniversities(
           learningLanguage.language.id,
+          command.universityIds,
         );
     }
 
@@ -65,7 +68,7 @@ export class GetUserMatchUsecase {
       await this.languageRepository.getLanguagesProposedToLearning();
 
     this.logger.debug(
-      `Found ${targets.length} potential learningLanguages match for learningLanguage ${command.id}`,
+      `Found ${targets.length} potential learningLanguages match in universities ${command.universityIds} for learningLanguage ${command.id}`,
     );
 
     const potentialMatchs: Match[] = [];

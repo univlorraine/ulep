@@ -239,7 +239,6 @@ const isoCodes = {
     family: 'Indo-European',
     name: 'Deutsch',
     mainUniversityStatus: LanguageStatus.PRIMARY,
-
     wikiUrl: 'https://en.wikipedia.org/wiki/German_language',
   },
   dv: {
