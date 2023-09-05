@@ -3,7 +3,6 @@ import { ProvidersModule } from 'src/providers/providers.module';
 import { MatchScorer } from './services/MatchScorer';
 import {
   AddLanguageRequestUsecase,
-  AskForAccountDeletionUsecase,
   CreateInterestCategoryUsecase,
   CreateInterestUsecase,
   CreateObjectiveUsecase,
@@ -15,6 +14,7 @@ import {
   CreateTandemUsecase,
   CreateTestUsecase,
   CreateUniversityUsecase,
+  CreateUnsubscribeReportUsecase,
   CreateUserUsecase,
   DeleteInterestCategoryUsecase,
   DeleteInterestUsecase,
@@ -127,6 +127,7 @@ const usecases: Provider[] = [
   UpdateQuestionUsecase,
   // Reports
   CreateReportCategoryUsecase,
+  CreateUnsubscribeReportUsecase,
   CreateReportUsecase,
   DeleteReportCategoryUsecase,
   DeleteReportUsecase,
@@ -152,7 +153,6 @@ const usecases: Provider[] = [
   GetUniversityUsecase,
   UpdateUniversityUsecase,
   // Users
-  AskForAccountDeletionUsecase,
   CreateUserUsecase,
   DeleteUserUsecase,
   GetUsersUsecase,

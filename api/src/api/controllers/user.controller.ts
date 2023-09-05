@@ -19,7 +19,6 @@ import * as Swagger from '@nestjs/swagger';
 import { configuration } from 'src/configuration';
 import { UploadAvatarUsecase } from 'src/core/usecases';
 import {
-  AskForAccountDeletionUsecase,
   CreateUserUsecase,
   DeleteUserUsecase,
   GetUserUsecase,
@@ -29,7 +28,6 @@ import {
 import { CollectionResponse, CurrentUser } from '../decorators';
 import { Roles } from '../decorators/roles.decorator';
 import {
-  AskForAccountDeletionRequest,
   CreateUserRequest,
   PaginationDto,
   UpdateUserRequest,
@@ -42,7 +40,6 @@ import { ImagesFilePipe } from '../validators/images.validator';
 @Swagger.ApiTags('Users')
 export class UserController {
   constructor(
-    private readonly askForAccountDeletionUsecase: AskForAccountDeletionUsecase,
     private readonly createUserUsecase: CreateUserUsecase,
     private readonly uploadAvatarUsecase: UploadAvatarUsecase,
     private readonly getUsersUsecase: GetUsersUsecase,
@@ -119,17 +116,6 @@ export class UserController {
     const user = await this.updateUserUsecase.execute(body);
 
     return UserResponse.fromDomain(user);
-  }
-
-  @Post(':id/ask-deletion')
-  @UseGuards(AuthenticationGuard)
-  @Swagger.ApiOperation({ summary: 'Ask for account deletion.' })
-  @Swagger.ApiOkResponse()
-  async askForAccountDeletion(
-    @Param('id', ParseUUIDPipe) id: string,
-    @Body() { reason }: AskForAccountDeletionRequest,
-  ) {
-    await this.askForAccountDeletionUsecase.execute({ user: id, reason });
   }
 
   @Delete(':id')

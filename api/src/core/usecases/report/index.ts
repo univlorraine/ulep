@@ -6,3 +6,4 @@ export * from './get-categories.usecase';
 export * from './get-reports-by-status.usecase';
 export * from './get-report.usecase';
 export * from './update-report-status.usecase';
+export * from './create-unsubscribe.usecase';
