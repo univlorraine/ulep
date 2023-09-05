@@ -7,7 +7,7 @@ const CountSuggestedLanguagesList = () => {
     return (
         <List exporter={false}>
             <Datagrid bulkActionButtons={false}>
-                <TextField label={translation('global.language')} sortable={false} source="language.code" />
+                <TextField label={translation('global.language')} sortable={false} source="language.name" />
                 <TextField label={translation('count_suggested_languages.total')} sortable={false} source="count" />
             </Datagrid>
         </List>

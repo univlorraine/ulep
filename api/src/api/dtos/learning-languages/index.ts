@@ -40,6 +40,10 @@ export class LearningLanguageResponse {
 
   @ApiPropertyOptional({ type: 'string', example: 'FR' })
   @Expose({ groups: ['read'] })
+  name?: string;
+
+  @ApiPropertyOptional({ type: 'string', example: 'FR' })
+  @Expose({ groups: ['read'] })
   code?: string;
 
   @ApiProperty({ type: 'string', example: 'A1' })
@@ -61,6 +65,7 @@ export class LearningLanguageResponse {
     if (includeProfile) {
       return new LearningLanguageResponse({
         id: learningLanguage.id,
+        name: learningLanguage.language.name,
         code: learningLanguage.language.code,
         level: learningLanguage.level,
         profile: ProfileResponse.fromDomain(learningLanguage.profile),
@@ -69,6 +74,7 @@ export class LearningLanguageResponse {
 
     return new LearningLanguageResponse({
       id: learningLanguage.id,
+      name: learningLanguage.language.name,
       code: learningLanguage.language.code,
       level: learningLanguage.level,
     });

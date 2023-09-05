@@ -1,6 +1,5 @@
 import React from 'react';
 import {
-    DeleteButton,
     TopToolbar,
     EditButton,
     useTranslate,
@@ -11,21 +10,19 @@ import {
     Datagrid,
 } from 'react-admin';
 
-const InterestShowAction = () => (
+const ReportCategoryShowAction = () => (
     <TopToolbar>
         <EditButton />
-        <DeleteButton redirect="/interests/categories" />
     </TopToolbar>
 );
 
-const InterestShow = () => {
+const ReportCategoryShow = () => {
     const translate = useTranslate();
 
     return (
-        <Show actions={<InterestShowAction />} title={translate('interests.label')}>
+        <Show actions={<ReportCategoryShowAction />} title={translate('report_categories.label')}>
             <SimpleShowLayout sx={{ m: 3 }}>
-                <TextField label={translate('interests.show.name')} source="name.content" />
-
+                <TextField label={translate('report_categories.show.name')} source="name.content" />
                 <ArrayField label={translate('global.translations')} source="name.translations">
                     <Datagrid bulkActionButtons={false}>
                         <TextField label="Code" source="language" />
@@ -37,4 +34,4 @@ const InterestShow = () => {
     );
 };
 
-export default InterestShow;
+export default ReportCategoryShow;

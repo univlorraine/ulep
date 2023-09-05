@@ -35,6 +35,8 @@ export interface ReportRepository {
 
   updateReport(id: string, status: ReportStatus): Promise<void>;
 
+  updateCategoryReport(category: ReportCategory): Promise<ReportCategory>;
+
   deleteReport(instance: Report): Promise<void>;
 
   deleteCategory(instance: ReportCategory): Promise<void>;

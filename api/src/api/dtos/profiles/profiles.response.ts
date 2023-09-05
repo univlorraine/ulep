@@ -1,10 +1,11 @@
-import { ApiProperty } from '@nestjs/swagger';
+import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
 import { Expose, Transform } from 'class-transformer';
 import { InterestResponse } from 'src/api/dtos/interests';
 import { Profile } from 'src/core/models/profile.model';
 import { UserResponse } from '../users';
 import { ObjectiveResponse } from '../objective';
 import { BiographyDto } from './biography';
+import { Language } from 'src/core/models';
 import { CampusResponse } from '../campus';
 import { LearningLanguageResponse } from '../learning-languages';
 
@@ -13,7 +14,11 @@ class NativeLanguageResponse {
   @Expose({ groups: ['read'] })
   code: string;
 
-  constructor(partial: Partial<ProfileResponse>) {
+  @ApiPropertyOptional({ type: 'string', example: 'France' })
+  @Expose({ groups: ['read'] })
+  name?: string;
+
+  constructor(partial: Partial<Language>) {
     Object.assign(this, partial);
   }
 }
@@ -23,7 +28,11 @@ class MasteredLanguageResponse {
   @Expose({ groups: ['read'] })
   code: string;
 
-  constructor(partial: Partial<ProfileResponse>) {
+  @ApiPropertyOptional({ type: 'string', example: 'France' })
+  @Expose({ groups: ['read'] })
+  name?: string;
+
+  constructor(partial: Partial<Language>) {
     Object.assign(this, partial);
   }
 }
@@ -39,6 +48,13 @@ export class ProfileResponse {
 
   @ApiProperty()
   @Expose({ groups: ['read'] })
+  @Transform(({ value }) =>
+    value.map((val) => new LearningLanguageResponse(val)),
+  )
+  learningLanguages: LearningLanguageResponse[];
+
+  @ApiProperty()
+  @Expose({ groups: ['read'] })
   @Transform(({ value }) => new NativeLanguageResponse(value))
   nativeLanguage: NativeLanguageResponse;
 
@@ -50,10 +66,6 @@ export class ProfileResponse {
     ),
   )
   masteredLanguages: MasteredLanguageResponse[];
-
-  @ApiProperty({ type: LearningLanguageResponse, isArray: true })
-  @Expose({ groups: ['read'] })
-  learningLanguages: LearningLanguageResponse[];
 
   @ApiProperty({ type: ObjectiveResponse, isArray: true })
   @Expose({ groups: ['read'] })
@@ -92,9 +104,11 @@ export class ProfileResponse {
       id: profile.id,
       user: UserResponse.fromDomain(profile.user),
       nativeLanguage: {
+        name: profile.nativeLanguage.name,
         code: profile.nativeLanguage.code,
       },
       masteredLanguages: profile.masteredLanguages.map((masteredLanguage) => ({
+        name: masteredLanguage.name,
         code: masteredLanguage.code,
       })),
       learningLanguages: profile.learningLanguages.map((ll) =>

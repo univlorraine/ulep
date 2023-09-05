@@ -5,21 +5,14 @@ import IndexedTranslation from '../../entities/IndexedTranslation';
 import inputStyle from '../../theme/inputStyle';
 import TranslationForm from './TranslationForm';
 
-interface InterestFormProps {
+interface ReportFormProps {
     handleSubmit: (name: string, translations: IndexedTranslation[]) => void;
     name?: string;
     tradKey: string;
-    tradModeKey: string;
     translations?: IndexedTranslation[];
 }
 
-const InterestForm: React.FC<InterestFormProps> = ({
-    handleSubmit,
-    name,
-    translations,
-    tradKey = 'interests',
-    tradModeKey = 'create',
-}) => {
+const ReportForm: React.FC<ReportFormProps> = ({ handleSubmit, name, translations, tradKey = 'create' }) => {
     const translate = useTranslate();
     const [newName, setNewName] = useState<string>(name || '');
     const [newTranslations, setNewTranslations] = useState<IndexedTranslation[]>(translations || []);
@@ -31,7 +24,7 @@ const InterestForm: React.FC<InterestFormProps> = ({
 
     return (
         <Box sx={{ m: 4 }}>
-            <Typography variant="subtitle1">{translate(`${tradKey}.${tradModeKey}.name`)}</Typography>
+            <Typography variant="subtitle1">{translate(`report_categories.${tradKey}.name`)}</Typography>
 
             <Box alignItems="center" display="flex" flexDirection="row">
                 <Input name="Language" sx={{ mx: 4, my: 2, width: 40 }} value="FR" disableUnderline />
@@ -60,4 +53,4 @@ const InterestForm: React.FC<InterestFormProps> = ({
     );
 };
 
-export default InterestForm;
+export default ReportForm;

@@ -83,6 +83,20 @@ export class InMemoryReportsRepository implements ReportRepository {
     }
   }
 
+  async updateCategoryReport(
+    category: ReportCategory,
+  ): Promise<ReportCategory> {
+    const index = this.#categories.findIndex((obj) => obj.id === category.id);
+
+    if (index === -1) {
+      return Promise.reject(null);
+    }
+
+    this.#categories[index] = category;
+
+    return Promise.resolve(category);
+  }
+
   async deleteReport(instance: Report): Promise<void> {
     const index = this.#reports.findIndex(
       (report) => report.id === instance.id,

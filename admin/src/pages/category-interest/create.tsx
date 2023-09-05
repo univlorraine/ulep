@@ -38,7 +38,7 @@ const CreateInterestCategory = () => {
 
     return (
         <Create title={translate('interest_categories.create.title')}>
-            <InterestForm handleSubmit={handleSubmit} tradKey="interest_categories" />
+            <InterestForm handleSubmit={handleSubmit} tradKey="interest_categories" tradModeKey="create" />
         </Create>
     );
 };

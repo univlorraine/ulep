@@ -7,7 +7,7 @@ const ObjectivesList = () => {
     return (
         <List bulkActionButtons={false} exporter={false} pagination={false}>
             <Datagrid rowClick="show">
-                <TextField label={translate('objectives.name')} source="name" />
+                <TextField label={translate('objectives.name')} sortable={false} source="name" />
             </Datagrid>
         </List>
     );

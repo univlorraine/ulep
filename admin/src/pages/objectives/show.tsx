@@ -22,7 +22,7 @@ const ObjectiveShow = () => {
 
     return (
         <Show actions={<ObjectiveShowAction />} title={translate('objectives.label')}>
-            <SimpleShowLayout>
+            <SimpleShowLayout sx={{ m: 3 }}>
                 <TextField label={translate('objectives.name')} source="name.content" />
 
                 <ImageField label={translate('global.image')} source="image.url" />

@@ -6,6 +6,7 @@ import daysjs from 'dayjs';
 import React, { useState } from 'react';
 import { useTranslate, useNotify } from 'react-admin';
 import Country from '../../entities/Country';
+import inputStyle from '../../theme/inputStyle';
 import isCodeValid from '../../utils/isCodeValid';
 import CountriesPicker from '../CountriesPicker';
 import TimezonePicker from '../TimezonePicker';
@@ -28,6 +29,7 @@ interface UniversityFormProps {
     ) => void;
     name?: string;
     timezone?: string;
+    tradKey?: string;
     website?: string;
 }
 
@@ -41,6 +43,7 @@ const UniversityForm: React.FC<UniversityFormProps> = ({
     domains,
     handleSubmit,
     name,
+    tradKey = 'create',
     timezone,
     website,
 }) => {
@@ -58,34 +61,36 @@ const UniversityForm: React.FC<UniversityFormProps> = ({
 
     const addCode = (newCode: string) => {
         if (!isCodeValid(newCode)) {
-            return notify('universities.create.codes_error');
+            return notify(`universities.${tradKey}.codes_error`);
         }
 
         return setNewCodes([...newCodes, newCode]);
     };
     const addDomain = (newDomain: string) => {
         if (newDomain[0] !== '@') {
-            return notify('universities.create.domains_error');
+            return notify(`universities.${tradKey}.domains_error`);
         }
 
         return setNewDomains([...newDomains, newDomain]);
     };
 
     const onSendUniversity = () => {
-        if (!newCountry || !newTimezone || !newName || !newAdmissionStartDate || !newAdmissionEndDate || !newWebsite) {
+        const admissionStart = newAdmissionStartDate || admissionStartDate;
+        const admissionEnd = newAdmissionEndDate || admissionEndDate;
+        if (!newCountry || !newTimezone || !newName || !admissionStart || !admissionEnd || !newWebsite) {
             return undefined;
         }
 
-        if (newAdmissionEndDate <= newAdmissionStartDate) {
-            return notify('universities.create.admission_error');
+        if (admissionEnd <= admissionStart) {
+            return notify(`universities.${tradKey}.admission_error`);
         }
 
         return handleSubmit(
             newName,
             newCountry,
             newTimezone,
-            newAdmissionStartDate,
-            newAdmissionEndDate,
+            admissionStart,
+            admissionEnd,
             newCodes,
             newDomains,
             newWebsite
@@ -95,29 +100,30 @@ const UniversityForm: React.FC<UniversityFormProps> = ({
     return (
         <LocalizationProvider dateAdapter={AdapterDayjs}>
             <Box display="flex" flexDirection="column" sx={{ m: 4 }}>
-                <Typography variant="subtitle1">{translate('universities.create.name')}</Typography>
+                <Typography variant="subtitle1">{translate(`universities.${tradKey}.name`)}</Typography>
 
-                <Box alignItems="center" display="flex" flexDirection="row">
+                <Box alignItems="center" display="flex" flexDirection="row" sx={{ mb: 2 }}>
                     <Input
                         name="Name"
                         onChange={(e) => setNewName(e.target.value)}
-                        sx={styles}
+                        sx={inputStyle}
                         value={newName}
+                        disableUnderline
                         required
                     />
                 </Box>
 
-                <Typography variant="subtitle1">{translate('universities.create.country')}</Typography>
+                <Typography variant="subtitle1">{translate(`universities.${tradKey}.country`)}</Typography>
                 <Box alignItems="center" display="flex" flexDirection="row">
                     <CountriesPicker onChange={setNewCountry} value={newCountry} />
                 </Box>
 
-                <Typography variant="subtitle1">{translate('universities.create.timezone')}</Typography>
+                <Typography variant="subtitle1">{translate(`universities.${tradKey}.timezone`)}</Typography>
                 <Box alignItems="center" display="flex" flexDirection="row">
                     <TimezonePicker onChange={setNewTimezone} value={newTimezone} />
                 </Box>
 
-                <Typography variant="subtitle1">{translate('universities.create.admission_start')}</Typography>
+                <Typography variant="subtitle1">{translate(`universities.${tradKey}.admission_start`)}</Typography>
                 <Box alignItems="center" display="flex" flexDirection="row">
                     <DatePicker
                         // @ts-ignore
@@ -125,12 +131,13 @@ const UniversityForm: React.FC<UniversityFormProps> = ({
                         format="DD/MM/YYYY"
                         label="DD/MM/YYYY"
                         onChange={setNewAdmissionStartDate}
-                        sx={{ my: 2 }}
+                        sx={{ my: 2, width: '100%' }}
                         value={newAdmissionStartDate}
+                        disableUnderline
                     />
                 </Box>
 
-                <Typography variant="subtitle1">{translate('universities.create.admission_end')}</Typography>
+                <Typography variant="subtitle1">{translate(`universities.${tradKey}.admission_end`)}</Typography>
                 <Box alignItems="center" display="flex" flexDirection="row">
                     <DatePicker
                         // @ts-ignore
@@ -138,12 +145,12 @@ const UniversityForm: React.FC<UniversityFormProps> = ({
                         format="DD/MM/YYYY"
                         label="DD/MM/YYYY"
                         onChange={setNewAdmissionEndDate}
-                        sx={{ my: 2 }}
+                        sx={{ my: 2, width: '100%' }}
                         value={newAdmissionEndDate}
                     />
                 </Box>
 
-                <Typography variant="subtitle1">{translate('universities.create.codes')}</Typography>
+                <Typography variant="subtitle1">{translate(`universities.${tradKey}.codes`)}</Typography>
                 <Table>
                     <TableBody>
                         {newCodes.map((code) => (
@@ -164,7 +171,7 @@ const UniversityForm: React.FC<UniversityFormProps> = ({
                     sx={styles}
                 />
 
-                <Typography variant="subtitle1">{translate('universities.create.domains')}</Typography>
+                <Typography variant="subtitle1">{translate(`universities.${tradKey}.domains`)}</Typography>
                 <Table>
                     <TableBody>
                         {newDomains.map((domain) => (
@@ -186,10 +193,16 @@ const UniversityForm: React.FC<UniversityFormProps> = ({
                     sx={styles}
                 />
 
-                <Typography variant="subtitle1">{translate('universities.create.website')}</Typography>
+                <Typography variant="subtitle1">{translate(`universities.${tradKey}.website`)}</Typography>
 
                 <Box alignItems="center" display="flex" flexDirection="row">
-                    <Input name="Name" onChange={(e) => setNewWebsite(e.target.value)} sx={styles} required />
+                    <Input
+                        name="Website"
+                        onChange={(e) => setNewWebsite(e.target.value)}
+                        sx={inputStyle}
+                        disableUnderline
+                        required
+                    />
                 </Box>
 
                 <Button
@@ -198,8 +211,8 @@ const UniversityForm: React.FC<UniversityFormProps> = ({
                         !newCountry ||
                         !newTimezone ||
                         !newName ||
-                        !newAdmissionStartDate ||
-                        !newAdmissionEndDate ||
+                        (!newAdmissionStartDate && !admissionStartDate) ||
+                        (!newAdmissionEndDate && !admissionEndDate) ||
                         !newWebsite
                     }
                     onClick={onSendUniversity}

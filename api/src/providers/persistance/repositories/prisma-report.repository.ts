@@ -176,13 +176,34 @@ export class PrismaReportRepository implements ReportRepository {
     });
   }
 
-  async updateCategory(id: string, name: string): Promise<void> {
-    await this.prisma.reportCategories.update({
-      where: { id },
+  async updateCategoryReport(
+    category: ReportCategory,
+  ): Promise<ReportCategory> {
+    await this.prisma.textContent.update({
+      where: {
+        id: category.name.id,
+      },
       data: {
-        TextContent: { update: { text: name } },
+        text: category.name.content,
+        LanguageCode: { connect: { code: category.name.language } },
+        Translations: {
+          deleteMany: {},
+          create: category.name.translations?.map((translation) => ({
+            text: translation.content,
+            LanguageCode: { connect: { code: translation.language } },
+          })),
+        },
       },
     });
+
+    const updatedCategory = await this.prisma.reportCategories.findUnique({
+      where: {
+        id: category.id,
+      },
+      include: { TextContent: TextContentRelations },
+    });
+
+    return reportCategoryMapper(updatedCategory);
   }
 
   async deleteReport(instance: Report): Promise<void> {

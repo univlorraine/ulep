@@ -66,6 +66,7 @@ export const profileMapper = (instance: ProfileSnapshot): Profile => {
     nativeLanguage: new Language({
       id: instance.NativeLanguage.id,
       code: instance.NativeLanguage.code,
+      name: instance.NativeLanguage.name,
       mainUniversityStatus: instance.NativeLanguage
         .mainUniversityStatus as LanguageStatus,
       secondaryUniversityActive:
@@ -75,6 +76,7 @@ export const profileMapper = (instance: ProfileSnapshot): Profile => {
       (language) =>
         new Language({
           id: language.LanguageCode.id,
+          name: language.LanguageCode.name,
           code: language.LanguageCode.code,
           mainUniversityStatus: instance.NativeLanguage
             .mainUniversityStatus as LanguageStatus,

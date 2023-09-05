@@ -2,6 +2,7 @@ import { Box, Typography, Input } from '@mui/material';
 import React, { useEffect, useState } from 'react';
 import { Button, useTranslate } from 'react-admin';
 import IndexedTranslation from '../../entities/IndexedTranslation';
+import inputStyle from '../../theme/inputStyle';
 import QuizzLevelPicker from '../QuizzLevelPicker';
 import TranslationForm from './TranslationForm';
 
@@ -38,13 +39,14 @@ const QuestionForm: React.FC<QuestionFormProps> = ({ handleSubmit, name, level, 
             <QuizzLevelPicker onChange={setCurrentLevel} value={currentLevel} />
             <Typography variant="subtitle1">{translate('questions.create.name')}</Typography>
             <Box alignItems="center" display="flex" flexDirection="row">
-                <Input name="Language" sx={{ mx: 4, my: 2, width: 40 }} value="FR" />
+                <Input name="Language" sx={{ mx: 4, my: 2, width: 40 }} value="FR" disableUnderline />
                 <Input
                     name="Content"
                     onChange={(e) => setCurrentName(e.target.value)}
                     placeholder={translate('global.content')}
-                    sx={{ width: '80%' }}
+                    sx={inputStyle}
                     value={currentName}
+                    disableUnderline
                     multiline
                     required
                 />

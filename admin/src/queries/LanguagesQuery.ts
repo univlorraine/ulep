@@ -15,7 +15,7 @@ const LanguagesQuery = (params: LanguagesParams): string => {
     const query = {
         page: params.pagination.page,
         limit: params.pagination.perPage,
-        field: params.sort.field,
+        field: params.sort.field || 'code',
         order: params.sort.order.toLowerCase(),
     };
 

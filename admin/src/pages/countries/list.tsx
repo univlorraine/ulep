@@ -1,13 +1,17 @@
 import React from 'react';
-import { List, Datagrid, TextField } from 'react-admin';
+import { useTranslate, List, Datagrid, TextField } from 'react-admin';
 
-const CountryList = () => (
-    <List bulkActionButtons={false} exporter={false}>
-        <Datagrid rowClick="edit">
-            <TextField source="code" />
-            <TextField source="name" />
-        </Datagrid>
-    </List>
-);
+const CountryList = () => {
+    const translate = useTranslate();
+
+    return (
+        <List exporter={false}>
+            <Datagrid bulkActionButtons={false}>
+                <TextField label={translate('countries.code')} source="code" />
+                <TextField label={translate('countries.name')} source="name" />
+            </Datagrid>
+        </List>
+    );
+};
 
 export default CountryList;

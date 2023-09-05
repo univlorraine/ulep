@@ -1,56 +1,55 @@
 import React from 'react';
-import { useTranslate, useNotify, useRedirect, useUpdate, Edit, WithRecord } from 'react-admin';
-import InterestForm from '../../components/form/InterestForm';
+import { useTranslate, useNotify, useRedirect, useUpdate, WithRecord, Edit } from 'react-admin';
+import ReportForm from '../../components/form/ReportForm';
 import IndexedTranslation from '../../entities/IndexedTranslation';
-import InterestCategory from '../../entities/InterestCategory';
+import ReportCategory from '../../entities/ReportCategory';
 import Translation from '../../entities/Translation';
 import indexedTranslationsToTranslations from '../../utils/indexedTranslationsToTranslations';
 
-const EditInterestCategory = () => {
+const EditReportCategory = () => {
     const translate = useTranslate();
     const [update] = useUpdate();
     const redirect = useRedirect();
     const notify = useNotify();
 
-    const handleSubmit = async (id: string, newInterest: string, newTranslations: IndexedTranslation[]) => {
+    const handleSubmit = async (id: string, name: string, translations: IndexedTranslation[]) => {
         const payload = {
             id,
-            name: newInterest,
-            translations: indexedTranslationsToTranslations(newTranslations),
+            name,
+            translations: indexedTranslationsToTranslations(translations),
         };
         try {
             return await update(
-                'interests/categories',
+                'reports/categories',
                 { data: payload },
                 {
                     onSettled: (data: any, error: Error) => {
                         if (!error) {
-                            return redirect('/interests/categories');
+                            return redirect('/reports/categories');
                         }
 
-                        return notify('interest_categories.update.error');
+                        return notify('report_categories.update.error');
                     },
                 }
             );
         } catch (err) {
             console.error(err);
 
-            return notify('interest.update.error');
+            return notify('report_categories.update.error');
         }
     };
 
     return (
-        <Edit title={translate('interest_categories.update.title')}>
+        <Edit title={translate('report_categories.update.title')}>
             <WithRecord
-                label="interests/categories/"
-                render={(record: InterestCategory) => (
-                    <InterestForm
+                label="interests"
+                render={(record: ReportCategory) => (
+                    <ReportForm
                         handleSubmit={(name: string, translations: IndexedTranslation[]) =>
                             handleSubmit(record.id, name, translations)
                         }
                         name={record.name.content}
-                        tradKey="interest_categories"
-                        tradModeKey="update"
+                        tradKey="update"
                         translations={record.name.translations?.map(
                             (translation: Translation, index: number) => new IndexedTranslation(index, translation)
                         )}
@@ -61,4 +60,4 @@ const EditInterestCategory = () => {
     );
 };
 
-export default EditInterestCategory;
+export default EditReportCategory;

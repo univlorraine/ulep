@@ -3,6 +3,7 @@ import React, { useState } from 'react';
 import { Button, useTranslate } from 'react-admin';
 import IndexedTranslation from '../../entities/IndexedTranslation';
 import MediaObject from '../../entities/MediaObject';
+import inputStyle from '../../theme/inputStyle';
 import ImageUploader from '../ImageUploader';
 import TranslationForm from './TranslationForm';
 
@@ -28,17 +29,18 @@ const ObjectiveForm: React.FC<ObjectiveFormProps> = ({ handleSubmit, name, image
     };
 
     return (
-        <Box component="form" sx={{ m: 4 }} noValidate>
+        <Box sx={{ m: 4 }}>
             <Typography variant="subtitle1">{translate('objectives.create.name')}</Typography>
 
             <Box alignItems="center" display="flex" flexDirection="row">
-                <Input name="Language" sx={{ mx: 4, my: 2, width: 40 }} value="FR" />
+                <Input name="Language" sx={{ mx: 4, my: 2, width: 40 }} value="FR" disableUnderline />
                 <Input
                     name="Content"
                     onChange={(e) => setCurrentName(e.target.value)}
                     placeholder={translate('global.content')}
-                    sx={{ width: '80%' }}
+                    sx={inputStyle}
                     value={currentName}
+                    disableUnderline
                     required
                 />
             </Box>
@@ -53,7 +55,7 @@ const ObjectiveForm: React.FC<ObjectiveFormProps> = ({ handleSubmit, name, image
                 color="primary"
                 disabled={!currentName}
                 onClick={sumbit}
-                sx={{ mt: 4, width: 300 }}
+                sx={{ mt: 4, width: '100%' }}
                 type="button"
                 variant="contained"
             >

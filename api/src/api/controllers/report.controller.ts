@@ -11,6 +11,7 @@ import {
   ParseUUIDPipe,
   Patch,
   Post,
+  Put,
   Query,
   UseGuards,
 } from '@nestjs/common';
@@ -23,8 +24,10 @@ import {
   DeleteReportCategoryUsecase,
   DeleteReportUsecase,
   GetCategoriesUsecase,
+  GetReportCategoryByIdUsecase,
   GetReportUsecase,
   GetReportsByStatusUsecase,
+  UpdateReportCategoryUsecase,
   UpdateReportStatusUsecase,
 } from '../../core/usecases/report';
 import { CurrentUser } from '../decorators';
@@ -32,8 +35,10 @@ import { Roles } from '../decorators/roles.decorator';
 import {
   CreateReportCategoryRequest,
   CreateReportRequest,
+  GetReportCategoryResponse,
   ReportCategoryResponse,
   ReportResponse,
+  UpdateReportCategoryRequest,
   UpdateReportStatusRequest,
 } from '../dtos';
 import { AuthenticationGuard } from '../guards';
@@ -50,9 +55,11 @@ export class ReportController {
     private readonly createUnsubscribeUsecase: CreateUnsubscribeReportUsecase,
     private readonly createReportUsecase: CreateReportUsecase,
     private readonly findReportCategoriesUsecase: GetCategoriesUsecase,
+    private readonly findReportCategoryByIdUsecase: GetReportCategoryByIdUsecase,
     private readonly getReportsByStatusUsecase: GetReportsByStatusUsecase,
     private readonly getReportUsecase: GetReportUsecase,
     private readonly updateReportStatusUsecase: UpdateReportStatusUsecase,
+    private readonly updateReportCategoryUsecase: UpdateReportCategoryUsecase,
     private readonly deleteReportCategoryUsecase: DeleteReportCategoryUsecase,
     private readonly deleteReportUsecase: DeleteReportUsecase,
   ) {}
@@ -85,6 +92,28 @@ export class ReportController {
       ),
       totalItems: instances.totalItems,
     });
+  }
+
+  @Get('categories/:id')
+  @UseGuards(AuthenticationGuard)
+  @Swagger.ApiOperation({ summary: 'Get Category ressource.' })
+  @Swagger.ApiOkResponse({ type: GetReportCategoryResponse, isArray: true })
+  async findOneCategory(@Param('id', ParseUUIDPipe) id: string) {
+    const category = await this.findReportCategoryByIdUsecase.execute({ id });
+    return GetReportCategoryResponse.fromDomain(category);
+  }
+
+  @Put('categories')
+  @Roles(configuration().adminRole)
+  @UseGuards(AuthenticationGuard)
+  @Swagger.ApiOperation({ summary: 'Update a Category ressource.' })
+  @Swagger.ApiOkResponse()
+  async updateCategory(@Body() request: UpdateReportCategoryRequest) {
+    const category = await await this.updateReportCategoryUsecase.execute({
+      ...request,
+    });
+
+    return ReportCategoryResponse.fromDomain(category);
   }
 
   @Delete('categories/:id')

@@ -3,6 +3,7 @@ import React from 'react';
 import { Button, useTranslate } from 'react-admin';
 import IndexedTranslation from '../../entities/IndexedTranslation';
 import Translation from '../../entities/Translation';
+import inputStyle from '../../theme/inputStyle';
 import TranslationLanguagePicker from '../TranslationLanguagePicker';
 
 interface TranslationFormProps {
@@ -38,8 +39,9 @@ const TranslationForm: React.FC<TranslationFormProps> = ({ setTranslations, tran
                         name={`Content${item.index}`}
                         onChange={(e) => onTraductionContentAdded(e.target.value, index)}
                         placeholder={translate('global.content')}
-                        sx={{ width: '80%' }}
+                        sx={inputStyle}
                         value={translations[index].translation.content}
+                        disableUnderline
                     />
                 </Box>
             ))}

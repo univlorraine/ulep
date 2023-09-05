@@ -23,6 +23,7 @@ export const suggestedLanguageMapper = (
     id: instance.id,
     language: new Language({
       id: instance.LanguageCode.id,
+      name: instance.LanguageCode.name,
       code: instance.LanguageCode.code,
       mainUniversityStatus: instance.LanguageCode
         .mainUniversityStatus as LanguageStatus,

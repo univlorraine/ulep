@@ -88,7 +88,11 @@ const ProfileList = (props: any) => {
     return (
         <List exporter={false} filters={<ProfileFilter />} title={translate('profiles.label')} {...props}>
             <Datagrid rowClick="show">
-                <TextField label={translate('global.role')} source="user.role" sortable />
+                <FunctionField
+                    label={translate('global.role')}
+                    render={(record: { user: User }) => translate(`global.${record.user.role.toLowerCase()}`)}
+                    source="user.role"
+                />
                 <TextField label={translate('global.lastname')} source="user.lastname" sortable />
                 <TextField label={translate('global.firstname')} source="user.firstname" sortable />
                 <TextField label={translate('global.email')} source="user.email" sortable />
@@ -96,7 +100,7 @@ const ProfileList = (props: any) => {
                 <TextField
                     label={translate('profiles.native_language')}
                     sortable={false}
-                    source="nativeLanguage.code"
+                    source="nativeLanguage.name"
                 />
                 <ArrayField
                     label={translate('profiles.mastered_languages')}
@@ -104,7 +108,7 @@ const ProfileList = (props: any) => {
                     source="masteredLanguages"
                 >
                     <SingleFieldList linkType={false}>
-                        <ChipField source="code" />
+                        <ChipField source="name" />
                     </SingleFieldList>
                 </ArrayField>
                 <BooleanField label={translate('profiles.certificate')} sortable={false} source="certificateOption" />
@@ -114,6 +118,7 @@ const ProfileList = (props: any) => {
                         <Select
                             onChange={(value) => onUpdateUserStatus(record.user.id, value.target.value as UserStatus)}
                             onClick={(e) => e.stopPropagation()}
+                            size="small"
                             value={record.user.status ?? 'ACTIVE'}
                         >
                             <MenuItem value="ACTIVE">{translate('global.active')}</MenuItem>

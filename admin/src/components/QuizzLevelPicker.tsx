@@ -23,6 +23,7 @@ const QuizzLevelPicker: React.FC<QuizzLevelPickerProps> = ({ onChange, value }) 
                 sx={{ mx: 4, my: 2 }}
                 value={value ?? ''}
                 variant="standard"
+                disableUnderline
             >
                 {data.map((quizz: Quizz) => (
                     <MenuItem key={quizz.id} value={quizz.level}>
