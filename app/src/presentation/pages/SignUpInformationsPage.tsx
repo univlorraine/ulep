@@ -72,14 +72,6 @@ const SignUpInformationsPage: React.FC = () => {
             return history.push('/signup/');
         }
 
-        if (profileSignUp.university.domains.length > 0 && !isDomainValid(email, profileSignUp.university.domains)) {
-            return setErrorMessage({ type: 'email', message: t('signup_informations_page.error_domain') });
-        }
-
-        if (profileSignUp.university.codes.length > 0 && !isCodeValid(code, profileSignUp.university.codes)) {
-            return setErrorMessage({ type: 'code', message: t('signup_informations_page.error_code') });
-        }
-
         if (!password || !isPasswordCorrect(password)) {
             return setErrorMessage({ type: 'password', message: t('signup_informations_page.error_password') });
         }
@@ -94,6 +86,7 @@ const SignUpInformationsPage: React.FC = () => {
             firstname,
             lastname,
             gender,
+            code,
             age,
             profileSignUp.university,
             profileSignUp.role,
@@ -102,6 +95,14 @@ const SignUpInformationsPage: React.FC = () => {
         );
 
         if (result instanceof Error) {
+            if (result.message === 'signup_informations_page.error_domain') {
+                return setErrorMessage({ type: 'email', message: t(result.message) });
+            }
+
+            if (result.message === 'signup_informations_page.error_code') {
+                return setErrorMessage({ type: 'code', message: t(result.message) });
+            }
+
             return await showToast({ message: t(result.message), duration: 1000 });
         }
 

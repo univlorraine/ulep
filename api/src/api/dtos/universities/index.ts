@@ -178,14 +178,6 @@ export class UniversityResponse {
   @Expose({ groups: ['read'] })
   sites: CampusResponse[];
 
-  @Swagger.ApiProperty({ type: 'string', isArray: true })
-  @Expose({ groups: ['read'] })
-  codes: string[];
-
-  @Swagger.ApiProperty({ type: 'string', isArray: true })
-  @Expose({ groups: ['read'] })
-  domains: string[];
-
   @Swagger.ApiProperty()
   @Expose({ groups: ['read'] })
   admissionStart: Date;
@@ -193,6 +185,14 @@ export class UniversityResponse {
   @Swagger.ApiProperty()
   @Expose({ groups: ['read'] })
   admissionEnd: Date;
+
+  @Swagger.ApiProperty({ type: 'string', isArray: true })
+  @Expose({ groups: ['university:read'] })
+  codes: string[];
+
+  @Swagger.ApiProperty({ type: 'string', isArray: true })
+  @Expose({ groups: ['university:read'] })
+  domains: string[];
 
   @Swagger.ApiPropertyOptional({ type: 'string', format: 'url' })
   @Expose({ groups: ['university:read'] })
