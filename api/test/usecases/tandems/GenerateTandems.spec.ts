@@ -916,6 +916,7 @@ describe('GenerateTandem UC', () => {
         experience: faker.lorem.sentence(),
         anecdote: faker.lorem.sentence(),
       },
+      campus: lorraineCampus,
     });
 
     // English learning french in whatever mode
