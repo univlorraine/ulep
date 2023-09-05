@@ -45,24 +45,34 @@ export class PrismaLearningLanguageRepository
     });
   }
 
-  async getLearningLanguagesOfProfileSpeakingAndNotInActiveTandem(
+  async getLearningLanguagesOfProfileSpeakingAndNotInActiveTandemFromUniversities(
     spokenLanguageId: string,
+    universityIds: string[],
   ): Promise<LearningLanguage[]> {
     const res = await this.prisma.learningLanguages.findMany({
       where: {
         Profile: {
-          OR: [
+          AND: [
             {
-              native_language_code_id: {
-                equals: spokenLanguageId,
-              },
-            },
-            {
-              MasteredLanguages: {
-                some: {
-                  language_code_id: {
+              OR: [
+                {
+                  native_language_code_id: {
                     equals: spokenLanguageId,
                   },
+                },
+                {
+                  MasteredLanguages: {
+                    some: {
+                      language_code_id: {
+                        equals: spokenLanguageId,
+                      },
+                    },
+                  },
+                },
+              ],
+              User: {
+                organization_id: {
+                  in: universityIds,
                 },
               },
             },
@@ -143,17 +153,29 @@ export class PrismaLearningLanguageRepository
     return !!res;
   }
 
-  async getLearningLanguagesOfOtherProfileNotInActiveTandem(
+  async getLearningLanguagesOfOtherProfileFromUniversitiesNotInActiveTandem(
     profileId: string,
+    universityIds: string[],
   ): Promise<LearningLanguage[]> {
     const res = await this.prisma.learningLanguages.findMany({
       where: {
         Profile: {
-          id: {
-            not: {
-              equals: profileId,
+          AND: [
+            {
+              id: {
+                not: {
+                  equals: profileId,
+                },
+              },
             },
-          },
+            {
+              User: {
+                organization_id: {
+                  in: universityIds,
+                },
+              },
+            },
+          ],
         },
         OR: [
           {

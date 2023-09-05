@@ -20,8 +20,15 @@ export class MatchController {
     summary: 'Retrieve the collection of Match ressource.',
   })
   @CollectionResponse(MatchResponse)
-  async getByUserId(@Query() { id, count }: GetMatchsRequest) {
-    const matches = await this.getUserMatchUsecase.execute({ id, count });
+  async getLearningLangugeMatches(
+    @Query() { id, count, universityIds }: GetMatchsRequest,
+  ) {
+    const matches = await this.getUserMatchUsecase.execute({
+      id,
+      count,
+      universityIds:
+        typeof universityIds === 'string' ? [universityIds] : universityIds,
+    });
 
     return new Collection<MatchResponse>({
       items: matches.items.map(MatchResponse.fromDomain),

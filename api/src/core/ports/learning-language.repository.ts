@@ -7,16 +7,18 @@ export interface LearningLanguageRepository {
 
   create: (learningLanguage: LearningLanguage) => Promise<void>;
 
-  getLearningLanguagesOfProfileSpeakingAndNotInActiveTandem: (
+  getLearningLanguagesOfProfileSpeakingAndNotInActiveTandemFromUniversities: (
     languageId: string,
+    universityIds: string[],
   ) => Promise<LearningLanguage[]>;
 
   getLearningLanguagesOfUniversitiesNotInActiveTandem: (
     universityIds: string[],
   ) => Promise<LearningLanguage[]>;
 
-  getLearningLanguagesOfOtherProfileNotInActiveTandem: (
+  getLearningLanguagesOfOtherProfileFromUniversitiesNotInActiveTandem: (
     profileId: string,
+    universityIds: string[],
   ) => Promise<LearningLanguage[]>;
 
   hasAnActiveTandem: (id: string) => Promise<boolean>;
