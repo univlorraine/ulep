@@ -16,6 +16,7 @@ export class MinioStorage implements StorageInterface {
   constructor(private readonly configService: ConfigService) {
     this.minioClient = new Minio.Client({
       endPoint: configService.get('MINIO_URL') || 'minio',
+      port: Number(configService.get('MINIO_PORT')) || null,
       useSSL: 'true' === configService.get('MINIO_USE_SSL'),
       accessKey: configService.get('MINIO_ACCESS_KEY'),
       secretKey: configService.get('MINIO_SECRET_KEY'),
