@@ -14,7 +14,7 @@ import { UUID_PROVIDER } from 'src/core/ports/uuid.provider';
 import { UuidProvider } from 'src/providers/services/uuid.provider';
 
 export type CreateTandemCommand = {
-  learningLanguages: string[];
+  learningLanguageIds: string[];
   status: TandemStatus;
 };
 
@@ -33,7 +33,7 @@ export class CreateTandemUsecase {
 
   async execute(command: CreateTandemCommand): Promise<Tandem> {
     const learningLanguages = await Promise.all(
-      command.learningLanguages.map((id) =>
+      command.learningLanguageIds.map((id) =>
         this.tryToFindLearningLanguages(id),
       ),
     );

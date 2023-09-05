@@ -50,8 +50,6 @@ export class CreateLearningLanguageUseCase {
   async execute(
     command: CreateLearningLanguageCommand,
   ): Promise<LearningLanguage> {
-    console.log('command', command);
-
     const profile = await this.profilesRepository.ofId(command.profileId);
     if (!profile) {
       throw new RessourceDoesNotExist('Profile does not exist');

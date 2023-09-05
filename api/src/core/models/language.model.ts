@@ -1,5 +1,4 @@
-import { Profile, User } from 'src/core/models';
-import { ProficiencyLevel } from './proficiency.model';
+import { User } from 'src/core/models';
 
 export enum LanguageStatus {
   PRIMARY = 'PRIMARY',

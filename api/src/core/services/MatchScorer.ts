@@ -53,17 +53,16 @@ export class MatchScorer implements IMatchScorer {
     learningLanguage2: LearningLanguage,
     availableLanguages: Language[]
   ): Match {
-    if (learningLanguage1.profile.id === learningLanguage2.profile.id) {
-      throw new SameProfilesError();
-    }
     const profile1 = learningLanguage1.profile;
     const profile2 = learningLanguage2.profile;
 
+    if (profile1.id === profile2.id) {
+      throw new SameProfilesError();
+    }
+
     if (!this.assertMatchIsNotForbidden(
       learningLanguage1,
-      profile1,
       learningLanguage2,
-      profile2,
       availableLanguages,
     )) {
       return new Match({ owner: learningLanguage1, target: learningLanguage2, scores: MatchScores.empty() });
@@ -253,11 +252,12 @@ export class MatchScorer implements IMatchScorer {
 
   private assertMatchIsNotForbidden(
     learningLanguage1: LearningLanguage,
-    profile1: Profile,
     learningLanguage2: LearningLanguage,
-    profile2: Profile,
     availableLanguages: Language[]
   ): boolean {
+    const profile1 = learningLanguage1.profile;
+    const profile2 = learningLanguage2.profile;
+
     // TODO(discovery): include other cases in discovery mode (ex: learning asian language, TANDEM).
     // TODO(discovery): algorithm should be adapted to consider learningLanguages as spoken in that case
     const profile1LearningLanguageIsDiscovery = learningLanguage1.language.isJokerLanguage();
