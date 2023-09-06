@@ -1,8 +1,9 @@
 import simpleRestProvider from 'ra-data-simple-rest';
-import { fetchUtils } from 'react-admin';
+import { CreateParams, DataProvider, DeleteManyParams, DeleteParams, UpdateParams, fetchUtils } from 'react-admin';
 import CountriesQuery from '../queries/CountriesQuery';
 import InterestsQuery from '../queries/InterestsQuery';
 import LanguagesQuery from '../queries/LanguagesQuery';
+import LearningLanguagesQuery from '../queries/LearningLanguagesQuery';
 import ProfilesQuery from '../queries/ProfilesQuery';
 import QuestionsQuery from '../queries/QuestionsQuery';
 import ReportsQuery from '../queries/ReportsQuery';
@@ -39,9 +40,9 @@ const httpClient = (url: string, options: any = {}) => {
 
 const dataProvider = simpleRestProvider(`${process.env.REACT_APP_API_URL}`, httpClient);
 
-const customDataProvider = {
+const customDataProvider: DataProvider = {
     ...dataProvider,
-    create: async (resource: string, params: any) => {
+    create: async (resource: string, params: CreateParams) => {
         const url = new URL(`${process.env.REACT_APP_API_URL}/${resource}`);
         let body;
 
@@ -61,7 +62,7 @@ const customDataProvider = {
 
         return { data: result };
     },
-    update: async (resource: string, params: any) => {
+    update: async (resource: string, params: UpdateParams) => {
         const url = new URL(`${process.env.REACT_APP_API_URL}/${resource}`);
         let body;
 
@@ -81,7 +82,7 @@ const customDataProvider = {
 
         return { data: result };
     },
-    delete: async (resource: string, params: any) => {
+    delete: async (resource: string, params: DeleteParams) => {
         const url = new URL(`${process.env.REACT_APP_API_URL}/${resource}/${params.id}`);
 
         const response = await fetch(url, httpClientOptions({ method: 'DELETE' }));
@@ -92,7 +93,7 @@ const customDataProvider = {
 
         return { data: params.id };
     },
-    deleteMany: async (resource: string, params: any) => {
+    deleteMany: async (resource: string, params: DeleteManyParams) => {
         const response = await Promise.all(
             params.ids.map(async (id: string) => {
                 const url = new URL(`${process.env.REACT_APP_API_URL}/${resource}/${id}`);
@@ -129,6 +130,9 @@ const customDataProvider = {
                 break;
             case 'interests/categories':
                 url.search = InterestsQuery(params);
+                break;
+            case 'learning-languages':
+                url.search = LearningLanguagesQuery(params);
                 break;
             default:
                 break;

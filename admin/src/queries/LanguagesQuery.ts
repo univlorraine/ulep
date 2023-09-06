@@ -1,6 +1,6 @@
 import qsAdapter from '../providers/qsAdapter';
 
-interface LanguagesParams {
+export interface LanguagesParams {
     pagination: {
         page: string;
         perPage: string;

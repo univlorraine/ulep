@@ -1,6 +1,6 @@
 import qsAdapter from '../providers/qsAdapter';
 
-interface ProfilesParams {
+export interface ProfilesParams {
     filter: {
         user: {
             country?: string;
