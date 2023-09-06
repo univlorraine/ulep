@@ -5,7 +5,7 @@ import { Roles } from '../decorators/roles.decorator';
 import { configuration } from 'src/configuration';
 import { AuthenticationGuard } from '../guards';
 import { CollectionResponse } from '../decorators';
-import { LearningLanguageResponse, PaginationDto } from '../dtos';
+import { GetLearningLanguagesRequest, LearningLanguageResponse } from '../dtos';
 import { Collection } from '@app/common';
 
 @Controller('learning-languages')
@@ -25,11 +25,12 @@ export class LearningLanguageController {
   })
   @CollectionResponse(LearningLanguageResponse)
   async getCollection(
-    @Query() { page, limit }: PaginationDto,
+    @Query() { page, limit, universityIds }: GetLearningLanguagesRequest,
   ): Promise<Collection<LearningLanguageResponse>> {
     const result = await this.getLearningLanguagesUsecase.execute({
       page,
       limit,
+      universityIds,
     });
 
     return new Collection<LearningLanguageResponse>({

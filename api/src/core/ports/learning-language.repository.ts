@@ -6,6 +6,7 @@ export const LEARNING_LANGUAGE_REPOSITORY = 'learning-language.repository';
 export interface LearningLanguageRepositoryGetProps {
   page: number;
   limit: number;
+  universityIds: string[];
 }
 
 export interface LearningLanguageRepository {
@@ -29,7 +30,7 @@ export interface LearningLanguageRepository {
 
   hasAnActiveTandem: (id: string) => Promise<boolean>;
 
-  get: (
+  OfUniversities: (
     props: LearningLanguageRepositoryGetProps,
   ) => Promise<Collection<LearningLanguage>>;
 }

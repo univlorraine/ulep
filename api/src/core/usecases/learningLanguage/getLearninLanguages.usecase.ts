@@ -7,6 +7,7 @@ import {
 } from 'src/core/ports/learning-language.repository';
 
 interface GetLearningLanguagesQuery {
+  universityIds: string[];
   page: number;
   limit: number;
 }
@@ -21,6 +22,6 @@ export class GetLearningLanguagesUsecase {
   async execute(
     query: GetLearningLanguagesQuery,
   ): Promise<Collection<LearningLanguage>> {
-    return this.learningLanguageRepository.get(query);
+    return this.learningLanguageRepository.OfUniversities(query);
   }
 }

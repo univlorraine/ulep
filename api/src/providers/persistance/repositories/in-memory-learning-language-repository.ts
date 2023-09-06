@@ -144,13 +144,16 @@ export class InMemoryLearningLanguageRepository
     return Promise.resolve(res);
   }
 
-  get({
+  OfUniversities({
     limit,
     page,
+    universityIds,
   }: LearningLanguageRepositoryGetProps): Promise<
     Collection<LearningLanguage>
   > {
-    const values = Array.from(this.#learningLanguages.values());
+    const values = Array.from(this.#learningLanguages.values()).filter((ll) =>
+      universityIds.includes(ll.profile.user.university.id),
+    );
 
     const firstItem = (page - 1) * limit;
     const items = values.slice(firstItem, firstItem + limit);

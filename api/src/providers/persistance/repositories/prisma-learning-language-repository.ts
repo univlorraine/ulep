@@ -1,4 +1,4 @@
-import { LearningLanguage, TandemStatus } from 'src/core/models';
+import { LearningLanguage, TandemStatus, University } from 'src/core/models';
 import { Collection, PrismaService } from '@app/common';
 import { Injectable } from '@nestjs/common';
 import {
@@ -203,15 +203,29 @@ export class PrismaLearningLanguageRepository
     return res.map(learningLanguageMapper);
   }
 
-  async get({
+  async OfUniversities({
     page,
     limit,
+    universityIds,
   }: LearningLanguageRepositoryGetProps): Promise<
     Collection<LearningLanguage>
   > {
-    const count = await this.prisma.learningLanguages.count();
+    const wherePayload = {
+      Profile: {
+        User: {
+          organization_id: {
+            in: universityIds,
+          },
+        },
+      },
+    };
+
+    const count = await this.prisma.learningLanguages.count({
+      where: wherePayload,
+    });
 
     const items = await this.prisma.learningLanguages.findMany({
+      where: wherePayload,
       skip: (page - 1) * limit,
       take: limit,
       include: LearningLanguageRelations,
