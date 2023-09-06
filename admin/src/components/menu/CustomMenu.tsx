@@ -18,6 +18,12 @@ const CustomMenu = () => {
             <Menu.Item leftIcon={<SchoolIcon />} primaryText={translate('campus.label')} to="/campus" />
 
             <Menu.Item leftIcon={<PersonIcon />} primaryText={translate('profiles.label')} to="/profiles" />
+            <Menu.Item
+                leftIcon={<PersonIcon />}
+                primaryText={translate('TODO.learning-languages.label')}
+                // TODO(NOW): manage too long text
+                to="/learning-languages"
+            />
             <Menu.Item leftIcon={<PublicIcon />} primaryText={translate('countries.label')} to="/countries" />
 
             <Menu.Item leftIcon={<LanguageIcon />} primaryText={translate('languages.label')} to="/languages" />

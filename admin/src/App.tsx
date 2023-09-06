@@ -8,6 +8,7 @@ import countSuggestedLanguages from './pages/count-suggested-languages';
 import countries from './pages/countries';
 import interests from './pages/interests';
 import languages from './pages/languages';
+import learningLanguages from './pages/learning-languages';
 import objectives from './pages/objectives';
 import profiles from './pages/profiles';
 import questions from './pages/questions';
@@ -65,6 +66,11 @@ const App = () => {
                 name="reports/categories"
                 options={{ label: translate('report_categories.label') }}
                 {...reportCategories}
+            />
+            <Resource
+                name="learning-languages"
+                options={{ label: translate('TODO.learning_languages') }}
+                {...learningLanguages}
             />
         </Admin>
     );
