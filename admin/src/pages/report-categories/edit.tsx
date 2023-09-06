@@ -23,7 +23,7 @@ const EditReportCategory = () => {
                 'reports/categories',
                 { data: payload },
                 {
-                    onSettled: (data: any, error: Error) => {
+                    onSettled: (_, error: unknown) => {
                         if (!error) {
                             return redirect('/reports/categories');
                         }
@@ -41,9 +41,9 @@ const EditReportCategory = () => {
 
     return (
         <Edit title={translate('report_categories.update.title')}>
-            <WithRecord
+            <WithRecord<ReportCategory>
                 label="interests"
-                render={(record: ReportCategory) => (
+                render={(record) => (
                     <ReportForm
                         handleSubmit={(name: string, translations: IndexedTranslation[]) =>
                             handleSubmit(record.id, name, translations)

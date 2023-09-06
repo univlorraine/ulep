@@ -72,7 +72,7 @@ const ProfileList = (props: any) => {
             'users',
             { data: payload },
             {
-                onSettled: (data: any, error: Error) => {
+                onSettled: (_, error: unknown) => {
                     if (!error) {
                         notify('profiles.edit_status_success');
                     } else {

@@ -36,7 +36,7 @@ const EditUniversity = () => {
                 `universities/${id}`,
                 { data: payload },
                 {
-                    onSettled: (data: any, error: Error) => {
+                    onSettled: (_, error: unknown) => {
                         if (!error) {
                             return redirect('/universities');
                         }
@@ -54,9 +54,9 @@ const EditUniversity = () => {
 
     return (
         <Edit title={translate('universities.update.title')}>
-            <WithRecord
+            <WithRecord<University>
                 label="university"
-                render={(record: University) => (
+                render={(record) => (
                     <UniversityForm
                         admissionEndDate={record.admissionEnd}
                         admissionStartDate={record.admissionStart}

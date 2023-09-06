@@ -23,7 +23,7 @@ const LanguageList = () => {
             'languages',
             { data: payload },
             {
-                onSettled: (data: any, error: Error) => {
+                onSettled: (_, error: unknown) => {
                     if (!error) {
                         notify('languages.status.success');
                     } else {

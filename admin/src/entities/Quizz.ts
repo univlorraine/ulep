@@ -1,8 +1,6 @@
-class Quizz {
-    constructor(
-        readonly id: string,
-        readonly level: string
-    ) {}
-}
+type Quizz = {
+    id: string;
+    level: string;
+};
 
 export default Quizz;

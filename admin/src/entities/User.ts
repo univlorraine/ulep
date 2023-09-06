@@ -1,7 +1,7 @@
-interface User {
+type User = {
     id: string;
     status: UserStatus;
     role: UserRole;
-}
+};
 
 export default User;

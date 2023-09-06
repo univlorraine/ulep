@@ -21,7 +21,7 @@ const CreateQuestion = () => {
                 'proficiency/questions',
                 { data: payload },
                 {
-                    onSettled: (data: any, error: Error) => {
+                    onSettled: (_, error: unknown) => {
                         if (!error) {
                             return redirect('/proficiency/questions');
                         }

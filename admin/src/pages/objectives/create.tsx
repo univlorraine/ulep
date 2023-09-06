@@ -26,7 +26,7 @@ const CreateObjective = () => {
                 'objectives',
                 { data: formData },
                 {
-                    onSettled: (data: any, error: Error) => {
+                    onSettled: (_, error: unknown) => {
                         if (!error) {
                             return redirect('/objectives');
                         }

@@ -1,11 +1,9 @@
 import Translation from './Translation';
 
-class TextContent {
-    constructor(
-        public content: string,
-        public language: TranslatedLanguage,
-        public translations: Translation[]
-    ) {}
-}
+type TextContent = {
+    content: string;
+    language: TranslatedLanguage;
+    translations: Translation[];
+};
 
 export default TextContent;
