@@ -28,7 +28,7 @@ const EditObjective = () => {
                 'objectives',
                 { data: formData },
                 {
-                    onSettled: (data: any, error: Error) => {
+                    onSettled: (_, error: unknown) => {
                         if (!error) {
                             return redirect('/objectives');
                         }
@@ -46,9 +46,9 @@ const EditObjective = () => {
 
     return (
         <Edit title={translate('objectives.update.title')}>
-            <WithRecord
+            <WithRecord<Objective>
                 label="objective"
-                render={(record: Objective) => (
+                render={(record) => (
                     <ObjectiveForm
                         handleSubmit={(name: string, translations: IndexedTranslation[], file?: File) =>
                             handleSubmit(record.id, name, translations, file)

@@ -24,7 +24,7 @@ const CreateInterest = () => {
                 'interests',
                 { data: payload },
                 {
-                    onSettled: (data: any, error: Error) => {
+                    onSettled: (_, error: unknown) => {
                         if (!error) {
                             return redirect('/interests/categories');
                         }

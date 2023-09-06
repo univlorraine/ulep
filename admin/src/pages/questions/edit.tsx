@@ -38,9 +38,9 @@ const EditQuestion = () => {
 
     return (
         <Edit title={translate('questions.update.title')}>
-            <WithRecord
+            <WithRecord<Question>
                 label="proficiency/questions"
-                render={(record: Question) => (
+                render={(record) => (
                     <QuestionForm
                         handleSubmit={(level: string, name: string, translations: IndexedTranslation[]) =>
                             handleSubmit(record.id, level, name, translations)

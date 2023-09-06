@@ -1,8 +1,6 @@
-class MediaObject {
-    constructor(
-        readonly id: string,
-        readonly url: string
-    ) {}
-}
+type MediaObject = {
+    id: string;
+    url: string;
+};
 
 export default MediaObject;

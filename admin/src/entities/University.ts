@@ -1,7 +1,7 @@
 import Campus from './Campus';
 import Country from './Country';
 
-interface University {
+type University = {
     id: string;
     name: string;
     parent: string;
@@ -13,6 +13,6 @@ interface University {
     codes: string[];
     domains: string[];
     website: string;
-}
+};
 
 export default University;

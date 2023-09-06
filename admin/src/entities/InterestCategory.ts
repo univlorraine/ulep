@@ -1,12 +1,10 @@
 import Interest from './Interest';
 import TextContent from './TextContent';
 
-class InterestCategory {
-    constructor(
-        readonly id: string,
-        readonly name: TextContent,
-        readonly interests: Interest[]
-    ) {}
-}
+type InterestCategory = {
+    id: string;
+    name: TextContent;
+    interests: Interest[];
+};
 
 export default InterestCategory;
