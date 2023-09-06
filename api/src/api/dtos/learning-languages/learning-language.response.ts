@@ -2,6 +2,7 @@ import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
 import { Expose } from 'class-transformer';
 import { ProfileResponse } from '../profiles';
 import { LearningLanguage } from 'src/core/models';
+import { Optional } from '@nestjs/common';
 
 export class LearningLanguageResponse {
   @ApiProperty({ type: 'string', format: 'uuid' })
@@ -24,6 +25,11 @@ export class LearningLanguageResponse {
   @Expose({ groups: ['read'] })
   profile: ProfileResponse;
 
+  @ApiProperty({ type: 'date' })
+  @Optional()
+  @Expose({ groups: ['read'] })
+  createdAt?: Date;
+
   constructor(partial: Partial<LearningLanguageResponse>) {
     Object.assign(this, partial);
   }
@@ -39,6 +45,7 @@ export class LearningLanguageResponse {
         code: learningLanguage.language.code,
         level: learningLanguage.level,
         profile: ProfileResponse.fromDomain(learningLanguage.profile),
+        createdAt: learningLanguage.createdAt,
       });
     }
 
@@ -47,6 +54,7 @@ export class LearningLanguageResponse {
       name: learningLanguage.language.name,
       code: learningLanguage.language.code,
       level: learningLanguage.level,
+      createdAt: learningLanguage.createdAt,
     });
   }
 }

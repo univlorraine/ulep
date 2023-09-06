@@ -25,7 +25,8 @@ export class LearningLanguageController {
   })
   @CollectionResponse(LearningLanguageResponse)
   async getCollection(
-    @Query() { page, limit, universityIds }: GetLearningLanguagesRequest,
+    @Query()
+    { page, limit, universityIds }: GetLearningLanguagesRequest,
   ): Promise<Collection<LearningLanguageResponse>> {
     const result = await this.getLearningLanguagesUsecase.execute({
       page,
@@ -33,8 +34,12 @@ export class LearningLanguageController {
       universityIds,
     });
 
+    // TODO(NOW+1): see if should make profile paramateble in repsone
+
     return new Collection<LearningLanguageResponse>({
-      items: result.items.map((ll) => LearningLanguageResponse.fromDomain(ll)),
+      items: result.items.map((ll) =>
+        LearningLanguageResponse.fromDomain(ll, true),
+      ),
       totalItems: result.totalItems,
     });
   }
