@@ -1,7 +1,10 @@
 import { LearningLanguage, TandemStatus } from 'src/core/models';
-import { PrismaService } from '@app/common';
+import { Collection, PrismaService } from '@app/common';
 import { Injectable } from '@nestjs/common';
-import { LearningLanguageRepository } from 'src/core/ports/learning-language.repository';
+import {
+  LearningLanguageRepository,
+  LearningLanguageRepositoryGetProps,
+} from 'src/core/ports/learning-language.repository';
 import {
   LearningLanguageRelations,
   learningLanguageMapper,
@@ -198,5 +201,25 @@ export class PrismaLearningLanguageRepository
     });
 
     return res.map(learningLanguageMapper);
+  }
+
+  async get({
+    page,
+    limit,
+  }: LearningLanguageRepositoryGetProps): Promise<
+    Collection<LearningLanguage>
+  > {
+    const count = await this.prisma.learningLanguages.count();
+
+    const items = await this.prisma.learningLanguages.findMany({
+      skip: (page - 1) * limit,
+      take: limit,
+      include: LearningLanguageRelations,
+    });
+
+    return {
+      items: items.map(learningLanguageMapper),
+      totalItems: count,
+    };
   }
 }

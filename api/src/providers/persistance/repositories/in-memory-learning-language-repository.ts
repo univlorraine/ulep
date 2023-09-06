@@ -1,10 +1,14 @@
+import { Collection } from '@app/common';
 import {
   LearningLanguage,
   Profile,
   Tandem,
   TandemStatus,
 } from 'src/core/models';
-import { LearningLanguageRepository } from 'src/core/ports/learning-language.repository';
+import {
+  LearningLanguageRepository,
+  LearningLanguageRepositoryGetProps,
+} from 'src/core/ports/learning-language.repository';
 
 export class InMemoryLearningLanguageRepository
   implements LearningLanguageRepository
@@ -138,5 +142,24 @@ export class InMemoryLearningLanguageRepository
     }
 
     return Promise.resolve(res);
+  }
+
+  get({
+    limit,
+    page,
+  }: LearningLanguageRepositoryGetProps): Promise<
+    Collection<LearningLanguage>
+  > {
+    const values = Array.from(this.#learningLanguages.values());
+
+    const firstItem = (page - 1) * limit;
+    const items = values.slice(firstItem, firstItem + limit);
+
+    return Promise.resolve(
+      new Collection<LearningLanguage>({
+        items,
+        totalItems: values.length,
+      }),
+    );
   }
 }

@@ -1,6 +1,12 @@
+import { Collection } from '@app/common';
 import { LearningLanguage } from '../models';
 
 export const LEARNING_LANGUAGE_REPOSITORY = 'learning-language.repository';
+
+export interface LearningLanguageRepositoryGetProps {
+  page: number;
+  limit: number;
+}
 
 export interface LearningLanguageRepository {
   ofId: (id: string) => Promise<LearningLanguage | null>;
@@ -22,4 +28,8 @@ export interface LearningLanguageRepository {
   ) => Promise<LearningLanguage[]>;
 
   hasAnActiveTandem: (id: string) => Promise<boolean>;
+
+  get: (
+    props: LearningLanguageRepositoryGetProps,
+  ) => Promise<Collection<LearningLanguage>>;
 }

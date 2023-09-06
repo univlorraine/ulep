@@ -18,6 +18,7 @@ import { AUTHENTICATOR } from './services/authenticator.interface';
 import { KeycloakAuthenticator } from './services/keycloak.authenticator';
 import { ObjectiveController } from './controllers/objective.controller';
 import { CampusController } from 'src/api/controllers/campus.controller';
+import { LearningLanguageController } from './controllers/learningLanguage.controller';
 
 @Module({
   imports: [CoreModule, TerminusModule],
@@ -37,6 +38,7 @@ import { CampusController } from 'src/api/controllers/campus.controller';
     UniversityController,
     UploadsController,
     UserController,
+    LearningLanguageController,
   ],
   providers: [
     {
