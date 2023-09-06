@@ -51,8 +51,6 @@ spec:
             {{- toYaml .Values.securityContext | nindent 12 }}
           image: "{{ .Values.api.image.repository }}:{{ .Values.api.image.tag | default .Chart.AppVersion }}"
           imagePullPolicy: {{ .Values.api.image.pullPolicy }}
-          command: ["/bin/sh"]
-          args: ["-c", "cd /srv/app; env > .env; pnpm run build; node dist/main"]
           ports:
             - name: direct
               containerPort: 3000
@@ -81,7 +79,11 @@ spec:
             - name: KEYCLOAK_CLIENT_ID
               value: "{{ .Values.api.env.keycloakClientId }}"
             - name: MINIO_URL
-              value: "{{ .Values.minioUrl }}.{{ .Values.domain }}"
+              value: "{{ .Values.minioApiUrl }}.{{ .Values.domain }}"
+            - name: MINIO_PUBLIC_URL
+              value: "https://{{ .Values.minioApiUrl }}.{{ .Values.domain }}"
+            - name: MINIO_USE_SSL
+              value: "true"
           envFrom:
             - secretRef: 
                 name: "{{ include "etandem.fullname" . }}-secret-{{ .Values.api.name }}"

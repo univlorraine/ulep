@@ -1,9 +1,13 @@
 import { Inject, Injectable, Logger } from '@nestjs/common';
 import { Match, Tandem, TandemStatus } from 'src/core/models';
 import {
-  PROFILE_REPOSITORY,
-  ProfileRepository,
-} from 'src/core/ports/profile.repository';
+  LANGUAGE_REPOSITORY,
+  LanguageRepository,
+} from 'src/core/ports/language.repository';
+import {
+  LEARNING_LANGUAGE_REPOSITORY,
+  LearningLanguageRepository,
+} from 'src/core/ports/learning-language.repository';
 import {
   TANDEM_REPOSITORY,
   TandemRepository,
@@ -20,55 +24,66 @@ export type GenerateTandemsCommand = {
 
 const TRESHOLD_VIABLE_PAIR = 0;
 
+// TODO(SOON): check if should add loop to generate / find pairs
+
 @Injectable()
 export class GenerateTandemsUsecase {
   private readonly scorer: IMatchScorer = new MatchScorer();
   private readonly logger = new Logger(GenerateTandemsUsecase.name);
 
   constructor(
-    @Inject(PROFILE_REPOSITORY)
-    private readonly profilesRepository: ProfileRepository,
     @Inject(TANDEM_REPOSITORY)
     private readonly tandemsRepository: TandemRepository,
+    @Inject(LEARNING_LANGUAGE_REPOSITORY)
+    private readonly learningLanguageRepository: LearningLanguageRepository,
     @Inject(UUID_PROVIDER)
     private readonly uuidProvider: UuidProviderInterface,
+    @Inject(LANGUAGE_REPOSITORY)
+    private readonly languageRepository: LanguageRepository,
   ) {}
 
   async execute(command: GenerateTandemsCommand): Promise<Tandem[]> {
-    const profiles =
-      await this.profilesRepository.getProfilesUsableForTandemsGeneration({
-        maxTandemPerProfile: 1, // TODO: change when multi-language
-        universityIds: command.universityIds,
-      });
-    // TODO: check how to manage draft tandems (override them when re-generating ?)
+    const learningLanguagesToPair =
+      await this.learningLanguageRepository.getLearningLanguagesOfUniversitiesNotInActiveTandem(
+        command.universityIds,
+      );
 
     this.logger.debug(
       `Found ${
-        profiles.length
-      } potential profiles for universities ${command.universityIds.join(
+        learningLanguagesToPair.length
+      } potential learning languages for universities ${command.universityIds.join(
         ', ',
       )}`,
     );
 
+    const languagesThatCanBeLearnt =
+      await this.languageRepository.getLanguagesProposedToLearning();
+
     // Generate all possible pairs
     const possiblePairs: Match[] = [];
-    for (let i = 0; i < profiles.length; i++) {
-      const profileToPair = profiles[i];
+    for (let i = 0; i < learningLanguagesToPair.length; i++) {
+      const learningLanguageToPair = learningLanguagesToPair[i];
 
-      for (let j = i + 1; j < profiles.length; j++) {
-        const potentialPairProfile = profiles[j];
+      for (let j = i + 1; j < learningLanguagesToPair.length; j++) {
+        const potentialPairLearningLanguage = learningLanguagesToPair[j];
 
         if (
-          profileToPair.user.university.isCentralUniversity() ||
-          potentialPairProfile.user.university.isCentralUniversity()
+          learningLanguageToPair.profile.id !==
+          potentialPairLearningLanguage.profile.id
         ) {
-          const match = this.scorer.computeMatchScore(
-            profileToPair,
-            potentialPairProfile,
-          );
+          if (
+            learningLanguageToPair.profile.user.university.isCentralUniversity() ||
+            potentialPairLearningLanguage.profile.user.university.isCentralUniversity()
+          ) {
+            const match = this.scorer.computeMatchScore(
+              learningLanguageToPair,
+              potentialPairLearningLanguage,
+              languagesThatCanBeLearnt,
+            );
 
-          if (match.total > TRESHOLD_VIABLE_PAIR) {
-            possiblePairs.push(match);
+            if (match.total > TRESHOLD_VIABLE_PAIR) {
+              possiblePairs.push(match);
+            }
           }
         }
       }
@@ -76,38 +91,38 @@ export class GenerateTandemsUsecase {
 
     this.logger.debug(`Computed ${possiblePairs.length} potential pairs`);
 
-    const sortedProfiles = profiles
+    const sortedLearningLanguages = learningLanguagesToPair
       .sort(
         (a, b) =>
-          // sort by register time
+          // sort by first created learning languages
           a.createdAt?.getTime() - b.createdAt?.getTime(),
       )
       .sort((a, b) => {
         // Sort by central university first
         if (
-          a.user.university.isCentralUniversity() ===
-          b.user.university.isCentralUniversity()
+          a.profile.user.university.isCentralUniversity() ===
+          b.profile.user.university.isCentralUniversity()
         ) {
           return 0;
         }
-        return a.user.university.isCentralUniversity() ? -1 : 1;
+        return a.profile.user.university.isCentralUniversity() ? -1 : 1;
       });
 
     let sortedPossiblePairs = possiblePairs.sort((a, b) => b.total - a.total);
-    const pairedProfilesId = new Set();
+    const pairedLearningLanguageIds = new Set<string>();
 
     // Select best pairs by priority order
     const tandems: Tandem[] = [];
-    for (const profileToPair of sortedProfiles) {
-      if (pairedProfilesId.has(profileToPair.id)) {
-        // Pair already found for this profile
+    for (const learningLanguageToPair of sortedLearningLanguages) {
+      if (pairedLearningLanguageIds.has(learningLanguageToPair.id)) {
+        // Pair already found for this learning language
         continue;
       }
 
       const pair = sortedPossiblePairs.find(
         (pair) =>
-          pair.owner.id === profileToPair.id ||
-          pair.target.id === profileToPair.id,
+          pair.owner.id === learningLanguageToPair.id ||
+          pair.target.id === learningLanguageToPair.id,
       );
       if (!pair) {
         // No viable pair found for profile
@@ -116,10 +131,9 @@ export class GenerateTandemsUsecase {
 
       const tandem = new Tandem({
         id: this.uuidProvider.generate(),
-        profiles: [pair.owner, pair.target],
+        learningLanguages: [pair.owner, pair.target],
         status: TandemStatus.DRAFT,
       });
-
       tandems.push(tandem);
 
       sortedPossiblePairs = sortedPossiblePairs.filter(
@@ -130,11 +144,17 @@ export class GenerateTandemsUsecase {
           possiblePair.target.id !== pair.target.id,
       );
 
-      pairedProfilesId.add(pair.owner.id);
-      pairedProfilesId.add(pair.target.id);
+      pairedLearningLanguageIds.add(pair.owner.id);
+      pairedLearningLanguageIds.add(pair.target.id);
     }
 
     await this.tandemsRepository.saveMany(tandems);
+
+    const countDeletedTandems =
+      await this.tandemsRepository.deleteTandemNotLinkedToLearningLangues();
+    this.logger.debug(
+      `Removed ${countDeletedTandems} tandems for learning languages in tandems proposal`,
+    );
 
     this.logger.debug(`Generated ${tandems.length} tandems`);
     return tandems;

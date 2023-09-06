@@ -17,4 +17,8 @@ export class GetMatchsRequest {
   @Min(1)
   @IsOptional()
   readonly count?: number;
+
+  @ApiProperty({ type: 'string', isArray: true })
+  @IsUUID('4', { each: true })
+  universityIds: string[];
 }

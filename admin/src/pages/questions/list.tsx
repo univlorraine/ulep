@@ -18,7 +18,7 @@ const QuestionList = () => {
 
     return (
         <List bulkActionButtons={false} exporter={false} filters={<QuestionFilter />}>
-            <Datagrid rowClick="edit">
+            <Datagrid rowClick="show">
                 <TextField label={translate('questions.level')} source="level" />
                 <TextField label={translate('questions.question')} source="value" />
             </Datagrid>

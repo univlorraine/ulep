@@ -1,7 +1,7 @@
 /* eslint-disable prettier/prettier */
 
-import { InvalidTandemError } from '../errors/tandem-exceptions';
-import { Profile } from './profile.model';
+import { InvalidTandemError, LearningLanguagesMustContainsProfilesForTandem } from '../errors/tandem-exceptions';
+import { LearningLanguage } from './learning-language.model';
 
 export enum TandemStatus {
   ACTIVE = 'ACTIVE',
@@ -11,46 +11,57 @@ export enum TandemStatus {
 
 export type CreateTandemProps = {
   id: string;
-  profiles: Profile[];
+  learningLanguages: LearningLanguage[];
   status: TandemStatus;
 };
 
-// TODO: languageCode
 export class Tandem {
   readonly id: string;
 
-  readonly profiles: Profile[];
+  readonly learningLanguages: LearningLanguage[];
 
   readonly status: TandemStatus;
 
   constructor(props: CreateTandemProps) {
     this.id = props.id;
-    this.profiles = [...props.profiles];
+    this.learningLanguages = [...props.learningLanguages];
     this.status = props.status;
 
-    if (this.profiles.length !== 2) {
-      throw new InvalidTandemError('Tandem must have exactly two profiles');
-    }
-
-    if (this.profiles[0].id === this.profiles[1].id) {
-      throw new InvalidTandemError('Tandem must have two different profiles');
-    }
-
-
-    const languagesSpokeByProfile1 = [this.profiles[0].nativeLanguage.code, ...this.profiles[0].masteredLanguages.map(language => language.code)];
-    const languagesSpokeByProfile2 = [this.profiles[1].nativeLanguage.code, ...this.profiles[1].masteredLanguages.map(language => language.code)];
-    // TODO(multipleLearningLanguage): manage multiple learning language
-    if (
-      !languagesSpokeByProfile1.includes(this.profiles[1].learningLanguages?.[0]?.language.code) ||
-      !languagesSpokeByProfile2.includes(this.profiles[0].learningLanguages?.[0]?.language.code)
-    ) {
-      throw new InvalidTandemError(
-        `Learning language and native/mastered language missmatch between profiles ${this.profiles[0].id} and ${this.profiles[1].id}`,
-      );
-    }
+    this.assertNoErrors();
   }
 
   static create(props: CreateTandemProps): Tandem {
     return new Tandem(props);
+  }
+
+  private assertNoErrors() {
+    if (this.learningLanguages.length !== 2) {
+      throw new InvalidTandemError('Tandem must have exactly two learning languages');
+    }
+
+    if (this.learningLanguages[0].id === this.learningLanguages[1].id) {
+      throw new InvalidTandemError('Tandem must have two different learning languages');
+    }
+    
+    const profile1 = this.learningLanguages[0].profile;
+    const profile2 = this.learningLanguages[1].profile;
+
+    if (!profile1 || !profile2) {
+      return new LearningLanguagesMustContainsProfilesForTandem();
+    }
+
+    if (profile1.id === profile2.id) {
+      throw new InvalidTandemError('Tandem must have two different profiles');
+    }
+    
+    // TODO(discovery): languages spoken should include learning languages
+    // if discover for other learning language
+    if ((!this.learningLanguages[1].language.isJokerLanguage() && !profile1.isSpeakingLanguage(this.learningLanguages[1].language)) || (
+      !this.learningLanguages[0].language.isJokerLanguage() && !profile2.isSpeakingLanguage(this.learningLanguages[0].language)
+    )) {
+      throw new InvalidTandemError(
+        `Learning language and native/mastered language missmatch between profiles ${this.learningLanguages[0].profile.id} and ${this.learningLanguages[1].profile.id}`,
+      );
+    }
   }
 }

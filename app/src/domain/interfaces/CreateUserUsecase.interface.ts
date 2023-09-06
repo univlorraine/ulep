@@ -7,6 +7,7 @@ interface CreateUserUsecaseInterface {
         firstname: string,
         lastname: string,
         gender: Gender,
+        code: string,
         age: number,
         university: University,
         role: Role,

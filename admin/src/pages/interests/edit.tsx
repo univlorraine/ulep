@@ -50,6 +50,7 @@ const EditInterest = () => {
                         }
                         name={record.name.content}
                         tradKey="interests"
+                        tradModeKey="update"
                         translations={record.name.translations?.map(
                             (translation: Translation, index: number) => new IndexedTranslation(index, translation)
                         )}

@@ -42,7 +42,7 @@ const CreateInterest = () => {
 
     return (
         <Create title={translate('interests.create.title')}>
-            <InterestForm handleSubmit={handleSubmit} tradKey="interests" />
+            <InterestForm handleSubmit={handleSubmit} tradKey="interests" tradModeKey="create" />
         </Create>
     );
 };

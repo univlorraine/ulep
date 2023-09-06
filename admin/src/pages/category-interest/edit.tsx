@@ -50,6 +50,7 @@ const EditInterestCategory = () => {
                         }
                         name={record.name.content}
                         tradKey="interest_categories"
+                        tradModeKey="update"
                         translations={record.name.translations?.map(
                             (translation: Translation, index: number) => new IndexedTranslation(index, translation)
                         )}

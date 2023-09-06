@@ -44,7 +44,11 @@ const InterestCategoryList = () => {
                                         <Chip
                                             key={interest.id}
                                             label={interest.name}
-                                            style={{ margin: '0 5px 5px 0', cursor: 'pointer' }}
+                                            style={{
+                                                backgroundColor: '#FFBF46',
+                                                margin: '0 5px 5px 0',
+                                                cursor: 'pointer',
+                                            }}
                                         />
                                     </Link>
                                 ))}
@@ -58,11 +62,7 @@ const InterestCategoryList = () => {
                                     }}
                                     type="button"
                                 >
-                                    <Chip
-                                        color="default"
-                                        label="+"
-                                        style={{ margin: '0 5px 5px 0', cursor: 'pointer' }}
-                                    />
+                                    <Chip label="+" style={{ margin: '0 5px 5px 0', cursor: 'pointer' }} />
                                 </button>
                             </div>
                         )}

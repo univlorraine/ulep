@@ -30,18 +30,6 @@ export class InMemoryTandemRepository implements TandemRepository {
     return Promise.resolve();
   }
 
-  async hasActiveTandem(profileId: string): Promise<boolean> {
-    const activeTandems = this.#tandems.filter(
-      (tandem) => tandem.status === TandemStatus.ACTIVE,
-    );
-
-    const profileIsInActiveTandem = activeTandems.some((tandem) =>
-      tandem.profiles.some((profile) => profile.id === profileId),
-    );
-
-    return profileIsInActiveTandem;
-  }
-
   async findWhere(props: FindWhereProps): Promise<Collection<Tandem>> {
     const { status, offset, limit } = props;
 
@@ -64,5 +52,33 @@ export class InMemoryTandemRepository implements TandemRepository {
     return this.#tandems.filter(
       (tandem) => tandem.status !== TandemStatus.INACTIVE,
     );
+  }
+
+  async getTandemsForProfile(profileId: string): Promise<Tandem[]> {
+    return this.#tandems.filter((tandem) =>
+      tandem.learningLanguages.some(
+        (learningLanguage) => learningLanguage.profile?.id === profileId,
+      ),
+    );
+  }
+
+  async deleteTandemNotLinkedToLearningLangues(): Promise<number> {
+    const length = this.#tandems.length;
+    this.#tandems = this.#tandems.filter((tandem) => {
+      return tandem.learningLanguages?.length > 0;
+    });
+    return Promise.resolve(length - this.#tandems.length);
+  }
+
+  async deleteTandemLinkedToLearningLanguages(
+    learningLanguageIds: string[],
+  ): Promise<number> {
+    const length = this.#tandems.length;
+    this.#tandems = this.#tandems.filter((tandem) =>
+      tandem.learningLanguages.some((ll) =>
+        learningLanguageIds.includes(ll.id),
+      ),
+    );
+    return Promise.resolve(length - this.#tandems.length);
   }
 }

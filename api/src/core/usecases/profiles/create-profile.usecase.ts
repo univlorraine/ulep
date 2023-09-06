@@ -4,12 +4,16 @@ import {
   RessourceAlreadyExists,
   RessourceDoesNotExist,
 } from 'src/core/errors';
-import { ProfileCampusException } from 'src/core/errors/profile-exceptions';
+import {
+  ProfileCampusException,
+  ProfileHasMaxNumberOfLearningLanguages,
+} from 'src/core/errors/profile-exceptions';
 import { UnsuportedLanguageException } from 'src/core/errors/unsuported-language.exception';
 import {
   Interest,
-  JOKER_LANGUAGE_CODE,
   Language,
+  LanguageStatus,
+  LearningLanguage,
   LearningObjective,
   LearningType,
   ProficiencyLevel,
@@ -117,20 +121,27 @@ export class CreateProfileUsecase {
       ),
     );
 
+    if (command.learningLanguages.length > 3) {
+      throw new ProfileHasMaxNumberOfLearningLanguages(
+        `Only 3 learning languages are accepted per profile`,
+      );
+    }
+
     const learningLanguages = await Promise.all(
       command.learningLanguages.map(async (learningLanguage) => {
         const language = await this.tryToFindTheLanguageOfCode(
           learningLanguage.code,
         );
 
-        if (learningLanguage.code !== JOKER_LANGUAGE_CODE) {
+        if (!language.isJokerLanguage()) {
           this.assertLanguageIsSupportedByUniversity(user.university, language);
         }
 
-        return {
+        return new LearningLanguage({
+          id: this.uuidProvider.generate(),
           language,
           level: learningLanguage.level,
-        };
+        });
       }),
     );
 
@@ -195,7 +206,8 @@ export class CreateProfileUsecase {
   ): void {
     if (
       (university.parent && !language.secondaryUniversityActive) ||
-      (!university.parent && language.mainUniversityStatus !== 'PRIMARY')
+      (!university.parent &&
+        language.mainUniversityStatus !== LanguageStatus.PRIMARY)
     ) {
       throw new UnsuportedLanguageException(
         `The language is not supported by the university`,

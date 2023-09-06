@@ -190,4 +190,15 @@ export class PrismaLanguageRepository implements LanguageRepository {
 
     return languageMapper(updateLanguage);
   }
+
+  async getLanguagesProposedToLearning(): Promise<Language[]> {
+    const res = await this.prisma.languageCodes.findMany({
+      where: {
+        mainUniversityStatus: {
+          equals: LanguageStatus.PRIMARY,
+        },
+      },
+    });
+    return res.map(languageMapper);
+  }
 }

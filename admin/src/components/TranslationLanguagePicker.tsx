@@ -11,9 +11,10 @@ const TranslationLanguagePicker: React.FC<TranslationLanguagePickerProps> = ({ o
         <Select
             id="language-picker"
             onChange={(language) => onChange(language.target.value as TranslatedLanguage)}
-            sx={{ mx: 4, my: 2 }}
+            sx={{ mx: 4, my: 2, minWidth: 48 }}
             value={value}
             variant="standard"
+            disableUnderline
         >
             <MenuItem value="en">EN</MenuItem>
             <MenuItem value="zh">ZH</MenuItem>

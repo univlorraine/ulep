@@ -11,3 +11,9 @@ export class ProfileCampusException extends DomainError {
     super({ message });
   }
 }
+
+export class ProfileHasMaxNumberOfLearningLanguages extends DomainError {
+  constructor(message: string) {
+    super({ message });
+  }
+}

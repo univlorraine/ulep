@@ -87,6 +87,7 @@ const EditUniversity = () => {
                         }
                         name={record.name}
                         timezone={record.timezone}
+                        tradKey="update"
                         website={record.website}
                     />
                 )}

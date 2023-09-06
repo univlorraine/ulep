@@ -22,8 +22,8 @@ const UniversityShow = (props: any) => {
     const translate = useTranslate();
 
     return (
-        <Show actions={<UniversityShowAction />} {...props}>
-            <SimpleShowLayout>
+        <Show actions={<UniversityShowAction />} title={translate('universities.label')} {...props}>
+            <SimpleShowLayout sx={{ m: 3 }}>
                 <TextField label={translate('universities.show.name')} source="name" />
                 <TextField label={translate('universities.show.country')} source="country.name" />
                 <TextField label={translate('universities.show.timezone')} source="timezone" />

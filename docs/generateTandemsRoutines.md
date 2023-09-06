@@ -1,5 +1,7 @@
 # Global
 
+TODO: adapt doc with tandem concerning learningLanguage rather than profiles
+
 ## Constraints
 
 Base constraints:

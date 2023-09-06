@@ -2,8 +2,8 @@ import { Injectable } from '@nestjs/common';
 import { Collection, PrismaService } from '@app/common';
 import { TandemRepository } from '../../../core/ports/tandems.repository';
 import { FindWhereProps } from '../../../core/ports/tandems.repository';
-import { Tandem, TandemStatus } from '../../../core/models';
-import { ProfilesRelations, profileMapper } from '../mappers';
+import { Tandem } from '../../../core/models';
+import { TandemRelations, tandemMapper } from '../mappers/tandem.mapper';
 
 @Injectable()
 export class PrismaTandemRepository implements TandemRepository {
@@ -13,9 +13,9 @@ export class PrismaTandemRepository implements TandemRepository {
     await this.prisma.tandems.create({
       data: {
         id: tandem.id,
-        Profiles: {
-          create: tandem.profiles.map((profile) => ({
-            Profile: { connect: { id: profile.id } },
+        LearningLanguages: {
+          connect: tandem.learningLanguages.map((learningLanguage) => ({
+            id: learningLanguage.id,
           })),
         },
         status: tandem.status,
@@ -28,9 +28,9 @@ export class PrismaTandemRepository implements TandemRepository {
       this.prisma.tandems.create({
         data: {
           id: tandem.id,
-          Profiles: {
-            create: tandem.profiles.map((profile) => ({
-              Profile: { connect: { id: profile.id } },
+          LearningLanguages: {
+            connect: tandem.learningLanguages.map((learningLanguage) => ({
+              id: learningLanguage.id,
             })),
           },
           status: tandem.status,
@@ -41,26 +41,10 @@ export class PrismaTandemRepository implements TandemRepository {
     await this.prisma.$transaction(tandemsToCreate);
   }
 
-  async hasActiveTandem(profileId: string): Promise<boolean> {
-    const activeTandems = await this.prisma.profilesOnTandems.findMany({
-      where: {
-        profile_id: profileId,
-        Tandem: {
-          status: { equals: TandemStatus.ACTIVE },
-        },
-      },
-    });
-
-    return activeTandems.length > 0;
-  }
-
   async findWhere(props: FindWhereProps): Promise<Collection<Tandem>> {
     const count = await this.prisma.tandems.count({
       where: {
         status: props.status ? { equals: props.status } : undefined,
-        Profiles: props.profileId
-          ? { some: { profile_id: props.profileId } }
-          : undefined,
       },
     });
 
@@ -71,25 +55,14 @@ export class PrismaTandemRepository implements TandemRepository {
     const tandems = await this.prisma.tandems.findMany({
       where: {
         status: props.status ? { equals: props.status } : undefined,
-        Profiles: props.profileId
-          ? { some: { profile_id: props.profileId } }
-          : undefined,
       },
       skip: props.offset,
       take: props.limit,
-      include: {
-        Profiles: { include: { Profile: { include: ProfilesRelations } } },
-      },
+      include: TandemRelations,
     });
 
     return {
-      items: tandems.map((tandem) => {
-        return new Tandem({
-          id: tandem.id,
-          profiles: tandem.Profiles.map((p) => profileMapper(p.Profile)),
-          status: TandemStatus[tandem.status],
-        });
-      }),
+      items: tandems.map(tandemMapper),
       totalItems: count,
     };
   }
@@ -105,17 +78,56 @@ export class PrismaTandemRepository implements TandemRepository {
       where: {
         status: { not: 'INACTIVE' },
       },
-      include: {
-        Profiles: { include: { Profile: { include: ProfilesRelations } } },
+      include: TandemRelations,
+    });
+    return tandems.map(tandemMapper);
+  }
+
+  async getTandemsForProfile(profileId: string): Promise<Tandem[]> {
+    const tandems = await this.prisma.tandems.findMany({
+      where: {
+        LearningLanguages: {
+          some: {
+            Profile: {
+              id: {
+                equals: profileId,
+              },
+            },
+          },
+        },
+      },
+      include: TandemRelations,
+    });
+    return tandems.map(tandemMapper);
+  }
+
+  async deleteTandemNotLinkedToLearningLangues(): Promise<number> {
+    const res = await this.prisma.tandems.deleteMany({
+      where: {
+        LearningLanguages: {
+          none: {},
+        },
       },
     });
-    // TODO: optimize with an object TandemSummary which would not including profile relations
-    return tandems.map((tandem) => {
-      return new Tandem({
-        id: tandem.id,
-        profiles: tandem.Profiles.map((p) => profileMapper(p.Profile)),
-        status: TandemStatus[tandem.status],
-      });
+
+    return res.count;
+  }
+
+  async deleteTandemLinkedToLearningLanguages(
+    learningLanguageIds: string[],
+  ): Promise<number> {
+    const res = await this.prisma.tandems.deleteMany({
+      where: {
+        LearningLanguages: {
+          some: {
+            id: {
+              in: learningLanguageIds,
+            },
+          },
+        },
+      },
     });
+
+    return res.count;
   }
 }

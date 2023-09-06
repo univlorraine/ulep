@@ -1,6 +1,7 @@
 import { Box, Typography, Input } from '@mui/material';
 import React, { useEffect, useState } from 'react';
 import { Button, useTranslate } from 'react-admin';
+import inuputStyle from '../../theme/inputStyle';
 
 interface CampusFormProps {
     handleSubmit: (name: string) => void;
@@ -23,13 +24,19 @@ const CampusForm: React.FC<CampusFormProps> = ({ handleSubmit, name }) => {
                 <Input
                     onChange={(e) => setNewName(e.target.value)}
                     placeholder={translate('global.content')}
-                    sx={{ width: '80%' }}
+                    sx={inuputStyle}
                     value={newName}
+                    disableUnderline
                     required
                 />
             </Box>
 
-            <Button color="primary" onClick={() => handleSubmit(newName)} sx={{ mt: 4 }} variant="contained">
+            <Button
+                color="primary"
+                onClick={() => handleSubmit(newName)}
+                sx={{ mt: 2, p: 1, width: '100%' }}
+                variant="contained"
+            >
                 <>{translate('global.save')}</>
             </Button>
         </Box>

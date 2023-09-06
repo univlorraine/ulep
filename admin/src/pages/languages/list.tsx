@@ -25,9 +25,9 @@ const LanguageList = () => {
             {
                 onSettled: (data: any, error: Error) => {
                     if (!error) {
-                        notify('languages.status.error');
-                    } else {
                         notify('languages.status.success');
+                    } else {
+                        notify('languages.status.error');
                     }
 
                     return refresh();
@@ -38,7 +38,7 @@ const LanguageList = () => {
 
     return (
         <List exporter={false}>
-            <Datagrid bulkActionButtons={false} rowClick="edit">
+            <Datagrid bulkActionButtons={false}>
                 <TextField label={translate('languages.code')} source="code" />
                 <TextField label={translate('languages.name')} source="name" />
                 <FunctionField
@@ -53,6 +53,7 @@ const LanguageList = () => {
                                 )
                             }
                             onClick={(e) => e.stopPropagation()}
+                            size="small"
                             value={record.mainUniversityStatus}
                         >
                             <MenuItem value="PRIMARY">{translate('languages.status.primary')}</MenuItem>
@@ -74,6 +75,7 @@ const LanguageList = () => {
                                 )
                             }
                             onClick={(e) => e.stopPropagation()}
+                            size="small"
                             value={record.secondaryUniversityActive ? 'ACTIVE' : 'UNACTIVE'}
                         >
                             <MenuItem value="ACTIVE">{translate('languages.secondary_status.active')}</MenuItem>

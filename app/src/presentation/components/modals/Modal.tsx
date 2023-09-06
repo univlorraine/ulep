@@ -1,4 +1,4 @@
-import { ReactElement } from 'react';
+import { ReactElement, useEffect } from 'react';
 import styles from './Modal.module.css';
 
 interface ModalProps {
@@ -14,9 +14,29 @@ const Modal: React.FC<ModalProps> = ({ children, hideWhiteBackground, isVisible,
         return null;
     }
 
+    const handleClickOutside = (event: MouseEvent) => {
+        const modalContent = document.getElementById('modal-content');
+
+        if (modalContent && !modalContent.contains(event.target as Node)) {
+            onClose();
+        }
+    };
+
+    useEffect(() => {
+        document.addEventListener('mousedown', handleClickOutside);
+
+        return () => {
+            document.removeEventListener('mousedown', handleClickOutside);
+        };
+    }, []);
+
     return (
         <div className={styles.modal} style={{ justifyContent: position }}>
-            {!hideWhiteBackground && <div className={styles['modal-content']}>{children}</div>}
+            {!hideWhiteBackground && (
+                <div id="modal-content" className={styles['modal-content']}>
+                    {children}
+                </div>
+            )}
             {hideWhiteBackground && children}
         </div>
     );

@@ -20,9 +20,10 @@ const CountriesPicker: React.FC<CountriesPickerProps> = ({ onChange, value }) =>
             <Select
                 id="countries-picker"
                 onChange={(country) => onChange(data.find((c: Country) => country.target.value === c.id))}
-                sx={{ my: 2, width: '100%' }}
+                sx={{ mb: 2, width: '100%' }}
                 value={value ? value.id : ''}
                 variant="standard"
+                disableUnderline
             >
                 {data.map((country: Country) => (
                     <MenuItem key={country.id} value={country.id}>

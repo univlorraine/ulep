@@ -64,9 +64,7 @@ class GetAllTandemsUsecase implements GetAllTandemsUsecaseInterface {
                                 'timezone',
                                 [{ id: 'id', name: 'Site A' }],
                                 new Date('2023-01-01T00:00:00.000Z'),
-                                new Date('2023-12-31T00:00:00.000Z'),
-                                [],
-                                []
+                                new Date('2023-12-31T00:00:00.000Z')
                             ),
                             'ACTIVE'
                         )
@@ -103,9 +101,7 @@ class GetAllTandemsUsecase implements GetAllTandemsUsecaseInterface {
                                 'timezone',
                                 [{ id: 'id', name: 'Site A' }],
                                 new Date('2023-01-01T00:00:00.000Z'),
-                                new Date('2023-12-31T00:00:00.000Z'),
-                                [],
-                                []
+                                new Date('2023-12-31T00:00:00.000Z')
                             ),
                             'ACTIVE'
                         )

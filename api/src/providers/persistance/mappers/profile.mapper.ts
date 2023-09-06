@@ -1,6 +1,8 @@
 import * as Prisma from '@prisma/client';
 import {
+  Language,
   LanguageStatus,
+  LearningLanguage,
   LearningType,
   ProficiencyLevel,
   Profile,
@@ -29,7 +31,12 @@ export const ProfilesRelations = {
   },
   NativeLanguage: true,
   MasteredLanguages: { include: { LanguageCode: true } },
-  LearningLanguages: { include: { LanguageCode: true } },
+  LearningLanguages: {
+    include: {
+      LanguageCode: true,
+      Tandem: true,
+    },
+  },
   Campus: true,
 };
 
@@ -56,26 +63,35 @@ export const profileMapper = (instance: ProfileSnapshot): Profile => {
   return new Profile({
     id: instance.id,
     user: userMapper(instance.User),
-    nativeLanguage: {
+    nativeLanguage: new Language({
       id: instance.NativeLanguage.id,
       code: instance.NativeLanguage.code,
+      name: instance.NativeLanguage.name,
       mainUniversityStatus: instance.NativeLanguage
         .mainUniversityStatus as LanguageStatus,
       secondaryUniversityActive:
         instance.NativeLanguage.secondaryUniversityActive,
-    },
-    masteredLanguages: instance.MasteredLanguages.map((language) => ({
-      id: language.LanguageCode.id,
-      code: language.LanguageCode.code,
-      mainUniversityStatus: instance.NativeLanguage
-        .mainUniversityStatus as LanguageStatus,
-      secondaryUniversityActive:
-        instance.NativeLanguage.secondaryUniversityActive,
-    })),
-    learningLanguages: instance.LearningLanguages.map((learningLanguage) => ({
-      level: ProficiencyLevel[learningLanguage.level],
-      language: languageMapper(learningLanguage.LanguageCode),
-    })),
+    }),
+    masteredLanguages: instance.MasteredLanguages.map(
+      (language) =>
+        new Language({
+          id: language.LanguageCode.id,
+          name: language.LanguageCode.name,
+          code: language.LanguageCode.code,
+          mainUniversityStatus: instance.NativeLanguage
+            .mainUniversityStatus as LanguageStatus,
+          secondaryUniversityActive:
+            instance.NativeLanguage.secondaryUniversityActive,
+        }),
+    ),
+    learningLanguages: instance.LearningLanguages.map(
+      (learningLanguage) =>
+        new LearningLanguage({
+          id: learningLanguage.id,
+          level: ProficiencyLevel[learningLanguage.level],
+          language: languageMapper(learningLanguage.LanguageCode),
+        }),
+    ),
     learningType: LearningType[instance.learning_type],
     meetingFrequency: instance.meeting_frequency,
     sameAge: instance.same_age,

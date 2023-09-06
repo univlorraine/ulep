@@ -28,6 +28,8 @@ import { OBJECTIVE_REPOSITORY } from 'src/core/ports/objective.repository';
 import { PrismaObjectiveRepository } from './persistance/repositories/prisma-objective.repository';
 import { CAMPUS_REPOSITORY } from 'src/core/ports/campus.repository';
 import { PrismaCampusRepository } from 'src/providers/persistance/repositories/prisma-campus.repository';
+import { LEARNING_LANGUAGE_REPOSITORY } from 'src/core/ports/learning-language.repository';
+import { PrismaLearningLanguageRepository } from './persistance/repositories/prisma-learning-language-repository';
 
 const providers: Provider[] = [
   {
@@ -85,6 +87,10 @@ const providers: Provider[] = [
   {
     provide: UUID_PROVIDER,
     useClass: UuidProvider,
+  },
+  {
+    provide: LEARNING_LANGUAGE_REPOSITORY,
+    useClass: PrismaLearningLanguageRepository,
   },
 ];
 

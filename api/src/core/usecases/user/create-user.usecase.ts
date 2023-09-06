@@ -1,5 +1,5 @@
 import { KeycloakClient } from '@app/keycloak';
-import { Inject, Injectable } from '@nestjs/common';
+import { BadRequestException, Inject, Injectable } from '@nestjs/common';
 import { RessourceDoesNotExist } from 'src/core/errors';
 import { Gender, Role } from 'src/core/models';
 import {
@@ -25,6 +25,7 @@ export class CreateUserCommand {
   university: string;
   role: Role;
   countryCode: string;
+  code: string;
 }
 
 @Injectable()
@@ -48,6 +49,25 @@ export class CreateUserUsecase {
     const country = await this.countryRepository.ofCode(command.countryCode);
     if (!country) {
       throw new RessourceDoesNotExist('Country code does not exist');
+    }
+
+    if (
+      university.codes.length > 0 &&
+      !university.codes.some((codeToCheck) => codeToCheck === command.code)
+    ) {
+      throw new BadRequestException('Code is invalid');
+    }
+
+    if (
+      university.domains.length > 0 &&
+      !university.domains.some((domain) => command.email.includes(domain))
+    ) {
+      throw new BadRequestException('Domain is invalid');
+    }
+
+    const now = new Date();
+    if (university.admissionEnd < now || university.admissionStart > now) {
+      throw new BadRequestException('Registration unavailable');
     }
 
     const keycloakUser = await this.keycloak.createUser({

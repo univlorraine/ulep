@@ -1,84 +1,84 @@
-import { Card, CardContent, TextField, Button } from '@material-ui/core';
-import { makeStyles } from '@material-ui/core/styles';
-import React from 'react';
-import { useTranslate, useLogin, useNotify, Notification } from 'react-admin';
-
-const useStyles = makeStyles(() => ({
-    button: {
-        width: '100%',
-        marginTop: '1em',
-    },
-    card: {
-        minWidth: 300,
-        marginTop: '6em',
-    },
-    form: {
-        padding: '0 1em 1em 1em',
-    },
-    input: {
-        marginTop: '1em',
-    },
-    main: {
-        alignItems: 'center',
-        background: 'linear-gradient(to bottom, blue, white)',
-        backgroundRepeat: 'no-repeat',
-        backgroundSize: 'cover',
-        display: 'flex',
-        flexDirection: 'column',
-        minHeight: '100vh',
-        justifyContent: 'center',
-    },
-}));
+import LockIcon from '@mui/icons-material/Lock';
+import { Avatar, Button, Card, CardActions, CircularProgress } from '@mui/material';
+import Box from '@mui/material/Box';
+import * as React from 'react';
+import { useState } from 'react';
+import { Form, required, TextInput, useTranslate, useLogin, useNotify } from 'react-admin';
 
 const LoginPage = () => {
-    const classes = useStyles();
+    const [loading, setLoading] = useState(false);
     const translate = useTranslate();
-    const [email, setEmail] = React.useState('');
-    const [password, setPassword] = React.useState('');
-    const login = useLogin();
-    const notify = useNotify();
 
-    const submit = (e: any) => {
-        e.preventDefault();
-        login({ email, password }).catch(() => notify(translate('login.loginError')));
+    const notify = useNotify();
+    const login = useLogin();
+
+    const handleSubmit = (auth: any) => {
+        setLoading(true);
+        login(auth).catch(() => {
+            notify(translate('login.loginError'));
+            setLoading(false);
+        });
     };
 
     return (
-        <div className={classes.main}>
-            <Card className={classes.card}>
-                <CardContent>
-                    <form className={classes.form} onSubmit={submit}>
-                        <p>{translate('global.email')}</p>
-                        <TextField
-                            className={classes.input}
-                            id="email"
-                            name="email"
-                            onChange={(e: any) => setEmail(e.target.value)}
-                            type="email"
-                            value={email}
-                            autoFocus
-                            fullWidth
-                            required
-                        />
-                        <p>{translate('login.password')}</p>
-                        <TextField
-                            className={classes.input}
-                            id="password"
-                            name={translate('login.password')}
-                            onChange={(e: any) => setPassword(e.target.value)}
-                            type="password"
-                            value={password}
-                            fullWidth
-                            required
-                        />
-                        <Button className={classes.button} color="primary" type="submit" variant="contained" fullWidth>
-                            {translate('login.connect')}
+        <Form onSubmit={handleSubmit} noValidate>
+            <Box
+                sx={{
+                    display: 'flex',
+                    flexDirection: 'column',
+                    minHeight: '100vh',
+                    alignItems: 'center',
+                    justifyContent: 'flex-start',
+                    background: 'url(https://source.unsplash.com/featured/1600x900)',
+                    backgroundRepeat: 'no-repeat',
+                    backgroundSize: 'cover',
+                }}
+            >
+                <Card sx={{ minWidth: 300, marginTop: '6em' }}>
+                    <Box
+                        sx={{
+                            alignItems: 'center',
+                            margin: '1em',
+                            display: 'flex',
+                            justifyContent: 'center',
+                            flexDirection: 'column',
+                        }}
+                    >
+                        <Avatar sx={{ bgcolor: 'secondary.main' }}>
+                            <LockIcon />
+                        </Avatar>
+                    </Box>
+                    <Box sx={{ padding: '0 1em 1em 1em' }}>
+                        <Box sx={{ marginTop: '1em' }}>
+                            <TextInput
+                                disabled={loading}
+                                label={translate('global.email')}
+                                source="email"
+                                validate={required()}
+                                autoFocus
+                                fullWidth
+                            />
+                        </Box>
+                        <Box sx={{ marginTop: '1em' }}>
+                            <TextInput
+                                disabled={loading}
+                                label={translate('login.password')}
+                                source="password"
+                                type="password"
+                                validate={required()}
+                                fullWidth
+                            />
+                        </Box>
+                    </Box>
+                    <CardActions sx={{ padding: '0 1em 1em 1em' }}>
+                        <Button color="primary" disabled={loading} type="submit" variant="contained" fullWidth>
+                            {loading && <CircularProgress size={25} thickness={2} />}
+                            {translate('ra.auth.sign_in')}
                         </Button>
-                    </form>
-                </CardContent>
-            </Card>
-            <Notification />
-        </div>
+                    </CardActions>
+                </Card>
+            </Box>
+        </Form>
     );
 };
 

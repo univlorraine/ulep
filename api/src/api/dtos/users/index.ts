@@ -13,10 +13,7 @@ import {
   IsOptional,
 } from 'class-validator';
 import { UniversityResponse } from '../universities';
-import {
-  AskForAccountDeletionCommand,
-  CreateUserCommand,
-} from 'src/core/usecases/user';
+import { CreateUserCommand } from 'src/core/usecases/user';
 import { Gender, Role, User, UserStatus } from 'src/core/models/user.model';
 import { MediaObjectResponse } from '../medias';
 
@@ -62,6 +59,10 @@ export class CreateUserRequest implements CreateUserCommand {
   @IsIn(['student', 'staff'])
   role: Role;
 
+  @Swagger.ApiProperty({ type: 'string', format: 'uuid' })
+  @IsString()
+  code: string;
+
   @Swagger.ApiProperty({ type: 'string', example: 'FR' })
   @IsString()
   @Length(2, 2)
@@ -77,16 +78,6 @@ export class UpdateUserRequest {
   @Swagger.ApiProperty({ type: 'string', enum: UserStatus })
   @IsOptional()
   status?: UserStatus;
-}
-
-export class AskForAccountDeletionRequest
-  implements Omit<AskForAccountDeletionCommand, 'user'>
-{
-  @Swagger.ApiPropertyOptional({ type: 'string' })
-  @IsString()
-  @IsNotEmpty()
-  @IsOptional()
-  reason: string;
 }
 
 export class UserResponse {

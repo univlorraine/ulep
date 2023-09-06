@@ -8,7 +8,10 @@ import {
   IsString,
   IsUUID,
 } from 'class-validator';
-import { textContentTranslationResponse } from 'src/api/dtos/text-content';
+import {
+  TextContentResponse,
+  textContentTranslationResponse,
+} from 'src/api/dtos/text-content';
 import { UserResponse } from 'src/api/dtos/users';
 import { Translation } from 'src/core/models';
 import {
@@ -22,6 +25,23 @@ import {
 } from 'src/core/usecases/report';
 
 export class CreateReportCategoryRequest {
+  @Swagger.ApiProperty({ type: 'string' })
+  @IsString()
+  @IsNotEmpty()
+  name: string;
+
+  @Swagger.ApiPropertyOptional({ type: 'array' })
+  @IsOptional()
+  @IsArray()
+  translations?: Translation[];
+}
+
+export class UpdateReportCategoryRequest {
+  @Swagger.ApiProperty({ type: 'string', format: 'uuid' })
+  @IsString()
+  @IsNotEmpty()
+  id: string;
+
   @Swagger.ApiProperty({ type: 'string' })
   @IsString()
   @IsNotEmpty()
@@ -74,6 +94,27 @@ export class ReportCategoryResponse {
     return new ReportCategoryResponse({
       id: entity.id,
       name: name,
+    });
+  }
+}
+
+export class GetReportCategoryResponse {
+  @Swagger.ApiProperty({ type: 'string', format: 'uuid' })
+  @Expose({ groups: ['read'] })
+  id: string;
+
+  @Swagger.ApiProperty({ type: TextContentResponse })
+  @Expose({ groups: ['read'] })
+  name: TextContentResponse;
+
+  constructor(partial: Partial<GetReportCategoryResponse>) {
+    Object.assign(this, partial);
+  }
+
+  static fromDomain(entity: ReportCategory): GetReportCategoryResponse {
+    return new GetReportCategoryResponse({
+      id: entity.id,
+      name: TextContentResponse.fromDomain(entity.name),
     });
   }
 }

@@ -1,5 +1,8 @@
 {
     "campus": {
+        "create": {
+            "title": "Création d'un campus"
+        },
         "label": "Campus",
         "name": "Nom des campus de l'université principale",
         "update": {
@@ -13,10 +16,13 @@
         "total": "Total"
     },
     "countries": {
-        "label": "Pays"
+        "code": "Code du pays",
+        "label": "Pays",
+        "name": "Nom du pays"
     },
     "global": {
         "active": "Actif",
+        "age": "Age",
         "banned": "Bannis",
         "content": "Contenu",
         "email": "Email",
@@ -47,6 +53,7 @@
         },
         "update": {
             "error": "Une erreur est survenue pendant la mise à jour d'un intérêt",
+            "name": "Nom de l'intérêt",
             "title": "Mise à jour d'un intérêt"
         }
     },
@@ -60,6 +67,7 @@
         "label": "Catégorie d'intérêts",
         "name": "Nom",
         "update": {
+            "name": "Nom de la catégorie",
             "title": "Mise à jour d'une catégorie d'intérêt"
         }
     },
@@ -108,22 +116,32 @@
             "anecdote": "Anecdote",
             "experience": "Experience",
             "favorite_place": "Lieu favoris",
-            "superpower": "Super pouvoirs"
+            "superpower": "Super pouvoirs",
+            "title": "Biographies"
         },
         "edit_status_error": "Le status n'a pas pu être mis à jour",
         "edit_status_success": "Le status a été mis à jour",
-        "frequenry": "Fréquence des rencontres",
+        "frequency": "Fréquence des rencontres",
+        "frequencies": {
+            "ONCE_A_WEEK": "Une fois par semaine",
+            "TWICE_A_WEEK": "Deux fois par semaine",
+            "THREE_TIMES_A_WEEK": "Trois fois par semaine",
+            "TWICE_A_MONTH": "Deux fois par mois",
+            "THREE_TIMES_A_MONTH": "Trois fois par mois"
+        },
         "certificate": "Certificat",
         "country": "Pays",
         "interests": "Centre d'intérêts",
         "label": "Profiles",
+        "language_title": "Langues",
         "learning_language": {
-            "code": "Code de langue d'apprentissage",
+            "name": "Nom de langue d'apprentissage",
             "level": "Niveau de la langue d'apprentissage"
         },
         "mastered_languages": "Langues maîtrisés",
         "native_language": "Langue native",
         "objectives": "Objectifs",
+        "summary": "Résumé",
         "searchLastname": "Chercher par nom",
         "status": "Status"
     },
@@ -136,12 +154,17 @@
         "label": "Questions",
         "level": "Niveau",
         "question": "Question",
+        "show": {
+            "level": "Niveau de la question",
+            "name": "Intitulé de la question"
+        },
         "update": {
             "error": "Une erreur est survenue pendant la mise à jour de la question",
             "title": "Mise à jour d'une question"
         }
     },
     "reports": {
+        "category": "Catégorie de signalement",
         "CLOSED": "Fermé",
         "content": "Contenu",
         "IN_PROGRESS": "En cours",
@@ -155,7 +178,15 @@
             "name": "Nom de la nouvelle catégorie",
             "title": "Création d'une nouvelle catégorie"
         },
-        "label": "Categories de signalement"
+        "label": "Categories de signalement",
+        "show": {
+            "name": "Nom de la catégorie de signalement"
+        },
+        "update": {
+            "error": "Une erreur est survenue pendant la mise à jour de la catégorie",
+            "name": "Nom de la catégorie de signalement",
+            "title": "Mise à jour d'une catégorie de signalement"
+        }
     },
     "suggested_languages": {
         "label": "Langues demandées"
@@ -189,6 +220,20 @@
             "resourcesUrl": "Url des ressources de langues de l'université",
             "sites": "Campus de rencontre",
             "timezone": "Timezone",
+            "website": "Site web de l'université"
+        },
+        "update": {
+            "admission_end": "Fin de date d'inscription à l'université",
+            "admission_error": "La date de fin d'admission doit être après la date de début",
+            "admission_start": "Début de date d'inscription à l'université",
+            "codes": "Liste des codes pour l'inscription",
+            "codes_error": "Le code doit faire une taille de 6 min. et avoir au moins une lettre et un chiffre",
+            "country": "Pays de l'université",
+            "domains": "Liste des noms de domaines pour l'inscription",
+            "domains_error": "Le nom de domaine doit commencer par un @",
+            "name": "Nom de l'université",
+            "timezone": "Timezone de l'université",
+            "title": "Mise à jour de l'université",
             "website": "Site web de l'université"
         }
     },

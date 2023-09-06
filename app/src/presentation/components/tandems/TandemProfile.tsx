@@ -58,9 +58,7 @@ const university = new University(
     'timezone',
     [{ id: 'id', name: 'Site A' }],
     new Date('2023-01-01T00:00:00.000Z'),
-    new Date('2023-12-31T00:00:00.000Z'),
-    [],
-    []
+    new Date('2023-12-31T00:00:00.000Z')
 );
 const note = 'J’aurai peu de dispo les 2 premières semaines d’Octobre, mais après tout sera beaucoup plus simple';
 

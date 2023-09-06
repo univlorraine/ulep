@@ -23,7 +23,7 @@ const InterestShow = () => {
 
     return (
         <Show actions={<InterestShowAction />} title={translate('interests.label')}>
-            <SimpleShowLayout>
+            <SimpleShowLayout sx={{ m: 3 }}>
                 <TextField label={translate('interests.show.name')} source="name.content" />
 
                 <ArrayField label={translate('global.translations')} source="name.translations">

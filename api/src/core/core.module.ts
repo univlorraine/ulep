@@ -3,9 +3,10 @@ import { ProvidersModule } from 'src/providers/providers.module';
 import { MatchScorer } from './services/MatchScorer';
 import {
   AddLanguageRequestUsecase,
-  AskForAccountDeletionUsecase,
+  CountAllSuggestedLanguageUsecase,
   CreateInterestCategoryUsecase,
   CreateInterestUsecase,
+  CreateLearningLanguageUseCase,
   CreateObjectiveUsecase,
   CreatePartnerUniversityUsecase,
   CreateProfileUsecase,
@@ -30,6 +31,7 @@ import {
   FindOneObjectiveUsecase,
   GenerateTandemsUsecase,
   GetCategoriesUsecase,
+  GetReportCategoryByIdUsecase,
   GetCountriesUniversitiesUsecase,
   GetCountriesUsecase,
   GetInterestCategoryUsecase,
@@ -62,12 +64,12 @@ import {
   UpdateUniversityUsecase,
   UpdateUserUsecase,
   UploadAvatarUsecase,
+  UpdateReportCategoryUsecase,
+  CreateUnsubscribeReportUsecase,
 } from './usecases';
 import { UploadObjectiveImageUsecase } from 'src/core/usecases/media/upload-objective-image.usecase';
 import { UpdateObjectiveUsecase } from 'src/core/usecases/objective/update-objective.usecase';
 import { DeleteObjectiveImageUsecase } from 'src/core/usecases/media/delete-objective-image.usecase';
-import { FindAllSuggestedLanguageUsecase } from 'src/core/usecases/language/find-all-suggested-language.usecase';
-import { CountAllSuggestedLanguageUsecase } from 'src/core/usecases/language/count-all-suggested-language.usecase';
 import {
   CreateCampusUsecase,
   DeleteCampusUsecase,
@@ -75,6 +77,7 @@ import {
   GetCampusUsecase,
   UpdateCampusUsecase,
 } from 'src/core/usecases/campus';
+import { FindAllSuggestedLanguageUsecase } from 'src/core/usecases/language/find-all-suggested-language.usecase';
 
 const usecases: Provider[] = [
   //Campus
@@ -126,22 +129,27 @@ const usecases: Provider[] = [
   GetTestsUsecase,
   UpdateQuestionUsecase,
   // Reports
+  CreateUnsubscribeReportUsecase,
   CreateReportCategoryUsecase,
   CreateReportUsecase,
   DeleteReportCategoryUsecase,
   DeleteReportUsecase,
   GetCategoriesUsecase,
+  GetReportCategoryByIdUsecase,
   GetReportUsecase,
   GetReportsByStatusUsecase,
   UpdateReportStatusUsecase,
-  // Tandems
+  UpdateReportCategoryUsecase,
+  // Profiles
   CreateProfileUsecase,
-  CreateTandemUsecase,
-  GenerateTandemsUsecase,
   GetTandemsForProfileUsecase,
   GetProfileByUserIdUsecase,
   GetProfilesUsecase,
   GetProfileUsecase,
+  CreateLearningLanguageUseCase,
+  // Tandems
+  CreateTandemUsecase,
+  GenerateTandemsUsecase,
   GetTandemsUsecase,
   GetUserMatchUsecase,
   // Universities
@@ -152,7 +160,6 @@ const usecases: Provider[] = [
   GetUniversityUsecase,
   UpdateUniversityUsecase,
   // Users
-  AskForAccountDeletionUsecase,
   CreateUserUsecase,
   DeleteUserUsecase,
   GetUsersUsecase,

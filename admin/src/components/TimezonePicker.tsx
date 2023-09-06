@@ -11,9 +11,10 @@ const TimezonePicker: React.FC<TimezonePickerProps> = ({ onChange, value }) => (
         <Select
             id="countries-picker"
             onChange={(timezone) => onChange(timezone.target.value)}
-            sx={{ my: 2, width: '100%' }}
+            sx={{ mb: 2, width: '100%' }}
             value={value ?? ''}
             variant="standard"
+            disableUnderline
         >
             {/* @ts-ignore */}
             {Intl.supportedValuesOf('timeZone').map((timzeone: string) => (
