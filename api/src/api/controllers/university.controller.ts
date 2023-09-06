@@ -68,7 +68,7 @@ export class UniversityController {
   @Get()
   @Swagger.ApiOperation({ summary: 'Collection of University ressource.' })
   @Swagger.ApiOkResponse({ type: UniversityResponse, isArray: true })
-  async findPartners() {
+  async getUniversities() {
     const universities = await this.getUniversitiesUsecase.execute();
 
     return new Collection<UniversityResponse>({
