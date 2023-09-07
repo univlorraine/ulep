@@ -21,3 +21,5 @@ export type Profile = {
     specificProgram?: boolean;
     createdAt?: Date;
 };
+
+export const getProfileDisplayName = (profile: Profile): string => `${profile.user.firstname} ${profile.user.lastname}`;

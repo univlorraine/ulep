@@ -11,7 +11,7 @@ import {
 import CountriesQuery from '../queries/CountriesQuery';
 import InterestsQuery from '../queries/InterestsQuery';
 import LanguagesQuery from '../queries/LanguagesQuery';
-import LearningLanguagesQuery from '../queries/LearningLanguagesQuery';
+import { LearningLanguagesQuery, LearningLanguageMatchesQuery } from '../queries/LearningLanguagesQuery';
 import ProfilesQuery from '../queries/ProfilesQuery';
 import QuestionsQuery from '../queries/QuestionsQuery';
 import ReportsQuery from '../queries/ReportsQuery';
@@ -132,7 +132,7 @@ const customDataProvider: DataProvider = {
         return { data: response };
     },
     getList: async (resource: string, params: any) => {
-        const url = new URL(`${process.env.REACT_APP_API_URL}/${resource}`);
+        let url = new URL(`${process.env.REACT_APP_API_URL}/${resource}`);
 
         switch (resource) {
             case 'countries':
@@ -156,6 +156,11 @@ const customDataProvider: DataProvider = {
             case 'learning-languages':
                 url.search = LearningLanguagesQuery(params);
                 break;
+            case 'learning-languages/matches':
+                // TODO(NOW+1): maybe dedicated resource name ?
+                url = new URL(`${process.env.REACT_APP_API_URL}/learning-languages/${params.filter.id}/matches`);
+                url.search = LearningLanguageMatchesQuery(params);
+                break;
             default:
                 break;
         }
@@ -167,7 +172,14 @@ const customDataProvider: DataProvider = {
 
         const result = await response.json();
 
-        return { data: result.items, total: result.totalItems };
+        return {
+            data: result.items.map(
+                // Note: workaround for list items not having IDs (such as learning
+                // language matches). Otherwise data is not accessible in useGetList
+                (item: any) => ({ ...item, id: item.id || 'no-id' })
+            ),
+            total: result.totalItems,
+        };
     },
     getMany: async (resource: string) => {
         const url = new URL(`${process.env.REACT_APP_API_URL}/${resource}`);

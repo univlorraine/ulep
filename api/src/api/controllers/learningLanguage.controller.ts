@@ -16,9 +16,14 @@ import { Roles } from '../decorators/roles.decorator';
 import { configuration } from 'src/configuration';
 import { AuthenticationGuard } from '../guards';
 import { CollectionResponse } from '../decorators';
-import { GetLearningLanguagesRequest, LearningLanguageResponse } from '../dtos';
+import {
+  GetLearningLanguagesRequest,
+  LearningLanguageResponse,
+  MatchResponse,
+} from '../dtos';
 import { Collection } from '@app/common';
-import { LearningLanguage } from 'src/core/models';
+import { GetLearningLanguageMatchsRequest } from '../dtos/learning-languages/get-learning-language-matches.request';
+import { GetUserMatchUsecase } from 'src/core/usecases';
 
 @Controller('learning-languages')
 @Swagger.ApiTags('LearningLanguages')
@@ -28,6 +33,7 @@ export class LearningLanguageController {
   constructor(
     private getLearningLanguagesUsecase: GetLearningLanguagesUsecase,
     private getLearningLanguageOfIdUsecase: GetLearningLanguageOfIdUsecase,
+    private getUserMatchUsecase: GetUserMatchUsecase,
   ) {}
 
   @Get()
@@ -70,5 +76,29 @@ export class LearningLanguageController {
     });
 
     return LearningLanguageResponse.fromDomain(learningLanguage, true);
+  }
+
+  @Get(':id/matches')
+  @Roles(configuration().adminRole)
+  @UseGuards(AuthenticationGuard)
+  @Swagger.ApiOperation({
+    summary: "Retrieve learning language's matches",
+  })
+  @CollectionResponse(MatchResponse)
+  async getLearningLangugeMatches(
+    @Param('id', ParseUUIDPipe) id: string,
+    @Query() { count, universityIds }: GetLearningLanguageMatchsRequest,
+  ) {
+    const matches = await this.getUserMatchUsecase.execute({
+      id,
+      count,
+      universityIds:
+        typeof universityIds === 'string' ? [universityIds] : universityIds,
+    });
+
+    return new Collection<MatchResponse>({
+      items: matches.items.map(MatchResponse.fromDomain),
+      totalItems: matches.totalItems,
+    });
   }
 }

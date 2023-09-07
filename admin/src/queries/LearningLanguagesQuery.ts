@@ -10,11 +10,26 @@ export interface LearningLanguagesParams {
     };
 }
 
-const LearningLanguagesQuery = (params: LearningLanguagesParams): string => {
+export const LearningLanguagesQuery = (params: LearningLanguagesParams): string => {
     const query = {
         universityIds: params.filter.universityIds,
         page: params.pagination.page,
         limit: params.pagination.perPage,
+    };
+
+    return new URLSearchParams(qsAdapter().stringify(query)).toString();
+};
+
+export interface LearningLanguageMatchesParams {
+    filter: {
+        id: string;
+        universityIds: string[];
+    };
+}
+
+export const LearningLanguageMatchesQuery = (params: LearningLanguagesParams): string => {
+    const query = {
+        universityIds: params.filter.universityIds,
     };
 
     return new URLSearchParams(qsAdapter().stringify(query)).toString();
