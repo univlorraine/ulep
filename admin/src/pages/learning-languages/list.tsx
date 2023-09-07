@@ -1,16 +1,98 @@
-import React from 'react';
-import { Datagrid, DateField, FunctionField, List, TextField } from 'react-admin';
+import { PlayArrow } from '@mui/icons-material';
+import { Modal, Box, CircularProgress } from '@mui/material';
+import React, { useState } from 'react';
+import { Button, Datagrid, DateField, FunctionField, List, TextField, TopToolbar } from 'react-admin';
 import UniversitiesPicker from '../../components/UniversitiesPicker';
 import { LearningLanguage } from '../../entities/LearningLanguage';
 import { getProfileDisplayName } from '../../entities/Profile';
+import useLaunchGlobalRoutine from './useLaunchGlobalRoutine';
 import useLearningLanguagesStore from './useLearningLanguagesStore';
+
+interface ActionsProps {
+    universityIds: string[];
+}
+
+const Actions = ({ universityIds }: ActionsProps) => {
+    // TODO(NOW+1): separate component ?
+
+    const [confirmModalIsOpen, setConfirmModalIsOpen] = useState<boolean>(false);
+
+    const { mutate, isLoading } = useLaunchGlobalRoutine({
+        onSuccess: () => {
+            setConfirmModalIsOpen(false);
+        },
+        onError: (err: unknown) => {
+            console.error('Error happened', err);
+            // TODO(NOW): notify
+        },
+    });
+    const handleConfirm = () => {
+        mutate(universityIds);
+    };
+
+    return (
+        <>
+            <TopToolbar>
+                <Button
+                    color="secondary"
+                    label="Lancer la routine globale"
+                    onClick={() => setConfirmModalIsOpen(true)}
+                    startIcon={<PlayArrow />}
+                    variant="text"
+                />
+            </TopToolbar>
+            <Modal
+                aria-describedby="modal-modal-description"
+                aria-labelledby="modal-modal-title"
+                onClose={() => setConfirmModalIsOpen(false)}
+                open={confirmModalIsOpen}
+            >
+                <Box
+                    sx={{
+                        position: 'absolute',
+                        top: '50%',
+                        left: '50%',
+                        transform: 'translate(-50%, -50%)',
+                        width: 400,
+                        bgcolor: 'background.paper',
+                        borderRadius: 2,
+                        p: 4,
+                    }}
+                >
+                    {isLoading ? (
+                        <Box
+                            sx={{
+                                display: 'flex',
+                                width: '100%',
+                                heigh: '100%',
+                                justifyContent: 'center',
+                                alignItems: 'center',
+                            }}
+                        >
+                            <CircularProgress />
+                        </Box>
+                    ) : (
+                        <>
+                            <p>Lancer la routine globale peut prendre quelques minutes.</p>
+                            <p>Les tandems proposés par l&lsquo;ancienne exécution seront perdus.</p>
+                            <p>Voulez vous-continuer ?</p>
+                            <Box sx={{ marginTop: 4, display: 'flex', justifyContent: 'space-around' }}>
+                                <Button label="Cancel" onClick={() => setConfirmModalIsOpen(false)} variant="text" />
+                                <Button color="error" label="Confirm" onClick={handleConfirm} variant="outlined" />
+                            </Box>
+                        </>
+                    )}
+                </Box>
+            </Modal>
+        </>
+    );
+};
 
 const LearningLanguageList = () => {
     // TODO(NOW): translations
     // TODO(NOW+2): manage different case user from university central / university partner
     const { selectedUniversityIds, setSelectedUniversityIds } = useLearningLanguagesStore();
 
-    // TODO(NOW): trigger global routine
     return (
         <>
             <div>
@@ -19,6 +101,7 @@ const LearningLanguageList = () => {
             <div>
                 {selectedUniversityIds.length ? (
                     <List<LearningLanguage>
+                        actions={<Actions universityIds={selectedUniversityIds} />}
                         exporter={false}
                         filter={{ universityIds: selectedUniversityIds }}
                         title="TODO.Translate"

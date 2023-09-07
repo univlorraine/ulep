@@ -217,6 +217,22 @@ const customDataProvider: DataProvider = {
 
         return result.items;
     },
+    launchGlobalRoutine: async (universityIds: string[]) => {
+        const url = `${process.env.REACT_APP_API_URL}/tandems/generate`;
+
+        const body = JSON.stringify({
+            universityIds,
+        });
+        const response = await fetch(url, httpClientOptions({ method: 'POST', body }));
+
+        if (!response.ok) {
+            throw new Error(`API request failed with status ${response.status}`);
+        }
+
+        const result = await response.json();
+
+        return result;
+    },
 };
 
 export default customDataProvider;
