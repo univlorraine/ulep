@@ -1,5 +1,13 @@
 import simpleRestProvider from 'ra-data-simple-rest';
-import { CreateParams, DataProvider, DeleteManyParams, DeleteParams, UpdateParams, fetchUtils } from 'react-admin';
+import {
+    CreateParams,
+    DataProvider,
+    DeleteManyParams,
+    DeleteParams,
+    GetOneParams,
+    UpdateParams,
+    fetchUtils,
+} from 'react-admin';
 import CountriesQuery from '../queries/CountriesQuery';
 import InterestsQuery from '../queries/InterestsQuery';
 import LanguagesQuery from '../queries/LanguagesQuery';
@@ -81,6 +89,20 @@ const customDataProvider: DataProvider = {
         const result = await response.json();
 
         return { data: result };
+    },
+    getOne: async (resource: string, params: GetOneParams) => {
+        // TODO(NOW+1): check why not ok without custom getOne ?
+        const url = new URL(`${process.env.REACT_APP_API_URL}/${resource}/${params.id}`);
+
+        const response = await fetch(url, httpClientOptions({ method: 'GET' }));
+
+        if (!response.ok) {
+            throw new Error(`API request failed with status ${response.status}`);
+        }
+
+        const data = await response.json();
+
+        return { data };
     },
     delete: async (resource: string, params: DeleteParams) => {
         const url = new URL(`${process.env.REACT_APP_API_URL}/${resource}/${params.id}`);
