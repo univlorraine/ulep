@@ -1,22 +1,24 @@
 import { Checkbox, FormControl, InputLabel, ListItemText, MenuItem } from '@mui/material';
 import Select from '@mui/material/Select';
-import React, { useState } from 'react';
+import React from 'react';
 import { useGetList, Loading } from 'react-admin';
 import University from '../entities/University';
 
 interface UniversitiesPickerProps {
+    value: string[];
     onSelected: (universityIds: string[]) => void;
 }
 
-const UniversitiesPicker = ({ onSelected }: UniversitiesPickerProps) => {
+const UniversitiesPicker = ({ value, onSelected }: UniversitiesPickerProps) => {
     const { data, isLoading, error } = useGetList<University>('universities');
-
-    const [universityIds, setUniversityIds] = useState<string[]>([]);
 
     if (isLoading) {
         return <Loading />;
     }
     if (error || !data) {
+        // TODO: better error display
+        console.error(error);
+
         return <div>Error</div>;
     }
 
@@ -29,19 +31,18 @@ const UniversitiesPicker = ({ onSelected }: UniversitiesPickerProps) => {
                     if (typeof event.target.value === 'string') {
                         throw new Error('Multiple select should emit event with array of IDs');
                     }
-                    setUniversityIds(event.target.value);
                     onSelected(event.target.value);
                 }}
                 placeholder="Sélectionner les universités"
                 renderValue={(selectedIds) =>
                     selectedIds.map((id) => data.find((item) => item.id === id)?.name).join(', ')
                 }
-                value={universityIds}
+                value={value}
                 multiple
             >
                 {data.map((item) => (
                     <MenuItem key={item.id} value={item.id}>
-                        <Checkbox checked={universityIds.includes(item.id)} />
+                        <Checkbox checked={value.includes(item.id)} />
                         <ListItemText>{item.name}</ListItemText>
                     </MenuItem>
                 ))}
