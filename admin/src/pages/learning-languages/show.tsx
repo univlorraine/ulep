@@ -1,5 +1,5 @@
 import { Box, Table, TableBody, TableCell, TableHead, TableRow } from '@mui/material';
-import React from 'react';
+import React, { useState } from 'react';
 
 import {
     DateField,
@@ -9,10 +9,11 @@ import {
     SimpleShowLayout,
     TextField,
     useGetList,
+    useGetOne,
     useGetRecordId,
     useShowContext,
 } from 'react-admin';
-import LearningLanguage from '../../entities/LearningLanguage';
+import { LearningLanguage, LearningLanguageTandem, TandemStatus } from '../../entities/LearningLanguage';
 import { Match } from '../../entities/Match';
 import { getProfileDisplayName } from '../../entities/Profile';
 import useLearningLanguagesStore from './useLearningLanguagesStore';
@@ -40,6 +41,30 @@ const LearningLanguageShow = () => {
         }
     );
 
+    // TODO(NOW): FIX navigation with Profile
+
+    const [noAssociatedTandem, setNoAssociatedTandem] = useState<boolean>(false);
+    const {
+        isLoading: isLoadingTandem,
+        isError: isErrorTandem,
+        data: tandem,
+    } = useGetOne<LearningLanguageTandem>(
+        'learning-languages/tandems',
+        {
+            id: recordId.toString(),
+        },
+        {
+            enabled: !!recordId,
+            retry: noAssociatedTandem,
+            onError: (err) => {
+                // Note: workaround to not consider no tandem as an error
+                if ((err as Error)?.cause === 404) {
+                    setNoAssociatedTandem(true);
+                }
+            },
+        }
+    );
+
     if (isLoading || isFetching) {
         return <Loading />;
     }
@@ -58,7 +83,7 @@ const LearningLanguageShow = () => {
                     <FunctionField
                         label="Name"
                         render={(data: LearningLanguage) => (
-                            <a href={`/profiles/${data?.profile.id}`}>{getProfileDisplayName(data?.profile)}</a>
+                            <a href={`/profiles/${data?.profile?.id}`}>{getProfileDisplayName(data?.profile)}</a>
                             // TODO(NOW+1): see with Reference field
                         )}
                     />
@@ -102,6 +127,42 @@ const LearningLanguageShow = () => {
                             </Table>
                         ) : (
                             <div>Sorry, no match</div>
+                        )}
+                    </Box>
+                </Box>
+
+                <Box sx={{ marginTop: 5, padding: 2 }}>
+                    <h2>Routine globale</h2>
+                    <Box sx={{ marginTop: 1 }}>
+                        {isLoadingTandem && <Loading />}
+                        {isErrorTandem && !noAssociatedTandem && <div>ERROR</div>}
+                        {!isLoadingTandem && !isErrorTandem && (
+                            <Table>
+                                <TableHead>
+                                    <TableRow>
+                                        <TableCell>Profile</TableCell>
+                                        <TableCell>Langue demandée</TableCell>
+                                        <TableCell>Niveau</TableCell>
+                                        <TableCell>Date</TableCell>
+                                        <TableCell>Matching</TableCell>
+                                        <TableCell>Actions</TableCell>
+                                    </TableRow>
+                                </TableHead>
+                                <TableBody>
+                                    {tandem?.status === TandemStatus.DRAFT && (
+                                        <TableRow>
+                                            <TableCell>{getProfileDisplayName(tandem.partner)}</TableCell>
+                                            <TableCell>{tandem.learningLanguage.name}</TableCell>
+                                            <TableCell>{tandem.learningLanguage.level}</TableCell>
+                                            <TableCell>
+                                                {new Date(tandem.learningLanguage.createdAt).toLocaleDateString()}
+                                            </TableCell>
+                                            <TableCell>N/A</TableCell>
+                                            <TableCell>Actions</TableCell>
+                                        </TableRow>
+                                    )}
+                                </TableBody>
+                            </Table>
                         )}
                     </Box>
                 </Box>

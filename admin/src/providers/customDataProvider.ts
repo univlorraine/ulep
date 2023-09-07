@@ -92,12 +92,22 @@ const customDataProvider: DataProvider = {
     },
     getOne: async (resource: string, params: GetOneParams) => {
         // TODO(NOW+1): check why not ok without custom getOne ?
-        const url = new URL(`${process.env.REACT_APP_API_URL}/${resource}/${params.id}`);
+        let url = new URL(`${process.env.REACT_APP_API_URL}/${resource}/${params.id}`);
+
+        switch (resource) {
+            case 'learning-languages/tandems':
+                url = new URL(`${process.env.REACT_APP_API_URL}/learning-languages/${params.id}/tandems`);
+                break;
+            default:
+                break;
+        }
 
         const response = await fetch(url, httpClientOptions({ method: 'GET' }));
 
         if (!response.ok) {
-            throw new Error(`API request failed with status ${response.status}`);
+            throw new Error(`API request failed with status ${response.status}`, {
+                cause: response.status,
+            });
         }
 
         const data = await response.json();
@@ -157,7 +167,6 @@ const customDataProvider: DataProvider = {
                 url.search = LearningLanguagesQuery(params);
                 break;
             case 'learning-languages/matches':
-                // TODO(NOW+1): maybe dedicated resource name ?
                 url = new URL(`${process.env.REACT_APP_API_URL}/learning-languages/${params.filter.id}/matches`);
                 url.search = LearningLanguageMatchesQuery(params);
                 break;

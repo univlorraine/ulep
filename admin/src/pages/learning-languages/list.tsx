@@ -1,7 +1,8 @@
 import React from 'react';
 import { Datagrid, DateField, FunctionField, List, TextField } from 'react-admin';
 import UniversitiesPicker from '../../components/UniversitiesPicker';
-import LearningLanguage from '../../entities/LearningLanguage';
+import { LearningLanguage } from '../../entities/LearningLanguage';
+import { getProfileDisplayName } from '../../entities/Profile';
 import useLearningLanguagesStore from './useLearningLanguagesStore';
 
 const LearningLanguageList = () => {
@@ -9,6 +10,7 @@ const LearningLanguageList = () => {
     // TODO(NOW+2): manage different case user from university central / university partner
     const { selectedUniversityIds, setSelectedUniversityIds } = useLearningLanguagesStore();
 
+    // TODO(NOW): trigger global routine
     return (
         <>
             <div>
@@ -25,8 +27,8 @@ const LearningLanguageList = () => {
                             <FunctionField
                                 label="Name"
                                 render={(record: LearningLanguage) => (
-                                    <a href={`/profiles/${record.profile.id}`}>
-                                        {record.profile.user.firstname} {record.profile.user.lastname}
+                                    <a href={`/profiles/${record.profile?.id}`}>
+                                        {getProfileDisplayName(record.profile)}
                                     </a>
                                 )}
                             />

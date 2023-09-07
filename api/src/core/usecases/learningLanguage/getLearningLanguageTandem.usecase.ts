@@ -1,4 +1,5 @@
 import { Inject, Injectable } from '@nestjs/common';
+import { RessourceDoesNotExist } from 'src/core/errors';
 import { Tandem } from 'src/core/models';
 import {
   TANDEM_REPOSITORY,
@@ -20,6 +21,9 @@ export class GetLearningLanguageTandemUsecase {
     const tandem = await this.tandemRepository.getTandemForLearningLanguage(
       query.id,
     );
+    if (!tandem) {
+      throw new RessourceDoesNotExist();
+    }
 
     return tandem;
   }

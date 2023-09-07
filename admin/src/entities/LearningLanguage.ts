@@ -1,12 +1,21 @@
 import { Profile } from './Profile';
 
-type LearningLanguage = {
+export type LearningLanguage = {
     id: string;
     code: string;
     level: string;
     name: string;
     createdAt: Date;
-    profile: Profile;
+    profile?: Profile;
 };
 
-export default LearningLanguage;
+export type LearningLanguageTandem = {
+    id: string;
+    status: string;
+    learningLanguage: LearningLanguage;
+    partner: Profile;
+};
+
+export enum TandemStatus {
+    DRAFT = 'DRAFT',
+}

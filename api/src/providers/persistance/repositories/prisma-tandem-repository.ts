@@ -116,6 +116,11 @@ export class PrismaTandemRepository implements TandemRepository {
       },
       include: TandemRelations,
     });
+
+    if (!tandem) {
+      return null;
+    }
+
     return tandemMapper(tandem);
   }
 

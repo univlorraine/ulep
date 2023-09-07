@@ -22,4 +22,5 @@ export type Profile = {
     createdAt?: Date;
 };
 
-export const getProfileDisplayName = (profile: Profile): string => `${profile.user.firstname} ${profile.user.lastname}`;
+export const getProfileDisplayName = (profile?: Profile): string =>
+    profile ? `${profile.user.firstname} ${profile.user.lastname}` : '';
