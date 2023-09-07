@@ -1,5 +1,16 @@
-import { GetLearningLanguagesUsecase } from './../../core/usecases/learningLanguage/getLearninLanguages.usecase';
-import { Controller, Get, Logger, Query, UseGuards } from '@nestjs/common';
+import {
+  GetLearningLanguagesUsecase,
+  GetLearningLanguageOfIdUsecase,
+} from 'src/core/usecases/learningLanguage';
+import {
+  Controller,
+  Get,
+  Logger,
+  Param,
+  ParseUUIDPipe,
+  Query,
+  UseGuards,
+} from '@nestjs/common';
 import * as Swagger from '@nestjs/swagger';
 import { Roles } from '../decorators/roles.decorator';
 import { configuration } from 'src/configuration';
@@ -7,6 +18,7 @@ import { AuthenticationGuard } from '../guards';
 import { CollectionResponse } from '../decorators';
 import { GetLearningLanguagesRequest, LearningLanguageResponse } from '../dtos';
 import { Collection } from '@app/common';
+import { LearningLanguage } from 'src/core/models';
 
 @Controller('learning-languages')
 @Swagger.ApiTags('LearningLanguages')
@@ -15,6 +27,7 @@ export class LearningLanguageController {
 
   constructor(
     private getLearningLanguagesUsecase: GetLearningLanguagesUsecase,
+    private getLearningLanguageOfIdUsecase: GetLearningLanguageOfIdUsecase,
   ) {}
 
   @Get()
@@ -42,5 +55,20 @@ export class LearningLanguageController {
       ),
       totalItems: result.totalItems,
     });
+  }
+
+  @Get(':id')
+  @UseGuards(AuthenticationGuard)
+  @Swagger.ApiOperation({ summary: 'Get a Learning language ressource.' })
+  @Swagger.ApiOkResponse({ type: LearningLanguageResponse, isArray: true }) // TODO(NOW)
+  @Swagger.ApiNotFoundResponse({ description: 'Resource not found' })
+  async findLearningLanguageById(
+    @Param('id', ParseUUIDPipe) id: string,
+  ): Promise<LearningLanguageResponse> {
+    const learningLanguage = await this.getLearningLanguageOfIdUsecase.execute({
+      id,
+    });
+
+    return LearningLanguageResponse.fromDomain(learningLanguage, true);
   }
 }

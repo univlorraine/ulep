@@ -1,1 +1,2 @@
-export * from './getLearninLanguages.usecase';
+export * from './getLearningLanguages.usecase';
+export * from './getLearningLanguageOfId.usecase';
