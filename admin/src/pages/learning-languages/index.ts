@@ -1,5 +1,7 @@
-import LearningLanguageList from './list';
+import List from './list';
+import Show from './show';
 
 export default {
-    list: LearningLanguageList,
+    list: List,
+    show: Show,
 };

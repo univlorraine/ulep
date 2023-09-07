@@ -18,7 +18,7 @@ const LearningLanguageList = () => {
             <div>
                 {universityIds.length ? (
                     <List<LearningLanguage> exporter={false} filter={{ universityIds }} title="TODO.Translate">
-                        <Datagrid bulkActionButtons={false}>
+                        <Datagrid bulkActionButtons={false} rowClick="show">
                             <FunctionField
                                 label="Name"
                                 render={(record: LearningLanguage) => (
