@@ -1,23 +1,26 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { Datagrid, DateField, FunctionField, List, TextField } from 'react-admin';
 import UniversitiesPicker from '../../components/UniversitiesPicker';
 import LearningLanguage from '../../entities/LearningLanguage';
+import useLearningLanguagesStore from './useLearningLanguagesStore';
 
 const LearningLanguageList = () => {
     // TODO(NOW): translations
     // TODO(NOW+2): manage different case user from university central / university partner
-    // TODO(NOW+1): manage universityIds in URL search params to keep historic ?
-
-    const [universityIds, setUniversityIds] = useState<string[]>([]);
+    const { selectedUniversityIds, setSelectedUniversityIds } = useLearningLanguagesStore();
 
     return (
         <>
             <div>
-                <UniversitiesPicker onSelected={(ids) => setUniversityIds(ids)} />
+                <UniversitiesPicker onSelected={(ids) => setSelectedUniversityIds(ids)} value={selectedUniversityIds} />
             </div>
             <div>
-                {universityIds.length ? (
-                    <List<LearningLanguage> exporter={false} filter={{ universityIds }} title="TODO.Translate">
+                {selectedUniversityIds.length ? (
+                    <List<LearningLanguage>
+                        exporter={false}
+                        filter={{ universityIds: selectedUniversityIds }}
+                        title="TODO.Translate"
+                    >
                         <Datagrid bulkActionButtons={false} rowClick="show">
                             <FunctionField
                                 label="Name"

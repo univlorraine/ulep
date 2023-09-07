@@ -15,9 +15,11 @@ import {
 import LearningLanguage from '../../entities/LearningLanguage';
 import { Match } from '../../entities/Match';
 import { getProfileDisplayName } from '../../entities/Profile';
+import useLearningLanguagesStore from './useLearningLanguagesStore';
 
 const LearningLanguageShow = () => {
     const { isLoading, isFetching, error } = useShowContext<LearningLanguage>();
+    const { selectedUniversityIds } = useLearningLanguagesStore();
 
     const recordId = useGetRecordId();
 
@@ -30,8 +32,7 @@ const LearningLanguageShow = () => {
         {
             filter: {
                 id: recordId,
-                universityIds: ['b511f9d1-ce7e-40b5-a630-ecb99f4e9f59', '0747d187-7b02-479b-8ce3-faccac2a20c9'],
-                // TODO(NOW-0): Get show params
+                universityIds: selectedUniversityIds,
             },
         },
         {
@@ -58,8 +59,8 @@ const LearningLanguageShow = () => {
                         label="Name"
                         render={(data: LearningLanguage) => (
                             <a href={`/profiles/${data?.profile.id}`}>{getProfileDisplayName(data?.profile)}</a>
+                            // TODO(NOW+1): see with Reference field
                         )}
-                        // TODO(NOW+1): see with Reference field
                     />
                     <DateField label="Date demande" source="createdAt" />
                     <TextField label="Learning language" source="name" />
