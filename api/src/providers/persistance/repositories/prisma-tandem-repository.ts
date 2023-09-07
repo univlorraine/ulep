@@ -101,6 +101,24 @@ export class PrismaTandemRepository implements TandemRepository {
     return tandems.map(tandemMapper);
   }
 
+  async getTandemForLearningLanguage(
+    learningLanguageId: string,
+  ): Promise<Tandem> {
+    const tandem = await this.prisma.tandems.findFirst({
+      where: {
+        LearningLanguages: {
+          some: {
+            id: {
+              equals: learningLanguageId,
+            },
+          },
+        },
+      },
+      include: TandemRelations,
+    });
+    return tandemMapper(tandem);
+  }
+
   async deleteTandemNotLinkedToLearningLangues(): Promise<number> {
     const res = await this.prisma.tandems.deleteMany({
       where: {

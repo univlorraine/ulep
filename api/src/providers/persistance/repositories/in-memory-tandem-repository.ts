@@ -62,6 +62,16 @@ export class InMemoryTandemRepository implements TandemRepository {
     );
   }
 
+  async getTandemForLearningLanguage(
+    learningLanguageId: string,
+  ): Promise<Tandem> {
+    return this.#tandems.find((tandem) =>
+      tandem.learningLanguages.some(
+        (learningLanguage) => learningLanguage.id === learningLanguageId,
+      ),
+    );
+  }
+
   async deleteTandemNotLinkedToLearningLangues(): Promise<number> {
     const length = this.#tandems.length;
     this.#tandems = this.#tandems.filter((tandem) => {

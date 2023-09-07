@@ -20,10 +20,12 @@ import {
   GetLearningLanguagesRequest,
   LearningLanguageResponse,
   MatchResponse,
+  UserTandemResponse,
 } from '../dtos';
 import { Collection } from '@app/common';
 import { GetLearningLanguageMatchsRequest } from '../dtos/learning-languages/get-learning-language-matches.request';
 import { GetUserMatchUsecase } from 'src/core/usecases';
+import { GetLearningLanguageTandemUsecase } from 'src/core/usecases/learningLanguage/getLearningLanguageTandem.usecase';
 
 @Controller('learning-languages')
 @Swagger.ApiTags('LearningLanguages')
@@ -34,6 +36,7 @@ export class LearningLanguageController {
     private getLearningLanguagesUsecase: GetLearningLanguagesUsecase,
     private getLearningLanguageOfIdUsecase: GetLearningLanguageOfIdUsecase,
     private getUserMatchUsecase: GetUserMatchUsecase,
+    private getLearningLanguageTandemUseCase: GetLearningLanguageTandemUsecase,
   ) {}
 
   @Get()
@@ -53,7 +56,7 @@ export class LearningLanguageController {
       universityIds,
     });
 
-    // TODO(NOW+1): see if should make profile paramateble in repsone
+    // TODO(NOW+1): see if should make profile parametable in repsone
 
     return new Collection<LearningLanguageResponse>({
       items: result.items.map((ll) =>
@@ -100,5 +103,26 @@ export class LearningLanguageController {
       items: matches.items.map(MatchResponse.fromDomain),
       totalItems: matches.totalItems,
     });
+  }
+
+  @Get(':id/tandems')
+  @Roles(configuration().adminRole)
+  @UseGuards(AuthenticationGuard)
+  @Swagger.ApiOperation({
+    summary: "Retrieve learning language's tandem",
+  })
+  @CollectionResponse(UserTandemResponse)
+  async getLearningLanguageTandem(
+    @Param('id', ParseUUIDPipe) id: string,
+  ): Promise<UserTandemResponse> {
+    const learningLanguage = await this.getLearningLanguageOfIdUsecase.execute({
+      id,
+    });
+
+    const tandem = await this.getLearningLanguageTandemUseCase.execute({
+      id,
+    });
+
+    return UserTandemResponse.fromDomain(learningLanguage.profile.id, tandem);
   }
 }
