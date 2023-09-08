@@ -53,14 +53,14 @@ const ShowTandems = () => {
             },
         },
         {
-            enabled: !!recordId && !hasActiveTandem,
+            enabled: !!recordId && !isLoadingTandem && !hasActiveTandem,
         }
     );
 
     if (isLoadingTandem) {
         return <CircularProgress />;
     }
-    if (isErrorTandem) {
+    if (isErrorTandem && !noAssociatedTandem) {
         console.error(errorTandem);
 
         return (
