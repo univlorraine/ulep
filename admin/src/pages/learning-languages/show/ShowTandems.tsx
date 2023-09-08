@@ -5,6 +5,7 @@ import { LearningLanguageTandem, TandemStatus } from '../../../entities/Learning
 import { Match } from '../../../entities/Match';
 import ProfileLink from '../ui/ProfileLink';
 import useLearningLanguagesStore from '../useLearningLanguagesStore';
+import ValidateTandem from './ValidateTandem';
 
 const ShowTandems = () => {
     const recordId = useGetRecordId();
@@ -164,7 +165,9 @@ const ShowTandems = () => {
                                         {new Date(tandem.learningLanguage.createdAt).toLocaleDateString()}
                                     </TableCell>
                                     <TableCell>N/A</TableCell>
-                                    <TableCell>Actions</TableCell>
+                                    <TableCell>
+                                        <ValidateTandem />
+                                    </TableCell>
                                 </TableRow>
                             )}
                         </TableBody>
