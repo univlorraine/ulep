@@ -18,8 +18,6 @@ import { getProfileDisplayName } from '../../../entities/Profile';
 import useLearningLanguagesStore from '../useLearningLanguagesStore';
 import useLaunchGlobalRoutine from './useLaunchGlobalRoutine';
 
-// TODO(NOW+1): refacto by folder
-
 interface ActionsProps {
     universityIds: string[];
 }
@@ -109,7 +107,6 @@ const Actions = ({ universityIds }: ActionsProps) => {
     );
 };
 
-// TODO(NOW): translations
 // TODO(NEXT): manage case where connected user is not from central university
 
 const LearningLanguageList = () => {
