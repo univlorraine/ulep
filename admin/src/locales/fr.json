@@ -251,7 +251,8 @@
         "list": {
             "actions": {
                 "globalRoutine": {
-                    "ctaLabel": "Lancer la routine globale"
+                    "ctaLabel": "Lancer la routine globale",
+                    "runningLabel": "Routine globale en cours d'exécution"
                 }
             },
             "globalRoutineModal": {

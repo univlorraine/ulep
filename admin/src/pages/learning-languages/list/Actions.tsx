@@ -2,6 +2,8 @@ import { PlayArrow } from '@mui/icons-material';
 import { Modal, Box, CircularProgress } from '@mui/material';
 import React, { useState } from 'react';
 import { Button, TopToolbar, useNotify, useTranslate } from 'react-admin';
+import { RoutineExecutionStatus } from '../../../entities/RoutineExecution';
+import useLastGlobalRoutineExecution from './useLastGlobalRoutineExecution';
 import useLaunchGlobalRoutine from './useLaunchGlobalRoutine';
 
 interface ActionsProps {
@@ -14,9 +16,21 @@ const Actions = ({ universityIds }: ActionsProps) => {
 
     const [confirmModalIsOpen, setConfirmModalIsOpen] = useState<boolean>(false);
 
+    // TODO(NOW): manage error
+    // TODO(NOW): manage polling
+    const {
+        data: lastGlobalRoutineExecution,
+        // isLoading: isLoadingLastGlobalRoutine,
+        refetch: refetchGlobalRoutine,
+    } = useLastGlobalRoutineExecution();
+
+    // TODO(NOW): fix typing
+    const globalRoutineIsCurrentlyRunning = lastGlobalRoutineExecution?.status === RoutineExecutionStatus.ON_GOING;
+
     const { mutate, isLoading } = useLaunchGlobalRoutine({
-        onSuccess: () => {
+        onSuccess: async () => {
             setConfirmModalIsOpen(false);
+            await refetchGlobalRoutine();
         },
         onError: (err: unknown) => {
             console.error(err);
@@ -30,13 +44,20 @@ const Actions = ({ universityIds }: ActionsProps) => {
     return (
         <>
             <TopToolbar>
-                <Button
-                    color="secondary"
-                    label={translate('learning_languages.list.actions.globalRoutine.ctaLabel')}
-                    onClick={() => setConfirmModalIsOpen(true)}
-                    startIcon={<PlayArrow />}
-                    variant="text"
-                />
+                {globalRoutineIsCurrentlyRunning ? (
+                    <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, padding: 0.5 }}>
+                        <CircularProgress size={15} />
+                        <span>{translate('learning_languages.list.actions.globalRoutine.runningLabel')}</span>
+                    </Box>
+                ) : (
+                    <Button
+                        color="secondary"
+                        label={translate('learning_languages.list.actions.globalRoutine.ctaLabel')}
+                        onClick={() => setConfirmModalIsOpen(true)}
+                        startIcon={<PlayArrow />}
+                        variant="text"
+                    />
+                )}
             </TopToolbar>
             <Modal
                 aria-describedby="modal-modal-description"
