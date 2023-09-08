@@ -88,8 +88,9 @@ const Actions = ({ universityIds }: ActionsProps) => {
     );
 };
 
+// TODO(NOW): translations
+
 const LearningLanguageList = () => {
-    // TODO(NOW): translations
     // TODO(NOW+2): manage different case user from university central / university partner
     const { selectedUniversityIds, setSelectedUniversityIds } = useLearningLanguagesStore();
 
@@ -109,11 +110,7 @@ const LearningLanguageList = () => {
                         <Datagrid bulkActionButtons={false} rowClick="show">
                             <FunctionField
                                 label="Name"
-                                render={(record: LearningLanguage) => (
-                                    <a href={`/profiles/${record.profile?.id}`}>
-                                        {getProfileDisplayName(record.profile)}
-                                    </a>
-                                )}
+                                render={(record: LearningLanguage) => getProfileDisplayName(record.profile)}
                             />
                             <TextField label="learned language" sortable={false} source="name" />
                             <TextField label="level" sortable={false} source="level" />

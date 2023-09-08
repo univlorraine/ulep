@@ -15,7 +15,7 @@ import {
 } from 'react-admin';
 import { LearningLanguage, LearningLanguageTandem, TandemStatus } from '../../entities/LearningLanguage';
 import { Match } from '../../entities/Match';
-import { getProfileDisplayName } from '../../entities/Profile';
+import ProfileLink from './ui/ProfileLink';
 import useLearningLanguagesStore from './useLearningLanguagesStore';
 
 const LearningLanguageShow = () => {
@@ -40,8 +40,6 @@ const LearningLanguageShow = () => {
             enabled: !!recordId,
         }
     );
-
-    // TODO(NOW): FIX navigation with Profile
 
     const [noAssociatedTandem, setNoAssociatedTandem] = useState<boolean>(false);
     const {
@@ -81,11 +79,9 @@ const LearningLanguageShow = () => {
             <div>
                 <SimpleShowLayout>
                     <FunctionField
-                        label="Name"
-                        render={(data: LearningLanguage) => (
-                            <a href={`/profiles/${data?.profile?.id}`}>{getProfileDisplayName(data?.profile)}</a>
-                            // TODO(NOW+1): see with Reference field
-                        )}
+                        render={(data: LearningLanguage) =>
+                            data?.profile && <ProfileLink profile={data.profile} variant="h5" />
+                        }
                     />
                     <DateField label="Date demande" source="createdAt" />
                     <TextField label="Learning language" source="name" />
@@ -113,7 +109,9 @@ const LearningLanguageShow = () => {
                                     {matches.map((match, index) => (
                                         // eslint-disable-next-line react/no-array-index-key
                                         <TableRow key={`match-${index}`}>
-                                            <TableCell>{getProfileDisplayName(match.target.profile)}</TableCell>
+                                            <TableCell>
+                                                <ProfileLink profile={match.target.profile} />
+                                            </TableCell>
                                             <TableCell>{match.target.name}</TableCell>
                                             <TableCell>{match.target.level}</TableCell>
                                             <TableCell>
@@ -151,7 +149,9 @@ const LearningLanguageShow = () => {
                                 <TableBody>
                                     {tandem?.status === TandemStatus.DRAFT && (
                                         <TableRow>
-                                            <TableCell>{getProfileDisplayName(tandem.partner)}</TableCell>
+                                            <TableCell>
+                                                <ProfileLink profile={tandem.partner} />
+                                            </TableCell>
                                             <TableCell>{tandem.learningLanguage.name}</TableCell>
                                             <TableCell>{tandem.learningLanguage.level}</TableCell>
                                             <TableCell>

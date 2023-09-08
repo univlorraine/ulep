@@ -9,12 +9,12 @@ export type Profile = {
     user: User;
     nativeLanguage: Language;
     masteredLanguages: Language[];
-    learningType: string; // TODO(NOW+1): see if enum
+    learningType: string;
     meetingFrequency: string;
     sameGender: boolean;
     sameAge: boolean;
     objectives: Objective[];
-    interests: Interest[]; // TODO(NOW+1): see if enum
+    interests: Interest[];
     biography?: { [key: string]: string };
     campus?: Campus;
     certificateOption?: boolean;
