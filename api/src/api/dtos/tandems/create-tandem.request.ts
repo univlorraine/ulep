@@ -12,9 +12,3 @@ export class CreateTandemRequest implements CreateTandemCommand {
   @IsEnum(TandemStatus)
   status: TandemStatus;
 }
-
-export class UpdateTandemRequest {
-  @Swagger.ApiProperty({ type: 'string', enum: ['active', 'inactive'] })
-  @IsEnum(TandemStatus)
-  status: TandemStatus;
-}

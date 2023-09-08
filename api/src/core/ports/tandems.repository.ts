@@ -14,6 +14,10 @@ export interface TandemRepository {
 
   saveMany(tandems: Tandem[]): Promise<void>;
 
+  ofId(id: string): Promise<Tandem>;
+
+  updateStatus(id: string, status: TandemStatus): Promise<void>;
+
   findWhere(props: FindWhereProps): Promise<Collection<Tandem>>;
 
   getExistingTandems(): Promise<Tandem[]>;
