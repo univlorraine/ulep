@@ -2,6 +2,7 @@ import { Check, Clear } from '@mui/icons-material';
 import { Box, CircularProgress, IconButton, Modal } from '@mui/material';
 import React, { useState } from 'react';
 import { Button } from 'react-admin';
+import useCreateTandem from '../useCreateTandem';
 import useValidateTandem from '../useValidateTandem';
 
 enum TandemAction {
@@ -13,11 +14,16 @@ enum TandemAction {
 // TODO(NOW+2): hide refuse while not implemented
 
 interface ValidateTandemProps {
-    tandemId: string;
+    tandemId?: string;
+    learningLanguageIds?: string[];
     onTandemValidated: () => void;
 }
 
-const ValidateTandem = ({ tandemId, onTandemValidated }: ValidateTandemProps) => {
+const ValidateTandem = ({ tandemId, learningLanguageIds, onTandemValidated }: ValidateTandemProps) => {
+    if (!tandemId && learningLanguageIds?.length !== 2) {
+        throw new Error('Validate tandem must have a tandemId or 2 learningLanguage Ids');
+    }
+
     const [modalMessage, setModalMessage] = useState<string>();
     const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
 
@@ -35,15 +41,27 @@ const ValidateTandem = ({ tandemId, onTandemValidated }: ValidateTandemProps) =>
         setIsModalOpen(true);
     };
 
-    const { mutate, isLoading } = useValidateTandem({
+    const { mutate: validateTandem, isLoading: isLoadingValidateTandem } = useValidateTandem({
+        onSuccess: async () => {
+            setIsModalOpen(false);
+            onTandemValidated();
+        },
+    });
+    const { mutate: createTandem, isLoading: isLoadingCreateTandem } = useCreateTandem({
         onSuccess: async () => {
             setIsModalOpen(false);
             onTandemValidated();
         },
     });
 
+    // TODO(NOW): manage error
+
     const handleConfirm = () => {
-        mutate(tandemId);
+        if (tandemId) {
+            validateTandem(tandemId);
+        } else if (learningLanguageIds) {
+            createTandem(learningLanguageIds);
+        }
     };
 
     return (
@@ -66,7 +84,7 @@ const ValidateTandem = ({ tandemId, onTandemValidated }: ValidateTandemProps) =>
                         p: 4,
                     }}
                 >
-                    {isLoading ? (
+                    {isLoadingValidateTandem || isLoadingCreateTandem ? (
                         <CircularProgress />
                     ) : (
                         <>

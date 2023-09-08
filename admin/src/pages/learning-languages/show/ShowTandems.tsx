@@ -98,6 +98,11 @@ const ShowTandems = () => {
         );
     }
 
+    const handleValidateTandem = async () => {
+        await refetchTandem();
+        await refetchMatches();
+    };
+
     return (
         <>
             <Box>
@@ -132,7 +137,12 @@ const ShowTandems = () => {
                                         <TableCell>{match.target.level}</TableCell>
                                         <TableCell>{new Date(match.target.createdAt).toLocaleDateString()}</TableCell>
                                         <TableCell>{match.score.total * 100}%</TableCell>
-                                        <TableCell>TODO: actions</TableCell>
+                                        <TableCell>
+                                            <ValidateTandem
+                                                learningLanguageIds={[recordId.toString(), match.target.id]}
+                                                onTandemValidated={handleValidateTandem}
+                                            />
+                                        </TableCell>
                                     </TableRow>
                                 ))}
                             </TableBody>
@@ -169,13 +179,7 @@ const ShowTandems = () => {
                                     </TableCell>
                                     <TableCell>N/A</TableCell>
                                     <TableCell>
-                                        <ValidateTandem
-                                            onTandemValidated={async () => {
-                                                await refetchTandem();
-                                                await refetchMatches();
-                                            }}
-                                            tandemId={tandem.id}
-                                        />
+                                        <ValidateTandem onTandemValidated={handleValidateTandem} tandemId={tandem.id} />
                                     </TableCell>
                                 </TableRow>
                             )}
