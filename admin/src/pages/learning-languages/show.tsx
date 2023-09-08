@@ -21,8 +21,6 @@ const LearningLanguageShow = () => {
         );
     }
 
-    // TODO(NOW+0): don't get match if user not from central university
-
     return (
         <Show title="TODO(NOW)">
             <SimpleShowLayout>

@@ -6,8 +6,6 @@ interface UseValidateTandemParams {
     onError?: (error: unknown) => void;
 }
 
-// TODO(NOW+2): rename validate into more appropriate when appariement mode will be in place
-
 const useValidateTandem = (options?: UseValidateTandemParams) => {
     const dataProvider = useDataProvider();
 

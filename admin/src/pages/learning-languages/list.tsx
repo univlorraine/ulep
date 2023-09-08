@@ -89,9 +89,9 @@ const Actions = ({ universityIds }: ActionsProps) => {
 };
 
 // TODO(NOW): translations
+// TODO(NEXT): manage case where connected user is not from central university
 
 const LearningLanguageList = () => {
-    // TODO(NOW+2): manage different case user from university central / university partner
     const { selectedUniversityIds, setSelectedUniversityIds } = useLearningLanguagesStore();
 
     return (

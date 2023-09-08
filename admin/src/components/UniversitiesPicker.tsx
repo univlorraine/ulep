@@ -1,7 +1,7 @@
-import { Checkbox, FormControl, InputLabel, ListItemText, MenuItem } from '@mui/material';
+import { Checkbox, CircularProgress, FormControl, InputLabel, ListItemText, MenuItem } from '@mui/material';
 import Select from '@mui/material/Select';
 import React from 'react';
-import { useGetList, Loading } from 'react-admin';
+import { useGetList } from 'react-admin';
 import University from '../entities/University';
 
 interface UniversitiesPickerProps {
@@ -13,13 +13,16 @@ const UniversitiesPicker = ({ value, onSelected }: UniversitiesPickerProps) => {
     const { data, isLoading, error } = useGetList<University>('universities');
 
     if (isLoading) {
-        return <Loading />;
+        return <CircularProgress />;
     }
     if (error || !data) {
-        // TODO: better error display
         console.error(error);
 
-        return <div>Error</div>;
+        return (
+            <div>
+                <p>Une erreur est survenue lors de la récupération des universités</p>
+            </div>
+        );
     }
 
     return (

@@ -10,9 +10,6 @@ enum TandemAction {
     REFUSE = 'REFUSE',
 }
 
-// TODO(NOW): factorize when creating a tandem from scratch VS updating a DRAFT tandem
-// TODO(NOW+2): hide refuse while not implemented
-
 interface ValidateTandemProps {
     tandemId?: string;
     learningLanguageIds?: string[];

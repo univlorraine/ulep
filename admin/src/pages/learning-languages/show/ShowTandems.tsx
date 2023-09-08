@@ -7,7 +7,7 @@ import ProfileLink from '../ui/ProfileLink';
 import useLearningLanguagesStore from '../useLearningLanguagesStore';
 import ValidateTandem from './ValidateTandem';
 
-// TODO(NOW+2): check how to relaunch global routine when validating / refusing a tandem
+// TODO(NEXT): Relaunch global routine when validating / refusing a tandem
 
 const ShowTandems = () => {
     const recordId = useGetRecordId();

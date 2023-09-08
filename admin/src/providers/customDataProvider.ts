@@ -92,7 +92,6 @@ const customDataProvider: DataProvider = {
         return { data: result };
     },
     getOne: async (resource: string, params: GetOneParams) => {
-        // TODO(NOW+1): check why not ok without custom getOne ?
         let url = new URL(`${process.env.REACT_APP_API_URL}/${resource}/${params.id}`);
 
         switch (resource) {

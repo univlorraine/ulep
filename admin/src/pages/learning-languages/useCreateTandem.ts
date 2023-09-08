@@ -6,8 +6,6 @@ interface UseCreateTandemParams {
     onError?: (error: unknown) => void;
 }
 
-// TODO(NOW+2): rename create into more appropriate when appariement mode will be in place
-
 const useCreateTandem = (options?: UseCreateTandemParams) => {
     const dataProvider = useDataProvider();
 
