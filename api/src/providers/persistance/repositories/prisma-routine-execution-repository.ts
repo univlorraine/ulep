@@ -44,4 +44,18 @@ export class PrismaRoutineExecutionRepository
 
     return routineExecutionMapper(instance);
   }
+
+  async getLast(): Promise<RoutineExecution> {
+    const res = await this.prisma.routineExecutions.findFirst({
+      orderBy: {
+        created_at: 'desc',
+      },
+    });
+
+    if (!res) {
+      return null;
+    }
+
+    return routineExecutionMapper(res);
+  }
 }

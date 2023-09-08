@@ -22,6 +22,7 @@ import { LearningLanguageController } from './controllers/learningLanguage.contr
 import { ROUTINE_EXECUTION_REPOSITORY } from 'src/core/ports/routine-execution.repository';
 import { PrismaRoutineExecutionRepository } from 'src/providers/persistance/repositories/prisma-routine-execution-repository';
 import { PrismaService } from '@app/common';
+import { RoutineExecutionController } from './controllers/routine-execution.controller';
 
 @Module({
   imports: [CoreModule, TerminusModule],
@@ -42,6 +43,7 @@ import { PrismaService } from '@app/common';
     UploadsController,
     UserController,
     LearningLanguageController,
+    RoutineExecutionController,
   ],
   providers: [
     PrismaService,

@@ -17,4 +17,6 @@ export interface RoutineExecutionRepository {
   }: CreateRoutineExecutionParams): Promise<RoutineExecution>;
 
   updateStatus(id: string, status: RoutineStatus): Promise<RoutineExecution>;
+
+  getLast(): Promise<RoutineExecution>;
 }
