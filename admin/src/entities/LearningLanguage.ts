@@ -18,4 +18,5 @@ export type LearningLanguageTandem = {
 
 export enum TandemStatus {
     DRAFT = 'DRAFT',
+    ACTIVE = 'ACTIVE',
 }
