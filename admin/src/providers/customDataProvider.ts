@@ -8,6 +8,7 @@ import {
     UpdateParams,
     fetchUtils,
 } from 'react-admin';
+import { TandemStatus } from '../entities/LearningLanguage';
 import CountriesQuery from '../queries/CountriesQuery';
 import InterestsQuery from '../queries/InterestsQuery';
 import LanguagesQuery from '../queries/LanguagesQuery';
@@ -232,6 +233,17 @@ const customDataProvider: DataProvider = {
         const result = await response.json();
 
         return result;
+    },
+    validateTandem: async (tandemId: string) => {
+        const url = `${process.env.REACT_APP_API_URL}/tandems/${tandemId}/status`;
+        const body = JSON.stringify({
+            status: TandemStatus.ACTIVE,
+        });
+        const response = await fetch(url, httpClientOptions({ method: 'PUT', body }));
+
+        if (!response.ok) {
+            throw new Error(`API request failed with status ${response.status}`);
+        }
     },
 };
 

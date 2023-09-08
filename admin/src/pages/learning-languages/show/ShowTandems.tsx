@@ -7,6 +7,8 @@ import ProfileLink from '../ui/ProfileLink';
 import useLearningLanguagesStore from '../useLearningLanguagesStore';
 import ValidateTandem from './ValidateTandem';
 
+// TODO(NOW+2): check how to relaunch global routine when validating / refusing a tandem
+
 const ShowTandems = () => {
     const recordId = useGetRecordId();
 
@@ -15,6 +17,7 @@ const ShowTandems = () => {
         isLoading: isLoadingTandem,
         isError: isErrorTandem,
         error: errorTandem,
+        refetch: refetchTandem,
         data: tandem,
     } = useGetOne<LearningLanguageTandem>(
         'learning-languages/tandems',
@@ -33,10 +36,13 @@ const ShowTandems = () => {
         }
     );
 
+    const hasActiveTandem = tandem?.status === TandemStatus.ACTIVE;
+
     const { selectedUniversityIds } = useLearningLanguagesStore();
     const {
         isLoading: isLoadingMatches,
         isError: isErrorMatches,
+        refetch: refetchMatches,
         data: matches,
     } = useGetList<Match>(
         'learning-languages/matches',
@@ -47,7 +53,7 @@ const ShowTandems = () => {
             },
         },
         {
-            enabled: !!recordId,
+            enabled: !!recordId && !hasActiveTandem,
         }
     );
 
@@ -64,9 +70,6 @@ const ShowTandems = () => {
         );
     }
 
-    console.log('tandem', tandem);
-
-    const hasActiveTandem = tandem?.status === TandemStatus.ACTIVE;
     if (hasActiveTandem) {
         return (
             <>
@@ -166,7 +169,13 @@ const ShowTandems = () => {
                                     </TableCell>
                                     <TableCell>N/A</TableCell>
                                     <TableCell>
-                                        <ValidateTandem />
+                                        <ValidateTandem
+                                            onTandemValidated={async () => {
+                                                await refetchTandem();
+                                                await refetchMatches();
+                                            }}
+                                            tandemId={tandem.id}
+                                        />
                                     </TableCell>
                                 </TableRow>
                             )}
