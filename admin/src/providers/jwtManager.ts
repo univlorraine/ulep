@@ -31,7 +31,9 @@ const jwtManager = () => {
         localStorage.removeItem('refresh_token');
     };
 
-    return { getToken, setTokens, ereaseTokens };
+    const decodeToken = (token: string) => jwtDecode(token);
+
+    return { getToken, setTokens, ereaseTokens, decodeToken };
 };
 
 export default jwtManager();

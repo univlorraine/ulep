@@ -77,6 +77,23 @@ const authProvider = () => ({
         return Promise.resolve();
     },
     getPermissions: () => (jwtManager.getToken('access_token') ? Promise.resolve() : Promise.reject()),
+    getIdentity: () => {
+        const accessToken = jwtManager.getToken('access_token');
+        if (!accessToken) {
+            return Promise.reject();
+        }
+
+        const decoded = jwtManager.decodeToken(accessToken);
+        if (!decoded) {
+            return Promise.reject();
+        }
+
+        return Promise.resolve({
+            id: '6363c0e2-80aa-487d-86a2-2cca6b39817f',
+            fullName: '',
+            ...decoded,
+        });
+    },
 });
 
 export default authProvider;
