@@ -1,7 +1,7 @@
 import { Checkbox, CircularProgress, FormControl, InputLabel, ListItemText, MenuItem } from '@mui/material';
 import Select from '@mui/material/Select';
 import React from 'react';
-import { useGetList } from 'react-admin';
+import { useGetList, useTranslate } from 'react-admin';
 import University from '../entities/University';
 
 interface UniversitiesPickerProps {
@@ -10,6 +10,8 @@ interface UniversitiesPickerProps {
 }
 
 const UniversitiesPicker = ({ value, onSelected }: UniversitiesPickerProps) => {
+    const translate = useTranslate();
+
     const { data, isLoading, error } = useGetList<University>('universities');
 
     if (isLoading) {
@@ -18,16 +20,12 @@ const UniversitiesPicker = ({ value, onSelected }: UniversitiesPickerProps) => {
     if (error || !data) {
         console.error(error);
 
-        return (
-            <div>
-                <p>Une erreur est survenue lors de la récupération des universités</p>
-            </div>
-        );
+        return <p>{translate('universitiesPicker.error')}</p>;
     }
 
     return (
         <FormControl sx={{ width: '100%' }}>
-            <InputLabel id="universities-select-label">Universités</InputLabel>
+            <InputLabel id="universities-select-label">{translate('universitiesPicker.label')}</InputLabel>
             <Select<string[]>
                 labelId="universities-select-label"
                 onChange={(event) => {
@@ -36,7 +34,7 @@ const UniversitiesPicker = ({ value, onSelected }: UniversitiesPickerProps) => {
                     }
                     onSelected(event.target.value);
                 }}
-                placeholder="Sélectionner les universités"
+                placeholder={translate('universitiesPicker.label')}
                 renderValue={(selectedIds) =>
                     selectedIds.map((id) => data.find((item) => item.id === id)?.name).join(', ')
                 }

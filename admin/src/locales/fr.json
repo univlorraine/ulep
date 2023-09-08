@@ -245,5 +245,79 @@
     "users": {
         "searchEmail": "Chercher par email",
         "userListTitle": "Utilisateurs"
+    },
+    "learning_languages": {
+        "label": "Demandes de tandems",
+        "list": {
+            "actions": {
+                "globalRoutine": {
+                    "ctaLabel": "Lancer la routine globale"
+                }
+            },
+            "globalRoutineModal": {
+                "description": "Lancer la routine globale peut prendre quelques minutes. Les tandems proposés par une ancienne exécution seront perdus.",
+                "confirmMessage": "Voulez-vous continuer ?",
+                "ctaLabels": {
+                    "confirm": "Confirmer",
+                    "cancel": "Annuler"
+                },
+                "error": "Une erreur est survenue lors de l'exécution de la routine globale"
+            },
+            "tableColumns": {
+                "name": "Nom",
+                "learnedLanguage": "Langue demandée",
+                "level": "Niveau",
+                "createdAt": "Créé le"
+            },
+            "noUniversitySelected": "Merci de sélectionner une ou plusieurs universités pour voir les demandes"
+        },
+        "show": {
+            "fields": {
+                "createdAt": "Date demande",
+                "learnedLanguage": "Langue demandé",
+                "level": "Niveau"
+            },
+            "tandems": {
+                "error": "Une erreur est survenue lors de la récupération des tandems",
+                "active": {
+                    "title": "En tandem avec",
+                    "tableColumns": {
+                        "profile": "Profil",
+                        "learnedLanguage": "Langue demandée",
+                        "level": "Niveau",
+                        "date": "Date"
+                    }
+                },
+                "matches": {
+                    "error": "Une erreur est survenue lors de la récupération des propositions de la routine individuelle",
+                    "title": "Suggestion routine individuelle",
+                    "tableColumns": {
+                        "profile": "Profil",
+                        "learnedLanguage": "Langue demandée",
+                        "level": "Niveau",
+                        "score": "Compatibilité",
+                        "date": "Date",
+                        "actions": "Actions"
+                    },
+                    "noResults": "Aucun résultats"
+                },
+                "globalSuggestions": {
+                    "title": "Suggestion routine globale"
+                },
+                "actions": {
+                    "validateMessage": "Vous êtes sur le point de créer un tandem. Êtes-vous sur ?",
+                    "refuseMessage": "Vous êtes sur le point de refuser un tandem. Êtes-vous sur ?",
+                    "ctaLabels": {
+                        "cancel": "Annuler",
+                        "confirm": "Confirmer"
+                    },
+                    "error": "Une erreur est survenue"
+                }
+            }
+        }
+    },
+    "universitiesPicker": {
+        "label": "Sélectionner des universités",
+        "error": "Une erreur est survenue lors de la récupération des universités"
     }
 }

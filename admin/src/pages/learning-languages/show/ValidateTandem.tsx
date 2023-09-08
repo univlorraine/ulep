@@ -1,7 +1,7 @@
 import { Check, Clear } from '@mui/icons-material';
 import { Box, CircularProgress, IconButton, Modal } from '@mui/material';
 import React, { useState } from 'react';
-import { Button, useNotify } from 'react-admin';
+import { Button, useNotify, useTranslate } from 'react-admin';
 import useCreateTandem from '../useCreateTandem';
 import useValidateTandem from '../useValidateTandem';
 
@@ -20,6 +20,8 @@ const ValidateTandem = ({ tandemId, learningLanguageIds, onTandemValidated }: Va
     if (!tandemId && learningLanguageIds?.length !== 2) {
         throw new Error('Validate tandem must have a tandemId or 2 learningLanguage Ids');
     }
+
+    const translate = useTranslate();
 
     const [modalAction, setModalAction] = useState<TandemAction>();
     const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
@@ -41,7 +43,7 @@ const ValidateTandem = ({ tandemId, learningLanguageIds, onTandemValidated }: Va
 
     const notify = useNotify();
     const onError = async () => {
-        notify('Une erreur est survenue', { type: 'error' });
+        notify(translate('learning_languages.show.tandems.actions.error'), { type: 'error' });
     };
 
     const { mutate: validateTandem, isLoading: isLoadingValidateTandem } = useValidateTandem({
@@ -66,7 +68,10 @@ const ValidateTandem = ({ tandemId, learningLanguageIds, onTandemValidated }: Va
         }
     };
 
-    const message = modalAction === TandemAction.VALIDATE ? 'créer un tandem' : 'rejeter un tandem';
+    const message =
+        modalAction === TandemAction.VALIDATE
+            ? translate('learning_languages.show.tandems.actions.validateMessage')
+            : translate('learning_languages.show.tandems.actions.refuseMessage');
 
     return (
         <>
@@ -92,10 +97,19 @@ const ValidateTandem = ({ tandemId, learningLanguageIds, onTandemValidated }: Va
                         <CircularProgress />
                     ) : (
                         <>
-                            <p>Vous êtes sur le point de {message}. Êtes vous sur ?</p>
+                            <p>{message}</p>
                             <Box sx={{ marginTop: 4, display: 'flex', justifyContent: 'space-around' }}>
-                                <Button label="Cancel" onClick={handleCloseModal} variant="text" />
-                                <Button color="error" label="Confirm" onClick={handleConfirm} variant="outlined" />
+                                <Button
+                                    label={translate('learning_languages.show.tandems.actions.ctaLabels.cancel')}
+                                    onClick={handleCloseModal}
+                                    variant="text"
+                                />
+                                <Button
+                                    color="error"
+                                    label={translate('learning_languages.show.tandems.actions.ctaLabels.confirm')}
+                                    onClick={handleConfirm}
+                                    variant="outlined"
+                                />
                             </Box>
                         </>
                     )}

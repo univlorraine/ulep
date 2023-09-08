@@ -69,7 +69,7 @@ const App = () => {
             />
             <Resource
                 name="learning-languages"
-                options={{ label: translate('TODO.learning_languages') }}
+                options={{ label: translate('learning_languages.label') }}
                 {...learningLanguages}
             />
         </Admin>

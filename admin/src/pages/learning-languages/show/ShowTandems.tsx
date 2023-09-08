@@ -1,6 +1,6 @@
 import { Box, CircularProgress, Table, TableBody, TableCell, TableHead, TableRow, Typography } from '@mui/material';
 import React, { useState } from 'react';
-import { useGetList, useGetOne, useGetRecordId } from 'react-admin';
+import { useGetList, useGetOne, useGetRecordId, useTranslate } from 'react-admin';
 import { LearningLanguageTandem, TandemStatus } from '../../../entities/LearningLanguage';
 import { Match } from '../../../entities/Match';
 import ProfileLink from '../ui/ProfileLink';
@@ -10,6 +10,8 @@ import ValidateTandem from './ValidateTandem';
 // TODO(NEXT): Relaunch global routine when validating / refusing a tandem
 
 const ShowTandems = () => {
+    const translate = useTranslate();
+
     const recordId = useGetRecordId();
 
     const [noAssociatedTandem, setNoAssociatedTandem] = useState<boolean>(false);
@@ -63,24 +65,28 @@ const ShowTandems = () => {
     if (isErrorTandem && !noAssociatedTandem) {
         console.error(errorTandem);
 
-        return (
-            <div>
-                <p>Une erreur est survenur lors de la récupération des tandems</p>
-            </div>
-        );
+        return <p>{translate('learning_languages.show.tandems.error')}</p>;
     }
 
     if (hasActiveTandem) {
         return (
             <>
-                <Typography variant="h6">En tandem avec</Typography>
+                <Typography variant="h6">{translate('learning_languages.show.tandems.active.title')}</Typography>
                 <Table>
                     <TableHead>
                         <TableRow>
-                            <TableCell>Profile</TableCell>
-                            <TableCell>Langue demandée</TableCell>
-                            <TableCell>Niveau</TableCell>
-                            <TableCell>Date</TableCell>
+                            <TableCell>
+                                {translate('learning_languages.show.tandems.active.tableColumns.profile')}
+                            </TableCell>
+                            <TableCell>
+                                {translate('learning_languages.show.tandems.active.tableColumns.learnedLanguage')}
+                            </TableCell>
+                            <TableCell>
+                                {translate('learning_languages.show.tandems.active.tableColumns.level')}
+                            </TableCell>
+                            <TableCell>
+                                {translate('learning_languages.show.tandems.active.tableColumns.date')}
+                            </TableCell>
                         </TableRow>
                     </TableHead>
                     <TableBody>
@@ -106,24 +112,34 @@ const ShowTandems = () => {
     return (
         <>
             <Box>
-                <Typography variant="h6">Routine individuelle</Typography>
+                <Typography variant="h6">{translate('learning_languages.show.tandems.matches.title')}</Typography>
                 <Box sx={{ marginTop: 1 }}>
                     {isLoadingMatches && <CircularProgress />}
-                    {isErrorMatches && (
-                        <div>
-                            <p>Une erreur est survenue lors de la récupération des propositions individuelles</p>
-                        </div>
-                    )}
+                    {isErrorMatches && <p>{translate('learning_languages.show.tandems.matches.error')}</p>}
                     {matches && matches?.length > 0 ? (
                         <Table>
                             <TableHead>
                                 <TableRow>
-                                    <TableCell>Profile</TableCell>
-                                    <TableCell>Langue demandée</TableCell>
-                                    <TableCell>Niveau</TableCell>
-                                    <TableCell>Date</TableCell>
-                                    <TableCell>Matching</TableCell>
-                                    <TableCell>Actions</TableCell>
+                                    <TableCell>
+                                        {translate('learning_languages.show.tandems.matches.tableColumns.profile')}
+                                    </TableCell>
+                                    <TableCell>
+                                        {translate(
+                                            'learning_languages.show.tandems.matches.tableColumns.learnedLanguage'
+                                        )}
+                                    </TableCell>
+                                    <TableCell>
+                                        {translate('learning_languages.show.tandems.matches.tableColumns.level')}
+                                    </TableCell>
+                                    <TableCell>
+                                        {translate('learning_languages.show.tandems.matches.tableColumns.date')}
+                                    </TableCell>
+                                    <TableCell>
+                                        {translate('learning_languages.show.tandems.matches.tableColumns.score')}
+                                    </TableCell>
+                                    <TableCell>
+                                        {translate('learning_languages.show.tandems.matches.tableColumns.actions')}
+                                    </TableCell>
                                 </TableRow>
                             </TableHead>
                             <TableBody>
@@ -148,22 +164,36 @@ const ShowTandems = () => {
                             </TableBody>
                         </Table>
                     ) : (
-                        <div>Désolé, il n&lsquo;y a pas de résultats</div>
+                        <p>{translate('learning_languages.show.tandems.matches.noResults')}</p>
                     )}
                 </Box>
             </Box>
             <Box sx={{ marginTop: 3 }}>
-                <Typography variant="h6">Routine globale</Typography>
+                <Typography variant="h6">
+                    {translate('learning_languages.show.tandems.globalSuggestions.title')}
+                </Typography>
                 <Box sx={{ marginTop: 1 }}>
                     <Table>
                         <TableHead>
                             <TableRow>
-                                <TableCell>Profile</TableCell>
-                                <TableCell>Langue demandée</TableCell>
-                                <TableCell>Niveau</TableCell>
-                                <TableCell>Date</TableCell>
-                                <TableCell>Matching</TableCell>
-                                <TableCell>Actions</TableCell>
+                                <TableCell>
+                                    {translate('learning_languages.show.tandems.matches.tableColumns.profile')}
+                                </TableCell>
+                                <TableCell>
+                                    {translate('learning_languages.show.tandems.matches.tableColumns.learnedLanguage')}
+                                </TableCell>
+                                <TableCell>
+                                    {translate('learning_languages.show.tandems.matches.tableColumns.level')}
+                                </TableCell>
+                                <TableCell>
+                                    {translate('learning_languages.show.tandems.matches.tableColumns.date')}
+                                </TableCell>
+                                <TableCell>
+                                    {translate('learning_languages.show.tandems.matches.tableColumns.score')}
+                                </TableCell>
+                                <TableCell>
+                                    {translate('learning_languages.show.tandems.matches.tableColumns.actions')}
+                                </TableCell>
                             </TableRow>
                         </TableHead>
                         <TableBody>
