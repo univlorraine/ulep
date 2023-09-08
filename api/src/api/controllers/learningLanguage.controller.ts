@@ -56,8 +56,6 @@ export class LearningLanguageController {
       universityIds,
     });
 
-    // TODO(NOW+1): see if should make profile parametable in repsone
-
     return new Collection<LearningLanguageResponse>({
       items: result.items.map((ll) =>
         LearningLanguageResponse.fromDomain(ll, true),
@@ -69,7 +67,7 @@ export class LearningLanguageController {
   @Get(':id')
   @UseGuards(AuthenticationGuard)
   @Swagger.ApiOperation({ summary: 'Get a Learning language ressource.' })
-  @Swagger.ApiOkResponse({ type: LearningLanguageResponse, isArray: true }) // TODO(NOW)
+  @Swagger.ApiOkResponse({ type: LearningLanguageResponse, isArray: true })
   @Swagger.ApiNotFoundResponse({ description: 'Resource not found' })
   async findLearningLanguageById(
     @Param('id', ParseUUIDPipe) id: string,

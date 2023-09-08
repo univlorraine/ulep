@@ -30,7 +30,7 @@ export class MatchController {
         typeof universityIds === 'string' ? [universityIds] : universityIds,
     });
 
-    // TODO(NOW): still usefull ?
+    // TODO(NOW+2): Check if this endpoint is still used
 
     return new Collection<MatchResponse>({
       items: matches.items.map(MatchResponse.fromDomain),
