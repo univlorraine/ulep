@@ -19,6 +19,9 @@ import { KeycloakAuthenticator } from './services/keycloak.authenticator';
 import { ObjectiveController } from './controllers/objective.controller';
 import { CampusController } from 'src/api/controllers/campus.controller';
 import { LearningLanguageController } from './controllers/learningLanguage.controller';
+import { ROUTINE_EXECUTION_REPOSITORY } from 'src/core/ports/routine-execution.repository';
+import { PrismaRoutineExecutionRepository } from 'src/providers/persistance/repositories/prisma-routine-execution-repository';
+import { PrismaService } from '@app/common';
 
 @Module({
   imports: [CoreModule, TerminusModule],
@@ -41,9 +44,14 @@ import { LearningLanguageController } from './controllers/learningLanguage.contr
     LearningLanguageController,
   ],
   providers: [
+    PrismaService,
     {
       provide: AUTHENTICATOR,
       useClass: KeycloakAuthenticator,
+    },
+    {
+      provide: ROUTINE_EXECUTION_REPOSITORY,
+      useClass: PrismaRoutineExecutionRepository,
     },
   ],
 })

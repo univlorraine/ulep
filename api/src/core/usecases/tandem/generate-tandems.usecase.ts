@@ -1,3 +1,8 @@
+import { RoutineExecutionRepository } from './../../ports/routine-execution.repository';
+import {
+  RoutineExecution,
+  RoutineStatus,
+} from './../../models/routine-execution.model';
 import { Inject, Injectable, Logger } from '@nestjs/common';
 import { Match, Tandem, TandemStatus } from 'src/core/models';
 import {
@@ -8,6 +13,7 @@ import {
   LEARNING_LANGUAGE_REPOSITORY,
   LearningLanguageRepository,
 } from 'src/core/ports/learning-language.repository';
+import { ROUTINE_EXECUTION_REPOSITORY } from 'src/core/ports/routine-execution.repository';
 import {
   TANDEM_REPOSITORY,
   TandemRepository,
@@ -157,6 +163,7 @@ export class GenerateTandemsUsecase {
     );
 
     this.logger.debug(`Generated ${tandems.length} tandems`);
+
     return tandems;
   }
 }
