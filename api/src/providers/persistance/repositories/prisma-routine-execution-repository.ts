@@ -58,4 +58,18 @@ export class PrismaRoutineExecutionRepository
 
     return routineExecutionMapper(res);
   }
+
+  async cleanOldRoutines(tresholdDate: Date): Promise<void> {
+    await this.prisma.routineExecutions.updateMany({
+      where: {
+        status: RoutineStatus.ON_GOING,
+        updated_at: {
+          lte: tresholdDate,
+        },
+      },
+      data: {
+        status: RoutineStatus.CANCELED,
+      },
+    });
+  }
 }

@@ -19,4 +19,6 @@ export interface RoutineExecutionRepository {
   updateStatus(id: string, status: RoutineStatus): Promise<RoutineExecution>;
 
   getLast(): Promise<RoutineExecution>;
+
+  cleanOldRoutines(tresholdDate: Date): Promise<void>;
 }

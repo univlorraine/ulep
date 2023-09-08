@@ -30,6 +30,11 @@ export class RoutineExecutionController {
       return null;
     }
 
+    const tresholdDate = new Date(
+      Date.now() - 1000 * 60 * configuration().CANCEL_TRESHOLD_IN_MIN,
+    );
+    await this.routineExecutionRepository.cleanOldRoutines(tresholdDate);
+
     return RoutineExecutionResponse.fromDomain(res);
   }
 }

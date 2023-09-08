@@ -4,6 +4,7 @@ export enum RoutineStatus {
   ON_GOING = 'ON_GOING',
   ERROR = 'ERROR',
   ENDED = 'ENDED',
+  CANCELED = 'CANCELED',
 }
 
 interface RoutineExecutionParams {
