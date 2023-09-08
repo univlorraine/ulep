@@ -56,8 +56,6 @@ const ValidateTandem = ({ tandemId, learningLanguageIds, onTandemValidated }: Va
         onError,
     });
 
-    // TODO(NOW): manage error
-
     const handleConfirm = () => {
         if (modalAction === TandemAction.VALIDATE) {
             if (tandemId) {
@@ -66,7 +64,8 @@ const ValidateTandem = ({ tandemId, learningLanguageIds, onTandemValidated }: Va
                 createTandem(learningLanguageIds);
             }
         } else {
-            console.info('not implemented yet');
+            // eslint-disable-next-line no-alert
+            window.alert('not implemented yet');
         }
     };
 
