@@ -1,7 +1,7 @@
 import { PlayArrow } from '@mui/icons-material';
 import { Modal, Box, CircularProgress } from '@mui/material';
 import React, { useState } from 'react';
-import { Button, Datagrid, DateField, FunctionField, List, TextField, TopToolbar } from 'react-admin';
+import { Button, Datagrid, DateField, FunctionField, List, TextField, TopToolbar, useNotify } from 'react-admin';
 import UniversitiesPicker from '../../components/UniversitiesPicker';
 import { LearningLanguage } from '../../entities/LearningLanguage';
 import { getProfileDisplayName } from '../../entities/Profile';
@@ -13,7 +13,7 @@ interface ActionsProps {
 }
 
 const Actions = ({ universityIds }: ActionsProps) => {
-    // TODO(NOW+1): separate component ?
+    const notify = useNotify();
 
     const [confirmModalIsOpen, setConfirmModalIsOpen] = useState<boolean>(false);
 
@@ -22,8 +22,8 @@ const Actions = ({ universityIds }: ActionsProps) => {
             setConfirmModalIsOpen(false);
         },
         onError: (err: unknown) => {
-            console.error('Error happened', err);
-            // TODO(NOW): notify
+            console.error(err);
+            notify('TODO(NOW+1): An error occured while launching global routine', { type: 'error' });
         },
     });
     const handleConfirm = () => {

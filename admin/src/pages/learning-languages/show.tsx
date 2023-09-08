@@ -1,4 +1,4 @@
-import { Box, Table, TableBody, TableCell, TableHead, TableRow } from '@mui/material';
+import { Box, CircularProgress, Table, TableBody, TableCell, TableHead, TableRow } from '@mui/material';
 import React, { useState } from 'react';
 
 import {
@@ -69,7 +69,11 @@ const LearningLanguageShow = () => {
     if (error) {
         console.error(error);
 
-        return <div>Error</div>;
+        return (
+            <div>
+                <p>Une erreur est survenur lors de la récupération de la demande</p>
+            </div>
+        );
     }
 
     // TODO(NOW+0): don't get match if user not from central university
@@ -91,8 +95,12 @@ const LearningLanguageShow = () => {
                 <Box sx={{ marginTop: 5, padding: 2 }}>
                     <h2>Routine indiv</h2>
                     <Box sx={{ marginTop: 1 }}>
-                        {isLoadingMatches && <Loading />}
-                        {isErrorMatches && <div>ERROR</div>}
+                        {isLoadingMatches && <CircularProgress />}
+                        {isErrorMatches && (
+                            <div>
+                                <p>Une erreur est survenue lors de la récupération des matches</p>
+                            </div>
+                        )}
                         {matches && matches?.length > 0 ? (
                             <Table>
                                 <TableHead>
@@ -132,8 +140,12 @@ const LearningLanguageShow = () => {
                 <Box sx={{ marginTop: 5, padding: 2 }}>
                     <h2>Routine globale</h2>
                     <Box sx={{ marginTop: 1 }}>
-                        {isLoadingTandem && <Loading />}
-                        {isErrorTandem && !noAssociatedTandem && <div>ERROR</div>}
+                        {isLoadingTandem && <CircularProgress />}
+                        {isErrorTandem && !noAssociatedTandem && (
+                            <div>
+                                <p>Une erreur est survenue lors de la récupération des matches</p>
+                            </div>
+                        )}
                         {!isLoadingTandem && !isErrorTandem && (
                             <Table>
                                 <TableHead>
