@@ -302,7 +302,8 @@
                     "noResults": "Aucun résultats"
                 },
                 "globalSuggestions": {
-                    "title": "Suggestion routine globale"
+                    "title": "Suggestion routine globale",
+                    "noResult": "Aucun résultat"
                 },
                 "actions": {
                     "validateMessage": "Vous êtes sur le point de créer un tandem. Êtes-vous sur ?",

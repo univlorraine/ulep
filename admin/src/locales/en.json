@@ -190,7 +190,8 @@
                     "noResults": "No results"
                 },
                 "globalSuggestions": {
-                    "title": "Global routine suggestion"
+                    "title": "Global routine suggestion",
+                    "noResult": "No result"
                 },
                 "actions": {
                     "validateMessage": "You're about to create a tandem. Do you confirm?",
