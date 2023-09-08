@@ -2,8 +2,8 @@ import { Check, Clear } from '@mui/icons-material';
 import { Box, CircularProgress, IconButton, Modal } from '@mui/material';
 import React, { useState } from 'react';
 import { Button, useNotify, useTranslate } from 'react-admin';
-import useCreateTandem from '../useCreateTandem';
-import useValidateTandem from '../useValidateTandem';
+import useCreateTandem from './useCreateTandem';
+import useValidateTandem from './useValidateTandem';
 
 enum TandemAction {
     VALIDATE = 'VALIDATE',

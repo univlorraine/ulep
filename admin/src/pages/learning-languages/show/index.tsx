@@ -2,9 +2,9 @@ import { Box } from '@mui/material';
 import React from 'react';
 
 import { DateField, FunctionField, Show, SimpleShowLayout, TextField, useTranslate } from 'react-admin';
-import { LearningLanguage } from '../../entities/LearningLanguage';
-import ShowTandems from './show/ShowTandems';
-import ProfileLink from './ui/ProfileLink';
+import { LearningLanguage } from '../../../entities/LearningLanguage';
+import ProfileLink from '../ui/ProfileLink';
+import ShowTandems from './ShowTandems';
 
 const LearningLanguageShow = () => {
     const translate = useTranslate();

@@ -12,11 +12,11 @@ import {
     useNotify,
     useTranslate,
 } from 'react-admin';
-import UniversitiesPicker from '../../components/UniversitiesPicker';
-import { LearningLanguage } from '../../entities/LearningLanguage';
-import { getProfileDisplayName } from '../../entities/Profile';
+import UniversitiesPicker from '../../../components/UniversitiesPicker';
+import { LearningLanguage } from '../../../entities/LearningLanguage';
+import { getProfileDisplayName } from '../../../entities/Profile';
+import useLearningLanguagesStore from '../useLearningLanguagesStore';
 import useLaunchGlobalRoutine from './useLaunchGlobalRoutine';
-import useLearningLanguagesStore from './useLearningLanguagesStore';
 
 // TODO(NOW+1): refacto by folder
 
