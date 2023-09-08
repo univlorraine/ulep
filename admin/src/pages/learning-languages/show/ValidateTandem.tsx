@@ -1,7 +1,7 @@
 import { Check, Clear } from '@mui/icons-material';
 import { Box, CircularProgress, IconButton, Modal } from '@mui/material';
 import React, { useState } from 'react';
-import { Button } from 'react-admin';
+import { Button, useNotify } from 'react-admin';
 import useCreateTandem from '../useCreateTandem';
 import useValidateTandem from '../useValidateTandem';
 
@@ -24,52 +24,60 @@ const ValidateTandem = ({ tandemId, learningLanguageIds, onTandemValidated }: Va
         throw new Error('Validate tandem must have a tandemId or 2 learningLanguage Ids');
     }
 
-    const [modalMessage, setModalMessage] = useState<string>();
+    const [modalAction, setModalAction] = useState<TandemAction>();
     const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
 
+    const handleCloseModal = () => {
+        setIsModalOpen(false);
+        setModalAction(undefined);
+    };
+
     const handleAction = (action: TandemAction) => {
-        switch (action) {
-            case TandemAction.VALIDATE:
-                setModalMessage('valider le tandem');
-                break;
-            case TandemAction.REFUSE:
-                setModalMessage('refuser le tandem');
-                break;
-            default:
-                throw new Error('Not a tandem action');
-        }
+        setModalAction(action);
         setIsModalOpen(true);
     };
 
+    const onSuccess = async () => {
+        onTandemValidated();
+        handleCloseModal();
+    };
+
+    const notify = useNotify();
+    const onError = async () => {
+        notify('Une erreur est survenue', { type: 'error' });
+    };
+
     const { mutate: validateTandem, isLoading: isLoadingValidateTandem } = useValidateTandem({
-        onSuccess: async () => {
-            setIsModalOpen(false);
-            onTandemValidated();
-        },
+        onSuccess,
+        onError,
     });
     const { mutate: createTandem, isLoading: isLoadingCreateTandem } = useCreateTandem({
-        onSuccess: async () => {
-            setIsModalOpen(false);
-            onTandemValidated();
-        },
+        onSuccess,
+        onError,
     });
 
     // TODO(NOW): manage error
 
     const handleConfirm = () => {
-        if (tandemId) {
-            validateTandem(tandemId);
-        } else if (learningLanguageIds) {
-            createTandem(learningLanguageIds);
+        if (modalAction === TandemAction.VALIDATE) {
+            if (tandemId) {
+                validateTandem(tandemId);
+            } else if (learningLanguageIds) {
+                createTandem(learningLanguageIds);
+            }
+        } else {
+            console.info('not implemented yet');
         }
     };
+
+    const message = modalAction === TandemAction.VALIDATE ? 'créer un tandem' : 'rejeter un tandem';
 
     return (
         <>
             <Modal
                 aria-describedby="modal-modal-description"
                 aria-labelledby="modal-modal-title"
-                onClose={() => setIsModalOpen(false)}
+                onClose={handleCloseModal}
                 open={isModalOpen}
             >
                 <Box
@@ -88,9 +96,9 @@ const ValidateTandem = ({ tandemId, learningLanguageIds, onTandemValidated }: Va
                         <CircularProgress />
                     ) : (
                         <>
-                            <p>Vous êtes sur le point de {modalMessage}. Êtes vous sur ?</p>
+                            <p>Vous êtes sur le point de {message}. Êtes vous sur ?</p>
                             <Box sx={{ marginTop: 4, display: 'flex', justifyContent: 'space-around' }}>
-                                <Button label="Cancel" onClick={() => setIsModalOpen(false)} variant="text" />
+                                <Button label="Cancel" onClick={handleCloseModal} variant="text" />
                                 <Button color="error" label="Confirm" onClick={handleConfirm} variant="outlined" />
                             </Box>
                         </>
