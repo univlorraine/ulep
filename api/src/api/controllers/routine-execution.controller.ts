@@ -24,10 +24,10 @@ export class RoutineExecutionController {
   @UseGuards(AuthenticationGuard)
   @ApiOperation({ summary: 'Retrieve last routine execution' })
   @ApiOkResponse({ type: RoutineExecutionResponse })
-  async getLast(): Promise<RoutineExecutionResponse> {
+  async getLast(): Promise<RoutineExecutionResponse | Record<string, any>> {
     const res = await this.routineExecutionRepository.getLast();
     if (!res) {
-      return null;
+      return {};
     }
 
     const tresholdDate = new Date(
