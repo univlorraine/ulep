@@ -49,7 +49,14 @@ export class LearningLanguageController {
   @CollectionResponse(LearningLanguageWithTandemResponse)
   async getCollection(
     @Query()
-    { page, limit, universityIds, field, order }: GetLearningLanguagesRequest,
+    {
+      page,
+      limit,
+      universityIds,
+      hasActiveTandem,
+      field,
+      order,
+    }: GetLearningLanguagesRequest,
   ): Promise<Collection<LearningLanguageWithTandemResponse>> {
     const orderBy = field &&
       order && {
@@ -61,6 +68,7 @@ export class LearningLanguageController {
       limit,
       universityIds,
       orderBy,
+      hasActiveTandem,
     });
 
     return new Collection<LearningLanguageWithTandemResponse>({

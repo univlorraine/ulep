@@ -144,6 +144,15 @@
                     "errorLoading": "An error occured while loading last global routine state"
                 }
             },
+            "filters": {
+                "tandem": {
+                    "label": "In tandem",
+                    "choices": {
+                        "yes": "Yes",
+                        "no": "No"
+                    }
+                }
+            },
             "globalRoutineModal": {
                 "description": "Global routine can take several minutes. Results of previous executions will be lost.",
                 "confirmMessage": "Do you wish to continue ?",

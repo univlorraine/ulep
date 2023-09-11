@@ -215,10 +215,11 @@ export class PrismaLearningLanguageRepository
     limit,
     universityIds,
     orderBy,
+    hasActiveTandem,
   }: LearningLanguageRepositoryGetProps): Promise<
     Collection<LearningLanguageWithTandem>
   > {
-    const wherePayload = {
+    let wherePayload: any = {
       Profile: {
         User: {
           organization_id: {
@@ -227,6 +228,36 @@ export class PrismaLearningLanguageRepository
         },
       },
     };
+    if (hasActiveTandem === true) {
+      wherePayload = {
+        ...wherePayload,
+        Tandem: {
+          status: {
+            equals: TandemStatus.ACTIVE,
+          },
+        },
+      };
+    } else if (hasActiveTandem === false) {
+      wherePayload = {
+        ...wherePayload,
+        OR: [
+          {
+            Tandem: {
+              status: {
+                not: {
+                  equals: TandemStatus.ACTIVE,
+                },
+              },
+            },
+          },
+          {
+            Tandem: {
+              is: null,
+            },
+          },
+        ],
+      };
+    }
 
     const count = await this.prisma.learningLanguages.count({
       where: wherePayload,
@@ -250,7 +281,7 @@ export class PrismaLearningLanguageRepository
           };
           break;
         case LearningLanguageQuerySortKey.UNIVERSITY:
-          // TODO(NOW): investigate why this field sort do not work
+          // TODO(NOW+1): investigate why this field sort do not work
           orderByPayload = {
             Profile: {
               User: {
@@ -273,8 +304,6 @@ export class PrismaLearningLanguageRepository
             },
           };
           break;
-        case LearningLanguageQuerySortKey.ACTIVE_TANDEM:
-        // TODO(NOW): implement
         default:
           // TODO(NOW): custom error
           throw new Error('Unsupported order by field');

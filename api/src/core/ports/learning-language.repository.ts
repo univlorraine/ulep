@@ -9,13 +9,13 @@ export enum LearningLanguageQuerySortKey {
   LANGUAGE = 'language',
   LEVEL = 'level',
   CREATED_AT = 'createdAt',
-  ACTIVE_TANDEM = 'activeTandem',
 }
 
 export interface LearningLanguageRepositoryGetProps {
   page: number;
   limit: number;
   universityIds: string[];
+  hasActiveTandem?: boolean;
   orderBy?: {
     field: LearningLanguageQuerySortKey;
     order: SortOrder;

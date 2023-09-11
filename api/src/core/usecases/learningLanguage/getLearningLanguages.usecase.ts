@@ -9,6 +9,7 @@ import {
 
 interface GetLearningLanguagesQuery {
   universityIds: string[];
+  hasActiveTandem?: boolean;
   page: number;
   limit: number;
   orderBy?: {

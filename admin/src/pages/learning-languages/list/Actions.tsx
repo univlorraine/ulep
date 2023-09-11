@@ -1,7 +1,7 @@
 import { PlayArrow } from '@mui/icons-material';
 import { Modal, Box, CircularProgress } from '@mui/material';
 import React, { useState } from 'react';
-import { Button, TopToolbar, useNotify, useTranslate } from 'react-admin';
+import { Button, FilterButton, TopToolbar, useNotify, useTranslate } from 'react-admin';
 import { RoutineExecutionStatus } from '../../../entities/RoutineExecution';
 import useLastGlobalRoutineExecution from './useLastGlobalRoutineExecution';
 import useLaunchGlobalRoutine from './useLaunchGlobalRoutine';
@@ -41,6 +41,7 @@ const Actions = ({ universityIds }: ActionsProps) => {
     return (
         <>
             <TopToolbar>
+                <FilterButton disableSaveQuery />
                 {isLoadingLastGlobalRoutine && <CircularProgress size={15} />}
                 {!isLoadingLastGlobalRoutine && globalRoutineIsCurrentlyRunning && (
                     <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, padding: 0.5 }}>

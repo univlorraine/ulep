@@ -3,6 +3,7 @@ import qsAdapter from '../providers/qsAdapter';
 export interface LearningLanguagesParams {
     filter: {
         universityIds: string[];
+        hasActiveTandem?: boolean;
     };
     pagination: {
         page: string;
@@ -34,6 +35,7 @@ const handleOrderField = (field?: string) => {
 export const LearningLanguagesQuery = (params: LearningLanguagesParams): string => {
     const query = {
         universityIds: params.filter.universityIds,
+        hasActiveTandem: params.filter.hasActiveTandem,
         page: params.pagination.page,
         limit: params.pagination.perPage,
         field: handleOrderField(params.sort?.field),

@@ -256,6 +256,15 @@
                     "errorLoading": "Une erreur est survenue lors du chargement de l'état de la dernière routine globale"
                 }
             },
+            "filters": {
+                "tandem": {
+                    "label": "En tandem",
+                    "choices": {
+                        "yes": "Oui",
+                        "no": "Non"
+                    }
+                }
+            },
             "globalRoutineModal": {
                 "description": "Lancer la routine globale peut prendre quelques minutes. Les tandems proposés par une ancienne exécution seront perdus.",
                 "confirmMessage": "Voulez-vous continuer ?",
