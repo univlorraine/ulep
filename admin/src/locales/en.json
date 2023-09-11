@@ -214,6 +214,7 @@
                 },
                 "globalSuggestions": {
                     "title": "Global routine suggestion",
+                    "titleNotCentralUniversity": "Proposed tandem",
                     "noResult": "No result"
                 },
                 "actions": {

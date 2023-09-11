@@ -326,6 +326,7 @@
                 },
                 "globalSuggestions": {
                     "title": "Suggestion routine globale",
+                    "titleNotCentralUniversity": "Tandem proposé",
                     "noResult": "Aucun résultat"
                 },
                 "actions": {

@@ -1,6 +1,6 @@
 import { Box, CircularProgress, Table, TableBody, TableCell, TableHead, TableRow, Typography } from '@mui/material';
 import React, { useState } from 'react';
-import { useGetList, useGetOne, useGetRecordId, useTranslate } from 'react-admin';
+import { useGetIdentity, useGetList, useGetOne, useGetRecordId, useTranslate } from 'react-admin';
 import { DisplayRole, DisplayLearningType } from '../../../components/translated';
 import { LearningLanguageTandem } from '../../../entities/LearningLanguage';
 import { Match } from '../../../entities/Match';
@@ -16,6 +16,8 @@ const ShowTandems = () => {
 
     const recordId = useGetRecordId();
 
+    const { data: identity, isLoading: isLoadingIdentity } = useGetIdentity();
+
     const [noAssociatedTandem, setNoAssociatedTandem] = useState<boolean>(false);
     const {
         isLoading: isLoadingTandem,
@@ -29,7 +31,7 @@ const ShowTandems = () => {
             id: recordId.toString(),
         },
         {
-            enabled: !!recordId,
+            enabled: !!recordId && !isLoadingIdentity,
             retry: noAssociatedTandem,
             onError: (err) => {
                 // Note: workaround to not consider no tandem as an error
@@ -57,11 +59,16 @@ const ShowTandems = () => {
             },
         },
         {
-            enabled: !!recordId && !isLoadingTandem && !hasActiveTandem,
+            enabled:
+                !!recordId &&
+                !isLoadingTandem &&
+                !hasActiveTandem &&
+                !isLoadingIdentity &&
+                identity?.isCentralUniversity,
         }
     );
 
-    if (isLoadingTandem) {
+    if (isLoadingIdentity || isLoadingTandem) {
         return <CircularProgress />;
     }
     if (isErrorTandem && !noAssociatedTandem) {
@@ -129,82 +136,94 @@ const ShowTandems = () => {
 
     return (
         <>
-            <Box>
-                <Typography variant="h6">{translate('learning_languages.show.tandems.matches.title')}</Typography>
-                <Box sx={{ marginTop: 1 }}>
-                    {isLoadingMatches && <CircularProgress />}
-                    {isErrorMatches && <p>{translate('learning_languages.show.tandems.matches.error')}</p>}
-                    {matches && matches?.length > 0 ? (
-                        <Table>
-                            <TableHead>
-                                <TableRow>
-                                    <TableCell>
-                                        {translate('learning_languages.show.tandems.matches.tableColumns.profile')}
-                                    </TableCell>
-                                    <TableCell>
-                                        {translate(
-                                            'learning_languages.show.tandems.matches.tableColumns.learnedLanguage'
-                                        )}
-                                    </TableCell>
-                                    <TableCell>
-                                        {translate('learning_languages.show.tandems.matches.tableColumns.level')}
-                                    </TableCell>
-                                    <TableCell>
-                                        {translate('learning_languages.show.tandems.matches.tableColumns.university')}
-                                    </TableCell>
-                                    <TableCell>
-                                        {translate('learning_languages.show.tandems.matches.tableColumns.role')}
-                                    </TableCell>
-                                    <TableCell>
-                                        {translate('learning_languages.show.tandems.matches.tableColumns.learningType')}
-                                    </TableCell>
-                                    <TableCell>
-                                        {translate('learning_languages.show.tandems.matches.tableColumns.date')}
-                                    </TableCell>
-                                    <TableCell>
-                                        {translate('learning_languages.show.tandems.matches.tableColumns.score')}
-                                    </TableCell>
-                                    <TableCell>
-                                        {translate('learning_languages.show.tandems.matches.tableColumns.actions')}
-                                    </TableCell>
-                                </TableRow>
-                            </TableHead>
-                            <TableBody>
-                                {matches.map((match, index) => (
-                                    // eslint-disable-next-line react/no-array-index-key
-                                    <TableRow key={`match-${index}`}>
+            {identity?.isCentralUniversity && (
+                <Box>
+                    <Typography variant="h6">{translate('learning_languages.show.tandems.matches.title')}</Typography>
+                    <Box sx={{ marginTop: 1 }}>
+                        {isLoadingMatches && <CircularProgress />}
+                        {isErrorMatches && <p>{translate('learning_languages.show.tandems.matches.error')}</p>}
+                        {matches && matches?.length > 0 ? (
+                            <Table>
+                                <TableHead>
+                                    <TableRow>
                                         <TableCell>
-                                            <ProfileLink profile={match.target.profile} />
-                                        </TableCell>
-                                        <TableCell>{match.target.name}</TableCell>
-                                        <TableCell>{match.target.level}</TableCell>
-                                        <TableCell>{match.target.profile?.user.university.name}</TableCell>
-                                        <TableCell>
-                                            <DisplayRole role={match.target.profile?.user.role} />
+                                            {translate('learning_languages.show.tandems.matches.tableColumns.profile')}
                                         </TableCell>
                                         <TableCell>
-                                            <DisplayLearningType learningType={match.target.profile?.learningType} />
+                                            {translate(
+                                                'learning_languages.show.tandems.matches.tableColumns.learnedLanguage'
+                                            )}
                                         </TableCell>
-                                        <TableCell>{new Date(match.target.createdAt).toLocaleDateString()}</TableCell>
-                                        <TableCell>{match.score.total * 100}%</TableCell>
                                         <TableCell>
-                                            <ValidateTandem
-                                                learningLanguageIds={[recordId.toString(), match.target.id]}
-                                                onTandemValidated={handleValidateTandem}
-                                            />
+                                            {translate('learning_languages.show.tandems.matches.tableColumns.level')}
+                                        </TableCell>
+                                        <TableCell>
+                                            {translate(
+                                                'learning_languages.show.tandems.matches.tableColumns.university'
+                                            )}
+                                        </TableCell>
+                                        <TableCell>
+                                            {translate('learning_languages.show.tandems.matches.tableColumns.role')}
+                                        </TableCell>
+                                        <TableCell>
+                                            {translate(
+                                                'learning_languages.show.tandems.matches.tableColumns.learningType'
+                                            )}
+                                        </TableCell>
+                                        <TableCell>
+                                            {translate('learning_languages.show.tandems.matches.tableColumns.date')}
+                                        </TableCell>
+                                        <TableCell>
+                                            {translate('learning_languages.show.tandems.matches.tableColumns.score')}
+                                        </TableCell>
+                                        <TableCell>
+                                            {translate('learning_languages.show.tandems.matches.tableColumns.actions')}
                                         </TableCell>
                                     </TableRow>
-                                ))}
-                            </TableBody>
-                        </Table>
-                    ) : (
-                        <p>{translate('learning_languages.show.tandems.matches.noResults')}</p>
-                    )}
+                                </TableHead>
+                                <TableBody>
+                                    {matches.map((match, index) => (
+                                        // eslint-disable-next-line react/no-array-index-key
+                                        <TableRow key={`match-${index}`}>
+                                            <TableCell>
+                                                <ProfileLink profile={match.target.profile} />
+                                            </TableCell>
+                                            <TableCell>{match.target.name}</TableCell>
+                                            <TableCell>{match.target.level}</TableCell>
+                                            <TableCell>{match.target.profile?.user.university.name}</TableCell>
+                                            <TableCell>
+                                                <DisplayRole role={match.target.profile?.user.role} />
+                                            </TableCell>
+                                            <TableCell>
+                                                <DisplayLearningType
+                                                    learningType={match.target.profile?.learningType}
+                                                />
+                                            </TableCell>
+                                            <TableCell>
+                                                {new Date(match.target.createdAt).toLocaleDateString()}
+                                            </TableCell>
+                                            <TableCell>{match.score.total * 100}%</TableCell>
+                                            <TableCell>
+                                                <ValidateTandem
+                                                    learningLanguageIds={[recordId.toString(), match.target.id]}
+                                                    onTandemValidated={handleValidateTandem}
+                                                />
+                                            </TableCell>
+                                        </TableRow>
+                                    ))}
+                                </TableBody>
+                            </Table>
+                        ) : (
+                            <p>{translate('learning_languages.show.tandems.matches.noResults')}</p>
+                        )}
+                    </Box>
                 </Box>
-            </Box>
+            )}
             <Box sx={{ marginTop: 3 }}>
                 <Typography variant="h6">
-                    {translate('learning_languages.show.tandems.globalSuggestions.title')}
+                    {identity?.isCentralUniversity
+                        ? translate('learning_languages.show.tandems.globalSuggestions.title')
+                        : translate('learning_languages.show.tandems.globalSuggestions.titleNotCentralUniversity')}
                 </Typography>
                 <Box sx={{ marginTop: 1 }}>
                     {noAssociatedTandem ? (
