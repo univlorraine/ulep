@@ -1,5 +1,5 @@
 import { Collection } from '@app/common';
-import { LearningLanguage } from '../models';
+import { LearningLanguage, LearningLanguageWithTandem } from '../models';
 
 export const LEARNING_LANGUAGE_REPOSITORY = 'learning-language.repository';
 
@@ -32,5 +32,5 @@ export interface LearningLanguageRepository {
 
   OfUniversities: (
     props: LearningLanguageRepositoryGetProps,
-  ) => Promise<Collection<LearningLanguage>>;
+  ) => Promise<Collection<LearningLanguageWithTandem>>;
 }

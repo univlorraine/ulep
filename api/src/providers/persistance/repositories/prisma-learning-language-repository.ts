@@ -1,4 +1,8 @@
-import { LearningLanguage, TandemStatus, University } from 'src/core/models';
+import {
+  LearningLanguage,
+  LearningLanguageWithTandem,
+  TandemStatus,
+} from 'src/core/models';
 import { Collection, PrismaService } from '@app/common';
 import { Injectable } from '@nestjs/common';
 import {
@@ -7,7 +11,9 @@ import {
 } from 'src/core/ports/learning-language.repository';
 import {
   LearningLanguageRelations,
+  LearningLanguageWithTandemRelations,
   learningLanguageMapper,
+  learningLanguageWithTandemMapper,
 } from '../mappers/learningLanguage.mapper';
 
 @Injectable()
@@ -208,7 +214,7 @@ export class PrismaLearningLanguageRepository
     limit,
     universityIds,
   }: LearningLanguageRepositoryGetProps): Promise<
-    Collection<LearningLanguage>
+    Collection<LearningLanguageWithTandem>
   > {
     const wherePayload = {
       Profile: {
@@ -228,11 +234,11 @@ export class PrismaLearningLanguageRepository
       where: wherePayload,
       skip: (page - 1) * limit,
       take: limit,
-      include: LearningLanguageRelations,
+      include: LearningLanguageWithTandemRelations,
     });
 
     return {
-      items: items.map(learningLanguageMapper),
+      items: items.map(learningLanguageWithTandemMapper),
       totalItems: count,
     };
   }

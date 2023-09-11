@@ -1,6 +1,6 @@
 import { Collection } from '@app/common';
 import { Inject, Injectable } from '@nestjs/common';
-import { LearningLanguage } from 'src/core/models';
+import { LearningLanguageWithTandem } from 'src/core/models';
 import {
   LEARNING_LANGUAGE_REPOSITORY,
   LearningLanguageRepository,
@@ -21,7 +21,7 @@ export class GetLearningLanguagesUsecase {
 
   async execute(
     query: GetLearningLanguagesQuery,
-  ): Promise<Collection<LearningLanguage>> {
+  ): Promise<Collection<LearningLanguageWithTandem>> {
     return this.learningLanguageRepository.OfUniversities(query);
   }
 }

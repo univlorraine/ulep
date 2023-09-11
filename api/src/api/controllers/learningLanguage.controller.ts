@@ -19,6 +19,7 @@ import { CollectionResponse } from '../decorators';
 import {
   GetLearningLanguagesRequest,
   LearningLanguageResponse,
+  LearningLanguageWithTandemResponse,
   MatchResponse,
   UserTandemResponse,
 } from '../dtos';
@@ -45,20 +46,20 @@ export class LearningLanguageController {
   @Swagger.ApiOperation({
     summary: 'Retrieve the collection of Learning languages resource.',
   })
-  @CollectionResponse(LearningLanguageResponse)
+  @CollectionResponse(LearningLanguageWithTandemResponse)
   async getCollection(
     @Query()
     { page, limit, universityIds }: GetLearningLanguagesRequest,
-  ): Promise<Collection<LearningLanguageResponse>> {
+  ): Promise<Collection<LearningLanguageWithTandemResponse>> {
     const result = await this.getLearningLanguagesUsecase.execute({
       page,
       limit,
       universityIds,
     });
 
-    return new Collection<LearningLanguageResponse>({
+    return new Collection<LearningLanguageWithTandemResponse>({
       items: result.items.map((ll) =>
-        LearningLanguageResponse.fromDomain(ll, true),
+        LearningLanguageWithTandemResponse.fromDomain(ll, true),
       ),
       totalItems: result.totalItems,
     });

@@ -25,9 +25,10 @@ export class TandemResponse {
   static fromDomain(tandem: Tandem): TandemResponse {
     return new TandemResponse({
       id: tandem.id,
-      learningLanguages: tandem.learningLanguages.map((ll) =>
-        LearningLanguageResponse.fromDomain(ll),
-      ),
+      learningLanguages:
+        tandem.learningLanguages?.map((ll) =>
+          LearningLanguageResponse.fromDomain(ll),
+        ) || [],
       status: tandem.status,
     });
   }
