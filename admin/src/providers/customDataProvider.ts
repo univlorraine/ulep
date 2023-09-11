@@ -8,8 +8,8 @@ import {
     UpdateParams,
     fetchUtils,
 } from 'react-admin';
-import { TandemStatus } from '../entities/LearningLanguage';
 import { RoutineExecution } from '../entities/RoutineExecution';
+import { TandemStatus } from '../entities/Tandem';
 import CountriesQuery from '../queries/CountriesQuery';
 import InterestsQuery from '../queries/InterestsQuery';
 import LanguagesQuery from '../queries/LanguagesQuery';

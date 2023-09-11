@@ -17,8 +17,3 @@ export type LearningLanguageTandem = {
     learningLanguage: LearningLanguage;
     partner: Profile;
 };
-
-export enum TandemStatus {
-    DRAFT = 'DRAFT',
-    ACTIVE = 'ACTIVE',
-}
