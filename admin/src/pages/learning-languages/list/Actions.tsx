@@ -8,9 +8,10 @@ import useLaunchGlobalRoutine from './useLaunchGlobalRoutine';
 
 interface ActionsProps {
     universityIds: string[];
+    enableLaunchGlobalRoutine?: boolean;
 }
 
-const Actions = ({ universityIds }: ActionsProps) => {
+const Actions = ({ universityIds, enableLaunchGlobalRoutine }: ActionsProps) => {
     const translate = useTranslate();
     const notify = useNotify();
 
@@ -37,6 +38,14 @@ const Actions = ({ universityIds }: ActionsProps) => {
     const handleConfirm = () => {
         mutate(universityIds);
     };
+
+    if (!enableLaunchGlobalRoutine) {
+        return (
+            <TopToolbar>
+                <FilterButton disableSaveQuery />
+            </TopToolbar>
+        );
+    }
 
     return (
         <>

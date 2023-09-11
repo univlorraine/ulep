@@ -48,6 +48,8 @@ const LearningLanguageList = () => {
         return <Loading />;
     }
 
+    // TODO(NOW+1): admin from partner university should known about on going routine ?
+
     return (
         <Box sx={{ marginTop: 2 }}>
             {identity.isCentralUniversity && (
@@ -55,7 +57,12 @@ const LearningLanguageList = () => {
             )}
             {selectedUniversityIds.length ? (
                 <List<LearningLanguage>
-                    actions={<Actions universityIds={selectedUniversityIds} />}
+                    actions={
+                        <Actions
+                            enableLaunchGlobalRoutine={identity.isCentralUniversity}
+                            universityIds={selectedUniversityIds}
+                        />
+                    }
                     exporter={false}
                     filter={{ universityIds: selectedUniversityIds }}
                     filters={filters}
