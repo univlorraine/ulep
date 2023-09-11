@@ -66,6 +66,9 @@ import {
   UploadAvatarUsecase,
   UpdateReportCategoryUsecase,
   CreateUnsubscribeReportUsecase,
+  GetLearningLanguagesUsecase,
+  GetLearningLanguageOfIdUsecase,
+  UpdateTandemStatusUsecase,
 } from './usecases';
 import { UploadObjectiveImageUsecase } from 'src/core/usecases/media/upload-objective-image.usecase';
 import { UpdateObjectiveUsecase } from 'src/core/usecases/objective/update-objective.usecase';
@@ -78,6 +81,7 @@ import {
   UpdateCampusUsecase,
 } from 'src/core/usecases/campus';
 import { FindAllSuggestedLanguageUsecase } from 'src/core/usecases/language/find-all-suggested-language.usecase';
+import { GetLearningLanguageTandemUsecase } from './usecases/learningLanguage/getLearningLanguageTandem.usecase';
 
 const usecases: Provider[] = [
   //Campus
@@ -147,11 +151,16 @@ const usecases: Provider[] = [
   GetProfilesUsecase,
   GetProfileUsecase,
   CreateLearningLanguageUseCase,
+  // LearningLanguages
+  GetLearningLanguagesUsecase,
+  GetLearningLanguageOfIdUsecase,
+  GetLearningLanguageTandemUsecase,
   // Tandems
   CreateTandemUsecase,
   GenerateTandemsUsecase,
   GetTandemsUsecase,
   GetUserMatchUsecase,
+  UpdateTandemStatusUsecase,
   // Universities
   CreatePartnerUniversityUsecase,
   CreateUniversityUsecase,

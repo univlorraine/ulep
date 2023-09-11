@@ -1,6 +1,6 @@
 import qsAdapter from '../providers/qsAdapter';
 
-interface CountriesParams {
+export interface CountriesParams {
     enable?: boolean;
     pagination?: boolean;
     order?: 'ASC' | 'DESC';

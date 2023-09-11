@@ -1,6 +1,6 @@
 import qsAdapter from '../providers/qsAdapter';
 
-interface ReportsParams {
+export interface ReportsParams {
     filter: {
         status: string;
     };

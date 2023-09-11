@@ -9,3 +9,4 @@ export * from './report';
 export * from './tandem';
 export * from './university';
 export * from './user';
+export * from './learningLanguage';

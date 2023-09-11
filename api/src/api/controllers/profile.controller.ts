@@ -117,6 +117,7 @@ export class ProfileController {
     const tandems = await this.getTandemsForProfileUsecase.execute({
       profile: id,
     });
+    // TODO(NOW+2): Check if this endpoint is still used
 
     return tandems.map((tandem) => UserTandemResponse.fromDomain(id, tandem));
   }
@@ -168,6 +169,8 @@ export class ProfileController {
       ...body,
       profileId: id,
     });
+
+    // TODO(NOW+2): Check if this endpoint is still used
 
     return LearningLanguageResponse.fromDomain(learningLanguage);
   }

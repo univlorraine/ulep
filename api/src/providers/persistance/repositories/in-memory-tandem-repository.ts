@@ -62,6 +62,16 @@ export class InMemoryTandemRepository implements TandemRepository {
     );
   }
 
+  async getTandemForLearningLanguage(
+    learningLanguageId: string,
+  ): Promise<Tandem> {
+    return this.#tandems.find((tandem) =>
+      tandem.learningLanguages.some(
+        (learningLanguage) => learningLanguage.id === learningLanguageId,
+      ),
+    );
+  }
+
   async deleteTandemNotLinkedToLearningLangues(): Promise<number> {
     const length = this.#tandems.length;
     this.#tandems = this.#tandems.filter((tandem) => {
@@ -80,5 +90,22 @@ export class InMemoryTandemRepository implements TandemRepository {
       ),
     );
     return Promise.resolve(length - this.#tandems.length);
+  }
+
+  ofId(id: string): Promise<Tandem> {
+    return Promise.resolve(this.#tandems.find((tandem) => tandem.id === id));
+  }
+
+  updateStatus(id: string, status: TandemStatus): Promise<void> {
+    this.#tandems = this.#tandems.map((tandem) => {
+      if (tandem.id === id) {
+        return new Tandem({
+          ...tandem,
+          status,
+        });
+      }
+      return tandem;
+    });
+    return Promise.resolve();
   }
 }

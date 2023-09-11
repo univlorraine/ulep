@@ -133,5 +133,80 @@
     "users": {
         "searchEmail": "Search email",
         "userListTitle": "Users"
+    },
+    "learning_languages": {
+        "label": "Tandem requests",
+        "list": {
+            "actions": {
+                "globalRoutine": {
+                    "ctaLabel": "Start global routine"
+                }
+            },
+            "globalRoutineModal": {
+                "description": "Global routine can take several minutes. Results of previous executions will be lost.",
+                "confirmMessage": "Do you wish to continue ?",
+                "ctaLabels": {
+                    "confirm": "Confirm",
+                    "cancel": "Cancel"
+                },
+                "error": "An error occured while starting global routine"
+            },
+            "tableColumns": {
+                "name": "Name",
+                "learnedLanguage": "Requested language",
+                "level": "Level",
+                "createdAt": "Created"
+            },
+            "noUniversitySelected": "Please select one or more universities to view language requests"
+        },
+        "show": {
+            "fields": {
+                "createdAt": "Date",
+                "learnedLanguage": "Requested language",
+                "level": "Level"
+            },
+            "tandems": {
+                "error": "An error occured while fetching tandems",
+                "active": {
+                    "title": "Tandem with",
+                    "tableColumns": {
+                        "profile": "Profile",
+                        "learnedLanguage": "Requested language",
+                        "level": "Level",
+                        "date": "Date"
+                    }
+                },
+                "matches": {
+                    "error": "An error occured while fetching individual routine suggestions",
+                    "title": "Individual routine suggestions",
+                    "tableColumns": {
+                        "profile": "Profile",
+                        "learnedLanguage": "Requested language",
+                        "level": "Level",
+                        "score": "Compatibility",
+                        "date": "Date",
+                        "actions": "Actions"
+                    },
+                    "noResults": "No results"
+                },
+                "globalSuggestions": {
+                    "title": "Global routine suggestion",
+                    "noResult": "No result"
+                },
+                "actions": {
+                    "validateMessage": "You're about to create a tandem. Do you confirm?",
+                    "refuseMessage": "You're about to refuse a tandem. Do you confirm?",
+                    "ctaLabels": {
+                        "cancel": "Cancel",
+                        "confirm": "Confirm"
+                    },
+                    "error": "An error occured&"
+                }
+            }
+        }
+    },
+    "universitiesPicker": {
+        "label": "Select universities",
+        "error": "An error occured while fetching universities"
     }
 }

@@ -1,4 +1,14 @@
-import { Body, Controller, Get, Post, Query, UseGuards } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Get,
+  Param,
+  ParseUUIDPipe,
+  Post,
+  Put,
+  Query,
+  UseGuards,
+} from '@nestjs/common';
 import * as Swagger from '@nestjs/swagger';
 import { Collection } from '@app/common';
 import { CollectionResponse } from '../decorators';
@@ -10,6 +20,8 @@ import { Roles } from '../decorators/roles.decorator';
 import { configuration } from 'src/configuration';
 import { AuthenticationGuard } from '../guards';
 import { GenerateTandemsRequest } from '../dtos/tandems/generate-tandems.request';
+import { UpdateTandemStatusRequest } from '../dtos/tandems/update-tandem-status.request';
+import { UpdateTandemStatusUsecase } from 'src/core/usecases/tandem/update-tandem-status.usecase';
 
 @Controller('tandems')
 @Swagger.ApiTags('Tandems')
@@ -18,6 +30,7 @@ export class TandemController {
     private readonly generateTandemsUsecase: GenerateTandemsUsecase,
     private readonly getTandemsUsecase: GetTandemsUsecase,
     private readonly createTandemUsecase: CreateTandemUsecase,
+    private readonly updateTandemStatusUsecase: UpdateTandemStatusUsecase,
   ) {}
 
   @Get()
@@ -45,6 +58,20 @@ export class TandemController {
   async create(@Body() body: CreateTandemRequest): Promise<TandemResponse> {
     const tandem = await this.createTandemUsecase.execute(body);
     return TandemResponse.fromDomain(tandem);
+  }
+
+  @Put(':id/status')
+  @Roles(configuration().adminRole)
+  @UseGuards(AuthenticationGuard)
+  @Swagger.ApiOperation({ summary: 'Update status of a Tandem ressource' })
+  async updateStatus(
+    @Param('id', ParseUUIDPipe) id: string,
+    @Body() body: UpdateTandemStatusRequest,
+  ): Promise<void> {
+    await this.updateTandemStatusUsecase.execute({
+      id,
+      status: body.status,
+    });
   }
 
   @Post('generate')
