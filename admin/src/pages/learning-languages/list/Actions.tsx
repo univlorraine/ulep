@@ -16,14 +16,12 @@ const Actions = ({ universityIds }: ActionsProps) => {
 
     const [confirmModalIsOpen, setConfirmModalIsOpen] = useState<boolean>(false);
 
-    // TODO(NOW): manage polling
     const {
         data: lastGlobalRoutineExecution,
-        // isLoading: isLoadingLastGlobalRoutine,
+        isLoading: isLoadingLastGlobalRoutine,
         refetch: refetchGlobalRoutine,
     } = useLastGlobalRoutineExecution();
 
-    // TODO(NOW): fix typing
     const globalRoutineIsCurrentlyRunning = lastGlobalRoutineExecution?.status === RoutineExecutionStatus.ON_GOING;
 
     const { mutate, isLoading } = useLaunchGlobalRoutine({
@@ -43,12 +41,14 @@ const Actions = ({ universityIds }: ActionsProps) => {
     return (
         <>
             <TopToolbar>
-                {globalRoutineIsCurrentlyRunning ? (
+                {isLoadingLastGlobalRoutine && <CircularProgress size={15} />}
+                {!isLoadingLastGlobalRoutine && globalRoutineIsCurrentlyRunning && (
                     <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, padding: 0.5 }}>
                         <CircularProgress size={15} />
                         <span>{translate('learning_languages.list.actions.globalRoutine.runningLabel')}</span>
                     </Box>
-                ) : (
+                )}
+                {!isLoadingLastGlobalRoutine && !globalRoutineIsCurrentlyRunning && (
                     <Button
                         color="secondary"
                         label={translate('learning_languages.list.actions.globalRoutine.ctaLabel')}
