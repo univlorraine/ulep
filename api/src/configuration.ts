@@ -5,6 +5,7 @@ export type Configuration = {
   keycloak: KeycloakConfiguration;
   adminRole: string;
   defaultTranslationLanguage: string;
+  CANCEL_TRESHOLD_IN_MIN: number;
 };
 
 export const configuration = (): Configuration => ({
@@ -19,4 +20,6 @@ export const configuration = (): Configuration => ({
   },
   adminRole: process.env.ADMIN_ROLE || 'admin',
   defaultTranslationLanguage: process.env.DEFAULT_TRANSLATION_LANGUAGE || 'fr',
+  CANCEL_TRESHOLD_IN_MIN:
+    parseInt(process.env.CANCEL_TRESHOLD_IN_MIN, 10) || 15,
 });

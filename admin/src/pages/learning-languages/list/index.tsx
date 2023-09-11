@@ -1,111 +1,11 @@
-import { PlayArrow } from '@mui/icons-material';
-import { Modal, Box, CircularProgress, Typography } from '@mui/material';
-import React, { useState } from 'react';
-import {
-    Button,
-    Datagrid,
-    DateField,
-    FunctionField,
-    List,
-    TextField,
-    TopToolbar,
-    useNotify,
-    useTranslate,
-} from 'react-admin';
+import { Box, Typography } from '@mui/material';
+import React from 'react';
+import { Datagrid, DateField, FunctionField, List, TextField, useTranslate } from 'react-admin';
 import UniversitiesPicker from '../../../components/UniversitiesPicker';
 import { LearningLanguage } from '../../../entities/LearningLanguage';
 import { getProfileDisplayName } from '../../../entities/Profile';
 import useLearningLanguagesStore from '../useLearningLanguagesStore';
-import useLaunchGlobalRoutine from './useLaunchGlobalRoutine';
-
-interface ActionsProps {
-    universityIds: string[];
-}
-
-const Actions = ({ universityIds }: ActionsProps) => {
-    const translate = useTranslate();
-    const notify = useNotify();
-
-    const [confirmModalIsOpen, setConfirmModalIsOpen] = useState<boolean>(false);
-
-    const { mutate, isLoading } = useLaunchGlobalRoutine({
-        onSuccess: () => {
-            setConfirmModalIsOpen(false);
-        },
-        onError: (err: unknown) => {
-            console.error(err);
-            notify(translate('learning_languages.list.globalRoutineModal.error'), { type: 'error' });
-        },
-    });
-    const handleConfirm = () => {
-        mutate(universityIds);
-    };
-
-    return (
-        <>
-            <TopToolbar>
-                <Button
-                    color="secondary"
-                    label={translate('learning_languages.list.actions.globalRoutine.ctaLabel')}
-                    onClick={() => setConfirmModalIsOpen(true)}
-                    startIcon={<PlayArrow />}
-                    variant="text"
-                />
-            </TopToolbar>
-            <Modal
-                aria-describedby="modal-modal-description"
-                aria-labelledby="modal-modal-title"
-                onClose={() => setConfirmModalIsOpen(false)}
-                open={confirmModalIsOpen}
-            >
-                <Box
-                    sx={{
-                        position: 'absolute',
-                        top: '50%',
-                        left: '50%',
-                        transform: 'translate(-50%, -50%)',
-                        width: 400,
-                        bgcolor: 'background.paper',
-                        borderRadius: 2,
-                        p: 4,
-                    }}
-                >
-                    {isLoading ? (
-                        <Box
-                            sx={{
-                                display: 'flex',
-                                width: '100%',
-                                heigh: '100%',
-                                justifyContent: 'center',
-                                alignItems: 'center',
-                            }}
-                        >
-                            <CircularProgress />
-                        </Box>
-                    ) : (
-                        <>
-                            <p>{translate('learning_languages.list.globalRoutineModal.description')}</p>
-                            <p>{translate('learning_languages.list.globalRoutineModal.confirmMessage')}</p>
-                            <Box sx={{ marginTop: 4, display: 'flex', justifyContent: 'space-around' }}>
-                                <Button
-                                    label={translate('learning_languages.list.globalRoutineModal.ctaLabels.cancel')}
-                                    onClick={() => setConfirmModalIsOpen(false)}
-                                    variant="text"
-                                />
-                                <Button
-                                    color="error"
-                                    label={translate('learning_languages.list.globalRoutineModal.ctaLabels.confirm')}
-                                    onClick={handleConfirm}
-                                    variant="outlined"
-                                />
-                            </Box>
-                        </>
-                    )}
-                </Box>
-            </Modal>
-        </>
-    );
-};
+import Actions from './Actions';
 
 // TODO(NEXT): manage case where connected user is not from central university
 

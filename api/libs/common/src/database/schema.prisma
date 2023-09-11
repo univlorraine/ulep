@@ -50,23 +50,24 @@ model LanguageCodes {
 //  * Universities
 //  * ****************************************************
 model Organizations {
-  id                 String          @id @default(uuid())
+  id                 String              @id @default(uuid())
   parent_id          String?
   country_code_id    String
   name               String
-  codes              String[]        @default([])
-  domains            String[]        @default([])
+  codes              String[]            @default([])
+  domains            String[]            @default([])
   timezone           String
   admissionStartDate DateTime
   admissionEndDate   DateTime
-  created_at         DateTime        @default(now())
-  updated_at         DateTime        @updatedAt
+  created_at         DateTime            @default(now())
+  updated_at         DateTime            @updatedAt
   website            String?
-  Parent             Organizations?  @relation("Organizations", fields: [parent_id], references: [id], onDelete: Cascade)
-  Childrens          Organizations[] @relation("Organizations")
-  Country            CountryCodes    @relation(fields: [country_code_id], references: [id])
+  Parent             Organizations?      @relation("Organizations", fields: [parent_id], references: [id], onDelete: Cascade)
+  Childrens          Organizations[]     @relation("Organizations")
+  Country            CountryCodes        @relation(fields: [country_code_id], references: [id])
   Users              Users[]
   Places             Places[]
+  RoutineExecutions  RoutineExecutions[]
 
   @@unique([name])
   @@map("organizations")
@@ -354,4 +355,13 @@ model Tandems {
 
   @@index([status], name: "status")
   @@map("tandems")
+}
+
+model RoutineExecutions {
+  id           String          @id @default(uuid())
+  sponsor_id   String
+  status       String
+  Universities Organizations[]
+  created_at   DateTime        @default(now())
+  updated_at   DateTime        @updatedAt
 }

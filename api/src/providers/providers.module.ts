@@ -30,6 +30,8 @@ import { CAMPUS_REPOSITORY } from 'src/core/ports/campus.repository';
 import { PrismaCampusRepository } from 'src/providers/persistance/repositories/prisma-campus.repository';
 import { LEARNING_LANGUAGE_REPOSITORY } from 'src/core/ports/learning-language.repository';
 import { PrismaLearningLanguageRepository } from './persistance/repositories/prisma-learning-language-repository';
+import { ROUTINE_EXECUTION_REPOSITORY } from 'src/core/ports/routine-execution.repository';
+import { PrismaRoutineExecutionRepository } from './persistance/repositories/prisma-routine-execution-repository';
 
 const providers: Provider[] = [
   {
@@ -91,6 +93,10 @@ const providers: Provider[] = [
   {
     provide: LEARNING_LANGUAGE_REPOSITORY,
     useClass: PrismaLearningLanguageRepository,
+  },
+  {
+    provide: ROUTINE_EXECUTION_REPOSITORY,
+    useClass: PrismaRoutineExecutionRepository,
   },
 ];
 

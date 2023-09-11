@@ -1,7 +1,10 @@
+import { RoutineStatus } from 'src/core/models/routine-execution.model';
 import {
   Body,
   Controller,
   Get,
+  Inject,
+  Logger,
   Param,
   ParseUUIDPipe,
   Post,
@@ -11,7 +14,7 @@ import {
 } from '@nestjs/common';
 import * as Swagger from '@nestjs/swagger';
 import { Collection } from '@app/common';
-import { CollectionResponse } from '../decorators';
+import { CollectionResponse, CurrentUser } from '../decorators';
 import { CreateTandemUsecase } from '../../core/usecases/tandem/create-tandem.usecase';
 import { GenerateTandemsUsecase } from '../../core/usecases/tandem/generate-tandems.usecase';
 import { GetTandemsUsecase } from '../../core/usecases/tandem/get-tandems.usecase';
@@ -22,15 +25,24 @@ import { AuthenticationGuard } from '../guards';
 import { GenerateTandemsRequest } from '../dtos/tandems/generate-tandems.request';
 import { UpdateTandemStatusRequest } from '../dtos/tandems/update-tandem-status.request';
 import { UpdateTandemStatusUsecase } from 'src/core/usecases/tandem/update-tandem-status.usecase';
+import {
+  ROUTINE_EXECUTION_REPOSITORY,
+  RoutineExecutionRepository,
+} from 'src/core/ports/routine-execution.repository';
+import { KeycloakUser } from '@app/keycloak';
 
 @Controller('tandems')
 @Swagger.ApiTags('Tandems')
 export class TandemController {
+  private readonly logger = new Logger(TandemController.name);
+
   constructor(
     private readonly generateTandemsUsecase: GenerateTandemsUsecase,
     private readonly getTandemsUsecase: GetTandemsUsecase,
     private readonly createTandemUsecase: CreateTandemUsecase,
     private readonly updateTandemStatusUsecase: UpdateTandemStatusUsecase,
+    @Inject(ROUTINE_EXECUTION_REPOSITORY)
+    private readonly routineExecutionRepository: RoutineExecutionRepository,
   ) {}
 
   @Get()
@@ -79,10 +91,34 @@ export class TandemController {
   @UseGuards(AuthenticationGuard)
   @Swagger.ApiOperation({ summary: 'Generate Tandems' })
   async generate(
+    @CurrentUser() user: KeycloakUser,
     @Body() body: GenerateTandemsRequest,
-  ): Promise<TandemResponse[]> {
-    const tandems = await this.generateTandemsUsecase.execute(body);
+  ): Promise<void> {
+    const routineExecution = await this.routineExecutionRepository.create({
+      sponsorId: user.sub,
+      universityIds: body.universityIds,
+    });
+    this.generateTandemsUsecase
+      .execute(body)
+      .then(() => {
+        return this.routineExecutionRepository.updateStatus(
+          routineExecution.id,
+          RoutineStatus.ENDED,
+        );
+      })
+      .catch((err: unknown) => {
+        this.logger.error(
+          `Error while generating tandem for universities ${body.universityIds.join(
+            ', ',
+          )}`,
+          err,
+        );
+        return this.routineExecutionRepository.updateStatus(
+          routineExecution.id,
+          RoutineStatus.ENDED,
+        );
+      });
 
-    return tandems.map(TandemResponse.fromDomain);
+    return null;
   }
 }

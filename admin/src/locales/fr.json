@@ -251,7 +251,9 @@
         "list": {
             "actions": {
                 "globalRoutine": {
-                    "ctaLabel": "Lancer la routine globale"
+                    "ctaLabel": "Lancer la routine globale",
+                    "runningLabel": "Routine globale en cours d'exécution",
+                    "errorLoading": "Une erreur est survenue lors du chargement de l'état de la dernière routine globale"
                 }
             },
             "globalRoutineModal": {
