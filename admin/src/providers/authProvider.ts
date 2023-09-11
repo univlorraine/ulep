@@ -5,6 +5,13 @@ const KEYCLOAK_REALM = process.env.REACT_APP_KEYCLOAK_REALM;
 const KEYCLOAK_CLIENT_ID = process.env.REACT_APP_KEYCLOAK_CLIENT_ID;
 const KEYCLOAK_CLIENT_SECRET = process.env.REACT_APP_KEYCLOAK_CLIENT_SECRET;
 
+export interface Identity {
+    id: string;
+    fullName?: string;
+    universityId?: string;
+    isCentralUniversity: boolean;
+}
+
 export const http = async (method: string, path: string, init: Omit<RequestInit, 'method'> = {}) => {
     const response = await fetch(path, {
         ...init,
@@ -77,21 +84,25 @@ const authProvider = () => ({
         return Promise.resolve();
     },
     getPermissions: () => (jwtManager.getToken('access_token') ? Promise.resolve() : Promise.reject()),
-    getIdentity: () => {
+    getIdentity: (): Promise<Identity> => {
+        // TODO(NOW+0): Doc on how to add universityId to user
+        // https://www.baeldung.com/keycloak-custom-user-attributes
+        // TODO(NOW+0): export client with mapper
         const accessToken = jwtManager.getToken('access_token');
         if (!accessToken) {
             return Promise.reject();
         }
 
-        const decoded = jwtManager.decodeToken(accessToken);
+        const decoded: any = jwtManager.decodeToken(accessToken);
         if (!decoded) {
             return Promise.reject();
         }
 
         return Promise.resolve({
-            id: '6363c0e2-80aa-487d-86a2-2cca6b39817f',
+            id: decoded.sub,
             fullName: '',
-            ...decoded,
+            universityId: decoded.universityId,
+            isCentralUniversity: !decoded.universityId,
         });
     },
 });
