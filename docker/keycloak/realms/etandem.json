@@ -35,7 +35,24 @@
       "directAccessGrantsEnabled": true,
       "redirectUris": [
         "http://localhost:3001/auth-callback"
-      ]
+      ],
+      "protocolMappers": [{
+        "id": "c07966d2-645c-4b0b-ba91-52916817d597",
+        "name": "universityId",
+        "protocol": "openid-connect",
+        "protocolMapper": "oidc-usermodel-attribute-mapper",
+        "consentRequired": false,
+        "config": {
+          "aggregate.attrs": "false",
+          "userinfo.token.claim": "true",
+          "multivalued": "false",
+          "user.attribute": "universityId",
+          "id.token.claim": "true",
+          "access.token.claim": "true",
+          "claim.name": "universityId",
+          "jsonType.label": "String"
+        }
+      }]
     }
   ],
   "groups": [{
