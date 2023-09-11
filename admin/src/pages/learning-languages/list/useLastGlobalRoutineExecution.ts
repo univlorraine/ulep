@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { useDataProvider } from 'react-admin';
+import { useDataProvider, useNotify, useTranslate } from 'react-admin';
 import { useQuery } from 'react-query';
 import { RoutineExecution, RoutineExecutionStatus } from '../../../entities/RoutineExecution';
 
@@ -7,6 +7,9 @@ const DEFAULT_POLLING_DELAY = 5 * 1000;
 const QUERY_KEY = ['GLOBAL_ROUTINE', 'LAST_EXECUTION'];
 
 const useLastGlobalRoutineExecution = (pollingDelayInSec?: number) => {
+    const notify = useNotify();
+    const translate = useTranslate();
+
     const dataProvider = useDataProvider();
 
     const [enablePolling, setEnablePolling] = useState<boolean>(true);
@@ -27,6 +30,7 @@ const useLastGlobalRoutineExecution = (pollingDelayInSec?: number) => {
             onError: (err: unknown) => {
                 console.error(err);
                 setEnablePolling(false);
+                notify(translate('learning_languages.list.actions.globalRoutine.errorLoading'));
             },
         }
     );

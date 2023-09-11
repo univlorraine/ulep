@@ -16,7 +16,6 @@ const Actions = ({ universityIds }: ActionsProps) => {
 
     const [confirmModalIsOpen, setConfirmModalIsOpen] = useState<boolean>(false);
 
-    // TODO(NOW): manage error
     // TODO(NOW): manage polling
     const {
         data: lastGlobalRoutineExecution,

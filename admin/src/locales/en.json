@@ -140,7 +140,8 @@
             "actions": {
                 "globalRoutine": {
                     "ctaLabel": "Start global routine",
-                    "runningLabel": "Global routine currently on-going"
+                    "runningLabel": "Global routine currently on-going",
+                    "errorLoading": "An error occured while loading last global routine state"
                 }
             },
             "globalRoutineModal": {
