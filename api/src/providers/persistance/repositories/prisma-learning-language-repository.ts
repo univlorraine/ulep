@@ -281,7 +281,6 @@ export class PrismaLearningLanguageRepository
           };
           break;
         case LearningLanguageQuerySortKey.UNIVERSITY:
-          // TODO(NOW+1): investigate why this field sort do not work
           orderByPayload = {
             Profile: {
               User: {
