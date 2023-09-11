@@ -270,7 +270,8 @@
                 "learnedLanguage": "Langue demandée",
                 "level": "Niveau",
                 "createdAt": "Créé le",
-                "university": "Université"
+                "university": "Université",
+                "hasActiveTandem": "En tandem"
             },
             "noUniversitySelected": "Merci de sélectionner une ou plusieurs universités pour voir les demandes"
         },
