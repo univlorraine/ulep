@@ -28,25 +28,23 @@ const LearningLanguageList = () => {
                         <FunctionField
                             label={translate('learning_languages.list.tableColumns.name')}
                             render={(record: LearningLanguage) => getProfileDisplayName(record.profile)}
+                            sortBy="profile.name"
                         />
                         <TextField
                             label={translate('learning_languages.list.tableColumns.university')}
                             source="profile.user.university.name"
+                            sortable
                         />
                         <TextField
                             label={translate('learning_languages.list.tableColumns.learnedLanguage')}
-                            sortable={false}
                             source="name"
+                            sortable
                         />
-                        <TextField
-                            label={translate('learning_languages.list.tableColumns.level')}
-                            sortable={false}
-                            source="level"
-                        />
+                        <TextField label={translate('learning_languages.list.tableColumns.level')} source="level" />
                         <DateField
                             label={translate('learning_languages.list.tableColumns.createdAt')}
-                            sortable={false}
                             source="createdAt"
+                            sortable
                         />
                         <FunctionField
                             label={translate('learning_languages.list.tableColumns.hasActiveTandem')}
@@ -57,6 +55,7 @@ const LearningLanguageList = () => {
                                     </Box>
                                 )
                             }
+                            sortBy="activeTandem"
                         />
                     </Datagrid>
                 </List>

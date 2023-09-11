@@ -6,6 +6,7 @@ import {
 import { Collection, PrismaService } from '@app/common';
 import { Injectable } from '@nestjs/common';
 import {
+  LearningLanguageQuerySortKey,
   LearningLanguageRepository,
   LearningLanguageRepositoryGetProps,
 } from 'src/core/ports/learning-language.repository';
@@ -213,6 +214,7 @@ export class PrismaLearningLanguageRepository
     page,
     limit,
     universityIds,
+    orderBy,
   }: LearningLanguageRepositoryGetProps): Promise<
     Collection<LearningLanguageWithTandem>
   > {
@@ -230,11 +232,61 @@ export class PrismaLearningLanguageRepository
       where: wherePayload,
     });
 
+    let orderByPayload;
+    if (orderBy) {
+      switch (orderBy.field) {
+        case LearningLanguageQuerySortKey.PROFILE:
+          orderByPayload = {
+            Profile: {
+              User: {
+                firstname: orderBy.order,
+              },
+            },
+          };
+          break;
+        case LearningLanguageQuerySortKey.CREATED_AT:
+          orderByPayload = {
+            created_at: orderBy.order,
+          };
+          break;
+        case LearningLanguageQuerySortKey.UNIVERSITY:
+          // TODO(NOW): investigate why this field sort do not work
+          orderByPayload = {
+            Profile: {
+              User: {
+                Organization: {
+                  name: orderBy.order,
+                },
+              },
+            },
+          };
+          break;
+        case LearningLanguageQuerySortKey.LEVEL:
+          orderByPayload = {
+            level: orderBy.order,
+          };
+          break;
+        case LearningLanguageQuerySortKey.LANGUAGE:
+          orderByPayload = {
+            LanguageCode: {
+              name: orderBy.order,
+            },
+          };
+          break;
+        case LearningLanguageQuerySortKey.ACTIVE_TANDEM:
+        // TODO(NOW): implement
+        default:
+          // TODO(NOW): custom error
+          throw new Error('Unsupported order by field');
+      }
+    }
+
     const items = await this.prisma.learningLanguages.findMany({
       where: wherePayload,
       skip: (page - 1) * limit,
       take: limit,
       include: LearningLanguageWithTandemRelations,
+      orderBy: orderByPayload,
     });
 
     return {
