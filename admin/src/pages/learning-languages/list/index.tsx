@@ -28,6 +28,10 @@ const LearningLanguageList = () => {
                             render={(record: LearningLanguage) => getProfileDisplayName(record.profile)}
                         />
                         <TextField
+                            label={translate('learning_languages.list.tableColumns.university')}
+                            source="profile.user.university.name"
+                        />
+                        <TextField
                             label={translate('learning_languages.list.tableColumns.learnedLanguage')}
                             sortable={false}
                             source="name"

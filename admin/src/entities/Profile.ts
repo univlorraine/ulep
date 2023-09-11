@@ -24,3 +24,14 @@ export type Profile = {
 
 export const getProfileDisplayName = (profile?: Profile): string =>
     profile ? `${profile.user.firstname} ${profile.user.lastname}` : '';
+
+export const getProfileUniversityAndCampusString = (profile?: Profile) => {
+    if (!profile) {
+        return '';
+    }
+    if (profile.campus) {
+        return `${profile.user.university.name} - ${profile.campus.name}`;
+    }
+
+    return `${profile.user.university.name}`;
+};

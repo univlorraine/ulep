@@ -157,7 +157,8 @@
                 "name": "Name",
                 "learnedLanguage": "Requested language",
                 "level": "Level",
-                "createdAt": "Created"
+                "createdAt": "Created",
+                "university": "University"
             },
             "noUniversitySelected": "Please select one or more universities to view language requests"
         },
@@ -165,7 +166,8 @@
             "fields": {
                 "createdAt": "Date",
                 "learnedLanguage": "Requested language",
-                "level": "Level"
+                "level": "Level",
+                "university": "University"
             },
             "tandems": {
                 "error": "An error occured while fetching tandems",

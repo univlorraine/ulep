@@ -3,6 +3,7 @@ import React from 'react';
 
 import { DateField, FunctionField, Show, SimpleShowLayout, TextField, useTranslate } from 'react-admin';
 import { LearningLanguage } from '../../../entities/LearningLanguage';
+import { getProfileUniversityAndCampusString } from '../../../entities/Profile';
 import ProfileLink from '../ui/ProfileLink';
 import ShowTandems from './ShowTandems';
 
@@ -16,6 +17,10 @@ const LearningLanguageShow = () => {
                     render={(data: LearningLanguage) =>
                         data?.profile && <ProfileLink profile={data.profile} variant="h5" />
                     }
+                />
+                <FunctionField
+                    label={translate('learning_languages.list.tableColumns.university')}
+                    render={(data: LearningLanguage) => getProfileUniversityAndCampusString(data.profile)}
                 />
                 <DateField label={translate('learning_languages.show.fields.createdAt')} source="createdAt" />
                 <TextField label={translate('learning_languages.show.fields.learnedLanguage')} source="name" />
