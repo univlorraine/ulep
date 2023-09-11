@@ -1,6 +1,7 @@
 import { Box, CircularProgress, Table, TableBody, TableCell, TableHead, TableRow, Typography } from '@mui/material';
 import React, { useState } from 'react';
 import { useGetList, useGetOne, useGetRecordId, useTranslate } from 'react-admin';
+import { DisplayRole, DisplayLearningType } from '../../../components/translated';
 import { LearningLanguageTandem } from '../../../entities/LearningLanguage';
 import { Match } from '../../../entities/Match';
 import { TandemStatus } from '../../../entities/Tandem';
@@ -86,6 +87,15 @@ const ShowTandems = () => {
                                 {translate('learning_languages.show.tandems.active.tableColumns.level')}
                             </TableCell>
                             <TableCell>
+                                {translate('learning_languages.show.tandems.active.tableColumns.university')}
+                            </TableCell>
+                            <TableCell>
+                                {translate('learning_languages.show.tandems.active.tableColumns.role')}
+                            </TableCell>
+                            <TableCell>
+                                {translate('learning_languages.show.tandems.active.tableColumns.learningType')}
+                            </TableCell>
+                            <TableCell>
                                 {translate('learning_languages.show.tandems.active.tableColumns.date')}
                             </TableCell>
                         </TableRow>
@@ -97,6 +107,13 @@ const ShowTandems = () => {
                             </TableCell>
                             <TableCell>{tandem.learningLanguage.name}</TableCell>
                             <TableCell>{tandem.learningLanguage.level}</TableCell>
+                            <TableCell>{tandem.partner.user.university.name}</TableCell>
+                            <TableCell>
+                                <DisplayRole role={tandem.partner.user.role} />
+                            </TableCell>
+                            <TableCell>
+                                <DisplayLearningType learningType={tandem.partner.learningType} />
+                            </TableCell>
                             <TableCell>{new Date(tandem.learningLanguage.createdAt).toLocaleDateString()}</TableCell>
                         </TableRow>
                     </TableBody>
@@ -133,6 +150,15 @@ const ShowTandems = () => {
                                         {translate('learning_languages.show.tandems.matches.tableColumns.level')}
                                     </TableCell>
                                     <TableCell>
+                                        {translate('learning_languages.show.tandems.matches.tableColumns.university')}
+                                    </TableCell>
+                                    <TableCell>
+                                        {translate('learning_languages.show.tandems.matches.tableColumns.role')}
+                                    </TableCell>
+                                    <TableCell>
+                                        {translate('learning_languages.show.tandems.matches.tableColumns.learningType')}
+                                    </TableCell>
+                                    <TableCell>
                                         {translate('learning_languages.show.tandems.matches.tableColumns.date')}
                                     </TableCell>
                                     <TableCell>
@@ -152,6 +178,13 @@ const ShowTandems = () => {
                                         </TableCell>
                                         <TableCell>{match.target.name}</TableCell>
                                         <TableCell>{match.target.level}</TableCell>
+                                        <TableCell>{match.target.profile?.user.university.name}</TableCell>
+                                        <TableCell>
+                                            <DisplayRole role={match.target.profile?.user.role} />
+                                        </TableCell>
+                                        <TableCell>
+                                            <DisplayLearningType learningType={match.target.profile?.learningType} />
+                                        </TableCell>
                                         <TableCell>{new Date(match.target.createdAt).toLocaleDateString()}</TableCell>
                                         <TableCell>{match.score.total * 100}%</TableCell>
                                         <TableCell>
@@ -192,6 +225,15 @@ const ShowTandems = () => {
                                         {translate('learning_languages.show.tandems.matches.tableColumns.level')}
                                     </TableCell>
                                     <TableCell>
+                                        {translate('learning_languages.show.tandems.matches.tableColumns.university')}
+                                    </TableCell>
+                                    <TableCell>
+                                        {translate('learning_languages.show.tandems.matches.tableColumns.role')}
+                                    </TableCell>
+                                    <TableCell>
+                                        {translate('learning_languages.show.tandems.matches.tableColumns.learningType')}
+                                    </TableCell>
+                                    <TableCell>
                                         {translate('learning_languages.show.tandems.matches.tableColumns.date')}
                                     </TableCell>
                                     <TableCell>
@@ -210,6 +252,14 @@ const ShowTandems = () => {
                                         </TableCell>
                                         <TableCell>{tandem.learningLanguage.name}</TableCell>
                                         <TableCell>{tandem.learningLanguage.level}</TableCell>
+                                        <TableCell>{tandem.partner.user.university.name}</TableCell>
+                                        <TableCell>
+                                            <DisplayRole role={tandem.partner.user.role} />
+                                        </TableCell>
+                                        <TableCell>
+                                            <DisplayLearningType learningType={tandem.partner.learningType} />
+                                        </TableCell>
+
                                         <TableCell>
                                             {new Date(tandem.learningLanguage.createdAt).toLocaleDateString()}
                                         </TableCell>

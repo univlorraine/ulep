@@ -22,7 +22,10 @@
         "staff": "Staff",
         "student": "Student",
         "translations": "Translations",
-        "university": "University"
+        "university": "University",
+        "etandem": "E-tandem",
+        "tandem": "Tandem",
+        "both": "Both"
     },
     "interests": {
         "create": {
@@ -187,7 +190,10 @@
                         "profile": "Profile",
                         "learnedLanguage": "Requested language",
                         "level": "Level",
-                        "date": "Date"
+                        "date": "Date",
+                        "university": "University",
+                        "role": "Role",
+                        "learningType": "Mode"
                     }
                 },
                 "matches": {
@@ -199,7 +205,10 @@
                         "level": "Level",
                         "score": "Compatibility",
                         "date": "Date",
-                        "actions": "Actions"
+                        "actions": "Actions",
+                        "university": "University",
+                        "role": "Role",
+                        "learningType": "Mode"
                     },
                     "noResults": "No results"
                 },
