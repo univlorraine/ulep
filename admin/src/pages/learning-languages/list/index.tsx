@@ -1,7 +1,7 @@
 import { Check } from '@mui/icons-material';
 import { Box, Typography } from '@mui/material';
 import React from 'react';
-import { Datagrid, DateField, FunctionField, List, TextField, useTranslate } from 'react-admin';
+import { Datagrid, DateField, FunctionField, List, SelectInput, TextField, useTranslate } from 'react-admin';
 import UniversitiesPicker from '../../../components/UniversitiesPicker';
 import { LearningLanguage } from '../../../entities/LearningLanguage';
 import { getProfileDisplayName } from '../../../entities/Profile';
@@ -15,6 +15,18 @@ const LearningLanguageList = () => {
     const translate = useTranslate();
     const { selectedUniversityIds, setSelectedUniversityIds } = useLearningLanguagesStore();
 
+    const filters = [
+        <SelectInput
+            key="activeTandemFilter"
+            choices={[
+                { id: true, name: translate('learning_languages.list.filters.tandem.choices.yes') },
+                { id: false, name: translate('learning_languages.list.filters.tandem.choices.no') },
+            ]}
+            label={translate('learning_languages.list.filters.tandem.label')}
+            source="hasActiveTandem"
+        />,
+    ];
+
     return (
         <Box sx={{ marginTop: 2 }}>
             <UniversitiesPicker onSelected={(ids) => setSelectedUniversityIds(ids)} value={selectedUniversityIds} />
@@ -23,30 +35,29 @@ const LearningLanguageList = () => {
                     actions={<Actions universityIds={selectedUniversityIds} />}
                     exporter={false}
                     filter={{ universityIds: selectedUniversityIds }}
+                    filters={filters}
                 >
                     <Datagrid bulkActionButtons={false} rowClick="show">
                         <FunctionField
                             label={translate('learning_languages.list.tableColumns.name')}
                             render={(record: LearningLanguage) => getProfileDisplayName(record.profile)}
+                            sortBy="profile.name"
                         />
                         <TextField
                             label={translate('learning_languages.list.tableColumns.university')}
                             source="profile.user.university.name"
+                            sortable
                         />
                         <TextField
                             label={translate('learning_languages.list.tableColumns.learnedLanguage')}
-                            sortable={false}
                             source="name"
+                            sortable
                         />
-                        <TextField
-                            label={translate('learning_languages.list.tableColumns.level')}
-                            sortable={false}
-                            source="level"
-                        />
+                        <TextField label={translate('learning_languages.list.tableColumns.level')} source="level" />
                         <DateField
                             label={translate('learning_languages.list.tableColumns.createdAt')}
-                            sortable={false}
                             source="createdAt"
+                            sortable
                         />
                         <FunctionField
                             label={translate('learning_languages.list.tableColumns.hasActiveTandem')}
@@ -57,6 +68,7 @@ const LearningLanguageList = () => {
                                     </Box>
                                 )
                             }
+                            sortable={false}
                         />
                     </Datagrid>
                 </List>

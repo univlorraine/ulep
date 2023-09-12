@@ -49,12 +49,26 @@ export class LearningLanguageController {
   @CollectionResponse(LearningLanguageWithTandemResponse)
   async getCollection(
     @Query()
-    { page, limit, universityIds }: GetLearningLanguagesRequest,
+    {
+      page,
+      limit,
+      universityIds,
+      hasActiveTandem,
+      field,
+      order,
+    }: GetLearningLanguagesRequest,
   ): Promise<Collection<LearningLanguageWithTandemResponse>> {
+    const orderBy = field &&
+      order && {
+        field,
+        order,
+      };
     const result = await this.getLearningLanguagesUsecase.execute({
       page,
       limit,
       universityIds,
+      orderBy,
+      hasActiveTandem,
     });
 
     return new Collection<LearningLanguageWithTandemResponse>({

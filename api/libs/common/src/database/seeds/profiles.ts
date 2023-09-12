@@ -60,6 +60,10 @@ export const createProfiles = async (
       .map((language) => ({
         language: language,
         level: enumValue(ProficiencyLevel),
+        createdAt: faker.date.between({
+          from: new Date(Date.now() - 1000 * 60 * 60 * 24 * 168),
+          to: new Date(),
+        }),
       }));
 
     let masteredLanguages = [];
@@ -113,6 +117,7 @@ export const createProfiles = async (
                 connect: { code: learningLanguage.language.code },
               },
               level: learningLanguage.level as ProficiencyLevel,
+              created_at: learningLanguage.createdAt,
             };
           }),
         },

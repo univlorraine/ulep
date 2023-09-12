@@ -4,12 +4,18 @@ import Language from './Language';
 import Objective from './Objective';
 import User from './User';
 
+export enum LearningType {
+    ETANDEM = 'ETANDEM',
+    TANDEM = 'TANDEM',
+    BOTH = 'BOTH',
+}
+
 export type Profile = {
     id: string;
     user: User;
     nativeLanguage: Language;
     masteredLanguages: Language[];
-    learningType: string;
+    learningType: LearningType;
     meetingFrequency: string;
     sameGender: boolean;
     sameAge: boolean;

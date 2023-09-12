@@ -1,15 +1,21 @@
-import { Collection } from '@app/common';
+import { Collection, SortOrder } from '@app/common';
 import { Inject, Injectable } from '@nestjs/common';
 import { LearningLanguageWithTandem } from 'src/core/models';
 import {
   LEARNING_LANGUAGE_REPOSITORY,
+  LearningLanguageQuerySortKey,
   LearningLanguageRepository,
 } from 'src/core/ports/learning-language.repository';
 
 interface GetLearningLanguagesQuery {
   universityIds: string[];
+  hasActiveTandem?: boolean;
   page: number;
   limit: number;
+  orderBy?: {
+    field: LearningLanguageQuerySortKey;
+    order: SortOrder;
+  };
 }
 
 @Injectable()

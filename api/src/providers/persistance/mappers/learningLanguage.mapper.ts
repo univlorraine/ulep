@@ -12,7 +12,6 @@ import {
   TandemStatus,
 } from 'src/core/models';
 import { languageMapper } from './language.mapper';
-import { TandemRelations, TandemSnapshot, tandemMapper } from './tandem.mapper';
 
 export const LearningLanguageRelations = {
   Profile: {

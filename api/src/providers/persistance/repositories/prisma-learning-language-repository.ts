@@ -6,6 +6,7 @@ import {
 import { Collection, PrismaService } from '@app/common';
 import { Injectable } from '@nestjs/common';
 import {
+  LearningLanguageQuerySortKey,
   LearningLanguageRepository,
   LearningLanguageRepositoryGetProps,
 } from 'src/core/ports/learning-language.repository';
@@ -213,10 +214,12 @@ export class PrismaLearningLanguageRepository
     page,
     limit,
     universityIds,
+    orderBy,
+    hasActiveTandem,
   }: LearningLanguageRepositoryGetProps): Promise<
     Collection<LearningLanguageWithTandem>
   > {
-    const wherePayload = {
+    let wherePayload: any = {
       Profile: {
         User: {
           organization_id: {
@@ -225,16 +228,93 @@ export class PrismaLearningLanguageRepository
         },
       },
     };
+    if (hasActiveTandem === true) {
+      wherePayload = {
+        ...wherePayload,
+        Tandem: {
+          status: {
+            equals: TandemStatus.ACTIVE,
+          },
+        },
+      };
+    } else if (hasActiveTandem === false) {
+      wherePayload = {
+        ...wherePayload,
+        OR: [
+          {
+            Tandem: {
+              status: {
+                not: {
+                  equals: TandemStatus.ACTIVE,
+                },
+              },
+            },
+          },
+          {
+            Tandem: {
+              is: null,
+            },
+          },
+        ],
+      };
+    }
 
     const count = await this.prisma.learningLanguages.count({
       where: wherePayload,
     });
+
+    let orderByPayload;
+    if (orderBy) {
+      switch (orderBy.field) {
+        case LearningLanguageQuerySortKey.PROFILE:
+          orderByPayload = {
+            Profile: {
+              User: {
+                firstname: orderBy.order,
+              },
+            },
+          };
+          break;
+        case LearningLanguageQuerySortKey.CREATED_AT:
+          orderByPayload = {
+            created_at: orderBy.order,
+          };
+          break;
+        case LearningLanguageQuerySortKey.UNIVERSITY:
+          orderByPayload = {
+            Profile: {
+              User: {
+                Organization: {
+                  name: orderBy.order,
+                },
+              },
+            },
+          };
+          break;
+        case LearningLanguageQuerySortKey.LEVEL:
+          orderByPayload = {
+            level: orderBy.order,
+          };
+          break;
+        case LearningLanguageQuerySortKey.LANGUAGE:
+          orderByPayload = {
+            LanguageCode: {
+              name: orderBy.order,
+            },
+          };
+          break;
+        default:
+          // TODO(NOW): custom error
+          throw new Error('Unsupported order by field');
+      }
+    }
 
     const items = await this.prisma.learningLanguages.findMany({
       where: wherePayload,
       skip: (page - 1) * limit,
       take: limit,
       include: LearningLanguageWithTandemRelations,
+      orderBy: orderByPayload,
     });
 
     return {

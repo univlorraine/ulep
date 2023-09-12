@@ -38,7 +38,10 @@
         "staff": "Personnel",
         "student": "Etudiant",
         "translations": "Traductions",
-        "university": "Université"
+        "university": "Université",
+        "etandem": "E-tandem",
+        "tandem": "Tandem",
+        "both": "Les deux"
     },
     "interests": {
         "create": {
@@ -256,6 +259,15 @@
                     "errorLoading": "Une erreur est survenue lors du chargement de l'état de la dernière routine globale"
                 }
             },
+            "filters": {
+                "tandem": {
+                    "label": "En tandem",
+                    "choices": {
+                        "yes": "Oui",
+                        "no": "Non"
+                    }
+                }
+            },
             "globalRoutineModal": {
                 "description": "Lancer la routine globale peut prendre quelques minutes. Les tandems proposés par une ancienne exécution seront perdus.",
                 "confirmMessage": "Voulez-vous continuer ?",
@@ -290,7 +302,10 @@
                         "profile": "Profil",
                         "learnedLanguage": "Langue demandée",
                         "level": "Niveau",
-                        "date": "Date"
+                        "date": "Date",
+                        "university": "Université",
+                        "role": "Rôle",
+                        "learningType": "Mode"
                     }
                 },
                 "matches": {
@@ -302,7 +317,10 @@
                         "level": "Niveau",
                         "score": "Compatibilité",
                         "date": "Date",
-                        "actions": "Actions"
+                        "actions": "Actions",
+                        "university": "Université",
+                        "role": "Rôle",
+                        "learningType": "Mode"
                     },
                     "noResults": "Aucun résultats"
                 },
