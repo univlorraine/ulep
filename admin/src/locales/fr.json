@@ -283,7 +283,8 @@
                 "level": "Niveau",
                 "createdAt": "Créé le",
                 "university": "Université",
-                "hasActiveTandem": "En tandem"
+                "hasActiveTandem": "En tandem",
+                "actionPossible": "Tandem en attente"
             },
             "noUniversitySelected": "Merci de sélectionner une ou plusieurs universités pour voir les demandes"
         },

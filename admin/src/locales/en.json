@@ -171,7 +171,8 @@
                 "level": "Level",
                 "createdAt": "Created",
                 "university": "University",
-                "hasActiveTandem": "In tandem"
+                "hasActiveTandem": "In tandem",
+                "actionPossible": "Pending tandem"
             },
             "noUniversitySelected": "Please select one or more universities to view language requests"
         },

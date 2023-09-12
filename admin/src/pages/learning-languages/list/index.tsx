@@ -13,7 +13,7 @@ import {
     useTranslate,
 } from 'react-admin';
 import UniversitiesPicker from '../../../components/UniversitiesPicker';
-import { LearningLanguage } from '../../../entities/LearningLanguage';
+import { LearningLanguage, learningLanguageHasPossibleAction } from '../../../entities/LearningLanguage';
 import { getProfileDisplayName } from '../../../entities/Profile';
 import { isTandemActive } from '../../../entities/Tandem';
 import useLearningLanguagesStore from '../useLearningLanguagesStore';
@@ -49,6 +49,7 @@ const LearningLanguageList = () => {
     }
 
     // TODO(NOW+1): admin from partner university should known about on going routine ?
+    // TODO(NOW): filter column en attente
 
     return (
         <Box sx={{ marginTop: 2 }}>
@@ -88,6 +89,17 @@ const LearningLanguageList = () => {
                             label={translate('learning_languages.list.tableColumns.createdAt')}
                             source="createdAt"
                             sortable
+                        />
+                        <FunctionField
+                            label={translate('learning_languages.list.tableColumns.actionPossible')}
+                            render={(record: LearningLanguage) =>
+                                learningLanguageHasPossibleAction(record) && (
+                                    <Box sx={{ textAlign: 'center' }}>
+                                        <Check />
+                                    </Box>
+                                )
+                            }
+                            sortable={false}
                         />
                         <FunctionField
                             label={translate('learning_languages.list.tableColumns.hasActiveTandem')}
