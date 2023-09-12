@@ -1,9 +1,11 @@
+import { Check } from '@mui/icons-material';
 import { Box, Typography } from '@mui/material';
 import React from 'react';
 import { Datagrid, DateField, FunctionField, List, TextField, useTranslate } from 'react-admin';
 import UniversitiesPicker from '../../../components/UniversitiesPicker';
 import { LearningLanguage } from '../../../entities/LearningLanguage';
 import { getProfileDisplayName } from '../../../entities/Profile';
+import { isTandemActive } from '../../../entities/Tandem';
 import useLearningLanguagesStore from '../useLearningLanguagesStore';
 import Actions from './Actions';
 
@@ -28,6 +30,10 @@ const LearningLanguageList = () => {
                             render={(record: LearningLanguage) => getProfileDisplayName(record.profile)}
                         />
                         <TextField
+                            label={translate('learning_languages.list.tableColumns.university')}
+                            source="profile.user.university.name"
+                        />
+                        <TextField
                             label={translate('learning_languages.list.tableColumns.learnedLanguage')}
                             sortable={false}
                             source="name"
@@ -41,6 +47,16 @@ const LearningLanguageList = () => {
                             label={translate('learning_languages.list.tableColumns.createdAt')}
                             sortable={false}
                             source="createdAt"
+                        />
+                        <FunctionField
+                            label={translate('learning_languages.list.tableColumns.hasActiveTandem')}
+                            render={(record: LearningLanguage) =>
+                                isTandemActive(record.tandem) && (
+                                    <Box sx={{ textAlign: 'center' }}>
+                                        <Check />
+                                    </Box>
+                                )
+                            }
                         />
                     </Datagrid>
                 </List>

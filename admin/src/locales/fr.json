@@ -269,7 +269,9 @@
                 "name": "Nom",
                 "learnedLanguage": "Langue demandée",
                 "level": "Niveau",
-                "createdAt": "Créé le"
+                "createdAt": "Créé le",
+                "university": "Université",
+                "hasActiveTandem": "En tandem"
             },
             "noUniversitySelected": "Merci de sélectionner une ou plusieurs universités pour voir les demandes"
         },
@@ -277,7 +279,8 @@
             "fields": {
                 "createdAt": "Date demande",
                 "learnedLanguage": "Langue demandé",
-                "level": "Niveau"
+                "level": "Niveau",
+                "university": "Université"
             },
             "tandems": {
                 "error": "Une erreur est survenue lors de la récupération des tandems",

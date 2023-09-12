@@ -1,8 +1,9 @@
 import { Box, CircularProgress, Table, TableBody, TableCell, TableHead, TableRow, Typography } from '@mui/material';
 import React, { useState } from 'react';
 import { useGetList, useGetOne, useGetRecordId, useTranslate } from 'react-admin';
-import { LearningLanguageTandem, TandemStatus } from '../../../entities/LearningLanguage';
+import { LearningLanguageTandem } from '../../../entities/LearningLanguage';
 import { Match } from '../../../entities/Match';
+import { TandemStatus } from '../../../entities/Tandem';
 import ProfileLink from '../ui/ProfileLink';
 import useLearningLanguagesStore from '../useLearningLanguagesStore';
 import ValidateTandem from './ValidateTandem';

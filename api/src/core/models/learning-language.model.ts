@@ -1,6 +1,15 @@
 import { Language } from './language.model';
 import { ProficiencyLevel } from './proficiency.model';
 import { Profile } from './profile.model';
+import { Tandem } from './tandem.model';
+
+interface LearningLanguageProps {
+  id: string;
+  language: Language;
+  level: ProficiencyLevel;
+  profile?: Profile;
+  createdAt?: Date;
+}
 
 export class LearningLanguage {
   readonly id: string;
@@ -15,17 +24,24 @@ export class LearningLanguage {
     level,
     profile,
     createdAt,
-  }: {
-    id: string;
-    language: Language;
-    level: ProficiencyLevel;
-    profile?: Profile;
-    createdAt?: Date;
-  }) {
+  }: LearningLanguageProps) {
     this.id = id;
     this.language = language;
     this.level = level;
     this.profile = profile;
     this.createdAt = createdAt;
+  }
+}
+
+interface LearningLanguageWithTandemProps extends LearningLanguageProps {
+  tandem?: Tandem;
+}
+
+export class LearningLanguageWithTandem extends LearningLanguage {
+  readonly tandem?: Tandem;
+
+  constructor(props: LearningLanguageWithTandemProps) {
+    super(props);
+    this.tandem = props.tandem;
   }
 }

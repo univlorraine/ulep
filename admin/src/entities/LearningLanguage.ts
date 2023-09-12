@@ -1,4 +1,5 @@
 import { Profile } from './Profile';
+import { TandemSummary } from './Tandem';
 
 export type LearningLanguage = {
     id: string;
@@ -7,6 +8,7 @@ export type LearningLanguage = {
     name: string;
     createdAt: Date;
     profile?: Profile;
+    tandem?: TandemSummary;
 };
 
 export type LearningLanguageTandem = {
@@ -15,8 +17,3 @@ export type LearningLanguageTandem = {
     learningLanguage: LearningLanguage;
     partner: Profile;
 };
-
-export enum TandemStatus {
-    DRAFT = 'DRAFT',
-    ACTIVE = 'ACTIVE',
-}

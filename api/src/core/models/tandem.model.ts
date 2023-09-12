@@ -11,23 +11,25 @@ export enum TandemStatus {
 
 export type CreateTandemProps = {
   id: string;
-  learningLanguages: LearningLanguage[];
+  learningLanguages?: LearningLanguage[];
   status: TandemStatus;
 };
 
 export class Tandem {
   readonly id: string;
 
-  readonly learningLanguages: LearningLanguage[];
+  readonly learningLanguages?: LearningLanguage[];
 
   readonly status: TandemStatus;
 
   constructor(props: CreateTandemProps) {
     this.id = props.id;
-    this.learningLanguages = [...props.learningLanguages];
     this.status = props.status;
-
-    this.assertNoErrors();
+    
+    if (props.learningLanguages) {
+      this.learningLanguages = [...props.learningLanguages];
+      this.assertNoErrors();
+    }
   }
 
   static create(props: CreateTandemProps): Tandem {

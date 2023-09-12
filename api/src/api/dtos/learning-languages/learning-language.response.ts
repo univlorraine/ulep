@@ -1,8 +1,9 @@
 import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
 import { Expose } from 'class-transformer';
 import { ProfileResponse } from '../profiles';
-import { LearningLanguage } from 'src/core/models';
+import { LearningLanguage, LearningLanguageWithTandem } from 'src/core/models';
 import { Optional } from '@nestjs/common';
+import { TandemResponse } from '../tandems';
 
 export class LearningLanguageResponse {
   @ApiProperty({ type: 'string', format: 'uuid' })
@@ -55,6 +56,30 @@ export class LearningLanguageResponse {
       code: learningLanguage.language.code,
       level: learningLanguage.level,
       createdAt: learningLanguage.createdAt,
+    });
+  }
+}
+
+export class LearningLanguageWithTandemResponse extends LearningLanguageResponse {
+  @ApiProperty({ type: TandemResponse })
+  @Expose({ groups: ['read'] })
+  @Optional()
+  tandem?: TandemResponse;
+
+  constructor(partial: Partial<LearningLanguageWithTandemResponse>) {
+    super(partial);
+    Object.assign(this, partial);
+  }
+
+  static fromDomain(
+    learningLanguage: LearningLanguageWithTandem,
+    includeProfile = false,
+  ): LearningLanguageWithTandemResponse {
+    return new LearningLanguageWithTandemResponse({
+      ...LearningLanguageResponse.fromDomain(learningLanguage, includeProfile),
+      tandem:
+        learningLanguage.tandem &&
+        TandemResponse.fromDomain(learningLanguage.tandem),
     });
   }
 }
