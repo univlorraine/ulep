@@ -1,0 +1,10 @@
+.color-bar {
+    height: 7px;
+}
+
+
+.main-bar {
+    background-color: black;
+    height: 7px;
+    width: 100%;
+}

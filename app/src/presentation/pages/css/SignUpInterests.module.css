@@ -1,0 +1,32 @@
+.category-title {
+    color: #000;
+    font-family: 'Roboto';
+    font-size: 20px;
+    font-style: normal;
+    font-weight: 700;
+    line-height: 25px;
+}
+
+.interests-container {
+    display: flex;
+    flex-wrap: wrap;
+    margin-bottom: 30px;
+}
+
+.tags {
+    background: none;
+    border: 1px solid black;
+    border-radius: 20px;
+    color: black;
+    margin: 5px;
+    padding: 4px 16px;
+}
+
+.tags-text {
+    color: #000;
+    font-family: 'Maven Pro', sans-serif;
+    font-size: 16px;
+    font-style: normal;
+    font-weight: 500;
+    line-height: 20px;
+}

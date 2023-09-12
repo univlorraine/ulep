@@ -1,0 +1,84 @@
+{
+  "realm": "etandem",
+  "enabled": true,
+  "registrationAllowed": true,
+  "registrationEmailAsUsername": true,
+  "accessTokenLifespan": 600,
+  "accessCodeLifespan": 600,
+  "requiredCredentials": [
+    "password"
+  ],
+  "smtpServer": {
+    "starttls": "false",
+    "port": "1025",
+    "host": "mailer",
+    "from": "contact@ulep.io",
+    "ssl": "false"
+  },
+  "clients": [
+    {
+      "clientId": "api",
+      "name": "API",
+      "clientAuthenticatorType": "client-secret",
+      "secret": "{{ .Values.api.env.keycloakClientSecret }}",
+      "bearerOnly": false,
+      "standardFlowEnabled": false,
+      "directAccessGrantsEnabled": true
+    },
+    {
+      "clientId": "react-admin",
+      "name": "admin",
+      "clientAuthenticatorType": "client-secret",
+      "secret": "{{ .Values.admin.env.keycloakClientSecret }}",
+      "protocol": "openid-connect",
+      "standardFlowEnabled": true,
+      "directAccessGrantsEnabled": true,
+      "redirectUris": [
+        "https://{{ .Values.api.env.adminUrl }}.{{ .Values.domain }}/auth-callback"
+      ],
+      "webOrigins": ["*"],
+      "adminUrl": "https://{{ .Values.api.env.adminUrl }}.{{ .Values.domain }}"
+    }
+  ],
+  "groups": [{
+    "id": "02736a0f-4679-4329-a877-2ce87aaea569",
+    "name": "Administrators",
+    "path": "/Administrators",
+    "attributes": {},
+    "realmRoles": ["admin"],
+    "clientRoles": {},
+    "subGroups": []
+  },
+  {
+    "id": "eba50e06-d584-4fc8-9d6b-908169202cea",
+    "name": "Managers",
+    "path": "/Managers",
+    "attributes": {},
+    "realmRoles": ["manager"],
+    "clientRoles": {},
+    "subGroups": []
+  }],
+  "roles": {
+    "realm": [
+      {
+        "id": "4451442a-a6cc-40cf-bf4a-4128cca5dcd5",
+        "name": "admin",
+        "description": "Group of users who can manage all parts of the application",
+        "composite": false,
+        "clientRole": false,
+        "containerId": "616eb353-7524-4a46-9cf3-44612cba6c90",
+        "attributes": {}
+      },
+      {
+        "id": "01a25df8-b1ef-42e6-8052-efccce028672",
+        "name": "manager",
+        "description": "Group of users who can manage all parts of their universities",
+        "composite": false,
+        "clientRole": false,
+        "containerId": "616eb353-7524-4a46-9cf3-44612cba6c90",
+        "attributes": {}
+      }
+    ]
+  }
+}
+  

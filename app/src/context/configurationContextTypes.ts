@@ -1,0 +1,45 @@
+import CameraAdapterInterface from '../adapter/interfaces/CameraAdapter.interface';
+import Configuration from '../domain/entities/Confirguration';
+import AskForAccountDeletionUsecaseInterface from '../domain/interfaces/AskForAccountDeletionUsecase.interface';
+import AskForLanguageUsecaseInterface from '../domain/interfaces/AskForLanguageUsecase.interface';
+import CreateProfileUsecaseInterface from '../domain/interfaces/CreateProfileUsecase.interface';
+import CreateReportUsecaseInterface from '../domain/interfaces/CreateReportUsecase.interface';
+import CreateUserUsecaseInterface from '../domain/interfaces/CreateUserUsecase.interface';
+import GetAllCountriesUsecaseInterface from '../domain/interfaces/GetAllCountriesUsecase.interface';
+import GetAllGoalsUsecaseInterface from '../domain/interfaces/GetAllGoalsUsecase.interface';
+import GetAllInterestCategoriessUsecase from '../domain/interfaces/GetAllInterestCategoriesUsecase.interface';
+import GetAllLanguagesUsecaseInterface from '../domain/interfaces/GetAllLanguagesUsecase.interface';
+import GetAllTandemsUsecaseInterface from '../domain/interfaces/GetAllTandemsUsecase.interface';
+import GetAllUniversitiesUsecaseInterface from '../domain/interfaces/GetAllUniversitiesUsecase.interface';
+import GetAllReportCategoriesUsecaseInterface from '../domain/interfaces/GetAlllReportCategoriesUsecase.interface';
+import GetProfileUsecaseInterface from '../domain/interfaces/GetProfileUsecase.interface';
+import GetQuizzByLevelUsecaseInterface from '../domain/interfaces/GetQuizzByLevelUsecase.interface';
+import GetUserUsecaseInterface from '../domain/interfaces/GetUserUsecase.interface';
+import LoginUsecaseInterface from '../domain/interfaces/LoginUsecase.interface';
+import ResetPasswordUsecaseInterface from '../domain/interfaces/ResetPasswordUsecase.interface';
+import UpdateAvatarUsecaseInterface from '../domain/interfaces/UpdateAvatarUsecase.interface';
+import UpdateNotificationPermissionUsecaseInterface from '../domain/interfaces/UpdateNotificationPermissionUsecase.interface';
+
+export interface ConfigContextValueType {
+    askForAccountDeletion: AskForAccountDeletionUsecaseInterface;
+    askForLanguage: AskForLanguageUsecaseInterface;
+    cameraAdapter: CameraAdapterInterface;
+    configuration: Configuration;
+    createProfile: CreateProfileUsecaseInterface;
+    createReport: CreateReportUsecaseInterface;
+    createUser: CreateUserUsecaseInterface;
+    getAllCountries: GetAllCountriesUsecaseInterface;
+    getAllGoals: GetAllGoalsUsecaseInterface;
+    getAllInterestCategories: GetAllInterestCategoriessUsecase;
+    getAllLanguages: GetAllLanguagesUsecaseInterface;
+    getAllReportCategories: GetAllReportCategoriesUsecaseInterface;
+    getAllTandems: GetAllTandemsUsecaseInterface;
+    getAllUniversities: GetAllUniversitiesUsecaseInterface;
+    getProfile: GetProfileUsecaseInterface;
+    getQuizzByLevel: GetQuizzByLevelUsecaseInterface;
+    getUser: GetUserUsecaseInterface;
+    login: LoginUsecaseInterface;
+    resetPassword: ResetPasswordUsecaseInterface;
+    updateAvatar: UpdateAvatarUsecaseInterface;
+    updateNotificationPermission: UpdateNotificationPermissionUsecaseInterface;
+}

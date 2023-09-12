@@ -23,7 +23,13 @@
       ],
       "@app/keycloak/*": [
         "libs/keycloak/src/*"
-      ]
+      ],
+      "@app/common": [
+        "libs/common/src"
+      ],
+      "@app/common/*": [
+        "libs/common/src/*"
+      ],
     }
   }
 }

@@ -1,0 +1,32 @@
+.container {
+    align-items: center;
+    border: 2px solid #f60c36;
+    border-radius: 5px;
+    background-color: #ffeef1;
+    display: flex;
+    flex-direction: row;
+    margin: 20px 0px;
+}
+
+.description {
+    color: #333;
+    font-family: 'Maven Pro', sans-serif;
+    font-size: 16px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: 20px;
+}
+
+.image {
+    padding: 0px 20px;
+}
+
+.title {
+    color: #f60c36;
+    font-family: 'Maven Pro', sans-serif;
+    font-size: 16px;
+    font-style: normal;
+    font-weight: 500;
+    line-height: 20px;
+    margin: 14px 0px;
+}

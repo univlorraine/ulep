@@ -1,0 +1,122 @@
+import * as Prisma from '@prisma/client';
+import {
+  Language,
+  LanguageStatus,
+  LearningLanguage,
+  LearningType,
+  ProficiencyLevel,
+  Profile,
+} from 'src/core/models';
+import {
+  TextContentRelations,
+  TextContentSnapshot,
+  textContentMapper,
+} from './translation.mapper';
+import { UserRelations, UserSnapshot, userMapper } from './user.mapper';
+import { languageMapper } from './language.mapper';
+import { campusMapper } from './campus.mapper';
+
+export const ProfilesRelations = {
+  User: {
+    include: UserRelations,
+  },
+  Goals: {
+    include: { TextContent: TextContentRelations },
+  },
+  Interests: {
+    include: {
+      TextContent: TextContentRelations,
+      Category: { include: { TextContent: TextContentRelations } },
+    },
+  },
+  NativeLanguage: true,
+  MasteredLanguages: { include: { LanguageCode: true } },
+  LearningLanguages: {
+    include: {
+      LanguageCode: true,
+      Tandem: true,
+    },
+  },
+  Campus: true,
+};
+
+export type ProfileSnapshot = Prisma.Profiles & {
+  User: UserSnapshot;
+  Goals: (Prisma.LearningObjectives & {
+    TextContent: TextContentSnapshot;
+  })[];
+  Interests: (Prisma.Interests & {
+    TextContent: TextContentSnapshot;
+    Category: Prisma.InterestCategories & { TextContent: TextContentSnapshot };
+  })[];
+  NativeLanguage: Prisma.LanguageCodes;
+  LearningLanguages: (Prisma.LearningLanguages & {
+    LanguageCode: Prisma.LanguageCodes;
+  })[];
+  MasteredLanguages: (Prisma.MasteredLanguages & {
+    LanguageCode: Prisma.LanguageCodes;
+  })[];
+  Campus: Prisma.Places;
+};
+
+export const profileMapper = (instance: ProfileSnapshot): Profile => {
+  return new Profile({
+    id: instance.id,
+    user: userMapper(instance.User),
+    nativeLanguage: new Language({
+      id: instance.NativeLanguage.id,
+      code: instance.NativeLanguage.code,
+      name: instance.NativeLanguage.name,
+      mainUniversityStatus: instance.NativeLanguage
+        .mainUniversityStatus as LanguageStatus,
+      secondaryUniversityActive:
+        instance.NativeLanguage.secondaryUniversityActive,
+    }),
+    masteredLanguages: instance.MasteredLanguages.map(
+      (language) =>
+        new Language({
+          id: language.LanguageCode.id,
+          name: language.LanguageCode.name,
+          code: language.LanguageCode.code,
+          mainUniversityStatus: instance.NativeLanguage
+            .mainUniversityStatus as LanguageStatus,
+          secondaryUniversityActive:
+            instance.NativeLanguage.secondaryUniversityActive,
+        }),
+    ),
+    learningLanguages: instance.LearningLanguages.map(
+      (learningLanguage) =>
+        new LearningLanguage({
+          id: learningLanguage.id,
+          level: ProficiencyLevel[learningLanguage.level],
+          language: languageMapper(learningLanguage.LanguageCode),
+        }),
+    ),
+    learningType: LearningType[instance.learning_type],
+    meetingFrequency: instance.meeting_frequency,
+    sameAge: instance.same_age,
+    sameGender: instance.same_gender,
+    objectives: instance.Goals.map((objective) => ({
+      id: objective.id,
+      name: textContentMapper(objective.TextContent),
+    })),
+    interests: instance.Interests.map((interest) => ({
+      id: interest.id,
+      name: textContentMapper(interest.TextContent),
+      category: {
+        id: interest.Category.id,
+        name: textContentMapper(interest.Category.TextContent),
+      },
+    })),
+    biography: {
+      superpower: instance.bio['superpower'],
+      favoritePlace: instance.bio['favoritePlace'],
+      experience: instance.bio['experience'],
+      anecdote: instance.bio['anecdote'],
+    },
+    campus: instance.Campus && campusMapper(instance.Campus),
+    certificateOption: instance.certificate_option,
+    specificProgram: instance.specific_program,
+    createdAt: instance.created_at,
+  });
+};

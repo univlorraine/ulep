@@ -1,0 +1,25 @@
+import { HttpResponse } from '../../adapter/BaseHttpAdapter';
+import { HttpAdapterInterface } from '../../adapter/DomainHttpAdapter';
+import QuestionCommand, { quizzCommandToDomain } from '../../command/QuestionCommand';
+import Question from '../entities/Question';
+import GetQuizzByLevelUsecaseInterface from '../interfaces/GetQuizzByLevelUsecase.interface';
+
+class GetQuizzByLevelUsecase implements GetQuizzByLevelUsecaseInterface {
+    constructor(private readonly domainHttpAdapter: HttpAdapterInterface) {}
+    async execute(level: CEFR): Promise<Question[] | Error> {
+        try {
+            const httpResponse: HttpResponse<QuestionCommand[]> = await this.domainHttpAdapter.get(
+                `/proficiency/questions/level/${level}`
+            );
+
+            if (!httpResponse.parsedBody) {
+                return new Error('errors.global');
+            }
+            return quizzCommandToDomain(httpResponse.parsedBody);
+        } catch (error: any) {
+            return new Error('errors.global');
+        }
+    }
+}
+
+export default GetQuizzByLevelUsecase;

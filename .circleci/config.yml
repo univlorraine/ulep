@@ -1,0 +1,179 @@
+version: 2.1
+
+orbs:
+  node: circleci/node@5.1.0
+  docker: circleci/docker@1.6
+
+executors:
+  node-executor:
+    docker:
+      - image: cimg/node:18.16.1
+      - image: cimg/postgres:14.0
+        environment:
+          POSTGRES_USER: postgres
+
+commands:
+  pnpm-install-api:
+    steps:
+      - run:
+          name: Install pnpm package manager
+          command: |
+            cd api && npm i pnpm@8.6.9
+
+jobs:
+##### API #####
+  install-api:
+    executor: node-executor
+    working_directory: ~/api
+    steps:
+      - checkout
+      - pnpm-install-api
+  lint-api:
+    executor: node-executor
+    working_directory: ~/api
+    steps:
+      - checkout
+      - run:
+          name: Install Dependencies
+          command: |
+            cd api && pnpm install --no-frozen-lockfile
+      - run:
+          name: Lint code
+          command: cd api && pnpm lint
+  test-api:
+    executor: node-executor
+    working_directory: ~/api
+    steps:
+      - checkout
+      - run:
+          name: Install Dependencies
+          command: cd api && pnpm install --no-frozen-lockfile
+      - run:
+          name: Run tests
+          command: cd api && pnpm run test
+  build-docker-api:
+    executor: node-executor
+    working_directory: ~/api
+    steps:
+      - checkout
+      - setup_remote_docker:
+          version: 20.10.14
+      - run:
+          name: Install Dependencies
+          command: |
+            cd api && pnpm i --no-frozen-lockfile
+      - run:
+          name: Run build image
+          command: |
+            export DOCKER_BUILDKIT=1
+            cd api && docker build --platform=linux/amd64 --target=api_prod -t rg.fr-par.scw.cloud/ulep/api-prod:latest -t rg.fr-par.scw.cloud/ulep/api-prod:1.0.<< pipeline.number >> .
+            docker build --platform=linux/amd64 --target=api_init -t rg.fr-par.scw.cloud/ulep/api-init:latest -t rg.fr-par.scw.cloud/ulep/api-init:1.0.<< pipeline.number >> .
+      - run:
+          name: push docker image
+          command: |
+            echo "$DOCKER_PASS" | docker login rg.fr-par.scw.cloud/ulep -u nologin --password-stdin
+            docker push rg.fr-par.scw.cloud/ulep/api-prod:latest && docker push rg.fr-par.scw.cloud/ulep/api-prod:1.0.<< pipeline.number >>
+            docker push rg.fr-par.scw.cloud/ulep/api-init:latest && docker push rg.fr-par.scw.cloud/ulep/api-init:1.0.<< pipeline.number >>
+##### ADMIN #####
+  lint-admin:
+    executor: node-executor
+    working_directory: ~/api
+    steps:
+      - checkout
+      - run:
+          name: Install Dependencies
+          command: |
+            cd admin && pnpm i --no-frozen-lockfile
+      - run:
+          name: Lint code
+          command: cd admin && pnpm run lint
+  tsc-build-admin:
+    executor: node-executor
+    working_directory: ~/api
+    steps:
+      - checkout
+      - run:
+          name: Install Dependencies
+          command: cd admin && pnpm i --no-frozen-lockfile
+      - run:
+          name: Run build
+          command: cd admin && pnpm run build
+  build-docker-admin:
+    executor: node-executor
+    working_directory: ~/api
+    steps:
+      - checkout
+      - setup_remote_docker:
+          version: 20.10.14
+      - run:
+          name: Install Dependencies
+          command: |
+            cd admin && pnpm i --no-frozen-lockfile
+      - run:
+          name: Run build image
+          command: |
+            export DOCKER_BUILDKIT=1
+            cd admin && docker build --platform=linux/amd64 --target=admin_prod -t rg.fr-par.scw.cloud/ulep/admin-prod:latest -t rg.fr-par.scw.cloud/ulep/admin-prod:1.0.<< pipeline.number >> .
+      - run:
+          name: push docker image
+          command: |
+            echo "$DOCKER_PASS" | docker login rg.fr-par.scw.cloud/ulep -u nologin --password-stdin
+            docker push rg.fr-par.scw.cloud/ulep/admin-prod:latest && docker push rg.fr-par.scw.cloud/ulep/admin-prod:1.0.<< pipeline.number >>
+
+  build-docker-webapp:
+    executor: node-executor
+    working_directory: ~/api
+    steps:
+      - checkout
+      - setup_remote_docker:
+          version: 20.10.14
+      - run:
+          name: Run build image
+          command: |
+            cd app && docker build --platform=linux/amd64 -t rg.fr-par.scw.cloud/ulep/webapp:latest -t rg.fr-par.scw.cloud/ulep/webapp:1.0.<< pipeline.number >> .
+      - run:
+          name: push docker image
+          command: |
+            echo "$DOCKER_PASS" | docker login rg.fr-par.scw.cloud/ulep -u nologin --password-stdin
+            docker push rg.fr-par.scw.cloud/ulep/webapp:latest && docker push rg.fr-par.scw.cloud/ulep/webapp:1.0.<< pipeline.number >>
+workflows:
+  version: 2
+  check_api:
+    jobs:
+      - install-api
+      - lint-api:
+          requires:
+            - install-api
+      - test-api:
+          requires:
+            - lint-api
+      - build-docker-api:
+          requires:
+            - lint-api
+            - test-api
+          filters:
+            branches:
+              only:
+                - develop
+                - main
+  check_admin:
+    jobs:
+      - lint-admin
+      - tsc-build-admin
+      - build-docker-admin:
+          requires:
+            - tsc-build-admin
+            - lint-admin
+          filters:
+            branches:
+              only:
+                - develop
+                - main
+  build_webapp:
+    jobs:
+      - build-docker-webapp:
+          filters:
+            branches:
+              only:
+                - develop
+                - main

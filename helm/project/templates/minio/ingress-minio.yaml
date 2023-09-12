@@ -1,0 +1,48 @@
+{{- if .Values.minio.ingress.enabled -}}
+{{- if semverCompare ">=1.19-0" .Capabilities.KubeVersion.GitVersion -}}
+apiVersion: networking.k8s.io/v1
+{{- else if semverCompare ">=1.14-0" .Capabilities.KubeVersion.GitVersion -}}
+apiVersion: networking.k8s.io/v1beta1
+{{- else -}}
+apiVersion: extensions/v1beta1
+{{- end }}
+kind: Ingress
+metadata:
+  name: "{{ .Values.name }}-{{ .Values.minio.name }}"
+  labels:
+    {{- include "etandem.labels" . | nindent 4 }}
+  {{- with .Values.minio.ingress.annotations }}
+  annotations:
+    {{- toYaml . | nindent 4 }}
+  {{- end }}
+spec:
+  ingressClassName: traefik
+  {{- if .Values.minio.ingress.tls }}
+  tls:
+    {{- range .Values.minio.ingress.tls }}
+    - hosts:
+        {{- range .hosts }}        
+        {{ $fqdn := printf "%s.%s" . $.Values.domain -}}
+        - {{ $fqdn }}
+        {{- end }}
+      secretName: "{{ $.Values.name }}-tls"
+    {{- end }}
+  {{- end }}
+  rules:
+    {{- range .Values.minio.ingress.hosts }}
+    {{ $fqdn := printf "%s.%s" .host $.Values.domain -}}
+    {{- $svcPort := .port -}}
+    - host: {{ $fqdn }}
+      http:
+        paths:
+        {{- range .paths }}
+          - path: {{ . | quote}}
+            pathType: Prefix
+            backend:
+              service:
+                name: "{{ $.Values.name }}-{{ $.Values.minio.name }}"
+                port:
+                  number: {{ $svcPort }}
+          {{- end }}
+      {{- end }}
+{{- end }}

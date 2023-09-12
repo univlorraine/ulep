@@ -1,0 +1,87 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name:  "{{ include "etandem.fullname" . }}-{{ .Values.minio.name }}"
+  labels:
+    {{- include "etandem.labels" . | nindent 4 }}
+spec:
+  {{- if not .Values.minio.autoscaling.enabled }}
+  replicas: {{ .Values.minio.replicaCount }}
+  {{- end }}
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: "{{ include "etandem.name" . }}-{{ .Values.minio.name }}"
+      app.kubernetes.io/instance: "{{ .Release.Name }}"
+  template:
+    metadata:
+      {{- with .Values.podAnnotations }}
+      annotations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      labels:
+        app.kubernetes.io/name: "{{ include "etandem.name" . }}-{{ .Values.minio.name }}"
+        app.kubernetes.io/instance: "{{ .Release.Name }}"
+    spec:
+      {{- with .Values.imagePullSecrets }}
+      imagePullSecrets:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      serviceAccountName: {{ include "etandem.serviceAccountName" . }}
+      securityContext:
+        {{- toYaml .Values.podSecurityContext | nindent 8 }}
+      containers:
+        - name: {{ .Chart.Name }}
+          securityContext:
+            {{- toYaml .Values.securityContext | nindent 12 }}
+          image: "{{ .Values.minio.image.repository }}:{{ .Values.minio.image.tag }}"
+          imagePullPolicy: {{ .Values.minio.image.pullPolicy }}
+          args:
+            - server
+            - /data/minio/
+            - --console-address
+            - :9001
+          ports:
+            - name: direct
+              containerPort: 9000
+              protocol: TCP
+            - name: http
+              containerPort: 9001
+              protocol: TCP
+          livenessProbe:
+            httpGet:
+              path: /minio/health/live
+              port: http
+            initialDelaySeconds: 30
+          readinessProbe:
+            httpGet:
+              path: /minio/health/live
+              port: http
+            initialDelaySeconds: 30
+            periodSeconds: 60
+          resources:
+            {{- toYaml .Values.resources | nindent 12 }}
+          env:
+            - name: MINIO_ROOT_USER
+              value: "{{ .Values.minio.env.minioRootUser }}"
+          envFrom: 
+            - secretRef: 
+                name: "{{ include "etandem.fullname" . }}-secret-{{ .Values.minio.name }}"
+          volumeMounts:
+          - name: "{{ .Values.minio.name }}-data"
+            mountPath: /data
+      volumes:
+      - name: "{{ .Values.minio.name }}-data"
+        persistentVolumeClaim:
+          claimName:  "{{ include "etandem.name" . }}-pvc-{{ .Values.minio.name }}"
+      {{- with .Values.nodeSelector }}
+      nodeSelector:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.affinity }}
+      affinity:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.tolerations }}
+      tolerations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}

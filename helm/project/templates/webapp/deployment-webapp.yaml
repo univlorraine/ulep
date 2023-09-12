@@ -1,0 +1,87 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name:  "{{ include "etandem.fullname" . }}-{{ .Values.webapp.name }}"
+  labels:
+    {{- include "etandem.labels" . | nindent 4 }}
+spec:
+  {{- if not .Values.webapp.autoscaling.enabled }}
+  replicas: {{ .Values.webapp.replicaCount }}
+  {{- end }}
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: "{{ include "etandem.name" . }}-{{ .Values.webapp.name }}"
+      app.kubernetes.io/instance: "{{ .Release.Name }}"
+  template:
+    metadata:
+      {{- with .Values.podAnnotations }}
+      annotations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      labels:
+        app.kubernetes.io/name: "{{ include "etandem.name" . }}-{{ .Values.webapp.name }}"
+        app.kubernetes.io/instance: "{{ .Release.Name }}"
+    spec:
+      {{- with .Values.imagePullSecrets }}
+      imagePullSecrets:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      serviceAccountName: {{ include "etandem.serviceAccountName" . }}
+      securityContext:
+        {{- toYaml .Values.podSecurityContext | nindent 8 }}
+      initContainers:
+      - name: build-webapp
+        image: "{{ .Values.webapp.initImage.repository }}:{{ .Values.webapp.initImage.tag | default .Chart.AppVersion }}"
+        imagePullPolicy: {{ .Values.webapp.initImage.pullPolicy }}
+        command: ["/bin/sh"]
+        args: ["-c", "cd /app && pnpm run build:prod && cp -r /app/dist/* /usr/share/nginx/html/"]
+        env: 
+          - name: VITE_API_URL
+            value: "https://{{ .Values.apiUrl }}.{{ .Values.domain }}"
+        volumeMounts:
+          - name: "{{ .Values.webapp.name }}-build"
+            mountPath: /usr/share/nginx/html/
+      containers:
+        - name: {{ .Chart.Name }}
+          securityContext:
+            {{- toYaml .Values.securityContext | nindent 12 }}
+          image: "{{ .Values.webapp.image.repository }}:{{ .Values.webapp.image.tag | default .Chart.AppVersion }}"
+          imagePullPolicy: {{ .Values.webapp.image.pullPolicy }}
+          ports:
+            - name: http
+              containerPort: 80
+              protocol: TCP
+          # livenessProbe:
+          #   httpGet:
+          #     path: /
+          #     port: http
+          # readinessProbe:
+          #   httpGet:
+          #     path: /
+          #     port: http
+          resources:
+            {{- toYaml .Values.resources | nindent 12 }}
+          volumeMounts:
+          - name: "{{ .Values.webapp.name }}-build"
+            mountPath: /usr/share/nginx/html/
+          - name: "{{ .Values.webapp.name }}-nginx-conf"
+            mountPath: /etc/nginx/conf.d/
+      volumes:
+      - name: "{{ .Values.webapp.name }}-build"
+        persistentVolumeClaim:
+          claimName:  "{{ .Values.name }}-pvc-{{ .Values.webapp.name }}"
+      - name: "{{ .Values.webapp.name }}-nginx-conf"
+        configMap:
+          name: "{{ .Values.name }}-nginx-conf-{{ .Values.webapp.name }}"
+      {{- with .Values.nodeSelector }}
+      nodeSelector:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.affinity }}
+      affinity:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.tolerations }}
+      tolerations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}

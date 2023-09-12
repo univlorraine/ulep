@@ -1,0 +1,57 @@
+.bubble {
+    position: absolute;
+    top: 0px;
+    left: -30px;
+}
+
+.button-container {
+    margin-bottom: 20px;
+    width: 100%;
+}
+
+.container {
+    align-items: center;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    height: 100%;
+    width: 100%;
+}
+
+.description {
+    color: #000;
+    font-family: 'Maven Pro';
+    font-size: 16px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: 20px;
+    margin-bottom: 10px;
+    text-align: center;
+    text-overflow: ellipsis;
+}
+
+.description-title {
+    color: #000;
+    font-family: 'Roboto';
+    font-size: 27px;
+    font-style: normal;
+    font-weight: 700;
+    line-height: 32px;
+    letter-spacing: -0.81px;
+    text-decoration-line: underline;
+    text-transform: uppercase;
+    text-align: center;
+}
+
+.image {
+    border-radius: 50%;
+    height: 225px;
+    width: 225px;
+    margin: 16px 0px;
+    object-fit: cover;
+}
+
+.image-container {
+    position: relative;
+    margin: 30px 0px;
+}

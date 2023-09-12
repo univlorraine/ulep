@@ -1,0 +1,40 @@
+# Node dependencies
+node_modules/
+
+# Log files
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Coverage directory
+coverage
+
+# Compiled binary addons (http://nodejs.org/api/addons.html)
+build/Release
+
+# TypeScript v1 declaration files
+typings/
+
+# Optional eslint cache
+.eslintcache
+
+# dotenv environment variable files
+.env
+
+# Ignoring IDE specific files
+.idea
+*.iml
+.vscode
+.DS_Store
+
+# Ionic/Angular specific
+www/
+platforms/
+plugins/
+
+# Ionic/Capacitor specific
+dist/
+
+# Cypress
+cypress/videos
+cypress/screenshots

@@ -1,0 +1,46 @@
+.bottom-container {
+    margin-top: auto;
+    margin-bottom: 40px;
+    display: flex;
+    flex-direction: row;
+}
+
+.bottom-container > * {
+    margin: 0px 10px;
+}
+
+.content {
+    align-items: center;
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+}
+
+.description {
+    color: #000;
+    font-family: "Maven Pro", sans-serif;
+    font-size: 16px;
+    font-style: normal;
+    font-weight: 500;
+    line-height: 20px;
+}
+
+.goal-container {
+    align-items: center;
+    border-radius: 5px;
+    cursor: pointer;
+    display: flex;
+    height: 80px;
+    margin-bottom: 10px;
+    width: 100%;
+}
+
+.goals-container {
+    width: 100%;
+}
+
+.image {
+    height: 50px;
+    margin: 0px 16px;
+    width: 50px;
+}

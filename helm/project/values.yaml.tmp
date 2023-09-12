@@ -1,0 +1,292 @@
+# Default values for etandem.
+# This is a YAML-formatted file.
+# Declare variables to be passed into your templates.
+
+############## GLOBAL ##############
+
+name: "ulep" # REQUIRED
+domain: exemple.com # REQUIRED 
+issuerName: letsencrypt # REQUIRED 
+global:
+  postgresql: 
+    auth:
+      username: postgres # FIXE
+      database: ulep # FIXE
+      password: "" # REQUIRED
+      postgresPassword: "" # REQUIRED
+
+postgresql:
+  primary:
+    initdb: 
+      scriptsConfigMap: ulep-init-database # REQUIRED
+apiUrl: &apiUrl api
+adminUrl: &adminUrl admin
+minioUrl: &minioUrl minio
+minioApiUrl: &minioApiUrl minio-api
+keycloakUrl: &keycloakUrl auth
+webappUrl: &webappUrl webapp
+############## API ##############
+api:
+  name: api # REQUIRED
+  replicaCount: 1 # OPTIONNEL
+
+  image:
+    repository: "rg.fr-par.scw.cloud/ulep/api-prod" # REQUIRED
+    tag: "latest" # REQUIRED
+    pullPolicy: Always # OPTIONNEL
+  initImage:
+    repository: rg.fr-par.scw.cloud/ulep/api-init # REQUIRED
+    tag: 'v1'  # REQUIRED
+    pullPolicy: IfNotPresent # OPTIONNEL
+
+  env:
+    keycloakRealm: etandem # FIXE
+    keycloakAdmin: admin # REQUIRED
+    keycloakAdminPassword: &keycloakAdminPassword AZE123aze # REQUIRED
+    keycloakClientId: api # FIXE
+    keycloakClientSecret: &keycloakClientSecret "" # REQUIRED 
+    minioAccessKey: &minioAccessKey minio # FIXE
+    minioSecretKey: &minioSecretKey AZE123aze # REQUIRED
+
+  autoscaling:
+    enabled: false
+    minReplicas: 1
+    maxReplicas: 100
+    targetCPUUtilizationPercentage: 80
+    # targetMemoryUtilizationPercentage: 80
+  service:
+    type: ClusterIP
+    port: 80
+
+  ingress:
+    enabled: true
+    className: traefik
+    annotations: 
+      kubernetes.io/ingress.class: "traefik"
+      cert-manager.io/cluster-issuer: "letsencrypt"
+      kubernetes.io/tls-acme: "true"
+    hosts:
+      - host: *apiUrl
+        paths: [/]
+    tls:
+      - hosts:
+          - *apiUrl
+############## API ##############
+
+############## AUTH ##############
+auth:
+  name: auth # REQUIRED
+  replicaCount: 1
+
+  image:
+    repository: "quay.io/keycloak/keycloak" # REQUIRED
+    tag: "21.1" # REQUIRED
+    pullPolicy: IfNotPresent
+
+  env:
+    keycloakAdmin: admin # FIXE
+    keycloakAdminPassword: *keycloakAdminPassword # REQUIRED
+    kcDB: postgres # FIXE
+    kcDBSchema: keycloak # FIXE
+    proxyAddressForwarding: true 
+
+  autoscaling:
+    enabled: false
+    minReplicas: 1
+    maxReplicas: 100
+    targetCPUUtilizationPercentage: 80
+    # targetMemoryUtilizationPercentage: 80
+  service:
+    type: ClusterIP
+    port: 80
+
+  ingress:
+    enabled: true
+    className: traefik
+    annotations: 
+      kubernetes.io/ingress.class: "traefik"
+      cert-manager.io/cluster-issuer: "letsencrypt"
+      kubernetes.io/tls-acme: "true"
+    hosts:
+      - host: *keycloakUrl
+        paths: [/]
+    tls: 
+      - hosts:
+          - *keycloakUrl
+############## AUTH ##############
+
+############## MINIO ##############
+minio:
+  name: minio # FIXE
+  replicaCount: 1
+
+  image:
+    repository: "minio/minio" # REQUIRED
+    tag: "RELEASE.2023-06-02T23-17-26Z.fips" # REQUIRED
+    pullPolicy: IfNotPresent
+
+  env:
+    minioRootUser: *minioAccessKey # FIXE
+    minioRootPassword: *minioSecretKey # REQUIRED
+
+  pv:
+    storage: 40Gi
+    storageClassName: scw-bssd
+
+  autoscaling:
+    enabled: false
+    minReplicas: 1
+    maxReplicas: 100
+    targetCPUUtilizationPercentage: 80
+    # targetMemoryUtilizationPercentage: 80
+  service:
+    type: ClusterIP
+    port: &svcPort 80
+
+  ingress:
+    enabled: true
+    className: traefik
+    annotations:
+      kubernetes.io/ingress.class: "traefik"
+      cert-manager.io/cluster-issuer: "letsencrypt"
+      kubernetes.io/tls-acme: "true"
+
+    hosts:
+      - host: *minioUrl
+        paths: [/]
+        port: *svcPort
+      - host: *minioApiUrl
+        paths: [/]
+        port: 9000
+    tls: 
+      - hosts:
+          - *minioUrl
+      - hosts:
+          - *minioApiUrl
+############## MINIO ##############
+
+############## ADMIN ##############
+admin:
+  name: admin # REQUIRED
+  replicaCount: 1
+
+  image:
+    repository: "rg.fr-par.scw.cloud/ulep/admin-prod" # REQUIRED
+    tag: "latest" # REQUIRED
+    pullPolicy: Always
+
+  env: 
+    keycloakRealm: etandem # FIXE
+    keycloakClientId: react-admin # FIXE
+    keycloakClientSecret: *keycloakClientSecret # REQUIRED
+
+  autoscaling:
+    enabled: false
+    minReplicas: 1
+    maxReplicas: 100
+    targetCPUUtilizationPercentage: 80
+    # targetMemoryUtilizationPercentage: 80
+  service:
+    type: ClusterIP
+    port: 80
+
+  ingress:
+    enabled: true
+    className: traefik
+    annotations:
+      kubernetes.io/ingress.class: "traefik"
+      cert-manager.io/cluster-issuer: "letsencrypt"
+      kubernetes.io/tls-acme: "true"
+
+    hosts:
+      - host: *adminUrl
+        paths: [/]
+    tls: 
+      - hosts:
+          - *adminUrl
+############## ADMIN ##############
+
+
+############## WEBAPP ##############
+webapp:
+  name: "webapp"
+  replicaCount: 1
+
+  image:
+    repository: nginx # REQUIRED
+    tag: '1.25.2-alpine'  # REQUIRED
+    pullPolicy: IfNotPresent # OPTIONNEL
+  initImage:
+    repository: "rg.fr-par.scw.cloud/ulep/webapp" # REQUIRED
+    tag: "latest" # REQUIRED
+    pullPolicy: IfNotPresent # OPTIONNEL
+
+  env: {}
+
+  pv:
+    storage: 4Gi
+    storageClassName: scw-bssd
+
+  autoscaling:
+    enabled: false
+    minReplicas: 1
+    maxReplicas: 100
+    targetCPUUtilizationPercentage: 80
+    # targetMemoryUtilizationPercentage: 80
+  service:
+    type: ClusterIP
+    port: 80
+
+  ingress:
+    enabled: true
+    className: traefik
+    annotations:
+      kubernetes.io/ingress.class: "traefik"
+      cert-manager.io/cluster-issuer: "letsencrypt"
+      kubernetes.io/tls-acme: "true"
+    hosts:
+      - host: *webappUrl
+        paths: [/]
+    tls: 
+      - hosts:
+          - *webappUrl
+############## WEBAPP ##############
+
+############## INIT SPEC ##############
+
+serviceAccount:
+  # Specifies whether a service account should be created
+  create: true
+  # Annotations to add to the service account
+  annotations: {}
+  # The name of the service account to use.
+  # If not set and create is true, a name is generated using the fullname template
+  name: ""
+
+imagePullSecrets: 
+  - name: "registrypullsecret" # FIXE
+
+nameOverride: ""
+fullnameOverride: ""
+
+podAnnotations: {}
+
+podSecurityContext: {}
+  # fsGroup: 2000
+
+securityContext: {}
+  # capabilities:
+  #   drop:
+  #   - ALL
+  # readOnlyRootFilesystem: true
+  # runAsNonRoot: true
+  # runAsUser: 1000
+
+
+resources: {}
+
+nodeSelector: {}
+
+tolerations: []
+
+affinity: {}

@@ -4,39 +4,59 @@ services:
   api:
     build:
       context: ./api
-      target: prod
+      target: api_prod
     depends_on:
       - database
     restart: unless-stopped
     environment:
-      DATABASE_URL: postgresql://${POSTGRES_USER:-postgres}:${POSTGRES_PASSWORD:-!ChangeMe!}@database:5432/${POSTGRES_DB:-postgres}?schema=public
+      ADMIN_URL: ${ADMIN_URL:-http://localhost:3001}
+      DATABASE_URL: postgresql://${POSTGRES_USER:-postgres}:${POSTGRES_PASSWORD:-!ChangeMe!}@database:5432/${POSTGRES_DB:-ulep}?schema=public
       KEYCLOAK_BASE_URL: ${KEYCLOAK_BASE_URL:-http://auth:8080}
       KEYCLOAK_REALM: ${KEYCLOAK_REALM:-etandem}
       KEYCLOAK_ADMIN: ${KEYCLOAK_ADMIN:-admin}
       KEYCLOAK_ADMIN_PASSWORD: ${KEYCLOAK_ADMIN_PASSWORD:-!ChangeMe!}
       KEYCLOAK_CLIENT_ID: ${KEYCLOAK_CLIENT_ID:-api}
       KEYCLOAK_CLIENT_SECRET: ${KEYCLOAK_CLIENT_SECRET:-bN49BuApmmtAODeOWOG8iKOOuJdN3KE6}
-      MINIO_URL: ${MINIO_URL:-http://minio:9000}
+      MINIO_PORT: 9000
+      MINIO_USE_SSL: 'false'
       MINIO_ACCESS_KEY: ${MINIO_USER:-minio}
       MINIO_SECRET_KEY: ${MINIO_PASSWORD:-!ChangeMe!}
-      
+      MINIO_PUBLIC_URL: ${MINIO_PUBLIC_URL:-http://localhost:9000}
+
+  admin:
+    build:
+      context: ./admin
+      target: admin_prod
+    depends_on:
+      - api
+    environment:
+      REACT_APP_API_URL: ${REACT_APP_API_URL:-http://localhost:3000}
+      REACT_APP_KEYCLOAK_URL: ${REACT_APP_KEYCLOAK_URL:-http://localhost:8080}
+      REACT_APP_KEYCLOAK_REALM: ${REACT_APP_KEYCLOAK_REALM:-etandem}
+      REACT_APP_KEYCLOAK_CLIENT_ID: ${REACT_APP_KEYCLOAK_CLIENT_ID:-react-admin}
+      REACT_APP_KEYCLOAK_CLIENT_SECRET: ${REACT_APP_KEYCLOAK_CLIENT_SECRET:-uKBywX2HlxfvKgxZoKZrbiBSx49CST6W}
+  
   auth:
-    image: quay.io/keycloak/keycloak:latest
+    image: quay.io/keycloak/keycloak:21.1.2
     depends_on:
         - database
+    volumes:
+      - ./docker/keycloak/providers:/opt/keycloak/providers
+      - ./docker/keycloak/realms:/opt/keycloak/data/import
+    command: start --import-realm
     environment:
       KEYCLOAK_ADMIN: ${KEYCLOAK_USER:-admin}
       KEYCLOAK_ADMIN_PASSWORD: ${KEYCLOAK_PASSWORD:-!ChangeMe!}
       KC_DB: postgres
       KC_DB_USERNAME: ${POSTGRES_USER:-postgres}
       KC_DB_PASSWORD: ${POSTGRES_PASSWORD:-!ChangeMe!}
-      KC_DB_URL: jdbc:postgresql://database:5432/${POSTGRES_DB:-postgres}
+      KC_DB_URL: jdbc:postgresql://database:5432/${POSTGRES_DB:-ulep}
       KC_DB_SCHEMA: keycloak
-    
+
   database:
     image: postgres:${POSTGRES_VERSION:-14}-alpine
     environment:
-      POSTGRES_DB: ${POSTGRES_DB:-postgres}
+      POSTGRES_DB: ${POSTGRES_DB:-ulep}
       POSTGRES_USER: ${POSTGRES_USER:-postgres}
       # You should definitely change the password in production
       POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-!ChangeMe!}
@@ -68,6 +88,6 @@ services:
   #     POSTGRES_HOST: database
   #     POSTGRES_PORT: 5432
   #     POSTGRES_DATABASE: ${WEBLATE_DB:-weblate} # ? TODO use custom schema
-    
+
 volumes:
   db_data:

@@ -1,0 +1,49 @@
+.app-name {
+    color: #000;
+    font-family: 'Poppins';
+    font-size: 31.463px;
+    font-style: normal;
+    font-weight: 900;
+    line-height: 28.727px;
+}
+
+.avatar {
+    border-radius: 50%;
+    height: 60px;
+    object-fit: cover;
+    width: 60px;
+}
+
+.avatar-container {
+    align-items: center;
+    background: none;
+    display: flex;
+    flex-direction: row;
+}
+
+.header-container {
+    align-items: center;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    margin: 0px 40px;
+    padding: 16px 0px;
+}
+
+.logo {
+    height: 54.99px;
+    width: 158.763px;
+}
+
+.logo-container {
+    align-items: center;
+    display: flex;
+    flex-direction: row;
+}
+
+.header-separator {
+    background-color: black;
+    height: 32.831px;
+    margin: 0px 16px;
+    width: 1.368px;
+}

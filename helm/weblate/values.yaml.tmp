@@ -1,0 +1,111 @@
+# Default values for etandem.
+# This is a YAML-formatted file.
+# Declare variables to be passed into your templates.
+
+############## GLOBAL ##############
+
+name: "ulep-weblate" # REQUIRED
+domain: "exemple.com" # REQUIRED
+issuerName: letsencrypt
+global:
+  postgresql: 
+    auth:
+      username: weblate # FIXE
+      database: weblate # FIXE
+      password:  # REQUIRED
+  redis: 
+    password:  # REQUIRED
+############## WEBLATE ##############
+weblate:
+  name: "weblate" # FIXE
+  replicaCount: 1
+
+  image:
+    repository: "weblate/weblate" # FIXE
+    tag: "4.18" # REQUIRED
+    pullPolicy: IfNotPresent
+
+  env:
+    site: weblate # FIXE
+    serverEmail: "" # REQUIRED
+    defaultFromEmail: "" # REQUIRED
+    emailHost: "" # REQUIRED
+    adminEmail: "" # REQUIRED
+    emailHostUser: "" # REQUIRED
+    emailHostPassword: "" # REQUIRED
+    emailPort: 587 # REQUIRED
+    allowedHost: '*' # OPTIONNEL
+    adminPassword: "" # REQUIRED
+  
+  pv:
+    storage: 5Gi # 5Gi recommandé
+    volumeMode: Filesystem
+    storageClassName: scw-bssd
+
+  autoscaling:
+    enabled: false
+    minReplicas: 1
+    maxReplicas: 100
+    targetCPUUtilizationPercentage: 80
+    # targetMemoryUtilizationPercentage: 80
+  service:
+    type: ClusterIP
+    port: 80
+
+  # FIXE
+  resources: 
+    limits:
+      cpu: "3" 
+      memory: 4000Mi
+    requests:
+      cpu: "2"
+      memory: 3000Mi
+
+  # FIXE
+  ingress:
+    enabled: true
+    className: traefik
+    annotations:
+      kubernetes.io/ingress.class: traefik
+      kubernetes.io/tls-acme: "true"
+      cert-manager.io/issuer: "letsencrypt"
+    hosts:
+      - host: weblate
+        paths: [/]
+    tls: 
+      - hosts:
+          - weblate
+############## WEBLATE ##############
+
+############## INIT SPEC ##############
+
+serviceAccount:
+  # Specifies whether a service account should be created
+  create: true
+  # Annotations to add to the service account
+  annotations: {}
+  # The name of the service account to use.
+  # If not set and create is true, a name is generated using the fullname template
+  name: ""
+
+imagePullSecrets: []
+nameOverride: ""
+fullnameOverride: ""
+
+podAnnotations: {}
+
+podSecurityContext: {}
+  # fsGroup: 2000
+
+securityContext: {}
+
+resources: {}
+
+nodeSelector: {}
+
+tolerations: 
+  - key: "node.kubernetes.io/memory-pressure"
+    operator: "Exists"
+    effect: "NoSchedule"
+
+affinity: {}

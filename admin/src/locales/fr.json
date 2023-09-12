@@ -1,0 +1,326 @@
+{
+    "campus": {
+        "create": {
+            "title": "Création d'un campus"
+        },
+        "label": "Campus",
+        "name": "Nom des campus de l'université principale",
+        "update": {
+            "error": "Une erreur est survenue pendant la mise à jour d'un campus",
+            "name": "Nom du campus",
+            "title": "Mise à jour d'un campus"
+        }
+    },
+    "count_suggested_languages": {
+        "label": "Total langues demandées",
+        "total": "Total"
+    },
+    "countries": {
+        "code": "Code du pays",
+        "label": "Pays",
+        "name": "Nom du pays"
+    },
+    "global": {
+        "active": "Actif",
+        "age": "Age",
+        "banned": "Bannis",
+        "content": "Contenu",
+        "email": "Email",
+        "firstname": "Prénom",
+        "gender": "Genre",
+        "image": "Image",
+        "language": "Langue",
+        "lastname": "Nom",
+        "new_translation": "Nouvelle traduction",
+        "reported": "Signalé",
+        "role": "Role",
+        "save": "Enregistrer",
+        "staff": "Personnel",
+        "student": "Etudiant",
+        "translations": "Traductions",
+        "university": "Université"
+    },
+    "interests": {
+        "create": {
+            "error": "Une erreur est survenue pendant la création de l'intérêt",
+            "name": "Nom du nouvel intérêt",
+            "title": "Création d'une nouvel intérêt"
+        },
+        "label": "Intérêts",
+        "show": {
+            "name": "Nom",
+            "label": "Intérêt"
+        },
+        "update": {
+            "error": "Une erreur est survenue pendant la mise à jour d'un intérêt",
+            "name": "Nom de l'intérêt",
+            "title": "Mise à jour d'un intérêt"
+        }
+    },
+    "interest_categories": {
+        "create": {
+            "error": "Une erreur est survenue pendant la création de la catégorie d'intérêt",
+            "name": "Nom de la nouvelle catégorie",
+            "title": "Création d'une nouvelle catégorie"
+        },
+        "interests": "Intérêts",
+        "label": "Catégorie d'intérêts",
+        "name": "Nom",
+        "update": {
+            "name": "Nom de la catégorie",
+            "title": "Mise à jour d'une catégorie d'intérêt"
+        }
+    },
+    "languages": {
+        "code": "Code de la langue",
+        "label": "Langues",
+        "name": "Nom de la langue",
+        "secondary_status": {
+            "active": "Langue proposée",
+            "title": "Disponibilité pour une université partenaire",
+            "unactive": "Langue non proposée"
+        },
+        "status": {
+            "error": "Une erreur est survenue pendant la mise à jour du status",
+            "primary": "Active en langue d'apprentissage",
+            "secondary": "Active en langue suggéré",
+            "success": "Le status a bien été mis à jour",
+            "title": "Status",
+            "unactive": "Désactivé pour l'apprentissage"
+        }
+    },
+    "login": {
+        "connect": "Connexion",
+        "loginError": "Mauvais email ou mot de passe",
+        "password": "Mot de passe"
+    },
+    "objectives": {
+        "edit": {
+            "error": "Une erreur est survenue pendant la mise à jour de l'objectif"
+        },
+        "create": {
+            "error": "Une erreur est survenue pendant la création de l'objectif",
+            "image": "Image du nouvel objectif",
+            "name": "Nom du nouvel objectif",
+            "title": "Création d'une nouvel objectif"
+        },
+        "label": "Objectifs",
+        "name": "Nom",
+        "update": {
+            "error": "Une erreur est survenue pendant la mise à jour d'un objectif",
+            "title": "Mise à jour d'un objectif"
+        }
+    },
+    "profiles": {
+        "biography": {
+            "anecdote": "Anecdote",
+            "experience": "Experience",
+            "favorite_place": "Lieu favoris",
+            "superpower": "Super pouvoirs",
+            "title": "Biographies"
+        },
+        "edit_status_error": "Le status n'a pas pu être mis à jour",
+        "edit_status_success": "Le status a été mis à jour",
+        "frequency": "Fréquence des rencontres",
+        "frequencies": {
+            "ONCE_A_WEEK": "Une fois par semaine",
+            "TWICE_A_WEEK": "Deux fois par semaine",
+            "THREE_TIMES_A_WEEK": "Trois fois par semaine",
+            "TWICE_A_MONTH": "Deux fois par mois",
+            "THREE_TIMES_A_MONTH": "Trois fois par mois"
+        },
+        "certificate": "Certificat",
+        "country": "Pays",
+        "interests": "Centre d'intérêts",
+        "label": "Profiles",
+        "language_title": "Langues",
+        "learning_language": {
+            "name": "Nom de langue d'apprentissage",
+            "level": "Niveau de la langue d'apprentissage"
+        },
+        "mastered_languages": "Langues maîtrisés",
+        "native_language": "Langue native",
+        "objectives": "Objectifs",
+        "summary": "Résumé",
+        "searchLastname": "Chercher par nom",
+        "status": "Status"
+    },
+    "questions": {
+        "create": {
+            "error": "Une erreur est survenue pendant la création de la question",
+            "level": "Selection du niveau de la question",
+            "name": "Création d'une nouvelle question"
+        },
+        "label": "Questions",
+        "level": "Niveau",
+        "question": "Question",
+        "show": {
+            "level": "Niveau de la question",
+            "name": "Intitulé de la question"
+        },
+        "update": {
+            "error": "Une erreur est survenue pendant la mise à jour de la question",
+            "title": "Mise à jour d'une question"
+        }
+    },
+    "reports": {
+        "category": "Catégorie de signalement",
+        "CLOSED": "Fermé",
+        "content": "Contenu",
+        "IN_PROGRESS": "En cours",
+        "label": "Signalements",
+        "OPEN": "Ouvert",
+        "status": "État"
+    },
+    "report_categories": {
+        "create": {
+            "error": "Une erreur est survenue pendant la création de la catégorie",
+            "name": "Nom de la nouvelle catégorie",
+            "title": "Création d'une nouvelle catégorie"
+        },
+        "label": "Categories de signalement",
+        "show": {
+            "name": "Nom de la catégorie de signalement"
+        },
+        "update": {
+            "error": "Une erreur est survenue pendant la mise à jour de la catégorie",
+            "name": "Nom de la catégorie de signalement",
+            "title": "Mise à jour d'une catégorie de signalement"
+        }
+    },
+    "suggested_languages": {
+        "label": "Langues demandées"
+    },
+    "universities": {
+        "create": {
+            "admission_end": "Fin de date d'inscription à la nouvelle université partenaire",
+            "admission_error": "La date de fin d'admission doit être après la date de début",
+            "admission_start": "Début de date d'inscription à la nouvelle université partenaire",
+            "codes": "Liste des codes pour l'inscription",
+            "codes_error": "Le code doit faire une taille de 6 min. et avoir au moins une lettre et un chiffre",
+            "country": "Pays de la nouvelle université partenaire",
+            "domains": "Liste des noms de domaines pour l'inscription",
+            "domains_error": "Le nom de domaine doit commencer par un @",
+            "name": "Nom de la nouvelle université partenaire",
+            "timezone": "Timezone de la nouvelle université partenaire",
+            "title": "Création d'une nouvelle université partenaire",
+            "website": "Site web de la nouvelle université partenaire"
+        },
+        "label": "Universités",
+        "name": "Nom de l'université",
+        "parent": "Université centrale",
+        "show": {
+            "admission_start": "Début de date d'admission",
+            "admission_end": "Fin de date d'admission",
+            "codes": "Codes d'inscriptions",
+            "confidentialityUrl": "Url des règles de confidentialités",
+            "country": "Pays de l'université",
+            "domains": "Nom de domaines autorisés",
+            "name": "Nom de l'université",
+            "resourcesUrl": "Url des ressources de langues de l'université",
+            "sites": "Campus de rencontre",
+            "timezone": "Timezone",
+            "website": "Site web de l'université"
+        },
+        "update": {
+            "admission_end": "Fin de date d'inscription à l'université",
+            "admission_error": "La date de fin d'admission doit être après la date de début",
+            "admission_start": "Début de date d'inscription à l'université",
+            "codes": "Liste des codes pour l'inscription",
+            "codes_error": "Le code doit faire une taille de 6 min. et avoir au moins une lettre et un chiffre",
+            "country": "Pays de l'université",
+            "domains": "Liste des noms de domaines pour l'inscription",
+            "domains_error": "Le nom de domaine doit commencer par un @",
+            "name": "Nom de l'université",
+            "timezone": "Timezone de l'université",
+            "title": "Mise à jour de l'université",
+            "website": "Site web de l'université"
+        }
+    },
+    "uploader": {
+        "drag_drop": "Glissez et déposez une image ou",
+        "drop_image": "Lâche l'image ici",
+        "select_image": "Choisissez une image"
+    },
+    "users": {
+        "searchEmail": "Chercher par email",
+        "userListTitle": "Utilisateurs"
+    },
+    "learning_languages": {
+        "label": "Demandes de tandems",
+        "list": {
+            "actions": {
+                "globalRoutine": {
+                    "ctaLabel": "Lancer la routine globale",
+                    "runningLabel": "Routine globale en cours d'exécution",
+                    "errorLoading": "Une erreur est survenue lors du chargement de l'état de la dernière routine globale"
+                }
+            },
+            "globalRoutineModal": {
+                "description": "Lancer la routine globale peut prendre quelques minutes. Les tandems proposés par une ancienne exécution seront perdus.",
+                "confirmMessage": "Voulez-vous continuer ?",
+                "ctaLabels": {
+                    "confirm": "Confirmer",
+                    "cancel": "Annuler"
+                },
+                "error": "Une erreur est survenue lors de l'exécution de la routine globale"
+            },
+            "tableColumns": {
+                "name": "Nom",
+                "learnedLanguage": "Langue demandée",
+                "level": "Niveau",
+                "createdAt": "Créé le"
+            },
+            "noUniversitySelected": "Merci de sélectionner une ou plusieurs universités pour voir les demandes"
+        },
+        "show": {
+            "fields": {
+                "createdAt": "Date demande",
+                "learnedLanguage": "Langue demandé",
+                "level": "Niveau"
+            },
+            "tandems": {
+                "error": "Une erreur est survenue lors de la récupération des tandems",
+                "active": {
+                    "title": "En tandem avec",
+                    "tableColumns": {
+                        "profile": "Profil",
+                        "learnedLanguage": "Langue demandée",
+                        "level": "Niveau",
+                        "date": "Date"
+                    }
+                },
+                "matches": {
+                    "error": "Une erreur est survenue lors de la récupération des propositions de la routine individuelle",
+                    "title": "Suggestion routine individuelle",
+                    "tableColumns": {
+                        "profile": "Profil",
+                        "learnedLanguage": "Langue demandée",
+                        "level": "Niveau",
+                        "score": "Compatibilité",
+                        "date": "Date",
+                        "actions": "Actions"
+                    },
+                    "noResults": "Aucun résultats"
+                },
+                "globalSuggestions": {
+                    "title": "Suggestion routine globale",
+                    "noResult": "Aucun résultat"
+                },
+                "actions": {
+                    "validateMessage": "Vous êtes sur le point de créer un tandem. Êtes-vous sur ?",
+                    "refuseMessage": "Vous êtes sur le point de refuser un tandem. Êtes-vous sur ?",
+                    "ctaLabels": {
+                        "cancel": "Annuler",
+                        "confirm": "Confirmer"
+                    },
+                    "error": "Une erreur est survenue"
+                }
+            }
+        }
+    },
+    "universitiesPicker": {
+        "label": "Sélectionner des universités",
+        "error": "Une erreur est survenue lors de la récupération des universités"
+    }
+}

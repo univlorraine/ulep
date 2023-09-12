@@ -1,0 +1,75 @@
+import { useTranslation } from 'react-i18next';
+import { Redirect, useHistory } from 'react-router';
+import { TandemPng } from '../../assets';
+import { useConfig } from '../../context/ConfigurationContext';
+import { useStoreState } from '../../store/storeTypes';
+import WebLayoutCentered from '../components/layout/WebLayoutCentered';
+import { codeCountryToFlag } from '../utils';
+import confirmLanguagesStyles from './css/PairingConfirmLanguage.module.css';
+import styles from './css/SignUp.module.css';
+
+const PairingConfirmLanguagePage: React.FC = () => {
+    const { t } = useTranslation();
+    const { configuration } = useConfig();
+    const history = useHistory();
+    const profileSignUp = useStoreState((state) => state.profileSignUp);
+    const user = useStoreState((state) => state.user);
+
+    if (!profileSignUp.learningLanguage || !user) {
+        return <Redirect to="/signup" />;
+    }
+
+    const pedagogyToTitle = (pedagogy: Pedagogy | undefined) => {
+        switch (pedagogy) {
+            case 'BOTH':
+                return t('global.tandem_etandem');
+            case 'ETANDEM':
+                return t('global.etandem');
+            case 'TANDEM':
+                return t('global.tandem');
+            default:
+                return '';
+        }
+    };
+
+    const continueSignUp = async () => {
+        return history.push('/signup/pairing/level/start');
+    };
+
+    return (
+        <WebLayoutCentered
+            backgroundIconColor={configuration.secondaryBackgroundImageColor}
+            headerColor={configuration.secondaryColor}
+            headerPercentage={36}
+            headerTitle={t('global.pairing_title')}
+        >
+            <div className={styles.body}>
+                <div>
+                    <h1 className="title">{t('pairing_confirm_language_page.title')}</h1>
+                    <p className="subtitle">{t('pairing_confirm_language_page.subtitle')}</p>
+                    <span>{t('pairing_confirm_language_page.language_title')}</span>
+                    <div className={confirmLanguagesStyles['language-container']}>
+                        {` ${codeCountryToFlag(profileSignUp.learningLanguage.code)} ${
+                            profileSignUp.learningLanguage.name
+                        }`}
+                    </div>
+                    <div className={confirmLanguagesStyles['mode-container']}>
+                        <p className={confirmLanguagesStyles['mode-text']}>{`${t(
+                            'pairing_confirm_language_page.mode_meet'
+                        )} ${pedagogyToTitle(profileSignUp.pedagogy)}  ${codeCountryToFlag(
+                            profileSignUp.learningLanguage.code
+                        )}`}</p>
+                        <img alt="tandem" src={TandemPng} />
+                    </div>
+                </div>
+                <div className={`large-margin-top extra-large-margin-bottom`}>
+                    <button className={`primary-button `} onClick={continueSignUp}>
+                        {t('pairing_confirm_language_page.validate_button')}
+                    </button>
+                </div>
+            </div>
+        </WebLayoutCentered>
+    );
+};
+
+export default PairingConfirmLanguagePage;

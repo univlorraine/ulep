@@ -1,0 +1,54 @@
+.primary-button,
+.tertiary-button {
+    background-color: #000;
+    border: none;
+    border-radius: 5px;
+    color: white;
+    font-family: 'Roboto', sans-serif;
+    font-size: 16px;
+    font-weight: 700;
+    height: 50px;
+    padding: 10px 10px;
+    text-transform: uppercase;
+    width: 100%;
+}
+.primary-button {
+    background-color: #000;
+    color: white;
+}
+
+.primary-button.disabled {
+    background-color: #a7a7a7;
+}
+
+.tertiary-button {
+    background-color: #fff;
+    border: 1px solid black;
+    color: black;
+}
+
+.secondary-button {
+    background: none;
+    color: #000;
+    text-align: center;
+    font-family: 'Roboto', sans-serif;
+    font-style: normal;
+    font-size: 16px;
+    font-weight: 700;
+    line-height: normal;
+    text-decoration-line: underline;
+    text-transform: uppercase;
+    width: 100%;
+}
+
+ion-button.confirm {
+    --background: #000;
+    --background-focused: #000;
+    --border-radius: 5px;
+    --color: #fff;
+    height: 50px;
+}
+
+ion-button.confirm:active {
+    --background: #a7a7a7;
+}

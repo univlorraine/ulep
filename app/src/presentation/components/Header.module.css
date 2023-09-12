@@ -1,0 +1,28 @@
+.container {
+    align-items: center;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    height: 53px;
+    padding: 0px 12px;
+}
+
+.image {
+    background: none;
+    height: 15px;
+    width: 15px;
+}
+
+.image-div {
+    background: none;
+}
+
+.title {
+    color: #000;
+    font-family: 'Roboto';
+    font-size: 17px;
+    font-style: normal;
+    font-weight: 700;
+    line-height: 21px;
+    text-align: center;
+}
