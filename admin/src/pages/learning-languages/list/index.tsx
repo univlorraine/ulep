@@ -20,8 +20,6 @@ import University from '../../../entities/University';
 import useLearningLanguagesStore from '../useLearningLanguagesStore';
 import Actions from './Actions';
 
-// TODO(NEXT): manage case where connected user is not from central university
-
 const LearningLanguageList = () => {
     const translate = useTranslate();
     const { selectedUniversityIds, setSelectedUniversityIds } = useLearningLanguagesStore();

@@ -88,7 +88,6 @@ const authProvider = () => ({
     getIdentity: async (): Promise<Identity> => {
         // TODO(NOW+0): Doc on how to add universityId to user
         // https://www.baeldung.com/keycloak-custom-user-attributes
-        // TODO(NOW+0): export client with mapper
         const accessToken = jwtManager.getToken('access_token');
         if (!accessToken) {
             return Promise.reject(new Error('Fail to get access token'));
