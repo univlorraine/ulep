@@ -33,9 +33,6 @@ const ProfileFilter = (props: any) => {
             <ReferenceInput label={translate('profiles.country')} reference="countries" source="user.country">
                 <SelectInput label={translate('profiles.country')} optionText="name" optionValue="code" />
             </ReferenceInput>
-            <ReferenceInput label={translate('global.university')} reference="universities" source="user.university">
-                <SelectInput label={translate('global.university')} optionText="name" />
-            </ReferenceInput>
             <ReferenceInput
                 label={translate('profiles.native_language')}
                 reference="languages"
@@ -111,7 +108,7 @@ const ProfileList = (props: any) => {
                 <TextField label={translate('global.lastname')} source="user.lastname" sortable />
                 <TextField label={translate('global.firstname')} source="user.firstname" sortable />
                 <TextField label={translate('global.email')} source="user.email" sortable />
-                <TextField label={translate('global.university')} source="user.university.name" sortable />
+                <TextField label={translate('global.university')} sortable={false} source="user.university.name" />
                 <TextField
                     label={translate('profiles.native_language')}
                     sortable={false}
