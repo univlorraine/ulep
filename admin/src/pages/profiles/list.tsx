@@ -17,6 +17,8 @@ import {
     useTranslate,
     FunctionField,
     ChipField,
+    useGetIdentity,
+    Loading,
 } from 'react-admin';
 import User from '../../entities/User';
 
@@ -62,6 +64,9 @@ const ProfileFilter = (props: any) => {
 
 const ProfileList = (props: any) => {
     const translate = useTranslate();
+
+    const { data: identity, isLoading: isLoadingIdentity } = useGetIdentity();
+
     const [update] = useUpdate();
     const refresh = useRefresh();
     const notify = useNotify();
@@ -85,8 +90,18 @@ const ProfileList = (props: any) => {
         );
     };
 
+    if (isLoadingIdentity) {
+        return <Loading />;
+    }
+
     return (
-        <List exporter={false} filters={<ProfileFilter />} title={translate('profiles.label')} {...props}>
+        <List
+            exporter={false}
+            filter={{ university: identity?.universityId }}
+            filters={<ProfileFilter />}
+            title={translate('profiles.label')}
+            {...props}
+        >
             <Datagrid rowClick="show">
                 <FunctionField
                     label={translate('global.role')}

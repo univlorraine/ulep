@@ -91,7 +91,7 @@ export class ProfileController {
               firstname: { contains: where.user?.firstname },
               lastname: { contains: where.user?.lastname },
               role: { equals: where.user?.role },
-              university: { equals: where.user?.university },
+              university: { equals: where?.university },
             },
             masteredLanguageCode: where.masteredLanguageCode,
             nativeLanguageCode: where.nativeLanguageCode,
