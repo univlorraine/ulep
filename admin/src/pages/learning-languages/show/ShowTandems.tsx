@@ -18,7 +18,7 @@ const ShowTandems = () => {
 
     const { data: identity, isLoading: isLoadingIdentity } = useGetIdentity();
 
-    const [noAssociatedTandem, setNoAssociatedTandem] = useState<boolean>(false);
+    const [retryTandemQuery, setRetryTandemQuery] = useState<boolean>(false);
     const {
         isLoading: isLoadingTandem,
         isError: isErrorTandem,
@@ -32,11 +32,11 @@ const ShowTandems = () => {
         },
         {
             enabled: !!recordId && !isLoadingIdentity,
-            retry: noAssociatedTandem,
+            retry: retryTandemQuery ? 3 : false,
             onError: (err) => {
-                // Note: workaround to not consider no tandem as an error
-                if ((err as Error)?.cause === 404) {
-                    setNoAssociatedTandem(true);
+                if ((err as Error)?.cause !== 404) {
+                    // Note: workaround to not consider no tandem as an error
+                    setRetryTandemQuery(true);
                 }
             },
         }
@@ -71,7 +71,7 @@ const ShowTandems = () => {
     if (isLoadingIdentity || isLoadingTandem) {
         return <CircularProgress />;
     }
-    if (isErrorTandem && !noAssociatedTandem) {
+    if (isErrorTandem && retryTandemQuery) {
         console.error(errorTandem);
 
         return <p>{translate('learning_languages.show.tandems.error')}</p>;
@@ -226,7 +226,7 @@ const ShowTandems = () => {
                         : translate('learning_languages.show.tandems.globalSuggestions.titleNotCentralUniversity')}
                 </Typography>
                 <Box sx={{ marginTop: 1 }}>
-                    {noAssociatedTandem ? (
+                    {!retryTandemQuery ? (
                         <p>{translate('learning_languages.show.tandems.globalSuggestions.noResult')}</p>
                     ) : (
                         <Table>
