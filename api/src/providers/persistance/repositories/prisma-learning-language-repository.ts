@@ -347,8 +347,7 @@ export class PrismaLearningLanguageRepository
           };
           break;
         default:
-          // TODO(NOW): custom error
-          throw new Error('Unsupported order by field');
+          throw new Error('Unsupported orderBy field');
       }
     }
 
