@@ -126,7 +126,8 @@
         "label": "Asked languages"
     },
     "universities": {
-        "label": "Universities"
+        "label": "Universities",
+        "id": "ID"
     },
     "uploader": {
         "drag_drop": "Drag and drop your image or",

@@ -223,7 +223,8 @@
             "resourcesUrl": "Url des ressources de langues de l'université",
             "sites": "Campus de rencontre",
             "timezone": "Timezone",
-            "website": "Site web de l'université"
+            "website": "Site web de l'université",
+            "id": "ID"
         },
         "update": {
             "admission_end": "Fin de date d'inscription à l'université",
