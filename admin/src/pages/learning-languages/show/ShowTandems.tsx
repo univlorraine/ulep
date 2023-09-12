@@ -45,6 +45,7 @@ const ShowTandems = () => {
     const hasActiveTandem = tandem?.status === TandemStatus.ACTIVE;
 
     const { selectedUniversityIds } = useLearningLanguagesStore();
+
     const {
         isLoading: isLoadingMatches,
         isError: isErrorMatches,
@@ -55,7 +56,7 @@ const ShowTandems = () => {
         {
             filter: {
                 id: recordId,
-                universityIds: selectedUniversityIds,
+                universityIds: identity?.universityId ? [...selectedUniversityIds, identity.universityId] : [],
             },
         },
         {

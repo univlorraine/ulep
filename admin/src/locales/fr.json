@@ -252,6 +252,9 @@
     "learning_languages": {
         "label": "Demandes de tandems",
         "list": {
+            "universitiesPicker": {
+                "label": "Sélectionner des universités pour l'appariement"
+            },
             "actions": {
                 "globalRoutine": {
                     "ctaLabel": "Lancer la routine globale",
@@ -293,14 +296,16 @@
                 "hasActiveTandem": "En tandem",
                 "actionPossible": "Tandem en attente"
             },
-            "noUniversitySelected": "Merci de sélectionner une ou plusieurs universités pour voir les demandes"
+            "noUniversitySelected": "Merci de sélectionner une ou plusieurs universités pour l'appariement"
         },
         "show": {
             "fields": {
                 "createdAt": "Date demande",
                 "learnedLanguage": "Langue demandé",
                 "level": "Niveau",
-                "university": "Université"
+                "university": "Université",
+                "role": "Rôle",
+                "learningType": "Mode d'apprentissage"
             },
             "tandems": {
                 "error": "Une erreur est survenue lors de la récupération des tandems",
@@ -350,7 +355,6 @@
         }
     },
     "universitiesPicker": {
-        "label": "Sélectionner des universités",
         "error": "Une erreur est survenue lors de la récupération des universités"
     }
 }

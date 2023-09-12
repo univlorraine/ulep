@@ -1,6 +1,6 @@
 import { Check } from '@mui/icons-material';
 import { Box, Typography } from '@mui/material';
-import React, { useEffect } from 'react';
+import React from 'react';
 import {
     Datagrid,
     DateField,
@@ -16,6 +16,7 @@ import UniversitiesPicker from '../../../components/UniversitiesPicker';
 import { LearningLanguage, learningLanguageHasPossibleAction } from '../../../entities/LearningLanguage';
 import { getProfileDisplayName } from '../../../entities/Profile';
 import { isTandemActive } from '../../../entities/Tandem';
+import University from '../../../entities/University';
 import useLearningLanguagesStore from '../useLearningLanguagesStore';
 import Actions from './Actions';
 
@@ -26,11 +27,6 @@ const LearningLanguageList = () => {
     const { selectedUniversityIds, setSelectedUniversityIds } = useLearningLanguagesStore();
 
     const { data: identity, isLoading: isLoadingIdentity } = useGetIdentity();
-    useEffect(() => {
-        if (identity?.universityId) {
-            setSelectedUniversityIds([identity.universityId]);
-        }
-    }, [identity]);
 
     const filters = [
         <SelectInput
@@ -57,23 +53,27 @@ const LearningLanguageList = () => {
         return <Loading />;
     }
 
-    // TODO(NOW+1): admin from partner university should known about on going routine ?
-
     return (
         <Box sx={{ marginTop: 2 }}>
             {identity.isCentralUniversity && (
-                <UniversitiesPicker onSelected={(ids) => setSelectedUniversityIds(ids)} value={selectedUniversityIds} />
+                <UniversitiesPicker
+                    filterUniversities={(university: University) => !!university.parent}
+                    label={translate('learning_languages.list.universitiesPicker.label')}
+                    onSelected={(ids) => setSelectedUniversityIds(ids)}
+                    placeholder={translate('learning_languages.list.universitiesPicker.label')}
+                    value={selectedUniversityIds}
+                />
             )}
-            {selectedUniversityIds.length ? (
+            {(identity.isCentralUniversity && selectedUniversityIds.length) || !identity.isCentralUniversity ? (
                 <List<LearningLanguage>
                     actions={
                         <Actions
                             enableLaunchGlobalRoutine={identity.isCentralUniversity}
-                            universityIds={selectedUniversityIds}
+                            universityIds={[...selectedUniversityIds, identity.universityId]}
                         />
                     }
                     exporter={false}
-                    filter={{ universityIds: selectedUniversityIds }}
+                    filter={{ universityIds: identity.universityId }}
                     filters={filters}
                 >
                     <Datagrid bulkActionButtons={false} rowClick="show">

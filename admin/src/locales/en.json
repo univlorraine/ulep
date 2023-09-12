@@ -140,6 +140,9 @@
     "learning_languages": {
         "label": "Tandem requests",
         "list": {
+            "universitiesPicker": {
+                "label": "Select pairing universities"
+            },
             "actions": {
                 "globalRoutine": {
                     "ctaLabel": "Start global routine",
@@ -181,14 +184,16 @@
                 "hasActiveTandem": "In tandem",
                 "actionPossible": "Pending tandem"
             },
-            "noUniversitySelected": "Please select one or more universities to view language requests"
+            "noUniversitySelected": "Please select one or more universities for pairing"
         },
         "show": {
             "fields": {
                 "createdAt": "Date",
                 "learnedLanguage": "Requested language",
                 "level": "Level",
-                "university": "University"
+                "university": "University",
+                "role": "Role",
+                "learningType": "Learning type"
             },
             "tandems": {
                 "error": "An error occured while fetching tandems",
@@ -238,7 +243,6 @@
         }
     },
     "universitiesPicker": {
-        "label": "Select universities",
         "error": "An error occured while fetching universities"
     }
 }
