@@ -148,8 +148,15 @@
                 }
             },
             "filters": {
-                "tandem": {
+                "activeTandem": {
                     "label": "In tandem",
+                    "choices": {
+                        "yes": "Yes",
+                        "no": "No"
+                    }
+                },
+                "actionableTandem": {
+                    "label": "Pending tandems",
                     "choices": {
                         "yes": "Yes",
                         "no": "No"

@@ -17,6 +17,12 @@ export class GetLearningLanguagesRequest extends PaginationDto {
   @IsOptional()
   hasActiveTandem?: boolean;
 
+  @ApiProperty({ type: 'boolean' })
+  @Transform(({ value }) => (value ? value === 'true' : undefined))
+  @IsBoolean()
+  @IsOptional()
+  hasActionableTandem?: boolean;
+
   @ApiPropertyOptional({
     type: 'string',
     enum: LearningLanguageQuerySortKey,

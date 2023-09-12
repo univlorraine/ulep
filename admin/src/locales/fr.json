@@ -260,8 +260,15 @@
                 }
             },
             "filters": {
-                "tandem": {
+                "activeTandem": {
                     "label": "En tandem",
+                    "choices": {
+                        "yes": "Oui",
+                        "no": "Non"
+                    }
+                },
+                "actionableTandem": {
+                    "label": "Tandems en attente",
                     "choices": {
                         "yes": "Oui",
                         "no": "Non"

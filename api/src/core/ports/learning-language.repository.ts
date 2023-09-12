@@ -16,6 +16,7 @@ export interface LearningLanguageRepositoryGetProps {
   limit: number;
   universityIds: string[];
   hasActiveTandem?: boolean;
+  hasActionableTandem?: boolean;
   orderBy?: {
     field: LearningLanguageQuerySortKey;
     order: SortOrder;

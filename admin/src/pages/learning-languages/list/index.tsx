@@ -34,12 +34,21 @@ const LearningLanguageList = () => {
 
     const filters = [
         <SelectInput
+            key="actionableTandemFilter"
+            choices={[
+                { id: true, name: translate('learning_languages.list.filters.actionableTandem.choices.yes') },
+                { id: false, name: translate('learning_languages.list.filters.actionableTandem.choices.no') },
+            ]}
+            label={translate('learning_languages.list.filters.actionableTandem.label')}
+            source="hasActionableTandem"
+        />,
+        <SelectInput
             key="activeTandemFilter"
             choices={[
-                { id: true, name: translate('learning_languages.list.filters.tandem.choices.yes') },
-                { id: false, name: translate('learning_languages.list.filters.tandem.choices.no') },
+                { id: true, name: translate('learning_languages.list.filters.activeTandem.choices.yes') },
+                { id: false, name: translate('learning_languages.list.filters.activeTandem.choices.no') },
             ]}
-            label={translate('learning_languages.list.filters.tandem.label')}
+            label={translate('learning_languages.list.filters.activeTandem.label')}
             source="hasActiveTandem"
         />,
     ];
@@ -49,7 +58,6 @@ const LearningLanguageList = () => {
     }
 
     // TODO(NOW+1): admin from partner university should known about on going routine ?
-    // TODO(NOW): filter column en attente
 
     return (
         <Box sx={{ marginTop: 2 }}>
