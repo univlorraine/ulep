@@ -223,7 +223,8 @@
             "resourcesUrl": "Url des ressources de langues de l'université",
             "sites": "Campus de rencontre",
             "timezone": "Timezone",
-            "website": "Site web de l'université"
+            "website": "Site web de l'université",
+            "id": "ID"
         },
         "update": {
             "admission_end": "Fin de date d'inscription à l'université",
@@ -252,6 +253,9 @@
     "learning_languages": {
         "label": "Demandes de tandems",
         "list": {
+            "universitiesPicker": {
+                "label": "Sélectionner des universités pour l'appariement"
+            },
             "actions": {
                 "globalRoutine": {
                     "ctaLabel": "Lancer la routine globale",
@@ -260,8 +264,15 @@
                 }
             },
             "filters": {
-                "tandem": {
+                "activeTandem": {
                     "label": "En tandem",
+                    "choices": {
+                        "yes": "Oui",
+                        "no": "Non"
+                    }
+                },
+                "actionableTandem": {
+                    "label": "Tandems en attente",
                     "choices": {
                         "yes": "Oui",
                         "no": "Non"
@@ -283,16 +294,19 @@
                 "level": "Niveau",
                 "createdAt": "Créé le",
                 "university": "Université",
-                "hasActiveTandem": "En tandem"
+                "hasActiveTandem": "En tandem",
+                "actionPossible": "Tandem en attente"
             },
-            "noUniversitySelected": "Merci de sélectionner une ou plusieurs universités pour voir les demandes"
+            "noUniversitySelected": "Merci de sélectionner une ou plusieurs universités pour l'appariement"
         },
         "show": {
             "fields": {
                 "createdAt": "Date demande",
                 "learnedLanguage": "Langue demandé",
                 "level": "Niveau",
-                "university": "Université"
+                "university": "Université",
+                "role": "Rôle",
+                "learningType": "Mode d'apprentissage"
             },
             "tandems": {
                 "error": "Une erreur est survenue lors de la récupération des tandems",
@@ -326,6 +340,7 @@
                 },
                 "globalSuggestions": {
                     "title": "Suggestion routine globale",
+                    "titleNotCentralUniversity": "Tandem proposé",
                     "noResult": "Aucun résultat"
                 },
                 "actions": {
@@ -341,7 +356,6 @@
         }
     },
     "universitiesPicker": {
-        "label": "Sélectionner des universités",
         "error": "Une erreur est survenue lors de la récupération des universités"
     }
 }

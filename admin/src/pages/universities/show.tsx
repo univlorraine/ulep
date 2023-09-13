@@ -45,6 +45,7 @@ const UniversityShow = (props: any) => {
                     </SingleFieldList>
                 </TextField>
                 <TextField label={translate('universities.show.website')} source="website" />
+                <TextField label={translate('universities.show.id')} source="id" />
             </SimpleShowLayout>
         </Show>
     );

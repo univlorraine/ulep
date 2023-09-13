@@ -126,7 +126,8 @@
         "label": "Asked languages"
     },
     "universities": {
-        "label": "Universities"
+        "label": "Universities",
+        "id": "ID"
     },
     "uploader": {
         "drag_drop": "Drag and drop your image or",
@@ -140,6 +141,9 @@
     "learning_languages": {
         "label": "Tandem requests",
         "list": {
+            "universitiesPicker": {
+                "label": "Select pairing universities"
+            },
             "actions": {
                 "globalRoutine": {
                     "ctaLabel": "Start global routine",
@@ -148,8 +152,15 @@
                 }
             },
             "filters": {
-                "tandem": {
+                "activeTandem": {
                     "label": "In tandem",
+                    "choices": {
+                        "yes": "Yes",
+                        "no": "No"
+                    }
+                },
+                "actionableTandem": {
+                    "label": "Pending tandems",
                     "choices": {
                         "yes": "Yes",
                         "no": "No"
@@ -171,16 +182,19 @@
                 "level": "Level",
                 "createdAt": "Created",
                 "university": "University",
-                "hasActiveTandem": "In tandem"
+                "hasActiveTandem": "In tandem",
+                "actionPossible": "Pending tandem"
             },
-            "noUniversitySelected": "Please select one or more universities to view language requests"
+            "noUniversitySelected": "Please select one or more universities for pairing"
         },
         "show": {
             "fields": {
                 "createdAt": "Date",
                 "learnedLanguage": "Requested language",
                 "level": "Level",
-                "university": "University"
+                "university": "University",
+                "role": "Role",
+                "learningType": "Learning type"
             },
             "tandems": {
                 "error": "An error occured while fetching tandems",
@@ -214,6 +228,7 @@
                 },
                 "globalSuggestions": {
                     "title": "Global routine suggestion",
+                    "titleNotCentralUniversity": "Proposed tandem",
                     "noResult": "No result"
                 },
                 "actions": {
@@ -229,7 +244,6 @@
         }
     },
     "universitiesPicker": {
-        "label": "Select universities",
         "error": "An error occured while fetching universities"
     }
 }

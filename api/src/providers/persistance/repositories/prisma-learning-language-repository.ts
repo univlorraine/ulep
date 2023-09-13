@@ -216,10 +216,11 @@ export class PrismaLearningLanguageRepository
     universityIds,
     orderBy,
     hasActiveTandem,
+    hasActionableTandem,
   }: LearningLanguageRepositoryGetProps): Promise<
     Collection<LearningLanguageWithTandem>
   > {
-    let wherePayload: any = {
+    const permanentWherePayload = {
       Profile: {
         User: {
           organization_id: {
@@ -228,18 +229,47 @@ export class PrismaLearningLanguageRepository
         },
       },
     };
+
+    const tandemWhereClauses = [];
+    if (hasActionableTandem === true) {
+      tandemWhereClauses.push({
+        Tandem: {
+          status: {
+            not: {
+              in: [TandemStatus.ACTIVE, TandemStatus.INACTIVE],
+            },
+          },
+        },
+      });
+    } else if (hasActionableTandem === false) {
+      tandemWhereClauses.push({
+        OR: [
+          {
+            Tandem: {
+              status: {
+                in: [TandemStatus.ACTIVE, TandemStatus.INACTIVE],
+              },
+            },
+          },
+          {
+            Tandem: {
+              is: null,
+            },
+          },
+        ],
+      });
+    }
+
     if (hasActiveTandem === true) {
-      wherePayload = {
-        ...wherePayload,
+      tandemWhereClauses.push({
         Tandem: {
           status: {
             equals: TandemStatus.ACTIVE,
           },
         },
-      };
+      });
     } else if (hasActiveTandem === false) {
-      wherePayload = {
-        ...wherePayload,
+      tandemWhereClauses.push({
         OR: [
           {
             Tandem: {
@@ -256,6 +286,19 @@ export class PrismaLearningLanguageRepository
             },
           },
         ],
+      });
+    }
+
+    let wherePayload: any = { ...permanentWherePayload };
+    if (tandemWhereClauses.length > 1) {
+      wherePayload = {
+        ...wherePayload,
+        AND: tandemWhereClauses,
+      };
+    } else if (tandemWhereClauses.length === 1) {
+      wherePayload = {
+        ...wherePayload,
+        ...tandemWhereClauses[0],
       };
     }
 
@@ -304,8 +347,7 @@ export class PrismaLearningLanguageRepository
           };
           break;
         default:
-          // TODO(NOW): custom error
-          throw new Error('Unsupported order by field');
+          throw new Error('Unsupported orderBy field');
       }
     }
 

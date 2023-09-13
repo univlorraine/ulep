@@ -1,9 +1,17 @@
+import University from '../entities/University';
 import jwtManager from './jwtManager';
 
 const KEYCLOAK_URL = process.env.REACT_APP_KEYCLOAK_URL;
 const KEYCLOAK_REALM = process.env.REACT_APP_KEYCLOAK_REALM;
 const KEYCLOAK_CLIENT_ID = process.env.REACT_APP_KEYCLOAK_CLIENT_ID;
 const KEYCLOAK_CLIENT_SECRET = process.env.REACT_APP_KEYCLOAK_CLIENT_SECRET;
+
+export interface Identity {
+    id: string;
+    fullName?: string;
+    universityId?: string;
+    isCentralUniversity: boolean;
+}
 
 export const http = async (method: string, path: string, init: Omit<RequestInit, 'method'> = {}) => {
     const response = await fetch(path, {
@@ -77,21 +85,42 @@ const authProvider = () => ({
         return Promise.resolve();
     },
     getPermissions: () => (jwtManager.getToken('access_token') ? Promise.resolve() : Promise.reject()),
-    getIdentity: () => {
+    getIdentity: async (): Promise<Identity> => {
+        // TODO(NOW+0): Doc on how to add universityId to user
+        // https://www.baeldung.com/keycloak-custom-user-attributes
         const accessToken = jwtManager.getToken('access_token');
         if (!accessToken) {
-            return Promise.reject();
+            return Promise.reject(new Error('Fail to get access token'));
         }
 
-        const decoded = jwtManager.decodeToken(accessToken);
+        const decoded: any = jwtManager.decodeToken(accessToken);
         if (!decoded) {
-            return Promise.reject();
+            return Promise.reject(new Error('Fail to decode token'));
+        }
+
+        let { universityId } = decoded;
+        let isCentralUniversity = false;
+
+        if (!universityId) {
+            const universitiesRes = await fetch(`${process.env.REACT_APP_API_URL}/universities`, {
+                headers: {
+                    Authorization: `Bearer ${accessToken}`,
+                },
+            });
+            const universities = await universitiesRes.json();
+            const centralUniversity = universities?.items?.find((university: University) => !university.parent);
+            if (!centralUniversity) {
+                return Promise.reject(new Error('No central university defined'));
+            }
+            universityId = centralUniversity.id;
+            isCentralUniversity = true;
         }
 
         return Promise.resolve({
-            id: '6363c0e2-80aa-487d-86a2-2cca6b39817f',
+            id: decoded.sub,
             fullName: '',
-            ...decoded,
+            universityId,
+            isCentralUniversity,
         });
     },
 });

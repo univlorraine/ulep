@@ -54,6 +54,7 @@ export class LearningLanguageController {
       limit,
       universityIds,
       hasActiveTandem,
+      hasActionableTandem,
       field,
       order,
     }: GetLearningLanguagesRequest,
@@ -69,6 +70,7 @@ export class LearningLanguageController {
       universityIds,
       orderBy,
       hasActiveTandem,
+      hasActionableTandem,
     });
 
     return new Collection<LearningLanguageWithTandemResponse>({
