@@ -21,8 +21,6 @@ import customDataProvider from './providers/customDataProvider';
 import i18nProvider from './providers/i18nProvider';
 import theme from './theme/theme';
 
-// TODO(NOW): try Fragment
-
 const App = () => {
     const translate = useTranslate();
 
