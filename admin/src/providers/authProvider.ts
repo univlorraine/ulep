@@ -13,6 +13,8 @@ export interface Identity {
     isCentralUniversity: boolean;
 }
 
+export const ADMIN_PERMISSION = 'admin';
+
 export const http = async (method: string, path: string, init: Omit<RequestInit, 'method'> = {}) => {
     const response = await fetch(path, {
         ...init,
@@ -84,7 +86,19 @@ const authProvider = () => ({
 
         return Promise.resolve();
     },
-    getPermissions: () => (jwtManager.getToken('access_token') ? Promise.resolve() : Promise.reject()),
+    getPermissions: async () => {
+        const accessToken = jwtManager.getToken('access_token');
+        if (!accessToken) {
+            return Promise.reject();
+        }
+
+        const decoded: any = jwtManager.decodeToken(accessToken);
+        if (!decoded) {
+            return Promise.reject();
+        }
+
+        return Promise.resolve(decoded.universityId ? null : ADMIN_PERMISSION);
+    },
     getIdentity: async (): Promise<Identity> => {
         // TODO(NOW+0): Doc on how to add universityId to user
         // https://www.baeldung.com/keycloak-custom-user-attributes
