@@ -143,7 +143,7 @@ const ShowTandems = () => {
                     <Box sx={{ marginTop: 1 }}>
                         {isLoadingMatches && <CircularProgress />}
                         {isErrorMatches && <p>{translate('learning_languages.show.tandems.matches.error')}</p>}
-                        {matches && matches?.length > 0 ? (
+                        {!isLoadingMatches && !isErrorMatches && matches && matches?.length > 0 ? (
                             <Table>
                                 <TableHead>
                                     <TableRow>
