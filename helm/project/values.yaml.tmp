@@ -175,11 +175,6 @@ admin:
     tag: "latest" # REQUIRED
     pullPolicy: Always
 
-  env: 
-    keycloakRealm: etandem # FIXE
-    keycloakClientId: react-admin # FIXE
-    keycloakClientSecret: *keycloakClientSecret # REQUIRED
-
   autoscaling:
     enabled: false
     minReplicas: 1
