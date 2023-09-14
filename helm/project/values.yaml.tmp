@@ -175,6 +175,9 @@ admin:
     tag: "latest" # REQUIRED
     pullPolicy: Always
 
+  env: 
+    keycloakClientSecret: *keycloakClientSecret # REQUIRED
+
   autoscaling:
     enabled: false
     minReplicas: 1
