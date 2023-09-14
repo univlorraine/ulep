@@ -35,7 +35,19 @@ const authProvider = () => ({
         });
 
         const payload = await response.json();
-        jwtManager.setTokens(payload.accessToken, payload.refreshToken);
+
+        // Check that user has admin role to authorize login
+        const decoded: any = jwtManager.decodeToken(payload.accessToken);
+        if (decoded) {
+            const isAdmin = decoded.realm_access?.roles.includes('admin');
+            if (isAdmin) {
+                jwtManager.setTokens(payload.accessToken, payload.refreshToken);
+
+                return Promise.resolve();
+            }
+        }
+
+        return Promise.reject();
     },
     logout: () => {
         jwtManager.ereaseTokens();
