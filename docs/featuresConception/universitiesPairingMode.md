@@ -45,35 +45,103 @@ Context: a tandem is suggested by individual routine but do not exist in databas
 ```plantuml
 start
     :get universityId of admin who trigger the action;
-
     :partner = tandem user who's not from same university of admin;
 
-    if (have a partner) then(no)
+    if (have a partner) then(false)
         ' If no partner then all users are from same university as admin 
-        :CREATE tandem as ACTIVE;
-    else (yes)
+        :CREATE tandem as ACTIVE AND
+            validation from admin's university;
+    else (true)
         :pairingMode = get partner's university pairing mode;
         switch (pairingMode?)
             case (manual)
-                ' TODO(NOW): find way to distinguish validation
-                ' Maybe store ID of last university/user which validate
-                :CREATE tandem as VALIDATED;
+                :CREATE tandem with
+                status TO_VALIDATE AND
+                validation from admin's university;
             case (semi-automatic)
-                :CREATE tandem as ACTIVE;
+                :CREATE tandem as ACTIVE AND
+                validation from admin's university;
             case (automatic)
-                :CREATE tandem as ACTIVE;
+                :CREATE tandem as ACTIVE AND
+                validation from admin's university;
         endswitch
     endif
-
 end
 ```
 
-# Specific case to address
+
+### Validate a tandem
+
+Context:
+- A tandem has been proposed by global routine (i.e. exist in DB with status `DRAFT`) OR
+- A tandem has been created after suggestion by individual routine but due to universities pairing mode it's waiting for validation from an university (i.e. exist in DB with a status like `VALIDATED_UNIVERSITY_1`)
+
+```plantuml
+start
+    :adminUniversity = get university of admin who trigger the action;
+    :tandem = get tandem;
+
+    :tandemUniversities = tandem's users universities;
+
+    if (tandemUniversities include adminUniversity?) then (true)
+        :partner = tandem user who's not from adminUniversity;
+
+        if (tandem status is "DRAFT"
+        OR "VALIDATED_UNIVERSITY_1"?) then(false)
+            stop
+        else (true)
+            if (tandem users are from same university?) then(true)
+                :UPDATE tandem with
+                status ACTIVE AND
+                validation from adminUniversity;
+            else (false)
+                if (tandem status?) then (DRAFT)
+                    :pairingMode = partner's university pairing mode;
+
+                    switch (pairingMode?)
+                        case (manual)
+                            :UPDATE  tandem with
+                            status TO_VALIDATE AND
+                            validation from adminUniversity;
+                        case (semi-automatic)
+                            :UPDATE tandem as ACTIVE AND
+                            validation from adminUniversity;
+                        case (automatic)
+                            :UPDATE tandem as ACTIVE AND
+                            validation from adminUniversity;
+                    endswitch
+                else (VALIDATED_UNIVERSITY_1)
+                    :get tandem's university validation;
+                    
+                    if (adminUniversity is in tandem's validation) then (true)
+                        ' Admin's university has already validated this tandem
+                        stop
+                    else (false)
+                        :UPDATE tandem as ACTIVE AND
+                        validation from adminUniversity;
+                    endif
+
+                endif
+            endif
+        endif
+    else (false)
+        stop
+    endif
+
+end
+
+```
+
+### Global routine execution
+
+TODO
+
+## Specific case to address
 
 TODO: address these cases
 - How to manage a tandem validated by 1st university if second university validate an other tandem (from individual routine for example)
 
-# TODOs after
+## TODOs after
 
 - Relaunch global routine if needed
 - Side effect of a validation / creation (email ?)
