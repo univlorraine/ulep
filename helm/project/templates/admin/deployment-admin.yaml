@@ -54,9 +54,6 @@ spec:
           env:
             - name: REACT_APP_API_URL
               value: "https://{{ .Values.apiUrl }}.{{ .Values.domain }}"
-          envFrom: 
-            - secretRef: 
-                name: "{{ include "etandem.fullname" . }}-secret-{{ .Values.admin.name }}"
       {{- with .Values.nodeSelector }}
       nodeSelector:
         {{- toYaml . | nindent 8 }}
