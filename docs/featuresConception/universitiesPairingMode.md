@@ -136,12 +136,18 @@ end
 
 TODO
 
-## Specific case to address
 
-TODO: address these cases
+
+## TODOs
+
+1. Add university's pairing mode and ability to update them through Backoffice
+2. Impact on tandem creation / validation usecases
+3. IHM validation / creation 
+
+Specific case to address:
 - How to manage a tandem validated by 1st university if second university validate an other tandem (from individual routine for example)
 
-## TODOs after
-
+After:
 - Relaunch global routine if needed
+- Refusal of tandem
 - Side effect of a validation / creation (email ?)
