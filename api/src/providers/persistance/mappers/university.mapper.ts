@@ -1,5 +1,5 @@
 import * as Prisma from '@prisma/client';
-import { University } from 'src/core/models';
+import { PairingMode, University } from 'src/core/models';
 import { campusMapper } from './campus.mapper';
 import { countryMapper } from 'src/providers/persistance/mappers/country.mapper';
 
@@ -26,5 +26,6 @@ export const universityMapper = (snapshot: UniversitySnapshot): University => {
     admissionStart: snapshot.admissionStartDate,
     admissionEnd: snapshot.admissionEndDate,
     website: snapshot.website,
+    pairingMode: PairingMode[snapshot.pairing_mode],
   });
 };

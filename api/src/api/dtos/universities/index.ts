@@ -9,7 +9,7 @@ import {
   IsUrl,
   IsArray,
 } from 'class-validator';
-import { University } from 'src/core/models/university.model';
+import { PairingMode, University } from 'src/core/models/university.model';
 import {
   CreatePartnerUniversityCommand,
   CreateUniversityCommand,
@@ -63,6 +63,11 @@ export class CreateUniversityRequest implements CreateUniversityCommand {
   @IsUrl()
   @IsOptional()
   website?: string;
+
+  @Swagger.ApiProperty({ type: 'string', enum: PairingMode })
+  @IsString()
+  @IsNotEmpty()
+  pairingMode: PairingMode;
 }
 
 export class UpdateUniversityRequest
@@ -107,6 +112,11 @@ export class UpdateUniversityRequest
   @IsUrl()
   @IsOptional()
   website: string;
+
+  @Swagger.ApiProperty({ type: 'string', enum: PairingMode })
+  @IsString()
+  @IsNotEmpty()
+  pairingMode: PairingMode;
 }
 
 export class CreateUniversityPartnerRequest
@@ -151,6 +161,11 @@ export class CreateUniversityPartnerRequest
   @IsUrl()
   @IsOptional()
   website?: string;
+
+  @Swagger.ApiProperty({ type: 'string', enum: PairingMode })
+  @IsString()
+  @IsNotEmpty()
+  pairingMode: PairingMode;
 }
 
 export class UniversityResponse {
@@ -198,6 +213,10 @@ export class UniversityResponse {
   @Expose({ groups: ['university:read'] })
   website?: string;
 
+  @Swagger.ApiProperty({ type: 'string', enum: PairingMode })
+  @Expose({ groups: ['read'] })
+  pairingMode: PairingMode;
+
   constructor(partial: Partial<UniversityResponse>) {
     Object.assign(this, partial);
   }
@@ -215,6 +234,7 @@ export class UniversityResponse {
       admissionStart: university.admissionStart,
       admissionEnd: university.admissionEnd,
       website: university.website,
+      pairingMode: university.pairingMode,
     });
   }
 }
