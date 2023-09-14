@@ -7,6 +7,35 @@ Here are the pre-requisites for a tandem to be created regarding the university 
 - `semi-automatic`: an admin from the university or its tandem partner's university must validate the tandem
 - `automatic`: no need for validation from this university
 
+## Impact on Data model
+
+```plantuml
+class Organizations {
+    id: string
+    ---
+    // Other fields
+    pairingMode: string
+}
+
+note right of Organizations::pairingMode
+    oneOf [
+        "MANUAL",
+        "SEMI_AUTOMATIC",
+        "AUTOMATIC"
+    ]
+endnote
+
+class Tandems {
+    id: string
+    ---
+    // Other fields
+    ---
+    UniversityValidations: Organization[]
+}
+
+Tandems::UniversityValidations "n" -- "n" Organizations 
+```
+
 ## Impact on use cases
 
 ### Create a tandem
