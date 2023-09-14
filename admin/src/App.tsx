@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import { Admin, Resource, useTranslate } from 'react-admin';
 import CustomLayout from './components/layout/layout';
 import LoginPage from './pages/auth/login';
@@ -16,7 +16,7 @@ import reports from './pages/report';
 import reportCategories from './pages/report-categories';
 import suggestedLanguages from './pages/suggested-languages';
 import universities from './pages/universities';
-import authProvider from './providers/authProvider';
+import authProvider, { ADMIN_PERMISSION } from './providers/authProvider';
 import customDataProvider from './providers/customDataProvider';
 import i18nProvider from './providers/i18nProvider';
 import theme from './theme/theme';
@@ -24,94 +24,82 @@ import theme from './theme/theme';
 const App = () => {
     const translate = useTranslate();
 
-    const authProviderInstance = authProvider();
-
-    const [isIdentityFromCentralUniversity, setIsIdentityFromCentralUniversity] = useState<boolean>();
-    const [isLoadingIdentity, setIsLoadingIdentity] = useState<boolean>();
-
-    useEffect(() => {
-        setIsLoadingIdentity(true);
-        authProviderInstance
-            .getIdentity()
-            .then((identity) => {
-                if (identity) {
-                    setIsIdentityFromCentralUniversity(identity.isCentralUniversity);
-                }
-            })
-            .catch((err) => {
-                console.error(err);
-            })
-            .finally(() => {
-                setIsLoadingIdentity(false);
-            });
-    }, []);
-
-    if (isLoadingIdentity) {
-        return null;
-    }
-
     return (
         <Admin
-            authProvider={authProviderInstance}
+            authProvider={authProvider()}
             dataProvider={customDataProvider}
             i18nProvider={i18nProvider}
             layout={CustomLayout}
             loginPage={LoginPage}
             theme={theme}
         >
-            <>
-                {isIdentityFromCentralUniversity && (
-                    <>
-                        <Resource name="countries" options={{ label: translate('countries.label') }} {...countries} />
-                        <Resource name="languages" options={{ label: translate('languages.label') }} {...languages} />
-                        <Resource
-                            name="languages/requests"
-                            options={{ label: translate('suggested_languages.label') }}
-                            {...suggestedLanguages}
-                        />
-                        <Resource
-                            name="languages/requests/count"
-                            options={{ label: translate('count_suggested_languages.label') }}
-                            {...countSuggestedLanguages}
-                        />
-                        <Resource name="interests" options={{ label: translate('interests.label') }} {...interests} />
-                        <Resource
-                            name="interests/categories"
-                            options={{ label: translate('interest_categories.label') }}
-                            {...categoryInterest}
-                        />
-                        <Resource
-                            name="objectives"
-                            options={{ label: translate('objectives.label') }}
-                            {...objectives}
-                        />
-                        <Resource name="campus" options={{ label: translate('campus.label') }} {...campus} />
-                        <Resource
-                            name="proficiency/questions"
-                            options={{ label: translate('questions.label') }}
-                            {...questions}
-                        />
-                        <Resource
-                            name="universities"
-                            options={{ label: translate('universities.label') }}
-                            recordRepresentation="name"
-                            {...universities}
-                        />
-                        <Resource name="reports" options={{ label: translate('reports.label') }} {...reports} />
-                        <Resource
-                            name="reports/categories"
-                            options={{ label: translate('report_categories.label') }}
-                            {...reportCategories}
-                        />
-                    </>
-                )}
-                <Resource name="profiles" options={{ label: translate('profiles.label') }} {...profiles} />
-                <Resource
-                    name="learning-languages"
-                    options={{ label: translate('learning_languages.label') }}
-                    {...learningLanguages}
-                />
-            </>
+            {(permissions) => (
+                <>
+                    <Resource name="profiles" options={{ label: translate('profiles.label') }} {...profiles} />
+                    <Resource
+                        name="learning-languages"
+                        options={{ label: translate('learning_languages.label') }}
+                        {...learningLanguages}
+                    />
+                    {permissions === ADMIN_PERMISSION && (
+                        <>
+                            <Resource
+                                name="countries"
+                                options={{ label: translate('countries.label') }}
+                                {...countries}
+                            />
+                            <Resource
+                                name="languages"
+                                options={{ label: translate('languages.label') }}
+                                {...languages}
+                            />
+                            <Resource
+                                name="languages/requests"
+                                options={{ label: translate('suggested_languages.label') }}
+                                {...suggestedLanguages}
+                            />
+                            <Resource
+                                name="languages-requests-count"
+                                options={{ label: translate('count_suggested_languages.label') }}
+                                {...countSuggestedLanguages}
+                            />
+                            <Resource
+                                name="interests"
+                                options={{ label: translate('interests.label') }}
+                                {...interests}
+                            />
+                            <Resource
+                                name="interests/categories"
+                                options={{ label: translate('interest_categories.label') }}
+                                {...categoryInterest}
+                            />
+                            <Resource
+                                name="objectives"
+                                options={{ label: translate('objectives.label') }}
+                                {...objectives}
+                            />
+                            <Resource name="campus" options={{ label: translate('campus.label') }} {...campus} />
+                            <Resource
+                                name="proficiency/questions"
+                                options={{ label: translate('questions.label') }}
+                                {...questions}
+                            />
+                            <Resource
+                                name="universities"
+                                options={{ label: translate('universities.label') }}
+                                recordRepresentation="name"
+                                {...universities}
+                            />
+                            <Resource name="reports" options={{ label: translate('reports.label') }} {...reports} />
+                            <Resource
+                                name="reports/categories"
+                                options={{ label: translate('report_categories.label') }}
+                                {...reportCategories}
+                            />
+                        </>
+                    )}
+                </>
+            )}
         </Admin>
     );
 };

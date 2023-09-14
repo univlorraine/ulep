@@ -7,13 +7,13 @@ import PublicIcon from '@mui/icons-material/Public';
 import QuizIcon from '@mui/icons-material/Quiz';
 import SchoolIcon from '@mui/icons-material/School';
 import React from 'react';
-import { useTranslate, Menu, useGetIdentity } from 'react-admin';
+import { useTranslate, Menu, usePermissions } from 'react-admin';
+import { ADMIN_PERMISSION } from '../../providers/authProvider';
 
 const CustomMenu = () => {
     const translate = useTranslate();
 
-    const { data: identity } = useGetIdentity();
-    const isFromCentralUniversity = identity?.isCentralUniversity;
+    const { permissions } = usePermissions();
 
     return (
         <Menu sx={{ display: 'flex' }}>
@@ -23,7 +23,7 @@ const CustomMenu = () => {
                 primaryText={translate('learning_languages.label')}
                 to="/learning-languages"
             />
-            {isFromCentralUniversity && (
+            {permissions === ADMIN_PERMISSION && (
                 // Note: div is mandatory to group these Menu.Item as Fragment throw an error from MUI component
                 <div>
                     <Menu.Item
