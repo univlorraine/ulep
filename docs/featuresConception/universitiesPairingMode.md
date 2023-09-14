@@ -134,8 +134,9 @@ end
 
 ### Global routine execution
 
-TODO
+See [dedicated README](./generateTandemsRoutines.md) for algorithm details.
 
+When a tandem is picked by global routine, check if tandems users university are both in automatic pairing mode. If that's the case, then create tandem with status "ACTIVE".
 
 
 ## TODOs
