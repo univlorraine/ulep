@@ -54,12 +54,6 @@ spec:
           env:
             - name: REACT_APP_API_URL
               value: "https://{{ .Values.apiUrl }}.{{ .Values.domain }}"
-            - name: REACT_APP_KEYCLOAK_URL
-              value: "https://{{ .Values.keycloakUrl }}.{{ .Values.domain }}"
-            - name: REACT_APP_KEYCLOAK_REALM
-              value: "{{ .Values.api.env.keycloakRealm }}"
-            - name: REACT_APP_KEYCLOAK_CLIENT_ID
-              value: "react-admin"
           envFrom: 
             - secretRef: 
                 name: "{{ include "etandem.fullname" . }}-secret-{{ .Values.admin.name }}"

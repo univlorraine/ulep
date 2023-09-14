@@ -23,7 +23,24 @@
       "secret": "bN49BuApmmtAODeOWOG8iKOOuJdN3KE6",
       "bearerOnly": false,
       "standardFlowEnabled": false,
-      "directAccessGrantsEnabled": true
+      "directAccessGrantsEnabled": true,
+      "protocolMappers": [{
+        "id": "b38e1a26-d649-4370-879d-c7499d023daa",
+        "name": "universityId",
+        "protocol": "openid-connect",
+        "protocolMapper": "oidc-usermodel-attribute-mapper",
+        "consentRequired": false,
+        "config": {
+          "aggregate.attrs": "false",
+          "userinfo.token.claim": "true",
+          "multivalued": "false",
+          "user.attribute": "universityId",
+          "id.token.claim": "true",
+          "access.token.claim": "true",
+          "claim.name": "universityId",
+          "jsonType.label": "String"
+        }
+      }]
     },
     {
       "clientId": "react-admin",
