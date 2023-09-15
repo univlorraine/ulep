@@ -1,4 +1,4 @@
-import { ArgumentsHost, Catch, HttpStatus } from '@nestjs/common';
+import { ArgumentsHost, Catch, HttpStatus, Logger } from '@nestjs/common';
 import { Response } from 'express';
 import { BaseExceptionFilter } from '@nestjs/core';
 import { DomainError, DomainErrorCode } from 'src/core/errors';
@@ -13,6 +13,8 @@ export const domainErrorToHttpStatusCode: Record<DomainErrorCode, HttpStatus> =
 
 @Catch(DomainError)
 export class DomainErrorFilter extends BaseExceptionFilter {
+  private readonly logger = new Logger();
+
   // This filter catches unhandled domain exceptions and returns a predefined
   // well-formatted JSON response with a human-readable error and a semantically
   // correct HTTP status code that can be handled programmatically by the client.
@@ -20,6 +22,8 @@ export class DomainErrorFilter extends BaseExceptionFilter {
     const ctx = host.switchToHttp();
     const response = ctx.getResponse<Response>();
     const httpStatusCode = domainErrorToHttpStatusCode[exception.code];
+
+    this.logger.error(exception);
 
     response.status(httpStatusCode).end(
       JSON.stringify({
