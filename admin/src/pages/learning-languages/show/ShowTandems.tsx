@@ -227,7 +227,7 @@ const ShowTandems = () => {
                         : translate('learning_languages.show.tandems.globalSuggestions.titleNotCentralUniversity')}
                 </Typography>
                 <Box sx={{ marginTop: 1 }}>
-                    {!retryTandemQuery ? (
+                    {isErrorTandem && !retryTandemQuery ? (
                         <p>{translate('learning_languages.show.tandems.globalSuggestions.noResult')}</p>
                     ) : (
                         <Table>
