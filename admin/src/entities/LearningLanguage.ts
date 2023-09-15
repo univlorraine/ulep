@@ -16,6 +16,7 @@ export type LearningLanguageTandem = {
     status: string;
     userLearningLanguage: LearningLanguage;
     partnerLearningLanguage: LearningLanguage;
+    universityValidations: string[];
 };
 
 /**

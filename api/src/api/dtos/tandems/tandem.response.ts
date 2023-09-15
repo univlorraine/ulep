@@ -51,6 +51,10 @@ export class UserTandemResponse {
   @Expose({ groups: ['read'] })
   userLearningLanguage: LearningLanguageResponse;
 
+  @Swagger.ApiProperty({ type: 'string', isArray: true })
+  @Expose({ groups: ['read'] })
+  universityValidations: string[];
+
   constructor(partial: Partial<UserTandemResponse>) {
     Object.assign(this, partial);
   }
@@ -91,6 +95,7 @@ export class UserTandemResponse {
       userLearningLanguage: LearningLanguageResponse.fromDomain(
         learningLanguageProfile,
       ),
+      universityValidations: tandem.universityValidations,
     });
   }
 }

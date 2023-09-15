@@ -147,6 +147,8 @@ const ShowTandems = () => {
     if (hasTandemWaitingForValidation) {
         // TODO(NOW): better + translations
         // TODO(NOW): only if admin not from validated university
+        const isUserValidationNeeded = !tandem.universityValidations.includes(identity?.universityId);
+
         return (
             <>
                 <Typography variant="h6">Validé 1 fois</Typography>
@@ -199,7 +201,9 @@ const ShowTandems = () => {
                                 {new Date(tandem.partnerLearningLanguage.createdAt).toLocaleDateString()}
                             </TableCell>
                             <TableCell>
-                                <ValidateTandem onTandemValidated={handleValidateTandem} tandemId={tandem.id} />
+                                {isUserValidationNeeded && (
+                                    <ValidateTandem onTandemValidated={handleValidateTandem} tandemId={tandem.id} />
+                                )}
                             </TableCell>
                         </TableRow>
                     </TableBody>
