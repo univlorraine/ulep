@@ -18,8 +18,6 @@ export interface TandemRepository {
 
   update(tandem: Tandem): Promise<void>;
 
-  updateStatus(id: string, status: TandemStatus): Promise<void>;
-
   findWhere(props: FindWhereProps): Promise<Collection<Tandem>>;
 
   getExistingTandems(): Promise<Tandem[]>;

@@ -96,19 +96,6 @@ export class InMemoryTandemRepository implements TandemRepository {
     return Promise.resolve(this.#tandems.find((tandem) => tandem.id === id));
   }
 
-  updateStatus(id: string, status: TandemStatus): Promise<void> {
-    this.#tandems = this.#tandems.map((tandem) => {
-      if (tandem.id === id) {
-        return new Tandem({
-          ...tandem,
-          status,
-        });
-      }
-      return tandem;
-    });
-    return Promise.resolve();
-  }
-
   update(tandem: Tandem): Promise<void> {
     this.#tandems = this.#tandems.map((t) => (t.id === tandem.id ? tandem : t));
     return Promise.resolve();

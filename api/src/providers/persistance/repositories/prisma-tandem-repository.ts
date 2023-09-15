@@ -179,16 +179,6 @@ export class PrismaTandemRepository implements TandemRepository {
     return tandemMapper(res);
   }
 
-  async updateStatus(id: string, status: TandemStatus): Promise<void> {
-    await this.prisma.tandems.update({
-      where: {
-        id,
-      },
-      data: {
-        status,
-      },
-    });
-  }
   async update(tandem: Tandem): Promise<void> {
     await this.prisma.tandems.update({
       where: {

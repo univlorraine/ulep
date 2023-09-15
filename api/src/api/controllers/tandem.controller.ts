@@ -3,7 +3,6 @@ import {
   CreateTandemUsecase,
   GenerateTandemsUsecase,
   GetTandemsUsecase,
-  UpdateTandemStatusUsecase,
 } from 'src/core/usecases/tandem';
 import { RoutineStatus } from 'src/core/models/routine-execution.model';
 import {
@@ -27,7 +26,6 @@ import { Roles } from '../decorators/roles.decorator';
 import { configuration } from 'src/configuration';
 import { AuthenticationGuard } from '../guards';
 import { GenerateTandemsRequest } from '../dtos/tandems/generate-tandems.request';
-import { UpdateTandemStatusRequest } from '../dtos/tandems/update-tandem-status.request';
 import {
   ROUTINE_EXECUTION_REPOSITORY,
   RoutineExecutionRepository,
@@ -43,7 +41,6 @@ export class TandemController {
     private readonly generateTandemsUsecase: GenerateTandemsUsecase,
     private readonly getTandemsUsecase: GetTandemsUsecase,
     private readonly createTandemUsecase: CreateTandemUsecase,
-    private readonly updateTandemStatusUsecase: UpdateTandemStatusUsecase,
     private readonly validateTandemUsecase: ValidateTandemUsecase,
     @Inject(ROUTINE_EXECUTION_REPOSITORY)
     private readonly routineExecutionRepository: RoutineExecutionRepository,
@@ -93,21 +90,6 @@ export class TandemController {
     await this.validateTandemUsecase.execute({
       id,
       adminUniversityId: user.universityId,
-    });
-  }
-
-  @Put(':id/status')
-  @Roles(configuration().adminRole)
-  @UseGuards(AuthenticationGuard)
-  @Swagger.ApiOperation({ summary: 'Update status of a Tandem ressource' })
-  async updateStatus(
-    @Param('id', ParseUUIDPipe) id: string,
-    @Body() body: UpdateTandemStatusRequest,
-  ): Promise<void> {
-    // TODO(NOW+1): remove endpoint and usecase (not used anymore)
-    await this.updateTandemStatusUsecase.execute({
-      id,
-      status: body.status,
     });
   }
 

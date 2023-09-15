@@ -69,7 +69,6 @@ import {
   CreateUnsubscribeReportUsecase,
   GetLearningLanguagesUsecase,
   GetLearningLanguageOfIdUsecase,
-  UpdateTandemStatusUsecase,
 } from './usecases';
 import { UploadObjectiveImageUsecase } from 'src/core/usecases/media/upload-objective-image.usecase';
 import { UpdateObjectiveUsecase } from 'src/core/usecases/objective/update-objective.usecase';
@@ -161,7 +160,6 @@ const usecases: Provider[] = [
   GenerateTandemsUsecase,
   GetTandemsUsecase,
   GetUserMatchUsecase,
-  UpdateTandemStatusUsecase,
   ValidateTandemUsecase,
   // Universities
   CreatePartnerUniversityUsecase,
