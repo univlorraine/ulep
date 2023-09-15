@@ -118,8 +118,8 @@ const ShowTandems = () => {
                             <TableCell>
                                 <ProfileLink profile={tandem.partnerLearningLanguage.profile} />
                             </TableCell>
-                            <TableCell>{tandem.userLearningLanguage.name}</TableCell>
-                            <TableCell>{tandem.userLearningLanguage.level}</TableCell>
+                            <TableCell>{tandem.partnerLearningLanguage.name}</TableCell>
+                            <TableCell>{tandem.partnerLearningLanguage.level}</TableCell>
                             <TableCell>{tandem.partnerLearningLanguage.profile.user.university.name}</TableCell>
                             <TableCell>
                                 <DisplayRole role={tandem.partnerLearningLanguage.profile.user.role} />
@@ -130,7 +130,7 @@ const ShowTandems = () => {
                                 />
                             </TableCell>
                             <TableCell>
-                                {new Date(tandem.userLearningLanguage.createdAt).toLocaleDateString()}
+                                {new Date(tandem.partnerLearningLanguage.createdAt).toLocaleDateString()}
                             </TableCell>
                         </TableRow>
                     </TableBody>
@@ -184,8 +184,8 @@ const ShowTandems = () => {
                             <TableCell>
                                 <ProfileLink profile={tandem.partnerLearningLanguage.profile} />
                             </TableCell>
-                            <TableCell>{tandem.userLearningLanguage.name}</TableCell>
-                            <TableCell>{tandem.userLearningLanguage.level}</TableCell>
+                            <TableCell>{tandem.partnerLearningLanguage.name}</TableCell>
+                            <TableCell>{tandem.partnerLearningLanguage.level}</TableCell>
                             <TableCell>{tandem.partnerLearningLanguage.profile.user.university.name}</TableCell>
                             <TableCell>
                                 <DisplayRole role={tandem.partnerLearningLanguage.profile.user.role} />
@@ -196,7 +196,7 @@ const ShowTandems = () => {
                                 />
                             </TableCell>
                             <TableCell>
-                                {new Date(tandem.userLearningLanguage.createdAt).toLocaleDateString()}
+                                {new Date(tandem.partnerLearningLanguage.createdAt).toLocaleDateString()}
                             </TableCell>
                             <TableCell>
                                 <ValidateTandem onTandemValidated={handleValidateTandem} tandemId={tandem.id} />
@@ -343,8 +343,8 @@ const ShowTandems = () => {
                                         <TableCell>
                                             <ProfileLink profile={tandem.partnerLearningLanguage.profile} />
                                         </TableCell>
-                                        <TableCell>{tandem.userLearningLanguage.name}</TableCell>
-                                        <TableCell>{tandem.userLearningLanguage.level}</TableCell>
+                                        <TableCell>{tandem.partnerLearningLanguage.name}</TableCell>
+                                        <TableCell>{tandem.partnerLearningLanguage.level}</TableCell>
                                         <TableCell>
                                             {tandem.partnerLearningLanguage.profile.user.university.name}
                                         </TableCell>
@@ -358,7 +358,7 @@ const ShowTandems = () => {
                                         </TableCell>
 
                                         <TableCell>
-                                            {new Date(tandem.userLearningLanguage.createdAt).toLocaleDateString()}
+                                            {new Date(tandem.partnerLearningLanguage.createdAt).toLocaleDateString()}
                                         </TableCell>
                                         <TableCell>N/A</TableCell>
                                         <TableCell>
