@@ -263,6 +263,19 @@
                         "learningType": "Mode"
                     }
                 },
+                "waitingValidation": {
+                    "title": "Pending validation",
+                    "tableColumns": {
+                        "profile": "Profile",
+                        "learnedLanguage": "Requested language",
+                        "level": "Level",
+                        "date": "Date",
+                        "university": "University",
+                        "role": "Role",
+                        "learningType": "Mode",
+                        "action": "Action"
+                    }
+                },
                 "matches": {
                     "error": "An error occured while fetching individual routine suggestions",
                     "title": "Individual routine suggestions",

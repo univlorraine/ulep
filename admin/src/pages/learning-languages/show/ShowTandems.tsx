@@ -80,7 +80,6 @@ const ShowTandems = () => {
     }
 
     // TODO(NOW): manage edge cases:
-    // - I validate a tandem but there's need for validation from other university and its still proposed in individual routine results
     // - I validated VS I need to validate a tandem
 
     if (hasActiveTandem) {
@@ -145,39 +144,43 @@ const ShowTandems = () => {
     };
 
     if (hasTandemWaitingForValidation) {
-        // TODO(NOW): better + translations
-        // TODO(NOW): only if admin not from validated university
         const isUserValidationNeeded = !tandem.universityValidations.includes(identity?.universityId);
 
         return (
             <>
-                <Typography variant="h6">Validé 1 fois</Typography>
+                <Typography variant="h6">
+                    {translate('learning_languages.show.tandems.waitingValidation.title')}
+                </Typography>
                 <Table>
                     <TableHead>
                         <TableRow>
                             <TableCell>
-                                {translate('learning_languages.show.tandems.active.tableColumns.profile')}
+                                {translate('learning_languages.show.tandems.waitingValidation.tableColumns.profile')}
                             </TableCell>
                             <TableCell>
-                                {translate('learning_languages.show.tandems.active.tableColumns.learnedLanguage')}
+                                {translate(
+                                    'learning_languages.show.tandems.waitingValidation.tableColumns.learnedLanguage'
+                                )}
                             </TableCell>
                             <TableCell>
-                                {translate('learning_languages.show.tandems.active.tableColumns.level')}
+                                {translate('learning_languages.show.tandems.waitingValidation.tableColumns.level')}
                             </TableCell>
                             <TableCell>
-                                {translate('learning_languages.show.tandems.active.tableColumns.university')}
+                                {translate('learning_languages.show.tandems.waitingValidation.tableColumns.university')}
                             </TableCell>
                             <TableCell>
-                                {translate('learning_languages.show.tandems.active.tableColumns.role')}
+                                {translate('learning_languages.show.tandems.waitingValidation.tableColumns.role')}
                             </TableCell>
                             <TableCell>
-                                {translate('learning_languages.show.tandems.active.tableColumns.learningType')}
+                                {translate(
+                                    'learning_languages.show.tandems.waitingValidation.tableColumns.learningType'
+                                )}
                             </TableCell>
                             <TableCell>
-                                {translate('learning_languages.show.tandems.active.tableColumns.date')}
+                                {translate('learning_languages.show.tandems.waitingValidation.tableColumns.date')}
                             </TableCell>
                             <TableCell>
-                                {translate('learning_languages.show.tandems.active.tableColumns.action')}
+                                {translate('learning_languages.show.tandems.waitingValidation.tableColumns.action')}
                             </TableCell>
                         </TableRow>
                     </TableHead>
@@ -201,8 +204,10 @@ const ShowTandems = () => {
                                 {new Date(tandem.partnerLearningLanguage.createdAt).toLocaleDateString()}
                             </TableCell>
                             <TableCell>
-                                {isUserValidationNeeded && (
+                                {isUserValidationNeeded ? (
                                     <ValidateTandem onTandemValidated={handleValidateTandem} tandemId={tandem.id} />
+                                ) : (
+                                    <span>N/A</span>
                                 )}
                             </TableCell>
                         </TableRow>
