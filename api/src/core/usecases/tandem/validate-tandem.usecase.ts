@@ -1,6 +1,6 @@
 import { TandemRepository } from '../../ports/tandems.repository';
 import { Inject, Injectable, Logger } from '@nestjs/common';
-import { RessourceDoesNotExist } from 'src/core/errors';
+import { DomainError, RessourceDoesNotExist } from 'src/core/errors';
 import { Tandem, TandemStatus } from 'src/core/models';
 import { TANDEM_REPOSITORY } from 'src/core/ports/tandems.repository';
 import {
@@ -31,9 +31,9 @@ export class ValidateTandemUsecase {
     }
 
     if (tandem.status !== TandemStatus.VALIDATED_BY_ONE_UNIVERSITY) {
-      throw new Error(
-        `Tandem with status ${tandem.status} can't be validated: ${command.id}`,
-      );
+      throw new DomainError({
+        message: `Tandem with status ${tandem.status} can't be validated: ${command.id}`,
+      });
     }
 
     const adminUniversityId =
@@ -48,9 +48,13 @@ export class ValidateTandemUsecase {
     let updatedTandem: Tandem;
     if (learningLanguagesFromAdminUniversity.length === 0) {
       // TODO(NOW+1): custom errors ?
-      throw new Error(
-        'No concerned learning languages is from admin university',
-      );
+      throw new DomainError({
+        message: 'No concerned learning languages is from admin university',
+      });
+    } else if (tandem.universityValidations.includes(adminUniversityId)) {
+      throw new DomainError({
+        message: 'Admin university has already validated this tandem',
+      });
     } else {
       updatedTandem = new Tandem({
         ...tandem,

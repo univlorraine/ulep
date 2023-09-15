@@ -86,12 +86,12 @@ export class TandemController {
   @UseGuards(AuthenticationGuard)
   @Swagger.ApiOperation({ summary: 'Validate a Tandem ressource' })
   async validateTandem(
+    @CurrentUser() user: KeycloakUser,
     @Param('id', ParseUUIDPipe) id: string,
-    @Body() body: UpdateTandemStatusRequest,
   ): Promise<void> {
-    await this.updateTandemStatusUsecase.execute({
+    await this.validateTandemUsecase.execute({
       id,
-      status: body.status,
+      adminUniversityId: user.universityId,
     });
   }
 
