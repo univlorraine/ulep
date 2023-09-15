@@ -7,9 +7,12 @@ import { Match } from '../../../entities/Match';
 import { TandemStatus } from '../../../entities/Tandem';
 import ProfileLink from '../ui/ProfileLink';
 import useLearningLanguagesStore from '../useLearningLanguagesStore';
-import ValidateTandem from './ValidateTandem';
+import AcceptTandem from './AcceptTandem';
 
 // TODO(NEXT): Relaunch global routine when validating / refusing a tandem
+
+// TODO(NOW+1): factorize table display
+// TODO(NOW+1): split / factorize validate / create buttons
 
 const ShowTandems = () => {
     const translate = useTranslate();
@@ -135,7 +138,7 @@ const ShowTandems = () => {
         );
     }
 
-    const handleValidateTandem = async () => {
+    const handleAcceptTandem = async () => {
         await refetchTandem();
         await refetchMatches();
     };
@@ -202,7 +205,7 @@ const ShowTandems = () => {
                             </TableCell>
                             <TableCell>
                                 {isUserValidationNeeded ? (
-                                    <ValidateTandem onTandemValidated={handleValidateTandem} tandemId={tandem.id} />
+                                    <AcceptTandem onTandemValidated={handleAcceptTandem} tandemId={tandem.id} />
                                 ) : (
                                     <span>N/A</span>
                                 )}
@@ -284,9 +287,9 @@ const ShowTandems = () => {
                                             </TableCell>
                                             <TableCell>{match.score.total * 100}%</TableCell>
                                             <TableCell>
-                                                <ValidateTandem
+                                                <AcceptTandem
                                                     learningLanguageIds={[recordId.toString(), match.target.id]}
-                                                    onTandemValidated={handleValidateTandem}
+                                                    onTandemValidated={handleAcceptTandem}
                                                 />
                                             </TableCell>
                                         </TableRow>
@@ -368,12 +371,12 @@ const ShowTandems = () => {
                                         </TableCell>
                                         <TableCell>N/A</TableCell>
                                         <TableCell>
-                                            <ValidateTandem
+                                            <AcceptTandem
                                                 learningLanguageIds={[
                                                     recordId.toString(),
                                                     tandem.partnerLearningLanguage.id,
                                                 ]}
-                                                onTandemValidated={handleValidateTandem}
+                                                onTandemValidated={handleAcceptTandem}
                                             />
                                         </TableCell>
                                     </TableRow>
