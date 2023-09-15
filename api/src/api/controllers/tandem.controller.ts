@@ -140,7 +140,7 @@ export class TandemController {
         );
         return this.routineExecutionRepository.updateStatus(
           routineExecution.id,
-          RoutineStatus.ENDED,
+          RoutineStatus.ERROR,
         );
       });
 
