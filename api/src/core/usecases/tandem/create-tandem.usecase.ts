@@ -1,4 +1,3 @@
-import { universityCommandToDomain } from './../../../../../app/src/command/UniversityCommand';
 import { Inject, Injectable, Logger } from '@nestjs/common';
 import { RessourceDoesNotExist } from 'src/core/errors';
 import { LearningLanguageIsAlreadyInActiveTandemError } from 'src/core/errors/tandem-exceptions';

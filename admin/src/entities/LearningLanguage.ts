@@ -7,15 +7,16 @@ export type LearningLanguage = {
     level: string;
     name: string;
     createdAt: Date;
-    profile?: Profile;
+    profile: Profile;
     tandem?: TandemSummary;
 };
 
 export type LearningLanguageTandem = {
     id: string;
     status: string;
-    learningLanguage: LearningLanguage;
-    partner: Profile;
+    userLearningLanguage: LearningLanguage;
+    partnerLearningLanguage: LearningLanguage;
+    universityValidations: string[];
 };
 
 /**

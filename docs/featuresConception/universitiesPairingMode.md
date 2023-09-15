@@ -73,7 +73,6 @@ end
 ### Validate a tandem
 
 Context:
-- A tandem has been proposed by global routine (i.e. exist in DB with status `DRAFT`) OR
 - A tandem has been created after suggestion by individual routine but due to universities pairing mode it's waiting for validation from an university (i.e. exist in DB with a status like `VALIDATED_UNIVERSITY_1`)
 
 ```plantuml
@@ -86,8 +85,7 @@ start
     if (tandemUniversities include adminUniversity?) then (true)
         :partner = tandem user who's not from adminUniversity;
 
-        if (tandem status is "DRAFT"
-        OR "VALIDATED_UNIVERSITY_1"?) then(false)
+        if ("VALIDATED_UNIVERSITY_1"?) then(false)
             stop
         else (true)
             if (tandem users are from same university?) then(true)
@@ -95,32 +93,14 @@ start
                 status ACTIVE AND
                 validation from adminUniversity;
             else (false)
-                if (tandem status?) then (DRAFT)
-                    :pairingMode = partner's university pairing mode;
-
-                    switch (pairingMode?)
-                        case (manual)
-                            :UPDATE  tandem with
-                            status TO_VALIDATE AND
-                            validation from adminUniversity;
-                        case (semi-automatic)
-                            :UPDATE tandem as ACTIVE AND
-                            validation from adminUniversity;
-                        case (automatic)
-                            :UPDATE tandem as ACTIVE AND
-                            validation from adminUniversity;
-                    endswitch
-                else (VALIDATED_UNIVERSITY_1)
-                    :get tandem's university validation;
-                    
-                    if (adminUniversity is in tandem's validation) then (true)
-                        ' Admin's university has already validated this tandem
-                        stop
-                    else (false)
-                        :UPDATE tandem as ACTIVE AND
-                        validation from adminUniversity;
-                    endif
-
+                :get tandem's university validation;
+                
+                if (adminUniversity is in tandem's validation) then (true)
+                    ' Admin's university has already validated this tandem
+                    stop
+                else (false)
+                    :UPDATE tandem as ACTIVE AND
+                    validation from adminUniversity;
                 endif
             endif
         endif
