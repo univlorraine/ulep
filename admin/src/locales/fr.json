@@ -207,7 +207,13 @@
             "name": "Nom de la nouvelle université partenaire",
             "timezone": "Timezone de la nouvelle université partenaire",
             "title": "Création d'une nouvelle université partenaire",
-            "website": "Site web de la nouvelle université partenaire"
+            "website": "Site web de la nouvelle université partenaire",
+            "pairingMode": "Mode d'appariement"
+        },
+        "pairingModes": {
+            "manual": "Manuel",
+            "semi_automatic": "Semi-automatique",
+            "automatic": "Automatique"
         },
         "label": "Universités",
         "name": "Nom de l'université",
@@ -224,7 +230,8 @@
             "sites": "Campus de rencontre",
             "timezone": "Timezone",
             "website": "Site web de l'université",
-            "id": "ID"
+            "id": "ID",
+            "pairingMode": "Mode d'appariement"
         },
         "update": {
             "admission_end": "Fin de date d'inscription à l'université",
@@ -238,7 +245,8 @@
             "name": "Nom de l'université",
             "timezone": "Timezone de l'université",
             "title": "Mise à jour de l'université",
-            "website": "Site web de l'université"
+            "website": "Site web de l'université",
+            "pairingMode": "Mode d'appariement"
         }
     },
     "uploader": {

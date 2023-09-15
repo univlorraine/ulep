@@ -4,7 +4,7 @@ import {
   UniversityRepository,
 } from '../../ports/university.repository';
 import { RessourceAlreadyExists, RessourceDoesNotExist } from 'src/core/errors';
-import { University } from 'src/core/models';
+import { PairingMode, University } from 'src/core/models';
 import {
   COUNTRY_REPOSITORY,
   CountryRepository,
@@ -20,6 +20,7 @@ export class UpdateUniversityCommand {
   codes: string[];
   domains: string[];
   website: string;
+  pairingMode: PairingMode;
 }
 
 @Injectable()
@@ -54,6 +55,7 @@ export class UpdateUniversityUsecase {
         admissionStart: command.admissionStart,
         campus: university.campus,
         website: command.website,
+        pairingMode: command.pairingMode,
       }),
     );
   }

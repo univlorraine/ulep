@@ -62,12 +62,14 @@ model Organizations {
   created_at         DateTime            @default(now())
   updated_at         DateTime            @updatedAt
   website            String?
+  pairing_mode       String              @default("MANUAL")
   Parent             Organizations?      @relation("Organizations", fields: [parent_id], references: [id], onDelete: Cascade)
   Childrens          Organizations[]     @relation("Organizations")
   Country            CountryCodes        @relation(fields: [country_code_id], references: [id])
   Users              Users[]
   Places             Places[]
   RoutineExecutions  RoutineExecutions[]
+  ValidatedTandems   Tandems[]
 
   @@unique([name])
   @@map("organizations")
@@ -347,11 +349,12 @@ model InterestCategories {
 //  * Tandems
 //  * ****************************************************
 model Tandems {
-  id                String              @id @default(uuid())
-  status            String              @default("ACTIVE")
-  created_at        DateTime            @default(now())
-  updated_at        DateTime            @updatedAt
-  LearningLanguages LearningLanguages[]
+  id                    String              @id @default(uuid())
+  status                String              @default("ACTIVE")
+  created_at            DateTime            @default(now())
+  updated_at            DateTime            @updatedAt
+  LearningLanguages     LearningLanguages[]
+  UniversityValidations Organizations[]
 
   @@index([status], name: "status")
   @@map("tandems")

@@ -1,6 +1,12 @@
 import Campus from './Campus';
 import Country from './Country';
 
+export enum PairingMode {
+    MANUAL = 'MANUAL',
+    SEMI_AUTOMATIC = 'SEMI_AUTOMATIC',
+    AUTOMATIC = 'AUTOMATIC',
+}
+
 type University = {
     id: string;
     name: string;
@@ -12,6 +18,7 @@ type University = {
     sites: Campus[];
     codes: string[];
     domains: string[];
+    pairingMode: PairingMode;
     website: string;
 };
 

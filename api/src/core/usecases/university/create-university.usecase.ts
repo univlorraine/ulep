@@ -1,6 +1,6 @@
 import { Inject, Injectable } from '@nestjs/common';
 import { DomainError, RessourceDoesNotExist } from 'src/core/errors';
-import { University } from 'src/core/models';
+import { PairingMode, University } from 'src/core/models';
 import { Campus } from 'src/core/models/campus.model';
 import {
   COUNTRY_REPOSITORY,
@@ -25,6 +25,7 @@ export class CreateUniversityCommand {
   website?: string;
   codes?: string[];
   domains?: string[];
+  pairingMode: PairingMode;
 }
 
 @Injectable()
@@ -76,6 +77,7 @@ export class CreateUniversityUsecase {
       website: command.website,
       codes: command.codes,
       domains: command.domains,
+      pairingMode: command.pairingMode,
     });
 
     return this.universityRepository.create(university);

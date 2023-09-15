@@ -17,6 +17,7 @@ const CreateUniversity = () => {
         admissionEnd: Date,
         codes: string[],
         domains: string[],
+        pairingMode: string,
         website?: string
     ) => {
         const payload = {
@@ -27,6 +28,7 @@ const CreateUniversity = () => {
             admissionEnd,
             codes,
             domains,
+            pairingMode,
             website,
         };
 
