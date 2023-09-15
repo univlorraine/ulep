@@ -85,7 +85,7 @@ export class TandemController {
   @Roles(configuration().adminRole)
   @UseGuards(AuthenticationGuard)
   @Swagger.ApiOperation({ summary: 'Validate a Tandem ressource' })
-  async updateStatus(
+  async validateTandem(
     @Param('id', ParseUUIDPipe) id: string,
     @Body() body: UpdateTandemStatusRequest,
   ): Promise<void> {
