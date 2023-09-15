@@ -363,8 +363,11 @@ const ShowTandems = () => {
                                         <TableCell>N/A</TableCell>
                                         <TableCell>
                                             <ValidateTandem
+                                                learningLanguageIds={[
+                                                    recordId.toString(),
+                                                    tandem.partnerLearningLanguage.id,
+                                                ]}
                                                 onTandemValidated={handleValidateTandem}
-                                                tandemId={tandem.id}
                                             />
                                         </TableCell>
                                     </TableRow>

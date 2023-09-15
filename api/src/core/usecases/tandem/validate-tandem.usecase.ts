@@ -1,12 +1,7 @@
 import { TandemRepository } from '../../ports/tandems.repository';
 import { Inject, Injectable, Logger } from '@nestjs/common';
 import { RessourceDoesNotExist } from 'src/core/errors';
-import {
-  LearningLanguage,
-  PairingMode,
-  Tandem,
-  TandemStatus,
-} from 'src/core/models';
+import { Tandem, TandemStatus } from 'src/core/models';
 import { TANDEM_REPOSITORY } from 'src/core/ports/tandems.repository';
 import {
   UNIVERSITY_REPOSITORY,
@@ -35,10 +30,7 @@ export class ValidateTandemUsecase {
       throw new RessourceDoesNotExist();
     }
 
-    if (
-      tandem.status !== TandemStatus.DRAFT &&
-      tandem.status !== TandemStatus.VALIDATED_BY_ONE_UNIVERSITY
-    ) {
+    if (tandem.status !== TandemStatus.VALIDATED_BY_ONE_UNIVERSITY) {
       throw new Error(
         `Tandem with status ${tandem.status} can't be validated: ${command.id}`,
       );
@@ -48,26 +40,10 @@ export class ValidateTandemUsecase {
       command.adminUniversityId ??
       (await this.universityRepository.findUniversityCentral()).id;
 
-    const {
-      learningLanguagesFromAdminUniversity,
-      learningLanguagesNotFromAdminUniversity,
-    } = tandem.learningLanguages.reduce<{
-      learningLanguagesFromAdminUniversity: LearningLanguage[];
-      learningLanguagesNotFromAdminUniversity: LearningLanguage[];
-    }>(
-      (accumulator, ll) => {
-        if (ll.profile.user.university.id === adminUniversityId) {
-          accumulator.learningLanguagesFromAdminUniversity.push(ll);
-        } else {
-          accumulator.learningLanguagesNotFromAdminUniversity.push(ll);
-        }
-        return accumulator;
-      },
-      {
-        learningLanguagesFromAdminUniversity: [],
-        learningLanguagesNotFromAdminUniversity: [],
-      },
-    );
+    const learningLanguagesFromAdminUniversity =
+      tandem.learningLanguages.filter(
+        (ll) => ll.profile.user.university.id === adminUniversityId,
+      );
 
     let updatedTandem: Tandem;
     if (learningLanguagesFromAdminUniversity.length === 0) {
@@ -75,10 +51,7 @@ export class ValidateTandemUsecase {
       throw new Error(
         'No concerned learning languages is from admin university',
       );
-    } else if (
-      learningLanguagesFromAdminUniversity.length ===
-      tandem.learningLanguages.length
-    ) {
+    } else {
       updatedTandem = new Tandem({
         ...tandem,
         status: TandemStatus.ACTIVE,
@@ -87,49 +60,6 @@ export class ValidateTandemUsecase {
           adminUniversityId,
         ],
       });
-    } else {
-      if (tandem.status === TandemStatus.VALIDATED_BY_ONE_UNIVERSITY) {
-        updatedTandem = new Tandem({
-          ...tandem,
-          status: TandemStatus.ACTIVE,
-          universityValidations: [
-            ...tandem.universityValidations,
-            adminUniversityId,
-          ],
-        });
-      } else {
-        const partnerUniversityPairingMode =
-          learningLanguagesNotFromAdminUniversity[0].profile.user.university
-            .pairingMode;
-
-        switch (partnerUniversityPairingMode) {
-          case PairingMode.MANUAL:
-            updatedTandem = new Tandem({
-              ...tandem,
-              status: TandemStatus.VALIDATED_BY_ONE_UNIVERSITY,
-              universityValidations: [
-                ...tandem.universityValidations,
-                adminUniversityId,
-              ],
-            });
-            break;
-          case PairingMode.SEMI_AUTOMATIC:
-          case PairingMode.AUTOMATIC:
-            updatedTandem = new Tandem({
-              ...tandem,
-              status: TandemStatus.ACTIVE,
-              universityValidations: [
-                ...tandem.universityValidations,
-                adminUniversityId,
-              ],
-            });
-            break;
-          default:
-            throw new Error(
-              `Unsupported university pairing mode ${partnerUniversityPairingMode}`,
-            );
-        }
-      }
     }
 
     await this.tandemRepository.update(updatedTandem);
