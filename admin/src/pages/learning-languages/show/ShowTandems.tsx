@@ -116,18 +116,22 @@ const ShowTandems = () => {
                     <TableBody>
                         <TableRow>
                             <TableCell>
-                                <ProfileLink profile={tandem.partner} />
+                                <ProfileLink profile={tandem.partnerLearningLanguage.profile} />
                             </TableCell>
-                            <TableCell>{tandem.learningLanguage.name}</TableCell>
-                            <TableCell>{tandem.learningLanguage.level}</TableCell>
-                            <TableCell>{tandem.partner.user.university.name}</TableCell>
+                            <TableCell>{tandem.userLearningLanguage.name}</TableCell>
+                            <TableCell>{tandem.userLearningLanguage.level}</TableCell>
+                            <TableCell>{tandem.partnerLearningLanguage.profile.user.university.name}</TableCell>
                             <TableCell>
-                                <DisplayRole role={tandem.partner.user.role} />
+                                <DisplayRole role={tandem.partnerLearningLanguage.profile.user.role} />
                             </TableCell>
                             <TableCell>
-                                <DisplayLearningType learningType={tandem.partner.learningType} />
+                                <DisplayLearningType
+                                    learningType={tandem.partnerLearningLanguage.profile.learningType}
+                                />
                             </TableCell>
-                            <TableCell>{new Date(tandem.learningLanguage.createdAt).toLocaleDateString()}</TableCell>
+                            <TableCell>
+                                {new Date(tandem.userLearningLanguage.createdAt).toLocaleDateString()}
+                            </TableCell>
                         </TableRow>
                     </TableBody>
                 </Table>
@@ -178,18 +182,22 @@ const ShowTandems = () => {
                     <TableBody>
                         <TableRow>
                             <TableCell>
-                                <ProfileLink profile={tandem.partner} />
+                                <ProfileLink profile={tandem.partnerLearningLanguage.profile} />
                             </TableCell>
-                            <TableCell>{tandem.learningLanguage.name}</TableCell>
-                            <TableCell>{tandem.learningLanguage.level}</TableCell>
-                            <TableCell>{tandem.partner.user.university.name}</TableCell>
+                            <TableCell>{tandem.userLearningLanguage.name}</TableCell>
+                            <TableCell>{tandem.userLearningLanguage.level}</TableCell>
+                            <TableCell>{tandem.partnerLearningLanguage.profile.user.university.name}</TableCell>
                             <TableCell>
-                                <DisplayRole role={tandem.partner.user.role} />
+                                <DisplayRole role={tandem.partnerLearningLanguage.profile.user.role} />
                             </TableCell>
                             <TableCell>
-                                <DisplayLearningType learningType={tandem.partner.learningType} />
+                                <DisplayLearningType
+                                    learningType={tandem.partnerLearningLanguage.profile.learningType}
+                                />
                             </TableCell>
-                            <TableCell>{new Date(tandem.learningLanguage.createdAt).toLocaleDateString()}</TableCell>
+                            <TableCell>
+                                {new Date(tandem.userLearningLanguage.createdAt).toLocaleDateString()}
+                            </TableCell>
                             <TableCell>
                                 <ValidateTandem onTandemValidated={handleValidateTandem} tandemId={tandem.id} />
                             </TableCell>
@@ -333,20 +341,24 @@ const ShowTandems = () => {
                                 {tandem?.status === TandemStatus.DRAFT && (
                                     <TableRow>
                                         <TableCell>
-                                            <ProfileLink profile={tandem.partner} />
+                                            <ProfileLink profile={tandem.partnerLearningLanguage.profile} />
                                         </TableCell>
-                                        <TableCell>{tandem.learningLanguage.name}</TableCell>
-                                        <TableCell>{tandem.learningLanguage.level}</TableCell>
-                                        <TableCell>{tandem.partner.user.university.name}</TableCell>
+                                        <TableCell>{tandem.userLearningLanguage.name}</TableCell>
+                                        <TableCell>{tandem.userLearningLanguage.level}</TableCell>
                                         <TableCell>
-                                            <DisplayRole role={tandem.partner.user.role} />
+                                            {tandem.partnerLearningLanguage.profile.user.university.name}
                                         </TableCell>
                                         <TableCell>
-                                            <DisplayLearningType learningType={tandem.partner.learningType} />
+                                            <DisplayRole role={tandem.partnerLearningLanguage.profile.user.role} />
+                                        </TableCell>
+                                        <TableCell>
+                                            <DisplayLearningType
+                                                learningType={tandem.partnerLearningLanguage.profile.learningType}
+                                            />
                                         </TableCell>
 
                                         <TableCell>
-                                            {new Date(tandem.learningLanguage.createdAt).toLocaleDateString()}
+                                            {new Date(tandem.userLearningLanguage.createdAt).toLocaleDateString()}
                                         </TableCell>
                                         <TableCell>N/A</TableCell>
                                         <TableCell>
