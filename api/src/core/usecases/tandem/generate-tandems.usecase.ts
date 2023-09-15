@@ -1,8 +1,3 @@
-import { RoutineExecutionRepository } from './../../ports/routine-execution.repository';
-import {
-  RoutineExecution,
-  RoutineStatus,
-} from './../../models/routine-execution.model';
 import { Inject, Injectable, Logger } from '@nestjs/common';
 import { Match, PairingMode, Tandem, TandemStatus } from 'src/core/models';
 import {
@@ -13,7 +8,6 @@ import {
   LEARNING_LANGUAGE_REPOSITORY,
   LearningLanguageRepository,
 } from 'src/core/ports/learning-language.repository';
-import { ROUTINE_EXECUTION_REPOSITORY } from 'src/core/ports/routine-execution.repository';
 import {
   TANDEM_REPOSITORY,
   TandemRepository,
@@ -114,6 +108,18 @@ export class GenerateTandemsUsecase {
         return a.profile.user.university.isCentralUniversity() ? -1 : 1;
       });
 
+    const tandemsPendingValidation = await this.tandemsRepository.findWhere({
+      status: TandemStatus.VALIDATED_BY_ONE_UNIVERSITY,
+    });
+    // Build map of pending tandem hash in order to efficiency determine if pending tandem
+    // concerning 2 learning languages exist
+    const tandemsPendingValidationMap = new Map<string, Tandem>(
+      tandemsPendingValidation.items.map((tandem) => [
+        tandem.getHash(),
+        tandem,
+      ]),
+    );
+
     let sortedPossiblePairs = possiblePairs.sort((a, b) => b.total - a.total);
     const pairedLearningLanguageIds = new Set<string>();
 
@@ -147,18 +153,22 @@ export class GenerateTandemsUsecase {
         learningLanguages: [pair.owner, pair.target],
         status: tandemStatus,
       });
-      tandems.push(tandem);
 
-      sortedPossiblePairs = sortedPossiblePairs.filter(
-        (possiblePair) =>
-          possiblePair.owner.id !== pair.owner.id &&
-          possiblePair.owner.id !== pair.target.id &&
-          possiblePair.target.id !== pair.owner.id &&
-          possiblePair.target.id !== pair.target.id,
-      );
+      // Do not re-create a tandem that already exist and is pending validation
+      if (!tandemsPendingValidationMap.has(tandem.getHash())) {
+        tandems.push(tandem);
 
-      pairedLearningLanguageIds.add(pair.owner.id);
-      pairedLearningLanguageIds.add(pair.target.id);
+        sortedPossiblePairs = sortedPossiblePairs.filter(
+          (possiblePair) =>
+            possiblePair.owner.id !== pair.owner.id &&
+            possiblePair.owner.id !== pair.target.id &&
+            possiblePair.target.id !== pair.owner.id &&
+            possiblePair.target.id !== pair.target.id,
+        );
+
+        pairedLearningLanguageIds.add(pair.owner.id);
+        pairedLearningLanguageIds.add(pair.target.id);
+      }
     }
 
     await this.tandemsRepository.saveMany(tandems);

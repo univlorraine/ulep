@@ -74,4 +74,13 @@ export class Tandem {
       );
     }
   }
+
+  getHash(): string {
+    return this.learningLanguages?.length > 0 ?
+      this.learningLanguages
+        .map((ll) => ll.id)
+        .sort((a, b) => a.localeCompare(b))
+        .join('_')
+      : "";
+  }
 }
