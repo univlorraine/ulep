@@ -43,6 +43,7 @@ const ShowTandems = () => {
     );
 
     const hasActiveTandem = tandem?.status === TandemStatus.ACTIVE;
+    const hasTandemWaitingForValidation = tandem?.status === TandemStatus.VALIDATED_BY_ONE_UNIVERSITY;
 
     const { selectedUniversityIds } = useLearningLanguagesStore();
 
@@ -77,6 +78,10 @@ const ShowTandems = () => {
 
         return <p>{translate('learning_languages.show.tandems.error')}</p>;
     }
+
+    // TODO(NOW): manage edge cases:
+    // - I validate a tandem but there's need for validation from other university and its still proposed in individual routine results
+    // - I validated VS I need to validate a tandem
 
     if (hasActiveTandem) {
         return (
@@ -134,6 +139,66 @@ const ShowTandems = () => {
         await refetchTandem();
         await refetchMatches();
     };
+
+    if (hasTandemWaitingForValidation) {
+        // TODO(NOW): better + translations
+        // TODO(NOW): only if admin not from validated university
+        return (
+            <>
+                <Typography variant="h6">Validé 1 fois</Typography>
+                <Table>
+                    <TableHead>
+                        <TableRow>
+                            <TableCell>
+                                {translate('learning_languages.show.tandems.active.tableColumns.profile')}
+                            </TableCell>
+                            <TableCell>
+                                {translate('learning_languages.show.tandems.active.tableColumns.learnedLanguage')}
+                            </TableCell>
+                            <TableCell>
+                                {translate('learning_languages.show.tandems.active.tableColumns.level')}
+                            </TableCell>
+                            <TableCell>
+                                {translate('learning_languages.show.tandems.active.tableColumns.university')}
+                            </TableCell>
+                            <TableCell>
+                                {translate('learning_languages.show.tandems.active.tableColumns.role')}
+                            </TableCell>
+                            <TableCell>
+                                {translate('learning_languages.show.tandems.active.tableColumns.learningType')}
+                            </TableCell>
+                            <TableCell>
+                                {translate('learning_languages.show.tandems.active.tableColumns.date')}
+                            </TableCell>
+                            <TableCell>
+                                {translate('learning_languages.show.tandems.active.tableColumns.action')}
+                            </TableCell>
+                        </TableRow>
+                    </TableHead>
+                    <TableBody>
+                        <TableRow>
+                            <TableCell>
+                                <ProfileLink profile={tandem.partner} />
+                            </TableCell>
+                            <TableCell>{tandem.learningLanguage.name}</TableCell>
+                            <TableCell>{tandem.learningLanguage.level}</TableCell>
+                            <TableCell>{tandem.partner.user.university.name}</TableCell>
+                            <TableCell>
+                                <DisplayRole role={tandem.partner.user.role} />
+                            </TableCell>
+                            <TableCell>
+                                <DisplayLearningType learningType={tandem.partner.learningType} />
+                            </TableCell>
+                            <TableCell>{new Date(tandem.learningLanguage.createdAt).toLocaleDateString()}</TableCell>
+                            <TableCell>
+                                <ValidateTandem onTandemValidated={handleValidateTandem} tandemId={tandem.id} />
+                            </TableCell>
+                        </TableRow>
+                    </TableBody>
+                </Table>
+            </>
+        );
+    }
 
     return (
         <>
