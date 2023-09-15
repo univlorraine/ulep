@@ -79,9 +79,6 @@ const ShowTandems = () => {
         return <p>{translate('learning_languages.show.tandems.error')}</p>;
     }
 
-    // TODO(NOW): manage edge cases:
-    // - I validated VS I need to validate a tandem
-
     if (hasActiveTandem) {
         return (
             <>

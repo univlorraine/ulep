@@ -83,7 +83,7 @@ export class UserTandemResponse {
       throw new Error('Partner not found');
     }
 
-    // TODO(NOW+2): Check if userLearningLanguage is really needed
+    // TODO(CLEAN): Check if userLearningLanguage is really needed
 
     return new UserTandemResponse({
       id: tandem.id,
