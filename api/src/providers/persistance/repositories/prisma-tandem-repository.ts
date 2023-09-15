@@ -21,8 +21,8 @@ export class PrismaTandemRepository implements TandemRepository {
           })),
         },
         status: tandem.status,
-        UniversityValidations: tandem.universityValidations.length && {
-          connect: tandem.universityValidations.map((universityId) => ({
+        UniversityValidations: {
+          connect: tandem.universityValidations?.map((universityId) => ({
             id: universityId,
           })),
         },
@@ -41,8 +41,8 @@ export class PrismaTandemRepository implements TandemRepository {
             })),
           },
           status: tandem.status,
-          UniversityValidations: tandem.universityValidations.length && {
-            connect: tandem.universityValidations.map((universityId) => ({
+          UniversityValidations: {
+            connect: tandem.universityValidations?.map((universityId) => ({
               id: universityId,
             })),
           },

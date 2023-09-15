@@ -4,7 +4,7 @@ import {
   RoutineStatus,
 } from './../../models/routine-execution.model';
 import { Inject, Injectable, Logger } from '@nestjs/common';
-import { Match, Tandem, TandemStatus } from 'src/core/models';
+import { Match, PairingMode, Tandem, TandemStatus } from 'src/core/models';
 import {
   LANGUAGE_REPOSITORY,
   LanguageRepository,
@@ -135,10 +135,17 @@ export class GenerateTandemsUsecase {
         continue;
       }
 
+      const tandemStatus =
+        pair.owner.profile.user.university.pairingMode ===
+          PairingMode.AUTOMATIC &&
+        pair.target.profile.user.university.pairingMode ===
+          PairingMode.AUTOMATIC
+          ? TandemStatus.ACTIVE
+          : TandemStatus.DRAFT;
       const tandem = new Tandem({
         id: this.uuidProvider.generate(),
         learningLanguages: [pair.owner, pair.target],
-        status: TandemStatus.DRAFT,
+        status: tandemStatus,
       });
       tandems.push(tandem);
 

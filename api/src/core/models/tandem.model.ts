@@ -32,7 +32,7 @@ export class Tandem {
   constructor(props: CreateTandemProps) {
     this.id = props.id;
     this.status = props.status;
-    this.universityValidations = props.universityValidations;
+    this.universityValidations = props.universityValidations || [];
     
     if (props.learningLanguages) {
       this.learningLanguages = [...props.learningLanguages];
