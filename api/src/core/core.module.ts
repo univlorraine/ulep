@@ -1,3 +1,4 @@
+import { ValidateTandemUsecase } from './usecases/tandem/validate-tandem.usecase';
 import { Module, Provider } from '@nestjs/common';
 import { ProvidersModule } from 'src/providers/providers.module';
 import { MatchScorer } from './services/MatchScorer';
@@ -161,6 +162,7 @@ const usecases: Provider[] = [
   GetTandemsUsecase,
   GetUserMatchUsecase,
   UpdateTandemStatusUsecase,
+  ValidateTandemUsecase,
   // Universities
   CreatePartnerUniversityUsecase,
   CreateUniversityUsecase,

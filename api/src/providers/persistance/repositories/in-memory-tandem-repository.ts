@@ -108,4 +108,8 @@ export class InMemoryTandemRepository implements TandemRepository {
     });
     return Promise.resolve();
   }
+
+  update(tandem: Tandem): Promise<void> {
+    this.#tandems = this.#tandems.map((t) => (t.id === tandem.id ? tandem : t));
+  }
 }

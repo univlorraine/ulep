@@ -19,7 +19,7 @@ export class UpdateTandemStatusUsecase {
   ) {}
 
   async execute(command: UpdateTandemStatusCommand): Promise<void> {
-    const tandem = this.tandemRepository.ofId(command.id);
+    const tandem = await this.tandemRepository.ofId(command.id);
     if (!tandem) {
       throw new RessourceDoesNotExist();
     }

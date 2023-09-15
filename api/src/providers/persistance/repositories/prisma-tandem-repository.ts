@@ -5,6 +5,8 @@ import { FindWhereProps } from '../../../core/ports/tandems.repository';
 import { Tandem, TandemStatus } from '../../../core/models';
 import { TandemRelations, tandemMapper } from '../mappers/tandem.mapper';
 
+// TODO(NOW+1): tandemMapper
+
 @Injectable()
 export class PrismaTandemRepository implements TandemRepository {
   constructor(private readonly prisma: PrismaService) {}
@@ -19,6 +21,11 @@ export class PrismaTandemRepository implements TandemRepository {
           })),
         },
         status: tandem.status,
+        UniversityValidations: tandem.universityValidations.length && {
+          connect: tandem.universityValidations.map((universityId) => ({
+            id: universityId,
+          })),
+        },
       },
     });
   }
@@ -34,6 +41,11 @@ export class PrismaTandemRepository implements TandemRepository {
             })),
           },
           status: tandem.status,
+          UniversityValidations: tandem.universityValidations.length && {
+            connect: tandem.universityValidations.map((universityId) => ({
+              id: universityId,
+            })),
+          },
         },
       }),
     );
@@ -176,6 +188,27 @@ export class PrismaTandemRepository implements TandemRepository {
       },
       data: {
         status,
+      },
+    });
+  }
+  async update(tandem: Tandem): Promise<void> {
+    await this.prisma.tandems.update({
+      where: {
+        id: tandem.id,
+      },
+      data: {
+        id: tandem.id,
+        LearningLanguages: {
+          connect: tandem.learningLanguages.map((learningLanguage) => ({
+            id: learningLanguage.id,
+          })),
+        },
+        status: tandem.status,
+        UniversityValidations: tandem.universityValidations.length && {
+          connect: tandem.universityValidations.map((universityId) => ({
+            id: universityId,
+          })),
+        },
       },
     });
   }

@@ -1,3 +1,5 @@
+// TODO(NOW+1): same import for UC
+import { ValidateTandemUsecase } from 'src/core/usecases/tandem/validate-tandem.usecase';
 import { RoutineStatus } from 'src/core/models/routine-execution.model';
 import {
   Body,
@@ -30,7 +32,6 @@ import {
   RoutineExecutionRepository,
 } from 'src/core/ports/routine-execution.repository';
 import { KeycloakUser } from '@app/keycloak';
-import { TandemStatus } from 'src/core/models';
 
 @Controller('tandems')
 @Swagger.ApiTags('Tandems')
@@ -42,6 +43,7 @@ export class TandemController {
     private readonly getTandemsUsecase: GetTandemsUsecase,
     private readonly createTandemUsecase: CreateTandemUsecase,
     private readonly updateTandemStatusUsecase: UpdateTandemStatusUsecase,
+    private readonly validateTandemUsecase: ValidateTandemUsecase,
     @Inject(ROUTINE_EXECUTION_REPOSITORY)
     private readonly routineExecutionRepository: RoutineExecutionRepository,
   ) {}
@@ -79,6 +81,20 @@ export class TandemController {
     return TandemResponse.fromDomain(tandem);
   }
 
+  @Post(':id/validate')
+  @Roles(configuration().adminRole)
+  @UseGuards(AuthenticationGuard)
+  @Swagger.ApiOperation({ summary: 'Validate a Tandem ressource' })
+  async updateStatus(
+    @Param('id', ParseUUIDPipe) id: string,
+    @Body() body: UpdateTandemStatusRequest,
+  ): Promise<void> {
+    await this.updateTandemStatusUsecase.execute({
+      id,
+      status: body.status,
+    });
+  }
+
   @Put(':id/status')
   @Roles(configuration().adminRole)
   @UseGuards(AuthenticationGuard)
@@ -87,6 +103,7 @@ export class TandemController {
     @Param('id', ParseUUIDPipe) id: string,
     @Body() body: UpdateTandemStatusRequest,
   ): Promise<void> {
+    // TODO(NOW+1): remove endpoint and usecase (not used anymore)
     await this.updateTandemStatusUsecase.execute({
       id,
       status: body.status,
