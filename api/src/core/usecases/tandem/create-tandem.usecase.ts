@@ -1,5 +1,5 @@
 import { Inject, Injectable, Logger } from '@nestjs/common';
-import { RessourceDoesNotExist } from 'src/core/errors';
+import { DomainError, RessourceDoesNotExist } from 'src/core/errors';
 import { LearningLanguageIsAlreadyInActiveTandemError } from 'src/core/errors/tandem-exceptions';
 import {
   LearningLanguage,
@@ -81,10 +81,9 @@ export class CreateTandemUsecase {
 
     let tandem: Tandem;
     if (learningLanguagesFromAdminUniversity.length === 0) {
-      // TODO(NOW+1): custom errors ?
-      throw new Error(
-        'No concerned learning languages is from admin university',
-      );
+      throw new DomainError({
+        message: 'No concerned learning languages is from admin university',
+      });
     } else if (
       learningLanguagesFromAdminUniversity.length === learningLanguages.length
     ) {
@@ -118,9 +117,9 @@ export class CreateTandemUsecase {
           });
           break;
         default:
-          throw new Error(
-            `Unsupported university pairing mode ${partnerUniversityPairingMode}`,
-          );
+          throw new DomainError({
+            message: `Unsupported university pairing mode ${partnerUniversityPairingMode}`,
+          });
       }
     }
 

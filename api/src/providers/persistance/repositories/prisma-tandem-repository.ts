@@ -5,8 +5,6 @@ import { FindWhereProps } from '../../../core/ports/tandems.repository';
 import { Tandem, TandemStatus } from '../../../core/models';
 import { TandemRelations, tandemMapper } from '../mappers/tandem.mapper';
 
-// TODO(NOW+1): tandemMapper
-
 @Injectable()
 export class PrismaTandemRepository implements TandemRepository {
   constructor(private readonly prisma: PrismaService) {}

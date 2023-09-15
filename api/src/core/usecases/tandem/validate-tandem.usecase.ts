@@ -47,7 +47,6 @@ export class ValidateTandemUsecase {
 
     let updatedTandem: Tandem;
     if (learningLanguagesFromAdminUniversity.length === 0) {
-      // TODO(NOW+1): custom errors ?
       throw new DomainError({
         message: 'No concerned learning languages is from admin university',
       });
