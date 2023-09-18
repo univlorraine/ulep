@@ -1,7 +1,6 @@
 import * as Swagger from '@nestjs/swagger';
 import { Expose } from 'class-transformer';
 import { Tandem, TandemStatus } from '../../../core/models/tandem.model';
-import { ProfileResponse } from '../profiles';
 import { LearningLanguage } from 'src/core/models';
 import { LearningLanguageResponse } from '../learning-languages';
 
@@ -82,8 +81,6 @@ export class UserTandemResponse {
     if (!learningLanguagePartner.profile) {
       throw new Error('Partner not found');
     }
-
-    // TODO(CLEAN): Check if userLearningLanguage is really needed
 
     return new UserTandemResponse({
       id: tandem.id,

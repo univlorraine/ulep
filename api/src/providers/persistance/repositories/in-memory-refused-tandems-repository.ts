@@ -14,4 +14,8 @@ export class InMemoryRefusedTandemRepository
     this.#refusedTandems.push(item);
     return Promise.resolve();
   }
+
+  getAll(): Promise<RefusedTandem[]> {
+    return Promise.resolve(this.#refusedTandems);
+  }
 }
