@@ -1,5 +1,13 @@
+import { SendEmailPayload } from './../../ports/email.gateway';
 import { Inject, Injectable, Logger } from '@nestjs/common';
-import { Match, PairingMode, Tandem, TandemStatus } from 'src/core/models';
+import {
+  Match,
+  PairingMode,
+  Tandem,
+  TandemStatus,
+  University,
+} from 'src/core/models';
+import { EMAIL_GATEWAY, EmailGateway } from 'src/core/ports/email.gateway';
 import {
   LANGUAGE_REPOSITORY,
   LanguageRepository,
@@ -49,6 +57,8 @@ export class GenerateTandemsUsecase {
     private readonly languageRepository: LanguageRepository,
     @Inject(REFUSED_TANDEMS_REPOSITORY)
     private readonly refusedTandemsRepository: RefusedTandemsRepository,
+    @Inject(EMAIL_GATEWAY)
+    private readonly emailGateway: EmailGateway,
   ) {}
 
   async execute(command: GenerateTandemsCommand): Promise<Tandem[]> {
@@ -149,6 +159,10 @@ export class GenerateTandemsUsecase {
     let sortedPossiblePairs = possiblePairs.sort((a, b) => b.total - a.total);
     const pairedLearningLanguageIds = new Set<string>();
 
+    const universitiesWithNewTandems = new Map<string, University>([]);
+
+    const notificationEmails: SendEmailPayload[] = [];
+
     // Select best pairs by priority order
     const tandems: Tandem[] = [];
     for (const learningLanguageToPair of sortedLearningLanguages) {
@@ -194,10 +208,53 @@ export class GenerateTandemsUsecase {
 
         pairedLearningLanguageIds.add(pair.owner.id);
         pairedLearningLanguageIds.add(pair.target.id);
+
+        const ownerUniversity = pair.owner.profile.user.university;
+        const targetUniversity = pair.target.profile.user.university;
+        if (!universitiesWithNewTandems.has(ownerUniversity.id)) {
+          universitiesWithNewTandems.set(ownerUniversity.id, ownerUniversity);
+        }
+        if (!universitiesWithNewTandems.has(targetUniversity.id)) {
+          universitiesWithNewTandems.set(targetUniversity.id, targetUniversity);
+        }
+
+        if (tandemStatus === TandemStatus.ACTIVE) {
+          notificationEmails.push({
+            recipient: pair.owner.profile.user.email,
+            subject: 'Subject to translate to owner language',
+            content: 'content to translate to owner language and template',
+          });
+          notificationEmails.push({
+            recipient: pair.target.profile.user.email,
+            subject: 'Subject to translate to target language',
+            content: 'content to translate to target language',
+          });
+        }
       }
     }
 
     await this.tandemsRepository.saveMany(tandems);
+
+    if (universitiesWithNewTandems.size > 0) {
+      for (const [universityId, university] of universitiesWithNewTandems) {
+        if (university.notificationEmail) {
+          notificationEmails.push({
+            recipient: university.notificationEmail,
+            subject: 'subject to translate to university language',
+            content: 'Content to translate and template',
+          });
+        } else {
+          this.logger.warn(
+            `University ${universityId} has no notification email configured`,
+          );
+        }
+      }
+    }
+
+    if (notificationEmails.length > 0) {
+      // TODO(NOW): manage failure, translations and templating
+      await this.emailGateway.bulkSend(notificationEmails);
+    }
 
     const countDeletedTandems =
       await this.tandemsRepository.deleteTandemNotLinkedToLearningLangues();
