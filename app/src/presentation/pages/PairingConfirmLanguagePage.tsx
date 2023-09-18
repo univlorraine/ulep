@@ -4,7 +4,7 @@ import { TandemPng } from '../../assets';
 import { useConfig } from '../../context/ConfigurationContext';
 import { useStoreState } from '../../store/storeTypes';
 import WebLayoutCentered from '../components/layout/WebLayoutCentered';
-import { codeCountryToFlag } from '../utils';
+import { codeLanguageToFlag } from '../utils';
 import confirmLanguagesStyles from './css/PairingConfirmLanguage.module.css';
 import styles from './css/SignUp.module.css';
 
@@ -49,14 +49,14 @@ const PairingConfirmLanguagePage: React.FC = () => {
                     <p className="subtitle">{t('pairing_confirm_language_page.subtitle')}</p>
                     <span>{t('pairing_confirm_language_page.language_title')}</span>
                     <div className={confirmLanguagesStyles['language-container']}>
-                        {` ${codeCountryToFlag(profileSignUp.learningLanguage.code)} ${
+                        {` ${codeLanguageToFlag(profileSignUp.learningLanguage.code)} ${
                             profileSignUp.learningLanguage.name
                         }`}
                     </div>
                     <div className={confirmLanguagesStyles['mode-container']}>
                         <p className={confirmLanguagesStyles['mode-text']}>{`${t(
                             'pairing_confirm_language_page.mode_meet'
-                        )} ${pedagogyToTitle(profileSignUp.pedagogy)}  ${codeCountryToFlag(
+                        )} ${pedagogyToTitle(profileSignUp.pedagogy)}  ${codeLanguageToFlag(
                             profileSignUp.learningLanguage.code
                         )}`}</p>
                         <img alt="tandem" src={TandemPng} />

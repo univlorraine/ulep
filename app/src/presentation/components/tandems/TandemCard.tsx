@@ -1,5 +1,6 @@
 import Language from '../../../domain/entities/Language';
 import University from '../../../domain/entities/University';
+import { codeLanguageToFlag } from '../../utils';
 import styles from './TandemCard.module.css';
 
 interface TandemCardProps {
@@ -18,7 +19,7 @@ const TandemCard: React.FC<TandemCardProps> = ({ avatar, fistname, language, las
             <div className={styles.card}>
                 <div className={styles.content}>
                     <img alt="avatar" className={styles.avatar} src={avatar} />
-                    <div className={styles.bubble}>{language.getFlag()}</div>
+                    <div className={styles.bubble}>{codeLanguageToFlag(language.code)}</div>
                     <div className={styles['text-container']}>
                         <span className={styles.name}>{`${fistname} ${lastname}`}</span>
                         <span className={styles['university-name']}>{university.name}</span>

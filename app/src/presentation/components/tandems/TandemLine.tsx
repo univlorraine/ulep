@@ -3,6 +3,7 @@ import { ArrowRightSvg } from '../../../assets';
 import Language from '../../../domain/entities/Language';
 import Profile from '../../../domain/entities/Profile';
 import styles from './TandemLine.module.css';
+import { codeLanguageToFlag } from '../../utils';
 
 interface TandemLineProps {
     language: Language;
@@ -33,7 +34,7 @@ const TandemLine: React.FC<TandemLineProps> = ({ language, profile, onPressed, s
         <button className={styles.container} onClick={onPressed}>
             <div className={styles['left-container']}>
                 <div className={styles['flag-container']}>
-                    <span className={styles.flag}>{language.getFlag()}</span>
+                    <span className={styles.flag}>{codeLanguageToFlag(language.code)}</span>
                 </div>
                 <span className={styles.title}>{t(getTitleFromStatusAndProfile(status, !!profile))}</span>
             </div>

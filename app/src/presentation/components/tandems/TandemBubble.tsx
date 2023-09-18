@@ -16,7 +16,7 @@ const TandemBubble: React.FC<TandemBubbleProps> = ({ language, onTandemPressed, 
                 <span className={styles.name}>{profileName}</span>
             </div>
             <div className={styles['flag-container']}>
-                <span className={styles.flag}>{language.getFlag()}</span>
+                <span className={styles.flag}>{'U+1F1EB U+1F1F7'}</span>
             </div>
         </button>
     );

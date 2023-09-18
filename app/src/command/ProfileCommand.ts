@@ -32,7 +32,6 @@ interface ProfileCommand {
 }
 
 export const profileCommandToDomain = (command: ProfileCommand) => {
-    console.warn(command);
     return new Profile(
         command.id,
         command.nativeLanguage.code,

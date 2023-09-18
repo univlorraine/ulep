@@ -1,4 +1,3 @@
-import LearningLanguage from '../domain/entities/LearningLanguage';
 import ProfileCommand, { profileCommandToDomain } from './ProfileCommand';
 
 interface LearningLanguageCommand {
@@ -8,15 +7,4 @@ interface LearningLanguageCommand {
     level: CEFR;
     profile: ProfileCommand;
 }
-
-export const learningLanguageCommandToDomain = (command: LearningLanguageCommand) => {
-    return new LearningLanguage(
-        command.id,
-        command.code,
-        command.name,
-        command.level,
-        profileCommandToDomain(command.profile)
-    );
-};
-
 export default LearningLanguageCommand;

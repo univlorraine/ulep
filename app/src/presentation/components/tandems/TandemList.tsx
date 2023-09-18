@@ -10,7 +10,6 @@ interface TandemListProps {
 
 const TandemList: React.FC<TandemListProps> = ({ onTandemPressed, tandems }) => {
     const { t } = useTranslation();
-    console.warn(tandems);
     return (
         <div className="home-card">
             <span className="home-card-title">{t('home_page.tandem.title')}</span>
