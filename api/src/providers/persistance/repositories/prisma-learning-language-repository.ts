@@ -2,6 +2,7 @@ import {
   LearningLanguage,
   LearningLanguageWithTandem,
   TandemStatus,
+  UserStatus,
 } from 'src/core/models';
 import { Collection, PrismaService } from '@app/common';
 import { Injectable } from '@nestjs/common';
@@ -81,9 +82,18 @@ export class PrismaLearningLanguageRepository
                 },
               ],
               User: {
-                organization_id: {
-                  in: universityIds,
-                },
+                AND: [
+                  {
+                    organization_id: {
+                      in: universityIds,
+                    },
+                  },
+                  {
+                    status: {
+                      not: UserStatus.BANNED,
+                    },
+                  },
+                ],
               },
             },
           ],
@@ -118,9 +128,18 @@ export class PrismaLearningLanguageRepository
       where: {
         Profile: {
           User: {
-            organization_id: {
-              in: universityIds,
-            },
+            AND: [
+              {
+                organization_id: {
+                  in: universityIds,
+                },
+              },
+              {
+                status: {
+                  not: UserStatus.BANNED,
+                },
+              },
+            ],
           },
         },
         OR: [
@@ -180,9 +199,18 @@ export class PrismaLearningLanguageRepository
             },
             {
               User: {
-                organization_id: {
-                  in: universityIds,
-                },
+                AND: [
+                  {
+                    organization_id: {
+                      in: universityIds,
+                    },
+                  },
+                  {
+                    status: {
+                      not: UserStatus.BANNED,
+                    },
+                  },
+                ],
               },
             },
           ],
@@ -223,9 +251,18 @@ export class PrismaLearningLanguageRepository
     const permanentWherePayload = {
       Profile: {
         User: {
-          organization_id: {
-            in: universityIds,
-          },
+          AND: [
+            {
+              organization_id: {
+                in: universityIds,
+              },
+            },
+            {
+              status: {
+                not: UserStatus.BANNED,
+              },
+            },
+          ],
         },
       },
     };
