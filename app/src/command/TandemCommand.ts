@@ -7,6 +7,7 @@ interface TandemCommand {
     id: string;
     status: TandemStatus;
     partnerLearningLanguage: LearningLanguageCommand;
+    userLearningLanguage: Omit<LearningLanguageCommand, 'profile'>;
 }
 
 export const tandemCommandToDomain = (command: TandemCommand[]) => {
@@ -16,9 +17,9 @@ export const tandemCommandToDomain = (command: TandemCommand[]) => {
                 tandem.id,
                 tandem.status,
                 new Language(
-                    tandem.partnerLearningLanguage.id,
-                    tandem.partnerLearningLanguage.code,
-                    tandem.partnerLearningLanguage.name
+                    tandem.userLearningLanguage.id,
+                    tandem.userLearningLanguage.code,
+                    tandem.userLearningLanguage.name
                 ),
                 tandem.partnerLearningLanguage.level as CEFR,
                 profileCommandToDomain(tandem.partnerLearningLanguage.profile)

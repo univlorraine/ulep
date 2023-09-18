@@ -1,4 +1,4 @@
-import ProfileCommand, { profileCommandToDomain } from './ProfileCommand';
+import ProfileCommand from './ProfileCommand';
 
 interface LearningLanguageCommand {
     id: string;

@@ -9,7 +9,12 @@ interface ProfileCommand {
     interests: { id: string; name: string }[];
     nativeLanguage: {
         code: string;
+        name: string;
     };
+    masteredLanguages: {
+        code: string;
+        name: string;
+    }[];
     learningLanguages: {
         id: string;
         code: string;
@@ -34,7 +39,10 @@ interface ProfileCommand {
 export const profileCommandToDomain = (command: ProfileCommand) => {
     return new Profile(
         command.id,
-        command.nativeLanguage.code,
+        new Language(command.nativeLanguage.code, command.nativeLanguage.code, command.nativeLanguage.name),
+        command.masteredLanguages.map(
+            (masteredLanguage) => new Language(masteredLanguage.code, masteredLanguage.code, masteredLanguage.name)
+        ),
         command.learningLanguages.map(
             (learningLanguage) => new Language(learningLanguage.id, learningLanguage.code, learningLanguage.name)
         ),
