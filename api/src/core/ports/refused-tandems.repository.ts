@@ -6,4 +6,6 @@ export interface RefusedTandemsRepository {
   save(item: RefusedTandem): Promise<void>;
 
   getAll(): Promise<RefusedTandem[]>;
+
+  getForLearningLanguage(learningLanguageId: string): Promise<RefusedTandem[]>;
 }

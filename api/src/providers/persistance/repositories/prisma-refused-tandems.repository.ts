@@ -44,4 +44,33 @@ export class PrismaRefusedTandemsRepository
         }),
     );
   }
+
+  async getForLearningLanguage(
+    learningLanguageId: string,
+  ): Promise<RefusedTandem[]> {
+    const res = await this.prisma.refusedTandems.findMany({
+      where: {
+        LearningLanguages: {
+          some: {
+            id: {
+              equals: learningLanguageId,
+            },
+          },
+        },
+      },
+      include: {
+        University: true,
+        LearningLanguages: true,
+      },
+    });
+
+    return res.map(
+      (item) =>
+        new RefusedTandem({
+          id: item.id,
+          learningLanguageIds: item.LearningLanguages.map((ll) => ll.id),
+          universityId: item.University.id,
+        }),
+    );
+  }
 }

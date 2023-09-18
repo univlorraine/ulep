@@ -18,4 +18,12 @@ export class InMemoryRefusedTandemRepository
   getAll(): Promise<RefusedTandem[]> {
     return Promise.resolve(this.#refusedTandems);
   }
+
+  getForLearningLanguage(learningLanguageId: string): Promise<RefusedTandem[]> {
+    return Promise.resolve(
+      this.#refusedTandems.filter((item) =>
+        item.learningLanguageIds.includes(learningLanguageId),
+      ),
+    );
+  }
 }
