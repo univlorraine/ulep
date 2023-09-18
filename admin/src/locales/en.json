@@ -140,7 +140,8 @@
             "timezone": "Partner university timezone",
             "title": "Create a new partner university",
             "website": "Partner university website",
-            "pairingMode": "Pairing mode"
+            "pairingMode": "Pairing mode",
+            "notificationEmail": "Email for notifications"
         },
         "pairingModes": {
             "manual": "Manual",
@@ -164,7 +165,8 @@
             "timezone": "Timezone",
             "website": "University website",
             "id": "ID",
-            "pairingMode": "Pairing mode"
+            "pairingMode": "Pairing mode",
+            "notificationEmail": "Email for notifications"
         },
         "update": {
             "admission_end": "University admission due date",
@@ -179,7 +181,8 @@
             "timezone": "University timezone",
             "title": "Update an university",
             "website": "University website",
-            "pairingMode": "Pairing mode"
+            "pairingMode": "Pairing mode",
+            "notificationEmail": "Email for notifications"
         }
     },
     "uploader": {

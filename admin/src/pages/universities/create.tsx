@@ -18,7 +18,8 @@ const CreateUniversity = () => {
         codes: string[],
         domains: string[],
         pairingMode: string,
-        website?: string
+        website?: string,
+        notificationEmail?: string
     ) => {
         const payload = {
             name,
@@ -30,6 +31,7 @@ const CreateUniversity = () => {
             domains,
             pairingMode,
             website,
+            notificationEmail: notificationEmail || undefined,
         };
 
         try {
