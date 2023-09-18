@@ -11,15 +11,15 @@ enum TandemAction {
     REFUSE = 'REFUSE',
 }
 
-interface AcceptTandemProps {
+interface TandemActionsProps {
     tandemId?: string;
     learningLanguageIds?: string[];
-    onTandemValidated: () => void;
+    onTandemAction: () => void;
 }
 
-const AcceptTandem = ({ tandemId, learningLanguageIds, onTandemValidated }: AcceptTandemProps) => {
+const TandemActions = ({ tandemId, learningLanguageIds, onTandemAction }: TandemActionsProps) => {
     if (!tandemId && learningLanguageIds?.length !== 2) {
-        throw new Error('Validate tandem must have a tandemId or 2 learningLanguage Ids');
+        throw new Error('TandemActions must have a tandemId or 2 learningLanguage Ids');
     }
 
     const translate = useTranslate();
@@ -38,7 +38,7 @@ const AcceptTandem = ({ tandemId, learningLanguageIds, onTandemValidated }: Acce
     };
 
     const onSuccess = async () => {
-        onTandemValidated();
+        onTandemAction();
         handleCloseModal();
     };
 
@@ -73,7 +73,6 @@ const AcceptTandem = ({ tandemId, learningLanguageIds, onTandemValidated }: Acce
                 throw new Error('Must have 2 learning languages to refuse tandem');
             }
             refuseTandem(learningLanguageIds);
-            // TODO(NOW): rename component
         }
     };
 
@@ -134,4 +133,4 @@ const AcceptTandem = ({ tandemId, learningLanguageIds, onTandemValidated }: Acce
     );
 };
 
-export default AcceptTandem;
+export default TandemActions;

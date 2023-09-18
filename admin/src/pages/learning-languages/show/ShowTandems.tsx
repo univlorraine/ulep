@@ -6,7 +6,7 @@ import { LearningLanguageTandem } from '../../../entities/LearningLanguage';
 import { Match } from '../../../entities/Match';
 import { TandemStatus } from '../../../entities/Tandem';
 import useLearningLanguagesStore from '../useLearningLanguagesStore';
-import AcceptTandem from './AcceptTandem';
+import TandemActions from './TandemActions';
 import TandemTable from './TandemTable';
 
 // TODO(NEXT): Relaunch global routine when validating / refusing a tandem
@@ -88,7 +88,7 @@ const ShowTandems = () => {
         );
     }
 
-    const handleAcceptTandem = async () => {
+    const handleTandemAction = async () => {
         await refetchTandem();
         await refetchMatches();
     };
@@ -105,12 +105,12 @@ const ShowTandems = () => {
                     actions={
                         isUserValidationNeeded
                             ? () => (
-                                  <AcceptTandem
+                                  <TandemActions
                                       learningLanguageIds={[
                                           tandem.userLearningLanguage.id,
                                           tandem.partnerLearningLanguage.id,
                                       ]}
-                                      onTandemValidated={handleAcceptTandem}
+                                      onTandemAction={handleTandemAction}
                                       tandemId={tandem.id}
                                   />
                               )
@@ -133,9 +133,9 @@ const ShowTandems = () => {
                         {!isLoadingMatches && !isErrorMatches && matches && matches?.length > 0 ? (
                             <TandemTable
                                 actions={(partner) => (
-                                    <AcceptTandem
+                                    <TandemActions
                                         learningLanguageIds={[recordId.toString(), partner.id]}
-                                        onTandemValidated={handleAcceptTandem}
+                                        onTandemAction={handleTandemAction}
                                     />
                                 )}
                                 partners={matches.map((match) => ({
@@ -161,9 +161,9 @@ const ShowTandems = () => {
                     ) : (
                         <TandemTable
                             actions={() => (
-                                <AcceptTandem
+                                <TandemActions
                                     learningLanguageIds={[recordId.toString(), tandem.partnerLearningLanguage.id]}
-                                    onTandemValidated={handleAcceptTandem}
+                                    onTandemAction={handleTandemAction}
                                 />
                             )}
                             partners={tandem?.status === TandemStatus.DRAFT ? [tandem.partnerLearningLanguage] : []}
