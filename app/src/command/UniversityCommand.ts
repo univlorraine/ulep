@@ -1,6 +1,5 @@
 import Campus from '../domain/entities/Campus';
 import University from '../domain/entities/University';
-import LanguageCommand, { languageCommandToDomain } from './LanguageCommand';
 
 interface UniversityCommand {
     id: string;
