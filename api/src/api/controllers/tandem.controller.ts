@@ -14,7 +14,6 @@ import {
   Param,
   ParseUUIDPipe,
   Post,
-  Put,
   Query,
   UseGuards,
 } from '@nestjs/common';

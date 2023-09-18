@@ -10,6 +10,7 @@ interface TandemListProps {
 
 const TandemList: React.FC<TandemListProps> = ({ onTandemPressed, tandems }) => {
     const { t } = useTranslation();
+    console.warn(tandems);
     return (
         <div className="home-card">
             <span className="home-card-title">{t('home_page.tandem.title')}</span>
@@ -21,7 +22,7 @@ const TandemList: React.FC<TandemListProps> = ({ onTandemPressed, tandems }) => 
                             return (
                                 <TandemBubble
                                     key={tandem.id}
-                                    language={tandem.language}
+                                    language={tandem.learningLanguage}
                                     onTandemPressed={() => onTandemPressed(tandem)}
                                     profileAvatar={tandem.partner?.user.avatar}
                                     profileName={tandem.partner?.user.firstname}

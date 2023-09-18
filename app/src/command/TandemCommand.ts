@@ -1,12 +1,12 @@
+import Language from '../domain/entities/Language';
 import Tandem from '../domain/entities/Tandem';
-import LanguageCommand, { languageCommandToDomain } from './LanguageCommand';
-import ProfileCommand, { profileCommandToDomain } from './ProfileCommand';
+import LearningLanguageCommand from './LearningLanguageCommand';
+import { profileCommandToDomain } from './ProfileCommand';
 
 interface TandemCommand {
     id: string;
-    language: LanguageCommand;
     status: TandemStatus;
-    partner?: ProfileCommand;
+    partnerLearningLanguage: LearningLanguageCommand;
 }
 
 export const tandemCommandToDomain = (command: TandemCommand[]) => {
@@ -14,9 +14,14 @@ export const tandemCommandToDomain = (command: TandemCommand[]) => {
         (tandem) =>
             new Tandem(
                 tandem.id,
-                languageCommandToDomain(tandem.language),
                 tandem.status,
-                tandem.partner ? profileCommandToDomain(tandem.partner) : undefined
+                new Language(
+                    tandem.partnerLearningLanguage.id,
+                    tandem.partnerLearningLanguage.code,
+                    tandem.partnerLearningLanguage.name
+                ),
+                tandem.partnerLearningLanguage.level as CEFR,
+                profileCommandToDomain(tandem.partnerLearningLanguage.profile)
             )
     );
 };
