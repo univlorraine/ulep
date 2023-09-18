@@ -104,7 +104,16 @@ const ShowTandems = () => {
                 <TandemTable
                     actions={
                         isUserValidationNeeded
-                            ? () => <AcceptTandem onTandemValidated={handleAcceptTandem} tandemId={tandem.id} />
+                            ? () => (
+                                  <AcceptTandem
+                                      learningLanguageIds={[
+                                          tandem.userLearningLanguage.id,
+                                          tandem.partnerLearningLanguage.id,
+                                      ]}
+                                      onTandemValidated={handleAcceptTandem}
+                                      tandemId={tandem.id}
+                                  />
+                              )
                             : undefined
                     }
                     partners={[tandem.partnerLearningLanguage]}
