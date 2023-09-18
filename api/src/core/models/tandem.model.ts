@@ -4,30 +4,40 @@ import { InvalidTandemError, LearningLanguagesMustContainsProfilesForTandem } fr
 import { LearningLanguage } from './learning-language.model';
 
 export enum TandemStatus {
-  ACTIVE = 'ACTIVE',
   INACTIVE = 'INACTIVE',
   DRAFT = 'DRAFT',
+  VALIDATED_BY_ONE_UNIVERSITY = 'VALIDATED_BY_ONE_UNIVERSITY',
+  ACTIVE = 'ACTIVE',
 }
 
 export type CreateTandemProps = {
   id: string;
-  learningLanguages: LearningLanguage[];
+  learningLanguages?: LearningLanguage[];
   status: TandemStatus;
+  universityValidations?: string[];
 };
 
 export class Tandem {
   readonly id: string;
 
-  readonly learningLanguages: LearningLanguage[];
-
+  // Learning languages that compose the tandem
+  readonly learningLanguages?: LearningLanguage[];
+  
+  // Status of the tandem
   readonly status: TandemStatus;
+  
+  // ID of universities which has validated the tandem
+  readonly universityValidations?: string[];
 
   constructor(props: CreateTandemProps) {
     this.id = props.id;
-    this.learningLanguages = [...props.learningLanguages];
     this.status = props.status;
-
-    this.assertNoErrors();
+    this.universityValidations = props.universityValidations || [];
+    
+    if (props.learningLanguages) {
+      this.learningLanguages = [...props.learningLanguages];
+      this.assertNoErrors();
+    }
   }
 
   static create(props: CreateTandemProps): Tandem {
@@ -63,5 +73,14 @@ export class Tandem {
         `Learning language and native/mastered language missmatch between profiles ${this.learningLanguages[0].profile.id} and ${this.learningLanguages[1].profile.id}`,
       );
     }
+  }
+
+  getHash(): string {
+    return this.learningLanguages?.length > 0 ?
+      this.learningLanguages
+        .map((ll) => ll.id)
+        .sort((a, b) => a.localeCompare(b))
+        .join('_')
+      : "";
   }
 }

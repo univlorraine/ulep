@@ -1,3 +1,9 @@
+import {
+  ValidateTandemUsecase,
+  CreateTandemUsecase,
+  GenerateTandemsUsecase,
+  GetTandemsUsecase,
+} from 'src/core/usecases/tandem';
 import { RoutineStatus } from 'src/core/models/routine-execution.model';
 import {
   Body,
@@ -15,16 +21,11 @@ import {
 import * as Swagger from '@nestjs/swagger';
 import { Collection } from '@app/common';
 import { CollectionResponse, CurrentUser } from '../decorators';
-import { CreateTandemUsecase } from '../../core/usecases/tandem/create-tandem.usecase';
-import { GenerateTandemsUsecase } from '../../core/usecases/tandem/generate-tandems.usecase';
-import { GetTandemsUsecase } from '../../core/usecases/tandem/get-tandems.usecase';
 import { CreateTandemRequest, PaginationDto, TandemResponse } from '../dtos';
 import { Roles } from '../decorators/roles.decorator';
 import { configuration } from 'src/configuration';
 import { AuthenticationGuard } from '../guards';
 import { GenerateTandemsRequest } from '../dtos/tandems/generate-tandems.request';
-import { UpdateTandemStatusRequest } from '../dtos/tandems/update-tandem-status.request';
-import { UpdateTandemStatusUsecase } from 'src/core/usecases/tandem/update-tandem-status.usecase';
 import {
   ROUTINE_EXECUTION_REPOSITORY,
   RoutineExecutionRepository,
@@ -40,7 +41,7 @@ export class TandemController {
     private readonly generateTandemsUsecase: GenerateTandemsUsecase,
     private readonly getTandemsUsecase: GetTandemsUsecase,
     private readonly createTandemUsecase: CreateTandemUsecase,
-    private readonly updateTandemStatusUsecase: UpdateTandemStatusUsecase,
+    private readonly validateTandemUsecase: ValidateTandemUsecase,
     @Inject(ROUTINE_EXECUTION_REPOSITORY)
     private readonly routineExecutionRepository: RoutineExecutionRepository,
   ) {}
@@ -67,22 +68,28 @@ export class TandemController {
   @Roles(configuration().adminRole)
   @UseGuards(AuthenticationGuard)
   @Swagger.ApiOperation({ summary: 'Creates a Tandem ressource.' })
-  async create(@Body() body: CreateTandemRequest): Promise<TandemResponse> {
-    const tandem = await this.createTandemUsecase.execute(body);
+  async create(
+    @CurrentUser() user: KeycloakUser,
+    @Body() body: CreateTandemRequest,
+  ): Promise<TandemResponse> {
+    const tandem = await this.createTandemUsecase.execute({
+      adminUniversityId: user.universityId,
+      learningLanguageIds: body.learningLanguageIds,
+    });
     return TandemResponse.fromDomain(tandem);
   }
 
-  @Put(':id/status')
+  @Post(':id/validate')
   @Roles(configuration().adminRole)
   @UseGuards(AuthenticationGuard)
-  @Swagger.ApiOperation({ summary: 'Update status of a Tandem ressource' })
-  async updateStatus(
+  @Swagger.ApiOperation({ summary: 'Validate a Tandem ressource' })
+  async validateTandem(
+    @CurrentUser() user: KeycloakUser,
     @Param('id', ParseUUIDPipe) id: string,
-    @Body() body: UpdateTandemStatusRequest,
   ): Promise<void> {
-    await this.updateTandemStatusUsecase.execute({
+    await this.validateTandemUsecase.execute({
       id,
-      status: body.status,
+      adminUniversityId: user.universityId,
     });
   }
 
@@ -115,7 +122,7 @@ export class TandemController {
         );
         return this.routineExecutionRepository.updateStatus(
           routineExecution.id,
-          RoutineStatus.ENDED,
+          RoutineStatus.ERROR,
         );
       });
 

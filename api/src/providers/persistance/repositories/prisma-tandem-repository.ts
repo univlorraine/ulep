@@ -19,6 +19,11 @@ export class PrismaTandemRepository implements TandemRepository {
           })),
         },
         status: tandem.status,
+        UniversityValidations: {
+          connect: tandem.universityValidations?.map((universityId) => ({
+            id: universityId,
+          })),
+        },
       },
     });
   }
@@ -34,6 +39,11 @@ export class PrismaTandemRepository implements TandemRepository {
             })),
           },
           status: tandem.status,
+          UniversityValidations: {
+            connect: tandem.universityValidations?.map((universityId) => ({
+              id: universityId,
+            })),
+          },
         },
       }),
     );
@@ -169,13 +179,24 @@ export class PrismaTandemRepository implements TandemRepository {
     return tandemMapper(res);
   }
 
-  async updateStatus(id: string, status: TandemStatus): Promise<void> {
+  async update(tandem: Tandem): Promise<void> {
     await this.prisma.tandems.update({
       where: {
-        id,
+        id: tandem.id,
       },
       data: {
-        status,
+        id: tandem.id,
+        LearningLanguages: {
+          connect: tandem.learningLanguages.map((learningLanguage) => ({
+            id: learningLanguage.id,
+          })),
+        },
+        status: tandem.status,
+        UniversityValidations: tandem.universityValidations.length && {
+          connect: tandem.universityValidations.map((universityId) => ({
+            id: universityId,
+          })),
+        },
       },
     });
   }

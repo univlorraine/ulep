@@ -1,6 +1,7 @@
 import { Collection } from '@app/common';
 import {
   LearningLanguage,
+  LearningLanguageWithTandem,
   Profile,
   Tandem,
   TandemStatus,
@@ -149,17 +150,20 @@ export class InMemoryLearningLanguageRepository
     page,
     universityIds,
   }: LearningLanguageRepositoryGetProps): Promise<
-    Collection<LearningLanguage>
+    Collection<LearningLanguageWithTandem>
   > {
     const values = Array.from(this.#learningLanguages.values()).filter((ll) =>
       universityIds.includes(ll.profile.user.university.id),
     );
 
     const firstItem = (page - 1) * limit;
-    const items = values.slice(firstItem, firstItem + limit);
+    const items = values.slice(firstItem, firstItem + limit).map((item) => {
+      const tandem = this.#tandemsPerLearningLanguages.get(item.id);
+      return { ...item, tandem };
+    });
 
     return Promise.resolve(
-      new Collection<LearningLanguage>({
+      new Collection<LearningLanguageWithTandem>({
         items,
         totalItems: values.length,
       }),

@@ -4,6 +4,7 @@ export class KeycloakUser {
   email: string;
   email_verified: boolean;
   realm_access: RealmAccess;
+  universityId?: string;
 }
 
 export type KeycloakEmailAction =

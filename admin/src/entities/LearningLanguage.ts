@@ -1,4 +1,5 @@
 import { Profile } from './Profile';
+import { TandemStatus, TandemSummary } from './Tandem';
 
 export type LearningLanguage = {
     id: string;
@@ -6,17 +7,25 @@ export type LearningLanguage = {
     level: string;
     name: string;
     createdAt: Date;
-    profile?: Profile;
+    profile: Profile;
+    tandem?: TandemSummary;
 };
 
 export type LearningLanguageTandem = {
     id: string;
     status: string;
-    learningLanguage: LearningLanguage;
-    partner: Profile;
+    userLearningLanguage: LearningLanguage;
+    partnerLearningLanguage: LearningLanguage;
+    universityValidations: string[];
 };
 
-export enum TandemStatus {
-    DRAFT = 'DRAFT',
-    ACTIVE = 'ACTIVE',
-}
+/**
+ * Return true if an action is possible on a learning language
+ * Action possible = a tandem is actionable (validate, refuse, etc)
+ * @param learningLanguage
+ * @returns
+ */
+export const learningLanguageHasPossibleAction = (learningLanguage?: LearningLanguage) =>
+    learningLanguage?.tandem?.status &&
+    learningLanguage?.tandem?.status !== TandemStatus.ACTIVE &&
+    learningLanguage?.tandem?.status !== TandemStatus.INACTIVE;

@@ -59,7 +59,7 @@ export class CreateUserRequest implements CreateUserCommand {
   @IsIn(['student', 'staff'])
   role: Role;
 
-  @Swagger.ApiProperty({ type: 'string', format: 'uuid' })
+  @Swagger.ApiProperty({ type: 'string' })
   @IsString()
   code: string;
 

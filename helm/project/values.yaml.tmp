@@ -176,8 +176,6 @@ admin:
     pullPolicy: Always
 
   env: 
-    keycloakRealm: etandem # FIXE
-    keycloakClientId: react-admin # FIXE
     keycloakClientSecret: *keycloakClientSecret # REQUIRED
 
   autoscaling:

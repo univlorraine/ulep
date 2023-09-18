@@ -29,7 +29,7 @@ const LoginPage = () => {
                     minHeight: '100vh',
                     alignItems: 'center',
                     justifyContent: 'flex-start',
-                    background: 'url(https://source.unsplash.com/featured/1600x900)',
+                    backgroundColor: '#9e9e9e',
                     backgroundRepeat: 'no-repeat',
                     backgroundSize: 'cover',
                 }}

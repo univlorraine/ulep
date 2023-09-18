@@ -2,7 +2,9 @@ import { Box } from '@mui/material';
 import React from 'react';
 
 import { DateField, FunctionField, Show, SimpleShowLayout, TextField, useTranslate } from 'react-admin';
+import { DisplayLearningType, DisplayRole } from '../../../components/translated';
 import { LearningLanguage } from '../../../entities/LearningLanguage';
+import { getProfileUniversityAndCampusString } from '../../../entities/Profile';
 import ProfileLink from '../ui/ProfileLink';
 import ShowTandems from './ShowTandems';
 
@@ -17,9 +19,23 @@ const LearningLanguageShow = () => {
                         data?.profile && <ProfileLink profile={data.profile} variant="h5" />
                     }
                 />
+                <FunctionField
+                    label={translate('learning_languages.list.tableColumns.university')}
+                    render={(data: LearningLanguage) => getProfileUniversityAndCampusString(data.profile)}
+                />
                 <DateField label={translate('learning_languages.show.fields.createdAt')} source="createdAt" />
                 <TextField label={translate('learning_languages.show.fields.learnedLanguage')} source="name" />
                 <TextField label={translate('learning_languages.show.fields.level')} source="level" />
+                <FunctionField
+                    label={translate('learning_languages.show.fields.role')}
+                    render={(data: LearningLanguage) => <DisplayRole role={data.profile?.user.role} />}
+                />
+                <FunctionField
+                    label={translate('learning_languages.show.fields.learningType')}
+                    render={(data: LearningLanguage) => (
+                        <DisplayLearningType learningType={data.profile?.learningType} />
+                    )}
+                />
             </SimpleShowLayout>
 
             <Box sx={{ padding: 2 }}>

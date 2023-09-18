@@ -1,7 +1,12 @@
 import { Inject, Injectable, Logger } from '@nestjs/common';
-import { RessourceDoesNotExist } from 'src/core/errors';
+import { DomainError, RessourceDoesNotExist } from 'src/core/errors';
 import { LearningLanguageIsAlreadyInActiveTandemError } from 'src/core/errors/tandem-exceptions';
-import { LearningLanguage, Tandem, TandemStatus } from 'src/core/models';
+import {
+  LearningLanguage,
+  PairingMode,
+  Tandem,
+  TandemStatus,
+} from 'src/core/models';
 import {
   LEARNING_LANGUAGE_REPOSITORY,
   LearningLanguageRepository,
@@ -10,12 +15,16 @@ import {
   TANDEM_REPOSITORY,
   TandemRepository,
 } from 'src/core/ports/tandems.repository';
+import {
+  UNIVERSITY_REPOSITORY,
+  UniversityRepository,
+} from 'src/core/ports/university.repository';
 import { UUID_PROVIDER } from 'src/core/ports/uuid.provider';
 import { UuidProvider } from 'src/providers/services/uuid.provider';
 
 export type CreateTandemCommand = {
   learningLanguageIds: string[];
-  status: TandemStatus;
+  adminUniversityId?: string;
 };
 
 @Injectable()
@@ -27,6 +36,8 @@ export class CreateTandemUsecase {
     private readonly learningLanguageRepository: LearningLanguageRepository,
     @Inject(TANDEM_REPOSITORY)
     private readonly tandemsRepository: TandemRepository,
+    @Inject(UNIVERSITY_REPOSITORY)
+    private readonly universityRepository: UniversityRepository,
     @Inject(UUID_PROVIDER)
     private readonly uuidProvider: UuidProvider,
   ) {}
@@ -37,18 +48,80 @@ export class CreateTandemUsecase {
         this.tryToFindLearningLanguages(id),
       ),
     );
-
     await Promise.all(
       learningLanguages.map((ll) =>
         this.assertLearningLanguageIsNotInActiveTandem(ll),
       ),
     );
 
-    const tandem = Tandem.create({
-      id: this.uuidProvider.generate(),
-      learningLanguages,
-      status: command.status,
-    });
+    const adminUniversityId =
+      command.adminUniversityId ??
+      (await this.universityRepository.findUniversityCentral()).id;
+
+    const {
+      learningLanguagesFromAdminUniversity,
+      learningLanguagesNotFromAdminUniversity,
+    } = learningLanguages.reduce<{
+      learningLanguagesFromAdminUniversity: LearningLanguage[];
+      learningLanguagesNotFromAdminUniversity: LearningLanguage[];
+    }>(
+      (accumulator, ll) => {
+        if (ll.profile.user.university.id === adminUniversityId) {
+          accumulator.learningLanguagesFromAdminUniversity.push(ll);
+        } else {
+          accumulator.learningLanguagesNotFromAdminUniversity.push(ll);
+        }
+        return accumulator;
+      },
+      {
+        learningLanguagesFromAdminUniversity: [],
+        learningLanguagesNotFromAdminUniversity: [],
+      },
+    );
+
+    let tandem: Tandem;
+    if (learningLanguagesFromAdminUniversity.length === 0) {
+      throw new DomainError({
+        message: 'No concerned learning languages is from admin university',
+      });
+    } else if (
+      learningLanguagesFromAdminUniversity.length === learningLanguages.length
+    ) {
+      tandem = Tandem.create({
+        id: this.uuidProvider.generate(),
+        learningLanguages,
+        status: TandemStatus.ACTIVE,
+        universityValidations: [adminUniversityId],
+      });
+    } else {
+      const partnerUniversityPairingMode =
+        learningLanguagesNotFromAdminUniversity[0].profile.user.university
+          .pairingMode;
+
+      switch (partnerUniversityPairingMode) {
+        case PairingMode.MANUAL:
+          tandem = Tandem.create({
+            id: this.uuidProvider.generate(),
+            learningLanguages,
+            status: TandemStatus.VALIDATED_BY_ONE_UNIVERSITY,
+            universityValidations: [adminUniversityId],
+          });
+          break;
+        case PairingMode.SEMI_AUTOMATIC:
+        case PairingMode.AUTOMATIC:
+          tandem = Tandem.create({
+            id: this.uuidProvider.generate(),
+            learningLanguages,
+            status: TandemStatus.ACTIVE,
+            universityValidations: [adminUniversityId],
+          });
+          break;
+        default:
+          throw new DomainError({
+            message: `Unsupported university pairing mode ${partnerUniversityPairingMode}`,
+          });
+      }
+    }
 
     const countDeletedTandem =
       await this.tandemsRepository.deleteTandemLinkedToLearningLanguages(

@@ -1,7 +1,7 @@
 import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
 import { Expose, Transform } from 'class-transformer';
 import { InterestResponse } from 'src/api/dtos/interests';
-import { Profile } from 'src/core/models/profile.model';
+import { LearningType, Profile } from 'src/core/models/profile.model';
 import { UserResponse } from '../users';
 import { ObjectiveResponse } from '../objective';
 import { BiographyDto } from './biography';
@@ -95,6 +95,10 @@ export class ProfileResponse {
   @Expose({ groups: ['read'] })
   specificProgram: boolean;
 
+  @ApiProperty({ type: 'string', enum: LearningType })
+  @Expose({ groups: ['read'] })
+  learningType: LearningType;
+
   constructor(partial: Partial<ProfileResponse>) {
     Object.assign(this, partial);
   }
@@ -126,6 +130,7 @@ export class ProfileResponse {
       campus: profile.campus && CampusResponse.fromCampus(profile.campus),
       certificateOption: profile.certificateOption,
       specificProgram: profile.specificProgram,
+      learningType: profile.learningType,
     });
   }
 }

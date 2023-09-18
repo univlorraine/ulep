@@ -91,7 +91,7 @@ export class ProfileController {
               firstname: { contains: where.user?.firstname },
               lastname: { contains: where.user?.lastname },
               role: { equals: where.user?.role },
-              university: { equals: where.user?.university },
+              university: { equals: where?.university },
             },
             masteredLanguageCode: where.masteredLanguageCode,
             nativeLanguageCode: where.nativeLanguageCode,
@@ -117,7 +117,7 @@ export class ProfileController {
     const tandems = await this.getTandemsForProfileUsecase.execute({
       profile: id,
     });
-    // TODO(NOW+2): Check if this endpoint is still used
+    // TODO(CLEAN): Check if this endpoint is still used
 
     return tandems.map((tandem) => UserTandemResponse.fromDomain(id, tandem));
   }
@@ -170,7 +170,7 @@ export class ProfileController {
       profileId: id,
     });
 
-    // TODO(NOW+2): Check if this endpoint is still used
+    // TODO(CLEAN): Check if this endpoint is still used
 
     return LearningLanguageResponse.fromDomain(learningLanguage);
   }

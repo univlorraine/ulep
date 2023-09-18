@@ -17,6 +17,8 @@ import {
     useTranslate,
     FunctionField,
     ChipField,
+    useGetIdentity,
+    Loading,
 } from 'react-admin';
 import User from '../../entities/User';
 
@@ -30,9 +32,6 @@ const ProfileFilter = (props: any) => {
             <TextInput label={translate('global.email')} source="user.email" />
             <ReferenceInput label={translate('profiles.country')} reference="countries" source="user.country">
                 <SelectInput label={translate('profiles.country')} optionText="name" optionValue="code" />
-            </ReferenceInput>
-            <ReferenceInput label={translate('global.university')} reference="universities" source="user.university">
-                <SelectInput label={translate('global.university')} optionText="name" />
             </ReferenceInput>
             <ReferenceInput
                 label={translate('profiles.native_language')}
@@ -62,6 +61,9 @@ const ProfileFilter = (props: any) => {
 
 const ProfileList = (props: any) => {
     const translate = useTranslate();
+
+    const { data: identity, isLoading: isLoadingIdentity } = useGetIdentity();
+
     const [update] = useUpdate();
     const refresh = useRefresh();
     const notify = useNotify();
@@ -85,8 +87,18 @@ const ProfileList = (props: any) => {
         );
     };
 
+    if (isLoadingIdentity) {
+        return <Loading />;
+    }
+
     return (
-        <List exporter={false} filters={<ProfileFilter />} title={translate('profiles.label')} {...props}>
+        <List
+            exporter={false}
+            filter={{ university: identity?.universityId }}
+            filters={<ProfileFilter />}
+            title={translate('profiles.label')}
+            {...props}
+        >
             <Datagrid rowClick="show">
                 <FunctionField
                     label={translate('global.role')}
@@ -96,7 +108,7 @@ const ProfileList = (props: any) => {
                 <TextField label={translate('global.lastname')} source="user.lastname" sortable />
                 <TextField label={translate('global.firstname')} source="user.firstname" sortable />
                 <TextField label={translate('global.email')} source="user.email" sortable />
-                <TextField label={translate('global.university')} source="user.university.name" sortable />
+                <TextField label={translate('global.university')} sortable={false} source="user.university.name" />
                 <TextField
                     label={translate('profiles.native_language')}
                     sortable={false}

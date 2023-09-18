@@ -11,8 +11,8 @@ class ProfileQueryWhere {
     firstname?: string;
     lastname?: string;
     role?: string;
-    university?: string;
   };
+  university?: string;
   masteredLanguageCode?: string;
   nativeLanguageCode?: string;
 }

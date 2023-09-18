@@ -1,6 +1,12 @@
 import { CountryCode } from 'src/core/models/country-code.model';
 import { Campus } from './campus.model';
 
+export enum PairingMode {
+  MANUAL = 'MANUAL',
+  SEMI_AUTOMATIC = 'SEMI_AUTOMATIC',
+  AUTOMATIC = 'AUTOMATIC',
+}
+
 export interface UniversityProps {
   id: string;
   name: string;
@@ -13,6 +19,7 @@ export interface UniversityProps {
   admissionStart: Date;
   admissionEnd: Date;
   website?: string;
+  pairingMode?: PairingMode;
 }
 
 export class University {
@@ -38,6 +45,8 @@ export class University {
 
   readonly website?: string;
 
+  readonly pairingMode: PairingMode;
+
   constructor(props: UniversityProps) {
     this.id = props.id;
     this.name = props.name;
@@ -50,6 +59,7 @@ export class University {
     this.admissionStart = props.admissionStart;
     this.admissionEnd = props.admissionEnd;
     this.website = props.website;
+    this.pairingMode = props.pairingMode || PairingMode.MANUAL;
   }
 
   static create(props: UniversityProps): University {

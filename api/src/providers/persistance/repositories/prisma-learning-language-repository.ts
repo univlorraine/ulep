@@ -1,13 +1,20 @@
-import { LearningLanguage, TandemStatus, University } from 'src/core/models';
+import {
+  LearningLanguage,
+  LearningLanguageWithTandem,
+  TandemStatus,
+} from 'src/core/models';
 import { Collection, PrismaService } from '@app/common';
 import { Injectable } from '@nestjs/common';
 import {
+  LearningLanguageQuerySortKey,
   LearningLanguageRepository,
   LearningLanguageRepositoryGetProps,
 } from 'src/core/ports/learning-language.repository';
 import {
   LearningLanguageRelations,
+  LearningLanguageWithTandemRelations,
   learningLanguageMapper,
+  learningLanguageWithTandemMapper,
 } from '../mappers/learningLanguage.mapper';
 
 @Injectable()
@@ -207,10 +214,13 @@ export class PrismaLearningLanguageRepository
     page,
     limit,
     universityIds,
+    orderBy,
+    hasActiveTandem,
+    hasActionableTandem,
   }: LearningLanguageRepositoryGetProps): Promise<
-    Collection<LearningLanguage>
+    Collection<LearningLanguageWithTandem>
   > {
-    const wherePayload = {
+    const permanentWherePayload = {
       Profile: {
         User: {
           organization_id: {
@@ -220,19 +230,137 @@ export class PrismaLearningLanguageRepository
       },
     };
 
+    const tandemWhereClauses = [];
+    if (hasActionableTandem === true) {
+      tandemWhereClauses.push({
+        Tandem: {
+          status: {
+            not: {
+              in: [TandemStatus.ACTIVE, TandemStatus.INACTIVE],
+            },
+          },
+        },
+      });
+    } else if (hasActionableTandem === false) {
+      tandemWhereClauses.push({
+        OR: [
+          {
+            Tandem: {
+              status: {
+                in: [TandemStatus.ACTIVE, TandemStatus.INACTIVE],
+              },
+            },
+          },
+          {
+            Tandem: {
+              is: null,
+            },
+          },
+        ],
+      });
+    }
+
+    if (hasActiveTandem === true) {
+      tandemWhereClauses.push({
+        Tandem: {
+          status: {
+            equals: TandemStatus.ACTIVE,
+          },
+        },
+      });
+    } else if (hasActiveTandem === false) {
+      tandemWhereClauses.push({
+        OR: [
+          {
+            Tandem: {
+              status: {
+                not: {
+                  equals: TandemStatus.ACTIVE,
+                },
+              },
+            },
+          },
+          {
+            Tandem: {
+              is: null,
+            },
+          },
+        ],
+      });
+    }
+
+    let wherePayload: any = { ...permanentWherePayload };
+    if (tandemWhereClauses.length > 1) {
+      wherePayload = {
+        ...wherePayload,
+        AND: tandemWhereClauses,
+      };
+    } else if (tandemWhereClauses.length === 1) {
+      wherePayload = {
+        ...wherePayload,
+        ...tandemWhereClauses[0],
+      };
+    }
+
     const count = await this.prisma.learningLanguages.count({
       where: wherePayload,
     });
+
+    let orderByPayload;
+    if (orderBy) {
+      switch (orderBy.field) {
+        case LearningLanguageQuerySortKey.PROFILE:
+          orderByPayload = {
+            Profile: {
+              User: {
+                firstname: orderBy.order,
+              },
+            },
+          };
+          break;
+        case LearningLanguageQuerySortKey.CREATED_AT:
+          orderByPayload = {
+            created_at: orderBy.order,
+          };
+          break;
+        case LearningLanguageQuerySortKey.UNIVERSITY:
+          orderByPayload = {
+            Profile: {
+              User: {
+                Organization: {
+                  name: orderBy.order,
+                },
+              },
+            },
+          };
+          break;
+        case LearningLanguageQuerySortKey.LEVEL:
+          orderByPayload = {
+            level: orderBy.order,
+          };
+          break;
+        case LearningLanguageQuerySortKey.LANGUAGE:
+          orderByPayload = {
+            LanguageCode: {
+              name: orderBy.order,
+            },
+          };
+          break;
+        default:
+          throw new Error('Unsupported orderBy field');
+      }
+    }
 
     const items = await this.prisma.learningLanguages.findMany({
       where: wherePayload,
       skip: (page - 1) * limit,
       take: limit,
-      include: LearningLanguageRelations,
+      include: LearningLanguageWithTandemRelations,
+      orderBy: orderByPayload,
     });
 
     return {
-      items: items.map(learningLanguageMapper),
+      items: items.map(learningLanguageWithTandemMapper),
       totalItems: count,
     };
   }

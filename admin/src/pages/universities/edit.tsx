@@ -19,6 +19,7 @@ const EditUniversity = () => {
         admissionEnd: Date,
         codes: string[],
         domains: string[],
+        pairingMode: string,
         website?: string
     ) => {
         const payload = {
@@ -30,6 +31,7 @@ const EditUniversity = () => {
             codes,
             domains,
             website,
+            pairingMode,
         };
         try {
             return await update(
@@ -71,6 +73,7 @@ const EditUniversity = () => {
                             admissionEnd: Date,
                             codes: string[],
                             domains: string[],
+                            pairingMode: string,
                             website?: string
                         ) =>
                             handleSubmit(
@@ -82,10 +85,12 @@ const EditUniversity = () => {
                                 admissionEnd,
                                 codes,
                                 domains,
+                                pairingMode,
                                 website
                             )
                         }
                         name={record.name}
+                        pairingMode={record.pairingMode}
                         timezone={record.timezone}
                         tradKey="update"
                         website={record.website}
