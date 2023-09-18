@@ -9,7 +9,6 @@ import {
     fetchUtils,
 } from 'react-admin';
 import { RoutineExecution } from '../entities/RoutineExecution';
-import { TandemStatus } from '../entities/Tandem';
 import CountriesQuery from '../queries/CountriesQuery';
 import InterestsQuery from '../queries/InterestsQuery';
 import LanguagesQuery from '../queries/LanguagesQuery';
@@ -244,11 +243,8 @@ const customDataProvider: DataProvider = {
         return result;
     },
     validateTandem: async (tandemId: string): Promise<void> => {
-        const url = `${process.env.REACT_APP_API_URL}/tandems/${tandemId}/status`;
-        const body = JSON.stringify({
-            status: TandemStatus.ACTIVE,
-        });
-        const response = await fetch(url, httpClientOptions({ method: 'PUT', body }));
+        const url = `${process.env.REACT_APP_API_URL}/tandems/${tandemId}/validate`;
+        const response = await fetch(url, httpClientOptions({ method: 'POST' }));
 
         if (!response.ok) {
             throw new Error(`API request failed with status ${response.status}`);
@@ -258,7 +254,6 @@ const customDataProvider: DataProvider = {
         const url = `${process.env.REACT_APP_API_URL}/tandems`;
         const body = JSON.stringify({
             learningLanguageIds,
-            status: TandemStatus.ACTIVE,
         });
         const response = await fetch(url, httpClientOptions({ method: 'POST', body }));
 

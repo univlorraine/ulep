@@ -330,6 +330,19 @@
                         "learningType": "Mode"
                     }
                 },
+                "waitingValidation": {
+                    "title": "Attente validation",
+                    "tableColumns": {
+                        "profile": "Profil",
+                        "learnedLanguage": "Langue demandée",
+                        "level": "Niveau",
+                        "date": "Date",
+                        "university": "Université",
+                        "role": "Rôle",
+                        "learningType": "Mode",
+                        "action": "Action"
+                    }
+                },
                 "matches": {
                     "error": "Une erreur est survenue lors de la récupération des propositions de la routine individuelle",
                     "title": "Suggestion routine individuelle",

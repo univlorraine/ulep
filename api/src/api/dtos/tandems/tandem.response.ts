@@ -39,9 +39,9 @@ export class UserTandemResponse {
   @Expose({ groups: ['read'] })
   id: string | null = null;
 
-  @Swagger.ApiProperty({ type: ProfileResponse })
+  @Swagger.ApiProperty({ type: LearningLanguageResponse })
   @Expose({ groups: ['read'] })
-  partner: ProfileResponse;
+  partnerLearningLanguage: LearningLanguageResponse;
 
   @Swagger.ApiProperty({ type: 'string', enum: TandemStatus })
   @Expose({ groups: ['read'] })
@@ -49,7 +49,11 @@ export class UserTandemResponse {
 
   @Swagger.ApiProperty({ type: LearningLanguageResponse })
   @Expose({ groups: ['read'] })
-  learningLanguage: LearningLanguageResponse;
+  userLearningLanguage: LearningLanguageResponse;
+
+  @Swagger.ApiProperty({ type: 'string', isArray: true })
+  @Expose({ groups: ['read'] })
+  universityValidations: string[];
 
   constructor(partial: Partial<UserTandemResponse>) {
     Object.assign(this, partial);
@@ -79,13 +83,19 @@ export class UserTandemResponse {
       throw new Error('Partner not found');
     }
 
+    // TODO(CLEAN): Check if userLearningLanguage is really needed
+
     return new UserTandemResponse({
       id: tandem.id,
-      partner: ProfileResponse.fromDomain(learningLanguagePartner.profile),
+      partnerLearningLanguage: LearningLanguageResponse.fromDomain(
+        learningLanguagePartner,
+        true,
+      ),
       status: tandem.status,
-      learningLanguage: LearningLanguageResponse.fromDomain(
+      userLearningLanguage: LearningLanguageResponse.fromDomain(
         learningLanguageProfile,
       ),
+      universityValidations: tandem.universityValidations,
     });
   }
 }

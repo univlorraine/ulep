@@ -10,10 +10,12 @@ export const TandemRelations = {
   LearningLanguages: {
     include: LearningLanguageRelations,
   },
+  UniversityValidations: true,
 };
 
 export type TandemSnapshot = Prisma.Tandems & {
   LearningLanguages: LearningLanguageSnapshot[];
+  UniversityValidations: Prisma.Organizations[];
 };
 
 export const tandemMapper = (instance: TandemSnapshot): Tandem =>
@@ -21,4 +23,6 @@ export const tandemMapper = (instance: TandemSnapshot): Tandem =>
     id: instance.id,
     learningLanguages: instance.LearningLanguages.map(learningLanguageMapper),
     status: TandemStatus[instance.status],
+    universityValidations:
+      instance.UniversityValidations?.map((university) => university.id) || [],
   });

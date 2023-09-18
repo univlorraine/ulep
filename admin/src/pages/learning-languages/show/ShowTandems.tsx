@@ -43,6 +43,7 @@ const ShowTandems = () => {
     );
 
     const hasActiveTandem = tandem?.status === TandemStatus.ACTIVE;
+    const hasTandemWaitingForValidation = tandem?.status === TandemStatus.VALIDATED_BY_ONE_UNIVERSITY;
 
     const { selectedUniversityIds } = useLearningLanguagesStore();
 
@@ -111,18 +112,22 @@ const ShowTandems = () => {
                     <TableBody>
                         <TableRow>
                             <TableCell>
-                                <ProfileLink profile={tandem.partner} />
+                                <ProfileLink profile={tandem.partnerLearningLanguage.profile} />
                             </TableCell>
-                            <TableCell>{tandem.learningLanguage.name}</TableCell>
-                            <TableCell>{tandem.learningLanguage.level}</TableCell>
-                            <TableCell>{tandem.partner.user.university.name}</TableCell>
+                            <TableCell>{tandem.partnerLearningLanguage.name}</TableCell>
+                            <TableCell>{tandem.partnerLearningLanguage.level}</TableCell>
+                            <TableCell>{tandem.partnerLearningLanguage.profile.user.university.name}</TableCell>
                             <TableCell>
-                                <DisplayRole role={tandem.partner.user.role} />
+                                <DisplayRole role={tandem.partnerLearningLanguage.profile.user.role} />
                             </TableCell>
                             <TableCell>
-                                <DisplayLearningType learningType={tandem.partner.learningType} />
+                                <DisplayLearningType
+                                    learningType={tandem.partnerLearningLanguage.profile.learningType}
+                                />
                             </TableCell>
-                            <TableCell>{new Date(tandem.learningLanguage.createdAt).toLocaleDateString()}</TableCell>
+                            <TableCell>
+                                {new Date(tandem.partnerLearningLanguage.createdAt).toLocaleDateString()}
+                            </TableCell>
                         </TableRow>
                     </TableBody>
                 </Table>
@@ -134,6 +139,80 @@ const ShowTandems = () => {
         await refetchTandem();
         await refetchMatches();
     };
+
+    if (hasTandemWaitingForValidation) {
+        const isUserValidationNeeded = !tandem.universityValidations.includes(identity?.universityId);
+
+        return (
+            <>
+                <Typography variant="h6">
+                    {translate('learning_languages.show.tandems.waitingValidation.title')}
+                </Typography>
+                <Table>
+                    <TableHead>
+                        <TableRow>
+                            <TableCell>
+                                {translate('learning_languages.show.tandems.waitingValidation.tableColumns.profile')}
+                            </TableCell>
+                            <TableCell>
+                                {translate(
+                                    'learning_languages.show.tandems.waitingValidation.tableColumns.learnedLanguage'
+                                )}
+                            </TableCell>
+                            <TableCell>
+                                {translate('learning_languages.show.tandems.waitingValidation.tableColumns.level')}
+                            </TableCell>
+                            <TableCell>
+                                {translate('learning_languages.show.tandems.waitingValidation.tableColumns.university')}
+                            </TableCell>
+                            <TableCell>
+                                {translate('learning_languages.show.tandems.waitingValidation.tableColumns.role')}
+                            </TableCell>
+                            <TableCell>
+                                {translate(
+                                    'learning_languages.show.tandems.waitingValidation.tableColumns.learningType'
+                                )}
+                            </TableCell>
+                            <TableCell>
+                                {translate('learning_languages.show.tandems.waitingValidation.tableColumns.date')}
+                            </TableCell>
+                            <TableCell>
+                                {translate('learning_languages.show.tandems.waitingValidation.tableColumns.action')}
+                            </TableCell>
+                        </TableRow>
+                    </TableHead>
+                    <TableBody>
+                        <TableRow>
+                            <TableCell>
+                                <ProfileLink profile={tandem.partnerLearningLanguage.profile} />
+                            </TableCell>
+                            <TableCell>{tandem.partnerLearningLanguage.name}</TableCell>
+                            <TableCell>{tandem.partnerLearningLanguage.level}</TableCell>
+                            <TableCell>{tandem.partnerLearningLanguage.profile.user.university.name}</TableCell>
+                            <TableCell>
+                                <DisplayRole role={tandem.partnerLearningLanguage.profile.user.role} />
+                            </TableCell>
+                            <TableCell>
+                                <DisplayLearningType
+                                    learningType={tandem.partnerLearningLanguage.profile.learningType}
+                                />
+                            </TableCell>
+                            <TableCell>
+                                {new Date(tandem.partnerLearningLanguage.createdAt).toLocaleDateString()}
+                            </TableCell>
+                            <TableCell>
+                                {isUserValidationNeeded ? (
+                                    <ValidateTandem onTandemValidated={handleValidateTandem} tandemId={tandem.id} />
+                                ) : (
+                                    <span>N/A</span>
+                                )}
+                            </TableCell>
+                        </TableRow>
+                    </TableBody>
+                </Table>
+            </>
+        );
+    }
 
     return (
         <>
@@ -227,7 +306,7 @@ const ShowTandems = () => {
                         : translate('learning_languages.show.tandems.globalSuggestions.titleNotCentralUniversity')}
                 </Typography>
                 <Box sx={{ marginTop: 1 }}>
-                    {!retryTandemQuery ? (
+                    {isErrorTandem && !retryTandemQuery ? (
                         <p>{translate('learning_languages.show.tandems.globalSuggestions.noResult')}</p>
                     ) : (
                         <Table>
@@ -268,26 +347,33 @@ const ShowTandems = () => {
                                 {tandem?.status === TandemStatus.DRAFT && (
                                     <TableRow>
                                         <TableCell>
-                                            <ProfileLink profile={tandem.partner} />
+                                            <ProfileLink profile={tandem.partnerLearningLanguage.profile} />
                                         </TableCell>
-                                        <TableCell>{tandem.learningLanguage.name}</TableCell>
-                                        <TableCell>{tandem.learningLanguage.level}</TableCell>
-                                        <TableCell>{tandem.partner.user.university.name}</TableCell>
+                                        <TableCell>{tandem.partnerLearningLanguage.name}</TableCell>
+                                        <TableCell>{tandem.partnerLearningLanguage.level}</TableCell>
                                         <TableCell>
-                                            <DisplayRole role={tandem.partner.user.role} />
+                                            {tandem.partnerLearningLanguage.profile.user.university.name}
                                         </TableCell>
                                         <TableCell>
-                                            <DisplayLearningType learningType={tandem.partner.learningType} />
+                                            <DisplayRole role={tandem.partnerLearningLanguage.profile.user.role} />
+                                        </TableCell>
+                                        <TableCell>
+                                            <DisplayLearningType
+                                                learningType={tandem.partnerLearningLanguage.profile.learningType}
+                                            />
                                         </TableCell>
 
                                         <TableCell>
-                                            {new Date(tandem.learningLanguage.createdAt).toLocaleDateString()}
+                                            {new Date(tandem.partnerLearningLanguage.createdAt).toLocaleDateString()}
                                         </TableCell>
                                         <TableCell>N/A</TableCell>
                                         <TableCell>
                                             <ValidateTandem
+                                                learningLanguageIds={[
+                                                    recordId.toString(),
+                                                    tandem.partnerLearningLanguage.id,
+                                                ]}
                                                 onTandemValidated={handleValidateTandem}
-                                                tandemId={tandem.id}
                                             />
                                         </TableCell>
                                     </TableRow>
