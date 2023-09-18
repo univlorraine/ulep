@@ -34,10 +34,16 @@ const ShowTandems = () => {
             enabled: !!recordId && !isLoadingIdentity,
             retry: retryTandemQuery ? 3 : false,
             onError: (err) => {
-                if ((err as Error)?.cause !== 404) {
-                    // Note: workaround to not consider no tandem as an error
-                    setRetryTandemQuery(true);
+                if ((err as Error)?.cause === 404) {
+                    return undefined;
                 }
+
+                setRetryTandemQuery(true);
+
+                return err;
+            },
+            onSuccess: () => {
+                setRetryTandemQuery(false);
             },
         }
     );
@@ -93,7 +99,7 @@ const ShowTandems = () => {
         await refetchMatches();
     };
 
-    if (hasTandemWaitingForValidation) {
+    if (hasTandemWaitingForValidation && !isErrorTandem) {
         const isUserValidationNeeded = !tandem.universityValidations.includes(identity?.universityId);
 
         return (
