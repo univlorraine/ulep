@@ -209,6 +209,7 @@ export class GenerateTandemsUsecase {
         pairedLearningLanguageIds.add(pair.owner.id);
         pairedLearningLanguageIds.add(pair.target.id);
 
+        // TODO(NOW): clarify : en attente validation
         const ownerUniversity = pair.owner.profile.user.university;
         const targetUniversity = pair.target.profile.user.university;
         if (!universitiesWithNewTandems.has(ownerUniversity.id)) {
