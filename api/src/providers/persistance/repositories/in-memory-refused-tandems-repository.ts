@@ -1,7 +1,7 @@
 import { RefusedTandem } from 'src/core/models/refused-tandem.model';
 import { RefusedTandemsRepository } from './../../../core/ports/refused-tandems.repository';
 
-export class InMemoryRefusedTandemRepository
+export class InMemoryRefusedTandemsRepository
   implements RefusedTandemsRepository
 {
   #refusedTandems: RefusedTandem[];
