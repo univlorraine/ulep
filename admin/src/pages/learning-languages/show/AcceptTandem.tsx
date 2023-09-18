@@ -6,17 +6,17 @@ import useCreateTandem from './useCreateTandem';
 import useValidateTandem from './useValidateTandem';
 
 enum TandemAction {
-    VALIDATE = 'VALIDATE',
+    ACCEPT = 'ACCEPT',
     REFUSE = 'REFUSE',
 }
 
-interface ValidateTandemProps {
+interface AcceptTandemProps {
     tandemId?: string;
     learningLanguageIds?: string[];
     onTandemValidated: () => void;
 }
 
-const ValidateTandem = ({ tandemId, learningLanguageIds, onTandemValidated }: ValidateTandemProps) => {
+const AcceptTandem = ({ tandemId, learningLanguageIds, onTandemValidated }: AcceptTandemProps) => {
     if (!tandemId && learningLanguageIds?.length !== 2) {
         throw new Error('Validate tandem must have a tandemId or 2 learningLanguage Ids');
     }
@@ -56,7 +56,7 @@ const ValidateTandem = ({ tandemId, learningLanguageIds, onTandemValidated }: Va
     });
 
     const handleConfirm = () => {
-        if (modalAction === TandemAction.VALIDATE) {
+        if (modalAction === TandemAction.ACCEPT) {
             if (tandemId) {
                 validateTandem(tandemId);
             } else if (learningLanguageIds) {
@@ -69,7 +69,7 @@ const ValidateTandem = ({ tandemId, learningLanguageIds, onTandemValidated }: Va
     };
 
     const message =
-        modalAction === TandemAction.VALIDATE
+        modalAction === TandemAction.ACCEPT
             ? translate('learning_languages.show.tandems.actions.validateMessage')
             : translate('learning_languages.show.tandems.actions.refuseMessage');
 
@@ -115,7 +115,7 @@ const ValidateTandem = ({ tandemId, learningLanguageIds, onTandemValidated }: Va
                     )}
                 </Box>
             </Modal>
-            <IconButton aria-label="accept" color="success" onClick={() => handleAction(TandemAction.VALIDATE)}>
+            <IconButton aria-label="accept" color="success" onClick={() => handleAction(TandemAction.ACCEPT)}>
                 <Check />
             </IconButton>
             <IconButton aria-label="reject" color="error" onClick={() => handleAction(TandemAction.REFUSE)}>
@@ -125,4 +125,4 @@ const ValidateTandem = ({ tandemId, learningLanguageIds, onTandemValidated }: Va
     );
 };
 
-export default ValidateTandem;
+export default AcceptTandem;

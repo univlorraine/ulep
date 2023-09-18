@@ -319,45 +319,26 @@
             "tandems": {
                 "error": "Une erreur est survenue lors de la récupération des tandems",
                 "active": {
-                    "title": "En tandem avec",
-                    "tableColumns": {
-                        "profile": "Profil",
-                        "learnedLanguage": "Langue demandée",
-                        "level": "Niveau",
-                        "date": "Date",
-                        "university": "Université",
-                        "role": "Rôle",
-                        "learningType": "Mode"
-                    }
+                    "title": "En tandem avec"
                 },
                 "waitingValidation": {
-                    "title": "Attente validation",
-                    "tableColumns": {
-                        "profile": "Profil",
-                        "learnedLanguage": "Langue demandée",
-                        "level": "Niveau",
-                        "date": "Date",
-                        "university": "Université",
-                        "role": "Rôle",
-                        "learningType": "Mode",
-                        "action": "Action"
-                    }
+                    "title": "Attente validation"
                 },
                 "matches": {
                     "error": "Une erreur est survenue lors de la récupération des propositions de la routine individuelle",
                     "title": "Suggestion routine individuelle",
-                    "tableColumns": {
-                        "profile": "Profil",
-                        "learnedLanguage": "Langue demandée",
-                        "level": "Niveau",
-                        "score": "Compatibilité",
-                        "date": "Date",
-                        "actions": "Actions",
-                        "university": "Université",
-                        "role": "Rôle",
-                        "learningType": "Mode"
-                    },
                     "noResults": "Aucun résultats"
+                },
+                "tableColumns": {
+                    "profile": "Profil",
+                    "learnedLanguage": "Langue demandée",
+                    "level": "Niveau",
+                    "score": "Compatibilité",
+                    "date": "Date",
+                    "actions": "Actions",
+                    "university": "Université",
+                    "role": "Rôle",
+                    "learningType": "Mode"
                 },
                 "globalSuggestions": {
                     "title": "Suggestion routine globale",

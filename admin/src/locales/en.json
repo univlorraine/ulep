@@ -252,45 +252,26 @@
             "tandems": {
                 "error": "An error occured while fetching tandems",
                 "active": {
-                    "title": "Tandem with",
-                    "tableColumns": {
-                        "profile": "Profile",
-                        "learnedLanguage": "Requested language",
-                        "level": "Level",
-                        "date": "Date",
-                        "university": "University",
-                        "role": "Role",
-                        "learningType": "Mode"
-                    }
+                    "title": "Tandem with"
                 },
                 "waitingValidation": {
-                    "title": "Pending validation",
-                    "tableColumns": {
-                        "profile": "Profile",
-                        "learnedLanguage": "Requested language",
-                        "level": "Level",
-                        "date": "Date",
-                        "university": "University",
-                        "role": "Role",
-                        "learningType": "Mode",
-                        "action": "Action"
-                    }
+                    "title": "Pending validation"
                 },
                 "matches": {
                     "error": "An error occured while fetching individual routine suggestions",
                     "title": "Individual routine suggestions",
-                    "tableColumns": {
-                        "profile": "Profile",
-                        "learnedLanguage": "Requested language",
-                        "level": "Level",
-                        "score": "Compatibility",
-                        "date": "Date",
-                        "actions": "Actions",
-                        "university": "University",
-                        "role": "Role",
-                        "learningType": "Mode"
-                    },
                     "noResults": "No results"
+                },
+                "tableColumns": {
+                    "profile": "Profile",
+                    "learnedLanguage": "Requested language",
+                    "level": "Level",
+                    "score": "Compatibility",
+                    "date": "Date",
+                    "actions": "Actions",
+                    "university": "University",
+                    "role": "Role",
+                    "learningType": "Mode"
                 },
                 "globalSuggestions": {
                     "title": "Global routine suggestion",
