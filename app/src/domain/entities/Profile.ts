@@ -1,12 +1,13 @@
 import { Interest } from './CategoryInterests';
 import Goal from './Goal';
+import Language from './Language';
 import User from './User';
 
 class Profile {
     constructor(
         public readonly id: string,
         public readonly nativeLanguageCode: string,
-        public readonly learningLanguageCode: string,
+        public readonly learningLanguage: Language[],
         public readonly goals: Goal[],
         public readonly frequency: MeetFrequency,
         public readonly interests: Interest[],

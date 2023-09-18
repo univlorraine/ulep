@@ -41,6 +41,7 @@ const SignUpAvailabilitiesPage: React.FC = () => {
 
     const continueSignUp = async (note?: string, isPrivate?: boolean) => {
         updateProfileSignUp({ availabilities, availabilityNote: note, availabilityNotePrivate: isPrivate, timezone });
+        setOpenFinalModal(false);
 
         history.push('/signup/frequency');
     };

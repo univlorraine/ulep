@@ -41,7 +41,7 @@ class GetAllTandemsUsecase implements GetAllTandemsUsecaseInterface {
                     new Profile(
                         'id2',
                         'FR',
-                        'CN',
+                        [new Language('id', 'CN', 'China')],
                         [new Goal('id', 'name', '')],
                         'ONCE_A_WEEK',
                         [new Interest('id', 'name')],
@@ -78,7 +78,7 @@ class GetAllTandemsUsecase implements GetAllTandemsUsecaseInterface {
                     new Profile(
                         'id2',
                         'FR',
-                        'CN',
+                        [new Language('id', 'CN', 'China')],
                         [new Goal('id', 'name', '')],
                         'ONCE_A_WEEK',
                         [new Interest('id', 'name')],
