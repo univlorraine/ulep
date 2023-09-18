@@ -63,6 +63,7 @@ model Organizations {
   updated_at         DateTime            @updatedAt
   website            String?
   pairing_mode       String              @default("MANUAL")
+  notification_email String?
   Parent             Organizations?      @relation("Organizations", fields: [parent_id], references: [id], onDelete: Cascade)
   Childrens          Organizations[]     @relation("Organizations")
   Country            CountryCodes        @relation(fields: [country_code_id], references: [id])
