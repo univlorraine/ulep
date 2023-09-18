@@ -16,10 +16,14 @@ const payload: ProfileCommand = {
     nativeLanguage: {
         code: 'FR',
     },
-    learningLanguage: {
-        code: 'CN',
-        level: 'AO',
-    },
+    learningLanguages: [
+        {
+            id: 'id',
+            code: 'CN',
+            level: 'AO',
+            name: 'Chinese',
+        },
+    ],
     objectives: [{ id: 'id', name: 'name', image: { id: 'id', url: 'url' } }],
     meetingFrequency: 'ONCE_A_WEEK',
     biography: {
