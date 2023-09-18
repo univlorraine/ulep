@@ -9,7 +9,7 @@ declare global {
         | 'THREE_TIMES_A_MONTH';
     type Pedagogy = 'TANDEM' | 'ETANDEM' | 'BOTH';
     type Role = 'staff' | 'student';
-    type TandemStatus = 'ACTIVE' | 'UNACTIVE' | 'DRAFT';
+    type TandemStatus = 'ACTIVE' | 'UNACTIVE' | 'DRAFT' | 'VALIDATED_BY_ONE_UNIVERSITY';
     type UserStatus = 'ACTIVE' | 'REPORTED' | 'BANNED';
 }
 

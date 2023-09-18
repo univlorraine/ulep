@@ -13,7 +13,7 @@ interface TandemLineProps {
 }
 
 const getTitleFromStatusAndProfile = (status: TandemStatus, hasProfile: boolean) => {
-    if (status === 'DRAFT') {
+    if (status === 'DRAFT' || status === 'VALIDATED_BY_ONE_UNIVERSITY') {
         return 'home_page.waiting_tandem.tandem_draft';
     }
 
