@@ -33,7 +33,6 @@ const initialAvailabilities: Availabilites = {
 
 const note = 'J’aurai peu de dispo les 2 premières semaines d’Octobre, mais après tout sera beaucoup plus simple';
 
-//TODO: Change language description
 const TandemProfile: React.FC<TandemProfileProps> = ({ language, onClose, profile }) => {
     const { t } = useTranslation();
     const { configuration } = useConfig();
@@ -74,7 +73,15 @@ const TandemProfile: React.FC<TandemProfileProps> = ({ language, onClose, profil
 
                 <span className={styles.category}>{t(`home_page.tandem_validated.languages`)}</span>
                 <div className={styles['text-container']}>
-                    <>{profile.nativeLanguage.name}</>
+                    <>
+                        {profile.nativeLanguage.name} <br />
+                        {profile.masteredLanguages.map((masteredLangauge) => (
+                            <>
+                                {masteredLangauge.name}
+                                <br />
+                            </>
+                        ))}
+                    </>
                 </div>
                 <span className={styles.category}>{t(`home_page.tandem_validated.interests`)}</span>
                 <div className={styles.interests}>
