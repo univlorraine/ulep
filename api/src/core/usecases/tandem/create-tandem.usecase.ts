@@ -7,6 +7,7 @@ import {
   Tandem,
   TandemStatus,
 } from 'src/core/models';
+import { EMAIL_GATEWAY, EmailGateway } from 'src/core/ports/email.gateway';
 import {
   LEARNING_LANGUAGE_REPOSITORY,
   LearningLanguageRepository,
@@ -40,6 +41,8 @@ export class CreateTandemUsecase {
     private readonly universityRepository: UniversityRepository,
     @Inject(UUID_PROVIDER)
     private readonly uuidProvider: UuidProvider,
+    @Inject(EMAIL_GATEWAY)
+    private readonly emailGateway: EmailGateway,
   ) {}
 
   async execute(command: CreateTandemCommand): Promise<Tandem> {
@@ -135,6 +138,21 @@ export class CreateTandemUsecase {
     this.logger.debug(
       `Tandem ${tandem.id} created with status ${tandem.status}`,
     );
+
+    if (tandem.status === TandemStatus.ACTIVE) {
+      // TODO(NOW): manage failure, translations and templating
+      const [learningLanguage1, learningLanguage2] = tandem.learningLanguages;
+      await this.emailGateway.send({
+        recipient: learningLanguage1.profile.user.email,
+        subject: 'Subject to translate to user1 language',
+        content: 'content to translate to user1 language and template',
+      });
+      await this.emailGateway.send({
+        recipient: learningLanguage2.profile.user.email,
+        subject: 'Subject to translate to user2 language',
+        content: 'content to translate to user2 language and template',
+      });
+    }
 
     return tandem;
   }
