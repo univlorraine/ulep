@@ -27,5 +27,6 @@ export const universityMapper = (snapshot: UniversitySnapshot): University => {
     admissionEnd: snapshot.admissionEndDate,
     website: snapshot.website,
     pairingMode: PairingMode[snapshot.pairing_mode],
+    notificationEmail: snapshot.notification_email,
   });
 };
