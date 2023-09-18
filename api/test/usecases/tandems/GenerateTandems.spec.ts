@@ -20,6 +20,7 @@ import { InMemoryCountryCodesRepository } from 'src/providers/persistance/reposi
 import { InMemoryLanguageRepository } from 'src/providers/persistance/repositories/in-memory-language-repository';
 import { InMemoryLearningLanguageRepository } from 'src/providers/persistance/repositories/in-memory-learning-language-repository';
 import { InMemoryTandemRepository } from 'src/providers/persistance/repositories/in-memory-tandem-repository';
+import { InMemoryRefusedTandemsRepository } from 'src/providers/persistance/repositories/in-memory-refused-tandems-repository';
 import { UuidProvider } from 'src/providers/services/uuid.provider';
 
 // Note: learning language comparison is based on ID
@@ -62,12 +63,14 @@ describe('GenerateTandem UC', () => {
   const learningLanguageRepository = new InMemoryLearningLanguageRepository();
   const uuidProvider = new UuidProvider();
   const languageRepository = new InMemoryLanguageRepository();
+  const refusedTandemsRepository = new InMemoryRefusedTandemsRepository();
 
   const uc = new GenerateTandemsUsecase(
     tandemsRepository,
     learningLanguageRepository,
     uuidProvider,
     languageRepository,
+    refusedTandemsRepository,
   );
 
   ///////// Data /////////

@@ -70,6 +70,7 @@ model Organizations {
   Places             Places[]
   RoutineExecutions  RoutineExecutions[]
   ValidatedTandems   Tandems[]
+  RefusedTandems     RefusedTandems[]
 
   @@unique([name])
   @@map("organizations")
@@ -302,16 +303,17 @@ model LearningObjectives {
 }
 
 model LearningLanguages {
-  id               String        @id @default(uuid())
+  id               String           @id @default(uuid())
   profile_id       String
   tandem_id        String?
   language_code_id String
-  created_at       DateTime      @default(now())
-  updated_at       DateTime      @updatedAt
+  created_at       DateTime         @default(now())
+  updated_at       DateTime         @updatedAt
   level            String
-  Profile          Profiles      @relation(fields: [profile_id], references: [id])
-  Tandem           Tandems?      @relation(fields: [tandem_id], references: [id])
-  LanguageCode     LanguageCodes @relation(fields: [language_code_id], references: [id])
+  Profile          Profiles         @relation(fields: [profile_id], references: [id])
+  Tandem           Tandems?         @relation(fields: [tandem_id], references: [id])
+  LanguageCode     LanguageCodes    @relation(fields: [language_code_id], references: [id])
+  RefusedTandems   RefusedTandems[]
 
   @@map("learning_languages")
 }
@@ -367,4 +369,13 @@ model RoutineExecutions {
   Universities Organizations[]
   created_at   DateTime        @default(now())
   updated_at   DateTime        @updatedAt
+}
+
+model RefusedTandems {
+  id                String              @id @default(uuid())
+  LearningLanguages LearningLanguages[]
+  University        Organizations       @relation(fields: [organizationsId], references: [id])
+  created_at        DateTime            @default(now())
+  updated_at        DateTime            @updatedAt
+  organizationsId   String
 }

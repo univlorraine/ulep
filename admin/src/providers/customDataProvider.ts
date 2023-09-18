@@ -261,6 +261,17 @@ const customDataProvider: DataProvider = {
             throw new Error(`API request failed with status ${response.status}`);
         }
     },
+    refuseTandem: async (learningLanguageIds: string[]): Promise<void> => {
+        const url = `${process.env.REACT_APP_API_URL}/tandems/refuse`;
+        const body = JSON.stringify({
+            learningLanguageIds,
+        });
+        const response = await fetch(url, httpClientOptions({ method: 'POST', body }));
+
+        if (!response.ok) {
+            throw new Error(`API request failed with status ${response.status}`);
+        }
+    },
 };
 
 export default customDataProvider;

@@ -3,6 +3,7 @@ import { Box, CircularProgress, IconButton, Modal } from '@mui/material';
 import React, { useState } from 'react';
 import { Button, useNotify, useTranslate } from 'react-admin';
 import useCreateTandem from './useCreateTandem';
+import useRefuseTandem from './useRefuseTandem';
 import useValidateTandem from './useValidateTandem';
 
 enum TandemAction {
@@ -10,15 +11,15 @@ enum TandemAction {
     REFUSE = 'REFUSE',
 }
 
-interface AcceptTandemProps {
+interface TandemActionsProps {
     tandemId?: string;
     learningLanguageIds?: string[];
-    onTandemValidated: () => void;
+    onTandemAction: () => void;
 }
 
-const AcceptTandem = ({ tandemId, learningLanguageIds, onTandemValidated }: AcceptTandemProps) => {
+const TandemActions = ({ tandemId, learningLanguageIds, onTandemAction }: TandemActionsProps) => {
     if (!tandemId && learningLanguageIds?.length !== 2) {
-        throw new Error('Validate tandem must have a tandemId or 2 learningLanguage Ids');
+        throw new Error('TandemActions must have a tandemId or 2 learningLanguage Ids');
     }
 
     const translate = useTranslate();
@@ -37,7 +38,7 @@ const AcceptTandem = ({ tandemId, learningLanguageIds, onTandemValidated }: Acce
     };
 
     const onSuccess = async () => {
-        onTandemValidated();
+        onTandemAction();
         handleCloseModal();
     };
 
@@ -55,6 +56,11 @@ const AcceptTandem = ({ tandemId, learningLanguageIds, onTandemValidated }: Acce
         onError,
     });
 
+    const { mutate: refuseTandem, isLoading: isLoadingRefuseTandem } = useRefuseTandem({
+        onSuccess,
+        onError,
+    });
+
     const handleConfirm = () => {
         if (modalAction === TandemAction.ACCEPT) {
             if (tandemId) {
@@ -63,8 +69,10 @@ const AcceptTandem = ({ tandemId, learningLanguageIds, onTandemValidated }: Acce
                 createTandem(learningLanguageIds);
             }
         } else {
-            // eslint-disable-next-line no-alert
-            window.alert('not implemented yet');
+            if (learningLanguageIds?.length !== 2) {
+                throw new Error('Must have 2 learning languages to refuse tandem');
+            }
+            refuseTandem(learningLanguageIds);
         }
     };
 
@@ -93,7 +101,7 @@ const AcceptTandem = ({ tandemId, learningLanguageIds, onTandemValidated }: Acce
                         p: 4,
                     }}
                 >
-                    {isLoadingValidateTandem || isLoadingCreateTandem ? (
+                    {isLoadingValidateTandem || isLoadingCreateTandem || isLoadingRefuseTandem ? (
                         <CircularProgress />
                     ) : (
                         <>
@@ -125,4 +133,4 @@ const AcceptTandem = ({ tandemId, learningLanguageIds, onTandemValidated }: Acce
     );
 };
 
-export default AcceptTandem;
+export default TandemActions;

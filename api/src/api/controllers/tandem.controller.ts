@@ -3,6 +3,7 @@ import {
   CreateTandemUsecase,
   GenerateTandemsUsecase,
   GetTandemsUsecase,
+  RefuseTandemUsecase,
 } from 'src/core/usecases/tandem';
 import { RoutineStatus } from 'src/core/models/routine-execution.model';
 import {
@@ -14,14 +15,18 @@ import {
   Param,
   ParseUUIDPipe,
   Post,
-  Put,
   Query,
   UseGuards,
 } from '@nestjs/common';
 import * as Swagger from '@nestjs/swagger';
 import { Collection } from '@app/common';
 import { CollectionResponse, CurrentUser } from '../decorators';
-import { CreateTandemRequest, PaginationDto, TandemResponse } from '../dtos';
+import {
+  CreateTandemRequest,
+  PaginationDto,
+  RefuseTandemRequest,
+  TandemResponse,
+} from '../dtos';
 import { Roles } from '../decorators/roles.decorator';
 import { configuration } from 'src/configuration';
 import { AuthenticationGuard } from '../guards';
@@ -42,6 +47,7 @@ export class TandemController {
     private readonly getTandemsUsecase: GetTandemsUsecase,
     private readonly createTandemUsecase: CreateTandemUsecase,
     private readonly validateTandemUsecase: ValidateTandemUsecase,
+    private readonly refuseTandemUsecase: RefuseTandemUsecase,
     @Inject(ROUTINE_EXECUTION_REPOSITORY)
     private readonly routineExecutionRepository: RoutineExecutionRepository,
   ) {}
@@ -127,5 +133,19 @@ export class TandemController {
       });
 
     return null;
+  }
+
+  @Post('refuse')
+  @Roles(configuration().adminRole)
+  @UseGuards(AuthenticationGuard)
+  @Swagger.ApiOperation({ summary: 'Refuse a tandem' })
+  async refuseTandem(
+    @CurrentUser() user: KeycloakUser,
+    @Body() body: RefuseTandemRequest,
+  ): Promise<void> {
+    await this.refuseTandemUsecase.execute({
+      adminUniversityId: user.universityId,
+      learningLanguageIds: body.learningLanguageIds,
+    });
   }
 }

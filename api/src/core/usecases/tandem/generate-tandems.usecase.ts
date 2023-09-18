@@ -9,6 +9,10 @@ import {
   LearningLanguageRepository,
 } from 'src/core/ports/learning-language.repository';
 import {
+  REFUSED_TANDEMS_REPOSITORY,
+  RefusedTandemsRepository,
+} from 'src/core/ports/refused-tandems.repository';
+import {
   TANDEM_REPOSITORY,
   TandemRepository,
 } from 'src/core/ports/tandems.repository';
@@ -23,6 +27,9 @@ export type GenerateTandemsCommand = {
 };
 
 const TRESHOLD_VIABLE_PAIR = 0;
+
+const getLearningLanguagesHash = (learningLanguageIds: string[]): string =>
+  learningLanguageIds.sort((a, b) => a.localeCompare(b)).join('_');
 
 // TODO(SOON): check if should add loop to generate / find pairs
 
@@ -40,6 +47,8 @@ export class GenerateTandemsUsecase {
     private readonly uuidProvider: UuidProviderInterface,
     @Inject(LANGUAGE_REPOSITORY)
     private readonly languageRepository: LanguageRepository,
+    @Inject(REFUSED_TANDEMS_REPOSITORY)
+    private readonly refusedTandemsRepository: RefusedTandemsRepository,
   ) {}
 
   async execute(command: GenerateTandemsCommand): Promise<Tandem[]> {
@@ -59,6 +68,14 @@ export class GenerateTandemsUsecase {
     const languagesThatCanBeLearnt =
       await this.languageRepository.getLanguagesProposedToLearning();
 
+    const refusedTandems = await this.refusedTandemsRepository.getAll();
+    const refusedTandemsIdMap = new Map<string, null>(
+      refusedTandems.map((refusedTandem) => [
+        getLearningLanguagesHash(refusedTandem.learningLanguageIds),
+        null,
+      ]),
+    );
+
     // Generate all possible pairs
     const possiblePairs: Match[] = [];
     for (let i = 0; i < learningLanguagesToPair.length; i++) {
@@ -75,14 +92,23 @@ export class GenerateTandemsUsecase {
             learningLanguageToPair.profile.user.university.isCentralUniversity() ||
             potentialPairLearningLanguage.profile.user.university.isCentralUniversity()
           ) {
-            const match = this.scorer.computeMatchScore(
-              learningLanguageToPair,
-              potentialPairLearningLanguage,
-              languagesThatCanBeLearnt,
-            );
+            if (
+              !refusedTandemsIdMap.has(
+                getLearningLanguagesHash([
+                  learningLanguageToPair.id,
+                  potentialPairLearningLanguage.id,
+                ]),
+              )
+            ) {
+              const match = this.scorer.computeMatchScore(
+                learningLanguageToPair,
+                potentialPairLearningLanguage,
+                languagesThatCanBeLearnt,
+              );
 
-            if (match.total > TRESHOLD_VIABLE_PAIR) {
-              possiblePairs.push(match);
+              if (match.total > TRESHOLD_VIABLE_PAIR) {
+                possiblePairs.push(match);
+              }
             }
           }
         }
