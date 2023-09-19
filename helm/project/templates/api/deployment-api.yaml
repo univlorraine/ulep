@@ -84,6 +84,14 @@ spec:
               value: "https://{{ .Values.minioApiUrl }}.{{ .Values.domain }}"
             - name: MINIO_USE_SSL
               value: "true"
+            - name: SMTP_HOST
+              value: "{{ .Values.api.env.smtpHost }}"
+            - name: SMTP_PORT
+              value: "{{ .Values.api.env.smtpPort }}"
+            - name: SMTP_SECURE
+              value: "{{ .Values.api.env.smtpSecure }}"
+            - name: SMTP_SENDER
+              value: "{{ .Values.api.env.smtpSender }}"
           envFrom:
             - secretRef: 
                 name: "{{ include "etandem.fullname" . }}-secret-{{ .Values.api.name }}"

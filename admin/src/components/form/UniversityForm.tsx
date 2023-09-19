@@ -39,13 +39,15 @@ interface UniversityFormProps {
         codes: string[],
         domains: string[],
         pairingMode: string,
-        website?: string
+        website?: string,
+        notificationEmail?: string
     ) => void;
     name?: string;
     timezone?: string;
     tradKey?: string;
     website?: string;
     pairingMode?: string;
+    notificationEmail?: string;
 }
 
 const styles = { my: 2, width: '100%' };
@@ -67,6 +69,7 @@ const UniversityForm: React.FC<UniversityFormProps> = ({
     timezone,
     website,
     pairingMode,
+    notificationEmail,
 }) => {
     const translate = useTranslate();
     const notify = useNotify();
@@ -80,6 +83,7 @@ const UniversityForm: React.FC<UniversityFormProps> = ({
     const [newCodes, setNewCodes] = useState<string[]>(codes || []);
     const [newDomains, setNewDomains] = useState<string[]>(domains || []);
     const [newPairingMode, setNewPairingMode] = useState<string>(pairingMode || 'MANUAL');
+    const [newNotificationEmail, setNewNotificationEmail] = useState<string>(notificationEmail || '');
 
     const addCode = (newCode: string) => {
         if (!isCodeValid(newCode)) {
@@ -116,7 +120,8 @@ const UniversityForm: React.FC<UniversityFormProps> = ({
             newCodes,
             newDomains,
             newPairingMode,
-            newWebsite
+            newWebsite,
+            newNotificationEmail
         );
     };
 
@@ -239,6 +244,7 @@ const UniversityForm: React.FC<UniversityFormProps> = ({
                             name="Website"
                             onChange={(e) => setNewWebsite(e.target.value)}
                             sx={inputStyle}
+                            value={newWebsite}
                             disableUnderline
                             required
                         />
@@ -264,6 +270,20 @@ const UniversityForm: React.FC<UniversityFormProps> = ({
                                 ))}
                             </Select>
                         </FormControl>
+                    </Box>
+
+                    <Typography variant="subtitle1">
+                        {translate(`universities.${tradKey}.notificationEmail`)}
+                    </Typography>
+                    <Box alignItems="center" display="flex" flexDirection="row" sx={{ mb: 2 }}>
+                        <Input
+                            name="notificationEmail"
+                            onChange={(e) => setNewNotificationEmail(e.target.value)}
+                            sx={inputStyle}
+                            value={newNotificationEmail}
+                            disableUnderline
+                            required
+                        />
                     </Box>
 
                     <Button

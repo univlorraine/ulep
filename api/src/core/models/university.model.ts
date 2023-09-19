@@ -20,6 +20,7 @@ export interface UniversityProps {
   admissionEnd: Date;
   website?: string;
   pairingMode?: PairingMode;
+  notificationEmail?: string;
 }
 
 export class University {
@@ -47,6 +48,8 @@ export class University {
 
   readonly pairingMode: PairingMode;
 
+  readonly notificationEmail?: string;
+
   constructor(props: UniversityProps) {
     this.id = props.id;
     this.name = props.name;
@@ -60,6 +63,7 @@ export class University {
     this.admissionEnd = props.admissionEnd;
     this.website = props.website;
     this.pairingMode = props.pairingMode || PairingMode.MANUAL;
+    this.notificationEmail = props.notificationEmail;
   }
 
   static create(props: UniversityProps): University {

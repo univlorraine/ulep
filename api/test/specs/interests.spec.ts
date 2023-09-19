@@ -13,6 +13,8 @@ import { TestAuthGuard } from '../utils/TestAuthGuard';
 import { InMemoryLanguageRepository } from 'src/providers/persistance/repositories/in-memory-language-repository';
 import { LANGUAGE_REPOSITORY } from 'src/core/ports/language.repository';
 import { AuthenticationGuard } from 'src/api/guards';
+import InMemoryEmailGateway from 'src/providers/gateway/in-memory-email.gateway';
+import { EMAIL_GATEWAY } from 'src/core/ports/email.gateway';
 
 describe('Interests', () => {
   let app: TestServer;
@@ -23,6 +25,7 @@ describe('Interests', () => {
 
   const repository = new InMemoryInterestRepository();
   const languageRepository = new InMemoryLanguageRepository();
+  const inMemoryEmail = new InMemoryEmailGateway();
 
   beforeAll(async () => {
     const language = languageFactory.makeOne({ code: 'fr' });
@@ -35,6 +38,8 @@ describe('Interests', () => {
       .useValue(repository)
       .overrideProvider(LANGUAGE_REPOSITORY)
       .useValue(languageRepository)
+      .overrideProvider(EMAIL_GATEWAY)
+      .useValue(inMemoryEmail)
       .overrideGuard(AuthenticationGuard)
       .useValue(TestAuthGuard)
       .compile();

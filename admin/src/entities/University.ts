@@ -20,6 +20,7 @@ type University = {
     domains: string[];
     pairingMode: PairingMode;
     website: string;
+    notificationEmail?: string;
 };
 
 export default University;

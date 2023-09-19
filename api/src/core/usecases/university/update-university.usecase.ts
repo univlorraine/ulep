@@ -21,6 +21,7 @@ export class UpdateUniversityCommand {
   domains: string[];
   website: string;
   pairingMode: PairingMode;
+  notificationEmail?: string;
 }
 
 @Injectable()
@@ -56,6 +57,7 @@ export class UpdateUniversityUsecase {
         campus: university.campus,
         website: command.website,
         pairingMode: command.pairingMode,
+        notificationEmail: command.notificationEmail,
       }),
     );
   }

@@ -34,6 +34,8 @@ import { ROUTINE_EXECUTION_REPOSITORY } from 'src/core/ports/routine-execution.r
 import { PrismaRoutineExecutionRepository } from './persistance/repositories/prisma-routine-execution-repository';
 import { REFUSED_TANDEMS_REPOSITORY } from 'src/core/ports/refused-tandems.repository';
 import { PrismaRefusedTandemsRepository } from './persistance/repositories/prisma-refused-tandems.repository';
+import { EMAIL_GATEWAY } from 'src/core/ports/email.gateway';
+import { SmtpEmailGateway } from './gateway/smtp-email.gateway';
 
 const providers: Provider[] = [
   {
@@ -103,6 +105,10 @@ const providers: Provider[] = [
   {
     provide: REFUSED_TANDEMS_REPOSITORY,
     useClass: PrismaRefusedTandemsRepository,
+  },
+  {
+    provide: EMAIL_GATEWAY,
+    useClass: SmtpEmailGateway,
   },
 ];
 

@@ -24,6 +24,7 @@ export class CreatePartnerUniversityCommand {
   codes?: string[];
   domains?: string[];
   pairingMode: PairingMode;
+  notificationEmail?: string;
 }
 
 @Injectable()
@@ -67,6 +68,7 @@ export class CreatePartnerUniversityUsecase {
       codes: command.codes,
       domains: command.domains,
       pairingMode: command.pairingMode,
+      notificationEmail: command.notificationEmail,
     });
 
     return this.universityRepository.create(university);

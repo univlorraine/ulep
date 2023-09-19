@@ -7,12 +7,15 @@ import { LANGUAGE_REPOSITORY } from 'src/core/ports/language.repository';
 import { TestServer } from './test.server';
 import { AuthenticationGuard } from 'src/api/guards';
 import { TestAuthGuard } from '../utils/TestAuthGuard';
+import InMemoryEmailGateway from 'src/providers/gateway/in-memory-email.gateway';
+import { EMAIL_GATEWAY } from 'src/core/ports/email.gateway';
 
 describe('Languages', () => {
   let app: TestServer;
 
   const factory = new LanguageFactory();
   const repository = new InMemoryLanguageRepository();
+  const inMemoryEmail = new InMemoryEmailGateway();
 
   beforeAll(async () => {
     const module = await Test.createTestingModule({
@@ -20,6 +23,8 @@ describe('Languages', () => {
     })
       .overrideProvider(LANGUAGE_REPOSITORY)
       .useValue(repository)
+      .overrideProvider(EMAIL_GATEWAY)
+      .useValue(inMemoryEmail)
       .overrideGuard(AuthenticationGuard)
       .useValue(TestAuthGuard)
       .compile();

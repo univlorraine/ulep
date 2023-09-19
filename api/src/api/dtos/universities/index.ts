@@ -8,6 +8,7 @@ import {
   IsDate,
   IsUrl,
   IsArray,
+  IsEmail,
 } from 'class-validator';
 import { PairingMode, University } from 'src/core/models/university.model';
 import {
@@ -68,6 +69,11 @@ export class CreateUniversityRequest implements CreateUniversityCommand {
   @IsString()
   @IsNotEmpty()
   pairingMode: PairingMode;
+
+  @Swagger.ApiPropertyOptional({ type: 'string', format: 'email' })
+  @IsOptional()
+  @IsEmail()
+  notificationEmail?: string;
 }
 
 export class UpdateUniversityRequest
@@ -117,6 +123,11 @@ export class UpdateUniversityRequest
   @IsString()
   @IsNotEmpty()
   pairingMode: PairingMode;
+
+  @Swagger.ApiPropertyOptional({ type: 'string', format: 'email' })
+  @IsEmail()
+  @IsOptional()
+  notificationEmail?: string;
 }
 
 export class CreateUniversityPartnerRequest
@@ -166,6 +177,11 @@ export class CreateUniversityPartnerRequest
   @IsString()
   @IsNotEmpty()
   pairingMode: PairingMode;
+
+  @Swagger.ApiPropertyOptional({ type: 'string', format: 'email' })
+  @IsEmail()
+  @IsOptional()
+  notificationEmail?: string;
 }
 
 export class UniversityResponse {
@@ -217,6 +233,10 @@ export class UniversityResponse {
   @Expose({ groups: ['read'] })
   pairingMode: PairingMode;
 
+  @Swagger.ApiPropertyOptional({ type: 'string', format: 'url' })
+  @Expose({ groups: ['read'] })
+  notificationEmail?: string;
+
   constructor(partial: Partial<UniversityResponse>) {
     Object.assign(this, partial);
   }
@@ -235,6 +255,7 @@ export class UniversityResponse {
       admissionEnd: university.admissionEnd,
       website: university.website,
       pairingMode: university.pairingMode,
+      notificationEmail: university.notificationEmail,
     });
   }
 }
