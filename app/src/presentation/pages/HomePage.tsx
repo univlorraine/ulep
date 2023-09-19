@@ -39,7 +39,14 @@ const HomePage: React.FC = () => {
             return await showToast({ message: t(result.message), duration: 5000 });
         }
 
-        setTandems(result);
+        const waitingLearningLanguages: Tandem[] = [];
+        profile?.learningLanguages.map((learningLanguage) => {
+            if (!result.find((tandem) => tandem.learningLanguage.id === learningLanguage.id)) {
+                waitingLearningLanguages.push(new Tandem(learningLanguage.id, 'DRAFT', learningLanguage, 'A0'));
+            }
+        });
+
+        setTandems([...result, ...waitingLearningLanguages]);
     };
 
     useEffect(() => {
@@ -97,7 +104,8 @@ const HomePage: React.FC = () => {
                         <TandemList onTandemPressed={onValidatedTandemPressed} tandems={tandems} />
                         <WaitingTandemList
                             onTandemPressed={onTandemPressed}
-                            onNewTandemAsked={() => null}
+                            onNewTandemAsked={() => history.push('pairing/languages')}
+                            profile={profile}
                             tandems={tandems}
                         />
                     </div>
@@ -132,6 +140,7 @@ const HomePage: React.FC = () => {
                                 selectedTandem.status === 'VALIDATED_BY_ONE_UNIVERSITY')
                         }
                         onClose={() => setSelectedTandem(undefined)}
+                        onFindNewTandem={() => history.push('pairing/languages')}
                         status={selectedTandem?.status}
                     />
                     <TandemProfileModal

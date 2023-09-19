@@ -1,17 +1,17 @@
-import { LanguageAskedCommand } from '../../../src/command/LanguageCommand';
+import LanguageCommand, { LanguageAskedCommand } from '../../../src/command/LanguageCommand';
 import Language from '../../../src/domain/entities/Language';
-import AskForLanguageUsecase from '../../../src/domain/usecases/AskForLanguageUsecase';
+import AskForLearningLanguageUsecase from '../../../src/domain/usecases/AskForLearningLanguageUsecase';
 import DomainHttpAdapter from '../../mocks/adapters/HttpAdapter';
 
-const usecaseResponse: LanguageAskedCommand = { code: 'FR', count: 10 };
+const usecaseResponse: LanguageCommand = { id: 'id', code: 'FR', name: 'Français' };
 const languagePayload = new Language('id', 'FR', 'Français');
 
-describe('askForLanguage', () => {
+describe('askForLearningLanguage', () => {
     let adapter: DomainHttpAdapter;
-    let usecase: AskForLanguageUsecase;
+    let usecase: AskForLearningLanguageUsecase;
     beforeAll(() => {
         adapter = new DomainHttpAdapter();
-        usecase = new AskForLanguageUsecase(adapter);
+        usecase = new AskForLearningLanguageUsecase(adapter);
     });
 
     afterEach(() => {
@@ -22,9 +22,9 @@ describe('askForLanguage', () => {
         expect.assertions(2);
         jest.spyOn(adapter, 'post');
         adapter.mockJson({ parsedBody: usecaseResponse });
-        await usecase.execute(languagePayload);
+        await usecase.execute('id', languagePayload, 'A1');
         expect(adapter.post).toHaveBeenCalledTimes(1);
-        expect(adapter.post).toHaveBeenCalledWith(`/languages/${languagePayload.code}/requests`, {});
+        expect(adapter.post).toHaveBeenCalledWith(`/profiles/id/learning-language`, { code: 'FR', level: 'A1' });
     });
 
     it('execute must return an expected response', async () => {
@@ -32,8 +32,8 @@ describe('askForLanguage', () => {
 
         adapter.mockJson({ parsedBody: usecaseResponse });
 
-        const result = await usecase.execute(languagePayload);
-        expect(result).toBe(10);
+        const result = await usecase.execute('id', languagePayload, 'A1');
+        expect(result).toStrictEqual(new Language('id', 'FR', 'Français'));
     });
 
     it('execute must return an expected response without parsed body', async () => {
@@ -41,7 +41,7 @@ describe('askForLanguage', () => {
 
         adapter.mockJson({});
 
-        const result = await usecase.execute(languagePayload);
+        const result = await usecase.execute('id', languagePayload, 'A1');
         expect(result).toBeInstanceOf(Error);
     });
 
@@ -50,14 +50,14 @@ describe('askForLanguage', () => {
 
         adapter.mockError({ status: 409 });
 
-        const result = await usecase.execute(languagePayload);
+        const result = await usecase.execute('id', languagePayload, 'A1');
         expect(result).toBeInstanceOf(Error);
     });
 
     it('execute must return an error if adapter return an error without status', async () => {
         expect.assertions(1);
         adapter.mockError({});
-        const result = await usecase.execute(languagePayload);
+        const result = await usecase.execute('id', languagePayload, 'A1');
         expect(result).toStrictEqual(new Error('errors.global'));
     });
 });

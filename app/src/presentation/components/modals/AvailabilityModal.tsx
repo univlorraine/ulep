@@ -25,6 +25,7 @@ const AvailabilityModal: React.FC<AvailabilityModalProps> = ({
     useEffect(() => {
         setOccurence(currentOccurence ?? 'VERY_AVAILABLE');
     }, [isVisible]);
+
     return (
         <Modal isVisible={isVisible} onClose={onClose}>
             <div>

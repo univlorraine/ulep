@@ -169,8 +169,6 @@ export class ProfileController {
       profileId: id,
     });
 
-    // TODO(CLEAN): Check if this endpoint is still used
-
     return LearningLanguageResponse.fromDomain(learningLanguage);
   }
 }

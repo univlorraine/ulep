@@ -60,7 +60,7 @@ const QuizzSelectionContent: React.FC<QuizzSelectionContentProps> = ({ onQuizzSe
             </div>
             <div>
                 <button
-                    className="primary-button large-margin-bottom"
+                    className={`primary-button large-margin-bottom ${!selectQuizz ? 'disabled' : ''}`}
                     disabled={!selectQuizz}
                     onClick={() => onQuizzSelected(selectQuizz)}
                 >

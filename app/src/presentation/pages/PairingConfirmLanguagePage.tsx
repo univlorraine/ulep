@@ -1,5 +1,5 @@
 import { useTranslation } from 'react-i18next';
-import { Redirect, useHistory } from 'react-router';
+import { Redirect, useHistory, useParams } from 'react-router';
 import { TandemPng } from '../../assets';
 import { useConfig } from '../../context/ConfigurationContext';
 import { useStoreState } from '../../store/storeTypes';
@@ -11,9 +11,12 @@ import styles from './css/SignUp.module.css';
 const PairingConfirmLanguagePage: React.FC = () => {
     const { t } = useTranslation();
     const { configuration } = useConfig();
+    const isSignUp = useParams<{ prefix?: string }>().prefix;
     const history = useHistory();
     const profileSignUp = useStoreState((state) => state.profileSignUp);
-    const user = useStoreState((state) => state.user);
+    const userSignUp = useStoreState((state) => state.user);
+    const profile = useStoreState((state) => state.profile);
+    const user = userSignUp || profile?.user;
 
     if (!profileSignUp.learningLanguage || !user) {
         return <Redirect to="/signup" />;
@@ -33,7 +36,7 @@ const PairingConfirmLanguagePage: React.FC = () => {
     };
 
     const continueSignUp = async () => {
-        return history.push('/signup/pairing/level/start');
+        return history.push(`${isSignUp ? '/' + isSignUp : '/'}pairing/level/start`);
     };
 
     return (
@@ -56,14 +59,14 @@ const PairingConfirmLanguagePage: React.FC = () => {
                     <div className={confirmLanguagesStyles['mode-container']}>
                         <p className={confirmLanguagesStyles['mode-text']}>{`${t(
                             'pairing_confirm_language_page.mode_meet'
-                        )} ${pedagogyToTitle(profileSignUp.pedagogy)}  ${codeLanguageToFlag(
+                        )} ${pedagogyToTitle(profileSignUp.pedagogy)} ${codeLanguageToFlag(
                             profileSignUp.learningLanguage.code
                         )}`}</p>
                         <img alt="tandem" src={TandemPng} />
                     </div>
                 </div>
                 <div className={`large-margin-top extra-large-margin-bottom`}>
-                    <button className={`primary-button `} onClick={continueSignUp}>
+                    <button className={`primary-button`} onClick={continueSignUp}>
                         {t('pairing_confirm_language_page.validate_button')}
                     </button>
                 </div>

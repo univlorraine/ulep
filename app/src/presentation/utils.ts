@@ -17,15 +17,15 @@ const countriesCodeWithFlags: [string, string][] = [
     ['ca', '🇪🇸'], // Catalan - Spain
     ['co', '🇫🇷'], // Corsican - France
     ['cs', '🇨🇿'], // Czech - Czechia
-    ['cy', '🇬🇧'], // Welsh - United Kingdom
+    ['cy', '🏴󠁧󠁢󠁷󠁬󠁳󠁿'], // Welsh - Wales
     ['da', '🇩🇰'], // Danish - Denmark
     ['de', '🇩🇪'], // German - Germany
     ['dv', '🇲🇻'], // Divehi - Maldives
     ['dz', '🇧🇹'], // Dzongkha - Bhutan
     ['el', '🇬🇷'], // Greek - Greece
-    ['en', '🇺🇸'], // English - United States
+    ['en', '🇬🇧'], // English - United Kingdom
     ['eo', '🌐'], // Esperanto - No associated country
-    ['es', '🇪🇸'], // Spanish - Mexico
+    ['es', '🇪🇸'], // Spanish - Spain
     ['et', '🇪🇪'], // Estonian - Estonia
     ['eu', '🇪🇸'], // Basque - Spain
     ['fa', '🇮🇷'], // Persian - Iran

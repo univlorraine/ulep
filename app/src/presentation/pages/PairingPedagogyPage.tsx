@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { Redirect, useHistory } from 'react-router';
+import { Redirect, useHistory, useParams } from 'react-router';
 import { useConfig } from '../../context/ConfigurationContext';
 import Campus from '../../domain/entities/Campus';
 import { useStoreActions, useStoreState } from '../../store/storeTypes';
@@ -20,12 +20,15 @@ interface PedagogieData {
 const PairingPedagogyPage: React.FC = () => {
     const { t } = useTranslation();
     const { configuration } = useConfig();
+    const isSignUp = useParams<{ prefix?: string }>().prefix;
     const history = useHistory();
     const updateProfileSignUp = useStoreActions((state) => state.updateProfileSignUp);
     const profileSignUp = useStoreState((state) => state.profileSignUp);
+    const profile = useStoreState((state) => state.profile);
     const [pedagogySelected, setPedagogySelected] = useState<Pedagogy>();
+    const university = profileSignUp.university || profile?.user.university;
 
-    if (!profileSignUp.university) {
+    if (!university) {
         return <Redirect to={'/signup'} />;
     }
     const pedagogiesData: PedagogieData[] = [
@@ -34,7 +37,7 @@ const PairingPedagogyPage: React.FC = () => {
             title: t('pairing_pedagogy_page.tandem_title'),
             button: t('pairing_pedagogy_page.tandem_button'),
             value: 'TANDEM',
-            display: profileSignUp.university.isCentral,
+            display: university.isCentral,
         },
         {
             color: '#7997C6',
@@ -48,27 +51,27 @@ const PairingPedagogyPage: React.FC = () => {
             title: t('pairing_pedagogy_page.both_title'),
             button: t('pairing_pedagogy_page.both_button'),
             value: 'BOTH',
-            display: profileSignUp.university.isCentral,
+            display: university.isCentral,
         },
     ];
 
     const onPedagogyPressed = (pedagogy: Pedagogy) => {
-        if (pedagogy !== 'ETANDEM' && profileSignUp.university && profileSignUp.university.sites.length > 1) {
+        if (pedagogy !== 'ETANDEM' && university && university.sites.length > 1) {
             return setPedagogySelected(pedagogy);
         }
 
-        if (pedagogy !== 'ETANDEM' && profileSignUp.university && profileSignUp.university.sites.length === 1) {
-            updateProfileSignUp({ pedagogy, campus: profileSignUp.university.sites[0] });
-            return history.push('/signup/pairing/language/confirm');
+        if (pedagogy !== 'ETANDEM' && university && university.sites.length === 1) {
+            updateProfileSignUp({ pedagogy, campus: university.sites[0] });
+            return history.push(`${isSignUp ? '/' + isSignUp : '/'}pairing/language/confirm`);
         }
 
         updateProfileSignUp({ pedagogy });
-        return history.push('/signup/pairing/language/confirm');
+        return history.push(`${isSignUp ? '/' + isSignUp : '/'}pairing/language/confirm`);
     };
 
     const onSiteValidated = (campus?: Campus) => {
         updateProfileSignUp({ pedagogy: pedagogySelected, campus });
-        return history.push('/signup/pairing/language/confirm');
+        return history.push(`${isSignUp ? '/' + isSignUp : '/'}pairing/language/confirm`);
     };
 
     return (
@@ -104,7 +107,7 @@ const PairingPedagogyPage: React.FC = () => {
                     isVisible={!!pedagogySelected}
                     onClose={() => setPedagogySelected(undefined)}
                     onValidate={onSiteValidated}
-                    sites={profileSignUp.university.sites}
+                    sites={university.sites}
                 />
             </div>
         </WebLayoutCentered>
