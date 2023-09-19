@@ -20,21 +20,25 @@ const SignUpBiographyPage: React.FC = () => {
     const [travelBiography, setTravelBiography] = useState<string>('');
 
     const continueSignUp = async () => {
-        if (powerBiography.length < 10) {
+        const power = powerBiography.trim();
+        const incredible = incredibleBiography.trim();
+        const place = placeBiography.trim();
+        const travel = travelBiography.trim();
+        if (power.length < 10) {
             return setErrorMessage({ id: 'power', value: t('signup_biography_page.error_message') });
-        } else if (incredibleBiography.length < 10) {
+        } else if (incredible.length < 10) {
             return setErrorMessage({ id: 'incredible', value: t('signup_biography_page.error_message') });
-        } else if (placeBiography.length < 10) {
+        } else if (place.length < 10) {
             return setErrorMessage({ id: 'place', value: t('signup_biography_page.error_message') });
-        } else if (travelBiography.length < 10) {
+        } else if (travel.length < 10) {
             return setErrorMessage({ id: 'travel', value: t('signup_biography_page.error_message') });
         }
         updateProfileSignUp({
             biography: {
-                incredible: incredibleBiography,
-                place: placeBiography,
-                power: powerBiography,
-                travel: travelBiography,
+                incredible,
+                place,
+                power,
+                travel,
             },
         });
 
