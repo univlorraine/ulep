@@ -52,6 +52,20 @@ export class TandemController {
     private readonly routineExecutionRepository: RoutineExecutionRepository,
   ) {}
 
+  private async relaunchLastRoutine(user: KeycloakUser) {
+    const lastRoutine = await this.routineExecutionRepository.getLast({
+      status: RoutineStatus.ENDED,
+    });
+    if (lastRoutine) {
+      this.logger.debug(`Relaunch global routine ${lastRoutine.id}`);
+      await this.generate(user, {
+        universityIds: lastRoutine.universities.map(
+          (university) => university.id,
+        ),
+      });
+    }
+  }
+
   @Get()
   @Roles(configuration().adminRole)
   @UseGuards(AuthenticationGuard)
@@ -82,6 +96,11 @@ export class TandemController {
       adminUniversityId: user.universityId,
       learningLanguageIds: body.learningLanguageIds,
     });
+
+    if (body.relaunch) {
+      this.relaunchLastRoutine(user);
+    }
+
     return TandemResponse.fromDomain(tandem);
   }
 
@@ -149,21 +168,7 @@ export class TandemController {
     });
 
     if (body.relaunch) {
-      const lastRoutine = await this.routineExecutionRepository.getLast({
-        status: RoutineStatus.ENDED,
-      });
-      if (lastRoutine) {
-        this.logger.debug(
-          `Relaunch global routine ${
-            lastRoutine.id
-          } after refusing tandem for ${body.learningLanguageIds.join(', ')}`,
-        );
-        await this.generate(user, {
-          universityIds: lastRoutine.universities.map(
-            (university) => university.id,
-          ),
-        });
-      }
+      this.relaunchLastRoutine(user);
     }
   }
 }
