@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { useHistory, useParams } from 'react-router';
+import { useHistory } from 'react-router';
 import { useConfig } from '../../context/ConfigurationContext';
 import { useStoreActions } from '../../store/storeTypes';
 import WebLayoutCentered from '../components/layout/WebLayoutCentered';
@@ -10,16 +10,15 @@ import styles from './css/SignUp.module.css';
 const PairingOptionsPage: React.FC = () => {
     const { t } = useTranslation();
     const { configuration } = useConfig();
-    const history = useHistory();
-    const isSignUp = useParams<{ prefix?: string }>().prefix;
     const updateProfileSignUp = useStoreActions((store) => store.updateProfileSignUp);
+    const history = useHistory();
     const [sameTandem, setSameTandem] = useState<boolean>(false);
     const [isForCertificate, setIsForCertificate] = useState<boolean>(false);
     const [isForProgram, setIsForProgram] = useState<boolean>(false);
 
     const onNextStepPressed = () => {
         updateProfileSignUp({ sameTandem, isForCertificate, isForProgram });
-        return history.push(`${isSignUp ? '/' + isSignUp : ''}/pairing/end`);
+        return history.push('/signup/pairing/end');
     };
 
     return (
@@ -71,10 +70,7 @@ const PairingOptionsPage: React.FC = () => {
                     <button className="primary-button large-margin-bottom" onClick={onNextStepPressed}>
                         {t('pairing_options_page.validate_button')}
                     </button>
-                    <button
-                        className="secondary-button"
-                        onClick={() => history.push(`${isSignUp ? '/' + isSignUp : ''}/pairing/end`)}
-                    >
+                    <button className="secondary-button" onClick={() => history.push('/signup/pairing/end')}>
                         {t('pairing_options_page.pass_button')}
                     </button>
                 </div>

@@ -1,6 +1,6 @@
 import { useIonToast } from '@ionic/react';
 import { useTranslation } from 'react-i18next';
-import { Redirect, useParams } from 'react-router';
+import { Redirect } from 'react-router';
 import { useConfig } from '../../context/ConfigurationContext';
 import { useStoreState } from '../../store/storeTypes';
 import FlagBubble from '../components/FlagBubble';
@@ -11,19 +11,13 @@ import styles from './css/PairingFinalPage.module.css';
 const PairingFinalPage: React.FC = () => {
     const { t } = useTranslation();
     const { configuration, createProfile } = useConfig();
-    const isSignUp = useParams<{ prefix?: string }>().prefix;
     const [showToast] = useIonToast();
     const profileSignUp = useStoreState((state) => state.profileSignUp);
-    const userSignUp = useStoreState((state) => state.user);
-    const profile = useStoreState((state) => state.profile);
-    const university = profileSignUp.university || profile?.user.university;
-    const user = userSignUp || profile?.user;
+    const user = useStoreState((state) => state.user);
 
-    if (!profileSignUp.learningLanguage || !university || !user) {
-        return <Redirect to={`${isSignUp ? '/' + isSignUp : ''}/pairing/languages`} />;
+    if (!profileSignUp.learningLanguage || !profileSignUp.university || !user) {
+        return <Redirect to="/signup/pairing/languages" />;
     }
-
-    const askNewLearningLanguage = () => {};
 
     const nextStep = async () => {
         if (

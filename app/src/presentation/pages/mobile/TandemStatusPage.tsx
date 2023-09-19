@@ -18,7 +18,11 @@ const TandemStatusPage: React.FC = () => {
 
     return (
         <IonPage>
-            <TandemStatusContent onFindNewTandem={() => null} onClose={history.goBack} status={tandem.status} />
+            <TandemStatusContent
+                onFindNewTandem={() => history.push('pairing/languages')}
+                onClose={history.goBack}
+                status={tandem.status}
+            />
         </IonPage>
     );
 };

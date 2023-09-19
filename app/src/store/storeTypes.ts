@@ -53,7 +53,8 @@ interface ProfileStorePayload {
 }
 
 interface UpdateProfile {
-    avatar: string;
+    avatar?: string;
+    learningLanguage?: Language;
 }
 
 interface UserStorePayload {

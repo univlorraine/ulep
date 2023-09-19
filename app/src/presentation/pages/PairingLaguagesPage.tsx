@@ -44,7 +44,7 @@ const PairingLaguagesPage: React.FC = () => {
                 )
             );
         }
-
+        console.warn(profile);
         return setLanguages(
             result.filter(
                 (language) =>
@@ -57,7 +57,11 @@ const PairingLaguagesPage: React.FC = () => {
 
     const continueSignUp = async () => {
         updateProfileSignUp({ learningLanguage: selectedLaguage });
-        history.push(`${isSignUp ? '/' + isSignUp : ''}/pairing/pedagogy`);
+        if (!isSignUp) {
+            return history.push('/pairing/language/confirm');
+        }
+
+        return history.push(`/signup/pairing/pedagogy`);
     };
 
     useEffect(() => {

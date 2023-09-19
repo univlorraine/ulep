@@ -8,7 +8,7 @@ class Profile {
         public readonly id: string,
         public readonly nativeLanguage: Language,
         public readonly masteredLanguages: Language[],
-        public readonly learningLanguages: Language[],
+        public learningLanguages: Language[],
         public readonly goals: Goal[],
         public readonly frequency: MeetFrequency,
         public readonly interests: Interest[],

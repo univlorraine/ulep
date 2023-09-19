@@ -98,6 +98,7 @@ const HomePage: React.FC = () => {
                         <WaitingTandemList
                             onTandemPressed={onTandemPressed}
                             onNewTandemAsked={() => history.push('pairing/languages')}
+                            profile={profile}
                             tandems={tandems}
                         />
                     </div>
@@ -132,6 +133,7 @@ const HomePage: React.FC = () => {
                                 selectedTandem.status === 'VALIDATED_BY_ONE_UNIVERSITY')
                         }
                         onClose={() => setSelectedTandem(undefined)}
+                        onFindNewTandem={() => history.push('pairing/languages')}
                         status={selectedTandem?.status}
                     />
                     <TandemProfileModal
