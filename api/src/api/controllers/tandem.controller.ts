@@ -149,9 +149,10 @@ export class TandemController {
     });
 
     if (body.relaunch) {
-      // TODO(NOW): last of status
-      const lastRoutine = await this.routineExecutionRepository.getLast();
-      if (lastRoutine && lastRoutine.status !== RoutineStatus.ON_GOING) {
+      const lastRoutine = await this.routineExecutionRepository.getLast({
+        status: RoutineStatus.ENDED,
+      });
+      if (lastRoutine) {
         this.logger.debug(
           `Relaunch global routine ${
             lastRoutine.id
