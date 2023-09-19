@@ -447,9 +447,11 @@ export class KeycloakClient {
     }
 
     if (this.tokenSet.expired()) {
-      this.issuerClient.refresh(this.tokenSet.refresh_token);
+      const tokenSet = await this.issuerClient.refresh(
+        this.tokenSet.refresh_token,
+      );
+      this.tokenSet = tokenSet;
     }
-
     return this.tokenSet.access_token;
   }
 }
