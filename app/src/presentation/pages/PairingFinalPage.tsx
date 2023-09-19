@@ -5,7 +5,7 @@ import { useConfig } from '../../context/ConfigurationContext';
 import { useStoreState } from '../../store/storeTypes';
 import FlagBubble from '../components/FlagBubble';
 import SuccessLayout from '../components/layout/SuccessLayout';
-import { codeCountryToFlag } from '../utils';
+import { codeLanguageToFlag } from '../utils';
 import styles from './css/PairingFinalPage.module.css';
 
 const PairingFinalPage: React.FC = () => {
@@ -77,7 +77,7 @@ const PairingFinalPage: React.FC = () => {
                 </div>
                 <div className={`${styles['tandem-container']}`}>{`${t('global.tandem')} ${
                     profileSignUp.learningLanguage.name
-                } ${codeCountryToFlag(profileSignUp.learningLanguage.code)}`}</div>
+                } ${codeLanguageToFlag(profileSignUp.learningLanguage.code)}`}</div>
                 <span className={`${styles.description} large-margin-top`}>{`${t(
                     'pairing_final_page.congratulation'
                 )},`}</span>

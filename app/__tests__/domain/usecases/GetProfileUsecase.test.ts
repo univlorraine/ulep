@@ -8,7 +8,9 @@ const payload: ProfileCommand = {
     interests: [{ id: 'interestId', name: 'name' }],
     nativeLanguage: {
         code: 'FR',
+        name: 'Français',
     },
+    masteredLanguages: [{ code: 'EN', name: 'English' }],
     learningLanguages: [
         {
             id: 'id',

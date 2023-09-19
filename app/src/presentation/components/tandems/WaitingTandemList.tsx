@@ -20,7 +20,7 @@ const WaitingTandemList: React.FC<WaitingTandemListProps> = ({ onNewTandemAsked,
                         return (
                             <TandemLine
                                 key={tandem.id}
-                                language={tandem.language}
+                                language={tandem.learningLanguage}
                                 profile={tandem.partner}
                                 onPressed={() => onTandemPressed(tandem)}
                                 status={tandem.status}

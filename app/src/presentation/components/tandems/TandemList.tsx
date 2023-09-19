@@ -21,7 +21,7 @@ const TandemList: React.FC<TandemListProps> = ({ onTandemPressed, tandems }) => 
                             return (
                                 <TandemBubble
                                     key={tandem.id}
-                                    language={tandem.language}
+                                    language={tandem.learningLanguage}
                                     onTandemPressed={() => onTandemPressed(tandem)}
                                     profileAvatar={tandem.partner?.user.avatar}
                                     profileName={tandem.partner?.user.firstname}

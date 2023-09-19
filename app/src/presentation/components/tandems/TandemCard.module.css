@@ -6,12 +6,17 @@
 }
 
 .bubble {
+    align-items: center;
     background-color: white;
     border-radius: 50%;
+    display: flex;
+    font-size: 25px;
+    height: 44px;
     left: -6px;
-    padding: 12px;
+    justify-content: center;
     position: absolute;
     top: 0;
+    width: 44px;
 }
 
 .card,

@@ -25,7 +25,7 @@ const countriesCodeWithFlags: [string, string][] = [
     ['el', '🇬🇷'], // Greek - Greece
     ['en', '🇺🇸'], // English - United States
     ['eo', '🌐'], // Esperanto - No associated country
-    ['es', '🇲🇽'], // Spanish - Mexico
+    ['es', '🇪🇸'], // Spanish - Mexico
     ['et', '🇪🇪'], // Estonian - Estonia
     ['eu', '🇪🇸'], // Basque - Spain
     ['fa', '🇮🇷'], // Persian - Iran
@@ -174,7 +174,7 @@ export const isNameCorrect = (firstname: string) => {
     return regex.test(firstname);
 };
 
-export const codeCountryToFlag = (countryCode: string) => {
+export const codeLanguageToFlag = (countryCode: string) => {
     const countriesMap = new Map(countriesCodeWithFlags);
     if (countriesMap.has(countryCode.toLocaleLowerCase())) {
         return countriesMap.get(countryCode.toLowerCase());

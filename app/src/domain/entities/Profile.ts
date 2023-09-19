@@ -6,8 +6,9 @@ import User from './User';
 class Profile {
     constructor(
         public readonly id: string,
-        public readonly nativeLanguageCode: string,
-        public readonly learningLanguage: Language[],
+        public readonly nativeLanguage: Language,
+        public readonly masteredLanguages: Language[],
+        public readonly learningLanguages: Language[],
         public readonly goals: Goal[],
         public readonly frequency: MeetFrequency,
         public readonly interests: Interest[],

@@ -117,7 +117,6 @@ export class ProfileController {
     const tandems = await this.getTandemsForProfileUsecase.execute({
       profile: id,
     });
-    // TODO(CLEAN): Check if this endpoint is still used
 
     return tandems.map((tandem) => UserTandemResponse.fromDomain(id, tandem));
   }

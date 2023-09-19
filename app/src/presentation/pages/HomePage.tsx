@@ -32,22 +32,22 @@ const HomePage: React.FC = () => {
     const [selectedTandem, setSelectedTandem] = useState<Tandem>();
     const [tandems, setTandems] = useState<Tandem[]>([]);
 
-    useEffect(() => {
-        getHomeData();
-    }, []);
-
-    const onDisconnect = () => {
-        return logout();
-    };
-
     const getHomeData = async () => {
-        const result = await getAllTandems.execute();
+        const result = await getAllTandems.execute(profile!.id);
 
         if (result instanceof Error) {
             return await showToast({ message: t(result.message), duration: 5000 });
         }
 
         setTandems(result);
+    };
+
+    useEffect(() => {
+        getHomeData();
+    }, []);
+
+    const onDisconnect = () => {
+        return logout();
     };
 
     const onProfilePressed = () => (isHybrid ? history.push('/profil') : setDisplayProfile(true));
@@ -62,7 +62,7 @@ const HomePage: React.FC = () => {
             ? setSelectedTandem(tandem)
             : history.push('/tandem-profil', {
                   profile: tandem.partner,
-                  language: tandem.language,
+                  language: tandem.learningLanguage,
               });
 
     const formattedDate = `${currentDate.getFullYear()}-${currentDate.getDate().toString().padStart(2, '0')}-${(
@@ -127,14 +127,16 @@ const HomePage: React.FC = () => {
                     <TandemStatusModal
                         isVisible={
                             !!selectedTandem &&
-                            (selectedTandem.status === 'DRAFT' || selectedTandem.status === 'UNACTIVE')
+                            (selectedTandem.status === 'DRAFT' ||
+                                selectedTandem.status === 'UNACTIVE' ||
+                                selectedTandem.status === 'VALIDATED_BY_ONE_UNIVERSITY')
                         }
                         onClose={() => setSelectedTandem(undefined)}
                         status={selectedTandem?.status}
                     />
                     <TandemProfileModal
                         isVisible={!!selectedTandem && selectedTandem.status === 'ACTIVE'}
-                        language={selectedTandem?.language}
+                        language={selectedTandem?.learningLanguage}
                         onClose={() => setSelectedTandem(undefined)}
                         profile={selectedTandem?.partner}
                     />
