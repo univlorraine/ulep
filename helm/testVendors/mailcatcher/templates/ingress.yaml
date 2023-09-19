@@ -33,7 +33,7 @@ spec:
         {{- range .hosts }}
         - {{ . | quote }}
         {{- end }}
-      secretName: {{ .secretName }}
+      secretName: "{{ $.Values.name }}-tls"
     {{- end }}
   {{- end }}
   rules:
@@ -42,8 +42,8 @@ spec:
       http:
         paths:
           {{- range .paths }}
-          - path: {{ .path }}
-            pathType: {{ .pathType }}
+          - path: {{ .path | quote }}
+            pathType: Prefix
             backend:
               service:
                 name: {{ $fullName }}
