@@ -1,4 +1,4 @@
-import { Redirect, useHistory } from 'react-router';
+import { Redirect, useHistory, useParams } from 'react-router';
 import { useConfig } from '../../context/ConfigurationContext';
 import { useStoreState } from '../../store/storeTypes';
 import LanguageSelectedContent from '../components/contents/LanguageSelectedContent';
@@ -8,8 +8,11 @@ import styles from './css/SignUp.module.css';
 const PairingLevelStartPage: React.FC = () => {
     const { configuration } = useConfig();
     const history = useHistory();
+    const isSignUp = useParams<{ prefix?: string }>().prefix;
     const profileSignUp = useStoreState((state) => state.profileSignUp);
-    const user = useStoreState((state) => state.user);
+    const userSignUp = useStoreState((state) => state.user);
+    const profile = useStoreState((state) => state.profile);
+    const user = userSignUp || profile?.user;
 
     if (!profileSignUp.learningLanguage || !user) {
         return <Redirect to="/signup" />;
@@ -17,9 +20,9 @@ const PairingLevelStartPage: React.FC = () => {
 
     const continueSignUp = async () => {
         if (profileSignUp.learningLanguage?.code === '*') {
-            return history.push('/signup/pairing/preference');
+            return history.push(`${isSignUp ? '/' + isSignUp : ''}/pairing/preference`);
         }
-        return history.push('/signup/pairing/level');
+        return history.push(`${isSignUp ? '/' + isSignUp : ''}/pairing/level`);
     };
 
     return (
@@ -31,7 +34,7 @@ const PairingLevelStartPage: React.FC = () => {
             <div className={styles.body}>
                 <LanguageSelectedContent
                     language={profileSignUp.learningLanguage}
-                    mode={'confirm'}
+                    mode="confirm"
                     profilePicture={user.avatar}
                     onNextPressed={continueSignUp}
                 />

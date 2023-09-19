@@ -1,7 +1,7 @@
 import { useIonToast } from '@ionic/react';
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { Redirect, useHistory } from 'react-router';
+import { Redirect, useHistory, useParams } from 'react-router';
 import { useConfig } from '../../context/ConfigurationContext';
 import Question from '../../domain/entities/Question';
 import { useStoreActions, useStoreState } from '../../store/storeTypes';
@@ -16,6 +16,7 @@ import styles from './css/SignUp.module.css';
 const PairingQuizzPage: React.FC = () => {
     const { configuration, getQuizzByLevel } = useConfig();
     const history = useHistory();
+    const isSignUp = useParams<{ prefix?: string }>().prefix;
     const [showToast] = useIonToast();
     const { t } = useTranslation();
     const updateProfileSignUp = useStoreActions((state) => state.updateProfileSignUp);
@@ -25,7 +26,7 @@ const PairingQuizzPage: React.FC = () => {
     const [displayNextQuizz, setDisplayNextQuizz] = useState<boolean>(false);
 
     if (!profileSignUp.learningLanguage) {
-        return <Redirect to="/signup/pairing/languages" />;
+        return <Redirect to={`${isSignUp ? '/' + isSignUp : ''}/pairing/languages`} />;
     }
 
     const askQuizz = async (level: CEFR | undefined) => {
@@ -65,7 +66,7 @@ const PairingQuizzPage: React.FC = () => {
             updateProfileSignUp({ learningLanguageLevel: 'C2' });
         }
 
-        return history.push('/signup/pairing/language/quizz/end');
+        return history.push(`${isSignUp ? '/' + isSignUp : ''}/pairing/language/quizz/end`);
     };
 
     if (displayNextQuizz && currentQuizz) {

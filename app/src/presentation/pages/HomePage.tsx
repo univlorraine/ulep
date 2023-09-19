@@ -97,7 +97,7 @@ const HomePage: React.FC = () => {
                         <TandemList onTandemPressed={onValidatedTandemPressed} tandems={tandems} />
                         <WaitingTandemList
                             onTandemPressed={onTandemPressed}
-                            onNewTandemAsked={() => null}
+                            onNewTandemAsked={() => history.push('pairing/languages')}
                             tandems={tandems}
                         />
                     </div>

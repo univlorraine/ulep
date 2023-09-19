@@ -79,27 +79,35 @@ const OfflineRouter: React.FC = () => {
             <MobileRoute exact component={ReportPage} path={'/report'} />
             <MobileRoute exact component={SettingsPage} path={'/settings'} />
             <MobileRoute exact component={TandemStatusPage} path={'/tandem-status'} />
-            <PrivateRoute exact component={PairingLaguagesPage} path="/signup/pairing/languages" />
-            <PrivateRoute exact component={PairingOptionsPage} path="/signup/pairing/options" />
-            <PrivateRoute exact component={PairingPedagogyPage} path="/signup/pairing/pedagogy" />
-            <PrivateRoute exact component={PairingConfirmLanguagePage} path="/signup/pairing/language/confirm" />
-            <PrivateRoute exact component={PairingFinalPage} path="/signup/pairing/end" />
-            <PrivateRoute exact component={PairingLevelPage} path="/signup/pairing/level" />
-            <PrivateRoute exact component={PairingLevelStartPage} path="/signup/pairing/level/start" />
-            <PrivateRoute exact component={PairingOtherLanguagesPage} path="/signup/pairing/other-languages" />
-            <PrivateRoute exact component={PairingPreferencePage} path="/signup/pairing/preference" />
-            <PrivateRoute exact component={PairingQuizzEndPage} path="/signup/pairing/language/quizz/end" />
+            <PrivateRoute exact component={PairingLaguagesPage} path="/:prefix(signup/)?pairing/languages" />
+            <PrivateRoute exact component={PairingOptionsPage} path="/:prefix(signup/)?/pairing/options" />
+            <PrivateRoute exact component={PairingPedagogyPage} path="/:prefix(signup/)?/pairing/pedagogy" />
+            <PrivateRoute
+                exact
+                component={PairingConfirmLanguagePage}
+                path="/:prefix(signup/)?/pairing/language/confirm"
+            />
+            <PrivateRoute exact component={PairingFinalPage} path="/:prefix(signup/)?/pairing/end" />
+            <PrivateRoute exact component={PairingLevelPage} path="/:prefix(signup/)?/pairing/level" />
+            <PrivateRoute exact component={PairingLevelStartPage} path="/:prefix(signup/)?/pairing/level/start" />
+            <PrivateRoute
+                exact
+                component={PairingOtherLanguagesPage}
+                path="/:prefix(signup/)?/pairing/other-languages"
+            />
+            <PrivateRoute exact component={PairingPreferencePage} path="/:prefix(signup/)?/pairing/preference" />
+            <PrivateRoute exact component={PairingQuizzEndPage} path="/:prefix(signup/)?/pairing/language/quizz/end" />
             <PrivateRoute
                 exact
                 component={PairingQuizzIntroductionPage}
-                path="/signup/pairing/language/quizz/introduction"
+                path="/:prefix(signup/)?/pairing/language/quizz/introduction"
             />
-            <PrivateRoute exact component={PairingQuizzPage} path="/signup/pairing/language/quizz" />
-            <PrivateRoute exact component={PairingSelectCEFRPage} path="/signup/pairing/level/select" />
+            <PrivateRoute exact component={PairingQuizzPage} path="/:prefix(signup/)?/pairing/language/quizz" />
+            <PrivateRoute exact component={PairingSelectCEFRPage} path="/:prefix(signup/)?/pairing/level/select" />
             <PrivateRoute
                 exact
                 component={PairingUnavailableLanguagePage}
-                path="/signup/pairing/unavailable-language"
+                path="/:prefix(signup/)?/pairing/unavailable-language"
             />
             <PrivateRoute exact component={SignUpAvailabilitiesPage} path="/signup/availabilities" />
             <PrivateRoute exact component={SignUpBiographyPage} path="/signup/biography" />

@@ -1,7 +1,7 @@
 import { useIonToast } from '@ionic/react';
 import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { Redirect, useHistory } from 'react-router';
+import { Redirect, useHistory, useParams } from 'react-router';
 import { PlusPng } from '../../assets';
 import { useConfig } from '../../context/ConfigurationContext';
 import Language from '../../domain/entities/Language';
@@ -13,15 +13,18 @@ import styles from './css/SignUp.module.css';
 
 const PairingLaguagesPage: React.FC = () => {
     const { t } = useTranslation();
+    const isSignUp = useParams<{ prefix?: string }>().prefix;
     const { configuration, getAllLanguages } = useConfig();
     const [showToast] = useIonToast();
     const history = useHistory();
-    const updateProfileSignUp = useStoreActions((state) => state.updateProfileSignUp);
-    const profileSignUp = useStoreState((state) => state.profileSignUp);
     const [languages, setLanguages] = useState<Language[]>([]);
     const [selectedLaguage, setSelectedLanguage] = useState<Language>();
+    const updateProfileSignUp = useStoreActions((state) => state.updateProfileSignUp);
+    const profileSignUp = useStoreState((state) => state.profileSignUp);
+    const profile = useStoreState((state) => state.profile);
+    const university = profileSignUp.university || profile?.user.university;
 
-    if (!profileSignUp.university) {
+    if (!university) {
         return <Redirect to={'/signup'} />;
     }
 
@@ -32,17 +35,29 @@ const PairingLaguagesPage: React.FC = () => {
             return await showToast({ message: t(result.message), duration: 1000 });
         }
 
-        const universityLanguages = result.filter(
-            (language) =>
-                profileSignUp.nativeLanguage?.code !== language.code &&
-                !profileSignUp.otherLanguages?.find((otherLanguage) => language.code === otherLanguage.code)
+        if (isSignUp) {
+            return setLanguages(
+                result.filter(
+                    (language) =>
+                        profileSignUp.nativeLanguage?.code !== language.code &&
+                        !profileSignUp.otherLanguages?.find((otherLanguage) => language.code === otherLanguage.code)
+                )
+            );
+        }
+
+        return setLanguages(
+            result.filter(
+                (language) =>
+                    profile?.nativeLanguage.code !== language.code &&
+                    !profile?.masteredLanguages?.find((otherLanguage) => language.code === otherLanguage.code) &&
+                    !profile?.learningLanguages.find((learningLanguage) => language.code === learningLanguage.code)
+            )
         );
-        return setLanguages(universityLanguages);
     };
 
     const continueSignUp = async () => {
         updateProfileSignUp({ learningLanguage: selectedLaguage });
-        history.push('/signup/pairing/pedagogy');
+        history.push(`${isSignUp ? '/' + isSignUp : ''}/pairing/pedagogy`);
     };
 
     useEffect(() => {
@@ -72,10 +87,12 @@ const PairingLaguagesPage: React.FC = () => {
                                 />
                             );
                         })}
-                        {profileSignUp.university.isCentral && (
+                        {university.isCentral && (
                             <button
                                 style={{ background: 'none' }}
-                                onClick={() => history.push('/signup/pairing/other-languages')}
+                                onClick={() =>
+                                    history.push(`${isSignUp ? '/' + isSignUp : ''}/pairing/other-languages`)
+                                }
                             >
                                 <img alt="plus" className={pairingLanguagesStyles.image} src={PlusPng} />
                             </button>
