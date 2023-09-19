@@ -34,6 +34,7 @@ export const createUniversities = async (prisma: PrismaClient) => {
       admissionStartDate: new Date('2023-01-01'),
       admissionEndDate: new Date('2023-12-31'),
       website: 'https://www.univ-lorraine.fr/',
+      notification_email: 'notification+lorraine@test.fr',
     },
   });
   await prisma.organizations.create({
@@ -51,6 +52,7 @@ export const createUniversities = async (prisma: PrismaClient) => {
       admissionEndDate: new Date('2023-12-30'),
       website: 'https://www.birmingham.ac.uk',
       pairing_mode: PairingMode.SEMI_AUTOMATIC,
+      notification_email: 'notification+birm@test.fr',
     },
   });
   await prisma.organizations.create({
