@@ -35,10 +35,6 @@ const SignUpAvailabilitiesPage: React.FC = () => {
     const [openAvailabilityModal, setOpenAvailabilityModal] = useState<{ id: string; occurence: occurence } | null>();
     const [openFinalModal, setOpenFinalModal] = useState<boolean>(false);
 
-    if (!profileSignUp.university) {
-        return <Redirect to={'/signup'} />;
-    }
-
     const continueSignUp = async (note?: string, isPrivate?: boolean) => {
         updateProfileSignUp({ availabilities, availabilityNote: note, availabilityNotePrivate: isPrivate, timezone });
         setOpenFinalModal(false);
@@ -62,6 +58,10 @@ const SignUpAvailabilitiesPage: React.FC = () => {
         setAvailabilities(currentAvailabilities);
         return setOpenAvailabilityModal(undefined);
     };
+
+    if (!profileSignUp.university) {
+        return <Redirect to={'/signup'} />;
+    }
 
     return (
         <WebLayoutCentered

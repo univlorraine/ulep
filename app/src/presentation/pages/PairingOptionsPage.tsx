@@ -19,7 +19,7 @@ const PairingOptionsPage: React.FC = () => {
 
     const onNextStepPressed = () => {
         updateProfileSignUp({ sameTandem, isForCertificate, isForProgram });
-        return history.push(`${isSignUp ? '/' + isSignUp : ''}/pairing/end`);
+        return history.push(`${isSignUp ? '/' + isSignUp : '/'}pairing/end`);
     };
 
     return (
@@ -73,7 +73,7 @@ const PairingOptionsPage: React.FC = () => {
                     </button>
                     <button
                         className="secondary-button"
-                        onClick={() => history.push(`${isSignUp ? '/' + isSignUp : ''}/pairing/end`)}
+                        onClick={() => history.push(`${isSignUp ? '/' + isSignUp : '/'}pairing/end`)}
                     >
                         {t('pairing_options_page.pass_button')}
                     </button>

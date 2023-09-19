@@ -30,7 +30,7 @@ const PairingUnavailableLanguagePage: React.FC = () => {
     const user = userSignUp || profile?.user;
 
     if (!codeLanguage || !nameLanguage || !user) {
-        return <Redirect to={`${isSignUp ? '/' + isSignUp : ''}/pairing/languages`} />;
+        return <Redirect to={`${isSignUp ? '/' + isSignUp : '/'}pairing/languages`} />;
     }
 
     const language = new Language(idLanguage, codeLanguage, nameLanguage);
@@ -63,7 +63,7 @@ const PairingUnavailableLanguagePage: React.FC = () => {
                             <div className={styles['button-container']}>
                                 <button
                                     className="primary-button"
-                                    onClick={() => history.push(`${isSignUp ? '/' + isSignUp : ''}/pairing/languages`)}
+                                    onClick={() => history.push(`${isSignUp ? '/' + isSignUp : '/'}pairing/languages`)}
                                 >
                                     {t('pairing_unavailable_language_page.next_button')}
                                 </button>

@@ -55,7 +55,11 @@ const PairingLaguagesPage: React.FC = () => {
 
     const continueSignUp = async () => {
         updateProfileSignUp({ learningLanguage: selectedLaguage });
-        return history.push(`${isSignUp ? '/' + isSignUp : ''}/pairing/pedagogy`);
+        return history.push(`${isSignUp ? '/' + isSignUp : '/'}pairing/pedagogy`);
+    };
+
+    const otherLanguage = () => {
+        return history.push(`${isSignUp ? '/' + isSignUp : '/'}pairing/other-languages`);
     };
 
     useEffect(() => {
@@ -86,12 +90,7 @@ const PairingLaguagesPage: React.FC = () => {
                             );
                         })}
                         {university.isCentral && (
-                            <button
-                                style={{ background: 'none' }}
-                                onClick={() =>
-                                    history.push(`${isSignUp ? '/' + isSignUp : ''}/pairing/other-languages`)
-                                }
-                            >
+                            <button style={{ background: 'none' }} onClick={otherLanguage}>
                                 <img alt="plus" className={pairingLanguagesStyles.image} src={PlusPng} />
                             </button>
                         )}

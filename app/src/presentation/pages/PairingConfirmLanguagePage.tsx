@@ -36,7 +36,7 @@ const PairingConfirmLanguagePage: React.FC = () => {
     };
 
     const continueSignUp = async () => {
-        return history.push(`${isSignUp ? '/' + isSignUp : ''}/pairing/level/start`);
+        return history.push(`${isSignUp ? '/' + isSignUp : '/'}pairing/level/start`);
     };
 
     return (

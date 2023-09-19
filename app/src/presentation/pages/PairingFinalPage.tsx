@@ -21,7 +21,7 @@ const PairingFinalPage: React.FC = () => {
     const university = profileSignUp.university || user?.university;
 
     if (!profileSignUp.learningLanguage || !university || !user) {
-        return <Redirect to={`${isSignUp ? '/' + isSignUp : ''}/pairing/languages`} />;
+        return <Redirect to={`${isSignUp ? '/' + isSignUp : '/'}pairing/languages`} />;
     }
 
     const askNewLanguage = async () => {

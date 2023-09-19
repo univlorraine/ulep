@@ -23,7 +23,7 @@ const PairingPreferencePage: React.FC = () => {
 
     const onNextStepPressed = () => {
         updateProfileSignUp({ sameAge, sameGender });
-        return history.push(`${isSignUp ? '/' + isSignUp : ''}/pairing/options`);
+        return history.push(`${isSignUp ? '/' + isSignUp : '/'}pairing/options`);
     };
 
     return (

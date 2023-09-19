@@ -14,11 +14,11 @@ const PairingQuizzEndPage: React.FC = ({}) => {
     const { t } = useTranslation();
 
     if (!profileSignUp.learningLanguage || !profileSignUp.learningLanguageLevel) {
-        return <Redirect to={`${isSignUp ? '/' + isSignUp : ''}/pairing/languages`} />;
+        return <Redirect to={`${isSignUp ? '/' + isSignUp : '/'}pairing/languages`} />;
     }
 
     const nextStep = async () => {
-        return history.push(`${isSignUp ? '/' + isSignUp : ''}/pairing/preference`);
+        return history.push(`${isSignUp ? '/' + isSignUp : '/'}pairing/preference`);
     };
 
     return (

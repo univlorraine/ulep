@@ -32,7 +32,7 @@ const PairingQuizzIntroductionPage: React.FC = ({}) => {
                 <div>
                     <button
                         className="primary-button extra-large-margin-bottom"
-                        onClick={() => history.push(`${isSignUp ? '/' + isSignUp : ''}/pairing/language/quizz`)}
+                        onClick={() => history.push(`${isSignUp ? '/' + isSignUp : '/'}pairing/language/quizz`)}
                     >
                         {t('pairing_quizz_introduction_page.validate_button')}
                     </button>

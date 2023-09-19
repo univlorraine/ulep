@@ -19,7 +19,7 @@ const PairingSelectCEFRPage: React.FC = () => {
 
     const onValidateCefr = () => {
         updateProfileSignUp({ learningLanguageLevel: selectedLevel });
-        return history.push(`${isSignUp ? '/' + isSignUp : ''}/pairing/language/quizz/end`);
+        return history.push(`${isSignUp ? '/' + isSignUp : '/'}pairing/language/quizz/end`);
     };
 
     return (
@@ -69,7 +69,7 @@ const PairingSelectCEFRPage: React.FC = () => {
                     <button
                         className="secondary-button large-margin-top"
                         onClick={() =>
-                            history.push(`${isSignUp ? '/' + isSignUp : ''}/pairing/language/quizz/introduction`)
+                            history.push(`${isSignUp ? '/' + isSignUp : '/'}pairing/language/quizz/introduction`)
                         }
                     >
                         {t('pairing_select_level_page.test_button')}

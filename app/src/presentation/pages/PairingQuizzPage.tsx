@@ -26,7 +26,7 @@ const PairingQuizzPage: React.FC = () => {
     const [displayNextQuizz, setDisplayNextQuizz] = useState<boolean>(false);
 
     if (!profileSignUp.learningLanguage) {
-        return <Redirect to={`${isSignUp ? '/' + isSignUp : ''}/pairing/languages`} />;
+        return <Redirect to={`${isSignUp ? '/' + isSignUp : '/'}pairing/languages`} />;
     }
 
     const askQuizz = async (level: CEFR | undefined) => {
@@ -66,7 +66,7 @@ const PairingQuizzPage: React.FC = () => {
             updateProfileSignUp({ learningLanguageLevel: 'C2' });
         }
 
-        return history.push(`${isSignUp ? '/' + isSignUp : ''}/pairing/language/quizz/end`);
+        return history.push(`${isSignUp ? '/' + isSignUp : '/'}pairing/language/quizz/end`);
     };
 
     if (displayNextQuizz && currentQuizz) {

@@ -40,7 +40,7 @@ const PairingOtherLanguagesPage: React.FC = () => {
     const onOtherLanguageSelected = async (language: Language) => {
         if (language.code === '*') {
             updateProfileSignUp({ learningLanguage: language, learningLanguageLevel: 'A0' });
-            return history.push(`${isSignUp ? '/' + isSignUp : ''}/pairing/pedagogy`);
+            return history.push(`${isSignUp ? '/' + isSignUp : '/'}pairing/pedagogy`);
         }
 
         return setSelectedLanguage(language);
@@ -58,7 +58,7 @@ const PairingOtherLanguagesPage: React.FC = () => {
             return await showToast({ message: t(result.message), duration: 1000 });
         }
 
-        history.push(`${isSignUp ? '/' + isSignUp : ''}/pairing/unavailable-language`, {
+        history.push(`${isSignUp ? '/' + isSignUp : '/'}pairing/unavailable-language`, {
             askingStudents: result,
             codeLanguage: selectedLanguage.code,
             nameLanguage: selectedLanguage.name,
