@@ -32,7 +32,7 @@ export const configuration = (): Configuration => ({
     parseInt(process.env.CANCEL_TRESHOLD_IN_MIN, 10) || 15,
   smtp: {
     host: process.env.SMTP_HOST || 'localhost',
-    port: process.env.SMTP_PORT ? parseInt(process.env.SMTP_PORT, 10) : 1025,
+    port: process.env.SMTP_PORT ? parseInt(process.env.SMTP_PORT, 10) : 25,
     secure: process.env.SMTP_SECURE === 'true',
     sender: process.env.SMTP_SENDER || 'test@ulep.fr',
   },
