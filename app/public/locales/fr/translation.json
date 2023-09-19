@@ -346,7 +346,7 @@
         "error_firstname": "Veuillez saisir un prénom valide",
         "error_gender": "Veuillez choisir un genre",
         "error_lastname": "Veuillez saisir un nom valide",
-        "error_password": "Veuillez saisir un mot de passe valide",
+        "error_password": "Veuillez saisir un mot de passe valide ( au moins une majuscule, un chiffre et une lettre )",
         "photo": "Ajouter une photo",
         "photo_selected": "Modifier",
         "placeholder_age": "Entre ton âge",
