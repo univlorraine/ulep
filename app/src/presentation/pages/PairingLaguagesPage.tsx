@@ -44,24 +44,18 @@ const PairingLaguagesPage: React.FC = () => {
                 )
             );
         }
-        console.warn(profile);
         return setLanguages(
             result.filter(
                 (language) =>
                     profile?.nativeLanguage.code !== language.code &&
-                    !profile?.masteredLanguages?.find((otherLanguage) => language.code === otherLanguage.code) &&
-                    !profile?.learningLanguages.find((learningLanguage) => language.code === learningLanguage.code)
+                    !profile?.masteredLanguages?.find((otherLanguage) => language.code === otherLanguage.code)
             )
         );
     };
 
     const continueSignUp = async () => {
         updateProfileSignUp({ learningLanguage: selectedLaguage });
-        if (!isSignUp) {
-            return history.push('/pairing/language/confirm');
-        }
-
-        return history.push(`/signup/pairing/pedagogy`);
+        return history.push(`${isSignUp ? '/' + isSignUp : ''}/pairing/pedagogy`);
     };
 
     useEffect(() => {
