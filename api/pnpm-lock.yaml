@@ -1,4 +1,4 @@
-lockfileVersion: '6.1'
+lockfileVersion: '6.0'
 
 settings:
   autoInstallPeers: true
@@ -41,6 +41,9 @@ dependencies:
   minio:
     specifier: ^7.1.1
     version: 7.1.1
+  nodemailer:
+    specifier: ^6.9.5
+    version: 6.9.5
   openid-client:
     specifier: ^5.4.2
     version: 5.4.2
@@ -85,6 +88,9 @@ devDependencies:
   '@types/node':
     specifier: 18.15.11
     version: 18.15.11
+  '@types/nodemailer':
+    specifier: ^6.4.10
+    version: 6.4.10
   '@types/supertest':
     specifier: ^2.0.11
     version: 2.0.11
@@ -1358,6 +1364,12 @@ packages:
 
   /@types/node@18.15.11:
     resolution: {integrity: sha512-E5Kwq2n4SbMzQOn6wnmBjuK9ouqlURrcZDVfbo9ftDDTFt3nk7ZKK4GMOzoYgnpQJKcxwQw+lGaBvvlMo0qN/Q==}
+    dev: true
+
+  /@types/nodemailer@6.4.10:
+    resolution: {integrity: sha512-oPW/IdhkU3FyZc1dzeqmS+MBjrjZNiiINnrEOrWALzccJlP5xTlbkNr2YnTnnyj9Eqm5ofjRoASEbrCYpA7BrA==}
+    dependencies:
+      '@types/node': 18.15.11
     dev: true
 
   /@types/parse-json@4.0.0:
@@ -4232,6 +4244,11 @@ packages:
   /node-releases@2.0.12:
     resolution: {integrity: sha512-QzsYKWhXTWx8h1kIvqfnC++o0pEmpRQA/aenALsL2F4pqNVr7YzcdMlDij5WBnwftRbJCNJL/O7zdKaxKPHqgQ==}
     dev: true
+
+  /nodemailer@6.9.5:
+    resolution: {integrity: sha512-/dmdWo62XjumuLc5+AYQZeiRj+PRR8y8qKtFCOyuOl1k/hckZd8durUUHs/ucKx6/8kN+wFxqKJlQ/LK/qR5FA==}
+    engines: {node: '>=6.0.0'}
+    dev: false
 
   /normalize-path@3.0.0:
     resolution: {integrity: sha512-6eZs5Ls3WtCisHWp9S2GUy8dqkpGi4BVSz3GaqiE6ezub0512ESztXUwUB6C6IKbQkY2Pnb/mD4WYojCRwcwLA==}
