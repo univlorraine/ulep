@@ -47,6 +47,10 @@ api:
     keycloakClientSecret: &keycloakClientSecret "" # REQUIRED 
     minioAccessKey: &minioAccessKey minio # FIXE
     minioSecretKey: &minioSecretKey AZE123aze # REQUIRED
+    smtpHost: localhost # REQUIRED
+    smtpPort: 25 # REQUIRED
+    smtpSecure: true # REQUIRED
+    smtpSender: tandems@ulep.fr # REQUIRED
 
   autoscaling:
     enabled: false
