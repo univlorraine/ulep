@@ -41,8 +41,8 @@ const HomePage: React.FC = () => {
 
         const waitingLearningLanguages: Tandem[] = [];
         profile?.learningLanguages.map((learningLanguage) => {
-            if (!result.find((tandem) => tandem.learningLanguage.code === learningLanguage.code)) {
-                waitingLearningLanguages.push(new Tandem(learningLanguage.code, 'DRAFT', learningLanguage, 'A0'));
+            if (!result.find((tandem) => tandem.learningLanguage.id === learningLanguage.id)) {
+                waitingLearningLanguages.push(new Tandem(learningLanguage.id, 'DRAFT', learningLanguage, 'A0'));
             }
         });
 
