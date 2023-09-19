@@ -39,7 +39,14 @@ const HomePage: React.FC = () => {
             return await showToast({ message: t(result.message), duration: 5000 });
         }
 
-        setTandems(result);
+        const waitingLearningLanguages: Tandem[] = [];
+        profile?.learningLanguages.map((learningLanguage) => {
+            if (!result.find((tandem) => tandem.learningLanguage.code === learningLanguage.code)) {
+                waitingLearningLanguages.push(new Tandem(learningLanguage.code, 'DRAFT', learningLanguage, 'A0'));
+            }
+        });
+
+        setTandems([...result, ...waitingLearningLanguages]);
     };
 
     useEffect(() => {
