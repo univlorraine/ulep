@@ -5,7 +5,9 @@ import {
   RoutineStatus,
 } from 'src/core/models/routine-execution.model';
 import { RoutineExecutionRepository } from 'src/core/ports/routine-execution.repository';
-import routineExecutionMapper from '../mappers/routine-execution.mapper';
+import routineExecutionMapper, {
+  RoutineExecutionRelations,
+} from '../mappers/routine-execution.mapper';
 
 @Injectable()
 export class PrismaRoutineExecutionRepository
@@ -24,6 +26,7 @@ export class PrismaRoutineExecutionRepository
         },
         status: RoutineStatus.ON_GOING,
       },
+      include: RoutineExecutionRelations,
     });
 
     return routineExecutionMapper(instance);
@@ -40,6 +43,7 @@ export class PrismaRoutineExecutionRepository
       data: {
         status,
       },
+      include: RoutineExecutionRelations,
     });
 
     return routineExecutionMapper(instance);
@@ -50,6 +54,7 @@ export class PrismaRoutineExecutionRepository
       orderBy: {
         created_at: 'desc',
       },
+      include: RoutineExecutionRelations,
     });
 
     if (!res) {
