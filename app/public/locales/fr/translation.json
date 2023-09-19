@@ -186,7 +186,15 @@
     },
     "pairing_quizz_validation": {
         "description": "Continue sur ta lancée",
-        "description_next_step": "Tandem de choc ! De nombreux profils potentiels",
+        "description_next_step": {
+            "A0": "Tandem de choc ! De nombreux profils potentiels",
+            "A1": "Tandem de choc ! De nombreux profils potentiels",
+            "A2": "Tandem de choc ! De nombreux profils potentiels",
+            "B1": "Tandem de choc ! De nombreux profils potentiels",
+            "B2": "Tandem de choc ! De nombreux profils potentiels",
+            "C1": "Tandem de choc ! De nombreux profils potentiels",
+            "C2": "Tandem de choc ! De nombreux profils potentiels"
+        },
         "next_button": "Cool, la suite",
         "next_step_button": "C'est compris !",
         "subtitle": "Super, passons à tes préférences !",
