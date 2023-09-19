@@ -15,9 +15,17 @@ interface TandemActionsProps {
     tandemId?: string;
     learningLanguageIds?: string[];
     onTandemAction: () => void;
+    relaunchGlobalRoutineOnRefuse?: boolean;
+    relaunchGlobalRoutineOnAccept?: boolean;
 }
 
-const TandemActions = ({ tandemId, learningLanguageIds, onTandemAction }: TandemActionsProps) => {
+const TandemActions = ({
+    tandemId,
+    learningLanguageIds,
+    onTandemAction,
+    relaunchGlobalRoutineOnRefuse,
+    relaunchGlobalRoutineOnAccept,
+}: TandemActionsProps) => {
     if (!tandemId && learningLanguageIds?.length !== 2) {
         throw new Error('TandemActions must have a tandemId or 2 learningLanguage Ids');
     }
@@ -66,13 +74,19 @@ const TandemActions = ({ tandemId, learningLanguageIds, onTandemAction }: Tandem
             if (tandemId) {
                 validateTandem(tandemId);
             } else if (learningLanguageIds) {
-                createTandem(learningLanguageIds);
+                createTandem({
+                    learningLanguageIds,
+                    relaunch: relaunchGlobalRoutineOnAccept,
+                });
             }
         } else {
             if (learningLanguageIds?.length !== 2) {
                 throw new Error('Must have 2 learning languages to refuse tandem');
             }
-            refuseTandem(learningLanguageIds);
+            refuseTandem({
+                learningLanguageIds,
+                relaunch: relaunchGlobalRoutineOnRefuse,
+            });
         }
     };
 

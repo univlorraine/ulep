@@ -10,7 +10,8 @@ const useRefuseTandem = (options?: UseRefuseTandemParams) => {
     const dataProvider = useDataProvider();
 
     const { mutate, isLoading, isError } = useMutation(
-        (learningLanguageIds: string[]) => dataProvider.refuseTandem(learningLanguageIds),
+        (props: { learningLanguageIds: string[]; relaunch?: boolean }) =>
+            dataProvider.refuseTandem(props.learningLanguageIds, props.relaunch),
         options
     );
 

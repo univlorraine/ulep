@@ -242,18 +242,10 @@ const customDataProvider: DataProvider = {
 
         return result;
     },
-    validateTandem: async (tandemId: string): Promise<void> => {
+    validateTandem: async (tandemId: string, relaunchGlobalRoutine?: boolean): Promise<void> => {
         const url = `${process.env.REACT_APP_API_URL}/tandems/${tandemId}/validate`;
-        const response = await fetch(url, httpClientOptions({ method: 'POST' }));
-
-        if (!response.ok) {
-            throw new Error(`API request failed with status ${response.status}`);
-        }
-    },
-    createTandem: async (learningLanguageIds: string[]): Promise<void> => {
-        const url = `${process.env.REACT_APP_API_URL}/tandems`;
         const body = JSON.stringify({
-            learningLanguageIds,
+            relaunch: !!relaunchGlobalRoutine,
         });
         const response = await fetch(url, httpClientOptions({ method: 'POST', body }));
 
@@ -261,10 +253,23 @@ const customDataProvider: DataProvider = {
             throw new Error(`API request failed with status ${response.status}`);
         }
     },
-    refuseTandem: async (learningLanguageIds: string[]): Promise<void> => {
+    createTandem: async (learningLanguageIds: string[], relaunchGlobalRoutine?: boolean): Promise<void> => {
+        const url = `${process.env.REACT_APP_API_URL}/tandems`;
+        const body = JSON.stringify({
+            learningLanguageIds,
+            relaunch: !!relaunchGlobalRoutine,
+        });
+        const response = await fetch(url, httpClientOptions({ method: 'POST', body }));
+
+        if (!response.ok) {
+            throw new Error(`API request failed with status ${response.status}`);
+        }
+    },
+    refuseTandem: async (learningLanguageIds: string[], relaunchGlobalRoutine?: boolean): Promise<void> => {
         const url = `${process.env.REACT_APP_API_URL}/tandems/refuse`;
         const body = JSON.stringify({
             learningLanguageIds,
+            relaunch: !!relaunchGlobalRoutine,
         });
         const response = await fetch(url, httpClientOptions({ method: 'POST', body }));
 
