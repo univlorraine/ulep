@@ -39,6 +39,7 @@ export class SmtpEmailGateway implements EmailGateway {
   }
 
   send({ recipient, subject, content }: SendEmailPayload): Promise<void> {
+    this.logger.debug(`Send email to ${recipient}`);
     return new Promise((resolve, reject) => {
       this.#transporter.sendMail(
         {
