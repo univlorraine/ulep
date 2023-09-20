@@ -226,4 +226,23 @@ describe('createUserUsecase', () => {
         );
         expect(result).toStrictEqual(new Error('signup_informations_page.error_domain'));
     });
+
+    it('execute must return an error if adapter has code 409 with domain error message', async () => {
+        expect.assertions(1);
+        adapter.mockError({ error: { statusCode: 409 } });
+        const result = await usecase.execute(
+            'email',
+            'password',
+            'firstname',
+            'lastname',
+            'male',
+            'CODE',
+            22,
+            university,
+            'student',
+            'FR',
+            file
+        );
+        expect(result).toStrictEqual(new Error('signup_informations_page.error_email_already_exist'));
+    });
 });

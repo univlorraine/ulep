@@ -2,6 +2,7 @@ import FAQPng from './FAQ.png';
 import ArrowDownSvg from './arrow-down.svg';
 import ArrowRightSvg from './arrow-right.svg';
 import AvatarPng from './avatar.png';
+import AvatarPlaceholderPng from './user_placeholder.png';
 import BackgroundSvg from './background.svg';
 import BackgroundBluePng from './backgrounds/background-blue.png';
 import BackgroundRedPng from './backgrounds/background-red.png';
@@ -38,6 +39,7 @@ export {
     ArrowLeftSvg,
     ArrowRightSvg,
     AvatarPng,
+    AvatarPlaceholderPng,
     BackgroundBluePng,
     BackgroundRedPng,
     BackgroundSvg,

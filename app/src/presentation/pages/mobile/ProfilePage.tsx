@@ -2,6 +2,7 @@ import { IonPage } from '@ionic/react';
 import { Redirect, useHistory } from 'react-router';
 import { useStoreState } from '../../../store/storeTypes';
 import ProfileContent from '../../components/contents/ProfileContent';
+import { AvatarPlaceholderPng } from '../../../assets';
 
 const ProfilePage: React.FC = () => {
     const history = useHistory();
@@ -17,7 +18,7 @@ const ProfilePage: React.FC = () => {
                 onParameterPressed={() => history.push('/settings')}
                 profileFirstname={profile.user.firstname}
                 profileLastname={profile.user.lastname}
-                profilePicture={profile.user.avatar}
+                profilePicture={profile.user.avatar ?? AvatarPlaceholderPng}
             />
         </IonPage>
     );

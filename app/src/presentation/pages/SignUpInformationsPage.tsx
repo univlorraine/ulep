@@ -9,7 +9,7 @@ import Checkbox from '../components/Checkbox';
 import RadioButton from '../components/RadioButton';
 import TextInput from '../components/TextInput';
 import WebLayoutCentered from '../components/layout/WebLayoutCentered';
-import { isCodeValid, isDomainValid, isEmailCorrect, isNameCorrect, isPasswordCorrect } from '../utils';
+import { isEmailCorrect, isNameCorrect, isPasswordCorrect } from '../utils';
 import styles from './css/SignUp.module.css';
 
 const SignUpInformationsPage: React.FC = () => {
@@ -27,20 +27,12 @@ const SignUpInformationsPage: React.FC = () => {
     const [code, setCode] = useState<string>('');
     const [password, setPassword] = useState<string>('');
     const [confirmPassword, setConfirmPassword] = useState<string>('');
-    const [profilePicture, setProfilePicture] = useState<File>();
+    const [profilePicture, setProfilePicture] = useState<File | undefined>();
     const [CGUChecked, setCGUChecked] = useState<boolean>(false);
     const [errorMessage, setErrorMessage] = useState<{ type: string; message: string }>();
 
     const allFieldHasValue = () =>
-        !email ||
-        !password ||
-        !confirmPassword ||
-        !gender ||
-        !age ||
-        !firstname ||
-        !lastname ||
-        !profilePicture ||
-        !CGUChecked;
+        !email || !password || !confirmPassword || !gender || !age || !firstname || !lastname || !CGUChecked;
 
     const openGallery = async () => {
         setProfilePicture(await cameraAdapter.getPictureFromGallery());
@@ -67,7 +59,7 @@ const SignUpInformationsPage: React.FC = () => {
             return setErrorMessage({ type: 'email', message: t('signup_informations_page.error_email') });
         }
 
-        if (!profileSignUp.university || !profileSignUp.country || !profilePicture || !profileSignUp.role) {
+        if (!profileSignUp.university || !profileSignUp.country || !profileSignUp.role) {
             await showToast({ message: t('errors.global'), duration: 1000 });
             return history.push('/signup/');
         }
