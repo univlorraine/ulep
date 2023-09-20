@@ -7,6 +7,7 @@ import FlagBubble from '../components/FlagBubble';
 import SuccessLayout from '../components/layout/SuccessLayout';
 import { codeLanguageToFlag } from '../utils';
 import styles from './css/PairingFinalPage.module.css';
+import { AvatarPlaceholderPng } from '../../assets';
 
 const PairingFinalPage: React.FC = () => {
     const { t } = useTranslation();
@@ -93,7 +94,7 @@ const PairingFinalPage: React.FC = () => {
             <div className={styles.container}>
                 <h1 className="title">{t('pairing_final_page.title')}</h1>
                 <div className={styles['image-container']}>
-                    <img className={styles.image} alt="avatar" src={user.avatar}></img>
+                    <img className={styles.image} alt="avatar" src={user.avatar ?? AvatarPlaceholderPng}></img>
                     <div className={styles.bubble}>
                         <FlagBubble language={profileSignUp.learningLanguage} textColor="white" isSelected disabled />
                     </div>

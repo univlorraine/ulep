@@ -2,7 +2,7 @@ import { IonContent, IonPage, useIonToast } from '@ionic/react';
 import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Redirect, useHistory } from 'react-router';
-import { ArrowDownSvg, ReportSvg } from '../../assets';
+import { ArrowDownSvg, AvatarPlaceholderPng, ReportSvg } from '../../assets';
 import { useConfig } from '../../context/ConfigurationContext';
 import Tandem from '../../domain/entities/Tandem';
 import { useStoreActions, useStoreState } from '../../store/storeTypes';
@@ -84,7 +84,9 @@ const HomePage: React.FC = () => {
 
     return (
         <IonPage>
-            {!isHybrid && <HomeHeader avatar={profile.user.avatar} onPicturePressed={onProfilePressed} />}
+            {!isHybrid && (
+                <HomeHeader avatar={profile.user.avatar ?? AvatarPlaceholderPng} onPicturePressed={onProfilePressed} />
+            )}
             <IonContent>
                 <div className={styles.container}>
                     <div className={styles['header']}>
@@ -94,7 +96,11 @@ const HomePage: React.FC = () => {
                         </div>
                         {isHybrid && (
                             <button className={styles['avatar-container']} onClick={onProfilePressed}>
-                                <img alt="avatar" className={styles.avatar} src={profile.user.avatar} />
+                                <img
+                                    alt="avatar"
+                                    className={styles.avatar}
+                                    src={profile.user.avatar ?? AvatarPlaceholderPng}
+                                />
                                 <img alt="arrow-down" src={ArrowDownSvg} />
                             </button>
                         )}
@@ -130,7 +136,7 @@ const HomePage: React.FC = () => {
                         onDisconnect={onDisconnect}
                         profileFirstname={profile.user.firstname}
                         profileLastname={profile.user.lastname}
-                        profilePicture={profile.user.avatar}
+                        profilePicture={profile.user.avatar ?? AvatarPlaceholderPng}
                     />
                     <TandemStatusModal
                         isVisible={

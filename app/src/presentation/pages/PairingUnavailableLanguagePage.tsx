@@ -8,6 +8,7 @@ import FlagBubble from '../components/FlagBubble';
 import LanguageSelectedContent from '../components/contents/LanguageSelectedContent';
 import SuccessLayout from '../components/layout/SuccessLayout';
 import styles from './css/PairingUnavailableLanguage.module.css';
+import { AvatarPlaceholderPng } from '../../assets';
 
 interface PairingUnavailableLanguageState {
     askingStudents: number;
@@ -46,7 +47,7 @@ const PairingUnavailableLanguagePage: React.FC = () => {
                     <LanguageSelectedContent
                         language={language}
                         mode={'unavailable'}
-                        profilePicture={user.avatar}
+                        profilePicture={user.avatar ?? AvatarPlaceholderPng}
                         onNextPressed={() => setIsLastStep(true)}
                     />
                 )}

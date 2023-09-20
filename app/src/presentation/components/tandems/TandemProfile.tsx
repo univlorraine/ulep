@@ -1,6 +1,6 @@
 import React from 'react';
 import { useTranslation } from 'react-i18next';
-import { ArrowLeftSvg, CloseBlackSvg } from '../../../assets';
+import { ArrowLeftSvg, AvatarPlaceholderPng, CloseBlackSvg } from '../../../assets';
 import { ReactComponent as Background } from '../../../assets/background.svg';
 import { useConfig } from '../../../context/ConfigurationContext';
 import { getInitialAviability } from '../../../domain/entities/Availability';
@@ -51,7 +51,7 @@ const TandemProfile: React.FC<TandemProfileProps> = ({ language, onClose, profil
             <div className={styles.content}>
                 <span className="title extra-large-margin-bottom">{t(`home_page.tandem_validated.title`)}</span>
                 <TandemCard
-                    avatar={profile.user.avatar}
+                    avatar={profile.user.avatar ?? AvatarPlaceholderPng}
                     fistname={profile.user.firstname}
                     language={language}
                     lastname={profile.user.lastname}
