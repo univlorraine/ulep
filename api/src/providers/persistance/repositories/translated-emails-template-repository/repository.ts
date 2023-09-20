@@ -4,6 +4,7 @@ import EmailContent, {
   EMAIL_TEMPLATE_IDS,
 } from 'src/core/models/email-content.model';
 import { EmailTemplateRepository } from 'src/core/ports/email-template.repository';
+import getMailFromTemplate from './templates/tandemBecomeActive';
 
 const config = configuration();
 
@@ -26,6 +27,7 @@ const DEFAULT_TRANSLATIONS = {
     content: {
       introduction: 'Hi,',
       paragraphs: {
+        // TODO(NOW): best regards
         '1': 'You have tandem suggested by global routine or pending validation. Connect to the back-office to arbitrate these tandems.',
       },
       signature: "L'équipe Tandem de l'Université de Lorraine",
@@ -92,6 +94,7 @@ export default class TranslatedEmailTemplateRepository
   ): Promise<EmailContent> {
     // TODO(NOW): sanitize ?
     // TODO(NOW): interpolation
+    // TODO(NOW): use i18n + backend ?
 
     if (this.isLastTranslationExpired(languageCode)) {
       try {
@@ -105,16 +108,18 @@ export default class TranslatedEmailTemplateRepository
       this.#translations[languageCode]?.[templateId] ??
       this.#translations.en[templateId];
 
+    const content = getMailFromTemplate({
+      title: translations.title,
+      content: {
+        introduction: translations.content.introduction,
+        paragraphs: Object.values(translations.content.paragraphs),
+        signature: translations.content.signature,
+      },
+    });
+
     return new EmailContent({
       subject: translations.subject,
-      content: `<html>
-  <div style="background-color:red; height: 500px; width: 500px">
-      <h1>${translations.title}</h1>
-      <div>
-        <p>${translations.content.paragraphs['1']}</p>
-      </div>
-  </div>
-</html>`,
+      content: content,
     });
   }
 }
