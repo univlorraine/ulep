@@ -23,10 +23,10 @@ const PairingPedagogyPage: React.FC = () => {
     const isSignUp = useParams<{ prefix?: string }>().prefix;
     const history = useHistory();
     const updateProfileSignUp = useStoreActions((state) => state.updateProfileSignUp);
-    const profileSignUp = useStoreState((state) => state.profileSignUp);
+    const user = useStoreState((state) => state.user);
     const profile = useStoreState((state) => state.profile);
     const [pedagogySelected, setPedagogySelected] = useState<Pedagogy>();
-    const university = profileSignUp.university || profile?.user.university;
+    const university = user?.university || profile?.user.university;
 
     if (!university) {
         return <Redirect to={'/signup'} />;
