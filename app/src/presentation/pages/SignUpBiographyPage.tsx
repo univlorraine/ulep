@@ -19,6 +19,12 @@ const SignUpBiographyPage: React.FC = () => {
     const [placeBiography, setPlaceBiography] = useState<string>('');
     const [travelBiography, setTravelBiography] = useState<string>('');
 
+    const isAFieldEmpty =
+        powerBiography.trim().length === 0 ||
+        incredibleBiography.trim().length === 0 ||
+        placeBiography.trim().length === 0 ||
+        travelBiography.trim().length === 0;
+
     const continueSignUp = async () => {
         const power = powerBiography.trim();
         const incredible = incredibleBiography.trim();
@@ -102,7 +108,11 @@ const SignUpBiographyPage: React.FC = () => {
                     </div>
                 </div>
                 <div className={`${biographyStyles['bottom-container']} large-margin-top extra-large-margin-bottom`}>
-                    <button className={`primary-button`} onClick={continueSignUp}>
+                    <button
+                        className={`primary-button ${isAFieldEmpty ? 'disabled' : ''}`}
+                        disabled={isAFieldEmpty}
+                        onClick={continueSignUp}
+                    >
                         {t('signup_biography_page.validate_button')}
                     </button>
                 </div>
