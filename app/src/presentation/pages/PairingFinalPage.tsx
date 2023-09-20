@@ -18,10 +18,10 @@ const PairingFinalPage: React.FC = () => {
     const updateProfile = useStoreActions((state) => state.updateProfile);
     const profileSignUp = useStoreState((state) => state.profileSignUp);
     const userSignIn = useStoreState((state) => state.user);
-    const user = userSignIn || profile?.user;
-    const university = profileSignUp.university || user?.university;
+    const user = profile?.user || userSignIn;
+    const university = user?.university;
 
-    if (!profileSignUp.learningLanguage || !university || !user) {
+    if (!university || !user) {
         return <Redirect to={`${isSignUp ? '/' + isSignUp : '/'}pairing/languages`} />;
     }
 
@@ -46,10 +46,6 @@ const PairingFinalPage: React.FC = () => {
 
     const nextStep = async () => {
         if (
-            !profileSignUp.age ||
-            !profileSignUp.role ||
-            !profileSignUp.gender ||
-            !profileSignUp.university ||
             !profileSignUp.nativeLanguage ||
             !profileSignUp.otherLanguages ||
             !profileSignUp.learningLanguage ||
@@ -96,12 +92,12 @@ const PairingFinalPage: React.FC = () => {
                 <div className={styles['image-container']}>
                     <img className={styles.image} alt="avatar" src={user.avatar ?? AvatarPlaceholderPng}></img>
                     <div className={styles.bubble}>
-                        <FlagBubble language={profileSignUp.learningLanguage} textColor="white" isSelected disabled />
+                        <FlagBubble language={profileSignUp.learningLanguage!} textColor="white" isSelected disabled />
                     </div>
                 </div>
                 <div className={`${styles['tandem-container']}`}>{`${t('global.tandem')} ${
-                    profileSignUp.learningLanguage.name
-                } ${codeLanguageToFlag(profileSignUp.learningLanguage.code)}`}</div>
+                    profileSignUp.learningLanguage!.name
+                } ${codeLanguageToFlag(profileSignUp.learningLanguage!.code)}`}</div>
                 <span className={`${styles.description} large-margin-top`}>{`${t(
                     'pairing_final_page.congratulation'
                 )},`}</span>

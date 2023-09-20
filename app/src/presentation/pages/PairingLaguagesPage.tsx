@@ -22,7 +22,8 @@ const PairingLaguagesPage: React.FC = () => {
     const updateProfileSignUp = useStoreActions((state) => state.updateProfileSignUp);
     const profileSignUp = useStoreState((state) => state.profileSignUp);
     const profile = useStoreState((state) => state.profile);
-    const university = profileSignUp.university || profile?.user.university;
+    const user = useStoreState((state) => state.user);
+    const university = user?.university || profile?.user.university;
 
     if (!university) {
         return <Redirect to={'/signup'} />;

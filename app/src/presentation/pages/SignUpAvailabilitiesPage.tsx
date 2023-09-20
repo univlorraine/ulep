@@ -29,8 +29,10 @@ const SignUpAvailabilitiesPage: React.FC = () => {
     const history = useHistory();
     const updateProfileSignUp = useStoreActions((state) => state.updateProfileSignUp);
     const profileSignUp = useStoreState((state) => state.profileSignUp);
+    const userSignUp = useStoreState((state) => state.user);
+    const university = userSignUp?.university || profileSignUp.university;
     // @ts-ignore
-    const [timezone, setTimezone] = useState<string>(profileSignUp.university.timezone);
+    const [timezone, setTimezone] = useState<string>(university?.timezone);
     const [availabilities, setAvailabilities] = useState<Availabilites>(initialAvailabilities);
     const [openAvailabilityModal, setOpenAvailabilityModal] = useState<{ id: string; occurence: occurence } | null>();
     const [openFinalModal, setOpenFinalModal] = useState<boolean>(false);
@@ -59,7 +61,7 @@ const SignUpAvailabilitiesPage: React.FC = () => {
         return setOpenAvailabilityModal(undefined);
     };
 
-    if (!profileSignUp.university) {
+    if (!university) {
         return <Redirect to={'/signup'} />;
     }
 
@@ -84,7 +86,7 @@ const SignUpAvailabilitiesPage: React.FC = () => {
                             title: timzeone,
                             value: timzeone,
                         }))}
-                        placeholder={profileSignUp.university.timezone}
+                        placeholder={university.timezone}
                         title={t('signup_availabilities_page.timezone')}
                     />
 
