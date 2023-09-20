@@ -6,12 +6,14 @@ import { useConfig } from '../../../context/ConfigurationContext';
 import CircleAvatar from '../CircleAvatar';
 import TextInput from '../TextInput';
 import style from './Form.module.css';
+import { Tokens } from '../../../domain/interfaces/LoginUsecase.interface';
 
 interface LoginFormProps {
     goBack: () => void;
+    onLogin: (tokens: Tokens) => void;
 }
 
-const LoginForm: React.FC<LoginFormProps> = ({ goBack }) => {
+const LoginForm: React.FC<LoginFormProps> = ({ goBack, onLogin }) => {
     const { t } = useTranslation();
     const { login } = useConfig();
     const [email, setEmail] = useState<string>('');
@@ -28,6 +30,7 @@ const LoginForm: React.FC<LoginFormProps> = ({ goBack }) => {
             return await showToast({ message: t(result.message), duration: 5000 });
         }
         await hideLoading();
+        onLogin(result);
     };
 
     return (

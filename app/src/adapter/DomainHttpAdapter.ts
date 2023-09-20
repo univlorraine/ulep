@@ -2,7 +2,7 @@ import jwtDecode, { JwtPayload } from 'jwt-decode';
 import BaseHttpAdapter, { Body, HttpResponse } from './BaseHttpAdapter';
 
 export interface HttpAdapterInterface {
-    get: (path: string, args?: RequestInit, isTokenNeeded?: boolean) => Promise<Response>;
+    get: (path: string, args?: RequestInit, isTokenNeeded?: boolean, accessToken?: string) => Promise<Response>;
     post: (
         path: string,
         body: Body,
@@ -36,20 +36,20 @@ class DomainHttpAdapter extends BaseHttpAdapter implements HttpAdapterInterface 
         this.refreshToken = refreshToken;
     }
 
-    private getHeaders(): any {
+    private getHeaders(token?: string): any {
         return {
-            Authorization: `Bearer ${this.accessToken}`,
+            Authorization: `Bearer ${token || this.accessToken}`,
             'Language-code': this.languageCode,
         };
     }
 
-    async get(path: string, args: RequestInit = {}, isTokenNeeded = true): Promise<Response> {
+    async get(path: string, args: RequestInit = {}, isTokenNeeded = true, accessToken?: string): Promise<Response> {
         const isTokenValid = !isTokenNeeded || (await this.handleTokens());
 
         if (!isTokenValid) {
             throw new Error('errors.global');
         }
-        return super.get(`${this.apiUrl}${path}`, { ...args, headers: this.getHeaders() });
+        return super.get(`${this.apiUrl}${path}`, { ...args, headers: this.getHeaders(accessToken) });
     }
 
     async delete(path: string, args: RequestInit = {}, isTokenNeeded = true): Promise<Response> {
