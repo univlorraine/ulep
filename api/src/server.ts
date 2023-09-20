@@ -1,6 +1,7 @@
 import {
   ClassSerializerInterceptor,
   INestApplication,
+  LogLevel,
   ValidationPipe,
 } from '@nestjs/common';
 import { HttpAdapterHost, NestFactory, Reflector } from '@nestjs/core';
@@ -9,10 +10,35 @@ import { DocumentBuilder, OpenAPIObject, SwaggerModule } from '@nestjs/swagger';
 import { AppModule } from './app.module';
 import { DomainErrorFilter, PrismaClientExceptionFilter } from './api/filters';
 import { CollectionInterceptor } from './api/interceptors';
+import { configuration } from './configuration';
+
+const getLoggerLevels = (logLevel: string): LogLevel[] => {
+  const level: LogLevel[] = [];
+  switch (logLevel) {
+    case 'verbose':
+      level.push('verbose');
+    case 'debug':
+      level.push('debug');
+    case 'warn':
+      level.push('warn');
+    case 'error':
+      level.push('error');
+    case 'log':
+      level.push('log');
+      break;
+    default:
+      break;
+  }
+  return level;
+};
 
 export class Server {
   public async run(port: number): Promise<void> {
-    const app = await NestFactory.create<NestExpressApplication>(AppModule);
+    const logLevel = configuration().logLevel;
+    const app = await NestFactory.create<NestExpressApplication>(AppModule, {
+      logger: getLoggerLevels(logLevel),
+    });
+    console.info(`Log level set to ${logLevel}`);
 
     this.addGlobalPipes(app);
     this.addGlobalFilters(app);
