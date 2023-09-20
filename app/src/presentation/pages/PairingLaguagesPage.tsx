@@ -29,7 +29,7 @@ const PairingLaguagesPage: React.FC = () => {
     }
 
     const getLanguages = async () => {
-        let result = await getAllLanguages.execute('PRIMARY');
+        let result = await getAllLanguages.execute(university.isCentral ? 'PRIMARY' : 'PARTNER');
 
         if (result instanceof Error) {
             return await showToast({ message: t(result.message), duration: 1000 });

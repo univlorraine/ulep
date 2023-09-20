@@ -65,7 +65,7 @@ const PairingPedagogyPage: React.FC = () => {
             return history.push(`${isSignUp ? '/' + isSignUp : '/'}pairing/language/confirm`);
         }
 
-        updateProfileSignUp({ pedagogy });
+        updateProfileSignUp({ pedagogy, campus: undefined });
         return history.push(`${isSignUp ? '/' + isSignUp : '/'}pairing/language/confirm`);
     };
 
