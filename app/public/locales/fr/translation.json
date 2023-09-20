@@ -327,6 +327,7 @@
     },
     "signup_languages_page": {
         "language": "Ma langue",
+        "none": "Aucune",
         "other_languages": "Autres langues maitrisées - C1 min/Bilingue (optionnel)",
         "placeholder_primary_language": "Veuillez séléctionner votre langue native",
         "placeholder_first_optional_language": "Vous pouvez selectionner une première langue maîtrisée",
