@@ -103,7 +103,7 @@ const SignUpInformationsPage: React.FC = () => {
                 return setErrorMessage({ type: 'code', message: t(result.message) });
             }
 
-            return await showToast({ message: t(result.message), duration: 1000 });
+            return await showToast({ message: t(result.message), duration: 3000 });
         }
 
         updateProfileSignUp({
