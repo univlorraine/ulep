@@ -95,6 +95,8 @@ auth:
     kcDB: postgres # FIXE
     kcDBSchema: keycloak # FIXE
     proxyAddressForwarding: true 
+    logLevel: INFO # REQUIRED
+
 
   autoscaling:
     enabled: false
