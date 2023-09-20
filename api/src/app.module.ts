@@ -3,6 +3,7 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
 import { configuration } from './configuration';
 import { ApiModule } from './api/api.module';
 import { KeycloakModule } from '@app/keycloak';
+import { GatewayModule } from './providers/gateway/gateway.module';
 
 @Module({
   imports: [
@@ -14,6 +15,7 @@ import { KeycloakModule } from '@app/keycloak';
       inject: [ConfigService],
     }),
     ApiModule,
+    GatewayModule,
   ],
 })
 export class AppModule {}

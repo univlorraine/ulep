@@ -30,6 +30,7 @@ import { CAMPUS_REPOSITORY } from 'src/core/ports/campus.repository';
 import { PrismaCampusRepository } from 'src/providers/persistance/repositories/prisma-campus.repository';
 import { LEARNING_LANGUAGE_REPOSITORY } from 'src/core/ports/learning-language.repository';
 import { PrismaLearningLanguageRepository } from './persistance/repositories/prisma-learning-language-repository';
+import { GatewayController } from './gateway/gateway.controller';
 
 const providers: Provider[] = [
   {

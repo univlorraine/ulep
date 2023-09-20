@@ -5,6 +5,8 @@ export type Configuration = {
   keycloak: KeycloakConfiguration;
   adminRole: string;
   defaultTranslationLanguage: string;
+  connecteurUrl: string;
+  connecteurToken: string;
 };
 
 export const configuration = (): Configuration => ({
@@ -19,4 +21,6 @@ export const configuration = (): Configuration => ({
   },
   adminRole: process.env.ADMIN_ROLE || 'admin',
   defaultTranslationLanguage: process.env.DEFAULT_TRANSLATION_LANGUAGE || 'fr',
+  connecteurUrl: process.env.CONNECTEUR_URL,
+  connecteurToken: process.env.CONNECTEUR_TOKEN
 });
