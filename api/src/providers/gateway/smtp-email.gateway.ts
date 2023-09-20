@@ -23,17 +23,19 @@ export class SmtpEmailGateway implements EmailGateway {
       `Smtp email gateway setup with transport ${smtp.host}:${smtp.port}; secure: ${smtp.secure}; from: ${smtp.sender}`,
     );
 
-    new Promise<void>((resolve, reject) => {
-      this.#transporter.verify((error) => {
-        if (error) {
-          this.logger.error('Fail to verify smtp connection', error);
-          return reject(error);
-        } else {
-          this.logger.log('SMTP Email gateway ready to take messages');
-          return resolve();
-        }
+    if (!smtp.disableBootVerification) {
+      new Promise<void>((resolve, reject) => {
+        this.#transporter.verify((error) => {
+          if (error) {
+            this.logger.error('Fail to verify smtp connection', error);
+            return reject(error);
+          } else {
+            this.logger.log('SMTP Email gateway ready to take messages');
+            return resolve();
+          }
+        });
       });
-    });
+    }
   }
 
   send({ recipient, subject, content }: SendEmailPayload): Promise<void> {
