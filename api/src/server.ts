@@ -9,7 +9,10 @@ import { NestExpressApplication } from '@nestjs/platform-express';
 import { DocumentBuilder, OpenAPIObject, SwaggerModule } from '@nestjs/swagger';
 import { AppModule } from './app.module';
 import { DomainErrorFilter, PrismaClientExceptionFilter } from './api/filters';
-import { CollectionInterceptor } from './api/interceptors';
+import {
+  CollectionInterceptor,
+  HttpLoggerInterceptor,
+} from './api/interceptors';
 import { configuration } from './configuration';
 
 const getLoggerLevels = (logLevel: string): LogLevel[] => {
@@ -73,6 +76,8 @@ export class Server {
         groups: ['read'],
       }),
     );
+
+    app.useGlobalInterceptors(new HttpLoggerInterceptor());
 
     app.useGlobalInterceptors(new CollectionInterceptor());
   }
