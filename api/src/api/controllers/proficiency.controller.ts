@@ -116,11 +116,15 @@ export class ProficiencyController {
   @Swagger.ApiOkResponse({ type: ProficiencyQuestionResponse, isArray: true })
   async findQuestionsByLevel(
     @Param('level', ParseProficiencyLevelPipe) level: ProficiencyLevel,
+    @Headers('Language-code') languageCode?: string,
   ) {
     const questions = await this.getQuestionsByLevelUsecase.execute({ level });
 
     return questions.map((question) =>
-      ProficiencyQuestionResponse.fromProficiencyQuestion(question),
+      ProficiencyQuestionResponse.fromProficiencyQuestion(
+        question,
+        languageCode,
+      ),
     );
   }
 
@@ -132,10 +136,6 @@ export class ProficiencyController {
     @Query() { limit, page, level }: GetProficiencyQueryParams,
     @Headers('Language-code') languageCode?: string,
   ) {
-    const code =
-      configuration().defaultTranslationLanguage !== languageCode
-        ? languageCode
-        : undefined;
     const questions = await this.getQuestionsUsecase.execute({
       limit,
       page,
@@ -144,7 +144,10 @@ export class ProficiencyController {
 
     return new Collection<ProficiencyQuestionResponse>({
       items: questions.items.map((question) =>
-        ProficiencyQuestionResponse.fromProficiencyQuestion(question, code),
+        ProficiencyQuestionResponse.fromProficiencyQuestion(
+          question,
+          languageCode,
+        ),
       ),
       totalItems: questions.totalItems,
     });
