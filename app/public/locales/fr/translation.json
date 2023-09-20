@@ -341,7 +341,7 @@
         "error_age": "Veuillez saisir un âge valide",
         "error_code": "Veuillez saisir un code valide",
         "error_confirm_password": "Les mots de passes ne sont pas identiques",
-        "error_domain": "Veuillez saisir une adresse email valide",
+        "error_domain": "Veuillez saisir une adresse email valide ( vérifiez le format de l'email et le nom de domaine )",
         "error_email": "Veuillez saisir un email valide",
         "error_firstname": "Veuillez saisir un prénom valide",
         "error_gender": "Veuillez choisir un genre",
