@@ -118,6 +118,7 @@ const ShowTandems = () => {
                                       ]}
                                       onTandemAction={handleTandemAction}
                                       tandemId={tandem.id}
+                                      relaunchGlobalRoutineOnRefuse
                                   />
                               )
                             : undefined
@@ -142,6 +143,12 @@ const ShowTandems = () => {
                                     <TandemActions
                                         learningLanguageIds={[recordId.toString(), partner.id]}
                                         onTandemAction={handleTandemAction}
+                                        relaunchGlobalRoutineOnAccept={
+                                            !tandem || tandem.partnerLearningLanguage.id !== partner.id
+                                        }
+                                        relaunchGlobalRoutineOnRefuse={
+                                            tandem?.partnerLearningLanguage.id === partner.id
+                                        }
                                     />
                                 )}
                                 partners={matches.map((match) => ({
@@ -170,6 +177,7 @@ const ShowTandems = () => {
                                 <TandemActions
                                     learningLanguageIds={[recordId.toString(), tandem.partnerLearningLanguage.id]}
                                     onTandemAction={handleTandemAction}
+                                    relaunchGlobalRoutineOnRefuse
                                 />
                             )}
                             partners={tandem?.status === TandemStatus.DRAFT ? [tandem.partnerLearningLanguage] : []}

@@ -5,20 +5,21 @@ import {
 
 export const ROUTINE_EXECUTION_REPOSITORY = 'routine-execution.repository';
 
-interface CreateRoutineExecutionParams {
+export interface CreateRoutineExecutionParams {
   sponsorId: string;
   universityIds: string[];
 }
 
+export interface GetLastRoutineExecutionParams {
+  status?: RoutineStatus;
+}
+
 export interface RoutineExecutionRepository {
-  create({
-    sponsorId,
-    universityIds,
-  }: CreateRoutineExecutionParams): Promise<RoutineExecution>;
+  create(params: CreateRoutineExecutionParams): Promise<RoutineExecution>;
 
   updateStatus(id: string, status: RoutineStatus): Promise<RoutineExecution>;
 
-  getLast(): Promise<RoutineExecution>;
+  getLast(params?: GetLastRoutineExecutionParams): Promise<RoutineExecution>;
 
   cleanOldRoutines(tresholdDate: Date): Promise<void>;
 }

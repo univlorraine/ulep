@@ -10,7 +10,8 @@ const useCreateTandem = (options?: UseCreateTandemParams) => {
     const dataProvider = useDataProvider();
 
     const { mutate, isLoading, isError } = useMutation(
-        (learningLanguageIds: string[]) => dataProvider.createTandem(learningLanguageIds),
+        (props: { learningLanguageIds: string[]; relaunch?: boolean }) =>
+            dataProvider.createTandem(props.learningLanguageIds, props.relaunch),
         options
     );
 
