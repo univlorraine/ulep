@@ -66,6 +66,10 @@ class CreateUserUsecase implements CreateUserUsecaseInterface {
                 return new Error('errors.global');
             }
 
+            if (error.statusCode === 409) {
+                return new Error('signup_informations_page.error_email_already_exist');
+            }
+
             if (error.statusCode === 400 && error.message === 'Domain is invalid') {
                 return new Error('signup_informations_page.error_domain');
             }
