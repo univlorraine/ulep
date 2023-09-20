@@ -15,6 +15,7 @@ export type Configuration = {
   defaultTranslationLanguage: string;
   CANCEL_TRESHOLD_IN_MIN: number;
   smtp: SmtpConfiguration;
+  logLevel: string;
 };
 
 export const configuration = (): Configuration => ({
@@ -39,4 +40,5 @@ export const configuration = (): Configuration => ({
     secure: process.env.SMTP_SECURE === 'true',
     sender: process.env.SMTP_SENDER || 'test@ulep.fr',
   },
+  logLevel: process.env.LOG_LEVEL || 'warn',
 });

@@ -67,7 +67,7 @@ export class GenerateTandemsUsecase {
         command.universityIds,
       );
 
-    this.logger.debug(
+    this.logger.verbose(
       `Found ${
         learningLanguagesToPair.length
       } potential learning languages for universities ${command.universityIds.join(
@@ -125,7 +125,7 @@ export class GenerateTandemsUsecase {
       }
     }
 
-    this.logger.debug(`Computed ${possiblePairs.length} potential pairs`);
+    this.logger.verbose(`Computed ${possiblePairs.length} potential pairs`);
 
     const sortedLearningLanguages = learningLanguagesToPair
       .sort(
@@ -209,7 +209,6 @@ export class GenerateTandemsUsecase {
         pairedLearningLanguageIds.add(pair.owner.id);
         pairedLearningLanguageIds.add(pair.target.id);
 
-        // TODO(NOW): clarify : en attente validation
         const ownerUniversity = pair.owner.profile.user.university;
         const targetUniversity = pair.target.profile.user.university;
         if (!universitiesWithNewTandems.has(ownerUniversity.id)) {
@@ -259,11 +258,11 @@ export class GenerateTandemsUsecase {
 
     const countDeletedTandems =
       await this.tandemsRepository.deleteTandemNotLinkedToLearningLangues();
-    this.logger.debug(
+    this.logger.verbose(
       `Removed ${countDeletedTandems} tandems for learning languages in tandems proposal`,
     );
 
-    this.logger.debug(`Generated ${tandems.length} tandems`);
+    this.logger.verbose(`Generated ${tandems.length} tandems`);
 
     return tandems;
   }

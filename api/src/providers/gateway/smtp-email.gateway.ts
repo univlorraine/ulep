@@ -19,7 +19,7 @@ export class SmtpEmailGateway implements EmailGateway {
     });
     this.#from = smtp.sender;
 
-    this.logger.debug(
+    this.logger.log(
       `Smtp email gateway setup with transport ${smtp.host}:${smtp.port}; secure: ${smtp.secure}; from: ${smtp.sender}`,
     );
 

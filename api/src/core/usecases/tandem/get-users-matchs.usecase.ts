@@ -86,7 +86,7 @@ export class GetUserMatchUsecase {
     const languagesThatCanBeLearnt =
       await this.languageRepository.getLanguagesProposedToLearning();
 
-    this.logger.debug(
+    this.logger.verbose(
       `Found ${targets.length} potential learningLanguages match in universities ${command.universityIds} for learningLanguage ${command.id}`,
     );
 
