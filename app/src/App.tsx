@@ -36,6 +36,7 @@ import Store from './store/store';
 setupIonicReact();
 
 const AppContext = () => {
+    const { i18n } = useTranslation();
     const rehydrated = useStoreRehydrated();
     const accessToken = useStoreState((state) => state.accessToken);
     const refreshToken = useStoreState((state) => state.refreshToken);
@@ -67,7 +68,15 @@ const AppContext = () => {
 
     return (
         <ConfigContext.Provider
-            value={getConfigContextValue(accessToken, refreshToken, setProfile, setTokens, setUser, configuration)}
+            value={getConfigContextValue(
+                i18n.language,
+                accessToken,
+                refreshToken,
+                setProfile,
+                setTokens,
+                setUser,
+                configuration
+            )}
         >
             <IonReactRouter>
                 <Router />
