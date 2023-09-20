@@ -72,28 +72,32 @@ const SignUpLanguagesPage: React.FC = () => {
                     />
                 </div>
 
-                <div className="margin-bottom">
+                {myLanguage && (
+                    <div className="margin-bottom">
+                        <Dropdown<Language>
+                            onChange={(item) => pushOtherLanguage(item, 0)}
+                            options={languages.filter(
+                                (language) =>
+                                    language.value.name !== myLanguage?.name &&
+                                    (!otherLanguages[1] || otherLanguages[1].name !== language.value.name)
+                            )}
+                            placeholder={t('signup_languages_page.placeholder_first_optional_language')}
+                            title={t('signup_languages_page.other_languages')}
+                        />
+                    </div>
+                )}
+
+                {otherLanguages[0] && (
                     <Dropdown<Language>
-                        onChange={(item) => pushOtherLanguage(item, 0)}
+                        onChange={(item) => pushOtherLanguage(item, 1)}
                         options={languages.filter(
                             (language) =>
                                 language.value.name !== myLanguage?.name &&
-                                (!otherLanguages[1] || otherLanguages[1].name !== language.value.name)
+                                (!otherLanguages[0] || otherLanguages[0].name !== language.value.name)
                         )}
-                        placeholder={t('signup_languages_page.placeholder_first_optional_language')}
-                        title={t('signup_languages_page.other_languages')}
+                        placeholder={t('signup_languages_page.placeholder_second_optional_language')}
                     />
-                </div>
-
-                <Dropdown<Language>
-                    onChange={(item) => pushOtherLanguage(item, 1)}
-                    options={languages.filter(
-                        (language) =>
-                            language.value.name !== myLanguage?.name &&
-                            (!otherLanguages[0] || otherLanguages[0].name !== language.value.name)
-                    )}
-                    placeholder={t('signup_languages_page.placeholder_second_optional_language')}
-                />
+                )}
 
                 <div className={styles['bottom-container']}>
                     <button
