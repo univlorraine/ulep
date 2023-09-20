@@ -7,6 +7,7 @@ export const ConfigContext = createContext<ConfigContextValueType>(
     getConfigContextValue(
         '',
         '',
+        '',
         () => null,
         () => null,
         () => null,

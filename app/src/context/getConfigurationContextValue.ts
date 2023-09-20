@@ -24,6 +24,7 @@ import UpdateNotificationPermissionUsecase from '../domain/usecases/UpdateNotifi
 import { ConfigContextValueType } from './configurationContextTypes';
 
 const getConfigContextValue = (
+    languageCode: string,
     accessToken: string,
     refreshToken: string,
     setProfile: Function,
@@ -35,7 +36,8 @@ const getConfigContextValue = (
     const domainHttpAdapter = new DomainHttpAdapter(
         import.meta.env.VITE_API_URL ?? 'https://api.ulep.thestaging.io',
         accessToken,
-        refreshToken
+        refreshToken,
+        languageCode
     );
 
     const askForAccountDeletion = new AskForAccountDeletion(domainHttpAdapter);

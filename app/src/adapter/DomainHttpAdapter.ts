@@ -24,18 +24,22 @@ class DomainHttpAdapter extends BaseHttpAdapter implements HttpAdapterInterface 
 
     apiUrl: string = '';
 
+    languageCode: string = '';
+
     refreshToken: string = '';
 
-    constructor(apiUrl: string, accessToken: string, refreshToken: string) {
+    constructor(apiUrl: string, accessToken: string, refreshToken: string, languageCode: string) {
         super();
         this.accessToken = accessToken;
         this.apiUrl = apiUrl;
+        this.languageCode = languageCode;
         this.refreshToken = refreshToken;
     }
 
     private getHeaders(): any {
         return {
             Authorization: `Bearer ${this.accessToken}`,
+            'Language-code': this.languageCode,
         };
     }
 
