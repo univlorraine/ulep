@@ -88,7 +88,7 @@ const countriesCodeWithFlags: [string, string][] = [
     ['pa', '🇮🇳'], // Punjabi - India
     ['pl', '🇵🇱'], // Polish - Poland
     ['ps', '🇦🇫'], // Pashto - Afghanistan
-    ['pt', '🇧🇷'], // Portuguese - Brazil
+    ['pt', '🇵🇹'], // Portuguese - Portugal
     ['qu', '🇵🇪'], // Quechua - Peru
     ['rm', '🇨🇭'], // Romansh - Switzerland
     ['rn', '🇧🇮'], // Rundi - Burundi
