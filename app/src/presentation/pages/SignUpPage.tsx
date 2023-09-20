@@ -32,9 +32,9 @@ const SignUpPage: React.FC = () => {
         !university ||
         !country ||
         !selectedRole ||
-        !department ||
-        (!diplome && selectedRole === 'student') ||
-        (!staffFunction && selectedRole === 'staff');
+        (!department && university.isCentral) ||
+        (!diplome && selectedRole === 'student' && university.isCentral) ||
+        (!staffFunction && selectedRole === 'staff' && university.isCentral);
 
     const getSignUpData = async () => {
         const countriesResult = await getAllCountries.execute();
