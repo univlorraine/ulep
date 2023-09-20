@@ -130,12 +130,12 @@ export class CreateTandemUsecase {
       await this.tandemsRepository.deleteTandemLinkedToLearningLanguages(
         learningLanguages.map((ll) => ll.id),
       );
-    this.logger.debug(
+    this.logger.verbose(
       `Removed ${countDeletedTandem} tandems linked to learning languages of created tandem`,
     );
 
     await this.tandemsRepository.save(tandem);
-    this.logger.debug(
+    this.logger.verbose(
       `Tandem ${tandem.id} created with status ${tandem.status}`,
     );
 
