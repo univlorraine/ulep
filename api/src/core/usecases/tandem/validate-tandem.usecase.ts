@@ -2,6 +2,11 @@ import { TandemRepository } from '../../ports/tandems.repository';
 import { Inject, Injectable, Logger } from '@nestjs/common';
 import { DomainError, RessourceDoesNotExist } from 'src/core/errors';
 import { Tandem, TandemStatus } from 'src/core/models';
+import { EMAIL_TEMPLATE_IDS } from 'src/core/models/email-content.model';
+import {
+  EMAIL_TEMPLATE_REPOSITORY,
+  EmailTemplateRepository,
+} from 'src/core/ports/email-template.repository';
 import { EMAIL_GATEWAY, EmailGateway } from 'src/core/ports/email.gateway';
 import { TANDEM_REPOSITORY } from 'src/core/ports/tandems.repository';
 import {
@@ -23,6 +28,8 @@ export class ValidateTandemUsecase {
     private readonly tandemRepository: TandemRepository,
     @Inject(UNIVERSITY_REPOSITORY)
     private readonly universityRepository: UniversityRepository,
+    @Inject(EMAIL_TEMPLATE_REPOSITORY)
+    private readonly emailTemplateRepository: EmailTemplateRepository,
     @Inject(EMAIL_GATEWAY)
     private readonly emailGateway: EmailGateway,
   ) {}
@@ -71,17 +78,22 @@ export class ValidateTandemUsecase {
     await this.tandemRepository.update(updatedTandem);
 
     if (updatedTandem.status === TandemStatus.ACTIVE) {
-      // TODO(NOW): manage failure, translations and templating
       const [learningLanguage1, learningLanguage2] = tandem.learningLanguages;
+      const emailContentProfile1 = await this.emailTemplateRepository.getEmail(
+        EMAIL_TEMPLATE_IDS.TANDEM_BECOME_ACTIVE,
+        learningLanguage1.profile.nativeLanguage.code,
+      );
+      const emailContentProfile2 = await this.emailTemplateRepository.getEmail(
+        EMAIL_TEMPLATE_IDS.TANDEM_BECOME_ACTIVE,
+        learningLanguage2.profile.nativeLanguage.code,
+      );
       await this.emailGateway.send({
         recipient: learningLanguage1.profile.user.email,
-        subject: 'Subject to translate to user1 language',
-        content: 'content to translate to user1 language and template',
+        email: emailContentProfile1,
       });
       await this.emailGateway.send({
         recipient: learningLanguage2.profile.user.email,
-        subject: 'Subject to translate to user2 language',
-        content: 'content to translate to user2 language and template',
+        email: emailContentProfile2,
       });
     }
   }

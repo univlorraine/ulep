@@ -16,6 +16,11 @@ export type Configuration = {
   CANCEL_TRESHOLD_IN_MIN: number;
   smtp: SmtpConfiguration;
   logLevel: string;
+  emailTranslations: {
+    cacheInSec: number;
+    endpoint: string;
+    component: string;
+  };
 };
 
 export const configuration = (): Configuration => ({
@@ -41,4 +46,13 @@ export const configuration = (): Configuration => ({
     sender: process.env.SMTP_SENDER || 'test@ulep.fr',
   },
   logLevel: process.env.LOG_LEVEL || 'warn',
+  emailTranslations: {
+    cacheInSec: process.env.EMAIL_TRANSLATIONS_CACHE
+      ? parseInt(process.env.EMAIL_TRANSLATIONS_CACHE)
+      : 60 * 60,
+    endpoint:
+      process.env.EMAIL_TRANSLATIONS_ENDPOINT ||
+      'https://raw.githubusercontent.com/thetribeio/locales_ulep/main/locales',
+    component: process.env.EMAIL_TRANSLATIONS_COMPONENT || 'emails',
+  },
 });

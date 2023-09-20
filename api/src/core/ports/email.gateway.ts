@@ -1,9 +1,10 @@
+import EmailContent from '../models/email-content.model';
+
 export const EMAIL_GATEWAY = 'email.gateway';
 
 export interface SendEmailPayload {
   recipient: string;
-  subject: string;
-  content: string;
+  email: EmailContent;
 }
 
 export interface EmailGateway {

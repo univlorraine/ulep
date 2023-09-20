@@ -36,6 +36,8 @@ import { REFUSED_TANDEMS_REPOSITORY } from 'src/core/ports/refused-tandems.repos
 import { PrismaRefusedTandemsRepository } from './persistance/repositories/prisma-refused-tandems.repository';
 import { EMAIL_GATEWAY } from 'src/core/ports/email.gateway';
 import { SmtpEmailGateway } from './gateway/smtp-email.gateway';
+import { EMAIL_TEMPLATE_REPOSITORY } from 'src/core/ports/email-template.repository';
+import TranslatedEmailTemplateRepository from './persistance/repositories/translated-email-template.repository';
 
 const providers: Provider[] = [
   {
@@ -109,6 +111,10 @@ const providers: Provider[] = [
   {
     provide: EMAIL_GATEWAY,
     useClass: SmtpEmailGateway,
+  },
+  {
+    provide: EMAIL_TEMPLATE_REPOSITORY,
+    useClass: TranslatedEmailTemplateRepository,
   },
 ];
 
