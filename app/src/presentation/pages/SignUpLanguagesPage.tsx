@@ -8,6 +8,7 @@ import { useStoreActions } from '../../store/storeTypes';
 import Dropdown, { DropDownItem } from '../components/DropDown';
 import WebLayoutCentered from '../components/layout/WebLayoutCentered';
 import styles from './css/SignUp.module.css';
+import { codeLanguageToFlag } from '../utils';
 
 const SignUpLanguagesPage: React.FC = () => {
     const { t } = useTranslation();
@@ -26,7 +27,12 @@ const SignUpLanguagesPage: React.FC = () => {
             return await showToast({ message: t(result.message), duration: 1000 });
         }
 
-        return setLanguages(result.map((language) => ({ title: language.name, value: language })));
+        return setLanguages(
+            result.map((language) => ({
+                title: codeLanguageToFlag(language.code) + ' ' + language.name,
+                value: language,
+            }))
+        );
     };
 
     const pushOtherLanguage = (item: Language, index: number) => {
@@ -71,8 +77,8 @@ const SignUpLanguagesPage: React.FC = () => {
                         onChange={(item) => pushOtherLanguage(item, 0)}
                         options={languages.filter(
                             (language) =>
-                                language.title !== myLanguage?.name &&
-                                (!otherLanguages[1] || otherLanguages[1].name !== language.title)
+                                language.value.name !== myLanguage?.name &&
+                                (!otherLanguages[1] || otherLanguages[1].name !== language.value.name)
                         )}
                         placeholder={t('signup_languages_page.placeholder_first_optional_language')}
                         title={t('signup_languages_page.other_languages')}
@@ -83,8 +89,8 @@ const SignUpLanguagesPage: React.FC = () => {
                     onChange={(item) => pushOtherLanguage(item, 1)}
                     options={languages.filter(
                         (language) =>
-                            language.title !== myLanguage?.name &&
-                            (!otherLanguages[0] || otherLanguages[0].name !== language.title)
+                            language.value.name !== myLanguage?.name &&
+                            (!otherLanguages[0] || otherLanguages[0].name !== language.value.name)
                     )}
                     placeholder={t('signup_languages_page.placeholder_second_optional_language')}
                 />
