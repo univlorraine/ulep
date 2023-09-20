@@ -83,6 +83,14 @@ class CreateUserUsecase implements CreateUserUsecaseInterface {
                 return new Error('errors.global');
             }
 
+            if (error.statusCode === 400 && error.message.includes('expected size')) {
+                return new Error('signup_informations_page.error_picture_weight');
+            }
+
+            if (error.statusCode === 400 && error.message.includes('expected type')) {
+                return new Error('signup_informations_page.error_picture_format');
+            }
+
             if (error.statusCode === 409) {
                 return new Error('signup_informations_page.error_email_already_exist');
             }

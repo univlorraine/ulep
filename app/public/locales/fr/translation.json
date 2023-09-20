@@ -349,6 +349,8 @@
         "error_gender": "Veuillez choisir un genre",
         "error_lastname": "Veuillez saisir un nom valide",
         "error_password": "Veuillez saisir un mot de passe valide ( au moins une majuscule, un chiffre et une lettre )",
+        "error_picture_format": "L'image séléctionnée n'a pas un format valide ( JPG, PNG ou JPEG )",
+        "error_picture_weight": "L'image séléctionnée est trop lourde",
         "photo": "Ajouter une photo",
         "photo_selected": "Modifier",
         "placeholder_age": "Entre ton âge",
