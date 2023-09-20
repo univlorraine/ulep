@@ -94,6 +94,8 @@ spec:
               value: "{{ .Values.auth.env.proxyAddressForwarding }}"
             - name: KEYCLOAK_HOSTNAME
               value: "{{ .Values.keycloakUrl }}.{{ .Values.domain }}"
+            - name: KC_LOG_LEVEL
+              value: "{{ .Values.auth.env.logLevel }}"
           envFrom: 
             - secretRef: 
                 name: "{{ include "etandem.fullname" . }}-secret-{{ .Values.auth.name }}"

@@ -52,6 +52,7 @@ api:
     smtpSecure: true # REQUIRED
     smtpSender: tandems@ulep.fr # REQUIRED
     smtpDisableBootVerification: false # REQUIRED
+    logLevel: warn # OPTIONNEL
 
   autoscaling:
     enabled: false
@@ -94,6 +95,8 @@ auth:
     kcDB: postgres # FIXE
     kcDBSchema: keycloak # FIXE
     proxyAddressForwarding: true 
+    logLevel: INFO # REQUIRED
+
 
   autoscaling:
     enabled: false

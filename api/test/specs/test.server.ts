@@ -25,7 +25,6 @@ export class TestServer extends Server {
   }
 
   getService(service: string): any {
-    console.log('service', service);
     return this.app.get(service);
   }
 

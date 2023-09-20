@@ -60,7 +60,7 @@ export class RefuseTandemUsecase {
       );
 
     if (existingTandem) {
-      this.logger.debug(
+      this.logger.verbose(
         `Found tandem ${existingTandem.id} with status ${
           existingTandem.status
         } while refusing tandem for learningLanuguages ${learningLanguageIds.join(

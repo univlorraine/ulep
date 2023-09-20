@@ -246,7 +246,7 @@ export class KeycloakClient {
       },
     );
 
-    this.logger.debug(response.status);
+    this.logger.verbose(response.status);
 
     if (response.status === 401) {
       throw new InvalidCredentialsException();

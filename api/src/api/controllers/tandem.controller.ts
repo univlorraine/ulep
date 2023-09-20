@@ -57,7 +57,7 @@ export class TandemController {
       status: RoutineStatus.ENDED,
     });
     if (lastRoutine) {
-      this.logger.debug(`Relaunch global routine ${lastRoutine.id}`);
+      this.logger.verbose(`Relaunch global routine ${lastRoutine.id}`);
       await this.generate(user, {
         universityIds: lastRoutine.universities.map(
           (university) => university.id,
