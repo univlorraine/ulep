@@ -77,7 +77,8 @@ const SignUpInterestsPage: React.FC = () => {
                                                 onClick={() => interestPressed(interest)}
                                                 style={{
                                                     backgroundColor: isInclued ? '#FDEE66' : 'white',
-                                                    borderWidth: isInclued ? 0 : 1,
+                                                    borderWidth: 1,
+                                                    borderColor: isInclued ? '#FDEE66' : 'black',
                                                 }}
                                             >
                                                 <span className={interestStyle['tags-text']}>{interest.name}</span>
