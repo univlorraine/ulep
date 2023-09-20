@@ -5,6 +5,7 @@ interface SmtpConfiguration {
   port: number;
   secure: boolean;
   sender: string;
+  disableBootVerification: boolean;
 }
 
 export type Configuration = {
@@ -31,6 +32,8 @@ export const configuration = (): Configuration => ({
   CANCEL_TRESHOLD_IN_MIN:
     parseInt(process.env.CANCEL_TRESHOLD_IN_MIN, 10) || 15,
   smtp: {
+    disableBootVerification:
+      process.env.SMTP_DISABLE_BOOT_VERIFICATION === 'true',
     host: process.env.SMTP_HOST || 'localhost',
     port: process.env.SMTP_PORT ? parseInt(process.env.SMTP_PORT, 10) : 25,
     secure: process.env.SMTP_SECURE === 'true',
