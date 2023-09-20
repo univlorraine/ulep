@@ -17,6 +17,8 @@ const PairingOptionsPage: React.FC = () => {
     const [isForCertificate, setIsForCertificate] = useState<boolean>(false);
     const [isForProgram, setIsForProgram] = useState<boolean>(false);
 
+    const isAllFieldsEmpty = !isForCertificate && !isForProgram;
+
     const onNextStepPressed = () => {
         updateProfileSignUp({ sameTandem, isForCertificate, isForProgram });
         return history.push(`${isSignUp ? '/' + isSignUp : '/'}pairing/end`);
@@ -68,7 +70,11 @@ const PairingOptionsPage: React.FC = () => {
                     </div>
                 </div>
                 <div className="extra-large-margin-bottom">
-                    <button className="primary-button large-margin-bottom" onClick={onNextStepPressed}>
+                    <button
+                        className={`primary-button large-margin-bottom ${isAllFieldsEmpty ? 'disabled' : ''}`}
+                        disabled={isAllFieldsEmpty}
+                        onClick={onNextStepPressed}
+                    >
                         {t('pairing_options_page.validate_button')}
                     </button>
                     <button
