@@ -55,7 +55,7 @@ export class UserController {
   @Swagger.ApiCreatedResponse({ type: UserResponse })
   async create(
     @Body() body: CreateUserRequest,
-    @UploadedFile(new ImagesFilePipe()) file: Express.Multer.File,
+    @UploadedFile(new ImagesFilePipe()) file?: Express.Multer.File,
   ) {
     let user = await this.createUserUsecase.execute({ ...body });
     if (file) {
