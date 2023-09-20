@@ -163,7 +163,7 @@ export const isPasswordCorrect = (password: string) => {
 };
 
 export const isEmailCorrect = (email: string) => {
-    const regex = /^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/;
+    const regex = /^[\w-\.+]+@([\w-]+\.)+[\w-]{2,4}$/;
 
     return regex.test(email);
 };
