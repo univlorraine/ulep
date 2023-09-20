@@ -43,7 +43,7 @@ const SignUpPage: React.FC = () => {
         );
     };
 
-    const continueSignUp = () => {
+    const continueSignUp = async () => {
         if (
             !university ||
             !country ||
@@ -52,7 +52,7 @@ const SignUpPage: React.FC = () => {
             (selectedRole === 'staff' && !staffFunction) ||
             !department
         ) {
-            return setDisplayError(true);
+            return await showToast({ message: t('signup_page.missing_field'), duration: 3000 });
         }
         const now = new Date();
         if (university.admissionEnd < now || university.admissionStart > now) {
