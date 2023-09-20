@@ -46,8 +46,6 @@ export class UpdateUniversityUsecase {
       throw new RessourceAlreadyExists('Country does not exist');
     }
 
-    this.logger.debug(`Update university payload`, command);
-
     return this.universityRepository.update(
       new University({
         id: university.id,

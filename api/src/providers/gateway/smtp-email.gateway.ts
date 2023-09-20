@@ -19,7 +19,6 @@ export class SmtpEmailGateway implements EmailGateway {
     });
     this.#from = smtp.sender;
 
-    this.logger.debug('meta', this.#transporter.meta);
     this.logger.debug(
       `Smtp email gateway setup with transport ${smtp.host}:${smtp.port}; secure: ${smtp.secure}; from: ${smtp.sender}`,
     );
@@ -40,7 +39,6 @@ export class SmtpEmailGateway implements EmailGateway {
   }
 
   send({ recipient, subject, content }: SendEmailPayload): Promise<void> {
-    this.logger.debug(`Send email to ${recipient}`);
     return new Promise((resolve, reject) => {
       this.#transporter.sendMail(
         {

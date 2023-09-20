@@ -156,8 +156,6 @@ workflows:
               only:
                 - develop
                 - main
-                - ci/debug-emails
-                - ci-debug-emails
   check_admin:
     jobs:
       - lint-admin
