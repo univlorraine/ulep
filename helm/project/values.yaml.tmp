@@ -52,6 +52,7 @@ api:
     smtpSecure: true # REQUIRED
     smtpSender: tandems@ulep.fr # REQUIRED
     smtpDisableBootVerification: false # REQUIRED
+    logLevel: warn # OPTIONNEL
 
   autoscaling:
     enabled: false

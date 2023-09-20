@@ -94,6 +94,8 @@ spec:
               value: "{{ .Values.api.env.smtpSender }}"
             - name: SMTP_DISABLE_BOOT_VERIFICATION
               value: "{{ .Values.api.env.smtpDisableBootVerification }}"
+            - name: LOG_LEVEL
+              value: "{{ .Values.api.env.logLevel }}"
           envFrom:
             - secretRef: 
                 name: "{{ include "etandem.fullname" . }}-secret-{{ .Values.api.name }}"
