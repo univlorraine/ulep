@@ -1,12 +1,11 @@
 import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
 import { Expose, Transform } from 'class-transformer';
 import { InterestResponse } from 'src/api/dtos/interests';
-import { LearningType, Profile } from 'src/core/models/profile.model';
+import { Profile } from 'src/core/models/profile.model';
 import { UserResponse } from '../users';
 import { ObjectiveResponse } from '../objective';
 import { BiographyDto } from './biography';
 import { Language } from 'src/core/models';
-import { CampusResponse } from '../campus';
 import { LearningLanguageResponse } from '../learning-languages';
 import { IsObject, ValidateNested, IsBoolean } from 'class-validator';
 import { AvailabilitesDto } from 'src/api/dtos/profiles/availabilities';
@@ -102,22 +101,6 @@ export class ProfileResponse {
   @Expose({ groups: ['read'] })
   biography?: BiographyDto;
 
-  @ApiProperty({ type: CampusResponse, nullable: true })
-  @Expose({ groups: ['read'] })
-  campus: CampusResponse;
-
-  @ApiProperty({ type: 'boolean' })
-  @Expose({ groups: ['read'] })
-  certificateOption: boolean;
-
-  @ApiProperty({ type: 'boolean' })
-  @Expose({ groups: ['read'] })
-  specificProgram: boolean;
-
-  @ApiProperty({ type: 'string', enum: LearningType })
-  @Expose({ groups: ['read'] })
-  learningType: LearningType;
-
   constructor(partial: Partial<ProfileResponse>) {
     Object.assign(this, partial);
   }
@@ -149,10 +132,6 @@ export class ProfileResponse {
       availabilitiesNotePrivacy: profile.availavilitiesNotePrivacy,
       biography:
         profile.biography && BiographyDto.fromDomain(profile.biography),
-      campus: profile.campus && CampusResponse.fromCampus(profile.campus),
-      certificateOption: profile.certificateOption,
-      specificProgram: profile.specificProgram,
-      learningType: profile.learningType,
     });
   }
 }

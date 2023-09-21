@@ -6,7 +6,6 @@ import {
   ArrayMinSize,
   IsArray,
   IsBoolean,
-  IsEnum,
   IsNotEmpty,
   IsObject,
   IsOptional,
@@ -23,6 +22,13 @@ import { AvailabilitesDto } from 'src/api/dtos/profiles/availabilities';
 export class CreateProfileRequest
   implements Omit<CreateProfileCommand, 'user'>
 {
+  learningType: LearningType;
+  sameGender: boolean;
+  sameAge: boolean;
+  bios?: string;
+  campusId?: string;
+  certificateOption?: boolean;
+  specificProgram?: boolean;
   // TODO(herve): we should use ids instead of codes
   @Swagger.ApiProperty({ type: 'string', example: 'FR' })
   @IsNotEmpty()
@@ -40,10 +46,6 @@ export class CreateProfileRequest
   @IsOptional()
   masteredLanguageCodes?: string[];
 
-  @Swagger.ApiProperty({ enum: LearningType })
-  @IsEnum(LearningType)
-  learningType: LearningType;
-
   @Swagger.ApiProperty({ type: 'string', isArray: true, format: 'uuid' })
   @IsUUID('4', { each: true })
   objectives: string[];
@@ -57,14 +59,6 @@ export class CreateProfileRequest
   @ArrayMinSize(5)
   @IsNotEmpty({ each: true })
   interests: string[];
-
-  @Swagger.ApiProperty()
-  @IsBoolean()
-  sameGender: boolean;
-
-  @Swagger.ApiProperty()
-  @IsBoolean()
-  sameAge: boolean;
 
   @Swagger.ApiProperty({ type: AvailabilitesDto })
   @Transform(({ value }) => new AvailabilitesDto(value))
@@ -87,19 +81,4 @@ export class CreateProfileRequest
   @IsObject()
   @ValidateNested()
   biography: BiographyDto;
-
-  @Swagger.ApiProperty({ type: 'string' })
-  @IsUUID()
-  @IsOptional()
-  campusId?: string;
-
-  @Swagger.ApiProperty()
-  @IsBoolean()
-  @IsOptional()
-  certificateOption?: boolean;
-
-  @Swagger.ApiProperty()
-  @IsBoolean()
-  @IsOptional()
-  specificProgram?: boolean;
 }

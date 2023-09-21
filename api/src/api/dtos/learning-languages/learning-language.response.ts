@@ -1,9 +1,14 @@
 import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
 import { Expose } from 'class-transformer';
 import { ProfileResponse } from '../profiles';
-import { LearningLanguage, LearningLanguageWithTandem } from 'src/core/models';
+import {
+  LearningLanguage,
+  LearningLanguageWithTandem,
+  LearningType,
+} from 'src/core/models';
 import { Optional } from '@nestjs/common';
 import { TandemResponse } from '../tandems';
+import { CampusResponse } from '../campus';
 
 export class LearningLanguageResponse {
   @ApiProperty({ type: 'string', format: 'uuid' })
@@ -31,6 +36,22 @@ export class LearningLanguageResponse {
   @Expose({ groups: ['read'] })
   createdAt?: Date;
 
+  @ApiProperty({ type: CampusResponse, nullable: true })
+  @Expose({ groups: ['read'] })
+  campus: CampusResponse;
+
+  @ApiProperty({ type: 'boolean' })
+  @Expose({ groups: ['read'] })
+  certificateOption: boolean;
+
+  @ApiProperty({ type: 'boolean' })
+  @Expose({ groups: ['read'] })
+  specificProgram: boolean;
+
+  @ApiProperty({ type: 'string', enum: LearningType })
+  @Expose({ groups: ['read'] })
+  learningType: LearningType;
+
   constructor(partial: Partial<LearningLanguageResponse>) {
     Object.assign(this, partial);
   }
@@ -39,6 +60,7 @@ export class LearningLanguageResponse {
     learningLanguage: LearningLanguage,
     includeProfile = false,
   ): LearningLanguageResponse {
+    // TODO(NOW+1): refacto clean
     if (includeProfile) {
       return new LearningLanguageResponse({
         id: learningLanguage.id,
@@ -47,6 +69,12 @@ export class LearningLanguageResponse {
         level: learningLanguage.level,
         profile: ProfileResponse.fromDomain(learningLanguage.profile),
         createdAt: learningLanguage.createdAt,
+        campus:
+          learningLanguage.campus &&
+          CampusResponse.fromCampus(learningLanguage.campus),
+        certificateOption: learningLanguage.certificateOption,
+        specificProgram: learningLanguage.specificProgram,
+        learningType: learningLanguage.learningType,
       });
     }
 
@@ -56,6 +84,12 @@ export class LearningLanguageResponse {
       code: learningLanguage.language.code,
       level: learningLanguage.level,
       createdAt: learningLanguage.createdAt,
+      campus:
+        learningLanguage.campus &&
+        CampusResponse.fromCampus(learningLanguage.campus),
+      certificateOption: learningLanguage.certificateOption,
+      specificProgram: learningLanguage.specificProgram,
+      learningType: learningLanguage.learningType,
     });
   }
 }
