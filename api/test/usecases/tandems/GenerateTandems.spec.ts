@@ -23,6 +23,7 @@ import { InMemoryTandemRepository } from 'src/providers/persistance/repositories
 import { InMemoryRefusedTandemsRepository } from 'src/providers/persistance/repositories/in-memory-refused-tandems-repository';
 import { UuidProvider } from 'src/providers/services/uuid.provider';
 import InMemoryEmailGateway from 'src/providers/gateway/in-memory-email.gateway';
+import { InMemoryEmailTemplateRepository } from 'src/providers/persistance/repositories/in-memory-email-template-repository';
 
 // Note: learning language comparison is based on ID
 const checkTandemArrayContainsTandem = (
@@ -66,6 +67,7 @@ describe('GenerateTandem UC', () => {
   const languageRepository = new InMemoryLanguageRepository();
   const refusedTandemsRepository = new InMemoryRefusedTandemsRepository();
   const inMemoryEmailGateway = new InMemoryEmailGateway();
+  const inMemoryEmailTemplateGateway = new InMemoryEmailTemplateRepository();
 
   const uc = new GenerateTandemsUsecase(
     tandemsRepository,
@@ -73,6 +75,7 @@ describe('GenerateTandem UC', () => {
     uuidProvider,
     languageRepository,
     refusedTandemsRepository,
+    inMemoryEmailTemplateGateway,
     inMemoryEmailGateway,
   );
 
