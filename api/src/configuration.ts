@@ -17,7 +17,6 @@ export type Configuration = {
   smtp: SmtpConfiguration;
   logLevel: string;
   emailTranslations: {
-    cacheInSec: number;
     endpoint: string;
     component: string;
   };
@@ -47,9 +46,6 @@ export const configuration = (): Configuration => ({
   },
   logLevel: process.env.LOG_LEVEL || 'warn',
   emailTranslations: {
-    cacheInSec: process.env.EMAIL_TRANSLATIONS_CACHE
-      ? parseInt(process.env.EMAIL_TRANSLATIONS_CACHE)
-      : 60 * 60,
     endpoint:
       process.env.EMAIL_TRANSLATIONS_ENDPOINT ||
       'https://raw.githubusercontent.com/thetribeio/locales_ulep/main/locales',

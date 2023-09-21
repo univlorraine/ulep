@@ -12,14 +12,12 @@ import EmailContent, {
 import { EmailTemplateRepository } from 'src/core/ports/email-template.repository';
 import getMailFromTemplate from './templates/tandemBecomeActive';
 
-// TODO(NOW): clean config
-
 const config = configuration();
 
 const LANGUAGES = ['en', 'fr', 'cn'];
 
 const fallbackResources = {
-  cn: {
+  en: {
     translation: {
       [EMAIL_TEMPLATE_IDS.TANDEM_BECOME_ACTIVE]: {
         subject: "Your tandem's partner is ready to start",
@@ -32,7 +30,6 @@ const fallbackResources = {
           ],
           signature: "Tandem's team of Lorraine university",
         },
-        paragraphTest: ['We are happy', 'best regards'],
       },
       [EMAIL_TEMPLATE_IDS.TANDEM_TO_REVIEW]: {
         subject: 'You have suggested or pending tandems',
@@ -54,9 +51,6 @@ export default class TranslatedEmailTemplateRepository
   implements EmailTemplateRepository
 {
   private readonly logger = new Logger(TranslatedEmailTemplateRepository.name);
-
-  #lastTranslationsFetch: { [locale: string]: Date } = {};
-  #translations: { [locale: string]: any };
 
   constructor() {
     const url = `${config.emailTranslations.endpoint}/{{lng}}/${config.emailTranslations.component}.json`;
