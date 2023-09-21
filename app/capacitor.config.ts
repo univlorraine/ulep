@@ -7,6 +7,11 @@ const baseConfig: CapacitorConfig = {
     server: {
         androidScheme: 'https',
     },
+    plugins: {
+        Keyboard: {
+            resize: 'native',
+        },
+    },
 };
 
 switch (process.env.ENV) {

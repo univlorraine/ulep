@@ -3,7 +3,10 @@
 @import url('https://fonts.googleapis.com/css?family=Poppins&display=swap');
 
 .ios .content-wrapper {
-    padding-top: 25px;
+    padding-bottom: constant(safe-area-inset-bottom) !important;
+    padding-bottom: env(safe-area-inset-bottom) !important;
+    padding-top: constant(safe-area-inset-top) !important;
+    padding-top: env(safe-area-inset-top) !important;
 }
 
 .ion-page {
@@ -34,6 +37,10 @@
     min-height: 100vh;
     height: auto;
     z-index: 1;
+}
+
+.ios .white-centered-div {
+    min-height: 100%;
 }
 
 .container {
