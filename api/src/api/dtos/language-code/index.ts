@@ -42,6 +42,16 @@ export class LanguageRequestsCountResponse {
   constructor(partial: Partial<LanguageRequestsCountResponse>) {
     Object.assign(this, partial);
   }
+
+  static fromDomain(instance: {
+    code: string;
+    count: number;
+  }): LanguageRequestsCountResponse {
+    return new LanguageRequestsCountResponse({
+      code: instance.code,
+      count: instance.count,
+    });
+  }
 }
 
 export class SuggestedLanguageResponse {
