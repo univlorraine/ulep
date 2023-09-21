@@ -1,5 +1,12 @@
+import Campus from './Campus';
 import { Profile } from './Profile';
 import { TandemStatus, TandemSummary } from './Tandem';
+
+export enum LearningType {
+    ETANDEM = 'ETANDEM',
+    TANDEM = 'TANDEM',
+    BOTH = 'BOTH',
+}
 
 export type LearningLanguage = {
     id: string;
@@ -9,6 +16,12 @@ export type LearningLanguage = {
     createdAt: Date;
     profile: Profile;
     tandem?: TandemSummary;
+    sameGender: boolean;
+    learningType: LearningType;
+    sameAge: boolean;
+    campus?: Campus;
+    certificateOption?: boolean;
+    specificProgram?: boolean;
 };
 
 export type LearningLanguageTandem = {
@@ -29,3 +42,14 @@ export const learningLanguageHasPossibleAction = (learningLanguage?: LearningLan
     learningLanguage?.tandem?.status &&
     learningLanguage?.tandem?.status !== TandemStatus.ACTIVE &&
     learningLanguage?.tandem?.status !== TandemStatus.INACTIVE;
+
+export const getLearningLanguageUniversityAndCampusString = (learningLanguage?: LearningLanguage) => {
+    if (!learningLanguage) {
+        return '';
+    }
+    if (learningLanguage.campus) {
+        return `${learningLanguage.profile.user.university.name} - ${learningLanguage.campus.name}`;
+    }
+
+    return `${learningLanguage.profile.user.university.name}`;
+};
