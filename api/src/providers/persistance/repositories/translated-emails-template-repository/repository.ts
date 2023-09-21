@@ -5,7 +5,7 @@ import * as i18n from 'i18next';
 import * as HttpBackend from 'i18next-http-backend';
 import * as ChainedBackend from 'i18next-chained-backend';
 import * as resourcesToBackend from 'i18next-resources-to-backend';
-import { configuration } from 'src/configuration';
+import { configuration, getLoggerLevels } from 'src/configuration';
 import EmailContent, {
   EMAIL_TEMPLATE_IDS,
 } from 'src/core/models/email-content.model';
@@ -57,7 +57,7 @@ export default class TranslatedEmailTemplateRepository
     const fallbackBackend = (resourcesToBackend as any)(fallbackResources);
     i18n.use(ChainedBackend as any).init<ChainedBackend.ChainedBackendOptions>({
       fallbackLng: LANGUAGES,
-      // debug: true, // TODO(NOW): enable debug
+      debug: getLoggerLevels(config.logLevel).includes('debug'),
       backend: {
         backends: [HttpBackend, fallbackBackend],
         backendOptions: [

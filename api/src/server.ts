@@ -1,7 +1,6 @@
 import {
   ClassSerializerInterceptor,
   INestApplication,
-  LogLevel,
   ValidationPipe,
 } from '@nestjs/common';
 import { HttpAdapterHost, NestFactory, Reflector } from '@nestjs/core';
@@ -13,27 +12,7 @@ import {
   CollectionInterceptor,
   HttpLoggerInterceptor,
 } from './api/interceptors';
-import { configuration } from './configuration';
-
-const getLoggerLevels = (logLevel: string): LogLevel[] => {
-  const level: LogLevel[] = [];
-  switch (logLevel) {
-    case 'verbose':
-      level.push('verbose');
-    case 'debug':
-      level.push('debug');
-    case 'warn':
-      level.push('warn');
-    case 'error':
-      level.push('error');
-    case 'log':
-      level.push('log');
-      break;
-    default:
-      break;
-  }
-  return level;
-};
+import { configuration, getLoggerLevels } from './configuration';
 
 export class Server {
   public async run(port: number): Promise<void> {

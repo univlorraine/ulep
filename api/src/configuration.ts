@@ -1,4 +1,5 @@
 import { KeycloakConfiguration } from '@app/keycloak';
+import { LogLevel } from '@nestjs/common';
 
 interface SmtpConfiguration {
   host: string;
@@ -52,3 +53,23 @@ export const configuration = (): Configuration => ({
     component: process.env.EMAIL_TRANSLATIONS_COMPONENT || 'emails',
   },
 });
+
+export const getLoggerLevels = (logLevel: string): LogLevel[] => {
+  const level: LogLevel[] = [];
+  switch (logLevel) {
+    case 'verbose':
+      level.push('verbose');
+    case 'debug':
+      level.push('debug');
+    case 'warn':
+      level.push('warn');
+    case 'error':
+      level.push('error');
+    case 'log':
+      level.push('log');
+      break;
+    default:
+      break;
+  }
+  return level;
+};
