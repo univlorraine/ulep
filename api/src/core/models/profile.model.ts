@@ -35,7 +35,6 @@ export type CreateProfileProps = {
   masteredLanguages: Language[];
   learningLanguages: LearningLanguage[];
   meetingFrequency: string;
-
   objectives: LearningObjective[];
   interests: Interest[];
   availabilities?: Availabilites;

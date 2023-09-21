@@ -48,6 +48,14 @@ export class LearningLanguageResponse {
   @Expose({ groups: ['read'] })
   specificProgram: boolean;
 
+  @ApiProperty({ type: 'boolean' })
+  @Expose({ groups: ['read'] })
+  sameGender: boolean;
+
+  @ApiProperty({ type: 'boolean' })
+  @Expose({ groups: ['read'] })
+  sameAge: boolean;
+
   @ApiProperty({ type: 'string', enum: LearningType })
   @Expose({ groups: ['read'] })
   learningType: LearningType;
@@ -75,6 +83,8 @@ export class LearningLanguageResponse {
         certificateOption: learningLanguage.certificateOption,
         specificProgram: learningLanguage.specificProgram,
         learningType: learningLanguage.learningType,
+        sameGender: learningLanguage.sameGender,
+        sameAge: learningLanguage.sameAge,
       });
     }
 
@@ -90,6 +100,8 @@ export class LearningLanguageResponse {
       certificateOption: learningLanguage.certificateOption,
       specificProgram: learningLanguage.specificProgram,
       learningType: learningLanguage.learningType,
+      sameGender: learningLanguage.sameGender,
+      sameAge: learningLanguage.sameAge,
     });
   }
 }
