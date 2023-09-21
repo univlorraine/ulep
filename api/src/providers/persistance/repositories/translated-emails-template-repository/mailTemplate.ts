@@ -29,7 +29,7 @@ const getMailFromTemplate = ({ title, content }: GetMailProps) => {
                 background-repeat: no-repeat;
                 background-size: 150%;
 
-                /* TODO: background */
+                /* TODO: background image */
                 padding: 50px;
             }
 

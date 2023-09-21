@@ -9,7 +9,7 @@ import EmailContent, {
   EMAIL_TEMPLATE_IDS,
 } from 'src/core/models/email-content.model';
 import { EmailTemplateRepository } from 'src/core/ports/email-template.repository';
-import getMailFromTemplate from './templates/tandemBecomeActive';
+import getMailFromTemplate from './mailTemplate';
 
 const config = configuration();
 
