@@ -57,14 +57,28 @@ export const createProfiles = async (
         ),
         { min: 1, max: 3 },
       )
-      .map((language) => ({
-        language: language,
-        level: enumValue(ProficiencyLevel),
-        createdAt: faker.date.between({
-          from: new Date(Date.now() - 1000 * 60 * 60 * 24 * 168),
-          to: new Date(),
-        }),
-      }));
+      .map((language) => {
+        const isCentralUniversity = !user.Organization.parent_id;
+        const campus = isCentralUniversity
+          ? faker.helpers.arrayElement(user.Organization.Places)
+          : undefined;
+        const learningType = isCentralUniversity
+          ? faker.helpers.enumValue(LearningType)
+          : LearningType.ETANDEM;
+
+        return {
+          language: language,
+          level: enumValue(ProficiencyLevel),
+          createdAt: faker.date.between({
+            from: new Date(Date.now() - 1000 * 60 * 60 * 24 * 168),
+            to: new Date(),
+          }),
+          campus,
+          learningType,
+          sameGender: faker.datatype.boolean(),
+          sameAge: faker.datatype.boolean(),
+        };
+      });
 
     let masteredLanguages = [];
     if (index % 20 === 0) {
@@ -81,15 +95,6 @@ export const createProfiles = async (
         { min: 1, max: 3 },
       );
     }
-
-    const isCentralUniversity = !user.Organization.parent_id;
-    const campus = isCentralUniversity
-      ? faker.helpers.arrayElement(user.Organization.Places)
-      : undefined;
-
-    const learningType = isCentralUniversity
-      ? faker.helpers.enumValue(LearningType)
-      : LearningType.ETANDEM;
 
     await prisma.profiles.create({
       data: {
@@ -118,20 +123,20 @@ export const createProfiles = async (
               },
               level: learningLanguage.level as ProficiencyLevel,
               created_at: learningLanguage.createdAt,
+              learning_type: learningLanguage.learningType,
+              same_gender: learningLanguage.sameGender,
+              same_age: learningLanguage.sameAge,
+              Campus: learningLanguage.campus && {
+                connect: { id: learningLanguage.campus.id },
+              },
             };
           }),
         },
-        learning_type: learningType,
-        same_gender: instance.sameGender,
-        same_age: instance.sameAge,
         meeting_frequency: instance.meetingFrequency,
         availabilities: JSON.stringify(instance.availabilities),
         availabilities_note: instance.availabilitiesNote,
         availabilities_note_privacy: instance.availavilitiesNotePrivacy,
         bio: instance.biography,
-        Campus: campus && {
-          connect: { id: campus.id },
-        },
       },
     });
   }
