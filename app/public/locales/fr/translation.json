@@ -372,7 +372,7 @@
         "country_placeholder": "Sélectionne un pays dans la liste",
         "department_title": "Département",
         "diplome_title": "Diplôme",
-        "error": "Vous ne pourrez pas aller plus loin dans le processus d’inscription",
+        "error": "Vous ne pourrez pas aller plus loin dans le processus d’inscription ( les inscriptions sont terminées pour cette université )",
         "function_title": "Fonction",
         "footer_email": "Contactez-nous à",
         "footer_university": "Votre université n'est pas encore partenaire de l'",
