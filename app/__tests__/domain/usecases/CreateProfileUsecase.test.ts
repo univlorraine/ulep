@@ -34,6 +34,16 @@ const payload: ProfileCommand = {
         favoritePlace: 'place',
         superpower: 'power',
     },
+    availabilities: {
+        monday: 'AVAILABLE',
+        tuesday: 'AVAILABLE',
+        wednesday: 'AVAILABLE',
+        thursday: 'AVAILABLE',
+        friday: 'AVAILABLE',
+        saturday: 'AVAILABLE',
+        sunday: 'AVAILABLE',
+    },
+    availabilitiesNote: 'note',
     user: {
         id: 'userId',
         avatar: { id: 'avatarId', url: 'url' },
@@ -85,7 +95,17 @@ describe('createProfile', () => {
             true,
             biography,
             true,
-            true
+            true,
+            {
+                monday: 'AVAILABLE',
+                tuesday: 'AVAILABLE',
+                wednesday: 'AVAILABLE',
+                thursday: 'AVAILABLE',
+                friday: 'AVAILABLE',
+                saturday: 'AVAILABLE',
+                sunday: 'AVAILABLE',
+            },
+            'note'
         );
         expect(adapter.post).toHaveBeenCalledTimes(1);
         expect(adapter.post).toHaveBeenCalledWith('/profiles/', {
@@ -107,6 +127,18 @@ describe('createProfile', () => {
             campusId: undefined,
             certificateOption: true,
             specificProgram: true,
+
+            availabilities: {
+                monday: 'AVAILABLE',
+                tuesday: 'AVAILABLE',
+                wednesday: 'AVAILABLE',
+                thursday: 'AVAILABLE',
+                friday: 'AVAILABLE',
+                saturday: 'AVAILABLE',
+                sunday: 'AVAILABLE',
+            },
+            availabilitiesNote: 'note',
+            availabilitiesNotePrivacy: undefined,
         });
     });
 
@@ -128,7 +160,17 @@ describe('createProfile', () => {
             true,
             biography,
             true,
-            true
+            true,
+            {
+                monday: 'AVAILABLE',
+                tuesday: 'AVAILABLE',
+                wednesday: 'AVAILABLE',
+                thursday: 'AVAILABLE',
+                friday: 'AVAILABLE',
+                saturday: 'AVAILABLE',
+                sunday: 'AVAILABLE',
+            },
+            'note'
         );
         expect(mockedSetProfile).toHaveBeenCalledTimes(1);
         expect(result).toBeUndefined();
@@ -152,7 +194,17 @@ describe('createProfile', () => {
             true,
             biography,
             true,
-            true
+            true,
+            {
+                monday: 'AVAILABLE',
+                tuesday: 'AVAILABLE',
+                wednesday: 'AVAILABLE',
+                thursday: 'AVAILABLE',
+                friday: 'AVAILABLE',
+                saturday: 'AVAILABLE',
+                sunday: 'AVAILABLE',
+            },
+            'note'
         );
         expect(result).toBeInstanceOf(Error);
     });
@@ -173,7 +225,17 @@ describe('createProfile', () => {
             true,
             biography,
             true,
-            true
+            true,
+            {
+                monday: 'AVAILABLE',
+                tuesday: 'AVAILABLE',
+                wednesday: 'AVAILABLE',
+                thursday: 'AVAILABLE',
+                friday: 'AVAILABLE',
+                saturday: 'AVAILABLE',
+                sunday: 'AVAILABLE',
+            },
+            'note'
         );
         expect(result).toStrictEqual(new Error('errors.global'));
     });

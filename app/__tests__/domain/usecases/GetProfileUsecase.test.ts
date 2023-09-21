@@ -27,6 +27,16 @@ const payload: ProfileCommand = {
         favoritePlace: 'place',
         superpower: 'power',
     },
+    availabilities: {
+        monday: 'AVAILABLE',
+        tuesday: 'AVAILABLE',
+        wednesday: 'AVAILABLE',
+        thursday: 'AVAILABLE',
+        friday: 'AVAILABLE',
+        saturday: 'AVAILABLE',
+        sunday: 'AVAILABLE',
+    },
+    availabilitiesNote: 'note',
     user: {
         id: 'userId',
         avatar: { id: 'avatarId', url: 'url' },
