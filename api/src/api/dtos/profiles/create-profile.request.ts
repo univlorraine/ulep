@@ -10,6 +10,7 @@ import {
   IsNotEmpty,
   IsObject,
   IsOptional,
+  IsString,
   IsUUID,
   ValidateNested,
 } from 'class-validator';
@@ -72,7 +73,7 @@ export class CreateProfileRequest
   availabilities: AvailabilitesDto;
 
   @Swagger.ApiProperty({ type: 'string' })
-  @IsBoolean()
+  @IsString()
   availabilitiesNote: string;
 
   @Swagger.ApiProperty({ type: 'boolean' })
