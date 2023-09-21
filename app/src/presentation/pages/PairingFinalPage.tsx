@@ -53,6 +53,7 @@ const PairingFinalPage: React.FC = () => {
             !profileSignUp.pedagogy ||
             !profileSignUp.frequency ||
             !profileSignUp.interests ||
+            !profileSignUp?.availabilities ||
             !profileSignUp.biography
         ) {
             return await showToast({ message: t('errors.global'), duration: 1000 });
@@ -72,6 +73,9 @@ const PairingFinalPage: React.FC = () => {
             profileSignUp.biography,
             !!profileSignUp.isForCertificate,
             !!profileSignUp.isForProgram,
+            profileSignUp.availabilities,
+            profileSignUp.availabilityNote,
+            profileSignUp.availabilityNotePrivate,
             profileSignUp.campus?.id
         );
 

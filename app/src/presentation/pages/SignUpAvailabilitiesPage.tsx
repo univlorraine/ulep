@@ -2,7 +2,6 @@ import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Redirect, useHistory } from 'react-router';
 import { useConfig } from '../../context/ConfigurationContext';
-import { getInitialAviability, occurence } from '../../domain/entities/Availability';
 import { Availabilites } from '../../domain/entities/ProfileSignUp';
 import { useStoreActions, useStoreState } from '../../store/storeTypes';
 import AvailabilityLine from '../components/AvailabilityLine';
@@ -14,13 +13,13 @@ import styles from './css/SignUp.module.css';
 import availabilitiesStyles from './css/SignUpAvailabilities.module.css';
 
 const initialAvailabilities: Availabilites = {
-    monday: getInitialAviability(),
-    tuesday: getInitialAviability(),
-    wednesday: getInitialAviability(),
-    thursday: getInitialAviability(),
-    friday: getInitialAviability(),
-    saturday: getInitialAviability(),
-    sunday: getInitialAviability(),
+    monday: 'VERY_AVAILABLE',
+    tuesday: 'VERY_AVAILABLE',
+    wednesday: 'VERY_AVAILABLE',
+    thursday: 'VERY_AVAILABLE',
+    friday: 'VERY_AVAILABLE',
+    saturday: 'VERY_AVAILABLE',
+    sunday: 'VERY_AVAILABLE',
 };
 
 const SignUpAvailabilitiesPage: React.FC = () => {
@@ -34,7 +33,7 @@ const SignUpAvailabilitiesPage: React.FC = () => {
     // @ts-ignore
     const [timezone, setTimezone] = useState<string>(university?.timezone);
     const [availabilities, setAvailabilities] = useState<Availabilites>(initialAvailabilities);
-    const [openAvailabilityModal, setOpenAvailabilityModal] = useState<{ id: string; occurence: occurence } | null>();
+    const [openAvailabilityModal, setOpenAvailabilityModal] = useState<{ id: string; occurence: Occurence } | null>();
     const [openFinalModal, setOpenFinalModal] = useState<boolean>(false);
 
     const continueSignUp = async (note?: string, isPrivate?: boolean) => {
@@ -44,19 +43,13 @@ const SignUpAvailabilitiesPage: React.FC = () => {
         history.push('/signup/frequency');
     };
 
-    const updateAvailabilities = (occurence: occurence, note?: string, isPrivate?: boolean) => {
+    const updateAvailabilities = (occurence: Occurence) => {
         if (!openAvailabilityModal) {
             return;
         }
         const currentAvailabilities = { ...availabilities };
         const key = openAvailabilityModal.id as keyof Availabilites;
-        currentAvailabilities[key].occurence = occurence;
-        if (note) {
-            currentAvailabilities[key].note = note;
-        }
-        if (isPrivate !== undefined) {
-            currentAvailabilities[key].occurence = occurence;
-        }
+        currentAvailabilities[key] = occurence;
         setAvailabilities(currentAvailabilities);
         return setOpenAvailabilityModal(undefined);
     };

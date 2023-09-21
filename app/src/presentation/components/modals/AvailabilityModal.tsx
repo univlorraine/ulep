@@ -1,14 +1,13 @@
 import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { occurence } from '../../../domain/entities/Availability';
 import styles from './AvailabilityModal.module.css';
 import Modal from './Modal';
 
 interface AvailabilityModalProps {
-    currentOccurence?: occurence;
+    currentOccurence?: Occurence;
     isVisible: boolean;
     onClose: () => void;
-    onValidate: (occurence: occurence) => void;
+    onValidate: (occurence: Occurence) => void;
     title: string;
 }
 
@@ -20,7 +19,7 @@ const AvailabilityModal: React.FC<AvailabilityModalProps> = ({
     title,
 }) => {
     const { t } = useTranslation();
-    const [occurrence, setOccurence] = useState<occurence>(currentOccurence ?? 'VERY_AVAILABLE');
+    const [occurrence, setOccurence] = useState<Occurence>(currentOccurence ?? 'VERY_AVAILABLE');
 
     useEffect(() => {
         setOccurence(currentOccurence ?? 'VERY_AVAILABLE');

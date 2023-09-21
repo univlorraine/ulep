@@ -1,4 +1,3 @@
-import Availability from './Availability';
 import Campus from './Campus';
 import Country from './Country';
 import Goal from './Goal';
@@ -13,13 +12,13 @@ export interface BiographySignUp {
 }
 
 export interface Availabilites {
-    monday: Availability;
-    tuesday: Availability;
-    wednesday: Availability;
-    thursday: Availability;
-    friday: Availability;
-    saturday: Availability;
-    sunday: Availability;
+    monday: Occurence;
+    tuesday: Occurence;
+    wednesday: Occurence;
+    thursday: Occurence;
+    friday: Occurence;
+    saturday: Occurence;
+    sunday: Occurence;
 }
 
 class ProfileSignUp {

@@ -1,7 +1,7 @@
 import { HttpResponse } from '../../adapter/BaseHttpAdapter';
 import { HttpAdapterInterface } from '../../adapter/DomainHttpAdapter';
 import ProfileCommand, { profileCommandToDomain } from '../../command/ProfileCommand';
-import { BiographySignUp } from '../entities/ProfileSignUp';
+import { Availabilites, BiographySignUp } from '../entities/ProfileSignUp';
 import CreateProfileUsecaseInterface from '../interfaces/CreateProfileUsecase.interface';
 
 class CreateProfileUsecase implements CreateProfileUsecaseInterface {
@@ -21,6 +21,9 @@ class CreateProfileUsecase implements CreateProfileUsecaseInterface {
         biography: BiographySignUp,
         isForCertificate: boolean,
         isForProgram: boolean,
+        availabilities: Availabilites,
+        availabilitiesNote?: string,
+        availabilitiesNotePrivacy?: boolean,
         campusId?: string
     ): Promise<undefined | Error> {
         try {
@@ -43,6 +46,9 @@ class CreateProfileUsecase implements CreateProfileUsecaseInterface {
                 campusId: campusId,
                 certificateOption: isForCertificate,
                 specificProgram: isForProgram,
+                availabilities,
+                availabilitiesNote,
+                availabilitiesNotePrivacy,
             });
 
             if (!httpResponse.parsedBody) {

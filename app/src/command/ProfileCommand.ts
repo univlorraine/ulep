@@ -27,6 +27,17 @@ interface ProfileCommand {
         image: { id: string; url: string };
     }[];
     meetingFrequency: string;
+    availabilities: {
+        monday: string;
+        tuesday: string;
+        wednesday: string;
+        thursday: string;
+        friday: string;
+        saturday: string;
+        sunday: string;
+    };
+    availabilitiesNote?: string;
+    availavilitiesNotePrivacy?: boolean;
     biography: {
         anecdote: string;
         experience: string;
@@ -55,7 +66,18 @@ export const profileCommandToDomain = (command: ProfileCommand) => {
             favoritePlace: command.biography.favoritePlace,
             superpower: command.biography.superpower,
         },
-        userCommandToDomain(command.user)
+        {
+            monday: command.availabilities.monday as Occurence,
+            tuesday: command.availabilities.tuesday as Occurence,
+            wednesday: command.availabilities.wednesday as Occurence,
+            thursday: command.availabilities.thursday as Occurence,
+            friday: command.availabilities.friday as Occurence,
+            saturday: command.availabilities.saturday as Occurence,
+            sunday: command.availabilities.sunday as Occurence,
+        },
+        userCommandToDomain(command.user),
+        command.availabilitiesNote,
+        command.availavilitiesNotePrivacy
     );
 };
 
