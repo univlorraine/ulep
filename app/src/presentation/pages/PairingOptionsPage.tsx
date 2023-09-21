@@ -17,11 +17,14 @@ const PairingOptionsPage: React.FC = () => {
     const [isForCertificate, setIsForCertificate] = useState<boolean>(false);
     const [isForProgram, setIsForProgram] = useState<boolean>(false);
 
-    const isAllFieldsEmpty = !isForCertificate && !isForProgram;
-
     const onNextStepPressed = () => {
         updateProfileSignUp({ sameTandem, isForCertificate, isForProgram });
         return history.push(`${isSignUp ? '/' + isSignUp : '/'}pairing/end`);
+    };
+
+    const onNonePressed = () => {
+        setIsForCertificate(false);
+        setIsForProgram(false);
     };
 
     return (
@@ -67,23 +70,22 @@ const PairingOptionsPage: React.FC = () => {
                                 {t('pairing_options_page.program_subtitle')}
                             </span>
                         </button>
+
+                        <button
+                            className={pairingOptionsStyles['preference-container']}
+                            style={{
+                                background:
+                                    !isForCertificate && !isForProgram ? configuration.secondaryColor : '#F2F4F7',
+                            }}
+                            onClick={onNonePressed}
+                        >
+                            <p className={pairingOptionsStyles['preference-text']}>{t('pairing_options_page.none')}</p>
+                        </button>
                     </div>
                 </div>
-                <div className="extra-large-margin-bottom">
-                    <button
-                        className={`primary-button large-margin-bottom ${isAllFieldsEmpty ? 'disabled' : ''}`}
-                        disabled={isAllFieldsEmpty}
-                        onClick={onNextStepPressed}
-                    >
-                        {t('pairing_options_page.validate_button')}
-                    </button>
-                    <button
-                        className="secondary-button"
-                        onClick={() => history.push(`${isSignUp ? '/' + isSignUp : '/'}pairing/end`)}
-                    >
-                        {t('pairing_options_page.pass_button')}
-                    </button>
-                </div>
+                <button className={`primary-button extra-large-margin-bottom`} onClick={onNextStepPressed}>
+                    {t('pairing_options_page.validate_button')}
+                </button>
             </div>
         </WebLayoutCentered>
     );

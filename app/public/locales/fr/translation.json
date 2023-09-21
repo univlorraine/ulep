@@ -149,7 +149,7 @@
     },
     "pairing_options_page": {
         "certificat": "Certificat",
-        "pass_button": "Passer",
+        "none": "Pas d'options",
         "program": "Programme spécifique",
         "program_subtitle": "*Lorem ipsum, em ipsumem ipsum ",
         "same_tandem": "J'ai déjà participé au programme et je souhaite continuer avec la même personne",
