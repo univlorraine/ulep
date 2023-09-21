@@ -29,6 +29,10 @@ const fallbackResources = {
           ],
           signature: "Tandem's team of Lorraine university",
         },
+        footer: {
+          unsubscribe: 'You can unsubscribe by connecting to your account.',
+          downloadApps: 'Download our apps',
+        },
       },
       [EMAIL_TEMPLATE_IDS.TANDEM_TO_REVIEW]: {
         subject: 'You have suggested or pending tandems',
@@ -39,7 +43,11 @@ const fallbackResources = {
             'You have tandem suggested by global routine or pending validation. Connect to the back-office to arbitrate these tandems.',
             'Best regards,',
           ],
-          signature: "L'équipe Tandem de l'Université de Lorraine",
+          signature: "Tandem's team of Lorraine university",
+        },
+        footer: {
+          unsubscribe: 'You can unsubscribe by connecting to your account.',
+          downloadApps: 'Download our apps',
         },
       },
     },
@@ -69,6 +77,10 @@ export default class TranslatedEmailTemplateRepository
     });
   }
 
+  private getImageUrl(imageName: string): string {
+    return `${config.emailAssets.endpoint}/${config.emailAssets.bucket}/${imageName}`;
+  }
+
   async getEmail(
     templateId: EMAIL_TEMPLATE_IDS,
     languageCode: string,
@@ -92,7 +104,10 @@ export default class TranslatedEmailTemplateRepository
         emailText.content &&
         emailText.content.introduction &&
         emailText.content.paragraphs &&
-        emailText.content.signature
+        emailText.content.signature &&
+        emailText.footer &&
+        emailText.footer.unsubscribe &&
+        emailText.footer.downloadApps
       )
     ) {
       this.logger.error(`No valid email content for language ${lng}`);
@@ -103,10 +118,18 @@ export default class TranslatedEmailTemplateRepository
       subject: emailText.subject,
       content: getMailFromTemplate({
         title: emailText.title,
-        content: {
-          introduction: emailText.content.introduction,
-          paragraphs: emailText.content.paragraphs,
-          signature: emailText.content.signature,
+        content: emailText.content,
+        footer: emailText.footer,
+        imageUrls: {
+          background: this.getImageUrl('background.png'),
+          logo: this.getImageUrl('logo.png'),
+          bubble: this.getImageUrl('bonjour-bubble.png'),
+          playStore: this.getImageUrl('play-store.png'),
+          appleStore: this.getImageUrl('apple-store.png'),
+        },
+        links: {
+          appleStore: config.appLinks.appleStore,
+          playStore: config.appLinks.playStore,
         },
       }),
     });

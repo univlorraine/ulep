@@ -21,6 +21,14 @@ export type Configuration = {
     endpoint: string;
     component: string;
   };
+  emailAssets: {
+    endpoint: string;
+    bucket: string;
+  };
+  appLinks: {
+    appleStore: string;
+    playStore: string;
+  };
 };
 
 export const configuration = (): Configuration => ({
@@ -51,6 +59,16 @@ export const configuration = (): Configuration => ({
       process.env.EMAIL_TRANSLATIONS_ENDPOINT ||
       'https://raw.githubusercontent.com/thetribeio/locales_ulep/main/locales',
     component: process.env.EMAIL_TRANSLATIONS_COMPONENT || 'emails',
+  },
+  emailAssets: {
+    endpoint: process.env.EMAIL_ASSETS_ENDPOINT || 'http://localhost:9000',
+    bucket: process.env.EMAIL_ASSETS_BUCKET || 'assets',
+  },
+  appLinks: {
+    appleStore:
+      process.env.APP_LINK_APPLE_STORE || 'http://apple-store.fr/etandem',
+    playStore:
+      process.env.APP_LINK_PLAY_STORE || 'http://play-store.fr/etandem',
   },
 });
 
