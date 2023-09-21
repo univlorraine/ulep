@@ -32,7 +32,7 @@ const ProfileShow = (props: any) => {
 
     return (
         <Show title={<Title />} {...props}>
-            <TabbedShowLayout>
+            <TabbedShowLayout syncWithLocation={false}>
                 <TabbedShowLayout.Tab
                     contentClassName="tab"
                     label={translate('profiles.summary')}
