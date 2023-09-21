@@ -13,6 +13,22 @@ export enum LearningType {
   BOTH = 'BOTH',
 }
 
+export enum occurence {
+  UNAVAILABLE = 'UNAVAILABLE',
+  AVAILABLE = 'AVAILABLE',
+  VERY_AVAILABLE = 'VERY_AVAILABLE',
+}
+
+export interface Availabilites {
+  monday: occurence;
+  tuesday: occurence;
+  wednesday: occurence;
+  thursday: occurence;
+  friday: occurence;
+  saturday: occurence;
+  sunday: occurence;
+}
+
 export type CreateProfileProps = {
   id: string;
   user: User;
@@ -25,6 +41,9 @@ export type CreateProfileProps = {
   sameAge: boolean;
   objectives: LearningObjective[];
   interests: Interest[];
+  availabilities?: Availabilites;
+  availabilitiesNote?: string;
+  availavilitiesNotePrivacy?: boolean;
   biography?: { [key: string]: string };
   campus?: Campus;
   certificateOption?: boolean;
@@ -54,6 +73,12 @@ export class Profile {
   readonly objectives: LearningObjective[];
 
   readonly interests: Interest[];
+
+  readonly availabilities?: Availabilites;
+
+  readonly availabilitiesNote?: string;
+
+  readonly availavilitiesNotePrivacy?: boolean;
 
   readonly biography?: { [key: string]: string };
 
@@ -85,6 +110,9 @@ export class Profile {
     this.meetingFrequency = props.meetingFrequency;
     this.sameGender = props.sameGender;
     this.sameAge = props.sameAge;
+    this.availabilities = props.availabilities;
+    this.availabilitiesNote = props.availabilitiesNote;
+    this.availavilitiesNotePrivacy = props.availavilitiesNotePrivacy;
     this.objectives = [...props.objectives];
     this.interests = [...props.interests];
     this.biography = props.biography;

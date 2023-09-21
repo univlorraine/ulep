@@ -258,6 +258,9 @@ model Profiles {
   same_age                Boolean
   meeting_frequency       String
   bio                     Json
+  availabilities          Json?
+  availabilities_note     String?
+  availabilities_note_privacy  Boolean?
   campus_id               String?
   certificate_option      Boolean?
   specific_program        Boolean?
