@@ -1,4 +1,5 @@
 import { KeycloakConfiguration } from '@app/keycloak';
+import { LogLevel } from '@nestjs/common';
 
 interface SmtpConfiguration {
   host: string;
@@ -16,6 +17,10 @@ export type Configuration = {
   CANCEL_TRESHOLD_IN_MIN: number;
   smtp: SmtpConfiguration;
   logLevel: string;
+  emailTranslations: {
+    endpoint: string;
+    component: string;
+  };
 };
 
 export const configuration = (): Configuration => ({
@@ -41,4 +46,30 @@ export const configuration = (): Configuration => ({
     sender: process.env.SMTP_SENDER || 'test@ulep.fr',
   },
   logLevel: process.env.LOG_LEVEL || 'warn',
+  emailTranslations: {
+    endpoint:
+      process.env.EMAIL_TRANSLATIONS_ENDPOINT ||
+      'https://raw.githubusercontent.com/thetribeio/locales_ulep/main/locales',
+    component: process.env.EMAIL_TRANSLATIONS_COMPONENT || 'emails',
+  },
 });
+
+export const getLoggerLevels = (logLevel: string): LogLevel[] => {
+  const level: LogLevel[] = [];
+  switch (logLevel) {
+    case 'verbose':
+      level.push('verbose');
+    case 'debug':
+      level.push('debug');
+    case 'warn':
+      level.push('warn');
+    case 'error':
+      level.push('error');
+    case 'log':
+      level.push('log');
+      break;
+    default:
+      break;
+  }
+  return level;
+};
