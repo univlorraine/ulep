@@ -265,9 +265,10 @@ export class GenerateTandemsUsecase {
     if (universitiesWithNewTandems.size > 0) {
       for (const [universityId, university] of universitiesWithNewTandems) {
         if (university.notificationEmail) {
+          const lng = university.country.code.toLowerCase();
           const emailContent = await this.emailTemplateRepository.getEmail(
             EMAIL_TEMPLATE_IDS.TANDEM_TO_REVIEW,
-            'en', // TODO(NOW): see how to get university language
+            lng,
           );
           notificationEmails.push({
             recipient: university.notificationEmail,
@@ -282,7 +283,6 @@ export class GenerateTandemsUsecase {
     }
 
     if (notificationEmails.length > 0) {
-      // TODO(NOW): manage failure, translations and templating
       await this.emailGateway.bulkSend(notificationEmails);
     }
 
