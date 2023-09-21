@@ -26,11 +26,10 @@ const fallbackResources = {
         title: "Your tandem's partner is ready to start",
         content: {
           introduction: 'Dear {{firstname}},',
-          paragraphs: {
-            // TODO(NOW): fix typo in university value
-            '1': "We are happy to inform you that you're tandem's partner has been found and is ready to start learning language with you ! Your partner is {{partnerFirstname}} {{partnerLastname}}, student from {{universityName}} who shares you passion for learning languages and is excited to start this linguistic adventure with you. We recommend that you take time to introduce yourself to your partner and planify your first conversation session. We remind you that Tandem's program is designed to be a fair trade, so don't hesitate to share you knowledge and fully involve inthe program. If you meet problems or challenge, feel free to contact Tandem's team of Université  de Lorraine to get some help. We are here to help you succeed in your learning and are happy to be part of your learning journey.",
-            '2': 'Best regards,',
-          },
+          paragraphs: [
+            "We are happy to inform you that you're tandem's partner has been found and is ready to start learning language with you ! Your partner is {{partnerFirstname}} {{partnerLastname}}, student from {{universityName}} who shares you passion for learning languages and is excited to start this linguistic adventure with you. We recommend that you take time to introduce yourself to your partner and planify your first conversation session. We remind you that Tandem's program is designed to be a fair trade, so don't hesitate to share you knowledge and fully involve inthe program. If you meet problems or challenge, feel free to contact Tandem's team of Université  de Lorraine to get some help. We are here to help you succeed in your learning and are happy to be part of your learning journey.",
+            'Best regards,',
+          ],
           signature: "Tandem's team of Lorraine university",
         },
         paragraphTest: ['We are happy', 'best regards'],
@@ -40,11 +39,10 @@ const fallbackResources = {
         title: 'You have suggested or pending tandems',
         content: {
           introduction: 'Hi,',
-          paragraphs: {
-            // TODO(NOW): best regards in weblate
-            '1': 'You have tandem suggested by global routine or pending validation. Connect to the back-office to arbitrate these tandems.',
-            '2': 'Best regards,',
-          },
+          paragraphs: [
+            'You have tandem suggested by global routine or pending validation. Connect to the back-office to arbitrate these tandems.',
+            'Best regards,',
+          ],
           signature: "L'équipe Tandem de l'Université de Lorraine",
         },
       },
@@ -83,8 +81,6 @@ export default class TranslatedEmailTemplateRepository
     languageCode: string,
     interpolationValues?: { [key: string]: string },
   ): Promise<EmailContent> {
-    // TOTO(NOW): paragraphs in array rather than object ?
-
     const lng = languageCode;
     if (!LANGUAGES.includes(lng)) {
       this.logger.warn(`Non supported language ${lng} for translations`);
@@ -103,7 +99,7 @@ export default class TranslatedEmailTemplateRepository
         title: emailText.title,
         content: {
           introduction: emailText.content.introduction,
-          paragraphs: Object.values(emailText.content.paragraphs),
+          paragraphs: emailText.content.paragraphs,
           signature: emailText.content.signature,
         },
       }),
