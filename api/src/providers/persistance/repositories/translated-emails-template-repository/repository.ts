@@ -1,6 +1,5 @@
 /* eslint-disable @typescript-eslint/no-var-requires */
 import { Logger } from '@nestjs/common';
-// TODO(NOW): check typing errors
 import * as i18n from 'i18next';
 import * as HttpBackend from 'i18next-http-backend';
 import * as ChainedBackend from 'i18next-chained-backend';
@@ -80,12 +79,25 @@ export default class TranslatedEmailTemplateRepository
       this.logger.warn(`Non supported language ${lng} for translations`);
     }
 
-    // TODO(NOW): see what can be done with typing
     const emailText: any = i18n.t(templateId, {
       lng,
       returnObjects: true,
       ...interpolationValues,
     });
+
+    if (
+      !(
+        emailText.subject &&
+        emailText.title &&
+        emailText.content &&
+        emailText.content.introduction &&
+        emailText.content.paragraphs &&
+        emailText.content.signature
+      )
+    ) {
+      this.logger.error(`No valid email content for language ${lng}`);
+      throw new Error(`Can't build valid email for language ${lng}`);
+    }
 
     return new EmailContent({
       subject: emailText.subject,
