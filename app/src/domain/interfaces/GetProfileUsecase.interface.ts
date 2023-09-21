@@ -1,6 +1,6 @@
 import Profile from '../entities/Profile';
 
 interface GetProfileUsecaseInterface {
-    execute(): Promise<Profile | Error>;
+    execute(accessToken: string): Promise<Profile | Error>;
 }
 export default GetProfileUsecaseInterface;

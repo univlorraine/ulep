@@ -6,12 +6,14 @@ import GetUserUsecaseInterface from '../interfaces/GetUserUsecase.interface';
 
 class GetUserUsecase implements GetUserUsecaseInterface {
     constructor(private readonly domainHttpAdapter: HttpAdapterInterface) {}
-    async execute(): Promise<User | Error> {
+    async execute(accessToken: string): Promise<User | Error> {
         try {
+            //Force accessToken to avoid call with an old token ( because we have to wait store to be refreshed )
             const httpResponse: HttpResponse<UserCommand> = await this.domainHttpAdapter.get(
                 `/users/me`,
-                undefined,
-                false
+                {},
+                false,
+                accessToken
             );
 
             if (!httpResponse.parsedBody) {
