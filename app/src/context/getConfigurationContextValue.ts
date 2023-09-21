@@ -18,6 +18,7 @@ import GetQuizzByLevelUsecase from '../domain/usecases/GetQuizzByLevelUsecase';
 import GetUserUsecase from '../domain/usecases/GetUserUsecase';
 import LoginUsecase from '../domain/usecases/LoginUsecase';
 import ResetPasswordUsecase from '../domain/usecases/ResetPasswordUsecase';
+import RetrievePersonInfoUsecase from '../domain/usecases/RetrievePersonInfoUsecase';
 import UpdateAvatarUsecase from '../domain/usecases/UpdateAvatarUsecase';
 import UpdateNotificationPermissionUsecase from '../domain/usecases/UpdateNotificationPermissionUsecase';
 import { ConfigContextValueType } from './configurationContextTypes';
@@ -57,6 +58,7 @@ const getConfigContextValue = (
     const updateNotificationPermission = new UpdateNotificationPermissionUsecase(domainHttpAdapter);
 
     const createUser = new CreateUserUsecase(domainHttpAdapter, login, setUser);
+    const retrievePerson = new RetrievePersonInfoUsecase(domainHttpAdapter);
 
     return {
         askForAccountDeletion,
@@ -80,6 +82,7 @@ const getConfigContextValue = (
         resetPassword,
         updateAvatar,
         updateNotificationPermission,
+        retrievePerson,
     };
 };
 

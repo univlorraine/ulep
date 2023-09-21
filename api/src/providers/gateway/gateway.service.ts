@@ -3,7 +3,6 @@ import { Injectable } from "@nestjs/common";
 import { AxiosRequestConfig, AxiosResponse } from "axios";
 import { firstValueFrom, map } from "rxjs";
 import { IPersonne } from "./gateway.interface";
-import { ConfigService } from "@nestjs/config";
 import { configuration } from "src/configuration";
 
 @Injectable()

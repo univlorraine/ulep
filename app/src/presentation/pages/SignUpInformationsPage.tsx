@@ -1,5 +1,5 @@
 import { useIonToast } from '@ionic/react';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useHistory } from 'react-router';
 import { PlusPng } from '../../assets';
@@ -11,10 +11,11 @@ import TextInput from '../components/TextInput';
 import WebLayoutCentered from '../components/layout/WebLayoutCentered';
 import { isCodeValid, isDomainValid, isEmailCorrect, isNameCorrect, isPasswordCorrect } from '../utils';
 import styles from './css/SignUp.module.css';
+import Person from '../../domain/entities/Person';
 
 const SignUpInformationsPage: React.FC = () => {
     const { t } = useTranslation();
-    const { cameraAdapter, configuration, createUser } = useConfig();
+    const { cameraAdapter, configuration, createUser, retrievePerson } = useConfig();
     const [showToast] = useIonToast();
     const history = useHistory();
     const profileSignUp = useStoreState((store) => store.profileSignUp);
@@ -30,6 +31,9 @@ const SignUpInformationsPage: React.FC = () => {
     const [profilePicture, setProfilePicture] = useState<File>();
     const [CGUChecked, setCGUChecked] = useState<boolean>(false);
     const [errorMessage, setErrorMessage] = useState<{ type: string; message: string }>();
+    
+    //testing hugo
+    const [loading, setLoading] = useState<boolean>(false);
 
     const allFieldHasValue = () =>
         !email ||
@@ -118,6 +122,32 @@ const SignUpInformationsPage: React.FC = () => {
 
         return history.push('/signup/languages');
     };
+
+    //INFOS: ajout de Hugo pour préremplissage quand utilisateur UL
+    const userUlAutomaticValues = async () => {
+        const result = await retrievePerson.execute("ripon1i") as Person;
+        console.log(result);
+        setFirstname(result.firstname);
+        setLastname(result.lastname);
+        switch (result.gender) {
+            case "M.":
+                setGender("male")
+                break;
+            case "Mme.":
+                setGender("female")
+                break;
+            default:
+                break;
+        }
+        setAge(result.age);
+        setEmail(result.email);
+    }
+
+    //INFOS: useEffect() permet de lancer du code après que le composant soit rendered.
+    //TODO: regarder pourquoi les appelles sont doubler quand le useEffect s'éxécute.
+    useEffect(()=>{
+        userUlAutomaticValues();
+    }, []);
 
     return (
         <WebLayoutCentered
