@@ -151,10 +151,22 @@ export class CreateTandemUsecase {
       const emailContentProfile1 = await this.emailTemplateRepository.getEmail(
         EMAIL_TEMPLATE_IDS.TANDEM_BECOME_ACTIVE,
         learningLanguage1.profile.nativeLanguage.code,
+        {
+          firstname: learningLanguage1.profile.user.firstname,
+          partnerFirstname: learningLanguage2.profile.user.firstname,
+          partnerLastname: learningLanguage2.profile.user.lastname,
+          universityName: learningLanguage1.profile.user.university.name,
+        },
       );
       const emailContentProfile2 = await this.emailTemplateRepository.getEmail(
         EMAIL_TEMPLATE_IDS.TANDEM_BECOME_ACTIVE,
         learningLanguage2.profile.nativeLanguage.code,
+        {
+          firstname: learningLanguage2.profile.user.firstname,
+          partnerFirstname: learningLanguage1.profile.user.firstname,
+          partnerLastname: learningLanguage1.profile.user.lastname,
+          universityName: learningLanguage2.profile.user.university.name,
+        },
       );
       await this.emailGateway.send({
         recipient: learningLanguage1.profile.user.email,

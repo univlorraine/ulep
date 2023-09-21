@@ -1,4 +1,10 @@
+/* eslint-disable @typescript-eslint/no-var-requires */
 import { Logger } from '@nestjs/common';
+// TODO(NOW): check typing errors
+import * as i18n from 'i18next';
+import * as HttpBackend from 'i18next-http-backend';
+import * as ChainedBackend from 'i18next-chained-backend';
+import * as resourcesToBackend from 'i18next-resources-to-backend';
 import { configuration } from 'src/configuration';
 import EmailContent, {
   EMAIL_TEMPLATE_IDS,
@@ -6,31 +12,42 @@ import EmailContent, {
 import { EmailTemplateRepository } from 'src/core/ports/email-template.repository';
 import getMailFromTemplate from './templates/tandemBecomeActive';
 
+// TODO(NOW): clean config
+
 const config = configuration();
 
-const DEFAULT_TRANSLATIONS = {
-  [EMAIL_TEMPLATE_IDS.TANDEM_BECOME_ACTIVE]: {
-    subject: "Your tandem's partner is ready to start",
-    title: "Your tandem's partner is ready to start",
-    content: {
-      introduction: 'Dear {{firstname}},',
-      paragraphs: {
-        '1': "We are happy to inform you that you're tandem's partner has been found and is ready to start learning language with you ! Your partner is {{partnerFirstname}} {{partnerLastname}}, student from {universityName} who shares you passion for learning languages and is excited to start this linguistic adventure with you. We recommend that you take time to introduce yourself to your partner and planify your first conversation session. We remind you that Tandem's program is designed to be a fair trade, so don't hesitate to share you knowledge and fully involve inthe program. If you meet problems or challenge, feel free to contact Tandem's team of Université  de Lorraine to get some help. We are here to help you succeed in your learning and are happy to be part of your learning journey.",
-        '2': 'Best regards,',
+const LANGUAGES = ['en', 'fr', 'cn'];
+
+const fallbackResources = {
+  cn: {
+    translation: {
+      [EMAIL_TEMPLATE_IDS.TANDEM_BECOME_ACTIVE]: {
+        subject: "Your tandem's partner is ready to start",
+        title: "Your tandem's partner is ready to start",
+        content: {
+          introduction: 'Dear {{firstname}},',
+          paragraphs: {
+            // TODO(NOW): fix typo in university value
+            '1': "We are happy to inform you that you're tandem's partner has been found and is ready to start learning language with you ! Your partner is {{partnerFirstname}} {{partnerLastname}}, student from {{universityName}} who shares you passion for learning languages and is excited to start this linguistic adventure with you. We recommend that you take time to introduce yourself to your partner and planify your first conversation session. We remind you that Tandem's program is designed to be a fair trade, so don't hesitate to share you knowledge and fully involve inthe program. If you meet problems or challenge, feel free to contact Tandem's team of Université  de Lorraine to get some help. We are here to help you succeed in your learning and are happy to be part of your learning journey.",
+            '2': 'Best regards,',
+          },
+          signature: "Tandem's team of Lorraine university",
+        },
+        paragraphTest: ['We are happy', 'best regards'],
       },
-      signature: "Tandem's team of Lorraine university",
-    },
-  },
-  [EMAIL_TEMPLATE_IDS.TANDEM_TO_REVIEW]: {
-    subject: 'You have suggested or pending tandems',
-    title: 'You have suggested or pending tandems',
-    content: {
-      introduction: 'Hi,',
-      paragraphs: {
-        // TODO(NOW): best regards
-        '1': 'You have tandem suggested by global routine or pending validation. Connect to the back-office to arbitrate these tandems.',
+      [EMAIL_TEMPLATE_IDS.TANDEM_TO_REVIEW]: {
+        subject: 'You have suggested or pending tandems',
+        title: 'You have suggested or pending tandems',
+        content: {
+          introduction: 'Hi,',
+          paragraphs: {
+            // TODO(NOW): best regards in weblate
+            '1': 'You have tandem suggested by global routine or pending validation. Connect to the back-office to arbitrate these tandems.',
+            '2': 'Best regards,',
+          },
+          signature: "L'équipe Tandem de l'Université de Lorraine",
+        },
       },
-      signature: "L'équipe Tandem de l'Université de Lorraine",
     },
   },
 };
@@ -44,47 +61,21 @@ export default class TranslatedEmailTemplateRepository
   #translations: { [locale: string]: any };
 
   constructor() {
-    this.#translations = {
-      en: DEFAULT_TRANSLATIONS,
-    };
-    this.fetchTranslations('en');
-  }
-
-  private isLastTranslationExpired(languageCode: string): boolean {
-    const lastFetchTranslationsOfLanguage =
-      this.#lastTranslationsFetch[languageCode];
-    if (!lastFetchTranslationsOfLanguage) {
-      return true;
-    }
-
-    const msSinceLastSuccessfullFetch =
-      Date.now() - lastFetchTranslationsOfLanguage.getTime();
-    if (
-      msSinceLastSuccessfullFetch * 1000 >
-      config.emailTranslations.cacheInSec
-    ) {
-      return true;
-    }
-
-    return false;
-  }
-
-  private async fetchTranslations(languageCode: string): Promise<void> {
-    const url = `${config.emailTranslations.endpoint}/${languageCode}/${config.emailTranslations.component}.json`;
-    const res = await fetch(url);
-
-    if (!res.ok) {
-      this.logger.error(
-        `Fail to fetch email translations ${url} : `,
-        res.statusText,
-      );
-      throw new Error(`Error ${res.status} while fetching emails translations`);
-    }
-
-    const content = await res.json();
-
-    this.#lastTranslationsFetch[languageCode] = new Date();
-    this.#translations[languageCode] = content;
+    const url = `${config.emailTranslations.endpoint}/{{lng}}/${config.emailTranslations.component}.json`;
+    const fallbackBackend = (resourcesToBackend as any)(fallbackResources);
+    i18n.use(ChainedBackend as any).init<ChainedBackend.ChainedBackendOptions>({
+      fallbackLng: LANGUAGES,
+      // debug: true, // TODO(NOW): enable debug
+      backend: {
+        backends: [HttpBackend, fallbackBackend],
+        backendOptions: [
+          {
+            loadPath: url,
+            crossDomain: true,
+          },
+        ],
+      },
+    });
   }
 
   async getEmail(
@@ -92,34 +83,30 @@ export default class TranslatedEmailTemplateRepository
     languageCode: string,
     interpolationValues?: { [key: string]: string },
   ): Promise<EmailContent> {
-    // TODO(NOW): sanitize ?
-    // TODO(NOW): interpolation
-    // TODO(NOW): use i18n + backend ?
+    // TOTO(NOW): paragraphs in array rather than object ?
 
-    if (this.isLastTranslationExpired(languageCode)) {
-      try {
-        await this.fetchTranslations(languageCode);
-      } catch (err) {
-        // Do nothing as error already logged
-      }
+    const lng = languageCode;
+    if (!LANGUAGES.includes(lng)) {
+      this.logger.warn(`Non supported language ${lng} for translations`);
     }
 
-    const translations =
-      this.#translations[languageCode]?.[templateId] ??
-      this.#translations.en[templateId];
-
-    const content = getMailFromTemplate({
-      title: translations.title,
-      content: {
-        introduction: translations.content.introduction,
-        paragraphs: Object.values(translations.content.paragraphs),
-        signature: translations.content.signature,
-      },
+    // TODO(NOW): see what can be done with typing
+    const emailText: any = i18n.t(templateId, {
+      lng,
+      returnObjects: true,
+      ...interpolationValues,
     });
 
     return new EmailContent({
-      subject: translations.subject,
-      content: content,
+      subject: emailText.subject,
+      content: getMailFromTemplate({
+        title: emailText.title,
+        content: {
+          introduction: emailText.content.introduction,
+          paragraphs: Object.values(emailText.content.paragraphs),
+          signature: emailText.content.signature,
+        },
+      }),
     });
   }
 }
