@@ -55,6 +55,10 @@ api:
     logLevel: warn # OPTIONNEL
     emailsTranslationsEndpoint: https://raw.githubusercontent.com/thetribeio/locales_ulep/main/locales # REQUIRED
     emailsTranslationsComponent: emails # REQUIRED
+    emailsAssetsEndpoint: *minioApiUrl # REQUIRED
+    emailsAssetsBucket: assets # REQUIRED
+    appLinkAppleStore: TODO # REQUIRED
+    appLinkPlayStore: TODO # REQUIRED
 
   autoscaling:
     enabled: false
