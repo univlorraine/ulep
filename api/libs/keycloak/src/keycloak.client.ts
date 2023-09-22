@@ -54,7 +54,7 @@ export class KeycloakClient {
       client_secret: this.configuration.clientSecret,
     });
 
-    this.grantToken();
+    await this.grantToken();
   }
 
   private async grantToken(): Promise<void> {

@@ -3,7 +3,6 @@ import { useTranslation } from 'react-i18next';
 import { ArrowLeftSvg, AvatarPlaceholderPng, CloseBlackSvg } from '../../../assets';
 import { ReactComponent as Background } from '../../../assets/background.svg';
 import { useConfig } from '../../../context/ConfigurationContext';
-import { getInitialAviability } from '../../../domain/entities/Availability';
 import Language from '../../../domain/entities/Language';
 import Profile from '../../../domain/entities/Profile';
 import { Availabilites } from '../../../domain/entities/ProfileSignUp';
@@ -18,20 +17,6 @@ interface TandemProfileProps {
     onClose: () => void;
     profile: Profile;
 }
-
-//Mocked data
-// TODO: chagne this
-const initialAvailabilities: Availabilites = {
-    monday: getInitialAviability(),
-    tuesday: getInitialAviability(),
-    wednesday: getInitialAviability(),
-    thursday: getInitialAviability(),
-    friday: getInitialAviability(),
-    saturday: getInitialAviability(),
-    sunday: getInitialAviability(),
-};
-
-const note = 'J’aurai peu de dispo les 2 premières semaines d’Octobre, mais après tout sera beaucoup plus simple';
 
 const TandemProfile: React.FC<TandemProfileProps> = ({ language, onClose, profile }) => {
     const { t } = useTranslation();
@@ -104,16 +89,18 @@ const TandemProfile: React.FC<TandemProfileProps> = ({ language, onClose, profil
                 <span className={styles.category}>{t(`home_page.tandem_validated.availabilities`)}</span>
                 <div className={styles['text-container']}>{profile.user.university.timezone}</div>
                 <div className={styles.separator} />
-                {Object.keys(initialAvailabilities).map((availabilityKey) => {
+                {Object.keys(profile.availabilities).map((availabilityKey) => {
                     return (
                         <AvailabilityLine
-                            availability={initialAvailabilities[availabilityKey as keyof Availabilites]}
+                            availability={profile.availabilities[availabilityKey as keyof Availabilites]}
                             day={availabilityKey}
                         />
                     );
                 })}
                 <span className={styles.category}>{t(`home_page.tandem_validated.availabilities_note`)}</span>
-                <div className={styles['text-container']}>{note}</div>
+                {!profile.availabilitiesNotePrivacy && (
+                    <div className={styles['text-container']}>{profile.availabilitiesNote}</div>
+                )}
             </div>
         </div>
     );
