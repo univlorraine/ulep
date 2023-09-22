@@ -89,9 +89,13 @@ export class CreateLearningLanguageUseCase {
       }
     }
 
-    if (command.learningType === LearningType.TANDEM && !command.campusId) {
+    if (
+      !command.campusId &&
+      (command.learningType === LearningType.TANDEM ||
+        command.learningType === LearningType.BOTH)
+    ) {
       throw new ProfileCampusException(
-        'A campus is required for tandem learningType',
+        'A campus is required for tandem / both learningType',
       );
     }
     let campus;

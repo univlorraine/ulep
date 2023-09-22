@@ -121,11 +121,12 @@ export class CreateProfileUsecase {
         }
 
         if (
-          learningLanguage.learningType === LearningType.TANDEM &&
-          !learningLanguage.campusId
+          !learningLanguage.campusId &&
+          (learningLanguage.learningType === LearningType.TANDEM ||
+            learningLanguage.learningType === LearningType.BOTH)
         ) {
           throw new ProfileCampusException(
-            'A campus is required for tandem learningType',
+            'A campus is required for tandem/both learningType',
           );
         }
         let campus;
