@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useConfig } from '../../context/ConfigurationContext';
-import { useStoreState } from '../../store/storeTypes';
+import { useStoreActions, useStoreState } from '../../store/storeTypes';
 import WebLayoutCentered from '../components/layout/WebLayoutCentered';
 import ReportModal from '../components/modals/ReportModal';
 import styles from './css/Suspended.module.css';
@@ -11,11 +11,17 @@ const SuspendedPage: React.FC = () => {
     const { t } = useTranslation();
     const { configuration } = useConfig();
     const profile = useStoreState((state) => state.profile);
+    const logout = useStoreActions((state) => state.logout);
     const [isReportMode, setReportMode] = useState<boolean>(false);
+
+    const disconnect = async () => {
+        await logout();
+    }
 
     return (
         <WebLayoutCentered
             backgroundIconColor={configuration.primaryBackgroundImageColor}
+            goBackPressed={disconnect}
             headerColor={configuration.primaryColor}
             headerPercentage={100}
             headerTitle={t('global.account')}
