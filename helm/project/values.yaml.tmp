@@ -59,6 +59,9 @@ api:
     emailsAssetsBucket: assets # REQUIRED
     appLinkAppleStore: TODO # REQUIRED
     appLinkPlayStore: TODO # REQUIRED
+    translationsEndpoint: TODO # REQUIRED
+    translationsEndpointSuffix: TODO # OPTIONAL
+    translationsToken: TODO # REQUIRED
 
   autoscaling:
     enabled: false
