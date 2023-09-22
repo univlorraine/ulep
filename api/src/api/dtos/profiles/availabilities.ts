@@ -1,50 +1,50 @@
 import * as Swagger from '@nestjs/swagger';
 import { Expose } from 'class-transformer';
 import { IsNotEmpty, IsString } from 'class-validator';
-import { Availabilites, occurence } from 'src/core/models';
+import { Availabilites, AvailabilitesOptions } from 'src/core/models';
 
 export class AvailabilitesDto {
-  @Swagger.ApiProperty({ type: 'string', enum: occurence })
+  @Swagger.ApiProperty({ type: 'string', enum: AvailabilitesOptions })
   @Expose({ groups: ['read'] })
   @IsString()
   @IsNotEmpty()
-  monday: occurence;
+  monday: AvailabilitesOptions;
 
-  @Swagger.ApiProperty({ type: 'string', enum: occurence })
+  @Swagger.ApiProperty({ type: 'string', enum: AvailabilitesOptions })
   @Expose({ groups: ['read'] })
   @IsString()
   @IsNotEmpty()
-  tuesday: occurence;
+  tuesday: AvailabilitesOptions;
 
-  @Swagger.ApiProperty({ type: 'string', enum: occurence })
+  @Swagger.ApiProperty({ type: 'string', enum: AvailabilitesOptions })
   @Expose({ groups: ['read'] })
   @IsString()
   @IsNotEmpty()
-  wednesday: occurence;
+  wednesday: AvailabilitesOptions;
 
-  @Swagger.ApiProperty({ type: 'string', enum: occurence })
+  @Swagger.ApiProperty({ type: 'string', enum: AvailabilitesOptions })
   @Expose({ groups: ['read'] })
   @IsString()
   @IsNotEmpty()
-  thursday: occurence;
+  thursday: AvailabilitesOptions;
 
-  @Swagger.ApiProperty({ type: 'string', enum: occurence })
+  @Swagger.ApiProperty({ type: 'string', enum: AvailabilitesOptions })
   @Expose({ groups: ['read'] })
   @IsString()
   @IsNotEmpty()
-  friday: occurence;
+  friday: AvailabilitesOptions;
 
-  @Swagger.ApiProperty({ type: 'string', enum: occurence })
+  @Swagger.ApiProperty({ type: 'string', enum: AvailabilitesOptions })
   @Expose({ groups: ['read'] })
   @IsString()
   @IsNotEmpty()
-  saturday: occurence;
+  saturday: AvailabilitesOptions;
 
-  @Swagger.ApiProperty({ type: 'string', enum: occurence })
+  @Swagger.ApiProperty({ type: 'string', enum: AvailabilitesOptions })
   @Expose({ groups: ['read'] })
   @IsString()
   @IsNotEmpty()
-  sunday: occurence;
+  sunday: AvailabilitesOptions;
 
   constructor(partial: Partial<AvailabilitesDto>) {
     Object.assign(this, partial);

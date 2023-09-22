@@ -2,7 +2,7 @@ import { faker } from '@faker-js/faker';
 import {
   LearningType,
   Profile,
-  occurence,
+  AvailabilitesOptions,
 } from '../../../../../src/core/models';
 import { ModelFactory } from './model.factory';
 
@@ -27,13 +27,13 @@ export class ProfileFactory extends ModelFactory<Profile> {
       objectives: [],
       interests: [],
       availabilities: {
-        monday: enumValue(occurence),
-        tuesday: enumValue(occurence),
-        wednesday: enumValue(occurence),
-        thursday: enumValue(occurence),
-        friday: enumValue(occurence),
-        saturday: enumValue(occurence),
-        sunday: enumValue(occurence),
+        monday: enumValue(AvailabilitesOptions),
+        tuesday: enumValue(AvailabilitesOptions),
+        wednesday: enumValue(AvailabilitesOptions),
+        thursday: enumValue(AvailabilitesOptions),
+        friday: enumValue(AvailabilitesOptions),
+        saturday: enumValue(AvailabilitesOptions),
+        sunday: enumValue(AvailabilitesOptions),
       },
       availabilitiesNote: faker.lorem.sentence(),
       availavilitiesNotePrivacy: faker.datatype.boolean(),
