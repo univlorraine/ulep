@@ -13,19 +13,20 @@ const MobileRoute: React.FC<PrivateRouteProps> = ({ component: Component, ...pro
     const { width } = useWindowDimensions();
     const isHybrid = width < HYBRID_MAX_WIDTH;
 
+    if(!token){
+        window.location.href = '/';
+    }
+
+    if(!isHybrid){
+        window.location.href = '/home';
+    }
+
     return (
         <Route
             {...props}
             render={(props) =>
-                token && isHybrid ? (
+                token && isHybrid && (
                     <Component {...props} />
-                ) : (
-                    <Redirect
-                        to={{
-                            pathname: '/home',
-                            state: { from: props.location },
-                        }}
-                    />
                 )
             }
         />

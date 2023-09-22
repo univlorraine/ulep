@@ -1,7 +1,7 @@
 import { IonPage } from '@ionic/react';
-import { useHistory } from 'react-router';
+import { Redirect, useHistory } from 'react-router';
 import SettingsContent from '../../components/contents/SettingsContent';
-import { useStoreActions } from '../../../store/storeTypes';
+import { useStoreActions, useStoreState } from '../../../store/storeTypes';
 
 const SettingsPage: React.FC = () => {
     const history = useHistory();
