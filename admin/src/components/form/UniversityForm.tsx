@@ -13,6 +13,7 @@ import {
 } from '@mui/material';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
+import DeleteIcon from '@mui/icons-material/Delete';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import daysjs from 'dayjs';
 import React, { useState } from 'react';
@@ -92,6 +93,11 @@ const UniversityForm: React.FC<UniversityFormProps> = ({
 
         return setNewCodes([...newCodes, newCode]);
     };
+
+    const removeCode = (codeToRemove: string) => {
+        setNewCodes(newCodes.filter((code) => code !== codeToRemove))
+    }
+
     const addDomain = (newDomain: string) => {
         if (newDomain[0] !== '@') {
             return notify(`universities.${tradKey}.domains_error`);
@@ -99,6 +105,10 @@ const UniversityForm: React.FC<UniversityFormProps> = ({
 
         return setNewDomains([...newDomains, newDomain]);
     };
+
+    const removeDomain = (domainToRemove: string) => {
+        setNewDomains(newDomains.filter((domain) => domain !== domainToRemove))
+    }
 
     const onSendUniversity = () => {
         const admissionStart = newAdmissionStartDate || admissionStartDate;
@@ -199,6 +209,9 @@ const UniversityForm: React.FC<UniversityFormProps> = ({
                         <TableBody>
                             {newCodes.map((code) => (
                                 <TableRow key={code}>
+                                    <TableCell sx={{ width: 10 }}>
+                                        <Button onClick={() => removeCode(code)}><DeleteIcon /></Button>
+                                    </TableCell>
                                     <TableCell>{code}</TableCell>
                                 </TableRow>
                             ))}
@@ -220,6 +233,9 @@ const UniversityForm: React.FC<UniversityFormProps> = ({
                         <TableBody>
                             {newDomains.map((domain) => (
                                 <TableRow key={domain}>
+                                    <TableCell sx={{ width: 10 }}>
+                                        <Button onClick={() => removeDomain(domain)}><DeleteIcon /></Button>
+                                    </TableCell>
                                     <TableCell>{domain}</TableCell>
                                 </TableRow>
                             ))}
