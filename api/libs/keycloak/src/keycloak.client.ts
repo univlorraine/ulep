@@ -445,7 +445,7 @@ export class KeycloakClient {
    */
   public async getAccessToken(): Promise<string> {
     if (!this.tokenSet) {
-      await this.grantToken();
+      await this.initialize();
     }
 
     if (this.tokenSet.expired()) {
