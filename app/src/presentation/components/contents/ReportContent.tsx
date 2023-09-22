@@ -38,7 +38,6 @@ const ReportContent: React.FC<ReportContentProps> = ({ onGoBack, onReportSent })
         );
     };
 
-    //TODO: test this when token will be up
     const sendReport = async () => {
         if (!selectedCategory) {
             return;
@@ -50,6 +49,7 @@ const ReportContent: React.FC<ReportContentProps> = ({ onGoBack, onReportSent })
         }
 
         onReportSent();
+        return await showToast({ message: t('home_page.report.report_sent'), duration: 2000 });
     };
 
     useEffect(() => {
