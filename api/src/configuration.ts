@@ -99,3 +99,12 @@ export const getLoggerLevels = (logLevel: string): LogLevel[] => {
   }
   return level;
 };
+
+export const getTranslationsEndpoint = (
+  lng: string,
+  component: string,
+): string => {
+  const config = configuration();
+  // %2F work with github and gitlab but / doesn't with gitlab ( ??? )
+  return `${config.translationEndpoint}%2F${lng}%2F${component}.json${config.translationEndpointSuffix}`;
+};
