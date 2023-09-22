@@ -54,6 +54,7 @@ const UniversityShow = (props: any) => {
                     }
                 />
                 <TextField label={translate('universities.show.id')} source="id" />
+                <TextField label={translate('universities.show.notificationEmail')} source="notificationEmail" />
             </SimpleShowLayout>
         </Show>
     );

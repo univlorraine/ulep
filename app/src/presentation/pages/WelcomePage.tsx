@@ -9,6 +9,7 @@ import { HYBRID_MAX_WIDTH } from '../utils';
 const WelcomePage: React.FC = () => {
     const history = useHistory();
     const { width } = useWindowDimensions();
+
     return (
         <IonPage>
             {width < HYBRID_MAX_WIDTH ? (

@@ -17,15 +17,15 @@ const countriesCodeWithFlags: [string, string][] = [
     ['ca', '🇪🇸'], // Catalan - Spain
     ['co', '🇫🇷'], // Corsican - France
     ['cs', '🇨🇿'], // Czech - Czechia
-    ['cy', '🇬🇧'], // Welsh - United Kingdom
+    ['cy', '🏴󠁧󠁢󠁷󠁬󠁳󠁿'], // Welsh - Wales
     ['da', '🇩🇰'], // Danish - Denmark
     ['de', '🇩🇪'], // German - Germany
     ['dv', '🇲🇻'], // Divehi - Maldives
     ['dz', '🇧🇹'], // Dzongkha - Bhutan
     ['el', '🇬🇷'], // Greek - Greece
-    ['en', '🇺🇸'], // English - United States
+    ['en', '🇬🇧'], // English - United Kingdom
     ['eo', '🌐'], // Esperanto - No associated country
-    ['es', '🇲🇽'], // Spanish - Mexico
+    ['es', '🇪🇸'], // Spanish - Spain
     ['et', '🇪🇪'], // Estonian - Estonia
     ['eu', '🇪🇸'], // Basque - Spain
     ['fa', '🇮🇷'], // Persian - Iran
@@ -88,7 +88,7 @@ const countriesCodeWithFlags: [string, string][] = [
     ['pa', '🇮🇳'], // Punjabi - India
     ['pl', '🇵🇱'], // Polish - Poland
     ['ps', '🇦🇫'], // Pashto - Afghanistan
-    ['pt', '🇧🇷'], // Portuguese - Brazil
+    ['pt', '🇵🇹'], // Portuguese - Portugal
     ['qu', '🇵🇪'], // Quechua - Peru
     ['rm', '🇨🇭'], // Romansh - Switzerland
     ['rn', '🇧🇮'], // Rundi - Burundi
@@ -163,18 +163,18 @@ export const isPasswordCorrect = (password: string) => {
 };
 
 export const isEmailCorrect = (email: string) => {
-    const regex = /^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/;
+    const regex = /^[\w-\.+]+@([\w-]+\.)+[\w-]{2,4}$/;
 
     return regex.test(email);
 };
 
 export const isNameCorrect = (firstname: string) => {
-    const regex = /^[a-zA-Zà-ÿÀ-Ý-]+$/;
+    const regex = /^[a-zA-Zà-ÿÀ-Ý-' ]+$/;
 
     return regex.test(firstname);
 };
 
-export const codeCountryToFlag = (countryCode: string) => {
+export const codeLanguageToFlag = (countryCode: string) => {
     const countriesMap = new Map(countriesCodeWithFlags);
     if (countriesMap.has(countryCode.toLocaleLowerCase())) {
         return countriesMap.get(countryCode.toLowerCase());

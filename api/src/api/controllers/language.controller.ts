@@ -165,6 +165,6 @@ export class LanguageController {
       userId: user.sub,
     });
 
-    return new LanguageRequestsCountResponse(count);
+    return LanguageRequestsCountResponse.fromDomain(count);
   }
 }

@@ -125,6 +125,9 @@ export const createProfiles = async (
         same_gender: instance.sameGender,
         same_age: instance.sameAge,
         meeting_frequency: instance.meetingFrequency,
+        availabilities: JSON.stringify(instance.availabilities),
+        availabilities_note: instance.availabilitiesNote,
+        availabilities_note_privacy: instance.availavilitiesNotePrivacy,
         bio: instance.biography,
         Campus: campus && {
           connect: { id: campus.id },

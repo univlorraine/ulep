@@ -5,6 +5,7 @@ import { useStoreState } from '../../store/storeTypes';
 import WebLayoutCentered from '../components/layout/WebLayoutCentered';
 import ReportModal from '../components/modals/ReportModal';
 import styles from './css/Suspended.module.css';
+import { AvatarPlaceholderPng } from '../../assets';
 
 const SuspendedPage: React.FC = () => {
     const { t } = useTranslation();
@@ -23,7 +24,7 @@ const SuspendedPage: React.FC = () => {
                 <div className={styles.body}>
                     <div className={styles.content}>
                         <h1 className="title">{t('suspended_page.title')}</h1>
-                        <img alt="avatar" className={styles.image} src={profile?.user.avatar} />
+                        <img alt="avatar" className={styles.image} src={profile?.user.avatar ?? AvatarPlaceholderPng} />
                         <p className={styles.subtitle}>
                             {t('suspended_page.subtitle')}
                             <br />

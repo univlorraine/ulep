@@ -9,7 +9,12 @@ interface ProfileCommand {
     interests: { id: string; name: string }[];
     nativeLanguage: {
         code: string;
+        name: string;
     };
+    masteredLanguages: {
+        code: string;
+        name: string;
+    }[];
     learningLanguages: {
         id: string;
         code: string;
@@ -22,6 +27,17 @@ interface ProfileCommand {
         image: { id: string; url: string };
     }[];
     meetingFrequency: string;
+    availabilities: {
+        monday: string;
+        tuesday: string;
+        wednesday: string;
+        thursday: string;
+        friday: string;
+        saturday: string;
+        sunday: string;
+    };
+    availabilitiesNote?: string;
+    availavilitiesNotePrivacy?: boolean;
     biography: {
         anecdote: string;
         experience: string;
@@ -34,7 +50,10 @@ interface ProfileCommand {
 export const profileCommandToDomain = (command: ProfileCommand) => {
     return new Profile(
         command.id,
-        command.nativeLanguage.code,
+        new Language(command.nativeLanguage.code, command.nativeLanguage.code, command.nativeLanguage.name),
+        command.masteredLanguages.map(
+            (masteredLanguage) => new Language(masteredLanguage.code, masteredLanguage.code, masteredLanguage.name)
+        ),
         command.learningLanguages.map(
             (learningLanguage) => new Language(learningLanguage.id, learningLanguage.code, learningLanguage.name)
         ),
@@ -47,7 +66,18 @@ export const profileCommandToDomain = (command: ProfileCommand) => {
             favoritePlace: command.biography.favoritePlace,
             superpower: command.biography.superpower,
         },
-        userCommandToDomain(command.user)
+        {
+            monday: command.availabilities.monday as AvailabilitiesOptions,
+            tuesday: command.availabilities.tuesday as AvailabilitiesOptions,
+            wednesday: command.availabilities.wednesday as AvailabilitiesOptions,
+            thursday: command.availabilities.thursday as AvailabilitiesOptions,
+            friday: command.availabilities.friday as AvailabilitiesOptions,
+            saturday: command.availabilities.saturday as AvailabilitiesOptions,
+            sunday: command.availabilities.sunday as AvailabilitiesOptions,
+        },
+        userCommandToDomain(command.user),
+        command.availabilitiesNote,
+        command.availavilitiesNotePrivacy
     );
 };
 

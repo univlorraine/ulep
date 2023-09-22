@@ -10,7 +10,7 @@ i18n.use(HttpApi) // charge les traductions à partir des fichiers distants
         debug: true,
 
         backend: {
-            loadPath: '/locales/{{lng}}/translation.json',
+            loadPath: `${import.meta.env.VITE_API_URL}/instance/locales/{{lng}}/translation`,
         },
 
         interpolation: {

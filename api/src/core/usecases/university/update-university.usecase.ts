@@ -1,4 +1,4 @@
-import { Inject, Injectable } from '@nestjs/common';
+import { Inject, Injectable, Logger } from '@nestjs/common';
 import {
   UNIVERSITY_REPOSITORY,
   UniversityRepository,
@@ -21,10 +21,13 @@ export class UpdateUniversityCommand {
   domains: string[];
   website: string;
   pairingMode: PairingMode;
+  notificationEmail?: string;
 }
 
 @Injectable()
 export class UpdateUniversityUsecase {
+  private readonly logger = new Logger(UpdateUniversityUsecase.name);
+
   constructor(
     @Inject(COUNTRY_REPOSITORY)
     private readonly countryRepository: CountryRepository,
@@ -56,6 +59,7 @@ export class UpdateUniversityUsecase {
         campus: university.campus,
         website: command.website,
         pairingMode: command.pairingMode,
+        notificationEmail: command.notificationEmail,
       }),
     );
   }

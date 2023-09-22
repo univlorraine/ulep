@@ -8,6 +8,8 @@ import { BiographyDto } from './biography';
 import { Language } from 'src/core/models';
 import { CampusResponse } from '../campus';
 import { LearningLanguageResponse } from '../learning-languages';
+import { IsObject, ValidateNested, IsBoolean } from 'class-validator';
+import { AvailabilitesDto } from 'src/api/dtos/profiles/availabilities';
 
 class NativeLanguageResponse {
   @ApiProperty({ type: 'string', example: 'FR' })
@@ -79,6 +81,23 @@ export class ProfileResponse {
   @Expose({ groups: ['read'] })
   interests: InterestResponse[];
 
+  @ApiProperty({ type: AvailabilitesDto })
+  @Transform(({ value }) => new AvailabilitesDto(value))
+  @Expose({ groups: ['read'] })
+  @IsObject()
+  @ValidateNested()
+  availabilities: AvailabilitesDto;
+
+  @ApiProperty({ type: 'string' })
+  @Expose({ groups: ['read'] })
+  @IsBoolean()
+  availabilitiesNote: string;
+
+  @ApiProperty({ type: 'boolean' })
+  @Expose({ groups: ['read'] })
+  @IsBoolean()
+  availabilitiesNotePrivacy: boolean;
+
   @ApiProperty({ type: BiographyDto, nullable: true })
   @Expose({ groups: ['read'] })
   biography?: BiographyDto;
@@ -125,6 +144,9 @@ export class ProfileResponse {
         InterestResponse.fromDomain(interest),
       ),
       meetingFrequency: profile.meetingFrequency,
+      availabilities: AvailabilitesDto.fromDomain(profile.availabilities),
+      availabilitiesNote: profile.availabilitiesNote,
+      availabilitiesNotePrivacy: profile.availavilitiesNotePrivacy,
       biography:
         profile.biography && BiographyDto.fromDomain(profile.biography),
       campus: profile.campus && CampusResponse.fromCampus(profile.campus),

@@ -2,7 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { Collection, PrismaService } from '@app/common';
 import { TandemRepository } from '../../../core/ports/tandems.repository';
 import { FindWhereProps } from '../../../core/ports/tandems.repository';
-import { Tandem, TandemStatus } from '../../../core/models';
+import { Tandem } from '../../../core/models';
 import { TandemRelations, tandemMapper } from '../mappers/tandem.mapper';
 
 @Injectable()
@@ -77,12 +77,6 @@ export class PrismaTandemRepository implements TandemRepository {
     };
   }
 
-  async delete(tandemId: string): Promise<void> {
-    await this.prisma.tandems.delete({
-      where: { id: tandemId },
-    });
-  }
-
   async getExistingTandems(): Promise<Tandem[]> {
     const tandems = await this.prisma.tandems.findMany({
       where: {
@@ -120,6 +114,29 @@ export class PrismaTandemRepository implements TandemRepository {
           some: {
             id: {
               equals: learningLanguageId,
+            },
+          },
+        },
+      },
+      include: TandemRelations,
+    });
+
+    if (!tandem) {
+      return null;
+    }
+
+    return tandemMapper(tandem);
+  }
+
+  async getTandemOfLearningLanguages(
+    learningLanguageIds: string[],
+  ): Promise<Tandem> {
+    const tandem = await this.prisma.tandems.findFirst({
+      where: {
+        LearningLanguages: {
+          every: {
+            id: {
+              in: learningLanguageIds,
             },
           },
         },
@@ -197,6 +214,14 @@ export class PrismaTandemRepository implements TandemRepository {
             id: universityId,
           })),
         },
+      },
+    });
+  }
+
+  async delete(id: string): Promise<void> {
+    await this.prisma.tandems.delete({
+      where: {
+        id,
       },
     });
   }

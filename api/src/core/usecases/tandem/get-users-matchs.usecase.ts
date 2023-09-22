@@ -14,6 +14,10 @@ import {
   LEARNING_LANGUAGE_REPOSITORY,
   LearningLanguageRepository,
 } from 'src/core/ports/learning-language.repository';
+import {
+  REFUSED_TANDEMS_REPOSITORY,
+  RefusedTandemsRepository,
+} from 'src/core/ports/refused-tandems.repository';
 import { MatchScorer } from 'src/core/services/MatchScorer';
 
 export type GetUserMatchCommand = {
@@ -34,6 +38,8 @@ export class GetUserMatchUsecase {
     @Inject(LANGUAGE_REPOSITORY)
     private readonly languageRepository: LanguageRepository,
     private readonly matchService: MatchScorer,
+    @Inject(REFUSED_TANDEMS_REPOSITORY)
+    private readonly refusedTandemsRepository: RefusedTandemsRepository,
   ) {}
 
   async execute(command: GetUserMatchCommand): Promise<Collection<Match>> {
@@ -64,10 +70,23 @@ export class GetUserMatchUsecase {
         );
     }
 
+    const refusedTandems =
+      await this.refusedTandemsRepository.getForLearningLanguage(
+        learningLanguage.id,
+      );
+    const refusedPartnersMap = new Map<string, null>(
+      refusedTandems.map((item) => {
+        const partnerId = item.learningLanguageIds.find(
+          (id) => id !== learningLanguage.id,
+        );
+        return [partnerId, null];
+      }),
+    );
+
     const languagesThatCanBeLearnt =
       await this.languageRepository.getLanguagesProposedToLearning();
 
-    this.logger.debug(
+    this.logger.verbose(
       `Found ${targets.length} potential learningLanguages match in universities ${command.universityIds} for learningLanguage ${command.id}`,
     );
 
@@ -75,6 +94,7 @@ export class GetUserMatchUsecase {
 
     for (const target of targets) {
       if (target.profile.id === owner.id) continue;
+      if (refusedPartnersMap.has(target.id)) continue;
 
       const match = this.matchService.computeMatchScore(
         learningLanguage,

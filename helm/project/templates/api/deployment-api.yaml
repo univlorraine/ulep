@@ -84,6 +84,34 @@ spec:
               value: "https://{{ .Values.minioApiUrl }}.{{ .Values.domain }}"
             - name: MINIO_USE_SSL
               value: "true"
+            - name: SMTP_HOST
+              value: "{{ .Values.api.env.smtpHost }}"
+            - name: SMTP_PORT
+              value: "{{ .Values.api.env.smtpPort }}"
+            - name: SMTP_SECURE
+              value: "{{ .Values.api.env.smtpSecure }}"
+            - name: SMTP_SENDER
+              value: "{{ .Values.api.env.smtpSender }}"
+            - name: SMTP_DISABLE_BOOT_VERIFICATION
+              value: "{{ .Values.api.env.smtpDisableBootVerification }}"
+            - name: LOG_LEVEL
+              value: "{{ .Values.api.env.logLevel }}"
+            - name: LOG_LEVEL
+              value: "{{ .Values.api.env.logLevel }}"
+            - name: EMAIL_TRANSLATIONS_COMPONENT
+              value: "{{ .Values.api.env.emailsTranslationsComponent }}"
+            - name: EMAIL_ASSETS_ENDPOINT
+              value: "{{ .Values.api.env.emailsAssetsEndpoint }}"
+            - name: EMAIL_ASSETS_BUCKET
+              value: "{{ .Values.api.env.emailsAssetsBucket }}"
+            - name: APP_LINK_APPLE_STORE
+              value: "{{ .Values.api.env.appLinkAppleStore }}"
+            - name: APP_LINK_PLAY_STORE
+              value: "{{ .Values.api.env.appLinkPlayStore }}"
+            - name: TRANSLATIONS_ENDPOINT
+              value: "{{ .Values.api.env.translationsEndpoint }}"
+            - name: TRANSLATIONS_ENDPOINT_SUFFIX
+              value: "{{ .Values.api.env.translationsEndpointSuffix }}"
           envFrom:
             - secretRef: 
                 name: "{{ include "etandem.fullname" . }}-secret-{{ .Values.api.name }}"

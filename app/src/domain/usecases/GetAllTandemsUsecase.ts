@@ -1,114 +1,24 @@
+import { HttpResponse } from '../../adapter/BaseHttpAdapter';
 import { HttpAdapterInterface } from '../../adapter/DomainHttpAdapter';
-import { AvatarPng } from '../../assets';
-import { Interest } from '../entities/CategoryInterests';
-import Goal from '../entities/Goal';
-import Language from '../entities/Language';
-import Profile from '../entities/Profile';
+import { CollectionCommand } from '../../command/CollectionCommand';
+import TandemCommand, { tandemCommandToDomain } from '../../command/TandemCommand';
 import Tandem from '../entities/Tandem';
-import University from '../entities/University';
-import User from '../entities/User';
 import GetAllTandemsUsecaseInterface from '../interfaces/GetAllTandemsUsecase.interface';
 
-// TODO(herve): Add profile id command
-// response will be like this:
-// {
-//     "id": "id",
-//     "partner": Profile,
-//     "languages": Language[],
-//     "status": "ACTIVE"
-// }
 class GetAllTandemsUsecase implements GetAllTandemsUsecaseInterface {
     constructor(private readonly domainHttpAdapter: HttpAdapterInterface) {}
 
-    async execute(): Promise<Tandem[] | Error> {
+    async execute(id: string): Promise<Tandem[] | Error> {
         try {
-            //TODO: replace mocked data when api will be ready
-            /*
-            const httpResponse: HttpResponse<CollectionCommand<TandemCommand>> = await this.domainHttpAdapter.get(
-                `/profiles/{id}/tandems`
+            const httpResponse: HttpResponse<TandemCommand[]> = await this.domainHttpAdapter.get(
+                `/profiles/${id}/tandems`
             );
 
-            if (!httpResponse.parsedBody || !httpResponse.parsedBody.items) {
+            if (!httpResponse.parsedBody) {
                 return new Error('errors.global');
             }
 
-            return tandemCommandToDomain(httpResponse.parsedBody.items);*/
-            return [
-                new Tandem(
-                    'id2',
-                    new Language('id', 'FR', '🇫🇷 Fraçais'),
-                    'ACTIVE',
-                    new Profile(
-                        'id2',
-                        'FR',
-                        [new Language('id', 'CN', 'China')],
-                        [new Goal('id', 'name', '')],
-                        'ONCE_A_WEEK',
-                        [new Interest('id', 'name')],
-                        {
-                            anecdote: 'anectdote',
-                            experience: 'exeperience',
-                            favoritePlace: 'favoritePlace',
-                            superpower: 'superpower',
-                        },
-                        new User(
-                            'id2',
-                            AvatarPng,
-                            'email@test.fr',
-                            'firstname',
-                            'lastname',
-                            new University(
-                                'id',
-                                'name',
-                                false,
-                                'timezone',
-                                [{ id: 'id', name: 'Site A' }],
-                                new Date('2023-01-01T00:00:00.000Z'),
-                                new Date('2023-12-31T00:00:00.000Z')
-                            ),
-                            'ACTIVE'
-                        )
-                    )
-                ),
-                new Tandem('id3', new Language('id', 'CN', '🇨🇳 Chinois'), 'DRAFT'),
-                new Tandem(
-                    'id4',
-                    new Language('id', 'CN', '🇨🇳 Chinois'),
-                    'UNACTIVE',
-                    new Profile(
-                        'id2',
-                        'FR',
-                        [new Language('id', 'CN', 'China')],
-                        [new Goal('id', 'name', '')],
-                        'ONCE_A_WEEK',
-                        [new Interest('id', 'name')],
-                        {
-                            anecdote: 'anectdote',
-                            experience: 'exeperience',
-                            favoritePlace: 'favoritePlace',
-                            superpower: 'superpower',
-                        },
-                        new User(
-                            'id2',
-                            AvatarPng,
-                            'email@test.fr',
-                            'firstname',
-                            'lastname',
-                            new University(
-                                'id',
-                                'name',
-                                false,
-                                'timezone',
-                                [{ id: 'id', name: 'Site A' }],
-                                new Date('2023-01-01T00:00:00.000Z'),
-                                new Date('2023-12-31T00:00:00.000Z')
-                            ),
-                            'ACTIVE'
-                        )
-                    )
-                ),
-                new Tandem('id5', new Language('id', 'CN', '🇨🇳 Chinois'), 'UNACTIVE'),
-            ];
+            return tandemCommandToDomain(httpResponse.parsedBody);
         } catch (error: any) {
             return new Error('errors.global');
         }

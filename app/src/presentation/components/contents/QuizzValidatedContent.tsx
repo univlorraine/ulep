@@ -35,7 +35,7 @@ const QuizzValidatedContent: React.FC<QuizzValidatedContentProps> = ({
             </div>
             <p className={styles.description}>
                 {onNextStep
-                    ? t('pairing_quizz_validation.description_next_step')
+                    ? t(`pairing_quizz_validation.description_next_step.${quizzLevel}`)
                     : t('pairing_quizz_validation.description')}
             </p>
             {onNextQuizz && (

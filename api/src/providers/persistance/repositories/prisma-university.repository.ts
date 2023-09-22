@@ -35,6 +35,7 @@ export class PrismaUniversityRepository implements UniversityRepository {
         codes: university.codes,
         domains: university.domains,
         pairing_mode: university.pairingMode,
+        notification_email: university.notificationEmail,
       },
     });
 
@@ -116,6 +117,7 @@ export class PrismaUniversityRepository implements UniversityRepository {
           connect: { id: university.country.id },
         },
         pairing_mode: university.pairingMode,
+        notification_email: university.notificationEmail,
       },
     });
 

@@ -32,6 +32,12 @@ import { LEARNING_LANGUAGE_REPOSITORY } from 'src/core/ports/learning-language.r
 import { PrismaLearningLanguageRepository } from './persistance/repositories/prisma-learning-language-repository';
 import { ROUTINE_EXECUTION_REPOSITORY } from 'src/core/ports/routine-execution.repository';
 import { PrismaRoutineExecutionRepository } from './persistance/repositories/prisma-routine-execution-repository';
+import { REFUSED_TANDEMS_REPOSITORY } from 'src/core/ports/refused-tandems.repository';
+import { PrismaRefusedTandemsRepository } from './persistance/repositories/prisma-refused-tandems.repository';
+import { EMAIL_GATEWAY } from 'src/core/ports/email.gateway';
+import { SmtpEmailGateway } from './gateway/smtp-email.gateway';
+import { EMAIL_TEMPLATE_REPOSITORY } from 'src/core/ports/email-template.repository';
+import { TranslatedEmailTemplateRepository } from './persistance/repositories/translated-emails-template-repository';
 
 const providers: Provider[] = [
   {
@@ -97,6 +103,18 @@ const providers: Provider[] = [
   {
     provide: ROUTINE_EXECUTION_REPOSITORY,
     useClass: PrismaRoutineExecutionRepository,
+  },
+  {
+    provide: REFUSED_TANDEMS_REPOSITORY,
+    useClass: PrismaRefusedTandemsRepository,
+  },
+  {
+    provide: EMAIL_GATEWAY,
+    useClass: SmtpEmailGateway,
+  },
+  {
+    provide: EMAIL_TEMPLATE_REPOSITORY,
+    useClass: TranslatedEmailTemplateRepository,
   },
 ];
 

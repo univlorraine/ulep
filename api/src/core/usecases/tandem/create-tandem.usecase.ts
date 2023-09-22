@@ -7,6 +7,12 @@ import {
   Tandem,
   TandemStatus,
 } from 'src/core/models';
+import { EMAIL_TEMPLATE_IDS } from 'src/core/models/email-content.model';
+import {
+  EMAIL_TEMPLATE_REPOSITORY,
+  EmailTemplateRepository,
+} from 'src/core/ports/email-template.repository';
+import { EMAIL_GATEWAY, EmailGateway } from 'src/core/ports/email.gateway';
 import {
   LEARNING_LANGUAGE_REPOSITORY,
   LearningLanguageRepository,
@@ -40,6 +46,10 @@ export class CreateTandemUsecase {
     private readonly universityRepository: UniversityRepository,
     @Inject(UUID_PROVIDER)
     private readonly uuidProvider: UuidProvider,
+    @Inject(EMAIL_TEMPLATE_REPOSITORY)
+    private readonly emailTemplateRepository: EmailTemplateRepository,
+    @Inject(EMAIL_GATEWAY)
+    private readonly emailGateway: EmailGateway,
   ) {}
 
   async execute(command: CreateTandemCommand): Promise<Tandem> {
@@ -127,14 +137,46 @@ export class CreateTandemUsecase {
       await this.tandemsRepository.deleteTandemLinkedToLearningLanguages(
         learningLanguages.map((ll) => ll.id),
       );
-    this.logger.debug(
+    this.logger.verbose(
       `Removed ${countDeletedTandem} tandems linked to learning languages of created tandem`,
     );
 
     await this.tandemsRepository.save(tandem);
-    this.logger.debug(
+    this.logger.verbose(
       `Tandem ${tandem.id} created with status ${tandem.status}`,
     );
+
+    if (tandem.status === TandemStatus.ACTIVE) {
+      const [learningLanguage1, learningLanguage2] = tandem.learningLanguages;
+      const emailContentProfile1 = await this.emailTemplateRepository.getEmail(
+        EMAIL_TEMPLATE_IDS.TANDEM_BECOME_ACTIVE,
+        learningLanguage1.profile.nativeLanguage.code,
+        {
+          firstname: learningLanguage1.profile.user.firstname,
+          partnerFirstname: learningLanguage2.profile.user.firstname,
+          partnerLastname: learningLanguage2.profile.user.lastname,
+          universityName: learningLanguage1.profile.user.university.name,
+        },
+      );
+      const emailContentProfile2 = await this.emailTemplateRepository.getEmail(
+        EMAIL_TEMPLATE_IDS.TANDEM_BECOME_ACTIVE,
+        learningLanguage2.profile.nativeLanguage.code,
+        {
+          firstname: learningLanguage2.profile.user.firstname,
+          partnerFirstname: learningLanguage1.profile.user.firstname,
+          partnerLastname: learningLanguage1.profile.user.lastname,
+          universityName: learningLanguage2.profile.user.university.name,
+        },
+      );
+      await this.emailGateway.send({
+        recipient: learningLanguage1.profile.user.email,
+        email: emailContentProfile1,
+      });
+      await this.emailGateway.send({
+        recipient: learningLanguage2.profile.user.email,
+        email: emailContentProfile2,
+      });
+    }
 
     return tandem;
   }

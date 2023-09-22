@@ -10,6 +10,7 @@ import {
   IsNotEmpty,
   IsObject,
   IsOptional,
+  IsString,
   IsUUID,
   ValidateNested,
 } from 'class-validator';
@@ -17,6 +18,7 @@ import { LearningType } from 'src/core/models';
 import { CreateProfileCommand } from 'src/core/usecases/profiles/create-profile.usecase';
 import { BiographyDto } from './biography';
 import { LearningLanguageDto } from '../learning-languages';
+import { AvailabilitesDto } from 'src/api/dtos/profiles/availabilities';
 
 export class CreateProfileRequest
   implements Omit<CreateProfileCommand, 'user'>
@@ -63,6 +65,22 @@ export class CreateProfileRequest
   @Swagger.ApiProperty()
   @IsBoolean()
   sameAge: boolean;
+
+  @Swagger.ApiProperty({ type: AvailabilitesDto })
+  @Transform(({ value }) => new AvailabilitesDto(value))
+  @IsObject()
+  @ValidateNested()
+  availabilities: AvailabilitesDto;
+
+  @Swagger.ApiProperty({ type: 'string' })
+  @IsString()
+  @IsOptional()
+  availabilitiesNote?: string;
+
+  @Swagger.ApiProperty({ type: 'boolean' })
+  @IsBoolean()
+  @IsOptional()
+  availabilitiesNotePrivacy?: boolean;
 
   @Swagger.ApiProperty({ type: BiographyDto })
   @Transform(({ value }) => new BiographyDto(value))

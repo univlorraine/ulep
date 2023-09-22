@@ -2,7 +2,7 @@ import { IonContent, IonPage, useIonToast } from '@ionic/react';
 import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Redirect, useHistory } from 'react-router';
-import { ArrowDownSvg, ReportSvg } from '../../assets';
+import { ArrowDownSvg, AvatarPlaceholderPng, ReportSvg } from '../../assets';
 import { useConfig } from '../../context/ConfigurationContext';
 import Tandem from '../../domain/entities/Tandem';
 import { useStoreActions, useStoreState } from '../../store/storeTypes';
@@ -32,22 +32,29 @@ const HomePage: React.FC = () => {
     const [selectedTandem, setSelectedTandem] = useState<Tandem>();
     const [tandems, setTandems] = useState<Tandem[]>([]);
 
+    const getHomeData = async () => {
+        const result = await getAllTandems.execute(profile!.id);
+
+        if (result instanceof Error) {
+            return await showToast({ message: t(result.message), duration: 5000 });
+        }
+
+        const waitingLearningLanguages: Tandem[] = [];
+        profile?.learningLanguages.map((learningLanguage) => {
+            if (!result.find((tandem) => tandem.learningLanguage.id === learningLanguage.id)) {
+                waitingLearningLanguages.push(new Tandem(learningLanguage.id, 'DRAFT', learningLanguage, 'A0'));
+            }
+        });
+
+        setTandems([...result, ...waitingLearningLanguages]);
+    };
+
     useEffect(() => {
         getHomeData();
     }, []);
 
     const onDisconnect = () => {
         return logout();
-    };
-
-    const getHomeData = async () => {
-        const result = await getAllTandems.execute();
-
-        if (result instanceof Error) {
-            return await showToast({ message: t(result.message), duration: 5000 });
-        }
-
-        setTandems(result);
     };
 
     const onProfilePressed = () => (isHybrid ? history.push('/profil') : setDisplayProfile(true));
@@ -62,7 +69,7 @@ const HomePage: React.FC = () => {
             ? setSelectedTandem(tandem)
             : history.push('/tandem-profil', {
                   profile: tandem.partner,
-                  language: tandem.language,
+                  language: tandem.learningLanguage,
               });
 
     const formattedDate = `${currentDate.getFullYear()}-${currentDate.getDate().toString().padStart(2, '0')}-${(
@@ -77,7 +84,9 @@ const HomePage: React.FC = () => {
 
     return (
         <IonPage>
-            {!isHybrid && <HomeHeader avatar={profile.user.avatar} onPicturePressed={onProfilePressed} />}
+            {!isHybrid && (
+                <HomeHeader avatar={profile.user.avatar ?? AvatarPlaceholderPng} onPicturePressed={onProfilePressed} />
+            )}
             <IonContent>
                 <div className={styles.container}>
                     <div className={styles['header']}>
@@ -87,7 +96,11 @@ const HomePage: React.FC = () => {
                         </div>
                         {isHybrid && (
                             <button className={styles['avatar-container']} onClick={onProfilePressed}>
-                                <img alt="avatar" className={styles.avatar} src={profile.user.avatar} />
+                                <img
+                                    alt="avatar"
+                                    className={styles.avatar}
+                                    src={profile.user.avatar ?? AvatarPlaceholderPng}
+                                />
                                 <img alt="arrow-down" src={ArrowDownSvg} />
                             </button>
                         )}
@@ -97,7 +110,8 @@ const HomePage: React.FC = () => {
                         <TandemList onTandemPressed={onValidatedTandemPressed} tandems={tandems} />
                         <WaitingTandemList
                             onTandemPressed={onTandemPressed}
-                            onNewTandemAsked={() => null}
+                            onNewTandemAsked={() => history.push('pairing/languages')}
+                            profile={profile}
                             tandems={tandems}
                         />
                     </div>
@@ -122,19 +136,22 @@ const HomePage: React.FC = () => {
                         onDisconnect={onDisconnect}
                         profileFirstname={profile.user.firstname}
                         profileLastname={profile.user.lastname}
-                        profilePicture={profile.user.avatar}
+                        profilePicture={profile.user.avatar ?? AvatarPlaceholderPng}
                     />
                     <TandemStatusModal
                         isVisible={
                             !!selectedTandem &&
-                            (selectedTandem.status === 'DRAFT' || selectedTandem.status === 'UNACTIVE')
+                            (selectedTandem.status === 'DRAFT' ||
+                                selectedTandem.status === 'UNACTIVE' ||
+                                selectedTandem.status === 'VALIDATED_BY_ONE_UNIVERSITY')
                         }
                         onClose={() => setSelectedTandem(undefined)}
+                        onFindNewTandem={() => history.push('pairing/languages')}
                         status={selectedTandem?.status}
                     />
                     <TandemProfileModal
                         isVisible={!!selectedTandem && selectedTandem.status === 'ACTIVE'}
-                        language={selectedTandem?.language}
+                        language={selectedTandem?.learningLanguage}
                         onClose={() => setSelectedTandem(undefined)}
                         profile={selectedTandem?.partner}
                     />

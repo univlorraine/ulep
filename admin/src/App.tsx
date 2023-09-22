@@ -59,7 +59,7 @@ const App = () => {
                                 {...suggestedLanguages}
                             />
                             <Resource
-                                name="languages-requests-count"
+                                name="languages/requests/count"
                                 options={{ label: translate('count_suggested_languages.label') }}
                                 {...countSuggestedLanguages}
                             />

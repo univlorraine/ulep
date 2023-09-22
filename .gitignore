@@ -16,3 +16,6 @@ Thumbs.db
 !.vscode/extensions.json
 values.yaml
 helm/project/old
+
+# Docker data
+docker/minio/.minio.sys

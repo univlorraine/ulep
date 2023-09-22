@@ -60,6 +60,7 @@ export type ProfileSnapshot = Prisma.Profiles & {
 };
 
 export const profileMapper = (instance: ProfileSnapshot): Profile => {
+  const availabilities = JSON.parse(instance.availabilities as string);
   return new Profile({
     id: instance.id,
     user: userMapper(instance.User),
@@ -108,6 +109,17 @@ export const profileMapper = (instance: ProfileSnapshot): Profile => {
         name: textContentMapper(interest.Category.TextContent),
       },
     })),
+    availabilities: {
+      monday: availabilities['monday'],
+      tuesday: availabilities['tuesday'],
+      wednesday: availabilities['wednesday'],
+      thursday: availabilities['thursday'],
+      friday: availabilities['friday'],
+      saturday: availabilities['saturday'],
+      sunday: availabilities['sunday'],
+    },
+    availabilitiesNote: instance.availabilities_note,
+    availavilitiesNotePrivacy: instance.availabilities_note_privacy,
     biography: {
       superpower: instance.bio['superpower'],
       favoritePlace: instance.bio['favoritePlace'],

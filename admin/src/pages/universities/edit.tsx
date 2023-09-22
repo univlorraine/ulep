@@ -20,7 +20,8 @@ const EditUniversity = () => {
         codes: string[],
         domains: string[],
         pairingMode: string,
-        website?: string
+        website?: string,
+        notificationEmail?: string
     ) => {
         const payload = {
             name,
@@ -32,6 +33,7 @@ const EditUniversity = () => {
             domains,
             website,
             pairingMode,
+            notificationEmail: notificationEmail || undefined,
         };
         try {
             return await update(
@@ -74,7 +76,8 @@ const EditUniversity = () => {
                             codes: string[],
                             domains: string[],
                             pairingMode: string,
-                            website?: string
+                            website?: string,
+                            notificationEmail?: string
                         ) =>
                             handleSubmit(
                                 record.id,
@@ -86,10 +89,12 @@ const EditUniversity = () => {
                                 codes,
                                 domains,
                                 pairingMode,
-                                website
+                                website,
+                                notificationEmail
                             )
                         }
                         name={record.name}
+                        notificationEmail={record.notificationEmail}
                         pairingMode={record.pairingMode}
                         timezone={record.timezone}
                         tradKey="update"

@@ -1,19 +1,17 @@
 import { useTranslation } from 'react-i18next';
-import Availability, { occurence } from '../../domain/entities/Availability';
 import styles from './AvailabilityLine.module.css';
 
 interface AvailabilityLineProps {
-    availability: Availability;
+    availability: AvailabilitiesOptions;
     day: string;
-    onPress?: ({ id, occurence }: { id: string; occurence: occurence }) => void;
+    onPress?: ({ id, occurence }: { id: string; occurence: AvailabilitiesOptions }) => void;
 }
 
 const AvailabilityLine: React.FC<AvailabilityLineProps> = ({ availability, day, onPress }) => {
     const { t } = useTranslation();
     let color: string;
-    const status = availability.occurence;
 
-    switch (status) {
+    switch (availability) {
         case 'AVAILABLE':
             color = '#FF8700';
             break;
@@ -29,11 +27,11 @@ const AvailabilityLine: React.FC<AvailabilityLineProps> = ({ availability, day, 
             key={day}
             className={styles.container}
             disabled={!onPress}
-            onClick={() => (onPress ? onPress({ id: day, occurence: status }) : null)}
+            onClick={() => (onPress ? onPress({ id: day, occurence: availability }) : null)}
         >
             <span
                 className={styles['availability-day']}
-                style={{ color: status === 'UNAVAILABLE' ? '#767676' : 'black' }}
+                style={{ color: availability === 'UNAVAILABLE' ? '#767676' : 'black' }}
             >
                 {t(`days.${day}`)}
             </span>
@@ -41,9 +39,9 @@ const AvailabilityLine: React.FC<AvailabilityLineProps> = ({ availability, day, 
                 <div style={{ backgroundColor: color }} className={styles.dot} />
                 <span
                     className={styles['availability-status']}
-                    style={{ color: status === 'UNAVAILABLE' ? '#767676' : 'black' }}
+                    style={{ color: availability === 'UNAVAILABLE' ? '#767676' : 'black' }}
                 >
-                    {t(`signup_availabilities_page.${status}`)}
+                    {t(`signup_availabilities_page.${availability}`)}
                 </span>
             </div>
         </button>

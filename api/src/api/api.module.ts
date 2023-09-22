@@ -23,6 +23,7 @@ import { ROUTINE_EXECUTION_REPOSITORY } from 'src/core/ports/routine-execution.r
 import { PrismaRoutineExecutionRepository } from 'src/providers/persistance/repositories/prisma-routine-execution-repository';
 import { PrismaService } from '@app/common';
 import { RoutineExecutionController } from './controllers/routine-execution.controller';
+import { InstanceController } from 'src/api/controllers/instance.controller';
 
 @Module({
   imports: [CoreModule, TerminusModule],
@@ -31,6 +32,7 @@ import { RoutineExecutionController } from './controllers/routine-execution.cont
     CountryController,
     HealthController,
     InterestController,
+    InstanceController,
     LanguageController,
     MatchController,
     ObjectiveController,

@@ -24,6 +24,7 @@
       "bearerOnly": false,
       "standardFlowEnabled": false,
       "directAccessGrantsEnabled": true,
+      "serviceAccountsEnabled": true,
       "protocolMappers": [{
         "id": "b38e1a26-d649-4370-879d-c7499d023daa",
         "name": "universityId",
@@ -92,6 +93,29 @@
     "clientRoles": {},
     "subGroups": []
   }],
+  "users": [
+  {
+    "id": "8ef3f4a1-c828-4172-9f50-5820482f7969",
+    "createdTimestamp": 1695303592667,
+    "username": "service-account-api",
+    "enabled": true,
+    "totp": false,
+    "emailVerified": false,
+    "serviceAccountClientId": "api",
+    "disableableCredentialTypes": [],
+    "requiredActions": [],
+    "realmRoles": ["default-roles-etandem"],
+    "clientRoles": {
+      "realm-management": [
+        "query-users",
+        "manage-users",
+        "manage-authorization"
+      ]
+    },
+    "notBefore": 0,
+    "groups": []
+  }
+],
   "roles": {
     "realm": [
       {
@@ -115,4 +139,3 @@
     ]
   }
 }
-  

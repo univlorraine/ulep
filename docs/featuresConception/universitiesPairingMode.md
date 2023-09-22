@@ -119,6 +119,39 @@ See [dedicated README](./generateTandemsRoutines.md) for algorithm details.
 When a tandem is picked by global routine, check if tandems users university are both in automatic pairing mode. If that's the case, then create tandem with status "ACTIVE".
 
 
+## Refuse a tandem
+
+An admin of a university in MANUAL or SEMI_AUTOMATIC pairing mode can refuse a tandem.
+This tandem should not be proposed again.
+
+TODO:
+1. Refuse tandem UC: delete tandem if exist, add learning languages to refused tandems
+2. Impact on UC get-user-matches and generate tandems: do not propose a tandem that has been refused
+3. Back-office IHM
+
+```plantuml
+class LearningLanguages {
+    id: string
+    ---
+    // Other props
+}
+
+class RefusedTandems {
+    learningLanguageIds: string[]
+    createdAt: Date
+    universityRefused: string
+}
+
+class Organizations {
+    id: string
+    ---
+    // Other proprs
+}
+
+RefusedTandems::learningLanguageIds "n" -- "n" LearningLanguages::id
+RefusedTandems::universityRefused "n" -- "1" Organizations::id
+```
+
 ## TODOs
 
 1. Add university's pairing mode and ability to update them through Backoffice

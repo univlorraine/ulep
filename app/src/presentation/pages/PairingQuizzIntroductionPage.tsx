@@ -1,5 +1,5 @@
 import { useTranslation } from 'react-i18next';
-import { useHistory } from 'react-router';
+import { useHistory, useParams } from 'react-router';
 import { StarPng } from '../../assets';
 import { useConfig } from '../../context/ConfigurationContext';
 import WebLayoutCentered from '../components/layout/WebLayoutCentered';
@@ -9,6 +9,7 @@ import styles from './css/SignUp.module.css';
 const PairingQuizzIntroductionPage: React.FC = ({}) => {
     const { configuration } = useConfig();
     const history = useHistory();
+    const isSignUp = useParams<{ prefix?: string }>().prefix;
     const { t } = useTranslation();
 
     return (
@@ -31,7 +32,7 @@ const PairingQuizzIntroductionPage: React.FC = ({}) => {
                 <div>
                     <button
                         className="primary-button extra-large-margin-bottom"
-                        onClick={() => history.push('/signup/pairing/language/quizz')}
+                        onClick={() => history.push(`${isSignUp ? '/' + isSignUp : '/'}pairing/language/quizz`)}
                     >
                         {t('pairing_quizz_introduction_page.validate_button')}
                     </button>

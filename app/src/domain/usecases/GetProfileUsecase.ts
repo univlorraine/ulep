@@ -6,12 +6,14 @@ import GetProfileUsecaseInterface from '../interfaces/GetProfileUsecase.interfac
 
 class GetProfileUsecase implements GetProfileUsecaseInterface {
     constructor(private readonly domainHttpAdapter: HttpAdapterInterface) {}
-    async execute(): Promise<Profile | Error> {
+    async execute(accessToken: string): Promise<Profile | Error> {
         try {
+            //Force accessToken to avoid call with an old token ( because we have to wait store to be refreshed )
             const httpResponse: HttpResponse<ProfileCommand> = await this.domainHttpAdapter.get(
                 `/profiles/me`,
                 undefined,
-                false
+                false,
+                accessToken
             );
 
             if (!httpResponse.parsedBody) {

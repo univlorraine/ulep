@@ -1,5 +1,18 @@
+import { SendEmailPayload } from './../../ports/email.gateway';
 import { Inject, Injectable, Logger } from '@nestjs/common';
-import { Match, PairingMode, Tandem, TandemStatus } from 'src/core/models';
+import {
+  Match,
+  PairingMode,
+  Tandem,
+  TandemStatus,
+  University,
+} from 'src/core/models';
+import { EMAIL_TEMPLATE_IDS } from 'src/core/models/email-content.model';
+import {
+  EMAIL_TEMPLATE_REPOSITORY,
+  EmailTemplateRepository,
+} from 'src/core/ports/email-template.repository';
+import { EMAIL_GATEWAY, EmailGateway } from 'src/core/ports/email.gateway';
 import {
   LANGUAGE_REPOSITORY,
   LanguageRepository,
@@ -8,6 +21,10 @@ import {
   LEARNING_LANGUAGE_REPOSITORY,
   LearningLanguageRepository,
 } from 'src/core/ports/learning-language.repository';
+import {
+  REFUSED_TANDEMS_REPOSITORY,
+  RefusedTandemsRepository,
+} from 'src/core/ports/refused-tandems.repository';
 import {
   TANDEM_REPOSITORY,
   TandemRepository,
@@ -23,6 +40,9 @@ export type GenerateTandemsCommand = {
 };
 
 const TRESHOLD_VIABLE_PAIR = 0;
+
+const getLearningLanguagesHash = (learningLanguageIds: string[]): string =>
+  learningLanguageIds.sort((a, b) => a.localeCompare(b)).join('_');
 
 // TODO(SOON): check if should add loop to generate / find pairs
 
@@ -40,6 +60,12 @@ export class GenerateTandemsUsecase {
     private readonly uuidProvider: UuidProviderInterface,
     @Inject(LANGUAGE_REPOSITORY)
     private readonly languageRepository: LanguageRepository,
+    @Inject(REFUSED_TANDEMS_REPOSITORY)
+    private readonly refusedTandemsRepository: RefusedTandemsRepository,
+    @Inject(EMAIL_TEMPLATE_REPOSITORY)
+    private readonly emailTemplateRepository: EmailTemplateRepository,
+    @Inject(EMAIL_GATEWAY)
+    private readonly emailGateway: EmailGateway,
   ) {}
 
   async execute(command: GenerateTandemsCommand): Promise<Tandem[]> {
@@ -48,7 +74,7 @@ export class GenerateTandemsUsecase {
         command.universityIds,
       );
 
-    this.logger.debug(
+    this.logger.verbose(
       `Found ${
         learningLanguagesToPair.length
       } potential learning languages for universities ${command.universityIds.join(
@@ -58,6 +84,14 @@ export class GenerateTandemsUsecase {
 
     const languagesThatCanBeLearnt =
       await this.languageRepository.getLanguagesProposedToLearning();
+
+    const refusedTandems = await this.refusedTandemsRepository.getAll();
+    const refusedTandemsIdMap = new Map<string, null>(
+      refusedTandems.map((refusedTandem) => [
+        getLearningLanguagesHash(refusedTandem.learningLanguageIds),
+        null,
+      ]),
+    );
 
     // Generate all possible pairs
     const possiblePairs: Match[] = [];
@@ -75,21 +109,30 @@ export class GenerateTandemsUsecase {
             learningLanguageToPair.profile.user.university.isCentralUniversity() ||
             potentialPairLearningLanguage.profile.user.university.isCentralUniversity()
           ) {
-            const match = this.scorer.computeMatchScore(
-              learningLanguageToPair,
-              potentialPairLearningLanguage,
-              languagesThatCanBeLearnt,
-            );
+            if (
+              !refusedTandemsIdMap.has(
+                getLearningLanguagesHash([
+                  learningLanguageToPair.id,
+                  potentialPairLearningLanguage.id,
+                ]),
+              )
+            ) {
+              const match = this.scorer.computeMatchScore(
+                learningLanguageToPair,
+                potentialPairLearningLanguage,
+                languagesThatCanBeLearnt,
+              );
 
-            if (match.total > TRESHOLD_VIABLE_PAIR) {
-              possiblePairs.push(match);
+              if (match.total > TRESHOLD_VIABLE_PAIR) {
+                possiblePairs.push(match);
+              }
             }
           }
         }
       }
     }
 
-    this.logger.debug(`Computed ${possiblePairs.length} potential pairs`);
+    this.logger.verbose(`Computed ${possiblePairs.length} potential pairs`);
 
     const sortedLearningLanguages = learningLanguagesToPair
       .sort(
@@ -122,6 +165,10 @@ export class GenerateTandemsUsecase {
 
     let sortedPossiblePairs = possiblePairs.sort((a, b) => b.total - a.total);
     const pairedLearningLanguageIds = new Set<string>();
+
+    const universitiesWithNewTandems = new Map<string, University>([]);
+
+    const notificationEmails: SendEmailPayload[] = [];
 
     // Select best pairs by priority order
     const tandems: Tandem[] = [];
@@ -168,18 +215,84 @@ export class GenerateTandemsUsecase {
 
         pairedLearningLanguageIds.add(pair.owner.id);
         pairedLearningLanguageIds.add(pair.target.id);
+
+        const ownerUniversity = pair.owner.profile.user.university;
+        const targetUniversity = pair.target.profile.user.university;
+        if (!universitiesWithNewTandems.has(ownerUniversity.id)) {
+          universitiesWithNewTandems.set(ownerUniversity.id, ownerUniversity);
+        }
+        if (!universitiesWithNewTandems.has(targetUniversity.id)) {
+          universitiesWithNewTandems.set(targetUniversity.id, targetUniversity);
+        }
+
+        if (tandemStatus === TandemStatus.ACTIVE) {
+          const emailContentProfile1 =
+            await this.emailTemplateRepository.getEmail(
+              EMAIL_TEMPLATE_IDS.TANDEM_BECOME_ACTIVE,
+              pair.owner.profile.nativeLanguage.code,
+              {
+                firstname: pair.owner.profile.user.firstname,
+                partnerFirstname: pair.target.profile.user.firstname,
+                partnerLastname: pair.target.profile.user.lastname,
+                universityName: pair.owner.profile.user.university.name,
+              },
+            );
+          const emailContentProfile2 =
+            await this.emailTemplateRepository.getEmail(
+              EMAIL_TEMPLATE_IDS.TANDEM_BECOME_ACTIVE,
+              pair.target.profile.nativeLanguage.code,
+              {
+                firstname: pair.target.profile.user.firstname,
+                partnerFirstname: pair.owner.profile.user.firstname,
+                partnerLastname: pair.owner.profile.user.lastname,
+                universityName: pair.target.profile.user.university.name,
+              },
+            );
+          notificationEmails.push({
+            recipient: pair.owner.profile.user.email,
+            email: emailContentProfile1,
+          });
+          notificationEmails.push({
+            recipient: pair.target.profile.user.email,
+            email: emailContentProfile2,
+          });
+        }
       }
     }
 
     await this.tandemsRepository.saveMany(tandems);
 
+    if (universitiesWithNewTandems.size > 0) {
+      for (const [universityId, university] of universitiesWithNewTandems) {
+        if (university.notificationEmail) {
+          const lng = university.country.code.toLowerCase();
+          const emailContent = await this.emailTemplateRepository.getEmail(
+            EMAIL_TEMPLATE_IDS.TANDEM_TO_REVIEW,
+            lng,
+          );
+          notificationEmails.push({
+            recipient: university.notificationEmail,
+            email: emailContent,
+          });
+        } else {
+          this.logger.warn(
+            `University ${universityId} has no notification email configured`,
+          );
+        }
+      }
+    }
+
+    if (notificationEmails.length > 0) {
+      await this.emailGateway.bulkSend(notificationEmails);
+    }
+
     const countDeletedTandems =
       await this.tandemsRepository.deleteTandemNotLinkedToLearningLangues();
-    this.logger.debug(
+    this.logger.verbose(
       `Removed ${countDeletedTandems} tandems for learning languages in tandems proposal`,
     );
 
-    this.logger.debug(`Generated ${tandems.length} tandems`);
+    this.logger.verbose(`Generated ${tandems.length} tandems`);
 
     return tandems;
   }

@@ -82,7 +82,7 @@ const LanguageList = () => {
                             <MenuItem value="UNACTIVE">{translate('languages.secondary_status.unactive')}</MenuItem>
                         </Select>
                     )}
-                    sortBy="secondaryUniversityStatus"
+                    sortBy="secondaryUniversityActive"
                 />
             </Datagrid>
         </List>

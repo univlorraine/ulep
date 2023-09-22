@@ -20,6 +20,15 @@
         "label": "Pays",
         "name": "Nom du pays"
     },
+    "days": {
+        "monday": "Lundi",
+        "tuesday": "Mardi",
+        "wednesday": "Mercredi",
+        "thursday": "Jeudi",
+        "friday": "Vendredi",
+        "saturday": "Samedi",
+        "sunday": "Dimanche"
+    },
     "global": {
         "active": "Actif",
         "age": "Age",
@@ -115,12 +124,19 @@
         }
     },
     "profiles": {
+        "availabilities": "Disponibilités",
+        "availabilities_note": "Note de disponibilité",
         "biography": {
             "anecdote": "Anecdote",
             "experience": "Experience",
             "favorite_place": "Lieu favoris",
             "superpower": "Super pouvoirs",
             "title": "Biographies"
+        },
+        "availabilities_occurence": {
+            "VERY_AVAILABLE": "Très disponible",
+            "AVAILABLE": "Disponible",
+            "UNAVAILABLE": "Non disponible"
         },
         "edit_status_error": "Le status n'a pas pu être mis à jour",
         "edit_status_success": "Le status a été mis à jour",
@@ -208,7 +224,8 @@
             "timezone": "Timezone de la nouvelle université partenaire",
             "title": "Création d'une nouvelle université partenaire",
             "website": "Site web de la nouvelle université partenaire",
-            "pairingMode": "Mode d'appariement"
+            "pairingMode": "Mode d'appariement",
+            "notificationEmail": "Email pour les notifications"
         },
         "pairingModes": {
             "manual": "Manuel",
@@ -231,7 +248,8 @@
             "timezone": "Timezone",
             "website": "Site web de l'université",
             "id": "ID",
-            "pairingMode": "Mode d'appariement"
+            "pairingMode": "Mode d'appariement",
+            "notificationEmail": "Email pour les notifications"
         },
         "update": {
             "admission_end": "Fin de date d'inscription à l'université",
@@ -246,7 +264,8 @@
             "timezone": "Timezone de l'université",
             "title": "Mise à jour de l'université",
             "website": "Site web de l'université",
-            "pairingMode": "Mode d'appariement"
+            "pairingMode": "Mode d'appariement",
+            "notificationEmail": "Email pour les notifications"
         }
     },
     "uploader": {

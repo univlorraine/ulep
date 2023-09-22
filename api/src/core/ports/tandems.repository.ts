@@ -26,9 +26,13 @@ export interface TandemRepository {
 
   getTandemForLearningLanguage(learningLanguageId: string): Promise<Tandem>;
 
+  getTandemOfLearningLanguages(learningLanguageIds: string[]): Promise<Tandem>;
+
   deleteTandemNotLinkedToLearningLangues(): Promise<number>;
 
   deleteTandemLinkedToLearningLanguages(
     learningLanguagesIds: string[],
   ): Promise<number>;
+
+  delete(id: string): Promise<void>;
 }

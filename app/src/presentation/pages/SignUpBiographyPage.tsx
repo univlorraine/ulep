@@ -19,22 +19,32 @@ const SignUpBiographyPage: React.FC = () => {
     const [placeBiography, setPlaceBiography] = useState<string>('');
     const [travelBiography, setTravelBiography] = useState<string>('');
 
+    const isAFieldEmpty =
+        powerBiography.trim().length === 0 ||
+        incredibleBiography.trim().length === 0 ||
+        placeBiography.trim().length === 0 ||
+        travelBiography.trim().length === 0;
+
     const continueSignUp = async () => {
-        if (powerBiography.length < 10) {
+        const power = powerBiography.trim();
+        const incredible = incredibleBiography.trim();
+        const place = placeBiography.trim();
+        const travel = travelBiography.trim();
+        if (power.length < 10) {
             return setErrorMessage({ id: 'power', value: t('signup_biography_page.error_message') });
-        } else if (incredibleBiography.length < 10) {
+        } else if (incredible.length < 10) {
             return setErrorMessage({ id: 'incredible', value: t('signup_biography_page.error_message') });
-        } else if (placeBiography.length < 10) {
+        } else if (place.length < 10) {
             return setErrorMessage({ id: 'place', value: t('signup_biography_page.error_message') });
-        } else if (travelBiography.length < 10) {
+        } else if (travel.length < 10) {
             return setErrorMessage({ id: 'travel', value: t('signup_biography_page.error_message') });
         }
         updateProfileSignUp({
             biography: {
-                incredible: incredibleBiography,
-                place: placeBiography,
-                power: powerBiography,
-                travel: travelBiography,
+                incredible,
+                place,
+                power,
+                travel,
             },
         });
 
@@ -98,7 +108,11 @@ const SignUpBiographyPage: React.FC = () => {
                     </div>
                 </div>
                 <div className={`${biographyStyles['bottom-container']} large-margin-top extra-large-margin-bottom`}>
-                    <button className={`primary-button`} onClick={continueSignUp}>
+                    <button
+                        className={`primary-button ${isAFieldEmpty ? 'disabled' : ''}`}
+                        disabled={isAFieldEmpty}
+                        onClick={continueSignUp}
+                    >
                         {t('signup_biography_page.validate_button')}
                     </button>
                 </div>

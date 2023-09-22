@@ -17,7 +17,8 @@ const TandemStatusContent: React.FC<TandemStatusContentProps> = ({ onFindNewTand
     const { t } = useTranslation();
     const { width } = useWindowDimensions();
     const isHybrid = width < HYBRID_MAX_WIDTH;
-    const tradKey = status === 'DRAFT' ? 'draft' : 'not_found';
+    const waiting = status === 'DRAFT' || status === 'VALIDATED_BY_ONE_UNIVERSITY';
+    const tradKey = waiting ? 'draft' : 'not_found';
     return (
         <div className={styles.container} style={{ backgroundColor: configuration.secondaryColor }}>
             <Background className={styles.image} style={{ color: configuration.secondaryBackgroundImageColor }} />
@@ -30,11 +31,7 @@ const TandemStatusContent: React.FC<TandemStatusContentProps> = ({ onFindNewTand
             </button>
             <div className={styles.content}>
                 <span className="title extra-large-margin-bottom">{t(`home_page.tandem_${tradKey}.title`)}</span>
-                <img
-                    alt="clock"
-                    className="extra-large-margin-bottom"
-                    src={status === 'DRAFT' ? ClockPng : TandemNotFoundPng}
-                />
+                <img alt="clock" className="extra-large-margin-bottom" src={waiting ? ClockPng : TandemNotFoundPng} />
                 <span className="subtitle extra-large-margin-bottom">{t(`home_page.tandem_${tradKey}.subtitle`)}</span>
                 {status === 'UNACTIVE' && (
                     <div className={styles['bottom-container']}>
@@ -46,7 +43,7 @@ const TandemStatusContent: React.FC<TandemStatusContentProps> = ({ onFindNewTand
                         </button>
                     </div>
                 )}
-                {status === 'DRAFT' && (
+                {waiting && (
                     <button className="primary-button extra-large-margin-bottom" onClick={onClose}>
                         {t('home_page.tandem_draft.button')}
                     </button>

@@ -169,7 +169,7 @@ export class PrismaLanguageRepository implements LanguageRepository {
 
   async countRequests(code: string): Promise<number> {
     const count = await this.prisma.suggestedLanguages.count({
-      where: { language_code_id: code },
+      where: { LanguageCode: { code: code } },
     });
 
     return count;

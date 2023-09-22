@@ -2,6 +2,12 @@ import { TandemRepository } from '../../ports/tandems.repository';
 import { Inject, Injectable, Logger } from '@nestjs/common';
 import { DomainError, RessourceDoesNotExist } from 'src/core/errors';
 import { Tandem, TandemStatus } from 'src/core/models';
+import { EMAIL_TEMPLATE_IDS } from 'src/core/models/email-content.model';
+import {
+  EMAIL_TEMPLATE_REPOSITORY,
+  EmailTemplateRepository,
+} from 'src/core/ports/email-template.repository';
+import { EMAIL_GATEWAY, EmailGateway } from 'src/core/ports/email.gateway';
 import { TANDEM_REPOSITORY } from 'src/core/ports/tandems.repository';
 import {
   UNIVERSITY_REPOSITORY,
@@ -22,6 +28,10 @@ export class ValidateTandemUsecase {
     private readonly tandemRepository: TandemRepository,
     @Inject(UNIVERSITY_REPOSITORY)
     private readonly universityRepository: UniversityRepository,
+    @Inject(EMAIL_TEMPLATE_REPOSITORY)
+    private readonly emailTemplateRepository: EmailTemplateRepository,
+    @Inject(EMAIL_GATEWAY)
+    private readonly emailGateway: EmailGateway,
   ) {}
 
   async execute(command: ValidateTandemCommand): Promise<void> {
@@ -66,5 +76,37 @@ export class ValidateTandemUsecase {
     }
 
     await this.tandemRepository.update(updatedTandem);
+
+    if (updatedTandem.status === TandemStatus.ACTIVE) {
+      const [learningLanguage1, learningLanguage2] = tandem.learningLanguages;
+      const emailContentProfile1 = await this.emailTemplateRepository.getEmail(
+        EMAIL_TEMPLATE_IDS.TANDEM_BECOME_ACTIVE,
+        learningLanguage1.profile.nativeLanguage.code,
+        {
+          firstname: learningLanguage1.profile.user.firstname,
+          partnerFirstname: learningLanguage2.profile.user.firstname,
+          partnerLastname: learningLanguage2.profile.user.lastname,
+          universityName: learningLanguage1.profile.user.university.name,
+        },
+      );
+      const emailContentProfile2 = await this.emailTemplateRepository.getEmail(
+        EMAIL_TEMPLATE_IDS.TANDEM_BECOME_ACTIVE,
+        learningLanguage2.profile.nativeLanguage.code,
+        {
+          firstname: learningLanguage2.profile.user.firstname,
+          partnerFirstname: learningLanguage1.profile.user.firstname,
+          partnerLastname: learningLanguage1.profile.user.lastname,
+          universityName: learningLanguage2.profile.user.university.name,
+        },
+      );
+      await this.emailGateway.send({
+        recipient: learningLanguage1.profile.user.email,
+        email: emailContentProfile1,
+      });
+      await this.emailGateway.send({
+        recipient: learningLanguage2.profile.user.email,
+        email: emailContentProfile2,
+      });
+    }
   }
 }
