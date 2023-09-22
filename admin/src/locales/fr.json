@@ -20,6 +20,15 @@
         "label": "Pays",
         "name": "Nom du pays"
     },
+    "days": {
+        "monday": "Lundi",
+        "tuesday": "Mardi",
+        "wednesday": "Mercredi",
+        "thursday": "Jeudi",
+        "friday": "Vendredi",
+        "saturday": "Samedi",
+        "sunday": "Dimanche"
+    },
     "global": {
         "active": "Actif",
         "age": "Age",
@@ -115,12 +124,19 @@
         }
     },
     "profiles": {
+        "availabilities": "Disponibilités",
+        "availabilities_note": "Note de disponibilité",
         "biography": {
             "anecdote": "Anecdote",
             "experience": "Experience",
             "favorite_place": "Lieu favoris",
             "superpower": "Super pouvoirs",
             "title": "Biographies"
+        },
+        "availabilities_occurence": {
+            "VERY_AVAILABLE": "Très disponible",
+            "AVAILABLE": "Disponible",
+            "UNAVAILABLE": "Non disponible"
         },
         "edit_status_error": "Le status n'a pas pu être mis à jour",
         "edit_status_success": "Le status a été mis à jour",

@@ -11,6 +11,7 @@ import {
     useRecordContext,
     Datagrid,
 } from 'react-admin';
+import Availabilites from '../../entities/Availabilities';
 import User from '../../entities/User';
 
 const Title = () => {
@@ -99,6 +100,58 @@ const ProfileShow = (props: any) => {
                     />
                     <TextField label={translate('profiles.biography.experience')} source="biography.experience" />
                     <TextField label={translate('profiles.biography.anecdote')} source="biography.anecdote" />
+                </TabbedShowLayout.Tab>
+                <TabbedShowLayout.Tab contentClassName="tab" label={translate('profiles.availabilities')}>
+                    <FunctionField
+                        label={translate('days.monday')}
+                        render={(record: { availabilities: Availabilites }) =>
+                            translate(`profiles.availabilities_occurence.${record.availabilities.monday}`)
+                        }
+                        source="availabilities.monday"
+                    />
+                    <FunctionField
+                        label={translate('days.tuesday')}
+                        render={(record: { availabilities: Availabilites }) =>
+                            translate(`profiles.availabilities_occurence.${record.availabilities.tuesday}`)
+                        }
+                        source="availabilities.tuesday"
+                    />
+                    <FunctionField
+                        label={translate('days.wednesday')}
+                        render={(record: { availabilities: Availabilites }) =>
+                            translate(`profiles.availabilities_occurence.${record.availabilities.wednesday}`)
+                        }
+                        source="availabilities.wednesday"
+                    />
+                    <FunctionField
+                        label={translate('days.thursday')}
+                        render={(record: { availabilities: Availabilites }) =>
+                            translate(`profiles.availabilities_occurence.${record.availabilities.thursday}`)
+                        }
+                        source="availabilities.thursday"
+                    />
+                    <FunctionField
+                        label={translate('days.friday')}
+                        render={(record: { availabilities: Availabilites }) =>
+                            translate(`profiles.availabilities_occurence.${record.availabilities.friday}`)
+                        }
+                        source="availabilities.friday"
+                    />
+                    <FunctionField
+                        label={translate('days.saturday')}
+                        render={(record: { availabilities: Availabilites }) =>
+                            translate(`profiles.availabilities_occurence.${record.availabilities.saturday}`)
+                        }
+                        source="availabilities.saturday"
+                    />
+                    <FunctionField
+                        label={translate('days.sunday')}
+                        render={(record: { availabilities: Availabilites }) =>
+                            translate(`profiles.availabilities_occurence.${record.availabilities.sunday}`)
+                        }
+                        source="availabilities.sunday"
+                    />
+                    <TextField label={translate('profiles.availabilities_note')} source="availabilitiesNote" />
                 </TabbedShowLayout.Tab>
             </TabbedShowLayout>
         </Show>
