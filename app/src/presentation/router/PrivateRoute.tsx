@@ -1,5 +1,5 @@
 import { ComponentType } from 'react';
-import { Redirect, Route, RouteProps } from 'react-router-dom';
+import { Route, RouteProps } from 'react-router-dom';
 import { useStoreState } from '../../store/storeTypes';
 
 interface PrivateRouteProps extends RouteProps {
