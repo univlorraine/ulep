@@ -110,6 +110,10 @@ spec:
               value: "{{ .Values.api.env.appLinkAppleStore }}"
             - name: APP_LINK_PLAY_STORE
               value: "{{ .Values.api.env.appLinkPlayStore }}"
+            - name: TRANSLATIONS_ENDPOINT
+              value: "{{ .Values.api.env.translationsEndpoint }}"
+            - name: TRANSLATIONS_ENDPOINT_SUFFIX
+              value: "{{ .Values.api.env.translationsEndpointSuffix }}"
           envFrom:
             - secretRef: 
                 name: "{{ include "etandem.fullname" . }}-secret-{{ .Values.api.name }}"
