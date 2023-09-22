@@ -46,18 +46,20 @@ export class KeycloakClient {
 
   private async initialize(): Promise<void> {
     const keycloakIssuer = await Issuer.discover(
-      `${this.configuration.baseUrl}/realms/master`,
+      `${this.configuration.baseUrl}/realms/${this.configuration.realm}`,
     );
 
     this.issuerClient = new keycloakIssuer.Client({
-      client_id: 'admin-cli',
-      token_endpoint_auth_method: 'none',
+      client_id: this.configuration.clientId,
+      client_secret: this.configuration.clientSecret,
     });
 
+    this.grantToken();
+  }
+
+  private async grantToken(): Promise<void> {
     this.tokenSet = await this.issuerClient.grant({
-      grant_type: 'password',
-      username: this.configuration.username,
-      password: this.configuration.password,
+      grant_type: 'client_credentials',
     });
   }
 
@@ -447,10 +449,7 @@ export class KeycloakClient {
     }
 
     if (this.tokenSet.expired()) {
-      const tokenSet = await this.issuerClient.refresh(
-        this.tokenSet.refresh_token,
-      );
-      this.tokenSet = tokenSet;
+      await this.grantToken();
     }
     return this.tokenSet.access_token;
   }

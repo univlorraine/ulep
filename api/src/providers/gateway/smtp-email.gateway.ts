@@ -38,15 +38,15 @@ export class SmtpEmailGateway implements EmailGateway {
     }
   }
 
-  send({ recipient, subject, content }: SendEmailPayload): Promise<void> {
+  send({ recipient, email }: SendEmailPayload): Promise<void> {
     return new Promise((resolve, reject) => {
       this.#transporter.sendMail(
         {
           from: this.#from,
           to: recipient,
-          subject,
-          text: content,
-          html: `<html><p>${content}</p></html>`,
+          subject: email.subject,
+          text: email.textContent,
+          html: email.content,
         },
         (err: Error) => {
           if (err) {

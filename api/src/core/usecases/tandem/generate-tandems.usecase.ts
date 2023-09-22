@@ -7,6 +7,11 @@ import {
   TandemStatus,
   University,
 } from 'src/core/models';
+import { EMAIL_TEMPLATE_IDS } from 'src/core/models/email-content.model';
+import {
+  EMAIL_TEMPLATE_REPOSITORY,
+  EmailTemplateRepository,
+} from 'src/core/ports/email-template.repository';
 import { EMAIL_GATEWAY, EmailGateway } from 'src/core/ports/email.gateway';
 import {
   LANGUAGE_REPOSITORY,
@@ -57,6 +62,8 @@ export class GenerateTandemsUsecase {
     private readonly languageRepository: LanguageRepository,
     @Inject(REFUSED_TANDEMS_REPOSITORY)
     private readonly refusedTandemsRepository: RefusedTandemsRepository,
+    @Inject(EMAIL_TEMPLATE_REPOSITORY)
+    private readonly emailTemplateRepository: EmailTemplateRepository,
     @Inject(EMAIL_GATEWAY)
     private readonly emailGateway: EmailGateway,
   ) {}
@@ -219,15 +226,35 @@ export class GenerateTandemsUsecase {
         }
 
         if (tandemStatus === TandemStatus.ACTIVE) {
+          const emailContentProfile1 =
+            await this.emailTemplateRepository.getEmail(
+              EMAIL_TEMPLATE_IDS.TANDEM_BECOME_ACTIVE,
+              pair.owner.profile.nativeLanguage.code,
+              {
+                firstname: pair.owner.profile.user.firstname,
+                partnerFirstname: pair.target.profile.user.firstname,
+                partnerLastname: pair.target.profile.user.lastname,
+                universityName: pair.owner.profile.user.university.name,
+              },
+            );
+          const emailContentProfile2 =
+            await this.emailTemplateRepository.getEmail(
+              EMAIL_TEMPLATE_IDS.TANDEM_BECOME_ACTIVE,
+              pair.target.profile.nativeLanguage.code,
+              {
+                firstname: pair.target.profile.user.firstname,
+                partnerFirstname: pair.owner.profile.user.firstname,
+                partnerLastname: pair.owner.profile.user.lastname,
+                universityName: pair.target.profile.user.university.name,
+              },
+            );
           notificationEmails.push({
             recipient: pair.owner.profile.user.email,
-            subject: 'Subject to translate to owner language',
-            content: 'content to translate to owner language and template',
+            email: emailContentProfile1,
           });
           notificationEmails.push({
             recipient: pair.target.profile.user.email,
-            subject: 'Subject to translate to target language',
-            content: 'content to translate to target language',
+            email: emailContentProfile2,
           });
         }
       }
@@ -238,10 +265,14 @@ export class GenerateTandemsUsecase {
     if (universitiesWithNewTandems.size > 0) {
       for (const [universityId, university] of universitiesWithNewTandems) {
         if (university.notificationEmail) {
+          const lng = university.country.code.toLowerCase();
+          const emailContent = await this.emailTemplateRepository.getEmail(
+            EMAIL_TEMPLATE_IDS.TANDEM_TO_REVIEW,
+            lng,
+          );
           notificationEmails.push({
             recipient: university.notificationEmail,
-            subject: 'subject to translate to university language',
-            content: 'Content to translate and template',
+            email: emailContent,
           });
         } else {
           this.logger.warn(
@@ -252,7 +283,6 @@ export class GenerateTandemsUsecase {
     }
 
     if (notificationEmails.length > 0) {
-      // TODO(NOW): manage failure, translations and templating
       await this.emailGateway.bulkSend(notificationEmails);
     }
 
