@@ -1,10 +1,7 @@
-import { BadRequestException, Controller, Get, Param } from '@nestjs/common';
+import { Controller, Get, Param } from '@nestjs/common';
 import * as Swagger from '@nestjs/swagger';
 import { Configuration, configuration } from 'src/configuration';
-import {
-  RessourceDoesNotExist,
-  UnsuportedLanguageException,
-} from 'src/core/errors';
+import { RessourceDoesNotExist } from 'src/core/errors';
 
 @Controller('instance')
 @Swagger.ApiTags('Instance')
