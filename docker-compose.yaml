@@ -1,96 +1,96 @@
 version: "3.4"
 
 services:
-    api:
-        build:
-            context: ./api
-            target: api_prod
-        depends_on:
-            - database
-        restart: unless-stopped
-        environment:
-            ADMIN_URL: ${ADMIN_URL:-http://localhost:3001}
-            DATABASE_URL: postgresql://${POSTGRES_USER:-postgres}:${POSTGRES_PASSWORD:-!ChangeMe!}@database:5432/${POSTGRES_DB:-ulep}?schema=public
-            KEYCLOAK_BASE_URL: ${KEYCLOAK_BASE_URL:-http://auth:8080}
-            KEYCLOAK_REALM: ${KEYCLOAK_REALM:-etandem}
-            KEYCLOAK_ADMIN: ${KEYCLOAK_ADMIN:-admin}
-            KEYCLOAK_ADMIN_PASSWORD: ${KEYCLOAK_ADMIN_PASSWORD:-!ChangeMe!}
-            KEYCLOAK_CLIENT_ID: ${KEYCLOAK_CLIENT_ID:-api}
-            KEYCLOAK_CLIENT_SECRET: ${KEYCLOAK_CLIENT_SECRET:-bN49BuApmmtAODeOWOG8iKOOuJdN3KE6}
-            MINIO_PORT: 9000
-            MINIO_USE_SSL: "false"
-            MINIO_ACCESS_KEY: ${MINIO_USER:-minio}
-            MINIO_SECRET_KEY: ${MINIO_PASSWORD:-!ChangeMe!}
-            MINIO_PUBLIC_URL: ${MINIO_PUBLIC_URL:-http://localhost:9000}
-            TRANSLATION_ENDPOINT: ${TRANSLATION_ENDPOINT:-https://raw.githubusercontent.com/thetribeio/locales_ulep/main/locales/}
+  api:
+    build:
+      context: ./api
+      target: api_prod
+    depends_on:
+      - database
+    restart: unless-stopped
+    environment:
+      ADMIN_URL: ${ADMIN_URL:-http://localhost:3001}
+      DATABASE_URL: postgresql://${POSTGRES_USER:-postgres}:${POSTGRES_PASSWORD:-!ChangeMe!}@database:5432/${POSTGRES_DB:-ulep}?schema=public
+      KEYCLOAK_BASE_URL: ${KEYCLOAK_BASE_URL:-http://auth:8080}
+      KEYCLOAK_REALM: ${KEYCLOAK_REALM:-etandem}
+      KEYCLOAK_ADMIN: ${KEYCLOAK_ADMIN:-admin}
+      KEYCLOAK_ADMIN_PASSWORD: ${KEYCLOAK_ADMIN_PASSWORD:-!ChangeMe!}
+      KEYCLOAK_CLIENT_ID: ${KEYCLOAK_CLIENT_ID:-api}
+      KEYCLOAK_CLIENT_SECRET: ${KEYCLOAK_CLIENT_SECRET:-bN49BuApmmtAODeOWOG8iKOOuJdN3KE6}
+      MINIO_PORT: 9000
+      MINIO_USE_SSL: 'false'
+      MINIO_ACCESS_KEY: ${MINIO_USER:-minio}
+      MINIO_SECRET_KEY: ${MINIO_PASSWORD:-!ChangeMe!}
+      MINIO_PUBLIC_URL: ${MINIO_PUBLIC_URL:-http://localhost:9000}
+      TRANSLATION_ENDPOINT: ${TRANSLATION_ENDPOINT:-https://raw.githubusercontent.com/thetribeio/locales_ulep/main/locales/}
 
-    admin:
-        build:
-            context: ./admin
-            target: admin_prod
-        depends_on:
-            - api
-        environment:
-            REACT_APP_API_URL: ${REACT_APP_API_URL:-http://localhost:3000}
-            REACT_APP_KEYCLOAK_URL: ${REACT_APP_KEYCLOAK_URL:-http://localhost:8080}
-            REACT_APP_KEYCLOAK_REALM: ${REACT_APP_KEYCLOAK_REALM:-etandem}
-            REACT_APP_KEYCLOAK_CLIENT_ID: ${REACT_APP_KEYCLOAK_CLIENT_ID:-react-admin}
-            REACT_APP_KEYCLOAK_CLIENT_SECRET: ${REACT_APP_KEYCLOAK_CLIENT_SECRET:-uKBywX2HlxfvKgxZoKZrbiBSx49CST6W}
+  admin:
+    build:
+      context: ./admin
+      target: admin_prod
+    depends_on:
+      - api
+    environment:
+      REACT_APP_API_URL: ${REACT_APP_API_URL:-http://localhost:3000}
+      REACT_APP_KEYCLOAK_URL: ${REACT_APP_KEYCLOAK_URL:-http://localhost:8080}
+      REACT_APP_KEYCLOAK_REALM: ${REACT_APP_KEYCLOAK_REALM:-etandem}
+      REACT_APP_KEYCLOAK_CLIENT_ID: ${REACT_APP_KEYCLOAK_CLIENT_ID:-react-admin}
+      REACT_APP_KEYCLOAK_CLIENT_SECRET: ${REACT_APP_KEYCLOAK_CLIENT_SECRET:-uKBywX2HlxfvKgxZoKZrbiBSx49CST6W}
 
-    auth:
-        image: quay.io/keycloak/keycloak:21.1.2
-        depends_on:
-            - database
-        volumes:
-            - ./docker/keycloak/providers:/opt/keycloak/providers
-            - ./docker/keycloak/realms:/opt/keycloak/data/import
-        command: start --import-realm
-        environment:
-            KEYCLOAK_ADMIN: ${KEYCLOAK_USER:-admin}
-            KEYCLOAK_ADMIN_PASSWORD: ${KEYCLOAK_PASSWORD:-!ChangeMe!}
-            KC_DB: postgres
-            KC_DB_USERNAME: ${POSTGRES_USER:-postgres}
-            KC_DB_PASSWORD: ${POSTGRES_PASSWORD:-!ChangeMe!}
-            KC_DB_URL: jdbc:postgresql://database:5432/${POSTGRES_DB:-ulep}
-            KC_DB_SCHEMA: keycloak
+  auth:
+    image: quay.io/keycloak/keycloak:21.1.2
+    depends_on:
+        - database
+    volumes:
+      - ./docker/keycloak/providers:/opt/keycloak/providers
+      - ./docker/keycloak/realms:/opt/keycloak/data/import
+    command: start --import-realm
+    environment:
+      KEYCLOAK_ADMIN: ${KEYCLOAK_USER:-admin}
+      KEYCLOAK_ADMIN_PASSWORD: ${KEYCLOAK_PASSWORD:-!ChangeMe!}
+      KC_DB: postgres
+      KC_DB_USERNAME: ${POSTGRES_USER:-postgres}
+      KC_DB_PASSWORD: ${POSTGRES_PASSWORD:-!ChangeMe!}
+      KC_DB_URL: jdbc:postgresql://database:5432/${POSTGRES_DB:-ulep}
+      KC_DB_SCHEMA: keycloak
 
-    database:
-        image: postgres:${POSTGRES_VERSION:-14}-alpine
-        environment:
-            POSTGRES_DB: ${POSTGRES_DB:-ulep}
-            POSTGRES_USER: ${POSTGRES_USER:-postgres}
-            # You should definitely change the password in production
-            POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-!ChangeMe!}
-        volumes:
-            - ./docker/database/db.sql:/docker-entrypoint-initdb.d/db.sql
-            - db_data:/var/lib/postgresql/data
-            # you may use a bind-mounted host directory instead, so that it is harder to accidentally remove the volume and lose all your data!
-            # - ./docker/database/data:/var/lib/postgresql/data
+  database:
+    image: postgres:${POSTGRES_VERSION:-14}-alpine
+    environment:
+      POSTGRES_DB: ${POSTGRES_DB:-ulep}
+      POSTGRES_USER: ${POSTGRES_USER:-postgres}
+      # You should definitely change the password in production
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-!ChangeMe!}
+    volumes:
+      - ./docker/database/db.sql:/docker-entrypoint-initdb.d/db.sql
+      - db_data:/var/lib/postgresql/data
+      # you may use a bind-mounted host directory instead, so that it is harder to accidentally remove the volume and lose all your data!
+      # - ./docker/database/data:/var/lib/postgresql/data
 
-    minio:
-        image: minio/minio:latest
-        command: server /data/minio --console-address :9001
-        environment:
-            MINIO_ROOT_USER: ${MINIO_USER:-minio}
-            MINIO_ROOT_PASSWORD: ${MINIO_PASSWORD:-!ChangeMe!}
-        volumes:
-            - ./docker/minio:/data/minio
+  minio:
+    image: minio/minio:latest
+    command: server /data/minio --console-address :9001
+    environment:
+      MINIO_ROOT_USER: ${MINIO_USER:-minio}
+      MINIO_ROOT_PASSWORD: ${MINIO_PASSWORD:-!ChangeMe!}
+    volumes:
+      - ./docker/minio:/data/minio
 
-    # weblate:
-    #   image: weblate/weblate:latest
-    #   depends_on:
-    #     - database
-    #   ports:
-    #     - 8999:8080
-    #   environment:
-    #     WEBLATE_SITE_DOMAIN: ${DOMAIN_NAME:-localhost}
-    #     WEBLATE_ADMIN_NAME: ${WEBLATE_USER:-admin}
-    #     WEBLATE_ADMIN_PASSWORD: ${WEBLATE_PASSWORD:-!ChangeMe!}
-    #     POSTGRES_USER: ${POSTGRES_USER:-postgres}
-    #     POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-!ChangeMe!}
-    #     POSTGRES_HOST: database
-    #     POSTGRES_PORT: 5432
-    #     POSTGRES_DATABASE: ${WEBLATE_DB:-weblate} # ? TODO use custom schema
+  # weblate:
+  #   image: weblate/weblate:latest
+  #   depends_on:
+  #     - database
+  #   ports:
+  #     - 8999:8080
+  #   environment:
+  #     WEBLATE_SITE_DOMAIN: ${DOMAIN_NAME:-localhost}
+  #     WEBLATE_ADMIN_NAME: ${WEBLATE_USER:-admin}
+  #     WEBLATE_ADMIN_PASSWORD: ${WEBLATE_PASSWORD:-!ChangeMe!}
+  #     POSTGRES_USER: ${POSTGRES_USER:-postgres}
+  #     POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-!ChangeMe!}
+  #     POSTGRES_HOST: database
+  #     POSTGRES_PORT: 5432
+  #     POSTGRES_DATABASE: ${WEBLATE_DB:-weblate} # ? TODO use custom schema
 
 volumes:
-    db_data:
+  db_data:
