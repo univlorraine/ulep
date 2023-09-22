@@ -22,7 +22,7 @@ export class InstanceController {
   ): Promise<string> {
     // %2F work with github and gitlab but / doesn't with gitlab ( ??? )
     const result = await fetch(getTranslationsEndpoint(lng, type), {
-      headers: { 'PRIVATE-TOKEN': this.config.translationToken },
+      headers: { 'PRIVATE-TOKEN': this.config.translations.token },
     });
 
     if (!result.ok) {

@@ -66,7 +66,7 @@ export default class TranslatedEmailTemplateRepository
   constructor() {
     const url = getTranslationsEndpoint(
       '{{lng}}',
-      config.emailTranslations.component,
+      config.emailTranslationsComponent,
     );
     const fallbackBackend = (resourcesToBackend as any)(fallbackResources);
     i18n.use(ChainedBackend as any).init<ChainedBackend.ChainedBackendOptions>({
@@ -79,7 +79,7 @@ export default class TranslatedEmailTemplateRepository
             loadPath: url,
             crossDomain: true,
             customHeaders: {
-              'PRIVATE-TOKEN': config.translationToken,
+              'PRIVATE-TOKEN': config.translations.token,
             },
           },
         ],

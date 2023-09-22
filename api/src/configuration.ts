@@ -17,13 +17,7 @@ export type Configuration = {
   CANCEL_TRESHOLD_IN_MIN: number;
   smtp: SmtpConfiguration;
   logLevel: string;
-  translationEndpoint: string;
-  translationEndpointSuffix: string;
-  translationToken: string;
-  emailTranslations: {
-    endpoint: string;
-    component: string;
-  };
+  emailTranslationsComponent: string;
   emailAssets: {
     endpoint: string;
     bucket: string;
@@ -31,6 +25,11 @@ export type Configuration = {
   appLinks: {
     appleStore: string;
     playStore: string;
+  };
+  translations: {
+    endpoint: string;
+    endpointSuffix: string;
+    token: string;
   };
 };
 
@@ -57,12 +56,8 @@ export const configuration = (): Configuration => ({
     sender: process.env.SMTP_SENDER || 'test@ulep.fr',
   },
   logLevel: process.env.LOG_LEVEL || 'warn',
-  emailTranslations: {
-    endpoint:
-      process.env.EMAIL_TRANSLATIONS_ENDPOINT ||
-      'https://raw.githubusercontent.com/thetribeio/locales_ulep/main/locales',
-    component: process.env.EMAIL_TRANSLATIONS_COMPONENT || 'emails',
-  },
+  emailTranslationsComponent:
+    process.env.EMAIL_TRANSLATIONS_COMPONENT || 'emails',
   emailAssets: {
     endpoint: process.env.EMAIL_ASSETS_ENDPOINT || 'http://localhost:9000',
     bucket: process.env.EMAIL_ASSETS_BUCKET || 'assets',
@@ -73,11 +68,13 @@ export const configuration = (): Configuration => ({
     playStore:
       process.env.APP_LINK_PLAY_STORE || 'http://play-store.fr/etandem',
   },
-  translationEndpoint:
-    process.env.TRANSLATION_ENDPOINT ||
-    'https://raw.githubusercontent.com/thetribeio/locales_ulep/main/locales',
-  translationEndpointSuffix: process.env.TRANSLATION_ENDPOINT_SUFFIX || '',
-  translationToken: process.env.TRANSLATION_TOKEN || '',
+  translations: {
+    endpoint:
+      process.env.TRANSLATION_ENDPOINT ||
+      'https://raw.githubusercontent.com/thetribeio/locales_ulep/main/locales',
+    endpointSuffix: process.env.TRANSLATION_ENDPOINT_SUFFIX || '',
+    token: process.env.TRANSLATION_TOKEN || '',
+  },
 });
 
 export const getLoggerLevels = (logLevel: string): LogLevel[] => {
@@ -106,5 +103,5 @@ export const getTranslationsEndpoint = (
 ): string => {
   const config = configuration();
   // %2F work with github and gitlab but / doesn't with gitlab ( ??? )
-  return `${config.translationEndpoint}%2F${lng}%2F${component}.json${config.translationEndpointSuffix}`;
+  return `${config.translations.endpoint}%2F${lng}%2F${component}.json${config.translations.endpointSuffix}`;
 };
