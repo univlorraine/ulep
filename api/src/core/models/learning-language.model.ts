@@ -56,6 +56,26 @@ export class LearningLanguage {
     this.specificProgram = specificProgram;
     this.campus = campus;
   }
+
+  public isDiscovery() {
+    // TODO(discovery+1): asian discovery
+    return (
+      this.language.isJokerLanguage() ||
+      this.learningType === LearningType.TANDEM
+    );
+  }
+
+  public isCompatibleWithProfile(profile: Profile): boolean {
+    // TODO(NOW): see if should inverse assertion (better in protective ?)
+    if (!this.language.isJokerLanguage()) {
+      if (!profile.isSpeakingLanguage(this.language)) {
+        if (!this.isDiscovery() || !profile.isLearningLanguage(this.language)) {
+          return false;
+        }
+      }
+    }
+    return true;
+  }
 }
 
 interface LearningLanguageWithTandemProps extends LearningLanguageProps {
