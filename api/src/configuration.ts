@@ -75,7 +75,7 @@ export const configuration = (): Configuration => ({
   },
   translationEndpoint:
     process.env.TRANSLATION_ENDPOINT ||
-    'https://raw.githubusercontent.com/thetribeio/locales_ulep/main/locales%2Ffr%2Ftranslation.json',
+    'https://raw.githubusercontent.com/thetribeio/locales_ulep/main/locales',
   translationEndpointSuffix: process.env.TRANSLATION_ENDPOINT_SUFFIX || '',
   translationToken: process.env.TRANSLATION_TOKEN || '',
 });
