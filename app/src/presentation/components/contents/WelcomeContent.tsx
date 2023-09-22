@@ -36,6 +36,10 @@ const WelcomeContent: React.FC<WelcomeContentProps> = ({ onPress }) => {
 
     useEffect(() => {
         setCurrentTheme(themes[Math.floor(Math.random() * themes.length)]);
+        if(onPress){
+            setTimeout(()=> onPress(), 5000);
+        }
+
     }, []);
 
     const backgroundStyle = isHybrid
