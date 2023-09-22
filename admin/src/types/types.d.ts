@@ -9,7 +9,7 @@ declare global {
     type LanguageStatus = 'PRIMARY' | 'SECONDARY' | 'UNACTIVE';
     type UserStatus = 'BANNED' | 'REPORTED' | undefined;
     type UserRole = 'STUDENT' | 'STAFF';
-    type Occurence = 'UNAVAILABLE' | 'AVAILABLE' | 'VERY_AVAILABLE';
+    type AvailabilitiesOptions = 'UNAVAILABLE' | 'AVAILABLE' | 'VERY_AVAILABLE';
 }
 
 export {};

@@ -13,20 +13,20 @@ export enum LearningType {
   BOTH = 'BOTH',
 }
 
-export enum occurence {
+export enum AvailabilitesOptions {
   UNAVAILABLE = 'UNAVAILABLE',
   AVAILABLE = 'AVAILABLE',
   VERY_AVAILABLE = 'VERY_AVAILABLE',
 }
 
 export interface Availabilites {
-  monday: occurence;
-  tuesday: occurence;
-  wednesday: occurence;
-  thursday: occurence;
-  friday: occurence;
-  saturday: occurence;
-  sunday: occurence;
+  monday: AvailabilitesOptions;
+  tuesday: AvailabilitesOptions;
+  wednesday: AvailabilitesOptions;
+  thursday: AvailabilitesOptions;
+  friday: AvailabilitesOptions;
+  saturday: AvailabilitesOptions;
+  sunday: AvailabilitesOptions;
 }
 
 export type CreateProfileProps = {

@@ -2,9 +2,9 @@ import { useTranslation } from 'react-i18next';
 import styles from './AvailabilityLine.module.css';
 
 interface AvailabilityLineProps {
-    availability: Occurence;
+    availability: AvailabilitiesOptions;
     day: string;
-    onPress?: ({ id, occurence }: { id: string; occurence: Occurence }) => void;
+    onPress?: ({ id, occurence }: { id: string; occurence: AvailabilitiesOptions }) => void;
 }
 
 const AvailabilityLine: React.FC<AvailabilityLineProps> = ({ availability, day, onPress }) => {

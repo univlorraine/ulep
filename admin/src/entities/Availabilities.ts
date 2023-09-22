@@ -1,11 +1,11 @@
 interface Availabilites {
-    monday: Occurence;
-    tuesday: Occurence;
-    wednesday: Occurence;
-    thursday: Occurence;
-    friday: Occurence;
-    saturday: Occurence;
-    sunday: Occurence;
+    monday: AvailabilitiesOptions;
+    tuesday: AvailabilitiesOptions;
+    wednesday: AvailabilitiesOptions;
+    thursday: AvailabilitiesOptions;
+    friday: AvailabilitiesOptions;
+    saturday: AvailabilitiesOptions;
+    sunday: AvailabilitiesOptions;
 }
 
 export default Availabilites;

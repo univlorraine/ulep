@@ -74,11 +74,13 @@ export class CreateProfileRequest
 
   @Swagger.ApiProperty({ type: 'string' })
   @IsString()
-  availabilitiesNote: string;
+  @IsOptional()
+  availabilitiesNote?: string;
 
   @Swagger.ApiProperty({ type: 'boolean' })
   @IsBoolean()
-  availabilitiesNotePrivacy: boolean;
+  @IsOptional()
+  availabilitiesNotePrivacy?: boolean;
 
   @Swagger.ApiProperty({ type: BiographyDto })
   @Transform(({ value }) => new BiographyDto(value))
