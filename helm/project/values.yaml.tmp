@@ -53,7 +53,6 @@ api:
     smtpSender: tandems@ulep.fr # REQUIRED
     smtpDisableBootVerification: false # REQUIRED
     logLevel: warn # OPTIONNEL
-    emailsTranslationsEndpoint: https://raw.githubusercontent.com/thetribeio/locales_ulep/main/locales # REQUIRED
     emailsTranslationsComponent: emails # REQUIRED
     emailsAssetsEndpoint: *minioApiUrl # REQUIRED
     emailsAssetsBucket: assets # REQUIRED

@@ -4,7 +4,11 @@ import * as i18n from 'i18next';
 import * as HttpBackend from 'i18next-http-backend';
 import * as ChainedBackend from 'i18next-chained-backend';
 import * as resourcesToBackend from 'i18next-resources-to-backend';
-import { configuration, getLoggerLevels } from 'src/configuration';
+import {
+  configuration,
+  getLoggerLevels,
+  getTranslationsEndpoint,
+} from 'src/configuration';
 import EmailContent, {
   EMAIL_TEMPLATE_IDS,
 } from 'src/core/models/email-content.model';
@@ -60,7 +64,10 @@ export default class TranslatedEmailTemplateRepository
   private readonly logger = new Logger(TranslatedEmailTemplateRepository.name);
 
   constructor() {
-    const url = `${config.emailTranslations.endpoint}/{{lng}}/${config.emailTranslations.component}.json`;
+    const url = getTranslationsEndpoint(
+      '{{lng}}',
+      config.emailTranslationsComponent,
+    );
     const fallbackBackend = (resourcesToBackend as any)(fallbackResources);
     i18n.use(ChainedBackend as any).init<ChainedBackend.ChainedBackendOptions>({
       fallbackLng: LANGUAGES,
@@ -71,6 +78,9 @@ export default class TranslatedEmailTemplateRepository
           {
             loadPath: url,
             crossDomain: true,
+            customHeaders: {
+              'PRIVATE-TOKEN': config.translations.token,
+            },
           },
         ],
       },

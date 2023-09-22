@@ -98,8 +98,6 @@ spec:
               value: "{{ .Values.api.env.logLevel }}"
             - name: LOG_LEVEL
               value: "{{ .Values.api.env.logLevel }}"
-            - name: EMAIL_TRANSLATIONS_ENDPOINT
-              value: "{{ .Values.api.env.emailsTranslationsEndpoint }}"
             - name: EMAIL_TRANSLATIONS_COMPONENT
               value: "{{ .Values.api.env.emailsTranslationsComponent }}"
             - name: EMAIL_ASSETS_ENDPOINT

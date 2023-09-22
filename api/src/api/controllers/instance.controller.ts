@@ -1,6 +1,10 @@
 import { Controller, Get, Param } from '@nestjs/common';
 import * as Swagger from '@nestjs/swagger';
-import { Configuration, configuration } from 'src/configuration';
+import {
+  Configuration,
+  configuration,
+  getTranslationsEndpoint,
+} from 'src/configuration';
 import { RessourceDoesNotExist } from 'src/core/errors';
 
 @Controller('instance')
@@ -17,10 +21,9 @@ export class InstanceController {
     @Param('type') type: string,
   ): Promise<string> {
     // %2F work with github and gitlab but / doesn't with gitlab ( ??? )
-    const result = await fetch(
-      `${this.config.translationEndpoint}%2F${lng}%2F${type}.json${this.config.translationEndpointSuffix}`,
-      { headers: { 'PRIVATE-TOKEN': this.config.translationToken } },
-    );
+    const result = await fetch(getTranslationsEndpoint(lng, type), {
+      headers: { 'PRIVATE-TOKEN': this.config.translations.token },
+    });
 
     if (!result.ok) {
       throw new RessourceDoesNotExist();
