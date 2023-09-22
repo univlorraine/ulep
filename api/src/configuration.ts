@@ -17,6 +17,9 @@ export type Configuration = {
   CANCEL_TRESHOLD_IN_MIN: number;
   smtp: SmtpConfiguration;
   logLevel: string;
+  translationEndpoint: string;
+  translationEndpointSuffix: string;
+  translationToken: string;
   emailTranslations: {
     endpoint: string;
     component: string;
@@ -70,6 +73,11 @@ export const configuration = (): Configuration => ({
     playStore:
       process.env.APP_LINK_PLAY_STORE || 'http://play-store.fr/etandem',
   },
+  translationEndpoint:
+    process.env.TRANSLATION_ENDPOINT ||
+    'https://raw.githubusercontent.com/thetribeio/locales_ulep/main/locales%2Ffr%2Ftranslation.json',
+  translationEndpointSuffix: process.env.TRANSLATION_ENDPOINT_SUFFIX || '',
+  translationToken: process.env.TRANSLATION_TOKEN || '',
 });
 
 export const getLoggerLevels = (logLevel: string): LogLevel[] => {

@@ -10,10 +10,7 @@ i18n.use(HttpApi) // charge les traductions à partir des fichiers distants
         debug: true,
 
         backend: {
-            loadPath: import.meta.env.VITE_I18N_URL,
-            customHeaders: {
-                'PRIVATE-TOKEN': import.meta.env.VITE_I18N_TOKEN,
-            },
+            loadPath: `${import.meta.env.VITE_API_URL}/instance/locales/{{lng}}/translation`,
         },
 
         interpolation: {
