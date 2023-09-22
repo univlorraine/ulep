@@ -68,27 +68,7 @@ export class LearningLanguageResponse {
     learningLanguage: LearningLanguage,
     includeProfile = false,
   ): LearningLanguageResponse {
-    // TODO(NOW+1): refacto clean
-    if (includeProfile) {
-      return new LearningLanguageResponse({
-        id: learningLanguage.id,
-        name: learningLanguage.language.name,
-        code: learningLanguage.language.code,
-        level: learningLanguage.level,
-        profile: ProfileResponse.fromDomain(learningLanguage.profile),
-        createdAt: learningLanguage.createdAt,
-        campus:
-          learningLanguage.campus &&
-          CampusResponse.fromCampus(learningLanguage.campus),
-        certificateOption: learningLanguage.certificateOption,
-        specificProgram: learningLanguage.specificProgram,
-        learningType: learningLanguage.learningType,
-        sameGender: learningLanguage.sameGender,
-        sameAge: learningLanguage.sameAge,
-      });
-    }
-
-    return new LearningLanguageResponse({
+    const response = new LearningLanguageResponse({
       id: learningLanguage.id,
       name: learningLanguage.language.name,
       code: learningLanguage.language.code,
@@ -103,6 +83,15 @@ export class LearningLanguageResponse {
       sameGender: learningLanguage.sameGender,
       sameAge: learningLanguage.sameAge,
     });
+
+    if (includeProfile) {
+      return new LearningLanguageResponse({
+        ...response,
+        profile: ProfileResponse.fromDomain(learningLanguage.profile),
+      });
+    }
+
+    return response;
   }
 }
 
