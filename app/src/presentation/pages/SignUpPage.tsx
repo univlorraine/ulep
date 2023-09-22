@@ -12,10 +12,11 @@ import RadioButton from '../components/RadioButton';
 import TextInput from '../components/TextInput';
 import WebLayoutCentered from '../components/layout/WebLayoutCentered';
 import styles from './css/SignUp.module.css';
+import Person from '../../domain/entities/Person';
 
 const SignUpPage: React.FC = () => {
     const { t } = useTranslation();
-    const { configuration, getAllCountries } = useConfig();
+    const { configuration, getAllCountries, retrievePerson } = useConfig();
     const updateProfileSignUp = useStoreActions((state) => state.updateProfileSignUp);
     const [showToast] = useIonToast();
     const history = useHistory();
@@ -69,6 +70,29 @@ const SignUpPage: React.FC = () => {
         return setUniversity(country.universities[0]);
     };
 
+    const getPersonInfos = async () => {
+        console.log("button clicked");
+        const result = await retrievePerson.execute("muller66") as Person;
+        // console.log(result);
+        if (result.departement.label) {
+            setDepartment(result.departement.label);
+        }
+        setDepartment(result.departement.label);
+        switch (selectedRole) {
+            case "student":
+                // console.log("il s'agit d'un étudiant");
+                if(result.diploma.label){
+                    setDiplome(result.diploma.label);
+                }
+                break;
+            case "staff":
+                // console.log("il s'agit d'un personnel");
+                break;
+            default:
+                // console.log("pas de rôle sélectionné");
+                break;
+        }
+    }
     useEffect(() => {
         getSignUpData();
     }, []);
@@ -121,7 +145,7 @@ const SignUpPage: React.FC = () => {
                 </div>
 
                 {university && university.isCentral && (
-                    <button className="tertiary-button large-margin-vertical" onClick={() => undefined}>
+                    <button className="tertiary-button large-margin-vertical" onClick={getPersonInfos}>
                         {t('signup_page.sso_button')}
                     </button>
                 )}

@@ -7,7 +7,7 @@ interface PersonCommand {
     age: number;
     gender: string;
     role: string;
-    diploma : {
+    diploma: {
         code: string,
         label: string
     };

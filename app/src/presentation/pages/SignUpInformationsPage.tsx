@@ -32,8 +32,6 @@ const SignUpInformationsPage: React.FC = () => {
     const [CGUChecked, setCGUChecked] = useState<boolean>(false);
     const [errorMessage, setErrorMessage] = useState<{ type: string; message: string }>();
     
-    //testing hugo
-    const [loading, setLoading] = useState<boolean>(false);
 
     const allFieldHasValue = () =>
         !email ||
@@ -123,31 +121,42 @@ const SignUpInformationsPage: React.FC = () => {
         return history.push('/signup/languages');
     };
 
-    //INFOS: ajout de Hugo pour préremplissage quand utilisateur UL
+    //INFOS: function to retrieve the info of the user and load them in the input fileds
     const userUlAutomaticValues = async () => {
-        const result = await retrievePerson.execute("ripon1i") as Person;
-        console.log(result);
-        setFirstname(result.firstname);
-        setLastname(result.lastname);
+        const result = await retrievePerson.execute("muller66") as Person;
+        if (result.firstname) {
+            setFirstname(result.firstname);
+        }
+        if (result.lastname) {
+            setLastname(result.lastname);
+        }
         switch (result.gender) {
             case "M.":
                 setGender("male")
                 break;
-            case "Mme.":
+            case "Mme" || "MME":
                 setGender("female")
                 break;
             default:
                 break;
         }
-        setAge(result.age);
-        setEmail(result.email);
+        if (result.age) {
+            setAge(result.age);
+        }
+        if(result.email){
+            setEmail(result.email);
+        }
+        
     }
 
     //INFOS: useEffect() permet de lancer du code après que le composant soit rendered.
     //TODO: regarder pourquoi les appelles sont doubler quand le useEffect s'éxécute.
     useEffect(()=>{
-        userUlAutomaticValues();
-    }, []);
+        if (profileSignUp.university?.isCentral) {
+            console.log("université central")
+            userUlAutomaticValues();
+        }
+    },[]);
 
     return (
         <WebLayoutCentered
