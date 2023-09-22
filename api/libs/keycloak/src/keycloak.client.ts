@@ -54,6 +54,10 @@ export class KeycloakClient {
       client_secret: this.configuration.clientSecret,
     });
 
+    this.grantToken();
+  }
+
+  private async grantToken(): Promise<void> {
     this.tokenSet = await this.issuerClient.grant({
       grant_type: 'client_credentials',
     });
@@ -441,11 +445,11 @@ export class KeycloakClient {
    */
   public async getAccessToken(): Promise<string> {
     if (!this.tokenSet) {
-      await this.initialize();
+      await this.grantToken();
     }
 
     if (this.tokenSet.expired()) {
-      await this.initialize();
+      await this.grantToken();
     }
     return this.tokenSet.access_token;
   }
