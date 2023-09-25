@@ -69,8 +69,7 @@ export class GetLearningLanguageMatchesUsecase {
       );
 
       targets =
-        await this.learningLanguageRepository.getAvailableLearningLanguagesSpeakingDifferentLanguageFromOwnerAndFromUniversities(
-          owner.id, // TODO(NOW+1): remove this condition (optimization not needed)
+        await this.learningLanguageRepository.getAvailableLearningLanguagesSpeakingDifferentLanguageAndFromUniversities(
           languageIdsSpokenByOwner,
           languageIdsSupportedByUniversity,
           command.universityIds,

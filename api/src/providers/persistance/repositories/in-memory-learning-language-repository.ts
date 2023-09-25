@@ -127,8 +127,7 @@ export class InMemoryLearningLanguageRepository
     return Promise.resolve(false);
   }
 
-  getAvailableLearningLanguagesSpeakingDifferentLanguageFromOwnerAndFromUniversities(
-    ownerId: string,
+  getAvailableLearningLanguagesSpeakingDifferentLanguageAndFromUniversities(
     ownerSpokenLanguageIds: string[],
     universitySupportedLanguageIds: string[],
     universityIds: string[],
@@ -136,28 +135,26 @@ export class InMemoryLearningLanguageRepository
     const res = [];
 
     for (const learningLanguage of this.#learningLanguages.values()) {
-      if (learningLanguage.profile.id !== ownerId) {
-        if (universityIds.includes(learningLanguage.profile.user.id)) {
-          if (
-            (!ownerSpokenLanguageIds.includes(
+      if (universityIds.includes(learningLanguage.profile.user.id)) {
+        if (
+          (!ownerSpokenLanguageIds.includes(
+            learningLanguage.profile.nativeLanguage.id,
+          ) &&
+            universitySupportedLanguageIds.includes(
               learningLanguage.profile.nativeLanguage.id,
-            ) &&
-              universitySupportedLanguageIds.includes(
-                learningLanguage.profile.nativeLanguage.id,
-              )) ||
-            learningLanguage.profile.masteredLanguages.some(
-              (masteredLanguage) =>
-                !ownerSpokenLanguageIds.includes(masteredLanguage.id) &&
-                universitySupportedLanguageIds.includes(masteredLanguage.id),
-            )
+            )) ||
+          learningLanguage.profile.masteredLanguages.some(
+            (masteredLanguage) =>
+              !ownerSpokenLanguageIds.includes(masteredLanguage.id) &&
+              universitySupportedLanguageIds.includes(masteredLanguage.id),
+          )
+        ) {
+          if (
+            !this.#tandemsPerLearningLanguages?.has(learningLanguage.id) ||
+            this.#tandemsPerLearningLanguages?.get(learningLanguage.id)
+              .status !== TandemStatus.ACTIVE
           ) {
-            if (
-              !this.#tandemsPerLearningLanguages?.has(learningLanguage.id) ||
-              this.#tandemsPerLearningLanguages?.get(learningLanguage.id)
-                .status !== TandemStatus.ACTIVE
-            ) {
-              res.push(learningLanguage);
-            }
+            res.push(learningLanguage);
           }
         }
       }

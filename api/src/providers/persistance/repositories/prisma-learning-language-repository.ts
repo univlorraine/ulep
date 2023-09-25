@@ -204,8 +204,7 @@ export class PrismaLearningLanguageRepository
     return !!res;
   }
 
-  async getAvailableLearningLanguagesSpeakingDifferentLanguageFromOwnerAndFromUniversities(
-    ownerId: string,
+  async getAvailableLearningLanguagesSpeakingDifferentLanguageAndFromUniversities(
     ownerSpokenLanguageIds: string[],
     universitySupportedLanguageIds: string[],
     universityIds: string[],
@@ -214,14 +213,6 @@ export class PrismaLearningLanguageRepository
       where: {
         Profile: {
           AND: [
-            {
-              // Assert target is not owner
-              id: {
-                not: {
-                  equals: ownerId,
-                },
-              },
-            },
             {
               // Assert target speaks a language that is
               // not spoken by owner AND is supported by university
