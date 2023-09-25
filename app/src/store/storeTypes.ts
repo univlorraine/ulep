@@ -53,6 +53,7 @@ interface ProfileStorePayload {
 }
 
 interface UpdateProfile {
+    acceptsEmail?: boolean;
     avatar?: string;
     learningLanguage?: Language;
 }

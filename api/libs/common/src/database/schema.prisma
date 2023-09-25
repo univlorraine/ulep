@@ -119,6 +119,7 @@ model Users {
   status             String?              @default("ACTIVE")
   deactivated        Boolean              @default(false)
   deactivated_reason String?
+  accepts_email      Boolean              @default(true)
   country_code_id    String?
   image_id           String?              @unique
   created_at         DateTime             @default(now())

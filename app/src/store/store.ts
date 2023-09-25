@@ -36,6 +36,7 @@ const Store = createStore<TokenStoreTypes>(
                 if (profile && payload.avatar) profile.user.avatar = payload.avatar;
                 if (profile && payload.learningLanguage)
                     profile.learningLanguages = [...profile.learningLanguages, payload.learningLanguage];
+                if (profile && payload.acceptsEmail !== undefined) profile.user.acceptsEmail = payload.acceptsEmail;
             }),
             updateProfileSignUp: action((state, payload) => {
                 const profile = state.profileSignUp;
