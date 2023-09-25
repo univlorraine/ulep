@@ -19,6 +19,7 @@ const ProfilePage: React.FC = () => {
                 profileFirstname={profile.user.firstname}
                 profileLastname={profile.user.lastname}
                 profilePicture={profile.user.avatar ?? AvatarPlaceholderPng}
+                profileUniversity={profile.user.university}
             />
         </IonPage>
     );

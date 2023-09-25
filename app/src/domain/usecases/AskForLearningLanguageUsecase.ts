@@ -7,11 +7,30 @@ import AskForLearningLanguageUsecaseInterface from '../interfaces/AskForLearning
 class AskForLearningLanguageUsecase implements AskForLearningLanguageUsecaseInterface {
     constructor(private readonly domainHttpAdapter: HttpAdapterInterface) {}
 
-    async execute(profileId: string, language: Language, level: CEFR): Promise<Language | Error> {
+    async execute(
+        profileId: string,
+        language: Language,
+        level: CEFR,
+        learningType: Pedagogy,
+        sameAge: boolean,
+        sameGender: boolean,
+        campusId?: string,
+        isForCertificate?: boolean,
+        isForProgram?: boolean
+    ): Promise<Language | Error> {
         try {
             const httpResponse: HttpResponse<LanguageCommand> = await this.domainHttpAdapter.post(
                 `/profiles/${profileId}/learning-language`,
-                { code: language.code, level }
+                {
+                    code: language.code,
+                    level,
+                    learningType,
+                    sameAge,
+                    sameGender,
+                    campusId,
+                    certificateOption: isForCertificate,
+                    specificProgram: isForProgram,
+                }
             );
 
             if (!httpResponse.parsedBody) {

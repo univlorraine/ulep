@@ -48,11 +48,16 @@ export interface SignUpStorePayload {
     university?: University;
 }
 
+interface LanguagePayload {
+    language: string;
+}
+
 interface ProfileStorePayload {
     profile: Profile;
 }
 
 interface UpdateProfile {
+    acceptsEmail?: boolean;
     avatar?: string;
     learningLanguage?: Language;
 }
@@ -62,8 +67,10 @@ interface UserStorePayload {
 }
 interface StoreInterface {
     accessToken: string;
+    language: string;
     logout: Action<StoreInterface>;
     refreshToken: string;
+    setLanguage: Action<StoreInterface, LanguagePayload>;
     setProfile: Action<StoreInterface, ProfileStorePayload>;
     setTokens: Action<StoreInterface, TokenStorePayload>;
     setUser: Action<StoreInterface, UserStorePayload>;

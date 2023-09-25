@@ -3,10 +3,14 @@ import {
   RessourceDoesNotExist,
   UnsuportedLanguageException,
 } from 'src/core/errors';
-import { ProfileHasMaxNumberOfLearningLanguages } from 'src/core/errors/profile-exceptions';
+import {
+  ProfileCampusException,
+  ProfileHasMaxNumberOfLearningLanguages,
+} from 'src/core/errors/profile-exceptions';
 import {
   LanguageStatus,
   LearningLanguage,
+  LearningType,
   ProficiencyLevel,
 } from 'src/core/models';
 import {
@@ -30,6 +34,12 @@ export interface CreateLearningLanguageCommand {
   profileId: string;
   code: string;
   level: ProficiencyLevel;
+  learningType: LearningType;
+  sameGender: boolean;
+  sameAge: boolean;
+  campusId?: string;
+  certificateOption?: boolean;
+  specificProgram?: boolean;
 }
 
 @Injectable()
@@ -79,11 +89,38 @@ export class CreateLearningLanguageUseCase {
       }
     }
 
+    if (
+      !command.campusId &&
+      (command.learningType === LearningType.TANDEM ||
+        command.learningType === LearningType.BOTH)
+    ) {
+      throw new ProfileCampusException(
+        'A campus is required for tandem / both learningType',
+      );
+    }
+    let campus;
+    if (command.campusId) {
+      campus = profile.user.university.campus.find(
+        (campus) => campus.id === command.campusId,
+      );
+      if (!campus) {
+        throw new ProfileCampusException(
+          `${command.campusId} not part of user's university`,
+        );
+      }
+    }
+
     const item = new LearningLanguage({
       id: this.uuidProvider.generate(),
       language,
       level: command.level,
       profile: profile,
+      learningType: command.learningType,
+      sameGender: command.sameGender,
+      sameAge: command.sameAge,
+      certificateOption: command.certificateOption,
+      specificProgram: command.specificProgram,
+      campus: campus,
     });
 
     await this.learningLanguageRepository.create(item);

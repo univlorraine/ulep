@@ -39,6 +39,7 @@ const AppContext = () => {
     const { i18n } = useTranslation();
     const rehydrated = useStoreRehydrated();
     const accessToken = useStoreState((state) => state.accessToken);
+    const language = useStoreState((state) => state.language);
     const refreshToken = useStoreState((state) => state.refreshToken);
     const setProfile = useStoreActions((state) => state.setProfile);
     const setTokens = useStoreActions((state) => state.setTokens);
@@ -54,6 +55,14 @@ const AppContext = () => {
         '#4B7676',
         '#7CB8B8'
     );
+
+    useEffect(() => {
+        const getLanguage = async () => {
+            const deviceLanguage = await Device.getLanguageCode();
+            i18n.changeLanguage(language || deviceLanguage.value);
+        };
+        getLanguage();
+    }, [language]);
 
     useEffect(() => {
         document.documentElement.style.setProperty('--primary-color', configuration.primaryColor);
@@ -86,15 +95,6 @@ const AppContext = () => {
 };
 
 const App: React.FC = () => {
-    const { i18n } = useTranslation();
-    useEffect(() => {
-        const getLanguage = async () => {
-            const language = await Device.getLanguageCode();
-            i18n.changeLanguage(language.value);
-        };
-        getLanguage();
-    }, []);
-
     return (
         <IonApp>
             <StoreProvider store={Store}>

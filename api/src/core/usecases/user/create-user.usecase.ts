@@ -85,6 +85,7 @@ export class CreateUserUsecase {
     if (!user) {
       user = await this.userRepository.create({
         id: keycloakUser.id,
+        acceptsEmail: true,
         email: command.email,
         firstname: command.firstname,
         lastname: command.lastname,

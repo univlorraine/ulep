@@ -36,7 +36,6 @@ export class ExportController {
         level: item.learningLanguages?.[0]?.level,
         // goal: item.preferences.goals.map((g) => g.name.content).join(', '),
         interests: item.interests.map((i) => i.name.content).join(', '),
-        same_gender: item.sameGender ? 1 : 0,
         meeting_frequency: item.meetingFrequency,
       };
 

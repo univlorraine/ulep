@@ -1,9 +1,5 @@
 import { faker } from '@faker-js/faker';
-import {
-  LearningType,
-  Profile,
-  AvailabilitesOptions,
-} from '../../../../../src/core/models';
+import { Profile, AvailabilitesOptions } from '../../../../../src/core/models';
 import { ModelFactory } from './model.factory';
 
 const enumValue = <T>(_enum: unknown): T => {
@@ -16,14 +12,11 @@ export class ProfileFactory extends ModelFactory<Profile> {
     return {
       id: faker.string.uuid(),
       masteredLanguages: [],
-      learningType: enumValue(LearningType),
       meetingFrequency: faker.helpers.arrayElement([
         'ONCE_A_WEEK',
         'TWICE_A_WEEK',
       ]),
       learningLanguages: [],
-      sameGender: faker.datatype.boolean(),
-      sameAge: faker.datatype.boolean(),
       objectives: [],
       interests: [],
       availabilities: {

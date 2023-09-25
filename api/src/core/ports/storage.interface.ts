@@ -1,3 +1,5 @@
+import { Readable } from 'stream';
+
 export type File = Express.Multer.File;
 
 export const STORAGE_INTERFACE = 'storage.interface';
@@ -8,4 +10,6 @@ export interface StorageInterface {
   deleteFile(bucket: string, name: string): Promise<void>;
 
   getPresignedUrl(bucket: string, name: string): Promise<string>;
+
+  getObject(bucket: string, filename: string): Promise<Readable>;
 }

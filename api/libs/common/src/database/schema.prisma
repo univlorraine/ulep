@@ -78,13 +78,13 @@ model Organizations {
 }
 
 model Places {
-  id              String        @id @default(uuid())
-  name            String
-  organization_id String
-  created_at      DateTime      @default(now())
-  updated_at      DateTime      @updatedAt
-  Organization    Organizations @relation(fields: [organization_id], references: [id], onDelete: Cascade)
-  Profiles        Profiles[]
+  id                String              @id @default(uuid())
+  name              String
+  organization_id   String
+  created_at        DateTime            @default(now())
+  updated_at        DateTime            @updatedAt
+  Organization      Organizations       @relation(fields: [organization_id], references: [id], onDelete: Cascade)
+  LearningLanguages LearningLanguages[]
 
   @@unique([name])
   @@map("places")
@@ -119,6 +119,7 @@ model Users {
   status             String?              @default("ACTIVE")
   deactivated        Boolean              @default(false)
   deactivated_reason String?
+  accepts_email      Boolean              @default(true)
   country_code_id    String?
   image_id           String?              @unique
   created_at         DateTime             @default(now())
@@ -250,29 +251,23 @@ model ReportCategories {
 //  * Profiles
 //  * ****************************************************
 model Profiles {
-  id                      String               @id @default(uuid())
-  user_id                 String
-  native_language_code_id String
-  learning_type           String
-  same_gender             Boolean
-  same_age                Boolean
-  meeting_frequency       String
-  bio                     Json
-  availabilities          Json?
-  availabilities_note     String?
-  availabilities_note_privacy  Boolean?
-  campus_id               String?
-  certificate_option      Boolean?
-  specific_program        Boolean?
-  created_at              DateTime             @default(now())
-  updated_at              DateTime             @updatedAt
-  User                    Users                @relation(fields: [user_id], references: [id], onDelete: Cascade)
-  Campus                  Places?              @relation(fields: [campus_id], references: [id])
-  NativeLanguage          LanguageCodes        @relation("NativeLanguage", fields: [native_language_code_id], references: [id])
-  LearningLanguages       LearningLanguages[]
-  MasteredLanguages       MasteredLanguages[]
-  Goals                   LearningObjectives[]
-  Interests               Interests[]
+  id                          String   @id @default(uuid())
+  user_id                     String
+  native_language_code_id     String
+  meeting_frequency           String
+  bio                         Json
+  availabilities              Json?
+  availabilities_note         String?
+  availabilities_note_privacy Boolean?
+  created_at                  DateTime @default(now())
+  updated_at                  DateTime @updatedAt
+
+  User              Users                @relation(fields: [user_id], references: [id], onDelete: Cascade)
+  NativeLanguage    LanguageCodes        @relation("NativeLanguage", fields: [native_language_code_id], references: [id])
+  LearningLanguages LearningLanguages[]
+  MasteredLanguages MasteredLanguages[]
+  Goals             LearningObjectives[]
+  Interests         Interests[]
 
   @@unique([user_id])
   @@index([native_language_code_id], name: "native_language_code")
@@ -307,17 +302,25 @@ model LearningObjectives {
 }
 
 model LearningLanguages {
-  id               String           @id @default(uuid())
-  profile_id       String
-  tandem_id        String?
-  language_code_id String
-  created_at       DateTime         @default(now())
-  updated_at       DateTime         @updatedAt
-  level            String
-  Profile          Profiles         @relation(fields: [profile_id], references: [id])
-  Tandem           Tandems?         @relation(fields: [tandem_id], references: [id])
-  LanguageCode     LanguageCodes    @relation(fields: [language_code_id], references: [id])
-  RefusedTandems   RefusedTandems[]
+  id                 String   @id @default(uuid())
+  profile_id         String
+  tandem_id          String?
+  language_code_id   String
+  level              String
+  learning_type      String
+  same_gender        Boolean
+  same_age           Boolean
+  certificate_option Boolean?
+  specific_program   Boolean?
+  campus_id          String?
+  created_at         DateTime @default(now())
+  updated_at         DateTime @updatedAt
+
+  Profile        Profiles         @relation(fields: [profile_id], references: [id])
+  Tandem         Tandems?         @relation(fields: [tandem_id], references: [id])
+  LanguageCode   LanguageCodes    @relation(fields: [language_code_id], references: [id])
+  RefusedTandems RefusedTandems[]
+  Campus         Places?          @relation(fields: [campus_id], references: [id])
 
   @@map("learning_languages")
 }

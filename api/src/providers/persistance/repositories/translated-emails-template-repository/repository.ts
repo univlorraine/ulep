@@ -88,7 +88,7 @@ export default class TranslatedEmailTemplateRepository
   }
 
   private getImageUrl(imageName: string): string {
-    return `${config.emailAssets.endpoint}/${config.emailAssets.bucket}/${imageName}`;
+    return `${config.emailAssets.publicEndpoint}/instance/emails/images/${imageName}`;
   }
 
   async getEmail(

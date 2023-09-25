@@ -8,12 +8,14 @@ import SuccessLayout from '../components/layout/SuccessLayout';
 import { codeLanguageToFlag } from '../utils';
 import styles from './css/PairingFinalPage.module.css';
 import { AvatarPlaceholderPng } from '../../assets';
+import { useState } from 'react';
 
 const PairingFinalPage: React.FC = () => {
     const { t } = useTranslation();
     const { askForLearningLanguage, configuration, createProfile } = useConfig();
     const isSignUp = useParams<{ prefix?: string }>().prefix;
     const [showToast] = useIonToast();
+    const [loading, setLoading] = useState<boolean>(false);
     const profile = useStoreState((state) => state.profile);
     const updateProfile = useStoreActions((state) => state.updateProfile);
     const profileSignUp = useStoreState((state) => state.profileSignUp);
@@ -21,22 +23,29 @@ const PairingFinalPage: React.FC = () => {
     const user = profile?.user || userSignIn;
     const university = user?.university;
 
-    if (!university || !user) {
+    if ((!profileSignUp.learningLanguage && !loading) || !university || !user) {
         return <Redirect to={`${isSignUp ? '/' + isSignUp : '/'}pairing/languages`} />;
     }
 
     const askNewLanguage = async () => {
-        if (!profileSignUp.learningLanguage || !profileSignUp.learningLanguageLevel) {
+        setLoading(true);
+        if (!profileSignUp.learningLanguage || !profileSignUp.learningLanguageLevel || !profileSignUp.pedagogy) {
             return await showToast({ message: t('errors.global'), duration: 1000 });
         }
-
         const result = await askForLearningLanguage.execute(
             profile!.id,
             profileSignUp.learningLanguage,
-            profileSignUp.learningLanguageLevel
+            profileSignUp.learningLanguageLevel,
+            profileSignUp.pedagogy,
+            !!profileSignUp.sameAge,
+            !!profileSignUp.sameGender,
+            profileSignUp.campus?.id,
+            !!profileSignUp.isForCertificate,
+            !!profileSignUp.isForProgram
         );
 
         if (result instanceof Error) {
+            setLoading(false);
             return await showToast({ message: t(result.message), duration: 1000 });
         }
 
@@ -45,6 +54,7 @@ const PairingFinalPage: React.FC = () => {
     };
 
     const nextStep = async () => {
+        setLoading(true);
         if (
             !profileSignUp.nativeLanguage ||
             !profileSignUp.otherLanguages ||
@@ -56,6 +66,7 @@ const PairingFinalPage: React.FC = () => {
             !profileSignUp?.availabilities ||
             !profileSignUp.biography
         ) {
+            setLoading(false);
             return await showToast({ message: t('errors.global'), duration: 1000 });
         }
 
@@ -80,8 +91,10 @@ const PairingFinalPage: React.FC = () => {
         );
 
         if (result instanceof Error) {
+            setLoading(false);
             return await showToast({ message: t(result.message), duration: 1000 });
         }
+        setLoading(false);
         return (window.location.href = '/home');
     };
 
