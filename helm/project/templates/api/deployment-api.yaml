@@ -100,8 +100,8 @@ spec:
               value: "{{ .Values.api.env.logLevel }}"
             - name: EMAIL_TRANSLATIONS_COMPONENT
               value: "{{ .Values.api.env.emailsTranslationsComponent }}"
-            - name: EMAIL_ASSETS_ENDPOINT
-              value: "{{ .Values.api.env.emailsAssetsEndpoint }}"
+            - name: EMAIL_ASSETS_PUBLIC_ENDPOINT
+              value: "https://{{ .Values.api.env.emailsAssetsPublicUrl }}.{{ .Values.domain }}"
             - name: EMAIL_ASSETS_BUCKET
               value: "{{ .Values.api.env.emailsAssetsBucket }}"
             - name: APP_LINK_APPLE_STORE

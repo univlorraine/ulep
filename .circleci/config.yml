@@ -156,6 +156,7 @@ workflows:
               only:
                 - develop
                 - main
+
   check_admin:
     jobs:
       - lint-admin

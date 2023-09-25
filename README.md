@@ -73,48 +73,6 @@ You might also need roles, which can be added from Roles -> Add Role. Once creat
 
 Note: an "admin" role already exist for backoffice user. It is needed in order to perform actions in backoffice. See [repository wiki](https://github.com/thetribeio/etandem/wiki/Cr%C3%A9ation-d'un-utilisateur-du-Backoffice) on more information on how to create and assign role to user.
 
-
-## MinIO
-
-In order for email to properly have images, you must give read policy to bucket `assets`.
-
-Read policy for bucket: 
-```json
-{
-    "Version": "2012-10-17",
-    "Statement": [
-        {
-            "Effect": "Allow",
-            "Principal": {
-                "AWS": [
-                    "*"
-                ]
-            },
-            "Action": [
-                "s3:GetBucketLocation"
-            ],
-            "Resource": [
-                "arn:aws:s3:::assets"
-            ]
-        },
-        {
-            "Effect": "Allow",
-            "Principal": {
-                "AWS": [
-                    "*"
-                ]
-            },
-            "Action": [
-                "s3:GetObject"
-            ],
-            "Resource": [
-                "arn:aws:s3:::assets/*"
-            ]
-        }
-    ]
-}
-```
-
 ## Development
 
 ### Migrations
