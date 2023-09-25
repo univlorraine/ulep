@@ -62,13 +62,14 @@ export class LearningLanguage {
     if (learningLanguageMatch) {
       if (
         this.learningType === LearningType.BOTH &&
-        this.learningType === learningLanguageMatch.learningType &&
+        learningLanguageMatch.learningType === LearningType.BOTH &&
         this.campus &&
         this.campus.id === learningLanguageMatch.campus?.id
       ) {
         return true;
       }
     }
+
     return (
       this.language.isJokerLanguage() ||
       this.learningType === LearningType.TANDEM
@@ -92,6 +93,7 @@ export class LearningLanguage {
         return true;
       }
     }
+
     return false;
   }
 }

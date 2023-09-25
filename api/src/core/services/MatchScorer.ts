@@ -237,7 +237,8 @@ export class MatchScorer implements IMatchScorer {
     let matchProfileLevel = ProficiencyLevel.B2;
     if (isDiscovery) {
       if (learningLanguage.language.isJokerLanguage()) {
-        // TODO(NOW+1) TODO(discovery) TODO(joker): règle plus fine à trouver ici. est-ce que je prend B2 / le niveau du language appris
+        // TODO(discovery)
+        // TODO(joker): règle plus fine à trouver ici. est-ce que je prend B2 / le niveau du language appris
         // On a besoin de savoir avec qui on match ICI
       } else if (matchLearningLanguage.profile.isLearningLanguage(learningLanguage.language)) {
           matchProfileLevel = matchLearningLanguage.profile.learningLanguages.find(ll => ll.language.id === learningLanguage.language.id).level;
