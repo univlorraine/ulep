@@ -24,6 +24,8 @@ import { PrismaRoutineExecutionRepository } from 'src/providers/persistance/repo
 import { PrismaService } from '@app/common';
 import { RoutineExecutionController } from './controllers/routine-execution.controller';
 import { InstanceController } from 'src/api/controllers/instance.controller';
+import { STORAGE_INTERFACE } from 'src/core/ports/storage.interface';
+import { MinioStorage } from 'src/providers/storage/minio.storage';
 
 @Module({
   imports: [CoreModule, TerminusModule],
@@ -56,6 +58,10 @@ import { InstanceController } from 'src/api/controllers/instance.controller';
     {
       provide: ROUTINE_EXECUTION_REPOSITORY,
       useClass: PrismaRoutineExecutionRepository,
+    },
+    {
+      provide: STORAGE_INTERFACE,
+      useClass: MinioStorage,
     },
   ],
 })

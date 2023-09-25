@@ -3,6 +3,7 @@ import { Injectable } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { File, StorageInterface } from 'src/core/ports/storage.interface';
 import { ContentTypeException } from 'src/core/errors/content-type.exception';
+import { Readable } from 'stream';
 
 /*
  * This is the implementation of the StorageInterface.
@@ -68,5 +69,9 @@ export class MinioStorage implements StorageInterface {
         ],
       }),
     );
+  }
+
+  async getObject(bucket: string, filename: string): Promise<Readable> {
+    return this.minioClient.getObject(bucket, filename);
   }
 }

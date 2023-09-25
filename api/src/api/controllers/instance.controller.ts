@@ -1,4 +1,4 @@
-import { Controller, Get, Param } from '@nestjs/common';
+import { Controller, Get, Inject, Param, Res } from '@nestjs/common';
 import * as Swagger from '@nestjs/swagger';
 import {
   Configuration,
@@ -6,12 +6,19 @@ import {
   getTranslationsEndpoint,
 } from 'src/configuration';
 import { RessourceDoesNotExist } from 'src/core/errors';
+import {
+  STORAGE_INTERFACE,
+  StorageInterface,
+} from 'src/core/ports/storage.interface';
 
 @Controller('instance')
 @Swagger.ApiTags('Instance')
 export class InstanceController {
   config: Configuration;
-  constructor() {
+  constructor(
+    @Inject(STORAGE_INTERFACE)
+    private readonly storageGateway: StorageInterface,
+  ) {
     this.config = configuration();
   }
 
@@ -32,5 +39,24 @@ export class InstanceController {
     const locale = await result.json();
 
     return JSON.stringify(locale);
+  }
+
+  // TODO(NOW): type
+  @Get('emails/images/:fileName')
+  async getEmailImages(
+    @Param('fileName') fileName: string,
+    @Res() res,
+  ): Promise<any> {
+    try {
+      const stream = await this.storageGateway.getObject('assets', fileName);
+      return stream.pipe(res);
+    } catch (err) {
+      console.error(err);
+      if (err.code === 'NoSuchKey') {
+        console.log('404');
+      }
+      // TODO(NOW): return 404 on error
+      return;
+    }
   }
 }
