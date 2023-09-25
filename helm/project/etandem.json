@@ -14,10 +14,10 @@
     "defaultLocale": "en",
   "smtpServer": {
     "starttls": "false",
-    "port": "1025",
-    "host": "mailer",
-    "from": "contact@ulep.io",
-    "ssl": "false"
+    "port": "{{ .Values.api.env.smtpPort }}",
+    "host": "{{ .Values.api.env.smtpHost }}",
+    "from": "{{ .Values.api.env.smtpSender }}",
+    "ssl": "{{ .Values.api.env.smtpSecure }}"
   },
   "clients": [
     {
