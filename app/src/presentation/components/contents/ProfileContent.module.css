@@ -54,9 +54,20 @@
     font-weight: 700;
     line-height: 25px;
     letter-spacing: -0.6px;
-    margin-bottom: 40px;
+    margin-top: 12px;
     text-align: center;
     text-transform: uppercase;
+}
+
+.university {
+    color: var(--black, #000);
+    font-family: 'Maven Pro';
+    font-size: 16px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: 20px;
+    margin-bottom: 40px;
+    text-align: center;
 }
 
 @media (min-width: 768px) {
