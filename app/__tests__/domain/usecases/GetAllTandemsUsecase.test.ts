@@ -50,6 +50,7 @@ const usecaseResponse: TandemCommand[] = [
                 user: {
                     id: 'userId',
                     avatar: { id: 'avatarId', url: 'url' },
+                    acceptsEmail: true,
                     email: 'email',
                     firstname: 'firstname',
                     lastname: 'lastname',
