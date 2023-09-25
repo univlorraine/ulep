@@ -28,10 +28,9 @@ export type GetUserMatchCommand = {
 
 const DEFAULT_NB_USER_MATCHES = 5;
 
-// TODO(NOW+1): rename UC in GetLearningLanguageMatchUsecase
 @Injectable()
-export class GetUserMatchUsecase {
-  private readonly logger = new Logger(GetUserMatchUsecase.name);
+export class GetLearningLanguageMatchesUsecase {
+  private readonly logger = new Logger(GetLearningLanguageMatchesUsecase.name);
 
   constructor(
     @Inject(LEARNING_LANGUAGE_REPOSITORY)
