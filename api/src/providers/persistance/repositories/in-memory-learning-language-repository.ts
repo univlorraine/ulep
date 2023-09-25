@@ -185,7 +185,7 @@ export class InMemoryLearningLanguageRepository
 
     return Promise.resolve(
       new Collection<LearningLanguageWithTandem>({
-        items,
+        items: items.map((item) => new LearningLanguageWithTandem(item)),
         totalItems: values.length,
       }),
     );
