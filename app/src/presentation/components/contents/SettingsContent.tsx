@@ -14,12 +14,20 @@ interface SettingsContentProps {
 }
 
 const SettingsContent: React.FC<SettingsContentProps> = ({ onBackPressed, onDisconnect }) => {
-    const { i18n, t } = useTranslation();
+    const { t } = useTranslation();
     const { askForAccountDeletion, updateNotificationPermission } = useConfig();
+    const setLanguage = useStoreActions((state) => state.setLanguage);
+    const currentLanguage = useStoreState((state) => state.language);
     const [showToast] = useIonToast();
     const profile = useStoreState((state) => state.profile);
     const updateProfile = useStoreActions((state) => state.updateProfile);
     const [emailNotificationStatus, setEmailNotificationStatus] = useState<boolean>(profile!.user.acceptsEmail);
+
+    const LANGUAGES = [
+        { title: t('languages.french'), value: 'fr' },
+        { title: t('languages.english'), value: 'en' },
+        { title: t('languages.chinese'), value: 'cn' },
+    ];
 
     const onDeletionAsked = async () => {
         const result = await askForAccountDeletion.execute();
@@ -41,6 +49,10 @@ const SettingsContent: React.FC<SettingsContentProps> = ({ onBackPressed, onDisc
         return updateProfile({ acceptsEmail: !profile!.user.acceptsEmail });
     };
 
+    const updateLanguage = (code: string) => {
+        setLanguage({ language: code });
+    };
+
     return (
         <div className={styles.container}>
             <button className={styles['back-button']} onClick={onBackPressed}>
@@ -50,13 +62,10 @@ const SettingsContent: React.FC<SettingsContentProps> = ({ onBackPressed, onDisc
 
             <div className="large-margin-vertical">
                 <Dropdown
-                    onChange={(value) => i18n.changeLanguage(value)}
-                    options={[
-                        { title: 'French', value: 'fr' },
-                        { title: 'English', value: 'en' },
-                        { title: 'Chinese', value: 'cn' },
-                    ]}
+                    onChange={updateLanguage}
+                    options={LANGUAGES}
                     title={t('home_page.settings.language')}
+                    placeholder={LANGUAGES.find((language) => language.value === currentLanguage)?.title}
                 />
             </div>
             <span className={styles.subtitle}>{t('home_page.settings.other')}</span>

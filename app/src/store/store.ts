@@ -6,7 +6,11 @@ const Store = createStore<TokenStoreTypes>(
     persist(
         {
             accessToken: '',
+            language: '',
             refreshToken: '',
+            setLanguage: action((state, payload) => {
+                state.language = payload.language;
+            }),
             setProfile: action((state, payload) => {
                 state.profile = payload.profile;
                 if (state.profileSignUp) {
