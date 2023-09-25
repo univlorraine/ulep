@@ -13,7 +13,6 @@ import {
   IsUUID,
   ValidateNested,
 } from 'class-validator';
-import { LearningType } from 'src/core/models';
 import { CreateProfileCommand } from 'src/core/usecases/profiles/create-profile.usecase';
 import { BiographyDto } from './biography';
 import { LearningLanguageDto } from '../learning-languages';
@@ -22,14 +21,6 @@ import { AvailabilitesDto } from 'src/api/dtos/profiles/availabilities';
 export class CreateProfileRequest
   implements Omit<CreateProfileCommand, 'user'>
 {
-  learningType: LearningType;
-  sameGender: boolean;
-  sameAge: boolean;
-  bios?: string;
-  campusId?: string;
-  certificateOption?: boolean;
-  specificProgram?: boolean;
-  // TODO(herve): we should use ids instead of codes
   @Swagger.ApiProperty({ type: 'string', example: 'FR' })
   @IsNotEmpty()
   nativeLanguageCode: string;
@@ -40,7 +31,6 @@ export class CreateProfileRequest
   @ValidateNested()
   learningLanguages: LearningLanguageDto[];
 
-  // TODO(herve): we should use ids instead of codes
   @ApiPropertyOptional({ type: 'string', example: ['FR'] })
   @IsNotEmpty({ each: true })
   @IsOptional()

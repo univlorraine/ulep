@@ -111,23 +111,27 @@ describe('createProfile', () => {
         expect(adapter.post).toHaveBeenCalledWith('/profiles/', {
             nativeLanguageCode: 'FR',
             masteredLanguageCodes: ['CN'],
-            learningLanguages: [{ code: 'ES', level: 'A0' }],
-            learningType: 'TANDEM',
+            learningLanguages: [
+                {
+                    code: 'ES',
+                    level: 'A0',
+                    campusId: undefined,
+                    certificateOption: true,
+                    learningType: 'TANDEM',
+                    sameAge: true,
+                    sameGender: true,
+                    specificProgram: true,
+                },
+            ],
             objectives: ['goalId'],
             meetingFrequency: 'ONCE_A_WEEK',
             interests: ['interestsId'],
-            sameAge: true,
-            sameGender: true,
             biography: {
                 superpower: biography.power,
                 favoritePlace: biography.place,
                 experience: biography.travel,
                 anecdote: biography.incredible,
             },
-            campusId: undefined,
-            certificateOption: true,
-            specificProgram: true,
-
             availabilities: {
                 monday: 'AVAILABLE',
                 tuesday: 'AVAILABLE',
