@@ -156,7 +156,6 @@ workflows:
               only:
                 - develop
                 - main
-                - fix/email-assets-location
 
   check_admin:
     jobs:
