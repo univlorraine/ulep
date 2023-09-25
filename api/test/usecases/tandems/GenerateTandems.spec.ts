@@ -166,6 +166,7 @@ describe('GenerateTandem UC', () => {
   const french1 = new Profile({
     user: new User({
       id: 'user1',
+      acceptsEmail: true,
       email: '',
       firstname: '',
       lastname: '',
@@ -203,6 +204,7 @@ describe('GenerateTandem UC', () => {
   const french2 = new Profile({
     user: new User({
       id: 'user2',
+      acceptsEmail: true,
       email: '',
       firstname: '',
       lastname: '',
@@ -240,6 +242,7 @@ describe('GenerateTandem UC', () => {
   const french3 = new Profile({
     user: new User({
       id: 'user3',
+      acceptsEmail: true,
       email: '',
       firstname: '',
       lastname: '',
@@ -277,6 +280,7 @@ describe('GenerateTandem UC', () => {
   const spain1 = new Profile({
     user: new User({
       id: 'user4',
+      acceptsEmail: true,
       email: '',
       firstname: '',
       lastname: '',
@@ -314,6 +318,7 @@ describe('GenerateTandem UC', () => {
   const spain2 = new Profile({
     user: new User({
       id: 'user5',
+      acceptsEmail: true,
       email: '',
       firstname: '',
       lastname: '',
@@ -351,6 +356,7 @@ describe('GenerateTandem UC', () => {
   const english1 = new Profile({
     user: new User({
       id: 'user6',
+      acceptsEmail: true,
       email: '',
       firstname: '',
       lastname: '',
@@ -388,6 +394,7 @@ describe('GenerateTandem UC', () => {
   const english2 = new Profile({
     user: new User({
       id: 'user7',
+      acceptsEmail: true,
       email: '',
       firstname: '',
       lastname: '',
@@ -425,6 +432,7 @@ describe('GenerateTandem UC', () => {
   const deutch1 = new Profile({
     user: new User({
       id: 'user8',
+      acceptsEmail: true,
       email: '',
       firstname: '',
       lastname: '',
@@ -602,6 +610,7 @@ describe('GenerateTandem UC', () => {
     const male = new Profile({
       user: new User({
         id: 'user1',
+        acceptsEmail: true,
         email: '',
         firstname: '',
         lastname: '',
@@ -640,6 +649,7 @@ describe('GenerateTandem UC', () => {
     const female = new Profile({
       user: new User({
         id: 'user1',
+        acceptsEmail: true,
         email: '',
         firstname: '',
         lastname: '',
@@ -694,6 +704,7 @@ describe('GenerateTandem UC', () => {
     const frenchTandem = new Profile({
       user: new User({
         id: 'user1',
+        acceptsEmail: true,
         email: '',
         firstname: '',
         lastname: '',
@@ -734,6 +745,7 @@ describe('GenerateTandem UC', () => {
     const englishTandem = new Profile({
       user: new User({
         id: 'user2',
+        acceptsEmail: true,
         email: '',
         firstname: '',
         lastname: '',
@@ -774,6 +786,7 @@ describe('GenerateTandem UC', () => {
     const englishTandemOtherSite = new Profile({
       user: new User({
         id: 'user2',
+        acceptsEmail: true,
         email: '',
         firstname: '',
         lastname: '',
@@ -814,6 +827,7 @@ describe('GenerateTandem UC', () => {
     const frenchEtandem = new Profile({
       user: new User({
         id: 'user3',
+        acceptsEmail: true,
         email: '',
         firstname: '',
         lastname: '',
@@ -853,6 +867,7 @@ describe('GenerateTandem UC', () => {
     const englishEtandem = new Profile({
       user: new User({
         id: 'user4',
+        acceptsEmail: true,
         email: '',
         firstname: '',
         lastname: '',
@@ -892,6 +907,7 @@ describe('GenerateTandem UC', () => {
     const frenchBoth = new Profile({
       user: new User({
         id: 'user5',
+        acceptsEmail: true,
         email: '',
         firstname: '',
         lastname: '',
@@ -932,6 +948,7 @@ describe('GenerateTandem UC', () => {
     const englishBoth = new Profile({
       user: new User({
         id: 'user4',
+        acceptsEmail: true,
         email: '',
         firstname: '',
         lastname: '',
@@ -1112,6 +1129,7 @@ describe('GenerateTandem UC', () => {
     const studentSubsidiary1 = new Profile({
       user: new User({
         id: 's1subsidiary1',
+        acceptsEmail: true,
         email: '',
         firstname: '',
         lastname: '',
@@ -1149,6 +1167,7 @@ describe('GenerateTandem UC', () => {
     const studentSubsidiary2 = new Profile({
       user: new User({
         id: 's1subsidiary1',
+        acceptsEmail: true,
         email: '',
         firstname: '',
         lastname: '',
@@ -1225,6 +1244,7 @@ describe('GenerateTandem UC', () => {
     const profile1 = new Profile({
       user: new User({
         id: 's1subsidiary',
+        acceptsEmail: true,
         email: '',
         firstname: '',
         lastname: '',
@@ -1262,6 +1282,7 @@ describe('GenerateTandem UC', () => {
     const perfectMatchForProfile1 = new Profile({
       user: new User({
         id: 's2subsidiary',
+        acceptsEmail: true,
         email: '',
         firstname: '',
         lastname: '',
@@ -1327,6 +1348,7 @@ describe('GenerateTandem UC', () => {
     const firstUser = new Profile({
       user: new User({
         id: 'user1',
+        acceptsEmail: true,
         email: '',
         firstname: '',
         lastname: '',
@@ -1366,6 +1388,7 @@ describe('GenerateTandem UC', () => {
     const secondUser = new Profile({
       user: new User({
         id: 'user2',
+        acceptsEmail: true,
         email: '',
         firstname: '',
         lastname: '',
@@ -1404,6 +1427,7 @@ describe('GenerateTandem UC', () => {
     const match = new Profile({
       user: new User({
         id: 'user3',
+        acceptsEmail: true,
         email: '',
         firstname: '',
         lastname: '',
@@ -1459,6 +1483,7 @@ describe('GenerateTandem UC', () => {
     const profileLearningJoker = new Profile({
       user: new User({
         id: 'user1',
+        acceptsEmail: true,
         email: '',
         firstname: '',
         lastname: '',
@@ -1497,6 +1522,7 @@ describe('GenerateTandem UC', () => {
     const potentialMatch = new Profile({
       user: new User({
         id: 'user2',
+        acceptsEmail: true,
         email: '',
         firstname: '',
         lastname: '',

@@ -74,6 +74,7 @@ describe('Score', () => {
     const profile1 = new Profile({
       user: new User({
         id: 'user1',
+        acceptsEmail: true,
         email: '',
         firstname: '',
         lastname: '',
@@ -105,6 +106,7 @@ describe('Score', () => {
     const profile2 = new Profile({
       user: new User({
         id: 'user2',
+        acceptsEmail: true,
         email: '',
         firstname: '',
         lastname: '',
