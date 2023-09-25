@@ -5,7 +5,7 @@ import {
   LearningLanguageHasNoAssociatedProfile,
   ProfileIsNotInCentralUniversity,
 } from 'src/core/errors/tandem-exceptions';
-import { LearningLanguage, Match } from 'src/core/models';
+import { LearningLanguage, LearningType, Match } from 'src/core/models';
 import {
   LANGUAGE_REPOSITORY,
   LanguageRepository,
@@ -70,7 +70,7 @@ export class GetLearningLanguageMatchesUsecase {
 
       targets =
         await this.learningLanguageRepository.getAvailableLearningLanguagesSpeakingDifferentLanguageFromOwnerAndFromUniversities(
-          owner.id,
+          owner.id, // TODO(NOW+1): remove this condition (optimization not needed)
           languageIdsSpokenByOwner,
           languageIdsSupportedByUniversity,
           command.universityIds,
@@ -80,7 +80,10 @@ export class GetLearningLanguageMatchesUsecase {
         await this.learningLanguageRepository.getAvailableLearningLanguagesSpeakingLanguageFromUniversities(
           learningLanguage.language.id,
           command.universityIds,
-          learningLanguage.isDiscovery(),
+          learningLanguage.isDiscovery() ||
+            // We don't know if BOTH learning type can lead to discovery tandem yet
+            // so we include it
+            learningLanguage.learningType === LearningType.BOTH,
         );
     }
 

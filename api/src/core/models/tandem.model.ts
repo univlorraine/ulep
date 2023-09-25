@@ -64,8 +64,12 @@ export class Tandem {
       throw new InvalidTandemError('Tandem must have two different profiles');
     }
     
-    this.assertLearningCompatibility(this.learningLanguages[0], profile2);
-    this.assertLearningCompatibility(this.learningLanguages[1], profile1);
+    if (!this.learningLanguages[0].isCompatibleWithLearningLanguage(this.learningLanguages[1])) {
+      throw new InvalidTandemError(`learningLanguage ${this.learningLanguages[0].id} doesn't match learningLanguages ${this.learningLanguages[1].id} languages`);
+    }
+    if (!this.learningLanguages[1].isCompatibleWithLearningLanguage(this.learningLanguages[0])) {
+      throw new InvalidTandemError(`learningLanguage ${this.learningLanguages[1].id} doesn't match learningLanguages ${this.learningLanguages[0].id} languages`);
+    }
   }
 
   getHash(): string {
@@ -75,11 +79,5 @@ export class Tandem {
         .sort((a, b) => a.localeCompare(b))
         .join('_')
       : "";
-  }
-
-  private assertLearningCompatibility(learningLanguage: LearningLanguage, profile: Profile): void {
-    if (!learningLanguage.isCompatibleWithProfile(profile)) {
-      throw new InvalidTandemError(`learningLanguage ${this.learningLanguages[0].id} doesn't match profile ${profile.id} languages`);
-    }
   }
 }

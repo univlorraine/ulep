@@ -204,7 +204,6 @@ export class PrismaLearningLanguageRepository
     return !!res;
   }
 
-  // TODO(NOW+1): check if should exclude joker language too
   async getAvailableLearningLanguagesSpeakingDifferentLanguageFromOwnerAndFromUniversities(
     ownerId: string,
     ownerSpokenLanguageIds: string[],

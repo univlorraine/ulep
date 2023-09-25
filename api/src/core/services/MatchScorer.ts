@@ -71,6 +71,8 @@ export class MatchScorer implements IMatchScorer {
     // TODO(jokerLanguage): return which language has matched
     // TODO(jokerLanguage): compute learning scores with all possible spoken languages when learning is joker
 
+    // TODO(NOW+1): gérer les cas spécifiques: BOTH + BOTH et JOKER
+
     const scores: MatchScores = new MatchScores({
       level: this.computeLanguageLevel(learningLanguage1, learningLanguage2),
       age: this.computeAgeBonus(profile1, profile2),
@@ -85,8 +87,8 @@ export class MatchScorer implements IMatchScorer {
   }
 
   private computeLanguageLevel(learningLanguage1: LearningLanguage, learningLanguage2: LearningLanguage): number {
-    const learningScoreLearningLanguage1 = this.computeLearningScore(learningLanguage1, learningLanguage2.profile);
-    const learningScoreLearningLanguage2 = this.computeLearningScore(learningLanguage2, learningLanguage1.profile);
+    const learningScoreLearningLanguage1 = this.computeLearningScore(learningLanguage1, learningLanguage2);
+    const learningScoreLearningLanguage2 = this.computeLearningScore(learningLanguage2, learningLanguage1);
 
     return this.coeficients.level * ((learningScoreLearningLanguage1 + learningScoreLearningLanguage2) / 2);
   }
@@ -206,8 +208,9 @@ export class MatchScorer implements IMatchScorer {
     return intersection.size / union.size;
   }
 
-  private computeLearningScore(learningLanguage: LearningLanguage, matchProfile: Profile): number {
-    const levelsCount = learningLanguage.isDiscovery() ? 6 : 5;
+  private computeLearningScore(learningLanguage: LearningLanguage, matchLearningLanguage: LearningLanguage): number {
+    const isDiscovery = learningLanguage.isDiscovery(matchLearningLanguage)
+    const levelsCount = isDiscovery ? 6 : 5;
 
     const languageLevelMatrix: { [key: string]: { [key: string]: number } } = {
       A0: { A0: 0, A1: 1, A2: 1, B1: 2, B2: 2, C1: 2, C2: 2 },
@@ -232,16 +235,16 @@ export class MatchScorer implements IMatchScorer {
     // We approximate native and mastered language of user equals to a level between B1 and C2.
     // Score matrix have the same score for all these profile2 levels so we take B2 arbitrary here.
     let matchProfileLevel = ProficiencyLevel.B2;
-    if (learningLanguage.isDiscovery()) {
+    if (isDiscovery) {
       if (learningLanguage.language.isJokerLanguage()) {
         // TODO(NOW+1) TODO(discovery) TODO(joker): règle plus fine à trouver ici. est-ce que je prend B2 / le niveau du language appris
         // On a besoin de savoir avec qui on match ICI
-      } else if (matchProfile.isLearningLanguage(learningLanguage.language)) {
-          matchProfileLevel = matchProfile.learningLanguages.find(ll => ll.language.id === learningLanguage.language.id).level;
+      } else if (matchLearningLanguage.profile.isLearningLanguage(learningLanguage.language)) {
+          matchProfileLevel = matchLearningLanguage.profile.learningLanguages.find(ll => ll.language.id === learningLanguage.language.id).level;
       }
     }
     
-    const level = learningLanguage.isDiscovery()
+    const level = isDiscovery
       ? discoveryLanguageLevelMatrix[learningLanguage.level][matchProfileLevel]
       : languageLevelMatrix[learningLanguage.level][matchProfileLevel];
 
@@ -256,7 +259,6 @@ export class MatchScorer implements IMatchScorer {
     const profile1 = learningLanguage1.profile;
     const profile2 = learningLanguage2.profile;
     
-
     // Check joker language have a match in available languages spoken by other profile
     if (learningLanguage1.language.isJokerLanguage()) {
       if (!this.assertJokerHasMatchInProfile(profile1, profile2, availableLanguages)) {
@@ -269,8 +271,8 @@ export class MatchScorer implements IMatchScorer {
       }
     }
 
-    if (!learningLanguage1.isCompatibleWithProfile(profile2) ||
-      !learningLanguage2.isCompatibleWithProfile(profile1)
+    if (!learningLanguage1.isCompatibleWithLearningLanguage(learningLanguage2) ||
+      !learningLanguage2.isCompatibleWithLearningLanguage(learningLanguage1)
     ) {
       return false;
     }

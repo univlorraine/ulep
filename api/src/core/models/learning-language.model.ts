@@ -57,25 +57,37 @@ export class LearningLanguage {
     this.campus = campus;
   }
 
-  public isDiscovery() {
+  public isDiscovery(learningLanguageMatch?: LearningLanguage) {
     // TODO(discovery+1): asian discovery
+    if (learningLanguageMatch) {
+      if (
+        this.learningType === LearningType.BOTH &&
+        this.learningType === learningLanguageMatch.learningType &&
+        this.campus &&
+        this.campus.id === learningLanguageMatch.campus?.id
+      ) {
+        return true;
+      }
+    }
     return (
       this.language.isJokerLanguage() ||
       this.learningType === LearningType.TANDEM
     );
   }
 
-  public isCompatibleWithProfile(profile: Profile): boolean {
+  public isCompatibleWithLearningLanguage(
+    learningLanguage: LearningLanguage,
+  ): boolean {
     if (this.language.isJokerLanguage()) {
       // // TODO(NOW+1): Note: we do not check if joker language match a language spoken
       // by profile 2 but not spoken by profile 1 as this will be done in Score computation and probably return which language is possible in that case
       return true;
     } else {
-      if (profile.isSpeakingLanguage(this.language)) {
+      if (learningLanguage.profile.isSpeakingLanguage(this.language)) {
         return true;
       } else if (
-        this.isDiscovery() &&
-        profile.isLearningLanguage(this.language)
+        this.isDiscovery(learningLanguage) ||
+        learningLanguage.profile.isLearningLanguage(this.language)
       ) {
         return true;
       }
