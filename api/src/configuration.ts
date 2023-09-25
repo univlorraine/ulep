@@ -19,7 +19,6 @@ export type Configuration = {
   logLevel: string;
   emailTranslationsComponent: string;
   emailAssets: {
-    endpoint: string;
     bucket: string;
     publicEndpoint: string;
   };
@@ -60,7 +59,6 @@ export const configuration = (): Configuration => ({
   emailTranslationsComponent:
     process.env.EMAIL_TRANSLATIONS_COMPONENT || 'emails',
   emailAssets: {
-    endpoint: process.env.EMAIL_ASSETS_ENDPOINT || 'http://localhost:9000',
     bucket: process.env.EMAIL_ASSETS_BUCKET || 'assets',
     publicEndpoint:
       process.env.EMAIL_ASSETS_PUBLIC_ENDPOINT || 'http://localhost:3000',
