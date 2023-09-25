@@ -4,7 +4,7 @@ import { useTranslation } from 'react-i18next';
 import Switch from 'react-switch';
 import { ArrowLeftSvg, ArrowRightSvg } from '../../../assets';
 import { useConfig } from '../../../context/ConfigurationContext';
-import { useStoreActions } from '../../../store/storeTypes';
+import { useStoreActions, useStoreState } from '../../../store/storeTypes';
 import Dropdown from '../DropDown';
 import styles from './SettingsContent.module.css';
 
@@ -17,7 +17,9 @@ const SettingsContent: React.FC<SettingsContentProps> = ({ onBackPressed, onDisc
     const { i18n, t } = useTranslation();
     const { askForAccountDeletion, updateNotificationPermission } = useConfig();
     const [showToast] = useIonToast();
-    const [notificationStatus, setNotificationStatus] = useState<boolean>(true);
+    const profile = useStoreState((state) => state.profile);
+    const updateProfile = useStoreActions((state) => state.updateProfile);
+    const [emailNotificationStatus, setEmailNotificationStatus] = useState<boolean>(profile!.user.acceptsEmail);
 
     const onDeletionAsked = async () => {
         const result = await askForAccountDeletion.execute();
@@ -28,15 +30,15 @@ const SettingsContent: React.FC<SettingsContentProps> = ({ onBackPressed, onDisc
         return await showToast({ message: t('home_page.settings.deletion'), duration: 1000 });
     };
 
-    //TODO: test this when api will be ready
     const onUpdateNotification = async () => {
-        const result = await updateNotificationPermission.execute(!notificationStatus);
+        const result = await updateNotificationPermission.execute(profile!.user.id, !emailNotificationStatus);
 
         if (result instanceof Error) {
             return await showToast({ message: t(result.message), duration: 1000 });
         }
 
-        return setNotificationStatus(true);
+        setEmailNotificationStatus(!emailNotificationStatus);
+        return updateProfile({ acceptsEmail: !profile!.user.acceptsEmail });
     };
 
     return (
@@ -62,7 +64,7 @@ const SettingsContent: React.FC<SettingsContentProps> = ({ onBackPressed, onDisc
                 <span>{t('home_page.settings.notifications')}</span>
                 <Switch
                     onChange={() => onUpdateNotification()}
-                    checked={notificationStatus}
+                    checked={emailNotificationStatus}
                     uncheckedIcon={false}
                     checkedIcon={false}
                 />
