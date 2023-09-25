@@ -11,6 +11,7 @@ import {
   Matches,
   Length,
   IsOptional,
+  IsBoolean,
 } from 'class-validator';
 import { UniversityResponse } from '../universities';
 import { CreateUserCommand } from 'src/core/usecases/user';
@@ -78,6 +79,11 @@ export class UpdateUserRequest {
   @Swagger.ApiProperty({ type: 'string', enum: UserStatus })
   @IsOptional()
   status?: UserStatus;
+
+  @Swagger.ApiProperty({ type: 'boolean' })
+  @IsOptional()
+  @IsBoolean()
+  acceptsEmail: boolean;
 }
 
 export class UserResponse {
@@ -125,6 +131,10 @@ export class UserResponse {
   @Expose({ groups: ['read'] })
   avatar?: MediaObjectResponse;
 
+  @Swagger.ApiPropertyOptional({ type: 'boolean' })
+  @Expose({ groups: ['read'] })
+  acceptsEmail: boolean;
+
   constructor(partial: Partial<UserResponse>) {
     Object.assign(this, partial);
   }
@@ -141,6 +151,7 @@ export class UserResponse {
       role: user.role,
       country: user.country,
       status: user.status,
+      acceptsEmail: user.acceptsEmail,
       avatar: user.avatar
         ? MediaObjectResponse.fromMediaObject(user.avatar)
         : null,
