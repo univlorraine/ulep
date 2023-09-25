@@ -166,6 +166,7 @@ describe('GenerateTandem UC', () => {
   const french1 = new Profile({
     user: new User({
       id: 'user1',
+      acceptsEmail: true,
       email: '',
       firstname: '',
       lastname: '',
@@ -180,17 +181,17 @@ describe('GenerateTandem UC', () => {
     id: 'FR1',
     nativeLanguage: french,
     masteredLanguages: [],
-    learningType: LearningType.BOTH,
     meetingFrequency: 'ONCE_A_WEEK',
     learningLanguages: [
       {
         id: 'FR1-LL_EN_B2',
         language: english,
+        learningType: LearningType.BOTH,
         level: ProficiencyLevel.B2,
+        sameGender: false,
+        sameAge: false,
       },
     ],
-    sameGender: false,
-    sameAge: false,
     objectives: [],
     interests: [],
     biography: {
@@ -203,6 +204,7 @@ describe('GenerateTandem UC', () => {
   const french2 = new Profile({
     user: new User({
       id: 'user2',
+      acceptsEmail: true,
       email: '',
       firstname: '',
       lastname: '',
@@ -217,17 +219,17 @@ describe('GenerateTandem UC', () => {
     id: 'FR2',
     nativeLanguage: french,
     masteredLanguages: [deutch],
-    learningType: LearningType.BOTH,
     meetingFrequency: 'ONCE_A_WEEK',
     learningLanguages: [
       {
         id: 'FR2-LL_SP_A2',
         language: spanish,
         level: ProficiencyLevel.A2,
+        learningType: LearningType.BOTH,
+        sameGender: false,
+        sameAge: false,
       },
     ],
-    sameGender: false,
-    sameAge: false,
     objectives: [],
     interests: [],
     biography: {
@@ -240,6 +242,7 @@ describe('GenerateTandem UC', () => {
   const french3 = new Profile({
     user: new User({
       id: 'user3',
+      acceptsEmail: true,
       email: '',
       firstname: '',
       lastname: '',
@@ -254,17 +257,17 @@ describe('GenerateTandem UC', () => {
     id: 'FR3',
     nativeLanguage: french,
     masteredLanguages: [],
-    learningType: LearningType.BOTH,
     meetingFrequency: 'ONCE_A_WEEK',
     learningLanguages: [
       {
         id: 'FR3-LL_EN_A1',
         language: english,
         level: ProficiencyLevel.A1,
+        learningType: LearningType.BOTH,
+        sameGender: false,
+        sameAge: false,
       },
     ],
-    sameGender: false,
-    sameAge: false,
     objectives: [],
     interests: [],
     biography: {
@@ -277,6 +280,7 @@ describe('GenerateTandem UC', () => {
   const spain1 = new Profile({
     user: new User({
       id: 'user4',
+      acceptsEmail: true,
       email: '',
       firstname: '',
       lastname: '',
@@ -291,17 +295,17 @@ describe('GenerateTandem UC', () => {
     id: 'SP1',
     nativeLanguage: spanish,
     masteredLanguages: [],
-    learningType: LearningType.BOTH,
     meetingFrequency: 'ONCE_A_WEEK',
     learningLanguages: [
       {
         id: 'SP1-LL_FR_B1',
         language: french,
         level: ProficiencyLevel.B1,
+        learningType: LearningType.BOTH,
+        sameGender: false,
+        sameAge: false,
       },
     ],
-    sameGender: false,
-    sameAge: false,
     objectives: [],
     interests: [],
     biography: {
@@ -314,6 +318,7 @@ describe('GenerateTandem UC', () => {
   const spain2 = new Profile({
     user: new User({
       id: 'user5',
+      acceptsEmail: true,
       email: '',
       firstname: '',
       lastname: '',
@@ -328,17 +333,17 @@ describe('GenerateTandem UC', () => {
     id: 'SP2',
     nativeLanguage: spanish,
     masteredLanguages: [english],
-    learningType: LearningType.BOTH,
     meetingFrequency: 'ONCE_A_WEEK',
     learningLanguages: [
       {
         id: 'SP2-LL_FR_B2',
         language: french,
         level: ProficiencyLevel.B2,
+        learningType: LearningType.BOTH,
+        sameGender: false,
+        sameAge: false,
       },
     ],
-    sameGender: false,
-    sameAge: false,
     objectives: [],
     interests: [],
     biography: {
@@ -351,6 +356,7 @@ describe('GenerateTandem UC', () => {
   const english1 = new Profile({
     user: new User({
       id: 'user6',
+      acceptsEmail: true,
       email: '',
       firstname: '',
       lastname: '',
@@ -365,17 +371,17 @@ describe('GenerateTandem UC', () => {
     id: 'EN1',
     nativeLanguage: english,
     masteredLanguages: [],
-    learningType: LearningType.BOTH,
     meetingFrequency: 'ONCE_A_WEEK',
     learningLanguages: [
       {
         id: 'EN1-LL_FR_C2',
         language: french,
         level: ProficiencyLevel.C2,
+        learningType: LearningType.BOTH,
+        sameGender: false,
+        sameAge: false,
       },
     ],
-    sameGender: false,
-    sameAge: false,
     objectives: [],
     interests: [],
     biography: {
@@ -388,6 +394,7 @@ describe('GenerateTandem UC', () => {
   const english2 = new Profile({
     user: new User({
       id: 'user7',
+      acceptsEmail: true,
       email: '',
       firstname: '',
       lastname: '',
@@ -402,17 +409,17 @@ describe('GenerateTandem UC', () => {
     id: 'EN2',
     nativeLanguage: english,
     masteredLanguages: [],
-    learningType: LearningType.BOTH,
     meetingFrequency: 'ONCE_A_WEEK',
     learningLanguages: [
       {
         id: 'EN2-LL_FR_B1',
         language: french,
         level: ProficiencyLevel.B1,
+        learningType: LearningType.BOTH,
+        sameGender: false,
+        sameAge: false,
       },
     ],
-    sameGender: false,
-    sameAge: false,
     objectives: [],
     interests: [],
     biography: {
@@ -425,6 +432,7 @@ describe('GenerateTandem UC', () => {
   const deutch1 = new Profile({
     user: new User({
       id: 'user8',
+      acceptsEmail: true,
       email: '',
       firstname: '',
       lastname: '',
@@ -439,17 +447,17 @@ describe('GenerateTandem UC', () => {
     id: 'DE',
     nativeLanguage: deutch,
     masteredLanguages: [spanish],
-    learningType: LearningType.BOTH,
     meetingFrequency: 'ONCE_A_WEEK',
     learningLanguages: [
       {
         id: 'DE-LL_FR_B1',
         language: french,
         level: ProficiencyLevel.B1,
+        learningType: LearningType.BOTH,
+        sameGender: false,
+        sameAge: false,
       },
     ],
-    sameGender: false,
-    sameAge: false,
     objectives: [],
     interests: [],
     biography: {
@@ -602,6 +610,7 @@ describe('GenerateTandem UC', () => {
     const male = new Profile({
       user: new User({
         id: 'user1',
+        acceptsEmail: true,
         email: '',
         firstname: '',
         lastname: '',
@@ -616,17 +625,17 @@ describe('GenerateTandem UC', () => {
       id: 'MALE1',
       nativeLanguage: french,
       masteredLanguages: [],
-      learningType: LearningType.BOTH,
       meetingFrequency: 'ONCE_A_WEEK',
       learningLanguages: [
         {
           id: 'MALE1-EN_B2',
           language: english,
           level: ProficiencyLevel.B2,
+          learningType: LearningType.BOTH,
+          sameGender: false,
+          sameAge: false,
         },
       ],
-      sameGender: false,
-      sameAge: false,
       objectives: [],
       interests: [],
       biography: {
@@ -640,6 +649,7 @@ describe('GenerateTandem UC', () => {
     const female = new Profile({
       user: new User({
         id: 'user1',
+        acceptsEmail: true,
         email: '',
         firstname: '',
         lastname: '',
@@ -654,17 +664,17 @@ describe('GenerateTandem UC', () => {
       id: 'FEMALE',
       nativeLanguage: english,
       masteredLanguages: [],
-      learningType: LearningType.BOTH,
       meetingFrequency: 'ONCE_A_WEEK',
       learningLanguages: [
         {
           id: 'FEMALE-FR_B2',
           language: french,
           level: ProficiencyLevel.B2,
+          learningType: LearningType.BOTH,
+          sameGender: true,
+          sameAge: false,
         },
       ],
-      sameGender: true,
-      sameAge: false,
       objectives: [],
       interests: [],
       biography: {
@@ -694,6 +704,7 @@ describe('GenerateTandem UC', () => {
     const frenchTandem = new Profile({
       user: new User({
         id: 'user1',
+        acceptsEmail: true,
         email: '',
         firstname: '',
         lastname: '',
@@ -708,17 +719,18 @@ describe('GenerateTandem UC', () => {
       id: 'FR_TANDEM',
       nativeLanguage: french,
       masteredLanguages: [],
-      learningType: LearningType.TANDEM,
       meetingFrequency: 'ONCE_A_WEEK',
       learningLanguages: [
         {
           id: 'FR_TANDEM-EN_B2',
           language: english,
           level: ProficiencyLevel.B2,
+          learningType: LearningType.TANDEM,
+          sameGender: false,
+          sameAge: false,
+          campus: lorraineCampus,
         },
       ],
-      sameGender: false,
-      sameAge: false,
       objectives: [],
       interests: [],
       biography: {
@@ -727,13 +739,13 @@ describe('GenerateTandem UC', () => {
         experience: faker.lorem.sentence(),
         anecdote: faker.lorem.sentence(),
       },
-      campus: lorraineCampus,
     });
 
     // English learning french in tandem
     const englishTandem = new Profile({
       user: new User({
         id: 'user2',
+        acceptsEmail: true,
         email: '',
         firstname: '',
         lastname: '',
@@ -748,17 +760,18 @@ describe('GenerateTandem UC', () => {
       id: 'EN_TANDEM',
       nativeLanguage: english,
       masteredLanguages: [],
-      learningType: LearningType.TANDEM,
       meetingFrequency: 'ONCE_A_WEEK',
       learningLanguages: [
         {
           id: 'EN_TANDEM-LOR-FR_B2',
           language: french,
           level: ProficiencyLevel.B2,
+          learningType: LearningType.TANDEM,
+          sameGender: false,
+          sameAge: false,
+          campus: lorraineCampus,
         },
       ],
-      sameGender: false,
-      sameAge: false,
       objectives: [],
       interests: [],
       biography: {
@@ -767,13 +780,13 @@ describe('GenerateTandem UC', () => {
         experience: faker.lorem.sentence(),
         anecdote: faker.lorem.sentence(),
       },
-      campus: lorraineCampus,
     });
 
     // English learning french in tandem
     const englishTandemOtherSite = new Profile({
       user: new User({
         id: 'user2',
+        acceptsEmail: true,
         email: '',
         firstname: '',
         lastname: '',
@@ -788,17 +801,18 @@ describe('GenerateTandem UC', () => {
       id: 'EN_TANDEM',
       nativeLanguage: english,
       masteredLanguages: [],
-      learningType: LearningType.TANDEM,
       meetingFrequency: 'ONCE_A_WEEK',
       learningLanguages: [
         {
           id: 'EN_TANDEM-STR-FR_B2',
           language: french,
           level: ProficiencyLevel.B2,
+          learningType: LearningType.TANDEM,
+          sameGender: false,
+          sameAge: false,
+          campus: strasbourgCampus,
         },
       ],
-      sameGender: false,
-      sameAge: false,
       objectives: [],
       interests: [],
       biography: {
@@ -807,13 +821,13 @@ describe('GenerateTandem UC', () => {
         experience: faker.lorem.sentence(),
         anecdote: faker.lorem.sentence(),
       },
-      campus: strasbourgCampus,
     });
 
     // French learning english in etandem
     const frenchEtandem = new Profile({
       user: new User({
         id: 'user3',
+        acceptsEmail: true,
         email: '',
         firstname: '',
         lastname: '',
@@ -828,17 +842,17 @@ describe('GenerateTandem UC', () => {
       id: 'FR_ETANDEM',
       nativeLanguage: french,
       masteredLanguages: [],
-      learningType: LearningType.ETANDEM,
       meetingFrequency: 'ONCE_A_WEEK',
       learningLanguages: [
         {
           id: 'FR_ETANDEM-EN_B2',
           language: english,
           level: ProficiencyLevel.B2,
+          learningType: LearningType.ETANDEM,
+          sameGender: false,
+          sameAge: false,
         },
       ],
-      sameGender: false,
-      sameAge: false,
       objectives: [],
       interests: [],
       biography: {
@@ -853,6 +867,7 @@ describe('GenerateTandem UC', () => {
     const englishEtandem = new Profile({
       user: new User({
         id: 'user4',
+        acceptsEmail: true,
         email: '',
         firstname: '',
         lastname: '',
@@ -867,17 +882,17 @@ describe('GenerateTandem UC', () => {
       id: 'EN_ETANDEM',
       nativeLanguage: english,
       masteredLanguages: [],
-      learningType: LearningType.ETANDEM,
       meetingFrequency: 'ONCE_A_WEEK',
       learningLanguages: [
         {
           id: 'EN_ETANDEM-FR_B2',
           language: french,
           level: ProficiencyLevel.B2,
+          learningType: LearningType.ETANDEM,
+          sameGender: false,
+          sameAge: false,
         },
       ],
-      sameGender: false,
-      sameAge: false,
       objectives: [],
       interests: [],
       biography: {
@@ -892,6 +907,7 @@ describe('GenerateTandem UC', () => {
     const frenchBoth = new Profile({
       user: new User({
         id: 'user5',
+        acceptsEmail: true,
         email: '',
         firstname: '',
         lastname: '',
@@ -906,17 +922,18 @@ describe('GenerateTandem UC', () => {
       id: 'FR_BOTH',
       nativeLanguage: french,
       masteredLanguages: [],
-      learningType: LearningType.BOTH,
       meetingFrequency: 'ONCE_A_WEEK',
       learningLanguages: [
         {
           id: 'FR_BOTH-EN_B2',
           language: english,
           level: ProficiencyLevel.B2,
+          learningType: LearningType.BOTH,
+          sameGender: false,
+          sameAge: false,
+          campus: lorraineCampus,
         },
       ],
-      sameGender: false,
-      sameAge: false,
       objectives: [],
       interests: [],
       biography: {
@@ -925,13 +942,13 @@ describe('GenerateTandem UC', () => {
         experience: faker.lorem.sentence(),
         anecdote: faker.lorem.sentence(),
       },
-      campus: lorraineCampus,
     });
 
     // English learning french in whatever mode
     const englishBoth = new Profile({
       user: new User({
         id: 'user4',
+        acceptsEmail: true,
         email: '',
         firstname: '',
         lastname: '',
@@ -946,17 +963,17 @@ describe('GenerateTandem UC', () => {
       id: 'EN_BOTH',
       nativeLanguage: english,
       masteredLanguages: [],
-      learningType: LearningType.BOTH,
       meetingFrequency: 'ONCE_A_WEEK',
       learningLanguages: [
         {
           id: 'EN_BOTH-FR_B2',
           language: french,
           level: ProficiencyLevel.B2,
+          learningType: LearningType.BOTH,
+          sameGender: false,
+          sameAge: false,
         },
       ],
-      sameGender: false,
-      sameAge: false,
       objectives: [],
       interests: [],
       biography: {
@@ -1112,6 +1129,7 @@ describe('GenerateTandem UC', () => {
     const studentSubsidiary1 = new Profile({
       user: new User({
         id: 's1subsidiary1',
+        acceptsEmail: true,
         email: '',
         firstname: '',
         lastname: '',
@@ -1126,17 +1144,17 @@ describe('GenerateTandem UC', () => {
       id: 'EN_SUB',
       nativeLanguage: english,
       masteredLanguages: [],
-      learningType: LearningType.ETANDEM,
       meetingFrequency: 'ONCE_A_WEEK',
       learningLanguages: [
         {
           id: 'EN_SUB-FR_B2',
           language: french,
           level: ProficiencyLevel.B2,
+          learningType: LearningType.ETANDEM,
+          sameGender: false,
+          sameAge: false,
         },
       ],
-      sameGender: false,
-      sameAge: false,
       objectives: [],
       interests: [],
       biography: {
@@ -1149,6 +1167,7 @@ describe('GenerateTandem UC', () => {
     const studentSubsidiary2 = new Profile({
       user: new User({
         id: 's1subsidiary1',
+        acceptsEmail: true,
         email: '',
         firstname: '',
         lastname: '',
@@ -1163,17 +1182,17 @@ describe('GenerateTandem UC', () => {
       id: 'SP_SUB',
       nativeLanguage: spanish,
       masteredLanguages: [],
-      learningType: LearningType.ETANDEM,
       meetingFrequency: 'ONCE_A_WEEK',
       learningLanguages: [
         {
           id: 'SP_SUB-FR_B2',
           language: french,
           level: ProficiencyLevel.B2,
+          learningType: LearningType.ETANDEM,
+          sameGender: false,
+          sameAge: false,
         },
       ],
-      sameGender: false,
-      sameAge: false,
       objectives: [],
       interests: [],
       biography: {
@@ -1225,6 +1244,7 @@ describe('GenerateTandem UC', () => {
     const profile1 = new Profile({
       user: new User({
         id: 's1subsidiary',
+        acceptsEmail: true,
         email: '',
         firstname: '',
         lastname: '',
@@ -1239,17 +1259,17 @@ describe('GenerateTandem UC', () => {
       id: 'FR_SUB',
       nativeLanguage: french,
       masteredLanguages: [],
-      learningType: LearningType.ETANDEM,
       meetingFrequency: 'ONCE_A_WEEK',
       learningLanguages: [
         {
           id: 'FR_SUB-EN_B2',
           language: english,
           level: ProficiencyLevel.B2,
+          learningType: LearningType.ETANDEM,
+          sameGender: false,
+          sameAge: false,
         },
       ],
-      sameGender: false,
-      sameAge: false,
       objectives: [],
       interests: [],
       biography: {
@@ -1262,6 +1282,7 @@ describe('GenerateTandem UC', () => {
     const perfectMatchForProfile1 = new Profile({
       user: new User({
         id: 's2subsidiary',
+        acceptsEmail: true,
         email: '',
         firstname: '',
         lastname: '',
@@ -1276,17 +1297,17 @@ describe('GenerateTandem UC', () => {
       id: 'EN_SUB',
       nativeLanguage: english,
       masteredLanguages: [],
-      learningType: LearningType.ETANDEM,
       meetingFrequency: 'ONCE_A_WEEK',
       learningLanguages: [
         {
           id: 'EN_SUB-FR_B2',
           language: french,
           level: ProficiencyLevel.B2,
+          learningType: LearningType.ETANDEM,
+          sameGender: false,
+          sameAge: false,
         },
       ],
-      sameGender: false,
-      sameAge: false,
       objectives: [],
       interests: [],
       biography: {
@@ -1327,6 +1348,7 @@ describe('GenerateTandem UC', () => {
     const firstUser = new Profile({
       user: new User({
         id: 'user1',
+        acceptsEmail: true,
         email: '',
         firstname: '',
         lastname: '',
@@ -1341,7 +1363,6 @@ describe('GenerateTandem UC', () => {
       id: 'FR_1',
       nativeLanguage: french,
       masteredLanguages: [],
-      learningType: LearningType.ETANDEM,
       meetingFrequency: 'ONCE_A_WEEK',
       learningLanguages: [
         new LearningLanguage({
@@ -1349,10 +1370,11 @@ describe('GenerateTandem UC', () => {
           language: english,
           level: ProficiencyLevel.B2,
           createdAt: new Date('2023-08-28T10:00:00.000Z'),
+          learningType: LearningType.ETANDEM,
+          sameGender: false,
+          sameAge: false,
         }),
       ],
-      sameGender: false,
-      sameAge: false,
       objectives: [],
       interests: [],
       biography: {
@@ -1366,6 +1388,7 @@ describe('GenerateTandem UC', () => {
     const secondUser = new Profile({
       user: new User({
         id: 'user2',
+        acceptsEmail: true,
         email: '',
         firstname: '',
         lastname: '',
@@ -1380,7 +1403,6 @@ describe('GenerateTandem UC', () => {
       id: 'FR_2',
       nativeLanguage: french,
       masteredLanguages: [],
-      learningType: LearningType.ETANDEM,
       meetingFrequency: 'ONCE_A_WEEK',
       learningLanguages: [
         new LearningLanguage({
@@ -1388,10 +1410,11 @@ describe('GenerateTandem UC', () => {
           language: english,
           level: ProficiencyLevel.B2,
           createdAt: new Date('2023-08-12T10:00:00.000Z'),
+          learningType: LearningType.ETANDEM,
+          sameGender: false,
+          sameAge: false,
         }),
       ],
-      sameGender: false,
-      sameAge: false,
       objectives: [],
       interests: [],
       biography: {
@@ -1404,6 +1427,7 @@ describe('GenerateTandem UC', () => {
     const match = new Profile({
       user: new User({
         id: 'user3',
+        acceptsEmail: true,
         email: '',
         firstname: '',
         lastname: '',
@@ -1418,18 +1442,18 @@ describe('GenerateTandem UC', () => {
       id: 'EN_1',
       nativeLanguage: english,
       masteredLanguages: [],
-      learningType: LearningType.ETANDEM,
       meetingFrequency: 'ONCE_A_WEEK',
       learningLanguages: [
         new LearningLanguage({
           id: 'EN_1-LL_FR_B2',
           language: french,
           level: ProficiencyLevel.B2,
+          learningType: LearningType.ETANDEM,
+          sameGender: false,
+          sameAge: false,
           createdAt: new Date('2023-08-04T10:00:00.000Z'),
         }),
       ],
-      sameGender: false,
-      sameAge: false,
       objectives: [],
       interests: [],
       biography: {
@@ -1459,6 +1483,7 @@ describe('GenerateTandem UC', () => {
     const profileLearningJoker = new Profile({
       user: new User({
         id: 'user1',
+        acceptsEmail: true,
         email: '',
         firstname: '',
         lastname: '',
@@ -1473,17 +1498,17 @@ describe('GenerateTandem UC', () => {
       id: 'FR_JOKER',
       nativeLanguage: french,
       masteredLanguages: [],
-      learningType: LearningType.ETANDEM,
       meetingFrequency: 'ONCE_A_WEEK',
       learningLanguages: [
         {
           id: 'FR_1-LL_JOKER',
           language: joker,
           level: ProficiencyLevel.A0,
+          learningType: LearningType.ETANDEM,
+          sameGender: false,
+          sameAge: false,
         },
       ],
-      sameGender: false,
-      sameAge: false,
       objectives: [],
       interests: [],
       biography: {
@@ -1497,6 +1522,7 @@ describe('GenerateTandem UC', () => {
     const potentialMatch = new Profile({
       user: new User({
         id: 'user2',
+        acceptsEmail: true,
         email: '',
         firstname: '',
         lastname: '',
@@ -1511,17 +1537,17 @@ describe('GenerateTandem UC', () => {
       id: 'KS',
       nativeLanguage: otherLanguage,
       masteredLanguages: [],
-      learningType: LearningType.ETANDEM,
       meetingFrequency: 'ONCE_A_WEEK',
       learningLanguages: [
         {
           id: 'KS-LL_FR',
           language: french,
           level: ProficiencyLevel.B2,
+          learningType: LearningType.ETANDEM,
+          sameGender: false,
+          sameAge: false,
         },
       ],
-      sameGender: false,
-      sameAge: false,
       objectives: [],
       interests: [],
       biography: {

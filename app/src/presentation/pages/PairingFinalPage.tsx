@@ -29,14 +29,19 @@ const PairingFinalPage: React.FC = () => {
 
     const askNewLanguage = async () => {
         setLoading(true);
-        if (!profileSignUp.learningLanguage || !profileSignUp.learningLanguageLevel) {
-            setLoading(false);
+        if (!profileSignUp.learningLanguage || !profileSignUp.learningLanguageLevel || !profileSignUp.pedagogy) {
             return await showToast({ message: t('errors.global'), duration: 1000 });
         }
         const result = await askForLearningLanguage.execute(
             profile!.id,
             profileSignUp.learningLanguage,
-            profileSignUp.learningLanguageLevel
+            profileSignUp.learningLanguageLevel,
+            profileSignUp.pedagogy,
+            !!profileSignUp.sameAge,
+            !!profileSignUp.sameGender,
+            profileSignUp.campus?.id,
+            !!profileSignUp.isForCertificate,
+            !!profileSignUp.isForProgram
         );
 
         if (result instanceof Error) {

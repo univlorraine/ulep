@@ -226,36 +226,42 @@ export class GenerateTandemsUsecase {
         }
 
         if (tandemStatus === TandemStatus.ACTIVE) {
-          const emailContentProfile1 =
-            await this.emailTemplateRepository.getEmail(
-              EMAIL_TEMPLATE_IDS.TANDEM_BECOME_ACTIVE,
-              pair.owner.profile.nativeLanguage.code,
-              {
-                firstname: pair.owner.profile.user.firstname,
-                partnerFirstname: pair.target.profile.user.firstname,
-                partnerLastname: pair.target.profile.user.lastname,
-                universityName: pair.owner.profile.user.university.name,
-              },
-            );
-          const emailContentProfile2 =
-            await this.emailTemplateRepository.getEmail(
-              EMAIL_TEMPLATE_IDS.TANDEM_BECOME_ACTIVE,
-              pair.target.profile.nativeLanguage.code,
-              {
-                firstname: pair.target.profile.user.firstname,
-                partnerFirstname: pair.owner.profile.user.firstname,
-                partnerLastname: pair.owner.profile.user.lastname,
-                universityName: pair.target.profile.user.university.name,
-              },
-            );
-          notificationEmails.push({
-            recipient: pair.owner.profile.user.email,
-            email: emailContentProfile1,
-          });
-          notificationEmails.push({
-            recipient: pair.target.profile.user.email,
-            email: emailContentProfile2,
-          });
+          if (pair.owner.profile.user.acceptsEmail) {
+            const emailContentProfile1 =
+              await this.emailTemplateRepository.getEmail(
+                EMAIL_TEMPLATE_IDS.TANDEM_BECOME_ACTIVE,
+                pair.owner.profile.nativeLanguage.code,
+                {
+                  firstname: pair.owner.profile.user.firstname,
+                  partnerFirstname: pair.target.profile.user.firstname,
+                  partnerLastname: pair.target.profile.user.lastname,
+                  universityName: pair.owner.profile.user.university.name,
+                },
+              );
+            notificationEmails.push({
+              recipient: pair.owner.profile.user.email,
+              email: emailContentProfile1,
+            });
+          }
+
+          if (pair.target.profile.user.acceptsEmail) {
+            const emailContentProfile2 =
+              await this.emailTemplateRepository.getEmail(
+                EMAIL_TEMPLATE_IDS.TANDEM_BECOME_ACTIVE,
+                pair.target.profile.nativeLanguage.code,
+                {
+                  firstname: pair.target.profile.user.firstname,
+                  partnerFirstname: pair.owner.profile.user.firstname,
+                  partnerLastname: pair.owner.profile.user.lastname,
+                  universityName: pair.target.profile.user.university.name,
+                },
+              );
+
+            notificationEmails.push({
+              recipient: pair.target.profile.user.email,
+              email: emailContentProfile2,
+            });
+          }
         }
       }
     }

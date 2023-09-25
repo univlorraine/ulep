@@ -1,5 +1,5 @@
 interface UpdateNotificationPermissionUsecaseInterface {
-    execute(notificationPermission: boolean): Promise<void | Error>;
+    execute(id: string, notificationPermission: boolean): Promise<void | Error>;
 }
 
 export default UpdateNotificationPermissionUsecaseInterface;

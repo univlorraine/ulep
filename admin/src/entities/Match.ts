@@ -1,4 +1,4 @@
-import { Profile } from './Profile';
+import { LearningLanguage } from './LearningLanguage';
 
 type MatchScore = {
     level: number;
@@ -11,17 +11,8 @@ type MatchScore = {
     total: number;
 };
 
-type MatchTarget = {
-    id: string;
-    code: string;
-    createdAt: Date;
-    level: string;
-    name: string;
-    profile: Profile;
-};
-
 export type Match = {
     id: string;
     score: MatchScore;
-    target: MatchTarget;
+    target: LearningLanguage;
 };

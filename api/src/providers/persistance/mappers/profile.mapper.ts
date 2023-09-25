@@ -35,9 +35,9 @@ export const ProfilesRelations = {
     include: {
       LanguageCode: true,
       Tandem: true,
+      Campus: true,
     },
   },
-  Campus: true,
 };
 
 export type ProfileSnapshot = Prisma.Profiles & {
@@ -52,11 +52,11 @@ export type ProfileSnapshot = Prisma.Profiles & {
   NativeLanguage: Prisma.LanguageCodes;
   LearningLanguages: (Prisma.LearningLanguages & {
     LanguageCode: Prisma.LanguageCodes;
+    Campus: Prisma.Places;
   })[];
   MasteredLanguages: (Prisma.MasteredLanguages & {
     LanguageCode: Prisma.LanguageCodes;
   })[];
-  Campus: Prisma.Places;
 };
 
 export const profileMapper = (instance: ProfileSnapshot): Profile => {
@@ -91,12 +91,16 @@ export const profileMapper = (instance: ProfileSnapshot): Profile => {
           id: learningLanguage.id,
           level: ProficiencyLevel[learningLanguage.level],
           language: languageMapper(learningLanguage.LanguageCode),
+          learningType: LearningType[learningLanguage.learning_type],
+          sameAge: learningLanguage.same_age,
+          sameGender: learningLanguage.same_gender,
+          campus:
+            learningLanguage.Campus && campusMapper(learningLanguage.Campus),
+          certificateOption: learningLanguage.certificate_option,
+          specificProgram: learningLanguage.specific_program,
         }),
     ),
-    learningType: LearningType[instance.learning_type],
     meetingFrequency: instance.meeting_frequency,
-    sameAge: instance.same_age,
-    sameGender: instance.same_gender,
     objectives: instance.Goals.map((objective) => ({
       id: objective.id,
       name: textContentMapper(objective.TextContent),
@@ -126,9 +130,6 @@ export const profileMapper = (instance: ProfileSnapshot): Profile => {
       experience: instance.bio['experience'],
       anecdote: instance.bio['anecdote'],
     },
-    campus: instance.Campus && campusMapper(instance.Campus),
-    certificateOption: instance.certificate_option,
-    specificProgram: instance.specific_program,
     createdAt: instance.created_at,
   });
 };

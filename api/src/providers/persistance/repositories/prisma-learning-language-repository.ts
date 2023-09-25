@@ -52,6 +52,14 @@ export class PrismaLearningLanguageRepository
           },
         },
         level: item.level,
+        learning_type: item.learningType,
+        same_gender: item.sameGender,
+        same_age: item.sameAge,
+        certificate_option: item.certificateOption,
+        specific_program: item.specificProgram,
+        Campus: item.campus && {
+          connect: { id: item.campus.id },
+        },
       },
     });
   }

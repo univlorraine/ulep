@@ -40,6 +40,7 @@ const payload: ProfileCommand = {
     user: {
         id: 'userId',
         avatar: { id: 'avatarId', url: 'url' },
+        acceptsEmail: true,
         email: 'email',
         firstname: 'firstname',
         lastname: 'lastname',

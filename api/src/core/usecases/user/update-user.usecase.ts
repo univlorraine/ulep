@@ -6,6 +6,7 @@ import { UserStatus } from 'src/core/models';
 export class UpdateUserCommand {
   id: string;
   status?: UserStatus;
+  acceptsEmail?: boolean;
 }
 
 @Injectable()
@@ -24,6 +25,7 @@ export class UpdateUserUsecase {
     return this.userRepository.update({
       ...user,
       status: command.status,
+      acceptsEmail: command.acceptsEmail,
     });
   }
 }
