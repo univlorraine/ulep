@@ -16,6 +16,7 @@ const load = async () => {
     await prisma.learningLanguages.deleteMany();
     await prisma.masteredLanguages.deleteMany();
     await prisma.users.deleteMany();
+    await prisma.refusedTandems.deleteMany();
     await prisma.organizations.deleteMany();
     await prisma.translations.deleteMany();
     await prisma.languageCodes.deleteMany();
@@ -26,6 +27,7 @@ const load = async () => {
     await prisma.learningObjectives.deleteMany();
     await prisma.textContent.deleteMany();
     await prisma.reportCategories.deleteMany();
+    await prisma.routineExecutions.deleteMany();
     await prisma.tandems.deleteMany();
 
     await createCountries(prisma);

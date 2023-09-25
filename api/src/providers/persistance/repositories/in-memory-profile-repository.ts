@@ -1,8 +1,5 @@
 import { Collection } from '@app/common';
-import {
-  GetProfilesUsableForTandemsGenerationProps,
-  ProfileRepository,
-} from '../../../core/ports/profile.repository';
+import { ProfileRepository } from '../../../core/ports/profile.repository';
 import { Profile } from '../../../core/models/profile.model';
 
 export class InMemoryProfileRepository implements ProfileRepository {

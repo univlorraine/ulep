@@ -5,7 +5,6 @@ import {
   IsNotEmpty,
   IsUUID,
   IsEmail,
-  IsIn,
   IsInt,
   Min,
   Matches,
@@ -39,9 +38,8 @@ export class CreateUserRequest implements CreateUserCommand {
   @IsNotEmpty()
   lastname: string;
 
-  @Swagger.ApiProperty({ type: 'string' })
+  @Swagger.ApiProperty({ type: 'string', enum: Gender })
   @IsString()
-  @IsIn(['male', 'female', 'other'])
   gender: Gender;
 
   @Swagger.ApiProperty({ type: 'number' })
@@ -54,9 +52,8 @@ export class CreateUserRequest implements CreateUserCommand {
   @IsUUID()
   university: string;
 
-  @Swagger.ApiProperty({ type: 'string' })
+  @Swagger.ApiProperty({ type: 'string', enum: Role })
   @IsString()
-  @IsIn(['student', 'staff'])
   role: Role;
 
   @Swagger.ApiProperty({ type: 'string' })

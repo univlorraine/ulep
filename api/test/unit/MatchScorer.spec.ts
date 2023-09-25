@@ -88,11 +88,8 @@ describe('Score', () => {
       id: 'FR1',
       nativeLanguage: frenchLanguage,
       masteredLanguages: [],
-      learningType: LearningType.BOTH,
       meetingFrequency: 'ONCE_A_WEEK',
       learningLanguages: [],
-      sameGender: false,
-      sameAge: false,
       objectives: [],
       interests: [],
       biography: {
@@ -119,11 +116,8 @@ describe('Score', () => {
       id: 'EN1',
       nativeLanguage: spanishLanguage,
       masteredLanguages: [],
-      learningType: LearningType.BOTH,
       meetingFrequency: 'ONCE_A_WEEK',
       learningLanguages: [],
-      sameGender: false,
-      sameAge: false,
       objectives: [],
       interests: [],
       biography: {
@@ -138,12 +132,18 @@ describe('Score', () => {
       language: jokerLanguage,
       level: ProficiencyLevel.A0,
       profile: profile1,
+      learningType: LearningType.BOTH,
+      sameGender: false,
+      sameAge: false,
     });
     const learningLanguage2 = new LearningLanguage({
       id: 'LL1',
       language: jokerLanguage,
       level: ProficiencyLevel.A0,
       profile: profile2,
+      learningType: LearningType.BOTH,
+      sameGender: false,
+      sameAge: false,
     });
 
     const res = matchScorer.computeMatchScore(

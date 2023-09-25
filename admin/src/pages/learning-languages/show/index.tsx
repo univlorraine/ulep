@@ -1,10 +1,9 @@
 import { Box } from '@mui/material';
 import React from 'react';
 
-import { DateField, FunctionField, Show, SimpleShowLayout, TextField, useTranslate } from 'react-admin';
-import { DisplayLearningType, DisplayRole } from '../../../components/translated';
-import { LearningLanguage } from '../../../entities/LearningLanguage';
-import { getProfileUniversityAndCampusString } from '../../../entities/Profile';
+import { BooleanField, DateField, FunctionField, Show, SimpleShowLayout, TextField, useTranslate } from 'react-admin';
+import { DisplayGender, DisplayLearningType, DisplayRole } from '../../../components/translated';
+import { LearningLanguage, getLearningLanguageUniversityAndCampusString } from '../../../entities/LearningLanguage';
 import ProfileLink from '../ui/ProfileLink';
 import ShowTandems from './ShowTandems';
 
@@ -21,7 +20,7 @@ const LearningLanguageShow = () => {
                 />
                 <FunctionField
                     label={translate('learning_languages.list.tableColumns.university')}
-                    render={(data: LearningLanguage) => getProfileUniversityAndCampusString(data.profile)}
+                    render={(data: LearningLanguage) => getLearningLanguageUniversityAndCampusString(data)}
                 />
                 <DateField label={translate('learning_languages.show.fields.createdAt')} source="createdAt" />
                 <TextField label={translate('learning_languages.show.fields.learnedLanguage')} source="name" />
@@ -32,9 +31,23 @@ const LearningLanguageShow = () => {
                 />
                 <FunctionField
                     label={translate('learning_languages.show.fields.learningType')}
-                    render={(data: LearningLanguage) => (
-                        <DisplayLearningType learningType={data.profile?.learningType} />
-                    )}
+                    render={(data: LearningLanguage) => <DisplayLearningType learningType={data.learningType} />}
+                />
+                <BooleanField label={translate('learning_languages.show.fields.sameGender')} source="sameGender" />
+                <FunctionField
+                    label={translate('learning_languages.show.fields.gender')}
+                    render={(data: LearningLanguage) => <DisplayGender gender={data.profile?.user.gender} />}
+                />
+                <BooleanField label={translate('learning_languages.show.fields.sameAge')} source="sameAge" />
+                <TextField label={translate('learning_languages.show.fields.age')} source="profile.user.age" />
+                {/* TODO(NOW): manage certificate and program null */}
+                <BooleanField
+                    label={translate('learning_languages.show.fields.certificateOption')}
+                    source="certificateOption"
+                />
+                <BooleanField
+                    label={translate('learning_languages.show.fields.specificProgram')}
+                    source="specificProgram"
                 />
             </SimpleShowLayout>
 

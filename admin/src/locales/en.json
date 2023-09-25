@@ -25,7 +25,12 @@
         "university": "University",
         "etandem": "E-tandem",
         "tandem": "Tandem",
-        "both": "Both"
+        "both": "Both",
+        "genderValues": {
+            "male": "Male",
+            "female": "Female",
+            "other": "Other"
+        }
     },
     "interests": {
         "create": {
@@ -250,7 +255,13 @@
                 "level": "Level",
                 "university": "University",
                 "role": "Role",
-                "learningType": "Learning type"
+                "learningType": "Learning type",
+                "sameGender": "Same gender",
+                "gender": "Gender",
+                "sameAge": "Same age",
+                "age": "Age",
+                "certificateOption": "Certificate option",
+                "specificProgram": "Specific program"
             },
             "tandems": {
                 "error": "An error occured while fetching tandems",
@@ -274,7 +285,9 @@
                     "actions": "Actions",
                     "university": "University",
                     "role": "Role",
-                    "learningType": "Mode"
+                    "learningType": "Mode",
+                    "gender": "Gender",
+                    "age": "Age"
                 },
                 "globalSuggestions": {
                     "title": "Global routine suggestion",

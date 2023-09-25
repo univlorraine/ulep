@@ -77,7 +77,7 @@ export class MatchScorer implements IMatchScorer {
       status: this.computeSameRolesBonus(profile1, profile2),
       goals: this.computeSameGoalsBonus(profile1, profile2),
       university: this.computeSameUniversityBonus(profile1, profile2),
-      gender: this.computeSameGenderBonus(profile1, profile2),
+      gender: this.computeSameGenderBonus(learningLanguage1, learningLanguage2),
       interests: this.computeSameInterestBonus(profile1, profile2),
     });
 
@@ -140,14 +140,14 @@ export class MatchScorer implements IMatchScorer {
   }
 
   // Apply bonus if profiles dont share the same gender
-  private computeSameGenderBonus(profile1: Profile, profile2: Profile): number {
+  private computeSameGenderBonus(learningLanguage1: LearningLanguage, learningLanguage2: LearningLanguage): number {
     // Check if either profile prefers to be matched with someone of the same gender
-    const prefersSameGender1 = profile1.sameGender;
-    const prefersSameGender2 = profile2.sameGender;
+    const prefersSameGender1 = learningLanguage1.sameGender;
+    const prefersSameGender2 = learningLanguage2.sameGender;
     // Check if both profiles do not care about gender
     const doesNotCareAboutGender = !prefersSameGender1 && !prefersSameGender2;
     // Check if the genders of the two profiles match
-    const gendersMatch = profile1.user.gender === profile2.user.gender;
+    const gendersMatch = learningLanguage1.profile.user.gender === learningLanguage2.profile.user.gender;
     // Apply bonus if one profile prefer the same gender and their genders match,
     // or if both profiles do not care about gender
     if (
@@ -294,26 +294,26 @@ export class MatchScorer implements IMatchScorer {
     }
 
     // Check forbidden case of same gender
-    if ((profile1.sameGender || profile2.sameGender)
+    if ((learningLanguage1.sameGender || learningLanguage2.sameGender)
       && profile1.user.gender !== profile2.user.gender
     ) {
         return false;
     }
 
     // Check incompatibilities between learning types
-    if (profile1.learningType !== profile2.learningType && (
-        profile1.learningType !== LearningType.BOTH && profile2.learningType !== LearningType.BOTH
+    if (learningLanguage1.learningType !== learningLanguage2.learningType && (
+      learningLanguage1.learningType !== LearningType.BOTH && learningLanguage2.learningType !== LearningType.BOTH
     )) {
         return false;
     }
 
     // Check same campus if tandem
     if (
-      (profile1.learningType === LearningType.TANDEM
-        || profile2.learningType === LearningType.TANDEM)
+      (learningLanguage1.learningType === LearningType.TANDEM
+        || learningLanguage2.learningType === LearningType.TANDEM)
       && (
-        (!profile1.campus || !profile2.campus)
-        || (profile1.campus.id !== profile2.campus.id)
+        (!learningLanguage1.campus || !learningLanguage2.campus)
+        || (learningLanguage1.campus.id !== learningLanguage2.campus.id)
       )
      ) {
         return false;

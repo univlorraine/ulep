@@ -50,7 +50,12 @@
         "university": "Université",
         "etandem": "E-tandem",
         "tandem": "Tandem",
-        "both": "Les deux"
+        "both": "Les deux",
+        "genderValues": {
+            "male": "Homme",
+            "female": "Femme",
+            "other": "Autre"
+        }
     },
     "interests": {
         "create": {
@@ -333,7 +338,13 @@
                 "level": "Niveau",
                 "university": "Université",
                 "role": "Rôle",
-                "learningType": "Mode d'apprentissage"
+                "learningType": "Mode d'apprentissage",
+                "sameGender": "Même genre",
+                "gender": "Genre",
+                "sameAge": "Même âge",
+                "age": "Âge",
+                "certificateOption": "Option certificat",
+                "specificProgram": "Option programme spécifique"
             },
             "tandems": {
                 "error": "Une erreur est survenue lors de la récupération des tandems",
@@ -357,7 +368,9 @@
                     "actions": "Actions",
                     "university": "Université",
                     "role": "Rôle",
-                    "learningType": "Mode"
+                    "learningType": "Mode",
+                    "gender": "Genre",
+                    "age": "Âge"
                 },
                 "globalSuggestions": {
                     "title": "Suggestion routine globale",
