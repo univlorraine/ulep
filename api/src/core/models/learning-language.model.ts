@@ -66,15 +66,21 @@ export class LearningLanguage {
   }
 
   public isCompatibleWithProfile(profile: Profile): boolean {
-    // TODO(NOW): see if should inverse assertion (better in protective ?)
-    if (!this.language.isJokerLanguage()) {
-      if (!profile.isSpeakingLanguage(this.language)) {
-        if (!this.isDiscovery() || !profile.isLearningLanguage(this.language)) {
-          return false;
-        }
+    if (this.language.isJokerLanguage()) {
+      // // TODO(NOW+1): Note: we do not check if joker language match a language spoken
+      // by profile 2 but not spoken by profile 1 as this will be done in Score computation and probably return which language is possible in that case
+      return true;
+    } else {
+      if (profile.isSpeakingLanguage(this.language)) {
+        return true;
+      } else if (
+        this.isDiscovery() &&
+        profile.isLearningLanguage(this.language)
+      ) {
+        return true;
       }
     }
-    return true;
+    return false;
   }
 }
 
