@@ -54,7 +54,7 @@ api:
     smtpDisableBootVerification: false # REQUIRED
     logLevel: warn # OPTIONNEL
     emailsTranslationsComponent: emails # REQUIRED
-    emailsAssetsEndpoint: *minioApiUrl # REQUIRED
+    emailsAssetsPublicUrl: *apiUrl # FIXE
     emailsAssetsBucket: assets # REQUIRED
     appLinkAppleStore: TODO # REQUIRED
     appLinkPlayStore: TODO # REQUIRED
