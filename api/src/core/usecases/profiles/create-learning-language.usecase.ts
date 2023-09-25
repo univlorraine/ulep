@@ -76,17 +76,13 @@ export class CreateLearningLanguageUseCase {
       throw new RessourceDoesNotExist('Language does not exist');
     }
 
-    if (!language.isJokerLanguage()) {
-      if (
-        (profile.user.university.parent &&
-          !language.secondaryUniversityActive) ||
-        (!profile.user.university.parent &&
-          language.mainUniversityStatus !== LanguageStatus.PRIMARY)
-      ) {
-        throw new UnsuportedLanguageException(
-          `The language is not supported by the university`,
-        );
-      }
+    if (
+      !language.isJokerLanguage() &&
+      !profile.user.university.supportLanguage(language)
+    ) {
+      throw new UnsuportedLanguageException(
+        `The language is not supported by the university`,
+      );
     }
 
     if (
