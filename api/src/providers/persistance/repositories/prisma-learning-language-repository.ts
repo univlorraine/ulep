@@ -64,31 +64,45 @@ export class PrismaLearningLanguageRepository
     });
   }
 
-  async getLearningLanguagesOfProfileSpeakingAndNotInActiveTandemFromUniversities(
-    spokenLanguageId: string,
+  async getAvailableLearningLanguagesSpeakingLanguageFromUniversities(
+    languageId: string,
     universityIds: string[],
+    considerLearntLanguagesAsSpoken = false,
   ): Promise<LearningLanguage[]> {
+    const clauseSpokeLanguage: any = [
+      {
+        native_language_code_id: {
+          equals: languageId,
+        },
+      },
+      {
+        MasteredLanguages: {
+          some: {
+            language_code_id: {
+              equals: languageId,
+            },
+          },
+        },
+      },
+    ];
+    if (considerLearntLanguagesAsSpoken) {
+      clauseSpokeLanguage.push({
+        LearningLanguages: {
+          some: {
+            language_code_id: {
+              equals: languageId,
+            },
+          },
+        },
+      });
+    }
+
     const res = await this.prisma.learningLanguages.findMany({
       where: {
         Profile: {
           AND: [
             {
-              OR: [
-                {
-                  native_language_code_id: {
-                    equals: spokenLanguageId,
-                  },
-                },
-                {
-                  MasteredLanguages: {
-                    some: {
-                      language_code_id: {
-                        equals: spokenLanguageId,
-                      },
-                    },
-                  },
-                },
-              ],
+              OR: clauseSpokeLanguage,
               User: {
                 AND: [
                   {
@@ -190,8 +204,11 @@ export class PrismaLearningLanguageRepository
     return !!res;
   }
 
-  async getLearningLanguagesOfOtherProfileFromUniversitiesNotInActiveTandem(
-    profileId: string,
+  // TODO(NOW+1): check if should exclude joker language too
+  async getAvailableLearningLanguagesSpeakingDifferentLanguageFromOwnerAndFromUniversities(
+    ownerId: string,
+    ownerSpokenLanguageIds: string[],
+    universitySupportedLanguageIds: string[],
     universityIds: string[],
   ): Promise<LearningLanguage[]> {
     const res = await this.prisma.learningLanguages.findMany({
@@ -199,11 +216,50 @@ export class PrismaLearningLanguageRepository
         Profile: {
           AND: [
             {
+              // Assert target is not owner
               id: {
                 not: {
-                  equals: profileId,
+                  equals: ownerId,
                 },
               },
+            },
+            {
+              // Assert target speaks a language that is
+              // not spoken by owner AND is supported by university
+              OR: [
+                {
+                  AND: [
+                    {
+                      native_language_code_id: {
+                        not: { in: ownerSpokenLanguageIds },
+                      },
+                    },
+                    {
+                      native_language_code_id: {
+                        in: universitySupportedLanguageIds,
+                      },
+                    },
+                  ],
+                },
+                {
+                  MasteredLanguages: {
+                    some: {
+                      AND: [
+                        {
+                          language_code_id: {
+                            not: { in: ownerSpokenLanguageIds },
+                          },
+                        },
+                        {
+                          language_code_id: {
+                            in: universityIds,
+                          },
+                        },
+                      ],
+                    },
+                  },
+                },
+              ],
             },
             {
               User: {

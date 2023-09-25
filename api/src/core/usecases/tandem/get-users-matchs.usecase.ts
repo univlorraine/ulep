@@ -28,6 +28,7 @@ export type GetUserMatchCommand = {
 
 const DEFAULT_NB_USER_MATCHES = 5;
 
+// TODO(NOW+1): rename UC in GetLearningLanguageMatchUsecase
 @Injectable()
 export class GetUserMatchUsecase {
   private readonly logger = new Logger(GetUserMatchUsecase.name);
@@ -54,19 +55,33 @@ export class GetUserMatchUsecase {
       throw new ProfileIsNotInCentralUniversity(command.id);
     }
 
+    const languagesThatCanBeLearnt =
+      await this.languageRepository.getLanguagesProposedToLearning();
+
     let targets = [];
     if (learningLanguage.language.isJokerLanguage()) {
+      const languageIdsSpokenByOwner = [
+        owner.nativeLanguage,
+        ...owner.masteredLanguages,
+      ].map((language) => language.id);
+
+      const languageIdsSupportedByUniversity = languagesThatCanBeLearnt.map(
+        (language) => language.id,
+      );
+
       targets =
-        await this.learningLanguageRepository.getLearningLanguagesOfOtherProfileFromUniversitiesNotInActiveTandem(
+        await this.learningLanguageRepository.getAvailableLearningLanguagesSpeakingDifferentLanguageFromOwnerAndFromUniversities(
           owner.id,
+          languageIdsSpokenByOwner,
+          languageIdsSupportedByUniversity,
           command.universityIds,
         );
     } else {
-      // TODO(discovery): search for profiles learning the language too
       targets =
-        await this.learningLanguageRepository.getLearningLanguagesOfProfileSpeakingAndNotInActiveTandemFromUniversities(
+        await this.learningLanguageRepository.getAvailableLearningLanguagesSpeakingLanguageFromUniversities(
           learningLanguage.language.id,
           command.universityIds,
+          learningLanguage.isDiscovery(),
         );
     }
 
@@ -82,9 +97,6 @@ export class GetUserMatchUsecase {
         return [partnerId, null];
       }),
     );
-
-    const languagesThatCanBeLearnt =
-      await this.languageRepository.getLanguagesProposedToLearning();
 
     this.logger.verbose(
       `Found ${targets.length} potential learningLanguages match in universities ${command.universityIds} for learningLanguage ${command.id}`,
