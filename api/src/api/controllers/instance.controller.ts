@@ -1,4 +1,12 @@
-import { Controller, Get, Inject, Param, Res } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  HttpStatus,
+  Inject,
+  Logger,
+  Param,
+  Res,
+} from '@nestjs/common';
 import * as Swagger from '@nestjs/swagger';
 import {
   Configuration,
@@ -10,11 +18,14 @@ import {
   STORAGE_INTERFACE,
   StorageInterface,
 } from 'src/core/ports/storage.interface';
+import { Readable } from 'stream';
 
 @Controller('instance')
 @Swagger.ApiTags('Instance')
 export class InstanceController {
-  config: Configuration;
+  private readonly logger = new Logger(InstanceController.name);
+  private config: Configuration;
+
   constructor(
     @Inject(STORAGE_INTERFACE)
     private readonly storageGateway: StorageInterface,
@@ -41,22 +52,24 @@ export class InstanceController {
     return JSON.stringify(locale);
   }
 
-  // TODO(NOW): type
   @Get('emails/images/:fileName')
   async getEmailImages(
     @Param('fileName') fileName: string,
     @Res() res,
-  ): Promise<any> {
+  ): Promise<Readable> {
     try {
-      const stream = await this.storageGateway.getObject('assets', fileName);
+      const stream = await this.storageGateway.getObject(
+        this.config.emailAssets.bucket,
+        fileName,
+      );
       return stream.pipe(res);
     } catch (err) {
-      console.error(err);
       if (err.code === 'NoSuchKey') {
-        console.log('404');
+        this.logger.warn(`Email asset ${fileName} does not exist`);
+        return res.status(HttpStatus.NOT_FOUND).end();
       }
-      // TODO(NOW): return 404 on error
-      return;
+      this.logger.error(err);
+      return res.status(HttpStatus.INTERNAL_SERVER_ERROR).end();
     }
   }
 }
