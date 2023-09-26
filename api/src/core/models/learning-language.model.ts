@@ -16,6 +16,7 @@ interface LearningLanguageProps {
   certificateOption?: boolean;
   specificProgram?: boolean;
   campus?: Campus;
+  tandemLanguage?: Language;
 }
 
 export class LearningLanguage {
@@ -30,6 +31,7 @@ export class LearningLanguage {
   readonly certificateOption?: boolean;
   readonly specificProgram?: boolean;
   readonly campus?: Campus;
+  tandemLanguage?: Language;
 
   constructor({
     id,
@@ -43,6 +45,7 @@ export class LearningLanguage {
     certificateOption,
     specificProgram,
     campus,
+    tandemLanguage,
   }: LearningLanguageProps) {
     this.id = id;
     this.language = language;
@@ -55,6 +58,7 @@ export class LearningLanguage {
     this.certificateOption = certificateOption;
     this.specificProgram = specificProgram;
     this.campus = campus;
+    this.tandemLanguage = tandemLanguage;
   }
 
   public isDiscovery(learningLanguageMatch?: LearningLanguage) {

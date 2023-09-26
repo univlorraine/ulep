@@ -38,7 +38,8 @@ model LanguageCodes {
   SuggestedLanguages        SuggestedLanguages[]
   Translations              Translations[]
   TextContents              TextContent[]
-  LearningLanguages         LearningLanguages[]
+  LearningLanguages         LearningLanguages[]  @relation("LearningLanguageLanguage")
+  JokerLearningLanguages    LearningLanguages[]  @relation("TandemLanguage")
 
   @@unique([name])
   @@unique([code])
@@ -302,23 +303,25 @@ model LearningObjectives {
 }
 
 model LearningLanguages {
-  id                 String   @id @default(uuid())
-  profile_id         String
-  tandem_id          String?
-  language_code_id   String
-  level              String
-  learning_type      String
-  same_gender        Boolean
-  same_age           Boolean
-  certificate_option Boolean?
-  specific_program   Boolean?
-  campus_id          String?
-  created_at         DateTime @default(now())
-  updated_at         DateTime @updatedAt
+  id                      String   @id @default(uuid())
+  profile_id              String
+  language_code_id        String
+  level                   String
+  learning_type           String
+  same_gender             Boolean
+  same_age                Boolean
+  certificate_option      Boolean?
+  specific_program        Boolean?
+  campus_id               String?
+  tandem_id               String?
+  tandem_language_code_id String?
+  created_at              DateTime @default(now())
+  updated_at              DateTime @updatedAt
 
   Profile        Profiles         @relation(fields: [profile_id], references: [id])
   Tandem         Tandems?         @relation(fields: [tandem_id], references: [id])
-  LanguageCode   LanguageCodes    @relation(fields: [language_code_id], references: [id])
+  TandemLanguage LanguageCodes?   @relation("TandemLanguage", fields: [tandem_language_code_id], references: [id])
+  LanguageCode   LanguageCodes    @relation("LearningLanguageLanguage", fields: [language_code_id], references: [id])
   RefusedTandems RefusedTandems[]
   Campus         Places?          @relation(fields: [campus_id], references: [id])
 
