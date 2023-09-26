@@ -25,6 +25,10 @@
                             ${kcSanitize(messagesPerField.get('password'))?no_esc}
                         </span>
                     </#if>
+
+                    <span id="input-error-password-requirements" class="${properties.kcInputErrorMessageClass!}" aria-live="polite" style="display:none;">
+                        Le mot de passe doit contenir au moins une majuscule, une minuscule et un chiffre.
+                    </span>
                 </div>
             </div>
 
@@ -56,14 +60,33 @@
 
             <div class="${properties.kcFormGroupClass!}">
                 <div id="kc-form-buttons" class="${properties.kcFormButtonsClass!}">
-                    <input type="submit" value="${msg("doSubmit")}" />
+                    <input id="submit-button" type="submit" disabled={true} value="${msg("doSubmit")}" />
                 </div>
             </div>
         </form>
 
     <script lang="js">
+    const showConfirmPasswordInput = document.getElementById("showConfirmPassword");
+    const passwordConfirmInput = document.getElementById("password-confirm");
     const showPasswordInput = document.getElementById("showPassword");
     const passwordInput = document.getElementById("password-new");
+    const passwordRequirementsError = document.getElementById("input-error-password-requirements");
+    const submitButton = document.getElementById("submit-button");
+
+    passwordInput.addEventListener("input", function () {
+    const password = passwordInput.value;
+    const hasUpperCase = /[A-Z]/.test(password);
+    const hasLowerCase = /[a-z]/.test(password);
+    const hasNumber = /[0-9]/.test(password);
+
+    if (hasUpperCase && hasLowerCase && hasNumber) {
+        passwordRequirementsError.style.display = "none";
+        submitButton.disabled = false;
+    } else {
+        passwordRequirementsError.style.display = "block";
+        submitButton.disabled = true;
+    }
+    });
 
     showPasswordInput.addEventListener("change", function () {
         if (showPasswordInput.checked) {
@@ -72,19 +95,14 @@
             passwordInput.type = "password";
         }
     });
-    </script>
 
-    <script lang="js">
-        const showConfirmPasswordInput = document.getElementById("showConfirmPassword");
-        const passwordConfirmInput = document.getElementById("password-confirm");
-
-        showConfirmPasswordInput.addEventListener("change", function () {
-            if (showConfirmPasswordInput.checked) {
-                passwordConfirmInput.type = "text";
-            } else {
-                passwordConfirmInput.type = "password";
-            }
-        });
+    showConfirmPasswordInput.addEventListener("change", function () {
+        if (showConfirmPasswordInput.checked) {
+            passwordConfirmInput.type = "text";
+        } else {
+            passwordConfirmInput.type = "password";
+        }
+    });
     </script>
     </#if>
 </@layout.registrationLayout>

@@ -135,6 +135,12 @@ input[type="submit"] {
     padding: 0.625rem 0.75rem;
 }
 
+input[type="submit"]:disabled {
+    background-color: var(--color-white);
+    border: 1px solid var(--color-black);
+    color: var(--color-black);
+}
+
 button {
     border: none;
     padding: 0.625rem 0.75rem;
