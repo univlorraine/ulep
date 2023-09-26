@@ -123,30 +123,37 @@ const SignUpInformationsPage: React.FC = () => {
 
     //INFOS: function to retrieve the info of the user and load them in the input fileds
     const userUlAutomaticValues = async () => {
-        const result = await retrievePerson.execute("muller66") as Person;
-        if (result.firstname) {
-            setFirstname(result.firstname);
+        const response = await retrievePerson.execute("contoux1u");
+        if (response instanceof Error) {
+            return await showToast({
+                message: t(response.message),
+                duration: 1000,
+            });
+        } else {
+            const result = response as Person
+            if (result.firstname) {
+                setFirstname(result.firstname);
+            }
+            if (result.lastname) {
+                setLastname(result.lastname);
+            }
+            switch (result.gender) {
+                case "M.":
+                    setGender("male")
+                    break;
+                case "Mme" || "MME":
+                    setGender("female")
+                    break;
+                default:
+                    break;
+            }
+            if (result.age) {
+                setAge(result.age);
+            }
+            if(result.email){
+                setEmail(result.email);
+            }
         }
-        if (result.lastname) {
-            setLastname(result.lastname);
-        }
-        switch (result.gender) {
-            case "M.":
-                setGender("male")
-                break;
-            case "Mme" || "MME":
-                setGender("female")
-                break;
-            default:
-                break;
-        }
-        if (result.age) {
-            setAge(result.age);
-        }
-        if(result.email){
-            setEmail(result.email);
-        }
-        
     }
 
     //INFOS: useEffect() permet de lancer du code après que le composant soit rendered.

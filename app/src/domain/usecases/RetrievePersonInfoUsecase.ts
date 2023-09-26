@@ -23,11 +23,11 @@ class RetrievePersonInfoUsecase implements RetrievePersonInfoUsecaseInterface {
             );
 
             if (!httpResponse.parsedBody) {
-                return new Error('errors.global');
+                return new Error('errors.connecteur');
             }
             return personCommandToDomain(httpResponse.parsedBody);
         } catch (error:any) {
-            return new Error('errors.global');
+            return new Error('errors.connecteur');
         }
     }
 }
