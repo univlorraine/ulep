@@ -68,8 +68,6 @@ export class MatchScorer implements IMatchScorer {
       return new Match({ owner: learningLanguage1, target: learningLanguage2, scores: MatchScores.empty() });
     }
 
-    // TODO(NOW): search better name computeLanguageLevel
-    // TODO(NOW): return which language has matched
     const languageLevel = this.computeLanguageLevel(learningLanguage1, learningLanguage2, availableLanguages)
 
     const scores: MatchScores = new MatchScores({
