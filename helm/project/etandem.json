@@ -8,6 +8,10 @@
   "requiredCredentials": [
     "password"
   ],
+  "internationalizationEnabled": true,
+    "loginTheme": "ulep",
+    "supportedLocales": ["en", "fr"],
+    "defaultLocale": "fr",
   "smtpServer": {
     "starttls": "false",
     "port": "1025",
@@ -31,6 +35,7 @@
         "protocol": "openid-connect",
         "protocolMapper": "oidc-usermodel-attribute-mapper",
         "consentRequired": false,
+        "redirectUris": ["https://{{ .Values.api.env.appUrl }}/login"],
         "config": {
           "aggregate.attrs": "false",
           "userinfo.token.claim": "true",
