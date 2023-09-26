@@ -42,12 +42,7 @@ export class BearerTokensResponse {
 }
 
 export class ResetPasswordRequest {
-  @ApiProperty({ description: 'The user id.' })
-  @IsUUID()
-  userId: string;
-
-  @ApiPropertyOptional({ description: 'The redirect uri.' })
+  @ApiProperty({ description: 'The user email' })
   @IsString()
-  @IsOptional()
-  redirectUri?: string;
+  email: string;
 }
