@@ -19,7 +19,6 @@ import PairingQuizzIntroductionPage from '../pages/PairingQuizzIntroductionPage'
 import PairingQuizzPage from '../pages/PairingQuizzPage';
 import PairingSelectCEFRPage from '../pages/PairingSelectCEFRPage';
 import PairingUnavailableLanguagePage from '../pages/PairingUnavailableLanguagePage';
-import ResetPasswordPage from '../pages/ResetPasswordPage';
 import SignUpAvailabilitiesPage from '../pages/SignUpAvailabilitiesPage';
 import SignUpBiographyPage from '../pages/SignUpBiographyPage';
 import SignupFinalPage from '../pages/SignUpFinalPage';
@@ -67,9 +66,6 @@ const OfflineRouter: React.FC = () => {
             </Route>
             <Route exact path="/login">
                 <LoginPage />
-            </Route>
-            <Route exact path="/reset-password/:id">
-                <ResetPasswordPage />
             </Route>
             <Route exact path="/signup">
                 <SignUpPage />
