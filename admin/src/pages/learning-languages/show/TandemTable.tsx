@@ -12,6 +12,7 @@ interface TandemPartner {
     profile: Profile;
     name: string;
     learningType: LearningType;
+    effectiveLearningType?: LearningType;
     level: string;
     createdAt: Date;
     score?: number;
@@ -64,7 +65,10 @@ const TandemTable = ({ partners, actions, displayTandemLanguage }: TandemTablePr
                             <DisplayRole role={partner.profile.user.role} />
                         </TableCell>
                         <TableCell>
-                            <DisplayLearningType learningType={partner.learningType} />
+                            <DisplayLearningType
+                                effectiveLearningType={partner.effectiveLearningType}
+                                learningType={partner.learningType}
+                            />
                         </TableCell>
                         <TableCell>
                             <DisplayGender gender={partner.profile.user.gender} />

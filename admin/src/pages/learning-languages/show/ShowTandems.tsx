@@ -2,7 +2,12 @@
 import { Box, CircularProgress, Typography } from '@mui/material';
 import React, { useState } from 'react';
 import { useGetIdentity, useGetList, useGetOne, useRecordContext, useTranslate } from 'react-admin';
-import { LearningLanguage, LearningLanguageTandem, isJoker } from '../../../entities/LearningLanguage';
+import {
+    LearningLanguage,
+    LearningLanguageTandem,
+    getEffectiveLearningType,
+    isJoker,
+} from '../../../entities/LearningLanguage';
 import { Match } from '../../../entities/Match';
 import { TandemStatus } from '../../../entities/Tandem';
 import useLearningLanguagesStore from '../useLearningLanguagesStore';
@@ -95,6 +100,7 @@ const ShowTandems = () => {
                         {
                             ...tandem.partnerLearningLanguage,
                             tandemLanguage: tandem.userLearningLanguage.tandemLanguage,
+                            effectiveLearningType: getEffectiveLearningType(record, tandem.partnerLearningLanguage),
                         },
                     ]}
                 />
@@ -137,6 +143,7 @@ const ShowTandems = () => {
                         {
                             ...tandem.partnerLearningLanguage,
                             tandemLanguage: tandem.userLearningLanguage.tandemLanguage,
+                            effectiveLearningType: getEffectiveLearningType(record, tandem.partnerLearningLanguage),
                         },
                     ]}
                 />
@@ -171,6 +178,7 @@ const ShowTandems = () => {
                                     ...match.target,
                                     score: match.score.total,
                                     tandemLanguage: match.tandemLanguage,
+                                    effectiveLearningType: getEffectiveLearningType(record, match.target),
                                 }))}
                             />
                         ) : (
@@ -204,6 +212,10 @@ const ShowTandems = () => {
                                           {
                                               ...tandem.partnerLearningLanguage,
                                               tandemLanguage: tandem.userLearningLanguage.tandemLanguage,
+                                              effectiveLearningType: getEffectiveLearningType(
+                                                  tandem.userLearningLanguage,
+                                                  tandem.partnerLearningLanguage
+                                              ),
                                           },
                                       ]
                                     : []
