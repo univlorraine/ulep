@@ -2,6 +2,7 @@ import { Table, TableBody, TableCell, TableHead, TableRow } from '@mui/material'
 import React from 'react';
 import { useTranslate } from 'react-admin';
 import { DisplayGender, DisplayLearningType, DisplayRole } from '../../../components/translated';
+import Language from '../../../entities/Language';
 import { LearningType } from '../../../entities/LearningLanguage';
 import { Profile } from '../../../entities/Profile';
 import ProfileLink from '../ui/ProfileLink';
@@ -14,14 +15,16 @@ interface TandemPartner {
     level: string;
     createdAt: Date;
     score?: number;
+    tandemLanguage?: Language;
 }
 
 interface TandemTableProps {
     partners: TandemPartner[];
     actions?: (partner: TandemPartner) => React.ReactNode;
+    displayTandemLanguage?: boolean;
 }
 
-const TandemTable = ({ partners, actions }: TandemTableProps) => {
+const TandemTable = ({ partners, actions, displayTandemLanguage }: TandemTableProps) => {
     const translate = useTranslate();
 
     return (
@@ -38,6 +41,11 @@ const TandemTable = ({ partners, actions }: TandemTableProps) => {
                     <TableCell>{translate('learning_languages.show.tandems.tableColumns.age')}</TableCell>
                     <TableCell>{translate('learning_languages.show.tandems.tableColumns.score')}</TableCell>
                     <TableCell>{translate('learning_languages.show.tandems.tableColumns.date')}</TableCell>
+                    {displayTandemLanguage && (
+                        <TableCell>
+                            {translate('learning_languages.show.tandems.tableColumns.tandemLanguage')}
+                        </TableCell>
+                    )}
                     {actions && (
                         <TableCell>{translate('learning_languages.show.tandems.tableColumns.actions')}</TableCell>
                     )}
@@ -64,6 +72,7 @@ const TandemTable = ({ partners, actions }: TandemTableProps) => {
                         <TableCell>{partner.profile.user.age}</TableCell>
                         <TableCell>{partner.score ?? 'N/A'}</TableCell>
                         <TableCell>{new Date(partner.createdAt).toLocaleDateString()}</TableCell>
+                        {displayTandemLanguage && <TableCell>{partner.tandemLanguage?.name}</TableCell>}
                         {actions && <TableCell>{actions(partner)}</TableCell>}
                     </TableRow>
                 ))}

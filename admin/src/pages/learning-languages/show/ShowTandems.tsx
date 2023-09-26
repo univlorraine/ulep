@@ -1,8 +1,8 @@
 /* eslint-disable react/no-unstable-nested-components */
 import { Box, CircularProgress, Typography } from '@mui/material';
 import React, { useState } from 'react';
-import { useGetIdentity, useGetList, useGetOne, useGetRecordId, useTranslate } from 'react-admin';
-import { LearningLanguageTandem } from '../../../entities/LearningLanguage';
+import { useGetIdentity, useGetList, useGetOne, useRecordContext, useTranslate } from 'react-admin';
+import { LearningLanguage, LearningLanguageTandem, isJoker } from '../../../entities/LearningLanguage';
 import { Match } from '../../../entities/Match';
 import { TandemStatus } from '../../../entities/Tandem';
 import useLearningLanguagesStore from '../useLearningLanguagesStore';
@@ -12,7 +12,8 @@ import TandemTable from './TandemTable';
 const ShowTandems = () => {
     const translate = useTranslate();
 
-    const recordId = useGetRecordId();
+    const record = useRecordContext<LearningLanguage>();
+    const isJokerLearningLanguage = isJoker(record);
 
     const { data: identity, isLoading: isLoadingIdentity } = useGetIdentity();
 
@@ -26,10 +27,10 @@ const ShowTandems = () => {
     } = useGetOne<LearningLanguageTandem>(
         'learning-languages/tandems',
         {
-            id: recordId.toString(),
+            id: record?.id.toString(),
         },
         {
-            enabled: !!recordId && !isLoadingIdentity,
+            enabled: !!record?.id && !isLoadingIdentity,
             retry: retryTandemQuery ? 3 : false,
             onError: (err) => {
                 if ((err as Error)?.cause === 404) {
@@ -60,13 +61,13 @@ const ShowTandems = () => {
         'learning-languages/matches',
         {
             filter: {
-                id: recordId,
+                id: record?.id,
                 universityIds: identity?.universityId ? [...selectedUniversityIds, identity.universityId] : [],
             },
         },
         {
             enabled:
-                !!recordId &&
+                !!record?.id &&
                 !isLoadingTandem &&
                 !hasActiveTandem &&
                 !isLoadingIdentity &&
@@ -87,7 +88,16 @@ const ShowTandems = () => {
         return (
             <>
                 <Typography variant="h6">{translate('learning_languages.show.tandems.active.title')}</Typography>
-                <TandemTable partners={[tandem.partnerLearningLanguage]} />
+                <TandemTable
+                    displayTandemLanguage={isJokerLearningLanguage}
+                    // TODO(NOW+2): display language in index
+                    partners={[
+                        {
+                            ...tandem.partnerLearningLanguage,
+                            tandemLanguage: tandem.userLearningLanguage.tandemLanguage,
+                        },
+                    ]}
+                />
             </>
         );
     }
@@ -114,6 +124,7 @@ const ShowTandems = () => {
                                           tandem.userLearningLanguage.id,
                                           tandem.partnerLearningLanguage.id,
                                       ]}
+                                      // TODO(NOW+2): display language in index
                                       onTandemAction={handleTandemAction}
                                       tandemId={tandem.id}
                                       relaunchGlobalRoutineOnRefuse
@@ -121,7 +132,13 @@ const ShowTandems = () => {
                               )
                             : undefined
                     }
-                    partners={[tandem.partnerLearningLanguage]}
+                    displayTandemLanguage={isJokerLearningLanguage}
+                    partners={[
+                        {
+                            ...tandem.partnerLearningLanguage,
+                            tandemLanguage: tandem.userLearningLanguage.tandemLanguage,
+                        },
+                    ]}
                 />
             </>
         );
@@ -139,7 +156,7 @@ const ShowTandems = () => {
                             <TandemTable
                                 actions={(partner) => (
                                     <TandemActions
-                                        learningLanguageIds={[recordId.toString(), partner.id]}
+                                        learningLanguageIds={[record?.id.toString(), partner.id]}
                                         onTandemAction={handleTandemAction}
                                         relaunchGlobalRoutineOnAccept={
                                             !tandem || tandem.partnerLearningLanguage.id !== partner.id
@@ -149,9 +166,11 @@ const ShowTandems = () => {
                                         }
                                     />
                                 )}
+                                displayTandemLanguage={isJokerLearningLanguage}
                                 partners={matches.map((match) => ({
                                     ...match.target,
                                     score: match.score.total,
+                                    tandemLanguage: match.tandemLanguage,
                                 }))}
                             />
                         ) : (
@@ -173,12 +192,22 @@ const ShowTandems = () => {
                         <TandemTable
                             actions={() => (
                                 <TandemActions
-                                    learningLanguageIds={[recordId.toString(), tandem.partnerLearningLanguage.id]}
+                                    learningLanguageIds={[record?.id.toString(), tandem.partnerLearningLanguage.id]}
                                     onTandemAction={handleTandemAction}
                                     relaunchGlobalRoutineOnRefuse
                                 />
                             )}
-                            partners={tandem?.status === TandemStatus.DRAFT ? [tandem.partnerLearningLanguage] : []}
+                            displayTandemLanguage={isJokerLearningLanguage}
+                            partners={
+                                tandem?.status === TandemStatus.DRAFT
+                                    ? [
+                                          {
+                                              ...tandem.partnerLearningLanguage,
+                                              tandemLanguage: tandem.userLearningLanguage.tandemLanguage,
+                                          },
+                                      ]
+                                    : []
+                            }
                         />
                     )}
                 </Box>

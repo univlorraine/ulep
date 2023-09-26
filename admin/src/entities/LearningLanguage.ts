@@ -1,4 +1,5 @@
 import Campus from './Campus';
+import Language from './Language';
 import { Profile } from './Profile';
 import { TandemStatus, TandemSummary } from './Tandem';
 
@@ -22,6 +23,7 @@ export type LearningLanguage = {
     campus?: Campus;
     certificateOption?: boolean;
     specificProgram?: boolean;
+    tandemLanguage?: Language;
 };
 
 export type LearningLanguageTandem = {
@@ -52,4 +54,12 @@ export const getLearningLanguageUniversityAndCampusString = (learningLanguage?: 
     }
 
     return `${learningLanguage.profile.user.university.name}`;
+};
+
+export const isJoker = (learningLanguage?: LearningLanguage): boolean => {
+    if (learningLanguage?.code === '*') {
+        return true;
+    }
+
+    return false;
 };
