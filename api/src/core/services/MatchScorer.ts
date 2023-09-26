@@ -277,7 +277,7 @@ export class MatchScorer implements IMatchScorer {
           score: undefined,
         });
 
-        return languagesWithScores[0];
+        return languagesWithScores;
       } else if (matchLearningLanguage.profile.isLearningLanguage(learningLanguage.language)) {
           matchProfileLevel = matchLearningLanguage.profile.learningLanguages.find(ll => ll.language.id === learningLanguage.language.id).level;
       }

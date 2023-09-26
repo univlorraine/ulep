@@ -39,8 +39,7 @@ export interface LearningLanguageRepository {
   ) => Promise<LearningLanguage[]>;
 
   getAvailableLearningLanguagesSpeakingDifferentLanguageAndFromUniversities: (
-    ownerSpokenLanguageIds: string[],
-    universitySupportedLanguageIds: string[],
+    allowedLanguages: string[],
     universityIds: string[],
   ) => Promise<LearningLanguage[]>;
 

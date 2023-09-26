@@ -128,8 +128,7 @@ export class InMemoryLearningLanguageRepository
   }
 
   getAvailableLearningLanguagesSpeakingDifferentLanguageAndFromUniversities(
-    ownerSpokenLanguageIds: string[],
-    universitySupportedLanguageIds: string[],
+    allowedLanguageIds: string[],
     universityIds: string[],
   ): Promise<LearningLanguage[]> {
     const res = [];
@@ -137,16 +136,11 @@ export class InMemoryLearningLanguageRepository
     for (const learningLanguage of this.#learningLanguages.values()) {
       if (universityIds.includes(learningLanguage.profile.user.id)) {
         if (
-          (!ownerSpokenLanguageIds.includes(
+          allowedLanguageIds.includes(
             learningLanguage.profile.nativeLanguage.id,
-          ) &&
-            universitySupportedLanguageIds.includes(
-              learningLanguage.profile.nativeLanguage.id,
-            )) ||
-          learningLanguage.profile.masteredLanguages.some(
-            (masteredLanguage) =>
-              !ownerSpokenLanguageIds.includes(masteredLanguage.id) &&
-              universitySupportedLanguageIds.includes(masteredLanguage.id),
+          ) ||
+          learningLanguage.profile.masteredLanguages.some((masteredLanguage) =>
+            allowedLanguageIds.includes(masteredLanguage.id),
           )
         ) {
           if (
