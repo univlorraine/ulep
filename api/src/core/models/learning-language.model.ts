@@ -65,8 +65,10 @@ export class LearningLanguage {
     // TODO(discovery+1): asian discovery
     if (learningLanguageMatch) {
       if (
-        this.learningType === LearningType.BOTH &&
-        learningLanguageMatch.learningType === LearningType.BOTH &&
+        (this.learningType === LearningType.TANDEM ||
+          (this.learningType === LearningType.BOTH &&
+            (learningLanguageMatch.learningType === LearningType.BOTH ||
+              learningLanguageMatch.learningType === LearningType.TANDEM))) &&
         this.campus &&
         this.campus.id === learningLanguageMatch.campus?.id
       ) {
