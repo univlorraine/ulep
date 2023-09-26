@@ -115,7 +115,7 @@ const SignUpInformationsPage: React.FC = () => {
 
     //INFOS: function to retrieve the info of the user and load them in the input fileds
     const userUlAutomaticValues = async () => {
-        const response = await retrievePerson.execute("contoux1u");
+        const response = await retrievePerson.execute("champmar5");
         if (response instanceof Error) {
             return await showToast({
                 message: t(response.message),

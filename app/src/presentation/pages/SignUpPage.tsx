@@ -73,24 +73,20 @@ const SignUpPage: React.FC = () => {
 
     const getPersonInfos = async () => {
         console.log("button clicked");
-        const result = await retrievePerson.execute("muller66") as Person;
-        // console.log(result);
+        const result = await retrievePerson.execute("champmar5") as Person;
         if (result.departement.label) {
             setDepartment(result.departement.label);
         }
         setDepartment(result.departement.label);
         switch (selectedRole) {
             case "student":
-                // console.log("il s'agit d'un étudiant");
                 if(result.diploma.label){
                     setDiplome(result.diploma.label);
                 }
                 break;
             case "staff":
-                // console.log("il s'agit d'un personnel");
                 break;
             default:
-                // console.log("pas de rôle sélectionné");
                 break;
         }
     }
