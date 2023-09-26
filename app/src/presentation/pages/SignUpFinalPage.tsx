@@ -4,12 +4,12 @@ import { useConfig } from '../../context/ConfigurationContext';
 import { useStoreState } from '../../store/storeTypes';
 import SuccessLayout from '../components/layout/SuccessLayout';
 import styles from './css/SignUpFinalPage.module.css';
+import { AvatarPlaceholderPng } from '../../assets';
 
 const SignupFinalPage: React.FC = () => {
     const { t } = useTranslation();
     const history = useHistory();
     const { configuration } = useConfig();
-    const profileSignUp = useStoreState((state) => state.profileSignUp);
     const user = useStoreState((state) => state.user);
 
     return (
@@ -19,10 +19,10 @@ const SignupFinalPage: React.FC = () => {
             colorCode={configuration.primaryColor}
         >
             <div className={styles.container}>
-                <h1 className={styles.title}>{`${t('signup_end_page.thanks')} ${profileSignUp.firstname}, ${t(
+                <h1 className={styles.title}>{`${t('signup_end_page.thanks')} ${user?.firstname}, ${t(
                     'signup_end_page.account'
                 )}`}</h1>
-                <img className={styles.image} alt="avatar" src={user?.avatar} />
+                <img className={styles.image} alt="avatar" src={user?.avatar ?? AvatarPlaceholderPng} />
                 <p className={styles.description}>{t('signup_end_page.description')}</p>
                 <button className="primary-button" onClick={() => history.push('/signup/pairing/languages')}>
                     {t('signup_end_page.validate_button')}

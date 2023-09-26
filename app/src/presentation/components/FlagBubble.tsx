@@ -1,6 +1,6 @@
 import { useConfig } from '../../context/ConfigurationContext';
 import Language from '../../domain/entities/Language';
-import { codeCountryToFlag } from '../utils';
+import { codeLanguageToFlag } from '../utils';
 import styles from './FlagBubble.module.css';
 
 interface FlagBubbleProps {
@@ -23,7 +23,7 @@ const FlagBubble: React.FC<FlagBubbleProps> = ({ disabled, isSelected, language,
             }}
             onClick={() => (onPressed ? onPressed(language) : null)}
         >
-            <span className={styles.flag}>{codeCountryToFlag(language.code)}</span>
+            <span className={styles.flag}>{codeLanguageToFlag(language.code)}</span>
             <span className={styles.country} style={{ color: textColor }}>
                 {language.name}
             </span>

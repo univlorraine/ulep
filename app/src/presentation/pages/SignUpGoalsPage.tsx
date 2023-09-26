@@ -44,8 +44,8 @@ const SignUpGoalsPage: React.FC = () => {
         return setUserGoals(currentGoals);
     };
 
-    const continueSignUp = async () => {
-        updateProfileSignUp({ goals: userGoals });
+    const continueSignUp = async (goals: Goal[]) => {
+        updateProfileSignUp({ goals });
 
         history.push('/signup/interests');
     };
@@ -96,14 +96,14 @@ const SignUpGoalsPage: React.FC = () => {
                     <button
                         className={`tertiary-button`}
                         disabled={goals.length === 0}
-                        onClick={() => history.push('/signup/interests')}
+                        onClick={() => continueSignUp([])}
                     >
                         {t('signup_goals_page.pass_button')}
                     </button>
                     <button
                         className={`primary-button ${userGoals.length === 0 ? 'disabled' : ''}`}
                         disabled={userGoals.length === 0}
-                        onClick={continueSignUp}
+                        onClick={() => continueSignUp(userGoals)}
                     >
                         {t('signup_goals_page.validate_button')}
                     </button>

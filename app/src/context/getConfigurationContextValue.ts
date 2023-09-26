@@ -3,6 +3,7 @@ import DomainHttpAdapter from '../adapter/DomainHttpAdapter';
 import Configuration from '../domain/entities/Confirguration';
 import AskForAccountDeletion from '../domain/usecases/AskForAccountDeletionUsecase';
 import AskForLanguageUsecase from '../domain/usecases/AskForLanguageUsecase';
+import AskForLearningLanguageUsecase from '../domain/usecases/AskForLearningLanguageUsecase';
 import CreateProfileUsecase from '../domain/usecases/CreateProfileUsecase';
 import CreateReportUsecase from '../domain/usecases/CreateReportUsecase';
 import CreateUserUsecase from '../domain/usecases/CreateUserUsecase';
@@ -24,6 +25,7 @@ import UpdateNotificationPermissionUsecase from '../domain/usecases/UpdateNotifi
 import { ConfigContextValueType } from './configurationContextTypes';
 
 const getConfigContextValue = (
+    languageCode: string,
     accessToken: string,
     refreshToken: string,
     setProfile: Function,
@@ -35,11 +37,13 @@ const getConfigContextValue = (
     const domainHttpAdapter = new DomainHttpAdapter(
         import.meta.env.VITE_API_URL ?? 'https://api.ulep.thestaging.io',
         accessToken,
-        refreshToken
+        refreshToken,
+        languageCode
     );
 
     const askForAccountDeletion = new AskForAccountDeletion(domainHttpAdapter);
     const askForLanguage = new AskForLanguageUsecase(domainHttpAdapter);
+    const askForLearningLanguage = new AskForLearningLanguageUsecase(domainHttpAdapter);
     const createProfile = new CreateProfileUsecase(domainHttpAdapter, setProfile);
     const createReport = new CreateReportUsecase(domainHttpAdapter);
     const getAllInterestCategories = new GetAllInterestCategoriesUsecase(domainHttpAdapter);
@@ -63,6 +67,7 @@ const getConfigContextValue = (
     return {
         askForAccountDeletion,
         askForLanguage,
+        askForLearningLanguage,
         cameraAdapter,
         configuration,
         createProfile,

@@ -19,6 +19,11 @@ export class PrismaTandemRepository implements TandemRepository {
           })),
         },
         status: tandem.status,
+        UniversityValidations: {
+          connect: tandem.universityValidations?.map((universityId) => ({
+            id: universityId,
+          })),
+        },
       },
     });
   }
@@ -34,6 +39,11 @@ export class PrismaTandemRepository implements TandemRepository {
             })),
           },
           status: tandem.status,
+          UniversityValidations: {
+            connect: tandem.universityValidations?.map((universityId) => ({
+              id: universityId,
+            })),
+          },
         },
       }),
     );
@@ -67,12 +77,6 @@ export class PrismaTandemRepository implements TandemRepository {
     };
   }
 
-  async delete(tandemId: string): Promise<void> {
-    await this.prisma.tandems.delete({
-      where: { id: tandemId },
-    });
-  }
-
   async getExistingTandems(): Promise<Tandem[]> {
     const tandems = await this.prisma.tandems.findMany({
       where: {
@@ -99,6 +103,52 @@ export class PrismaTandemRepository implements TandemRepository {
       include: TandemRelations,
     });
     return tandems.map(tandemMapper);
+  }
+
+  async getTandemForLearningLanguage(
+    learningLanguageId: string,
+  ): Promise<Tandem> {
+    const tandem = await this.prisma.tandems.findFirst({
+      where: {
+        LearningLanguages: {
+          some: {
+            id: {
+              equals: learningLanguageId,
+            },
+          },
+        },
+      },
+      include: TandemRelations,
+    });
+
+    if (!tandem) {
+      return null;
+    }
+
+    return tandemMapper(tandem);
+  }
+
+  async getTandemOfLearningLanguages(
+    learningLanguageIds: string[],
+  ): Promise<Tandem> {
+    const tandem = await this.prisma.tandems.findFirst({
+      where: {
+        LearningLanguages: {
+          every: {
+            id: {
+              in: learningLanguageIds,
+            },
+          },
+        },
+      },
+      include: TandemRelations,
+    });
+
+    if (!tandem) {
+      return null;
+    }
+
+    return tandemMapper(tandem);
   }
 
   async deleteTandemNotLinkedToLearningLangues(): Promise<number> {
@@ -129,5 +179,50 @@ export class PrismaTandemRepository implements TandemRepository {
     });
 
     return res.count;
+  }
+
+  async ofId(id: string): Promise<Tandem> {
+    const res = await this.prisma.tandems.findFirst({
+      where: {
+        id,
+      },
+      include: TandemRelations,
+    });
+
+    if (!res) {
+      return null;
+    }
+
+    return tandemMapper(res);
+  }
+
+  async update(tandem: Tandem): Promise<void> {
+    await this.prisma.tandems.update({
+      where: {
+        id: tandem.id,
+      },
+      data: {
+        id: tandem.id,
+        LearningLanguages: {
+          connect: tandem.learningLanguages.map((learningLanguage) => ({
+            id: learningLanguage.id,
+          })),
+        },
+        status: tandem.status,
+        UniversityValidations: tandem.universityValidations.length && {
+          connect: tandem.universityValidations.map((universityId) => ({
+            id: universityId,
+          })),
+        },
+      },
+    });
+  }
+
+  async delete(id: string): Promise<void> {
+    await this.prisma.tandems.delete({
+      where: {
+        id,
+      },
+    });
   }
 }

@@ -9,7 +9,10 @@ services:
             - ./api:/srv/app
         ports:
             - ${API_PORT:-3000}:3000
-
+        environment:
+            SMTP_HOST: mailer
+            SMTP_PORT: 1025
+            SMTP_SENDER: test@thetribe.io
     admin:
         build:
             context: ./admin

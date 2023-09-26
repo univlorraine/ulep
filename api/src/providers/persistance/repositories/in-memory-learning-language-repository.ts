@@ -1,14 +1,24 @@
+import { Collection } from '@app/common';
 import {
   LearningLanguage,
+  LearningLanguageWithTandem,
   Profile,
   Tandem,
   TandemStatus,
 } from 'src/core/models';
-import { LearningLanguageRepository } from 'src/core/ports/learning-language.repository';
+import {
+  LearningLanguageRepository,
+  LearningLanguageRepositoryGetProps,
+} from 'src/core/ports/learning-language.repository';
 
 export class InMemoryLearningLanguageRepository
   implements LearningLanguageRepository
 {
+  getAvailableLearningLanguagesSpeakingLanguageFromUniversities: (
+    languageId: string,
+    universityIds: string[],
+    considerLearntLanguagesAsSpoken?: boolean,
+  ) => Promise<LearningLanguage[]>;
   #learningLanguages: Map<string, LearningLanguage>;
   #tandemsPerLearningLanguages: Map<string, Tandem>;
 
@@ -117,15 +127,28 @@ export class InMemoryLearningLanguageRepository
     return Promise.resolve(false);
   }
 
-  getLearningLanguagesOfOtherProfileFromUniversitiesNotInActiveTandem(
-    profileId: string,
+  getAvailableLearningLanguagesSpeakingDifferentLanguageAndFromUniversities(
+    ownerSpokenLanguageIds: string[],
+    universitySupportedLanguageIds: string[],
     universityIds: string[],
   ): Promise<LearningLanguage[]> {
     const res = [];
 
     for (const learningLanguage of this.#learningLanguages.values()) {
-      if (learningLanguage.profile.id !== profileId) {
-        if (universityIds.includes(learningLanguage.profile.user.id)) {
+      if (universityIds.includes(learningLanguage.profile.user.id)) {
+        if (
+          (!ownerSpokenLanguageIds.includes(
+            learningLanguage.profile.nativeLanguage.id,
+          ) &&
+            universitySupportedLanguageIds.includes(
+              learningLanguage.profile.nativeLanguage.id,
+            )) ||
+          learningLanguage.profile.masteredLanguages.some(
+            (masteredLanguage) =>
+              !ownerSpokenLanguageIds.includes(masteredLanguage.id) &&
+              universitySupportedLanguageIds.includes(masteredLanguage.id),
+          )
+        ) {
           if (
             !this.#tandemsPerLearningLanguages?.has(learningLanguage.id) ||
             this.#tandemsPerLearningLanguages?.get(learningLanguage.id)
@@ -138,5 +161,30 @@ export class InMemoryLearningLanguageRepository
     }
 
     return Promise.resolve(res);
+  }
+
+  OfUniversities({
+    limit,
+    page,
+    universityIds,
+  }: LearningLanguageRepositoryGetProps): Promise<
+    Collection<LearningLanguageWithTandem>
+  > {
+    const values = Array.from(this.#learningLanguages.values()).filter((ll) =>
+      universityIds.includes(ll.profile.user.university.id),
+    );
+
+    const firstItem = (page - 1) * limit;
+    const items = values.slice(firstItem, firstItem + limit).map((item) => {
+      const tandem = this.#tandemsPerLearningLanguages.get(item.id);
+      return { ...item, tandem };
+    });
+
+    return Promise.resolve(
+      new Collection<LearningLanguageWithTandem>({
+        items: items.map((item) => new LearningLanguageWithTandem(item)),
+        totalItems: values.length,
+      }),
+    );
   }
 }

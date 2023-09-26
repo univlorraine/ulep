@@ -25,6 +25,7 @@ services:
       # CONNECTEUR_URL: ${CONNECTEUR_URL:-http://194.199.223.119:3010/v1/user}
       CONNECTEUR_URL: ${CONNECTEUR_URL:-http://10.188.130.109:3010/v1/user}
       CONNECTEUR_TOKEN: ${CONNECTEUR_TOKEN:-eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.e30.8khTNPulKx_fKgLpYEqI_BvaxeJh8P5WOrq6kuUh2Ww}
+      TRANSLATION_ENDPOINT: ${TRANSLATION_ENDPOINT:-https://raw.githubusercontent.com/thetribeio/locales_ulep/main/locales/}
 
   admin:
     build:
@@ -38,7 +39,7 @@ services:
       REACT_APP_KEYCLOAK_REALM: ${REACT_APP_KEYCLOAK_REALM:-etandem}
       REACT_APP_KEYCLOAK_CLIENT_ID: ${REACT_APP_KEYCLOAK_CLIENT_ID:-react-admin}
       REACT_APP_KEYCLOAK_CLIENT_SECRET: ${REACT_APP_KEYCLOAK_CLIENT_SECRET:-uKBywX2HlxfvKgxZoKZrbiBSx49CST6W}
-  
+
   auth:
     image: quay.io/keycloak/keycloak:21.1.2
     depends_on:
@@ -71,10 +72,12 @@ services:
 
   minio:
     image: minio/minio:latest
-    command: server /data/minio/ --console-address :9001
+    command: server /data/minio --console-address :9001
     environment:
       MINIO_ROOT_USER: ${MINIO_USER:-minio}
       MINIO_ROOT_PASSWORD: ${MINIO_PASSWORD:-!ChangeMe!}
+    volumes:
+      - ./docker/minio:/data/minio
 
   # weblate:
   #   image: weblate/weblate:latest

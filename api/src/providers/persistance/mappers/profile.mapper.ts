@@ -35,9 +35,9 @@ export const ProfilesRelations = {
     include: {
       LanguageCode: true,
       Tandem: true,
+      Campus: true,
     },
   },
-  Campus: true,
 };
 
 export type ProfileSnapshot = Prisma.Profiles & {
@@ -52,14 +52,15 @@ export type ProfileSnapshot = Prisma.Profiles & {
   NativeLanguage: Prisma.LanguageCodes;
   LearningLanguages: (Prisma.LearningLanguages & {
     LanguageCode: Prisma.LanguageCodes;
+    Campus: Prisma.Places;
   })[];
   MasteredLanguages: (Prisma.MasteredLanguages & {
     LanguageCode: Prisma.LanguageCodes;
   })[];
-  Campus: Prisma.Places;
 };
 
 export const profileMapper = (instance: ProfileSnapshot): Profile => {
+  const availabilities = JSON.parse(instance.availabilities as string);
   return new Profile({
     id: instance.id,
     user: userMapper(instance.User),
@@ -90,12 +91,16 @@ export const profileMapper = (instance: ProfileSnapshot): Profile => {
           id: learningLanguage.id,
           level: ProficiencyLevel[learningLanguage.level],
           language: languageMapper(learningLanguage.LanguageCode),
+          learningType: LearningType[learningLanguage.learning_type],
+          sameAge: learningLanguage.same_age,
+          sameGender: learningLanguage.same_gender,
+          campus:
+            learningLanguage.Campus && campusMapper(learningLanguage.Campus),
+          certificateOption: learningLanguage.certificate_option,
+          specificProgram: learningLanguage.specific_program,
         }),
     ),
-    learningType: LearningType[instance.learning_type],
     meetingFrequency: instance.meeting_frequency,
-    sameAge: instance.same_age,
-    sameGender: instance.same_gender,
     objectives: instance.Goals.map((objective) => ({
       id: objective.id,
       name: textContentMapper(objective.TextContent),
@@ -108,15 +113,23 @@ export const profileMapper = (instance: ProfileSnapshot): Profile => {
         name: textContentMapper(interest.Category.TextContent),
       },
     })),
+    availabilities: {
+      monday: availabilities['monday'],
+      tuesday: availabilities['tuesday'],
+      wednesday: availabilities['wednesday'],
+      thursday: availabilities['thursday'],
+      friday: availabilities['friday'],
+      saturday: availabilities['saturday'],
+      sunday: availabilities['sunday'],
+    },
+    availabilitiesNote: instance.availabilities_note,
+    availavilitiesNotePrivacy: instance.availabilities_note_privacy,
     biography: {
       superpower: instance.bio['superpower'],
       favoritePlace: instance.bio['favoritePlace'],
       experience: instance.bio['experience'],
       anecdote: instance.bio['anecdote'],
     },
-    campus: instance.Campus && campusMapper(instance.Campus),
-    certificateOption: instance.certificate_option,
-    specificProgram: instance.specific_program,
     createdAt: instance.created_at,
   });
 };

@@ -5,6 +5,20 @@ import University from '../entities/University';
 import CreateUserUsecaseInterface from '../interfaces/CreateUserUsecase.interface';
 import LoginUsecaseInterface from '../interfaces/LoginUsecase.interface';
 
+interface UserPayload {
+    age: number;
+    code: string;
+    countryCode: string;
+    email: string;
+    firstname: string;
+    gender: Gender;
+    lastname: string;
+    password: string;
+    role: Role;
+    university: string;
+    file?: File;
+}
+
 class CreateUserUsecase implements CreateUserUsecaseInterface {
     constructor(
         private readonly domainHttpAdapter: HttpAdapterInterface,
@@ -23,11 +37,10 @@ class CreateUserUsecase implements CreateUserUsecaseInterface {
         university: University,
         role: Role,
         countryCode: string,
-        avatar: File
+        avatar?: File
     ): Promise<void | Error> {
         try {
-            const body = {
-                file: avatar,
+            const body: UserPayload = {
                 email,
                 password,
                 firstname,
@@ -39,6 +52,10 @@ class CreateUserUsecase implements CreateUserUsecaseInterface {
                 role,
                 countryCode,
             };
+
+            if (avatar) {
+                body.file = avatar;
+            }
 
             const httpResponse: HttpResponse<UserCommand> = await this.domainHttpAdapter.post(
                 `/users`,
@@ -64,6 +81,18 @@ class CreateUserUsecase implements CreateUserUsecaseInterface {
 
             if (!error || !error.statusCode) {
                 return new Error('errors.global');
+            }
+
+            if (error.statusCode === 400 && error.message.includes('expected size')) {
+                return new Error('signup_informations_page.error_picture_weight');
+            }
+
+            if (error.statusCode === 400 && error.message.includes('expected type')) {
+                return new Error('signup_informations_page.error_picture_format');
+            }
+
+            if (error.statusCode === 409) {
+                return new Error('signup_informations_page.error_email_already_exist');
             }
 
             if (error.statusCode === 400 && error.message === 'Domain is invalid') {

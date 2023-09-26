@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { useHistory } from 'react-router';
+import { useHistory, useParams } from 'react-router';
 import { useConfig } from '../../context/ConfigurationContext';
 import { useStoreActions } from '../../store/storeTypes';
 import WebLayoutCentered from '../components/layout/WebLayoutCentered';
@@ -10,6 +10,7 @@ import styles from './css/SignUp.module.css';
 const PairingPreferencePage: React.FC = () => {
     const { t } = useTranslation();
     const { configuration } = useConfig();
+    const isSignUp = useParams<{ prefix?: string }>().prefix;
     const updateProfileSignUp = useStoreActions((store) => store.updateProfileSignUp);
     const history = useHistory();
     const [sameAge, setSameAge] = useState<boolean>(false);
@@ -22,7 +23,7 @@ const PairingPreferencePage: React.FC = () => {
 
     const onNextStepPressed = () => {
         updateProfileSignUp({ sameAge, sameGender });
-        return history.push('/signup/pairing/options');
+        return history.push(`${isSignUp ? '/' + isSignUp : '/'}pairing/options`);
     };
 
     return (

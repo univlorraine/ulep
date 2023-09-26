@@ -1,4 +1,3 @@
-import Availability from './Availability';
 import Campus from './Campus';
 import Country from './Country';
 import Goal from './Goal';
@@ -12,14 +11,19 @@ export interface BiographySignUp {
     travel: string;
 }
 
+export enum AvailabilitesOptions {
+    UNAVAILABLE = 'UNAVAILABLE',
+    AVAILABLE = 'AVAILABLE',
+    VERY_AVAILABLE = 'VERY_AVAILABLE',
+}
 export interface Availabilites {
-    monday: Availability;
-    tuesday: Availability;
-    wednesday: Availability;
-    thursday: Availability;
-    friday: Availability;
-    saturday: Availability;
-    sunday: Availability;
+    monday: AvailabilitiesOptions;
+    tuesday: AvailabilitiesOptions;
+    wednesday: AvailabilitiesOptions;
+    thursday: AvailabilitiesOptions;
+    friday: AvailabilitiesOptions;
+    saturday: AvailabilitiesOptions;
+    sunday: AvailabilitiesOptions;
 }
 
 class ProfileSignUp {

@@ -20,6 +20,15 @@
         "label": "Pays",
         "name": "Nom du pays"
     },
+    "days": {
+        "monday": "Lundi",
+        "tuesday": "Mardi",
+        "wednesday": "Mercredi",
+        "thursday": "Jeudi",
+        "friday": "Vendredi",
+        "saturday": "Samedi",
+        "sunday": "Dimanche"
+    },
     "global": {
         "active": "Actif",
         "age": "Age",
@@ -38,7 +47,15 @@
         "staff": "Personnel",
         "student": "Etudiant",
         "translations": "Traductions",
-        "university": "Université"
+        "university": "Université",
+        "etandem": "E-tandem",
+        "tandem": "Tandem",
+        "both": "Les deux",
+        "genderValues": {
+            "male": "Homme",
+            "female": "Femme",
+            "other": "Autre"
+        }
     },
     "interests": {
         "create": {
@@ -112,12 +129,19 @@
         }
     },
     "profiles": {
+        "availabilities": "Disponibilités",
+        "availabilities_note": "Note de disponibilité",
         "biography": {
             "anecdote": "Anecdote",
             "experience": "Experience",
             "favorite_place": "Lieu favoris",
             "superpower": "Super pouvoirs",
             "title": "Biographies"
+        },
+        "availabilities_occurence": {
+            "VERY_AVAILABLE": "Très disponible",
+            "AVAILABLE": "Disponible",
+            "UNAVAILABLE": "Non disponible"
         },
         "edit_status_error": "Le status n'a pas pu être mis à jour",
         "edit_status_success": "Le status a été mis à jour",
@@ -204,7 +228,14 @@
             "name": "Nom de la nouvelle université partenaire",
             "timezone": "Timezone de la nouvelle université partenaire",
             "title": "Création d'une nouvelle université partenaire",
-            "website": "Site web de la nouvelle université partenaire"
+            "website": "Site web de la nouvelle université partenaire",
+            "pairingMode": "Mode d'appariement",
+            "notificationEmail": "Email pour les notifications"
+        },
+        "pairingModes": {
+            "manual": "Manuel",
+            "semi_automatic": "Semi-automatique",
+            "automatic": "Automatique"
         },
         "label": "Universités",
         "name": "Nom de l'université",
@@ -220,7 +251,10 @@
             "resourcesUrl": "Url des ressources de langues de l'université",
             "sites": "Campus de rencontre",
             "timezone": "Timezone",
-            "website": "Site web de l'université"
+            "website": "Site web de l'université",
+            "id": "ID",
+            "pairingMode": "Mode d'appariement",
+            "notificationEmail": "Email pour les notifications"
         },
         "update": {
             "admission_end": "Fin de date d'inscription à l'université",
@@ -234,7 +268,9 @@
             "name": "Nom de l'université",
             "timezone": "Timezone de l'université",
             "title": "Mise à jour de l'université",
-            "website": "Site web de l'université"
+            "website": "Site web de l'université",
+            "pairingMode": "Mode d'appariement",
+            "notificationEmail": "Email pour les notifications"
         }
     },
     "uploader": {
@@ -245,5 +281,115 @@
     "users": {
         "searchEmail": "Chercher par email",
         "userListTitle": "Utilisateurs"
+    },
+    "learning_languages": {
+        "label": "Demandes de tandems",
+        "list": {
+            "universitiesPicker": {
+                "label": "Sélectionner des universités pour l'appariement"
+            },
+            "actions": {
+                "globalRoutine": {
+                    "ctaLabel": "Lancer la routine globale",
+                    "runningLabel": "Routine globale en cours d'exécution",
+                    "errorLoading": "Une erreur est survenue lors du chargement de l'état de la dernière routine globale"
+                }
+            },
+            "filters": {
+                "activeTandem": {
+                    "label": "En tandem",
+                    "choices": {
+                        "yes": "Oui",
+                        "no": "Non"
+                    }
+                },
+                "actionableTandem": {
+                    "label": "Tandems en attente",
+                    "choices": {
+                        "yes": "Oui",
+                        "no": "Non"
+                    }
+                }
+            },
+            "globalRoutineModal": {
+                "description": "Lancer la routine globale peut prendre quelques minutes. Les tandems proposés par une ancienne exécution seront perdus.",
+                "confirmMessage": "Voulez-vous continuer ?",
+                "ctaLabels": {
+                    "confirm": "Confirmer",
+                    "cancel": "Annuler"
+                },
+                "error": "Une erreur est survenue lors de l'exécution de la routine globale"
+            },
+            "tableColumns": {
+                "name": "Nom",
+                "learnedLanguage": "Langue demandée",
+                "level": "Niveau",
+                "createdAt": "Créé le",
+                "university": "Université",
+                "hasActiveTandem": "En tandem",
+                "actionPossible": "Tandem en attente"
+            },
+            "noUniversitySelected": "Merci de sélectionner une ou plusieurs universités pour l'appariement"
+        },
+        "show": {
+            "fields": {
+                "createdAt": "Date demande",
+                "learnedLanguage": "Langue demandé",
+                "level": "Niveau",
+                "university": "Université",
+                "role": "Rôle",
+                "learningType": "Mode d'apprentissage",
+                "sameGender": "Même genre",
+                "gender": "Genre",
+                "sameAge": "Même âge",
+                "age": "Âge",
+                "certificateOption": "Option certificat",
+                "specificProgram": "Option programme spécifique"
+            },
+            "tandems": {
+                "error": "Une erreur est survenue lors de la récupération des tandems",
+                "active": {
+                    "title": "En tandem avec"
+                },
+                "waitingValidation": {
+                    "title": "Attente validation"
+                },
+                "matches": {
+                    "error": "Une erreur est survenue lors de la récupération des propositions de la routine individuelle",
+                    "title": "Suggestion routine individuelle",
+                    "noResults": "Aucun résultats"
+                },
+                "tableColumns": {
+                    "profile": "Profil",
+                    "learnedLanguage": "Langue demandée",
+                    "level": "Niveau",
+                    "score": "Compatibilité",
+                    "date": "Date",
+                    "actions": "Actions",
+                    "university": "Université",
+                    "role": "Rôle",
+                    "learningType": "Mode",
+                    "gender": "Genre",
+                    "age": "Âge"
+                },
+                "globalSuggestions": {
+                    "title": "Suggestion routine globale",
+                    "titleNotCentralUniversity": "Tandem proposé",
+                    "noResult": "Aucun résultat"
+                },
+                "actions": {
+                    "validateMessage": "Vous êtes sur le point de créer un tandem. Êtes-vous sur ?",
+                    "refuseMessage": "Vous êtes sur le point de refuser un tandem. Êtes-vous sur ?",
+                    "ctaLabels": {
+                        "cancel": "Annuler",
+                        "confirm": "Confirmer"
+                    },
+                    "error": "Une erreur est survenue"
+                }
+            }
+        }
+    },
+    "universitiesPicker": {
+        "error": "Une erreur est survenue lors de la récupération des universités"
     }
 }

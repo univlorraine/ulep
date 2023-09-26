@@ -53,17 +53,17 @@ export class CreateProfileCommand {
   learningLanguages: {
     code: string;
     level: ProficiencyLevel;
+    learningType: LearningType;
+    sameGender: boolean;
+    sameAge: boolean;
+    campusId?: string;
+    certificateOption?: boolean;
+    specificProgram?: boolean;
   }[];
-  learningType: LearningType;
   objectives: string[];
   meetingFrequency: string;
   interests: string[];
-  sameGender: boolean;
-  sameAge: boolean;
   bios?: string;
-  campusId?: string;
-  certificateOption?: boolean;
-  specificProgram?: boolean;
 }
 
 @Injectable()
@@ -89,23 +89,6 @@ export class CreateProfileUsecase {
     const user = await this.tryToFindTheUserOfId(command.user);
 
     await this.assertProfileDoesNotExistForUser(user.id);
-
-    if (command.learningType === LearningType.TANDEM && !command.campusId) {
-      throw new ProfileCampusException(
-        'A campus is required for tandem learningType',
-      );
-    }
-    let campus;
-    if (command.campusId) {
-      campus = user.university.campus.find(
-        (campus) => campus.id === command.campusId,
-      );
-      if (!campus) {
-        throw new ProfileCampusException(
-          `${command.campusId} not part of user's university`,
-        );
-      }
-    }
 
     const interests = await Promise.all(
       command.interests.map((id) => this.tryToFindTheInterestOfId(id)),
@@ -133,14 +116,46 @@ export class CreateProfileUsecase {
           learningLanguage.code,
         );
 
-        if (!language.isJokerLanguage()) {
-          this.assertLanguageIsSupportedByUniversity(user.university, language);
+        if (
+          !language.isJokerLanguage() &&
+          !user.university.supportLanguage(language)
+        ) {
+          throw new UnsuportedLanguageException(
+            `The language is not supported by the university`,
+          );
+        }
+
+        if (
+          !learningLanguage.campusId &&
+          (learningLanguage.learningType === LearningType.TANDEM ||
+            learningLanguage.learningType === LearningType.BOTH)
+        ) {
+          throw new ProfileCampusException(
+            'A campus is required for tandem/both learningType',
+          );
+        }
+        let campus;
+        if (learningLanguage.campusId) {
+          campus = user.university.campus.find(
+            (campus) => campus.id === learningLanguage.campusId,
+          );
+          if (!campus) {
+            throw new ProfileCampusException(
+              `${learningLanguage.campusId} not part of user's university`,
+            );
+          }
         }
 
         return new LearningLanguage({
           id: this.uuidProvider.generate(),
           language,
           level: learningLanguage.level,
+          learningType: learningLanguage.learningType,
+          sameGender: learningLanguage.sameGender,
+          sameAge: learningLanguage.sameAge,
+          certificateOption: learningLanguage.certificateOption,
+          specificProgram: learningLanguage.specificProgram,
+          campus: campus,
         });
       }),
     );
@@ -158,7 +173,6 @@ export class CreateProfileUsecase {
       learningLanguages,
       objectives,
       interests,
-      campus,
     });
 
     await this.profilesRepository.create(profile);
@@ -198,21 +212,6 @@ export class CreateProfileUsecase {
     }
 
     return language;
-  }
-
-  private assertLanguageIsSupportedByUniversity(
-    university: University,
-    language: Language,
-  ): void {
-    if (
-      (university.parent && !language.secondaryUniversityActive) ||
-      (!university.parent &&
-        language.mainUniversityStatus !== LanguageStatus.PRIMARY)
-    ) {
-      throw new UnsuportedLanguageException(
-        `The language is not supported by the university`,
-      );
-    }
   }
 
   private async tryToFindTheObjectiveOfId(

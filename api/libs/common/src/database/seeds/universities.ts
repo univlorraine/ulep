@@ -1,4 +1,5 @@
 import { PrismaClient } from '@prisma/client';
+import { PairingMode } from '../../../../../src/core/models';
 
 export enum UniversitySeedIDs {
   CENTRAL = 'b511f9d1-ce7e-40b5-a630-ecb99f4e9f59',
@@ -33,6 +34,7 @@ export const createUniversities = async (prisma: PrismaClient) => {
       admissionStartDate: new Date('2023-01-01'),
       admissionEndDate: new Date('2023-12-31'),
       website: 'https://www.univ-lorraine.fr/',
+      notification_email: 'notification+lorraine@test.fr',
     },
   });
   await prisma.organizations.create({
@@ -49,6 +51,8 @@ export const createUniversities = async (prisma: PrismaClient) => {
       admissionStartDate: new Date('2023-01-02'),
       admissionEndDate: new Date('2023-12-30'),
       website: 'https://www.birmingham.ac.uk',
+      pairing_mode: PairingMode.SEMI_AUTOMATIC,
+      notification_email: 'notification+birm@test.fr',
     },
   });
   await prisma.organizations.create({
@@ -65,6 +69,7 @@ export const createUniversities = async (prisma: PrismaClient) => {
       admissionStartDate: new Date('2023-01-02'),
       admissionEndDate: new Date('2023-12-30'),
       website: 'https://www.toto.de',
+      pairing_mode: PairingMode.AUTOMATIC,
     },
   });
 };

@@ -19,7 +19,9 @@ const EditUniversity = () => {
         admissionEnd: Date,
         codes: string[],
         domains: string[],
-        website?: string
+        pairingMode: string,
+        website?: string,
+        notificationEmail?: string
     ) => {
         const payload = {
             name,
@@ -30,13 +32,15 @@ const EditUniversity = () => {
             codes,
             domains,
             website,
+            pairingMode,
+            notificationEmail: notificationEmail || undefined,
         };
         try {
             return await update(
                 `universities/${id}`,
                 { data: payload },
                 {
-                    onSettled: (data: any, error: Error) => {
+                    onSettled: (_, error: unknown) => {
                         if (!error) {
                             return redirect('/universities');
                         }
@@ -54,9 +58,9 @@ const EditUniversity = () => {
 
     return (
         <Edit title={translate('universities.update.title')}>
-            <WithRecord
+            <WithRecord<University>
                 label="university"
-                render={(record: University) => (
+                render={(record) => (
                     <UniversityForm
                         admissionEndDate={record.admissionEnd}
                         admissionStartDate={record.admissionStart}
@@ -71,7 +75,9 @@ const EditUniversity = () => {
                             admissionEnd: Date,
                             codes: string[],
                             domains: string[],
-                            website?: string
+                            pairingMode: string,
+                            website?: string,
+                            notificationEmail?: string
                         ) =>
                             handleSubmit(
                                 record.id,
@@ -82,10 +88,14 @@ const EditUniversity = () => {
                                 admissionEnd,
                                 codes,
                                 domains,
-                                website
+                                pairingMode,
+                                website,
+                                notificationEmail
                             )
                         }
                         name={record.name}
+                        notificationEmail={record.notificationEmail}
+                        pairingMode={record.pairingMode}
                         timezone={record.timezone}
                         tradKey="update"
                         website={record.website}

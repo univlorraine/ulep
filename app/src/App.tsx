@@ -36,8 +36,10 @@ import Store from './store/store';
 setupIonicReact();
 
 const AppContext = () => {
+    const { i18n } = useTranslation();
     const rehydrated = useStoreRehydrated();
     const accessToken = useStoreState((state) => state.accessToken);
+    const language = useStoreState((state) => state.language);
     const refreshToken = useStoreState((state) => state.refreshToken);
     const setProfile = useStoreActions((state) => state.setProfile);
     const setTokens = useStoreActions((state) => state.setTokens);
@@ -55,6 +57,14 @@ const AppContext = () => {
     );
 
     useEffect(() => {
+        const getLanguage = async () => {
+            const deviceLanguage = await Device.getLanguageCode();
+            i18n.changeLanguage(language || deviceLanguage.value);
+        };
+        getLanguage();
+    }, [language]);
+
+    useEffect(() => {
         document.documentElement.style.setProperty('--primary-color', configuration.primaryColor);
         document.documentElement.style.setProperty('--primary-dark-color', configuration.primaryDarkColor);
         document.documentElement.style.setProperty('--secondary-color', configuration.secondaryColor);
@@ -67,7 +77,15 @@ const AppContext = () => {
 
     return (
         <ConfigContext.Provider
-            value={getConfigContextValue(accessToken, refreshToken, setProfile, setTokens, setUser, configuration)}
+            value={getConfigContextValue(
+                i18n.language,
+                accessToken,
+                refreshToken,
+                setProfile,
+                setTokens,
+                setUser,
+                configuration
+            )}
         >
             <IonReactRouter>
                 <Router />
@@ -77,15 +95,6 @@ const AppContext = () => {
 };
 
 const App: React.FC = () => {
-    const { i18n } = useTranslation();
-    useEffect(() => {
-        const getLanguage = async () => {
-            const language = await Device.getLanguageCode();
-            i18n.changeLanguage(language.value);
-        };
-        getLanguage();
-    }, []);
-
     return (
         <IonApp>
             <StoreProvider store={Store}>

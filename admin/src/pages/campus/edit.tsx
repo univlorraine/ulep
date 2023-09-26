@@ -19,7 +19,7 @@ const EditCampus = () => {
                 'campus',
                 { data: payload },
                 {
-                    onSettled: (data: any, error: Error) => {
+                    onSettled: (_, error: unknown) => {
                         if (!error) {
                             return redirect('/campus');
                         }
@@ -37,9 +37,9 @@ const EditCampus = () => {
 
     return (
         <Edit title={translate('campus.update.title')}>
-            <WithRecord
+            <WithRecord<Campus>
                 label="campus"
-                render={(record: Campus) => (
+                render={(record) => (
                     <CampusForm
                         handleSubmit={(newName: string) => handleSubmit(record.id, newName)}
                         name={record.name}

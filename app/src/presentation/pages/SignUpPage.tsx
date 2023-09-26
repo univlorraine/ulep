@@ -29,6 +29,14 @@ const SignUpPage: React.FC = () => {
     const [university, setUniversity] = useState<University>();
     const [displayError, setDisplayError] = useState<boolean>(false);
 
+    const isAFieldEmpty =
+        !university ||
+        !country ||
+        !selectedRole ||
+        (!department && university.isCentral) ||
+        (!diplome && selectedRole === 'student' && university.isCentral) ||
+        (!staffFunction && selectedRole === 'staff' && university.isCentral);
+
     const getSignUpData = async () => {
         const countriesResult = await getAllCountries.execute();
 
@@ -44,16 +52,9 @@ const SignUpPage: React.FC = () => {
         );
     };
 
-    const continueSignUp = () => {
-        if (
-            !university ||
-            !country ||
-            !selectedRole ||
-            (selectedRole === 'student' && !diplome) ||
-            (selectedRole === 'staff' && !staffFunction) ||
-            !department
-        ) {
-            return setDisplayError(true);
+    const continueSignUp = async () => {
+        if (isAFieldEmpty) {
+            return await showToast({ message: t('signup_page.missing_field'), duration: 3000 });
         }
         const now = new Date();
         if (university.admissionEnd < now || university.admissionStart > now) {
@@ -181,7 +182,11 @@ const SignUpPage: React.FC = () => {
                             <a href={`mailto:${configuration.emailContact}`}>{configuration.emailContact}</a>
                         </p>
                     )}
-                    <button className="primary-button" onClick={continueSignUp}>
+                    <button
+                        className={`primary-button ${isAFieldEmpty ? 'disabled' : ''}`}
+                        disabled={isAFieldEmpty}
+                        onClick={continueSignUp}
+                    >
                         {t('signup_page.validate_button')}
                     </button>
                 </div>

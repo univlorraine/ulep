@@ -1,6 +1,6 @@
 import qsAdapter from '../providers/qsAdapter';
 
-interface QuestionsParams {
+export interface QuestionsParams {
     filter?: {
         level: string;
     };

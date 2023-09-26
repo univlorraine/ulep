@@ -8,11 +8,17 @@ const payload: ProfileCommand = {
     interests: [{ id: 'interestId', name: 'name' }],
     nativeLanguage: {
         code: 'FR',
+        name: 'Français',
     },
-    learningLanguage: {
-        code: 'CN',
-        level: 'AO',
-    },
+    masteredLanguages: [{ code: 'EN', name: 'English' }],
+    learningLanguages: [
+        {
+            id: 'id',
+            code: 'CN',
+            level: 'AO',
+            name: 'Chinese',
+        },
+    ],
     objectives: [{ id: 'id', name: 'name', image: { id: 'id', url: 'url' } }],
     meetingFrequency: 'ONCE_A_WEEK',
     biography: {
@@ -21,9 +27,20 @@ const payload: ProfileCommand = {
         favoritePlace: 'place',
         superpower: 'power',
     },
+    availabilities: {
+        monday: 'AVAILABLE',
+        tuesday: 'AVAILABLE',
+        wednesday: 'AVAILABLE',
+        thursday: 'AVAILABLE',
+        friday: 'AVAILABLE',
+        saturday: 'AVAILABLE',
+        sunday: 'AVAILABLE',
+    },
+    availabilitiesNote: 'note',
     user: {
         id: 'userId',
         avatar: { id: 'avatarId', url: 'url' },
+        acceptsEmail: true,
         email: 'email',
         firstname: 'firstname',
         lastname: 'lastname',
@@ -57,9 +74,9 @@ describe('getProfile', () => {
         expect.assertions(2);
         jest.spyOn(adapter, 'get');
         adapter.mockJson({ parsedBody: {} });
-        await usecase.execute();
+        await usecase.execute('accessToken');
         expect(adapter.get).toHaveBeenCalledTimes(1);
-        expect(adapter.get).toHaveBeenCalledWith('/profiles/me', undefined, false);
+        expect(adapter.get).toHaveBeenCalledWith('/profiles/me', undefined, false, 'accessToken');
     });
 
     it('execute must return an expected response', async () => {
@@ -67,7 +84,7 @@ describe('getProfile', () => {
 
         adapter.mockJson({ parsedBody: payload });
 
-        const result = await usecase.execute();
+        const result = await usecase.execute('accessToken');
         expect(result).toBeInstanceOf(Profile);
     });
 
@@ -76,14 +93,14 @@ describe('getProfile', () => {
 
         adapter.mockJson({});
 
-        const result = await usecase.execute();
+        const result = await usecase.execute('accessToken');
         expect(result).toBeInstanceOf(Error);
     });
 
     it('execute must return an error if adapter return an error without status', async () => {
         expect.assertions(1);
         adapter.mockError({});
-        const result = await usecase.execute();
+        const result = await usecase.execute('accessToken');
         expect(result).toStrictEqual(new Error('errors.global'));
     });
 });

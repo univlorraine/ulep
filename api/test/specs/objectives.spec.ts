@@ -9,6 +9,8 @@ import { LANGUAGE_REPOSITORY } from 'src/core/ports/language.repository';
 import { AuthenticationGuard } from 'src/api/guards';
 import { TestAuthGuard } from '../utils/TestAuthGuard';
 import { AUTHENTICATOR, InMemoryAuthenticator } from 'src/api/services';
+import { EMAIL_GATEWAY } from 'src/core/ports/email.gateway';
+import InMemoryEmailGateway from 'src/providers/gateway/in-memory-email.gateway';
 
 describe('Objectives', () => {
   let app: TestServer;
@@ -21,6 +23,7 @@ describe('Objectives', () => {
 
   const { keycloakUser } = new KeycloakUserFactory().makeOne();
   const authenticator = new InMemoryAuthenticator(keycloakUser);
+  const inMemoryEmail = new InMemoryEmailGateway();
 
   beforeAll(async () => {
     languageRepository.init([language]);
@@ -34,6 +37,8 @@ describe('Objectives', () => {
       .useValue(languageRepository)
       .overrideProvider(AUTHENTICATOR)
       .useValue(authenticator)
+      .overrideProvider(EMAIL_GATEWAY)
+      .useValue(inMemoryEmail)
       .overrideGuard(AuthenticationGuard)
       .useValue(TestAuthGuard)
       .compile();

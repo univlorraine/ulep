@@ -6,7 +6,7 @@ import DomainHttpAdapter from '../../mocks/adapters/HttpAdapter';
 const usecaseResponse: LanguageAskedCommand = { code: 'FR', count: 10 };
 const languagePayload = new Language('id', 'FR', 'Français');
 
-describe('getAllCountries', () => {
+describe('askForLanguage', () => {
     let adapter: DomainHttpAdapter;
     let usecase: AskForLanguageUsecase;
     beforeAll(() => {

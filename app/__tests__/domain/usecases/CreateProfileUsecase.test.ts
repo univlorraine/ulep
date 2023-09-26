@@ -15,11 +15,17 @@ const payload: ProfileCommand = {
     interests: [{ id: 'interestId', name: 'name' }],
     nativeLanguage: {
         code: 'FR',
+        name: 'Français',
     },
-    learningLanguage: {
-        code: 'CN',
-        level: 'AO',
-    },
+    masteredLanguages: [{ code: 'EN', name: 'English' }],
+    learningLanguages: [
+        {
+            id: 'id',
+            code: 'CN',
+            level: 'AO',
+            name: 'Chinese',
+        },
+    ],
     objectives: [{ id: 'id', name: 'name', image: { id: 'id', url: 'url' } }],
     meetingFrequency: 'ONCE_A_WEEK',
     biography: {
@@ -28,9 +34,20 @@ const payload: ProfileCommand = {
         favoritePlace: 'place',
         superpower: 'power',
     },
+    availabilities: {
+        monday: 'AVAILABLE',
+        tuesday: 'AVAILABLE',
+        wednesday: 'AVAILABLE',
+        thursday: 'AVAILABLE',
+        friday: 'AVAILABLE',
+        saturday: 'AVAILABLE',
+        sunday: 'AVAILABLE',
+    },
+    availabilitiesNote: 'note',
     user: {
         id: 'userId',
         avatar: { id: 'avatarId', url: 'url' },
+        acceptsEmail: true,
         email: 'email',
         firstname: 'firstname',
         lastname: 'lastname',
@@ -79,28 +96,54 @@ describe('createProfile', () => {
             true,
             biography,
             true,
-            true
+            true,
+            {
+                monday: 'AVAILABLE',
+                tuesday: 'AVAILABLE',
+                wednesday: 'AVAILABLE',
+                thursday: 'AVAILABLE',
+                friday: 'AVAILABLE',
+                saturday: 'AVAILABLE',
+                sunday: 'AVAILABLE',
+            },
+            'note'
         );
         expect(adapter.post).toHaveBeenCalledTimes(1);
         expect(adapter.post).toHaveBeenCalledWith('/profiles/', {
             nativeLanguageCode: 'FR',
             masteredLanguageCodes: ['CN'],
-            learningLanguages: [{ code: 'ES', level: 'A0' }],
-            learningType: 'TANDEM',
+            learningLanguages: [
+                {
+                    code: 'ES',
+                    level: 'A0',
+                    campusId: undefined,
+                    certificateOption: true,
+                    learningType: 'TANDEM',
+                    sameAge: true,
+                    sameGender: true,
+                    specificProgram: true,
+                },
+            ],
             objectives: ['goalId'],
             meetingFrequency: 'ONCE_A_WEEK',
             interests: ['interestsId'],
-            sameAge: true,
-            sameGender: true,
             biography: {
                 superpower: biography.power,
                 favoritePlace: biography.place,
                 experience: biography.travel,
                 anecdote: biography.incredible,
             },
-            campusId: undefined,
-            certificateOption: true,
-            specificProgram: true,
+            availabilities: {
+                monday: 'AVAILABLE',
+                tuesday: 'AVAILABLE',
+                wednesday: 'AVAILABLE',
+                thursday: 'AVAILABLE',
+                friday: 'AVAILABLE',
+                saturday: 'AVAILABLE',
+                sunday: 'AVAILABLE',
+            },
+            availabilitiesNote: 'note',
+            availabilitiesNotePrivacy: undefined,
         });
     });
 
@@ -122,7 +165,17 @@ describe('createProfile', () => {
             true,
             biography,
             true,
-            true
+            true,
+            {
+                monday: 'AVAILABLE',
+                tuesday: 'AVAILABLE',
+                wednesday: 'AVAILABLE',
+                thursday: 'AVAILABLE',
+                friday: 'AVAILABLE',
+                saturday: 'AVAILABLE',
+                sunday: 'AVAILABLE',
+            },
+            'note'
         );
         expect(mockedSetProfile).toHaveBeenCalledTimes(1);
         expect(result).toBeUndefined();
@@ -146,7 +199,17 @@ describe('createProfile', () => {
             true,
             biography,
             true,
-            true
+            true,
+            {
+                monday: 'AVAILABLE',
+                tuesday: 'AVAILABLE',
+                wednesday: 'AVAILABLE',
+                thursday: 'AVAILABLE',
+                friday: 'AVAILABLE',
+                saturday: 'AVAILABLE',
+                sunday: 'AVAILABLE',
+            },
+            'note'
         );
         expect(result).toBeInstanceOf(Error);
     });
@@ -167,7 +230,17 @@ describe('createProfile', () => {
             true,
             biography,
             true,
-            true
+            true,
+            {
+                monday: 'AVAILABLE',
+                tuesday: 'AVAILABLE',
+                wednesday: 'AVAILABLE',
+                thursday: 'AVAILABLE',
+                friday: 'AVAILABLE',
+                saturday: 'AVAILABLE',
+                sunday: 'AVAILABLE',
+            },
+            'note'
         );
         expect(result).toStrictEqual(new Error('errors.global'));
     });

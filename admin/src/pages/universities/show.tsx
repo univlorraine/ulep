@@ -10,7 +10,9 @@ import {
     SimpleShowLayout,
     TextField,
     Show,
+    FunctionField,
 } from 'react-admin';
+import University from '../../entities/University';
 
 const UniversityShowAction = () => (
     <TopToolbar>
@@ -45,6 +47,14 @@ const UniversityShow = (props: any) => {
                     </SingleFieldList>
                 </TextField>
                 <TextField label={translate('universities.show.website')} source="website" />
+                <FunctionField
+                    label={translate('universities.show.pairingMode')}
+                    render={(data: University) =>
+                        translate(`universities.pairingModes.${data.pairingMode.toLowerCase()}`)
+                    }
+                />
+                <TextField label={translate('universities.show.id')} source="id" />
+                <TextField label={translate('universities.show.notificationEmail')} source="notificationEmail" />
             </SimpleShowLayout>
         </Show>
     );

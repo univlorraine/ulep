@@ -1,4 +1,5 @@
 import Language from '../../../domain/entities/Language';
+import { codeLanguageToFlag } from '../../utils';
 import styles from './TandemBubble.module.css';
 
 interface TandemBubbleProps {
@@ -16,7 +17,7 @@ const TandemBubble: React.FC<TandemBubbleProps> = ({ language, onTandemPressed, 
                 <span className={styles.name}>{profileName}</span>
             </div>
             <div className={styles['flag-container']}>
-                <span className={styles.flag}>{language.getFlag()}</span>
+                <span className={styles.flag}>{codeLanguageToFlag(language.code)}</span>
             </div>
         </button>
     );

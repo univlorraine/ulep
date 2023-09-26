@@ -1,7 +1,13 @@
 import Campus from './Campus';
 import Country from './Country';
 
-interface University {
+export enum PairingMode {
+    MANUAL = 'MANUAL',
+    SEMI_AUTOMATIC = 'SEMI_AUTOMATIC',
+    AUTOMATIC = 'AUTOMATIC',
+}
+
+type University = {
     id: string;
     name: string;
     parent: string;
@@ -12,7 +18,9 @@ interface University {
     sites: Campus[];
     codes: string[];
     domains: string[];
+    pairingMode: PairingMode;
     website: string;
-}
+    notificationEmail?: string;
+};
 
 export default University;

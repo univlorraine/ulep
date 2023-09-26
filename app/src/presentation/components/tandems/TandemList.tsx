@@ -2,6 +2,7 @@ import { useTranslation } from 'react-i18next';
 import Tandem from '../../../domain/entities/Tandem';
 import TandemBubble from './TandemBubble';
 import styles from './TandemList.module.css';
+import { AvatarPlaceholderPng } from '../../../assets';
 
 interface TandemListProps {
     onTandemPressed: (tandem: Tandem) => void;
@@ -21,9 +22,9 @@ const TandemList: React.FC<TandemListProps> = ({ onTandemPressed, tandems }) => 
                             return (
                                 <TandemBubble
                                     key={tandem.id}
-                                    language={tandem.language}
+                                    language={tandem.learningLanguage}
                                     onTandemPressed={() => onTandemPressed(tandem)}
-                                    profileAvatar={tandem.partner?.user.avatar}
+                                    profileAvatar={tandem.partner?.user.avatar ?? AvatarPlaceholderPng}
                                     profileName={tandem.partner?.user.firstname}
                                 />
                             );

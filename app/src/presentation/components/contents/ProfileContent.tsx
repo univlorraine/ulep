@@ -6,6 +6,7 @@ import { useStoreActions } from '../../../store/storeTypes';
 import styles from './ProfileContent.module.css';
 import { useState } from 'react';
 import { TailSpin } from 'react-loader-spinner';
+import University from '../../../domain/entities/University';
 
 interface ProfileContentProps {
     onClose: () => void;
@@ -13,6 +14,7 @@ interface ProfileContentProps {
     profileFirstname: string;
     profileLastname: string;
     profilePicture: string;
+    profileUniversity: University;
 }
 
 const ProfileContent: React.FC<ProfileContentProps> = ({
@@ -21,6 +23,7 @@ const ProfileContent: React.FC<ProfileContentProps> = ({
     profileFirstname,
     profileLastname,
     profilePicture,
+    profileUniversity
 }) => {
     const { configuration } = useConfig();
     const { t } = useTranslation();
@@ -74,6 +77,7 @@ const ProfileContent: React.FC<ProfileContentProps> = ({
                     <img alt="avatar" className={styles.image} src={profilePicture} />
                 )}
                 <span className={styles.name}>{`${profileFirstname} ${profileLastname}`}</span>
+                <span className={styles.university}>{profileUniversity.name}</span>
 
                 <button className={`${styles.button} margin-bottom`} onClick={changeAvatar}>
                     <div className={styles['button-container']}>

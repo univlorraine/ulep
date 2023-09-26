@@ -5,7 +5,7 @@ import {
   LearningLanguageHasNoAssociatedProfile,
   ProfileIsNotInCentralUniversity,
 } from 'src/core/errors/tandem-exceptions';
-import { LearningLanguage, Match } from 'src/core/models';
+import { LearningLanguage, LearningType, Match } from 'src/core/models';
 import {
   LANGUAGE_REPOSITORY,
   LanguageRepository,
@@ -14,6 +14,10 @@ import {
   LEARNING_LANGUAGE_REPOSITORY,
   LearningLanguageRepository,
 } from 'src/core/ports/learning-language.repository';
+import {
+  REFUSED_TANDEMS_REPOSITORY,
+  RefusedTandemsRepository,
+} from 'src/core/ports/refused-tandems.repository';
 import { MatchScorer } from 'src/core/services/MatchScorer';
 
 export type GetUserMatchCommand = {
@@ -25,8 +29,8 @@ export type GetUserMatchCommand = {
 const DEFAULT_NB_USER_MATCHES = 5;
 
 @Injectable()
-export class GetUserMatchUsecase {
-  private readonly logger = new Logger(GetUserMatchUsecase.name);
+export class GetLearningLanguageMatchesUsecase {
+  private readonly logger = new Logger(GetLearningLanguageMatchesUsecase.name);
 
   constructor(
     @Inject(LEARNING_LANGUAGE_REPOSITORY)
@@ -34,6 +38,8 @@ export class GetUserMatchUsecase {
     @Inject(LANGUAGE_REPOSITORY)
     private readonly languageRepository: LanguageRepository,
     private readonly matchService: MatchScorer,
+    @Inject(REFUSED_TANDEMS_REPOSITORY)
+    private readonly refusedTandemsRepository: RefusedTandemsRepository,
   ) {}
 
   async execute(command: GetUserMatchCommand): Promise<Collection<Match>> {
@@ -48,26 +54,52 @@ export class GetUserMatchUsecase {
       throw new ProfileIsNotInCentralUniversity(command.id);
     }
 
-    let targets = [];
-    if (learningLanguage.language.isJokerLanguage()) {
-      targets =
-        await this.learningLanguageRepository.getLearningLanguagesOfOtherProfileFromUniversitiesNotInActiveTandem(
-          owner.id,
-          command.universityIds,
-        );
-    } else {
-      // TODO(discovery): search for profiles learning the language too
-      targets =
-        await this.learningLanguageRepository.getLearningLanguagesOfProfileSpeakingAndNotInActiveTandemFromUniversities(
-          learningLanguage.language.id,
-          command.universityIds,
-        );
-    }
-
     const languagesThatCanBeLearnt =
       await this.languageRepository.getLanguagesProposedToLearning();
 
-    this.logger.debug(
+    let targets = [];
+    if (learningLanguage.language.isJokerLanguage()) {
+      const languageIdsSpokenByOwner = [
+        owner.nativeLanguage,
+        ...owner.masteredLanguages,
+      ].map((language) => language.id);
+
+      const languageIdsSupportedByUniversity = languagesThatCanBeLearnt.map(
+        (language) => language.id,
+      );
+
+      targets =
+        await this.learningLanguageRepository.getAvailableLearningLanguagesSpeakingDifferentLanguageAndFromUniversities(
+          languageIdsSpokenByOwner,
+          languageIdsSupportedByUniversity,
+          command.universityIds,
+        );
+    } else {
+      targets =
+        await this.learningLanguageRepository.getAvailableLearningLanguagesSpeakingLanguageFromUniversities(
+          learningLanguage.language.id,
+          command.universityIds,
+          learningLanguage.isDiscovery() ||
+            // We don't know if BOTH learning type can lead to discovery tandem yet
+            // so we include it
+            learningLanguage.learningType === LearningType.BOTH,
+        );
+    }
+
+    const refusedTandems =
+      await this.refusedTandemsRepository.getForLearningLanguage(
+        learningLanguage.id,
+      );
+    const refusedPartnersMap = new Map<string, null>(
+      refusedTandems.map((item) => {
+        const partnerId = item.learningLanguageIds.find(
+          (id) => id !== learningLanguage.id,
+        );
+        return [partnerId, null];
+      }),
+    );
+
+    this.logger.verbose(
       `Found ${targets.length} potential learningLanguages match in universities ${command.universityIds} for learningLanguage ${command.id}`,
     );
 
@@ -75,6 +107,7 @@ export class GetUserMatchUsecase {
 
     for (const target of targets) {
       if (target.profile.id === owner.id) continue;
+      if (refusedPartnersMap.has(target.id)) continue;
 
       const match = this.matchService.computeMatchScore(
         learningLanguage,

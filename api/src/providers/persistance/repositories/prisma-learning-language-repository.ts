@@ -1,10 +1,21 @@
-import { LearningLanguage, TandemStatus } from 'src/core/models';
-import { PrismaService } from '@app/common';
+import {
+  LearningLanguage,
+  LearningLanguageWithTandem,
+  TandemStatus,
+  UserStatus,
+} from 'src/core/models';
+import { Collection, PrismaService } from '@app/common';
 import { Injectable } from '@nestjs/common';
-import { LearningLanguageRepository } from 'src/core/ports/learning-language.repository';
+import {
+  LearningLanguageQuerySortKey,
+  LearningLanguageRepository,
+  LearningLanguageRepositoryGetProps,
+} from 'src/core/ports/learning-language.repository';
 import {
   LearningLanguageRelations,
+  LearningLanguageWithTandemRelations,
   learningLanguageMapper,
+  learningLanguageWithTandemMapper,
 } from '../mappers/learningLanguage.mapper';
 
 @Injectable()
@@ -41,39 +52,70 @@ export class PrismaLearningLanguageRepository
           },
         },
         level: item.level,
+        learning_type: item.learningType,
+        same_gender: item.sameGender,
+        same_age: item.sameAge,
+        certificate_option: item.certificateOption,
+        specific_program: item.specificProgram,
+        Campus: item.campus && {
+          connect: { id: item.campus.id },
+        },
       },
     });
   }
 
-  async getLearningLanguagesOfProfileSpeakingAndNotInActiveTandemFromUniversities(
-    spokenLanguageId: string,
+  async getAvailableLearningLanguagesSpeakingLanguageFromUniversities(
+    languageId: string,
     universityIds: string[],
+    considerLearntLanguagesAsSpoken = false,
   ): Promise<LearningLanguage[]> {
+    const clauseSpokeLanguage: any = [
+      {
+        native_language_code_id: {
+          equals: languageId,
+        },
+      },
+      {
+        MasteredLanguages: {
+          some: {
+            language_code_id: {
+              equals: languageId,
+            },
+          },
+        },
+      },
+    ];
+    if (considerLearntLanguagesAsSpoken) {
+      clauseSpokeLanguage.push({
+        LearningLanguages: {
+          some: {
+            language_code_id: {
+              equals: languageId,
+            },
+          },
+        },
+      });
+    }
+
     const res = await this.prisma.learningLanguages.findMany({
       where: {
         Profile: {
           AND: [
             {
-              OR: [
-                {
-                  native_language_code_id: {
-                    equals: spokenLanguageId,
-                  },
-                },
-                {
-                  MasteredLanguages: {
-                    some: {
-                      language_code_id: {
-                        equals: spokenLanguageId,
-                      },
+              OR: clauseSpokeLanguage,
+              User: {
+                AND: [
+                  {
+                    organization_id: {
+                      in: universityIds,
                     },
                   },
-                },
-              ],
-              User: {
-                organization_id: {
-                  in: universityIds,
-                },
+                  {
+                    status: {
+                      not: UserStatus.BANNED,
+                    },
+                  },
+                ],
               },
             },
           ],
@@ -108,9 +150,18 @@ export class PrismaLearningLanguageRepository
       where: {
         Profile: {
           User: {
-            organization_id: {
-              in: universityIds,
-            },
+            AND: [
+              {
+                organization_id: {
+                  in: universityIds,
+                },
+              },
+              {
+                status: {
+                  not: UserStatus.BANNED,
+                },
+              },
+            ],
           },
         },
         OR: [
@@ -153,8 +204,9 @@ export class PrismaLearningLanguageRepository
     return !!res;
   }
 
-  async getLearningLanguagesOfOtherProfileFromUniversitiesNotInActiveTandem(
-    profileId: string,
+  async getAvailableLearningLanguagesSpeakingDifferentLanguageAndFromUniversities(
+    ownerSpokenLanguageIds: string[],
+    universitySupportedLanguageIds: string[],
     universityIds: string[],
   ): Promise<LearningLanguage[]> {
     const res = await this.prisma.learningLanguages.findMany({
@@ -162,17 +214,57 @@ export class PrismaLearningLanguageRepository
         Profile: {
           AND: [
             {
-              id: {
-                not: {
-                  equals: profileId,
+              // Assert target speaks a language that is
+              // not spoken by owner AND is supported by university
+              OR: [
+                {
+                  AND: [
+                    {
+                      native_language_code_id: {
+                        not: { in: ownerSpokenLanguageIds },
+                      },
+                    },
+                    {
+                      native_language_code_id: {
+                        in: universitySupportedLanguageIds,
+                      },
+                    },
+                  ],
                 },
-              },
+                {
+                  MasteredLanguages: {
+                    some: {
+                      AND: [
+                        {
+                          language_code_id: {
+                            not: { in: ownerSpokenLanguageIds },
+                          },
+                        },
+                        {
+                          language_code_id: {
+                            in: universityIds,
+                          },
+                        },
+                      ],
+                    },
+                  },
+                },
+              ],
             },
             {
               User: {
-                organization_id: {
-                  in: universityIds,
-                },
+                AND: [
+                  {
+                    organization_id: {
+                      in: universityIds,
+                    },
+                  },
+                  {
+                    status: {
+                      not: UserStatus.BANNED,
+                    },
+                  },
+                ],
               },
             },
           ],
@@ -198,5 +290,169 @@ export class PrismaLearningLanguageRepository
     });
 
     return res.map(learningLanguageMapper);
+  }
+
+  async OfUniversities({
+    page,
+    limit,
+    universityIds,
+    orderBy,
+    hasActiveTandem,
+    hasActionableTandem,
+  }: LearningLanguageRepositoryGetProps): Promise<
+    Collection<LearningLanguageWithTandem>
+  > {
+    const permanentWherePayload = {
+      Profile: {
+        User: {
+          AND: [
+            {
+              organization_id: {
+                in: universityIds,
+              },
+            },
+            {
+              status: {
+                not: UserStatus.BANNED,
+              },
+            },
+          ],
+        },
+      },
+    };
+
+    const tandemWhereClauses = [];
+    if (hasActionableTandem === true) {
+      tandemWhereClauses.push({
+        Tandem: {
+          status: {
+            not: {
+              in: [TandemStatus.ACTIVE, TandemStatus.INACTIVE],
+            },
+          },
+        },
+      });
+    } else if (hasActionableTandem === false) {
+      tandemWhereClauses.push({
+        OR: [
+          {
+            Tandem: {
+              status: {
+                in: [TandemStatus.ACTIVE, TandemStatus.INACTIVE],
+              },
+            },
+          },
+          {
+            Tandem: {
+              is: null,
+            },
+          },
+        ],
+      });
+    }
+
+    if (hasActiveTandem === true) {
+      tandemWhereClauses.push({
+        Tandem: {
+          status: {
+            equals: TandemStatus.ACTIVE,
+          },
+        },
+      });
+    } else if (hasActiveTandem === false) {
+      tandemWhereClauses.push({
+        OR: [
+          {
+            Tandem: {
+              status: {
+                not: {
+                  equals: TandemStatus.ACTIVE,
+                },
+              },
+            },
+          },
+          {
+            Tandem: {
+              is: null,
+            },
+          },
+        ],
+      });
+    }
+
+    let wherePayload: any = { ...permanentWherePayload };
+    if (tandemWhereClauses.length > 1) {
+      wherePayload = {
+        ...wherePayload,
+        AND: tandemWhereClauses,
+      };
+    } else if (tandemWhereClauses.length === 1) {
+      wherePayload = {
+        ...wherePayload,
+        ...tandemWhereClauses[0],
+      };
+    }
+
+    const count = await this.prisma.learningLanguages.count({
+      where: wherePayload,
+    });
+
+    let orderByPayload;
+    if (orderBy) {
+      switch (orderBy.field) {
+        case LearningLanguageQuerySortKey.PROFILE:
+          orderByPayload = {
+            Profile: {
+              User: {
+                firstname: orderBy.order,
+              },
+            },
+          };
+          break;
+        case LearningLanguageQuerySortKey.CREATED_AT:
+          orderByPayload = {
+            created_at: orderBy.order,
+          };
+          break;
+        case LearningLanguageQuerySortKey.UNIVERSITY:
+          orderByPayload = {
+            Profile: {
+              User: {
+                Organization: {
+                  name: orderBy.order,
+                },
+              },
+            },
+          };
+          break;
+        case LearningLanguageQuerySortKey.LEVEL:
+          orderByPayload = {
+            level: orderBy.order,
+          };
+          break;
+        case LearningLanguageQuerySortKey.LANGUAGE:
+          orderByPayload = {
+            LanguageCode: {
+              name: orderBy.order,
+            },
+          };
+          break;
+        default:
+          throw new Error('Unsupported orderBy field');
+      }
+    }
+
+    const items = await this.prisma.learningLanguages.findMany({
+      where: wherePayload,
+      skip: (page - 1) * limit,
+      take: limit,
+      include: LearningLanguageWithTandemRelations,
+      orderBy: orderByPayload,
+    });
+
+    return {
+      items: items.map(learningLanguageWithTandemMapper),
+      totalItems: count,
+    };
   }
 }

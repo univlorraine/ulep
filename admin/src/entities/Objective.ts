@@ -1,12 +1,10 @@
 import MediaObject from './MediaObject';
 import TextContent from './TextContent';
 
-class Objective {
-    constructor(
-        readonly id: string,
-        readonly image: MediaObject,
-        readonly name: TextContent
-    ) {}
-}
+type Objective = {
+    id: string;
+    image: MediaObject;
+    name: TextContent;
+};
 
 export default Objective;

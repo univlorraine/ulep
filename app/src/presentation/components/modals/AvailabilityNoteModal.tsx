@@ -43,7 +43,11 @@ const AvailabilityNoteModal: React.FC<AvailabilityNoteModalProps> = ({ isVisible
                         <button className="tertiary-button" onClick={() => onValidate()}>
                             {t('signup_availabilities_page.modal.pass_button')}
                         </button>
-                        <button className="primary-button margin-left" onClick={() => onValidate(note, isPrivate)}>
+                        <button
+                            className={`primary-button margin-left ${note.trim().length === 0 ? 'disabled' : ''}`}
+                            disabled={note.trim().length === 0}
+                            onClick={() => onValidate(note, isPrivate)}
+                        >
                             {t('signup_availabilities_page.modal.validate_button')}
                         </button>
                     </div>

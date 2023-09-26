@@ -1,9 +1,11 @@
+import { AvatarPlaceholderPng } from '../assets';
 import User from '../domain/entities/User';
 import UniversityCommand, { universityCommandToDomain } from './UniversityCommand';
 
 interface UserCommand {
     id: string;
-    avatar: { id: string; url: string };
+    avatar?: { id: string; url: string };
+    acceptsEmail: boolean;
     email: string;
     firstname: string;
     lastname: string;
@@ -14,12 +16,13 @@ interface UserCommand {
 export const userCommandToDomain = (command: UserCommand) => {
     return new User(
         command.id,
-        command.avatar.url,
         command.email,
         command.firstname,
         command.lastname,
         universityCommandToDomain(command.university),
-        command.status
+        command.status,
+        command.acceptsEmail,
+        command.avatar ? command.avatar.url : undefined
     );
 };
 

@@ -1,7 +1,7 @@
-import { createTheme } from '@material-ui/core/styles';
-import { defaultTheme } from 'react-admin';
+import { PaletteOptions } from '@mui/material';
+import { RaThemeOptions, defaultTheme } from 'react-admin';
 
-const theme = createTheme({
+const theme: RaThemeOptions = {
     ...defaultTheme,
     palette: {
         primary: {
@@ -13,7 +13,7 @@ const theme = createTheme({
         trasnparentPrimary: {
             main: '#57576111',
         },
-    },
+    } as PaletteOptions,
     components: {
         ...defaultTheme.components,
         RaChipField: {
@@ -34,6 +34,6 @@ const theme = createTheme({
     typography: {
         fontFamily: ['-apple-system', 'BlinkMacSystemFont', '"Segoe UI"', 'Arial', 'sans-serif'].join(','),
     },
-});
+};
 
 export default theme;

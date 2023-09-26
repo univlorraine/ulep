@@ -1,7 +1,7 @@
 import { useTranslation } from 'react-i18next';
 import { FAQPng } from '../../../assets';
 import Language from '../../../domain/entities/Language';
-import { codeCountryToFlag } from '../../utils';
+import { codeLanguageToFlag } from '../../utils';
 import otherLanguagesSelectedStyles from './OtherLanguageSelectedContent.module.css';
 
 interface OtherLanguageSelectedContentProps {
@@ -20,7 +20,7 @@ const OtherLanguageSelectedContent: React.FC<OtherLanguageSelectedContentProps> 
                 <p className={otherLanguagesSelectedStyles['language-title']}>
                     {t('pairing_other_languages_page.selected_language.language')}
                 </p>
-                <div className={otherLanguagesSelectedStyles['language-container']}>{`${codeCountryToFlag(
+                <div className={otherLanguagesSelectedStyles['language-container']}>{`${codeLanguageToFlag(
                     language.code
                 )} ${language.name}`}</div>
 

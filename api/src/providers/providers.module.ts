@@ -30,7 +30,14 @@ import { CAMPUS_REPOSITORY } from 'src/core/ports/campus.repository';
 import { PrismaCampusRepository } from 'src/providers/persistance/repositories/prisma-campus.repository';
 import { LEARNING_LANGUAGE_REPOSITORY } from 'src/core/ports/learning-language.repository';
 import { PrismaLearningLanguageRepository } from './persistance/repositories/prisma-learning-language-repository';
-import { GatewayController } from './gateway/gateway.controller';
+import { ROUTINE_EXECUTION_REPOSITORY } from 'src/core/ports/routine-execution.repository';
+import { PrismaRoutineExecutionRepository } from './persistance/repositories/prisma-routine-execution-repository';
+import { REFUSED_TANDEMS_REPOSITORY } from 'src/core/ports/refused-tandems.repository';
+import { PrismaRefusedTandemsRepository } from './persistance/repositories/prisma-refused-tandems.repository';
+import { EMAIL_GATEWAY } from 'src/core/ports/email.gateway';
+import { SmtpEmailGateway } from './gateway/smtp-email.gateway';
+import { EMAIL_TEMPLATE_REPOSITORY } from 'src/core/ports/email-template.repository';
+import { TranslatedEmailTemplateRepository } from './persistance/repositories/translated-emails-template-repository';
 
 const providers: Provider[] = [
   {
@@ -92,6 +99,22 @@ const providers: Provider[] = [
   {
     provide: LEARNING_LANGUAGE_REPOSITORY,
     useClass: PrismaLearningLanguageRepository,
+  },
+  {
+    provide: ROUTINE_EXECUTION_REPOSITORY,
+    useClass: PrismaRoutineExecutionRepository,
+  },
+  {
+    provide: REFUSED_TANDEMS_REPOSITORY,
+    useClass: PrismaRefusedTandemsRepository,
+  },
+  {
+    provide: EMAIL_GATEWAY,
+    useClass: SmtpEmailGateway,
+  },
+  {
+    provide: EMAIL_TEMPLATE_REPOSITORY,
+    useClass: TranslatedEmailTemplateRepository,
   },
 ];
 

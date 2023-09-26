@@ -47,6 +47,20 @@ api:
     keycloakClientSecret: &keycloakClientSecret "" # REQUIRED 
     minioAccessKey: &minioAccessKey minio # FIXE
     minioSecretKey: &minioSecretKey AZE123aze # REQUIRED
+    smtpHost: localhost # REQUIRED
+    smtpPort: 25 # REQUIRED
+    smtpSecure: true # REQUIRED
+    smtpSender: tandems@ulep.fr # REQUIRED
+    smtpDisableBootVerification: false # REQUIRED
+    logLevel: warn # OPTIONNEL
+    emailsTranslationsComponent: emails # REQUIRED
+    emailsAssetsPublicUrl: *apiUrl # FIXE
+    emailsAssetsBucket: assets # REQUIRED
+    appLinkAppleStore: TODO # REQUIRED
+    appLinkPlayStore: TODO # REQUIRED
+    translationsEndpoint: TODO # REQUIRED
+    translationsEndpointSuffix: TODO # OPTIONAL
+    translationsToken: TODO # REQUIRED
 
   autoscaling:
     enabled: false
@@ -89,6 +103,8 @@ auth:
     kcDB: postgres # FIXE
     kcDBSchema: keycloak # FIXE
     proxyAddressForwarding: true 
+    logLevel: INFO # REQUIRED
+
 
   autoscaling:
     enabled: false
@@ -176,8 +192,6 @@ admin:
     pullPolicy: Always
 
   env: 
-    keycloakRealm: etandem # FIXE
-    keycloakClientId: react-admin # FIXE
     keycloakClientSecret: *keycloakClientSecret # REQUIRED
 
   autoscaling:

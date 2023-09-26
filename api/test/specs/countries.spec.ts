@@ -7,12 +7,15 @@ import { InMemoryCountryCodesRepository } from 'src/providers/persistance/reposi
 import { TestServer } from './test.server';
 import { TestAuthGuard } from '../utils/TestAuthGuard';
 import { AuthenticationGuard } from 'src/api/guards';
+import InMemoryEmailGateway from 'src/providers/gateway/in-memory-email.gateway';
+import { EMAIL_GATEWAY } from 'src/core/ports/email.gateway';
 
 describe('Countries', () => {
   let app: TestServer;
 
   const factory = new CountryFactory();
   const repository = new InMemoryCountryCodesRepository();
+  const inMemoryEmail = new InMemoryEmailGateway();
 
   beforeAll(async () => {
     const module = await Test.createTestingModule({
@@ -20,6 +23,8 @@ describe('Countries', () => {
     })
       .overrideProvider(COUNTRY_REPOSITORY)
       .useValue(repository)
+      .overrideProvider(EMAIL_GATEWAY)
+      .useValue(inMemoryEmail)
       .overrideGuard(AuthenticationGuard)
       .useValue(TestAuthGuard)
       .compile();

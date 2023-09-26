@@ -1,31 +1,61 @@
 import { useIonToast } from '@ionic/react';
 import { useTranslation } from 'react-i18next';
-import { Redirect, useHistory } from 'react-router';
+import { Redirect, useParams } from 'react-router';
 import { useConfig } from '../../context/ConfigurationContext';
-import { useStoreState } from '../../store/storeTypes';
+import { useStoreActions, useStoreState } from '../../store/storeTypes';
 import FlagBubble from '../components/FlagBubble';
 import SuccessLayout from '../components/layout/SuccessLayout';
-import { codeCountryToFlag } from '../utils';
+import { codeLanguageToFlag } from '../utils';
 import styles from './css/PairingFinalPage.module.css';
+import { AvatarPlaceholderPng } from '../../assets';
+import { useState } from 'react';
 
 const PairingFinalPage: React.FC = () => {
     const { t } = useTranslation();
-    const history = useHistory();
-    const { configuration, createProfile } = useConfig();
+    const { askForLearningLanguage, configuration, createProfile } = useConfig();
+    const isSignUp = useParams<{ prefix?: string }>().prefix;
     const [showToast] = useIonToast();
+    const [loading, setLoading] = useState<boolean>(false);
+    const profile = useStoreState((state) => state.profile);
+    const updateProfile = useStoreActions((state) => state.updateProfile);
     const profileSignUp = useStoreState((state) => state.profileSignUp);
-    const user = useStoreState((state) => state.user);
+    const userSignIn = useStoreState((state) => state.user);
+    const user = profile?.user || userSignIn;
+    const university = user?.university;
 
-    if (!profileSignUp.learningLanguage || !profileSignUp.university || !user) {
-        return <Redirect to="/signup/pairing/languages" />;
+    if ((!profileSignUp.learningLanguage && !loading) || !university || !user) {
+        return <Redirect to={`${isSignUp ? '/' + isSignUp : '/'}pairing/languages`} />;
     }
 
+    const askNewLanguage = async () => {
+        setLoading(true);
+        if (!profileSignUp.learningLanguage || !profileSignUp.learningLanguageLevel || !profileSignUp.pedagogy) {
+            return await showToast({ message: t('errors.global'), duration: 1000 });
+        }
+        const result = await askForLearningLanguage.execute(
+            profile!.id,
+            profileSignUp.learningLanguage,
+            profileSignUp.learningLanguageLevel,
+            profileSignUp.pedagogy,
+            !!profileSignUp.sameAge,
+            !!profileSignUp.sameGender,
+            profileSignUp.campus?.id,
+            !!profileSignUp.isForCertificate,
+            !!profileSignUp.isForProgram
+        );
+
+        if (result instanceof Error) {
+            setLoading(false);
+            return await showToast({ message: t(result.message), duration: 1000 });
+        }
+
+        updateProfile({ learningLanguage: result });
+        return (window.location.href = '/home');
+    };
+
     const nextStep = async () => {
+        setLoading(true);
         if (
-            !profileSignUp.age ||
-            !profileSignUp.role ||
-            !profileSignUp.gender ||
-            !profileSignUp.university ||
             !profileSignUp.nativeLanguage ||
             !profileSignUp.otherLanguages ||
             !profileSignUp.learningLanguage ||
@@ -33,8 +63,10 @@ const PairingFinalPage: React.FC = () => {
             !profileSignUp.pedagogy ||
             !profileSignUp.frequency ||
             !profileSignUp.interests ||
+            !profileSignUp?.availabilities ||
             !profileSignUp.biography
         ) {
+            setLoading(false);
             return await showToast({ message: t('errors.global'), duration: 1000 });
         }
 
@@ -52,12 +84,17 @@ const PairingFinalPage: React.FC = () => {
             profileSignUp.biography,
             !!profileSignUp.isForCertificate,
             !!profileSignUp.isForProgram,
+            profileSignUp.availabilities,
+            profileSignUp.availabilityNote,
+            profileSignUp.availabilityNotePrivate,
             profileSignUp.campus?.id
         );
 
         if (result instanceof Error) {
+            setLoading(false);
             return await showToast({ message: t(result.message), duration: 1000 });
         }
+        setLoading(false);
         return (window.location.href = '/home');
     };
 
@@ -70,19 +107,22 @@ const PairingFinalPage: React.FC = () => {
             <div className={styles.container}>
                 <h1 className="title">{t('pairing_final_page.title')}</h1>
                 <div className={styles['image-container']}>
-                    <img className={styles.image} alt="avatar" src={user.avatar}></img>
+                    <img className={styles.image} alt="avatar" src={user.avatar ?? AvatarPlaceholderPng}></img>
                     <div className={styles.bubble}>
-                        <FlagBubble language={profileSignUp.learningLanguage} textColor="white" isSelected disabled />
+                        <FlagBubble language={profileSignUp.learningLanguage!} textColor="white" isSelected disabled />
                     </div>
                 </div>
                 <div className={`${styles['tandem-container']}`}>{`${t('global.tandem')} ${
-                    profileSignUp.learningLanguage.name
-                } ${codeCountryToFlag(profileSignUp.learningLanguage.code)}`}</div>
+                    profileSignUp.learningLanguage!.name
+                } ${codeLanguageToFlag(profileSignUp.learningLanguage!.code)}`}</div>
                 <span className={`${styles.description} large-margin-top`}>{`${t(
                     'pairing_final_page.congratulation'
                 )},`}</span>
                 <span className={styles.description}>{t('pairing_final_page.congratulation_text')}</span>
-                <button className="primary-button large-margin-top" onClick={nextStep}>
+                <button
+                    className="primary-button large-margin-top"
+                    onClick={() => (isSignUp ? nextStep() : askNewLanguage())}
+                >
                     {t('pairing_final_page.validate_button')}
                 </button>
             </div>

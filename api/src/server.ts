@@ -8,11 +8,19 @@ import { NestExpressApplication } from '@nestjs/platform-express';
 import { DocumentBuilder, OpenAPIObject, SwaggerModule } from '@nestjs/swagger';
 import { AppModule } from './app.module';
 import { DomainErrorFilter, PrismaClientExceptionFilter } from './api/filters';
-import { CollectionInterceptor } from './api/interceptors';
+import {
+  CollectionInterceptor,
+  HttpLoggerInterceptor,
+} from './api/interceptors';
+import { configuration, getLoggerLevels } from './configuration';
 
 export class Server {
   public async run(port: number): Promise<void> {
-    const app = await NestFactory.create<NestExpressApplication>(AppModule);
+    const logLevel = configuration().logLevel;
+    const app = await NestFactory.create<NestExpressApplication>(AppModule, {
+      logger: getLoggerLevels(logLevel),
+    });
+    console.info(`Log level set to ${logLevel}`);
 
     this.addGlobalPipes(app);
     this.addGlobalFilters(app);
@@ -47,6 +55,8 @@ export class Server {
         groups: ['read'],
       }),
     );
+
+    app.useGlobalInterceptors(new HttpLoggerInterceptor());
 
     app.useGlobalInterceptors(new CollectionInterceptor());
   }

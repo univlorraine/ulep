@@ -1,3 +1,4 @@
+import { ValidateTandemUsecase } from './usecases/tandem/validate-tandem.usecase';
 import { Module, Provider } from '@nestjs/common';
 import { ProvidersModule } from 'src/providers/providers.module';
 import { MatchScorer } from './services/MatchScorer';
@@ -52,7 +53,7 @@ import {
   GetTestsUsecase,
   GetUniversitiesUsecase,
   GetUniversityUsecase,
-  GetUserMatchUsecase,
+  GetLearningLanguageMatchesUsecase,
   GetUserUsecase,
   GetUsersUsecase,
   UpdateCountryStatusUsecase,
@@ -66,6 +67,9 @@ import {
   UploadAvatarUsecase,
   UpdateReportCategoryUsecase,
   CreateUnsubscribeReportUsecase,
+  GetLearningLanguagesUsecase,
+  GetLearningLanguageOfIdUsecase,
+  RefuseTandemUsecase,
 } from './usecases';
 import { UploadObjectiveImageUsecase } from 'src/core/usecases/media/upload-objective-image.usecase';
 import { UpdateObjectiveUsecase } from 'src/core/usecases/objective/update-objective.usecase';
@@ -78,6 +82,7 @@ import {
   UpdateCampusUsecase,
 } from 'src/core/usecases/campus';
 import { FindAllSuggestedLanguageUsecase } from 'src/core/usecases/language/find-all-suggested-language.usecase';
+import { GetLearningLanguageTandemUsecase } from './usecases/learningLanguage/getLearningLanguageTandem.usecase';
 
 const usecases: Provider[] = [
   //Campus
@@ -147,11 +152,17 @@ const usecases: Provider[] = [
   GetProfilesUsecase,
   GetProfileUsecase,
   CreateLearningLanguageUseCase,
+  // LearningLanguages
+  GetLearningLanguagesUsecase,
+  GetLearningLanguageOfIdUsecase,
+  GetLearningLanguageTandemUsecase,
   // Tandems
   CreateTandemUsecase,
   GenerateTandemsUsecase,
   GetTandemsUsecase,
-  GetUserMatchUsecase,
+  GetLearningLanguageMatchesUsecase,
+  ValidateTandemUsecase,
+  RefuseTandemUsecase,
   // Universities
   CreatePartnerUniversityUsecase,
   CreateUniversityUsecase,

@@ -6,7 +6,11 @@ const Store = createStore<TokenStoreTypes>(
     persist(
         {
             accessToken: '',
+            language: '',
             refreshToken: '',
+            setLanguage: action((state, payload) => {
+                state.language = payload.language;
+            }),
             setProfile: action((state, payload) => {
                 state.profile = payload.profile;
                 if (state.profileSignUp) {
@@ -34,6 +38,11 @@ const Store = createStore<TokenStoreTypes>(
             updateProfile: action((state, payload) => {
                 const profile = state.profile;
                 if (profile && payload.avatar) profile.user.avatar = payload.avatar;
+                if (profile && payload.learningLanguage) {
+                    state.profileSignUp = new ProfileSignUp();
+                    profile.learningLanguages = [...profile.learningLanguages, payload.learningLanguage];
+                }
+                if (profile && payload.acceptsEmail !== undefined) profile.user.acceptsEmail = payload.acceptsEmail;
             }),
             updateProfileSignUp: action((state, payload) => {
                 const profile = state.profileSignUp;

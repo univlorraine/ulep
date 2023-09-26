@@ -1,6 +1,6 @@
 import qsAdapter from '../providers/qsAdapter';
 
-interface InterestsParams {
+export interface InterestsParams {
     pagination: {
         page: string;
         perPage: string;

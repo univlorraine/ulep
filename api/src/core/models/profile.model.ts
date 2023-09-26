@@ -1,5 +1,4 @@
 import { ProfileLanguagesException } from '../errors/profile-exceptions';
-import { Campus } from './campus.model';
 import { Interest } from './interest.model';
 import { Language } from './language.model';
 import { LearningLanguage } from './learning-language.model';
@@ -13,22 +12,35 @@ export enum LearningType {
   BOTH = 'BOTH',
 }
 
+export enum AvailabilitesOptions {
+  UNAVAILABLE = 'UNAVAILABLE',
+  AVAILABLE = 'AVAILABLE',
+  VERY_AVAILABLE = 'VERY_AVAILABLE',
+}
+
+export interface Availabilites {
+  monday: AvailabilitesOptions;
+  tuesday: AvailabilitesOptions;
+  wednesday: AvailabilitesOptions;
+  thursday: AvailabilitesOptions;
+  friday: AvailabilitesOptions;
+  saturday: AvailabilitesOptions;
+  sunday: AvailabilitesOptions;
+}
+
 export type CreateProfileProps = {
   id: string;
   user: User;
   nativeLanguage: Language;
   masteredLanguages: Language[];
   learningLanguages: LearningLanguage[];
-  learningType: LearningType;
   meetingFrequency: string;
-  sameGender: boolean;
-  sameAge: boolean;
   objectives: LearningObjective[];
   interests: Interest[];
+  availabilities?: Availabilites;
+  availabilitiesNote?: string;
+  availavilitiesNotePrivacy?: boolean;
   biography?: { [key: string]: string };
-  campus?: Campus;
-  certificateOption?: boolean;
-  specificProgram?: boolean;
   createdAt?: Date;
 };
 
@@ -43,25 +55,19 @@ export class Profile {
 
   readonly learningLanguages: LearningLanguage[];
 
-  readonly learningType: LearningType;
-
   readonly meetingFrequency: string;
-
-  readonly sameGender: boolean;
-
-  readonly sameAge: boolean;
 
   readonly objectives: LearningObjective[];
 
   readonly interests: Interest[];
 
+  readonly availabilities?: Availabilites;
+
+  readonly availabilitiesNote?: string;
+
+  readonly availavilitiesNotePrivacy?: boolean;
+
   readonly biography?: { [key: string]: string };
-
-  readonly campus?: Campus;
-
-  readonly certificateOption?: boolean;
-
-  readonly specificProgram?: boolean;
 
   readonly createdAt?: Date;
 
@@ -81,16 +87,13 @@ export class Profile {
     this.nativeLanguage = props.nativeLanguage;
     this.masteredLanguages = [...props.masteredLanguages];
     this.learningLanguages = learningLanguages;
-    this.learningType = props.learningType;
     this.meetingFrequency = props.meetingFrequency;
-    this.sameGender = props.sameGender;
-    this.sameAge = props.sameAge;
+    this.availabilities = props.availabilities;
+    this.availabilitiesNote = props.availabilitiesNote;
+    this.availavilitiesNotePrivacy = props.availavilitiesNotePrivacy;
     this.objectives = [...props.objectives];
     this.interests = [...props.interests];
     this.biography = props.biography;
-    this.campus = props.campus;
-    this.certificateOption = props.certificateOption;
-    this.specificProgram = props.specificProgram;
     this.createdAt = props.createdAt;
 
     this.assertLanguesAreUnique();
@@ -132,6 +135,12 @@ export class Profile {
     const spokenLanguages = [this.nativeLanguage, ...this.masteredLanguages];
     return spokenLanguages.some(
       (spokenLanguage) => spokenLanguage.id === language.id,
+    );
+  }
+
+  public isLearningLanguage(language: Language): boolean {
+    return this.learningLanguages.some(
+      (learningLanguage) => learningLanguage.language.id === language.id,
     );
   }
 }

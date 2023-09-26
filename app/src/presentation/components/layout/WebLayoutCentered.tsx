@@ -7,6 +7,7 @@ import Header from '../Header';
 
 interface WebLayoutCenteredProps {
     backgroundIconColor: string;
+    goBackPressed?: () => void;
     headerColor: string;
     headerPercentage: number;
     headerTitle: string;
@@ -15,6 +16,7 @@ interface WebLayoutCenteredProps {
 
 const WebLayoutCentered: React.FC<WebLayoutCenteredProps> = ({
     backgroundIconColor,
+    goBackPressed,
     headerColor,
     headerPercentage,
     headerTitle,
@@ -32,7 +34,7 @@ const WebLayoutCentered: React.FC<WebLayoutCenteredProps> = ({
                 )}
                 <div style={{ backgroundColor: headerColor }} className="page content-wrapper">
                     <div className="white-centered-div">
-                        <Header progressColor={headerColor} progressPercentage={headerPercentage} title={headerTitle} />
+                        <Header goBackPressed={goBackPressed} progressColor={headerColor} progressPercentage={headerPercentage} title={headerTitle} />
                         {children}
                     </div>
                 </div>

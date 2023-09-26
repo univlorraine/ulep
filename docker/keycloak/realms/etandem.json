@@ -1,81 +1,141 @@
 {
-  "realm": "etandem",
-  "enabled": true,
-  "registrationAllowed": true,
-  "registrationEmailAsUsername": true,
-  "accessTokenLifespan": 600,
-  "accessCodeLifespan": 600,
-  "requiredCredentials": [
-    "password"
-  ],
-  "smtpServer": {
-    "starttls": "false",
-    "port": "1025",
-    "host": "mailer",
-    "from": "contact@ulep.io",
-    "ssl": "false"
-  },
-  "clients": [
-    {
-      "clientId": "api",
-      "name": "API",
-      "clientAuthenticatorType": "client-secret",
-      "secret": "bN49BuApmmtAODeOWOG8iKOOuJdN3KE6",
-      "bearerOnly": false,
-      "standardFlowEnabled": false,
-      "directAccessGrantsEnabled": true
+    "realm": "etandem",
+    "enabled": true,
+    "registrationAllowed": true,
+    "registrationEmailAsUsername": true,
+    "accessTokenLifespan": 600,
+    "accessCodeLifespan": 600,
+    "requiredCredentials": ["password"],
+    "smtpServer": {
+        "starttls": "false",
+        "port": "1025",
+        "host": "mailer",
+        "from": "contact@ulep.io",
+        "ssl": "false"
     },
-    {
-      "clientId": "react-admin",
-      "name": "admin",
-      "clientAuthenticatorType": "client-secret",
-      "secret": "uKBywX2HlxfvKgxZoKZrbiBSx49CST6W",
-      "protocol": "openid-connect",
-      "standardFlowEnabled": true,
-      "directAccessGrantsEnabled": true,
-      "redirectUris": [
-        "http://localhost:3001/auth-callback"
-      ]
+    "clients": [
+        {
+            "clientId": "api",
+            "name": "API",
+            "clientAuthenticatorType": "client-secret",
+            "secret": "bN49BuApmmtAODeOWOG8iKOOuJdN3KE6",
+            "bearerOnly": false,
+            "standardFlowEnabled": false,
+            "directAccessGrantsEnabled": true,
+            "serviceAccountsEnabled": true,
+            "protocolMappers": [
+                {
+                    "id": "b38e1a26-d649-4370-879d-c7499d023daa",
+                    "name": "universityId",
+                    "protocol": "openid-connect",
+                    "protocolMapper": "oidc-usermodel-attribute-mapper",
+                    "consentRequired": false,
+                    "config": {
+                        "aggregate.attrs": "false",
+                        "userinfo.token.claim": "true",
+                        "multivalued": "false",
+                        "user.attribute": "universityId",
+                        "id.token.claim": "true",
+                        "access.token.claim": "true",
+                        "claim.name": "universityId",
+                        "jsonType.label": "String"
+                    }
+                }
+            ]
+        },
+        {
+            "clientId": "react-admin",
+            "name": "admin",
+            "clientAuthenticatorType": "client-secret",
+            "secret": "uKBywX2HlxfvKgxZoKZrbiBSx49CST6W",
+            "protocol": "openid-connect",
+            "standardFlowEnabled": true,
+            "directAccessGrantsEnabled": true,
+            "redirectUris": ["http://localhost:3001/auth-callback"],
+            "protocolMappers": [
+                {
+                    "id": "c07966d2-645c-4b0b-ba91-52916817d597",
+                    "name": "universityId",
+                    "protocol": "openid-connect",
+                    "protocolMapper": "oidc-usermodel-attribute-mapper",
+                    "consentRequired": false,
+                    "config": {
+                        "aggregate.attrs": "false",
+                        "userinfo.token.claim": "true",
+                        "multivalued": "false",
+                        "user.attribute": "universityId",
+                        "id.token.claim": "true",
+                        "access.token.claim": "true",
+                        "claim.name": "universityId",
+                        "jsonType.label": "String"
+                    }
+                }
+            ]
+        }
+    ],
+    "groups": [
+        {
+            "id": "02736a0f-4679-4329-a877-2ce87aaea569",
+            "name": "Administrators",
+            "path": "/Administrators",
+            "attributes": {},
+            "realmRoles": ["admin"],
+            "clientRoles": {},
+            "subGroups": []
+        },
+        {
+            "id": "eba50e06-d584-4fc8-9d6b-908169202cea",
+            "name": "Managers",
+            "path": "/Managers",
+            "attributes": {},
+            "realmRoles": ["manager"],
+            "clientRoles": {},
+            "subGroups": []
+        }
+    ],
+    "users": [
+        {
+            "id": "8ef3f4a1-c828-4172-9f50-5820482f7969",
+            "createdTimestamp": 1695303592667,
+            "username": "service-account-api",
+            "enabled": true,
+            "totp": false,
+            "emailVerified": false,
+            "serviceAccountClientId": "api",
+            "disableableCredentialTypes": [],
+            "requiredActions": [],
+            "realmRoles": ["default-roles-etandem"],
+            "clientRoles": {
+                "realm-management": [
+                    "query-users",
+                    "manage-users",
+                    "manage-authorization"
+                ]
+            },
+            "notBefore": 0,
+            "groups": []
+        }
+    ],
+    "roles": {
+        "realm": [
+            {
+                "id": "4451442a-a6cc-40cf-bf4a-4128cca5dcd5",
+                "name": "admin",
+                "description": "Group of users who can manage all parts of the application",
+                "composite": false,
+                "clientRole": false,
+                "containerId": "616eb353-7524-4a46-9cf3-44612cba6c90",
+                "attributes": {}
+            },
+            {
+                "id": "01a25df8-b1ef-42e6-8052-efccce028672",
+                "name": "manager",
+                "description": "Group of users who can manage all parts of their universities",
+                "composite": false,
+                "clientRole": false,
+                "containerId": "616eb353-7524-4a46-9cf3-44612cba6c90",
+                "attributes": {}
+            }
+        ]
     }
-  ],
-  "groups": [{
-    "id": "02736a0f-4679-4329-a877-2ce87aaea569",
-    "name": "Administrators",
-    "path": "/Administrators",
-    "attributes": {},
-    "realmRoles": ["admin"],
-    "clientRoles": {},
-    "subGroups": []
- },
- {
-    "id": "eba50e06-d584-4fc8-9d6b-908169202cea",
-    "name": "Managers",
-    "path": "/Managers",
-    "attributes": {},
-    "realmRoles": ["manager"],
-    "clientRoles": {},
-    "subGroups": []
- }],
-  "roles": {
-    "realm": [
-      {
-        "id": "4451442a-a6cc-40cf-bf4a-4128cca5dcd5",
-        "name": "admin",
-        "description": "Group of users who can manage all parts of the application",
-        "composite": false,
-        "clientRole": false,
-        "containerId": "616eb353-7524-4a46-9cf3-44612cba6c90",
-        "attributes": {}
-      },
-      {
-        "id": "01a25df8-b1ef-42e6-8052-efccce028672",
-        "name": "manager",
-        "description": "Group of users who can manage all parts of their universities",
-        "composite": false,
-        "clientRole": false,
-        "containerId": "616eb353-7524-4a46-9cf3-44612cba6c90",
-        "attributes": {}
-      }
-    ]
-  }
 }

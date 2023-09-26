@@ -1,0 +1,29 @@
+import { RefusedTandem } from 'src/core/models/refused-tandem.model';
+import { RefusedTandemsRepository } from './../../../core/ports/refused-tandems.repository';
+
+export class InMemoryRefusedTandemsRepository
+  implements RefusedTandemsRepository
+{
+  #refusedTandems: RefusedTandem[];
+
+  constructor() {
+    this.#refusedTandems = [];
+  }
+
+  save(item): Promise<void> {
+    this.#refusedTandems.push(item);
+    return Promise.resolve();
+  }
+
+  getAll(): Promise<RefusedTandem[]> {
+    return Promise.resolve(this.#refusedTandems);
+  }
+
+  getForLearningLanguage(learningLanguageId: string): Promise<RefusedTandem[]> {
+    return Promise.resolve(
+      this.#refusedTandems.filter((item) =>
+        item.learningLanguageIds.includes(learningLanguageId),
+      ),
+    );
+  }
+}

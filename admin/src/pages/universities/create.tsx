@@ -17,7 +17,9 @@ const CreateUniversity = () => {
         admissionEnd: Date,
         codes: string[],
         domains: string[],
-        website?: string
+        pairingMode: string,
+        website?: string,
+        notificationEmail?: string
     ) => {
         const payload = {
             name,
@@ -27,7 +29,9 @@ const CreateUniversity = () => {
             admissionEnd,
             codes,
             domains,
+            pairingMode,
             website,
+            notificationEmail: notificationEmail || undefined,
         };
 
         try {
@@ -35,7 +39,7 @@ const CreateUniversity = () => {
                 'universities/partners',
                 { data: payload },
                 {
-                    onSettled: (data: any, error: Error) => {
+                    onSettled: (_, error: unknown) => {
                         if (!error) {
                             return redirect('/universities');
                         }

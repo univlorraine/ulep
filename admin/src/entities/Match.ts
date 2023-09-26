@@ -1,0 +1,18 @@
+import { LearningLanguage } from './LearningLanguage';
+
+type MatchScore = {
+    level: number;
+    age: number;
+    status: number;
+    goals: number;
+    interests: number;
+    gender: number;
+    university: number;
+    total: number;
+};
+
+export type Match = {
+    id: string;
+    score: MatchScore;
+    target: LearningLanguage;
+};

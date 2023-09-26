@@ -1,20 +1,13 @@
 import * as Swagger from '@nestjs/swagger';
-import { ArrayNotEmpty, IsEnum } from 'class-validator';
-import { TandemStatus } from 'src/core/models/tandem.model';
-import { CreateTandemCommand } from 'src/core/usecases/tandem/create-tandem.usecase';
+import { ArrayNotEmpty, IsBoolean, IsOptional } from 'class-validator';
 
-export class CreateTandemRequest implements CreateTandemCommand {
-  @Swagger.ApiProperty({ type: 'string', isArray: true })
+export class CreateTandemRequest {
+  @Swagger.ApiProperty({ type: 'string', isArray: true, minItems: 2 })
   @ArrayNotEmpty()
   learningLanguageIds: string[];
 
-  @Swagger.ApiProperty({ type: 'string', enum: TandemStatus })
-  @IsEnum(TandemStatus)
-  status: TandemStatus;
-}
-
-export class UpdateTandemRequest {
-  @Swagger.ApiProperty({ type: 'string', enum: ['active', 'inactive'] })
-  @IsEnum(TandemStatus)
-  status: TandemStatus;
+  @Swagger.ApiProperty()
+  @IsBoolean()
+  @IsOptional()
+  relaunch?: boolean;
 }

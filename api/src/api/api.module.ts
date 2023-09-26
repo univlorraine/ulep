@@ -4,7 +4,6 @@ import { CoreModule } from 'src/core/core.module';
 import { HealthController } from './controllers/health.controller';
 import { InterestController } from './controllers/interest.controller';
 import { LanguageController } from './controllers/language.controller';
-import { MatchController } from './controllers/match.controller';
 import { ProficiencyController } from './controllers/proficiency.controller';
 import { ReportController } from './controllers/report.controller';
 import { SecurityController } from './controllers/security.controller';
@@ -18,6 +17,14 @@ import { AUTHENTICATOR } from './services/authenticator.interface';
 import { KeycloakAuthenticator } from './services/keycloak.authenticator';
 import { ObjectiveController } from './controllers/objective.controller';
 import { CampusController } from 'src/api/controllers/campus.controller';
+import { LearningLanguageController } from './controllers/learningLanguage.controller';
+import { ROUTINE_EXECUTION_REPOSITORY } from 'src/core/ports/routine-execution.repository';
+import { PrismaRoutineExecutionRepository } from 'src/providers/persistance/repositories/prisma-routine-execution-repository';
+import { PrismaService } from '@app/common';
+import { RoutineExecutionController } from './controllers/routine-execution.controller';
+import { InstanceController } from 'src/api/controllers/instance.controller';
+import { STORAGE_INTERFACE } from 'src/core/ports/storage.interface';
+import { MinioStorage } from 'src/providers/storage/minio.storage';
 
 @Module({
   imports: [CoreModule, TerminusModule],
@@ -26,8 +33,8 @@ import { CampusController } from 'src/api/controllers/campus.controller';
     CountryController,
     HealthController,
     InterestController,
+    InstanceController,
     LanguageController,
-    MatchController,
     ObjectiveController,
     ProficiencyController,
     ProfileController,
@@ -37,11 +44,22 @@ import { CampusController } from 'src/api/controllers/campus.controller';
     UniversityController,
     UploadsController,
     UserController,
+    LearningLanguageController,
+    RoutineExecutionController,
   ],
   providers: [
+    PrismaService,
     {
       provide: AUTHENTICATOR,
       useClass: KeycloakAuthenticator,
+    },
+    {
+      provide: ROUTINE_EXECUTION_REPOSITORY,
+      useClass: PrismaRoutineExecutionRepository,
+    },
+    {
+      provide: STORAGE_INTERFACE,
+      useClass: MinioStorage,
     },
   ],
 })

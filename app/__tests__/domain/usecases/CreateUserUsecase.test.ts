@@ -8,6 +8,7 @@ import LoginUsecase from '../../mocks/usecase/LoginUsecase';
 const payload: UserCommand = {
     id: 'id',
     avatar: { id: 'id', url: 'url' },
+    acceptsEmail: true,
     email: 'email',
     firstname: 'firstname',
     lastname: 'lastname',
@@ -208,6 +209,44 @@ describe('createUserUsecase', () => {
         expect(result).toStrictEqual(new Error('signup_informations_page.error_code'));
     });
 
+    it('execute must return an error if adapter has code 400 with image weight error message', async () => {
+        expect.assertions(1);
+        adapter.mockError({ error: { statusCode: 400, message: 'expected size' } });
+        const result = await usecase.execute(
+            'email',
+            'password',
+            'firstname',
+            'lastname',
+            'male',
+            'CODE',
+            22,
+            university,
+            'student',
+            'FR',
+            file
+        );
+        expect(result).toStrictEqual(new Error('signup_informations_page.error_picture_weight'));
+    });
+
+    it('execute must return an error if adapter has code 400 with image type error message', async () => {
+        expect.assertions(1);
+        adapter.mockError({ error: { statusCode: 400, message: 'expected type' } });
+        const result = await usecase.execute(
+            'email',
+            'password',
+            'firstname',
+            'lastname',
+            'male',
+            'CODE',
+            22,
+            university,
+            'student',
+            'FR',
+            file
+        );
+        expect(result).toStrictEqual(new Error('signup_informations_page.error_picture_format'));
+    });
+
     it('execute must return an error if adapter has code 400 with domain error message', async () => {
         expect.assertions(1);
         adapter.mockError({ error: { statusCode: 400, message: 'Domain is invalid' } });
@@ -225,5 +264,24 @@ describe('createUserUsecase', () => {
             file
         );
         expect(result).toStrictEqual(new Error('signup_informations_page.error_domain'));
+    });
+
+    it('execute must return an error if adapter has code 409 with domain error message', async () => {
+        expect.assertions(1);
+        adapter.mockError({ error: { statusCode: 409 } });
+        const result = await usecase.execute(
+            'email',
+            'password',
+            'firstname',
+            'lastname',
+            'male',
+            'CODE',
+            22,
+            university,
+            'student',
+            'FR',
+            file
+        );
+        expect(result).toStrictEqual(new Error('signup_informations_page.error_email_already_exist'));
     });
 });

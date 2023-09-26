@@ -42,13 +42,11 @@ export class PrismaProfileRepository implements ProfileRepository {
     await this.prisma.profiles.create({
       data: {
         id: profile.id,
-        learning_type: profile.learningType,
-        same_gender: profile.sameGender,
-        same_age: profile.sameAge,
         meeting_frequency: profile.meetingFrequency,
+        availabilities: JSON.stringify(profile.availabilities),
+        availabilities_note: profile.availabilitiesNote,
+        availabilities_note_privacy: profile.availavilitiesNotePrivacy,
         bio: profile.biography,
-        certificate_option: profile.certificateOption,
-        specific_program: profile.specificProgram,
         User: {
           connect: { id: profile.user.id },
         },
@@ -62,6 +60,14 @@ export class PrismaProfileRepository implements ProfileRepository {
                 connect: { code: learningLanguage.language.code },
               },
               level: learningLanguage.level,
+              learning_type: learningLanguage.learningType,
+              same_gender: learningLanguage.sameGender,
+              same_age: learningLanguage.sameAge,
+              certificate_option: learningLanguage.certificateOption,
+              specific_program: learningLanguage.specificProgram,
+              Campus: learningLanguage.campus && {
+                connect: { id: learningLanguage.campus.id },
+              },
             };
           }),
         },
@@ -75,9 +81,6 @@ export class PrismaProfileRepository implements ProfileRepository {
         },
         Interests: {
           connect: profile.interests.map((interest) => ({ id: interest.id })),
-        },
-        Campus: profile.campus && {
-          connect: { id: profile.campus.id },
         },
       },
     });

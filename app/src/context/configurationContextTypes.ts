@@ -2,6 +2,7 @@ import CameraAdapterInterface from '../adapter/interfaces/CameraAdapter.interfac
 import Configuration from '../domain/entities/Confirguration';
 import AskForAccountDeletionUsecaseInterface from '../domain/interfaces/AskForAccountDeletionUsecase.interface';
 import AskForLanguageUsecaseInterface from '../domain/interfaces/AskForLanguageUsecase.interface';
+import AskForLearningLanguageUsecaseInterface from '../domain/interfaces/AskForLearningLanguageUsecase.interface';
 import CreateProfileUsecaseInterface from '../domain/interfaces/CreateProfileUsecase.interface';
 import CreateReportUsecaseInterface from '../domain/interfaces/CreateReportUsecase.interface';
 import CreateUserUsecaseInterface from '../domain/interfaces/CreateUserUsecase.interface';
@@ -24,6 +25,7 @@ import UpdateNotificationPermissionUsecaseInterface from '../domain/interfaces/U
 export interface ConfigContextValueType {
     askForAccountDeletion: AskForAccountDeletionUsecaseInterface;
     askForLanguage: AskForLanguageUsecaseInterface;
+    askForLearningLanguage: AskForLearningLanguageUsecaseInterface;
     cameraAdapter: CameraAdapterInterface;
     configuration: Configuration;
     createProfile: CreateProfileUsecaseInterface;

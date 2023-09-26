@@ -1,12 +1,10 @@
 import TextContent from './TextContent';
 
-class Question {
-    constructor(
-        readonly id: string,
-        readonly answer: boolean,
-        readonly level: string,
-        readonly value: TextContent
-    ) {}
-}
+type Question = {
+    id: string;
+    answer: boolean;
+    level: string;
+    value: TextContent;
+};
 
 export default Question;

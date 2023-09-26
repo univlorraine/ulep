@@ -23,7 +23,7 @@ const EditInterest = () => {
                 'interests',
                 { data: payload },
                 {
-                    onSettled: (data: any, error: Error) => {
+                    onSettled: (_, error: unknown) => {
                         if (!error) {
                             return redirect('/interests/categories');
                         }
@@ -41,9 +41,9 @@ const EditInterest = () => {
 
     return (
         <Edit title={translate('interests.update.title')}>
-            <WithRecord
+            <WithRecord<Interest>
                 label="interests"
-                render={(record: Interest) => (
+                render={(record) => (
                     <InterestForm
                         handleSubmit={(name: string, translations: IndexedTranslation[]) =>
                             handleSubmit(record.id, name, translations)

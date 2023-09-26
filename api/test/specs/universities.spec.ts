@@ -18,6 +18,9 @@ import { AuthenticationGuard } from 'src/api/guards';
 import { TestAuthGuard } from '../utils/TestAuthGuard';
 import { InMemoryCountryCodesRepository } from 'src/providers/persistance/repositories/in-memory-country-repository';
 import { COUNTRY_REPOSITORY } from 'src/core/ports/country.repository';
+import { PairingMode } from 'src/core/models';
+import { EMAIL_GATEWAY } from 'src/core/ports/email.gateway';
+import InMemoryEmailGateway from 'src/providers/gateway/in-memory-email.gateway';
 
 describe('Universities', () => {
   let app: TestServer;
@@ -38,6 +41,7 @@ describe('Universities', () => {
 
   const universityFactory = new UniversityFactory();
   const repository = new InMemoryUniversityRepository();
+  const inMemoryEmail = new InMemoryEmailGateway();
 
   beforeAll(async () => {
     userRepositoy.init([user]);
@@ -52,6 +56,8 @@ describe('Universities', () => {
       .useValue(countryRepository)
       .overrideProvider(USER_REPOSITORY)
       .useValue(userRepositoy)
+      .overrideProvider(EMAIL_GATEWAY)
+      .useValue(inMemoryEmail)
       .overrideGuard(AuthenticationGuard)
       .useValue(TestAuthGuard)
       .overrideProvider(AUTHENTICATOR)
@@ -86,6 +92,7 @@ describe('Universities', () => {
         codes: [],
         domains: [],
         countryId: country.id,
+        pairingMode: PairingMode.SEMI_AUTOMATIC,
       })
       .expect(201);
   });
@@ -107,6 +114,7 @@ describe('Universities', () => {
         admissionStart: '2021-01-01',
         admissionEnd: '2021-12-31',
         website: 'https://www.ox.ac.uk/',
+        pairingMode: PairingMode.SEMI_AUTOMATIC,
       })
       .expect(400);
   });

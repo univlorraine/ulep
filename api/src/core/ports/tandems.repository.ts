@@ -14,15 +14,25 @@ export interface TandemRepository {
 
   saveMany(tandems: Tandem[]): Promise<void>;
 
+  ofId(id: string): Promise<Tandem>;
+
+  update(tandem: Tandem): Promise<void>;
+
   findWhere(props: FindWhereProps): Promise<Collection<Tandem>>;
 
   getExistingTandems(): Promise<Tandem[]>;
 
   getTandemsForProfile(profileId: string): Promise<Tandem[]>;
 
+  getTandemForLearningLanguage(learningLanguageId: string): Promise<Tandem>;
+
+  getTandemOfLearningLanguages(learningLanguageIds: string[]): Promise<Tandem>;
+
   deleteTandemNotLinkedToLearningLangues(): Promise<number>;
 
   deleteTandemLinkedToLearningLanguages(
     learningLanguagesIds: string[],
   ): Promise<number>;
+
+  delete(id: string): Promise<void>;
 }

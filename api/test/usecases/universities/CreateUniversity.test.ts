@@ -8,6 +8,7 @@ import { InMemoryLanguageRepository } from '../../../src/providers/persistance/r
 import { InMemoryUniversityRepository } from '../../../src/providers/persistance/repositories/in-memory-university-repository';
 import { CreateUniversityUsecase } from '../../../src/core/usecases';
 import { InMemoryCountryCodesRepository } from 'src/providers/persistance/repositories/in-memory-country-repository';
+import { PairingMode } from 'src/core/models';
 
 describe('CreateUniversity', () => {
   const languageFactory = new LanguageFactory();
@@ -42,6 +43,7 @@ describe('CreateUniversity', () => {
       admissionEnd: new Date('2000-12-31'),
       countryId: countries[0].id,
       campusNames: [],
+      pairingMode: PairingMode.AUTOMATIC,
     });
 
     const instance = await universityRepository.ofName(
@@ -68,6 +70,7 @@ describe('CreateUniversity', () => {
         campusNames: [],
         admissionStart: new Date('2000-01-01'),
         admissionEnd: new Date('2000-12-31'),
+        pairingMode: PairingMode.AUTOMATIC,
       });
     } catch (error) {
       exception = error;

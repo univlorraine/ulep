@@ -1,4 +1,4 @@
-import { BiographySignUp } from '../entities/ProfileSignUp';
+import { Availabilites, BiographySignUp } from '../entities/ProfileSignUp';
 
 interface CreateProfileUsecaseInterface {
     execute(
@@ -15,6 +15,9 @@ interface CreateProfileUsecaseInterface {
         bios: BiographySignUp,
         isForCertificate: boolean,
         isForProgram: boolean,
+        availabilities: Availabilites,
+        availabilitiesNote?: string,
+        availabilitiesNotePrivacy?: boolean,
         campusId?: string
     ): Promise<undefined | Error>;
 }

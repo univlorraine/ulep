@@ -18,3 +18,6 @@ values.yaml
 temp.yaml
 values-local.yaml
 helm/project/old
+
+# Docker data
+docker/minio/.minio.sys

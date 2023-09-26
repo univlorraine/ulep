@@ -6,6 +6,7 @@ import DomainHttpAdapter from '../../mocks/adapters/HttpAdapter';
 const payload: UserCommand = {
     id: 'userId',
     avatar: { id: 'avatarId', url: 'url' },
+    acceptsEmail: true,
     email: 'email',
     firstname: 'firstname',
     lastname: 'lastname',
@@ -38,9 +39,9 @@ describe('getUser', () => {
         expect.assertions(2);
         jest.spyOn(adapter, 'get');
         adapter.mockJson({ parsedBody: {} });
-        await usecase.execute();
+        await usecase.execute('accessToken');
         expect(adapter.get).toHaveBeenCalledTimes(1);
-        expect(adapter.get).toHaveBeenCalledWith('/users/me', undefined, false);
+        expect(adapter.get).toHaveBeenCalledWith('/users/me', {}, false, 'accessToken');
     });
 
     it('execute must return an expected response', async () => {
@@ -48,7 +49,7 @@ describe('getUser', () => {
 
         adapter.mockJson({ parsedBody: payload });
 
-        const result = await usecase.execute();
+        const result = await usecase.execute('accessToken');
         expect(result).toBeInstanceOf(User);
     });
 
@@ -57,14 +58,14 @@ describe('getUser', () => {
 
         adapter.mockJson({});
 
-        const result = await usecase.execute();
+        const result = await usecase.execute('accessToken');
         expect(result).toBeInstanceOf(Error);
     });
 
     it('execute must return an error if adapter return an error without status', async () => {
         expect.assertions(1);
         adapter.mockError({});
-        const result = await usecase.execute();
+        const result = await usecase.execute('accessToken');
         expect(result).toStrictEqual(new Error('errors.global'));
     });
 });

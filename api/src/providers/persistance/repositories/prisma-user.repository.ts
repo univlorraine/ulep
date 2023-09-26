@@ -80,6 +80,7 @@ export class PrismaUserRepository implements UserRepository {
         Nationality: { connect: { code: user.country } },
         status: user.status,
         deactivated_reason: user.deactivatedReason,
+        accepts_email: user.acceptsEmail,
       },
     });
 

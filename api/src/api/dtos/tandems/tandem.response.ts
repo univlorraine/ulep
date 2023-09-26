@@ -1,7 +1,6 @@
 import * as Swagger from '@nestjs/swagger';
 import { Expose } from 'class-transformer';
 import { Tandem, TandemStatus } from '../../../core/models/tandem.model';
-import { ProfileResponse } from '../profiles';
 import { LearningLanguage } from 'src/core/models';
 import { LearningLanguageResponse } from '../learning-languages';
 
@@ -25,9 +24,10 @@ export class TandemResponse {
   static fromDomain(tandem: Tandem): TandemResponse {
     return new TandemResponse({
       id: tandem.id,
-      learningLanguages: tandem.learningLanguages.map((ll) =>
-        LearningLanguageResponse.fromDomain(ll),
-      ),
+      learningLanguages:
+        tandem.learningLanguages?.map((ll) =>
+          LearningLanguageResponse.fromDomain(ll),
+        ) || [],
       status: tandem.status,
     });
   }
@@ -38,9 +38,9 @@ export class UserTandemResponse {
   @Expose({ groups: ['read'] })
   id: string | null = null;
 
-  @Swagger.ApiProperty({ type: ProfileResponse })
+  @Swagger.ApiProperty({ type: LearningLanguageResponse })
   @Expose({ groups: ['read'] })
-  partner: ProfileResponse;
+  partnerLearningLanguage: LearningLanguageResponse;
 
   @Swagger.ApiProperty({ type: 'string', enum: TandemStatus })
   @Expose({ groups: ['read'] })
@@ -48,7 +48,11 @@ export class UserTandemResponse {
 
   @Swagger.ApiProperty({ type: LearningLanguageResponse })
   @Expose({ groups: ['read'] })
-  learningLanguage: LearningLanguageResponse;
+  userLearningLanguage: LearningLanguageResponse;
+
+  @Swagger.ApiProperty({ type: 'string', isArray: true })
+  @Expose({ groups: ['read'] })
+  universityValidations: string[];
 
   constructor(partial: Partial<UserTandemResponse>) {
     Object.assign(this, partial);
@@ -80,11 +84,15 @@ export class UserTandemResponse {
 
     return new UserTandemResponse({
       id: tandem.id,
-      partner: ProfileResponse.fromDomain(learningLanguagePartner.profile),
+      partnerLearningLanguage: LearningLanguageResponse.fromDomain(
+        learningLanguagePartner,
+        true,
+      ),
       status: tandem.status,
-      learningLanguage: LearningLanguageResponse.fromDomain(
+      userLearningLanguage: LearningLanguageResponse.fromDomain(
         learningLanguageProfile,
       ),
+      universityValidations: tandem.universityValidations,
     });
   }
 }

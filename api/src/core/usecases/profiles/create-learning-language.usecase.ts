@@ -3,10 +3,14 @@ import {
   RessourceDoesNotExist,
   UnsuportedLanguageException,
 } from 'src/core/errors';
-import { ProfileHasMaxNumberOfLearningLanguages } from 'src/core/errors/profile-exceptions';
+import {
+  ProfileCampusException,
+  ProfileHasMaxNumberOfLearningLanguages,
+} from 'src/core/errors/profile-exceptions';
 import {
   LanguageStatus,
   LearningLanguage,
+  LearningType,
   ProficiencyLevel,
 } from 'src/core/models';
 import {
@@ -30,6 +34,12 @@ export interface CreateLearningLanguageCommand {
   profileId: string;
   code: string;
   level: ProficiencyLevel;
+  learningType: LearningType;
+  sameGender: boolean;
+  sameAge: boolean;
+  campusId?: string;
+  certificateOption?: boolean;
+  specificProgram?: boolean;
 }
 
 @Injectable()
@@ -66,15 +76,32 @@ export class CreateLearningLanguageUseCase {
       throw new RessourceDoesNotExist('Language does not exist');
     }
 
-    if (!language.isJokerLanguage()) {
-      if (
-        (profile.user.university.parent &&
-          !language.secondaryUniversityActive) ||
-        (!profile.user.university.parent &&
-          language.mainUniversityStatus !== LanguageStatus.PRIMARY)
-      ) {
-        throw new UnsuportedLanguageException(
-          `The language is not supported by the university`,
+    if (
+      !language.isJokerLanguage() &&
+      !profile.user.university.supportLanguage(language)
+    ) {
+      throw new UnsuportedLanguageException(
+        `The language is not supported by the university`,
+      );
+    }
+
+    if (
+      !command.campusId &&
+      (command.learningType === LearningType.TANDEM ||
+        command.learningType === LearningType.BOTH)
+    ) {
+      throw new ProfileCampusException(
+        'A campus is required for tandem / both learningType',
+      );
+    }
+    let campus;
+    if (command.campusId) {
+      campus = profile.user.university.campus.find(
+        (campus) => campus.id === command.campusId,
+      );
+      if (!campus) {
+        throw new ProfileCampusException(
+          `${command.campusId} not part of user's university`,
         );
       }
     }
@@ -84,6 +111,12 @@ export class CreateLearningLanguageUseCase {
       language,
       level: command.level,
       profile: profile,
+      learningType: command.learningType,
+      sameGender: command.sameGender,
+      sameAge: command.sameAge,
+      certificateOption: command.certificateOption,
+      specificProgram: command.specificProgram,
+      campus: campus,
     });
 
     await this.learningLanguageRepository.create(item);

@@ -1,10 +1,8 @@
 import TextContent from './TextContent';
 
-class ReportCategory {
-    constructor(
-        readonly id: string,
-        readonly name: TextContent
-    ) {}
-}
+type ReportCategory = {
+    id: string;
+    name: TextContent;
+};
 
 export default ReportCategory;

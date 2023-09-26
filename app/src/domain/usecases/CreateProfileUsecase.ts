@@ -1,7 +1,7 @@
 import { HttpResponse } from '../../adapter/BaseHttpAdapter';
 import { HttpAdapterInterface } from '../../adapter/DomainHttpAdapter';
 import ProfileCommand, { profileCommandToDomain } from '../../command/ProfileCommand';
-import { BiographySignUp } from '../entities/ProfileSignUp';
+import { Availabilites, BiographySignUp } from '../entities/ProfileSignUp';
 import CreateProfileUsecaseInterface from '../interfaces/CreateProfileUsecase.interface';
 
 class CreateProfileUsecase implements CreateProfileUsecaseInterface {
@@ -21,28 +21,39 @@ class CreateProfileUsecase implements CreateProfileUsecaseInterface {
         biography: BiographySignUp,
         isForCertificate: boolean,
         isForProgram: boolean,
+        availabilities: Availabilites,
+        availabilitiesNote?: string,
+        availabilitiesNotePrivacy?: boolean,
         campusId?: string
     ): Promise<undefined | Error> {
         try {
             const httpResponse: HttpResponse<ProfileCommand> = await this.domainHttpAdapter.post(`/profiles/`, {
                 nativeLanguageCode: nativeLanguage,
                 masteredLanguageCodes: masteredLanguages,
-                learningLanguages: [{ code: learningLanguageCode, level: cefrLevel }],
-                learningType,
+                learningLanguages: [
+                    {
+                        code: learningLanguageCode,
+                        level: cefrLevel,
+                        certificateOption: isForCertificate,
+                        learningType,
+                        specificProgram: isForProgram,
+                        campusId: campusId,
+                        sameAge: preferSameAge,
+                        sameGender: preferSameGender,
+                    },
+                ],
                 objectives: goals,
                 meetingFrequency,
                 interests,
-                sameAge: preferSameAge,
-                sameGender: preferSameGender,
                 biography: {
                     superpower: biography.power,
                     favoritePlace: biography.place,
                     experience: biography.travel,
                     anecdote: biography.incredible,
                 },
-                campusId: campusId,
-                certificateOption: isForCertificate,
-                specificProgram: isForProgram,
+                availabilities,
+                availabilitiesNote,
+                availabilitiesNotePrivacy,
             });
 
             if (!httpResponse.parsedBody) {
