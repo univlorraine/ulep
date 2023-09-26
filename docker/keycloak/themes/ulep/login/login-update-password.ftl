@@ -27,7 +27,7 @@
                     </#if>
 
                     <span id="input-error-password-requirements" class="${properties.kcInputErrorMessageClass!}" aria-live="polite" style="display:none;">
-                        Le mot de passe doit contenir au moins une majuscule, une minuscule et un chiffre.
+                        ${msg("passwordFormat")}
                     </span>
                 </div>
             </div>
