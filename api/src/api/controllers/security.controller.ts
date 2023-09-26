@@ -50,7 +50,6 @@ export class SecurityController {
     if (!user) {
       throw new RessourceDoesNotExist(body.email);
     }
-
     await this.keycloakClient.executeActionEmail(
       ['UPDATE_PASSWORD'],
       user.id,
