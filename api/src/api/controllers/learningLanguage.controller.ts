@@ -25,7 +25,7 @@ import {
 } from '../dtos';
 import { Collection } from '@app/common';
 import { GetLearningLanguageMatchsRequest } from '../dtos/learning-languages/get-learning-language-matches.request';
-import { GetUserMatchUsecase } from 'src/core/usecases';
+import { GetLearningLanguageMatchesUsecase } from 'src/core/usecases';
 import { GetLearningLanguageTandemUsecase } from 'src/core/usecases/learningLanguage/getLearningLanguageTandem.usecase';
 
 @Controller('learning-languages')
@@ -36,7 +36,7 @@ export class LearningLanguageController {
   constructor(
     private getLearningLanguagesUsecase: GetLearningLanguagesUsecase,
     private getLearningLanguageOfIdUsecase: GetLearningLanguageOfIdUsecase,
-    private getUserMatchUsecase: GetUserMatchUsecase,
+    private getLearningLanguageMatchesUsecase: GetLearningLanguageMatchesUsecase,
     private getLearningLanguageTandemUseCase: GetLearningLanguageTandemUsecase,
   ) {}
 
@@ -107,7 +107,7 @@ export class LearningLanguageController {
     @Param('id', ParseUUIDPipe) id: string,
     @Query() { count, universityIds }: GetLearningLanguageMatchsRequest,
   ) {
-    const matches = await this.getUserMatchUsecase.execute({
+    const matches = await this.getLearningLanguageMatchesUsecase.execute({
       id,
       count,
       universityIds:

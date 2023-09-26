@@ -137,4 +137,10 @@ export class Profile {
       (spokenLanguage) => spokenLanguage.id === language.id,
     );
   }
+
+  public isLearningLanguage(language: Language): boolean {
+    return this.learningLanguages.some(
+      (learningLanguage) => learningLanguage.language.id === language.id,
+    );
+  }
 }

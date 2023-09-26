@@ -4,7 +4,6 @@ import { CoreModule } from 'src/core/core.module';
 import { HealthController } from './controllers/health.controller';
 import { InterestController } from './controllers/interest.controller';
 import { LanguageController } from './controllers/language.controller';
-import { MatchController } from './controllers/match.controller';
 import { ProficiencyController } from './controllers/proficiency.controller';
 import { ReportController } from './controllers/report.controller';
 import { SecurityController } from './controllers/security.controller';
@@ -36,7 +35,6 @@ import { MinioStorage } from 'src/providers/storage/minio.storage';
     InterestController,
     InstanceController,
     LanguageController,
-    MatchController,
     ObjectiveController,
     ProficiencyController,
     ProfileController,

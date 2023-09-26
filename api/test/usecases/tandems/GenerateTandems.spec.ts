@@ -183,14 +183,14 @@ describe('GenerateTandem UC', () => {
     masteredLanguages: [],
     meetingFrequency: 'ONCE_A_WEEK',
     learningLanguages: [
-      {
+      new LearningLanguage({
         id: 'FR1-LL_EN_B2',
         language: english,
         learningType: LearningType.BOTH,
         level: ProficiencyLevel.B2,
         sameGender: false,
         sameAge: false,
-      },
+      }),
     ],
     objectives: [],
     interests: [],
@@ -221,14 +221,14 @@ describe('GenerateTandem UC', () => {
     masteredLanguages: [deutch],
     meetingFrequency: 'ONCE_A_WEEK',
     learningLanguages: [
-      {
+      new LearningLanguage({
         id: 'FR2-LL_SP_A2',
         language: spanish,
         level: ProficiencyLevel.A2,
         learningType: LearningType.BOTH,
         sameGender: false,
         sameAge: false,
-      },
+      }),
     ],
     objectives: [],
     interests: [],
@@ -259,14 +259,14 @@ describe('GenerateTandem UC', () => {
     masteredLanguages: [],
     meetingFrequency: 'ONCE_A_WEEK',
     learningLanguages: [
-      {
+      new LearningLanguage({
         id: 'FR3-LL_EN_A1',
         language: english,
         level: ProficiencyLevel.A1,
         learningType: LearningType.BOTH,
         sameGender: false,
         sameAge: false,
-      },
+      }),
     ],
     objectives: [],
     interests: [],
@@ -297,14 +297,14 @@ describe('GenerateTandem UC', () => {
     masteredLanguages: [],
     meetingFrequency: 'ONCE_A_WEEK',
     learningLanguages: [
-      {
+      new LearningLanguage({
         id: 'SP1-LL_FR_B1',
         language: french,
         level: ProficiencyLevel.B1,
         learningType: LearningType.BOTH,
         sameGender: false,
         sameAge: false,
-      },
+      }),
     ],
     objectives: [],
     interests: [],
@@ -335,14 +335,14 @@ describe('GenerateTandem UC', () => {
     masteredLanguages: [english],
     meetingFrequency: 'ONCE_A_WEEK',
     learningLanguages: [
-      {
+      new LearningLanguage({
         id: 'SP2-LL_FR_B2',
         language: french,
         level: ProficiencyLevel.B2,
         learningType: LearningType.BOTH,
         sameGender: false,
         sameAge: false,
-      },
+      }),
     ],
     objectives: [],
     interests: [],
@@ -373,14 +373,14 @@ describe('GenerateTandem UC', () => {
     masteredLanguages: [],
     meetingFrequency: 'ONCE_A_WEEK',
     learningLanguages: [
-      {
+      new LearningLanguage({
         id: 'EN1-LL_FR_C2',
         language: french,
         level: ProficiencyLevel.C2,
         learningType: LearningType.BOTH,
         sameGender: false,
         sameAge: false,
-      },
+      }),
     ],
     objectives: [],
     interests: [],
@@ -411,14 +411,14 @@ describe('GenerateTandem UC', () => {
     masteredLanguages: [],
     meetingFrequency: 'ONCE_A_WEEK',
     learningLanguages: [
-      {
+      new LearningLanguage({
         id: 'EN2-LL_FR_B1',
         language: french,
         level: ProficiencyLevel.B1,
         learningType: LearningType.BOTH,
         sameGender: false,
         sameAge: false,
-      },
+      }),
     ],
     objectives: [],
     interests: [],
@@ -449,14 +449,14 @@ describe('GenerateTandem UC', () => {
     masteredLanguages: [spanish],
     meetingFrequency: 'ONCE_A_WEEK',
     learningLanguages: [
-      {
+      new LearningLanguage({
         id: 'DE-LL_FR_B1',
         language: french,
         level: ProficiencyLevel.B1,
         learningType: LearningType.BOTH,
         sameGender: false,
         sameAge: false,
-      },
+      }),
     ],
     objectives: [],
     interests: [],
@@ -627,14 +627,14 @@ describe('GenerateTandem UC', () => {
       masteredLanguages: [],
       meetingFrequency: 'ONCE_A_WEEK',
       learningLanguages: [
-        {
+        new LearningLanguage({
           id: 'MALE1-EN_B2',
           language: english,
           level: ProficiencyLevel.B2,
           learningType: LearningType.BOTH,
           sameGender: false,
           sameAge: false,
-        },
+        }),
       ],
       objectives: [],
       interests: [],
@@ -666,14 +666,14 @@ describe('GenerateTandem UC', () => {
       masteredLanguages: [],
       meetingFrequency: 'ONCE_A_WEEK',
       learningLanguages: [
-        {
+        new LearningLanguage({
           id: 'FEMALE-FR_B2',
           language: french,
           level: ProficiencyLevel.B2,
           learningType: LearningType.BOTH,
           sameGender: true,
           sameAge: false,
-        },
+        }),
       ],
       objectives: [],
       interests: [],
@@ -721,7 +721,7 @@ describe('GenerateTandem UC', () => {
       masteredLanguages: [],
       meetingFrequency: 'ONCE_A_WEEK',
       learningLanguages: [
-        {
+        new LearningLanguage({
           id: 'FR_TANDEM-EN_B2',
           language: english,
           level: ProficiencyLevel.B2,
@@ -729,7 +729,7 @@ describe('GenerateTandem UC', () => {
           sameGender: false,
           sameAge: false,
           campus: lorraineCampus,
-        },
+        }),
       ],
       objectives: [],
       interests: [],
@@ -762,7 +762,7 @@ describe('GenerateTandem UC', () => {
       masteredLanguages: [],
       meetingFrequency: 'ONCE_A_WEEK',
       learningLanguages: [
-        {
+        new LearningLanguage({
           id: 'EN_TANDEM-LOR-FR_B2',
           language: french,
           level: ProficiencyLevel.B2,
@@ -770,7 +770,7 @@ describe('GenerateTandem UC', () => {
           sameGender: false,
           sameAge: false,
           campus: lorraineCampus,
-        },
+        }),
       ],
       objectives: [],
       interests: [],
@@ -803,7 +803,7 @@ describe('GenerateTandem UC', () => {
       masteredLanguages: [],
       meetingFrequency: 'ONCE_A_WEEK',
       learningLanguages: [
-        {
+        new LearningLanguage({
           id: 'EN_TANDEM-STR-FR_B2',
           language: french,
           level: ProficiencyLevel.B2,
@@ -811,7 +811,7 @@ describe('GenerateTandem UC', () => {
           sameGender: false,
           sameAge: false,
           campus: strasbourgCampus,
-        },
+        }),
       ],
       objectives: [],
       interests: [],
@@ -844,14 +844,14 @@ describe('GenerateTandem UC', () => {
       masteredLanguages: [],
       meetingFrequency: 'ONCE_A_WEEK',
       learningLanguages: [
-        {
+        new LearningLanguage({
           id: 'FR_ETANDEM-EN_B2',
           language: english,
           level: ProficiencyLevel.B2,
           learningType: LearningType.ETANDEM,
           sameGender: false,
           sameAge: false,
-        },
+        }),
       ],
       objectives: [],
       interests: [],
@@ -884,14 +884,14 @@ describe('GenerateTandem UC', () => {
       masteredLanguages: [],
       meetingFrequency: 'ONCE_A_WEEK',
       learningLanguages: [
-        {
+        new LearningLanguage({
           id: 'EN_ETANDEM-FR_B2',
           language: french,
           level: ProficiencyLevel.B2,
           learningType: LearningType.ETANDEM,
           sameGender: false,
           sameAge: false,
-        },
+        }),
       ],
       objectives: [],
       interests: [],
@@ -924,7 +924,7 @@ describe('GenerateTandem UC', () => {
       masteredLanguages: [],
       meetingFrequency: 'ONCE_A_WEEK',
       learningLanguages: [
-        {
+        new LearningLanguage({
           id: 'FR_BOTH-EN_B2',
           language: english,
           level: ProficiencyLevel.B2,
@@ -932,7 +932,7 @@ describe('GenerateTandem UC', () => {
           sameGender: false,
           sameAge: false,
           campus: lorraineCampus,
-        },
+        }),
       ],
       objectives: [],
       interests: [],
@@ -965,14 +965,14 @@ describe('GenerateTandem UC', () => {
       masteredLanguages: [],
       meetingFrequency: 'ONCE_A_WEEK',
       learningLanguages: [
-        {
+        new LearningLanguage({
           id: 'EN_BOTH-FR_B2',
           language: french,
           level: ProficiencyLevel.B2,
           learningType: LearningType.BOTH,
           sameGender: false,
           sameAge: false,
-        },
+        }),
       ],
       objectives: [],
       interests: [],
@@ -1146,14 +1146,14 @@ describe('GenerateTandem UC', () => {
       masteredLanguages: [],
       meetingFrequency: 'ONCE_A_WEEK',
       learningLanguages: [
-        {
+        new LearningLanguage({
           id: 'EN_SUB-FR_B2',
           language: french,
           level: ProficiencyLevel.B2,
           learningType: LearningType.ETANDEM,
           sameGender: false,
           sameAge: false,
-        },
+        }),
       ],
       objectives: [],
       interests: [],
@@ -1184,14 +1184,14 @@ describe('GenerateTandem UC', () => {
       masteredLanguages: [],
       meetingFrequency: 'ONCE_A_WEEK',
       learningLanguages: [
-        {
+        new LearningLanguage({
           id: 'SP_SUB-FR_B2',
           language: french,
           level: ProficiencyLevel.B2,
           learningType: LearningType.ETANDEM,
           sameGender: false,
           sameAge: false,
-        },
+        }),
       ],
       objectives: [],
       interests: [],
@@ -1261,14 +1261,14 @@ describe('GenerateTandem UC', () => {
       masteredLanguages: [],
       meetingFrequency: 'ONCE_A_WEEK',
       learningLanguages: [
-        {
+        new LearningLanguage({
           id: 'FR_SUB-EN_B2',
           language: english,
           level: ProficiencyLevel.B2,
           learningType: LearningType.ETANDEM,
           sameGender: false,
           sameAge: false,
-        },
+        }),
       ],
       objectives: [],
       interests: [],
@@ -1299,14 +1299,14 @@ describe('GenerateTandem UC', () => {
       masteredLanguages: [],
       meetingFrequency: 'ONCE_A_WEEK',
       learningLanguages: [
-        {
+        new LearningLanguage({
           id: 'EN_SUB-FR_B2',
           language: french,
           level: ProficiencyLevel.B2,
           learningType: LearningType.ETANDEM,
           sameGender: false,
           sameAge: false,
-        },
+        }),
       ],
       objectives: [],
       interests: [],
@@ -1500,14 +1500,14 @@ describe('GenerateTandem UC', () => {
       masteredLanguages: [],
       meetingFrequency: 'ONCE_A_WEEK',
       learningLanguages: [
-        {
+        new LearningLanguage({
           id: 'FR_1-LL_JOKER',
           language: joker,
           level: ProficiencyLevel.A0,
           learningType: LearningType.ETANDEM,
           sameGender: false,
           sameAge: false,
-        },
+        }),
       ],
       objectives: [],
       interests: [],
@@ -1539,14 +1539,14 @@ describe('GenerateTandem UC', () => {
       masteredLanguages: [],
       meetingFrequency: 'ONCE_A_WEEK',
       learningLanguages: [
-        {
+        new LearningLanguage({
           id: 'KS-LL_FR',
           language: french,
           level: ProficiencyLevel.B2,
           learningType: LearningType.ETANDEM,
           sameGender: false,
           sameAge: false,
-        },
+        }),
       ],
       objectives: [],
       interests: [],

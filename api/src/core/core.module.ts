@@ -53,7 +53,7 @@ import {
   GetTestsUsecase,
   GetUniversitiesUsecase,
   GetUniversityUsecase,
-  GetUserMatchUsecase,
+  GetLearningLanguageMatchesUsecase,
   GetUserUsecase,
   GetUsersUsecase,
   UpdateCountryStatusUsecase,
@@ -160,7 +160,7 @@ const usecases: Provider[] = [
   CreateTandemUsecase,
   GenerateTandemsUsecase,
   GetTandemsUsecase,
-  GetUserMatchUsecase,
+  GetLearningLanguageMatchesUsecase,
   ValidateTandemUsecase,
   RefuseTandemUsecase,
   // Universities

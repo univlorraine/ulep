@@ -1,7 +1,7 @@
 /* eslint-disable prettier/prettier */
-
 import { InvalidTandemError, LearningLanguagesMustContainsProfilesForTandem } from '../errors/tandem-exceptions';
 import { LearningLanguage } from './learning-language.model';
+import { Profile } from './profile.model';
 
 export enum TandemStatus {
   INACTIVE = 'INACTIVE',
@@ -64,14 +64,11 @@ export class Tandem {
       throw new InvalidTandemError('Tandem must have two different profiles');
     }
     
-    // TODO(discovery): languages spoken should include learning languages
-    // if discover for other learning language
-    if ((!this.learningLanguages[1].language.isJokerLanguage() && !profile1.isSpeakingLanguage(this.learningLanguages[1].language)) || (
-      !this.learningLanguages[0].language.isJokerLanguage() && !profile2.isSpeakingLanguage(this.learningLanguages[0].language)
-    )) {
-      throw new InvalidTandemError(
-        `Learning language and native/mastered language missmatch between profiles ${this.learningLanguages[0].profile.id} and ${this.learningLanguages[1].profile.id}`,
-      );
+    if (!this.learningLanguages[0].isCompatibleWithLearningLanguage(this.learningLanguages[1])) {
+      throw new InvalidTandemError(`learningLanguage ${this.learningLanguages[0].id} doesn't match learningLanguages ${this.learningLanguages[1].id} languages`);
+    }
+    if (!this.learningLanguages[1].isCompatibleWithLearningLanguage(this.learningLanguages[0])) {
+      throw new InvalidTandemError(`learningLanguage ${this.learningLanguages[1].id} doesn't match learningLanguages ${this.learningLanguages[0].id} languages`);
     }
   }
 

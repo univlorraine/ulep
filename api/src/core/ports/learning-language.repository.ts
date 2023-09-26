@@ -28,17 +28,19 @@ export interface LearningLanguageRepository {
 
   create: (learningLanguage: LearningLanguage) => Promise<void>;
 
-  getLearningLanguagesOfProfileSpeakingAndNotInActiveTandemFromUniversities: (
+  getAvailableLearningLanguagesSpeakingLanguageFromUniversities: (
     languageId: string,
     universityIds: string[],
+    considerLearntLanguagesAsSpoken?: boolean,
   ) => Promise<LearningLanguage[]>;
 
   getLearningLanguagesOfUniversitiesNotInActiveTandem: (
     universityIds: string[],
   ) => Promise<LearningLanguage[]>;
 
-  getLearningLanguagesOfOtherProfileFromUniversitiesNotInActiveTandem: (
-    profileId: string,
+  getAvailableLearningLanguagesSpeakingDifferentLanguageAndFromUniversities: (
+    ownerSpokenLanguageIds: string[],
+    universitySupportedLanguageIds: string[],
     universityIds: string[],
   ) => Promise<LearningLanguage[]>;
 

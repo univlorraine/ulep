@@ -14,6 +14,11 @@ import {
 export class InMemoryLearningLanguageRepository
   implements LearningLanguageRepository
 {
+  getAvailableLearningLanguagesSpeakingLanguageFromUniversities: (
+    languageId: string,
+    universityIds: string[],
+    considerLearntLanguagesAsSpoken?: boolean,
+  ) => Promise<LearningLanguage[]>;
   #learningLanguages: Map<string, LearningLanguage>;
   #tandemsPerLearningLanguages: Map<string, Tandem>;
 
@@ -122,15 +127,28 @@ export class InMemoryLearningLanguageRepository
     return Promise.resolve(false);
   }
 
-  getLearningLanguagesOfOtherProfileFromUniversitiesNotInActiveTandem(
-    profileId: string,
+  getAvailableLearningLanguagesSpeakingDifferentLanguageAndFromUniversities(
+    ownerSpokenLanguageIds: string[],
+    universitySupportedLanguageIds: string[],
     universityIds: string[],
   ): Promise<LearningLanguage[]> {
     const res = [];
 
     for (const learningLanguage of this.#learningLanguages.values()) {
-      if (learningLanguage.profile.id !== profileId) {
-        if (universityIds.includes(learningLanguage.profile.user.id)) {
+      if (universityIds.includes(learningLanguage.profile.user.id)) {
+        if (
+          (!ownerSpokenLanguageIds.includes(
+            learningLanguage.profile.nativeLanguage.id,
+          ) &&
+            universitySupportedLanguageIds.includes(
+              learningLanguage.profile.nativeLanguage.id,
+            )) ||
+          learningLanguage.profile.masteredLanguages.some(
+            (masteredLanguage) =>
+              !ownerSpokenLanguageIds.includes(masteredLanguage.id) &&
+              universitySupportedLanguageIds.includes(masteredLanguage.id),
+          )
+        ) {
           if (
             !this.#tandemsPerLearningLanguages?.has(learningLanguage.id) ||
             this.#tandemsPerLearningLanguages?.get(learningLanguage.id)
@@ -164,7 +182,7 @@ export class InMemoryLearningLanguageRepository
 
     return Promise.resolve(
       new Collection<LearningLanguageWithTandem>({
-        items,
+        items: items.map((item) => new LearningLanguageWithTandem(item)),
         totalItems: values.length,
       }),
     );

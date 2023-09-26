@@ -56,6 +56,46 @@ export class LearningLanguage {
     this.specificProgram = specificProgram;
     this.campus = campus;
   }
+
+  public isDiscovery(learningLanguageMatch?: LearningLanguage) {
+    // TODO(discovery+1): asian discovery
+    if (learningLanguageMatch) {
+      if (
+        this.learningType === LearningType.BOTH &&
+        learningLanguageMatch.learningType === LearningType.BOTH &&
+        this.campus &&
+        this.campus.id === learningLanguageMatch.campus?.id
+      ) {
+        return true;
+      }
+    }
+
+    return (
+      this.language.isJokerLanguage() ||
+      this.learningType === LearningType.TANDEM
+    );
+  }
+
+  public isCompatibleWithLearningLanguage(
+    learningLanguage: LearningLanguage,
+  ): boolean {
+    if (this.language.isJokerLanguage()) {
+      // // TODO(NOW+1): Note: we do not check if joker language match a language spoken
+      // by profile 2 but not spoken by profile 1 as this will be done in Score computation and probably return which language is possible in that case
+      return true;
+    } else {
+      if (learningLanguage.profile.isSpeakingLanguage(this.language)) {
+        return true;
+      } else if (
+        this.isDiscovery(learningLanguage) &&
+        learningLanguage.profile.isLearningLanguage(this.language)
+      ) {
+        return true;
+      }
+    }
+
+    return false;
+  }
 }
 
 interface LearningLanguageWithTandemProps extends LearningLanguageProps {
