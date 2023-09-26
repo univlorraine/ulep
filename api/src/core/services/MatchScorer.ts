@@ -68,13 +68,15 @@ export class MatchScorer implements IMatchScorer {
       return new Match({ owner: learningLanguage1, target: learningLanguage2, scores: MatchScores.empty() });
     }
 
-    // TODO(jokerLanguage): return which language has matched
-    // TODO(jokerLanguage): compute learning scores with all possible spoken languages when learning is joker
+    // TODO(NOW+1): gérer les cas spécifiques: BOTH + BOTH
+    // BOTH = BOTH => on privilégie le TANDEM
 
-    // TODO(NOW+1): gérer les cas spécifiques: BOTH + BOTH et JOKER
+    // TODO(NOW): search better name computeLanguageLevel
+    // TODO(NOW): return which language has matched
+    const languageLevel = this.computeLanguageLevel(learningLanguage1, learningLanguage2)
 
     const scores: MatchScores = new MatchScores({
-      level: this.computeLanguageLevel(learningLanguage1, learningLanguage2),
+      level: languageLevel.score,
       age: this.computeAgeBonus(profile1, profile2),
       status: this.computeSameRolesBonus(profile1, profile2),
       goals: this.computeSameGoalsBonus(profile1, profile2),
@@ -86,11 +88,20 @@ export class MatchScorer implements IMatchScorer {
     return new Match({ owner: learningLanguage1, target: learningLanguage2, scores });
   }
 
-  private computeLanguageLevel(learningLanguage1: LearningLanguage, learningLanguage2: LearningLanguage): number {
-    const learningScoreLearningLanguage1 = this.computeLearningScore(learningLanguage1, learningLanguage2);
-    const learningScoreLearningLanguage2 = this.computeLearningScore(learningLanguage2, learningLanguage1);
+  private computeLanguageLevel(learningLanguage1: LearningLanguage, learningLanguage2: LearningLanguage): {
+    score: number;
+    languageLearntByProfile1?: Language;
+    languageLearntByProfile2?: Language;
+  } {
+    const learningLevelLearningLanguage1 = this.computeLearningScore(learningLanguage1, learningLanguage2);
+    const learningLevelLearningLanguage2 = this.computeLearningScore(learningLanguage2, learningLanguage1);
+    const score = this.coeficients.level * ((learningLevelLearningLanguage1.score + learningLevelLearningLanguage2.score) / 2);
 
-    return this.coeficients.level * ((learningScoreLearningLanguage1 + learningScoreLearningLanguage2) / 2);
+    return {
+      score,
+      languageLearntByProfile1: learningLevelLearningLanguage1.languageLearnt,
+      languageLearntByProfile2:  learningLevelLearningLanguage2.languageLearnt,
+    }
   }
 
   // Apply bunus if ages match criteria
@@ -208,7 +219,10 @@ export class MatchScorer implements IMatchScorer {
     return intersection.size / union.size;
   }
 
-  private computeLearningScore(learningLanguage: LearningLanguage, matchLearningLanguage: LearningLanguage): number {
+  private computeLearningScore(learningLanguage: LearningLanguage, matchLearningLanguage: LearningLanguage): {
+    score: number;
+    languageLearnt?: Language;
+   } {
     const isDiscovery = learningLanguage.isDiscovery(matchLearningLanguage)
     const levelsCount = isDiscovery ? 6 : 5;
 
@@ -237,9 +251,33 @@ export class MatchScorer implements IMatchScorer {
     let matchProfileLevel = ProficiencyLevel.B2;
     if (isDiscovery) {
       if (learningLanguage.language.isJokerLanguage()) {
-        // TODO(discovery)
-        // TODO(joker): règle plus fine à trouver ici. est-ce que je prend B2 / le niveau du language appris
-        // On a besoin de savoir avec qui on match ICI
+        const languagesWithLevels: { language: Language; level: ProficiencyLevel }[] = [{
+            language: matchLearningLanguage.profile.nativeLanguage,
+            level: ProficiencyLevel.B2,
+          }, 
+          ...matchLearningLanguage.profile.masteredLanguages.map(masteredLanguage => ({
+            language: masteredLanguage,
+            level: ProficiencyLevel.B2
+          })),
+          ...matchLearningLanguage.profile.learningLanguages
+            .filter(ll => !ll.language.isJokerLanguage())
+        ];
+
+        const languagesWithScores = languagesWithLevels.reduce<{ language: Language; score: number, }>((accumulator, value) => {
+          const languageScore = discoveryLanguageLevelMatrix[learningLanguage.level][value.level] / levelsCount;
+          if (!accumulator.score || languageScore > accumulator.score) {
+            return {
+              language: value.language,
+              score: languageScore
+            }
+          }
+          return accumulator;
+        }, {
+          language: undefined,
+          score: undefined,
+        });
+
+        return languagesWithScores[0];
       } else if (matchLearningLanguage.profile.isLearningLanguage(learningLanguage.language)) {
           matchProfileLevel = matchLearningLanguage.profile.learningLanguages.find(ll => ll.language.id === learningLanguage.language.id).level;
       }
@@ -249,7 +287,8 @@ export class MatchScorer implements IMatchScorer {
       ? discoveryLanguageLevelMatrix[learningLanguage.level][matchProfileLevel]
       : languageLevelMatrix[learningLanguage.level][matchProfileLevel];
 
-    return level / levelsCount;
+    const score = level / levelsCount;
+    return { score };
   }
 
   private assertMatchIsNotForbidden(
@@ -308,17 +347,27 @@ export class MatchScorer implements IMatchScorer {
   }
 
 
-  private assertJokerHasMatchInProfile(profileWithJoker: Profile, profile2: Profile, availableLanguages: Language[]) {
+  private getPotentialJokerMatchInProfile(
+    profileWithJoker: Profile,
+    profile2: Profile,
+    availableLanguages: Language[]
+  ): Language[] {
     const availableLanguagesForProfile = profileWithJoker.user.university.isCentralUniversity()
         ? availableLanguages
         : availableLanguages.filter(language => language.secondaryUniversityActive);
     const potentialLanguagesToLearnFromProfile2 = availableLanguagesForProfile.filter(language => 
+      !language.isJokerLanguage() &&
       !profileWithJoker.isSpeakingLanguage(language) &&
       (profile2.isSpeakingLanguage(language) ||
         // We include language learnt by profile2 has profileWithJoker is learning joker language
         profile2.isLearningLanguage(language)
       )
     );
+    return potentialLanguagesToLearnFromProfile2;
+  }
+
+  private assertJokerHasMatchInProfile(profileWithJoker: Profile, profile2: Profile, availableLanguages: Language[]): boolean {
+    const potentialLanguagesToLearnFromProfile2 = this.getPotentialJokerMatchInProfile(profileWithJoker, profile2, availableLanguages);
     if (potentialLanguagesToLearnFromProfile2.length === 0) {
       return false;
     }

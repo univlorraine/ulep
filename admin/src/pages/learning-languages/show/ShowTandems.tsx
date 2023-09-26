@@ -9,8 +9,6 @@ import useLearningLanguagesStore from '../useLearningLanguagesStore';
 import TandemActions from './TandemActions';
 import TandemTable from './TandemTable';
 
-// TODO(NEXT): Relaunch global routine when validating / refusing a tandem
-
 const ShowTandems = () => {
     const translate = useTranslate();
 
