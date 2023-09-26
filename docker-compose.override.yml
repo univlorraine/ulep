@@ -23,7 +23,7 @@ services:
             - ${ADMIN_PORT:-3001}:3000
 
     auth:
-        command: start-dev --import-realm
+        command: "start-dev --spi-phone-default-service=dummy --import-realm --spi-theme-static-max-age=-1 --spi-theme-cache-themes=false --spi-theme-cache-templates=false --spi-phone-default-source-hour-maximum=100 --spi-phone-default-ibitibi-phone-default-region=FR"
         ports:
             - ${AUTH_PORT:-8080}:8080
 
