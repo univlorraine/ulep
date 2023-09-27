@@ -32,6 +32,11 @@ const TandemTable = ({ partners, actions, displayTandemLanguage }: TandemTablePr
         <Table>
             <TableHead>
                 <TableRow>
+                    {displayTandemLanguage && (
+                        <TableCell>
+                            {translate('learning_languages.show.tandems.tableColumns.tandemLanguage')}
+                        </TableCell>
+                    )}
                     <TableCell>{translate('learning_languages.show.tandems.tableColumns.profile')}</TableCell>
                     <TableCell>{translate('learning_languages.show.tandems.tableColumns.learnedLanguage')}</TableCell>
                     <TableCell>{translate('learning_languages.show.tandems.tableColumns.level')}</TableCell>
@@ -42,11 +47,6 @@ const TandemTable = ({ partners, actions, displayTandemLanguage }: TandemTablePr
                     <TableCell>{translate('learning_languages.show.tandems.tableColumns.age')}</TableCell>
                     <TableCell>{translate('learning_languages.show.tandems.tableColumns.score')}</TableCell>
                     <TableCell>{translate('learning_languages.show.tandems.tableColumns.date')}</TableCell>
-                    {displayTandemLanguage && (
-                        <TableCell>
-                            {translate('learning_languages.show.tandems.tableColumns.tandemLanguage')}
-                        </TableCell>
-                    )}
                     {actions && (
                         <TableCell>{translate('learning_languages.show.tandems.tableColumns.actions')}</TableCell>
                     )}
@@ -55,6 +55,7 @@ const TandemTable = ({ partners, actions, displayTandemLanguage }: TandemTablePr
             <TableBody>
                 {partners.map((partner) => (
                     <TableRow key={partner.id}>
+                        {displayTandemLanguage && <TableCell>{partner.tandemLanguage?.name}</TableCell>}
                         <TableCell>
                             <ProfileLink profile={partner.profile} />
                         </TableCell>
@@ -76,7 +77,6 @@ const TandemTable = ({ partners, actions, displayTandemLanguage }: TandemTablePr
                         <TableCell>{partner.profile.user.age}</TableCell>
                         <TableCell>{partner.score ?? 'N/A'}</TableCell>
                         <TableCell>{new Date(partner.createdAt).toLocaleDateString()}</TableCell>
-                        {displayTandemLanguage && <TableCell>{partner.tandemLanguage?.name}</TableCell>}
                         {actions && <TableCell>{actions(partner)}</TableCell>}
                     </TableRow>
                 ))}

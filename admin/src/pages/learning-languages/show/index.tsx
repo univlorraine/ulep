@@ -40,7 +40,6 @@ const LearningLanguageShow = () => {
                 />
                 <BooleanField label={translate('learning_languages.show.fields.sameAge')} source="sameAge" />
                 <TextField label={translate('learning_languages.show.fields.age')} source="profile.user.age" />
-                {/* TODO(NOW): manage certificate and program null */}
                 <BooleanField
                     label={translate('learning_languages.show.fields.certificateOption')}
                     source="certificateOption"

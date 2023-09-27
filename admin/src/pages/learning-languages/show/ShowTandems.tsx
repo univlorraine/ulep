@@ -95,7 +95,6 @@ const ShowTandems = () => {
                 <Typography variant="h6">{translate('learning_languages.show.tandems.active.title')}</Typography>
                 <TandemTable
                     displayTandemLanguage={isJokerLearningLanguage}
-                    // TODO(NOW+2): display language in index
                     partners={[
                         {
                             ...tandem.partnerLearningLanguage,
@@ -130,7 +129,6 @@ const ShowTandems = () => {
                                           tandem.userLearningLanguage.id,
                                           tandem.partnerLearningLanguage.id,
                                       ]}
-                                      // TODO(NOW+2): display language in index
                                       onTandemAction={handleTandemAction}
                                       tandemId={tandem.id}
                                       relaunchGlobalRoutineOnRefuse
