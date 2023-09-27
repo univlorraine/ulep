@@ -78,7 +78,7 @@ export class User {
     this.deactivatedReason = props.deactivatedReason;
   }
 
-  public filterLearnableLanguages(languages: Language[]) {
+  public filterLearnableLanguages(languages: Language[]): Language[] {
     return this.university.isCentralUniversity()
       ? languages.filter((language) =>
           language.canBeLearntInCentralUniversity(),

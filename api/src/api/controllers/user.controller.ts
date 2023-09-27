@@ -35,6 +35,7 @@ import {
 } from '../dtos';
 import { AuthenticationGuard } from '../guards';
 import { ImagesFilePipe } from '../validators/images.validator';
+import { User } from 'src/core/models';
 
 @Controller('users')
 @Swagger.ApiTags('Users')
@@ -63,7 +64,7 @@ export class UserController {
         userId: user.id,
         file,
       });
-      user = { ...user, avatar: upload };
+      user = new User({ ...user, avatar: upload });
     }
 
     return UserResponse.fromDomain(user);
@@ -94,7 +95,7 @@ export class UserController {
     const id = user.sub;
     const me = await this.getUserUsecase.execute(id);
 
-    return UserResponse.fromDomain({ id, ...me });
+    return UserResponse.fromDomain(me);
   }
 
   @Get(':id')
@@ -105,7 +106,7 @@ export class UserController {
   async findOne(@Param('id', ParseUUIDPipe) id: string) {
     const instance = await this.getUserUsecase.execute(id);
 
-    return UserResponse.fromDomain({ id, ...instance });
+    return UserResponse.fromDomain(instance);
   }
 
   @Put()
