@@ -68,10 +68,13 @@ export class MatchScorer implements IMatchScorer {
       return new Match({ owner: learningLanguage1, target: learningLanguage2, scores: MatchScores.empty() });
     }
 
-    const languageLevel = this.computeLanguageLevel(learningLanguage1, learningLanguage2, availableLanguages)
 
+    const learningCompatibility = this.computeLearningCompatibility(learningLanguage1, learningLanguage2, availableLanguages)
+    learningLanguage1.tandemLanguage = learningCompatibility.languageLearntByProfile1;
+    learningLanguage2.tandemLanguage = learningCompatibility.languageLearntByProfile2;
+    
     const scores: MatchScores = new MatchScores({
-      level: languageLevel.score,
+      level: learningCompatibility.score,
       age: this.computeAgeBonus(profile1, profile2),
       status: this.computeSameRolesBonus(profile1, profile2),
       goals: this.computeSameGoalsBonus(profile1, profile2),
@@ -80,9 +83,6 @@ export class MatchScorer implements IMatchScorer {
       interests: this.computeSameInterestBonus(profile1, profile2),
     });
 
-    learningLanguage1.tandemLanguage = languageLevel.languageLearntByProfile1;
-    learningLanguage2.tandemLanguage = languageLevel.languageLearntByProfile2;
-
     return new Match({
       owner: learningLanguage1,
       target: learningLanguage2,
@@ -90,7 +90,16 @@ export class MatchScorer implements IMatchScorer {
     });
   }
 
-  private computeLanguageLevel(learningLanguage1: LearningLanguage, learningLanguage2: LearningLanguage, availableLanguages: Language[]): {
+  /**
+   * Compute learning compatibility score between 2 learning languages.
+   * Also return languages that should be learnt from other profile if a learning language
+   * is joker
+   * @param learningLanguage1 
+   * @param learningLanguage2 
+   * @param availableLanguages 
+   * @returns 
+   */
+  private computeLearningCompatibility(learningLanguage1: LearningLanguage, learningLanguage2: LearningLanguage, availableLanguages: Language[]): {
     score: number;
     languageLearntByProfile1?: Language;
     languageLearntByProfile2?: Language;
@@ -221,6 +230,14 @@ export class MatchScorer implements IMatchScorer {
     return intersection.size / union.size;
   }
 
+  /**
+   * Compute score of learningLanguage request learning a language from another learningLanguage's profile.
+   * If learningLanguage is joker, language that should be learnt from other profile is also returned
+   * @param learningLanguage learningLanguage that want to learn
+   * @param matchLearningLanguage learningLanguage that can match
+   * @param availableLanguages languages available for learning in system
+   * @returns {score, languageLearnt}
+   */
   private computeLearningScore(learningLanguage: LearningLanguage, matchLearningLanguage: LearningLanguage, availableLanguages: Language[]): {
     score: number;
     languageLearnt?: Language;
