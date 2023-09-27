@@ -15,7 +15,7 @@ interface TandemPartner {
     effectiveLearningType?: LearningType;
     level: string;
     createdAt: Date;
-    score?: number;
+    compatibilityScore?: number;
     tandemLanguage?: Language;
 }
 
@@ -75,7 +75,7 @@ const TandemTable = ({ partners, actions, displayTandemLanguage }: TandemTablePr
                             <DisplayGender gender={partner.profile.user.gender} />
                         </TableCell>
                         <TableCell>{partner.profile.user.age}</TableCell>
-                        <TableCell>{partner.score ?? 'N/A'}</TableCell>
+                        <TableCell>{partner.compatibilityScore ?? 'N/A'}</TableCell>
                         <TableCell>{new Date(partner.createdAt).toLocaleDateString()}</TableCell>
                         {actions && <TableCell>{actions(partner)}</TableCell>}
                     </TableRow>

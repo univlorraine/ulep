@@ -98,6 +98,7 @@ const ShowTandems = () => {
                     partners={[
                         {
                             ...tandem.partnerLearningLanguage,
+                            compatibilityScore: tandem.compatibilityScore,
                             tandemLanguage: tandem.userLearningLanguage.tandemLanguage,
                             effectiveLearningType: getEffectiveLearningType(record, tandem.partnerLearningLanguage),
                         },
@@ -140,6 +141,7 @@ const ShowTandems = () => {
                     partners={[
                         {
                             ...tandem.partnerLearningLanguage,
+                            compatibilityScore: tandem.compatibilityScore,
                             tandemLanguage: tandem.userLearningLanguage.tandemLanguage,
                             effectiveLearningType: getEffectiveLearningType(record, tandem.partnerLearningLanguage),
                         },
@@ -174,7 +176,7 @@ const ShowTandems = () => {
                                 displayTandemLanguage={isJokerLearningLanguage}
                                 partners={matches.map((match) => ({
                                     ...match.target,
-                                    score: match.score.total,
+                                    compatibilityScore: match.score.total,
                                     tandemLanguage: match.tandemLanguage,
                                     effectiveLearningType: getEffectiveLearningType(record, match.target),
                                 }))}
@@ -209,6 +211,7 @@ const ShowTandems = () => {
                                     ? [
                                           {
                                               ...tandem.partnerLearningLanguage,
+                                              compatibilityScore: tandem.compatibilityScore,
                                               tandemLanguage: tandem.userLearningLanguage.tandemLanguage,
                                               effectiveLearningType: getEffectiveLearningType(
                                                   tandem.userLearningLanguage,
