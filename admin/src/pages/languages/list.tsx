@@ -108,7 +108,7 @@ const LanguageList = () => {
                             <MenuItem value="true">{translate('languages.isDiscovery.yes')}</MenuItem>
                         </Select>
                     )}
-                    sortBy="secondaryUniversityActive"
+                    sortBy="isDiscovery"
                 />
             </Datagrid>
         </List>
