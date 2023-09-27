@@ -131,9 +131,12 @@ export class Profile {
     }
   }
 
+  get spokenLanguages(): Language[] {
+    return [this.nativeLanguage, ...this.masteredLanguages];
+  }
+
   public isSpeakingLanguage(language: Language): boolean {
-    const spokenLanguages = [this.nativeLanguage, ...this.masteredLanguages];
-    return spokenLanguages.some(
+    return this.spokenLanguages.some(
       (spokenLanguage) => spokenLanguage.id === language.id,
     );
   }

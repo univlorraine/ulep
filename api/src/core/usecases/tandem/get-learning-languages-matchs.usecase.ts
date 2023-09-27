@@ -60,10 +60,10 @@ export class GetLearningLanguageMatchesUsecase {
 
     let targets = [];
     if (learningLanguage.language.isJokerLanguage()) {
-      const languageIdsSpokenByOwner = [
-        owner.nativeLanguage,
-        ...owner.masteredLanguages,
-      ].map((language) => language.id);
+      // TODO(NOW): see if factorize
+      const languageIdsSpokenByOwner = owner.spokenLanguages.map(
+        (language) => language.id,
+      );
       const languageIdsThatCanBeLearnt = languagesAvailableForLearning
         .map((language) => language.id)
         .filter((id) => !languageIdsSpokenByOwner.includes(id));

@@ -75,10 +75,9 @@ export class InMemoryLearningLanguageRepository
 
     for (const learningLanguage of this.#learningLanguages.values()) {
       if (
-        learningLanguage.profile?.masteredLanguages.some(
+        learningLanguage.profile?.spokenLanguages.some(
           (language) => language.id === languageId,
-        ) ||
-        learningLanguage.profile?.nativeLanguage.id === languageId
+        )
       ) {
         if (
           universityIds.includes(learningLanguage.profile.user.university.id)
@@ -136,10 +135,7 @@ export class InMemoryLearningLanguageRepository
     for (const learningLanguage of this.#learningLanguages.values()) {
       if (universityIds.includes(learningLanguage.profile.user.id)) {
         if (
-          allowedLanguageIds.includes(
-            learningLanguage.profile.nativeLanguage.id,
-          ) ||
-          learningLanguage.profile.masteredLanguages.some((masteredLanguage) =>
+          learningLanguage.profile.spokenLanguages.some((masteredLanguage) =>
             allowedLanguageIds.includes(masteredLanguage.id),
           )
         ) {
