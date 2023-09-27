@@ -249,42 +249,41 @@ export class MatchScorer implements IMatchScorer {
     };
 
     // We approximate native and mastered language of user equals to a level between B1 and C2.
-    // Score matrix have the same score for all these profile2 levels so we take B2 arbitrary here.
+    // Score matrix have the same score for all these match profile levels so we take B2 arbitrary here.
     let matchProfileLevel = ProficiencyLevel.B2;
 
-    // TODO(NOW+1): refactorize if/else
-    if (isDiscovery) {
-      if (learningLanguage.language.isJokerLanguage()) {
-        const learnableLanguagesFromMatch: { language: Language; level: ProficiencyLevel }[] = [
-          ...matchLearningLanguage.profile.spokenLanguages.map(masteredLanguage => ({
-            language: masteredLanguage,
-            level: ProficiencyLevel.B2
-          })),
-          ...matchLearningLanguage.profile.learningLanguages
-        ]
+    if (learningLanguage.language.isJokerLanguage()) {
+      const learnableLanguagesFromMatch: { language: Language; level: ProficiencyLevel }[] = [
+        ...matchLearningLanguage.profile.spokenLanguages.map(masteredLanguage => ({
+          language: masteredLanguage,
+          level: ProficiencyLevel.B2
+        })),
+        ...matchLearningLanguage.profile.learningLanguages
+      ]
 
-        const universityLearnableLanguages = learningLanguage.profile.user.filterLearnableLanguages(availableLanguages);
-        return learnableLanguagesFromMatch.reduce<{ languageLearnt: Language; score: number, }>((accumulator, value) => {
-          if (!value.language.isJokerLanguage() && 
-            learningLanguage.profile.isSpeakingLanguage(value.language) &&
-            universityLearnableLanguages.some(language => language.id == value.language.id)
-          ) {
-            const score = discoveryLanguageLevelMatrix[ProficiencyLevel.A0][value.level] / levelsCount;
-            if (!accumulator.score || score > accumulator.score) {
-              return {
-                languageLearnt: value.language,
-                score
-              }
+      const universityLearnableLanguages = learningLanguage.profile.user.filterLearnableLanguages(availableLanguages);
+      const matchLanguageWithScore = learnableLanguagesFromMatch.reduce<{ languageLearnt: Language; score: number, }>((accumulator, value) => {
+        if (!value.language.isJokerLanguage() && 
+          learningLanguage.profile.isSpeakingLanguage(value.language) &&
+          universityLearnableLanguages.some(language => language.id == value.language.id)
+        ) {
+          const score = discoveryLanguageLevelMatrix[ProficiencyLevel.A0][value.level] / levelsCount;
+          if (!accumulator.score || score > accumulator.score) {
+            return {
+              languageLearnt: value.language,
+              score
             }
           }
-          return accumulator;
-        }, {
-          languageLearnt: undefined,
-          score: undefined,
-        });
-      } else if (matchLearningLanguage.profile.isLearningLanguage(learningLanguage.language)) {
-          matchProfileLevel = matchLearningLanguage.profile.learningLanguages.find(ll => ll.language.id === learningLanguage.language.id).level;
-      }
+        }
+        return accumulator;
+      }, {
+        languageLearnt: undefined,
+        score: undefined,
+      });
+
+      return matchLanguageWithScore;
+    } else if (isDiscovery && matchLearningLanguage.profile.isLearningLanguage(learningLanguage.language)) {
+        matchProfileLevel = matchLearningLanguage.profile.learningLanguages.find(ll => ll.language.id === learningLanguage.language.id).level;
     }
     
     const level = isDiscovery
