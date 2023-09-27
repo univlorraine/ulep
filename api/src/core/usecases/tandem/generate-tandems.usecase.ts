@@ -199,6 +199,7 @@ export class GenerateTandemsUsecase {
         id: this.uuidProvider.generate(),
         learningLanguages: [pair.owner, pair.target],
         status: tandemStatus,
+        compatibilityScore: pair.total,
       });
 
       // Do not re-create a tandem that already exist and is pending validation

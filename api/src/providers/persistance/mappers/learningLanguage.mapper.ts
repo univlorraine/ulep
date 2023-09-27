@@ -82,6 +82,7 @@ export const learningLanguageWithTandemMapper = (
       new Tandem({
         id: instance.Tandem.id,
         status: TandemStatus[instance.Tandem.status],
+        compatibilityScore: instance.Tandem.compatibilityScore / 100,
       }),
     tandemLanguage:
       instance.TandemLanguage && languageMapper(instance.TandemLanguage),

@@ -365,6 +365,9 @@ model InterestCategories {
 model Tandems {
   id                    String              @id @default(uuid())
   status                String              @default("ACTIVE")
+  // We store compatibilityScore as an Int in order to avoid float approximation
+  // This means the score between 0-1 (float) should be converted to 0-100 (int)
+  compatibilityScore    Int                 @default(0)
   created_at            DateTime            @default(now())
   updated_at            DateTime            @updatedAt
   LearningLanguages     LearningLanguages[]

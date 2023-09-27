@@ -1,7 +1,6 @@
 /* eslint-disable prettier/prettier */
 import { InvalidTandemError, LearningLanguagesMustContainsProfilesForTandem } from '../errors/tandem-exceptions';
 import { LearningLanguage } from './learning-language.model';
-import { Profile } from './profile.model';
 
 export enum TandemStatus {
   INACTIVE = 'INACTIVE',
@@ -15,6 +14,7 @@ export type CreateTandemProps = {
   learningLanguages?: LearningLanguage[];
   status: TandemStatus;
   universityValidations?: string[];
+  compatibilityScore: number;
 };
 
 export class Tandem {
@@ -28,11 +28,15 @@ export class Tandem {
   
   // ID of universities which has validated the tandem
   readonly universityValidations?: string[];
+  
+  // Score representing compatibility of learning languages
+  readonly compatibilityScore: number;
 
   constructor(props: CreateTandemProps) {
     this.id = props.id;
     this.status = props.status;
     this.universityValidations = props.universityValidations || [];
+    this.compatibilityScore = props.compatibilityScore;
     
     if (props.learningLanguages) {
       this.learningLanguages = [...props.learningLanguages];

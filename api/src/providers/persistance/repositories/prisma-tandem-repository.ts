@@ -9,22 +9,27 @@ import { TandemRelations, tandemMapper } from '../mappers/tandem.mapper';
 export class PrismaTandemRepository implements TandemRepository {
   constructor(private readonly prisma: PrismaService) {}
 
+  private static toPrismaModel(tandem: Tandem) {
+    return {
+      id: tandem.id,
+      LearningLanguages: {
+        connect: tandem.learningLanguages.map((learningLanguage) => ({
+          id: learningLanguage.id,
+        })),
+      },
+      status: tandem.status,
+      UniversityValidations: {
+        connect: tandem.universityValidations?.map((universityId) => ({
+          id: universityId,
+        })),
+      },
+      compatibilityScore: Math.floor(tandem.compatibilityScore * 100),
+    };
+  }
+
   async save(tandem: Tandem): Promise<void> {
     await this.prisma.tandems.create({
-      data: {
-        id: tandem.id,
-        LearningLanguages: {
-          connect: tandem.learningLanguages.map((learningLanguage) => ({
-            id: learningLanguage.id,
-          })),
-        },
-        status: tandem.status,
-        UniversityValidations: {
-          connect: tandem.universityValidations?.map((universityId) => ({
-            id: universityId,
-          })),
-        },
-      },
+      data: PrismaTandemRepository.toPrismaModel(tandem),
     });
 
     for (const learningLanguage of tandem.learningLanguages) {
@@ -50,20 +55,7 @@ export class PrismaTandemRepository implements TandemRepository {
       (accumulator, value) => {
         accumulator.tandemsToCreate.push(
           this.prisma.tandems.create({
-            data: {
-              id: value.id,
-              LearningLanguages: {
-                connect: value.learningLanguages.map((learningLanguage) => ({
-                  id: learningLanguage.id,
-                })),
-              },
-              status: value.status,
-              UniversityValidations: {
-                connect: value.universityValidations?.map((universityId) => ({
-                  id: universityId,
-                })),
-              },
-            },
+            data: PrismaTandemRepository.toPrismaModel(value),
           }),
         );
         for (const learningLanguage of value.learningLanguages) {
@@ -248,20 +240,7 @@ export class PrismaTandemRepository implements TandemRepository {
       where: {
         id: tandem.id,
       },
-      data: {
-        id: tandem.id,
-        LearningLanguages: {
-          connect: tandem.learningLanguages.map((learningLanguage) => ({
-            id: learningLanguage.id,
-          })),
-        },
-        status: tandem.status,
-        UniversityValidations: tandem.universityValidations.length && {
-          connect: tandem.universityValidations.map((universityId) => ({
-            id: universityId,
-          })),
-        },
-      },
+      data: PrismaTandemRepository.toPrismaModel(tandem),
     });
   }
 

@@ -25,4 +25,5 @@ export const tandemMapper = (instance: TandemSnapshot): Tandem =>
     status: TandemStatus[instance.status],
     universityValidations:
       instance.UniversityValidations?.map((university) => university.id) || [],
+    compatibilityScore: instance.compatibilityScore / 100,
   });
