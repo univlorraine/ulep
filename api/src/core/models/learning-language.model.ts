@@ -86,8 +86,10 @@ export class LearningLanguage {
     learningLanguage: LearningLanguage,
   ): boolean {
     if (this.language.isJokerLanguage()) {
-      // // TODO(NOW+1): Note: we do not check if joker language match a language spoken
-      // by profile 2 but not spoken by profile 1 as this will be done in Score computation and probably return which language is possible in that case
+      // Author note: we currently do not check if joker language match a language spoken
+      // by other profile and not spoken by this learningLanguage's profile here as:
+      // - This is done in match score computation, where it needs to return the language
+      // - It depends on other external elements such as available languages
       return true;
     } else {
       if (learningLanguage.profile.isSpeakingLanguage(this.language)) {
