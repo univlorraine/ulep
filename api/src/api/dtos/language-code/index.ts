@@ -124,4 +124,9 @@ export class UpdateLanguageCodeRequest {
   @IsOptional()
   @IsBoolean()
   secondaryUniversityActive?: boolean;
+
+  @Swagger.ApiPropertyOptional({ type: 'boolean' })
+  @IsOptional()
+  @IsBoolean()
+  isDiscovery?: boolean;
 }

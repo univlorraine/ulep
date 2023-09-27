@@ -12,6 +12,7 @@ export type LanguageProps = {
   mainUniversityStatus: LanguageStatus;
   secondaryUniversityActive: boolean;
   name?: string;
+  isDiscovery: boolean;
 };
 
 export type SuggestedLanguageProps = {
@@ -26,6 +27,7 @@ export class Language {
   readonly name?: string;
   readonly mainUniversityStatus: LanguageStatus;
   readonly secondaryUniversityActive: boolean;
+  readonly isDiscovery: boolean;
 
   constructor(props: LanguageProps) {
     this.id = props.id;
@@ -33,6 +35,7 @@ export class Language {
     this.name = props.name;
     this.mainUniversityStatus = props.mainUniversityStatus;
     this.secondaryUniversityActive = props.secondaryUniversityActive;
+    this.isDiscovery = props.isDiscovery;
   }
 
   public isJokerLanguage() {
