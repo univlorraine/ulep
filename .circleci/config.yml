@@ -148,7 +148,7 @@ jobs:
           name: Build docker image
           command: |
             export DOCKER_BUILDKIT=1
-            cd docker/keycloak && docker build --platform=linux/amd64 --target=auth_prod -t rg.fr-par.scw.cloud/ulep/auth-prod:latest -t rg.fr-par.scw.cloud/ulep/auth-prod:1.0.<< pipeline.number >> .
+            cd docker/keycloak && docker build --platform=linux/amd64 -t rg.fr-par.scw.cloud/ulep/auth-prod:latest -t rg.fr-par.scw.cloud/ulep/auth-prod:1.0.<< pipeline.number >> .
       - run:
           name: Push docker image
           command: |
