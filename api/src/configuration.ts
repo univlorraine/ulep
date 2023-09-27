@@ -5,6 +5,7 @@ interface SmtpConfiguration {
   host: string;
   port: number;
   secure: boolean;
+  ignoreTLS: boolean;
   sender: string;
   disableBootVerification: boolean;
 }
@@ -53,6 +54,7 @@ export const configuration = (): Configuration => ({
     host: process.env.SMTP_HOST || 'localhost',
     port: process.env.SMTP_PORT ? parseInt(process.env.SMTP_PORT, 10) : 25,
     secure: process.env.SMTP_SECURE === 'true',
+    ignoreTLS: process.env.SMTP_IGNORE_TLS === 'true',
     sender: process.env.SMTP_SENDER || 'test@ulep.fr',
   },
   logLevel: process.env.LOG_LEVEL || 'warn',
