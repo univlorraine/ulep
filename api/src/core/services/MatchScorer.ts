@@ -251,15 +251,13 @@ export class MatchScorer implements IMatchScorer {
     // We approximate native and mastered language of user equals to a level between B1 and C2.
     // Score matrix have the same score for all these profile2 levels so we take B2 arbitrary here.
     let matchProfileLevel = ProficiencyLevel.B2;
+
+    // TODO(NOW+1): refactorize if/else
     if (isDiscovery) {
       if (learningLanguage.language.isJokerLanguage()) {
-        const availableLanguageIdsForProfile = learningLanguage.profile.user.university.isCentralUniversity()
-          ? availableLanguages.map(l => l.id)
-          : availableLanguages.filter(language => language.secondaryUniversityActive).map(l => l.id);
-
-        // TODO(NOW+1): refactorize if/else
         // TODO(NOW+1): see if factorize spokenLanguage into variable
         // TODO(NOW+1): optimize this section
+        const learnableLanguages = learningLanguage.profile.user.filterLearnableLanguages(availableLanguages);
         const languagesThatCanBeLearntWithLevel: { language: Language; level: ProficiencyLevel }[] = [{
             language: matchLearningLanguage.profile.nativeLanguage,
             level: ProficiencyLevel.B2,
@@ -269,7 +267,10 @@ export class MatchScorer implements IMatchScorer {
             level: ProficiencyLevel.B2
           })),
           ...matchLearningLanguage.profile.learningLanguages
-        ].filter(ll => !ll.language.isJokerLanguage() && !learningLanguage.profile.isSpeakingLanguage(ll.language) && availableLanguageIdsForProfile.includes(ll.language.id));
+        ].filter(ll => !ll.language.isJokerLanguage() && 
+          learningLanguage.profile.isSpeakingLanguage(ll.language) &&
+          learnableLanguages.some(language => language.id == ll.language.id)
+        );
 
         const languageWithScore = languagesThatCanBeLearntWithLevel.reduce<{ languageLearnt: Language; score: number, }>((accumulator, value) => {
           const languageScore = discoveryLanguageLevelMatrix[ProficiencyLevel.A0][value.level] / levelsCount;
@@ -309,12 +310,12 @@ export class MatchScorer implements IMatchScorer {
     
     // Check joker language have a match in available languages spoken by other profile
     if (learningLanguage1.language.isJokerLanguage()) {
-      if (!this.assertJokerHasMatchInProfile(profile1, profile2, availableLanguages)) {
+      if (!profile1.canLearnALanguageFromProfile(profile2, availableLanguages)) {
         return false;
       }
     }
     if (learningLanguage2.language.isJokerLanguage()) {
-      if (!this.assertJokerHasMatchInProfile(profile2, profile1, availableLanguages)) {
+      if (!profile2.canLearnALanguageFromProfile(profile1, availableLanguages)) {
         return false;
       }
     }
@@ -349,35 +350,6 @@ export class MatchScorer implements IMatchScorer {
       )
      ) {
         return false;
-    }
-
-    return true;
-  }
-
-
-  private getPotentialJokerMatchInProfile(
-    profileWithJoker: Profile,
-    profile2: Profile,
-    availableLanguages: Language[]
-  ): Language[] {
-    const availableLanguagesForProfile = profileWithJoker.user.university.isCentralUniversity()
-        ? availableLanguages
-        : availableLanguages.filter(language => language.secondaryUniversityActive);
-    const potentialLanguagesToLearnFromProfile2 = availableLanguagesForProfile.filter(language => 
-      !language.isJokerLanguage() &&
-      !profileWithJoker.isSpeakingLanguage(language) &&
-      (profile2.isSpeakingLanguage(language) ||
-        // We include language learnt by profile2 has profileWithJoker is learning joker language
-        profile2.isLearningLanguage(language)
-      )
-    );
-    return potentialLanguagesToLearnFromProfile2;
-  }
-
-  private assertJokerHasMatchInProfile(profileWithJoker: Profile, profile2: Profile, availableLanguages: Language[]): boolean {
-    const potentialLanguagesToLearnFromProfile2 = this.getPotentialJokerMatchInProfile(profileWithJoker, profile2, availableLanguages);
-    if (potentialLanguagesToLearnFromProfile2.length === 0) {
-      return false;
     }
 
     return true;

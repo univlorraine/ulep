@@ -38,6 +38,16 @@ export class Language {
   public isJokerLanguage() {
     return this.code === JOKER_LANGUAGE_CODE;
   }
+
+  public canBeLearntInCentralUniversity() {
+    return this.mainUniversityStatus === LanguageStatus.PRIMARY;
+  }
+
+  public canBeLearntInPartnerUniversity() {
+    return (
+      this.canBeLearntInCentralUniversity() && this.secondaryUniversityActive
+    );
+  }
 }
 
 export class SuggestedLanguage {

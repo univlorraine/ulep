@@ -1,3 +1,4 @@
+import { Language } from './language.model';
 import { MediaObject } from './media.model';
 import { University } from './university.model';
 
@@ -75,5 +76,15 @@ export class User {
     this.avatar = props.avatar;
     this.status = props.status;
     this.deactivatedReason = props.deactivatedReason;
+  }
+
+  public filterLearnableLanguages(languages: Language[]) {
+    return this.university.isCentralUniversity()
+      ? languages.filter((language) =>
+          language.canBeLearntInCentralUniversity(),
+        )
+      : languages.filter((language) =>
+          language.canBeLearntInPartnerUniversity(),
+        );
   }
 }

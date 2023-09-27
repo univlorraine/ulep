@@ -143,4 +143,32 @@ export class Profile {
       (learningLanguage) => learningLanguage.language.id === language.id,
     );
   }
+
+  /**
+   * Check if this profile can learn a language from another profile
+   * @param profile Profile from which we want to learn
+   * @param availableLanguages Available languages to be learnt in system
+   * @returns {boolean}
+   */
+  public canLearnALanguageFromProfile(
+    profile: Profile,
+    availableLanguages: Language[],
+  ): boolean {
+    const potentialLanguagesToLearnFromProfile = this.user
+      .filterLearnableLanguages(availableLanguages)
+      .filter(
+        (language) =>
+          !language.isJokerLanguage() &&
+          (profile.isSpeakingLanguage(language) ||
+            // We include language learnt by other profile as current profile can
+            // be searching for tandem in discover mode
+            profile.isLearningLanguage(language)) &&
+          !this.isSpeakingLanguage(language),
+      );
+    if (potentialLanguagesToLearnFromProfile.length === 0) {
+      return false;
+    }
+
+    return true;
+  }
 }
