@@ -41,6 +41,17 @@ spec:
               value: "{{ include "etandem.name" . }}-postgresql.{{ .Release.Namespace }}"
             - name: DB_USER
               value: "{{ .Values.global.postgresql.auth.username }}"
+        - name: Mount theme
+          image: "{{ .Values.auth.initImage.repository }}:{{ .Values.auth.initImage.tag}}"
+          volumeMounts:
+            - name: "{{ .Values.auth.name }}-themes"
+              mountPath: /auth-themes
+          command: [/bin/sh, -c]
+          args:
+            - |
+              echo "Copying themes..."
+              cp -R /app/themes/* /kc-themes
+              echo "All themes copied"
       containers:
         - name: {{ .Chart.Name }}
           securityContext:

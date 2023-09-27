@@ -98,6 +98,11 @@ auth:
     tag: "21.1" # REQUIRED
     pullPolicy: IfNotPresent
 
+  initImage: 
+    repository: "rg.fr-par.scw.cloud/ulep/auth-prod" # REQUIRED
+    tag: "latest" # REQUIRED
+
+
   env:
     keycloakAdmin: admin # FIXE
     keycloakAdminPassword: *keycloakAdminPassword # REQUIRED
