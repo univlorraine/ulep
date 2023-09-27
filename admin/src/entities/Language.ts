@@ -4,6 +4,7 @@ type Language = {
     name?: string;
     mainUniversityStatus: LanguageStatus;
     secondaryUniversityActive: boolean;
+    isDiscovery: boolean;
 };
 
 export default Language;

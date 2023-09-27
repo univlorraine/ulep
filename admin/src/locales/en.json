@@ -62,7 +62,12 @@
         }
     },
     "languages": {
-        "label": "Languages"
+        "label": "Languages",
+        "isDiscovery": {
+            "title": "Discovery language",
+            "yes": "Yes",
+            "no": "No"
+        }
     },
     "login": {
         "connect": "Connect",
