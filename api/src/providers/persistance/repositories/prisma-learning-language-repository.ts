@@ -143,9 +143,7 @@ export class PrismaLearningLanguageRepository
     return res.map(learningLanguageMapper);
   }
 
-  async getLearningLanguagesOfUniversitiesNotInActiveTandem(
-    universityIds: string[],
-  ) {
+  async getAvailableLearningLanguagesOfUniversities(universityIds: string[]) {
     const res = await this.prisma.learningLanguages.findMany({
       where: {
         Profile: {
@@ -204,7 +202,7 @@ export class PrismaLearningLanguageRepository
     return !!res;
   }
 
-  async getAvailableLearningLanguagesSpeakingDifferentLanguageAndFromUniversities(
+  async getAvailableLearningLanguagesSpeakingOneOfLanguagesAndFromUniversities(
     allowedLanguages: string[],
     universityIds: string[],
   ): Promise<LearningLanguage[]> {

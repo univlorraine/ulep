@@ -70,7 +70,7 @@ export class GenerateTandemsUsecase {
 
   async execute(command: GenerateTandemsCommand): Promise<Tandem[]> {
     const learningLanguagesToPair =
-      await this.learningLanguageRepository.getLearningLanguagesOfUniversitiesNotInActiveTandem(
+      await this.learningLanguageRepository.getAvailableLearningLanguagesOfUniversities(
         command.universityIds,
       );
 

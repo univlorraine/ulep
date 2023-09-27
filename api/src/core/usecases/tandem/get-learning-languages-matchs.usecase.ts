@@ -60,7 +60,6 @@ export class GetLearningLanguageMatchesUsecase {
 
     let targets = [];
     if (learningLanguage.language.isJokerLanguage()) {
-      // TODO(NOW): see if factorize
       const languageIdsSpokenByOwner = owner.spokenLanguages.map(
         (language) => language.id,
       );
@@ -69,7 +68,7 @@ export class GetLearningLanguageMatchesUsecase {
         .filter((id) => !languageIdsSpokenByOwner.includes(id));
 
       targets =
-        await this.learningLanguageRepository.getAvailableLearningLanguagesSpeakingDifferentLanguageAndFromUniversities(
+        await this.learningLanguageRepository.getAvailableLearningLanguagesSpeakingOneOfLanguagesAndFromUniversities(
           languageIdsThatCanBeLearnt,
           command.universityIds,
         );

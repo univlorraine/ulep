@@ -96,7 +96,7 @@ export class InMemoryLearningLanguageRepository
     return Promise.resolve(res);
   }
 
-  getLearningLanguagesOfUniversitiesNotInActiveTandem(universityIds: string[]) {
+  getAvailableLearningLanguagesOfUniversities(universityIds: string[]) {
     const res = [];
 
     for (const learningLanguage of this.#learningLanguages.values()) {
@@ -126,7 +126,7 @@ export class InMemoryLearningLanguageRepository
     return Promise.resolve(false);
   }
 
-  getAvailableLearningLanguagesSpeakingDifferentLanguageAndFromUniversities(
+  getAvailableLearningLanguagesSpeakingOneOfLanguagesAndFromUniversities(
     allowedLanguageIds: string[],
     universityIds: string[],
   ): Promise<LearningLanguage[]> {
