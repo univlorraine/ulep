@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { EyeSvg } from '../../assets';
 import style from './TextInput.module.css';
+import { IonInput } from '@ionic/react';
 
 interface TextInputProps {
     customHeight?: number;
@@ -29,10 +30,9 @@ const TextInput: React.FC<TextInputProps> = ({
                 <div
                     className={`${style['input-wrapper']} ${errorMessage ? style['input-error'] : style['input-text']}`}
                 >
-                    <input
-                        autoComplete="off"
+                    <IonInput
                         className={style.input}
-                        onChange={(e) => onChange(e.target.value)}
+                        onIonInput={(e: any) => onChange(e.target.value)}
                         placeholder={placeholder ?? ''}
                         style={{ height: customHeight }}
                         type={showPasword ? 'text' : type}
