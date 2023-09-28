@@ -34,13 +34,12 @@ export interface LearningLanguageRepository {
     considerLearntLanguagesAsSpoken?: boolean,
   ) => Promise<LearningLanguage[]>;
 
-  getLearningLanguagesOfUniversitiesNotInActiveTandem: (
+  getAvailableLearningLanguagesOfUniversities: (
     universityIds: string[],
   ) => Promise<LearningLanguage[]>;
 
-  getAvailableLearningLanguagesSpeakingDifferentLanguageAndFromUniversities: (
-    ownerSpokenLanguageIds: string[],
-    universitySupportedLanguageIds: string[],
+  getAvailableLearningLanguagesSpeakingOneOfLanguagesAndFromUniversities: (
+    allowedLanguages: string[],
     universityIds: string[],
   ) => Promise<LearningLanguage[]>;
 

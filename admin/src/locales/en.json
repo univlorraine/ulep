@@ -287,7 +287,8 @@
                     "role": "Role",
                     "learningType": "Mode",
                     "gender": "Gender",
-                    "age": "Age"
+                    "age": "Age",
+                    "tandemLanguage": "Language to learn"
                 },
                 "globalSuggestions": {
                     "title": "Global routine suggestion",

@@ -19,7 +19,7 @@ export type UserSnapshot = Prisma.Users & {
 };
 
 export const userMapper = (snapshot: UserSnapshot): User => {
-  return {
+  return new User({
     id: snapshot.id,
     email: snapshot.email,
     firstname: snapshot.firstname,
@@ -40,5 +40,5 @@ export const userMapper = (snapshot: UserSnapshot): User => {
       }),
     status: snapshot.status as UserStatus,
     acceptsEmail: snapshot.accepts_email,
-  };
+  });
 };

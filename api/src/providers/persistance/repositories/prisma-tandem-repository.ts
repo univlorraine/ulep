@@ -26,29 +26,76 @@ export class PrismaTandemRepository implements TandemRepository {
         },
       },
     });
+
+    for (const learningLanguage of tandem.learningLanguages) {
+      if (learningLanguage.tandemLanguage) {
+        await this.prisma.learningLanguages.update({
+          where: {
+            id: learningLanguage.id,
+          },
+          data: {
+            TandemLanguage: {
+              connect: {
+                id: learningLanguage.tandemLanguage.id,
+              },
+            },
+          },
+        });
+      }
+    }
   }
 
   async saveMany(tandems: Tandem[]): Promise<void> {
-    const tandemsToCreate = tandems.map((tandem) =>
-      this.prisma.tandems.create({
-        data: {
-          id: tandem.id,
-          LearningLanguages: {
-            connect: tandem.learningLanguages.map((learningLanguage) => ({
-              id: learningLanguage.id,
-            })),
-          },
-          status: tandem.status,
-          UniversityValidations: {
-            connect: tandem.universityValidations?.map((universityId) => ({
-              id: universityId,
-            })),
-          },
-        },
-      }),
+    const { tandemsToCreate, learningLanguagesToUpdate } = tandems.reduce(
+      (accumulator, value) => {
+        accumulator.tandemsToCreate.push(
+          this.prisma.tandems.create({
+            data: {
+              id: value.id,
+              LearningLanguages: {
+                connect: value.learningLanguages.map((learningLanguage) => ({
+                  id: learningLanguage.id,
+                })),
+              },
+              status: value.status,
+              UniversityValidations: {
+                connect: value.universityValidations?.map((universityId) => ({
+                  id: universityId,
+                })),
+              },
+            },
+          }),
+        );
+        for (const learningLanguage of value.learningLanguages) {
+          if (learningLanguage.tandemLanguage) {
+            accumulator.learningLanguagesToUpdate.push(
+              this.prisma.learningLanguages.update({
+                where: {
+                  id: learningLanguage.id,
+                },
+                data: {
+                  TandemLanguage: {
+                    connect: {
+                      id: learningLanguage.tandemLanguage.id,
+                    },
+                  },
+                },
+              }),
+            );
+          }
+        }
+
+        return accumulator;
+      },
+      {
+        tandemsToCreate: [],
+        learningLanguagesToUpdate: [],
+      },
     );
 
-    await this.prisma.$transaction(tandemsToCreate);
+    await this.prisma.$transaction(
+      tandemsToCreate.concat(learningLanguagesToUpdate),
+    );
   }
 
   async findWhere(props: FindWhereProps): Promise<Collection<Tandem>> {

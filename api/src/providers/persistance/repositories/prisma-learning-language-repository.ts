@@ -143,9 +143,7 @@ export class PrismaLearningLanguageRepository
     return res.map(learningLanguageMapper);
   }
 
-  async getLearningLanguagesOfUniversitiesNotInActiveTandem(
-    universityIds: string[],
-  ) {
+  async getAvailableLearningLanguagesOfUniversities(universityIds: string[]) {
     const res = await this.prisma.learningLanguages.findMany({
       where: {
         Profile: {
@@ -204,9 +202,8 @@ export class PrismaLearningLanguageRepository
     return !!res;
   }
 
-  async getAvailableLearningLanguagesSpeakingDifferentLanguageAndFromUniversities(
-    ownerSpokenLanguageIds: string[],
-    universitySupportedLanguageIds: string[],
+  async getAvailableLearningLanguagesSpeakingOneOfLanguagesAndFromUniversities(
+    allowedLanguages: string[],
     universityIds: string[],
   ): Promise<LearningLanguage[]> {
     const res = await this.prisma.learningLanguages.findMany({
@@ -214,38 +211,28 @@ export class PrismaLearningLanguageRepository
         Profile: {
           AND: [
             {
-              // Assert target speaks a language that is
-              // not spoken by owner AND is supported by university
+              // Assert target speaks or learns an allowed language
               OR: [
                 {
-                  AND: [
-                    {
-                      native_language_code_id: {
-                        not: { in: ownerSpokenLanguageIds },
-                      },
-                    },
-                    {
-                      native_language_code_id: {
-                        in: universitySupportedLanguageIds,
-                      },
-                    },
-                  ],
+                  native_language_code_id: {
+                    in: allowedLanguages,
+                  },
                 },
                 {
                   MasteredLanguages: {
                     some: {
-                      AND: [
-                        {
-                          language_code_id: {
-                            not: { in: ownerSpokenLanguageIds },
-                          },
-                        },
-                        {
-                          language_code_id: {
-                            in: universityIds,
-                          },
-                        },
-                      ],
+                      language_code_id: {
+                        in: allowedLanguages,
+                      },
+                    },
+                  },
+                },
+                {
+                  LearningLanguages: {
+                    some: {
+                      language_code_id: {
+                        in: allowedLanguages,
+                      },
                     },
                   },
                 },

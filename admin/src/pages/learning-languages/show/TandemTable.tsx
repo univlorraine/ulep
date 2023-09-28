@@ -2,6 +2,7 @@ import { Table, TableBody, TableCell, TableHead, TableRow } from '@mui/material'
 import React from 'react';
 import { useTranslate } from 'react-admin';
 import { DisplayGender, DisplayLearningType, DisplayRole } from '../../../components/translated';
+import Language from '../../../entities/Language';
 import { LearningType } from '../../../entities/LearningLanguage';
 import { Profile } from '../../../entities/Profile';
 import ProfileLink from '../ui/ProfileLink';
@@ -11,23 +12,31 @@ interface TandemPartner {
     profile: Profile;
     name: string;
     learningType: LearningType;
+    effectiveLearningType?: LearningType;
     level: string;
     createdAt: Date;
     score?: number;
+    tandemLanguage?: Language;
 }
 
 interface TandemTableProps {
     partners: TandemPartner[];
     actions?: (partner: TandemPartner) => React.ReactNode;
+    displayTandemLanguage?: boolean;
 }
 
-const TandemTable = ({ partners, actions }: TandemTableProps) => {
+const TandemTable = ({ partners, actions, displayTandemLanguage }: TandemTableProps) => {
     const translate = useTranslate();
 
     return (
         <Table>
             <TableHead>
                 <TableRow>
+                    {displayTandemLanguage && (
+                        <TableCell>
+                            {translate('learning_languages.show.tandems.tableColumns.tandemLanguage')}
+                        </TableCell>
+                    )}
                     <TableCell>{translate('learning_languages.show.tandems.tableColumns.profile')}</TableCell>
                     <TableCell>{translate('learning_languages.show.tandems.tableColumns.learnedLanguage')}</TableCell>
                     <TableCell>{translate('learning_languages.show.tandems.tableColumns.level')}</TableCell>
@@ -46,6 +55,7 @@ const TandemTable = ({ partners, actions }: TandemTableProps) => {
             <TableBody>
                 {partners.map((partner) => (
                     <TableRow key={partner.id}>
+                        {displayTandemLanguage && <TableCell>{partner.tandemLanguage?.name}</TableCell>}
                         <TableCell>
                             <ProfileLink profile={partner.profile} />
                         </TableCell>
@@ -56,7 +66,10 @@ const TandemTable = ({ partners, actions }: TandemTableProps) => {
                             <DisplayRole role={partner.profile.user.role} />
                         </TableCell>
                         <TableCell>
-                            <DisplayLearningType learningType={partner.learningType} />
+                            <DisplayLearningType
+                                effectiveLearningType={partner.effectiveLearningType}
+                                learningType={partner.learningType}
+                            />
                         </TableCell>
                         <TableCell>
                             <DisplayGender gender={partner.profile.user.gender} />

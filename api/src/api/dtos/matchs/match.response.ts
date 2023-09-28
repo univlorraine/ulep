@@ -2,6 +2,7 @@ import { ApiProperty } from '@nestjs/swagger';
 import { Expose, Type } from 'class-transformer';
 import { Match } from 'src/core/models/matchs.model';
 import { LearningLanguageResponse } from '../learning-languages';
+import { LanguageResponse } from '../languages';
 
 class MatchScoreDto {
   @ApiProperty()
@@ -51,6 +52,10 @@ export class MatchResponse {
   @Expose({ groups: ['read'] })
   score: MatchScoreDto;
 
+  @ApiProperty({ type: LanguageResponse })
+  @Expose({ groups: ['read'] })
+  tandemLanguage?: LanguageResponse;
+
   constructor(partial: Partial<MatchResponse>) {
     Object.assign(this, partial);
   }
@@ -68,6 +73,9 @@ export class MatchResponse {
         university: instance.scores.university,
         total: instance.total,
       }),
+      tandemLanguage:
+        instance.owner.tandemLanguage &&
+        LanguageResponse.fromLanguage(instance.owner.tandemLanguage),
     });
   }
 }

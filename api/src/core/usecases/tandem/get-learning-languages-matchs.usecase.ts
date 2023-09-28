@@ -54,24 +54,22 @@ export class GetLearningLanguageMatchesUsecase {
       throw new ProfileIsNotInCentralUniversity(command.id);
     }
 
-    const languagesThatCanBeLearnt =
-      await this.languageRepository.getLanguagesProposedToLearning();
+    const languagesAvailableForLearning = (
+      await this.languageRepository.getLanguagesProposedToLearning()
+    ).filter((language) => !language.isJokerLanguage());
 
     let targets = [];
     if (learningLanguage.language.isJokerLanguage()) {
-      const languageIdsSpokenByOwner = [
-        owner.nativeLanguage,
-        ...owner.masteredLanguages,
-      ].map((language) => language.id);
-
-      const languageIdsSupportedByUniversity = languagesThatCanBeLearnt.map(
+      const languageIdsSpokenByOwner = owner.spokenLanguages.map(
         (language) => language.id,
       );
+      const languageIdsThatCanBeLearnt = languagesAvailableForLearning
+        .map((language) => language.id)
+        .filter((id) => !languageIdsSpokenByOwner.includes(id));
 
       targets =
-        await this.learningLanguageRepository.getAvailableLearningLanguagesSpeakingDifferentLanguageAndFromUniversities(
-          languageIdsSpokenByOwner,
-          languageIdsSupportedByUniversity,
+        await this.learningLanguageRepository.getAvailableLearningLanguagesSpeakingOneOfLanguagesAndFromUniversities(
+          languageIdsThatCanBeLearnt,
           command.universityIds,
         );
     } else {
@@ -112,7 +110,7 @@ export class GetLearningLanguageMatchesUsecase {
       const match = this.matchService.computeMatchScore(
         learningLanguage,
         target,
-        languagesThatCanBeLearnt,
+        languagesAvailableForLearning,
       );
 
       potentialMatchs.push(match);

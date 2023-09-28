@@ -16,6 +16,7 @@ interface LearningLanguageProps {
   certificateOption?: boolean;
   specificProgram?: boolean;
   campus?: Campus;
+  tandemLanguage?: Language;
 }
 
 export class LearningLanguage {
@@ -30,6 +31,7 @@ export class LearningLanguage {
   readonly certificateOption?: boolean;
   readonly specificProgram?: boolean;
   readonly campus?: Campus;
+  tandemLanguage?: Language;
 
   constructor({
     id,
@@ -43,6 +45,7 @@ export class LearningLanguage {
     certificateOption,
     specificProgram,
     campus,
+    tandemLanguage,
   }: LearningLanguageProps) {
     this.id = id;
     this.language = language;
@@ -55,14 +58,17 @@ export class LearningLanguage {
     this.certificateOption = certificateOption;
     this.specificProgram = specificProgram;
     this.campus = campus;
+    this.tandemLanguage = tandemLanguage;
   }
 
   public isDiscovery(learningLanguageMatch?: LearningLanguage) {
     // TODO(discovery+1): asian discovery
     if (learningLanguageMatch) {
       if (
-        this.learningType === LearningType.BOTH &&
-        learningLanguageMatch.learningType === LearningType.BOTH &&
+        (this.learningType === LearningType.TANDEM ||
+          (this.learningType === LearningType.BOTH &&
+            (learningLanguageMatch.learningType === LearningType.BOTH ||
+              learningLanguageMatch.learningType === LearningType.TANDEM))) &&
         this.campus &&
         this.campus.id === learningLanguageMatch.campus?.id
       ) {
@@ -80,8 +86,10 @@ export class LearningLanguage {
     learningLanguage: LearningLanguage,
   ): boolean {
     if (this.language.isJokerLanguage()) {
-      // // TODO(NOW+1): Note: we do not check if joker language match a language spoken
-      // by profile 2 but not spoken by profile 1 as this will be done in Score computation and probably return which language is possible in that case
+      // Author note: we currently do not check if joker language match a language spoken
+      // by other profile and not spoken by this learningLanguage's profile here as:
+      // - This is done in match score computation, where it needs to return the language
+      // - It depends on other external elements such as available languages
       return true;
     } else {
       if (learningLanguage.profile.isSpeakingLanguage(this.language)) {
