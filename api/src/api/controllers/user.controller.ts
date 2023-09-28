@@ -21,6 +21,7 @@ import { UploadAvatarUsecase } from 'src/core/usecases';
 import {
   CreateUserUsecase,
   DeleteUserUsecase,
+  GetAdministratorsUsecase,
   GetUserUsecase,
   GetUsersUsecase,
   UpdateUserUsecase,
@@ -28,6 +29,7 @@ import {
 import { CollectionResponse, CurrentUser } from '../decorators';
 import { Roles } from '../decorators/roles.decorator';
 import {
+  AdministratorResponse,
   CreateUserRequest,
   PaginationDto,
   UpdateUserRequest,
@@ -47,6 +49,7 @@ export class UserController {
     private readonly getUserUsecase: GetUserUsecase,
     private readonly updateUserUsecase: UpdateUserUsecase,
     private readonly deleteUserUsecase: DeleteUserUsecase,
+    private readonly getAdministrators: GetAdministratorsUsecase,
   ) {}
 
   @Post()
@@ -85,6 +88,17 @@ export class UserController {
       items: users.items.map(UserResponse.fromDomain),
       totalItems: users.totalItems,
     });
+  }
+
+  @Get('administrators')
+  @Roles(configuration().adminRole)
+  @UseGuards(AuthenticationGuard)
+  @Swagger.ApiOperation({ summary: 'Collection of Administrator ressource.' })
+  @CollectionResponse(UserResponse)
+  async findAllAdministrators() {
+    const admin = await this.getAdministrators.execute();
+
+    return admin.map(AdministratorResponse.fromDomain);
   }
 
   @Get('me')

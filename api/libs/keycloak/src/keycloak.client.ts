@@ -401,6 +401,26 @@ export class KeycloakClient {
   }
 
   /*
+   * Get administrators users
+   */
+  public async getAdministrators(): Promise<UserRepresentation[]> {
+    const response = await fetch(
+      `${this.configuration.baseUrl}/admin/realms/${this.configuration.realm}/groups/02736a0f-4679-4329-a877-2ce87aaea569/members`,
+      {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${await this.getAccessToken()}`,
+        },
+      },
+    );
+
+    const administrators = await response.json();
+
+    return administrators;
+  }
+
+  /*
    * Get a role by name
    */
   private async getRealmRole(roleName: string): Promise<RoleRepresentation> {
