@@ -281,7 +281,7 @@ export class MatchScorer implements IMatchScorer {
       const universityLearnableLanguages = learningLanguage.profile.user.filterLearnableLanguages(availableLanguages);
       const matchLanguageWithScore = learnableLanguagesFromMatch.reduce<{ languageLearnt: Language; score: number, }>((accumulator, value) => {
         if (!value.language.isJokerLanguage() && 
-          learningLanguage.profile.isSpeakingLanguage(value.language) &&
+          !learningLanguage.profile.isSpeakingLanguage(value.language) &&
           universityLearnableLanguages.some(language => language.id == value.language.id)
         ) {
           const score = discoveryLanguageLevelMatrix[ProficiencyLevel.A0][value.level] / levelsCount;
