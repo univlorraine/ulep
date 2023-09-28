@@ -41,7 +41,7 @@ spec:
               value: "{{ include "etandem.name" . }}-postgresql.{{ .Release.Namespace }}"
             - name: DB_USER
               value: "{{ .Values.global.postgresql.auth.username }}"
-        - name: Mount theme
+        - name: mount-custom-theme
           image: "{{ .Values.auth.initImage.repository }}:{{ .Values.auth.initImage.tag}}"
           volumeMounts:
             - name: "{{ .Values.auth.name }}-themes"
@@ -50,7 +50,7 @@ spec:
           args:
             - |
               echo "Copying themes..."
-              cp -R /app/themes/* /kc-themes
+              cp -R /app/themes/* /auth-themes
               echo "All themes copied"
       containers:
         - name: {{ .Chart.Name }}
@@ -115,6 +115,8 @@ spec:
             mountPath: /opt/keycloak/data/import
           - name: "{{ .Values.auth.name }}-providers"
             mountPath: /opt/keycloak/providers
+          - name: "{{ .Values.auth.name }}-themes"
+            mountPath: /opt/keycloak/themes
       volumes:
       - name: "{{ .Values.auth.name }}-realm"
         configMap:
@@ -122,6 +124,8 @@ spec:
       - name: "{{ .Values.auth.name }}-providers"
         configMap:
           name: "{{ include "etandem.name" . }}-providers-{{ .Values.auth.name }}"
+      - name: "{{ .Values.auth.name }}-themes"
+        emptyDir: {}
       {{- with .Values.nodeSelector }}
       nodeSelector:
         {{- toYaml . | nindent 8 }}
