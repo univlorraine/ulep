@@ -14,6 +14,10 @@ import {
 } from 'src/core/ports/email-template.repository';
 import { EMAIL_GATEWAY, EmailGateway } from 'src/core/ports/email.gateway';
 import {
+  LANGUAGE_REPOSITORY,
+  LanguageRepository,
+} from 'src/core/ports/language.repository';
+import {
   LEARNING_LANGUAGE_REPOSITORY,
   LearningLanguageRepository,
 } from 'src/core/ports/learning-language.repository';
@@ -26,6 +30,7 @@ import {
   UniversityRepository,
 } from 'src/core/ports/university.repository';
 import { UUID_PROVIDER } from 'src/core/ports/uuid.provider';
+import { IMatchScorer, MatchScorer } from 'src/core/services/MatchScorer';
 import { UuidProvider } from 'src/providers/services/uuid.provider';
 
 export type CreateTandemCommand = {
@@ -35,6 +40,7 @@ export type CreateTandemCommand = {
 
 @Injectable()
 export class CreateTandemUsecase {
+  private readonly scorer: IMatchScorer = new MatchScorer();
   private readonly logger = new Logger(CreateTandemUsecase.name);
 
   constructor(
@@ -44,6 +50,8 @@ export class CreateTandemUsecase {
     private readonly tandemsRepository: TandemRepository,
     @Inject(UNIVERSITY_REPOSITORY)
     private readonly universityRepository: UniversityRepository,
+    @Inject(LANGUAGE_REPOSITORY)
+    private readonly languageRepository: LanguageRepository,
     @Inject(UUID_PROVIDER)
     private readonly uuidProvider: UuidProvider,
     @Inject(EMAIL_TEMPLATE_REPOSITORY)
@@ -89,6 +97,14 @@ export class CreateTandemUsecase {
       },
     );
 
+    const availableLanguages =
+      await this.languageRepository.getLanguagesProposedToLearning();
+    const compatibilityScore = this.scorer.computeMatchScore(
+      learningLanguages[0],
+      learningLanguages[1],
+      availableLanguages,
+    ).total;
+
     let tandem: Tandem;
     if (learningLanguagesFromAdminUniversity.length === 0) {
       throw new DomainError({
@@ -102,6 +118,7 @@ export class CreateTandemUsecase {
         learningLanguages,
         status: TandemStatus.ACTIVE,
         universityValidations: [adminUniversityId],
+        compatibilityScore,
       });
     } else {
       const partnerUniversityPairingMode =
@@ -115,6 +132,7 @@ export class CreateTandemUsecase {
             learningLanguages,
             status: TandemStatus.VALIDATED_BY_ONE_UNIVERSITY,
             universityValidations: [adminUniversityId],
+            compatibilityScore,
           });
           break;
         case PairingMode.SEMI_AUTOMATIC:
@@ -124,6 +142,7 @@ export class CreateTandemUsecase {
             learningLanguages,
             status: TandemStatus.ACTIVE,
             universityValidations: [adminUniversityId],
+            compatibilityScore,
           });
           break;
         default:

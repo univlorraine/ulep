@@ -29,6 +29,7 @@ export const suggestedLanguageMapper = (
         .mainUniversityStatus as LanguageStatus,
       secondaryUniversityActive:
         instance.LanguageCode.secondaryUniversityActive,
+      isDiscovery: instance.LanguageCode.isDiscovery,
     }),
     user: userMapper(instance.User),
   });
@@ -42,4 +43,5 @@ export const languageMapper = (instance: LanguageSnapshot): Language =>
     name: instance.name,
     mainUniversityStatus: instance.mainUniversityStatus as LanguageStatus,
     secondaryUniversityActive: instance.secondaryUniversityActive,
+    isDiscovery: instance.isDiscovery,
   });

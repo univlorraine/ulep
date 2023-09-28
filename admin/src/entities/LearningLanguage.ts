@@ -32,6 +32,7 @@ export type LearningLanguageTandem = {
     userLearningLanguage: LearningLanguage;
     partnerLearningLanguage: LearningLanguage;
     universityValidations: string[];
+    compatibilityScore: number;
 };
 
 /**

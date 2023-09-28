@@ -26,20 +26,22 @@ model CountryCodes {
 }
 
 model LanguageCodes {
-  id                        String               @id @default(uuid())
+  id                        String   @id @default(uuid())
   name                      String
   code                      String
-  created_at                DateTime             @default(now())
-  updated_at                DateTime             @updatedAt
-  mainUniversityStatus      String               @default("UNACTIVE")
-  secondaryUniversityActive Boolean              @default(false)
-  NativeLanguages           Profiles[]           @relation("NativeLanguage")
-  MasteredLanguages         MasteredLanguages[]
-  SuggestedLanguages        SuggestedLanguages[]
-  Translations              Translations[]
-  TextContents              TextContent[]
-  LearningLanguages         LearningLanguages[]  @relation("LearningLanguageLanguage")
-  JokerLearningLanguages    LearningLanguages[]  @relation("TandemLanguage")
+  created_at                DateTime @default(now())
+  updated_at                DateTime @updatedAt
+  mainUniversityStatus      String   @default("UNACTIVE")
+  secondaryUniversityActive Boolean  @default(false)
+  isDiscovery               Boolean  @default(false)
+
+  NativeLanguages        Profiles[]           @relation("NativeLanguage")
+  MasteredLanguages      MasteredLanguages[]
+  SuggestedLanguages     SuggestedLanguages[]
+  Translations           Translations[]
+  TextContents           TextContent[]
+  LearningLanguages      LearningLanguages[]  @relation("LearningLanguageLanguage")
+  JokerLearningLanguages LearningLanguages[]  @relation("TandemLanguage")
 
   @@unique([name])
   @@unique([code])
@@ -363,6 +365,9 @@ model InterestCategories {
 model Tandems {
   id                    String              @id @default(uuid())
   status                String              @default("ACTIVE")
+  // We store compatibilityScore as an Int in order to avoid float approximation
+  // This means the score between 0-1 (float) should be converted to 0-100 (int)
+  compatibilityScore    Int                 @default(0)
   created_at            DateTime            @default(now())
   updated_at            DateTime            @updatedAt
   LearningLanguages     LearningLanguages[]

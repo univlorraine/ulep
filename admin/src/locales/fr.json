@@ -104,6 +104,11 @@
             "success": "Le status a bien été mis à jour",
             "title": "Status",
             "unactive": "Désactivé pour l'apprentissage"
+        },
+        "isDiscovery": {
+            "title": "Langue découverte",
+            "yes": "Oui",
+            "no": "Non"
         }
     },
     "login": {

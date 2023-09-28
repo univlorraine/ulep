@@ -85,17 +85,9 @@ export class LanguageController {
   @Swagger.ApiOkResponse({ type: LanguageResponse, isArray: true })
   async update(
     @Body()
-    {
-      code,
-      mainUniversityStatus,
-      secondaryUniversityActive,
-    }: UpdateLanguageCodeRequest,
+    command: UpdateLanguageCodeRequest,
   ) {
-    const language = await this.updateLangaugeUsecase.execute({
-      code,
-      mainUniversityStatus,
-      secondaryUniversityActive,
-    });
+    const language = await this.updateLangaugeUsecase.execute(command);
 
     return LanguageResponse.fromLanguage(language);
   }

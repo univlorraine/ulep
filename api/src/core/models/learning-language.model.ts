@@ -62,7 +62,6 @@ export class LearningLanguage {
   }
 
   public isDiscovery(learningLanguageMatch?: LearningLanguage) {
-    // TODO(discovery+1): asian discovery
     if (learningLanguageMatch) {
       if (
         (this.learningType === LearningType.TANDEM ||
@@ -77,6 +76,7 @@ export class LearningLanguage {
     }
 
     return (
+      this.language.isDiscovery ||
       this.language.isJokerLanguage() ||
       this.learningType === LearningType.TANDEM
     );

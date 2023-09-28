@@ -86,6 +86,7 @@ describe('GenerateTandem UC', () => {
     name: 'french',
     mainUniversityStatus: LanguageStatus.PRIMARY,
     secondaryUniversityActive: true,
+    isDiscovery: false,
   });
   const english = new Language({
     id: faker.string.uuid(),
@@ -93,6 +94,7 @@ describe('GenerateTandem UC', () => {
     name: 'english',
     mainUniversityStatus: LanguageStatus.PRIMARY,
     secondaryUniversityActive: true,
+    isDiscovery: false,
   });
   const spanish = new Language({
     id: faker.string.uuid(),
@@ -100,6 +102,7 @@ describe('GenerateTandem UC', () => {
     name: 'spanish',
     mainUniversityStatus: LanguageStatus.PRIMARY,
     secondaryUniversityActive: true,
+    isDiscovery: false,
   });
   const deutch = new Language({
     id: faker.string.uuid(),
@@ -107,6 +110,7 @@ describe('GenerateTandem UC', () => {
     name: 'deutch',
     mainUniversityStatus: LanguageStatus.PRIMARY,
     secondaryUniversityActive: true,
+    isDiscovery: false,
   });
   const joker = new Language({
     id: faker.string.uuid(),
@@ -114,6 +118,7 @@ describe('GenerateTandem UC', () => {
     name: 'joker',
     mainUniversityStatus: LanguageStatus.PRIMARY,
     secondaryUniversityActive: true,
+    isDiscovery: false,
   });
   const otherLanguage = new Language({
     id: faker.string.uuid(),
@@ -121,6 +126,7 @@ describe('GenerateTandem UC', () => {
     name: 'other',
     mainUniversityStatus: LanguageStatus.UNACTIVE,
     secondaryUniversityActive: false,
+    isDiscovery: false,
   });
   languageRepository.init([
     french,
@@ -533,6 +539,7 @@ describe('GenerateTandem UC', () => {
           }),
         ],
         status: TandemStatus.ACTIVE,
+        compatibilityScore: 0.1,
       }),
       new Tandem({
         id: 'tandem2',
@@ -547,6 +554,7 @@ describe('GenerateTandem UC', () => {
           }),
         ],
         status: TandemStatus.ACTIVE,
+        compatibilityScore: 0.1,
       }),
     ];
 

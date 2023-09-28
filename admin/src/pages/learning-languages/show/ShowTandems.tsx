@@ -89,20 +89,22 @@ const ShowTandems = () => {
         return <p>{translate('learning_languages.show.tandems.error')}</p>;
     }
 
+    const tandemPartners = tandem
+        ? [
+              {
+                  ...tandem.partnerLearningLanguage,
+                  compatibilityScore: tandem.compatibilityScore,
+                  tandemLanguage: tandem.userLearningLanguage.tandemLanguage,
+                  effectiveLearningType: getEffectiveLearningType(record, tandem.partnerLearningLanguage),
+              },
+          ]
+        : [];
+
     if (hasActiveTandem) {
         return (
             <>
                 <Typography variant="h6">{translate('learning_languages.show.tandems.active.title')}</Typography>
-                <TandemTable
-                    displayTandemLanguage={isJokerLearningLanguage}
-                    partners={[
-                        {
-                            ...tandem.partnerLearningLanguage,
-                            tandemLanguage: tandem.userLearningLanguage.tandemLanguage,
-                            effectiveLearningType: getEffectiveLearningType(record, tandem.partnerLearningLanguage),
-                        },
-                    ]}
-                />
+                <TandemTable displayTandemLanguage={isJokerLearningLanguage} partners={tandemPartners} />
             </>
         );
     }
@@ -137,13 +139,7 @@ const ShowTandems = () => {
                             : undefined
                     }
                     displayTandemLanguage={isJokerLearningLanguage}
-                    partners={[
-                        {
-                            ...tandem.partnerLearningLanguage,
-                            tandemLanguage: tandem.userLearningLanguage.tandemLanguage,
-                            effectiveLearningType: getEffectiveLearningType(record, tandem.partnerLearningLanguage),
-                        },
-                    ]}
+                    partners={tandemPartners}
                 />
             </>
         );
@@ -174,7 +170,7 @@ const ShowTandems = () => {
                                 displayTandemLanguage={isJokerLearningLanguage}
                                 partners={matches.map((match) => ({
                                     ...match.target,
-                                    score: match.score.total,
+                                    compatibilityScore: match.score.total,
                                     tandemLanguage: match.tandemLanguage,
                                     effectiveLearningType: getEffectiveLearningType(record, match.target),
                                 }))}
@@ -204,20 +200,7 @@ const ShowTandems = () => {
                                 />
                             )}
                             displayTandemLanguage={isJokerLearningLanguage}
-                            partners={
-                                tandem?.status === TandemStatus.DRAFT
-                                    ? [
-                                          {
-                                              ...tandem.partnerLearningLanguage,
-                                              tandemLanguage: tandem.userLearningLanguage.tandemLanguage,
-                                              effectiveLearningType: getEffectiveLearningType(
-                                                  tandem.userLearningLanguage,
-                                                  tandem.partnerLearningLanguage
-                                              ),
-                                          },
-                                      ]
-                                    : []
-                            }
+                            partners={tandem?.status === TandemStatus.DRAFT ? tandemPartners : []}
                         />
                     )}
                 </Box>
