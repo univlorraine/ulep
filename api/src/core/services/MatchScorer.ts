@@ -27,7 +27,7 @@ export interface IMatchScorer {
 export class MatchScorer implements IMatchScorer {
 
   #coeficients: Coeficients = {
-    level: 0.7,
+    level: 0.65,
     age: 0.05,
     status: 0.05,
     goals: 0.05,
