@@ -1,5 +1,4 @@
 import { Device } from '@capacitor/device';
-import { StatusBar, Style } from '@capacitor/status-bar';
 import { IonApp, setupIonicReact } from '@ionic/react';
 import { IonReactRouter } from '@ionic/react-router';
 import { StoreProvider, useStoreRehydrated } from 'easy-peasy';

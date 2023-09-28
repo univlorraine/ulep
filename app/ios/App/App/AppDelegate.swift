@@ -15,7 +15,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
                 let statusBarHeight = statusBarManager?.statusBarFrame.height ?? 0
 
                 let statusbarView = UIView()
-                statusbarView.backgroundColor = UIColor(red: 1.0, green: 1.0, blue: 1.0, alpha: 1.0) // Remplacez les valeurs RGB par celles de votre choix
+                statusbarView.backgroundColor = UIColor(red: 1.0, green: 1.0, blue: 1.0, alpha: 1.0)
                 window?.rootViewController?.view.addSubview(statusbarView)
 
                 statusbarView.translatesAutoresizingMaskIntoConstraints = false

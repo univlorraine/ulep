@@ -30,7 +30,7 @@ const WebLayoutCentered: React.FC<WebLayoutCenteredProps> = ({
                         <Background style={{ color: backgroundIconColor }} className="background-image" />
                     </div>
                 )}
-                <div style={{ backgroundColor: headerColor }} className="page content-wrapper">
+                <div style={{ backgroundColor: isHybrid ? 'white' : headerColor }} className="page content-wrapper">
                     <div className="white-centered-div">
                         <Header progressColor={headerColor} progressPercentage={headerPercentage} title={headerTitle} />
                         {children}
