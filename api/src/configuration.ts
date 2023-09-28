@@ -36,7 +36,7 @@ export type Configuration = {
 
 export const configuration = (): Configuration => ({
   port: 3000,
-  appUrl: process.env.APP_URL,
+  appUrl: process.env.APP_URL || 'http://localhost:5173',
   keycloak: {
     baseUrl: process.env.KEYCLOAK_BASE_URL,
     realm: process.env.KEYCLOAK_REALM,

@@ -60,7 +60,7 @@
 
             <div class="${properties.kcFormGroupClass!}">
                 <div id="kc-form-buttons" class="${properties.kcFormButtonsClass!}">
-                    <input id="submit-button" type="submit" disabled={true} value="${msg("doSubmit")}" />
+                    <input id="submit-button" type="submit" value="${msg("doSubmit")}" />
                 </div>
             </div>
         </form>
@@ -70,23 +70,6 @@
     const passwordConfirmInput = document.getElementById("password-confirm");
     const showPasswordInput = document.getElementById("showPassword");
     const passwordInput = document.getElementById("password-new");
-    const passwordRequirementsError = document.getElementById("input-error-password-requirements");
-    const submitButton = document.getElementById("submit-button");
-
-    passwordInput.addEventListener("input", function () {
-    const password = passwordInput.value;
-    const hasUpperCase = /[A-Z]/.test(password);
-    const hasLowerCase = /[a-z]/.test(password);
-    const hasNumber = /[0-9]/.test(password);
-
-    if (hasUpperCase && hasLowerCase && hasNumber) {
-        passwordRequirementsError.style.display = "none";
-        submitButton.disabled = false;
-    } else {
-        passwordRequirementsError.style.display = "block";
-        submitButton.disabled = true;
-    }
-    });
 
     showPasswordInput.addEventListener("change", function () {
         if (showPasswordInput.checked) {

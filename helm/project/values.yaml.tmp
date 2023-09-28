@@ -61,7 +61,7 @@ api:
     translationsEndpoint: TODO # REQUIRED
     translationsEndpointSuffix: TODO # OPTIONAL
     translationsToken: TODO # REQUIRED
-    appUrl: webapp.ulep.thestaging.io #REQUIRED
+    appUrl: *webappUrl # FIXE
 
   autoscaling:
     enabled: false
