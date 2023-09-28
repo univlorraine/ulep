@@ -112,6 +112,8 @@ spec:
               value: "{{ .Values.api.env.translationsEndpoint }}"
             - name: TRANSLATIONS_ENDPOINT_SUFFIX
               value: "{{ .Values.api.env.translationsEndpointSuffix }}"
+            - name: APP_URL
+              value: "https://{{ .Values.api.env.appUrl }}.{{ .Values.domain }}"
           envFrom:
             - secretRef: 
                 name: "{{ include "etandem.fullname" . }}-secret-{{ .Values.api.name }}"
