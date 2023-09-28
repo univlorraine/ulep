@@ -9,6 +9,7 @@ export enum LearningLanguageQuerySortKey {
   LANGUAGE = 'language',
   LEVEL = 'level',
   CREATED_AT = 'createdAt',
+  SPECIFIC_PROGRAM = 'specificProgram',
 }
 
 export interface LearningLanguageRepositoryGetProps {

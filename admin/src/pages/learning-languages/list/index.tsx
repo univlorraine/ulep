@@ -4,6 +4,7 @@ import React from 'react';
 import {
     Datagrid,
     DateField,
+    BooleanField,
     FunctionField,
     List,
     Loading,
@@ -95,6 +96,10 @@ const LearningLanguageList = () => {
                             label={translate('learning_languages.list.tableColumns.createdAt')}
                             source="createdAt"
                             sortable
+                        />
+                        <BooleanField
+                            label={translate('learning_languages.list.tableColumns.specificProgram')}
+                            source="specificProgram"
                         />
                         <FunctionField
                             label={translate('learning_languages.list.tableColumns.actionPossible')}
