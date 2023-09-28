@@ -113,6 +113,15 @@ export class AdministratorResponse {
   }
 }
 
+export class CreateAdministratorRequest {
+  @Swagger.ApiProperty({ type: 'string', format: 'email' })
+  @IsEmail()
+  email: string;
+
+  @Swagger.ApiProperty({ type: 'string', format: 'uuid' })
+  @IsUUID()
+  universityId: string;
+}
 export class UserResponse {
   @Swagger.ApiProperty({ type: 'string', format: 'uuid' })
   @Expose({ groups: ['read'] })

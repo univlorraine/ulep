@@ -19,6 +19,7 @@ import * as Swagger from '@nestjs/swagger';
 import { configuration } from 'src/configuration';
 import { UploadAvatarUsecase } from 'src/core/usecases';
 import {
+  CreateAdministratorUsecase,
   CreateUserUsecase,
   DeleteUserUsecase,
   GetAdministratorsUsecase,
@@ -30,6 +31,7 @@ import { CollectionResponse, CurrentUser } from '../decorators';
 import { Roles } from '../decorators/roles.decorator';
 import {
   AdministratorResponse,
+  CreateAdministratorRequest,
   CreateUserRequest,
   PaginationDto,
   UpdateUserRequest,
@@ -49,7 +51,8 @@ export class UserController {
     private readonly getUserUsecase: GetUserUsecase,
     private readonly updateUserUsecase: UpdateUserUsecase,
     private readonly deleteUserUsecase: DeleteUserUsecase,
-    private readonly getAdministrators: GetAdministratorsUsecase,
+    private readonly getAdministratorsUsecase: GetAdministratorsUsecase,
+    private readonly createAdministratorUsecase: CreateAdministratorUsecase,
   ) {}
 
   @Post()
@@ -96,9 +99,20 @@ export class UserController {
   @Swagger.ApiOperation({ summary: 'Collection of Administrator ressource.' })
   @CollectionResponse(UserResponse)
   async findAllAdministrators() {
-    const admin = await this.getAdministrators.execute();
+    const administrators = await this.getAdministratorsUsecase.execute();
 
-    return admin.map(AdministratorResponse.fromDomain);
+    return administrators.map(AdministratorResponse.fromDomain);
+  }
+
+  @Post('administrators')
+  @Roles(configuration().adminRole)
+  @UseGuards(AuthenticationGuard)
+  @Swagger.ApiOperation({ summary: 'Collection of Administrator ressource.' })
+  @CollectionResponse(UserResponse)
+  async createAdministrator(@Body() body: CreateAdministratorRequest) {
+    const admin = await this.createAdministratorUsecase.execute(body);
+
+    return AdministratorResponse.fromDomain(admin);
   }
 
   @Get('me')

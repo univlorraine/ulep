@@ -11,6 +11,7 @@ interface SmtpConfiguration {
 
 export type Configuration = {
   appUrl: string;
+  adminUrl: string;
   port: number;
   keycloak: KeycloakConfiguration;
   adminRole: string;
@@ -37,6 +38,7 @@ export type Configuration = {
 export const configuration = (): Configuration => ({
   port: 3000,
   appUrl: process.env.APP_URL || 'http://localhost:5173',
+  adminUrl: process.env.ADMIN_URL || 'http://localhost:3001',
   keycloak: {
     baseUrl: process.env.KEYCLOAK_BASE_URL,
     realm: process.env.KEYCLOAK_REALM,

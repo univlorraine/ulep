@@ -22,6 +22,7 @@ import RoleRepresentation, {
   KeycloakCertsResponse,
   UserRepresentation,
   KeycloakUser,
+  CreateAdministratorProps,
 } from './keycloak.models';
 import { Client, Issuer, TokenSet } from 'openid-client';
 
@@ -305,6 +306,39 @@ export class KeycloakClient {
   }
 
   /*
+   * Creates a new user in Keycloak.
+   */
+  async createAdministrator(
+    props: CreateAdministratorProps,
+  ): Promise<UserRepresentation> {
+    const response = await fetch(
+      `${this.configuration.baseUrl}/admin/realms/${this.configuration.realm}/users`,
+      {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${await this.getAccessToken()}`,
+        },
+        body: JSON.stringify({
+          email: props.email,
+          enabled: true,
+          attributes: {
+            universityId: props.universityId,
+          },
+        }),
+      },
+    );
+    if (!response.ok) {
+      this.logger.error(JSON.stringify(await response.json()));
+      throw new UserAlreadyExistException();
+    }
+
+    const user = await this.getUserByEmail(props.email);
+
+    return user;
+  }
+
+  /*
    * Retrieves all users from Keycloak
    * Params:
    *  - email: email of the user
@@ -374,6 +408,22 @@ export class KeycloakClient {
     }
 
     return users[0];
+  }
+
+  /*
+   * Add user to group
+   */
+  async addUserToAdministrator(userId: string): Promise<void> {
+    await fetch(
+      `${this.configuration.baseUrl}/admin/realms/${this.configuration.realm}/users/${userId}/groups/02736a0f-4679-4329-a877-2ce87aaea569`,
+      {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${await this.getAccessToken()}`,
+        },
+      },
+    );
   }
 
   /*
