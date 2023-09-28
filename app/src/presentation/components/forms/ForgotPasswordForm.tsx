@@ -6,9 +6,11 @@ import { AvatarPng, LeftChevronSvg } from '../../../assets';
 import CircleAvatar from '../CircleAvatar';
 import TextInput from '../TextInput';
 import style from './Form.module.css';
+import { useConfig } from '../../../context/ConfigurationContext';
 
 const ForgotPasswordForm = () => {
     const { t } = useTranslation();
+    const { resetPassword } = useConfig();
     const history = useHistory();
     const [email, setEmail] = useState<string>('');
     const [showLoading, hideLoading] = useIonLoading();
@@ -17,11 +19,11 @@ const ForgotPasswordForm = () => {
     const handleForgotPassword = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
         await showLoading();
-        const result: any = []; // TODO: call forgot password route
+        const result = await resetPassword.execute(email);
         if (result instanceof Error) {
             await showToast({ message: t(result.message), duration: 5000 });
         } else {
-            await history.push('/forgot-password/sent');
+            await history.push('/forgot-password/sent', { email });
         }
         await hideLoading();
     };

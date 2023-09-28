@@ -15,16 +15,17 @@ describe('ResetPasswordUsecase', () => {
 
     it('execute function must call DomainHttpAdapter with specific path and params', async () => {
         expect.assertions(2);
-        jest.spyOn(adapter, 'put');
+        jest.spyOn(adapter, 'post');
         adapter.mockJson({ parsedBody: {} });
-        await usecase.execute('id', 'password');
-        expect(adapter.put).toHaveBeenCalledTimes(1);
-        expect(adapter.put).toHaveBeenCalledWith(
-            '/users/id/reset-password',
+        await usecase.execute('email');
+        expect(adapter.post).toHaveBeenCalledTimes(1);
+        expect(adapter.post).toHaveBeenCalledWith(
+            '/authentication/reset-password',
             {
-                password: 'password',
+                email: 'email',
             },
             {},
+            undefined,
             false
         );
     });
@@ -34,14 +35,14 @@ describe('ResetPasswordUsecase', () => {
 
         adapter.mockJson({});
 
-        const result = await usecase.execute('id', 'password');
+        const result = await usecase.execute('email');
         expect(result).toBeInstanceOf(Error);
     });
 
     it('execute must return an error if adapter return an error without status', async () => {
         expect.assertions(1);
         adapter.mockError({});
-        const result = await usecase.execute('email', 'password');
+        const result = await usecase.execute('email');
         expect(result).toStrictEqual(new Error('errors.global'));
     });
 });

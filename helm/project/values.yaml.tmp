@@ -5,10 +5,10 @@
 ############## GLOBAL ##############
 
 name: "ulep" # REQUIRED
-domain: exemple.com # REQUIRED 
-issuerName: letsencrypt # REQUIRED 
+domain: exemple.com # REQUIRED
+issuerName: letsencrypt # REQUIRED
 global:
-  postgresql: 
+  postgresql:
     auth:
       username: postgres # FIXE
       database: ulep # FIXE
@@ -17,7 +17,7 @@ global:
 
 postgresql:
   primary:
-    initdb: 
+    initdb:
       scriptsConfigMap: ulep-init-database # REQUIRED
 apiUrl: &apiUrl api
 adminUrl: &adminUrl admin
@@ -44,7 +44,7 @@ api:
     keycloakAdmin: admin # REQUIRED
     keycloakAdminPassword: &keycloakAdminPassword AZE123aze # REQUIRED
     keycloakClientId: api # FIXE
-    keycloakClientSecret: &keycloakClientSecret "" # REQUIRED 
+    keycloakClientSecret: &keycloakClientSecret "" # REQUIRED
     minioAccessKey: &minioAccessKey minio # FIXE
     minioSecretKey: &minioSecretKey AZE123aze # REQUIRED
     smtpHost: localhost # REQUIRED
@@ -61,6 +61,7 @@ api:
     translationsEndpoint: TODO # REQUIRED
     translationsEndpointSuffix: TODO # OPTIONAL
     translationsToken: TODO # REQUIRED
+    appUrl: *webappUrl # FIXE
 
   autoscaling:
     enabled: false
@@ -75,7 +76,7 @@ api:
   ingress:
     enabled: true
     className: traefik
-    annotations: 
+    annotations:
       kubernetes.io/ingress.class: "traefik"
       cert-manager.io/cluster-issuer: "letsencrypt"
       kubernetes.io/tls-acme: "true"
@@ -102,7 +103,7 @@ auth:
     keycloakAdminPassword: *keycloakAdminPassword # REQUIRED
     kcDB: postgres # FIXE
     kcDBSchema: keycloak # FIXE
-    proxyAddressForwarding: true 
+    proxyAddressForwarding: true
     logLevel: INFO # REQUIRED
 
 
@@ -119,14 +120,14 @@ auth:
   ingress:
     enabled: true
     className: traefik
-    annotations: 
+    annotations:
       kubernetes.io/ingress.class: "traefik"
       cert-manager.io/cluster-issuer: "letsencrypt"
       kubernetes.io/tls-acme: "true"
     hosts:
       - host: *keycloakUrl
         paths: [/]
-    tls: 
+    tls:
       - hosts:
           - *keycloakUrl
 ############## AUTH ##############
@@ -174,7 +175,7 @@ minio:
       - host: *minioApiUrl
         paths: [/]
         port: 9000
-    tls: 
+    tls:
       - hosts:
           - *minioUrl
       - hosts:
@@ -191,7 +192,7 @@ admin:
     tag: "latest" # REQUIRED
     pullPolicy: Always
 
-  env: 
+  env:
     keycloakClientSecret: *keycloakClientSecret # REQUIRED
 
   autoscaling:
@@ -215,7 +216,7 @@ admin:
     hosts:
       - host: *adminUrl
         paths: [/]
-    tls: 
+    tls:
       - hosts:
           - *adminUrl
 ############## ADMIN ##############
@@ -261,7 +262,7 @@ webapp:
     hosts:
       - host: *webappUrl
         paths: [/]
-    tls: 
+    tls:
       - hosts:
           - *webappUrl
 ############## WEBAPP ##############
@@ -277,7 +278,7 @@ serviceAccount:
   # If not set and create is true, a name is generated using the fullname template
   name: ""
 
-imagePullSecrets: 
+imagePullSecrets:
   - name: "registrypullsecret" # FIXE
 
 nameOverride: ""
