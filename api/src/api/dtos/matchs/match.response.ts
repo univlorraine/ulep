@@ -31,7 +31,11 @@ class MatchScoreDto {
 
   @ApiProperty()
   @Expose({ groups: ['read'] })
-  university: number;
+  meetingFrequency: number;
+
+  @ApiProperty()
+  @Expose({ groups: ['read'] })
+  certificateOption: number;
 
   @ApiProperty()
   @Expose({ groups: ['read'] })
@@ -70,7 +74,8 @@ export class MatchResponse {
         goals: instance.scores.goals,
         interests: instance.scores.interests,
         gender: instance.scores.gender,
-        university: instance.scores.university,
+        meetingFrequency: instance.scores.meetingFrequency,
+        certificateOption: instance.scores.certificateOption,
         total: instance.total,
       }),
       tandemLanguage:
