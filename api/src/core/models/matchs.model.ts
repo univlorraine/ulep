@@ -17,6 +17,7 @@ export class MatchScores {
   readonly gender: number;
   readonly university: number;
   readonly meetingFrequency: number;
+  readonly certificateOption: number;
 
   constructor(props: {
     level: number;
@@ -27,6 +28,7 @@ export class MatchScores {
     gender: number;
     university: number;
     meetingFrequency: number;
+    certificateOption: number;
   }) {
     this.level = props.level;
     this.age = props.age;
@@ -36,6 +38,7 @@ export class MatchScores {
     this.gender = props.gender;
     this.university = props.university;
     this.meetingFrequency = props.meetingFrequency;
+    this.certificateOption = props.certificateOption;
   }
 
   static empty(): MatchScores {
@@ -48,6 +51,7 @@ export class MatchScores {
       gender: 0,
       university: 0,
       meetingFrequency: 0,
+      certificateOption: 0,
     });
   }
 }

@@ -13,6 +13,7 @@ export type Coeficients = {
   gender: number;
   university: number;
   meetingFrequency: number;
+  certificateOption: number;
 };
 
 export interface IMatchScorer {
@@ -35,6 +36,7 @@ export class MatchScorer implements IMatchScorer {
     gender: 0.05,
     university: 0.05,
     meetingFrequency: 0.05,
+    certificateOption: 0.05,
   };
 
   public set coeficients(coeficients: Coeficients) {
@@ -83,7 +85,8 @@ export class MatchScorer implements IMatchScorer {
       university: this.computeSameUniversityBonus(profile1, profile2),
       gender: this.computeSameGenderBonus(learningLanguage1, learningLanguage2),
       interests: this.computeSameInterestBonus(profile1, profile2),
-      meetingFrequency: this.computeMeetingFrequencyBonus(profile1, profile2)
+      meetingFrequency: this.computeMeetingFrequencyBonus(profile1, profile2),
+      certificateOption: this.computeCertificateOptionBonus(learningLanguage1, learningLanguage2)
     });
 
     return new Match({
@@ -241,6 +244,17 @@ export class MatchScorer implements IMatchScorer {
       return this.#coeficients.meetingFrequency;
     }
 
+    return 0;
+  }
+
+  private computeCertificateOptionBonus(
+    learningLanguage1: LearningLanguage,
+    learningLanguage2: LearningLanguage
+  ): number {
+    if (!!learningLanguage1.certificateOption === !!learningLanguage2.certificateOption) {
+      return this.#coeficients.certificateOption;
+    }
+    
     return 0;
   }
 
