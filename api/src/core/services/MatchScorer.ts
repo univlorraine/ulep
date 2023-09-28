@@ -11,7 +11,6 @@ export type Coeficients = {
   goals: number;
   interests: number;
   gender: number;
-  university: number;
   meetingFrequency: number;
   certificateOption: number;
 };
@@ -34,7 +33,6 @@ export class MatchScorer implements IMatchScorer {
     goals: 0.05,
     interests: 0.05,
     gender: 0.05,
-    university: 0.05,
     meetingFrequency: 0.05,
     certificateOption: 0.05,
   };
@@ -82,7 +80,6 @@ export class MatchScorer implements IMatchScorer {
       age: this.computeAgeBonus(profile1, profile2),
       status: this.computeSameRolesBonus(profile1, profile2),
       goals: this.computeSameGoalsBonus(profile1, profile2),
-      university: this.computeSameUniversityBonus(profile1, profile2),
       gender: this.computeSameGenderBonus(learningLanguage1, learningLanguage2),
       interests: this.computeSameInterestBonus(profile1, profile2),
       meetingFrequency: this.computeMeetingFrequencyBonus(profile1, profile2),
@@ -208,21 +205,6 @@ export class MatchScorer implements IMatchScorer {
     return this.coeficients.interests * similarity;
   }
 
-  // Apply bonus if profiles share the same university
-  private computeSameUniversityBonus(
-    profile1: Profile,
-    profile2: Profile,
-  ): number {
-    // Check if both profiles share the same university
-    const sharesUniversity = profile1.user.university.id === profile2.user.university.id;
-
-    // If both profiles share the same university, apply the bonus
-    if (sharesUniversity) {
-      return this.coeficients.university;
-    }
-
-    return 0;
-  }
 
   // Compute the similarity between two sets of strings using the Jaccard index
   private computeSimilarity(set1: Set<string>, set2: Set<string>): number {
