@@ -12,6 +12,7 @@ export type Coeficients = {
   interests: number;
   gender: number;
   university: number;
+  meetingFrequency: number;
 };
 
 export interface IMatchScorer {
@@ -33,6 +34,7 @@ export class MatchScorer implements IMatchScorer {
     interests: 0.05,
     gender: 0.05,
     university: 0.05,
+    meetingFrequency: 0.05,
   };
 
   public set coeficients(coeficients: Coeficients) {
@@ -81,6 +83,7 @@ export class MatchScorer implements IMatchScorer {
       university: this.computeSameUniversityBonus(profile1, profile2),
       gender: this.computeSameGenderBonus(learningLanguage1, learningLanguage2),
       interests: this.computeSameInterestBonus(profile1, profile2),
+      meetingFrequency: this.computeMeetingFrequencyBonus(profile1, profile2)
     });
 
     return new Match({
@@ -228,6 +231,17 @@ export class MatchScorer implements IMatchScorer {
     }
 
     return intersection.size / union.size;
+  }
+
+  private computeMeetingFrequencyBonus(
+    profile1: Profile,
+    profile2: Profile
+  ): number {
+    if (profile1.meetingFrequency === profile2.meetingFrequency) {
+      return this.#coeficients.meetingFrequency;
+    }
+
+    return 0;
   }
 
   /**
