@@ -141,6 +141,15 @@ export class GenerateTandemsUsecase {
           a.createdAt?.getTime() - b.createdAt?.getTime(),
       )
       .sort((a, b) => {
+        // Sort by specific program first
+        if (a.specificProgram) {
+          return -1;
+        } else if (b.specificProgram) {
+          return 1;
+        }
+        return 0;
+      })
+      .sort((a, b) => {
         // Sort by central university first
         if (
           a.profile.user.university.isCentralUniversity() ===
