@@ -102,13 +102,13 @@ export class AdministratorResponse {
   }
 
   static fromDomain(user: UserRepresentation) {
-    console.warn(user);
     return new AdministratorResponse({
       id: user.id,
       email: user.email,
-      universityId: user.attributes.universityId
-        ? user.attributes.universityId[0]
-        : undefined,
+      universityId:
+        user.attributes && user.attributes.universityId
+          ? user.attributes.universityId[0]
+          : undefined,
     });
   }
 }
@@ -120,7 +120,8 @@ export class CreateAdministratorRequest {
 
   @Swagger.ApiProperty({ type: 'string', format: 'uuid' })
   @IsUUID()
-  universityId: string;
+  @IsOptional()
+  universityId?: string;
 }
 export class UserResponse {
   @Swagger.ApiProperty({ type: 'string', format: 'uuid' })

@@ -21,11 +21,13 @@ export class CreateAdministratorUsecase {
   ) {}
 
   async execute(command: CreateAdministratorCommand) {
-    const university = await this.universityRepository.ofId(
-      command.universityId,
-    );
-    if (!university) {
-      throw new RessourceDoesNotExist('University does not exist');
+    if (command.universityId) {
+      const university = await this.universityRepository.ofId(
+        command.universityId,
+      );
+      if (!university) {
+        throw new RessourceDoesNotExist('University does not exist');
+      }
     }
 
     const keycloakUser = await this.keycloak.createAdministrator({
@@ -35,7 +37,6 @@ export class CreateAdministratorUsecase {
 
     await this.keycloak.addUserToAdministrator(keycloakUser.id);
 
-    console.warn(`${configuration().adminUrl}/login`);
     await this.keycloak.executeActionEmail(
       ['UPDATE_PASSWORD'],
       keycloakUser.id,

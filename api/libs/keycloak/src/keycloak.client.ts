@@ -417,7 +417,7 @@ export class KeycloakClient {
     await fetch(
       `${this.configuration.baseUrl}/admin/realms/${this.configuration.realm}/users/${userId}/groups/02736a0f-4679-4329-a877-2ce87aaea569`,
       {
-        method: 'POST',
+        method: 'PUT',
         headers: {
           'Content-Type': 'application/json',
           Authorization: `Bearer ${await this.getAccessToken()}`,
