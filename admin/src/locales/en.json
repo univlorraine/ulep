@@ -249,7 +249,8 @@
                 "createdAt": "Created",
                 "university": "University",
                 "hasActiveTandem": "In tandem",
-                "actionPossible": "Pending tandem"
+                "actionPossible": "Pending tandem",
+                "specificProgram": "Specific program"
             },
             "noUniversitySelected": "Please select one or more universities for pairing"
         },

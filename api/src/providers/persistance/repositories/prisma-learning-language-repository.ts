@@ -424,6 +424,11 @@ export class PrismaLearningLanguageRepository
             },
           };
           break;
+        case LearningLanguageQuerySortKey.SPECIFIC_PROGRAM:
+          orderByPayload = {
+            specific_program: orderBy.order,
+          };
+          break;
         default:
           throw new Error('Unsupported orderBy field');
       }

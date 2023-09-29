@@ -11,7 +11,8 @@ export type Coeficients = {
   goals: number;
   interests: number;
   gender: number;
-  university: number;
+  meetingFrequency: number;
+  certificateOption: number;
 };
 
 export interface IMatchScorer {
@@ -26,13 +27,14 @@ export interface IMatchScorer {
 export class MatchScorer implements IMatchScorer {
 
   #coeficients: Coeficients = {
-    level: 0.7,
+    level: 0.65,
     age: 0.05,
     status: 0.05,
     goals: 0.05,
     interests: 0.05,
     gender: 0.05,
-    university: 0.05,
+    meetingFrequency: 0.05,
+    certificateOption: 0.05,
   };
 
   public set coeficients(coeficients: Coeficients) {
@@ -78,9 +80,10 @@ export class MatchScorer implements IMatchScorer {
       age: this.computeAgeBonus(profile1, profile2),
       status: this.computeSameRolesBonus(profile1, profile2),
       goals: this.computeSameGoalsBonus(profile1, profile2),
-      university: this.computeSameUniversityBonus(profile1, profile2),
       gender: this.computeSameGenderBonus(learningLanguage1, learningLanguage2),
       interests: this.computeSameInterestBonus(profile1, profile2),
+      meetingFrequency: this.computeMeetingFrequencyBonus(profile1, profile2),
+      certificateOption: this.computeCertificateOptionBonus(learningLanguage1, learningLanguage2)
     });
 
     return new Match({
@@ -202,21 +205,6 @@ export class MatchScorer implements IMatchScorer {
     return this.coeficients.interests * similarity;
   }
 
-  // Apply bonus if profiles share the same university
-  private computeSameUniversityBonus(
-    profile1: Profile,
-    profile2: Profile,
-  ): number {
-    // Check if both profiles share the same university
-    const sharesUniversity = profile1.user.university.id === profile2.user.university.id;
-
-    // If both profiles share the same university, apply the bonus
-    if (sharesUniversity) {
-      return this.coeficients.university;
-    }
-
-    return 0;
-  }
 
   // Compute the similarity between two sets of strings using the Jaccard index
   private computeSimilarity(set1: Set<string>, set2: Set<string>): number {
@@ -228,6 +216,28 @@ export class MatchScorer implements IMatchScorer {
     }
 
     return intersection.size / union.size;
+  }
+
+  private computeMeetingFrequencyBonus(
+    profile1: Profile,
+    profile2: Profile
+  ): number {
+    if (profile1.meetingFrequency === profile2.meetingFrequency) {
+      return this.#coeficients.meetingFrequency;
+    }
+
+    return 0;
+  }
+
+  private computeCertificateOptionBonus(
+    learningLanguage1: LearningLanguage,
+    learningLanguage2: LearningLanguage
+  ): number {
+    if (!!learningLanguage1.certificateOption === !!learningLanguage2.certificateOption) {
+      return this.#coeficients.certificateOption;
+    }
+    
+    return 0;
   }
 
   /**
@@ -281,7 +291,7 @@ export class MatchScorer implements IMatchScorer {
       const universityLearnableLanguages = learningLanguage.profile.user.filterLearnableLanguages(availableLanguages);
       const matchLanguageWithScore = learnableLanguagesFromMatch.reduce<{ languageLearnt: Language; score: number, }>((accumulator, value) => {
         if (!value.language.isJokerLanguage() && 
-          learningLanguage.profile.isSpeakingLanguage(value.language) &&
+          !learningLanguage.profile.isSpeakingLanguage(value.language) &&
           universityLearnableLanguages.some(language => language.id == value.language.id)
         ) {
           const score = discoveryLanguageLevelMatrix[ProficiencyLevel.A0][value.level] / levelsCount;

@@ -332,7 +332,8 @@
                 "createdAt": "Créé le",
                 "university": "Université",
                 "hasActiveTandem": "En tandem",
-                "actionPossible": "Tandem en attente"
+                "actionPossible": "Tandem en attente",
+                "specificProgram": "Programme spécifique"
             },
             "noUniversitySelected": "Merci de sélectionner une ou plusieurs universités pour l'appariement"
         },

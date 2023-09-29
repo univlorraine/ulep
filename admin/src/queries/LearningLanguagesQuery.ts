@@ -27,6 +27,7 @@ const handleOrderField = (field?: string) => {
         case 'level':
         case 'createdAt':
         case 'activeTandem':
+        case 'specificProgram':
             return field;
         default:
             return undefined;
