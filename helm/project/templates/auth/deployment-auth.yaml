@@ -123,17 +123,12 @@ spec:
           volumeMounts:
           - name: "{{ .Values.auth.name }}-realm"
             mountPath: /opt/keycloak/data/import
-          - name: "{{ .Values.auth.name }}-providers"
-            mountPath: /opt/keycloak/providers
           - name: "{{ .Values.auth.name }}-themes"
             mountPath: /opt/keycloak/themes
       volumes:
       - name: "{{ .Values.auth.name }}-realm"
         configMap:
           name: "{{ include "etandem.name" . }}-realm-{{ .Values.auth.name }}"
-      - name: "{{ .Values.auth.name }}-providers"
-        configMap:
-          name: "{{ include "etandem.name" . }}-providers-{{ .Values.auth.name }}"
       - name: "{{ .Values.auth.name }}-themes"
         emptyDir: {}
       {{- with .Values.nodeSelector }}
