@@ -3,6 +3,7 @@ import { Body, Controller, Logger, Post } from '@nestjs/common';
 import * as Swagger from '@nestjs/swagger';
 import {
   BearerTokensRequest,
+  BearerTokensFromCodeRequest,
   BearerTokensResponse,
   RefreshTokenRequest,
   ResetPasswordRequest,
@@ -27,6 +28,18 @@ export class SecurityController {
       email,
       password,
     );
+
+    return new BearerTokensResponse(credentials);
+  }
+
+  @Post('token/code')
+  @Swagger.ApiOperation({ summary: 'Request a JWT token.' })
+  @Swagger.ApiOkResponse({ type: BearerTokensResponse })
+  async loginFromCode(
+    @Body() { code }: BearerTokensFromCodeRequest,
+  ): Promise<BearerTokensResponse> {
+    const credentials =
+      await this.keycloakClient.getCredentialsFromAuthorizationCode(code);
 
     return new BearerTokensResponse(credentials);
   }
