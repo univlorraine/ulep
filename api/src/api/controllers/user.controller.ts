@@ -21,6 +21,7 @@ import { UploadAvatarUsecase } from 'src/core/usecases';
 import {
   CreateAdministratorUsecase,
   CreateUserUsecase,
+  DeleteAdministratorUsecase,
   DeleteUserUsecase,
   GetAdministratorsUsecase,
   GetUserUsecase,
@@ -53,6 +54,7 @@ export class UserController {
     private readonly deleteUserUsecase: DeleteUserUsecase,
     private readonly getAdministratorsUsecase: GetAdministratorsUsecase,
     private readonly createAdministratorUsecase: CreateAdministratorUsecase,
+    private readonly deleteAdministratorUsecase: DeleteAdministratorUsecase,
   ) {}
 
   @Post()
@@ -107,12 +109,22 @@ export class UserController {
   @Post('administrators')
   @Roles(configuration().adminRole)
   @UseGuards(AuthenticationGuard)
-  @Swagger.ApiOperation({ summary: 'Collection of Administrator ressource.' })
-  @CollectionResponse(UserResponse)
+  @Swagger.ApiOperation({ summary: 'Create an Administrator ressource.' })
+  @Swagger.ApiCreatedResponse({ type: AdministratorResponse })
   async createAdministrator(@Body() body: CreateAdministratorRequest) {
     const admin = await this.createAdministratorUsecase.execute(body);
 
     return AdministratorResponse.fromDomain(admin);
+  }
+
+  @Delete('administrators/:id')
+  @Roles(configuration().adminRole)
+  @UseGuards(AuthenticationGuard)
+  @Swagger.ApiOperation({ summary: 'Delete an administrator' })
+  async deleteAdministrator(@Param('id', ParseUUIDPipe) id: string) {
+    await this.deleteAdministratorUsecase.execute({ id });
+
+    return;
   }
 
   @Get('me')

@@ -339,6 +339,22 @@ export class KeycloakClient {
   }
 
   /*
+   * Creates a new user in Keycloak.
+   */
+  async deleteAdministrator(id: string): Promise<void> {
+    await fetch(
+      `${this.configuration.baseUrl}/admin/realms/${this.configuration.realm}/users/${id}`,
+      {
+        method: 'DELETE',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${await this.getAccessToken()}`,
+        },
+      },
+    );
+  }
+
+  /*
    * Retrieves all users from Keycloak
    * Params:
    *  - email: email of the user
