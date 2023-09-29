@@ -26,7 +26,7 @@
       "clientAuthenticatorType": "client-secret",
       "secret": "{{ .Values.api.env.keycloakClientSecret }}",
       "bearerOnly": false,
-      "standardFlowEnabled": false,
+      "standardFlowEnabled": true,
       "directAccessGrantsEnabled": true,
       "redirectUris": ["https://{{ .Values.api.env.appUrl }}.{{ .Values.domain }}/*", "https://{{ .Values.api.env.adminUrl }}.{{ .Values.domain }}/*"],
       "serviceAccountsEnabled": true,
