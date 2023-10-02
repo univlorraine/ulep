@@ -26,3 +26,6 @@ dependencies:
 - name: postgresql
   version: 12.6.4
   repository: "oci://registry-1.docker.io/bitnamicharts"
+- name: minio
+  version: 12.8.11
+  repository: "oci://registry-1.docker.io/bitnamicharts"

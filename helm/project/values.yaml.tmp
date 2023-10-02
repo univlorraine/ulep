@@ -139,52 +139,62 @@ auth:
 
 ############## MINIO ##############
 minio:
-  name: minio # FIXE
-  replicaCount: 1
+  global:
+    storageClass: scw-bssd
 
   image:
-    repository: "minio/minio" # REQUIRED
-    tag: "RELEASE.2023-09-30T07-02-29Z.fips" # REQUIRED
-    pullPolicy: IfNotPresent
+    tag: 2023.9.30-debian-11-r0
+  clientImage:
+    tag: 2023.9.29-debian-11-r0
+  volumePermissions:
+    image:
+      tag: 11-debian-11-r83
 
-  env:
-    minioRootUser: *minioAccessKey # FIXE
-    minioRootPassword: *minioSecretKey # REQUIRED
+  auth: 
+    rootUser: *minioAccessKey
+    rootPassword: *minioSecretKey
 
-  pv:
-    storage: 40Gi
-    storageClassName: scw-bssd
+  persistence:
+    size: 40Gi
 
-  autoscaling:
-    enabled: false
-    minReplicas: 1
-    maxReplicas: 100
-    targetCPUUtilizationPercentage: 80
-    # targetMemoryUtilizationPercentage: 80
-  service:
-    type: ClusterIP
-    port: &svcPort 80
+  # Distributed  mode is recommended for PROD
+  mode: distributed
+  statefulset:
+    replicaCount: 2
+    drivesPerNode: 2
 
   ingress:
     enabled: true
-    className: traefik
+    ingressClassName: traefik
+    hostname: minio.ulep.thestaging.io
+    path: /
+    pathType: Prefix
+    servicePort: 9001
     annotations:
       kubernetes.io/ingress.class: "traefik"
       cert-manager.io/cluster-issuer: "letsencrypt"
       kubernetes.io/tls-acme: "true"
-
-    hosts:
-      - host: *minioUrl
-        paths: [/]
-        port: *svcPort
-      - host: *minioApiUrl
-        paths: [/]
-        port: 9000
-    tls:
+    tls: true
+    extraTls:
       - hosts:
-          - *minioUrl
+         - minio.ulep.thestaging.io
+        secretName: minio
+  apiIngress:
+    enabled: true
+    ingressClassName: traefik
+    hostname: minio-api.ulep.thestaging.io
+    path: /
+    pathType: Prefix
+    servicePort: 9000
+    annotations:
+      kubernetes.io/ingress.class: "traefik"
+      cert-manager.io/cluster-issuer: "letsencrypt"
+      kubernetes.io/tls-acme: "true"
+    tls: true
+    extraTls:
       - hosts:
-          - *minioApiUrl
+         - minio-api.ulep.thestaging.io
+        secretName: minio-api
 ############## MINIO ##############
 
 ############## ADMIN ##############
