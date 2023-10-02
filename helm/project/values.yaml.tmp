@@ -144,7 +144,7 @@ minio:
 
   image:
     repository: "minio/minio" # REQUIRED
-    tag: "RELEASE.2023-06-02T23-17-26Z.fips" # REQUIRED
+    tag: "RELEASE.2023-09-30T07-02-29Z.fips" # REQUIRED
     pullPolicy: IfNotPresent
 
   env:
