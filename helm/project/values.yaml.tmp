@@ -73,6 +73,16 @@ api:
     type: ClusterIP
     port: 80
 
+  probes:
+    readiness:
+      initialDelaySeconds: 0
+      periodSeconds: 10
+      failureThreshold: 6
+    liveness:
+      initialDelaySeconds: 0
+      periodSeconds: 5
+      failureThreshold: 5
+
   ingress:
     enabled: true
     className: traefik
@@ -121,6 +131,20 @@ auth:
   service:
     type: ClusterIP
     port: 80
+
+  probes:
+    startup:
+      initialDelaySeconds: 10
+      periodSeconds: 10
+      failureThreshold: 12
+    readiness:
+      initialDelaySeconds: 0
+      periodSeconds: 5
+      failureThreshold: 10
+    liveness:
+      initialDelaySeconds: 0
+      periodSeconds: 5
+      failureThreshold: 5
 
   ingress:
     enabled: true
@@ -220,6 +244,20 @@ admin:
     type: ClusterIP
     port: 80
 
+  probes:
+    startup:
+      initialDelaySeconds: 60
+      periodSeconds: 30
+      failureThreshold: 5
+    readiness:
+      initialDelaySeconds: 0
+      periodSeconds: 10
+      failureThreshold: 3
+    liveness:
+      initialDelaySeconds: 0
+      periodSeconds: 5
+      failureThreshold: 3
+
   ingress:
     enabled: true
     className: traefik
@@ -267,6 +305,19 @@ webapp:
     type: ClusterIP
     port: 80
 
+  probes:
+    startup:
+      initialDelaySeconds: 30
+      periodSeconds: 10
+      failureThreshold: 15
+    readiness:
+      initialDelaySeconds: 0
+      periodSeconds: 10
+      failureThreshold: 3
+    liveness:
+      initialDelaySeconds: 0
+      periodSeconds: 5
+      failureThreshold: 3
   ingress:
     enabled: true
     className: traefik

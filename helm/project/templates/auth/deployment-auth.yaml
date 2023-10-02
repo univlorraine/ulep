@@ -77,17 +77,27 @@ spec:
             - name: admin
               containerPort: 9990
               protocol: TCP
-          # livenessProbe:
-          #   httpGet:
-          #     path: /health/ready
-          #     port: http
-          #   initialDelaySeconds: 90
-          # readinessProbe:
-          #   httpGet:
-          #     path: /health/ready
-          #     port: http
-          #   periodSeconds: 30
-          #   initialDelaySeconds: 90
+          startupProbe:
+            httpGet:
+              path: /
+              port: http
+            initialDelaySeconds: {{ .Values.auth.probes.startup.initialDelaySeconds }}
+            periodSeconds: {{ .Values.auth.probes.startup.periodSeconds }}
+            failureThreshold: {{ .Values.auth.probes.startup.failureThreshold }}
+          readinessProbe:
+            httpGet:
+              path: /
+              port: http
+            initialDelaySeconds: {{ .Values.auth.probes.readiness.initialDelaySeconds }}
+            periodSeconds: {{ .Values.auth.probes.readiness.periodSeconds }}
+            failureThreshold: {{ .Values.auth.probes.readiness.failureThreshold }}
+          livenessProbe:
+            httpGet:
+              path: /
+              port: http
+            initialDelaySeconds: {{ .Values.auth.probes.liveness.initialDelaySeconds }}
+            periodSeconds: {{ .Values.auth.probes.liveness.periodSeconds }}
+            failureThreshold: {{ .Values.auth.probes.liveness.failureThreshold }}
           resources:
             {{- toYaml .Values.resources | nindent 12 }}
           env:
