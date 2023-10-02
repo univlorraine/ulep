@@ -1,5 +1,5 @@
 import { Device } from '@capacitor/device';
-import { IonApp, setupIonicReact } from '@ionic/react';
+import { IonApp, isPlatform, setupIonicReact } from '@ionic/react';
 import { IonReactRouter } from '@ionic/react-router';
 import { StoreProvider, useStoreRehydrated } from 'easy-peasy';
 import { useEffect } from 'react';
@@ -32,12 +32,12 @@ import './presentation/theme/global.css';
 import './presentation/theme/margin.css';
 import './presentation/theme/variables.css';
 import Store from './store/store';
+import InstancesPage from './presentation/pages/mobile/InstancesPage';
 
 setupIonicReact();
 
 const AppContext = () => {
     const { i18n } = useTranslation();
-    const rehydrated = useStoreRehydrated();
     const accessToken = useStoreState((state) => state.accessToken);
     const language = useStoreState((state) => state.language);
     const refreshToken = useStoreState((state) => state.refreshToken);
@@ -71,10 +71,6 @@ const AppContext = () => {
         document.documentElement.style.setProperty('--secondary-dark-color', configuration.secondaryDarkColor);
     }, []);
 
-    if (!rehydrated) {
-        return <div />;
-    }
-
     return (
         <ConfigContext.Provider
             value={getConfigContextValue(
@@ -94,11 +90,26 @@ const AppContext = () => {
     );
 };
 
+const AppInstance: React.FC = () => {
+    const rehydrated = useStoreRehydrated();
+    const apiUrl = useStoreState((state) => state.apiUrl);
+    const setApiUrl = useStoreActions((state) => state.setApiUrl);
+
+    if (!rehydrated) {
+        return <div />;
+    }
+
+    // We check if we are on ios / android and if we already got an api url in env variable ( on dev for exemple )
+    if (isPlatform('hybrid') && !apiUrl && !import.meta.env.VITE_API_URL)
+        return <InstancesPage onValidate={(url: string) => setApiUrl({ apiUrl: url })} />;
+    else return <AppContext />;
+};
+
 const App: React.FC = () => {
     return (
         <IonApp>
             <StoreProvider store={Store}>
-                <AppContext />
+                <AppInstance />
             </StoreProvider>
         </IonApp>
     );
