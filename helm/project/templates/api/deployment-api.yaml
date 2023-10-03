@@ -57,14 +57,14 @@ spec:
               protocol: TCP
           readinessProbe:
             httpGet:
-              path: /docs # TODO: change when add status endpoint to API
+              path: /health
               port: 3000
             initialDelaySeconds: {{ .Values.api.probes.readiness.initialDelaySeconds }}
             periodSeconds: {{ .Values.api.probes.readiness.periodSeconds }}
             failureThreshold: {{ .Values.api.probes.readiness.failureThreshold }}
           livenessProbe:
             httpGet:
-              path: /docs # TODO: change when add status endpoint to API
+              path: /health
               port: 3000
             initialDelaySeconds: {{ .Values.api.probes.liveness.initialDelaySeconds }}
             periodSeconds: {{ .Values.api.probes.liveness.periodSeconds }}
