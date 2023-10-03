@@ -10,7 +10,6 @@ export type Coeficients = {
   status: number;
   goals: number;
   interests: number;
-  gender: number;
   meetingFrequency: number;
   certificateOption: number;
 };
@@ -32,7 +31,6 @@ export class MatchScorer implements IMatchScorer {
     status: 0.05,
     goals: 0.05,
     interests: 0.05,
-    gender: 0.05,
     meetingFrequency: 0.05,
     certificateOption: 0.05,
   };
@@ -80,7 +78,6 @@ export class MatchScorer implements IMatchScorer {
       age: this.computeAgeBonus(profile1, profile2),
       status: this.computeSameRolesBonus(profile1, profile2),
       goals: this.computeSameGoalsBonus(profile1, profile2),
-      gender: this.computeSameGenderBonus(learningLanguage1, learningLanguage2),
       interests: this.computeSameInterestBonus(profile1, profile2),
       meetingFrequency: this.computeMeetingFrequencyBonus(profile1, profile2),
       certificateOption: this.computeCertificateOptionBonus(learningLanguage1, learningLanguage2)
@@ -158,27 +155,6 @@ export class MatchScorer implements IMatchScorer {
       return this.coeficients.status;
     }
 
-    return 0;
-  }
-
-  // Apply bonus if profiles dont share the same gender
-  private computeSameGenderBonus(learningLanguage1: LearningLanguage, learningLanguage2: LearningLanguage): number {
-    // Check if either profile prefers to be matched with someone of the same gender
-    const prefersSameGender1 = learningLanguage1.sameGender;
-    const prefersSameGender2 = learningLanguage2.sameGender;
-    // Check if both profiles do not care about gender
-    const doesNotCareAboutGender = !prefersSameGender1 && !prefersSameGender2;
-    // Check if the genders of the two profiles match
-    const gendersMatch = learningLanguage1.profile.user.gender === learningLanguage2.profile.user.gender;
-    // Apply bonus if one profile prefer the same gender and their genders match,
-    // or if both profiles do not care about gender
-    if (
-      ((prefersSameGender1 || prefersSameGender2) && gendersMatch) ||
-      doesNotCareAboutGender
-    ) {
-      return this.coeficients.gender;
-    }
-    // Return the original score if none of the conditions for bonus apply
     return 0;
   }
 
