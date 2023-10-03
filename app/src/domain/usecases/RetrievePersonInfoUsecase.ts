@@ -15,7 +15,7 @@ class RetrievePersonInfoUsecase implements RetrievePersonInfoUsecaseInterface {
         }
         try {
             const httpResponse: HttpResponse<PersonCommand> = await this.domainHttpAdapter.post(
-                `/UserUniversityInfos`,
+                `/userUniversityInfos`,
                 requestBody,
                 undefined,
                 'application/json',

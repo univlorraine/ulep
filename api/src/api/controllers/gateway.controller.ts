@@ -8,8 +8,8 @@ export interface RetrieveUserUniversityInfoRequest {
     tokenKeycloak: string;
 }
 
-@Controller('UserUniversityInfos')
-@Swagger.ApiTags('UserUniversityInfos')
+@Controller('userUniversityInfos')
+@Swagger.ApiTags('userUniversityInfos')
 export class GatewayController {
 
     constructor(
