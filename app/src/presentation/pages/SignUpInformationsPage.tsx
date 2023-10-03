@@ -115,36 +115,20 @@ const SignUpInformationsPage: React.FC = () => {
 
     const userUlAutomaticValues = async () => {
         const tokenKeycloak = "";
-        const response = await retrievePerson.execute(tokenKeycloak);
-        if (response instanceof Error) {
-            return await showToast({
-                message: t(response.message),
-                duration: 1000,
-            });
-        } else {
-            const result = response as Person
-            if (result.firstname) {
-                setFirstname(result.firstname);
-            }
-            if (result.lastname) {
-                setLastname(result.lastname);
-            }
-            switch (result.gender) {
-                case "M.":
-                    setGender("male")
-                    break;
-                case "Mme" || "MME":
-                    setGender("female")
-                    break;
-                default:
-                    break;
-            }
-            if (result.age) {
-                setAge(result.age);
-            }
-            if(result.email){
-                setEmail(result.email);
-            }
+        if (profileSignUp.firstname) {
+            setFirstname(profileSignUp.firstname);
+        }
+        if (profileSignUp.lastname) {
+            setLastname(profileSignUp.lastname);
+        }
+        if (profileSignUp.gender) {
+            setGender(profileSignUp.gender)
+        }
+        if (profileSignUp.age) {
+            setAge(profileSignUp.age);
+        }
+        if(profileSignUp.email){
+            setEmail(profileSignUp.email);
         }
     }
 

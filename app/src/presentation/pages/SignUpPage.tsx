@@ -88,6 +88,32 @@ const SignUpPage: React.FC = () => {
             default:
                 break;
         }
+        if (result.firstname) {
+            const firstname = result.firstname;
+            updateProfileSignUp({firstname});
+        }
+        if (result.lastname){
+            const lastname = result.lastname;
+            updateProfileSignUp({lastname});
+        }
+        if (result.age) {
+            const age = result.age;
+            updateProfileSignUp({age});
+        }
+        if (result.email) {
+            const email = result.email;
+            updateProfileSignUp({email});
+        }
+        switch (result.gender) {
+            case "M.":
+                updateProfileSignUp({gender:"male"});
+                break;
+            case "Mme" || "MME":
+                updateProfileSignUp({gender:"female"});
+                break;
+            default:
+                break;
+        }
     }
     useEffect(() => {
         getSignUpData();
