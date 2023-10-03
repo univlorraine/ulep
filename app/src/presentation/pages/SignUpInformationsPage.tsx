@@ -113,9 +113,9 @@ const SignUpInformationsPage: React.FC = () => {
         return history.push('/signup/languages');
     };
 
-    //INFOS: function to retrieve the info of the user and load them in the input fileds
     const userUlAutomaticValues = async () => {
-        const response = await retrievePerson.execute("champmar5");
+        const tokenKeycloak = "";
+        const response = await retrievePerson.execute(tokenKeycloak);
         if (response instanceof Error) {
             return await showToast({
                 message: t(response.message),
@@ -148,11 +148,8 @@ const SignUpInformationsPage: React.FC = () => {
         }
     }
 
-    //INFOS: useEffect() permet de lancer du code après que le composant soit rendered.
-    //TODO: regarder pourquoi les appelles sont doubler quand le useEffect s'éxécute.
     useEffect(()=>{
         if (profileSignUp.university?.isCentral) {
-            console.log("université central")
             userUlAutomaticValues();
         }
     },[]);

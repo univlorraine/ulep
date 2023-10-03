@@ -7,14 +7,8 @@ interface PersonCommand {
     age: number;
     gender: string;
     role: string;
-    diploma: {
-        code: string,
-        label: string
-    };
-    departement: {
-        code: string,
-        label: string
-    };
+    diploma: string;
+    departement: string;
 }
 export const personCommandToDomain = (command: PersonCommand) => {
     return new Person(

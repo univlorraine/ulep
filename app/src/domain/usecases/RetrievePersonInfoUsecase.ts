@@ -9,25 +9,24 @@ class RetrievePersonInfoUsecase implements RetrievePersonInfoUsecaseInterface {
     
     
 
-    async execute(loginUL:string): Promise<Person | Error> {
+    async execute(tokenKeycloak:string): Promise<Person | Error> {
         const requestBody = {
-            "login":loginUL
+            "tokenKeycloak":tokenKeycloak
         }
         try {
             const httpResponse: HttpResponse<PersonCommand> = await this.domainHttpAdapter.post(
-                `/connecteur`,
+                `/UserUniversityInfos`,
                 requestBody,
                 undefined,
                 'application/json',
                 false
             );
-
             if (!httpResponse.parsedBody) {
-                return new Error('errors.connecteur');
+                return new Error('errors.gateway');
             }
             return personCommandToDomain(httpResponse.parsedBody);
         } catch (error:any) {
-            return new Error('errors.connecteur');
+            return new Error('errors.gateway');
         }
     }
 }

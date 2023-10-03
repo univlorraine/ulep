@@ -2,7 +2,6 @@ import { HttpService } from "@nestjs/axios";
 import { Injectable } from "@nestjs/common";
 import { AxiosRequestConfig, AxiosResponse } from "axios";
 import { firstValueFrom, map } from "rxjs";
-import { IPersonne } from "./gateway.interface";
 import { configuration } from "src/configuration";
 
 @Injectable()
@@ -10,26 +9,24 @@ export class GatewayService {
     constructor(
         private readonly httpService: HttpService
     ){}
-    //INFOS: variables from the .env file (provided by the docker-compose)
-    urlConnecteur = configuration().connecteurUrl;
-    tokenConnecteur = configuration().connecteurToken;
+    private urlConnecteur = configuration().connecteurUrl;
+    private tokenConnecteur = configuration().connecteurToken;
     
-    async retrieveUserInfosFromConnecteur(loginUL:string):Promise<IPersonne>{
+    async getUserUniversityInfo(loginUL:string):Promise<any>{
         const body = {
             "login": loginUL,
             "clientUser": loginUL
         }
         const requestConfig: AxiosRequestConfig = {
             headers:{
-                'Authorization': "Bearer "+this.tokenConnecteur,
-                'content-type': "application/json",
+                'Authorization': `Bearer ${this.tokenConnecteur}`,
             }
         }
-        const responseConnecteur = await firstValueFrom(this.httpService.post(this.urlConnecteur,body,requestConfig).pipe(
+        const res = await firstValueFrom(this.httpService.post(this.urlConnecteur,body,requestConfig).pipe(
             map((axiosResponse: AxiosResponse) => {
-                return axiosResponse.data as IPersonne;
+                return axiosResponse.data;
             })
         ))
-        return responseConnecteur;
+        return res;
     }
 }

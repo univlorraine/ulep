@@ -72,16 +72,15 @@ const SignUpPage: React.FC = () => {
     };
 
     const getPersonInfos = async () => {
-        console.log("button clicked");
-        const result = await retrievePerson.execute("champmar5") as Person;
-        if (result.departement.label) {
-            setDepartment(result.departement.label);
+        const tokenKeycloak = "tokenKeycloakUltraSecret";
+        const result = await retrievePerson.execute(tokenKeycloak) as Person;
+        if (result.departement) {
+            setDepartment(result.departement);
         }
-        setDepartment(result.departement.label);
         switch (selectedRole) {
             case "student":
-                if(result.diploma.label){
-                    setDiplome(result.diploma.label);
+                if(result.diploma){
+                    setDiplome(result.diploma);
                 }
                 break;
             case "staff":
