@@ -1,4 +1,5 @@
 import * as Prisma from '@prisma/client';
+import { generateData } from './usersFromUL';
 import { createLanguageCodes } from './languages';
 import { createUniversities } from './universities';
 import { createUsers } from './users';
@@ -37,8 +38,10 @@ const load = async () => {
     await createProficiencyTests(prisma);
     await createInterests(prisma);
     await createLearningObjectives(prisma);
-    await createUsers(200, 100, prisma);
-    await createProfiles(prisma);
+
+    await generateData(prisma);
+    // await createUsers(200, 100, prisma);
+    // await createProfiles(prisma);
   } catch (e) {
     console.error(e);
     process.exit(1);
