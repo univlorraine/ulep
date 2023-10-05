@@ -406,6 +406,15 @@ export class PrismaLearningLanguageRepository
             specific_program: orderBy.order,
           };
           break;
+        case LearningLanguageQuerySortKey.ROLE:
+          orderByPayload = {
+            Profile: {
+              User: {
+                role: orderBy.order,
+              },
+            },
+          };
+          break;
         default:
           throw new Error('Unsupported orderBy field');
       }

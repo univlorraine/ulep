@@ -250,7 +250,8 @@
                 "university": "University",
                 "hasActiveTandem": "In tandem",
                 "actionPossible": "Pending tandem",
-                "specificProgram": "Specific program"
+                "specificProgram": "Specific program",
+                "role": "Role"
             },
             "noUniversitySelected": "Please select one or more universities for pairing"
         },

@@ -333,7 +333,8 @@
                 "university": "Université",
                 "hasActiveTandem": "En tandem",
                 "actionPossible": "Tandem en attente",
-                "specificProgram": "Programme spécifique"
+                "specificProgram": "Programme spécifique",
+                "role": "Rôle"
             },
             "noUniversitySelected": "Merci de sélectionner une ou plusieurs universités pour l'appariement"
         },
