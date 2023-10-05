@@ -15,7 +15,7 @@ const enumValue = <T>(_enum: unknown): T => {
 // eslint-disable-next-line @typescript-eslint/no-var-requires
 const rawData = require('./ulData.json');
 
-export const generateData = async (prisma: Prisma.PrismaClient) => {
+export const insertUlData = async (prisma: Prisma.PrismaClient) => {
   const places = await prisma.places.findMany();
   const countries = await prisma.countryCodes.findMany();
   const languages = await prisma.languageCodes.findMany();
