@@ -1,7 +1,7 @@
 import { Language, LearningLanguage, LearningType } from 'src/core/models';
 /* eslint-disable prettier/prettier */
 import { Injectable } from '@nestjs/common';
-import { Match, MatchScores, ProficiencyLevel, Profile } from '../models';
+import { Match, MatchScores, Profile } from '../models';
 import { InvalidCoeficientsError, SameProfilesError } from '../errors/match-exceptions';
 
 export type Coeficients = {
@@ -47,6 +47,9 @@ export class MatchScorer implements IMatchScorer {
     return this.#coeficients;
   }
 
+  // TODO(NOW+2): comment on why we keep match language 
+  // TODO(NOW+2): display spoken languages in BO when match joker
+
   // TODO(bonus): Use interest categories similarity instead of interests
   public computeMatchScore(
     learningLanguage1: LearningLanguage,
@@ -68,13 +71,8 @@ export class MatchScorer implements IMatchScorer {
       return new Match({ owner: learningLanguage1, target: learningLanguage2, scores: MatchScores.empty() });
     }
 
-
-    const learningCompatibility = this.computeLearningCompatibility(learningLanguage1, learningLanguage2, availableLanguages)
-    learningLanguage1.tandemLanguage = learningCompatibility.languageLearntByProfile1;
-    learningLanguage2.tandemLanguage = learningCompatibility.languageLearntByProfile2;
-    
     const scores: MatchScores = new MatchScores({
-      level: learningCompatibility.score,
+      level: this.computeLearningCompatibility(learningLanguage1, learningLanguage2),
       age: this.computeAgeBonus(profile1, profile2),
       status: this.computeSameRolesBonus(profile1, profile2),
       goals: this.computeSameGoalsBonus(profile1, profile2),
@@ -92,27 +90,49 @@ export class MatchScorer implements IMatchScorer {
 
   /**
    * Compute learning compatibility score between 2 learning languages.
-   * Also return languages that should be learnt from other profile if a learning language
-   * is joker
    * @param learningLanguage1 
    * @param learningLanguage2 
-   * @param availableLanguages 
    * @returns 
    */
-  private computeLearningCompatibility(learningLanguage1: LearningLanguage, learningLanguage2: LearningLanguage, availableLanguages: Language[]): {
-    score: number;
-    languageLearntByProfile1?: Language;
-    languageLearntByProfile2?: Language;
-  } {
-    const learningLevelLearningLanguage1 = this.computeLearningScore(learningLanguage1, learningLanguage2, availableLanguages);
-    const learningLevelLearningLanguage2 = this.computeLearningScore(learningLanguage2, learningLanguage1, availableLanguages);
-    const score = this.coeficients.level * ((learningLevelLearningLanguage1.score + learningLevelLearningLanguage2.score) / 2);
+  private computeLearningCompatibility(learningLanguage1: LearningLanguage, learningLanguage2: LearningLanguage): number {
+    const isDiscovery = learningLanguage1.isDiscovery(learningLanguage2) || learningLanguage2.isDiscovery(learningLanguage1);
+    
+    // Note: A learning language can only match a language spoken by the potential match profile. As all
+    // languages spoken are approximated with the same skill level ,we approximate the compatibility 
+    // score only with learning language levels. We consider in this method that compatibility
+    // has already been asserted (i.e. learningLanguage 1 is spoken by profile 2 and learningLanguage 2 is spoken by profile 1).
+    // Note: to preserve this approximation, it is mandatory that matrix are symetrics
 
-    return {
-      score,
-      languageLearntByProfile1: learningLevelLearningLanguage1.languageLearnt,
-      languageLearntByProfile2:  learningLevelLearningLanguage2.languageLearnt,
-    }
+    const languageLevelMatrix: { [key: string]: { [key: string]: number } } = {
+      A0: { A0: 0, A1: 1, A2: 1, B1: 2, B2: 2, C1: 2, C2: 2 },
+      A1: { A0: 1, A1: 2, A2: 2, B1: 3, B2: 3, C1: 3, C2: 3 },
+      A2: { A0: 1, A1: 2, A2: 2, B1: 4, B2: 4, C1: 4, C2: 4 },
+      B1: { A0: 2, A1: 3, A2: 4, B1: 5, B2: 5, C1: 5, C2: 5 },
+      B2: { A0: 2, A1: 3, A2: 4, B1: 5, B2: 5, C1: 5, C2: 5 },
+      C1: { A0: 2, A1: 3, A2: 4, B1: 5, B2: 5, C1: 5, C2: 5 },
+      C2: { A0: 2, A1: 3, A2: 4, B1: 5, B2: 5, C1: 5, C2: 5 },
+    };
+
+    // TODO(NOW+1): extract matrix injectione from method
+    // TODO(NOW+2): integrate new matrix from UL when they have it
+    const discoveryLanguageLevelMatrix: { [key: string]: { [key: string]: number } } = {
+      A0: { A0: 0, A1: 2, A2: 2, B1: 5, B2: 5, C1: 5, C2: 5 },
+      A1: { A0: 2, A1: 2, A2: 2, B1: 5, B2: 5, C1: 5, C2: 5 },
+      A2: { A0: 2, A1: 2, A2: 5, B1: 5, B2: 5, C1: 5, C2: 5 },
+      B1: { A0: 6, A1: 6, A2: 5, B1: 4, B2: 4, C1: 4, C2: 4 },
+      B2: { A0: 6, A1: 6, A2: 5, B1: 4, B2: 4, C1: 4, C2: 4 },
+      C1: { A0: 6, A1: 6, A2: 5, B1: 4, B2: 4, C1: 4, C2: 4 },
+      C2: { A0: 6, A1: 6, A2: 5, B1: 4, B2: 4, C1: 4, C2: 4 },
+    };
+    const levelsCount = isDiscovery ? 6 : 5;
+
+    const rawScore = isDiscovery
+      ? discoveryLanguageLevelMatrix[learningLanguage1.level][learningLanguage2.level]
+      : languageLevelMatrix[learningLanguage1.level][learningLanguage2.level];
+
+    const score = rawScore / levelsCount;
+
+    return this.coeficients.level * score;
   }
 
   // Apply bunus if ages match criteria
@@ -214,87 +234,6 @@ export class MatchScorer implements IMatchScorer {
     }
     
     return 0;
-  }
-
-  /**
-   * Compute score of learningLanguage request learning a language from another learningLanguage's profile.
-   * If learningLanguage is joker, language that should be learnt from other profile is also returned
-   * @param learningLanguage learningLanguage that want to learn
-   * @param matchLearningLanguage learningLanguage that can match
-   * @param availableLanguages languages available for learning in system
-   * @returns {score, languageLearnt}
-   */
-  private computeLearningScore(learningLanguage: LearningLanguage, matchLearningLanguage: LearningLanguage, availableLanguages: Language[]): {
-    score: number;
-    languageLearnt?: Language;
-   } {
-    const isDiscovery = learningLanguage.isDiscovery(matchLearningLanguage)
-    const levelsCount = isDiscovery ? 6 : 5;
-
-    const languageLevelMatrix: { [key: string]: { [key: string]: number } } = {
-      A0: { A0: 0, A1: 1, A2: 1, B1: 2, B2: 2, C1: 2, C2: 2 },
-      A1: { A0: 1, A1: 2, A2: 2, B1: 3, B2: 3, C1: 3, C2: 3 },
-      A2: { A0: 1, A1: 2, A2: 2, B1: 4, B2: 4, C1: 4, C2: 4 },
-      B1: { A0: 2, A1: 3, A2: 4, B1: 5, B2: 5, C1: 5, C2: 5 },
-      B2: { A0: 2, A1: 3, A2: 4, B1: 5, B2: 5, C1: 5, C2: 5 },
-      C1: { A0: 2, A1: 3, A2: 4, B1: 5, B2: 5, C1: 5, C2: 5 },
-      C2: { A0: 2, A1: 3, A2: 4, B1: 5, B2: 5, C1: 5, C2: 5 },
-    };
-
-    const discoveryLanguageLevelMatrix: { [key: string]: { [key: string]: number } } = {
-      A0: { A0: 0, A1: 2, A2: 2, B1: 5, B2: 5, C1: 5, C2: 5 },
-      A1: { A0: 2, A1: 2, A2: 2, B1: 5, B2: 5, C1: 5, C2: 5 },
-      A2: { A0: 2, A1: 2, A2: 5, B1: 5, B2: 5, C1: 5, C2: 5 },
-      B1: { A0: 6, A1: 6, A2: 5, B1: 4, B2: 4, C1: 4, C2: 4 },
-      B2: { A0: 6, A1: 6, A2: 5, B1: 4, B2: 4, C1: 4, C2: 4 },
-      C1: { A0: 6, A1: 6, A2: 5, B1: 4, B2: 4, C1: 4, C2: 4 },
-      C2: { A0: 6, A1: 6, A2: 5, B1: 4, B2: 4, C1: 4, C2: 4 },
-    };
-
-    // We approximate native and mastered language of user equals to a level between B1 and C2.
-    // Score matrix have the same score for all these match profile levels so we take B2 arbitrary here.
-    let matchProfileLevel = ProficiencyLevel.B2;
-
-    if (learningLanguage.language.isJokerLanguage()) {
-      const learnableLanguagesFromMatch: { language: Language; level: ProficiencyLevel }[] = [
-        ...matchLearningLanguage.profile.spokenLanguages.map(masteredLanguage => ({
-          language: masteredLanguage,
-          level: ProficiencyLevel.B2
-        })),
-        ...matchLearningLanguage.profile.learningLanguages
-      ]
-
-      const universityLearnableLanguages = learningLanguage.profile.user.filterLearnableLanguages(availableLanguages);
-      const matchLanguageWithScore = learnableLanguagesFromMatch.reduce<{ languageLearnt: Language; score: number, }>((accumulator, value) => {
-        if (!value.language.isJokerLanguage() && 
-          !learningLanguage.profile.isSpeakingLanguage(value.language) &&
-          universityLearnableLanguages.some(language => language.id == value.language.id)
-        ) {
-          const score = discoveryLanguageLevelMatrix[ProficiencyLevel.A0][value.level] / levelsCount;
-          if (!accumulator.score || score > accumulator.score) {
-            return {
-              languageLearnt: value.language,
-              score
-            }
-          }
-        }
-        return accumulator;
-      }, {
-        languageLearnt: undefined,
-        score: undefined,
-      });
-
-      return matchLanguageWithScore;
-    } else if (isDiscovery && matchLearningLanguage.profile.isLearningLanguage(learningLanguage.language)) {
-        matchProfileLevel = matchLearningLanguage.profile.learningLanguages.find(ll => ll.language.id === learningLanguage.language.id).level;
-    }
-    
-    const level = isDiscovery
-      ? discoveryLanguageLevelMatrix[learningLanguage.level][matchProfileLevel]
-      : languageLevelMatrix[learningLanguage.level][matchProfileLevel];
-
-    const score = level / levelsCount;
-    return { score };
   }
 
   private assertMatchIsNotForbidden(
