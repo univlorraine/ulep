@@ -135,42 +135,30 @@ export class GenerateTandemsUsecase {
 
     this.logger.verbose(`Computed ${possiblePairs.length} potential pairs`);
 
-    // TODO(NOW+1): factorize in one sort loop
-
-    const sortedLearningLanguages = learningLanguagesToPair
-      .sort(
-        (a, b) =>
-          // sort by first created learning languages
-          a.createdAt?.getTime() - b.createdAt?.getTime(),
-      )
-      .sort((a, b) => {
-        // Sort by specific program first
-        if (a.specificProgram) {
+    const sortedLearningLanguages = learningLanguagesToPair.sort((a, b) => {
+      if (
+        a.profile.user.university.isCentralUniversity() ===
+        b.profile.user.university.isCentralUniversity()
+      ) {
+        if (a.profile.user.role === b.profile.user.role) {
+          if (a.specificProgram === b.specificProgram) {
+            return a.createdAt?.getTime() - b.createdAt?.getTime();
+          } else if (!!a.specificProgram) {
+            return -1;
+          } else {
+            return 1;
+          }
+        } else if (a.profile.user.role === Role.STAFF) {
           return -1;
-        } else if (b.specificProgram) {
+        } else {
           return 1;
         }
-        return 0;
-      })
-      .sort((a, b) => {
-        // Sort by staff in priority
-        if (a.profile.user.role === Role.STAFF) {
-          return -1;
-        } else if (b.profile.user.role === Role.STAFF) {
-          return 1;
-        }
-        return 0;
-      })
-      .sort((a, b) => {
-        // Sort by central university first
-        if (
-          a.profile.user.university.isCentralUniversity() ===
-          b.profile.user.university.isCentralUniversity()
-        ) {
-          return 0;
-        }
-        return a.profile.user.university.isCentralUniversity() ? -1 : 1;
-      });
+      } else if (a.profile.user.university.isCentralUniversity()) {
+        return -1;
+      } else {
+        return 1;
+      }
+    });
 
     const tandemsPendingValidation = await this.tandemsRepository.findWhere({
       status: TandemStatus.VALIDATED_BY_ONE_UNIVERSITY,
