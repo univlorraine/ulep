@@ -28,6 +28,8 @@ postgresql-ha:
     repmgrPassword: *dbPassword # FIXE
     database: *dbName # FIXE
     initdbScriptsCM: *dbInitScriptsCM # FIXE
+  persistence:
+    size: 8Gi # REQUIRED
   pgpool:
     adminPassword: *dbPassword # FIXE
 ############## POSTGRES ##############
