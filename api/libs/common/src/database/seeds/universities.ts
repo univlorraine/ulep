@@ -1,6 +1,23 @@
 import { PrismaClient } from '@prisma/client';
 import { PairingMode } from '../../../../../src/core/models';
 
+export const createCentralUniversityPlaceholder = async (
+  prisma: PrismaClient,
+) => {
+  const countries = await prisma.countryCodes.findMany();
+  await prisma.organizations.create({
+    data: {
+      name: 'Central university',
+      Country: {
+        connect: { id: countries.find((country) => country.code === 'FR').id },
+      },
+      timezone: 'Europe/Paris',
+      admissionStartDate: new Date(),
+      admissionEndDate: new Date(),
+    },
+  });
+};
+
 export enum UniversitySeedIDs {
   CENTRAL = 'b511f9d1-ce7e-40b5-a630-ecb99f4e9f59',
   BIRMINGHAM = '60ea6e0d-e654-47bf-9bbf-58b3c375b339',
