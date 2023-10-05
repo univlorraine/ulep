@@ -5,7 +5,7 @@ import { firstValueFrom, map } from "rxjs";
 import { configuration } from "src/configuration";
 
 @Injectable()
-export class GatewayService {
+export class UlUniversityConnectorService {
     constructor(
         private readonly httpService: HttpService
     ){}

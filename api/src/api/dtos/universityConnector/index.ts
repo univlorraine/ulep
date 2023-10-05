@@ -1,8 +1,8 @@
 import * as Swagger from '@nestjs/swagger';
 import { Expose } from 'class-transformer';
-import { UserUniversityInfo } from 'src/core/models/gateway.model';
+import { UserUniversityInfo } from 'src/core/models/universityConnector.model';
 
-export class ConnecteurResponse {
+export class ConnectorResponse {
     @Swagger.ApiProperty({type: 'string'})
     @Expose({ groups: ['read'] })
     email: string;
@@ -35,12 +35,12 @@ export class ConnecteurResponse {
     @Expose({ groups: ['read'] })
     departement: string;
 
-    constructor(partial: Partial<ConnecteurResponse>){
+    constructor(partial: Partial<ConnectorResponse>){
         Object.assign(this, partial);
     }
 
     static fromDomain(userUniversity: UserUniversityInfo){
-        return new ConnecteurResponse({
+        return new ConnectorResponse({
             email: userUniversity.email,
             firstname: userUniversity.firstname,
             lastname: userUniversity.lastname,
