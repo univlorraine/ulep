@@ -3,6 +3,7 @@ import { Inject, Injectable, Logger } from '@nestjs/common';
 import {
   Match,
   PairingMode,
+  Role,
   Tandem,
   TandemStatus,
   University,
@@ -134,7 +135,7 @@ export class GenerateTandemsUsecase {
 
     this.logger.verbose(`Computed ${possiblePairs.length} potential pairs`);
 
-    // TODO(NOW): update priority with user's role
+    // TODO(NOW+1): factorize in one sort loop
 
     const sortedLearningLanguages = learningLanguagesToPair
       .sort(
@@ -147,6 +148,15 @@ export class GenerateTandemsUsecase {
         if (a.specificProgram) {
           return -1;
         } else if (b.specificProgram) {
+          return 1;
+        }
+        return 0;
+      })
+      .sort((a, b) => {
+        // Sort by staff in priority
+        if (a.profile.user.role === Role.STAFF) {
+          return -1;
+        } else if (b.profile.user.role === Role.STAFF) {
           return 1;
         }
         return 0;
