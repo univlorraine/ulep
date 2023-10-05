@@ -77,10 +77,6 @@ export class GetLearningLanguageMatchesUsecase {
         await this.learningLanguageRepository.getAvailableLearningLanguagesSpeakingLanguageFromUniversities(
           learningLanguage.language.id,
           command.universityIds,
-          learningLanguage.isDiscovery() ||
-            // We don't know if BOTH learning type can lead to discovery tandem yet
-            // so we include it
-            learningLanguage.learningType === LearningType.BOTH,
         );
     }
 

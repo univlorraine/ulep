@@ -62,6 +62,7 @@ export class LearningLanguage {
   }
 
   public isDiscovery(learningLanguageMatch?: LearningLanguage) {
+    // TODO(NOW+1): impact match isDiscovery ?
     if (learningLanguageMatch) {
       if (
         (this.learningType === LearningType.TANDEM ||
@@ -86,6 +87,8 @@ export class LearningLanguage {
     learningLanguage: LearningLanguage,
   ): boolean {
     if (this.language.isJokerLanguage()) {
+      // TODO(NOW+1): check if can compute here now. If that's the case, remove check in MatchScorer
+
       // Author note: we currently do not check if joker language match a language spoken
       // by other profile and not spoken by this learningLanguage's profile here as:
       // - This is done in match score computation, where it needs to return the language
@@ -93,11 +96,6 @@ export class LearningLanguage {
       return true;
     } else {
       if (learningLanguage.profile.isSpeakingLanguage(this.language)) {
-        return true;
-      } else if (
-        this.isDiscovery(learningLanguage) &&
-        learningLanguage.profile.isLearningLanguage(this.language)
-      ) {
         return true;
       }
     }

@@ -134,6 +134,8 @@ export class GenerateTandemsUsecase {
 
     this.logger.verbose(`Computed ${possiblePairs.length} potential pairs`);
 
+    // TODO(NOW): update priority with user's role
+
     const sortedLearningLanguages = learningLanguagesToPair
       .sort(
         (a, b) =>
