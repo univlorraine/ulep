@@ -36,11 +36,11 @@ spec:
           args: ["set -x; while [ $(pg_isready -d $DB_NAME -h $HOST_NAME -p 5432 -U $DB_USER -q; echo $?) -ne 0 ]; do sleep 5; done"]          
           env:
             - name: DB_NAME
-              value: "{{ .Values.global.postgresql.auth.database }}"
+              value: "{{ .Values.db.database }}"
             - name: HOST_NAME
-              value: "{{ include "etandem.name" . }}-postgresql.{{ .Release.Namespace }}"
+              value: "{{ include "etandem.name" . }}-postgresql-ha-pgpool.{{ .Release.Namespace }}"
             - name: DB_USER
-              value: "{{ .Values.global.postgresql.auth.username }}"
+              value: "{{ .Values.db.username }}"
         - name: mount-custom-theme
           image: "{{ .Values.auth.initImage.repository }}:{{ .Values.auth.initImage.tag}}"
           volumeMounts:
@@ -106,9 +106,9 @@ spec:
             - name: KC_DB
               value: "{{ .Values.auth.env.kcDB }}"
             - name: KC_DB_USERNAME
-              value: "{{ .Values.global.postgresql.auth.username }}"
+              value: "{{ .Values.db.username }}"
             - name: KC_DB_URL
-              value: "jdbc:postgresql://{{ .Values.name }}-postgresql.{{ .Release.Namespace }}:5432/{{ .Values.global.postgresql.auth.database }}"
+              value: "jdbc:postgresql://{{ .Values.name }}-postgresql-ha-pgpool.{{ .Release.Namespace }}:5432/{{ .Values.db.database }}"
             - name: KC_DB_SCHEMA
               value: "{{ .Values.auth.env.kcDBSchema }}"
             - name: PROXY_ADDRESS_FORWARDING
