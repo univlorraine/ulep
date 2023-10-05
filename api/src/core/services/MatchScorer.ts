@@ -22,6 +22,17 @@ export interface IMatchScorer {
   ): Match;
 }
 
+const getMaxValueInNumberMatrix = (matrix: { [key: string]: { [key: string]: number } }) => Object.values(matrix)
+  .reduce<number>((accumulator, value) => {
+    const maxScoreForValue = Math.max(...Object.values(value)); 
+    if (!accumulator || maxScoreForValue > accumulator) {
+      return maxScoreForValue
+    }
+
+    return accumulator;
+  }, -1);
+
+
 @Injectable()
 export class MatchScorer implements IMatchScorer {
 
@@ -34,6 +45,40 @@ export class MatchScorer implements IMatchScorer {
     meetingFrequency: 0.05,
     certificateOption: 0.05,
   };
+
+
+  // Note: A learning language can only match a language spoken by the potential match profile. As all
+  // languages spoken are approximated with the same skill level ,we approximate the compatibility 
+  // score only with learning language levels. We consider in this method that compatibility
+  // has already been asserted (i.e. learningLanguage 1 is spoken by profile 2 and learningLanguage 2 is spoken by profile 1).
+  // Note: to preserve this approximation, it is mandatory that matrix are symetrics
+  #standardPairingLearningLanguagesCompatibilityMatrix: { [key: string]: { [key: string]: number } } = {
+    A0: { A0: 0, A1: 1, A2: 1, B1: 2, B2: 2, C1: 2, C2: 2 },
+    A1: { A0: 1, A1: 2, A2: 2, B1: 3, B2: 3, C1: 3, C2: 3 },
+    A2: { A0: 1, A1: 2, A2: 2, B1: 4, B2: 4, C1: 4, C2: 4 },
+    B1: { A0: 2, A1: 3, A2: 4, B1: 5, B2: 5, C1: 5, C2: 5 },
+    B2: { A0: 2, A1: 3, A2: 4, B1: 5, B2: 5, C1: 5, C2: 5 },
+    C1: { A0: 2, A1: 3, A2: 4, B1: 5, B2: 5, C1: 5, C2: 5 },
+    C2: { A0: 2, A1: 3, A2: 4, B1: 5, B2: 5, C1: 5, C2: 5 },
+  }
+  #standardPairingLearningLanguagesCompatibilityMatrixMaxScore: number;
+
+  #discoveryPairingLearningLanguagesCompatibilityMatrix: { [key: string]: { [key: string]: number } } = {
+    A0: { A0: 0, A1: 2, A2: 2, B1: 5, B2: 5, C1: 5, C2: 5 },
+    A1: { A0: 2, A1: 2, A2: 2, B1: 5, B2: 5, C1: 5, C2: 5 },
+    A2: { A0: 2, A1: 2, A2: 5, B1: 5, B2: 5, C1: 5, C2: 5 },
+    B1: { A0: 6, A1: 6, A2: 5, B1: 4, B2: 4, C1: 4, C2: 4 },
+    B2: { A0: 6, A1: 6, A2: 5, B1: 4, B2: 4, C1: 4, C2: 4 },
+    C1: { A0: 6, A1: 6, A2: 5, B1: 4, B2: 4, C1: 4, C2: 4 },
+    C2: { A0: 6, A1: 6, A2: 5, B1: 4, B2: 4, C1: 4, C2: 4 },
+  };
+  #discoveryPairingLearningLanguagesCompatibilityMatrixMaxScore: number;
+
+
+  constructor() {
+    this.#standardPairingLearningLanguagesCompatibilityMatrixMaxScore = getMaxValueInNumberMatrix(this.#standardPairingLearningLanguagesCompatibilityMatrix);
+    this.#discoveryPairingLearningLanguagesCompatibilityMatrixMaxScore = getMaxValueInNumberMatrix(this.#discoveryPairingLearningLanguagesCompatibilityMatrix);
+  }
 
   public set coeficients(coeficients: Coeficients) {
     const sum = Object.values(coeficients).reduce((a, b) => a + b, 0);
@@ -96,41 +141,10 @@ export class MatchScorer implements IMatchScorer {
    */
   private computeLearningCompatibility(learningLanguage1: LearningLanguage, learningLanguage2: LearningLanguage): number {
     const isDiscovery = learningLanguage1.isDiscovery(learningLanguage2) || learningLanguage2.isDiscovery(learningLanguage1);
-    
-    // Note: A learning language can only match a language spoken by the potential match profile. As all
-    // languages spoken are approximated with the same skill level ,we approximate the compatibility 
-    // score only with learning language levels. We consider in this method that compatibility
-    // has already been asserted (i.e. learningLanguage 1 is spoken by profile 2 and learningLanguage 2 is spoken by profile 1).
-    // Note: to preserve this approximation, it is mandatory that matrix are symetrics
-
-    const languageLevelMatrix: { [key: string]: { [key: string]: number } } = {
-      A0: { A0: 0, A1: 1, A2: 1, B1: 2, B2: 2, C1: 2, C2: 2 },
-      A1: { A0: 1, A1: 2, A2: 2, B1: 3, B2: 3, C1: 3, C2: 3 },
-      A2: { A0: 1, A1: 2, A2: 2, B1: 4, B2: 4, C1: 4, C2: 4 },
-      B1: { A0: 2, A1: 3, A2: 4, B1: 5, B2: 5, C1: 5, C2: 5 },
-      B2: { A0: 2, A1: 3, A2: 4, B1: 5, B2: 5, C1: 5, C2: 5 },
-      C1: { A0: 2, A1: 3, A2: 4, B1: 5, B2: 5, C1: 5, C2: 5 },
-      C2: { A0: 2, A1: 3, A2: 4, B1: 5, B2: 5, C1: 5, C2: 5 },
-    };
-
-    // TODO(NOW+1): extract matrix injectione from method
-    // TODO(NOW+2): integrate new matrix from UL when they have it
-    const discoveryLanguageLevelMatrix: { [key: string]: { [key: string]: number } } = {
-      A0: { A0: 0, A1: 2, A2: 2, B1: 5, B2: 5, C1: 5, C2: 5 },
-      A1: { A0: 2, A1: 2, A2: 2, B1: 5, B2: 5, C1: 5, C2: 5 },
-      A2: { A0: 2, A1: 2, A2: 5, B1: 5, B2: 5, C1: 5, C2: 5 },
-      B1: { A0: 6, A1: 6, A2: 5, B1: 4, B2: 4, C1: 4, C2: 4 },
-      B2: { A0: 6, A1: 6, A2: 5, B1: 4, B2: 4, C1: 4, C2: 4 },
-      C1: { A0: 6, A1: 6, A2: 5, B1: 4, B2: 4, C1: 4, C2: 4 },
-      C2: { A0: 6, A1: 6, A2: 5, B1: 4, B2: 4, C1: 4, C2: 4 },
-    };
-    const levelsCount = isDiscovery ? 6 : 5;
-
-    const rawScore = isDiscovery
-      ? discoveryLanguageLevelMatrix[learningLanguage1.level][learningLanguage2.level]
-      : languageLevelMatrix[learningLanguage1.level][learningLanguage2.level];
-
-    const score = rawScore / levelsCount;
+  
+    const score = isDiscovery
+      ? this.#discoveryPairingLearningLanguagesCompatibilityMatrix[learningLanguage1.level][learningLanguage2.level] / this.#discoveryPairingLearningLanguagesCompatibilityMatrixMaxScore
+      : this.#standardPairingLearningLanguagesCompatibilityMatrix[learningLanguage1.level][learningLanguage2.level] / this.#standardPairingLearningLanguagesCompatibilityMatrixMaxScore;
 
     return this.coeficients.level * score;
   }
