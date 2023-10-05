@@ -7,24 +7,31 @@
 name: "ulep" # REQUIRED
 domain: exemple.com # REQUIRED
 issuerName: letsencrypt # REQUIRED
-global:
-  postgresql:
-    auth:
-      username: postgres # FIXE
-      database: ulep # FIXE
-      password: "" # REQUIRED
-      postgresPassword: "" # REQUIRED
 
-postgresql:
-  primary:
-    initdb:
-      scriptsConfigMap: ulep-init-database # REQUIRED
+db:
+  username: &dbUser postgres # FIXE
+  database: &dbName ulep # FIXE
+  password: &dbPassword TODO # REQUIRED
+  initScriptsCM: &dbInitScriptsCM ulep-init-database # FIXE
+
 apiUrl: &apiUrl api
 adminUrl: &adminUrl admin
 minioUrl: &minioUrl minio
 minioApiUrl: &minioApiUrl minio-api
 keycloakUrl: &keycloakUrl auth
 webappUrl: &webappUrl webapp
+
+############## POSTGRES ##############
+postgresql-ha:
+  postgresql:
+    password: *dbPassword # FIXE
+    repmgrPassword: *dbPassword # FIXE
+    database: *dbName # FIXE
+    initdbScriptsCM: *dbInitScriptsCM # FIXE
+  pgpool:
+    adminPassword: *dbPassword # FIXE
+############## POSTGRES ##############
+
 ############## API ##############
 api:
   name: api # REQUIRED
