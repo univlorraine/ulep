@@ -295,7 +295,7 @@
                     "learningType": "Mode",
                     "gender": "Gender",
                     "age": "Age",
-                    "tandemLanguage": "Language to learn"
+                    "spokenLanguages": "Spoken languages"
                 },
                 "globalSuggestions": {
                     "title": "Global routine suggestion",

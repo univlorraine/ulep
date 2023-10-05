@@ -34,7 +34,7 @@ const TandemTable = ({ partners, actions, displayTandemLanguage }: TandemTablePr
                 <TableRow>
                     {displayTandemLanguage && (
                         <TableCell>
-                            {translate('learning_languages.show.tandems.tableColumns.tandemLanguage')}
+                            {translate('learning_languages.show.tandems.tableColumns.spokenLanguages')}
                         </TableCell>
                     )}
                     <TableCell>{translate('learning_languages.show.tandems.tableColumns.profile')}</TableCell>
@@ -55,7 +55,13 @@ const TandemTable = ({ partners, actions, displayTandemLanguage }: TandemTablePr
             <TableBody>
                 {partners.map((partner) => (
                     <TableRow key={partner.id}>
-                        {displayTandemLanguage && <TableCell>{partner.tandemLanguage?.name}</TableCell>}
+                        {displayTandemLanguage && (
+                            <TableCell>
+                                {[partner.profile.nativeLanguage, ...partner.profile.masteredLanguages]
+                                    .map((language) => language.name)
+                                    .join(', ')}
+                            </TableCell>
+                        )}
                         <TableCell>
                             <ProfileLink profile={partner.profile} />
                         </TableCell>

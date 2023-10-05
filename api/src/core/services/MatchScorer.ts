@@ -92,9 +92,6 @@ export class MatchScorer implements IMatchScorer {
     return this.#coeficients;
   }
 
-  // TODO(NOW+2): comment on why we keep match language 
-  // TODO(NOW+2): display spoken languages in BO when match joker
-
   // TODO(bonus): Use interest categories similarity instead of interests
   public computeMatchScore(
     learningLanguage1: LearningLanguage,
