@@ -5,6 +5,7 @@ export enum UniversitySeedIDs {
   CENTRAL = 'b511f9d1-ce7e-40b5-a630-ecb99f4e9f59',
   BIRMINGHAM = '60ea6e0d-e654-47bf-9bbf-58b3c375b339',
   FRANCFORT = '0747d187-7b02-479b-8ce3-faccac2a20c9',
+  OTTAWA = '1d9f3c9f-0408-46a6-ba1e-b934a4be6b14',
 }
 
 export const createUniversities = async (prisma: PrismaClient) => {
@@ -70,6 +71,23 @@ export const createUniversities = async (prisma: PrismaClient) => {
       admissionEndDate: new Date('2023-12-30'),
       website: 'https://www.toto.de',
       pairing_mode: PairingMode.AUTOMATIC,
+    },
+  });
+  await prisma.organizations.create({
+    data: {
+      id: UniversitySeedIDs.OTTAWA,
+      name: 'Université de Ottawa',
+      Country: {
+        connect: { id: countries.find((country) => country.code === 'CA').id },
+      },
+      codes: ['23OTTAWA'],
+      domains: ['@univ-ottawa.ca', '@thetribe.io'],
+      timezone: 'Canada/Atlantic',
+      Parent: { connect: { id: UniversitySeedIDs.CENTRAL } },
+      admissionStartDate: new Date('2023-01-02'),
+      admissionEndDate: new Date('2023-12-30'),
+      website: 'https://www.toto.ca',
+      pairing_mode: PairingMode.SEMI_AUTOMATIC,
     },
   });
 };
