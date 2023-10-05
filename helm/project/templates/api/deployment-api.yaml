@@ -42,8 +42,8 @@ spec:
             value: "{{ .Values.global.postgresql.auth.username }}"
           - name: DATABASE_URL
             value: "postgresql://{{ .Values.global.postgresql.auth.username }}:$(PGPASSWORD)@{{ include "etandem.name" . }}-postgresql.{{ .Release.Namespace }}:5432/{{ .Values.global.postgresql.auth.database }}?schema=public"
-        envFrom: 
-          - secretRef: 
+        envFrom:
+          - secretRef:
               name: "{{ include "etandem.fullname" . }}-secret-{{ .Values.api.name }}"
       containers:
         - name: {{ .Chart.Name }}
@@ -78,6 +78,8 @@ spec:
               value: "{{ .Values.api.env.keycloakAdmin }}"
             - name: KEYCLOAK_CLIENT_ID
               value: "{{ .Values.api.env.keycloakClientId }}"
+            - name: KEYCLOAK_ADMIN_GROUP_ID
+              value: "{{ .Values.api.env.keycloakAdminGroupId }}"
             - name: MINIO_URL
               value: "{{ .Values.minioApiUrl }}.{{ .Values.domain }}"
             - name: MINIO_PUBLIC_URL
@@ -113,7 +115,7 @@ spec:
             - name: TRANSLATIONS_ENDPOINT_SUFFIX
               value: "{{ .Values.api.env.translationsEndpointSuffix }}"
           envFrom:
-            - secretRef: 
+            - secretRef:
                 name: "{{ include "etandem.fullname" . }}-secret-{{ .Values.api.name }}"
       {{- with .Values.nodeSelector }}
       nodeSelector:

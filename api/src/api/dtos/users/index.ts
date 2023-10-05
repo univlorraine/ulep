@@ -105,10 +105,7 @@ export class AdministratorResponse {
     return new AdministratorResponse({
       id: user.id,
       email: user.email,
-      universityId:
-        user.attributes && user.attributes.universityId
-          ? user.attributes.universityId[0]
-          : undefined,
+      universityId: user.attributes?.universityId?.[0],
     });
   }
 }

@@ -329,8 +329,9 @@ export class KeycloakClient {
       },
     );
     if (!response.ok) {
-      this.logger.error(JSON.stringify(await response.json()));
-      throw new UserAlreadyExistException();
+      const result = await response.json();
+      this.logger.error(JSON.stringify(result));
+      throw new HttpException({ message: result }, 500);
     }
 
     const user = await this.getUserByEmail(props.email);
@@ -429,9 +430,9 @@ export class KeycloakClient {
   /*
    * Add user to group
    */
-  async addUserToAdministrator(userId: string): Promise<void> {
+  async addUserToAdministrators(userId: string): Promise<void> {
     await fetch(
-      `${this.configuration.baseUrl}/admin/realms/${this.configuration.realm}/users/${userId}/groups/02736a0f-4679-4329-a877-2ce87aaea569`,
+      `${this.configuration.baseUrl}/admin/realms/${this.configuration.realm}/users/${userId}/groups/${this.configuration.adminGroupId}`,
       {
         method: 'PUT',
         headers: {
@@ -471,7 +472,7 @@ export class KeycloakClient {
    */
   public async getAdministrators(): Promise<UserRepresentation[]> {
     const response = await fetch(
-      `${this.configuration.baseUrl}/admin/realms/${this.configuration.realm}/groups/02736a0f-4679-4329-a877-2ce87aaea569/members`,
+      `${this.configuration.baseUrl}/admin/realms/${this.configuration.realm}/groups/${this.configuration.adminGroupId}/members`,
       {
         method: 'GET',
         headers: {

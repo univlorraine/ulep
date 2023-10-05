@@ -15,7 +15,7 @@ export class CreateAdministratorCommand {
 @Injectable()
 export class CreateAdministratorUsecase {
   constructor(
-    private readonly keycloak: KeycloakClient,
+    private readonly keycloakClient: KeycloakClient,
     @Inject(UNIVERSITY_REPOSITORY)
     private readonly universityRepository: UniversityRepository,
   ) {}
@@ -30,14 +30,14 @@ export class CreateAdministratorUsecase {
       }
     }
 
-    const keycloakUser = await this.keycloak.createAdministrator({
+    const keycloakUser = await this.keycloakClient.createAdministrator({
       email: command.email,
       universityId: command.universityId,
     });
 
-    await this.keycloak.addUserToAdministrator(keycloakUser.id);
+    await this.keycloakClient.addUserToAdministrators(keycloakUser.id);
 
-    await this.keycloak.executeActionEmail(
+    await this.keycloakClient.executeActionEmail(
       ['UPDATE_PASSWORD'],
       keycloakUser.id,
       `${configuration().adminUrl}/login`,
