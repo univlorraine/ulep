@@ -16,7 +16,7 @@ import GetAllTandemsUsecase from '../domain/usecases/GetAllTandemsUsecase';
 import GetAllUniversitiesUsecase from '../domain/usecases/GetAllUniversitiesUsecase';
 import GetProfileByUserIdUsecase from '../domain/usecases/GetProfileUsecase';
 import GetQuizzByLevelUsecase from '../domain/usecases/GetQuizzByLevelUsecase';
-import { GetTokenFromCodeUsecase } from '../domain/usecases/GetTokenFromCodeUsecase';
+import { GetTokenFromCodeUsecase, GetInitialUrlUsecase } from '../domain/usecases/AuthStandardFlow';
 import GetUserUsecase from '../domain/usecases/GetUserUsecase';
 import LoginUsecase from '../domain/usecases/LoginUsecase';
 import ResetPasswordUsecase from '../domain/usecases/ResetPasswordUsecase';
@@ -34,8 +34,9 @@ const getConfigContextValue = (
     configuration: Configuration
 ): ConfigContextValueType => {
     const cameraAdapter = new CameraAdapter();
+    const apiUrl = import.meta.env.VITE_API_URL ?? 'https://api.ulep.thestaging.io';
     const domainHttpAdapter = new DomainHttpAdapter(
-        import.meta.env.VITE_API_URL ?? 'https://api.ulep.thestaging.io',
+        apiUrl,
         accessToken,
         refreshToken,
         languageCode
@@ -58,6 +59,7 @@ const getConfigContextValue = (
     const getUser = new GetUserUsecase(domainHttpAdapter);
     const login = new LoginUsecase(domainHttpAdapter, setTokens);
     const getTokenFromCodeUsecase = new GetTokenFromCodeUsecase(domainHttpAdapter, setTokens);
+    const getInitialUrlUsecase = new GetInitialUrlUsecase(apiUrl);
     const resetPassword = new ResetPasswordUsecase(domainHttpAdapter);
     const updateAvatar = new UpdateAvatarUsecase(domainHttpAdapter);
     const updateNotificationPermission = new UpdateNotificationPermissionUsecase(domainHttpAdapter);
@@ -88,6 +90,7 @@ const getConfigContextValue = (
         updateAvatar,
         updateNotificationPermission,
         getTokenFromCodeUsecase,
+        getInitialUrlUsecase,
     };
 };
 

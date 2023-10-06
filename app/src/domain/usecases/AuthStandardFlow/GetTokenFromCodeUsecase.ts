@@ -1,7 +1,8 @@
-import { HttpResponse } from '../../adapter/BaseHttpAdapter';
-import GetTokenFromCodeUsecaseInterface, { Tokens } from "../interfaces/GetTokenFromCodeUsecase.interface";
-import { HttpAdapterInterface } from '../../adapter/DomainHttpAdapter';
+import { HttpResponse } from '../../../adapter/BaseHttpAdapter';
+import GetTokenFromCodeUsecaseInterface, { Tokens } from "../../interfaces/AuthStandardFlow/GetTokenFromCodeUsecase.interface";
+import { HttpAdapterInterface } from '../../../adapter/DomainHttpAdapter';
 
+// TODO(NOW): factorize
 interface GetTokenResponse {
     accessToken: string;
     refreshToken: string;
