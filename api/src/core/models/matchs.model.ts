@@ -14,7 +14,6 @@ export class MatchScores {
   readonly status: number;
   readonly goals: number;
   readonly interests: number;
-  readonly gender: number;
   readonly meetingFrequency: number;
   readonly certificateOption: number;
 
@@ -24,7 +23,6 @@ export class MatchScores {
     status: number;
     goals: number;
     interests: number;
-    gender: number;
     meetingFrequency: number;
     certificateOption: number;
   }) {
@@ -33,7 +31,6 @@ export class MatchScores {
     this.status = props.status;
     this.goals = props.goals;
     this.interests = props.interests;
-    this.gender = props.gender;
     this.meetingFrequency = props.meetingFrequency;
     this.certificateOption = props.certificateOption;
   }
@@ -45,7 +42,6 @@ export class MatchScores {
       status: 0,
       goals: 0,
       interests: 0,
-      gender: 0,
       meetingFrequency: 0,
       certificateOption: 0,
     });

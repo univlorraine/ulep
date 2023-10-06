@@ -179,7 +179,7 @@ describe('GenerateTandem UC', () => {
       gender: Gender.MALE,
       age: 19,
       university: centralUniversity,
-      role: Role.STAFF,
+      role: Role.STUDENT,
       country: 'FR',
       avatar: null,
       deactivatedReason: '',
@@ -255,7 +255,7 @@ describe('GenerateTandem UC', () => {
       gender: Gender.MALE,
       age: 19,
       university: centralUniversity,
-      role: Role.STAFF,
+      role: Role.STUDENT,
       country: 'FR',
       avatar: null,
       deactivatedReason: '',
@@ -293,7 +293,7 @@ describe('GenerateTandem UC', () => {
       gender: Gender.MALE,
       age: 48,
       university: centralUniversity,
-      role: Role.STAFF,
+      role: Role.STUDENT,
       country: 'ES',
       avatar: null,
       deactivatedReason: '',
@@ -301,12 +301,12 @@ describe('GenerateTandem UC', () => {
     id: 'SP1',
     nativeLanguage: spanish,
     masteredLanguages: [],
-    meetingFrequency: 'ONCE_A_WEEK',
+    meetingFrequency: 'TWICE_A_MONTH',
     learningLanguages: [
       new LearningLanguage({
         id: 'SP1-LL_FR_B1',
         language: french,
-        level: ProficiencyLevel.B1,
+        level: ProficiencyLevel.A2,
         learningType: LearningType.BOTH,
         sameGender: false,
         sameAge: false,
@@ -328,7 +328,7 @@ describe('GenerateTandem UC', () => {
       email: '',
       firstname: '',
       lastname: '',
-      gender: Gender.FEMALE,
+      gender: Gender.MALE,
       age: 19,
       university: centralUniversity,
       role: Role.STUDENT,
@@ -407,7 +407,7 @@ describe('GenerateTandem UC', () => {
       gender: Gender.MALE,
       age: 28,
       university: centralUniversity,
-      role: Role.STAFF,
+      role: Role.STUDENT,
       country: 'EN',
       avatar: null,
       deactivatedReason: '',
@@ -1393,6 +1393,104 @@ describe('GenerateTandem UC', () => {
       },
     });
 
+    test('should generate tandem for staff before student', async () => {
+      const bestUser = new Profile({
+        user: new User({
+          id: 'user1',
+          acceptsEmail: true,
+          email: '',
+          firstname: '',
+          lastname: '',
+          gender: Gender.MALE,
+          age: 19,
+          university: centralUniversity,
+          role: Role.STUDENT,
+          country: 'FR',
+          avatar: null,
+          deactivatedReason: '',
+        }),
+        id: 'FR_1',
+        nativeLanguage: french,
+        masteredLanguages: [],
+        meetingFrequency: 'ONCE_A_WEEK',
+        learningLanguages: [
+          new LearningLanguage({
+            id: 'FR_1-LL_EN_B2',
+            language: english,
+            level: ProficiencyLevel.B2,
+            createdAt: new Date('2023-04-08T10:00:00.000Z'),
+            learningType: LearningType.ETANDEM,
+            sameGender: false,
+            sameAge: false,
+            specificProgram: false,
+          }),
+        ],
+        objectives: [],
+        interests: [],
+        biography: {
+          superpower: faker.lorem.sentence(),
+          favoritePlace: faker.lorem.sentence(),
+          experience: faker.lorem.sentence(),
+          anecdote: faker.lorem.sentence(),
+        },
+      });
+      // bestUser is better match but not in specific program
+      const priorityUser = new Profile({
+        user: new User({
+          id: 'user2',
+          acceptsEmail: true,
+          email: '',
+          firstname: '',
+          lastname: '',
+          gender: Gender.FEMALE,
+          age: 50,
+          university: centralUniversity,
+          role: Role.STAFF,
+          country: 'FR',
+          avatar: null,
+          deactivatedReason: '',
+        }),
+        id: 'FR_2',
+        nativeLanguage: french,
+        masteredLanguages: [],
+        meetingFrequency: 'ONCE_A_WEEK',
+        learningLanguages: [
+          new LearningLanguage({
+            id: 'FR_2-LL_EN_B2',
+            language: english,
+            level: ProficiencyLevel.B2,
+            createdAt: new Date('2023-04-18T10:00:00.000Z'),
+            learningType: LearningType.ETANDEM,
+            sameGender: false,
+            sameAge: false,
+            specificProgram: false,
+          }),
+        ],
+        objectives: [],
+        interests: [],
+        biography: {
+          superpower: faker.lorem.sentence(),
+          favoritePlace: faker.lorem.sentence(),
+          experience: faker.lorem.sentence(),
+          anecdote: faker.lorem.sentence(),
+        },
+      });
+
+      learningLanguageRepository.init([bestUser, match, priorityUser]);
+
+      await uc.execute({
+        universityIds: [centralUniversity.id, subsidiaryUniveristy1.id],
+      });
+
+      const tandems = await tandemsRepository.getExistingTandems();
+      expect(
+        checkTandemArrayContainsTandem(tandems, {
+          a: match.learningLanguages[0],
+          b: priorityUser.learningLanguages[0],
+        }),
+      ).toBeTruthy();
+    });
+
     test('should generate tandem for learning languages with specific program first', async () => {
       const bestUser = new Profile({
         user: new User({
@@ -1445,7 +1543,7 @@ describe('GenerateTandem UC', () => {
           gender: Gender.FEMALE,
           age: 50,
           university: centralUniversity,
-          role: Role.STAFF,
+          role: Role.STUDENT,
           country: 'FR',
           avatar: null,
           deactivatedReason: '',
@@ -1543,7 +1641,7 @@ describe('GenerateTandem UC', () => {
           gender: Gender.FEMALE,
           age: 50,
           university: centralUniversity,
-          role: Role.STAFF,
+          role: Role.STUDENT,
           country: 'FR',
           avatar: null,
           deactivatedReason: '',

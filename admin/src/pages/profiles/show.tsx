@@ -17,13 +17,13 @@ import User from '../../entities/User';
 const Title = () => {
     const record = useRecordContext();
 
-    if (!record) {
+    if (!record?.user) {
         return null;
     }
 
     return (
         <span>
-            {record.firstname} {record.lastname}
+            {record.user.firstname} {record.user.lastname}
         </span>
     );
 };

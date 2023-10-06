@@ -27,10 +27,6 @@ class MatchScoreDto {
 
   @ApiProperty()
   @Expose({ groups: ['read'] })
-  gender: number;
-
-  @ApiProperty()
-  @Expose({ groups: ['read'] })
   meetingFrequency: number;
 
   @ApiProperty()
@@ -73,7 +69,6 @@ export class MatchResponse {
         status: instance.scores.status,
         goals: instance.scores.goals,
         interests: instance.scores.interests,
-        gender: instance.scores.gender,
         meetingFrequency: instance.scores.meetingFrequency,
         certificateOption: instance.scores.certificateOption,
         total: instance.total,

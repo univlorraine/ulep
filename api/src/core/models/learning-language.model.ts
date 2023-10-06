@@ -94,11 +94,6 @@ export class LearningLanguage {
     } else {
       if (learningLanguage.profile.isSpeakingLanguage(this.language)) {
         return true;
-      } else if (
-        this.isDiscovery(learningLanguage) &&
-        learningLanguage.profile.isLearningLanguage(this.language)
-      ) {
-        return true;
       }
     }
 
