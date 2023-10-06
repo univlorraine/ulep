@@ -3,6 +3,12 @@
         "email": "Email",
         "password": "Password"
     },
+    "instance": {
+        "button": "Validate and continue",
+        "error": "Error while loading instance",
+        "subtitle": "Choose your instance from the list below",
+        "title": "Your instance"
+    },
     "login_page": {
         "button": "Login",
         "subtitle": "Welcome back! Sign in using your social account or email to continue us",

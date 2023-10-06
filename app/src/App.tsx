@@ -1,8 +1,8 @@
 import { Device } from '@capacitor/device';
-import { IonApp, isPlatform, setupIonicReact } from '@ionic/react';
+import { IonApp, IonLoading, setupIonicReact, useIonToast } from '@ionic/react';
 import { IonReactRouter } from '@ionic/react-router';
 import { StoreProvider, useStoreRehydrated } from 'easy-peasy';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { ConfigContext } from './context/ConfigurationContext';
 import getConfigContextValue from './context/getConfigurationContextValue';
@@ -26,35 +26,31 @@ import '@ionic/react/css/text-alignment.css';
 import '@ionic/react/css/text-transformation.css';
 
 /* Theme variables */
-import Configuration from './domain/entities/Confirguration';
 import './presentation/theme/button.css';
 import './presentation/theme/global.css';
 import './presentation/theme/margin.css';
 import './presentation/theme/variables.css';
 import Store from './store/store';
 import InstancesPage from './presentation/pages/mobile/InstancesPage';
+import useFetchConfiguration from './presentation/hooks/useFetchConfiguration';
+import useFetchI18NBackend from './presentation/hooks/useFetchI18NBackend';
 
 setupIonicReact();
 
 const AppContext = () => {
     const { i18n } = useTranslation();
+    const [showToast] = useIonToast();
     const accessToken = useStoreState((state) => state.accessToken);
+    const apiUrl = useStoreState((state) => state.apiUrl);
     const language = useStoreState((state) => state.language);
     const refreshToken = useStoreState((state) => state.refreshToken);
     const setProfile = useStoreActions((state) => state.setProfile);
     const setTokens = useStoreActions((state) => state.setTokens);
     const setUser = useStoreActions((state) => state.setUser);
-    const configuration = new Configuration(
-        'Université de Lorraine',
-        'Université de Lorraine',
-        'contact@email.com',
-        '#FDEE66',
-        '#B6AA43',
-        '#EDDF5E',
-        '#8BC4C4',
-        '#4B7676',
-        '#7CB8B8'
-    );
+
+    const { configuration, error, loading } = useFetchConfiguration(import.meta.env.VITE_API_URL || apiUrl);
+
+    useFetchI18NBackend(apiUrl);
 
     useEffect(() => {
         const getLanguage = async () => {
@@ -64,12 +60,14 @@ const AppContext = () => {
         getLanguage();
     }, [language]);
 
-    useEffect(() => {
-        document.documentElement.style.setProperty('--primary-color', configuration.primaryColor);
-        document.documentElement.style.setProperty('--primary-dark-color', configuration.primaryDarkColor);
-        document.documentElement.style.setProperty('--secondary-color', configuration.secondaryColor);
-        document.documentElement.style.setProperty('--secondary-dark-color', configuration.secondaryDarkColor);
-    }, []);
+    if (error) {
+        showToast({ message: error.message, duration: 5000 });
+        return <IonLoading />; //TODO: ERROR PAGE ?
+    }
+
+    if (!configuration || loading) {
+        return <IonLoading />;
+    }
 
     return (
         <ConfigContext.Provider
@@ -99,8 +97,8 @@ const AppInstance: React.FC = () => {
         return <div />;
     }
 
-    // We check if we are on ios / android and if we already got an api url in env variable ( on dev for exemple )
-    if (isPlatform('hybrid') && !apiUrl && !import.meta.env.VITE_API_URL)
+    // We check if we have an api url on env variable or on localstorage ( web and hybrid )
+    if (!apiUrl && !import.meta.env.VITE_API_URL)
         return <InstancesPage onValidate={(url: string) => setApiUrl({ apiUrl: url })} />;
     else return <AppContext />;
 };

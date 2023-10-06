@@ -2,6 +2,8 @@ import { IonPage } from '@ionic/react';
 import ULLogo from '../../../assets/instances/ul-logo.svg';
 import { useState } from 'react';
 import styles from '../css/InstancePage.module.css';
+import { AvatarPng } from '../../../assets';
+import { useTranslation } from 'react-i18next';
 
 interface Instance {
     apiUrl: string;
@@ -13,26 +15,31 @@ const instances: Instance[] = [
     {
         image: ULLogo,
         name: 'Université de Lorraine',
-        apiUrl: 'http://localhost:3000',
-    },
-    {
-        image: ULLogo,
-        name: 'Université de Lorraine',
-        apiUrl: '',
+        apiUrl: 'https://api.ulep.thestaging.io/',
     },
 ];
+
+if (import.meta.env.VITE_ENV === 'dev') {
+    instances.push({
+        image: ULLogo,
+        name: 'Localhost dev mode',
+        apiUrl: import.meta.env.VITE_LOCAL_API,
+    });
+}
 
 interface InstancesPageProps {
     onValidate: (url: string) => void;
 }
 
 const InstancesPage: React.FC<InstancesPageProps> = ({ onValidate }) => {
+    const { t } = useTranslation();
     const [selectedInstance, setSelectedInstance] = useState<Instance>();
+
     return (
         <IonPage>
             <div className={`content-wrapper ${styles.container}`}>
-                <h1 className="title">Votre instance</h1>
-                <p className="subtitle">Choisis ton instance dans la liste ci-dessous</p>
+                <h1 className="title">{t('instance.title')}</h1>
+                <p className="subtitle">{t('instance.subtitle')}</p>
                 {instances.map((instance) => (
                     <button
                         key={instance.apiUrl}
@@ -52,7 +59,7 @@ const InstancesPage: React.FC<InstancesPageProps> = ({ onValidate }) => {
                 disabled={!selectedInstance}
                 onClick={() => onValidate(selectedInstance!.apiUrl)}
             >
-                Valider et continuer
+                {t('instance.button')}
             </button>
         </IonPage>
     );

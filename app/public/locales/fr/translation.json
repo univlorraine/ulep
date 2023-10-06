@@ -117,6 +117,12 @@
             "title": "Mes demandes en attentes"
         }
     },
+    "instance": {
+        "button": "Valider et continuer",
+        "error": "Erreur pendant le chargement de l'instance",
+        "subtitle": "Choisis ton instance dans la liste ci-dessous",
+        "title": "Votre instance"
+    },
     "languages": {
         "french": "Français",
         "english": "Anglais",
