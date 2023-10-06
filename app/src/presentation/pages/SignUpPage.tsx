@@ -122,7 +122,10 @@ const SignUpPage: React.FC = () => {
                 </div>
 
                 {university && university.isCentral && (
-                    <button className="tertiary-button large-margin-vertical" onClick={() => undefined}>
+                    <button className="tertiary-button large-margin-vertical" onClick={() => {
+                        const redirectUri = encodeURIComponent("http://localhost:5173/auth");
+                        window.location.href = `http://localhost:3000/authentication/flow?redirectUri=${redirectUri}`;
+                    }}>
                         {t('signup_page.sso_button')}
                     </button>
                 )}

@@ -15,6 +15,7 @@ import GetAllUniversitiesUsecaseInterface from '../domain/interfaces/GetAllUnive
 import GetAllReportCategoriesUsecaseInterface from '../domain/interfaces/GetAlllReportCategoriesUsecase.interface';
 import GetProfileUsecaseInterface from '../domain/interfaces/GetProfileUsecase.interface';
 import GetQuizzByLevelUsecaseInterface from '../domain/interfaces/GetQuizzByLevelUsecase.interface';
+import GetTokenFromCodeUsecaseInterface from '../domain/interfaces/GetTokenFromCodeUsecase.interface';
 import GetUserUsecaseInterface from '../domain/interfaces/GetUserUsecase.interface';
 import LoginUsecaseInterface from '../domain/interfaces/LoginUsecase.interface';
 import ResetPasswordUsecaseInterface from '../domain/interfaces/ResetPasswordUsecase.interface';
@@ -44,4 +45,5 @@ export interface ConfigContextValueType {
     resetPassword: ResetPasswordUsecaseInterface;
     updateAvatar: UpdateAvatarUsecaseInterface;
     updateNotificationPermission: UpdateNotificationPermissionUsecaseInterface;
+    getTokenFromCodeUsecase: GetTokenFromCodeUsecaseInterface;
 }

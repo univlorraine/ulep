@@ -16,6 +16,7 @@ import GetAllTandemsUsecase from '../domain/usecases/GetAllTandemsUsecase';
 import GetAllUniversitiesUsecase from '../domain/usecases/GetAllUniversitiesUsecase';
 import GetProfileByUserIdUsecase from '../domain/usecases/GetProfileUsecase';
 import GetQuizzByLevelUsecase from '../domain/usecases/GetQuizzByLevelUsecase';
+import { GetTokenFromCodeUsecase } from '../domain/usecases/GetTokenFromCodeUsecase';
 import GetUserUsecase from '../domain/usecases/GetUserUsecase';
 import LoginUsecase from '../domain/usecases/LoginUsecase';
 import ResetPasswordUsecase from '../domain/usecases/ResetPasswordUsecase';
@@ -56,6 +57,7 @@ const getConfigContextValue = (
     const getQuizzByLevel = new GetQuizzByLevelUsecase(domainHttpAdapter);
     const getUser = new GetUserUsecase(domainHttpAdapter);
     const login = new LoginUsecase(domainHttpAdapter, setTokens);
+    const getTokenFromCodeUsecase = new GetTokenFromCodeUsecase(domainHttpAdapter, setTokens);
     const resetPassword = new ResetPasswordUsecase(domainHttpAdapter);
     const updateAvatar = new UpdateAvatarUsecase(domainHttpAdapter);
     const updateNotificationPermission = new UpdateNotificationPermissionUsecase(domainHttpAdapter);
@@ -85,6 +87,7 @@ const getConfigContextValue = (
         resetPassword,
         updateAvatar,
         updateNotificationPermission,
+        getTokenFromCodeUsecase,
     };
 };
 
