@@ -1,5 +1,4 @@
 import Campus from './Campus';
-import Language from './Language';
 import { Profile } from './Profile';
 import { TandemStatus, TandemSummary } from './Tandem';
 
@@ -23,7 +22,6 @@ export type LearningLanguage = {
     campus?: Campus;
     certificateOption?: boolean;
     specificProgram?: boolean;
-    tandemLanguage?: Language;
 };
 
 export type LearningLanguageTandem = {

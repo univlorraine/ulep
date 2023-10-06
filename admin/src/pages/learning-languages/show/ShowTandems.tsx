@@ -94,7 +94,6 @@ const ShowTandems = () => {
               {
                   ...tandem.partnerLearningLanguage,
                   compatibilityScore: tandem.compatibilityScore,
-                  tandemLanguage: tandem.userLearningLanguage.tandemLanguage,
                   effectiveLearningType: getEffectiveLearningType(record, tandem.partnerLearningLanguage),
               },
           ]
@@ -171,7 +170,6 @@ const ShowTandems = () => {
                                 partners={matches.map((match) => ({
                                     ...match.target,
                                     compatibilityScore: match.score.total,
-                                    tandemLanguage: match.tandemLanguage,
                                     effectiveLearningType: getEffectiveLearningType(record, match.target),
                                 }))}
                             />

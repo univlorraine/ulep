@@ -35,13 +35,13 @@ spec:
         imagePullPolicy: {{ .Values.api.initImage.pullPolicy }}
         env:
           - name: DB_NAME
-            value: "{{ .Values.global.postgresql.auth.database }}"
+            value: "{{ .Values.db.database }}"
           - name: HOST_NAME
-            value: "{{ include "etandem.name" . }}-postgresql.{{ .Release.Namespace }}"
+            value: "{{ include "etandem.name" . }}-postgresql-ha-pgpool.{{ .Release.Namespace }}"
           - name: DB_USER
-            value: "{{ .Values.global.postgresql.auth.username }}"
+            value: "{{ .Values.db.username }}"
           - name: DATABASE_URL
-            value: "postgresql://{{ .Values.global.postgresql.auth.username }}:$(PGPASSWORD)@{{ include "etandem.name" . }}-postgresql.{{ .Release.Namespace }}:5432/{{ .Values.global.postgresql.auth.database }}?schema=public"
+            value: "postgresql://{{ .Values.db.username }}:$(PGPASSWORD)@{{ include "etandem.name" . }}-postgresql-ha-pgpool.{{ .Release.Namespace }}:5432/{{ .Values.db.database }}?schema=public"
         envFrom:
           - secretRef:
               name: "{{ include "etandem.fullname" . }}-secret-{{ .Values.api.name }}"
@@ -55,21 +55,27 @@ spec:
             - name: direct
               containerPort: 3000
               protocol: TCP
-          # livenessProbe:
-          #   httpGet:
-          #     path: /
-          #     port: http
-          # readinessProbe:
-          #   httpGet:
-          #     path: /
-          #     port: http
+          readinessProbe:
+            httpGet:
+              path: /health
+              port: 3000
+            initialDelaySeconds: {{ .Values.api.probes.readiness.initialDelaySeconds }}
+            periodSeconds: {{ .Values.api.probes.readiness.periodSeconds }}
+            failureThreshold: {{ .Values.api.probes.readiness.failureThreshold }}
+          livenessProbe:
+            httpGet:
+              path: /health
+              port: 3000
+            initialDelaySeconds: {{ .Values.api.probes.liveness.initialDelaySeconds }}
+            periodSeconds: {{ .Values.api.probes.liveness.periodSeconds }}
+            failureThreshold: {{ .Values.api.probes.liveness.failureThreshold }}
           resources:
             {{- toYaml .Values.resources | nindent 12 }}
           env:
             - name: ADMIN_URL
               value: "https://{{ .Values.adminUrl }}.{{ .Values.domain }}"
             - name: DATABASE_URL
-              value: "postgresql://{{ .Values.global.postgresql.auth.username }}:$(PGPASSWORD)@{{ include "etandem.name" . }}-postgresql.{{ .Release.Namespace }}:5432/{{ .Values.global.postgresql.auth.database }}?schema=public"
+              value: "postgresql://{{ .Values.db.username }}:$(PGPASSWORD)@{{ include "etandem.name" . }}-postgresql-ha-pgpool.{{ .Release.Namespace }}:5432/{{ .Values.db.database }}?schema=public"
             - name: KEYCLOAK_BASE_URL
               value: "https://{{ .Values.keycloakUrl }}.{{ .Values.domain }}"
             - name: KEYCLOAK_REALM
@@ -114,6 +120,8 @@ spec:
               value: "{{ .Values.api.env.translationsEndpoint }}"
             - name: TRANSLATIONS_ENDPOINT_SUFFIX
               value: "{{ .Values.api.env.translationsEndpointSuffix }}"
+            - name: APP_URL
+              value: "https://{{ .Values.api.env.appUrl }}.{{ .Values.domain }}"
           envFrom:
             - secretRef:
                 name: "{{ include "etandem.fullname" . }}-secret-{{ .Values.api.name }}"

@@ -249,7 +249,9 @@
                 "createdAt": "Created",
                 "university": "University",
                 "hasActiveTandem": "In tandem",
-                "actionPossible": "Pending tandem"
+                "actionPossible": "Pending tandem",
+                "specificProgram": "Specific program",
+                "role": "Role"
             },
             "noUniversitySelected": "Please select one or more universities for pairing"
         },
@@ -293,7 +295,7 @@
                     "learningType": "Mode",
                     "gender": "Gender",
                     "age": "Age",
-                    "tandemLanguage": "Language to learn"
+                    "spokenLanguages": "Spoken languages"
                 },
                 "globalSuggestions": {
                     "title": "Global routine suggestion",

@@ -67,42 +67,28 @@ export class PrismaLearningLanguageRepository
   async getAvailableLearningLanguagesSpeakingLanguageFromUniversities(
     languageId: string,
     universityIds: string[],
-    considerLearntLanguagesAsSpoken = false,
   ): Promise<LearningLanguage[]> {
-    const clauseSpokeLanguage: any = [
-      {
-        native_language_code_id: {
-          equals: languageId,
-        },
-      },
-      {
-        MasteredLanguages: {
-          some: {
-            language_code_id: {
-              equals: languageId,
-            },
-          },
-        },
-      },
-    ];
-    if (considerLearntLanguagesAsSpoken) {
-      clauseSpokeLanguage.push({
-        LearningLanguages: {
-          some: {
-            language_code_id: {
-              equals: languageId,
-            },
-          },
-        },
-      });
-    }
-
     const res = await this.prisma.learningLanguages.findMany({
       where: {
         Profile: {
           AND: [
             {
-              OR: clauseSpokeLanguage,
+              OR: [
+                {
+                  native_language_code_id: {
+                    equals: languageId,
+                  },
+                },
+                {
+                  MasteredLanguages: {
+                    some: {
+                      language_code_id: {
+                        equals: languageId,
+                      },
+                    },
+                  },
+                },
+              ],
               User: {
                 AND: [
                   {
@@ -211,7 +197,7 @@ export class PrismaLearningLanguageRepository
         Profile: {
           AND: [
             {
-              // Assert target speaks or learns an allowed language
+              // Assert target speaks an allowed language
               OR: [
                 {
                   native_language_code_id: {
@@ -220,15 +206,6 @@ export class PrismaLearningLanguageRepository
                 },
                 {
                   MasteredLanguages: {
-                    some: {
-                      language_code_id: {
-                        in: allowedLanguages,
-                      },
-                    },
-                  },
-                },
-                {
-                  LearningLanguages: {
                     some: {
                       language_code_id: {
                         in: allowedLanguages,
@@ -421,6 +398,20 @@ export class PrismaLearningLanguageRepository
           orderByPayload = {
             LanguageCode: {
               name: orderBy.order,
+            },
+          };
+          break;
+        case LearningLanguageQuerySortKey.SPECIFIC_PROGRAM:
+          orderByPayload = {
+            specific_program: orderBy.order,
+          };
+          break;
+        case LearningLanguageQuerySortKey.ROLE:
+          orderByPayload = {
+            Profile: {
+              User: {
+                role: orderBy.order,
+              },
             },
           };
           break;

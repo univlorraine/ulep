@@ -9,15 +9,15 @@
     "password"
   ],
   "internationalizationEnabled": true,
-    "loginTheme": "ulep",
-    "supportedLocales": ["en", "fr"],
-    "defaultLocale": "en",
+  "loginTheme": "ulep",
+  "supportedLocales": ["en", "fr"],
+  "defaultLocale": "en",
   "smtpServer": {
     "starttls": "false",
-    "port": "1025",
-    "host": "mailer",
-    "from": "contact@ulep.io",
-    "ssl": "false"
+    "port": "{{ .Values.api.env.smtpPort }}",
+    "host": "{{ .Values.api.env.smtpHost }}",
+    "from": "{{ .Values.api.env.smtpSender }}",
+    "ssl": "{{ .Values.api.env.smtpSecure }}"
   },
   "clients": [
     {
@@ -28,6 +28,7 @@
       "bearerOnly": false,
       "standardFlowEnabled": false,
       "directAccessGrantsEnabled": true,
+      "redirectUris": ["https://{{ .Values.api.env.appUrl }}.{{ .Values.domain }}/login"],
       "serviceAccountsEnabled": true,
       "protocolMappers": [{
         "id": "b38e1a26-d649-4370-879d-c7499d023daa",
@@ -57,10 +58,10 @@
       "standardFlowEnabled": true,
       "directAccessGrantsEnabled": true,
       "redirectUris": [
-        "https://{{ .Values.api.env.adminUrl }}.{{ .Values.domain }}/auth-callback"
+        "https://{{ .Values.adminUrl }}.{{ .Values.domain }}/auth-callback"
       ],
       "webOrigins": ["*"],
-      "adminUrl": "https://{{ .Values.api.env.adminUrl }}.{{ .Values.domain }}",
+      "adminUrl": "https://{{ .Values.adminUrl }}.{{ .Values.domain }}",
       "protocolMappers": [{
         "id": "c07966d2-645c-4b0b-ba91-52916817d597",
         "name": "universityId",

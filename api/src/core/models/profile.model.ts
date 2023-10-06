@@ -162,10 +162,7 @@ export class Profile {
       .filter(
         (language) =>
           !language.isJokerLanguage() &&
-          (profile.isSpeakingLanguage(language) ||
-            // We include language learnt by other profile as current profile can
-            // be searching for tandem in discover mode
-            profile.isLearningLanguage(language)) &&
+          profile.isSpeakingLanguage(language) &&
           !this.isSpeakingLanguage(language),
       );
     if (potentialLanguagesToLearnFromProfile.length === 0) {

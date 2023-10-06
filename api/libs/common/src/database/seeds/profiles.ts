@@ -77,6 +77,7 @@ export const createProfiles = async (
           learningType,
           sameGender: faker.datatype.boolean(),
           sameAge: faker.datatype.boolean(),
+          specificProgram: faker.datatype.boolean(),
         };
       });
 
@@ -126,6 +127,7 @@ export const createProfiles = async (
               learning_type: learningLanguage.learningType,
               same_gender: learningLanguage.sameGender,
               same_age: learningLanguage.sameAge,
+              specific_program: learningLanguage.specificProgram,
               Campus: learningLanguage.campus && {
                 connect: { id: learningLanguage.campus.id },
               },
