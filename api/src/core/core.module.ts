@@ -70,6 +70,8 @@ import {
   GetLearningLanguagesUsecase,
   GetLearningLanguageOfIdUsecase,
   RefuseTandemUsecase,
+  GetInstanceUsecase,
+  UpdateInstanceUsecase,
 } from './usecases';
 import { UploadObjectiveImageUsecase } from 'src/core/usecases/media/upload-objective-image.usecase';
 import { UpdateObjectiveUsecase } from 'src/core/usecases/objective/update-objective.usecase';
@@ -176,6 +178,9 @@ const usecases: Provider[] = [
   GetUsersUsecase,
   GetUserUsecase,
   UpdateUserUsecase,
+  // Instance
+  GetInstanceUsecase,
+  UpdateInstanceUsecase,
 ];
 
 const services: Provider[] = [MatchScorer];

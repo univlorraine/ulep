@@ -8,11 +8,13 @@ import { createInterests } from './interests';
 import { createProfiles } from './profiles';
 import { createLearningObjectives } from './objective';
 import { createReportCategories } from './report';
+import { createInstance } from './instance';
 
 const prisma = new Prisma.PrismaClient();
 
 const load = async () => {
   try {
+    await prisma.instance.deleteMany();
     await prisma.learningLanguages.deleteMany();
     await prisma.masteredLanguages.deleteMany();
     await prisma.users.deleteMany();
@@ -30,6 +32,7 @@ const load = async () => {
     await prisma.routineExecutions.deleteMany();
     await prisma.tandems.deleteMany();
 
+    await createInstance(prisma);
     await createCountries(prisma);
     await createLanguageCodes(prisma);
     await createUniversities(prisma);
