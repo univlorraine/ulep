@@ -26,7 +26,10 @@ export class Server {
     this.addGlobalFilters(app);
     this.addGlobalInterceptors(app);
     this.addCORSConfiguration(app);
-    this.buildAPIDocumentation(app);
+
+    if (process.env.NODE_ENV !== 'production') {
+      this.buildAPIDocumentation(app);
+    }
 
     await app.listen(port);
   }
