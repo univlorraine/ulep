@@ -28,7 +28,7 @@
       "bearerOnly": false,
       "standardFlowEnabled": false,
       "directAccessGrantsEnabled": true,
-      "redirectUris": ["https://{{ .Values.api.env.appUrl }}.{{ .Values.domain }}/login"],
+      "redirectUris": ["https://{{ .Values.api.env.appUrl }}.{{ .Values.domain }}/*", "https://{{ .Values.api.env.adminUrl }}.{{ .Values.domain }}/*"],
       "serviceAccountsEnabled": true,
       "protocolMappers": [{
         "id": "b38e1a26-d649-4370-879d-c7499d023daa",

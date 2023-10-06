@@ -189,6 +189,10 @@ const customDataProvider: DataProvider = {
 
         const result = await response.json();
 
+        if (!result.items) {
+            return { data: result, total: result.length };
+        }
+
         return {
             data: result.items.map(
                 // Note: workaround for list items not having IDs (such as learning

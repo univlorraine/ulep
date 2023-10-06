@@ -19,8 +19,11 @@ import * as Swagger from '@nestjs/swagger';
 import { configuration } from 'src/configuration';
 import { UploadAvatarUsecase } from 'src/core/usecases';
 import {
+  CreateAdministratorUsecase,
   CreateUserUsecase,
+  DeleteAdministratorUsecase,
   DeleteUserUsecase,
+  GetAdministratorsUsecase,
   GetUserUsecase,
   GetUsersUsecase,
   UpdateUserUsecase,
@@ -28,6 +31,8 @@ import {
 import { CollectionResponse, CurrentUser } from '../decorators';
 import { Roles } from '../decorators/roles.decorator';
 import {
+  AdministratorResponse,
+  CreateAdministratorRequest,
   CreateUserRequest,
   PaginationDto,
   UpdateUserRequest,
@@ -47,6 +52,9 @@ export class UserController {
     private readonly getUserUsecase: GetUserUsecase,
     private readonly updateUserUsecase: UpdateUserUsecase,
     private readonly deleteUserUsecase: DeleteUserUsecase,
+    private readonly getAdministratorsUsecase: GetAdministratorsUsecase,
+    private readonly createAdministratorUsecase: CreateAdministratorUsecase,
+    private readonly deleteAdministratorUsecase: DeleteAdministratorUsecase,
   ) {}
 
   @Post()
@@ -85,6 +93,38 @@ export class UserController {
       items: users.items.map(UserResponse.fromDomain),
       totalItems: users.totalItems,
     });
+  }
+
+  @Get('administrators')
+  @Roles(configuration().adminRole)
+  @UseGuards(AuthenticationGuard)
+  @Swagger.ApiOperation({ summary: 'Collection of Administrator ressource.' })
+  @CollectionResponse(UserResponse)
+  async findAllAdministrators() {
+    const administrators = await this.getAdministratorsUsecase.execute();
+
+    return administrators.map(AdministratorResponse.fromDomain);
+  }
+
+  @Post('administrators')
+  @Roles(configuration().adminRole)
+  @UseGuards(AuthenticationGuard)
+  @Swagger.ApiOperation({ summary: 'Create an Administrator ressource.' })
+  @Swagger.ApiCreatedResponse({ type: AdministratorResponse })
+  async createAdministrator(@Body() body: CreateAdministratorRequest) {
+    const admin = await this.createAdministratorUsecase.execute(body);
+
+    return AdministratorResponse.fromDomain(admin);
+  }
+
+  @Delete('administrators/:id')
+  @Roles(configuration().adminRole)
+  @UseGuards(AuthenticationGuard)
+  @Swagger.ApiOperation({ summary: 'Delete an administrator' })
+  async deleteAdministrator(@Param('id', ParseUUIDPipe) id: string) {
+    await this.deleteAdministratorUsecase.execute({ id });
+
+    return;
   }
 
   @Get('me')

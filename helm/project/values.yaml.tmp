@@ -53,6 +53,7 @@ api:
     keycloakAdmin: admin # REQUIRED
     keycloakAdminPassword: &keycloakAdminPassword AZE123aze # REQUIRED
     keycloakClientId: api # FIXE
+    keycloakAdminGroupId: 02736a0f-4679-4329-a877-2ce87aaea569 # FIXE
     keycloakClientSecret: &keycloakClientSecret "" # REQUIRED
     minioAccessKey: &minioAccessKey minio # FIXE
     minioSecretKey: &minioSecretKey AZE123aze # REQUIRED

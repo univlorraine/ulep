@@ -206,5 +206,4 @@ workflows:
               only:
                 - develop
                 - main
-                - feat/UL-infra-kc-theme
     

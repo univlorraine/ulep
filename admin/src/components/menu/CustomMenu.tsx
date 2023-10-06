@@ -33,6 +33,11 @@ const CustomMenu = () => {
                         to="/instance/config/show"
                     />
                     <Menu.Item
+                        leftIcon={<PersonIcon />}
+                        primaryText={translate('administrators.label')}
+                        to="/users/administrators"
+                    />
+                    <Menu.Item
                         leftIcon={<SchoolIcon />}
                         primaryText={translate('universities.label')}
                         to="/universities"
