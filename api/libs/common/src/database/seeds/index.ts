@@ -1,7 +1,10 @@
 import * as Prisma from '@prisma/client';
 import { insertUlData } from './ulDataSeed';
 import { createLanguageCodes } from './languages';
-import { createUniversities } from './universities';
+import {
+  createCentralUniversityPlaceholder,
+  createUniversities,
+} from './universities';
 import { createUsers } from './users';
 import { createCountries } from './countries';
 import { createProficiencyTests } from './proficiency';
@@ -55,6 +58,8 @@ const load = async () => {
 
     if (seedULDataset || seedRandomDataset) {
       await createUniversities(prisma);
+    } else {
+      await createCentralUniversityPlaceholder(prisma);
     }
     if (seedULDataset) {
       console.info('[DB seed] UL dataset');
