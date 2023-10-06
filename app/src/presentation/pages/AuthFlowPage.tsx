@@ -15,7 +15,10 @@ const AuthPage: React.FC = () => {
 
     useEffect(() => {
         if (code) {
-            getTokenFromCodeUsecase.execute(code).then((res) => {
+            getTokenFromCodeUsecase.execute({
+                code,
+                redirectUri: `${window.location.origin}/auth`
+            }).then((res) => {
                 if ("accessToken" in res) {
                     // TODO(future): call connector here to initialize store with values from university ?
                     history.push("/signup/informations");
@@ -23,7 +26,7 @@ const AuthPage: React.FC = () => {
             }).catch((err) => {
                 console.error(err);
                 window.alert("an error occured");
-                // TODO: redirect on error page when exist
+                // TODO(future): redirect on error page when exist
                 history.push("/error");
             });
         }

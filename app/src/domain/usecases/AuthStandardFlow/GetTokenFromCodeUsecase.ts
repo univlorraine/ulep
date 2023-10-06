@@ -1,8 +1,7 @@
 import { HttpResponse } from '../../../adapter/BaseHttpAdapter';
-import GetTokenFromCodeUsecaseInterface, { Tokens } from "../../interfaces/AuthStandardFlow/GetTokenFromCodeUsecase.interface";
+import GetTokenFromCodeUsecaseInterface, { GetTokenFromCodeCommand, Tokens } from "../../interfaces/AuthStandardFlow/GetTokenFromCodeUsecase.interface";
 import { HttpAdapterInterface } from '../../../adapter/DomainHttpAdapter';
 
-// TODO(NOW): factorize
 interface GetTokenResponse {
     accessToken: string;
     refreshToken: string;
@@ -11,12 +10,15 @@ interface GetTokenResponse {
 export class GetTokenFromCodeUsecase implements GetTokenFromCodeUsecaseInterface {
     constructor(private readonly domainHttpAdapter: HttpAdapterInterface, private readonly setTokens: Function) {}
 
-    async execute(code: string): Promise<Tokens | Error> {
+    async execute({code, redirectUri}: GetTokenFromCodeCommand): Promise<Tokens | Error> {
         try {
             const httpResponse: HttpResponse<GetTokenResponse> = await this.domainHttpAdapter.post(
                 '/authentication/flow/code',
                 {
-                    code
+                    code,
+                    // Note: redirectUri must be the same redirectUri used when initializing the flow
+                    // otherwise an error will be thrown by auth server
+                    redirectUri
                 },
                 {},
                 undefined,

@@ -19,6 +19,11 @@ export class BearerTokensFromCodeRequest {
   @IsString()
   @IsNotEmpty()
   code: string;
+
+  @ApiProperty({ type: 'string' })
+  @IsString()
+  @IsNotEmpty()
+  redirectUri: string;
 }
 
 export class RefreshTokenRequest {

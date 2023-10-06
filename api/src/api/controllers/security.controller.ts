@@ -63,10 +63,13 @@ export class SecurityController {
   @Swagger.ApiOperation({ summary: 'Request a JWT token using grant code.' })
   @Swagger.ApiOkResponse({ type: BearerTokensResponse })
   async loginFromCode(
-    @Body() { code }: BearerTokensFromCodeRequest,
+    @Body() { code, redirectUri }: BearerTokensFromCodeRequest,
   ): Promise<BearerTokensResponse> {
     const credentials =
-      await this.keycloakClient.getCredentialsFromAuthorizationCode(code);
+      await this.keycloakClient.getCredentialsFromAuthorizationCode({
+        authorizationCode: code,
+        redirectUri,
+      });
 
     return new BearerTokensResponse(credentials);
   }

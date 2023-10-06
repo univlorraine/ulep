@@ -106,9 +106,13 @@ export class KeycloakClient {
    * Returns the access token and refresh token.
    * Throws HttpException (409) if the credentials are invalid.
    */
-  async getCredentialsFromAuthorizationCode(
-    authorizationCode: string,
-  ): Promise<Credentials> {
+  async getCredentialsFromAuthorizationCode({
+    authorizationCode,
+    redirectUri,
+  }: {
+    authorizationCode: string;
+    redirectUri: string;
+  }): Promise<Credentials> {
     const response = await fetch(
       `${this.configuration.baseUrl}/realms/${this.configuration.realm}/protocol/openid-connect/token`,
       {
@@ -120,7 +124,7 @@ export class KeycloakClient {
           client_id: this.configuration.clientId,
           client_secret: this.configuration.clientSecret,
           scope: 'openid',
-          redirect_uri: 'http://localhost:5173/auth',
+          redirect_uri: redirectUri,
         }),
       },
     );
