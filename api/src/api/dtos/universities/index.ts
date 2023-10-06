@@ -253,7 +253,7 @@ export class UniversityResponse {
       parent: university.parent,
       timezone: university.timezone,
       sites: university.campus.map(CampusResponse.fromCampus),
-      hasCode: university.codes.length > 0,
+      hasCode: !!(university.codes?.length > 0),
       codes: university.codes,
       domains: university.domains,
       admissionStart: university.admissionStart,
