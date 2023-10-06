@@ -17,7 +17,6 @@ export class InMemoryLearningLanguageRepository
   getAvailableLearningLanguagesSpeakingLanguageFromUniversities: (
     languageId: string,
     universityIds: string[],
-    considerLearntLanguagesAsSpoken?: boolean,
   ) => Promise<LearningLanguage[]>;
   #learningLanguages: Map<string, LearningLanguage>;
   #tandemsPerLearningLanguages: Map<string, Tandem>;

@@ -24,6 +24,8 @@ const handleOrderField = (field?: string) => {
             return 'language';
         case 'profile.user.university.name':
             return 'university';
+        case 'profile.user.role':
+            return 'role';
         case 'level':
         case 'createdAt':
         case 'activeTandem':
