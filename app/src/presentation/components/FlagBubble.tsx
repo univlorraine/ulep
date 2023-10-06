@@ -1,3 +1,4 @@
+import { useTranslation } from 'react-i18next';
 import { useConfig } from '../../context/ConfigurationContext';
 import Language from '../../domain/entities/Language';
 import { codeLanguageToFlag } from '../utils';
@@ -13,6 +14,7 @@ interface FlagBubbleProps {
 
 const FlagBubble: React.FC<FlagBubbleProps> = ({ disabled, isSelected, language, onPressed, textColor = 'black' }) => {
     const { configuration } = useConfig();
+    const { t } = useTranslation();
     return (
         <button
             key={language.code}
@@ -25,7 +27,7 @@ const FlagBubble: React.FC<FlagBubbleProps> = ({ disabled, isSelected, language,
         >
             <span className={styles.flag}>{codeLanguageToFlag(language.code)}</span>
             <span className={styles.country} style={{ color: textColor }}>
-                {language.name}
+                {t(`languages_code.${language.code}`)}
             </span>
         </button>
     );
