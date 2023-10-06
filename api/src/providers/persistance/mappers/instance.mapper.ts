@@ -1,5 +1,5 @@
 import * as Prisma from '@prisma/client';
-import { Instance } from 'src/core/models/Instance';
+import { Instance } from 'src/core/models/Instance.model';
 
 export type InstanceSnapshot = Prisma.Instance;
 

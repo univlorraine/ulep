@@ -1,4 +1,4 @@
-import { Instance } from 'src/core/models/Instance';
+import { Instance } from 'src/core/models/Instance.model';
 
 export const INSTANCE_REPOSITORY = 'instance.repository';
 

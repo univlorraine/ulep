@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { PrismaService } from '@app/common';
 import { InstanceRepository } from 'src/core/ports/instance.repository';
-import { Instance } from 'src/core/models/Instance';
+import { Instance } from 'src/core/models/Instance.model';
 import { instanceMapper } from 'src/providers/persistance/mappers/instance.mapper';
 
 @Injectable()

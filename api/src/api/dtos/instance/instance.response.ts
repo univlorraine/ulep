@@ -1,12 +1,8 @@
 import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
 import { Expose } from 'class-transformer';
-import { Instance } from 'src/core/models/Instance';
+import { Instance } from 'src/core/models/Instance.model';
 
 export class InstanceResponse {
-  @ApiProperty({ type: 'string', format: 'uuid' })
-  @Expose({ groups: ['read'] })
-  id: string;
-
   @ApiPropertyOptional({ type: 'string', example: 'Université de Lorraine' })
   @Expose({ groups: ['read'] })
   name: string;
@@ -57,7 +53,6 @@ export class InstanceResponse {
 
   static fromDomain(instance: Instance): InstanceResponse {
     return new InstanceResponse({
-      id: instance.id,
       name: instance.name,
       email: instance.email,
       cguUrl: instance.cguUrl,

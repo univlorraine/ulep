@@ -6,6 +6,7 @@ import campus from './pages/campus';
 import categoryInterest from './pages/category-interest';
 import countSuggestedLanguages from './pages/count-suggested-languages';
 import countries from './pages/countries';
+import instance from './pages/instance';
 import interests from './pages/interests';
 import languages from './pages/languages';
 import learningLanguages from './pages/learning-languages';
@@ -43,6 +44,7 @@ const App = () => {
                     />
                     {permissions === ADMIN_PERMISSION && (
                         <>
+                            <Resource name="instance" options={{ label: translate('instance.label') }} {...instance} />
                             <Resource
                                 name="countries"
                                 options={{ label: translate('countries.label') }}

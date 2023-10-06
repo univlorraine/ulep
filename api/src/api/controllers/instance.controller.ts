@@ -40,7 +40,7 @@ export class InstanceController {
     this.config = configuration();
   }
 
-  @Get()
+  @Get('config')
   async getInstance(): Promise<InstanceResponse> {
     const instance = await this.getInstanceUsecase.execute();
 

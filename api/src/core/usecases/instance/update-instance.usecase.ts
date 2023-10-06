@@ -1,6 +1,6 @@
 import { Inject, Injectable } from '@nestjs/common';
 import { RessourceDoesNotExist } from 'src/core/errors';
-import { Instance } from 'src/core/models/Instance';
+import { Instance } from 'src/core/models/Instance.model';
 import {
   INSTANCE_REPOSITORY,
   InstanceRepository,
