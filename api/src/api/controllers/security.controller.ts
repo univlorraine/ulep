@@ -1,5 +1,13 @@
 import { KeycloakClient } from '@app/keycloak';
-import { Body, Controller, Logger, Post } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Get,
+  Logger,
+  Param,
+  Post,
+  Res,
+} from '@nestjs/common';
 import * as Swagger from '@nestjs/swagger';
 import {
   BearerTokensRequest,
@@ -32,8 +40,27 @@ export class SecurityController {
     return new BearerTokensResponse(credentials);
   }
 
-  @Post('token/code')
-  @Swagger.ApiOperation({ summary: 'Request a JWT token.' })
+  @Get('flow')
+  @Swagger.ApiOperation({ summary: 'Initiate a standard browser login.' })
+  @Swagger.ApiOkResponse({ type: BearerTokensResponse })
+  async initiateStandardFlow(
+    @Param('redirectUri') redirectUri: string,
+    @Res() res,
+  ): Promise<void> {
+    if (!redirectUri) {
+      this.logger.warn(
+        'No redirect URI when initializing standard flow. Using default redirectUri',
+      );
+    }
+
+    const url = this.keycloakClient.getStandardFlowUrl(
+      redirectUri || `${configuration().appUrl}/auth`,
+    );
+    res.redirect(url);
+  }
+
+  @Post('flow/code')
+  @Swagger.ApiOperation({ summary: 'Request a JWT token using grant code.' })
   @Swagger.ApiOkResponse({ type: BearerTokensResponse })
   async loginFromCode(
     @Body() { code }: BearerTokensFromCodeRequest,

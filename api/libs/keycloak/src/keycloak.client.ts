@@ -120,7 +120,7 @@ export class KeycloakClient {
           client_id: this.configuration.clientId,
           client_secret: this.configuration.clientSecret,
           scope: 'openid',
-          redirect_uri: 'https://webapp.ulep.thestaging.io/login',
+          redirect_uri: 'http://localhost:5173/auth',
         }),
       },
     );
@@ -572,5 +572,14 @@ export class KeycloakClient {
       await this.grantToken();
     }
     return this.tokenSet.access_token;
+  }
+
+  /**
+   * Get standard flow URL
+   * @param redirectUri
+   * @returns
+   */
+  public getStandardFlowUrl(redirectUri: string): string {
+    return `${this.configuration.baseUrl}/realms/${this.configuration.realm}/protocol/openid-connect/auth?response_type=code&client_id=${this.configuration.clientId}&scope=openid&redirect_uri=${redirectUri}`;
   }
 }
