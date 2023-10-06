@@ -1,4 +1,15 @@
 {
+    "administrators": {
+        "all": "Tout",
+        "create": {
+            "email": "Veuillez saisir l'email du nouvel administrateur",
+            "error": "Une erreur est survenue lors de la création d'un administrateur",
+            "title": "Création d'un administrateur",
+            "university": "Veuillez sélectionner une université pour l'administrateur"
+        },
+        "label": "Administrateurs",
+        "university": "Gestionnaire de"
+    },
     "campus": {
         "create": {
             "title": "Création d'un campus"

@@ -36,6 +36,7 @@
         "protocol": "openid-connect",
         "protocolMapper": "oidc-usermodel-attribute-mapper",
         "consentRequired": false,
+        "redirectUris": ["https://{{ .Values.api.env.appUrl }}.{{ .Values.domain }}/*", "https://{{ .Values.api.env.adminUrl }}.{{ .Values.domain }}/*"],
         "config": {
           "aggregate.attrs": "false",
           "userinfo.token.claim": "true",

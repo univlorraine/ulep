@@ -27,7 +27,7 @@
             "standardFlowEnabled": false,
             "directAccessGrantsEnabled": true,
             "serviceAccountsEnabled": true,
-            "redirectUris": ["http://localhost:5173/login"],
+            "redirectUris": ["http://localhost:5173/*", "http://localhost:3001/*"],
             "protocolMappers": [
                 {
                     "id": "b38e1a26-d649-4370-879d-c7499d023daa",

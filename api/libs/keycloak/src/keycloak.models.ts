@@ -83,6 +83,11 @@ export interface CreateUserProps {
   origin?: string;
 }
 
+export interface CreateAdministratorProps {
+  email: string;
+  universityId?: string;
+}
+
 export interface GetUsersProps {
   id?: string;
   email?: string;
