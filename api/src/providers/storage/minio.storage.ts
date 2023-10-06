@@ -66,6 +66,13 @@ export class MinioStorage implements StorageInterface {
             Action: ['s3:GetObject'],
             Resource: [`arn:aws:s3:::${bucket}/*`],
           },
+          {
+            Sid: 'AddPerm',
+            Effect: 'Allow',
+            Principal: '*',
+            Action: ['s3:PutObject'],
+            Resource: [`arn:aws:s3:::${bucket}/*`],
+          },
         ],
       }),
     );
