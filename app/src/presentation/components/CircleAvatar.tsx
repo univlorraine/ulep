@@ -16,7 +16,7 @@ const CircleAvatar: React.FC<CircleAvatarProps> = ({
 }) => {
     return (
         <div className={`${style.avatarView} ${viewClassName}`}>
-            <img alt={alt} src={backgroundImage} style={{ height, width }} className={style.avatar} />
+            <img alt={alt} src={backgroundImage} style={{ height, width, minHeight: height, minWidth: width }} className={style.avatar} />
         </div>
     );
 };

@@ -1,3 +1,4 @@
+import { LanguageResponse } from './../languages/index';
 import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
 import { Expose } from 'class-transformer';
 import { ProfileResponse } from '../profiles';
@@ -60,6 +61,10 @@ export class LearningLanguageResponse {
   @Expose({ groups: ['read'] })
   learningType: LearningType;
 
+  @ApiProperty({ type: LanguageResponse })
+  @Expose({ groups: ['read'] })
+  tandemLanguage?: LanguageResponse;
+
   constructor(partial: Partial<LearningLanguageResponse>) {
     Object.assign(this, partial);
   }
@@ -82,6 +87,9 @@ export class LearningLanguageResponse {
       learningType: learningLanguage.learningType,
       sameGender: learningLanguage.sameGender,
       sameAge: learningLanguage.sameAge,
+      tandemLanguage:
+        learningLanguage.tandemLanguage &&
+        LanguageResponse.fromLanguage(learningLanguage.tandemLanguage),
     });
 
     if (includeProfile) {

@@ -9,6 +9,8 @@ export enum LearningLanguageQuerySortKey {
   LANGUAGE = 'language',
   LEVEL = 'level',
   CREATED_AT = 'createdAt',
+  SPECIFIC_PROGRAM = 'specificProgram',
+  ROLE = 'role',
 }
 
 export interface LearningLanguageRepositoryGetProps {
@@ -28,17 +30,17 @@ export interface LearningLanguageRepository {
 
   create: (learningLanguage: LearningLanguage) => Promise<void>;
 
-  getLearningLanguagesOfProfileSpeakingAndNotInActiveTandemFromUniversities: (
+  getAvailableLearningLanguagesSpeakingLanguageFromUniversities: (
     languageId: string,
     universityIds: string[],
   ) => Promise<LearningLanguage[]>;
 
-  getLearningLanguagesOfUniversitiesNotInActiveTandem: (
+  getAvailableLearningLanguagesOfUniversities: (
     universityIds: string[],
   ) => Promise<LearningLanguage[]>;
 
-  getLearningLanguagesOfOtherProfileFromUniversitiesNotInActiveTandem: (
-    profileId: string,
+  getAvailableLearningLanguagesSpeakingOneOfLanguagesAndFromUniversities: (
+    allowedLanguages: string[],
     universityIds: string[],
   ) => Promise<LearningLanguage[]>;
 

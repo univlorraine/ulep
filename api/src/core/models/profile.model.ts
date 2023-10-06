@@ -131,10 +131,44 @@ export class Profile {
     }
   }
 
+  get spokenLanguages(): Language[] {
+    return [this.nativeLanguage, ...this.masteredLanguages];
+  }
+
   public isSpeakingLanguage(language: Language): boolean {
-    const spokenLanguages = [this.nativeLanguage, ...this.masteredLanguages];
-    return spokenLanguages.some(
+    return this.spokenLanguages.some(
       (spokenLanguage) => spokenLanguage.id === language.id,
     );
+  }
+
+  public isLearningLanguage(language: Language): boolean {
+    return this.learningLanguages.some(
+      (learningLanguage) => learningLanguage.language.id === language.id,
+    );
+  }
+
+  /**
+   * Check if this profile can learn a language from another profile
+   * @param profile Profile from which we want to learn
+   * @param availableLanguages Available languages to be learnt in system
+   * @returns {boolean}
+   */
+  public canLearnALanguageFromProfile(
+    profile: Profile,
+    availableLanguages: Language[],
+  ): boolean {
+    const potentialLanguagesToLearnFromProfile = this.user
+      .filterLearnableLanguages(availableLanguages)
+      .filter(
+        (language) =>
+          !language.isJokerLanguage() &&
+          profile.isSpeakingLanguage(language) &&
+          !this.isSpeakingLanguage(language),
+      );
+    if (potentialLanguagesToLearnFromProfile.length === 0) {
+      return false;
+    }
+
+    return true;
   }
 }

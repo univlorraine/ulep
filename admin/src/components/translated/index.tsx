@@ -15,7 +15,13 @@ export const DisplayRole = ({ role }: { role?: UserRole }) => {
     }
 };
 
-export const DisplayLearningType = ({ learningType }: { learningType?: LearningType }) => {
+export const DisplayLearningType = ({
+    learningType,
+    effectiveLearningType,
+}: {
+    learningType?: LearningType;
+    effectiveLearningType?: LearningType;
+}) => {
     const translate = useTranslate();
     switch (learningType) {
         case LearningType.TANDEM:
@@ -23,6 +29,14 @@ export const DisplayLearningType = ({ learningType }: { learningType?: LearningT
         case LearningType.ETANDEM:
             return <>{translate('global.etandem')}</>;
         case LearningType.BOTH:
+            if (effectiveLearningType) {
+                return (
+                    <>
+                        {translate('global.both')} ({translate(`global.${effectiveLearningType.toLowerCase()}`)})
+                    </>
+                );
+            }
+
             return <>{translate('global.both')}</>;
         default:
             return null;

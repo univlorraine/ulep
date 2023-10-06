@@ -22,6 +22,7 @@ import RoleRepresentation, {
   KeycloakCertsResponse,
   UserRepresentation,
   KeycloakUser,
+  CreateAdministratorProps,
 } from './keycloak.models';
 import { Client, Issuer, TokenSet } from 'openid-client';
 
@@ -305,6 +306,56 @@ export class KeycloakClient {
   }
 
   /*
+   * Creates a new user in Keycloak.
+   */
+  async createAdministrator(
+    props: CreateAdministratorProps,
+  ): Promise<UserRepresentation> {
+    const response = await fetch(
+      `${this.configuration.baseUrl}/admin/realms/${this.configuration.realm}/users`,
+      {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${await this.getAccessToken()}`,
+        },
+        body: JSON.stringify({
+          email: props.email,
+          enabled: true,
+          attributes: {
+            universityId: props.universityId,
+          },
+        }),
+      },
+    );
+    if (!response.ok) {
+      const result = await response.json();
+      this.logger.error(JSON.stringify(result));
+      throw new HttpException({ message: result }, 500);
+    }
+
+    const user = await this.getUserByEmail(props.email);
+
+    return user;
+  }
+
+  /*
+   * Creates a new user in Keycloak.
+   */
+  async deleteAdministrator(id: string): Promise<void> {
+    await fetch(
+      `${this.configuration.baseUrl}/admin/realms/${this.configuration.realm}/users/${id}`,
+      {
+        method: 'DELETE',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${await this.getAccessToken()}`,
+        },
+      },
+    );
+  }
+
+  /*
    * Retrieves all users from Keycloak
    * Params:
    *  - email: email of the user
@@ -377,6 +428,22 @@ export class KeycloakClient {
   }
 
   /*
+   * Add user to group
+   */
+  async addUserToAdministrators(userId: string): Promise<void> {
+    await fetch(
+      `${this.configuration.baseUrl}/admin/realms/${this.configuration.realm}/users/${userId}/groups/${this.configuration.adminGroupId}`,
+      {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${await this.getAccessToken()}`,
+        },
+      },
+    );
+  }
+
+  /*
    * Add realm-level role mappings to the user
    */
   async addRealmRoleToUser(userId: string, roleName: string): Promise<void> {
@@ -398,6 +465,26 @@ export class KeycloakClient {
         ]),
       },
     );
+  }
+
+  /*
+   * Get administrators users
+   */
+  public async getAdministrators(): Promise<UserRepresentation[]> {
+    const response = await fetch(
+      `${this.configuration.baseUrl}/admin/realms/${this.configuration.realm}/groups/${this.configuration.adminGroupId}/members`,
+      {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${await this.getAccessToken()}`,
+        },
+      },
+    );
+
+    const administrators = await response.json();
+
+    return administrators;
   }
 
   /*

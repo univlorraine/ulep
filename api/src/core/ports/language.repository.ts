@@ -7,7 +7,8 @@ export type LanguageQuerySortFilter =
   | 'code'
   | 'name'
   | 'mainUniversityStatus'
-  | 'secondaryUniversityActive';
+  | 'secondaryUniversityActive'
+  | 'isDiscovery';
 
 export type SuggestedLanguageOrderKey =
   | 'email'

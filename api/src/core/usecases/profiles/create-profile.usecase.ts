@@ -116,8 +116,13 @@ export class CreateProfileUsecase {
           learningLanguage.code,
         );
 
-        if (!language.isJokerLanguage()) {
-          this.assertLanguageIsSupportedByUniversity(user.university, language);
+        if (
+          !language.isJokerLanguage() &&
+          !user.university.supportLanguage(language)
+        ) {
+          throw new UnsuportedLanguageException(
+            `The language is not supported by the university`,
+          );
         }
 
         if (
@@ -207,21 +212,6 @@ export class CreateProfileUsecase {
     }
 
     return language;
-  }
-
-  private assertLanguageIsSupportedByUniversity(
-    university: University,
-    language: Language,
-  ): void {
-    if (
-      (university.parent && !language.secondaryUniversityActive) ||
-      (!university.parent &&
-        language.mainUniversityStatus !== LanguageStatus.PRIMARY)
-    ) {
-      throw new UnsuportedLanguageException(
-        `The language is not supported by the university`,
-      );
-    }
   }
 
   private async tryToFindTheObjectiveOfId(

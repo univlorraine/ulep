@@ -1,12 +1,6 @@
-import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
+import { ApiProperty } from '@nestjs/swagger';
 import { Expose } from 'class-transformer';
-import {
-  IsEmail,
-  IsNotEmpty,
-  IsOptional,
-  IsString,
-  IsUUID,
-} from 'class-validator';
+import { IsEmail, IsNotEmpty, IsString } from 'class-validator';
 
 export class BearerTokensRequest {
   @ApiProperty({ type: 'string', format: 'email' })
@@ -42,12 +36,7 @@ export class BearerTokensResponse {
 }
 
 export class ResetPasswordRequest {
-  @ApiProperty({ description: 'The user id.' })
-  @IsUUID()
-  userId: string;
-
-  @ApiPropertyOptional({ description: 'The redirect uri.' })
+  @ApiProperty({ description: 'The user email' })
   @IsString()
-  @IsOptional()
-  redirectUri?: string;
+  email: string;
 }

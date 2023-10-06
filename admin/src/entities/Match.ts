@@ -1,3 +1,4 @@
+import Language from './Language';
 import { LearningLanguage } from './LearningLanguage';
 
 type MatchScore = {
@@ -15,4 +16,5 @@ export type Match = {
     id: string;
     score: MatchScore;
     target: LearningLanguage;
+    tandemLanguage?: Language;
 };

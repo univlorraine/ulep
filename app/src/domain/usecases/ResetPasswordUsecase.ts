@@ -5,14 +5,15 @@ import ResetPasswordUsecaseInterface from '../interfaces/ResetPasswordUsecase.in
 class ResetPasswordUsecase implements ResetPasswordUsecaseInterface {
     constructor(private readonly domainHttpAdapter: HttpAdapterInterface) {}
 
-    async execute(id: string, password: string): Promise<void | Error> {
+    async execute(email: string): Promise<void | Error> {
         try {
-            const httpResponse: HttpResponse<any> = await this.domainHttpAdapter.put(
-                `/users/${id}/reset-password`,
+            const httpResponse: HttpResponse<any> = await this.domainHttpAdapter.post(
+                `/authentication/reset-password`,
                 {
-                    password,
+                    email,
                 },
                 {},
+                undefined,
                 false
             );
 

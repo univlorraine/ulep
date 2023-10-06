@@ -5,7 +5,7 @@ import {
   LearningLanguageHasNoAssociatedProfile,
   ProfileIsNotInCentralUniversity,
 } from 'src/core/errors/tandem-exceptions';
-import { LearningLanguage, Match } from 'src/core/models';
+import { LearningLanguage, LearningType, Match } from 'src/core/models';
 import {
   LANGUAGE_REPOSITORY,
   LanguageRepository,
@@ -29,8 +29,8 @@ export type GetUserMatchCommand = {
 const DEFAULT_NB_USER_MATCHES = 5;
 
 @Injectable()
-export class GetUserMatchUsecase {
-  private readonly logger = new Logger(GetUserMatchUsecase.name);
+export class GetLearningLanguageMatchesUsecase {
+  private readonly logger = new Logger(GetLearningLanguageMatchesUsecase.name);
 
   constructor(
     @Inject(LEARNING_LANGUAGE_REPOSITORY)
@@ -54,17 +54,27 @@ export class GetUserMatchUsecase {
       throw new ProfileIsNotInCentralUniversity(command.id);
     }
 
+    const languagesAvailableForLearning = (
+      await this.languageRepository.getLanguagesProposedToLearning()
+    ).filter((language) => !language.isJokerLanguage());
+
     let targets = [];
     if (learningLanguage.language.isJokerLanguage()) {
+      const languageIdsSpokenByOwner = owner.spokenLanguages.map(
+        (language) => language.id,
+      );
+      const languageIdsThatCanBeLearnt = languagesAvailableForLearning
+        .map((language) => language.id)
+        .filter((id) => !languageIdsSpokenByOwner.includes(id));
+
       targets =
-        await this.learningLanguageRepository.getLearningLanguagesOfOtherProfileFromUniversitiesNotInActiveTandem(
-          owner.id,
+        await this.learningLanguageRepository.getAvailableLearningLanguagesSpeakingOneOfLanguagesAndFromUniversities(
+          languageIdsThatCanBeLearnt,
           command.universityIds,
         );
     } else {
-      // TODO(discovery): search for profiles learning the language too
       targets =
-        await this.learningLanguageRepository.getLearningLanguagesOfProfileSpeakingAndNotInActiveTandemFromUniversities(
+        await this.learningLanguageRepository.getAvailableLearningLanguagesSpeakingLanguageFromUniversities(
           learningLanguage.language.id,
           command.universityIds,
         );
@@ -83,9 +93,6 @@ export class GetUserMatchUsecase {
       }),
     );
 
-    const languagesThatCanBeLearnt =
-      await this.languageRepository.getLanguagesProposedToLearning();
-
     this.logger.verbose(
       `Found ${targets.length} potential learningLanguages match in universities ${command.universityIds} for learningLanguage ${command.id}`,
     );
@@ -99,7 +106,7 @@ export class GetUserMatchUsecase {
       const match = this.matchService.computeMatchScore(
         learningLanguage,
         target,
-        languagesThatCanBeLearnt,
+        languagesAvailableForLearning,
       );
 
       potentialMatchs.push(match);

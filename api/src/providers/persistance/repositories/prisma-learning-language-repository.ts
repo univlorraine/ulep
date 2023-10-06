@@ -64,8 +64,8 @@ export class PrismaLearningLanguageRepository
     });
   }
 
-  async getLearningLanguagesOfProfileSpeakingAndNotInActiveTandemFromUniversities(
-    spokenLanguageId: string,
+  async getAvailableLearningLanguagesSpeakingLanguageFromUniversities(
+    languageId: string,
     universityIds: string[],
   ): Promise<LearningLanguage[]> {
     const res = await this.prisma.learningLanguages.findMany({
@@ -76,14 +76,14 @@ export class PrismaLearningLanguageRepository
               OR: [
                 {
                   native_language_code_id: {
-                    equals: spokenLanguageId,
+                    equals: languageId,
                   },
                 },
                 {
                   MasteredLanguages: {
                     some: {
                       language_code_id: {
-                        equals: spokenLanguageId,
+                        equals: languageId,
                       },
                     },
                   },
@@ -129,9 +129,7 @@ export class PrismaLearningLanguageRepository
     return res.map(learningLanguageMapper);
   }
 
-  async getLearningLanguagesOfUniversitiesNotInActiveTandem(
-    universityIds: string[],
-  ) {
+  async getAvailableLearningLanguagesOfUniversities(universityIds: string[]) {
     const res = await this.prisma.learningLanguages.findMany({
       where: {
         Profile: {
@@ -190,8 +188,8 @@ export class PrismaLearningLanguageRepository
     return !!res;
   }
 
-  async getLearningLanguagesOfOtherProfileFromUniversitiesNotInActiveTandem(
-    profileId: string,
+  async getAvailableLearningLanguagesSpeakingOneOfLanguagesAndFromUniversities(
+    allowedLanguages: string[],
     universityIds: string[],
   ): Promise<LearningLanguage[]> {
     const res = await this.prisma.learningLanguages.findMany({
@@ -199,11 +197,23 @@ export class PrismaLearningLanguageRepository
         Profile: {
           AND: [
             {
-              id: {
-                not: {
-                  equals: profileId,
+              // Assert target speaks an allowed language
+              OR: [
+                {
+                  native_language_code_id: {
+                    in: allowedLanguages,
+                  },
                 },
-              },
+                {
+                  MasteredLanguages: {
+                    some: {
+                      language_code_id: {
+                        in: allowedLanguages,
+                      },
+                    },
+                  },
+                },
+              ],
             },
             {
               User: {
@@ -388,6 +398,20 @@ export class PrismaLearningLanguageRepository
           orderByPayload = {
             LanguageCode: {
               name: orderBy.order,
+            },
+          };
+          break;
+        case LearningLanguageQuerySortKey.SPECIFIC_PROGRAM:
+          orderByPayload = {
+            specific_program: orderBy.order,
+          };
+          break;
+        case LearningLanguageQuerySortKey.ROLE:
+          orderByPayload = {
+            Profile: {
+              User: {
+                role: orderBy.order,
+              },
             },
           };
           break;

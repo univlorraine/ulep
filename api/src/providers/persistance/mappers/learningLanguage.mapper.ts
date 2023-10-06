@@ -21,12 +21,14 @@ export const LearningLanguageRelations = {
   },
   LanguageCode: true,
   Campus: true,
+  TandemLanguage: true,
 };
 
 export type LearningLanguageSnapshot = Prisma.LearningLanguages & {
   Profile: ProfileSnapshot;
   LanguageCode: Prisma.LanguageCodes;
   Campus: Prisma.Places;
+  TandemLanguage?: Prisma.LanguageCodes;
 };
 
 export const learningLanguageMapper = (
@@ -44,16 +46,20 @@ export const learningLanguageMapper = (
     campus: instance.Campus && campusMapper(instance.Campus),
     certificateOption: instance.certificate_option,
     specificProgram: instance.specific_program,
+    tandemLanguage:
+      instance.TandemLanguage && languageMapper(instance.TandemLanguage),
   });
 };
 
 export const LearningLanguageWithTandemRelations = {
   ...LearningLanguageRelations,
   Tandem: true,
+  TandemLanguage: true,
 };
 
 export type LearningLanguageWithTandemSnapshot = LearningLanguageSnapshot & {
   Tandem: Prisma.Tandems;
+  TandemLanguage?: Prisma.LanguageCodes;
 };
 
 export const learningLanguageWithTandemMapper = (
@@ -76,6 +82,9 @@ export const learningLanguageWithTandemMapper = (
       new Tandem({
         id: instance.Tandem.id,
         status: TandemStatus[instance.Tandem.status],
+        compatibilityScore: instance.Tandem.compatibilityScore / 100,
       }),
+    tandemLanguage:
+      instance.TandemLanguage && languageMapper(instance.TandemLanguage),
   });
 };

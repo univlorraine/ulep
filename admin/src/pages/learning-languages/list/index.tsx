@@ -4,6 +4,7 @@ import React from 'react';
 import {
     Datagrid,
     DateField,
+    BooleanField,
     FunctionField,
     List,
     Loading,
@@ -12,6 +13,7 @@ import {
     useGetIdentity,
     useTranslate,
 } from 'react-admin';
+import { DisplayRole } from '../../../components/translated';
 import UniversitiesPicker from '../../../components/UniversitiesPicker';
 import { LearningLanguage, learningLanguageHasPossibleAction } from '../../../entities/LearningLanguage';
 import { getProfileDisplayName } from '../../../entities/Profile';
@@ -81,11 +83,6 @@ const LearningLanguageList = () => {
                             sortBy="profile.name"
                         />
                         <TextField
-                            label={translate('learning_languages.list.tableColumns.university')}
-                            source="profile.user.university.name"
-                            sortable
-                        />
-                        <TextField
                             label={translate('learning_languages.list.tableColumns.learnedLanguage')}
                             source="name"
                             sortable
@@ -95,6 +92,15 @@ const LearningLanguageList = () => {
                             label={translate('learning_languages.list.tableColumns.createdAt')}
                             source="createdAt"
                             sortable
+                        />
+                        <FunctionField
+                            label={translate('learning_languages.list.tableColumns.role')}
+                            render={(record: LearningLanguage) => <DisplayRole role={record.profile?.user.role} />}
+                            sortBy="profile.user.role"
+                        />
+                        <BooleanField
+                            label={translate('learning_languages.list.tableColumns.specificProgram')}
+                            source="specificProgram"
                         />
                         <FunctionField
                             label={translate('learning_languages.list.tableColumns.actionPossible')}

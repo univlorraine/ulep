@@ -7,6 +7,8 @@ import {
   RefreshTokenRequest,
   ResetPasswordRequest,
 } from '../dtos';
+import { configuration } from 'src/configuration';
+import { RessourceDoesNotExist } from 'src/core/errors';
 
 @Controller('authentication')
 @Swagger.ApiTags('Authentication')
@@ -43,10 +45,15 @@ export class SecurityController {
   @Post('reset-password')
   @Swagger.ApiOperation({ summary: 'Send email to reset user password' })
   async resetPassword(@Body() body: ResetPasswordRequest): Promise<void> {
+    const user = await this.keycloakClient.getUserByEmail(body.email);
+
+    if (!user) {
+      throw new RessourceDoesNotExist(body.email);
+    }
     await this.keycloakClient.executeActionEmail(
       ['UPDATE_PASSWORD'],
-      body.userId,
-      body.redirectUri,
+      user.id,
+      `${configuration().appUrl}/login`,
     );
 
     return;

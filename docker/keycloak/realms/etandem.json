@@ -6,6 +6,10 @@
     "accessTokenLifespan": 600,
     "accessCodeLifespan": 600,
     "requiredCredentials": ["password"],
+    "internationalizationEnabled": true,
+    "loginTheme": "ulep",
+    "supportedLocales": ["en", "fr"],
+    "defaultLocale": "fr",
     "smtpServer": {
         "starttls": "false",
         "port": "1025",
@@ -23,6 +27,7 @@
             "standardFlowEnabled": false,
             "directAccessGrantsEnabled": true,
             "serviceAccountsEnabled": true,
+            "redirectUris": ["http://localhost:5173/*", "http://localhost:3001/*"],
             "protocolMappers": [
                 {
                     "id": "b38e1a26-d649-4370-879d-c7499d023daa",
@@ -93,6 +98,7 @@
             "subGroups": []
         }
     ],
+    "passwordPolicy": "digits(1) and lowerCase(1) and upperCase(1)",
     "users": [
         {
             "id": "8ef3f4a1-c828-4172-9f50-5820482f7969",

@@ -16,6 +16,7 @@ interface LearningLanguageProps {
   certificateOption?: boolean;
   specificProgram?: boolean;
   campus?: Campus;
+  tandemLanguage?: Language;
 }
 
 export class LearningLanguage {
@@ -30,6 +31,7 @@ export class LearningLanguage {
   readonly certificateOption?: boolean;
   readonly specificProgram?: boolean;
   readonly campus?: Campus;
+  tandemLanguage?: Language;
 
   constructor({
     id,
@@ -43,6 +45,7 @@ export class LearningLanguage {
     certificateOption,
     specificProgram,
     campus,
+    tandemLanguage,
   }: LearningLanguageProps) {
     this.id = id;
     this.language = language;
@@ -55,6 +58,46 @@ export class LearningLanguage {
     this.certificateOption = certificateOption;
     this.specificProgram = specificProgram;
     this.campus = campus;
+    this.tandemLanguage = tandemLanguage;
+  }
+
+  public isDiscovery(learningLanguageMatch?: LearningLanguage) {
+    if (learningLanguageMatch) {
+      if (
+        (this.learningType === LearningType.TANDEM ||
+          (this.learningType === LearningType.BOTH &&
+            (learningLanguageMatch.learningType === LearningType.BOTH ||
+              learningLanguageMatch.learningType === LearningType.TANDEM))) &&
+        this.campus &&
+        this.campus.id === learningLanguageMatch.campus?.id
+      ) {
+        return true;
+      }
+    }
+
+    return (
+      this.language.isDiscovery ||
+      this.language.isJokerLanguage() ||
+      this.learningType === LearningType.TANDEM
+    );
+  }
+
+  public isCompatibleWithLearningLanguage(
+    learningLanguage: LearningLanguage,
+  ): boolean {
+    if (this.language.isJokerLanguage()) {
+      // Author note: we currently do not check if joker language match a language spoken
+      // by other profile and not spoken by this learningLanguage's profile here as:
+      // - This is done in match score computation, where it needs to return the language
+      // - It depends on other external elements such as available languages
+      return true;
+    } else {
+      if (learningLanguage.profile.isSpeakingLanguage(this.language)) {
+        return true;
+      }
+    }
+
+    return false;
   }
 }
 

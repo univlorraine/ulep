@@ -9,15 +9,17 @@ const LanguageList = () => {
     const notify = useNotify();
     const refresh = useRefresh();
 
-    const onUpdateLanguageStatus = async (
+    const onUpdateLanguage = async (
         code: string,
         mainUniversityStatus: LanguageStatus,
-        secondaryUniversityActive: boolean
+        secondaryUniversityActive: boolean,
+        isDiscovery: boolean
     ) => {
         const payload = {
             code,
             mainUniversityStatus,
             secondaryUniversityActive,
+            isDiscovery,
         };
         await update(
             'languages',
@@ -46,10 +48,11 @@ const LanguageList = () => {
                     render={(record: Language) => (
                         <Select
                             onChange={(value) =>
-                                onUpdateLanguageStatus(
+                                onUpdateLanguage(
                                     record.code,
                                     value.target.value as LanguageStatus,
-                                    record.secondaryUniversityActive
+                                    record.secondaryUniversityActive,
+                                    record.isDiscovery
                                 )
                             }
                             onClick={(e) => e.stopPropagation()}
@@ -68,10 +71,11 @@ const LanguageList = () => {
                     render={(record: Language) => (
                         <Select
                             onChange={(value) =>
-                                onUpdateLanguageStatus(
+                                onUpdateLanguage(
                                     record.code,
                                     record.mainUniversityStatus,
-                                    value.target.value === 'ACTIVE'
+                                    value.target.value === 'ACTIVE',
+                                    record.isDiscovery
                                 )
                             }
                             onClick={(e) => e.stopPropagation()}
@@ -83,6 +87,28 @@ const LanguageList = () => {
                         </Select>
                     )}
                     sortBy="secondaryUniversityActive"
+                />
+                <FunctionField
+                    label={translate('languages.isDiscovery.title')}
+                    render={(record: Language) => (
+                        <Select
+                            onChange={(value) =>
+                                onUpdateLanguage(
+                                    record.code,
+                                    record.mainUniversityStatus,
+                                    record.secondaryUniversityActive,
+                                    value.target.value === 'true'
+                                )
+                            }
+                            onClick={(e) => e.stopPropagation()}
+                            size="small"
+                            value={record.isDiscovery ? 'true' : 'false'}
+                        >
+                            <MenuItem value="false">{translate('languages.isDiscovery.no')}</MenuItem>
+                            <MenuItem value="true">{translate('languages.isDiscovery.yes')}</MenuItem>
+                        </Select>
+                    )}
+                    sortBy="isDiscovery"
                 />
             </Datagrid>
         </List>

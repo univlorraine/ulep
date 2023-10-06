@@ -16,6 +16,7 @@ import { UniversityResponse } from '../universities';
 import { CreateUserCommand } from 'src/core/usecases/user';
 import { Gender, Role, User, UserStatus } from 'src/core/models/user.model';
 import { MediaObjectResponse } from '../medias';
+import { UserRepresentation } from '@app/keycloak';
 
 export class CreateUserRequest implements CreateUserCommand {
   @Swagger.ApiProperty({ type: 'string', format: 'email' })
@@ -83,6 +84,42 @@ export class UpdateUserRequest {
   acceptsEmail: boolean;
 }
 
+export class AdministratorResponse {
+  @Swagger.ApiProperty({ type: 'string', format: 'uuid' })
+  @Expose({ groups: ['read'] })
+  id: string;
+
+  @Swagger.ApiProperty({ type: 'string', format: 'email' })
+  @Expose({ groups: ['read'] })
+  email: string;
+
+  @Swagger.ApiProperty({ type: 'string', format: 'uuid' })
+  @Expose({ groups: ['read'] })
+  universityId?: string;
+
+  constructor(partial: Partial<AdministratorResponse>) {
+    Object.assign(this, partial);
+  }
+
+  static fromDomain(user: UserRepresentation) {
+    return new AdministratorResponse({
+      id: user.id,
+      email: user.email,
+      universityId: user.attributes?.universityId?.[0],
+    });
+  }
+}
+
+export class CreateAdministratorRequest {
+  @Swagger.ApiProperty({ type: 'string', format: 'email' })
+  @IsEmail()
+  email: string;
+
+  @Swagger.ApiProperty({ type: 'string', format: 'uuid' })
+  @IsUUID()
+  @IsOptional()
+  universityId?: string;
+}
 export class UserResponse {
   @Swagger.ApiProperty({ type: 'string', format: 'uuid' })
   @Expose({ groups: ['read'] })

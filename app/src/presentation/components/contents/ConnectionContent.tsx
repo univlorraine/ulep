@@ -11,7 +11,7 @@ interface ConnectionContentProps {
 const ConnectionContent: React.FC<ConnectionContentProps> = ({ onLoginPressed, onSignUpPressed }) => {
     const { t } = useTranslation();
     return (
-        <div className={style['outer-div']}>
+        <div className={`content-wrapper ${style['outer-div']}`}>
             <div className={style['connect-div']}>
                 <CircleAvatar
                     alt="avatar"

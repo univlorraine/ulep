@@ -1,7 +1,7 @@
 import { KeycloakClient } from '@app/keycloak';
 import { BadRequestException, Inject, Injectable } from '@nestjs/common';
 import { RessourceDoesNotExist } from 'src/core/errors';
-import { Gender, Role } from 'src/core/models';
+import { Gender, Role, User } from 'src/core/models';
 import {
   COUNTRY_REPOSITORY,
   CountryRepository,
@@ -83,18 +83,20 @@ export class CreateUserUsecase {
 
     let user = await this.userRepository.ofId(keycloakUser.id);
     if (!user) {
-      user = await this.userRepository.create({
-        id: keycloakUser.id,
-        acceptsEmail: true,
-        email: command.email,
-        firstname: command.firstname,
-        lastname: command.lastname,
-        gender: command.gender,
-        age: command.age,
-        university: university,
-        role: command.role,
-        country: country.code,
-      });
+      user = await this.userRepository.create(
+        new User({
+          id: keycloakUser.id,
+          acceptsEmail: true,
+          email: command.email,
+          firstname: command.firstname,
+          lastname: command.lastname,
+          gender: command.gender,
+          age: command.age,
+          university: university,
+          role: command.role,
+          country: country.code,
+        }),
+      );
     }
 
     return user;
