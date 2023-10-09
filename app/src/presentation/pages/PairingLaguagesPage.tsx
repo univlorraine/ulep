@@ -20,10 +20,8 @@ const PairingLaguagesPage: React.FC = () => {
     const [languages, setLanguages] = useState<Language[]>([]);
     const [selectedLaguage, setSelectedLanguage] = useState<Language>();
     const updateProfileSignUp = useStoreActions((state) => state.updateProfileSignUp);
-    const profileSignUp = useStoreState((state) => state.profileSignUp);
     const profile = useStoreState((state) => state.profile);
-    const user = useStoreState((state) => state.user);
-    const university = user?.university || profile?.user.university;
+    const university = profile?.user.university;
 
     if (!university) {
         return <Redirect to={'/signup'} />;
@@ -36,15 +34,6 @@ const PairingLaguagesPage: React.FC = () => {
             return await showToast({ message: t(result.message), duration: 1000 });
         }
 
-        if (isSignUp) {
-            return setLanguages(
-                result.filter(
-                    (language) =>
-                        profileSignUp.nativeLanguage?.code !== language.code &&
-                        !profileSignUp.otherLanguages?.find((otherLanguage) => language.code === otherLanguage.code)
-                )
-            );
-        }
         return setLanguages(
             result.filter(
                 (language) =>

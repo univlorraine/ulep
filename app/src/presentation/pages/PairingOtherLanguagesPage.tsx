@@ -15,13 +15,12 @@ const PairingOtherLanguagesPage: React.FC = () => {
     const { askForLanguage, configuration, getAllLanguages } = useConfig();
     const isSignUp = useParams<{ prefix?: string }>().prefix;
     const [showToast] = useIonToast();
-    const user = useStoreState((state) => state.user);
     const profile = useStoreState((state) => state.profile);
+    const university = profile?.user.university;
     const updateProfileSignUp = useStoreActions((state) => state.updateProfileSignUp);
     const history = useHistory();
     const [languages, setLanguages] = useState<Language[]>([]);
     const [selectedLanguage, setSelectedLanguage] = useState<Language>();
-    const university = user?.university || profile?.user.university;
 
     if (!university) {
         return <Redirect to={'/signup'} />;

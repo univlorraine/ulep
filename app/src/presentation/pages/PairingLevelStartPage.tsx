@@ -11,9 +11,8 @@ const PairingLevelStartPage: React.FC = () => {
     const history = useHistory();
     const isSignUp = useParams<{ prefix?: string }>().prefix;
     const profileSignUp = useStoreState((state) => state.profileSignUp);
-    const userSignUp = useStoreState((state) => state.user);
     const profile = useStoreState((state) => state.profile);
-    const user = userSignUp || profile?.user;
+    const user = profile?.user;
 
     if (!profileSignUp.learningLanguage || !user) {
         return <Redirect to="/signup" />;

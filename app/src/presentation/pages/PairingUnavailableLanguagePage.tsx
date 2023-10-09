@@ -21,14 +21,14 @@ interface PairingUnavailableLanguageState {
 const PairingUnavailableLanguagePage: React.FC = () => {
     const { t } = useTranslation();
     const { configuration } = useConfig();
-    const isSignUp = useParams<{ prefix?: string }>().prefix;
     const history = useHistory();
-    const [isLastStep, setIsLastStep] = useState<boolean>(false);
+    const isSignUp = useParams<{ prefix?: string }>().prefix;
     const location = useLocation<PairingUnavailableLanguageState>();
     const { askingStudents, idLanguage, codeLanguage, nameLanguage } = location.state || {};
-    const userSignUp = useStoreState((state) => state.user);
+
+    const [isLastStep, setIsLastStep] = useState<boolean>(false);
     const profile = useStoreState((state) => state.profile);
-    const user = userSignUp || profile?.user;
+    const user = profile?.user;
 
     if (!codeLanguage || !nameLanguage || !user) {
         return <Redirect to={`${isSignUp ? '/' + isSignUp : '/'}pairing/languages`} />;

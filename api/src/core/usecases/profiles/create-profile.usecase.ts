@@ -12,13 +12,11 @@ import { UnsuportedLanguageException } from 'src/core/errors/unsuported-language
 import {
   Interest,
   Language,
-  LanguageStatus,
   LearningLanguage,
   LearningObjective,
   LearningType,
   ProficiencyLevel,
   Profile,
-  University,
   User,
 } from 'src/core/models';
 import {

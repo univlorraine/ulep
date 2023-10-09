@@ -14,9 +14,8 @@ const PairingConfirmLanguagePage: React.FC = () => {
     const isSignUp = useParams<{ prefix?: string }>().prefix;
     const history = useHistory();
     const profileSignUp = useStoreState((state) => state.profileSignUp);
-    const userSignUp = useStoreState((state) => state.user);
     const profile = useStoreState((state) => state.profile);
-    const user = userSignUp || profile?.user;
+    const user = profile?.user;
 
     if (!profileSignUp.learningLanguage || !user) {
         return <Redirect to="/signup" />;

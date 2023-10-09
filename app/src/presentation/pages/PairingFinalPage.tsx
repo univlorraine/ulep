@@ -12,7 +12,7 @@ import { useState } from 'react';
 
 const PairingFinalPage: React.FC = () => {
     const { t } = useTranslation();
-    const { askForLearningLanguage, configuration, createProfile } = useConfig();
+    const { askForLearningLanguage, configuration } = useConfig();
     const isSignUp = useParams<{ prefix?: string }>().prefix;
     const [showToast] = useIonToast();
     const [loading, setLoading] = useState<boolean>(false);
@@ -53,51 +53,6 @@ const PairingFinalPage: React.FC = () => {
         return (window.location.href = '/home');
     };
 
-    const nextStep = async () => {
-        setLoading(true);
-        if (
-            !profileSignUp.nativeLanguage ||
-            !profileSignUp.otherLanguages ||
-            !profileSignUp.learningLanguage ||
-            !profileSignUp.learningLanguageLevel ||
-            !profileSignUp.pedagogy ||
-            !profileSignUp.frequency ||
-            !profileSignUp.interests ||
-            !profileSignUp?.availabilities ||
-            !profileSignUp.biography
-        ) {
-            setLoading(false);
-            return await showToast({ message: t('errors.global'), duration: 1000 });
-        }
-
-        const result = await createProfile.execute(
-            profileSignUp.nativeLanguage.code,
-            profileSignUp.otherLanguages.map((language) => language.code),
-            profileSignUp.learningLanguage.code,
-            profileSignUp.learningLanguageLevel,
-            profileSignUp.pedagogy,
-            profileSignUp.goals?.map((goal) => goal.id) || [],
-            profileSignUp.frequency,
-            profileSignUp.interests,
-            !!profileSignUp.sameAge,
-            !!profileSignUp.sameGender,
-            profileSignUp.biography,
-            !!profileSignUp.isForCertificate,
-            !!profileSignUp.isForProgram,
-            profileSignUp.availabilities,
-            profileSignUp.availabilityNote,
-            profileSignUp.availabilityNotePrivate,
-            profileSignUp.campus?.id
-        );
-
-        if (result instanceof Error) {
-            setLoading(false);
-            return await showToast({ message: t(result.message), duration: 1000 });
-        }
-        setLoading(false);
-        return (window.location.href = '/home');
-    };
-
     return (
         <SuccessLayout
             backgroundIconColor={configuration.secondaryBackgroundImageColor}
@@ -119,10 +74,7 @@ const PairingFinalPage: React.FC = () => {
                     'pairing_final_page.congratulation'
                 )},`}</span>
                 <span className={styles.description}>{t('pairing_final_page.congratulation_text')}</span>
-                <button
-                    className="primary-button large-margin-top"
-                    onClick={() => (isSignUp ? nextStep() : askNewLanguage())}
-                >
+                <button className="primary-button large-margin-top" onClick={() => askNewLanguage}>
                     {t('pairing_final_page.validate_button')}
                 </button>
             </div>
