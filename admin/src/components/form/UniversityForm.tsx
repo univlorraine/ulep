@@ -26,8 +26,8 @@ import CountriesPicker from '../CountriesPicker';
 import TimezonePicker from '../TimezonePicker';
 
 interface UniversityFormProps {
-    admissionEndDate?: Date;
-    admissionStartDate?: Date;
+    admissionEndDate?: string;
+    admissionStartDate?: string;
     codes?: string[];
     country?: Country;
     domains?: string[];
@@ -116,8 +116,8 @@ const UniversityForm: React.FC<UniversityFormProps> = ({
     };
 
     const onSendUniversity = () => {
-        const admissionStart = newAdmissionStartDate || admissionStartDate;
-        const admissionEnd = newAdmissionEndDate || admissionEndDate;
+        const admissionStart = newAdmissionStartDate || (admissionStartDate ? new Date(admissionStartDate) : undefined);
+        const admissionEnd = newAdmissionEndDate || (admissionEndDate ? new Date(admissionEndDate) : undefined);
         if (!newCountry || !newTimezone || !newName || !admissionStart || !admissionEnd || !newWebsite) {
             return undefined;
         }
