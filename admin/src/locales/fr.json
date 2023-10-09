@@ -232,6 +232,8 @@
         "label": "Langues demandées"
     },
     "universities": {
+        "code_button": "Ajouter un code",
+        "domain_button": "Ajouter un domaine",
         "create": {
             "admission_end": "Fin de date d'inscription à la nouvelle université partenaire",
             "admission_error": "La date de fin d'admission doit être après la date de début",
@@ -248,6 +250,7 @@
             "pairingMode": "Mode d'appariement",
             "notificationEmail": "Email pour les notifications"
         },
+
         "pairingModes": {
             "manual": "Manuel",
             "semi_automatic": "Semi-automatique",
