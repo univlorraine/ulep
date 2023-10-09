@@ -51,8 +51,7 @@ scripts:
       name: Add environment file
       script: |
           cat >> "app/.env" <<EOF
-          VITE_API_URL=$VITE_API_URL
-          VITE_KEYCLOAK_URL=$VITE_KEYCLOAK_URL
+          VITE_UL_API_URL=$VITE_UL_API_URL
           ENV=staging
           EOF
     - &setup_keystore
