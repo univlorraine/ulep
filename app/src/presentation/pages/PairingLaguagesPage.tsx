@@ -1,7 +1,7 @@
 import { useIonToast } from '@ionic/react';
 import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { Redirect, useHistory, useParams } from 'react-router';
+import { Redirect, useHistory } from 'react-router';
 import { PlusPng } from '../../assets';
 import { useConfig } from '../../context/ConfigurationContext';
 import Language from '../../domain/entities/Language';
@@ -13,7 +13,6 @@ import styles from './css/SignUp.module.css';
 
 const PairingLaguagesPage: React.FC = () => {
     const { t } = useTranslation();
-    const isSignUp = useParams<{ prefix?: string }>().prefix;
     const { configuration, getAllLanguages } = useConfig();
     const [showToast] = useIonToast();
     const history = useHistory();
@@ -46,11 +45,11 @@ const PairingLaguagesPage: React.FC = () => {
 
     const continueSignUp = async () => {
         updateProfileSignUp({ learningLanguage: selectedLaguage });
-        return history.push(`${isSignUp ? '/' + isSignUp : '/'}pairing/pedagogy`);
+        return history.push(`/pairing/pedagogy`);
     };
 
     const otherLanguage = () => {
-        return history.push(`${isSignUp ? '/' + isSignUp : '/'}pairing/other-languages`);
+        return history.push(`/pairing/other-languages`);
     };
 
     useEffect(() => {

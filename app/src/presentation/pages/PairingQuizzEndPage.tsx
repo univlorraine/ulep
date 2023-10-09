@@ -1,5 +1,5 @@
 import { useTranslation } from 'react-i18next';
-import { Redirect, useHistory, useParams } from 'react-router';
+import { Redirect, useHistory } from 'react-router';
 import { useConfig } from '../../context/ConfigurationContext';
 import { useStoreState } from '../../store/storeTypes';
 import QuizzValidatedContent from '../components/contents/QuizzValidatedContent';
@@ -7,18 +7,17 @@ import WebLayoutCentered from '../components/layout/WebLayoutCentered';
 import styles from './css/SignUp.module.css';
 
 const PairingQuizzEndPage: React.FC = ({}) => {
-    const { configuration, askForLearningLanguage } = useConfig();
+    const { configuration } = useConfig();
     const history = useHistory();
-    const isSignUp = useParams<{ prefix?: string }>().prefix;
     const profileSignUp = useStoreState((state) => state.profileSignUp);
     const { t } = useTranslation();
 
     if (!profileSignUp.learningLanguage || !profileSignUp.learningLanguageLevel) {
-        return <Redirect to={`${isSignUp ? '/' + isSignUp : '/'}pairing/languages`} />;
+        return <Redirect to={`/pairing/languages`} />;
     }
 
     const nextStep = async () => {
-        return history.push(`${isSignUp ? '/' + isSignUp : '/'}pairing/preference`);
+        return history.push(`/pairing/preference`);
     };
 
     return (

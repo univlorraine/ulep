@@ -1,6 +1,6 @@
 import { useIonToast } from '@ionic/react';
 import { useTranslation } from 'react-i18next';
-import { Redirect, useParams } from 'react-router';
+import { Redirect } from 'react-router';
 import { useConfig } from '../../context/ConfigurationContext';
 import { useStoreActions, useStoreState } from '../../store/storeTypes';
 import FlagBubble from '../components/FlagBubble';
@@ -13,7 +13,6 @@ import { useState } from 'react';
 const PairingFinalPage: React.FC = () => {
     const { t } = useTranslation();
     const { askForLearningLanguage, configuration } = useConfig();
-    const isSignUp = useParams<{ prefix?: string }>().prefix;
     const [showToast] = useIonToast();
     const [loading, setLoading] = useState<boolean>(false);
     const profile = useStoreState((state) => state.profile);
@@ -24,7 +23,7 @@ const PairingFinalPage: React.FC = () => {
     const university = user?.university;
 
     if ((!profileSignUp.learningLanguage && !loading) || !university || !user) {
-        return <Redirect to={`${isSignUp ? '/' + isSignUp : '/'}pairing/languages`} />;
+        return <Redirect to={`/pairing/languages`} />;
     }
 
     const askNewLanguage = async () => {

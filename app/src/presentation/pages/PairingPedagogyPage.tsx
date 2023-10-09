@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { Redirect, useHistory, useParams } from 'react-router';
+import { Redirect, useHistory } from 'react-router';
 import { useConfig } from '../../context/ConfigurationContext';
 import Campus from '../../domain/entities/Campus';
 import { useStoreActions, useStoreState } from '../../store/storeTypes';
@@ -20,7 +20,6 @@ interface PedagogieData {
 const PairingPedagogyPage: React.FC = () => {
     const { t } = useTranslation();
     const { configuration } = useConfig();
-    const isSignUp = useParams<{ prefix?: string }>().prefix;
     const history = useHistory();
     const updateProfileSignUp = useStoreActions((state) => state.updateProfileSignUp);
     const profile = useStoreState((state) => state.profile);
@@ -61,16 +60,16 @@ const PairingPedagogyPage: React.FC = () => {
 
         if (pedagogy !== 'ETANDEM' && university && university.sites.length === 1) {
             updateProfileSignUp({ pedagogy, campus: university.sites[0] });
-            return history.push(`${isSignUp ? '/' + isSignUp : '/'}pairing/language/confirm`);
+            return history.push(`/pairing/language/confirm`);
         }
 
         updateProfileSignUp({ pedagogy, campus: undefined });
-        return history.push(`${isSignUp ? '/' + isSignUp : '/'}pairing/language/confirm`);
+        return history.push(`/pairing/language/confirm`);
     };
 
     const onSiteValidated = (campus?: Campus) => {
         updateProfileSignUp({ pedagogy: pedagogySelected, campus });
-        return history.push(`${isSignUp ? '/' + isSignUp : '/'}pairing/language/confirm`);
+        return history.push(`/pairing/language/confirm`);
     };
 
     return (
