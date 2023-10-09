@@ -15,7 +15,7 @@ import styles from './css/SignUp.module.css';
 
 const SignUpPage: React.FC = () => {
     const { t } = useTranslation();
-    const { configuration, getAllCountries } = useConfig();
+    const { configuration, getAllCountries, getInitialUrlUsecase } = useConfig();
     const updateProfileSignUp = useStoreActions((state) => state.updateProfileSignUp);
     const [showToast] = useIonToast();
     const history = useHistory();
@@ -122,7 +122,13 @@ const SignUpPage: React.FC = () => {
                 </div>
 
                 {university && university.isCentral && (
-                    <button className="tertiary-button large-margin-vertical" onClick={() => undefined}>
+                    <button
+                        className="tertiary-button large-margin-vertical"
+                        onClick={async () => {
+                            const redirectUri = encodeURIComponent(`${window.location.origin}/auth`);
+                            window.location.href = getInitialUrlUsecase.execute(redirectUri);
+                        }}
+                    >
                         {t('signup_page.sso_button')}
                     </button>
                 )}

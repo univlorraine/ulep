@@ -15,11 +15,13 @@ import GetAllUniversitiesUsecaseInterface from '../domain/interfaces/GetAllUnive
 import GetAllReportCategoriesUsecaseInterface from '../domain/interfaces/GetAlllReportCategoriesUsecase.interface';
 import GetProfileUsecaseInterface from '../domain/interfaces/GetProfileUsecase.interface';
 import GetQuizzByLevelUsecaseInterface from '../domain/interfaces/GetQuizzByLevelUsecase.interface';
+import GetTokenFromCodeUsecaseInterface from '../domain/interfaces/AuthStandardFlow/GetTokenFromCodeUsecase.interface';
 import GetUserUsecaseInterface from '../domain/interfaces/GetUserUsecase.interface';
 import LoginUsecaseInterface from '../domain/interfaces/LoginUsecase.interface';
 import ResetPasswordUsecaseInterface from '../domain/interfaces/ResetPasswordUsecase.interface';
 import UpdateAvatarUsecaseInterface from '../domain/interfaces/UpdateAvatarUsecase.interface';
 import UpdateNotificationPermissionUsecaseInterface from '../domain/interfaces/UpdateNotificationPermissionUsecase.interface';
+import { GetInitialUrlUsecase } from '../domain/usecases/AuthStandardFlow/GetInitialUrlUsecase';
 
 export interface ConfigContextValueType {
     askForAccountDeletion: AskForAccountDeletionUsecaseInterface;
@@ -44,4 +46,6 @@ export interface ConfigContextValueType {
     resetPassword: ResetPasswordUsecaseInterface;
     updateAvatar: UpdateAvatarUsecaseInterface;
     updateNotificationPermission: UpdateNotificationPermissionUsecaseInterface;
+    getTokenFromCodeUsecase: GetTokenFromCodeUsecaseInterface;
+    getInitialUrlUsecase: GetInitialUrlUsecase;
 }

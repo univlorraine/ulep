@@ -26,6 +26,7 @@ import SignUpFrequencyPage from '../pages/SignUpFrequencyPage';
 import SignUpGoalsPage from '../pages/SignUpGoalsPage';
 import SignUpInformationsPage from '../pages/SignUpInformationsPage';
 import SignUpInterestsPage from '../pages/SignUpInterestsPage';
+import AuthFlowPage from '../pages/AuthFlowPage';
 import SignUpLanguagesPage from '../pages/SignUpLanguagesPage';
 import SignUpPage from '../pages/SignUpPage';
 import WelcomePage from '../pages/WelcomePage';
@@ -69,6 +70,9 @@ const OfflineRouter: React.FC = () => {
             </Route>
             <Route exact path="/signup">
                 <SignUpPage />
+            </Route>
+            <Route exact path="/auth">
+                <AuthFlowPage />
             </Route>
             <MobileRoute exact component={TandemProfilePage} path={'/tandem-profil'} />
             <MobileRoute exact component={ProfilePage} path={'/profil'} />

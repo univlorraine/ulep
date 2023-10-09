@@ -14,6 +14,18 @@ export class BearerTokensRequest {
   password: string;
 }
 
+export class BearerTokensFromCodeRequest {
+  @ApiProperty({ type: 'string' })
+  @IsString()
+  @IsNotEmpty()
+  code: string;
+
+  @ApiProperty({ type: 'string' })
+  @IsString()
+  @IsNotEmpty()
+  redirectUri: string;
+}
+
 export class RefreshTokenRequest {
   @ApiProperty({ type: 'string' })
   @IsNotEmpty()

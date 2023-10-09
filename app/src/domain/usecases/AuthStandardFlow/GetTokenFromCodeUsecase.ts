@@ -1,23 +1,27 @@
-import { HttpResponse } from '../../adapter/BaseHttpAdapter';
-import { HttpAdapterInterface } from '../../adapter/DomainHttpAdapter';
-import Tokens from '../entities/Tokens';
-import LoginUsecaseInterface from '../interfaces/LoginUsecase.interface';
+import { HttpResponse } from '../../../adapter/BaseHttpAdapter';
+import GetTokenFromCodeUsecaseInterface, {
+    GetTokenFromCodeParams,
+} from '../../interfaces/AuthStandardFlow/GetTokenFromCodeUsecase.interface';
+import { HttpAdapterInterface } from '../../../adapter/DomainHttpAdapter';
+import Tokens from '../../entities/Tokens';
 
-interface LoginCommand {
+interface GetTokenResponse {
     accessToken: string;
     refreshToken: string;
 }
 
-class LoginUsecase implements LoginUsecaseInterface {
+export class GetTokenFromCodeUsecase implements GetTokenFromCodeUsecaseInterface {
     constructor(private readonly domainHttpAdapter: HttpAdapterInterface, private readonly setTokens: Function) {}
 
-    async execute(email: string, password: string): Promise<Tokens | Error> {
+    async execute({ code, redirectUri }: GetTokenFromCodeParams): Promise<Tokens | Error> {
         try {
-            const httpResponse: HttpResponse<LoginCommand> = await this.domainHttpAdapter.post(
-                '/authentication/token',
+            const httpResponse: HttpResponse<GetTokenResponse> = await this.domainHttpAdapter.post(
+                '/authentication/flow/code',
                 {
-                    email,
-                    password,
+                    code,
+                    // Note: redirectUri must be the same redirectUri used when initializing the flow
+                    // otherwise an error will be thrown by auth server
+                    redirectUri,
                 },
                 {},
                 undefined,
@@ -53,5 +57,3 @@ class LoginUsecase implements LoginUsecaseInterface {
         }
     }
 }
-
-export default LoginUsecase;

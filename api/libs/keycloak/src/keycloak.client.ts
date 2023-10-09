@@ -106,6 +106,43 @@ export class KeycloakClient {
    * Returns the access token and refresh token.
    * Throws HttpException (409) if the credentials are invalid.
    */
+  async getCredentialsFromAuthorizationCode({
+    authorizationCode,
+    redirectUri,
+  }: {
+    authorizationCode: string;
+    redirectUri: string;
+  }): Promise<Credentials> {
+    const response = await fetch(
+      `${this.configuration.baseUrl}/realms/${this.configuration.realm}/protocol/openid-connect/token`,
+      {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+        body: new URLSearchParams({
+          code: authorizationCode,
+          grant_type: 'authorization_code',
+          client_id: this.configuration.clientId,
+          client_secret: this.configuration.clientSecret,
+          scope: 'openid',
+          redirect_uri: redirectUri,
+        }),
+      },
+    );
+
+    if (!response.ok) {
+      this.logger.error(JSON.stringify(await response.json()));
+      throw new InvalidCredentialsException();
+    }
+
+    const { access_token, refresh_token } = await response.json();
+
+    return { accessToken: access_token, refreshToken: refresh_token };
+  }
+
+  /*
+   * Returns the access token and refresh token.
+   * Throws HttpException (409) if the credentials are invalid.
+   */
   async getCredentials(email: string, password: string): Promise<Credentials> {
     const response = await fetch(
       `${this.configuration.baseUrl}/realms/${this.configuration.realm}/protocol/openid-connect/token`,
@@ -539,5 +576,14 @@ export class KeycloakClient {
       await this.grantToken();
     }
     return this.tokenSet.access_token;
+  }
+
+  /**
+   * Get standard flow URL
+   * @param redirectUri
+   * @returns
+   */
+  public getStandardFlowUrl(redirectUri: string): string {
+    return `${this.configuration.baseUrl}/realms/${this.configuration.realm}/protocol/openid-connect/auth?response_type=code&client_id=${this.configuration.clientId}&scope=openid&redirect_uri=${redirectUri}`;
   }
 }
