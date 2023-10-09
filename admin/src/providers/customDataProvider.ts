@@ -8,6 +8,7 @@ import {
     UpdateParams,
     fetchUtils,
 } from 'react-admin';
+import Language from '../entities/Language';
 import { RoutineExecution } from '../entities/RoutineExecution';
 import CountriesQuery from '../queries/CountriesQuery';
 import InterestsQuery from '../queries/InterestsQuery';
@@ -180,6 +181,16 @@ const customDataProvider: DataProvider = {
         }
 
         const result = await response.json();
+
+        if (resource === 'languages') {
+            return {
+                data: result.items.map((language: Language) => ({
+                    ...language,
+                    name: `languages_code.${language.code}`,
+                })),
+                total: result.totalItems,
+            };
+        }
 
         if (!result.items) {
             return { data: result, total: result.length };
