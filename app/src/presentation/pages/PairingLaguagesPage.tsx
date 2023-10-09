@@ -49,7 +49,8 @@ const PairingLaguagesPage: React.FC = () => {
             result.filter(
                 (language) =>
                     profile?.nativeLanguage.code !== language.code &&
-                    !profile?.masteredLanguages?.find((otherLanguage) => language.code === otherLanguage.code)
+                    !profile?.masteredLanguages?.find((otherLanguage) => language.code === otherLanguage.code) &&
+                    !profile?.learningLanguages?.find((learningLanguage) => language.code === learningLanguage.code)
             )
         );
     };
