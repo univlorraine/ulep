@@ -9,7 +9,7 @@ import LoginForm from '../components/forms/LoginForm';
 import WebLayout from '../components/layout/WebLayout';
 import useWindowDimensions from '../hooks/useWindowDimensions';
 import { HYBRID_MAX_WIDTH } from '../utils';
-import { Tokens } from '../../domain/interfaces/LoginUsecase.interface';
+import Tokens from '../../domain/entities/Tokens';
 
 const LoginPage: React.FC = () => {
     const { width } = useWindowDimensions();

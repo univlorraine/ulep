@@ -1,6 +1,9 @@
 import { HttpResponse } from '../../../adapter/BaseHttpAdapter';
-import GetTokenFromCodeUsecaseInterface, { GetTokenFromCodeCommand, Tokens } from "../../interfaces/AuthStandardFlow/GetTokenFromCodeUsecase.interface";
+import GetTokenFromCodeUsecaseInterface, {
+    GetTokenFromCodeParams,
+} from '../../interfaces/AuthStandardFlow/GetTokenFromCodeUsecase.interface';
 import { HttpAdapterInterface } from '../../../adapter/DomainHttpAdapter';
+import Tokens from '../../entities/Tokens';
 
 interface GetTokenResponse {
     accessToken: string;
@@ -10,7 +13,7 @@ interface GetTokenResponse {
 export class GetTokenFromCodeUsecase implements GetTokenFromCodeUsecaseInterface {
     constructor(private readonly domainHttpAdapter: HttpAdapterInterface, private readonly setTokens: Function) {}
 
-    async execute({code, redirectUri}: GetTokenFromCodeCommand): Promise<Tokens | Error> {
+    async execute({ code, redirectUri }: GetTokenFromCodeParams): Promise<Tokens | Error> {
         try {
             const httpResponse: HttpResponse<GetTokenResponse> = await this.domainHttpAdapter.post(
                 '/authentication/flow/code',
@@ -18,7 +21,7 @@ export class GetTokenFromCodeUsecase implements GetTokenFromCodeUsecaseInterface
                     code,
                     // Note: redirectUri must be the same redirectUri used when initializing the flow
                     // otherwise an error will be thrown by auth server
-                    redirectUri
+                    redirectUri,
                 },
                 {},
                 undefined,
@@ -37,7 +40,6 @@ export class GetTokenFromCodeUsecase implements GetTokenFromCodeUsecaseInterface
             await this.setTokens(tokens);
 
             return tokens;
-            
         } catch (error: any) {
             if (!error || !error.status) {
                 return new Error('errors.global');

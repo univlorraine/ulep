@@ -19,7 +19,6 @@ const SignUpPage: React.FC = () => {
     const updateProfileSignUp = useStoreActions((state) => state.updateProfileSignUp);
     const [showToast] = useIonToast();
     const history = useHistory();
-
     const [countries, setCountries] = useState<DropDownItem<Country>[]>([]);
     const [country, setCountry] = useState<Country>();
     const [department, setDepartment] = useState<string>('');
@@ -123,10 +122,13 @@ const SignUpPage: React.FC = () => {
                 </div>
 
                 {university && university.isCentral && (
-                    <button className="tertiary-button large-margin-vertical" onClick={async () => {
-                        const redirectUri = encodeURIComponent(`${window.location.origin}/auth`);
-                        window.location.href = getInitialUrlUsecase.execute(redirectUri);
-                    }}>
+                    <button
+                        className="tertiary-button large-margin-vertical"
+                        onClick={async () => {
+                            const redirectUri = encodeURIComponent(`${window.location.origin}/auth`);
+                            window.location.href = getInitialUrlUsecase.execute(redirectUri);
+                        }}
+                    >
                         {t('signup_page.sso_button')}
                     </button>
                 )}
