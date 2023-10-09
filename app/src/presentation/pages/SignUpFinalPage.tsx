@@ -1,5 +1,4 @@
 import { useTranslation } from 'react-i18next';
-import { useHistory } from 'react-router';
 import { useConfig } from '../../context/ConfigurationContext';
 import { useStoreState } from '../../store/storeTypes';
 import SuccessLayout from '../components/layout/SuccessLayout';
@@ -43,7 +42,7 @@ const SignupFinalPage: React.FC = () => {
             return await showToast({ message: t(result.message), duration: 1000 });
         }
 
-        return (window.location.href = '/signup/pairing/languages');
+        return (window.location.href = '/pairing/languages');
     };
 
     return (

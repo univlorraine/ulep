@@ -1,7 +1,7 @@
 import { useIonToast } from '@ionic/react';
 import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { Redirect, useHistory } from 'react-router';
+import { Redirect, useHistory, useParams } from 'react-router';
 import { PlusPng } from '../../assets';
 import { useConfig } from '../../context/ConfigurationContext';
 import Language from '../../domain/entities/Language';
