@@ -14,6 +14,10 @@
         "userDoesntExist": "L'utilisateur n'existe pas",
         "userWrongCredentials": "Le mot de passe ou l'email est incorrect"
     },
+    "error_page": {
+        "title": "Une erreur est survenue",
+        "subtitle": "Veuillez nous excusez mais une erreur est survenue, veuillez rafraichir la page ou effectuer un retour en arrière."
+    },
     "forgot_password_page": {
         "button": "Envoyer",
         "invalid_email": "Email invalide",

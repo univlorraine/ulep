@@ -15,7 +15,7 @@ const instances: Instance[] = [
     {
         image: ULLogo,
         name: 'Université de Lorraine',
-        apiUrl: 'https://api.ulep.thestaging.io/',
+        apiUrl: import.meta.env.VITE_UL_API_URL,
     },
 ];
 
@@ -43,11 +43,10 @@ const InstancesPage: React.FC<InstancesPageProps> = ({ onValidate }) => {
                 {instances.map((instance) => (
                     <button
                         key={instance.apiUrl}
-                        className={styles.instance}
+                        className={`${styles.instance} ${
+                            selectedInstance?.apiUrl === instance.apiUrl && styles['primary-instance']
+                        }`}
                         onClick={() => setSelectedInstance(instance)}
-                        style={{
-                            backgroundColor: selectedInstance?.apiUrl === instance.apiUrl ? '#FDEE66' : '#F2F4F7',
-                        }}
                     >
                         <img className={styles.image} src={instance.image} />
                         <p className={styles['instance-name']}>{instance.name}</p>

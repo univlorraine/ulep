@@ -18,6 +18,7 @@
 
 .instance {
     align-items: center;
+    background-color: #f2f4f7;
     border-radius: 5px;
     display: flex;
     height: 80px;
@@ -33,4 +34,8 @@
     font-weight: 500;
     line-height: 20px;
     margin-left: 16px;
+}
+
+.primary-instance {
+    background-color: #fdee66;
 }

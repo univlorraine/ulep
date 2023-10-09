@@ -116,7 +116,7 @@ const InstanceForm: React.FC<InstanceFormProps> = ({ handleSubmit, instance }) =
 
             <Box alignItems="center" display="flex" flexDirection="row">
                 <Input
-                    name="Confidentiality"
+                    name="Ressource"
                     onChange={(e) => setNewRessource(e.target.value)}
                     sx={inputStyle}
                     type="url"

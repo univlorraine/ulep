@@ -35,22 +35,8 @@ export class UpdateInstanceUsecase {
     }
 
     const newInstance = new Instance({
-      id: instance.id,
-      name: command.name || instance.name,
-      email: command.email || instance.email,
-      cguUrl: command.cguUrl || instance.cguUrl,
-      confidentialityUrl:
-        command.confidentialityUrl || instance.confidentialityUrl,
-      ressourceUrl: command.ressourceUrl || instance.ressourceUrl,
-      primaryColor: command.primaryColor || instance.primaryColor,
-      primaryBackgroundColor:
-        command.primaryBackgroundColor || instance.primaryBackgroundColor,
-      primaryDarkColor: command.primaryDarkColor || instance.primaryDarkColor,
-      secondaryColor: command.secondaryColor || instance.secondaryColor,
-      secondaryBackgroundColor:
-        command.secondaryBackgroundColor || instance.secondaryBackgroundColor,
-      secondaryDarkColor:
-        command.secondaryDarkColor || instance.secondaryDarkColor,
+      ...instance,
+      ...command,
     });
 
     await this.instanceRepository.update(newInstance);

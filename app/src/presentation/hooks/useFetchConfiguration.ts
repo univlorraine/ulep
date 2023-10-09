@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import Configuration from '../../domain/entities/Confirguration';
 import { useTranslation } from 'react-i18next';
+import { useIonToast } from '@ionic/react';
 
 interface InstanceCommand {
     name: string;
@@ -18,9 +19,10 @@ interface InstanceCommand {
 
 const useFetchConfiguration = (apiUrl: string) => {
     const { t } = useTranslation();
+    const [showToast] = useIonToast();
     const [configuration, setConfiguration] = useState<Configuration>();
     const [error, setError] = useState<Error>();
-    const [loading, setLoading] = useState<boolean>(true);
+    const [loading, setLoading] = useState<boolean>(false);
 
     const askInstance = async () => {
         try {
@@ -54,13 +56,15 @@ const useFetchConfiguration = (apiUrl: string) => {
             document.documentElement.style.setProperty('--secondary-dark-color', result.secondaryDarkColor);
         } catch (error: any) {
             setError(error);
+            showToast({ message: error.message, duration: 5000 });
         }
     };
 
     useEffect(() => {
         setLoading(true);
-        askInstance();
-        setLoading(false);
+        askInstance().finally(() => {
+            setLoading(false);
+        });
     }, [apiUrl]);
 
     return { configuration, error, loading };

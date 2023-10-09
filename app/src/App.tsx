@@ -1,8 +1,8 @@
 import { Device } from '@capacitor/device';
-import { IonApp, IonLoading, setupIonicReact, useIonToast } from '@ionic/react';
+import { IonApp, IonLoading, setupIonicReact } from '@ionic/react';
 import { IonReactRouter } from '@ionic/react-router';
 import { StoreProvider, useStoreRehydrated } from 'easy-peasy';
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import { ConfigContext } from './context/ConfigurationContext';
 import getConfigContextValue from './context/getConfigurationContextValue';
@@ -34,12 +34,12 @@ import Store from './store/store';
 import InstancesPage from './presentation/pages/mobile/InstancesPage';
 import useFetchConfiguration from './presentation/hooks/useFetchConfiguration';
 import useFetchI18NBackend from './presentation/hooks/useFetchI18NBackend';
+import ErrorPage from './presentation/pages/ErrorPage';
 
 setupIonicReact();
 
 const AppContext = () => {
     const { i18n } = useTranslation();
-    const [showToast] = useIonToast();
     const accessToken = useStoreState((state) => state.accessToken);
     const apiUrl = useStoreState((state) => state.apiUrl);
     const language = useStoreState((state) => state.language);
@@ -61,8 +61,7 @@ const AppContext = () => {
     }, [language]);
 
     if (error) {
-        showToast({ message: error.message, duration: 5000 });
-        return <IonLoading />; //TODO: ERROR PAGE ?
+        return <ErrorPage />;
     }
 
     if (!configuration || loading) {

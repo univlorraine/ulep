@@ -11,7 +11,7 @@ import {
 } from '@nestjs/common';
 import * as Swagger from '@nestjs/swagger';
 import { InstanceResponse } from 'src/api/dtos/instance/instance.response';
-import { InstanceRequest } from 'src/api/dtos/instance/update-instance.request';
+import { UpdateInstanceRequest } from 'src/api/dtos/instance/update-instance.request';
 import {
   Configuration,
   configuration,
@@ -49,7 +49,7 @@ export class InstanceController {
 
   @Put()
   async updateInstance(
-    @Body() body: InstanceRequest,
+    @Body() body: UpdateInstanceRequest,
   ): Promise<InstanceResponse> {
     const instance = await this.updateInstanceUsecase.execute(body);
 

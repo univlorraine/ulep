@@ -77,10 +77,10 @@
         "ressource": "Url vers les ressources de langues",
         "primaryColor": "Couleur primaire de l'application",
         "primaryBackgroundColor": "Couleur primaire de l'image de fond de l'application",
-        "primaryDarkColor": "Couleur primaire nuancé en sombre utilisé pour le fond de l'application",
+        "primaryDarkColor": "Nuance sombre de la couleur primaire utilisé pour le fond de l'application",
         "secondaryColor": "Couleur secondaire de l'application",
         "secondaryBackgroundColor": "Couleur secondaire de l'image de fond de l'application",
-        "secondaryDarkColor": "Couleur secondaire nuancé en sombre utilisé pour le fond de l'application",
+        "secondaryDarkColor": "Nuance sombre de la couleur secondaire utilisé pour le fond de l'application",
         "edit": {
             "error": "Une erreur est survenue pendant la mise à jour de l'instance",
             "name": "Nom de l'instance",

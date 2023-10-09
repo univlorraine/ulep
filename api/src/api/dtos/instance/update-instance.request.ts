@@ -7,7 +7,7 @@ import {
   IsUrl,
 } from 'class-validator';
 
-export class InstanceRequest {
+export class UpdateInstanceRequest {
   @ApiPropertyOptional({ type: 'string', example: 'Université de Lorraine' })
   @IsOptional()
   @IsString()
