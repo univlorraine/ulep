@@ -11,11 +11,10 @@ import TextInput from '../components/TextInput';
 import WebLayoutCentered from '../components/layout/WebLayoutCentered';
 import { isEmailCorrect, isNameCorrect, isPasswordCorrect } from '../utils';
 import styles from './css/SignUp.module.css';
-import Person from '../../domain/entities/Person';
 
 const SignUpInformationsPage: React.FC = () => {
     const { t } = useTranslation();
-    const { cameraAdapter, configuration, createUser, retrievePerson } = useConfig();
+    const { cameraAdapter, configuration, createUser } = useConfig();
     const [showToast] = useIonToast();
     const history = useHistory();
     const profileSignUp = useStoreState((store) => store.profileSignUp);
@@ -31,7 +30,6 @@ const SignUpInformationsPage: React.FC = () => {
     const [profilePicture, setProfilePicture] = useState<File | undefined>();
     const [CGUChecked, setCGUChecked] = useState<boolean>(false);
     const [errorMessage, setErrorMessage] = useState<{ type: string; message: string }>();
-    
 
     const allFieldHasValue = () =>
         !email || !password || !confirmPassword || !gender || !age || !firstname || !lastname || !CGUChecked;
@@ -114,29 +112,18 @@ const SignUpInformationsPage: React.FC = () => {
     };
 
     const userUlAutomaticValues = async () => {
-        const tokenKeycloak = "";
-        if (profileSignUp.firstname) {
-            setFirstname(profileSignUp.firstname);
-        }
-        if (profileSignUp.lastname) {
-            setLastname(profileSignUp.lastname);
-        }
-        if (profileSignUp.gender) {
-            setGender(profileSignUp.gender)
-        }
-        if (profileSignUp.age) {
-            setAge(profileSignUp.age);
-        }
-        if(profileSignUp.email){
-            setEmail(profileSignUp.email);
-        }
-    }
+        setFirstname(profileSignUp.firstname || '');
+        setLastname(profileSignUp.lastname || '');
+        setGender(profileSignUp.gender || undefined);
+        setAge(profileSignUp.age || undefined);
+        setEmail(profileSignUp.email || '');
+    };
 
-    useEffect(()=>{
+    useEffect(() => {
         if (profileSignUp.university?.isCentral) {
             userUlAutomaticValues();
         }
-    },[]);
+    }, []);
 
     return (
         <WebLayoutCentered

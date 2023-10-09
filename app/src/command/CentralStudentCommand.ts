@@ -1,6 +1,6 @@
-import Person from "../domain/entities/Person";
+import CentralStudent from '../domain/entities/CentralStudent';
 
-interface PersonCommand {
+interface CentralStudentCommand {
     email: string;
     firstname: string;
     lastname: string;
@@ -10,8 +10,8 @@ interface PersonCommand {
     diploma: string;
     departement: string;
 }
-export const personCommandToDomain = (command: PersonCommand) => {
-    return new Person(
+export const centralStudentCommandToDomain = (command: CentralStudentCommand) => {
+    return new CentralStudent(
         command.email,
         command.firstname,
         command.lastname,
@@ -22,4 +22,4 @@ export const personCommandToDomain = (command: PersonCommand) => {
         command.departement
     );
 };
-export default PersonCommand
+export default CentralStudentCommand;

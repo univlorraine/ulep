@@ -1,20 +1,18 @@
-import { HttpResponse } from "../../adapter/BaseHttpAdapter";
-import { HttpAdapterInterface } from "../../adapter/DomainHttpAdapter";
-import PersonCommand, { personCommandToDomain } from "../../command/PersonCommand";
-import Person from "../entities/Person";
-import RetrievePersonInfoUsecaseInterface from "../interfaces/RetrievePersonInfoUsecase.interface";
+import { HttpResponse } from '../../adapter/BaseHttpAdapter';
+import { HttpAdapterInterface } from '../../adapter/DomainHttpAdapter';
+import CentralStudentCommand, { centralStudentCommandToDomain } from '../../command/CentralStudentCommand';
+import CentralStudent from '../entities/CentralStudent';
+import RetrievePersonInfoUsecaseInterface from '../interfaces/RetrievePersonInfoUsecase.interface';
 
 class RetrievePersonInfoUsecase implements RetrievePersonInfoUsecaseInterface {
-    constructor(private readonly domainHttpAdapter: HttpAdapterInterface){}
-    
-    
+    constructor(private readonly domainHttpAdapter: HttpAdapterInterface) {}
 
-    async execute(tokenKeycloak:string): Promise<Person | Error> {
+    async execute(tokenKeycloak: string): Promise<CentralStudent | Error> {
         const requestBody = {
-            "tokenKeycloak":tokenKeycloak
-        }
+            tokenKeycloak: tokenKeycloak,
+        };
         try {
-            const httpResponse: HttpResponse<PersonCommand> = await this.domainHttpAdapter.post(
+            const httpResponse: HttpResponse<CentralStudentCommand> = await this.domainHttpAdapter.post(
                 `/userUniversityInfos`,
                 requestBody,
                 undefined,
@@ -24,8 +22,8 @@ class RetrievePersonInfoUsecase implements RetrievePersonInfoUsecaseInterface {
             if (!httpResponse.parsedBody) {
                 return new Error('errors.gateway');
             }
-            return personCommandToDomain(httpResponse.parsedBody);
-        } catch (error:any) {
+            return centralStudentCommandToDomain(httpResponse.parsedBody);
+        } catch (error: any) {
             return new Error('errors.gateway');
         }
     }

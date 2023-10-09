@@ -1,7 +1,7 @@
 import { useIonToast } from '@ionic/react';
 import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { useHistory } from 'react-router';
+import { useHistory, useLocation } from 'react-router';
 import { useConfig } from '../../context/ConfigurationContext';
 import Country from '../../domain/entities/Country';
 import University from '../../domain/entities/University';
@@ -12,7 +12,10 @@ import RadioButton from '../components/RadioButton';
 import TextInput from '../components/TextInput';
 import WebLayoutCentered from '../components/layout/WebLayoutCentered';
 import styles from './css/SignUp.module.css';
-import Person from '../../domain/entities/Person';
+
+interface SignUpPageParams {
+    accessToken: string;
+}
 
 const SignUpPage: React.FC = () => {
     const { t } = useTranslation();
@@ -20,6 +23,8 @@ const SignUpPage: React.FC = () => {
     const updateProfileSignUp = useStoreActions((state) => state.updateProfileSignUp);
     const [showToast] = useIonToast();
     const history = useHistory();
+    const location = useLocation<SignUpPageParams>();
+    const { accessToken } = location.state || {};
     const [countries, setCountries] = useState<DropDownItem<Country>[]>([]);
     const [country, setCountry] = useState<Country>();
     const [department, setDepartment] = useState<string>('');
@@ -71,11 +76,12 @@ const SignUpPage: React.FC = () => {
         return setUniversity(country.universities[0]);
     };
 
-    const getPersonInfos = async () => {
-        const tokenKeycloak = 'tokenKeycloakUltraSecret';
-        const result = (await retrievePerson.execute(tokenKeycloak)) as Person;
-        if (result.departement) {
-            setDepartment(result.departement);
+    const getPersonInfos = async (token: string) => {
+        console.warn(token);
+        const result = await retrievePerson.execute(token);
+        console.warn(result);
+        if (result instanceof Error) {
+            return await showToast({ message: t(result.message), duration: 1000 });
         }
         switch (selectedRole) {
             case 'student':
@@ -88,36 +94,24 @@ const SignUpPage: React.FC = () => {
             default:
                 break;
         }
-        if (result.firstname) {
-            const firstname = result.firstname;
-            updateProfileSignUp({ firstname });
-        }
-        if (result.lastname) {
-            const lastname = result.lastname;
-            updateProfileSignUp({ lastname });
-        }
-        if (result.age) {
-            const age = result.age;
-            updateProfileSignUp({ age });
-        }
-        if (result.email) {
-            const email = result.email;
-            updateProfileSignUp({ email });
-        }
-        switch (result.gender) {
-            case 'M.':
-                updateProfileSignUp({ gender: 'male' });
-                break;
-            case 'Mme' || 'MME':
-                updateProfileSignUp({ gender: 'female' });
-                break;
-            default:
-                break;
-        }
+        const firstname = result.firstname;
+        const lastname = result.lastname;
+        const age = result.age;
+        const email = result.email;
+        const gender = result.gender === 'M.' ? 'male' : 'female';
+        console.warn({ firstname, lastname, age, email, gender });
+        updateProfileSignUp({ firstname, lastname, age, email, gender });
     };
     useEffect(() => {
         getSignUpData();
     }, []);
+
+    useEffect(() => {
+        if (accessToken) {
+            console.warn('inside token');
+            getPersonInfos(accessToken);
+        }
+    }, [accessToken]);
 
     return (
         <WebLayoutCentered

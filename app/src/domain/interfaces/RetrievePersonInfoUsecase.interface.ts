@@ -1,6 +1,6 @@
-import Person from "../entities/Person";
+import CentralStudent from '../entities/CentralStudent';
 
 interface RetrievePersonInfoUsecaseInterface {
-    execute(tokenKeycloak:string): Promise<Person | Error>;
+    execute(tokenKeycloak: string): Promise<CentralStudent | Error>;
 }
 export default RetrievePersonInfoUsecaseInterface;
