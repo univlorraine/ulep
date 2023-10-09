@@ -30,6 +30,7 @@ export type LearningLanguageTandem = {
     userLearningLanguage: LearningLanguage;
     partnerLearningLanguage: LearningLanguage;
     universityValidations: string[];
+    compatibilityScore: number;
 };
 
 /**
@@ -52,4 +53,37 @@ export const getLearningLanguageUniversityAndCampusString = (learningLanguage?: 
     }
 
     return `${learningLanguage.profile.user.university.name}`;
+};
+
+export const isJoker = (learningLanguage?: LearningLanguage): boolean => {
+    if (learningLanguage?.code === '*') {
+        return true;
+    }
+
+    return false;
+};
+
+export const getEffectiveLearningType = (
+    learningLanguage1: LearningLanguage,
+    learningLanguage2: LearningLanguage
+): LearningType => {
+    switch (learningLanguage1.learningType) {
+        case LearningType.BOTH:
+            if (
+                (learningLanguage2.learningType === LearningType.BOTH ||
+                    learningLanguage2.learningType === LearningType.TANDEM) &&
+                learningLanguage1.campus &&
+                learningLanguage1.campus.id === learningLanguage2.campus?.id
+            ) {
+                return LearningType.TANDEM;
+            }
+
+            return LearningType.ETANDEM;
+        case LearningType.ETANDEM:
+            return learningLanguage1.learningType;
+        case LearningType.TANDEM:
+            return learningLanguage1.learningType;
+        default:
+            throw new Error(`Unknown LearningType ${learningLanguage1.learningType}`);
+    }
 };

@@ -23,6 +23,10 @@ export class LanguageResponse {
   @Expose({ groups: ['read', 'language:read'] })
   secondaryUniversityActive?: boolean;
 
+  @Swagger.ApiProperty({ type: 'boolean' })
+  @Expose({ groups: ['read', 'language:read'] })
+  isDiscovery: boolean;
+
   constructor(partial: Partial<LanguageResponse>) {
     Object.assign(this, partial);
   }
@@ -34,6 +38,7 @@ export class LanguageResponse {
       name: language.name,
       mainUniversityStatus: language.mainUniversityStatus,
       secondaryUniversityActive: language.secondaryUniversityActive,
+      isDiscovery: language.isDiscovery,
     });
   }
 }

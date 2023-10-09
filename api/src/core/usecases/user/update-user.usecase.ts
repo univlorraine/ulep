@@ -1,7 +1,7 @@
 import { Inject, Injectable } from '@nestjs/common';
 import { USER_REPOSITORY, UserRepository } from '../../ports/user.repository';
 import { RessourceDoesNotExist } from 'src/core/errors';
-import { UserStatus } from 'src/core/models';
+import { User, UserStatus } from 'src/core/models';
 
 export class UpdateUserCommand {
   id: string;
@@ -22,10 +22,12 @@ export class UpdateUserUsecase {
       throw new RessourceDoesNotExist();
     }
 
-    return this.userRepository.update({
-      ...user,
-      status: command.status,
-      acceptsEmail: command.acceptsEmail,
-    });
+    return this.userRepository.update(
+      new User({
+        ...user,
+        status: command.status,
+        acceptsEmail: command.acceptsEmail,
+      }),
+    );
   }
 }

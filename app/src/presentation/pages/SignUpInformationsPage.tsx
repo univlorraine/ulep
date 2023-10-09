@@ -221,14 +221,16 @@ const SignUpInformationsPage: React.FC = () => {
                     value={email}
                 />
 
-                <TextInput
-                    errorMessage={errorMessage?.type === 'code' ? errorMessage.message : undefined}
-                    onChange={setCode}
-                    placeholder={t('signup_informations_page.placeholder_code')}
-                    title={t('signup_informations_page.code')}
-                    type="text"
-                    value={code}
-                />
+                {profileSignUp.university?.hasCode && (
+                    <TextInput
+                        errorMessage={errorMessage?.type === 'code' ? errorMessage.message : undefined}
+                        onChange={setCode}
+                        placeholder={t('signup_informations_page.placeholder_code')}
+                        title={t('signup_informations_page.code')}
+                        type="text"
+                        value={code}
+                    />
+                )}
 
                 <TextInput
                     errorMessage={errorMessage?.type === 'password' ? errorMessage.message : undefined}

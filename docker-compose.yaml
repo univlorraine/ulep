@@ -10,6 +10,7 @@ services:
     restart: unless-stopped
     environment:
       ADMIN_URL: ${ADMIN_URL:-http://localhost:3001}
+      APP_URL: ${APP_URL:-http://localhost:5173}
       DATABASE_URL: postgresql://${POSTGRES_USER:-postgres}:${POSTGRES_PASSWORD:-!ChangeMe!}@database:5432/${POSTGRES_DB:-ulep}?schema=public
       KEYCLOAK_BASE_URL: ${KEYCLOAK_BASE_URL:-http://auth:8080}
       KEYCLOAK_REALM: ${KEYCLOAK_REALM:-etandem}
@@ -46,6 +47,7 @@ services:
     volumes:
       - ./docker/keycloak/providers:/opt/keycloak/providers
       - ./docker/keycloak/realms:/opt/keycloak/data/import
+      - ./docker/keycloak/themes:/opt/keycloak/themes
     command: start --import-realm
     environment:
       KEYCLOAK_ADMIN: ${KEYCLOAK_USER:-admin}

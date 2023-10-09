@@ -10,6 +10,7 @@ export class UpdateLanguageCodeCommand {
   code: string;
   mainUniversityStatus?: LanguageStatus;
   secondaryUniversityActive?: boolean;
+  isDiscovery?: boolean;
 }
 
 @Injectable()
@@ -32,9 +33,9 @@ export class UpdateLanguageCodeUsecase {
         mainUniversityStatus:
           command.mainUniversityStatus ?? language.mainUniversityStatus,
         secondaryUniversityActive:
-          command.secondaryUniversityActive !== undefined
-            ? command.secondaryUniversityActive
-            : language.secondaryUniversityActive,
+          command.secondaryUniversityActive ??
+          language.secondaryUniversityActive,
+        isDiscovery: command.isDiscovery ?? language.secondaryUniversityActive,
       }),
     );
   }

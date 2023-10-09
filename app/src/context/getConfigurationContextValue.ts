@@ -16,6 +16,7 @@ import GetAllTandemsUsecase from '../domain/usecases/GetAllTandemsUsecase';
 import GetAllUniversitiesUsecase from '../domain/usecases/GetAllUniversitiesUsecase';
 import GetProfileByUserIdUsecase from '../domain/usecases/GetProfileUsecase';
 import GetQuizzByLevelUsecase from '../domain/usecases/GetQuizzByLevelUsecase';
+import { GetTokenFromCodeUsecase, GetInitialUrlUsecase } from '../domain/usecases/AuthStandardFlow';
 import GetUserUsecase from '../domain/usecases/GetUserUsecase';
 import LoginUsecase from '../domain/usecases/LoginUsecase';
 import ResetPasswordUsecase from '../domain/usecases/ResetPasswordUsecase';
@@ -34,12 +35,8 @@ const getConfigContextValue = (
     configuration: Configuration
 ): ConfigContextValueType => {
     const cameraAdapter = new CameraAdapter();
-    const domainHttpAdapter = new DomainHttpAdapter(
-        import.meta.env.VITE_API_URL ?? 'https://api.ulep.thestaging.io',
-        accessToken,
-        refreshToken,
-        languageCode
-    );
+    const apiUrl = import.meta.env.VITE_API_URL ?? 'https://api.ulep.thestaging.io';
+    const domainHttpAdapter = new DomainHttpAdapter(apiUrl, accessToken, refreshToken, languageCode);
 
     const askForAccountDeletion = new AskForAccountDeletion(domainHttpAdapter);
     const askForLanguage = new AskForLanguageUsecase(domainHttpAdapter);
@@ -57,6 +54,8 @@ const getConfigContextValue = (
     const getQuizzByLevel = new GetQuizzByLevelUsecase(domainHttpAdapter);
     const getUser = new GetUserUsecase(domainHttpAdapter);
     const login = new LoginUsecase(domainHttpAdapter, setTokens);
+    const getTokenFromCodeUsecase = new GetTokenFromCodeUsecase(domainHttpAdapter, setTokens);
+    const getInitialUrlUsecase = new GetInitialUrlUsecase(apiUrl);
     const resetPassword = new ResetPasswordUsecase(domainHttpAdapter);
     const updateAvatar = new UpdateAvatarUsecase(domainHttpAdapter);
     const updateNotificationPermission = new UpdateNotificationPermissionUsecase(domainHttpAdapter);
@@ -88,6 +87,8 @@ const getConfigContextValue = (
         updateAvatar,
         updateNotificationPermission,
         retrievePerson,
+        getTokenFromCodeUsecase,
+        getInitialUrlUsecase,
     };
 };
 

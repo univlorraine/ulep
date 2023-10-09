@@ -217,6 +217,10 @@ export class UniversityResponse {
   @Expose({ groups: ['read'] })
   admissionEnd: Date;
 
+  @Swagger.ApiProperty()
+  @Expose({ groups: ['read'] })
+  hasCode: boolean;
+
   @Swagger.ApiProperty({ type: 'string', isArray: true })
   @Expose({ groups: ['university:read'] })
   codes: string[];
@@ -249,6 +253,7 @@ export class UniversityResponse {
       parent: university.parent,
       timezone: university.timezone,
       sites: university.campus.map(CampusResponse.fromCampus),
+      hasCode: !!(university.codes?.length > 0),
       codes: university.codes,
       domains: university.domains,
       admissionStart: university.admissionStart,

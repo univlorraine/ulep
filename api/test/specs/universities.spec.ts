@@ -21,6 +21,8 @@ import { COUNTRY_REPOSITORY } from 'src/core/ports/country.repository';
 import { PairingMode } from 'src/core/models';
 import { EMAIL_GATEWAY } from 'src/core/ports/email.gateway';
 import InMemoryEmailGateway from 'src/providers/gateway/in-memory-email.gateway';
+import { EMAIL_TEMPLATE_REPOSITORY } from 'src/core/ports/email-template.repository';
+import { InMemoryEmailTemplateRepository } from 'src/providers/persistance/repositories/in-memory-email-template-repository';
 
 describe('Universities', () => {
   let app: TestServer;
@@ -58,6 +60,8 @@ describe('Universities', () => {
       .useValue(userRepositoy)
       .overrideProvider(EMAIL_GATEWAY)
       .useValue(inMemoryEmail)
+      .overrideProvider(EMAIL_TEMPLATE_REPOSITORY)
+      .useValue(InMemoryEmailTemplateRepository)
       .overrideGuard(AuthenticationGuard)
       .useValue(TestAuthGuard)
       .overrideProvider(AUTHENTICATOR)

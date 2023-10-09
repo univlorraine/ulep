@@ -62,7 +62,12 @@
         }
     },
     "languages": {
-        "label": "Languages"
+        "label": "Languages",
+        "isDiscovery": {
+            "title": "Discovery language",
+            "yes": "Yes",
+            "no": "No"
+        }
     },
     "login": {
         "connect": "Connect",
@@ -244,7 +249,9 @@
                 "createdAt": "Created",
                 "university": "University",
                 "hasActiveTandem": "In tandem",
-                "actionPossible": "Pending tandem"
+                "actionPossible": "Pending tandem",
+                "specificProgram": "Specific program",
+                "role": "Role"
             },
             "noUniversitySelected": "Please select one or more universities for pairing"
         },
@@ -287,7 +294,8 @@
                     "role": "Role",
                     "learningType": "Mode",
                     "gender": "Gender",
-                    "age": "Age"
+                    "age": "Age",
+                    "spokenLanguages": "Spoken languages"
                 },
                 "globalSuggestions": {
                     "title": "Global routine suggestion",

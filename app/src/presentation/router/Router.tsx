@@ -19,7 +19,6 @@ import PairingQuizzIntroductionPage from '../pages/PairingQuizzIntroductionPage'
 import PairingQuizzPage from '../pages/PairingQuizzPage';
 import PairingSelectCEFRPage from '../pages/PairingSelectCEFRPage';
 import PairingUnavailableLanguagePage from '../pages/PairingUnavailableLanguagePage';
-import ResetPasswordPage from '../pages/ResetPasswordPage';
 import SignUpAvailabilitiesPage from '../pages/SignUpAvailabilitiesPage';
 import SignUpBiographyPage from '../pages/SignUpBiographyPage';
 import SignupFinalPage from '../pages/SignUpFinalPage';
@@ -27,6 +26,7 @@ import SignUpFrequencyPage from '../pages/SignUpFrequencyPage';
 import SignUpGoalsPage from '../pages/SignUpGoalsPage';
 import SignUpInformationsPage from '../pages/SignUpInformationsPage';
 import SignUpInterestsPage from '../pages/SignUpInterestsPage';
+import AuthFlowPage from '../pages/AuthFlowPage';
 import SignUpLanguagesPage from '../pages/SignUpLanguagesPage';
 import SignUpPage from '../pages/SignUpPage';
 import WelcomePage from '../pages/WelcomePage';
@@ -68,11 +68,11 @@ const OfflineRouter: React.FC = () => {
             <Route exact path="/login">
                 <LoginPage />
             </Route>
-            <Route exact path="/reset-password/:id">
-                <ResetPasswordPage />
-            </Route>
             <Route exact path="/signup">
                 <SignUpPage />
+            </Route>
+            <Route exact path="/auth">
+                <AuthFlowPage />
             </Route>
             <MobileRoute exact component={TandemProfilePage} path={'/tandem-profil'} />
             <MobileRoute exact component={ProfilePage} path={'/profil'} />

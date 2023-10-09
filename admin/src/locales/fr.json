@@ -1,4 +1,15 @@
 {
+    "administrators": {
+        "all": "Tout",
+        "create": {
+            "email": "Veuillez saisir l'email du nouvel administrateur",
+            "error": "Une erreur est survenue lors de la création d'un administrateur",
+            "title": "Création d'un administrateur",
+            "university": "Veuillez sélectionner une université pour l'administrateur"
+        },
+        "label": "Administrateurs",
+        "university": "Gestionnaire de"
+    },
     "campus": {
         "create": {
             "title": "Création d'un campus"
@@ -104,6 +115,11 @@
             "success": "Le status a bien été mis à jour",
             "title": "Status",
             "unactive": "Désactivé pour l'apprentissage"
+        },
+        "isDiscovery": {
+            "title": "Langue découverte",
+            "yes": "Oui",
+            "no": "Non"
         }
     },
     "login": {
@@ -216,6 +232,8 @@
         "label": "Langues demandées"
     },
     "universities": {
+        "code_button": "Ajouter un code",
+        "domain_button": "Ajouter un domaine",
         "create": {
             "admission_end": "Fin de date d'inscription à la nouvelle université partenaire",
             "admission_error": "La date de fin d'admission doit être après la date de début",
@@ -232,6 +250,7 @@
             "pairingMode": "Mode d'appariement",
             "notificationEmail": "Email pour les notifications"
         },
+
         "pairingModes": {
             "manual": "Manuel",
             "semi_automatic": "Semi-automatique",
@@ -327,7 +346,9 @@
                 "createdAt": "Créé le",
                 "university": "Université",
                 "hasActiveTandem": "En tandem",
-                "actionPossible": "Tandem en attente"
+                "actionPossible": "Tandem en attente",
+                "specificProgram": "Programme spécifique",
+                "role": "Rôle"
             },
             "noUniversitySelected": "Merci de sélectionner une ou plusieurs universités pour l'appariement"
         },
@@ -370,7 +391,8 @@
                     "role": "Rôle",
                     "learningType": "Mode",
                     "gender": "Genre",
-                    "age": "Âge"
+                    "age": "Âge",
+                    "spokenLanguages": "Langues parlées"
                 },
                 "globalSuggestions": {
                     "title": "Suggestion routine globale",

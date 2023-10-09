@@ -67,42 +67,28 @@ export class PrismaLearningLanguageRepository
   async getAvailableLearningLanguagesSpeakingLanguageFromUniversities(
     languageId: string,
     universityIds: string[],
-    considerLearntLanguagesAsSpoken = false,
   ): Promise<LearningLanguage[]> {
-    const clauseSpokeLanguage: any = [
-      {
-        native_language_code_id: {
-          equals: languageId,
-        },
-      },
-      {
-        MasteredLanguages: {
-          some: {
-            language_code_id: {
-              equals: languageId,
-            },
-          },
-        },
-      },
-    ];
-    if (considerLearntLanguagesAsSpoken) {
-      clauseSpokeLanguage.push({
-        LearningLanguages: {
-          some: {
-            language_code_id: {
-              equals: languageId,
-            },
-          },
-        },
-      });
-    }
-
     const res = await this.prisma.learningLanguages.findMany({
       where: {
         Profile: {
           AND: [
             {
-              OR: clauseSpokeLanguage,
+              OR: [
+                {
+                  native_language_code_id: {
+                    equals: languageId,
+                  },
+                },
+                {
+                  MasteredLanguages: {
+                    some: {
+                      language_code_id: {
+                        equals: languageId,
+                      },
+                    },
+                  },
+                },
+              ],
               User: {
                 AND: [
                   {
@@ -143,9 +129,7 @@ export class PrismaLearningLanguageRepository
     return res.map(learningLanguageMapper);
   }
 
-  async getLearningLanguagesOfUniversitiesNotInActiveTandem(
-    universityIds: string[],
-  ) {
+  async getAvailableLearningLanguagesOfUniversities(universityIds: string[]) {
     const res = await this.prisma.learningLanguages.findMany({
       where: {
         Profile: {
@@ -204,9 +188,8 @@ export class PrismaLearningLanguageRepository
     return !!res;
   }
 
-  async getAvailableLearningLanguagesSpeakingDifferentLanguageAndFromUniversities(
-    ownerSpokenLanguageIds: string[],
-    universitySupportedLanguageIds: string[],
+  async getAvailableLearningLanguagesSpeakingOneOfLanguagesAndFromUniversities(
+    allowedLanguages: string[],
     universityIds: string[],
   ): Promise<LearningLanguage[]> {
     const res = await this.prisma.learningLanguages.findMany({
@@ -214,38 +197,19 @@ export class PrismaLearningLanguageRepository
         Profile: {
           AND: [
             {
-              // Assert target speaks a language that is
-              // not spoken by owner AND is supported by university
+              // Assert target speaks an allowed language
               OR: [
                 {
-                  AND: [
-                    {
-                      native_language_code_id: {
-                        not: { in: ownerSpokenLanguageIds },
-                      },
-                    },
-                    {
-                      native_language_code_id: {
-                        in: universitySupportedLanguageIds,
-                      },
-                    },
-                  ],
+                  native_language_code_id: {
+                    in: allowedLanguages,
+                  },
                 },
                 {
                   MasteredLanguages: {
                     some: {
-                      AND: [
-                        {
-                          language_code_id: {
-                            not: { in: ownerSpokenLanguageIds },
-                          },
-                        },
-                        {
-                          language_code_id: {
-                            in: universityIds,
-                          },
-                        },
-                      ],
+                      language_code_id: {
+                        in: allowedLanguages,
+                      },
                     },
                   },
                 },
@@ -434,6 +398,20 @@ export class PrismaLearningLanguageRepository
           orderByPayload = {
             LanguageCode: {
               name: orderBy.order,
+            },
+          };
+          break;
+        case LearningLanguageQuerySortKey.SPECIFIC_PROGRAM:
+          orderByPayload = {
+            specific_program: orderBy.order,
+          };
+          break;
+        case LearningLanguageQuerySortKey.ROLE:
+          orderByPayload = {
+            Profile: {
+              User: {
+                role: orderBy.order,
+              },
             },
           };
           break;

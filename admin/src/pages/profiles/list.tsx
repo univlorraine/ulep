@@ -35,6 +35,7 @@ const ProfileFilter = (props: any) => {
             </ReferenceInput>
             <ReferenceInput
                 label={translate('profiles.native_language')}
+                perPage={250}
                 reference="languages"
                 source="nativeLanguageCode"
             >
@@ -42,6 +43,7 @@ const ProfileFilter = (props: any) => {
             </ReferenceInput>
             <ReferenceInput
                 label={translate('profiles.mastered_languages')}
+                perPage={250}
                 reference="languages"
                 source="masteredLanguageCode"
             >

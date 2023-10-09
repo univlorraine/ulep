@@ -16,7 +16,7 @@ import Person from '../../domain/entities/Person';
 
 const SignUpPage: React.FC = () => {
     const { t } = useTranslation();
-    const { configuration, getAllCountries, retrievePerson } = useConfig();
+    const { configuration, getAllCountries, getInitialUrlUsecase, retrievePerson } = useConfig();
     const updateProfileSignUp = useStoreActions((state) => state.updateProfileSignUp);
     const [showToast] = useIonToast();
     const history = useHistory();
@@ -72,49 +72,49 @@ const SignUpPage: React.FC = () => {
     };
 
     const getPersonInfos = async () => {
-        const tokenKeycloak = "tokenKeycloakUltraSecret";
-        const result = await retrievePerson.execute(tokenKeycloak) as Person;
+        const tokenKeycloak = 'tokenKeycloakUltraSecret';
+        const result = (await retrievePerson.execute(tokenKeycloak)) as Person;
         if (result.departement) {
             setDepartment(result.departement);
         }
         switch (selectedRole) {
-            case "student":
-                if(result.diploma){
+            case 'student':
+                if (result.diploma) {
                     setDiplome(result.diploma);
                 }
                 break;
-            case "staff":
+            case 'staff':
                 break;
             default:
                 break;
         }
         if (result.firstname) {
             const firstname = result.firstname;
-            updateProfileSignUp({firstname});
+            updateProfileSignUp({ firstname });
         }
-        if (result.lastname){
+        if (result.lastname) {
             const lastname = result.lastname;
-            updateProfileSignUp({lastname});
+            updateProfileSignUp({ lastname });
         }
         if (result.age) {
             const age = result.age;
-            updateProfileSignUp({age});
+            updateProfileSignUp({ age });
         }
         if (result.email) {
             const email = result.email;
-            updateProfileSignUp({email});
+            updateProfileSignUp({ email });
         }
         switch (result.gender) {
-            case "M.":
-                updateProfileSignUp({gender:"male"});
+            case 'M.':
+                updateProfileSignUp({ gender: 'male' });
                 break;
-            case "Mme" || "MME":
-                updateProfileSignUp({gender:"female"});
+            case 'Mme' || 'MME':
+                updateProfileSignUp({ gender: 'female' });
                 break;
             default:
                 break;
         }
-    }
+    };
     useEffect(() => {
         getSignUpData();
     }, []);
@@ -167,7 +167,13 @@ const SignUpPage: React.FC = () => {
                 </div>
 
                 {university && university.isCentral && (
-                    <button className="tertiary-button large-margin-vertical" onClick={getPersonInfos}>
+                    <button
+                        className="tertiary-button large-margin-vertical"
+                        onClick={async () => {
+                            const redirectUri = encodeURIComponent(`${window.location.origin}/auth`);
+                            window.location.href = getInitialUrlUsecase.execute(redirectUri);
+                        }}
+                    >
                         {t('signup_page.sso_button')}
                     </button>
                 )}

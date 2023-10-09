@@ -27,6 +27,11 @@ const CustomMenu = () => {
                 // Note: div is mandatory to group these Menu.Item as Fragment throw an error from MUI component
                 <div>
                     <Menu.Item
+                        leftIcon={<PersonIcon />}
+                        primaryText={translate('administrators.label')}
+                        to="/users/administrators"
+                    />
+                    <Menu.Item
                         leftIcon={<SchoolIcon />}
                         primaryText={translate('universities.label')}
                         to="/universities"

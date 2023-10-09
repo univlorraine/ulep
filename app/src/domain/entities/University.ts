@@ -7,6 +7,7 @@ class University {
         public readonly isCentral: boolean,
         public readonly timezone: string,
         public readonly sites: Campus[],
+        public readonly hasCode: boolean,
         public readonly admissionStart: Date,
         public readonly admissionEnd: Date
     ) {}

@@ -25,7 +25,7 @@ export class FindAllLanguageParams extends PaginationDto {
 
   @Swagger.ApiPropertyOptional({
     type: 'string',
-    enum: ['code', 'name', 'status', 'secondary'],
+    enum: ['code', 'name', 'status', 'secondary', 'isDiscovery'],
   })
   @IsOptional()
   field?: LanguageQuerySortFilter;

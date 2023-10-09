@@ -41,14 +41,27 @@ spec:
             - name: http
               containerPort: 80
               protocol: TCP
-          # livenessProbe:
-          #   httpGet:
-          #     path: /
-          #     port: http
-          # readinessProbe:
-          #   httpGet:
-          #     path: /
-          #     port: http
+          startupProbe:
+            httpGet:
+              path: /
+              port: http
+            initialDelaySeconds: {{ .Values.admin.probes.startup.initialDelaySeconds }}
+            periodSeconds: {{ .Values.admin.probes.startup.periodSeconds }}
+            failureThreshold: {{ .Values.admin.probes.startup.failureThreshold }}
+          readinessProbe:
+            httpGet:
+              path: /
+              port: http
+            initialDelaySeconds: {{ .Values.admin.probes.readiness.initialDelaySeconds }}
+            periodSeconds: {{ .Values.admin.probes.readiness.periodSeconds }}
+            failureThreshold: {{ .Values.admin.probes.readiness.failureThreshold }}
+          livenessProbe:
+            httpGet:
+              path: /
+              port: http
+            initialDelaySeconds: {{ .Values.admin.probes.liveness.initialDelaySeconds }}
+            periodSeconds: {{ .Values.admin.probes.liveness.periodSeconds }}
+            failureThreshold: {{ .Values.admin.probes.liveness.failureThreshold }}
           resources:
             {{- toYaml .Values.resources | nindent 12 }}
           env:
