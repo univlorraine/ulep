@@ -78,8 +78,8 @@ const UniversityForm: React.FC<UniversityFormProps> = ({
     const [newName, setNewName] = useState<string>(name || '');
     const [newCountry, setNewCountry] = useState<Country | undefined>(country || undefined);
     const [newTimezone, setNewTimezone] = useState<string | undefined>(timezone || '');
-    const [newAdmissionStartDate, setNewAdmissionStartDate] = useState<Date | null>();
-    const [newAdmissionEndDate, setNewAdmissionEndDate] = useState<Date | null>();
+    const [newAdmissionStartDate, setNewAdmissionStartDate] = useState<Date | null>(new Date());
+    const [newAdmissionEndDate, setNewAdmissionEndDate] = useState<Date | null>(new Date());
     const [newWebsite, setNewWebsite] = useState<string>(website || '');
     const [newCode, setNewCode] = useState<string>('');
     const [newCodes, setNewCodes] = useState<string[]>(codes || []);
@@ -191,7 +191,6 @@ const UniversityForm: React.FC<UniversityFormProps> = ({
                             label="DD/MM/YYYY"
                             onChange={setNewAdmissionStartDate}
                             sx={{ my: 2, width: '100%' }}
-                            value={newAdmissionStartDate}
                             disableUnderline
                         />
                     </Box>
@@ -205,7 +204,6 @@ const UniversityForm: React.FC<UniversityFormProps> = ({
                             label="DD/MM/YYYY"
                             onChange={setNewAdmissionEndDate}
                             sx={{ my: 2, width: '100%' }}
-                            value={newAdmissionEndDate}
                         />
                     </Box>
 
