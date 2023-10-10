@@ -75,9 +75,9 @@ const PairingUnavailableLanguagePage: React.FC = () => {
                                 {t('pairing_unavailable_language_page.ressource_title')}
                             </p>
                             <div className={styles['button-container']}>
-                                <button className="primary-button">
+                                <a href={configuration.ressourceUrl} className="primary-button">
                                     {t('pairing_unavailable_language_page.ressource_button')}
-                                </button>
+                                </a>
                             </div>
                         </div>
                     </>

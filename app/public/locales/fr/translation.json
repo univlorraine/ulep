@@ -15,6 +15,10 @@
         "userWrongCredentials": "Le mot de passe ou l'email est incorrect",
         "connecteur":"Erreur lors de la récupération des informations utilisateur"
     },
+    "error_page": {
+        "title": "Une erreur est survenue",
+        "subtitle": "Veuillez nous excusez mais une erreur est survenue, veuillez rafraichir la page ou effectuer un retour en arrière."
+    },
     "forgot_password_page": {
         "button": "Envoyer",
         "invalid_email": "Email invalide",
@@ -117,6 +121,12 @@
             "tandem_unavailable": "Tandem indisponible",
             "title": "Mes demandes en attentes"
         }
+    },
+    "instance": {
+        "button": "Valider et continuer",
+        "error": "Erreur pendant le chargement de l'instance",
+        "subtitle": "Choisis ton instance dans la liste ci-dessous",
+        "title": "Votre instance"
     },
     "languages": {
         "french": "Français",
