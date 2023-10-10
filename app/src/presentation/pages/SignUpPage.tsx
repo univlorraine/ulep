@@ -77,9 +77,7 @@ const SignUpPage: React.FC = () => {
     };
 
     const getPersonInfos = async (token: string) => {
-        console.warn(token);
         const result = await retrievePerson.execute(token);
-        console.warn(result);
         if (result instanceof Error) {
             return await showToast({ message: t(result.message), duration: 1000 });
         }
@@ -99,16 +97,15 @@ const SignUpPage: React.FC = () => {
         const age = result.age;
         const email = result.email;
         const gender = result.gender === 'M.' ? 'male' : 'female';
-        console.warn({ firstname, lastname, age, email, gender });
         updateProfileSignUp({ firstname, lastname, age, email, gender });
     };
+
     useEffect(() => {
         getSignUpData();
     }, []);
 
     useEffect(() => {
         if (accessToken) {
-            console.warn('inside token');
             getPersonInfos(accessToken);
         }
     }, [accessToken]);

@@ -25,10 +25,8 @@ export class UniversityConnectorController {
     @Body() body: RetrieveUserUniversityInfoRequest,
   ): Promise<ConnectorResponse> {
     const token = body.tokenKeycloak;
-    //TODO: faire un traitement du token keycloak, pour aller récupérer le loginUL
-    const loginUL = 'champmar5';
     const resultFromService = await this.gatewayService.getUserUniversityInfo(
-      loginUL,
+      token,
     );
     return ConnectorResponse.fromDomain(resultFromService);
   }

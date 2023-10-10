@@ -465,6 +465,16 @@ export class KeycloakClient {
   }
 
   /*
+   * Get loginUl from a user
+   */
+  public async getUserLoginUl(token: string): Promise<string> {
+    const userTokenInfos = await this.authenticate(token);
+    const user = await this.getUserByEmail(userTokenInfos.email);
+
+    return user.attributes?.['loginCentral']?.[0];
+  }
+
+  /*
    * Add user to group
    */
   async addUserToAdministrators(userId: string): Promise<void> {
