@@ -26,14 +26,14 @@ const SignUpInformationsPage: React.FC = () => {
     const [showToast] = useIonToast();
     const history = useHistory();
     const location = useLocation<SignUpInformationsParams>();
-    const { centralFirstname, centralLastname, centralEmail, centralGender, centralAge } = location.state || {};
+    const { centralLastname } = location.state || {};
     const profileSignUp = useStoreState((store) => store.profileSignUp);
     const updateProfileSignUp = useStoreActions((state) => state.updateProfileSignUp);
-    const [firstname, setFirstname] = useState<string>(centralFirstname || '');
-    const [lastname, setLastname] = useState<string>(centralLastname || '');
-    const [gender, setGender] = useState<Gender | undefined>(centralGender);
-    const [age, setAge] = useState<number | undefined>(centralAge);
-    const [email, setEmail] = useState<string>(centralEmail || '');
+    const [firstname, setFirstname] = useState<string>('');
+    const [lastname, setLastname] = useState<string>('');
+    const [gender, setGender] = useState<Gender | undefined>();
+    const [age, setAge] = useState<number | undefined>();
+    const [email, setEmail] = useState<string>('');
     const [code, setCode] = useState<string>('');
     const [password, setPassword] = useState<string>('');
     const [confirmPassword, setConfirmPassword] = useState<string>('');
@@ -43,12 +43,11 @@ const SignUpInformationsPage: React.FC = () => {
 
     const allFieldHasValue = () => {
         if (centralLastname) {
-          return email && gender && age && firstname && lastname && CGUChecked;
+            return email && gender && age && firstname && lastname && CGUChecked;
         } else {
-          return email && password && confirmPassword && gender && age && firstname && lastname && CGUChecked;
+            return email && password && confirmPassword && gender && age && firstname && lastname && CGUChecked;
         }
-      };
-
+    };
 
     const openGallery = async () => {
         setProfilePicture(await cameraAdapter.getPictureFromGallery());
@@ -140,6 +139,15 @@ const SignUpInformationsPage: React.FC = () => {
             userUlAutomaticValues();
         }
     }, []);
+
+    useEffect(() => {
+        const state = location.state;
+        setEmail(state.centralEmail || '');
+        setFirstname(state.centralFirstname || '');
+        setLastname(state.centralLastname || '');
+        setGender(state.centralGender);
+        setAge(state.centralAge);
+    }, [location.state]);
 
     return (
         <WebLayoutCentered
@@ -235,23 +243,27 @@ const SignUpInformationsPage: React.FC = () => {
                     />
                 )}
 
-                {!centralLastname && <TextInput
-                    errorMessage={errorMessage?.type === 'password' ? errorMessage.message : undefined}
-                    onChange={setPassword}
-                    placeholder={t('signup_informations_page.placeholder_password')}
-                    title={t('global.password')}
-                    type="password"
-                    value={password}
-                />}
+                {!centralLastname && (
+                    <TextInput
+                        errorMessage={errorMessage?.type === 'password' ? errorMessage.message : undefined}
+                        onChange={setPassword}
+                        placeholder={t('signup_informations_page.placeholder_password')}
+                        title={t('global.password')}
+                        type="password"
+                        value={password}
+                    />
+                )}
 
-                {!centralLastname && <TextInput
-                    errorMessage={errorMessage?.type === 'confirm' ? errorMessage.message : undefined}
-                    onChange={setConfirmPassword}
-                    placeholder={t('signup_informations_page.placeholder_confirm_password')}
-                    title={t('signup_informations_page.confirm_password')}
-                    type="password"
-                    value={confirmPassword}
-                />}
+                {!centralLastname && (
+                    <TextInput
+                        errorMessage={errorMessage?.type === 'confirm' ? errorMessage.message : undefined}
+                        onChange={setConfirmPassword}
+                        placeholder={t('signup_informations_page.placeholder_confirm_password')}
+                        title={t('signup_informations_page.confirm_password')}
+                        type="password"
+                        value={confirmPassword}
+                    />
+                )}
 
                 <Checkbox
                     isSelected={CGUChecked}
