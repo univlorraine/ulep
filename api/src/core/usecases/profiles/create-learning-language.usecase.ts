@@ -8,7 +8,6 @@ import {
   ProfileHasMaxNumberOfLearningLanguages,
 } from 'src/core/errors/profile-exceptions';
 import {
-  LanguageStatus,
   LearningLanguage,
   LearningType,
   ProficiencyLevel,
@@ -78,7 +77,7 @@ export class CreateLearningLanguageUseCase {
 
     if (
       !language.isJokerLanguage() &&
-      !profile.user.university.supportLanguage(language)
+      !profile.user.university.supportLanguage(language, command.learningType)
     ) {
       throw new UnsuportedLanguageException(
         `The language is not supported by the university`,

@@ -16,9 +16,6 @@ const Store = createStore<TokenStoreTypes>(
                 if (state.profileSignUp) {
                     state.profileSignUp = new ProfileSignUp();
                 }
-                if (state.user) {
-                    state.user = undefined;
-                }
             }),
             setTokens: action((state, payload) => {
                 state.accessToken = payload.accessToken ?? state.accessToken;
@@ -26,6 +23,7 @@ const Store = createStore<TokenStoreTypes>(
             }),
             setUser: action((state, payload) => {
                 state.user = payload.user ?? state.user;
+                state.profile = undefined;
             }),
             logout: action((state) => {
                 state.accessToken = '';
@@ -61,6 +59,7 @@ const Store = createStore<TokenStoreTypes>(
                 if (payload.gender) profile.gender = payload.gender;
                 if (payload.goals) profile.goals = payload.goals;
                 if (payload.interests) profile.interests = payload.interests;
+                if (payload.isSuggested) profile.isSuggested = payload.isSuggested;
                 if (payload.isForCertificate) profile.isForCertificate = payload.isForCertificate;
                 if (payload.isForProgram) profile.isForProgram = payload.isForProgram;
                 if (payload.lastname) profile.lastname = payload.lastname;

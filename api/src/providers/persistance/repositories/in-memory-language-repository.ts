@@ -111,7 +111,9 @@ export class InMemoryLanguageRepository implements LanguageRepository {
 
   getLanguagesProposedToLearning(): Promise<Language[]> {
     const res = this.#languages.filter(
-      (language) => language.mainUniversityStatus === LanguageStatus.PRIMARY,
+      (language) =>
+        language.mainUniversityStatus === LanguageStatus.PRIMARY ||
+        language.mainUniversityStatus === LanguageStatus.SECONDARY,
     );
     return Promise.resolve(res);
   }

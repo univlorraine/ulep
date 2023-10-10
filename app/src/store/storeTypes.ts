@@ -29,6 +29,7 @@ export interface SignUpStorePayload {
     gender?: Gender;
     goals?: Goal[];
     interests?: string[];
+    isSuggested?: boolean;
     isForCertificate?: boolean;
     isForProgram?: boolean;
     lastname?: string;

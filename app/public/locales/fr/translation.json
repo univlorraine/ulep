@@ -267,8 +267,10 @@
         },
         "ressource_button": "VOIR LES RESSOURCES DISPONIBLES",
         "ressource_title": "Les ressources pour m’aider",
+        "pedagogy_button": "Choisir un autre moyen de rencontre",
+        "pedagogy_title": "Je souhaite choisir une autre moyen de rencontre",
         "subtitle": "Trouve des ressources et des groupes de discussion en ligne pour apprendre la langue par toi-même.",
-        "title": "Langue non disponible en tandem"
+        "title": "Langue non disponible en e-tandem"
     },
     "reset_password_page": {
         "button": "Valider",

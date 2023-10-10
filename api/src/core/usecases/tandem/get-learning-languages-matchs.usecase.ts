@@ -5,7 +5,7 @@ import {
   LearningLanguageHasNoAssociatedProfile,
   ProfileIsNotInCentralUniversity,
 } from 'src/core/errors/tandem-exceptions';
-import { LearningLanguage, LearningType, Match } from 'src/core/models';
+import { LearningLanguage, Match } from 'src/core/models';
 import {
   LANGUAGE_REPOSITORY,
   LanguageRepository,
@@ -98,7 +98,6 @@ export class GetLearningLanguageMatchesUsecase {
     );
 
     const potentialMatchs: Match[] = [];
-
     for (const target of targets) {
       if (target.profile.id === owner.id) continue;
       if (refusedPartnersMap.has(target.id)) continue;

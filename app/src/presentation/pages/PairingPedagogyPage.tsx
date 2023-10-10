@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { Redirect, useHistory } from 'react-router';
+import { Redirect, useHistory, useLocation } from 'react-router';
 import { useConfig } from '../../context/ConfigurationContext';
 import Campus from '../../domain/entities/Campus';
 import { useStoreActions, useStoreState } from '../../store/storeTypes';
@@ -8,6 +8,7 @@ import ColoredCard from '../components/ColoredCard';
 import WebLayoutCentered from '../components/layout/WebLayoutCentered';
 import SitesModal from '../components/modals/SitesModal';
 import styles from './css/SignUp.module.css';
+import Language from '../../domain/entities/Language';
 
 interface PedagogieData {
     color: string;
@@ -21,6 +22,7 @@ const PairingPedagogyPage: React.FC = () => {
     const { t } = useTranslation();
     const { configuration } = useConfig();
     const history = useHistory();
+    const profileSignUp = useStoreState((state) => state.profileSignUp);
     const updateProfileSignUp = useStoreActions((state) => state.updateProfileSignUp);
     const profile = useStoreState((state) => state.profile);
     const [pedagogySelected, setPedagogySelected] = useState<Pedagogy>();
@@ -57,12 +59,14 @@ const PairingPedagogyPage: React.FC = () => {
         if (pedagogy !== 'ETANDEM' && university && university.sites.length > 1) {
             return setPedagogySelected(pedagogy);
         }
-
         if (pedagogy !== 'ETANDEM' && university && university.sites.length === 1) {
             updateProfileSignUp({ pedagogy, campus: university.sites[0] });
             return history.push(`/pairing/language/confirm`);
         }
 
+        if (pedagogy === 'ETANDEM' && profileSignUp.isSuggested) {
+            return history.push('/pairing/other-languages/selected');
+        }
         updateProfileSignUp({ pedagogy, campus: undefined });
         return history.push(`/pairing/language/confirm`);
     };
