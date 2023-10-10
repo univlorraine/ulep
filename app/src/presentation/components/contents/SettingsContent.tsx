@@ -15,7 +15,7 @@ interface SettingsContentProps {
 
 const SettingsContent: React.FC<SettingsContentProps> = ({ onBackPressed, onDisconnect }) => {
     const { t } = useTranslation();
-    const { askForAccountDeletion, updateNotificationPermission } = useConfig();
+    const { askForAccountDeletion, configuration, updateNotificationPermission } = useConfig();
     const setLanguage = useStoreActions((state) => state.setLanguage);
     const currentLanguage = useStoreState((state) => state.language);
     const [showToast] = useIonToast();
@@ -78,11 +78,11 @@ const SettingsContent: React.FC<SettingsContentProps> = ({ onBackPressed, onDisc
                     checkedIcon={false}
                 />
             </button>
-            <a className={styles['setting-container']}>
+            <a href={configuration.confidentialityUrl} className={styles['setting-container']}>
                 <span>{t('home_page.settings.confidentiality')}</span>
                 <img alt="right-arrow" src={ArrowRightSvg} />
             </a>
-            <a className={`${styles['setting-container']} large-margin-bottom`}>
+            <a href={configuration.cguUrl} className={`${styles['setting-container']} large-margin-bottom`}>
                 <span>{t('home_page.settings.CGU')}</span>
                 <img alt="right-arrow" src={ArrowRightSvg} />
             </a>

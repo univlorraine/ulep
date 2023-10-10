@@ -6,8 +6,12 @@ const Store = createStore<TokenStoreTypes>(
     persist(
         {
             accessToken: '',
+            apiUrl: '',
             language: '',
             refreshToken: '',
+            setApiUrl: action((state, payload) => {
+                state.apiUrl = payload.apiUrl;
+            }),
             setLanguage: action((state, payload) => {
                 state.language = payload.language;
             }),

@@ -12,6 +12,7 @@ import { createInterests } from './interests';
 import { createProfiles } from './profiles';
 import { createLearningObjectives } from './objective';
 import { createReportCategories } from './report';
+import { createInstance } from './instance';
 import { parseArgs } from 'node:util';
 
 const prisma = new Prisma.PrismaClient();
@@ -47,8 +48,10 @@ const load = async () => {
       await prisma.reportCategories.deleteMany();
       await prisma.routineExecutions.deleteMany();
       await prisma.tandems.deleteMany();
+      await prisma.instance.deleteMany();
     }
 
+    await createInstance(prisma);
     await createCountries(prisma);
     await createLanguageCodes(prisma);
     await createReportCategories(prisma);

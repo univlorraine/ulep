@@ -70,6 +70,8 @@ import {
   GetLearningLanguagesUsecase,
   GetLearningLanguageOfIdUsecase,
   RefuseTandemUsecase,
+  GetInstanceUsecase,
+  UpdateInstanceUsecase,
   GetAdministratorsUsecase,
   CreateAdministratorUsecase,
   DeleteAdministratorUsecase,
@@ -182,6 +184,9 @@ const usecases: Provider[] = [
   GetUsersUsecase,
   GetUserUsecase,
   UpdateUserUsecase,
+  // Instance
+  GetInstanceUsecase,
+  UpdateInstanceUsecase,
 ];
 
 const services: Provider[] = [MatchScorer];

@@ -14,7 +14,7 @@ switch (process.env.ENV) {
         config = {
             ...baseConfig,
             appId: 'com.ionic.etandem',
-            appName: 'etandem',
+            appName: 'etandem', 
             ios: {
                 scheme: 'prod',
             },

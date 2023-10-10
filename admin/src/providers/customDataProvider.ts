@@ -89,6 +89,10 @@ const customDataProvider: DataProvider = {
 
         const result = await response.json();
 
+        if (resource === 'instance') {
+            return { data: { ...result, id: 'config' } };
+        }
+
         return { data: result };
     },
     getOne: async (resource: string, params: GetOneParams) => {
@@ -111,6 +115,10 @@ const customDataProvider: DataProvider = {
         }
 
         const data = await response.json();
+
+        if (resource === 'instance') {
+            return { data: { ...data, id: 'config' } };
+        }
 
         return { data };
     },
