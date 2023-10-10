@@ -8,6 +8,8 @@ export interface UserRepository {
 
   findAll(offset?: number, limit?: number): Promise<Collection<User>>;
 
+  ofEmail(email: string): Promise<User | null>;
+
   ofId(id: string): Promise<User | null>;
 
   update(user: User): Promise<User>;

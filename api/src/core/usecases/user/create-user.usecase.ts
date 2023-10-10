@@ -1,6 +1,6 @@
 import { KeycloakClient } from '@app/keycloak';
 import { BadRequestException, Inject, Injectable } from '@nestjs/common';
-import { RessourceDoesNotExist } from 'src/core/errors';
+import { RessourceAlreadyExists, RessourceDoesNotExist } from 'src/core/errors';
 import { Gender, Role, User } from 'src/core/models';
 import {
   COUNTRY_REPOSITORY,
@@ -17,7 +17,7 @@ import {
 
 export class CreateUserCommand {
   email: string;
-  password: string;
+  password?: string;
   firstname: string;
   lastname: string;
   gender: Gender;
@@ -25,7 +25,7 @@ export class CreateUserCommand {
   university: string;
   role: Role;
   countryCode: string;
-  code: string;
+  code?: string;
 }
 
 @Injectable()
@@ -41,6 +41,12 @@ export class CreateUserUsecase {
   ) {}
 
   async execute(command: CreateUserCommand) {
+    const doesUserExist = await this.userRepository.ofEmail(command.email);
+
+    if (doesUserExist) {
+      throw new RessourceAlreadyExists();
+    }
+
     const university = await this.universityRepository.ofId(command.university);
     if (!university) {
       throw new RessourceDoesNotExist('University does not exist');
@@ -69,17 +75,34 @@ export class CreateUserUsecase {
     if (university.admissionEnd < now || university.admissionStart > now) {
       throw new BadRequestException('Registration unavailable');
     }
+    let keycloakUser;
+    if (command.password) {
+      keycloakUser = await this.keycloak.createUser({
+        email: command.email,
+        password: command.password,
+        firstName: command.firstname,
+        lastName: command.lastname,
+        roles: ['USER'],
+        enabled: true,
+        emailVerified: false,
+        origin: 'api',
+      });
+    } else {
+      const currentKeycloakUser = await this.keycloak.getUserByEmail(
+        command.email,
+      );
 
-    const keycloakUser = await this.keycloak.createUser({
-      email: command.email,
-      password: command.password,
-      firstName: command.firstname,
-      lastName: command.lastname,
-      roles: ['USER'],
-      enabled: true,
-      emailVerified: false,
-      origin: 'api',
-    });
+      if (!currentKeycloakUser) {
+        throw new RessourceDoesNotExist();
+      }
+
+      keycloakUser = await this.keycloak.updateUser({
+        id: currentKeycloakUser.id,
+        email: command.email,
+        firstName: command.firstname,
+        lastName: command.lastname,
+      });
+    }
 
     let user = await this.userRepository.ofId(keycloakUser.id);
     if (!user) {

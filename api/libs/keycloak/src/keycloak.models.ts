@@ -73,6 +73,13 @@ interface KeycloakKey {
   x5c: string;
 }
 
+export interface UpdateUserProps {
+  id: string;
+  email: string;
+  firstName?: string;
+  lastName?: string;
+}
+
 export interface CreateUserProps {
   email: string;
   password: string;

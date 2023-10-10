@@ -97,7 +97,9 @@ const SignUpPage: React.FC = () => {
         const age = result.age;
         const email = result.email;
         const gender = result.gender === 'M.' ? 'male' : 'female';
-        updateProfileSignUp({ firstname, lastname, age, email, gender });
+        updateProfileSignUp({ diplome: result.diploma, role: selectedRole });
+
+        history.push('/signup/informations', { centralFirstname: firstname, centralLastname: lastname, centralAge: age, centralEmail: email, centralGender: gender as Gender});
     };
 
     useEffect(() => {
@@ -161,6 +163,7 @@ const SignUpPage: React.FC = () => {
                     <button
                         className="tertiary-button large-margin-vertical"
                         onClick={async () => {
+                            updateProfileSignUp({ country, department, role: selectedRole, university });
                             const redirectUri = encodeURIComponent(`${window.location.origin}/auth`);
                             window.location.href = getInitialUrlUsecase.execute(redirectUri);
                         }}

@@ -23,6 +23,7 @@ import RoleRepresentation, {
   UserRepresentation,
   KeycloakUser,
   CreateAdministratorProps,
+  UpdateUserProps,
 } from './keycloak.models';
 import { Client, Issuer, TokenSet } from 'openid-client';
 
@@ -338,6 +339,35 @@ export class KeycloakClient {
     for (const role of props.roles) {
       await this.addRealmRoleToUser(user.id, role);
     }
+
+    return user;
+  }
+
+  /*
+   * Update a new  in Keycloak.
+   */
+  async updateUser(props: UpdateUserProps): Promise<UserRepresentation> {
+    const response = await fetch(
+      `${this.configuration.baseUrl}/admin/realms/${this.configuration.realm}/users/${props.id}`,
+      {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${await this.getAccessToken()}`,
+        },
+        body: JSON.stringify({
+          email: props.email,
+          firstName: props.firstName,
+          lastName: props.lastName,
+        }),
+      },
+    );
+    if (!response.ok) {
+      this.logger.error(JSON.stringify(await response.json()));
+      throw new UserAlreadyExistException();
+    }
+
+    const user = await this.getUserByEmail(props.email);
 
     return user;
   }
