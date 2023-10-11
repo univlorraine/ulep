@@ -23,8 +23,6 @@ services:
       MINIO_ACCESS_KEY: ${MINIO_USER:-minio}
       MINIO_SECRET_KEY: ${MINIO_PASSWORD:-!ChangeMe!}
       MINIO_PUBLIC_URL: ${MINIO_PUBLIC_URL:-http://localhost:9000}
-      CONNECTEUR_URL: ${CONNECTEUR_URL:-http://10.188.130.109:3010/v1/user}
-      CONNECTEUR_TOKEN: ${CONNECTEUR_TOKEN:-TOKENJWTDUCONNECTEUR}
       TRANSLATION_ENDPOINT: ${TRANSLATION_ENDPOINT:-https://raw.githubusercontent.com/thetribeio/locales_ulep/main/locales/}
 
   admin:

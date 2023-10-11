@@ -72,6 +72,8 @@ api:
     translationsEndpointSuffix: TODO # OPTIONAL
     translationsToken: TODO # REQUIRED
     appUrl: *webappUrl # FIXE
+    connectorUrl: TODO # OPTIONAL
+    connectorToken TODO # OPTIONAL
 
   autoscaling:
     enabled: false
@@ -118,7 +120,7 @@ auth:
     tag: "21.1" # REQUIRED
     pullPolicy: IfNotPresent
 
-  initImage: 
+  initImage:
     repository: "rg.fr-par.scw.cloud/ulep/auth-prod" # REQUIRED
     tag: "latest" # REQUIRED
 
@@ -181,7 +183,7 @@ minio:
   clientImage:
     tag: 2023.9.29-debian-11-r0
 
-  auth: 
+  auth:
     rootUser: *minioAccessKey
     rootPassword: *minioSecretKey
 

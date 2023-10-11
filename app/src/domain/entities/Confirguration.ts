@@ -11,7 +11,8 @@ class Configuration {
         public readonly primaryBackgroundImageColor: string,
         public readonly secondaryColor: string,
         public readonly secondaryDarkColor: string,
-        public readonly secondaryBackgroundImageColor: string
+        public readonly secondaryBackgroundImageColor: string,
+        public readonly hasConnector: boolean,
     ) {}
 }
 
