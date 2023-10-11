@@ -1,5 +1,13 @@
 import simpleRestProvider from 'ra-data-simple-rest';
-import { CreateParams, DeleteManyParams, DeleteParams, GetOneParams, UpdateParams, fetchUtils } from 'react-admin';
+import {
+    CreateParams,
+    DataProvider,
+    DeleteManyParams,
+    DeleteParams,
+    GetOneParams,
+    UpdateParams,
+    fetchUtils,
+} from 'react-admin';
 import { RoutineExecution } from '../entities/RoutineExecution';
 import CountriesQuery from '../queries/CountriesQuery';
 import InterestsQuery from '../queries/InterestsQuery';
@@ -281,6 +289,6 @@ const customDataProvider = {
             throw new Error(`API request failed with status ${response.status}`);
         }
     },
-};
+} as unknown as DataProvider;
 
 export default customDataProvider;

@@ -142,11 +142,13 @@ const SignUpInformationsPage: React.FC = () => {
 
     useEffect(() => {
         const state = location.state;
-        setEmail(state.centralEmail || '');
-        setFirstname(state.centralFirstname || '');
-        setLastname(state.centralLastname || '');
-        setGender(state.centralGender);
-        setAge(state.centralAge);
+        if(state){
+            setEmail(state.centralEmail || '');
+            setFirstname(state.centralFirstname || '');
+            setLastname(state.centralLastname || '');
+            setGender(state.centralGender);
+            setAge(state.centralAge);
+        }
     }, [location.state]);
 
     return (
