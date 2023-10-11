@@ -1,13 +1,5 @@
 import simpleRestProvider from 'ra-data-simple-rest';
-import {
-    CreateParams,
-    DataProvider,
-    DeleteManyParams,
-    DeleteParams,
-    GetOneParams,
-    UpdateParams,
-    fetchUtils,
-} from 'react-admin';
+import { CreateParams, DeleteManyParams, DeleteParams, GetOneParams, UpdateParams, fetchUtils } from 'react-admin';
 import { RoutineExecution } from '../entities/RoutineExecution';
 import CountriesQuery from '../queries/CountriesQuery';
 import InterestsQuery from '../queries/InterestsQuery';
@@ -49,7 +41,7 @@ const httpClient = (url: string, options: any = {}) => {
 
 const dataProvider = simpleRestProvider(`${process.env.REACT_APP_API_URL}`, httpClient);
 
-const customDataProvider: DataProvider = {
+const customDataProvider = {
     ...dataProvider,
     create: async (resource: string, params: CreateParams) => {
         const url = new URL(`${process.env.REACT_APP_API_URL}/${resource}`);

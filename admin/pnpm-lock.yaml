@@ -87,7 +87,7 @@ dependencies:
 devDependencies:
   '@thetribe/eslint-config-react-typescript':
     specifier: ^0.5.1
-    version: 0.5.1(@typescript-eslint/eslint-plugin@5.62.0)(@typescript-eslint/parser@5.62.0)(eslint-plugin-import@2.28.1)(eslint-plugin-jsx-a11y@6.7.1)(eslint-plugin-react-hooks@4.2.0)(eslint-plugin-react@7.28.0)(eslint@8.2.0)
+    version: 0.5.1(@typescript-eslint/eslint-plugin@5.62.0)(@typescript-eslint/parser@5.62.0)(eslint-plugin-import@2.28.1)(eslint-plugin-jsx-a11y@6.7.1)(eslint-plugin-react-hooks@4.6.0)(eslint-plugin-react@7.28.0)(eslint@8.2.0)
   '@types/jest':
     specifier: ^26.0.24
     version: 26.0.24
@@ -128,8 +128,8 @@ devDependencies:
     specifier: ^7.28.0
     version: 7.28.0(eslint@8.2.0)
   eslint-plugin-react-hooks:
-    specifier: ^4.2.0
-    version: 4.2.0(eslint@8.2.0)
+    specifier: ^4.3.0
+    version: 4.6.0(eslint@8.2.0)
   prettier:
     specifier: ^3.0.2
     version: 3.0.2
@@ -3367,10 +3367,10 @@ packages:
       '@testing-library/dom': 9.3.1
     dev: false
 
-  /@thetribe/eslint-config-react-typescript@0.5.1(@typescript-eslint/eslint-plugin@5.62.0)(@typescript-eslint/parser@5.62.0)(eslint-plugin-import@2.28.1)(eslint-plugin-jsx-a11y@6.7.1)(eslint-plugin-react-hooks@4.2.0)(eslint-plugin-react@7.28.0)(eslint@8.2.0):
+  /@thetribe/eslint-config-react-typescript@0.5.1(@typescript-eslint/eslint-plugin@5.62.0)(@typescript-eslint/parser@5.62.0)(eslint-plugin-import@2.28.1)(eslint-plugin-jsx-a11y@6.7.1)(eslint-plugin-react-hooks@4.6.0)(eslint-plugin-react@7.28.0)(eslint@8.2.0):
     resolution: {integrity: sha512-4Gz5yeaiFsU8ZZC/Jn05RKNeThIhdH+E1zsES32DJUPhsJ0WeHAQ1FBiNRb+ihA338aYzHrtgYp5b9to99zhzQ==}
     dependencies:
-      '@thetribe/eslint-config-react': 0.6.1(eslint-plugin-import@2.28.1)(eslint-plugin-jsx-a11y@6.7.1)(eslint-plugin-react-hooks@4.2.0)(eslint-plugin-react@7.28.0)(eslint@8.2.0)
+      '@thetribe/eslint-config-react': 0.6.1(eslint-plugin-import@2.28.1)(eslint-plugin-jsx-a11y@6.7.1)(eslint-plugin-react-hooks@4.6.0)(eslint-plugin-react@7.28.0)(eslint@8.2.0)
       '@thetribe/eslint-config-typescript': 0.5.1(@typescript-eslint/eslint-plugin@5.62.0)(@typescript-eslint/parser@5.62.0)(eslint-plugin-import@2.28.1)(eslint@8.2.0)
     transitivePeerDependencies:
       - '@typescript-eslint/eslint-plugin'
@@ -3382,11 +3382,11 @@ packages:
       - eslint-plugin-react-hooks
     dev: true
 
-  /@thetribe/eslint-config-react@0.6.1(eslint-plugin-import@2.28.1)(eslint-plugin-jsx-a11y@6.7.1)(eslint-plugin-react-hooks@4.2.0)(eslint-plugin-react@7.28.0)(eslint@8.2.0):
+  /@thetribe/eslint-config-react@0.6.1(eslint-plugin-import@2.28.1)(eslint-plugin-jsx-a11y@6.7.1)(eslint-plugin-react-hooks@4.6.0)(eslint-plugin-react@7.28.0)(eslint@8.2.0):
     resolution: {integrity: sha512-uqSeo5DsqUTqmw/FVJlu4EKSEQ0HPtaqnvJ1ZW59BY84BI9dtcpkUn8ocKKc+tvU2AeqHx/xRK64Gn86jA/HBg==}
     dependencies:
       '@thetribe/eslint-config': 0.5.0(eslint-plugin-import@2.28.1)(eslint@8.2.0)
-      eslint-config-airbnb: 19.0.4(eslint-plugin-import@2.28.1)(eslint-plugin-jsx-a11y@6.7.1)(eslint-plugin-react-hooks@4.2.0)(eslint-plugin-react@7.28.0)(eslint@8.2.0)
+      eslint-config-airbnb: 19.0.4(eslint-plugin-import@2.28.1)(eslint-plugin-jsx-a11y@6.7.1)(eslint-plugin-react-hooks@4.6.0)(eslint-plugin-react@7.28.0)(eslint@8.2.0)
     transitivePeerDependencies:
       - eslint
       - eslint-plugin-import
@@ -5907,7 +5907,7 @@ packages:
       semver: 6.3.1
     dev: true
 
-  /eslint-config-airbnb@19.0.4(eslint-plugin-import@2.28.1)(eslint-plugin-jsx-a11y@6.7.1)(eslint-plugin-react-hooks@4.2.0)(eslint-plugin-react@7.28.0)(eslint@8.2.0):
+  /eslint-config-airbnb@19.0.4(eslint-plugin-import@2.28.1)(eslint-plugin-jsx-a11y@6.7.1)(eslint-plugin-react-hooks@4.6.0)(eslint-plugin-react@7.28.0)(eslint@8.2.0):
     resolution: {integrity: sha512-T75QYQVQX57jiNgpF9r1KegMICE94VYwoFQyMGhrvc+lB8YF2E/M/PYDaQe1AJcWaEgqLE+ErXV1Og/+6Vyzew==}
     engines: {node: ^10.12.0 || ^12.22.0 || ^14.17.0 || >=16.0.0}
     peerDependencies:
@@ -5922,7 +5922,7 @@ packages:
       eslint-plugin-import: 2.28.1(@typescript-eslint/parser@5.62.0)(eslint@8.2.0)
       eslint-plugin-jsx-a11y: 6.7.1(eslint@8.2.0)
       eslint-plugin-react: 7.28.0(eslint@8.2.0)
-      eslint-plugin-react-hooks: 4.2.0(eslint@8.2.0)
+      eslint-plugin-react-hooks: 4.6.0(eslint@8.2.0)
       object.assign: 4.1.4
       object.entries: 1.1.6
     dev: true
@@ -6126,15 +6126,6 @@ packages:
       prettier: 3.0.2
       prettier-linter-helpers: 1.0.0
       synckit: 0.8.5
-    dev: true
-
-  /eslint-plugin-react-hooks@4.2.0(eslint@8.2.0):
-    resolution: {integrity: sha512-623WEiZJqxR7VdxFCKLI6d6LLpwJkGPYKODnkH3D7WpOG5KM8yWueBd8TLsNAetEJNF5iJmolaAKO3F8yzyVBQ==}
-    engines: {node: '>=10'}
-    peerDependencies:
-      eslint: ^3.0.0 || ^4.0.0 || ^5.0.0 || ^6.0.0 || ^7.0.0
-    dependencies:
-      eslint: 8.2.0
     dev: true
 
   /eslint-plugin-react-hooks@4.6.0(eslint@8.2.0):
