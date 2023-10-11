@@ -70,7 +70,7 @@ export class InstanceResponse {
       secondaryColor: instance.secondaryColor,
       secondaryBackgroundColor: instance.secondaryBackgroundColor,
       secondaryDarkColor: instance.secondaryDarkColor,
-      hasConnector: !!(config.connecteurToken && config.connecteurUrl),
+      hasConnector: !!(config.connectorToken && config.connectorUrl),
     });
   }
 }

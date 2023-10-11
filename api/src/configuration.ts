@@ -16,8 +16,8 @@ export type Configuration = {
   keycloak: KeycloakConfiguration;
   adminRole: string;
   defaultTranslationLanguage: string;
-  connecteurUrl: string;
-  connecteurToken: string;
+  connectorUrl: string;
+  connectorToken: string;
   CANCEL_TRESHOLD_IN_MIN: number;
   smtp: SmtpConfiguration;
   logLevel: string;
@@ -54,8 +54,8 @@ export const configuration = (): Configuration => ({
   },
   adminRole: process.env.ADMIN_ROLE || 'admin',
   defaultTranslationLanguage: process.env.DEFAULT_TRANSLATION_LANGUAGE || 'fr',
-  connecteurUrl: process.env.CONNECTEUR_URL,
-  connecteurToken: process.env.CONNECTEUR_TOKEN,
+  connectorUrl: process.env.CONNECTOR_URL,
+  connectorToken: process.env.CONNECTOR_TOKEN,
   CANCEL_TRESHOLD_IN_MIN:
     parseInt(process.env.CANCEL_TRESHOLD_IN_MIN, 10) || 15,
   smtp: {

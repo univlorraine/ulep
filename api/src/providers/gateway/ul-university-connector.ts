@@ -11,11 +11,12 @@ export class UlUniversityConnectorService {
     private readonly httpService: HttpService,
     private readonly keycloak: KeycloakClient,
   ) {}
-  private urlConnecteur = configuration().connecteurUrl;
-  private tokenConnecteur = configuration().connecteurToken;
+  private config = configuration();
 
   async getUserUniversityInfo(token: string): Promise<any> {
-    if (!this.urlConnecteur || !this.tokenConnecteur) {
+    const connectorUrl = this.config.connectorUrl;
+    const connectorToken = this.config.connectorToken;
+    if (!connectorUrl || !connectorToken) {
       return {};
     }
 
@@ -31,11 +32,11 @@ export class UlUniversityConnectorService {
     };
     const requestConfig: AxiosRequestConfig = {
       headers: {
-        Authorization: `Bearer ${this.tokenConnecteur}`,
+        Authorization: `Bearer ${connectorToken}`,
       },
     };
     const res = await firstValueFrom(
-      this.httpService.post(this.urlConnecteur, body, requestConfig).pipe(
+      this.httpService.post(connectorUrl, body, requestConfig).pipe(
         map((axiosResponse: AxiosResponse) => {
           return axiosResponse.data;
         }),

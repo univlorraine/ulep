@@ -122,9 +122,9 @@ spec:
               value: "{{ .Values.api.env.translationsEndpointSuffix }}"
             - name: APP_URL
               value: "https://{{ .Values.api.env.appUrl }}.{{ .Values.domain }}"
-            - name: CONNECTEUR_URL
-              value: "{{ .Values.api.env.connectorURL }}"
-            - name: CONNECTEUR_TOKEN
+            - name: CONNECTOR_URL
+              value: "{{ .Values.api.env.connectorUrl }}"
+            - name: CONNECTOR_TOKEN
               value: "{{ .Values.api.env.connectorToken }}"
           envFrom:
             - secretRef:
