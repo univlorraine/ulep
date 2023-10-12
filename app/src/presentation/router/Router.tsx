@@ -40,6 +40,7 @@ import PrivateRoute from './PrivateRoute';
 import PairingLevelStartPage from '../pages/PairingLevelStartPage';
 import { useStoreState } from '../../store/storeTypes';
 import SuspendedPage from '../pages/SuspendedPage';
+import PairingOtherLanguageSelectedPage from '../pages/PairingOtherLanguageSelectedPage';
 
 const OfflineRouter: React.FC = () => {
     const profile = useStoreState((store) => store.profile);
@@ -87,6 +88,7 @@ const OfflineRouter: React.FC = () => {
             <PrivateRoute exact component={PairingLevelPage} path="/pairing/level" />
             <PrivateRoute exact component={PairingLevelStartPage} path="/pairing/level/start" />
             <PrivateRoute exact component={PairingOtherLanguagesPage} path="/pairing/other-languages" />
+            <PrivateRoute exact component={PairingOtherLanguageSelectedPage} path="/pairing/other-languages/selected" />
             <PrivateRoute exact component={PairingPreferencePage} path="/pairing/preference" />
             <PrivateRoute exact component={PairingQuizzEndPage} path="/pairing/language/quizz/end" />
             <PrivateRoute exact component={PairingQuizzIntroductionPage} path="/pairing/language/quizz/introduction" />

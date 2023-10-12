@@ -6,20 +6,18 @@ import { useConfig } from '../../context/ConfigurationContext';
 import Language from '../../domain/entities/Language';
 import { useStoreActions, useStoreState } from '../../store/storeTypes';
 import OtherLanguageContent from '../components/contents/OtherLanguageContent';
-import OtherLanguageSelectedContent from '../components/contents/OtherLanguageSelectedContent';
 import WebLayoutCentered from '../components/layout/WebLayoutCentered';
 import styles from './css/SignUp.module.css';
 
 const PairingOtherLanguagesPage: React.FC = () => {
     const { t } = useTranslation();
-    const { askForLanguage, configuration, getAllLanguages } = useConfig();
+    const { configuration, getAllLanguages } = useConfig();
     const [showToast] = useIonToast();
     const profile = useStoreState((state) => state.profile);
     const university = profile?.user.university;
     const updateProfileSignUp = useStoreActions((state) => state.updateProfileSignUp);
     const history = useHistory();
     const [languages, setLanguages] = useState<Language[]>([]);
-    const [selectedLanguage, setSelectedLanguage] = useState<Language>();
 
     if (!university) {
         return <Redirect to={'/signup'} />;
@@ -32,7 +30,14 @@ const PairingOtherLanguagesPage: React.FC = () => {
             return await showToast({ message: t(result.message), duration: 1000 });
         }
 
-        return setLanguages(result);
+        return setLanguages(
+            result.filter(
+                (language) =>
+                    profile?.nativeLanguage.code !== language.code &&
+                    !profile?.masteredLanguages?.find((otherLanguage) => language.code === otherLanguage.code) &&
+                    !profile?.learningLanguages?.find((learningLanguage) => language.code === learningLanguage.code)
+            )
+        );
     };
 
     const onOtherLanguageSelected = async (language: Language) => {
@@ -41,27 +46,8 @@ const PairingOtherLanguagesPage: React.FC = () => {
             return history.push(`/pairing/pedagogy`);
         }
 
-        return setSelectedLanguage(language);
-    };
-
-    const onLanguageAsked = async () => {
-        if (!selectedLanguage) {
-            return;
-        }
-
-        const result = await askForLanguage.execute(selectedLanguage);
-
-        if (result instanceof Error) {
-            setSelectedLanguage(undefined);
-            return await showToast({ message: t(result.message), duration: 1000 });
-        }
-
-        history.push(`/pairing/unavailable-language`, {
-            askingStudents: result,
-            codeLanguage: selectedLanguage.code,
-            nameLanguage: selectedLanguage.name,
-        });
-        setSelectedLanguage(undefined);
+        updateProfileSignUp({ learningLanguage: language, isSuggested: true });
+        return history.push(`/pairing/pedagogy`);
     };
 
     useEffect(() => {
@@ -76,12 +62,7 @@ const PairingOtherLanguagesPage: React.FC = () => {
             headerTitle={t('global.pairing_title')}
         >
             <div className={styles.body}>
-                {!selectedLanguage && (
-                    <OtherLanguageContent languages={languages} onLanguageSelected={onOtherLanguageSelected} />
-                )}
-                {selectedLanguage && (
-                    <OtherLanguageSelectedContent language={selectedLanguage} onNextStep={onLanguageAsked} />
-                )}
+                <OtherLanguageContent languages={languages} onLanguageSelected={onOtherLanguageSelected} />
             </div>
         </WebLayoutCentered>
     );

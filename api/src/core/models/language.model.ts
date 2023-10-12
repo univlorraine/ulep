@@ -43,7 +43,10 @@ export class Language {
   }
 
   public canBeLearntInCentralUniversity() {
-    return this.mainUniversityStatus === LanguageStatus.PRIMARY;
+    return (
+      this.mainUniversityStatus === LanguageStatus.PRIMARY ||
+      this.mainUniversityStatus === LanguageStatus.SECONDARY
+    );
   }
 
   public canBeLearntInPartnerUniversity() {
