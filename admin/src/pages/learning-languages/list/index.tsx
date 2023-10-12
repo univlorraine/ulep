@@ -12,6 +12,7 @@ import {
     TextField,
     useGetIdentity,
     useTranslate,
+    TextInput,
 } from 'react-admin';
 import { DisplayRole } from '../../../components/translated';
 import UniversitiesPicker from '../../../components/UniversitiesPicker';
@@ -46,6 +47,11 @@ const LearningLanguageList = () => {
             ]}
             label={translate('learning_languages.list.filters.activeTandem.label')}
             source="hasActiveTandem"
+        />,
+        <TextInput
+            key="userLastname"
+            label={translate('learning_languages.list.filters.user_lastname.label')}
+            source="profile.user.lastname"
         />,
     ];
 

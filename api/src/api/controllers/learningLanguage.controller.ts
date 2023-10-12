@@ -52,6 +52,7 @@ export class LearningLanguageController {
     {
       page,
       limit,
+      lastname,
       universityIds,
       hasActiveTandem,
       hasActionableTandem,
@@ -71,6 +72,7 @@ export class LearningLanguageController {
       orderBy,
       hasActiveTandem,
       hasActionableTandem,
+      lastname,
     });
 
     return new Collection<LearningLanguageWithTandemResponse>({

@@ -263,6 +263,7 @@ export class PrismaLearningLanguageRepository
     orderBy,
     hasActiveTandem,
     hasActionableTandem,
+    lastname,
   }: LearningLanguageRepositoryGetProps): Promise<
     Collection<LearningLanguageWithTandem>
   > {
@@ -280,6 +281,11 @@ export class PrismaLearningLanguageRepository
                 not: UserStatus.BANNED,
               },
             },
+            lastname
+              ? {
+                  lastname: { contains: lastname },
+                }
+              : {},
           ],
         },
       },
