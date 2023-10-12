@@ -1,12 +1,10 @@
-import { Body, Controller, Header, HttpCode, Post } from '@nestjs/common';
+import { Controller, Header, HttpCode, Post, UseGuards } from '@nestjs/common';
 import { UlUniversityConnectorService } from '../../providers/gateway/ul-university-connector';
 import * as Swagger from '@nestjs/swagger';
 import { ConnectorResponse } from '../dtos/universityConnector';
-import { CollectionResponse } from '../decorators';
-
-export interface RetrieveUserUniversityInfoRequest {
-  tokenKeycloak: string;
-}
+import { CollectionResponse, CurrentUser } from '../decorators';
+import { KeycloakUser } from '@app/keycloak';
+import { AuthenticationGuard } from 'src/api/guards';
 
 @Controller('userUniversityInfos')
 @Swagger.ApiTags('userUniversityInfos')
@@ -21,12 +19,12 @@ export class UniversityConnectorController {
   })
   @Swagger.ApiResponse({ type: ConnectorResponse })
   @CollectionResponse(ConnectorResponse)
+  @UseGuards(AuthenticationGuard)
   async retrieveUserInfos(
-    @Body() body: RetrieveUserUniversityInfoRequest,
+    @CurrentUser() user: KeycloakUser,
   ): Promise<ConnectorResponse> {
-    const token = body.tokenKeycloak;
     const resultFromService = await this.gatewayService.getUserUniversityInfo(
-      token,
+      user.universityLogin,
     );
     return ConnectorResponse.fromDomain(resultFromService);
   }

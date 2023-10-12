@@ -1,4 +1,3 @@
-import { KeycloakClient } from '@app/keycloak';
 import { HttpService } from '@nestjs/axios';
 import { ForbiddenException, Injectable } from '@nestjs/common';
 import { AxiosRequestConfig, AxiosResponse } from 'axios';
@@ -7,28 +6,23 @@ import { configuration } from 'src/configuration';
 
 @Injectable()
 export class UlUniversityConnectorService {
-  constructor(
-    private readonly httpService: HttpService,
-    private readonly keycloak: KeycloakClient,
-  ) {}
+  constructor(private readonly httpService: HttpService) {}
   private config = configuration();
 
-  async getUserUniversityInfo(token: string): Promise<any> {
+  async getUserUniversityInfo(universityLogin: string): Promise<any> {
     const connectorUrl = this.config.connectorUrl;
     const connectorToken = this.config.connectorToken;
     if (!connectorUrl || !connectorToken) {
       return {};
     }
 
-    const loginCentral = await this.keycloak.getUserLoginUl(token);
-
-    if (!loginCentral) {
+    if (!universityLogin) {
       throw new ForbiddenException();
     }
 
     const body = {
-      login: loginCentral,
-      clientUser: loginCentral,
+      login: universityLogin,
+      clientUser: universityLogin,
     };
     const requestConfig: AxiosRequestConfig = {
       headers: {

@@ -23,7 +23,6 @@ import RoleRepresentation, {
   UserRepresentation,
   KeycloakUser,
   CreateAdministratorProps,
-  UpdateUserProps,
 } from './keycloak.models';
 import { Client, Issuer, TokenSet } from 'openid-client';
 
@@ -344,35 +343,6 @@ export class KeycloakClient {
   }
 
   /*
-   * Update a new  in Keycloak.
-   */
-  async updateUser(props: UpdateUserProps): Promise<UserRepresentation> {
-    const response = await fetch(
-      `${this.configuration.baseUrl}/admin/realms/${this.configuration.realm}/users/${props.id}`,
-      {
-        method: 'PUT',
-        headers: {
-          'Content-Type': 'application/json',
-          Authorization: `Bearer ${await this.getAccessToken()}`,
-        },
-        body: JSON.stringify({
-          email: props.email,
-          firstName: props.firstName,
-          lastName: props.lastName,
-        }),
-      },
-    );
-    if (!response.ok) {
-      this.logger.error(JSON.stringify(await response.json()));
-      throw new UserAlreadyExistException();
-    }
-
-    const user = await this.getUserByEmail(props.email);
-
-    return user;
-  }
-
-  /*
    * Creates a new user in Keycloak.
    */
   async createAdministrator(
@@ -492,16 +462,6 @@ export class KeycloakClient {
     }
 
     return users[0];
-  }
-
-  /*
-   * Get loginUl from a user
-   */
-  public async getUserLoginUl(token: string): Promise<string> {
-    const userTokenInfos = await this.authenticate(token);
-    const user = await this.getUserByEmail(userTokenInfos.email);
-
-    return user.attributes?.['loginCentral']?.[0];
   }
 
   /*

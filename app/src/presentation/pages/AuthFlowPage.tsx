@@ -23,9 +23,7 @@ const AuthPage: React.FC = () => {
             return history.goBack();
         }
 
-        if (result.accessToken) {
-            return history.push('/signup', { accessToken: result.accessToken });
-        }
+        return history.push('/signup', { fromIdp: true });
     };
 
     useEffect(() => {

@@ -1,6 +1,6 @@
 import { KeycloakClient } from '@app/keycloak';
 import { BadRequestException, Inject, Injectable } from '@nestjs/common';
-import { RessourceAlreadyExists, RessourceDoesNotExist } from 'src/core/errors';
+import { RessourceDoesNotExist } from 'src/core/errors';
 import { Gender, Role, User } from 'src/core/models';
 import {
   COUNTRY_REPOSITORY,
@@ -41,12 +41,6 @@ export class CreateUserUsecase {
   ) {}
 
   async execute(command: CreateUserCommand) {
-    const doesUserExist = await this.userRepository.ofEmail(command.email);
-
-    if (doesUserExist) {
-      throw new RessourceAlreadyExists();
-    }
-
     const university = await this.universityRepository.ofId(command.university);
     if (!university) {
       throw new RessourceDoesNotExist('University does not exist');
@@ -88,20 +82,7 @@ export class CreateUserUsecase {
         origin: 'api',
       });
     } else {
-      const currentKeycloakUser = await this.keycloak.getUserByEmail(
-        command.email,
-      );
-
-      if (!currentKeycloakUser) {
-        throw new RessourceDoesNotExist();
-      }
-
-      keycloakUser = await this.keycloak.updateUser({
-        id: currentKeycloakUser.id,
-        email: command.email,
-        firstName: command.firstname,
-        lastName: command.lastname,
-      });
+      keycloakUser = await this.keycloak.getUserByEmail(command.email);
     }
 
     let user = await this.userRepository.ofId(keycloakUser.id);

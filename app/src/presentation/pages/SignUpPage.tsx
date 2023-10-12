@@ -14,7 +14,7 @@ import WebLayoutCentered from '../components/layout/WebLayoutCentered';
 import styles from './css/SignUp.module.css';
 
 interface SignUpPageParams {
-    accessToken: string;
+    fromIdp: boolean;
 }
 
 const SignUpPage: React.FC = () => {
@@ -24,7 +24,7 @@ const SignUpPage: React.FC = () => {
     const [showToast] = useIonToast();
     const history = useHistory();
     const location = useLocation<SignUpPageParams>();
-    const { accessToken } = location.state || {};
+    const { fromIdp } = location.state || {};
     const [countries, setCountries] = useState<DropDownItem<Country>[]>([]);
     const [country, setCountry] = useState<Country>();
     const [department, setDepartment] = useState<string>('');
@@ -76,8 +76,8 @@ const SignUpPage: React.FC = () => {
         return setUniversity(country.universities[0]);
     };
 
-    const getPersonInfos = async (token: string) => {
-        const result = await retrievePerson.execute(token);
+    const getPersonInfos = async () => {
+        const result = await retrievePerson.execute();
         if (result instanceof Error) {
             return await showToast({ message: t(result.message), duration: 1000 });
         }
@@ -107,10 +107,10 @@ const SignUpPage: React.FC = () => {
     }, []);
 
     useEffect(() => {
-        if (accessToken) {
-            getPersonInfos(accessToken);
+        if (fromIdp) {
+            getPersonInfos();
         }
-    }, [accessToken]);
+    }, [fromIdp]);
 
     return (
         <WebLayoutCentered

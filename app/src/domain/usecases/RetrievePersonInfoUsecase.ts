@@ -7,15 +7,13 @@ import RetrievePersonInfoUsecaseInterface from '../interfaces/RetrievePersonInfo
 class RetrievePersonInfoUsecase implements RetrievePersonInfoUsecaseInterface {
     constructor(private readonly domainHttpAdapter: HttpAdapterInterface) {}
 
-    async execute(tokenKeycloak: string): Promise<CentralStudent | Error> {
-        const requestBody = { tokenKeycloak };
+    async execute(): Promise<CentralStudent | Error> {
         try {
             const httpResponse: HttpResponse<CentralStudentCommand> = await this.domainHttpAdapter.post(
                 `/userUniversityInfos`,
-                requestBody,
+                {},
                 undefined,
-                'application/json',
-                false
+                'application/json'
             );
             if (!httpResponse.parsedBody) {
                 return new Error('errors.gateway');

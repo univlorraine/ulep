@@ -52,21 +52,6 @@ export class PrismaUserRepository implements UserRepository {
     return { items: users, totalItems: count };
   }
 
-  async ofEmail(email: string): Promise<User | null> {
-    const instance = await this.prisma.users.findUnique({
-      where: {
-        email,
-      },
-      include: UserRelations,
-    });
-
-    if (!instance) {
-      return null;
-    }
-
-    return userMapper(instance);
-  }
-
   async ofId(id: string): Promise<User | null> {
     const instance = await this.prisma.users.findUnique({
       where: {

@@ -42,11 +42,9 @@ const SignUpInformationsPage: React.FC = () => {
     const [errorMessage, setErrorMessage] = useState<{ type: string; message: string }>();
 
     const allFieldHasValue = () => {
-        if (centralLastname) {
-            return email && gender && age && firstname && lastname && CGUChecked;
-        } else {
-            return email && password && confirmPassword && gender && age && firstname && lastname && CGUChecked;
-        }
+        return email && gender && age && firstname && lastname && CGUChecked && (
+           centralLastname ? true : password && confirmPassword
+        );
     };
 
     const openGallery = async () => {
@@ -83,7 +81,7 @@ const SignUpInformationsPage: React.FC = () => {
             return setErrorMessage({ type: 'password', message: t('signup_informations_page.error_password') });
         }
 
-        if (centralLastname && password !== confirmPassword) {
+        if (!centralLastname && password !== confirmPassword) {
             return setErrorMessage({ type: 'confirm', message: t('signup_informations_page.error_confirm_password') });
         }
 

@@ -1,6 +1,6 @@
 import CentralStudent from '../entities/CentralStudent';
 
 interface RetrievePersonInfoUsecaseInterface {
-    execute(tokenKeycloak: string): Promise<CentralStudent | Error>;
+    execute(): Promise<CentralStudent | Error>;
 }
 export default RetrievePersonInfoUsecaseInterface;
