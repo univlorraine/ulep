@@ -245,7 +245,7 @@ export class GenerateTandemsUsecase {
                   firstname: pair.owner.profile.user.firstname,
                   partnerFirstname: pair.target.profile.user.firstname,
                   partnerLastname: pair.target.profile.user.lastname,
-                  universityName: pair.owner.profile.user.university.name,
+                  universityName: pair.target.profile.user.university.name,
                 },
               );
             notificationEmails.push({
@@ -263,7 +263,7 @@ export class GenerateTandemsUsecase {
                   firstname: pair.target.profile.user.firstname,
                   partnerFirstname: pair.owner.profile.user.firstname,
                   partnerLastname: pair.owner.profile.user.lastname,
-                  universityName: pair.target.profile.user.university.name,
+                  universityName: pair.owner.profile.user.university.name,
                 },
               );
 

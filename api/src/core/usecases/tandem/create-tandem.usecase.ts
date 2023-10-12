@@ -176,7 +176,7 @@ export class CreateTandemUsecase {
               firstname: learningLanguage1.profile.user.firstname,
               partnerFirstname: learningLanguage2.profile.user.firstname,
               partnerLastname: learningLanguage2.profile.user.lastname,
-              universityName: learningLanguage1.profile.user.university.name,
+              universityName: learningLanguage2.profile.user.university.name,
             },
           );
         await this.emailGateway.send({
@@ -194,7 +194,7 @@ export class CreateTandemUsecase {
               firstname: learningLanguage2.profile.user.firstname,
               partnerFirstname: learningLanguage1.profile.user.firstname,
               partnerLastname: learningLanguage1.profile.user.lastname,
-              universityName: learningLanguage2.profile.user.university.name,
+              universityName: learningLanguage1.profile.user.university.name,
             },
           );
 
