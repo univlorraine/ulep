@@ -65,7 +65,7 @@ const OtherLanguageContent: React.FC<OtherLanguageContentProps> = ({ languages, 
                                 <Checkbox
                                     isSelected={language.code === selectedLaguage?.code}
                                     onPressed={() => setSelectedLanguage(language)}
-                                    name={language.name}
+                                    name={t(`languages_code.${language.code}`)}
                                     textClass={pairingOtherLanguagesStyles['checkbox-text']}
                                 />
                             </div>

@@ -22,14 +22,14 @@ const OtherLanguageSelectedContent: React.FC<OtherLanguageSelectedContentProps> 
                 </p>
                 <div className={otherLanguagesSelectedStyles['language-container']}>{`${codeLanguageToFlag(
                     language.code
-                )} ${language.name}`}</div>
+                )} ${t(`languages_code.${language.code}`)}`}</div>
 
                 <img alt="FAQ" className={otherLanguagesSelectedStyles.image} src={FAQPng} />
 
                 <p className={otherLanguagesSelectedStyles.explaination}>
-                    {`${t('pairing_other_languages_page.selected_language.explain_first_start')} ${language.name} ${t(
-                        'pairing_other_languages_page.selected_language.explain_first_end'
-                    )}`}
+                    {`${t('pairing_other_languages_page.selected_language.explain_first_start')} ${t(
+                        `languages_code.${language.code}`
+                    )} ${t('pairing_other_languages_page.selected_language.explain_first_end')}`}
                     <br />
                     <br />
                     {t('pairing_other_languages_page.selected_language.explain_second')}
