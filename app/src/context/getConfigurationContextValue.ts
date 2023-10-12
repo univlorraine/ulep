@@ -20,6 +20,7 @@ import { GetTokenFromCodeUsecase, GetInitialUrlUsecase } from '../domain/usecase
 import GetUserUsecase from '../domain/usecases/GetUserUsecase';
 import LoginUsecase from '../domain/usecases/LoginUsecase';
 import ResetPasswordUsecase from '../domain/usecases/ResetPasswordUsecase';
+import RetrievePersonInfoUsecase from '../domain/usecases/RetrievePersonInfoUsecase';
 import UpdateAvatarUsecase from '../domain/usecases/UpdateAvatarUsecase';
 import UpdateNotificationPermissionUsecase from '../domain/usecases/UpdateNotificationPermissionUsecase';
 import { ConfigContextValueType } from './configurationContextTypes';
@@ -35,12 +36,7 @@ const getConfigContextValue = (
 ): ConfigContextValueType => {
     const cameraAdapter = new CameraAdapter();
     const apiUrl = import.meta.env.VITE_API_URL ?? 'https://api.ulep.thestaging.io';
-    const domainHttpAdapter = new DomainHttpAdapter(
-        apiUrl,
-        accessToken,
-        refreshToken,
-        languageCode
-    );
+    const domainHttpAdapter = new DomainHttpAdapter(apiUrl, accessToken, refreshToken, languageCode);
 
     const askForAccountDeletion = new AskForAccountDeletion(domainHttpAdapter);
     const askForLanguage = new AskForLanguageUsecase(domainHttpAdapter);
@@ -65,6 +61,7 @@ const getConfigContextValue = (
     const updateNotificationPermission = new UpdateNotificationPermissionUsecase(domainHttpAdapter);
 
     const createUser = new CreateUserUsecase(domainHttpAdapter, login, setUser);
+    const retrievePerson = new RetrievePersonInfoUsecase(domainHttpAdapter);
 
     return {
         askForAccountDeletion,
@@ -89,6 +86,7 @@ const getConfigContextValue = (
         resetPassword,
         updateAvatar,
         updateNotificationPermission,
+        retrievePerson,
         getTokenFromCodeUsecase,
         getInitialUrlUsecase,
     };

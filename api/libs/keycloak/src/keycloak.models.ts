@@ -72,7 +72,6 @@ interface KeycloakKey {
   kid: string;
   x5c: string;
 }
-
 export interface CreateUserProps {
   email: string;
   password: string;

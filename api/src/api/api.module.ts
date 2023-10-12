@@ -25,9 +25,12 @@ import { RoutineExecutionController } from './controllers/routine-execution.cont
 import { InstanceController } from 'src/api/controllers/instance.controller';
 import { STORAGE_INTERFACE } from 'src/core/ports/storage.interface';
 import { MinioStorage } from 'src/providers/storage/minio.storage';
+import { HttpModule } from '@nestjs/axios';
+import { UniversityConnectorController } from './controllers/universityConnector.controller';
+import { UlUniversityConnectorService } from 'src/providers/gateway/ul-university-connector';
 
 @Module({
-  imports: [CoreModule, TerminusModule],
+  imports: [CoreModule, TerminusModule, HttpModule],
   controllers: [
     CampusController,
     CountryController,
@@ -46,6 +49,7 @@ import { MinioStorage } from 'src/providers/storage/minio.storage';
     UserController,
     LearningLanguageController,
     RoutineExecutionController,
+    UniversityConnectorController
   ],
   providers: [
     PrismaService,
@@ -61,6 +65,7 @@ import { MinioStorage } from 'src/providers/storage/minio.storage';
       provide: STORAGE_INTERFACE,
       useClass: MinioStorage,
     },
+    UlUniversityConnectorService,
   ],
 })
 export class ApiModule {}

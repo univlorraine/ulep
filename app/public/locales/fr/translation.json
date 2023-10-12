@@ -12,7 +12,8 @@
         "ask_language": { "conflit": "Vous avez déjà demandé cette langue" },
         "global": "Une erreur est survenue",
         "userDoesntExist": "L'utilisateur n'existe pas",
-        "userWrongCredentials": "Le mot de passe ou l'email est incorrect"
+        "userWrongCredentials": "Le mot de passe ou l'email est incorrect",
+        "connecteur":"Erreur lors de la récupération des informations utilisateur"
     },
     "error_page": {
         "title": "Une erreur est survenue",

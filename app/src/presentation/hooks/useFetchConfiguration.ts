@@ -15,6 +15,7 @@ interface InstanceCommand {
     secondaryColor: string;
     secondaryBackgroundColor: string;
     secondaryDarkColor: string;
+    hasConnector: boolean;
 }
 
 const useFetchConfiguration = (apiUrl: string) => {
@@ -47,7 +48,8 @@ const useFetchConfiguration = (apiUrl: string) => {
                     result.primaryBackgroundColor,
                     result.secondaryColor,
                     result.secondaryDarkColor,
-                    result.secondaryBackgroundColor
+                    result.secondaryBackgroundColor,
+                    result.hasConnector
                 )
             );
             document.documentElement.style.setProperty('--primary-color', result.primaryColor);

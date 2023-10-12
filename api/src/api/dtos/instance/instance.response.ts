@@ -1,5 +1,6 @@
 import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
 import { Expose } from 'class-transformer';
+import { configuration } from 'src/configuration';
 import { Instance } from 'src/core/models/Instance.model';
 
 export class InstanceResponse {
@@ -47,11 +48,16 @@ export class InstanceResponse {
   @Expose({ groups: ['read'] })
   secondaryDarkColor: string;
 
+  @ApiProperty({ type: 'boolean' })
+  @Expose({ groups: ['read'] })
+  hasConnector: boolean;
+
   constructor(partial: Partial<InstanceResponse>) {
     Object.assign(this, partial);
   }
 
   static fromDomain(instance: Instance): InstanceResponse {
+    const config = configuration();
     return new InstanceResponse({
       name: instance.name,
       email: instance.email,
@@ -64,6 +70,7 @@ export class InstanceResponse {
       secondaryColor: instance.secondaryColor,
       secondaryBackgroundColor: instance.secondaryBackgroundColor,
       secondaryDarkColor: instance.secondaryDarkColor,
+      hasConnector: !!(config.connectorToken && config.connectorUrl),
     });
   }
 }

@@ -19,14 +19,11 @@ const AuthPage: React.FC = () => {
         const result = await getTokenFromCodeUsecase.execute({ code, redirectUri: `${window.location.origin}/auth` });
 
         if (result instanceof Error) {
-            showToast(t('global.error'), 5000);
+            await showToast(t('global.error'), 5000);
             return history.goBack();
         }
 
-        if ('accessToken' in result) {
-            // TODO(future): call connector here to initialize store with values from university ?
-            return history.push('/signup/informations');
-        }
+        return history.push('/signup', { fromIdp: true });
     };
 
     useEffect(() => {

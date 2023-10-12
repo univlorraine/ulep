@@ -23,7 +23,8 @@ export const ConfigContext = createContext<ConfigContextValueType>(
             '#EDDF5E',
             '#8BC4C4',
             '#4B7676',
-            '#7CB8B8'
+            '#7CB8B8',
+            false
         )
     )
 );

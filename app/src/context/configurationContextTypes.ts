@@ -19,6 +19,7 @@ import GetTokenFromCodeUsecaseInterface from '../domain/interfaces/AuthStandardF
 import GetUserUsecaseInterface from '../domain/interfaces/GetUserUsecase.interface';
 import LoginUsecaseInterface from '../domain/interfaces/LoginUsecase.interface';
 import ResetPasswordUsecaseInterface from '../domain/interfaces/ResetPasswordUsecase.interface';
+import RetrievePersonInfoUsecaseInterface from '../domain/interfaces/RetrievePersonInfoUsecase.interface';
 import UpdateAvatarUsecaseInterface from '../domain/interfaces/UpdateAvatarUsecase.interface';
 import UpdateNotificationPermissionUsecaseInterface from '../domain/interfaces/UpdateNotificationPermissionUsecase.interface';
 import { GetInitialUrlUsecase } from '../domain/usecases/AuthStandardFlow/GetInitialUrlUsecase';
@@ -46,6 +47,7 @@ export interface ConfigContextValueType {
     resetPassword: ResetPasswordUsecaseInterface;
     updateAvatar: UpdateAvatarUsecaseInterface;
     updateNotificationPermission: UpdateNotificationPermissionUsecaseInterface;
+    retrievePerson: RetrievePersonInfoUsecaseInterface;
     getTokenFromCodeUsecase: GetTokenFromCodeUsecaseInterface;
     getInitialUrlUsecase: GetInitialUrlUsecase;
 }

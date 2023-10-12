@@ -50,7 +50,7 @@ const httpClient = (url: string, options: any = {}) => {
 
 const dataProvider = simpleRestProvider(`${process.env.REACT_APP_API_URL}`, httpClient);
 
-const customDataProvider: DataProvider = {
+const customDataProvider = {
     ...dataProvider,
     create: async (resource: string, params: CreateParams) => {
         const url = new URL(`${process.env.REACT_APP_API_URL}/${resource}`);
@@ -300,6 +300,6 @@ const customDataProvider: DataProvider = {
             throw new Error(`API request failed with status ${response.status}`);
         }
     },
-};
+} as unknown as DataProvider;
 
 export default customDataProvider;

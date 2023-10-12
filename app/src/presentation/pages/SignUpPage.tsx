@@ -1,7 +1,7 @@
 import { useIonToast } from '@ionic/react';
 import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { useHistory } from 'react-router';
+import { useHistory, useLocation } from 'react-router';
 import { useConfig } from '../../context/ConfigurationContext';
 import Country from '../../domain/entities/Country';
 import University from '../../domain/entities/University';
@@ -13,12 +13,18 @@ import TextInput from '../components/TextInput';
 import WebLayoutCentered from '../components/layout/WebLayoutCentered';
 import styles from './css/SignUp.module.css';
 
+interface SignUpPageParams {
+    fromIdp: boolean;
+}
+
 const SignUpPage: React.FC = () => {
     const { t } = useTranslation();
-    const { configuration, getAllCountries, getInitialUrlUsecase } = useConfig();
+    const { configuration, getAllCountries, getInitialUrlUsecase, retrievePerson } = useConfig();
     const updateProfileSignUp = useStoreActions((state) => state.updateProfileSignUp);
     const [showToast] = useIonToast();
     const history = useHistory();
+    const location = useLocation<SignUpPageParams>();
+    const { fromIdp } = location.state || {};
     const [countries, setCountries] = useState<DropDownItem<Country>[]>([]);
     const [country, setCountry] = useState<Country>();
     const [department, setDepartment] = useState<string>('');
@@ -70,9 +76,41 @@ const SignUpPage: React.FC = () => {
         return setUniversity(country.universities[0]);
     };
 
+    const getPersonInfos = async () => {
+        const result = await retrievePerson.execute();
+        if (result instanceof Error) {
+            return await showToast({ message: t(result.message), duration: 1000 });
+        }
+        switch (selectedRole) {
+            case 'student':
+                if (result.diploma) {
+                    setDiplome(result.diploma);
+                }
+                break;
+            case 'staff':
+                break;
+            default:
+                break;
+        }
+        const firstname = result.firstname;
+        const lastname = result.lastname;
+        const age = result.age;
+        const email = result.email;
+        const gender = result.gender === 'M.' ? 'male' : 'female';
+        updateProfileSignUp({ diplome: result.diploma, role: selectedRole });
+
+        history.push('/signup/informations', { centralFirstname: firstname, centralLastname: lastname, centralAge: age, centralEmail: email, centralGender: gender as Gender});
+    };
+
     useEffect(() => {
         getSignUpData();
     }, []);
+
+    useEffect(() => {
+        if (fromIdp) {
+            getPersonInfos();
+        }
+    }, [fromIdp]);
 
     return (
         <WebLayoutCentered
@@ -121,10 +159,11 @@ const SignUpPage: React.FC = () => {
                     />
                 </div>
 
-                {university && university.isCentral && (
+                {university && university.isCentral && configuration.hasConnector && (
                     <button
                         className="tertiary-button large-margin-vertical"
                         onClick={async () => {
+                            updateProfileSignUp({ country, department, role: selectedRole, university });
                             const redirectUri = encodeURIComponent(`${window.location.origin}/auth`);
                             window.location.href = getInitialUrlUsecase.execute(redirectUri);
                         }}
