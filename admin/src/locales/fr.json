@@ -357,6 +357,9 @@
                         "yes": "Oui",
                         "no": "Non"
                     }
+                },
+                "user_lastname": {
+                    "label": "Nom d'utilisateur"
                 }
             },
             "globalRoutineModal": {
