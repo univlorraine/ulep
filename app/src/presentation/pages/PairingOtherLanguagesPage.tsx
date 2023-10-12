@@ -1,7 +1,7 @@
 import { useIonToast } from '@ionic/react';
 import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { Redirect, useHistory, useParams } from 'react-router';
+import { Redirect, useHistory } from 'react-router';
 import { useConfig } from '../../context/ConfigurationContext';
 import Language from '../../domain/entities/Language';
 import { useStoreActions, useStoreState } from '../../store/storeTypes';
@@ -13,15 +13,13 @@ import styles from './css/SignUp.module.css';
 const PairingOtherLanguagesPage: React.FC = () => {
     const { t } = useTranslation();
     const { askForLanguage, configuration, getAllLanguages } = useConfig();
-    const isSignUp = useParams<{ prefix?: string }>().prefix;
     const [showToast] = useIonToast();
-    const user = useStoreState((state) => state.user);
     const profile = useStoreState((state) => state.profile);
+    const university = profile?.user.university;
     const updateProfileSignUp = useStoreActions((state) => state.updateProfileSignUp);
     const history = useHistory();
     const [languages, setLanguages] = useState<Language[]>([]);
     const [selectedLanguage, setSelectedLanguage] = useState<Language>();
-    const university = user?.university || profile?.user.university;
 
     if (!university) {
         return <Redirect to={'/signup'} />;
@@ -40,7 +38,7 @@ const PairingOtherLanguagesPage: React.FC = () => {
     const onOtherLanguageSelected = async (language: Language) => {
         if (language.code === '*') {
             updateProfileSignUp({ learningLanguage: language, learningLanguageLevel: 'A0' });
-            return history.push(`${isSignUp ? '/' + isSignUp : '/'}pairing/pedagogy`);
+            return history.push(`/pairing/pedagogy`);
         }
 
         return setSelectedLanguage(language);
@@ -58,7 +56,7 @@ const PairingOtherLanguagesPage: React.FC = () => {
             return await showToast({ message: t(result.message), duration: 1000 });
         }
 
-        history.push(`${isSignUp ? '/' + isSignUp : '/'}pairing/unavailable-language`, {
+        history.push(`/pairing/unavailable-language`, {
             askingStudents: result,
             codeLanguage: selectedLanguage.code,
             nameLanguage: selectedLanguage.name,
