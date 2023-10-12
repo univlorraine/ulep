@@ -281,11 +281,9 @@ export class PrismaLearningLanguageRepository
                 not: UserStatus.BANNED,
               },
             },
-            lastname
-              ? {
-                  lastname: { contains: lastname },
-                }
-              : {},
+            {
+              lastname: { contains: lastname || '' },
+            },
           ],
         },
       },
