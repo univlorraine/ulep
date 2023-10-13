@@ -26,6 +26,9 @@ export class CreateUserCommand {
   role: Role;
   countryCode: string;
   code?: string;
+  division?: string;
+  diploma?: string;
+  staffFunction?: string;
 }
 
 @Injectable()
@@ -99,6 +102,9 @@ export class CreateUserUsecase {
           university: university,
           role: command.role,
           country: country.code,
+          division: command.division,
+          diploma: command.diploma,
+          staffFunction: command.staffFunction,
         }),
       );
     }
