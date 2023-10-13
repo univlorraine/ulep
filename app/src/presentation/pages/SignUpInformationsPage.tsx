@@ -96,6 +96,9 @@ const SignUpInformationsPage: React.FC = () => {
             profileSignUp.university,
             profileSignUp.role,
             profileSignUp.country.code,
+            profileSignUp.department,
+            profileSignUp.diplome,
+            profileSignUp.staffFunction,
             profilePicture
         );
 
