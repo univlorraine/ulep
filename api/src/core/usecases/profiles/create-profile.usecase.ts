@@ -19,6 +19,12 @@ import {
   Profile,
   User,
 } from 'src/core/models';
+import { EMAIL_TEMPLATE_IDS } from 'src/core/models/email-content.model';
+import {
+  EMAIL_TEMPLATE_REPOSITORY,
+  EmailTemplateRepository,
+} from 'src/core/ports/email-template.repository';
+import { EMAIL_GATEWAY, EmailGateway } from 'src/core/ports/email.gateway';
 import {
   INTEREST_REPOSITORY,
   InterestRepository,
@@ -81,6 +87,10 @@ export class CreateProfileUsecase {
     private readonly objectiveRepository: LearningObjectiveRepository,
     @Inject(UUID_PROVIDER)
     private readonly uuidProvider: UuidProviderInterface,
+    @Inject(EMAIL_GATEWAY)
+    private readonly emailGateway: EmailGateway,
+    @Inject(EMAIL_TEMPLATE_REPOSITORY)
+    private readonly emailTemplateRepository: EmailTemplateRepository,
   ) {}
 
   async execute(command: CreateProfileCommand): Promise<Profile> {
@@ -174,6 +184,17 @@ export class CreateProfileUsecase {
     });
 
     await this.profilesRepository.create(profile);
+
+    await this.emailGateway.send({
+      recipient: profile.user.email,
+      email: await this.emailTemplateRepository.getEmail(
+        EMAIL_TEMPLATE_IDS.WELCOME,
+        profile.nativeLanguage.code,
+        {
+          firstname: profile.user.firstname,
+        },
+      ),
+    });
 
     return profile;
   }
