@@ -1,4 +1,4 @@
-import { Inject, Injectable } from '@nestjs/common';
+import { Inject, Injectable, Logger } from '@nestjs/common';
 import { USER_REPOSITORY, UserRepository } from '../../ports/user.repository';
 import { RessourceDoesNotExist } from 'src/core/errors';
 import { User, UserStatus } from 'src/core/models';
@@ -15,6 +15,7 @@ export class UpdateUserCommand {
 
 @Injectable()
 export class UpdateUserUsecase {
+  private logger = new Logger('UpsateUserUsecase');
   constructor(
     @Inject(USER_REPOSITORY)
     private readonly userRepository: UserRepository,
@@ -32,6 +33,8 @@ export class UpdateUserUsecase {
       user.status !== UserStatus.BANNED &&
       command.status === UserStatus.BANNED
     ) {
+      this.logger.verbose(`User ${user.id} has been banned`);
+
       await this.tandemRepository.disableTandemsForUser(user.id);
     }
 
