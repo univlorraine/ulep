@@ -10,6 +10,10 @@ export class PrismaInstanceRepository implements InstanceRepository {
   async getInstance(): Promise<Instance> {
     const instance = await this.prisma.instance.findFirst({});
 
+    if (!instance) {
+      return null;
+    }
+
     return instanceMapper(instance);
   }
   async update(instance: Instance): Promise<Instance> {

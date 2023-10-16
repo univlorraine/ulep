@@ -79,7 +79,11 @@ const LearningLanguageList = () => {
                         />
                     }
                     exporter={false}
-                    filter={{ universityIds: identity.universityId }}
+                    filter={{
+                        universityIds: identity?.isCentralUniversity
+                            ? [...selectedUniversityIds, identity.universityId]
+                            : identity.universityId,
+                    }}
                     filters={filters}
                 >
                     <Datagrid bulkActionButtons={false} rowClick="show">
