@@ -4,7 +4,6 @@
     border-radius: 5px;
     display: flex;
     flex-direction: column;
-    height: 50%;
     justify-content: center;
     overflow: auto; /* to avoid collapse effect */
     padding: 0px 25px;
@@ -46,13 +45,20 @@
 }
 
 @media (min-width: 768px) {
+    .icons {
+        height: auto;
+        width: auto;
+        min-height: 20vh;
+        min-width: 20vh;
+    }
+
     .connect-div,
     .signup-div {
-        padding: 0 118px;
+        padding: 10px 118px;
     }
 
     .outer-div {
-        padding: 60px;
+        padding: 5vh;
     }
 
     .connect-div {

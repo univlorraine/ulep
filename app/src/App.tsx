@@ -71,6 +71,7 @@ const AppContext = () => {
     return (
         <ConfigContext.Provider
             value={getConfigContextValue(
+                apiUrl,
                 i18n.language,
                 accessToken,
                 refreshToken,

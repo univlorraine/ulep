@@ -54,9 +54,6 @@ const OfflineRouter: React.FC = () => {
             <Route exact path="/">
                 <WelcomePage />
             </Route>
-            <Route exact path="/home">
-                <HomePage />
-            </Route>
             <Route exact path="/connect">
                 <ConnectPage />
             </Route>
@@ -75,6 +72,7 @@ const OfflineRouter: React.FC = () => {
             <Route exact path="/auth">
                 <AuthFlowPage />
             </Route>
+            <PrivateRoute exact component={HomePage} path="/home" />
             <MobileRoute exact component={TandemProfilePage} path={'/tandem-profil'} />
             <MobileRoute exact component={ProfilePage} path={'/profil'} />
             <MobileRoute exact component={ReportPage} path={'/report'} />
