@@ -64,6 +64,21 @@ export class CreateUserRequest implements CreateUserCommand {
   @IsString()
   @Length(2, 2)
   countryCode: string;
+
+  @Swagger.ApiProperty({ type: 'string' })
+  @IsString()
+  @IsOptional()
+  division?: string;
+
+  @Swagger.ApiProperty({ type: 'string' })
+  @IsString()
+  @IsOptional()
+  diploma?: string;
+
+  @Swagger.ApiProperty({ type: 'string' })
+  @IsString()
+  @IsOptional()
+  staffFunction?: string;
 }
 
 export class UpdateUserRequest {

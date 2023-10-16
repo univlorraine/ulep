@@ -138,6 +138,9 @@ model Users {
   deactivated        Boolean              @default(false)
   deactivated_reason String?
   accepts_email      Boolean              @default(true)
+  division           String?
+  diploma            String?
+  staff_function     String?
   country_code_id    String?
   image_id           String?              @unique
   created_at         DateTime             @default(now())
