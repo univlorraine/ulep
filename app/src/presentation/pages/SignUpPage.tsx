@@ -159,7 +159,7 @@ const SignUpPage: React.FC = () => {
                     />
                 </div>
 
-                {university && university.isCentral && configuration.hasConnector && (
+                {university && university.isCentral && (
                     <button
                         className="tertiary-button large-margin-vertical"
                         onClick={async () => {
