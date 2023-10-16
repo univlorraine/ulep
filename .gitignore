@@ -8,7 +8,7 @@ Thumbs.db
 
 # IDE - VSCode
 *.code-workspace
-/.vscode
+*.vscode
 .vscode/*
 !.vscode/settings.json
 !.vscode/tasks.json
@@ -19,7 +19,4 @@ helm/project/old
 
 # Docker data
 docker/minio/.minio.sys
-helm/weblate/values-local.yaml
-helm/project/charts/ulep-user-provider/values-local.yaml
-helm/project/values-local.yaml
-helm/temp.yaml
+values-local.yaml
