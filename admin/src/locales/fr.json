@@ -4,6 +4,7 @@
         "create": {
             "email": "Veuillez saisir l'email du nouvel administrateur",
             "error": "Une erreur est survenue lors de la création d'un administrateur",
+            "password": "Veuillez saisir un mot de passe pour l'administrateur ( 1 majuscule, 1 minuscule et 1 chiffre )",
             "title": "Création d'un administrateur",
             "university": "Veuillez sélectionner une université pour l'administrateur"
         },
@@ -52,6 +53,7 @@
         "language": "Langue",
         "lastname": "Nom",
         "new_translation": "Nouvelle traduction",
+        "password": "Mot de passe",
         "reported": "Signalé",
         "role": "Role",
         "save": "Enregistrer",

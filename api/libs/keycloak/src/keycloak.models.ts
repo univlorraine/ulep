@@ -85,6 +85,7 @@ export interface CreateUserProps {
 
 export interface CreateAdministratorProps {
   email: string;
+  password: string;
   universityId?: string;
 }
 

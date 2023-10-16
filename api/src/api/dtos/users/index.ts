@@ -132,6 +132,10 @@ export class CreateAdministratorRequest {
   @IsUUID()
   @IsOptional()
   universityId?: string;
+
+  @Swagger.ApiProperty({ type: 'string' })
+  @IsString()
+  password: string;
 }
 export class UserResponse {
   @Swagger.ApiProperty({ type: 'string', format: 'uuid' })

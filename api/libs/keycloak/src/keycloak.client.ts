@@ -359,6 +359,13 @@ export class KeycloakClient {
         body: JSON.stringify({
           email: props.email,
           enabled: true,
+          credentials: [
+            {
+              type: 'password',
+              value: props.password,
+              temporary: false,
+            },
+          ],
           attributes: {
             universityId: props.universityId,
           },
