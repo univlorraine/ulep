@@ -34,6 +34,7 @@ const Store = createStore<TokenStoreTypes>(
                 state.profile = undefined;
                 state.refreshToken = '';
                 state.user = undefined;
+                state.apiUrl = '';
             }),
             profile: undefined,
             profileSignUp: new ProfileSignUp(),

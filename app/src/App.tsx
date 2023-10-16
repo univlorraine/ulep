@@ -1,5 +1,5 @@
 import { Device } from '@capacitor/device';
-import { IonApp, IonLoading, setupIonicReact } from '@ionic/react';
+import { IonApp, IonContent, IonLoading, IonPage, setupIonicReact } from '@ionic/react';
 import { IonReactRouter } from '@ionic/react-router';
 import { StoreProvider, useStoreRehydrated } from 'easy-peasy';
 import { useEffect } from 'react';
@@ -64,6 +64,7 @@ const AppContext = () => {
         return <ErrorPage />;
     }
 
+    //TODO(future): Real loader rather than just IonLoading doing nothing
     if (!configuration || loading) {
         return <IonLoading />;
     }
