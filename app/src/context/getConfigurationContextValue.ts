@@ -26,6 +26,7 @@ import UpdateNotificationPermissionUsecase from '../domain/usecases/UpdateNotifi
 import { ConfigContextValueType } from './configurationContextTypes';
 
 const getConfigContextValue = (
+    apiUrl: string,
     languageCode: string,
     accessToken: string,
     refreshToken: string,
@@ -35,8 +36,7 @@ const getConfigContextValue = (
     configuration: Configuration
 ): ConfigContextValueType => {
     const cameraAdapter = new CameraAdapter();
-    const apiUrl = import.meta.env.VITE_API_URL ?? 'https://api.ulep.thestaging.io';
-    const domainHttpAdapter = new DomainHttpAdapter(apiUrl, accessToken, refreshToken, languageCode);
+    const domainHttpAdapter = new DomainHttpAdapter(apiUrl, accessToken, refreshToken, languageCode, setTokens);
 
     const askForAccountDeletion = new AskForAccountDeletion(domainHttpAdapter);
     const askForLanguage = new AskForLanguageUsecase(domainHttpAdapter);

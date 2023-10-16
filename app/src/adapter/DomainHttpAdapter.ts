@@ -28,12 +28,15 @@ class DomainHttpAdapter extends BaseHttpAdapter implements HttpAdapterInterface 
 
     refreshToken: string = '';
 
-    constructor(apiUrl: string, accessToken: string, refreshToken: string, languageCode: string) {
+    setTokens: Function;
+
+    constructor(apiUrl: string, accessToken: string, refreshToken: string, languageCode: string, setTokens: Function) {
         super();
         this.accessToken = accessToken;
         this.apiUrl = apiUrl;
         this.languageCode = languageCode;
         this.refreshToken = refreshToken;
+        this.setTokens = setTokens;
     }
 
     private getHeaders(token?: string): any {
@@ -106,11 +109,13 @@ class DomainHttpAdapter extends BaseHttpAdapter implements HttpAdapterInterface 
         );
 
         if (!response.parsedBody || !response.parsedBody.accessToken) {
-            return false;
+            return this.setTokens({ accessToken: '', refreshToken: '' });
         }
 
-        this.accessToken = response.parsedBody.accessToken;
-        this.refreshToken = response.parsedBody.refreshToken;
+        this.setTokens({
+            accessToken: response.parsedBody.accessToken,
+            refreshToken: response.parsedBody.refreshToken,
+        });
         return true;
     };
 }
