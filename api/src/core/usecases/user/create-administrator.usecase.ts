@@ -1,6 +1,5 @@
 import { KeycloakClient } from '@app/keycloak';
 import { Inject, Injectable } from '@nestjs/common';
-import { configuration } from 'src/configuration';
 import { RessourceDoesNotExist } from 'src/core/errors';
 import {
   UNIVERSITY_REPOSITORY,
