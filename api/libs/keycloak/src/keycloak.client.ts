@@ -335,6 +335,10 @@ export class KeycloakClient {
 
     const user = await this.getUserByEmail(props.email);
 
+    if (!user) {
+      return;
+    }
+
     for (const role of props.roles) {
       await this.addRealmRoleToUser(user.id, role);
     }
@@ -465,7 +469,7 @@ export class KeycloakClient {
     const users = await this.getUsers({ email, max: 1 });
 
     if (users.length === 0) {
-      throw new Error('User not found');
+      return;
     }
 
     return users[0];
