@@ -49,7 +49,6 @@ const useFetchConfiguration = (apiUrl: string) => {
                     result.secondaryColor,
                     result.secondaryDarkColor,
                     result.secondaryBackgroundColor,
-                    result.hasConnector
                 )
             );
             document.documentElement.style.setProperty('--primary-color', result.primaryColor);
