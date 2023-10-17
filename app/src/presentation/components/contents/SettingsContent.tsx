@@ -27,6 +27,8 @@ const SettingsContent: React.FC<SettingsContentProps> = ({ onBackPressed, onDisc
         { title: t('languages.french'), value: 'fr' },
         { title: t('languages.english'), value: 'en' },
         { title: t('languages.chinese'), value: 'cn' },
+        { title: t('languages.deutsche'), value: 'de' },
+        { title: t('languages.spanish'), value: 'es' },
     ];
 
     const onDeletionAsked = async () => {
