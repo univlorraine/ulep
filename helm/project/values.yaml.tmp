@@ -60,6 +60,7 @@ api:
     smtpHost: localhost # REQUIRED
     smtpPort: 25 # REQUIRED
     smtpSecure: true # REQUIRED
+    ignoreTLS: false # REQUIRED
     smtpSender: tandems@ulep.fr # REQUIRED
     smtpDisableBootVerification: false # REQUIRED
     logLevel: warn # OPTIONNEL
