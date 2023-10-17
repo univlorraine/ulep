@@ -4,7 +4,7 @@ import {
   TandemStatus,
   UserStatus,
 } from 'src/core/models';
-import { Collection, PrismaService } from '@app/common';
+import { Collection, ModeQuery, PrismaService } from '@app/common';
 import { Injectable } from '@nestjs/common';
 import {
   LearningLanguageQuerySortKey,
@@ -282,7 +282,10 @@ export class PrismaLearningLanguageRepository
               },
             },
             {
-              lastname: { contains: lastname || '' },
+              lastname: {
+                contains: lastname || '',
+                mode: ModeQuery.INSENSITIVE,
+              },
             },
           ],
         },

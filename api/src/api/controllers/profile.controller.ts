@@ -1,4 +1,4 @@
-import { Collection } from '@app/common';
+import { Collection, ModeQuery } from '@app/common';
 import { KeycloakUser } from '@app/keycloak';
 import {
   Body,
@@ -88,8 +88,14 @@ export class ProfileController {
             user: {
               country: { equals: where.user?.country },
               email: { contains: where.user?.email },
-              firstname: { contains: where.user?.firstname },
-              lastname: { contains: where.user?.lastname },
+              firstname: {
+                contains: where.user?.firstname,
+                mode: ModeQuery.INSENSITIVE,
+              },
+              lastname: {
+                contains: where.user?.lastname,
+                mode: ModeQuery.INSENSITIVE,
+              },
               role: { equals: where.user?.role },
               university: { equals: where?.university },
             },
