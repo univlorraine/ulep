@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="21507" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" launchScreen="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="01J-lp-oVM">
-    <device id="retina4_0" orientation="portrait" appearance="light"/>
+    <device id="ipad12_9rounded" orientation="portrait" layout="fullscreen" appearance="light"/>
     <dependencies>
         <deployment identifier="iOS"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="21505"/>
@@ -13,15 +13,32 @@
             <objects>
                 <viewController id="01J-lp-oVM" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="Bfs-ix-0tE">
-                        <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
+                        <rect key="frame" x="0.0" y="0.0" width="1024" height="1366"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                        <subviews>
+                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="splash" translatesAutoresizingMaskIntoConstraints="NO" id="b8p-Rv-jwg">
+                                <rect key="frame" x="0.0" y="0.0" width="1024" height="1346"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" secondItem="b8p-Rv-jwg" secondAttribute="height" multiplier="40:71" id="dgq-VY-MU8"/>
+                                </constraints>
+                            </imageView>
+                        </subviews>
                         <viewLayoutGuide key="safeArea" id="Ntn-nt-i9U"/>
                         <color key="backgroundColor" red="0.99215686274509807" green="0.93333333333333335" blue="0.40000000000000002" alpha="1" colorSpace="calibratedRGB"/>
+                        <constraints>
+                            <constraint firstItem="b8p-Rv-jwg" firstAttribute="leading" secondItem="Ntn-nt-i9U" secondAttribute="leading" id="2jT-AN-5Xn"/>
+                            <constraint firstItem="Ntn-nt-i9U" firstAttribute="trailing" secondItem="b8p-Rv-jwg" secondAttribute="trailing" id="4pV-ly-OWH"/>
+                            <constraint firstItem="Ntn-nt-i9U" firstAttribute="bottom" secondItem="b8p-Rv-jwg" secondAttribute="bottom" id="Kiw-oa-5ks"/>
+                            <constraint firstItem="b8p-Rv-jwg" firstAttribute="top" secondItem="Bfs-ix-0tE" secondAttribute="top" id="kMX-7l-lfy"/>
+                        </constraints>
                     </view>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="iYj-Kq-Ea1" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="52" y="374.66266866566718"/>
+            <point key="canvasLocation" x="50.625" y="373.94366197183098"/>
         </scene>
     </scenes>
+    <resources>
+        <image name="splash" width="1366" height="1366"/>
+    </resources>
 </document>
