@@ -1,6 +1,5 @@
 import { KeycloakClient } from '@app/keycloak';
 import { Inject, Injectable } from '@nestjs/common';
-import { configuration } from 'src/configuration';
 import { RessourceDoesNotExist } from 'src/core/errors';
 import {
   UNIVERSITY_REPOSITORY,
@@ -9,6 +8,7 @@ import {
 
 export class CreateAdministratorCommand {
   email: string;
+  password: string;
   universityId?: string;
 }
 
@@ -32,16 +32,11 @@ export class CreateAdministratorUsecase {
 
     const keycloakUser = await this.keycloakClient.createAdministrator({
       email: command.email,
+      password: command.password,
       universityId: command.universityId,
     });
 
     await this.keycloakClient.addUserToAdministrators(keycloakUser.id);
-
-    await this.keycloakClient.executeActionEmail(
-      ['UPDATE_PASSWORD'],
-      keycloakUser.id,
-      `${configuration().adminUrl}/login`,
-    );
 
     return keycloakUser;
   }
