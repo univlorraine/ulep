@@ -35,4 +35,6 @@ export interface TandemRepository {
   ): Promise<number>;
 
   delete(id: string): Promise<void>;
+
+  disableTandemsForUser(id: string): Promise<void>;
 }

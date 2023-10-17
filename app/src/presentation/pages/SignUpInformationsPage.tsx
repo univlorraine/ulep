@@ -1,7 +1,7 @@
 import { useIonToast } from '@ionic/react';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { useHistory } from 'react-router';
+import { useHistory, useLocation } from 'react-router';
 import { PlusPng } from '../../assets';
 import { useConfig } from '../../context/ConfigurationContext';
 import { useStoreActions, useStoreState } from '../../store/storeTypes';
@@ -12,17 +12,27 @@ import WebLayoutCentered from '../components/layout/WebLayoutCentered';
 import { isEmailCorrect, isNameCorrect, isPasswordCorrect } from '../utils';
 import styles from './css/SignUp.module.css';
 
+interface SignUpInformationsParams {
+    centralFirstname?: string;
+    centralLastname?: string;
+    centralEmail?: string;
+    centralGender?: Gender;
+    centralAge?: number;
+}
+
 const SignUpInformationsPage: React.FC = () => {
     const { t } = useTranslation();
     const { cameraAdapter, configuration, createUser } = useConfig();
     const [showToast] = useIonToast();
     const history = useHistory();
+    const location = useLocation<SignUpInformationsParams>();
+    const { centralLastname } = location.state || {};
     const profileSignUp = useStoreState((store) => store.profileSignUp);
     const updateProfileSignUp = useStoreActions((state) => state.updateProfileSignUp);
     const [firstname, setFirstname] = useState<string>('');
     const [lastname, setLastname] = useState<string>('');
-    const [gender, setGender] = useState<Gender>();
-    const [age, setAge] = useState<number>();
+    const [gender, setGender] = useState<Gender | undefined>();
+    const [age, setAge] = useState<number | undefined>();
     const [email, setEmail] = useState<string>('');
     const [code, setCode] = useState<string>('');
     const [password, setPassword] = useState<string>('');
@@ -31,8 +41,11 @@ const SignUpInformationsPage: React.FC = () => {
     const [CGUChecked, setCGUChecked] = useState<boolean>(false);
     const [errorMessage, setErrorMessage] = useState<{ type: string; message: string }>();
 
-    const allFieldHasValue = () =>
-        !email || !password || !confirmPassword || !gender || !age || !firstname || !lastname || !CGUChecked;
+    const allFieldHasValue = () => {
+        return email && gender && age && firstname && lastname && CGUChecked && (
+           centralLastname ? true : password && confirmPassword
+        );
+    };
 
     const openGallery = async () => {
         setProfilePicture(await cameraAdapter.getPictureFromGallery());
@@ -64,11 +77,11 @@ const SignUpInformationsPage: React.FC = () => {
             return history.push('/signup/');
         }
 
-        if (!password || !isPasswordCorrect(password)) {
+        if (!centralLastname && (!password || !isPasswordCorrect(password))) {
             return setErrorMessage({ type: 'password', message: t('signup_informations_page.error_password') });
         }
 
-        if (password !== confirmPassword) {
+        if (!centralLastname && password !== confirmPassword) {
             return setErrorMessage({ type: 'confirm', message: t('signup_informations_page.error_confirm_password') });
         }
 
@@ -83,6 +96,9 @@ const SignUpInformationsPage: React.FC = () => {
             profileSignUp.university,
             profileSignUp.role,
             profileSignUp.country.code,
+            profileSignUp.department,
+            profileSignUp.diplome,
+            profileSignUp.staffFunction,
             profilePicture
         );
 
@@ -110,6 +126,31 @@ const SignUpInformationsPage: React.FC = () => {
 
         return history.push('/signup/languages');
     };
+
+    const userUlAutomaticValues = async () => {
+        setFirstname(profileSignUp.firstname || '');
+        setLastname(profileSignUp.lastname || '');
+        setGender(profileSignUp.gender || undefined);
+        setAge(profileSignUp.age || undefined);
+        setEmail(profileSignUp.email || '');
+    };
+
+    useEffect(() => {
+        if (profileSignUp.university?.isCentral) {
+            userUlAutomaticValues();
+        }
+    }, []);
+
+    useEffect(() => {
+        const state = location.state;
+        if(state){
+            setEmail(state.centralEmail || '');
+            setFirstname(state.centralFirstname || '');
+            setLastname(state.centralLastname || '');
+            setGender(state.centralGender);
+            setAge(state.centralAge);
+        }
+    }, [location.state]);
 
     return (
         <WebLayoutCentered
@@ -194,32 +235,38 @@ const SignUpInformationsPage: React.FC = () => {
                     value={email}
                 />
 
-                <TextInput
-                    errorMessage={errorMessage?.type === 'code' ? errorMessage.message : undefined}
-                    onChange={setCode}
-                    placeholder={t('signup_informations_page.placeholder_code')}
-                    title={t('signup_informations_page.code')}
-                    type="text"
-                    value={code}
-                />
+                {profileSignUp.university?.hasCode && (
+                    <TextInput
+                        errorMessage={errorMessage?.type === 'code' ? errorMessage.message : undefined}
+                        onChange={setCode}
+                        placeholder={t('signup_informations_page.placeholder_code')}
+                        title={t('signup_informations_page.code')}
+                        type="text"
+                        value={code}
+                    />
+                )}
 
-                <TextInput
-                    errorMessage={errorMessage?.type === 'password' ? errorMessage.message : undefined}
-                    onChange={setPassword}
-                    placeholder={t('signup_informations_page.placeholder_password')}
-                    title={t('global.password')}
-                    type="password"
-                    value={password}
-                />
+                {!centralLastname && (
+                    <TextInput
+                        errorMessage={errorMessage?.type === 'password' ? errorMessage.message : undefined}
+                        onChange={setPassword}
+                        placeholder={t('signup_informations_page.placeholder_password')}
+                        title={t('global.password')}
+                        type="password"
+                        value={password}
+                    />
+                )}
 
-                <TextInput
-                    errorMessage={errorMessage?.type === 'confirm' ? errorMessage.message : undefined}
-                    onChange={setConfirmPassword}
-                    placeholder={t('signup_informations_page.placeholder_confirm_password')}
-                    title={t('signup_informations_page.confirm_password')}
-                    type="password"
-                    value={confirmPassword}
-                />
+                {!centralLastname && (
+                    <TextInput
+                        errorMessage={errorMessage?.type === 'confirm' ? errorMessage.message : undefined}
+                        onChange={setConfirmPassword}
+                        placeholder={t('signup_informations_page.placeholder_confirm_password')}
+                        title={t('signup_informations_page.confirm_password')}
+                        type="password"
+                        value={confirmPassword}
+                    />
+                )}
 
                 <Checkbox
                     isSelected={CGUChecked}
@@ -230,9 +277,9 @@ const SignUpInformationsPage: React.FC = () => {
                 <div className={styles['bottom-container']}>
                     <button
                         className={`primary-button small-margin-top large-margin-bottom ${
-                            allFieldHasValue() ? 'disabled' : ''
+                            !allFieldHasValue() ? 'disabled' : ''
                         }`}
-                        disabled={allFieldHasValue()}
+                        disabled={!allFieldHasValue()}
                         onClick={continueSignUp}
                     >
                         {t('signup_informations_page.validate_button')}

@@ -21,6 +21,7 @@ type CountAllSuggestedLanguagesResult = {
   count: number;
   mainUniversityStatus: LanguageStatus;
   secondaryUniversityActive: boolean;
+  isDiscovery: boolean;
 };
 
 @Injectable()
@@ -73,7 +74,7 @@ export class PrismaLanguageRepository implements LanguageRepository {
 
     const results: CountAllSuggestedLanguagesResult[] = await this.prisma
       .$queryRaw`
-    SELECT l.id, l.name, l.code, COUNT(s.language_code_id) as count
+    SELECT l.id, l.name, l.code, l.isDiscovery, COUNT(s.language_code_id) as count
     FROM suggested_languages s
     JOIN language_codes l ON s.language_code_id = l.id
     GROUP BY l.id
@@ -89,6 +90,7 @@ export class PrismaLanguageRepository implements LanguageRepository {
           code: result.code,
           mainUniversityStatus: result.mainUniversityStatus,
           secondaryUniversityActive: result.secondaryUniversityActive,
+          isDiscovery: result.isDiscovery,
         }),
         count: Number(result.count),
       })),
@@ -181,6 +183,7 @@ export class PrismaLanguageRepository implements LanguageRepository {
       data: {
         mainUniversityStatus: language.mainUniversityStatus,
         secondaryUniversityActive: language.secondaryUniversityActive,
+        isDiscovery: language.isDiscovery,
       },
     });
 
@@ -195,7 +198,7 @@ export class PrismaLanguageRepository implements LanguageRepository {
     const res = await this.prisma.languageCodes.findMany({
       where: {
         mainUniversityStatus: {
-          equals: LanguageStatus.PRIMARY,
+          in: [LanguageStatus.PRIMARY, LanguageStatus.SECONDARY],
         },
       },
     });

@@ -2,6 +2,10 @@ import i18n from 'i18next';
 import { initReactI18next } from 'react-i18next';
 import HttpApi from 'i18next-http-backend';
 
+export interface BackendOptions {
+    loadPath: string;
+}
+
 i18n.use(HttpApi) // charge les traductions à partir des fichiers distants
     .use(initReactI18next) // initialise react-i18next
     .init({
@@ -10,7 +14,7 @@ i18n.use(HttpApi) // charge les traductions à partir des fichiers distants
         debug: true,
 
         backend: {
-            loadPath: `${import.meta.env.VITE_API_URL}/instance/locales/{{lng}}/translation`,
+            loadPath: `/locales/{{lng}}/translation.json`,
         },
 
         interpolation: {

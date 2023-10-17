@@ -6,6 +6,10 @@
     "accessTokenLifespan": 600,
     "accessCodeLifespan": 600,
     "requiredCredentials": ["password"],
+    "internationalizationEnabled": true,
+    "loginTheme": "ulep",
+    "supportedLocales": ["en", "fr"],
+    "defaultLocale": "fr",
     "smtpServer": {
         "starttls": "false",
         "port": "1025",
@@ -20,9 +24,10 @@
             "clientAuthenticatorType": "client-secret",
             "secret": "bN49BuApmmtAODeOWOG8iKOOuJdN3KE6",
             "bearerOnly": false,
-            "standardFlowEnabled": false,
+            "standardFlowEnabled": true,
             "directAccessGrantsEnabled": true,
             "serviceAccountsEnabled": true,
+            "redirectUris": ["http://localhost:5173/*", "http://localhost:3001/*"],
             "protocolMappers": [
                 {
                     "id": "b38e1a26-d649-4370-879d-c7499d023daa",
@@ -39,6 +44,22 @@
                         "access.token.claim": "true",
                         "claim.name": "universityId",
                         "jsonType.label": "String"
+                    }
+                },
+                {
+                    "id": "52ae63dc-8053-4067-bd2b-3609ab1cc95b",
+                    "name": "universityLogin",
+                    "protocol": "openid-connect",
+                    "protocolMapper": "oidc-usermodel-attribute-mapper",
+                    "consentRequired": false,
+                    "config": {
+                      "aggregate.attrs": "false",
+                      "userinfo.token.claim": "true",
+                      "multivalued": "false",
+                      "user.attribute": "universityLogin",
+                      "id.token.claim": "true",
+                      "access.token.claim": "true",
+                      "claim.name": "universityLogin"
                     }
                 }
             ]
@@ -93,6 +114,7 @@
             "subGroups": []
         }
     ],
+    "passwordPolicy": "digits(1) and lowerCase(1) and upperCase(1)",
     "users": [
         {
             "id": "8ef3f4a1-c828-4172-9f50-5820482f7969",

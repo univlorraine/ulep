@@ -29,6 +29,7 @@ export interface SignUpStorePayload {
     gender?: Gender;
     goals?: Goal[];
     interests?: string[];
+    isSuggested?: boolean;
     isForCertificate?: boolean;
     isForProgram?: boolean;
     lastname?: string;
@@ -52,6 +53,10 @@ interface LanguagePayload {
     language: string;
 }
 
+interface ApiUrlPayload {
+    apiUrl: string;
+}
+
 interface ProfileStorePayload {
     profile: Profile;
 }
@@ -67,9 +72,11 @@ interface UserStorePayload {
 }
 interface StoreInterface {
     accessToken: string;
+    apiUrl: string;
     language: string;
     logout: Action<StoreInterface>;
     refreshToken: string;
+    setApiUrl: Action<StoreInterface, ApiUrlPayload>;
     setLanguage: Action<StoreInterface, LanguagePayload>;
     setProfile: Action<StoreInterface, ProfileStorePayload>;
     setTokens: Action<StoreInterface, TokenStorePayload>;

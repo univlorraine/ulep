@@ -1,7 +1,7 @@
 import { KeycloakClient } from '@app/keycloak';
 import { BadRequestException, Inject, Injectable } from '@nestjs/common';
 import { RessourceDoesNotExist } from 'src/core/errors';
-import { Gender, Role } from 'src/core/models';
+import { Gender, Role, User } from 'src/core/models';
 import {
   COUNTRY_REPOSITORY,
   CountryRepository,
@@ -17,7 +17,7 @@ import {
 
 export class CreateUserCommand {
   email: string;
-  password: string;
+  password?: string;
   firstname: string;
   lastname: string;
   gender: Gender;
@@ -25,7 +25,10 @@ export class CreateUserCommand {
   university: string;
   role: Role;
   countryCode: string;
-  code: string;
+  code?: string;
+  division?: string;
+  diploma?: string;
+  staffFunction?: string;
 }
 
 @Injectable()
@@ -69,32 +72,41 @@ export class CreateUserUsecase {
     if (university.admissionEnd < now || university.admissionStart > now) {
       throw new BadRequestException('Registration unavailable');
     }
-
-    const keycloakUser = await this.keycloak.createUser({
-      email: command.email,
-      password: command.password,
-      firstName: command.firstname,
-      lastName: command.lastname,
-      roles: ['USER'],
-      enabled: true,
-      emailVerified: false,
-      origin: 'api',
-    });
+    let keycloakUser;
+    if (command.password) {
+      keycloakUser = await this.keycloak.createUser({
+        email: command.email,
+        password: command.password,
+        firstName: command.firstname,
+        lastName: command.lastname,
+        roles: ['USER'],
+        enabled: true,
+        emailVerified: false,
+        origin: 'api',
+      });
+    } else {
+      keycloakUser = await this.keycloak.getUserByEmail(command.email);
+    }
 
     let user = await this.userRepository.ofId(keycloakUser.id);
     if (!user) {
-      user = await this.userRepository.create({
-        id: keycloakUser.id,
-        acceptsEmail: true,
-        email: command.email,
-        firstname: command.firstname,
-        lastname: command.lastname,
-        gender: command.gender,
-        age: command.age,
-        university: university,
-        role: command.role,
-        country: country.code,
-      });
+      user = await this.userRepository.create(
+        new User({
+          id: keycloakUser.id,
+          acceptsEmail: true,
+          email: command.email,
+          firstname: command.firstname,
+          lastname: command.lastname,
+          gender: command.gender,
+          age: command.age,
+          university: university,
+          role: command.role,
+          country: country.code,
+          division: command.division,
+          diploma: command.diploma,
+          staffFunction: command.staffFunction,
+        }),
+      );
     }
 
     return user;

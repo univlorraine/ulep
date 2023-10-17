@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { Redirect, useHistory, useParams } from 'react-router';
+import { Redirect, useHistory, useLocation } from 'react-router';
 import { useConfig } from '../../context/ConfigurationContext';
 import Campus from '../../domain/entities/Campus';
 import { useStoreActions, useStoreState } from '../../store/storeTypes';
@@ -8,6 +8,7 @@ import ColoredCard from '../components/ColoredCard';
 import WebLayoutCentered from '../components/layout/WebLayoutCentered';
 import SitesModal from '../components/modals/SitesModal';
 import styles from './css/SignUp.module.css';
+import Language from '../../domain/entities/Language';
 
 interface PedagogieData {
     color: string;
@@ -20,13 +21,12 @@ interface PedagogieData {
 const PairingPedagogyPage: React.FC = () => {
     const { t } = useTranslation();
     const { configuration } = useConfig();
-    const isSignUp = useParams<{ prefix?: string }>().prefix;
     const history = useHistory();
+    const profileSignUp = useStoreState((state) => state.profileSignUp);
     const updateProfileSignUp = useStoreActions((state) => state.updateProfileSignUp);
-    const user = useStoreState((state) => state.user);
     const profile = useStoreState((state) => state.profile);
     const [pedagogySelected, setPedagogySelected] = useState<Pedagogy>();
-    const university = user?.university || profile?.user.university;
+    const university = profile?.user.university;
 
     if (!university) {
         return <Redirect to={'/signup'} />;
@@ -59,19 +59,21 @@ const PairingPedagogyPage: React.FC = () => {
         if (pedagogy !== 'ETANDEM' && university && university.sites.length > 1) {
             return setPedagogySelected(pedagogy);
         }
-
         if (pedagogy !== 'ETANDEM' && university && university.sites.length === 1) {
             updateProfileSignUp({ pedagogy, campus: university.sites[0] });
-            return history.push(`${isSignUp ? '/' + isSignUp : '/'}pairing/language/confirm`);
+            return history.push(`/pairing/language/confirm`);
         }
 
+        if (pedagogy === 'ETANDEM' && profileSignUp.isSuggested) {
+            return history.push('/pairing/other-languages/selected');
+        }
         updateProfileSignUp({ pedagogy, campus: undefined });
-        return history.push(`${isSignUp ? '/' + isSignUp : '/'}pairing/language/confirm`);
+        return history.push(`/pairing/language/confirm`);
     };
 
     const onSiteValidated = (campus?: Campus) => {
         updateProfileSignUp({ pedagogy: pedagogySelected, campus });
-        return history.push(`${isSignUp ? '/' + isSignUp : '/'}pairing/language/confirm`);
+        return history.push(`/pairing/language/confirm`);
     };
 
     return (

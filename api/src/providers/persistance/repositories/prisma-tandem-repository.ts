@@ -2,53 +2,92 @@ import { Injectable } from '@nestjs/common';
 import { Collection, PrismaService } from '@app/common';
 import { TandemRepository } from '../../../core/ports/tandems.repository';
 import { FindWhereProps } from '../../../core/ports/tandems.repository';
-import { Tandem } from '../../../core/models';
+import { Tandem, TandemStatus } from '../../../core/models';
 import { TandemRelations, tandemMapper } from '../mappers/tandem.mapper';
 
 @Injectable()
 export class PrismaTandemRepository implements TandemRepository {
   constructor(private readonly prisma: PrismaService) {}
 
+  private static toPrismaModel(tandem: Tandem) {
+    return {
+      id: tandem.id,
+      LearningLanguages: {
+        connect: tandem.learningLanguages.map((learningLanguage) => ({
+          id: learningLanguage.id,
+        })),
+      },
+      status: tandem.status,
+      UniversityValidations: {
+        connect: tandem.universityValidations?.map((universityId) => ({
+          id: universityId,
+        })),
+      },
+      compatibilityScore: Math.floor(tandem.compatibilityScore * 100),
+    };
+  }
+
   async save(tandem: Tandem): Promise<void> {
     await this.prisma.tandems.create({
-      data: {
-        id: tandem.id,
-        LearningLanguages: {
-          connect: tandem.learningLanguages.map((learningLanguage) => ({
-            id: learningLanguage.id,
-          })),
-        },
-        status: tandem.status,
-        UniversityValidations: {
-          connect: tandem.universityValidations?.map((universityId) => ({
-            id: universityId,
-          })),
-        },
-      },
+      data: PrismaTandemRepository.toPrismaModel(tandem),
     });
+
+    for (const learningLanguage of tandem.learningLanguages) {
+      if (learningLanguage.tandemLanguage) {
+        await this.prisma.learningLanguages.update({
+          where: {
+            id: learningLanguage.id,
+          },
+          data: {
+            TandemLanguage: {
+              connect: {
+                id: learningLanguage.tandemLanguage.id,
+              },
+            },
+          },
+        });
+      }
+    }
   }
 
   async saveMany(tandems: Tandem[]): Promise<void> {
-    const tandemsToCreate = tandems.map((tandem) =>
-      this.prisma.tandems.create({
-        data: {
-          id: tandem.id,
-          LearningLanguages: {
-            connect: tandem.learningLanguages.map((learningLanguage) => ({
-              id: learningLanguage.id,
-            })),
-          },
-          status: tandem.status,
-          UniversityValidations: {
-            connect: tandem.universityValidations?.map((universityId) => ({
-              id: universityId,
-            })),
-          },
-        },
-      }),
+    const { tandemsToCreate, learningLanguagesToUpdate } = tandems.reduce(
+      (accumulator, value) => {
+        accumulator.tandemsToCreate.push(
+          this.prisma.tandems.create({
+            data: PrismaTandemRepository.toPrismaModel(value),
+          }),
+        );
+        for (const learningLanguage of value.learningLanguages) {
+          if (learningLanguage.tandemLanguage) {
+            accumulator.learningLanguagesToUpdate.push(
+              this.prisma.learningLanguages.update({
+                where: {
+                  id: learningLanguage.id,
+                },
+                data: {
+                  TandemLanguage: {
+                    connect: {
+                      id: learningLanguage.tandemLanguage.id,
+                    },
+                  },
+                },
+              }),
+            );
+          }
+        }
+
+        return accumulator;
+      },
+      {
+        tandemsToCreate: [],
+        learningLanguagesToUpdate: [],
+      },
     );
 
-    await this.prisma.$transaction(tandemsToCreate);
+    await this.prisma.$transaction(
+      tandemsToCreate.concat(learningLanguagesToUpdate),
+    );
   }
 
   async findWhere(props: FindWhereProps): Promise<Collection<Tandem>> {
@@ -163,6 +202,25 @@ export class PrismaTandemRepository implements TandemRepository {
     return res.count;
   }
 
+  async disableTandemsForUser(id: string): Promise<void> {
+    await this.prisma.tandems.updateMany({
+      where: {
+        LearningLanguages: {
+          some: {
+            Profile: {
+              user_id: {
+                equals: id,
+              },
+            },
+          },
+        },
+      },
+      data: {
+        status: TandemStatus.INACTIVE,
+      },
+    });
+  }
+
   async deleteTandemLinkedToLearningLanguages(
     learningLanguageIds: string[],
   ): Promise<number> {
@@ -201,20 +259,7 @@ export class PrismaTandemRepository implements TandemRepository {
       where: {
         id: tandem.id,
       },
-      data: {
-        id: tandem.id,
-        LearningLanguages: {
-          connect: tandem.learningLanguages.map((learningLanguage) => ({
-            id: learningLanguage.id,
-          })),
-        },
-        status: tandem.status,
-        UniversityValidations: tandem.universityValidations.length && {
-          connect: tandem.universityValidations.map((universityId) => ({
-            id: universityId,
-          })),
-        },
-      },
+      data: PrismaTandemRepository.toPrismaModel(tandem),
     });
   }
 

@@ -1,7 +1,7 @@
 apiVersion: v1
 kind: ConfigMap
 metadata:
-  name: "{{ .Values.postgresql.primary.initdb.scriptsConfigMap }}"
+  name: "{{ .Values.db.initScriptsCM }}"
 data:
   db.sql: |
     CREATE SCHEMA IF NOT EXISTS keycloak;

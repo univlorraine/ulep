@@ -6,7 +6,7 @@ import { useConfig } from '../../../context/ConfigurationContext';
 import CircleAvatar from '../CircleAvatar';
 import TextInput from '../TextInput';
 import style from './Form.module.css';
-import { Tokens } from '../../../domain/interfaces/LoginUsecase.interface';
+import Tokens from '../../../domain/entities/Tokens';
 
 interface LoginFormProps {
     goBack: () => void;

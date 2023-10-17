@@ -13,8 +13,8 @@ type University = {
     parent: string;
     country: Country;
     timezone: string;
-    admissionStart: Date;
-    admissionEnd: Date;
+    admissionStart: string;
+    admissionEnd: string;
     sites: Campus[];
     codes: string[];
     domains: string[];

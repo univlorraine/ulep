@@ -3,6 +3,7 @@ import { Inject, Injectable, Logger } from '@nestjs/common';
 import {
   Match,
   PairingMode,
+  Role,
   Tandem,
   TandemStatus,
   University,
@@ -70,7 +71,7 @@ export class GenerateTandemsUsecase {
 
   async execute(command: GenerateTandemsCommand): Promise<Tandem[]> {
     const learningLanguagesToPair =
-      await this.learningLanguageRepository.getLearningLanguagesOfUniversitiesNotInActiveTandem(
+      await this.learningLanguageRepository.getAvailableLearningLanguagesOfUniversities(
         command.universityIds,
       );
 
@@ -134,22 +135,30 @@ export class GenerateTandemsUsecase {
 
     this.logger.verbose(`Computed ${possiblePairs.length} potential pairs`);
 
-    const sortedLearningLanguages = learningLanguagesToPair
-      .sort(
-        (a, b) =>
-          // sort by first created learning languages
-          a.createdAt?.getTime() - b.createdAt?.getTime(),
-      )
-      .sort((a, b) => {
-        // Sort by central university first
-        if (
-          a.profile.user.university.isCentralUniversity() ===
-          b.profile.user.university.isCentralUniversity()
-        ) {
-          return 0;
+    const sortedLearningLanguages = learningLanguagesToPair.sort((a, b) => {
+      if (
+        a.profile.user.university.isCentralUniversity() ===
+        b.profile.user.university.isCentralUniversity()
+      ) {
+        if (a.profile.user.role === b.profile.user.role) {
+          if (a.specificProgram === b.specificProgram) {
+            return a.createdAt?.getTime() - b.createdAt?.getTime();
+          } else if (!!a.specificProgram) {
+            return -1;
+          } else {
+            return 1;
+          }
+        } else if (a.profile.user.role === Role.STAFF) {
+          return -1;
+        } else {
+          return 1;
         }
-        return a.profile.user.university.isCentralUniversity() ? -1 : 1;
-      });
+      } else if (a.profile.user.university.isCentralUniversity()) {
+        return -1;
+      } else {
+        return 1;
+      }
+    });
 
     const tandemsPendingValidation = await this.tandemsRepository.findWhere({
       status: TandemStatus.VALIDATED_BY_ONE_UNIVERSITY,
@@ -199,6 +208,7 @@ export class GenerateTandemsUsecase {
         id: this.uuidProvider.generate(),
         learningLanguages: [pair.owner, pair.target],
         status: tandemStatus,
+        compatibilityScore: pair.total,
       });
 
       // Do not re-create a tandem that already exist and is pending validation
@@ -235,7 +245,7 @@ export class GenerateTandemsUsecase {
                   firstname: pair.owner.profile.user.firstname,
                   partnerFirstname: pair.target.profile.user.firstname,
                   partnerLastname: pair.target.profile.user.lastname,
-                  universityName: pair.owner.profile.user.university.name,
+                  universityName: pair.target.profile.user.university.name,
                 },
               );
             notificationEmails.push({
@@ -253,7 +263,7 @@ export class GenerateTandemsUsecase {
                   firstname: pair.target.profile.user.firstname,
                   partnerFirstname: pair.owner.profile.user.firstname,
                   partnerLastname: pair.owner.profile.user.lastname,
-                  universityName: pair.target.profile.user.university.name,
+                  universityName: pair.owner.profile.user.university.name,
                 },
               );
 

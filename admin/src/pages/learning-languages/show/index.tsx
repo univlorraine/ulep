@@ -1,17 +1,40 @@
 import { Box } from '@mui/material';
 import React from 'react';
 
-import { BooleanField, DateField, FunctionField, Show, SimpleShowLayout, TextField, useTranslate } from 'react-admin';
+import {
+    BooleanField,
+    DateField,
+    FunctionField,
+    Show,
+    SimpleShowLayout,
+    TextField,
+    useRecordContext,
+    useTranslate,
+} from 'react-admin';
 import { DisplayGender, DisplayLearningType, DisplayRole } from '../../../components/translated';
 import { LearningLanguage, getLearningLanguageUniversityAndCampusString } from '../../../entities/LearningLanguage';
 import ProfileLink from '../ui/ProfileLink';
 import ShowTandems from './ShowTandems';
 
+const Title = () => {
+    const record = useRecordContext();
+
+    if (!record?.profile?.user) {
+        return null;
+    }
+
+    return (
+        <span>
+            {record.profile.user.firstname} {record.profile.user.lastname} - {record.name}
+        </span>
+    );
+};
+
 const LearningLanguageShow = () => {
     const translate = useTranslate();
 
     return (
-        <Show>
+        <Show title={<Title />}>
             <SimpleShowLayout>
                 <FunctionField
                     render={(data: LearningLanguage) =>
@@ -40,7 +63,6 @@ const LearningLanguageShow = () => {
                 />
                 <BooleanField label={translate('learning_languages.show.fields.sameAge')} source="sameAge" />
                 <TextField label={translate('learning_languages.show.fields.age')} source="profile.user.age" />
-                {/* TODO(NOW): manage certificate and program null */}
                 <BooleanField
                     label={translate('learning_languages.show.fields.certificateOption')}
                     source="certificateOption"

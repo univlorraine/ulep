@@ -24,6 +24,7 @@ describe('Score', () => {
       code: '*',
       mainUniversityStatus: LanguageStatus.PRIMARY,
       secondaryUniversityActive: true,
+      isDiscovery: false,
     });
 
     const country = {
@@ -40,6 +41,7 @@ describe('Score', () => {
       name: 'french',
       mainUniversityStatus: LanguageStatus.PRIMARY,
       secondaryUniversityActive: true,
+      isDiscovery: false,
     });
     const englishLanguage = new Language({
       id: faker.string.uuid(),
@@ -47,6 +49,7 @@ describe('Score', () => {
       name: 'english',
       mainUniversityStatus: LanguageStatus.PRIMARY,
       secondaryUniversityActive: true,
+      isDiscovery: false,
     });
     const spanishLanguage = new Language({
       id: faker.string.uuid(),
@@ -54,6 +57,7 @@ describe('Score', () => {
       name: 'english',
       mainUniversityStatus: LanguageStatus.UNACTIVE,
       secondaryUniversityActive: true,
+      isDiscovery: false,
     });
     const lorraineCampus = new Campus({
       id: 'campusLorraine',

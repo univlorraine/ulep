@@ -1,6 +1,7 @@
 import { HttpResponse } from '../../adapter/BaseHttpAdapter';
 import { HttpAdapterInterface } from '../../adapter/DomainHttpAdapter';
-import LoginUsecaseInterface, { Tokens } from '../interfaces/LoginUsecase.interface';
+import Tokens from '../entities/Tokens';
+import LoginUsecaseInterface from '../interfaces/LoginUsecase.interface';
 
 interface LoginCommand {
     accessToken: string;

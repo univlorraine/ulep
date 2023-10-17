@@ -16,6 +16,9 @@ interface UserPayload {
     password: string;
     role: Role;
     university: string;
+    division?: string;
+    diploma?: string;
+    staffFunction?: string;
     file?: File;
 }
 
@@ -37,6 +40,9 @@ class CreateUserUsecase implements CreateUserUsecaseInterface {
         university: University,
         role: Role,
         countryCode: string,
+        division?: string,
+        diploma?: string,
+        staffFunction?: string,
         avatar?: File
     ): Promise<void | Error> {
         try {
@@ -55,6 +61,18 @@ class CreateUserUsecase implements CreateUserUsecaseInterface {
 
             if (avatar) {
                 body.file = avatar;
+            }
+
+            if(division) {
+                body.division = division;
+            }
+
+            if(diploma) {
+                body.diploma = diploma;
+            }
+
+            if(staffFunction) {
+                body.staffFunction = staffFunction;
             }
 
             const httpResponse: HttpResponse<UserCommand> = await this.domainHttpAdapter.post(

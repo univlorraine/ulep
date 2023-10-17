@@ -17,7 +17,6 @@ export class InMemoryLearningLanguageRepository
   getAvailableLearningLanguagesSpeakingLanguageFromUniversities: (
     languageId: string,
     universityIds: string[],
-    considerLearntLanguagesAsSpoken?: boolean,
   ) => Promise<LearningLanguage[]>;
   #learningLanguages: Map<string, LearningLanguage>;
   #tandemsPerLearningLanguages: Map<string, Tandem>;
@@ -75,10 +74,9 @@ export class InMemoryLearningLanguageRepository
 
     for (const learningLanguage of this.#learningLanguages.values()) {
       if (
-        learningLanguage.profile?.masteredLanguages.some(
+        learningLanguage.profile?.spokenLanguages.some(
           (language) => language.id === languageId,
-        ) ||
-        learningLanguage.profile?.nativeLanguage.id === languageId
+        )
       ) {
         if (
           universityIds.includes(learningLanguage.profile.user.university.id)
@@ -97,7 +95,7 @@ export class InMemoryLearningLanguageRepository
     return Promise.resolve(res);
   }
 
-  getLearningLanguagesOfUniversitiesNotInActiveTandem(universityIds: string[]) {
+  getAvailableLearningLanguagesOfUniversities(universityIds: string[]) {
     const res = [];
 
     for (const learningLanguage of this.#learningLanguages.values()) {
@@ -127,9 +125,8 @@ export class InMemoryLearningLanguageRepository
     return Promise.resolve(false);
   }
 
-  getAvailableLearningLanguagesSpeakingDifferentLanguageAndFromUniversities(
-    ownerSpokenLanguageIds: string[],
-    universitySupportedLanguageIds: string[],
+  getAvailableLearningLanguagesSpeakingOneOfLanguagesAndFromUniversities(
+    allowedLanguageIds: string[],
     universityIds: string[],
   ): Promise<LearningLanguage[]> {
     const res = [];
@@ -137,16 +134,8 @@ export class InMemoryLearningLanguageRepository
     for (const learningLanguage of this.#learningLanguages.values()) {
       if (universityIds.includes(learningLanguage.profile.user.id)) {
         if (
-          (!ownerSpokenLanguageIds.includes(
-            learningLanguage.profile.nativeLanguage.id,
-          ) &&
-            universitySupportedLanguageIds.includes(
-              learningLanguage.profile.nativeLanguage.id,
-            )) ||
-          learningLanguage.profile.masteredLanguages.some(
-            (masteredLanguage) =>
-              !ownerSpokenLanguageIds.includes(masteredLanguage.id) &&
-              universitySupportedLanguageIds.includes(masteredLanguage.id),
+          learningLanguage.profile.spokenLanguages.some((masteredLanguage) =>
+            allowedLanguageIds.includes(masteredLanguage.id),
           )
         ) {
           if (

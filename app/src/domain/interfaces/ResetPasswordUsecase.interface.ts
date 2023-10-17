@@ -1,4 +1,4 @@
 interface ResetPasswordUsecaseInterface {
-    execute(id: string, password: string): Promise<void | Error>;
+    execute(email: string): Promise<void | Error>;
 }
 export default ResetPasswordUsecaseInterface;

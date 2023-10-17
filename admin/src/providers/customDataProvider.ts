@@ -8,6 +8,7 @@ import {
     UpdateParams,
     fetchUtils,
 } from 'react-admin';
+import Language from '../entities/Language';
 import { RoutineExecution } from '../entities/RoutineExecution';
 import CountriesQuery from '../queries/CountriesQuery';
 import InterestsQuery from '../queries/InterestsQuery';
@@ -49,7 +50,7 @@ const httpClient = (url: string, options: any = {}) => {
 
 const dataProvider = simpleRestProvider(`${process.env.REACT_APP_API_URL}`, httpClient);
 
-const customDataProvider: DataProvider = {
+const customDataProvider = {
     ...dataProvider,
     create: async (resource: string, params: CreateParams) => {
         const url = new URL(`${process.env.REACT_APP_API_URL}/${resource}`);
@@ -89,6 +90,10 @@ const customDataProvider: DataProvider = {
 
         const result = await response.json();
 
+        if (resource === 'instance') {
+            return { data: { ...result, id: 'config' } };
+        }
+
         return { data: result };
     },
     getOne: async (resource: string, params: GetOneParams) => {
@@ -111,6 +116,10 @@ const customDataProvider: DataProvider = {
         }
 
         const data = await response.json();
+
+        if (resource === 'instance') {
+            return { data: { ...data, id: 'config' } };
+        }
 
         return { data };
     },
@@ -180,6 +189,20 @@ const customDataProvider: DataProvider = {
         }
 
         const result = await response.json();
+
+        if (resource === 'languages') {
+            return {
+                data: result.items.map((language: Language) => ({
+                    ...language,
+                    name: `languages_code.${language.code}`,
+                })),
+                total: result.totalItems,
+            };
+        }
+
+        if (!result.items) {
+            return { data: result, total: result.length };
+        }
 
         return {
             data: result.items.map(
@@ -277,6 +300,6 @@ const customDataProvider: DataProvider = {
             throw new Error(`API request failed with status ${response.status}`);
         }
     },
-};
+} as unknown as DataProvider;
 
 export default customDataProvider;

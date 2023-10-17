@@ -64,26 +64,9 @@ export const profileMapper = (instance: ProfileSnapshot): Profile => {
   return new Profile({
     id: instance.id,
     user: userMapper(instance.User),
-    nativeLanguage: new Language({
-      id: instance.NativeLanguage.id,
-      code: instance.NativeLanguage.code,
-      name: instance.NativeLanguage.name,
-      mainUniversityStatus: instance.NativeLanguage
-        .mainUniversityStatus as LanguageStatus,
-      secondaryUniversityActive:
-        instance.NativeLanguage.secondaryUniversityActive,
-    }),
-    masteredLanguages: instance.MasteredLanguages.map(
-      (language) =>
-        new Language({
-          id: language.LanguageCode.id,
-          name: language.LanguageCode.name,
-          code: language.LanguageCode.code,
-          mainUniversityStatus: instance.NativeLanguage
-            .mainUniversityStatus as LanguageStatus,
-          secondaryUniversityActive:
-            instance.NativeLanguage.secondaryUniversityActive,
-        }),
+    nativeLanguage: languageMapper(instance.NativeLanguage),
+    masteredLanguages: instance.MasteredLanguages.map((language) =>
+      languageMapper(language.LanguageCode),
     ),
     learningLanguages: instance.LearningLanguages.map(
       (learningLanguage) =>

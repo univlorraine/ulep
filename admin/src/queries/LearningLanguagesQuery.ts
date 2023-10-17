@@ -5,6 +5,11 @@ export interface LearningLanguagesParams {
         universityIds: string[];
         hasActiveTandem?: boolean;
         hasActionableTandem?: boolean;
+        profile: {
+            user: {
+                lastname: string;
+            };
+        };
     };
     pagination: {
         page: string;
@@ -24,9 +29,12 @@ const handleOrderField = (field?: string) => {
             return 'language';
         case 'profile.user.university.name':
             return 'university';
+        case 'profile.user.role':
+            return 'role';
         case 'level':
         case 'createdAt':
         case 'activeTandem':
+        case 'specificProgram':
             return field;
         default:
             return undefined;
@@ -35,6 +43,7 @@ const handleOrderField = (field?: string) => {
 
 export const LearningLanguagesQuery = (params: LearningLanguagesParams): string => {
     const query = {
+        lastname: params.filter.profile?.user?.lastname,
         universityIds: params.filter.universityIds,
         hasActiveTandem: params.filter.hasActiveTandem,
         hasActionableTandem: params.filter.hasActionableTandem,

@@ -8,6 +8,21 @@ generator client {
   binaryTargets = ["native", "linux-musl-openssl-3.0.x"]
 }
 
+model Instance {
+  id            String          @id @default(uuid())
+  name          String
+  email         String
+  ressource_url String
+  cgu_url       String
+  confidentiality_url   String
+  primary_color         String
+  primary_background_color  String
+  primary_dark_color    String
+  secondary_color  String
+  secondary_background_color    String
+  secondary_dark_color  String
+}
+
 model CountryCodes {
   id           String          @id @default(uuid())
   name         String
@@ -26,19 +41,22 @@ model CountryCodes {
 }
 
 model LanguageCodes {
-  id                        String               @id @default(uuid())
+  id                        String   @id @default(uuid())
   name                      String
   code                      String
-  created_at                DateTime             @default(now())
-  updated_at                DateTime             @updatedAt
-  mainUniversityStatus      String               @default("UNACTIVE")
-  secondaryUniversityActive Boolean              @default(false)
-  NativeLanguages           Profiles[]           @relation("NativeLanguage")
-  MasteredLanguages         MasteredLanguages[]
-  SuggestedLanguages        SuggestedLanguages[]
-  Translations              Translations[]
-  TextContents              TextContent[]
-  LearningLanguages         LearningLanguages[]
+  created_at                DateTime @default(now())
+  updated_at                DateTime @updatedAt
+  mainUniversityStatus      String   @default("UNACTIVE")
+  secondaryUniversityActive Boolean  @default(false)
+  isDiscovery               Boolean  @default(false)
+
+  NativeLanguages        Profiles[]           @relation("NativeLanguage")
+  MasteredLanguages      MasteredLanguages[]
+  SuggestedLanguages     SuggestedLanguages[]
+  Translations           Translations[]
+  TextContents           TextContent[]
+  LearningLanguages      LearningLanguages[]  @relation("LearningLanguageLanguage")
+  JokerLearningLanguages LearningLanguages[]  @relation("TandemLanguage")
 
   @@unique([name])
   @@unique([code])
@@ -120,6 +138,9 @@ model Users {
   deactivated        Boolean              @default(false)
   deactivated_reason String?
   accepts_email      Boolean              @default(true)
+  division           String?
+  diploma            String?
+  staff_function     String?
   country_code_id    String?
   image_id           String?              @unique
   created_at         DateTime             @default(now())
@@ -302,23 +323,25 @@ model LearningObjectives {
 }
 
 model LearningLanguages {
-  id                 String   @id @default(uuid())
-  profile_id         String
-  tandem_id          String?
-  language_code_id   String
-  level              String
-  learning_type      String
-  same_gender        Boolean
-  same_age           Boolean
-  certificate_option Boolean?
-  specific_program   Boolean?
-  campus_id          String?
-  created_at         DateTime @default(now())
-  updated_at         DateTime @updatedAt
+  id                      String   @id @default(uuid())
+  profile_id              String
+  language_code_id        String
+  level                   String
+  learning_type           String
+  same_gender             Boolean
+  same_age                Boolean
+  certificate_option      Boolean?
+  specific_program        Boolean?
+  campus_id               String?
+  tandem_id               String?
+  tandem_language_code_id String?
+  created_at              DateTime @default(now())
+  updated_at              DateTime @updatedAt
 
   Profile        Profiles         @relation(fields: [profile_id], references: [id])
   Tandem         Tandems?         @relation(fields: [tandem_id], references: [id])
-  LanguageCode   LanguageCodes    @relation(fields: [language_code_id], references: [id])
+  TandemLanguage LanguageCodes?   @relation("TandemLanguage", fields: [tandem_language_code_id], references: [id])
+  LanguageCode   LanguageCodes    @relation("LearningLanguageLanguage", fields: [language_code_id], references: [id])
   RefusedTandems RefusedTandems[]
   Campus         Places?          @relation(fields: [campus_id], references: [id])
 
@@ -360,6 +383,9 @@ model InterestCategories {
 model Tandems {
   id                    String              @id @default(uuid())
   status                String              @default("ACTIVE")
+  // We store compatibilityScore as an Int in order to avoid float approximation
+  // This means the score between 0-1 (float) should be converted to 0-100 (int)
+  compatibilityScore    Int                 @default(0)
   created_at            DateTime            @default(now())
   updated_at            DateTime            @updatedAt
   LearningLanguages     LearningLanguages[]

@@ -57,6 +57,8 @@ class ProfileSignUp {
 
     public interests?: string[];
 
+    public isSuggested?: boolean;
+
     public isForCertificate?: boolean;
 
     public isForProgram?: boolean;

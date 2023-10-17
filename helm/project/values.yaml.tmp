@@ -5,26 +5,35 @@
 ############## GLOBAL ##############
 
 name: "ulep" # REQUIRED
-domain: exemple.com # REQUIRED 
-issuerName: letsencrypt # REQUIRED 
-global:
-  postgresql: 
-    auth:
-      username: postgres # FIXE
-      database: ulep # FIXE
-      password: "" # REQUIRED
-      postgresPassword: "" # REQUIRED
+domain: exemple.com # REQUIRED
+issuerName: letsencrypt # REQUIRED
 
-postgresql:
-  primary:
-    initdb: 
-      scriptsConfigMap: ulep-init-database # REQUIRED
+db:
+  username: &dbUser postgres # FIXE
+  database: &dbName ulep # FIXE
+  password: &dbPassword TODO # REQUIRED
+  initScriptsCM: &dbInitScriptsCM ulep-init-database # FIXE
+
 apiUrl: &apiUrl api
 adminUrl: &adminUrl admin
 minioUrl: &minioUrl minio
 minioApiUrl: &minioApiUrl minio-api
 keycloakUrl: &keycloakUrl auth
 webappUrl: &webappUrl webapp
+
+############## POSTGRES ##############
+postgresql-ha:
+  postgresql:
+    password: *dbPassword # FIXE
+    repmgrPassword: *dbPassword # FIXE
+    database: *dbName # FIXE
+    initdbScriptsCM: *dbInitScriptsCM # FIXE
+  persistence:
+    size: 8Gi # REQUIRED
+  pgpool:
+    adminPassword: *dbPassword # FIXE
+############## POSTGRES ##############
+
 ############## API ##############
 api:
   name: api # REQUIRED
@@ -44,7 +53,8 @@ api:
     keycloakAdmin: admin # REQUIRED
     keycloakAdminPassword: &keycloakAdminPassword AZE123aze # REQUIRED
     keycloakClientId: api # FIXE
-    keycloakClientSecret: &keycloakClientSecret "" # REQUIRED 
+    keycloakAdminGroupId: 02736a0f-4679-4329-a877-2ce87aaea569 # FIXE
+    keycloakClientSecret: &keycloakClientSecret "" # REQUIRED
     minioAccessKey: &minioAccessKey minio # FIXE
     minioSecretKey: &minioSecretKey AZE123aze # REQUIRED
     smtpHost: localhost # REQUIRED
@@ -62,6 +72,9 @@ api:
     translationsEndpoint: TODO # REQUIRED
     translationsEndpointSuffix: TODO # OPTIONAL
     translationsToken: TODO # REQUIRED
+    appUrl: *webappUrl # FIXE
+    connectorUrl: TODO # OPTIONAL
+    connectorToken TODO # OPTIONAL
 
   autoscaling:
     enabled: false
@@ -73,10 +86,20 @@ api:
     type: ClusterIP
     port: 80
 
+  probes:
+    readiness:
+      initialDelaySeconds: 0
+      periodSeconds: 10
+      failureThreshold: 6
+    liveness:
+      initialDelaySeconds: 0
+      periodSeconds: 5
+      failureThreshold: 5
+
   ingress:
     enabled: true
     className: traefik
-    annotations: 
+    annotations:
       kubernetes.io/ingress.class: "traefik"
       cert-manager.io/cluster-issuer: "letsencrypt"
       kubernetes.io/tls-acme: "true"
@@ -98,12 +121,17 @@ auth:
     tag: "21.1" # REQUIRED
     pullPolicy: IfNotPresent
 
+  initImage:
+    repository: "rg.fr-par.scw.cloud/ulep/auth-prod" # REQUIRED
+    tag: "latest" # REQUIRED
+
+
   env:
     keycloakAdmin: admin # FIXE
     keycloakAdminPassword: *keycloakAdminPassword # REQUIRED
     kcDB: postgres # FIXE
     kcDBSchema: keycloak # FIXE
-    proxyAddressForwarding: true 
+    proxyAddressForwarding: true
     logLevel: INFO # REQUIRED
 
 
@@ -117,48 +145,19 @@ auth:
     type: ClusterIP
     port: 80
 
-  ingress:
-    enabled: true
-    className: traefik
-    annotations: 
-      kubernetes.io/ingress.class: "traefik"
-      cert-manager.io/cluster-issuer: "letsencrypt"
-      kubernetes.io/tls-acme: "true"
-    hosts:
-      - host: *keycloakUrl
-        paths: [/]
-    tls: 
-      - hosts:
-          - *keycloakUrl
-############## AUTH ##############
-
-############## MINIO ##############
-minio:
-  name: minio # FIXE
-  replicaCount: 1
-
-  image:
-    repository: "minio/minio" # REQUIRED
-    tag: "RELEASE.2023-06-02T23-17-26Z.fips" # REQUIRED
-    pullPolicy: IfNotPresent
-
-  env:
-    minioRootUser: *minioAccessKey # FIXE
-    minioRootPassword: *minioSecretKey # REQUIRED
-
-  pv:
-    storage: 40Gi
-    storageClassName: scw-bssd
-
-  autoscaling:
-    enabled: false
-    minReplicas: 1
-    maxReplicas: 100
-    targetCPUUtilizationPercentage: 80
-    # targetMemoryUtilizationPercentage: 80
-  service:
-    type: ClusterIP
-    port: &svcPort 80
+  probes:
+    startup:
+      initialDelaySeconds: 10
+      periodSeconds: 10
+      failureThreshold: 12
+    readiness:
+      initialDelaySeconds: 0
+      periodSeconds: 5
+      failureThreshold: 10
+    liveness:
+      initialDelaySeconds: 0
+      periodSeconds: 5
+      failureThreshold: 5
 
   ingress:
     enabled: true
@@ -167,19 +166,69 @@ minio:
       kubernetes.io/ingress.class: "traefik"
       cert-manager.io/cluster-issuer: "letsencrypt"
       kubernetes.io/tls-acme: "true"
-
     hosts:
-      - host: *minioUrl
+      - host: *keycloakUrl
         paths: [/]
-        port: *svcPort
-      - host: *minioApiUrl
-        paths: [/]
-        port: 9000
-    tls: 
+    tls:
       - hosts:
-          - *minioUrl
+          - *keycloakUrl
+############## AUTH ##############
+
+############## MINIO ##############
+minio:
+  global:
+    storageClass: scw-bssd
+
+  image:
+    tag: 2023.9.30-debian-11-r0
+  clientImage:
+    tag: 2023.9.29-debian-11-r0
+
+  auth:
+    rootUser: *minioAccessKey
+    rootPassword: *minioSecretKey
+
+  persistence:
+    size: 40Gi
+
+  # Distributed  mode is recommended for PROD
+  mode: distributed
+  statefulset:
+    replicaCount: 2
+    drivesPerNode: 2
+
+  ingress:
+    enabled: true
+    ingressClassName: traefik
+    hostname: minio.ulep.thestaging.io
+    path: /
+    pathType: Prefix
+    servicePort: 9001
+    annotations:
+      kubernetes.io/ingress.class: "traefik"
+      cert-manager.io/cluster-issuer: "letsencrypt"
+      kubernetes.io/tls-acme: "true"
+    tls: true
+    extraTls:
       - hosts:
-          - *minioApiUrl
+         - minio.ulep.thestaging.io
+        secretName: minio
+  apiIngress:
+    enabled: true
+    ingressClassName: traefik
+    hostname: minio-api.ulep.thestaging.io
+    path: /
+    pathType: Prefix
+    servicePort: 9000
+    annotations:
+      kubernetes.io/ingress.class: "traefik"
+      cert-manager.io/cluster-issuer: "letsencrypt"
+      kubernetes.io/tls-acme: "true"
+    tls: true
+    extraTls:
+      - hosts:
+         - minio-api.ulep.thestaging.io
+        secretName: minio-api
 ############## MINIO ##############
 
 ############## ADMIN ##############
@@ -192,7 +241,7 @@ admin:
     tag: "latest" # REQUIRED
     pullPolicy: Always
 
-  env: 
+  env:
     keycloakClientSecret: *keycloakClientSecret # REQUIRED
 
   autoscaling:
@@ -205,6 +254,20 @@ admin:
     type: ClusterIP
     port: 80
 
+  probes:
+    startup:
+      initialDelaySeconds: 60
+      periodSeconds: 30
+      failureThreshold: 5
+    readiness:
+      initialDelaySeconds: 0
+      periodSeconds: 10
+      failureThreshold: 3
+    liveness:
+      initialDelaySeconds: 0
+      periodSeconds: 5
+      failureThreshold: 3
+
   ingress:
     enabled: true
     className: traefik
@@ -216,7 +279,7 @@ admin:
     hosts:
       - host: *adminUrl
         paths: [/]
-    tls: 
+    tls:
       - hosts:
           - *adminUrl
 ############## ADMIN ##############
@@ -252,6 +315,19 @@ webapp:
     type: ClusterIP
     port: 80
 
+  probes:
+    startup:
+      initialDelaySeconds: 30
+      periodSeconds: 10
+      failureThreshold: 15
+    readiness:
+      initialDelaySeconds: 0
+      periodSeconds: 10
+      failureThreshold: 3
+    liveness:
+      initialDelaySeconds: 0
+      periodSeconds: 5
+      failureThreshold: 3
   ingress:
     enabled: true
     className: traefik
@@ -262,7 +338,7 @@ webapp:
     hosts:
       - host: *webappUrl
         paths: [/]
-    tls: 
+    tls:
       - hosts:
           - *webappUrl
 ############## WEBAPP ##############
@@ -278,7 +354,7 @@ serviceAccount:
   # If not set and create is true, a name is generated using the fullname template
   name: ""
 
-imagePullSecrets: 
+imagePullSecrets:
   - name: "registrypullsecret" # FIXE
 
 nameOverride: ""

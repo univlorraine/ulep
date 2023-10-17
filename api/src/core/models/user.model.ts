@@ -1,3 +1,4 @@
+import { Language } from './language.model';
 import { MediaObject } from './media.model';
 import { University } from './university.model';
 
@@ -32,6 +33,9 @@ export type UserProps = {
   status?: UserStatus;
   deactivatedReason?: string;
   acceptsEmail: boolean;
+  diploma?: string;
+  staffFunction?: string;
+  division?: string;
 };
 
 export class User {
@@ -61,6 +65,12 @@ export class User {
 
   readonly deactivatedReason?: string;
 
+  readonly diploma?: string;
+
+  readonly division?: string;
+
+  readonly staffFunction?: string;
+
   constructor(props: UserProps) {
     this.id = props.id;
     this.email = props.email;
@@ -75,5 +85,18 @@ export class User {
     this.avatar = props.avatar;
     this.status = props.status;
     this.deactivatedReason = props.deactivatedReason;
+    this.diploma = props.diploma;
+    this.division = props.division;
+    this.staffFunction = props.staffFunction;
+  }
+
+  public filterLearnableLanguages(languages: Language[]): Language[] {
+    return this.university.isCentralUniversity()
+      ? languages.filter((language) =>
+          language.canBeLearntInCentralUniversity(),
+        )
+      : languages.filter((language) =>
+          language.canBeLearntInPartnerUniversity(),
+        );
   }
 }

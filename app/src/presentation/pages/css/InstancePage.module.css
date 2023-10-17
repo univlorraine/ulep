@@ -1,0 +1,41 @@
+.button {
+    align-self: center;
+    margin-bottom: 16px;
+    width: 90%;
+}
+
+.container {
+    align-items: center;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    padding: 0 20px;
+}
+
+.image {
+    margin-left: 10px;
+}
+
+.instance {
+    align-items: center;
+    background-color: #f2f4f7;
+    border-radius: 5px;
+    display: flex;
+    height: 80px;
+    margin-bottom: 10px;
+    width: 100%;
+}
+
+.instance-name {
+    color: #000;
+    font-family: 'Maven Pro';
+    font-size: 16px;
+    font-style: normal;
+    font-weight: 500;
+    line-height: 20px;
+    margin-left: 16px;
+}
+
+.primary-instance {
+    background-color: #fdee66;
+}
