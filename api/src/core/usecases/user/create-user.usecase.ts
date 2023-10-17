@@ -88,6 +88,10 @@ export class CreateUserUsecase {
       keycloakUser = await this.keycloak.getUserByEmail(command.email);
     }
 
+    if (!keycloakUser) {
+      throw new RessourceDoesNotExist('User does not exist');
+    }
+
     let user = await this.userRepository.ofId(keycloakUser.id);
     if (!user) {
       user = await this.userRepository.create(
