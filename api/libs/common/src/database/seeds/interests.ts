@@ -275,6 +275,15 @@ const interests: {
         ],
       },
       {
+        name: 'Documentaire',
+        translations: [
+          { code: 'en', content: 'Documentary' },
+          { code: 'zh', content: '纪录影片' },
+          { code: 'de', content: 'Dokumentarfilm' },
+          { code: 'es', content: 'Documental' },
+        ],
+      },
+      {
         name: 'Drame',
         translations: [
           { code: 'en', content: 'Drama' },
@@ -302,21 +311,30 @@ const interests: {
         ],
       },
       {
-        name: 'Seul·e',
-        translations: [
-          { code: 'en', content: 'Alone' },
-          { code: 'zh', content: '单独一个人' },
-          { code: 'de', content: 'Allein' },
-          { code: 'es', content: 'Solo/a' },
-        ],
-      },
-      {
         name: 'Policier',
         translations: [
           { code: 'en', content: 'Detective fiction' },
           { code: 'zh', content: '侦探' },
           { code: 'de', content: 'Krimi' },
           { code: 'es', content: 'Policíacas' },
+        ],
+      },
+      {
+        name: 'Romance',
+        translations: [
+          { code: 'en', content: 'Romance' },
+          { code: 'zh', content: '浪漫' },
+          { code: 'de', content: 'Romantik' },
+          { code: 'es', content: 'Romance' },
+        ],
+      },
+      {
+        name: 'Seul·e',
+        translations: [
+          { code: 'en', content: 'Alone' },
+          { code: 'zh', content: '单独一个人' },
+          { code: 'de', content: 'Allein' },
+          { code: 'es', content: 'Solo/a' },
         ],
       },
       {
@@ -335,24 +353,6 @@ const interests: {
           { code: 'zh', content: '恐怖小说' },
           { code: 'de', content: 'Thriller' },
           { code: 'es', content: 'Thriller' },
-        ],
-      },
-      {
-        name: 'Documentaire',
-        translations: [
-          { code: 'en', content: 'Documentary' },
-          { code: 'zh', content: '纪录影片' },
-          { code: 'de', content: 'Dokumentarfilm' },
-          { code: 'es', content: 'Documental' },
-        ],
-      },
-      {
-        name: 'Romance',
-        translations: [
-          { code: 'en', content: 'Romance' },
-          { code: 'zh', content: '浪漫' },
-          { code: 'de', content: 'Romantik' },
-          { code: 'es', content: 'Romance' },
         ],
       },
     ],
