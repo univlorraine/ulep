@@ -150,6 +150,31 @@ const questions = {
       ],
     },
     {
+      name: "Je peux écrire des messages et des publications personnelles en ligne très simples, sur mes loisirs, ce que j'aime ou n’aime pas, etc. avec des phrases très courtes et à l’aide d’un outil de traduction.",
+      translations: [
+        {
+          code: 'en',
+          content:
+            'Can formulate very simple messages and personal online postings as a series of very short sentences about hobbies, likes/dislikes, etc., relying on the aid of a translation tool.',
+        },
+        {
+          code: 'zh',
+          content:
+            '我能写一些消息，并且我能用很短的句子和翻译工具，在网上发表一些很简单的，关于我的消遣，我喜欢什么或不喜欢什么等的信息。',
+        },
+        {
+          code: 'de',
+          content:
+            'Kann sehr einfache Mitteilungen und persönliche online Postings über Hobbys, Vorlieben und Abneigungen usw. in einer Abfolge von sehr kurzen Sätzen verfassen und sich dabei auf Übersetzungshilfen stützen.',
+        },
+        {
+          code: 'es',
+          content:
+            'Elabora mensajes y entradas personales, muy sencillos y compuestos de una serie de frases muy cortas, sobre aficiones, lo que le gusta/no le gusta, etc., con la ayuda de una herramienta de traducción.',
+        },
+      ],
+    },
+    {
       name: 'Je peux comprendre les grandes lignes d’une information simple, donnée dans une situation prévisible, comme par ex. celle d’un guide touristique (« Voici où habite le Président »).',
       translations: [
         {
