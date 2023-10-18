@@ -2,51 +2,61 @@ import { PrismaClient } from '@prisma/client';
 
 export enum ObjectiveIds {
   ORAL_PRACTICE = 'eaf9948e-3a55-473a-b1f7-6634eec2a621',
-  IMPROVE_LEVEL = '889f9ffe-08b5-4bb2-bb57-48a84739d198',
-  SPEAK_LIKE_NATIVE = 'b75a2c18-3026-431a-a0af-af3f30fd2f44',
-  PREPARE_TRAVEL_ABROAD = 'ce567cf5-8b3b-42c5-b816-f9e0a6f5d7f8',
+  WRITING_PRACTICE = 'ce567cf5-8b3b-42c5-b816-f9e0a6f5d7f8',
+  DISCOVER_CULTURE = '889f9ffe-08b5-4bb2-bb57-48a84739d198',
+  DISCOVER_LANGUAGE = 'b75a2c18-3026-431a-a0af-af3f30fd2f44',
   GET_CERTIFICATION = '49f3bb2d-75cb-4421-afef-2f4207722bdc',
 }
 
 const objectives = [
   {
-    id: ObjectiveIds.SPEAK_LIKE_NATIVE,
-    text: 'Parler comme un natif',
+    id: ObjectiveIds.DISCOVER_LANGUAGE,
+    text: 'Découvrir une nouvelle langue',
     translations: [
-      { code: 'en', content: 'Speak like a native' },
-      { code: 'zh', content: '像本地人一样说话' },
+      { code: 'en', content: 'Discover a new language' },
+      { code: 'zh', content: '探索一门新语言' },
+      { code: 'de', content: 'Eine neue Sprache entdecken' },
+      { code: 'es', content: 'Descubrir otro idioma' },
     ],
   },
   {
-    id: ObjectiveIds.IMPROVE_LEVEL,
-    text: 'Améliorer mon niveau',
+    id: ObjectiveIds.DISCOVER_CULTURE,
+    text: 'Découvrir une culture',
     translations: [
-      { code: 'en', content: 'Improve my level' },
-      { code: 'zh', content: '提高我的水平' },
+      { code: 'en', content: 'Discover a culture' },
+      { code: 'zh', content: '探索一种文化' },
+      { code: 'de', content: 'Eine Kultur entdecken' },
+      { code: 'es', content: 'Descubrir una cultura' },
     ],
   },
   {
     id: ObjectiveIds.ORAL_PRACTICE,
-    text: 'S’entraîner à l’oral',
+    text: 'Améliorer mes compétences orales',
     translations: [
-      { code: 'en', content: 'Oral training' },
-      { code: 'zh', content: '口语培训' },
+      { code: 'en', content: 'Improve my oral skills' },
+      { code: 'zh', content: '改进我的口语能力' },
+      { code: 'de', content: 'Meine mündlichen Fähigkeiten verbessern' },
+      { code: 'es', content: 'Mejorar mis competencias orales' },
     ],
   },
   {
-    id: ObjectiveIds.PREPARE_TRAVEL_ABROAD,
-    text: 'Preparer un séjour à l’etranger',
+    id: ObjectiveIds.WRITING_PRACTICE,
+    text: 'Améliorer mes compétences écrites',
     translations: [
-      { code: 'en', content: 'Preparing a trip abroad' },
-      { code: 'zh', content: '准备出国旅行' },
+      { code: 'en', content: 'Improve my written skills' },
+      { code: 'zh', content: '改进我的写作能力' },
+      { code: 'de', content: 'Meine schriftlichen Fähigkeiten verbessern' },
+      { code: 'es', content: 'Mejorar mis competencias escritas' },
     ],
   },
   {
     id: ObjectiveIds.GET_CERTIFICATION,
-    text: 'Obtenir une certification',
+    text: 'Obtenir un certificat (e)Tandem',
     translations: [
-      { code: 'en', content: 'Obtaining certification' },
-      { code: 'zh', content: '获得认证' },
+      { code: 'en', content: 'Receive an (e)Tandem certificate' },
+      { code: 'zh', content: '获得一个(远程)语伴证书' },
+      { code: 'de', content: 'Ein (e)Tandem-Zertifikat erhalten' },
+      { code: 'es', content: 'Obtener un certificado de E-Tándem' },
     ],
   },
 ];
