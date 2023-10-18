@@ -2,7 +2,6 @@ import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Redirect, useHistory, useLocation } from 'react-router';
 import { useConfig } from '../../context/ConfigurationContext';
-import Language from '../../domain/entities/Language';
 import { useStoreState } from '../../store/storeTypes';
 import FlagBubble from '../components/FlagBubble';
 import LanguageSelectedContent from '../components/contents/LanguageSelectedContent';
@@ -25,6 +24,10 @@ const PairingUnavailableLanguagePage: React.FC = () => {
     const [isLastStep, setIsLastStep] = useState<boolean>(false);
     const profile = useStoreState((state) => state.profile);
     const user = profile?.user;
+
+    const navigateToRessource = () => {
+        window.location.href = configuration.ressourceUrl;
+    }
 
     if (!language || !user) {
         return <Redirect to={`/pairing/languages`} />;
@@ -76,9 +79,9 @@ const PairingUnavailableLanguagePage: React.FC = () => {
                                 {t('pairing_unavailable_language_page.ressource_title')}
                             </p>
                             <div className={styles['button-container']}>
-                                <a href={configuration.ressourceUrl} className="primary-button">
+                                <button onClick={navigateToRessource} className="primary-button">
                                     {t('pairing_unavailable_language_page.ressource_button')}
-                                </a>
+                                </button>
                             </div>
                         </div>
                     </>
