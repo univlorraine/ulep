@@ -1087,7 +1087,7 @@ export const createProficiencyTests = async (prisma: PrismaClient) => {
           create: questions[level].map((question) => ({
             TextContent: {
               create: {
-                text: question,
+                text: question.name,
                 Translations: {
                   create: question.translations?.map((translation) => ({
                     text: translation.content,
