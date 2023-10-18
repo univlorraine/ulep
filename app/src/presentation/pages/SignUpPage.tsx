@@ -39,8 +39,8 @@ const SignUpPage: React.FC = () => {
         !country ||
         !selectedRole ||
         (!department && university.isCentral) ||
-        (!diplome && selectedRole === 'student' && university.isCentral) ||
-        (!staffFunction && selectedRole === 'staff' && university.isCentral);
+        (!diplome && selectedRole === 'STUDENT' && university.isCentral) ||
+        (!staffFunction && selectedRole === 'STAFF' && university.isCentral);
 
     const getSignUpData = async () => {
         const countriesResult = await getAllCountries.execute();
@@ -82,12 +82,12 @@ const SignUpPage: React.FC = () => {
             return await showToast({ message: t(result.message), duration: 1000 });
         }
         switch (selectedRole) {
-            case 'student':
+            case 'STUDENT':
                 if (result.diploma) {
                     setDiplome(result.diploma);
                 }
                 break;
-            case 'staff':
+            case 'STAFF':
                 break;
             default:
                 break;
@@ -96,7 +96,7 @@ const SignUpPage: React.FC = () => {
         const lastname = result.lastname;
         const age = result.age;
         const email = result.email;
-        const gender = result.gender === 'M.' ? 'male' : 'female';
+        const gender = result.gender === 'M.' ? 'MALE' : 'FEMALE';
         updateProfileSignUp({ diplome: result.diploma, role: selectedRole });
 
         history.push('/signup/informations', { centralFirstname: firstname, centralLastname: lastname, centralAge: age, centralEmail: email, centralGender: gender as Gender});
@@ -125,13 +125,13 @@ const SignUpPage: React.FC = () => {
                 <h2 className={styles.subtitle}>{t('signup_page.profile_title')}</h2>
 
                 <RadioButton
-                    isSelected={selectedRole === 'student'}
-                    onPressed={() => setSelectedRole('student')}
+                    isSelected={selectedRole === 'STUDENT'}
+                    onPressed={() => setSelectedRole('STUDENT')}
                     name={t('signup_page.student_role')}
                 />
                 <RadioButton
-                    isSelected={selectedRole === 'staff'}
-                    onPressed={() => setSelectedRole('staff')}
+                    isSelected={selectedRole === 'STAFF'}
+                    onPressed={() => setSelectedRole('STAFF')}
                     name={t('signup_page.staff_role')}
                 />
 
@@ -182,7 +182,7 @@ const SignUpPage: React.FC = () => {
                     </div>
                 )}
 
-                {selectedRole === 'staff' && (
+                {selectedRole === 'STAFF' && (
                     <TextInput
                         onChange={setStaffFunction}
                         title={t('signup_page.function_title')}
@@ -190,7 +190,7 @@ const SignUpPage: React.FC = () => {
                     />
                 )}
 
-                {selectedRole === 'student' && (
+                {selectedRole === 'STUDENT' && (
                     <TextInput onChange={setDiplome} title={t('signup_page.diplome_title')} value={diplome} />
                 )}
                 {displayError && <ErrorMessage description={t('signup_page.error')} />}
