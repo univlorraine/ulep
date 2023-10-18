@@ -199,20 +199,20 @@ const SignUpInformationsPage: React.FC = () => {
                     <h2 className={`${styles.subtitle} no-margin-top`}>{t('global.gender')}</h2>
 
                     <RadioButton
-                        isSelected={gender === 'female'}
-                        onPressed={() => setGender('female')}
+                        isSelected={gender === 'FEMALE'}
+                        onPressed={() => setGender('FEMALE')}
                         name={t('global.woman')}
                     />
 
                     <RadioButton
-                        isSelected={gender === 'male'}
-                        onPressed={() => setGender('male')}
+                        isSelected={gender === 'MALE'}
+                        onPressed={() => setGender('MALE')}
                         name={t('global.men')}
                     />
 
                     <RadioButton
-                        isSelected={gender === 'other'}
-                        onPressed={() => setGender('other')}
+                        isSelected={gender === 'OTHER'}
+                        onPressed={() => setGender('OTHER')}
                         name={t('global.binary')}
                     />
                 </div>
