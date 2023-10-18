@@ -51,7 +51,7 @@ const PairingConfirmLanguagePage: React.FC = () => {
                     <span>{t('pairing_confirm_language_page.language_title')}</span>
                     <div className={confirmLanguagesStyles['language-container']}>
                         {` ${codeLanguageToFlag(profileSignUp.learningLanguage.code)} ${
-                            profileSignUp.learningLanguage.name
+                            t(`languages_code.${profileSignUp.learningLanguage.code}`)
                         }`}
                     </div>
                     <div className={confirmLanguagesStyles['mode-container']}>
