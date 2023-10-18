@@ -146,7 +146,7 @@ const ShowTandems = () => {
 
     return (
         <>
-            {identity?.isCentralUniversity && (
+            {!record.profile.user.university.parent && (
                 <Box>
                     <Typography variant="h6">{translate('learning_languages.show.tandems.matches.title')}</Typography>
                     <Box sx={{ marginTop: 1 }}>
@@ -181,7 +181,7 @@ const ShowTandems = () => {
             )}
             <Box sx={{ marginTop: 3 }}>
                 <Typography variant="h6">
-                    {identity?.isCentralUniversity
+                    {!record.profile.user.university.parent
                         ? translate('learning_languages.show.tandems.globalSuggestions.title')
                         : translate('learning_languages.show.tandems.globalSuggestions.titleNotCentralUniversity')}
                 </Typography>
