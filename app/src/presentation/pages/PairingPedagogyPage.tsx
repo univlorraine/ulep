@@ -64,7 +64,7 @@ const PairingPedagogyPage: React.FC = () => {
             return history.push(`/pairing/language/confirm`);
         }
 
-        if (pedagogy === 'ETANDEM' && profileSignUp.isSuggested) {
+        if (pedagogy === 'ETANDEM' && profileSignUp.isSuggested && profileSignUp.learningLanguage?.code !== '*') {
             return history.push('/pairing/other-languages/selected');
         }
         updateProfileSignUp({ pedagogy, campus: undefined });
