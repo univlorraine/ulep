@@ -1006,6 +1006,12 @@ const isoCodes = {
     name: 'Sängö',
     wikiUrl: 'https://en.wikipedia.org/wiki/Sango_language',
   },
+  sh: {
+    iso6391: 'sh',
+    iso6392: 'hbs',
+    name: 'Serbo-croate',
+    wikiUrl: 'https://fr.wikipedia.org/wiki/Serbo-croate',
+  },
   si: {
     iso6391: 'si',
     iso6392: 'sin',
