@@ -32,6 +32,10 @@
     overflow-y: auto;
 }
 
+.web-content > * {
+    margin: auto 0;
+}
+
 @media (min-width: 768px) {
     .image {
         top: 50%;
@@ -49,9 +53,5 @@
         display: flex;
         justify-content: center;
         padding: 60px 0px 50px 0px;
-    }
-
-    .web-content > * {
-        margin: auto 0;
     }
 }
