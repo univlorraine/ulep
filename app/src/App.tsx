@@ -72,7 +72,7 @@ const AppContext = () => {
     return (
         <ConfigContext.Provider
             value={getConfigContextValue(
-                apiUrl,
+                import.meta.env.VITE_API_URL || apiUrl,
                 i18n.language,
                 accessToken,
                 refreshToken,
