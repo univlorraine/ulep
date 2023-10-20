@@ -18,6 +18,8 @@ const TranslationLanguagePicker: React.FC<TranslationLanguagePickerProps> = ({ o
         >
             <MenuItem value="en">EN</MenuItem>
             <MenuItem value="zh">ZH</MenuItem>
+            <MenuItem value="de">DE</MenuItem>
+            <MenuItem value="es">ES</MenuItem>
         </Select>
     </FormControl>
 );
