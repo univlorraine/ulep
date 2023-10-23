@@ -73,7 +73,7 @@ const PairingFinalPage: React.FC = () => {
                     'pairing_final_page.congratulation'
                 )},`}</span>
                 <span className={styles.description}>{t('pairing_final_page.congratulation_text')}</span>
-                <button className="primary-button large-margin-top" onClick={askNewLanguage}>
+                <button className="primary-button large-margin-top" disabled={loading} onClick={askNewLanguage}>
                     {t('pairing_final_page.validate_button')}
                 </button>
             </div>
