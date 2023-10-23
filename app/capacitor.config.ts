@@ -7,6 +7,11 @@ const baseConfig: CapacitorConfig = {
     server: {
         androidScheme: 'https',
     },
+    plugins: {
+        App: {
+            customUrlScheme: 'ulep',
+        },
+    },
 };
 
 switch (process.env.ENV) {
@@ -14,7 +19,7 @@ switch (process.env.ENV) {
         config = {
             ...baseConfig,
             appId: 'com.ionic.etandem',
-            appName: 'etandem', 
+            appName: 'etandem',
             ios: {
                 scheme: 'prod',
             },

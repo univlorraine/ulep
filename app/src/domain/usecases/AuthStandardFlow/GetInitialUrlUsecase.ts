@@ -1,4 +1,4 @@
-import GetInitialUrlUsecaseInterface from "../../interfaces/AuthStandardFlow/GetInitialUrlUsecase.interface";
+import GetInitialUrlUsecaseInterface from '../../interfaces/AuthStandardFlow/GetInitialUrlUsecase.interface';
 
 export class GetInitialUrlUsecase implements GetInitialUrlUsecaseInterface {
     constructor(private readonly apiUrl: string) {}
