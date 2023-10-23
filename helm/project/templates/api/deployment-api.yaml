@@ -98,6 +98,8 @@ spec:
               value: "{{ .Values.api.env.smtpPort }}"
             - name: SMTP_SECURE
               value: "{{ .Values.api.env.smtpSecure }}"
+            - name: SMTP_IGNORE_TLS
+            value: "{{ .Values.api.env.ignoreTLS }}"
             - name: SMTP_SENDER
               value: "{{ .Values.api.env.smtpSender }}"
             - name: SMTP_DISABLE_BOOT_VERIFICATION
@@ -122,6 +124,10 @@ spec:
               value: "{{ .Values.api.env.translationsEndpointSuffix }}"
             - name: APP_URL
               value: "https://{{ .Values.api.env.appUrl }}.{{ .Values.domain }}"
+            - name: CONNECTOR_URL
+              value: "{{ .Values.api.env.connectorUrl }}"
+            - name: CONNECTOR_TOKEN
+              value: "{{ .Values.api.env.connectorToken }}"
           envFrom:
             - secretRef:
                 name: "{{ include "etandem.fullname" . }}-secret-{{ .Values.api.name }}"

@@ -12,6 +12,9 @@ interface CreateUserUsecaseInterface {
         university: University,
         role: Role,
         countryCode: string,
+        division?: string,
+        diploma?: string,
+        staffFunction?: string,
         avatar?: File
     ): Promise<void | Error>;
 }

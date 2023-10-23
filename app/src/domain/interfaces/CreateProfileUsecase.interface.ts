@@ -4,21 +4,13 @@ interface CreateProfileUsecaseInterface {
     execute(
         nativeLanguageCode: string,
         masteredLanguageCodes: string[],
-        learningLanguageCode: string,
-        cefrLevel: string,
-        learningType: Pedagogy,
         goals: string[],
         meetingFrequency: MeetFrequency,
         interests: string[],
-        preferSameAge: boolean,
-        preferSameGender: boolean,
         bios: BiographySignUp,
-        isForCertificate: boolean,
-        isForProgram: boolean,
         availabilities: Availabilites,
         availabilitiesNote?: string,
-        availabilitiesNotePrivacy?: boolean,
-        campusId?: string
+        availabilitiesNotePrivacy?: boolean
     ): Promise<undefined | Error>;
 }
 export default CreateProfileUsecaseInterface;

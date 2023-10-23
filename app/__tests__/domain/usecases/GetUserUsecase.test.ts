@@ -15,6 +15,7 @@ const payload: UserCommand = {
         name: 'name',
         parent: undefined,
         sites: [],
+        hasCode: true,
         timezone: 'timezone',
         website: 'site',
         admissionStart: new Date('2023-01-01T00:00:00.000Z'),

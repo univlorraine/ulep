@@ -5,6 +5,7 @@ export class KeycloakUser {
   email_verified: boolean;
   realm_access: RealmAccess;
   universityId?: string;
+  universityLogin?: string;
 }
 
 export type KeycloakEmailAction =
@@ -71,7 +72,6 @@ interface KeycloakKey {
   kid: string;
   x5c: string;
 }
-
 export interface CreateUserProps {
   email: string;
   password: string;
@@ -85,6 +85,7 @@ export interface CreateUserProps {
 
 export interface CreateAdministratorProps {
   email: string;
+  password: string;
   universityId?: string;
 }
 

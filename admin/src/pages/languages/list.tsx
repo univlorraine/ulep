@@ -42,7 +42,12 @@ const LanguageList = () => {
         <List exporter={false}>
             <Datagrid bulkActionButtons={false}>
                 <TextField label={translate('languages.code')} source="code" />
-                <TextField label={translate('languages.name')} source="name" />
+                <FunctionField
+                    label={translate('languages.name')}
+                    render={(record: Language) => translate(`languages_code.${record.code}`)}
+                    sortable={false}
+                    source="code"
+                />
                 <FunctionField
                     label={translate('languages.status.title')}
                     render={(record: Language) => (

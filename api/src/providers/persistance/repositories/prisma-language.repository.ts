@@ -198,7 +198,7 @@ export class PrismaLanguageRepository implements LanguageRepository {
     const res = await this.prisma.languageCodes.findMany({
       where: {
         mainUniversityStatus: {
-          equals: LanguageStatus.PRIMARY,
+          in: [LanguageStatus.PRIMARY, LanguageStatus.SECONDARY],
         },
       },
     });

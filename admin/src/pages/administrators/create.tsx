@@ -5,6 +5,7 @@ import University from '../../entities/University';
 
 interface AdministratorPayload {
     email: string;
+    password: string;
     universityId?: string;
 }
 
@@ -14,9 +15,10 @@ const CreateAdministrator = () => {
     const redirect = useRedirect();
     const notify = useNotify();
 
-    const handleSubmit = async (email: string, university?: University) => {
+    const handleSubmit = async (email: string, password: string, university?: University) => {
         const payload: AdministratorPayload = {
             email,
+            password,
         };
 
         if (university?.parent) {

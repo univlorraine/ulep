@@ -7,7 +7,6 @@ import {
   IsEmail,
   IsInt,
   Min,
-  Matches,
   Length,
   IsOptional,
   IsBoolean,
@@ -25,10 +24,8 @@ export class CreateUserRequest implements CreateUserCommand {
 
   @Swagger.ApiProperty({ type: 'string', format: 'password' })
   @IsString()
-  @Matches(/((?=.*\d)|(?=.*\W+))(?![.\n])(?=.*[A-Z])(?=.*[a-z]).*$/, {
-    message: 'password too weak',
-  })
-  password: string;
+  @IsOptional()
+  password?: string;
 
   @Swagger.ApiProperty({ type: 'string' })
   @IsString()
@@ -60,12 +57,28 @@ export class CreateUserRequest implements CreateUserCommand {
 
   @Swagger.ApiProperty({ type: 'string' })
   @IsString()
-  code: string;
+  @IsOptional()
+  code?: string;
 
   @Swagger.ApiProperty({ type: 'string', example: 'FR' })
   @IsString()
   @Length(2, 2)
   countryCode: string;
+
+  @Swagger.ApiProperty({ type: 'string' })
+  @IsString()
+  @IsOptional()
+  division?: string;
+
+  @Swagger.ApiProperty({ type: 'string' })
+  @IsString()
+  @IsOptional()
+  diploma?: string;
+
+  @Swagger.ApiProperty({ type: 'string' })
+  @IsString()
+  @IsOptional()
+  staffFunction?: string;
 }
 
 export class UpdateUserRequest {
@@ -119,6 +132,10 @@ export class CreateAdministratorRequest {
   @IsUUID()
   @IsOptional()
   universityId?: string;
+
+  @Swagger.ApiProperty({ type: 'string' })
+  @IsString()
+  password: string;
 }
 export class UserResponse {
   @Swagger.ApiProperty({ type: 'string', format: 'uuid' })

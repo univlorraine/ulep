@@ -54,6 +54,24 @@ const fallbackResources = {
           downloadApps: 'Download our apps',
         },
       },
+      [EMAIL_TEMPLATE_IDS.WELCOME]: {
+        subject: 'Welcome on ULEP',
+        title: 'Welcome on ULEP',
+        content: {
+          introduction: 'Dear {{firstname}},',
+          paragraphs: [
+            "We're delighted to welcome you to the Université de Lorraine Tandem program! You are now registered to learn a new language with a student partner who shares your passion for language learning. In the next few days, you will receive an e-mail notification informing you that you have been matched with your Tandem partner",
+            'We recommend that you take the time to introduce yourself to your partner and plan your first conversation session. We encourage you to be open-minded and fully involved in the program to get the most out of it.',
+            "If you have any questions or concerns, please don't hesitate to contact us. We're here to help you succeed in your language learning journey and we're delighted to be part of your learning journey.",
+            'Best regards,',
+          ],
+          signature: "Tandem's team of Lorraine University",
+        },
+        footer: {
+          unsubscribe: 'You can unsubscribe by connecting to your account.',
+          downloadApps: 'Download our apps',
+        },
+      },
     },
   },
 };

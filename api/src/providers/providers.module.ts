@@ -38,8 +38,11 @@ import { EMAIL_GATEWAY } from 'src/core/ports/email.gateway';
 import { SmtpEmailGateway } from './gateway/smtp-email.gateway';
 import { EMAIL_TEMPLATE_REPOSITORY } from 'src/core/ports/email-template.repository';
 import { TranslatedEmailTemplateRepository } from './persistance/repositories/translated-emails-template-repository';
+import { INSTANCE_REPOSITORY } from 'src/core/ports/instance.repository';
+import { PrismaInstanceRepository } from 'src/providers/persistance/repositories/prisma-instance.repository';
 
 const providers: Provider[] = [
+  { provide: INSTANCE_REPOSITORY, useClass: PrismaInstanceRepository },
   {
     provide: CAMPUS_REPOSITORY,
     useClass: PrismaCampusRepository,

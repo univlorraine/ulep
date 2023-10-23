@@ -28,8 +28,8 @@ const SignUpAvailabilitiesPage: React.FC = () => {
     const history = useHistory();
     const updateProfileSignUp = useStoreActions((state) => state.updateProfileSignUp);
     const profileSignUp = useStoreState((state) => state.profileSignUp);
-    const userSignUp = useStoreState((state) => state.user);
-    const university = userSignUp?.university || profileSignUp.university;
+    const user = useStoreState((state) => state.user);
+    const university = user?.university || profileSignUp.university;
     // @ts-ignore
     const [timezone, setTimezone] = useState<string>(university?.timezone);
     const [availabilities, setAvailabilities] = useState<Availabilites>(initialAvailabilities);

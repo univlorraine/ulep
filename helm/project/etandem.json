@@ -26,7 +26,7 @@
       "clientAuthenticatorType": "client-secret",
       "secret": "{{ .Values.api.env.keycloakClientSecret }}",
       "bearerOnly": false,
-      "standardFlowEnabled": false,
+      "standardFlowEnabled": true,
       "directAccessGrantsEnabled": true,
       "redirectUris": ["https://{{ .Values.api.env.appUrl }}.{{ .Values.domain }}/*", "https://{{ .Values.api.env.adminUrl }}.{{ .Values.domain }}/*"],
       "serviceAccountsEnabled": true,
@@ -45,6 +45,21 @@
           "access.token.claim": "true",
           "claim.name": "universityId",
           "jsonType.label": "String"
+        }
+      }, {
+        "id": "52ae63dc-8053-4067-bd2b-3609ab1cc95b",
+        "name": "universityLogin",
+        "protocol": "openid-connect",
+        "protocolMapper": "oidc-usermodel-attribute-mapper",
+        "consentRequired": false,
+        "config": {
+          "aggregate.attrs": "false",
+          "userinfo.token.claim": "true",
+          "multivalued": "false",
+          "user.attribute": "universityLogin",
+          "id.token.claim": "true",
+          "access.token.claim": "true",
+          "claim.name": "universityLogin"
         }
       }]
     },

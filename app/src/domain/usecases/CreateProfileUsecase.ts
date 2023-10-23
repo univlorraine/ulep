@@ -10,38 +10,19 @@ class CreateProfileUsecase implements CreateProfileUsecaseInterface {
     async execute(
         nativeLanguage: string,
         masteredLanguages: string[],
-        learningLanguageCode: string,
-        cefrLevel: string,
-        learningType: Pedagogy,
         goals: string[],
         meetingFrequency: MeetFrequency,
         interests: string[],
-        preferSameAge: boolean,
-        preferSameGender: boolean,
         biography: BiographySignUp,
-        isForCertificate: boolean,
-        isForProgram: boolean,
         availabilities: Availabilites,
         availabilitiesNote?: string,
-        availabilitiesNotePrivacy?: boolean,
-        campusId?: string
+        availabilitiesNotePrivacy?: boolean
     ): Promise<undefined | Error> {
         try {
             const httpResponse: HttpResponse<ProfileCommand> = await this.domainHttpAdapter.post(`/profiles/`, {
                 nativeLanguageCode: nativeLanguage,
                 masteredLanguageCodes: masteredLanguages,
-                learningLanguages: [
-                    {
-                        code: learningLanguageCode,
-                        level: cefrLevel,
-                        certificateOption: isForCertificate,
-                        learningType,
-                        specificProgram: isForProgram,
-                        campusId: campusId,
-                        sameAge: preferSameAge,
-                        sameGender: preferSameGender,
-                    },
-                ],
+                learningLanguages: [],
                 objectives: goals,
                 meetingFrequency,
                 interests,

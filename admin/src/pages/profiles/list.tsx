@@ -96,7 +96,7 @@ const ProfileList = (props: any) => {
     return (
         <List
             exporter={false}
-            filter={{ university: identity?.universityId }}
+            filter={{ university: !identity?.isCentralUniversity ? identity?.universityId : undefined }}
             filters={<ProfileFilter />}
             title={translate('profiles.label')}
             {...props}

@@ -1,5 +1,5 @@
 import { Device } from '@capacitor/device';
-import { IonApp, setupIonicReact } from '@ionic/react';
+import { IonApp, IonContent, IonLoading, IonPage, setupIonicReact } from '@ionic/react';
 import { IonReactRouter } from '@ionic/react-router';
 import { StoreProvider, useStoreRehydrated } from 'easy-peasy';
 import { useEffect } from 'react';
@@ -26,35 +26,31 @@ import '@ionic/react/css/text-alignment.css';
 import '@ionic/react/css/text-transformation.css';
 
 /* Theme variables */
-import Configuration from './domain/entities/Confirguration';
 import './presentation/theme/button.css';
 import './presentation/theme/global.css';
 import './presentation/theme/margin.css';
 import './presentation/theme/variables.css';
 import Store from './store/store';
+import InstancesPage from './presentation/pages/mobile/InstancesPage';
+import useFetchConfiguration from './presentation/hooks/useFetchConfiguration';
+import useFetchI18NBackend from './presentation/hooks/useFetchI18NBackend';
+import ErrorPage from './presentation/pages/ErrorPage';
 
 setupIonicReact();
 
 const AppContext = () => {
     const { i18n } = useTranslation();
-    const rehydrated = useStoreRehydrated();
     const accessToken = useStoreState((state) => state.accessToken);
+    const apiUrl = useStoreState((state) => state.apiUrl);
     const language = useStoreState((state) => state.language);
     const refreshToken = useStoreState((state) => state.refreshToken);
     const setProfile = useStoreActions((state) => state.setProfile);
     const setTokens = useStoreActions((state) => state.setTokens);
     const setUser = useStoreActions((state) => state.setUser);
-    const configuration = new Configuration(
-        'Université de Lorraine',
-        'Université de Lorraine',
-        'contact@email.com',
-        '#FDEE66',
-        '#B6AA43',
-        '#EDDF5E',
-        '#8BC4C4',
-        '#4B7676',
-        '#7CB8B8'
-    );
+
+    const { configuration, error, loading } = useFetchConfiguration(import.meta.env.VITE_API_URL || apiUrl);
+
+    useFetchI18NBackend(apiUrl);
 
     useEffect(() => {
         const getLanguage = async () => {
@@ -64,20 +60,19 @@ const AppContext = () => {
         getLanguage();
     }, [language]);
 
-    useEffect(() => {
-        document.documentElement.style.setProperty('--primary-color', configuration.primaryColor);
-        document.documentElement.style.setProperty('--primary-dark-color', configuration.primaryDarkColor);
-        document.documentElement.style.setProperty('--secondary-color', configuration.secondaryColor);
-        document.documentElement.style.setProperty('--secondary-dark-color', configuration.secondaryDarkColor);
-    }, []);
+    if (error) {
+        return <ErrorPage />;
+    }
 
-    if (!rehydrated) {
-        return <div />;
+    //TODO(future): Real loader rather than just IonLoading doing nothing
+    if (!configuration || loading) {
+        return <IonLoading />;
     }
 
     return (
         <ConfigContext.Provider
             value={getConfigContextValue(
+                import.meta.env.VITE_API_URL || apiUrl,
                 i18n.language,
                 accessToken,
                 refreshToken,
@@ -94,11 +89,26 @@ const AppContext = () => {
     );
 };
 
+const AppInstance: React.FC = () => {
+    const rehydrated = useStoreRehydrated();
+    const apiUrl = useStoreState((state) => state.apiUrl);
+    const setApiUrl = useStoreActions((state) => state.setApiUrl);
+
+    if (!rehydrated) {
+        return <div />;
+    }
+
+    // We check if we have an api url on env variable or on localstorage ( web and hybrid )
+    if (!apiUrl && !import.meta.env.VITE_API_URL)
+        return <InstancesPage onValidate={(url: string) => setApiUrl({ apiUrl: url })} />;
+    else return <AppContext />;
+};
+
 const App: React.FC = () => {
     return (
         <IonApp>
             <StoreProvider store={Store}>
-                <AppContext />
+                <AppInstance />
             </StoreProvider>
         </IonApp>
     );

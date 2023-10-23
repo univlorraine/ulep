@@ -1,14 +1,22 @@
 import { KeycloakClient } from '@app/keycloak';
-import { Body, Controller, Logger, Post } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Get,
+  Logger,
+  Param,
+  Post,
+  Res,
+} from '@nestjs/common';
 import * as Swagger from '@nestjs/swagger';
 import {
   BearerTokensRequest,
+  BearerTokensFromCodeRequest,
   BearerTokensResponse,
   RefreshTokenRequest,
   ResetPasswordRequest,
 } from '../dtos';
 import { configuration } from 'src/configuration';
-import { RessourceDoesNotExist } from 'src/core/errors';
 
 @Controller('authentication')
 @Swagger.ApiTags('Authentication')
@@ -31,6 +39,40 @@ export class SecurityController {
     return new BearerTokensResponse(credentials);
   }
 
+  @Get('flow')
+  @Swagger.ApiOperation({ summary: 'Initiate a standard browser login.' })
+  @Swagger.ApiOkResponse({ type: BearerTokensResponse })
+  async initiateStandardFlow(
+    @Param('redirectUri') redirectUri: string,
+    @Res() res,
+  ): Promise<void> {
+    if (!redirectUri) {
+      this.logger.warn(
+        'No redirect URI when initializing standard flow. Using default redirectUri',
+      );
+    }
+
+    const url = this.keycloakClient.getStandardFlowUrl(
+      redirectUri || `${configuration().appUrl}/auth`,
+    );
+    res.redirect(url);
+  }
+
+  @Post('flow/code')
+  @Swagger.ApiOperation({ summary: 'Request a JWT token using grant code.' })
+  @Swagger.ApiOkResponse({ type: BearerTokensResponse })
+  async loginFromCode(
+    @Body() { code, redirectUri }: BearerTokensFromCodeRequest,
+  ): Promise<BearerTokensResponse> {
+    const credentials =
+      await this.keycloakClient.getCredentialsFromAuthorizationCode({
+        authorizationCode: code,
+        redirectUri,
+      });
+
+    return new BearerTokensResponse(credentials);
+  }
+
   @Post('refresh-token')
   @Swagger.ApiOperation({ summary: 'Request a JWT token.' })
   @Swagger.ApiOkResponse({ type: BearerTokensResponse })
@@ -48,8 +90,9 @@ export class SecurityController {
     const user = await this.keycloakClient.getUserByEmail(body.email);
 
     if (!user) {
-      throw new RessourceDoesNotExist(body.email);
+      return;
     }
+
     await this.keycloakClient.executeActionEmail(
       ['UPDATE_PASSWORD'],
       user.id,

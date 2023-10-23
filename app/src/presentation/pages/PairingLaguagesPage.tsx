@@ -13,17 +13,14 @@ import styles from './css/SignUp.module.css';
 
 const PairingLaguagesPage: React.FC = () => {
     const { t } = useTranslation();
-    const isSignUp = useParams<{ prefix?: string }>().prefix;
     const { configuration, getAllLanguages } = useConfig();
     const [showToast] = useIonToast();
     const history = useHistory();
     const [languages, setLanguages] = useState<Language[]>([]);
     const [selectedLaguage, setSelectedLanguage] = useState<Language>();
     const updateProfileSignUp = useStoreActions((state) => state.updateProfileSignUp);
-    const profileSignUp = useStoreState((state) => state.profileSignUp);
     const profile = useStoreState((state) => state.profile);
-    const user = useStoreState((state) => state.user);
-    const university = user?.university || profile?.user.university;
+    const university = profile?.user.university;
 
     if (!university) {
         return <Redirect to={'/signup'} />;
@@ -36,31 +33,23 @@ const PairingLaguagesPage: React.FC = () => {
             return await showToast({ message: t(result.message), duration: 1000 });
         }
 
-        if (isSignUp) {
-            return setLanguages(
-                result.filter(
-                    (language) =>
-                        profileSignUp.nativeLanguage?.code !== language.code &&
-                        !profileSignUp.otherLanguages?.find((otherLanguage) => language.code === otherLanguage.code)
-                )
-            );
-        }
         return setLanguages(
             result.filter(
                 (language) =>
                     profile?.nativeLanguage.code !== language.code &&
-                    !profile?.masteredLanguages?.find((otherLanguage) => language.code === otherLanguage.code)
+                    !profile?.masteredLanguages?.find((otherLanguage) => language.code === otherLanguage.code) &&
+                    !profile?.learningLanguages?.find((learningLanguage) => language.code === learningLanguage.code)
             )
         );
     };
 
     const continueSignUp = async () => {
         updateProfileSignUp({ learningLanguage: selectedLaguage });
-        return history.push(`${isSignUp ? '/' + isSignUp : '/'}pairing/pedagogy`);
+        return history.push(`/pairing/pedagogy`);
     };
 
     const otherLanguage = () => {
-        return history.push(`${isSignUp ? '/' + isSignUp : '/'}pairing/other-languages`);
+        return history.push(`/pairing/other-languages`);
     };
 
     useEffect(() => {

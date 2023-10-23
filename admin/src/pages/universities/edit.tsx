@@ -45,14 +45,14 @@ const EditUniversity = () => {
                             return redirect('/universities');
                         }
 
-                        return notify('universities.edit.error');
+                        return notify('universities.update.error');
                     },
                 }
             );
         } catch (err) {
             console.error(err);
 
-            return notify('universities.edit.error');
+            return notify('universities.update.error');
         }
     };
 

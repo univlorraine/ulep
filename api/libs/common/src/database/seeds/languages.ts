@@ -755,6 +755,12 @@ const isoCodes = {
     name: 'Монгол',
     wikiUrl: 'https://en.wikipedia.org/wiki/Mongolian_language',
   },
+  mo: {
+    iso6391: 'mo',
+    iso6392: 'mol',
+    name: 'лимба молдовеняскэ',
+    wikiUrl: 'https://fr.wikipedia.org/wiki/Moldave',
+  },
   mr: {
     iso6391: 'mr',
     iso6392: 'mar',
@@ -999,6 +1005,12 @@ const isoCodes = {
     family: 'Niger–Congo',
     name: 'Sängö',
     wikiUrl: 'https://en.wikipedia.org/wiki/Sango_language',
+  },
+  sh: {
+    iso6391: 'sh',
+    iso6392: 'hbs',
+    name: 'Serbo-croate',
+    wikiUrl: 'https://fr.wikipedia.org/wiki/Serbo-croate',
   },
   si: {
     iso6391: 'si',

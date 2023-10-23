@@ -1,6 +1,7 @@
 export enum EMAIL_TEMPLATE_IDS {
   TANDEM_BECOME_ACTIVE = 'tandemBecomeActive',
   TANDEM_TO_REVIEW = 'notifyUniversityAdminTandemToReview',
+  WELCOME = 'welcome',
 }
 
 interface EmailContentProps {
