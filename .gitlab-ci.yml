@@ -1,0 +1,73 @@
+workflow:
+  rules:
+    - if: $CI_COMMIT_BRANCH == "main" || $CI_COMMIT_BRANCH == "develop" ||  $CI_COMMIT_BRANCH == "ci" # Supprimer ci
+
+stages:
+  - packages
+
+# CI de package
+.package ci:
+  stage: packages
+  trigger:
+    include: .gitlab-ci/package-ci.yml
+    strategy: depend
+
+# CI de l'admin
+🧩 admin:
+  extends: .package ci
+  variables:
+    WORKING_DIR: admin
+    IMAGE_NAME: ulep/admin
+    DOCKERFILE_PATH: .gitlab-ci/Dockerfile.admin
+    # DOCKER_TARGET: admin_prod # Génère une erreur : ERR_PNPM_BROKEN_LOCKFILE  The lockfile at "/srv/app/pnpm-lock.yaml" is broken: duplicated mapping key (1755:3)
+    LINT: enabled
+  rules:
+    - changes:
+        - admin/**/*
+
+# CI de l'initialisation API
+🧩 api init:
+  extends: .package ci
+  variables:
+    WORKING_DIR: api
+    IMAGE_NAME: ulep/api-init
+    DOCKER_TARGET: api_init
+  rules:
+    - changes:
+        - api/libs/common/src/database/**/*
+
+# CI de l'API
+🧩 api:
+  extends: .package ci
+  variables:
+    WORKING_DIR: api
+    IMAGE_NAME: ulep/api
+    DOCKERFILE_PATH: .gitlab-ci/Dockerfile.api
+    DOCKER_TARGET: api_ul
+    # DOCKER_TARGET: api_prod
+    LINT: enabled
+    TEST: enabled
+  rules:
+    - changes:
+        - api/**/*
+
+# CI du thème UL Keycloak
+🧩 auth ul theme:
+  extends: .package ci
+  variables:
+    WORKING_DIR: docker/keycloak
+    IMAGE_NAME: ulep/auth-ul-theme
+    TAG: "1.0"
+  rules:
+    - changes:
+        - docker/keycloak/**/*
+
+# CI de la webapp
+🧩 webapp:
+  extends: .package ci
+  variables:
+    WORKING_DIR: app
+    IMAGE_NAME: ulep/webapp
+  rules:
+    - changes:
+        - app/**/*

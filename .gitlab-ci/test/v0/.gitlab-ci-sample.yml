@@ -1,0 +1,104 @@
+variables:
+  NODE_VERSION: 18 # Nécessite un ARG de même nom dans les Dockerfile (construction du FROM node:$NODE_VERSION-alpine)
+  DOCKERFILE_PATH: $WORKING_DIR/Dockerfile
+
+stages:
+  - 📦 build
+
+.build image: # Build de l'image
+  stage: 📦 build
+  image:
+    name: gcr.io/kaniko-project/executor:debug
+    entrypoint: [""]
+  before_script: # Informations de connexion au registry Harbor dans un fichier de conf Kaniko
+    - mkdir -p /kaniko/.docker
+    - echo "{\"auths\":{\"$CI_REGISTRY\":{\"auth\":\"$(printf "%s:%s" "$CI_REGISTRY_USER" "$CI_REGISTRY_PASSWORD" | base64 | tr -d '\n')\"}}}" > /kaniko/.docker/config.json
+  script:
+    # Ajout du NODE_ENV comme build-arg s'il est défini
+    - >
+      if [ $NODE_ENV_CI ]; then
+        NODE_ENV_CI_BUILD_ARGS="--build-arg NODE_ENV_CI=$NODE_ENV_CI"
+      fi
+    # Ajout des options de target si elle est définie
+    - >
+      if [ $DOCKER_TARGET ]; then
+        TARGET_OPTIONS="--target $DOCKER_TARGET --skip-unused-stages=true"
+      fi  
+    # Tag de l'image selon la version de l'app (cf package.json) si elle n'est pas fournie
+    - >
+      if [ -z $TAG]; then
+        TAG=$(cat $CI_PROJECT_DIR/$WORKING_DIR/package.json | grep version | head -1 | awk -F= "{ print $2 }" | sed 's/[version:,\",]//g' | tr -d '[[:space:]]')
+      fi
+    # Suffixe avec le nom de la branche si la branche n'est pas main
+    - >
+      if [ $CI_COMMIT_BRANCH != "main" ]; then
+        TAG=$TAG-$CI_COMMIT_BRANCH
+      fi
+    # Build de l'image docker et push sur harbor
+    - /kaniko/executor
+      --context $CI_PROJECT_DIR/$WORKING_DIR
+      --build-arg NODE_VERSION=$NODE_VERSION $NODE_ENV_CI_BUILD_ARGS
+      --dockerfile $CI_PROJECT_DIR/$DOCKERFILE_PATH
+      $TARGET_OPTIONS
+      --destination $CI_REGISTRY_IMAGE/$IMAGE_NAME:$TAG
+  rules:
+    - if: '$CI_COMMIT_BRANCH == "main" || $CI_COMMIT_BRANCH == "develop" ||  $CI_COMMIT_BRANCH == "ci"' # TODO : ci à supprimer
+
+# Build de l'image admin
+🚀 admin image:
+  extends: .build image
+  variables:
+    WORKING_DIR: admin
+    IMAGE_NAME: ulep/admin
+    DOCKER_TARGET: admin_prod
+  rules:
+    - changes: # la CI n'est déclenchée que lorsqu'il y a une modification dans le path précisé
+        - admin/**/*
+
+# Build de l'image d'initialisation API
+🚀 api init image:
+  extends: .build image
+  variables:
+    WORKING_DIR: api
+    IMAGE_NAME: ulep/api-init
+    DOCKER_TARGET: api_init
+  rules:
+    - changes:
+        - api/**/*
+
+# Build de l'image API
+🚀 api image:
+  extends: 🚀 api init image
+  variables:
+    IMAGE_NAME: ulep/api
+    DOCKER_TARGET: api_prod
+
+# Build de l'image API (mode dev)
+🚀 api dev image:
+  extends: 🚀 api image
+  variables:
+    NODE_ENV_CI: development
+  when: manual
+  rules:
+    - if: '$CI_COMMIT_BRANCH != "main"'
+
+# Build de l'image du thème UL Keycloak
+🚀 auth ul theme image:
+  extends: .build image
+  variables:
+    WORKING_DIR: docker/keycloak
+    IMAGE_NAME: ulep/auth-ul-theme
+    TAG: "1.0"
+  rules:
+    - changes:
+        - docker/keycloak/**/*
+
+# Build de l'image de la webapp
+🚀 webapp image:
+  extends: .build image
+  variables:
+    WORKING_DIR: app
+    IMAGE_NAME: ulep/webapp
+  rules:
+    - changes:
+        - app/**/*

@@ -1,0 +1,73 @@
+stages:
+  - packages
+
+# Base des CI
+.base:
+  stage: packages
+  trigger:
+    include: .gitlab-ci/template-ci.yml
+    strategy: depend
+
+# CI de l'admin
+🧩 admin:
+  extends: .base
+  variables:
+    WORKING_DIR: admin
+    IMAGE_NAME: ulep/admin
+    DOCKERFILE_PATH: .gitlab-ci/Dockerfile.admin
+  rules:
+    - changes: # la CI n'est déclenchée que lorsqu'il y a une modification dans le path précisé
+        - admin/**/*
+
+# CI de l'initialisation API
+🧩 api init:
+  extends: .base
+  variables:
+    WORKING_DIR: api
+    IMAGE_NAME: ulep/api-init
+    DOCKER_TARGET: api_init
+  rules:
+    - changes:
+        - api/libs/common/src/database/**/*
+
+# CI de l'API
+🧩 api:
+  extends: .base
+  variables:
+    WORKING_DIR: api
+    IMAGE_NAME: ulep/api
+    DOCKERFILE_PATH: .gitlab-ci/Dockerfile.api
+    DOCKER_TARGET: api_ul
+  rules:
+    - changes:
+        - api/**/*
+
+# CI de l'API (mode dev)
+🧩 api dev:
+  extends: 🧩 api
+  variables:
+    NODE_ENV_CI: development
+  when: manual
+  rules:
+    - if: '$CI_COMMIT_BRANCH != "main"'
+
+# CI du thème UL Keycloak
+🧩 auth ul theme:
+  extends: .base
+  variables:
+    WORKING_DIR: docker/keycloak
+    IMAGE_NAME: ulep/auth-ul-theme
+    TAG: "1.0"
+  rules:
+    - changes:
+        - docker/keycloak/**/*
+
+# CI de la webapp
+🧩 webapp:
+  extends: .base
+  variables:
+    WORKING_DIR: app
+    IMAGE_NAME: ulep/webapp
+  rules:
+    - changes:
+        - app/**/*
