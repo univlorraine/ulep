@@ -33,14 +33,21 @@ const WelcomeContent: React.FC<WelcomeContentProps> = ({ onPress }) => {
     const [currentTheme, setCurrentTheme] = useState<HomeTheme>(themes[0]);
     const { width } = useWindowDimensions();
     const isHybrid = width < HYBRID_MAX_WIDTH;
+    let timeout: NodeJS.Timeout;
+
+    const onButtonPressed = () => {
+        clearTimeout(timeout);
+        if (onPress) {
+            onPress();
+        }
+    };
 
     useEffect(() => {
-        let timeout: NodeJS.Timeout;
         setCurrentTheme(themes[Math.floor(Math.random() * themes.length)]);
         if (onPress) {
             timeout = setTimeout(() => onPress(), 5000);
         }
-        return () =>  clearInterval(timeout);
+        return () => clearTimeout(timeout);
     }, []);
 
     const backgroundStyle = isHybrid
@@ -64,7 +71,7 @@ const WelcomeContent: React.FC<WelcomeContentProps> = ({ onPress }) => {
                     <p className={style['welcome-subtext']}>le meilleur moyen de pratiquer une langue</p>
                 </span>
 
-                <button className={style.button} disabled={!onPress} onClick={onPress}>
+                <button className={style.button} disabled={!onPress} onClick={onButtonPressed}>
                     <p className={style['button-text']}>Apprends une nouvelle langue en tandem</p>
                 </button>
             </div>
