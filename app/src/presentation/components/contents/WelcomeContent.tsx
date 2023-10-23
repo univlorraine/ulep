@@ -37,9 +37,7 @@ const WelcomeContent: React.FC<WelcomeContentProps> = ({ onPress }) => {
 
     const onButtonPressed = () => {
         clearTimeout(timeout);
-        if (onPress) {
-            onPress();
-        }
+        onPress?.();
     };
 
     useEffect(() => {
