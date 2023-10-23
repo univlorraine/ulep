@@ -1,0 +1,150 @@
+# CI de package
+
+variables:
+  NODE_VERSION: 18
+  DOCKERFILE_PATH: $WORKING_DIR/Dockerfile
+  # Base Postgres pour les tests
+  POSTGRES_DB: ulep
+  POSTGRES_USER: postgres
+  POSTGRES_PASSWORD: postgres
+  POSTGRES_HOST_AUTH_METHOD: trust
+
+stages:
+  - 🔩 .pre
+  - 📦 build
+
+# Base commune
+.base:
+  image: node:$NODE_VERSION-alpine
+  before_script: # Activation de corepack pour pouvoir utiliser pnpm
+    - corepack enable
+    - corepack prepare --activate pnpm@latest
+    - cd $WORKING_DIR
+
+# Installation des dépendances
+⚙️ dependencies:
+  stage: 🔩 .pre
+  extends: .base
+  script: # (cache pas forcément utile : https://pnpm.io/fr/continuous-integration)
+    # Si pas --no-frozen-lockfile alors ERR_PNPM_OUTDATED_LOCKFILE  Cannot install with "frozen-lockfile" because pnpm-lock.yaml is not up to date with package.json
+    # Il ne devrait pas y avoir cette erreur. Une autre option pour remplacer --no-frozen-lockfile est --fix-lockfile
+    - pnpm i --no-frozen-lockfile # cf .circleci/config.yml 
+  artifacts:
+    paths:
+      - $CI_PROJECT_DIR/$WORKING_DIR/node_modules
+    expire_in: 1 hour
+  rules:
+    - if: ($LINT == 'enabled' || $TEST == 'enabled' || $DOCKERFILE_PATH != "$WORKING_DIR/Dockerfile") 
+
+# Lint
+🛡️ lint:
+  stage: 🔩 .pre
+  extends: .base
+  needs:
+    - job: ⚙️ dependencies
+  script:
+    - pnpm run lint
+  rules:
+    - if: $LINT == 'enabled'
+
+# Test
+🛡️ test:
+  stage: 🔩 .pre
+  extends: .base
+  needs:
+    - job: ⚙️ dependencies
+  services: # https://docs.gitlab.com/ee/ci/services/postgres.html (https://knasmueller.net/gitlab-postgresql-testing-pipeline)
+    - postgres:13-alpine
+  script:
+    - echo "DATABASE_URL=postgresql://$POSTGRES_USER:$POSTGRES_PASSWORD@postgres:5432/$POSTGRES_DB" > .env
+    - pnpm prisma generate
+    - pnpm run test
+  rules:
+    - if: $TEST == 'enabled'
+
+# Build
+.build:
+  stage: 📦 build
+  extends: .base
+  needs:
+    - job: ⚙️ dependencies
+    - job: 🛡️ lint
+      optional: true
+    # Empêche le build si ce job est en erreur
+    - job: 🛡️ test
+      optional: true
+
+# Build de l'api (uniquement si on utilise un Dockerfile différent de celui par défaut)
+⚙️ api:
+  extends: .build
+  script:
+    - pnpm prisma generate
+    - pnpm run build
+    # - pnpm install --prod (génère une erreur dans le pod même en mode prod : Error: Cannot find module '@faker-js/faker')
+  artifacts:
+    paths:
+      - $CI_PROJECT_DIR/$WORKING_DIR/dist
+      - $CI_PROJECT_DIR/$WORKING_DIR/package.json
+      - $CI_PROJECT_DIR/$WORKING_DIR/node_modules
+    expire_in: 1 hour
+  rules:
+    - if: $WORKING_DIR == "api" && $DOCKERFILE_PATH != "$WORKING_DIR/Dockerfile"
+
+# Build de l'admin (uniquement si on utilise un Dockerfile différent de celui par défaut)
+🖥️ admin:
+  extends: .build
+  script:
+    - pnpm run build
+    # - pnpm install --prod (génère une erreur dans le pod même en mode prod : Error: Cannot find module '@faker-js/faker')
+  artifacts:
+    paths:
+      - $CI_PROJECT_DIR/$WORKING_DIR
+      # A utiliser à la place de la ligne précédente si les sources ne sont plus nécessaires dans le fichier de déploiement Helm
+      # - $CI_PROJECT_DIR/$WORKING_DIR/build
+      # - $CI_PROJECT_DIR/$WORKING_DIR/node_modules
+    expire_in: 1 hour
+  rules:
+    - if: $WORKING_DIR == "admin" && $DOCKERFILE_PATH != "$WORKING_DIR/Dockerfile"
+
+# Build de l'image
+🚀 container image:
+  stage: 📦 build
+  needs:
+    - job: 🛡️ lint
+      optional: true
+    - job: 🛡️ test
+      optional: true  
+    - job: 🖥️ admin
+      optional: true
+    - job: ⚙️ api
+      optional: true
+  image:
+    name: gcr.io/kaniko-project/executor:debug
+    entrypoint: [""]
+  before_script: # Informations de connexion au registry Harbor dans un fichier de conf Kaniko
+    - mkdir -p /kaniko/.docker
+    - echo "{\"auths\":{\"$CI_REGISTRY\":{\"auth\":\"$(printf "%s:%s" "$CI_REGISTRY_USER" "$CI_REGISTRY_PASSWORD" | base64 | tr -d '\n')\"}}}" > /kaniko/.docker/config.json
+  script:
+    # Ajout des options de target si elle est définie
+    - >
+      if [ $DOCKER_TARGET ]; then
+        TARGET_OPTIONS="--target $DOCKER_TARGET --skip-unused-stages=true"
+      fi  
+    # Tag de l'image selon la version de l'app (cf package.json), si elle n'est pas fournie
+    - >
+      if [ -z $TAG]; then
+        TAG=$(cat $CI_PROJECT_DIR/$WORKING_DIR/package.json | grep version | head -1 | awk -F= "{ print $2 }" | sed 's/[version:,\",]//g' | tr -d '[[:space:]]')
+      fi
+    # NODE_ENV_CI en "development" et suffixe avec le nom de la branche, si la branche n'est pas main
+    - >
+      if [ $CI_COMMIT_BRANCH != "main" ]; then
+        NODE_ENV_CI_BUILD_ARGS="--build-arg NODE_ENV_CI=development"
+        TAG=$TAG-$CI_COMMIT_BRANCH
+      fi
+    # Build de l'image docker et push sur harbor
+    - /kaniko/executor
+      --context $CI_PROJECT_DIR/$WORKING_DIR
+      --build-arg NODE_VERSION=$NODE_VERSION $NODE_ENV_CI_BUILD_ARGS
+      --dockerfile $CI_PROJECT_DIR/$DOCKERFILE_PATH
+      $TARGET_OPTIONS
+      --destination $CI_REGISTRY_IMAGE/$IMAGE_NAME:$TAG
