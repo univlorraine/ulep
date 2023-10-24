@@ -41,6 +41,7 @@ import PairingLevelStartPage from '../pages/PairingLevelStartPage';
 import { useStoreState } from '../../store/storeTypes';
 import SuspendedPage from '../pages/SuspendedPage';
 import PairingOtherLanguageSelectedPage from '../pages/PairingOtherLanguageSelectedPage';
+import AppUrlListener from './AppUrlListener';
 
 const OfflineRouter: React.FC = () => {
     const profile = useStoreState((store) => store.profile);
@@ -51,6 +52,7 @@ const OfflineRouter: React.FC = () => {
 
     return (
         <IonRouterOutlet>
+            <AppUrlListener />
             <Route exact path="/">
                 <WelcomePage />
             </Route>
