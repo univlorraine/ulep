@@ -140,6 +140,8 @@
         "forgot": "Mot de passe oublié ?",
         "invalid_email": "Email invalide",
         "invalid_password": "Mot de passe invalide",
+        "sso_button": "M’authentifier",
+        "sso_title": "Étudiant de l’{{name}}, connecte-toi avec des identifiants de l’université",
         "subtitle": "Connecte-toi avec tes identifiants de l’université pour continuer à utiliser l’application",
         "title": "Se connecter"
     },

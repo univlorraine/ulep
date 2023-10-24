@@ -15,7 +15,7 @@ interface LoginFormProps {
 
 const LoginForm: React.FC<LoginFormProps> = ({ goBack, onLogin }) => {
     const { t } = useTranslation();
-    const { login } = useConfig();
+    const { configuration, getInitialUrlUsecase, login } = useConfig();
     const [email, setEmail] = useState<string>('');
     const [password, setPassword] = useState<string>('');
     const [showLoading, hideLoading] = useIonLoading();
@@ -57,6 +57,21 @@ const LoginForm: React.FC<LoginFormProps> = ({ goBack, onLogin }) => {
                         <IonRouterLink className="secondary-button large-margin-top" routerLink="/forgot-password">
                             {t('login_page.forgot')}
                         </IonRouterLink>
+                    </div>
+                    <div className={style.separator} />
+                    <div className={style['bottom-container']}>
+                        <p className={style['sso-text']}>
+                            {t('login_page.sso_title', { name: configuration.mainUniversityName })}
+                        </p>
+                        <button
+                            className="tertiary-button large-margin-vertical"
+                            onClick={() => {
+                                const redirectUri = encodeURIComponent(`${window.location.origin}/auth`);
+                                window.location.href = getInitialUrlUsecase.execute(redirectUri);
+                            }}
+                        >
+                            {t('login_page.sso_button')}
+                        </button>
                     </div>
                 </form>
             </IonContent>
