@@ -20,10 +20,15 @@
                         </div>
                     </div>
 
-                    <#if messagesPerField.existsError('password')>
+                    <#if messagesPerField.existsError('password') || messagesPerField.existsError('password-policy')>
                         <span id="input-error-password" class="${properties.kcInputErrorMessageClass!}" aria-live="polite">
                             ${kcSanitize(messagesPerField.get('password'))?no_esc}
                         </span>
+                        <#if messagesPerField.existsError('password-policy')>
+                            <span id="input-error-password-policy" class="${properties.kcInputErrorMessageClass!}" aria-live="polite">
+                                ${kcSanitize(messagesPerField.get('password-policy'))?no_esc}
+                            </span>
+                        </#if>
                     </#if>
 
                     <span id="input-error-password-requirements" class="${properties.kcInputErrorMessageClass!}" aria-live="polite" style="display:none;">
