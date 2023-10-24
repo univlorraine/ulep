@@ -17,7 +17,6 @@ const AuthPage: React.FC = () => {
     const [showToast] = useIonToast();
 
     const getAccessToken = async (code: string) => {
-        console.warn(Capacitor.isNativePlatform() ? 'ulep://auth' : `${window.location.origin}/auth`);
         const result = await getTokenFromCodeUsecase.execute({
             code,
             redirectUri: Capacitor.isNativePlatform() ? 'ulep://auth' : `${window.location.origin}/auth`,

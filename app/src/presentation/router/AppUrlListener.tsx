@@ -6,7 +6,6 @@ const AppUrlListener: React.FC<any> = () => {
     let history = useHistory();
     useEffect(() => {
         App.addListener('appUrlOpen', (event: URLOpenListenerEvent) => {
-            console.warn('url:', event.url);
             const slug = event.url.split('.app').pop();
             if (slug) {
                 history.push(slug);
