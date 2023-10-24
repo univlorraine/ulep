@@ -12,7 +12,7 @@
                     <div class="${properties.kcInputGroup!}">
                         <input type="password" id="password-new" name="password-new" class="${properties.kcInputClass!}"
                                autofocus autocomplete="new-password" pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).+"
-                               title="Doit contenir au moins une majuscule, une minuscule et un chiffre."
+                               title="${msg('passwordPoliciesError')}"
                                aria-invalid="<#if messagesPerField.existsError('password','password-confirm')>true</#if>"
                         />
                         <div class="${properties.kcInputShowPasswordClass!} show-password">
