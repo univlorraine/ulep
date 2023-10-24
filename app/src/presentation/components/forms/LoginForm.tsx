@@ -7,6 +7,7 @@ import CircleAvatar from '../CircleAvatar';
 import TextInput from '../TextInput';
 import style from './Form.module.css';
 import Tokens from '../../../domain/entities/Tokens';
+import { Capacitor } from '@capacitor/core';
 
 interface LoginFormProps {
     goBack: () => void;
@@ -34,7 +35,9 @@ const LoginForm: React.FC<LoginFormProps> = ({ goBack, onLogin }) => {
     };
 
     const ssoLogin = () => {
-        const redirectUri = encodeURIComponent(`${window.location.origin}/auth`);
+        const redirectUri = encodeURIComponent(
+            Capacitor.isNativePlatform() ? 'ulep://auth' : `${window.location.origin}/auth`
+        );
         window.location.href = getInitialUrlUsecase.execute(redirectUri);
     };
 
