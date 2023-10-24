@@ -111,7 +111,7 @@ const SignUpPage: React.FC = () => {
     }, []);
 
     useEffect(() => {
-        if (fromIdp && countries.length !== 0) {
+        if (fromIdp && countries.length) {
             getPersonInfos();
         }
     }, [fromIdp, countries]);
