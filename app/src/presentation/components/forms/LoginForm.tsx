@@ -33,6 +33,11 @@ const LoginForm: React.FC<LoginFormProps> = ({ goBack, onLogin }) => {
         onLogin(result);
     };
 
+    const ssoLogin = () => {
+        const redirectUri = encodeURIComponent(`${window.location.origin}/auth`);
+        window.location.href = getInitialUrlUsecase.execute(redirectUri);
+    };
+
     return (
         <div className="container">
             <IonHeader className="ion-no-border">
@@ -63,13 +68,7 @@ const LoginForm: React.FC<LoginFormProps> = ({ goBack, onLogin }) => {
                         <p className={style['sso-text']}>
                             {t('login_page.sso_title', { name: configuration.mainUniversityName })}
                         </p>
-                        <button
-                            className="tertiary-button large-margin-vertical"
-                            onClick={() => {
-                                const redirectUri = encodeURIComponent(`${window.location.origin}/auth`);
-                                window.location.href = getInitialUrlUsecase.execute(redirectUri);
-                            }}
-                        >
+                        <button className="tertiary-button large-margin-vertical" onClick={ssoLogin}>
                             {t('login_page.sso_button')}
                         </button>
                     </div>
