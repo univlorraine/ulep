@@ -8,5 +8,15 @@
                 "EF:B9:AC:F2:62:12:7E:D7:54:1B:82:B4:1E:EA:B5:78:E4:CB:EC:1C:76:3D:98:80:3F:1D:EF:A2:3F:F2:71:F2"
             ]
         }
+    },
+    {
+        "relation": ["delegate_permission/common.handle_all_urls"],
+        "target": {
+            "namespace": "android_app",
+            "package_name": "fr.univlorraine.ulep.staging",
+            "sha256_cert_fingerprints": [
+                "69:B4:89:43:B1:C0:92:CD:F1:E4:3C:9B:C2:73:C7:E3:B3:78:14:E7:F4:EA:33:BB:E3:3A:71:5F:DB:62:BE:AB"
+            ]
+        }
     }
 ]

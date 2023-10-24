@@ -7,6 +7,12 @@
                 "paths": [
                     "*"
                 ]
+            },
+            {
+                "appID": "GZ5KRQM7B5.fr.univlorraine.ulep.staging",
+                "paths": [
+                    "*"
+                ]
             }
         ]
     }
