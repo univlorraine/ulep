@@ -1,5 +1,5 @@
 <#import "template.ftl" as layout>
-<@layout.registrationLayout displayMessage=!messagesPerField.existsError('password','password-confirm'); section>
+<@layout.registrationLayout displayMessage=!messagesPerField.existsError('password-new','password-confirm'); section>
     <#if section = "header">
         ${msg("updatePasswordTitle")}
     <#elseif section = "form">
@@ -11,7 +11,8 @@
                 <div class="${properties.kcInputWrapperClass!}">
                     <div class="${properties.kcInputGroup!}">
                         <input type="password" id="password-new" name="password-new" class="${properties.kcInputClass!}"
-                               autofocus autocomplete="new-password"
+                               autofocus autocomplete="new-password" pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).+"
+                               title="Doit contenir au moins une majuscule, une minuscule et un chiffre."
                                aria-invalid="<#if messagesPerField.existsError('password','password-confirm')>true</#if>"
                         />
                         <div class="${properties.kcInputShowPasswordClass!} show-password">
@@ -20,15 +21,10 @@
                         </div>
                     </div>
 
-                    <#if messagesPerField.existsError('password') || messagesPerField.existsError('password-policy')>
+                    <#if messagesPerField.existsError('password-new')>
                         <span id="input-error-password" class="${properties.kcInputErrorMessageClass!}" aria-live="polite">
-                            ${kcSanitize(messagesPerField.get('password'))?no_esc}
+                            ${kcSanitize(messagesPerField.get('password-new'))?no_esc}
                         </span>
-                        <#if messagesPerField.existsError('password-policy')>
-                            <span id="input-error-password-policy" class="${properties.kcInputErrorMessageClass!}" aria-live="polite">
-                                ${kcSanitize(messagesPerField.get('password-policy'))?no_esc}
-                            </span>
-                        </#if>
                     </#if>
 
                     <span id="input-error-password-requirements" class="${properties.kcInputErrorMessageClass!}" aria-live="polite" style="display:none;">
