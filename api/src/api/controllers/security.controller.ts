@@ -4,8 +4,8 @@ import {
   Controller,
   Get,
   Logger,
-  Param,
   Post,
+  Query,
   Res,
 } from '@nestjs/common';
 import * as Swagger from '@nestjs/swagger';
@@ -43,7 +43,7 @@ export class SecurityController {
   @Swagger.ApiOperation({ summary: 'Initiate a standard browser login.' })
   @Swagger.ApiOkResponse({ type: BearerTokensResponse })
   async initiateStandardFlow(
-    @Param('redirectUri') redirectUri: string,
+    @Query('redirectUri') redirectUri: string,
     @Res() res,
   ): Promise<void> {
     if (!redirectUri) {

@@ -8,6 +8,7 @@ import { useTranslation } from 'react-i18next';
 import Profile from '../../domain/entities/Profile';
 import User from '../../domain/entities/User';
 import { useStoreActions } from '../../store/storeTypes';
+import { Capacitor } from '@capacitor/core';
 
 const AuthPage: React.FC = () => {
     const { t } = useTranslation();
@@ -21,7 +22,10 @@ const AuthPage: React.FC = () => {
     const [showToast] = useIonToast();
 
     const getAccessToken = async (code: string) => {
-        const result = await getTokenFromCodeUsecase.execute({ code, redirectUri: `${window.location.origin}/auth` });
+        const result = await getTokenFromCodeUsecase.execute({
+            code,
+            redirectUri: Capacitor.isNativePlatform() ? 'ulep://auth' : `${window.location.origin}/auth`,
+        });
 
         if (result instanceof Error) {
             await showToast(t('global.error'), 5000);

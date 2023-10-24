@@ -12,6 +12,7 @@ import RadioButton from '../components/RadioButton';
 import TextInput from '../components/TextInput';
 import WebLayoutCentered from '../components/layout/WebLayoutCentered';
 import styles from './css/SignUp.module.css';
+import { Capacitor } from '@capacitor/core';
 
 interface SignUpPageParams {
     fromIdp: boolean;
@@ -99,7 +100,13 @@ const SignUpPage: React.FC = () => {
         const gender = result.gender === 'M.' ? 'MALE' : 'FEMALE';
         updateProfileSignUp({ diplome: result.diploma, role: selectedRole });
 
-        history.push('/signup/informations', { centralFirstname: firstname, centralLastname: lastname, centralAge: age, centralEmail: email, centralGender: gender as Gender});
+        history.push('/signup/informations', {
+            centralFirstname: firstname,
+            centralLastname: lastname,
+            centralAge: age,
+            centralEmail: email,
+            centralGender: gender as Gender,
+        });
     };
 
     useEffect(() => {
@@ -164,7 +171,9 @@ const SignUpPage: React.FC = () => {
                         className="tertiary-button large-margin-vertical"
                         onClick={async () => {
                             updateProfileSignUp({ country, department, role: selectedRole, university });
-                            const redirectUri = encodeURIComponent(`${window.location.origin}/auth`);
+                            const redirectUri = encodeURIComponent(
+                                Capacitor.isNativePlatform() ? 'ulep://auth' : `${window.location.origin}/auth`
+                            );
                             window.location.href = getInitialUrlUsecase.execute(redirectUri);
                         }}
                     >
