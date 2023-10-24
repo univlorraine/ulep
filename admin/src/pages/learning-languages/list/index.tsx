@@ -1,5 +1,5 @@
 import { Check } from '@mui/icons-material';
-import { Box, Typography } from '@mui/material';
+import { Box } from '@mui/material';
 import React from 'react';
 import {
     Datagrid,
@@ -70,77 +70,71 @@ const LearningLanguageList = () => {
                     value={selectedUniversityIds}
                 />
             )}
-            {(identity.isCentralUniversity && selectedUniversityIds.length) || !identity.isCentralUniversity ? (
-                <List<LearningLanguage>
-                    actions={
-                        <Actions
-                            enableLaunchGlobalRoutine={identity.isCentralUniversity}
-                            universityIds={[...selectedUniversityIds, identity.universityId]}
-                        />
-                    }
-                    exporter={false}
-                    filter={{
-                        universityIds: identity?.isCentralUniversity
-                            ? [...selectedUniversityIds, identity.universityId]
-                            : identity.universityId,
-                    }}
-                    filters={filters}
-                >
-                    <Datagrid bulkActionButtons={false} rowClick="show">
-                        <FunctionField
-                            label={translate('learning_languages.list.tableColumns.name')}
-                            render={(record: LearningLanguage) => getProfileDisplayName(record.profile)}
-                            sortBy="profile.name"
-                        />
-                        <TextField
-                            label={translate('learning_languages.list.tableColumns.learnedLanguage')}
-                            source="name"
-                            sortable
-                        />
-                        <TextField label={translate('learning_languages.list.tableColumns.level')} source="level" />
-                        <DateField
-                            label={translate('learning_languages.list.tableColumns.createdAt')}
-                            source="createdAt"
-                            sortable
-                        />
-                        <FunctionField
-                            label={translate('learning_languages.list.tableColumns.role')}
-                            render={(record: LearningLanguage) => <DisplayRole role={record.profile?.user.role} />}
-                            sortBy="profile.user.role"
-                        />
-                        <BooleanField
-                            label={translate('learning_languages.list.tableColumns.specificProgram')}
-                            source="specificProgram"
-                        />
-                        <FunctionField
-                            label={translate('learning_languages.list.tableColumns.actionPossible')}
-                            render={(record: LearningLanguage) =>
-                                learningLanguageHasPossibleAction(record) && (
-                                    <Box sx={{ textAlign: 'center' }}>
-                                        <Check />
-                                    </Box>
-                                )
-                            }
-                            sortable={false}
-                        />
-                        <FunctionField
-                            label={translate('learning_languages.list.tableColumns.hasActiveTandem')}
-                            render={(record: LearningLanguage) =>
-                                isTandemActive(record.tandem) && (
-                                    <Box sx={{ textAlign: 'center' }}>
-                                        <Check />
-                                    </Box>
-                                )
-                            }
-                            sortable={false}
-                        />
-                    </Datagrid>
-                </List>
-            ) : (
-                <Box sx={{ marginTop: 5, textAlign: 'center' }}>
-                    <Typography>{translate('learning_languages.list.noUniversitySelected')}</Typography>
-                </Box>
-            )}
+            <List<LearningLanguage>
+                actions={
+                    <Actions
+                        enableLaunchGlobalRoutine={identity.isCentralUniversity}
+                        universityIds={[...selectedUniversityIds, identity.universityId]}
+                    />
+                }
+                exporter={false}
+                filter={{
+                    universityIds: identity?.isCentralUniversity
+                        ? [...selectedUniversityIds, identity.universityId]
+                        : identity.universityId,
+                }}
+                filters={filters}
+            >
+                <Datagrid bulkActionButtons={false} rowClick="show">
+                    <FunctionField
+                        label={translate('learning_languages.list.tableColumns.name')}
+                        render={(record: LearningLanguage) => getProfileDisplayName(record.profile)}
+                        sortBy="profile.name"
+                    />
+                    <TextField
+                        label={translate('learning_languages.list.tableColumns.learnedLanguage')}
+                        source="name"
+                        sortable
+                    />
+                    <TextField label={translate('learning_languages.list.tableColumns.level')} source="level" />
+                    <DateField
+                        label={translate('learning_languages.list.tableColumns.createdAt')}
+                        source="createdAt"
+                        sortable
+                    />
+                    <FunctionField
+                        label={translate('learning_languages.list.tableColumns.role')}
+                        render={(record: LearningLanguage) => <DisplayRole role={record.profile?.user.role} />}
+                        sortBy="profile.user.role"
+                    />
+                    <BooleanField
+                        label={translate('learning_languages.list.tableColumns.specificProgram')}
+                        source="specificProgram"
+                    />
+                    <FunctionField
+                        label={translate('learning_languages.list.tableColumns.actionPossible')}
+                        render={(record: LearningLanguage) =>
+                            learningLanguageHasPossibleAction(record) && (
+                                <Box sx={{ textAlign: 'center' }}>
+                                    <Check />
+                                </Box>
+                            )
+                        }
+                        sortable={false}
+                    />
+                    <FunctionField
+                        label={translate('learning_languages.list.tableColumns.hasActiveTandem')}
+                        render={(record: LearningLanguage) =>
+                            isTandemActive(record.tandem) && (
+                                <Box sx={{ textAlign: 'center' }}>
+                                    <Check />
+                                </Box>
+                            )
+                        }
+                        sortable={false}
+                    />
+                </Datagrid>
+            </List>
         </Box>
     );
 };
