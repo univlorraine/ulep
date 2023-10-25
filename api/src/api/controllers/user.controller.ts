@@ -26,6 +26,7 @@ import {
   GetAdministratorsUsecase,
   GetUserUsecase,
   GetUsersUsecase,
+  UpdateAdministratorUsecase,
   UpdateUserUsecase,
 } from '../../core/usecases/user';
 import { CollectionResponse, CurrentUser } from '../decorators';
@@ -35,6 +36,7 @@ import {
   CreateAdministratorRequest,
   CreateUserRequest,
   PaginationDto,
+  UpdateAdministratorRequest,
   UpdateUserRequest,
   UserResponse,
 } from '../dtos';
@@ -54,6 +56,7 @@ export class UserController {
     private readonly deleteUserUsecase: DeleteUserUsecase,
     private readonly getAdministratorsUsecase: GetAdministratorsUsecase,
     private readonly createAdministratorUsecase: CreateAdministratorUsecase,
+    private readonly updateAdministratorUsecase: UpdateAdministratorUsecase,
     private readonly deleteAdministratorUsecase: DeleteAdministratorUsecase,
   ) {}
 
@@ -113,6 +116,17 @@ export class UserController {
   @Swagger.ApiCreatedResponse({ type: AdministratorResponse })
   async createAdministrator(@Body() body: CreateAdministratorRequest) {
     const admin = await this.createAdministratorUsecase.execute(body);
+
+    return AdministratorResponse.fromDomain(admin);
+  }
+
+  @Put('administrators')
+  @Roles(configuration().adminRole)
+  @UseGuards(AuthenticationGuard)
+  @Swagger.ApiOperation({ summary: 'Update an Administrator ressource.' })
+  @Swagger.ApiCreatedResponse({ type: AdministratorResponse })
+  async updateAdministrator(@Body() body: UpdateAdministratorRequest) {
+    const admin = await this.updateAdministratorUsecase.execute(body);
 
     return AdministratorResponse.fromDomain(admin);
   }
