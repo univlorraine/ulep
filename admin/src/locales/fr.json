@@ -244,6 +244,7 @@
     },
     "reports": {
         "category": "Catégorie de signalement",
+        "created_at": "Date de soumission",
         "CLOSED": "Fermé",
         "content": "Contenu",
         "IN_PROGRESS": "En cours",
