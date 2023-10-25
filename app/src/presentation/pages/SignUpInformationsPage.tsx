@@ -98,7 +98,7 @@ const SignUpInformationsPage: React.FC = () => {
             firstname,
             lastname,
             gender,
-            code,
+            code.trim(),
             age,
             profileSignUp.university,
             profileSignUp.role,
