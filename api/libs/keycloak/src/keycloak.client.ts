@@ -24,6 +24,7 @@ import RoleRepresentation, {
   KeycloakUser,
   CreateAdministratorProps,
   UpdateAdministratorProps,
+  UpdateAdministratorPayload,
 } from './keycloak.models';
 import { Client, Issuer, TokenSet } from 'openid-client';
 
@@ -394,6 +395,23 @@ export class KeycloakClient {
   async updateAdministrator(
     props: UpdateAdministratorProps,
   ): Promise<UserRepresentation> {
+    const payload: UpdateAdministratorPayload = {
+      email: props.email,
+      attributes: {
+        universityId: props.universityId,
+      },
+    };
+
+    if (props.password) {
+      payload.credentials = [
+        {
+          type: 'password',
+          value: props.password,
+          temporary: false,
+        },
+      ];
+    }
+
     const response = await fetch(
       `${this.configuration.baseUrl}/admin/realms/${this.configuration.realm}/users/${props.id}`,
       {
@@ -402,19 +420,7 @@ export class KeycloakClient {
           'Content-Type': 'application/json',
           Authorization: `Bearer ${await this.getAccessToken()}`,
         },
-        body: JSON.stringify({
-          email: props.email,
-          credentials: [
-            {
-              type: 'password',
-              value: props.password,
-              temporary: false,
-            },
-          ],
-          attributes: {
-            universityId: props.universityId,
-          },
-        }),
+        body: JSON.stringify(payload),
       },
     );
 

@@ -30,14 +30,14 @@ export class UpdateAdministratorUsecase {
         throw new RessourceDoesNotExist('University does not exist');
       }
     }
-
-    if (this.keycloakClient.getUserById(command.id)) {
+    const admin = await this.keycloakClient.getUserById(command.id);
+    if (!admin) {
       throw new RessourceDoesNotExist('Administrator does not exist');
     }
 
     const keycloakUser = await this.keycloakClient.updateAdministrator({
-      id: command.id,
-      email: command.email,
+      id: admin.id,
+      email: command.email || admin.email,
       password: command.password,
       universityId: command.universityId,
     });
