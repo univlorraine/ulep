@@ -274,6 +274,7 @@
             "country": "Pays de la nouvelle université partenaire",
             "domains": "Liste des noms de domaines pour l'inscription",
             "domains_error": "Le nom de domaine doit commencer par un @",
+            "error": "Une erreur est survenue lors de la création de l'université",
             "name": "Nom de la nouvelle université partenaire",
             "timezone": "Timezone de la nouvelle université partenaire",
             "title": "Création d'une nouvelle université partenaire",
