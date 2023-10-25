@@ -112,6 +112,17 @@ const LearningLanguageList = () => {
                         source="specificProgram"
                     />
                     <FunctionField
+                        label={translate('learning_languages.list.tableColumns.reported')}
+                        render={(record: LearningLanguage) =>
+                            record.profile.user.status === 'REPORTED' && (
+                                <Box sx={{ textAlign: 'center' }}>
+                                    <Check />
+                                </Box>
+                            )
+                        }
+                        sortable={false}
+                    />
+                    <FunctionField
                         label={translate('learning_languages.list.tableColumns.actionPossible')}
                         render={(record: LearningLanguage) =>
                             learningLanguageHasPossibleAction(record) && (
