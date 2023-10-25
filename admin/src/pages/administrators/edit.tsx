@@ -59,6 +59,7 @@ const EditAdministrator = () => {
                         handleSubmit={(email: string, password?: string, university?: University) =>
                             handleSubmit(record.id, email, password, university)
                         }
+                        type="update"
                         universityId={record.universityId || 'central'}
                     />
                 )}

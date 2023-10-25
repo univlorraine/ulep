@@ -10,9 +10,10 @@ interface AdministratorFormProps {
     email?: string;
     handleSubmit: (email: string, password?: string, university?: University) => void;
     universityId?: string;
+    type: string;
 }
 
-const AdministratorForm: React.FC<AdministratorFormProps> = ({ email, handleSubmit, universityId }) => {
+const AdministratorForm: React.FC<AdministratorFormProps> = ({ email, handleSubmit, universityId, type }) => {
     const translate = useTranslate();
     const [newEmail, setNewEmail] = useState<string>(email || '');
     const [password, setPassword] = useState<string>('');
@@ -20,7 +21,7 @@ const AdministratorForm: React.FC<AdministratorFormProps> = ({ email, handleSubm
 
     return (
         <Box sx={{ m: 4 }}>
-            <Typography variant="subtitle1">{translate(`administrators.update.email`)}</Typography>
+            <Typography variant="subtitle1">{translate(`administrators.${type}.email`)}</Typography>
 
             <Box alignItems="center" display="flex" flexDirection="row">
                 <Input
@@ -35,10 +36,10 @@ const AdministratorForm: React.FC<AdministratorFormProps> = ({ email, handleSubm
                 />
             </Box>
 
-            <Typography variant="subtitle1">{translate(`administrators.update.university`)}</Typography>
+            <Typography variant="subtitle1">{translate(`administrators.${type}.university`)}</Typography>
             <UniversityPicker initialValue={universityId} onChange={setUniversity} value={university} />
 
-            <Typography variant="subtitle1">{translate(`administrators.update.password`)}</Typography>
+            <Typography variant="subtitle1">{translate(`administrators.${type}.password`)}</Typography>
             <Box alignItems="center" display="flex" flexDirection="row">
                 <Input
                     name="Password"
@@ -53,7 +54,9 @@ const AdministratorForm: React.FC<AdministratorFormProps> = ({ email, handleSubm
 
             <Button
                 color="primary"
-                disabled={!university || (email ? false : !password || !isPasswordValid(password)) || !newEmail}
+                disabled={
+                    !university || (email && !password ? false : !password || !isPasswordValid(password)) || !newEmail
+                }
                 onClick={() => handleSubmit(newEmail, password, university)}
                 sx={{ mt: 4, width: '100%' }}
                 type="button"

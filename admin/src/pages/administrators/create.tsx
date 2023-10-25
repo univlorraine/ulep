@@ -48,7 +48,7 @@ const CreateAdministrator = () => {
 
     return (
         <Create title={translate('administrators.create.title')}>
-            <AdministratorForm handleSubmit={handleSubmit} />
+            <AdministratorForm handleSubmit={handleSubmit} type="create" />
         </Create>
     );
 };
