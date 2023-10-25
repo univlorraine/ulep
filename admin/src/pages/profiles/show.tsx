@@ -10,6 +10,7 @@ import {
     Show,
     useRecordContext,
     Datagrid,
+    Identifier,
 } from 'react-admin';
 import Availabilites from '../../entities/Availabilities';
 import User from '../../entities/User';
@@ -85,7 +86,10 @@ const ProfileShow = (props: any) => {
                         </SingleFieldList>
                     </ArrayField>
                     <ArrayField source="learningLanguages">
-                        <Datagrid bulkActionButtons={false}>
+                        <Datagrid
+                            bulkActionButtons={false}
+                            rowClick={(id: Identifier) => `/learning-languages/${id}/show`}
+                        >
                             <TextField source="name" />
                             <TextField source="level" />
                         </Datagrid>
