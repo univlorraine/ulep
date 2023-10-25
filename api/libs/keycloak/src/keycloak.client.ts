@@ -497,14 +497,24 @@ export class KeycloakClient {
     return users;
   }
 
-  async getUserById(id: string): Promise<UserRepresentation> {
-    const users = await this.getUsers({ id, max: 1 });
+  async getUserById(userId: string): Promise<UserRepresentation> {
+    const url = `${this.configuration.baseUrl}/admin/realms/${this.configuration.realm}/users/${userId}`;
+    const response = await fetch(url, {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${await this.getAccessToken()}`,
+      },
+    });
 
-    if (users.length === 0) {
-      throw new Error('User not found');
+    if (!response.ok) {
+      const result = await response.json();
+      this.logger.error(JSON.stringify(result));
+      throw new HttpException({ message: result }, response.status);
     }
 
-    return users[0];
+    const user = await response.json();
+    return user;
   }
 
   async getUserByEmail(email: string): Promise<UserRepresentation> {

@@ -75,6 +75,8 @@ import {
   GetAdministratorsUsecase,
   CreateAdministratorUsecase,
   DeleteAdministratorUsecase,
+  UpdateAdministratorUsecase,
+  GetAdministratorUsecase,
 } from './usecases';
 import { UploadObjectiveImageUsecase } from 'src/core/usecases/media/upload-objective-image.usecase';
 import { UpdateObjectiveUsecase } from 'src/core/usecases/objective/update-objective.usecase';
@@ -180,10 +182,12 @@ const usecases: Provider[] = [
   CreateUserUsecase,
   DeleteAdministratorUsecase,
   DeleteUserUsecase,
+  GetAdministratorUsecase,
   GetAdministratorsUsecase,
   GetUsersUsecase,
   GetUserUsecase,
   UpdateUserUsecase,
+  UpdateAdministratorUsecase,
   // Instance
   GetInstanceUsecase,
   UpdateInstanceUsecase,

@@ -23,6 +23,7 @@ import {
   CreateUserUsecase,
   DeleteAdministratorUsecase,
   DeleteUserUsecase,
+  GetAdministratorUsecase,
   GetAdministratorsUsecase,
   GetUserUsecase,
   GetUsersUsecase,
@@ -55,6 +56,7 @@ export class UserController {
     private readonly updateUserUsecase: UpdateUserUsecase,
     private readonly deleteUserUsecase: DeleteUserUsecase,
     private readonly getAdministratorsUsecase: GetAdministratorsUsecase,
+    private readonly getAdministratorUsecase: GetAdministratorUsecase,
     private readonly createAdministratorUsecase: CreateAdministratorUsecase,
     private readonly updateAdministratorUsecase: UpdateAdministratorUsecase,
     private readonly deleteAdministratorUsecase: DeleteAdministratorUsecase,
@@ -107,6 +109,17 @@ export class UserController {
     const administrators = await this.getAdministratorsUsecase.execute();
 
     return administrators.map(AdministratorResponse.fromDomain);
+  }
+
+  @Get('administrators/:id')
+  @Roles(configuration().adminRole)
+  @UseGuards(AuthenticationGuard)
+  @Swagger.ApiOperation({ summary: 'Get an Administrator ressource.' })
+  @CollectionResponse(UserResponse)
+  async findAnAdministrator(@Param('id', ParseUUIDPipe) id: string) {
+    const administrator = await this.getAdministratorUsecase.execute(id);
+
+    return AdministratorResponse.fromDomain(administrator);
   }
 
   @Post('administrators')
