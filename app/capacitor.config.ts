@@ -5,7 +5,7 @@ let config: CapacitorConfig;
 const baseConfig: CapacitorConfig = {
     webDir: 'dist',
     server: {
-        androidScheme: 'https',
+        androidScheme: 'ulep',
     },
     plugins: {
         App: {

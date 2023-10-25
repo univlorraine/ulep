@@ -27,7 +27,11 @@
             "standardFlowEnabled": true,
             "directAccessGrantsEnabled": true,
             "serviceAccountsEnabled": true,
-            "redirectUris": ["http://localhost:5173/*", "http://localhost:3001/*"],
+            "redirectUris": [
+                "http://localhost:5173/*",
+                "http://localhost:3001/*",
+                "ulep://"
+            ],
             "protocolMappers": [
                 {
                     "id": "b38e1a26-d649-4370-879d-c7499d023daa",
@@ -53,13 +57,13 @@
                     "protocolMapper": "oidc-usermodel-attribute-mapper",
                     "consentRequired": false,
                     "config": {
-                      "aggregate.attrs": "false",
-                      "userinfo.token.claim": "true",
-                      "multivalued": "false",
-                      "user.attribute": "universityLogin",
-                      "id.token.claim": "true",
-                      "access.token.claim": "true",
-                      "claim.name": "universityLogin"
+                        "aggregate.attrs": "false",
+                        "userinfo.token.claim": "true",
+                        "multivalued": "false",
+                        "user.attribute": "universityLogin",
+                        "id.token.claim": "true",
+                        "access.token.claim": "true",
+                        "claim.name": "universityLogin"
                     }
                 }
             ]

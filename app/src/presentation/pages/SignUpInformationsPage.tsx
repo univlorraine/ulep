@@ -12,12 +12,13 @@ import WebLayoutCentered from '../components/layout/WebLayoutCentered';
 import { isEmailCorrect, isNameCorrect, isPasswordCorrect } from '../utils';
 import styles from './css/SignUp.module.css';
 
-interface SignUpInformationsParams {
+export interface SignUpInformationsParams {
     centralFirstname?: string;
     centralLastname?: string;
     centralEmail?: string;
     centralGender?: Gender;
     centralAge?: number;
+    fromIdp?: boolean;
 }
 
 const SignUpInformationsPage: React.FC = () => {
@@ -26,7 +27,7 @@ const SignUpInformationsPage: React.FC = () => {
     const [showToast] = useIonToast();
     const history = useHistory();
     const location = useLocation<SignUpInformationsParams>();
-    const { centralLastname } = location.state || {};
+    const { fromIdp } = location.state || {};
     const profileSignUp = useStoreState((store) => store.profileSignUp);
     const updateProfileSignUp = useStoreActions((state) => state.updateProfileSignUp);
     const [firstname, setFirstname] = useState<string>('');
@@ -42,8 +43,14 @@ const SignUpInformationsPage: React.FC = () => {
     const [errorMessage, setErrorMessage] = useState<{ type: string; message: string }>();
 
     const allFieldHasValue = () => {
-        return email && gender && age && firstname && lastname && CGUChecked && (
-           centralLastname ? true : password && confirmPassword
+        return (
+            email &&
+            gender &&
+            age &&
+            firstname &&
+            lastname &&
+            CGUChecked &&
+            (fromIdp ? true : password && confirmPassword)
         );
     };
 
@@ -77,11 +84,11 @@ const SignUpInformationsPage: React.FC = () => {
             return history.push('/signup/');
         }
 
-        if (!centralLastname && (!password || !isPasswordCorrect(password))) {
+        if (!fromIdp && (!password || !isPasswordCorrect(password))) {
             return setErrorMessage({ type: 'password', message: t('signup_informations_page.error_password') });
         }
 
-        if (!centralLastname && password !== confirmPassword) {
+        if (!fromIdp && password !== confirmPassword) {
             return setErrorMessage({ type: 'confirm', message: t('signup_informations_page.error_confirm_password') });
         }
 
@@ -110,10 +117,8 @@ const SignUpInformationsPage: React.FC = () => {
             if (result.message === 'signup_informations_page.error_code') {
                 return setErrorMessage({ type: 'code', message: t(result.message) });
             }
-
             return await showToast({ message: t(result.message), duration: 3000 });
         }
-
         updateProfileSignUp({
             firstname,
             lastname,
@@ -143,7 +148,7 @@ const SignUpInformationsPage: React.FC = () => {
 
     useEffect(() => {
         const state = location.state;
-        if(state){
+        if (state) {
             setEmail(state.centralEmail || '');
             setFirstname(state.centralFirstname || '');
             setLastname(state.centralLastname || '');
@@ -246,7 +251,7 @@ const SignUpInformationsPage: React.FC = () => {
                     />
                 )}
 
-                {!centralLastname && (
+                {!fromIdp && (
                     <TextInput
                         errorMessage={errorMessage?.type === 'password' ? errorMessage.message : undefined}
                         onChange={setPassword}
@@ -257,7 +262,7 @@ const SignUpInformationsPage: React.FC = () => {
                     />
                 )}
 
-                {!centralLastname && (
+                {!fromIdp && (
                     <TextInput
                         errorMessage={errorMessage?.type === 'confirm' ? errorMessage.message : undefined}
                         onChange={setConfirmPassword}

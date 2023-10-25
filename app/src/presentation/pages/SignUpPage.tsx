@@ -13,6 +13,7 @@ import TextInput from '../components/TextInput';
 import WebLayoutCentered from '../components/layout/WebLayoutCentered';
 import styles from './css/SignUp.module.css';
 import { Capacitor } from '@capacitor/core';
+import { SignUpInformationsParams } from './SignUpInformationsPage';
 
 interface SignUpPageParams {
     fromIdp: boolean;
@@ -34,6 +35,7 @@ const SignUpPage: React.FC = () => {
     const [staffFunction, setStaffFunction] = useState<string>('');
     const [university, setUniversity] = useState<University>();
     const [displayError, setDisplayError] = useState<boolean>(false);
+    const [payload, setPayload] = useState<SignUpInformationsParams>({});
 
     const isAFieldEmpty =
         !university ||
@@ -68,8 +70,7 @@ const SignUpPage: React.FC = () => {
         }
 
         updateProfileSignUp({ country, department, diplome, role: selectedRole, staffFunction, university });
-
-        return history.push('/signup/informations');
+        return history.push('/signup/informations', payload);
     };
 
     const onCountrySelected = (country: Country) => {
@@ -82,30 +83,26 @@ const SignUpPage: React.FC = () => {
         if (result instanceof Error) {
             return await showToast({ message: t(result.message), duration: 1000 });
         }
-        switch (selectedRole) {
-            case 'STUDENT':
-                if (result.diploma) {
-                    setDiplome(result.diploma);
-                }
+        let centralUniversity: University | undefined;
+        let centralCountry: Country | undefined;
+        for (const country of countries) {
+            centralUniversity = country.value.universities.find((university) => university.isCentral);
+            centralCountry = country.value;
+            if (centralUniversity) {
                 break;
-            case 'STAFF':
-                break;
-            default:
-                break;
+            }
         }
-        const firstname = result.firstname;
-        const lastname = result.lastname;
-        const age = result.age;
-        const email = result.email;
-        const gender = result.gender === 'M.' ? 'MALE' : 'FEMALE';
-        updateProfileSignUp({ diplome: result.diploma, role: selectedRole });
 
-        history.push('/signup/informations', {
-            centralFirstname: firstname,
-            centralLastname: lastname,
-            centralAge: age,
-            centralEmail: email,
-            centralGender: gender as Gender,
+        setUniversity(centralUniversity);
+        setCountry(centralCountry);
+        setDiplome(result.diploma);
+        setPayload({
+            centralFirstname: result.firstname,
+            centralLastname: result.lastname,
+            centralAge: result.age,
+            centralEmail: result.email,
+            centralGender: result.gender as Gender,
+            fromIdp: true,
         });
     };
 
@@ -114,11 +111,10 @@ const SignUpPage: React.FC = () => {
     }, []);
 
     useEffect(() => {
-        if (fromIdp) {
+        if (fromIdp && countries.length) {
             getPersonInfos();
         }
-    }, [fromIdp]);
-
+    }, [fromIdp, countries]);
     return (
         <WebLayoutCentered
             backgroundIconColor={configuration.primaryBackgroundImageColor}
@@ -146,7 +142,7 @@ const SignUpPage: React.FC = () => {
                     <Dropdown<Country>
                         onChange={onCountrySelected}
                         options={countries}
-                        placeholder={t('signup_page.country_placeholder')}
+                        placeholder={country?.name || t('signup_page.country_placeholder')}
                         title={t('global.country')}
                     />
                 </div>
@@ -166,7 +162,7 @@ const SignUpPage: React.FC = () => {
                     />
                 </div>
 
-                {university && university.isCentral && (
+                {university && university.isCentral && !payload && (
                     <button
                         className="tertiary-button large-margin-vertical"
                         onClick={async () => {

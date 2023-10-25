@@ -35,6 +35,7 @@ import InstancesPage from './presentation/pages/mobile/InstancesPage';
 import useFetchConfiguration from './presentation/hooks/useFetchConfiguration';
 import useFetchI18NBackend from './presentation/hooks/useFetchI18NBackend';
 import ErrorPage from './presentation/pages/ErrorPage';
+import AppUrlListener from './presentation/router/AppUrlListener';
 
 setupIonicReact();
 
@@ -83,6 +84,7 @@ const AppContext = () => {
             )}
         >
             <IonReactRouter>
+                <AppUrlListener />
                 <Router />
             </IonReactRouter>
         </ConfigContext.Provider>
