@@ -190,6 +190,18 @@ export class UserResponse {
   @Expose({ groups: ['read'] })
   role: string;
 
+  @Swagger.ApiProperty({ type: 'string' })
+  @Expose({ groups: ['read'] })
+  division?: string;
+
+  @Swagger.ApiProperty({ type: 'string' })
+  @Expose({ groups: ['read'] })
+  diploma?: string;
+
+  @Swagger.ApiProperty({ type: 'string' })
+  @Expose({ groups: ['read'] })
+  staffFunction?: string;
+
   @Swagger.ApiProperty({ type: 'string', example: 'FR' })
   @Expose({ groups: ['read'] })
   country: string;
@@ -223,6 +235,9 @@ export class UserResponse {
       country: user.country,
       status: user.status,
       acceptsEmail: user.acceptsEmail,
+      division: user.division,
+      diploma: user.diploma,
+      staffFunction: user.staffFunction,
       avatar: user.avatar
         ? MediaObjectResponse.fromMediaObject(user.avatar)
         : null,
