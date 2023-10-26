@@ -49,7 +49,7 @@ const PairingQuizzPage: React.FC = () => {
             return;
         }
 
-        if (percentage >= 80 && currentQuizz !== 'C1') {
+        if (percentage >= 80 && currentQuizz !== 'C2') {
             return setDisplayNextQuizz(true);
         }
 
@@ -59,10 +59,6 @@ const PairingQuizzPage: React.FC = () => {
 
         if (percentage < 80) {
             updateProfileSignUp({ learningLanguageLevel: getPreviousLevel(currentQuizz) });
-        }
-
-        if (percentage >= 80 && currentQuizz === 'C1') {
-            updateProfileSignUp({ learningLanguageLevel: 'C2' });
         }
 
         return history.push(`/pairing/language/quizz/end`);
