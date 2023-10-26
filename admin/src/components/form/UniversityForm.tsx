@@ -22,6 +22,7 @@ import Country from '../../entities/Country';
 import { PairingMode } from '../../entities/University';
 import inputStyle from '../../theme/inputStyle';
 import isCodeValid from '../../utils/isCodeValid';
+import isUrlValid from '../../utils/isUrlValid';
 import CountriesPicker from '../CountriesPicker';
 import TimezonePicker from '../TimezonePicker';
 
@@ -78,8 +79,12 @@ const UniversityForm: React.FC<UniversityFormProps> = ({
     const [newName, setNewName] = useState<string>(name || '');
     const [newCountry, setNewCountry] = useState<Country | undefined>(country || undefined);
     const [newTimezone, setNewTimezone] = useState<string | undefined>(timezone || '');
-    const [newAdmissionStartDate, setNewAdmissionStartDate] = useState<Date | null>(new Date(admissionStartDate || ''));
-    const [newAdmissionEndDate, setNewAdmissionEndDate] = useState<Date | null>(new Date(admissionEndDate || ''));
+    const [newAdmissionStartDate, setNewAdmissionStartDate] = useState<Date | null>(
+        !admissionStartDate ? new Date() : new Date(admissionStartDate)
+    );
+    const [newAdmissionEndDate, setNewAdmissionEndDate] = useState<Date | null>(
+        !admissionEndDate ? new Date() : new Date(admissionEndDate)
+    );
     const [newWebsite, setNewWebsite] = useState<string>(website || '');
     const [newCode, setNewCode] = useState<string>('');
     const [newCodes, setNewCodes] = useState<string[]>(codes || []);
@@ -121,9 +126,12 @@ const UniversityForm: React.FC<UniversityFormProps> = ({
         if (!newCountry || !newTimezone || !newName || !admissionStart || !admissionEnd || !newWebsite) {
             return undefined;
         }
-
         if (admissionEnd <= admissionStart) {
             return notify(`universities.${tradKey}.admission_error`);
+        }
+
+        if (!isUrlValid(newWebsite)) {
+            return notify(`universities.${tradKey}.url_error`);
         }
 
         return handleSubmit(
