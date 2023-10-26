@@ -162,7 +162,7 @@ const SignUpPage: React.FC = () => {
                     />
                 </div>
 
-                {university && university.isCentral && !payload && (
+                {university && university.isCentral && !fromIdp && (
                     <button
                         className="tertiary-button large-margin-vertical"
                         onClick={async () => {
