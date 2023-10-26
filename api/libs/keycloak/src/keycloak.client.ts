@@ -23,6 +23,8 @@ import RoleRepresentation, {
   UserRepresentation,
   KeycloakUser,
   CreateAdministratorProps,
+  UpdateAdministratorProps,
+  UpdateAdministratorPayload,
 } from './keycloak.models';
 import { Client, Issuer, TokenSet } from 'openid-client';
 
@@ -388,6 +390,52 @@ export class KeycloakClient {
   }
 
   /*
+   * Updates an existing user in Keycloak.
+   */
+  async updateAdministrator(
+    props: UpdateAdministratorProps,
+  ): Promise<UserRepresentation> {
+    const payload: UpdateAdministratorPayload = {
+      email: props.email,
+      attributes: {
+        universityId: props.universityId,
+      },
+    };
+
+    if (props.password) {
+      payload.credentials = [
+        {
+          type: 'password',
+          value: props.password,
+          temporary: false,
+        },
+      ];
+    }
+
+    const response = await fetch(
+      `${this.configuration.baseUrl}/admin/realms/${this.configuration.realm}/users/${props.id}`,
+      {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${await this.getAccessToken()}`,
+        },
+        body: JSON.stringify(payload),
+      },
+    );
+
+    if (!response.ok) {
+      const result = await response.json();
+      this.logger.error(JSON.stringify(result));
+      throw new HttpException({ message: result }, 500);
+    }
+
+    const updatedAdmin = await this.getUserById(props.id);
+
+    return updatedAdmin;
+  }
+
+  /*
    * Creates a new user in Keycloak.
    */
   async deleteAdministrator(id: string): Promise<void> {
@@ -455,14 +503,24 @@ export class KeycloakClient {
     return users;
   }
 
-  async getUserById(id: string): Promise<UserRepresentation> {
-    const users = await this.getUsers({ id, max: 1 });
+  async getUserById(userId: string): Promise<UserRepresentation> {
+    const url = `${this.configuration.baseUrl}/admin/realms/${this.configuration.realm}/users/${userId}`;
+    const response = await fetch(url, {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${await this.getAccessToken()}`,
+      },
+    });
 
-    if (users.length === 0) {
-      throw new Error('User not found');
+    if (!response.ok) {
+      const result = await response.json();
+      this.logger.error(JSON.stringify(result));
+      throw new HttpException({ message: result }, response.status);
     }
 
-    return users[0];
+    const user = await response.json();
+    return user;
   }
 
   async getUserByEmail(email: string): Promise<UserRepresentation> {

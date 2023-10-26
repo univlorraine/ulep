@@ -137,6 +137,26 @@ export class CreateAdministratorRequest {
   @IsString()
   password: string;
 }
+
+export class UpdateAdministratorRequest {
+  @Swagger.ApiProperty({ type: 'string', format: 'uuid' })
+  @IsUUID()
+  id: string;
+
+  @Swagger.ApiProperty({ type: 'string', format: 'email' })
+  @IsOptional()
+  email?: string;
+
+  @Swagger.ApiProperty({ type: 'string', format: 'uuid' })
+  @IsUUID()
+  @IsOptional()
+  universityId?: string;
+
+  @Swagger.ApiProperty({ type: 'string' })
+  @IsString()
+  @IsOptional()
+  password?: string;
+}
 export class UserResponse {
   @Swagger.ApiProperty({ type: 'string', format: 'uuid' })
   @Expose({ groups: ['read'] })

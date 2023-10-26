@@ -89,6 +89,25 @@ export interface CreateAdministratorProps {
   universityId?: string;
 }
 
+export interface UpdateAdministratorProps {
+  id: string;
+  email?: string;
+  password?: string;
+  universityId?: string;
+}
+
+export interface UpdateAdministratorPayload {
+  email: string;
+  credentials?: {
+    type: string;
+    value: string;
+    temporary: boolean;
+  }[];
+  attributes?: {
+    universityId: string;
+  };
+}
+
 export interface GetUsersProps {
   id?: string;
   email?: string;

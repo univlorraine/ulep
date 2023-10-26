@@ -3,9 +3,9 @@ import { useNotify, useRedirect, useCreate, Create, useTranslate } from 'react-a
 import AdministratorForm from '../../components/form/AdministratorForm';
 import University from '../../entities/University';
 
-interface AdministratorPayload {
+interface AdministratorCreatePayload {
     email: string;
-    password: string;
+    password?: string;
     universityId?: string;
 }
 
@@ -15,8 +15,8 @@ const CreateAdministrator = () => {
     const redirect = useRedirect();
     const notify = useNotify();
 
-    const handleSubmit = async (email: string, password: string, university?: University) => {
-        const payload: AdministratorPayload = {
+    const handleSubmit = async (email: string, password?: string, university?: University) => {
+        const payload: AdministratorCreatePayload = {
             email,
             password,
         };
@@ -48,7 +48,7 @@ const CreateAdministrator = () => {
 
     return (
         <Create title={translate('administrators.create.title')}>
-            <AdministratorForm handleSubmit={handleSubmit} />
+            <AdministratorForm handleSubmit={handleSubmit} type="create" />
         </Create>
     );
 };

@@ -6,7 +6,7 @@ const AdministratorList = (props: any) => {
 
     return (
         <List exporter={false} pagination={false} title={translate('administrators.label')} {...props}>
-            <Datagrid>
+            <Datagrid rowClick="edit">
                 <TextField label={translate('global.email')} source="email" />
                 <ReferenceField
                     emptyText={translate('administrators.all')}
