@@ -38,6 +38,9 @@ export const userMapper = (snapshot: UserSnapshot): User => {
         mimetype: snapshot.Avatar.mime,
         size: snapshot.Avatar.size,
       }),
+    diploma: snapshot.diploma,
+    division: snapshot.division,
+    staffFunction: snapshot.staff_function,
     status: snapshot.status as UserStatus,
     acceptsEmail: snapshot.accepts_email,
   });

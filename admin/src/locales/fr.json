@@ -214,6 +214,8 @@
             "THREE_TIMES_A_MONTH": "Trois fois par mois"
         },
         "certificate": "Certificat",
+        "diploma": "Diplôme",
+        "division": "Département",
         "country": "Pays",
         "interests": "Centre d'intérêts",
         "label": "Profiles",
@@ -227,6 +229,7 @@
         "objectives": "Objectifs",
         "summary": "Résumé",
         "searchLastname": "Chercher par nom",
+        "staffFunction": "Fonction",
         "status": "Statut"
     },
     "questions": {
