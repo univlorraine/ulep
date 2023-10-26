@@ -452,7 +452,7 @@
                 },
                 "actions": {
                     "validateMessage": "Vous êtes sur le point de créer un tandem. Êtes-vous sur ?",
-                    "refuseMessage": "Vous êtes sur le point de refuser un tandem. Êtes-vous sur ?",
+                    "refuseMessage": "Vous êtes sur le point de refuser / annuler un tandem. Êtes-vous sur ?",
                     "ctaLabels": {
                         "cancel": "Annuler",
                         "confirm": "Confirmer"
