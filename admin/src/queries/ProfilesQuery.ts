@@ -8,6 +8,7 @@ export interface ProfilesParams {
             firstname?: string;
             lastname?: string;
             role?: string;
+            status?: UserStatus;
         };
         university?: string;
         masteredLanguageCode?: string;
@@ -50,6 +51,7 @@ const ProfilesQuery = (params: ProfilesParams): string => {
                       firstname: params.filter.user.firstname,
                       lastname: params.filter.user.lastname,
                       role: params.filter.user.role,
+                      status: params.filter.user.status,
                   }
                 : {},
             university: params.filter.university,

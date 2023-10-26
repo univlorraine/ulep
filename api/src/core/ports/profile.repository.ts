@@ -28,6 +28,7 @@ export interface ProfileQueryWhere {
     lastname?: StringFilter;
     role?: StringFilter;
     university?: StringFilter;
+    status?: StringFilter;
   };
   masteredLanguageCode?: string;
   nativeLanguageCode?: string;
