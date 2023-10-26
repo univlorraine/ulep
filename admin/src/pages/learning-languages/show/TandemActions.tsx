@@ -17,6 +17,7 @@ interface TandemActionsProps {
     onTandemAction: () => void;
     relaunchGlobalRoutineOnRefuse?: boolean;
     relaunchGlobalRoutineOnAccept?: boolean;
+    disableCreateButton?: boolean;
 }
 
 const TandemActions = ({
@@ -25,6 +26,7 @@ const TandemActions = ({
     onTandemAction,
     relaunchGlobalRoutineOnRefuse,
     relaunchGlobalRoutineOnAccept,
+    disableCreateButton,
 }: TandemActionsProps) => {
     if (!tandemId && learningLanguageIds?.length !== 2) {
         throw new Error('TandemActions must have a tandemId or 2 learningLanguage Ids');
@@ -137,9 +139,11 @@ const TandemActions = ({
                     )}
                 </Box>
             </Modal>
-            <IconButton aria-label="accept" color="success" onClick={() => handleAction(TandemAction.ACCEPT)}>
-                <Check />
-            </IconButton>
+            {!disableCreateButton && (
+                <IconButton aria-label="accept" color="success" onClick={() => handleAction(TandemAction.ACCEPT)}>
+                    <Check />
+                </IconButton>
+            )}
             <IconButton aria-label="reject" color="error" onClick={() => handleAction(TandemAction.REFUSE)}>
                 <Clear />
             </IconButton>

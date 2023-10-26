@@ -67,11 +67,7 @@ export class RefuseTandemUsecase {
           ', ',
         )}`,
       );
-      if (existingTandem.status === TandemStatus.ACTIVE) {
-        throw new DomainError({
-          message: `University ${adminUniversityId} Can't refuse active tandem ${existingTandem.id}`,
-        });
-      } else if (existingTandem.status === TandemStatus.INACTIVE) {
+      if (existingTandem.status === TandemStatus.INACTIVE) {
         throw new DomainError({
           message: `University ${adminUniversityId} Can't refuse inactive tandem ${existingTandem.id}`,
         });

@@ -90,6 +90,11 @@ const ShowTandems = () => {
         return <p>{translate('learning_languages.show.tandems.error')}</p>;
     }
 
+    const handleTandemAction = async () => {
+        await refetchTandem();
+        await refetchMatches();
+    };
+
     const tandemPartners = tandem
         ? [
               {
@@ -104,15 +109,21 @@ const ShowTandems = () => {
         return (
             <>
                 <Typography variant="h6">{translate('learning_languages.show.tandems.active.title')}</Typography>
-                <TandemTable displayTandemLanguage={isJokerLearningLanguage} partners={tandemPartners} />
+                <TandemTable
+                    actions={() => (
+                        <TandemActions
+                            learningLanguageIds={[record?.id.toString(), tandem.partnerLearningLanguage.id]}
+                            onTandemAction={handleTandemAction}
+                            disableCreateButton
+                            relaunchGlobalRoutineOnRefuse
+                        />
+                    )}
+                    displayTandemLanguage={isJokerLearningLanguage}
+                    partners={tandemPartners}
+                />
             </>
         );
     }
-
-    const handleTandemAction = async () => {
-        await refetchTandem();
-        await refetchMatches();
-    };
 
     if (hasTandemWaitingForValidation && !isErrorTandem) {
         const isUserValidationNeeded = !tandem.universityValidations.includes(identity?.universityId);
