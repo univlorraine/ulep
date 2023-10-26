@@ -1,5 +1,5 @@
 import React from 'react';
-import { FunctionField, useTranslate, Filter, SelectInput, Datagrid, List, TextField } from 'react-admin';
+import { FunctionField, useTranslate, Filter, SelectInput, Datagrid, List, TextField, DateField } from 'react-admin';
 
 const ReportFilter = (props: any) => {
     const translate = useTranslate();
@@ -35,6 +35,7 @@ const ReportList = () => {
                     source="status"
                 />
                 <TextField label={translate('reports.content')} source="content" />
+                <DateField label={translate('reports.created_at')} source="createdAt" />
             </Datagrid>
         </List>
     );

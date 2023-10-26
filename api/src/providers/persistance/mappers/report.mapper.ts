@@ -48,5 +48,6 @@ export const reportMapper = (snapshot: ReportSnapshot): Report => {
     status: ReportStatus[snapshot.status],
     content: snapshot.content,
     user: userMapper(snapshot.User),
+    createdAt: snapshot.createdAt,
   });
 };
