@@ -338,7 +338,7 @@ model LearningLanguages {
   created_at              DateTime @default(now())
   updated_at              DateTime @updatedAt
 
-  Profile        Profiles         @relation(fields: [profile_id], references: [id])
+  Profile        Profiles         @relation(fields: [profile_id], references: [id], onDelete: Cascade)
   Tandem         Tandems?         @relation(fields: [tandem_id], references: [id])
   TandemLanguage LanguageCodes?   @relation("TandemLanguage", fields: [tandem_language_code_id], references: [id])
   LanguageCode   LanguageCodes    @relation("LearningLanguageLanguage", fields: [language_code_id], references: [id])
