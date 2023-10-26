@@ -30,9 +30,7 @@ export class DeleteAvatarUsecase {
     const user = await this.tryToFindTheUserOfId(command.userId);
 
     const previousImage = await this.tryToFindTheAvatarOfUser(user);
-    if (previousImage) {
-      await this.deletePreviousAvatar(previousImage);
-    }
+    await this.deletePreviousAvatar(previousImage);
   }
 
   private async tryToFindTheUserOfId(id: string): Promise<User> {
