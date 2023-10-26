@@ -392,6 +392,7 @@
                 "hasActiveTandem": "En tandem",
                 "actionPossible": "Tandem en attente",
                 "specificProgram": "Programme spécifique",
+                "reported": "Signalé",
                 "role": "Rôle"
             },
             "noUniversitySelected": "Merci de sélectionner une ou plusieurs universités pour l'appariement"
