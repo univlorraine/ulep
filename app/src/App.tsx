@@ -1,5 +1,5 @@
 import { Device } from '@capacitor/device';
-import { IonApp, IonContent, IonLoading, IonPage, setupIonicReact } from '@ionic/react';
+import { IonApp, setupIonicReact } from '@ionic/react';
 import { IonReactRouter } from '@ionic/react-router';
 import { StoreProvider, useStoreRehydrated } from 'easy-peasy';
 import { useEffect } from 'react';
@@ -16,14 +16,6 @@ import '@ionic/react/css/core.css';
 import '@ionic/react/css/normalize.css';
 import '@ionic/react/css/structure.css';
 import '@ionic/react/css/typography.css';
-
-/* Optional CSS utils that can be commented out */
-import '@ionic/react/css/display.css';
-import '@ionic/react/css/flex-utils.css';
-import '@ionic/react/css/float-elements.css';
-import '@ionic/react/css/padding.css';
-import '@ionic/react/css/text-alignment.css';
-import '@ionic/react/css/text-transformation.css';
 
 /* Theme variables */
 import './presentation/theme/button.css';
@@ -67,7 +59,7 @@ const AppContext = () => {
 
     //TODO(future): Real loader rather than just IonLoading doing nothing
     if (!configuration || loading) {
-        return <IonLoading />;
+        return null;
     }
 
     return (
@@ -84,8 +76,8 @@ const AppContext = () => {
             )}
         >
             <IonReactRouter>
-                <AppUrlListener />
                 <Router />
+                <AppUrlListener />
             </IonReactRouter>
         </ConfigContext.Provider>
     );
@@ -97,7 +89,7 @@ const AppInstance: React.FC = () => {
     const setApiUrl = useStoreActions((state) => state.setApiUrl);
 
     if (!rehydrated) {
-        return <div />;
+        return null;
     }
 
     // We check if we have an api url on env variable or on localstorage ( web and hybrid )
