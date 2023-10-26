@@ -105,6 +105,7 @@ export class ProfileController {
               },
               role: { equals: where.user?.role },
               university: { equals: where?.university },
+              status: { equals: where?.user.status },
             },
             masteredLanguageCode: where.masteredLanguageCode,
             nativeLanguageCode: where.nativeLanguageCode,

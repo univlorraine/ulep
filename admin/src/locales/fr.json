@@ -63,7 +63,7 @@
         "new_translation": "Nouvelle traduction",
         "password": "Mot de passe",
         "reported": "Signalé",
-        "role": "Role",
+        "role": "Rôle",
         "save": "Enregistrer",
         "staff": "Personnel",
         "student": "Etudiant",
@@ -72,6 +72,11 @@
         "etandem": "E-tandem",
         "tandem": "Tandem",
         "both": "Les deux",
+        "userStatus": {
+            "active": "Actif",
+            "banned": "Bannis",
+            "reported": "Signalé"
+        },
         "genderValues": {
             "male": "Homme",
             "female": "Femme",
@@ -151,8 +156,8 @@
             "error": "Une erreur est survenue pendant la mise à jour du status",
             "primary": "Active en langue d'apprentissage",
             "secondary": "Active en langue suggéré",
-            "success": "Le status a bien été mis à jour",
-            "title": "Status",
+            "success": "Le statut a bien été mis à jour",
+            "title": "Statut",
             "unactive": "Désactivé pour l'apprentissage"
         },
         "isDiscovery": {
@@ -222,7 +227,7 @@
         "objectives": "Objectifs",
         "summary": "Résumé",
         "searchLastname": "Chercher par nom",
-        "status": "Status"
+        "status": "Statut"
     },
     "questions": {
         "create": {

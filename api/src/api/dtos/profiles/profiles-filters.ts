@@ -3,6 +3,7 @@ import { IsOptional } from 'class-validator';
 import { PaginationDto } from '../pagination';
 import { SortOrder } from '@app/common';
 import { ProfileQuerySortKey } from 'src/core/ports/profile.repository';
+import { UserStatus } from 'src/core/models';
 
 class ProfileQueryWhere {
   user: {
@@ -11,6 +12,7 @@ class ProfileQueryWhere {
     firstname?: string;
     lastname?: string;
     role?: string;
+    status?: UserStatus;
   };
   university?: string;
   masteredLanguageCode?: string;
