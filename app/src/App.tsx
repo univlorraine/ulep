@@ -92,10 +92,10 @@ const AppInstance: React.FC = () => {
         return null;
     }
 
-    // We check if we have an api url on env variable or on localstorage ( web and hybrid )
     if (!apiUrl && !import.meta.env.VITE_API_URL)
         return <InstancesPage onValidate={(url: string) => setApiUrl({ apiUrl: url })} />;
-    else return <AppContext />;
+
+    return <AppContext />;
 };
 
 const App: React.FC = () => {
