@@ -276,7 +276,13 @@ const SignUpInformationsPage: React.FC = () => {
                 <Checkbox
                     isSelected={CGUChecked}
                     onPressed={() => setCGUChecked(!CGUChecked)}
-                    name={t('signup_informations_page.cgu')}
+                    name={<>
+                        {`${t('signup_informations_page.cgu.prefix')} `}
+                        <a href={configuration.cguUrl}>{`${t('signup_informations_page.cgu.cgu')}`}</a>
+                        {` ${t('signup_informations_page.cgu.separator')} `}
+                        <a href={configuration.confidentialityUrl}>{`${t('signup_informations_page.cgu.confidentiality')}`}</a>
+                        {` ${t('signup_informations_page.cgu.suffix')}`}
+                      </>}
                 />
 
                 <div className={styles['bottom-container']}>

@@ -99,7 +99,7 @@ spec:
             - name: SMTP_SECURE
               value: "{{ .Values.api.env.smtpSecure }}"
             - name: SMTP_IGNORE_TLS
-            value: "{{ .Values.api.env.ignoreTLS }}"
+              value: "{{ .Values.api.env.ignoreTLS }}"
             - name: SMTP_SENDER
               value: "{{ .Values.api.env.smtpSender }}"
             - name: SMTP_DISABLE_BOOT_VERIFICATION

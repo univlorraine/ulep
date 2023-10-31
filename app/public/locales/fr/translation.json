@@ -361,7 +361,13 @@
     "signup_informations_page": {
         "code": "Code",
         "confirm_password": "Confirme ton mot de passe",
-        "cgu": "Accepter les conditions d'utilisation et la politique de confidentialité pour utiliser l'application.",
+        "cgu": {
+            "confidentiality": "politique de confidentialité",
+            "cgu": "conditions d'utilisation",
+            "prefix": "Accepter les",
+            "separator": "et la",
+            "suffix": " pour utiliser l'application."
+        },
         "error_age": "Veuillez saisir un âge valide",
         "error_code": "Veuillez saisir un code valide",
         "error_confirm_password": "Les mots de passes ne sont pas identiques",
