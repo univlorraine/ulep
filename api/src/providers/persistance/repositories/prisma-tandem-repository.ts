@@ -191,15 +191,27 @@ export class PrismaTandemRepository implements TandemRepository {
   }
 
   async deleteTandemNotLinkedToLearningLangues(): Promise<number> {
-    const res = await this.prisma.tandems.deleteMany({
+    const tandems = await this.prisma.tandems.findMany({
+      include: {
+        LearningLanguages: true,
+      },
+    });
+
+    const tandemsToDelete = tandems.filter(
+      (tandem) => tandem.LearningLanguages.length !== 2,
+    );
+
+    const idsToDelete = tandemsToDelete.map((tandem) => tandem.id);
+
+    const deleteResult = await this.prisma.tandems.deleteMany({
       where: {
-        LearningLanguages: {
-          none: {},
+        id: {
+          in: idsToDelete,
         },
       },
     });
 
-    return res.count;
+    return deleteResult.count;
   }
 
   async disableTandemsForUser(id: string): Promise<void> {
