@@ -29,10 +29,17 @@ const SignUpLanguagesPage: React.FC = () => {
 
         return setLanguages([
             { title: t('signup_languages_page.none'), value: undefined },
-            ...result.map((language) => ({
-                title: codeLanguageToFlag(language.code) + ' ' + language.name,
-                value: language,
-            })),
+            ...result
+                .map((language) => ({
+                    title: `${codeLanguageToFlag(language.code)} ${t(`languages_code.${language.code}`)}`,
+                    value: language,
+                }))
+                .sort((a, b) => {
+                    const translatedA = t(`languages_code.${a.value.code}`);
+                    const translatedB = t(`languages_code.${b.value.code}`);
+
+                    return translatedB < translatedA ? 1 : -1;
+                }),
         ]);
     };
 

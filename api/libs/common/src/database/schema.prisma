@@ -8,6 +8,21 @@ generator client {
   binaryTargets = ["native", "linux-musl-openssl-3.0.x"]
 }
 
+model Instance {
+  id            String          @id @default(uuid())
+  name          String
+  email         String
+  ressource_url String
+  cgu_url       String
+  confidentiality_url   String
+  primary_color         String
+  primary_background_color  String
+  primary_dark_color    String
+  secondary_color  String
+  secondary_background_color    String
+  secondary_dark_color  String
+}
+
 model CountryCodes {
   id           String          @id @default(uuid())
   name         String
@@ -123,6 +138,9 @@ model Users {
   deactivated        Boolean              @default(false)
   deactivated_reason String?
   accepts_email      Boolean              @default(true)
+  division           String?
+  diploma            String?
+  staff_function     String?
   country_code_id    String?
   image_id           String?              @unique
   created_at         DateTime             @default(now())
@@ -320,7 +338,7 @@ model LearningLanguages {
   created_at              DateTime @default(now())
   updated_at              DateTime @updatedAt
 
-  Profile        Profiles         @relation(fields: [profile_id], references: [id])
+  Profile        Profiles         @relation(fields: [profile_id], references: [id], onDelete: Cascade)
   Tandem         Tandems?         @relation(fields: [tandem_id], references: [id])
   TandemLanguage LanguageCodes?   @relation("TandemLanguage", fields: [tandem_language_code_id], references: [id])
   LanguageCode   LanguageCodes    @relation("LearningLanguageLanguage", fields: [language_code_id], references: [id])

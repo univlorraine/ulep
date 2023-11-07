@@ -1,6 +1,7 @@
 import { CountryCode } from 'src/core/models/country-code.model';
 import { Campus } from './campus.model';
 import { Language, LanguageStatus } from './language.model';
+import { LearningType } from './profile.model';
 
 export enum PairingMode {
   MANUAL = 'MANUAL',
@@ -75,12 +76,21 @@ export class University {
     return !this.parent;
   }
 
-  public supportLanguage(language: Language): boolean {
+  public supportLanguage(
+    language: Language,
+    learningType?: LearningType,
+  ): boolean {
     if (!this.isCentralUniversity() && language.secondaryUniversityActive) {
       return true;
     } else if (
       this.isCentralUniversity() &&
       language.mainUniversityStatus === LanguageStatus.PRIMARY
+    ) {
+      return true;
+    } else if (
+      this.isCentralUniversity() &&
+      language.mainUniversityStatus === LanguageStatus.SECONDARY &&
+      learningType !== LearningType.ETANDEM
     ) {
       return true;
     }

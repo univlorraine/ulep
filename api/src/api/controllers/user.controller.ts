@@ -23,9 +23,11 @@ import {
   CreateUserUsecase,
   DeleteAdministratorUsecase,
   DeleteUserUsecase,
+  GetAdministratorUsecase,
   GetAdministratorsUsecase,
   GetUserUsecase,
   GetUsersUsecase,
+  UpdateAdministratorUsecase,
   UpdateUserUsecase,
 } from '../../core/usecases/user';
 import { CollectionResponse, CurrentUser } from '../decorators';
@@ -35,6 +37,7 @@ import {
   CreateAdministratorRequest,
   CreateUserRequest,
   PaginationDto,
+  UpdateAdministratorRequest,
   UpdateUserRequest,
   UserResponse,
 } from '../dtos';
@@ -53,7 +56,9 @@ export class UserController {
     private readonly updateUserUsecase: UpdateUserUsecase,
     private readonly deleteUserUsecase: DeleteUserUsecase,
     private readonly getAdministratorsUsecase: GetAdministratorsUsecase,
+    private readonly getAdministratorUsecase: GetAdministratorUsecase,
     private readonly createAdministratorUsecase: CreateAdministratorUsecase,
+    private readonly updateAdministratorUsecase: UpdateAdministratorUsecase,
     private readonly deleteAdministratorUsecase: DeleteAdministratorUsecase,
   ) {}
 
@@ -106,6 +111,17 @@ export class UserController {
     return administrators.map(AdministratorResponse.fromDomain);
   }
 
+  @Get('administrators/:id')
+  @Roles(configuration().adminRole)
+  @UseGuards(AuthenticationGuard)
+  @Swagger.ApiOperation({ summary: 'Get an Administrator ressource.' })
+  @CollectionResponse(UserResponse)
+  async findAnAdministrator(@Param('id', ParseUUIDPipe) id: string) {
+    const administrator = await this.getAdministratorUsecase.execute(id);
+
+    return AdministratorResponse.fromDomain(administrator);
+  }
+
   @Post('administrators')
   @Roles(configuration().adminRole)
   @UseGuards(AuthenticationGuard)
@@ -113,6 +129,17 @@ export class UserController {
   @Swagger.ApiCreatedResponse({ type: AdministratorResponse })
   async createAdministrator(@Body() body: CreateAdministratorRequest) {
     const admin = await this.createAdministratorUsecase.execute(body);
+
+    return AdministratorResponse.fromDomain(admin);
+  }
+
+  @Put('administrators')
+  @Roles(configuration().adminRole)
+  @UseGuards(AuthenticationGuard)
+  @Swagger.ApiOperation({ summary: 'Update an Administrator ressource.' })
+  @Swagger.ApiCreatedResponse({ type: AdministratorResponse })
+  async updateAdministrator(@Body() body: UpdateAdministratorRequest) {
+    const admin = await this.updateAdministratorUsecase.execute(body);
 
     return AdministratorResponse.fromDomain(admin);
   }

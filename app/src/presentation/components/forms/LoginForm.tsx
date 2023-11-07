@@ -6,7 +6,8 @@ import { useConfig } from '../../../context/ConfigurationContext';
 import CircleAvatar from '../CircleAvatar';
 import TextInput from '../TextInput';
 import style from './Form.module.css';
-import { Tokens } from '../../../domain/interfaces/LoginUsecase.interface';
+import Tokens from '../../../domain/entities/Tokens';
+import { Capacitor } from '@capacitor/core';
 
 interface LoginFormProps {
     goBack: () => void;
@@ -15,7 +16,7 @@ interface LoginFormProps {
 
 const LoginForm: React.FC<LoginFormProps> = ({ goBack, onLogin }) => {
     const { t } = useTranslation();
-    const { login } = useConfig();
+    const { configuration, getInitialUrlUsecase, login } = useConfig();
     const [email, setEmail] = useState<string>('');
     const [password, setPassword] = useState<string>('');
     const [showLoading, hideLoading] = useIonLoading();
@@ -31,6 +32,13 @@ const LoginForm: React.FC<LoginFormProps> = ({ goBack, onLogin }) => {
         }
         await hideLoading();
         onLogin(result);
+    };
+
+    const ssoLogin = () => {
+        const redirectUri = encodeURIComponent(
+            Capacitor.isNativePlatform() ? 'ulep://auth' : `${window.location.origin}/auth`
+        );
+        window.location.href = getInitialUrlUsecase.execute(redirectUri);
     };
 
     return (
@@ -57,6 +65,15 @@ const LoginForm: React.FC<LoginFormProps> = ({ goBack, onLogin }) => {
                         <IonRouterLink className="secondary-button large-margin-top" routerLink="/forgot-password">
                             {t('login_page.forgot')}
                         </IonRouterLink>
+                    </div>
+                    <div className={style.separator} />
+                    <div className={style['bottom-container']}>
+                        <p className={style['sso-text']}>
+                            {t('login_page.sso_title', { name: configuration.mainUniversityName })}
+                        </p>
+                        <button className="tertiary-button large-margin-vertical" onClick={ssoLogin}>
+                            {t('login_page.sso_button')}
+                        </button>
                     </div>
                 </form>
             </IonContent>

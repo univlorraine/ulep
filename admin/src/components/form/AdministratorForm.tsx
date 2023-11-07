@@ -3,41 +3,61 @@ import React, { useState } from 'react';
 import { Button, useTranslate } from 'react-admin';
 import University from '../../entities/University';
 import inputStyle from '../../theme/inputStyle';
+import isPasswordValid from '../../utils/isPasswordValid';
 import UniversityPicker from '../UniversityPicker';
 
 interface AdministratorFormProps {
-    handleSubmit: (email: string, university?: University) => void;
+    email?: string;
+    handleSubmit: (email: string, password?: string, university?: University) => void;
+    universityId?: string;
+    type: string;
 }
 
-const AdministratorForm: React.FC<AdministratorFormProps> = ({ handleSubmit }) => {
+const AdministratorForm: React.FC<AdministratorFormProps> = ({ email, handleSubmit, universityId, type }) => {
     const translate = useTranslate();
-    const [email, setEmail] = useState<string>('');
+    const [newEmail, setNewEmail] = useState<string>(email || '');
+    const [password, setPassword] = useState<string>('');
     const [university, setUniversity] = useState<University>();
 
     return (
         <Box sx={{ m: 4 }}>
-            <Typography variant="subtitle1">{translate(`administrators.create.email`)}</Typography>
+            <Typography variant="subtitle1">{translate(`administrators.${type}.email`)}</Typography>
 
             <Box alignItems="center" display="flex" flexDirection="row">
                 <Input
                     name="Email"
-                    onChange={(e) => setEmail(e.target.value)}
+                    onChange={(e) => setNewEmail(e.target.value)}
                     placeholder={translate('global.email')}
                     sx={inputStyle}
                     type="email"
-                    value={email}
+                    value={newEmail}
                     disableUnderline
                     required
                 />
             </Box>
 
-            <Typography variant="subtitle1">{translate(`administrators.create.university`)}</Typography>
-            <UniversityPicker onChange={setUniversity} value={university} />
+            <Typography variant="subtitle1">{translate(`administrators.${type}.university`)}</Typography>
+            <UniversityPicker initialValue={universityId} onChange={setUniversity} value={university} />
+
+            <Typography variant="subtitle1">{translate(`administrators.${type}.password`)}</Typography>
+            <Box alignItems="center" display="flex" flexDirection="row">
+                <Input
+                    name="Password"
+                    onChange={(e) => setPassword(e.target.value)}
+                    placeholder={translate('global.password')}
+                    sx={inputStyle}
+                    value={password}
+                    disableUnderline
+                    required
+                />
+            </Box>
 
             <Button
                 color="primary"
-                disabled={!university || !email}
-                onClick={() => handleSubmit(email, university)}
+                disabled={
+                    !university || (email && !password ? false : !password || !isPasswordValid(password)) || !newEmail
+                }
+                onClick={() => handleSubmit(newEmail, password, university)}
                 sx={{ mt: 4, width: '100%' }}
                 type="button"
                 variant="contained"

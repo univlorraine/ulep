@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { useHistory, useParams } from 'react-router';
+import { useHistory } from 'react-router';
 import { useConfig } from '../../context/ConfigurationContext';
 import { useStoreActions } from '../../store/storeTypes';
 import WebLayoutCentered from '../components/layout/WebLayoutCentered';
@@ -10,7 +10,6 @@ import styles from './css/SignUp.module.css';
 const PairingSelectCEFRPage: React.FC = () => {
     const { t } = useTranslation();
     const { configuration } = useConfig();
-    const isSignUp = useParams<{ prefix?: string }>().prefix;
     const updateProfileSignUp = useStoreActions((state) => state.updateProfileSignUp);
     const history = useHistory();
     const [selectedLevel, setSelectedLevel] = useState<CEFR>();
@@ -19,7 +18,7 @@ const PairingSelectCEFRPage: React.FC = () => {
 
     const onValidateCefr = () => {
         updateProfileSignUp({ learningLanguageLevel: selectedLevel });
-        return history.push(`${isSignUp ? '/' + isSignUp : '/'}pairing/language/quizz/end`);
+        return history.push(`/pairing/language/quizz/end`);
     };
 
     return (
@@ -68,9 +67,7 @@ const PairingSelectCEFRPage: React.FC = () => {
                     </button>
                     <button
                         className="secondary-button large-margin-top"
-                        onClick={() =>
-                            history.push(`${isSignUp ? '/' + isSignUp : '/'}pairing/language/quizz/introduction`)
-                        }
+                        onClick={() => history.push(`/pairing/language/quizz/introduction`)}
                     >
                         {t('pairing_select_level_page.test_button')}
                     </button>

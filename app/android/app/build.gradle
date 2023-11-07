@@ -51,16 +51,16 @@ android {
         dev {
             applicationIdSuffix ".dev"
             dimension "version"
-            manifestPlaceholders = [displayName:"etandem-dev"]
+            manifestPlaceholders = [displayName:"ulep-dev"]
         }
         staging {
             applicationIdSuffix ".staging"
             dimension "version"
-            manifestPlaceholders = [displayName:"etandem-staging"]
+            manifestPlaceholders = [displayName:"ulep-staging"]
         }
         prod {
             dimension "version"
-            manifestPlaceholders = [displayName:"etandem"]
+            manifestPlaceholders = [displayName:"ulep"]
         }
     }
     buildTypes {

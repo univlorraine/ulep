@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { useHistory, useParams } from 'react-router';
+import { useHistory } from 'react-router';
 import { useConfig } from '../../context/ConfigurationContext';
 import { useStoreActions } from '../../store/storeTypes';
 import WebLayoutCentered from '../components/layout/WebLayoutCentered';
@@ -11,7 +11,6 @@ const PairingOptionsPage: React.FC = () => {
     const { t } = useTranslation();
     const { configuration } = useConfig();
     const history = useHistory();
-    const isSignUp = useParams<{ prefix?: string }>().prefix;
     const updateProfileSignUp = useStoreActions((store) => store.updateProfileSignUp);
     const [sameTandem, setSameTandem] = useState<boolean>(false);
     const [isForCertificate, setIsForCertificate] = useState<boolean>(false);
@@ -19,7 +18,7 @@ const PairingOptionsPage: React.FC = () => {
 
     const onNextStepPressed = () => {
         updateProfileSignUp({ sameTandem, isForCertificate, isForProgram });
-        return history.push(`${isSignUp ? '/' + isSignUp : '/'}pairing/end`);
+        return history.push(`/pairing/end`);
     };
 
     const onNonePressed = () => {

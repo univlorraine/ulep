@@ -1,15 +1,27 @@
 import { FormControl, MenuItem, Select } from '@mui/material';
-import React from 'react';
+import React, { useEffect } from 'react';
 import { useGetList } from 'react-admin';
 import University from '../entities/University';
 
 interface UniversityPickerProps {
+    initialValue?: string;
     onChange: (value: University) => void;
     value?: University;
 }
 
-const UniversityPicker: React.FC<UniversityPickerProps> = ({ onChange, value }) => {
+const UniversityPicker: React.FC<UniversityPickerProps> = ({ initialValue, onChange, value }) => {
     const { data, isLoading } = useGetList('universities');
+
+    useEffect(() => {
+        if (initialValue && data) {
+            onChange(
+                data.find(
+                    (university: University) =>
+                        university.id === initialValue || (initialValue === 'central' && !university.parent)
+                )
+            );
+        }
+    }, [data]);
 
     if (isLoading || !data) {
         return <div />;

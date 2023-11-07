@@ -6,6 +6,7 @@ interface UniversityCommand {
     name: string;
     parent: string | undefined;
     sites: { id: string; name: string }[];
+    hasCode: boolean;
     timezone: string;
     website: string;
     admissionStart: Date;
@@ -19,6 +20,7 @@ export const universityCommandToDomain = (command: UniversityCommand) => {
         !command.parent,
         command.timezone,
         command.sites.map((site) => new Campus(site.id, site.name)),
+        command.hasCode,
         new Date(command.admissionStart),
         new Date(command.admissionEnd)
     );

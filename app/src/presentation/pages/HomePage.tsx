@@ -51,7 +51,7 @@ const HomePage: React.FC = () => {
 
     useEffect(() => {
         getHomeData();
-    }, []);
+    }, [profile?.learningLanguages]);
 
     const onDisconnect = () => {
         return logout();

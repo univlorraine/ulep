@@ -10,3 +10,4 @@ export * from './tandem';
 export * from './university';
 export * from './user';
 export * from './learningLanguage';
+export * from './instance';

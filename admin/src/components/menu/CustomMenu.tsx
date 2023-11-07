@@ -6,6 +6,7 @@ import PersonIcon from '@mui/icons-material/Person';
 import PublicIcon from '@mui/icons-material/Public';
 import QuizIcon from '@mui/icons-material/Quiz';
 import SchoolIcon from '@mui/icons-material/School';
+import SettingsIcon from '@mui/icons-material/Settings';
 import React from 'react';
 import { useTranslate, Menu, usePermissions } from 'react-admin';
 import { ADMIN_PERMISSION } from '../../providers/authProvider';
@@ -26,6 +27,11 @@ const CustomMenu = () => {
             {permissions === ADMIN_PERMISSION && (
                 // Note: div is mandatory to group these Menu.Item as Fragment throw an error from MUI component
                 <div>
+                    <Menu.Item
+                        leftIcon={<SettingsIcon />}
+                        primaryText={translate('instance.label')}
+                        to="/instance/config/show"
+                    />
                     <Menu.Item
                         leftIcon={<PersonIcon />}
                         primaryText={translate('administrators.label')}

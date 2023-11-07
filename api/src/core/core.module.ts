@@ -70,9 +70,15 @@ import {
   GetLearningLanguagesUsecase,
   GetLearningLanguageOfIdUsecase,
   RefuseTandemUsecase,
+  GetInstanceUsecase,
+  UpdateInstanceUsecase,
   GetAdministratorsUsecase,
   CreateAdministratorUsecase,
   DeleteAdministratorUsecase,
+  UpdateAdministratorUsecase,
+  GetAdministratorUsecase,
+  DeleteProfileUsecase,
+  DeleteAvatarUsecase,
 } from './usecases';
 import { UploadObjectiveImageUsecase } from 'src/core/usecases/media/upload-objective-image.usecase';
 import { UpdateObjectiveUsecase } from 'src/core/usecases/objective/update-objective.usecase';
@@ -154,6 +160,8 @@ const usecases: Provider[] = [
   GetProfileByUserIdUsecase,
   GetProfilesUsecase,
   GetProfileUsecase,
+  DeleteAvatarUsecase,
+  DeleteProfileUsecase,
   CreateLearningLanguageUseCase,
   // LearningLanguages
   GetLearningLanguagesUsecase,
@@ -178,10 +186,15 @@ const usecases: Provider[] = [
   CreateUserUsecase,
   DeleteAdministratorUsecase,
   DeleteUserUsecase,
+  GetAdministratorUsecase,
   GetAdministratorsUsecase,
   GetUsersUsecase,
   GetUserUsecase,
   UpdateUserUsecase,
+  UpdateAdministratorUsecase,
+  // Instance
+  GetInstanceUsecase,
+  UpdateInstanceUsecase,
 ];
 
 const services: Provider[] = [MatchScorer];

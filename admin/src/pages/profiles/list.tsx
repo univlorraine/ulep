@@ -51,6 +51,15 @@ const ProfileFilter = (props: any) => {
             </ReferenceInput>
             <SelectInput
                 choices={[
+                    { id: 'ACTIVE', name: translate('global.userStatus.active') },
+                    { id: 'REPORTED', name: translate('global.userStatus.reported') },
+                    { id: 'BANNED', name: translate('global.userStatus.banned') },
+                ]}
+                label={translate('profiles.status')}
+                source="user.status"
+            />
+            <SelectInput
+                choices={[
                     { id: 'STUDENT', name: translate('global.student') },
                     { id: 'STAFF', name: translate('global.staff') },
                 ]}
@@ -96,7 +105,7 @@ const ProfileList = (props: any) => {
     return (
         <List
             exporter={false}
-            filter={{ university: identity?.universityId }}
+            filter={{ university: !identity?.isCentralUniversity ? identity?.universityId : undefined }}
             filters={<ProfileFilter />}
             title={translate('profiles.label')}
             {...props}

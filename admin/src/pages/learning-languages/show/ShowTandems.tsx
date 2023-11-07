@@ -14,6 +14,7 @@ import useLearningLanguagesStore from '../useLearningLanguagesStore';
 import TandemActions from './TandemActions';
 import TandemTable from './TandemTable';
 
+// TODO(futur): handle inactive tandem
 const ShowTandems = () => {
     const translate = useTranslate();
 
@@ -76,7 +77,7 @@ const ShowTandems = () => {
                 !isLoadingTandem &&
                 !hasActiveTandem &&
                 !isLoadingIdentity &&
-                identity?.isCentralUniversity,
+                !record.profile.user.university.parent,
         }
     );
 
@@ -88,6 +89,11 @@ const ShowTandems = () => {
 
         return <p>{translate('learning_languages.show.tandems.error')}</p>;
     }
+
+    const handleTandemAction = async () => {
+        await refetchTandem();
+        await refetchMatches();
+    };
 
     const tandemPartners = tandem
         ? [
@@ -103,15 +109,21 @@ const ShowTandems = () => {
         return (
             <>
                 <Typography variant="h6">{translate('learning_languages.show.tandems.active.title')}</Typography>
-                <TandemTable displayTandemLanguage={isJokerLearningLanguage} partners={tandemPartners} />
+                <TandemTable
+                    actions={() => (
+                        <TandemActions
+                            learningLanguageIds={[record?.id.toString(), tandem.partnerLearningLanguage.id]}
+                            onTandemAction={handleTandemAction}
+                            disableCreateButton
+                            relaunchGlobalRoutineOnRefuse
+                        />
+                    )}
+                    displayTandemLanguage={isJokerLearningLanguage}
+                    partners={tandemPartners}
+                />
             </>
         );
     }
-
-    const handleTandemAction = async () => {
-        await refetchTandem();
-        await refetchMatches();
-    };
 
     if (hasTandemWaitingForValidation && !isErrorTandem) {
         const isUserValidationNeeded = !tandem.universityValidations.includes(identity?.universityId);
@@ -146,7 +158,7 @@ const ShowTandems = () => {
 
     return (
         <>
-            {identity?.isCentralUniversity && (
+            {!record?.profile?.user.university.parent && (
                 <Box>
                     <Typography variant="h6">{translate('learning_languages.show.tandems.matches.title')}</Typography>
                     <Box sx={{ marginTop: 1 }}>
@@ -181,12 +193,12 @@ const ShowTandems = () => {
             )}
             <Box sx={{ marginTop: 3 }}>
                 <Typography variant="h6">
-                    {identity?.isCentralUniversity
+                    {!record?.profile?.user.university.parent
                         ? translate('learning_languages.show.tandems.globalSuggestions.title')
                         : translate('learning_languages.show.tandems.globalSuggestions.titleNotCentralUniversity')}
                 </Typography>
                 <Box sx={{ marginTop: 1 }}>
-                    {(isErrorTandem && !retryTandemQuery) || !tandem ? (
+                    {(isErrorTandem && !retryTandemQuery) || !tandem || tandem.status === TandemStatus.INACTIVE ? (
                         <p>{translate('learning_languages.show.tandems.globalSuggestions.noResult')}</p>
                     ) : (
                         <TandemTable

@@ -60,6 +60,7 @@ api:
     smtpHost: localhost # REQUIRED
     smtpPort: 25 # REQUIRED
     smtpSecure: true # REQUIRED
+    ignoreTLS: false # REQUIRED
     smtpSender: tandems@ulep.fr # REQUIRED
     smtpDisableBootVerification: false # REQUIRED
     logLevel: warn # OPTIONNEL
@@ -72,6 +73,8 @@ api:
     translationsEndpointSuffix: TODO # OPTIONAL
     translationsToken: TODO # REQUIRED
     appUrl: *webappUrl # FIXE
+    connectorUrl: TODO # OPTIONAL
+    connectorToken TODO # OPTIONAL
 
   autoscaling:
     enabled: false
@@ -118,7 +121,7 @@ auth:
     tag: "21.1" # REQUIRED
     pullPolicy: IfNotPresent
 
-  initImage: 
+  initImage:
     repository: "rg.fr-par.scw.cloud/ulep/auth-prod" # REQUIRED
     tag: "latest" # REQUIRED
 
@@ -181,7 +184,7 @@ minio:
   clientImage:
     tag: 2023.9.29-debian-11-r0
 
-  auth: 
+  auth:
     rootUser: *minioAccessKey
     rootPassword: *minioSecretKey
 

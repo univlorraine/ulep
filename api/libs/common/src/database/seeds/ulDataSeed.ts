@@ -70,13 +70,13 @@ export const insertUlData = async (prisma: Prisma.PrismaClient) => {
         objectiveId = ObjectiveIds.ORAL_PRACTICE;
         break;
       case 'IMPROVE_LEVEL':
-        objectiveId = ObjectiveIds.IMPROVE_LEVEL;
+        objectiveId = ObjectiveIds.WRITING_PRACTICE;
         break;
-      case 'SPEAK_LIKE_NATIVE':
-        objectiveId = ObjectiveIds.SPEAK_LIKE_NATIVE;
+      case 'DISCOVER_CULTURE':
+        objectiveId = ObjectiveIds.DISCOVER_CULTURE;
         break;
-      case 'PREPARE_TRAVEL_ABROAD':
-        objectiveId = ObjectiveIds.PREPARE_TRAVEL_ABROAD;
+      case 'DISCOVER_LANGUAGE':
+        objectiveId = ObjectiveIds.DISCOVER_LANGUAGE;
         break;
       case 'GET_CERTIFICATION':
         objectiveId = ObjectiveIds.GET_CERTIFICATION;

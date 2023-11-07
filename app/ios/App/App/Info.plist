@@ -34,6 +34,15 @@
 	<string>LaunchScreen</string>
 	<key>UIMainStoryboardFile</key>
 	<string>Main</string>
+    <key>CFBundleURLTypes</key>
+    <array>
+    <dict>
+        <key>CFBundleURLSchemes</key>
+            <array>
+                <string>ulep</string>
+            </array>
+        </dict>
+    </array>
 	<key>UIRequiredDeviceCapabilities</key>
 	<array>
 		<string>armv7</string>

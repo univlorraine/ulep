@@ -19,6 +19,7 @@ const payload: UserCommand = {
         name: 'name',
         parent: undefined,
         sites: [],
+        hasCode: true,
         timezone: 'timezone',
         website: 'site',
     },
@@ -31,6 +32,7 @@ const university = new University(
     false,
     'timezone',
     [{ id: 'id', name: 'Site A' }],
+    true,
     new Date('2023-01-01T00:00:00.000Z'),
     new Date('2023-12-31T00:00:00.000Z')
 );
@@ -60,12 +62,15 @@ describe('createUserUsecase', () => {
             'password',
             'firstname',
             'lastname',
-            'male',
+            'MALE',
             'CODE',
             22,
             university,
-            'student',
+            'STUDENT',
             'FR',
+            '',
+            '',
+            '',
             file
         );
         expect(adapter.post).toHaveBeenCalledTimes(1);
@@ -76,11 +81,11 @@ describe('createUserUsecase', () => {
                 password: 'password',
                 firstname: 'firstname',
                 lastname: 'lastname',
-                gender: 'male',
+                gender: 'MALE',
                 code: 'CODE',
                 age: 22,
                 university: university.id,
-                role: 'student',
+                role: 'STUDENT',
                 countryCode: 'FR',
                 file: file,
             },
@@ -101,12 +106,15 @@ describe('createUserUsecase', () => {
             'password',
             'firstname',
             'lastname',
-            'male',
+            'MALE',
             'CODE',
             22,
             university,
-            'student',
+            'STUDENT',
             'FR',
+            '',
+            '',
+            '',
             file
         );
         expect(mockedSetUser).toHaveBeenCalledTimes(1);
@@ -122,12 +130,15 @@ describe('createUserUsecase', () => {
             'password',
             'firstname',
             'lastname',
-            'male',
+            'MALE',
             'CODE',
             22,
             university,
-            'student',
+            'STUDENT',
             'FR',
+            '',
+            '',
+            '',
             file
         );
         expect(result).toStrictEqual(new Error('errors.global'));
@@ -141,12 +152,15 @@ describe('createUserUsecase', () => {
             'password',
             'firstname',
             'lastname',
-            'male',
+            'MALE',
             'CODE',
             22,
             university,
-            'student',
+            'STUDENT',
             'FR',
+            '',
+            '',
+            '',
             file
         );
         expect(result).toStrictEqual(new Error('errors.global'));
@@ -160,12 +174,15 @@ describe('createUserUsecase', () => {
             'password',
             'firstname',
             'lastname',
-            'male',
+            'MALE',
             'CODE',
             22,
             university,
-            'student',
+            'STUDENT',
             'FR',
+            '',
+            '',
+            '',
             file
         );
         expect(result).toStrictEqual(new Error('errors.global'));
@@ -179,12 +196,15 @@ describe('createUserUsecase', () => {
             'password',
             'firstname',
             'lastname',
-            'male',
+            'MALE',
             'CODE',
             22,
             university,
-            'student',
+            'STUDENT',
             'FR',
+            '',
+            '',
+            '',
             file
         );
         expect(result).toStrictEqual(new Error('errors.global'));
@@ -198,12 +218,15 @@ describe('createUserUsecase', () => {
             'password',
             'firstname',
             'lastname',
-            'male',
+            'MALE',
             'CODE',
             22,
             university,
-            'student',
+            'STUDENT',
             'FR',
+            '',
+            '',
+            '',
             file
         );
         expect(result).toStrictEqual(new Error('signup_informations_page.error_code'));
@@ -217,12 +240,15 @@ describe('createUserUsecase', () => {
             'password',
             'firstname',
             'lastname',
-            'male',
+            'MALE',
             'CODE',
             22,
             university,
-            'student',
+            'STUDENT',
             'FR',
+            '',
+            '',
+            '',
             file
         );
         expect(result).toStrictEqual(new Error('signup_informations_page.error_picture_weight'));
@@ -236,12 +262,15 @@ describe('createUserUsecase', () => {
             'password',
             'firstname',
             'lastname',
-            'male',
+            'MALE',
             'CODE',
             22,
             university,
-            'student',
+            'STUDENT',
             'FR',
+            '',
+            '',
+            '',
             file
         );
         expect(result).toStrictEqual(new Error('signup_informations_page.error_picture_format'));
@@ -255,12 +284,15 @@ describe('createUserUsecase', () => {
             'password',
             'firstname',
             'lastname',
-            'male',
+            'MALE',
             'CODE',
             22,
             university,
-            'student',
+            'STUDENT',
             'FR',
+            '',
+            '',
+            '',
             file
         );
         expect(result).toStrictEqual(new Error('signup_informations_page.error_domain'));
@@ -274,12 +306,15 @@ describe('createUserUsecase', () => {
             'password',
             'firstname',
             'lastname',
-            'male',
+            'MALE',
             'CODE',
             22,
             university,
-            'student',
+            'STUDENT',
             'FR',
+            '',
+            '',
+            '',
             file
         );
         expect(result).toStrictEqual(new Error('signup_informations_page.error_email_already_exist'));

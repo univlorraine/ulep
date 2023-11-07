@@ -1,8 +1,9 @@
-import { Collection } from '@app/common';
+import { Collection, ModeQuery } from '@app/common';
 import { KeycloakUser } from '@app/keycloak';
 import {
   Body,
   Controller,
+  Delete,
   Get,
   Logger,
   Param,
@@ -21,6 +22,9 @@ import {
   GetProfilesUsecase,
   GetTandemsForProfileUsecase,
   CreateLearningLanguageUseCase,
+  DeleteProfileUsecase,
+  DeleteUserUsecase,
+  DeleteAvatarUsecase,
 } from 'src/core/usecases';
 import { CollectionResponse, CurrentUser } from '../decorators';
 import { Roles } from '../decorators/roles.decorator';
@@ -44,8 +48,11 @@ export class ProfileController {
     private readonly getProfilesUsecase: GetProfilesUsecase,
     private readonly getProfileByUserIdUsecase: GetProfileByUserIdUsecase,
     private readonly getProfileUsecase: GetProfileUsecase,
+    private readonly deleteProfileUsecase: DeleteProfileUsecase,
     private readonly getTandemsForProfileUsecase: GetTandemsForProfileUsecase,
     private readonly createLearningLanguageUsecase: CreateLearningLanguageUseCase,
+    private readonly deleteUserUsecase: DeleteUserUsecase,
+    private readonly deleteAvatarUsecase: DeleteAvatarUsecase,
   ) {}
 
   @Post()
@@ -88,10 +95,17 @@ export class ProfileController {
             user: {
               country: { equals: where.user?.country },
               email: { contains: where.user?.email },
-              firstname: { contains: where.user?.firstname },
-              lastname: { contains: where.user?.lastname },
+              firstname: {
+                contains: where.user?.firstname,
+                mode: ModeQuery.INSENSITIVE,
+              },
+              lastname: {
+                contains: where.user?.lastname,
+                mode: ModeQuery.INSENSITIVE,
+              },
               role: { equals: where.user?.role },
               university: { equals: where?.university },
+              status: { equals: where.user?.status },
             },
             masteredLanguageCode: where.masteredLanguageCode,
             nativeLanguageCode: where.nativeLanguageCode,
@@ -103,6 +117,22 @@ export class ProfileController {
       items: profiles.items.map(ProfileResponse.fromDomain),
       totalItems: profiles.totalItems,
     });
+  }
+
+  @Delete(':id')
+  @Roles(configuration().adminRole)
+  @UseGuards(AuthenticationGuard)
+  @Swagger.ApiOperation({
+    summary: 'Delete a profile resource',
+  })
+  @CollectionResponse(ProfileResponse)
+  async delete(@Param('id', ParseUUIDPipe) id: string): Promise<void> {
+    const profile = await this.getItem(id);
+    await this.deleteProfileUsecase.execute({ id });
+    await this.deleteAvatarUsecase.execute({ userId: profile.user.id });
+    await this.deleteUserUsecase.execute({ id: profile.user.id });
+
+    return;
   }
 
   @Get(':id/tandems')

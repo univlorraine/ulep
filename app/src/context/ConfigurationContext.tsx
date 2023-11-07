@@ -8,6 +8,7 @@ export const ConfigContext = createContext<ConfigContextValueType>(
         '',
         '',
         '',
+        '',
         () => null,
         () => null,
         () => null,
@@ -15,12 +16,15 @@ export const ConfigContext = createContext<ConfigContextValueType>(
             'Université de Lorraine',
             'Université de Lorraine',
             'contact@email.com',
+            'url',
+            'url',
+            'url',
             '#FDEE66',
             '#B6AA43',
             '#EDDF5E',
             '#8BC4C4',
             '#4B7676',
-            '#7CB8B8'
+            '#7CB8B8',
         )
     )
 );

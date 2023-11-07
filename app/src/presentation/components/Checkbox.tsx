@@ -3,7 +3,7 @@ import styles from './Checkbox.module.css';
 interface CheckboxProps {
     isSelected: boolean;
     onPressed: () => void;
-    name: string | null;
+    name: JSX.Element | string | null;
     textClass?: string;
 }
 

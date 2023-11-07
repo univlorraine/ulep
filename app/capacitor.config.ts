@@ -7,14 +7,19 @@ const baseConfig: CapacitorConfig = {
     server: {
         androidScheme: 'https',
     },
+    plugins: {
+        App: {
+            customUrlScheme: 'ulep',
+        },
+    },
 };
 
 switch (process.env.ENV) {
     case 'prod':
         config = {
             ...baseConfig,
-            appId: 'com.ionic.etandem',
-            appName: 'etandem',
+            appId: 'fr.univlorraine.ulep',
+            appName: 'ULEP',
             ios: {
                 scheme: 'prod',
             },
@@ -26,8 +31,8 @@ switch (process.env.ENV) {
     case 'staging':
         config = {
             ...baseConfig,
-            appId: 'com.ionic.etandem.staging',
-            appName: 'etandem-staging',
+            appId: 'fr.univlorraine.ulep.staging',
+            appName: 'ULEP',
             ios: {
                 scheme: 'staging',
             },
@@ -39,8 +44,8 @@ switch (process.env.ENV) {
     default:
         config = {
             ...baseConfig,
-            appId: 'com.ionic.etandem.dev',
-            appName: 'etandem-dev',
+            appId: 'fr.univlorraine.ulep.dev',
+            appName: 'ULEP',
             ios: {
                 scheme: 'dev',
             },

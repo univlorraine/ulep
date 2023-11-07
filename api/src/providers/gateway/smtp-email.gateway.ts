@@ -16,6 +16,7 @@ export class SmtpEmailGateway implements EmailGateway {
       host: smtp.host,
       port: smtp.port,
       secure: smtp.secure,
+      ignoreTLS: smtp.ignoreTLS,
     });
     this.#from = smtp.sender;
 

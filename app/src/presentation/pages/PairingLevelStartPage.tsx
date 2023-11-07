@@ -1,4 +1,4 @@
-import { Redirect, useHistory, useParams } from 'react-router';
+import { Redirect, useHistory } from 'react-router';
 import { useConfig } from '../../context/ConfigurationContext';
 import { useStoreState } from '../../store/storeTypes';
 import LanguageSelectedContent from '../components/contents/LanguageSelectedContent';
@@ -9,11 +9,9 @@ import { AvatarPlaceholderPng } from '../../assets';
 const PairingLevelStartPage: React.FC = () => {
     const { configuration } = useConfig();
     const history = useHistory();
-    const isSignUp = useParams<{ prefix?: string }>().prefix;
     const profileSignUp = useStoreState((state) => state.profileSignUp);
-    const userSignUp = useStoreState((state) => state.user);
     const profile = useStoreState((state) => state.profile);
-    const user = userSignUp || profile?.user;
+    const user = profile?.user;
 
     if (!profileSignUp.learningLanguage || !user) {
         return <Redirect to="/signup" />;
@@ -21,9 +19,9 @@ const PairingLevelStartPage: React.FC = () => {
 
     const continueSignUp = async () => {
         if (profileSignUp.learningLanguage?.code === '*') {
-            return history.push(`${isSignUp ? '/' + isSignUp : '/'}pairing/preference`);
+            return history.push(`/pairing/preference`);
         }
-        return history.push(`${isSignUp ? '/' + isSignUp : '/'}pairing/level`);
+        return history.push(`/pairing/level`);
     };
 
     return (

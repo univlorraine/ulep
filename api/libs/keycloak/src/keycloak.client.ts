@@ -23,6 +23,8 @@ import RoleRepresentation, {
   UserRepresentation,
   KeycloakUser,
   CreateAdministratorProps,
+  UpdateAdministratorProps,
+  UpdateAdministratorPayload,
 } from './keycloak.models';
 import { Client, Issuer, TokenSet } from 'openid-client';
 
@@ -100,6 +102,43 @@ export class KeycloakClient {
     const publicKey = `-----BEGIN CERTIFICATE-----\r\n${key.x5c}\r\n-----END CERTIFICATE-----`;
 
     return publicKey;
+  }
+
+  /*
+   * Returns the access token and refresh token.
+   * Throws HttpException (409) if the credentials are invalid.
+   */
+  async getCredentialsFromAuthorizationCode({
+    authorizationCode,
+    redirectUri,
+  }: {
+    authorizationCode: string;
+    redirectUri: string;
+  }): Promise<Credentials> {
+    const response = await fetch(
+      `${this.configuration.baseUrl}/realms/${this.configuration.realm}/protocol/openid-connect/token`,
+      {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+        body: new URLSearchParams({
+          code: authorizationCode,
+          grant_type: 'authorization_code',
+          client_id: this.configuration.clientId,
+          client_secret: this.configuration.clientSecret,
+          scope: 'openid',
+          redirect_uri: redirectUri,
+        }),
+      },
+    );
+
+    if (!response.ok) {
+      this.logger.error(JSON.stringify(await response.json()));
+      throw new InvalidCredentialsException();
+    }
+
+    const { access_token, refresh_token } = await response.json();
+
+    return { accessToken: access_token, refreshToken: refresh_token };
   }
 
   /*
@@ -298,6 +337,10 @@ export class KeycloakClient {
 
     const user = await this.getUserByEmail(props.email);
 
+    if (!user) {
+      return;
+    }
+
     for (const role of props.roles) {
       await this.addRealmRoleToUser(user.id, role);
     }
@@ -322,6 +365,13 @@ export class KeycloakClient {
         body: JSON.stringify({
           email: props.email,
           enabled: true,
+          credentials: [
+            {
+              type: 'password',
+              value: props.password,
+              temporary: false,
+            },
+          ],
           attributes: {
             universityId: props.universityId,
           },
@@ -337,6 +387,52 @@ export class KeycloakClient {
     const user = await this.getUserByEmail(props.email);
 
     return user;
+  }
+
+  /*
+   * Updates an existing user in Keycloak.
+   */
+  async updateAdministrator(
+    props: UpdateAdministratorProps,
+  ): Promise<UserRepresentation> {
+    const payload: UpdateAdministratorPayload = {
+      email: props.email,
+      attributes: {
+        universityId: props.universityId,
+      },
+    };
+
+    if (props.password) {
+      payload.credentials = [
+        {
+          type: 'password',
+          value: props.password,
+          temporary: false,
+        },
+      ];
+    }
+
+    const response = await fetch(
+      `${this.configuration.baseUrl}/admin/realms/${this.configuration.realm}/users/${props.id}`,
+      {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${await this.getAccessToken()}`,
+        },
+        body: JSON.stringify(payload),
+      },
+    );
+
+    if (!response.ok) {
+      const result = await response.json();
+      this.logger.error(JSON.stringify(result));
+      throw new HttpException({ message: result }, 500);
+    }
+
+    const updatedAdmin = await this.getUserById(props.id);
+
+    return updatedAdmin;
   }
 
   /*
@@ -407,21 +503,31 @@ export class KeycloakClient {
     return users;
   }
 
-  async getUserById(id: string): Promise<UserRepresentation> {
-    const users = await this.getUsers({ id, max: 1 });
+  async getUserById(userId: string): Promise<UserRepresentation> {
+    const url = `${this.configuration.baseUrl}/admin/realms/${this.configuration.realm}/users/${userId}`;
+    const response = await fetch(url, {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${await this.getAccessToken()}`,
+      },
+    });
 
-    if (users.length === 0) {
-      throw new Error('User not found');
+    if (!response.ok) {
+      const result = await response.json();
+      this.logger.error(JSON.stringify(result));
+      throw new HttpException({ message: result }, response.status);
     }
 
-    return users[0];
+    const user = await response.json();
+    return user;
   }
 
   async getUserByEmail(email: string): Promise<UserRepresentation> {
     const users = await this.getUsers({ email, max: 1 });
 
     if (users.length === 0) {
-      throw new Error('User not found');
+      return;
     }
 
     return users[0];
@@ -539,5 +645,14 @@ export class KeycloakClient {
       await this.grantToken();
     }
     return this.tokenSet.access_token;
+  }
+
+  /**
+   * Get standard flow URL
+   * @param redirectUri
+   * @returns
+   */
+  public getStandardFlowUrl(redirectUri: string): string {
+    return `${this.configuration.baseUrl}/realms/${this.configuration.realm}/protocol/openid-connect/auth?response_type=code&client_id=${this.configuration.clientId}&scope=openid&redirect_uri=${redirectUri}`;
   }
 }

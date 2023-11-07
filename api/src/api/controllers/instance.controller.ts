@@ -1,13 +1,17 @@
 import {
+  Body,
   Controller,
   Get,
   HttpStatus,
   Inject,
   Logger,
   Param,
+  Put,
   Res,
 } from '@nestjs/common';
 import * as Swagger from '@nestjs/swagger';
+import { InstanceResponse } from 'src/api/dtos/instance/instance.response';
+import { UpdateInstanceRequest } from 'src/api/dtos/instance/update-instance.request';
 import {
   Configuration,
   configuration,
@@ -18,6 +22,7 @@ import {
   STORAGE_INTERFACE,
   StorageInterface,
 } from 'src/core/ports/storage.interface';
+import { GetInstanceUsecase, UpdateInstanceUsecase } from 'src/core/usecases';
 import { Readable } from 'stream';
 
 @Controller('instance')
@@ -29,8 +34,26 @@ export class InstanceController {
   constructor(
     @Inject(STORAGE_INTERFACE)
     private readonly storageGateway: StorageInterface,
+    private readonly getInstanceUsecase: GetInstanceUsecase,
+    private readonly updateInstanceUsecase: UpdateInstanceUsecase,
   ) {
     this.config = configuration();
+  }
+
+  @Get('config')
+  async getInstance(): Promise<InstanceResponse> {
+    const instance = await this.getInstanceUsecase.execute();
+
+    return InstanceResponse.fromDomain(instance);
+  }
+
+  @Put()
+  async updateInstance(
+    @Body() body: UpdateInstanceRequest,
+  ): Promise<InstanceResponse> {
+    const instance = await this.updateInstanceUsecase.execute(body);
+
+    return InstanceResponse.fromDomain(instance);
   }
 
   @Get('locales/:lng/:type')

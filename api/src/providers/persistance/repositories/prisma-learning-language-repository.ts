@@ -4,7 +4,7 @@ import {
   TandemStatus,
   UserStatus,
 } from 'src/core/models';
-import { Collection, PrismaService } from '@app/common';
+import { Collection, ModeQuery, PrismaService } from '@app/common';
 import { Injectable } from '@nestjs/common';
 import {
   LearningLanguageQuerySortKey,
@@ -263,6 +263,7 @@ export class PrismaLearningLanguageRepository
     orderBy,
     hasActiveTandem,
     hasActionableTandem,
+    lastname,
   }: LearningLanguageRepositoryGetProps): Promise<
     Collection<LearningLanguageWithTandem>
   > {
@@ -278,6 +279,12 @@ export class PrismaLearningLanguageRepository
             {
               status: {
                 not: UserStatus.BANNED,
+              },
+            },
+            {
+              lastname: {
+                contains: lastname || '',
+                mode: ModeQuery.INSENSITIVE,
               },
             },
           ],

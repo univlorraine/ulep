@@ -13,6 +13,7 @@ const usecaseResponse: CollectionCommand<UniversityCommand> = {
                 { id: 'id', name: 'Campus A' },
                 { id: 'id2', name: 'Campus B' },
             ],
+            hasCode: true,
             parent: undefined,
             timezone: 'timezone',
             website: 'website',

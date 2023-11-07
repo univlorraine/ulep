@@ -8,14 +8,16 @@ Thumbs.db
 
 # IDE - VSCode
 *.code-workspace
-/.vscode
-.vscode/*
+*vscode
+vscode/*
 !.vscode/settings.json
 !.vscode/tasks.json
 !.vscode/launch.json
 !.vscode/extensions.json
 values.yaml
+values-local.yaml
 helm/project/old
 
 # Docker data
 docker/minio/.minio.sys
+values-local.yaml

@@ -22,12 +22,13 @@ import Country from '../../entities/Country';
 import { PairingMode } from '../../entities/University';
 import inputStyle from '../../theme/inputStyle';
 import isCodeValid from '../../utils/isCodeValid';
+import isUrlValid from '../../utils/isUrlValid';
 import CountriesPicker from '../CountriesPicker';
 import TimezonePicker from '../TimezonePicker';
 
 interface UniversityFormProps {
-    admissionEndDate?: Date;
-    admissionStartDate?: Date;
+    admissionEndDate?: string;
+    admissionStartDate?: string;
     codes?: string[];
     country?: Country;
     domains?: string[];
@@ -78,32 +79,41 @@ const UniversityForm: React.FC<UniversityFormProps> = ({
     const [newName, setNewName] = useState<string>(name || '');
     const [newCountry, setNewCountry] = useState<Country | undefined>(country || undefined);
     const [newTimezone, setNewTimezone] = useState<string | undefined>(timezone || '');
-    const [newAdmissionStartDate, setNewAdmissionStartDate] = useState<Date | null>();
-    const [newAdmissionEndDate, setNewAdmissionEndDate] = useState<Date | null>();
+    const [newAdmissionStartDate, setNewAdmissionStartDate] = useState<Date | null>(
+        !admissionStartDate ? new Date() : new Date(admissionStartDate)
+    );
+    const [newAdmissionEndDate, setNewAdmissionEndDate] = useState<Date | null>(
+        !admissionEndDate ? new Date() : new Date(admissionEndDate)
+    );
     const [newWebsite, setNewWebsite] = useState<string>(website || '');
+    const [newCode, setNewCode] = useState<string>('');
     const [newCodes, setNewCodes] = useState<string[]>(codes || []);
+    const [newDomain, setNewDomain] = useState<string>('');
     const [newDomains, setNewDomains] = useState<string[]>(domains || []);
     const [newPairingMode, setNewPairingMode] = useState<string>(pairingMode || 'MANUAL');
     const [newNotificationEmail, setNewNotificationEmail] = useState<string>(notificationEmail || '');
 
-    const addCode = (newCode: string) => {
-        if (!isCodeValid(newCode)) {
+    const addCode = (code: string) => {
+        if (!isCodeValid(code)) {
             return notify(`universities.${tradKey}.codes_error`);
         }
+        setNewCode('');
 
-        return setNewCodes([...newCodes, newCode]);
+        return setNewCodes([...newCodes, code]);
     };
 
     const removeCode = (codeToRemove: string) => {
         setNewCodes(newCodes.filter((code) => code !== codeToRemove));
     };
 
-    const addDomain = (newDomain: string) => {
-        if (newDomain[0] !== '@') {
+    const addDomain = (domain: string) => {
+        if (domain[0] !== '@') {
             return notify(`universities.${tradKey}.domains_error`);
         }
 
-        return setNewDomains([...newDomains, newDomain]);
+        setNewDomain('');
+
+        return setNewDomains([...newDomains, domain]);
     };
 
     const removeDomain = (domainToRemove: string) => {
@@ -111,14 +121,17 @@ const UniversityForm: React.FC<UniversityFormProps> = ({
     };
 
     const onSendUniversity = () => {
-        const admissionStart = newAdmissionStartDate || admissionStartDate;
-        const admissionEnd = newAdmissionEndDate || admissionEndDate;
+        const admissionStart = newAdmissionStartDate || (admissionStartDate ? new Date(admissionStartDate) : undefined);
+        const admissionEnd = newAdmissionEndDate || (admissionEndDate ? new Date(admissionEndDate) : undefined);
         if (!newCountry || !newTimezone || !newName || !admissionStart || !admissionEnd || !newWebsite) {
             return undefined;
         }
-
         if (admissionEnd <= admissionStart) {
             return notify(`universities.${tradKey}.admission_error`);
+        }
+
+        if (!isUrlValid(newWebsite)) {
+            return notify(`universities.${tradKey}.url_error`);
         }
 
         return handleSubmit(
@@ -186,7 +199,6 @@ const UniversityForm: React.FC<UniversityFormProps> = ({
                             label="DD/MM/YYYY"
                             onChange={setNewAdmissionStartDate}
                             sx={{ my: 2, width: '100%' }}
-                            value={newAdmissionStartDate}
                             disableUnderline
                         />
                     </Box>
@@ -200,7 +212,6 @@ const UniversityForm: React.FC<UniversityFormProps> = ({
                             label="DD/MM/YYYY"
                             onChange={setNewAdmissionEndDate}
                             sx={{ my: 2, width: '100%' }}
-                            value={newAdmissionEndDate}
                         />
                     </Box>
 
@@ -219,16 +230,23 @@ const UniversityForm: React.FC<UniversityFormProps> = ({
                             ))}
                         </TableBody>
                     </Table>
-                    <Input
-                        onKeyDown={(e) => {
-                            if (e.key === 'Enter') {
-                                addCode((e.target as HTMLInputElement).value);
-                                (e.target as HTMLInputElement).value = '';
-                            }
-                        }}
-                        placeholder="Ajouter un nouveau code"
-                        sx={styles}
-                    />
+                    <Box alignItems="center" display="flex" flexDirection="column">
+                        <Input
+                            onChange={(e) => setNewCode(e.target.value)}
+                            placeholder="Ajouter un nouveau code"
+                            sx={styles}
+                            value={newCode}
+                        />
+                        <Button
+                            color="primary"
+                            disabled={!newCode}
+                            onClick={() => addCode(newCode)}
+                            sx={{ ...styles, height: 30 }}
+                            variant="contained"
+                        >
+                            {translate('universities.code_button')}
+                        </Button>
+                    </Box>
 
                     <Typography variant="subtitle1">{translate(`universities.${tradKey}.domains`)}</Typography>
                     <Table>
@@ -246,16 +264,23 @@ const UniversityForm: React.FC<UniversityFormProps> = ({
                         </TableBody>
                     </Table>
 
-                    <Input
-                        onKeyDown={async (e) => {
-                            if (e.key === 'Enter') {
-                                await addDomain((e.target as HTMLInputElement).value);
-                                (e.target as HTMLInputElement).value = '';
-                            }
-                        }}
-                        placeholder="Ajouter un nouveau domaine"
-                        sx={styles}
-                    />
+                    <Box alignItems="center" display="flex" flexDirection="column">
+                        <Input
+                            onChange={(e) => setNewDomain(e.target.value)}
+                            placeholder="Ajouter un nouveau domaine"
+                            sx={styles}
+                            value={newDomain}
+                        />
+                        <Button
+                            color="primary"
+                            disabled={!newDomain}
+                            onClick={() => addDomain(newDomain)}
+                            sx={{ ...styles, height: 30 }}
+                            variant="contained"
+                        >
+                            {translate('universities.domain_button')}
+                        </Button>
+                    </Box>
 
                     <Typography variant="subtitle1">{translate(`universities.${tradKey}.website`)}</Typography>
 

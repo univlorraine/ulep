@@ -5,6 +5,7 @@ interface SmtpConfiguration {
   host: string;
   port: number;
   secure: boolean;
+  ignoreTLS: boolean;
   sender: string;
   disableBootVerification: boolean;
 }
@@ -16,6 +17,8 @@ export type Configuration = {
   keycloak: KeycloakConfiguration;
   adminRole: string;
   defaultTranslationLanguage: string;
+  connectorUrl: string;
+  connectorToken: string;
   CANCEL_TRESHOLD_IN_MIN: number;
   smtp: SmtpConfiguration;
   logLevel: string;
@@ -52,6 +55,8 @@ export const configuration = (): Configuration => ({
   },
   adminRole: process.env.ADMIN_ROLE || 'admin',
   defaultTranslationLanguage: process.env.DEFAULT_TRANSLATION_LANGUAGE || 'fr',
+  connectorUrl: process.env.CONNECTOR_URL,
+  connectorToken: process.env.CONNECTOR_TOKEN,
   CANCEL_TRESHOLD_IN_MIN:
     parseInt(process.env.CANCEL_TRESHOLD_IN_MIN, 10) || 15,
   smtp: {
@@ -60,6 +65,7 @@ export const configuration = (): Configuration => ({
     host: process.env.SMTP_HOST || 'localhost',
     port: process.env.SMTP_PORT ? parseInt(process.env.SMTP_PORT, 10) : 25,
     secure: process.env.SMTP_SECURE === 'true',
+    ignoreTLS: process.env.SMTP_IGNORE_TLS === 'true',
     sender: process.env.SMTP_SENDER || 'test@ulep.fr',
   },
   logLevel: process.env.LOG_LEVEL || 'warn',

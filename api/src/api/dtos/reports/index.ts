@@ -140,6 +140,10 @@ export class ReportResponse {
   @Expose({ groups: ['read'] })
   user: UserResponse;
 
+  @Swagger.ApiProperty({ type: 'date' })
+  @Expose({ groups: ['read'] })
+  createdAt: Date;
+
   constructor(partial: Partial<ReportResponse>) {
     Object.assign(this, partial);
   }
@@ -151,6 +155,7 @@ export class ReportResponse {
       status: instance.status,
       content: instance.content,
       user: UserResponse.fromDomain(instance.user),
+      createdAt: instance.createdAt,
     });
   }
 }

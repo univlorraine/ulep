@@ -1,7 +1,7 @@
 import { useIonToast } from '@ionic/react';
 import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { useHistory } from 'react-router';
+import { useHistory, useLocation } from 'react-router';
 import { useConfig } from '../../context/ConfigurationContext';
 import Country from '../../domain/entities/Country';
 import University from '../../domain/entities/University';
@@ -12,13 +12,21 @@ import RadioButton from '../components/RadioButton';
 import TextInput from '../components/TextInput';
 import WebLayoutCentered from '../components/layout/WebLayoutCentered';
 import styles from './css/SignUp.module.css';
+import { Capacitor } from '@capacitor/core';
+import { SignUpInformationsParams } from './SignUpInformationsPage';
+
+interface SignUpPageParams {
+    fromIdp: boolean;
+}
 
 const SignUpPage: React.FC = () => {
     const { t } = useTranslation();
-    const { configuration, getAllCountries } = useConfig();
+    const { configuration, getAllCountries, getInitialUrlUsecase, retrievePerson } = useConfig();
     const updateProfileSignUp = useStoreActions((state) => state.updateProfileSignUp);
     const [showToast] = useIonToast();
     const history = useHistory();
+    const location = useLocation<SignUpPageParams>();
+    const { fromIdp } = location.state || {};
     const [countries, setCountries] = useState<DropDownItem<Country>[]>([]);
     const [country, setCountry] = useState<Country>();
     const [department, setDepartment] = useState<string>('');
@@ -27,14 +35,15 @@ const SignUpPage: React.FC = () => {
     const [staffFunction, setStaffFunction] = useState<string>('');
     const [university, setUniversity] = useState<University>();
     const [displayError, setDisplayError] = useState<boolean>(false);
+    const [payload, setPayload] = useState<SignUpInformationsParams>({});
 
     const isAFieldEmpty =
         !university ||
         !country ||
         !selectedRole ||
         (!department && university.isCentral) ||
-        (!diplome && selectedRole === 'student' && university.isCentral) ||
-        (!staffFunction && selectedRole === 'staff' && university.isCentral);
+        (!diplome && selectedRole === 'STUDENT' && university.isCentral) ||
+        (!staffFunction && selectedRole === 'STAFF' && university.isCentral);
 
     const getSignUpData = async () => {
         const countriesResult = await getAllCountries.execute();
@@ -61,8 +70,7 @@ const SignUpPage: React.FC = () => {
         }
 
         updateProfileSignUp({ country, department, diplome, role: selectedRole, staffFunction, university });
-
-        return history.push('/signup/informations');
+        return history.push('/signup/informations', payload);
     };
 
     const onCountrySelected = (country: Country) => {
@@ -70,10 +78,43 @@ const SignUpPage: React.FC = () => {
         return setUniversity(country.universities[0]);
     };
 
+    const getPersonInfos = async () => {
+        const result = await retrievePerson.execute();
+        if (result instanceof Error) {
+            return await showToast({ message: t(result.message), duration: 1000 });
+        }
+        let centralUniversity: University | undefined;
+        let centralCountry: Country | undefined;
+        for (const country of countries) {
+            centralUniversity = country.value.universities.find((university) => university.isCentral);
+            centralCountry = country.value;
+            if (centralUniversity) {
+                break;
+            }
+        }
+
+        setUniversity(centralUniversity);
+        setCountry(centralCountry);
+        setDiplome(result.diploma);
+        setPayload({
+            centralFirstname: result.firstname,
+            centralLastname: result.lastname,
+            centralAge: result.age,
+            centralEmail: result.email,
+            centralGender: result.gender as Gender,
+            fromIdp: true,
+        });
+    };
+
     useEffect(() => {
         getSignUpData();
     }, []);
 
+    useEffect(() => {
+        if (fromIdp && countries.length) {
+            getPersonInfos();
+        }
+    }, [fromIdp, countries]);
     return (
         <WebLayoutCentered
             backgroundIconColor={configuration.primaryBackgroundImageColor}
@@ -87,13 +128,13 @@ const SignUpPage: React.FC = () => {
                 <h2 className={styles.subtitle}>{t('signup_page.profile_title')}</h2>
 
                 <RadioButton
-                    isSelected={selectedRole === 'student'}
-                    onPressed={() => setSelectedRole('student')}
+                    isSelected={selectedRole === 'STUDENT'}
+                    onPressed={() => setSelectedRole('STUDENT')}
                     name={t('signup_page.student_role')}
                 />
                 <RadioButton
-                    isSelected={selectedRole === 'staff'}
-                    onPressed={() => setSelectedRole('staff')}
+                    isSelected={selectedRole === 'STAFF'}
+                    onPressed={() => setSelectedRole('STAFF')}
                     name={t('signup_page.staff_role')}
                 />
 
@@ -101,7 +142,7 @@ const SignUpPage: React.FC = () => {
                     <Dropdown<Country>
                         onChange={onCountrySelected}
                         options={countries}
-                        placeholder={t('signup_page.country_placeholder')}
+                        placeholder={country?.name || t('signup_page.country_placeholder')}
                         title={t('global.country')}
                     />
                 </div>
@@ -121,8 +162,17 @@ const SignUpPage: React.FC = () => {
                     />
                 </div>
 
-                {university && university.isCentral && (
-                    <button className="tertiary-button large-margin-vertical" onClick={() => undefined}>
+                {university && university.isCentral && !fromIdp && (
+                    <button
+                        className="tertiary-button large-margin-vertical"
+                        onClick={async () => {
+                            updateProfileSignUp({ country, department, role: selectedRole, university });
+                            const redirectUri = encodeURIComponent(
+                                Capacitor.isNativePlatform() ? 'ulep://auth' : `${window.location.origin}/auth`
+                            );
+                            window.location.href = getInitialUrlUsecase.execute(redirectUri);
+                        }}
+                    >
                         {t('signup_page.sso_button')}
                     </button>
                 )}
@@ -137,7 +187,7 @@ const SignUpPage: React.FC = () => {
                     </div>
                 )}
 
-                {selectedRole === 'staff' && (
+                {selectedRole === 'STAFF' && (
                     <TextInput
                         onChange={setStaffFunction}
                         title={t('signup_page.function_title')}
@@ -145,7 +195,7 @@ const SignUpPage: React.FC = () => {
                     />
                 )}
 
-                {selectedRole === 'student' && (
+                {selectedRole === 'STUDENT' && (
                     <TextInput onChange={setDiplome} title={t('signup_page.diplome_title')} value={diplome} />
                 )}
                 {displayError && <ErrorMessage description={t('signup_page.error')} />}

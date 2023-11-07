@@ -1,13 +1,13 @@
 {
-    "name": "etandem",
+    "name": "ulep",
     "private": true,
-    "version": "0.0.1",
+    "version": "0.0.13",
     "type": "module",
     "scripts": {
         "dev": "vite",
         "build": "tsc && vite build",
         "build:prod": "tsc && ionic build --prod",
-        "build:android": "npx cap sync android && ionic capacitor run android -l --external",
+        "build:android": "npx cap sync android && ionic capacitor run android -l --external --prod",
         "build:ios": "npx cap sync ios && ionic capacitor run ios -l --external",
         "preview": "vite preview",
         "test.e2e": "cypress run",

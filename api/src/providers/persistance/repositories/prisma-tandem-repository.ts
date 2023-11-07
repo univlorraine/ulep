@@ -2,7 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { Collection, PrismaService } from '@app/common';
 import { TandemRepository } from '../../../core/ports/tandems.repository';
 import { FindWhereProps } from '../../../core/ports/tandems.repository';
-import { Tandem } from '../../../core/models';
+import { Tandem, TandemStatus } from '../../../core/models';
 import { TandemRelations, tandemMapper } from '../mappers/tandem.mapper';
 
 @Injectable()
@@ -200,6 +200,25 @@ export class PrismaTandemRepository implements TandemRepository {
     });
 
     return res.count;
+  }
+
+  async disableTandemsForUser(id: string): Promise<void> {
+    await this.prisma.tandems.updateMany({
+      where: {
+        LearningLanguages: {
+          some: {
+            Profile: {
+              user_id: {
+                equals: id,
+              },
+            },
+          },
+        },
+      },
+      data: {
+        status: TandemStatus.INACTIVE,
+      },
+    });
   }
 
   async deleteTandemLinkedToLearningLanguages(

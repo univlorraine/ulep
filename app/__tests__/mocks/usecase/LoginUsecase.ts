@@ -1,4 +1,5 @@
-import LoginUsecaseInterface, { Tokens } from '../../../src/domain/interfaces/LoginUsecase.interface';
+import Tokens from '../../../src/domain/entities/Tokens';
+import LoginUsecaseInterface from '../../../src/domain/interfaces/LoginUsecase.interface';
 
 class LoginUsecase implements LoginUsecaseInterface {
     execute(email: string, password: string): Promise<Tokens | Error> {

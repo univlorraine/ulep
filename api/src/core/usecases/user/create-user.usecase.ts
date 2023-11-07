@@ -17,7 +17,7 @@ import {
 
 export class CreateUserCommand {
   email: string;
-  password: string;
+  password?: string;
   firstname: string;
   lastname: string;
   gender: Gender;
@@ -25,7 +25,10 @@ export class CreateUserCommand {
   university: string;
   role: Role;
   countryCode: string;
-  code: string;
+  code?: string;
+  division?: string;
+  diploma?: string;
+  staffFunction?: string;
 }
 
 @Injectable()
@@ -69,17 +72,25 @@ export class CreateUserUsecase {
     if (university.admissionEnd < now || university.admissionStart > now) {
       throw new BadRequestException('Registration unavailable');
     }
+    let keycloakUser;
+    if (command.password) {
+      keycloakUser = await this.keycloak.createUser({
+        email: command.email,
+        password: command.password,
+        firstName: command.firstname,
+        lastName: command.lastname,
+        roles: ['USER'],
+        enabled: true,
+        emailVerified: false,
+        origin: 'api',
+      });
+    } else {
+      keycloakUser = await this.keycloak.getUserByEmail(command.email);
+    }
 
-    const keycloakUser = await this.keycloak.createUser({
-      email: command.email,
-      password: command.password,
-      firstName: command.firstname,
-      lastName: command.lastname,
-      roles: ['USER'],
-      enabled: true,
-      emailVerified: false,
-      origin: 'api',
-    });
+    if (!keycloakUser) {
+      throw new RessourceDoesNotExist('User does not exist');
+    }
 
     let user = await this.userRepository.ofId(keycloakUser.id);
     if (!user) {
@@ -90,11 +101,14 @@ export class CreateUserUsecase {
           email: command.email,
           firstname: command.firstname,
           lastname: command.lastname,
-          gender: command.gender,
+          gender: command.gender.toUpperCase() as Gender,
           age: command.age,
           university: university,
-          role: command.role,
+          role: command.role.toUpperCase() as Role,
           country: country.code,
+          division: command.division,
+          diploma: command.diploma,
+          staffFunction: command.staffFunction,
         }),
       );
     }

@@ -1,7 +1,7 @@
 import { useIonToast } from '@ionic/react';
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { Redirect, useHistory, useParams } from 'react-router';
+import { Redirect, useHistory } from 'react-router';
 import { useConfig } from '../../context/ConfigurationContext';
 import Question from '../../domain/entities/Question';
 import { useStoreActions, useStoreState } from '../../store/storeTypes';
@@ -16,7 +16,6 @@ import styles from './css/SignUp.module.css';
 const PairingQuizzPage: React.FC = () => {
     const { configuration, getQuizzByLevel } = useConfig();
     const history = useHistory();
-    const isSignUp = useParams<{ prefix?: string }>().prefix;
     const [showToast] = useIonToast();
     const { t } = useTranslation();
     const updateProfileSignUp = useStoreActions((state) => state.updateProfileSignUp);
@@ -26,7 +25,7 @@ const PairingQuizzPage: React.FC = () => {
     const [displayNextQuizz, setDisplayNextQuizz] = useState<boolean>(false);
 
     if (!profileSignUp.learningLanguage) {
-        return <Redirect to={`${isSignUp ? '/' + isSignUp : '/'}pairing/languages`} />;
+        return <Redirect to={`/pairing/languages`} />;
     }
 
     const askQuizz = async (level: CEFR | undefined) => {
@@ -50,7 +49,7 @@ const PairingQuizzPage: React.FC = () => {
             return;
         }
 
-        if (percentage >= 80 && currentQuizz !== 'C1') {
+        if (percentage >= 80 && currentQuizz !== 'C2') {
             return setDisplayNextQuizz(true);
         }
 
@@ -62,11 +61,7 @@ const PairingQuizzPage: React.FC = () => {
             updateProfileSignUp({ learningLanguageLevel: getPreviousLevel(currentQuizz) });
         }
 
-        if (percentage >= 80 && currentQuizz === 'C1') {
-            updateProfileSignUp({ learningLanguageLevel: 'C2' });
-        }
-
-        return history.push(`${isSignUp ? '/' + isSignUp : '/'}pairing/language/quizz/end`);
+        return history.push(`/pairing/language/quizz/end`);
     };
 
     if (displayNextQuizz && currentQuizz) {
