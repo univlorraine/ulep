@@ -11,6 +11,10 @@ const baseConfig: CapacitorConfig = {
         App: {
             customUrlScheme: 'ulep',
         },
+        Keyboard: {
+            resize: "body",
+            style: "DARK"
+        }
     },
 };
 
