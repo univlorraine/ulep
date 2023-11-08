@@ -14,6 +14,7 @@ import WebLayoutCentered from '../components/layout/WebLayoutCentered';
 import styles from './css/SignUp.module.css';
 import { Capacitor } from '@capacitor/core';
 import { SignUpInformationsParams } from './SignUpInformationsPage';
+import { Keyboard } from '@capacitor/keyboard';
 
 interface SignUpPageParams {
     fromIdp: boolean;
@@ -112,6 +113,7 @@ const SignUpPage: React.FC = () => {
 
     useEffect(() => {
         if (fromIdp && countries.length) {
+            Keyboard.hide();
             getPersonInfos();
         }
     }, [fromIdp, countries]);
