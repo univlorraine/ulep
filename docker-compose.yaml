@@ -24,6 +24,8 @@ services:
       MINIO_SECRET_KEY: ${MINIO_PASSWORD:-!ChangeMe!}
       MINIO_PUBLIC_URL: ${MINIO_PUBLIC_URL:-http://localhost:9000}
       TRANSLATION_ENDPOINT: ${TRANSLATION_ENDPOINT:-https://raw.githubusercontent.com/thetribeio/locales_ulep/main/locales/}
+      SENTRY_DSN: ${SENTRY_DSN_API}
+      APP_ENV: ${APP_ENV:-dev}
 
   admin:
     build:

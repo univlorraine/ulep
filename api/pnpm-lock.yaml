@@ -32,6 +32,12 @@ dependencies:
   '@prisma/client':
     specifier: 4.15.0
     version: 4.15.0(prisma@4.16.2)
+  '@sentry/node':
+    specifier: ^7.78.0
+    version: 7.78.0
+  '@sentry/tracing':
+    specifier: ^7.78.0
+    version: 7.78.0
   axios:
     specifier: ^1.5.0
     version: 1.5.0
@@ -1251,6 +1257,55 @@ packages:
     resolution: {integrity: sha512-vx1nxVvN4QeT/cepQce68deh/Turxy5Mr+4L4zClFuK1GlxN3+ivxfuv+ej/gvidWn1cE1uAhW7ALLNlYbRUAw==}
     requiresBuild: true
 
+  /@sentry-internal/tracing@7.78.0:
+    resolution: {integrity: sha512-53wf+HWyjiansZ0U+q7Q7U2kEjXfL/C8+XOwE4ntLVPGFyvxuYaRUb8OEYFNTsODf20ihnxOLZ+GsXXPlqPfFA==}
+    engines: {node: '>=8'}
+    dependencies:
+      '@sentry/core': 7.78.0
+      '@sentry/types': 7.78.0
+      '@sentry/utils': 7.78.0
+    dev: false
+
+  /@sentry/core@7.78.0:
+    resolution: {integrity: sha512-cf8U+1cNkIK14KC5ySXtzu4RW5Veto3lqkS95Rbl4ExUsrVsfansFNH63j6Bvu7UbJlBRK67uf6Ug2GBbUBUIg==}
+    engines: {node: '>=8'}
+    dependencies:
+      '@sentry/types': 7.78.0
+      '@sentry/utils': 7.78.0
+    dev: false
+
+  /@sentry/node@7.78.0:
+    resolution: {integrity: sha512-gCImN1McfAObOvwgHTef2RZaifcgKt8oqCmctk9MczLJOqjOSzuaigNiCwvyvioe5Eq9jqbZomO6Qx/sG+1gpQ==}
+    engines: {node: '>=8'}
+    dependencies:
+      '@sentry-internal/tracing': 7.78.0
+      '@sentry/core': 7.78.0
+      '@sentry/types': 7.78.0
+      '@sentry/utils': 7.78.0
+      https-proxy-agent: 5.0.1
+    transitivePeerDependencies:
+      - supports-color
+    dev: false
+
+  /@sentry/tracing@7.78.0:
+    resolution: {integrity: sha512-NSWJZP6upHMYVGqE/4hbKHroqLOr+XjNS37MwXvip3trpIT7GK3JEGXrbkZAsmGhNiGWW3IYXAK169bL0gwX7w==}
+    engines: {node: '>=8'}
+    dependencies:
+      '@sentry-internal/tracing': 7.78.0
+    dev: false
+
+  /@sentry/types@7.78.0:
+    resolution: {integrity: sha512-XNyu6EFTrXmKlVgKHOxGdBJ6Aw7BnMBWtptr5TPOQJ4kh+rP+4DB3I6nafcSSUbIsO+hBVgBpj0J8R3Ps86CMQ==}
+    engines: {node: '>=8'}
+    dev: false
+
+  /@sentry/utils@7.78.0:
+    resolution: {integrity: sha512-vxPZaMTthMgEgKvlkuqD9rQuQ4Q8fsWAuOuzeuwUbrVCBIeM/WpmyjUUx4ozy6axNGXSXGE4CzrEQUNv3+t9kQ==}
+    engines: {node: '>=8'}
+    dependencies:
+      '@sentry/types': 7.78.0
+    dev: false
+
   /@sinclair/typebox@0.27.8:
     resolution: {integrity: sha512-+Fj43pSMwJs4KRrH/938Uf+uAELIgVBmQzg/q1YG10djyfA3TnrU8N8XzqCh/okZdszqBQTZf96idMfE5lnwTA==}
     dev: true
@@ -1780,6 +1835,15 @@ packages:
     engines: {node: '>=0.4.0'}
     hasBin: true
     dev: true
+
+  /agent-base@6.0.2:
+    resolution: {integrity: sha512-RZNwNclF7+MS/8bDg70amg32dyeZGZxiDuQmZxKLAlQjr3jGyLx+4Kkk58UO7D2QdgFIQCovuSuZESne6RG6XQ==}
+    engines: {node: '>= 6.0.0'}
+    dependencies:
+      debug: 4.3.4
+    transitivePeerDependencies:
+      - supports-color
+    dev: false
 
   /ajv-formats@2.1.1(ajv@8.12.0):
     resolution: {integrity: sha512-Wx0Kx52hxE7C18hkMEggYlEifqWZtYaRgouJor+WMdPnQyEK13vgEWyVNup7SoeeoLMsr4kf5h6dOW11I15MUA==}
@@ -2438,7 +2502,6 @@ packages:
         optional: true
     dependencies:
       ms: 2.1.2
-    dev: true
 
   /decode-uri-component@0.2.2:
     resolution: {integrity: sha512-FqUYQ+8o158GyGTrMFJms9qh3CqTKvAqgqsTnkLI8sKu0028orqBhxNMFkFen0zGyg6epACD32pjVk58ngIErQ==}
@@ -3202,6 +3265,16 @@ packages:
       setprototypeof: 1.2.0
       statuses: 2.0.1
       toidentifier: 1.0.1
+
+  /https-proxy-agent@5.0.1:
+    resolution: {integrity: sha512-dFcAjpTQFgoLMzC2VwU+C/CbS7uRL0lWmxDITmqm7C+7F0Odmj6s9l6alZc6AELXhrnggM2CeWSXHGOdX2YtwA==}
+    engines: {node: '>= 6'}
+    dependencies:
+      agent-base: 6.0.2
+      debug: 4.3.4
+    transitivePeerDependencies:
+      - supports-color
+    dev: false
 
   /human-signals@1.1.1:
     resolution: {integrity: sha512-SEQu7vl8KjNL2eoGBLF3+wAjpsNfA9XMlXAYj/3EdaNfAlxKthD1xjEQfGOUhllCGGJVNY34bRr6lPINhNjyZw==}
@@ -4257,7 +4330,6 @@ packages:
 
   /ms@2.1.2:
     resolution: {integrity: sha512-sGkPx+VjMtmA6MX27oA4FBFELFCZZ4S4XqeGOXCv68tT+jb3vk/RyaKWP0PTKyWtmLSM0b+adUTEvbs1PEaH2w==}
-    dev: true
 
   /ms@2.1.3:
     resolution: {integrity: sha512-6FlzubTLZG3J2a/NVCAleEhjzq5oxgHyaCU9yYXvcLsvoVaHJq/s5xXI6/XXP6tz7R9xAOtHnSO/tXtF3WRTlA==}
