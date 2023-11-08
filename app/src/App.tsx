@@ -39,7 +39,7 @@ Sentry.init({
         new Sentry.BrowserTracing(),
         new Sentry.Replay()
       ],
-    release: "ulep-frontend@" + import.meta.env.VITE_VERSION,
+    release: "ulep-frontend@" + APP_VERSION,
     dist: "1",
     environment: import.meta.env.VITE_ENV,
     tracesSampleRate: 1.0,

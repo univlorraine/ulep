@@ -17,7 +17,7 @@ Sentry.init({
     dsn: process.env.REACT_APP_SENTRY_DSN,
     debug: process.env.REACT_APP_ENV === 'dev',
     integrations: [new Sentry.BrowserTracing(), new Sentry.Replay()],
-    release: `ulep-admin@${process.env.REACT_APP_VERSION}`,
+    release: `ulep-admin@${process.env.npm_package_version}`,
     dist: '1',
     environment: process.env.REACT_APP_ENV,
     tracesSampleRate: 1.0,
