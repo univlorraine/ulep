@@ -7,8 +7,9 @@ import { useTranslation } from 'react-i18next';
 import { ConfigContext } from './context/ConfigurationContext';
 import getConfigContextValue from './context/getConfigurationContextValue';
 import Router from './presentation/router/Router';
+import React from 'react';
 import { useStoreActions, useStoreState } from './store/storeTypes';
-
+import * as Sentry from "@sentry/react";
 /* Core CSS required for Ionic components to work properly */
 import '@ionic/react/css/core.css';
 
@@ -31,6 +32,19 @@ import AppUrlListener from './presentation/router/AppUrlListener';
 
 setupIonicReact();
 
+Sentry.init({
+    dsn: import.meta.env.VITE_SENTRY_DSN,
+    debug: import.meta.env.VITE_ENV === "dev",
+    integrations: [
+        new Sentry.BrowserTracing(),
+        new Sentry.Replay()
+      ],
+    release: "ulep-frontend@" + import.meta.env.VITE_REACT_APP_VERSION,
+    dist: "1",
+    environment: import.meta.env.VITE_ENV,
+    tracesSampleRate: 1.0,
+});
+
 const AppContext = () => {
     const { i18n } = useTranslation();
     const accessToken = useStoreState((state) => state.accessToken);
@@ -42,7 +56,6 @@ const AppContext = () => {
     const setUser = useStoreActions((state) => state.setUser);
 
     const { configuration, error, loading } = useFetchConfiguration(import.meta.env.VITE_API_URL || apiUrl);
-
     useFetchI18NBackend(apiUrl);
 
     useEffect(() => {
