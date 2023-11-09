@@ -1,9 +1,9 @@
 dependencies:
-- name: postgresql-ha
+- name: postgresql
   repository: oci://registry-1.docker.io/bitnamicharts
-  version: 11.9.8
+  version: 13.2.3
 - name: minio
   repository: oci://registry-1.docker.io/bitnamicharts
   version: 12.8.11
-digest: sha256:91f3e9c78f7cc80233934119b18bfff4cef3fe5a30250ac30d1d016ae7e2834a
-generated: "2023-10-05T11:19:09.61735+02:00"
+digest: sha256:fa01e6965418614968d4e43eb5fcd72aed8c73302a0499efc856a40f045aaaea
+generated: "2023-11-09T16:25:55.348105+01:00"
