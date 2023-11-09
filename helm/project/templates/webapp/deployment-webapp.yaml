@@ -35,9 +35,13 @@ spec:
         imagePullPolicy: {{ .Values.webapp.initImage.pullPolicy }}
         command: ["/bin/sh"]
         args: ["-c", "cd /app && pnpm run build:prod && cp -r /app/dist/* /usr/share/nginx/html/"]
-        env: 
+        env:
           - name: VITE_API_URL
             value: "https://{{ .Values.apiUrl }}.{{ .Values.domain }}"
+        - name: VITE_ENV
+            value: "{{ .Values.webapp.env.viteEnv }}"
+        - name: VITE_SENTRY_DSN
+            value: "{{ .Values.webapp.env.viteSentryDsn }}"
         volumeMounts:
           - name: "{{ .Values.webapp.name }}-build"
             mountPath: /usr/share/nginx/html/

@@ -128,6 +128,10 @@ spec:
               value: "{{ .Values.api.env.connectorUrl }}"
             - name: CONNECTOR_TOKEN
               value: "{{ .Values.api.env.connectorToken }}"
+            - name: SENTRY_DSN
+              value: "{{ .Values.api.env.sentryDsn }}"
+            - name: APP_ENV
+              value: "{{ .Values.api.env.appEnv }}"
           envFrom:
             - secretRef:
                 name: "{{ include "etandem.fullname" . }}-secret-{{ .Values.api.name }}"
