@@ -131,7 +131,7 @@ spec:
             - name: SENTRY_DSN
               value: "{{ .Values.api.env.sentryDsn }}"
             - name: APP_ENV
-              value: "{{ .Values.api.env.appEnv }}"
+              value: "{{ .Values.appEnv }}"
           envFrom:
             - secretRef:
                 name: "{{ include "etandem.fullname" . }}-secret-{{ .Values.api.name }}"

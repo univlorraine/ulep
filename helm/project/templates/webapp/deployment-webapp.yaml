@@ -39,7 +39,7 @@ spec:
           - name: VITE_API_URL
             value: "https://{{ .Values.apiUrl }}.{{ .Values.domain }}"
           - name: VITE_ENV
-            value: "{{ .Values.webapp.env.viteEnv }}"
+            value: "{{ .Values.appEnv }}"
           - name: VITE_SENTRY_DSN
             value: "{{ .Values.webapp.env.viteSentryDsn }}"
         volumeMounts:
