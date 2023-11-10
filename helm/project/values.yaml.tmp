@@ -302,9 +302,7 @@ webapp:
     pullPolicy: IfNotPresent # OPTIONNEL
 
   env:
-    viteEnv: TODO # REQUIRED
     viteSentryDsn: https://55b587a5cbd974654f1945a27eb99eab@o4506189543702528.ingest.sentry.io/4506189564739584 # REQUIRED
-
 
   pv:
     storage: 4Gi
