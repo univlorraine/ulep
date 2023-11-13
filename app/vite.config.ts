@@ -9,6 +9,9 @@ export default defineConfig({
         exclude: [`@capacitor/camera`],
     },
     plugins: [react(), legacy(), svgr()],
+    define: {
+        'APP_VERSION': JSON.stringify(process.env.npm_package_version),
+    },
     test: {
         globals: true,
         environment: 'jsdom',

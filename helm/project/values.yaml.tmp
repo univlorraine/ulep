@@ -8,11 +8,13 @@ name: "ulep" # REQUIRED
 domain: exemple.com # REQUIRED
 issuerName: letsencrypt # REQUIRED
 
-db:
-  username: &dbUser postgres # FIXE
-  database: &dbName ulep # FIXE
-  password: &dbPassword TODO # REQUIRED
-  initScriptsCM: &dbInitScriptsCM ulep-init-database # FIXE
+global:
+  postgresql:
+    auth:
+      username: postgres # FIXE
+      database: ulep # FIXE
+      password: "" # REQUIRED
+      postgresPassword: "" # REQUIRED
 
 apiUrl: &apiUrl api
 adminUrl: &adminUrl admin
@@ -20,18 +22,16 @@ minioUrl: &minioUrl minio
 minioApiUrl: &minioApiUrl minio-api
 keycloakUrl: &keycloakUrl auth
 webappUrl: &webappUrl webapp
+appEnv: TODO #REQUIRED
+
 
 ############## POSTGRES ##############
-postgresql-ha:
-  postgresql:
-    password: *dbPassword # FIXE
-    repmgrPassword: *dbPassword # FIXE
-    database: *dbName # FIXE
-    initdbScriptsCM: *dbInitScriptsCM # FIXE
-  persistence:
+postgresql:
+  primary:
+    initdb:
+      scriptsConfigMap: ulep-init-database # REQUIRED
+          persistence:
     size: 8Gi # REQUIRED
-  pgpool:
-    adminPassword: *dbPassword # FIXE
 ############## POSTGRES ##############
 
 ############## API ##############
@@ -75,6 +75,7 @@ api:
     appUrl: *webappUrl # FIXE
     connectorUrl: TODO # OPTIONAL
     connectorToken TODO # OPTIONAL
+    sentryDsn: https://197c0cc72e015dfa4b48f5c76f3e4cf4@o4506189543702528.ingest.sentry.io/4506189938098176 #REQUIRED
 
   autoscaling:
     enabled: false
@@ -243,6 +244,7 @@ admin:
 
   env:
     keycloakClientSecret: *keycloakClientSecret # REQUIRED
+    sentryDsn: https://596a9c42e2044517cb7ae673d24a0503@o4506189543702528.ingest.sentry.io/4506189827342336 #FIXE
 
   autoscaling:
     enabled: false
@@ -299,7 +301,8 @@ webapp:
     tag: "latest" # REQUIRED
     pullPolicy: IfNotPresent # OPTIONNEL
 
-  env: {}
+  env:
+    viteSentryDsn: https://55b587a5cbd974654f1945a27eb99eab@o4506189543702528.ingest.sentry.io/4506189564739584 # REQUIRED
 
   pv:
     storage: 4Gi
