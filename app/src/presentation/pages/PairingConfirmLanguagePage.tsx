@@ -59,7 +59,7 @@ const PairingConfirmLanguagePage: React.FC = () => {
                             'pairing_confirm_language_page.mode_meet'
                         )} ${pedagogyToTitle(profileSignUp.pedagogy)} ${profileSignUp.pedagogy === 'TANDEM' ? ' - ' + profileSignUp.campus?.name : ''} ${codeLanguageToFlag(
                             profileSignUp.learningLanguage.code
-                        )} `}</p>
+                        )}`}</p>
                         <img alt="tandem" src={TandemPng} />
                     </div>
                 </div>
