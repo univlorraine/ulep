@@ -13,8 +13,6 @@ import {
   HttpLoggerInterceptor,
 } from './api/interceptors';
 import { configuration, getLoggerLevels } from './configuration';
-import { SentryFilter } from 'src/api/filters/sentry-exception.filter';
-import * as Sentry from '@sentry/node';
 
 export class Server {
   public async run(port: number): Promise<void> {
@@ -26,7 +24,6 @@ export class Server {
 
     this.addGlobalPipes(app);
     this.addGlobalFilters(app);
-    this.addSentry(app);
     this.addGlobalInterceptors(app);
     this.addCORSConfiguration(app);
 
@@ -52,21 +49,6 @@ export class Server {
 
     app.useGlobalFilters(new PrismaClientExceptionFilter(httpAdapter));
     app.useGlobalFilters(new DomainErrorFilter(httpAdapter));
-  }
-
-  protected addSentry(app: INestApplication): void {
-    Sentry.init({
-      dsn: process.env.SENTRY_DSN,
-      debug: process.env.APP_ENV === 'dev',
-      release: 'ulep-api@' + process.env.npm_package_version,
-      dist: '1',
-      environment: process.env.APP_ENV,
-      tracesSampleRate: 1.0,
-    });
-
-    // Import the filter globally, capturing all exceptions on all routes
-    const { httpAdapter } = app.get(HttpAdapterHost);
-    app.useGlobalFilters(new SentryFilter(httpAdapter));
   }
 
   protected addGlobalInterceptors(app: INestApplication): void {
