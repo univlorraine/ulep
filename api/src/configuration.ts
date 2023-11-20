@@ -84,9 +84,9 @@ export const configuration = (): Configuration => ({
   },
   translations: {
     endpoint:
-      process.env.TRANSLATION_ENDPOINT ||
+      process.env.TRANSLATIONS_ENDPOINT ||
       'https://raw.githubusercontent.com/thetribeio/locales_ulep/main/locales',
-    endpointSuffix: process.env.TRANSLATION_ENDPOINT_SUFFIX || '',
+    endpointSuffix: process.env.TRANSLATIONS_ENDPOINT_SUFFIX || '',
     token: process.env.TRANSLATION_TOKEN || '',
   },
 });
