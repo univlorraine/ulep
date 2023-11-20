@@ -9,13 +9,14 @@ import ReportStatusPicker from '../ReportStatusPicker';
 
 interface ReportProps {
     handleSubmit: (status: ReportStatus, comment?: string) => void;
+    category: string;
     content: string;
     status: ReportStatus;
     user: User;
     comment?: string;
 }
 
-const ReportForm: React.FC<ReportProps> = ({ handleSubmit, content, status, user, comment }) => {
+const ReportForm: React.FC<ReportProps> = ({ handleSubmit, category, content, status, user, comment }) => {
     const translate = useTranslate();
     const [newStatus, setNewStatus] = useState<ReportStatus>(status);
     const [newComment, setNewComment] = useState<string | undefined>(comment);
@@ -41,16 +42,21 @@ const ReportForm: React.FC<ReportProps> = ({ handleSubmit, content, status, user
                 {user.email}
             </Typography>
             <Typography sx={titleStyle} variant="subtitle1">
+                {translate(`reports.update.status`)}
+            </Typography>
+            <ReportStatusPicker onChange={setNewStatus} value={newStatus} />
+            <Typography sx={titleStyle} variant="subtitle1">
+                {translate(`reports.category`)}
+            </Typography>
+            <Typography sx={textStyle} variant="subtitle2">
+                {category}
+            </Typography>
+            <Typography sx={titleStyle} variant="subtitle1">
                 {translate(`global.content`)}
             </Typography>
             <Typography sx={textStyle} variant="subtitle2">
                 {content}
             </Typography>
-
-            <Typography sx={titleStyle} variant="subtitle1">
-                {translate(`reports.update.status`)}
-            </Typography>
-            <ReportStatusPicker onChange={setNewStatus} value={newStatus} />
 
             <Typography sx={titleStyle} variant="subtitle1">
                 {translate(`reports.update.comment`)}

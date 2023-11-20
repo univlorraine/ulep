@@ -41,6 +41,7 @@ const EditReport = () => {
             <WithRecord<Report>
                 render={(record) => (
                     <ReportForm
+                        category={record.category.name}
                         comment={record.comment}
                         content={record.content}
                         handleSubmit={(status: ReportStatus, comment?: string) =>
