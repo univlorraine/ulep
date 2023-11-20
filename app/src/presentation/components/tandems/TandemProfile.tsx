@@ -42,6 +42,12 @@ const TandemProfile: React.FC<TandemProfileProps> = ({ language, onClose, profil
                     lastname={profile.user.lastname}
                     university={profile.user.university}
                 />
+
+                <span className={styles.category}>{t(`global.email`)}</span>
+                <div className={styles['text-container']}>
+                    {profile.user.email}
+                </div>
+
                 {profile.goals.length !== 0 && (
                     <>
                         <span className={styles.category}>{t(`home_page.tandem_validated.goals`)}</span>
