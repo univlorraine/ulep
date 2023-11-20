@@ -1,5 +1,6 @@
 import React from 'react';
 import { TopToolbar, EditButton, useTranslate, Show, SimpleShowLayout, TextField, FunctionField } from 'react-admin';
+import Report from '../../entities/Report';
 
 const ReportShowAction = () => (
     <TopToolbar>
@@ -18,7 +19,7 @@ const ReportShow = () => {
                 <TextField label={translate('global.email')} source="user.email" />
                 <FunctionField
                     label={translate('reports.status')}
-                    render={(record: any) => translate(`reports.${record.status}`)}
+                    render={(record: Report) => translate(`reports.${record.status}`)}
                     source="status"
                 />
                 <TextField label={translate('reports.category')} source="category.name" />
