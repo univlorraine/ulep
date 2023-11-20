@@ -169,10 +169,14 @@ export class PrismaReportRepository implements ReportRepository {
     return reportCategoryMapper(reportCategory);
   }
 
-  async updateReport(id: string, status: ReportStatus): Promise<void> {
+  async updateReport(
+    id: string,
+    status: ReportStatus,
+    comment?: string,
+  ): Promise<void> {
     await this.prisma.reports.update({
       where: { id },
-      data: { status },
+      data: { status, comment },
     });
   }
 
