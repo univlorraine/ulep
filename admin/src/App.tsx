@@ -1,6 +1,7 @@
 import React from 'react';
 import { Admin, Resource, useTranslate } from 'react-admin';
 import CustomLayout from './components/layout/layout';
+import CustomAppBar from './components/menu/CustomAppBar';
 import administrators from './pages/administrators';
 import LoginPage from './pages/auth/login';
 import campus from './pages/campus';

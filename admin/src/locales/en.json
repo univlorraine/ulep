@@ -32,6 +32,36 @@
             "other": "Other"
         }
     },
+    "instance": {
+        "label": "Instance",
+        "name": "Instance name",
+        "email": "Email linked to the instance",
+        "cgu": "Url to terms and conditions",
+        "confidentiality": "Url to confidentiality rules",
+        "resource": "Url to language resources",
+        "primaryColor": "Primary color of the application",
+        "primaryBackgroundColor": "Primary color of the application's background image",
+        "maintenance": "Maintenance",
+        "primaryDarkColor": "Dark shade of the primary color used for the application background",
+        "secondaryColor": "Secondary color of the application",
+        "secondaryBackgroundColor": "Secondary color of the application's background image",
+        "secondaryDarkColor": "Dark shade of the secondary color used for the application background",
+        "edit": {
+            "error": "An error occurred while updating the instance",
+            "name": "Instance name",
+            "email": "Email linked to instance",
+            "cgu": "Url to terms and conditions",
+            "confidentiality": "Url to confidentiality rules",
+            "resource": "Url to language resources",
+            "primaryColor": "Primary color of the application",
+            "primaryBackgroundColor": "Primary color of the application's background image",
+            "primaryDarkColor": "Primary dark color used for the application background",
+            "secondaryColor": "Secondary color of the application",
+            "secondaryBackgroundColor": "Secondary color of the application's background image",
+            "secondaryDarkColor": "Secondary dark color used for the application background",
+            "title": "Instance update"
+        }
+    },
     "interests": {
         "create": {
             "error": "An error occurred while creating the interest",
