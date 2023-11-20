@@ -24,8 +24,6 @@ services:
       MINIO_SECRET_KEY: ${MINIO_PASSWORD:-!ChangeMe!}
       MINIO_PUBLIC_URL: ${MINIO_PUBLIC_URL:-http://localhost:9000}
       TRANSLATION_ENDPOINT: ${TRANSLATION_ENDPOINT:-https://raw.githubusercontent.com/thetribeio/locales_ulep/main/locales/}
-      SENTRY_DSN: ${SENTRY_DSN_API:-https://197c0cc72e015dfa4b48f5c76f3e4cf4@o4506189543702528.ingest.sentry.io/4506189938098176}
-      APP_ENV: ${APP_ENV:-dev}
 
   admin:
     build:
@@ -39,8 +37,6 @@ services:
       REACT_APP_KEYCLOAK_REALM: ${REACT_APP_KEYCLOAK_REALM:-etandem}
       REACT_APP_KEYCLOAK_CLIENT_ID: ${REACT_APP_KEYCLOAK_CLIENT_ID:-react-admin}
       REACT_APP_KEYCLOAK_CLIENT_SECRET: ${REACT_APP_KEYCLOAK_CLIENT_SECRET:-uKBywX2HlxfvKgxZoKZrbiBSx49CST6W}
-      REACT_APP_SENTRY_DSN: ${REACT_APP_SENTRY_DSN:-https://596a9c42e2044517cb7ae673d24a0503@o4506189543702528.ingest.sentry.io/4506189827342336}
-      REACT_APP_ENV: ${REACT_APP_ENV:-dev}
   auth:
     image: quay.io/keycloak/keycloak:21.1.2
     depends_on:
