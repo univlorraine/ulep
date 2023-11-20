@@ -74,13 +74,15 @@ export class InMemoryReportsRepository implements ReportRepository {
     );
   }
 
-  async updateReport(id: string, status: ReportStatus): Promise<void> {
+  async updateReport(id: string, status: ReportStatus): Promise<Report> {
     const index = this.#reports.findIndex((report) => report.id === id);
 
     if (index !== -1) {
       const report = this.#reports[index];
       this.#reports[index] = { ...report, status };
     }
+
+    return this.reportOfId(id);
   }
 
   async updateCategoryReport(

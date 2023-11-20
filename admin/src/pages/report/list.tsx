@@ -24,7 +24,7 @@ const ReportList = () => {
 
     return (
         <List exporter={false} filters={<ReportFilter />}>
-            <Datagrid>
+            <Datagrid rowClick="show">
                 <TextField label={translate('reports.category')} source="category.name" />
                 <TextField label={translate('global.lastname')} source="user.lastname" />
                 <TextField label={translate('global.firstname')} source="user.firstname" />

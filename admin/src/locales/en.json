@@ -118,11 +118,18 @@
     },
     "reports": {
         "closed": "Closed",
+        "comment": "Administrator's comments",
         "content": "Content",
         "in_progress": "In progress",
         "label": "Reports",
         "open": "Open",
-        "status": "Status"
+        "status": "Status",
+        "update": {
+            "comment": "Update report comment",
+            "error": "An error occurred while updating the alert",
+            "status": "Update the status of the alert",
+            "title": "Report update"
+        }
     },
     "report_categories": {
         "create": {

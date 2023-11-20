@@ -252,13 +252,20 @@
     },
     "reports": {
         "category": "Catégorie de signalement",
+        "comment": "Commentaire des administrateurs",
         "created_at": "Date de soumission",
         "CLOSED": "Fermé",
         "content": "Contenu",
         "IN_PROGRESS": "En cours",
         "label": "Signalements",
         "OPEN": "Ouvert",
-        "status": "État"
+        "status": "État",
+        "update": {
+            "comment": "Mettez à jour le commentaire du signalement",
+            "error": "Une erreur est survenue pendant la mise à jour du signalement",
+            "status": "Mettez à jour l'état du signalement",
+            "title": "Mise à jour du signalement"
+        }
     },
     "report_categories": {
         "create": {

@@ -9,7 +9,6 @@ import {
   Logger,
   Param,
   ParseUUIDPipe,
-  Patch,
   Post,
   Put,
   Query,
@@ -188,7 +187,7 @@ export class ReportController {
     return ReportResponse.fromDomain(instance);
   }
 
-  @Patch(':id')
+  @Put(':id')
   @Roles(configuration().adminRole)
   @UseGuards(AuthenticationGuard)
   @Swagger.ApiOperation({ summary: 'Updates a Report ressource.' })
@@ -197,7 +196,12 @@ export class ReportController {
     @Param('id', ParseUUIDPipe) id: string,
     @Body() request: UpdateReportStatusRequest,
   ) {
-    await this.updateReportStatusUsecase.execute({ id, ...request });
+    const report = await this.updateReportStatusUsecase.execute({
+      id,
+      ...request,
+    });
+
+    return ReportResponse.fromDomain(report);
   }
 
   @Delete(':id')
