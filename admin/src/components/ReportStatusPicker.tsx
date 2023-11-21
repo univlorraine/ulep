@@ -15,7 +15,7 @@ const ReportStatusPicker: React.FC<ReportStatusPickerProps> = ({ onChange, value
     return (
         <FormControl>
             <Select
-                id="countries-picker"
+                id="report-picker"
                 onChange={(reportStatus) => onChange(reportStatus.target.value as ReportStatus)}
                 sx={{ width: '100%' }}
                 value={value}
