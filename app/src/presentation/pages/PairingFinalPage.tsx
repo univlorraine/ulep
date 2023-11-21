@@ -67,7 +67,7 @@ const PairingFinalPage: React.FC = () => {
                     </div>
                 </div>
                 <div className={`${styles['tandem-container']}`}>{`${t('global.tandem')} ${
-                    profileSignUp.learningLanguage!.name
+                    t(`languages_code.${profileSignUp.learningLanguage!.code}`)
                 } ${codeLanguageToFlag(profileSignUp.learningLanguage!.code)}`}</div>
                 <span className={`${styles.description} large-margin-top`}>{`${t(
                     'pairing_final_page.congratulation'
