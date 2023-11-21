@@ -11,7 +11,7 @@ import WebLayoutCentered from '../components/layout/WebLayoutCentered';
 import pairingLanguagesStyles from './css/PairingLanguages.module.css';
 import styles from './css/SignUp.module.css';
 
-const PairingLaguagesPage: React.FC = () => {
+const PairingLanguagesPage: React.FC = () => {
     const { t } = useTranslation();
     const { configuration, getAllLanguages } = useConfig();
     const [showToast] = useIonToast();
@@ -37,7 +37,6 @@ const PairingLaguagesPage: React.FC = () => {
             result.filter(
                 (language) =>
                     profile?.nativeLanguage.code !== language.code &&
-                    !profile?.masteredLanguages?.find((otherLanguage) => language.code === otherLanguage.code) &&
                     !profile?.learningLanguages?.find((learningLanguage) => language.code === learningLanguage.code)
             )
         );
@@ -100,4 +99,4 @@ const PairingLaguagesPage: React.FC = () => {
     );
 };
 
-export default PairingLaguagesPage;
+export default PairingLanguagesPage;

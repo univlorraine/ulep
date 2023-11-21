@@ -119,16 +119,6 @@ export class Profile {
         'Native language cannot be a mastered language',
       );
     }
-
-    const intersectionMasteredAndLearningLanguages =
-      this.learningLanguages.filter((learningLanguage) =>
-        masteredLanguagesCodes.includes(learningLanguage.language.code),
-      );
-    if (intersectionMasteredAndLearningLanguages.length > 0) {
-      throw new ProfileLanguagesException(
-        'A language cannot be in learning and mastered languages',
-      );
-    }
   }
 
   get spokenLanguages(): Language[] {
