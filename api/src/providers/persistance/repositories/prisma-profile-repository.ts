@@ -104,16 +104,17 @@ export class PrismaProfileRepository implements ProfileRepository {
             status: where.user.status,
           },
           MasteredLanguages: {
-            every: { LanguageCode: { code: where.masteredLanguageCode } },
+            some: {
+              LanguageCode: { code: where.masteredLanguageCode },
+            },
           },
           NativeLanguage: { code: where.nativeLanguageCode },
         }
       : {};
-    console.log(wherePayload);
+
     const count = await this.prisma.profiles.count({
       where: wherePayload,
     });
-
     // If skip is out of range, return an empty array
     if (offset >= count) {
       return { items: [], totalItems: count };
