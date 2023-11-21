@@ -32,18 +32,21 @@ import AppUrlListener from './presentation/router/AppUrlListener';
 
 setupIonicReact();
 
-Sentry.init({
-    dsn: import.meta.env.VITE_SENTRY_DSN,
-    debug: import.meta.env.VITE_ENV === "dev",
-    integrations: [
-        new Sentry.BrowserTracing(),
-        new Sentry.Replay()
-      ],
-    release: "ulep-frontend@" + APP_VERSION,
-    dist: "1",
-    environment: import.meta.env.VITE_ENV,
-    tracesSampleRate: 1.0,
-});
+if(import.meta.env.VITE_SENTRY_DSN){
+    Sentry.init({
+        dsn: import.meta.env.VITE_SENTRY_DSN,
+        debug: import.meta.env.VITE_ENV === "dev",
+        integrations: [
+            new Sentry.BrowserTracing(),
+            new Sentry.Replay()
+          ],
+        release: "ulep-frontend@" + APP_VERSION,
+        dist: "1",
+        environment: import.meta.env.VITE_ENV,
+        tracesSampleRate: 1.0,
+    });
+}
+
 
 const AppContext = () => {
     const { i18n } = useTranslation();

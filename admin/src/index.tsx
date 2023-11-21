@@ -1,8 +1,6 @@
-import * as Sentry from '@sentry/react';
 import React from 'react';
 import { createRoot } from 'react-dom/client';
 import './index.css';
-import packageInfo from '../package.json';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
 
@@ -13,16 +11,6 @@ if (!element) {
 }
 
 const { ...props } = element.dataset;
-
-Sentry.init({
-    dsn: process.env.REACT_APP_SENTRY_DSN,
-    debug: process.env.REACT_APP_ENV === 'dev',
-    integrations: [new Sentry.BrowserTracing(), new Sentry.Replay()],
-    release: `ulep-admin@${packageInfo.version}`,
-    dist: '1',
-    environment: process.env.REACT_APP_ENV,
-    tracesSampleRate: 1.0,
-});
 
 const root = createRoot(element);
 

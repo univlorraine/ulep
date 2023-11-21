@@ -57,7 +57,7 @@ const PairingConfirmLanguagePage: React.FC = () => {
                     <div className={confirmLanguagesStyles['mode-container']}>
                         <p className={confirmLanguagesStyles['mode-text']}>{`${t(
                             'pairing_confirm_language_page.mode_meet'
-                        )} ${pedagogyToTitle(profileSignUp.pedagogy)} ${codeLanguageToFlag(
+                        )} ${pedagogyToTitle(profileSignUp.pedagogy)} ${profileSignUp.pedagogy === 'TANDEM' ? ' - ' + profileSignUp.campus?.name : ''} ${codeLanguageToFlag(
                             profileSignUp.learningLanguage.code
                         )}`}</p>
                         <img alt="tandem" src={TandemPng} />
