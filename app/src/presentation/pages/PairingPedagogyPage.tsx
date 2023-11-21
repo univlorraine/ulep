@@ -44,7 +44,7 @@ const PairingPedagogyPage: React.FC = () => {
             title: t('pairing_pedagogy_page.etandem_title'),
             button: t('pairing_pedagogy_page.etandem_button'),
             value: 'ETANDEM',
-            display: true,
+            display: profileSignUp.learningLanguage?.code !== '*',
         },
         {
             color: '#5DABC6',
