@@ -1,8 +1,9 @@
 import { Select, MenuItem } from '@mui/material';
-import React from 'react';
+import React, { useMemo } from 'react';
 import {
     useRefresh,
     useNotify,
+    useGetList,
     useUpdate,
     BooleanField,
     SelectInput,
@@ -20,10 +21,28 @@ import {
     useGetIdentity,
     Loading,
 } from 'react-admin';
+import Language from '../../entities/Language';
+import { Profile } from '../../entities/Profile';
 import User from '../../entities/User';
 
 const ProfileFilter = (props: any) => {
     const translate = useTranslate();
+
+    const { data: languages } = useGetList('languages', {
+        pagination: { page: 1, perPage: 250 },
+        sort: { field: 'name', order: 'ASC' },
+    });
+
+    const sortedLanguages = useMemo(() => {
+        if (!languages) return [];
+
+        return languages.sort((a, b) => {
+            const nameA = translate(`languages_code.${a.code}`);
+            const nameB = translate(`languages_code.${b.code}`);
+
+            return nameA.localeCompare(nameB);
+        });
+    }, [languages]);
 
     return (
         <Filter {...props}>
@@ -33,22 +52,24 @@ const ProfileFilter = (props: any) => {
             <ReferenceInput label={translate('profiles.country')} reference="countries" source="user.country">
                 <SelectInput label={translate('profiles.country')} optionText="name" optionValue="code" />
             </ReferenceInput>
-            <ReferenceInput
-                label={translate('profiles.native_language')}
-                perPage={250}
-                reference="languages"
-                source="nativeLanguageCode"
-            >
-                <SelectInput label={translate('profiles.native_language')} optionText="code" optionValue="code" />
-            </ReferenceInput>
-            <ReferenceInput
-                label={translate('profiles.mastered_languages')}
-                perPage={250}
-                reference="languages"
-                source="masteredLanguageCode"
-            >
-                <SelectInput label={translate('profiles.mastered_languages')} optionText="code" optionValue="code" />
-            </ReferenceInput>
+            {sortedLanguages && (
+                <SelectInput
+                    choices={sortedLanguages}
+                    label={translate('profiles.native_language')}
+                    optionText={(option) => translate(`languages_code.${option.code}`)}
+                    optionValue="code"
+                    source="nativeLanguageCode"
+                />
+            )}
+            {sortedLanguages && (
+                <SelectInput
+                    choices={sortedLanguages}
+                    label={translate('profiles.mastered_languages')}
+                    optionText={(option) => translate(`languages_code.${option.code}`)}
+                    optionValue="code"
+                    source="masteredLanguageCode"
+                />
+            )}
             <SelectInput
                 choices={[
                     { id: 'ACTIVE', name: translate('global.userStatus.active') },
@@ -120,10 +141,11 @@ const ProfileList = (props: any) => {
                 <TextField label={translate('global.firstname')} source="user.firstname" sortable />
                 <TextField label={translate('global.email')} source="user.email" sortable />
                 <TextField label={translate('global.university')} sortable={false} source="user.university.name" />
-                <TextField
+                <FunctionField
                     label={translate('profiles.native_language')}
+                    render={(profile: Profile) => translate(`languages_code.${profile.nativeLanguage.code}`)}
                     sortable={false}
-                    source="nativeLanguage.name"
+                    source="nativeLanguageCode"
                 />
                 <ArrayField
                     label={translate('profiles.mastered_languages')}
@@ -131,7 +153,14 @@ const ProfileList = (props: any) => {
                     source="masteredLanguages"
                 >
                     <SingleFieldList linkType={false}>
-                        <ChipField source="name" />
+                        <FunctionField
+                            render={(record: Language) => (
+                                <ChipField
+                                    record={{ name: translate(`languages_code.${record.code}`) }}
+                                    source="name"
+                                />
+                            )}
+                        />
                     </SingleFieldList>
                 </ArrayField>
                 <BooleanField label={translate('profiles.certificate')} sortable={false} source="certificateOption" />
