@@ -54,6 +54,7 @@
         "age": "Age",
         "banned": "Bannis",
         "content": "Contenu",
+        "disconnect": "Déconnexion",
         "email": "Email",
         "firstname": "Prénom",
         "gender": "Genre",
@@ -219,7 +220,7 @@
         "division": "Département",
         "country": "Pays",
         "interests": "Centre d'intérêts",
-        "label": "Profiles",
+        "label": "Utilisateurs",
         "language_title": "Langues",
         "learning_language": {
             "name": "Nom de langue d'apprentissage",
