@@ -95,7 +95,7 @@ export class PrismaProfileRepository implements ProfileRepository {
     const wherePayload = where
       ? {
           User: {
-            country_code_id: where.user.country,
+            Nationality: { code: where.user.country },
             email: where.user.email,
             firstname: where.user.firstname,
             lastname: where.user.lastname,
@@ -109,7 +109,7 @@ export class PrismaProfileRepository implements ProfileRepository {
           NativeLanguage: { code: where.nativeLanguageCode },
         }
       : {};
-
+    console.log(wherePayload);
     const count = await this.prisma.profiles.count({
       where: wherePayload,
     });
