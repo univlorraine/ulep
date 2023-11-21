@@ -70,6 +70,10 @@ export class UpdateReportStatusRequest
   @Swagger.ApiProperty({ type: 'string', enum: ReportStatus })
   @IsEnum(ReportStatus)
   status: ReportStatus;
+
+  @Swagger.ApiProperty({ type: 'string' })
+  @IsOptional()
+  comment: string;
 }
 
 export class ReportCategoryResponse {
@@ -144,6 +148,10 @@ export class ReportResponse {
   @Expose({ groups: ['read'] })
   createdAt: Date;
 
+  @Swagger.ApiProperty({ type: 'string' })
+  @Expose({ groups: ['read'] })
+  comment?: string;
+
   constructor(partial: Partial<ReportResponse>) {
     Object.assign(this, partial);
   }
@@ -156,6 +164,7 @@ export class ReportResponse {
       content: instance.content,
       user: UserResponse.fromDomain(instance.user),
       createdAt: instance.createdAt,
+      comment: instance.comment,
     });
   }
 }

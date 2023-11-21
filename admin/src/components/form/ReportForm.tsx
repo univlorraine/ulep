@@ -1,48 +1,81 @@
 import { Box, Typography, Input } from '@mui/material';
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { Button, useTranslate } from 'react-admin';
-import IndexedTranslation from '../../entities/IndexedTranslation';
+import { ReportStatus } from '../../entities/Report';
+import User from '../../entities/User';
 import inputStyle from '../../theme/inputStyle';
-import TranslationForm from './TranslationForm';
+import { textStyle, titleStyle } from '../../theme/textStyle';
+import ReportStatusPicker from '../ReportStatusPicker';
 
-interface ReportFormProps {
-    handleSubmit: (name: string, translations: IndexedTranslation[]) => void;
-    name?: string;
-    tradKey: string;
-    translations?: IndexedTranslation[];
+interface ReportProps {
+    handleSubmit: (status: ReportStatus, comment?: string) => void;
+    category: string;
+    content: string;
+    status: ReportStatus;
+    user: User;
+    comment?: string;
 }
 
-const ReportForm: React.FC<ReportFormProps> = ({ handleSubmit, name, translations, tradKey = 'create' }) => {
+const ReportForm: React.FC<ReportProps> = ({ handleSubmit, category, content, status, user, comment }) => {
     const translate = useTranslate();
-    const [newName, setNewName] = useState<string>(name || '');
-    const [newTranslations, setNewTranslations] = useState<IndexedTranslation[]>(translations || []);
-
-    useEffect(() => {
-        setNewName(name || '');
-        setNewTranslations(translations || []);
-    }, [name, translations]);
+    const [newStatus, setNewStatus] = useState<ReportStatus>(status);
+    const [newComment, setNewComment] = useState<string | undefined>(comment);
 
     return (
         <Box sx={{ m: 4 }}>
-            <Typography variant="subtitle1">{translate(`report_categories.${tradKey}.name`)}</Typography>
+            <Typography sx={titleStyle} variant="subtitle1">
+                {translate(`global.firstname`)}
+            </Typography>
+            <Typography sx={textStyle} variant="subtitle2">
+                {user.firstname}
+            </Typography>
+            <Typography sx={titleStyle} variant="subtitle1">
+                {translate(`global.lastname`)}
+            </Typography>
+            <Typography sx={textStyle} variant="subtitle2">
+                {user.lastname}
+            </Typography>
+            <Typography sx={titleStyle} variant="subtitle1">
+                {translate(`global.email`)}
+            </Typography>
+            <Typography sx={textStyle} variant="subtitle2">
+                {user.email}
+            </Typography>
+            <Typography sx={titleStyle} variant="subtitle1">
+                {translate(`reports.update.status`)}
+            </Typography>
+            <ReportStatusPicker onChange={setNewStatus} value={newStatus} />
+            <Typography sx={titleStyle} variant="subtitle1">
+                {translate(`reports.category`)}
+            </Typography>
+            <Typography sx={textStyle} variant="subtitle2">
+                {category}
+            </Typography>
+            <Typography sx={titleStyle} variant="subtitle1">
+                {translate(`global.content`)}
+            </Typography>
+            <Typography sx={textStyle} variant="subtitle2">
+                {content}
+            </Typography>
 
+            <Typography sx={titleStyle} variant="subtitle1">
+                {translate(`reports.update.comment`)}
+            </Typography>
             <Box alignItems="center" display="flex" flexDirection="row">
-                <Input name="Language" sx={{ mx: 4, my: 2, width: 40 }} value="FR" disableUnderline />
                 <Input
                     name="Content"
-                    onChange={(e) => setNewName(e.target.value)}
+                    onChange={(e) => setNewComment(e.target.value)}
                     placeholder={translate('global.content')}
                     sx={inputStyle}
-                    value={newName}
+                    value={newComment}
                     disableUnderline
                     required
                 />
             </Box>
 
-            <TranslationForm setTranslations={setNewTranslations} translations={newTranslations} />
             <Button
                 color="primary"
-                onClick={() => handleSubmit(newName, newTranslations)}
+                onClick={() => handleSubmit(newStatus, newComment)}
                 sx={{ mt: 4, width: '100%' }}
                 type="button"
                 variant="contained"
