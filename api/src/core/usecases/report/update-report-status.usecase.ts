@@ -9,6 +9,7 @@ import { RessourceDoesNotExist } from 'src/core/errors';
 export class UpdateReportStatusCommand {
   id: string;
   status: ReportStatus;
+  comment?: string;
 }
 
 @Injectable()
@@ -25,6 +26,10 @@ export class UpdateReportStatusUsecase {
       throw new RessourceDoesNotExist();
     }
 
-    return this.reportRepository.updateReport(command.id, command.status);
+    return this.reportRepository.updateReport(
+      command.id,
+      command.status,
+      command.comment,
+    );
   }
 }

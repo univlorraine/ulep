@@ -1,6 +1,6 @@
 import React from 'react';
 import { useTranslate, useNotify, useRedirect, useUpdate, WithRecord, Edit } from 'react-admin';
-import ReportForm from '../../components/form/ReportForm';
+import CategoryReportForm from '../../components/form/CategoryReportForm';
 import IndexedTranslation from '../../entities/IndexedTranslation';
 import ReportCategory from '../../entities/ReportCategory';
 import Translation from '../../entities/Translation';
@@ -44,7 +44,7 @@ const EditReportCategory = () => {
             <WithRecord<ReportCategory>
                 label="interests"
                 render={(record) => (
-                    <ReportForm
+                    <CategoryReportForm
                         handleSubmit={(name: string, translations: IndexedTranslation[]) =>
                             handleSubmit(record.id, name, translations)
                         }

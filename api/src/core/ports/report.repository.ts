@@ -33,7 +33,11 @@ export interface ReportRepository {
 
   categoryOfName(name: string): Promise<ReportCategory | null>;
 
-  updateReport(id: string, status: ReportStatus): Promise<void>;
+  updateReport(
+    id: string,
+    status: ReportStatus,
+    comment?: string,
+  ): Promise<Report>;
 
   updateCategoryReport(category: ReportCategory): Promise<ReportCategory>;
 

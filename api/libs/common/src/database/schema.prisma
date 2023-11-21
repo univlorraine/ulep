@@ -245,6 +245,7 @@ model Reports {
   content    String
   categoryId String
   status     String           @default("OPEN")
+  comment    String?
   userId     String
   createdAt  DateTime         @default(now())
   updatedAt  DateTime         @updatedAt
