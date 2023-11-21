@@ -37,6 +37,22 @@ export class InMemoryReportsRepository implements ReportRepository {
     return category;
   }
 
+  async findReportByUserIdAndCategory(
+    userId: string,
+    categoryId: any,
+  ): Promise<Report | null> {
+    const report = await this.#reports.find(
+      (report) =>
+        report.user.id === userId && report.category.id === categoryId,
+    );
+
+    if (!report) {
+      return null;
+    }
+
+    return report;
+  }
+
   async reportsByStatus(status: ReportStatus): Promise<Report[]> {
     return this.#reports.filter((report) => report.status === status);
   }

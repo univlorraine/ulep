@@ -169,6 +169,22 @@ export class PrismaReportRepository implements ReportRepository {
     return reportCategoryMapper(reportCategory);
   }
 
+  async findReportByUserIdAndCategory(
+    userId: string,
+    categoryId,
+  ): Promise<Report> {
+    const report = await this.prisma.reports.findFirst({
+      where: { userId, categoryId },
+      include: ReportRelations,
+    });
+
+    if (!report) {
+      return null;
+    }
+
+    return reportMapper(report);
+  }
+
   async updateReport(
     id: string,
     status: ReportStatus,
