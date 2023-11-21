@@ -69,7 +69,7 @@ const SignUpGoalsPage: React.FC = () => {
                     <div className={`${goalsStyles['goals-container']} large-margin-top`}>
                         {goals.map((goal) => {
                             return (
-                                <div
+                                <button
                                     key={goal.id}
                                     className={goalsStyles['goal-container']}
                                     onClick={() => goalPressed(goal)}
@@ -87,7 +87,7 @@ const SignUpGoalsPage: React.FC = () => {
                                         src={goal.image ?? WritingSkillPng}
                                     />
                                     <span className={goalsStyles.description}>{goal.name}</span>
-                                </div>
+                                </button>
                             );
                         })}
                     </div>
