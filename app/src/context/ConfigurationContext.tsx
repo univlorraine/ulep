@@ -25,6 +25,7 @@ export const ConfigContext = createContext<ConfigContextValueType>(
             '#8BC4C4',
             '#4B7676',
             '#7CB8B8',
+            false
         )
     )
 );
