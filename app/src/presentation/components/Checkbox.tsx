@@ -9,13 +9,14 @@ interface CheckboxProps {
 
 const Checkbox: React.FC<CheckboxProps> = ({ isSelected, onPressed, name, textClass }) => {
     return (
-        <div className={styles.container} onClick={onPressed}>
-            <div
+        <div className={styles.container}>
+            <button
+                onClick={onPressed}
                 style={{ backgroundColor: !isSelected ? 'white' : 'black' }}
                 className={isSelected ? styles['checkbox-selected'] : styles['checkbox-unselected']}
             >
                 {isSelected && <img alt="check" className={styles.image} src={CheckSvg} />}
-            </div>
+            </button>
             <span className={textClass}>{name}</span>
         </div>
     );
