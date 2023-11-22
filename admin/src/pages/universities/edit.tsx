@@ -17,6 +17,8 @@ const EditUniversity = () => {
         timezone: string,
         admissionStart: Date,
         admissionEnd: Date,
+        openServiceDate: Date,
+        closeServiceDate: Date,
         codes: string[],
         domains: string[],
         pairingMode: string,
@@ -29,6 +31,8 @@ const EditUniversity = () => {
             timezone,
             admissionStart,
             admissionEnd,
+            openServiceDate,
+            closeServiceDate,
             codes,
             domains,
             website,
@@ -64,6 +68,7 @@ const EditUniversity = () => {
                     <UniversityForm
                         admissionEndDate={record.admissionEnd}
                         admissionStartDate={record.admissionStart}
+                        closeServiceDate={record.closeServiceDate}
                         codes={record.codes}
                         country={record.country}
                         domains={record.domains}
@@ -73,6 +78,8 @@ const EditUniversity = () => {
                             timezone: string,
                             admissionStart: Date,
                             admissionEnd: Date,
+                            openServiceDate: Date,
+                            closeServiceDate: Date,
                             codes: string[],
                             domains: string[],
                             pairingMode: string,
@@ -86,6 +93,8 @@ const EditUniversity = () => {
                                 timezone,
                                 admissionStart,
                                 admissionEnd,
+                                openServiceDate,
+                                closeServiceDate,
                                 codes,
                                 domains,
                                 pairingMode,
@@ -95,6 +104,7 @@ const EditUniversity = () => {
                         }
                         name={record.name}
                         notificationEmail={record.notificationEmail}
+                        openServiceDate={record.openServiceDate}
                         pairingMode={record.pairingMode}
                         timezone={record.timezone}
                         tradKey="update"

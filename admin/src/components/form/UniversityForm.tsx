@@ -29,6 +29,8 @@ import TimezonePicker from '../TimezonePicker';
 interface UniversityFormProps {
     admissionEndDate?: string;
     admissionStartDate?: string;
+    openServiceDate?: string;
+    closeServiceDate?: string;
     codes?: string[];
     country?: Country;
     domains?: string[];
@@ -38,6 +40,8 @@ interface UniversityFormProps {
         timezone: string,
         admissionStart: Date,
         admissionEnd: Date,
+        openService: Date,
+        closeService: Date,
         codes: string[],
         domains: string[],
         pairingMode: string,
@@ -62,6 +66,8 @@ interface PairingModeOption {
 const UniversityForm: React.FC<UniversityFormProps> = ({
     admissionEndDate,
     admissionStartDate,
+    openServiceDate,
+    closeServiceDate,
     codes,
     country,
     domains,
@@ -84,6 +90,12 @@ const UniversityForm: React.FC<UniversityFormProps> = ({
     );
     const [newAdmissionEndDate, setNewAdmissionEndDate] = useState<Date | null>(
         !admissionEndDate ? new Date() : new Date(admissionEndDate)
+    );
+    const [newOpenServiceDate, setNewOpenServiceDate] = useState<Date | null>(
+        !openServiceDate ? new Date() : new Date(openServiceDate)
+    );
+    const [newCloseServiceDate, setNewCloseServiceDate] = useState<Date | null>(
+        !closeServiceDate ? new Date() : new Date(closeServiceDate)
     );
     const [newWebsite, setNewWebsite] = useState<string>(website || '');
     const [newCode, setNewCode] = useState<string>('');
@@ -123,11 +135,26 @@ const UniversityForm: React.FC<UniversityFormProps> = ({
     const onSendUniversity = () => {
         const admissionStart = newAdmissionStartDate || (admissionStartDate ? new Date(admissionStartDate) : undefined);
         const admissionEnd = newAdmissionEndDate || (admissionEndDate ? new Date(admissionEndDate) : undefined);
-        if (!newCountry || !newTimezone || !newName || !admissionStart || !admissionEnd || !newWebsite) {
+        const openService = newOpenServiceDate || (openServiceDate ? new Date(openServiceDate) : undefined);
+        const closeService = newCloseServiceDate || (closeServiceDate ? new Date(closeServiceDate) : undefined);
+        if (
+            !newCountry ||
+            !newTimezone ||
+            !newName ||
+            !admissionStart ||
+            !admissionEnd ||
+            !openService ||
+            !closeService ||
+            !newWebsite
+        ) {
             return undefined;
         }
+
         if (admissionEnd <= admissionStart) {
             return notify(`universities.${tradKey}.admission_error`);
+        }
+        if (closeService <= openService) {
+            return notify(`universities.${tradKey}.open_service_error`);
         }
 
         if (!isUrlValid(newWebsite)) {
@@ -140,6 +167,8 @@ const UniversityForm: React.FC<UniversityFormProps> = ({
             newTimezone,
             admissionStart,
             admissionEnd,
+            openService,
+            closeService,
             newCodes,
             newDomains,
             newPairingMode,
@@ -211,6 +240,31 @@ const UniversityForm: React.FC<UniversityFormProps> = ({
                             format="DD/MM/YYYY"
                             label="DD/MM/YYYY"
                             onChange={setNewAdmissionEndDate}
+                            sx={{ my: 2, width: '100%' }}
+                        />
+                    </Box>
+
+                    <Typography variant="subtitle1">{translate(`universities.${tradKey}.open_service`)}</Typography>
+                    <Box alignItems="center" display="flex" flexDirection="row">
+                        <DatePicker
+                            // @ts-ignore
+                            defaultValue={daysjs(openServiceDate)}
+                            format="DD/MM/YYYY"
+                            label="DD/MM/YYYY"
+                            onChange={setNewOpenServiceDate}
+                            sx={{ my: 2, width: '100%' }}
+                            disableUnderline
+                        />
+                    </Box>
+
+                    <Typography variant="subtitle1">{translate(`universities.${tradKey}.close_service`)}</Typography>
+                    <Box alignItems="center" display="flex" flexDirection="row">
+                        <DatePicker
+                            // @ts-ignore
+                            defaultValue={daysjs(closeServiceDate)}
+                            format="DD/MM/YYYY"
+                            label="DD/MM/YYYY"
+                            onChange={setNewCloseServiceDate}
                             sx={{ my: 2, width: '100%' }}
                         />
                     </Box>

@@ -17,6 +17,8 @@ export class UpdateUniversityCommand {
   timezone: string;
   admissionEnd: Date;
   admissionStart: Date;
+  openServiceDate: Date;
+  closeServiceDate: Date;
   codes: string[];
   domains: string[];
   website: string;
@@ -56,6 +58,8 @@ export class UpdateUniversityUsecase {
         timezone: command.timezone,
         admissionEnd: command.admissionEnd,
         admissionStart: command.admissionStart,
+        openServiceDate: command.openServiceDate,
+        closeServiceDate: command.closeServiceDate,
         campus: university.campus,
         website: command.website,
         pairingMode: command.pairingMode,

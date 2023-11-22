@@ -15,6 +15,8 @@ type University = {
     timezone: string;
     admissionStart: string;
     admissionEnd: string;
+    openServiceDate: string;
+    closeServiceDate: string;
     sites: Campus[];
     codes: string[];
     domains: string[];
