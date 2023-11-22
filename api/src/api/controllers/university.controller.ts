@@ -78,7 +78,6 @@ export class UniversityController {
   }
 
   @Get(':id')
-  @Roles(configuration().adminRole)
   @UseGuards(AuthenticationGuard)
   @SerializeOptions({ groups: ['read', 'university:read'] })
   @Swagger.ApiOperation({ summary: 'University ressource.' })

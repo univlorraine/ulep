@@ -24,6 +24,7 @@ import RetrievePersonInfoUsecase from '../domain/usecases/RetrievePersonInfoUsec
 import UpdateAvatarUsecase from '../domain/usecases/UpdateAvatarUsecase';
 import UpdateNotificationPermissionUsecase from '../domain/usecases/UpdateNotificationPermissionUsecase';
 import { ConfigContextValueType } from './configurationContextTypes';
+import GetUniversity from '../domain/usecases/GetUniversity';
 
 const getConfigContextValue = (
     apiUrl: string,
@@ -53,6 +54,7 @@ const getConfigContextValue = (
     const getProfile = new GetProfileByUserIdUsecase(domainHttpAdapter);
     const getQuizzByLevel = new GetQuizzByLevelUsecase(domainHttpAdapter);
     const getUser = new GetUserUsecase(domainHttpAdapter);
+    const getUniversity = new GetUniversity(domainHttpAdapter);
     const login = new LoginUsecase(domainHttpAdapter, setTokens);
     const getTokenFromCodeUsecase = new GetTokenFromCodeUsecase(domainHttpAdapter, setTokens);
     const getInitialUrlUsecase = new GetInitialUrlUsecase(apiUrl);
@@ -82,6 +84,7 @@ const getConfigContextValue = (
         getProfile,
         getQuizzByLevel,
         getUser,
+        getUniversity,
         login,
         resetPassword,
         updateAvatar,

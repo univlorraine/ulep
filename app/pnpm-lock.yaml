@@ -56,15 +56,15 @@ dependencies:
   '@sentry/react':
     specifier: 7.73.0
     version: 7.73.0(react@18.2.0)
-  '@sentry/tracing':
-    specifier: ^7.77.0
-    version: 7.77.0
   '@types/react-router':
     specifier: ^5.1.20
     version: 5.1.20
   '@types/react-router-dom':
     specifier: ^5.3.3
     version: 5.3.3
+  date-fns:
+    specifier: ^2.30.0
+    version: 2.30.0
   easy-peasy:
     specifier: ^6.0.1
     version: 6.0.1(@types/react-dom@18.0.10)(@types/react@18.0.27)(react-dom@18.2.0)(react@18.2.0)
@@ -2368,15 +2368,6 @@ packages:
       tslib: 2.6.2
     dev: false
 
-  /@sentry-internal/tracing@7.77.0:
-    resolution: {integrity: sha512-8HRF1rdqWwtINqGEdx8Iqs9UOP/n8E0vXUu3Nmbqj4p5sQPA7vvCfq+4Y4rTqZFc7sNdFpDsRION5iQEh8zfZw==}
-    engines: {node: '>=8'}
-    dependencies:
-      '@sentry/core': 7.77.0
-      '@sentry/types': 7.77.0
-      '@sentry/utils': 7.77.0
-    dev: false
-
   /@sentry/browser@7.73.0:
     resolution: {integrity: sha512-e301hUixcJ5+HNKCJwajFF5smF4opXEFSclyWsJuFNufv5J/1C1SDhbwG2JjBt5zzdSoKWJKT1ewR6vpICyoDw==}
     engines: {node: '>=8'}
@@ -2426,14 +2417,6 @@ packages:
       '@sentry/types': 7.73.0
       '@sentry/utils': 7.73.0
       tslib: 2.6.2
-    dev: false
-
-  /@sentry/core@7.77.0:
-    resolution: {integrity: sha512-Tj8oTYFZ/ZD+xW8IGIsU6gcFXD/gfE+FUxUaeSosd9KHwBQNOLhZSsYo/tTVf/rnQI/dQnsd4onPZLiL+27aTg==}
-    engines: {node: '>=8'}
-    dependencies:
-      '@sentry/types': 7.77.0
-      '@sentry/utils': 7.77.0
     dev: false
 
   /@sentry/hub@7.73.0:
@@ -2487,20 +2470,8 @@ packages:
       '@sentry-internal/tracing': 7.73.0
     dev: false
 
-  /@sentry/tracing@7.77.0:
-    resolution: {integrity: sha512-zr6eSCW3NJ124uj4Fy/6hh77cziy43dpYE1WpgvO/yhl1+kdrY2XVJ0bXGqwHU0KBm/eSgHD7yecUxmZUXiabA==}
-    engines: {node: '>=8'}
-    dependencies:
-      '@sentry-internal/tracing': 7.77.0
-    dev: false
-
   /@sentry/types@7.73.0:
     resolution: {integrity: sha512-/v8++bly8jW7r4cP2wswYiiVpn7eLLcqwnfPUMeCQze4zj3F3nTRIKc9BGHzU0V+fhHa3RwRC2ksqTGq1oJMDg==}
-    engines: {node: '>=8'}
-    dev: false
-
-  /@sentry/types@7.77.0:
-    resolution: {integrity: sha512-nfb00XRJVi0QpDHg+JkqrmEBHsqBnxJu191Ded+Cs1OJ5oPXEW6F59LVcBScGvMqe+WEk1a73eH8XezwfgrTsA==}
     engines: {node: '>=8'}
     dev: false
 
@@ -2510,13 +2481,6 @@ packages:
     dependencies:
       '@sentry/types': 7.73.0
       tslib: 2.6.2
-    dev: false
-
-  /@sentry/utils@7.77.0:
-    resolution: {integrity: sha512-NmM2kDOqVchrey3N5WSzdQoCsyDkQkiRxExPaNI2oKQ/jMWHs9yt0tSy7otPBcXs0AP59ihl75Bvm1tDRcsp5g==}
-    engines: {node: '>=8'}
-    dependencies:
-      '@sentry/types': 7.77.0
     dev: false
 
   /@sinclair/typebox@0.27.8:
@@ -3969,6 +3933,13 @@ packages:
       whatwg-mimetype: 3.0.0
       whatwg-url: 11.0.0
     dev: true
+
+  /date-fns@2.30.0:
+    resolution: {integrity: sha512-fnULvOpxnC5/Vg3NCiWelDsLiUc9bRwAPs/+LfTLNvetFCtCTN+yQz15C/fs4AwX1R9K5GLtLfn8QW+dWisaAw==}
+    engines: {node: '>=0.11'}
+    dependencies:
+      '@babel/runtime': 7.23.2
+    dev: false
 
   /dayjs@1.11.10:
     resolution: {integrity: sha512-vjAczensTgRcqDERK0SR2XMwsF/tSvnvlv6VcF2GIhg6Sx4yOIt/irsr1RDJsKiIyBzJDpCoXiWWq28MqH2cnQ==}

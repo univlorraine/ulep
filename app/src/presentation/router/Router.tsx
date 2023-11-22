@@ -41,12 +41,19 @@ import PairingLevelStartPage from '../pages/PairingLevelStartPage';
 import { useStoreState } from '../../store/storeTypes';
 import SuspendedPage from '../pages/SuspendedPage';
 import PairingOtherLanguageSelectedPage from '../pages/PairingOtherLanguageSelectedPage';
+import useIsUniversityOpen from '../hooks/useIsUniversityOpen';
+import ServiceClosePage from '../pages/ServiceClosePage';
 
 const OfflineRouter: React.FC = () => {
     const profile = useStoreState((store) => store.profile);
+    const {openDate, closeDate, isUniversityOpen} = useIsUniversityOpen(profile?.user.university.id, [profile?.user.university.id]);
 
     if (profile && profile.user.status === 'BANNED') {
         return <SuspendedPage />;
+    }
+
+    if (!isUniversityOpen && openDate && closeDate) {
+        return <ServiceClosePage openDate={openDate} closeDate={closeDate} />;
     }
 
     return (
