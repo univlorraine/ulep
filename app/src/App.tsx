@@ -29,6 +29,7 @@ import useFetchConfiguration from './presentation/hooks/useFetchConfiguration';
 import useFetchI18NBackend from './presentation/hooks/useFetchI18NBackend';
 import ErrorPage from './presentation/pages/ErrorPage';
 import AppUrlListener from './presentation/router/AppUrlListener';
+import MaintenancePage from './presentation/pages/MaintenancePage';
 
 setupIonicReact();
 
@@ -76,6 +77,9 @@ const AppContext = () => {
     //TODO(future): Real loader rather than just IonLoading doing nothing
     if (!configuration || loading) {
         return null;
+    }
+    if(configuration.isInMaintenance) {
+        return <MaintenancePage />;
     }
 
     return (

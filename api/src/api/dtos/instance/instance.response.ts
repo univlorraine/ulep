@@ -51,6 +51,10 @@ export class InstanceResponse {
   @Expose({ groups: ['read'] })
   hasConnector: boolean;
 
+  @ApiProperty({ type: 'boolean' })
+  @Expose({ groups: ['read'] })
+  isInMaintenance: boolean;
+
   constructor(partial: Partial<InstanceResponse>) {
     Object.assign(this, partial);
   }
@@ -68,6 +72,7 @@ export class InstanceResponse {
       secondaryColor: instance.secondaryColor,
       secondaryBackgroundColor: instance.secondaryBackgroundColor,
       secondaryDarkColor: instance.secondaryDarkColor,
+      isInMaintenance: instance.isInMaintenance,
     });
   }
 }
