@@ -113,6 +113,7 @@ export class UpdateUniversityRequest
   @Swagger.ApiProperty({ type: 'string', format: 'date' })
   @Type(() => Date)
   @IsDate()
+  @IsAfterThan('openServiceDate')
   admissionStart: Date;
 
   @Swagger.ApiProperty({ type: 'string', format: 'date' })
@@ -130,6 +131,7 @@ export class UpdateUniversityRequest
   @Type(() => Date)
   @IsDate()
   @IsAfterThan('openServiceDate')
+  @IsAfterThan('admissionEnd')
   closeServiceDate: Date;
 
   @Swagger.ApiProperty({ type: 'string', example: 'Europe/Paris' })

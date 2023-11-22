@@ -153,8 +153,13 @@ const UniversityForm: React.FC<UniversityFormProps> = ({
         if (admissionEnd <= admissionStart) {
             return notify(`universities.${tradKey}.admission_error`);
         }
+
         if (closeService <= openService) {
             return notify(`universities.${tradKey}.open_service_error`);
+        }
+
+        if (openService > admissionStart || closeService < admissionEnd) {
+            return notify(`universities.${tradKey}.service_dont_include_admission_date`);
         }
 
         if (!isUrlValid(newWebsite)) {
