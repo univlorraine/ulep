@@ -227,7 +227,9 @@
         "validated": "Validé"
     },
     "pairing_languages_page": {
+        "home_button": "Retour sur la page principale",
         "subtitle": "Quelle langue veux-tu travailler avec ton tandem ?",
+        "no_languages": "Aucune langue disponible",
         "title": "Choix de la langue",
         "validate_button": "Valider et continuer"
     },
