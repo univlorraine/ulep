@@ -4,7 +4,7 @@ import UniversityCommand, { universityCommandToDomain } from '../../command/Univ
 import University from '../entities/University';
 import GetUniversityInterface from '../interfaces/GetUniversity.interface';
 
-class GetUniversity implements GetUniversityInterface {
+class GetUniversityUsecase implements GetUniversityInterface {
     constructor(private readonly domainHttpAdapter: HttpAdapterInterface) {}
     async execute(universityId: string): Promise<University | Error> {
         try {
@@ -23,4 +23,4 @@ class GetUniversity implements GetUniversityInterface {
     }
 }
 
-export default GetUniversity;
+export default GetUniversityUsecase;
