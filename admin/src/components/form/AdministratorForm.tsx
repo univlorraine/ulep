@@ -1,6 +1,6 @@
 import { Box, Typography, Input } from '@mui/material';
 import React, { useState } from 'react';
-import { Button, useTranslate } from 'react-admin';
+import { Button, Loading, useGetIdentity, useTranslate } from 'react-admin';
 import University from '../../entities/University';
 import inputStyle from '../../theme/inputStyle';
 import isPasswordValid from '../../utils/isPasswordValid';
@@ -8,7 +8,7 @@ import UniversityPicker from '../UniversityPicker';
 
 interface AdministratorFormProps {
     email?: string;
-    handleSubmit: (email: string, password?: string, university?: University) => void;
+    handleSubmit: (email: string, password?: string, universityId?: string) => void;
     universityId?: string;
     type: string;
 }
@@ -18,6 +18,18 @@ const AdministratorForm: React.FC<AdministratorFormProps> = ({ email, handleSubm
     const [newEmail, setNewEmail] = useState<string>(email || '');
     const [password, setPassword] = useState<string>('');
     const [university, setUniversity] = useState<University>();
+    const { data: identity, isLoading: isLoadingIdentity } = useGetIdentity();
+
+    if (isLoadingIdentity || !identity) {
+        return <Loading />;
+    }
+    const onCreatePressed = () => {
+        if (!identity.isCentralUniversity) {
+            return handleSubmit(newEmail, password, identity.universityId);
+        }
+
+        return handleSubmit(newEmail, password, university?.parent ? university?.id : undefined);
+    };
 
     return (
         <Box sx={{ m: 4 }}>
@@ -36,8 +48,12 @@ const AdministratorForm: React.FC<AdministratorFormProps> = ({ email, handleSubm
                 />
             </Box>
 
-            <Typography variant="subtitle1">{translate(`administrators.${type}.university`)}</Typography>
-            <UniversityPicker initialValue={universityId} onChange={setUniversity} value={university} />
+            {identity?.isCentralUniversity && (
+                <>
+                    <Typography variant="subtitle1">{translate(`administrators.${type}.university`)}</Typography>
+                    <UniversityPicker initialValue={universityId} onChange={setUniversity} value={university} />
+                </>
+            )}
 
             <Typography variant="subtitle1">{translate(`administrators.${type}.password`)}</Typography>
             <Box alignItems="center" display="flex" flexDirection="row">
@@ -55,9 +71,11 @@ const AdministratorForm: React.FC<AdministratorFormProps> = ({ email, handleSubm
             <Button
                 color="primary"
                 disabled={
-                    !university || (email && !password ? false : !password || !isPasswordValid(password)) || !newEmail
+                    (!university && identity.isCentralUniversity) ||
+                    (email && !password ? false : !password || !isPasswordValid(password)) ||
+                    !newEmail
                 }
-                onClick={() => handleSubmit(newEmail, password, university)}
+                onClick={onCreatePressed}
                 sx={{ mt: 4, width: '100%' }}
                 type="button"
                 variant="contained"

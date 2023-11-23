@@ -24,6 +24,11 @@ const CustomMenu = () => {
                 primaryText={translate('learning_languages.label')}
                 to="/learning-languages"
             />
+            <Menu.Item
+                leftIcon={<PersonIcon />}
+                primaryText={translate('administrators.label')}
+                to="/users/administrators"
+            />
             {permissions === ADMIN_PERMISSION && (
                 // Note: div is mandatory to group these Menu.Item as Fragment throw an error from MUI component
                 <div>
@@ -31,11 +36,6 @@ const CustomMenu = () => {
                         leftIcon={<SettingsIcon />}
                         primaryText={translate('instance.label')}
                         to="/instance/config/show"
-                    />
-                    <Menu.Item
-                        leftIcon={<PersonIcon />}
-                        primaryText={translate('administrators.label')}
-                        to="/users/administrators"
                     />
                     <Menu.Item
                         leftIcon={<SchoolIcon />}
