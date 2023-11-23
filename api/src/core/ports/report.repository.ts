@@ -6,6 +6,7 @@ export const REPORT_REPOSITORY = 'report.repository';
 export type ReportQuerySortKey = 'firstname' | 'lastname' | 'university';
 export interface ReportQueryWhere {
   status?: StringFilter;
+  universityId?: string;
 }
 
 export interface ReportQueryOrderBy {

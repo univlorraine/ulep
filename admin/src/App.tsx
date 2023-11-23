@@ -43,6 +43,7 @@ const App = () => {
                         options={{ label: translate('learning_languages.label') }}
                         {...learningLanguages}
                     />
+                    <Resource name="reports" options={{ label: translate('reports.label') }} {...reports} />
                     {permissions === ADMIN_PERMISSION && (
                         <>
                             <Resource name="instance" options={{ label: translate('instance.label') }} {...instance} />
@@ -98,7 +99,6 @@ const App = () => {
                                 recordRepresentation="name"
                                 {...universities}
                             />
-                            <Resource name="reports" options={{ label: translate('reports.label') }} {...reports} />
                             <Resource
                                 name="reports/categories"
                                 options={{ label: translate('report_categories.label') }}

@@ -1,5 +1,16 @@
 import React from 'react';
-import { FunctionField, useTranslate, Filter, SelectInput, Datagrid, List, TextField, DateField } from 'react-admin';
+import {
+    FunctionField,
+    useTranslate,
+    Filter,
+    SelectInput,
+    Datagrid,
+    List,
+    TextField,
+    DateField,
+    Loading,
+    useGetIdentity,
+} from 'react-admin';
 
 const ReportFilter = (props: any) => {
     const translate = useTranslate();
@@ -21,9 +32,18 @@ const ReportFilter = (props: any) => {
 
 const ReportList = () => {
     const translate = useTranslate();
+    const { data: identity, isLoading: isLoadingIdentity } = useGetIdentity();
+
+    if (isLoadingIdentity || !identity) {
+        return <Loading />;
+    }
 
     return (
-        <List exporter={false} filters={<ReportFilter />}>
+        <List
+            exporter={false}
+            filter={!identity?.isCentralUniversity ? { universityId: identity.universityId } : undefined}
+            filters={<ReportFilter />}
+        >
             <Datagrid>
                 <TextField label={translate('reports.category')} source="category.name" />
                 <TextField label={translate('global.lastname')} source="user.lastname" />

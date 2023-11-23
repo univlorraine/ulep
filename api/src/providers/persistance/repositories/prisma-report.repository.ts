@@ -23,7 +23,17 @@ export class PrismaReportRepository implements ReportRepository {
     orderBy?: ReportQueryOrderBy,
     where?: ReportQueryWhere,
   ): Promise<Collection<Report>> {
-    const count = await this.prisma.reports.count({ where });
+    const whereQuery = {
+      status: where?.status,
+      User: {
+        Organization: {
+          id: where?.universityId,
+        },
+      },
+    };
+    console.warn(where);
+    console.warn(whereQuery);
+    const count = await this.prisma.reports.count({ where: whereQuery });
 
     // If skip is out of range, return an empty array
     if (offset >= count) {
@@ -38,7 +48,7 @@ export class PrismaReportRepository implements ReportRepository {
     }
 
     const reports = await this.prisma.reports.findMany({
-      where,
+      where: whereQuery,
       skip: offset,
       orderBy: order,
       take: limit,
