@@ -305,7 +305,7 @@ model MasteredLanguages {
   language_code_id String
   created_at       DateTime      @default(now())
   updated_at       DateTime      @updatedAt
-  Profile          Profiles      @relation(fields: [profile_id], references: [id])
+  Profile          Profiles      @relation(fields: [profile_id], references: [id], onDelete: Cascade)
   LanguageCode     LanguageCodes @relation(fields: [language_code_id], references: [id])
 
   @@id([profile_id, language_code_id])
