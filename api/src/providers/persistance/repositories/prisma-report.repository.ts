@@ -31,8 +31,6 @@ export class PrismaReportRepository implements ReportRepository {
         },
       },
     };
-    console.warn(where);
-    console.warn(whereQuery);
     const count = await this.prisma.reports.count({ where: whereQuery });
 
     // If skip is out of range, return an empty array

@@ -44,14 +44,14 @@ const App = () => {
                         {...learningLanguages}
                     />
                     <Resource name="reports" options={{ label: translate('reports.label') }} {...reports} />
+                    <Resource
+                        name="users/administrators"
+                        options={{ label: translate('administrators.label') }}
+                        {...administrators}
+                    />
                     {permissions === ADMIN_PERMISSION && (
                         <>
                             <Resource name="instance" options={{ label: translate('instance.label') }} {...instance} />
-                            <Resource
-                                name="users/administrators"
-                                options={{ label: translate('administrators.label') }}
-                                {...administrators}
-                            />
                             <Resource
                                 name="countries"
                                 options={{ label: translate('countries.label') }}

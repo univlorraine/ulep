@@ -10,6 +10,7 @@ import {
 } from 'react-admin';
 import Language from '../entities/Language';
 import { RoutineExecution } from '../entities/RoutineExecution';
+import AdministratorsQuery from '../queries/AdministratorsQuery';
 import CountriesQuery from '../queries/CountriesQuery';
 import InterestsQuery from '../queries/InterestsQuery';
 import LanguagesQuery from '../queries/LanguagesQuery';
@@ -154,6 +155,9 @@ const customDataProvider = {
         let url = new URL(`${process.env.REACT_APP_API_URL}/${resource}`);
 
         switch (resource) {
+            case 'users/administrators':
+                url.search = AdministratorsQuery(params);
+                break;
             case 'countries':
                 url.search = CountriesQuery(params);
                 break;
