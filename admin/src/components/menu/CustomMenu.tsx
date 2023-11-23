@@ -70,7 +70,11 @@ const CustomMenu = () => {
                         primaryText={translate('objectives.label')}
                         to="/objectives"
                     />
-                    <Menu.Item leftIcon={<FlagIcon />} primaryText={translate('reports.label')} to="/reports" />
+                </div>
+            )}
+            <Menu.Item leftIcon={<FlagIcon />} primaryText={translate('reports.label')} to="/reports" />
+            {permissions === ADMIN_PERMISSION && (
+                <div>
                     <Menu.Item
                         leftIcon={<FlagIcon />}
                         primaryText={translate('report_categories.label')}

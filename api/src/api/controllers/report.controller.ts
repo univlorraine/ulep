@@ -160,13 +160,17 @@ export class ReportController {
   @Swagger.ApiOperation({ summary: 'Collection of Report ressource.' })
   @Swagger.ApiOkResponse({ type: ReportResponse, isArray: true })
   async findByStatus(
-    @Query() { field, limit, order, page, status }: GetReportsQueryParams,
+    @Query()
+    { field, limit, order, page, status, universityId }: GetReportsQueryParams,
   ) {
     const instances = await this.getReportsByStatusUsecase.execute({
       limit,
       orderBy: { order, field },
       page,
-      where: status ? { status: { equals: ReportStatus[status] } } : undefined,
+      where: {
+        ...(status ? { status: { equals: ReportStatus[status] } } : {}),
+        ...(universityId ? { universityId: universityId } : {}),
+      },
     });
 
     return new Collection<ReportResponse>({

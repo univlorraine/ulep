@@ -11,6 +11,10 @@ export class GetReportsQueryParams extends PaginationDto {
   @IsEnum(ReportStatus)
   status?: ReportStatus;
 
+  @Swagger.ApiPropertyOptional({ type: 'string' })
+  @IsOptional()
+  universityId?: string;
+
   @Swagger.ApiPropertyOptional({
     type: 'string',
     enum: ['firstname', 'lastname', 'university'],
