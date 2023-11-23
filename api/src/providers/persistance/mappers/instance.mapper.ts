@@ -17,5 +17,6 @@ export const instanceMapper = (instanceSnapshot: InstanceSnapshot) => {
     secondaryColor: instanceSnapshot.secondary_color,
     secondaryBackgroundColor: instanceSnapshot.secondary_background_color,
     secondaryDarkColor: instanceSnapshot.secondary_dark_color,
+    isInMaintenance: instanceSnapshot.is_in_maintenance,
   });
 };

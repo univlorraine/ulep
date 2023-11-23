@@ -62,4 +62,8 @@ export class UpdateInstanceRequest {
   @IsOptional()
   @IsHexColor()
   secondaryDarkColor?: string;
+
+  @ApiPropertyOptional({ type: 'boolean' })
+  @IsOptional()
+  isInMaintenance?: boolean;
 }

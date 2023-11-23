@@ -44,7 +44,7 @@ const ReportList = () => {
             filter={!identity?.isCentralUniversity ? { universityId: identity.universityId } : undefined}
             filters={<ReportFilter />}
         >
-            <Datagrid>
+            <Datagrid rowClick="show">
                 <TextField label={translate('reports.category')} source="category.name" />
                 <TextField label={translate('global.lastname')} source="user.lastname" />
                 <TextField label={translate('global.firstname')} source="user.firstname" />

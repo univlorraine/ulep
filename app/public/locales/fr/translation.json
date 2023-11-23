@@ -19,6 +19,10 @@
         "title": "Une erreur est survenue",
         "subtitle": "Veuillez nous excusez mais une erreur est survenue, veuillez rafraichir la page ou effectuer un retour en arrière"
     },
+    "maintenance_page": {
+        "title": "Maitenance en cours",
+        "subtitle": "Veuillez nous excusez mais une maintenance est en cours"
+    },
     "forgot_password_page": {
         "button": "Envoyer",
         "invalid_email": "Email invalide",

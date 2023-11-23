@@ -8,7 +8,7 @@ import HomePage from '../pages/HomePage';
 import LoginPage from '../pages/LoginPage';
 import PairingConfirmLanguagePage from '../pages/PairingConfirmLanguagePage';
 import PairingFinalPage from '../pages/PairingFinalPage';
-import PairingLaguagesPage from '../pages/PairingLaguagesPage';
+import PairingLanguagesPage from '../pages/PairingLanguagesPage';
 import PairingLevelPage from '../pages/PairingLevelPage';
 import PairingOptionsPage from '../pages/PairingOptionsPage';
 import PairingOtherLanguagesPage from '../pages/PairingOtherLanguagesPage';
@@ -85,7 +85,7 @@ const OfflineRouter: React.FC = () => {
             <MobileRoute exact component={ReportPage} path={'/report'} />
             <MobileRoute exact component={SettingsPage} path={'/settings'} />
             <MobileRoute exact component={TandemStatusPage} path={'/tandem-status'} />
-            <PrivateRoute exact component={PairingLaguagesPage} path="/pairing/languages" />
+            <PrivateRoute exact component={PairingLanguagesPage} path="/pairing/languages" />
             <PrivateRoute exact component={PairingOptionsPage} path="/pairing/options" />
             <PrivateRoute exact component={PairingPedagogyPage} path="/pairing/pedagogy" />
             <PrivateRoute exact component={PairingConfirmLanguagePage} path="/pairing/language/confirm" />

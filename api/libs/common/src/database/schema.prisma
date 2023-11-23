@@ -21,6 +21,7 @@ model Instance {
   secondary_color  String
   secondary_background_color    String
   secondary_dark_color  String
+  is_in_maintenance Boolean @default(false)
 }
 
 model CountryCodes {
@@ -247,6 +248,7 @@ model Reports {
   content    String
   categoryId String
   status     String           @default("OPEN")
+  comment    String?
   userId     String
   createdAt  DateTime         @default(now())
   updatedAt  DateTime         @updatedAt

@@ -54,6 +54,7 @@
         "age": "Age",
         "banned": "Bannis",
         "content": "Contenu",
+        "disconnect": "Déconnexion",
         "email": "Email",
         "firstname": "Prénom",
         "gender": "Genre",
@@ -92,6 +93,7 @@
         "ressource": "Url vers les ressources de langues",
         "primaryColor": "Couleur primaire de l'application",
         "primaryBackgroundColor": "Couleur primaire de l'image de fond de l'application",
+        "maintenance": "Mise en maintenance",
         "primaryDarkColor": "Nuance sombre de la couleur primaire utilisé pour le fond de l'application",
         "secondaryColor": "Couleur secondaire de l'application",
         "secondaryBackgroundColor": "Couleur secondaire de l'image de fond de l'application",
@@ -252,13 +254,20 @@
     },
     "reports": {
         "category": "Catégorie de signalement",
+        "comment": "Commentaire des administrateurs",
         "created_at": "Date de soumission",
         "CLOSED": "Fermé",
         "content": "Contenu",
         "IN_PROGRESS": "En cours",
         "label": "Signalements",
         "OPEN": "Ouvert",
-        "status": "État"
+        "status": "État",
+        "update": {
+            "comment": "Mettez à jour le commentaire du signalement",
+            "error": "Une erreur est survenue pendant la mise à jour du signalement",
+            "status": "Mettez à jour l'état du signalement",
+            "title": "Mise à jour du signalement"
+        }
     },
     "report_categories": {
         "create": {
