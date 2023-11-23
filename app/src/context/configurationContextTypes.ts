@@ -23,6 +23,7 @@ import RetrievePersonInfoUsecaseInterface from '../domain/interfaces/RetrievePer
 import UpdateAvatarUsecaseInterface from '../domain/interfaces/UpdateAvatarUsecase.interface';
 import UpdateNotificationPermissionUsecaseInterface from '../domain/interfaces/UpdateNotificationPermissionUsecase.interface';
 import { GetInitialUrlUsecase } from '../domain/usecases/AuthStandardFlow/GetInitialUrlUsecase';
+import GetUniversityInterface from '../domain/interfaces/GetUniversity.interface';
 
 export interface ConfigContextValueType {
     askForAccountDeletion: AskForAccountDeletionUsecaseInterface;
@@ -43,6 +44,7 @@ export interface ConfigContextValueType {
     getProfile: GetProfileUsecaseInterface;
     getQuizzByLevel: GetQuizzByLevelUsecaseInterface;
     getUser: GetUserUsecaseInterface;
+    getUniversity: GetUniversityInterface;
     login: LoginUsecaseInterface;
     resetPassword: ResetPasswordUsecaseInterface;
     updateAvatar: UpdateAvatarUsecaseInterface;

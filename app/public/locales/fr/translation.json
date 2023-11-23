@@ -301,6 +301,10 @@
         "new_password_error": "Doit contenir un chiffre un majuscule et une minuscule",
         "title": "Nouveau mot de passe"
     },
+    "service_close": {
+        "subtitle": "Le service est fermé pour le moment, voici les dates d'ouvertures de service {{start}} jusqu'à {{end}}",
+        "title": "Service indisponnible"
+    },
     "signup_availabilities_page": {
         "AVAILABLE": "Peu disponible",
         "modal": {

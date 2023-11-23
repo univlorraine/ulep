@@ -72,6 +72,8 @@ describe('Score', () => {
       timezone: 'GMT+1',
       admissionStart: new Date(),
       admissionEnd: new Date(),
+      openServiceDate: new Date(),
+      closeServiceDate: new Date(),
       codes: [],
       domains: [],
     });

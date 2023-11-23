@@ -9,7 +9,9 @@ class University {
         public readonly sites: Campus[],
         public readonly hasCode: boolean,
         public readonly admissionStart: Date,
-        public readonly admissionEnd: Date
+        public readonly admissionEnd: Date,
+        public readonly openServiceDate: Date,
+        public readonly closeServiceDate: Date
     ) {}
 }
 

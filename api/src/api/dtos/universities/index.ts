@@ -60,6 +60,17 @@ export class CreateUniversityRequest implements CreateUniversityCommand {
   @IsAfterThan('admissionStart')
   admissionEnd: Date;
 
+  @Swagger.ApiProperty({ type: 'string', format: 'date' })
+  @Type(() => Date)
+  @IsDate()
+  openServiceDate: Date;
+
+  @Swagger.ApiProperty({ type: 'string', format: 'date' })
+  @Type(() => Date)
+  @IsDate()
+  @IsAfterThan('openServiceDate')
+  closeServiceDate: Date;
+
   @Swagger.ApiPropertyOptional({ type: 'string', format: 'url' })
   @IsUrl()
   @IsOptional()
@@ -102,6 +113,7 @@ export class UpdateUniversityRequest
   @Swagger.ApiProperty({ type: 'string', format: 'date' })
   @Type(() => Date)
   @IsDate()
+  @IsAfterThan('openServiceDate')
   admissionStart: Date;
 
   @Swagger.ApiProperty({ type: 'string', format: 'date' })
@@ -109,6 +121,18 @@ export class UpdateUniversityRequest
   @IsDate()
   @IsAfterThan('admissionStart')
   admissionEnd: Date;
+
+  @Swagger.ApiProperty({ type: 'string', format: 'date' })
+  @Type(() => Date)
+  @IsDate()
+  openServiceDate: Date;
+
+  @Swagger.ApiProperty({ type: 'string', format: 'date' })
+  @Type(() => Date)
+  @IsDate()
+  @IsAfterThan('openServiceDate')
+  @IsAfterThan('admissionEnd')
+  closeServiceDate: Date;
 
   @Swagger.ApiProperty({ type: 'string', example: 'Europe/Paris' })
   @IsTimeZone()
@@ -163,6 +187,17 @@ export class CreateUniversityPartnerRequest
   @IsDate()
   @IsAfterThan('admissionStart')
   admissionEnd: Date;
+
+  @Swagger.ApiProperty({ type: 'string', format: 'date' })
+  @Type(() => Date)
+  @IsDate()
+  openServiceDate: Date;
+
+  @Swagger.ApiProperty({ type: 'string', format: 'date' })
+  @Type(() => Date)
+  @IsDate()
+  @IsAfterThan('openServiceDate')
+  closeServiceDate: Date;
 
   @Swagger.ApiProperty({ type: 'string', example: 'Europe/Paris' })
   @IsTimeZone()
@@ -219,6 +254,14 @@ export class UniversityResponse {
 
   @Swagger.ApiProperty()
   @Expose({ groups: ['read'] })
+  openServiceDate: Date;
+
+  @Swagger.ApiProperty()
+  @Expose({ groups: ['read'] })
+  closeServiceDate: Date;
+
+  @Swagger.ApiProperty()
+  @Expose({ groups: ['read'] })
   hasCode: boolean;
 
   @Swagger.ApiProperty({ type: 'string', isArray: true })
@@ -258,6 +301,8 @@ export class UniversityResponse {
       domains: university.domains,
       admissionStart: university.admissionStart,
       admissionEnd: university.admissionEnd,
+      openServiceDate: university.openServiceDate,
+      closeServiceDate: university.closeServiceDate,
       website: university.website,
       pairingMode: university.pairingMode,
       notificationEmail: university.notificationEmail,

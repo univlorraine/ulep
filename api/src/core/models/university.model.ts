@@ -20,6 +20,8 @@ export interface UniversityProps {
   timezone: string;
   admissionStart: Date;
   admissionEnd: Date;
+  openServiceDate: Date;
+  closeServiceDate: Date;
   website?: string;
   pairingMode?: PairingMode;
   notificationEmail?: string;
@@ -46,6 +48,10 @@ export class University {
 
   readonly admissionEnd: Date;
 
+  readonly openServiceDate: Date;
+
+  readonly closeServiceDate: Date;
+
   readonly website?: string;
 
   readonly pairingMode: PairingMode;
@@ -63,6 +69,8 @@ export class University {
     this.timezone = props.timezone;
     this.admissionStart = props.admissionStart;
     this.admissionEnd = props.admissionEnd;
+    this.openServiceDate = props.openServiceDate;
+    this.closeServiceDate = props.closeServiceDate;
     this.website = props.website;
     this.pairingMode = props.pairingMode || PairingMode.MANUAL;
     this.notificationEmail = props.notificationEmail;

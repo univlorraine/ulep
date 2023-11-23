@@ -25,6 +25,8 @@ export const universityMapper = (snapshot: UniversitySnapshot): University => {
     timezone: snapshot.timezone,
     admissionStart: snapshot.admissionStartDate,
     admissionEnd: snapshot.admissionEndDate,
+    openServiceDate: snapshot.openServiceDate,
+    closeServiceDate: snapshot.closeServiceDate,
     website: snapshot.website,
     pairingMode: PairingMode[snapshot.pairing_mode],
     notificationEmail: snapshot.notification_email,

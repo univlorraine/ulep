@@ -78,6 +78,8 @@ model Organizations {
   timezone           String
   admissionStartDate DateTime
   admissionEndDate   DateTime
+  openServiceDate    DateTime
+  closeServiceDate   DateTime
   created_at         DateTime            @default(now())
   updated_at         DateTime            @updatedAt
   website            String?
