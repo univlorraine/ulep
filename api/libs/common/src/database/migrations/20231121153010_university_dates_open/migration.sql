@@ -6,5 +6,5 @@
 
 */
 -- AlterTable
-ALTER TABLE "organizations" ADD COLUMN     "closeServiceDate" TIMESTAMP(3) NOT NULL,
-ADD COLUMN     "openServiceDate" TIMESTAMP(3) NOT NULL;
+ALTER TABLE "organizations" ADD COLUMN     "closeServiceDate" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+ADD COLUMN     "openServiceDate" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP;
