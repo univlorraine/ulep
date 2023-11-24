@@ -12,9 +12,9 @@ const baseConfig: CapacitorConfig = {
             customUrlScheme: 'ulep',
         },
         Keyboard: {
-            resize: "body",
-            style: "DARK"
-        }
+            resize: 'native',
+            style: 'DARK',
+        },
     },
 };
 

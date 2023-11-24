@@ -1,9 +1,8 @@
 import { IonContent, IonPage, useIonToast } from '@ionic/react';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Redirect, useHistory } from 'react-router';
 import { ArrowDownSvg, AvatarPlaceholderPng, ReportSvg } from '../../assets';
-import { useConfig } from '../../context/ConfigurationContext';
 import Tandem from '../../domain/entities/Tandem';
 import { useStoreActions, useStoreState } from '../../store/storeTypes';
 import HomeHeader from '../components/HomeHeader';
@@ -21,7 +20,6 @@ import useGetTandems from '../hooks/useGetTandems';
 const HomePage: React.FC = () => {
     const { t } = useTranslation();
     const history = useHistory();
-    const { getAllTandems } = useConfig();
     const [showToast] = useIonToast();
     const logout = useStoreActions((store) => store.logout);
     const currentDate = new Date();
@@ -32,7 +30,7 @@ const HomePage: React.FC = () => {
     const [displayReport, setDisplayReport] = useState<boolean>(false);
     const [selectedTandem, setSelectedTandem] = useState<Tandem>();
 
-    const tandems = useGetTandems({profile, showToast, t}, [profile?.learningLanguages]);
+    const tandems = useGetTandems({ profile, showToast, t }, [profile?.learningLanguages]);
 
     const onDisconnect = () => {
         return logout();
@@ -69,7 +67,7 @@ const HomePage: React.FC = () => {
                 <HomeHeader avatar={profile.user.avatar ?? AvatarPlaceholderPng} onPicturePressed={onProfilePressed} />
             )}
             <IonContent>
-                <div className={styles.container}>
+                <div className={`${styles.container} content-wrapper`}>
                     <div className={styles['header']}>
                         <div className={styles['hello-container']}>
                             <span className={styles.date}>{formattedDate}</span>
