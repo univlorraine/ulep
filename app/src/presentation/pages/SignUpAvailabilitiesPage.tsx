@@ -11,6 +11,7 @@ import AvailabilityModal from '../components/modals/AvailabilityModal';
 import AvailabilityNoteModal from '../components/modals/AvailabilityNoteModal';
 import styles from './css/SignUp.module.css';
 import availabilitiesStyles from './css/SignUpAvailabilities.module.css';
+import moment from 'moment-timezone';
 
 const initialAvailabilities: Availabilites = {
     monday: AvailabilitesOptions.VERY_AVAILABLE,
@@ -78,7 +79,7 @@ const SignUpAvailabilitiesPage: React.FC = () => {
                     <Dropdown<string>
                         onChange={setTimezone}
                         //@ts-ignore
-                        options={Intl.supportedValuesOf('timeZone').map((timzeone: string) => ({
+                        options={moment.tz.names().map((timzeone: string) => ({
                             title: timzeone,
                             value: timzeone,
                         }))}
