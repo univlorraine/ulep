@@ -28,6 +28,7 @@ import { MinioStorage } from 'src/providers/storage/minio.storage';
 import { HttpModule } from '@nestjs/axios';
 import { UniversityConnectorController } from './controllers/universityConnector.controller';
 import { UlUniversityConnectorService } from 'src/providers/gateway/ul-university-connector';
+import { PurgesController } from './controllers/purge.controller';
 
 @Module({
   imports: [CoreModule, TerminusModule, HttpModule],
@@ -41,6 +42,7 @@ import { UlUniversityConnectorService } from 'src/providers/gateway/ul-universit
     ObjectiveController,
     ProficiencyController,
     ProfileController,
+    PurgesController,
     ReportController,
     SecurityController,
     TandemController,
@@ -49,7 +51,7 @@ import { UlUniversityConnectorService } from 'src/providers/gateway/ul-universit
     UserController,
     LearningLanguageController,
     RoutineExecutionController,
-    UniversityConnectorController
+    UniversityConnectorController,
   ],
   providers: [
     PrismaService,

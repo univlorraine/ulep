@@ -1,11 +1,15 @@
 import ExitToAppIcon from '@mui/icons-material/ExitToApp';
+import DeleteIcon from '@mui/icons-material/Delete';
 import { Typography, Switch, SwitchProps, Box } from '@mui/material';
 import * as React from 'react';
 import { AppBar, UserMenu, MenuItemLink, useNotify, useUpdate, useGetOne, useTranslate, useLogout } from 'react-admin';
+import { http } from '../../providers/authProvider';
+import usePurge from './usePurge';
 
 const CustomUserMenu = (props: any) => {
     const translate = useTranslate();
     const logout = useLogout();
+    const { mutate: purge } = usePurge();
 
     return (
         <UserMenu {...props}>
@@ -13,6 +17,12 @@ const CustomUserMenu = (props: any) => {
                 leftIcon={<ExitToAppIcon />}
                 onClick={logout}
                 primaryText={translate('global.disconnect')}
+                to=""
+            />
+            <MenuItemLink
+                leftIcon={<DeleteIcon />}
+                onClick={() => purge()}
+                primaryText={translate('purge.title')}
                 to=""
             />
         </UserMenu>

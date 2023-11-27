@@ -140,9 +140,9 @@ export class ReportResponse {
   @Expose({ groups: ['read'] })
   content: string;
 
-  @Swagger.ApiProperty({ type: UserResponse })
+  @Swagger.ApiPropertyOptional({ type: UserResponse })
   @Expose({ groups: ['read'] })
-  user: UserResponse;
+  user?: UserResponse;
 
   @Swagger.ApiProperty({ type: 'date' })
   @Expose({ groups: ['read'] })
@@ -162,7 +162,7 @@ export class ReportResponse {
       category: ReportCategoryResponse.fromDomain(instance.category),
       status: instance.status,
       content: instance.content,
-      user: UserResponse.fromDomain(instance.user),
+      user: instance.user ? UserResponse.fromDomain(instance.user) : undefined,
       createdAt: instance.createdAt,
       comment: instance.comment,
     });

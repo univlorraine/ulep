@@ -72,8 +72,8 @@ export class CreateUserUsecase {
     if (university.admissionEnd < now || university.admissionStart > now) {
       throw new BadRequestException('Registration unavailable');
     }
-    let keycloakUser;
-    if (command.password) {
+    let keycloakUser = await this.keycloak.getUserByEmail(command.email);
+    if (command.password && !keycloakUser) {
       keycloakUser = await this.keycloak.createUser({
         email: command.email,
         password: command.password,
@@ -84,8 +84,6 @@ export class CreateUserUsecase {
         emailVerified: false,
         origin: 'api',
       });
-    } else {
-      keycloakUser = await this.keycloak.getUserByEmail(command.email);
     }
 
     if (!keycloakUser) {

@@ -2,10 +2,6 @@ import { Inject, Injectable } from '@nestjs/common';
 import { RessourceDoesNotExist } from 'src/core/errors';
 import { LearningLanguage, Profile } from 'src/core/models';
 import {
-  LEARNING_LANGUAGE_REPOSITORY,
-  LearningLanguageRepository,
-} from 'src/core/ports/learning-language.repository';
-import {
   PROFILE_REPOSITORY,
   ProfileRepository,
 } from 'src/core/ports/profile.repository';
@@ -25,8 +21,6 @@ export class DeleteProfileUsecase {
     private readonly profilesRepository: ProfileRepository,
     @Inject(TANDEM_REPOSITORY)
     private readonly tandemRepository: TandemRepository,
-    @Inject(LEARNING_LANGUAGE_REPOSITORY)
-    private readonly learningLanguageRepository: LearningLanguageRepository,
   ) {}
 
   async execute(command: DeleteProfileCommand): Promise<void> {

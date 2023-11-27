@@ -435,10 +435,10 @@ export class KeycloakClient {
     return updatedAdmin;
   }
 
-  /*
-   * Creates a new user in Keycloak.
-   */
-  async deleteAdministrator(id: string): Promise<void> {
+  /**
+   * Delete user in Keycloak.
+   **/
+  async deleteUser(id: string): Promise<void> {
     await fetch(
       `${this.configuration.baseUrl}/admin/realms/${this.configuration.realm}/users/${id}`,
       {
@@ -501,6 +501,24 @@ export class KeycloakClient {
     const users = await response.json();
 
     return users;
+  }
+
+  async getUsersCount(): Promise<number> {
+    const url = new URL(
+      `${this.configuration.baseUrl}/admin/realms/${this.configuration.realm}/users/count`,
+    );
+
+    const response = await fetch(url.toString(), {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${await this.getAccessToken()}`,
+      },
+    });
+
+    const count = await response.json();
+
+    return count;
   }
 
   async getUserById(userId: string): Promise<UserRepresentation> {

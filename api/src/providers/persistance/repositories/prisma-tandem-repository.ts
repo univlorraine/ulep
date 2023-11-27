@@ -97,7 +97,7 @@ export class PrismaTandemRepository implements TandemRepository {
       },
     });
 
-    if (props.offset >= count) {
+    if (props.offset && props.offset >= count) {
       return { items: [], totalItems: count };
     }
 
@@ -281,5 +281,23 @@ export class PrismaTandemRepository implements TandemRepository {
         id,
       },
     });
+  }
+
+  async deleteAll(): Promise<void> {
+    await this.prisma.tandems.deleteMany();
+  }
+
+  async archiveTandems(tandems: Tandem[], purgeId: string): Promise<void> {
+    for (const tandem of tandems) {
+      await this.prisma.tandemHistory.createMany({
+        data: tandem.learningLanguages.map((learningLanguage) => ({
+          id: learningLanguage.id,
+          user_id: learningLanguage.profile.user.id,
+          purge_id: purgeId,
+          tandem_id: tandem.id,
+          language_code_id: learningLanguage.language.id,
+        })),
+      });
+    }
   }
 }

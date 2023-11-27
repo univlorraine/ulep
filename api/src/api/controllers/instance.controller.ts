@@ -6,6 +6,7 @@ import {
   Inject,
   Logger,
   Param,
+  Post,
   Put,
   Res,
 } from '@nestjs/common';
@@ -41,6 +42,8 @@ export class InstanceController {
   }
 
   @Get('config')
+  @Swagger.ApiOperation({ summary: 'Get the instance configuration' })
+  @Swagger.ApiCreatedResponse({ type: InstanceResponse })
   async getInstance(): Promise<InstanceResponse> {
     const instance = await this.getInstanceUsecase.execute();
 
@@ -48,6 +51,8 @@ export class InstanceController {
   }
 
   @Put()
+  @Swagger.ApiOperation({ summary: 'Update the instance' })
+  @Swagger.ApiCreatedResponse({ type: InstanceResponse })
   async updateInstance(
     @Body() body: UpdateInstanceRequest,
   ): Promise<InstanceResponse> {
@@ -94,5 +99,12 @@ export class InstanceController {
       this.logger.error(err);
       return res.status(HttpStatus.INTERNAL_SERVER_ERROR).end();
     }
+  }
+
+  @Post('purge')
+  @Swagger.ApiOperation({ summary: 'Purge the instance' })
+  @Swagger.ApiCreatedResponse({ type: InstanceResponse })
+  async purgeInstance(): Promise<InstanceResponse> {
+    throw new Error('Not implemented');
   }
 }

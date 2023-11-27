@@ -242,6 +242,12 @@ export class PrismaReportRepository implements ReportRepository {
     });
   }
 
+  async deleteAllReportClosed(): Promise<void> {
+    await this.prisma.reports.deleteMany({
+      where: { status: ReportStatus.CLOSED },
+    });
+  }
+
   async deleteCategory(instance: ReportCategory): Promise<void> {
     // As we have a foreign key with cascade delete, we don't need to delete the category.
     await this.prisma.textContent.delete({ where: { id: instance.name.id } });

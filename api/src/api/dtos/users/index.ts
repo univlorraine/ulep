@@ -22,7 +22,7 @@ export class CreateUserRequest implements CreateUserCommand {
   @IsEmail()
   email: string;
 
-  @Swagger.ApiProperty({ type: 'string', format: 'password' })
+  @Swagger.ApiPropertyOptional({ type: 'string', format: 'password' })
   @IsString()
   @IsOptional()
   password?: string;
@@ -55,7 +55,7 @@ export class CreateUserRequest implements CreateUserCommand {
   @IsString()
   role: Role;
 
-  @Swagger.ApiProperty({ type: 'string' })
+  @Swagger.ApiPropertyOptional({ type: 'string' })
   @IsString()
   @IsOptional()
   code?: string;
@@ -65,17 +65,17 @@ export class CreateUserRequest implements CreateUserCommand {
   @Length(2, 2)
   countryCode: string;
 
-  @Swagger.ApiProperty({ type: 'string' })
+  @Swagger.ApiPropertyOptional({ type: 'string' })
   @IsString()
   @IsOptional()
   division?: string;
 
-  @Swagger.ApiProperty({ type: 'string' })
+  @Swagger.ApiPropertyOptional({ type: 'string' })
   @IsString()
   @IsOptional()
   diploma?: string;
 
-  @Swagger.ApiProperty({ type: 'string' })
+  @Swagger.ApiPropertyOptional({ type: 'string' })
   @IsString()
   @IsOptional()
   staffFunction?: string;

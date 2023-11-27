@@ -1,6 +1,9 @@
 import { Collection } from '@app/common';
 import { Report, ReportCategory, ReportStatus } from 'src/core/models';
-import { ReportRepository } from 'src/core/ports/report.repository';
+import {
+  ReportQueryWhere,
+  ReportRepository,
+} from 'src/core/ports/report.repository';
 
 export class InMemoryReportsRepository implements ReportRepository {
   #categories: ReportCategory[] = [];
@@ -115,13 +118,19 @@ export class InMemoryReportsRepository implements ReportRepository {
     return Promise.resolve(category);
   }
 
-  async deleteReport(instance: Report): Promise<void> {
-    const index = this.#reports.findIndex(
-      (report) => report.id === instance.id,
-    );
+  async deleteReport(where: ReportQueryWhere): Promise<void> {
+    if (where.id) {
+      const index = this.#reports.findIndex((report) => report.id === where.id);
 
-    if (index !== -1) {
-      this.#reports.splice(index, 1);
+      if (index !== -1) {
+        this.#reports.splice(index, 1);
+      }
+    }
+
+    if (where.status) {
+      this.#reports = this.#reports.filter(
+        (report) => report.status !== where.status,
+      );
     }
   }
 

@@ -168,7 +168,7 @@ export class ReportController {
       orderBy: { order, field },
       page,
       where: {
-        ...(status ? { status: { equals: ReportStatus[status] } } : {}),
+        ...(status ? { status: ReportStatus[status] } : {}),
         ...(universityId ? { universityId: universityId } : {}),
       },
     });
