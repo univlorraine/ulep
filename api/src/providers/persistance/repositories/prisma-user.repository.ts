@@ -9,6 +9,12 @@ import { UniversityRelations } from '../mappers';
 export class PrismaUserRepository implements UserRepository {
   constructor(private readonly prisma: PrismaService) {}
 
+  async createBlacklist(usersId: string[]): Promise<void> {
+    await this.prisma.blacklist.createMany({
+      data: usersId.map((userId) => ({ user_id: userId })),
+    });
+  }
+
   async create(user: User): Promise<User> {
     const instance = await this.prisma.users.create({
       data: {
@@ -97,9 +103,13 @@ export class PrismaUserRepository implements UserRepository {
     return userMapper(updatedUser);
   }
 
-  async remove(id: string): Promise<void> {
+  async delete(id: string): Promise<void> {
     await this.prisma.users.delete({
       where: { id },
     });
+  }
+
+  async deleteAll(): Promise<void> {
+    await this.prisma.users.deleteMany({});
   }
 }

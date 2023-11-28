@@ -119,4 +119,16 @@ export class InMemoryTandemRepository implements TandemRepository {
     this.#tandems = this.#tandems.filter((t) => t.id !== id);
     return Promise.resolve();
   }
+
+  // TODO
+  deleteAll(): Promise<void> {
+    this.#tandems = [];
+
+    return Promise.resolve();
+  }
+
+  // TODO
+  archiveTandems(tandems: Tandem[], purgeId: string): Promise<void> {
+    throw new Error('Method not implemented.');
+  }
 }

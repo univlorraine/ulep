@@ -28,7 +28,7 @@ export type CreateReportProps = {
   category: ReportCategory;
   status: ReportStatus;
   content: string;
-  user: User;
+  user?: User;
   createdAt?: Date;
   comment?: string;
 };
@@ -44,7 +44,7 @@ export class Report {
 
   readonly content: string;
 
-  readonly user: User;
+  readonly user?: User;
 
   readonly createdAt?: Date;
 

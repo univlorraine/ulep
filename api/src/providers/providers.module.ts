@@ -40,6 +40,8 @@ import { EMAIL_TEMPLATE_REPOSITORY } from 'src/core/ports/email-template.reposit
 import { TranslatedEmailTemplateRepository } from './persistance/repositories/translated-emails-template-repository';
 import { INSTANCE_REPOSITORY } from 'src/core/ports/instance.repository';
 import { PrismaInstanceRepository } from 'src/providers/persistance/repositories/prisma-instance.repository';
+import { PURGE_REPOSITORY } from 'src/core/ports/purge.repository';
+import { PrismaPurgeRepository } from './persistance/repositories/prisma-purge.repository';
 
 const providers: Provider[] = [
   { provide: INSTANCE_REPOSITORY, useClass: PrismaInstanceRepository },
@@ -74,6 +76,10 @@ const providers: Provider[] = [
   {
     provide: PROFILE_REPOSITORY,
     useClass: PrismaProfileRepository,
+  },
+  {
+    provide: PURGE_REPOSITORY,
+    useClass: PrismaPurgeRepository,
   },
   {
     provide: REPORT_REPOSITORY,

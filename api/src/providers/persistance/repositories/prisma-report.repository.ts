@@ -24,12 +24,10 @@ export class PrismaReportRepository implements ReportRepository {
     where?: ReportQueryWhere,
   ): Promise<Collection<Report>> {
     const whereQuery = {
-      status: where?.status,
-      User: {
-        Organization: {
-          id: where?.universityId,
-        },
-      },
+      status: where.status ? { equals: where.status } : undefined,
+      User: where.universityId
+        ? { Organization: { id: where?.universityId } }
+        : undefined,
     };
     const count = await this.prisma.reports.count({ where: whereQuery });
 
@@ -239,6 +237,12 @@ export class PrismaReportRepository implements ReportRepository {
   async deleteReport(instance: Report): Promise<void> {
     await this.prisma.reports.delete({
       where: { id: instance.id },
+    });
+  }
+
+  async deleteManyReports(): Promise<void> {
+    await this.prisma.reports.deleteMany({
+      where: { status: ReportStatus.CLOSED },
     });
   }
 

@@ -23,6 +23,8 @@ export class DeleteReportUsecase {
       throw new RessourceDoesNotExist();
     }
 
-    return this.reportRepository.deleteReport(instance);
+    return this.reportRepository.deleteReport({
+      id: instance.id,
+    });
   }
 }

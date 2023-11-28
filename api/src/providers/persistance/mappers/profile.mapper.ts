@@ -1,7 +1,5 @@
 import * as Prisma from '@prisma/client';
 import {
-  Language,
-  LanguageStatus,
   LearningLanguage,
   LearningType,
   ProficiencyLevel,

@@ -234,6 +234,10 @@
         "staffFunction": "Fonction",
         "status": "Statut"
     },
+    "purge": {
+        "error": "Une erreur est survenue durant la purge du système",
+        "title": "Purge le système"
+    },
     "questions": {
         "create": {
             "error": "Une erreur est survenue pendant la création de la question",

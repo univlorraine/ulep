@@ -36,5 +36,9 @@ export interface TandemRepository {
 
   delete(id: string): Promise<void>;
 
+  deleteAll(): Promise<void>;
+
   disableTandemsForUser(id: string): Promise<void>;
+
+  archiveTandems(tandems: Tandem[], purgeId: string): Promise<void>;
 }

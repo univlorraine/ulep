@@ -46,7 +46,7 @@ export const insertUlData = async (prisma: Prisma.PrismaClient) => {
 
     const user = {
       id: faker.string.uuid(),
-      email: faker.internet.email(),
+      email: `${item.firstname.toLowerCase()}.${item.lastname.toLowerCase()}@ul.com`,
       firstname: item.firstname,
       lastname: item.lastname,
       gender: item.gender,
