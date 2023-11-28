@@ -1,7 +1,6 @@
 import React from 'react';
 import { useNotify, useRedirect, useCreate, Create, useTranslate } from 'react-admin';
 import AdministratorForm from '../../components/form/AdministratorForm';
-import University from '../../entities/University';
 
 interface AdministratorCreatePayload {
     email: string;
@@ -15,15 +14,12 @@ const CreateAdministrator = () => {
     const redirect = useRedirect();
     const notify = useNotify();
 
-    const handleSubmit = async (email: string, password?: string, university?: University) => {
+    const handleSubmit = async (email: string, password?: string, universityId?: string) => {
         const payload: AdministratorCreatePayload = {
             email,
             password,
+            universityId,
         };
-
-        if (university?.parent) {
-            payload.universityId = university.id;
-        }
 
         try {
             return await create(

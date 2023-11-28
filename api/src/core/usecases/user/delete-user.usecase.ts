@@ -20,6 +20,6 @@ export class DeleteUserUsecase {
       throw new RessourceDoesNotExist();
     }
 
-    return this.userRepository.remove(command.id);
+    return this.userRepository.delete(command.id);
   }
 }

@@ -24,6 +24,11 @@ const SignupFinalPage: React.FC = () => {
             !profileSignUp.biography ||
             !profileSignUp.availabilities
         ) {
+            // If we have a profile and no profileSignUp, we must go to next step to add languages
+            if(profile?.id) {
+                return (window.location.href = '/pairing/languages');
+            }
+
             return await showToast({ message: t('errors.global'), duration: 1000 });
         }
         const result = await createProfile.execute(

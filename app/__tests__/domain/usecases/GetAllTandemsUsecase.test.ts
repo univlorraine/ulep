@@ -1,6 +1,5 @@
 import TandemCommand from '../../../src/command/TandemCommand';
 import Tandem from '../../../src/domain/entities/Tandem';
-import University from '../../../src/domain/entities/University';
 import GetAllTandemsUsecase from '../../../src/domain/usecases/GetAllTandemsUsecase';
 import DomainHttpAdapter from '../../mocks/adapters/HttpAdapter';
 
@@ -64,6 +63,8 @@ const usecaseResponse: TandemCommand[] = [
                         website: 'site',
                         admissionStart: new Date('2023-01-01T00:00:00.000Z'),
                         admissionEnd: new Date('2023-12-31T00:00:00.000Z'),
+                        openServiceDate: new Date('2023-01-01T00:00:00.000Z'),
+                        closeServiceDate: new Date('2023-01-01T00:00:00.000Z'),
                     },
                     status: 'ACTIVE',
                 },

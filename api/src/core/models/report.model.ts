@@ -28,8 +28,9 @@ export type CreateReportProps = {
   category: ReportCategory;
   status: ReportStatus;
   content: string;
-  user: User;
+  user?: User;
   createdAt?: Date;
+  comment?: string;
 };
 
 export const UNSUBSCRIBE_CATEGORY_REPORT = 'Désinscription';
@@ -43,9 +44,11 @@ export class Report {
 
   readonly content: string;
 
-  readonly user: User;
+  readonly user?: User;
 
   readonly createdAt?: Date;
+
+  readonly comment?: string;
 
   constructor(props: CreateReportProps) {
     this.id = props.id;
@@ -54,6 +57,7 @@ export class Report {
     this.content = props.content;
     this.user = props.user;
     this.createdAt = props.createdAt;
+    this.comment = props.comment;
   }
 
   static create(props: CreateReportProps): Report {

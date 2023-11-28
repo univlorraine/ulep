@@ -35,13 +35,13 @@ spec:
         imagePullPolicy: {{ .Values.api.initImage.pullPolicy }}
         env:
           - name: DB_NAME
-            value: "{{ .Values.db.database }}"
+            value: "{{ .Values.global.postgresql.auth.database }}"
           - name: HOST_NAME
-            value: "{{ include "etandem.name" . }}-postgresql-ha-pgpool.{{ .Release.Namespace }}"
+            value: "{{ include "etandem.name" . }}-postgresql.{{ .Release.Namespace }}"
           - name: DB_USER
-            value: "{{ .Values.db.username }}"
+            value: "{{ .Values.global.postgresql.auth.username }}"
           - name: DATABASE_URL
-            value: "postgresql://{{ .Values.db.username }}:$(PGPASSWORD)@{{ include "etandem.name" . }}-postgresql-ha-pgpool.{{ .Release.Namespace }}:5432/{{ .Values.db.database }}?schema=public"
+            value: "postgresql://{{ .Values.global.postgresql.auth.username }}:$(PGPASSWORD)@{{ include "etandem.name" . }}-postgresql.{{ .Release.Namespace }}:5432/{{ .Values.database }}?schema=public"
         envFrom:
           - secretRef:
               name: "{{ include "etandem.fullname" . }}-secret-{{ .Values.api.name }}"
@@ -75,7 +75,7 @@ spec:
             - name: ADMIN_URL
               value: "https://{{ .Values.adminUrl }}.{{ .Values.domain }}"
             - name: DATABASE_URL
-              value: "postgresql://{{ .Values.db.username }}:$(PGPASSWORD)@{{ include "etandem.name" . }}-postgresql-ha-pgpool.{{ .Release.Namespace }}:5432/{{ .Values.db.database }}?schema=public"
+              value: "postgresql://{{ .Values.global.postgresql.auth.username }}:$(PGPASSWORD)@{{ include "etandem.name" . }}-postgresql.{{ .Release.Namespace }}:5432/{{ .Values.global.postgresql.auth.database }}?schema=public"
             - name: KEYCLOAK_BASE_URL
               value: "https://{{ .Values.keycloakUrl }}.{{ .Values.domain }}"
             - name: KEYCLOAK_REALM

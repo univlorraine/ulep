@@ -1,6 +1,9 @@
 import { Collection } from '@app/common';
 import { Report, ReportCategory, ReportStatus } from 'src/core/models';
-import { ReportRepository } from 'src/core/ports/report.repository';
+import {
+  ReportQueryWhere,
+  ReportRepository,
+} from 'src/core/ports/report.repository';
 
 export class InMemoryReportsRepository implements ReportRepository {
   #categories: ReportCategory[] = [];
@@ -35,6 +38,22 @@ export class InMemoryReportsRepository implements ReportRepository {
     this.#categories.push(category);
 
     return category;
+  }
+
+  async findReportByUserIdAndCategory(
+    userId: string,
+    categoryId: any,
+  ): Promise<Report | null> {
+    const report = await this.#reports.find(
+      (report) =>
+        report.user.id === userId && report.category.id === categoryId,
+    );
+
+    if (!report) {
+      return null;
+    }
+
+    return report;
   }
 
   async reportsByStatus(status: ReportStatus): Promise<Report[]> {
@@ -74,13 +93,15 @@ export class InMemoryReportsRepository implements ReportRepository {
     );
   }
 
-  async updateReport(id: string, status: ReportStatus): Promise<void> {
+  async updateReport(id: string, status: ReportStatus): Promise<Report> {
     const index = this.#reports.findIndex((report) => report.id === id);
 
     if (index !== -1) {
       const report = this.#reports[index];
       this.#reports[index] = { ...report, status };
     }
+
+    return this.reportOfId(id);
   }
 
   async updateCategoryReport(
@@ -97,13 +118,19 @@ export class InMemoryReportsRepository implements ReportRepository {
     return Promise.resolve(category);
   }
 
-  async deleteReport(instance: Report): Promise<void> {
-    const index = this.#reports.findIndex(
-      (report) => report.id === instance.id,
-    );
+  async deleteReport(where: ReportQueryWhere): Promise<void> {
+    if (where.id) {
+      const index = this.#reports.findIndex((report) => report.id === where.id);
 
-    if (index !== -1) {
-      this.#reports.splice(index, 1);
+      if (index !== -1) {
+        this.#reports.splice(index, 1);
+      }
+    }
+
+    if (where.status) {
+      this.#reports = this.#reports.filter(
+        (report) => report.status !== where.status,
+      );
     }
   }
 
@@ -114,6 +141,24 @@ export class InMemoryReportsRepository implements ReportRepository {
 
     if (index !== -1) {
       this.#categories.splice(index, 1);
+    }
+  }
+
+  async deleteManyReports(where: ReportQueryWhere): Promise<void> {
+    if (where.status) {
+      this.#reports = this.#reports.filter(
+        (report) => report.status !== where.status,
+      );
+    }
+
+    if (where.id) {
+      this.#reports = this.#reports.filter((report) => report.id !== where.id);
+    }
+
+    if (where.universityId) {
+      this.#reports = this.#reports.filter(
+        (report) => report.user.university.id !== where.universityId,
+      );
     }
   }
 }

@@ -99,6 +99,13 @@ const LearningLanguageList = () => {
                     <TextField label={translate('learning_languages.list.tableColumns.level')} source="level" />
                     <DateField
                         label={translate('learning_languages.list.tableColumns.createdAt')}
+                        options={{
+                            year: 'numeric',
+                            month: 'numeric',
+                            day: 'numeric',
+                            hour: 'numeric',
+                            minute: 'numeric',
+                        }}
                         source="createdAt"
                         sortable
                     />
@@ -110,6 +117,10 @@ const LearningLanguageList = () => {
                     <BooleanField
                         label={translate('learning_languages.list.tableColumns.specificProgram')}
                         source="specificProgram"
+                    />
+                    <TextField
+                        label={translate('learning_languages.list.tableColumns.university')}
+                        source="profile.user.university.name"
                     />
                     <FunctionField
                         label={translate('learning_languages.list.tableColumns.reported')}

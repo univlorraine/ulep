@@ -11,6 +11,7 @@ interface InstanceProps {
   secondaryColor: string;
   secondaryBackgroundColor: string;
   secondaryDarkColor: string;
+  isInMaintenance: boolean;
 }
 
 export class Instance {
@@ -26,6 +27,7 @@ export class Instance {
   readonly secondaryColor: string;
   readonly secondaryBackgroundColor: string;
   readonly secondaryDarkColor: string;
+  readonly isInMaintenance: boolean;
 
   constructor(instance: InstanceProps) {
     this.id = instance.id;
@@ -40,5 +42,6 @@ export class Instance {
     this.secondaryColor = instance.secondaryColor;
     this.secondaryBackgroundColor = instance.secondaryBackgroundColor;
     this.secondaryDarkColor = instance.secondaryDarkColor;
+    this.isInMaintenance = instance.isInMaintenance;
   }
 }

@@ -2,6 +2,7 @@ import qsAdapter from '../providers/qsAdapter';
 
 export interface ReportsParams {
     filter: {
+        universityId?: string;
         status: string;
     };
     pagination: {
@@ -30,6 +31,7 @@ const handleOrderField = (field?: string) => {
 const ReportsQuery = (params: ReportsParams): string => {
     const query = {
         status: params.filter.status,
+        universityId: params.filter.universityId,
         page: params.pagination.page,
         limit: params.pagination.perPage,
         field: handleOrderField(params.sort.field),

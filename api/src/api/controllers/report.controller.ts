@@ -9,7 +9,6 @@ import {
   Logger,
   Param,
   ParseUUIDPipe,
-  Patch,
   Post,
   Put,
   Query,
@@ -161,13 +160,17 @@ export class ReportController {
   @Swagger.ApiOperation({ summary: 'Collection of Report ressource.' })
   @Swagger.ApiOkResponse({ type: ReportResponse, isArray: true })
   async findByStatus(
-    @Query() { field, limit, order, page, status }: GetReportsQueryParams,
+    @Query()
+    { field, limit, order, page, status, universityId }: GetReportsQueryParams,
   ) {
     const instances = await this.getReportsByStatusUsecase.execute({
       limit,
       orderBy: { order, field },
       page,
-      where: status ? { status: { equals: ReportStatus[status] } } : undefined,
+      where: {
+        ...(status ? { status: ReportStatus[status] } : {}),
+        ...(universityId ? { universityId: universityId } : {}),
+      },
     });
 
     return new Collection<ReportResponse>({
@@ -188,7 +191,7 @@ export class ReportController {
     return ReportResponse.fromDomain(instance);
   }
 
-  @Patch(':id')
+  @Put(':id')
   @Roles(configuration().adminRole)
   @UseGuards(AuthenticationGuard)
   @Swagger.ApiOperation({ summary: 'Updates a Report ressource.' })
@@ -197,7 +200,12 @@ export class ReportController {
     @Param('id', ParseUUIDPipe) id: string,
     @Body() request: UpdateReportStatusRequest,
   ) {
-    await this.updateReportStatusUsecase.execute({ id, ...request });
+    const report = await this.updateReportStatusUsecase.execute({
+      id,
+      ...request,
+    });
+
+    return ReportResponse.fromDomain(report);
   }
 
   @Delete(':id')

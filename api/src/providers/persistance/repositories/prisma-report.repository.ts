@@ -23,7 +23,13 @@ export class PrismaReportRepository implements ReportRepository {
     orderBy?: ReportQueryOrderBy,
     where?: ReportQueryWhere,
   ): Promise<Collection<Report>> {
-    const count = await this.prisma.reports.count({ where });
+    const whereQuery = {
+      status: where.status ? { equals: where.status } : undefined,
+      User: where.universityId
+        ? { Organization: { id: where?.universityId } }
+        : undefined,
+    };
+    const count = await this.prisma.reports.count({ where: whereQuery });
 
     // If skip is out of range, return an empty array
     if (offset >= count) {
@@ -38,7 +44,7 @@ export class PrismaReportRepository implements ReportRepository {
     }
 
     const reports = await this.prisma.reports.findMany({
-      where,
+      where: whereQuery,
       skip: offset,
       orderBy: order,
       take: limit,
@@ -169,11 +175,33 @@ export class PrismaReportRepository implements ReportRepository {
     return reportCategoryMapper(reportCategory);
   }
 
-  async updateReport(id: string, status: ReportStatus): Promise<void> {
+  async findReportByUserIdAndCategory(
+    userId: string,
+    categoryId,
+  ): Promise<Report> {
+    const report = await this.prisma.reports.findFirst({
+      where: { userId, categoryId },
+      include: ReportRelations,
+    });
+
+    if (!report) {
+      return null;
+    }
+
+    return reportMapper(report);
+  }
+
+  async updateReport(
+    id: string,
+    status: ReportStatus,
+    comment?: string,
+  ): Promise<Report> {
     await this.prisma.reports.update({
       where: { id },
-      data: { status },
+      data: { status, comment },
     });
+
+    return this.reportOfId(id);
   }
 
   async updateCategoryReport(
@@ -209,6 +237,12 @@ export class PrismaReportRepository implements ReportRepository {
   async deleteReport(instance: Report): Promise<void> {
     await this.prisma.reports.delete({
       where: { id: instance.id },
+    });
+  }
+
+  async deleteManyReports(): Promise<void> {
+    await this.prisma.reports.deleteMany({
+      where: { status: ReportStatus.CLOSED },
     });
   }
 

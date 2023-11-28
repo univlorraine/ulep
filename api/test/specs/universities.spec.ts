@@ -92,6 +92,8 @@ describe('Universities', () => {
         timezone: 'Europe/London',
         admissionStart: '2021-01-01',
         admissionEnd: '2021-12-31',
+        openServiceDate: '2022-01-01',
+        closeServiceDate: '2024-12-31',
         website: 'https://www.ox.ac.uk/',
         codes: [],
         domains: [],
@@ -117,6 +119,8 @@ describe('Universities', () => {
         timezone: 'Europe/London',
         admissionStart: '2021-01-01',
         admissionEnd: '2021-12-31',
+        openServiceDate: '2022-01-01',
+        closeServiceDate: '2024-12-31',
         website: 'https://www.ox.ac.uk/',
         pairingMode: PairingMode.SEMI_AUTOMATIC,
       })
@@ -134,6 +138,8 @@ describe('Universities', () => {
         timezone: 'Europe/London',
         admissionStart: '2021-12-31',
         admissionEnd: '2021-01-01',
+        openServiceDate: '2022-01-01',
+        closeServiceDate: '2024-12-31',
         website: 'https://www.ox.ac.uk/',
       })
       .expect(400);
@@ -149,6 +155,8 @@ describe('Universities', () => {
       .send({
         admissionStart: '2021-12-31',
         admissionEnd: '2021-01-01',
+        openServiceDate: '2022-01-01',
+        closeServiceDate: '2024-12-31',
         name: 'University of Oxford',
         timezone: 'Europe/London',
         website: 'https://www.ox.ac.uk/',

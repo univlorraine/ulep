@@ -33,19 +33,13 @@ const WelcomeContent: React.FC<WelcomeContentProps> = ({ onPress }) => {
     const [currentTheme, setCurrentTheme] = useState<HomeTheme>(themes[0]);
     const { width } = useWindowDimensions();
     const isHybrid = width < HYBRID_MAX_WIDTH;
-    let timeout: NodeJS.Timeout;
 
     const onButtonPressed = () => {
-        clearTimeout(timeout);
         onPress?.();
     };
 
     useEffect(() => {
         setCurrentTheme(themes[Math.floor(Math.random() * themes.length)]);
-        if (onPress) {
-            timeout = setTimeout(() => onPress(), 5000);
-        }
-        return () => clearTimeout(timeout);
     }, []);
 
     const backgroundStyle = isHybrid

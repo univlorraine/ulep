@@ -16,6 +16,7 @@ interface InstanceCommand {
     secondaryBackgroundColor: string;
     secondaryDarkColor: string;
     hasConnector: boolean;
+    isInMaintenance: boolean;
 }
 
 const useFetchConfiguration = (apiUrl: string) => {
@@ -35,6 +36,7 @@ const useFetchConfiguration = (apiUrl: string) => {
             }
 
             const result: InstanceCommand = await response.json();
+            console.warn(result);
             setConfiguration(
                 new Configuration(
                     result.name,
@@ -49,6 +51,7 @@ const useFetchConfiguration = (apiUrl: string) => {
                     result.secondaryColor,
                     result.secondaryDarkColor,
                     result.secondaryBackgroundColor,
+                    result.isInMaintenance,
                 )
             );
             document.documentElement.style.setProperty('--primary-color', result.primaryColor);

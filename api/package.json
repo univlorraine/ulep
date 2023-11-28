@@ -1,6 +1,6 @@
 {
   "name": "api",
-  "version": "0.0.8",
+  "version": "0.0.16",
   "description": "",
   "author": "",
   "private": true,
@@ -19,7 +19,7 @@
     "test:debug": "node --inspect-brk -r tsconfig-paths/register -r ts-node/register node_modules/.bin/jest --runInBand",
     "test:e2e": "jest --config ./test/jest-e2e.json",
     "migrate": "pnpx prisma migrate dev",
-    "seed": "pnpx prisma db seed",
+    "seed": "pnpx prisma db seed -- --delete ",
     "seed:ul": "pnpx prisma db seed -- --delete --seed ul",
     "seed:random": "pnpx prisma db seed -- --seed random --delete"
   },
@@ -33,6 +33,8 @@
     "@nestjs/terminus": "^9.2.2",
     "@nestjs/throttler": "^4.2.1",
     "@prisma/client": "4.15.0",
+    "@sentry/node": "^7.78.0",
+    "@sentry/tracing": "^7.78.0",
     "axios": "^1.5.0",
     "class-transformer": "^0.5.1",
     "class-validator": "^0.14.0",

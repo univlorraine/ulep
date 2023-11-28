@@ -1,14 +1,24 @@
 import { IonPage } from '@ionic/react';
-import { useHistory } from 'react-router';
+import { useHistory, useLocation } from 'react-router';
 import ConnexionContent from '../components/contents/ConnectionContent';
 import WelcomeContent from '../components/contents/WelcomeContent';
 import WebLayout from '../components/layout/WebLayout';
 import useWindowDimensions from '../hooks/useWindowDimensions';
 import { HYBRID_MAX_WIDTH } from '../utils';
+import { useEffect } from 'react';
 
 const WelcomePage: React.FC = () => {
     const history = useHistory();
     const { width } = useWindowDimensions();
+    const location = useLocation();
+
+    useEffect(() => {
+        let timeout: NodeJS.Timeout;
+        if(width < HYBRID_MAX_WIDTH && location.pathname === '/') {
+            timeout = setTimeout(() => history.push('/connect'), 5000);
+        }
+        return () => clearTimeout(timeout);
+    }, [location.pathname]);
 
     return (
         <IonPage>

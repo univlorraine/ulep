@@ -16,6 +16,8 @@ const payload: UserCommand = {
         id: 'universityId',
         admissionStart: new Date('2023-01-01T00:00:00.000Z'),
         admissionEnd: new Date('2023-12-31T00:00:00.000Z'),
+        openServiceDate: new Date('2023-01-01T00:00:00.000Z'),
+        closeServiceDate: new Date('2023-01-01T00:00:00.000Z'),
         name: 'name',
         parent: undefined,
         sites: [],
@@ -34,7 +36,9 @@ const university = new University(
     [{ id: 'id', name: 'Site A' }],
     true,
     new Date('2023-01-01T00:00:00.000Z'),
-    new Date('2023-12-31T00:00:00.000Z')
+    new Date('2023-12-31T00:00:00.000Z'),
+    new Date('2023-01-01T00:00:00.000Z'),
+    new Date('2023-01-01T00:00:00.000Z'),
 );
 const file = new File(['Bits'], 'name');
 describe('createUserUsecase', () => {

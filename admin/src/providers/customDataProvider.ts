@@ -10,6 +10,7 @@ import {
 } from 'react-admin';
 import Language from '../entities/Language';
 import { RoutineExecution } from '../entities/RoutineExecution';
+import AdministratorsQuery from '../queries/AdministratorsQuery';
 import CountriesQuery from '../queries/CountriesQuery';
 import InterestsQuery from '../queries/InterestsQuery';
 import LanguagesQuery from '../queries/LanguagesQuery';
@@ -154,6 +155,9 @@ const customDataProvider = {
         let url = new URL(`${process.env.REACT_APP_API_URL}/${resource}`);
 
         switch (resource) {
+            case 'users/administrators':
+                url.search = AdministratorsQuery(params);
+                break;
             case 'countries':
                 url.search = CountriesQuery(params);
                 break;
@@ -295,6 +299,14 @@ const customDataProvider = {
             relaunch: !!relaunchGlobalRoutine,
         });
         const response = await fetch(url, httpClientOptions({ method: 'POST', body }));
+
+        if (!response.ok) {
+            throw new Error(`API request failed with status ${response.status}`);
+        }
+    },
+    purge: async (): Promise<void> => {
+        const url = `${process.env.REACT_APP_API_URL}/purges`;
+        const response = await fetch(url, httpClientOptions({ method: 'POST' }));
 
         if (!response.ok) {
             throw new Error(`API request failed with status ${response.status}`);

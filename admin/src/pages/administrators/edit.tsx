@@ -2,7 +2,6 @@ import React from 'react';
 import { useNotify, useRedirect, Edit, useTranslate, useUpdate, WithRecord } from 'react-admin';
 import AdministratorForm from '../../components/form/AdministratorForm';
 import Administrator from '../../entities/Administrator';
-import University from '../../entities/University';
 
 interface AdministratorUpdatePayload {
     id: string;
@@ -17,16 +16,13 @@ const EditAdministrator = () => {
     const redirect = useRedirect();
     const notify = useNotify();
 
-    const handleSubmit = async (id: string, email: string, password?: string, university?: University) => {
+    const handleSubmit = async (id: string, email: string, password?: string, universityId?: string) => {
         const payload: AdministratorUpdatePayload = {
             id,
             email,
             password,
+            universityId,
         };
-
-        if (university?.parent) {
-            payload.universityId = university.id;
-        }
 
         try {
             return await update(
@@ -56,8 +52,8 @@ const EditAdministrator = () => {
                 render={(record) => (
                     <AdministratorForm
                         email={record.email}
-                        handleSubmit={(email: string, password?: string, university?: University) =>
-                            handleSubmit(record.id, email, password, university)
+                        handleSubmit={(email: string, password?: string, universityId?: string) =>
+                            handleSubmit(record.id, email, password, universityId)
                         }
                         type="update"
                         universityId={record.universityId || 'central'}

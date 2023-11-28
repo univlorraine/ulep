@@ -1,11 +1,14 @@
-import { Collection, SortOrder, StringFilter } from '@app/common';
+import { Collection, SortOrder } from '@app/common';
 import { Report, ReportCategory, ReportStatus } from '../models';
 
 export const REPORT_REPOSITORY = 'report.repository';
 
 export type ReportQuerySortKey = 'firstname' | 'lastname' | 'university';
+
 export interface ReportQueryWhere {
-  status?: StringFilter;
+  id?: string;
+  status?: ReportStatus;
+  universityId?: string;
 }
 
 export interface ReportQueryOrderBy {
@@ -33,11 +36,22 @@ export interface ReportRepository {
 
   categoryOfName(name: string): Promise<ReportCategory | null>;
 
-  updateReport(id: string, status: ReportStatus): Promise<void>;
+  findReportByUserIdAndCategory(
+    userId: string,
+    categoryId,
+  ): Promise<Report | null>;
+
+  updateReport(
+    id: string,
+    status: ReportStatus,
+    comment?: string,
+  ): Promise<Report>;
 
   updateCategoryReport(category: ReportCategory): Promise<ReportCategory>;
 
-  deleteReport(instance: Report): Promise<void>;
+  deleteReport(where: ReportQueryWhere): Promise<void>;
+
+  deleteManyReports(where: ReportQueryWhere): Promise<void>;
 
   deleteCategory(instance: ReportCategory): Promise<void>;
 }

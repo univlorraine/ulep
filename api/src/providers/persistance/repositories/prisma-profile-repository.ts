@@ -95,7 +95,7 @@ export class PrismaProfileRepository implements ProfileRepository {
     const wherePayload = where
       ? {
           User: {
-            country_code_id: where.user.country,
+            Nationality: { code: where.user.country },
             email: where.user.email,
             firstname: where.user.firstname,
             lastname: where.user.lastname,
@@ -104,7 +104,9 @@ export class PrismaProfileRepository implements ProfileRepository {
             status: where.user.status,
           },
           MasteredLanguages: {
-            every: { LanguageCode: { code: where.masteredLanguageCode } },
+            some: {
+              LanguageCode: { code: where.masteredLanguageCode },
+            },
           },
           NativeLanguage: { code: where.nativeLanguageCode },
         }
@@ -113,7 +115,6 @@ export class PrismaProfileRepository implements ProfileRepository {
     const count = await this.prisma.profiles.count({
       where: wherePayload,
     });
-
     // If skip is out of range, return an empty array
     if (offset >= count) {
       return { items: [], totalItems: count };

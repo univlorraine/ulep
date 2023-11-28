@@ -82,7 +82,7 @@ export class Server {
     const options = new DocumentBuilder()
       .setTitle('ULEP API')
       .setVersion('1.0.0')
-      // .addBearerAuth({ ... })
+      .addBearerAuth()
       .build();
 
     const document: OpenAPIObject = SwaggerModule.createDocument(app, options);

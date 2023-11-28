@@ -1,10 +1,8 @@
-import * as Sentry from '@sentry/browser';
 import React from 'react';
 import { createRoot } from 'react-dom/client';
 import './index.css';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
-import version from './version';
 
 const element = document.getElementById('root');
 
@@ -12,13 +10,7 @@ if (!element) {
     throw new Error('Missing root element');
 }
 
-const { environmentName, sentryDsn, ...props } = element.dataset;
-
-Sentry.init({
-    dsn: sentryDsn,
-    environment: environmentName,
-    release: version ? `ul-admin@${version}` : undefined,
-});
+const { ...props } = element.dataset;
 
 const root = createRoot(element);
 

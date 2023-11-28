@@ -11,6 +11,8 @@ interface UniversityCommand {
     website: string;
     admissionStart: Date;
     admissionEnd: Date;
+    openServiceDate: Date;
+    closeServiceDate: Date;
 }
 
 export const universityCommandToDomain = (command: UniversityCommand) => {
@@ -22,7 +24,9 @@ export const universityCommandToDomain = (command: UniversityCommand) => {
         command.sites.map((site) => new Campus(site.id, site.name)),
         command.hasCode,
         new Date(command.admissionStart),
-        new Date(command.admissionEnd)
+        new Date(command.admissionEnd),
+        new Date(command.openServiceDate),
+        new Date(command.closeServiceDate)
     );
 };
 

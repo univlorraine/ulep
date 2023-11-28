@@ -41,6 +41,8 @@ export class InstanceController {
   }
 
   @Get('config')
+  @Swagger.ApiOperation({ summary: 'Get the instance configuration' })
+  @Swagger.ApiCreatedResponse({ type: InstanceResponse })
   async getInstance(): Promise<InstanceResponse> {
     const instance = await this.getInstanceUsecase.execute();
 
@@ -48,6 +50,8 @@ export class InstanceController {
   }
 
   @Put()
+  @Swagger.ApiOperation({ summary: 'Update the instance' })
+  @Swagger.ApiCreatedResponse({ type: InstanceResponse })
   async updateInstance(
     @Body() body: UpdateInstanceRequest,
   ): Promise<InstanceResponse> {

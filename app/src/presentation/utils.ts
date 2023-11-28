@@ -35,7 +35,7 @@ const countriesCodeWithFlags: [string, string][] = [
     ['fr', '🇫🇷'], // French - France
     ['fy', '🇳🇱'], // Western Frisian - Netherlands
     ['ga', '🇮🇪'], // Irish - Ireland
-    ['gd', '🇬🇧'], // Scottish Gaelic - United Kingdom
+    ['gd', '🏴󠁧󠁢󠁳󠁣󠁴󠁿'], // Scottish Gaelic - United Kingdom
     ['gl', '🇪🇸'], // Galician - Spain
     ['gn', '🇵🇾'], // Guarani - Paraguay
     ['gu', '🇮🇳'], // Gujarati - India

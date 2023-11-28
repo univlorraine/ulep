@@ -55,6 +55,17 @@ export class CreateUnsubscribeReportUsecase {
       throw new RessourceDoesNotExist(`User does not exist`);
     }
 
+    // Check if report deletion already exist
+    const reportAlreadyExist =
+      await this.reportRepository.findReportByUserIdAndCategory(
+        owner.id,
+        category.id,
+      );
+
+    if (reportAlreadyExist) {
+      return reportAlreadyExist;
+    }
+
     return this.reportRepository.createReport(
       new Report({
         id: this.uuidProvider.generate(),

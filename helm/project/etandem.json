@@ -29,7 +29,7 @@
             "redirectUris": [
                 "https://{{ .Values.api.env.appUrl }}.{{ .Values.domain }}/*",
                 "https://{{ .Values.api.env.adminUrl }}.{{ .Values.domain }}/*",
-                "ulep://"
+                "ulep://*"
             ],
             "serviceAccountsEnabled": true,
             "protocolMappers": [

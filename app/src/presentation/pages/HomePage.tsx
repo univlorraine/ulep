@@ -1,9 +1,8 @@
 import { IonContent, IonPage, useIonToast } from '@ionic/react';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Redirect, useHistory } from 'react-router';
 import { ArrowDownSvg, AvatarPlaceholderPng, ReportSvg } from '../../assets';
-import { useConfig } from '../../context/ConfigurationContext';
 import Tandem from '../../domain/entities/Tandem';
 import { useStoreActions, useStoreState } from '../../store/storeTypes';
 import HomeHeader from '../components/HomeHeader';
@@ -16,11 +15,11 @@ import WaitingTandemList from '../components/tandems/WaitingTandemList';
 import useWindowDimensions from '../hooks/useWindowDimensions';
 import { HYBRID_MAX_WIDTH } from '../utils';
 import styles from './css/Home.module.css';
+import useGetTandems from '../hooks/useGetTandems';
 
 const HomePage: React.FC = () => {
     const { t } = useTranslation();
     const history = useHistory();
-    const { getAllTandems } = useConfig();
     const [showToast] = useIonToast();
     const logout = useStoreActions((store) => store.logout);
     const currentDate = new Date();
@@ -30,28 +29,8 @@ const HomePage: React.FC = () => {
     const [displayProfile, setDisplayProfile] = useState<boolean>(false);
     const [displayReport, setDisplayReport] = useState<boolean>(false);
     const [selectedTandem, setSelectedTandem] = useState<Tandem>();
-    const [tandems, setTandems] = useState<Tandem[]>([]);
 
-    const getHomeData = async () => {
-        const result = await getAllTandems.execute(profile!.id);
-
-        if (result instanceof Error) {
-            return await showToast({ message: t(result.message), duration: 5000 });
-        }
-
-        const waitingLearningLanguages: Tandem[] = [];
-        profile?.learningLanguages.map((learningLanguage) => {
-            if (!result.find((tandem) => tandem.learningLanguage.id === learningLanguage.id)) {
-                waitingLearningLanguages.push(new Tandem(learningLanguage.id, 'DRAFT', learningLanguage, 'A0'));
-            }
-        });
-
-        setTandems([...result, ...waitingLearningLanguages]);
-    };
-
-    useEffect(() => {
-        getHomeData();
-    }, [profile?.learningLanguages]);
+    const tandems = useGetTandems({ profile, showToast, t }, [profile?.learningLanguages]);
 
     const onDisconnect = () => {
         return logout();
@@ -88,7 +67,7 @@ const HomePage: React.FC = () => {
                 <HomeHeader avatar={profile.user.avatar ?? AvatarPlaceholderPng} onPicturePressed={onProfilePressed} />
             )}
             <IonContent>
-                <div className={styles.container}>
+                <div className={`${styles.container} content-wrapper`}>
                     <div className={styles['header']}>
                         <div className={styles['hello-container']}>
                             <span className={styles.date}>{formattedDate}</span>

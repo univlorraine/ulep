@@ -44,6 +44,7 @@ import {
 import { AuthenticationGuard } from '../guards';
 import { ImagesFilePipe } from '../validators/images.validator';
 import { User } from 'src/core/models';
+import { GetAdministratorsQueryParams } from 'src/api/dtos/users/administrators-filter';
 
 @Controller('users')
 @Swagger.ApiTags('Users')
@@ -105,8 +106,12 @@ export class UserController {
   @UseGuards(AuthenticationGuard)
   @Swagger.ApiOperation({ summary: 'Collection of Administrator ressource.' })
   @CollectionResponse(UserResponse)
-  async findAllAdministrators() {
-    const administrators = await this.getAdministratorsUsecase.execute();
+  async findAllAdministrators(
+    @Query() { universityId }: GetAdministratorsQueryParams,
+  ) {
+    const administrators = await this.getAdministratorsUsecase.execute(
+      universityId,
+    );
 
     return administrators.map(AdministratorResponse.fromDomain);
   }

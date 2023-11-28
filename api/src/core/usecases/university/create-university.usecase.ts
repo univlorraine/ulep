@@ -22,6 +22,8 @@ export class CreateUniversityCommand {
   timezone: string;
   admissionStart: Date;
   admissionEnd: Date;
+  openServiceDate: Date;
+  closeServiceDate: Date;
   website?: string;
   codes?: string[];
   domains?: string[];
@@ -75,6 +77,8 @@ export class CreateUniversityUsecase {
       timezone: command.timezone,
       admissionStart: command.admissionStart,
       admissionEnd: command.admissionEnd,
+      openServiceDate: command.openServiceDate,
+      closeServiceDate: command.closeServiceDate,
       website: command.website,
       codes: command.codes,
       domains: command.domains,

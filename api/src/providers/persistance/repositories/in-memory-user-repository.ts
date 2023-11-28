@@ -4,6 +4,7 @@ import { UserRepository } from 'src/core/ports/user.repository';
 
 export class InMemoryUserRepository implements UserRepository {
   #users: User[] = [];
+  #blacklist: string[] = [];
 
   get users(): User[] {
     return this.#users;
@@ -54,11 +55,19 @@ export class InMemoryUserRepository implements UserRepository {
     return this.#users[index];
   }
 
-  async remove(id: string): Promise<void> {
+  async delete(id: string): Promise<void> {
     const index = this.#users.findIndex((u) => u.id === id);
 
     if (index !== -1) {
       this.#users.splice(index, 1);
     }
+  }
+
+  async deleteAll(): Promise<void> {
+    this.#users = [];
+  }
+
+  async createBlacklist(usersId: string[]): Promise<void> {
+    this.#blacklist = [...this.#blacklist, ...usersId];
   }
 }

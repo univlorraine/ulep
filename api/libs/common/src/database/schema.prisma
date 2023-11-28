@@ -4,23 +4,24 @@ datasource db {
 }
 
 generator client {
-  provider      = "prisma-client-js"
-  binaryTargets = ["native", "linux-musl-openssl-3.0.x"]
+  provider = "prisma-client-js"
+  // binaryTargets = ["native", "linux-musl-openssl-3.0.x"]
 }
 
 model Instance {
-  id            String          @id @default(uuid())
-  name          String
-  email         String
-  ressource_url String
-  cgu_url       String
-  confidentiality_url   String
-  primary_color         String
-  primary_background_color  String
-  primary_dark_color    String
-  secondary_color  String
-  secondary_background_color    String
-  secondary_dark_color  String
+  id                         String  @id @default(uuid())
+  name                       String
+  email                      String
+  ressource_url              String
+  cgu_url                    String
+  confidentiality_url        String
+  primary_color              String
+  primary_background_color   String
+  primary_dark_color         String
+  secondary_color            String
+  secondary_background_color String
+  secondary_dark_color       String
+  is_in_maintenance          Boolean @default(false)
 }
 
 model CountryCodes {
@@ -77,6 +78,8 @@ model Organizations {
   timezone           String
   admissionStartDate DateTime
   admissionEndDate   DateTime
+  openServiceDate    DateTime            @default(now())
+  closeServiceDate   DateTime            @default(now())
   created_at         DateTime            @default(now())
   updated_at         DateTime            @updatedAt
   website            String?
@@ -245,11 +248,12 @@ model Reports {
   content    String
   categoryId String
   status     String           @default("OPEN")
-  userId     String
+  comment    String?
+  userId     String?
   createdAt  DateTime         @default(now())
   updatedAt  DateTime         @updatedAt
   Category   ReportCategories @relation(fields: [categoryId], references: [id], onDelete: Cascade)
-  User       Users            @relation(fields: [userId], references: [id], onDelete: Cascade)
+  User       Users?           @relation(fields: [userId], references: [id])
 
   @@index([categoryId], name: "category_id")
   @@index([userId], name: "user_id")
@@ -301,7 +305,7 @@ model MasteredLanguages {
   language_code_id String
   created_at       DateTime      @default(now())
   updated_at       DateTime      @updatedAt
-  Profile          Profiles      @relation(fields: [profile_id], references: [id])
+  Profile          Profiles      @relation(fields: [profile_id], references: [id], onDelete: Cascade)
   LanguageCode     LanguageCodes @relation(fields: [language_code_id], references: [id])
 
   @@id([profile_id, language_code_id])
@@ -411,4 +415,37 @@ model RefusedTandems {
   created_at        DateTime            @default(now())
   updated_at        DateTime            @updatedAt
   organizationsId   String
+}
+
+//  * ****************************************************
+//  * Purges
+//  * ****************************************************
+model Purges {
+  id            String          @id @default(uuid())
+  author_id     String
+  created_at    DateTime        @default(now())
+  TandemHistory TandemHistory[]
+
+  @@map("purges")
+}
+
+model Blacklist {
+  id         String   @id @default(uuid())
+  user_id    String   @unique
+  created_at DateTime @default(now())
+
+  @@map("blacklist")
+}
+
+model TandemHistory {
+  id               String   @id @default(uuid())
+  user_id          String
+  purge_id         String
+  tandem_id        String
+  language_code_id String
+  created_at       DateTime @default(now())
+  Purge            Purges   @relation(fields: [purge_id], references: [id], onDelete: Cascade)
+
+  @@unique([user_id, tandem_id])
+  @@map("tandem_history")
 }

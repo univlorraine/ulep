@@ -5,8 +5,8 @@ import { KeycloakClient } from '@app/keycloak';
 export class GetAdministratorsUsecase {
   constructor(private readonly keycloak: KeycloakClient) {}
 
-  async execute() {
-    const result = await this.keycloak.getAdministrators();
+  async execute(universityId?: string) {
+    const result = await this.keycloak.getAdministrators(universityId);
 
     return result;
   }

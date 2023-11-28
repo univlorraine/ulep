@@ -18,20 +18,11 @@
     "forceConsistentCasingInFileNames": false,
     "noFallthroughCasesInSwitch": false,
     "paths": {
-      "@app/keycloak": [
-        "libs/keycloak/src"
-      ],
-      "@app/keycloak/*": [
-        "libs/keycloak/src/*"
-      ],
-      "@app/common": [
-        "libs/common/src"
-      ],
-      "@app/common/*": [
-        "libs/common/src/*"
-      ]
+      "@app/keycloak": ["libs/keycloak/src"],
+      "@app/keycloak/*": ["libs/keycloak/src/*"],
+      "@app/common": ["libs/common/src"],
+      "@app/common/*": ["libs/common/src/*"]
     },
     "resolveJsonModule": true
-
   }
 }

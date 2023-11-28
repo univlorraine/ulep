@@ -53,6 +53,10 @@ const PairingQuizzPage: React.FC = () => {
             return setDisplayNextQuizz(true);
         }
 
+        if(percentage >= 80 && currentQuizz === 'C2') {
+            updateProfileSignUp({ learningLanguageLevel: currentQuizz });
+        }
+
         if (percentage < 10 && currentQuizz === 'A1') {
             updateProfileSignUp({ learningLanguageLevel: 'A0' });
         }

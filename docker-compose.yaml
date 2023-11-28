@@ -23,7 +23,7 @@ services:
       MINIO_ACCESS_KEY: ${MINIO_USER:-minio}
       MINIO_SECRET_KEY: ${MINIO_PASSWORD:-!ChangeMe!}
       MINIO_PUBLIC_URL: ${MINIO_PUBLIC_URL:-http://localhost:9000}
-      TRANSLATION_ENDPOINT: ${TRANSLATION_ENDPOINT:-https://raw.githubusercontent.com/thetribeio/locales_ulep/main/locales/}
+      TRANSLATIONS_ENDPOINT: ${TRANSLATIONS_ENDPOINT:-https://raw.githubusercontent.com/thetribeio/locales_ulep/main/locales/}
 
   admin:
     build:
@@ -37,7 +37,6 @@ services:
       REACT_APP_KEYCLOAK_REALM: ${REACT_APP_KEYCLOAK_REALM:-etandem}
       REACT_APP_KEYCLOAK_CLIENT_ID: ${REACT_APP_KEYCLOAK_CLIENT_ID:-react-admin}
       REACT_APP_KEYCLOAK_CLIENT_SECRET: ${REACT_APP_KEYCLOAK_CLIENT_SECRET:-uKBywX2HlxfvKgxZoKZrbiBSx49CST6W}
-
   auth:
     image: quay.io/keycloak/keycloak:21.1.2
     depends_on:
