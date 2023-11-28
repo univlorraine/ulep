@@ -143,4 +143,22 @@ export class InMemoryReportsRepository implements ReportRepository {
       this.#categories.splice(index, 1);
     }
   }
+
+  async deleteManyReports(where: ReportQueryWhere): Promise<void> {
+    if (where.status) {
+      this.#reports = this.#reports.filter(
+        (report) => report.status !== where.status,
+      );
+    }
+
+    if (where.id) {
+      this.#reports = this.#reports.filter((report) => report.id !== where.id);
+    }
+
+    if (where.universityId) {
+      this.#reports = this.#reports.filter(
+        (report) => report.user.university.id !== where.universityId,
+      );
+    }
+  }
 }
