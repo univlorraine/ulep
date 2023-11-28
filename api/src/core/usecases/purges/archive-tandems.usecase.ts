@@ -68,7 +68,7 @@ export class archiveTandemsAndDeleteUsersUsecase {
 
     await Promise.all([
       this.blacklistUsers(users),
-      this.deleteUsers(users, usersWithActiveTandem),
+      this.deleteUsers(usersWithActiveTandem),
     ]);
 
     // 4. Delete closed reports
@@ -99,10 +99,7 @@ export class archiveTandemsAndDeleteUsersUsecase {
     return activeTandems.items;
   }
 
-  private async deleteUsers(
-    users: User[],
-    usersWithActiveTandem: string[],
-  ): Promise<void> {
+  private async deleteUsers(usersWithActiveTandem: string[]): Promise<void> {
     // Retrieve all administrators
     const administratorsId = (await this.keycloak.getAdministrators()).map(
       (administrator) => administrator.id,
@@ -139,7 +136,7 @@ export class archiveTandemsAndDeleteUsersUsecase {
   }
 
   private async deleteClosedReports(): Promise<void> {
-    await this.reportRepository.deleteReport({
+    await this.reportRepository.deleteManyReports({
       status: ReportStatus.CLOSED,
     });
   }

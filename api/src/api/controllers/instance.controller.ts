@@ -6,7 +6,6 @@ import {
   Inject,
   Logger,
   Param,
-  Post,
   Put,
   Res,
 } from '@nestjs/common';
@@ -99,12 +98,5 @@ export class InstanceController {
       this.logger.error(err);
       return res.status(HttpStatus.INTERNAL_SERVER_ERROR).end();
     }
-  }
-
-  @Post('purge')
-  @Swagger.ApiOperation({ summary: 'Purge the instance' })
-  @Swagger.ApiCreatedResponse({ type: InstanceResponse })
-  async purgeInstance(): Promise<InstanceResponse> {
-    throw new Error('Not implemented');
   }
 }

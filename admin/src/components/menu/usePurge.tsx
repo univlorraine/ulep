@@ -10,9 +10,9 @@ const usePurge = (options?: UsePurgeParams) => {
     const dataProvider = useDataProvider();
     const notify = useNotify();
 
-    const { mutate, isLoading, isError } = useMutation(() => dataProvider.purge(), options);
+    const { mutate, isLoading, isError } = useMutation(dataProvider.purge, options);
 
-    if(isError){
+    if (isError) {
         notify('purge.error');
     }
 

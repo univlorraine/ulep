@@ -1,15 +1,34 @@
-import ExitToAppIcon from '@mui/icons-material/ExitToApp';
 import DeleteIcon from '@mui/icons-material/Delete';
+import ExitToAppIcon from '@mui/icons-material/ExitToApp';
 import { Typography, Switch, SwitchProps, Box } from '@mui/material';
 import * as React from 'react';
-import { AppBar, UserMenu, MenuItemLink, useNotify, useUpdate, useGetOne, useTranslate, useLogout } from 'react-admin';
-import { http } from '../../providers/authProvider';
+import {
+    AppBar,
+    UserMenu,
+    MenuItemLink,
+    useNotify,
+    useUpdate,
+    useGetOne,
+    useTranslate,
+    useLogout,
+    usePermissions,
+    useRefresh,
+} from 'react-admin';
+import { ADMIN_PERMISSION } from '../../providers/authProvider';
 import usePurge from './usePurge';
 
 const CustomUserMenu = (props: any) => {
     const translate = useTranslate();
     const logout = useLogout();
+    const { permissions } = usePermissions();
+    const refresh = useRefresh();
+
     const { mutate: purge } = usePurge();
+
+    const handlePurge = async () => {
+        await purge();
+        refresh();
+    };
 
     return (
         <UserMenu {...props}>
@@ -19,12 +38,14 @@ const CustomUserMenu = (props: any) => {
                 primaryText={translate('global.disconnect')}
                 to=""
             />
-            <MenuItemLink
-                leftIcon={<DeleteIcon />}
-                onClick={() => purge()}
-                primaryText={translate('purge.title')}
-                to=""
-            />
+            {permissions === ADMIN_PERMISSION && (
+                <MenuItemLink
+                    leftIcon={<DeleteIcon />}
+                    onClick={handlePurge}
+                    primaryText={translate('purge.title')}
+                    to=""
+                />
+            )}
         </UserMenu>
     );
 };

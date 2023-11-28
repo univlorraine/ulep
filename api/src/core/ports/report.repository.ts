@@ -51,5 +51,7 @@ export interface ReportRepository {
 
   deleteReport(where: ReportQueryWhere): Promise<void>;
 
+  deleteManyReports(where: ReportQueryWhere): Promise<void>;
+
   deleteCategory(instance: ReportCategory): Promise<void>;
 }

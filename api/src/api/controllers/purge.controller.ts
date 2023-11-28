@@ -12,14 +12,14 @@ import { KeycloakUser } from '@app/keycloak';
 export class PurgesController {
   constructor(
     private readonly userTandemPurgeUsecase: archiveTandemsAndDeleteUsersUsecase,
-  ) { }
+  ) {}
 
   @Post()
   @Roles(configuration().adminRole)
   @UseGuards(AuthenticationGuard)
   @Swagger.ApiOperation({ summary: 'Create Purge ressource.' })
   async findAll(@CurrentUser() user: KeycloakUser) {
-    const instance = await this.userTandemPurgeUsecase.execute({
+    await this.userTandemPurgeUsecase.execute({
       userId: user.sub,
     });
   }

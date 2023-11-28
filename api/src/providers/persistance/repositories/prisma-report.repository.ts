@@ -242,7 +242,7 @@ export class PrismaReportRepository implements ReportRepository {
     });
   }
 
-  async deleteAllReportClosed(): Promise<void> {
+  async deleteManyReports(): Promise<void> {
     await this.prisma.reports.deleteMany({
       where: { status: ReportStatus.CLOSED },
     });
