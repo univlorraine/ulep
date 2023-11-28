@@ -304,7 +304,7 @@ const customDataProvider = {
             throw new Error(`API request failed with status ${response.status}`);
         }
     },
-    purge: async() : Promise<void> => {
+    purge: async (): Promise<void> => {
         const url = `${process.env.REACT_APP_API_URL}/purges`;
         const response = await fetch(url, httpClientOptions({ method: 'POST' }));
 
