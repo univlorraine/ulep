@@ -36,7 +36,6 @@ const useFetchConfiguration = (apiUrl: string) => {
             }
 
             const result: InstanceCommand = await response.json();
-            console.warn(result);
             setConfiguration(
                 new Configuration(
                     result.name,
@@ -51,7 +50,7 @@ const useFetchConfiguration = (apiUrl: string) => {
                     result.secondaryColor,
                     result.secondaryDarkColor,
                     result.secondaryBackgroundColor,
-                    result.isInMaintenance,
+                    result.isInMaintenance
                 )
             );
             document.documentElement.style.setProperty('--primary-color', result.primaryColor);

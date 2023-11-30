@@ -104,7 +104,7 @@ export class ProfileController {
                 mode: ModeQuery.INSENSITIVE,
               },
               role: { equals: where.user?.role },
-              university: { equals: where?.university },
+              university: { equals: where?.user?.university },
               status: { equals: where.user?.status },
             },
             masteredLanguageCode: where.masteredLanguageCode,
