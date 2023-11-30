@@ -75,6 +75,7 @@ const ProfileFilter = (props: any) => {
                     { id: 'ACTIVE', name: translate('global.userStatus.active') },
                     { id: 'REPORTED', name: translate('global.userStatus.reported') },
                     { id: 'BANNED', name: translate('global.userStatus.banned') },
+                    { id: 'CANCELED', name: translate('global.userStatus.canceled') },
                 ]}
                 label={translate('profiles.status')}
                 source="user.status"
@@ -176,6 +177,7 @@ const ProfileList = (props: any) => {
                             <MenuItem value="ACTIVE">{translate('global.active')}</MenuItem>
                             <MenuItem value="REPORTED">{translate('global.reported')}</MenuItem>
                             <MenuItem value="BANNED">{translate('global.banned')}</MenuItem>
+                            <MenuItem value="CANCELED">{translate('global.canceled')}</MenuItem>
                         </Select>
                     )}
                 />

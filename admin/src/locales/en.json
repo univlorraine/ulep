@@ -10,6 +10,7 @@
         "active": "Active",
         "banned": "Banned",
         "content": "Content",
+        "canceled": "Canceled",
         "disconnect": "Disconnect",
         "email": "Email",
         "firstname": "Firstname",
@@ -27,6 +28,12 @@
         "etandem": "E-tandem",
         "tandem": "Tandem",
         "both": "Both",
+        "userStatus": {
+            "active": "Actif",
+            "banned": "Bannis",
+            "canceled": "Annulé",
+            "reported": "Signalé"
+        },
         "genderValues": {
             "male": "Male",
             "female": "Female",
