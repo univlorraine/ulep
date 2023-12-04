@@ -5,7 +5,7 @@ import { useHistory, useLocation } from 'react-router';
 import { useConfig } from '../../context/ConfigurationContext';
 import Country from '../../domain/entities/Country';
 import University from '../../domain/entities/University';
-import { useStoreActions } from '../../store/storeTypes';
+import { useStoreActions, useStoreState } from '../../store/storeTypes';
 import Dropdown, { DropDownItem } from '../components/DropDown';
 import ErrorMessage from '../components/ErrorMessage';
 import RadioButton from '../components/RadioButton';
@@ -24,6 +24,7 @@ const SignUpPage: React.FC = () => {
     const { t } = useTranslation();
     const { configuration, getAllCountries, getInitialUrlUsecase, retrievePerson } = useConfig();
     const updateProfileSignUp = useStoreActions((state) => state.updateProfileSignUp);
+    const profileSignUp = useStoreState((state) => state.profileSignUp);
     const [showToast] = useIonToast();
     const history = useHistory();
     const location = useLocation<SignUpPageParams>();
@@ -31,7 +32,7 @@ const SignUpPage: React.FC = () => {
     const [countries, setCountries] = useState<DropDownItem<Country>[]>([]);
     const [country, setCountry] = useState<Country>();
     const [department, setDepartment] = useState<string>('');
-    const [diplome, setDiplome] = useState<string>('');
+    const [diploma, setDiploma] = useState<string>('');
     const [selectedRole, setSelectedRole] = useState<Role>();
     const [staffFunction, setStaffFunction] = useState<string>('');
     const [university, setUniversity] = useState<University>();
@@ -43,7 +44,7 @@ const SignUpPage: React.FC = () => {
         !country ||
         !selectedRole ||
         (!department && university.isCentral) ||
-        (!diplome && selectedRole === 'STUDENT' && university.isCentral) ||
+        (!diploma && selectedRole === 'STUDENT' && university.isCentral) ||
         (!staffFunction && selectedRole === 'STAFF' && university.isCentral);
 
     const getSignUpData = async () => {
@@ -70,7 +71,7 @@ const SignUpPage: React.FC = () => {
             return setDisplayError(true);
         }
 
-        updateProfileSignUp({ country, department, diplome, role: selectedRole, staffFunction, university });
+        updateProfileSignUp({ country, department, diplome: diploma, role: selectedRole, staffFunction, university });
         return history.push('/signup/informations', payload);
     };
 
@@ -94,9 +95,26 @@ const SignUpPage: React.FC = () => {
             }
         }
 
+        if (profileSignUp.staffFunction) {
+            setStaffFunction(profileSignUp.staffFunction);
+        }
+
+        if (profileSignUp.department) {
+            setDepartment(profileSignUp.department);
+        }
+
+        if (profileSignUp.role) {
+            setSelectedRole(profileSignUp.role);
+        }
+
+        if (result.diploma) {
+            setDiploma(result.diploma);
+        } else if (profileSignUp.diplome) {
+            setDiploma(profileSignUp.diplome);
+        }
+
         setUniversity(centralUniversity);
         setCountry(centralCountry);
-        setDiplome(result.diploma);
         setPayload({
             centralFirstname: result.firstname,
             centralLastname: result.lastname,
@@ -168,7 +186,14 @@ const SignUpPage: React.FC = () => {
                     <button
                         className="tertiary-button large-margin-vertical"
                         onClick={async () => {
-                            updateProfileSignUp({ country, department, role: selectedRole, university });
+                            updateProfileSignUp({
+                                country,
+                                department,
+                                role: selectedRole,
+                                university,
+                                diplome: diploma,
+                                staffFunction,
+                            });
                             const redirectUri = encodeURIComponent(
                                 Capacitor.isNativePlatform() ? 'ulep://auth' : `${window.location.origin}/auth`
                             );
@@ -198,7 +223,7 @@ const SignUpPage: React.FC = () => {
                 )}
 
                 {selectedRole === 'STUDENT' && (
-                    <TextInput onChange={setDiplome} title={t('signup_page.diplome_title')} value={diplome} />
+                    <TextInput onChange={setDiploma} title={t('signup_page.diplome_title')} value={diploma} />
                 )}
                 {displayError && <ErrorMessage description={t('signup_page.error')} />}
                 <div className={styles['bottom-container']}>
