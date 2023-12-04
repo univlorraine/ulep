@@ -10,15 +10,19 @@ def getMyVersionName = { ->
     return project.hasProperty('versionName') ? versionName : "1.0"
 }
 
+def keystorePropertiesFile = rootProject.file('key.properties');
+def keystoreProperties = new Properties();
+keystoreProperties.load(new FileInputStream(keystorePropertiesFile));
+
 android {
-    namespace "com.ionic.etandem"
+    namespace "fr.univlorraine.ulep"
     compileSdkVersion rootProject.ext.compileSdkVersion
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_17
         targetCompatibility JavaVersion.VERSION_17
     }
     defaultConfig {
-        applicationId "com.ionic.etandem"
+        applicationId "fr.univlorraine.ulep"
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
         versionCode getMyVersionCode()
@@ -37,13 +41,12 @@ android {
                 storePassword System.getenv()["CM_KEYSTORE_PASSWORD"]
                 keyAlias System.getenv()["CM_KEY_ALIAS"]
                 keyPassword System.getenv()["CM_KEY_PASSWORD"]
-            }
-            // else {
-            //     keyAlias keystoreProperties['keyAlias']
-            //     keyPassword keystoreProperties['keyPassword']
-            //     storeFile keystoreProperties['storeFile'] ? file(keystoreProperties['storeFile']) : null
-            //     storePassword keystoreProperties['storePassword']
-            // }
+            } else if(keystoreProperties['storeFile']) {
+                 keyAlias keystoreProperties['keyAlias']
+                 keyPassword keystoreProperties['keyPassword']
+                 storeFile keystoreProperties['storeFile'] ? file(keystoreProperties['storeFile']) : null
+                 storePassword keystoreProperties['storePassword']
+             }
         }
     }
     flavorDimensions "version"

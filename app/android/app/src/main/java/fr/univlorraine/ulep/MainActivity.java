@@ -1,4 +1,4 @@
-package com.ionic.etandem;
+package fr.univlorraine.ulep;
 
 import com.getcapacitor.Plugin;
 import android.os.Bundle;

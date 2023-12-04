@@ -1,7 +1,7 @@
 {
-  "name": "etandem",
-  "integrations": {
-    "capacitor": {}
-  },
-  "type": "react-vite"
+    "name": "ULEP",
+    "integrations": {
+        "capacitor": {}
+    },
+    "type": "react-vite"
 }

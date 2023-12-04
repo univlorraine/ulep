@@ -86,7 +86,7 @@ workflows:
     #     environment:
     #         ios_signing:
     #             distribution_type: app_store
-    #             bundle_identifier: com.ionic.etandem.staging
+    #             bundle_identifier: fr.univlorraine.ulep
     #         vars:
     #             # Ionic Xcode worskspace and scheme
     #             XCODE_WORKSPACE: "ios/App/App.xcworkspace"
@@ -140,7 +140,7 @@ workflows:
                 - firebase_credentials
                 - staging
             vars:
-                PACKAGE_NAME: "com.ionic.etandem.staging"
+                PACKAGE_NAME: "fr.univlorraine.ulep"
                 # GOOGLE_PLAY_TRACK: alpha
             node: 16.14.0
             xcode: 14.2
@@ -167,7 +167,7 @@ workflows:
             firebase:
                 firebase_service_account: $FIREBASE_SERVICE_ACCOUNT
                 android:
-                    app_id: 1:305758228479:android:6fc469b7f02de1cb7321ca
+                    app_id: 1:305758228479:android:b66dc123578d8fa17321ca
                     groups:
                         - android-testers
 
@@ -193,7 +193,7 @@ workflows:
                     - certificate: theTribe
                       environment_variable: ~/Library/MobileDevice/Certificates
             vars:
-                BUNDLE_ID: "com.ionic.etandem.staging"
+                BUNDLE_ID: "fr.univlorraine.ulep"
         triggering:
             events:
                 - push
