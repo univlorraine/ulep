@@ -427,7 +427,9 @@
     "suspended_page": {
         "contact_us": "Contacte-nous pour plus d'informations.",
         "subtitle": "Nous sommes désolés mais ton compte a été suspendu pour non-respect de nos règles et conditions d'utilisation.",
+        "subtitle_canceled": "Nous sommes désolés mais ton compte a été annulé",
         "title": "Compte suspendu",
+        "title_canceled": "Compte annulé",
         "validate_button": "Nous contacter"
     },
     "languages_code": {

@@ -7,7 +7,7 @@ declare global {
         | 'TWICE_A_MONTH'
         | 'THREE_TIMES_A_MONTH';
     type LanguageStatus = 'PRIMARY' | 'SECONDARY' | 'UNACTIVE';
-    type UserStatus = 'BANNED' | 'REPORTED' | undefined;
+    type UserStatus = 'CANCELED' | 'BANNED' | 'REPORTED' | undefined;
     type UserRole = 'STUDENT' | 'STAFF';
     type AvailabilitiesOptions = 'UNAVAILABLE' | 'AVAILABLE' | 'VERY_AVAILABLE';
 }

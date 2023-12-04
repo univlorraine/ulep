@@ -10,7 +10,7 @@ declare global {
     type Pedagogy = 'TANDEM' | 'ETANDEM' | 'BOTH';
     type Role = 'STAFF' | 'STUDENT';
     type TandemStatus = 'ACTIVE' | 'UNACTIVE' | 'DRAFT' | 'VALIDATED_BY_ONE_UNIVERSITY';
-    type UserStatus = 'ACTIVE' | 'REPORTED' | 'BANNED';
+    type UserStatus = 'ACTIVE' | 'REPORTED' | 'BANNED' | 'CANCELED';
     type AvailabilitiesOptions = 'UNAVAILABLE' | 'AVAILABLE' | 'VERY_AVAILABLE';
 }
 

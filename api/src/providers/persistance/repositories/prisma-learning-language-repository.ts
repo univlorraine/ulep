@@ -98,7 +98,7 @@ export class PrismaLearningLanguageRepository
                   },
                   {
                     status: {
-                      not: UserStatus.BANNED,
+                      notIn: [UserStatus.BANNED, UserStatus.CANCELED],
                     },
                   },
                 ],
@@ -142,7 +142,7 @@ export class PrismaLearningLanguageRepository
               },
               {
                 status: {
-                  not: UserStatus.BANNED,
+                  notIn: [UserStatus.BANNED, UserStatus.CANCELED],
                 },
               },
             ],
@@ -225,7 +225,7 @@ export class PrismaLearningLanguageRepository
                   },
                   {
                     status: {
-                      not: UserStatus.BANNED,
+                      notIn: [UserStatus.BANNED, UserStatus.CANCELED],
                     },
                   },
                 ],
@@ -278,7 +278,7 @@ export class PrismaLearningLanguageRepository
             },
             {
               status: {
-                not: UserStatus.BANNED,
+                notIn: [UserStatus.BANNED, UserStatus.CANCELED],
               },
             },
             {

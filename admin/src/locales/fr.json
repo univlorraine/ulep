@@ -53,6 +53,7 @@
         "active": "Actif",
         "age": "Age",
         "banned": "Bannis",
+        "canceled": "Annulé",
         "content": "Contenu",
         "disconnect": "Déconnexion",
         "email": "Email",
@@ -76,6 +77,7 @@
         "userStatus": {
             "active": "Actif",
             "banned": "Bannis",
+            "canceled": "Annulé",
             "reported": "Signalé"
         },
         "genderValues": {
