@@ -72,7 +72,7 @@ interface TextInputProps {
 }
 
 const TextInput: React.FC<TextInputProps> = ({
-    autocomplete,
+    autocomplete = 'off',
     customHeight,
     errorMessage,
     onChange,

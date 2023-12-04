@@ -84,13 +84,7 @@ const ReportContent: React.FC<ReportContentProps> = ({ onGoBack, onReportSent })
                         title={t('home_page.report.category_title')}
                     />
                 </div>
-                <TextInput
-                    autocomplete="off"
-                    onChange={setNote}
-                    title={t('home_page.report.note')}
-                    type="text-area"
-                    value={note}
-                />
+                <TextInput onChange={setNote} title={t('home_page.report.note')} type="text-area" value={note} />
                 <div className={styles['button-container']}>
                     <button
                         className={`primary-button ${!selectedCategory ? 'disabled' : ''}`}

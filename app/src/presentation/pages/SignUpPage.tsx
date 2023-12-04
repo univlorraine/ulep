@@ -207,7 +207,6 @@ const SignUpPage: React.FC = () => {
                 {selectedRole && (
                     <div className="large-margin-top">
                         <TextInput
-                            autocomplete="off"
                             onChange={setDepartment}
                             title={t('signup_page.department_title')}
                             value={department}
@@ -217,7 +216,6 @@ const SignUpPage: React.FC = () => {
 
                 {selectedRole === 'STAFF' && (
                     <TextInput
-                        autocomplete="off"
                         onChange={setStaffFunction}
                         title={t('signup_page.function_title')}
                         value={staffFunction}
@@ -225,12 +223,7 @@ const SignUpPage: React.FC = () => {
                 )}
 
                 {selectedRole === 'STUDENT' && (
-                    <TextInput
-                        autocomplete="off"
-                        onChange={setDiploma}
-                        title={t('signup_page.diplome_title')}
-                        value={diploma}
-                    />
+                    <TextInput onChange={setDiploma} title={t('signup_page.diplome_title')} value={diploma} />
                 )}
                 {displayError && <ErrorMessage description={t('signup_page.error')} />}
                 <div className={styles['bottom-container']}>

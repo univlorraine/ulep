@@ -225,7 +225,6 @@ const SignUpInformationsPage: React.FC = () => {
                 </div>
 
                 <TextInput
-                    autocomplete="off"
                     errorMessage={errorMessage?.type === 'age' ? errorMessage.message : undefined}
                     onChange={(age: string) => setAge(Number(age))}
                     placeholder={t('signup_informations_page.placeholder_age')}
@@ -246,7 +245,6 @@ const SignUpInformationsPage: React.FC = () => {
 
                 {profileSignUp.university?.hasCode && (
                     <TextInput
-                        autocomplete="off"
                         errorMessage={errorMessage?.type === 'code' ? errorMessage.message : undefined}
                         onChange={setCode}
                         placeholder={t('signup_informations_page.placeholder_code')}
