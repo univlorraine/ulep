@@ -57,8 +57,20 @@ const LoginForm: React.FC<LoginFormProps> = ({ goBack, onLogin }) => {
                     <div className="ion-text-center">
                         <p className={style.subtitle}>{t('login_page.subtitle')}</p>
                     </div>
-                    <TextInput onChange={setEmail} title={t('global.email')} type="email" value={email} />
-                    <TextInput onChange={setPassword} title={t('global.password')} type="password" value={password} />
+                    <TextInput
+                        autocomplete="email"
+                        onChange={setEmail}
+                        title={t('global.email')}
+                        type="email"
+                        value={email}
+                    />
+                    <TextInput
+                        autocomplete="current-password"
+                        onChange={setPassword}
+                        title={t('global.password')}
+                        type="password"
+                        value={password}
+                    />
                     <div className={style['bottom-container']}>
                         <button className="primary-button">{t('login_page.button')}</button>
 
