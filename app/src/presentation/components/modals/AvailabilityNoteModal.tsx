@@ -26,6 +26,7 @@ const AvailabilityNoteModal: React.FC<AvailabilityNoteModalProps> = ({ isVisible
                 <div className={styles.container}>
                     <span className={styles.title}>{t('signup_availabilities_page.modal.title_note')}</span>
                     <TextInput
+                        autocomplete="off"
                         customHeight={170}
                         onChange={setNote}
                         title={t('signup_availabilities_page.modal.note')}
