@@ -13,8 +13,8 @@ class ProfileQueryWhere {
     lastname?: string;
     role?: string;
     status?: UserStatus;
+    university?: UserStatus;
   };
-  university?: string;
   masteredLanguageCode?: string;
   nativeLanguageCode?: string;
 }

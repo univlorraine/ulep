@@ -52,6 +52,9 @@ const ProfileFilter = (props: any) => {
             <ReferenceInput label={translate('profiles.country')} reference="countries" source="user.country">
                 <SelectInput label={translate('profiles.country')} optionText="name" optionValue="code" />
             </ReferenceInput>
+            <ReferenceInput label={translate('global.university')} reference="universities" source="user.university">
+                <SelectInput label={translate('global.university')} optionText="name" optionValue="id" />
+            </ReferenceInput>
             {sortedLanguages && (
                 <SelectInput
                     choices={sortedLanguages}
