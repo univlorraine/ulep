@@ -19,6 +19,9 @@ const AdministratorList = (props: any) => {
         >
             <Datagrid rowClick="edit">
                 <TextField label={translate('global.email')} source="email" />
+                <TextField label={translate('global.firstname')} source="firstname" />
+                <TextField label={translate('global.lastname')} source="lastname" />
+
                 {identity.isCentralUniversity && (
                     <ReferenceField
                         emptyText={translate('administrators.all')}

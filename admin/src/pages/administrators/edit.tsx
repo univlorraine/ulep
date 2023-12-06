@@ -6,6 +6,8 @@ import Administrator from '../../entities/Administrator';
 interface AdministratorUpdatePayload {
     id: string;
     email?: string;
+    firstname?: string;
+    lastname?: string;
     password?: string;
     universityId?: string;
 }
@@ -16,10 +18,19 @@ const EditAdministrator = () => {
     const redirect = useRedirect();
     const notify = useNotify();
 
-    const handleSubmit = async (id: string, email: string, password?: string, universityId?: string) => {
+    const handleSubmit = async (
+        id: string,
+        email: string,
+        firstname: string,
+        lastname: string,
+        password?: string,
+        universityId?: string
+    ) => {
         const payload: AdministratorUpdatePayload = {
             id,
             email,
+            firstname,
+            lastname,
             password,
             universityId,
         };
@@ -52,9 +63,15 @@ const EditAdministrator = () => {
                 render={(record) => (
                     <AdministratorForm
                         email={record.email}
-                        handleSubmit={(email: string, password?: string, universityId?: string) =>
-                            handleSubmit(record.id, email, password, universityId)
-                        }
+                        firstname={record.firstname}
+                        handleSubmit={(
+                            email: string,
+                            firstname: string,
+                            lastname: string,
+                            password?: string,
+                            universityId?: string
+                        ) => handleSubmit(record.id, email, firstname, lastname, password, universityId)}
+                        lastname={record.lastname}
                         type="update"
                         universityId={record.universityId || 'central'}
                     />
