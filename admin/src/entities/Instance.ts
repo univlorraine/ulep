@@ -10,6 +10,7 @@ type Instance = {
     secondaryColor: string;
     secondaryBackgroundColor: string;
     secondaryDarkColor: string;
+    isInMaintenance: boolean;
 };
 
 export default Instance;

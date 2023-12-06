@@ -50,10 +50,17 @@
         "primaryColor": "Primary color of the application",
         "primaryBackgroundColor": "Primary color of the application's background image",
         "maintenance": "Maintenance",
+        "mainteance_update": "Instance has been updated",
         "primaryDarkColor": "Dark shade of the primary color used for the application background",
         "secondaryColor": "Secondary color of the application",
         "secondaryBackgroundColor": "Secondary color of the application's background image",
         "secondaryDarkColor": "Dark shade of the secondary color used for the application background",
+        "update_error": "An error occurred while updating the instance",
+        "purge_modal": {
+            "cancel": "Cancel",
+            "message": "You are about to delete all data from the instance. This action is irreversible. Do you confirm?",
+            "confirm": "Confirm"
+        },
         "edit": {
             "error": "An error occurred while updating the instance",
             "name": "Instance name",
