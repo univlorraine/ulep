@@ -52,7 +52,7 @@
     "global": {
         "active": "Actif",
         "age": "Age",
-        "banned": "Bannis",
+        "blocked": "Bloqué",
         "canceled": "Annulé",
         "content": "Contenu",
         "disconnect": "Déconnexion",
@@ -76,7 +76,7 @@
         "both": "Les deux",
         "userStatus": {
             "active": "Actif",
-            "banned": "Bannis",
+            "blocked": "Bloqué",
             "canceled": "Annulé",
             "reported": "Signalé"
         },
