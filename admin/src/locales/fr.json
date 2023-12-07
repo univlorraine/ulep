@@ -389,9 +389,9 @@
             },
             "actions": {
                 "globalRoutine": {
-                    "ctaLabel": "Lancer la routine globale",
+                    "ctaLabel": "Lancer le calcul global",
                     "runningLabel": "Routine globale en cours d'exécution",
-                    "errorLoading": "Une erreur est survenue lors du chargement de l'état de la dernière routine globale"
+                    "errorLoading": "Une erreur est survenue lors du chargement de l'état de le dernier calcul global"
                 }
             },
             "filters": {
@@ -414,13 +414,13 @@
                 }
             },
             "globalRoutineModal": {
-                "description": "Lancer la routine globale peut prendre quelques minutes. Les tandems proposés par une ancienne exécution seront perdus.",
+                "description": "Lancer le calcul global peut prendre quelques minutes. Les tandems proposés par une ancienne exécution seront perdus.",
                 "confirmMessage": "Voulez-vous continuer ?",
                 "ctaLabels": {
                     "confirm": "Confirmer",
                     "cancel": "Annuler"
                 },
-                "error": "Une erreur est survenue lors de l'exécution de la routine globale"
+                "error": "Une erreur est survenue lors de l'exécution du calcul global"
             },
             "tableColumns": {
                 "name": "Nom",
@@ -460,8 +460,8 @@
                     "title": "Attente validation"
                 },
                 "matches": {
-                    "error": "Une erreur est survenue lors de la récupération des propositions de la routine individuelle",
-                    "title": "Suggestion routine individuelle",
+                    "error": "Une erreur est survenue lors de la récupération des meilleurs appariements pour cet utilisateur",
+                    "title": "Meilleurs appariements pour cet utilisateur",
                     "noResults": "Aucun résultats"
                 },
                 "tableColumns": {
@@ -479,7 +479,7 @@
                     "spokenLanguages": "Langues parlées"
                 },
                 "globalSuggestions": {
-                    "title": "Suggestion routine globale",
+                    "title": "Tandem proposé par le calcul global",
                     "titleNotCentralUniversity": "Tandem proposé",
                     "noResult": "Aucun résultat"
                 },

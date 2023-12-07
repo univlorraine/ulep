@@ -277,9 +277,9 @@
             },
             "actions": {
                 "globalRoutine": {
-                    "ctaLabel": "Start global routine",
-                    "runningLabel": "Global routine currently on-going",
-                    "errorLoading": "An error occured while loading last global routine state"
+                    "ctaLabel": "Start overall matching process",
+                    "runningLabel": "Global matching process currently on-going",
+                    "errorLoading": "An error occured while loading last global matching process state"
                 }
             },
             "filters": {
@@ -299,13 +299,13 @@
                 }
             },
             "globalRoutineModal": {
-                "description": "Global routine can take several minutes. Results of previous executions will be lost.",
+                "description": "Global matching process can take several minutes. Results of previous executions will be lost.",
                 "confirmMessage": "Do you wish to continue ?",
                 "ctaLabels": {
                     "confirm": "Confirm",
                     "cancel": "Cancel"
                 },
-                "error": "An error occured while starting global routine"
+                "error": "An error occured while starting global matching process"
             },
             "tableColumns": {
                 "name": "Name",
@@ -344,8 +344,8 @@
                     "title": "Pending validation"
                 },
                 "matches": {
-                    "error": "An error occured while fetching individual routine suggestions",
-                    "title": "Individual routine suggestions",
+                    "error": "An error occured while fetching individual matching process suggestions",
+                    "title": "Best matches for this user",
                     "noResults": "No results"
                 },
                 "tableColumns": {
@@ -363,7 +363,7 @@
                     "spokenLanguages": "Spoken languages"
                 },
                 "globalSuggestions": {
-                    "title": "Global routine suggestion",
+                    "title": "Global Tandem suggested with overall process suggestion",
                     "titleNotCentralUniversity": "Proposed tandem",
                     "noResult": "No result"
                 },
