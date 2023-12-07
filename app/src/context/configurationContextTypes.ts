@@ -26,6 +26,7 @@ import { GetInitialUrlUsecase } from '../domain/usecases/AuthStandardFlow/GetIni
 import GetUniversityInterface from '../domain/interfaces/GetUniversity.interface';
 
 export interface ConfigContextValueType {
+    accessToken: string;
     askForAccountDeletion: AskForAccountDeletionUsecaseInterface;
     askForLanguage: AskForLanguageUsecaseInterface;
     askForLearningLanguage: AskForLearningLanguageUsecaseInterface;
