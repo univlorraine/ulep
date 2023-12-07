@@ -8,7 +8,7 @@
     },
     "global": {
         "active": "Active",
-        "banned": "Banned",
+        "blocked": "Blocked",
         "content": "Content",
         "canceled": "Canceled",
         "disconnect": "Disconnect",
@@ -30,7 +30,7 @@
         "both": "Both",
         "userStatus": {
             "active": "Actif",
-            "banned": "Bannis",
+            "blocked": "Blocked",
             "canceled": "Annulé",
             "reported": "Signalé"
         },
