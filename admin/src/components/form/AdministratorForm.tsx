@@ -8,15 +8,32 @@ import UniversityPicker from '../UniversityPicker';
 
 interface AdministratorFormProps {
     email?: string;
-    handleSubmit: (email: string, password?: string, universityId?: string) => void;
+    firstname?: string;
+    handleSubmit: (
+        email: string,
+        firstname: string,
+        lastname: string,
+        password?: string,
+        universityId?: string
+    ) => void;
+    lastname?: string;
     universityId?: string;
     type: string;
 }
 
-const AdministratorForm: React.FC<AdministratorFormProps> = ({ email, handleSubmit, universityId, type }) => {
+const AdministratorForm: React.FC<AdministratorFormProps> = ({
+    email,
+    firstname,
+    handleSubmit,
+    lastname,
+    universityId,
+    type,
+}) => {
     const translate = useTranslate();
     const [newEmail, setNewEmail] = useState<string>(email || '');
     const [password, setPassword] = useState<string>('');
+    const [newFirstname, setNewFirstname] = useState<string>(firstname || '');
+    const [newLastname, setNewLastname] = useState<string>(lastname || '');
     const [university, setUniversity] = useState<University>();
     const { data: identity, isLoading: isLoadingIdentity } = useGetIdentity();
 
@@ -28,7 +45,13 @@ const AdministratorForm: React.FC<AdministratorFormProps> = ({ email, handleSubm
             return handleSubmit(newEmail, password, identity.universityId);
         }
 
-        return handleSubmit(newEmail, password, university?.parent ? university?.id : undefined);
+        return handleSubmit(
+            newEmail,
+            newFirstname,
+            newLastname,
+            password,
+            university?.parent ? university?.id : undefined
+        );
     };
 
     return (
@@ -55,6 +78,32 @@ const AdministratorForm: React.FC<AdministratorFormProps> = ({ email, handleSubm
                 </>
             )}
 
+            <Typography variant="subtitle1">{translate('global.firstname')}</Typography>
+            <Box alignItems="center" display="flex" flexDirection="row">
+                <Input
+                    name="Firstname"
+                    onChange={(e) => setNewFirstname(e.target.value)}
+                    placeholder={translate('global.firstname')}
+                    sx={inputStyle}
+                    value={newFirstname}
+                    disableUnderline
+                    required
+                />
+            </Box>
+
+            <Typography variant="subtitle1">{translate(`global.lastname`)}</Typography>
+            <Box alignItems="center" display="flex" flexDirection="row">
+                <Input
+                    name="Lastname"
+                    onChange={(e) => setNewLastname(e.target.value)}
+                    placeholder={translate('global.lastname')}
+                    sx={inputStyle}
+                    value={newLastname}
+                    disableUnderline
+                    required
+                />
+            </Box>
+
             <Typography variant="subtitle1">{translate(`administrators.${type}.password`)}</Typography>
             <Box alignItems="center" display="flex" flexDirection="row">
                 <Input
@@ -73,6 +122,8 @@ const AdministratorForm: React.FC<AdministratorFormProps> = ({ email, handleSubm
                 disabled={
                     (!university && identity.isCentralUniversity) ||
                     (email && !password ? false : !password || !isPasswordValid(password)) ||
+                    !newFirstname ||
+                    !newLastname ||
                     !newEmail
                 }
                 onClick={onCreatePressed}

@@ -106,6 +106,14 @@ export class AdministratorResponse {
   @Expose({ groups: ['read'] })
   email: string;
 
+  @Swagger.ApiProperty({ type: 'string' })
+  @Expose({ groups: ['read'] })
+  firstname: string;
+
+  @Swagger.ApiProperty({ type: 'string' })
+  @Expose({ groups: ['read'] })
+  lastname: string;
+
   @Swagger.ApiProperty({ type: 'string', format: 'uuid' })
   @Expose({ groups: ['read'] })
   universityId?: string;
@@ -119,6 +127,8 @@ export class AdministratorResponse {
       id: user.id,
       email: user.email,
       universityId: user.attributes?.universityId?.[0],
+      firstname: user.firstName,
+      lastname: user.lastName,
     });
   }
 }
@@ -127,6 +137,14 @@ export class CreateAdministratorRequest {
   @Swagger.ApiProperty({ type: 'string', format: 'email' })
   @IsEmail()
   email: string;
+
+  @Swagger.ApiProperty({ type: 'string' })
+  @IsString()
+  firstname: string;
+
+  @Swagger.ApiProperty({ type: 'string' })
+  @IsString()
+  lastname: string;
 
   @Swagger.ApiProperty({ type: 'string', format: 'uuid' })
   @IsUUID()
@@ -143,16 +161,26 @@ export class UpdateAdministratorRequest {
   @IsUUID()
   id: string;
 
-  @Swagger.ApiProperty({ type: 'string', format: 'email' })
+  @Swagger.ApiPropertyOptional({ type: 'string', format: 'email' })
   @IsOptional()
   email?: string;
 
-  @Swagger.ApiProperty({ type: 'string', format: 'uuid' })
+  @Swagger.ApiPropertyOptional({ type: 'string' })
+  @IsString()
+  @IsOptional()
+  firstname?: string;
+
+  @Swagger.ApiPropertyOptional({ type: 'string' })
+  @IsString()
+  @IsOptional()
+  lastname?: string;
+
+  @Swagger.ApiPropertyOptional({ type: 'string', format: 'uuid' })
   @IsUUID()
   @IsOptional()
   universityId?: string;
 
-  @Swagger.ApiProperty({ type: 'string' })
+  @Swagger.ApiPropertyOptional({ type: 'string' })
   @IsString()
   @IsOptional()
   password?: string;

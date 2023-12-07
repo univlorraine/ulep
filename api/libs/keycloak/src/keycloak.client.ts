@@ -364,6 +364,8 @@ export class KeycloakClient {
         },
         body: JSON.stringify({
           email: props.email,
+          firstName: props.firstname,
+          lastName: props.lastname,
           enabled: true,
           credentials: [
             {
@@ -397,6 +399,8 @@ export class KeycloakClient {
   ): Promise<UserRepresentation> {
     const payload: UpdateAdministratorPayload = {
       email: props.email,
+      firstName: props.firstname,
+      lastName: props.lastname,
       attributes: {
         universityId: props.universityId,
       },
