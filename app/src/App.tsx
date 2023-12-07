@@ -30,7 +30,10 @@ import useFetchI18NBackend from './presentation/hooks/useFetchI18NBackend';
 import ErrorPage from './presentation/pages/ErrorPage';
 import AppUrlListener from './presentation/router/AppUrlListener';
 import MaintenancePage from './presentation/pages/MaintenancePage';
+import { polyfillCountryFlagEmojis } from "country-flag-emoji-polyfill";
 
+
+polyfillCountryFlagEmojis();
 setupIonicReact();
 
 if(import.meta.env.VITE_SENTRY_DSN){
