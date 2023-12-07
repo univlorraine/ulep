@@ -26,16 +26,27 @@ import UpdateNotificationPermissionUsecase from '../domain/usecases/UpdateNotifi
 import { ConfigContextValueType } from './configurationContextTypes';
 import GetUniversityUsecase from '../domain/usecases/GetUniversityUsecase';
 
-const getConfigContextValue = (
-    apiUrl: string,
-    languageCode: string,
-    accessToken: string,
-    refreshToken: string,
-    setProfile: Function,
-    setTokens: Function,
-    setUser: Function,
-    configuration: Configuration
-): ConfigContextValueType => {
+interface GetConfigContextValueProps {
+    apiUrl: string;
+    languageCode: string;
+    accessToken: string;
+    refreshToken: string;
+    setProfile: Function;
+    setTokens: Function;
+    setUser: Function;
+    configuration: Configuration;
+}
+
+const getConfigContextValue = ({
+    apiUrl,
+    languageCode,
+    accessToken,
+    refreshToken,
+    setProfile,
+    setTokens,
+    setUser,
+    configuration,
+}: GetConfigContextValueProps): ConfigContextValueType => {
     const cameraAdapter = new CameraAdapter();
     const domainHttpAdapter = new DomainHttpAdapter(apiUrl, accessToken, refreshToken, languageCode, setTokens);
 
@@ -66,6 +77,7 @@ const getConfigContextValue = (
     const retrievePerson = new RetrievePersonInfoUsecase(domainHttpAdapter);
 
     return {
+        accessToken,
         askForAccountDeletion,
         askForLanguage,
         askForLearningLanguage,

@@ -4,15 +4,15 @@ import { ConfigContextValueType } from './configurationContextTypes';
 import getConfigContextValue from './getConfigurationContextValue';
 
 export const ConfigContext = createContext<ConfigContextValueType>(
-    getConfigContextValue(
-        '',
-        '',
-        '',
-        '',
-        () => null,
-        () => null,
-        () => null,
-        new Configuration(
+    getConfigContextValue({
+        apiUrl: '',
+        languageCode: '',
+        accessToken:'',
+        refreshToken:'',
+        setProfile: () => null,
+        setTokens: () => null,
+        setUser: () => null,
+        configuration: new Configuration(
             'Université de Lorraine',
             'Université de Lorraine',
             'contact@email.com',
@@ -27,7 +27,7 @@ export const ConfigContext = createContext<ConfigContextValueType>(
             '#7CB8B8',
             false
         )
-    )
+        })
 );
 
 export const useConfig = () => useContext(ConfigContext);

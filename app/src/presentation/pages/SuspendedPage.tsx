@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useConfig } from '../../context/ConfigurationContext';
 import { useStoreActions, useStoreState } from '../../store/storeTypes';
@@ -13,14 +13,29 @@ interface SuspendedPageProps {
 
 const SuspendedPage: React.FC<SuspendedPageProps> = ({ status }) => {
     const { t } = useTranslation();
-    const { configuration } = useConfig();
+    const { accessToken, configuration, getProfile } = useConfig();
     const profile = useStoreState((state) => state.profile);
     const logout = useStoreActions((state) => state.logout);
+    const setProfile = useStoreActions((state) => state.setProfile);
     const [isReportMode, setReportMode] = useState<boolean>(false);
 
     const disconnect = async () => {
         await logout();
     };
+
+    const reloadProfile = async () => {
+        const profile = await getProfile.execute(accessToken);
+
+        if(profile instanceof Error){
+            return await disconnect();
+        }
+
+        return setProfile({ profile });
+    }
+
+    useEffect(() => {
+        reloadProfile();
+    }, []);
 
     return (
         <WebLayoutCentered

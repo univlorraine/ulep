@@ -85,14 +85,16 @@ const AppContext = () => {
     return (
         <ConfigContext.Provider
             value={getConfigContextValue(
-                import.meta.env.VITE_API_URL || apiUrl,
-                i18n.language,
-                accessToken,
-                refreshToken,
-                setProfile,
-                setTokens,
-                setUser,
-                configuration
+                {
+                    apiUrl: import.meta.env.VITE_API_URL || apiUrl,
+                    languageCode: i18n.language,
+                    accessToken,
+                    refreshToken,
+                    setProfile,
+                    setTokens,
+                    setUser,
+                    configuration
+                }
             )}
         >
             <IonReactRouter>
