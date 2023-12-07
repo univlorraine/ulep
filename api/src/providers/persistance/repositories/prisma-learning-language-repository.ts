@@ -375,7 +375,7 @@ export class PrismaLearningLanguageRepository
           orderByPayload = {
             Profile: {
               User: {
-                firstname: orderBy.order,
+                lastname: orderBy.order,
               },
             },
           };
