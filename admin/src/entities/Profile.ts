@@ -16,4 +16,4 @@ export type Profile = {
 };
 
 export const getProfileDisplayName = (profile?: Profile): string =>
-    profile ? `${profile.user.firstname} ${profile.user.lastname}` : '';
+    profile ? `${profile.user.lastname} ${profile.user.firstname}` : '';
