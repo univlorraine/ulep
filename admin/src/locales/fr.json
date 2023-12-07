@@ -96,10 +96,17 @@
         "primaryColor": "Couleur primaire de l'application",
         "primaryBackgroundColor": "Couleur primaire de l'image de fond de l'application",
         "maintenance": "Mise en maintenance",
+        "mainteance_update": "L'instance a bien été modifié",
         "primaryDarkColor": "Nuance sombre de la couleur primaire utilisé pour le fond de l'application",
         "secondaryColor": "Couleur secondaire de l'application",
         "secondaryBackgroundColor": "Couleur secondaire de l'image de fond de l'application",
         "secondaryDarkColor": "Nuance sombre de la couleur secondaire utilisé pour le fond de l'application",
+        "update_error": "Une erreur est survenue pendant la mise à jour de l'instance",
+        "purge_modal": {
+            "cancel": "Annuler",
+            "message": "Voulez vous vraiment réinitialiser l'instance ?",
+            "confirm": "Confirmer"
+        },
         "edit": {
             "error": "Une erreur est survenue pendant la mise à jour de l'instance",
             "name": "Nom de l'instance",
@@ -238,7 +245,7 @@
     },
     "purge": {
         "error": "Une erreur est survenue durant la purge du système",
-        "title": "Purge le système"
+        "title": "Réinitialisation"
     },
     "questions": {
         "create": {
