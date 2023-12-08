@@ -24,7 +24,7 @@ const useGetTandems = ({profile, showToast, t}: useGetTandemsProps, deps: any[])
             const waitingLearningLanguages: Tandem[] = [];
             profile?.learningLanguages.map((learningLanguage) => {
                 if (!result.find((tandem) => tandem.learningLanguage.id === learningLanguage.id)) {
-                    waitingLearningLanguages.push(new Tandem(learningLanguage.id, 'DRAFT', learningLanguage, 'A0'));
+                    waitingLearningLanguages.push(new Tandem(learningLanguage.id, 'DRAFT', learningLanguage, 'A0', 'TANDEM'));
                 }
             });
 
