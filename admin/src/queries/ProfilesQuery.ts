@@ -9,8 +9,8 @@ export interface ProfilesParams {
             lastname?: string;
             role?: string;
             status?: UserStatus;
+            university?: string;
         };
-        university?: string;
         masteredLanguageCode?: string;
         nativeLanguageCode?: string;
     };
@@ -52,9 +52,9 @@ const ProfilesQuery = (params: ProfilesParams): string => {
                       lastname: params.filter.user.lastname,
                       role: params.filter.user.role,
                       status: params.filter.user.status,
+                      university: params.filter.user.university,
                   }
                 : {},
-            university: params.filter.university,
             masteredLanguageCode: params.filter.masteredLanguageCode,
             nativeLanguageCode: params.filter.nativeLanguageCode,
         },

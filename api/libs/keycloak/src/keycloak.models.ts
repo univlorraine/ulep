@@ -85,12 +85,16 @@ export interface CreateUserProps {
 
 export interface CreateAdministratorProps {
   email: string;
+  firstname: string;
+  lastname: string;
   password: string;
   universityId?: string;
 }
 
 export interface UpdateAdministratorProps {
   id: string;
+  firstname?: string;
+  lastname?: string;
   email?: string;
   password?: string;
   universityId?: string;
@@ -98,6 +102,8 @@ export interface UpdateAdministratorProps {
 
 export interface UpdateAdministratorPayload {
   email: string;
+  firstName?: string;
+  lastName?: string;
   credentials?: {
     type: string;
     value: string;

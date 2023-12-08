@@ -46,10 +46,12 @@ import ServiceClosePage from '../pages/ServiceClosePage';
 
 const OfflineRouter: React.FC = () => {
     const profile = useStoreState((store) => store.profile);
-    const {openDate, closeDate, isUniversityOpen} = useIsUniversityOpen(profile?.user.university.id, [profile?.user.university.id]);
+    const { openDate, closeDate, isUniversityOpen } = useIsUniversityOpen(profile?.user.university.id, [
+        profile?.user.university.id,
+    ]);
 
-    if (profile && profile.user.status === 'BANNED') {
-        return <SuspendedPage />;
+    if (profile && (profile.user.status === 'BANNED' || profile.user.status === 'CANCELED')) {
+        return <SuspendedPage status={profile.user.status} />;
     }
 
     if (!isUniversityOpen && openDate && closeDate) {

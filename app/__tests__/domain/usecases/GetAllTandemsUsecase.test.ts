@@ -11,6 +11,7 @@ const usecaseResponse: TandemCommand[] = [
             id: 'id',
             level: 'B1',
             name: 'Français',
+            learningType: 'ETANDEM',
             code: 'FR',
             profile: {
                 id: 'id',
@@ -75,6 +76,7 @@ const usecaseResponse: TandemCommand[] = [
             code: 'EN',
             name: 'English',
             level: 'A1',
+            learningType: 'ETANDEM'
         },
     },
 ];

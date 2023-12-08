@@ -41,7 +41,13 @@ const ForgotPasswordForm = () => {
                     <div className={`ion-text-center`}>
                         <h1 className={style.title}>{t('forgot_password_page.title')}</h1>
                     </div>
-                    <TextInput onChange={setEmail} title={t('global.email')} value={email} type="email" />
+                    <TextInput
+                        autocomplete="email"
+                        onChange={setEmail}
+                        title={t('global.email')}
+                        value={email}
+                        type="email"
+                    />
                     <div className={style['bottom-container']}>
                         <button className="primary-button">{t('forgot_password_page.button')}</button>
                     </div>

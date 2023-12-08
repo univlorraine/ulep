@@ -96,10 +96,10 @@ export class PrismaProfileRepository implements ProfileRepository {
       ? {
           User: {
             Nationality: { code: where.user.country },
+            Organization: { id: where.user.university },
             email: where.user.email,
             firstname: where.user.firstname,
             lastname: where.user.lastname,
-            organization_id: where.user.university,
             role: where.user.role,
             status: where.user.status,
           },

@@ -52,6 +52,9 @@ const ProfileFilter = (props: any) => {
             <ReferenceInput label={translate('profiles.country')} reference="countries" source="user.country">
                 <SelectInput label={translate('profiles.country')} optionText="name" optionValue="code" />
             </ReferenceInput>
+            <ReferenceInput label={translate('global.university')} reference="universities" source="user.university">
+                <SelectInput label={translate('global.university')} optionText="name" optionValue="id" />
+            </ReferenceInput>
             {sortedLanguages && (
                 <SelectInput
                     choices={sortedLanguages}
@@ -74,7 +77,8 @@ const ProfileFilter = (props: any) => {
                 choices={[
                     { id: 'ACTIVE', name: translate('global.userStatus.active') },
                     { id: 'REPORTED', name: translate('global.userStatus.reported') },
-                    { id: 'BANNED', name: translate('global.userStatus.banned') },
+                    { id: 'BANNED', name: translate('global.userStatus.blocked') },
+                    { id: 'CANCELED', name: translate('global.userStatus.canceled') },
                 ]}
                 label={translate('profiles.status')}
                 source="user.status"
@@ -175,7 +179,8 @@ const ProfileList = (props: any) => {
                         >
                             <MenuItem value="ACTIVE">{translate('global.active')}</MenuItem>
                             <MenuItem value="REPORTED">{translate('global.reported')}</MenuItem>
-                            <MenuItem value="BANNED">{translate('global.banned')}</MenuItem>
+                            <MenuItem value="BANNED">{translate('global.blocked')}</MenuItem>
+                            <MenuItem value="CANCELED">{translate('global.canceled')}</MenuItem>
                         </Select>
                     )}
                 />

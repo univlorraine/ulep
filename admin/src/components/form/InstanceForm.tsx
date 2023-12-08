@@ -52,6 +52,7 @@ const InstanceForm: React.FC<InstanceFormProps> = ({ handleSubmit, instance }) =
             secondaryColor: newSecondaryColor,
             secondaryBackgroundColor: newSecondaryBackgroundColor,
             secondaryDarkColor: newSecondaryDarkColor,
+            isInMaintenance: instance.isInMaintenance,
         };
 
         return handleSubmit(newInstance);

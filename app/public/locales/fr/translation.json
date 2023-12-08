@@ -65,6 +65,11 @@
         "signup_title": "Première fois sur l'application ?",
         "signup_button": "Créer un compte"
     },
+    "confirm_modal": {
+        "cancel": "Annuler",
+        "title": "Voulez-vous vraiment supprimer votre compte ?",
+        "validate": "Confirmer"
+    },
     "home_page": {
         "profile": {
             "disconnect": "Se déconnecter",
@@ -116,7 +121,12 @@
             "place": "🏖️ Son endroit préféré",
             "power": "⚡️ Son super pouvoir",
             "title": "Nous avons trouvé ton tandem 🎉",
-            "travel": "✈ Ses voyages"
+            "travel": "✈ Ses voyages",
+            "type": {
+                "BOTH": "Etandem / Tandem",
+                "ETANDEM": "Etandem",
+                "TANDEM": "Tandem"
+            }
         },
         "waiting_tandem": {
             "button": "Faire une nouvelle demande",
@@ -130,7 +140,7 @@
         "button": "Valider et continuer",
         "error": "Erreur pendant le chargement de l'instance",
         "subtitle": "Choisis ton instance dans la liste ci-dessous",
-        "title": "Votre instance"
+        "title": "Votre programme"
     },
     "languages": {
         "french": "Français",
@@ -427,7 +437,9 @@
     "suspended_page": {
         "contact_us": "Contacte-nous pour plus d'informations.",
         "subtitle": "Nous sommes désolés mais ton compte a été suspendu pour non-respect de nos règles et conditions d'utilisation.",
+        "subtitle_canceled": "Nous sommes désolés mais ton compte a été annulé",
         "title": "Compte suspendu",
+        "title_canceled": "Compte annulé",
         "validate_button": "Nous contacter"
     },
     "languages_code": {

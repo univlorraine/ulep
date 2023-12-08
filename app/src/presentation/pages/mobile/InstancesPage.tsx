@@ -14,7 +14,7 @@ interface Instance {
 const instances: Instance[] = [
     {
         image: ULLogo,
-        name: 'Université de Lorraine',
+        name: 'Université de Lorraine et ses partenaires',
         apiUrl: import.meta.env.VITE_UL_API_URL,
     },
 ];

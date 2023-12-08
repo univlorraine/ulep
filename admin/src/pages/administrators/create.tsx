@@ -4,6 +4,8 @@ import AdministratorForm from '../../components/form/AdministratorForm';
 
 interface AdministratorCreatePayload {
     email: string;
+    firstname: string;
+    lastname: string;
     password?: string;
     universityId?: string;
 }
@@ -14,9 +16,17 @@ const CreateAdministrator = () => {
     const redirect = useRedirect();
     const notify = useNotify();
 
-    const handleSubmit = async (email: string, password?: string, universityId?: string) => {
+    const handleSubmit = async (
+        email: string,
+        firstname: string,
+        lastname: string,
+        password?: string,
+        universityId?: string
+    ) => {
         const payload: AdministratorCreatePayload = {
             email,
+            firstname,
+            lastname,
             password,
             universityId,
         };

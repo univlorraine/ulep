@@ -1,7 +1,7 @@
 {
     "name": "ulep",
     "private": true,
-    "version": "0.0.22",
+    "version": "0.0.28",
     "type": "module",
     "scripts": {
         "dev": "vite",
@@ -34,6 +34,7 @@
         "@sentry/react": "7.73.0",
         "@types/react-router": "^5.1.20",
         "@types/react-router-dom": "^5.3.3",
+        "country-flag-emoji-polyfill": "^0.1.4",
         "date-fns": "^2.30.0",
         "easy-peasy": "^6.0.1",
         "esbuild": "^0.18.11",

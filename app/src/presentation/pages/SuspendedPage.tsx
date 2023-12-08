@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useConfig } from '../../context/ConfigurationContext';
 import { useStoreActions, useStoreState } from '../../store/storeTypes';
@@ -7,16 +7,35 @@ import ReportModal from '../components/modals/ReportModal';
 import styles from './css/Suspended.module.css';
 import { AvatarPlaceholderPng } from '../../assets';
 
-const SuspendedPage: React.FC = () => {
+interface SuspendedPageProps {
+    status: UserStatus;
+}
+
+const SuspendedPage: React.FC<SuspendedPageProps> = ({ status }) => {
     const { t } = useTranslation();
-    const { configuration } = useConfig();
+    const { accessToken, configuration, getProfile } = useConfig();
     const profile = useStoreState((state) => state.profile);
     const logout = useStoreActions((state) => state.logout);
+    const setProfile = useStoreActions((state) => state.setProfile);
     const [isReportMode, setReportMode] = useState<boolean>(false);
 
     const disconnect = async () => {
         await logout();
+    };
+
+    const reloadProfile = async () => {
+        const profile = await getProfile.execute(accessToken);
+
+        if(profile instanceof Error){
+            return await disconnect();
+        }
+
+        return setProfile({ profile });
     }
+
+    useEffect(() => {
+        reloadProfile();
+    }, []);
 
     return (
         <WebLayoutCentered
@@ -29,10 +48,12 @@ const SuspendedPage: React.FC = () => {
             <>
                 <div className={styles.body}>
                     <div className={styles.content}>
-                        <h1 className="title">{t('suspended_page.title')}</h1>
+                        <h1 className="title">
+                            {status === 'BANNED' ? t('suspended_page.title') : t('suspended_page.title_canceled')}
+                        </h1>
                         <img alt="avatar" className={styles.image} src={profile?.user.avatar ?? AvatarPlaceholderPng} />
                         <p className={styles.subtitle}>
-                            {t('suspended_page.subtitle')}
+                            {status === 'BANNED' ? t('suspended_page.subtitle') : t('suspended_page.subtitle_canceled')}
                             <br />
                             <br />
                             {t('suspended_page.contact_us')}

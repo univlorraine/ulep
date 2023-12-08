@@ -1,4 +1,6 @@
-import React from 'react';
+import DeleteIcon from '@mui/icons-material/Delete';
+import { Typography, Switch, SwitchProps, Box, Modal } from '@mui/material';
+import React, { useState } from 'react';
 import {
     TopToolbar,
     EditButton,
@@ -8,8 +10,15 @@ import {
     TextField,
     UrlField,
     EmailField,
+    useNotify,
+    useUpdate,
+    Button,
+    useRefresh,
+    FunctionField,
 } from 'react-admin';
 import { ColorField } from 'react-admin-color-picker';
+import usePurge from '../../components/menu/usePurge';
+import Instance from '../../entities/Instance';
 
 const InstanceShowAction = () => (
     <TopToolbar>
@@ -19,6 +28,31 @@ const InstanceShowAction = () => (
 
 const InstanceShow = () => {
     const translate = useTranslate();
+    const [update] = useUpdate();
+    const notify = useNotify();
+    const refresh = useRefresh();
+    const { mutate: purge } = usePurge();
+    const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
+
+    const handleToggle: SwitchProps['onChange'] = async (event) => {
+        try {
+            const isOn = event.target.checked;
+            await update('instance', { data: { isInMaintenance: isOn } });
+            notify(translate('instance.mainteance_update'));
+        } catch (error) {
+            notify(translate('instance.update_error'));
+        }
+    };
+
+    const handlePurge = async () => {
+        await purge();
+        setIsModalOpen(false);
+        refresh();
+    };
+
+    const handleCloseModal = () => {
+        setIsModalOpen(false);
+    };
 
     return (
         <Show actions={<InstanceShowAction />} title={translate('instance.label')}>
@@ -34,7 +68,70 @@ const InstanceShow = () => {
                 <ColorField label={translate('instance.secondaryColor')} source="secondaryColor" />
                 <ColorField label={translate('instance.secondaryBackgroundColor')} source="secondaryBackgroundColor" />
                 <ColorField label={translate('instance.secondaryDarkColor')} source="secondaryDarkColor" />
+                <FunctionField
+                    render={(record: Instance) => (
+                        <div style={{ display: 'flex', alignItems: 'center', marginBottom: '1em' }}>
+                            <Typography color="inherit" variant="subtitle1">
+                                {translate('instance.maintenance')}
+                            </Typography>
+                            <Switch
+                                color="secondary"
+                                defaultChecked={record?.isInMaintenance}
+                                onChange={handleToggle}
+                                value={record?.isInMaintenance}
+                            />
+                        </div>
+                    )}
+                />
+                <Button color="secondary" onClick={() => setIsModalOpen(true)} variant="contained">
+                    <div
+                        style={{
+                            display: 'flex',
+                            alignItems: 'center',
+                            justifyContent: 'center',
+                        }}
+                    >
+                        <DeleteIcon />
+                        <Typography>{translate('purge.title')}</Typography>
+                    </div>
+                </Button>
             </SimpleShowLayout>
+            <Modal
+                aria-describedby="confirm-modal"
+                aria-labelledby="confirm-modal"
+                onClose={handleCloseModal}
+                open={isModalOpen}
+            >
+                <Box
+                    sx={{
+                        position: 'absolute',
+                        top: '50%',
+                        left: '50%',
+                        transform: 'translate(-50%, -50%)',
+                        width: 400,
+                        bgcolor: 'background.paper',
+                        borderRadius: 2,
+                        p: 4,
+                    }}
+                >
+                    <>
+                        <p>{translate('instance.purge_modal.message')}</p>
+                        <Box sx={{ marginTop: 4, display: 'flex', justifyContent: 'space-around' }}>
+                            <Button
+                                label={translate('learning_languages.show.tandems.actions.ctaLabels.cancel')}
+                                onClick={handleCloseModal}
+                                variant="text"
+                            />
+                            <Button
+                                color="error"
+                                label={translate('learning_languages.show.tandems.actions.ctaLabels.confirm')}
+                                onClick={handlePurge}
+                                variant="outlined"
+                            />
+                        </Box>
+                    </>
+                </Box>
+            </Modal>
         </Show>
     );
 };

@@ -183,6 +183,7 @@ const SignUpInformationsPage: React.FC = () => {
                 </button>
 
                 <TextInput
+                    autocomplete="name"
                     errorMessage={errorMessage?.type === 'firstname' ? errorMessage.message : undefined}
                     onChange={setFirstname}
                     placeholder={t('signup_informations_page.placeholder_firstname')}
@@ -192,6 +193,7 @@ const SignUpInformationsPage: React.FC = () => {
                 />
 
                 <TextInput
+                    autocomplete="family-name"
                     errorMessage={errorMessage?.type === 'lastname' ? errorMessage.message : undefined}
                     onChange={setLastname}
                     placeholder={t('signup_informations_page.placeholder_name')}
@@ -232,6 +234,7 @@ const SignUpInformationsPage: React.FC = () => {
                 />
 
                 <TextInput
+                    autocomplete="email"
                     errorMessage={errorMessage?.type === 'email' ? errorMessage.message : undefined}
                     onChange={setEmail}
                     placeholder={t('signup_informations_page.placeholder_email')}
@@ -253,6 +256,7 @@ const SignUpInformationsPage: React.FC = () => {
 
                 {!fromIdp && (
                     <TextInput
+                        autocomplete="new-password"
                         errorMessage={errorMessage?.type === 'password' ? errorMessage.message : undefined}
                         onChange={setPassword}
                         placeholder={t('signup_informations_page.placeholder_password')}
@@ -264,6 +268,7 @@ const SignUpInformationsPage: React.FC = () => {
 
                 {!fromIdp && (
                     <TextInput
+                        autocomplete="new-password"
                         errorMessage={errorMessage?.type === 'confirm' ? errorMessage.message : undefined}
                         onChange={setConfirmPassword}
                         placeholder={t('signup_informations_page.placeholder_confirm_password')}
@@ -276,13 +281,17 @@ const SignUpInformationsPage: React.FC = () => {
                 <Checkbox
                     isSelected={CGUChecked}
                     onPressed={() => setCGUChecked(!CGUChecked)}
-                    name={<>
-                        {`${t('signup_informations_page.cgu.prefix')} `}
-                        <a href={configuration.cguUrl}>{`${t('signup_informations_page.cgu.cgu')}`}</a>
-                        {` ${t('signup_informations_page.cgu.separator')} `}
-                        <a href={configuration.confidentialityUrl}>{`${t('signup_informations_page.cgu.confidentiality')}`}</a>
-                        {` ${t('signup_informations_page.cgu.suffix')}`}
-                      </>}
+                    name={
+                        <>
+                            {`${t('signup_informations_page.cgu.prefix')} `}
+                            <a href={configuration.cguUrl}>{`${t('signup_informations_page.cgu.cgu')}`}</a>
+                            {` ${t('signup_informations_page.cgu.separator')} `}
+                            <a href={configuration.confidentialityUrl}>{`${t(
+                                'signup_informations_page.cgu.confidentiality'
+                            )}`}</a>
+                            {` ${t('signup_informations_page.cgu.suffix')}`}
+                        </>
+                    }
                 />
 
                 <div className={styles['bottom-container']}>

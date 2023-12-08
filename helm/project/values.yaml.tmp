@@ -14,7 +14,6 @@ global:
       username: postgres # FIXE
       database: ulep # FIXE
       password: "" # REQUIRED
-      postgresPassword: "" # REQUIRED
 
 apiUrl: &apiUrl api
 adminUrl: &adminUrl admin
@@ -28,7 +27,7 @@ postgresql:
   primary:
     initdb:
       scriptsConfigMap: ulep-init-database # REQUIRED
-          persistence:
+  persistence:
     size: 8Gi # REQUIRED
 ############## POSTGRES ##############
 
@@ -73,6 +72,7 @@ api:
     appUrl: *webappUrl # FIXE
     connectorUrl: TODO # OPTIONAL
     connectorToken TODO # OPTIONAL
+    postgresConnectionLimit: TODO # OPTIONAL
 
   autoscaling:
     enabled: false

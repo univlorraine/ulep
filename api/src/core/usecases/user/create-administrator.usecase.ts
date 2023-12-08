@@ -8,6 +8,8 @@ import {
 
 export class CreateAdministratorCommand {
   email: string;
+  firstname: string;
+  lastname: string;
   password: string;
   universityId?: string;
 }
@@ -32,6 +34,8 @@ export class CreateAdministratorUsecase {
 
     const keycloakUser = await this.keycloakClient.createAdministrator({
       email: command.email,
+      firstname: command.firstname,
+      lastname: command.lastname,
       password: command.password,
       universityId: command.universityId,
     });

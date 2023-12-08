@@ -52,7 +52,8 @@
     "global": {
         "active": "Actif",
         "age": "Age",
-        "banned": "Bannis",
+        "blocked": "Bloqué",
+        "canceled": "Annulé",
         "content": "Contenu",
         "disconnect": "Déconnexion",
         "email": "Email",
@@ -75,7 +76,8 @@
         "both": "Les deux",
         "userStatus": {
             "active": "Actif",
-            "banned": "Bannis",
+            "blocked": "Bloqué",
+            "canceled": "Annulé",
             "reported": "Signalé"
         },
         "genderValues": {
@@ -94,10 +96,17 @@
         "primaryColor": "Couleur primaire de l'application",
         "primaryBackgroundColor": "Couleur primaire de l'image de fond de l'application",
         "maintenance": "Mise en maintenance",
+        "mainteance_update": "L'instance a bien été modifié",
         "primaryDarkColor": "Nuance sombre de la couleur primaire utilisé pour le fond de l'application",
         "secondaryColor": "Couleur secondaire de l'application",
         "secondaryBackgroundColor": "Couleur secondaire de l'image de fond de l'application",
         "secondaryDarkColor": "Nuance sombre de la couleur secondaire utilisé pour le fond de l'application",
+        "update_error": "Une erreur est survenue pendant la mise à jour de l'instance",
+        "purge_modal": {
+            "cancel": "Annuler",
+            "message": "Voulez vous vraiment réinitialiser l'instance ?",
+            "confirm": "Confirmer"
+        },
         "edit": {
             "error": "Une erreur est survenue pendant la mise à jour de l'instance",
             "name": "Nom de l'instance",
@@ -236,7 +245,7 @@
     },
     "purge": {
         "error": "Une erreur est survenue durant la purge du système",
-        "title": "Purge le système"
+        "title": "Réinitialisation"
     },
     "questions": {
         "create": {
@@ -380,9 +389,9 @@
             },
             "actions": {
                 "globalRoutine": {
-                    "ctaLabel": "Lancer la routine globale",
-                    "runningLabel": "Routine globale en cours d'exécution",
-                    "errorLoading": "Une erreur est survenue lors du chargement de l'état de la dernière routine globale"
+                    "ctaLabel": "Lancer le calcul global",
+                    "runningLabel": "Calcul global en cours d'exécution",
+                    "errorLoading": "Une erreur est survenue lors du chargement de l'état de le dernier calcul global"
                 }
             },
             "filters": {
@@ -405,13 +414,13 @@
                 }
             },
             "globalRoutineModal": {
-                "description": "Lancer la routine globale peut prendre quelques minutes. Les tandems proposés par une ancienne exécution seront perdus.",
+                "description": "Lancer le calcul global peut prendre quelques minutes. Les tandems proposés par une ancienne exécution seront perdus.",
                 "confirmMessage": "Voulez-vous continuer ?",
                 "ctaLabels": {
                     "confirm": "Confirmer",
                     "cancel": "Annuler"
                 },
-                "error": "Une erreur est survenue lors de l'exécution de la routine globale"
+                "error": "Une erreur est survenue lors de l'exécution du calcul global"
             },
             "tableColumns": {
                 "name": "Nom",
@@ -451,8 +460,8 @@
                     "title": "Attente validation"
                 },
                 "matches": {
-                    "error": "Une erreur est survenue lors de la récupération des propositions de la routine individuelle",
-                    "title": "Suggestion routine individuelle",
+                    "error": "Une erreur est survenue lors de la récupération des meilleurs appariements pour cet utilisateur",
+                    "title": "Meilleurs appariements pour cet utilisateur",
                     "noResults": "Aucun résultats"
                 },
                 "tableColumns": {
@@ -470,7 +479,7 @@
                     "spokenLanguages": "Langues parlées"
                 },
                 "globalSuggestions": {
-                    "title": "Suggestion routine globale",
+                    "title": "Tandem proposé par le calcul global",
                     "titleNotCentralUniversity": "Tandem proposé",
                     "noResult": "Aucun résultat"
                 },

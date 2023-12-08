@@ -59,7 +59,7 @@ const WelcomeContent: React.FC<WelcomeContentProps> = ({ onPress }) => {
             <div style={backgroundStyle} className={`content-wrapper container`}>
                 <img src={currentTheme.image} alt="bubble" className={style['bubble']} />
                 <span className={style['welcome-text']}>
-                    Bienvenue sur (e)Tandem,
+                    Bienvenue sur ULEP,
                     <p className={style['welcome-subtext']}>le meilleur moyen de pratiquer une langue</p>
                 </span>
 

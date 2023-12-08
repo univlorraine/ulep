@@ -6,6 +6,7 @@ export enum UserStatus {
   ACTIVE = 'ACTIVE',
   BANNED = 'BANNED',
   REPORTED = 'REPORTED',
+  CANCELED = 'CANCELED',
 }
 
 export enum Gender {

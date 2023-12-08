@@ -4,6 +4,7 @@ interface LearningLanguageCommand {
     id: string;
     name: string;
     code: string;
+    learningType: Pedagogy;
     level: CEFR;
     profile: ProfileCommand;
 }

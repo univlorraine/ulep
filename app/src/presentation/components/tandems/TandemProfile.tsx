@@ -7,18 +7,20 @@ import Language from '../../../domain/entities/Language';
 import Profile from '../../../domain/entities/Profile';
 import { Availabilites } from '../../../domain/entities/ProfileSignUp';
 import useWindowDimensions from '../../hooks/useWindowDimensions';
-import { HYBRID_MAX_WIDTH } from '../../utils';
+import { HYBRID_MAX_WIDTH, codeLanguageToFlag } from '../../utils';
 import AvailabilityLine from '../AvailabilityLine';
 import TandemCard from './TandemCard';
 import styles from './TandemProfile.module.css';
 
 interface TandemProfileProps {
     language: Language;
+    level: CEFR;
     onClose: () => void;
+    pedagogy: Pedagogy;
     profile: Profile;
 }
 
-const TandemProfile: React.FC<TandemProfileProps> = ({ language, onClose, profile }) => {
+const TandemProfile: React.FC<TandemProfileProps> = ({ language, level, onClose, pedagogy, profile }) => {
     const { t } = useTranslation();
     const { configuration } = useConfig();
     const { width } = useWindowDimensions();
@@ -48,10 +50,10 @@ const TandemProfile: React.FC<TandemProfileProps> = ({ language, onClose, profil
                     {profile.user.email}
                 </div>
 
-                {profile.goals.length !== 0 && (
                     <>
                         <span className={styles.category}>{t(`home_page.tandem_validated.goals`)}</span>
                         <div className={styles['text-container']}>
+                            <span>{`${t(`home_page.tandem_validated.type.${pedagogy}`)} ( ${level} ) ${codeLanguageToFlag(language.code)}`}</span> <br/>
                             {profile.goals.map((goal) => (
                                 <React.Fragment key={goal.id}>
                                     {goal.name}
@@ -60,17 +62,16 @@ const TandemProfile: React.FC<TandemProfileProps> = ({ language, onClose, profil
                             ))}
                         </div>
                     </>
-                )}
 
                 <span className={styles.category}>{t(`home_page.tandem_validated.languages`)}</span>
                 <div className={styles['text-container']}>
                     <>
                         {profile.nativeLanguage.name} <br />
                         {profile.masteredLanguages.map((masteredLangauge) => (
-                            <>
+                            <div key={masteredLangauge.id}>
                                 {masteredLangauge.name}
                                 <br />
-                            </>
+                            </div>
                         ))}
                     </>
                 </div>
