@@ -5,19 +5,21 @@ import Modal from './Modal';
 
 interface TandemProfileModalProps {
     isVisible: boolean;
-    language?: Language;
     onClose: () => void;
+    language?: Language;
+    level?: CEFR;
+    pedagogy?: Pedagogy;
     profile?: Profile;
 }
 
-const TandemProfileModal: React.FC<TandemProfileModalProps> = ({ isVisible, language, onClose, profile }) => {
-    if (!language || !profile) {
+const TandemProfileModal: React.FC<TandemProfileModalProps> = ({ isVisible, language, level, onClose, pedagogy, profile }) => {
+    if (!language || !profile || !level ||!pedagogy) {
         return <div />;
     }
 
     return (
         <Modal isVisible={isVisible} onClose={onClose} hideWhiteBackground>
-            <TandemProfile language={language} onClose={onClose} profile={profile} />
+            <TandemProfile language={language} level={level} onClose={onClose} pedagogy={pedagogy} profile={profile} />
         </Modal>
     );
 };
