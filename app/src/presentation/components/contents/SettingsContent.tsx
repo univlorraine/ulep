@@ -7,6 +7,7 @@ import { useConfig } from '../../../context/ConfigurationContext';
 import { useStoreActions, useStoreState } from '../../../store/storeTypes';
 import Dropdown from '../DropDown';
 import styles from './SettingsContent.module.css';
+import ConfirmModal from '../modals/ConfirmModal';
 
 interface SettingsContentProps {
     onBackPressed: () => void;
@@ -22,6 +23,7 @@ const SettingsContent: React.FC<SettingsContentProps> = ({ onBackPressed, onDisc
     const profile = useStoreState((state) => state.profile);
     const updateProfile = useStoreActions((state) => state.updateProfile);
     const [emailNotificationStatus, setEmailNotificationStatus] = useState<boolean>(profile!.user.acceptsEmail);
+    const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
 
     const LANGUAGES = [
         { title: t('languages.french'), value: 'fr' },
@@ -37,6 +39,7 @@ const SettingsContent: React.FC<SettingsContentProps> = ({ onBackPressed, onDisc
         if (result instanceof Error) {
             return await showToast({ message: t(result.message), duration: 1000 });
         }
+        setIsModalOpen(false);
         return await showToast({ message: t('home_page.settings.deletion'), duration: 1000 });
     };
 
@@ -90,7 +93,7 @@ const SettingsContent: React.FC<SettingsContentProps> = ({ onBackPressed, onDisc
             </a>
 
             <span className={styles.subtitle}>{t('home_page.settings.account')}</span>
-            <button className={styles['setting-container']} onClick={onDeletionAsked}>
+            <button className={styles['setting-container']} onClick={() => setIsModalOpen(true)}>
                 <span>{t('home_page.settings.unsubscribe')}</span>
                 <img alt="right-arrow" src={ArrowRightSvg} />
             </button>
@@ -98,6 +101,7 @@ const SettingsContent: React.FC<SettingsContentProps> = ({ onBackPressed, onDisc
                 <span>{t('home_page.settings.logout')}</span>
                 <img alt="right-arrow" src={ArrowRightSvg} />
             </button>
+            <ConfirmModal isVisible={isModalOpen} onClose={() => setIsModalOpen(false)} onValidate={() => onDeletionAsked()} title={t('confirm_modal.title')} />
         </div>
     );
 };
