@@ -1,0 +1,37 @@
+import { useTranslation } from 'react-i18next';
+import styles from './ConfirmModal.module.css';
+import Modal from './Modal';
+
+interface ConfirmModalProps {
+    isVisible: boolean;
+    onClose: () => void;
+    onValidate: () => void;
+    title: string;
+}
+
+const ConfirmModal: React.FC<ConfirmModalProps> = ({ isVisible, onClose, onValidate, title }) => {
+    const { t } = useTranslation();
+
+    return (
+        <Modal isVisible={isVisible} onClose={onClose}>
+            <div>
+                <div className={styles.container}>
+                    <span className={styles.title}>{title}</span>
+                    <div className={styles['button-container']}>
+                        <button className="tertiary-button" onClick={() => onClose()}>
+                            {t('confirm_modal.cancel')}
+                        </button>
+                        <button
+                            className={`primary-button margin-left`}
+                            onClick={() => onValidate()}
+                        >
+                            {t('confirm_modal.validate')}
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </Modal>
+    );
+};
+
+export default ConfirmModal;

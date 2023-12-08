@@ -65,6 +65,11 @@
         "signup_title": "Première fois sur l'application ?",
         "signup_button": "Créer un compte"
     },
+    "confirm_modal": {
+        "cancel": "Annuler",
+        "title": "Voulez-vous vraiment supprimer votre compte ?",
+        "validate": "Confirmer"
+    },
     "home_page": {
         "profile": {
             "disconnect": "Se déconnecter",
