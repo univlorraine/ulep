@@ -49,6 +49,8 @@ const HomePage: React.FC = () => {
             : history.push('/tandem-profil', {
                   profile: tandem.partner,
                   language: tandem.learningLanguage,
+                  level: tandem.level,
+                  pedagogy: tandem.pedagogy,
               });
 
     const formattedDate = `${currentDate.getFullYear()}-${currentDate.getDate().toString().padStart(2, '0')}-${(
@@ -132,7 +134,9 @@ const HomePage: React.FC = () => {
                     <TandemProfileModal
                         isVisible={!!selectedTandem && selectedTandem.status === 'ACTIVE'}
                         language={selectedTandem?.learningLanguage}
+                        level={selectedTandem?.level}
                         onClose={() => setSelectedTandem(undefined)}
+                        pedagogy={selectedTandem?.pedagogy}
                         profile={selectedTandem?.partner}
                     />
                 </>

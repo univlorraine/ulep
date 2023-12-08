@@ -390,7 +390,7 @@
             "actions": {
                 "globalRoutine": {
                     "ctaLabel": "Lancer le calcul global",
-                    "runningLabel": "Routine globale en cours d'exécution",
+                    "runningLabel": "Calcul global en cours d'exécution",
                     "errorLoading": "Une erreur est survenue lors du chargement de l'état de le dernier calcul global"
                 }
             },

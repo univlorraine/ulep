@@ -116,7 +116,12 @@
             "place": "🏖️ Son endroit préféré",
             "power": "⚡️ Son super pouvoir",
             "title": "Nous avons trouvé ton tandem 🎉",
-            "travel": "✈ Ses voyages"
+            "travel": "✈ Ses voyages",
+            "type": {
+                "BOTH": "Etandem / Tandem",
+                "ETANDEM": "Etandem",
+                "TANDEM": "Tandem"
+            }
         },
         "waiting_tandem": {
             "button": "Faire une nouvelle demande",

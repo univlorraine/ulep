@@ -7,6 +7,7 @@ class Tandem {
         public status: TandemStatus,
         public learningLanguage: Language,
         public level: CEFR,
+        public pedagogy: Pedagogy,
         public partner?: Profile
     ) {}
 }
