@@ -12,12 +12,14 @@ export class TestServer extends Server {
   }
 
   // TODO(herve): We could overide all providers instead of beforeAll test method.
-  async run(): Promise<void> {
+  async run(): Promise<INestApplication> {
     super.addGlobalPipes(this.app);
     super.addGlobalFilters(this.app);
     super.addGlobalInterceptors(this.app);
 
     await this.app.init();
+
+    return this.app;
   }
 
   getHttpServer(): any {

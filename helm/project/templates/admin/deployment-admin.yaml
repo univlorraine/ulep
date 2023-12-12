@@ -67,6 +67,8 @@ spec:
           env:
             - name: REACT_APP_API_URL
               value: "https://{{ .Values.apiUrl }}.{{ .Values.domain }}"
+            - name: REACT_APP_SENTRY_DSN
+              value: "{{ .Values.admin.env.sentryDsn }}"
       {{- with .Values.nodeSelector }}
       nodeSelector:
         {{- toYaml . | nindent 8 }}

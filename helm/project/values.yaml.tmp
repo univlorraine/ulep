@@ -73,6 +73,7 @@ api:
     connectorUrl: TODO # OPTIONAL
     connectorToken TODO # OPTIONAL
     postgresConnectionLimit: TODO # OPTIONAL
+    sentryDsn: TODO # OPTIONAL
 
   autoscaling:
     enabled: false
@@ -241,6 +242,7 @@ admin:
 
   env:
     keycloakClientSecret: *keycloakClientSecret # REQUIRED
+    sentryDsn: TODO # OPTIONAL
 
   autoscaling:
     enabled: false

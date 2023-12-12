@@ -15,7 +15,7 @@ import {
 import { configuration, getLoggerLevels } from './configuration';
 
 export class Server {
-  public async run(port: number): Promise<void> {
+  public async run(port: number): Promise<INestApplication> {
     const logLevel = configuration().logLevel;
     const app = await NestFactory.create<NestExpressApplication>(AppModule, {
       logger: getLoggerLevels(logLevel),
@@ -32,6 +32,8 @@ export class Server {
     }
 
     await app.listen(port);
+
+    return app;
   }
 
   protected addGlobalPipes(app: INestApplication): void {
@@ -46,7 +48,6 @@ export class Server {
 
   protected addGlobalFilters(app: INestApplication): void {
     const { httpAdapter } = app.get(HttpAdapterHost);
-
     app.useGlobalFilters(new PrismaClientExceptionFilter(httpAdapter));
     app.useGlobalFilters(new DomainErrorFilter(httpAdapter));
   }
