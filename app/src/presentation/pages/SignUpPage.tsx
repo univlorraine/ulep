@@ -99,7 +99,9 @@ const SignUpPage: React.FC = () => {
             setStaffFunction(profileSignUp.staffFunction);
         }
 
-        if (profileSignUp.department) {
+        if (result.departement) {
+            setDepartment(result.departement);
+        } else if (profileSignUp.department) {
             setDepartment(profileSignUp.department);
         }
 

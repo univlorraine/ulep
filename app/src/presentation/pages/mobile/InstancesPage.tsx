@@ -1,8 +1,7 @@
 import { IonPage } from '@ionic/react';
 import ULLogo from '../../../assets/instances/ul-logo.svg';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import styles from '../css/InstancePage.module.css';
-import { AvatarPng } from '../../../assets';
 import { useTranslation } from 'react-i18next';
 
 interface Instance {
@@ -34,6 +33,12 @@ interface InstancesPageProps {
 const InstancesPage: React.FC<InstancesPageProps> = ({ onValidate }) => {
     const { t } = useTranslation();
     const [selectedInstance, setSelectedInstance] = useState<Instance>();
+
+    useEffect(() => {
+        if(instances.length === 1) {
+            onValidate(instances[0].apiUrl);
+        }
+    }, []);
 
     return (
         <IonPage>
