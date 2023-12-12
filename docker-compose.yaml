@@ -11,6 +11,8 @@ services:
     environment:
       ADMIN_URL: ${ADMIN_URL:-http://localhost:3001}
       APP_URL: ${APP_URL:-http://localhost:5173}
+      LOG_LEVEL: ${LOG_LEVEL:-warn}
+      DEFAULT_TRANSLATION_LANGUAGE: ${DEFAULT_TRANSLATION_LANGUAGE:-fr}
       DATABASE_URL: postgresql://${POSTGRES_USER:-postgres}:${POSTGRES_PASSWORD:-!ChangeMe!}@database:5432/${POSTGRES_DB:-ulep}?schema=public
       KEYCLOAK_BASE_URL: ${KEYCLOAK_BASE_URL:-http://auth:8080}
       KEYCLOAK_REALM: ${KEYCLOAK_REALM:-etandem}
@@ -18,13 +20,30 @@ services:
       KEYCLOAK_ADMIN_PASSWORD: ${KEYCLOAK_ADMIN_PASSWORD:-!ChangeMe!}
       KEYCLOAK_CLIENT_ID: ${KEYCLOAK_CLIENT_ID:-api}
       KEYCLOAK_CLIENT_SECRET: ${KEYCLOAK_CLIENT_SECRET:-bN49BuApmmtAODeOWOG8iKOOuJdN3KE6}
+      KEYCLOAK_ADMIN_GROUP_ID: ${KEYCLOAK_ADMIN_GROUP_ID:-02736a0f-4679-4329-a877-2ce87aaea569}
       MINIO_PORT: 9000
-      MINIO_USE_SSL: 'false'
+      MINIO_USE_SSL: false
       MINIO_ACCESS_KEY: ${MINIO_USER:-minio}
       MINIO_SECRET_KEY: ${MINIO_PASSWORD:-!ChangeMe!}
       MINIO_PUBLIC_URL: ${MINIO_PUBLIC_URL:-http://localhost:9000}
       TRANSLATIONS_ENDPOINT: ${TRANSLATIONS_ENDPOINT:-https://raw.githubusercontent.com/thetribeio/locales_ulep/main/locales/}
-
+      TRANSLATIONS_ENDPOINT_SUFFIX: ${TRANSLATIONS_ENDPOINT_SUFFIX:-}
+      TRANSLATION_TOKEN: ${TRANSLATION_TOKEN:-}
+      CONNECTOR_URL: ${CONNECTOR_URL:-}
+      CONNECTOR_TOKEN: ${CONNECTOR_TOKEN:-}
+      EMAIL_ASSETS_BUCKET: ${EMAIL_ASSETS_BUCKET:-assets}
+      EMAIL_TRANSLATIONS_COMPONENT: ${EMAIL_TRANSLATIONS_COMPONENT:-emails}
+      EMAIL_ASSETS_PUBLIC_ENDPOINT: ${EMAIL_ASSETS_PUBLIC_ENDPOINT:-http://localhost:3000}
+      APP_LINK_APPLE_STORE: ${APP_LINK_APPLE_STORE:-http://apple-store.fr/etandem}
+      APP_LINK_PLAY_STORE: ${APP_LINK_PLAY_STORE:-http://play-store.fr/etandem}
+      SMTP_DISABLE_BOOT_VERIFICATION: ${SMTP_DISABLE_BOOT_VERIFICATION:-true}
+      SMTP_HOST: ${SMTP_HOST:-mailer}
+      SMTP_PORT: ${SMTP_PORT:-1025}
+      SMTP_SECURE: ${SMTP_SECURE:-true}
+      SMTP_IGNORE_TLS: ${SMTP_IGNORE_TLS:-true}
+      SMTP_SENDER: ${SMTP_SENDER:-test@ulep.fr}
+      SENTRY_DSN: ${API_SENTRY_DSN}
+      
   admin:
     build:
       context: ./admin
@@ -37,6 +56,8 @@ services:
       REACT_APP_KEYCLOAK_REALM: ${REACT_APP_KEYCLOAK_REALM:-etandem}
       REACT_APP_KEYCLOAK_CLIENT_ID: ${REACT_APP_KEYCLOAK_CLIENT_ID:-react-admin}
       REACT_APP_KEYCLOAK_CLIENT_SECRET: ${REACT_APP_KEYCLOAK_CLIENT_SECRET:-uKBywX2HlxfvKgxZoKZrbiBSx49CST6W}
+      REACT_APP_SENTRY_DSN: ${ADMIN_SENTRY_DSN}
+
   auth:
     image: quay.io/keycloak/keycloak:21.1.2
     depends_on:

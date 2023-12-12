@@ -23,12 +23,10 @@ export class DomainErrorFilter extends BaseExceptionFilter {
     const response = ctx.getResponse<Response>();
     const httpStatusCode = domainErrorToHttpStatusCode[exception.code];
 
-    this.logger.error(exception);
-
-    response.status(httpStatusCode).end(
-      JSON.stringify({
-        message: exception.message,
-      }),
-    );
+    response.status(httpStatusCode).json({
+      statusCode: httpStatusCode,
+      message: exception.message,
+      code: exception.code,
+    });
   }
 }
