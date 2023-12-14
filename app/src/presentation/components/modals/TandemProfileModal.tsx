@@ -8,18 +8,19 @@ interface TandemProfileModalProps {
     onClose: () => void;
     language?: Language;
     level?: CEFR;
+    partnerLearningLanguage?: Language;
     pedagogy?: Pedagogy;
     profile?: Profile;
 }
 
-const TandemProfileModal: React.FC<TandemProfileModalProps> = ({ isVisible, language, level, onClose, pedagogy, profile }) => {
-    if (!language || !profile || !level ||!pedagogy) {
+const TandemProfileModal: React.FC<TandemProfileModalProps> = ({ isVisible, language, level, onClose, partnerLearningLanguage, pedagogy, profile }) => {
+    if (!language || !profile || !level ||!pedagogy || !partnerLearningLanguage) {
         return <div />;
     }
 
     return (
         <Modal isVisible={isVisible} onClose={onClose} hideWhiteBackground>
-            <TandemProfile language={language} level={level} onClose={onClose} pedagogy={pedagogy} profile={profile} />
+            <TandemProfile language={language} level={level} onClose={onClose} partnerLearningLanguage={partnerLearningLanguage} pedagogy={pedagogy} profile={profile} />
         </Modal>
     );
 };

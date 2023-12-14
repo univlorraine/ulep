@@ -51,6 +51,7 @@ const HomePage: React.FC = () => {
                   language: tandem.learningLanguage,
                   level: tandem.level,
                   pedagogy: tandem.pedagogy,
+                  tandemLearningLanguage: tandem.partnerLearningLanguage,
               });
 
     const formattedDate = `${currentDate.getFullYear()}-${currentDate.getDate().toString().padStart(2, '0')}-${(
@@ -136,6 +137,7 @@ const HomePage: React.FC = () => {
                         language={selectedTandem?.learningLanguage}
                         level={selectedTandem?.level}
                         onClose={() => setSelectedTandem(undefined)}
+                        partnerLearningLanguage={selectedTandem?.partnerLearningLanguage}
                         pedagogy={selectedTandem?.pedagogy}
                         profile={selectedTandem?.partner}
                     />
