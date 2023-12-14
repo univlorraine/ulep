@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import Tandem from '../../domain/entities/Tandem';
 import Profile from '../../domain/entities/Profile';
 import { useConfig } from '../../context/ConfigurationContext';
+import Language from '../../domain/entities/Language';
 
 interface useGetTandemsProps {
     profile?: Profile;
@@ -22,9 +23,10 @@ const useGetTandems = ({profile, showToast, t}: useGetTandemsProps, deps: any[])
             }
 
             const waitingLearningLanguages: Tandem[] = [];
-            profile?.learningLanguages.map((learningLanguage) => {
+            profile?.learningLanguages.map((learningLanguage: Language) => {
                 if (!result.find((tandem) => tandem.learningLanguage.id === learningLanguage.id)) {
-                    waitingLearningLanguages.push(new Tandem(learningLanguage.id, 'DRAFT', learningLanguage, 'A0', 'TANDEM'));
+                    // TODO(futur) : Change this logic to get it from api ? 
+                    waitingLearningLanguages.push(new Tandem(learningLanguage.id, 'DRAFT', learningLanguage, learningLanguage, 'A0', 'TANDEM'));
                 }
             });
 
