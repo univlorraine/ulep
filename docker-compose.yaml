@@ -39,11 +39,11 @@ services:
       SMTP_DISABLE_BOOT_VERIFICATION: ${SMTP_DISABLE_BOOT_VERIFICATION:-true}
       SMTP_HOST: ${SMTP_HOST:-mailer}
       SMTP_PORT: ${SMTP_PORT:-1025}
-      SMTP_SECURE: ${SMTP_SECURE:-true}
+      SMTP_SECURE: ${SMTP_SECURE:-false}
       SMTP_IGNORE_TLS: ${SMTP_IGNORE_TLS:-true}
       SMTP_SENDER: ${SMTP_SENDER:-test@ulep.fr}
       SENTRY_DSN: ${API_SENTRY_DSN}
-      
+
   admin:
     build:
       context: ./admin
