@@ -74,6 +74,7 @@
         "etandem": "E-tandem",
         "tandem": "Tandem",
         "both": "Les deux",
+        "deleted_user": "Utilisateur supprimé",
         "userStatus": {
             "active": "Actif",
             "blocked": "Bloqué",

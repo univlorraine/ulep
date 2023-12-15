@@ -27,19 +27,19 @@ const ReportForm: React.FC<ReportProps> = ({ handleSubmit, category, content, st
                 {translate(`global.firstname`)}
             </Typography>
             <Typography sx={textStyle} variant="subtitle2">
-                {user.firstname}
+                {user?.firstname ? user.firstname : translate('global.deleted_user')}
             </Typography>
             <Typography sx={titleStyle} variant="subtitle1">
                 {translate(`global.lastname`)}
             </Typography>
             <Typography sx={textStyle} variant="subtitle2">
-                {user.lastname}
+                {user?.lastname ? user.lastname : translate('global.deleted_user')}
             </Typography>
             <Typography sx={titleStyle} variant="subtitle1">
                 {translate(`global.email`)}
             </Typography>
             <Typography sx={textStyle} variant="subtitle2">
-                {user.email}
+                {user?.email ? user.email : translate('global.deleted_user')}
             </Typography>
             <Typography sx={titleStyle} variant="subtitle1">
                 {translate(`reports.update.status`)}
