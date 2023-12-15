@@ -4,7 +4,7 @@
     border-radius: 5px;
     background: #f2f4f7;
     display: flex;
-    font-family: 'Twemoji Country Flags';
+    font-family: 'Roboto', 'Twemoji Country Flags', sans-serif;
     height: 50px;
     padding: 12px 16px;
 }
