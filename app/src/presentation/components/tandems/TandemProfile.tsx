@@ -18,9 +18,10 @@ interface TandemProfileProps {
     onClose: () => void;
     pedagogy: Pedagogy;
     profile: Profile;
+    partnerLearningLanguage: Language;
 }
 
-const TandemProfile: React.FC<TandemProfileProps> = ({ language, level, onClose, pedagogy, profile }) => {
+const TandemProfile: React.FC<TandemProfileProps> = ({ language, level, onClose, pedagogy, profile, partnerLearningLanguage }) => {
     const { t } = useTranslation();
     const { configuration } = useConfig();
     const { width } = useWindowDimensions();
@@ -53,7 +54,7 @@ const TandemProfile: React.FC<TandemProfileProps> = ({ language, level, onClose,
                     <>
                         <span className={styles.category}>{t(`home_page.tandem_validated.goals`)}</span>
                         <div className={styles['text-container']}>
-                            <span>{`${t(`home_page.tandem_validated.type.${pedagogy}`)} ( ${level} ) ${codeLanguageToFlag(language.code)}`}</span> <br/>
+                            <span>{`${t(`home_page.tandem_validated.type.${pedagogy}`)} ( ${level} ) ${codeLanguageToFlag(partnerLearningLanguage.code)}`}</span> <br/>
                             {profile.goals.map((goal) => (
                                 <React.Fragment key={goal.id}>
                                     {goal.name}
