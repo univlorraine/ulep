@@ -1,5 +1,5 @@
 import { Collection } from '@app/common';
-import { User } from 'src/core/models/user.model';
+import { User, UserStatus } from 'src/core/models/user.model';
 import { UserRepository } from 'src/core/ports/user.repository';
 
 export class InMemoryUserRepository implements UserRepository {
@@ -45,6 +45,12 @@ export class InMemoryUserRepository implements UserRepository {
     return this.#users.find((user) => user.email === email);
   }
 
+  async ofStatus(status: UserStatus): Promise<User[]> {
+    const users = this.#users.filter((user) => user.status === status);
+
+    return users;
+  }
+
   async update(user: User): Promise<User> {
     const index = this.#users.findIndex((it) => it.id === user.id);
 
@@ -67,7 +73,12 @@ export class InMemoryUserRepository implements UserRepository {
     this.#users = [];
   }
 
-  async createBlacklist(usersId: string[]): Promise<void> {
-    this.#blacklist = [...this.#blacklist, ...usersId];
+  async blacklist(users: User[]): Promise<void> {
+    const emails = users.map((user) => user.email);
+    this.#blacklist = [...this.#blacklist, ...emails];
+  }
+
+  async isBlacklisted(email: string): Promise<boolean> {
+    return this.#blacklist.includes(email);
   }
 }

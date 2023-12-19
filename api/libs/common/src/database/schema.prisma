@@ -432,6 +432,7 @@ model Purges {
 model Blacklist {
   id         String   @id @default(uuid())
   user_id    String   @unique
+  email      String?
   created_at DateTime @default(now())
 
   @@map("blacklist")

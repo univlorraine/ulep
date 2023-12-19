@@ -2,18 +2,12 @@ import { Injectable } from '@nestjs/common';
 import { Collection, PrismaService } from '@app/common';
 import { UserRelations, userMapper } from '../mappers/user.mapper';
 import { UserRepository } from 'src/core/ports/user.repository';
-import { User } from 'src/core/models';
+import { User, UserStatus } from 'src/core/models';
 import { UniversityRelations } from '../mappers';
 
 @Injectable()
 export class PrismaUserRepository implements UserRepository {
   constructor(private readonly prisma: PrismaService) {}
-
-  async createBlacklist(usersId: string[]): Promise<void> {
-    await this.prisma.blacklist.createMany({
-      data: usersId.map((userId) => ({ user_id: userId })),
-    });
-  }
 
   async create(user: User): Promise<User> {
     const instance = await this.prisma.users.create({
@@ -76,6 +70,17 @@ export class PrismaUserRepository implements UserRepository {
     return userMapper(instance);
   }
 
+  async ofStatus(status: UserStatus): Promise<User[]> {
+    const instances = await this.prisma.users.findMany({
+      where: {
+        status: status.toString(),
+      },
+      include: UserRelations,
+    });
+
+    return instances.map((item) => userMapper(item));
+  }
+
   async update(user: User): Promise<User> {
     await this.prisma.users.update({
       where: { id: user.id },
@@ -111,5 +116,28 @@ export class PrismaUserRepository implements UserRepository {
 
   async deleteAll(): Promise<void> {
     await this.prisma.users.deleteMany({});
+  }
+
+  async blacklist(users: User[]): Promise<void> {
+    const blacklist = await this.prisma.blacklist.findMany();
+
+    for (const user of users) {
+      const index = blacklist.findIndex((it) => it.email === user.email);
+      if (index !== -1) {
+        continue;
+      }
+
+      await this.prisma.blacklist.create({
+        data: {
+          user_id: user.id,
+          email: user.email,
+        },
+      });
+    }
+  }
+
+  async isBlacklisted(email: string): Promise<boolean> {
+    const blacklist = await this.prisma.blacklist.findMany();
+    return blacklist.some((it) => it.email === email);
   }
 }

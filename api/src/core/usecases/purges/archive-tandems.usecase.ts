@@ -58,20 +58,14 @@ export class archiveTandemsAndDeleteUsersUsecase {
   async execute(command: UserTandemPurgeCommand): Promise<Purge> {
     // Create purge
     const purge = await this.createNewPurge(command.userId);
-
-    // Save active tandems then delete it
+    // Blacklist users who have been banned
+    await this.blacklistUsers();
+    // Retrieve all users who have an active tandem
     const activeTandems = await this.archiveTandems(purge.id);
-
-    // Delete users
-    const users = (await this.userRepository.findAll()).items;
     const usersWithActiveTandem = this.getUserIdFromTandems(activeTandems);
-
-    await Promise.all([
-      this.blacklistUsers(users),
-      this.deleteUsers(usersWithActiveTandem),
-    ]);
-
-    // 4. Delete closed reports
+    // Delete users who do not have an active tandem and are not administrators
+    await this.deleteUsers(usersWithActiveTandem);
+    // Delete closed reports
     await this.deleteClosedReports();
 
     return purge;
@@ -127,12 +121,9 @@ export class archiveTandemsAndDeleteUsersUsecase {
     await this.userRepository.deleteAll();
   }
 
-  private async blacklistUsers(users: User[]): Promise<void> {
-    const banned = users
-      .filter((user) => user.status === UserStatus.BANNED)
-      .map((user) => user.id);
-
-    await this.userRepository.createBlacklist(banned);
+  private async blacklistUsers(): Promise<void> {
+    const users = await this.userRepository.ofStatus(UserStatus.BANNED);
+    await this.userRepository.blacklist(users);
   }
 
   private async deleteClosedReports(): Promise<void> {

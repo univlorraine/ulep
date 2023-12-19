@@ -109,6 +109,10 @@ class CreateUserUsecase implements CreateUserUsecaseInterface {
                 return new Error('signup_informations_page.error_picture_format');
             }
 
+            if (error.statusCode === 401) {
+                return new Error('signup_informations_page.error_unauthorized');
+            }
+
             if (error.statusCode === 409) {
                 return new Error('signup_informations_page.error_email_already_exist');
             }
@@ -120,6 +124,7 @@ class CreateUserUsecase implements CreateUserUsecaseInterface {
             if (error.statusCode === 400 && error.message === 'Code is invalid') {
                 return new Error('signup_informations_page.error_code');
             }
+            
             return new Error('errors.global');
         }
     }
