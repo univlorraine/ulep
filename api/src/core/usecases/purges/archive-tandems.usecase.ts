@@ -19,7 +19,6 @@ import {
   USER_REPOSITORY,
   UserRepository,
 } from 'src/core/ports/user.repository';
-import { User } from 'src/core/models';
 import {
   REPORT_REPOSITORY,
   ReportRepository,
@@ -28,6 +27,7 @@ import {
   UUID_PROVIDER,
   UuidProviderInterface,
 } from 'src/core/ports/uuid.provider';
+import { DeleteUserUsecase } from '../user';
 
 export class UserTandemPurgeCommand {
   userId: string;
@@ -35,9 +35,9 @@ export class UserTandemPurgeCommand {
 
 /// Iterate through all archived tandems and delete users (in Keycloak) who do not have a tandem (they did not register after the last purge).
 /// We should create specifics usecases for each step of the purge process. (delete users, delete tandems, delete reports, blacklist, ;()...)
-export class archiveTandemsAndDeleteUsersUsecase {
+export class ArchiveTandemsAndDeleteUsersUsecase {
   private readonly logger = new Logger(
-    archiveTandemsAndDeleteUsersUsecase.name,
+    ArchiveTandemsAndDeleteUsersUsecase.name,
   );
 
   constructor(
@@ -53,6 +53,7 @@ export class archiveTandemsAndDeleteUsersUsecase {
     private readonly keycloak: KeycloakClient,
     @Inject(UUID_PROVIDER)
     private readonly uuidProvider: UuidProviderInterface,
+    private readonly deleteUsersUsecase: DeleteUserUsecase,
   ) {}
 
   async execute(command: UserTandemPurgeCommand): Promise<Purge> {
@@ -118,7 +119,11 @@ export class archiveTandemsAndDeleteUsersUsecase {
 
     // Finally, delete all users from the application. Users with active tandems
     // will still be in keycloak in case they want to register again in the next campaign.
-    await this.userRepository.deleteAll();
+    // We call the deleteUsersUsecase for each user to delete the user's image from the storage.
+    const users = await this.userRepository.findAll();
+    for (const user of users.items) {
+      await this.deleteUsersUsecase.execute({ id: user.id });
+    }
   }
 
   private async blacklistUsers(): Promise<void> {

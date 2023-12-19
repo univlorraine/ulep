@@ -36,11 +36,11 @@ export class PrismaUserRepository implements UserRepository {
     return userMapper(instance);
   }
 
-  async findAll(offset = 0, limit = 30): Promise<Collection<User>> {
+  async findAll(offset?: number, limit?: number): Promise<Collection<User>> {
     const count = await this.prisma.users.count();
 
     // If skip is out of range, return an empty array
-    if (offset >= count) {
+    if (offset && offset >= count) {
       return { items: [], totalItems: count };
     }
 
