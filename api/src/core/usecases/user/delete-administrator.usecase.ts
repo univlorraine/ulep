@@ -7,7 +7,7 @@ export class DeleteAdministratorCommand {
 
 @Injectable()
 export class DeleteAdministratorUsecase {
-  constructor(private readonly keycloak: KeycloakClient) { }
+  constructor(private readonly keycloak: KeycloakClient) {}
 
   async execute(command: DeleteAdministratorCommand) {
     return this.keycloak.deleteUser(command.id);

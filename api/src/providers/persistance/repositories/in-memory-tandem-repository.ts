@@ -106,6 +106,7 @@ export class InMemoryTandemRepository implements TandemRepository {
     return Promise.resolve(this.#tandems.find((tandem) => tandem.id === id));
   }
 
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   disableTandemsForUser(id: string): Promise<void> {
     return Promise.resolve();
   }
@@ -128,6 +129,7 @@ export class InMemoryTandemRepository implements TandemRepository {
   }
 
   // TODO
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   archiveTandems(tandems: Tandem[], purgeId: string): Promise<void> {
     throw new Error('Method not implemented.');
   }
