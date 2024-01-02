@@ -1,3 +1,4 @@
+import MediaObject from './MediaObject';
 import University from './University';
 
 class User {

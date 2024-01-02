@@ -24,6 +24,7 @@ import UpdateAvatarUsecaseInterface from '../domain/interfaces/UpdateAvatarUseca
 import UpdateNotificationPermissionUsecaseInterface from '../domain/interfaces/UpdateNotificationPermissionUsecase.interface';
 import { GetInitialUrlUsecase } from '../domain/usecases/AuthStandardFlow/GetInitialUrlUsecase';
 import GetUniversityInterface from '../domain/interfaces/GetUniversity.interface';
+import GetAvatarUsecaseInterface from '../domain/interfaces/GetAvatarUsecase.interface';
 
 export interface ConfigContextValueType {
     accessToken: string;
@@ -42,6 +43,7 @@ export interface ConfigContextValueType {
     getAllReportCategories: GetAllReportCategoriesUsecaseInterface;
     getAllTandems: GetAllTandemsUsecaseInterface;
     getAllUniversities: GetAllUniversitiesUsecaseInterface;
+    getAvatar: GetAvatarUsecaseInterface;
     getProfile: GetProfileUsecaseInterface;
     getQuizzByLevel: GetQuizzByLevelUsecaseInterface;
     getUser: GetUserUsecaseInterface;

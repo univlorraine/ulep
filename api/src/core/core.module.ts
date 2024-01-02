@@ -39,6 +39,7 @@ import {
   GetInterestUsecase,
   GetInterestsByCategoriesUsecase,
   GetLevelsUsecase,
+  GetMediaObjectUsecase,
   GetProfileByUserIdUsecase,
   GetProfileUsecase,
   GetProfilesUsecase,
@@ -122,6 +123,7 @@ const usecases: Provider[] = [
   FindAllSuggestedLanguageUsecase,
   UpdateLanguageCodeUsecase,
   // Media
+  GetMediaObjectUsecase,
   DeleteObjectiveImageUsecase,
   UploadAvatarUsecase,
   UploadObjectiveImageUsecase,

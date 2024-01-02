@@ -4,7 +4,7 @@ import UniversityCommand, { universityCommandToDomain } from './UniversityComman
 
 interface UserCommand {
     id: string;
-    avatar?: { id: string; url: string };
+    avatar?: { id: string; };
     acceptsEmail: boolean;
     email: string;
     firstname: string;
@@ -22,7 +22,7 @@ export const userCommandToDomain = (command: UserCommand) => {
         universityCommandToDomain(command.university),
         command.status,
         command.acceptsEmail,
-        command.avatar ? command.avatar.url : undefined
+        command.avatar ? command.avatar.id : undefined
     );
 };
 
