@@ -5,7 +5,7 @@ import DomainHttpAdapter from '../../mocks/adapters/HttpAdapter';
 
 const payload: UserCommand = {
     id: 'userId',
-    avatar: { id: 'avatarId', url: 'url' },
+    avatar: { id: 'avatarId', mimeType: 'image/png' },
     acceptsEmail: true,
     email: 'email',
     firstname: 'firstname',

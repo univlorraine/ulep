@@ -4,7 +4,6 @@ import { useStoreState } from '../../store/storeTypes';
 import LanguageSelectedContent from '../components/contents/LanguageSelectedContent';
 import SuccessLayout from '../components/layout/SuccessLayout';
 import styles from './css/SignUp.module.css';
-import { AvatarPlaceholderPng } from '../../assets';
 
 const PairingLevelStartPage: React.FC = () => {
     const { configuration } = useConfig();
@@ -34,7 +33,7 @@ const PairingLevelStartPage: React.FC = () => {
                 <LanguageSelectedContent
                     language={profileSignUp.learningLanguage}
                     mode="confirm"
-                    profilePicture={user.avatar ?? AvatarPlaceholderPng}
+                    user={user}
                     onNextPressed={continueSignUp}
                 />
             </div>

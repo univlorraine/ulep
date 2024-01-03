@@ -44,7 +44,7 @@ const PairingUnavailableLanguagePage: React.FC = () => {
                     <LanguageSelectedContent
                         language={language}
                         mode="unavailable"
-                        profilePicture={user.avatar ?? AvatarPlaceholderPng}
+                        user={user}
                         onNextPressed={() => setIsLastStep(true)}
                     />
                 )}

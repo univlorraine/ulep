@@ -1,20 +1,21 @@
 import Language from '../../../domain/entities/Language';
+import Profile from '../../../domain/entities/Profile';
 import { codeLanguageToFlag } from '../../utils';
+import Avatar from '../Avatar';
 import styles from './TandemBubble.module.css';
 
 interface TandemBubbleProps {
     language: Language;
     onTandemPressed: () => void;
-    profileAvatar?: string;
-    profileName?: string;
+    profile?: Profile;
 }
 
-const TandemBubble: React.FC<TandemBubbleProps> = ({ language, onTandemPressed, profileAvatar, profileName }) => {
+const TandemBubble: React.FC<TandemBubbleProps> = ({ language, onTandemPressed, profile }) => {
     return (
         <button className={styles.container} onClick={onTandemPressed}>
             <div className={styles.profile}>
-                <img alt="tandem-avatar" className={styles.avatar} src={profileAvatar} />
-                <span className={styles.name}>{profileName}</span>
+                <Avatar user={profile?.user} className={styles.avatar} />
+                <span className={styles.name}>{profile?.user.firstname}</span>
             </div>
             <div className={styles['flag-container']}>
                 <span className={styles.flag}>{codeLanguageToFlag(language.code)}</span>

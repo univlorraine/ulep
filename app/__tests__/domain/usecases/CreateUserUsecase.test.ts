@@ -7,7 +7,7 @@ import LoginUsecase from '../../mocks/usecase/LoginUsecase';
 
 const payload: UserCommand = {
     id: 'id',
-    avatar: { id: 'id', url: 'url' },
+    avatar: { id: 'id', mimeType: 'image/png' },
     acceptsEmail: true,
     email: 'email',
     firstname: 'firstname',

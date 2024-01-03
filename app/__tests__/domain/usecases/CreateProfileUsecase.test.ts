@@ -39,7 +39,7 @@ const payload: ProfileCommand = {
     availabilitiesNote: 'note',
     user: {
         id: 'userId',
-        avatar: { id: 'avatarId', url: 'url' },
+        avatar: { id: 'avatarId', mimeType: 'image/png' },
         acceptsEmail: true,
         email: 'email',
         firstname: 'firstname',

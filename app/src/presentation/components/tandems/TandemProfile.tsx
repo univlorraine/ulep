@@ -1,6 +1,6 @@
 import React from 'react';
 import { useTranslation } from 'react-i18next';
-import { ArrowLeftSvg, AvatarPlaceholderPng, CloseBlackSvg } from '../../../assets';
+import { ArrowLeftSvg, CloseBlackSvg } from '../../../assets';
 import { ReactComponent as Background } from '../../../assets/background.svg';
 import { useConfig } from '../../../context/ConfigurationContext';
 import Language from '../../../domain/entities/Language';
@@ -38,13 +38,7 @@ const TandemProfile: React.FC<TandemProfileProps> = ({ language, level, onClose,
             </button>
             <div className={styles.content}>
                 <span className="title extra-large-margin-bottom">{t(`home_page.tandem_validated.title`)}</span>
-                <TandemCard
-                    avatar={profile.user.avatar ?? AvatarPlaceholderPng}
-                    fistname={profile.user.firstname}
-                    language={language}
-                    lastname={profile.user.lastname}
-                    university={profile.user.university}
-                />
+                <TandemCard profile={profile} language={language}/>
 
                 <span className={styles.category}>{t(`global.email`)}</span>
                 <div className={styles['text-container']}>

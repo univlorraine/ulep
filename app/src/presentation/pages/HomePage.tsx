@@ -16,6 +16,7 @@ import useWindowDimensions from '../hooks/useWindowDimensions';
 import { HYBRID_MAX_WIDTH } from '../utils';
 import styles from './css/Home.module.css';
 import useGetTandems from '../hooks/useGetTandems';
+import Avatar from '../components/Avatar';
 
 const HomePage: React.FC = () => {
     const { t } = useTranslation();
@@ -67,7 +68,7 @@ const HomePage: React.FC = () => {
     return (
         <IonPage>
             {!isHybrid && (
-                <HomeHeader avatar={profile.user.avatar ?? AvatarPlaceholderPng} onPicturePressed={onProfilePressed} />
+                <HomeHeader user={profile.user} onPicturePressed={onProfilePressed} />
             )}
             <IonContent>
                 <div className={`${styles.container} content-wrapper`}>
@@ -78,11 +79,7 @@ const HomePage: React.FC = () => {
                         </div>
                         {isHybrid && (
                             <button className={styles['avatar-container']} onClick={onProfilePressed}>
-                                <img
-                                    alt="avatar"
-                                    className={styles.avatar}
-                                    src={profile.user.avatar ?? AvatarPlaceholderPng}
-                                />
+                                <Avatar user={profile.user} className={styles.avatar} />
                                 <img alt="arrow-down" src={ArrowDownSvg} />
                             </button>
                         )}
@@ -116,10 +113,7 @@ const HomePage: React.FC = () => {
                         isVisible={displayProfile}
                         onClose={() => setDisplayProfile(false)}
                         onDisconnect={onDisconnect}
-                        profileFirstname={profile.user.firstname}
-                        profileLastname={profile.user.lastname}
-                        profilePicture={profile.user.avatar ?? AvatarPlaceholderPng}
-                        profileUniversity={profile.user.university}
+                        profile={profile}
                     />
                     <TandemStatusModal
                         isVisible={

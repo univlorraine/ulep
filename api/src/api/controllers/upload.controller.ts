@@ -67,7 +67,6 @@ export class UploadsController {
 
   @Get(':id')
   @SerializeOptions({ groups: ['read', MEDIA_READ] })
-  @UseGuards(AuthenticationGuard)
   @Swagger.ApiOperation({ summary: 'MediaObject ressource' })
   @Swagger.ApiResponse({ type: MediaObjectResponse })
   async findOne(@Param('id') id: string): Promise<MediaObjectResponse> {

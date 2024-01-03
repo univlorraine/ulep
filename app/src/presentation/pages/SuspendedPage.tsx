@@ -6,6 +6,7 @@ import WebLayoutCentered from '../components/layout/WebLayoutCentered';
 import ReportModal from '../components/modals/ReportModal';
 import styles from './css/Suspended.module.css';
 import { AvatarPlaceholderPng } from '../../assets';
+import Avatar from '../components/Avatar';
 
 interface SuspendedPageProps {
     status: UserStatus;
@@ -51,7 +52,7 @@ const SuspendedPage: React.FC<SuspendedPageProps> = ({ status }) => {
                         <h1 className="title">
                             {status === 'BANNED' ? t('suspended_page.title') : t('suspended_page.title_canceled')}
                         </h1>
-                        <img alt="avatar" className={styles.image} src={profile?.user.avatar ?? AvatarPlaceholderPng} />
+                        <Avatar user={profile?.user} className={styles.image} />
                         <p className={styles.subtitle}>
                             {status === 'BANNED' ? t('suspended_page.subtitle') : t('suspended_page.subtitle_canceled')}
                             <br />

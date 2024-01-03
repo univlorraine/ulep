@@ -1,28 +1,26 @@
 import Language from '../../../domain/entities/Language';
-import University from '../../../domain/entities/University';
+import Profile from '../../../domain/entities/Profile';
 import { codeLanguageToFlag } from '../../utils';
+import Avatar from '../Avatar';
 import styles from './TandemCard.module.css';
 
 interface TandemCardProps {
-    avatar: string;
-    fistname: string;
+    profile: Profile;
     language: Language;
-    lastname: string;
-    university: University;
 }
 
-const TandemCard: React.FC<TandemCardProps> = ({ avatar, fistname, language, lastname, university }) => {
+const TandemCard: React.FC<TandemCardProps> = ({ profile, language }) => {
     return (
         <div className={styles['container']}>
             <div className={styles.card2} />
             <div className={styles.card1} />
             <div className={styles.card}>
                 <div className={styles.content}>
-                    <img alt="avatar" className={styles.avatar} src={avatar} />
+                    <Avatar user={profile.user} className={styles.avatar} />
                     <div className={styles.bubble}>{codeLanguageToFlag(language.code)}</div>
                     <div className={styles['text-container']}>
-                        <span className={styles.name}>{`${fistname} ${lastname}`}</span>
-                        <span className={styles['university-name']}>{university.name}</span>
+                        <span className={styles.name}>{`${profile.user.firstname} ${profile.user.lastname}`}</span>
+                        <span className={styles['university-name']}>{profile.user.university.name}</span>
                     </div>
                 </div>
             </div>

@@ -2,18 +2,20 @@ import { useTranslation } from 'react-i18next';
 import Language from '../../../domain/entities/Language';
 import FlagBubble from '../FlagBubble';
 import styles from './LanguageSelectedContent.module.css';
+import Avatar from '../Avatar';
+import User from '../../../domain/entities/User';
 
 interface LanguageSelectedContentProps {
     language: Language;
     mode: 'confirm' | 'unavailable';
-    profilePicture: string;
+    user: User;
     onNextPressed: () => void;
 }
 
 const LanguageSelectedContent: React.FC<LanguageSelectedContentProps> = ({
     language,
     mode,
-    profilePicture,
+    user,
     onNextPressed,
 }) => {
     const { t } = useTranslation();
@@ -23,7 +25,7 @@ const LanguageSelectedContent: React.FC<LanguageSelectedContentProps> = ({
             <h1 className="title">{`${t(`pairing_${mode}_language_page.not_alone.title`)}`}</h1>
             <span className="subtitle">{`${t(`pairing_${mode}_language_page.not_alone.subtitle`)}`}</span>
             <div className={styles['image-container']}>
-                <img className={styles.image} alt="avatar" src={profilePicture}></img>
+                <Avatar user={user} className={styles.image} />
                 <div className={styles.bubble}>
                     <FlagBubble language={language} textColor="white" isSelected disabled />
                 </div>
