@@ -69,6 +69,7 @@ interface TextInputProps {
     title: string;
     type?: 'email' | 'number' | 'password' | 'text' | 'text-area';
     value: string;
+    maxLength?: number;
 }
 
 const TextInput: React.FC<TextInputProps> = ({
@@ -80,6 +81,7 @@ const TextInput: React.FC<TextInputProps> = ({
     title,
     type,
     value,
+    maxLength,
 }) => {
     const [showPasword, setShowPassword] = useState<boolean>(false);
     const inputId = `input-${title}}`;
@@ -117,7 +119,7 @@ const TextInput: React.FC<TextInputProps> = ({
                     className={`${style['area-text']} ${
                         errorMessage ? style['area-text-error'] : style['area-text-text']
                     }`}
-                    maxLength={200}
+                    maxLength={maxLength ?? 200}
                     onChange={(e) => onChange(e.target.value)}
                     placeholder={placeholder ?? ''}
                     style={{ height: customHeight }}
