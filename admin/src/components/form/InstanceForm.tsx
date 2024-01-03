@@ -128,23 +128,38 @@ const InstanceForm: React.FC<InstanceFormProps> = ({ handleSubmit, instance }) =
             </Box>
 
             <Typography variant="subtitle1">{translate(`instance.edit.primaryColor`)}</Typography>
-            <MuiColorInput onChange={(_, colors) => setNewPrimaryColor(colors.hex)} value={newPrimaryColor} />
+            <MuiColorInput
+                format="hex"
+                onChange={(_, colors) => setNewPrimaryColor(colors.hex)}
+                value={newPrimaryColor}
+            />
             <Typography variant="subtitle1">{translate(`instance.edit.primaryBackgroundColor`)}</Typography>
             <MuiColorInput
+                format="hex"
                 onChange={(_, colors) => setNewPrimaryBackgroundColor(colors.hex)}
                 value={newPrimaryBackgroundColor}
             />
             <Typography variant="subtitle1">{translate(`instance.edit.primaryDarkColor`)}</Typography>
-            <MuiColorInput onChange={(_, colors) => setNewPrimaryDarkColor(colors.hex)} value={newPrimaryDarkColor} />
+            <MuiColorInput
+                format="hex"
+                onChange={(_, colors) => setNewPrimaryDarkColor(colors.hex)}
+                value={newPrimaryDarkColor}
+            />
             <Typography variant="subtitle1">{translate(`instance.edit.secondaryColor`)}</Typography>
-            <MuiColorInput onChange={(_, colors) => setNewSecondaryColor(colors.hex)} value={newSecondaryColor} />
+            <MuiColorInput
+                format="hex"
+                onChange={(_, colors) => setNewSecondaryColor(colors.hex)}
+                value={newSecondaryColor}
+            />
             <Typography variant="subtitle1">{translate(`instance.edit.secondaryBackgroundColor`)}</Typography>
             <MuiColorInput
+                format="hex"
                 onChange={(_, colors) => setNewSecondaryBackgroundColor(colors.hex)}
                 value={newSecondaryBackgroundColor}
             />
             <Typography variant="subtitle1">{translate(`instance.edit.secondaryDarkColor`)}</Typography>
             <MuiColorInput
+                format="hex"
                 onChange={(_, colors) => setNewSecondaryDarkColor(colors.hex)}
                 value={newSecondaryDarkColor}
             />
