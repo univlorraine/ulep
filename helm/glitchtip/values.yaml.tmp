@@ -1,0 +1,53 @@
+# For configuration options, see https://gitlab.com/glitchtip/glitchtip-helm-chart/-/blob/master/values.yaml
+glitchtip:
+  image:
+    repository: glitchtip/glitchtip
+    tag: v3.4.4
+    pullPolicy: IfNotPresent
+  env:
+    normal:
+      GLITCHTIP_DOMAIN: https://glitchtip.ulep.thestaging.io
+      EMAIL_URL: smtp://email:password@smtp_url:port
+      DEFAULT_FROM_EMAIL: info@example.com
+    secret:
+      SECRET_KEY: "!ThisMustBeChanged!" # run openssl rand -hex 32
+  web:
+    service:
+      type: ClusterIP
+      port: 80
+    ingress:
+      enabled: true
+      className: traefik
+      annotations:
+        kubernetes.io/ingress.class: traefik
+        cert-manager.io/cluster-issuer: "letsencrypt"
+        kubernetes.io/tls-acme: "true"
+      hosts:
+        - host: glitchtip.ulep.thestaging.io
+          paths:
+            - path: /
+              pathType: Prefix
+      tls:
+        - secretName: glitchtip-tls
+          hosts:
+            - glitchtip.ulep.thestaging.io
+
+  # For configuration options, see https://artifacthub.io/packages/helm/bitnami/redis
+  redis:
+    enabled: true
+    architecture: standalone
+    auth:
+     password: "!ChangeMe!"
+    master:
+      persistence:
+        enabled: false
+
+  # For configuration options, see https://artifacthub.io/packages/helm/bitnami/postgresql
+  postgresql:
+    enabled: true
+    auth:
+      postgresPassword: "!ChangeMe!"
+    primary:
+      persistence:
+        size: 10Gi  # Default is 8, may want this considerably higher
+
