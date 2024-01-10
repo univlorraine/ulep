@@ -119,6 +119,11 @@ const TandemTable = ({ partners, actions, displayTandemLanguage }: TandemTablePr
                 ))}
             </TableBody>
             <Popover
+                PaperProps={{
+                    style: {
+                        borderRadius: 10,
+                    },
+                }}
                 anchorEl={anchorEl}
                 anchorOrigin={{
                     vertical: 'bottom',
