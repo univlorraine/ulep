@@ -25,5 +25,5 @@ appVersion: "1.16.0"
 
 dependencies:
   - name: glitchtip
-    version: 2.5.1 # https://gitlab.com/glitchtip/glitchtip-helm-chart/-/blob/master/Chart.yaml?ref_type=heads#L17
+    version: 2.5.1
     repository: https://gitlab.com/api/v4/projects/16325141/packages/helm/stable

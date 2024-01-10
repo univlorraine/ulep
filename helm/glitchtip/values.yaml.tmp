@@ -1,3 +1,5 @@
+define: &domain "glitchtip.ulep.thestaging.io"
+
 # For configuration options, see https://gitlab.com/glitchtip/glitchtip-helm-chart/-/blob/master/values.yaml
 glitchtip:
   image:
@@ -23,14 +25,14 @@ glitchtip:
         cert-manager.io/cluster-issuer: "letsencrypt"
         kubernetes.io/tls-acme: "true"
       hosts:
-        - host: glitchtip.ulep.thestaging.io
+        - host: *domain
           paths:
             - path: /
               pathType: Prefix
       tls:
         - secretName: glitchtip-tls
           hosts:
-            - glitchtip.ulep.thestaging.io
+            - *domain
 
   # For configuration options, see https://artifacthub.io/packages/helm/bitnami/redis
   redis:
