@@ -1,9 +1,12 @@
 import { Table, TableBody, TableCell, TableHead, TableRow } from '@mui/material';
-import React from 'react';
+import Popover from '@mui/material/Popover';
+import Typography from '@mui/material/Typography';
+import React, { useState } from 'react';
 import { useTranslate } from 'react-admin';
 import { DisplayGender, DisplayLearningType, DisplayRole } from '../../../components/translated';
 import Language from '../../../entities/Language';
 import { LearningType } from '../../../entities/LearningLanguage';
+import { MatchScore } from '../../../entities/Match';
 import { Profile } from '../../../entities/Profile';
 import ProfileLink from '../ui/ProfileLink';
 
@@ -15,6 +18,7 @@ interface TandemPartner {
     effectiveLearningType?: LearningType;
     level: string;
     createdAt: Date;
+    matchScore?: MatchScore;
     compatibilityScore?: number;
     tandemLanguage?: Language;
 }
@@ -27,6 +31,22 @@ interface TandemTableProps {
 
 const TandemTable = ({ partners, actions, displayTandemLanguage }: TandemTableProps) => {
     const translate = useTranslate();
+
+    const [anchorEl, setAnchorEl] = React.useState<HTMLElement | null>(null);
+    const [selectedMatchScore, setSelectedMatchScore] = useState<MatchScore | undefined>();
+
+    const handlePopoverOpen = (event: React.MouseEvent<HTMLElement>, matchScore?: MatchScore) => {
+        if (matchScore) {
+            setSelectedMatchScore(matchScore);
+            setAnchorEl(event.currentTarget);
+        }
+    };
+
+    const handlePopoverClose = () => {
+        setAnchorEl(null);
+    };
+
+    const open = Boolean(anchorEl);
 
     return (
         <Table>
@@ -82,13 +102,48 @@ const TandemTable = ({ partners, actions, displayTandemLanguage }: TandemTablePr
                         </TableCell>
                         <TableCell>{partner.profile.user.age}</TableCell>
                         <TableCell>
-                            {partner.compatibilityScore ? `${partner.compatibilityScore * 100}%` : 'N/A'}
+                            <div>
+                                <Typography
+                                    aria-haspopup="true"
+                                    aria-owns={open ? 'mouse-over-popover' : undefined}
+                                    onMouseEnter={(event) => handlePopoverOpen(event, partner.matchScore)}
+                                    onMouseLeave={handlePopoverClose}
+                                >
+                                    {partner.compatibilityScore ? `${partner.compatibilityScore * 100}%` : 'N/A'}
+                                </Typography>
+                            </div>
                         </TableCell>
                         <TableCell>{new Date(partner.createdAt).toLocaleDateString()}</TableCell>
                         {actions && <TableCell>{actions(partner)}</TableCell>}
                     </TableRow>
                 ))}
             </TableBody>
+            <Popover
+                anchorEl={anchorEl}
+                anchorOrigin={{
+                    vertical: 'bottom',
+                    horizontal: 'left',
+                }}
+                id="mouse-over-popover"
+                onClose={handlePopoverClose}
+                open={open}
+                sx={{
+                    pointerEvents: 'none',
+                }}
+                transformOrigin={{
+                    vertical: 'top',
+                    horizontal: 'left',
+                }}
+                disableRestoreFocus
+            >
+                <Typography sx={{ p: 1 }}>{`Age : ${selectedMatchScore?.age}`}</Typography>
+                <Typography sx={{ p: 1 }}>{`Gender : ${selectedMatchScore?.gender}`}</Typography>
+                <Typography sx={{ p: 1 }}>{`Goals : ${selectedMatchScore?.goals}`}</Typography>
+                <Typography sx={{ p: 1 }}>{`Interests : ${selectedMatchScore?.interests}`}</Typography>
+                <Typography sx={{ p: 1 }}>{`Level : ${selectedMatchScore?.level}`}</Typography>
+                <Typography sx={{ p: 1 }}>{`Status : ${selectedMatchScore?.status}`}</Typography>
+                <Typography sx={{ p: 1 }}>{`Total : ${selectedMatchScore?.total}`}</Typography>
+            </Popover>
         </Table>
     );
 };

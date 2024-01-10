@@ -182,6 +182,7 @@ const ShowTandems = () => {
                                 partners={matches.map((match) => ({
                                     ...match.target,
                                     compatibilityScore: match.score.total,
+                                    matchScore: match.score,
                                     effectiveLearningType: getEffectiveLearningType(record, match.target),
                                 }))}
                             />

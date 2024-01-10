@@ -1,7 +1,7 @@
 import Language from './Language';
 import { LearningLanguage } from './LearningLanguage';
 
-type MatchScore = {
+export type MatchScore = {
     level: number;
     age: number;
     status: number;
