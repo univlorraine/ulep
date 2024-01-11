@@ -15,6 +15,7 @@ import {
   LearningLanguage,
   LearningObjective,
   LearningType,
+  MeetingFrequency,
   ProficiencyLevel,
   Profile,
   User,
@@ -65,7 +66,7 @@ export class CreateProfileCommand {
     specificProgram?: boolean;
   }[];
   objectives: string[];
-  meetingFrequency: string;
+  meetingFrequency: MeetingFrequency;
   interests: string[];
   bios?: string;
 }

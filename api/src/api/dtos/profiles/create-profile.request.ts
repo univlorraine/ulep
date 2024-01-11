@@ -17,6 +17,7 @@ import { CreateProfileCommand } from 'src/core/usecases/profiles/create-profile.
 import { BiographyDto } from './biography';
 import { LearningLanguageDto } from '../learning-languages';
 import { AvailabilitesDto } from 'src/api/dtos/profiles/availabilities';
+import { MeetingFrequency } from 'src/core/models';
 
 export class CreateProfileRequest
   implements Omit<CreateProfileCommand, 'user'>
@@ -40,9 +41,9 @@ export class CreateProfileRequest
   @IsUUID('4', { each: true })
   objectives: string[];
 
-  @Swagger.ApiProperty({ type: 'string', example: 'ONCE_A_WEEK' })
+  @Swagger.ApiProperty({ type: 'string', enum: MeetingFrequency })
   @IsNotEmpty()
-  meetingFrequency: string;
+  meetingFrequency: MeetingFrequency;
 
   @Swagger.ApiProperty({ type: 'string', format: 'uuid', isArray: true })
   @ArrayMaxSize(10)

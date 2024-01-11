@@ -2,6 +2,7 @@ import * as Prisma from '@prisma/client';
 import {
   LearningLanguage,
   LearningType,
+  MeetingFrequency,
   ProficiencyLevel,
   Profile,
 } from 'src/core/models';
@@ -81,7 +82,7 @@ export const profileMapper = (instance: ProfileSnapshot): Profile => {
           specificProgram: learningLanguage.specific_program,
         }),
     ),
-    meetingFrequency: instance.meeting_frequency,
+    meetingFrequency: MeetingFrequency[instance.meeting_frequency],
     objectives: instance.Goals.map((objective) => ({
       id: objective.id,
       name: textContentMapper(objective.TextContent),

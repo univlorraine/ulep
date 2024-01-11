@@ -1,7 +1,7 @@
 import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
 import { Expose, Transform } from 'class-transformer';
 import { InterestResponse } from 'src/api/dtos/interests';
-import { Profile } from 'src/core/models/profile.model';
+import { MeetingFrequency, Profile } from 'src/core/models/profile.model';
 import { UserResponse } from '../users';
 import { ObjectiveResponse } from '../objective';
 import { BiographyDto } from './biography';
@@ -72,9 +72,9 @@ export class ProfileResponse {
   @Expose({ groups: ['read'] })
   objectives: ObjectiveResponse[];
 
-  @ApiProperty({ type: 'string' })
+  @ApiProperty({ type: 'string', enum: MeetingFrequency })
   @Expose({ groups: ['read'] })
-  meetingFrequency: string;
+  meetingFrequency: MeetingFrequency;
 
   @ApiProperty({ type: InterestResponse, isArray: true })
   @Expose({ groups: ['read'] })

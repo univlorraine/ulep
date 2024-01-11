@@ -6,6 +6,7 @@ import {
   LanguageStatus,
   LearningLanguage,
   LearningType,
+  MeetingFrequency,
   ProficiencyLevel,
   Profile,
   Role,
@@ -189,7 +190,7 @@ describe('GenerateTandem UC', () => {
     id: 'FR1',
     nativeLanguage: french,
     masteredLanguages: [],
-    meetingFrequency: 'ONCE_A_WEEK',
+    meetingFrequency: MeetingFrequency.ONCE_A_WEEK,
     learningLanguages: [
       new LearningLanguage({
         id: 'FR1-LL_EN_B2',
@@ -227,7 +228,7 @@ describe('GenerateTandem UC', () => {
     id: 'FR2',
     nativeLanguage: french,
     masteredLanguages: [deutch],
-    meetingFrequency: 'ONCE_A_WEEK',
+    meetingFrequency: MeetingFrequency.ONCE_A_WEEK,
     learningLanguages: [
       new LearningLanguage({
         id: 'FR2-LL_SP_A2',
@@ -265,7 +266,7 @@ describe('GenerateTandem UC', () => {
     id: 'FR3',
     nativeLanguage: french,
     masteredLanguages: [],
-    meetingFrequency: 'ONCE_A_WEEK',
+    meetingFrequency: MeetingFrequency.ONCE_A_WEEK,
     learningLanguages: [
       new LearningLanguage({
         id: 'FR3-LL_EN_A1',
@@ -303,7 +304,7 @@ describe('GenerateTandem UC', () => {
     id: 'SP1',
     nativeLanguage: spanish,
     masteredLanguages: [],
-    meetingFrequency: 'TWICE_A_MONTH',
+    meetingFrequency: MeetingFrequency.TWICE_A_MONTH,
     learningLanguages: [
       new LearningLanguage({
         id: 'SP1-LL_FR_B1',
@@ -341,7 +342,7 @@ describe('GenerateTandem UC', () => {
     id: 'SP2',
     nativeLanguage: spanish,
     masteredLanguages: [english],
-    meetingFrequency: 'ONCE_A_WEEK',
+    meetingFrequency: MeetingFrequency.ONCE_A_WEEK,
     learningLanguages: [
       new LearningLanguage({
         id: 'SP2-LL_FR_B2',
@@ -379,7 +380,7 @@ describe('GenerateTandem UC', () => {
     id: 'EN1',
     nativeLanguage: english,
     masteredLanguages: [],
-    meetingFrequency: 'ONCE_A_WEEK',
+    meetingFrequency: MeetingFrequency.ONCE_A_WEEK,
     learningLanguages: [
       new LearningLanguage({
         id: 'EN1-LL_FR_C2',
@@ -417,7 +418,7 @@ describe('GenerateTandem UC', () => {
     id: 'EN2',
     nativeLanguage: english,
     masteredLanguages: [],
-    meetingFrequency: 'ONCE_A_WEEK',
+    meetingFrequency: MeetingFrequency.ONCE_A_WEEK,
     learningLanguages: [
       new LearningLanguage({
         id: 'EN2-LL_FR_B1',
@@ -455,7 +456,7 @@ describe('GenerateTandem UC', () => {
     id: 'DE',
     nativeLanguage: deutch,
     masteredLanguages: [spanish],
-    meetingFrequency: 'ONCE_A_WEEK',
+    meetingFrequency: MeetingFrequency.ONCE_A_WEEK,
     learningLanguages: [
       new LearningLanguage({
         id: 'DE-LL_FR_B1',
@@ -635,7 +636,7 @@ describe('GenerateTandem UC', () => {
       id: 'MALE1',
       nativeLanguage: french,
       masteredLanguages: [],
-      meetingFrequency: 'ONCE_A_WEEK',
+      meetingFrequency: MeetingFrequency.ONCE_A_WEEK,
       learningLanguages: [
         new LearningLanguage({
           id: 'MALE1-EN_B2',
@@ -674,7 +675,7 @@ describe('GenerateTandem UC', () => {
       id: 'FEMALE',
       nativeLanguage: english,
       masteredLanguages: [],
-      meetingFrequency: 'ONCE_A_WEEK',
+      meetingFrequency: MeetingFrequency.ONCE_A_WEEK,
       learningLanguages: [
         new LearningLanguage({
           id: 'FEMALE-FR_B2',
@@ -729,7 +730,7 @@ describe('GenerateTandem UC', () => {
       id: 'FR_TANDEM',
       nativeLanguage: french,
       masteredLanguages: [],
-      meetingFrequency: 'ONCE_A_WEEK',
+      meetingFrequency: MeetingFrequency.ONCE_A_WEEK,
       learningLanguages: [
         new LearningLanguage({
           id: 'FR_TANDEM-EN_B2',
@@ -770,7 +771,7 @@ describe('GenerateTandem UC', () => {
       id: 'EN_TANDEM',
       nativeLanguage: english,
       masteredLanguages: [],
-      meetingFrequency: 'ONCE_A_WEEK',
+      meetingFrequency: MeetingFrequency.ONCE_A_WEEK,
       learningLanguages: [
         new LearningLanguage({
           id: 'EN_TANDEM-LOR-FR_B2',
@@ -811,7 +812,7 @@ describe('GenerateTandem UC', () => {
       id: 'EN_TANDEM',
       nativeLanguage: english,
       masteredLanguages: [],
-      meetingFrequency: 'ONCE_A_WEEK',
+      meetingFrequency: MeetingFrequency.ONCE_A_WEEK,
       learningLanguages: [
         new LearningLanguage({
           id: 'EN_TANDEM-STR-FR_B2',
@@ -852,7 +853,7 @@ describe('GenerateTandem UC', () => {
       id: 'FR_ETANDEM',
       nativeLanguage: french,
       masteredLanguages: [],
-      meetingFrequency: 'ONCE_A_WEEK',
+      meetingFrequency: MeetingFrequency.ONCE_A_WEEK,
       learningLanguages: [
         new LearningLanguage({
           id: 'FR_ETANDEM-EN_B2',
@@ -892,7 +893,7 @@ describe('GenerateTandem UC', () => {
       id: 'EN_ETANDEM',
       nativeLanguage: english,
       masteredLanguages: [],
-      meetingFrequency: 'ONCE_A_WEEK',
+      meetingFrequency: MeetingFrequency.ONCE_A_WEEK,
       learningLanguages: [
         new LearningLanguage({
           id: 'EN_ETANDEM-FR_B2',
@@ -932,7 +933,7 @@ describe('GenerateTandem UC', () => {
       id: 'FR_BOTH',
       nativeLanguage: french,
       masteredLanguages: [],
-      meetingFrequency: 'ONCE_A_WEEK',
+      meetingFrequency: MeetingFrequency.ONCE_A_WEEK,
       learningLanguages: [
         new LearningLanguage({
           id: 'FR_BOTH-EN_B2',
@@ -973,7 +974,7 @@ describe('GenerateTandem UC', () => {
       id: 'EN_BOTH',
       nativeLanguage: english,
       masteredLanguages: [],
-      meetingFrequency: 'ONCE_A_WEEK',
+      meetingFrequency: MeetingFrequency.ONCE_A_WEEK,
       learningLanguages: [
         new LearningLanguage({
           id: 'EN_BOTH-FR_B2',
@@ -1158,7 +1159,7 @@ describe('GenerateTandem UC', () => {
       id: 'EN_SUB',
       nativeLanguage: english,
       masteredLanguages: [],
-      meetingFrequency: 'ONCE_A_WEEK',
+      meetingFrequency: MeetingFrequency.ONCE_A_WEEK,
       learningLanguages: [
         new LearningLanguage({
           id: 'EN_SUB-FR_B2',
@@ -1196,7 +1197,7 @@ describe('GenerateTandem UC', () => {
       id: 'SP_SUB',
       nativeLanguage: spanish,
       masteredLanguages: [],
-      meetingFrequency: 'ONCE_A_WEEK',
+      meetingFrequency: MeetingFrequency.ONCE_A_WEEK,
       learningLanguages: [
         new LearningLanguage({
           id: 'SP_SUB-FR_B2',
@@ -1275,7 +1276,7 @@ describe('GenerateTandem UC', () => {
       id: 'FR_SUB',
       nativeLanguage: french,
       masteredLanguages: [],
-      meetingFrequency: 'ONCE_A_WEEK',
+      meetingFrequency: MeetingFrequency.ONCE_A_WEEK,
       learningLanguages: [
         new LearningLanguage({
           id: 'FR_SUB-EN_B2',
@@ -1313,7 +1314,7 @@ describe('GenerateTandem UC', () => {
       id: 'EN_SUB',
       nativeLanguage: english,
       masteredLanguages: [],
-      meetingFrequency: 'ONCE_A_WEEK',
+      meetingFrequency: MeetingFrequency.ONCE_A_WEEK,
       learningLanguages: [
         new LearningLanguage({
           id: 'EN_SUB-FR_B2',
@@ -1381,7 +1382,7 @@ describe('GenerateTandem UC', () => {
       id: 'EN_1',
       nativeLanguage: english,
       masteredLanguages: [],
-      meetingFrequency: 'ONCE_A_WEEK',
+      meetingFrequency: MeetingFrequency.ONCE_A_WEEK,
       learningLanguages: [
         new LearningLanguage({
           id: 'EN_1-LL_FR_B2',
@@ -1422,7 +1423,7 @@ describe('GenerateTandem UC', () => {
         id: 'FR_1',
         nativeLanguage: french,
         masteredLanguages: [],
-        meetingFrequency: 'ONCE_A_WEEK',
+        meetingFrequency: MeetingFrequency.ONCE_A_WEEK,
         learningLanguages: [
           new LearningLanguage({
             id: 'FR_1-LL_EN_B2',
@@ -1463,7 +1464,7 @@ describe('GenerateTandem UC', () => {
         id: 'FR_2',
         nativeLanguage: french,
         masteredLanguages: [],
-        meetingFrequency: 'ONCE_A_WEEK',
+        meetingFrequency: MeetingFrequency.ONCE_A_WEEK,
         learningLanguages: [
           new LearningLanguage({
             id: 'FR_2-LL_EN_B2',
@@ -1520,7 +1521,7 @@ describe('GenerateTandem UC', () => {
         id: 'FR_1',
         nativeLanguage: french,
         masteredLanguages: [],
-        meetingFrequency: 'ONCE_A_WEEK',
+        meetingFrequency: MeetingFrequency.ONCE_A_WEEK,
         learningLanguages: [
           new LearningLanguage({
             id: 'FR_1-LL_EN_B2',
@@ -1561,7 +1562,7 @@ describe('GenerateTandem UC', () => {
         id: 'FR_2',
         nativeLanguage: french,
         masteredLanguages: [],
-        meetingFrequency: 'ONCE_A_WEEK',
+        meetingFrequency: MeetingFrequency.ONCE_A_WEEK,
         learningLanguages: [
           new LearningLanguage({
             id: 'FR_2-LL_EN_B2',
@@ -1618,7 +1619,7 @@ describe('GenerateTandem UC', () => {
         id: 'FR_1',
         nativeLanguage: french,
         masteredLanguages: [],
-        meetingFrequency: 'ONCE_A_WEEK',
+        meetingFrequency: MeetingFrequency.ONCE_A_WEEK,
         learningLanguages: [
           new LearningLanguage({
             id: 'FR_1-LL_EN_B2',
@@ -1659,7 +1660,7 @@ describe('GenerateTandem UC', () => {
         id: 'FR_2',
         nativeLanguage: french,
         masteredLanguages: [],
-        meetingFrequency: 'ONCE_A_WEEK',
+        meetingFrequency: MeetingFrequency.ONCE_A_WEEK,
         learningLanguages: [
           new LearningLanguage({
             id: 'FR_2-LL_EN_B2',
@@ -1698,7 +1699,7 @@ describe('GenerateTandem UC', () => {
         id: 'EN_1',
         nativeLanguage: english,
         masteredLanguages: [],
-        meetingFrequency: 'ONCE_A_WEEK',
+        meetingFrequency: MeetingFrequency.ONCE_A_WEEK,
         learningLanguages: [
           new LearningLanguage({
             id: 'EN_1-LL_FR_B2',
@@ -1755,7 +1756,7 @@ describe('GenerateTandem UC', () => {
       id: 'FR_JOKER',
       nativeLanguage: french,
       masteredLanguages: [],
-      meetingFrequency: 'ONCE_A_WEEK',
+      meetingFrequency: MeetingFrequency.ONCE_A_WEEK,
       learningLanguages: [
         new LearningLanguage({
           id: 'FR_1-LL_JOKER',
@@ -1794,7 +1795,7 @@ describe('GenerateTandem UC', () => {
       id: 'KS',
       nativeLanguage: otherLanguage,
       masteredLanguages: [],
-      meetingFrequency: 'ONCE_A_WEEK',
+      meetingFrequency: MeetingFrequency.ONCE_A_WEEK,
       learningLanguages: [
         new LearningLanguage({
           id: 'KS-LL_FR',

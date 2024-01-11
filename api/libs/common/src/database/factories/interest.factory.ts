@@ -6,6 +6,7 @@ export class InterestFactory extends ModelFactory<Interest> {
   getDefaults(): Partial<Interest> {
     return {
       id: faker.string.uuid(),
+      category: faker.string.uuid(),
       name: {
         id: faker.string.uuid(),
         content: faker.lorem.sentence(),

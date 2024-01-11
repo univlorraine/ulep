@@ -17,7 +17,9 @@ describe('GetLanguages', () => {
 
     repository.init(languages);
 
-    const result = await usecase.execute();
+    const result = await usecase.execute({
+      orderBy: { order: 'asc' },
+    });
 
     expect(result).toEqual(languages);
   });

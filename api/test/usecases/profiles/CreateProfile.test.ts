@@ -10,7 +10,11 @@ import { InMemoryLanguageRepository } from '../../../src/providers/persistance/r
 import { InMemoryProfileRepository } from '../../../src/providers/persistance/repositories/in-memory-profile-repository';
 import { InMemoryUniversityRepository } from '../../../src/providers/persistance/repositories/in-memory-university-repository';
 import { InMemoryUserRepository } from '../../../src/providers/persistance/repositories/in-memory-user-repository';
-import { LearningType, ProficiencyLevel } from '../../../src/core/models';
+import {
+  LearningType,
+  MeetingFrequency,
+  ProficiencyLevel,
+} from '../../../src/core/models';
 import {
   RessourceDoesNotExist,
   UnsuportedLanguageException,
@@ -103,17 +107,20 @@ describe('CreateProfile', () => {
 
     try {
       await createProfileUsecase.execute({
-        id: 'uuid-1',
         user: 'uuid-that-does-not-exist',
         nativeLanguageCode: languages[0].code,
-        learningLanguageCode: languages[1].code,
-        level: ProficiencyLevel.B2,
-        learningType: LearningType.ETANDEM,
+        learningLanguages: [
+          {
+            code: languages[1].code,
+            level: ProficiencyLevel.B2,
+            learningType: LearningType.ETANDEM,
+            sameGender: true,
+            sameAge: true,
+          },
+        ],
         objectives: [],
-        meetingFrequency: 'ONCE_A_WEEK',
+        meetingFrequency: MeetingFrequency.ONCE_A_WEEK,
         interests: [interest.id],
-        sameGender: true,
-        sameAge: true,
         bios: 'I am a student',
       });
     } catch (error) {
@@ -123,40 +130,25 @@ describe('CreateProfile', () => {
     expect(exception).toBeInstanceOf(RessourceDoesNotExist);
   });
 
-  it('when learning language is null, level should be A0', async () => {
-    const profile = await createProfileUsecase.execute({
-      id: 'uuid-1',
-      user: user.id,
-      nativeLanguageCode: nativeLanguage.code,
-      level: ProficiencyLevel.B2,
-      learningType: LearningType.ETANDEM,
-      objectives: [],
-      meetingFrequency: 'ONCE_A_WEEK',
-      interests: [interest.id],
-      sameGender: true,
-      sameAge: true,
-      bios: 'I am a student',
-    });
-
-    expect(profile.level).toBe(ProficiencyLevel.A0);
-  });
-
   it('should throw an error if university do not accept learning language', async () => {
     let exception: Error | undefined;
 
     try {
       await createProfileUsecase.execute({
-        id: 'uuid-1',
         user: user.id,
         nativeLanguageCode: nativeLanguage.code,
-        learningLanguageCode: unvailableLanguage.code,
-        level: ProficiencyLevel.B2,
-        learningType: LearningType.ETANDEM,
+        learningLanguages: [
+          {
+            code: unvailableLanguage.code,
+            level: ProficiencyLevel.B2,
+            learningType: LearningType.ETANDEM,
+            sameGender: true,
+            sameAge: true,
+          },
+        ],
         objectives: [],
-        meetingFrequency: 'ONCE_A_WEEK',
+        meetingFrequency: MeetingFrequency.ONCE_A_WEEK,
         interests: [interest.id],
-        sameGender: true,
-        sameAge: true,
         bios: 'I am a student',
       });
     } catch (error) {
@@ -171,17 +163,20 @@ describe('CreateProfile', () => {
 
     try {
       await createProfileUsecase.execute({
-        id: 'uuid-1',
         user: user.id,
         nativeLanguageCode: nativeLanguage.code,
-        learningLanguageCode: nativeLanguage.code,
-        level: ProficiencyLevel.B2,
-        learningType: LearningType.ETANDEM,
+        learningLanguages: [
+          {
+            code: nativeLanguage.code,
+            level: ProficiencyLevel.B2,
+            learningType: LearningType.ETANDEM,
+            sameGender: true,
+            sameAge: true,
+          },
+        ],
         objectives: [],
-        meetingFrequency: 'ONCE_A_WEEK',
+        meetingFrequency: MeetingFrequency.ONCE_A_WEEK,
         interests: [interest.id],
-        sameGender: true,
-        sameAge: true,
         bios: 'I am a student',
       });
     } catch (error) {
@@ -196,18 +191,21 @@ describe('CreateProfile', () => {
 
     try {
       await createProfileUsecase.execute({
-        id: 'uuid-1',
         user: user.id,
         nativeLanguageCode: nativeLanguage.code,
-        learningLanguageCode: learningLanguage.code,
-        level: ProficiencyLevel.B2,
+        learningLanguages: [
+          {
+            code: learningLanguage.code,
+            level: ProficiencyLevel.B2,
+            learningType: LearningType.ETANDEM,
+            sameGender: true,
+            sameAge: true,
+          },
+        ],
         masteredLanguageCodes: [nativeLanguage.code],
-        learningType: LearningType.ETANDEM,
         objectives: [],
-        meetingFrequency: 'ONCE_A_WEEK',
+        meetingFrequency: MeetingFrequency.ONCE_A_WEEK,
         interests: [interest.id],
-        sameGender: true,
-        sameAge: true,
         bios: 'I am a student',
       });
     } catch (error) {
@@ -222,18 +220,21 @@ describe('CreateProfile', () => {
 
     try {
       await createProfileUsecase.execute({
-        id: 'uuid-1',
         user: user.id,
         nativeLanguageCode: nativeLanguage.code,
-        learningLanguageCode: learningLanguage.code,
-        level: ProficiencyLevel.B2,
+        learningLanguages: [
+          {
+            code: learningLanguage.code,
+            level: ProficiencyLevel.B2,
+            learningType: LearningType.ETANDEM,
+            sameGender: true,
+            sameAge: true,
+          },
+        ],
         masteredLanguageCodes: [learningLanguage.code],
-        learningType: LearningType.ETANDEM,
         objectives: [],
-        meetingFrequency: 'ONCE_A_WEEK',
+        meetingFrequency: MeetingFrequency.ONCE_A_WEEK,
         interests: [interest.id],
-        sameGender: true,
-        sameAge: true,
         bios: 'I am a student',
       });
     } catch (error) {

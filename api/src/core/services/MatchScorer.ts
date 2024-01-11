@@ -19,6 +19,8 @@ export type AgeThreshold = {
   maxDifference: number;
 }[];
 
+export type Matrix = { [key: string]: { [key: string]: number } };
+
 export interface IMatchScorer {
   computeMatchScore(
     learningLanguage1: LearningLanguage,
@@ -27,7 +29,7 @@ export interface IMatchScorer {
   ): Match;
 }
 
-const getMaxValueInNumberMatrix = (matrix: { [key: string]: { [key: string]: number } }) => Object.values(matrix)
+const getMaxValueInNumberMatrix = (matrix: Matrix ) => Object.values(matrix)
   .reduce<number>((accumulator, value) => {
     const maxScoreForValue = Math.max(...Object.values(value));
     if (!accumulator || maxScoreForValue > accumulator) {
@@ -61,12 +63,21 @@ export class MatchScorer implements IMatchScorer {
     { age: 15, maxDifference: 5 },
   ];
 
+  // Similarities of meeting frequencies
+  #frequencyMatrix: Matrix = {
+    ONCE_A_WEEK: { ONCE_A_WEEK: 1.0, TWICE_A_WEEK: 0.8, THREE_TIMES_A_WEEK: 0.6, TWICE_A_MONTH: 0.4, THREE_TIMES_A_MONTH: 0.3 },
+    TWICE_A_WEEK: { ONCE_A_WEEK: 0.8, TWICE_A_WEEK: 1.0, THREE_TIMES_A_WEEK: 0.8, TWICE_A_MONTH: 0.5, THREE_TIMES_A_MONTH: 0.4 },
+    THREE_TIMES_A_WEEK: { ONCE_A_WEEK: 0.6, TWICE_A_WEEK: 0.8, THREE_TIMES_A_WEEK: 1.0, TWICE_A_MONTH: 0.6, THREE_TIMES_A_MONTH: 0.5 },
+    TWICE_A_MONTH: { ONCE_A_WEEK: 0.4, TWICE_A_WEEK: 0.5, THREE_TIMES_A_WEEK: 0.6, TWICE_A_MONTH: 1.0, THREE_TIMES_A_MONTH: 0.9 },
+    THREE_TIMES_A_MONTH: { ONCE_A_WEEK: 0.3, TWICE_A_WEEK: 0.4, THREE_TIMES_A_WEEK: 0.5, TWICE_A_MONTH: 0.9, THREE_TIMES_A_MONTH: 1.0 }
+  };
+
   // Note: A learning language can only match a language spoken by the potential match profile. As all
   // languages spoken are approximated with the same skill level ,we approximate the compatibility 
   // score only with learning language levels. We consider in this method that compatibility
   // has already been asserted (i.e. learningLanguage 1 is spoken by profile 2 and learningLanguage 2 is spoken by profile 1).
   // Note: to preserve this approximation, it is mandatory that matrix are symetrics
-  #standardPairingLearningLanguagesCompatibilityMatrix: { [key: string]: { [key: string]: number } } = {
+  #standardPairingLearningLanguagesCompatibilityMatrix: Matrix = {
     A0: { A0: 0, A1: 1, A2: 1, B1: 2, B2: 2, C1: 2, C2: 2 },
     A1: { A0: 1, A1: 2, A2: 2, B1: 3, B2: 3, C1: 3, C2: 3 },
     A2: { A0: 1, A1: 2, A2: 2, B1: 4, B2: 4, C1: 4, C2: 4 },
@@ -77,7 +88,7 @@ export class MatchScorer implements IMatchScorer {
   }
   #standardPairingLearningLanguagesCompatibilityMatrixMaxScore: number;
 
-  #discoveryPairingLearningLanguagesCompatibilityMatrix: { [key: string]: { [key: string]: number } } = {
+  #discoveryPairingLearningLanguagesCompatibilityMatrix: Matrix = {
     A0: { A0: 0, A1: 1, A2: 2, B1: 3, B2: 3, C1: 3, C2: 3 },
     A1: { A0: 1, A1: 1, A2: 2, B1: 5, B2: 5, C1: 5, C2: 5 },
     A2: { A0: 2, A1: 2, A2: 3, B1: 4, B2: 4, C1: 4, C2: 4 },
@@ -105,6 +116,21 @@ export class MatchScorer implements IMatchScorer {
 
   public get coeficients(): Coeficients {
     return this.#coeficients;
+  }
+
+  // For testing purpose
+  public get frequencyMatrix(): Matrix {
+    return this.#frequencyMatrix;
+  }
+
+  // For testing purpose
+  public get standardPairingLearningLanguagesCompatibilityMatrix(): Matrix {
+    return this.#standardPairingLearningLanguagesCompatibilityMatrix;
+  }
+
+  // For testing purpose
+  public get discoveryPairingLearningLanguagesCompatibilityMatrix(): Matrix {
+    return this.#discoveryPairingLearningLanguagesCompatibilityMatrix;
   }
 
   public computeMatchScore(
@@ -246,11 +272,9 @@ export class MatchScorer implements IMatchScorer {
     profile1: Profile,
     profile2: Profile
   ): number {
-    if (profile1.meetingFrequency === profile2.meetingFrequency) {
-      return this.#coeficients.meetingFrequency;
-    }
+    const ponderation = this.#frequencyMatrix[profile1.meetingFrequency][profile2.meetingFrequency];
 
-    return 0;
+    return this.#coeficients.meetingFrequency * ponderation;
   }
 
   // Apply bonus if profiles share the same certificate option
