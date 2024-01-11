@@ -27,6 +27,7 @@ export class UpdateInterestUsecase {
 
     return this.repository.updateInterest({
       id: interest.id,
+      category: interest.category,
       name: {
         id: interest.name.id,
         content: command.name,

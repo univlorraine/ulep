@@ -89,10 +89,7 @@ export const profileMapper = (instance: ProfileSnapshot): Profile => {
     interests: instance.Interests.map((interest) => ({
       id: interest.id,
       name: textContentMapper(interest.TextContent),
-      category: {
-        id: interest.Category.id,
-        name: textContentMapper(interest.Category.TextContent),
-      },
+      category: interest.category_id,
     })),
     availabilities: {
       monday: availabilities['monday'],

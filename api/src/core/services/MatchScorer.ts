@@ -107,7 +107,6 @@ export class MatchScorer implements IMatchScorer {
     return this.#coeficients;
   }
 
-  // TODO(bonus): Use interest categories similarity instead of interests
   public computeMatchScore(
     learningLanguage1: LearningLanguage,
     learningLanguage2: LearningLanguage,
@@ -127,7 +126,7 @@ export class MatchScorer implements IMatchScorer {
     )) {
       return new Match({ owner: learningLanguage1, target: learningLanguage2, scores: MatchScores.empty() });
     }
-    
+
     // Check if age bonus should be applied (i.e. if one of the two profiles is looking for a partner of the same age)
     const shouldApplyAgeBonus = learningLanguage1.sameAge || learningLanguage2.sameAge;
 
@@ -168,7 +167,7 @@ export class MatchScorer implements IMatchScorer {
   private computeAgeBonus(profile1: Profile, profile2: Profile): number {
     // Compute the absolute age difference between the two profiles
     const ageDiff: number = Math.abs(profile1.user.age - profile2.user.age);
-    
+
     for (const threshold of this.#ageThresholds) {
       // Check if at least one of the profiles is equal to or older than the threshold age
       if (profile1.user.age >= threshold.age || profile2.user.age >= threshold.age) {
@@ -208,16 +207,25 @@ export class MatchScorer implements IMatchScorer {
   }
 
   // Apply bonus if profiles share the same interests
+  // This is done by mapping each profile's interests and their categories,
+  // creating Sets (to ensure uniqueness), and then computing the similarity.
   private computeSameInterestBonus(
     profile1: Profile,
     profile2: Profile,
   ): number {
-    const similarity = this.computeSimilarity(
+    // Calculate the similarity of interests categories
+    const categories = this.computeSimilarity(
+      new Set(profile1.interests.map((interest) => interest.category)),
+      new Set(profile2.interests.map((interest) => interest.category)),
+    );
+
+    // Calculate the similarity of specific interests.
+    const interests = this.computeSimilarity(
       new Set(profile1.interests.map((interest) => interest.id)),
       new Set(profile2.interests.map((interest) => interest.id)),
     );
 
-    return this.coeficients.interests * similarity;
+    return ((this.coeficients.interests / 2) * categories) + ((this.coeficients.interests / 2) * interests);
   }
 
 
@@ -232,7 +240,7 @@ export class MatchScorer implements IMatchScorer {
 
     return intersection.size / union.size;
   }
-  
+
   // Apply bonus if profiles share the same meeting frequency
   private computeMeetingFrequencyBonus(
     profile1: Profile,

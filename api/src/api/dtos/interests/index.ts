@@ -63,6 +63,10 @@ export class InterestResponse {
   @Expose({ groups: ['read'] })
   id: string;
 
+  @Swagger.ApiProperty({ type: 'string', format: 'uuid' })
+  @Expose({ groups: ['profile:read'] })
+  category: string;
+
   @Swagger.ApiProperty({ type: 'string' })
   @Expose({ groups: ['read'] })
   name: string;
@@ -75,6 +79,7 @@ export class InterestResponse {
     const name = textContentTranslationResponse(interest.name, languageCode);
     return new InterestResponse({
       id: interest.id,
+      category: interest.category,
       name: name,
     });
   }
