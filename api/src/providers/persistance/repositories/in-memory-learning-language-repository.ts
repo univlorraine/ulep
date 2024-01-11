@@ -61,6 +61,12 @@ export class InMemoryLearningLanguageRepository
     return Promise.resolve(this.#learningLanguages.get(id));
   }
 
+  async ofProfile(id: string): Promise<LearningLanguage[]> {
+    return Array.from(this.#learningLanguages.values()).filter(
+      (language: LearningLanguage) => language.profile.id === id,
+    );
+  }
+
   create(learningLanguage: LearningLanguage): Promise<void> {
     this.#learningLanguages.set(learningLanguage.id, learningLanguage);
     return Promise.resolve();

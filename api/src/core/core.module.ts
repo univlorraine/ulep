@@ -70,6 +70,7 @@ import {
   CreateUnsubscribeReportUsecase,
   GetLearningLanguagesUsecase,
   GetLearningLanguageOfIdUsecase,
+  GetLearningLanguageOfProfileUsecase,
   RefuseTandemUsecase,
   GetInstanceUsecase,
   UpdateInstanceUsecase,
@@ -169,6 +170,7 @@ const usecases: Provider[] = [
   // LearningLanguages
   GetLearningLanguagesUsecase,
   GetLearningLanguageOfIdUsecase,
+  GetLearningLanguageOfProfileUsecase,
   GetLearningLanguageTandemUsecase,
   // Tandems
   CreateTandemUsecase,

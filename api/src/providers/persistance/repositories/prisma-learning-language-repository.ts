@@ -37,6 +37,17 @@ export class PrismaLearningLanguageRepository
     return learningLanguageMapper(res);
   }
 
+  async ofProfile(id: string): Promise<LearningLanguage[]> {
+    const items = await this.prisma.learningLanguages.findMany({
+      where: {
+        profile_id: id,
+      },
+      include: LearningLanguageWithTandemRelations,
+    });
+
+    return items.map(learningLanguageWithTandemMapper);
+  }
+
   async create(item: LearningLanguage): Promise<void> {
     await this.prisma.learningLanguages.create({
       data: {

@@ -1,5 +1,5 @@
 import { IonContent, IonPage, useIonToast } from '@ionic/react';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Redirect, useHistory } from 'react-router';
 import { ArrowDownSvg, AvatarPlaceholderPng, ReportSvg } from '../../assets';
@@ -30,9 +30,12 @@ const HomePage: React.FC = () => {
     const [displayProfile, setDisplayProfile] = useState<boolean>(false);
     const [displayReport, setDisplayReport] = useState<boolean>(false);
     const [selectedTandem, setSelectedTandem] = useState<Tandem>();
+    const { tandems, error } = useGetTandems();
 
-    const tandems = useGetTandems({ profile, showToast, t }, [profile?.learningLanguages]);
-
+    if (error) {
+        showToast({ message: t(error.message), duration: 5000 });
+    }
+    
     const onDisconnect = () => {
         return logout();
     };

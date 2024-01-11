@@ -25,6 +25,7 @@ import {
   DeleteProfileUsecase,
   DeleteUserUsecase,
   DeleteAvatarUsecase,
+  GetLearningLanguageOfProfileUsecase,
 } from 'src/core/usecases';
 import { CollectionResponse, CurrentUser } from '../decorators';
 import { Roles } from '../decorators/roles.decorator';
@@ -45,6 +46,7 @@ export class ProfileController {
 
   constructor(
     private readonly createProfileUsecase: CreateProfileUsecase,
+    private readonly getLearningLanguageOfProfileUsecase: GetLearningLanguageOfProfileUsecase,
     private readonly getProfilesUsecase: GetProfilesUsecase,
     private readonly getProfileByUserIdUsecase: GetProfileByUserIdUsecase,
     private readonly getProfileUsecase: GetProfileUsecase,
@@ -200,5 +202,24 @@ export class ProfileController {
     });
 
     return LearningLanguageResponse.fromDomain(learningLanguage);
+  }
+
+  @Get(':id/learning-language')
+  @UseGuards(AuthenticationGuard)
+  @Swagger.ApiOperation({
+    summary: 'Retrieve the collection of learning languages ressource.',
+  })
+  @Swagger.ApiOkResponse({ type: LearningLanguageResponse, isArray: true })
+  @Swagger.ApiNotFoundResponse({ description: 'Resource does not exist' })
+  async getLearningLanguage(
+    @Param('id', ParseUUIDPipe) id: string,
+  ): Promise<LearningLanguageResponse[]> {
+    const languages = await this.getLearningLanguageOfProfileUsecase.execute({
+      id,
+    });
+
+    return languages.map((language) =>
+      LearningLanguageResponse.fromDomain(language, false),
+    );
   }
 }
