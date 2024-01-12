@@ -127,6 +127,7 @@ describe('Score', () => {
       closeServiceDate: new Date(),
       codes: [],
       domains: [],
+      maxTandemsPerUser: 3,
     });
     const profile1 = new Profile({
       user: new User({

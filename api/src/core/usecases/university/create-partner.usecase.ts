@@ -26,6 +26,7 @@ export class CreatePartnerUniversityCommand {
   codes?: string[];
   domains?: string[];
   pairingMode: PairingMode;
+  maxTandemsPerUser: number;
   notificationEmail?: string;
 }
 
@@ -72,6 +73,7 @@ export class CreatePartnerUniversityUsecase {
       codes: command.codes,
       domains: command.domains,
       pairingMode: command.pairingMode,
+      maxTandemsPerUser: command.maxTandemsPerUser,
       notificationEmail: command.notificationEmail,
     });
 

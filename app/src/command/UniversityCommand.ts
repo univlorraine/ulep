@@ -13,6 +13,7 @@ interface UniversityCommand {
     admissionEnd: Date;
     openServiceDate: Date;
     closeServiceDate: Date;
+    maxTandemsPerUser: number;
 }
 
 export const universityCommandToDomain = (command: UniversityCommand) => {
@@ -26,7 +27,8 @@ export const universityCommandToDomain = (command: UniversityCommand) => {
         new Date(command.admissionStart),
         new Date(command.admissionEnd),
         new Date(command.openServiceDate),
-        new Date(command.closeServiceDate)
+        new Date(command.closeServiceDate),
+        command.maxTandemsPerUser,
     );
 };
 

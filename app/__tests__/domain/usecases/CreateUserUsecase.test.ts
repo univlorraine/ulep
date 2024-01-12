@@ -24,6 +24,7 @@ const payload: UserCommand = {
         hasCode: true,
         timezone: 'timezone',
         website: 'site',
+        maxTandemsPerUser: 3,
     },
     status: 'ACTIVE',
 };
@@ -39,6 +40,7 @@ const university = new University(
     new Date('2023-12-31T00:00:00.000Z'),
     new Date('2023-01-01T00:00:00.000Z'),
     new Date('2023-01-01T00:00:00.000Z'),
+    3,
 );
 const file = new File(['Bits'], 'name');
 describe('createUserUsecase', () => {

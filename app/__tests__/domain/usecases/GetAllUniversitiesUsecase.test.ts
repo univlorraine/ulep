@@ -21,6 +21,7 @@ const usecaseResponse: CollectionCommand<UniversityCommand> = {
             admissionEnd: new Date('2023-12-31T00:00:00.000Z'),
             openServiceDate: new Date('2023-01-01T00:00:00.000Z'),
             closeServiceDate: new Date('2023-01-01T00:00:00.000Z'),
+            maxTandemsPerUser: 3,
         },
     ],
     totalItems: 1,

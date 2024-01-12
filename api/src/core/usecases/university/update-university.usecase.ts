@@ -23,6 +23,7 @@ export class UpdateUniversityCommand {
   domains: string[];
   website: string;
   pairingMode: PairingMode;
+  maxTandemsPerUser: number;
   notificationEmail?: string;
 }
 
@@ -38,6 +39,7 @@ export class UpdateUniversityUsecase {
   ) {}
 
   async execute(command: UpdateUniversityCommand) {
+    this.logger.log(JSON.stringify(command));
     const university = await this.universityRepository.ofId(command.id);
     if (!university) {
       throw new RessourceDoesNotExist();
@@ -63,6 +65,7 @@ export class UpdateUniversityUsecase {
         campus: university.campus,
         website: command.website,
         pairingMode: command.pairingMode,
+        maxTandemsPerUser: command.maxTandemsPerUser,
         notificationEmail: command.notificationEmail,
       }),
     );

@@ -11,6 +11,7 @@ export class UniversityFactory extends ModelFactory<University> {
       timezone: 'Europe/Paris',
       admissionStart: new Date('2020-01-01'),
       admissionEnd: new Date('2020-12-31'),
+      maxTandemsPerUser: 1,
       website: faker.internet.url(),
     };
   }

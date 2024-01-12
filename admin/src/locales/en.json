@@ -208,6 +208,7 @@
             "title": "Create a new partner university",
             "website": "Partner university website",
             "pairingMode": "Pairing mode",
+            "max_tandems_per_user": "Maximum number of tandems per user",
             "notificationEmail": "Email for notifications"
         },
         "pairingModes": {
@@ -238,6 +239,7 @@
             "website": "University website",
             "id": "ID",
             "pairingMode": "Pairing mode",
+            "max_tandems_per_user": "Maximum number of tandems per user",
             "notificationEmail": "Email for notifications"
         },
         "update": {
@@ -247,6 +249,7 @@
             "open_service": "Service opening date",
             "open_service_error": "Service opening date must be before closing date",
             "service_dont_include_admission_date": "Registration dates must be within service opening dates",
+            "max_tandems_per_user_error": "Maximum number of tandems per user must be between 1 and 3",
             "close_service": "Service closing date",
             "codes": "Codes list for inscription",
             "codes_error": "Code must has at least 6 characters and have a letter and a number",
@@ -258,6 +261,7 @@
             "title": "Update an university",
             "website": "University website",
             "pairingMode": "Pairing mode",
+            "max_tandems_per_user": "Maximum number of tandems per user",
             "notificationEmail": "Email for notifications"
         }
     },

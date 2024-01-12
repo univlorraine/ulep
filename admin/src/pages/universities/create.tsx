@@ -20,6 +20,7 @@ const CreateUniversity = () => {
         codes: string[],
         domains: string[],
         pairingMode: string,
+        maxTandemsPerUser: number,
         website?: string,
         notificationEmail?: string
     ) => {
@@ -34,6 +35,7 @@ const CreateUniversity = () => {
             codes,
             domains,
             pairingMode,
+            maxTandemsPerUser,
             website,
             notificationEmail: notificationEmail || undefined,
         };

@@ -170,6 +170,7 @@ describe('GenerateTandem UC', () => {
     closeServiceDate: new Date(),
     codes: [],
     domains: [],
+    maxTandemsPerUser: 3,
   });
 
   const french1 = new Profile({
@@ -1120,6 +1121,7 @@ describe('GenerateTandem UC', () => {
       country,
       codes: [],
       domains: [],
+      maxTandemsPerUser: 3,
     });
     const campusMadrid = new Campus({
       id: 'campusMadrid',
@@ -1139,6 +1141,7 @@ describe('GenerateTandem UC', () => {
       country,
       codes: [],
       domains: [],
+      maxTandemsPerUser: 3,
     });
 
     const studentSubsidiary1 = new Profile({
@@ -1256,6 +1259,7 @@ describe('GenerateTandem UC', () => {
       country,
       codes: [],
       domains: [],
+      maxTandemsPerUser: 3,
     });
 
     const profile1 = new Profile({
@@ -1363,6 +1367,7 @@ describe('GenerateTandem UC', () => {
       country,
       codes: [],
       domains: [],
+      maxTandemsPerUser: 3,
     });
     const match = new Profile({
       user: new User({

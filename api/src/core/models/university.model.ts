@@ -24,6 +24,7 @@ export interface UniversityProps {
   closeServiceDate: Date;
   website?: string;
   pairingMode?: PairingMode;
+  maxTandemsPerUser: number;
   notificationEmail?: string;
 }
 
@@ -56,6 +57,8 @@ export class University {
 
   readonly pairingMode: PairingMode;
 
+  readonly maxTandemsPerUser: number;
+
   readonly notificationEmail?: string;
 
   constructor(props: UniversityProps) {
@@ -73,6 +76,7 @@ export class University {
     this.closeServiceDate = props.closeServiceDate;
     this.website = props.website;
     this.pairingMode = props.pairingMode || PairingMode.MANUAL;
+    this.maxTandemsPerUser = props.maxTandemsPerUser;
     this.notificationEmail = props.notificationEmail;
   }
 

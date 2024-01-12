@@ -113,9 +113,9 @@ export class CreateProfileUsecase {
       ),
     );
 
-    if (command.learningLanguages.length > 3) {
+    if (command.learningLanguages.length > user.university.maxTandemsPerUser) {
       throw new ProfileHasMaxNumberOfLearningLanguages(
-        `Only 3 learning languages are accepted per profile`,
+        `Only ${user.university.maxTandemsPerUser} learning languages are accepted per profile`,
       );
     }
 

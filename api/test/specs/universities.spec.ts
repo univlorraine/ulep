@@ -99,6 +99,7 @@ describe('Universities', () => {
         domains: [],
         countryId: country.id,
         pairingMode: PairingMode.SEMI_AUTOMATIC,
+        maxTandemsPerUser: 3,
       })
       .expect(201);
   });
@@ -123,6 +124,7 @@ describe('Universities', () => {
         closeServiceDate: '2024-12-31',
         website: 'https://www.ox.ac.uk/',
         pairingMode: PairingMode.SEMI_AUTOMATIC,
+        maxTandemsPerUser: 3,
       })
       .expect(400);
   });
@@ -141,6 +143,7 @@ describe('Universities', () => {
         openServiceDate: '2022-01-01',
         closeServiceDate: '2024-12-31',
         website: 'https://www.ox.ac.uk/',
+        maxTandemsPerUser: 3,
       })
       .expect(400);
   });

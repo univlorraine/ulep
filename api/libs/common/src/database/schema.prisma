@@ -69,30 +69,31 @@ model LanguageCodes {
 //  * Universities
 //  * ****************************************************
 model Organizations {
-  id                 String              @id @default(uuid())
-  parent_id          String?
-  country_code_id    String
-  name               String
-  codes              String[]            @default([])
-  domains            String[]            @default([])
-  timezone           String
-  admissionStartDate DateTime
-  admissionEndDate   DateTime
-  openServiceDate    DateTime            @default(now())
-  closeServiceDate   DateTime            @default(now())
-  created_at         DateTime            @default(now())
-  updated_at         DateTime            @updatedAt
-  website            String?
-  pairing_mode       String              @default("MANUAL")
-  notification_email String?
-  Parent             Organizations?      @relation("Organizations", fields: [parent_id], references: [id], onDelete: Cascade)
-  Childrens          Organizations[]     @relation("Organizations")
-  Country            CountryCodes        @relation(fields: [country_code_id], references: [id])
-  Users              Users[]
-  Places             Places[]
-  RoutineExecutions  RoutineExecutions[]
-  ValidatedTandems   Tandems[]
-  RefusedTandems     RefusedTandems[]
+  id                   String              @id @default(uuid())
+  parent_id            String?
+  country_code_id      String
+  name                 String
+  codes                String[]            @default([])
+  domains              String[]            @default([])
+  timezone             String
+  admissionStartDate   DateTime
+  admissionEndDate     DateTime
+  openServiceDate      DateTime            @default(now())
+  closeServiceDate     DateTime            @default(now())
+  created_at           DateTime            @default(now())
+  updated_at           DateTime            @updatedAt
+  website              String?
+  pairing_mode         String              @default("MANUAL")
+  max_tandems_per_user Int                 @default(1)
+  notification_email   String?
+  Parent               Organizations?      @relation("Organizations", fields: [parent_id], references: [id], onDelete: Cascade)
+  Childrens            Organizations[]     @relation("Organizations")
+  Country              CountryCodes        @relation(fields: [country_code_id], references: [id])
+  Users                Users[]
+  Places               Places[]
+  RoutineExecutions    RoutineExecutions[]
+  ValidatedTandems     Tandems[]
+  RefusedTandems       RefusedTandems[]
 
   @@unique([name])
   @@map("organizations")
