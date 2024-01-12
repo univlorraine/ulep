@@ -28,6 +28,8 @@ import User from '../../entities/User';
 const ProfileFilter = (props: any) => {
     const translate = useTranslate();
 
+    const { data: identity } = useGetIdentity();
+
     const { data: languages } = useGetList('languages', {
         pagination: { page: 1, perPage: 250 },
         sort: { field: 'name', order: 'ASC' },
@@ -52,9 +54,15 @@ const ProfileFilter = (props: any) => {
             <ReferenceInput label={translate('profiles.country')} reference="countries" source="user.country">
                 <SelectInput label={translate('profiles.country')} optionText="name" optionValue="code" />
             </ReferenceInput>
-            <ReferenceInput label={translate('global.university')} reference="universities" source="user.university">
-                <SelectInput label={translate('global.university')} optionText="name" optionValue="id" />
-            </ReferenceInput>
+            {identity?.isCentralUniversity && (
+                <ReferenceInput
+                    label={translate('global.university')}
+                    reference="universities"
+                    source="user.university"
+                >
+                    <SelectInput label={translate('global.university')} optionText="name" optionValue="id" />
+                </ReferenceInput>
+            )}
             {sortedLanguages && (
                 <SelectInput
                     choices={sortedLanguages}
@@ -130,7 +138,9 @@ const ProfileList = (props: any) => {
     return (
         <List
             exporter={false}
-            filter={{ user: { university: !identity?.isCentralUniversity ? identity?.universityId : undefined } }}
+            filter={{
+                university: !identity?.isCentralUniversity ? identity?.universityId : undefined,
+            }}
             filters={<ProfileFilter />}
             title={translate('profiles.label')}
             {...props}

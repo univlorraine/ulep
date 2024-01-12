@@ -2,7 +2,7 @@ import qsAdapter from '../providers/qsAdapter';
 
 export interface ProfilesParams {
     filter: {
-        user: {
+        user?: {
             country?: string;
             email?: string;
             firstname?: string;
@@ -13,6 +13,7 @@ export interface ProfilesParams {
         };
         masteredLanguageCode?: string;
         nativeLanguageCode?: string;
+        university?: string; // Use to force university filter when admin is from partner university
     };
     pagination: {
         page: string;
@@ -43,21 +44,15 @@ const handleOrderField = (field?: string) => {
 
 const ProfilesQuery = (params: ProfilesParams): string => {
     const query = {
-        where: {
-            user: params.filter.user
-                ? {
-                      country: params.filter.user.country,
-                      email: params.filter.user.email,
-                      firstname: params.filter.user.firstname,
-                      lastname: params.filter.user.lastname,
-                      role: params.filter.user.role,
-                      status: params.filter.user.status,
-                      university: params.filter.user.university,
-                  }
-                : {},
-            masteredLanguageCode: params.filter.masteredLanguageCode,
-            nativeLanguageCode: params.filter.nativeLanguageCode,
-        },
+        country: params.filter.user?.country,
+        email: params.filter.user?.email,
+        firstname: params.filter.user?.firstname,
+        lastname: params.filter.user?.lastname,
+        role: params.filter.user?.role,
+        status: params.filter.user?.status,
+        university: params.filter.university || params.filter.user?.university,
+        masteredLanguageCode: params.filter.masteredLanguageCode,
+        nativeLanguageCode: params.filter.nativeLanguageCode,
         page: params.pagination.page,
         limit: params.pagination.perPage,
         field: handleOrderField(params.sort.field),
