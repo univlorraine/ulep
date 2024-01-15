@@ -22,7 +22,7 @@ export function IsAfterThan(
           if (relatedValue === undefined || value === undefined) {
             return false;
           }
-          return value > relatedValue;
+          return value >= relatedValue;
         },
         defaultMessage(args: ValidationArguments) {
           const [relatedPropertyName] = args.constraints;

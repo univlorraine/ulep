@@ -25,6 +25,7 @@ import {
   DeleteProfileUsecase,
   DeleteUserUsecase,
   DeleteAvatarUsecase,
+  GetLearningLanguageOfProfileUsecase,
 } from 'src/core/usecases';
 import { CollectionResponse, CurrentUser } from '../decorators';
 import { Roles } from '../decorators/roles.decorator';
@@ -45,6 +46,7 @@ export class ProfileController {
 
   constructor(
     private readonly createProfileUsecase: CreateProfileUsecase,
+    private readonly getLearningLanguageOfProfileUsecase: GetLearningLanguageOfProfileUsecase,
     private readonly getProfilesUsecase: GetProfilesUsecase,
     private readonly getProfileByUserIdUsecase: GetProfileByUserIdUsecase,
     private readonly getProfileUsecase: GetProfileUsecase,
@@ -81,36 +83,50 @@ export class ProfileController {
   })
   @CollectionResponse(ProfileResponse)
   async getCollection(
-    @Query() { page, limit, field, order, where }: ProfileQueryFilter,
+    @Query() query: ProfileQueryFilter,
   ): Promise<Collection<ProfileResponse>> {
+    const {
+      email,
+      firstname,
+      lastname,
+      role,
+      university,
+      country,
+      status,
+      masteredLanguageCode,
+      nativeLanguageCode,
+      field,
+      order,
+      page,
+      limit,
+    } = query;
+
     const profiles = await this.getProfilesUsecase.execute({
       page,
-      orderBy: {
+      orderBy: (field || order) && {
         field,
         order,
       },
       limit,
-      where: where
-        ? {
-            user: {
-              country: { equals: where.user?.country },
-              email: { contains: where.user?.email },
-              firstname: {
-                contains: where.user?.firstname,
-                mode: ModeQuery.INSENSITIVE,
-              },
-              lastname: {
-                contains: where.user?.lastname,
-                mode: ModeQuery.INSENSITIVE,
-              },
-              role: { equals: where.user?.role },
-              university: { equals: where?.user?.university },
-              status: { equals: where.user?.status },
-            },
-            masteredLanguageCode: where.masteredLanguageCode,
-            nativeLanguageCode: where.nativeLanguageCode,
-          }
-        : undefined,
+      where: {
+        user: {
+          country: { equals: country },
+          email: { contains: email },
+          firstname: {
+            contains: firstname,
+            mode: ModeQuery.INSENSITIVE,
+          },
+          lastname: {
+            contains: lastname,
+            mode: ModeQuery.INSENSITIVE,
+          },
+          role: { equals: role },
+          university: { equals: university },
+          status: { equals: status },
+        },
+        masteredLanguageCode: masteredLanguageCode,
+        nativeLanguageCode: nativeLanguageCode,
+      },
     });
 
     return new Collection<ProfileResponse>({
@@ -200,5 +216,24 @@ export class ProfileController {
     });
 
     return LearningLanguageResponse.fromDomain(learningLanguage);
+  }
+
+  @Get(':id/learning-language')
+  @UseGuards(AuthenticationGuard)
+  @Swagger.ApiOperation({
+    summary: 'Retrieve the collection of learning languages ressource.',
+  })
+  @Swagger.ApiOkResponse({ type: LearningLanguageResponse, isArray: true })
+  @Swagger.ApiNotFoundResponse({ description: 'Resource does not exist' })
+  async getLearningLanguage(
+    @Param('id', ParseUUIDPipe) id: string,
+  ): Promise<LearningLanguageResponse[]> {
+    const languages = await this.getLearningLanguageOfProfileUsecase.execute({
+      id,
+    });
+
+    return languages.map((language) =>
+      LearningLanguageResponse.fromDomain(language, false),
+    );
   }
 }

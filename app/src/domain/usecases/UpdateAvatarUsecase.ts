@@ -1,14 +1,15 @@
 import { HttpResponse } from '../../adapter/BaseHttpAdapter';
 import { HttpAdapterInterface } from '../../adapter/DomainHttpAdapter';
-import AvatarCommand from '../../command/AvatarCommand';
+import MediaObjectCommand from '../../command/MediaObjectCommand';
+import MediaObject from '../entities/MediaObject';
 import UpdateAvatarUsecaseInterface from '../interfaces/UpdateAvatarUsecase.interface';
 
 class UpdateAvatarUsecase implements UpdateAvatarUsecaseInterface {
-    constructor(private readonly domainHttpAdapter: HttpAdapterInterface) {}
+    constructor(private readonly domainHttpAdapter: HttpAdapterInterface) { }
 
-    async execute(avatar: File): Promise<string | Error> {
+    async execute(avatar: File): Promise<MediaObject | Error> {
         try {
-            const httpResponse: HttpResponse<AvatarCommand> = await this.domainHttpAdapter.post(
+            const httpResponse: HttpResponse<MediaObjectCommand & { url: string }> = await this.domainHttpAdapter.post(
                 `/uploads/avatar`,
                 { file: avatar },
                 {},
@@ -19,7 +20,7 @@ class UpdateAvatarUsecase implements UpdateAvatarUsecaseInterface {
                 return new Error('errors.global');
             }
 
-            return httpResponse.parsedBody.url;
+            return httpResponse.parsedBody;
         } catch (error: any) {
             return new Error('errors.global');
         }

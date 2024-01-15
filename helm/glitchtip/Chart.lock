@@ -1,0 +1,6 @@
+dependencies:
+- name: glitchtip
+  repository: https://gitlab.com/api/v4/projects/16325141/packages/helm/stable
+  version: 2.5.1
+digest: sha256:947c10b01c90811ded182b4a1e0cea652ca67bbe9fa04cbf68a0a419e19cbfec
+generated: "2024-01-09T14:13:57.378648+01:00"

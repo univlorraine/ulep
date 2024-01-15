@@ -6,24 +6,19 @@ import { useStoreActions } from '../../../store/storeTypes';
 import styles from './ProfileContent.module.css';
 import { useState } from 'react';
 import { TailSpin } from 'react-loader-spinner';
-import University from '../../../domain/entities/University';
+import Avatar from '../Avatar';
+import Profile from '../../../domain/entities/Profile';
 
 interface ProfileContentProps {
     onClose: () => void;
     onParameterPressed: () => void;
-    profileFirstname: string;
-    profileLastname: string;
-    profilePicture: string;
-    profileUniversity: University;
+    profile: Profile;
 }
 
 const ProfileContent: React.FC<ProfileContentProps> = ({
     onClose,
     onParameterPressed,
-    profileFirstname,
-    profileLastname,
-    profilePicture,
-    profileUniversity
+    profile,
 }) => {
     const { configuration } = useConfig();
     const { t } = useTranslation();
@@ -74,10 +69,10 @@ const ProfileContent: React.FC<ProfileContentProps> = ({
                         visible={true}
                     />
                 ) : (
-                    <img alt="avatar" className={styles.image} src={profilePicture} />
+                    <Avatar user={profile.user} className={styles.image} />
                 )}
-                <span className={styles.name}>{`${profileFirstname} ${profileLastname}`}</span>
-                <span className={styles.university}>{profileUniversity.name}</span>
+                <span className={styles.name}>{`${profile.user.firstname} ${profile.user.lastname}`}</span>
+                <span className={styles.university}>{profile.user.university.name}</span>
 
                 <button className={`${styles.button} margin-bottom`} onClick={changeAvatar}>
                     <div className={styles['button-container']}>

@@ -12,6 +12,14 @@ export enum LearningType {
   BOTH = 'BOTH',
 }
 
+export enum MeetingFrequency {
+  ONCE_A_WEEK = 'ONCE_A_WEEK',
+  TWICE_A_WEEK = 'TWICE_A_WEEK',
+  THREE_TIMES_A_WEEK = 'THREE_TIMES_A_WEEK',
+  TWICE_A_MONTH = 'TWICE_A_MONTH',
+  THREE_TIMES_A_MONTH = 'THREE_TIMES_A_MONTH',
+}
+
 export enum AvailabilitesOptions {
   UNAVAILABLE = 'UNAVAILABLE',
   AVAILABLE = 'AVAILABLE',
@@ -34,7 +42,7 @@ export type CreateProfileProps = {
   nativeLanguage: Language;
   masteredLanguages: Language[];
   learningLanguages: LearningLanguage[];
-  meetingFrequency: string;
+  meetingFrequency: MeetingFrequency;
   objectives: LearningObjective[];
   interests: Interest[];
   availabilities?: Availabilites;
@@ -55,7 +63,7 @@ export class Profile {
 
   readonly learningLanguages: LearningLanguage[];
 
-  readonly meetingFrequency: string;
+  readonly meetingFrequency: MeetingFrequency;
 
   readonly objectives: LearningObjective[];
 

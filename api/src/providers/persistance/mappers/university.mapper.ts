@@ -29,6 +29,7 @@ export const universityMapper = (snapshot: UniversitySnapshot): University => {
     closeServiceDate: snapshot.closeServiceDate,
     website: snapshot.website,
     pairingMode: PairingMode[snapshot.pairing_mode],
+    maxTandemsPerUser: snapshot.max_tandems_per_user,
     notificationEmail: snapshot.notification_email,
   });
 };

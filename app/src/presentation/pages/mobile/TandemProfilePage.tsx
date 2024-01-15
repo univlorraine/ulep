@@ -9,19 +9,20 @@ interface TandemProfileState {
     pedagogy: Pedagogy;
     profile: Profile;
     level: CEFR;
+    tandemLearningLanguage: Language;
 }
 
 const TandemProfilePage: React.FC = () => {
     const history = useHistory();
     const location = useLocation<TandemProfileState>();
-    const { language, level, pedagogy, profile } = location.state || {};
+    const { language, level, pedagogy, profile, tandemLearningLanguage } = location.state || {};
 
     if (!profile || !language) {
         return <Redirect to="/home" />;
     }
     return (
         <IonPage>
-            <TandemProfile language={language} level={level} onClose={() => history.push('/home')} pedagogy={pedagogy} profile={profile} />
+            <TandemProfile language={language} level={level} onClose={() => history.push('/home')} partnerLearningLanguage={tandemLearningLanguage} pedagogy={pedagogy} profile={profile} />
         </IonPage>
     );
 };

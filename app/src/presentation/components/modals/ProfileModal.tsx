@@ -2,27 +2,20 @@ import { useState } from 'react';
 import ProfileContent from '../contents/ProfileContent';
 import SettingsContent from '../contents/SettingsContent';
 import Modal from './Modal';
-import { useStoreActions } from '../../../store/storeTypes';
-import University from '../../../domain/entities/University';
+import Profile from '../../../domain/entities/Profile';
 
 interface ProfileModalProps {
     isVisible: boolean;
     onClose: () => void;
     onDisconnect: () => void;
-    profileFirstname: string;
-    profileLastname: string;
-    profilePicture: string;
-    profileUniversity: University;
+    profile: Profile;
 }
 
 const ProfileModal: React.FC<ProfileModalProps> = ({
     isVisible,
     onClose,
     onDisconnect,
-    profileFirstname,
-    profileLastname,
-    profilePicture,
-    profileUniversity
+    profile
 }) => {
     const [displaySettings, setDisplaySettings] = useState<boolean>(false);
 
@@ -32,10 +25,7 @@ const ProfileModal: React.FC<ProfileModalProps> = ({
                 <ProfileContent
                     onClose={onClose}
                     onParameterPressed={() => setDisplaySettings(true)}
-                    profileFirstname={profileFirstname}
-                    profileLastname={profileLastname}
-                    profilePicture={profilePicture}
-                    profileUniversity={profileUniversity}
+                    profile={profile}
                 />
             ) : (
                 <SettingsContent onBackPressed={() => setDisplaySettings(false)} onDisconnect={onDisconnect} />

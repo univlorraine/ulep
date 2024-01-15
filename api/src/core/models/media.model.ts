@@ -42,10 +42,6 @@ export class MediaObject {
     });
   }
 
-  get url(): string {
-    return `${process.env.MINIO_PUBLIC_URL}/${this.bucket}/${this.name}`;
-  }
-
   private static getFileExtension(contentType: string): string {
     switch (contentType) {
       // image mime types

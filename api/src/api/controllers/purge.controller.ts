@@ -3,7 +3,7 @@ import * as Swagger from '@nestjs/swagger';
 import { configuration } from 'src/configuration';
 import { Roles } from '../decorators/roles.decorator';
 import { AuthenticationGuard } from '../guards';
-import { archiveTandemsAndDeleteUsersUsecase } from 'src/core/usecases/purges/archive-tandems.usecase';
+import { ArchiveTandemsAndDeleteUsersUsecase } from 'src/core/usecases/purges/archive-tandems.usecase';
 import { CurrentUser } from '../decorators';
 import { KeycloakUser } from '@app/keycloak';
 
@@ -11,7 +11,7 @@ import { KeycloakUser } from '@app/keycloak';
 @Swagger.ApiTags('Purges')
 export class PurgesController {
   constructor(
-    private readonly userTandemPurgeUsecase: archiveTandemsAndDeleteUsersUsecase,
+    private readonly userTandemPurgeUsecase: ArchiveTandemsAndDeleteUsersUsecase,
   ) {}
 
   @Post()

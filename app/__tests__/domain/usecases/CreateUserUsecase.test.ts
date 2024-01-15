@@ -7,7 +7,7 @@ import LoginUsecase from '../../mocks/usecase/LoginUsecase';
 
 const payload: UserCommand = {
     id: 'id',
-    avatar: { id: 'id', url: 'url' },
+    avatar: { id: 'id', mimeType: 'image/png' },
     acceptsEmail: true,
     email: 'email',
     firstname: 'firstname',
@@ -24,6 +24,7 @@ const payload: UserCommand = {
         hasCode: true,
         timezone: 'timezone',
         website: 'site',
+        maxTandemsPerUser: 3,
     },
     status: 'ACTIVE',
 };
@@ -39,6 +40,7 @@ const university = new University(
     new Date('2023-12-31T00:00:00.000Z'),
     new Date('2023-01-01T00:00:00.000Z'),
     new Date('2023-01-01T00:00:00.000Z'),
+    3,
 );
 const file = new File(['Bits'], 'name');
 describe('createUserUsecase', () => {

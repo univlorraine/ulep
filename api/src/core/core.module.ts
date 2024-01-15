@@ -39,6 +39,7 @@ import {
   GetInterestUsecase,
   GetInterestsByCategoriesUsecase,
   GetLevelsUsecase,
+  GetMediaObjectUsecase,
   GetProfileByUserIdUsecase,
   GetProfileUsecase,
   GetProfilesUsecase,
@@ -69,6 +70,7 @@ import {
   CreateUnsubscribeReportUsecase,
   GetLearningLanguagesUsecase,
   GetLearningLanguageOfIdUsecase,
+  GetLearningLanguageOfProfileUsecase,
   RefuseTandemUsecase,
   GetInstanceUsecase,
   UpdateInstanceUsecase,
@@ -92,7 +94,7 @@ import {
 } from 'src/core/usecases/campus';
 import { FindAllSuggestedLanguageUsecase } from 'src/core/usecases/language/find-all-suggested-language.usecase';
 import { GetLearningLanguageTandemUsecase } from './usecases/learningLanguage/getLearningLanguageTandem.usecase';
-import { archiveTandemsAndDeleteUsersUsecase } from './usecases/purges/archive-tandems.usecase';
+import { ArchiveTandemsAndDeleteUsersUsecase } from './usecases/purges/archive-tandems.usecase';
 
 const usecases: Provider[] = [
   //Campus
@@ -122,6 +124,7 @@ const usecases: Provider[] = [
   FindAllSuggestedLanguageUsecase,
   UpdateLanguageCodeUsecase,
   // Media
+  GetMediaObjectUsecase,
   DeleteObjectiveImageUsecase,
   UploadAvatarUsecase,
   UploadObjectiveImageUsecase,
@@ -167,6 +170,7 @@ const usecases: Provider[] = [
   // LearningLanguages
   GetLearningLanguagesUsecase,
   GetLearningLanguageOfIdUsecase,
+  GetLearningLanguageOfProfileUsecase,
   GetLearningLanguageTandemUsecase,
   // Tandems
   CreateTandemUsecase,
@@ -193,7 +197,7 @@ const usecases: Provider[] = [
   GetUserUsecase,
   UpdateUserUsecase,
   UpdateAdministratorUsecase,
-  archiveTandemsAndDeleteUsersUsecase,
+  ArchiveTandemsAndDeleteUsersUsecase,
   // Instance
   GetInstanceUsecase,
   UpdateInstanceUsecase,

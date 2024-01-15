@@ -46,6 +46,7 @@ export class CreateInterestUsecase {
     return this.repository.createInterest(
       {
         id: this.uuidProvider.generate(),
+        category: category.id,
         name: {
           id: this.uuidProvider.generate(),
           content: command.name,

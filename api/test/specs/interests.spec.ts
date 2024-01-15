@@ -106,12 +106,15 @@ describe('Interests', () => {
   });
 
   test('get interests by category should succeed', async () => {
-    repository.reset();
-
-    const interest = interestFactory.makeOne();
+    const uuid = 'uuid-1';
+    const interest = interestFactory.makeOne({
+      category: uuid,
+    });
     const category = categoryFactory.makeOne({
+      id: uuid,
       interests: [interest],
     });
+
     repository.init([category]);
 
     const { body } = await request(app.getHttpServer())
@@ -124,8 +127,12 @@ describe('Interests', () => {
   });
 
   test('delete interest should succeed', async () => {
-    const interest = interestFactory.makeOne();
+    const uuid = 'uuid-1';
+    const interest = interestFactory.makeOne({
+      category: uuid,
+    });
     const category = categoryFactory.makeOne({
+      id: uuid,
       interests: [interest],
     });
     repository.init([category]);

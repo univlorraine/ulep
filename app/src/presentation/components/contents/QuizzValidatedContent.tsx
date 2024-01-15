@@ -24,7 +24,7 @@ const QuizzValidatedContent: React.FC<QuizzValidatedContentProps> = ({
             <h1 className="title">{`${t(`pairing_quizz_validation.title`)}`}</h1>
             {onNextStep && <p className="subtitle">{t(`pairing_quizz_validation.subtitle`)}</p>}
             <div className={styles['image-container']}>
-                <img className={styles.image} alt="avatar" src={TrophiePng}></img>
+                <img className={styles.image} alt="trophie" src={TrophiePng}></img>
                 <div className={styles.bubble}>
                     <FlagBubble language={language} textColor="white" isSelected disabled />
                 </div>

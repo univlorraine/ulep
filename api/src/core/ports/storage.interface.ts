@@ -9,7 +9,11 @@ export interface StorageInterface {
 
   deleteFile(bucket: string, name: string): Promise<void>;
 
-  getPresignedUrl(bucket: string, name: string): Promise<string>;
+  generatePresignedUrl(
+    bucket: string,
+    name: string,
+    expiry: number,
+  ): Promise<string>;
 
   getObject(bucket: string, filename: string): Promise<Readable>;
 }

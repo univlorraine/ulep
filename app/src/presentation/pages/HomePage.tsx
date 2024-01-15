@@ -1,5 +1,5 @@
 import { IonContent, IonPage, useIonToast } from '@ionic/react';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Redirect, useHistory } from 'react-router';
 import { ArrowDownSvg, AvatarPlaceholderPng, ReportSvg } from '../../assets';
@@ -16,6 +16,7 @@ import useWindowDimensions from '../hooks/useWindowDimensions';
 import { HYBRID_MAX_WIDTH } from '../utils';
 import styles from './css/Home.module.css';
 import useGetTandems from '../hooks/useGetTandems';
+import Avatar from '../components/Avatar';
 
 const HomePage: React.FC = () => {
     const { t } = useTranslation();
@@ -29,9 +30,12 @@ const HomePage: React.FC = () => {
     const [displayProfile, setDisplayProfile] = useState<boolean>(false);
     const [displayReport, setDisplayReport] = useState<boolean>(false);
     const [selectedTandem, setSelectedTandem] = useState<Tandem>();
+    const { tandems, error } = useGetTandems();
 
-    const tandems = useGetTandems({ profile, showToast, t }, [profile?.learningLanguages]);
-
+    if (error) {
+        showToast({ message: t(error.message), duration: 5000 });
+    }
+    
     const onDisconnect = () => {
         return logout();
     };
@@ -51,6 +55,7 @@ const HomePage: React.FC = () => {
                   language: tandem.learningLanguage,
                   level: tandem.level,
                   pedagogy: tandem.pedagogy,
+                  tandemLearningLanguage: tandem.partnerLearningLanguage,
               });
 
     const formattedDate = `${currentDate.getFullYear()}-${currentDate.getDate().toString().padStart(2, '0')}-${(
@@ -66,7 +71,7 @@ const HomePage: React.FC = () => {
     return (
         <IonPage>
             {!isHybrid && (
-                <HomeHeader avatar={profile.user.avatar ?? AvatarPlaceholderPng} onPicturePressed={onProfilePressed} />
+                <HomeHeader user={profile.user} onPicturePressed={onProfilePressed} />
             )}
             <IonContent>
                 <div className={`${styles.container} content-wrapper`}>
@@ -77,11 +82,7 @@ const HomePage: React.FC = () => {
                         </div>
                         {isHybrid && (
                             <button className={styles['avatar-container']} onClick={onProfilePressed}>
-                                <img
-                                    alt="avatar"
-                                    className={styles.avatar}
-                                    src={profile.user.avatar ?? AvatarPlaceholderPng}
-                                />
+                                <Avatar user={profile.user} className={styles.avatar} />
                                 <img alt="arrow-down" src={ArrowDownSvg} />
                             </button>
                         )}
@@ -115,10 +116,7 @@ const HomePage: React.FC = () => {
                         isVisible={displayProfile}
                         onClose={() => setDisplayProfile(false)}
                         onDisconnect={onDisconnect}
-                        profileFirstname={profile.user.firstname}
-                        profileLastname={profile.user.lastname}
-                        profilePicture={profile.user.avatar ?? AvatarPlaceholderPng}
-                        profileUniversity={profile.user.university}
+                        profile={profile}
                     />
                     <TandemStatusModal
                         isVisible={
@@ -136,6 +134,7 @@ const HomePage: React.FC = () => {
                         language={selectedTandem?.learningLanguage}
                         level={selectedTandem?.level}
                         onClose={() => setSelectedTandem(undefined)}
+                        partnerLearningLanguage={selectedTandem?.partnerLearningLanguage}
                         pedagogy={selectedTandem?.pedagogy}
                         profile={selectedTandem?.partner}
                     />

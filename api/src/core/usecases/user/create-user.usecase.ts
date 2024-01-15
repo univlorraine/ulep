@@ -1,6 +1,6 @@
 import { KeycloakClient } from '@app/keycloak';
 import { BadRequestException, Inject, Injectable } from '@nestjs/common';
-import { RessourceDoesNotExist } from 'src/core/errors';
+import { RessourceDoesNotExist, UnauthorizedOperation } from 'src/core/errors';
 import { Gender, Role, User } from 'src/core/models';
 import {
   COUNTRY_REPOSITORY,
@@ -44,6 +44,13 @@ export class CreateUserUsecase {
   ) {}
 
   async execute(command: CreateUserCommand) {
+    const isBlacklisted = await this.userRepository.isBlacklisted(
+      command.email,
+    );
+    if (isBlacklisted) {
+      throw new UnauthorizedOperation();
+    }
+
     const university = await this.universityRepository.ofId(command.university);
     if (!university) {
       throw new RessourceDoesNotExist('University does not exist');

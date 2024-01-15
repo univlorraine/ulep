@@ -1,3 +1,4 @@
+import MediaObject from './MediaObject';
 import University from './University';
 
 class User {
@@ -9,7 +10,7 @@ class User {
         public readonly university: University,
         public readonly status: UserStatus,
         public acceptsEmail: boolean,
-        public avatar?: string
+        public avatar?: MediaObject
     ) {}
 }
 

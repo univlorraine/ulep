@@ -29,6 +29,8 @@ export interface LearningLanguageRepositoryGetProps {
 export interface LearningLanguageRepository {
   ofId: (id: string) => Promise<LearningLanguage | null>;
 
+  ofProfile: (id: string) => Promise<LearningLanguage[]>;
+
   create: (learningLanguage: LearningLanguage) => Promise<void>;
 
   getAvailableLearningLanguagesSpeakingLanguageFromUniversities: (

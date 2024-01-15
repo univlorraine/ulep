@@ -11,7 +11,8 @@ class University {
         public readonly admissionStart: Date,
         public readonly admissionEnd: Date,
         public readonly openServiceDate: Date,
-        public readonly closeServiceDate: Date
+        public readonly closeServiceDate: Date,
+        public readonly maxTandemsPerUser: number,
     ) {}
 }
 

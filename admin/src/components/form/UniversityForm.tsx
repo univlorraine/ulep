@@ -45,6 +45,7 @@ interface UniversityFormProps {
         codes: string[],
         domains: string[],
         pairingMode: string,
+        maxTandemsPerUser: number,
         website?: string,
         notificationEmail?: string
     ) => void;
@@ -53,6 +54,7 @@ interface UniversityFormProps {
     tradKey?: string;
     website?: string;
     pairingMode?: string;
+    maxTandemsPerUser?: number;
     notificationEmail?: string;
 }
 
@@ -77,6 +79,7 @@ const UniversityForm: React.FC<UniversityFormProps> = ({
     timezone,
     website,
     pairingMode,
+    maxTandemsPerUser,
     notificationEmail,
 }) => {
     const translate = useTranslate();
@@ -103,6 +106,7 @@ const UniversityForm: React.FC<UniversityFormProps> = ({
     const [newDomain, setNewDomain] = useState<string>('');
     const [newDomains, setNewDomains] = useState<string[]>(domains || []);
     const [newPairingMode, setNewPairingMode] = useState<string>(pairingMode || 'MANUAL');
+    const [newMaxTandemsPerUser, setNewMaxTandemsPerUser] = useState<number>(maxTandemsPerUser || 1);
     const [newNotificationEmail, setNewNotificationEmail] = useState<string>(notificationEmail || '');
 
     const addCode = (code: string) => {
@@ -137,6 +141,7 @@ const UniversityForm: React.FC<UniversityFormProps> = ({
         const admissionEnd = newAdmissionEndDate || (admissionEndDate ? new Date(admissionEndDate) : undefined);
         const openService = newOpenServiceDate || (openServiceDate ? new Date(openServiceDate) : undefined);
         const closeService = newCloseServiceDate || (closeServiceDate ? new Date(closeServiceDate) : undefined);
+
         if (
             !newCountry ||
             !newTimezone ||
@@ -162,6 +167,10 @@ const UniversityForm: React.FC<UniversityFormProps> = ({
             return notify(`universities.${tradKey}.service_dont_include_admission_date`);
         }
 
+        if (newMaxTandemsPerUser < 1 || newMaxTandemsPerUser > 3) {
+            return notify(`universities.${tradKey}.max_tandems_per_user_error`);
+        }
+
         if (!isUrlValid(newWebsite)) {
             return notify(`universities.${tradKey}.url_error`);
         }
@@ -177,6 +186,7 @@ const UniversityForm: React.FC<UniversityFormProps> = ({
             newCodes,
             newDomains,
             newPairingMode,
+            newMaxTandemsPerUser,
             newWebsite,
             newNotificationEmail
         );
@@ -271,6 +281,21 @@ const UniversityForm: React.FC<UniversityFormProps> = ({
                             label="DD/MM/YYYY"
                             onChange={setNewCloseServiceDate}
                             sx={{ my: 2, width: '100%' }}
+                        />
+                    </Box>
+
+                    <Typography variant="subtitle1">
+                        {translate(`universities.${tradKey}.max_tandems_per_user`)}
+                    </Typography>
+                    <Box alignItems="center" display="flex" flexDirection="row" sx={{ mb: 2 }}>
+                        <Input
+                            name="maxTandemsPerUser"
+                            onChange={(e) => setNewMaxTandemsPerUser(parseInt(e.target.value, 10))}
+                            sx={inputStyle}
+                            type="number"
+                            value={newMaxTandemsPerUser}
+                            disableUnderline
+                            required
                         />
                     </Box>
 

@@ -6,6 +6,7 @@ import {
   LanguageStatus,
   LearningLanguage,
   LearningType,
+  MeetingFrequency,
   ProficiencyLevel,
   Profile,
   Role,
@@ -13,7 +14,57 @@ import {
   User,
 } from '../../src/core/models';
 import { faker } from '@faker-js/faker';
-import { MatchScorer } from 'src/core/services/MatchScorer';
+import { MatchScorer, Matrix } from 'src/core/services/MatchScorer';
+
+const isMatrixSymmetric = (matrix: Matrix): boolean => {
+  const keys = Object.keys(matrix);
+
+  for (let i = 0; i < keys.length; i++) {
+    for (let j = 0; j < keys.length; j++) {
+      const keyI = keys[i];
+      const keyJ = keys[j];
+
+      // Check if the corresponding keys exists
+      if (
+        matrix[keyI][keyJ] === undefined ||
+        matrix[keyJ][keyI] === undefined
+      ) {
+        return false;
+      }
+
+      // Check if the elements are symmetric
+      if (matrix[keyI][keyJ] !== matrix[keyJ][keyI]) {
+        return false;
+      }
+    }
+  }
+
+  return true;
+};
+
+describe('Matrix', () => {
+  const matchScorer = new MatchScorer();
+
+  test('frequencyMatrix should be symetric', () => {
+    expect(isMatrixSymmetric(matchScorer.frequencyMatrix)).toBe(true);
+  });
+
+  test('standardPairingLearningLanguagesCompatibilityMatrix should be symetric', () => {
+    expect(
+      isMatrixSymmetric(
+        matchScorer.standardPairingLearningLanguagesCompatibilityMatrix,
+      ),
+    ).toBe(true);
+  });
+
+  test('discoveryPairingLearningLanguagesCompatibilityMatrix should be symetric', () => {
+    expect(
+      isMatrixSymmetric(
+        matchScorer.discoveryPairingLearningLanguagesCompatibilityMatrix,
+      ),
+    ).toBe(true);
+  });
+});
 
 describe('Score', () => {
   const matchScorer = new MatchScorer();
@@ -76,6 +127,7 @@ describe('Score', () => {
       closeServiceDate: new Date(),
       codes: [],
       domains: [],
+      maxTandemsPerUser: 3,
     });
     const profile1 = new Profile({
       user: new User({
@@ -95,7 +147,7 @@ describe('Score', () => {
       id: 'FR1',
       nativeLanguage: frenchLanguage,
       masteredLanguages: [],
-      meetingFrequency: 'ONCE_A_WEEK',
+      meetingFrequency: MeetingFrequency.ONCE_A_WEEK,
       learningLanguages: [],
       objectives: [],
       interests: [],
@@ -124,7 +176,7 @@ describe('Score', () => {
       id: 'EN1',
       nativeLanguage: spanishLanguage,
       masteredLanguages: [],
-      meetingFrequency: 'ONCE_A_WEEK',
+      meetingFrequency: MeetingFrequency.ONCE_A_WEEK,
       learningLanguages: [],
       objectives: [],
       interests: [],

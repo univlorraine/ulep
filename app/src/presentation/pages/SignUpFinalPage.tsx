@@ -3,8 +3,8 @@ import { useConfig } from '../../context/ConfigurationContext';
 import { useStoreState } from '../../store/storeTypes';
 import SuccessLayout from '../components/layout/SuccessLayout';
 import styles from './css/SignUpFinalPage.module.css';
-import { AvatarPlaceholderPng } from '../../assets';
 import { useIonToast } from '@ionic/react';
+import Avatar from '../components/Avatar';
 
 const SignupFinalPage: React.FC = () => {
     const { t } = useTranslation();
@@ -25,7 +25,7 @@ const SignupFinalPage: React.FC = () => {
             !profileSignUp.availabilities
         ) {
             // If we have a profile and no profileSignUp, we must go to next step to add languages
-            if(profile?.id) {
+            if (profile?.id) {
                 return (window.location.href = '/pairing/languages');
             }
 
@@ -57,16 +57,14 @@ const SignupFinalPage: React.FC = () => {
             colorCode={configuration.primaryColor}
         >
             <div className={styles.container}>
-                <h1 className={styles.title}>{`${t('signup_end_page.thanks')} ${
-                    profile?.user.firstname || user?.firstname
-                }, ${t('signup_end_page.account')}`}</h1>
-                <img className={styles.image} alt="avatar" src={user?.avatar ?? AvatarPlaceholderPng} />
+                <h1 className={styles.title}>{`${t('signup_end_page.thanks')} ${profile?.user.firstname || user?.firstname}, ${t('signup_end_page.account')}`}</h1>
+                <Avatar user={user} className={styles.image} />
                 <p className={styles.description}>{t('signup_end_page.description')}</p>
-                <button className="primary-button" onClick={onCreateProfile}>
-                    {t('signup_end_page.validate_button')}
-                </button>
+                <button className="primary-button" onClick={onCreateProfile}>{t('signup_end_page.validate_button')}</button>
+
             </div>
-        </SuccessLayout>
+
+        </SuccessLayout >
     );
 };
 

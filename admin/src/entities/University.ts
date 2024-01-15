@@ -21,6 +21,7 @@ type University = {
     codes: string[];
     domains: string[];
     pairingMode: PairingMode;
+    maxTandemsPerUser: number;
     website: string;
     notificationEmail?: string;
 };

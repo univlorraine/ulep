@@ -18,6 +18,8 @@ const WaitingTandemList: React.FC<WaitingTandemListProps> = ({
     tandems,
 }) => {
     const { t } = useTranslation();
+    const hasReachedMaxTandems = profile.learningLanguages.length >= profile.user.university.maxTandemsPerUser;
+
     return (
         <div className="home-card">
             <span className="home-card-title">{t('home_page.waiting_tandem.title')}</span>
@@ -36,7 +38,7 @@ const WaitingTandemList: React.FC<WaitingTandemListProps> = ({
                         );
                     })}
             </div>
-            {profile && profile.learningLanguages.length < 3 && (
+            {profile && !hasReachedMaxTandems && (
                 <button className="primary-button margin-top large-margin-bottom" onClick={onNewTandemAsked}>
                     {t('home_page.waiting_tandem.button')}
                 </button>

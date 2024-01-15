@@ -1,7 +1,11 @@
+import MediaObject from '../../../src/domain/entities/MediaObject';
 import UpdateAvatarUsecase from '../../../src/domain/usecases/UpdateAvatarUsecase';
 import DomainHttpAdapter from '../../mocks/adapters/HttpAdapter';
-const response = { id: 'id', url: 'url' };
+
+const response = { id: 'id', mimeType: "image/png", url: 'url' };
+
 const file = new File(['Bits'], 'name');
+
 describe('updateAvatar', () => {
     let adapter: DomainHttpAdapter;
     let usecase: UpdateAvatarUsecase;
@@ -24,12 +28,15 @@ describe('updateAvatar', () => {
     });
 
     it('execute must return an expected response', async () => {
-        expect.assertions(1);
+        expect.assertions(3);
 
         adapter.mockJson({ parsedBody: response });
 
         const result = await usecase.execute(file);
-        expect(result).toBe('url');
+        expect(result).toHaveProperty('id');
+        expect(result).toHaveProperty('mimeType');
+        expect(result).toHaveProperty('url');
+        // expect(result).toBeInstanceOf(MediaObject);
     });
 
     it('execute must return an expected response without parsed body', async () => {

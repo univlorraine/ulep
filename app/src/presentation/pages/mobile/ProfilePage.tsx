@@ -16,10 +16,7 @@ const ProfilePage: React.FC = () => {
             <ProfileContent
                 onClose={() => history.goBack()}
                 onParameterPressed={() => history.push('/settings')}
-                profileFirstname={profile.user.firstname}
-                profileLastname={profile.user.lastname}
-                profilePicture={profile.user.avatar ?? AvatarPlaceholderPng}
-                profileUniversity={profile.user.university}
+                profile={profile}
             />
         </IonPage>
     );

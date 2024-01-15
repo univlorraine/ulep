@@ -9,6 +9,8 @@ import {
   IsUrl,
   IsArray,
   IsEmail,
+  Min,
+  Max,
 } from 'class-validator';
 import { PairingMode, University } from 'src/core/models/university.model';
 import {
@@ -81,6 +83,12 @@ export class CreateUniversityRequest implements CreateUniversityCommand {
   @IsNotEmpty()
   pairingMode: PairingMode;
 
+  @Swagger.ApiProperty({ type: 'number', minimum: 1, maximum: 3 })
+  @Type(() => Number)
+  @Min(1)
+  @Max(3)
+  maxTandemsPerUser: number;
+
   @Swagger.ApiPropertyOptional({ type: 'string', format: 'email' })
   @IsOptional()
   @IsEmail()
@@ -148,6 +156,12 @@ export class UpdateUniversityRequest
   @IsNotEmpty()
   pairingMode: PairingMode;
 
+  @Swagger.ApiProperty({ type: 'number', minimum: 1, maximum: 3 })
+  @Type(() => Number)
+  @Min(1)
+  @Max(3)
+  maxTandemsPerUser: number;
+
   @Swagger.ApiPropertyOptional({ type: 'string', format: 'email' })
   @IsEmail()
   @IsOptional()
@@ -212,6 +226,12 @@ export class CreateUniversityPartnerRequest
   @IsString()
   @IsNotEmpty()
   pairingMode: PairingMode;
+
+  @Swagger.ApiProperty({ type: 'number', minimum: 1, maximum: 3 })
+  @Type(() => Number)
+  @Min(1)
+  @Max(3)
+  maxTandemsPerUser: number;
 
   @Swagger.ApiPropertyOptional({ type: 'string', format: 'email' })
   @IsEmail()
@@ -280,6 +300,10 @@ export class UniversityResponse {
   @Expose({ groups: ['read'] })
   pairingMode: PairingMode;
 
+  @Swagger.ApiProperty({ type: 'number' })
+  @Expose({ groups: ['read'] })
+  maxTandemsPerUser: number;
+
   @Swagger.ApiPropertyOptional({ type: 'string', format: 'url' })
   @Expose({ groups: ['read'] })
   notificationEmail?: string;
@@ -305,6 +329,7 @@ export class UniversityResponse {
       closeServiceDate: university.closeServiceDate,
       website: university.website,
       pairingMode: university.pairingMode,
+      maxTandemsPerUser: university.maxTandemsPerUser,
       notificationEmail: university.notificationEmail,
     });
   }

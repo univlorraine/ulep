@@ -22,6 +22,7 @@ const EditUniversity = () => {
         codes: string[],
         domains: string[],
         pairingMode: string,
+        maxTandemsPerUser: number,
         website?: string,
         notificationEmail?: string
     ) => {
@@ -37,6 +38,7 @@ const EditUniversity = () => {
             domains,
             website,
             pairingMode,
+            maxTandemsPerUser,
             notificationEmail: notificationEmail || undefined,
         };
         try {
@@ -83,6 +85,7 @@ const EditUniversity = () => {
                             codes: string[],
                             domains: string[],
                             pairingMode: string,
+                            maxTandemsPerUser: number,
                             website?: string,
                             notificationEmail?: string
                         ) =>
@@ -98,10 +101,12 @@ const EditUniversity = () => {
                                 codes,
                                 domains,
                                 pairingMode,
+                                maxTandemsPerUser,
                                 website,
                                 notificationEmail
                             )
                         }
+                        maxTandemsPerUser={record.maxTandemsPerUser}
                         name={record.name}
                         notificationEmail={record.notificationEmail}
                         openServiceDate={record.openServiceDate}

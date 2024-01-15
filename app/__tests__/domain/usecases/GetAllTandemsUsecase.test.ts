@@ -49,7 +49,7 @@ const usecaseResponse: TandemCommand[] = [
                 availabilitiesNote: 'note',
                 user: {
                     id: 'userId',
-                    avatar: { id: 'avatarId', url: 'url' },
+                    avatar: { id: 'avatarId', mimeType: 'image/png' },
                     acceptsEmail: true,
                     email: 'email',
                     firstname: 'firstname',
@@ -66,6 +66,7 @@ const usecaseResponse: TandemCommand[] = [
                         admissionEnd: new Date('2023-12-31T00:00:00.000Z'),
                         openServiceDate: new Date('2023-01-01T00:00:00.000Z'),
                         closeServiceDate: new Date('2023-01-01T00:00:00.000Z'),
+                        maxTandemsPerUser: 1,
                     },
                     status: 'ACTIVE',
                 },

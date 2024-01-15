@@ -103,11 +103,13 @@ export class PrismaProfileRepository implements ProfileRepository {
             role: where.user.role,
             status: where.user.status,
           },
-          MasteredLanguages: {
-            some: {
-              LanguageCode: { code: where.masteredLanguageCode },
+          ...(where.masteredLanguageCode && {
+            MasteredLanguages: {
+              some: {
+                LanguageCode: { code: where.masteredLanguageCode },
+              },
             },
-          },
+          }),
           NativeLanguage: { code: where.nativeLanguageCode },
         }
       : {};

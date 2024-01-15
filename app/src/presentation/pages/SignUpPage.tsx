@@ -175,9 +175,9 @@ const SignUpPage: React.FC = () => {
                         options={
                             country
                                 ? country.universities.map((university) => ({
-                                      title: university.name,
-                                      value: university,
-                                  }))
+                                    title: university.name,
+                                    value: university,
+                                }))
                                 : []
                         }
                         title={t('signup_page.university_title')}
@@ -228,6 +228,7 @@ const SignUpPage: React.FC = () => {
                     <TextInput onChange={setDiploma} title={t('signup_page.diplome_title')} value={diploma} />
                 )}
                 {displayError && <ErrorMessage description={t('signup_page.error')} />}
+
                 <div className={styles['bottom-container']}>
                     {!selectedRole && (
                         <p className={styles.information}>
@@ -237,13 +238,16 @@ const SignUpPage: React.FC = () => {
                             <a href={`mailto:${configuration.emailContact}`}>{configuration.emailContact}</a>
                         </p>
                     )}
-                    <button
-                        className={`primary-button ${isAFieldEmpty ? 'disabled' : ''}`}
-                        disabled={isAFieldEmpty}
-                        onClick={continueSignUp}
-                    >
-                        {t('signup_page.validate_button')}
-                    </button>
+                    {/* If university central is selected and oauth was successfull or university central is not selected */}
+                    {(university && university.isCentral && fromIdp) || (university && !university.isCentral) && (
+                        <button
+                            className={`primary-button ${isAFieldEmpty ? 'disabled' : ''}`}
+                            disabled={isAFieldEmpty}
+                            onClick={continueSignUp}
+                        >
+                            {t('signup_page.validate_button')}
+                        </button>
+                    )}
                 </div>
             </div>
         </WebLayoutCentered>

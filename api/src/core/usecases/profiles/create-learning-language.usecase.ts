@@ -64,9 +64,11 @@ export class CreateLearningLanguageUseCase {
       throw new RessourceDoesNotExist('Profile does not exist');
     }
 
-    if (profile.learningLanguages.length >= 3) {
+    const maxTandemCount = profile.user.university.maxTandemsPerUser;
+    const learningLanguagesCount = profile.learningLanguages.length;
+    if (learningLanguagesCount >= maxTandemCount) {
       throw new ProfileHasMaxNumberOfLearningLanguages(
-        `Profile already has ${profile.learningLanguages.length} learning languages`,
+        `Profile already has ${learningLanguagesCount} learning languages`,
       );
     }
 

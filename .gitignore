@@ -21,3 +21,5 @@ helm/project/old
 # Docker data
 docker/minio/.minio.sys
 values-local.yaml
+
+docker/minio/*

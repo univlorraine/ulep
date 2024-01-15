@@ -1,4 +1,5 @@
 import style from './CircleAvatar.module.css';
+
 interface CircleAvatarProps {
     alt?: string;
     backgroundImage: string;

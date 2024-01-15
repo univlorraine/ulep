@@ -5,6 +5,8 @@ export const createCentralUniversityPlaceholder = async (
   prisma: PrismaClient,
 ) => {
   const countries = await prisma.countryCodes.findMany();
+  const now = new Date();
+
   await prisma.organizations.create({
     data: {
       name: 'Central university',
@@ -12,10 +14,10 @@ export const createCentralUniversityPlaceholder = async (
         connect: { id: countries.find((country) => country.code === 'FR').id },
       },
       timezone: 'Europe/Paris',
-      admissionStartDate: new Date(),
-      admissionEndDate: new Date(),
-      openServiceDate: new Date(),
-      closeServiceDate: new Date(),
+      admissionStartDate: new Date(now.getFullYear(), 0, 1),
+      admissionEndDate: new Date(now.getFullYear(), 11, 31),
+      openServiceDate: new Date(now.getFullYear(), 0, 1),
+      closeServiceDate: new Date(now.getFullYear(), 11, 31),
     },
   });
 };
@@ -29,6 +31,8 @@ export enum UniversitySeedIDs {
 
 export const createUniversities = async (prisma: PrismaClient) => {
   const countries = await prisma.countryCodes.findMany();
+  const now = new Date();
+
   await prisma.organizations.create({
     data: {
       id: UniversitySeedIDs.CENTRAL,
@@ -51,14 +55,15 @@ export const createUniversities = async (prisma: PrismaClient) => {
       codes: ['23LORRAINE'],
       domains: ['@univ-lorraine.fr'],
       timezone: 'Europe/Paris',
-      openServiceDate: new Date('2022-01-01'),
-      closeServiceDate: new Date('2024-12-31'),
-      admissionStartDate: new Date('2023-01-01'),
-      admissionEndDate: new Date('2023-12-31'),
+      admissionStartDate: new Date(now.getFullYear(), 0, 1),
+      admissionEndDate: new Date(now.getFullYear(), 11, 31),
+      openServiceDate: new Date(now.getFullYear(), 0, 1),
+      closeServiceDate: new Date(now.getFullYear(), 11, 31),
       website: 'https://www.univ-lorraine.fr/',
       notification_email: 'notification+lorraine@test.fr',
     },
   });
+
   await prisma.organizations.create({
     data: {
       id: UniversitySeedIDs.BIRMINGHAM,
@@ -70,15 +75,16 @@ export const createUniversities = async (prisma: PrismaClient) => {
       domains: ['@univ-birmingham.fr'],
       timezone: 'Europe/London',
       Parent: { connect: { id: UniversitySeedIDs.CENTRAL } },
-      openServiceDate: new Date('2022-01-01'),
-      closeServiceDate: new Date('2024-12-31'),
-      admissionStartDate: new Date('2023-01-02'),
-      admissionEndDate: new Date('2023-12-30'),
+      admissionStartDate: new Date(now.getFullYear(), 0, 1),
+      admissionEndDate: new Date(now.getFullYear(), 11, 31),
+      openServiceDate: new Date(now.getFullYear(), 0, 1),
+      closeServiceDate: new Date(now.getFullYear(), 11, 31),
       website: 'https://www.birmingham.ac.uk',
       pairing_mode: PairingMode.SEMI_AUTOMATIC,
       notification_email: 'notification+birm@test.fr',
     },
   });
+
   await prisma.organizations.create({
     data: {
       id: UniversitySeedIDs.FRANCFORT,
@@ -90,14 +96,15 @@ export const createUniversities = async (prisma: PrismaClient) => {
       domains: ['@univ-francfort.fr'],
       timezone: 'Europe/Berlin',
       Parent: { connect: { id: UniversitySeedIDs.CENTRAL } },
-      openServiceDate: new Date('2022-01-01'),
-      closeServiceDate: new Date('2024-12-31'),
-      admissionStartDate: new Date('2023-01-02'),
-      admissionEndDate: new Date('2023-12-30'),
+      admissionStartDate: new Date(now.getFullYear(), 0, 1),
+      admissionEndDate: new Date(now.getFullYear(), 11, 31),
+      openServiceDate: new Date(now.getFullYear(), 0, 1),
+      closeServiceDate: new Date(now.getFullYear(), 11, 31),
       website: 'https://www.toto.de',
       pairing_mode: PairingMode.AUTOMATIC,
     },
   });
+
   await prisma.organizations.create({
     data: {
       id: UniversitySeedIDs.OTTAWA,
@@ -109,10 +116,10 @@ export const createUniversities = async (prisma: PrismaClient) => {
       domains: ['@univ-ottawa.ca', '@thetribe.io'],
       timezone: 'Canada/Atlantic',
       Parent: { connect: { id: UniversitySeedIDs.CENTRAL } },
-      openServiceDate: new Date('2022-01-01'),
-      closeServiceDate: new Date('2024-12-31'),
-      admissionStartDate: new Date('2023-01-02'),
-      admissionEndDate: new Date('2023-12-30'),
+      admissionStartDate: new Date(now.getFullYear(), 0, 1),
+      admissionEndDate: new Date(now.getFullYear(), 11, 31),
+      openServiceDate: new Date(now.getFullYear(), 0, 1),
+      closeServiceDate: new Date(now.getFullYear(), 11, 31),
       website: 'https://www.toto.ca',
       pairing_mode: PairingMode.SEMI_AUTOMATIC,
     },

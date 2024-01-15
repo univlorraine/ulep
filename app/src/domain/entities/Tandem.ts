@@ -6,6 +6,7 @@ class Tandem {
         public id: string,
         public status: TandemStatus,
         public learningLanguage: Language,
+        public partnerLearningLanguage: Language,
         public level: CEFR,
         public pedagogy: Pedagogy,
         public partner?: Profile

@@ -33,6 +33,7 @@ const UniversityShow = (props: any) => {
                 <DateField label={translate('universities.show.admission_end')} source="admissionEnd" />
                 <DateField label={translate('universities.show.open_service')} source="openServiceDate" />
                 <DateField label={translate('universities.show.close_service')} source="closeServiceDate" />
+                <TextField label={translate('universities.show.max_tandems_per_user')} source="maxTandemsPerUser" />
                 <ArrayField label={translate('universities.show.sites')} sortable={false} source="sites">
                     <SingleFieldList linkType={false}>
                         <ChipField source="name" />

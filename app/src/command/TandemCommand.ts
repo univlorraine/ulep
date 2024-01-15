@@ -21,6 +21,7 @@ export const tandemCommandToDomain = (command: TandemCommand[]) => {
                     tandem.userLearningLanguage.code,
                     tandem.userLearningLanguage.name
                 ),
+                new Language(tandem.partnerLearningLanguage.id, tandem.partnerLearningLanguage.code, tandem.partnerLearningLanguage.name),
                 tandem.partnerLearningLanguage.level as CEFR,
                 tandem.partnerLearningLanguage.learningType as Pedagogy,
                 profileCommandToDomain(tandem.partnerLearningLanguage.profile)

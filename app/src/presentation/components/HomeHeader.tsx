@@ -1,13 +1,15 @@
 import { IonHeader } from '@ionic/react';
 import { ArrowDownSvg, LogoTextSvg } from '../../assets';
 import styles from './HomeHeader.module.css';
+import User from '../../domain/entities/User';
+import Avatar from './Avatar';
 
 interface HomeHeaderProps {
-    avatar: string;
+    user: User;
     onPicturePressed: () => void;
 }
 
-const HomeHeader: React.FC<HomeHeaderProps> = ({ avatar, onPicturePressed }) => {
+const HomeHeader: React.FC<HomeHeaderProps> = ({ user, onPicturePressed }) => {
     return (
         <IonHeader>
             <div className={styles['header-container']}>
@@ -17,7 +19,7 @@ const HomeHeader: React.FC<HomeHeaderProps> = ({ avatar, onPicturePressed }) => 
                     <span className={styles['app-name']}>ULEP</span>
                 </div>
                 <button className={styles['avatar-container']} onClick={onPicturePressed}>
-                    <img alt="avatar" className={styles.avatar} src={avatar} />
+                    <Avatar user={user} className={styles.avatar} />
                     <img alt="arrow-down" src={ArrowDownSvg} />
                 </button>
             </div>
