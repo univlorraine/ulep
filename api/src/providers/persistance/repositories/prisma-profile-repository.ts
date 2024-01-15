@@ -122,10 +122,10 @@ export class PrismaProfileRepository implements ProfileRepository {
       return { items: [], totalItems: count };
     }
 
-    let order;
-    if (orderBy.field === 'university') {
+    let order = undefined;
+    if (orderBy && orderBy.field === 'university') {
       order = { User: { Organization: { name: orderBy.order } } };
-    } else if (orderBy.field) {
+    } else if (orderBy) {
       order = { User: { [orderBy.field]: orderBy.order } };
     }
 

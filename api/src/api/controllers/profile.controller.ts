@@ -101,12 +101,11 @@ export class ProfileController {
       limit,
     } = query;
 
+    const orderBy = field && order && { field, order };
+
     const profiles = await this.getProfilesUsecase.execute({
       page,
-      orderBy: (field || order) && {
-        field,
-        order,
-      },
+      orderBy: orderBy,
       limit,
       where: {
         user: {

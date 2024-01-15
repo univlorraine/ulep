@@ -35,7 +35,7 @@ export interface ProfileQueryWhere {
 }
 
 export interface ProfileQueryOrderBy {
-  field?: ProfileQuerySortKey;
+  field: ProfileQuerySortKey;
   order: SortOrder;
 }
 
