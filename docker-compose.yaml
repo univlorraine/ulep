@@ -11,7 +11,7 @@ services:
     environment:
       ADMIN_URL: ${ADMIN_URL:-http://localhost:3001}
       APP_URL: ${APP_URL:-http://localhost:5173}
-      LOG_LEVEL: ${LOG_LEVEL:-warn}
+      LOG_LEVEL: ${LOG_LEVEL:-debug} # verbose, debug, log, warn or error
       DEFAULT_TRANSLATION_LANGUAGE: ${DEFAULT_TRANSLATION_LANGUAGE:-fr}
       DATABASE_URL: postgresql://${POSTGRES_USER:-postgres}:${POSTGRES_PASSWORD:-!ChangeMe!}@database:5432/${POSTGRES_DB:-ulep}?schema=public
       KEYCLOAK_BASE_URL: ${KEYCLOAK_BASE_URL:-http://auth:8080}
@@ -21,14 +21,14 @@ services:
       KEYCLOAK_CLIENT_ID: ${KEYCLOAK_CLIENT_ID:-api}
       KEYCLOAK_CLIENT_SECRET: ${KEYCLOAK_CLIENT_SECRET:-bN49BuApmmtAODeOWOG8iKOOuJdN3KE6}
       KEYCLOAK_ADMIN_GROUP_ID: ${KEYCLOAK_ADMIN_GROUP_ID:-02736a0f-4679-4329-a877-2ce87aaea569}
-      MINIO_HOST: ${MINIO_HOST:-192.168.1.201}
-      MINIO_PORT: 9000
-      MINIO_USE_SSL: false
+      MINIO_HOST: ${MINIO_HOST:-minio}
+      MINIO_PORT: ${MINIO_PORT:-9000}
+      MINIO_USE_SSL: ${MINIO_USE_SSL:-false}
       MINIO_ACCESS_KEY: ${MINIO_USER:-minio}
       MINIO_SECRET_KEY: ${MINIO_PASSWORD:-!ChangeMe!}
       TRANSLATIONS_ENDPOINT: ${TRANSLATIONS_ENDPOINT:-https://raw.githubusercontent.com/thetribeio/locales_ulep/main/locales/}
       TRANSLATIONS_ENDPOINT_SUFFIX: ${TRANSLATIONS_ENDPOINT_SUFFIX:-}
-      TRANSLATION_TOKEN: ${TRANSLATION_TOKEN:-}
+      TRANSLATIONS_TOKEN: ${TRANSLATIONS_TOKEN:-}
       CONNECTOR_URL: ${CONNECTOR_URL:-}
       CONNECTOR_TOKEN: ${CONNECTOR_TOKEN:-}
       EMAIL_ASSETS_BUCKET: ${EMAIL_ASSETS_BUCKET:-assets}
@@ -43,6 +43,7 @@ services:
       SMTP_IGNORE_TLS: ${SMTP_IGNORE_TLS:-true}
       SMTP_SENDER: ${SMTP_SENDER:-test@ulep.fr}
       SENTRY_DSN: ${API_SENTRY_DSN}
+      CANCEL_TRESHOLD_IN_MINUTES: ${CANCEL_TRESHOLD_IN_MINUTES:-15}
 
   admin:
     build:

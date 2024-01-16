@@ -76,7 +76,10 @@ export class InterestResponse {
   }
 
   static fromDomain(interest: Interest, languageCode?: string) {
-    const name = textContentTranslationResponse(interest.name, languageCode);
+    const name = textContentTranslationResponse({
+      textContent: interest.name,
+      languageCode,
+    });
     return new InterestResponse({
       id: interest.id,
       category: interest.category,
@@ -145,7 +148,11 @@ export class InterestCategoryResponse {
   }
 
   static fromDomain(category: InterestCategory, languageCode?: string) {
-    const name = textContentTranslationResponse(category.name, languageCode);
+    const name = textContentTranslationResponse({
+      textContent: category.name,
+      languageCode,
+    });
+
     return new InterestCategoryResponse({
       id: category.id,
       name: name,

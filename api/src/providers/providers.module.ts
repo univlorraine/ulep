@@ -42,6 +42,7 @@ import { INSTANCE_REPOSITORY } from 'src/core/ports/instance.repository';
 import { PrismaInstanceRepository } from 'src/providers/persistance/repositories/prisma-instance.repository';
 import { PURGE_REPOSITORY } from 'src/core/ports/purge.repository';
 import { PrismaPurgeRepository } from './persistance/repositories/prisma-purge.repository';
+import { ConfigModule } from '@nestjs/config';
 
 const providers: Provider[] = [
   { provide: INSTANCE_REPOSITORY, useClass: PrismaInstanceRepository },
@@ -128,7 +129,7 @@ const providers: Provider[] = [
 ];
 
 @Module({
-  imports: [],
+  imports: [ConfigModule],
   providers: [PrismaService, ...providers],
   exports: [...providers],
 })

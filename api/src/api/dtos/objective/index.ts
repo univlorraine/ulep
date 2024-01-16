@@ -82,7 +82,10 @@ export class ObjectiveResponse {
   }
 
   static fromDomain(instance: LearningObjective, languageCode?: string) {
-    const name = textContentTranslationResponse(instance.name, languageCode);
+    const name = textContentTranslationResponse({
+      textContent: instance.name,
+      languageCode,
+    });
 
     return new ObjectiveResponse({
       id: instance.id,

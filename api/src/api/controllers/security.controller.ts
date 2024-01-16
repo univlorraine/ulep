@@ -16,14 +16,22 @@ import {
   RefreshTokenRequest,
   ResetPasswordRequest,
 } from '../dtos';
-import { configuration } from 'src/configuration';
+import { ConfigService } from '@nestjs/config';
+import { Env } from 'src/configuration';
 
 @Controller('authentication')
 @Swagger.ApiTags('Authentication')
 export class SecurityController {
   private readonly logger = new Logger(SecurityController.name);
 
-  constructor(private readonly keycloakClient: KeycloakClient) {}
+  #appUrl: string;
+
+  constructor(
+    private readonly keycloakClient: KeycloakClient,
+    env: ConfigService<Env, true>,
+  ) {
+    this.#appUrl = env.get('APP_URL');
+  }
 
   @Post('token')
   @Swagger.ApiOperation({ summary: 'Request a JWT token.' })
@@ -53,7 +61,7 @@ export class SecurityController {
     }
 
     const url = this.keycloakClient.getStandardFlowUrl(
-      redirectUri || `${configuration().appUrl}/auth`,
+      redirectUri || `${this.#appUrl}/auth`,
     );
     res.redirect(url);
   }
@@ -96,7 +104,7 @@ export class SecurityController {
     await this.keycloakClient.executeActionEmail(
       ['UPDATE_PASSWORD'],
       user.id,
-      `${configuration().appUrl}/login`,
+      `${this.#appUrl}/login`,
     );
 
     return;

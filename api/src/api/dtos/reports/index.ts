@@ -93,7 +93,10 @@ export class ReportCategoryResponse {
     entity: ReportCategory,
     languageCode?: string,
   ): ReportCategoryResponse {
-    const name = textContentTranslationResponse(entity.name, languageCode);
+    const name = textContentTranslationResponse({
+      textContent: entity.name,
+      languageCode,
+    });
 
     return new ReportCategoryResponse({
       id: entity.id,

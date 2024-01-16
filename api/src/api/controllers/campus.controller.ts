@@ -11,8 +11,7 @@ import {
   UseGuards,
 } from '@nestjs/common';
 import * as Swagger from '@nestjs/swagger';
-import { configuration } from 'src/configuration';
-import { Roles } from '../decorators/roles.decorator';
+import { Role, Roles } from '../decorators/roles.decorator';
 import { AuthenticationGuard } from '../guards';
 import {
   CreateCampusUsecase,
@@ -38,7 +37,7 @@ export class CampusController {
   ) {}
 
   @Post()
-  @Roles(configuration().adminRole)
+  @Roles(Role.ADMIN)
   @UseGuards(AuthenticationGuard)
   @Swagger.ApiOperation({ summary: 'Create a new Campus ressource.' })
   @Swagger.ApiCreatedResponse({ type: CampusResponse })
@@ -70,7 +69,7 @@ export class CampusController {
   }
 
   @Put()
-  @Roles(configuration().adminRole)
+  @Roles(Role.ADMIN)
   @UseGuards(AuthenticationGuard)
   @Swagger.ApiOperation({ summary: 'Update a Campus ressource.' })
   @Swagger.ApiOkResponse()
@@ -83,7 +82,7 @@ export class CampusController {
   }
 
   @Delete(':id')
-  @Roles(configuration().adminRole)
+  @Roles(Role.ADMIN)
   @UseGuards(AuthenticationGuard)
   @Swagger.ApiOperation({ summary: 'Delete a Campus ressource.' })
   @Swagger.ApiOkResponse()

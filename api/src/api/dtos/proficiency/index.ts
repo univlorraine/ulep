@@ -131,7 +131,11 @@ export class ProficiencyQuestionResponse {
     question: ProficiencyQuestion,
     languageCode?: string,
   ): ProficiencyQuestionResponse {
-    const name = textContentTranslationResponse(question.text, languageCode);
+    const name = textContentTranslationResponse({
+      textContent: question.text,
+      languageCode,
+    });
+
     return new ProficiencyQuestionResponse({
       id: question.id,
       value: name,

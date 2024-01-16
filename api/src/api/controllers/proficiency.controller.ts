@@ -5,7 +5,6 @@ import {
   Body,
   Param,
   Delete,
-  Logger,
   SerializeOptions,
   ParseUUIDPipe,
   UseGuards,
@@ -37,16 +36,17 @@ import {
 import { ParseProficiencyLevelPipe } from '../validators';
 import { ProficiencyLevel } from 'src/core/models';
 import { AuthenticationGuard } from '../guards';
-import { Roles } from '../decorators/roles.decorator';
-import { configuration } from 'src/configuration';
+import { Role, Roles } from '../decorators/roles.decorator';
 import { GetProficiencyQueryParams } from 'src/api/dtos/proficiency/proficiency-filters';
 import { Collection } from '@app/common';
 import { UpdateQuestionUsecase } from 'src/core/usecases/proficiency/update-question.usecase';
+import { ConfigService } from '@nestjs/config';
+import { Env } from 'src/configuration';
 
 @Controller('proficiency')
 @Swagger.ApiTags('Proficiency')
 export class ProficiencyController {
-  private readonly logger = new Logger(ProficiencyController.name);
+  #defaultLanguageCode: string;
 
   constructor(
     private readonly createTestUsecase: CreateTestUsecase,
@@ -60,10 +60,13 @@ export class ProficiencyController {
     private readonly deleteQuestionUsecase: DeleteQuestionUsecase,
     private readonly getLevelsUsecase: GetLevelsUsecase,
     private readonly updateQuestionUsecase: UpdateQuestionUsecase,
-  ) {}
+    env: ConfigService<Env, true>,
+  ) {
+    this.#defaultLanguageCode = env.get<string>('DEFAULT_TRANSLATION_LANGUAGE');
+  }
 
   @Post('tests')
-  @Roles(configuration().adminRole)
+  @Roles(Role.ADMIN)
   @UseGuards(AuthenticationGuard)
   @Swagger.ApiOperation({ summary: 'Create a new Test ressource.' })
   @Swagger.ApiCreatedResponse({ type: ProficiencyTestResponse })
@@ -74,7 +77,7 @@ export class ProficiencyController {
   }
 
   @Get('tests')
-  @Roles(configuration().adminRole)
+  @Roles(Role.ADMIN)
   @UseGuards(AuthenticationGuard)
   @Swagger.ApiOperation({ summary: 'Collection of Test ressource.' })
   @Swagger.ApiOkResponse({ type: ProficiencyTestResponse, isArray: true })
@@ -89,7 +92,7 @@ export class ProficiencyController {
   }
 
   @Get('tests/:id')
-  @Roles(configuration().adminRole)
+  @Roles(Role.ADMIN)
   @UseGuards(AuthenticationGuard)
   @SerializeOptions({ groups: ['read', 'test:read'] })
   @Swagger.ApiOperation({ summary: 'Test ressource.' })
@@ -101,7 +104,7 @@ export class ProficiencyController {
   }
 
   @Delete('tests/:id')
-  @Roles(configuration().adminRole)
+  @Roles(Role.ADMIN)
   @UseGuards(AuthenticationGuard)
   @Swagger.ApiOperation({ summary: 'Deletes a Test ressource.' })
   @Swagger.ApiOkResponse()
@@ -154,7 +157,7 @@ export class ProficiencyController {
   }
 
   @Get('questions/:id')
-  @Roles(configuration().adminRole)
+  @Roles(Role.ADMIN)
   @UseGuards(AuthenticationGuard)
   @Swagger.ApiOperation({ summary: 'Get a Question ressource.' })
   @Swagger.ApiOkResponse({ type: GetProficiencyQuestionResponse })
@@ -165,12 +168,12 @@ export class ProficiencyController {
   }
 
   @Post('questions')
-  @Roles(configuration().adminRole)
+  @Roles(Role.ADMIN)
   @UseGuards(AuthenticationGuard)
   @Swagger.ApiOperation({ summary: 'Create a new Question ressource.' })
   @Swagger.ApiCreatedResponse({ type: ProficiencyQuestionResponse })
   async createQuestion(@Body() body: CreateQuestionRequest) {
-    const languageCode = configuration().defaultTranslationLanguage;
+    const languageCode = this.#defaultLanguageCode;
     const question = await this.createQuestionUsecase.execute({
       ...body,
       languageCode,
@@ -180,12 +183,12 @@ export class ProficiencyController {
   }
 
   @Put('questions')
-  @Roles(configuration().adminRole)
+  @Roles(Role.ADMIN)
   @UseGuards(AuthenticationGuard)
   @Swagger.ApiOperation({ summary: 'Update a Question ressource.' })
   @Swagger.ApiCreatedResponse({ type: ProficiencyQuestionResponse })
   async updateQuestion(@Body() body: UpdateQuestionRequest) {
-    const languageCode = configuration().defaultTranslationLanguage;
+    const languageCode = this.#defaultLanguageCode;
     const question = await this.updateQuestionUsecase.execute({
       ...body,
       languageCode,
@@ -195,7 +198,7 @@ export class ProficiencyController {
   }
 
   @Delete('questions/:id')
-  @Roles(configuration().adminRole)
+  @Roles(Role.ADMIN)
   @UseGuards(AuthenticationGuard)
   @Swagger.ApiOperation({ summary: 'Deletes a Question ressource.' })
   @Swagger.ApiOkResponse()
@@ -204,7 +207,7 @@ export class ProficiencyController {
   }
 
   @Get('levels')
-  @Roles(configuration().adminRole)
+  @Roles(Role.ADMIN)
   @UseGuards(AuthenticationGuard)
   @Swagger.ApiOperation({ summary: 'Proficiency Levels.' })
   @Swagger.ApiOkResponse({ type: String, isArray: true })

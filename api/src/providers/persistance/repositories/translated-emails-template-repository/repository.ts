@@ -1,21 +1,16 @@
 /* eslint-disable @typescript-eslint/no-var-requires */
-import { Logger } from '@nestjs/common';
+import { Injectable, Logger } from '@nestjs/common';
 import * as i18n from 'i18next';
 import * as HttpBackend from 'i18next-http-backend';
 import * as ChainedBackend from 'i18next-chained-backend';
 import * as resourcesToBackend from 'i18next-resources-to-backend';
-import {
-  configuration,
-  getLoggerLevels,
-  getTranslationsEndpoint,
-} from 'src/configuration';
+import { Env, getTranslationsEndpoint } from 'src/configuration';
 import EmailContent, {
   EMAIL_TEMPLATE_IDS,
 } from 'src/core/models/email-content.model';
 import { EmailTemplateRepository } from 'src/core/ports/email-template.repository';
 import getMailFromTemplate from './mailTemplate';
-
-const config = configuration();
+import { ConfigService } from '@nestjs/config';
 
 const LANGUAGES = ['en', 'fr', 'cn'];
 
@@ -76,20 +71,21 @@ const fallbackResources = {
   },
 };
 
+@Injectable()
 export default class TranslatedEmailTemplateRepository
   implements EmailTemplateRepository
 {
   private readonly logger = new Logger(TranslatedEmailTemplateRepository.name);
 
-  constructor() {
+  constructor(private readonly env: ConfigService<Env, true>) {
     const url = getTranslationsEndpoint(
       '{{lng}}',
-      config.emailTranslationsComponent,
+      env.get<string>('EMAIL_TRANSLATIONS_COMPONENT'),
     );
     const fallbackBackend = (resourcesToBackend as any)(fallbackResources);
     i18n.use(ChainedBackend as any).init<ChainedBackend.ChainedBackendOptions>({
       fallbackLng: LANGUAGES,
-      debug: getLoggerLevels(config.logLevel).includes('debug'),
+      debug: env.get('LOG_LEVEL') === 'debug',
       backend: {
         backends: [HttpBackend, fallbackBackend],
         backendOptions: [
@@ -97,7 +93,7 @@ export default class TranslatedEmailTemplateRepository
             loadPath: url,
             crossDomain: true,
             customHeaders: {
-              'PRIVATE-TOKEN': config.translations.token,
+              'PRIVATE-TOKEN': env.get('TRANSLATIONS_TOKEN'),
             },
           },
         ],
@@ -106,7 +102,8 @@ export default class TranslatedEmailTemplateRepository
   }
 
   private getImageUrl(imageName: string): string {
-    return `${config.emailAssets.publicEndpoint}/instance/emails/images/${imageName}`;
+    const endpoint = this.env.get<string>('EMAIL_ASSETS_PUBLIC_ENDPOINT');
+    return `${endpoint}/instance/emails/images/${imageName}`;
   }
 
   async getEmail(
@@ -156,8 +153,8 @@ export default class TranslatedEmailTemplateRepository
           appleStore: this.getImageUrl('apple-store.png'),
         },
         links: {
-          appleStore: config.appLinks.appleStore,
-          playStore: config.appLinks.playStore,
+          appleStore: this.env.get<string>('APP_LINK_APPLE_STORE'),
+          playStore: this.env.get<string>('APP_LINK_PLAY_STORE'),
         },
       }),
     });

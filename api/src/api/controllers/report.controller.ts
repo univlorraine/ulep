@@ -15,7 +15,6 @@ import {
   UseGuards,
 } from '@nestjs/common';
 import * as Swagger from '@nestjs/swagger';
-import { configuration } from 'src/configuration';
 import {
   CreateReportCategoryUsecase,
   CreateReportUsecase,
@@ -30,7 +29,7 @@ import {
   UpdateReportStatusUsecase,
 } from '../../core/usecases/report';
 import { CurrentUser } from '../decorators';
-import { Roles } from '../decorators/roles.decorator';
+import { Role, Roles } from '../decorators/roles.decorator';
 import {
   CreateReportCategoryRequest,
   CreateReportRequest,
@@ -43,11 +42,15 @@ import {
 import { AuthenticationGuard } from '../guards';
 import { GetReportsQueryParams } from 'src/api/dtos/reports/reports-filters';
 import { ReportStatus } from 'src/core/models';
+import { ConfigService } from '@nestjs/config';
+import { Env } from 'src/configuration';
 
 @Controller('reports')
 @Swagger.ApiTags('Reports')
 export class ReportController {
   private readonly logger = new Logger(ReportController.name);
+
+  #defaultLanguageCode: string;
 
   constructor(
     private readonly createReportCategoryUsecase: CreateReportCategoryUsecase,
@@ -61,15 +64,18 @@ export class ReportController {
     private readonly updateReportCategoryUsecase: UpdateReportCategoryUsecase,
     private readonly deleteReportCategoryUsecase: DeleteReportCategoryUsecase,
     private readonly deleteReportUsecase: DeleteReportUsecase,
-  ) {}
+    env: ConfigService<Env, true>,
+  ) {
+    this.#defaultLanguageCode = env.get<string>('DEFAULT_TRANSLATION_LANGUAGE');
+  }
 
   @Post('categories')
-  @Roles(configuration().adminRole)
+  @Roles(Role.ADMIN)
   @UseGuards(AuthenticationGuard)
   @Swagger.ApiOperation({ summary: 'Create a new Category ressource.' })
   @Swagger.ApiCreatedResponse({ type: ReportCategoryResponse })
   async createCategory(@Body() body: CreateReportCategoryRequest) {
-    const languageCode = configuration().defaultTranslationLanguage;
+    const languageCode = this.#defaultLanguageCode;
     const instance = await this.createReportCategoryUsecase.execute({
       languageCode,
       name: body.name,
@@ -103,7 +109,7 @@ export class ReportController {
   }
 
   @Put('categories')
-  @Roles(configuration().adminRole)
+  @Roles(Role.ADMIN)
   @UseGuards(AuthenticationGuard)
   @Swagger.ApiOperation({ summary: 'Update a Category ressource.' })
   @Swagger.ApiOkResponse()
@@ -116,7 +122,7 @@ export class ReportController {
   }
 
   @Delete('categories/:id')
-  @Roles(configuration().adminRole)
+  @Roles(Role.ADMIN)
   @UseGuards(AuthenticationGuard)
   @Swagger.ApiOperation({ summary: 'Deletes a Category ressource.' })
   @Swagger.ApiOkResponse()
@@ -155,7 +161,7 @@ export class ReportController {
   }
 
   @Get()
-  @Roles(configuration().adminRole)
+  @Roles(Role.ADMIN)
   @UseGuards(AuthenticationGuard)
   @Swagger.ApiOperation({ summary: 'Collection of Report ressource.' })
   @Swagger.ApiOkResponse({ type: ReportResponse, isArray: true })
@@ -181,7 +187,7 @@ export class ReportController {
 
   // TODO: only admin or owner can get report
   @Get(':id')
-  @Roles(configuration().adminRole)
+  @Roles(Role.ADMIN)
   @UseGuards(AuthenticationGuard)
   @Swagger.ApiOperation({ summary: 'Report ressource.' })
   @Swagger.ApiOkResponse({ type: ReportResponse })
@@ -192,7 +198,7 @@ export class ReportController {
   }
 
   @Put(':id')
-  @Roles(configuration().adminRole)
+  @Roles(Role.ADMIN)
   @UseGuards(AuthenticationGuard)
   @Swagger.ApiOperation({ summary: 'Updates a Report ressource.' })
   @Swagger.ApiOkResponse()
@@ -209,7 +215,7 @@ export class ReportController {
   }
 
   @Delete(':id')
-  @Roles(configuration().adminRole)
+  @Roles(Role.ADMIN)
   @UseGuards(AuthenticationGuard)
   @Swagger.ApiOperation({ summary: 'Deletes a Report ressource.' })
   @Swagger.ApiOkResponse()

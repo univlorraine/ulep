@@ -11,7 +11,6 @@ import {
   Controller,
   Get,
   Inject,
-  Logger,
   Param,
   ParseUUIDPipe,
   Post,
@@ -27,8 +26,7 @@ import {
   RefuseTandemRequest,
   TandemResponse,
 } from '../dtos';
-import { Roles } from '../decorators/roles.decorator';
-import { configuration } from 'src/configuration';
+import { Role, Roles } from '../decorators/roles.decorator';
 import { AuthenticationGuard } from '../guards';
 import { GenerateTandemsRequest } from '../dtos/tandems/generate-tandems.request';
 import {
@@ -40,8 +38,6 @@ import { KeycloakUser } from '@app/keycloak';
 @Controller('tandems')
 @Swagger.ApiTags('Tandems')
 export class TandemController {
-  private readonly logger = new Logger(TandemController.name);
-
   constructor(
     private readonly generateTandemsUsecase: GenerateTandemsUsecase,
     private readonly getTandemsUsecase: GetTandemsUsecase,
@@ -57,7 +53,6 @@ export class TandemController {
       status: RoutineStatus.ENDED,
     });
     if (lastRoutine) {
-      this.logger.verbose(`Relaunch global routine ${lastRoutine.id}`);
       await this.generate(user, {
         universityIds: lastRoutine.universities.map(
           (university) => university.id,
@@ -67,7 +62,7 @@ export class TandemController {
   }
 
   @Get()
-  @Roles(configuration().adminRole)
+  @Roles(Role.ADMIN)
   @UseGuards(AuthenticationGuard)
   @Swagger.ApiOperation({
     summary: 'Retrieve the collection of Tandem ressource.',
@@ -85,7 +80,7 @@ export class TandemController {
   }
 
   @Post()
-  @Roles(configuration().adminRole)
+  @Roles(Role.ADMIN)
   @UseGuards(AuthenticationGuard)
   @Swagger.ApiOperation({ summary: 'Creates a Tandem ressource.' })
   async create(
@@ -105,7 +100,7 @@ export class TandemController {
   }
 
   @Post(':id/validate')
-  @Roles(configuration().adminRole)
+  @Roles(Role.ADMIN)
   @UseGuards(AuthenticationGuard)
   @Swagger.ApiOperation({ summary: 'Validate a Tandem ressource' })
   async validateTandem(
@@ -119,7 +114,7 @@ export class TandemController {
   }
 
   @Post('generate')
-  @Roles(configuration().adminRole)
+  @Roles(Role.ADMIN)
   @UseGuards(AuthenticationGuard)
   @Swagger.ApiOperation({ summary: 'Generate Tandems' })
   async generate(
@@ -138,13 +133,8 @@ export class TandemController {
           RoutineStatus.ENDED,
         );
       })
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
       .catch((err: unknown) => {
-        this.logger.error(
-          `Error while generating tandem for universities ${body.universityIds.join(
-            ', ',
-          )}`,
-          err,
-        );
         return this.routineExecutionRepository.updateStatus(
           routineExecution.id,
           RoutineStatus.ERROR,
@@ -155,7 +145,7 @@ export class TandemController {
   }
 
   @Post('refuse')
-  @Roles(configuration().adminRole)
+  @Roles(Role.ADMIN)
   @UseGuards(AuthenticationGuard)
   @Swagger.ApiOperation({ summary: 'Refuse a tandem' })
   async refuseTandem(

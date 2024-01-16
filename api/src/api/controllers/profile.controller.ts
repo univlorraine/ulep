@@ -14,7 +14,6 @@ import {
   UseGuards,
 } from '@nestjs/common';
 import * as Swagger from '@nestjs/swagger';
-import { configuration } from 'src/configuration';
 import {
   CreateProfileUsecase,
   GetProfileByUserIdUsecase,
@@ -28,7 +27,7 @@ import {
   GetLearningLanguageOfProfileUsecase,
 } from 'src/core/usecases';
 import { CollectionResponse, CurrentUser } from '../decorators';
-import { Roles } from '../decorators/roles.decorator';
+import { Role, Roles } from '../decorators/roles.decorator';
 import {
   CreateProfileRequest,
   ProfileQueryFilter,
@@ -76,7 +75,7 @@ export class ProfileController {
   }
 
   @Get()
-  @Roles(configuration().adminRole)
+  @Roles(Role.ADMIN)
   @UseGuards(AuthenticationGuard)
   @Swagger.ApiOperation({
     summary: 'Retrieve the collection of Profile ressource.',
@@ -135,7 +134,7 @@ export class ProfileController {
   }
 
   @Delete(':id')
-  @Roles(configuration().adminRole)
+  @Roles(Role.ADMIN)
   @UseGuards(AuthenticationGuard)
   @Swagger.ApiOperation({
     summary: 'Delete a profile resource',
@@ -185,7 +184,7 @@ export class ProfileController {
   }
 
   @Get(':id')
-  @Roles(configuration().adminRole)
+  @Roles(Role.ADMIN)
   @UseGuards(AuthenticationGuard)
   @SerializeOptions({ groups: ['read', 'profile:read'] })
   @Swagger.ApiOperation({ summary: 'Retrieve a Profile ressource.' })

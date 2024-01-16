@@ -1,16 +1,25 @@
 import { EmailGateway, SendEmailPayload } from 'src/core/ports/email.gateway';
 import { Transporter, createTransport } from 'nodemailer';
-import { configuration } from 'src/configuration';
-import { Logger } from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
+import { ConfigService } from '@nestjs/config';
+import { Env } from 'src/configuration';
 
+@Injectable()
 export class SmtpEmailGateway implements EmailGateway {
-  private readonly logger = new Logger(SmtpEmailGateway.name);
-
   #transporter: Transporter;
   #from: string;
 
-  constructor() {
-    const { smtp } = configuration();
+  constructor(env: ConfigService<Env, true>) {
+    const smtp = {
+      host: env.get<string>('SMTP_HOST'),
+      port: env.get<number>('SMTP_PORT'),
+      secure: env.get<boolean>('SMTP_SECURE'),
+      ignoreTLS: env.get<boolean>('SMTP_IGNORE_TLS'),
+      sender: env.get<string>('SMTP_SENDER'),
+      disableBootVerification: env.get<boolean>(
+        'SMTP_DISABLE_BOOT_VERIFICATION',
+      ),
+    };
 
     this.#transporter = createTransport({
       host: smtp.host,
@@ -20,18 +29,12 @@ export class SmtpEmailGateway implements EmailGateway {
     });
     this.#from = smtp.sender;
 
-    this.logger.log(
-      `Smtp email gateway setup with transport ${smtp.host}:${smtp.port}; secure: ${smtp.secure}; from: ${smtp.sender}`,
-    );
-
     if (!smtp.disableBootVerification) {
       new Promise<void>((resolve, reject) => {
         this.#transporter.verify((error) => {
           if (error) {
-            this.logger.error('Fail to verify smtp connection', error);
             return reject(error);
           } else {
-            this.logger.log('SMTP Email gateway ready to take messages');
             return resolve();
           }
         });
@@ -51,7 +54,6 @@ export class SmtpEmailGateway implements EmailGateway {
         },
         (err: Error) => {
           if (err) {
-            this.logger.error(err);
             return reject(err);
           }
 

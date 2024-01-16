@@ -35,15 +35,18 @@ import {
   UpdateInterestUsecase,
 } from '../../core/usecases/interest';
 import { AuthenticationGuard } from '../guards';
-import { configuration } from 'src/configuration';
-import { Roles } from '../decorators/roles.decorator';
+import { Role, Roles } from '../decorators/roles.decorator';
 import { GetInterestsQueryParams } from 'src/api/dtos/interests/interests-filter';
 import { Collection } from '@app/common';
+import { ConfigService } from '@nestjs/config';
+import { Env } from 'src/configuration';
 
 @Controller('interests')
 @Swagger.ApiTags('Interests')
 export class InterestController {
   private readonly logger = new Logger(InterestController.name);
+
+  private readonly defaultLanguageCode: string;
 
   constructor(
     private readonly createInterestUsecase: CreateInterestUsecase,
@@ -55,33 +58,34 @@ export class InterestController {
     private readonly deleteInterestUsecase: DeleteInterestUsecase,
     private readonly updateInterestUsecase: UpdateInterestUsecase,
     private readonly updateIterestCategoryUsecase: UpdateInterestCategoryUsecase,
-  ) {}
+    env: ConfigService<Env, true>,
+  ) {
+    this.defaultLanguageCode = env.get<string>('DEFAULT_TRANSLATION_LANGUAGE');
+  }
 
   @Post()
-  @Roles(configuration().adminRole)
+  @Roles(Role.ADMIN)
   @UseGuards(AuthenticationGuard)
   @Swagger.ApiOperation({ summary: 'Create a new Interest ressource.' })
   @Swagger.ApiCreatedResponse({ type: InterestResponse })
   async createInterest(@Body() body: CreateInterestRequest) {
-    const languageCode = configuration().defaultTranslationLanguage;
     const instance = await this.createInterestUsecase.execute({
       ...body,
-      languageCode,
+      languageCode: this.defaultLanguageCode,
     });
 
     return InterestResponse.fromDomain(instance);
   }
 
   @Post('categories')
-  @Roles(configuration().adminRole)
+  @Roles(Role.ADMIN)
   @UseGuards(AuthenticationGuard)
   @Swagger.ApiOperation({ summary: 'Create a new Category ressource.' })
   @Swagger.ApiCreatedResponse({ type: InterestResponse })
   async createCategory(@Body() body: CreateInterestCategoryRequest) {
-    const languageCode = configuration().defaultTranslationLanguage;
     const instance = await this.createCategoryUsecase.execute({
       ...body,
-      languageCode,
+      languageCode: this.defaultLanguageCode,
     });
 
     return InterestCategoryResponse.fromDomain(instance);
@@ -133,7 +137,7 @@ export class InterestController {
   }
 
   @Delete(':id')
-  @Roles(configuration().adminRole)
+  @Roles(Role.ADMIN)
   @UseGuards(AuthenticationGuard)
   @Swagger.ApiOperation({ summary: 'Deletes a Interest ressource.' })
   @Swagger.ApiOkResponse()
@@ -142,7 +146,7 @@ export class InterestController {
   }
 
   @Delete('categories/:id')
-  @Roles(configuration().adminRole)
+  @Roles(Role.ADMIN)
   @UseGuards(AuthenticationGuard)
   @Swagger.ApiOperation({ summary: 'Deletes a Category ressource.' })
   @Swagger.ApiOkResponse()
@@ -151,7 +155,7 @@ export class InterestController {
   }
 
   @Put()
-  @Roles(configuration().adminRole)
+  @Roles(Role.ADMIN)
   @UseGuards(AuthenticationGuard)
   @Swagger.ApiOperation({ summary: 'Update an Interest ressource.' })
   @Swagger.ApiOkResponse({ type: InterestResponse })
@@ -162,7 +166,7 @@ export class InterestController {
   }
 
   @Put('categories')
-  @Roles(configuration().adminRole)
+  @Roles(Role.ADMIN)
   @UseGuards(AuthenticationGuard)
   @Swagger.ApiOperation({ summary: 'Update an Category ressource.' })
   @Swagger.ApiOkResponse({ type: InterestCategoryResponse })

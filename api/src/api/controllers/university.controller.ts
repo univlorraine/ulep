@@ -12,7 +12,6 @@ import {
   UseGuards,
 } from '@nestjs/common';
 import * as Swagger from '@nestjs/swagger';
-import { configuration } from 'src/configuration';
 import {
   CreatePartnerUniversityUsecase,
   CreateUniversityUsecase,
@@ -21,7 +20,7 @@ import {
   GetUniversityUsecase,
   UpdateUniversityUsecase,
 } from '../../core/usecases/university';
-import { Roles } from '../decorators/roles.decorator';
+import { Role, Roles } from '../decorators/roles.decorator';
 import {
   CreateUniversityPartnerRequest,
   CreateUniversityRequest,
@@ -29,6 +28,7 @@ import {
   UpdateUniversityRequest,
 } from '../dtos';
 import { AuthenticationGuard } from '../guards';
+
 @Controller('universities')
 @Swagger.ApiTags('Universities')
 export class UniversityController {
@@ -42,7 +42,7 @@ export class UniversityController {
   ) {}
 
   @Post()
-  @Roles(configuration().adminRole)
+  @Roles(Role.ADMIN)
   @UseGuards(AuthenticationGuard)
   @Swagger.ApiOperation({ summary: 'Create a new University ressource.' })
   @Swagger.ApiCreatedResponse({ type: UniversityResponse })
@@ -53,7 +53,7 @@ export class UniversityController {
   }
 
   @Post('partners')
-  @Roles(configuration().adminRole)
+  @Roles(Role.ADMIN)
   @UseGuards(AuthenticationGuard)
   @Swagger.ApiOperation({
     summary: 'Create a new partner University ressource.',
@@ -89,7 +89,7 @@ export class UniversityController {
   }
 
   @Put(':id')
-  @Roles(configuration().adminRole)
+  @Roles(Role.ADMIN)
   @UseGuards(AuthenticationGuard)
   @Swagger.ApiOperation({ summary: 'Updates a University ressource.' })
   @Swagger.ApiOkResponse()
@@ -106,7 +106,7 @@ export class UniversityController {
   }
 
   @Delete(':id')
-  @Roles(configuration().adminRole)
+  @Roles(Role.ADMIN)
   @UseGuards(AuthenticationGuard)
   @Swagger.ApiOperation({ summary: 'Deletes a University ressource.' })
   @Swagger.ApiOkResponse()

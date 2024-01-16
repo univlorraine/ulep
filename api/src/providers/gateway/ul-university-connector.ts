@@ -1,17 +1,27 @@
 import { HttpService } from '@nestjs/axios';
 import { ForbiddenException, Injectable } from '@nestjs/common';
+import { ConfigService } from '@nestjs/config';
 import { AxiosRequestConfig, AxiosResponse } from 'axios';
 import { firstValueFrom, map } from 'rxjs';
-import { configuration } from 'src/configuration';
+import { Env } from 'src/configuration';
 
 @Injectable()
 export class UlUniversityConnectorService {
-  constructor(private readonly httpService: HttpService) {}
-  private config = configuration();
+  #connectorUrl?: string;
+  #connectorToken?: string;
+
+  constructor(
+    private readonly httpService: HttpService,
+    env: ConfigService<Env, true>,
+  ) {
+    this.#connectorUrl = env.get('CONNECTOR_URL');
+    this.#connectorToken = env.get('CONNECTOR_TOKEN');
+  }
 
   async getUserUniversityInfo(universityLogin: string): Promise<any> {
-    const connectorUrl = this.config.connectorUrl;
-    const connectorToken = this.config.connectorToken;
+    const connectorUrl = this.#connectorUrl;
+    const connectorToken = this.#connectorToken;
+
     if (!connectorUrl || !connectorToken) {
       return {};
     }

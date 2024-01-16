@@ -16,7 +16,6 @@ import {
 } from '@nestjs/common';
 import { FileInterceptor } from '@nestjs/platform-express';
 import * as Swagger from '@nestjs/swagger';
-import { configuration } from 'src/configuration';
 import { UploadAvatarUsecase } from 'src/core/usecases';
 import {
   CreateAdministratorUsecase,
@@ -31,7 +30,7 @@ import {
   UpdateUserUsecase,
 } from '../../core/usecases/user';
 import { CollectionResponse, CurrentUser } from '../decorators';
-import { Roles } from '../decorators/roles.decorator';
+import { Role, Roles } from '../decorators/roles.decorator';
 import {
   AdministratorResponse,
   CreateAdministratorRequest,
@@ -85,7 +84,7 @@ export class UserController {
   }
 
   @Get()
-  @Roles(configuration().adminRole)
+  @Roles(Role.ADMIN)
   @UseGuards(AuthenticationGuard)
   @Swagger.ApiOperation({ summary: 'Collection of User ressource.' })
   @CollectionResponse(UserResponse)
@@ -102,7 +101,7 @@ export class UserController {
   }
 
   @Get('administrators')
-  @Roles(configuration().adminRole)
+  @Roles(Role.ADMIN)
   @UseGuards(AuthenticationGuard)
   @Swagger.ApiOperation({ summary: 'Collection of Administrator ressource.' })
   @CollectionResponse(UserResponse)
@@ -117,7 +116,7 @@ export class UserController {
   }
 
   @Get('administrators/:id')
-  @Roles(configuration().adminRole)
+  @Roles(Role.ADMIN)
   @UseGuards(AuthenticationGuard)
   @Swagger.ApiOperation({ summary: 'Get an Administrator ressource.' })
   @CollectionResponse(UserResponse)
@@ -128,7 +127,7 @@ export class UserController {
   }
 
   @Post('administrators')
-  @Roles(configuration().adminRole)
+  @Roles(Role.ADMIN)
   @UseGuards(AuthenticationGuard)
   @Swagger.ApiOperation({ summary: 'Create an Administrator ressource.' })
   @Swagger.ApiCreatedResponse({ type: AdministratorResponse })
@@ -139,7 +138,7 @@ export class UserController {
   }
 
   @Put('administrators')
-  @Roles(configuration().adminRole)
+  @Roles(Role.ADMIN)
   @UseGuards(AuthenticationGuard)
   @Swagger.ApiOperation({ summary: 'Update an Administrator ressource.' })
   @Swagger.ApiCreatedResponse({ type: AdministratorResponse })
@@ -150,7 +149,7 @@ export class UserController {
   }
 
   @Delete('administrators/:id')
-  @Roles(configuration().adminRole)
+  @Roles(Role.ADMIN)
   @UseGuards(AuthenticationGuard)
   @Swagger.ApiOperation({ summary: 'Delete an administrator' })
   async deleteAdministrator(@Param('id', ParseUUIDPipe) id: string) {
@@ -171,7 +170,7 @@ export class UserController {
   }
 
   @Get(':id')
-  @Roles(configuration().adminRole)
+  @Roles(Role.ADMIN)
   @UseGuards(AuthenticationGuard)
   @Swagger.ApiOperation({ summary: 'User ressource.' })
   @Swagger.ApiOkResponse({ type: UserResponse })
@@ -192,7 +191,7 @@ export class UserController {
   }
 
   @Delete(':id')
-  @Roles(configuration().adminRole)
+  @Roles(Role.ADMIN)
   @UseGuards(AuthenticationGuard)
   @Swagger.ApiOperation({ summary: 'Deletes a User ressource.' })
   @Swagger.ApiOkResponse()

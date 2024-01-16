@@ -39,41 +39,45 @@ api:
   image:
     repository: "rg.fr-par.scw.cloud/ulep/api-prod" # REQUIRED
     tag: "latest" # REQUIRED
-    pullPolicy: Always # OPTIONNEL
+    pullPolicy: IfNotPresent # OPTIONNEL
   initImage:
     repository: rg.fr-par.scw.cloud/ulep/api-init # REQUIRED
     tag: 'v1'  # REQUIRED
     pullPolicy: IfNotPresent # OPTIONNEL
 
   env:
-    keycloakRealm: etandem # FIXE
-    keycloakAdmin: admin # REQUIRED
-    keycloakAdminPassword: &keycloakAdminPassword AZE123aze # REQUIRED
-    keycloakClientId: api # FIXE
-    keycloakAdminGroupId: 02736a0f-4679-4329-a877-2ce87aaea569 # FIXE
-    keycloakClientSecret: &keycloakClientSecret "" # REQUIRED
-    minioAccessKey: &minioAccessKey minio # FIXE
-    minioSecretKey: &minioSecretKey AZE123aze # REQUIRED
-    smtpHost: localhost # REQUIRED
-    smtpPort: 25 # REQUIRED
-    smtpSecure: true # REQUIRED
-    ignoreTLS: false # REQUIRED
-    smtpSender: tandems@ulep.fr # REQUIRED
-    smtpDisableBootVerification: false # REQUIRED
-    logLevel: warn # OPTIONNEL
-    emailsTranslationsComponent: emails # REQUIRED
-    emailsAssetsPublicUrl: *apiUrl # FIXE
-    emailsAssetsBucket: assets # REQUIRED
-    appLinkAppleStore: TODO # REQUIRED
-    appLinkPlayStore: TODO # REQUIRED
-    translationsEndpoint: TODO # REQUIRED
-    translationsEndpointSuffix: TODO # OPTIONAL
-    translationsToken: TODO # REQUIRED
-    appUrl: *webappUrl # FIXE
-    connectorUrl: TODO # OPTIONAL
-    connectorToken TODO # OPTIONAL
-    postgresConnectionLimit: TODO # OPTIONAL
-    sentryDsn: TODO # OPTIONAL
+    adminUrl: *adminUrl
+    appUrl: *webappUrl
+    logLevel: warn
+    defaultTranslationLanguage: fr
+    keycloakRealm: etandem
+    keycloakAdmin: admin
+    keycloakClientId: api
+    keycloakClientSecret: &keycloakClientSecret change-me
+    keycloakAdminGroupId: change-me
+    minioHost: *minioUrl
+    minioPort: 443
+    minioUseSsl: true
+    minioAccessKey: &minioAccessKey change-me
+    minioSecretKey: &minioSecretKey change-me
+    translationsEndpoint: https://translations.exemple.com
+    translationsEndpointSuffix: /raw?ref=master
+    translationsToken: change-me
+    connectorUrl: https://connector.exemple.com
+    connectorToken: change-me
+    emailsAssetsBucket: assets
+    emailsTranslationsComponent: emails
+    emailsAssetsPublicEndpoint: *apiUrl
+    appLinkAppleStore: https://www.apple.com/fr/app-store/etandem
+    appLinkPlayStore: https://play.google.com/store/apps/etandem
+    smtpDisableBootVerification: false
+    smtpHost: mailcatcher
+    smtpPort: 1025
+    smtpSecure: false
+    smtpIgnoreTLS: true
+    smtpSender: contact@exemple.fr
+    sentryDsn: https://123@glitchtip.exemple.com/1
+    cancelTresholdInMin: 15
 
   autoscaling:
     enabled: false

@@ -12,6 +12,7 @@ import {
   AUTHENTICATOR,
   AuthenticatorInterface,
 } from '../services/authenticator.interface';
+import { ROLES_KEY, Role } from '../decorators/roles.decorator';
 
 @Injectable()
 export class AuthenticationGuard implements CanActivate {
@@ -33,7 +34,7 @@ export class AuthenticationGuard implements CanActivate {
       const user = await this.authenticate(token);
       request['user'] = user;
 
-      const roles = this.reflector.get<string[]>('roles', context.getHandler());
+      const roles = this.reflector.get<Role[]>(ROLES_KEY, context.getHandler());
       if (!roles) {
         return true;
       }

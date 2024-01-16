@@ -5,7 +5,6 @@ import {
   Body,
   Param,
   Delete,
-  Logger,
   UseGuards,
   UploadedFile,
   UseInterceptors,
@@ -28,8 +27,7 @@ import {
   UpdateObjectiveUsecase,
 } from '../../core/usecases/objective';
 import { AuthenticationGuard } from '../guards';
-import { Roles } from '../decorators/roles.decorator';
-import { configuration } from 'src/configuration';
+import { Role, Roles } from '../decorators/roles.decorator';
 import { ImagesFilePipe } from 'src/api/validators';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { Collection } from '@app/common';
@@ -37,11 +35,13 @@ import {
   DeleteObjectiveImageUsecase,
   UploadObjectiveImageUsecase,
 } from 'src/core/usecases/media';
+import { ConfigService } from '@nestjs/config';
+import { Env } from 'src/configuration';
 
 @Controller('objectives')
 @Swagger.ApiTags('Objectives')
 export class ObjectiveController {
-  private readonly logger = new Logger(ObjectiveController.name);
+  #defaultLanguageCode: string;
 
   constructor(
     private readonly createObjectiveUsecase: CreateObjectiveUsecase,
@@ -51,10 +51,13 @@ export class ObjectiveController {
     private readonly deleteObjectiveUsecase: DeleteObjectiveUsecase,
     private readonly updateObjectiveUsecase: UpdateObjectiveUsecase,
     private readonly uploadObjectiveImageUsecase: UploadObjectiveImageUsecase,
-  ) {}
+    env: ConfigService<Env, true>,
+  ) {
+    this.#defaultLanguageCode = env.get<string>('DEFAULT_TRANSLATION_LANGUAGE');
+  }
 
   @Post()
-  @Roles(configuration().adminRole)
+  @Roles(Role.ADMIN)
   @UseInterceptors(FileInterceptor('file'))
   @UseGuards(AuthenticationGuard)
   @Swagger.ApiOperation({ summary: 'Create a new Objective ressource.' })
@@ -63,7 +66,8 @@ export class ObjectiveController {
     @Body() body: CreateObjectiveRequest,
     @UploadedFile(new ImagesFilePipe()) file: Express.Multer.File,
   ) {
-    const languageCode = configuration().defaultTranslationLanguage;
+    const languageCode = this.#defaultLanguageCode;
+
     let objective = await this.createObjectiveUsecase.execute({
       ...body,
       languageCode,
@@ -96,7 +100,7 @@ export class ObjectiveController {
   }
 
   @Get(':id')
-  @Roles(configuration().adminRole)
+  @Roles(Role.ADMIN)
   @UseGuards(AuthenticationGuard)
   @Swagger.ApiOperation({ summary: 'Objective ressource.' })
   @Swagger.ApiOkResponse({ type: GetObjectiveResponse })
@@ -107,7 +111,7 @@ export class ObjectiveController {
   }
 
   @Delete(':id')
-  @Roles(configuration().adminRole)
+  @Roles(Role.ADMIN)
   @UseGuards(AuthenticationGuard)
   @Swagger.ApiOperation({ summary: 'Deletes a Objective ressource.' })
   @Swagger.ApiOkResponse()
@@ -118,7 +122,7 @@ export class ObjectiveController {
   }
 
   @Put()
-  @Roles(configuration().adminRole)
+  @Roles(Role.ADMIN)
   @UseInterceptors(FileInterceptor('file'))
   @UseGuards(AuthenticationGuard)
   @Swagger.ApiOperation({ summary: 'Update a new Objective ressource.' })
@@ -127,7 +131,8 @@ export class ObjectiveController {
     @Body() body: UpdateObjectiveRequest,
     @UploadedFile(new ImagesFilePipe()) file?: Express.Multer.File,
   ) {
-    const languageCode = configuration().defaultTranslationLanguage;
+    const languageCode = this.#defaultLanguageCode;
+
     let objective = await this.updateObjectiveUsecase.execute({
       ...body,
       languageCode,

@@ -41,10 +41,10 @@ spec:
           - name: DB_USER
             value: "{{ .Values.global.postgresql.auth.username }}"
           - name: DATABASE_URL
-            value: "postgresql://{{ .Values.global.postgresql.auth.username }}:$(PGPASSWORD)@{{ include "etandem.name" . }}-postgresql.{{ .Release.Namespace }}:5432/{{ .Values.global.postgresql.auth.database }}?schema=public"
-        envFrom:
-          - secretRef:
-              name: "{{ include "etandem.fullname" . }}-secret-{{ .Values.api.name }}"
+            valueFrom:
+                secretKeyRef:
+                  name: "{{ include "etandem.fullname" . }}-secret-{{ .Values.api.name }}"
+                  key: database-url
       containers:
         - name: {{ .Chart.Name }}
           securityContext:
@@ -74,24 +74,78 @@ spec:
           env:
             - name: ADMIN_URL
               value: "https://{{ .Values.adminUrl }}.{{ .Values.domain }}"
+            - name: APP_URL
+              value: "https://{{ .Values.api.env.appUrl }}.{{ .Values.domain }}"
+            - name: LOG_LEVEL
+              value: "{{ .Values.api.env.logLevel }}"
+            - name: DEFAULT_TRANSLATION_LANGUAGE
+              value: "{{ .Values.api.env.defaultTranslationLanguage }}"
             - name: DATABASE_URL
-              value: "postgresql://{{ .Values.global.postgresql.auth.username }}:$(PGPASSWORD)@{{ include "etandem.name" . }}-postgresql.{{ .Release.Namespace }}:5432/{{ .Values.global.postgresql.auth.database }}?schema=public"
+              valueFrom:
+                secretKeyRef:
+                  name: "{{ include "etandem.fullname" . }}-secret-{{ .Values.api.name }}"
+                  key: database-url
             - name: KEYCLOAK_BASE_URL
               value: "https://{{ .Values.keycloakUrl }}.{{ .Values.domain }}"
             - name: KEYCLOAK_REALM
               value: "{{ .Values.api.env.keycloakRealm }}"
             - name: KEYCLOAK_ADMIN
               value: "{{ .Values.api.env.keycloakAdmin }}"
+            - name: KEYCLOAK_ADMIN_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: "{{ include "etandem.fullname" . }}-secret-{{ .Values.api.name }}"
+                  key: keycloak-admin-password
             - name: KEYCLOAK_CLIENT_ID
               value: "{{ .Values.api.env.keycloakClientId }}"
+            - name: KEYCLOAK_CLIENT_SECRET
+              valueFrom:
+                secretKeyRef:
+                  name: "{{ include "etandem.fullname" . }}-secret-{{ .Values.api.name }}"
+                  key: keycloak-client-secret
             - name: KEYCLOAK_ADMIN_GROUP_ID
               value: "{{ .Values.api.env.keycloakAdminGroupId }}"
-            - name: MINIO_URL
-              value: "{{ .Values.minioApiUrl }}.{{ .Values.domain }}"
-            - name: MINIO_PUBLIC_URL
-              value: "https://{{ .Values.minioApiUrl }}.{{ .Values.domain }}"
+            - name: MINIO_HOST
+              value: "{{ .Values.api.env.minioHost }}.{{ .Values.domain }}"
+            - name: MINIO_PORT
+              value: "{{ .Values.api.env.minioPort }}"
             - name: MINIO_USE_SSL
-              value: "true"
+              value: "{{ .Values.api.env.minioUseSsl }}"
+            - name: MINIO_ACCESS_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: "{{ include "etandem.fullname" . }}-secret-{{ .Values.api.name }}"
+                  key: minio-access-key
+            - name: MINIO_SECRET_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: "{{ include "etandem.fullname" . }}-secret-{{ .Values.api.name }}"
+                  key: minio-secret-key
+            - name: TRANSLATIONS_ENDPOINT
+              value: "{{ .Values.api.env.translationsEndpoint }}"
+            - name: TRANSLATIONS_ENDPOINT_SUFFIX
+              value: "{{ .Values.api.env.translationsEndpointSuffix }}"
+            - name: TRANSLATIONS_TOKEN
+              valueFrom:
+                secretKeyRef:
+                  name: "{{ include "etandem.fullname" . }}-secret-{{ .Values.api.name }}"
+                  key: translations-token
+            - name: CONNECTOR_URL
+              value: "{{ .Values.api.env.connectorUrl }}"
+            - name: CONNECTOR_TOKEN
+              value: "{{ .Values.api.env.connectorToken }}"
+            - name: EMAIL_ASSETS_BUCKET
+              value: "{{ .Values.api.env.emailsAssetsBucket }}"
+            - name: EMAIL_TRANSLATIONS_COMPONENT
+              value: "{{ .Values.api.env.emailsTranslationsComponent }}"
+            - name: EMAIL_ASSETS_PUBLIC_ENDPOINT
+              value: "https://{{ .Values.api.env.emailsAssetsPublicEndpoint }}.{{ .Values.domain }}"
+            - name: APP_LINK_APPLE_STORE
+              value: "{{ .Values.api.env.appLinkAppleStore }}"
+            - name: APP_LINK_PLAY_STORE
+              value: "{{ .Values.api.env.appLinkPlayStore }}"
+            - name: SMTP_DISABLE_BOOT_VERIFICATION
+              value: "{{ .Values.api.env.smtpDisableBootVerification }}"
             - name: SMTP_HOST
               value: "{{ .Values.api.env.smtpHost }}"
             - name: SMTP_PORT
@@ -99,40 +153,13 @@ spec:
             - name: SMTP_SECURE
               value: "{{ .Values.api.env.smtpSecure }}"
             - name: SMTP_IGNORE_TLS
-              value: "{{ .Values.api.env.ignoreTLS }}"
+              value: "{{ .Values.api.env.smtpIgnoreTLS }}"
             - name: SMTP_SENDER
               value: "{{ .Values.api.env.smtpSender }}"
-            - name: SMTP_DISABLE_BOOT_VERIFICATION
-              value: "{{ .Values.api.env.smtpDisableBootVerification }}"
-            - name: LOG_LEVEL
-              value: "{{ .Values.api.env.logLevel }}"
-            - name: LOG_LEVEL
-              value: "{{ .Values.api.env.logLevel }}"
-            - name: EMAIL_TRANSLATIONS_COMPONENT
-              value: "{{ .Values.api.env.emailsTranslationsComponent }}"
-            - name: EMAIL_ASSETS_PUBLIC_ENDPOINT
-              value: "https://{{ .Values.api.env.emailsAssetsPublicUrl }}.{{ .Values.domain }}"
-            - name: EMAIL_ASSETS_BUCKET
-              value: "{{ .Values.api.env.emailsAssetsBucket }}"
-            - name: APP_LINK_APPLE_STORE
-              value: "{{ .Values.api.env.appLinkAppleStore }}"
-            - name: APP_LINK_PLAY_STORE
-              value: "{{ .Values.api.env.appLinkPlayStore }}"
-            - name: TRANSLATIONS_ENDPOINT
-              value: "{{ .Values.api.env.translationsEndpoint }}"
-            - name: TRANSLATIONS_ENDPOINT_SUFFIX
-              value: "{{ .Values.api.env.translationsEndpointSuffix }}"
-            - name: APP_URL
-              value: "https://{{ .Values.api.env.appUrl }}.{{ .Values.domain }}"
-            - name: CONNECTOR_URL
-              value: "{{ .Values.api.env.connectorUrl }}"
-            - name: CONNECTOR_TOKEN
-              value: "{{ .Values.api.env.connectorToken }}"
             - name: SENTRY_DSN
               value: "{{ .Values.api.env.sentryDsn }}"
-          envFrom:
-            - secretRef:
-                name: "{{ include "etandem.fullname" . }}-secret-{{ .Values.api.name }}"
+            - name: CANCEL_TRESHOLD_IN_MIN
+              value: "{{ .Values.api.env.cancelTresholdInMin }}"
       {{- with .Values.nodeSelector }}
       nodeSelector:
         {{- toYaml . | nindent 8 }}

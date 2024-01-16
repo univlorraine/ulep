@@ -4,19 +4,15 @@ import {
   Get,
   HttpStatus,
   Inject,
-  Logger,
   Param,
   Put,
   Res,
 } from '@nestjs/common';
+import { ConfigService } from '@nestjs/config';
 import * as Swagger from '@nestjs/swagger';
 import { InstanceResponse } from 'src/api/dtos/instance/instance.response';
 import { UpdateInstanceRequest } from 'src/api/dtos/instance/update-instance.request';
-import {
-  Configuration,
-  configuration,
-  getTranslationsEndpoint,
-} from 'src/configuration';
+import { Env, getTranslationsEndpoint } from 'src/configuration';
 import { RessourceDoesNotExist } from 'src/core/errors';
 import {
   STORAGE_INTERFACE,
@@ -28,16 +24,18 @@ import { Readable } from 'stream';
 @Controller('instance')
 @Swagger.ApiTags('Instance')
 export class InstanceController {
-  private readonly logger = new Logger(InstanceController.name);
-  private config: Configuration;
+  #translationToken: string;
+  #emailAssetsBucket: string;
 
   constructor(
     @Inject(STORAGE_INTERFACE)
     private readonly storageGateway: StorageInterface,
     private readonly getInstanceUsecase: GetInstanceUsecase,
     private readonly updateInstanceUsecase: UpdateInstanceUsecase,
+    env: ConfigService<Env, true>,
   ) {
-    this.config = configuration();
+    this.#translationToken = env.get('TRANSLATIONS_TOKEN');
+    this.#emailAssetsBucket = env.get('EMAIL_ASSETS_BUCKET');
   }
 
   @Get('config')
@@ -67,7 +65,7 @@ export class InstanceController {
   ): Promise<string> {
     // %2F work with github and gitlab but / doesn't with gitlab ( ??? )
     const result = await fetch(getTranslationsEndpoint(lng, type), {
-      headers: { 'PRIVATE-TOKEN': this.config.translations.token },
+      headers: { 'PRIVATE-TOKEN': this.#translationToken },
     });
 
     if (!result.ok) {
@@ -86,16 +84,14 @@ export class InstanceController {
   ): Promise<Readable> {
     try {
       const stream = await this.storageGateway.getObject(
-        this.config.emailAssets.bucket,
+        this.#emailAssetsBucket,
         fileName,
       );
       return stream.pipe(res);
     } catch (err) {
       if (err.code === 'NoSuchKey') {
-        this.logger.warn(`Email asset ${fileName} does not exist`);
         return res.status(HttpStatus.NOT_FOUND).end();
       }
-      this.logger.error(err);
       return res.status(HttpStatus.INTERNAL_SERVER_ERROR).end();
     }
   }

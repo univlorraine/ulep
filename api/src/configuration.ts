@@ -1,121 +1,254 @@
-import { KeycloakConfiguration } from '@app/keycloak';
 import { LogLevel } from '@nestjs/common';
+import { plainToClass } from 'class-transformer';
+import {
+  IsBoolean,
+  IsEnum,
+  IsInt,
+  IsNotEmpty,
+  IsNumber,
+  IsOptional,
+  IsString,
+  validateSync,
+} from 'class-validator';
 
-interface SmtpConfiguration {
-  host: string;
-  port: number;
-  secure: boolean;
-  ignoreTLS: boolean;
-  sender: string;
-  disableBootVerification: boolean;
-}
+export class Env {
+  @IsString()
+  @IsNotEmpty()
+  ADMIN_URL: string;
 
-export type Configuration = {
-  appUrl: string;
-  adminUrl: string;
-  port: number;
-  keycloak: KeycloakConfiguration;
-  adminRole: string;
-  defaultTranslationLanguage: string;
-  connectorUrl: string;
-  connectorToken: string;
+  @IsString()
+  @IsNotEmpty()
+  APP_URL: string;
+
+  @IsEnum(['verbose', 'debug', 'warn', 'error', 'log'])
+  @IsOptional()
+  LOG_LEVEL?: string;
+
+  @IsString()
+  @IsNotEmpty()
+  DEFAULT_TRANSLATION_LANGUAGE: string;
+
+  @IsString()
+  @IsNotEmpty()
+  DATABASE_URL: string;
+
+  @IsString()
+  @IsNotEmpty()
+  KEYCLOAK_BASE_URL: string;
+
+  @IsString()
+  @IsNotEmpty()
+  KEYCLOAK_REALM: string;
+
+  @IsString()
+  @IsNotEmpty()
+  KEYCLOAK_ADMIN: string;
+
+  @IsString()
+  @IsNotEmpty()
+  KEYCLOAK_ADMIN_PASSWORD: string;
+
+  @IsString()
+  @IsNotEmpty()
+  KEYCLOAK_CLIENT_ID: string;
+
+  @IsString()
+  @IsNotEmpty()
+  KEYCLOAK_CLIENT_SECRET: string;
+
+  @IsString()
+  @IsNotEmpty()
+  KEYCLOAK_ADMIN_GROUP_ID: string;
+
+  @IsString()
+  @IsNotEmpty()
+  MINIO_HOST: string;
+
+  @IsNumber()
+  MINIO_PORT: number;
+
+  @IsBoolean()
+  MINIO_USE_SSL: boolean;
+
+  @IsString()
+  @IsNotEmpty()
+  MINIO_ACCESS_KEY: string;
+
+  @IsString()
+  @IsNotEmpty()
+  MINIO_SECRET_KEY: string;
+
+  @IsString()
+  @IsNotEmpty()
+  TRANSLATIONS_ENDPOINT: string;
+
+  @IsString()
+  TRANSLATIONS_ENDPOINT_SUFFIX: string;
+
+  @IsString()
+  TRANSLATIONS_TOKEN: string;
+
+  @IsString()
+  @IsOptional()
+  CONNECTOR_URL?: string;
+
+  @IsString()
+  @IsOptional()
+  CONNECTOR_TOKEN?: string;
+
+  @IsString()
+  @IsNotEmpty()
+  EMAIL_ASSETS_BUCKET: string;
+
+  @IsString()
+  @IsNotEmpty()
+  EMAIL_TRANSLATIONS_COMPONENT: string;
+
+  @IsString()
+  @IsNotEmpty()
+  EMAIL_ASSETS_PUBLIC_ENDPOINT: string;
+
+  @IsString()
+  @IsNotEmpty()
+  APP_LINK_APPLE_STORE: string;
+
+  @IsString()
+  @IsNotEmpty()
+  APP_LINK_PLAY_STORE: string;
+
+  @IsBoolean()
+  SMTP_DISABLE_BOOT_VERIFICATION: boolean;
+
+  @IsString()
+  @IsNotEmpty()
+  SMTP_HOST: string;
+
+  @IsNumber()
+  SMTP_PORT: number;
+
+  @IsBoolean()
+  SMTP_SECURE: boolean;
+
+  @IsBoolean()
+  SMTP_IGNORE_TLS: boolean;
+
+  @IsString()
+  @IsNotEmpty()
+  SMTP_SENDER: string;
+
+  @IsString()
+  @IsOptional()
+  SENTRY_DSN?: string;
+
+  @IsInt()
+  @IsOptional()
   CANCEL_TRESHOLD_IN_MIN: number;
-  smtp: SmtpConfiguration;
-  logLevel: string;
-  emailTranslationsComponent: string;
-  emailAssets: {
-    bucket: string;
-    publicEndpoint: string;
-  };
-  appLinks: {
-    appleStore: string;
-    playStore: string;
-  };
-  translations: {
-    endpoint: string;
-    endpointSuffix: string;
-    token: string;
-  };
-};
 
-export const configuration = (): Configuration => ({
-  port: 3000,
-  appUrl: process.env.APP_URL || 'http://localhost:5173',
-  adminUrl: process.env.ADMIN_URL || 'http://localhost:3001',
-  keycloak: {
-    baseUrl: process.env.KEYCLOAK_BASE_URL,
-    realm: process.env.KEYCLOAK_REALM,
-    username: process.env.KEYCLOAK_ADMIN,
-    password: process.env.KEYCLOAK_ADMIN_PASSWORD,
-    clientId: process.env.KEYCLOAK_CLIENT_ID,
-    clientSecret: process.env.KEYCLOAK_CLIENT_SECRET,
-    adminGroupId:
-      process.env.KEYCLOAK_ADMIN_GROUP_ID ||
-      '02736a0f-4679-4329-a877-2ce87aaea569',
-  },
-  adminRole: process.env.ADMIN_ROLE || 'admin',
-  defaultTranslationLanguage: process.env.DEFAULT_TRANSLATION_LANGUAGE || 'fr',
-  connectorUrl: process.env.CONNECTOR_URL,
-  connectorToken: process.env.CONNECTOR_TOKEN,
-  CANCEL_TRESHOLD_IN_MIN:
-    parseInt(process.env.CANCEL_TRESHOLD_IN_MIN, 10) || 15,
-  smtp: {
-    disableBootVerification:
-      process.env.SMTP_DISABLE_BOOT_VERIFICATION === 'true',
-    host: process.env.SMTP_HOST || 'localhost',
-    port: process.env.SMTP_PORT ? parseInt(process.env.SMTP_PORT, 10) : 25,
-    secure: process.env.SMTP_SECURE === 'true',
-    ignoreTLS: process.env.SMTP_IGNORE_TLS === 'true',
-    sender: process.env.SMTP_SENDER || 'test@ulep.fr',
-  },
-  logLevel: process.env.LOG_LEVEL || 'warn',
-  emailTranslationsComponent:
-    process.env.EMAIL_TRANSLATIONS_COMPONENT || 'emails',
-  emailAssets: {
-    bucket: process.env.EMAIL_ASSETS_BUCKET || 'assets',
-    publicEndpoint:
-      process.env.EMAIL_ASSETS_PUBLIC_ENDPOINT || 'http://localhost:3000',
-  },
-  appLinks: {
-    appleStore:
-      process.env.APP_LINK_APPLE_STORE || 'http://apple-store.fr/etandem',
-    playStore:
-      process.env.APP_LINK_PLAY_STORE || 'http://play-store.fr/etandem',
-  },
-  translations: {
-    endpoint:
-      process.env.TRANSLATIONS_ENDPOINT ||
-      'https://raw.githubusercontent.com/thetribeio/locales_ulep/main/locales',
-    endpointSuffix: process.env.TRANSLATIONS_ENDPOINT_SUFFIX || '',
-    token: process.env.TRANSLATION_TOKEN || '',
-  },
-});
+  static DEFAULT_LOG_LEVEL: LogLevel = 'warn';
 
-export const getLoggerLevels = (logLevel: string): LogLevel[] => {
-  const level: LogLevel[] = [];
-  switch (logLevel) {
-    case 'verbose':
-      level.push('verbose');
-    case 'debug':
-      level.push('debug');
-    case 'warn':
-      level.push('warn');
-    case 'error':
-      level.push('error');
-    case 'log':
-      level.push('log');
-      break;
-    default:
-      break;
+  static validate(configuration: Record<string, unknown>): Env {
+    const env = plainToClass(Env, configuration, {
+      enableImplicitConversion: true,
+    });
+
+    if (process.env.NODE_ENV === 'test') {
+      return test;
+    }
+
+    const errors = validateSync(env, { skipMissingProperties: false });
+
+    if (errors.length > 0) {
+      throw new Error(errors.toString());
+    }
+
+    return env;
   }
-  return level;
-};
+}
 
 export const getTranslationsEndpoint = (
   lng: string,
   component: string,
 ): string => {
-  const config = configuration();
+  const endpoint = process.env.TRANSLATIONS_ENDPOINT || '';
+  const suffix = process.env.TRANSLATIONS_ENDPOINT_SUFFIX || '';
   // %2F work with github and gitlab but / doesn't with gitlab ( ??? )
-  return `${config.translations.endpoint}%2F${lng}%2F${component}.json${config.translations.endpointSuffix}`;
+  return `${endpoint}%2F${lng}%2F${component}.json${suffix}`;
 };
+
+/// Testing configuration
+const test: Env = {
+  ADMIN_URL: 'http://localhost:3000',
+  APP_URL: 'http://localhost:4200',
+  LOG_LEVEL: 'debug',
+  DEFAULT_TRANSLATION_LANGUAGE: 'fr',
+  DATABASE_URL: 'postgresql://postgres:postgres@localhost:5432/test',
+  KEYCLOAK_BASE_URL: 'http://localhost:8080/auth',
+  KEYCLOAK_REALM: 'master',
+  KEYCLOAK_ADMIN: 'admin',
+  KEYCLOAK_ADMIN_PASSWORD: 'admin',
+  KEYCLOAK_CLIENT_ID: 'admin-cli',
+  KEYCLOAK_CLIENT_SECRET: 'f0a0c0e0-0000-0000-0000-000000000000',
+  KEYCLOAK_ADMIN_GROUP_ID: 'admin',
+  MINIO_HOST: 'minio',
+  MINIO_PORT: 9000,
+  MINIO_USE_SSL: false,
+  MINIO_ACCESS_KEY: 'minio',
+  MINIO_SECRET_KEY: 'minio123',
+  TRANSLATIONS_ENDPOINT: 'http://localhost:3000/api/translations',
+  TRANSLATIONS_ENDPOINT_SUFFIX: '',
+  TRANSLATIONS_TOKEN: 'test',
+  EMAIL_ASSETS_BUCKET: 'assets',
+  EMAIL_TRANSLATIONS_COMPONENT: 'email',
+  EMAIL_ASSETS_PUBLIC_ENDPOINT: 'http://localhost:9000/assets',
+  APP_LINK_APPLE_STORE: 'https://apple.com',
+  APP_LINK_PLAY_STORE: 'https://play.google.com',
+  SMTP_DISABLE_BOOT_VERIFICATION: false,
+  SMTP_HOST: 'smtp.mailtrap.io',
+  SMTP_PORT: 2525,
+  SMTP_SECURE: false,
+  SMTP_IGNORE_TLS: true,
+  SMTP_SENDER: 'sender@localhost',
+  CANCEL_TRESHOLD_IN_MIN: 15,
+};
+
+// Production and development configuration
+// Loaded from environment variables
+export default (): Env => ({
+  ADMIN_URL: process.env.ADMIN_URL,
+  APP_URL: process.env.APP_URL,
+  LOG_LEVEL: process.env.LOG_LEVEL,
+  DEFAULT_TRANSLATION_LANGUAGE: process.env.DEFAULT_TRANSLATION_LANGUAGE,
+  DATABASE_URL: process.env.DATABASE_URL,
+  KEYCLOAK_BASE_URL: process.env.KEYCLOAK_BASE_URL,
+  KEYCLOAK_REALM: process.env.KEYCLOAK_REALM,
+  KEYCLOAK_ADMIN: process.env.KEYCLOAK_ADMIN,
+  KEYCLOAK_ADMIN_PASSWORD: process.env.KEYCLOAK_ADMIN_PASSWORD,
+  KEYCLOAK_CLIENT_ID: process.env.KEYCLOAK_CLIENT_ID,
+  KEYCLOAK_CLIENT_SECRET: process.env.KEYCLOAK_CLIENT_SECRET,
+  KEYCLOAK_ADMIN_GROUP_ID: process.env.KEYCLOAK_ADMIN_GROUP_ID,
+  MINIO_HOST: process.env.MINIO_HOST,
+  MINIO_PORT: parseInt(process.env.MINIO_PORT, 10),
+  MINIO_USE_SSL: Boolean(process.env.MINIO_USE_SSL),
+  MINIO_ACCESS_KEY: process.env.MINIO_ACCESS_KEY,
+  MINIO_SECRET_KEY: process.env.MINIO_SECRET_KEY,
+  TRANSLATIONS_ENDPOINT: process.env.TRANSLATIONS_ENDPOINT,
+  TRANSLATIONS_ENDPOINT_SUFFIX: process.env.TRANSLATIONS_ENDPOINT_SUFFIX,
+  TRANSLATIONS_TOKEN: process.env.TRANSLATIONS_TOKEN,
+  CONNECTOR_URL: process.env.CONNECTOR_URL,
+  CONNECTOR_TOKEN: process.env.CONNECTOR_TOKEN,
+  EMAIL_ASSETS_BUCKET: process.env.EMAIL_ASSETS_BUCKET,
+  EMAIL_TRANSLATIONS_COMPONENT: process.env.EMAIL_TRANSLATIONS_COMPONENT,
+  EMAIL_ASSETS_PUBLIC_ENDPOINT: process.env.EMAIL_ASSETS_PUBLIC_ENDPOINT,
+  APP_LINK_APPLE_STORE: process.env.APP_LINK_APPLE_STORE,
+  APP_LINK_PLAY_STORE: process.env.APP_LINK_PLAY_STORE,
+  SMTP_DISABLE_BOOT_VERIFICATION: Boolean(
+    process.env.SMTP_DISABLE_BOOT_VERIFICATION,
+  ),
+  SMTP_HOST: process.env.SMTP_HOST,
+  SMTP_PORT: parseInt(process.env.SMTP_PORT, 10),
+  SMTP_SECURE: Boolean(process.env.SMTP_SECURE),
+  SMTP_IGNORE_TLS: Boolean(process.env.SMTP_IGNORE_TLS),
+  SMTP_SENDER: process.env.SMTP_SENDER,
+  SENTRY_DSN: process.env.SENTRY_DSN,
+  CANCEL_TRESHOLD_IN_MIN: parseInt(process.env.CANCEL_TRESHOLD_IN_MIN, 10),
+});

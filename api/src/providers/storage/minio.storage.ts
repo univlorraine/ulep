@@ -4,6 +4,7 @@ import { ConfigService } from '@nestjs/config';
 import { File, StorageInterface } from 'src/core/ports/storage.interface';
 import { ContentTypeException } from 'src/core/errors/content-type.exception';
 import { Readable } from 'stream';
+import { Env } from 'src/configuration';
 
 /*
  * This is the implementation of the StorageInterface.
@@ -14,13 +15,13 @@ import { Readable } from 'stream';
 export class MinioStorage implements StorageInterface {
   private readonly minioClient: Minio.Client;
 
-  constructor(private readonly configService: ConfigService) {
+  constructor(env: ConfigService<Env, true>) {
     this.minioClient = new Minio.Client({
-      endPoint: configService.get('MINIO_HOST') || 'minio',
-      port: Number(configService.get('MINIO_PORT')) || null,
-      useSSL: 'true' === configService.get('MINIO_USE_SSL'),
-      accessKey: configService.get('MINIO_ACCESS_KEY'),
-      secretKey: configService.get('MINIO_SECRET_KEY'),
+      endPoint: env.get('MINIO_HOST'),
+      port: env.get('MINIO_PORT'),
+      useSSL: 'true' === env.get('MINIO_USE_SSL'),
+      accessKey: env.get('MINIO_ACCESS_KEY'),
+      secretKey: env.get('MINIO_SECRET_KEY'),
     });
   }
 

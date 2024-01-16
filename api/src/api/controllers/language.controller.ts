@@ -2,7 +2,6 @@ import {
   Body,
   Controller,
   Get,
-  Logger,
   Param,
   Post,
   Put,
@@ -30,16 +29,13 @@ import { KeycloakUser } from '@app/keycloak';
 import { Collection } from '@app/common';
 import { FindAllSuggestedLanguageParams } from 'src/api/dtos/language-code/suggested-language-filters';
 import { FindAllSuggestedLanguageUsecase } from 'src/core/usecases/language/find-all-suggested-language.usecase';
-import { Roles } from 'src/api/decorators/roles.decorator';
-import { configuration } from 'src/configuration';
+import { Role, Roles } from 'src/api/decorators/roles.decorator';
 import { CountAllSuggestedLanguageUsecase } from 'src/core/usecases/language/count-all-suggested-language.usecase';
 import { FindAllLanguageParams } from 'src/api/dtos/language-code/language-filters';
 
 @Controller('languages')
 @Swagger.ApiTags('Languages')
 export class LanguageController {
-  private readonly logger = new Logger(LanguageController.name);
-
   constructor(
     private readonly countAllSuggestedLanguageUsecase: CountAllSuggestedLanguageUsecase,
     private readonly findAllLanguagesUsecase: FindAllLanguageCodeUsecase,
@@ -77,7 +73,7 @@ export class LanguageController {
   }
 
   @Put()
-  @Roles(configuration().adminRole)
+  @Roles(Role.ADMIN)
   @UseGuards(AuthenticationGuard)
   @CollectionResponse(LanguageResponse)
   @SerializeOptions({ groups: ['read', 'language:read'] })
@@ -93,7 +89,7 @@ export class LanguageController {
   }
 
   @Get('requests')
-  @Roles(configuration().adminRole)
+  @Roles(Role.ADMIN)
   @UseGuards(AuthenticationGuard)
   @CollectionResponse(SuggestedLanguageResponse)
   @Swagger.ApiOperation({
@@ -117,7 +113,7 @@ export class LanguageController {
   }
 
   @Get('requests/count')
-  @Roles(configuration().adminRole)
+  @Roles(Role.ADMIN)
   @UseGuards(AuthenticationGuard)
   @CollectionResponse(AllSuggestedLanguageCountResponse)
   @Swagger.ApiOperation({

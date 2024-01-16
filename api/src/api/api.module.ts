@@ -29,9 +29,10 @@ import { HttpModule } from '@nestjs/axios';
 import { UniversityConnectorController } from './controllers/universityConnector.controller';
 import { UlUniversityConnectorService } from 'src/providers/gateway/ul-university-connector';
 import { PurgesController } from './controllers/purge.controller';
+import { ConfigModule } from '@nestjs/config';
 
 @Module({
-  imports: [CoreModule, TerminusModule, HttpModule],
+  imports: [CoreModule, TerminusModule, HttpModule, ConfigModule],
   controllers: [
     CampusController,
     CountryController,

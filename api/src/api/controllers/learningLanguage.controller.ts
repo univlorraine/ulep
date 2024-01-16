@@ -5,15 +5,13 @@ import {
 import {
   Controller,
   Get,
-  Logger,
   Param,
   ParseUUIDPipe,
   Query,
   UseGuards,
 } from '@nestjs/common';
 import * as Swagger from '@nestjs/swagger';
-import { Roles } from '../decorators/roles.decorator';
-import { configuration } from 'src/configuration';
+import { Role, Roles } from '../decorators/roles.decorator';
 import { AuthenticationGuard } from '../guards';
 import { CollectionResponse } from '../decorators';
 import {
@@ -31,8 +29,6 @@ import { GetLearningLanguageTandemUsecase } from 'src/core/usecases/learningLang
 @Controller('learning-languages')
 @Swagger.ApiTags('LearningLanguages')
 export class LearningLanguageController {
-  private readonly logger = new Logger(LearningLanguageController.name);
-
   constructor(
     private getLearningLanguagesUsecase: GetLearningLanguagesUsecase,
     private getLearningLanguageOfIdUsecase: GetLearningLanguageOfIdUsecase,
@@ -41,7 +37,7 @@ export class LearningLanguageController {
   ) {}
 
   @Get()
-  @Roles(configuration().adminRole)
+  @Roles(Role.ADMIN)
   @UseGuards(AuthenticationGuard)
   @Swagger.ApiOperation({
     summary: 'Retrieve the collection of Learning languages resource.',
@@ -99,7 +95,7 @@ export class LearningLanguageController {
   }
 
   @Get(':id/matches')
-  @Roles(configuration().adminRole)
+  @Roles(Role.ADMIN)
   @UseGuards(AuthenticationGuard)
   @Swagger.ApiOperation({
     summary: "Retrieve learning language's matches",
@@ -123,7 +119,7 @@ export class LearningLanguageController {
   }
 
   @Get(':id/tandems')
-  @Roles(configuration().adminRole)
+  @Roles(Role.ADMIN)
   @UseGuards(AuthenticationGuard)
   @Swagger.ApiOperation({
     summary: "Retrieve learning language's tandem",

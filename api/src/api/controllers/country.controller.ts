@@ -22,8 +22,7 @@ import {
   GetCountriesQueryParams,
   UpdateCountryRequest,
 } from '../dtos';
-import { configuration } from 'src/configuration';
-import { Roles } from '../decorators/roles.decorator';
+import { Role, Roles } from '../decorators/roles.decorator';
 import { AuthenticationGuard } from '../guards';
 
 @Controller('countries')
@@ -67,7 +66,7 @@ export class CountryController {
   }
 
   @Patch(':id')
-  @Roles(configuration().adminRole)
+  @Roles(Role.ADMIN)
   @UseGuards(AuthenticationGuard)
   @Swagger.ApiOperation({ summary: 'Update a Country ressource.' })
   async update(

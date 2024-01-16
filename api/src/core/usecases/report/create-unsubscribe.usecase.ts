@@ -15,7 +15,8 @@ import {
   UUID_PROVIDER,
   UuidProviderInterface,
 } from 'src/core/ports/uuid.provider';
-import { configuration } from 'src/configuration';
+import { ConfigService } from '@nestjs/config';
+import { Env } from 'src/configuration';
 
 export class CreateUnsubscribeReportCommand {
   owner: string;
@@ -23,6 +24,8 @@ export class CreateUnsubscribeReportCommand {
 
 @Injectable()
 export class CreateUnsubscribeReportUsecase {
+  #defaultLanguageCode: string;
+
   constructor(
     @Inject(REPORT_REPOSITORY)
     private readonly reportRepository: ReportRepository,
@@ -30,7 +33,12 @@ export class CreateUnsubscribeReportUsecase {
     private readonly userRepository: UserRepository,
     @Inject(UUID_PROVIDER)
     private readonly uuidProvider: UuidProviderInterface,
-  ) {}
+    configService: ConfigService<Env, true>,
+  ) {
+    this.#defaultLanguageCode = configService.get(
+      'DEFAULT_TRANSLATION_LANGUAGE',
+    );
+  }
 
   async execute(command: CreateUnsubscribeReportCommand): Promise<Report> {
     let category = await this.reportRepository.categoryOfName(
@@ -43,7 +51,7 @@ export class CreateUnsubscribeReportUsecase {
           name: {
             id: this.uuidProvider.generate(),
             content: UNSUBSCRIBE_CATEGORY_REPORT,
-            language: configuration().defaultTranslationLanguage,
+            language: this.#defaultLanguageCode,
             translations: [],
           },
         }),

@@ -2,6 +2,7 @@ import * as Sentry from '@sentry/node';
 import {
   ClassSerializerInterceptor,
   INestApplication,
+  LogLevel,
   ValidationPipe,
 } from '@nestjs/common';
 import { HttpAdapterHost, NestFactory, Reflector } from '@nestjs/core';
@@ -13,21 +14,21 @@ import {
   CollectionInterceptor,
   HttpLoggerInterceptor,
 } from './api/interceptors';
-import { configuration, getLoggerLevels } from './configuration';
 import { SentryFilter } from './api/filters/sentry-exception.filter';
+import { Env } from './configuration';
 
 export class Server {
   public async run(port: number): Promise<INestApplication> {
-    const logLevel = configuration().logLevel;
     const app = await NestFactory.create<NestExpressApplication>(AppModule, {
-      logger: getLoggerLevels(logLevel),
+      logger: this.getLogLevelsUpTo(
+        (process.env.LOG_LEVEL ?? Env.DEFAULT_LOG_LEVEL) as LogLevel,
+      ),
     });
 
     this.addGlobalPipes(app);
     this.addGlobalFilters(app);
     this.addGlobalInterceptors(app);
     this.addCORSConfiguration(app);
-    this.addSentryConfiguration(app);
 
     if (process.env.NODE_ENV !== 'production') {
       this.buildAPIDocumentation(app);
@@ -52,6 +53,11 @@ export class Server {
     const { httpAdapter } = app.get(HttpAdapterHost);
     app.useGlobalFilters(new PrismaClientExceptionFilter(httpAdapter));
     app.useGlobalFilters(new DomainErrorFilter(httpAdapter));
+
+    if (process.env.NODE_ENV !== 'test' && process.env.SENTRY_DSN) {
+      Sentry.init({ dsn: process.env.SENTRY_DSN });
+      app.useGlobalFilters(new SentryFilter(httpAdapter));
+    }
   }
 
   protected addGlobalInterceptors(app: INestApplication): void {
@@ -81,14 +87,6 @@ export class Server {
     });
   }
 
-  protected addSentryConfiguration(app: INestApplication): void {
-    if (process.env.SENTRY_DSN && process.env.NODE_ENV === 'production') {
-      Sentry.init({ dsn: process.env.SENTRY_DSN });
-      const { httpAdapter } = app.get(HttpAdapterHost);
-      app.useGlobalFilters(new SentryFilter(httpAdapter));
-    }
-  }
-
   protected buildAPIDocumentation(app: INestApplication): void {
     const options = new DocumentBuilder()
       .setTitle('ULEP API')
@@ -99,5 +97,15 @@ export class Server {
     const document: OpenAPIObject = SwaggerModule.createDocument(app, options);
 
     SwaggerModule.setup('docs', app, document);
+  }
+
+  protected getLogLevelsUpTo(level: LogLevel): LogLevel[] {
+    const levels: LogLevel[] = ['verbose', 'debug', 'log', 'warn', 'error'];
+    const index = levels.indexOf(level);
+    if (index === -1) {
+      throw new Error(`Niveau de log inconnu : ${level}`);
+    }
+
+    return levels.slice(0, index + 1);
   }
 }
