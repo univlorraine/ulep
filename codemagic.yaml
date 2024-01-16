@@ -52,6 +52,7 @@ scripts:
       script: |
           cat >> "app/.env" <<EOF
           VITE_UL_API_URL=$VITE_UL_API_URL
+          VITE_SENTRY_DSN=$VITE_SENTRY_DSN
           ENV=staging
           EOF
     - &setup_keystore
