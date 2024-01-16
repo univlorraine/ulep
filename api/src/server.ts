@@ -1,3 +1,4 @@
+import * as Sentry from '@sentry/node';
 import {
   ClassSerializerInterceptor,
   INestApplication,
@@ -13,6 +14,7 @@ import {
   HttpLoggerInterceptor,
 } from './api/interceptors';
 import { configuration, getLoggerLevels } from './configuration';
+import { SentryFilter } from './api/filters/sentry-exception.filter';
 
 export class Server {
   public async run(port: number): Promise<INestApplication> {
@@ -20,12 +22,12 @@ export class Server {
     const app = await NestFactory.create<NestExpressApplication>(AppModule, {
       logger: getLoggerLevels(logLevel),
     });
-    console.info(`Log level set to ${logLevel}`);
 
     this.addGlobalPipes(app);
     this.addGlobalFilters(app);
     this.addGlobalInterceptors(app);
     this.addCORSConfiguration(app);
+    this.addSentryConfiguration(app);
 
     if (process.env.NODE_ENV !== 'production') {
       this.buildAPIDocumentation(app);
@@ -77,6 +79,14 @@ export class Server {
       origin: '*',
       methods: ['GET', 'HEAD', 'OPTIONS', 'POST', 'PUT', 'DELETE'],
     });
+  }
+
+  protected addSentryConfiguration(app: INestApplication): void {
+    if (process.env.SENTRY_DSN && process.env.NODE_ENV === 'production') {
+      Sentry.init({ dsn: process.env.SENTRY_DSN });
+      const { httpAdapter } = app.get(HttpAdapterHost);
+      app.useGlobalFilters(new SentryFilter(httpAdapter));
+    }
   }
 
   protected buildAPIDocumentation(app: INestApplication): void {
