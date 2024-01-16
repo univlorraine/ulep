@@ -30,7 +30,7 @@
     "@nestjs/core": "^9.4.3",
     "@nestjs/platform-express": "^9.4.3",
     "@nestjs/swagger": "^6.3.0",
-    "@nestjs/terminus": "^9.2.2",
+    "@nestjs/terminus": "^10.2.0",
     "@nestjs/throttler": "^4.2.1",
     "@prisma/client": "4.15.0",
     "@sentry/node": "^7.78.0",
