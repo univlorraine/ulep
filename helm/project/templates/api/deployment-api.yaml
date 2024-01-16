@@ -75,7 +75,7 @@ spec:
             - name: ADMIN_URL
               value: "https://{{ .Values.adminUrl }}.{{ .Values.domain }}"
             - name: DATABASE_URL
-              value: "postgresql://{{ .Values.global.postgresql.auth.username }}:$(PGPASSWORD)@{{ include "etandem.name" . }}-postgresql.{{ .Release.Namespace }}:5432/{{ .Values.global.postgresql.auth.database }}?schema=public&connection_limit={{ .Values.api.env.postgresConnectionLimit }}"
+              value: "postgresql://{{ .Values.global.postgresql.auth.username }}:$(PGPASSWORD)@{{ include "etandem.name" . }}-postgresql.{{ .Release.Namespace }}:5432/{{ .Values.global.postgresql.auth.database }}?schema=public"
             - name: KEYCLOAK_BASE_URL
               value: "https://{{ .Values.keycloakUrl }}.{{ .Values.domain }}"
             - name: KEYCLOAK_REALM
