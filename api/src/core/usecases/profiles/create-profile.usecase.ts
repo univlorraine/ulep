@@ -1,4 +1,5 @@
 import { Inject, Injectable, Logger } from '@nestjs/common';
+import * as Sentry from '@sentry/node';
 import {
   DomainErrorCode,
   RessourceAlreadyExists,
@@ -184,18 +185,11 @@ export class CreateProfileUsecase {
       interests,
     });
 
+    await this.sendWelcomeEmail(profile);
+
     await this.profilesRepository.create(profile);
 
-    await this.emailGateway.send({
-      recipient: profile.user.email,
-      email: await this.emailTemplateRepository.getEmail(
-        EMAIL_TEMPLATE_IDS.WELCOME,
-        profile.nativeLanguage.code,
-        {
-          firstname: profile.user.firstname,
-        },
-      ),
-    });
+    await this.sendWelcomeEmail(profile);
 
     return profile;
   }
@@ -246,5 +240,30 @@ export class CreateProfileUsecase {
     }
 
     return objective;
+  }
+
+  private async sendWelcomeEmail(profile: Profile): Promise<void> {
+    try {
+      await this.emailGateway.send({
+        recipient: profile.user.email,
+        email: await this.emailTemplateRepository.getEmail(
+          EMAIL_TEMPLATE_IDS.WELCOME,
+          profile.nativeLanguage.code,
+          {
+            firstname: profile.user.firstname,
+          },
+        ),
+      });
+    } catch (error) {
+      Sentry.captureException(error, {
+        user: {
+          id: profile.user.id,
+        },
+        extra: {
+          email: profile.user.email,
+          template: EMAIL_TEMPLATE_IDS.WELCOME,
+        },
+      });
+    }
   }
 }
