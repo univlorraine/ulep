@@ -70,6 +70,7 @@ interface TextInputProps {
     type?: 'email' | 'number' | 'password' | 'text' | 'text-area';
     value: string;
     maxLength?: number;
+    disabled?: boolean;
 }
 
 const TextInput: React.FC<TextInputProps> = ({
@@ -82,6 +83,7 @@ const TextInput: React.FC<TextInputProps> = ({
     type,
     value,
     maxLength,
+    disabled,
 }) => {
     const [showPasword, setShowPassword] = useState<boolean>(false);
     const inputId = `input-${title}}`;
@@ -100,6 +102,7 @@ const TextInput: React.FC<TextInputProps> = ({
                         style={{ height: customHeight }}
                         type={showPasword ? 'text' : type}
                         value={value}
+                        disabled={disabled}
                         required
                         autocomplete={autocomplete}
                     />

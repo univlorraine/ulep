@@ -12,9 +12,10 @@ interface DropdownProps<T> {
     options: DropDownItem<T>[];
     placeholder?: string | null;
     title?: string | null;
+    disabled?: boolean;
 }
 
-const Dropdown = <T,>({ onChange, options, placeholder, title }: DropdownProps<T>) => {
+const Dropdown = <T,>({ onChange, options, placeholder, title, disabled }: DropdownProps<T>) => {
     const [isOpen, setIsOpen] = useState<boolean>(false);
     const [selectedOption, setSelectedOption] = useState<DropDownItem<T> | undefined>(
         !placeholder ? options[0] : undefined
@@ -51,7 +52,7 @@ const Dropdown = <T,>({ onChange, options, placeholder, title }: DropdownProps<T
         <div ref={dropdownRef}>
             <span className={styles.title}>{title}</span>
             <div className={styles.container}>
-                <button className={styles.button} onClick={() => setIsOpen(!isOpen)}>
+                <button className={styles.button} onClick={() => setIsOpen(!isOpen)} disabled={disabled}>
                     {selectedOption ? selectedOption.title : placeholder}
                     <img alt="arrow-down" src={ArrowDownSvg} />
                 </button>
