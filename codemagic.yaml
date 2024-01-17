@@ -38,10 +38,10 @@ scripts:
       name: Update dependencies and copy web assets to native project
       script: |
           cd app && npx cap sync # <- update native dependencies and copy web assets to native project
-    - &setup_xcode
-      name: Set up code signing settings on Xcode project
-      script: |
-          cd app && xcode-project use-profiles
+    # - &setup_xcode
+    #   name: Set up code signing settings on Xcode project
+    #   script: |
+    #       cd app && xcode-project use-profiles
     - &increment_build_number
       name: Increment build number
       script: |
@@ -64,13 +64,13 @@ scripts:
           keyAlias=$CM_KEY_ALIAS
           storeFile=$CM_KEYSTORE_PATH
           EOF
-    - &build_ipa
-      name: Build ipa for distribution
-      script: |
-          cd $CM_BUILD_DIR/app
-          xcode-project build-ipa \
-            --workspace "$XCODE_WORKSPACE" \
-            --scheme "$XCODE_SCHEME"
+    # - &build_ipa
+    #   name: Build ipa for distribution
+    #   script: |
+    #       cd $CM_BUILD_DIR/app
+    #       xcode-project build-ipa \
+    #         --workspace "$XCODE_WORKSPACE" \
+    #         --scheme "$XCODE_SCHEME"
     - &build_apk
       name: Build Android release
       script: |
@@ -161,6 +161,7 @@ workflows:
             - *pnpm_build
             - *set_sdk_location
             - *update_dependency
+            - *increment_build_number
             - *build_apk
         artifacts:
             - $CM_BUILD_DIR/app/android/app/build/outputs/**/*.apk
