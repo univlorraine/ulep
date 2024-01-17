@@ -137,6 +137,7 @@ const SignUpPage: React.FC = () => {
             getPersonInfos();
         }
     }, [fromIdp, countries]);
+
     return (
         <WebLayoutCentered
             backgroundIconColor={configuration.primaryBackgroundImageColor}
@@ -238,16 +239,13 @@ const SignUpPage: React.FC = () => {
                             <a href={`mailto:${configuration.emailContact}`}>{configuration.emailContact}</a>
                         </p>
                     )}
-                    {/* If university central is selected and oauth was successfull or university central is not selected */}
-                    {(university && university.isCentral && fromIdp) || (university && !university.isCentral) && (
-                        <button
-                            className={`primary-button ${isAFieldEmpty ? 'disabled' : ''}`}
-                            disabled={isAFieldEmpty}
-                            onClick={continueSignUp}
-                        >
-                            {t('signup_page.validate_button')}
-                        </button>
-                    )}
+                    <button
+                        className={`primary-button ${isAFieldEmpty ? 'disabled' : ''}`}
+                        disabled={isAFieldEmpty}
+                        onClick={continueSignUp}
+                    >
+                        {t('signup_page.validate_button')}
+                    </button>
                 </div>
             </div>
         </WebLayoutCentered>
