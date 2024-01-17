@@ -49,20 +49,15 @@ export class SecurityController {
 
   @Get('flow')
   @Swagger.ApiOperation({ summary: 'Initiate a standard browser login.' })
-  @Swagger.ApiOkResponse({ type: BearerTokensResponse })
+  @Swagger.ApiResponse({ status: 302 })
   async initiateStandardFlow(
     @Query('redirectUri') redirectUri: string,
     @Res() res,
   ): Promise<void> {
-    if (!redirectUri) {
-      this.logger.warn(
-        'No redirect URI when initializing standard flow. Using default redirectUri',
-      );
-    }
+    const redirect = redirectUri || `${this.#appUrl}/auth`;
 
-    const url = this.keycloakClient.getStandardFlowUrl(
-      redirectUri || `${this.#appUrl}/auth`,
-    );
+    const url = await this.keycloakClient.getStandardFlowUrl(redirect);
+
     res.redirect(url);
   }
 

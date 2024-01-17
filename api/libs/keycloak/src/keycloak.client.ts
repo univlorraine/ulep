@@ -25,6 +25,7 @@ import RoleRepresentation, {
   CreateAdministratorProps,
   UpdateAdministratorProps,
   UpdateAdministratorPayload,
+  OpenIdConfiguration,
 } from './keycloak.models';
 import { Client, Issuer, TokenSet } from 'openid-client';
 
@@ -683,7 +684,34 @@ export class KeycloakClient {
    * @param redirectUri
    * @returns
    */
-  public getStandardFlowUrl(redirectUri: string): string {
-    return `${this.configuration.baseUrl}/realms/${this.configuration.realm}/protocol/openid-connect/auth?response_type=code&client_id=${this.configuration.clientId}&scope=openid&redirect_uri=${redirectUri}`;
+  public async getStandardFlowUrl(redirectUri: string): Promise<string> {
+    const configuration = await this.getMetadata();
+    const endoint = configuration.authorization_endpoint;
+
+    const params = new URLSearchParams({
+      response_type: 'code',
+      client_id: this.configuration.clientId,
+      scope: 'openid',
+      redirect_uri: redirectUri,
+    });
+
+    return `${endoint}?${params.toString()}`;
+  }
+
+  /**
+   * Authorization Server Metadata.
+   * See https://datatracker.ietf.org/doc/html/rfc8414#section-3
+   */
+  public async getMetadata(): Promise<OpenIdConfiguration> {
+    const response = await fetch(
+      `${this.configuration.baseUrl}/realms/${this.configuration.realm}/.well-known/openid-configuration`,
+      {
+        method: 'GET',
+      },
+    );
+
+    const metadata = await response.json();
+
+    return metadata;
   }
 }
