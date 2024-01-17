@@ -83,7 +83,7 @@ export class InstanceController {
     @Res() res,
   ): Promise<Readable> {
     try {
-      const stream = await this.storageGateway.getObject(
+      const stream = await this.storageGateway.read(
         this.#emailAssetsBucket,
         fileName,
       );

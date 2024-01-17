@@ -1,83 +1,114 @@
-import * as Minio from 'minio';
 import { Injectable } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { File, StorageInterface } from 'src/core/ports/storage.interface';
-import { ContentTypeException } from 'src/core/errors/content-type.exception';
 import { Readable } from 'stream';
 import { Env } from 'src/configuration';
+import {
+  CreateBucketCommand,
+  DeleteObjectCommand,
+  GetObjectCommand,
+  HeadBucketCommand,
+  HeadObjectCommand,
+  PutObjectCommand,
+  S3Client,
+  S3ServiceException,
+} from '@aws-sdk/client-s3';
+import { getSignedUrl } from '@aws-sdk/s3-request-presigner';
 
-/*
- * This is the implementation of the StorageInterface.
- * It uses the Minio client to upload files to the Minio server.
- * https://min.io/docs/minio/linux/developers/javascript/API.html
- */
 @Injectable()
 export class MinioStorage implements StorageInterface {
-  private readonly minioClient: Minio.Client;
+  #client: S3Client;
 
   constructor(env: ConfigService<Env, true>) {
-    this.minioClient = new Minio.Client({
-      endPoint: env.get('MINIO_HOST'),
-      port: env.get('MINIO_PORT'),
-      useSSL: 'true' === env.get('MINIO_USE_SSL'),
-      accessKey: env.get('MINIO_ACCESS_KEY'),
-      secretKey: env.get('MINIO_SECRET_KEY'),
+    this.#client = new S3Client({
+      endpoint: env.get('S3_URL'),
+      region: env.get('S3_REGION'),
+      credentials: {
+        accessKeyId: env.get('S3_ACCESS_KEY'),
+        secretAccessKey: env.get('S3_ACCESS_SECRET'),
+      },
+      forcePathStyle: true,
     });
   }
 
-  async uploadFile(bucket: string, name: string, file: File): Promise<void> {
-    // Check if content type is allowed
-    const allowedContentTypes = ['image/jpeg', 'image/png'];
-    if (!allowedContentTypes.includes(file.mimetype)) {
-      throw new ContentTypeException(file.mimetype);
+  async read(bucket: string, filename: string): Promise<Readable> {
+    const command = new GetObjectCommand({ Bucket: bucket, Key: filename });
+    const response = await this.#client.send(command);
+
+    if (response.Body instanceof Readable) {
+      return response.Body;
     }
 
-    // Create bucket with policies if not exists
-    const bucketExists = await this.minioClient.bucketExists(bucket);
+    throw new Error('No response body was provided');
+  }
+
+  async write(bucket: string, name: string, file: File): Promise<void> {
+    const bucketExists = await this.directoryExists(bucket);
     if (!bucketExists) {
-      await this.createBucket(bucket);
+      await this.createDirectory(bucket);
     }
 
-    await this.minioClient.putObject(bucket, name, file.buffer, file.size);
+    const command = new PutObjectCommand({
+      Bucket: bucket,
+      Key: name,
+      Body: file.buffer,
+      ContentType: file.mimetype,
+      ContentLength: file.size,
+      ACL: 'private',
+    });
+
+    await this.#client.send(command);
   }
 
-  async generatePresignedUrl(
-    bucket: string,
-    name: string,
-    expiry: number,
-  ): Promise<string> {
-    return this.minioClient.presignedUrl('GET', bucket, name, expiry);
+  async delete(bucket: string, name: string): Promise<void> {
+    const bucketExists = await this.directoryExists(bucket);
+    if (!bucketExists) {
+      return;
+    }
+
+    const command = new DeleteObjectCommand({ Bucket: bucket, Key: name });
+
+    await this.#client.send(command);
   }
 
-  async deleteFile(bucketName: string, fileName: string): Promise<void> {
-    await this.minioClient.removeObject(bucketName, fileName);
+  // eslint-disable-next-line prettier/prettier
+  async temporaryUrl(bucket: string, name: string, expiry: number): Promise<string> {
+    const command = new GetObjectCommand({ Bucket: bucket, Key: name });
+
+    return getSignedUrl(this.#client, command, { expiresIn: expiry });
   }
 
-  private async createBucket(bucketName: string): Promise<void> {
-    await this.minioClient.makeBucket(bucketName, 'eu-west-1');
+  async fileExists(bucket: string, name: string): Promise<boolean> {
+    try {
+      const command = new HeadObjectCommand({ Bucket: bucket, Key: name });
+      await this.#client.send(command);
+
+      return true;
+    } catch (e) {
+      // eslint-disable-next-line prettier/prettier
+      if (e instanceof S3ServiceException && e.$metadata.httpStatusCode === 404) {
+        return false;
+      }
+
+      throw e;
+    }
   }
 
-  private async addPolicyToBucket(
-    bucket: string,
-    actions: ('s3:GetObject' | 's3:PutObject' | 's3:DeleteObject')[],
-  ) {
-    await this.minioClient.setBucketPolicy(
-      bucket,
-      JSON.stringify({
-        Version: '2012-10-17',
-        Statement: [
-          {
-            Effect: 'Allow',
-            Principal: { AWS: '*' },
-            Action: actions,
-            Resource: [`arn:aws:s3:::${bucket}/*`],
-          },
-        ],
-      }),
-    );
+  async directoryExists(bucket: string): Promise<boolean> {
+    const command = new HeadBucketCommand({ Bucket: bucket });
+    try {
+      await this.#client.send(command);
+      return true;
+    } catch (error) {
+      return false;
+    }
   }
 
-  async getObject(bucket: string, filename: string): Promise<Readable> {
-    return this.minioClient.getObject(bucket, filename);
+  async createDirectory(directory: string): Promise<void> {
+    const command = new CreateBucketCommand({
+      Bucket: directory,
+      ACL: 'private',
+    });
+    await this.#client.send(command);
   }
 }

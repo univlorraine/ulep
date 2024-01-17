@@ -52,7 +52,7 @@ export class UploadsController {
       file,
     });
 
-    const url = await this.storage.generatePresignedUrl(
+    const url = await this.storage.temporaryUrl(
       upload.bucket,
       upload.name,
       this.EXPIRATION_TIME,
@@ -72,7 +72,7 @@ export class UploadsController {
   async findOne(@Param('id') id: string): Promise<MediaObjectResponse> {
     const instance = await this.getMediaObjectUsecase.execute({ id });
 
-    const url = await this.storage.generatePresignedUrl(
+    const url = await this.storage.temporaryUrl(
       instance.bucket,
       instance.name,
       this.EXPIRATION_TIME,

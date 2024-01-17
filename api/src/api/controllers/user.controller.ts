@@ -72,6 +72,7 @@ export class UserController {
     @UploadedFile(new ImagesFilePipe()) file?: Express.Multer.File,
   ) {
     let user = await this.createUserUsecase.execute({ ...body });
+
     if (file) {
       const upload = await this.uploadAvatarUsecase.execute({
         userId: user.id,

@@ -45,7 +45,7 @@ export class DeleteObjectiveImageUsecase {
 
   private async deleteObjectiveImage(image: MediaObject | null) {
     if (!image) return;
-    await this.storageInterface.deleteFile(image.bucket, image.name);
+    await this.storageInterface.delete(image.bucket, image.name);
     await this.mediaObjectRepository.remove(image.id);
   }
 }

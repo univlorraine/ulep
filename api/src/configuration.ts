@@ -62,21 +62,19 @@ export class Env {
 
   @IsString()
   @IsNotEmpty()
-  MINIO_HOST: string;
-
-  @IsNumber()
-  MINIO_PORT: number;
-
-  @IsBoolean()
-  MINIO_USE_SSL: boolean;
+  S3_URL: string;
 
   @IsString()
   @IsNotEmpty()
-  MINIO_ACCESS_KEY: string;
+  S3_REGION: string;
 
   @IsString()
   @IsNotEmpty()
-  MINIO_SECRET_KEY: string;
+  S3_ACCESS_KEY: string;
+
+  @IsString()
+  @IsNotEmpty()
+  S3_ACCESS_SECRET: string;
 
   @IsString()
   @IsNotEmpty()
@@ -189,11 +187,10 @@ const test: Env = {
   KEYCLOAK_CLIENT_ID: 'admin-cli',
   KEYCLOAK_CLIENT_SECRET: 'f0a0c0e0-0000-0000-0000-000000000000',
   KEYCLOAK_ADMIN_GROUP_ID: 'admin',
-  MINIO_HOST: 'minio',
-  MINIO_PORT: 9000,
-  MINIO_USE_SSL: false,
-  MINIO_ACCESS_KEY: 'minio',
-  MINIO_SECRET_KEY: 'minio123',
+  S3_URL: 'http://minio:9000',
+  S3_REGION: 'eu-east-1',
+  S3_ACCESS_KEY: 'minio',
+  S3_ACCESS_SECRET: 'minio123',
   TRANSLATIONS_ENDPOINT: 'http://localhost:3000/api/translations',
   TRANSLATIONS_ENDPOINT_SUFFIX: '',
   TRANSLATIONS_TOKEN: 'test',
@@ -226,11 +223,10 @@ export default (): Env => ({
   KEYCLOAK_CLIENT_ID: process.env.KEYCLOAK_CLIENT_ID,
   KEYCLOAK_CLIENT_SECRET: process.env.KEYCLOAK_CLIENT_SECRET,
   KEYCLOAK_ADMIN_GROUP_ID: process.env.KEYCLOAK_ADMIN_GROUP_ID,
-  MINIO_HOST: process.env.MINIO_HOST,
-  MINIO_PORT: parseInt(process.env.MINIO_PORT, 10),
-  MINIO_USE_SSL: Boolean(process.env.MINIO_USE_SSL),
-  MINIO_ACCESS_KEY: process.env.MINIO_ACCESS_KEY,
-  MINIO_SECRET_KEY: process.env.MINIO_SECRET_KEY,
+  S3_URL: process.env.S3_URL,
+  S3_REGION: process.env.S3_REGION,
+  S3_ACCESS_KEY: process.env.S3_ACCESS_KEY,
+  S3_ACCESS_SECRET: process.env.S3_ACCESS_SECRET,
   TRANSLATIONS_ENDPOINT: process.env.TRANSLATIONS_ENDPOINT,
   TRANSLATIONS_ENDPOINT_SUFFIX: process.env.TRANSLATIONS_ENDPOINT_SUFFIX,
   TRANSLATIONS_TOKEN: process.env.TRANSLATIONS_TOKEN,

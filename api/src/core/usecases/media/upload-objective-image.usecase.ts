@@ -63,7 +63,7 @@ export class UploadObjectiveImageUsecase {
     file: Express.Multer.File,
   ): Promise<MediaObject> {
     const image = MediaObject.image(file, 'objective');
-    await this.storageInterface.uploadFile(image.bucket, image.name, file);
+    await this.storageInterface.write(image.bucket, image.name, file);
     await this.mediaObjectRepository.saveObjectiveImage(objective, image);
 
     return image;
@@ -71,7 +71,7 @@ export class UploadObjectiveImageUsecase {
 
   private async deletePreviousObjectiveImage(image: MediaObject | null) {
     if (!image) return;
-    await this.storageInterface.deleteFile(image.bucket, image.name);
+    await this.storageInterface.delete(image.bucket, image.name);
     await this.mediaObjectRepository.remove(image.id);
   }
 }

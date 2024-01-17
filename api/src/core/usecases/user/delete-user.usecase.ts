@@ -27,10 +27,7 @@ export class DeleteUserUsecase {
     }
 
     if (instance.avatar) {
-      await this.storage.deleteFile(
-        instance.avatar.bucket,
-        instance.avatar.name,
-      );
+      await this.storage.delete(instance.avatar.bucket, instance.avatar.name);
     }
 
     return this.userRepository.delete(command.id);

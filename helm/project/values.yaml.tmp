@@ -2,49 +2,31 @@
 # This is a YAML-formatted file.
 # Declare variables to be passed into your templates.
 
-############## GLOBAL ##############
-
-name: "ulep" # REQUIRED
-domain: exemple.com # REQUIRED
-issuerName: letsencrypt # REQUIRED
-
-global:
-  postgresql:
-    auth:
-      username: postgres # FIXE
-      database: ulep # FIXE
-      password: "" # REQUIRED
+name: "ulep"
+domain: ulep.thestaging.io
+issuerName: letsencrypt
 
 apiUrl: &apiUrl api
 adminUrl: &adminUrl admin
-minioUrl: &minioUrl minio
-minioApiUrl: &minioApiUrl minio-api
 keycloakUrl: &keycloakUrl auth
 webappUrl: &webappUrl webapp
+keycloakAdminPassword: &keycloakAdminPassword AZE123aze
+keycloakClientSecret: &keycloakClientSecret bN49BuApmmtAODeOWOG8iKOOuJdN3KE6
+minioAccessKey: &minioAccessKey minio
+minioSecretKey: &minioSecretKey AZE123aze
+appEnv: staging
 
-############## POSTGRES ##############
-postgresql:
-  primary:
-    initdb:
-      scriptsConfigMap: ulep-init-database # REQUIRED
-  persistence:
-    size: 8Gi # REQUIRED
-############## POSTGRES ##############
-
-############## API ##############
 api:
-  name: api # REQUIRED
-  replicaCount: 1 # OPTIONNEL
-
+  name: api
+  replicaCount: 1
   image:
-    repository: "rg.fr-par.scw.cloud/ulep/api-prod" # REQUIRED
-    tag: "latest" # REQUIRED
-    pullPolicy: IfNotPresent # OPTIONNEL
+    repository: rg.fr-par.scw.cloud/ulep/api-prod
+    tag: '1.0.1496'
+    pullPolicy: Always
   initImage:
-    repository: rg.fr-par.scw.cloud/ulep/api-init # REQUIRED
-    tag: 'v1'  # REQUIRED
-    pullPolicy: IfNotPresent # OPTIONNEL
-
+    repository: rg.fr-par.scw.cloud/ulep/api-init
+    tag: '1.0.1496'
+    pullPolicy: Always
   env:
     adminUrl: *adminUrl
     appUrl: *webappUrl
@@ -53,18 +35,16 @@ api:
     keycloakRealm: etandem
     keycloakAdmin: admin
     keycloakClientId: api
-    keycloakClientSecret: &keycloakClientSecret change-me
-    keycloakAdminGroupId: change-me
-    minioHost: *minioUrl
-    minioPort: 443
-    minioUseSsl: true
-    minioAccessKey: &minioAccessKey change-me
-    minioSecretKey: &minioSecretKey change-me
-    translationsEndpoint: https://translations.exemple.com
+    keycloakClientSecret: *keycloakClientSecret
+    keycloakAdminGroupId: 02736a0f-4679-4329-a877-2ce87aaea569
+    minioUrl: https://minio-api.ulep.thestaging.io
+    minioAccessKey: *minioAccessKey
+    minioSecretKey: *minioSecretKey
+    translationsEndpoint: https://gitlab.univ-lorraine.fr/api/v4/projects/7519/repository/files/locales
     translationsEndpointSuffix: /raw?ref=master
-    translationsToken: change-me
-    connectorUrl: https://connector.exemple.com
-    connectorToken: change-me
+    translationsToken: glpat-v3-kKL4hk4nrktHRGkyu
+    connectorUrl: https://auth.ulep.thestaging.io
+    connectorToken: 5f8a2b8c-8b0a-4b9e-9b0a-4b9e9b0a4b9e
     emailsAssetsBucket: assets
     emailsTranslationsComponent: emails
     emailsAssetsPublicEndpoint: *apiUrl
@@ -75,10 +55,9 @@ api:
     smtpPort: 1025
     smtpSecure: false
     smtpIgnoreTLS: true
-    smtpSender: contact@exemple.fr
-    sentryDsn: https://123@glitchtip.exemple.com/1
+    smtpSender: contact@ulep.fr
+    sentryDsn: https://3306ec4562fb4cfab0be7feaf5bf136a@glitchtip.ulep.thestaging.io/1
     cancelTresholdInMin: 15
-
   autoscaling:
     enabled: false
     minReplicas: 1
@@ -88,7 +67,6 @@ api:
   service:
     type: ClusterIP
     port: 80
-
   probes:
     readiness:
       initialDelaySeconds: 0
@@ -98,7 +76,6 @@ api:
       initialDelaySeconds: 0
       periodSeconds: 5
       failureThreshold: 5
-
   ingress:
     enabled: true
     className: traefik
@@ -112,32 +89,25 @@ api:
     tls:
       - hosts:
           - *apiUrl
-############## API ##############
 
-############## AUTH ##############
 auth:
-  name: auth # REQUIRED
+  name: "auth"
   replicaCount: 1
-
   image:
-    repository: "quay.io/keycloak/keycloak" # REQUIRED
-    tag: "21.1" # REQUIRED
+    repository: "quay.io/keycloak/keycloak"
+    tag: "21.1"
     pullPolicy: IfNotPresent
-
   initImage:
-    repository: "rg.fr-par.scw.cloud/ulep/auth-prod" # REQUIRED
-    tag: "latest" # REQUIRED
-
-
+    repository: "rg.fr-par.scw.cloud/ulep/auth-prod"
+    tag: "1.0.1496"
   env:
-    keycloakAdmin: admin # FIXE
-    keycloakAdminPassword: *keycloakAdminPassword # REQUIRED
-    kcDB: postgres # FIXE
-    kcDBSchema: keycloak # FIXE
+    keycloakAdmin: admin
+    keycloakAdminPassword: *keycloakAdminPassword
+    kcDB: postgres
+    kcDBSchema: keycloak
     proxyAddressForwarding: true
-    logLevel: INFO # REQUIRED
-
-
+    logLevel: DEBUG
+    sentryDsn: https://f16c3018310045fe9a5fa2c47f437921@glitchtip.ulep.thestaging.io/5
   autoscaling:
     enabled: false
     minReplicas: 1
@@ -147,7 +117,6 @@ auth:
   service:
     type: ClusterIP
     port: 80
-
   probes:
     startup:
       initialDelaySeconds: 10
@@ -161,7 +130,6 @@ auth:
       initialDelaySeconds: 0
       periodSeconds: 5
       failureThreshold: 5
-
   ingress:
     enabled: true
     className: traefik
@@ -175,31 +143,38 @@ auth:
     tls:
       - hosts:
           - *keycloakUrl
-############## AUTH ##############
 
-############## MINIO ##############
+# Full configuration: https://github.com/bitnami/charts/tree/master/bitnami/postgresql
+postgresql:
+  global:
+    postgresql:
+      auth:
+        username: "ulep"
+        password: "AZE123aze"
+        database: "ulep"
+  primary:
+    initdb:
+      scriptsConfigMap: ulep-init-database
+    persistence:
+      size: 8Gi
+
 minio:
   global:
     storageClass: scw-bssd
-
   image:
     tag: 2023.9.30-debian-11-r0
   clientImage:
     tag: 2023.9.29-debian-11-r0
-
   auth:
     rootUser: *minioAccessKey
     rootPassword: *minioSecretKey
-
   persistence:
-    size: 40Gi
-
+    size: 8Gi
   # Distributed  mode is recommended for PROD
   mode: distributed
   statefulset:
     replicaCount: 2
     drivesPerNode: 2
-
   ingress:
     enabled: true
     ingressClassName: traefik
@@ -232,22 +207,17 @@ minio:
       - hosts:
          - minio-api.ulep.thestaging.io
         secretName: minio-api
-############## MINIO ##############
 
-############## ADMIN ##############
 admin:
-  name: admin # REQUIRED
+  name: "admin"
   replicaCount: 1
-
   image:
-    repository: "rg.fr-par.scw.cloud/ulep/admin-prod" # REQUIRED
-    tag: "latest" # REQUIRED
-    pullPolicy: Always
-
+    repository: "rg.fr-par.scw.cloud/ulep/admin-prod"
+    tag: "1.0.1496"
+    pullPolicy: IfNotPresent
   env:
-    keycloakClientSecret: *keycloakClientSecret # REQUIRED
-    sentryDsn: TODO # OPTIONAL
-
+    keycloakClientSecret: *keycloakClientSecret
+    sentryDsn: https://56e3c8db64eb4dce8edd825a0ddd7a8c@glitchtip.ulep.thestaging.io/2
   autoscaling:
     enabled: false
     minReplicas: 1
@@ -257,7 +227,6 @@ admin:
   service:
     type: ClusterIP
     port: 80
-
   probes:
     startup:
       initialDelaySeconds: 60
@@ -271,7 +240,6 @@ admin:
       initialDelaySeconds: 0
       periodSeconds: 5
       failureThreshold: 3
-
   ingress:
     enabled: true
     className: traefik
@@ -279,38 +247,32 @@ admin:
       kubernetes.io/ingress.class: "traefik"
       cert-manager.io/cluster-issuer: "letsencrypt"
       kubernetes.io/tls-acme: "true"
-
     hosts:
       - host: *adminUrl
         paths: [/]
     tls:
       - hosts:
           - *adminUrl
-############## ADMIN ##############
 
-
-############## WEBAPP ##############
 webapp:
   name: "webapp"
   replicaCount: 1
-
   image:
-    repository: nginx # REQUIRED
-    tag: '1.25.2-alpine'  # REQUIRED
-    pullPolicy: IfNotPresent # OPTIONNEL
+    repository: nginx
+    tag: '1.25.2-alpine'
+    pullPolicy: IfNotPresent
   initImage:
-    repository: "rg.fr-par.scw.cloud/ulep/webapp" # REQUIRED
-    tag: "latest" # REQUIRED
-    pullPolicy: IfNotPresent # OPTIONNEL
-
-  env: {}
-
+    repository: "rg.fr-par.scw.cloud/ulep/webapp"
+    tag: "1.0.1496"
+    pullPolicy: IfNotPresent
+  env:
+    viteEnv: staging
+    viteSentryDsn: https://e60e318600f44d14b015b9935ed0a793@glitchtip.ulep.thestaging.io/4
   pv:
     storage: 4Gi
     storageClassName: scw-bssd
-
   autoscaling:
-    enabled: false
+    enabled: true
     minReplicas: 1
     maxReplicas: 100
     targetCPUUtilizationPercentage: 80
@@ -318,7 +280,6 @@ webapp:
   service:
     type: ClusterIP
     port: 80
-
   probes:
     startup:
       initialDelaySeconds: 30
@@ -345,9 +306,6 @@ webapp:
     tls:
       - hosts:
           - *webappUrl
-############## WEBAPP ##############
-
-############## INIT SPEC ##############
 
 serviceAccount:
   # Specifies whether a service account should be created
@@ -359,7 +317,7 @@ serviceAccount:
   name: ""
 
 imagePullSecrets:
-  - name: "registrypullsecret" # FIXE
+  - name: "registrypullsecret"
 
 nameOverride: ""
 fullnameOverride: ""
