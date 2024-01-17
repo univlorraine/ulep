@@ -161,7 +161,6 @@ workflows:
             - *pnpm_build
             - *set_sdk_location
             - *update_dependency
-            - *increment_build_number
             - *build_apk
         artifacts:
             - $CM_BUILD_DIR/app/android/app/build/outputs/**/*.apk
