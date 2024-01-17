@@ -21,7 +21,9 @@ import {
   Profile,
   User,
 } from 'src/core/models';
-import { EMAIL_TEMPLATE_IDS } from 'src/core/models/email-content.model';
+import EmailContent, {
+  EMAIL_TEMPLATE_IDS,
+} from 'src/core/models/email-content.model';
 import {
   EMAIL_TEMPLATE_REPOSITORY,
   EmailTemplateRepository,
@@ -185,8 +187,6 @@ export class CreateProfileUsecase {
       interests,
     });
 
-    await this.sendWelcomeEmail(profile);
-
     await this.profilesRepository.create(profile);
 
     await this.sendWelcomeEmail(profile);
@@ -243,27 +243,27 @@ export class CreateProfileUsecase {
   }
 
   private async sendWelcomeEmail(profile: Profile): Promise<void> {
+    let email: EmailContent;
+
+    try {
+      email = await this.emailTemplateRepository.getEmail(
+        EMAIL_TEMPLATE_IDS.WELCOME,
+        profile.nativeLanguage.code,
+        { firstname: profile.user.firstname },
+      );
+    } catch (error) {
+      this.logger.error('Error while parsing welcome email', error);
+      Sentry.captureException(error);
+    }
+
     try {
       await this.emailGateway.send({
         recipient: profile.user.email,
-        email: await this.emailTemplateRepository.getEmail(
-          EMAIL_TEMPLATE_IDS.WELCOME,
-          profile.nativeLanguage.code,
-          {
-            firstname: profile.user.firstname,
-          },
-        ),
+        email: email,
       });
     } catch (error) {
-      Sentry.captureException(error, {
-        user: {
-          id: profile.user.id,
-        },
-        extra: {
-          email: profile.user.email,
-          template: EMAIL_TEMPLATE_IDS.WELCOME,
-        },
-      });
+      this.logger.error('Error while sending welcome email', error);
+      Sentry.captureException(error);
     }
   }
 }

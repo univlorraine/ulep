@@ -1,7 +1,8 @@
+import * as Sentry from '@sentry/node';
 import { TandemRepository } from '../../ports/tandems.repository';
 import { Inject, Injectable, Logger } from '@nestjs/common';
 import { DomainError, RessourceDoesNotExist } from 'src/core/errors';
-import { Tandem, TandemStatus } from 'src/core/models';
+import { Tandem, TandemStatus, User } from 'src/core/models';
 import { EMAIL_TEMPLATE_IDS } from 'src/core/models/email-content.model';
 import {
   EMAIL_TEMPLATE_REPOSITORY,
@@ -80,41 +81,48 @@ export class ValidateTandemUsecase {
     if (updatedTandem.status === TandemStatus.ACTIVE) {
       const [learningLanguage1, learningLanguage2] = tandem.learningLanguages;
       if (learningLanguage1.profile.user.acceptsEmail) {
-        const emailContentProfile1 =
-          await this.emailTemplateRepository.getEmail(
-            EMAIL_TEMPLATE_IDS.TANDEM_BECOME_ACTIVE,
-            learningLanguage1.profile.nativeLanguage.code,
-            {
-              firstname: learningLanguage1.profile.user.firstname,
-              partnerFirstname: learningLanguage2.profile.user.firstname,
-              partnerLastname: learningLanguage2.profile.user.lastname,
-              universityName: learningLanguage2.profile.user.university.name,
-            },
-          );
-        await this.emailGateway.send({
-          recipient: learningLanguage1.profile.user.email,
-          email: emailContentProfile1,
+        await this.sendTamdemValidatedEmail({
+          language: learningLanguage1.profile.nativeLanguage.code,
+          user: learningLanguage1.profile.user,
+          partner: learningLanguage2.profile.user,
         });
       }
 
       if (learningLanguage2.profile.user.acceptsEmail) {
-        const emailContentProfile2 =
-          await this.emailTemplateRepository.getEmail(
-            EMAIL_TEMPLATE_IDS.TANDEM_BECOME_ACTIVE,
-            learningLanguage2.profile.nativeLanguage.code,
-            {
-              firstname: learningLanguage2.profile.user.firstname,
-              partnerFirstname: learningLanguage1.profile.user.firstname,
-              partnerLastname: learningLanguage1.profile.user.lastname,
-              universityName: learningLanguage1.profile.user.university.name,
-            },
-          );
-
-        await this.emailGateway.send({
-          recipient: learningLanguage2.profile.user.email,
-          email: emailContentProfile2,
+        await this.sendTamdemValidatedEmail({
+          language: learningLanguage2.profile.nativeLanguage.code,
+          user: learningLanguage2.profile.user,
+          partner: learningLanguage1.profile.user,
         });
       }
+    }
+  }
+
+  private async sendTamdemValidatedEmail({
+    language,
+    user,
+    partner,
+  }: {
+    language: string;
+    user: User;
+    partner: User;
+  }): Promise<void> {
+    try {
+      const email = await this.emailTemplateRepository.getEmail(
+        EMAIL_TEMPLATE_IDS.TANDEM_BECOME_ACTIVE,
+        language,
+        {
+          firstname: user.firstname,
+          partnerFirstname: partner.firstname,
+          partnerLastname: partner.lastname,
+          universityName: partner.university.name,
+        },
+      );
+
+      await this.emailGateway.send({ recipient: user.email, email: email });
+    } catch (error) {
+      this.logger.error('Error while sending tandem validated email', error);
+      Sentry.captureException(error);
     }
   }
 }

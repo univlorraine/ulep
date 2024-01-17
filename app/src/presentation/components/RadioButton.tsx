@@ -4,12 +4,11 @@ interface RadioButtonProps {
     isSelected: boolean;
     onPressed: () => void;
     name: string;
-    disabled?: boolean;
 }
 
-const RadioButton: React.FC<RadioButtonProps> = ({ isSelected, onPressed, name, disabled }) => {
+const RadioButton: React.FC<RadioButtonProps> = ({ isSelected, onPressed, name }) => {
     return (
-        <button className={styles.container} onClick={onPressed} disabled={disabled}>
+        <button className={styles.container} onClick={onPressed}>
             <div className={styles['outer-circle']}>
                 <div
                     style={{ backgroundColor: !isSelected ? 'white' : 'black' }}

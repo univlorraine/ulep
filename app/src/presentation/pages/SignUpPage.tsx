@@ -29,6 +29,7 @@ const SignUpPage: React.FC = () => {
     const history = useHistory();
     const location = useLocation<SignUpPageParams>();
     const { fromIdp } = location.state || {};
+    const [isLoggedIn, setIsLoggedIn] = useState<boolean>(false);
     const [countries, setCountries] = useState<DropDownItem<Country>[]>([]);
     const [country, setCountry] = useState<Country>();
     const [department, setDepartment] = useState<string>('');
@@ -39,7 +40,7 @@ const SignUpPage: React.FC = () => {
     const [displayError, setDisplayError] = useState<boolean>(false);
     const [payload, setPayload] = useState<SignUpInformationsParams>({});
 
-    const isAFieldEmpty =
+    const isAFieldEmpty: boolean =
         !university ||
         !country ||
         !selectedRole ||
@@ -47,7 +48,19 @@ const SignUpPage: React.FC = () => {
         (!diploma && selectedRole === 'STUDENT' && university.isCentral) ||
         (!staffFunction && selectedRole === 'STAFF' && university.isCentral);
 
-    const getSignUpData = async () => {
+    // Force oauth if user is not logged in and university is central.
+    // Should be part of the university entity with list of awailable / required auth providers (sso, email, etc.)
+    // to be more modular.
+    const isFormValid: boolean = (university?.isCentral ?? false) ? (isLoggedIn && !isAFieldEmpty) : !isAFieldEmpty;
+
+    // Map list of University to list of DropDownItem.
+    const universities: { title: string; value: University }[] = (country?.universities || []).map((university) => ({
+        title: university.name,
+        value: university,
+    }));
+
+    // Get list of countries from API and map it to list of DropDownItem.
+    const loadCountryList = async () => {
         const countriesResult = await getAllCountries.execute();
 
         if (countriesResult instanceof Error) {
@@ -62,12 +75,13 @@ const SignUpPage: React.FC = () => {
         );
     };
 
+    // Validate university admission dates and continue to next page.
     const continueSignUp = async () => {
         if (isAFieldEmpty) {
             return await showToast({ message: t('signup_page.missing_field'), duration: 3000 });
         }
         const now = new Date();
-        if (university.admissionEnd < now || university.admissionStart > now) {
+        if (university!.admissionEnd < now || university!.admissionStart > now) {
             return setDisplayError(true);
         }
 
@@ -75,11 +89,15 @@ const SignUpPage: React.FC = () => {
         return history.push('/signup/informations', payload);
     };
 
+    // Update country selection and set university to first university find in the list.
     const onCountrySelected = (country: Country) => {
         setCountry(country);
         return setUniversity(country.universities[0]);
     };
 
+    // Get user infos and update fields when user is logged in.
+    // Here we call the API to get user infos but we should call the userinfo endpoint
+    // from the auth provider ?
     const getPersonInfos = async () => {
         const result = await retrievePerson.execute();
         if (result instanceof Error) {
@@ -125,10 +143,11 @@ const SignUpPage: React.FC = () => {
             centralGender: result.gender as Gender,
             fromIdp: true,
         });
+        setIsLoggedIn(true);
     };
 
     useEffect(() => {
-        getSignUpData();
+        loadCountryList();
     }, []);
 
     useEffect(() => {
@@ -148,8 +167,8 @@ const SignUpPage: React.FC = () => {
             <div className={styles.body}>
                 <h1 className={styles.title}>{t('signup_page.title')}</h1>
 
+                {/* Role selectors */}
                 <h2 className={styles.subtitle}>{t('signup_page.profile_title')}</h2>
-
                 <RadioButton
                     isSelected={selectedRole === 'STUDENT'}
                     onPressed={() => setSelectedRole('STUDENT')}
@@ -160,7 +179,7 @@ const SignUpPage: React.FC = () => {
                     onPressed={() => setSelectedRole('STAFF')}
                     name={t('signup_page.staff_role')}
                 />
-
+                {/* Country selector */}
                 <div className="large-margin-top">
                     <Dropdown<Country>
                         onChange={onCountrySelected}
@@ -169,23 +188,18 @@ const SignUpPage: React.FC = () => {
                         title={t('global.country')}
                     />
                 </div>
-
-                <div className="large-margin-top">
-                    <Dropdown<University>
-                        onChange={setUniversity}
-                        options={
-                            country
-                                ? country.universities.map((university) => ({
-                                    title: university.name,
-                                    value: university,
-                                }))
-                                : []
-                        }
-                        title={t('signup_page.university_title')}
-                    />
-                </div>
-
-                {university && university.isCentral && !fromIdp && (
+                {/* University selector */}
+                {universities.length > 0 && (
+                    <div className="large-margin-top">
+                        <Dropdown<University>
+                            onChange={setUniversity}
+                            options={universities}
+                            title={t('signup_page.university_title')}
+                        />
+                    </div>
+                )}
+                {/* Loggin button */}
+                {university && university.isCentral && !isLoggedIn && (
                     <button
                         className="tertiary-button large-margin-vertical"
                         onClick={async () => {
@@ -206,8 +220,8 @@ const SignUpPage: React.FC = () => {
                         {t('signup_page.sso_button')}
                     </button>
                 )}
-
-                {selectedRole && (
+                {/* Department selector. */}
+                {university && selectedRole && (
                     <div className="large-margin-top">
                         <TextInput
                             onChange={setDepartment}
@@ -216,20 +230,26 @@ const SignUpPage: React.FC = () => {
                         />
                     </div>
                 )}
-
-                {selectedRole === 'STAFF' && (
+                {/* Staff function selector */}
+                {university && selectedRole === 'STAFF' && (
                     <TextInput
                         onChange={setStaffFunction}
                         title={t('signup_page.function_title')}
                         value={staffFunction}
                     />
                 )}
-
-                {selectedRole === 'STUDENT' && (
-                    <TextInput onChange={setDiploma} title={t('signup_page.diplome_title')} value={diploma} />
+                {/* diploma selector */}
+                {university && selectedRole === 'STUDENT' && (
+                    <TextInput
+                        onChange={setDiploma}
+                        title={t('signup_page.diplome_title')}
+                        value={diploma}
+                    />
                 )}
+   
                 {displayError && <ErrorMessage description={t('signup_page.error')} />}
-
+                
+                {/* continue action button */}
                 <div className={styles['bottom-container']}>
                     {!selectedRole && (
                         <p className={styles.information}>
@@ -240,8 +260,8 @@ const SignUpPage: React.FC = () => {
                         </p>
                     )}
                     <button
-                        className={`primary-button ${isAFieldEmpty ? 'disabled' : ''}`}
-                        disabled={isAFieldEmpty}
+                        className={`primary-button ${!isFormValid ? 'disabled' : ''}`}
+                        disabled={!isFormValid}
                         onClick={continueSignUp}
                     >
                         {t('signup_page.validate_button')}
