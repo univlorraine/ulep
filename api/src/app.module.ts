@@ -2,13 +2,12 @@ import { Module } from '@nestjs/common';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { ApiModule } from './api/api.module';
 import { KeycloakModule } from '@app/keycloak';
-import configuration, { Env } from './configuration';
+import { Env } from './configuration';
 
 @Module({
   imports: [
     ConfigModule.forRoot({
       isGlobal: true,
-      load: [configuration],
       validate: Env.validate,
     }),
     KeycloakModule.registerAsync({

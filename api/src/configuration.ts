@@ -1,7 +1,8 @@
 import { LogLevel } from '@nestjs/common';
-import { plainToClass } from 'class-transformer';
+import { Transform, plainToClass } from 'class-transformer';
 import {
   IsBoolean,
+  IsDefined,
   IsEnum,
   IsInt,
   IsNotEmpty,
@@ -114,7 +115,9 @@ export class Env {
   @IsNotEmpty()
   APP_LINK_PLAY_STORE: string;
 
+  @IsDefined()
   @IsBoolean()
+  @Transform(({ value }) => value === 'true')
   SMTP_DISABLE_BOOT_VERIFICATION: boolean;
 
   @IsString()
@@ -122,12 +125,17 @@ export class Env {
   SMTP_HOST: string;
 
   @IsNumber()
+  @Transform(({ value }) => parseInt(value, 10))
   SMTP_PORT: number;
 
+  @IsDefined()
   @IsBoolean()
+  @Transform(({ value }) => value === 'true')
   SMTP_SECURE: boolean;
 
+  @IsDefined()
   @IsBoolean()
+  @Transform(({ value }) => value === 'true')
   SMTP_IGNORE_TLS: boolean;
 
   @IsString()
@@ -140,13 +148,14 @@ export class Env {
 
   @IsInt()
   @IsOptional()
+  @Transform(({ value }) => parseInt(value, 10))
   CANCEL_TRESHOLD_IN_MIN: number;
 
   static DEFAULT_LOG_LEVEL: LogLevel = 'warn';
 
   static validate(configuration: Record<string, unknown>): Env {
     const env = plainToClass(Env, configuration, {
-      enableImplicitConversion: true,
+      enableImplicitConversion: false,
     });
 
     if (process.env.NODE_ENV === 'test') {
@@ -207,44 +216,3 @@ const test: Env = {
   SMTP_SENDER: 'sender@localhost',
   CANCEL_TRESHOLD_IN_MIN: 15,
 };
-
-// Production and development configuration
-// Loaded from environment variables
-export default (): Env => ({
-  ADMIN_URL: process.env.ADMIN_URL,
-  APP_URL: process.env.APP_URL,
-  LOG_LEVEL: process.env.LOG_LEVEL,
-  DEFAULT_TRANSLATION_LANGUAGE: process.env.DEFAULT_TRANSLATION_LANGUAGE,
-  DATABASE_URL: process.env.DATABASE_URL,
-  KEYCLOAK_BASE_URL: process.env.KEYCLOAK_BASE_URL,
-  KEYCLOAK_REALM: process.env.KEYCLOAK_REALM,
-  KEYCLOAK_ADMIN: process.env.KEYCLOAK_ADMIN,
-  KEYCLOAK_ADMIN_PASSWORD: process.env.KEYCLOAK_ADMIN_PASSWORD,
-  KEYCLOAK_CLIENT_ID: process.env.KEYCLOAK_CLIENT_ID,
-  KEYCLOAK_CLIENT_SECRET: process.env.KEYCLOAK_CLIENT_SECRET,
-  KEYCLOAK_ADMIN_GROUP_ID: process.env.KEYCLOAK_ADMIN_GROUP_ID,
-  S3_URL: process.env.S3_URL,
-  S3_REGION: process.env.S3_REGION,
-  S3_ACCESS_KEY: process.env.S3_ACCESS_KEY,
-  S3_ACCESS_SECRET: process.env.S3_ACCESS_SECRET,
-  TRANSLATIONS_ENDPOINT: process.env.TRANSLATIONS_ENDPOINT,
-  TRANSLATIONS_ENDPOINT_SUFFIX: process.env.TRANSLATIONS_ENDPOINT_SUFFIX,
-  TRANSLATIONS_TOKEN: process.env.TRANSLATIONS_TOKEN,
-  CONNECTOR_URL: process.env.CONNECTOR_URL,
-  CONNECTOR_TOKEN: process.env.CONNECTOR_TOKEN,
-  EMAIL_ASSETS_BUCKET: process.env.EMAIL_ASSETS_BUCKET,
-  EMAIL_TRANSLATIONS_COMPONENT: process.env.EMAIL_TRANSLATIONS_COMPONENT,
-  EMAIL_ASSETS_PUBLIC_ENDPOINT: process.env.EMAIL_ASSETS_PUBLIC_ENDPOINT,
-  APP_LINK_APPLE_STORE: process.env.APP_LINK_APPLE_STORE,
-  APP_LINK_PLAY_STORE: process.env.APP_LINK_PLAY_STORE,
-  SMTP_DISABLE_BOOT_VERIFICATION: Boolean(
-    process.env.SMTP_DISABLE_BOOT_VERIFICATION,
-  ),
-  SMTP_HOST: process.env.SMTP_HOST,
-  SMTP_PORT: parseInt(process.env.SMTP_PORT, 10),
-  SMTP_SECURE: Boolean(process.env.SMTP_SECURE),
-  SMTP_IGNORE_TLS: Boolean(process.env.SMTP_IGNORE_TLS),
-  SMTP_SENDER: process.env.SMTP_SENDER,
-  SENTRY_DSN: process.env.SENTRY_DSN,
-  CANCEL_TRESHOLD_IN_MIN: parseInt(process.env.CANCEL_TRESHOLD_IN_MIN, 10),
-});
