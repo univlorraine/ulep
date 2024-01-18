@@ -40,6 +40,11 @@ spec:
             value: "{{ include "etandem.name" . }}-postgresql.{{ .Release.Namespace }}"
           - name: DB_USER
             value: "{{ .Values.postgresql.global.postgresql.auth.username }}"
+          - name: PGPASSWORD
+            valueFrom:
+              secretKeyRef:
+                name: "{{ include "etandem.fullname" . }}-secret-{{ .Values.api.name }}"
+                key: database-password
           - name: DATABASE_URL
             valueFrom:
               secretKeyRef:
