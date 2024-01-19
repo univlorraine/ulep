@@ -6,6 +6,7 @@ import {
   ArrayMinSize,
   IsArray,
   IsBoolean,
+  IsEnum,
   IsNotEmpty,
   IsObject,
   IsOptional,
@@ -43,6 +44,7 @@ export class CreateProfileRequest
 
   @Swagger.ApiProperty({ type: 'string', enum: MeetingFrequency })
   @IsNotEmpty()
+  @IsEnum(MeetingFrequency)
   meetingFrequency: MeetingFrequency;
 
   @Swagger.ApiProperty({ type: 'string', format: 'uuid', isArray: true })
