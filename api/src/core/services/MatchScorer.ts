@@ -1,6 +1,6 @@
 import { Language, LearningLanguage, LearningType } from 'src/core/models';
 /* eslint-disable prettier/prettier */
-import { Injectable } from '@nestjs/common';
+import { Injectable, Logger } from '@nestjs/common';
 import { Match, MatchScores, Profile } from '../models';
 import { InvalidCoeficientsError, SameProfilesError } from '../errors/match-exceptions';
 
@@ -42,6 +42,8 @@ const getMaxValueInNumberMatrix = (matrix: Matrix ) => Object.values(matrix)
 
 @Injectable()
 export class MatchScorer implements IMatchScorer {
+  private readonly logger = new Logger(MatchScorer.name);
+
   // Coeficients used to compute the match score
   #coeficients: Coeficients = {
     level: 0.60,
@@ -272,9 +274,18 @@ export class MatchScorer implements IMatchScorer {
     profile1: Profile,
     profile2: Profile
   ): number {
-    const ponderation = this.#frequencyMatrix[profile1.meetingFrequency][profile2.meetingFrequency];
+    if (!profile1.meetingFrequency || !profile2.meetingFrequency) {
+      this.logger.error(`Error computing meeting frequency bonus: meeting frequency is not defined`);
+      return 0;
+    }
 
-    return this.#coeficients.meetingFrequency * ponderation;
+    try {
+      const ponderation = this.#frequencyMatrix[profile1.meetingFrequency][profile2.meetingFrequency];
+      return this.#coeficients.meetingFrequency * ponderation;
+    } catch (error) {
+      this.logger.error(`Error computing meeting frequency bonus: ${error}`);
+      return 0;
+    }
   }
 
   // Apply bonus if profiles share the same certificate option
