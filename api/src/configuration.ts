@@ -151,6 +151,10 @@ export class Env {
   @Transform(({ value }) => parseInt(value, 10))
   CANCEL_TRESHOLD_IN_MIN: number;
 
+  @IsInt()
+  @Transform(({ value }) => parseInt(value, 10))
+  SIGNED_URL_EXPIRATION_IN_SECONDS: number;
+
   static DEFAULT_LOG_LEVEL: LogLevel = 'warn';
 
   static validate(configuration: Record<string, unknown>): Env {
@@ -215,4 +219,5 @@ const test: Env = {
   SMTP_IGNORE_TLS: true,
   SMTP_SENDER: 'sender@localhost',
   CANCEL_TRESHOLD_IN_MIN: 15,
+  SIGNED_URL_EXPIRATION_IN_SECONDS: 60,
 };

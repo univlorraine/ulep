@@ -163,6 +163,8 @@ spec:
               value: "{{ .Values.api.env.sentryDsn }}"
             - name: CANCEL_TRESHOLD_IN_MIN
               value: "{{ .Values.api.env.cancelTresholdInMin }}"
+            - name: SIGNED_URL_EXPIRATION_IN_SECONDS
+              value: "{{ .Values.api.env.signedUrlExpirationInSeconds }}"
       {{- with .Values.nodeSelector }}
       nodeSelector:
         {{- toYaml . | nindent 8 }}
