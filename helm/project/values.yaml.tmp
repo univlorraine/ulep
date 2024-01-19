@@ -58,6 +58,7 @@ api:
     smtpSender: contact@ulep.fr
     sentryDsn: https://3306ec4562fb4cfab0be7feaf5bf136a@glitchtip.ulep.thestaging.io/1
     cancelTresholdInMin: 15
+    signedUrlExpirationInSeconds: 3600
   autoscaling:
     enabled: false
     minReplicas: 1

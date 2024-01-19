@@ -24,18 +24,23 @@ import {
   STORAGE_INTERFACE,
   StorageInterface,
 } from 'src/core/ports/storage.interface';
+import { ConfigService } from '@nestjs/config';
+import { Env } from 'src/configuration';
 
 @Controller('uploads')
 @Swagger.ApiTags('Uploads')
 export class UploadsController {
-  // Default expiration time for presigned url is 1h
-  private readonly EXPIRATION_TIME = 3600;
+  // Expiration time for presigned url
+  #expirationTime: number;
 
   constructor(
     @Inject(STORAGE_INTERFACE) private readonly storage: StorageInterface,
     private readonly uploadAvatarUsecase: UploadAvatarUsecase,
     private readonly getMediaObjectUsecase: GetMediaObjectUsecase,
-  ) {}
+    env: ConfigService<Env, true>,
+  ) {
+    this.#expirationTime = env.get('SIGNED_URL_EXPIRATION_IN_SECONDS');
+  }
 
   @Post('avatar')
   @SerializeOptions({ groups: ['read', 'media:read'] })
@@ -55,7 +60,7 @@ export class UploadsController {
     const url = await this.storage.temporaryUrl(
       upload.bucket,
       upload.name,
-      this.EXPIRATION_TIME,
+      this.#expirationTime,
     );
 
     return new MediaObjectResponse({
@@ -75,7 +80,7 @@ export class UploadsController {
     const url = await this.storage.temporaryUrl(
       instance.bucket,
       instance.name,
-      this.EXPIRATION_TIME,
+      this.#expirationTime,
     );
 
     return new MediaObjectResponse({
