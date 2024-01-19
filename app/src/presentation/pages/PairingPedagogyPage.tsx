@@ -76,6 +76,9 @@ const PairingPedagogyPage: React.FC = () => {
         return history.push(`/pairing/language/confirm`);
     };
 
+    console.log('isSuggested', profileSignUp.isSuggested);
+    console.log('university', JSON.stringify(university, null, 2));
+
     return (
         <WebLayoutCentered
             backgroundIconColor={configuration.secondaryBackgroundImageColor}
@@ -90,6 +93,10 @@ const PairingPedagogyPage: React.FC = () => {
 
                     {pedagogiesData.map((pedagogyData) => {
                         if (!pedagogyData.display) {
+                            return;
+                        }
+
+                        if (university && university.sites.length === 0 && pedagogyData.value !== 'ETANDEM') {
                             return;
                         }
 
