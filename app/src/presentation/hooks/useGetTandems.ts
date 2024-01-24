@@ -1,9 +1,9 @@
-import { useState, useEffect, useMemo } from 'react';
+import { useState, useEffect } from 'react';
 import Tandem from '../../domain/entities/Tandem';
-import Profile from '../../domain/entities/Profile';
 import { useConfig } from '../../context/ConfigurationContext';
 import Language from '../../domain/entities/Language';
 import { useStoreState } from '../../store/storeTypes';
+import { LearningType } from '../pages/PairingPedagogyPage';
 
 const useGetTandems = () => {
     const { getAllTandems } = useConfig();
@@ -21,7 +21,7 @@ const useGetTandems = () => {
                 profile?.learningLanguages.map((learningLanguage: Language) => {
                     if (!result.find((tandem) => tandem.learningLanguage.id === learningLanguage.id)) {
                         // TODO(futur) : Change this logic to get it from api ? 
-                        waitingLearningLanguages.push(new Tandem(learningLanguage.id, 'DRAFT', learningLanguage, learningLanguage, 'A0', 'TANDEM'));
+                        waitingLearningLanguages.push(new Tandem(learningLanguage.id, 'DRAFT', learningLanguage, learningLanguage, 'A0', LearningType.TANDEM));
                     }
                 });
                 setTandemsResult({ tandems: [...result, ...waitingLearningLanguages], error: undefined })

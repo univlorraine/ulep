@@ -7,6 +7,7 @@ import WebLayoutCentered from '../components/layout/WebLayoutCentered';
 import { codeLanguageToFlag } from '../utils';
 import confirmLanguagesStyles from './css/PairingConfirmLanguage.module.css';
 import styles from './css/SignUp.module.css';
+import { LearningType } from './PairingPedagogyPage';
 
 const PairingConfirmLanguagePage: React.FC = () => {
     const { t } = useTranslation();
@@ -22,11 +23,11 @@ const PairingConfirmLanguagePage: React.FC = () => {
 
     const pedagogyToTitle = (pedagogy: Pedagogy | undefined) => {
         switch (pedagogy) {
-            case 'BOTH':
+            case LearningType.BOTH:
                 return t('global.tandem_etandem');
-            case 'ETANDEM':
+            case LearningType.ETANDEM:
                 return t('global.etandem');
-            case 'TANDEM':
+            case LearningType.TANDEM:
                 return t('global.tandem');
             default:
                 return '';
@@ -57,7 +58,7 @@ const PairingConfirmLanguagePage: React.FC = () => {
                     <div className={confirmLanguagesStyles['mode-container']}>
                         <p className={confirmLanguagesStyles['mode-text']}>{`${t(
                             'pairing_confirm_language_page.mode_meet'
-                        )} ${pedagogyToTitle(profileSignUp.pedagogy)} ${profileSignUp.pedagogy === 'TANDEM' ? ' - ' + profileSignUp.campus?.name : ''} ${codeLanguageToFlag(
+                        )} ${pedagogyToTitle(profileSignUp.pedagogy)} ${profileSignUp.pedagogy === LearningType.TANDEM ? ' - ' + profileSignUp.campus?.name : ''} ${codeLanguageToFlag(
                             profileSignUp.learningLanguage.code
                         )}`}</p>
                         <img alt="tandem" src={TandemPng} />
