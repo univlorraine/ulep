@@ -11,6 +11,7 @@ glitchtip:
       GLITCHTIP_DOMAIN: https://glitchtip.ulep.thestaging.io
       EMAIL_URL: smtp://email:password@smtp_url:port
       DEFAULT_FROM_EMAIL: info@example.com
+      ENABLE_USER_REGISTRATION: "True"
     secret:
       SECRET_KEY: "!ThisMustBeChanged!" # run openssl rand -hex 32
   web:
