@@ -5,6 +5,13 @@ import * as Sentry from '@sentry/node';
 @Catch()
 export class SentryFilter extends BaseExceptionFilter {
   catch(exception: unknown, host: ArgumentsHost) {
+    const ctx = host.switchToHttp();
+    const request = ctx.getRequest();
+
+    if (request.user) {
+      Sentry.setUser(request.user);
+    }
+
     Sentry.captureException(exception);
     super.catch(exception, host);
   }
