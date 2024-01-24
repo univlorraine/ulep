@@ -1,4 +1,3 @@
-import { LogLevel } from '@nestjs/common';
 import { Transform, plainToClass } from 'class-transformer';
 import {
   IsBoolean,
@@ -21,7 +20,7 @@ export class Env {
   @IsNotEmpty()
   APP_URL: string;
 
-  @IsEnum(['verbose', 'debug', 'warn', 'error', 'log'])
+  @IsEnum(['error', 'warn', 'log', 'debug', 'verbose'])
   @IsOptional()
   LOG_LEVEL?: string;
 
@@ -154,8 +153,6 @@ export class Env {
   @IsInt()
   @Transform(({ value }) => parseInt(value, 10))
   SIGNED_URL_EXPIRATION_IN_SECONDS: number;
-
-  static DEFAULT_LOG_LEVEL: LogLevel = 'warn';
 
   static validate(configuration: Record<string, unknown>): Env {
     const env = plainToClass(Env, configuration, {

@@ -1,8 +1,6 @@
-import * as Sentry from '@sentry/node';
 import {
   ClassSerializerInterceptor,
   INestApplication,
-  LogLevel,
   ValidationPipe,
 } from '@nestjs/common';
 import { HttpAdapterHost, NestFactory, Reflector } from '@nestjs/core';
@@ -15,14 +13,12 @@ import {
   HttpLoggerInterceptor,
 } from './api/interceptors';
 import { SentryFilter } from './api/filters/sentry-exception.filter';
-import { Env } from './configuration';
+import { SentryService } from '@app/common';
 
 export class Server {
   public async run(port: number): Promise<INestApplication> {
     const app = await NestFactory.create<NestExpressApplication>(AppModule, {
-      logger: this.getLogLevelsUpTo(
-        (process.env.LOG_LEVEL ?? Env.DEFAULT_LOG_LEVEL) as LogLevel,
-      ),
+      logger: new SentryService(),
     });
 
     this.addGlobalPipes(app);
@@ -55,7 +51,6 @@ export class Server {
     app.useGlobalFilters(new DomainErrorFilter(httpAdapter));
 
     if (process.env.NODE_ENV !== 'test' && process.env.SENTRY_DSN) {
-      Sentry.init({ dsn: process.env.SENTRY_DSN });
       app.useGlobalFilters(new SentryFilter(httpAdapter));
     }
   }
@@ -97,15 +92,5 @@ export class Server {
     const document: OpenAPIObject = SwaggerModule.createDocument(app, options);
 
     SwaggerModule.setup('docs', app, document);
-  }
-
-  protected getLogLevelsUpTo(level: LogLevel): LogLevel[] {
-    const levels: LogLevel[] = ['verbose', 'debug', 'log', 'warn', 'error'];
-    const index = levels.indexOf(level);
-    if (index === -1) {
-      throw new Error(`Niveau de log inconnu : ${level}`);
-    }
-
-    return levels.slice(0, index + 1);
   }
 }
