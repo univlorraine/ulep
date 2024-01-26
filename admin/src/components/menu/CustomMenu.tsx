@@ -8,14 +8,15 @@ import QuizIcon from '@mui/icons-material/Quiz';
 import SchoolIcon from '@mui/icons-material/School';
 import SettingsIcon from '@mui/icons-material/Settings';
 import React from 'react';
-import { useTranslate, Menu, usePermissions } from 'react-admin';
-import { ADMIN_PERMISSION } from '../../providers/authProvider';
+import { useTranslate, Menu, usePermissions, useGetIdentity } from 'react-admin';
+import { SUPER_ADMIN_PERMISSION } from '../../providers/authProvider';
 
 const CustomMenu = () => {
     const translate = useTranslate();
+    const { data } = useGetIdentity();
+    
 
     const { permissions } = usePermissions();
-
     return (
         <Menu sx={{ display: 'flex' }}>
             <Menu.Item leftIcon={<PersonIcon />} primaryText={translate('profiles.label')} to="/profiles" />
@@ -29,7 +30,14 @@ const CustomMenu = () => {
                 primaryText={translate('administrators.label')}
                 to="/users/administrators"
             />
-            {permissions === ADMIN_PERMISSION && (
+            {(permissions !== SUPER_ADMIN_PERMISSION && data && data.universityId) && (
+                <Menu.Item
+                    leftIcon={<SchoolIcon />}
+                    primaryText={translate('universities.label')}
+                    to={`/universities/${data.universityId}/show`}
+                />
+            )}
+            {permissions === SUPER_ADMIN_PERMISSION && (
                 // Note: div is mandatory to group these Menu.Item as Fragment throw an error from MUI component
                 <div>
                     <Menu.Item
@@ -73,7 +81,7 @@ const CustomMenu = () => {
                 </div>
             )}
             <Menu.Item leftIcon={<FlagIcon />} primaryText={translate('reports.label')} to="/reports" />
-            {permissions === ADMIN_PERMISSION && (
+            {permissions === SUPER_ADMIN_PERMISSION && (
                 <div>
                     <Menu.Item
                         leftIcon={<FlagIcon />}
