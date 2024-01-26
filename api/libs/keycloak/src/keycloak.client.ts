@@ -26,6 +26,7 @@ import RoleRepresentation, {
   UpdateAdministratorProps,
   UpdateAdministratorPayload,
   OpenIdConfiguration,
+  CredentialRepresentation,
 } from './keycloak.models';
 import { Client, Issuer, TokenSet } from 'openid-client';
 
@@ -556,6 +557,26 @@ export class KeycloakClient {
     return users[0];
   }
 
+  async getUserCredentials(id: string): Promise<CredentialRepresentation[]> {
+    const url = `${this.configuration.baseUrl}/admin/realms/${this.configuration.realm}/users/${id}/credentials`;
+    const response = await fetch(url, {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${await this.getAccessToken()}`,
+      },
+    });
+
+    if (!response.ok || response.status !== 200) {
+      const message = await response.json();
+      throw new HttpException({ message: message }, response.status);
+    }
+
+    const credentials = await response.json();
+
+    return credentials;
+  }
+
   /*
    * Add user to group
    */
@@ -564,6 +585,19 @@ export class KeycloakClient {
       `${this.configuration.baseUrl}/admin/realms/${this.configuration.realm}/users/${userId}/groups/${this.configuration.adminGroupId}`,
       {
         method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${await this.getAccessToken()}`,
+        },
+      },
+    );
+  }
+
+  async removeUserFromAdministrators(userId: string): Promise<void> {
+    await fetch(
+      `${this.configuration.baseUrl}/admin/realms/${this.configuration.realm}/users/${userId}/groups/${this.configuration.adminGroupId}`,
+      {
+        method: 'DELETE',
         headers: {
           'Content-Type': 'application/json',
           Authorization: `Bearer ${await this.getAccessToken()}`,
