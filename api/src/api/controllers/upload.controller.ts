@@ -75,6 +75,7 @@ export class UploadsController {
   @Swagger.ApiOperation({ summary: 'MediaObject ressource' })
   @Swagger.ApiResponse({ type: MediaObjectResponse })
   async findOne(@Param('id') id: string): Promise<MediaObjectResponse> {
+    const now = new Date().getTime();
     const instance = await this.getMediaObjectUsecase.execute({ id });
 
     const url = await this.storage.temporaryUrl(
@@ -87,6 +88,7 @@ export class UploadsController {
       id: instance.id,
       mimeType: instance.mimetype,
       url,
+      expireAt: new Date(now + this.#expirationTime * 1000),
     });
   }
 }
