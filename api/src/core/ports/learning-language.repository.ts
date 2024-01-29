@@ -49,8 +49,6 @@ export interface LearningLanguageRepository {
 
   hasAnActiveTandem: (id: string) => Promise<boolean>;
 
-  countLanguagesByUniversity: (universityId: string) => Promise<number>;
-
   OfUniversities: (
     props: LearningLanguageRepositoryGetProps,
   ) => Promise<Collection<LearningLanguageWithTandem>>;

@@ -131,14 +131,6 @@ export class InMemoryLearningLanguageRepository
     return Promise.resolve(false);
   }
 
-  countLanguagesByUniversity(universityId: string): Promise<number> {
-    const count = Array.from(this.#learningLanguages.values()).filter(
-      (ll) => universityId === ll.profile.user.university.id,
-    ).length;
-
-    return Promise.resolve(count);
-  }
-
   getAvailableLearningLanguagesSpeakingOneOfLanguagesAndFromUniversities(
     allowedLanguageIds: string[],
     universityIds: string[],

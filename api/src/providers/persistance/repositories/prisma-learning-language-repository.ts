@@ -199,12 +199,6 @@ export class PrismaLearningLanguageRepository
     return !!res;
   }
 
-  countLanguagesByUniversity(universityId: string): Promise<number> {
-    return this.prisma.learningLanguages.count({
-      where: { Profile: { User: { Organization: { id: universityId } } } },
-    });
-  }
-
   async getAvailableLearningLanguagesSpeakingOneOfLanguagesAndFromUniversities(
     allowedLanguages: string[],
     universityIds: string[],
