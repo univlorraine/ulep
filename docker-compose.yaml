@@ -1,4 +1,4 @@
-version: "3.4"
+version: '3.4'
 
 services:
   api:
@@ -58,11 +58,12 @@ services:
       REACT_APP_KEYCLOAK_CLIENT_ID: ${REACT_APP_KEYCLOAK_CLIENT_ID:-react-admin}
       REACT_APP_KEYCLOAK_CLIENT_SECRET: ${REACT_APP_KEYCLOAK_CLIENT_SECRET:-uKBywX2HlxfvKgxZoKZrbiBSx49CST6W}
       REACT_APP_SENTRY_DSN: ${ADMIN_SENTRY_DSN:-}
+      WDS_SOCKET_PORT: 0
 
   auth:
     image: quay.io/keycloak/keycloak:21.1.2
     depends_on:
-        - database
+      - database
     volumes:
       - ./docker/keycloak/providers:/opt/keycloak/providers
       - ./docker/keycloak/realms:/opt/keycloak/data/import
