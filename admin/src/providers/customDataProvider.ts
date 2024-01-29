@@ -21,6 +21,17 @@ import ReportsQuery from '../queries/ReportsQuery';
 import { http } from './authProvider';
 import jwtManager from './jwtManager';
 
+const throwError = async (response: Response) => {
+    const result = await response.json();
+    if (result.message) {
+        throw new Error(result.message);
+    }
+
+    throw new Error(`API request failed with status ${response.status}`, {
+        cause: response.status,
+    });
+};
+
 const httpClientOptions = (options: any = {}) => {
     const newOptions = options;
     if (!newOptions.headers) {
@@ -66,7 +77,7 @@ const customDataProvider = {
         const response = await fetch(url, httpClientOptions({ method: 'POST', body }));
 
         if (!response.ok) {
-            throw new Error(`API request failed with status ${response.status}`);
+            await throwError(response);
         }
 
         const result = await response.json();
@@ -86,7 +97,7 @@ const customDataProvider = {
         const response = await fetch(url, httpClientOptions({ method: 'PUT', body }));
 
         if (!response.ok) {
-            throw new Error(`API request failed with status ${response.status}`);
+            await throwError(response);
         }
 
         const result = await response.json();
@@ -111,9 +122,7 @@ const customDataProvider = {
         const response = await fetch(url, httpClientOptions({ method: 'GET' }));
 
         if (!response.ok) {
-            throw new Error(`API request failed with status ${response.status}`, {
-                cause: response.status,
-            });
+            await throwError(response);
         }
 
         const data = await response.json();
@@ -130,7 +139,7 @@ const customDataProvider = {
         const response = await fetch(url, httpClientOptions({ method: 'DELETE' }));
 
         if (!response.ok) {
-            throw new Error(`API request failed with status ${response.status}`);
+            await throwError(response);
         }
 
         return { data: params.id };
@@ -142,7 +151,7 @@ const customDataProvider = {
 
                 const result = await fetch(url, httpClientOptions({ method: 'DELETE' }));
                 if (!result.ok) {
-                    throw new Error(`API request failed with status ${result.status}`);
+                    await throwError(result);
                 }
 
                 return id;
@@ -189,7 +198,7 @@ const customDataProvider = {
         const response = await fetch(url, httpClientOptions());
 
         if (!response.ok) {
-            throw new Error(`API request failed with status ${response.status}`);
+            await throwError(response);
         }
 
         const result = await response.json();
@@ -222,7 +231,7 @@ const customDataProvider = {
         const response = await fetch(url, httpClientOptions());
 
         if (!response.ok) {
-            throw new Error(`API request failed with status ${response.status}`);
+            await throwError(response);
         }
 
         const result = await response.json();
@@ -237,7 +246,7 @@ const customDataProvider = {
         );
 
         if (!response.ok) {
-            throw new Error(`API request failed with status ${response.status}`);
+            await throwError(response);
         }
 
         const result = await response.json();
@@ -253,7 +262,7 @@ const customDataProvider = {
         const response = await fetch(url, httpClientOptions({ method: 'POST', body }));
 
         if (!response.ok) {
-            throw new Error(`API request failed with status ${response.status}`);
+            await throwError(response);
         }
     },
     getLastGlobalRoutineExecution: async (): Promise<RoutineExecution> => {
@@ -262,7 +271,7 @@ const customDataProvider = {
         const response = await fetch(url, httpClientOptions());
 
         if (!response.ok) {
-            throw new Error(`API request failed with status ${response.status}`);
+            await throwError(response);
         }
 
         const result = await response.json();
@@ -277,7 +286,7 @@ const customDataProvider = {
         const response = await fetch(url, httpClientOptions({ method: 'POST', body }));
 
         if (!response.ok) {
-            throw new Error(`API request failed with status ${response.status}`);
+            await throwError(response);
         }
     },
     createTandem: async (learningLanguageIds: string[], relaunchGlobalRoutine?: boolean): Promise<void> => {
@@ -289,7 +298,7 @@ const customDataProvider = {
         const response = await fetch(url, httpClientOptions({ method: 'POST', body }));
 
         if (!response.ok) {
-            throw new Error(`API request failed with status ${response.status}`);
+            await throwError(response);
         }
     },
     refuseTandem: async (learningLanguageIds: string[], relaunchGlobalRoutine?: boolean): Promise<void> => {
@@ -301,7 +310,7 @@ const customDataProvider = {
         const response = await fetch(url, httpClientOptions({ method: 'POST', body }));
 
         if (!response.ok) {
-            throw new Error(`API request failed with status ${response.status}`);
+            await throwError(response);
         }
     },
     purge: async (): Promise<void> => {
@@ -309,7 +318,7 @@ const customDataProvider = {
         const response = await fetch(url, httpClientOptions({ method: 'POST' }));
 
         if (!response.ok) {
-            throw new Error(`API request failed with status ${response.status}`);
+            await throwError(response);
         }
     },
 } as unknown as DataProvider;

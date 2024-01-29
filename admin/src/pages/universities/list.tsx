@@ -1,21 +1,25 @@
 import CheckIcon from '@mui/icons-material/Check';
 import React from 'react';
-import { FunctionField, useTranslate, List, Datagrid, TextField } from 'react-admin';
+import { FunctionField, useTranslate, List, Datagrid, TextField, BulkDeleteButton } from 'react-admin';
 import University from '../../entities/University';
+
+const UniversityBulkActionsToolbar = () => <BulkDeleteButton mutationMode="pessimistic" />;
 
 const UniversityList = (props: any) => {
     const translate = useTranslate();
 
     return (
         <List exporter={false} pagination={false} title={translate('universities.label')} {...props}>
-            <Datagrid isRowSelectable={(record: University) => !!record.parent} rowClick="show">
+            <Datagrid
+                bulkActionButtons={<UniversityBulkActionsToolbar />}
+                isRowSelectable={(record: University) => !!record.parent}
+                rowClick="show"
+            >
                 <TextField label={translate('universities.name')} source="name" />
                 <FunctionField
                     label={translate('universities.parent')}
                     render={(record: any) =>
-                        record.parent ? (
-                            <div />
-                        ) : (
+                        !record.parent && (
                             <div>
                                 <CheckIcon />
                             </div>
