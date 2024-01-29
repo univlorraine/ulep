@@ -50,7 +50,9 @@ const LearningLanguageShow = () => {
                 <TextField label={translate('learning_languages.show.fields.level')} source="level" />
                 <FunctionField
                     label={translate('learning_languages.show.fields.status')}
-                    render={(data: LearningLanguage) => translate(`global.userStatus.${data.profile.user.status?.toLowerCase()}`)}
+                    render={(data: LearningLanguage) =>
+                        translate(`global.userStatus.${data.profile.user.status?.toLowerCase()}`)
+                    }
                 />
                 <FunctionField
                     label={translate('learning_languages.show.fields.role')}
