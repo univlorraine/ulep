@@ -5,6 +5,7 @@ import { ObjectiveIds } from './objective';
 import {
   AvailabilitesOptions,
   LearningType,
+  MeetingFrequency,
 } from '../../../../../src/core/models';
 
 const enumValue = <T>(_enum: unknown): T => {
@@ -142,12 +143,9 @@ export const insertUlData = async (prisma: Prisma.PrismaClient) => {
       LearningLanguages: {
         create: [learningLanguage],
       },
-      meeting_frequency: faker.helpers.arrayElement([
-        'ONCE_A_WEEK',
-        'TWICE_A_WEEK',
-        'ONCE_A_MONTH',
-        'TWICE_A_MONTH',
-      ]),
+      meeting_frequency: faker.helpers.arrayElement(
+        Object.entries(MeetingFrequency).map(([, v]) => v.toUpperCase()),
+      ),
       availabilities: JSON.stringify({
         monday: enumValue(AvailabilitesOptions),
         tuesday: enumValue(AvailabilitesOptions),
