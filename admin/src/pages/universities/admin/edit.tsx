@@ -3,7 +3,7 @@ import { useTranslate, useNotify, useRedirect, useUpdate, Edit, WithRecord, Load
 import UniversityForm from '../../../components/form/UniversityForm';
 import Country from '../../../entities/Country';
 import University from '../../../entities/University';
-import { useSecurityContext } from './useSecurityContext';
+import useSecurityContext from './useSecurityContext';
 
 const EditUniversity = () => {
     const translate = useTranslate();
@@ -67,7 +67,7 @@ const EditUniversity = () => {
     };
 
     return (
-        <Edit title={translate('universities.update.title')} redirect="show">
+        <Edit redirect="show" title={translate('universities.update.title')}>
             <WithRecord<University>
                 label="university"
                 render={(record) => (

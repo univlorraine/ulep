@@ -14,9 +14,8 @@ import { SUPER_ADMIN_PERMISSION } from '../../providers/authProvider';
 const CustomMenu = () => {
     const translate = useTranslate();
     const { data } = useGetIdentity();
-    
-
     const { permissions } = usePermissions();
+
     return (
         <Menu sx={{ display: 'flex' }}>
             <Menu.Item leftIcon={<PersonIcon />} primaryText={translate('profiles.label')} to="/profiles" />
@@ -30,7 +29,7 @@ const CustomMenu = () => {
                 primaryText={translate('administrators.label')}
                 to="/users/administrators"
             />
-            {(permissions !== SUPER_ADMIN_PERMISSION && data && data.universityId) && (
+            {permissions !== SUPER_ADMIN_PERMISSION && data && data.universityId && (
                 <Menu.Item
                     leftIcon={<SchoolIcon />}
                     primaryText={translate('universities.label')}

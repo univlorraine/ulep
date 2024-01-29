@@ -14,7 +14,7 @@ import {
     Loading,
 } from 'react-admin';
 import University from '../../../entities/University';
-import { useSecurityContext } from './useSecurityContext';
+import useSecurityContext from './useSecurityContext';
 
 const UniversityShowAction = () => (
     <TopToolbar>
@@ -27,7 +27,7 @@ const UniversityShow = (props: any) => {
     const { isLoading, isUniversityAdmin } = useSecurityContext();
 
     if (isLoading || isUniversityAdmin) return <Loading />;
-    
+
     return (
         <Show actions={<UniversityShowAction />} title={translate('universities.label')} {...props}>
             <SimpleShowLayout sx={{ m: 3 }}>

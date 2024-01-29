@@ -51,10 +51,10 @@ const App = () => {
                     />
                     {permissions === ADMIN_PERMISSION && (
                         <Resource
+                            edit={universities.admin.edit}
                             name="universities"
                             options={{ label: translate('universities.label') }}
                             recordRepresentation="name"
-                            edit={universities.admin.edit}
                             show={universities.admin.show}
                         />
                     )}
