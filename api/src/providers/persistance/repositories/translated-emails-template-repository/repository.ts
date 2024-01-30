@@ -12,7 +12,7 @@ import { EmailTemplateRepository } from 'src/core/ports/email-template.repositor
 import getMailFromTemplate from './mailTemplate';
 import { ConfigService } from '@nestjs/config';
 
-const LANGUAGES = ['en', 'fr', 'cn'];
+const LANGUAGES = ['en', 'fr'];
 
 const fallbackResources = {
   en: {
@@ -85,7 +85,7 @@ export default class TranslatedEmailTemplateRepository
     const fallbackBackend = (resourcesToBackend as any)(fallbackResources);
     i18n.use(ChainedBackend as any).init<ChainedBackend.ChainedBackendOptions>({
       fallbackLng: LANGUAGES,
-      debug: env.get('LOG_LEVEL') === 'debug',
+      debug: false,
       backend: {
         backends: [HttpBackend, fallbackBackend],
         backendOptions: [

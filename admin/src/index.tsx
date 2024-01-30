@@ -15,7 +15,11 @@ const { ...props } = element.dataset;
 
 const sentryDsn = process.env.REACT_APP_SENTRY_DSN;
 if (sentryDsn) {
-    Sentry.init({ dsn: sentryDsn });
+    Sentry.init({
+        dsn: sentryDsn,
+        integrations: [new Sentry.BrowserTracing(), new Sentry.Replay()],
+        environment: process.env.NODE_ENV,
+    });
 }
 
 const root = createRoot(element);
