@@ -450,6 +450,7 @@
                 "createdAt": "Date demande",
                 "learnedLanguage": "Langue demandé",
                 "level": "Niveau",
+                "status": "Statut",
                 "university": "Université",
                 "role": "Rôle",
                 "learningType": "Mode d'apprentissage",

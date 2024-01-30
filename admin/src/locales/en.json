@@ -330,6 +330,7 @@
                 "createdAt": "Date",
                 "learnedLanguage": "Requested language",
                 "level": "Level",
+                "status": "Status",
                 "university": "University",
                 "role": "Role",
                 "learningType": "Learning type",
