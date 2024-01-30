@@ -18,7 +18,7 @@ import reports from './pages/report';
 import reportCategories from './pages/report-categories';
 import suggestedLanguages from './pages/suggested-languages';
 import universities from './pages/universities';
-import authProvider, { ADMIN_PERMISSION } from './providers/authProvider';
+import authProvider, { ADMIN_PERMISSION, SUPER_ADMIN_PERMISSION } from './providers/authProvider';
 import customDataProvider from './providers/customDataProvider';
 import i18nProvider from './providers/i18nProvider';
 import theme from './theme/theme';
@@ -50,6 +50,15 @@ const App = () => {
                         {...administrators}
                     />
                     {permissions === ADMIN_PERMISSION && (
+                        <Resource
+                            edit={universities.admin.edit}
+                            name="universities"
+                            options={{ label: translate('universities.label') }}
+                            recordRepresentation="name"
+                            show={universities.admin.show}
+                        />
+                    )}
+                    {permissions === SUPER_ADMIN_PERMISSION && (
                         <>
                             <Resource name="instance" options={{ label: translate('instance.label') }} {...instance} />
                             <Resource

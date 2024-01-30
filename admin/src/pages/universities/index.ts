@@ -1,3 +1,5 @@
+import AdminEditUniversity from './admin/edit';
+import AdminUniversityShow from './admin/show';
 import CreateUniversity from './create';
 import EditUniversity from './edit';
 import UniversityList from './list';
@@ -8,4 +10,8 @@ export default {
     create: CreateUniversity,
     list: UniversityList,
     show: UniversityShow,
+    admin: {
+        edit: AdminEditUniversity,
+        show: AdminUniversityShow,
+    },
 };

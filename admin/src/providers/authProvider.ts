@@ -8,6 +8,7 @@ export interface Identity {
     isCentralUniversity: boolean;
 }
 
+export const SUPER_ADMIN_PERMISSION = 'super-admin';
 export const ADMIN_PERMISSION = 'admin';
 
 export const http = async (method: string, path: string, init: Omit<RequestInit, 'method'> = {}) => {
@@ -98,7 +99,7 @@ const authProvider = () => ({
             return Promise.reject();
         }
 
-        return Promise.resolve(decoded.universityId ? null : ADMIN_PERMISSION);
+        return Promise.resolve(decoded.universityId ? ADMIN_PERMISSION : SUPER_ADMIN_PERMISSION);
     },
     getIdentity: async (): Promise<Identity> => {
         const accessToken = jwtManager.getToken('access_token');
