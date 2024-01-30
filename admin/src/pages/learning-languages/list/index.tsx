@@ -13,6 +13,7 @@ import {
     useGetIdentity,
     useTranslate,
     TextInput,
+    BulkDeleteButton,
 } from 'react-admin';
 import { DisplayRole } from '../../../components/translated';
 import UniversitiesPicker from '../../../components/UniversitiesPicker';
@@ -22,6 +23,8 @@ import { isTandemActive } from '../../../entities/Tandem';
 import University from '../../../entities/University';
 import useLearningLanguagesStore from '../useLearningLanguagesStore';
 import Actions from './Actions';
+
+const LearningLanguageBulkActionsToolbar = () => <BulkDeleteButton mutationMode="pessimistic" />;
 
 const LearningLanguageList = () => {
     const translate = useTranslate();
@@ -85,7 +88,7 @@ const LearningLanguageList = () => {
                 }}
                 filters={filters}
             >
-                <Datagrid bulkActionButtons={false} rowClick="show">
+                <Datagrid bulkActionButtons={<LearningLanguageBulkActionsToolbar />} rowClick="show">
                     <FunctionField
                         label={translate('learning_languages.list.tableColumns.name')}
                         render={(record: LearningLanguage) => getProfileDisplayName(record.profile)}
