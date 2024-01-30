@@ -105,7 +105,7 @@ export class ProfileResponse {
     Object.assign(this, partial);
   }
 
-  static fromDomain(profile: Profile): ProfileResponse {
+  static fromDomain(profile: Profile, languageCode?: string): ProfileResponse {
     return new ProfileResponse({
       id: profile.id,
       user: UserResponse.fromDomain(profile.user),
@@ -121,10 +121,10 @@ export class ProfileResponse {
         LearningLanguageResponse.fromDomain(ll),
       ),
       objectives: profile.objectives.map((objective) =>
-        ObjectiveResponse.fromDomain(objective),
+        ObjectiveResponse.fromDomain(objective, languageCode),
       ),
       interests: profile.interests.map((interest) =>
-        InterestResponse.fromDomain(interest),
+        InterestResponse.fromDomain(interest, languageCode),
       ),
       meetingFrequency: profile.meetingFrequency,
       availabilities: AvailabilitesDto.fromDomain(profile.availabilities),
