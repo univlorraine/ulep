@@ -35,55 +35,40 @@ export class SentryService extends ConsoleLogger {
     if (!this.shouldLog('log')) {
       return;
     }
-
-    try {
-      super.log(message, context);
-      Sentry.captureMessage(message, 'log');
-    } catch (err) {}
+    super.log(message, context);
+    Sentry.captureMessage(message, 'log');
   }
 
   error(message: string, trace?: string, context?: string) {
     if (!this.shouldLog('error')) {
       return;
     }
-
-    try {
-      super.error(message, trace, context);
-      Sentry.captureMessage(message, 'error');
-    } catch (err) {}
+    super.error(message, trace, context);
+    Sentry.captureMessage(message, 'error');
   }
 
   warn(message: string, context?: string) {
     if (!this.shouldLog('warn')) {
       return;
     }
-
-    try {
-      super.warn(message, context);
-      Sentry.captureMessage(message, 'warning');
-    } catch (err) {}
+    super.warn(message, context);
+    Sentry.captureMessage(message, 'warning');
   }
 
   debug(message: string, context?: string) {
     if (!this.shouldLog('debug')) {
       return;
     }
-
-    try {
-      super.debug(message, context);
-      Sentry.captureMessage(message, 'debug');
-    } catch (err) {}
+    super.debug(message, context);
+    Sentry.captureMessage(message, 'debug');
   }
 
   verbose(message: string, context?: string) {
     if (!this.shouldLog('verbose')) {
       return;
     }
-
-    try {
-      super.verbose(message, context);
-      Sentry.captureMessage(message, 'info');
-    } catch (err) {}
+    super.verbose(message, context);
+    Sentry.captureMessage(message, 'info');
   }
 
   private shouldLog(level: LogLevel): boolean {
