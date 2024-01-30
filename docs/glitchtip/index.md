@@ -126,4 +126,27 @@ Selecting `Create New Alert` opens the alert configuration. By default, alerts a
 > [!TIP]
 > Alerts can also be configured to be sent to Slack, Discord, etc., by adding more recipients.
 
+## Uptime Monitoring
+
+Glitchtip provides a monitoring tool for uptime periodically sends or awaits requests to ensure your application is operational and accessible.
+
+Setting up GlitchTip to track your site's status is straightforward—simply complete the "Create a New Uptime Monitor" form.
+
+![Glitchtip uptime](glitchtip_uptime.png)
+
+**Monitor type**
+`Ping`: Sends a lightweight HTTP HEAD request to check site uptime.
+`POST`: Sends a POST request; marks site as down if the response fails.
+`GET`: Sends a GET request; marks site as down if the response fails.
+`Heartbeat`: Waits for site's requests; marks as down if none received.
+
+**Associated project**
+This optional field helps ensure email alerts for app status changes. Choose a project with email notifications.
+
+**Expected status**
+For POST and GET monitors: GlitchTip checks if the app's response matches the expected status. If not, it marks the app as down.
+
+**Interval**
+The rate at which GlitchTip sends or expects requests from your app.
+
 Happy monitoring!
