@@ -1,27 +1,24 @@
 import { Box, Typography, Input } from '@mui/material';
 import React, { useState } from 'react';
 import { Button, Loading, useGetIdentity, useTranslate } from 'react-admin';
+import { AdministratorFormPayload } from '../../entities/Administrator';
 import University from '../../entities/University';
 import inputStyle from '../../theme/inputStyle';
 import isPasswordValid from '../../utils/isPasswordValid';
 import UniversityPicker from '../UniversityPicker';
 
 interface AdministratorFormProps {
+    id?: string;
     email?: string;
     firstname?: string;
-    handleSubmit: (
-        email: string,
-        firstname: string,
-        lastname: string,
-        password?: string,
-        universityId?: string
-    ) => void;
+    handleSubmit: (payload: AdministratorFormPayload) => void;
     lastname?: string;
     universityId?: string;
     type: string;
 }
 
 const AdministratorForm: React.FC<AdministratorFormProps> = ({
+    id,
     email,
     firstname,
     handleSubmit,
@@ -42,16 +39,22 @@ const AdministratorForm: React.FC<AdministratorFormProps> = ({
     }
     const onCreatePressed = () => {
         if (!identity.isCentralUniversity) {
-            return handleSubmit(newEmail, password, identity.universityId);
+            return handleSubmit({
+                id,
+                email: newEmail,
+                password,
+                universityId: identity.universityId,
+            });
         }
 
-        return handleSubmit(
-            newEmail,
-            newFirstname,
-            newLastname,
+        return handleSubmit({
+            id,
+            email: newEmail,
+            firstname: newFirstname,
+            lastname: newLastname,
             password,
-            university?.parent ? university?.id : undefined
-        );
+            universityId: university?.parent ? university?.id : undefined,
+        });
     };
 
     return (
