@@ -18,7 +18,7 @@
         "dayjs": "^1.11.9",
         "jwt-decode": "^3.1.2",
         "lint": "^0.8.19",
-        "lodash": "^4.17.21",
+        "lodash": "~4.17.5",
         "mui-color-input": "^2.0.0",
         "qs": "^6.11.2",
         "ra-data-simple-rest": "^4.16.8",
@@ -74,6 +74,7 @@
         ]
     },
     "peerDependencies": {
+        "lodash": "~4.17.5",
         "react-query": "^3.39.3"
     }
 }
