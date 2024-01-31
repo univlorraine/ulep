@@ -1,7 +1,7 @@
 import { useIonToast } from '@ionic/react';
 import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { Redirect, useHistory, useParams } from 'react-router';
+import { Redirect, useHistory } from 'react-router';
 import { PlusPng } from '../../assets';
 import { useConfig } from '../../context/ConfigurationContext';
 import Language from '../../domain/entities/Language';
@@ -49,7 +49,7 @@ const PairingLanguagesPage: React.FC = () => {
 
     const navigateToHome = () => {
         return (window.location.href = '/home');
-    }
+    };
 
     const otherLanguage = () => {
         return history.push(`/pairing/other-languages`);
@@ -71,21 +71,20 @@ const PairingLanguagesPage: React.FC = () => {
                     <h1 className="title">{t('pairing_languages_page.title')}</h1>
                     {!!languages.length && <p className="subtitle">{t('pairing_languages_page.subtitle')}</p>}
 
-                    {!languages.length && (
-                        <p className="subtitle">{t('pairing_languages_page.no_languages')}</p>
-                    )}
+                    {!languages.length && <p className="subtitle">{t('pairing_languages_page.no_languages')}</p>}
 
                     <div className={pairingLanguagesStyles['languages-container']}>
-                        {!!languages.length && languages.map((language) => {
-                            return (
-                                <FlagBubble
-                                    key={language.code}
-                                    isSelected={selectedLaguage?.code === language.code}
-                                    language={language}
-                                    onPressed={setSelectedLanguage}
-                                />
-                            );
-                        })}
+                        {!!languages.length &&
+                            languages.map((language) => {
+                                return (
+                                    <FlagBubble
+                                        key={language.code}
+                                        isSelected={selectedLaguage?.code === language.code}
+                                        language={language}
+                                        onPressed={setSelectedLanguage}
+                                    />
+                                );
+                            })}
                         {university.isCentral && (
                             <button style={{ background: 'none' }} onClick={otherLanguage}>
                                 <img alt="plus" className={pairingLanguagesStyles.image} src={PlusPng} />
@@ -94,20 +93,21 @@ const PairingLanguagesPage: React.FC = () => {
                     </div>
                 </div>
                 <div className={`extra-large-margin-bottom`}>
-                    {!!languages.length && <button
-                        className={`primary-button ${!selectedLaguage ? 'disabled' : ''}`}
-                        disabled={!selectedLaguage}
-                        onClick={continueSignUp}
-                    >
-                        {t('pairing_languages_page.validate_button')}
-                    </button>}
+                    {!!languages.length && (
+                        <button
+                            className={`primary-button ${!selectedLaguage ? 'disabled' : ''}`}
+                            disabled={!selectedLaguage}
+                            onClick={continueSignUp}
+                        >
+                            {t('pairing_languages_page.validate_button')}
+                        </button>
+                    )}
 
-                    {!languages.length && <button
-                        className={`primary-button`}
-                        onClick={navigateToHome}
-                    >
-                        {t('pairing_languages_page.home_button')}
-                    </button>}
+                    {!languages.length && (
+                        <button className={`primary-button`} onClick={navigateToHome}>
+                            {t('pairing_languages_page.home_button')}
+                        </button>
+                    )}
                 </div>
             </div>
         </WebLayoutCentered>

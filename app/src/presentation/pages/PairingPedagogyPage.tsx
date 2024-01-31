@@ -69,7 +69,11 @@ const PairingPedagogyPage: React.FC = () => {
             return history.push(`/pairing/language/confirm`);
         }
 
-        if (pedagogy === LearningType.ETANDEM && profileSignUp.isSuggested && profileSignUp.learningLanguage?.code !== '*') {
+        if (
+            pedagogy === LearningType.ETANDEM &&
+            profileSignUp.isSuggested &&
+            profileSignUp.learningLanguage?.code !== '*'
+        ) {
             return history.push('/pairing/other-languages/selected');
         }
         updateProfileSignUp({ pedagogy, campus: undefined });
@@ -80,9 +84,6 @@ const PairingPedagogyPage: React.FC = () => {
         updateProfileSignUp({ pedagogy: pedagogySelected, campus });
         return history.push(`/pairing/language/confirm`);
     };
-
-    console.log('isSuggested', profileSignUp.isSuggested);
-    console.log('university', JSON.stringify(university, null, 2));
 
     return (
         <WebLayoutCentered
@@ -101,7 +102,11 @@ const PairingPedagogyPage: React.FC = () => {
                             return;
                         }
 
-                        if (university && university.sites.length === 0 && pedagogyData.value !== LearningType.ETANDEM) {
+                        if (
+                            university &&
+                            university.sites.length === 0 &&
+                            pedagogyData.value !== LearningType.ETANDEM
+                        ) {
                             return;
                         }
 
