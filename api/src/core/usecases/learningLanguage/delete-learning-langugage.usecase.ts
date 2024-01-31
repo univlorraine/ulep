@@ -5,6 +5,10 @@ import {
   LEARNING_LANGUAGE_REPOSITORY,
   LearningLanguageRepository,
 } from 'src/core/ports/learning-language.repository';
+import {
+  TANDEM_REPOSITORY,
+  TandemRepository,
+} from 'src/core/ports/tandems.repository';
 
 export class DeleteLearningLanguageCommand {
   id: string;
@@ -15,6 +19,8 @@ export class DeleteLearningLanguageUsecase {
   constructor(
     @Inject(LEARNING_LANGUAGE_REPOSITORY)
     private readonly learningLanguageRepository: LearningLanguageRepository,
+    @Inject(TANDEM_REPOSITORY)
+    private readonly tandemRepository: TandemRepository,
   ) {}
 
   async execute(command: DeleteLearningLanguageCommand) {
@@ -27,6 +33,10 @@ export class DeleteLearningLanguageUsecase {
     }
 
     await this.assertLearningLanguageIsNotInActiveTandem(learningLangugage.id);
+
+    await this.tandemRepository.deleteTandemLinkedToLearningLanguages([
+      learningLangugage.id,
+    ]);
 
     return this.learningLanguageRepository.delete(learningLangugage.id);
   }
