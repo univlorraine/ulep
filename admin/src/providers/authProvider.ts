@@ -24,9 +24,61 @@ export const http = async (method: string, path: string, init: Omit<RequestInit,
     return response;
 };
 
+const checkAuth = {
+    withSSO: async (code: string) => {
+        const redirectUri = encodeURI(`${window.location.origin}`);
+        console.log({ redirectUri });
+        const response = await http('POST', `${process.env.REACT_APP_API_URL}/authentication/flow/code`, {
+            headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+            body: new URLSearchParams({
+                code,
+                redirectUri,
+            }),
+        });
+
+        const payload = await response.json();
+
+        const decoded: any = jwtManager.decodeToken(payload.accessToken);
+        if (decoded) {
+            const isAdmin = decoded.realm_access?.roles.includes('admin');
+            if (isAdmin) {
+                jwtManager.setTokens(payload.accessToken, payload.refreshToken);
+
+                window.location.href = redirectUri;
+
+                return Promise.resolve();
+            }
+        }
+
+        return Promise.reject();
+    },
+    withAccessToken: async () => {
+        if (jwtManager.getToken('access_token')) {
+            return Promise.resolve();
+        }
+        const refreshToken = jwtManager.getToken('refresh_token');
+        if (!refreshToken) {
+            jwtManager.ereaseTokens();
+
+            return Promise.reject();
+        }
+
+        const response = await http('POST', `${process.env.REACT_APP_API_URL}/authentication/refresh-token`, {
+            headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+            body: new URLSearchParams({
+                token: refreshToken,
+            }),
+        });
+
+        const payload = await response.json();
+        jwtManager.setTokens(payload.accessToken, payload.refreshToken);
+
+        return Promise.resolve();
+    },
+};
+
 const authProvider = () => ({
     login: async ({ email, password }: { email: string; password: string }) => {
-        // TODO(auth): API auth endpoint should be adapted to manage authentication using different clients
         const response = await http('POST', `${process.env.REACT_APP_API_URL}/authentication/token`, {
             headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
             body: new URLSearchParams({
@@ -56,27 +108,14 @@ const authProvider = () => ({
         return Promise.resolve();
     },
     checkAuth: async () => {
-        if (jwtManager.getToken('access_token')) {
-            return Promise.resolve();
-        }
-        const refreshToken = jwtManager.getToken('refresh_token');
-        if (!refreshToken) {
-            jwtManager.ereaseTokens();
+        const params = new URLSearchParams(window.location.search);
+        const code = params.get('code');
 
-            return Promise.reject();
+        if (code) {
+            return checkAuth.withSSO(code);
         }
 
-        const response = await http('POST', `${process.env.REACT_APP_API_URL}/authentication/refresh-token`, {
-            headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-            body: new URLSearchParams({
-                token: refreshToken,
-            }),
-        });
-
-        const payload = await response.json();
-        jwtManager.setTokens(payload.accessToken, payload.refreshToken);
-
-        return Promise.resolve();
+        return checkAuth.withAccessToken();
     },
     checkError: async (error: any) => {
         const { status } = error;

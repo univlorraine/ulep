@@ -1,3 +1,4 @@
+import KeyIcon from '@mui/icons-material/Key';
 import LockIcon from '@mui/icons-material/Lock';
 import { Avatar, Button, Card, CardActions, CircularProgress } from '@mui/material';
 import Box from '@mui/material/Box';
@@ -18,6 +19,11 @@ const LoginPage = () => {
             notify(translate('login.loginError'));
             setLoading(false);
         });
+    };
+
+    const ssoLogin = () => {
+        const redirectUri = encodeURI(`${window.location.origin}`);
+        window.location.href = `${process.env.REACT_APP_API_URL}/authentication/flow?redirectUri=${redirectUri}`;
     };
 
     return (
@@ -74,6 +80,33 @@ const LoginPage = () => {
                         <Button color="primary" disabled={loading} type="submit" variant="contained" fullWidth>
                             {loading && <CircularProgress size={25} thickness={2} />}
                             {translate('ra.auth.sign_in')}
+                        </Button>
+                    </CardActions>
+                </Card>
+                <Card sx={{ minWidth: 300, marginTop: '2em' }}>
+                    <Box
+                        sx={{
+                            alignItems: 'center',
+                            margin: '1em',
+                            display: 'flex',
+                            justifyContent: 'center',
+                            flexDirection: 'column',
+                        }}
+                    >
+                        <Avatar sx={{ bgcolor: 'secondary.main' }}>
+                            <KeyIcon />
+                        </Avatar>
+                    </Box>
+                    <CardActions sx={{ padding: '0 1em 1em 1em' }}>
+                        <Button
+                            color="primary"
+                            disabled={loading}
+                            onClick={ssoLogin}
+                            type="button"
+                            variant="contained"
+                            fullWidth
+                        >
+                            {translate('global.sso_login')}
                         </Button>
                     </CardActions>
                 </Card>
