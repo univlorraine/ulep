@@ -42,30 +42,33 @@ export class ResetPasswordUsecase {
 
     const credentials = await this.keycloakClient.getUserCredentials(user.id);
 
-    const hasCredentials = credentials.some(
+    const hasPasswordCredentials = credentials.some(
       (credential) => credential.type === 'password',
     );
 
-    if (hasCredentials) {
+    const profile = await this.profileRepository.ofUser(user.id);
+    const language = profile
+      ? profile.nativeLanguage.code
+      : this.env.get('DEFAULT_TRANSLATION_LANGUAGE');
+
+    if (hasPasswordCredentials) {
       await this.keycloakClient.executeActionEmail(
         ['UPDATE_PASSWORD'],
         user.id,
+        language,
         command.loginUrl,
       );
     } else {
-      this.sendSSOResetPasswordEmail(user, command.loginUrl);
+      this.sendSSOResetPasswordEmail(user, language, command.loginUrl);
     }
   }
 
   private async sendSSOResetPasswordEmail(
     user: UserRepresentation,
+    language: string,
     loginUrl: string,
   ): Promise<void> {
     try {
-      const profile = await this.profileRepository.ofUser(user.id);
-      const language = profile
-        ? profile.nativeLanguage.code
-        : this.env.get('DEFAULT_TRANSLATION_LANGUAGE');
       const email = await this.emailTemplateRepository.getEmail(
         EMAIL_TEMPLATE_IDS.RESET_PASSWORD_SSO,
         language,
