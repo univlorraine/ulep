@@ -1,3 +1,4 @@
+// eslint-disable-next-line import/no-extraneous-dependencies
 import get from 'lodash/get';
 import React from 'react';
 import { ImageField, useRecordContext, useGetOne, FieldProps } from 'react-admin';
@@ -7,8 +8,7 @@ const ReferenceUploadField = <RecordType extends Record<string, any> = Record<st
 ) => {
     const { label, source } = props;
     const record = useRecordContext();
-    // @ts-ignore
-    const sourceValue = get(record, source);
+    const sourceValue = get(record, source as string);
 
     if (!sourceValue) {
         return null;

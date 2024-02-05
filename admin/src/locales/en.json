@@ -1,23 +1,69 @@
 {
+    "administrators": {
+        "all": "All",
+        "create": {
+            "email": "Please enter the email of the new administrator",
+            "error": "An error occurred while creating an administrator",
+            "password": "Please enter a password for the administrator (1 uppercase, 1 lowercase and 1 number)",
+            "title": "Creating an administrator",
+            "university": "Please select a university for the administrator"
+        },
+        "label": "Administrators",
+        "university": "Manager",
+
+        "update": {
+            "email": "Update user email",
+            "error": "An error occurred while updating an administrator",
+            "password": "Please enter an administrator password (1 uppercase, 1 lowercase and 1 number) if you want to update it",
+            "title": "Updating an administrator",
+            "university": "Update the university to administer"
+        }
+    },
+    "campus": {
+        "create": {
+            "title": "Create a campus"
+        },
+        "label": "Campus",
+        "name": "Centrale univertity name",
+        "update": {
+            "error": "An error occurred while updating the instance",
+            "name": "Campus name",
+            "title": "Update campus"
+        }
+    },
     "count_suggested_languages": {
         "label": "Total languages requested",
         "total": "Total"
     },
     "countries": {
-        "label": "Countries"
+        "code": "Country code",
+        "label": "Countries",
+        "name": "Country"
+    },
+    "days": {
+        "monday": "Monday",
+        "tuesday": "Tuesday",
+        "wednesday": "Wednesday",
+        "thursday": "Thursday",
+        "friday": "Friday",
+        "saturday": "Saturday",
+        "sunday": "Sunday"
     },
     "global": {
         "active": "Active",
+        "age": "Age",
         "blocked": "Blocked",
-        "content": "Content",
         "canceled": "Canceled",
+        "content": "Content",
         "disconnect": "Disconnect",
         "email": "Email",
         "firstname": "Firstname",
+        "gender": "Gender",
         "image": "Image",
         "language": "Language",
         "lastname": "Lastname",
         "new_translation": "New translation",
+        "password": "Password",
         "reported": "Reported",
         "role": "Role",
         "save": "Save",
@@ -108,7 +154,22 @@
         }
     },
     "languages": {
+        "code": "Language code",
         "label": "Languages",
+        "name": "Language name",
+        "secondary_status": {
+            "active": "Active language",
+            "title": "Availability for a partner university",
+            "unactive": "Unactive language"
+        },
+        "status": {
+            "error": "An error occurred while updating status",
+            "primary": "Enabled learning language",
+            "secondary": "Enabled suggested language",
+            "success": "The status has been updated successfully",
+            "title": "Status",
+            "unactive": "Disabled for learning"
+        },
         "isDiscovery": {
             "title": "Discovery language",
             "yes": "Yes",
@@ -138,15 +199,52 @@
         }
     },
     "profiles": {
+        "availabilities": "Availabilities",
+        "availabilities_note": "Availabilities note",
+        "biography": {
+            "anecdote": "Anecdote",
+            "experience": "Experience",
+            "favorite_place": "Favorite place",
+            "superpower": "Super power",
+            "title": "Biographies"
+        },
+        "availabilities_occurence": {
+            "VERY_AVAILABLE": "Very available",
+            "AVAILABLE": "Available",
+            "UNAVAILABLE": "Unavailable"
+        },
         "edit_status_error": "Status could not be updated",
         "edit_status_success": "The status has been updated",
+        "frequency": "Frequency of meetings",
+        "frequencies": {
+            "ONCE_A_WEEK": "Once a week",
+            "TWICE_A_WEEK": "Twice a week",
+            "THREE_TIMES_A_WEEK": "Three times a week",
+            "TWICE_A_MONTH": "Twice a month",
+            "THREE_TIMES_A_MONTH": "Three times a month"
+        },
         "certificate": "Certificate",
+        "diploma": "Diploma",
+        "division": "Division",
         "country": "Country",
+        "interests": "Interests",
         "label": "Users",
+        "language_title": "Languages",
+        "learning_language": {
+            "name": "Learning language name",
+            "level": "Level of learning language"
+        },
         "mastered_languages": "Mastered languages",
         "native_language": "Native language",
+        "objectives": "Objectives",
+        "summary": "Summary",
         "searchLastname": "Lastname",
+        "staffFunction": "Function",
         "status": "Status"
+    },
+    "purge": {
+        "error": "An error occurred while the purge",
+        "title": "Purge"
     },
     "questions": {
         "create": {
@@ -157,6 +255,10 @@
         "label": "Questions",
         "level": "Level",
         "question": "Question",
+        "show": {
+            "level": "Question level",
+            "name": "Question title"
+        },
         "update": {
             "error": "An error occurred while updating the question",
             "title": "Update a question"
@@ -321,7 +423,8 @@
                 "hasActiveTandem": "In tandem",
                 "actionPossible": "Pending tandem",
                 "specificProgram": "Specific program",
-                "role": "Role"
+                "role": "Role",
+                "reported": "Reported"
             },
             "noUniversitySelected": "Please select one or more universities for pairing"
         },
