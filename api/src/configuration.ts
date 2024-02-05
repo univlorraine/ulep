@@ -187,7 +187,7 @@ export const getTranslationsEndpoint = (
 const test: Env = {
   ADMIN_URL: 'http://localhost:3000',
   APP_URL: 'http://localhost:4200',
-  LOG_LEVEL: 'debug',
+  LOG_LEVEL: 'error',
   DEFAULT_TRANSLATION_LANGUAGE: 'fr',
   DATABASE_URL: 'postgresql://postgres:postgres@localhost:5432/test',
   KEYCLOAK_BASE_URL: 'http://localhost:8080/auth',

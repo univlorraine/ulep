@@ -1,3 +1,12 @@
+import EmojiEventsIcon from '@mui/icons-material/EmojiEvents';
+import FlagIcon from '@mui/icons-material/Flag';
+import InterestsIcon from '@mui/icons-material/Interests';
+import LanguageIcon from '@mui/icons-material/Language';
+import PersonIcon from '@mui/icons-material/Person';
+import PublicIcon from '@mui/icons-material/Public';
+import QuizIcon from '@mui/icons-material/Quiz';
+import SchoolIcon from '@mui/icons-material/School';
+import SettingsIcon from '@mui/icons-material/Settings';
 import React from 'react';
 import { Admin, Resource, useTranslate } from 'react-admin';
 import CustomLayout from './components/layout/layout';
@@ -37,14 +46,26 @@ const App = () => {
         >
             {(permissions) => (
                 <>
-                    <Resource name="profiles" options={{ label: translate('profiles.label') }} {...profiles} />
                     <Resource
+                        icon={PersonIcon}
+                        name="profiles"
+                        options={{ label: translate('profiles.label') }}
+                        {...profiles}
+                    />
+                    <Resource
+                        icon={PersonIcon}
                         name="learning-languages"
                         options={{ label: translate('learning_languages.label') }}
                         {...learningLanguages}
                     />
-                    <Resource name="reports" options={{ label: translate('reports.label') }} {...reports} />
                     <Resource
+                        icon={FlagIcon}
+                        name="reports"
+                        options={{ label: translate('reports.label') }}
+                        {...reports}
+                    />
+                    <Resource
+                        icon={PersonIcon}
                         name="users/administrators"
                         options={{ label: translate('administrators.label') }}
                         {...administrators}
@@ -60,55 +81,75 @@ const App = () => {
                     )}
                     {permissions === SUPER_ADMIN_PERMISSION && (
                         <>
-                            <Resource name="instance" options={{ label: translate('instance.label') }} {...instance} />
                             <Resource
+                                icon={SettingsIcon}
+                                name="instance"
+                                options={{ label: translate('instance.label') }}
+                                {...instance}
+                            />
+                            <Resource
+                                icon={PublicIcon}
                                 name="countries"
                                 options={{ label: translate('countries.label') }}
                                 {...countries}
                             />
                             <Resource
+                                icon={LanguageIcon}
                                 name="languages"
                                 options={{ label: translate('languages.label') }}
                                 {...languages}
                             />
                             <Resource
+                                icon={LanguageIcon}
                                 name="languages/requests"
                                 options={{ label: translate('suggested_languages.label') }}
                                 {...suggestedLanguages}
                             />
                             <Resource
+                                icon={LanguageIcon}
                                 name="languages/requests/count"
                                 options={{ label: translate('count_suggested_languages.label') }}
                                 {...countSuggestedLanguages}
                             />
                             <Resource
+                                icon={InterestsIcon}
                                 name="interests"
                                 options={{ label: translate('interests.label') }}
                                 {...interests}
                             />
                             <Resource
+                                icon={InterestsIcon}
                                 name="interests/categories"
                                 options={{ label: translate('interest_categories.label') }}
                                 {...categoryInterest}
                             />
                             <Resource
+                                icon={EmojiEventsIcon}
                                 name="objectives"
                                 options={{ label: translate('objectives.label') }}
                                 {...objectives}
                             />
-                            <Resource name="campus" options={{ label: translate('campus.label') }} {...campus} />
                             <Resource
+                                icon={SchoolIcon}
+                                name="campus"
+                                options={{ label: translate('campus.label') }}
+                                {...campus}
+                            />
+                            <Resource
+                                icon={QuizIcon}
                                 name="proficiency/questions"
                                 options={{ label: translate('questions.label') }}
                                 {...questions}
                             />
                             <Resource
+                                icon={SchoolIcon}
                                 name="universities"
                                 options={{ label: translate('universities.label') }}
                                 recordRepresentation="name"
                                 {...universities}
                             />
                             <Resource
+                                icon={FlagIcon}
                                 name="reports/categories"
                                 options={{ label: translate('report_categories.label') }}
                                 {...reportCategories}

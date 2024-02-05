@@ -75,6 +75,10 @@ export class PrismaLearningLanguageRepository
     });
   }
 
+  async delete(id: string): Promise<void> {
+    await this.prisma.learningLanguages.delete({ where: { id } });
+  }
+
   async getAvailableLearningLanguagesSpeakingLanguageFromUniversities(
     languageId: string,
     universityIds: string[],
