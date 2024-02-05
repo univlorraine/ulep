@@ -18,6 +18,7 @@ import {
 } from '../dtos';
 import { ConfigService } from '@nestjs/config';
 import { Env } from 'src/configuration';
+import { ResetPasswordUsecase } from 'src/core/usecases/security/reset-password.usecase';
 
 @Controller('authentication')
 @Swagger.ApiTags('Authentication')
@@ -28,6 +29,7 @@ export class SecurityController {
 
   constructor(
     private readonly keycloakClient: KeycloakClient,
+    private readonly resetPasswordUsecase: ResetPasswordUsecase,
     env: ConfigService<Env, true>,
   ) {
     this.#appUrl = env.get('APP_URL');
@@ -90,18 +92,9 @@ export class SecurityController {
   @Post('reset-password')
   @Swagger.ApiOperation({ summary: 'Send email to reset user password' })
   async resetPassword(@Body() body: ResetPasswordRequest): Promise<void> {
-    const user = await this.keycloakClient.getUserByEmail(body.email);
-
-    if (!user) {
-      return;
-    }
-
-    await this.keycloakClient.executeActionEmail(
-      ['UPDATE_PASSWORD'],
-      user.id,
-      `${this.#appUrl}/login`,
-    );
-
-    return;
+    return await this.resetPasswordUsecase.execute({
+      email: body.email,
+      loginUrl: `${this.#appUrl}/login`,
+    });
   }
 }

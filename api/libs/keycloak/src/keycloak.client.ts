@@ -177,6 +177,7 @@ export class KeycloakClient {
   async executeActionEmail(
     actions: KeycloakEmailAction[],
     user: string,
+    language: string,
     redirectUri?: string,
   ): Promise<void> {
     let url = `${this.configuration.baseUrl}/admin/realms/${this.configuration.realm}/users/${user}/execute-actions-email`;
@@ -194,6 +195,7 @@ export class KeycloakClient {
       method: 'PUT',
       headers: {
         'Content-Type': 'application/json',
+        'Accept-Language': language,
         Authorization: `Bearer ${await this.getAccessToken()}`,
       },
       body: JSON.stringify(actions),
