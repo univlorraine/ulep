@@ -23,6 +23,9 @@ import { EMAIL_GATEWAY } from 'src/core/ports/email.gateway';
 import InMemoryEmailGateway from 'src/providers/gateway/in-memory-email.gateway';
 import { EMAIL_TEMPLATE_REPOSITORY } from 'src/core/ports/email-template.repository';
 import { InMemoryEmailTemplateRepository } from 'src/providers/persistance/repositories/in-memory-email-template-repository';
+import { LEARNING_LANGUAGE_REPOSITORY } from 'src/core/ports/learning-language.repository';
+import { InMemoryLearningLanguageRepository } from 'src/providers/persistance/repositories/in-memory-learning-language-repository';
+import { KeycloakClient } from '@app/keycloak';
 
 describe('Universities', () => {
   let app: TestServer;
@@ -31,6 +34,7 @@ describe('Universities', () => {
   const countryRepository = new InMemoryCountryCodesRepository();
   const { user, keycloakUser } = new KeycloakUserFactory().makeOne();
   const authenticator = new InMemoryAuthenticator(keycloakUser);
+  const learningLanguageRepository = new InMemoryLearningLanguageRepository();
   const countryFactory = new CountryFactory();
   const country = countryFactory.makeOne();
 
@@ -49,6 +53,20 @@ describe('Universities', () => {
     userRepositoy.init([user]);
     countryRepository.init([country]);
 
+    const keycloak = new KeycloakClient({
+      realm: 'test',
+      username: 'test',
+      password: 'password',
+      clientId: 'test',
+      clientSecret: 'secret',
+      baseUrl: 'http://localhost:8080/auth',
+      adminGroupId: 'admin',
+    });
+
+    jest
+      .spyOn(keycloak, 'getAdministrators')
+      .mockImplementation(() => Promise.resolve([]));
+
     const module = await Test.createTestingModule({
       imports: [AppModule],
     })
@@ -66,6 +84,10 @@ describe('Universities', () => {
       .useValue(TestAuthGuard)
       .overrideProvider(AUTHENTICATOR)
       .useValue(authenticator)
+      .overrideProvider(LEARNING_LANGUAGE_REPOSITORY)
+      .useValue(learningLanguageRepository)
+      .overrideProvider(KeycloakClient)
+      .useValue(keycloak)
       .compile();
 
     app = TestServer.create(module.createNestApplication());
@@ -206,12 +228,13 @@ describe('Universities', () => {
   });
 
   it('should delete university', async () => {
-    countryRepository.init([country]);
-
     const central = universityFactory.makeOne();
     const partner = universityFactory.makeOne({
       parent: central.id,
     });
+
+    countryRepository.init([country]);
+    learningLanguageRepository.init([]);
     repository.init([central, partner]);
 
     await request(app.getHttpServer())
