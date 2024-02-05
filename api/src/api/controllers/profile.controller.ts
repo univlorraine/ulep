@@ -11,6 +11,7 @@ import {
   Post,
   Query,
   SerializeOptions,
+  Headers,
   UseGuards,
 } from '@nestjs/common';
 import * as Swagger from '@nestjs/swagger';
@@ -37,6 +38,7 @@ import {
   LearningLanguageResponse,
 } from '../dtos';
 import { AuthenticationGuard } from '../guards';
+import { Profile } from 'src/core/models';
 
 @Controller('profiles')
 @Swagger.ApiTags('Profiles')
@@ -128,7 +130,9 @@ export class ProfileController {
     });
 
     return new Collection<ProfileResponse>({
-      items: profiles.items.map(ProfileResponse.fromDomain),
+      items: profiles.items.map((profile: Profile) =>
+        ProfileResponse.fromDomain(profile),
+      ),
       totalItems: profiles.totalItems,
     });
   }
@@ -192,10 +196,11 @@ export class ProfileController {
   @Swagger.ApiNotFoundResponse({ description: 'Resource not found' })
   async getItem(
     @Param('id', ParseUUIDPipe) id: string,
+    @Headers('Language-code') languageCode?: string,
   ): Promise<ProfileResponse> {
     const profile = await this.getProfileUsecase.execute({ id });
 
-    return ProfileResponse.fromDomain(profile);
+    return ProfileResponse.fromDomain(profile, languageCode);
   }
 
   @Post(':id/learning-language')

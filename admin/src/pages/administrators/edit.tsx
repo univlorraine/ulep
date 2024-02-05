@@ -1,16 +1,7 @@
 import React from 'react';
 import { useNotify, useRedirect, Edit, useTranslate, useUpdate, WithRecord } from 'react-admin';
 import AdministratorForm from '../../components/form/AdministratorForm';
-import Administrator from '../../entities/Administrator';
-
-interface AdministratorUpdatePayload {
-    id: string;
-    email?: string;
-    firstname?: string;
-    lastname?: string;
-    password?: string;
-    universityId?: string;
-}
+import Administrator, { AdministratorFormPayload } from '../../entities/Administrator';
 
 const EditAdministrator = () => {
     const translate = useTranslate();
@@ -18,23 +9,7 @@ const EditAdministrator = () => {
     const redirect = useRedirect();
     const notify = useNotify();
 
-    const handleSubmit = async (
-        id: string,
-        email: string,
-        firstname: string,
-        lastname: string,
-        password?: string,
-        universityId?: string
-    ) => {
-        const payload: AdministratorUpdatePayload = {
-            id,
-            email,
-            firstname,
-            lastname,
-            password,
-            universityId,
-        };
-
+    const handleSubmit = async (payload: AdministratorFormPayload) => {
         try {
             return await update(
                 'users/administrators',
@@ -64,13 +39,8 @@ const EditAdministrator = () => {
                     <AdministratorForm
                         email={record.email}
                         firstname={record.firstname}
-                        handleSubmit={(
-                            email: string,
-                            firstname: string,
-                            lastname: string,
-                            password?: string,
-                            universityId?: string
-                        ) => handleSubmit(record.id, email, firstname, lastname, password, universityId)}
+                        handleSubmit={handleSubmit}
+                        id={record.id}
                         lastname={record.lastname}
                         type="update"
                         universityId={record.universityId || 'central'}

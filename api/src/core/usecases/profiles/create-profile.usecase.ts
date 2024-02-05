@@ -1,5 +1,4 @@
 import { Inject, Injectable, Logger } from '@nestjs/common';
-import * as Sentry from '@sentry/node';
 import {
   DomainErrorCode,
   RessourceAlreadyExists,
@@ -253,7 +252,6 @@ export class CreateProfileUsecase {
       );
     } catch (error) {
       this.logger.error('Error while parsing welcome email', error);
-      Sentry.captureException(error);
     }
 
     try {
@@ -263,7 +261,6 @@ export class CreateProfileUsecase {
       });
     } catch (error) {
       this.logger.error('Error while sending welcome email', error);
-      Sentry.captureException(error);
     }
   }
 }

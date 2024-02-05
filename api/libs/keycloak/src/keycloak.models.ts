@@ -160,3 +160,11 @@ export interface OpenIdConfiguration {
   require_request_uri_registration?: boolean;
   code_challenge_methods_supported?: string[];
 }
+
+export interface CredentialRepresentation {
+  id?: string;
+  type?: string;
+  value?: string;
+  temporary?: boolean;
+  createdDate?: number;
+}

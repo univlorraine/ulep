@@ -169,7 +169,7 @@ export const isEmailCorrect = (email: string) => {
 };
 
 export const isNameCorrect = (firstname: string) => {
-    const regex = /^[a-zA-Zà-ÿÀ-Ý-' ]+$/;
+    const regex = /^^\D+$/;
 
     return regex.test(firstname);
 };

@@ -6,10 +6,10 @@ import {
     Show,
     SimpleShowLayout,
     TextField,
-    ImageField,
     ArrayField,
     Datagrid,
 } from 'react-admin';
+import ReferenceUploadField from '../../components/field/ReferenceUploadField';
 
 const ObjectiveShowAction = () => (
     <TopToolbar>
@@ -25,7 +25,7 @@ const ObjectiveShow = () => {
             <SimpleShowLayout sx={{ m: 3 }}>
                 <TextField label={translate('objectives.name')} source="name.content" />
 
-                <ImageField label={translate('global.image')} source="image.url" />
+                <ReferenceUploadField label={translate('global.image')} source="image.id" />
 
                 <ArrayField label={translate('global.translations')} source="name.translations">
                     <Datagrid bulkActionButtons={false}>

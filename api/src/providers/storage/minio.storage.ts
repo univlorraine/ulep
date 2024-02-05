@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, Logger } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { File, StorageInterface } from 'src/core/ports/storage.interface';
 import { Readable } from 'stream';
@@ -12,17 +12,21 @@ import {
   PutObjectCommand,
   S3Client,
   S3ServiceException,
+  PutBucketPolicyCommand,
 } from '@aws-sdk/client-s3';
 import { getSignedUrl } from '@aws-sdk/s3-request-presigner';
 
 @Injectable()
 export class MinioStorage implements StorageInterface {
+  #logger = new Logger(MinioStorage.name);
+
   #client: S3Client;
 
   constructor(env: ConfigService<Env, true>) {
     this.#client = new S3Client({
       endpoint: env.get('S3_URL'),
       region: env.get('S3_REGION'),
+      runtime: 'node',
       credentials: {
         accessKeyId: env.get('S3_ACCESS_KEY'),
         secretAccessKey: env.get('S3_ACCESS_SECRET'),
@@ -44,8 +48,10 @@ export class MinioStorage implements StorageInterface {
 
   async write(bucket: string, name: string, file: File): Promise<void> {
     const bucketExists = await this.directoryExists(bucket);
+
     if (!bucketExists) {
       await this.createDirectory(bucket);
+      await this.makeBucketPrivate(bucket);
     }
 
     const command = new PutObjectCommand({
@@ -109,6 +115,23 @@ export class MinioStorage implements StorageInterface {
       Bucket: directory,
       ACL: 'private',
     });
+
     await this.#client.send(command);
+  }
+
+  private async makeBucketPrivate(bucket: string): Promise<void> {
+    const command = new PutBucketPolicyCommand({
+      Bucket: bucket,
+      Policy: JSON.stringify({
+        Version: '2012-10-17',
+        Statement: [],
+      }),
+    });
+
+    try {
+      await this.#client.send(command);
+    } catch (err) {
+      this.#logger.error(err);
+    }
   }
 }

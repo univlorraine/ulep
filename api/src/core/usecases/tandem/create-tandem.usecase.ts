@@ -1,4 +1,3 @@
-import * as Sentry from '@sentry/node';
 import { Inject, Injectable, Logger } from '@nestjs/common';
 import { DomainError, RessourceDoesNotExist } from 'src/core/errors';
 import { LearningLanguageIsAlreadyInActiveTandemError } from 'src/core/errors/tandem-exceptions';
@@ -240,7 +239,6 @@ export class CreateTandemUsecase {
         'Error while sending tandem become active email',
         error,
       );
-      Sentry.captureException(error);
     }
   }
 }

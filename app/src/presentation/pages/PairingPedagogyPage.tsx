@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { Redirect, useHistory, useLocation } from 'react-router';
+import { Redirect, useHistory } from 'react-router';
 import { useConfig } from '../../context/ConfigurationContext';
 import Campus from '../../domain/entities/Campus';
 import { useStoreActions, useStoreState } from '../../store/storeTypes';
@@ -8,7 +8,12 @@ import ColoredCard from '../components/ColoredCard';
 import WebLayoutCentered from '../components/layout/WebLayoutCentered';
 import SitesModal from '../components/modals/SitesModal';
 import styles from './css/SignUp.module.css';
-import Language from '../../domain/entities/Language';
+
+export enum LearningType {
+    ETANDEM = 'ETANDEM',
+    TANDEM = 'TANDEM',
+    BOTH = 'BOTH',
+}
 
 interface PedagogieData {
     color: string;
@@ -36,35 +41,39 @@ const PairingPedagogyPage: React.FC = () => {
             color: '#8BC4C4',
             title: t('pairing_pedagogy_page.tandem_title'),
             button: t('pairing_pedagogy_page.tandem_button'),
-            value: 'TANDEM',
+            value: LearningType.TANDEM,
             display: university.isCentral,
         },
         {
             color: '#7997C6',
             title: t('pairing_pedagogy_page.etandem_title'),
             button: t('pairing_pedagogy_page.etandem_button'),
-            value: 'ETANDEM',
+            value: LearningType.ETANDEM,
             display: profileSignUp.learningLanguage?.code !== '*',
         },
         {
             color: '#5DABC6',
             title: t('pairing_pedagogy_page.both_title'),
             button: t('pairing_pedagogy_page.both_button'),
-            value: 'BOTH',
+            value: LearningType.BOTH,
             display: university.isCentral,
         },
     ];
 
     const onPedagogyPressed = (pedagogy: Pedagogy) => {
-        if (pedagogy !== 'ETANDEM' && university && university.sites.length > 1) {
+        if (pedagogy !== LearningType.ETANDEM && university && university.sites.length > 1) {
             return setPedagogySelected(pedagogy);
         }
-        if (pedagogy !== 'ETANDEM' && university && university.sites.length === 1) {
+        if (pedagogy !== LearningType.ETANDEM && university && university.sites.length === 1) {
             updateProfileSignUp({ pedagogy, campus: university.sites[0] });
             return history.push(`/pairing/language/confirm`);
         }
 
-        if (pedagogy === 'ETANDEM' && profileSignUp.isSuggested && profileSignUp.learningLanguage?.code !== '*') {
+        if (
+            pedagogy === LearningType.ETANDEM &&
+            profileSignUp.isSuggested &&
+            profileSignUp.learningLanguage?.code !== '*'
+        ) {
             return history.push('/pairing/other-languages/selected');
         }
         updateProfileSignUp({ pedagogy, campus: undefined });
@@ -96,7 +105,11 @@ const PairingPedagogyPage: React.FC = () => {
                             return;
                         }
 
-                        if (university && university.sites.length === 0 && pedagogyData.value !== 'ETANDEM') {
+                        if (
+                            university &&
+                            university.sites.length === 0 &&
+                            pedagogyData.value !== LearningType.ETANDEM
+                        ) {
                             return;
                         }
 

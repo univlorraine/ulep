@@ -1,4 +1,3 @@
-import * as Sentry from '@sentry/node';
 import { TandemRepository } from '../../ports/tandems.repository';
 import { Inject, Injectable, Logger } from '@nestjs/common';
 import { DomainError, RessourceDoesNotExist } from 'src/core/errors';
@@ -122,7 +121,6 @@ export class ValidateTandemUsecase {
       await this.emailGateway.send({ recipient: user.email, email: email });
     } catch (error) {
       this.logger.error('Error while sending tandem validated email', error);
-      Sentry.captureException(error);
     }
   }
 }

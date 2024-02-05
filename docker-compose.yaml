@@ -1,4 +1,4 @@
-version: "3.4"
+version: '3.4'
 
 services:
   api:
@@ -43,7 +43,7 @@ services:
       SMTP_SENDER: ${SMTP_SENDER:-test@ulep.fr}
       SENTRY_DSN: ${API_SENTRY_DSN:-}
       CANCEL_TRESHOLD_IN_MINUTES: ${CANCEL_TRESHOLD_IN_MINUTES:-15}
-      SIGNED_URL_EXPIRATION_IN_SECONDS: ${SIGNED_URL_EXPIRATION_IN_SECONDS:-3600}
+      SIGNED_URL_EXPIRATION_IN_SECONDS: ${SIGNED_URL_EXPIRATION_IN_SECONDS:-600}
 
   admin:
     build:
@@ -58,11 +58,12 @@ services:
       REACT_APP_KEYCLOAK_CLIENT_ID: ${REACT_APP_KEYCLOAK_CLIENT_ID:-react-admin}
       REACT_APP_KEYCLOAK_CLIENT_SECRET: ${REACT_APP_KEYCLOAK_CLIENT_SECRET:-uKBywX2HlxfvKgxZoKZrbiBSx49CST6W}
       REACT_APP_SENTRY_DSN: ${ADMIN_SENTRY_DSN:-}
+      WDS_SOCKET_PORT: 0
 
   auth:
     image: quay.io/keycloak/keycloak:21.1.2
     depends_on:
-        - database
+      - database
     volumes:
       - ./docker/keycloak/providers:/opt/keycloak/providers
       - ./docker/keycloak/realms:/opt/keycloak/data/import

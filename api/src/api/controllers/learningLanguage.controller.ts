@@ -4,6 +4,7 @@ import {
 } from 'src/core/usecases/learningLanguage';
 import {
   Controller,
+  Delete,
   Get,
   Param,
   ParseUUIDPipe,
@@ -25,6 +26,7 @@ import { Collection } from '@app/common';
 import { GetLearningLanguageMatchsRequest } from '../dtos/learning-languages/get-learning-language-matches.request';
 import { GetLearningLanguageMatchesUsecase } from 'src/core/usecases';
 import { GetLearningLanguageTandemUsecase } from 'src/core/usecases/learningLanguage/getLearningLanguageTandem.usecase';
+import { DeleteLearningLanguageUsecase } from 'src/core/usecases/learningLanguage/delete-learning-langugage.usecase';
 
 @Controller('learning-languages')
 @Swagger.ApiTags('LearningLanguages')
@@ -34,6 +36,7 @@ export class LearningLanguageController {
     private getLearningLanguageOfIdUsecase: GetLearningLanguageOfIdUsecase,
     private getLearningLanguageMatchesUsecase: GetLearningLanguageMatchesUsecase,
     private getLearningLanguageTandemUseCase: GetLearningLanguageTandemUsecase,
+    private deleteLearningLanguageUsecase: DeleteLearningLanguageUsecase,
   ) {}
 
   @Get()
@@ -137,5 +140,14 @@ export class LearningLanguageController {
     });
 
     return UserTandemResponse.fromDomain(learningLanguage.profile.id, tandem);
+  }
+
+  @Delete(':id')
+  @Roles(Role.ADMIN)
+  @UseGuards(AuthenticationGuard)
+  @Swagger.ApiOperation({ summary: 'Deletes a learning language ressource.' })
+  @Swagger.ApiOkResponse()
+  remove(@Param('id', ParseUUIDPipe) id: string) {
+    return this.deleteLearningLanguageUsecase.execute({ id });
   }
 }

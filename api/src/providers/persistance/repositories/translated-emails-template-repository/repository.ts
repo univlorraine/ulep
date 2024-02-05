@@ -12,7 +12,7 @@ import { EmailTemplateRepository } from 'src/core/ports/email-template.repositor
 import getMailFromTemplate from './mailTemplate';
 import { ConfigService } from '@nestjs/config';
 
-const LANGUAGES = ['en', 'fr', 'cn'];
+const LANGUAGES = ['en', 'fr'];
 
 const fallbackResources = {
   en: {
@@ -67,6 +67,23 @@ const fallbackResources = {
           downloadApps: 'Download our apps',
         },
       },
+      [EMAIL_TEMPLATE_IDS.RESET_PASSWORD_SSO]: {
+        subject: 'Reset ULEP account',
+        title: 'Reset ULEP account',
+        content: {
+          introduction: 'Dear {{firstname}},',
+          paragraphs: [
+            'You have requested a password reset. Your account is configured as single sign on, you can use the "Authenticate me" button from the login page',
+            '<a href="{{loginUrl}}">Go to login page</a>',
+            'Best regards,',
+          ],
+          signature: "Tandem's team of Lorraine University",
+        },
+        footer: {
+          unsubscribe: 'You can unsubscribe by connecting to your account.',
+          downloadApps: 'Download our apps',
+        },
+      },
     },
   },
 };
@@ -85,7 +102,7 @@ export default class TranslatedEmailTemplateRepository
     const fallbackBackend = (resourcesToBackend as any)(fallbackResources);
     i18n.use(ChainedBackend as any).init<ChainedBackend.ChainedBackendOptions>({
       fallbackLng: LANGUAGES,
-      debug: env.get('LOG_LEVEL') === 'debug',
+      debug: false,
       backend: {
         backends: [HttpBackend, fallbackBackend],
         backendOptions: [
@@ -121,7 +138,6 @@ export default class TranslatedEmailTemplateRepository
       returnObjects: true,
       ...interpolationValues,
     });
-
     if (
       !(
         emailText.subject &&

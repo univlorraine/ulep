@@ -52,4 +52,6 @@ export interface LearningLanguageRepository {
   OfUniversities: (
     props: LearningLanguageRepositoryGetProps,
   ) => Promise<Collection<LearningLanguageWithTandem>>;
+
+  delete(id: string): Promise<void>;
 }

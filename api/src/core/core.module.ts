@@ -95,6 +95,8 @@ import {
 import { FindAllSuggestedLanguageUsecase } from 'src/core/usecases/language/find-all-suggested-language.usecase';
 import { GetLearningLanguageTandemUsecase } from './usecases/learningLanguage/getLearningLanguageTandem.usecase';
 import { ArchiveTandemsAndDeleteUsersUsecase } from './usecases/purges/archive-tandems.usecase';
+import { ResetPasswordUsecase } from './usecases/security/reset-password.usecase';
+import { DeleteLearningLanguageUsecase } from './usecases/learningLanguage/delete-learning-langugage.usecase';
 
 const usecases: Provider[] = [
   //Campus
@@ -172,6 +174,7 @@ const usecases: Provider[] = [
   GetLearningLanguageOfIdUsecase,
   GetLearningLanguageOfProfileUsecase,
   GetLearningLanguageTandemUsecase,
+  DeleteLearningLanguageUsecase,
   // Tandems
   CreateTandemUsecase,
   GenerateTandemsUsecase,
@@ -201,6 +204,8 @@ const usecases: Provider[] = [
   // Instance
   GetInstanceUsecase,
   UpdateInstanceUsecase,
+  // Security
+  ResetPasswordUsecase,
 ];
 
 const services: Provider[] = [MatchScorer];

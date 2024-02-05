@@ -72,6 +72,11 @@ export class InMemoryLearningLanguageRepository
     return Promise.resolve();
   }
 
+  delete(id: string): Promise<void> {
+    this.#learningLanguages.delete(id);
+    return Promise.resolve();
+  }
+
   getLearningLanguagesOfProfileSpeakingAndNotInActiveTandemFromUniversities(
     languageId: string,
     universityIds: string[],

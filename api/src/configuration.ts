@@ -1,4 +1,3 @@
-import { LogLevel } from '@nestjs/common';
 import { Transform, plainToClass } from 'class-transformer';
 import {
   IsBoolean,
@@ -21,7 +20,7 @@ export class Env {
   @IsNotEmpty()
   APP_URL: string;
 
-  @IsEnum(['verbose', 'debug', 'warn', 'error', 'log'])
+  @IsEnum(['error', 'warn', 'log', 'debug', 'verbose'])
   @IsOptional()
   LOG_LEVEL?: string;
 
@@ -155,8 +154,6 @@ export class Env {
   @Transform(({ value }) => parseInt(value, 10))
   SIGNED_URL_EXPIRATION_IN_SECONDS: number;
 
-  static DEFAULT_LOG_LEVEL: LogLevel = 'warn';
-
   static validate(configuration: Record<string, unknown>): Env {
     const env = plainToClass(Env, configuration, {
       enableImplicitConversion: false,
@@ -190,7 +187,7 @@ export const getTranslationsEndpoint = (
 const test: Env = {
   ADMIN_URL: 'http://localhost:3000',
   APP_URL: 'http://localhost:4200',
-  LOG_LEVEL: 'debug',
+  LOG_LEVEL: 'error',
   DEFAULT_TRANSLATION_LANGUAGE: 'fr',
   DATABASE_URL: 'postgresql://postgres:postgres@localhost:5432/test',
   KEYCLOAK_BASE_URL: 'http://localhost:8080/auth',
