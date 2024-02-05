@@ -85,9 +85,6 @@ const PairingPedagogyPage: React.FC = () => {
         return history.push(`/pairing/language/confirm`);
     };
 
-    console.log('isSuggested', profileSignUp.isSuggested);
-    console.log('university', JSON.stringify(university, null, 2));
-
     return (
         <WebLayoutCentered
             backgroundIconColor={configuration.secondaryBackgroundImageColor}
