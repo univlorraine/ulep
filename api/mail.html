@@ -1,0 +1,177 @@
+<html>
+    <head>
+        <link rel="preconnect" href="https://fonts.googleapis.com">
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
+        <style lang="css">
+            body {
+                font-family: 'Roboto', sans-serif;
+                margin: 0;
+            }
+        
+    
+            h1 {
+                font-size: 37px;
+                line-height: 40px;
+                font-weight: 700;
+            }
+    
+            h2 {
+                font-size: 17px;
+                font-weight: 700;
+                line-height: 21px;
+                margin-bottom: 30px;
+            }
+    
+            hr {
+                margin-top: 50px;
+            }
+    
+            .logo {
+                width: 160px;
+            }
+    
+    
+            header {
+                background-image: url('${http://localhost:9000/assets/background.png}');
+                background-color: rgb(253, 238, 102);
+                background-position: -100px top;
+                background-repeat: no-repeat;
+                background-size: 150%;
+    
+                padding: 50px;
+                text-align: center;
+            }
+    
+            header>.logo-container {
+                margin-bottom: 30px;
+            }
+    
+            header .bubble {
+                width: 225px;
+                margin-bottom: -50px;
+            }
+    
+            section {
+                padding: 30px;
+    
+                font-size: 16px;
+                font-weight: 400;
+                line-height: 20px;
+            }
+    
+            section p {
+                margin-bottom: 20px;
+            }
+    
+            section .logo-container {
+                text-align: center;
+                margin-top: 30px;
+            }
+    
+    
+            footer {
+                background-color: #000000;
+                color: #ffffff;
+    
+                padding: 50px;
+                text-align: center;
+            }
+    
+            footer .unsubscribe-text {
+                margin-bottom: 30px;
+                font-size: 16px;
+                font-weight: 700;
+                line-height: 18.75px;
+            }
+    
+            footer .download-apps-section {
+                border: solid 1px #ffffff;
+                border-radius: 10px;
+                padding: 30px;
+
+                width: fit-content;
+                margin: auto;
+            }
+    
+            footer .download-apps-section__text {
+                margin-bottom: 11px;
+            }
+    
+            footer .download-apps-section__buttons {
+                display: flex;
+                flex-direction: column;
+                gap: 12px;
+            }
+    
+            footer .store-button {
+                width: 180px;
+            }
+    
+    
+            @media screen and (min-width: 800px) {
+                .logo {
+                    width: 250px;
+                }
+    
+                section {
+                    padding: 80px;
+                }
+    
+                section .logo-container {
+                    margin-top: 50px;
+                }
+    
+                footer .download-apps-section__buttons {
+                    flex-direction: row;
+                    justify-content: center;
+                    gap: 50px;
+                }
+            }
+        </style>
+    </head>
+    <body>
+        <header>
+            <div class="logo-container">
+                <img src="http://localhost:9000/assets/logo.png" alt="logo" class="logo">
+            </div>
+    
+            <div class="bubble-container">
+                <img src="http://localhost:9000/assets/bonjour-bubble.png" alt="hi" class="bubble">
+            </div>
+    
+            <h1>Your tandem's partner is ready to start</h1>
+        </header>
+        <section>
+            <h2>Dear herve</h2>
+            <div>
+                We are happy to inform you that you're tandem's partner has been found and is ready to start learning language with you ! Your partner is {{partnerFirstname}} {{partnerLastname}}, student from {{universityName}} who shares you passion for learning languages and is excited to start this linguistic adventure with you. We recommend that you take time to introduce yourself to your partner and planify your first conversation session. We remind you that Tandem's program is designed to be a fair trade, so don't hesitate to share you knowledge and fully involve inthe program. If you meet problems or challenge, feel free to contact Tandem's team of Université  de Lorraine to get some help. We are here to help you succeed in your learning and are happy to be part of your learning journey.\n
+                Best regards,
+                <p>Tandem's team of Lorraine university</p>
+            </div>
+            <hr>
+            <div class="logo-container">
+                <img class="logo" src="http://localhost:9000/assets/logo.png" alt="logo">
+            </div>
+        </section>
+        <footer>
+            <p class="unsubscribe-text">
+                You can unsubscribe by connecting to your account.
+            </p>
+    
+            <div class="download-apps-section">
+                <div class="download-apps-section__text">
+                    <span>Download our apps</span>
+                </div>
+                <div class="download-apps-section__buttons">
+                    <a href="${links.appleStore}">
+                        <img src="http://localhost:9000/assets/apple-store.png" alt="apple-store" class="store-button">
+                    </a>
+                    <a href="${links.playStore}">
+                        <img src="http://localhost:9000/assets/play-store.png" alt="play-store" class="store-button">
+                    </a>
+                </div>
+            </div>
+        </footer>
+    </body>
+    </html>

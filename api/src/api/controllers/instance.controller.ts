@@ -5,6 +5,7 @@ import {
   HttpStatus,
   Inject,
   Param,
+  Post,
   Put,
   Res,
 } from '@nestjs/common';
@@ -94,5 +95,10 @@ export class InstanceController {
       }
       return res.status(HttpStatus.INTERNAL_SERVER_ERROR).end();
     }
+  }
+
+  @Post('emails')
+  async sendEmail(@Body() body: any): Promise<void> {
+    console.log(body);
   }
 }
