@@ -2,11 +2,6 @@ import { TandemRepository } from '../../ports/tandems.repository';
 import { Inject, Injectable, Logger } from '@nestjs/common';
 import { DomainError, RessourceDoesNotExist } from 'src/core/errors';
 import { Tandem, TandemStatus, User } from 'src/core/models';
-import { EMAIL_TEMPLATE_IDS } from 'src/core/models/email-content.model';
-import {
-  EMAIL_TEMPLATE_REPOSITORY,
-  EmailTemplateRepository,
-} from 'src/core/ports/email-template.repository';
 import { EMAIL_GATEWAY, EmailGateway } from 'src/core/ports/email.gateway';
 import { TANDEM_REPOSITORY } from 'src/core/ports/tandems.repository';
 import {
@@ -28,8 +23,6 @@ export class ValidateTandemUsecase {
     private readonly tandemRepository: TandemRepository,
     @Inject(UNIVERSITY_REPOSITORY)
     private readonly universityRepository: UniversityRepository,
-    @Inject(EMAIL_TEMPLATE_REPOSITORY)
-    private readonly emailTemplateRepository: EmailTemplateRepository,
     @Inject(EMAIL_GATEWAY)
     private readonly emailGateway: EmailGateway,
   ) {}
@@ -97,28 +90,24 @@ export class ValidateTandemUsecase {
     }
   }
 
-  private async sendTamdemValidatedEmail({
-    language,
-    user,
-    partner,
-  }: {
+  private async sendTamdemValidatedEmail(props: {
     language: string;
     user: User;
     partner: User;
   }): Promise<void> {
     try {
-      const email = await this.emailTemplateRepository.getEmail(
-        EMAIL_TEMPLATE_IDS.TANDEM_BECOME_ACTIVE,
-        language,
-        {
-          firstname: user.firstname,
-          partnerFirstname: partner.firstname,
-          partnerLastname: partner.lastname,
-          universityName: partner.university.name,
+      await this.emailGateway.sendNewPartnerEmail({
+        to: props.user.email,
+        language: props.language,
+        user: {
+          ...props.user,
+          university: props.user.university.name,
         },
-      );
-
-      await this.emailGateway.send({ recipient: user.email, email: email });
+        partner: {
+          ...props.partner,
+          university: props.partner.university.name,
+        },
+      });
     } catch (error) {
       this.logger.error('Error while sending tandem validated email', error);
     }

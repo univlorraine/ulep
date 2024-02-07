@@ -19,11 +19,9 @@ import { AuthenticationGuard } from 'src/api/guards';
 import { TestAuthGuard } from '../utils/TestAuthGuard';
 import { InMemoryCountryCodesRepository } from 'src/providers/persistance/repositories/in-memory-country-repository';
 import { COUNTRY_REPOSITORY } from 'src/core/ports/country.repository';
-import { Language, PairingMode } from 'src/core/models';
+import { PairingMode } from 'src/core/models';
 import { EMAIL_GATEWAY } from 'src/core/ports/email.gateway';
 import InMemoryEmailGateway from 'src/providers/gateway/in-memory-email.gateway';
-import { EMAIL_TEMPLATE_REPOSITORY } from 'src/core/ports/email-template.repository';
-import { InMemoryEmailTemplateRepository } from 'src/providers/persistance/repositories/in-memory-email-template-repository';
 import { LEARNING_LANGUAGE_REPOSITORY } from 'src/core/ports/learning-language.repository';
 import { InMemoryLearningLanguageRepository } from 'src/providers/persistance/repositories/in-memory-learning-language-repository';
 import { KeycloakClient } from '@app/keycloak';
@@ -82,8 +80,6 @@ describe('Universities', () => {
       .useValue(userRepositoy)
       .overrideProvider(EMAIL_GATEWAY)
       .useValue(inMemoryEmail)
-      .overrideProvider(EMAIL_TEMPLATE_REPOSITORY)
-      .useValue(InMemoryEmailTemplateRepository)
       .overrideGuard(AuthenticationGuard)
       .useValue(TestAuthGuard)
       .overrideProvider(AUTHENTICATOR)

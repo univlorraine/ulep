@@ -1,4 +1,3 @@
-import { SendEmailPayload } from './../../ports/email.gateway';
 import { Inject, Injectable, Logger } from '@nestjs/common';
 import {
   Match,
@@ -6,14 +5,13 @@ import {
   Role,
   Tandem,
   TandemStatus,
-  University,
 } from 'src/core/models';
-import { EMAIL_TEMPLATE_IDS } from 'src/core/models/email-content.model';
 import {
-  EMAIL_TEMPLATE_REPOSITORY,
-  EmailTemplateRepository,
-} from 'src/core/ports/email-template.repository';
-import { EMAIL_GATEWAY, EmailGateway } from 'src/core/ports/email.gateway';
+  EMAIL_GATEWAY,
+  EmailGateway,
+  NewPartnerEmail,
+  NewTandemNoticeEmailProps,
+} from 'src/core/ports/email.gateway';
 import {
   LANGUAGE_REPOSITORY,
   LanguageRepository,
@@ -63,8 +61,6 @@ export class GenerateTandemsUsecase {
     private readonly languageRepository: LanguageRepository,
     @Inject(REFUSED_TANDEMS_REPOSITORY)
     private readonly refusedTandemsRepository: RefusedTandemsRepository,
-    @Inject(EMAIL_TEMPLATE_REPOSITORY)
-    private readonly emailTemplateRepository: EmailTemplateRepository,
     @Inject(EMAIL_GATEWAY)
     private readonly emailGateway: EmailGateway,
   ) {}
@@ -175,9 +171,10 @@ export class GenerateTandemsUsecase {
     let sortedPossiblePairs = possiblePairs.sort((a, b) => b.total - a.total);
     const pairedLearningLanguageIds = new Set<string>();
 
-    const universitiesWithNewTandems = new Map<string, University>([]);
-
-    const notificationEmails: SendEmailPayload[] = [];
+    const notificationEmails: {
+      type: 'sendNewPartnerEmail' | 'sendNewTandemNoticeEmail';
+      payload: NewPartnerEmail | NewTandemNoticeEmailProps;
+    }[] = [];
 
     // Select best pairs by priority order
     const tandems: Tandem[] = [];
@@ -204,6 +201,7 @@ export class GenerateTandemsUsecase {
           PairingMode.AUTOMATIC
           ? TandemStatus.ACTIVE
           : TandemStatus.DRAFT;
+
       const tandem = new Tandem({
         id: this.uuidProvider.generate(),
         learningLanguages: [pair.owner, pair.target],
@@ -226,80 +224,77 @@ export class GenerateTandemsUsecase {
         pairedLearningLanguageIds.add(pair.owner.id);
         pairedLearningLanguageIds.add(pair.target.id);
 
-        const ownerUniversity = pair.owner.profile.user.university;
-        const targetUniversity = pair.target.profile.user.university;
-        if (!universitiesWithNewTandems.has(ownerUniversity.id)) {
-          universitiesWithNewTandems.set(ownerUniversity.id, ownerUniversity);
-        }
-        if (!universitiesWithNewTandems.has(targetUniversity.id)) {
-          universitiesWithNewTandems.set(targetUniversity.id, targetUniversity);
+        if (tandemStatus !== TandemStatus.ACTIVE) {
+          continue;
         }
 
-        if (tandemStatus === TandemStatus.ACTIVE) {
-          if (pair.owner.profile.user.acceptsEmail) {
-            const emailContentProfile1 =
-              await this.emailTemplateRepository.getEmail(
-                EMAIL_TEMPLATE_IDS.TANDEM_BECOME_ACTIVE,
-                pair.owner.profile.nativeLanguage.code,
-                {
-                  firstname: pair.owner.profile.user.firstname,
-                  partnerFirstname: pair.target.profile.user.firstname,
-                  partnerLastname: pair.target.profile.user.lastname,
-                  universityName: pair.target.profile.user.university.name,
-                },
-              );
-            notificationEmails.push({
-              recipient: pair.owner.profile.user.email,
-              email: emailContentProfile1,
-            });
-          }
+        const owner = pair.owner.profile.user;
+        const target = pair.target.profile.user;
 
-          if (pair.target.profile.user.acceptsEmail) {
-            const emailContentProfile2 =
-              await this.emailTemplateRepository.getEmail(
-                EMAIL_TEMPLATE_IDS.TANDEM_BECOME_ACTIVE,
-                pair.target.profile.nativeLanguage.code,
-                {
-                  firstname: pair.target.profile.user.firstname,
-                  partnerFirstname: pair.owner.profile.user.firstname,
-                  partnerLastname: pair.owner.profile.user.lastname,
-                  universityName: pair.owner.profile.user.university.name,
-                },
-              );
+        if (owner.acceptsEmail) {
+          notificationEmails.push({
+            type: 'sendNewPartnerEmail',
+            payload: {
+              to: owner.email,
+              language: pair.owner.profile.nativeLanguage.code,
+              user: { ...owner, university: owner.university.name },
+              partner: { ...target, university: target.university.name },
+            },
+          });
+        }
 
-            notificationEmails.push({
-              recipient: pair.target.profile.user.email,
-              email: emailContentProfile2,
-            });
-          }
+        if (target.acceptsEmail) {
+          notificationEmails.push({
+            type: 'sendNewPartnerEmail',
+            payload: {
+              to: target.email,
+              language: pair.target.profile.nativeLanguage.code,
+              user: { ...target, university: target.university.name },
+              partner: { ...owner, university: owner.university.name },
+            },
+          });
+        }
+
+        if (owner.university.notificationEmail) {
+          notificationEmails.push({
+            type: 'sendNewTandemNoticeEmail',
+            payload: {
+              to: owner.university.notificationEmail,
+              language: owner.university.country.code.toLowerCase(),
+              user: { ...owner, university: owner.university.name },
+              partner: { ...target, university: target.university.name },
+            },
+          });
+        }
+
+        if (
+          owner.university.id !== target.university.id &&
+          target.university.notificationEmail
+        ) {
+          notificationEmails.push({
+            type: 'sendNewTandemNoticeEmail',
+            payload: {
+              to: target.university.notificationEmail,
+              language: target.university.country.code.toLowerCase(),
+              user: { ...target, university: target.university.name },
+              partner: { ...owner, university: owner.university.name },
+            },
+          });
         }
       }
     }
 
     await this.tandemsRepository.saveMany(tandems);
 
-    if (universitiesWithNewTandems.size > 0) {
-      for (const [universityId, university] of universitiesWithNewTandems) {
-        if (university.notificationEmail) {
-          const lng = university.country.code.toLowerCase();
-          const emailContent = await this.emailTemplateRepository.getEmail(
-            EMAIL_TEMPLATE_IDS.TANDEM_TO_REVIEW,
-            lng,
-          );
-          notificationEmails.push({
-            recipient: university.notificationEmail,
-            email: emailContent,
-          });
-        } else {
-          this.logger.warn(
-            `University ${universityId} has no notification email configured`,
-          );
-        }
-      }
-    }
+    for (const notificationEmail of notificationEmails) {
+      const method = notificationEmail.type;
+      const payload = notificationEmail.payload;
 
-    if (notificationEmails.length > 0) {
-      await this.emailGateway.bulkSend(notificationEmails);
+      try {
+        await this.emailGateway[method](payload);
+      } catch (error) {
+        this.logger.error(`Error on ${method} with ${JSON.stringify(payload)}`);
+      }
     }
 
     const countDeletedTandems =

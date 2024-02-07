@@ -1,4 +1,5 @@
 import * as fs from 'fs';
+import * as path from 'path';
 import {
   Inject,
   Injectable,
@@ -7,7 +8,8 @@ import {
   OnModuleInit,
 } from '@nestjs/common';
 import { Transporter, createTransport } from 'nodemailer';
-import mjml from 'mjml';
+import * as mjml2html from 'mjml';
+import { render } from 'mustache';
 
 export const MAILER_CONFIGURATION = 'MAILER_CONFIGURATION';
 
@@ -15,23 +17,22 @@ export interface MailerConfiguration {
   host: string;
   port: number;
   secure: boolean;
-  auth: {
-    user: string;
-    pass: string;
-  };
+  ignoreTLS: boolean;
+  emailFrom: string;
+  templatesPath: string;
+  disableBootVerification: boolean;
 }
 
 export interface EmailOptions {
   to: string;
   subject: string;
-  template: string;
-  variables: Record<string, string>;
+  template: 'admin' | 'user';
+  variables: Record<string, any>;
 }
 
 @Injectable()
 export class MailerService implements OnModuleInit, OnModuleDestroy {
   #transporter: Transporter;
-  #templates: Record<string, string> = {};
   #logger: Logger;
 
   constructor(
@@ -42,6 +43,10 @@ export class MailerService implements OnModuleInit, OnModuleDestroy {
 
   onModuleInit() {
     this.createTransporter();
+
+    if (!this.config.disableBootVerification) {
+      this.verifyTransporter();
+    }
   }
 
   onModuleDestroy() {
@@ -50,30 +55,36 @@ export class MailerService implements OnModuleInit, OnModuleDestroy {
 
   private createTransporter() {
     this.#transporter = createTransport({
-      host: 'smtp.example.com',
-      port: 587,
-      secure: false,
-      ignoreTLS: true,
+      host: this.config.host,
+      port: this.config.port,
+      secure: this.config.secure,
+      ignoreTLS: this.config.ignoreTLS,
     });
   }
 
-  private loadTemplate(template: string): string {
-    if (!this.#templates[template]) {
-      const templatePath = `./templates/${template}.mjml`;
-      const templateContent = fs.readFileSync(templatePath, 'utf8');
-      this.#templates[template] = templateContent;
-    }
-
-    return this.#templates[template];
+  private verifyTransporter() {
+    return new Promise<void>((resolve, reject) => {
+      this.#transporter.verify((error) => {
+        if (error) {
+          return reject(error);
+        } else {
+          return resolve();
+        }
+      });
+    });
   }
 
-  private parseTemplate(content: string, args: Record<string, string>): string {
-    Object.keys(args).forEach((key) => {
-      const re = new RegExp(`{{${key}}}`, 'g');
-      content = content.replace(re, args[key]);
-    });
+  public loadTemplate(template: string): string {
+    const file = path.join(this.config.templatesPath, `${template}.mjml`);
+    const content = fs.readFileSync(file, 'utf8');
 
-    const { html } = mjml(content);
+    return content;
+  }
+
+  public parseTemplate(content: string, args: Record<string, any>): string {
+    const template = render(content, args);
+
+    const { html } = mjml2html(template);
 
     return html;
   }
@@ -85,7 +96,7 @@ export class MailerService implements OnModuleInit, OnModuleDestroy {
     const htmlContent = this.parseTemplate(content, variables);
 
     const mailOptions = {
-      from: this.config.auth.user,
+      from: this.config.emailFrom,
       to,
       subject,
       html: htmlContent,

@@ -6,13 +6,7 @@ import {
   PairingMode,
   Tandem,
   TandemStatus,
-  User,
 } from 'src/core/models';
-import { EMAIL_TEMPLATE_IDS } from 'src/core/models/email-content.model';
-import {
-  EMAIL_TEMPLATE_REPOSITORY,
-  EmailTemplateRepository,
-} from 'src/core/ports/email-template.repository';
 import { EMAIL_GATEWAY, EmailGateway } from 'src/core/ports/email.gateway';
 import {
   LANGUAGE_REPOSITORY,
@@ -55,8 +49,6 @@ export class CreateTandemUsecase {
     private readonly languageRepository: LanguageRepository,
     @Inject(UUID_PROVIDER)
     private readonly uuidProvider: UuidProvider,
-    @Inject(EMAIL_TEMPLATE_REPOSITORY)
-    private readonly emailTemplateRepository: EmailTemplateRepository,
     @Inject(EMAIL_GATEWAY)
     private readonly emailGateway: EmailGateway,
   ) {}
@@ -167,22 +159,7 @@ export class CreateTandemUsecase {
     );
 
     if (tandem.status === TandemStatus.ACTIVE) {
-      const [learningLanguage1, learningLanguage2] = tandem.learningLanguages;
-      if (learningLanguage1.profile.user.acceptsEmail) {
-        await this.sendTamdemBecomeActiveEmail({
-          language: learningLanguage1.profile.nativeLanguage.code,
-          user: learningLanguage1.profile.user,
-          partner: learningLanguage2.profile.user,
-        });
-      }
-
-      if (learningLanguage2.profile.user.acceptsEmail) {
-        await this.sendTamdemBecomeActiveEmail({
-          language: learningLanguage2.profile.nativeLanguage.code,
-          user: learningLanguage2.profile.user,
-          partner: learningLanguage1.profile.user,
-        });
-      }
+      await this.sendTamdemBecomeActiveEmails(tandem);
     }
 
     return tandem;
@@ -212,33 +189,86 @@ export class CreateTandemUsecase {
     }
   }
 
-  private async sendTamdemBecomeActiveEmail({
-    language,
-    user,
-    partner,
-  }: {
-    language: string;
-    user: User;
-    partner: User;
-  }): Promise<void> {
-    try {
-      const email = await this.emailTemplateRepository.getEmail(
-        EMAIL_TEMPLATE_IDS.TANDEM_BECOME_ACTIVE,
-        language,
-        {
-          firstname: user.firstname,
-          partnerFirstname: partner.firstname,
-          partnerLastname: partner.lastname,
-          universityName: partner.university.name,
-        },
-      );
+  private async sendTamdemBecomeActiveEmails(tandem: Tandem): Promise<void> {
+    const [learningLanguage1, learningLanguage2] = tandem.learningLanguages;
 
-      await this.emailGateway.send({ recipient: user.email, email: email });
-    } catch (error) {
-      this.logger.error(
-        'Error while sending tandem become active email',
-        error,
-      );
+    const user1 = learningLanguage1.profile.user;
+    const user2 = learningLanguage2.profile.user;
+
+    if (user1.acceptsEmail) {
+      try {
+        await this.emailGateway.sendNewPartnerEmail({
+          to: user1.email,
+          language: learningLanguage1.profile.nativeLanguage.code,
+          user: {
+            firstname: user1.firstname,
+            lastname: user1.lastname,
+            university: user1.university.name,
+          },
+          partner: {
+            firstname: user2.firstname,
+            lastname: user2.lastname,
+            university: user2.university.name,
+          },
+        });
+      } catch (error) {
+        this.logger.error(
+          `Error sending email to user ${user1.email} after tandem creation: ${error}`,
+        );
+      }
+    }
+
+    if (user2.acceptsEmail) {
+      try {
+        await this.emailGateway.sendNewPartnerEmail({
+          to: user2.email,
+          language: learningLanguage2.profile.nativeLanguage.code,
+          user: {
+            firstname: user2.firstname,
+            lastname: user2.lastname,
+            university: user2.university.name,
+          },
+          partner: {
+            firstname: user1.firstname,
+            lastname: user1.lastname,
+            university: user1.university.name,
+          },
+        });
+      } catch (error) {
+        this.logger.error(
+          `Error sending email to user ${user2.email} after tandem creation: ${error}`,
+        );
+      }
+    }
+
+    const university1 = user1.university;
+    const university2 = user2.university;
+    const isSameUniversity = university1.id === university2.id;
+
+    if (university1.notificationEmail) {
+      try {
+        await this.emailGateway.sendTandemValidationNoticeEmail({
+          to: university1.notificationEmail,
+          language: university1.country.code.toLowerCase(),
+        });
+      } catch (error) {
+        this.logger.error(
+          `Error sending email to university ${university1.notificationEmail} after tandem creation: ${error}`,
+        );
+      }
+    }
+
+    if (!isSameUniversity && university2.notificationEmail) {
+      try {
+        await this.emailGateway.sendTandemValidationNoticeEmail({
+          to: university2.notificationEmail,
+          language: university2.country.code.toLowerCase(),
+        });
+      } catch (error) {
+        this.logger.error(
+          `Error sending email to university ${university2.notificationEmail} after tandem creation: ${error}`,
+        );
+      }
     }
   }
 }

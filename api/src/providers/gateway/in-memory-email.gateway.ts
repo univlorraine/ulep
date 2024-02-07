@@ -1,26 +1,59 @@
-import { Logger } from '@nestjs/common';
-import { EmailGateway, SendEmailPayload } from 'src/core/ports/email.gateway';
+/* eslint-disable @typescript-eslint/no-unused-vars */
+import {
+  AccountBlockedEmailProps,
+  EmailGateway,
+  NewPartnerEmail,
+  NewTandemNoticeEmailProps,
+  NewUserRegistrationNoticeEmailProps,
+  PasswordChangeDeniedEmailProps,
+  SendWelcomeMailProps,
+  TandemCanceledEmailProps,
+  TandemCanceledNoticeEmailProps,
+  TandemValidationNoticeEmailProps,
+} from 'src/core/ports/email.gateway';
 
 export default class InMemoryEmailGateway implements EmailGateway {
-  private readonly logger = new Logger(InMemoryEmailGateway.name);
-
-  #emails: SendEmailPayload[];
-
-  constructor() {
-    this.#emails = [];
-  }
-
-  send(payload: SendEmailPayload): Promise<void> {
-    this.#emails.push(payload);
-    this.logger.debug('Send email', payload);
+  sendWelcomeMail(props: SendWelcomeMailProps): Promise<void> {
     return Promise.resolve();
   }
 
-  bulkSend(payloads: SendEmailPayload[]): Promise<void> {
-    this.#emails = [...this.#emails, ...payloads];
-    for (const payload of payloads) {
-      this.logger.debug('Send email', payload);
-    }
+  sendNewUserRegistrationNoticeEmail(
+    props: NewUserRegistrationNoticeEmailProps,
+  ): Promise<void> {
+    return Promise.resolve();
+  }
+
+  sendPasswordChangeDeniedEmail(
+    props: PasswordChangeDeniedEmailProps,
+  ): Promise<void> {
+    return Promise.resolve();
+  }
+
+  sendAccountBlockedEmail(props: AccountBlockedEmailProps): Promise<void> {
+    return Promise.resolve();
+  }
+
+  sendTandemValidationNoticeEmail(
+    props: TandemValidationNoticeEmailProps,
+  ): Promise<void> {
+    return Promise.resolve();
+  }
+
+  sendNewPartnerEmail(props: NewPartnerEmail): Promise<void> {
+    return Promise.resolve();
+  }
+
+  sendNewTandemNoticeEmail(props: NewTandemNoticeEmailProps): Promise<void> {
+    return Promise.resolve();
+  }
+
+  sendTandemCanceledEmail(props: TandemCanceledEmailProps): Promise<void> {
+    return Promise.resolve();
+  }
+
+  sendTandemCanceledNoticeEmail(
+    props: TandemCanceledNoticeEmailProps,
+  ): Promise<void> {
     return Promise.resolve();
   }
 }

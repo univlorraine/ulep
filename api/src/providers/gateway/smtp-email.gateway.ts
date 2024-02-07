@@ -1,69 +1,255 @@
-import { EmailGateway, SendEmailPayload } from 'src/core/ports/email.gateway';
-import { Transporter, createTransport } from 'nodemailer';
 import { Injectable } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { Env } from 'src/configuration';
+import { I18nService } from 'nestjs-i18n';
+import { MailerService } from '@app/common';
+
+import {
+  AccountBlockedEmailProps,
+  EmailGateway,
+  NewPartnerEmail,
+  NewTandemNoticeEmailProps,
+  NewUserRegistrationNoticeEmailProps,
+  PasswordChangeDeniedEmailProps,
+  SendWelcomeMailProps,
+  TandemCanceledNoticeEmailProps,
+  TandemValidationNoticeEmailProps,
+  TandemCanceledEmailProps,
+} from 'src/core/ports/email.gateway';
 
 @Injectable()
 export class SmtpEmailGateway implements EmailGateway {
-  #transporter: Transporter;
-  #from: string;
+  constructor(
+    private readonly env: ConfigService<Env, true>,
+    private readonly i18n: I18nService,
+    private readonly mailer: MailerService,
+  ) {}
 
-  constructor(env: ConfigService<Env, true>) {
-    const smtp = {
-      host: env.get<string>('SMTP_HOST'),
-      port: env.get<number>('SMTP_PORT'),
-      secure: env.get<boolean>('SMTP_SECURE'),
-      ignoreTLS: env.get<boolean>('SMTP_IGNORE_TLS'),
-      sender: env.get<string>('SMTP_SENDER'),
-      disableBootVerification: env.get<boolean>(
-        'SMTP_DISABLE_BOOT_VERIFICATION',
-      ),
+  private get images() {
+    const endpoint = this.env.get('EMAIL_ASSETS_PUBLIC_ENDPOINT');
+    const bucket = this.env.get('EMAIL_ASSETS_BUCKET');
+
+    return {
+      logo: `${endpoint}/${bucket}/logo.png`,
+      background: `${endpoint}/${bucket}/background.png`,
+      bubble: `${endpoint}/${bucket}/bonjour-bubble.png`,
+      playStore: `${endpoint}/${bucket}/play-store.png`,
+      appleStore: `${endpoint}/${bucket}/apple-store.png`,
     };
+  }
 
-    this.#transporter = createTransport({
-      host: smtp.host,
-      port: smtp.port,
-      secure: smtp.secure,
-      ignoreTLS: smtp.ignoreTLS,
-    });
-    this.#from = smtp.sender;
+  private get links() {
+    return {
+      playStore: this.env.get('APP_LINK_PLAY_STORE'),
+      appleStore: this.env.get('APP_LINK_APPLE_STORE'),
+    };
+  }
 
-    if (!smtp.disableBootVerification) {
-      new Promise<void>((resolve, reject) => {
-        this.#transporter.verify((error) => {
-          if (error) {
-            return reject(error);
-          } else {
-            return resolve();
-          }
-        });
-      });
+  private get footer() {
+    return this.i18n.translate('emails.footer');
+  }
+
+  private translate(
+    key: string,
+    language: string,
+    args?: Record<string, any>,
+  ): Record<string, any> {
+    const value = this.i18n.translate(key, { lang: language, args });
+    const isObject = typeof value === 'object' && value !== null;
+    const hasTitle =
+      isObject && 'title' in value && typeof value.title === 'string';
+    const hasBody =
+      isObject && 'bodyHtml' in value && typeof value.bodyHtml === 'string';
+
+    if (!hasTitle || !hasBody) {
+      throw new Error(`Invalid translation for key: ${key}`);
     }
+
+    return value;
   }
 
-  send({ recipient, email }: SendEmailPayload): Promise<void> {
-    return new Promise((resolve, reject) => {
-      this.#transporter.sendMail(
-        {
-          from: this.#from,
-          to: recipient,
-          subject: email.subject,
-          text: email.textContent,
-          html: email.content,
-        },
-        (err: Error) => {
-          if (err) {
-            return reject(err);
-          }
+  async sendWelcomeMail(props: SendWelcomeMailProps): Promise<void> {
+    const translations = this.translate('emails.welcome', props.language, {
+      ...props,
+    });
 
-          return resolve();
-        },
-      );
+    await this.mailer.sendMail({
+      to: props.to,
+      subject: translations.title,
+      template: 'user',
+      variables: {
+        links: this.links,
+        images: this.images,
+        ...translations,
+        footer: this.footer,
+      },
     });
   }
 
-  async bulkSend(payloads: SendEmailPayload[]): Promise<void> {
-    await Promise.all(payloads.map((payload) => this.send(payload)));
+  async sendNewUserRegistrationNoticeEmail(
+    props: NewUserRegistrationNoticeEmailProps,
+  ): Promise<void> {
+    const translations = this.translate(
+      'emails.newUserRegistrationNotice',
+      props.language,
+      { ...props },
+    );
+
+    await this.mailer.sendMail({
+      to: props.to,
+      subject: translations.title,
+      template: 'admin',
+      variables: {
+        links: this.links,
+        images: this.images,
+        ...translations,
+      },
+    });
+  }
+
+  async sendPasswordChangeDeniedEmail(
+    props: PasswordChangeDeniedEmailProps,
+  ): Promise<void> {
+    const translations = this.translate(
+      'emails.passwordChangeDenied',
+      props.language,
+      { ...props },
+    );
+
+    await this.mailer.sendMail({
+      to: props.to,
+      subject: translations.title,
+      template: 'user',
+      variables: {
+        links: this.links,
+        images: this.images,
+        ...translations,
+        footer: this.footer,
+      },
+    });
+  }
+
+  async sendAccountBlockedEmail(
+    props: AccountBlockedEmailProps,
+  ): Promise<void> {
+    const translations = this.translate(
+      'emails.accountBlocked',
+      props.language,
+      { ...props },
+    );
+
+    await this.mailer.sendMail({
+      to: props.to,
+      subject: translations.title,
+      template: 'user',
+      variables: {
+        links: this.links,
+        images: this.images,
+        ...translations,
+        footer: this.footer,
+      },
+    });
+  }
+
+  async sendTandemValidationNoticeEmail(
+    props: TandemValidationNoticeEmailProps,
+  ): Promise<void> {
+    const translations = this.translate(
+      'emails.tandemValidationNotice',
+      props.language,
+    );
+
+    await this.mailer.sendMail({
+      to: props.to,
+      subject: translations.title,
+      template: 'admin',
+      variables: {
+        links: this.links,
+        images: this.images,
+        ...translations,
+      },
+    });
+  }
+
+  async sendNewPartnerEmail(props: NewPartnerEmail): Promise<void> {
+    const translations = this.translate('emails.newTandem', props.language, {
+      ...props,
+    });
+
+    await this.mailer.sendMail({
+      to: props.to,
+      subject: translations.title,
+      template: 'user',
+      variables: {
+        links: this.links,
+        images: this.images,
+        ...translations,
+        footer: this.footer,
+      },
+    });
+  }
+
+  async sendNewTandemNoticeEmail(
+    props: NewTandemNoticeEmailProps,
+  ): Promise<void> {
+    const translations = this.translate(
+      'emails.newTandemNotice',
+      props.language,
+      { ...props },
+    );
+
+    await this.mailer.sendMail({
+      to: props.to,
+      subject: translations.title,
+      template: 'admin',
+      variables: {
+        links: this.links,
+        images: this.images,
+        ...translations,
+      },
+    });
+  }
+
+  async sendTandemCanceledEmail(
+    props: TandemCanceledEmailProps,
+  ): Promise<void> {
+    const translations = this.translate(
+      'emails.tandemCanceled',
+      props.language,
+      { ...props },
+    );
+
+    await this.mailer.sendMail({
+      to: props.to,
+      subject: translations.title,
+      template: 'user',
+      variables: {
+        links: this.links,
+        images: this.images,
+        ...translations,
+        footer: this.footer,
+      },
+    });
+  }
+
+  async sendTandemCanceledNoticeEmail(
+    props: TandemCanceledNoticeEmailProps,
+  ): Promise<void> {
+    const translations = this.translate(
+      'emails.tandemCanceledNotice',
+      props.language,
+      { ...props },
+    );
+
+    await this.mailer.sendMail({
+      to: props.to,
+      subject: translations.title,
+      template: 'admin',
+      variables: {
+        links: this.links,
+        images: this.images,
+        ...translations,
+      },
+    });
   }
 }

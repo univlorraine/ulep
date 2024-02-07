@@ -3,12 +3,30 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
 import { ApiModule } from './api/api.module';
 import { KeycloakModule } from '@app/keycloak';
 import { Env } from './configuration';
+import { MailerModule } from '@app/common';
+import { AcceptLanguageResolver, I18nModule, QueryResolver } from 'nestjs-i18n';
 
 @Module({
   imports: [
     ConfigModule.forRoot({
       isGlobal: true,
       validate: Env.validate,
+    }),
+    I18nModule.forRootAsync({
+      useFactory: async (env: ConfigService<Env, true>) => ({
+        fallbackLanguage: env
+          .get<string>('DEFAULT_TRANSLATION_LANGUAGE')
+          .toLowerCase(),
+        loaderOptions: {
+          path: 'i18n/',
+          watch: process.env.NODE_ENV !== 'production',
+        },
+      }),
+      resolvers: [
+        { use: QueryResolver, options: ['lang'] },
+        AcceptLanguageResolver,
+      ],
+      inject: [ConfigService],
     }),
     KeycloakModule.registerAsync({
       isGlobal: true,
@@ -21,6 +39,22 @@ import { Env } from './configuration';
         clientId: env.get<string>('KEYCLOAK_CLIENT_ID'),
         clientSecret: env.get<string>('KEYCLOAK_CLIENT_SECRET'),
         adminGroupId: env.get<string>('KEYCLOAK_ADMIN_GROUP_ID'),
+      }),
+      inject: [ConfigService],
+    }),
+    MailerModule.registerAsync({
+      isGlobal: true,
+      imports: [ConfigModule],
+      useFactory: async (env: ConfigService<Env, true>) => ({
+        host: env.get<string>('SMTP_HOST'),
+        port: env.get<number>('SMTP_PORT'),
+        secure: env.get<boolean>('SMTP_SECURE'),
+        ignoreTLS: env.get<boolean>('SMTP_IGNORE_TLS'),
+        emailFrom: env.get<string>('SMTP_SENDER'),
+        disableBootVerification: env.get<boolean>(
+          'SMTP_DISABLE_BOOT_VERIFICATION',
+        ),
+        templatesPath: 'templates/',
       }),
       inject: [ConfigService],
     }),

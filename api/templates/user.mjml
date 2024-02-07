@@ -1,0 +1,65 @@
+<mjml>
+  <mj-head>
+    <mj-title>{{title}}</mj-title>
+    <mj-font name="Roboto" href="https://fonts.googleapis.com/css?family=Roboto:300,500"></mj-font>
+    <mj-attributes>
+      <mj-all font-family="Roboto, Helvetica, sans-serif"></mj-all>
+      <mj-text color="#000000" font-size="12px" font-weight="400" line-height="20px"></mj-text>
+      <mj-section padding="0px"></mj-section>
+    </mj-attributes>
+    <mj-style>
+      h2 {
+        font-size: 17px;
+        font-weight: 700;
+        line-height: 21px;
+        margin-bottom: 30px;
+      }
+
+      .app-links {
+        border: solid 1px #ffffff;
+        border-radius: 10px;
+        width: 50%;
+        padding: 10px;
+        margin: auto;
+      }
+    </mj-style>
+  </mj-head>
+  <mj-body>
+    <!-- header -->
+    <mj-hero mode="fluid-height" background-color="rgb(253, 238, 102)" background-width="600px" background-url="{{images.background}}" padding="50px">
+      <!-- logo -->
+      <mj-image width="160px" src="{{images.logo}}" alt="logo" />
+      <!-- buble image -->
+      <mj-image width="140px" src="{{images.bubble}}" alt="hi" />
+      <!-- title -->
+      <mj-text color="#000000" align="center" font-size="16px" line-height="40px" font-weight="700">{{title}}</mj-text>
+    </mj-hero>
+    <!-- Main content -->
+    <mj-section>
+      <mj-column>
+        <mj-text>
+          {{{bodyHtml}}}
+        </mj-text>
+      </mj-column>
+    </mj-section>
+    <!-- Footer -->
+    <mj-wrapper background-color="#000000" padding="30px">
+      <mj-section padding-bottom="30px">
+        <mj-column width="100%">
+          <mj-text align="center" color="#ffffff" font-size="10px" font-weight="700" line-height="18.75px">{{footer.unsubscribe}}</mj-text>
+        </mj-column>
+      </mj-section>
+      <mj-section css-class="app-links">
+        <mj-column width="100%">
+          <mj-text align="center" color="#ffffff" font-size="12px">{{footer.downloadApps}}</mj-text>
+        </mj-column>
+        <mj-column width="100%">
+          <mj-image href="{{links.playStore}}" src="{{images.playStore}}"></mj-image>
+        </mj-column>
+        <mj-column width="100%">
+          <mj-image href="{{links.appleStore}}" src="{{images.appleStore}}"></mj-image>
+        </mj-column>
+      </mj-section>
+    </mj-wrapper>
+  </mj-body>
+</mjml>

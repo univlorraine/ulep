@@ -1,43 +1,19 @@
-import {
-  Body,
-  Controller,
-  Get,
-  HttpStatus,
-  Inject,
-  Param,
-  Post,
-  Put,
-  Res,
-} from '@nestjs/common';
-import { ConfigService } from '@nestjs/config';
+import { Body, Controller, Get, Param, Put } from '@nestjs/common';
 import * as Swagger from '@nestjs/swagger';
+import { I18nService } from 'nestjs-i18n';
 import { InstanceResponse } from 'src/api/dtos/instance/instance.response';
 import { UpdateInstanceRequest } from 'src/api/dtos/instance/update-instance.request';
-import { Env, getTranslationsEndpoint } from 'src/configuration';
 import { RessourceDoesNotExist } from 'src/core/errors';
-import {
-  STORAGE_INTERFACE,
-  StorageInterface,
-} from 'src/core/ports/storage.interface';
 import { GetInstanceUsecase, UpdateInstanceUsecase } from 'src/core/usecases';
-import { Readable } from 'stream';
 
 @Controller('instance')
 @Swagger.ApiTags('Instance')
 export class InstanceController {
-  #translationToken: string;
-  #emailAssetsBucket: string;
-
   constructor(
-    @Inject(STORAGE_INTERFACE)
-    private readonly storageGateway: StorageInterface,
     private readonly getInstanceUsecase: GetInstanceUsecase,
     private readonly updateInstanceUsecase: UpdateInstanceUsecase,
-    env: ConfigService<Env, true>,
-  ) {
-    this.#translationToken = env.get('TRANSLATIONS_TOKEN');
-    this.#emailAssetsBucket = env.get('EMAIL_ASSETS_BUCKET');
-  }
+    private readonly i18n: I18nService,
+  ) {}
 
   @Get('config')
   @Swagger.ApiOperation({ summary: 'Get the instance configuration' })
@@ -64,41 +40,11 @@ export class InstanceController {
     @Param('lng') lng: string,
     @Param('type') type: string,
   ): Promise<string> {
-    // %2F work with github and gitlab but / doesn't with gitlab ( ??? )
-    const result = await fetch(getTranslationsEndpoint(lng, type), {
-      headers: { 'PRIVATE-TOKEN': this.#translationToken },
-    });
-
-    if (!result.ok) {
-      throw new RessourceDoesNotExist();
-    }
-
-    const locale = await result.json();
-
-    return JSON.stringify(locale);
-  }
-
-  @Get('emails/images/:fileName')
-  async getEmailImages(
-    @Param('fileName') fileName: string,
-    @Res() res,
-  ): Promise<Readable> {
     try {
-      const stream = await this.storageGateway.read(
-        this.#emailAssetsBucket,
-        fileName,
-      );
-      return stream.pipe(res);
-    } catch (err) {
-      if (err.code === 'NoSuchKey') {
-        return res.status(HttpStatus.NOT_FOUND).end();
-      }
-      return res.status(HttpStatus.INTERNAL_SERVER_ERROR).end();
+      const translations = await this.i18n.translate(type, { lang: lng });
+      return JSON.stringify(translations);
+    } catch (error) {
+      throw new RessourceDoesNotExist(error.message);
     }
-  }
-
-  @Post('emails')
-  async sendEmail(@Body() body: any): Promise<void> {
-    console.log(body);
   }
 }

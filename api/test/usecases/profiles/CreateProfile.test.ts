@@ -5,11 +5,6 @@ import {
   UserFactory,
 } from '@app/common';
 import { CreateProfileUsecase } from '../../../src/core/usecases';
-import { InMemoryInterestRepository } from '../../../src/providers/persistance/repositories/in-memory-interest.repository';
-import { InMemoryLanguageRepository } from '../../../src/providers/persistance/repositories/in-memory-language-repository';
-import { InMemoryProfileRepository } from '../../../src/providers/persistance/repositories/in-memory-profile-repository';
-import { InMemoryUniversityRepository } from '../../../src/providers/persistance/repositories/in-memory-university-repository';
-import { InMemoryUserRepository } from '../../../src/providers/persistance/repositories/in-memory-user-repository';
 import {
   LearningType,
   MeetingFrequency,
@@ -18,8 +13,16 @@ import {
 import {
   RessourceDoesNotExist,
   UnsuportedLanguageException,
-} from 'src/core/errors';
-import { ProfileLanguagesException } from 'src/core/errors/profile-exceptions';
+} from '../../../src/core/errors';
+import { ProfileLanguagesException } from '../../../src/core/errors/profile-exceptions';
+import { InMemoryInterestRepository } from '../../../src/providers/persistance/repositories/in-memory-interest.repository';
+import { InMemoryLanguageRepository } from '../../../src/providers/persistance/repositories/in-memory-language-repository';
+import { InMemoryProfileRepository } from '../../../src/providers/persistance/repositories/in-memory-profile-repository';
+import { InMemoryUniversityRepository } from '../../../src/providers/persistance/repositories/in-memory-university-repository';
+import { InMemoryUserRepository } from '../../../src/providers/persistance/repositories/in-memory-user-repository';
+import { InMemoryLearningObjectiveRepository } from '../../../src/providers/persistance/repositories/in-memory-objective.repository';
+import InMemoryEmailGateway from '../../../src/providers/gateway/in-memory-email.gateway';
+import { UuidProvider } from '../../../src/providers/services/uuid.provider';
 
 describe('CreateProfile', () => {
   const userFactory = new UserFactory();
@@ -32,6 +35,9 @@ describe('CreateProfile', () => {
   const universityRepository = new InMemoryUniversityRepository();
   const languageRepository = new InMemoryLanguageRepository();
   const interestRepository = new InMemoryInterestRepository();
+  const objectivesRepository = new InMemoryLearningObjectiveRepository();
+  const uuidProvider = new UuidProvider();
+  const emailGateway = new InMemoryEmailGateway();
 
   const learningLanguage = languageFactory.makeOne({
     id: 'uuid-1',
@@ -55,7 +61,7 @@ describe('CreateProfile', () => {
 
   const languages = [learningLanguage, nativeLanguage, masteredLanguage];
 
-  const university = universityFactory.makeOne({ languages });
+  const university = universityFactory.makeOne();
 
   const user = userFactory.makeOne({
     university: university,
@@ -68,6 +74,9 @@ describe('CreateProfile', () => {
     profileRepository,
     languageRepository,
     interestRepository,
+    objectivesRepository,
+    uuidProvider,
+    emailGateway,
   );
 
   beforeEach(async () => {
