@@ -5,7 +5,6 @@ import { useStoreActions, useStoreState } from '../../store/storeTypes';
 import WebLayoutCentered from '../components/layout/WebLayoutCentered';
 import ReportModal from '../components/modals/ReportModal';
 import styles from './css/Suspended.module.css';
-import { AvatarPlaceholderPng } from '../../assets';
 import Avatar from '../components/Avatar';
 
 interface SuspendedPageProps {
@@ -27,12 +26,12 @@ const SuspendedPage: React.FC<SuspendedPageProps> = ({ status }) => {
     const reloadProfile = async () => {
         const profile = await getProfile.execute(accessToken);
 
-        if(profile instanceof Error){
+        if (profile instanceof Error) {
             return await disconnect();
         }
 
         return setProfile({ profile });
-    }
+    };
 
     useEffect(() => {
         reloadProfile();
