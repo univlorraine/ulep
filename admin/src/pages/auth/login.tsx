@@ -22,7 +22,7 @@ const LoginPage = () => {
     };
 
     const ssoLogin = () => {
-        const redirectUri = encodeURI(`${window.location.origin}`);
+        const redirectUri = encodeURI(`${window.location.origin}#/auth-callback`);
         window.location.href = `${process.env.REACT_APP_API_URL}/authentication/flow?redirectUri=${redirectUri}`;
     };
 
