@@ -1,11 +1,12 @@
 import SchoolIcon from '@mui/icons-material/School';
 import React from 'react';
-import { Menu, usePermissions, useGetIdentity } from 'react-admin';
+import { Menu, usePermissions, useGetIdentity, useTranslate } from 'react-admin';
 import { ADMIN_PERMISSION, SUPER_ADMIN_PERMISSION } from '../../providers/authProvider';
 
 const CustomMenu = () => {
     const { data } = useGetIdentity();
     const { permissions } = usePermissions();
+    const translate = useTranslate();
 
     return (
         <Menu sx={{ display: 'flex' }}>
@@ -13,7 +14,11 @@ const CustomMenu = () => {
             <Menu.ResourceItem name="learning-languages" />
             <Menu.ResourceItem name="users/administrators" />
             {permissions === ADMIN_PERMISSION && data && data.universityId && (
-                <Menu.Item leftIcon={<SchoolIcon />} to={`/universities/${data.universityId}/show`} />
+                <Menu.Item
+                    leftIcon={<SchoolIcon />}
+                    primaryText={translate('universities.label')}
+                    to={`/universities/${data.universityId}/show`}
+                />
             )}
             {permissions === SUPER_ADMIN_PERMISSION && (
                 // Note: div is mandatory to group these Menu.Item as Fragment throw an error from MUI component
