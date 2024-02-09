@@ -398,7 +398,7 @@ export class KeycloakClient {
   /*
    * Updates an existing user in Keycloak.
    */
-  async updateAdministrator(
+  async updateUser(
     props: UpdateAdministratorProps,
   ): Promise<UserRepresentation> {
     const payload: UpdateAdministratorPayload = {

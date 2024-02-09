@@ -45,7 +45,7 @@ export class CreateAdministratorUsecase {
 
       const hasCredentials = await this.hasCredentials(user.id);
 
-      await this.keycloakClient.updateAdministrator({
+      await this.keycloakClient.updateUser({
         id: user.id,
         email: command.email,
         firstname: command.firstname,

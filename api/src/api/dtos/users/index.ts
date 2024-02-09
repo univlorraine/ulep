@@ -87,6 +87,21 @@ export class UpdateUserRequest {
   @IsNotEmpty()
   id: string;
 
+  @Swagger.ApiPropertyOptional({ type: 'string', format: 'email' })
+  @IsEmail()
+  @IsOptional()
+  email?: string;
+
+  @Swagger.ApiPropertyOptional({ type: 'string' })
+  @IsString()
+  @IsOptional()
+  firstname?: string;
+
+  @Swagger.ApiPropertyOptional({ type: 'string' })
+  @IsString()
+  @IsOptional()
+  lastname?: string;
+
   @Swagger.ApiProperty({ type: 'string', enum: UserStatus })
   @IsOptional()
   status?: UserStatus;

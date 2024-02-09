@@ -19,11 +19,15 @@ import {
 import { EMAIL_GATEWAY, EmailGateway } from 'src/core/ports/email.gateway';
 import { ConfigService } from '@nestjs/config';
 import { Env } from 'src/configuration';
+import { KeycloakClient } from '@app/keycloak';
 
 export class UpdateUserCommand {
   id: string;
   status?: UserStatus;
   acceptsEmail?: boolean;
+  email?: string;
+  firstname?: string;
+  lastname?: string;
 }
 
 @Injectable()
@@ -40,6 +44,7 @@ export class UpdateUserUsecase {
     @Inject(EMAIL_GATEWAY)
     private readonly emailGateway: EmailGateway,
     private readonly env: ConfigService<Env, true>,
+    private readonly keycloakClient: KeycloakClient,
   ) {}
 
   async execute(command: UpdateUserCommand): Promise<User> {
@@ -48,11 +53,23 @@ export class UpdateUserUsecase {
       throw new RessourceDoesNotExist();
     }
 
+    if (command.firstname || command.lastname || command.email) {
+      await this.keycloakClient.updateUser({
+        id: user.id,
+        firstname: command.firstname || user.firstname,
+        lastname: command.lastname || user.lastname,
+        email: command.email || user.email,
+      });
+    }
+
     const update = await this.userRepository.update(
       new User({
         ...user,
-        status: command.status,
-        acceptsEmail: command.acceptsEmail,
+        status: command.status || user.status,
+        acceptsEmail: command.acceptsEmail || user.acceptsEmail,
+        firstname: command.firstname || user.firstname,
+        lastname: command.lastname || user.lastname,
+        email: command.email || user.email,
       }),
     );
 
@@ -164,4 +181,6 @@ export class UpdateUserUsecase {
       );
     }
   }
+
+  private sync;
 }
