@@ -15,5 +15,13 @@ export type Profile = {
     createdAt?: Date;
 };
 
+export interface ProfileFormPayload {
+    id?: string;
+    email?: string;
+    firstname?: string;
+    lastname?: string;
+    password?: string;
+}
+
 export const getProfileDisplayName = (profile?: Profile): string =>
     profile ? `${profile.user.lastname} ${profile.user.firstname}` : '';
