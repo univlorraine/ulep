@@ -3,6 +3,10 @@ import { User, UserStatus } from '../models';
 
 export const USER_REPOSITORY = 'user.repository';
 
+export type WhereProps = {
+  universityId?: string;
+};
+
 export interface UserRepository {
   create(user: User): Promise<User>;
 
@@ -21,4 +25,6 @@ export interface UserRepository {
   blacklist(users: User[]): Promise<void>;
 
   isBlacklisted(email: string): Promise<boolean>;
+
+  count(props: WhereProps): Promise<number>;
 }
