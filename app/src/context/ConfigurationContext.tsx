@@ -7,11 +7,12 @@ export const ConfigContext = createContext<ConfigContextValueType>(
     getConfigContextValue({
         apiUrl: '',
         languageCode: '',
-        accessToken:'',
-        refreshToken:'',
+        accessToken: '',
+        refreshToken: '',
         setProfile: () => null,
         setTokens: () => null,
         setUser: () => null,
+        logout: () => null,
         configuration: new Configuration(
             'Université de Lorraine',
             'Université de Lorraine',
@@ -26,8 +27,8 @@ export const ConfigContext = createContext<ConfigContextValueType>(
             '#4B7676',
             '#7CB8B8',
             false
-        )
-        })
+        ),
+    })
 );
 
 export const useConfig = () => useContext(ConfigContext);
