@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { Collection, PrismaService } from '@app/common';
 import { UserRelations, userMapper } from '../mappers/user.mapper';
-import { UserRepository } from 'src/core/ports/user.repository';
+import { UserRepository, WhereProps } from 'src/core/ports/user.repository';
 import { User, UserStatus } from 'src/core/models';
 import { UniversityRelations } from '../mappers';
 
@@ -139,5 +139,15 @@ export class PrismaUserRepository implements UserRepository {
   async isBlacklisted(email: string): Promise<boolean> {
     const blacklist = await this.prisma.blacklist.findMany();
     return blacklist.some((it) => it.email === email);
+  }
+
+  async count(props: WhereProps): Promise<number> {
+    const countUsers = await this.prisma.users.count({
+      where: {
+        organization_id: props.universityId,
+      },
+    });
+
+    return countUsers;
   }
 }

@@ -1,6 +1,6 @@
 import { Collection } from '@app/common';
 import { User, UserStatus } from 'src/core/models/user.model';
-import { UserRepository } from 'src/core/ports/user.repository';
+import { UserRepository, WhereProps } from 'src/core/ports/user.repository';
 
 export class InMemoryUserRepository implements UserRepository {
   #users: User[] = [];
@@ -80,5 +80,11 @@ export class InMemoryUserRepository implements UserRepository {
 
   async isBlacklisted(email: string): Promise<boolean> {
     return this.#blacklist.includes(email);
+  }
+
+  async count(props: WhereProps): Promise<number> {
+    return this.#users.filter(
+      (user) => user.university?.id === props.universityId,
+    ).length;
   }
 }
