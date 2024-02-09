@@ -51,6 +51,12 @@ const ProfileTab = () => {
                 <TextField label={translate('global.gender')} source="user.gender" />
                 <TextField label={translate('global.university')} source="user.university.name" />
                 <FunctionField
+                    label={translate('learning_languages.show.fields.status')}
+                    render={(record: { user: User }) =>
+                        translate(`global.userStatus.${record.user.status?.toLowerCase()}`)
+                    }
+                />
+                <FunctionField
                     label={translate('global.role')}
                     render={(record: { user: User }) => translate(`global.${record.user.role.toLowerCase()}`)}
                     source="user.role"
