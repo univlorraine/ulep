@@ -15,11 +15,7 @@ interface ProfileContentProps {
     profile: Profile;
 }
 
-const ProfileContent: React.FC<ProfileContentProps> = ({
-    onClose,
-    onParameterPressed,
-    profile,
-}) => {
+const ProfileContent: React.FC<ProfileContentProps> = ({ onClose, onParameterPressed, profile }) => {
     const { configuration } = useConfig();
     const { t } = useTranslation();
     const [showToast] = useIonToast();
@@ -42,10 +38,6 @@ const ProfileContent: React.FC<ProfileContentProps> = ({
 
             return setLoading(false);
         }
-    };
-
-    const disconnect = () => {
-        return logout();
     };
 
     return (
@@ -90,7 +82,7 @@ const ProfileContent: React.FC<ProfileContentProps> = ({
                     <img alt="arrow-right" src={ArrowRightSvg} />
                 </button>
 
-                <button className={styles.button} onClick={disconnect}>
+                <button className={styles.button} onClick={() => logout()}>
                     <div className={styles['button-container']}>
                         <img alt="disconnect" src={SmallAvatarPng} />
                         <span className="margin-left">{t('home_page.profile.disconnect')}</span>

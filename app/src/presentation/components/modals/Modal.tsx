@@ -10,10 +10,6 @@ interface ModalProps {
 }
 
 const Modal: React.FC<ModalProps> = ({ children, hideWhiteBackground, isVisible, onClose, position = 'center' }) => {
-    if (!isVisible) {
-        return null;
-    }
-
     const handleClickOutside = (event: MouseEvent) => {
         const modalContent = document.getElementById('modal-content');
 
@@ -29,6 +25,10 @@ const Modal: React.FC<ModalProps> = ({ children, hideWhiteBackground, isVisible,
             document.removeEventListener('mousedown', handleClickOutside);
         };
     }, []);
+
+    if (!isVisible) {
+        return null;
+    }
 
     return (
         <div className={styles.modal} style={{ justifyContent: position }}>
