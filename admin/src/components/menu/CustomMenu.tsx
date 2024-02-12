@@ -15,7 +15,11 @@ const CustomMenu = () => {
             <Menu.ResourceItem name="learning-languages" />
             <Menu.ResourceItem name="users/administrators" />
             {permissions === ADMIN_PERMISSION && data && data.universityId && (
-                <Menu.Item leftIcon={<SchoolIcon />} to={`/universities/${data.universityId}/show`} />
+                <Menu.Item
+                    leftIcon={<SchoolIcon />}
+                    primaryText={translate('universities.label')}
+                    to={`/universities/${data.universityId}/show`}
+                />
             )}
             {permissions === SUPER_ADMIN_PERMISSION && (
                 // Note: div is mandatory to group these Menu.Item as Fragment throw an error from MUI component
