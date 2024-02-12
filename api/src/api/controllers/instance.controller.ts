@@ -1,8 +1,9 @@
 import { Body, Controller, Get, Param, Put } from '@nestjs/common';
+import { ConfigService } from '@nestjs/config';
 import * as Swagger from '@nestjs/swagger';
-import { I18nService } from 'nestjs-i18n';
 import { InstanceResponse } from 'src/api/dtos/instance/instance.response';
 import { UpdateInstanceRequest } from 'src/api/dtos/instance/update-instance.request';
+import { Env } from 'src/configuration';
 import { RessourceDoesNotExist } from 'src/core/errors';
 import { GetInstanceUsecase, UpdateInstanceUsecase } from 'src/core/usecases';
 
@@ -12,7 +13,7 @@ export class InstanceController {
   constructor(
     private readonly getInstanceUsecase: GetInstanceUsecase,
     private readonly updateInstanceUsecase: UpdateInstanceUsecase,
-    private readonly i18n: I18nService,
+    private readonly env: ConfigService<Env, true>,
   ) {}
 
   @Get('config')
@@ -40,11 +41,21 @@ export class InstanceController {
     @Param('lng') lng: string,
     @Param('type') type: string,
   ): Promise<string> {
-    try {
-      const translations = await this.i18n.translate(type, { lang: lng });
-      return JSON.stringify(translations);
-    } catch (error) {
-      throw new RessourceDoesNotExist(error.message);
+    // %2F work with github and gitlab but / doesn't with gitlab ( ??? )
+    const endpoint = this.env.get('TRANSLATIONS_ENDPOINT');
+    const suffix = this.env.get('TRANSLATIONS_ENDPOINT_SUFFIX');
+    const url = `${endpoint}%2F${lng}%2F${type}.json${suffix}`;
+
+    const result = await fetch(url, {
+      headers: { 'PRIVATE-TOKEN': this.env.get('TRANSLATIONS_TOKEN') },
+    });
+
+    if (!result.ok) {
+      throw new RessourceDoesNotExist();
     }
+
+    const locale = await result.json();
+
+    return JSON.stringify(locale);
   }
 }
