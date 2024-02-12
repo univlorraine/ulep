@@ -56,15 +56,6 @@ dependencies:
   i18next:
     specifier: ^23.5.1
     version: 23.5.1
-  i18next-chained-backend:
-    specifier: ^4.5.0
-    version: 4.5.0
-  i18next-http-backend:
-    specifier: ^2.2.2
-    version: 2.2.2
-  i18next-resources-to-backend:
-    specifier: ^1.1.4
-    version: 1.1.4
   jsonwebtoken:
     specifier: ^9.0.0
     version: 9.0.1
@@ -3618,14 +3609,6 @@ packages:
     resolution: {integrity: sha512-dcKFX3jn0MpIaXjisoRvexIJVEKzaq7z2rZKxf+MSr9TkdmHmsU4m2lcLojrj/FHl8mk5VxMmYA+ftRkP/3oKQ==}
     dev: true
 
-  /cross-fetch@3.1.6:
-    resolution: {integrity: sha512-riRvo06crlE8HiqOwIpQhxwdOk4fOeR7FVM/wXoxchFEqMNUjvbs3bfo4OTgMEMHzppd4DxFBDbyySj8Cv781g==}
-    dependencies:
-      node-fetch: 2.7.0
-    transitivePeerDependencies:
-      - encoding
-    dev: false
-
   /cross-spawn@7.0.3:
     resolution: {integrity: sha512-iRDPJKUPVEND7dHPO8rkbOnPpyDygcDFtWjpeWNCgy8WP2rXcxXL8TskReQl6OrB2G7+UJrags1q15Fudc7G6w==}
     engines: {node: '>= 8'}
@@ -4588,27 +4571,6 @@ packages:
     resolution: {integrity: sha512-B4FFZ6q/T2jhhksgkbEW3HBvWIfDW85snkQgawt07S7J5QXTk6BkNV+0yAeZrM5QpMAdYlocGoljn0sJ/WQkFw==}
     engines: {node: '>=10.17.0'}
     dev: true
-
-  /i18next-chained-backend@4.5.0:
-    resolution: {integrity: sha512-2W7JwY0iTJx/VfBmTSc3vhp2FGONiJx8eiFQUoXM70xfvYqtfnzptRyNjM9BJCUNV0rUvvBm5N8CmRuSL38v0A==}
-    dependencies:
-      '@babel/runtime': 7.22.15
-      i18next-resources-to-backend: 1.1.4
-    dev: false
-
-  /i18next-http-backend@2.2.2:
-    resolution: {integrity: sha512-mJu4ZqzDtBiU3O4GV9AbK5ekEqoDMdMnCl3pkdXmb5b8yoIH//u8FsmIe6C5qXb3teZu+j6VMi20tjUgzeABiw==}
-    dependencies:
-      cross-fetch: 3.1.6
-    transitivePeerDependencies:
-      - encoding
-    dev: false
-
-  /i18next-resources-to-backend@1.1.4:
-    resolution: {integrity: sha512-hMyr9AOmIea17AOaVe1srNxK/l3mbk81P7Uf3fdcjlw3ehZy3UNTd0OP3EEi6yu4J02kf9jzhCcjokz6AFlEOg==}
-    dependencies:
-      '@babel/runtime': 7.22.15
-    dev: false
 
   /i18next@23.5.1:
     resolution: {integrity: sha512-JelYzcaCoFDaa+Ysbfz2JsGAKkrHiMG6S61+HLBUEIPaF40WMwW9hCPymlQGrP+wWawKxKPuSuD71WZscCsWHg==}
