@@ -86,6 +86,7 @@ export class PrismaUserRepository implements UserRepository {
       where: { id: user.id },
       data: {
         Organization: { connect: { id: user.university.id } },
+        email: user.email,
         firstname: user.firstname,
         lastname: user.lastname,
         age: user.age,

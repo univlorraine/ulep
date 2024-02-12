@@ -37,7 +37,7 @@ export class UpdateAdministratorUsecase {
       throw new RessourceDoesNotExist('Administrator does not exist');
     }
 
-    const keycloakUser = await this.keycloakClient.updateAdministrator({
+    const keycloakUser = await this.keycloakClient.updateUser({
       id: admin.id,
       firstname: command.firstname || admin.firstName,
       lastname: command.lastname || admin.lastName,
