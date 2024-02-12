@@ -24,7 +24,7 @@ interface ProfileCommand {
     objectives: {
         id: string;
         name: string;
-        image: { id: string; url: string };
+        image: { id: string; mimeType: string };
     }[];
     meetingFrequency: string;
     availabilities: {

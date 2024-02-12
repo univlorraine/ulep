@@ -5,7 +5,7 @@ import GetAllGoalsUsecase from '../../../src/domain/usecases/GetAllGoalsUsecase'
 import DomainHttpAdapter from '../../mocks/adapters/HttpAdapter';
 
 const usecaseResponse: CollectionCommand<GoalCommand> = {
-    items: [{ id: 'id', name: 'name', image: { id: 'id', url: 'url' } }],
+    items: [{ id: 'id', name: 'name', image: { id: 'id', mimeType: 'image/jpg' } }],
     totalItems: 1,
 };
 

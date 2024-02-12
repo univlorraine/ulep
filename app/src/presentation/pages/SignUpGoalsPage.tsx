@@ -9,6 +9,7 @@ import { useStoreActions } from '../../store/storeTypes';
 import WebLayoutCentered from '../components/layout/WebLayoutCentered';
 import styles from './css/SignUp.module.css';
 import goalsStyles from './css/SignUpGoals.module.css';
+import NetworkImage from '../components/NetworkImage';
 
 const SignUpGoalsPage: React.FC = () => {
     const { t } = useTranslation();
@@ -76,16 +77,24 @@ const SignUpGoalsPage: React.FC = () => {
                                     style={{
                                         backgroundColor:
                                             userGoals.length === 0 ||
-                                            userGoals.findIndex((userGoal) => userGoal.id === goal.id) === -1
+                                                userGoals.findIndex((userGoal) => userGoal.id === goal.id) === -1
                                                 ? '#F2F4F7'
                                                 : '#FDEE66',
                                     }}
                                 >
-                                    <img
-                                        alt={goal.id}
-                                        className={goalsStyles.image}
-                                        src={goal.image ?? WritingSkillPng}
-                                    />
+                                    {goal.image ?
+                                        <NetworkImage
+                                            id={goal.image.id}
+                                            alt={goal.id}
+                                            className={goalsStyles.image}
+                                            placeholder={WritingSkillPng}
+                                        />
+                                        : <img
+                                            alt={goal.id}
+                                            className={goalsStyles.image}
+                                            src={WritingSkillPng}
+                                        />
+                                    }
                                     <span className={goalsStyles.description}>{goal.name}</span>
                                 </button>
                             );
