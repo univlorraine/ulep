@@ -12,7 +12,7 @@ const PrivateRoute: React.FC<PrivateRouteProps> = ({ component: Component, ...pr
     const router = useIonRouter();
 
     if (!token) {
-        router.push('/login', 'root', 'replace');
+        window.location.href = '/';
     }
 
     return <Route {...props} render={(props) => token && <Component {...props} />} />;

@@ -19,15 +19,11 @@ const SuspendedPage: React.FC<SuspendedPageProps> = ({ status }) => {
     const setProfile = useStoreActions((state) => state.setProfile);
     const [isReportMode, setReportMode] = useState<boolean>(false);
 
-    const disconnect = async () => {
-        await logout();
-    };
-
     const reloadProfile = async () => {
         const profile = await getProfile.execute(accessToken);
 
         if (profile instanceof Error) {
-            return await disconnect();
+            return logout();
         }
 
         return setProfile({ profile });
@@ -40,7 +36,7 @@ const SuspendedPage: React.FC<SuspendedPageProps> = ({ status }) => {
     return (
         <WebLayoutCentered
             backgroundIconColor={configuration.primaryBackgroundImageColor}
-            goBackPressed={disconnect}
+            goBackPressed={logout}
             headerColor={configuration.primaryColor}
             headerPercentage={100}
             headerTitle={t('global.account')}
