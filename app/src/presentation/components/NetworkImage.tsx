@@ -1,6 +1,6 @@
-import useGetMediaObject from "../hooks/useGetMediaObject";
+import useGetMediaObject from '../hooks/useGetMediaObject';
 import style from './NetworkImage.module.css';
-import { IonSpinner } from "@ionic/react";
+import { IonSpinner } from '@ionic/react';
 
 interface NetworkImageProps {
     id: string;
@@ -12,10 +12,10 @@ interface NetworkImageProps {
 const NetworkImage: React.FC<NetworkImageProps> = ({ id, alt = 'image', viewClassName, placeholder }) => {
     const { loading, image, error } = useGetMediaObject({ id });
 
-    return (
-        <div className={viewClassName}>
-            {loading ? <IonSpinner color={"primary"}></IonSpinner> : <img alt={alt} src={error ? placeholder : image} className={style.image} />}
-        </div>
+    return loading ? (
+        <IonSpinner color={'primary'}></IonSpinner>
+    ) : (
+        <img alt={alt} src={error ? placeholder : image} className={style.image + ' ' + viewClassName} />
     );
 };
 
