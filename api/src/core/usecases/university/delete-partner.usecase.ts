@@ -4,6 +4,10 @@ import {
   UniversityRepository,
 } from '../../ports/university.repository';
 import { DomainError, RessourceDoesNotExist } from 'src/core/errors';
+import {
+  USER_REPOSITORY,
+  UserRepository,
+} from 'src/core/ports/user.repository';
 
 export class DeleteUniversityCommand {
   id: string;
@@ -14,6 +18,8 @@ export class DeleteUniversityUsecase {
   constructor(
     @Inject(UNIVERSITY_REPOSITORY)
     private readonly universityRepository: UniversityRepository,
+    @Inject(USER_REPOSITORY)
+    private readonly userRepository: UserRepository,
   ) {}
 
   async execute(command: DeleteUniversityCommand) {
@@ -26,15 +32,27 @@ export class DeleteUniversityUsecase {
       throw new DomainError({ message: 'Cannot delete root university' });
     }
 
-    const havePartners = await this.universityRepository.havePartners(
-      command.id,
-    );
+    await this.assertUniversityHaveNoPartnersUniversity(command.id);
+    await this.assertUniversityHaveNoUsers(command.id);
+
+    return this.universityRepository.remove(command.id);
+  }
+
+  private async assertUniversityHaveNoPartnersUniversity(id: string) {
+    const havePartners = await this.universityRepository.havePartners(id);
     if (havePartners) {
       throw new DomainError({
         message: 'Cannot delete university with partners',
       });
     }
+  }
 
-    return this.universityRepository.remove(command.id);
+  private async assertUniversityHaveNoUsers(id: string) {
+    const countUsers = await this.userRepository.count({ universityId: id });
+    if (countUsers > 0) {
+      throw new DomainError({
+        message: 'Cannot delete university with users',
+      });
+    }
   }
 }

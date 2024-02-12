@@ -6,7 +6,14 @@ import {
 } from '@app/common';
 import { InMemoryProfileRepository } from '../../../src/providers/persistance/repositories/in-memory-profile-repository';
 import { GetProfileUsecase } from '../../../src/core/usecases/profiles/get-profile.usecase';
-import { LearningType, ProficiencyLevel, Profile } from 'src/core/models';
+import {
+  AvailabilitesOptions,
+  LearningLanguage,
+  LearningType,
+  MeetingFrequency,
+  ProficiencyLevel,
+  Profile,
+} from 'src/core/models';
 
 describe('GetProfile', () => {
   const userFactory = new UserFactory();
@@ -27,9 +34,7 @@ describe('GetProfile', () => {
     code: 'fr',
   });
 
-  const university = universityFactory.makeOne({
-    languages: [learningLanguage, nativeLanguage],
-  });
+  const university = universityFactory.makeOne();
 
   const user = userFactory.makeOne({ university });
 
@@ -38,16 +43,30 @@ describe('GetProfile', () => {
   const profile = new Profile({
     id: 'uuid-1',
     user: user,
-    nativeLanguage,
-    learningLanguage,
-    level: ProficiencyLevel.B2,
+    nativeLanguage: nativeLanguage,
     masteredLanguages: [],
-    learningType: LearningType.ETANDEM,
-    meetingFrequency: 'ONCE_A_WEEK',
-    sameGender: false,
-    sameAge: false,
+    learningLanguages: [
+      new LearningLanguage({
+        id: 'learning-language-uuid-1',
+        language: learningLanguage,
+        level: ProficiencyLevel.B2,
+        learningType: LearningType.ETANDEM,
+        sameGender: false,
+        sameAge: false,
+      }),
+    ],
+    meetingFrequency: MeetingFrequency.ONCE_A_WEEK,
     objectives: [],
     interests: [interest],
+    availabilities: {
+      monday: AvailabilitesOptions.AVAILABLE,
+      tuesday: AvailabilitesOptions.AVAILABLE,
+      wednesday: AvailabilitesOptions.AVAILABLE,
+      thursday: AvailabilitesOptions.AVAILABLE,
+      friday: AvailabilitesOptions.AVAILABLE,
+      saturday: AvailabilitesOptions.AVAILABLE,
+      sunday: AvailabilitesOptions.AVAILABLE,
+    },
   });
 
   beforeEach(() => {

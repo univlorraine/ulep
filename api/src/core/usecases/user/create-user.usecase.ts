@@ -1,11 +1,17 @@
 import { KeycloakClient } from '@app/keycloak';
-import { BadRequestException, Inject, Injectable } from '@nestjs/common';
+import {
+  BadRequestException,
+  Inject,
+  Injectable,
+  Logger,
+} from '@nestjs/common';
 import { RessourceDoesNotExist, UnauthorizedOperation } from 'src/core/errors';
 import { Gender, Role, User } from 'src/core/models';
 import {
   COUNTRY_REPOSITORY,
   CountryRepository,
 } from 'src/core/ports/country.repository';
+import { EMAIL_GATEWAY, EmailGateway } from 'src/core/ports/email.gateway';
 import {
   UNIVERSITY_REPOSITORY,
   UniversityRepository,
@@ -33,6 +39,8 @@ export class CreateUserCommand {
 
 @Injectable()
 export class CreateUserUsecase {
+  private readonly logger = new Logger(CreateUserUsecase.name);
+
   constructor(
     private readonly keycloak: KeycloakClient,
     @Inject(USER_REPOSITORY)
@@ -41,9 +49,11 @@ export class CreateUserUsecase {
     private readonly universityRepository: UniversityRepository,
     @Inject(COUNTRY_REPOSITORY)
     private readonly countryRepository: CountryRepository,
+    @Inject(EMAIL_GATEWAY)
+    private readonly emailGateway: EmailGateway,
   ) {}
 
-  async execute(command: CreateUserCommand) {
+  async execute(command: CreateUserCommand): Promise<User> {
     const isBlacklisted = await this.userRepository.isBlacklisted(
       command.email,
     );
@@ -79,6 +89,7 @@ export class CreateUserUsecase {
     if (university.admissionEnd < now || university.admissionStart > now) {
       throw new BadRequestException('Registration unavailable');
     }
+
     let keycloakUser = await this.keycloak.getUserByEmail(command.email);
     if (command.password && !keycloakUser) {
       keycloakUser = await this.keycloak.createUser({
@@ -116,6 +127,19 @@ export class CreateUserUsecase {
           staffFunction: command.staffFunction,
         }),
       );
+
+      // Notify the university about the new registration
+      if (user.university.notificationEmail) {
+        try {
+          await this.emailGateway.sendNewUserRegistrationNoticeEmail({
+            to: user.university.notificationEmail,
+            language: user.university.country.code.toLowerCase(),
+            user: { ...user },
+          });
+        } catch (error) {
+          console.error('Error sending registration notice email', error);
+        }
+      }
     }
 
     return user;

@@ -29,7 +29,7 @@ const usecaseResponse: TandemCommand[] = [
                         name: 'Chinese',
                     },
                 ],
-                objectives: [{ id: 'id', name: 'name', image: { id: 'id', url: 'url' } }],
+                objectives: [{ id: 'id', name: 'name', image: { id: 'id', mimeType: 'image/jpg' } }],
                 meetingFrequency: 'ONCE_A_WEEK',
                 biography: {
                     anecdote: 'anecdote',

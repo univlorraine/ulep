@@ -75,6 +75,7 @@
         "tandem": "Tandem",
         "both": "Both",
         "deleted_user": "Deleted user",
+        "sso_login": "Authenticate",
         "userStatus": {
             "active": "Actif",
             "blocked": "Blocked",

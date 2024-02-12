@@ -9,7 +9,7 @@ import getConfigContextValue from './context/getConfigurationContextValue';
 import Router from './presentation/router/Router';
 import React from 'react';
 import { useStoreActions, useStoreState } from './store/storeTypes';
-import * as Sentry from "@sentry/react";
+import * as Sentry from '@sentry/react';
 /* Core CSS required for Ionic components to work properly */
 import '@ionic/react/css/core.css';
 
@@ -30,27 +30,23 @@ import useFetchI18NBackend from './presentation/hooks/useFetchI18NBackend';
 import ErrorPage from './presentation/pages/ErrorPage';
 import AppUrlListener from './presentation/router/AppUrlListener';
 import MaintenancePage from './presentation/pages/MaintenancePage';
-import { polyfillCountryFlagEmojis } from "country-flag-emoji-polyfill";
-
+import { polyfillCountryFlagEmojis } from 'country-flag-emoji-polyfill';
+import { useIonRouter } from '@ionic/react';
 
 polyfillCountryFlagEmojis();
 setupIonicReact();
 
-if(import.meta.env.VITE_SENTRY_DSN){
+if (import.meta.env.VITE_SENTRY_DSN) {
     Sentry.init({
         dsn: import.meta.env.VITE_SENTRY_DSN,
-        debug: import.meta.env.VITE_ENV === "dev",
-        integrations: [
-            new Sentry.BrowserTracing(),
-            new Sentry.Replay()
-          ],
-        release: "ulep-frontend@" + APP_VERSION,
-        dist: "1",
+        debug: import.meta.env.VITE_ENV === 'dev',
+        integrations: [new Sentry.BrowserTracing(), new Sentry.Replay()],
+        release: 'ulep-frontend@' + APP_VERSION,
+        dist: '1',
         environment: import.meta.env.VITE_ENV,
         tracesSampleRate: 1.0,
     });
 }
-
 
 const AppContext = () => {
     const { i18n } = useTranslation();
@@ -60,6 +56,8 @@ const AppContext = () => {
     const refreshToken = useStoreState((state) => state.refreshToken);
     const setProfile = useStoreActions((state) => state.setProfile);
     const setTokens = useStoreActions((state) => state.setTokens);
+    const logout = useStoreActions((state) => state.logout);
+    const router = useIonRouter();
     const setUser = useStoreActions((state) => state.setUser);
 
     const { configuration, error, loading } = useFetchConfiguration(import.meta.env.VITE_API_URL || apiUrl);
@@ -81,24 +79,24 @@ const AppContext = () => {
     if (!configuration || loading) {
         return null;
     }
-    if(configuration.isInMaintenance) {
+    if (configuration.isInMaintenance) {
         return <MaintenancePage />;
     }
 
     return (
         <ConfigContext.Provider
-            value={getConfigContextValue(
-                {
-                    apiUrl: import.meta.env.VITE_API_URL || apiUrl,
-                    languageCode: i18n.language,
-                    accessToken,
-                    refreshToken,
-                    setProfile,
-                    setTokens,
-                    setUser,
-                    configuration
-                }
-            )}
+            value={getConfigContextValue({
+                apiUrl: import.meta.env.VITE_API_URL || apiUrl,
+                languageCode: i18n.language,
+                accessToken,
+                refreshToken,
+                setProfile,
+                setTokens,
+                setUser,
+                configuration,
+                logout,
+                router,
+            })}
         >
             <IonReactRouter>
                 <Router />

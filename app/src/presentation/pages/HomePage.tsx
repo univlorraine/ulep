@@ -35,10 +35,6 @@ const HomePage: React.FC = () => {
     if (error) {
         showToast({ message: t(error.message), duration: 5000 });
     }
-    
-    const onDisconnect = () => {
-        return logout();
-    };
 
     const onProfilePressed = () => (isHybrid ? history.push('/profil') : setDisplayProfile(true));
 
@@ -70,9 +66,7 @@ const HomePage: React.FC = () => {
 
     return (
         <IonPage>
-            {!isHybrid && (
-                <HomeHeader user={profile.user} onPicturePressed={onProfilePressed} />
-            )}
+            {!isHybrid && <HomeHeader user={profile.user} onPicturePressed={onProfilePressed} />}
             <IonContent>
                 <div className={`${styles.container} content-wrapper`}>
                     <div className={styles['header']}>
@@ -115,7 +109,7 @@ const HomePage: React.FC = () => {
                     <ProfileModal
                         isVisible={displayProfile}
                         onClose={() => setDisplayProfile(false)}
-                        onDisconnect={onDisconnect}
+                        onDisconnect={logout}
                         profile={profile}
                     />
                     <TandemStatusModal

@@ -127,7 +127,7 @@ export class KeycloakClient {
           grant_type: 'authorization_code',
           client_id: this.configuration.clientId,
           client_secret: this.configuration.clientSecret,
-          scope: 'openid',
+          scope: 'openid offline_access email profile',
           redirect_uri: redirectUri,
         }),
       },
@@ -159,7 +159,7 @@ export class KeycloakClient {
           grant_type: 'password',
           client_id: this.configuration.clientId,
           client_secret: this.configuration.clientSecret,
-          scope: 'openid',
+          scope: 'openid offline_access email profile',
         }),
       },
     );
@@ -250,7 +250,7 @@ export class KeycloakClient {
 
   /*
    * Refreshes the access token
-   * Throws HttpException (409) if the credentials are invalid.
+   * Throws HttpException (401) if the credentials are invalid.
    */
   async refreshToken(refreshToken: string): Promise<Credentials> {
     const response = await fetch(
@@ -398,7 +398,7 @@ export class KeycloakClient {
   /*
    * Updates an existing user in Keycloak.
    */
-  async updateAdministrator(
+  async updateUser(
     props: UpdateAdministratorProps,
   ): Promise<UserRepresentation> {
     const payload: UpdateAdministratorPayload = {
@@ -727,7 +727,7 @@ export class KeycloakClient {
     const params = new URLSearchParams({
       response_type: 'code',
       client_id: this.configuration.clientId,
-      scope: 'openid',
+      scope: 'openid offline_access email profile',
       redirect_uri: redirectUri,
     });
 

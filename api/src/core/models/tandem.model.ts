@@ -2,6 +2,7 @@
 import { InvalidTandemError, LearningLanguagesMustContainsProfilesForTandem } from '../errors/tandem-exceptions';
 import { LearningLanguage } from './learning-language.model';
 
+
 export enum TandemStatus {
   INACTIVE = 'INACTIVE',
   DRAFT = 'DRAFT',

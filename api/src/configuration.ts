@@ -104,6 +104,7 @@ export class Env {
 
   @IsString()
   @IsNotEmpty()
+  @Transform(({ value }) => removeTrailingSlash(value))
   EMAIL_ASSETS_PUBLIC_ENDPOINT: string;
 
   @IsString()
@@ -172,6 +173,14 @@ export class Env {
     return env;
   }
 }
+
+const removeTrailingSlash = (url: string): string => {
+  if (url.endsWith('/')) {
+    return url.slice(0, -1);
+  }
+
+  return url;
+};
 
 export const getTranslationsEndpoint = (
   lng: string,

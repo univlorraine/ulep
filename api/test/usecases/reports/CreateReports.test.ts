@@ -3,6 +3,7 @@ import { RessourceDoesNotExist } from '../../../src/core/errors';
 import { CreateReportUsecase } from '../../../src/core/usecases';
 import { InMemoryReportsRepository } from '../../../src/providers/persistance/repositories/in-memory-reports-repository';
 import { InMemoryUserRepository } from '../../../src/providers/persistance/repositories/in-memory-user-repository';
+import { UuidProvider } from 'src/providers/services/uuid.provider';
 
 describe('CreateReport', () => {
   const userFactory = new UserFactory();
@@ -10,9 +11,11 @@ describe('CreateReport', () => {
 
   const reportsRepository = new InMemoryReportsRepository();
   const userRepositiry = new InMemoryUserRepository();
+  const uuidProvider = new UuidProvider();
   const createReportsUsecase = new CreateReportUsecase(
     reportsRepository,
     userRepositiry,
+    uuidProvider,
   );
 
   beforeEach(() => {
@@ -30,7 +33,6 @@ describe('CreateReport', () => {
     });
 
     await createReportsUsecase.execute({
-      id: '1',
       owner: user.id,
       content: 'content',
       category: '1',
@@ -44,7 +46,6 @@ describe('CreateReport', () => {
   it('Should throw an error if the category does not exists', async () => {
     try {
       await createReportsUsecase.execute({
-        id: '1',
         content: 'content',
         category: 'uuid_does_not_exists',
         owner: user.id,
@@ -64,7 +65,6 @@ describe('CreateReport', () => {
 
     try {
       await createReportsUsecase.execute({
-        id: '1',
         content: 'content',
         category: '1',
         owner: 'uuid_does_not_exists',

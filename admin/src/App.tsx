@@ -37,7 +37,7 @@ const App = () => {
 
     return (
         <Admin
-            authProvider={authProvider()}
+            authProvider={authProvider}
             dataProvider={customDataProvider}
             i18nProvider={i18nProvider}
             layout={CustomLayout}

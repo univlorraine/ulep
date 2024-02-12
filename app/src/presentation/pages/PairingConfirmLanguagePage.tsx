@@ -23,14 +23,14 @@ const PairingConfirmLanguagePage: React.FC = () => {
 
     const campusName = profileSignUp.campus ? ' - ' + profileSignUp.campus.name : '';
 
-    const pedagogyToTitle = (pedagogy: Pedagogy | undefined) => {
+    const pedagogyToTitle = (pedagogy: Pedagogy | undefined, campusName: string) => {
         switch (pedagogy) {
             case LearningType.BOTH:
-                return t('global.tandem_etandem');
+                return t('global.tandem') + ' ' + campusName + ' / ' + t('global.etandem');
             case LearningType.ETANDEM:
                 return t('global.etandem');
             case LearningType.TANDEM:
-                return t('global.tandem');
+                return t('global.tandem') + ' ' + campusName;
             default:
                 return '';
         }
@@ -60,7 +60,7 @@ const PairingConfirmLanguagePage: React.FC = () => {
                     <div className={confirmLanguagesStyles['mode-container']}>
                         <p className={confirmLanguagesStyles['mode-text']}>{`${t(
                             'pairing_confirm_language_page.mode_meet'
-                        )} ${pedagogyToTitle(profileSignUp.pedagogy)} ${campusName} ${codeLanguageToFlag(
+                        )} ${pedagogyToTitle(profileSignUp.pedagogy, campusName)} ${codeLanguageToFlag(
                             profileSignUp.learningLanguage.code
                         )}`}</p>
                         <img alt="tandem" src={TandemPng} />

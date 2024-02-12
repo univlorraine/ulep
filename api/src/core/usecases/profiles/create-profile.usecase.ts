@@ -20,13 +20,6 @@ import {
   Profile,
   User,
 } from 'src/core/models';
-import EmailContent, {
-  EMAIL_TEMPLATE_IDS,
-} from 'src/core/models/email-content.model';
-import {
-  EMAIL_TEMPLATE_REPOSITORY,
-  EmailTemplateRepository,
-} from 'src/core/ports/email-template.repository';
 import { EMAIL_GATEWAY, EmailGateway } from 'src/core/ports/email.gateway';
 import {
   INTEREST_REPOSITORY,
@@ -92,8 +85,6 @@ export class CreateProfileUsecase {
     private readonly uuidProvider: UuidProviderInterface,
     @Inject(EMAIL_GATEWAY)
     private readonly emailGateway: EmailGateway,
-    @Inject(EMAIL_TEMPLATE_REPOSITORY)
-    private readonly emailTemplateRepository: EmailTemplateRepository,
   ) {}
 
   async execute(command: CreateProfileCommand): Promise<Profile> {
@@ -188,7 +179,9 @@ export class CreateProfileUsecase {
 
     await this.profilesRepository.create(profile);
 
-    await this.sendWelcomeEmail(profile);
+    if (profile.user.acceptsEmail) {
+      await this.sendWelcomeEmail(profile);
+    }
 
     return profile;
   }
@@ -242,22 +235,14 @@ export class CreateProfileUsecase {
   }
 
   private async sendWelcomeEmail(profile: Profile): Promise<void> {
-    let email: EmailContent;
-
     try {
-      email = await this.emailTemplateRepository.getEmail(
-        EMAIL_TEMPLATE_IDS.WELCOME,
-        profile.nativeLanguage.code,
-        { firstname: profile.user.firstname },
-      );
-    } catch (error) {
-      this.logger.error('Error while parsing welcome email', error);
-    }
-
-    try {
-      await this.emailGateway.send({
-        recipient: profile.user.email,
-        email: email,
+      this.emailGateway.sendWelcomeMail({
+        to: profile.user.email,
+        language: profile.nativeLanguage.code,
+        user: {
+          firstname: profile.user.firstname,
+          lastname: profile.user.lastname,
+        },
       });
     } catch (error) {
       this.logger.error('Error while sending welcome email', error);

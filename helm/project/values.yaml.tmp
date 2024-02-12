@@ -47,7 +47,7 @@ api:
     connectorToken: 5f8a2b8c-8b0a-4b9e-9b0a-4b9e9b0a4b9e
     emailsAssetsBucket: assets
     emailsTranslationsComponent: emails
-    emailsAssetsPublicEndpoint: *apiUrl
+    emailsAssetsPublicEndpoint: *minioUrl
     appLinkAppleStore: https://www.apple.com/fr/app-store/etandem
     appLinkPlayStore: https://play.google.com/store/apps/etandem
     smtpDisableBootVerification: false

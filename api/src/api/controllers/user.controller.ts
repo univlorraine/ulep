@@ -182,6 +182,7 @@ export class UserController {
   }
 
   @Put()
+  @Roles(Role.ADMIN)
   @UseGuards(AuthenticationGuard)
   @Swagger.ApiOperation({ summary: 'Updates a User ressource.' })
   @Swagger.ApiOkResponse({ type: UserResponse })

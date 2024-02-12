@@ -6,6 +6,7 @@ import {
   KeycloakUserFactory,
   LanguageFactory,
   UniversityFactory,
+  UserFactory,
 } from '@app/common';
 import { TestServer } from './test.server';
 import { InMemoryLanguageRepository } from 'src/providers/persistance/repositories/in-memory-language-repository';
@@ -21,8 +22,6 @@ import { COUNTRY_REPOSITORY } from 'src/core/ports/country.repository';
 import { PairingMode } from 'src/core/models';
 import { EMAIL_GATEWAY } from 'src/core/ports/email.gateway';
 import InMemoryEmailGateway from 'src/providers/gateway/in-memory-email.gateway';
-import { EMAIL_TEMPLATE_REPOSITORY } from 'src/core/ports/email-template.repository';
-import { InMemoryEmailTemplateRepository } from 'src/providers/persistance/repositories/in-memory-email-template-repository';
 import { LEARNING_LANGUAGE_REPOSITORY } from 'src/core/ports/learning-language.repository';
 import { InMemoryLearningLanguageRepository } from 'src/providers/persistance/repositories/in-memory-learning-language-repository';
 import { KeycloakClient } from '@app/keycloak';
@@ -32,7 +31,11 @@ describe('Universities', () => {
 
   const userRepositoy = new InMemoryUserRepository();
   const countryRepository = new InMemoryCountryCodesRepository();
-  const { user, keycloakUser } = new KeycloakUserFactory().makeOne();
+  const universityFactory = new UniversityFactory();
+  const university = universityFactory.makeOne();
+  const userFactory = new UserFactory();
+  const user = userFactory.makeOne({ university });
+  const { keycloakUser } = new KeycloakUserFactory().makeOne({ user });
   const authenticator = new InMemoryAuthenticator(keycloakUser);
   const learningLanguageRepository = new InMemoryLearningLanguageRepository();
   const countryFactory = new CountryFactory();
@@ -45,7 +48,6 @@ describe('Universities', () => {
   ];
   const languageRepository = new InMemoryLanguageRepository();
 
-  const universityFactory = new UniversityFactory();
   const repository = new InMemoryUniversityRepository();
   const inMemoryEmail = new InMemoryEmailGateway();
 
@@ -78,8 +80,6 @@ describe('Universities', () => {
       .useValue(userRepositoy)
       .overrideProvider(EMAIL_GATEWAY)
       .useValue(inMemoryEmail)
-      .overrideProvider(EMAIL_TEMPLATE_REPOSITORY)
-      .useValue(InMemoryEmailTemplateRepository)
       .overrideGuard(AuthenticationGuard)
       .useValue(TestAuthGuard)
       .overrideProvider(AUTHENTICATOR)
@@ -233,6 +233,7 @@ describe('Universities', () => {
       parent: central.id,
     });
 
+    userRepositoy.init([]);
     countryRepository.init([country]);
     learningLanguageRepository.init([]);
     repository.init([central, partner]);
@@ -254,6 +255,18 @@ describe('Universities', () => {
 
     await request(app.getHttpServer())
       .delete(`/universities/${central.id}`)
+      .set('Authorization', `Bearer ${keycloakUser.sub}`)
+      .expect(400);
+  });
+
+  it('should return bad request if university has users', async () => {
+    countryRepository.init([country]);
+
+    userRepositoy.init([user]);
+    repository.init([university]);
+
+    await request(app.getHttpServer())
+      .delete(`/universities/${university.id}`)
       .set('Authorization', `Bearer ${keycloakUser.sub}`)
       .expect(400);
   });

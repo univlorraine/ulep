@@ -114,7 +114,7 @@ export class ReportController {
   @Swagger.ApiOperation({ summary: 'Update a Category ressource.' })
   @Swagger.ApiOkResponse()
   async updateCategory(@Body() request: UpdateReportCategoryRequest) {
-    const category = await await this.updateReportCategoryUsecase.execute({
+    const category = await this.updateReportCategoryUsecase.execute({
       ...request,
     });
 
