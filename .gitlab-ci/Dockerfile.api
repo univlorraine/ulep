@@ -32,6 +32,10 @@ COPY ./package.json /srv/app/package.json
 COPY ./dist /srv/app/dist
 # Copie des modules nodes dans le dossier /srv/app/node_modules du container
 COPY ./node_modules /srv/app/node_modules
+# Copie du dossier i18n
+COPY ./i18n /srv/app/i18n
+# Copie du dossier template
+COPY ./templates /srv/app/templates
 
 ENV NODE_ENV $NODE_ENV_CI
 # RUN echo ${NODE_ENV}
