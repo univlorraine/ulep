@@ -1,42 +1,42 @@
 {
-  "welcome": {
-    "title": "Bienvenue sur ULEP",
-    "bodyHtml": "<p>Bonjour {user.firstname},</p><p>Nous sommes ravis de vous accueillir au programme Tandem de l'Université de Lorraine ! Vous êtes maintenant inscrit(e) pour apprendre une nouvelle langue avec un(e) étudiant(e) partenaire qui partage votre passion pour l'apprentissage des langues. Dans les prochains jours, vous recevrez une notification par e-mail vous informant que vous avez été jumelé(e) avec votre partenaire Tandem.</p><p>Si vous avez des questions ou des préoccupations, n'hésitez pas à nous contacter. Nous sommes là pour vous aider à réussir dans votre apprentissage de la langue et nous sommes ravis de faire partie de votre parcours d'apprentissage.</p><p>Cordialement,</p><p>L'équipe Tandem de l'Université de Lorraine</p>"
-  },
-  "newUserRegistrationNotice": {
-    "title": "Une nouvelle inscription est déposée",
-    "bodyHtml": "<p>Bonjour, un nouvel utilisateur de votre établissement a fait une demande d’inscription dans l’application ULEP: {user.firstname} {user.lastname}.</p><p>Vous pourrez retrouver les détails de l’inscription dans le back-office.</p><p>Cordialement,</p><p>L'équipe Tandem de l'Université de Lorraine</p>"
-  },
-  "passwordChangeDenied": {
-    "title": "Demande de modification de mot de passe",
-    "bodyHtml": "<p>Bonjour {user.firstname},</p><p>Tu as demandé un changement de mot de passe dans l’application ULEP. Cette demande ne peut pas aboutir. Ton mot de passe n’est pas géré dans ULEP. Ton accès à ULEP est géré avec ton compte dans ton université. Pour accéder à ULEP utilise la méthode d’authentification de ton université.</p><p>Cordialement,</p><p>L'équipe Tandem de l'Université de Lorraine</p>"
-  },
-  "accountBlocked": {
-    "title": "Votre compte ULEP a été bloqué",
-    "bodyHtml": "<p>Bonjour {user.firstname},</p><p>Nous vous informons que votre compte ULEP est désormais bloqué suite à des non-conformités avec nos conditions d’utilisation. L'accès aux fonctionnalités de l'application est temporairement restreint.<p>Cordialement,</p><p>L'équipe Tandem de l'Université de Lorraine</p>"
-  },
-  "tandemValidationNotice": {
-    "title": "Vous avez des tandems suggérés ou en attente",
-    "bodyHtml": "<p>Bonjour, vous avez des tandems suggérés par la routine globale ou en attente de validation.</p><p>Connectez vous sur le back-office pour arbitrer ces tandems.</p><p>Cordialement,</p><p>L'équipe Tandem de l'Université de Lorraine</p>"
-  },
-  "newTandem": {
-    "title": "Votre partenaire tandem est prêt(e) à commencer",
-    "bodyHtml": "<p>Cher(e) {user.firstname},</p><p>Nous sommes heureux de vous informer que votre partenaire Tandem a été trouvé(e) et est prêt(e) à commencer à apprendre la langue avec vous ! Votre partenaire est {partner.firstname} {partner.lastname}, un(e) étudiant(e) de {partner.university} qui partage votre passion pour l'apprentissage des langues et qui est impatient(e) de commencer cette aventure linguistique avec vous. Nous vous encourageons à prendre le temps de vous présenter à votre partenaire et de planifier votre première session de conversation. Nous vous rappelons que le programme Tandem est conçu pour être un échange équitable, alors n'hésitez pas à partager vos connaissances et à vous impliquer pleinement dans le programme. Si vous rencontrez des problèmes ou des défis, n'hésitez pas à contacter l'équipe Tandem de l'Université de Lorraine pour obtenir de l'aide. Nous sommes là pour vous aider à réussir dans votre apprentissage de la langue et nous sommes ravis de faire partie de votre parcours d'apprentissage.</p><p>Cordialement,</p><p>L'équipe Tandem de l'Université de Lorraine</p>"
-  },
-  "newTandemNotice": {
-    "title": "Un nouveau tandem est constitué",
-    "bodyHtml": "<p>Bonjour, un nouveau tandem est créé dans l’application ULEP.</p<p>Les utilisateurs désormais en tandem sont:</p><ul><li>{user.firstname} {user.lastname} {user.university}</li><li>{partner.firstname} {partner.lastname} {partner.university}</li></ul><p>Vous pourrez retrouver les détails du nouveau tandem dans le back-office.</p><p>Cordialement,</p><p>L'équipe Tandem de l'Université de Lorraine</p>"
-  },
-  "tandemCanceled": {
-    "title": "Ton tandem a été dissocié",
-    "bodyHtml": "<p>Bonjour {user.firstname},</p><p>Nous sommes au regret de t’annoncer que tu n’as plus de partenaire de Tandem ULEP. Sur la page d’accueil de l’application tu pourras vérifier si ta demande de Tandem est en attente. Les raisons peuvent être multiples, si tu souhaites en savoir plus, tu peux nous contacter via l’application.</p><p>Cordialement,</p><p>L'équipe Tandem de l'Université de Lorraine</p>"
-  },
-  "tandemCanceledNotice": {
-    "title": "Un tandem est dissocié",
-    "bodyHtml": "<p>Bonjour, un tandem de l’application ULEP vient d’être défait.</p<p>Les utilisateurs précédemment en tandem sont:</p><ul><li>{user.firstname} {user.lastname} {user.university}</li><li>{partner.firstname} {partner.lastname} {partner.university}</li></ul><p>Si vous n’êtes pas à l’origine de cette dissociation, vous pouvez consulter le back-office pour vérifier les demandes de tandems se trouvant en attente du fait de ce changement.</p><p>Cordialement,</p><p>L'équipe Tandem de l'Université de Lorraine</p>"
-  },
-  "footer": {
-    "unsubscribe": "Vous pouvez vous désinscrire en vous connectant à votre compte.",
-    "downloadApps": "Téléchargez nos apps"
-  }
+    "welcome": {
+        "title": "Bienvenue sur ULEP",
+        "bodyHtml": "<p>Bonjour {user. firstname},</p><p>Nous sommes ravis de vous accueillir au programme Tandem de l'Université de Lorraine ! Vous êtes maintenant inscrit(e) pour apprendre une nouvelle langue avec un(e) étudiant(e) partenaire qui partage votre passion pour l'apprentissage des langues. Dans les prochains jours, vous recevrez une notification par e-mail vous informant que vous avez été jumelé(e) avec votre partenaire Tandem.</p><p>Si vous avez des questions ou des préoccupations, n'hésitez pas à nous contacter. Nous sommes là pour vous aider à réussir dans votre apprentissage de la langue et nous sommes ravis de faire partie de votre parcours d'apprentissage.</p><p>Cordialement,</p><p>L'équipe Tandem de l'Université de Lorraine</p>"
+    },
+    "newUserRegistrationNotice": {
+        "title": "Une nouvelle inscription est déposée",
+        "bodyHtml": "<p>Bonjour, un nouvel utilisateur de votre établissement a fait une demande d’inscription dans l’application ULEP : {user.firstname} {user.lastname}.</p><p>Vous pourrez retrouver les détails de l’inscription dans le back-office.</p><p>Cordialement,</p><p>L'équipe Tandem de l'Université de Lorraine</p>"
+    },
+    "passwordChangeDenied": {
+        "title": "Demande de modification de mot de passe",
+        "bodyHtml": "<p>Bonjour {user.firstname},</p><p>Tu as demandé un changement de mot de passe dans l’application ULEP. Cette demande ne peut pas aboutir. Ton mot de passe n’est pas géré dans ULEP. Ton accès à ULEP est géré avec ton compte dans ton université. Pour accéder à ULEP utilise la méthode d’authentification de ton université.</p><p>Cordialement,</p><p>L'équipe Tandem de l'Université de Lorraine</p>"
+    },
+    "accountBlocked": {
+        "title": "Votre compte ULEP a été bloqué",
+        "bodyHtml": "<p>Bonjour {user.firstname},</p><p>Nous vous informons que votre compte ULEP est désormais bloqué suite à des non-conformités avec nos conditions d’utilisation. L'accès aux fonctionnalités de l'application est temporairement restreint.<p>Cordialement,</p><p>L'équipe Tandem de l'Université de Lorraine</p>"
+    },
+    "tandemValidationNotice": {
+        "title": "Vous avez des tandems suggérés ou en attente",
+        "bodyHtml": "<p>Bonjour, vous avez des tandems suggérés par la routine globale ou en attente de validation.</p><p>Connectez vous sur le back-office pour arbitrer ces tandems.</p><p>Cordialement,</p><p>L'équipe Tandem de l'Université de Lorraine</p>"
+    },
+    "newTandem": {
+        "title": "Votre partenaire tandem est prêt(e) à commencer",
+        "bodyHtml": "<p>Cher(e) {user.firstname},</p><p>Nous sommes heureux de vous informer que votre partenaire Tandem a été trouvé(e) et est prêt(e) à commencer à apprendre la langue avec vous ! Votre partenaire est {partner.firstname} {partner.lastname}, un(e) étudiant(e) de {partner.university} qui partage votre passion pour l'apprentissage des langues et qui est impatient(e) de commencer cette aventure linguistique avec vous. Nous vous encourageons à prendre le temps de vous présenter à votre partenaire et de planifier votre première session de conversation. Nous vous rappelons que le programme Tandem est conçu pour être un échange équitable, alors n'hésitez pas à partager vos connaissances et à vous impliquer pleinement dans le programme. Si vous rencontrez des problèmes ou des défis, n'hésitez pas à contacter l'équipe Tandem de l'Université de Lorraine pour obtenir de l'aide. Nous sommes là pour vous aider à réussir dans votre apprentissage de la langue et nous sommes ravis de faire partie de votre parcours d'apprentissage.</p><p>Cordialement,</p><p>L'équipe Tandem de l'Université de Lorraine</p>"
+    },
+    "newTandemNotice": {
+        "title": "Un nouveau tandem est constitué",
+        "bodyHtml": "<p>Bonjour, un nouveau tandem est créé dans l’application ULEP.</p<p>Les utilisateurs désormais en tandem sont:</p><ul><li>{user.firstname} {user.lastname} {user.university}</li><li>{partner.firstname} {partner.lastname} {partner.university}</li></ul><p>Vous pourrez retrouver les détails du nouveau tandem dans le back-office.</p><p>Cordialement,</p><p>L'équipe Tandem de l'Université de Lorraine</p>"
+    },
+    "tandemCanceled": {
+        "title": "Ton tandem a été dissocié",
+        "bodyHtml": "<p>Bonjour {user.firstname},</p><p>Nous sommes au regret de t’annoncer que tu n’as plus de partenaire de Tandem ULEP. Sur la page d’accueil de l’application tu pourras vérifier si ta demande de Tandem est en attente. Les raisons peuvent être multiples, si tu souhaites en savoir plus, tu peux nous contacter via l’application.</p><p>Cordialement,</p><p>L'équipe Tandem de l'Université de Lorraine</p>"
+    },
+    "tandemCanceledNotice": {
+        "title": "Un tandem est dissocié",
+        "bodyHtml": "<p>Bonjour, un tandem de l’application ULEP vient d’être défait.</p<p>Les utilisateurs précédemment en tandem sont:</p><ul><li>{user.firstname} {user.lastname} {user.university}</li><li>{partner.firstname} {partner.lastname} {partner.university}</li></ul><p>Si vous n’êtes pas à l’origine de cette dissociation, vous pouvez consulter le back-office pour vérifier les demandes de tandems se trouvant en attente du fait de ce changement.</p><p>Cordialement,</p><p>L'équipe Tandem de l'Université de Lorraine</p>"
+    },
+    "footer": {
+        "unsubscribe": "Vous pouvez vous désinscrire en vous connectant à votre compte.",
+        "downloadApps": "Téléchargez nos apps"
+    }
 }
