@@ -71,7 +71,7 @@ const SignUpInformationsPage: React.FC = () => {
             return await showToast(t('signup_informations_page.error_gender'), 1000);
         }
 
-        if (!age || age < 1 || age > 80) {
+        if (!age || age < 17 || age > 80) {
             return setErrorMessage({ type: 'age', message: t('signup_informations_page.error_age') });
         }
 
