@@ -74,7 +74,7 @@ export class UpdateUserUsecase {
     );
 
     if (
-      command.status === UserStatus.BANNED ||
+      command.status === UserStatus.BANNED &&
       user.status !== UserStatus.BANNED
     ) {
       await this.cancelTandemsForUser(user);
