@@ -161,6 +161,23 @@ export class PrismaLanguageRepository implements LanguageRepository {
   }
 
   async addRequest(code: string, userId: string): Promise<void> {
+    const languageCode = await this.prisma.languageCodes.findUnique({
+      where: { code },
+    });
+
+    if (!languageCode) return;
+
+    const suggestedLanguages = this.prisma.suggestedLanguages.findUnique({
+      where: {
+        language_code_id_user_id: {
+          language_code_id: languageCode.id,
+          user_id: userId,
+        },
+      },
+    });
+
+    if (suggestedLanguages) return;
+
     await this.prisma.suggestedLanguages.create({
       data: {
         LanguageCode: { connect: { code } },
