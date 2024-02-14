@@ -9,7 +9,9 @@
         "sunday": "Dimanche"
     },
     "errors": {
-        "ask_language": { "conflit": "Vous avez déjà demandé cette langue" },
+        "ask_language": {
+            "conflit": "Vous avez déjà demandé cette langue"
+        },
         "global": "Une erreur est survenue",
         "userDoesntExist": "L'utilisateur n'existe pas",
         "userWrongCredentials": "Le mot de passe ou l'email est incorrect",
@@ -98,7 +100,7 @@
             "unsubscribe": "Se désinscrire"
         },
         "tandem": {
-            "title": "Mes tandems"
+            "title": "Mes tandems en cours"
         },
         "tandem_draft": {
             "button": "C'est compris !",
