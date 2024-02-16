@@ -3,7 +3,7 @@ import { useHistory } from 'react-router';
 import { useConfig } from '../../context/ConfigurationContext';
 import Profile from '../../domain/entities/Profile';
 import User from '../../domain/entities/User';
-import { useStoreActions } from '../../store/storeTypes';
+import { useStoreActions, useStoreState } from '../../store/storeTypes';
 import WelcomeContent from '../components/contents/WelcomeContent';
 import LoginForm from '../components/forms/LoginForm';
 import WebLayout from '../components/layout/WebLayout';
@@ -20,6 +20,9 @@ const LoginPage: React.FC = () => {
     const { t } = useTranslation();
     const setProfile = useStoreActions((store) => store.setProfile);
     const setUser = useStoreActions((store) => store.setUser);
+    const token = useStoreState((state) => state.accessToken);
+
+    if (token) window.location.href = '/home';
 
     const onLogin = async (tokens: Tokens) => {
         const resultProfile = await getProfile.execute(tokens.accessToken);
