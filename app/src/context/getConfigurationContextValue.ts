@@ -27,6 +27,7 @@ import { ConfigContextValueType } from './configurationContextTypes';
 import GetUniversityUsecase from '../domain/usecases/GetUniversityUsecase';
 import GetMediaObjectUsecase from '../domain/usecases/GetMediaObjectUsecase';
 import { UseIonRouterResult } from '@ionic/react';
+import RevokeSessionsUsecase from '../domain/usecases/RevokeSessionsUsecase';
 
 interface GetConfigContextValueProps {
     apiUrl: string;
@@ -82,6 +83,7 @@ const getConfigContextValue = ({
     const getMediaObject = new GetMediaObjectUsecase(domainHttpAdapter);
     const getUniversity = new GetUniversityUsecase(domainHttpAdapter);
     const login = new LoginUsecase(domainHttpAdapter, setTokens);
+    const revokeSessionsUsecase = new RevokeSessionsUsecase(domainHttpAdapter);
     const getTokenFromCodeUsecase = new GetTokenFromCodeUsecase(domainHttpAdapter, setTokens);
     const getInitialUrlUsecase = new GetInitialUrlUsecase(apiUrl);
     const resetPassword = new ResetPasswordUsecase(domainHttpAdapter);
@@ -120,6 +122,7 @@ const getConfigContextValue = ({
         retrievePerson,
         getTokenFromCodeUsecase,
         getInitialUrlUsecase,
+        revokeSessionsUsecase,
     };
 };
 

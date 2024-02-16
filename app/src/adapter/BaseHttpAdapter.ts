@@ -76,7 +76,7 @@ class BaseHttpAdapter {
                     return { ok: true };
                 })
                 .then((result) => {
-                    if (response.ok) {
+                    if (response.ok || response.status === 401) {
                         response.parsedBody = result;
                         resolve(response);
                     } else {
