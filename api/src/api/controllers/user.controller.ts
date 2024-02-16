@@ -44,6 +44,7 @@ import { AuthenticationGuard } from '../guards';
 import { ImagesFilePipe } from '../validators/images.validator';
 import { User } from 'src/core/models';
 import { GetAdministratorsQueryParams } from 'src/api/dtos/users/administrators-filter';
+import { RevokeSessionsUsecase } from 'src/core/usecases/user/revoke-sessions.usecase';
 
 @Controller('users')
 @Swagger.ApiTags('Users')
@@ -60,6 +61,7 @@ export class UserController {
     private readonly createAdministratorUsecase: CreateAdministratorUsecase,
     private readonly updateAdministratorUsecase: UpdateAdministratorUsecase,
     private readonly deleteAdministratorUsecase: DeleteAdministratorUsecase,
+    private readonly revokeSessionsUsecase: RevokeSessionsUsecase,
   ) {}
 
   @Post()
@@ -168,6 +170,15 @@ export class UserController {
     const me = await this.getUserUsecase.execute(id);
 
     return UserResponse.fromDomain(me);
+  }
+
+  @Get('revoke')
+  @UseGuards(AuthenticationGuard)
+  @Swagger.ApiOperation({ summary: 'Revoke User sessions.' })
+  async rekoveSessions(@CurrentUser() user: KeycloakUser) {
+    await this.revokeSessionsUsecase.execute(user.sub);
+
+    return;
   }
 
   @Get(':id')

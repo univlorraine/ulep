@@ -78,6 +78,7 @@ export class UpdateUserUsecase {
       user.status !== UserStatus.BANNED
     ) {
       await this.cancelTandemsForUser(user);
+      await this.keycloakClient.userLogout(user.id);
 
       if (user.acceptsEmail) {
         await this.sendAccountBlockedEmail(user);
@@ -181,6 +182,4 @@ export class UpdateUserUsecase {
       );
     }
   }
-
-  private sync;
 }
