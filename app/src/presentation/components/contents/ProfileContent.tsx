@@ -21,7 +21,12 @@ const ProfileContent: React.FC<ProfileContentProps> = ({ onClose, onParameterPre
     const [showToast] = useIonToast();
     const [loading, setLoading] = useState<boolean>(false);
     const { logout, updateProfile } = useStoreActions((store) => store);
-    const { cameraAdapter, updateAvatar } = useConfig();
+    const { cameraAdapter, updateAvatar, revokeSessionsUsecase } = useConfig();
+
+    const handleDisconnect = async (): Promise<void> => {
+        await revokeSessionsUsecase.execute();
+        logout();
+    };
 
     const changeAvatar = async () => {
         const avatarFile = await cameraAdapter.getPictureFromGallery();
@@ -82,7 +87,7 @@ const ProfileContent: React.FC<ProfileContentProps> = ({ onClose, onParameterPre
                     <img alt="arrow-right" src={ArrowRightSvg} />
                 </button>
 
-                <button className={styles.button} onClick={() => logout()}>
+                <button className={styles.button} onClick={handleDisconnect}>
                     <div className={styles['button-container']}>
                         <img alt="disconnect" src={SmallAvatarPng} />
                         <span className="margin-left">{t('home_page.profile.disconnect')}</span>

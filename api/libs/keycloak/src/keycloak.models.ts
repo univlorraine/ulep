@@ -41,6 +41,10 @@ interface UserProfileAttributeMetadata {
   validators: { [index: string]: { [index: string]: any } };
 }
 
+interface Client {
+  [index: string]: string[];
+}
+
 export default interface RoleRepresentation {
   id?: string;
   name?: string;
@@ -55,7 +59,7 @@ export default interface RoleRepresentation {
 
 export interface Composites {
   realm?: string[];
-  client?: { [index: string]: string[] };
+  client?: Client;
   application?: { [index: string]: string[] };
 }
 
@@ -167,4 +171,15 @@ export interface CredentialRepresentation {
   value?: string;
   temporary?: boolean;
   createdDate?: number;
+}
+
+export interface UserSession {
+  id: string;
+  username: string;
+  userId: string;
+  ipAddress: string;
+  start: number;
+  lastAccess: number;
+  rememberMe: boolean;
+  clients: Client[];
 }
