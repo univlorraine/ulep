@@ -3,7 +3,7 @@ import { useHistory } from 'react-router';
 import { useConfig } from '../../context/ConfigurationContext';
 import Profile from '../../domain/entities/Profile';
 import User from '../../domain/entities/User';
-import { useStoreActions, useStoreState } from '../../store/storeTypes';
+import { useStoreActions } from '../../store/storeTypes';
 import WelcomeContent from '../components/contents/WelcomeContent';
 import LoginForm from '../components/forms/LoginForm';
 import WebLayout from '../components/layout/WebLayout';
@@ -11,6 +11,7 @@ import useWindowDimensions from '../hooks/useWindowDimensions';
 import { HYBRID_MAX_WIDTH } from '../utils';
 import Tokens from '../../domain/entities/Tokens';
 import { useTranslation } from 'react-i18next';
+import useRedirectToHomeIfLogged from '../hooks/useRedirectToHomeIfLogged';
 
 const LoginPage: React.FC = () => {
     const { width } = useWindowDimensions();
@@ -20,9 +21,7 @@ const LoginPage: React.FC = () => {
     const { t } = useTranslation();
     const setProfile = useStoreActions((store) => store.setProfile);
     const setUser = useStoreActions((store) => store.setUser);
-    const token = useStoreState((state) => state.accessToken);
-
-    if (token) window.location.href = '/home';
+    useRedirectToHomeIfLogged();
 
     const onLogin = async (tokens: Tokens) => {
         const resultProfile = await getProfile.execute(tokens.accessToken);

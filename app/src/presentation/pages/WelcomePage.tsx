@@ -6,15 +6,13 @@ import WebLayout from '../components/layout/WebLayout';
 import useWindowDimensions from '../hooks/useWindowDimensions';
 import { HYBRID_MAX_WIDTH } from '../utils';
 import { useEffect } from 'react';
-import { useStoreState } from '../../store/storeTypes';
+import useRedirectToHomeIfLogged from '../hooks/useRedirectToHomeIfLogged';
 
 const WelcomePage: React.FC = () => {
     const history = useHistory();
     const { width } = useWindowDimensions();
     const location = useLocation();
-    const token = useStoreState((state) => state.accessToken);
-
-    if (token) window.location.href = '/home';
+    useRedirectToHomeIfLogged();
 
     useEffect(() => {
         let timeout: NodeJS.Timeout;
