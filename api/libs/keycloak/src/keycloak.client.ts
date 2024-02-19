@@ -27,6 +27,7 @@ import RoleRepresentation, {
   UpdateAdministratorPayload,
   OpenIdConfiguration,
   CredentialRepresentation,
+  UserSession,
 } from './keycloak.models';
 import { Client, Issuer, TokenSet } from 'openid-client';
 
@@ -751,7 +752,7 @@ export class KeycloakClient {
     return metadata;
   }
 
-  public async userLogout(userId: string): Promise<void> {
+  public async logoutUser(userId: string): Promise<void> {
     await fetch(
       `${this.configuration.baseUrl}/admin/realms/${this.configuration.realm}/users/${userId}/logout`,
       {
@@ -764,7 +765,7 @@ export class KeycloakClient {
     );
   }
 
-  public async getUserSessions(userId: string): Promise<any> {
+  public async getUserSessions(userId: string): Promise<UserSession[]> {
     const response = await fetch(
       `${this.configuration.baseUrl}/admin/realms/${this.configuration.realm}/users/${userId}/sessions`,
       {

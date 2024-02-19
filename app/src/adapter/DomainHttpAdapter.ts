@@ -67,14 +67,14 @@ class DomainHttpAdapter extends BaseHttpAdapter implements HttpAdapterInterface 
     }
 
     async get(path: string, args: RequestInit = {}, isTokenNeeded = true, accessToken?: string): Promise<Response> {
-        return this.checkAuth(
+        return this.withAuthCheck(
             super.get(`${this.apiUrl}${path}`, { ...args, headers: this.getHeaders(accessToken) }),
             isTokenNeeded
         );
     }
 
     async delete(path: string, args: RequestInit = {}, isTokenNeeded = true): Promise<Response> {
-        return this.checkAuth(
+        return this.withAuthCheck(
             super.delete(`${this.apiUrl}${path}`, { ...args, headers: this.getHeaders() }),
             isTokenNeeded
         );
@@ -87,20 +87,20 @@ class DomainHttpAdapter extends BaseHttpAdapter implements HttpAdapterInterface 
         contentType = 'application/json',
         isTokenNeeded = true
     ): Promise<Response> {
-        return this.checkAuth(
+        return this.withAuthCheck(
             super.post(`${this.apiUrl}${path}`, body, { ...args, headers: this.getHeaders() }, contentType),
             isTokenNeeded
         );
     }
 
     async put(path: string, body: Body, args: RequestInit = {}, isTokenNeeded = true): Promise<Response> {
-        return this.checkAuth(
+        return this.withAuthCheck(
             super.put(`${this.apiUrl}${path}`, body, { ...args, headers: this.getHeaders() }),
             isTokenNeeded
         );
     }
 
-    async checkAuth(request: Promise<Response>, isTokenNeeded: boolean) {
+    async withAuthCheck(request: Promise<Response>, isTokenNeeded: boolean) {
         await this.handleTokens(isTokenNeeded);
 
         const response = await request;

@@ -21,7 +21,7 @@ export class RevokeSessionsUsecase {
     }
 
     try {
-      await this.keycloakClient.userLogout(user.id);
+      await this.keycloakClient.logoutUser(user.id);
     } catch (error) {
       this.logger.error(`Error revoke sessions to user ${user.id} : ${error}`);
     }
