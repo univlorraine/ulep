@@ -128,11 +128,8 @@ export class CreateUserUsecase {
         }),
       );
 
-      const universityAdmins = (await this.keycloak.getAdministrators()).filter(
-        (admin) =>
-          university.isCentralUniversity()
-            ? !admin.attributes?.universityId
-            : admin.attributes?.universityId.includes(university.id),
+      const universityAdmins = await this.keycloak.getUniversityAdministrators(
+        university,
       );
       const emailsToSend = universityAdmins.map((admin) =>
         this.emailGateway.sendNewUserRegistrationNoticeEmail({
@@ -148,7 +145,6 @@ export class CreateUserUsecase {
           `An error occured while sending new user registration email notification for university ${university.id} admins`,
         );
       }
-      // TODO(NOW+1): check if can delete user.university.notificationEmail
     }
 
     return user;
