@@ -12,12 +12,14 @@ import {
     useTranslate,
 } from 'react-admin';
 import { DisplayGender, DisplayLearningType, DisplayRole } from '../../../components/translated';
+import Language from '../../../entities/Language';
 import { LearningLanguage, getLearningLanguageUniversityAndCampusString } from '../../../entities/LearningLanguage';
 import ProfileLink from '../ui/ProfileLink';
 import ShowTandems from './ShowTandems';
 
 const Title = () => {
     const record = useRecordContext();
+    const translate = useTranslate();
 
     if (!record?.profile?.user) {
         return null;
@@ -25,7 +27,8 @@ const Title = () => {
 
     return (
         <span>
-            {record.profile.user.firstname} {record.profile.user.lastname} - {record.name}
+            {record.profile.user.firstname} {record.profile.user.lastname} -{' '}
+            {translate(`languages_code.${record.code}`)}
         </span>
     );
 };
@@ -46,7 +49,11 @@ const LearningLanguageShow = () => {
                     render={(data: LearningLanguage) => getLearningLanguageUniversityAndCampusString(data)}
                 />
                 <DateField label={translate('learning_languages.show.fields.createdAt')} source="createdAt" />
-                <TextField label={translate('learning_languages.show.fields.learnedLanguage')} source="name" />
+                <FunctionField
+                    label={translate('learning_languages.list.tableColumns.learnedLanguage')}
+                    render={(record: Language) => translate(`languages_code.${record.code}`)}
+                    source="code"
+                />
                 <TextField label={translate('learning_languages.show.fields.level')} source="level" />
                 <FunctionField
                     label={translate('learning_languages.show.fields.status')}

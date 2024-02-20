@@ -17,6 +17,7 @@ import {
 } from 'react-admin';
 import { DisplayRole } from '../../../components/translated';
 import UniversitiesPicker from '../../../components/UniversitiesPicker';
+import Language from '../../../entities/Language';
 import { LearningLanguage, learningLanguageHasPossibleAction } from '../../../entities/LearningLanguage';
 import { getProfileDisplayName } from '../../../entities/Profile';
 import { isTandemActive } from '../../../entities/Tandem';
@@ -94,10 +95,11 @@ const LearningLanguageList = () => {
                         render={(record: LearningLanguage) => getProfileDisplayName(record.profile)}
                         sortBy="profile.name"
                     />
-                    <TextField
+                    <FunctionField
                         label={translate('learning_languages.list.tableColumns.learnedLanguage')}
-                        source="name"
-                        sortable
+                        render={(record: Language) => translate(`languages_code.${record.code}`)}
+                        sortable={false}
+                        source="code"
                     />
                     <TextField label={translate('learning_languages.list.tableColumns.level')} source="level" />
                     <DateField
