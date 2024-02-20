@@ -128,18 +128,27 @@ export class CreateUserUsecase {
         }),
       );
 
-      // Notify the university about the new registration
-      if (user.university.notificationEmail) {
-        try {
-          await this.emailGateway.sendNewUserRegistrationNoticeEmail({
-            to: user.university.notificationEmail,
-            language: user.university.country.code.toLowerCase(),
-            user: { ...user },
-          });
-        } catch (error) {
-          console.error('Error sending registration notice email', error);
-        }
+      const universityAdmins = (await this.keycloak.getAdministrators()).filter(
+        (admin) =>
+          university.isCentralUniversity()
+            ? !admin.attributes?.universityId
+            : admin.attributes?.universityId.includes(university.id),
+      );
+      const emailsToSend = universityAdmins.map((admin) =>
+        this.emailGateway.sendNewUserRegistrationNoticeEmail({
+          to: admin.email,
+          language: user.university.country.code.toLowerCase(),
+          user: { ...user },
+        }),
+      );
+      try {
+        await Promise.all(emailsToSend);
+      } catch (err) {
+        this.logger.error(
+          `An error occured while sending new user registration email notification for university ${university.id} admins`,
+        );
       }
+      // TODO(NOW+1): check if can delete user.university.notificationEmail
     }
 
     return user;

@@ -652,10 +652,10 @@ export class KeycloakClient {
 
     let administrators = await response.json();
 
+    // TODO(NOW+1): distinguish getAdministrators from getUniversityAdministrators
     if (universityId) {
-      administrators = administrators.filter(
-        (administrator) =>
-          administrator.attributes?.universityId == universityId,
+      administrators = administrators.filter((administrator) =>
+        administrator.attributes?.universityId.includes(universityId),
       );
     }
 
