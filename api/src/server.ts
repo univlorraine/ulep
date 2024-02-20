@@ -11,8 +11,8 @@ import { DomainErrorFilter, PrismaClientExceptionFilter } from './api/filters';
 import {
   CollectionInterceptor,
   HttpLoggerInterceptor,
+  SentryInterceptor,
 } from './api/interceptors';
-import { SentryFilter } from './api/filters/sentry-exception.filter';
 import { SentryService } from '@app/common';
 
 export class Server {
@@ -49,10 +49,6 @@ export class Server {
     const { httpAdapter } = app.get(HttpAdapterHost);
     app.useGlobalFilters(new PrismaClientExceptionFilter(httpAdapter));
     app.useGlobalFilters(new DomainErrorFilter(httpAdapter));
-
-    if (process.env.NODE_ENV !== 'test' && process.env.SENTRY_DSN) {
-      app.useGlobalFilters(new SentryFilter(httpAdapter));
-    }
   }
 
   protected addGlobalInterceptors(app: INestApplication): void {
@@ -63,8 +59,12 @@ export class Server {
       }),
     );
 
-    app.useGlobalInterceptors(new HttpLoggerInterceptor());
+    if (process.env.NODE_ENV !== 'test' && process.env.SENTRY_DSN) {
+      console.info('Sentry interceptor enabled');
+      app.useGlobalInterceptors(new SentryInterceptor());
+    }
 
+    app.useGlobalInterceptors(new HttpLoggerInterceptor());
     app.useGlobalInterceptors(new CollectionInterceptor());
   }
 

@@ -1,22 +1,27 @@
 import { SentryService } from '@app/common';
 import { KeycloakException } from '@app/keycloak';
 import {
+  CallHandler,
   Catch,
-  ArgumentsHost,
+  ExecutionContext,
   ForbiddenException,
+  NestInterceptor,
   UnauthorizedException,
 } from '@nestjs/common';
-import { BaseExceptionFilter } from '@nestjs/core';
+import { Observable, catchError } from 'rxjs';
 import { DomainError, DomainErrorCode } from 'src/core/errors';
 
 @Catch()
-export class SentryFilter extends BaseExceptionFilter {
-  catch(exception: unknown, host: ArgumentsHost) {
-    if (this.shouldHandleError(exception)) {
-      SentryService.captureException(exception, host);
-    }
-
-    super.catch(exception, host);
+export class SentryInterceptor implements NestInterceptor {
+  intercept(context: ExecutionContext, next: CallHandler): Observable<any> {
+    return next.handle().pipe(
+      catchError((err) => {
+        if (this.shouldHandleError(err)) {
+          SentryService.captureException(err, context);
+        }
+        throw err;
+      }),
+    );
   }
 
   private shouldHandleError(exception: unknown): boolean {
