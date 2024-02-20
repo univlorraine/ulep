@@ -17,11 +17,11 @@ const getTitleFromStatusAndProfile = (status: TandemStatus, hasProfile: boolean)
         return 'home_page.waiting_tandem.tandem_draft';
     }
 
-    if (status === 'UNACTIVE' && hasProfile) {
+    if (status === 'INACTIVE' && hasProfile) {
         return 'home_page.waiting_tandem.tandem_unavailable';
     }
 
-    if (status === 'UNACTIVE' && !hasProfile) {
+    if (status === 'INACTIVE' && !hasProfile) {
         return 'home_page.waiting_tandem.tandem_not_found';
     }
 

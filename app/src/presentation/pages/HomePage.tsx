@@ -123,7 +123,7 @@ const HomePage: React.FC = () => {
                         isVisible={
                             !!selectedTandem &&
                             (selectedTandem.status === 'DRAFT' ||
-                                selectedTandem.status === 'UNACTIVE' ||
+                                selectedTandem.status === 'INACTIVE' ||
                                 selectedTandem.status === 'VALIDATED_BY_ONE_UNIVERSITY')
                         }
                         onClose={() => setSelectedTandem(undefined)}
