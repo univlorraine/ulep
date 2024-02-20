@@ -1,6 +1,5 @@
 import jwtDecode, { JwtPayload } from 'jwt-decode';
 import BaseHttpAdapter, { Body, HttpResponse } from './BaseHttpAdapter';
-import { IonReactRouter } from '@ionic/react-router';
 import { UseIonRouterResult } from '@ionic/react';
 
 export interface HttpAdapterInterface {
@@ -68,23 +67,17 @@ class DomainHttpAdapter extends BaseHttpAdapter implements HttpAdapterInterface 
     }
 
     async get(path: string, args: RequestInit = {}, isTokenNeeded = true, accessToken?: string): Promise<Response> {
-        const isTokenValid = await this.handleTokens(isTokenNeeded);
-
-        if (!isTokenValid) {
-            this.logoutAndRedirect();
-        }
-
-        return super.get(`${this.apiUrl}${path}`, { ...args, headers: this.getHeaders(accessToken) });
+        return this.withAuthCheck(
+            super.get(`${this.apiUrl}${path}`, { ...args, headers: this.getHeaders(accessToken) }),
+            isTokenNeeded
+        );
     }
 
     async delete(path: string, args: RequestInit = {}, isTokenNeeded = true): Promise<Response> {
-        const isTokenValid = await this.handleTokens(isTokenNeeded);
-
-        if (!isTokenValid) {
-            this.logoutAndRedirect();
-        }
-
-        return super.delete(`${this.apiUrl}${path}`, { ...args, headers: this.getHeaders() });
+        return this.withAuthCheck(
+            super.delete(`${this.apiUrl}${path}`, { ...args, headers: this.getHeaders() }),
+            isTokenNeeded
+        );
     }
 
     async post(
@@ -94,36 +87,46 @@ class DomainHttpAdapter extends BaseHttpAdapter implements HttpAdapterInterface 
         contentType = 'application/json',
         isTokenNeeded = true
     ): Promise<Response> {
-        const isTokenValid = await this.handleTokens(isTokenNeeded);
-
-        if (!isTokenValid) {
-            this.logoutAndRedirect();
-        }
-
-        return super.post(`${this.apiUrl}${path}`, body, { ...args, headers: this.getHeaders() }, contentType);
+        return this.withAuthCheck(
+            super.post(`${this.apiUrl}${path}`, body, { ...args, headers: this.getHeaders() }, contentType),
+            isTokenNeeded
+        );
     }
 
     async put(path: string, body: Body, args: RequestInit = {}, isTokenNeeded = true): Promise<Response> {
-        const isTokenValid = await this.handleTokens(isTokenNeeded);
+        return this.withAuthCheck(
+            super.put(`${this.apiUrl}${path}`, body, { ...args, headers: this.getHeaders() }),
+            isTokenNeeded
+        );
+    }
 
-        if (!isTokenValid) {
+    async withAuthCheck(request: Promise<Response>, isTokenNeeded: boolean) {
+        await this.handleTokens(isTokenNeeded);
+
+        const response = await request;
+
+        if (response.status === 401) {
             this.logoutAndRedirect();
         }
 
-        return super.put(`${this.apiUrl}${path}`, body, { ...args, headers: this.getHeaders() });
+        return response;
     }
 
-    handleTokens = async (isTokenNeeded: boolean): Promise<boolean> => {
-        if (!isTokenNeeded) return true;
+    handleTokens = async (isTokenNeeded: boolean): Promise<void> => {
+        if (!isTokenNeeded) return;
         const isAccessTokenValid = await this.handleAccessToken();
 
         if (isAccessTokenValid) {
-            return true;
+            return;
         }
 
         const isRefreshTokenValid = await this.handleRefreshToken();
 
-        return isRefreshTokenValid;
+        if (isRefreshTokenValid) {
+            return;
+        }
+
+        this.logoutAndRedirect();
     };
 
     handleAccessToken = async () => {

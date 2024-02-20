@@ -97,6 +97,7 @@ import { GetLearningLanguageTandemUsecase } from './usecases/learningLanguage/ge
 import { ArchiveTandemsAndDeleteUsersUsecase } from './usecases/purges/archive-tandems.usecase';
 import { ResetPasswordUsecase } from './usecases/security/reset-password.usecase';
 import { DeleteLearningLanguageUsecase } from './usecases/learningLanguage/delete-learning-langugage.usecase';
+import { RevokeSessionsUsecase } from './usecases/user/revoke-sessions.usecase';
 
 const usecases: Provider[] = [
   //Campus
@@ -201,6 +202,7 @@ const usecases: Provider[] = [
   UpdateUserUsecase,
   UpdateAdministratorUsecase,
   ArchiveTandemsAndDeleteUsersUsecase,
+  RevokeSessionsUsecase,
   // Instance
   GetInstanceUsecase,
   UpdateInstanceUsecase,

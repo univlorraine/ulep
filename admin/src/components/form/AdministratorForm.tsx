@@ -37,23 +37,23 @@ const AdministratorForm: React.FC<AdministratorFormProps> = ({
     if (isLoadingIdentity || !identity) {
         return <Loading />;
     }
-    const onCreatePressed = () => {
+
+    const getUniversityId = (): string | undefined => {
         if (!identity.isCentralUniversity) {
-            return handleSubmit({
-                id,
-                email: newEmail,
-                password,
-                universityId: identity.universityId,
-            });
+            return identity.universityId;
         }
 
-        return handleSubmit({
+        return university?.parent ? university?.id : undefined;
+    };
+
+    const onCreatePressed = () => {
+        handleSubmit({
             id,
             email: newEmail,
             firstname: newFirstname,
             lastname: newLastname,
             password,
-            universityId: university?.parent ? university?.id : undefined,
+            universityId: getUniversityId(),
         });
     };
 

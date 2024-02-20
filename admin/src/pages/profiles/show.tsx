@@ -13,6 +13,9 @@ import {
     Identifier,
 } from 'react-admin';
 import Availabilites from '../../entities/Availabilities';
+import Language from '../../entities/Language';
+import { LearningLanguage } from '../../entities/LearningLanguage';
+import { Profile } from '../../entities/Profile';
 import User from '../../entities/User';
 
 const Title = () => {
@@ -91,19 +94,32 @@ const ProfileTab = () => {
             </TabbedShowLayout.Tab>
 
             <TabbedShowLayout.Tab contentClassName="tab" label={translate('profiles.language_title')}>
-                <TextField label={translate('profiles.native_language')} source="nativeLanguage.name" />
+                <FunctionField
+                    label={translate('profiles.native_language')}
+                    render={(record: Profile) => translate(`languages_code.${record.nativeLanguage.code}`)}
+                />
                 <ArrayField
                     label={translate('profiles.mastered_languages')}
                     sortable={false}
                     source="masteredLanguages"
                 >
-                    <SingleFieldList linkType={false}>
-                        <ChipField source="name" />
+                    <SingleFieldList>
+                        <FunctionField
+                            render={(record: Language) => (
+                                <ChipField
+                                    record={{ name: translate(`languages_code.${record.code}`) }}
+                                    source="name"
+                                />
+                            )}
+                        />
                     </SingleFieldList>
                 </ArrayField>
                 <ArrayField source="learningLanguages">
                     <Datagrid bulkActionButtons={false} rowClick={(id: Identifier) => `/learning-languages/${id}/show`}>
-                        <TextField source="name" />
+                        <FunctionField
+                            render={(record: LearningLanguage) => translate(`languages_code.${record.code}`)}
+                            source="name"
+                        />
                         <TextField source="level" />
                     </Datagrid>
                 </ArrayField>

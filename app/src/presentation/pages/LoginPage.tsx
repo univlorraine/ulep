@@ -11,6 +11,7 @@ import useWindowDimensions from '../hooks/useWindowDimensions';
 import { HYBRID_MAX_WIDTH } from '../utils';
 import Tokens from '../../domain/entities/Tokens';
 import { useTranslation } from 'react-i18next';
+import useRedirectToHomeIfLogged from '../hooks/useRedirectToHomeIfLogged';
 
 const LoginPage: React.FC = () => {
     const { width } = useWindowDimensions();
@@ -20,6 +21,7 @@ const LoginPage: React.FC = () => {
     const { t } = useTranslation();
     const setProfile = useStoreActions((store) => store.setProfile);
     const setUser = useStoreActions((store) => store.setUser);
+    useRedirectToHomeIfLogged();
 
     const onLogin = async (tokens: Tokens) => {
         const resultProfile = await getProfile.execute(tokens.accessToken);

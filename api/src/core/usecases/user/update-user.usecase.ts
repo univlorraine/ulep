@@ -74,10 +74,18 @@ export class UpdateUserUsecase {
     );
 
     if (
-      command.status === UserStatus.BANNED ||
+      command.status === UserStatus.CANCELED &&
+      user.status !== UserStatus.CANCELED
+    ) {
+      await this.cancelTandemsForUser(user);
+    }
+
+    if (
+      command.status === UserStatus.BANNED &&
       user.status !== UserStatus.BANNED
     ) {
       await this.cancelTandemsForUser(user);
+      await this.keycloakClient.logoutUser(user.id);
 
       if (user.acceptsEmail) {
         await this.sendAccountBlockedEmail(user);
@@ -181,6 +189,4 @@ export class UpdateUserUsecase {
       );
     }
   }
-
-  private sync;
 }

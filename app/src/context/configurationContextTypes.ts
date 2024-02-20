@@ -22,9 +22,10 @@ import ResetPasswordUsecaseInterface from '../domain/interfaces/ResetPasswordUse
 import RetrievePersonInfoUsecaseInterface from '../domain/interfaces/RetrievePersonInfoUsecase.interface';
 import UpdateAvatarUsecaseInterface from '../domain/interfaces/UpdateAvatarUsecase.interface';
 import UpdateNotificationPermissionUsecaseInterface from '../domain/interfaces/UpdateNotificationPermissionUsecase.interface';
-import { GetInitialUrlUsecase } from '../domain/usecases/AuthStandardFlow/GetInitialUrlUsecase';
 import GetUniversityInterface from '../domain/interfaces/GetUniversity.interface';
 import GetMediaObjectUsecaseInterface from '../domain/interfaces/GetMediaObjectUsecase.interface';
+import RevokeSessionsUsecaseInterface from '../domain/interfaces/RevokeSessionsUsecase.interface';
+import GetInitialUrlUsecaseInterface from '../domain/interfaces/AuthStandardFlow/GetInitialUrlUsecase.interface';
 
 export interface ConfigContextValueType {
     accessToken: string;
@@ -54,5 +55,6 @@ export interface ConfigContextValueType {
     updateNotificationPermission: UpdateNotificationPermissionUsecaseInterface;
     retrievePerson: RetrievePersonInfoUsecaseInterface;
     getTokenFromCodeUsecase: GetTokenFromCodeUsecaseInterface;
-    getInitialUrlUsecase: GetInitialUrlUsecase;
+    getInitialUrlUsecase: GetInitialUrlUsecaseInterface;
+    revokeSessionsUsecase: RevokeSessionsUsecaseInterface;
 }

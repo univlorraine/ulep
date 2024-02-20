@@ -14,6 +14,7 @@ interface TandemPartner {
     id: string;
     profile: Profile;
     name: string;
+    code: string;
     learningType: LearningType;
     effectiveLearningType?: LearningType;
     level: string;
@@ -78,14 +79,14 @@ const TandemTable = ({ partners, actions, displayTandemLanguage }: TandemTablePr
                         {displayTandemLanguage && (
                             <TableCell>
                                 {[partner.profile.nativeLanguage, ...partner.profile.masteredLanguages]
-                                    .map((language) => language.name)
+                                    .map((language) => translate(`languages_code.${language.code}`))
                                     .join(', ')}
                             </TableCell>
                         )}
                         <TableCell>
                             <ProfileLink profile={partner.profile} />
                         </TableCell>
-                        <TableCell>{partner.name}</TableCell>
+                        <TableCell>{translate(`languages_code.${partner.code}`)}</TableCell>
                         <TableCell>{partner.level}</TableCell>
                         <TableCell>{partner.profile.user.university.name}</TableCell>
                         <TableCell>
