@@ -14,6 +14,7 @@ import useLearningLanguagesStore from '../useLearningLanguagesStore';
 import TandemActions from './TandemActions';
 import TandemFilters from './TandemTable/TandemFilters';
 import TandemTable from './TandemTable/TandemTable';
+import useTandemMatchesFilters from './TandemTable/useTandemMatchesFilters';
 
 // TODO(futur): handle inactive tandem
 const ShowTandems = () => {
@@ -89,24 +90,15 @@ const ShowTandems = () => {
         }
     );
 
-    const [firstnameFilter, setFirstnameFilter] = useState<string>();
-    const [lastnameFilter, setLastnameFilter] = useState<string>();
-    const [roleFilter, setRoleFilter] = useState<UserRole>();
-    let filteredMatches = matches || [];
-    if (firstnameFilter) {
-        filteredMatches = filteredMatches.filter((match) =>
-            match.target.profile.user.firstname.toLowerCase().includes(firstnameFilter.toLowerCase())
-        );
-    }
-    // TODO(NOW+1): optimize loop for filtering
-    if (lastnameFilter) {
-        filteredMatches = filteredMatches.filter((match) =>
-            match.target.profile.user.lastname.toLowerCase().includes(lastnameFilter.toLowerCase())
-        );
-    }
-    if (roleFilter) {
-        filteredMatches = filteredMatches.filter((match) => match.target.profile.user.role === roleFilter);
-    }
+    const {
+        filteredMatches,
+        firstnameFilter,
+        setFirstnameFilter,
+        lastnameFilter,
+        setLastnameFilter,
+        roleFilter,
+        setRoleFilter,
+    } = useTandemMatchesFilters(matches || []);
 
     if (isLoadingIdentity || isLoadingTandem) {
         return <CircularProgress />;
