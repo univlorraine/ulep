@@ -1,4 +1,4 @@
-import { Table, TableBody, TableCell, TableHead, TableRow } from '@mui/material';
+import { Table, TableBody, TableCell, TableHead, TableRow, TablePagination } from '@mui/material';
 import Popover from '@mui/material/Popover';
 import Typography from '@mui/material/Typography';
 import React, { useState } from 'react';
@@ -47,6 +47,18 @@ const TandemTable = ({ partners, actions, displayTandemLanguage }: TandemTablePr
         setAnchorEl(null);
     };
 
+    const [page, setPage] = useState<number>(0);
+    const handleChangePage = (event: unknown, newPage: number) => {
+        setPage(newPage);
+    };
+    const [rowsPerPage, setRowsPerPage] = useState<number>(5);
+    const handleChangeRowsPerPage = (event: React.ChangeEvent<HTMLInputElement>) => {
+        setRowsPerPage(parseInt(event.target.value, 10));
+        setPage(0);
+    };
+
+    const visibleRows = partners.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage);
+
     const open = Boolean(anchorEl);
 
     return (
@@ -74,7 +86,7 @@ const TandemTable = ({ partners, actions, displayTandemLanguage }: TandemTablePr
                 </TableRow>
             </TableHead>
             <TableBody>
-                {partners.map((partner) => (
+                {visibleRows.map((partner) => (
                     <TableRow key={partner.id}>
                         {displayTandemLanguage && (
                             <TableCell>
@@ -119,6 +131,14 @@ const TandemTable = ({ partners, actions, displayTandemLanguage }: TandemTablePr
                     </TableRow>
                 ))}
             </TableBody>
+            <TablePagination
+                count={partners.length}
+                onPageChange={handleChangePage}
+                onRowsPerPageChange={handleChangeRowsPerPage}
+                page={page}
+                rowsPerPage={rowsPerPage}
+                rowsPerPageOptions={[5, 10, 25]}
+            />
             <Popover
                 PaperProps={{
                     style: {
