@@ -1,6 +1,6 @@
 import { useState } from 'react';
 
-// TODO(NOW): option pagination
+// TODO(NOW): option pagination (e.g. nb item per page)
 
 const usePagination = <T>(rows: T[]) => {
     const [page, setPage] = useState<number>(0);

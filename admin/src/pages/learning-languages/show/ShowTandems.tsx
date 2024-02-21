@@ -1,5 +1,15 @@
 /* eslint-disable react/no-unstable-nested-components */
-import { Box, CircularProgress, Typography } from '@mui/material';
+import {
+    Box,
+    CircularProgress,
+    FormControl,
+    InputLabel,
+    MenuItem,
+    Select,
+    SelectChangeEvent,
+    TextField,
+    Typography,
+} from '@mui/material';
 import React, { useState } from 'react';
 import { useGetIdentity, useGetList, useGetOne, useRecordContext, useTranslate } from 'react-admin';
 import {
@@ -87,6 +97,25 @@ const ShowTandems = () => {
             enabled: !!record?.id && !isLoadingTandem && !hasActiveTandem && !isLoadingIdentity,
         }
     );
+
+    const [firstnameFilter, setFirstnameFilter] = useState<string>();
+    const [lastnameFilter, setLastnameFilter] = useState<string>();
+    const [roleFilter, setRoleFilter] = useState<UserRole>();
+    let filteredMatches = matches || [];
+    if (firstnameFilter) {
+        filteredMatches = filteredMatches.filter((match) =>
+            match.target.profile.user.firstname.toLowerCase().includes(firstnameFilter.toLowerCase())
+        );
+    }
+    // TODO(NOW+1): optimize loop for filtering
+    if (lastnameFilter) {
+        filteredMatches = filteredMatches.filter((match) =>
+            match.target.profile.user.lastname.toLowerCase().includes(lastnameFilter.toLowerCase())
+        );
+    }
+    if (roleFilter) {
+        filteredMatches = filteredMatches.filter((match) => match.target.profile.user.role === roleFilter);
+    }
 
     if (isLoadingIdentity || isLoadingTandem) {
         return <CircularProgress />;
@@ -227,9 +256,42 @@ const ShowTandems = () => {
                 <Box sx={{ marginTop: 3 }}>
                     <Typography variant="h6">{translate('learning_languages.show.tandems.matches.title')}</Typography>
                     <Box sx={{ marginTop: 1 }}>
+                        <TextField
+                            id="firstname-filter"
+                            label="Firstname" // TODO(NOW): translate
+                            onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
+                                setFirstnameFilter(event.target.value);
+                            }}
+                            value={firstnameFilter}
+                        />
+                        <TextField
+                            id="lastname-filter"
+                            label="Lastname" // TODO(NOW): translate
+                            onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
+                                setLastnameFilter(event.target.value);
+                            }}
+                            value={lastnameFilter}
+                        />
+                        <FormControl>
+                            <InputLabel id="role-filter-label">Role</InputLabel>
+                            <Select
+                                id="role-filter"
+                                label="Role"
+                                labelId="role-filter-label"
+                                onChange={(event: SelectChangeEvent) => {
+                                    setRoleFilter(event.target.value as UserRole);
+                                }}
+                                value={roleFilter}
+                            >
+                                <MenuItem value="STUDENT">Student</MenuItem>
+                                <MenuItem value="STAFF">Staff</MenuItem>
+                            </Select>
+                        </FormControl>
+                    </Box>
+                    <Box sx={{ marginTop: 1 }}>
                         {isLoadingMatches && <CircularProgress />}
                         {isErrorMatches && <p>{translate('learning_languages.show.tandems.matches.error')}</p>}
-                        {!isLoadingMatches && !isErrorMatches && matches && matches?.length > 0 ? (
+                        {!isLoadingMatches && !isErrorMatches && filteredMatches && filteredMatches?.length > 0 ? (
                             <TandemTable
                                 actions={(partner) => (
                                     <TandemActions
@@ -244,7 +306,7 @@ const ShowTandems = () => {
                                     />
                                 )}
                                 displayTandemLanguage={isJokerLearningLanguage}
-                                partners={matches.map((match) => ({
+                                partners={filteredMatches.map((match) => ({
                                     ...match.target,
                                     compatibilityScore: match.score.total,
                                     matchScore: match.score,
