@@ -30,6 +30,7 @@ import RoleRepresentation, {
   UserSession,
 } from './keycloak.models';
 import { Client, Issuer, TokenSet } from 'openid-client';
+import { University } from 'src/core/models';
 
 export interface Credentials {
   accessToken: string;
@@ -652,14 +653,27 @@ export class KeycloakClient {
 
     let administrators = await response.json();
 
+    // TODO(NOW+1): distinguish getAdministrators from getUniversityAdministrators
     if (universityId) {
-      administrators = administrators.filter(
-        (administrator) =>
-          administrator.attributes?.universityId == universityId,
+      administrators = administrators.filter((administrator) =>
+        administrator.attributes?.universityId.includes(universityId),
       );
     }
 
     return administrators;
+  }
+
+  /*
+   * Get administrators attached to the university
+   */
+  public async getUniversityAdministrators(
+    university: University,
+  ): Promise<UserRepresentation[]> {
+    return (await this.getAdministrators()).filter((admin) =>
+      university.isCentralUniversity()
+        ? !admin.attributes?.universityId
+        : admin.attributes?.universityId.includes(university.id),
+    );
   }
 
   /*
