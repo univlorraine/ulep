@@ -1,15 +1,5 @@
 /* eslint-disable react/no-unstable-nested-components */
-import {
-    Box,
-    CircularProgress,
-    FormControl,
-    InputLabel,
-    MenuItem,
-    Select,
-    SelectChangeEvent,
-    TextField,
-    Typography,
-} from '@mui/material';
+import { Box, CircularProgress, Typography } from '@mui/material';
 import React, { useState } from 'react';
 import { useGetIdentity, useGetList, useGetOne, useRecordContext, useTranslate } from 'react-admin';
 import {
@@ -22,6 +12,7 @@ import { Match } from '../../../entities/Match';
 import { TandemStatus } from '../../../entities/Tandem';
 import useLearningLanguagesStore from '../useLearningLanguagesStore';
 import TandemActions from './TandemActions';
+import TandemFilters from './TandemTable/TandemFilters';
 import TandemTable from './TandemTable/TandemTable';
 
 // TODO(futur): handle inactive tandem
@@ -228,7 +219,7 @@ const ShowTandems = () => {
                     </Box>
                 </Box>
             )}
-            <Box sx={{ marginTop: 3 }}>
+            <Box sx={{ marginTop: '2rem' }}>
                 <Typography variant="h6">
                     {userIsFromCentralUniversity
                         ? translate('learning_languages.show.tandems.globalSuggestions.title')
@@ -253,40 +244,17 @@ const ShowTandems = () => {
                 </Box>
             </Box>
             {!userIsFromCentralUniversity && (
-                <Box sx={{ marginTop: 3 }}>
+                <Box sx={{ marginTop: '2rem' }}>
                     <Typography variant="h6">{translate('learning_languages.show.tandems.matches.title')}</Typography>
                     <Box sx={{ marginTop: 1 }}>
-                        <TextField
-                            id="firstname-filter"
-                            label="Firstname" // TODO(NOW): translate
-                            onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
-                                setFirstnameFilter(event.target.value);
-                            }}
-                            value={firstnameFilter}
+                        <TandemFilters
+                            firstname={firstnameFilter}
+                            lastname={lastnameFilter}
+                            role={roleFilter}
+                            setFirstname={setFirstnameFilter}
+                            setLastname={setLastnameFilter}
+                            setRole={setRoleFilter}
                         />
-                        <TextField
-                            id="lastname-filter"
-                            label="Lastname" // TODO(NOW): translate
-                            onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
-                                setLastnameFilter(event.target.value);
-                            }}
-                            value={lastnameFilter}
-                        />
-                        <FormControl>
-                            <InputLabel id="role-filter-label">Role</InputLabel>
-                            <Select
-                                id="role-filter"
-                                label="Role"
-                                labelId="role-filter-label"
-                                onChange={(event: SelectChangeEvent) => {
-                                    setRoleFilter(event.target.value as UserRole);
-                                }}
-                                value={roleFilter}
-                            >
-                                <MenuItem value="STUDENT">Student</MenuItem>
-                                <MenuItem value="STAFF">Staff</MenuItem>
-                            </Select>
-                        </FormControl>
                     </Box>
                     <Box sx={{ marginTop: 1 }}>
                         {isLoadingMatches && <CircularProgress />}
