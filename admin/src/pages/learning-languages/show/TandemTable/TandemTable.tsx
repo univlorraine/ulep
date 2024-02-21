@@ -3,12 +3,13 @@ import Popover from '@mui/material/Popover';
 import Typography from '@mui/material/Typography';
 import React, { useState } from 'react';
 import { useTranslate } from 'react-admin';
-import { DisplayGender, DisplayLearningType, DisplayRole } from '../../../components/translated';
-import Language from '../../../entities/Language';
-import { LearningType } from '../../../entities/LearningLanguage';
-import { MatchScore } from '../../../entities/Match';
-import { Profile } from '../../../entities/Profile';
-import ProfileLink from '../ui/ProfileLink';
+import { DisplayGender, DisplayLearningType, DisplayRole } from '../../../../components/translated';
+import Language from '../../../../entities/Language';
+import { LearningType } from '../../../../entities/LearningLanguage';
+import { MatchScore } from '../../../../entities/Match';
+import { Profile } from '../../../../entities/Profile';
+import ProfileLink from '../../ui/ProfileLink';
+import usePagination from './usePagination';
 
 interface TandemPartner {
     id: string;
@@ -28,9 +29,12 @@ interface TandemTableProps {
     partners: TandemPartner[];
     actions?: (partner: TandemPartner) => React.ReactNode;
     displayTandemLanguage?: boolean;
+    paginationEnabled?: boolean;
 }
 
-const TandemTable = ({ partners, actions, displayTandemLanguage }: TandemTableProps) => {
+// TODO(NOW): filters
+
+const TandemTable = ({ partners, actions, displayTandemLanguage, paginationEnabled }: TandemTableProps) => {
     const translate = useTranslate();
 
     const [anchorEl, setAnchorEl] = React.useState<HTMLElement | null>(null);
@@ -47,17 +51,10 @@ const TandemTable = ({ partners, actions, displayTandemLanguage }: TandemTablePr
         setAnchorEl(null);
     };
 
-    const [page, setPage] = useState<number>(0);
-    const handleChangePage = (event: unknown, newPage: number) => {
-        setPage(newPage);
-    };
-    const [rowsPerPage, setRowsPerPage] = useState<number>(5);
-    const handleChangeRowsPerPage = (event: React.ChangeEvent<HTMLInputElement>) => {
-        setRowsPerPage(parseInt(event.target.value, 10));
-        setPage(0);
-    };
-
-    const visibleRows = partners.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage);
+    const { page, handleChangePage, rowsPerPage, handleChangeRowsPerPage, visibleRows } = usePagination(
+        paginationEnabled ? partners : []
+    );
+    const rows = paginationEnabled ? visibleRows : partners;
 
     const open = Boolean(anchorEl);
 
@@ -86,7 +83,7 @@ const TandemTable = ({ partners, actions, displayTandemLanguage }: TandemTablePr
                 </TableRow>
             </TableHead>
             <TableBody>
-                {visibleRows.map((partner) => (
+                {rows.map((partner) => (
                     <TableRow key={partner.id}>
                         {displayTandemLanguage && (
                             <TableCell>
@@ -131,14 +128,16 @@ const TandemTable = ({ partners, actions, displayTandemLanguage }: TandemTablePr
                     </TableRow>
                 ))}
             </TableBody>
-            <TablePagination
-                count={partners.length}
-                onPageChange={handleChangePage}
-                onRowsPerPageChange={handleChangeRowsPerPage}
-                page={page}
-                rowsPerPage={rowsPerPage}
-                rowsPerPageOptions={[5, 10, 25]}
-            />
+            {paginationEnabled && (
+                <TablePagination
+                    count={partners.length}
+                    onPageChange={handleChangePage}
+                    onRowsPerPageChange={handleChangeRowsPerPage}
+                    page={page}
+                    rowsPerPage={rowsPerPage}
+                    rowsPerPageOptions={[5, 10, 25]}
+                />
+            )}
             <Popover
                 PaperProps={{
                     style: {

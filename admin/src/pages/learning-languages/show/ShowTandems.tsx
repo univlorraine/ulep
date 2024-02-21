@@ -12,7 +12,7 @@ import { Match } from '../../../entities/Match';
 import { TandemStatus } from '../../../entities/Tandem';
 import useLearningLanguagesStore from '../useLearningLanguagesStore';
 import TandemActions from './TandemActions';
-import TandemTable from './TandemTable';
+import TandemTable from './TandemTable/TandemTable';
 
 // TODO(futur): handle inactive tandem
 const ShowTandems = () => {
@@ -70,6 +70,8 @@ const ShowTandems = () => {
             count: 0,
         };
     }
+
+    // TODO(NOW): manage no result
 
     const {
         isLoading: isLoadingMatches,
@@ -248,6 +250,7 @@ const ShowTandems = () => {
                                     matchScore: match.score,
                                     effectiveLearningType: getEffectiveLearningType(record, match.target),
                                 }))}
+                                paginationEnabled
                             />
                         ) : (
                             <p>{translate('learning_languages.show.tandems.matches.noResults')}</p>
