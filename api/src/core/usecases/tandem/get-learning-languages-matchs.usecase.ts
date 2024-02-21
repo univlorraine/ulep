@@ -1,10 +1,7 @@
 import { Collection } from '@app/common';
 import { Inject, Injectable, Logger } from '@nestjs/common';
 import { RessourceDoesNotExist } from 'src/core/errors';
-import {
-  LearningLanguageHasNoAssociatedProfile,
-  ProfileIsNotInCentralUniversity,
-} from 'src/core/errors/tandem-exceptions';
+import { LearningLanguageHasNoAssociatedProfile } from 'src/core/errors/tandem-exceptions';
 import { LearningLanguage, Match } from 'src/core/models';
 import {
   LANGUAGE_REPOSITORY,
@@ -50,8 +47,6 @@ export class GetLearningLanguageMatchesUsecase {
     const owner = learningLanguage.profile;
     if (!owner) {
       throw new LearningLanguageHasNoAssociatedProfile(command.id);
-    } else if (!owner.user.university.isCentralUniversity()) {
-      throw new ProfileIsNotInCentralUniversity(command.id);
     }
 
     const languagesAvailableForLearning = (
@@ -115,9 +110,14 @@ export class GetLearningLanguageMatchesUsecase {
       .filter((match) => match.total > 0)
       .sort((a, b) => b.total - a.total);
 
+    const items =
+      command.count === 0
+        ? matchs
+        : matchs.slice(0, command.count || DEFAULT_NB_USER_MATCHES);
+
     return new Collection<Match>({
-      items: matchs.slice(0, command.count || DEFAULT_NB_USER_MATCHES),
-      totalItems: matchs.length,
+      items,
+      totalItems: items.length,
     });
   }
 
