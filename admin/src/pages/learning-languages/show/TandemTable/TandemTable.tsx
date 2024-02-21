@@ -9,9 +9,9 @@ import { LearningType } from '../../../../entities/LearningLanguage';
 import { MatchScore } from '../../../../entities/Match';
 import { Profile } from '../../../../entities/Profile';
 import ProfileLink from '../../ui/ProfileLink';
-import usePagination from './usePagination';
+import { Pagination } from './usePagination';
 
-interface TandemPartner {
+export interface TandemPartner {
     id: string;
     profile: Profile;
     name: string;
@@ -26,15 +26,13 @@ interface TandemPartner {
 }
 
 interface TandemTableProps {
-    partners: TandemPartner[];
+    rows: TandemPartner[];
     actions?: (partner: TandemPartner) => React.ReactNode;
     displayTandemLanguage?: boolean;
-    paginationEnabled?: boolean;
+    pagination?: Omit<Pagination<TandemPartner>, 'resetPage' | 'visibleRows'>;
 }
 
-// TODO(NOW): filters
-
-const TandemTable = ({ partners, actions, displayTandemLanguage, paginationEnabled }: TandemTableProps) => {
+const TandemTable = ({ rows, actions, displayTandemLanguage, pagination }: TandemTableProps) => {
     const translate = useTranslate();
 
     const [anchorEl, setAnchorEl] = React.useState<HTMLElement | null>(null);
@@ -50,11 +48,6 @@ const TandemTable = ({ partners, actions, displayTandemLanguage, paginationEnabl
     const handlePopoverClose = () => {
         setAnchorEl(null);
     };
-
-    const { page, handleChangePage, rowsPerPage, handleChangeRowsPerPage, visibleRows } = usePagination(
-        paginationEnabled ? partners : []
-    );
-    const rows = paginationEnabled ? visibleRows : partners;
 
     const open = Boolean(anchorEl);
 
@@ -128,14 +121,19 @@ const TandemTable = ({ partners, actions, displayTandemLanguage, paginationEnabl
                     </TableRow>
                 ))}
             </TableBody>
-            {paginationEnabled && (
+
+            {pagination && (
                 <TablePagination
-                    count={partners.length}
-                    onPageChange={handleChangePage}
-                    onRowsPerPageChange={handleChangeRowsPerPage}
-                    page={page}
-                    rowsPerPage={rowsPerPage}
-                    rowsPerPageOptions={[5, 10, 25]}
+                    count={pagination.count}
+                    onPageChange={(event: unknown, newPage: number) => {
+                        pagination.handleChangePage(newPage);
+                    }}
+                    onRowsPerPageChange={(event: React.ChangeEvent<HTMLInputElement>) => {
+                        pagination.handleChangeRowsPerPage(parseInt(event.target.value, 10));
+                    }}
+                    page={pagination.page}
+                    rowsPerPage={pagination.rowsPerPage}
+                    rowsPerPageOptions={pagination.rowsPerPageOptions}
                 />
             )}
             <Popover
