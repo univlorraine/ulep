@@ -77,10 +77,10 @@
         "deleted_user": "Deleted user",
         "sso_login": "Authenticate",
         "userStatus": {
-            "active": "Actif",
-            "blocked": "Blocked",
-            "canceled": "Annulé",
-            "reported": "Signalé"
+            "active": "Active",
+            "banned": "Banned",
+            "canceled": "Canceled",
+            "reported": "Reported"
         },
         "genderValues": {
             "male": "Male",

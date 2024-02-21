@@ -78,7 +78,7 @@
         "sso_login": "M'authentifier",
         "userStatus": {
             "active": "Actif",
-            "blocked": "Bloqué",
+            "banned": "Bloqué",
             "canceled": "Annulé",
             "reported": "Signalé"
         },
