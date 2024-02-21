@@ -10,6 +10,7 @@ import {
 } from '../../../entities/LearningLanguage';
 import { Match } from '../../../entities/Match';
 import { TandemStatus } from '../../../entities/Tandem';
+import { isCentralUniversity } from '../../../entities/University';
 import useLearningLanguagesStore from '../useLearningLanguagesStore';
 import TandemActions from './TandemActions';
 import TandemFilters from './TandemTable/TandemFilters';
@@ -22,8 +23,7 @@ const ShowTandems = () => {
 
     const record = useRecordContext<LearningLanguage>();
     const isJokerLearningLanguage = isJoker(record);
-    // TODO(NOW): extract method
-    const userIsFromCentralUniversity = !record?.profile?.user.university.parent;
+    const userIsFromCentralUniversity = isCentralUniversity(record?.profile?.user.university);
 
     const { data: identity, isLoading: isLoadingIdentity } = useGetIdentity();
 
