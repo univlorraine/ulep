@@ -12,7 +12,7 @@ import { Match } from '../../../entities/Match';
 import { TandemStatus } from '../../../entities/Tandem';
 import { isCentralUniversity } from '../../../entities/University';
 import useLearningLanguagesStore from '../useLearningLanguagesStore';
-import TandemActions from './TandemActions';
+import TandemActions from './Actions/TandemActions';
 import TandemFilters from './TandemTable/TandemFilters';
 import TandemTable from './TandemTable/TandemTable';
 import useTandemMatchesFilters from './TandemTable/useTandemMatchesFilters';
