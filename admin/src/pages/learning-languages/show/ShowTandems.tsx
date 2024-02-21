@@ -20,6 +20,8 @@ const ShowTandems = () => {
 
     const record = useRecordContext<LearningLanguage>();
     const isJokerLearningLanguage = isJoker(record);
+    // TODO(NOW): extract method
+    const userIsFromCentralUniversity = !record?.profile?.user.university.parent;
 
     const { data: identity, isLoading: isLoadingIdentity } = useGetIdentity();
 
@@ -58,6 +60,17 @@ const ShowTandems = () => {
 
     const { selectedUniversityIds } = useLearningLanguagesStore();
 
+    let getLearningLanguagesMatchesFilters: any = {
+        id: record?.id,
+        universityIds: identity?.universityId ? [...selectedUniversityIds, identity.universityId] : [],
+    };
+    if (!userIsFromCentralUniversity) {
+        getLearningLanguagesMatchesFilters = {
+            ...getLearningLanguagesMatchesFilters,
+            count: 0,
+        };
+    }
+
     const {
         isLoading: isLoadingMatches,
         isError: isErrorMatches,
@@ -66,18 +79,10 @@ const ShowTandems = () => {
     } = useGetList<Match>(
         'learning-languages/matches',
         {
-            filter: {
-                id: record?.id,
-                universityIds: identity?.universityId ? [...selectedUniversityIds, identity.universityId] : [],
-            },
+            filter: getLearningLanguagesMatchesFilters,
         },
         {
-            enabled:
-                !!record?.id &&
-                !isLoadingTandem &&
-                !hasActiveTandem &&
-                !isLoadingIdentity &&
-                !record.profile.user.university.parent,
+            enabled: !!record?.id && !isLoadingTandem && !hasActiveTandem && !isLoadingIdentity,
         }
     );
 
@@ -158,7 +163,7 @@ const ShowTandems = () => {
 
     return (
         <>
-            {!record?.profile?.user.university.parent && (
+            {userIsFromCentralUniversity && (
                 <Box>
                     <Typography variant="h6">{translate('learning_languages.show.tandems.matches.title')}</Typography>
                     <Box sx={{ marginTop: 1 }}>
@@ -194,7 +199,7 @@ const ShowTandems = () => {
             )}
             <Box sx={{ marginTop: 3 }}>
                 <Typography variant="h6">
-                    {!record?.profile?.user.university.parent
+                    {userIsFromCentralUniversity
                         ? translate('learning_languages.show.tandems.globalSuggestions.title')
                         : translate('learning_languages.show.tandems.globalSuggestions.titleNotCentralUniversity')}
                 </Typography>
@@ -216,6 +221,40 @@ const ShowTandems = () => {
                     )}
                 </Box>
             </Box>
+            {!userIsFromCentralUniversity && (
+                <Box sx={{ marginTop: 3 }}>
+                    <Typography variant="h6">{translate('learning_languages.show.tandems.matches.title')}</Typography>
+                    <Box sx={{ marginTop: 1 }}>
+                        {isLoadingMatches && <CircularProgress />}
+                        {isErrorMatches && <p>{translate('learning_languages.show.tandems.matches.error')}</p>}
+                        {!isLoadingMatches && !isErrorMatches && matches && matches?.length > 0 ? (
+                            <TandemTable
+                                actions={(partner) => (
+                                    <TandemActions
+                                        learningLanguageIds={[record?.id.toString(), partner.id]}
+                                        onTandemAction={handleTandemAction}
+                                        relaunchGlobalRoutineOnAccept={
+                                            !tandem || tandem.partnerLearningLanguage.id !== partner.id
+                                        }
+                                        relaunchGlobalRoutineOnRefuse={
+                                            tandem?.partnerLearningLanguage.id === partner.id
+                                        }
+                                    />
+                                )}
+                                displayTandemLanguage={isJokerLearningLanguage}
+                                partners={matches.map((match) => ({
+                                    ...match.target,
+                                    compatibilityScore: match.score.total,
+                                    matchScore: match.score,
+                                    effectiveLearningType: getEffectiveLearningType(record, match.target),
+                                }))}
+                            />
+                        ) : (
+                            <p>{translate('learning_languages.show.tandems.matches.noResults')}</p>
+                        )}
+                    </Box>
+                </Box>
+            )}
         </>
     );
 };
