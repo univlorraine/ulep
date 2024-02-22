@@ -25,6 +25,19 @@ interface Tokens {
     refreshToken: string;
 }
 
+interface RequestParams {
+    path: string;
+    args: RequestInit;
+    isTokenNeeded: boolean;
+    body?: Body;
+    contentType?: string;
+    accessToken?: string;
+}
+
+type Request = [string, RequestInit, Body?, string?];
+
+type Action = 'get' | 'post' | 'delete' | 'put';
+
 class DomainHttpAdapter extends BaseHttpAdapter implements HttpAdapterInterface {
     accessToken: string = '';
 
@@ -67,17 +80,11 @@ class DomainHttpAdapter extends BaseHttpAdapter implements HttpAdapterInterface 
     }
 
     async get(path: string, args: RequestInit = {}, isTokenNeeded = true, accessToken?: string): Promise<Response> {
-        await this.handleTokens(isTokenNeeded);
-
-        return this.withAuthCheck(
-            super.get(`${this.apiUrl}${path}`, { ...args, headers: this.getHeaders(accessToken) })
-        );
+        return this.withAuthCheck('get', { path: `${this.apiUrl}${path}`, args, isTokenNeeded, accessToken });
     }
 
     async delete(path: string, args: RequestInit = {}, isTokenNeeded = true): Promise<Response> {
-        await this.handleTokens(isTokenNeeded);
-
-        return this.withAuthCheck(super.delete(`${this.apiUrl}${path}`, { ...args, headers: this.getHeaders() }));
+        return this.withAuthCheck('delete', { path: `${this.apiUrl}${path}`, args, isTokenNeeded });
     }
 
     async post(
@@ -87,21 +94,24 @@ class DomainHttpAdapter extends BaseHttpAdapter implements HttpAdapterInterface 
         contentType = 'application/json',
         isTokenNeeded = true
     ): Promise<Response> {
-        await this.handleTokens(isTokenNeeded);
-
-        return this.withAuthCheck(
-            super.post(`${this.apiUrl}${path}`, body, { ...args, headers: this.getHeaders() }, contentType)
-        );
+        return this.withAuthCheck('post', { path: `${this.apiUrl}${path}`, args, body, contentType, isTokenNeeded });
     }
 
     async put(path: string, body: Body, args: RequestInit = {}, isTokenNeeded = true): Promise<Response> {
-        await this.handleTokens(isTokenNeeded);
-
-        return this.withAuthCheck(super.put(`${this.apiUrl}${path}`, body, { ...args, headers: this.getHeaders() }));
+        return this.withAuthCheck('put', { path: `${this.apiUrl}${path}`, args, body, isTokenNeeded });
     }
 
-    async withAuthCheck(request: Promise<Response>) {
-        const response = await request;
+    async withAuthCheck(
+        action: Action,
+        { path, args, body, contentType, accessToken, isTokenNeeded }: RequestParams
+    ): Promise<Response> {
+        await this.handleTokens(isTokenNeeded);
+
+        const requestInit = isTokenNeeded || accessToken ? { ...args, headers: this.getHeaders(accessToken) } : args;
+
+        const request: Request = [path, requestInit, body, contentType];
+
+        const response = await super[action](...request);
 
         if (response.status === 401) {
             this.logoutAndRedirect();
@@ -148,6 +158,7 @@ class DomainHttpAdapter extends BaseHttpAdapter implements HttpAdapterInterface 
 
         const response: HttpResponse<RefreshUsecaseCommand> = await super.post(
             `${this.apiUrl}/authentication/refresh-token`,
+            {},
             { token: this.refreshToken }
         );
 
