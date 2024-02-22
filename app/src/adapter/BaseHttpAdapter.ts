@@ -16,7 +16,7 @@ class BaseHttpAdapter {
         return this.http(path, { ...args, method: 'delete' });
     }
 
-    post(path: string, body: Body, args: RequestInit = {}, contentType = 'application/json'): Promise<Response> {
+    post(path: string, args: RequestInit = {}, body: Body = {}, contentType = 'application/json'): Promise<Response> {
         let encodedBody: any;
 
         if (contentType === 'multipart/form-data') {
@@ -30,7 +30,7 @@ class BaseHttpAdapter {
         return this.http(path, { ...args, method: 'post', body: encodedBody }, contentType);
     }
 
-    put(path: string, body: Body, args: RequestInit = {}): Promise<Response> {
+    put(path: string, args: RequestInit = {}, body: Body = {}): Promise<Response> {
         return this.http(path, {
             ...args,
             method: 'put',
