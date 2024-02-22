@@ -66,6 +66,7 @@ interface UpdateProfile {
     acceptsEmail?: boolean;
     avatar?: MediaObject;
     learningLanguage?: Language;
+    university?: University;
 }
 
 interface UserStorePayload {

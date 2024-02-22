@@ -21,8 +21,8 @@ export const userCommandToDomain = (command: UserCommand) => {
         command.email,
         command.firstname,
         command.lastname,
-        universityCommandToDomain(command.university),
         command.status,
+        universityCommandToDomain(command.university),
         command.acceptsEmail,
         command.avatar ? mediaObjectCommandToDomain(command.avatar) : undefined
     );

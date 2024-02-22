@@ -36,21 +36,27 @@ const PairingFinalPage: React.FC = () => {
             profileSignUp.learningLanguage,
             profileSignUp.learningLanguageLevel,
             profileSignUp.pedagogy,
-            !!profileSignUp.sameAge,
-            !!profileSignUp.sameGender,
+            Boolean(profileSignUp.sameAge),
+            Boolean(profileSignUp.sameGender),
             profileSignUp.campus?.id,
-            !!profileSignUp.isForCertificate,
-            !!profileSignUp.isForProgram
+            Boolean(profileSignUp.isForCertificate),
+            Boolean(profileSignUp.isForProgram)
         );
 
         if (result instanceof Error) {
             setLoading(false);
-            return await showToast({ message: t(result.message), duration: 1000 });
+            await showToast({ message: t(result.message), duration: 1000 });
+            return;
         }
 
         updateProfile({ learningLanguage: result });
-        return (window.location.href = '/home');
+
+        window.location.href = '/home';
     };
+
+    if (profileSignUp.learningLanguage === undefined) {
+        return null;
+    }
 
     return (
         <SuccessLayout
@@ -66,9 +72,9 @@ const PairingFinalPage: React.FC = () => {
                         <FlagBubble language={profileSignUp.learningLanguage!} textColor="white" isSelected disabled />
                     </div>
                 </div>
-                <div className={`${styles['tandem-container']}`}>{`${t('global.tandem')} ${
-                    t(`languages_code.${profileSignUp.learningLanguage!.code}`)
-                } ${codeLanguageToFlag(profileSignUp.learningLanguage!.code)}`}</div>
+                <div className={`${styles['tandem-container']}`}>{`${t('global.tandem')} ${t(
+                    `languages_code.${profileSignUp.learningLanguage!.code}`
+                )} ${codeLanguageToFlag(profileSignUp.learningLanguage!.code)}`}</div>
                 <span className={`${styles.description} large-margin-top`}>{`${t(
                     'pairing_final_page.congratulation'
                 )},`}</span>
