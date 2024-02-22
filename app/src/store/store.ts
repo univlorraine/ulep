@@ -46,6 +46,7 @@ const Store = createStore<TokenStoreTypes>(
                     profile.learningLanguages = [...profile.learningLanguages, payload.learningLanguage];
                 }
                 if (profile && payload.acceptsEmail !== undefined) profile.user.acceptsEmail = payload.acceptsEmail;
+                if (profile && payload.university) profile.user.university = payload.university;
             }),
             updateProfileSignUp: action((state, payload) => {
                 const profile = state.profileSignUp;
