@@ -1,12 +1,11 @@
 import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
 import { Type } from 'class-transformer';
-import { IsInt, IsOptional, IsUUID, Min } from 'class-validator';
+import { IsInt, IsOptional, IsUUID } from 'class-validator';
 
 export class GetLearningLanguageMatchsRequest {
-  @ApiPropertyOptional({ minimum: 1, default: 5 })
+  @ApiPropertyOptional({ default: 5 })
   @Type(() => Number)
   @IsInt()
-  @Min(1)
   @IsOptional()
   readonly count?: number;
 

@@ -1,5 +1,5 @@
 import { AuthProvider } from 'react-admin';
-import University from '../entities/University';
+import { isCentralUniversity as checkIsCentralUniversity } from '../entities/University';
 import jwtManager from './jwtManager';
 
 export interface Identity {
@@ -121,7 +121,7 @@ const authProvider: AuthProvider = {
                 },
             });
             const universities = await universitiesRes.json();
-            const centralUniversity = universities?.items?.find((university: University) => !university.parent);
+            const centralUniversity = universities?.items?.find(checkIsCentralUniversity);
             if (!centralUniversity) {
                 return Promise.reject(new Error('No central university defined'));
             }

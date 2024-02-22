@@ -10,7 +10,6 @@
         },
         "label": "Administrators",
         "university": "Manager",
-
         "update": {
             "email": "Update user email",
             "error": "An error occurred while updating an administrator",
@@ -50,6 +49,7 @@
         "sunday": "Sunday"
     },
     "global": {
+        "all": "All",
         "active": "Active",
         "age": "Age",
         "blocked": "Blocked",
@@ -291,7 +291,6 @@
     "suggested_languages": {
         "label": "Asked languages"
     },
-
     "universities": {
         "create": {
             "admission_end": "Partner university admission due date",
@@ -485,6 +484,11 @@
                         "confirm": "Confirm"
                     },
                     "error": "An error occured&"
+                },
+                "filters": {
+                    "firstname": "Firstname",
+                    "lastname": "Lastname",
+                    "role": "Role"
                 }
             }
         }

@@ -1,16 +1,17 @@
-import { Table, TableBody, TableCell, TableHead, TableRow } from '@mui/material';
+import { Table, TableBody, TableCell, TableHead, TableRow, TablePagination } from '@mui/material';
 import Popover from '@mui/material/Popover';
 import Typography from '@mui/material/Typography';
 import React, { useState } from 'react';
 import { useTranslate } from 'react-admin';
-import { DisplayGender, DisplayLearningType, DisplayRole } from '../../../components/translated';
-import Language from '../../../entities/Language';
-import { LearningType } from '../../../entities/LearningLanguage';
-import { MatchScore } from '../../../entities/Match';
-import { Profile } from '../../../entities/Profile';
-import ProfileLink from '../ui/ProfileLink';
+import { DisplayGender, DisplayLearningType, DisplayRole } from '../../../../components/translated';
+import Language from '../../../../entities/Language';
+import { LearningType } from '../../../../entities/LearningLanguage';
+import { MatchScore } from '../../../../entities/Match';
+import { Profile } from '../../../../entities/Profile';
+import ProfileLink from '../../ui/ProfileLink';
+import { Pagination } from './usePagination';
 
-interface TandemPartner {
+export interface TandemPartner {
     id: string;
     profile: Profile;
     name: string;
@@ -25,12 +26,13 @@ interface TandemPartner {
 }
 
 interface TandemTableProps {
-    partners: TandemPartner[];
+    rows: TandemPartner[];
     actions?: (partner: TandemPartner) => React.ReactNode;
     displayTandemLanguage?: boolean;
+    pagination?: Omit<Pagination<TandemPartner>, 'resetPage' | 'visibleRows'>;
 }
 
-const TandemTable = ({ partners, actions, displayTandemLanguage }: TandemTableProps) => {
+const TandemTable = ({ rows, actions, displayTandemLanguage, pagination }: TandemTableProps) => {
     const translate = useTranslate();
 
     const [anchorEl, setAnchorEl] = React.useState<HTMLElement | null>(null);
@@ -74,7 +76,7 @@ const TandemTable = ({ partners, actions, displayTandemLanguage }: TandemTablePr
                 </TableRow>
             </TableHead>
             <TableBody>
-                {partners.map((partner) => (
+                {rows.map((partner) => (
                     <TableRow key={partner.id}>
                         {displayTandemLanguage && (
                             <TableCell>
@@ -119,6 +121,21 @@ const TandemTable = ({ partners, actions, displayTandemLanguage }: TandemTablePr
                     </TableRow>
                 ))}
             </TableBody>
+
+            {pagination && (
+                <TablePagination
+                    count={pagination.count}
+                    onPageChange={(event: unknown, newPage: number) => {
+                        pagination.handleChangePage(newPage);
+                    }}
+                    onRowsPerPageChange={(event: React.ChangeEvent<HTMLInputElement>) => {
+                        pagination.handleChangeRowsPerPage(parseInt(event.target.value, 10));
+                    }}
+                    page={pagination.page}
+                    rowsPerPage={pagination.rowsPerPage}
+                    rowsPerPageOptions={pagination.rowsPerPageOptions}
+                />
+            )}
             <Popover
                 PaperProps={{
                     style: {

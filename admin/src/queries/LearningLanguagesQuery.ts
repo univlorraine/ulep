@@ -60,12 +60,14 @@ export interface LearningLanguageMatchesParams {
     filter: {
         id: string;
         universityIds: string[];
+        count?: number;
     };
 }
 
-export const LearningLanguageMatchesQuery = (params: LearningLanguagesParams): string => {
+export const LearningLanguageMatchesQuery = (params: LearningLanguageMatchesParams): string => {
     const query = {
         universityIds: params.filter.universityIds,
+        count: params.filter.count,
     };
 
     return new URLSearchParams(qsAdapter().stringify(query)).toString();

@@ -10,7 +10,6 @@
         },
         "label": "Administrateurs",
         "university": "Gestionnaire de",
-
         "update": {
             "email": "Mettez à jour l'email de l'utilisateur",
             "error": "Une erreur est survenue lors de la mise à jour d'un administrateur",
@@ -50,6 +49,7 @@
         "sunday": "Dimanche"
     },
     "global": {
+        "all": "Tout",
         "active": "Actif",
         "age": "Age",
         "blocked": "Bloqué",
@@ -329,7 +329,6 @@
             "max_tandems_per_user": "Nombre maximum de tandems par utilisateur",
             "notificationEmail": "Email pour les notifications"
         },
-
         "pairingModes": {
             "manual": "Manuel",
             "semi_automatic": "Semi-automatique",
@@ -502,6 +501,11 @@
                         "confirm": "Confirmer"
                     },
                     "error": "Une erreur est survenue"
+                },
+                "filters": {
+                    "firstname": "Prénom",
+                    "lastname": "Nom",
+                    "role": "Rôle"
                 }
             }
         }
