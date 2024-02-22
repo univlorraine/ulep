@@ -76,8 +76,6 @@ const ShowTandems = () => {
         };
     }
 
-    // TODO(NOW): manage no result
-
     const {
         isLoading: isLoadingMatches,
         isError: isErrorMatches,
