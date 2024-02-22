@@ -1,7 +1,5 @@
 import { useState } from 'react';
 
-// TODO(NOW): option pagination (e.g. nb item per page)
-
 export interface Pagination<T> {
     count: number;
     page: number;
@@ -13,13 +11,22 @@ export interface Pagination<T> {
     rowsPerPageOptions: number[];
 }
 
-const usePagination = <T>(rows: T[]): Pagination<T> => {
+interface UsePaginationOpts {
+    defaultRowPerPage?: number;
+    rowsPerPageOptions?: number[];
+}
+
+const usePagination = <T>(rows: T[], opts?: UsePaginationOpts): Pagination<T> => {
     const [page, setPage] = useState<number>(0);
     const handleChangePage = (value: number) => {
         setPage(value);
     };
 
-    const [rowsPerPage, setRowsPerPage] = useState<number>(5);
+    const rowsPerPageOptions = opts?.rowsPerPageOptions || [5, 10, 25, 50];
+    if (opts?.defaultRowPerPage && !rowsPerPageOptions.includes(opts.defaultRowPerPage)) {
+        throw new Error('Default row per page is not part of rowsPerPage options');
+    }
+    const [rowsPerPage, setRowsPerPage] = useState<number>(opts?.defaultRowPerPage || rowsPerPageOptions[0]);
     const handleChangeRowsPerPage = (value: number) => {
         setRowsPerPage(value);
         setPage(0);
@@ -31,7 +38,6 @@ const usePagination = <T>(rows: T[]): Pagination<T> => {
 
     const visibleRows = rows.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage);
     const count = rows.length;
-    const rowsPerPageOptions = [5, 10, 25, 50];
 
     return {
         count,
