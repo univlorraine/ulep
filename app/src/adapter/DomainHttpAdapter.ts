@@ -67,17 +67,17 @@ class DomainHttpAdapter extends BaseHttpAdapter implements HttpAdapterInterface 
     }
 
     async get(path: string, args: RequestInit = {}, isTokenNeeded = true, accessToken?: string): Promise<Response> {
+        await this.handleTokens(isTokenNeeded);
+
         return this.withAuthCheck(
-            super.get(`${this.apiUrl}${path}`, { ...args, headers: this.getHeaders(accessToken) }),
-            isTokenNeeded
+            super.get(`${this.apiUrl}${path}`, { ...args, headers: this.getHeaders(accessToken) })
         );
     }
 
     async delete(path: string, args: RequestInit = {}, isTokenNeeded = true): Promise<Response> {
-        return this.withAuthCheck(
-            super.delete(`${this.apiUrl}${path}`, { ...args, headers: this.getHeaders() }),
-            isTokenNeeded
-        );
+        await this.handleTokens(isTokenNeeded);
+
+        return this.withAuthCheck(super.delete(`${this.apiUrl}${path}`, { ...args, headers: this.getHeaders() }));
     }
 
     async post(
@@ -87,22 +87,20 @@ class DomainHttpAdapter extends BaseHttpAdapter implements HttpAdapterInterface 
         contentType = 'application/json',
         isTokenNeeded = true
     ): Promise<Response> {
+        await this.handleTokens(isTokenNeeded);
+
         return this.withAuthCheck(
-            super.post(`${this.apiUrl}${path}`, body, { ...args, headers: this.getHeaders() }, contentType),
-            isTokenNeeded
+            super.post(`${this.apiUrl}${path}`, body, { ...args, headers: this.getHeaders() }, contentType)
         );
     }
 
     async put(path: string, body: Body, args: RequestInit = {}, isTokenNeeded = true): Promise<Response> {
-        return this.withAuthCheck(
-            super.put(`${this.apiUrl}${path}`, body, { ...args, headers: this.getHeaders() }),
-            isTokenNeeded
-        );
-    }
-
-    async withAuthCheck(request: Promise<Response>, isTokenNeeded: boolean) {
         await this.handleTokens(isTokenNeeded);
 
+        return this.withAuthCheck(super.put(`${this.apiUrl}${path}`, body, { ...args, headers: this.getHeaders() }));
+    }
+
+    async withAuthCheck(request: Promise<Response>) {
         const response = await request;
 
         if (response.status === 401) {
@@ -112,7 +110,7 @@ class DomainHttpAdapter extends BaseHttpAdapter implements HttpAdapterInterface 
         return response;
     }
 
-    handleTokens = async (isTokenNeeded: boolean): Promise<void> => {
+    async handleTokens(isTokenNeeded: boolean): Promise<void> {
         if (!isTokenNeeded) return;
         const isAccessTokenValid = await this.handleAccessToken();
 
@@ -127,9 +125,9 @@ class DomainHttpAdapter extends BaseHttpAdapter implements HttpAdapterInterface 
         }
 
         this.logoutAndRedirect();
-    };
+    }
 
-    handleAccessToken = async () => {
+    async handleAccessToken() {
         if (!this.accessToken || !this.refreshToken) {
             return false;
         }
@@ -141,9 +139,9 @@ class DomainHttpAdapter extends BaseHttpAdapter implements HttpAdapterInterface 
         }
 
         return jwtAccessDecoded.exp > Date.now() / 1000;
-    };
+    }
 
-    handleRefreshToken = async () => {
+    async handleRefreshToken() {
         if (this.refreshToken === '') {
             return false;
         }
@@ -163,18 +161,18 @@ class DomainHttpAdapter extends BaseHttpAdapter implements HttpAdapterInterface 
         });
 
         return true;
-    };
+    }
 
-    setTokens = ({ accessToken, refreshToken }: Tokens) => {
+    setTokens({ accessToken, refreshToken }: Tokens) {
         this.accessToken = accessToken;
         this.refreshToken = refreshToken;
         this.setStorageTokens({ accessToken, refreshToken });
-    };
+    }
 
-    logoutAndRedirect = () => {
+    logoutAndRedirect() {
         this.logout();
         if (this.router) this.router.push('/login');
-    };
+    }
 }
 
 export default DomainHttpAdapter;
