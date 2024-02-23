@@ -23,6 +23,8 @@ const handleOrderField = (field?: string) => {
             return 'lastname';
         case 'user.university.name':
             return 'university';
+        case 'category.name':
+            return 'category';
         case 'status':
         case 'content':
         case 'createdAt':

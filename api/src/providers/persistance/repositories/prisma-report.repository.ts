@@ -41,6 +41,14 @@ export class PrismaReportRepository implements ReportRepository {
       order = { User: { Organization: { name: orderBy.order } } };
     } else if (orderBy.field === 'firstname' || orderBy.field === 'lastname') {
       order = { User: { [orderBy.field]: orderBy.order } };
+    } else if (orderBy.field === 'category') {
+      order = {
+        Category: {
+          TextContent: {
+            text: orderBy.order,
+          },
+        },
+      };
     } else if (orderBy.field) {
       order = { [orderBy.field]: orderBy.order };
     }

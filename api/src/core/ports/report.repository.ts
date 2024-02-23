@@ -7,6 +7,7 @@ export type ReportQuerySortKey =
   | 'firstname'
   | 'lastname'
   | 'university'
+  | 'category'
   | 'status'
   | 'content'
   | 'createdAt';

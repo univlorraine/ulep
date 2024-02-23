@@ -21,6 +21,7 @@ export class GetReportsQueryParams extends PaginationDto {
       'firstname',
       'lastname',
       'university',
+      'category',
       'content',
       'status',
       'createdAt',
