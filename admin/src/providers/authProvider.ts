@@ -109,7 +109,7 @@ const authProvider: AuthProvider = {
         if (error && (error.status === 401 || error.status === 403)) {
             jwtManager.ereaseTokens();
 
-            return Promise.reject(new Error('Check error fail'));
+            return Promise.reject(new Error('Forbidden'));
         }
 
         return Promise.resolve();
