@@ -86,12 +86,17 @@ const authProvider: AuthProvider = {
     async logout() {
         const accessToken = jwtManager.getToken('access_token');
         if (accessToken) {
-            await http('GET', `${process.env.REACT_APP_API_URL}/users/revoke`, {
-                headers: {
-                    'Content-Type': 'application/json',
-                    Authorization: `Bearer ${accessToken}`,
-                },
-            });
+            try {
+                await http('GET', `${process.env.REACT_APP_API_URL}/users/revoke`, {
+                    headers: {
+                        'Content-Type': 'application/json',
+                        Authorization: `Bearer ${accessToken}`,
+                    },
+                });
+            } catch (err) {
+                console.error('Fail to revoke user session', err);
+                jwtManager.ereaseTokens();
+            }
         }
 
         jwtManager.ereaseTokens();
