@@ -7,6 +7,24 @@ import UpdateAvatarUsecaseInterface from '../interfaces/UpdateAvatarUsecase.inte
 const regexValidationErrorFileSizeExceed = /expected size is less than (\d+)/
 
 export const UPDATE_AVATAR_MAX_SIZE_ERROR = "FILE_MAX_SIZE";
+export interface AvatarMaxSizeCause {
+    type: string;
+    maxSize: number;
+}
+
+export class AvatarMaxSizeError extends Error {
+    public maxSize: number;
+
+    constructor(message: string, maxSize: number, options?: ErrorOptions) {
+      super(message, options);
+      this.maxSize = maxSize;
+  
+      // Set the prototype explicitly.
+      Object.setPrototypeOf(this, AvatarMaxSizeError.prototype);
+    }
+  }
+  
+  
 
 class UpdateAvatarUsecase implements UpdateAvatarUsecaseInterface {
     constructor(private readonly domainHttpAdapter: HttpAdapterInterface) { }
@@ -29,12 +47,7 @@ class UpdateAvatarUsecase implements UpdateAvatarUsecaseInterface {
             if (error.error.statusCode === 400) {
                 const fileSizeExceedProcessedError =  error.error.message.match(regexValidationErrorFileSizeExceed);
                 if (fileSizeExceedProcessedError && fileSizeExceedProcessedError.length === 2) {
-                    return new Error('errors.fileSizeExceed', {
-                        cause: {
-                            type: UPDATE_AVATAR_MAX_SIZE_ERROR,
-                            maxSize: fileSizeExceedProcessedError[1] / 1000000
-                        }
-                    })
+                    return new AvatarMaxSizeError("errors.fileSizeExceed", fileSizeExceedProcessedError[1] / 1000000);
                 }
             }
             return new Error('errors.global');

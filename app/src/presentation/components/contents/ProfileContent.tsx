@@ -8,7 +8,11 @@ import { useState } from 'react';
 import { TailSpin } from 'react-loader-spinner';
 import Avatar from '../Avatar';
 import Profile from '../../../domain/entities/Profile';
-import { UPDATE_AVATAR_MAX_SIZE_ERROR } from '../../../domain/usecases/UpdateAvatarUsecase';
+import {
+    AvatarMaxSizeCause,
+    AvatarMaxSizeError,
+    UPDATE_AVATAR_MAX_SIZE_ERROR,
+} from '../../../domain/usecases/UpdateAvatarUsecase';
 
 interface ProfileContentProps {
     onClose: () => void;
@@ -37,11 +41,9 @@ const ProfileContent: React.FC<ProfileContentProps> = ({ onClose, onParameterPre
             const result = await updateAvatar.execute(avatarFile);
 
             if (result instanceof Error) {
-                let message = t(result.message)
-                if (result.cause) {
-                    if (result.cause.type === UPDATE_AVATAR_MAX_SIZE_ERROR) {
-                        message = t(result.message, {...result.cause})
-                    }
+                let message = t(result.message);
+                if (result instanceof AvatarMaxSizeError) {
+                    message = t(result.message, { maxSize: result.maxSize });
                 }
                 setLoading(false);
                 return await showToast({ message, duration: 5000 });
