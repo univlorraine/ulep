@@ -39,8 +39,10 @@ export class PrismaReportRepository implements ReportRepository {
     let order;
     if (orderBy.field === 'university') {
       order = { User: { Organization: { name: orderBy.order } } };
-    } else if (orderBy.field) {
+    } else if (orderBy.field === 'firstname' || orderBy.field === 'lastname') {
       order = { User: { [orderBy.field]: orderBy.order } };
+    } else if (orderBy.field) {
+      order = { [orderBy.field]: orderBy.order };
     }
 
     const reports = await this.prisma.reports.findMany({

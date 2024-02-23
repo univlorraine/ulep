@@ -23,6 +23,10 @@ const handleOrderField = (field?: string) => {
             return 'lastname';
         case 'user.university.name':
             return 'university';
+        case 'status':
+        case 'content':
+        case 'createdAt':
+            return field;
         default:
             return undefined;
     }

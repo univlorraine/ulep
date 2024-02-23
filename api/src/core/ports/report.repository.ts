@@ -3,7 +3,13 @@ import { Report, ReportCategory, ReportStatus } from '../models';
 
 export const REPORT_REPOSITORY = 'report.repository';
 
-export type ReportQuerySortKey = 'firstname' | 'lastname' | 'university';
+export type ReportQuerySortKey =
+  | 'firstname'
+  | 'lastname'
+  | 'university'
+  | 'status'
+  | 'content'
+  | 'createdAt';
 
 export interface ReportQueryWhere {
   id?: string;
