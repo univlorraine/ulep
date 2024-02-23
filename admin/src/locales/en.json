@@ -50,10 +50,7 @@
     },
     "global": {
         "all": "All",
-        "active": "Active",
         "age": "Age",
-        "blocked": "Blocked",
-        "canceled": "Canceled",
         "content": "Content",
         "disconnect": "Disconnect",
         "email": "Email",
@@ -403,6 +400,9 @@
                         "yes": "Yes",
                         "no": "No"
                     }
+                },
+                "user_lastname": {
+                    "label": "Lastname"
                 }
             },
             "globalRoutineModal": {
