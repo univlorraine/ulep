@@ -50,10 +50,7 @@
     },
     "global": {
         "all": "Tout",
-        "active": "Actif",
         "age": "Age",
-        "blocked": "Bloqué",
-        "canceled": "Annulé",
         "content": "Contenu",
         "disconnect": "Déconnexion",
         "email": "Email",
@@ -243,7 +240,10 @@
         "summary": "Résumé",
         "searchLastname": "Chercher par nom",
         "staffFunction": "Fonction",
-        "status": "Statut"
+        "status": "Statut",
+        "update": {
+            "title": "Modifier le profil"
+        }
     },
     "purge": {
         "error": "Une erreur est survenue durant la purge du système",
