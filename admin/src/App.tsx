@@ -43,6 +43,7 @@ const App = () => {
             layout={CustomLayout}
             loginPage={LoginPage}
             theme={theme}
+            requireAuth
         >
             {(permissions) => (
                 <>
