@@ -159,6 +159,8 @@ export const BACKGROUND_WEB_STYLE_INLINE = {
 };
 
 export const isPasswordCorrect = (password: string) => {
+    if (password.length <= 6) return false;
+
     const regex = /((?=.*\d)|(?=.*\W+))(?![.\n])(?=.*[A-Z])(?=.*[a-z]).*$/;
 
     return regex.test(password);
