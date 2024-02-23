@@ -168,6 +168,7 @@ export class ReportController {
   async findByStatus(
     @Query()
     { field, limit, order, page, status, universityId }: GetReportsQueryParams,
+    @Headers('Language-code') languageCode?: string,
   ) {
     const instances = await this.getReportsByStatusUsecase.execute({
       limit,
@@ -180,7 +181,9 @@ export class ReportController {
     });
 
     return new Collection<ReportResponse>({
-      items: instances.items.map(ReportResponse.fromDomain),
+      items: instances.items.map((item) =>
+        ReportResponse.fromDomain(item, languageCode),
+      ),
       totalItems: instances.totalItems,
     });
   }
