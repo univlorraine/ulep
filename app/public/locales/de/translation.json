@@ -12,7 +12,8 @@
         "global": "Es ist ein Fehler aufgetreten",
         "userDoesntExist": "Der Benutzer existiert nicht",
         "userWrongCredentials": "Das Passwort oder die E-Mail-Adresse ist falsch",
-        "connecteur": ""
+        "connecteur": "",
+        "fileSizeExceed": ""
     },
     "error_page": {
         "title": "",
