@@ -6,6 +6,7 @@ import {
     DeleteParams,
     GetOneParams,
     UpdateParams,
+    addRefreshAuthToDataProvider,
     fetchUtils,
 } from 'react-admin';
 import Language from '../entities/Language';
@@ -18,7 +19,7 @@ import { LearningLanguagesQuery, LearningLanguageMatchesQuery } from '../queries
 import ProfilesQuery from '../queries/ProfilesQuery';
 import QuestionsQuery from '../queries/QuestionsQuery';
 import ReportsQuery from '../queries/ReportsQuery';
-import { http } from './authProvider';
+import { http, refreshAuth } from './authProvider';
 import jwtManager from './jwtManager';
 
 const httpClientOptions = (options: any = {}) => {
@@ -321,4 +322,4 @@ const customDataProvider = {
     },
 } as unknown as DataProvider;
 
-export default customDataProvider;
+export default addRefreshAuthToDataProvider(customDataProvider, refreshAuth);
