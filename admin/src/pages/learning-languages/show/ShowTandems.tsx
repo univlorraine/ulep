@@ -1,6 +1,6 @@
 /* eslint-disable react/no-unstable-nested-components */
 import { Box, CircularProgress, Typography } from '@mui/material';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useGetIdentity, useGetList, useGetOne, useRecordContext, useTranslate } from 'react-admin';
 import {
     LearningLanguage,
@@ -10,9 +10,13 @@ import {
 } from '../../../entities/LearningLanguage';
 import { Match } from '../../../entities/Match';
 import { TandemStatus } from '../../../entities/Tandem';
+import { isCentralUniversity } from '../../../entities/University';
 import useLearningLanguagesStore from '../useLearningLanguagesStore';
-import TandemActions from './TandemActions';
-import TandemTable from './TandemTable';
+import TandemActions from './Actions/TandemActions';
+import TandemFilters from './TandemTable/TandemFilters';
+import TandemTable from './TandemTable/TandemTable';
+import usePagination from './TandemTable/usePagination';
+import useTandemMatchesFilters from './TandemTable/useTandemMatchesFilters';
 
 // TODO(futur): handle inactive tandem
 const ShowTandems = () => {
@@ -20,6 +24,9 @@ const ShowTandems = () => {
 
     const record = useRecordContext<LearningLanguage>();
     const isJokerLearningLanguage = isJoker(record);
+    const userIsFromCentralUniversity = record?.profile?.user
+        ? isCentralUniversity(record.profile.user.university)
+        : undefined;
 
     const { data: identity, isLoading: isLoadingIdentity } = useGetIdentity();
 
@@ -58,6 +65,17 @@ const ShowTandems = () => {
 
     const { selectedUniversityIds } = useLearningLanguagesStore();
 
+    let getLearningLanguagesMatchesFilters: any = {
+        id: record?.id,
+        universityIds: identity?.universityId ? [...selectedUniversityIds, identity.universityId] : [],
+    };
+    if (!userIsFromCentralUniversity) {
+        getLearningLanguagesMatchesFilters = {
+            ...getLearningLanguagesMatchesFilters,
+            count: 0,
+        };
+    }
+
     const {
         isLoading: isLoadingMatches,
         isError: isErrorMatches,
@@ -66,20 +84,26 @@ const ShowTandems = () => {
     } = useGetList<Match>(
         'learning-languages/matches',
         {
-            filter: {
-                id: record?.id,
-                universityIds: identity?.universityId ? [...selectedUniversityIds, identity.universityId] : [],
-            },
+            filter: getLearningLanguagesMatchesFilters,
         },
         {
-            enabled:
-                !!record?.id &&
-                !isLoadingTandem &&
-                !hasActiveTandem &&
-                !isLoadingIdentity &&
-                !record.profile.user.university.parent,
+            enabled: !!record?.id && !isLoadingTandem && !hasActiveTandem && !isLoadingIdentity,
         }
     );
+
+    const {
+        filteredMatches,
+        firstnameFilter,
+        setFirstnameFilter,
+        lastnameFilter,
+        setLastnameFilter,
+        roleFilter,
+        setRoleFilter,
+    } = useTandemMatchesFilters(matches || []);
+    const { resetPage, visibleRows, ...pagination } = usePagination<Match>(filteredMatches);
+    useEffect(() => {
+        resetPage();
+    }, [firstnameFilter, lastnameFilter, roleFilter]);
 
     if (isLoadingIdentity || isLoadingTandem) {
         return <CircularProgress />;
@@ -119,7 +143,7 @@ const ShowTandems = () => {
                         />
                     )}
                     displayTandemLanguage={isJokerLearningLanguage}
-                    partners={tandemPartners}
+                    rows={tandemPartners}
                 />
             </>
         );
@@ -150,7 +174,7 @@ const ShowTandems = () => {
                             : undefined
                     }
                     displayTandemLanguage={isJokerLearningLanguage}
-                    partners={tandemPartners}
+                    rows={tandemPartners}
                 />
             </>
         );
@@ -158,7 +182,7 @@ const ShowTandems = () => {
 
     return (
         <>
-            {!record?.profile?.user.university.parent && (
+            {userIsFromCentralUniversity && (
                 <Box>
                     <Typography variant="h6">{translate('learning_languages.show.tandems.matches.title')}</Typography>
                     <Box sx={{ marginTop: 1 }}>
@@ -179,7 +203,7 @@ const ShowTandems = () => {
                                     />
                                 )}
                                 displayTandemLanguage={isJokerLearningLanguage}
-                                partners={matches.map((match) => ({
+                                rows={matches.map((match) => ({
                                     ...match.target,
                                     compatibilityScore: match.score.total,
                                     matchScore: match.score,
@@ -192,9 +216,9 @@ const ShowTandems = () => {
                     </Box>
                 </Box>
             )}
-            <Box sx={{ marginTop: 3 }}>
+            <Box sx={{ marginTop: '2rem' }}>
                 <Typography variant="h6">
-                    {!record?.profile?.user.university.parent
+                    {userIsFromCentralUniversity
                         ? translate('learning_languages.show.tandems.globalSuggestions.title')
                         : translate('learning_languages.show.tandems.globalSuggestions.titleNotCentralUniversity')}
                 </Typography>
@@ -211,11 +235,62 @@ const ShowTandems = () => {
                                 />
                             )}
                             displayTandemLanguage={isJokerLearningLanguage}
-                            partners={tandem?.status === TandemStatus.DRAFT ? tandemPartners : []}
+                            rows={tandem?.status === TandemStatus.DRAFT ? tandemPartners : []}
                         />
                     )}
                 </Box>
             </Box>
+            {!userIsFromCentralUniversity && (
+                <Box sx={{ marginTop: '2rem' }}>
+                    <Typography variant="h6">{translate('learning_languages.show.tandems.matches.title')}</Typography>
+                    <Box sx={{ marginTop: 1 }}>
+                        {isLoadingMatches && <CircularProgress />}
+                        {isErrorMatches && <p>{translate('learning_languages.show.tandems.matches.error')}</p>}
+                        {!isLoadingMatches &&
+                            !isErrorMatches &&
+                            (matches && matches?.length > 0 ? (
+                                <>
+                                    <Box sx={{ marginTop: 1 }}>
+                                        <TandemFilters
+                                            firstname={firstnameFilter}
+                                            lastname={lastnameFilter}
+                                            role={roleFilter}
+                                            setFirstname={setFirstnameFilter}
+                                            setLastname={setLastnameFilter}
+                                            setRole={setRoleFilter}
+                                        />
+                                    </Box>
+                                    <Box sx={{ marginTop: 0.5 }}>
+                                        <TandemTable
+                                            actions={(partner) => (
+                                                <TandemActions
+                                                    learningLanguageIds={[record?.id.toString(), partner.id]}
+                                                    onTandemAction={handleTandemAction}
+                                                    relaunchGlobalRoutineOnAccept={
+                                                        !tandem || tandem.partnerLearningLanguage.id !== partner.id
+                                                    }
+                                                    relaunchGlobalRoutineOnRefuse={
+                                                        tandem?.partnerLearningLanguage.id === partner.id
+                                                    }
+                                                />
+                                            )}
+                                            displayTandemLanguage={isJokerLearningLanguage}
+                                            pagination={pagination}
+                                            rows={visibleRows.map((match) => ({
+                                                ...match.target,
+                                                compatibilityScore: match.score.total,
+                                                matchScore: match.score,
+                                                effectiveLearningType: getEffectiveLearningType(record, match.target),
+                                            }))}
+                                        />
+                                    </Box>
+                                </>
+                            ) : (
+                                <p>{translate('learning_languages.show.tandems.matches.noResults')}</p>
+                            ))}
+                    </Box>
+                </Box>
+            )}
         </>
     );
 };

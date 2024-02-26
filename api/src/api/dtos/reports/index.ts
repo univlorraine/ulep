@@ -159,10 +159,13 @@ export class ReportResponse {
     Object.assign(this, partial);
   }
 
-  static fromDomain(instance: Report): ReportResponse {
+  static fromDomain(instance: Report, languageCode?: string): ReportResponse {
     return new ReportResponse({
       id: instance.id,
-      category: ReportCategoryResponse.fromDomain(instance.category),
+      category: ReportCategoryResponse.fromDomain(
+        instance.category,
+        languageCode,
+      ),
       status: instance.status,
       content: instance.content,
       user: instance.user ? UserResponse.fromDomain(instance.user) : undefined,

@@ -1,7 +1,7 @@
 import { FormControl, MenuItem, Select } from '@mui/material';
 import React, { useEffect } from 'react';
 import { useGetList } from 'react-admin';
-import University from '../entities/University';
+import University, { isCentralUniversity } from '../entities/University';
 
 interface UniversityPickerProps {
     initialValue?: string;
@@ -17,7 +17,8 @@ const UniversityPicker: React.FC<UniversityPickerProps> = ({ initialValue, onCha
             onChange(
                 data.find(
                     (university: University) =>
-                        university.id === initialValue || (initialValue === 'central' && !university.parent)
+                        university.id === initialValue ||
+                        (initialValue === 'central' && isCentralUniversity(university))
                 )
             );
         }

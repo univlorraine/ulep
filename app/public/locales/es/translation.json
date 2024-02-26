@@ -12,7 +12,8 @@
         "global": "Ha ocurrido un error",
         "userDoesntExist": "El usuario no existe",
         "userWrongCredentials": "Contraseña o correo electrónico incorrectos",
-        "connecteur": ""
+        "connecteur": "",
+        "fileSizeExceed": ""
     },
     "error_page": {
         "title": "",

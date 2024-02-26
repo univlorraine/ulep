@@ -10,7 +10,6 @@
         },
         "label": "Administrateurs",
         "university": "Gestionnaire de",
-
         "update": {
             "email": "Mettez à jour l'email de l'utilisateur",
             "error": "Une erreur est survenue lors de la mise à jour d'un administrateur",
@@ -50,10 +49,8 @@
         "sunday": "Dimanche"
     },
     "global": {
-        "active": "Actif",
+        "all": "Tout",
         "age": "Age",
-        "blocked": "Bloqué",
-        "canceled": "Annulé",
         "content": "Contenu",
         "disconnect": "Déconnexion",
         "email": "Email",
@@ -78,7 +75,7 @@
         "sso_login": "M'authentifier",
         "userStatus": {
             "active": "Actif",
-            "blocked": "Bloqué",
+            "banned": "Bloqué",
             "canceled": "Annulé",
             "reported": "Signalé"
         },
@@ -243,7 +240,10 @@
         "summary": "Résumé",
         "searchLastname": "Chercher par nom",
         "staffFunction": "Fonction",
-        "status": "Statut"
+        "status": "Statut",
+        "update": {
+            "title": "Modifier le profil"
+        }
     },
     "purge": {
         "error": "Une erreur est survenue durant la purge du système",
@@ -329,7 +329,6 @@
             "max_tandems_per_user": "Nombre maximum de tandems par utilisateur",
             "notificationEmail": "Email pour les notifications"
         },
-
         "pairingModes": {
             "manual": "Manuel",
             "semi_automatic": "Semi-automatique",
@@ -502,6 +501,11 @@
                         "confirm": "Confirmer"
                     },
                     "error": "Une erreur est survenue"
+                },
+                "filters": {
+                    "firstname": "Prénom",
+                    "lastname": "Nom",
+                    "role": "Rôle"
                 }
             }
         }

@@ -12,7 +12,8 @@
         "global": "An error has occurred",
         "userDoesntExist": "This username does not exist",
         "userWrongCredentials": "The password or email is incorrect",
-        "connecteur": ""
+        "connecteur": "",
+        "fileSizeExceed": "The file is too big, it must be less than {maxSize}"
     },
     "error_page": {
         "title": "",

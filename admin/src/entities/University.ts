@@ -27,3 +27,5 @@ type University = {
 };
 
 export default University;
+
+export const isCentralUniversity = (university: University): boolean => !university.parent;

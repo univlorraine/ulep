@@ -15,7 +15,8 @@
         "global": "Une erreur est survenue",
         "userDoesntExist": "L'utilisateur n'existe pas",
         "userWrongCredentials": "Le mot de passe ou l'email est incorrect",
-        "connecteur": "Erreur lors de la récupération des informations utilisateur"
+        "connecteur": "Erreur lors de la récupération des informations utilisateur",
+        "fileSizeExceed": "Le fichier est trop volumineux, il doit être inférieur à {maxSize}"
     },
     "error_page": {
         "title": "Une erreur est survenue",

@@ -10,7 +10,6 @@
         },
         "label": "Administrators",
         "university": "Manager",
-
         "update": {
             "email": "Update user email",
             "error": "An error occurred while updating an administrator",
@@ -50,10 +49,8 @@
         "sunday": "Sunday"
     },
     "global": {
-        "active": "Active",
+        "all": "All",
         "age": "Age",
-        "blocked": "Blocked",
-        "canceled": "Canceled",
         "content": "Content",
         "disconnect": "Disconnect",
         "email": "Email",
@@ -77,10 +74,10 @@
         "deleted_user": "Deleted user",
         "sso_login": "Authenticate",
         "userStatus": {
-            "active": "Actif",
-            "blocked": "Blocked",
-            "canceled": "Annulé",
-            "reported": "Signalé"
+            "active": "Active",
+            "banned": "Banned",
+            "canceled": "Canceled",
+            "reported": "Reported"
         },
         "genderValues": {
             "male": "Male",
@@ -291,7 +288,6 @@
     "suggested_languages": {
         "label": "Asked languages"
     },
-
     "universities": {
         "create": {
             "admission_end": "Partner university admission due date",
@@ -404,6 +400,9 @@
                         "yes": "Yes",
                         "no": "No"
                     }
+                },
+                "user_lastname": {
+                    "label": "Lastname"
                 }
             },
             "globalRoutineModal": {
@@ -485,6 +484,11 @@
                         "confirm": "Confirm"
                     },
                     "error": "An error occured&"
+                },
+                "filters": {
+                    "firstname": "Firstname",
+                    "lastname": "Lastname",
+                    "role": "Role"
                 }
             }
         }

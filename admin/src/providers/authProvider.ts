@@ -1,5 +1,5 @@
-import { AuthProvider } from 'react-admin';
-import University from '../entities/University';
+import { AuthProvider, addRefreshAuthToAuthProvider } from 'react-admin';
+import { isCentralUniversity as checkIsCentralUniversity } from '../entities/University';
 import jwtManager from './jwtManager';
 
 export interface Identity {
@@ -25,6 +25,39 @@ export const http = async (method: string, path: string, init: Omit<RequestInit,
     return response;
 };
 
+const redirectUri = `${window.location.origin}/#/auth-callback`;
+
+export const ssoLogin = () => {
+    window.location.href = `${process.env.REACT_APP_API_URL}/authentication/flow?redirectUri=${encodeURIComponent(
+        redirectUri
+    )}`;
+};
+
+export const refreshAuth = async () => {
+    const { accessToken, refreshToken } = jwtManager.getTokens();
+
+    if (!refreshToken || !accessToken) {
+        return Promise.reject();
+    }
+
+    const decoded = jwtManager.decodeToken(accessToken);
+
+    if (decoded.exp && decoded.exp < Date.now() / 1000) {
+        // This function will fetch the new tokens from the authentication service and update them in localStorage
+        const response = await http('POST', `${process.env.REACT_APP_API_URL}/authentication/refresh-token`, {
+            headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+            body: new URLSearchParams({
+                token: refreshToken,
+            }),
+        });
+
+        const payload = await response.json();
+        jwtManager.setTokens(payload.accessToken, payload.refreshToken);
+    }
+
+    return Promise.resolve();
+};
+
 const authProvider: AuthProvider = {
     async login({ email, password }: { email: string; password: string }) {
         const response = await http('POST', `${process.env.REACT_APP_API_URL}/authentication/token`, {
@@ -48,54 +81,53 @@ const authProvider: AuthProvider = {
             }
         }
 
-        return Promise.reject();
+        return Promise.reject(new Error('Login fail.'));
     },
-    logout() {
+    async logout() {
+        const accessToken = jwtManager.getToken('access_token');
+        if (accessToken) {
+            try {
+                await http('GET', `${process.env.REACT_APP_API_URL}/users/revoke`, {
+                    headers: {
+                        'Content-Type': 'application/json',
+                        Authorization: `Bearer ${accessToken}`,
+                    },
+                });
+            } catch (err) {
+                console.error('Fail to revoke user session', err);
+                jwtManager.ereaseTokens();
+            }
+        }
+
         jwtManager.ereaseTokens();
 
         return Promise.resolve();
     },
-    async checkAuth() {
+    checkAuth() {
         if (jwtManager.getToken('access_token')) {
             return Promise.resolve();
         }
-        const refreshToken = jwtManager.getToken('refresh_token');
-        if (!refreshToken) {
-            jwtManager.ereaseTokens();
 
-            return Promise.reject();
-        }
-
-        const response = await http('POST', `${process.env.REACT_APP_API_URL}/authentication/refresh-token`, {
-            headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-            body: new URLSearchParams({
-                token: refreshToken,
-            }),
-        });
-
-        const payload = await response.json();
-        jwtManager.setTokens(payload.accessToken, payload.refreshToken);
-
-        return Promise.resolve();
+        return Promise.reject(new Error('Auth fail'));
     },
-    async checkError(error: any) {
+    checkError(error) {
         if (error && (error.status === 401 || error.status === 403)) {
             jwtManager.ereaseTokens();
 
-            return Promise.reject();
+            return Promise.reject(new Error('Forbidden'));
         }
 
         return Promise.resolve();
     },
-    async getPermissions() {
+    getPermissions() {
         const accessToken = jwtManager.getToken('access_token');
         if (!accessToken) {
-            return Promise.reject();
+            return Promise.reject(new Error('Access token not found.'));
         }
 
         const decoded: any = jwtManager.decodeToken(accessToken);
         if (!decoded) {
-            return Promise.reject();
+            return Promise.reject(new Error("Can't decode access token."));
         }
 
         return Promise.resolve(decoded.universityId ? ADMIN_PERMISSION : SUPER_ADMIN_PERMISSION);
@@ -121,7 +153,7 @@ const authProvider: AuthProvider = {
                 },
             });
             const universities = await universitiesRes.json();
-            const centralUniversity = universities?.items?.find((university: University) => !university.parent);
+            const centralUniversity = universities?.items?.find(checkIsCentralUniversity);
             if (!centralUniversity) {
                 return Promise.reject(new Error('No central university defined'));
             }
@@ -141,7 +173,6 @@ const authProvider: AuthProvider = {
         const code = params.get('code');
 
         if (code) {
-            const redirectUri = `${window.location.origin}`;
             const response = await http('POST', `${process.env.REACT_APP_API_URL}/authentication/flow/code`, {
                 headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
                 body: new URLSearchParams({
@@ -167,4 +198,4 @@ const authProvider: AuthProvider = {
     },
 };
 
-export default authProvider;
+export default addRefreshAuthToAuthProvider(authProvider, refreshAuth);

@@ -25,6 +25,19 @@ interface Tokens {
     refreshToken: string;
 }
 
+interface RequestParams {
+    path: string;
+    args: RequestInit;
+    isTokenNeeded: boolean;
+    body?: Body;
+    contentType?: string;
+    accessToken?: string;
+}
+
+type Request = [string, RequestInit, Body?, string?];
+
+type Action = 'get' | 'post' | 'delete' | 'put';
+
 class DomainHttpAdapter extends BaseHttpAdapter implements HttpAdapterInterface {
     accessToken: string = '';
 
@@ -67,17 +80,11 @@ class DomainHttpAdapter extends BaseHttpAdapter implements HttpAdapterInterface 
     }
 
     async get(path: string, args: RequestInit = {}, isTokenNeeded = true, accessToken?: string): Promise<Response> {
-        return this.withAuthCheck(
-            super.get(`${this.apiUrl}${path}`, { ...args, headers: this.getHeaders(accessToken) }),
-            isTokenNeeded
-        );
+        return this.withAuthCheck('get', { path: `${this.apiUrl}${path}`, args, isTokenNeeded, accessToken });
     }
 
     async delete(path: string, args: RequestInit = {}, isTokenNeeded = true): Promise<Response> {
-        return this.withAuthCheck(
-            super.delete(`${this.apiUrl}${path}`, { ...args, headers: this.getHeaders() }),
-            isTokenNeeded
-        );
+        return this.withAuthCheck('delete', { path: `${this.apiUrl}${path}`, args, isTokenNeeded });
     }
 
     async post(
@@ -87,23 +94,24 @@ class DomainHttpAdapter extends BaseHttpAdapter implements HttpAdapterInterface 
         contentType = 'application/json',
         isTokenNeeded = true
     ): Promise<Response> {
-        return this.withAuthCheck(
-            super.post(`${this.apiUrl}${path}`, body, { ...args, headers: this.getHeaders() }, contentType),
-            isTokenNeeded
-        );
+        return this.withAuthCheck('post', { path: `${this.apiUrl}${path}`, args, body, contentType, isTokenNeeded });
     }
 
     async put(path: string, body: Body, args: RequestInit = {}, isTokenNeeded = true): Promise<Response> {
-        return this.withAuthCheck(
-            super.put(`${this.apiUrl}${path}`, body, { ...args, headers: this.getHeaders() }),
-            isTokenNeeded
-        );
+        return this.withAuthCheck('put', { path: `${this.apiUrl}${path}`, args, body, isTokenNeeded });
     }
 
-    async withAuthCheck(request: Promise<Response>, isTokenNeeded: boolean) {
+    async withAuthCheck(
+        action: Action,
+        { path, args, body, contentType, accessToken, isTokenNeeded }: RequestParams
+    ): Promise<Response> {
         await this.handleTokens(isTokenNeeded);
 
-        const response = await request;
+        const requestInit = isTokenNeeded || accessToken ? { ...args, headers: this.getHeaders(accessToken) } : args;
+
+        const request: Request = [path, requestInit, body, contentType];
+
+        const response = await super[action](...request);
 
         if (response.status === 401) {
             this.logoutAndRedirect();
@@ -112,7 +120,7 @@ class DomainHttpAdapter extends BaseHttpAdapter implements HttpAdapterInterface 
         return response;
     }
 
-    handleTokens = async (isTokenNeeded: boolean): Promise<void> => {
+    async handleTokens(isTokenNeeded: boolean): Promise<void> {
         if (!isTokenNeeded) return;
         const isAccessTokenValid = await this.handleAccessToken();
 
@@ -127,9 +135,9 @@ class DomainHttpAdapter extends BaseHttpAdapter implements HttpAdapterInterface 
         }
 
         this.logoutAndRedirect();
-    };
+    }
 
-    handleAccessToken = async () => {
+    async handleAccessToken() {
         if (!this.accessToken || !this.refreshToken) {
             return false;
         }
@@ -141,15 +149,16 @@ class DomainHttpAdapter extends BaseHttpAdapter implements HttpAdapterInterface 
         }
 
         return jwtAccessDecoded.exp > Date.now() / 1000;
-    };
+    }
 
-    handleRefreshToken = async () => {
+    async handleRefreshToken() {
         if (this.refreshToken === '') {
             return false;
         }
 
         const response: HttpResponse<RefreshUsecaseCommand> = await super.post(
             `${this.apiUrl}/authentication/refresh-token`,
+            {},
             { token: this.refreshToken }
         );
 
@@ -163,18 +172,18 @@ class DomainHttpAdapter extends BaseHttpAdapter implements HttpAdapterInterface 
         });
 
         return true;
-    };
+    }
 
-    setTokens = ({ accessToken, refreshToken }: Tokens) => {
+    setTokens({ accessToken, refreshToken }: Tokens) {
         this.accessToken = accessToken;
         this.refreshToken = refreshToken;
         this.setStorageTokens({ accessToken, refreshToken });
-    };
+    }
 
-    logoutAndRedirect = () => {
+    logoutAndRedirect() {
         this.logout();
         if (this.router) this.router.push('/login');
-    };
+    }
 }
 
 export default DomainHttpAdapter;

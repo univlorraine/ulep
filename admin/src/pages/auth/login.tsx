@@ -5,6 +5,7 @@ import Box from '@mui/material/Box';
 import * as React from 'react';
 import { useState } from 'react';
 import { Form, required, TextInput, useTranslate, useLogin, useNotify } from 'react-admin';
+import { ssoLogin } from '../../providers/authProvider';
 
 const LoginPage = () => {
     const [loading, setLoading] = useState(false);
@@ -19,11 +20,6 @@ const LoginPage = () => {
             notify(translate('login.loginError'));
             setLoading(false);
         });
-    };
-
-    const ssoLogin = () => {
-        const redirectUri = encodeURI(`${window.location.origin}#/auth-callback`);
-        window.location.href = `${process.env.REACT_APP_API_URL}/authentication/flow?redirectUri=${redirectUri}`;
     };
 
     return (

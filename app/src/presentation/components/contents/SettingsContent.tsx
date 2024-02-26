@@ -8,6 +8,7 @@ import { useStoreActions, useStoreState } from '../../../store/storeTypes';
 import Dropdown from '../DropDown';
 import styles from './SettingsContent.module.css';
 import ConfirmModal from '../modals/ConfirmModal';
+import { Browser } from '@capacitor/browser';
 
 interface SettingsContentProps {
     onBackPressed: () => void;
@@ -24,6 +25,10 @@ const SettingsContent: React.FC<SettingsContentProps> = ({ onBackPressed, onDisc
     const updateProfile = useStoreActions((state) => state.updateProfile);
     const [emailNotificationStatus, setEmailNotificationStatus] = useState<boolean>(profile!.user.acceptsEmail);
     const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
+
+    const openBrowser = (url: string) => async () => {
+        await Browser.open({ url });
+    };
 
     const LANGUAGES = [
         { title: t('languages.french'), value: 'fr' },
@@ -83,11 +88,14 @@ const SettingsContent: React.FC<SettingsContentProps> = ({ onBackPressed, onDisc
                     checkedIcon={false}
                 />
             </button>
-            <a href={configuration.confidentialityUrl} className={styles['setting-container']}>
+            <a onClick={openBrowser(configuration.confidentialityUrl)} className={styles['setting-container']}>
                 <span>{t('home_page.settings.confidentiality')}</span>
                 <img alt="right-arrow" src={ArrowRightSvg} />
             </a>
-            <a href={configuration.cguUrl} className={`${styles['setting-container']} large-margin-bottom`}>
+            <a
+                onClick={openBrowser(configuration.cguUrl)}
+                className={`${styles['setting-container']} large-margin-bottom`}
+            >
                 <span>{t('home_page.settings.CGU')}</span>
                 <img alt="right-arrow" src={ArrowRightSvg} />
             </a>
@@ -101,7 +109,12 @@ const SettingsContent: React.FC<SettingsContentProps> = ({ onBackPressed, onDisc
                 <span>{t('home_page.settings.logout')}</span>
                 <img alt="right-arrow" src={ArrowRightSvg} />
             </button>
-            <ConfirmModal isVisible={isModalOpen} onClose={() => setIsModalOpen(false)} onValidate={() => onDeletionAsked()} title={t('confirm_modal.title')} />
+            <ConfirmModal
+                isVisible={isModalOpen}
+                onClose={() => setIsModalOpen(false)}
+                onValidate={() => onDeletionAsked()}
+                title={t('confirm_modal.title')}
+            />
         </div>
     );
 };

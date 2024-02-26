@@ -9,29 +9,43 @@ const useGetTandems = () => {
     const { getAllTandems } = useConfig();
     const profile = useStoreState((state) => state.profile);
 
-    const [tandemsResult, setTandemsResult] = useState<{ tandems: Tandem[], error: Error | undefined }>({tandems: [], error: undefined})
+    const [tandemsResult, setTandemsResult] = useState<{ tandems: Tandem[]; error: Error | undefined }>({
+        tandems: [],
+        error: undefined,
+    });
+
+    if (!profile) return tandemsResult;
 
     useEffect(() => {
         const fetchData = async () => {
-            const result = await getAllTandems.execute(profile!.id);
+            const result = await getAllTandems.execute(profile.id);
             if (result instanceof Error) {
-                setTandemsResult({ tandems: [], error: result })
+                setTandemsResult({ tandems: [], error: result });
             } else {
                 const waitingLearningLanguages: Tandem[] = [];
                 profile?.learningLanguages.map((learningLanguage: Language) => {
                     if (!result.find((tandem) => tandem.learningLanguage.id === learningLanguage.id)) {
-                        // TODO(futur) : Change this logic to get it from api ? 
-                        waitingLearningLanguages.push(new Tandem(learningLanguage.id, 'DRAFT', learningLanguage, learningLanguage, 'A0', LearningType.TANDEM));
+                        // TODO(futur) : Change this logic to get it from api ?
+                        waitingLearningLanguages.push(
+                            new Tandem(
+                                learningLanguage.id,
+                                'DRAFT',
+                                learningLanguage,
+                                learningLanguage,
+                                'A0',
+                                LearningType.TANDEM
+                            )
+                        );
                     }
                 });
-                setTandemsResult({ tandems: [...result, ...waitingLearningLanguages], error: undefined })
+                setTandemsResult({ tandems: [...result, ...waitingLearningLanguages], error: undefined });
             }
-        }
+        };
 
         fetchData();
-    }, [profile])
+    }, [profile]);
 
-    return tandemsResult
+    return tandemsResult;
 };
 
 export default useGetTandems;

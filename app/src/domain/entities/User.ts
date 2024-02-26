@@ -7,8 +7,8 @@ class User {
         public readonly email: string,
         public readonly firstname: string,
         public readonly lastname: string,
-        public readonly university: University,
         public readonly status: UserStatus,
+        public university: University,
         public acceptsEmail: boolean,
         public avatar?: MediaObject
     ) {}

@@ -21,7 +21,7 @@ import Language from '../../../entities/Language';
 import { LearningLanguage, learningLanguageHasPossibleAction } from '../../../entities/LearningLanguage';
 import { getProfileDisplayName } from '../../../entities/Profile';
 import { isTandemActive } from '../../../entities/Tandem';
-import University from '../../../entities/University';
+import University, { isCentralUniversity } from '../../../entities/University';
 import useLearningLanguagesStore from '../useLearningLanguagesStore';
 import Actions from './Actions';
 
@@ -67,7 +67,7 @@ const LearningLanguageList = () => {
         <Box sx={{ marginTop: 2 }}>
             {identity.isCentralUniversity && (
                 <UniversitiesPicker
-                    filterUniversities={(university: University) => !!university.parent}
+                    filterUniversities={(university: University) => !isCentralUniversity(university)}
                     label={translate('learning_languages.list.universitiesPicker.label')}
                     onSelected={(ids) => setSelectedUniversityIds(ids)}
                     placeholder={translate('learning_languages.list.universitiesPicker.label')}

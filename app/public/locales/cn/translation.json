@@ -12,7 +12,8 @@
         "global": "出现错误",
         "userDoesntExist": "用户不存在",
         "userWrongCredentials": "密码或电子邮件不正确",
-        "connecteur": ""
+        "connecteur": "",
+        "fileSizeExceed": ""
     },
     "error_page": {
         "title": "",

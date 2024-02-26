@@ -17,7 +17,15 @@ export class GetReportsQueryParams extends PaginationDto {
 
   @Swagger.ApiPropertyOptional({
     type: 'string',
-    enum: ['firstname', 'lastname', 'university'],
+    enum: [
+      'firstname',
+      'lastname',
+      'university',
+      'category',
+      'content',
+      'status',
+      'createdAt',
+    ],
   })
   @IsOptional()
   field?: ReportQuerySortKey;

@@ -1,7 +1,6 @@
 import { useTranslation } from 'react-i18next';
 import Tandem from '../../../domain/entities/Tandem';
 import TandemLine from './TandemLine';
-import { useStoreState } from '../../../store/storeTypes';
 import Profile from '../../../domain/entities/Profile';
 
 interface WaitingTandemListProps {

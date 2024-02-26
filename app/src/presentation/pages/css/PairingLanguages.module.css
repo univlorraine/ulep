@@ -16,3 +16,10 @@
     flex-wrap: wrap;
     margin-bottom: 30px;
 }
+
+.loader {
+    width: 100%;
+    display: flex;
+    margin-top: 2rem;
+    justify-content: center;
+}
