@@ -14,6 +14,9 @@ dependencies:
   '@capacitor/app':
     specifier: 5.0.2
     version: 5.0.2(@capacitor/core@5.0.4)
+  '@capacitor/browser':
+    specifier: ^5.2.0
+    version: 5.2.0(@capacitor/core@5.0.4)
   '@capacitor/camera':
     specifier: ^5.0.5
     version: 5.0.5(@capacitor/core@5.0.4)
@@ -1337,6 +1340,14 @@ packages:
 
   /@capacitor/app@5.0.2(@capacitor/core@5.0.4):
     resolution: {integrity: sha512-TRs5Iu94+IfUJ4iiljWC0tuVsHXBOD4asADggpUH6DnwlQo3cVuRnFK+A0jJnWW9GvlFy9uTsXxytzzXP/V0vQ==}
+    peerDependencies:
+      '@capacitor/core': ^5.0.0
+    dependencies:
+      '@capacitor/core': 5.0.4
+    dev: false
+
+  /@capacitor/browser@5.2.0(@capacitor/core@5.0.4):
+    resolution: {integrity: sha512-pWFrsNPOG6DlDWGl+bJqTWLvoJ2vvV27LKaSZ/A7S4td4bK3umwZmgGlp8ispjpYiurjliT25Ae8I+ywMV8X9w==}
     peerDependencies:
       '@capacitor/core': ^5.0.0
     dependencies:
