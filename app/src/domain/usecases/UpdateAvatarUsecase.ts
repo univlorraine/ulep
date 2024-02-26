@@ -44,7 +44,7 @@ class UpdateAvatarUsecase implements UpdateAvatarUsecaseInterface {
 
             return httpResponse.parsedBody;
         } catch (error: any) {
-            if (error.error.statusCode === 400) {
+            if (error.error?.statusCode === 400) {
                 const fileSizeExceedProcessedError =  error.error.message.match(regexValidationErrorFileSizeExceed);
                 if (fileSizeExceedProcessedError && fileSizeExceedProcessedError.length === 2) {
                     return new AvatarMaxSizeError("errors.fileSizeExceed", fileSizeExceedProcessedError[1] / 1000000);
