@@ -1,4 +1,4 @@
-import { Body, Controller, Get, Param, Put } from '@nestjs/common';
+import { Body, Controller, Get, Logger, Param, Put } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import * as Swagger from '@nestjs/swagger';
 import { InstanceResponse } from 'src/api/dtos/instance/instance.response';
@@ -10,6 +10,8 @@ import { GetInstanceUsecase, UpdateInstanceUsecase } from 'src/core/usecases';
 @Controller('instance')
 @Swagger.ApiTags('Instance')
 export class InstanceController {
+  private readonly logger = new Logger(InstanceController.name);
+
   constructor(
     private readonly getInstanceUsecase: GetInstanceUsecase,
     private readonly updateInstanceUsecase: UpdateInstanceUsecase,
@@ -44,10 +46,27 @@ export class InstanceController {
     // %2F work with github and gitlab but / doesn't with gitlab ( ??? )
     const endpoint = this.env.get('TRANSLATIONS_ENDPOINT');
     const suffix = this.env.get('TRANSLATIONS_ENDPOINT_SUFFIX');
-    const url = `${endpoint}%2F${lng}%2F${type}.json${suffix}`;
+    const url = `${endpoint}%2F${lng}%2F${type}.json${suffix || ''}`;
+
+    const headers = new Headers();
+    if (this.env.get('TRANSLATIONS_TOKEN')) {
+      headers.append('PRIVATE-TOKEN', this.env.get('TRANSLATIONS_TOKEN'));
+    } else if (this.env.get('TRANSLATIONS_BEARER_TOKEN')) {
+      headers.append(
+        'Authorization',
+        `Bearer ${this.env.get('TRANSLATIONS_BEARER_TOKEN')}`,
+      );
+    } else {
+      this.logger.debug(
+        'No authentication setup to fetch instance translations',
+      );
+    }
+
+    console.log('url', url);
+    console.log('headers', headers);
 
     const result = await fetch(url, {
-      headers: { 'PRIVATE-TOKEN': this.env.get('TRANSLATIONS_TOKEN') },
+      headers,
     });
 
     if (!result.ok) {
