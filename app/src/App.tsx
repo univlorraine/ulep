@@ -61,15 +61,17 @@ const AppContext = () => {
     const setUser = useStoreActions((state) => state.setUser);
 
     const { configuration, error, loading } = useFetchConfiguration(import.meta.env.VITE_API_URL || apiUrl);
-    useFetchI18NBackend(apiUrl);
+    const { isReady } = useFetchI18NBackend(apiUrl);
 
     useEffect(() => {
         const getLanguage = async () => {
             const deviceLanguage = await Device.getLanguageCode();
             i18n.changeLanguage(language || deviceLanguage.value);
         };
-        getLanguage();
-    }, [language]);
+        if (isReady) {
+            getLanguage();
+        }
+    }, [language, isReady]);
 
     if (error) {
         return <ErrorPage />;
