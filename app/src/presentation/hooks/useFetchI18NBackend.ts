@@ -9,7 +9,7 @@ const useFetchI18NBackend = (apiUrl: string) => {
             ? `${configuredApiUrl}/instance/locales/{{lng}}/translation`
             : '/locales/{{lng}}/translation.json';
         (i18n.options.backend as BackendOptions).loadPath = newi18nPath;
-        i18n.reloadResources().then(() => {
+        i18n.reloadResources().finally(() => {
             setIsReady(true);
         });
     }, [apiUrl]);
