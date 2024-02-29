@@ -51,7 +51,7 @@ const SignUpPage: React.FC = () => {
     // Force oauth if user is not logged in and university is central.
     // Should be part of the university entity with list of awailable / required auth providers (sso, email, etc.)
     // to be more modular.
-    const isFormValid: boolean = (university?.isCentral ?? false) ? (isLoggedIn && !isAFieldEmpty) : !isAFieldEmpty;
+    const isFormValid: boolean = university?.isCentral ?? false ? isLoggedIn && !isAFieldEmpty : !isAFieldEmpty;
 
     // Map list of University to list of DropDownItem.
     const universities: { title: string; value: University }[] = (country?.universities || []).map((university) => ({
@@ -179,25 +179,30 @@ const SignUpPage: React.FC = () => {
                     onPressed={() => setSelectedRole('STAFF')}
                     name={t('signup_page.staff_role')}
                 />
-                {/* Country selector */}
-                <div className="large-margin-top">
-                    <Dropdown<Country>
-                        onChange={onCountrySelected}
-                        options={countries}
-                        placeholder={country?.name || t('signup_page.country_placeholder')}
-                        title={t('global.country')}
-                    />
-                </div>
-                {/* University selector */}
-                {universities.length > 0 && (
-                    <div className="large-margin-top">
-                        <Dropdown<University>
-                            onChange={setUniversity}
-                            options={universities}
-                            title={t('signup_page.university_title')}
-                        />
-                    </div>
+                {(!university || (university && university.isCentral && !isLoggedIn)) && (
+                    <>
+                        {/* Country selector */}
+                        <div className="large-margin-top">
+                            <Dropdown<Country>
+                                onChange={onCountrySelected}
+                                options={countries}
+                                placeholder={country?.name || t('signup_page.country_placeholder')}
+                                title={t('global.country')}
+                            />
+                        </div>
+                        {/* University selector */}
+                        {universities.length > 0 && (
+                            <div className="large-margin-top">
+                                <Dropdown<University>
+                                    onChange={setUniversity}
+                                    options={universities}
+                                    title={t('signup_page.university_title')}
+                                />
+                            </div>
+                        )}
+                    </>
                 )}
+
                 {/* Loggin button */}
                 {university && university.isCentral && !isLoggedIn && (
                     <button
@@ -240,15 +245,11 @@ const SignUpPage: React.FC = () => {
                 )}
                 {/* diploma selector */}
                 {university && selectedRole === 'STUDENT' && (
-                    <TextInput
-                        onChange={setDiploma}
-                        title={t('signup_page.diplome_title')}
-                        value={diploma}
-                    />
+                    <TextInput onChange={setDiploma} title={t('signup_page.diplome_title')} value={diploma} />
                 )}
-   
+
                 {displayError && <ErrorMessage description={t('signup_page.error')} />}
-                
+
                 {/* continue action button */}
                 <div className={styles['bottom-container']}>
                     {!selectedRole && (
