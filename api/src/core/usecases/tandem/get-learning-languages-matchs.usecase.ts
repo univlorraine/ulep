@@ -117,7 +117,7 @@ export class GetLearningLanguageMatchesUsecase {
     }
 
     const matchs = potentialMatchs
-      .filter((match) => match.total > 0)
+      .filter((match) => match.total > 0 && match.isAValidTandem())
       .sort((a, b) => b.total - a.total);
 
     const items =
