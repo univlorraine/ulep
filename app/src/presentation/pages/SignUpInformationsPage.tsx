@@ -9,7 +9,7 @@ import Checkbox from '../components/Checkbox';
 import RadioButton from '../components/RadioButton';
 import TextInput from '../components/TextInput';
 import WebLayoutCentered from '../components/layout/WebLayoutCentered';
-import { isEmailCorrect, isNameCorrect, isPasswordCorrect } from '../utils';
+import { isEmailCorrect, isNameCorrect, isPasswordCorrect, openBrowser } from '../utils';
 import styles from './css/SignUp.module.css';
 
 export interface SignUpInformationsParams {
@@ -284,9 +284,11 @@ const SignUpInformationsPage: React.FC = () => {
                     name={
                         <>
                             {`${t('signup_informations_page.cgu.prefix')} `}
-                            <a href={configuration.cguUrl}>{`${t('signup_informations_page.cgu.cgu')}`}</a>
+                            <a onClick={openBrowser(configuration.cguUrl)}>{`${t(
+                                'signup_informations_page.cgu.cgu'
+                            )}`}</a>
                             {` ${t('signup_informations_page.cgu.separator')} `}
-                            <a href={configuration.confidentialityUrl}>{`${t(
+                            <a onClick={openBrowser(configuration.confidentialityUrl)}>{`${t(
                                 'signup_informations_page.cgu.confidentiality'
                             )}`}</a>
                             {` ${t('signup_informations_page.cgu.suffix')}`}

@@ -1,3 +1,5 @@
+import { Browser } from '@capacitor/browser';
+
 const countriesCodeWithFlags: [string, string][] = [
     ['aa', '🇪🇹'], // Afar - Ethiopia
     ['ab', '🇬🇪'], // Abkhaz - Georgia
@@ -228,3 +230,9 @@ export const isDomainValid = (email: string, domains: string[]) => {
 export const isCodeValid = (code: string, codesToCheck: string[]) => {
     return codesToCheck.some((codeToCheck) => codeToCheck === code);
 };
+
+export const openBrowser =
+    (url: string, windowName: string = '_blank') =>
+    async () => {
+        await Browser.open({ url, windowName });
+    };

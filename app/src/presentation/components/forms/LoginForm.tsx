@@ -8,6 +8,7 @@ import TextInput from '../TextInput';
 import style from './Form.module.css';
 import Tokens from '../../../domain/entities/Tokens';
 import { Capacitor } from '@capacitor/core';
+import { openBrowser } from '../../utils';
 
 interface LoginFormProps {
     goBack: () => void;
@@ -38,7 +39,8 @@ const LoginForm: React.FC<LoginFormProps> = ({ goBack, onLogin }) => {
         const redirectUri = encodeURIComponent(
             Capacitor.isNativePlatform() ? 'ulep://auth' : `${window.location.origin}/auth`
         );
-        window.location.href = getInitialUrlUsecase.execute(redirectUri);
+
+        return openBrowser(getInitialUrlUsecase.execute(redirectUri), '_self');
     };
 
     return (
@@ -49,45 +51,52 @@ const LoginForm: React.FC<LoginFormProps> = ({ goBack, onLogin }) => {
                 </IonButton>
             </IonHeader>
             <IonContent>
-                <form className={style['main-content']} onSubmit={handleLogin}>
-                    <CircleAvatar backgroundImage={AvatarPng} height={36} viewClassName={style['icons']} width={36} />
-                    <div className={`ion-text-center`}>
-                        <h1 className={style.title}>{t('login_page.title')}</h1>
-                    </div>
-                    <div className="ion-text-center">
-                        <p className={style.subtitle}>{t('login_page.subtitle')}</p>
-                    </div>
-                    <TextInput
-                        autocomplete="email"
-                        onChange={setEmail}
-                        title={t('global.email')}
-                        type="email"
-                        value={email}
-                    />
-                    <TextInput
-                        autocomplete="current-password"
-                        onChange={setPassword}
-                        title={t('global.password')}
-                        type="password"
-                        value={password}
-                    />
-                    <div className={style['bottom-container']}>
-                        <button className="primary-button">{t('login_page.button')}</button>
+                <div className={style['main-content']}>
+                    <form onSubmit={handleLogin}>
+                        <CircleAvatar
+                            backgroundImage={AvatarPng}
+                            height={36}
+                            viewClassName={style['icons']}
+                            width={36}
+                        />
+                        <div className={`ion-text-center`}>
+                            <h1 className={style.title}>{t('login_page.title')}</h1>
+                        </div>
+                        <div className="ion-text-center">
+                            <p className={style.subtitle}>{t('login_page.subtitle')}</p>
+                        </div>
+                        <TextInput
+                            autocomplete="email"
+                            onChange={setEmail}
+                            title={t('global.email')}
+                            type="email"
+                            value={email}
+                        />
+                        <TextInput
+                            autocomplete="current-password"
+                            onChange={setPassword}
+                            title={t('global.password')}
+                            type="password"
+                            value={password}
+                        />
+                        <div className={style['bottom-container']}>
+                            <button className="primary-button">{t('login_page.button')}</button>
 
-                        <IonRouterLink className="secondary-button large-margin-top" routerLink="/forgot-password">
-                            {t('login_page.forgot')}
-                        </IonRouterLink>
-                    </div>
+                            <IonRouterLink className="secondary-button large-margin-top" routerLink="/forgot-password">
+                                {t('login_page.forgot')}
+                            </IonRouterLink>
+                        </div>
+                    </form>
                     <div className={style.separator} />
                     <div className={style['bottom-container']}>
                         <p className={style['sso-text']}>
                             {t('login_page.sso_title', { name: configuration.mainUniversityName })}
                         </p>
-                        <button className="tertiary-button large-margin-vertical" onClick={ssoLogin}>
+                        <button className="tertiary-button large-margin-vertical" onClick={ssoLogin()}>
                             {t('login_page.sso_button')}
                         </button>
                     </div>
-                </form>
+                </div>
             </IonContent>
         </div>
     );

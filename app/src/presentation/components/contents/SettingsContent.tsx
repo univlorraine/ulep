@@ -8,7 +8,7 @@ import { useStoreActions, useStoreState } from '../../../store/storeTypes';
 import Dropdown from '../DropDown';
 import styles from './SettingsContent.module.css';
 import ConfirmModal from '../modals/ConfirmModal';
-import { Browser } from '@capacitor/browser';
+import { openBrowser } from '../../utils';
 
 interface SettingsContentProps {
     onBackPressed: () => void;
@@ -25,10 +25,6 @@ const SettingsContent: React.FC<SettingsContentProps> = ({ onBackPressed, onDisc
     const updateProfile = useStoreActions((state) => state.updateProfile);
     const [emailNotificationStatus, setEmailNotificationStatus] = useState<boolean>(profile!.user.acceptsEmail);
     const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
-
-    const openBrowser = (url: string) => async () => {
-        await Browser.open({ url });
-    };
 
     const LANGUAGES = [
         { title: t('languages.french'), value: 'fr' },
