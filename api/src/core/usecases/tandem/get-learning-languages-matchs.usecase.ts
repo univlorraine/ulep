@@ -5,10 +5,7 @@ import {
 import { Collection } from '@app/common';
 import { Inject, Injectable, Logger } from '@nestjs/common';
 import { RessourceDoesNotExist } from 'src/core/errors';
-import {
-  LearningLanguageHasNoAssociatedProfile,
-  ProfileIsNotInCentralUniversity,
-} from 'src/core/errors/tandem-exceptions';
+import { LearningLanguageHasNoAssociatedProfile } from 'src/core/errors/tandem-exceptions';
 import { LearningLanguage, Match } from 'src/core/models';
 import {
   LANGUAGE_REPOSITORY,
