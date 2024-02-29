@@ -13,11 +13,12 @@ interface DropdownProps<T> {
     options: DropDownItem<T>[];
     placeholder?: string | null;
     title?: string | null;
-    searchable?: boolean;
 }
 
-const Dropdown = <T,>({ onChange, options, placeholder, title, searchable = false }: DropdownProps<T>) => {
-    const [selectedOption, setSelectedOption] = useState<DropDownItem<T> | null>(!placeholder ? options[0] : null);
+const Dropdown = <T,>({ onChange, options, placeholder, title }: DropdownProps<T>) => {
+    const [selectedOption, setSelectedOption] = useState<DropDownItem<T> | undefined>(
+        !placeholder ? options[0] : undefined
+    );
     const prevOptions = useRef<DropDownItem<T>[]>(options);
 
     useEffect(() => {
@@ -29,7 +30,7 @@ const Dropdown = <T,>({ onChange, options, placeholder, title, searchable = fals
 
     const handleOptionClick = (item: DropDownItem<T>) => {
         setSelectedOption(item);
-        if (item) onChange(item.value);
+        onChange(item.value);
     };
 
     return (
@@ -38,7 +39,7 @@ const Dropdown = <T,>({ onChange, options, placeholder, title, searchable = fals
             <IonItem lines="none" className={`ion-no-padding ${styles.item}`}>
                 <IonSelect
                     interface="popover"
-                    aria-label={title ? title : undefined}
+                    aria-label={title || undefined}
                     class={styles.select}
                     placeholder={placeholder ? placeholder : undefined}
                     toggle-icon={ArrowDownSvg}

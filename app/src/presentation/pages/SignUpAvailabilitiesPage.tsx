@@ -79,9 +79,9 @@ const SignUpAvailabilitiesPage: React.FC = () => {
                     <Dropdown<string>
                         onChange={setTimezone}
                         options={moment.tz.names().map(
-                            (timzeone: string): DropDownItem<string> => ({
-                                label: timzeone,
-                                value: timzeone,
+                            (timezone: string): DropDownItem<string> => ({
+                                label: timezone,
+                                value: timezone,
                             })
                         )}
                         placeholder={university.timezone}
