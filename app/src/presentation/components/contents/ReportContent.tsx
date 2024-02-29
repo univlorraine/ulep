@@ -34,7 +34,7 @@ const ReportContent: React.FC<ReportContentProps> = ({ onGoBack, onReportSent })
 
         setSelectedCategory(result[0]);
         return setReportCategories(
-            result.map((reportCategory) => ({ title: reportCategory.name, value: reportCategory }))
+            result.map((reportCategory) => ({ label: reportCategory.name, value: reportCategory }))
         );
     };
 
