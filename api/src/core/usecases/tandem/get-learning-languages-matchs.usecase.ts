@@ -1,7 +1,14 @@
+import {
+  UNIVERSITY_REPOSITORY,
+  UniversityRepository,
+} from 'src/core/ports/university.repository';
 import { Collection } from '@app/common';
 import { Inject, Injectable, Logger } from '@nestjs/common';
 import { RessourceDoesNotExist } from 'src/core/errors';
-import { LearningLanguageHasNoAssociatedProfile } from 'src/core/errors/tandem-exceptions';
+import {
+  LearningLanguageHasNoAssociatedProfile,
+  ProfileIsNotInCentralUniversity,
+} from 'src/core/errors/tandem-exceptions';
 import { LearningLanguage, Match } from 'src/core/models';
 import {
   LANGUAGE_REPOSITORY,
@@ -37,6 +44,8 @@ export class GetLearningLanguageMatchesUsecase {
     private readonly matchService: MatchScorer,
     @Inject(REFUSED_TANDEMS_REPOSITORY)
     private readonly refusedTandemsRepository: RefusedTandemsRepository,
+    @Inject(UNIVERSITY_REPOSITORY)
+    private readonly universityRepository: UniversityRepository,
   ) {}
 
   async execute(command: GetUserMatchCommand): Promise<Collection<Match>> {
@@ -48,6 +57,10 @@ export class GetLearningLanguageMatchesUsecase {
     if (!owner) {
       throw new LearningLanguageHasNoAssociatedProfile(command.id);
     }
+
+    const targetUniveristies = owner.user.university.isCentralUniversity()
+      ? command.universityIds
+      : [(await this.universityRepository.findUniversityCentral()).id];
 
     const languagesAvailableForLearning = (
       await this.languageRepository.getLanguagesProposedToLearning()
@@ -65,13 +78,13 @@ export class GetLearningLanguageMatchesUsecase {
       targets =
         await this.learningLanguageRepository.getAvailableLearningLanguagesSpeakingOneOfLanguagesAndFromUniversities(
           languageIdsThatCanBeLearnt,
-          command.universityIds,
+          targetUniveristies,
         );
     } else {
       targets =
         await this.learningLanguageRepository.getAvailableLearningLanguagesSpeakingLanguageFromUniversities(
           learningLanguage.language.id,
-          command.universityIds,
+          targetUniveristies,
         );
     }
 
