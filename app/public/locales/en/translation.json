@@ -11,7 +11,7 @@
     "errors": {
         "global": "An error has occurred",
         "userDoesntExist": "This username does not exist",
-        "userWrongCredentials": "The password or email is incorrect",
+        "userWrongCredentials": "Authentication error: Bad email or bad password.",
         "connecteur": "",
         "fileSizeExceed": "The file is too big, it must be less than {maxSize}"
     },

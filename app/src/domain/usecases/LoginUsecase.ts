@@ -37,11 +37,7 @@ class LoginUsecase implements LoginUsecaseInterface {
 
             return tokens;
         } catch (error: any) {
-            if (!error || !error.status) {
-                return new Error('errors.global');
-            }
-
-            if (error.status === 401) {
+            if (!error || !error.status || error.status === 401) {
                 return new Error('errors.userWrongCredentials');
             }
 
