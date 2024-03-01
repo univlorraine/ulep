@@ -51,11 +51,11 @@ const SignUpPage: React.FC = () => {
     // Force oauth if user is not logged in and university is central.
     // Should be part of the university entity with list of awailable / required auth providers (sso, email, etc.)
     // to be more modular.
-    const isFormValid: boolean = (university?.isCentral ?? false) ? (isLoggedIn && !isAFieldEmpty) : !isAFieldEmpty;
+    const isFormValid: boolean = university?.isCentral ?? false ? isLoggedIn && !isAFieldEmpty : !isAFieldEmpty;
 
     // Map list of University to list of DropDownItem.
-    const universities: { title: string; value: University }[] = (country?.universities || []).map((university) => ({
-        title: university.name,
+    const universities: DropDownItem<University>[] = (country?.universities || []).map((university) => ({
+        label: university.name,
         value: university,
     }));
 
@@ -69,7 +69,7 @@ const SignUpPage: React.FC = () => {
 
         return setCountries(
             countriesResult.map((country) => ({
-                title: `${country.emoji ? country.emoji + ' ' : ''}${country.name}`,
+                label: `${country.emoji ? country.emoji + ' ' : ''}${country.name}`,
                 value: country,
             }))
         );
@@ -240,15 +240,11 @@ const SignUpPage: React.FC = () => {
                 )}
                 {/* diploma selector */}
                 {university && selectedRole === 'STUDENT' && (
-                    <TextInput
-                        onChange={setDiploma}
-                        title={t('signup_page.diplome_title')}
-                        value={diploma}
-                    />
+                    <TextInput onChange={setDiploma} title={t('signup_page.diplome_title')} value={diploma} />
                 )}
-   
+
                 {displayError && <ErrorMessage description={t('signup_page.error')} />}
-                
+
                 {/* continue action button */}
                 <div className={styles['bottom-container']}>
                     {!selectedRole && (
