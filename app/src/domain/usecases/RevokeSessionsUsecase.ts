@@ -7,7 +7,7 @@ class RevokeSessionsUsecase implements RevokeSessionsUsecaseInterface {
 
     async execute(): Promise<boolean | Error> {
         try {
-            const httpResponse: HttpResponse<any> = await this.domainHttpAdapter.get('/users/revoke', {}, false);
+            const httpResponse: HttpResponse<any> = await this.domainHttpAdapter.post('/users/revoke', {});
 
             if (!httpResponse.ok) {
                 return new Error('errors.global');

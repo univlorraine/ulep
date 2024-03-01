@@ -53,10 +53,10 @@ const SettingsContent: React.FC<SettingsContentProps> = ({ onBackPressed, onDisc
 
         if (result instanceof Error) {
             return await showToast({ message: t(result.message), duration: 1000 });
+        } else {
+            setEmailNotificationStatus(!emailNotificationStatus);
+            return updateProfile({ acceptsEmail: result.acceptsEmail });
         }
-
-        setEmailNotificationStatus(!emailNotificationStatus);
-        return updateProfile({ acceptsEmail: !profile!.user.acceptsEmail });
     };
 
     const updateLanguage = (code: string) => {

@@ -17,6 +17,10 @@ class HttpAdapter implements HttpAdapterInterface {
         return this.handleResponse();
     }
 
+    patch(): Promise<Response> {
+        return this.handleResponse();
+    }
+
     delete(): Promise<Response> {
         return this.handleResponse();
     }

@@ -1,6 +1,9 @@
+import { userResultToDomain } from '../../../src/command/UserResult';
 import UpdateNotificationPermissionUsecase from '../../../src/domain/usecases/UpdateNotificationPermissionUsecase';
+import userResult from '../../fixtures/user';
 import DomainHttpAdapter from '../../mocks/adapters/HttpAdapter';
-describe('updateAvatar', () => {
+
+describe('updateNotificationPermission', () => {
     let adapter: DomainHttpAdapter;
     let usecase: UpdateNotificationPermissionUsecase;
     beforeAll(() => {
@@ -14,20 +17,19 @@ describe('updateAvatar', () => {
 
     it('execute function must call DomainHttpAdapter with specific path and params', async () => {
         expect.assertions(2);
-        jest.spyOn(adapter, 'put');
+        jest.spyOn(adapter, 'patch');
         adapter.mockJson({ parsedBody: {} });
         await usecase.execute('id', false);
-        expect(adapter.put).toHaveBeenCalledTimes(1);
-        expect(adapter.put).toHaveBeenCalledWith('/users', { id: 'id', acceptsEmail: false });
+        expect(adapter.patch).toHaveBeenCalledTimes(1);
+        expect(adapter.patch).toHaveBeenCalledWith('/users/id', { acceptsEmail: false });
     });
 
     it('execute must return an expected response', async () => {
         expect.assertions(1);
-
-        adapter.mockJson({ parsedBody: {} });
+        adapter.mockJson({ parsedBody: userResult });
 
         const result = await usecase.execute('id', false);
-        expect(result).toBeUndefined();
+        expect(result).toEqual(userResultToDomain(userResult));
     });
 
     it('execute must return an expected response without parsed body', async () => {

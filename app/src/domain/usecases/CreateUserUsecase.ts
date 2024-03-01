@@ -1,6 +1,6 @@
 import { HttpResponse } from '../../adapter/BaseHttpAdapter';
 import { HttpAdapterInterface } from '../../adapter/DomainHttpAdapter';
-import UserCommand, { userCommandToDomain } from '../../command/UserCommand';
+import UserResult, { userResultToDomain } from '../../command/UserResult';
 import University from '../entities/University';
 import CreateUserUsecaseInterface from '../interfaces/CreateUserUsecase.interface';
 import LoginUsecaseInterface from '../interfaces/LoginUsecase.interface';
@@ -75,7 +75,7 @@ class CreateUserUsecase implements CreateUserUsecaseInterface {
                 body.staffFunction = staffFunction;
             }
 
-            const httpResponse: HttpResponse<UserCommand> = await this.domainHttpAdapter.post(
+            const httpResponse: HttpResponse<UserResult> = await this.domainHttpAdapter.post(
                 `/users`,
                 body,
                 {},
@@ -88,7 +88,7 @@ class CreateUserUsecase implements CreateUserUsecaseInterface {
             }
 
             this.setUser({
-                user: userCommandToDomain(httpResponse.parsedBody),
+                user: userResultToDomain(httpResponse.parsedBody),
             });
 
             await this.login.execute(email, password);
