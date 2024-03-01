@@ -174,13 +174,11 @@ export class UserController {
     return UserResponse.fromDomain(me);
   }
 
-  @Get('revoke')
+  @Post('revoke')
   @UseGuards(AuthenticationGuard)
   @Swagger.ApiOperation({ summary: 'Revoke User sessions.' })
   async rekoveSessions(@CurrentUser() user: KeycloakUser) {
-    await this.revokeSessionsUsecase.execute(user.sub);
-
-    return;
+    return this.revokeSessionsUsecase.execute(user.sub);
   }
 
   @Get(':id')

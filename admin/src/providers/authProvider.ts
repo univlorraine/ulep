@@ -87,7 +87,7 @@ const authProvider: AuthProvider = {
         const accessToken = jwtManager.getToken('access_token');
         if (accessToken) {
             try {
-                await http('GET', `${process.env.REACT_APP_API_URL}/users/revoke`, {
+                await http('POST', `${process.env.REACT_APP_API_URL}/users/revoke`, {
                     headers: {
                         'Content-Type': 'application/json',
                         Authorization: `Bearer ${accessToken}`,
