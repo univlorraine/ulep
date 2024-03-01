@@ -231,8 +231,4 @@ export const isCodeValid = (code: string, codesToCheck: string[]) => {
     return codesToCheck.some((codeToCheck) => codeToCheck === code);
 };
 
-export const openBrowser =
-    (url: string, windowName: string = '_blank') =>
-    async () => {
-        await Browser.open({ url, windowName });
-    };
+export const openBrowser = (url: string, windowName: string = '_blank') => Browser.open({ url, windowName });

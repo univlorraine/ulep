@@ -157,6 +157,11 @@ const SignUpInformationsPage: React.FC = () => {
         }
     }, [location.state]);
 
+    const openBrowserUrl = (url: string) => async (event: React.MouseEvent<HTMLElement>) => {
+        event.preventDefault();
+        await openBrowser(url);
+    };
+
     return (
         <WebLayoutCentered
             backgroundIconColor={configuration.primaryBackgroundImageColor}
@@ -284,13 +289,14 @@ const SignUpInformationsPage: React.FC = () => {
                     name={
                         <>
                             {`${t('signup_informations_page.cgu.prefix')} `}
-                            <a onClick={openBrowser(configuration.cguUrl)}>{`${t(
+                            <a href={configuration.cguUrl} onClick={openBrowserUrl(configuration.cguUrl)}>{`${t(
                                 'signup_informations_page.cgu.cgu'
                             )}`}</a>
                             {` ${t('signup_informations_page.cgu.separator')} `}
-                            <a onClick={openBrowser(configuration.confidentialityUrl)}>{`${t(
-                                'signup_informations_page.cgu.confidentiality'
-                            )}`}</a>
+                            <a
+                                href={configuration.confidentialityUrl}
+                                onClick={openBrowserUrl(configuration.confidentialityUrl)}
+                            >{`${t('signup_informations_page.cgu.confidentiality')}`}</a>
                             {` ${t('signup_informations_page.cgu.suffix')}`}
                         </>
                     }

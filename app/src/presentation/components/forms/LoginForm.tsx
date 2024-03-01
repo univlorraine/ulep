@@ -35,12 +35,12 @@ const LoginForm: React.FC<LoginFormProps> = ({ goBack, onLogin }) => {
         onLogin(result);
     };
 
-    const ssoLogin = () => {
+    const ssoLogin = async (): Promise<void> => {
         const redirectUri = encodeURIComponent(
             Capacitor.isNativePlatform() ? 'ulep://auth' : `${window.location.origin}/auth`
         );
 
-        return openBrowser(getInitialUrlUsecase.execute(redirectUri), '_self');
+        await openBrowser(getInitialUrlUsecase.execute(redirectUri), '_self');
     };
 
     return (
@@ -92,7 +92,7 @@ const LoginForm: React.FC<LoginFormProps> = ({ goBack, onLogin }) => {
                         <p className={style['sso-text']}>
                             {t('login_page.sso_title', { name: configuration.mainUniversityName })}
                         </p>
-                        <button className="tertiary-button large-margin-vertical" onClick={ssoLogin()}>
+                        <button className="tertiary-button large-margin-vertical" onClick={ssoLogin}>
                             {t('login_page.sso_button')}
                         </button>
                     </div>
