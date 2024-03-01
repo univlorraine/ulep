@@ -1,6 +1,8 @@
-import UserResult, { userResultToDomain } from '../../../src/command/UserResult';
+import { userResultToDomain } from '../../../src/command/UserResult';
 import UpdateNotificationPermissionUsecase from '../../../src/domain/usecases/UpdateNotificationPermissionUsecase';
+import userResult from '../../fixtures/user';
 import DomainHttpAdapter from '../../mocks/adapters/HttpAdapter';
+
 describe('updateNotificationPermission', () => {
     let adapter: DomainHttpAdapter;
     let usecase: UpdateNotificationPermissionUsecase;
@@ -24,37 +26,6 @@ describe('updateNotificationPermission', () => {
 
     it('execute must return an expected response', async () => {
         expect.assertions(1);
-
-        const userResult: UserResult = {
-            id: 'id',
-            avatar: { id: 'id', mimeType: 'image/png' },
-            acceptsEmail: true,
-            email: 'email',
-            firstname: 'firstname',
-            lastname: 'lastname',
-            university: {
-                id: 'universityId',
-                admissionStart: new Date('2023-01-01T00:00:00.000Z'),
-                admissionEnd: new Date('2023-12-31T00:00:00.000Z'),
-                openServiceDate: new Date('2023-01-01T00:00:00.000Z'),
-                closeServiceDate: new Date('2023-01-01T00:00:00.000Z'),
-                name: 'name',
-                parent: undefined,
-                sites: [],
-                hasCode: true,
-                timezone: 'timezone',
-                website: 'site',
-                maxTandemsPerUser: 3,
-            },
-            status: 'ACTIVE',
-            staffFunction: 'some job',
-            role: "STAFF",
-            gender: "MALE",
-            division: 'some division',
-            diploma: 'some diploma',
-            country: 'FR',
-            age: 25
-        };
         adapter.mockJson({ parsedBody: userResult });
 
         const result = await usecase.execute('id', false);
