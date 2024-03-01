@@ -67,7 +67,10 @@ const ShowTandems = () => {
 
     let getLearningLanguagesMatchesFilters: any = {
         id: record?.id,
-        universityIds: identity?.universityId ? [...selectedUniversityIds, identity.universityId] : [],
+        universityIds:
+            identity?.universityId && userIsFromCentralUniversity
+                ? [...selectedUniversityIds, identity.universityId]
+                : [],
     };
     if (!userIsFromCentralUniversity) {
         getLearningLanguagesMatchesFilters = {
