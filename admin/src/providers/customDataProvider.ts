@@ -5,6 +5,7 @@ import {
     DeleteManyParams,
     DeleteParams,
     GetOneParams,
+    HttpError,
     UpdateParams,
     addRefreshAuthToDataProvider,
     fetchUtils,
@@ -45,6 +46,10 @@ const httpClientOptions = (options: any = {}) => {
 };
 
 const throwError = async (response: Response) => {
+    if (response.status === 401) {
+        return Promise.reject(new HttpError('Forbidden', response.status));
+    }
+
     const data = await response.json();
     if (data.message) {
         throw new Error(data.message, { cause: response.status });
