@@ -1,6 +1,5 @@
 import { HttpResponse } from '../../adapter/BaseHttpAdapter';
 import { HttpAdapterInterface } from '../../adapter/DomainHttpAdapter';
-import { CollectionCommand } from '../../command/CollectionCommand';
 import TandemCommand, { tandemCommandToDomain } from '../../command/TandemCommand';
 import Tandem from '../entities/Tandem';
 import GetAllTandemsUsecaseInterface from '../interfaces/GetAllTandemsUsecase.interface';

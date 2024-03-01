@@ -1,11 +1,13 @@
 import { HttpResponse } from '../../adapter/BaseHttpAdapter';
 import { HttpAdapterInterface } from '../../adapter/DomainHttpAdapter';
+import { userCommandToDomain } from '../../command/UserCommand';
+import User from '../entities/User';
 import UpdateNotificationPermissionUsecaseInterface from '../interfaces/UpdateNotificationPermissionUsecase.interface';
 
 class UpdateNotificationPermissionUsecase implements UpdateNotificationPermissionUsecaseInterface {
     constructor(private readonly domainHttpAdapter: HttpAdapterInterface) {}
 
-    async execute(id: string, notificationPermission: boolean): Promise<void | Error> {
+    async execute(id: string, notificationPermission: boolean): Promise<User | Error> {
         try {
             const httpResponse: HttpResponse<undefined> = await this.domainHttpAdapter.patch(`/users/${id}`, {
                 acceptsEmail: notificationPermission,
@@ -14,7 +16,7 @@ class UpdateNotificationPermissionUsecase implements UpdateNotificationPermissio
             if (!httpResponse.parsedBody) {
                 return new Error('errors.global');
             }
-            return;
+            return userCommandToDomain(httpResponse.parsedBody);
         } catch (error: any) {
             return new Error('errors.global');
         }
