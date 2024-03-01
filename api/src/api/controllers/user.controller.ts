@@ -45,6 +45,7 @@ import { ImagesFilePipe } from '../validators/images.validator';
 import { User } from 'src/core/models';
 import { GetAdministratorsQueryParams } from 'src/api/dtos/users/administrators-filter';
 import { RevokeSessionsUsecase } from 'src/core/usecases/user/revoke-sessions.usecase';
+import { OwnerAllowed } from '../decorators/owner.decorator';
 
 @Controller('users')
 @Swagger.ApiTags('Users')
@@ -194,6 +195,7 @@ export class UserController {
 
   @Put(':id')
   @Roles(Role.ADMIN)
+  @OwnerAllowed((request) => request.params.id)
   @UseGuards(AuthenticationGuard)
   @Swagger.ApiOperation({ summary: 'Updates a User ressource.' })
   @Swagger.ApiOkResponse({ type: UserResponse })

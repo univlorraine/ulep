@@ -13,6 +13,7 @@ import {
   AuthenticatorInterface,
 } from '../services/authenticator.interface';
 import { ROLES_KEY, Role } from '../decorators/roles.decorator';
+import { OWNER_ALLOWED_KEY } from '../decorators/owner.decorator';
 
 @Injectable()
 export class AuthenticationGuard implements CanActivate {
@@ -33,6 +34,15 @@ export class AuthenticationGuard implements CanActivate {
     try {
       const user = await this.authenticate(token);
       request['user'] = user;
+
+      const getOwnerIdFromRequest = this.reflector.get<
+        (request: Request) => string
+      >(OWNER_ALLOWED_KEY, context.getHandler());
+      if (getOwnerIdFromRequest) {
+        if (user.sub === getOwnerIdFromRequest(request)) {
+          return true;
+        }
+      }
 
       const roles = this.reflector.get<Role[]>(ROLES_KEY, context.getHandler());
       if (!roles) {
