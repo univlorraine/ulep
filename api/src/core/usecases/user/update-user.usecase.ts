@@ -22,7 +22,6 @@ import { Env } from 'src/configuration';
 import { KeycloakClient } from '@app/keycloak';
 
 export class UpdateUserCommand {
-  id: string;
   status?: UserStatus;
   acceptsEmail?: boolean;
   email?: string;
@@ -47,8 +46,8 @@ export class UpdateUserUsecase {
     private readonly keycloakClient: KeycloakClient,
   ) {}
 
-  async execute(command: UpdateUserCommand): Promise<User> {
-    const user = await this.userRepository.ofId(command.id);
+  async execute(id: string, command: UpdateUserCommand): Promise<User> {
+    const user = await this.userRepository.ofId(id);
     if (!user) {
       throw new RessourceDoesNotExist();
     }

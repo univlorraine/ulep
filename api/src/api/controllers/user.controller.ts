@@ -192,14 +192,17 @@ export class UserController {
     return UserResponse.fromDomain(instance);
   }
 
-  @Put()
+  @Put(':id')
   @Roles(Role.ADMIN)
   @UseGuards(AuthenticationGuard)
   @Swagger.ApiOperation({ summary: 'Updates a User ressource.' })
   @Swagger.ApiOkResponse({ type: UserResponse })
-  async update(@Body() body: UpdateUserRequest) {
-    const user = await this.updateUserUsecase.execute(body);
-
+  async update(
+    @Param('id', ParseUUIDPipe) id: string,
+    @Body() body: UpdateUserRequest,
+  ) {
+    // TODO(future): cahnge this method to a patch since it partially update the user
+    const user = await this.updateUserUsecase.execute(id, body);
     return UserResponse.fromDomain(user);
   }
 

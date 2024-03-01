@@ -84,7 +84,10 @@ const customDataProvider = {
         return { data: result };
     },
     update: async (resource: string, params: UpdateParams) => {
-        const url = new URL(`${process.env.REACT_APP_API_URL}/${resource}`);
+        let url = `${process.env.REACT_APP_API_URL}/${resource}`;
+        if (params.id) {
+            url += `/${params.id}`;
+        }
         let body;
 
         if (params.data instanceof FormData) {
@@ -93,7 +96,7 @@ const customDataProvider = {
             body = JSON.stringify(params.data);
         }
 
-        const response = await fetch(url, httpClientOptions({ method: 'PUT', body }));
+        const response = await fetch(new URL(url), httpClientOptions({ method: 'PUT', body }));
 
         if (!response.ok) {
             await throwError(response);

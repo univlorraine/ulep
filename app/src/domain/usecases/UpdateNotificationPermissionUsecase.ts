@@ -7,8 +7,7 @@ class UpdateNotificationPermissionUsecase implements UpdateNotificationPermissio
 
     async execute(id: string, notificationPermission: boolean): Promise<void | Error> {
         try {
-            const httpResponse: HttpResponse<undefined> = await this.domainHttpAdapter.put(`/users`, {
-                id,
+            const httpResponse: HttpResponse<undefined> = await this.domainHttpAdapter.put(`/users/${id}`, {
                 acceptsEmail: notificationPermission,
             });
 

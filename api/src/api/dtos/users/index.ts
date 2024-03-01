@@ -82,11 +82,6 @@ export class CreateUserRequest implements CreateUserCommand {
 }
 
 export class UpdateUserRequest {
-  @Swagger.ApiProperty({ type: 'number', format: 'uuid' })
-  @IsUUID()
-  @IsNotEmpty()
-  id: string;
-
   @Swagger.ApiPropertyOptional({ type: 'string', format: 'email' })
   @IsEmail()
   @IsOptional()
