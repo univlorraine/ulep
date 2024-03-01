@@ -12,6 +12,7 @@ export interface HttpAdapterInterface {
         isTokenNeeded?: boolean
     ) => Promise<Response>;
     put: (path: string, body: Body, args?: RequestInit, isTokenNeeded?: boolean) => Promise<Response>;
+    patch: (path: string, body: Body, args?: RequestInit, isTokenNeeded?: boolean) => Promise<Response>;
     delete: (path: string, args?: RequestInit, isTokenNeeded?: boolean) => Promise<Response>;
 }
 
@@ -36,7 +37,7 @@ interface RequestParams {
 
 type Request = [string, RequestInit, Body?, string?];
 
-type Action = 'get' | 'post' | 'delete' | 'put';
+type Action = 'get' | 'post' | 'delete' | 'put' | 'patch';
 
 class DomainHttpAdapter extends BaseHttpAdapter implements HttpAdapterInterface {
     accessToken: string = '';
@@ -99,6 +100,10 @@ class DomainHttpAdapter extends BaseHttpAdapter implements HttpAdapterInterface 
 
     async put(path: string, body: Body, args: RequestInit = {}, isTokenNeeded = true): Promise<Response> {
         return this.withAuthCheck('put', { path: `${this.apiUrl}${path}`, args, body, isTokenNeeded });
+    }
+
+    async patch(path: string, body: Body, args: RequestInit = {}, isTokenNeeded = true): Promise<Response> {
+        return this.withAuthCheck('patch', { path: `${this.apiUrl}${path}`, args, body, isTokenNeeded });
     }
 
     async withAuthCheck(

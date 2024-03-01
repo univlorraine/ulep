@@ -96,7 +96,7 @@ const customDataProvider = {
             body = JSON.stringify(params.data);
         }
 
-        const response = await fetch(new URL(url), httpClientOptions({ method: 'PUT', body }));
+        const response = await fetch(new URL(url), httpClientOptions({ method: 'PATCH', body }));
 
         if (!response.ok) {
             await throwError(response);

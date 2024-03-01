@@ -7,6 +7,7 @@ import {
   Get,
   Param,
   ParseUUIDPipe,
+  Patch,
   Post,
   Put,
   Query,
@@ -193,7 +194,7 @@ export class UserController {
     return UserResponse.fromDomain(instance);
   }
 
-  @Put(':id')
+  @Patch(':id')
   @Roles(Role.ADMIN)
   @OwnerAllowed((request) => request.params.id)
   @UseGuards(AuthenticationGuard)
@@ -203,7 +204,6 @@ export class UserController {
     @Param('id', ParseUUIDPipe) id: string,
     @Body() body: UpdateUserRequest,
   ) {
-    // TODO(future): cahnge this method to a patch since it partially update the user
     const user = await this.updateUserUsecase.execute(id, body);
     return UserResponse.fromDomain(user);
   }
