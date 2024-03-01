@@ -52,7 +52,11 @@ export class UpdateUserUsecase {
       throw new RessourceDoesNotExist();
     }
 
-    if (command.firstname || command.lastname || command.email) {
+    if (
+      command.firstname !== user.firstname ||
+      command.lastname !== user.lastname ||
+      command.email !== user.email
+    ) {
       await this.keycloakClient.updateUser({
         id: user.id,
         firstname: command.firstname || user.firstname,
@@ -64,11 +68,7 @@ export class UpdateUserUsecase {
     const update = await this.userRepository.update(
       new User({
         ...user,
-        status: command.status || user.status,
-        acceptsEmail: command.acceptsEmail || user.acceptsEmail,
-        firstname: command.firstname || user.firstname,
-        lastname: command.lastname || user.lastname,
-        email: command.email || user.email,
+        ...command,
       }),
     );
 
