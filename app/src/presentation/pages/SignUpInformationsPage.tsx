@@ -9,7 +9,7 @@ import Checkbox from '../components/Checkbox';
 import RadioButton from '../components/RadioButton';
 import TextInput from '../components/TextInput';
 import WebLayoutCentered from '../components/layout/WebLayoutCentered';
-import { isEmailCorrect, isNameCorrect, isPasswordCorrect, openBrowser } from '../utils';
+import { isEmailCorrect, isNameCorrect, isPasswordCorrect, openBrowserHref } from '../utils';
 import styles from './css/SignUp.module.css';
 
 export interface SignUpInformationsParams {
@@ -157,11 +157,6 @@ const SignUpInformationsPage: React.FC = () => {
         }
     }, [location.state]);
 
-    const openBrowserUrl = (url: string) => async (event: React.MouseEvent<HTMLElement>) => {
-        event.preventDefault();
-        await openBrowser(url);
-    };
-
     return (
         <WebLayoutCentered
             backgroundIconColor={configuration.primaryBackgroundImageColor}
@@ -289,14 +284,13 @@ const SignUpInformationsPage: React.FC = () => {
                     name={
                         <>
                             {`${t('signup_informations_page.cgu.prefix')} `}
-                            <a href={configuration.cguUrl} onClick={openBrowserUrl(configuration.cguUrl)}>{`${t(
+                            <a href={configuration.cguUrl} onClick={openBrowserHref}>{`${t(
                                 'signup_informations_page.cgu.cgu'
                             )}`}</a>
                             {` ${t('signup_informations_page.cgu.separator')} `}
-                            <a
-                                href={configuration.confidentialityUrl}
-                                onClick={openBrowserUrl(configuration.confidentialityUrl)}
-                            >{`${t('signup_informations_page.cgu.confidentiality')}`}</a>
+                            <a href={configuration.confidentialityUrl} onClick={openBrowserHref}>{`${t(
+                                'signup_informations_page.cgu.confidentiality'
+                            )}`}</a>
                             {` ${t('signup_informations_page.cgu.suffix')}`}
                         </>
                     }

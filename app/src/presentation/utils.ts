@@ -233,4 +233,9 @@ export const isCodeValid = (code: string, codesToCheck: string[]) => {
 
 export const openBrowser = (url: string, windowName: string = '_blank') => Browser.open({ url, windowName });
 
+export const openBrowserHref = async (event: React.MouseEvent<HTMLElement>): Promise<void> => {
+    event.preventDefault();
+    await openBrowser((event.target as HTMLAnchorElement).href);
+};
+
 export const compareArrays = (a: unknown[], b: unknown[]) => JSON.stringify(a) == JSON.stringify(b);
