@@ -28,6 +28,10 @@ export class GetTokenFromCodeUsecase implements GetTokenFromCodeUsecaseInterface
                 false
             );
 
+            if (httpResponse.ok && httpResponse.status === 401) {
+                return new Error('errors.userWrongCredentials');
+            }
+
             if (!httpResponse.parsedBody || !httpResponse.parsedBody.accessToken) {
                 return new Error('errors.global');
             }
@@ -43,10 +47,6 @@ export class GetTokenFromCodeUsecase implements GetTokenFromCodeUsecaseInterface
         } catch (error: any) {
             if (!error || !error.status) {
                 return new Error('errors.global');
-            }
-
-            if (error.status === 401) {
-                return new Error('errors.userWrongCredentials');
             }
 
             if (error.status === 404) {

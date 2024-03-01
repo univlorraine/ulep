@@ -10,6 +10,10 @@ class RevokeSessionsUsecase implements RevokeSessionsUsecaseInterface {
             const httpResponse: HttpResponse<any> = await this.domainHttpAdapter.get('/users/revoke', {}, false);
 
             if (!httpResponse.ok) {
+                if (httpResponse.status === 401) {
+                    return new Error('errors.userWrongCredentials');
+                }
+
                 return new Error('errors.global');
             }
 
@@ -17,10 +21,6 @@ class RevokeSessionsUsecase implements RevokeSessionsUsecaseInterface {
         } catch (error: any) {
             if (!error || !error.status) {
                 return new Error('errors.global');
-            }
-
-            if (error.status === 401) {
-                return new Error('errors.userWrongCredentials');
             }
 
             if (error.status === 404) {

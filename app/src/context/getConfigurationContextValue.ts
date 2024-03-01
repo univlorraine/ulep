@@ -26,7 +26,6 @@ import UpdateNotificationPermissionUsecase from '../domain/usecases/UpdateNotifi
 import { ConfigContextValueType } from './configurationContextTypes';
 import GetUniversityUsecase from '../domain/usecases/GetUniversityUsecase';
 import GetMediaObjectUsecase from '../domain/usecases/GetMediaObjectUsecase';
-import { UseIonRouterResult } from '@ionic/react';
 import RevokeSessionsUsecase from '../domain/usecases/RevokeSessionsUsecase';
 
 interface GetConfigContextValueProps {
@@ -39,7 +38,6 @@ interface GetConfigContextValueProps {
     setUser: Function;
     configuration: Configuration;
     logout: Function;
-    router?: UseIonRouterResult;
 }
 
 const getConfigContextValue = ({
@@ -52,18 +50,9 @@ const getConfigContextValue = ({
     setUser,
     configuration,
     logout,
-    router,
 }: GetConfigContextValueProps): ConfigContextValueType => {
     const cameraAdapter = new CameraAdapter();
-    const domainHttpAdapter = new DomainHttpAdapter(
-        apiUrl,
-        accessToken,
-        refreshToken,
-        languageCode,
-        setTokens,
-        logout,
-        router
-    );
+    const domainHttpAdapter = new DomainHttpAdapter(apiUrl, accessToken, refreshToken, languageCode, setTokens, logout);
 
     const askForAccountDeletion = new AskForAccountDeletion(domainHttpAdapter);
     const askForLanguage = new AskForLanguageUsecase(domainHttpAdapter);

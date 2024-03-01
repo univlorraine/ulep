@@ -31,7 +31,6 @@ import ErrorPage from './presentation/pages/ErrorPage';
 import AppUrlListener from './presentation/router/AppUrlListener';
 import MaintenancePage from './presentation/pages/MaintenancePage';
 import { polyfillCountryFlagEmojis } from 'country-flag-emoji-polyfill';
-import { useIonRouter } from '@ionic/react';
 
 polyfillCountryFlagEmojis();
 setupIonicReact();
@@ -57,7 +56,6 @@ const AppContext = () => {
     const setProfile = useStoreActions((state) => state.setProfile);
     const setTokens = useStoreActions((state) => state.setTokens);
     const logout = useStoreActions((state) => state.logout);
-    const router = useIonRouter();
     const setUser = useStoreActions((state) => state.setUser);
 
     const { configuration, error, loading } = useFetchConfiguration(import.meta.env.VITE_API_URL || apiUrl);
@@ -97,7 +95,6 @@ const AppContext = () => {
                 setUser,
                 configuration,
                 logout,
-                router,
             })}
         >
             <IonReactRouter>

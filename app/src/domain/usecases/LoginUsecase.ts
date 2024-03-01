@@ -6,6 +6,7 @@ import LoginUsecaseInterface from '../interfaces/LoginUsecase.interface';
 interface LoginCommand {
     accessToken: string;
     refreshToken: string;
+    message?: string;
 }
 
 class LoginUsecase implements LoginUsecaseInterface {
@@ -24,6 +25,10 @@ class LoginUsecase implements LoginUsecaseInterface {
                 false
             );
 
+            if (!httpResponse.ok && httpResponse.status === 401) {
+                return new Error('errors.userWrongCredentials');
+            }
+
             if (!httpResponse.parsedBody || !httpResponse.parsedBody.accessToken) {
                 return new Error('errors.global');
             }
@@ -37,8 +42,8 @@ class LoginUsecase implements LoginUsecaseInterface {
 
             return tokens;
         } catch (error: any) {
-            if (!error || !error.status || error.status === 401) {
-                return new Error('errors.userWrongCredentials');
+            if (!error || !error.status) {
+                return new Error('errors.global');
             }
 
             if (error.status === 404) {

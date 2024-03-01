@@ -51,16 +51,13 @@ class DomainHttpAdapter extends BaseHttpAdapter implements HttpAdapterInterface 
 
     logout: Function;
 
-    router?: UseIonRouterResult;
-
     constructor(
         apiUrl: string,
         accessToken: string,
         refreshToken: string,
         languageCode: string,
         setTokens: Function,
-        logout: Function,
-        router?: UseIonRouterResult
+        logout: Function
     ) {
         super();
         this.accessToken = accessToken;
@@ -69,7 +66,6 @@ class DomainHttpAdapter extends BaseHttpAdapter implements HttpAdapterInterface 
         this.refreshToken = refreshToken;
         this.setStorageTokens = setTokens;
         this.logout = logout;
-        this.router = router;
     }
 
     private getHeaders(token?: string): any {
@@ -113,7 +109,7 @@ class DomainHttpAdapter extends BaseHttpAdapter implements HttpAdapterInterface 
 
         const response = await super[action](...request);
 
-        if (response.status === 401) {
+        if (isTokenNeeded && response.status === 401) {
             this.logoutAndRedirect();
         }
 
@@ -182,7 +178,7 @@ class DomainHttpAdapter extends BaseHttpAdapter implements HttpAdapterInterface 
 
     logoutAndRedirect() {
         this.logout();
-        if (this.router) this.router.push('/login');
+        window.location.href = '/login';
     }
 }
 
