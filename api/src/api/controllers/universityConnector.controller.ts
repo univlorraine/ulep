@@ -1,4 +1,4 @@
-import { Controller, Header, HttpCode, Post, UseGuards } from '@nestjs/common';
+import { Controller, Get, Header, HttpCode, UseGuards } from '@nestjs/common';
 import { UlUniversityConnectorService } from '../../providers/gateway/ul-university-connector';
 import * as Swagger from '@nestjs/swagger';
 import { ConnectorResponse } from '../dtos/universityConnector';
@@ -11,7 +11,7 @@ import { AuthenticationGuard } from 'src/api/guards';
 export class UniversityConnectorController {
   constructor(private gatewayService: UlUniversityConnectorService) {}
 
-  @Post()
+  @Get()
   @HttpCode(200)
   @Header('Content-Type', 'application/json')
   @Swagger.ApiOperation({
