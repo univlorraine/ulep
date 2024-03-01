@@ -179,7 +179,7 @@ const SignUpPage: React.FC = () => {
                     onPressed={() => setSelectedRole('STAFF')}
                     name={t('signup_page.staff_role')}
                 />
-                {(!university || (university && university.isCentral && !isLoggedIn)) && (
+                {(!university || !isLoggedIn) && (
                     <>
                         {/* Country selector */}
                         <div className="large-margin-top">
