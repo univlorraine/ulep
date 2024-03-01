@@ -1,6 +1,7 @@
 import ProfileCommand from '../../../src/command/ProfileCommand';
 import { BiographySignUp } from '../../../src/domain/entities/ProfileSignUp';
 import CreateProfileUsecase from '../../../src/domain/usecases/CreateProfileUsecase';
+import userResult from '../../fixtures/user';
 import DomainHttpAdapter from '../../mocks/adapters/HttpAdapter';
 
 const biography = {
@@ -37,29 +38,7 @@ const payload: ProfileCommand = {
         sunday: 'AVAILABLE',
     },
     availabilitiesNote: 'note',
-    user: {
-        id: 'userId',
-        avatar: { id: 'avatarId', mimeType: 'image/png' },
-        acceptsEmail: true,
-        email: 'email',
-        firstname: 'firstname',
-        lastname: 'lastname',
-        university: {
-            id: 'universityId',
-            name: 'name',
-            parent: undefined,
-            sites: [],
-            hasCode: true,
-            timezone: 'timezone',
-            website: 'site',
-            admissionStart: new Date('2023-01-01T00:00:00.000Z'),
-            admissionEnd: new Date('2023-12-31T00:00:00.000Z'),
-            openServiceDate: new Date('2023-01-01T00:00:00.000Z'),
-            closeServiceDate: new Date('2023-01-01T00:00:00.000Z'),
-            maxTandemsPerUser: 3,
-        },
-        status: 'ACTIVE',
-    },
+    user: userResult
 };
 
 describe('createProfile', () => {

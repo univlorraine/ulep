@@ -228,3 +228,5 @@ export const isDomainValid = (email: string, domains: string[]) => {
 export const isCodeValid = (code: string, codesToCheck: string[]) => {
     return codesToCheck.some((codeToCheck) => codeToCheck === code);
 };
+
+export const compareArrays = (a: unknown[], b: unknown[]) => JSON.stringify(a) == JSON.stringify(b);

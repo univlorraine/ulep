@@ -54,8 +54,8 @@ const SignUpPage: React.FC = () => {
     const isFormValid: boolean = university?.isCentral ?? false ? isLoggedIn && !isAFieldEmpty : !isAFieldEmpty;
 
     // Map list of University to list of DropDownItem.
-    const universities: { title: string; value: University }[] = (country?.universities || []).map((university) => ({
-        title: university.name,
+    const universities: DropDownItem<University>[] = (country?.universities || []).map((university) => ({
+        label: university.name,
         value: university,
     }));
 
@@ -69,7 +69,7 @@ const SignUpPage: React.FC = () => {
 
         return setCountries(
             countriesResult.map((country) => ({
-                title: `${country.emoji ? country.emoji + ' ' : ''}${country.name}`,
+                label: `${country.emoji ? country.emoji + ' ' : ''}${country.name}`,
                 value: country,
             }))
         );

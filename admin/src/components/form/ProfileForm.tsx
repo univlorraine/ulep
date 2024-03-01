@@ -6,7 +6,7 @@ import inputStyle from '../../theme/inputStyle';
 
 interface ProfileFormProps {
     record: Profile;
-    handleSubmit: (payload: ProfileFormPayload) => void;
+    handleSubmit: (id: string, payload: ProfileFormPayload) => void;
 }
 
 const ProfileForm: React.FC<ProfileFormProps> = ({ record, handleSubmit }) => {
@@ -20,8 +20,7 @@ const ProfileForm: React.FC<ProfileFormProps> = ({ record, handleSubmit }) => {
         return <Loading />;
     }
     const onCreatePressed = () =>
-        handleSubmit({
-            id: record.user.id,
+        handleSubmit(record.user.id, {
             email: newEmail,
             firstname: newFirstname,
             lastname: newLastname,

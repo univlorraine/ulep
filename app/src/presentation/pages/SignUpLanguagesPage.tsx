@@ -28,15 +28,25 @@ const SignUpLanguagesPage: React.FC = () => {
         }
 
         return setLanguages([
-            { title: t('signup_languages_page.none'), value: undefined },
+            { label: t('signup_languages_page.none'), value: undefined },
             ...result
                 .map((language) => ({
-                    title: `${codeLanguageToFlag(language.code)} ${t(`languages_code.${language.code}`)}`,
+                    label: `${codeLanguageToFlag(language.code)} ${t(`languages_code.${language.code}`)}`,
                     value: language,
                 }))
                 .sort((a, b) => {
-                    const translatedA = t(`languages_code.${a.value.code}`);
-                    const translatedB = t(`languages_code.${b.value.code}`);
+                    if (a.value.code === 'fr') {
+                        return -1;
+                    }
+
+                    if (b.value.code === 'fr') {
+                        return 1;
+                    }
+
+                    const removeAccents = (str: string) => str.normalize('NFD').replace(/[\u0300-\u036f]/g, '');
+
+                    const translatedA = removeAccents(t(`languages_code.${a.value.code}`));
+                    const translatedB = removeAccents(t(`languages_code.${b.value.code}`));
 
                     return translatedB < translatedA ? 1 : -1;
                 }),

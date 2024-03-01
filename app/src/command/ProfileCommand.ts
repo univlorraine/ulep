@@ -2,7 +2,7 @@ import { Interest } from '../domain/entities/CategoryInterests';
 import Language from '../domain/entities/Language';
 import Profile from '../domain/entities/Profile';
 import { goalCommandToDomain } from './GoalCommand';
-import UserCommand, { userCommandToDomain } from './UserCommand';
+import UserResult, { userResultToDomain } from './UserResult';
 
 interface ProfileCommand {
     id: string;
@@ -44,7 +44,7 @@ interface ProfileCommand {
         favoritePlace: string;
         superpower: string;
     };
-    user: UserCommand;
+    user: UserResult;
 }
 
 export const profileCommandToDomain = (command: ProfileCommand) => {
@@ -75,7 +75,7 @@ export const profileCommandToDomain = (command: ProfileCommand) => {
             saturday: command.availabilities.saturday as AvailabilitiesOptions,
             sunday: command.availabilities.sunday as AvailabilitiesOptions,
         },
-        userCommandToDomain(command.user),
+        userResultToDomain(command.user),
         command.availabilitiesNote,
         command.availavilitiesNotePrivacy
     );
