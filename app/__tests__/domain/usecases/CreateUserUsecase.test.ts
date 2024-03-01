@@ -1,11 +1,11 @@
-import UserCommand from '../../../src/command/UserCommand';
+import UserResult from '../../../src/command/UserResult';
 import University from '../../../src/domain/entities/University';
 import LoginUsecaseInterface from '../../../src/domain/interfaces/LoginUsecase.interface';
 import CreateUserUsecase from '../../../src/domain/usecases/CreateUserUsecase';
 import DomainHttpAdapter from '../../mocks/adapters/HttpAdapter';
 import LoginUsecase from '../../mocks/usecase/LoginUsecase';
 
-const payload: UserCommand = {
+const payload: UserResult = {
     id: 'id',
     avatar: { id: 'id', mimeType: 'image/png' },
     acceptsEmail: true,
@@ -27,6 +27,13 @@ const payload: UserCommand = {
         maxTandemsPerUser: 3,
     },
     status: 'ACTIVE',
+    staffFunction: 'some job',
+    role: "STAFF",
+    gender: "MALE",
+    division: 'some division',
+    diploma: 'some diploma',
+    country: 'FR',
+    age: 25
 };
 
 const university = new University(

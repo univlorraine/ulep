@@ -1,9 +1,9 @@
-import UserCommand from '../../../src/command/UserCommand';
+import UserResult from '../../../src/command/UserResult';
 import User from '../../../src/domain/entities/User';
 import GetUserUsecase from '../../../src/domain/usecases/GetUserUsecase';
 import DomainHttpAdapter from '../../mocks/adapters/HttpAdapter';
 
-const payload: UserCommand = {
+const payload: UserResult = {
     id: 'userId',
     avatar: { id: 'avatarId', mimeType: 'image/png' },
     acceptsEmail: true,
@@ -25,6 +25,13 @@ const payload: UserCommand = {
         maxTandemsPerUser: 3,
     },
     status: 'ACTIVE',
+    staffFunction: 'some job',
+    role: "STAFF",
+    gender: "MALE",
+    division: 'some division',
+    diploma: 'some diploma',
+    country: 'FR',
+    age: 25
 };
 
 describe('getUser', () => {

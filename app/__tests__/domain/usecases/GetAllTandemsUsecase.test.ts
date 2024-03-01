@@ -69,6 +69,13 @@ const usecaseResponse: TandemCommand[] = [
                         maxTandemsPerUser: 1,
                     },
                     status: 'ACTIVE',
+                    staffFunction: 'some job',
+                    role: "STAFF",
+                    gender: "MALE",
+                    division: 'some division',
+                    diploma: 'some diploma',
+                    country: 'FR',
+                    age: 25
                 },
             },
         },
