@@ -7,6 +7,7 @@ import {
   Get,
   Param,
   ParseUUIDPipe,
+  Patch,
   Post,
   Put,
   Query,
@@ -45,6 +46,7 @@ import { ImagesFilePipe } from '../validators/images.validator';
 import { User } from 'src/core/models';
 import { GetAdministratorsQueryParams } from 'src/api/dtos/users/administrators-filter';
 import { RevokeSessionsUsecase } from 'src/core/usecases/user/revoke-sessions.usecase';
+import { OwnerAllowed } from '../decorators/owner.decorator';
 
 @Controller('users')
 @Swagger.ApiTags('Users')
@@ -172,13 +174,11 @@ export class UserController {
     return UserResponse.fromDomain(me);
   }
 
-  @Get('revoke')
+  @Post('revoke')
   @UseGuards(AuthenticationGuard)
   @Swagger.ApiOperation({ summary: 'Revoke User sessions.' })
   async rekoveSessions(@CurrentUser() user: KeycloakUser) {
-    await this.revokeSessionsUsecase.execute(user.sub);
-
-    return;
+    return this.revokeSessionsUsecase.execute(user.sub);
   }
 
   @Get(':id')
@@ -192,14 +192,17 @@ export class UserController {
     return UserResponse.fromDomain(instance);
   }
 
-  @Put()
+  @Patch(':id')
   @Roles(Role.ADMIN)
+  @OwnerAllowed((request) => request.params.id)
   @UseGuards(AuthenticationGuard)
   @Swagger.ApiOperation({ summary: 'Updates a User ressource.' })
   @Swagger.ApiOkResponse({ type: UserResponse })
-  async update(@Body() body: UpdateUserRequest) {
-    const user = await this.updateUserUsecase.execute(body);
-
+  async update(
+    @Param('id', ParseUUIDPipe) id: string,
+    @Body() body: UpdateUserRequest,
+  ) {
+    const user = await this.updateUserUsecase.execute(id, body);
     return UserResponse.fromDomain(user);
   }
 

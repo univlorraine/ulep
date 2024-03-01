@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { EyeSvg } from '../../assets';
 import style from './TextInput.module.css';
-import { IonInput } from '@ionic/react';
+import { IonInput, IonItem } from '@ionic/react';
 
 export type AutocompleteTypes =
     | 'on'
@@ -79,7 +79,7 @@ const TextInput: React.FC<TextInputProps> = ({
     onChange,
     placeholder,
     title,
-    type,
+    type = 'text',
     value,
     maxLength,
 }) => {
@@ -89,12 +89,14 @@ const TextInput: React.FC<TextInputProps> = ({
         <div className={`${style.container} large-margin-bottom`}>
             <span className={style['input-label']}>{title}</span>
             {type !== 'text-area' ? (
-                <div
+                <IonItem
+                    lines="none"
                     className={`${style['input-wrapper']} ${errorMessage ? style['input-error'] : style['input-text']}`}
                 >
                     <IonInput
                         id={inputId}
-                        className={style.input}
+                        aria-label={title}
+                        class={style.input}
                         onIonInput={(e: any) => onChange(e.target.value)}
                         placeholder={placeholder ?? ''}
                         style={{ height: customHeight }}
@@ -113,7 +115,7 @@ const TextInput: React.FC<TextInputProps> = ({
                             <img alt="eye" src={EyeSvg} />
                         </button>
                     )}
-                </div>
+                </IonItem>
             ) : (
                 <textarea
                     className={`${style['area-text']} ${

@@ -1,6 +1,8 @@
+import { Logger } from '@nestjs/common';
 import { DomainError } from '../errors';
 import { LearningLanguagesMustContainsProfiles } from '../errors/match-exceptions';
 import { LearningLanguage } from './learning-language.model';
+import { Tandem, TandemStatus } from './tandem.model';
 
 export type CreateMatchProps = {
   owner: LearningLanguage;
@@ -78,5 +80,19 @@ export class Match {
     this.target = props.target;
     this.scores = props.scores;
     this.total = total;
+  }
+
+  public isAValidTandem(): boolean {
+    try {
+      new Tandem({
+        id: '',
+        learningLanguages: [this.owner, this.target],
+        status: TandemStatus.DRAFT,
+        compatibilityScore: this.total,
+      });
+      return true;
+    } catch (err) {
+      return false;
+    }
   }
 }

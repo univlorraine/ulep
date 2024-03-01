@@ -14,10 +14,6 @@ import {
 export class InMemoryLearningLanguageRepository
   implements LearningLanguageRepository
 {
-  getAvailableLearningLanguagesSpeakingLanguageFromUniversities: (
-    languageId: string,
-    universityIds: string[],
-  ) => Promise<LearningLanguage[]>;
   #learningLanguages: Map<string, LearningLanguage>;
   #tandemsPerLearningLanguages: Map<string, Tandem>;
 
@@ -140,27 +136,36 @@ export class InMemoryLearningLanguageRepository
     allowedLanguageIds: string[],
     universityIds: string[],
   ): Promise<LearningLanguage[]> {
-    const res = [];
-
-    for (const learningLanguage of this.#learningLanguages.values()) {
-      if (universityIds.includes(learningLanguage.profile.user.id)) {
-        if (
+    return Promise.resolve(
+      [...this.#learningLanguages.values()].filter(
+        (learningLanguage) =>
+          universityIds.includes(learningLanguage.profile.user.university.id) &&
           learningLanguage.profile.spokenLanguages.some((masteredLanguage) =>
             allowedLanguageIds.includes(masteredLanguage.id),
-          )
-        ) {
-          if (
-            !this.#tandemsPerLearningLanguages?.has(learningLanguage.id) ||
+          ) &&
+          (!this.#tandemsPerLearningLanguages?.has(learningLanguage.id) ||
             this.#tandemsPerLearningLanguages?.get(learningLanguage.id)
-              .status !== TandemStatus.ACTIVE
-          ) {
-            res.push(learningLanguage);
-          }
-        }
-      }
-    }
+              .status !== TandemStatus.ACTIVE),
+      ),
+    );
+  }
 
-    return Promise.resolve(res);
+  getAvailableLearningLanguagesSpeakingLanguageFromUniversities(
+    languageId: string,
+    universityIds: string[],
+  ): Promise<LearningLanguage[]> {
+    return Promise.resolve(
+      [...this.#learningLanguages.values()].filter(
+        (learningLanguage) =>
+          universityIds.includes(learningLanguage.profile.user.university.id) &&
+          learningLanguage.profile.spokenLanguages.some(
+            (masteredLanguage) => masteredLanguage.id === languageId,
+          ) &&
+          (!this.#tandemsPerLearningLanguages?.has(learningLanguage.id) ||
+            this.#tandemsPerLearningLanguages?.get(learningLanguage.id)
+              .status !== TandemStatus.ACTIVE),
+      ),
+    );
   }
 
   OfUniversities({

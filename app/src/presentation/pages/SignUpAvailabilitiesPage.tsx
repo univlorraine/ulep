@@ -5,7 +5,7 @@ import { useConfig } from '../../context/ConfigurationContext';
 import { Availabilites, AvailabilitesOptions } from '../../domain/entities/ProfileSignUp';
 import { useStoreActions, useStoreState } from '../../store/storeTypes';
 import AvailabilityLine from '../components/AvailabilityLine';
-import Dropdown from '../components/DropDown';
+import Dropdown, { DropDownItem } from '../components/DropDown';
 import WebLayoutCentered from '../components/layout/WebLayoutCentered';
 import AvailabilityModal from '../components/modals/AvailabilityModal';
 import AvailabilityNoteModal from '../components/modals/AvailabilityNoteModal';
@@ -78,11 +78,12 @@ const SignUpAvailabilitiesPage: React.FC = () => {
 
                     <Dropdown<string>
                         onChange={setTimezone}
-                        //@ts-ignore
-                        options={moment.tz.names().map((timzeone: string) => ({
-                            title: timzeone,
-                            value: timzeone,
-                        }))}
+                        options={moment.tz.names().map(
+                            (timezone: string): DropDownItem<string> => ({
+                                label: timezone,
+                                value: timezone,
+                            })
+                        )}
                         placeholder={university.timezone}
                         title={t('signup_availabilities_page.timezone')}
                     />

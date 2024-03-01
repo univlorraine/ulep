@@ -27,11 +27,11 @@ const SettingsContent: React.FC<SettingsContentProps> = ({ onBackPressed, onDisc
     const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
 
     const LANGUAGES = [
-        { title: t('languages.french'), value: 'fr' },
-        { title: t('languages.english'), value: 'en' },
-        { title: t('languages.chinese'), value: 'zh' },
-        { title: t('languages.deutsche'), value: 'de' },
-        { title: t('languages.spanish'), value: 'es' },
+        { label: t('languages.french'), value: 'fr' },
+        { label: t('languages.english'), value: 'en' },
+        { label: t('languages.chinese'), value: 'zh' },
+        { label: t('languages.deutsche'), value: 'de' },
+        { label: t('languages.spanish'), value: 'es' },
     ];
 
     const onDeletionAsked = async () => {
@@ -49,10 +49,10 @@ const SettingsContent: React.FC<SettingsContentProps> = ({ onBackPressed, onDisc
 
         if (result instanceof Error) {
             return await showToast({ message: t(result.message), duration: 1000 });
+        } else {
+            setEmailNotificationStatus(!emailNotificationStatus);
+            return updateProfile({ acceptsEmail: result.acceptsEmail });
         }
-
-        setEmailNotificationStatus(!emailNotificationStatus);
-        return updateProfile({ acceptsEmail: !profile!.user.acceptsEmail });
     };
 
     const updateLanguage = (code: string) => {
@@ -71,7 +71,7 @@ const SettingsContent: React.FC<SettingsContentProps> = ({ onBackPressed, onDisc
                     onChange={updateLanguage}
                     options={LANGUAGES}
                     title={t('home_page.settings.language')}
-                    placeholder={LANGUAGES.find((language) => language.value === currentLanguage)?.title}
+                    placeholder={LANGUAGES.find((language) => language.value === currentLanguage)?.label}
                 />
             </div>
             <span className={styles.subtitle}>{t('home_page.settings.other')}</span>

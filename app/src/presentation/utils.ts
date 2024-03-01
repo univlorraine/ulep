@@ -232,3 +232,5 @@ export const isCodeValid = (code: string, codesToCheck: string[]) => {
 };
 
 export const openBrowser = (url: string, windowName: string = '_blank') => Browser.open({ url, windowName });
+
+export const compareArrays = (a: unknown[], b: unknown[]) => JSON.stringify(a) == JSON.stringify(b);

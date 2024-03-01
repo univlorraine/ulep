@@ -9,12 +9,7 @@ class RetrievePersonInfoUsecase implements RetrievePersonInfoUsecaseInterface {
 
     async execute(): Promise<CentralStudent | Error> {
         try {
-            const httpResponse: HttpResponse<CentralStudentCommand> = await this.domainHttpAdapter.post(
-                `/userUniversityInfos`,
-                {},
-                undefined,
-                'application/json'
-            );
+            const httpResponse: HttpResponse<CentralStudentCommand> = await this.domainHttpAdapter.get("/userUniversityInfos");
             if (!httpResponse.parsedBody) {
                 return new Error('errors.gateway');
             }
