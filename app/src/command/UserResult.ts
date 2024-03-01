@@ -1,10 +1,8 @@
-import { AvatarPlaceholderPng } from '../assets';
-import MediaObject from '../domain/entities/MediaObject';
 import User from '../domain/entities/User';
 import MediaObjectCommand, { mediaObjectCommandToDomain } from './MediaObjectCommand';
 import UniversityCommand, { universityCommandToDomain } from './UniversityCommand';
 
-interface UserCommand {
+interface UserResult {
     id: string;
     avatar?: MediaObjectCommand;
     acceptsEmail: boolean;
@@ -13,19 +11,33 @@ interface UserCommand {
     lastname: string;
     university: UniversityCommand;
     status: UserStatus;
+    staffFunction: string;
+    role: Role;
+    gender: Gender;
+    division: string;
+    diploma: string;
+    country: string;
+    age: number;
 }
 
-export const userCommandToDomain = (command: UserCommand) => {
+export const userResultToDomain = (command: UserResult) => {
     return new User(
         command.id,
         command.email,
         command.firstname,
         command.lastname,
         command.status,
+        command.staffFunction,
+        command.role,
+        command.gender,
+        command.division,
+        command.diploma,
+        command.country,
+        command.age,
         universityCommandToDomain(command.university),
         command.acceptsEmail,
         command.avatar ? mediaObjectCommandToDomain(command.avatar) : undefined
     );
 };
 
-export default UserCommand;
+export default UserResult;

@@ -1,6 +1,6 @@
 import { HttpResponse } from '../../adapter/BaseHttpAdapter';
 import { HttpAdapterInterface } from '../../adapter/DomainHttpAdapter';
-import UserCommand, { userCommandToDomain } from '../../command/UserCommand';
+import UserResult, { userResultToDomain } from '../../command/UserResult';
 import User from '../entities/User';
 import GetUserUsecaseInterface from '../interfaces/GetUserUsecase.interface';
 
@@ -9,7 +9,7 @@ class GetUserUsecase implements GetUserUsecaseInterface {
     async execute(accessToken: string): Promise<User | Error> {
         try {
             //Force accessToken to avoid call with an old token ( because we have to wait store to be refreshed )
-            const httpResponse: HttpResponse<UserCommand> = await this.domainHttpAdapter.get(
+            const httpResponse: HttpResponse<UserResult> = await this.domainHttpAdapter.get(
                 `/users/me`,
                 {},
                 false,
@@ -19,7 +19,7 @@ class GetUserUsecase implements GetUserUsecaseInterface {
             if (!httpResponse.parsedBody) {
                 return new Error('errors.global');
             }
-            return userCommandToDomain(httpResponse.parsedBody);
+            return userResultToDomain(httpResponse.parsedBody);
         } catch (error: any) {
             return new Error('errors.global');
         }

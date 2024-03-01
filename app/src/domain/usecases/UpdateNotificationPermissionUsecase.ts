@@ -1,6 +1,6 @@
 import { HttpResponse } from '../../adapter/BaseHttpAdapter';
 import { HttpAdapterInterface } from '../../adapter/DomainHttpAdapter';
-import { userCommandToDomain } from '../../command/UserCommand';
+import { userResultToDomain } from '../../command/UserResult';
 import User from '../entities/User';
 import UpdateNotificationPermissionUsecaseInterface from '../interfaces/UpdateNotificationPermissionUsecase.interface';
 
@@ -16,7 +16,7 @@ class UpdateNotificationPermissionUsecase implements UpdateNotificationPermissio
             if (!httpResponse.parsedBody) {
                 return new Error('errors.global');
             }
-            return userCommandToDomain(httpResponse.parsedBody);
+            return userResultToDomain(httpResponse.parsedBody);
         } catch (error: any) {
             return new Error('errors.global');
         }
