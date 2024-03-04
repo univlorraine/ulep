@@ -1,12 +1,7 @@
 import { EMAIL_GATEWAY, EmailGateway } from 'src/core/ports/email.gateway';
 import { Inject, Injectable, Logger } from '@nestjs/common';
 import { DomainError, RessourceDoesNotExist } from 'src/core/errors';
-import {
-  RefusedTandem,
-  Tandem,
-  TandemStatus,
-  University,
-} from 'src/core/models';
+import { RefusedTandem, Tandem, TandemStatus } from 'src/core/models';
 import {
   LEARNING_LANGUAGE_REPOSITORY,
   LearningLanguageRepository,
