@@ -11,8 +11,9 @@ import {
 import { Match } from '../../../entities/Match';
 import { TandemStatus } from '../../../entities/Tandem';
 import { isCentralUniversity } from '../../../entities/University';
+import queryClient from '../../../queryClient';
 import useLearningLanguagesStore from '../useLearningLanguagesStore';
-import TandemActions from './Actions/TandemActions';
+import TandemActions, { TandemAction } from './Actions/TandemActions';
 import TandemFilters from './TandemTable/TandemFilters';
 import TandemTable from './TandemTable/TandemTable';
 import usePagination from './TandemTable/usePagination';
@@ -117,7 +118,14 @@ const ShowTandems = () => {
         return <p>{translate('learning_languages.show.tandems.error')}</p>;
     }
 
-    const handleTandemAction = async () => {
+    const handleTandemAction = async (action?: TandemAction) => {
+        if (hasActiveTandem && action === TandemAction.REFUSE) {
+            // We need to manually remove query from cache since underlying http call will return 404
+            // after existing tandem has been deleted
+            await queryClient.removeQueries({
+                queryKey: ['learning-languages/tandems', 'getOne', { id: record?.id.toString(), meta: undefined }],
+            });
+        }
         await refetchTandem();
         await refetchMatches();
     };
