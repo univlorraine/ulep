@@ -13,15 +13,19 @@ import { AcceptLanguageResolver, I18nModule, QueryResolver } from 'nestjs-i18n';
       validate: Env.validate,
     }),
     I18nModule.forRootAsync({
-      useFactory: async (env: ConfigService<Env, true>) => ({
-        fallbackLanguage: env
+      useFactory: async (env: ConfigService<Env, true>) => {
+        const fallbackLanguage = env
           .get<string>('DEFAULT_TRANSLATION_LANGUAGE')
-          .toLowerCase(),
-        loaderOptions: {
-          path: 'i18n/',
-          watch: process.env.NODE_ENV !== 'production',
-        },
-      }),
+          .toLowerCase();
+        console.info(`Default translation language: ${fallbackLanguage}`);
+        return {
+          fallbackLanguage,
+          loaderOptions: {
+            path: 'i18n/',
+            watch: process.env.NODE_ENV !== 'production',
+          },
+        };
+      },
       resolvers: [
         { use: QueryResolver, options: ['lang'] },
         AcceptLanguageResolver,
