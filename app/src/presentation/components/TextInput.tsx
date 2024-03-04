@@ -104,6 +104,7 @@ const TextInput: React.FC<TextInputProps> = ({
                         value={value}
                         required
                         autocomplete={autocomplete}
+                        maxlength={maxLength ?? 100}
                     />
 
                     {type === 'password' && (
