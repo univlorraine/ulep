@@ -219,4 +219,169 @@ describe('Score', () => {
 
     expect(res.total).toBe(res2.total);
   });
+
+  test('Should be null whenever a langage score is 0', () => {
+    const country1 = {
+      id: 'fr',
+      emoji: '👽',
+      name: 'France',
+      code: 'fr',
+      enable: true,
+    } as CountryCode;
+    const frenchLanguage = new Language({
+      id: faker.string.uuid(),
+      code: 'fr',
+      name: 'french',
+      mainUniversityStatus: LanguageStatus.PRIMARY,
+      secondaryUniversityActive: true,
+      isDiscovery: false,
+    });
+    const englishLanguage = new Language({
+      id: faker.string.uuid(),
+      code: 'en',
+      name: 'english',
+      mainUniversityStatus: LanguageStatus.PRIMARY,
+      secondaryUniversityActive: true,
+      isDiscovery: false,
+    });
+    const objectives: any = [
+      {
+        id: 'obj1',
+        name: 'obj1',
+      },
+      {
+        id: 'obj2',
+        name: 'obj2',
+      },
+    ];
+    const interests: any = [
+      {
+        id: 'interest1',
+        name: 'obj1',
+        category: {
+          id: 'interestCategoryA',
+        },
+      },
+      {
+        id: 'interest2',
+        name: 'obj1',
+        category: {
+          id: 'interestCategoryB',
+        },
+      },
+    ];
+    const lorraineCampus = new Campus({
+      id: 'campusLorraine',
+      name: 'campus Lorraine',
+      universityId: 'university1',
+    });
+    const centralUniversity = new University({
+      id: 'university1',
+      country: country1,
+      name: 'university 1',
+      campus: [lorraineCampus],
+      timezone: 'GMT+1',
+      admissionStart: new Date(),
+      admissionEnd: new Date(),
+      openServiceDate: new Date(),
+      closeServiceDate: new Date(),
+      codes: [],
+      domains: [],
+      maxTandemsPerUser: 3,
+    });
+    const profile1 = new Profile({
+      user: new User({
+        id: 'user1',
+        acceptsEmail: true,
+        email: '',
+        firstname: '',
+        lastname: '',
+        gender: Gender.MALE,
+        age: 19,
+        university: centralUniversity,
+        role: Role.STAFF,
+        country: 'FR',
+        avatar: null,
+        deactivatedReason: '',
+      }),
+      id: 'FR1',
+      nativeLanguage: frenchLanguage,
+      masteredLanguages: [],
+      meetingFrequency: MeetingFrequency.ONCE_A_WEEK,
+      learningLanguages: [],
+      objectives,
+      interests,
+      biography: {
+        superpower: faker.lorem.sentence(),
+        favoritePlace: faker.lorem.sentence(),
+        experience: faker.lorem.sentence(),
+        anecdote: faker.lorem.sentence(),
+      },
+    });
+    const profile2 = new Profile({
+      user: new User({
+        id: 'user2',
+        acceptsEmail: true,
+        email: '',
+        firstname: '',
+        lastname: '',
+        gender: Gender.MALE,
+        age: 19,
+        university: centralUniversity,
+        role: Role.STAFF,
+        country: 'EN',
+        avatar: null,
+        deactivatedReason: '',
+      }),
+      id: 'EN1',
+      nativeLanguage: englishLanguage,
+      masteredLanguages: [],
+      meetingFrequency: MeetingFrequency.ONCE_A_WEEK,
+      learningLanguages: [],
+      objectives,
+      interests,
+      biography: {
+        superpower: faker.lorem.sentence(),
+        favoritePlace: faker.lorem.sentence(),
+        experience: faker.lorem.sentence(),
+        anecdote: faker.lorem.sentence(),
+      },
+    });
+    const learningLanguage1 = new LearningLanguage({
+      id: 'LL1',
+      language: englishLanguage,
+      level: ProficiencyLevel.A0,
+      profile: profile1,
+      campus: lorraineCampus,
+      learningType: LearningType.TANDEM,
+      sameGender: true,
+      sameAge: true,
+    });
+    const learningLanguage2 = new LearningLanguage({
+      id: 'LL1',
+      language: frenchLanguage,
+      level: ProficiencyLevel.A0,
+      profile: profile2,
+      campus: lorraineCampus,
+      learningType: LearningType.TANDEM,
+      sameGender: true,
+      sameAge: true,
+    });
+
+    const res = matchScorer.computeMatchScore(
+      learningLanguage1,
+      learningLanguage2,
+      [frenchLanguage, englishLanguage],
+    );
+    expect(res.scores).toEqual({
+      level: 0,
+      age: 0,
+      status: 0,
+      goals: 0,
+      interests: 0,
+      meetingFrequency: 0,
+      certificateOption: 0,
+    });
+    expect(res.total).toBe(0);
+  });
 });

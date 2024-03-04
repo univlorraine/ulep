@@ -76,6 +76,12 @@ export class Match {
       });
     }
 
+    if (total !== 0 && props.scores.level === 0) {
+      throw new DomainError({
+        message: 'Langage score must be not null if total is not null',
+      });
+    }
+
     this.owner = props.owner;
     this.target = props.target;
     this.scores = props.scores;
