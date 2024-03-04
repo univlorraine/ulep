@@ -123,7 +123,7 @@ export class UpdateUserUsecase {
   }
 
   private async sendTandemCancelledEmails(tandem: Tandem) {
-    const universities = new Set<University>();
+    const universityIds = new Set<string>();
     const profiles = tandem.learningLanguages.map(
       (language) => language.profile,
     );
@@ -146,26 +146,26 @@ export class UpdateUserUsecase {
         }
       }
 
-      if (universities.has(profile.user.university)) {
-        continue;
-      }
-
-      if (profile.user.university.notificationEmail) {
-        try {
-          await this.emailGateway.sendTandemCanceledNoticeEmail({
-            to: profile.user.university.notificationEmail,
-            language: profile.user.university.country.code.toLowerCase(),
-            user: { ...profile.user, university: profile.user.university.name },
-            partner: { ...partner, university: partner.university.name },
-          });
-        } catch (error) {
-          this.logger.error(
-            `Error sending email to university ${profile.user.university.id} after tandem cancel: ${error}`,
-          );
+      if (!universityIds.has(profile.user.university.id)) {
+        if (profile.user.university.notificationEmail) {
+          try {
+            await this.emailGateway.sendTandemCanceledNoticeEmail({
+              to: profile.user.university.notificationEmail,
+              language: profile.user.university.country.code.toLowerCase(),
+              user: {
+                ...profile.user,
+                university: profile.user.university.name,
+              },
+              partner: { ...partner, university: partner.university.name },
+            });
+          } catch (error) {
+            this.logger.error(
+              `Error sending email to university ${profile.user.university.id} after tandem cancel: ${error}`,
+            );
+          }
         }
+        universityIds.add(profile.user.university.id);
       }
-
-      universities.add(profile.user.university);
     }
   }
 
