@@ -62,9 +62,6 @@ export class InstanceController {
       );
     }
 
-    console.log('url', url);
-    console.log('headers', headers);
-
     const result = await fetch(url, {
       headers,
     });

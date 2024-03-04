@@ -5,6 +5,7 @@ import {
     DeleteManyParams,
     DeleteParams,
     GetOneParams,
+    HttpError,
     UpdateParams,
     addRefreshAuthToDataProvider,
     fetchUtils,
@@ -45,6 +46,10 @@ const httpClientOptions = (options: any = {}) => {
 };
 
 const throwError = async (response: Response) => {
+    if (response.status === 401) {
+        return Promise.reject(new HttpError('Forbidden', response.status));
+    }
+
     const data = await response.json();
     if (data.message) {
         throw new Error(data.message, { cause: response.status });
@@ -84,7 +89,10 @@ const customDataProvider = {
         return { data: result };
     },
     update: async (resource: string, params: UpdateParams) => {
-        const url = new URL(`${process.env.REACT_APP_API_URL}/${resource}`);
+        let url = `${process.env.REACT_APP_API_URL}/${resource}`;
+        if (params.id) {
+            url += `/${params.id}`;
+        }
         let body;
 
         if (params.data instanceof FormData) {
@@ -93,7 +101,7 @@ const customDataProvider = {
             body = JSON.stringify(params.data);
         }
 
-        const response = await fetch(url, httpClientOptions({ method: 'PUT', body }));
+        const response = await fetch(new URL(url), httpClientOptions({ method: 'PATCH', body }));
 
         if (!response.ok) {
             await throwError(response);

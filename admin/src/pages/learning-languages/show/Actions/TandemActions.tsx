@@ -6,7 +6,7 @@ import useCreateTandem from './useCreateTandem';
 import useRefuseTandem from './useRefuseTandem';
 import useValidateTandem from './useValidateTandem';
 
-enum TandemAction {
+export enum TandemAction {
     ACCEPT = 'ACCEPT',
     REFUSE = 'REFUSE',
 }
@@ -14,7 +14,7 @@ enum TandemAction {
 interface TandemActionsProps {
     tandemId?: string;
     learningLanguageIds?: string[];
-    onTandemAction: () => void;
+    onTandemAction: (modalAction?: TandemAction) => void;
     relaunchGlobalRoutineOnRefuse?: boolean;
     relaunchGlobalRoutineOnAccept?: boolean;
     disableCreateButton?: boolean;
@@ -48,7 +48,7 @@ const TandemActions = ({
     };
 
     const onSuccess = async () => {
-        onTandemAction();
+        onTandemAction(modalAction);
         handleCloseModal();
     };
 

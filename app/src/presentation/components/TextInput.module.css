@@ -48,8 +48,6 @@
     font-size: 16px;
     font-family: 'Maven Pro', sans-serif;
     font-weight: 500;
-    padding-left: 16px;
-    width: calc(100% - 40px);
 }
 
 .input-error {
@@ -63,18 +61,12 @@
 }
 
 .input-wrapper {
-    border-radius: 5px;
-    height: 50px;
-    padding: 0px 16px;
-    width: 100%;
-    display: flex;
-    align-items: center;
+    --ion-background-color: transparent;
 }
 
 .area-text-wrapper {
     border-radius: 5px;
     height: 150px;
-    padding: 0px 16px;
     width: 100%;
     display: flex;
     align-items: center;
@@ -85,9 +77,14 @@
     font-size: 16px;
     font-family: 'Maven Pro', sans-serif;
     font-weight: 500;
-    flex-grow: 1;
     background-color: transparent;
     border: none;
+    width: 100%;
+    min-height: 50px;
+}
+
+.input input {
+    width: 100%;
 }
 
 input:focus {

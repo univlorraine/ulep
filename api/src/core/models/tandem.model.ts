@@ -69,6 +69,10 @@ export class Tandem {
       throw new InvalidTandemError('Tandem must have two different profiles');
     }
     
+    if (!profile1.user.university.isCentralUniversity() && !profile2.user.university.isCentralUniversity()) {
+      throw new InvalidTandemError('Tandem must concern at least one user from central university');
+    }
+    
     if (!this.learningLanguages[0].isCompatibleWithLearningLanguage(this.learningLanguages[1])) {
       throw new InvalidTandemError(`learningLanguage ${this.learningLanguages[0].id} doesn't match learningLanguages ${this.learningLanguages[1].id} languages`);
     }

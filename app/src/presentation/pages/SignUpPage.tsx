@@ -54,8 +54,8 @@ const SignUpPage: React.FC = () => {
     const isFormValid: boolean = university?.isCentral ?? false ? isLoggedIn && !isAFieldEmpty : !isAFieldEmpty;
 
     // Map list of University to list of DropDownItem.
-    const universities: { title: string; value: University }[] = (country?.universities || []).map((university) => ({
-        title: university.name,
+    const universities: DropDownItem<University>[] = (country?.universities || []).map((university) => ({
+        label: university.name,
         value: university,
     }));
 
@@ -69,7 +69,7 @@ const SignUpPage: React.FC = () => {
 
         return setCountries(
             countriesResult.map((country) => ({
-                title: `${country.emoji ? country.emoji + ' ' : ''}${country.name}`,
+                label: `${country.emoji ? country.emoji + ' ' : ''}${country.name}`,
                 value: country,
             }))
         );
@@ -232,6 +232,7 @@ const SignUpPage: React.FC = () => {
                             onChange={setDepartment}
                             title={t('signup_page.department_title')}
                             value={department}
+                            maxLength={50}
                         />
                     </div>
                 )}
@@ -241,11 +242,17 @@ const SignUpPage: React.FC = () => {
                         onChange={setStaffFunction}
                         title={t('signup_page.function_title')}
                         value={staffFunction}
+                        maxLength={50}
                     />
                 )}
                 {/* diploma selector */}
                 {university && selectedRole === 'STUDENT' && (
-                    <TextInput onChange={setDiploma} title={t('signup_page.diplome_title')} value={diploma} />
+                    <TextInput
+                        onChange={setDiploma}
+                        title={t('signup_page.diplome_title')}
+                        value={diploma}
+                        maxLength={50}
+                    />
                 )}
 
                 {displayError && <ErrorMessage description={t('signup_page.error')} />}

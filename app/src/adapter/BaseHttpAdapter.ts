@@ -9,11 +9,11 @@ export interface HttpResponse<T> extends Response {
 
 class BaseHttpAdapter {
     get(path: string, args: RequestInit = {}): Promise<Response> {
-        return this.http(path, { ...args, method: 'get' });
+        return this.http(path, { ...args, method: 'GET' });
     }
 
     delete(path: string, args: RequestInit = {}): Promise<Response> {
-        return this.http(path, { ...args, method: 'delete' });
+        return this.http(path, { ...args, method: 'DELETE' });
     }
 
     post(path: string, args: RequestInit = {}, body: Body = {}, contentType = 'application/json'): Promise<Response> {
@@ -27,13 +27,21 @@ class BaseHttpAdapter {
         } else {
             encodedBody = JSON.stringify(body);
         }
-        return this.http(path, { ...args, method: 'post', body: encodedBody }, contentType);
+        return this.http(path, { ...args, method: 'POST', body: encodedBody }, contentType);
     }
 
     put(path: string, args: RequestInit = {}, body: Body = {}): Promise<Response> {
         return this.http(path, {
             ...args,
-            method: 'put',
+            method: 'PUT',
+            body: JSON.stringify(body),
+        });
+    }
+
+    patch(path: string, args: RequestInit = {}, body: Body = {}): Promise<Response> {
+        return this.http(path, {
+            ...args,
+            method: 'PATCH',
             body: JSON.stringify(body),
         });
     }

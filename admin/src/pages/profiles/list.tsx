@@ -113,10 +113,9 @@ const ProfileList = (props: any) => {
     const notify = useNotify();
 
     const onUpdateUserStatus = async (id: string, status: UserStatus) => {
-        const payload = { id, status };
         await update(
             'users',
-            { data: payload },
+            { id, data: { status } },
             {
                 onSettled: (_, error: unknown) => {
                     if (!error) {

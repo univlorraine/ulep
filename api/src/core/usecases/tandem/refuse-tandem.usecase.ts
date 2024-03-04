@@ -1,6 +1,7 @@
+import { EMAIL_GATEWAY, EmailGateway } from 'src/core/ports/email.gateway';
 import { Inject, Injectable, Logger } from '@nestjs/common';
 import { DomainError, RessourceDoesNotExist } from 'src/core/errors';
-import { RefusedTandem, TandemStatus } from 'src/core/models';
+import { RefusedTandem, Tandem, TandemStatus } from 'src/core/models';
 import {
   LEARNING_LANGUAGE_REPOSITORY,
   LearningLanguageRepository,
@@ -40,6 +41,8 @@ export class RefuseTandemUsecase {
     private readonly uuidProvider: UuidProvider,
     @Inject(REFUSED_TANDEMS_REPOSITORY)
     private readonly refusedTandemsRepository: RefusedTandemsRepository,
+    @Inject(EMAIL_GATEWAY)
+    private readonly emailGateway: EmailGateway,
   ) {}
 
   async execute(command: RefuseTandemCommand): Promise<void> {
@@ -63,7 +66,7 @@ export class RefuseTandemUsecase {
       this.logger.verbose(
         `Found tandem ${existingTandem.id} with status ${
           existingTandem.status
-        } while refusing tandem for learningLanuguages ${learningLanguageIds.join(
+        } while refusing tandem for learningLanguages ${learningLanguageIds.join(
           ', ',
         )}`,
       );
@@ -73,7 +76,8 @@ export class RefuseTandemUsecase {
         });
       }
 
-      this.tandemRepository.delete(existingTandem.id);
+      await this.tandemRepository.delete(existingTandem.id);
+      this.sendTandemCancelledEmails(existingTandem);
     }
 
     const refusedTandem = new RefusedTandem({
@@ -92,5 +96,52 @@ export class RefuseTandemUsecase {
     }
 
     return LearningLanguage;
+  }
+
+  private async sendTandemCancelledEmails(tandem: Tandem) {
+    const universityIds = new Set<string>();
+    const profiles = tandem.learningLanguages.map(
+      (language) => language.profile,
+    );
+
+    for (const profile of profiles) {
+      const partner = profiles.find((p) => p.id !== profile.id).user;
+
+      if (profile.user.acceptsEmail) {
+        try {
+          await this.emailGateway.sendTandemCanceledEmail({
+            to: profile.user.email,
+            language: profile.nativeLanguage.code,
+            user: { ...profile.user, university: profile.user.university.name },
+            partner: { ...partner, university: partner.university.name },
+          });
+        } catch (error) {
+          this.logger.error(
+            `Error sending email to user ${profile.user.id} after tandem refused: ${error}`,
+          );
+        }
+      }
+
+      if (!universityIds.has(profile.user.university.id)) {
+        if (profile.user.university.notificationEmail) {
+          try {
+            await this.emailGateway.sendTandemCanceledNoticeEmail({
+              to: profile.user.university.notificationEmail,
+              language: profile.user.university.country.code.toLowerCase(),
+              user: {
+                ...profile.user,
+                university: profile.user.university.name,
+              },
+              partner: { ...partner, university: partner.university.name },
+            });
+          } catch (error) {
+            this.logger.error(
+              `Error sending email to university ${profile.user.university.id} after tandem refused: ${error}`,
+            );
+          }
+        }
+        universityIds.add(profile.user.university.id);
+      }
+    }
   }
 }

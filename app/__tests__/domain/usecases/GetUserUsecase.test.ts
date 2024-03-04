@@ -1,31 +1,9 @@
-import UserCommand from '../../../src/command/UserCommand';
 import User from '../../../src/domain/entities/User';
 import GetUserUsecase from '../../../src/domain/usecases/GetUserUsecase';
+import userResult from '../../fixtures/user';
 import DomainHttpAdapter from '../../mocks/adapters/HttpAdapter';
 
-const payload: UserCommand = {
-    id: 'userId',
-    avatar: { id: 'avatarId', mimeType: 'image/png' },
-    acceptsEmail: true,
-    email: 'email',
-    firstname: 'firstname',
-    lastname: 'lastname',
-    university: {
-        id: 'universityId',
-        name: 'name',
-        parent: undefined,
-        sites: [],
-        hasCode: true,
-        timezone: 'timezone',
-        website: 'site',
-        admissionStart: new Date('2023-01-01T00:00:00.000Z'),
-        admissionEnd: new Date('2023-12-31T00:00:00.000Z'),
-        openServiceDate: new Date('2023-01-01T00:00:00.000Z'),
-        closeServiceDate: new Date('2023-01-01T00:00:00.000Z'),
-        maxTandemsPerUser: 3,
-    },
-    status: 'ACTIVE',
-};
+const payload = userResult;
 
 describe('getUser', () => {
     let adapter: DomainHttpAdapter;

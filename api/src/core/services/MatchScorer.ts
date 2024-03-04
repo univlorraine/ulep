@@ -155,11 +155,16 @@ export class MatchScorer implements IMatchScorer {
       return new Match({ owner: learningLanguage1, target: learningLanguage2, scores: MatchScores.empty() });
     }
 
+    const languageScore = this.computeLearningCompatibility(learningLanguage1, learningLanguage2);
+    if (languageScore === 0) {
+      return new Match({ owner: learningLanguage1, target: learningLanguage2, scores: MatchScores.empty() });
+    }
+
     // Check if age bonus should be applied (i.e. if one of the two profiles is looking for a partner of the same age)
     const shouldApplyAgeBonus = learningLanguage1.sameAge || learningLanguage2.sameAge;
 
     const scores: MatchScores = new MatchScores({
-      level: this.computeLearningCompatibility(learningLanguage1, learningLanguage2),
+      level: languageScore,
       age: shouldApplyAgeBonus ? this.computeAgeBonus(profile1, profile2) : 0,
       status: this.computeSameRolesBonus(profile1, profile2),
       goals: this.computeSameGoalsBonus(profile1, profile2),
