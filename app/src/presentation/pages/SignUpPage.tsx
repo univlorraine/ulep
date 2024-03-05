@@ -179,25 +179,30 @@ const SignUpPage: React.FC = () => {
                     onPressed={() => setSelectedRole('STAFF')}
                     name={t('signup_page.staff_role')}
                 />
-                {/* Country selector */}
-                <div className="large-margin-top">
-                    <Dropdown<Country>
-                        onChange={onCountrySelected}
-                        options={countries}
-                        placeholder={country?.name || t('signup_page.country_placeholder')}
-                        title={t('global.country')}
-                    />
-                </div>
-                {/* University selector */}
-                {universities.length > 0 && (
-                    <div className="large-margin-top">
-                        <Dropdown<University>
-                            onChange={setUniversity}
-                            options={universities}
-                            title={t('signup_page.university_title')}
-                        />
-                    </div>
+                {(!university || !isLoggedIn) && (
+                    <>
+                        {/* Country selector */}
+                        <div className="large-margin-top">
+                            <Dropdown<Country>
+                                onChange={onCountrySelected}
+                                options={countries}
+                                placeholder={country?.name || t('signup_page.country_placeholder')}
+                                title={t('global.country')}
+                            />
+                        </div>
+                        {/* University selector */}
+                        {universities.length > 0 && (
+                            <div className="large-margin-top">
+                                <Dropdown<University>
+                                    onChange={setUniversity}
+                                    options={universities}
+                                    title={t('signup_page.university_title')}
+                                />
+                            </div>
+                        )}
+                    </>
                 )}
+
                 {/* Loggin button */}
                 {university && university.isCentral && !isLoggedIn && (
                     <button
