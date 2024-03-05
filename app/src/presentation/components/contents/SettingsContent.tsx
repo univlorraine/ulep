@@ -8,7 +8,7 @@ import { useStoreActions, useStoreState } from '../../../store/storeTypes';
 import Dropdown from '../DropDown';
 import styles from './SettingsContent.module.css';
 import ConfirmModal from '../modals/ConfirmModal';
-import { Browser } from '@capacitor/browser';
+import { openBrowserHref } from '../../utils';
 
 interface SettingsContentProps {
     onBackPressed: () => void;
@@ -25,10 +25,6 @@ const SettingsContent: React.FC<SettingsContentProps> = ({ onBackPressed, onDisc
     const updateProfile = useStoreActions((state) => state.updateProfile);
     const [emailNotificationStatus, setEmailNotificationStatus] = useState<boolean>(profile!.user.acceptsEmail);
     const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
-
-    const openBrowser = (url: string) => async () => {
-        await Browser.open({ url });
-    };
 
     const LANGUAGES = [
         { label: t('languages.french'), value: 'fr' },
@@ -88,12 +84,17 @@ const SettingsContent: React.FC<SettingsContentProps> = ({ onBackPressed, onDisc
                     checkedIcon={false}
                 />
             </button>
-            <a onClick={openBrowser(configuration.confidentialityUrl)} className={styles['setting-container']}>
+            <a
+                href={configuration.confidentialityUrl}
+                onClick={openBrowserHref}
+                className={styles['setting-container']}
+            >
                 <span>{t('home_page.settings.confidentiality')}</span>
                 <img alt="right-arrow" src={ArrowRightSvg} />
             </a>
             <a
-                onClick={openBrowser(configuration.cguUrl)}
+                href={configuration.cguUrl}
+                onClick={openBrowserHref}
                 className={`${styles['setting-container']} large-margin-bottom`}
             >
                 <span>{t('home_page.settings.CGU')}</span>

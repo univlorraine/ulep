@@ -1,3 +1,5 @@
+import { Browser } from '@capacitor/browser';
+
 const countriesCodeWithFlags: [string, string][] = [
     ['aa', '🇪🇹'], // Afar - Ethiopia
     ['ab', '🇬🇪'], // Abkhaz - Georgia
@@ -227,6 +229,13 @@ export const isDomainValid = (email: string, domains: string[]) => {
 
 export const isCodeValid = (code: string, codesToCheck: string[]) => {
     return codesToCheck.some((codeToCheck) => codeToCheck === code);
+};
+
+export const openBrowser = (url: string, windowName: string = '_blank') => Browser.open({ url, windowName });
+
+export const openBrowserHref = async (event: React.MouseEvent<HTMLElement>): Promise<void> => {
+    event.preventDefault();
+    await openBrowser((event.target as HTMLAnchorElement).href);
 };
 
 export const compareArrays = (a: unknown[], b: unknown[]) => JSON.stringify(a) == JSON.stringify(b);
