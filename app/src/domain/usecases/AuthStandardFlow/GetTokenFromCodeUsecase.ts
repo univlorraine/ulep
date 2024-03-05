@@ -28,7 +28,7 @@ export class GetTokenFromCodeUsecase implements GetTokenFromCodeUsecaseInterface
                 false
             );
 
-            if (httpResponse.ok && httpResponse.status === 401) {
+            if (!httpResponse.ok && httpResponse.status === 401) {
                 return new Error('errors.userWrongCredentials');
             }
 
