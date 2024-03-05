@@ -197,6 +197,7 @@
         }
     },
     "profiles": {
+        "export": "Export",
         "availabilities": "Availabilities",
         "availabilities_note": "Availabilities note",
         "biography": {
