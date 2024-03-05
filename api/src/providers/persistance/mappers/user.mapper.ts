@@ -43,5 +43,9 @@ export const userMapper = (snapshot: UserSnapshot): User => {
     staffFunction: snapshot.staff_function,
     status: snapshot.status as UserStatus,
     acceptsEmail: snapshot.accepts_email,
+    deactivated: snapshot.deactivated,
+    createdAt: snapshot.created_at,
+    updatedAt: snapshot.updated_at,
+    // TODO(NOW+1): check date doesn't need parsing
   });
 };

@@ -40,6 +40,7 @@ export const learningLanguageMapper = (
     level: ProficiencyLevel[instance.level],
     profile: profileMapper(instance.Profile),
     createdAt: instance.created_at,
+    updatedAt: instance.updated_at,
     learningType: LearningType[instance.learning_type],
     sameAge: instance.same_age,
     sameGender: instance.same_gender,
@@ -71,12 +72,14 @@ export const learningLanguageWithTandemMapper = (
     level: ProficiencyLevel[instance.level],
     profile: profileMapper(instance.Profile),
     createdAt: instance.created_at,
+    updatedAt: instance.updated_at,
     learningType: LearningType[instance.learning_type],
     sameAge: instance.same_age,
     sameGender: instance.same_gender,
     campus: instance.Campus && campusMapper(instance.Campus),
     certificateOption: instance.certificate_option,
     specificProgram: instance.specific_program,
+    // TODO(NOW+1): base this method on learningLanguageMapper
     tandem:
       instance.Tandem &&
       new Tandem({

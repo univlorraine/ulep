@@ -49,35 +49,25 @@ export type CreateProfileProps = {
   availabilitiesNote?: string;
   availavilitiesNotePrivacy?: boolean;
   biography?: { [key: string]: string };
-  createdAt?: Date;
+  createdAt: Date;
+  updatedAt?: Date;
 };
 
 export class Profile {
   readonly id: string;
-
   readonly user: User;
-
   readonly nativeLanguage: Language;
-
   readonly masteredLanguages: Language[];
-
   readonly learningLanguages: LearningLanguage[];
-
   readonly meetingFrequency: MeetingFrequency;
-
   readonly objectives: LearningObjective[];
-
   readonly interests: Interest[];
-
   readonly availabilities?: Availabilites;
-
   readonly availabilitiesNote?: string;
-
   readonly availavilitiesNotePrivacy?: boolean;
-
   readonly biography?: { [key: string]: string };
-
-  readonly createdAt?: Date;
+  readonly createdAt: Date;
+  readonly updatedAt?: Date;
 
   constructor(props: CreateProfileProps) {
     const learningLanguages = [...props.learningLanguages].map(
@@ -103,6 +93,7 @@ export class Profile {
     this.interests = [...props.interests];
     this.biography = props.biography;
     this.createdAt = props.createdAt;
+    this.updatedAt = props.updatedAt;
 
     this.assertLanguesAreUnique();
   }

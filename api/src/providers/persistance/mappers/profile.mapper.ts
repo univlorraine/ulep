@@ -110,5 +110,6 @@ export const profileMapper = (instance: ProfileSnapshot): Profile => {
       anecdote: instance.bio['anecdote'],
     },
     createdAt: instance.created_at,
+    updatedAt: instance.updated_at,
   });
 };

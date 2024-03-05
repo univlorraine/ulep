@@ -5,12 +5,14 @@ import {
   Controller,
   Delete,
   Get,
+  Header,
   Param,
   ParseUUIDPipe,
   Patch,
   Post,
   Put,
   Query,
+  StreamableFile,
   UploadedFile,
   UseGuards,
   UseInterceptors,
@@ -29,6 +31,7 @@ import {
   GetUsersUsecase,
   UpdateAdministratorUsecase,
   UpdateUserUsecase,
+  GetUserData,
 } from '../../core/usecases/user';
 import { CollectionResponse, CurrentUser } from '../decorators';
 import { Role, Roles } from '../decorators/roles.decorator';
@@ -47,6 +50,8 @@ import { User } from 'src/core/models';
 import { GetAdministratorsQueryParams } from 'src/api/dtos/users/administrators-filter';
 import { RevokeSessionsUsecase } from 'src/core/usecases/user/revoke-sessions.usecase';
 import { OwnerAllowed } from '../decorators/owner.decorator';
+import { stringify } from 'csv-stringify';
+import { profileToCsv } from '../dtos/profiles/profile-to-csv';
 
 @Controller('users')
 @Swagger.ApiTags('Users')
@@ -64,6 +69,7 @@ export class UserController {
     private readonly updateAdministratorUsecase: UpdateAdministratorUsecase,
     private readonly deleteAdministratorUsecase: DeleteAdministratorUsecase,
     private readonly revokeSessionsUsecase: RevokeSessionsUsecase,
+    private readonly getUserData: GetUserData,
   ) {}
 
   @Post()
@@ -213,5 +219,19 @@ export class UserController {
   @Swagger.ApiOkResponse()
   remove(@Param('id', ParseUUIDPipe) id: string) {
     return this.deleteUserUsecase.execute({ id });
+  }
+
+  @Get(':id/export')
+  @Roles(Role.ADMIN)
+  @UseGuards(AuthenticationGuard)
+  @Header('Content-Type', 'text/csv')
+  @Header('Content-Disposition', 'attachment; filename="test.csv"')
+  @Swagger.ApiOperation({ summary: 'Export user data.' })
+  // @Swagger.ApiOkResponse({ type: any }) // TODO(NOW)
+  async exportOne(@Param('id', ParseUUIDPipe) id: string) {
+    const profileData = await this.getUserData.execute(id);
+    const content = profileToCsv(profileData.profile);
+    const csv = stringify(content);
+    return new StreamableFile(csv);
   }
 }
