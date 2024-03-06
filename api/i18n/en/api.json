@@ -31,13 +31,22 @@
             "learning_request_same_age": "Request is same age",
             "learning_request_certificate_option": "Request with certificate",
             "learning_request_specific_program": "Request with specific program",
-            "associated_tandem_status": "Active tandem status",
-            "associated_tandem_creation_date": "Active tandem creation date",
+            "has_associated_tandem": "Has active tandem",
+            "associated_tandem_creation_date": "Tandem creation date",
             "goals": "Goals",
             "interests": "Interests",
             "meeting_frequency": "Meeting frequency",
-            "bio": "Biography",
-            "availabilities": "Availabilities",
+            "bio_superpower": "Bio superpower",
+            "bio_favorite_place": "Bio favorite place",
+            "bio_experience": "Bio experience",
+            "bio_anecdote": "Bio anecdote",
+            "monday_availabilities": "Monday availability",
+            "tuesday_availabilities": "Tuesday availability",
+            "wednesday_availabilities": "Wednesday availability",
+            "thursday_availabilities": "Thursday availability",
+            "friday_availabilities": "Friday availability",
+            "saturday_availabilities": "Saturday availability",
+            "sunday_availabilities": "Sunday availability",
             "availabilities_note": "Availabilities note",
             "availabilities_note_is_private": "Availabilities note is private",
             "profile_created_at": "Profile creation date",
@@ -76,6 +85,11 @@
                 "THREE_TIMES_A_WEEK": "Three times a week",
                 "TWICE_A_MONTH": "Twice a month",
                 "THREE_TIMES_A_MONTH": "Three times a month"
+            },
+            "availabilities": {
+                "UNAVAILABLE": "Unavailable",
+                "AVAILABLE": "Available",
+                "VERY_AVAILABLE": "Very available"
             }
         }
     }

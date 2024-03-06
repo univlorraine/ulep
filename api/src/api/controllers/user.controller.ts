@@ -285,6 +285,15 @@ export class UserController {
               case 'learning_request_type':
                 key = 'learningType';
                 break;
+              case 'monday_availabilities':
+              case 'tuesday_availabilities':
+              case 'wednesday_availabilities':
+              case 'thursday_availabilities':
+              case 'friday_availabilities':
+              case 'saturday_availabilities':
+              case 'sunday_availabilities':
+                key = 'availabilities';
+                break;
             }
             if (key) {
               return this.i18n.translate(`api.export.values.${key}.${value}`, {

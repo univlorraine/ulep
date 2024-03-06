@@ -36,8 +36,17 @@
             "goals": "Objectifs",
             "interests": "Intérêts",
             "meeting_frequency": "Fréquence de RDV",
-            "bio": "Biographie",
-            "availabilities": "Disponibilités",
+            "bio_superpower": "Bio super-pouvoir",
+            "bio_favorite_place": "Bio lieu préféré",
+            "bio_experience": "Bio expérience",
+            "bio_anecdote": "Bio anecdote",
+            "monday_availabilities": "Disponibilité lundi",
+            "tuesday_availabilities": "Disponibilité mardi",
+            "wednesday_availabilities": "Disponibilité mercredi",
+            "thursday_availabilities": "Disponibilité jeudi",
+            "friday_availabilities": "Disponibilité vendredi",
+            "saturday_availabilities": "Disponibilité samedi",
+            "sunday_availabilities": "Disponibilité dimanche",
             "availabilities_note": "Note de disponibilité",
             "availabilities_note_is_private": "Note de disponibilité est privée",
             "profile_created_at": "Date de création profil",
@@ -76,6 +85,11 @@
                 "THREE_TIMES_A_WEEK": "Trois fois par semaine",
                 "TWICE_A_MONTH": "Deux fois par mois",
                 "THREE_TIMES_A_MONTH": "trois fois par mois"
+            },
+            "availabilities": {
+                "UNAVAILABLE": "Non disponible",
+                "AVAILABLE": "Disponible",
+                "VERY_AVAILABLE": "Très disponible"
             }
         }
     }

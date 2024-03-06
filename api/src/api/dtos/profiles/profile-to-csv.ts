@@ -36,8 +36,17 @@ const profileToExportInfos = (profile: Profile) => ({
   goals: profile.objectives,
   interests: profile.interests,
   meeting_frequency: profile.meetingFrequency,
-  bio: JSON.stringify(profile.biography),
-  availabilities: JSON.stringify(profile.availabilities),
+  bio_superpower: profile.biography['superpower'],
+  bio_favorite_place: profile.biography['favoritePlace'],
+  bio_experience: profile.biography['experience'],
+  bio_anecdote: profile.biography['anecdote'],
+  monday_availabilities: profile.availabilities['monday'],
+  tuesday_availabilities: profile.availabilities['tuesday'],
+  wednesday_availabilities: profile.availabilities['wednesday'],
+  thursday_availabilities: profile.availabilities['thursday'],
+  friday_availabilities: profile.availabilities['friday'],
+  saturday_availabilities: profile.availabilities['saturday'],
+  sunday_availabilities: profile.availabilities['sunday'],
   availabilities_note: profile.availabilitiesNote,
   availabilities_note_is_private: !!profile.availavilitiesNotePrivacy,
   profile_created_at: profile.createdAt,
@@ -95,11 +104,11 @@ export const profileToCsv = ({
     }, {});
 
   // TODO(NOW): test historized tandems --> ID des anciens tandems ? ID / date creation + langue apprentisage
-  // TODO(NOW): translate availabilities / bio
   // TODO(NOW): staffFunction / degree only if staff / student
-  // TODO(NOW): translate dynamic values
   // TODO(NOW): translate languages names
   // TODO(NOW+1): return type ?
+
+  // {"superpower":"","favoritePlace":"","experience": "!","anecdote":""}
 
   const baseData = {
     ...userToExportInfos(user),
