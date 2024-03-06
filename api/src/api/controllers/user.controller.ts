@@ -52,6 +52,7 @@ import { RevokeSessionsUsecase } from 'src/core/usecases/user/revoke-sessions.us
 import { OwnerAllowed } from '../decorators/owner.decorator';
 import { stringify } from 'csv-stringify';
 import { profileToCsv } from '../dtos/profiles/profile-to-csv';
+import { I18nService } from 'nestjs-i18n';
 
 @Controller('users')
 @Swagger.ApiTags('Users')
@@ -70,6 +71,7 @@ export class UserController {
     private readonly deleteAdministratorUsecase: DeleteAdministratorUsecase,
     private readonly revokeSessionsUsecase: RevokeSessionsUsecase,
     private readonly getUserData: GetUserData,
+    private readonly i18n: I18nService,
   ) {}
 
   @Post()
@@ -228,9 +230,47 @@ export class UserController {
   @Header('Content-Disposition', 'attachment; filename="test.csv"')
   @Swagger.ApiOperation({ summary: 'Export user data.' })
   async exportOne(@Param('id', ParseUUIDPipe) id: string) {
-    const profileData = await this.getUserData.execute(id);
-    const content = profileToCsv(profileData);
-    const csv = stringify(content);
+    const userData = await this.getUserData.execute(id);
+    const content = profileToCsv(userData);
+
+    const userLanguage = userData.profile.nativeLanguage.code;
+    const csv = stringify(content, {
+      header: true,
+      cast: {
+        boolean: (value) =>
+          this.i18n.translate(`api.export.values.${value ? 'true' : 'false'}`, {
+            lang: userLanguage,
+          }),
+        date: (value) => new Intl.DateTimeFormat(userLanguage).format(value),
+        string: (value, { header, column }) => {
+          if (header) {
+            return this.i18n.translate(`api.export.headers.${value}`, {
+              lang: userLanguage,
+            });
+          } else {
+            let key: string;
+            switch (column) {
+              case 'gender':
+              case 'role':
+              case 'status':
+              case 'meeting_frequency':
+                key = column;
+                break;
+              case 'learning_request_type':
+                key = 'learningType';
+                break;
+            }
+            if (key) {
+              return this.i18n.translate(`api.export.values.${key}.${value}`, {
+                lang: userLanguage,
+              });
+            } else {
+              return value;
+            }
+          }
+        },
+      },
+    });
     return new StreamableFile(csv);
   }
 }

@@ -313,7 +313,7 @@ export class PrismaTandemRepository implements TandemRepository {
       where: {
         user_id: userId,
       },
-      // include: HistorizedTandemRelation,
+      include: HistorizedTandemRelation,
     });
     return res.map(historizedTandemMapper);
   }

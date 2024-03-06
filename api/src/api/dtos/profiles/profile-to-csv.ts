@@ -15,16 +15,32 @@ const userToExportInfos = (user: User) => ({
   gender: user.gender,
   role: user.role,
   status: user.status,
-  user_deactivated: user.deactivated?.toString(),
+  user_deactivated: !!user.deactivated,
   deactivated_reason: user.deactivatedReason,
-  accepts_email: user.acceptsEmail.toString(),
+  accepts_email: !!user.acceptsEmail,
   division: user.division,
   diploma: user.diploma,
-  staff_function: user.role,
+  staff_function: user.staffFunction,
   user_created_at: user.createdAt,
   user_last_update: user.updatedAt,
   university: user.university.name,
   nationality: user.country,
+});
+
+const profileToExportInfos = (profile: Profile) => ({
+  native_language: profile.nativeLanguage.code,
+  mastered_languages: profile.masteredLanguages.map(
+    (language) => language.code,
+  ),
+  goals: profile.objectives.map((objective) => objective.name.content),
+  interests: profile.interests.map((interest) => interest.name.content),
+  meeting_frequency: profile.meetingFrequency,
+  bio: JSON.stringify(profile.biography),
+  availabilities: JSON.stringify(profile.availabilities),
+  availabilities_note: profile.availabilitiesNote,
+  availabilities_note_is_private: !!profile.availavilitiesNotePrivacy,
+  profile_created_at: profile.createdAt,
+  profile_last_update: profile.updatedAt,
 });
 
 const learningLanguageToExportInfos = (
@@ -38,33 +54,14 @@ const learningLanguageToExportInfos = (
     learning_request_level: learningLanguage.level,
     learning_request_type: learningLanguage.learningType,
     learning_request_campus: learningLanguage.campus?.name,
-    learning_request_same_gender: learningLanguage.sameGender.toString(),
-    learning_request_same_age: learningLanguage.sameAge.toString(),
-    learning_request_certificate_option:
-      learningLanguage.certificateOption?.toString(),
-    learning_request_specific_program:
-      learningLanguage.specificProgram?.toString(),
-    has_associated_tandem: (!!associatedTandem).toString(),
-    associated_tandem_status: associatedTandem?.status,
+    learning_request_same_gender: !!learningLanguage.sameGender,
+    learning_request_same_age: !!learningLanguage.sameAge,
+    learning_request_certificate_option: !!learningLanguage.certificateOption,
+    learning_request_specific_program: !!learningLanguage.specificProgram,
+    has_associated_tandem: !!associatedTandem,
     associated_tandem_creation_date: associatedTandem?.createdAt,
   };
 };
-
-const profileToExportInfos = (profile: Profile) => ({
-  native_language: profile.nativeLanguage.code,
-  mastered_languages: profile.masteredLanguages.map(
-    (language) => language.code,
-  ),
-  goals: profile.objectives.map((objective) => objective.name.content),
-  interests: profile.interests.map((interest) => interest.name.content),
-  meeting_frequency: profile.meetingFrequency,
-  bio: JSON.stringify(profile.biography),
-  availabilities: JSON.stringify(profile.availabilities),
-  availabilities_note: profile.availabilitiesNote,
-  availabilities_note_is_private: profile.availavilitiesNotePrivacy?.toString(),
-  profile_created_at: profile.createdAt,
-  profile_last_update: profile.updatedAt,
-});
 
 interface ActiveTandemPerLearningLanguageId {
   [key: string]: Tandem;
@@ -84,7 +81,10 @@ export const profileToCsv = ({
   languagesSuggestedByUser: SuggestedLanguage[];
   activeTandems: Tandem[];
   historizedTandems: HistorizedTandem[];
-}): (string | number | boolean | Date | string[])[][] => {
+}): any => {
+  console.log('AVATAR', user.avatar);
+
+  // }): (string | number | boolean | Date | string[])[][] => {
   const activeTandemsInfosPerLearningLanguageId =
     activeTandems.reduce<ActiveTandemPerLearningLanguageId>((acc, tandem) => {
       const currentUserLearningLanguage = tandem.learningLanguages.find(
@@ -96,10 +96,15 @@ export const profileToCsv = ({
 
   // TODO(NOW): test historized tandems --> ID des anciens tandems ? ID / date creation + langue apprentisage
   // TODO(NOW): Ajouter avatar (URL) si possible
+  // TODO(NOW): check only ACTIVE TANDEMS
+  // TODO(NOW): translate availabilities / bio
+  // TODO(NOW): staffFunction / degree only if staff / student
+  // TODO(NOW): translate dynamic values
+  // TODO(NOW): translate languages names
 
   const baseData = {
     ...userToExportInfos(user),
-    is_blacklisted: isBlacklisted.toString(),
+    is_blacklisted: !!isBlacklisted,
     suggested_languages: languagesSuggestedByUser.map((suggestedLanguage) =>
       JSON.stringify({
         code: suggestedLanguage.language.code,
@@ -121,17 +126,9 @@ export const profileToCsv = ({
         ),
       }),
     );
-    return [
-      Object.keys(dataWithLearningLanguages[0]),
-      ...dataWithLearningLanguages.map((data) =>
-        Object.values(data).map((val) => (val === null ? undefined : val)),
-      ),
-    ];
+    return dataWithLearningLanguages;
   } else {
-    return [
-      Object.keys(baseData),
-      Object.values(baseData).map((val) => (val === null ? undefined : val)),
-    ];
+    return baseData;
   }
 
   // TODO(NOW): use cast to tranform array, dates, bool etc

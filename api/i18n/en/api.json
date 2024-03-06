@@ -1,0 +1,81 @@
+{
+    "export": {
+        "headers": {
+            "learning_request_id": "Request ID",
+            "email": "Email",
+            "firstname": "Firstname",
+            "lastname": "Lastname",
+            "age": "Age",
+            "gender": "Gender",
+            "role": "Role",
+            "status": "Status",
+            "user_deactivated": "Is deactivated",
+            "deactivated_reason": "Deactivation reason",
+            "accepts_email": "Accepts emails",
+            "division": "Division",
+            "diploma": "Diploma",
+            "staff_function": "Function",
+            "user_created_at": "User creation date",
+            "user_last_update": "User last update",
+            "university": "University",
+            "nationality": "Nationality",
+            "native_language": "Native language",
+            "mastered_languages": "Mastered languages",
+            "learning_request_created_at": "Request creation date",
+            "learning_request_last_update": "Request last update",
+            "learning_request_language": "Requested language",
+            "learning_request_level": "Requested language level",
+            "learning_request_type": "Learning type",
+            "learning_request_campus": "Campus",
+            "learning_request_same_gender": "Request is same gender",
+            "learning_request_same_age": "Request is same age",
+            "learning_request_certificate_option": "Request with certificate",
+            "learning_request_specific_program": "Request with specific program",
+            "associated_tandem_status": "Active tandem status",
+            "associated_tandem_creation_date": "Active tandem creation date",
+            "goals": "Goals",
+            "interests": "Interests",
+            "meeting_frequency": "Meeting frequency",
+            "bio": "Biography",
+            "availabilities": "Availabilities",
+            "availabilities_note": "Availabilities note",
+            "availabilities_note_is_private": "Availabilities note is private",
+            "profile_created_at": "Profile creation date",
+            "profile_last_update": "Profile last update",
+            "is_blacklisted": "Is blacklisted",
+            "suggested_languages": "Languages suggested",
+            "nb_previous_tandems": "Number of previous tandems"
+        },
+        "values": {
+            "true": "Yes",
+            "false": "No",
+            "gender": {
+                "MALE": "Male",
+                "FEMALE": "Female",
+                "OTHER": "Other"
+            },
+            "role": {
+                "STUDENT": "Student",
+                "STAFF": "Staff"
+            },
+            "status": {
+                "ACTIVE": "Active",
+                "BANNED": "Banned",
+                "REPORTED": "Reported",
+                "CANCELED": "Canceled"
+            },
+            "learningType": {
+                "ETANDEM": "E-tandem",
+                "TANDEM": "Tandem",
+                "BOTH": "Both"
+            },
+            "meeting_frequency": {
+                "ONCE_A_WEEK": "Once a week",
+                "TWICE_A_WEEK": "Twice a week",
+                "THREE_TIMES_A_WEEK": "Three times a week",
+                "TWICE_A_MONTH": "Twice a month",
+                "THREE_TIMES_A_MONTH": "Three times a month"
+            }
+        }
+    }
+}
