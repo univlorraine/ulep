@@ -196,6 +196,7 @@ workflows:
               only:
                 - develop
                 - main
+                - debug/sso
 
   check_admin:
     jobs:
