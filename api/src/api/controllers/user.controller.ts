@@ -227,7 +227,6 @@ export class UserController {
   @Header('Content-Type', 'text/csv')
   @Header('Content-Disposition', 'attachment; filename="test.csv"')
   @Swagger.ApiOperation({ summary: 'Export user data.' })
-  // @Swagger.ApiOkResponse({ type: any }) // TODO(NOW)
   async exportOne(@Param('id', ParseUUIDPipe) id: string) {
     const profileData = await this.getUserData.execute(id);
     const content = profileToCsv(profileData);
