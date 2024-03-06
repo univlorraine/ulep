@@ -196,7 +196,6 @@ workflows:
               only:
                 - develop
                 - main
-                - debug/sso
 
   check_admin:
     jobs:
@@ -211,6 +210,7 @@ workflows:
               only:
                 - develop
                 - main
+
   build_webapp:
     jobs:
       - build-docker-webapp:
@@ -220,6 +220,7 @@ workflows:
                 - develop
                 - main
 
+
   build_auth:
     jobs:
       - build-docker-auth:
@@ -228,4 +229,5 @@ workflows:
               only:
                 - develop
                 - main
+
 
