@@ -6,6 +6,7 @@ import {
   Delete,
   Get,
   Header,
+  Inject,
   Param,
   ParseUUIDPipe,
   Patch,
@@ -53,10 +54,19 @@ import { OwnerAllowed } from '../decorators/owner.decorator';
 import { stringify } from 'csv-stringify';
 import { profileToCsv } from '../dtos/profiles/profile-to-csv';
 import { I18nService } from 'nestjs-i18n';
+import {
+  STORAGE_INTERFACE,
+  StorageInterface,
+} from 'src/core/ports/storage.interface';
+import { ConfigService } from '@nestjs/config';
+import { Env } from 'src/configuration';
 
 @Controller('users')
 @Swagger.ApiTags('Users')
 export class UserController {
+  // Expiration time for presigned url
+  #expirationTime: number;
+
   constructor(
     private readonly createUserUsecase: CreateUserUsecase,
     private readonly uploadAvatarUsecase: UploadAvatarUsecase,
@@ -72,7 +82,11 @@ export class UserController {
     private readonly revokeSessionsUsecase: RevokeSessionsUsecase,
     private readonly getUserPersonalData: GetUserPersonalData,
     private readonly i18n: I18nService,
-  ) {}
+    @Inject(STORAGE_INTERFACE) private readonly storage: StorageInterface,
+    env: ConfigService<Env, true>,
+  ) {
+    this.#expirationTime = env.get('SIGNED_URL_EXPIRATION_IN_SECONDS');
+  }
 
   @Post()
   @UseInterceptors(FileInterceptor('file'))
@@ -231,7 +245,18 @@ export class UserController {
   @Swagger.ApiOperation({ summary: 'Export user data.' })
   async exportOne(@Param('id', ParseUUIDPipe) id: string) {
     const userData = await this.getUserPersonalData.execute(id);
-    const content = profileToCsv(userData);
+    const avatarSignedUrl = userData.user.avatar
+      ? await this.storage.temporaryUrl(
+          userData.user.avatar.bucket,
+          userData.user.avatar.name,
+          this.#expirationTime,
+        )
+      : undefined;
+
+    const content = profileToCsv({
+      ...userData,
+      avatarSignedUrl,
+    });
 
     const userLanguage = userData.profile.nativeLanguage.code;
     const csv = stringify(content, {

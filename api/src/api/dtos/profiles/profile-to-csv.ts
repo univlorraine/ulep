@@ -74,6 +74,7 @@ export const profileToCsv = ({
   languagesSuggestedByUser,
   activeTandems,
   historizedTandems,
+  avatarSignedUrl,
 }: {
   user: User;
   isBlacklisted: boolean;
@@ -81,9 +82,8 @@ export const profileToCsv = ({
   languagesSuggestedByUser: SuggestedLanguage[];
   activeTandems: Tandem[];
   historizedTandems: HistorizedTandem[];
+  avatarSignedUrl?: string;
 }): any => {
-  console.log('AVATAR', user.avatar);
-
   const activeTandemsInfosPerLearningLanguageId =
     activeTandems.reduce<ActiveTandemPerLearningLanguageId>((acc, tandem) => {
       const currentUserLearningLanguage = tandem.learningLanguages.find(
@@ -94,7 +94,6 @@ export const profileToCsv = ({
     }, {});
 
   // TODO(NOW): test historized tandems --> ID des anciens tandems ? ID / date creation + langue apprentisage
-  // TODO(NOW): Ajouter avatar (URL) si possible
   // TODO(NOW): check only ACTIVE TANDEMS
   // TODO(NOW): translate availabilities / bio
   // TODO(NOW): staffFunction / degree only if staff / student
@@ -104,6 +103,7 @@ export const profileToCsv = ({
 
   const baseData = {
     ...userToExportInfos(user),
+    avatar: avatarSignedUrl,
     is_blacklisted: !!isBlacklisted,
     suggested_languages: languagesSuggestedByUser.map((suggestedLanguage) =>
       JSON.stringify({

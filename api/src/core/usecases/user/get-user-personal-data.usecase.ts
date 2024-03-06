@@ -17,9 +17,6 @@ import {
   UserRepository,
 } from 'src/core/ports/user.repository';
 
-// @Inject(MEDIA_OBJECT_REPOSITORY)
-// private readonly mediaObjectRepository: MediaObjectRepository,
-
 interface UserPersonalData {
   user: User;
   isBlacklisted: boolean;
@@ -48,10 +45,6 @@ export class GetUserPersonalData {
     }
 
     const isBlacklisted = await this.userRepository.isBlacklisted(user.email);
-
-    // TODO(NOW)
-    // Avatar --> URL si possible
-    // Tandem history ---> ID des anciens tandems ? ID / date creation + langue apprentisage + quand fini ?
 
     const profile = await this.profileRepository.ofUser(id);
     if (!profile) {

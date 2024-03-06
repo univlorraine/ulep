@@ -44,7 +44,8 @@
             "profile_last_update": "Dernière mise à jour profil",
             "is_blacklisted": "Est sur liste noire",
             "suggested_languages": "Langues suggérées",
-            "nb_previous_tandems": "Nombres d'anciens tandems"
+            "nb_previous_tandems": "Nombres d'anciens tandems",
+            "avatar": "Avatar"
         },
         "values": {
             "true": "Oui",
