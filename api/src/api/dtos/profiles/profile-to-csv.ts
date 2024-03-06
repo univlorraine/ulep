@@ -1,32 +1,44 @@
 import {
-  Interest,
   LearningLanguage,
   Profile,
+  Role,
   SuggestedLanguage,
   Tandem,
   User,
 } from 'src/core/models';
 import { HistorizedTandem } from 'src/core/models/historized-tandem.model';
 
-const userToExportInfos = (user: User) => ({
-  email: user.email,
-  firstname: user.firstname,
-  lastname: user.lastname,
-  age: user.age,
-  gender: user.gender,
-  role: user.role,
-  status: user.status,
-  user_deactivated: !!user.deactivated,
-  deactivated_reason: user.deactivatedReason,
-  accepts_email: !!user.acceptsEmail,
-  division: user.division,
-  diploma: user.diploma,
-  staff_function: user.staffFunction,
-  user_created_at: user.createdAt,
-  user_last_update: user.updatedAt,
-  university: user.university.name,
-  nationality: user.country,
-});
+const userToExportInfos = (user: User) => {
+  let info: any = {
+    email: user.email,
+    firstname: user.firstname,
+    lastname: user.lastname,
+    age: user.age,
+    gender: user.gender,
+    role: user.role,
+    status: user.status,
+    user_deactivated: !!user.deactivated,
+    deactivated_reason: user.deactivatedReason,
+    accepts_email: !!user.acceptsEmail,
+    division: user.division,
+    user_created_at: user.createdAt,
+    user_last_update: user.updatedAt,
+    university: user.university.name,
+    nationality: user.country,
+  };
+  if (user.role === Role.STAFF) {
+    info = {
+      ...info,
+      diploma: user.diploma,
+    };
+  } else if (user.role === Role.STUDENT) {
+    info = {
+      ...info,
+      staff_function: user.staffFunction,
+    };
+  }
+  return info;
+};
 
 const profileToExportInfos = (profile: Profile) => ({
   native_language: profile.nativeLanguage.code,
@@ -104,11 +116,8 @@ export const profileToCsv = ({
     }, {});
 
   // TODO(NOW): test historized tandems --> ID des anciens tandems ? ID / date creation + langue apprentisage
-  // TODO(NOW): staffFunction / degree only if staff / student
   // TODO(NOW): translate languages names
   // TODO(NOW+1): return type ?
-
-  // {"superpower":"","favoritePlace":"","experience": "!","anecdote":""}
 
   const baseData = {
     ...userToExportInfos(user),
