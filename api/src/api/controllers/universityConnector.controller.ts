@@ -31,10 +31,15 @@ export class UniversityConnectorController {
     @CurrentUser() user: KeycloakUser,
   ): Promise<ConnectorResponse> {
     console.info('get /users/infos');
-    const resultFromService = await this.gatewayService.getUserUniversityInfo(
-      user.universityLogin,
-    );
-    console.info('resultFromService');
-    return ConnectorResponse.fromDomain(resultFromService);
+    try {
+      const resultFromService = await this.gatewayService.getUserUniversityInfo(
+        user.universityLogin,
+      );
+      console.info('resultFromService', resultFromService);
+      return ConnectorResponse.fromDomain(resultFromService);
+    } catch (err) {
+      console.error(err);
+      throw err;
+    }
   }
 }

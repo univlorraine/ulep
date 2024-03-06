@@ -19,6 +19,7 @@ export class UlUniversityConnectorService {
   }
 
   async getUserUniversityInfo(universityLogin: string): Promise<any> {
+    console.log('universityLogin', universityLogin);
     const connectorUrl = this.#connectorUrl;
     const connectorToken = this.#connectorToken;
 
