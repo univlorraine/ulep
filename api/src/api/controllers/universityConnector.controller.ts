@@ -1,4 +1,11 @@
-import { Controller, Get, Header, HttpCode, UseGuards } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  Header,
+  HttpCode,
+  UseGuards,
+  Logger,
+} from '@nestjs/common';
 import { UlUniversityConnectorService } from '../../providers/gateway/ul-university-connector';
 import * as Swagger from '@nestjs/swagger';
 import { ConnectorResponse } from '../dtos/universityConnector';
@@ -12,8 +19,8 @@ export class UniversityConnectorController {
   constructor(private gatewayService: UlUniversityConnectorService) {}
 
   @Get()
-  @HttpCode(200)
-  @Header('Content-Type', 'application/json')
+  // @HttpCode(200)
+  // @Header('Content-Type', 'application/json')
   @Swagger.ApiOperation({
     summary: 'Retrieve informations of a user from his university.',
   })
@@ -23,9 +30,11 @@ export class UniversityConnectorController {
   async retrieveUserInfos(
     @CurrentUser() user: KeycloakUser,
   ): Promise<ConnectorResponse> {
+    console.info('get /users/infos');
     const resultFromService = await this.gatewayService.getUserUniversityInfo(
       user.universityLogin,
     );
+    console.info('resultFromService');
     return ConnectorResponse.fromDomain(resultFromService);
   }
 }
