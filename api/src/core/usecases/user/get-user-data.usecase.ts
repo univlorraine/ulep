@@ -1,8 +1,17 @@
 import { ProfileRepository } from './../../ports/profile.repository';
 import { Inject } from '@nestjs/common';
 import { RessourceDoesNotExist } from 'src/core/errors';
-import { Profile, User } from 'src/core/models';
+import { Profile, SuggestedLanguage, Tandem, User } from 'src/core/models';
+import { HistorizedTandem } from 'src/core/models/historized-tandem.model';
+import {
+  LANGUAGE_REPOSITORY,
+  LanguageRepository,
+} from 'src/core/ports/language.repository';
 import { PROFILE_REPOSITORY } from 'src/core/ports/profile.repository';
+import {
+  TANDEM_REPOSITORY,
+  TandemRepository,
+} from 'src/core/ports/tandems.repository';
 import {
   USER_REPOSITORY,
   UserRepository,
@@ -12,15 +21,23 @@ import {
 
 interface UserPersonalData {
   user: User;
+  isBlacklisted: boolean;
   profile: Profile;
+  languagesSuggestedByUser: SuggestedLanguage[];
+  historizedTandems: HistorizedTandem[];
+  activeTandems: Tandem[];
 }
 
 export class GetUserData {
   constructor(
     @Inject(USER_REPOSITORY)
     private readonly userRepository: UserRepository,
+    @Inject(LANGUAGE_REPOSITORY)
+    private readonly languageRepository: LanguageRepository,
     @Inject(PROFILE_REPOSITORY)
     private readonly profileRepository: ProfileRepository,
+    @Inject(TANDEM_REPOSITORY)
+    private readonly tandemRepository: TandemRepository,
   ) {}
 
   async execute(id: string): Promise<UserPersonalData> {
@@ -29,9 +46,9 @@ export class GetUserData {
       throw new RessourceDoesNotExist();
     }
 
+    const isBlacklisted = await this.userRepository.isBlacklisted(user.email);
+
     // TODO(NOW)
-    // Blacklist // OUI --> boolean si blacklisté
-    // SuggestedLanguages, // OUI => les langages qu'il a suggéré --> code/langage/createdAt
     // Avatar --> URL si possible
     // Tandem history ---> ID des anciens tandems ? ID / date creation + langue apprentisage + quand fini ?
 
@@ -40,9 +57,23 @@ export class GetUserData {
       throw new RessourceDoesNotExist();
     }
 
+    const languagesSuggestedByUser =
+      await this.languageRepository.getLanguagesSuggestedByUser(user.id);
+
+    const historizedTandems =
+      await this.tandemRepository.getHistorizedTandemForUser(user.id);
+
+    const activeTandems = await this.tandemRepository.getTandemsForProfile(
+      profile.id,
+    );
+
     return {
       user,
+      isBlacklisted,
       profile,
+      languagesSuggestedByUser,
+      historizedTandems,
+      activeTandems,
     };
   }
 }

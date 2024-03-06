@@ -1,34 +1,98 @@
-import { Profile } from 'src/core/models';
+import {
+  LearningLanguage,
+  Profile,
+  SuggestedLanguage,
+  Tandem,
+  User,
+} from 'src/core/models';
+import { HistorizedTandem } from 'src/core/models/historized-tandem.model';
 
-export const profileToCsv = (
-  profile: Profile,
-): (string | number | boolean | Date | string[])[][] => {
+const learningLanguageToExportInfos = (
+  learningLanguage: LearningLanguage,
+  associatedTandem?: Tandem,
+) => {
+  return {
+    learning_request_created_at: learningLanguage.createdAt,
+    learning_request_last_update: learningLanguage.updatedAt,
+    learning_request_language: learningLanguage.language.code,
+    learning_request_level: learningLanguage.level,
+    learning_request_type: learningLanguage.learningType,
+    learning_request_campus: learningLanguage.campus?.name,
+    learning_request_same_gender: learningLanguage.sameGender.toString(),
+    learning_request_same_age: learningLanguage.sameAge.toString(),
+    learning_request_certificate_option:
+      learningLanguage.certificateOption?.toString(),
+    learning_request_specific_program:
+      learningLanguage.specificProgram?.toString(),
+    has_associated_tandem: (!!associatedTandem).toString(),
+    associated_tandem_status: associatedTandem?.status,
+    associated_tandem_creation_date: associatedTandem?.createdAt,
+  };
+};
+
+export const profileToCsv = ({
+  user,
+  isBlacklisted,
+  profile,
+  languagesSuggestedByUser,
+  activeTandems,
+  historizedTandems,
+}: {
+  user: User;
+  isBlacklisted: boolean;
+  profile: Profile;
+  languagesSuggestedByUser: SuggestedLanguage[];
+  activeTandems: Tandem[];
+  historizedTandems: HistorizedTandem[];
+}): (string | number | boolean | Date | string[])[][] => {
+  const activeTandemsInfosPerLearningLanguageId = activeTandems.reduce<{
+    [key: string]: Tandem;
+  }>((acc, tandem) => {
+    const userLearningLanguage = tandem.learningLanguages.find(
+      (ll) => ll.profile.id === profile.id,
+    );
+    acc[userLearningLanguage.id] = tandem;
+    return acc;
+  }, {});
+
+  // TODO(NOW+1): extract one method per "item"
+
+  // TODO(NOW): test historized tandems --> ID des anciens tandems ? ID / date creation + langue apprentisage
+
+  // TODO(NOW): manage suggested langage / campus ?
+  // TODO(NOW): Ajouter avatar (URL) si possible
+
   const baseData = {
     // User related fields //
-    email: profile.user.email,
-    firstname: profile.user.firstname,
-    lastname: profile.user.lastname,
-    age: profile.user.age,
-    gender: profile.user.gender,
-    role: profile.user.role,
-    status: profile.user.status,
-    deactivated_reason: profile.user.deactivatedReason,
-    accepts_email: profile.user.acceptsEmail.toString(),
-    division: profile.user.division,
-    diploma: profile.user.diploma,
-    staff_function: profile.user.role,
-    deactivated: profile.user.deactivated,
-    user_created_at: profile.user.createdAt,
-    user_last_update: profile.user.updatedAt,
-    university: profile.user.university.name,
-    nationality: profile.user.country,
+    email: user.email,
+    firstname: user.firstname,
+    lastname: user.lastname,
+    age: user.age,
+    gender: user.gender,
+    role: user.role,
+    status: user.status,
+    user_deactivated: user.deactivated?.toString(),
+    deactivated_reason: user.deactivatedReason,
+    accepts_email: user.acceptsEmail.toString(),
+    division: user.division,
+    diploma: user.diploma,
+    staff_function: user.role,
+    user_created_at: user.createdAt,
+    user_last_update: user.updatedAt,
+    university: user.university.name,
+    nationality: user.country,
+    is_blacklisted: isBlacklisted.toString(),
 
-    // "Reports", // Les reports fait à son sujet --> SINON
-    // Blacklist // OUI --> boolean
-    // "SuggestedLanguages", // OUI => code/langage/createdAt
-    // Avatar --> URL si possible
+    // Languages user suggested //
+    suggested_languages: languagesSuggestedByUser.map((suggestedLanguage) =>
+      JSON.stringify({
+        code: suggestedLanguage.language.code,
+        suggestion_date: suggestedLanguage.createdAt,
+      }),
+    ),
 
-    // Tandem history ---> ID des anciens tandems ? ID / date creation + langue apprentisage
+    // Previous tandems of users
+    nb_previous_tandems: historizedTandems.length,
 
     // Profile related fields //
     native_language: profile.nativeLanguage.code,
@@ -41,36 +105,21 @@ export const profileToCsv = (
     bio: JSON.stringify(profile.biography),
     availabilities: JSON.stringify(profile.availabilities),
     availabilities_note: profile.availabilitiesNote,
-    availabilities_note_privacy: profile.availavilitiesNotePrivacy?.toString(),
+    availabilities_note_is_private:
+      profile.availavilitiesNotePrivacy?.toString(),
     profile_created_at: profile.createdAt,
     profile_last_update: profile.updatedAt,
   };
 
-  // Note: export pas possible si user a pas renseigné son profile --> on voit que les profiles dans BO. Que faire ??? OUPS
-  // Ok si 1er export JSON pour les tandems et autre 1-n relations
-
-  // TODO(NOW): use cast to tranform array, dates, bool etc
-
   if (profile.learningLanguages.length > 0) {
     const dataWithLearningLanguages = profile.learningLanguages.map(
       (learningLanguage) => ({
+        learning_request_id: learningLanguage.id,
         ...baseData,
-        learning_request_created_at: learningLanguage.createdAt,
-        learning_request_last_update: learningLanguage.updatedAt,
-        learning_request_language: learningLanguage.language.code,
-        learning_request_level: learningLanguage.level,
-        learning_request_type: learningLanguage.learningType,
-        learning_request_campus: learningLanguage.campus?.name,
-        learning_request_same_gender: learningLanguage.sameGender.toString(),
-        learning_request_same_age: learningLanguage.sameAge.toString(),
-        learning_request_certificate_option:
-          learningLanguage.certificateOption?.toString(),
-        learning_request_specific_program:
-          learningLanguage.specificProgram?.toString(),
-
-        // learning_request_tandem_id: learningLanguage.
-        // learning_request_Tandem
-        // learning_request_TandemLanguage
+        ...learningLanguageToExportInfos(
+          learningLanguage,
+          activeTandemsInfosPerLearningLanguageId[learningLanguage.id],
+        ),
       }),
     );
     return dataWithLearningLanguages.reduce((acc, value) => {
@@ -87,7 +136,8 @@ export const profileToCsv = (
       Object.keys(baseData),
       Object.values(baseData).map((val) => (val === null ? undefined : val)),
     ];
-    console.log('res', tmp);
     return tmp;
   }
+
+  // TODO(NOW): use cast to tranform array, dates, bool etc
 };

@@ -71,6 +71,8 @@ export const profileMapper = (instance: ProfileSnapshot): Profile => {
       (learningLanguage) =>
         new LearningLanguage({
           id: learningLanguage.id,
+          createdAt: learningLanguage.created_at,
+          updatedAt: learningLanguage.updated_at,
           level: ProficiencyLevel[learningLanguage.level],
           language: languageMapper(learningLanguage.LanguageCode),
           learningType: LearningType[learningLanguage.learning_type],

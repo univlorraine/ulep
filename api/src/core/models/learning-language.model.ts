@@ -9,7 +9,7 @@ interface LearningLanguageProps {
   language: Language;
   level: ProficiencyLevel;
   profile?: Profile;
-  createdAt: Date;
+  createdAt?: Date;
   updatedAt?: Date;
   learningType: LearningType;
   sameGender: boolean;
@@ -25,7 +25,7 @@ export class LearningLanguage {
   readonly language: Language;
   readonly level: ProficiencyLevel;
   readonly profile?: Profile;
-  readonly createdAt: Date;
+  readonly createdAt?: Date;
   readonly updatedAt?: Date;
   readonly learningType: LearningType;
   readonly sameGender: boolean;

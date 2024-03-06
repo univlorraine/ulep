@@ -230,7 +230,7 @@ export class UserController {
   // @Swagger.ApiOkResponse({ type: any }) // TODO(NOW)
   async exportOne(@Param('id', ParseUUIDPipe) id: string) {
     const profileData = await this.getUserData.execute(id);
-    const content = profileToCsv(profileData.profile);
+    const content = profileToCsv(profileData);
     const csv = stringify(content);
     return new StreamableFile(csv);
   }

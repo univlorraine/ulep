@@ -16,6 +16,7 @@ export type CreateTandemProps = {
   status: TandemStatus;
   universityValidations?: string[];
   compatibilityScore: number;
+  createdAt?: Date;
 };
 
 export class Tandem {
@@ -33,11 +34,14 @@ export class Tandem {
   // Score representing compatibility of learning languages
   readonly compatibilityScore: number;
 
+  readonly createdAt?: Date;
+
   constructor(props: CreateTandemProps) {
     this.id = props.id;
     this.status = props.status;
     this.universityValidations = props.universityValidations || [];
     this.compatibilityScore = props.compatibilityScore;
+    this.createdAt = props.createdAt;
     
     if (props.learningLanguages) {
       this.learningLanguages = [...props.learningLanguages];

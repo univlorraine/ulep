@@ -38,7 +38,7 @@ export type UserProps = {
   staffFunction?: string;
   division?: string;
   deactivated?: boolean;
-  createdAt: Date;
+  createdAt?: Date;
   updatedAt?: Date;
 };
 
@@ -60,7 +60,7 @@ export class User {
   readonly diploma?: string;
   readonly division?: string;
   readonly staffFunction?: string;
-  readonly createdAt: Date;
+  readonly createdAt?: Date;
   readonly updatedAt?: Date;
 
   constructor(props: UserProps) {

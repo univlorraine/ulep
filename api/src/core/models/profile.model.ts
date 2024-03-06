@@ -49,7 +49,7 @@ export type CreateProfileProps = {
   availabilitiesNote?: string;
   availavilitiesNotePrivacy?: boolean;
   biography?: { [key: string]: string };
-  createdAt: Date;
+  createdAt?: Date;
   updatedAt?: Date;
 };
 
@@ -66,7 +66,7 @@ export class Profile {
   readonly availabilitiesNote?: string;
   readonly availavilitiesNotePrivacy?: boolean;
   readonly biography?: { [key: string]: string };
-  readonly createdAt: Date;
+  readonly createdAt?: Date;
   readonly updatedAt?: Date;
 
   constructor(props: CreateProfileProps) {
