@@ -31,7 +31,7 @@ import {
   GetUsersUsecase,
   UpdateAdministratorUsecase,
   UpdateUserUsecase,
-  GetUserData,
+  GetUserPersonalData,
 } from '../../core/usecases/user';
 import { CollectionResponse, CurrentUser } from '../decorators';
 import { Role, Roles } from '../decorators/roles.decorator';
@@ -70,7 +70,7 @@ export class UserController {
     private readonly updateAdministratorUsecase: UpdateAdministratorUsecase,
     private readonly deleteAdministratorUsecase: DeleteAdministratorUsecase,
     private readonly revokeSessionsUsecase: RevokeSessionsUsecase,
-    private readonly getUserData: GetUserData,
+    private readonly getUserPersonalData: GetUserPersonalData,
     private readonly i18n: I18nService,
   ) {}
 
@@ -230,7 +230,7 @@ export class UserController {
   @Header('Content-Disposition', 'attachment; filename="test.csv"')
   @Swagger.ApiOperation({ summary: 'Export user data.' })
   async exportOne(@Param('id', ParseUUIDPipe) id: string) {
-    const userData = await this.getUserData.execute(id);
+    const userData = await this.getUserPersonalData.execute(id);
     const content = profileToCsv(userData);
 
     const userLanguage = userData.profile.nativeLanguage.code;

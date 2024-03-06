@@ -1,4 +1,4 @@
-import { ProfileRepository } from './../../ports/profile.repository';
+import { ProfileRepository } from '../../ports/profile.repository';
 import { Inject } from '@nestjs/common';
 import { RessourceDoesNotExist } from 'src/core/errors';
 import { Profile, SuggestedLanguage, Tandem, User } from 'src/core/models';
@@ -17,7 +17,8 @@ import {
   UserRepository,
 } from 'src/core/ports/user.repository';
 
-// TODO(NOW+1): rename GetUserPersonalData
+// @Inject(MEDIA_OBJECT_REPOSITORY)
+// private readonly mediaObjectRepository: MediaObjectRepository,
 
 interface UserPersonalData {
   user: User;
@@ -28,7 +29,7 @@ interface UserPersonalData {
   activeTandems: Tandem[];
 }
 
-export class GetUserData {
+export class GetUserPersonalData {
   constructor(
     @Inject(USER_REPOSITORY)
     private readonly userRepository: UserRepository,

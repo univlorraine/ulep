@@ -84,7 +84,6 @@ export const profileToCsv = ({
 }): any => {
   console.log('AVATAR', user.avatar);
 
-  // }): (string | number | boolean | Date | string[])[][] => {
   const activeTandemsInfosPerLearningLanguageId =
     activeTandems.reduce<ActiveTandemPerLearningLanguageId>((acc, tandem) => {
       const currentUserLearningLanguage = tandem.learningLanguages.find(
@@ -101,6 +100,7 @@ export const profileToCsv = ({
   // TODO(NOW): staffFunction / degree only if staff / student
   // TODO(NOW): translate dynamic values
   // TODO(NOW): translate languages names
+  // TODO(NOW+1): return type ?
 
   const baseData = {
     ...userToExportInfos(user),
