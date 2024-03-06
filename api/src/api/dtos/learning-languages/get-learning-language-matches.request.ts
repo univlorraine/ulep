@@ -10,6 +10,7 @@ export class GetLearningLanguageMatchsRequest {
   readonly count?: number;
 
   @ApiProperty({ type: 'string', isArray: true })
+  @IsOptional()
   @IsUUID('4', { each: true })
   universityIds: string[];
 }

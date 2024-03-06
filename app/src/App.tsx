@@ -17,6 +17,7 @@ import '@ionic/react/css/core.css';
 import '@ionic/react/css/normalize.css';
 import '@ionic/react/css/structure.css';
 import '@ionic/react/css/typography.css';
+import '@ionic/react/css/padding.css';
 
 /* Theme variables */
 import './presentation/theme/button.css';
@@ -31,7 +32,6 @@ import ErrorPage from './presentation/pages/ErrorPage';
 import AppUrlListener from './presentation/router/AppUrlListener';
 import MaintenancePage from './presentation/pages/MaintenancePage';
 import { polyfillCountryFlagEmojis } from 'country-flag-emoji-polyfill';
-import { useIonRouter } from '@ionic/react';
 
 polyfillCountryFlagEmojis();
 setupIonicReact();
@@ -57,19 +57,20 @@ const AppContext = () => {
     const setProfile = useStoreActions((state) => state.setProfile);
     const setTokens = useStoreActions((state) => state.setTokens);
     const logout = useStoreActions((state) => state.logout);
-    const router = useIonRouter();
     const setUser = useStoreActions((state) => state.setUser);
 
     const { configuration, error, loading } = useFetchConfiguration(import.meta.env.VITE_API_URL || apiUrl);
-    useFetchI18NBackend(apiUrl);
+    const { isReady } = useFetchI18NBackend(apiUrl);
 
     useEffect(() => {
         const getLanguage = async () => {
             const deviceLanguage = await Device.getLanguageCode();
             i18n.changeLanguage(language || deviceLanguage.value);
         };
-        getLanguage();
-    }, [language]);
+        if (isReady) {
+            getLanguage();
+        }
+    }, [language, isReady]);
 
     if (error) {
         return <ErrorPage />;
@@ -95,7 +96,6 @@ const AppContext = () => {
                 setUser,
                 configuration,
                 logout,
-                router,
             })}
         >
             <IonReactRouter>

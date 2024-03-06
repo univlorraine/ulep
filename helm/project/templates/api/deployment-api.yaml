@@ -133,6 +133,12 @@ spec:
                 secretKeyRef:
                   name: "{{ include "etandem.fullname" . }}-secret-{{ .Values.api.name }}"
                   key: translations-token
+            - name: TRANSLATIONS_BEARER_TOKEN
+              valueFrom:
+                secretKeyRef:
+                  name: "{{ include "etandem.fullname" . }}-secret-{{ .Values.api.name }}"
+                  key: translations-bearer-token
+                  optional: true
             - name: CONNECTOR_URL
               value: "{{ .Values.api.env.connectorUrl }}"
             - name: CONNECTOR_TOKEN

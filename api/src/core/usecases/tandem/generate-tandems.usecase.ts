@@ -120,7 +120,10 @@ export class GenerateTandemsUsecase {
                 languagesThatCanBeLearnt,
               );
 
-              if (match.total > TRESHOLD_VIABLE_PAIR) {
+              if (
+                match.total > TRESHOLD_VIABLE_PAIR &&
+                match.isAValidTandem()
+              ) {
                 possiblePairs.push(match);
               }
             }

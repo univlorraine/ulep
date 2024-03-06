@@ -52,7 +52,7 @@ describe('loginUsecase', () => {
 
     it('execute must return an error if adapter return an 401 error', async () => {
         expect.assertions(1);
-        adapter.mockError({ status: 401 });
+        adapter.mockJson({ ok: false, status: 401 });
         const result = await usecase.execute('email', 'password');
         expect(result).toStrictEqual(new Error('errors.userWrongCredentials'));
     });

@@ -1,5 +1,5 @@
 import React from 'react';
-import { useTranslate, useNotify, useRedirect, useUpdate, Edit, WithRecord } from 'react-admin';
+import { useTranslate, Edit, WithRecord, useUpdate, useRedirect, useNotify } from 'react-admin';
 import ProfileForm from '../../components/form/ProfileForm';
 import { Profile, ProfileFormPayload } from '../../entities/Profile';
 
@@ -9,11 +9,12 @@ const ProfileEdit = () => {
     const redirect = useRedirect();
     const notify = useNotify();
 
-    const handleSubmit = async (payload: ProfileFormPayload) => {
+    const handleSubmit = async (id: string, payload: ProfileFormPayload) => {
         try {
             const user = await update(
                 'users',
                 {
+                    id,
                     data: payload,
                 },
                 {

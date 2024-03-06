@@ -16,8 +16,10 @@
 }
 
 .image {
+    border-radius: 50%;
     height: 225px;
     width: 225px;
+    object-fit: cover;
 }
 
 .subtitle {

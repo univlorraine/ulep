@@ -1,4 +1,3 @@
-import MediaObject from '../../../src/domain/entities/MediaObject';
 import UpdateAvatarUsecase from '../../../src/domain/usecases/UpdateAvatarUsecase';
 import DomainHttpAdapter from '../../mocks/adapters/HttpAdapter';
 
@@ -36,7 +35,6 @@ describe('updateAvatar', () => {
         expect(result).toHaveProperty('id');
         expect(result).toHaveProperty('mimeType');
         expect(result).toHaveProperty('url');
-        // expect(result).toBeInstanceOf(MediaObject);
     });
 
     it('execute must return an expected response without parsed body', async () => {

@@ -22,7 +22,6 @@ import { Env } from 'src/configuration';
 import { KeycloakClient } from '@app/keycloak';
 
 export class UpdateUserCommand {
-  id: string;
   status?: UserStatus;
   acceptsEmail?: boolean;
   email?: string;
@@ -47,13 +46,17 @@ export class UpdateUserUsecase {
     private readonly keycloakClient: KeycloakClient,
   ) {}
 
-  async execute(command: UpdateUserCommand): Promise<User> {
-    const user = await this.userRepository.ofId(command.id);
+  async execute(id: string, command: UpdateUserCommand): Promise<User> {
+    const user = await this.userRepository.ofId(id);
     if (!user) {
       throw new RessourceDoesNotExist();
     }
 
-    if (command.firstname || command.lastname || command.email) {
+    if (
+      command.firstname !== user.firstname ||
+      command.lastname !== user.lastname ||
+      command.email !== user.email
+    ) {
       await this.keycloakClient.updateUser({
         id: user.id,
         firstname: command.firstname || user.firstname,
@@ -65,11 +68,7 @@ export class UpdateUserUsecase {
     const update = await this.userRepository.update(
       new User({
         ...user,
-        status: command.status || user.status,
-        acceptsEmail: command.acceptsEmail || user.acceptsEmail,
-        firstname: command.firstname || user.firstname,
-        lastname: command.lastname || user.lastname,
-        email: command.email || user.email,
+        ...command,
       }),
     );
 
@@ -124,7 +123,7 @@ export class UpdateUserUsecase {
   }
 
   private async sendTandemCancelledEmails(tandem: Tandem) {
-    const universities = new Set<University>();
+    const universityIds = new Set<string>();
     const profiles = tandem.learningLanguages.map(
       (language) => language.profile,
     );
@@ -147,26 +146,26 @@ export class UpdateUserUsecase {
         }
       }
 
-      if (universities.has(profile.user.university)) {
-        continue;
-      }
-
-      if (profile.user.university.notificationEmail) {
-        try {
-          await this.emailGateway.sendTandemCanceledNoticeEmail({
-            to: profile.user.university.notificationEmail,
-            language: profile.user.university.country.code.toLowerCase(),
-            user: { ...profile.user, university: profile.user.university.name },
-            partner: { ...partner, university: partner.university.name },
-          });
-        } catch (error) {
-          this.logger.error(
-            `Error sending email to university ${profile.user.university.id} after tandem cancel: ${error}`,
-          );
+      if (!universityIds.has(profile.user.university.id)) {
+        if (profile.user.university.notificationEmail) {
+          try {
+            await this.emailGateway.sendTandemCanceledNoticeEmail({
+              to: profile.user.university.notificationEmail,
+              language: profile.user.university.country.code.toLowerCase(),
+              user: {
+                ...profile.user,
+                university: profile.user.university.name,
+              },
+              partner: { ...partner, university: partner.university.name },
+            });
+          } catch (error) {
+            this.logger.error(
+              `Error sending email to university ${profile.user.university.id} after tandem cancel: ${error}`,
+            );
+          }
         }
+        universityIds.add(profile.user.university.id);
       }
-
-      universities.add(profile.user.university);
     }
   }
 

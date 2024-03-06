@@ -12,6 +12,7 @@ export interface HttpAdapterInterface {
         isTokenNeeded?: boolean
     ) => Promise<Response>;
     put: (path: string, body: Body, args?: RequestInit, isTokenNeeded?: boolean) => Promise<Response>;
+    patch: (path: string, body: Body, args?: RequestInit, isTokenNeeded?: boolean) => Promise<Response>;
     delete: (path: string, args?: RequestInit, isTokenNeeded?: boolean) => Promise<Response>;
 }
 
@@ -36,7 +37,7 @@ interface RequestParams {
 
 type Request = [string, RequestInit, Body?, string?];
 
-type Action = 'get' | 'post' | 'delete' | 'put';
+type Action = 'get' | 'post' | 'delete' | 'put' | 'patch';
 
 class DomainHttpAdapter extends BaseHttpAdapter implements HttpAdapterInterface {
     accessToken: string = '';
@@ -51,16 +52,13 @@ class DomainHttpAdapter extends BaseHttpAdapter implements HttpAdapterInterface 
 
     logout: Function;
 
-    router?: UseIonRouterResult;
-
     constructor(
         apiUrl: string,
         accessToken: string,
         refreshToken: string,
         languageCode: string,
         setTokens: Function,
-        logout: Function,
-        router?: UseIonRouterResult
+        logout: Function
     ) {
         super();
         this.accessToken = accessToken;
@@ -69,7 +67,6 @@ class DomainHttpAdapter extends BaseHttpAdapter implements HttpAdapterInterface 
         this.refreshToken = refreshToken;
         this.setStorageTokens = setTokens;
         this.logout = logout;
-        this.router = router;
     }
 
     private getHeaders(token?: string): any {
@@ -101,6 +98,10 @@ class DomainHttpAdapter extends BaseHttpAdapter implements HttpAdapterInterface 
         return this.withAuthCheck('put', { path: `${this.apiUrl}${path}`, args, body, isTokenNeeded });
     }
 
+    async patch(path: string, body: Body, args: RequestInit = {}, isTokenNeeded = true): Promise<Response> {
+        return this.withAuthCheck('patch', { path: `${this.apiUrl}${path}`, args, body, isTokenNeeded });
+    }
+
     async withAuthCheck(
         action: Action,
         { path, args, body, contentType, accessToken, isTokenNeeded }: RequestParams
@@ -113,7 +114,7 @@ class DomainHttpAdapter extends BaseHttpAdapter implements HttpAdapterInterface 
 
         const response = await super[action](...request);
 
-        if (response.status === 401) {
+        if (isTokenNeeded && response.status === 401) {
             this.logoutAndRedirect();
         }
 
@@ -182,7 +183,7 @@ class DomainHttpAdapter extends BaseHttpAdapter implements HttpAdapterInterface 
 
     logoutAndRedirect() {
         this.logout();
-        if (this.router) this.router.push('/login');
+        window.location.href = '/login';
     }
 }
 

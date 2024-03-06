@@ -81,10 +81,16 @@ export class Env {
   TRANSLATIONS_ENDPOINT: string;
 
   @IsString()
+  @IsOptional()
   TRANSLATIONS_ENDPOINT_SUFFIX: string;
 
   @IsString()
+  @IsOptional()
   TRANSLATIONS_TOKEN: string;
+
+  @IsString()
+  @IsOptional()
+  TRANSLATIONS_BEARER_TOKEN: string;
 
   @IsString()
   @IsOptional()
@@ -213,6 +219,7 @@ const test: Env = {
   TRANSLATIONS_ENDPOINT: 'http://localhost:3000/api/translations',
   TRANSLATIONS_ENDPOINT_SUFFIX: '',
   TRANSLATIONS_TOKEN: 'test',
+  TRANSLATIONS_BEARER_TOKEN: '',
   EMAIL_ASSETS_BUCKET: 'assets',
   EMAIL_TRANSLATIONS_COMPONENT: 'email',
   EMAIL_ASSETS_PUBLIC_ENDPOINT: 'http://localhost:9000/assets',

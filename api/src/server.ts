@@ -78,7 +78,7 @@ export class Server {
       ],
       exposedHeaders: ['Content-Range'],
       origin: '*',
-      methods: ['GET', 'HEAD', 'OPTIONS', 'POST', 'PUT', 'DELETE'],
+      methods: ['GET', 'HEAD', 'OPTIONS', 'POST', 'PUT', 'PATCH', 'DELETE'],
     });
   }
 

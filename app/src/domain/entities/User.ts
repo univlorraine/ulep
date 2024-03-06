@@ -8,6 +8,13 @@ class User {
         public readonly firstname: string,
         public readonly lastname: string,
         public readonly status: UserStatus,
+        public readonly staffFunction: string,
+        public readonly role: Role,
+        public readonly gender: Gender,
+        public readonly division: string,
+        public readonly diploma: string,
+        public readonly country: string,
+        public readonly age: number,
         public university: University,
         public acceptsEmail: boolean,
         public avatar?: MediaObject

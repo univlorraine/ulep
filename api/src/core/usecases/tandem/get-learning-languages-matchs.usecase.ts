@@ -1,3 +1,7 @@
+import {
+  UNIVERSITY_REPOSITORY,
+  UniversityRepository,
+} from 'src/core/ports/university.repository';
 import { Collection } from '@app/common';
 import { Inject, Injectable, Logger } from '@nestjs/common';
 import { RessourceDoesNotExist } from 'src/core/errors';
@@ -37,6 +41,8 @@ export class GetLearningLanguageMatchesUsecase {
     private readonly matchService: MatchScorer,
     @Inject(REFUSED_TANDEMS_REPOSITORY)
     private readonly refusedTandemsRepository: RefusedTandemsRepository,
+    @Inject(UNIVERSITY_REPOSITORY)
+    private readonly universityRepository: UniversityRepository,
   ) {}
 
   async execute(command: GetUserMatchCommand): Promise<Collection<Match>> {
@@ -48,6 +54,10 @@ export class GetLearningLanguageMatchesUsecase {
     if (!owner) {
       throw new LearningLanguageHasNoAssociatedProfile(command.id);
     }
+
+    const targetUniveristies = owner.user.university.isCentralUniversity()
+      ? command.universityIds
+      : [(await this.universityRepository.findUniversityCentral()).id];
 
     const languagesAvailableForLearning = (
       await this.languageRepository.getLanguagesProposedToLearning()
@@ -65,13 +75,13 @@ export class GetLearningLanguageMatchesUsecase {
       targets =
         await this.learningLanguageRepository.getAvailableLearningLanguagesSpeakingOneOfLanguagesAndFromUniversities(
           languageIdsThatCanBeLearnt,
-          command.universityIds,
+          targetUniveristies,
         );
     } else {
       targets =
         await this.learningLanguageRepository.getAvailableLearningLanguagesSpeakingLanguageFromUniversities(
           learningLanguage.language.id,
-          command.universityIds,
+          targetUniveristies,
         );
     }
 
@@ -107,7 +117,7 @@ export class GetLearningLanguageMatchesUsecase {
     }
 
     const matchs = potentialMatchs
-      .filter((match) => match.total > 0)
+      .filter((match) => match.total > 0 && match.isAValidTandem())
       .sort((a, b) => b.total - a.total);
 
     const items =

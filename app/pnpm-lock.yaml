@@ -48,11 +48,11 @@ dependencies:
     specifier: ^3.2.1
     version: 3.2.1
   '@ionic/react':
-    specifier: ^7.0.0
-    version: 7.0.0(react-dom@18.2.0)(react@18.2.0)
+    specifier: ^7.7.3
+    version: 7.7.3(react-dom@18.2.0)(react@18.2.0)
   '@ionic/react-router':
-    specifier: ^7.0.0
-    version: 7.0.0(react-dom@18.2.0)(react-router-dom@5.3.4)(react-router@5.3.4)(react@18.2.0)
+    specifier: ^7.7.3
+    version: 7.7.3(react-dom@18.2.0)(react-router-dom@5.3.4)(react-router@5.3.4)(react@18.2.0)
   '@sentry/capacitor':
     specifier: ^0.14.0
     version: 0.14.0(@capacitor/core@5.0.4)(@sentry/react@7.73.0)
@@ -84,8 +84,8 @@ dependencies:
     specifier: ^2.2.1
     version: 2.2.1
   ionicons:
-    specifier: ^7.0.0
-    version: 7.0.0
+    specifier: ^7.2.2
+    version: 7.2.2
   jwt-decode:
     specifier: ^3.1.2
     version: 3.1.2
@@ -1950,11 +1950,11 @@ packages:
       - supports-color
     dev: true
 
-  /@ionic/core@7.0.0:
-    resolution: {integrity: sha512-pM8qOaea9ZbqZbGnoIswaeeTiHJKNQ9ziSNHSILDpdd4FjpxZjOeMgNUdvYzh5rX9fA6hEM2wodg7McIWHgvZQ==}
+  /@ionic/core@7.7.3:
+    resolution: {integrity: sha512-DSv6DPuiLU2MXsgDAXKFJW5OXxT7EyPy2jcQf03RcWooWeFryy979mqotPw7BgUuWt/fVGuz2tl3peAJGSqmDQ==}
     dependencies:
-      '@stencil/core': 3.4.2
-      ionicons: 7.2.1
+      '@stencil/core': 4.12.4
+      ionicons: 7.2.2
       tslib: 2.6.2
     dev: false
 
@@ -1963,15 +1963,15 @@ packages:
     engines: {node: '>=16.0.0', npm: '>=8.0.0'}
     dev: false
 
-  /@ionic/react-router@7.0.0(react-dom@18.2.0)(react-router-dom@5.3.4)(react-router@5.3.4)(react@18.2.0):
-    resolution: {integrity: sha512-rlYWI9Rh8lk3STZ38J7AGx0wnCHYpLg7Ocoxjsvxyuif5PEqQlzZyu0UN9IWVyEMctZEZ2cN0CLayBVaOCMYuA==}
+  /@ionic/react-router@7.7.3(react-dom@18.2.0)(react-router-dom@5.3.4)(react-router@5.3.4)(react@18.2.0):
+    resolution: {integrity: sha512-NmEk801pfbrqzyTAb5nLDWGseUzm7kMpUy0dMY6OU76tpuHrEFBCFkZYAlTJWqXhkGRj9cR0cMnFAhPtGeSCkg==}
     peerDependencies:
       react: '>=16.8.6'
       react-dom: '>=16.8.6'
       react-router: ^5.0.1
       react-router-dom: ^5.0.1
     dependencies:
-      '@ionic/react': 7.0.0(react-dom@18.2.0)(react@18.2.0)
+      '@ionic/react': 7.7.3(react-dom@18.2.0)(react@18.2.0)
       react: 18.2.0
       react-dom: 18.2.0(react@18.2.0)
       react-router: 5.3.4(react@18.2.0)
@@ -1979,14 +1979,14 @@ packages:
       tslib: 2.6.2
     dev: false
 
-  /@ionic/react@7.0.0(react-dom@18.2.0)(react@18.2.0):
-    resolution: {integrity: sha512-t9NlHZTiH/NvT3GLcO4yS5Whe9stpsZ9AtNOYS+aPcKM5vhxJSFGXDUvKtABOLi2CniW2kFE8krHwjz9V0GQYA==}
+  /@ionic/react@7.7.3(react-dom@18.2.0)(react@18.2.0):
+    resolution: {integrity: sha512-b8jLpqv4dZ9nB9zoxhe0KR1Wk9bWMQ3UXQcOPu20+zYrxExwPqpLJ93LI0bU4F7ellduMjsakvELY486FeRrXw==}
     peerDependencies:
       react: '>=16.8.6'
       react-dom: '>=16.8.6'
     dependencies:
-      '@ionic/core': 7.0.0
-      ionicons: 7.0.0
+      '@ionic/core': 7.7.3
+      ionicons: 7.2.2
       react: 18.2.0
       react-dom: 18.2.0(react@18.2.0)
       tslib: 2.6.2
@@ -2519,15 +2519,9 @@ packages:
       '@sinonjs/commons': 3.0.0
     dev: true
 
-  /@stencil/core@2.22.3:
-    resolution: {integrity: sha512-kmVA0M/HojwsfkeHsifvHVIYe4l5tin7J5+DLgtl8h6WWfiMClND5K3ifCXXI2ETDNKiEk21p6jql3Fx9o2rng==}
-    engines: {node: '>=12.10.0', npm: '>=6.0.0'}
-    hasBin: true
-    dev: false
-
-  /@stencil/core@3.4.2:
-    resolution: {integrity: sha512-FAUhUVaakCy29nU2GwO/HQBRV1ihPRvncz3PUc8oR+UJLAxGabTmP8PLY7wvHfbw+Cvi4VXfJFTBvdfDu6iKPQ==}
-    engines: {node: '>=14.10.0', npm: '>=6.0.0'}
+  /@stencil/core@4.12.4:
+    resolution: {integrity: sha512-KrwoXu9J1loWSvQQReilGPkt6/dCH/x5eTBDecCBPclz7vxUM13Iw9almBIffEpurk/kaMAglH0G7sAF/A2y1A==}
+    engines: {node: '>=16.0.0', npm: '>=7.10.0'}
     hasBin: true
     dev: false
 
@@ -5179,14 +5173,8 @@ packages:
       side-channel: 1.0.4
     dev: true
 
-  /ionicons@7.0.0:
-    resolution: {integrity: sha512-5G9gBxaUfJm0aAr/Kg5Eb/d7d+pMC65yiHjlkGATLrHSZgAzlc9l6ho0dCSdfq3wGef2QiZeNsvyChPVggfXwQ==}
-    dependencies:
-      '@stencil/core': 2.22.3
-    dev: false
-
-  /ionicons@7.2.1:
-    resolution: {integrity: sha512-2pvCM7DGVEtbbj48PJzQrCADCQrqjU1nUYX9l9PyEWz3ZfdnLdAouqwPxLdl8tbaF9cE7OZRSlyQD7oLOLnGoQ==}
+  /ionicons@7.2.2:
+    resolution: {integrity: sha512-I3iYIfc9Q9FRifWyFSwTAvbEABWlWY32i0sAVDDPGYnaIZVugkLCZFbEcrphW6ixVPg8tt1oLwalo/JJwbEqnA==}
     dependencies:
       '@stencil/core': 4.7.1
     dev: false

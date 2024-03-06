@@ -1,6 +1,8 @@
+import { Logger } from '@nestjs/common';
 import { DomainError } from '../errors';
 import { LearningLanguagesMustContainsProfiles } from '../errors/match-exceptions';
 import { LearningLanguage } from './learning-language.model';
+import { Tandem, TandemStatus } from './tandem.model';
 
 export type CreateMatchProps = {
   owner: LearningLanguage;
@@ -74,9 +76,29 @@ export class Match {
       });
     }
 
+    if (total !== 0 && props.scores.level === 0) {
+      throw new DomainError({
+        message: 'Langage score must be not null if total is not null',
+      });
+    }
+
     this.owner = props.owner;
     this.target = props.target;
     this.scores = props.scores;
     this.total = total;
+  }
+
+  public isAValidTandem(): boolean {
+    try {
+      new Tandem({
+        id: '',
+        learningLanguages: [this.owner, this.target],
+        status: TandemStatus.DRAFT,
+        compatibilityScore: this.total,
+      });
+      return true;
+    } catch (err) {
+      return false;
+    }
   }
 }

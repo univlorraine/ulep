@@ -57,14 +57,16 @@ const SignupFinalPage: React.FC = () => {
             colorCode={configuration.primaryColor}
         >
             <div className={styles.container}>
-                <h1 className={styles.title}>{`${t('signup_end_page.thanks')} ${profile?.user.firstname || user?.firstname}, ${t('signup_end_page.account')}`}</h1>
+                <h1 className={styles.title}>{`${t('signup_end_page.thanks')} ${
+                    profile?.user.firstname.trim() || user?.firstname.trim()
+                }, ${t('signup_end_page.account')}`}</h1>
                 <Avatar user={user} className={styles.image} />
                 <p className={styles.description}>{t('signup_end_page.description')}</p>
-                <button className="primary-button" onClick={onCreateProfile}>{t('signup_end_page.validate_button')}</button>
-
+                <button className="primary-button" onClick={onCreateProfile}>
+                    {t('signup_end_page.validate_button')}
+                </button>
             </div>
-
-        </SuccessLayout >
+        </SuccessLayout>
     );
 };
 
