@@ -14,7 +14,7 @@
         },
         "global": "Une erreur est survenue",
         "userDoesntExist": "L'utilisateur n'existe pas",
-        "userWrongCredentials": "Le mot de passe ou l'email est incorrect",
+        "userWrongCredentials": "Authentification en erreur : mauvais email ou mauvais mot de passe.",
         "connecteur": "Erreur lors de la récupération des informations utilisateur",
         "fileSizeExceed": "Le fichier est trop volumineux, il doit être inférieur à {maxSize}"
     },

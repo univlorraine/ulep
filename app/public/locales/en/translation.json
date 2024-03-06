@@ -9,15 +9,22 @@
         "sunday": "Sunday"
     },
     "errors": {
+        "ask_language": {
+            "conflit": "You have already requested this language"
+        },
         "global": "An error has occurred",
         "userDoesntExist": "This username does not exist",
-        "userWrongCredentials": "The password or email is incorrect",
+        "userWrongCredentials": "Authentication error: Bad email or bad password.",
         "connecteur": "",
         "fileSizeExceed": "The file is too big, it must be less than {maxSize}"
     },
     "error_page": {
-        "title": "",
-        "subtitle": ""
+        "title": "An error has occurred",
+        "subtitle": "We apologize but an error has occurred, please refresh the page or go back"
+    },
+    "maintenance_page": {
+        "title": "Maintenance is in progress",
+        "subtitle": "We apologize, but maintenance is in progress."
     },
     "forgot_password_page": {
         "button": "Send",
@@ -60,6 +67,11 @@
         "connect_button": "Sign in",
         "signup_title": "First time on the application?",
         "signup_button": "Create an account"
+    },
+    "confirm_modal": {
+        "cancel": "Cancel",
+        "title": "Are you sure you want to delete your account?",
+        "validate": "Confirm"
     },
     "home_page": {
         "profile": {
@@ -112,7 +124,12 @@
             "place": "🏖️ Their favourite place",
             "power": "⚡️ Their superpower",
             "title": "Tandem found 🎉",
-            "travel": "✈ Their travels"
+            "travel": "✈ Their travels",
+            "type": {
+                "BOTH": "Etandem / Tandem",
+                "ETANDEM": "Etandem",
+                "TANDEM": "Tandem"
+            }
         },
         "waiting_tandem": {
             "button": "Make a new request",
@@ -123,10 +140,10 @@
         }
     },
     "instance": {
-        "button": "",
-        "error": "",
-        "subtitle": "",
-        "title": ""
+        "button": "Validate and continue",
+        "error": "Error loading instance",
+        "subtitle": "Choose your instance from the list below",
+        "title": "Your program"
     },
     "languages": {
         "french": "French",
@@ -140,6 +157,8 @@
         "forgot": "Forgotten password?",
         "invalid_email": "Invalid email",
         "invalid_password": "Invalid password",
+        "sso_button": "Authenticate myself",
+        "sso_title": "Student of {{name}}, log in with university credentials",
         "subtitle": "Sign in with your university credentials to continue using the application",
         "title": "Sign in"
     },
@@ -206,13 +225,13 @@
     "pairing_quizz_validation": {
         "description": "Continue on your journey",
         "description_next_step": {
-            "A0": "",
-            "A1": "",
-            "A2": "",
-            "B1": "",
-            "B2": "",
-            "C1": "",
-            "C2": ""
+            "A0": "Shock tandem! Many potential profiles",
+            "A1": "Shock tandem! Many potential profiles",
+            "A2": "Shock tandem! Many potential profiles",
+            "B1": "Shock tandem! Many potential profiles",
+            "B2": "Shock tandem! Many potential profiles",
+            "C1": "Shock tandem! Many potential profiles",
+            "C2": "Shock tandem! Many potential profiles"
         },
         "next_button": "Cool, next",
         "next_step_button": "Understood!",
@@ -221,7 +240,9 @@
         "validated": "Confirmed"
     },
     "pairing_languages_page": {
+        "home_button": "Return to main page",
         "subtitle": "Which language do you want to practice with your tandem?",
+        "no_languages": "No language available",
         "title": "Chosen language",
         "validate_button": "Confirm and continue"
     },
@@ -235,7 +256,7 @@
         "validate_button": "Confirm and continue"
     },
     "pairing_other_languages_page": {
-        "joker_checkbox": "",
+        "joker_checkbox": "Joker language",
         "joker_description": "You want to help someone with their French while discovering a foreign language",
         "selected_language": {
             "explain_first_start": "We are sorry, this language",
@@ -280,8 +301,8 @@
         },
         "ressource_button": "SEE THE AVAILABLE RESOURCES",
         "ressource_title": "Resources to help me",
-        "pedagogy_button": "",
-        "pedagogy_title": "",
+        "pedagogy_button": "Choose another way to meet",
+        "pedagogy_title": "I would like to choose another method of meeting",
         "subtitle": "Find resources and group discussions online to practise the language.",
         "title": "This language is not available in tandem"
     },
@@ -357,25 +378,31 @@
         "validate_button": "Confirm and continue"
     },
     "signup_informations_page": {
-        "code": "",
+        "code": "Code",
         "confirm_password": "Confirm your password",
-        "cgu": "Accept the terms of use and privacy policy to use the application.",
+        "cgu": {
+            "confidentiality": "privacy policy",
+            "cgu": "terms of use",
+            "prefix": "Accept the",
+            "separator": "and the",
+            "suffix": " to use the application."
+        },
         "error_age": "Please enter a valid age",
-        "error_code": "",
+        "error_code": "Please enter a valid code",
         "error_confirm_password": "The passwords are not identical",
-        "error_domain": "",
+        "error_domain": "Please enter a valid email address (check email format and domain name)",
         "error_email": "Please enter a valid email",
         "error_email_already_exist": "",
         "error_firstname": "Please enter a valid first name",
         "error_gender": "Please select a gender",
         "error_lastname": "Please enter a valid last name",
         "error_password": "Please enter a valid password",
-        "error_picture_format": "",
-        "error_picture_weight": "",
+        "error_picture_format": "The selected image does not have a valid format (JPG, PNG or JPEG)",
+        "error_picture_weight": "The selected image is too heavy",
         "photo": "Add a photo",
         "photo_selected": "Update",
         "placeholder_age": "Enter your age",
-        "placeholder_code": "",
+        "placeholder_code": "Enter a registration code",
         "placeholder_confirm_password": "Confirm your password",
         "placeholder_email": "Add your email",
         "placeholder_firstname": "Enter your first name here",
@@ -397,7 +424,7 @@
         "function_title": "Profession",
         "footer_email": "Contact us at",
         "footer_university": "Our university is not yet a partner of",
-        "missing_field": "",
+        "missing_field": "Please enter all fields",
         "profile_title": "My profile",
         "sso_button": "Sign in",
         "staff_role": "University staff",
