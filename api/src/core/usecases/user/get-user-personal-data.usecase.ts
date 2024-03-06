@@ -1,7 +1,13 @@
 import { ProfileRepository } from '../../ports/profile.repository';
 import { Inject } from '@nestjs/common';
 import { RessourceDoesNotExist } from 'src/core/errors';
-import { Profile, SuggestedLanguage, Tandem, User } from 'src/core/models';
+import {
+  Profile,
+  SuggestedLanguage,
+  Tandem,
+  TandemStatus,
+  User,
+} from 'src/core/models';
 import { HistorizedTandem } from 'src/core/models/historized-tandem.model';
 import {
   LANGUAGE_REPOSITORY,
@@ -57,9 +63,9 @@ export class GetUserPersonalData {
     const historizedTandems =
       await this.tandemRepository.getHistorizedTandemForUser(user.id);
 
-    const activeTandems = await this.tandemRepository.getTandemsForProfile(
-      profile.id,
-    );
+    const activeTandems = (
+      await this.tandemRepository.getTandemsForProfile(profile.id)
+    ).filter((tandem) => tandem.status === TandemStatus.ACTIVE);
 
     return {
       user,

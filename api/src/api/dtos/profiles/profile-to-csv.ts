@@ -1,4 +1,5 @@
 import {
+  Interest,
   LearningLanguage,
   Profile,
   SuggestedLanguage,
@@ -32,8 +33,8 @@ const profileToExportInfos = (profile: Profile) => ({
   mastered_languages: profile.masteredLanguages.map(
     (language) => language.code,
   ),
-  goals: profile.objectives.map((objective) => objective.name.content),
-  interests: profile.interests.map((interest) => interest.name.content),
+  goals: profile.objectives,
+  interests: profile.interests,
   meeting_frequency: profile.meetingFrequency,
   bio: JSON.stringify(profile.biography),
   availabilities: JSON.stringify(profile.availabilities),
@@ -94,7 +95,6 @@ export const profileToCsv = ({
     }, {});
 
   // TODO(NOW): test historized tandems --> ID des anciens tandems ? ID / date creation + langue apprentisage
-  // TODO(NOW): check only ACTIVE TANDEMS
   // TODO(NOW): translate availabilities / bio
   // TODO(NOW): staffFunction / degree only if staff / student
   // TODO(NOW): translate dynamic values

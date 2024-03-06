@@ -47,7 +47,7 @@ import {
 } from '../dtos';
 import { AuthenticationGuard } from '../guards';
 import { ImagesFilePipe } from '../validators/images.validator';
-import { User } from 'src/core/models';
+import { Interest, LearningObjective, User } from 'src/core/models';
 import { GetAdministratorsQueryParams } from 'src/api/dtos/users/administrators-filter';
 import { RevokeSessionsUsecase } from 'src/core/usecases/user/revoke-sessions.usecase';
 import { OwnerAllowed } from '../decorators/owner.decorator';
@@ -244,6 +244,7 @@ export class UserController {
   @Header('Content-Disposition', 'attachment; filename="test.csv"')
   @Swagger.ApiOperation({ summary: 'Export user data.' })
   async exportOne(@Param('id', ParseUUIDPipe) id: string) {
+    // TODO(NOW): export some part of this in a presenter
     const userData = await this.getUserPersonalData.execute(id);
     const avatarSignedUrl = userData.user.avatar
       ? await this.storage.temporaryUrl(
@@ -293,6 +294,21 @@ export class UserController {
               return value;
             }
           }
+        },
+        object: (value, { column }) => {
+          if (column === 'interests' || column === 'goals') {
+            // Manage TextContent here
+            return JSON.stringify(
+              value.map((item: Interest | LearningObjective) => {
+                return (
+                  item.name.translations.find((translation) =>
+                    translation.language.includes(userLanguage),
+                  )?.content || item.name.content
+                );
+              }),
+            );
+          }
+          return JSON.stringify(value);
         },
       },
     });
