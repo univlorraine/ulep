@@ -117,4 +117,8 @@ export class InMemoryLanguageRepository implements LanguageRepository {
     );
     return Promise.resolve(res);
   }
+
+  getLanguagesSuggestedByUser(): Promise<SuggestedLanguage[]> {
+    throw new Error('Not implemented');
+  }
 }
