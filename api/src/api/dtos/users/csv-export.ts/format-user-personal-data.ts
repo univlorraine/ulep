@@ -130,6 +130,6 @@ export const formatUserPersonalData = ({
     );
     return dataWithLearningLanguages;
   } else {
-    return baseData;
+    return [baseData];
   }
 };
