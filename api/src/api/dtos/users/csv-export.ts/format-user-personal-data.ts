@@ -114,19 +114,17 @@ export const formatUserPersonalData = ({
     }, {});
 
   // TODO(NOW+1): return type ?
+  // TODO(NOW+1): reorder columns
   // TODO(NOW+1): test historized tandems --> ID des anciens tandems ? ID / date creation + langue apprentisage
 
   const baseData = {
     ...userToExportInfos(user),
     avatar: avatarSignedUrl,
     is_blacklisted: !!isBlacklisted,
-    suggested_languages: languagesSuggestedByUser.map((suggestedLanguage) =>
-      JSON.stringify({
-        // TODO(NOW): translate
-        code: suggestedLanguage.language.code,
-        suggestion_date: suggestedLanguage.createdAt,
-      }),
-    ),
+    suggested_languages: languagesSuggestedByUser.map((suggestedLanguage) => ({
+      code: suggestedLanguage.language.code,
+      suggestion_date: suggestedLanguage.createdAt,
+    })),
     nb_previous_tandems: historizedTandems.length,
     ...profileToExportInfos(profile),
   };

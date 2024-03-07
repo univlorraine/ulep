@@ -36,6 +36,7 @@ export const userPersonalDataToCsv = (
     cast: {
       boolean: (value) =>
         translate(`api.export.values.${value ? 'true' : 'false'}`),
+      // TODO(NOW): add hours to date
       date: (value) => new Intl.DateTimeFormat(userLanguage).format(value),
       string: (value, { header, column }) => {
         if (header) {
@@ -92,6 +93,15 @@ export const userPersonalDataToCsv = (
             value.map((item: Language) =>
               translate(`translation.languages_code.${item.code}`),
             ),
+          );
+        } else if (column === 'suggested_languages') {
+          return JSON.stringify(
+            value.map((item) => ({
+              suggestion_date: new Intl.DateTimeFormat(userLanguage).format(
+                item.suggestion_date,
+              ),
+              language: translate(`translation.languages_code.${item.code}`),
+            })),
           );
         }
         return JSON.stringify(value);
