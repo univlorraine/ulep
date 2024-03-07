@@ -1,3 +1,4 @@
+import { Language } from './language.model';
 import Purge from './purge.model';
 
 export interface HistorizedTandemProps {
@@ -5,7 +6,7 @@ export interface HistorizedTandemProps {
   userId: string;
   purge: Purge;
   createdAt: Date;
-  //   TODO(NOW): decide what todo with langage_code_id
+  language: Language;
 }
 
 export class HistorizedTandem {
@@ -13,11 +14,13 @@ export class HistorizedTandem {
   readonly userId: string;
   readonly purge: Purge;
   readonly createdAt: Date;
+  readonly language: Language;
 
   constructor(props: HistorizedTandemProps) {
     this.id = props.id;
     this.purge = props.purge;
     this.userId = props.userId;
     this.createdAt = props.createdAt;
+    this.language = props.language;
   }
 }

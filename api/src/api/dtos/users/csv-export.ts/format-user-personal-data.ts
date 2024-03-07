@@ -100,9 +100,9 @@ export const formatUserPersonalData = ({
       return acc;
     }, {});
 
+  // TODO(NOW+1): refactor country
   // TODO(NOW+1): return type ?
   // TODO(NOW+1): reorder columns
-  // TODO(NOW+1): test historized tandems --> ID des anciens tandems ? ID / date creation + langue apprentisage
 
   const baseData = {
     ...userToExportInfos(user),
@@ -113,7 +113,10 @@ export const formatUserPersonalData = ({
       code: suggestedLanguage.language.code,
       suggestion_date: suggestedLanguage.createdAt,
     })),
-    nb_previous_tandems: historizedTandems.length,
+    historized_tandems: historizedTandems.map((historizedTandem) => ({
+      code: historizedTandem.language.code,
+      historization_date: historizedTandem.createdAt,
+    })),
     ...profileToExportInfos(profile),
   };
 
