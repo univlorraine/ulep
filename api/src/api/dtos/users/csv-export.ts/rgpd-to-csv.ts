@@ -1,9 +1,4 @@
-import {
-  CountryCode,
-  Interest,
-  Language,
-  LearningObjective,
-} from 'src/core/models';
+import { Interest, Language, LearningObjective } from 'src/core/models';
 import { UserPersonalData } from 'src/core/usecases/user/get-user-personal-data.usecase';
 import { formatUserPersonalData } from './format-user-personal-data';
 import { stringify } from 'csv-stringify';

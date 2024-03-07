@@ -1,4 +1,3 @@
-import { Logger } from '@nestjs/common';
 import { DomainError } from '../errors';
 import { LearningLanguagesMustContainsProfiles } from '../errors/match-exceptions';
 import { LearningLanguage } from './learning-language.model';

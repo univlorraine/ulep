@@ -1,13 +1,7 @@
 import { Inject, Injectable, Logger } from '@nestjs/common';
 import { USER_REPOSITORY, UserRepository } from '../../ports/user.repository';
 import { RessourceDoesNotExist } from 'src/core/errors';
-import {
-  Tandem,
-  TandemStatus,
-  University,
-  User,
-  UserStatus,
-} from 'src/core/models';
+import { Tandem, TandemStatus, User, UserStatus } from 'src/core/models';
 import {
   PROFILE_REPOSITORY,
   ProfileRepository,
