@@ -23,7 +23,7 @@ import {
   UserRepository,
 } from 'src/core/ports/user.repository';
 
-interface UserPersonalData {
+export interface UserPersonalData {
   user: User;
   isBlacklisted: boolean;
   profile: Profile;

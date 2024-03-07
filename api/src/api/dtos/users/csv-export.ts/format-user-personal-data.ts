@@ -87,7 +87,7 @@ interface ActiveTandemPerLearningLanguageId {
   [key: string]: Tandem;
 }
 
-export const profileToCsv = ({
+export const formatUserPersonalData = ({
   user,
   isBlacklisted,
   profile,
@@ -122,6 +122,7 @@ export const profileToCsv = ({
     is_blacklisted: !!isBlacklisted,
     suggested_languages: languagesSuggestedByUser.map((suggestedLanguage) =>
       JSON.stringify({
+        // TODO(NOW): translate
         code: suggestedLanguage.language.code,
         suggestion_date: suggestedLanguage.createdAt,
       }),
