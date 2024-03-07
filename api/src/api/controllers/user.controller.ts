@@ -245,15 +245,6 @@ export class UserController {
   @Swagger.ApiOperation({ summary: 'Export user data.' })
   async exportOne(@Param('id', ParseUUIDPipe) id: string) {
     const userData = await this.getUserPersonalData.execute(id);
-    const countries = await this.getCountriesUseCase.execute({
-      // TODO(NOW+1): do search ?
-      // TODO(NOW+1): do that in constructor ?
-      // Note: user.country only contains country.code. This is why we get list of all countries
-      // to translate it. It would be better to return Country object in user but would need a
-      // more consequent refactoring.
-      pagination: false,
-      enable: true,
-    });
     const avatarSignedUrl = userData.user.avatar
       ? await this.storage.temporaryUrl(
           userData.user.avatar.bucket,
@@ -267,7 +258,6 @@ export class UserController {
       {
         userData,
         avatarSignedUrl,
-        countries: countries.items,
       },
       (value: string) =>
         this.i18n.translate(value, {

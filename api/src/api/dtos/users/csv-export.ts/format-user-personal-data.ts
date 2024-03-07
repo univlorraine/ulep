@@ -1,12 +1,5 @@
-import {
-  LearningLanguage,
-  Profile,
-  Role,
-  SuggestedLanguage,
-  Tandem,
-  User,
-} from 'src/core/models';
-import { HistorizedTandem } from 'src/core/models/historized-tandem.model';
+import { LearningLanguage, Profile, Role, Tandem, User } from 'src/core/models';
+import { UserPersonalData } from 'src/core/usecases';
 
 const userToExportInfos = (user: User) => {
   let info: any = {
@@ -24,7 +17,6 @@ const userToExportInfos = (user: User) => {
     user_created_at: user.createdAt,
     user_last_update: user.updatedAt,
     university: user.university.name,
-    country: user.country,
   };
   if (user.role === Role.STAFF) {
     info = {
@@ -89,19 +81,14 @@ interface ActiveTandemPerLearningLanguageId {
 
 export const formatUserPersonalData = ({
   user,
+  userCountry,
   isBlacklisted,
   profile,
   languagesSuggestedByUser,
   activeTandems,
   historizedTandems,
   avatarSignedUrl,
-}: {
-  user: User;
-  isBlacklisted: boolean;
-  profile: Profile;
-  languagesSuggestedByUser: SuggestedLanguage[];
-  activeTandems: Tandem[];
-  historizedTandems: HistorizedTandem[];
+}: UserPersonalData & {
   avatarSignedUrl?: string;
 }): any => {
   const activeTandemsInfosPerLearningLanguageId =
@@ -119,6 +106,7 @@ export const formatUserPersonalData = ({
 
   const baseData = {
     ...userToExportInfos(user),
+    country: userCountry.name,
     avatar: avatarSignedUrl,
     is_blacklisted: !!isBlacklisted,
     suggested_languages: languagesSuggestedByUser.map((suggestedLanguage) => ({

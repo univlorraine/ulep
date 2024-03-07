@@ -11,20 +11,12 @@ import { stringify } from 'csv-stringify';
 interface UserPersonalDataToCsvParams {
   userData: UserPersonalData;
   avatarSignedUrl?: string;
-  countries: CountryCode[];
 }
 
 export const userPersonalDataToCsv = (
-  { userData, avatarSignedUrl, countries }: UserPersonalDataToCsvParams,
+  { userData, avatarSignedUrl }: UserPersonalDataToCsvParams,
   translate: (key: string) => string,
 ) => {
-  const countryNamesByCode = countries.reduce<{
-    [key: string]: string;
-  }>((acc, country) => {
-    acc[country.code] = country.name;
-    return acc;
-  }, {});
-
   const content = formatUserPersonalData({
     ...userData,
     avatarSignedUrl,
@@ -69,8 +61,6 @@ export const userPersonalDataToCsv = (
             case 'sunday_availabilities':
               key = 'availabilities';
               break;
-            case 'country':
-              return countryNamesByCode[value] || value;
           }
           if (key) {
             return translate(`api.export.values.${key}.${value}`);
