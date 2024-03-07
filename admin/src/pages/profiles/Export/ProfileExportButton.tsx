@@ -1,6 +1,8 @@
 import { Download } from '@mui/icons-material';
+import { CircularProgress } from '@mui/material';
 import React from 'react';
 import { Button, useDataProvider, useRecordContext, useTranslate } from 'react-admin';
+import { useMutation } from 'react-query';
 
 const ProfileExportButton = () => {
     const translate = useTranslate();
@@ -9,7 +11,7 @@ const ProfileExportButton = () => {
 
     const dataProvider = useDataProvider();
 
-    const handleDownload = async () => {
+    const { mutate: handleDownload, isLoading } = useMutation(async () => {
         const response = await dataProvider.exportUserPersonalData(userId);
         const blob = await response.blob();
 
@@ -21,12 +23,18 @@ const ProfileExportButton = () => {
         link.click();
         window.URL.revokeObjectURL(url);
         document.body.removeChild(link);
-    };
+    });
 
     if (!userId) return null;
 
-    // TODO(NOW): disable + loading state ( <CircularProgress size={15} />)
-    return <Button label={translate('profiles.export')} onClick={handleDownload} startIcon={<Download />} />;
+    return (
+        <Button
+            disabled={isLoading}
+            label={translate('profiles.export')}
+            onClick={() => handleDownload()}
+            startIcon={isLoading ? <CircularProgress size={15} /> : <Download />}
+        />
+    );
 };
 
 export default ProfileExportButton;
