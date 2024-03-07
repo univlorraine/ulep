@@ -54,7 +54,12 @@
             "is_blacklisted": "Est sur liste noire",
             "suggested_languages": "Langues suggérées",
             "historized_tandems": "Anciens tandems",
-            "avatar": "Avatar"
+            "avatar": "Avatar",
+            "arrayKeys": {
+                "language": "Langue",
+                "suggestion_date": "Date suggestion",
+                "historization_date": "Date historisation"
+            }
         },
         "values": {
             "true": "Oui",

@@ -70,7 +70,6 @@ export const userPersonalDataToCsv = (
         }
       },
       object: (value, { column }) => {
-        // TODO(NOW): translate object keys
         if (column === 'interests' || column === 'goals') {
           return JSON.stringify(
             value.map((item: Interest | LearningObjective) => {
@@ -95,15 +94,21 @@ export const userPersonalDataToCsv = (
         } else if (column === 'suggested_languages') {
           return JSON.stringify(
             value.map((item) => ({
-              language: translate(`translation.languages_code.${item.code}`),
-              suggestion_date: dateFormater.format(item.suggestion_date),
+              [translate('api.export.headers.arrayKeys.language')]: translate(
+                `translation.languages_code.${item.code}`,
+              ),
+              [translate('api.export.headers.arrayKeys.suggestion_date')]:
+                dateFormater.format(item.suggestion_date),
             })),
           );
         } else if (column === 'historized_tandems') {
           return JSON.stringify(
             value.map((item) => ({
-              language: translate(`translation.languages_code.${item.code}`),
-              historization_date: dateFormater.format(item.historization_date),
+              [translate('api.export.headers.arrayKeys.language')]: translate(
+                `translation.languages_code.${item.code}`,
+              ),
+              [translate('api.export.headers.arrayKeys.historization_date')]:
+                dateFormater.format(item.historization_date),
             })),
           );
         }
