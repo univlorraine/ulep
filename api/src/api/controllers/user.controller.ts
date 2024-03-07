@@ -252,7 +252,6 @@ export class UserController {
           this.#expirationTime,
         )
       : undefined;
-    const userLanguage = userData.profile.nativeLanguage.code;
 
     const csv = userPersonalDataToCsv(
       {
@@ -261,7 +260,7 @@ export class UserController {
       },
       (value: string) =>
         this.i18n.translate(value, {
-          lang: userLanguage,
+          lang: userData.profile.nativeLanguage.code,
         }),
     );
 

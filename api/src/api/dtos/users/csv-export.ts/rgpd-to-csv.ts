@@ -107,7 +107,6 @@ export const userPersonalDataToCsv = (
             })),
           );
         }
-
         return JSON.stringify(value);
       },
     },

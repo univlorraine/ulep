@@ -8,6 +8,7 @@ const userToExportInfos = (user: User) => {
     lastname: user.lastname,
     age: user.age,
     gender: user.gender,
+    country: user.country.name,
     university: user.university.name,
     role: user.role,
     division: user.division,
@@ -81,7 +82,6 @@ interface ActiveTandemPerLearningLanguageId {
 
 export const formatUserPersonalData = ({
   user,
-  userCountry,
   isBlacklisted,
   profile,
   languagesSuggestedByUser,
@@ -100,12 +100,10 @@ export const formatUserPersonalData = ({
       return acc;
     }, {});
 
-  // TODO(NOW+1): refactor country
   // TODO(NOW+1): return type ?
 
   const baseData = {
     ...userToExportInfos(user),
-    country: userCountry.name,
     avatar: avatarSignedUrl,
     is_blacklisted: !!isBlacklisted,
     ...profileToExportInfos(profile),

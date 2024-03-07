@@ -28,7 +28,6 @@ import {
 
 export interface UserPersonalData {
   user: User;
-  userCountry: CountryCode;
   isBlacklisted: boolean;
   profile: Profile;
   languagesSuggestedByUser: SuggestedLanguage[];
@@ -46,8 +45,6 @@ export class GetUserPersonalData {
     private readonly profileRepository: ProfileRepository,
     @Inject(TANDEM_REPOSITORY)
     private readonly tandemRepository: TandemRepository,
-    @Inject(COUNTRY_REPOSITORY)
-    private readonly countryRepository: CountryRepository,
   ) {}
 
   async execute(id: string): Promise<UserPersonalData> {
@@ -55,7 +52,6 @@ export class GetUserPersonalData {
     if (!user) {
       throw new RessourceDoesNotExist();
     }
-    const userCountry = await this.countryRepository.ofCode(user.country.code);
 
     const isBlacklisted = await this.userRepository.isBlacklisted(user.email);
 
@@ -76,7 +72,6 @@ export class GetUserPersonalData {
 
     return {
       user,
-      userCountry,
       isBlacklisted,
       profile,
       languagesSuggestedByUser,
