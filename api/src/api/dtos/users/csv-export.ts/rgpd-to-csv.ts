@@ -31,13 +31,20 @@ export const userPersonalDataToCsv = (
   });
 
   const userLanguage = userData.profile.nativeLanguage.code;
+  const dateFormater = new Intl.DateTimeFormat(userLanguage, {
+    year: 'numeric',
+    month: 'numeric',
+    day: 'numeric',
+    hour: 'numeric',
+    minute: 'numeric',
+    second: 'numeric',
+  });
   const csv = stringify(content, {
     header: true,
     cast: {
       boolean: (value) =>
         translate(`api.export.values.${value ? 'true' : 'false'}`),
-      // TODO(NOW): add hours to date
-      date: (value) => new Intl.DateTimeFormat(userLanguage).format(value),
+      date: (value) => dateFormater.format(value),
       string: (value, { header, column }) => {
         if (header) {
           return translate(`api.export.headers.${value}`);
@@ -97,9 +104,7 @@ export const userPersonalDataToCsv = (
         } else if (column === 'suggested_languages') {
           return JSON.stringify(
             value.map((item) => ({
-              suggestion_date: new Intl.DateTimeFormat(userLanguage).format(
-                item.suggestion_date,
-              ),
+              suggestion_date: dateFormater.format(item.suggestion_date),
               language: translate(`translation.languages_code.${item.code}`),
             })),
           );
