@@ -199,7 +199,10 @@
         }
     },
     "profiles": {
-        "export": "Exporter",
+        "export": {
+            "buttonLabel": "Exporter",
+            "error": "Une erreur est survenue durant l'export de l'utilisateur"
+        },
         "availabilities": "Disponibilités",
         "availabilities_note": "Note de disponibilité",
         "biography": {

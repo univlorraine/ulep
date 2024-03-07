@@ -197,7 +197,10 @@
         }
     },
     "profiles": {
-        "export": "Export",
+        "export": {
+            "buttonLabel": "Export",
+            "error": "An error occured while exporting user"
+        },
         "availabilities": "Availabilities",
         "availabilities_note": "Availabilities note",
         "biography": {

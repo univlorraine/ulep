@@ -270,7 +270,7 @@ export class UserResponse {
       age: user.age,
       university: UniversityResponse.fromUniversity(user.university),
       role: user.role,
-      country: user.country,
+      country: user.country.code,
       status: user.status,
       acceptsEmail: user.acceptsEmail,
       division: user.division,

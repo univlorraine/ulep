@@ -55,7 +55,7 @@ export class GetUserPersonalData {
     if (!user) {
       throw new RessourceDoesNotExist();
     }
-    const userCountry = await this.countryRepository.ofCode(user.country);
+    const userCountry = await this.countryRepository.ofCode(user.country.code);
 
     const isBlacklisted = await this.userRepository.isBlacklisted(user.email);
 

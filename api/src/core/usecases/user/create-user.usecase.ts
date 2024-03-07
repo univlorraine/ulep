@@ -121,7 +121,7 @@ export class CreateUserUsecase {
           age: command.age,
           university: university,
           role: command.role.toUpperCase() as Role,
-          country: country.code,
+          country,
           division: command.division,
           diploma: command.diploma,
           staffFunction: command.staffFunction,

@@ -1,3 +1,4 @@
+import { CountryCode } from './country-code.model';
 import { Language } from './language.model';
 import { MediaObject } from './media.model';
 import { University } from './university.model';
@@ -29,7 +30,7 @@ export type UserProps = {
   age: number;
   university: University;
   role: Role;
-  country: string;
+  country: CountryCode;
   avatar?: MediaObject;
   status?: UserStatus;
   deactivatedReason?: string;
@@ -51,7 +52,7 @@ export class User {
   readonly age: number;
   readonly university: University;
   readonly role: Role;
-  readonly country: string;
+  readonly country: CountryCode;
   readonly acceptsEmail: boolean;
   readonly avatar?: MediaObject;
   readonly status?: UserStatus;

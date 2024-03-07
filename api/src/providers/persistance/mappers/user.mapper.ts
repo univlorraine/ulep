@@ -26,7 +26,7 @@ export const userMapper = (snapshot: UserSnapshot): User => {
     lastname: snapshot.lastname,
     gender: snapshot.gender as Gender,
     age: snapshot.age,
-    country: snapshot.Nationality?.code,
+    country: snapshot.Nationality,
     role: snapshot.role as Role,
     university: universityMapper(snapshot.Organization),
     avatar:
