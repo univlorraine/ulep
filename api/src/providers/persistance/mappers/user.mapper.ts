@@ -46,6 +46,5 @@ export const userMapper = (snapshot: UserSnapshot): User => {
     deactivated: snapshot.deactivated,
     createdAt: snapshot.created_at,
     updatedAt: snapshot.updated_at,
-    // TODO(NOW+1): check date doesn't need parsing
   });
 };

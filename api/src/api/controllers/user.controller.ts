@@ -20,7 +20,7 @@ import {
 } from '@nestjs/common';
 import { FileInterceptor } from '@nestjs/platform-express';
 import * as Swagger from '@nestjs/swagger';
-import { UploadAvatarUsecase } from 'src/core/usecases';
+import { UploadAvatarUsecase, GetCountriesUsecase } from 'src/core/usecases';
 import {
   CreateAdministratorUsecase,
   CreateUserUsecase,
@@ -47,7 +47,7 @@ import {
 } from '../dtos';
 import { AuthenticationGuard } from '../guards';
 import { ImagesFilePipe } from '../validators/images.validator';
-import { Interest, LearningObjective, User } from 'src/core/models';
+import { Interest, Language, LearningObjective, User } from 'src/core/models';
 import { GetAdministratorsQueryParams } from 'src/api/dtos/users/administrators-filter';
 import { RevokeSessionsUsecase } from 'src/core/usecases/user/revoke-sessions.usecase';
 import { OwnerAllowed } from '../decorators/owner.decorator';
@@ -84,6 +84,7 @@ export class UserController {
     private readonly i18n: I18nService,
     @Inject(STORAGE_INTERFACE) private readonly storage: StorageInterface,
     env: ConfigService<Env, true>,
+    private readonly getCountriesUseCase: GetCountriesUsecase,
   ) {
     this.#expirationTime = env.get('SIGNED_URL_EXPIRATION_IN_SECONDS');
   }
@@ -246,6 +247,19 @@ export class UserController {
   async exportOne(@Param('id', ParseUUIDPipe) id: string) {
     // TODO(NOW): export some part of this in a presenter
     const userData = await this.getUserPersonalData.execute(id);
+    const countries = await this.getCountriesUseCase.execute({
+      // TODO(NOW): explain why that
+      // TODO(NOW+1): do that in constructor ?
+      pagination: false,
+      enable: true,
+    });
+    const countryNamesByCode = countries.items.reduce<{
+      [key: string]: string;
+    }>((acc, country) => {
+      acc[country.code] = country.name;
+      return acc;
+    }, {});
+
     const avatarSignedUrl = userData.user.avatar
       ? await this.storage.temporaryUrl(
           userData.user.avatar.bucket,
@@ -294,6 +308,8 @@ export class UserController {
               case 'sunday_availabilities':
                 key = 'availabilities';
                 break;
+              case 'country':
+                return countryNamesByCode[value] || value;
             }
             if (key) {
               return this.i18n.translate(`api.export.values.${key}.${value}`, {
@@ -306,7 +322,6 @@ export class UserController {
         },
         object: (value, { column }) => {
           if (column === 'interests' || column === 'goals') {
-            // Manage TextContent here
             return JSON.stringify(
               value.map((item: Interest | LearningObjective) => {
                 return (
@@ -315,6 +330,24 @@ export class UserController {
                   )?.content || item.name.content
                 );
               }),
+            );
+          } else if (
+            column === 'native_language' ||
+            column === 'learning_request_language'
+          ) {
+            return this.i18n.translate(
+              `translation.languages_code.${value.code}`,
+              {
+                lang: userLanguage,
+              },
+            );
+          } else if (column === 'mastered_languages') {
+            return JSON.stringify(
+              value.map((item: Language) =>
+                this.i18n.translate(`translation.languages_code.${item.code}`, {
+                  lang: userLanguage,
+                }),
+              ),
             );
           }
           return JSON.stringify(value);

@@ -24,7 +24,7 @@ const userToExportInfos = (user: User) => {
     user_created_at: user.createdAt,
     user_last_update: user.updatedAt,
     university: user.university.name,
-    nationality: user.country,
+    country: user.country,
   };
   if (user.role === Role.STAFF) {
     info = {
@@ -41,10 +41,8 @@ const userToExportInfos = (user: User) => {
 };
 
 const profileToExportInfos = (profile: Profile) => ({
-  native_language: profile.nativeLanguage.code,
-  mastered_languages: profile.masteredLanguages.map(
-    (language) => language.code,
-  ),
+  native_language: profile.nativeLanguage,
+  mastered_languages: profile.masteredLanguages,
   goals: profile.objectives,
   interests: profile.interests,
   meeting_frequency: profile.meetingFrequency,
@@ -72,7 +70,7 @@ const learningLanguageToExportInfos = (
   return {
     learning_request_created_at: learningLanguage.createdAt,
     learning_request_last_update: learningLanguage.updatedAt,
-    learning_request_language: learningLanguage.language.code,
+    learning_request_language: learningLanguage.language,
     learning_request_level: learningLanguage.level,
     learning_request_type: learningLanguage.learningType,
     learning_request_campus: learningLanguage.campus?.name,
@@ -115,9 +113,8 @@ export const profileToCsv = ({
       return acc;
     }, {});
 
-  // TODO(NOW): test historized tandems --> ID des anciens tandems ? ID / date creation + langue apprentisage
-  // TODO(NOW): translate languages names
   // TODO(NOW+1): return type ?
+  // TODO(NOW+1): test historized tandems --> ID des anciens tandems ? ID / date creation + langue apprentisage
 
   const baseData = {
     ...userToExportInfos(user),
@@ -148,6 +145,4 @@ export const profileToCsv = ({
   } else {
     return baseData;
   }
-
-  // TODO(NOW): use cast to tranform array, dates, bool etc
 };

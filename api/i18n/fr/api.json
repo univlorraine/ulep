@@ -18,7 +18,7 @@
             "user_created_at": "Date de création utilisateur",
             "user_last_update": "Dernière mise à jour utilisateur",
             "university": "Université",
-            "nationality": "Nationalité",
+            "country": "Pays",
             "native_language": "Langue native",
             "mastered_languages": "Langues maitrisées",
             "learning_request_created_at": "Date de création requête",
