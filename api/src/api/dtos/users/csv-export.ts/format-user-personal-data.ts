@@ -8,15 +8,15 @@ const userToExportInfos = (user: User) => {
     lastname: user.lastname,
     age: user.age,
     gender: user.gender,
+    university: user.university.name,
     role: user.role,
+    division: user.division,
+    accepts_email: !!user.acceptsEmail,
     status: user.status,
     user_deactivated: !!user.deactivated,
     deactivated_reason: user.deactivatedReason,
-    accepts_email: !!user.acceptsEmail,
-    division: user.division,
     user_created_at: user.createdAt,
     user_last_update: user.updatedAt,
-    university: user.university.name,
   };
   if (user.role === Role.STAFF) {
     info = {
@@ -60,8 +60,6 @@ const learningLanguageToExportInfos = (
   associatedTandem?: Tandem,
 ) => {
   return {
-    learning_request_created_at: learningLanguage.createdAt,
-    learning_request_last_update: learningLanguage.updatedAt,
     learning_request_language: learningLanguage.language,
     learning_request_level: learningLanguage.level,
     learning_request_type: learningLanguage.learningType,
@@ -70,6 +68,8 @@ const learningLanguageToExportInfos = (
     learning_request_same_age: !!learningLanguage.sameAge,
     learning_request_certificate_option: !!learningLanguage.certificateOption,
     learning_request_specific_program: !!learningLanguage.specificProgram,
+    learning_request_created_at: learningLanguage.createdAt,
+    learning_request_last_update: learningLanguage.updatedAt,
     has_associated_tandem: !!associatedTandem,
     associated_tandem_creation_date: associatedTandem?.createdAt,
   };
@@ -102,13 +102,13 @@ export const formatUserPersonalData = ({
 
   // TODO(NOW+1): refactor country
   // TODO(NOW+1): return type ?
-  // TODO(NOW+1): reorder columns
 
   const baseData = {
     ...userToExportInfos(user),
     country: userCountry.name,
     avatar: avatarSignedUrl,
     is_blacklisted: !!isBlacklisted,
+    ...profileToExportInfos(profile),
     suggested_languages: languagesSuggestedByUser.map((suggestedLanguage) => ({
       code: suggestedLanguage.language.code,
       suggestion_date: suggestedLanguage.createdAt,
@@ -117,7 +117,6 @@ export const formatUserPersonalData = ({
       code: historizedTandem.language.code,
       historization_date: historizedTandem.createdAt,
     })),
-    ...profileToExportInfos(profile),
   };
 
   if (profile.learningLanguages.length > 0) {
