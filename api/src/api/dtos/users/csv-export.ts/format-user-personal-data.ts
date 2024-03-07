@@ -90,7 +90,7 @@ export const formatUserPersonalData = ({
   avatarSignedUrl,
 }: UserPersonalData & {
   avatarSignedUrl?: string;
-}): any => {
+}): { [key: string]: any } => {
   const activeTandemsInfosPerLearningLanguageId =
     activeTandems.reduce<ActiveTandemPerLearningLanguageId>((acc, tandem) => {
       const currentUserLearningLanguage = tandem.learningLanguages.find(
@@ -99,8 +99,6 @@ export const formatUserPersonalData = ({
       acc[currentUserLearningLanguage.id] = tandem;
       return acc;
     }, {});
-
-  // TODO(NOW+1): return type ?
 
   const baseData = {
     ...userToExportInfos(user),
