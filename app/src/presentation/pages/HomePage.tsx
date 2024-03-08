@@ -68,6 +68,7 @@ const HomePage: React.FC = () => {
         .padStart(2, '0')}`;
 
     if (!profile) {
+        // TODO(NOW): can be cause of multiple renders
         return <Redirect to={'/'} />;
     }
 
