@@ -17,6 +17,11 @@
     color: white;
 }
 
+.center-button {
+    align-self: center;
+    max-width: 250px;
+}
+
 .primary-button.disabled {
     background-color: #a7a7a7;
 }

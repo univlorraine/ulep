@@ -60,9 +60,9 @@
     text-align: center;
 }
 
-@media (min-width: 1080px) {
+@media (min-width: 768px) {
     .main-content {
-        padding: 0 60px;
+        padding: 0 30px;
         max-width: 600px;
         margin: 0 auto;
     }

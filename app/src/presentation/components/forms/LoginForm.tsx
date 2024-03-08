@@ -80,7 +80,7 @@ const LoginForm: React.FC<LoginFormProps> = ({ goBack, onLogin }) => {
                             value={password}
                         />
                         <div className={style['bottom-container']}>
-                            <button className="primary-button">{t('login_page.button')}</button>
+                            <button className="primary-button center-button">{t('login_page.button')}</button>
 
                             <IonRouterLink className="secondary-button large-margin-top" routerLink="/forgot-password">
                                 {t('login_page.forgot')}
@@ -92,7 +92,7 @@ const LoginForm: React.FC<LoginFormProps> = ({ goBack, onLogin }) => {
                         <p className={style['sso-text']}>
                             {t('login_page.sso_title', { name: configuration.mainUniversityName })}
                         </p>
-                        <button className="tertiary-button large-margin-vertical" onClick={ssoLogin}>
+                        <button className="tertiary-button large-margin-vertical center-button" onClick={ssoLogin}>
                             {t('login_page.sso_button')}
                         </button>
                     </div>
