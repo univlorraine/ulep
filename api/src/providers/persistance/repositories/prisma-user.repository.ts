@@ -23,7 +23,7 @@ export class PrismaUserRepository implements UserRepository {
         diploma: user.diploma,
         division: user.division,
         staff_function: user.staffFunction,
-        Nationality: { connect: { code: user.country } },
+        Nationality: { connect: { id: user.country.id } },
         deactivated_reason: user.deactivatedReason,
       },
       include: {
@@ -92,7 +92,7 @@ export class PrismaUserRepository implements UserRepository {
         age: user.age,
         gender: user.gender,
         role: user.role,
-        Nationality: { connect: { code: user.country } },
+        Nationality: { connect: { id: user.country.id } },
         status: user.status,
         deactivated_reason: user.deactivatedReason,
         accepts_email: user.acceptsEmail,

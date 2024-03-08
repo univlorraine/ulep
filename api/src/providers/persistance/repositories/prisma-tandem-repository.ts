@@ -4,6 +4,11 @@ import { TandemRepository } from '../../../core/ports/tandems.repository';
 import { FindWhereProps } from '../../../core/ports/tandems.repository';
 import { Tandem, TandemStatus } from '../../../core/models';
 import { TandemRelations, tandemMapper } from '../mappers/tandem.mapper';
+import { HistorizedTandem } from 'src/core/models/historized-tandem.model';
+import {
+  HistorizedTandemRelation,
+  historizedTandemMapper,
+} from '../mappers/historizedTandem.mapper';
 
 @Injectable()
 export class PrismaTandemRepository implements TandemRepository {
@@ -299,5 +304,17 @@ export class PrismaTandemRepository implements TandemRepository {
         })),
       });
     }
+  }
+
+  async getHistorizedTandemForUser(
+    userId: string,
+  ): Promise<HistorizedTandem[]> {
+    const res = await this.prisma.tandemHistory.findMany({
+      where: {
+        user_id: userId,
+      },
+      include: HistorizedTandemRelation,
+    });
+    return res.map(historizedTandemMapper);
   }
 }

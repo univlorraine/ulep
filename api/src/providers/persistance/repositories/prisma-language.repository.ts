@@ -221,4 +221,17 @@ export class PrismaLanguageRepository implements LanguageRepository {
     });
     return res.map(languageMapper);
   }
+
+  async getLanguagesSuggestedByUser(
+    userId: string,
+  ): Promise<SuggestedLanguage[]> {
+    const res = await this.prisma.suggestedLanguages.findMany({
+      where: {
+        user_id: userId,
+      },
+      include: SuggestedLanguageRelations,
+    });
+
+    return res.map(suggestedLanguageMapper);
+  }
 }

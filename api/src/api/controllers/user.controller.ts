@@ -5,19 +5,22 @@ import {
   Controller,
   Delete,
   Get,
+  Header,
+  Inject,
   Param,
   ParseUUIDPipe,
   Patch,
   Post,
   Put,
   Query,
+  StreamableFile,
   UploadedFile,
   UseGuards,
   UseInterceptors,
 } from '@nestjs/common';
 import { FileInterceptor } from '@nestjs/platform-express';
 import * as Swagger from '@nestjs/swagger';
-import { UploadAvatarUsecase } from 'src/core/usecases';
+import { UploadAvatarUsecase, GetCountriesUsecase } from 'src/core/usecases';
 import {
   CreateAdministratorUsecase,
   CreateUserUsecase,
@@ -29,6 +32,7 @@ import {
   GetUsersUsecase,
   UpdateAdministratorUsecase,
   UpdateUserUsecase,
+  GetUserPersonalData,
 } from '../../core/usecases/user';
 import { CollectionResponse, CurrentUser } from '../decorators';
 import { Role, Roles } from '../decorators/roles.decorator';
@@ -47,10 +51,21 @@ import { User } from 'src/core/models';
 import { GetAdministratorsQueryParams } from 'src/api/dtos/users/administrators-filter';
 import { RevokeSessionsUsecase } from 'src/core/usecases/user/revoke-sessions.usecase';
 import { OwnerAllowed } from '../decorators/owner.decorator';
+import { I18nService } from 'nestjs-i18n';
+import {
+  STORAGE_INTERFACE,
+  StorageInterface,
+} from 'src/core/ports/storage.interface';
+import { ConfigService } from '@nestjs/config';
+import { Env } from 'src/configuration';
+import { userPersonalDataToCsv } from '../dtos/users/csv-export.ts';
 
 @Controller('users')
 @Swagger.ApiTags('Users')
 export class UserController {
+  // Expiration time for presigned url
+  #expirationTime: number;
+
   constructor(
     private readonly createUserUsecase: CreateUserUsecase,
     private readonly uploadAvatarUsecase: UploadAvatarUsecase,
@@ -64,7 +79,14 @@ export class UserController {
     private readonly updateAdministratorUsecase: UpdateAdministratorUsecase,
     private readonly deleteAdministratorUsecase: DeleteAdministratorUsecase,
     private readonly revokeSessionsUsecase: RevokeSessionsUsecase,
-  ) {}
+    private readonly getUserPersonalData: GetUserPersonalData,
+    private readonly i18n: I18nService,
+    @Inject(STORAGE_INTERFACE) private readonly storage: StorageInterface,
+    env: ConfigService<Env, true>,
+    private readonly getCountriesUseCase: GetCountriesUsecase,
+  ) {
+    this.#expirationTime = env.get('SIGNED_URL_EXPIRATION_IN_SECONDS');
+  }
 
   @Post()
   @UseInterceptors(FileInterceptor('file'))
@@ -213,5 +235,35 @@ export class UserController {
   @Swagger.ApiOkResponse()
   remove(@Param('id', ParseUUIDPipe) id: string) {
     return this.deleteUserUsecase.execute({ id });
+  }
+
+  @Get(':id/export')
+  @Roles(Role.ADMIN)
+  @UseGuards(AuthenticationGuard)
+  @Header('Content-Type', 'text/csv')
+  @Header('Content-Disposition', 'attachment; filename="test.csv"')
+  @Swagger.ApiOperation({ summary: 'Export user data.' })
+  async exportOne(@Param('id', ParseUUIDPipe) id: string) {
+    const userData = await this.getUserPersonalData.execute(id);
+    const avatarSignedUrl = userData.user.avatar
+      ? await this.storage.temporaryUrl(
+          userData.user.avatar.bucket,
+          userData.user.avatar.name,
+          this.#expirationTime,
+        )
+      : undefined;
+
+    const csv = userPersonalDataToCsv(
+      {
+        userData,
+        avatarSignedUrl,
+      },
+      (value: string) =>
+        this.i18n.translate(value, {
+          lang: userData.profile.nativeLanguage.code,
+        }),
+    );
+
+    return new StreamableFile(csv);
   }
 }

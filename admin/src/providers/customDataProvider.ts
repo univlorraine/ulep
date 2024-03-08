@@ -329,6 +329,16 @@ const customDataProvider = {
             await throwError(response);
         }
     },
+    exportUserPersonalData: async (userId: string): Promise<Response> => {
+        const url = `${process.env.REACT_APP_API_URL}/users/${userId}/export`;
+        const response = await fetch(url, httpClientOptions({ method: 'GET' }));
+
+        if (!response.ok) {
+            await throwError(response);
+        }
+
+        return response;
+    },
 } as unknown as DataProvider;
 
 export default addRefreshAuthToDataProvider(customDataProvider, refreshAuth);

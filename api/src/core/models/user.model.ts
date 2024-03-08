@@ -1,3 +1,4 @@
+import { CountryCode } from './country-code.model';
 import { Language } from './language.model';
 import { MediaObject } from './media.model';
 import { University } from './university.model';
@@ -29,7 +30,7 @@ export type UserProps = {
   age: number;
   university: University;
   role: Role;
-  country: string;
+  country: CountryCode;
   avatar?: MediaObject;
   status?: UserStatus;
   deactivatedReason?: string;
@@ -37,40 +38,31 @@ export type UserProps = {
   diploma?: string;
   staffFunction?: string;
   division?: string;
+  deactivated?: boolean;
+  createdAt?: Date;
+  updatedAt?: Date;
 };
 
 export class User {
   readonly id: string;
-
   readonly email: string;
-
   readonly firstname: string;
-
   readonly lastname: string;
-
   readonly gender: Gender;
-
   readonly age: number;
-
   readonly university: University;
-
   readonly role: Role;
-
-  readonly country: string;
-
+  readonly country: CountryCode;
   readonly acceptsEmail: boolean;
-
   readonly avatar?: MediaObject;
-
   readonly status?: UserStatus;
-
+  readonly deactivated?: boolean;
   readonly deactivatedReason?: string;
-
   readonly diploma?: string;
-
   readonly division?: string;
-
   readonly staffFunction?: string;
+  readonly createdAt?: Date;
+  readonly updatedAt?: Date;
 
   constructor(props: UserProps) {
     this.id = props.id;
@@ -89,6 +81,9 @@ export class User {
     this.diploma = props.diploma;
     this.division = props.division;
     this.staffFunction = props.staffFunction;
+    this.deactivated = props.deactivated;
+    this.createdAt = props.createdAt;
+    this.updatedAt = props.updatedAt;
   }
 
   public filterLearnableLanguages(languages: Language[]): Language[] {
