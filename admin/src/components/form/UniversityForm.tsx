@@ -208,9 +208,6 @@ const UniversityForm: React.FC<UniversityFormProps> = ({
         },
     ];
 
-    // TODO(NOW): check OK with timezone
-    // TODO(NOW): default hours when creating university
-
     const locale = i18nProvider.getLocale();
 
     return (

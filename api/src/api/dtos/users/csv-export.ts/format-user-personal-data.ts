@@ -100,8 +100,6 @@ export const formatUserPersonalData = ({
       return acc;
     }, {});
 
-  // TODO(NOW+1): return type ?
-
   const baseData = {
     ...userToExportInfos(user),
     avatar: avatarSignedUrl,
