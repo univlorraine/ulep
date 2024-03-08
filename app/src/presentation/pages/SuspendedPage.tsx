@@ -18,6 +18,14 @@ const SuspendedPage: React.FC<SuspendedPageProps> = ({ status }) => {
     const logout = useStoreActions((state) => state.logout);
     const setProfile = useStoreActions((state) => state.setProfile);
     const [isReportMode, setReportMode] = useState<boolean>(false);
+    const { revokeSessionsUsecase } = useConfig();
+
+    const handleDisconnect = async (): Promise<void> => {
+        await revokeSessionsUsecase.execute();
+        logout();
+        // Note: history.push doesn't work here since this component is out of Ion-Router
+        window.location.href = '/';
+    };
 
     const reloadProfile = async () => {
         const profile = await getProfile.execute(accessToken);
@@ -36,7 +44,7 @@ const SuspendedPage: React.FC<SuspendedPageProps> = ({ status }) => {
     return (
         <WebLayoutCentered
             backgroundIconColor={configuration.primaryBackgroundImageColor}
-            goBackPressed={logout}
+            goBackPressed={handleDisconnect}
             headerColor={configuration.primaryColor}
             headerPercentage={100}
             headerTitle={t('global.account')}
