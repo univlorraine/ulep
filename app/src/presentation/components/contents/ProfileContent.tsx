@@ -8,11 +8,8 @@ import { useState } from 'react';
 import { TailSpin } from 'react-loader-spinner';
 import Avatar from '../Avatar';
 import Profile from '../../../domain/entities/Profile';
-import {
-    AvatarMaxSizeCause,
-    AvatarMaxSizeError,
-    UPDATE_AVATAR_MAX_SIZE_ERROR,
-} from '../../../domain/usecases/UpdateAvatarUsecase';
+import { AvatarMaxSizeError } from '../../../domain/usecases/UpdateAvatarUsecase';
+import useLogout from '../../hooks/useLogout';
 
 interface ProfileContentProps {
     onClose: () => void;
@@ -25,13 +22,10 @@ const ProfileContent: React.FC<ProfileContentProps> = ({ onClose, onParameterPre
     const { t } = useTranslation();
     const [showToast] = useIonToast();
     const [loading, setLoading] = useState<boolean>(false);
-    const { logout, updateProfile } = useStoreActions((store) => store);
-    const { cameraAdapter, updateAvatar, revokeSessionsUsecase } = useConfig();
+    const { updateProfile } = useStoreActions((store) => store);
+    const { cameraAdapter, updateAvatar } = useConfig();
 
-    const handleDisconnect = async (): Promise<void> => {
-        await revokeSessionsUsecase.execute();
-        logout();
-    };
+    const { handleLogout } = useLogout();
 
     const changeAvatar = async () => {
         const avatarFile = await cameraAdapter.getPictureFromGallery();
@@ -96,7 +90,7 @@ const ProfileContent: React.FC<ProfileContentProps> = ({ onClose, onParameterPre
                     <img alt="arrow-right" src={ArrowRightSvg} />
                 </button>
 
-                <button className={styles.button} onClick={handleDisconnect}>
+                <button className={styles.button} onClick={handleLogout}>
                     <div className={styles['button-container']}>
                         <img alt="disconnect" src={SmallAvatarPng} />
                         <span className="margin-left">{t('home_page.profile.disconnect')}</span>

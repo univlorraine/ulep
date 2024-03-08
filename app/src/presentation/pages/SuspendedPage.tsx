@@ -6,6 +6,7 @@ import WebLayoutCentered from '../components/layout/WebLayoutCentered';
 import ReportModal from '../components/modals/ReportModal';
 import styles from './css/Suspended.module.css';
 import Avatar from '../components/Avatar';
+import useLogout from '../hooks/useLogout';
 
 interface SuspendedPageProps {
     status: UserStatus;
@@ -15,15 +16,16 @@ const SuspendedPage: React.FC<SuspendedPageProps> = ({ status }) => {
     const { t } = useTranslation();
     const { accessToken, configuration, getProfile } = useConfig();
     const profile = useStoreState((state) => state.profile);
-    const logout = useStoreActions((state) => state.logout);
     const setProfile = useStoreActions((state) => state.setProfile);
     const [isReportMode, setReportMode] = useState<boolean>(false);
+
+    const { handleLogout } = useLogout({ forceRedirect: true });
 
     const reloadProfile = async () => {
         const profile = await getProfile.execute(accessToken);
 
         if (profile instanceof Error) {
-            return logout();
+            return handleLogout();
         }
 
         return setProfile({ profile });
@@ -36,7 +38,7 @@ const SuspendedPage: React.FC<SuspendedPageProps> = ({ status }) => {
     return (
         <WebLayoutCentered
             backgroundIconColor={configuration.primaryBackgroundImageColor}
-            goBackPressed={logout}
+            goBackPressed={handleLogout}
             headerColor={configuration.primaryColor}
             headerPercentage={100}
             headerTitle={t('global.account')}
