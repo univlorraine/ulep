@@ -60,12 +60,10 @@
     text-align: center;
 }
 
-@media (min-width: 768px) {
+@media (min-width: 1080px) {
     .main-content {
         padding: 0 60px;
-    }
-
-    .bottom-container {
-        padding: 0 120px;
+        max-width: 600px;
+        margin: 0 auto;
     }
 }
