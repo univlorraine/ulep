@@ -66,20 +66,6 @@ const ShowTandems = () => {
 
     const { selectedUniversityIds } = useLearningLanguagesStore();
 
-    let getLearningLanguagesMatchesFilters: any = {
-        id: record?.id,
-        universityIds:
-            identity?.universityId && userIsFromCentralUniversity
-                ? [...selectedUniversityIds, identity.universityId]
-                : [],
-    };
-    if (!userIsFromCentralUniversity) {
-        getLearningLanguagesMatchesFilters = {
-            ...getLearningLanguagesMatchesFilters,
-            count: 0,
-        };
-    }
-
     const {
         isLoading: isLoadingMatches,
         isError: isErrorMatches,
@@ -88,7 +74,14 @@ const ShowTandems = () => {
     } = useGetList<Match>(
         'learning-languages/matches',
         {
-            filter: getLearningLanguagesMatchesFilters,
+            filter: {
+                id: record?.id,
+                universityIds:
+                    identity?.universityId && userIsFromCentralUniversity
+                        ? [...selectedUniversityIds, identity.universityId]
+                        : [],
+                count: 0,
+            },
         },
         {
             enabled: !!record?.id && !isLoadingTandem && !hasActiveTandem && !isLoadingIdentity,
@@ -193,41 +186,7 @@ const ShowTandems = () => {
 
     return (
         <>
-            {userIsFromCentralUniversity && (
-                <Box>
-                    <Typography variant="h6">{translate('learning_languages.show.tandems.matches.title')}</Typography>
-                    <Box sx={{ marginTop: 1 }}>
-                        {isLoadingMatches && <CircularProgress />}
-                        {isErrorMatches && <p>{translate('learning_languages.show.tandems.matches.error')}</p>}
-                        {!isLoadingMatches && !isErrorMatches && matches && matches?.length > 0 ? (
-                            <TandemTable
-                                actions={(partner) => (
-                                    <TandemActions
-                                        learningLanguageIds={[record?.id.toString(), partner.id]}
-                                        onTandemAction={handleTandemAction}
-                                        relaunchGlobalRoutineOnAccept={
-                                            !tandem || tandem.partnerLearningLanguage.id !== partner.id
-                                        }
-                                        relaunchGlobalRoutineOnRefuse={
-                                            tandem?.partnerLearningLanguage.id === partner.id
-                                        }
-                                    />
-                                )}
-                                displayTandemLanguage={isJokerLearningLanguage}
-                                rows={matches.map((match) => ({
-                                    ...match.target,
-                                    compatibilityScore: match.score.total,
-                                    matchScore: match.score,
-                                    effectiveLearningType: getEffectiveLearningType(record, match.target),
-                                }))}
-                            />
-                        ) : (
-                            <p>{translate('learning_languages.show.tandems.matches.noResults')}</p>
-                        )}
-                    </Box>
-                </Box>
-            )}
-            <Box sx={{ marginTop: '2rem' }}>
+            <Box>
                 <Typography variant="h6">
                     {userIsFromCentralUniversity
                         ? translate('learning_languages.show.tandems.globalSuggestions.title')
@@ -251,57 +210,55 @@ const ShowTandems = () => {
                     )}
                 </Box>
             </Box>
-            {!userIsFromCentralUniversity && (
-                <Box sx={{ marginTop: '2rem' }}>
-                    <Typography variant="h6">{translate('learning_languages.show.tandems.matches.title')}</Typography>
-                    <Box sx={{ marginTop: 1 }}>
-                        {isLoadingMatches && <CircularProgress />}
-                        {isErrorMatches && <p>{translate('learning_languages.show.tandems.matches.error')}</p>}
-                        {!isLoadingMatches &&
-                            !isErrorMatches &&
-                            (matches && matches?.length > 0 ? (
-                                <>
-                                    <Box sx={{ marginTop: 1 }}>
-                                        <TandemFilters
-                                            firstname={firstnameFilter}
-                                            lastname={lastnameFilter}
-                                            role={roleFilter}
-                                            setFirstname={setFirstnameFilter}
-                                            setLastname={setLastnameFilter}
-                                            setRole={setRoleFilter}
-                                        />
-                                    </Box>
-                                    <Box sx={{ marginTop: 0.5 }}>
-                                        <TandemTable
-                                            actions={(partner) => (
-                                                <TandemActions
-                                                    learningLanguageIds={[record?.id.toString(), partner.id]}
-                                                    onTandemAction={handleTandemAction}
-                                                    relaunchGlobalRoutineOnAccept={
-                                                        !tandem || tandem.partnerLearningLanguage.id !== partner.id
-                                                    }
-                                                    relaunchGlobalRoutineOnRefuse={
-                                                        tandem?.partnerLearningLanguage.id === partner.id
-                                                    }
-                                                />
-                                            )}
-                                            displayTandemLanguage={isJokerLearningLanguage}
-                                            pagination={pagination}
-                                            rows={visibleRows.map((match) => ({
-                                                ...match.target,
-                                                compatibilityScore: match.score.total,
-                                                matchScore: match.score,
-                                                effectiveLearningType: getEffectiveLearningType(record, match.target),
-                                            }))}
-                                        />
-                                    </Box>
-                                </>
-                            ) : (
-                                <p>{translate('learning_languages.show.tandems.matches.noResults')}</p>
-                            ))}
-                    </Box>
+            <Box sx={{ marginTop: '2rem' }}>
+                <Typography variant="h6">{translate('learning_languages.show.tandems.matches.title')}</Typography>
+                <Box sx={{ marginTop: 1 }}>
+                    {isLoadingMatches && <CircularProgress />}
+                    {isErrorMatches && <p>{translate('learning_languages.show.tandems.matches.error')}</p>}
+                    {!isLoadingMatches &&
+                        !isErrorMatches &&
+                        (matches && matches?.length > 0 ? (
+                            <>
+                                <Box sx={{ marginTop: 1 }}>
+                                    <TandemFilters
+                                        firstname={firstnameFilter}
+                                        lastname={lastnameFilter}
+                                        role={roleFilter}
+                                        setFirstname={setFirstnameFilter}
+                                        setLastname={setLastnameFilter}
+                                        setRole={setRoleFilter}
+                                    />
+                                </Box>
+                                <Box sx={{ marginTop: 0.5 }}>
+                                    <TandemTable
+                                        actions={(partner) => (
+                                            <TandemActions
+                                                learningLanguageIds={[record?.id.toString(), partner.id]}
+                                                onTandemAction={handleTandemAction}
+                                                relaunchGlobalRoutineOnAccept={
+                                                    !tandem || tandem.partnerLearningLanguage.id !== partner.id
+                                                }
+                                                relaunchGlobalRoutineOnRefuse={
+                                                    tandem?.partnerLearningLanguage.id === partner.id
+                                                }
+                                            />
+                                        )}
+                                        displayTandemLanguage={isJokerLearningLanguage}
+                                        pagination={pagination}
+                                        rows={visibleRows.map((match) => ({
+                                            ...match.target,
+                                            compatibilityScore: match.score.total,
+                                            matchScore: match.score,
+                                            effectiveLearningType: getEffectiveLearningType(record, match.target),
+                                        }))}
+                                    />
+                                </Box>
+                            </>
+                        ) : (
+                            <p>{translate('learning_languages.show.tandems.matches.noResults')}</p>
+                        ))}
                 </Box>
-            )}
+            </Box>
         </>
     );
 };
