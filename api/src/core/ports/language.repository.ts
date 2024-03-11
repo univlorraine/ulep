@@ -63,4 +63,6 @@ export interface LanguageRepository {
   update(language: Language): Promise<Language>;
 
   getLanguagesProposedToLearning(): Promise<Language[]>;
+
+  getLanguagesSuggestedByUser(userId: string): Promise<SuggestedLanguage[]>;
 }

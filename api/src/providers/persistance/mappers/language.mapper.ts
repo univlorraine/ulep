@@ -32,6 +32,7 @@ export const suggestedLanguageMapper = (
       isDiscovery: instance.LanguageCode.isDiscovery,
     }),
     user: userMapper(instance.User),
+    createdAt: instance.created_at,
   });
 
 export type LanguageSnapshot = Prisma.LanguageCodes;

@@ -1,5 +1,6 @@
 import { Collection } from '@app/common';
 import { Tandem, TandemStatus } from '../models';
+import { HistorizedTandem } from '../models/historized-tandem.model';
 
 export const TANDEM_REPOSITORY = 'tandem.repository';
 
@@ -41,4 +42,6 @@ export interface TandemRepository {
   disableTandemsForUser(id: string): Promise<void>;
 
   archiveTandems(tandems: Tandem[], purgeId: string): Promise<void>;
+
+  getHistorizedTandemForUser(userId: string): Promise<HistorizedTandem[]>;
 }

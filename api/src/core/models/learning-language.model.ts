@@ -10,6 +10,7 @@ interface LearningLanguageProps {
   level: ProficiencyLevel;
   profile?: Profile;
   createdAt?: Date;
+  updatedAt?: Date;
   learningType: LearningType;
   sameGender: boolean;
   sameAge: boolean;
@@ -25,6 +26,7 @@ export class LearningLanguage {
   readonly level: ProficiencyLevel;
   readonly profile?: Profile;
   readonly createdAt?: Date;
+  readonly updatedAt?: Date;
   readonly learningType: LearningType;
   readonly sameGender: boolean;
   readonly sameAge: boolean;
@@ -39,6 +41,7 @@ export class LearningLanguage {
     level,
     profile,
     createdAt,
+    updatedAt,
     learningType,
     sameGender,
     sameAge,
@@ -52,6 +55,7 @@ export class LearningLanguage {
     this.level = level;
     this.profile = profile;
     this.createdAt = createdAt;
+    this.updatedAt = updatedAt;
     this.learningType = learningType;
     this.sameGender = sameGender;
     this.sameAge = sameAge;

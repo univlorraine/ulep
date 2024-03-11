@@ -3,6 +3,7 @@ import { TandemRepository } from '../../../core/ports/tandems.repository';
 import { Collection } from '@app/common';
 import { FindWhereProps } from '../../../core/ports/tandems.repository';
 import { Tandem, TandemStatus } from '../../../core/models';
+import { HistorizedTandem } from 'src/core/models/historized-tandem.model';
 
 @Injectable()
 export class InMemoryTandemRepository implements TandemRepository {
@@ -132,5 +133,10 @@ export class InMemoryTandemRepository implements TandemRepository {
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   archiveTandems(tandems: Tandem[], purgeId: string): Promise<void> {
     throw new Error('Method not implemented.');
+  }
+
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  getHistorizedTandemForUser(userId: string): Promise<HistorizedTandem[]> {
+    throw new Error('Not implemented');
   }
 }

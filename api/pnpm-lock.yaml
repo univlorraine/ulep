@@ -53,6 +53,9 @@ dependencies:
   class-validator:
     specifier: ^0.14.0
     version: 0.14.0
+  csv-stringify:
+    specifier: ^6.4.6
+    version: 6.4.6
   i18next:
     specifier: ^23.5.1
     version: 23.5.1
@@ -3634,6 +3637,10 @@ packages:
   /css-what@6.1.0:
     resolution: {integrity: sha512-HTUrgRJ7r4dsZKU6GjmpfRK1O76h97Z8MfS1G0FozR+oF2kG6Vfe8JE6zwrkbxigziPHinCJ+gCPjA9EaBDtRw==}
     engines: {node: '>= 6'}
+    dev: false
+
+  /csv-stringify@6.4.6:
+    resolution: {integrity: sha512-h2V2XZ3uOTLilF5dPIptgUfN/o2ia/80Ie0Lly18LAnw5s8Eb7kt8rfxSUy24AztJZas9f6DPZpVlzDUtFt/ag==}
     dev: false
 
   /debug@2.6.9:

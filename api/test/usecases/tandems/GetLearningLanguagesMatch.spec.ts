@@ -120,8 +120,6 @@ describe('Get learning languages match', () => {
     enable: true,
   };
 
-  //   countryRepository.init([country]);
-
   const centralUniversity = new University({
     id: 'university1',
     country: franceCountry,
@@ -164,7 +162,7 @@ describe('Get learning languages match', () => {
       age: 19,
       university: centralUniversity,
       role: Role.STUDENT,
-      country: 'FR',
+      country: franceCountry,
       avatar: null,
       deactivatedReason: '',
     }),
@@ -203,7 +201,7 @@ describe('Get learning languages match', () => {
       age: 19,
       university: centralUniversity,
       role: Role.STUDENT,
-      country: 'EN',
+      country: england,
       avatar: null,
       deactivatedReason: '',
     }),
@@ -241,7 +239,7 @@ describe('Get learning languages match', () => {
       age: 28,
       university: partnerUniversity,
       role: Role.STUDENT,
-      country: 'EN',
+      country: england,
       avatar: null,
       deactivatedReason: '',
     }),
@@ -279,7 +277,7 @@ describe('Get learning languages match', () => {
       age: 19,
       university: centralUniversity,
       role: Role.STUDENT,
-      country: 'EN',
+      country: england,
       avatar: null,
       deactivatedReason: '',
     }),
@@ -318,7 +316,7 @@ describe('Get learning languages match', () => {
       age: 19,
       university: partnerUniversity,
       role: Role.STUDENT,
-      country: 'FR',
+      country: franceCountry,
       avatar: null,
       deactivatedReason: '',
     }),

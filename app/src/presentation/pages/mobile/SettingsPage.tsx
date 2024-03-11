@@ -1,22 +1,15 @@
 import { IonPage } from '@ionic/react';
 import { useHistory } from 'react-router';
 import SettingsContent from '../../components/contents/SettingsContent';
-import { useStoreActions } from '../../../store/storeTypes';
-import { useConfig } from '../../../context/ConfigurationContext';
+import useLogout from '../../hooks/useLogout';
 
 const SettingsPage: React.FC = () => {
     const history = useHistory();
-    const logout = useStoreActions((store) => store.logout);
-    const { revokeSessionsUsecase } = useConfig();
-
-    const handleDisconnect = async (): Promise<void> => {
-        await revokeSessionsUsecase.execute();
-        logout();
-    };
+    const { handleLogout } = useLogout();
 
     return (
         <IonPage>
-            <SettingsContent onBackPressed={history.goBack} onDisconnect={handleDisconnect} />
+            <SettingsContent onBackPressed={history.goBack} onDisconnect={handleLogout} />
         </IonPage>
     );
 };

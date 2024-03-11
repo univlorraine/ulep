@@ -19,6 +19,7 @@ export type SuggestedLanguageProps = {
   id: string;
   language: Language;
   user: User;
+  createdAt: Date;
 };
 
 export class Language {
@@ -60,11 +61,13 @@ export class SuggestedLanguage {
   readonly id: string;
   readonly language: Language;
   readonly user: User;
+  readonly createdAt: Date;
 
   constructor(props: SuggestedLanguageProps) {
     this.id = props.id;
     this.language = props.language;
     this.user = props.user;
+    this.createdAt = props.createdAt;
   }
 }
 

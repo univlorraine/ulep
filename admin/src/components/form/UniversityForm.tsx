@@ -12,14 +12,15 @@ import {
     Select,
     MenuItem,
 } from '@mui/material';
+import { DateTimePicker } from '@mui/x-date-pickers';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
-import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import daysjs from 'dayjs';
 import React, { useState } from 'react';
 import { useTranslate, useNotify, Form } from 'react-admin';
 import Country from '../../entities/Country';
 import { PairingMode } from '../../entities/University';
+import i18nProvider from '../../providers/i18nProvider';
 import inputStyle from '../../theme/inputStyle';
 import isCodeValid from '../../utils/isCodeValid';
 import isUrlValid from '../../utils/isUrlValid';
@@ -207,8 +208,10 @@ const UniversityForm: React.FC<UniversityFormProps> = ({
         },
     ];
 
+    const locale = i18nProvider.getLocale();
+
     return (
-        <LocalizationProvider dateAdapter={AdapterDayjs}>
+        <LocalizationProvider adapterLocale={locale} dateAdapter={AdapterDayjs}>
             <Form>
                 <Box display="flex" flexDirection="column" sx={{ m: 4 }}>
                     <Typography variant="subtitle1">{translate(`universities.${tradKey}.name`)}</Typography>
@@ -236,11 +239,10 @@ const UniversityForm: React.FC<UniversityFormProps> = ({
 
                     <Typography variant="subtitle1">{translate(`universities.${tradKey}.admission_start`)}</Typography>
                     <Box alignItems="center" display="flex" flexDirection="row">
-                        <DatePicker
+                        <DateTimePicker
+                            ampm={false}
                             // @ts-ignore
                             defaultValue={daysjs(admissionStartDate)}
-                            format="DD/MM/YYYY"
-                            label="DD/MM/YYYY"
                             onChange={setNewAdmissionStartDate}
                             sx={{ my: 2, width: '100%' }}
                             disableUnderline
@@ -249,11 +251,10 @@ const UniversityForm: React.FC<UniversityFormProps> = ({
 
                     <Typography variant="subtitle1">{translate(`universities.${tradKey}.admission_end`)}</Typography>
                     <Box alignItems="center" display="flex" flexDirection="row">
-                        <DatePicker
+                        <DateTimePicker
+                            ampm={false}
                             // @ts-ignore
                             defaultValue={daysjs(admissionEndDate)}
-                            format="DD/MM/YYYY"
-                            label="DD/MM/YYYY"
                             onChange={setNewAdmissionEndDate}
                             sx={{ my: 2, width: '100%' }}
                         />
@@ -261,11 +262,10 @@ const UniversityForm: React.FC<UniversityFormProps> = ({
 
                     <Typography variant="subtitle1">{translate(`universities.${tradKey}.open_service`)}</Typography>
                     <Box alignItems="center" display="flex" flexDirection="row">
-                        <DatePicker
+                        <DateTimePicker
+                            ampm={false}
                             // @ts-ignore
                             defaultValue={daysjs(openServiceDate)}
-                            format="DD/MM/YYYY"
-                            label="DD/MM/YYYY"
                             onChange={setNewOpenServiceDate}
                             sx={{ my: 2, width: '100%' }}
                             disableUnderline
@@ -274,11 +274,10 @@ const UniversityForm: React.FC<UniversityFormProps> = ({
 
                     <Typography variant="subtitle1">{translate(`universities.${tradKey}.close_service`)}</Typography>
                     <Box alignItems="center" display="flex" flexDirection="row">
-                        <DatePicker
+                        <DateTimePicker
+                            ampm={false}
                             // @ts-ignore
                             defaultValue={daysjs(closeServiceDate)}
-                            format="DD/MM/YYYY"
-                            label="DD/MM/YYYY"
                             onChange={setNewCloseServiceDate}
                             sx={{ my: 2, width: '100%' }}
                         />

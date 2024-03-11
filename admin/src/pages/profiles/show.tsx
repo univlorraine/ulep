@@ -11,12 +11,15 @@ import {
     useRecordContext,
     Datagrid,
     Identifier,
+    EditButton,
+    TopToolbar,
 } from 'react-admin';
 import Availabilites from '../../entities/Availabilities';
 import Language from '../../entities/Language';
 import { LearningLanguage } from '../../entities/LearningLanguage';
 import { Profile } from '../../entities/Profile';
 import User from '../../entities/User';
+import ProfileExportButton from './Export/ProfileExportButton';
 
 const Title = () => {
     const record = useRecordContext();
@@ -31,6 +34,13 @@ const Title = () => {
         </span>
     );
 };
+
+export const ShowActions = () => (
+    <TopToolbar>
+        <ProfileExportButton />
+        <EditButton />
+    </TopToolbar>
+);
 
 const ProfileTab = () => {
     const translate = useTranslate();
@@ -188,7 +198,7 @@ const ProfileTab = () => {
 };
 
 const ProfileShow = (props: any) => (
-    <Show title={<Title />} {...props}>
+    <Show actions={<ShowActions />} title={<Title />} {...props}>
         <ProfileTab />
     </Show>
 );

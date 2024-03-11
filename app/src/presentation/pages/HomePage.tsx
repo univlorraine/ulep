@@ -4,7 +4,7 @@ import { useTranslation } from 'react-i18next';
 import { Redirect, useHistory } from 'react-router';
 import { ArrowDownSvg, ReportSvg } from '../../assets';
 import Tandem from '../../domain/entities/Tandem';
-import { useStoreActions, useStoreState } from '../../store/storeTypes';
+import { useStoreState } from '../../store/storeTypes';
 import HomeHeader from '../components/HomeHeader';
 import ProfileModal from '../components/modals/ProfileModal';
 import ReportModal from '../components/modals/ReportModal';
@@ -17,13 +17,12 @@ import { HYBRID_MAX_WIDTH } from '../utils';
 import styles from './css/Home.module.css';
 import useGetTandems from '../hooks/useGetTandems';
 import Avatar from '../components/Avatar';
-import { useConfig } from '../../context/ConfigurationContext';
+import useLogout from '../hooks/useLogout';
 
 const HomePage: React.FC = () => {
     const { t } = useTranslation();
     const history = useHistory();
     const [showToast] = useIonToast();
-    const logout = useStoreActions((store) => store.logout);
     const currentDate = new Date();
     const { width } = useWindowDimensions();
     const isHybrid = width < HYBRID_MAX_WIDTH;
@@ -32,16 +31,11 @@ const HomePage: React.FC = () => {
     const [displayReport, setDisplayReport] = useState<boolean>(false);
     const [selectedTandem, setSelectedTandem] = useState<Tandem>();
     const { tandems, error } = useGetTandems();
-    const { revokeSessionsUsecase } = useConfig();
+    const { handleLogout } = useLogout();
 
     if (error) {
         showToast({ message: t(error.message), duration: 5000 });
     }
-
-    const handleDisconnect = async (): Promise<void> => {
-        await revokeSessionsUsecase.execute();
-        logout();
-    };
 
     const onProfilePressed = () => (isHybrid ? history.push('/profil') : setDisplayProfile(true));
 
@@ -116,7 +110,7 @@ const HomePage: React.FC = () => {
                     <ProfileModal
                         isVisible={displayProfile}
                         onClose={() => setDisplayProfile(false)}
-                        onDisconnect={handleDisconnect}
+                        onDisconnect={handleLogout}
                         profile={profile}
                     />
                     <TandemStatusModal

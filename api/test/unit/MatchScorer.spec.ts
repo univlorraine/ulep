@@ -69,6 +69,21 @@ describe('Matrix', () => {
 describe('Score', () => {
   const matchScorer = new MatchScorer();
 
+  const country = {
+    id: 'id',
+    emoji: '👽',
+    name: 'France',
+    code: 'fr',
+    enable: true,
+  } as CountryCode;
+  const england = {
+    id: 'en',
+    emoji: '👽',
+    name: 'England',
+    code: 'en',
+    enable: true,
+  } as CountryCode;
+
   test('Should be symetric when learning languages are both joker language', () => {
     const jokerLanguage = new Language({
       id: 'joker',
@@ -77,14 +92,6 @@ describe('Score', () => {
       secondaryUniversityActive: true,
       isDiscovery: false,
     });
-
-    const country = {
-      id: 'id',
-      emoji: '👽',
-      name: 'France',
-      code: 'fr',
-      enable: true,
-    } as CountryCode;
 
     const frenchLanguage = new Language({
       id: faker.string.uuid(),
@@ -140,7 +147,7 @@ describe('Score', () => {
         age: 19,
         university: centralUniversity,
         role: Role.STAFF,
-        country: 'FR',
+        country,
         avatar: null,
         deactivatedReason: '',
       }),
@@ -169,7 +176,7 @@ describe('Score', () => {
         age: 19,
         university: centralUniversity,
         role: Role.STAFF,
-        country: 'EN',
+        country,
         avatar: null,
         deactivatedReason: '',
       }),
@@ -300,7 +307,7 @@ describe('Score', () => {
         age: 19,
         university: centralUniversity,
         role: Role.STAFF,
-        country: 'FR',
+        country: country1,
         avatar: null,
         deactivatedReason: '',
       }),
@@ -329,7 +336,7 @@ describe('Score', () => {
         age: 19,
         university: centralUniversity,
         role: Role.STAFF,
-        country: 'EN',
+        country: england,
         avatar: null,
         deactivatedReason: '',
       }),
