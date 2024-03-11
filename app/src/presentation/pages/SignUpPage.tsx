@@ -15,6 +15,7 @@ import styles from './css/SignUp.module.css';
 import { Capacitor } from '@capacitor/core';
 import { SignUpInformationsParams } from './SignUpInformationsPage';
 import { Keyboard } from '@capacitor/keyboard';
+import { openBrowser } from '../utils';
 
 interface SignUpPageParams {
     fromIdp: boolean;
@@ -219,7 +220,8 @@ const SignUpPage: React.FC = () => {
                             const redirectUri = encodeURIComponent(
                                 Capacitor.isNativePlatform() ? 'ulep://auth' : `${window.location.origin}/auth`
                             );
-                            window.location.href = getInitialUrlUsecase.execute(redirectUri);
+
+                            await openBrowser(getInitialUrlUsecase.execute(redirectUri), '_self');
                         }}
                     >
                         {t('signup_page.sso_button')}
