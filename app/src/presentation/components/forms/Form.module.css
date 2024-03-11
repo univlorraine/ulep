@@ -62,10 +62,8 @@
 
 @media (min-width: 768px) {
     .main-content {
-        padding: 0 60px;
-    }
-
-    .bottom-container {
-        padding: 0 120px;
+        padding: 0 30px;
+        max-width: 600px;
+        margin: 0 auto;
     }
 }

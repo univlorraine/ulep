@@ -46,6 +46,10 @@
     line-height: 25px;
 }
 
+.card-button {
+    max-width: 250px;
+}
+
 @media (min-width: 768px) {
     .icons {
         height: auto;
@@ -57,7 +61,7 @@
     .connect-div,
     .signup-div {
         height: auto;
-        padding: 10px 118px;
+        padding: 50px 10px;
     }
 
     .outer-div {
