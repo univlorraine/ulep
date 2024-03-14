@@ -10,7 +10,7 @@ import FlagBubble from '../components/FlagBubble';
 import WebLayoutCentered from '../components/layout/WebLayoutCentered';
 import pairingLanguagesStyles from './css/PairingLanguages.module.css';
 import styles from './css/SignUp.module.css';
-import { TailSpin } from 'react-loader-spinner';
+import Loader from '../components/Loader';
 
 const PairingLanguagesPage: React.FC = () => {
     const { t } = useTranslation();
@@ -75,12 +75,7 @@ const PairingLanguagesPage: React.FC = () => {
                     <h1 className="title">{t('pairing_languages_page.title')}</h1>
                     {isLoadingLanguages ? (
                         <div className={pairingLanguagesStyles.loader}>
-                            <TailSpin
-                                color={configuration.primaryColor}
-                                ariaLabel="tail-spin-loading"
-                                radius="1"
-                                visible={true}
-                            />
+                            <Loader />
                         </div>
                     ) : (
                         <>
