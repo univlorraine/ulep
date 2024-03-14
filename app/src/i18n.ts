@@ -11,8 +11,7 @@ i18n.use(HttpApi) // charge les traductions à partir des fichiers distants
     .init({
         lng: 'fr', // langue par défaut
         fallbackLng: 'en', // si la langue choisie ne peut pas être chargée, utiliser l'anglais
-        debug: true,
-
+        debug: import.meta.env.VITE_ENV === 'dev',
         backend: {
             loadPath: `/locales/{{lng}}/translation.json`,
         },
