@@ -8,6 +8,7 @@ import ProfileSignUp, { Availabilites, BiographySignUp } from '../domain/entitie
 import University from '../domain/entities/University';
 import User from '../domain/entities/User';
 import MediaObject from '../domain/entities/MediaObject';
+import LearningLanguage from '../domain/entities/LearningLanguage';
 
 export interface TokenStorePayload {
     accessToken: string;
@@ -65,7 +66,7 @@ interface ProfileStorePayload {
 interface UpdateProfile {
     acceptsEmail?: boolean;
     avatar?: MediaObject;
-    learningLanguage?: Language;
+    learningLanguage?: LearningLanguage;
     university?: University;
 }
 

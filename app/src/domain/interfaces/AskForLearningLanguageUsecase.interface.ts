@@ -1,4 +1,5 @@
 import Language from '../entities/Language';
+import LearningLanguage from '../entities/LearningLanguage';
 
 interface AskForLearningLanguageUsecaseInterface {
     execute(
@@ -11,6 +12,6 @@ interface AskForLearningLanguageUsecaseInterface {
         campusId?: string,
         isForCertificate?: boolean,
         isForProgram?: boolean
-    ): Promise<Language | Error>;
+    ): Promise<LearningLanguage | Error>;
 }
 export default AskForLearningLanguageUsecaseInterface;
