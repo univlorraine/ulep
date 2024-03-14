@@ -52,7 +52,7 @@ const PairingLanguagesPage: React.FC = () => {
     };
 
     const navigateToHome = () => {
-        return (window.location.href = '/home');
+        return history.push('/home');
     };
 
     const otherLanguage = () => {

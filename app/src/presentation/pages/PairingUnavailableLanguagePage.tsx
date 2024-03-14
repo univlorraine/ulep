@@ -7,7 +7,6 @@ import FlagBubble from '../components/FlagBubble';
 import LanguageSelectedContent from '../components/contents/LanguageSelectedContent';
 import SuccessLayout from '../components/layout/SuccessLayout';
 import styles from './css/PairingUnavailableLanguage.module.css';
-import { AvatarPlaceholderPng } from '../../assets';
 
 interface PairingUnavailableLanguageState {
     askingStudents: number;
@@ -26,8 +25,8 @@ const PairingUnavailableLanguagePage: React.FC = () => {
     const user = profile?.user;
 
     const navigateToRessource = () => {
-        window.location.href = configuration.ressourceUrl;
-    }
+        history.push(configuration.ressourceUrl);
+    };
 
     if (!language || !user) {
         return <Redirect to={`/pairing/languages`} />;

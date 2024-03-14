@@ -1,6 +1,6 @@
 import { useIonToast } from '@ionic/react';
 import { useTranslation } from 'react-i18next';
-import { Redirect } from 'react-router';
+import { Redirect, useHistory } from 'react-router';
 import { useConfig } from '../../context/ConfigurationContext';
 import { useStoreActions, useStoreState } from '../../store/storeTypes';
 import FlagBubble from '../components/FlagBubble';
@@ -12,6 +12,7 @@ import Avatar from '../components/Avatar';
 
 const PairingFinalPage: React.FC = () => {
     const { t } = useTranslation();
+    const history = useHistory();
     const { askForLearningLanguage, configuration } = useConfig();
     const [showToast] = useIonToast();
     const [loading, setLoading] = useState<boolean>(false);
@@ -50,8 +51,7 @@ const PairingFinalPage: React.FC = () => {
         }
 
         updateProfile({ learningLanguage: result });
-
-        window.location.href = '/home';
+        history.push('/home');
     };
 
     if (profileSignUp.learningLanguage === undefined) {
