@@ -1,7 +1,6 @@
 import { useState, useEffect } from 'react';
 import Tandem from '../../domain/entities/Tandem';
 import { useConfig } from '../../context/ConfigurationContext';
-import Language from '../../domain/entities/Language';
 import { useStoreState } from '../../store/storeTypes';
 import { LearningType } from '../pages/PairingPedagogyPage';
 
@@ -28,7 +27,7 @@ const useGetTandems = () => {
                 setTandemsResult({ tandems: [], error: result, isLoading: false });
             } else {
                 const waitingLearningLanguages: Tandem[] = [];
-                profile?.learningLanguages.map((learningLanguage: Language) => {
+                profile?.learningLanguages.map((learningLanguage) => {
                     if (!result.find((tandem) => tandem.learningLanguage.id === learningLanguage.id)) {
                         // TODO(futur) : Change this logic to get it from api ?
                         waitingLearningLanguages.push(

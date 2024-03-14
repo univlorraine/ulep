@@ -1,7 +1,9 @@
 import { Interest } from '../domain/entities/CategoryInterests';
 import Language from '../domain/entities/Language';
+import LearningLanguage from '../domain/entities/LearningLanguage';
 import Profile from '../domain/entities/Profile';
 import { goalCommandToDomain } from './GoalCommand';
+import learningLanguageResultToDomain, { LearningLanguageResult } from './LearningLanguageResult';
 import UserResult, { userResultToDomain } from './UserResult';
 
 interface ProfileCommand {
@@ -15,12 +17,7 @@ interface ProfileCommand {
         code: string;
         name: string;
     }[];
-    learningLanguages: {
-        id: string;
-        code: string;
-        level: string;
-        name: string;
-    }[];
+    learningLanguages: LearningLanguageResult[];
     objectives: {
         id: string;
         name: string;
@@ -47,16 +44,14 @@ interface ProfileCommand {
     user: UserResult;
 }
 
-export const profileCommandToDomain = (command: ProfileCommand) => {
+export const profileCommandToDomain = (command: ProfileCommand): Profile => {
     return new Profile(
         command.id,
         new Language(command.nativeLanguage.code, command.nativeLanguage.code, command.nativeLanguage.name),
         command.masteredLanguages.map(
             (masteredLanguage) => new Language(masteredLanguage.code, masteredLanguage.code, masteredLanguage.name)
         ),
-        command.learningLanguages.map(
-            (learningLanguage) => new Language(learningLanguage.id, learningLanguage.code, learningLanguage.name)
-        ),
+        command.learningLanguages.map(learningLanguageResultToDomain),
         command.objectives.map((goal) => goalCommandToDomain(goal)),
         command.meetingFrequency as MeetFrequency,
         command.interests.map((interest) => new Interest(interest.id, interest.name)),
