@@ -1,19 +1,20 @@
-import { ComponentType } from 'react';
+import { ReactNode } from 'react';
 import { Route, RouteProps } from 'react-router-dom';
 import { useStoreState } from '../../store/storeTypes';
 
 interface PrivateRouteProps extends RouteProps {
-    component: ComponentType<any>;
+    children: ReactNode;
 }
 
-const PrivateRoute: React.FC<PrivateRouteProps> = ({ component: Component, ...props }) => {
+const PrivateRoute: React.FC<PrivateRouteProps> = ({ children, ...props }) => {
     const token = useStoreState((state) => state.accessToken);
 
     if (!token) {
         window.location.href = '/';
+        return null;
     }
 
-    return <Route {...props} render={(props) => token && <Component {...props} />} />;
+    return <Route {...props}>{children}</Route>;
 };
 
 export default PrivateRoute;

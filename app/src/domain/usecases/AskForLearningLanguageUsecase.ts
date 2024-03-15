@@ -1,7 +1,8 @@
 import { HttpResponse } from '../../adapter/BaseHttpAdapter';
 import { HttpAdapterInterface } from '../../adapter/DomainHttpAdapter';
-import LanguageCommand, { LanguageAskedCommand, languageCommandToDomain } from '../../command/LanguageCommand';
+import learningLanguageResultToDomain, { LearningLanguageResult } from '../../command/LearningLanguageResult';
 import Language from '../entities/Language';
+import LearningLanguage from '../entities/LearningLanguage';
 import AskForLearningLanguageUsecaseInterface from '../interfaces/AskForLearningLanguageUsecase.interface';
 
 class AskForLearningLanguageUsecase implements AskForLearningLanguageUsecaseInterface {
@@ -17,9 +18,9 @@ class AskForLearningLanguageUsecase implements AskForLearningLanguageUsecaseInte
         campusId?: string,
         isForCertificate?: boolean,
         isForProgram?: boolean
-    ): Promise<Language | Error> {
+    ): Promise<LearningLanguage | Error> {
         try {
-            const httpResponse: HttpResponse<LanguageCommand> = await this.domainHttpAdapter.post(
+            const httpResponse: HttpResponse<LearningLanguageResult> = await this.domainHttpAdapter.post(
                 `/profiles/${profileId}/learning-language`,
                 {
                     code: language.code,
@@ -37,7 +38,7 @@ class AskForLearningLanguageUsecase implements AskForLearningLanguageUsecaseInte
                 return new Error('errors.global');
             }
 
-            return languageCommandToDomain(httpResponse.parsedBody);
+            return learningLanguageResultToDomain(httpResponse.parsedBody);
         } catch (error: any) {
             return new Error('errors.global');
         }

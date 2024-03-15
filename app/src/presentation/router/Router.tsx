@@ -1,6 +1,6 @@
 import { IonRouterOutlet } from '@ionic/react';
 import React from 'react';
-import { Route } from 'react-router-dom';
+import { Route, Switch } from 'react-router-dom';
 import ConnectPage from '../pages/ConnectPage';
 import ForgotPasswordPage from '../pages/ForgotPasswordPage';
 import ForgotPasswordSentPage from '../pages/ForgotPasswordSentPage';
@@ -60,56 +60,116 @@ const OfflineRouter: React.FC = () => {
 
     return (
         <IonRouterOutlet>
-            <Route exact path="/">
-                <WelcomePage />
-            </Route>
-            <Route exact path="/connect">
-                <ConnectPage />
-            </Route>
-            <Route exact path="/forgot-password">
-                <ForgotPasswordPage />
-            </Route>
-            <Route exact path="/forgot-password/sent">
-                <ForgotPasswordSentPage />
-            </Route>
-            <Route exact path="/login">
-                <LoginPage />
-            </Route>
-            <Route exact path="/signup">
-                <SignUpPage />
-            </Route>
-            <Route exact path="/auth">
-                <AuthFlowPage />
-            </Route>
-            <PrivateRoute exact component={HomePage} path="/home" />
-            <MobileRoute exact component={TandemProfilePage} path={'/tandem-profil'} />
-            <MobileRoute exact component={ProfilePage} path={'/profil'} />
-            <MobileRoute exact component={ReportPage} path={'/report'} />
-            <MobileRoute exact component={SettingsPage} path={'/settings'} />
-            <MobileRoute exact component={TandemStatusPage} path={'/tandem-status'} />
-            <PrivateRoute exact component={PairingLanguagesPage} path="/pairing/languages" />
-            <PrivateRoute exact component={PairingOptionsPage} path="/pairing/options" />
-            <PrivateRoute exact component={PairingPedagogyPage} path="/pairing/pedagogy" />
-            <PrivateRoute exact component={PairingConfirmLanguagePage} path="/pairing/language/confirm" />
-            <PrivateRoute exact component={PairingFinalPage} path="/pairing/end" />
-            <PrivateRoute exact component={PairingLevelPage} path="/pairing/level" />
-            <PrivateRoute exact component={PairingLevelStartPage} path="/pairing/level/start" />
-            <PrivateRoute exact component={PairingOtherLanguagesPage} path="/pairing/other-languages" />
-            <PrivateRoute exact component={PairingOtherLanguageSelectedPage} path="/pairing/other-languages/selected" />
-            <PrivateRoute exact component={PairingPreferencePage} path="/pairing/preference" />
-            <PrivateRoute exact component={PairingQuizzEndPage} path="/pairing/language/quizz/end" />
-            <PrivateRoute exact component={PairingQuizzIntroductionPage} path="/pairing/language/quizz/introduction" />
-            <PrivateRoute exact component={PairingQuizzPage} path="/pairing/language/quizz" />
-            <PrivateRoute exact component={PairingSelectCEFRPage} path="/pairing/level/select" />
-            <PrivateRoute exact component={PairingUnavailableLanguagePage} path="/pairing/unavailable-language" />
-            <PrivateRoute exact component={SignUpAvailabilitiesPage} path="/signup/availabilities" />
-            <PrivateRoute exact component={SignUpBiographyPage} path="/signup/biography" />
-            <PrivateRoute exact component={SignUpFrequencyPage} path="/signup/frequency" />
-            <PrivateRoute exact component={SignupFinalPage} path="/signup/end" />
-            <PrivateRoute exact component={SignUpGoalsPage} path="/signup/goals" />
-            <PrivateRoute exact component={SignUpInterestsPage} path="/signup/interests" />
-            <PrivateRoute exact component={SignUpLanguagesPage} path="/signup/languages" />
-            <Route exact component={SignUpInformationsPage} path="/signup/informations" />
+            <Switch>
+                <Route exact path="/">
+                    <WelcomePage />
+                </Route>
+                <Route exact path="/connect">
+                    <ConnectPage />
+                </Route>
+                <Route exact path="/forgot-password">
+                    <ForgotPasswordPage />
+                </Route>
+                <Route exact path="/forgot-password/sent">
+                    <ForgotPasswordSentPage />
+                </Route>
+                <Route exact path="/login">
+                    <LoginPage />
+                </Route>
+                <Route exact path="/signup">
+                    <SignUpPage />
+                </Route>
+                <Route exact path="/auth">
+                    <AuthFlowPage />
+                </Route>
+                <PrivateRoute exact path="/home">
+                    <HomePage />
+                </PrivateRoute>
+                <MobileRoute exact path={'/tandem-profil'}>
+                    <TandemProfilePage />
+                </MobileRoute>
+                <MobileRoute exact path={'/profil'}>
+                    <ProfilePage />
+                </MobileRoute>
+                <MobileRoute exact path={'/report'}>
+                    <ReportPage />
+                </MobileRoute>
+                <MobileRoute exact path={'/settings'}>
+                    <SettingsPage />
+                </MobileRoute>
+                <MobileRoute exact path={'/tandem-status'}>
+                    <TandemStatusPage />
+                </MobileRoute>
+                <PrivateRoute exact path="/pairing/languages">
+                    <PairingLanguagesPage />
+                </PrivateRoute>
+                <PrivateRoute exact path="/pairing/options">
+                    <PairingOptionsPage />
+                </PrivateRoute>
+                <PrivateRoute exact path="/pairing/pedagogy">
+                    <PairingPedagogyPage />
+                </PrivateRoute>
+                <PrivateRoute exact path="/pairing/language/confirm">
+                    <PairingConfirmLanguagePage />
+                </PrivateRoute>
+                <PrivateRoute exact path="/pairing/end">
+                    <PairingFinalPage />
+                </PrivateRoute>
+                <PrivateRoute exact path="/pairing/level">
+                    <PairingLevelPage />
+                </PrivateRoute>
+                <PrivateRoute exact path="/pairing/level/start">
+                    <PairingLevelStartPage />
+                </PrivateRoute>
+                <PrivateRoute exact path="/pairing/other-languages">
+                    <PairingOtherLanguagesPage />
+                </PrivateRoute>
+                <PrivateRoute exact path="/pairing/other-languages/selected">
+                    <PairingOtherLanguageSelectedPage />
+                </PrivateRoute>
+                <PrivateRoute exact path="/pairing/preference">
+                    <PairingPreferencePage />
+                </PrivateRoute>
+                <PrivateRoute exact path="/pairing/language/quizz/end">
+                    <PairingQuizzEndPage />
+                </PrivateRoute>
+                <PrivateRoute exact path="/pairing/language/quizz/introduction">
+                    <PairingQuizzIntroductionPage />
+                </PrivateRoute>
+                <PrivateRoute exact path="/pairing/language/quizz">
+                    <PairingQuizzPage />
+                </PrivateRoute>
+                <PrivateRoute exact path="/pairing/level/select">
+                    <PairingSelectCEFRPage />
+                </PrivateRoute>
+                <PrivateRoute exact path="/pairing/unavailable-language">
+                    <PairingUnavailableLanguagePage />
+                </PrivateRoute>
+                <PrivateRoute exact path="/signup/availabilities">
+                    <SignUpAvailabilitiesPage />
+                </PrivateRoute>
+                <PrivateRoute exact path="/signup/biography">
+                    <SignUpBiographyPage />
+                </PrivateRoute>
+                <PrivateRoute exact path="/signup/frequency">
+                    <SignUpFrequencyPage />
+                </PrivateRoute>
+                <PrivateRoute exact path="/signup/end">
+                    <SignupFinalPage />
+                </PrivateRoute>
+                <PrivateRoute exact path="/signup/goals">
+                    <SignUpGoalsPage />
+                </PrivateRoute>
+                <PrivateRoute exact path="/signup/interests">
+                    <SignUpInterestsPage />
+                </PrivateRoute>
+                <PrivateRoute exact path="/signup/languages">
+                    <SignUpLanguagesPage />
+                </PrivateRoute>
+                <Route exact path="/signup/informations">
+                    <SignUpInformationsPage />
+                </Route>
+            </Switch>
         </IonRouterOutlet>
     );
 };

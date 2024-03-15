@@ -1,12 +1,12 @@
-import Language from './Language';
+import LearningLanguage from './LearningLanguage';
 import Profile from './Profile';
 
 class Tandem {
     constructor(
         public id: string,
         public status: TandemStatus,
-        public learningLanguage: Language,
-        public partnerLearningLanguage: Language,
+        public learningLanguage: LearningLanguage,
+        public partnerLearningLanguage: LearningLanguage,
         public level: CEFR,
         public pedagogy: Pedagogy,
         public partner?: Profile

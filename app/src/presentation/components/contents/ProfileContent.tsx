@@ -5,11 +5,11 @@ import { useConfig } from '../../../context/ConfigurationContext';
 import { useStoreActions } from '../../../store/storeTypes';
 import styles from './ProfileContent.module.css';
 import { useState } from 'react';
-import { TailSpin } from 'react-loader-spinner';
 import Avatar from '../Avatar';
 import Profile from '../../../domain/entities/Profile';
 import { AvatarMaxSizeError } from '../../../domain/usecases/UpdateAvatarUsecase';
 import useLogout from '../../hooks/useLogout';
+import Loader from '../Loader';
 
 interface ProfileContentProps {
     onClose: () => void;
@@ -58,16 +58,7 @@ const ProfileContent: React.FC<ProfileContentProps> = ({ onClose, onParameterPre
             <div className={styles.content}>
                 <h1 className="title">{t('home_page.profile.title')}</h1>
                 {loading ? (
-                    <TailSpin
-                        height="150"
-                        width="150"
-                        color={configuration.primaryColor}
-                        ariaLabel="tail-spin-loading"
-                        radius="1"
-                        wrapperStyle={{}}
-                        wrapperClass=""
-                        visible={true}
-                    />
+                    <Loader height="150" width="150" wrapperStyle={{}} wrapperClass="" />
                 ) : (
                     <Avatar user={profile.user} className={styles.image} />
                 )}
