@@ -1,9 +1,20 @@
-import LanguageCommand, { LanguageAskedCommand } from '../../../src/command/LanguageCommand';
+import { LearningLanguageResult } from '../../../src/command/LearningLanguageResult';
 import Language from '../../../src/domain/entities/Language';
+import LearningLanguage from '../../../src/domain/entities/LearningLanguage';
 import AskForLearningLanguageUsecase from '../../../src/domain/usecases/AskForLearningLanguageUsecase';
 import DomainHttpAdapter from '../../mocks/adapters/HttpAdapter';
 
-const usecaseResponse: LanguageCommand = { id: 'id', code: 'FR', name: 'Français' };
+const usecaseResponse: LearningLanguageResult = {
+    id: 'id',
+    code: 'FR',
+    name: 'Français',
+    learningType: "TANDEM",
+    level: "A1",
+    sameAge: true,
+    sameGender: true,
+    certificateOption: false,
+    specificProgram: false,
+};
 const languagePayload = new Language('id', 'FR', 'Français');
 
 describe('askForLearningLanguage', () => {
@@ -42,7 +53,17 @@ describe('askForLearningLanguage', () => {
         adapter.mockJson({ parsedBody: usecaseResponse });
 
         const result = await usecase.execute('id', languagePayload, 'A1', 'TANDEM', true, true);
-        expect(result).toStrictEqual(new Language('id', 'FR', 'Français'));
+        expect(result).toStrictEqual(new LearningLanguage(
+            'id',
+            'FR',
+            'Français',
+            "A1",
+            "TANDEM",
+            true,            
+            true,            
+            false,            
+            false
+        ));
     });
 
     it('execute must return an expected response without parsed body', async () => {
