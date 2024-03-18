@@ -44,7 +44,7 @@ This will build and run the project on your localhost. You now have access to th
 
 To initialize database schema, run the migrations: 
 ```bash
-make migrate
+make migration
 ```
 
 To seed database:
