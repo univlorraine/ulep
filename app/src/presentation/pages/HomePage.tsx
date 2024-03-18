@@ -18,6 +18,7 @@ import styles from './css/Home.module.css';
 import useGetTandems from '../hooks/useGetTandems';
 import Avatar from '../components/Avatar';
 import useLogout from '../hooks/useLogout';
+import Loader from '../components/Loader';
 
 const HomePage: React.FC = () => {
     const { t } = useTranslation();
@@ -30,7 +31,8 @@ const HomePage: React.FC = () => {
     const [displayProfile, setDisplayProfile] = useState<boolean>(false);
     const [displayReport, setDisplayReport] = useState<boolean>(false);
     const [selectedTandem, setSelectedTandem] = useState<Tandem>();
-    const { tandems, error } = useGetTandems();
+
+    const { tandems, error, isLoading } = useGetTandems();
     const { handleLogout } = useLogout();
 
     if (error) {
@@ -84,13 +86,21 @@ const HomePage: React.FC = () => {
                     </div>
                     {isHybrid && <div className={styles.separator} />}
                     <div className={styles.content}>
-                        <TandemList onTandemPressed={onValidatedTandemPressed} tandems={tandems} />
-                        <WaitingTandemList
-                            onTandemPressed={onTandemPressed}
-                            onNewTandemAsked={() => history.push('pairing/languages')}
-                            profile={profile}
-                            tandems={tandems}
-                        />
+                        {isLoading ? (
+                            <div className={styles.loaderContainer}>
+                                <Loader />
+                            </div>
+                        ) : (
+                            <>
+                                <TandemList onTandemPressed={onValidatedTandemPressed} tandems={tandems} />
+                                <WaitingTandemList
+                                    onTandemPressed={onTandemPressed}
+                                    onNewTandemAsked={() => history.push('pairing/languages')}
+                                    profile={profile}
+                                    tandems={tandems}
+                                />
+                            </>
+                        )}
                     </div>
                     <div className={styles['report-container']}>
                         <button className={`tertiary-button ${styles.report}`} onClick={onReportPressed}>

@@ -16,8 +16,9 @@ const payload: ProfileCommand = {
         {
             id: 'id',
             code: 'CN',
-            level: 'AO',
             name: 'Chinese',
+            learningType: "TANDEM",
+            level: 'A0',
         },
     ],
     objectives: [{ id: 'id', name: 'name', image: { id: 'id', mimeType: 'image/jpg' } }],

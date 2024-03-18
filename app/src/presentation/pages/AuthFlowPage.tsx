@@ -2,13 +2,13 @@ import { IonPage, useIonToast } from '@ionic/react';
 import { useHistory, useLocation } from 'react-router';
 import { useEffect } from 'react';
 import { useConfig } from '../../context/ConfigurationContext';
-import { TailSpin } from 'react-loader-spinner';
 import CenterLayout from '../components/layout/CenterLayout';
 import { useTranslation } from 'react-i18next';
 import Profile from '../../domain/entities/Profile';
 import User from '../../domain/entities/User';
 import { useStoreActions } from '../../store/storeTypes';
 import { Capacitor } from '@capacitor/core';
+import Loader from '../components/Loader';
 
 const AuthPage: React.FC = () => {
     const { t } = useTranslation();
@@ -56,16 +56,7 @@ const AuthPage: React.FC = () => {
     return (
         <IonPage>
             <CenterLayout>
-                <TailSpin
-                    height="150"
-                    width="150"
-                    color={configuration.primaryColor}
-                    ariaLabel="tail-spin-loading"
-                    radius="1"
-                    wrapperStyle={{}}
-                    wrapperClass=""
-                    visible={true}
-                />
+                <Loader height="150" width="150" wrapperStyle={{}} wrapperClass="" />
             </CenterLayout>
         </IonPage>
     );

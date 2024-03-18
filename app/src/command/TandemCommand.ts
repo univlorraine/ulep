@@ -1,31 +1,28 @@
-import Language from '../domain/entities/Language';
 import Tandem from '../domain/entities/Tandem';
-import LearningLanguageCommand from './LearningLanguageCommand';
-import { profileCommandToDomain } from './ProfileCommand';
+import learningLanguageResultToDomain, { LearningLanguageResult } from './LearningLanguageResult';
 
 interface TandemCommand {
     id: string;
     status: TandemStatus;
-    partnerLearningLanguage: LearningLanguageCommand;
-    userLearningLanguage: Omit<LearningLanguageCommand, 'profile'>;
+    partnerLearningLanguage: LearningLanguageResult;
+    userLearningLanguage: Omit<LearningLanguageResult, 'profile'>;
 }
 
 export const tandemCommandToDomain = (command: TandemCommand[]) => {
     return command.map(
-        (tandem) =>
-            new Tandem(
+        (tandem) => {
+            const userLearningLanguage = learningLanguageResultToDomain(tandem.userLearningLanguage);
+            const partnerLearningLanguage = learningLanguageResultToDomain(tandem.partnerLearningLanguage);
+            return new Tandem(
                 tandem.id,
                 tandem.status,
-                new Language(
-                    tandem.userLearningLanguage.id,
-                    tandem.userLearningLanguage.code,
-                    tandem.userLearningLanguage.name
-                ),
-                new Language(tandem.partnerLearningLanguage.id, tandem.partnerLearningLanguage.code, tandem.partnerLearningLanguage.name),
-                tandem.partnerLearningLanguage.level as CEFR,
-                tandem.partnerLearningLanguage.learningType as Pedagogy,
-                profileCommandToDomain(tandem.partnerLearningLanguage.profile)
+                userLearningLanguage,
+                partnerLearningLanguage,
+                partnerLearningLanguage.level,
+                partnerLearningLanguage.learningType,
+                partnerLearningLanguage.profile
             )
+        }
     );
 };
 

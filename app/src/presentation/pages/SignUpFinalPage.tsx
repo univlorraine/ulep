@@ -5,9 +5,11 @@ import SuccessLayout from '../components/layout/SuccessLayout';
 import styles from './css/SignUpFinalPage.module.css';
 import { useIonToast } from '@ionic/react';
 import Avatar from '../components/Avatar';
+import { useHistory } from 'react-router';
 
 const SignupFinalPage: React.FC = () => {
     const { t } = useTranslation();
+    const history = useHistory();
     const [showToast] = useIonToast();
     const { configuration, createProfile } = useConfig();
     const profileSignUp = useStoreState((state) => state.profileSignUp);
@@ -26,7 +28,7 @@ const SignupFinalPage: React.FC = () => {
         ) {
             // If we have a profile and no profileSignUp, we must go to next step to add languages
             if (profile?.id) {
-                return (window.location.href = '/pairing/languages');
+                return history.push('/pairing/languages');
             }
 
             return await showToast({ message: t('errors.global'), duration: 1000 });
@@ -47,7 +49,7 @@ const SignupFinalPage: React.FC = () => {
             return await showToast({ message: t(result.message), duration: 1000 });
         }
 
-        return (window.location.href = '/pairing/languages');
+        return history.push('/pairing/languages');
     };
 
     return (
