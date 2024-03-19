@@ -32,6 +32,7 @@ export interface ConfigContextValueType {
     askForAccountDeletion: AskForAccountDeletionUsecaseInterface;
     askForLanguage: AskForLanguageUsecaseInterface;
     askForLearningLanguage: AskForLearningLanguageUsecaseInterface;
+    browserAdapter: BrowserAdapterInterface;
     cameraAdapter: CameraAdapterInterface;
     configuration: Configuration;
     createProfile: CreateProfileUsecaseInterface;

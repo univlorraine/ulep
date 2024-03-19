@@ -15,7 +15,7 @@ const AuthPage: React.FC = () => {
     const location = useLocation();
     const params = new URLSearchParams(location.search);
     const code = params.get('code');
-    const { configuration, getProfile, getUser, getTokenFromCodeUsecase } = useConfig();
+    const { browserAdapter, getProfile, getUser, getTokenFromCodeUsecase } = useConfig();
     const setProfile = useStoreActions((store) => store.setProfile);
     const setUser = useStoreActions((store) => store.setUser);
     const history = useHistory();
@@ -26,6 +26,9 @@ const AuthPage: React.FC = () => {
             code,
             redirectUri: Capacitor.isNativePlatform() ? 'ulep://auth' : `${window.location.origin}/auth`,
         });
+
+        // Close browser after the user is redirected to the app
+        await browserAdapter.close();
 
         if (result instanceof Error) {
             await showToast(t('global.error'), 5000);

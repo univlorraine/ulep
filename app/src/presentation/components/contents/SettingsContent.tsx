@@ -8,7 +8,6 @@ import { useStoreActions, useStoreState } from '../../../store/storeTypes';
 import Dropdown from '../DropDown';
 import styles from './SettingsContent.module.css';
 import ConfirmModal from '../modals/ConfirmModal';
-import { openBrowserHref } from '../../utils';
 
 interface SettingsContentProps {
     onBackPressed: () => void;
@@ -17,7 +16,7 @@ interface SettingsContentProps {
 
 const SettingsContent: React.FC<SettingsContentProps> = ({ onBackPressed, onDisconnect }) => {
     const { t } = useTranslation();
-    const { askForAccountDeletion, configuration, updateNotificationPermission } = useConfig();
+    const { askForAccountDeletion, browserAdapter, configuration, updateNotificationPermission } = useConfig();
     const setLanguage = useStoreActions((state) => state.setLanguage);
     const currentLanguage = useStoreState((state) => state.language);
     const [showToast] = useIonToast();
@@ -86,7 +85,7 @@ const SettingsContent: React.FC<SettingsContentProps> = ({ onBackPressed, onDisc
             </button>
             <a
                 href={configuration.confidentialityUrl}
-                onClick={openBrowserHref}
+                onClick={browserAdapter.openHref}
                 className={styles['setting-container']}
             >
                 <span>{t('home_page.settings.confidentiality')}</span>
@@ -94,7 +93,7 @@ const SettingsContent: React.FC<SettingsContentProps> = ({ onBackPressed, onDisc
             </a>
             <a
                 href={configuration.cguUrl}
-                onClick={openBrowserHref}
+                onClick={browserAdapter.openHref}
                 className={`${styles['setting-container']} large-margin-bottom`}
             >
                 <span>{t('home_page.settings.CGU')}</span>
