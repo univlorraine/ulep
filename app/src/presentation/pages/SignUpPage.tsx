@@ -22,7 +22,7 @@ interface SignUpPageParams {
 
 const SignUpPage: React.FC = () => {
     const { t } = useTranslation();
-    const { browserAdapter, configuration, getAllCountries, getInitialUrlUsecase, retrievePerson } = useConfig();
+    const { browserAdapter, capacitorAdapter, configuration, getAllCountries, getInitialUrlUsecase, retrievePerson } = useConfig();
     const updateProfileSignUp = useStoreActions((state) => state.updateProfileSignUp);
     const profileSignUp = useStoreState((state) => state.profileSignUp);
     const [showToast] = useIonToast();
@@ -217,7 +217,7 @@ const SignUpPage: React.FC = () => {
                                 staffFunction,
                             });
                             const redirectUri = encodeURIComponent(
-                                Capacitor.isNativePlatform() ? 'ulep://auth' : `${window.location.origin}/auth`
+                                capacitorAdapter.isNativePlatform() ? 'ulep://auth' : `${window.location.origin}/auth`
                             );
 
                             await browserAdapter.open(getInitialUrlUsecase.execute(redirectUri), '_self');

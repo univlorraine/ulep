@@ -1,4 +1,5 @@
 import { Browser } from '@capacitor/browser';
+import BrowserAdapterInterface from './interfaces/BrowserAdapter.interface';
 
 class BrowserAdapter implements BrowserAdapterInterface {
     close = async () => await Browser.close()

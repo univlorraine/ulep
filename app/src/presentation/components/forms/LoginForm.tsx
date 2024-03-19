@@ -16,7 +16,7 @@ interface LoginFormProps {
 
 const LoginForm: React.FC<LoginFormProps> = ({ goBack, onLogin }) => {
     const { t } = useTranslation();
-    const { browserAdapter, configuration, getInitialUrlUsecase, login } = useConfig();
+    const { browserAdapter, capacitorAdapter, configuration, getInitialUrlUsecase, login } = useConfig();
     const [email, setEmail] = useState<string>('');
     const [password, setPassword] = useState<string>('');
     const [showLoading, hideLoading] = useIonLoading();
@@ -36,7 +36,7 @@ const LoginForm: React.FC<LoginFormProps> = ({ goBack, onLogin }) => {
 
     const ssoLogin = async (): Promise<void> => {
         const redirectUri = encodeURIComponent(
-            Capacitor.isNativePlatform() ? 'ulep://auth' : `${window.location.origin}/auth`
+            capacitorAdapter.isNativePlatform() ? 'ulep://auth' : `${window.location.origin}/auth`
         );
 
         await browserAdapter.open(getInitialUrlUsecase.execute(redirectUri), '_self');

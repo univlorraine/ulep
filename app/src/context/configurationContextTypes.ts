@@ -26,6 +26,8 @@ import GetUniversityInterface from '../domain/interfaces/GetUniversity.interface
 import GetMediaObjectUsecaseInterface from '../domain/interfaces/GetMediaObjectUsecase.interface';
 import RevokeSessionsUsecaseInterface from '../domain/interfaces/RevokeSessionsUsecase.interface';
 import GetInitialUrlUsecaseInterface from '../domain/interfaces/AuthStandardFlow/GetInitialUrlUsecase.interface';
+import BrowserAdapterInterface from '../adapter/interfaces/BrowserAdapter.interface';
+import CapacitorAdapterInterface from '../adapter/interfaces/CapacitorAdapter.interface';
 
 export interface ConfigContextValueType {
     accessToken: string;
@@ -34,6 +36,7 @@ export interface ConfigContextValueType {
     askForLearningLanguage: AskForLearningLanguageUsecaseInterface;
     browserAdapter: BrowserAdapterInterface;
     cameraAdapter: CameraAdapterInterface;
+    capacitorAdapter: CapacitorAdapterInterface;
     configuration: Configuration;
     createProfile: CreateProfileUsecaseInterface;
     createReport: CreateReportUsecaseInterface;
