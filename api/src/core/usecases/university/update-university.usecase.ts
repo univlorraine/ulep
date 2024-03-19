@@ -3,7 +3,7 @@ import {
   UNIVERSITY_REPOSITORY,
   UniversityRepository,
 } from '../../ports/university.repository';
-import { RessourceAlreadyExists, RessourceDoesNotExist } from 'src/core/errors';
+import { RessourceDoesNotExist } from 'src/core/errors';
 import { PairingMode, University } from 'src/core/models';
 import {
   COUNTRY_REPOSITORY,
@@ -47,7 +47,7 @@ export class UpdateUniversityUsecase {
 
     const country = await this.countryRepository.ofId(command.countryId);
     if (!country) {
-      throw new RessourceAlreadyExists('Country does not exist');
+      throw new RessourceDoesNotExist('Country does not exist');
     }
 
     return this.universityRepository.update(
