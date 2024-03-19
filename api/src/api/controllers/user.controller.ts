@@ -1,4 +1,4 @@
-import { Collection } from '@app/common';
+import { Collection, I18nService } from '@app/common';
 import { KeycloakUser } from '@app/keycloak';
 import {
   Body,
@@ -20,7 +20,7 @@ import {
 } from '@nestjs/common';
 import { FileInterceptor } from '@nestjs/platform-express';
 import * as Swagger from '@nestjs/swagger';
-import { UploadAvatarUsecase, GetCountriesUsecase } from 'src/core/usecases';
+import { UploadAvatarUsecase } from 'src/core/usecases';
 import {
   CreateAdministratorUsecase,
   CreateUserUsecase,
@@ -51,7 +51,6 @@ import { User } from 'src/core/models';
 import { GetAdministratorsQueryParams } from 'src/api/dtos/users/administrators-filter';
 import { RevokeSessionsUsecase } from 'src/core/usecases/user/revoke-sessions.usecase';
 import { OwnerAllowed } from '../decorators/owner.decorator';
-import { I18nService } from 'nestjs-i18n';
 import {
   STORAGE_INTERFACE,
   StorageInterface,
@@ -83,7 +82,6 @@ export class UserController {
     private readonly i18n: I18nService,
     @Inject(STORAGE_INTERFACE) private readonly storage: StorageInterface,
     env: ConfigService<Env, true>,
-    private readonly getCountriesUseCase: GetCountriesUsecase,
   ) {
     this.#expirationTime = env.get('SIGNED_URL_EXPIRATION_IN_SECONDS');
   }
@@ -259,9 +257,9 @@ export class UserController {
         avatarSignedUrl,
       },
       (value: string) =>
-        this.i18n.translate(value, {
+        `${this.i18n.translate(value, {
           lang: userData.profile.nativeLanguage.code,
-        }),
+        })}`,
     );
 
     return new StreamableFile(csv);

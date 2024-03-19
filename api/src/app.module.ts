@@ -4,7 +4,8 @@ import { ApiModule } from './api/api.module';
 import { KeycloakModule } from '@app/keycloak';
 import { Env } from './configuration';
 import { MailerModule } from '@app/common';
-import { AcceptLanguageResolver, I18nModule, QueryResolver } from 'nestjs-i18n';
+import { I18nModule } from '@app/common/i18n/i18n.module';
+// import { AcceptLanguageResolver, I18nModule, QueryResolver } from 'nestjs-i18n';
 
 @Module({
   imports: [
@@ -12,26 +13,34 @@ import { AcceptLanguageResolver, I18nModule, QueryResolver } from 'nestjs-i18n';
       isGlobal: true,
       validate: Env.validate,
     }),
-    I18nModule.forRootAsync({
-      useFactory: async (env: ConfigService<Env, true>) => {
-        const fallbackLanguage = env
-          .get<string>('DEFAULT_TRANSLATION_LANGUAGE')
-          .toLowerCase();
-        console.info(`Default translation language: ${fallbackLanguage}`);
-        return {
-          fallbackLanguage,
-          loaderOptions: {
-            path: 'i18n/',
-            watch: process.env.NODE_ENV !== 'production',
-          },
-        };
-      },
-      resolvers: [
-        { use: QueryResolver, options: ['lang'] },
-        AcceptLanguageResolver,
-      ],
+    I18nModule.registerAsync({
+      isGlobal: true,
+      imports: [ConfigModule],
+      useFactory: async (env: ConfigService<Env, true>) => ({
+        // TODO(NOW): parameters here
+      }),
       inject: [ConfigService],
     }),
+    // I18nModule.forRootAsync({
+    //   useFactory: async (env: ConfigService<Env, true>) => {
+    //     const fallbackLanguage = env
+    //       .get<string>('DEFAULT_TRANSLATION_LANGUAGE')
+    //       .toLowerCase();
+    //     console.info(`Default translation language: ${fallbackLanguage}`);
+    //     return {
+    //       fallbackLanguage,
+    //       loaderOptions: {
+    //         path: 'i18n/',
+    //         watch: process.env.NODE_ENV !== 'production',
+    //       },
+    //     };
+    //   },
+    //   resolvers: [
+    //     { use: QueryResolver, options: ['lang'] },
+    //     AcceptLanguageResolver,
+    //   ],
+    //   inject: [ConfigService],
+    // }),
     KeycloakModule.registerAsync({
       isGlobal: true,
       imports: [ConfigModule],

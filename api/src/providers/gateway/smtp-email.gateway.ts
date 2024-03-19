@@ -1,8 +1,8 @@
 import { Injectable } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { Env } from 'src/configuration';
-import { I18nService } from 'nestjs-i18n';
-import { MailerService } from '@app/common';
+import { I18nService as test } from 'nestjs-i18n';
+import { I18nService, MailerService } from '@app/common';
 
 import {
   AccountBlockedEmailProps,
