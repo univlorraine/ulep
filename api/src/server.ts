@@ -75,6 +75,8 @@ export class Server {
         'Authorization',
         'Range',
         'Language-code',
+        'sentry-trace',
+        'baggage',
       ],
       exposedHeaders: ['Content-Range'],
       origin: '*',
