@@ -42,6 +42,7 @@
     "class-validator": "^0.14.0",
     "csv-stringify": "^6.4.6",
     "i18next": "^23.5.1",
+    "i18next-http-backend": "^2.5.0",
     "jsonwebtoken": "^9.0.0",
     "mjml": "^4.15.3",
     "mustache": "^4.2.0",

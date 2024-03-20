@@ -1,11 +1,11 @@
-import { Controller, Get, SerializeOptions } from '@nestjs/common';
+import { Controller, Get, Param, SerializeOptions } from '@nestjs/common';
 import {
   HealthCheck,
   HealthCheckService,
   PrismaHealthIndicator,
 } from '@nestjs/terminus';
 import * as Swagger from '@nestjs/swagger';
-import { PrismaService } from '@app/common';
+import { I18nService, PrismaService } from '@app/common';
 
 @Controller('health')
 @Swagger.ApiExcludeController()
@@ -14,6 +14,7 @@ export class HealthController {
     private readonly healthCheckService: HealthCheckService,
     private readonly prisma: PrismaHealthIndicator,
     private readonly prismaService: PrismaService,
+    private readonly i18n: I18nService,
   ) {}
 
   @Get()
@@ -23,5 +24,17 @@ export class HealthController {
     return this.healthCheckService.check([
       () => this.prisma.pingCheck('prisma', this.prismaService),
     ]);
+  }
+
+  @Get('test/:id')
+  @HealthCheck()
+  @SerializeOptions({ strategy: 'exposeAll' })
+  async test(@Param('id') id: string): Promise<any> {
+    const test = this.i18n.translate('tandemBecomeActive.subject', {
+      ns: 'emails',
+      lng: id,
+    });
+    console.log('test', test, ' - ', id);
+    return test;
   }
 }

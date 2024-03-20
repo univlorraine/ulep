@@ -5,7 +5,6 @@ import { KeycloakModule } from '@app/keycloak';
 import { Env } from './configuration';
 import { MailerModule } from '@app/common';
 import { I18nModule } from '@app/common/i18n/i18n.module';
-// import { AcceptLanguageResolver, I18nModule, QueryResolver } from 'nestjs-i18n';
 
 @Module({
   imports: [
@@ -16,11 +15,25 @@ import { I18nModule } from '@app/common/i18n/i18n.module';
     I18nModule.registerAsync({
       isGlobal: true,
       imports: [ConfigModule],
-      useFactory: async (env: ConfigService<Env, true>) => ({
-        // TODO(NOW): parameters here
-      }),
+      useFactory: async (env: ConfigService<Env, true>) => {
+        const fallbackLanguage = env
+          .get('DEFAULT_TRANSLATION_LANGUAGE')
+          .toLowerCase();
+        console.info(`Default translation language: ${fallbackLanguage}`);
+        return {
+          fallbackLanguage: fallbackLanguage,
+          http: {
+            // TODO(NOW+1): see how to factorize with instance translation
+            endpoint: env.get('TRANSLATIONS_ENDPOINT'),
+            endpointSuffix: env.get('TRANSLATIONS_ENDPOINT_SUFFIX'),
+            token: env.get('TRANSLATIONS_TOKEN'),
+            bearerToken: env.get('TRANSLATIONS_BEARER_TOKEN'),
+          },
+        };
+      },
       inject: [ConfigService],
     }),
+    // TODO(NOW+1): remove i18n-nest if don't use a
     // I18nModule.forRootAsync({
     //   useFactory: async (env: ConfigService<Env, true>) => {
     //     const fallbackLanguage = env
