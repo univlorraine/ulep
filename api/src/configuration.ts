@@ -87,6 +87,17 @@ export class Env {
   WEBLATE_API_TOKEN: string;
   // TODO(NOW): clean other vars
 
+  @IsNumber()
+  @Transform(({ value }) => parseInt(value, 10))
+  @IsOptional()
+  WEBLATE_RELOAD_INTERVAL: number;
+
+  @IsBoolean()
+  @Transform(({ value }) => value === 'true')
+  @IsOptional()
+  I18N_DEBUG: boolean;
+  // TODO(NOW): clean other vars
+
   @IsString()
   @IsNotEmpty()
   TRANSLATIONS_ENDPOINT: string;

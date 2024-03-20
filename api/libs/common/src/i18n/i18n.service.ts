@@ -13,12 +13,15 @@ import {
 
 export const I18N_SERVICE_CONFIGURATION = 'I18N_SERVICE_CONFIGURATION';
 
+const DEFAULT_RELOAD_INTERVAL = 24 * 60 * 60 * 1000;
+
 export interface I18nServiceConfiguration {
   fallbackLanguage?: string;
   debug?: boolean;
   http: {
     url: string;
     token?: string;
+    reloadInterval?: number;
   };
 }
 
@@ -42,6 +45,7 @@ export class I18nService implements OnModuleInit, OnModuleDestroy {
     private readonly config: I18nServiceConfiguration,
   ) {
     this.#logger = new Logger('I18nService');
+    this.#logger.debug(`Config: ${JSON.stringify(this.config)}`);
   }
 
   async onModuleInit() {
@@ -67,39 +71,15 @@ export class I18nService implements OnModuleInit, OnModuleDestroy {
             Authorization: `Token ${this.config.http.token}`,
           };
         },
-        // reloadInterval: 10 * 1000,
-        reloadInterval: 60 * 60 * 1000, // Reload each hour
+        reloadInterval:
+          this.config.http.reloadInterval || DEFAULT_RELOAD_INTERVAL,
       },
     });
 
-    this.#i18nReload = setInterval(async () => {
-      const { languages: updatedLanguages, components: updatedComponents } =
-        await this.getAvailableLanguagesAndComponents();
-
-      const newLanguages = [...updatedLanguages].filter(
-        (language) => !this.#knownLanguages.has(language),
-      );
-      if (newLanguages.length > 0) {
-        this.#logger.debug(`Languages to add: ${newLanguages.join(', ')}`);
-        await this.#i18n.loadLanguages(newLanguages);
-        for (const language of newLanguages) {
-          this.#knownLanguages.add(language);
-        }
-        this.#logger.log(`Added languages: ${newLanguages.join(', ')}`);
-      }
-
-      const newComponents = [...updatedComponents].filter(
-        (component) => !this.#knownComponents.has(component),
-      );
-      if (newComponents.length > 0) {
-        this.#logger.debug(`Namespace to add: ${newComponents.join(', ')}`);
-        await this.#i18n.loadNamespaces(newComponents);
-        for (const component of newComponents) {
-          this.#knownComponents.add(component);
-        }
-        this.#logger.log(`Added namespace: ${newComponents.join(', ')}`);
-      }
-    }, 10 * 1000);
+    this.#i18nReload = setInterval(
+      () => this.loadNewLanguagesAndComponents,
+      this.config.http.reloadInterval || DEFAULT_RELOAD_INTERVAL,
+    );
   }
 
   onModuleDestroy() {
@@ -138,7 +118,7 @@ export class I18nService implements OnModuleInit, OnModuleDestroy {
           const component = value.component.slug;
 
           // Glossary are components created by Weblate
-          if (!value.is_glossary) {
+          if (component !== 'glossary') {
             if (acc.languages.has(code) <= 0) {
               acc.languages.add(code);
             }
@@ -154,6 +134,35 @@ export class I18nService implements OnModuleInit, OnModuleDestroy {
           languages: new Set(),
         },
       );
+    }
+  }
+
+  private async loadNewLanguagesAndComponents() {
+    const { languages: updatedLanguages, components: updatedComponents } =
+      await this.getAvailableLanguagesAndComponents();
+
+    const newLanguages = [...updatedLanguages].filter(
+      (language) => !this.#knownLanguages.has(language),
+    );
+    if (newLanguages.length > 0) {
+      this.#logger.debug(`Languages to add: ${newLanguages.join(', ')}`);
+      await this.#i18n.loadLanguages(newLanguages);
+      for (const language of newLanguages) {
+        this.#knownLanguages.add(language);
+      }
+      this.#logger.log(`Added languages: ${newLanguages.join(', ')}`);
+    }
+
+    const newComponents = [...updatedComponents].filter(
+      (component) => !this.#knownComponents.has(component),
+    );
+    if (newComponents.length > 0) {
+      this.#logger.debug(`Namespace to add: ${newComponents.join(', ')}`);
+      await this.#i18n.loadNamespaces(newComponents);
+      for (const component of newComponents) {
+        this.#knownComponents.add(component);
+      }
+      this.#logger.log(`Added namespace: ${newComponents.join(', ')}`);
     }
   }
 

@@ -22,10 +22,11 @@ import { I18nModule } from '@app/common/i18n/i18n.module';
         console.info(`Default translation language: ${fallbackLanguage}`);
         return {
           fallbackLanguage: fallbackLanguage,
-          debug: env.get('DEFAULT_TRANSLATION_LANGUAGE') === 'true',
+          debug: env.get('I18N_DEBUG'),
           http: {
             url: env.get('WEBLATE_API_URL'),
             token: env.get('WEBLATE_API_TOKEN'),
+            reloadInterval: env.get('WEBLATE_RELOAD_INTERVAL'),
             // TODO(NOW+1): see how to factorize with instance translation
             // endpoint: env.get('TRANSLATIONS_ENDPOINT'),
             // endpointSuffix: env.get('TRANSLATIONS_ENDPOINT_SUFFIX'),
