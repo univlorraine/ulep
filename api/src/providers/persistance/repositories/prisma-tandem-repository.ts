@@ -1,14 +1,9 @@
 import { Injectable } from '@nestjs/common';
 import { Collection, PrismaService } from '@app/common';
-import { TandemRepository } from '../../../core/ports/tandems.repository';
-import { FindWhereProps } from '../../../core/ports/tandems.repository';
+import { TandemRepository } from '../../../core/ports/tandem.repository';
+import { FindWhereProps } from '../../../core/ports/tandem.repository';
 import { Tandem, TandemStatus } from '../../../core/models';
 import { TandemRelations, tandemMapper } from '../mappers/tandem.mapper';
-import { HistorizedTandem } from 'src/core/models/historized-tandem.model';
-import {
-  HistorizedTandemRelation,
-  historizedTandemMapper,
-} from '../mappers/historizedTandem.mapper';
 
 @Injectable()
 export class PrismaTandemRepository implements TandemRepository {
@@ -298,23 +293,12 @@ export class PrismaTandemRepository implements TandemRepository {
         data: tandem.learningLanguages.map((learningLanguage) => ({
           id: learningLanguage.id,
           user_id: learningLanguage.profile.user.id,
+          user_email: learningLanguage.profile.user.email,
           purge_id: purgeId,
           tandem_id: tandem.id,
           language_code_id: learningLanguage.language.id,
         })),
       });
     }
-  }
-
-  async getHistorizedTandemForUser(
-    userId: string,
-  ): Promise<HistorizedTandem[]> {
-    const res = await this.prisma.tandemHistory.findMany({
-      where: {
-        user_id: userId,
-      },
-      include: HistorizedTandemRelation,
-    });
-    return res.map(historizedTandemMapper);
   }
 }

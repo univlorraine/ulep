@@ -19,6 +19,8 @@ export const historizedTandemMapper = (
   new HistorizedTandem({
     id: instance.id,
     userId: instance.user_id,
+    userEmail: instance.user_email,
+    tandemId: instance.tandem_id,
     purge: purgeMapper(instance.Purge),
     createdAt: instance.created_at,
     language: languageMapper(instance.Language),

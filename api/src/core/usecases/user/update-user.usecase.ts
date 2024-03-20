@@ -9,7 +9,7 @@ import {
 import {
   TANDEM_REPOSITORY,
   TandemRepository,
-} from 'src/core/ports/tandems.repository';
+} from 'src/core/ports/tandem.repository';
 import { EMAIL_GATEWAY, EmailGateway } from 'src/core/ports/email.gateway';
 import { ConfigService } from '@nestjs/config';
 import { Env } from 'src/configuration';
