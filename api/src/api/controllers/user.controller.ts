@@ -83,7 +83,6 @@ export class UserController {
     private readonly i18n: I18nService,
     @Inject(STORAGE_INTERFACE) private readonly storage: StorageInterface,
     env: ConfigService<Env, true>,
-    private readonly getCountriesUseCase: GetCountriesUsecase,
   ) {
     this.#expirationTime = env.get('SIGNED_URL_EXPIRATION_IN_SECONDS');
   }

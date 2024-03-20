@@ -3,7 +3,7 @@ import Language from '../../../src/domain/entities/Language';
 import AskForLanguageUsecase from '../../../src/domain/usecases/AskForLanguageUsecase';
 import DomainHttpAdapter from '../../mocks/adapters/HttpAdapter';
 
-const usecaseResponse: LanguageAskedCommand = { code: 'FR', count: 10 };
+const httpCallResponse: LanguageAskedCommand = { code: 'FR', count: 10 };
 const languagePayload = new Language('id', 'FR', 'Français');
 
 describe('askForLanguage', () => {
@@ -21,7 +21,7 @@ describe('askForLanguage', () => {
     it('execute function must call DomainHttpAdapter with specific path and params', async () => {
         expect.assertions(2);
         jest.spyOn(adapter, 'post');
-        adapter.mockJson({ parsedBody: usecaseResponse });
+        adapter.mockJson({ parsedBody: httpCallResponse });
         await usecase.execute(languagePayload);
         expect(adapter.post).toHaveBeenCalledTimes(1);
         expect(adapter.post).toHaveBeenCalledWith(`/languages/${languagePayload.code}/requests`, {});
@@ -30,7 +30,7 @@ describe('askForLanguage', () => {
     it('execute must return an expected response', async () => {
         expect.assertions(1);
 
-        adapter.mockJson({ parsedBody: usecaseResponse });
+        adapter.mockJson({ parsedBody: httpCallResponse });
 
         const result = await usecase.execute(languagePayload);
         expect(result).toBe(10);

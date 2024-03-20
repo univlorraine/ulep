@@ -3,7 +3,7 @@ import University from '../../../src/domain/entities/University';
 import GetUniversityUsecase from '../../../src/domain/usecases/GetUniversityUsecase';
 import DomainHttpAdapter from '../../mocks/adapters/HttpAdapter';
 
-const usecaseResponse: UniversityCommand = {
+const httpCallResponse: UniversityCommand = {
     id: 'id',
     name: 'name',
     sites: [
@@ -36,7 +36,7 @@ describe('getUniversity', () => {
     it('execute function must call DomainHttpAdapter with specific path and params', async () => {
         expect.assertions(2);
         jest.spyOn(adapter, 'get');
-        adapter.mockJson({ parsedBody: usecaseResponse });
+        adapter.mockJson({ parsedBody: httpCallResponse });
         await usecase.execute('id');
         expect(adapter.get).toHaveBeenCalledTimes(1);
         expect(adapter.get).toHaveBeenCalledWith('/universities/id');
@@ -45,7 +45,7 @@ describe('getUniversity', () => {
     it('execute must return an expected response', async () => {
         expect.assertions(1);
 
-        adapter.mockJson({ parsedBody: usecaseResponse });
+        adapter.mockJson({ parsedBody: httpCallResponse });
 
         const result = (await usecase.execute('id')) as University;
         expect(result).toBeInstanceOf(University);

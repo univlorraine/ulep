@@ -26,6 +26,7 @@ import GetUniversityInterface from '../domain/interfaces/GetUniversity.interface
 import GetMediaObjectUsecaseInterface from '../domain/interfaces/GetMediaObjectUsecase.interface';
 import RevokeSessionsUsecaseInterface from '../domain/interfaces/RevokeSessionsUsecase.interface';
 import GetInitialUrlUsecaseInterface from '../domain/interfaces/AuthStandardFlow/GetInitialUrlUsecase.interface';
+import GetHistoricEmailPartnerUsecaseInterface from '../domain/interfaces/GetHistoricEmailPartnerUsecase.interface';
 
 export interface ConfigContextValueType {
     accessToken: string;
@@ -44,6 +45,7 @@ export interface ConfigContextValueType {
     getAllReportCategories: GetAllReportCategoriesUsecaseInterface;
     getAllTandems: GetAllTandemsUsecaseInterface;
     getAllUniversities: GetAllUniversitiesUsecaseInterface;
+    getHistoricEmailPartner: GetHistoricEmailPartnerUsecaseInterface;
     getMediaObject: GetMediaObjectUsecaseInterface;
     getProfile: GetProfileUsecaseInterface;
     getQuizzByLevel: GetQuizzByLevelUsecaseInterface;
