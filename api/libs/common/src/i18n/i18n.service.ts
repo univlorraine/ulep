@@ -3,8 +3,6 @@
 
 import * as i18n from 'i18next';
 import * as HttpBackend from 'i18next-http-backend';
-// import * as ChainedBackend from 'i18next-chained-backend';
-// import * as resourcesToBackend from 'i18next-resources-to-backend';
 import {
   Inject,
   Injectable,
@@ -17,11 +15,10 @@ export const I18N_SERVICE_CONFIGURATION = 'I18N_SERVICE_CONFIGURATION';
 
 export interface I18nServiceConfiguration {
   fallbackLanguage?: string;
+  debug?: boolean;
   http: {
-    endpoint: string;
-    endpointSuffix?: string;
+    url: string;
     token?: string;
-    bearerToken?: string;
   };
 }
 
@@ -35,6 +32,10 @@ export type I18nTranslation =
 export class I18nService implements OnModuleInit, OnModuleDestroy {
   #logger: Logger;
   #i18n: any;
+  #i18nReload: NodeJS.Timer;
+
+  #knownLanguages: Set<string>;
+  #knownComponents: Set<string>;
 
   constructor(
     @Inject(I18N_SERVICE_CONFIGURATION)
@@ -44,50 +45,74 @@ export class I18nService implements OnModuleInit, OnModuleDestroy {
   }
 
   async onModuleInit() {
-    // Idea: browser repo to get available languages (how to manage that on reload though)
-    // Idea: use of gitlab/github webhooks
-    // Idea: i18next.loadLanguages(['de', 'fr'])
-
     const { languages, components } =
       await this.getAvailableLanguagesAndComponents();
-    console.log('test', [...languages]);
+    this.#knownLanguages = languages;
+    this.#knownComponents = components;
 
-    const url = `https://weblate.ulep.thestaging.io/api/translations/ulep/{{ns}}/{{lng}}/file/`;
+    const url = `${this.config.http.url}/translations/ulep/{{ns}}/{{lng}}/file/`;
 
-    // i18n.use(ChainedBackend as any).init<ChainedBackend.ChainedBackendOptions>(
     this.#i18n = i18n.use(HttpBackend as any);
-
     await this.#i18n.init({
-      lng: [...languages],
       fallbackLng: this.config.fallbackLanguage || 'en',
       ns: [...components],
-      debug: true, // TODO(NOW+1)
-      // debug: getLoggerLevels(config.logLevel).includes('debug'),
+      debug: this.config.debug,
+      preload: [...languages],
       backend: {
         loadPath: url,
         crossDomain: true,
-
         withCredentials: true,
         customHeaders: () => {
           return {
             Authorization: `Token ${this.config.http.token}`,
           };
         },
+        // reloadInterval: 10 * 1000,
         reloadInterval: 60 * 60 * 1000, // Reload each hour
       },
     });
+
+    this.#i18nReload = setInterval(async () => {
+      const { languages: updatedLanguages, components: updatedComponents } =
+        await this.getAvailableLanguagesAndComponents();
+
+      const newLanguages = [...updatedLanguages].filter(
+        (language) => !this.#knownLanguages.has(language),
+      );
+      if (newLanguages.length > 0) {
+        this.#logger.debug(`Languages to add: ${newLanguages.join(', ')}`);
+        await this.#i18n.loadLanguages(newLanguages);
+        for (const language of newLanguages) {
+          this.#knownLanguages.add(language);
+        }
+        this.#logger.log(`Added languages: ${newLanguages.join(', ')}`);
+      }
+
+      const newComponents = [...updatedComponents].filter(
+        (component) => !this.#knownComponents.has(component),
+      );
+      if (newComponents.length > 0) {
+        this.#logger.debug(`Namespace to add: ${newComponents.join(', ')}`);
+        await this.#i18n.loadNamespaces(newComponents);
+        for (const component of newComponents) {
+          this.#knownComponents.add(component);
+        }
+        this.#logger.log(`Added namespace: ${newComponents.join(', ')}`);
+      }
+    }, 10 * 1000);
   }
 
   onModuleDestroy() {
-    // TODO
+    if (this.#i18nReload) {
+      clearInterval(this.#i18nReload);
+    }
   }
 
   private async getAvailableLanguagesAndComponents(): Promise<{
-    languages: string[];
-    components: string[];
+    languages: Set<string>;
+    components: Set<string>;
   }> {
-    const translationsUrl =
-      'https://weblate.ulep.thestaging.io/api/translations/';
+    const translationsUrl = `${this.config.http.url}/translations/`;
 
     const res = await fetch(translationsUrl, {
       headers: {
@@ -101,7 +126,10 @@ export class I18nService implements OnModuleInit, OnModuleDestroy {
       } catch (err) {
         this.#logger.error(res.body);
       }
-      // TODO(NOW): see how manage that
+      return {
+        components: new Set(),
+        languages: new Set(),
+      };
     } else {
       const data = await res.json();
       return data.results.reduce(
@@ -109,8 +137,8 @@ export class I18nService implements OnModuleInit, OnModuleDestroy {
           const code = value.language_code;
           const component = value.component.slug;
 
-          // Glossary is a component created by Weblate
-          if (component !== 'glossary') {
+          // Glossary are components created by Weblate
+          if (!value.is_glossary) {
             if (acc.languages.has(code) <= 0) {
               acc.languages.add(code);
             }

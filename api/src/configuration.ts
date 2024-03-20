@@ -1,3 +1,4 @@
+import { LogLevel } from '@nestjs/common';
 import { Transform, plainToClass } from 'class-transformer';
 import {
   IsBoolean,
@@ -75,6 +76,16 @@ export class Env {
   @IsString()
   @IsNotEmpty()
   S3_ACCESS_SECRET: string;
+
+  @IsString()
+  @IsNotEmpty()
+  WEBLATE_API_URL: string;
+  // TODO(NOW): clean other vars
+
+  @IsString()
+  @IsOptional()
+  WEBLATE_API_TOKEN: string;
+  // TODO(NOW): clean other vars
 
   @IsString()
   @IsNotEmpty()
@@ -196,6 +207,26 @@ export const getTranslationsEndpoint = (
   const suffix = process.env.TRANSLATIONS_ENDPOINT_SUFFIX || '';
   // %2F work with github and gitlab but / doesn't with gitlab ( ??? )
   return `${endpoint}%2F${lng}%2F${component}.json${suffix}`;
+};
+
+export const getLoggerLevels = (logLevel: string): LogLevel[] => {
+  const level: LogLevel[] = [];
+  switch (logLevel) {
+    case 'verbose':
+      level.push('verbose');
+    case 'debug':
+      level.push('debug');
+    case 'warn':
+      level.push('warn');
+    case 'error':
+      level.push('error');
+    case 'log':
+      level.push('log');
+      break;
+    default:
+      break;
+  }
+  return level;
 };
 
 /// Testing configuration

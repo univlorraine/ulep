@@ -22,12 +22,15 @@ import { I18nModule } from '@app/common/i18n/i18n.module';
         console.info(`Default translation language: ${fallbackLanguage}`);
         return {
           fallbackLanguage: fallbackLanguage,
+          debug: env.get('DEFAULT_TRANSLATION_LANGUAGE') === 'true',
           http: {
+            url: env.get('WEBLATE_API_URL'),
+            token: env.get('WEBLATE_API_TOKEN'),
             // TODO(NOW+1): see how to factorize with instance translation
-            endpoint: env.get('TRANSLATIONS_ENDPOINT'),
-            endpointSuffix: env.get('TRANSLATIONS_ENDPOINT_SUFFIX'),
-            token: env.get('TRANSLATIONS_TOKEN'),
-            bearerToken: env.get('TRANSLATIONS_BEARER_TOKEN'),
+            // endpoint: env.get('TRANSLATIONS_ENDPOINT'),
+            // endpointSuffix: env.get('TRANSLATIONS_ENDPOINT_SUFFIX'),
+            // token: env.get('TRANSLATIONS_TOKEN'),
+            // bearerToken: env.get('TRANSLATIONS_BEARER_TOKEN'),
           },
         };
       },
