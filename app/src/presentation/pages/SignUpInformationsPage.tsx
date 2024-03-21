@@ -284,11 +284,11 @@ const SignUpInformationsPage: React.FC = () => {
                     name={
                         <>
                             {`${t('signup_informations_page.cgu.prefix')} `}
-                            <a href={configuration.cguUrl} onClick={browserAdapter.openHref}>{`${t(
+                            <a href={configuration.cguUrl} onClick={browserAdapter.openLinkInBrowser}>{`${t(
                                 'signup_informations_page.cgu.cgu'
                             )}`}</a>
                             {` ${t('signup_informations_page.cgu.separator')} `}
-                            <a href={configuration.confidentialityUrl} onClick={browserAdapter.openHref}>{`${t(
+                            <a href={configuration.confidentialityUrl} onClick={browserAdapter.openLinkInBrowser}>{`${t(
                                 'signup_informations_page.cgu.confidentiality'
                             )}`}</a>
                             {` ${t('signup_informations_page.cgu.suffix')}`}

@@ -85,7 +85,7 @@ const SettingsContent: React.FC<SettingsContentProps> = ({ onBackPressed, onDisc
             </button>
             <a
                 href={configuration.confidentialityUrl}
-                onClick={browserAdapter.openHref}
+                onClick={browserAdapter.openLinkInBrowser}
                 className={styles['setting-container']}
             >
                 <span>{t('home_page.settings.confidentiality')}</span>
@@ -93,7 +93,7 @@ const SettingsContent: React.FC<SettingsContentProps> = ({ onBackPressed, onDisc
             </a>
             <a
                 href={configuration.cguUrl}
-                onClick={browserAdapter.openHref}
+                onClick={browserAdapter.openLinkInBrowser}
                 className={`${styles['setting-container']} large-margin-bottom`}
             >
                 <span>{t('home_page.settings.CGU')}</span>
