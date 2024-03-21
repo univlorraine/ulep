@@ -1,7 +1,8 @@
 import GetHistoricEmailPartnerUsecase from '../../../src/domain/usecases/GetHistoricEmailPartnerUsecase';
 import DomainHttpAdapter from '../../mocks/adapters/HttpAdapter';
 
-const httpCallResponse: string = 'myemail@email.com';
+const email = 'myemail@email.com';
+const httpCallResponse: { email: string } = { email };
 const userId = 'userId';
 const languageId = 'languageId';
 
@@ -34,7 +35,7 @@ describe('getHistoricEmailPartner', () => {
         adapter.mockJson({ parsedBody: httpCallResponse });
 
         const result = await usecase.execute(userId, languageId);
-        expect(result).toBe(httpCallResponse);
+        expect(result).toBe(email);
     });
 
     it('execute must return an expected response without parsed body', async () => {
