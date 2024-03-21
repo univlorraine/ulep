@@ -26,7 +26,7 @@ import { I18nModule } from '@app/common/i18n/i18n.module';
           http: {
             url: env.get('WEBLATE_API_URL'),
             token: env.get('WEBLATE_API_TOKEN'),
-            reloadInterval: env.get('WEBLATE_RELOAD_INTERVAL'),
+            reloadInterval: env.get('I18N_RELOAD_INTERVAL'),
           },
         };
       },

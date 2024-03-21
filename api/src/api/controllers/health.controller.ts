@@ -30,7 +30,8 @@ export class HealthController {
   @HealthCheck()
   @SerializeOptions({ strategy: 'exposeAll' })
   async test(@Param('id') id: string): Promise<any> {
-    const test = this.i18n.translate('tandemBecomeActive.subject', {
+    // TODO(NOW): remove
+    const test = this.i18n.translate('welcome.title', {
       ns: 'emails',
       lng: id,
     });

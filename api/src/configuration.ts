@@ -88,7 +88,7 @@ export class Env {
   @IsNumber()
   @Transform(({ value }) => parseInt(value, 10))
   @IsOptional()
-  WEBLATE_RELOAD_INTERVAL: number;
+  I18N_RELOAD_INTERVAL: number;
 
   @IsString()
   @IsOptional()
@@ -229,6 +229,8 @@ export const getLoggerLevels = (logLevel: string): LogLevel[] => {
   return level;
 };
 
+// TODO(NOW+1): update docker-compose
+
 /// Testing configuration
 const test: Env = {
   ADMIN_URL: 'http://localhost:3000',
@@ -249,7 +251,7 @@ const test: Env = {
   S3_ACCESS_SECRET: 'minio123',
   WEBLATE_API_URL: 'http://localhost:8000/api',
   WEBLATE_API_TOKEN: '',
-  WEBLATE_RELOAD_INTERVAL: 0, // TODO(NOW+1): see if rename into I18N_RELOAD_INTERVAL
+  I18N_RELOAD_INTERVAL: 0,
   APP_TRANSLATION_NAMESPACE: 'app',
   API_TRANSLATION_NAMESPACE: 'api',
   EMAIL_TRANSLATION_NAMESPACE: 'emails',
