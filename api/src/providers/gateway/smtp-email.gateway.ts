@@ -16,8 +16,6 @@ import {
   TandemCanceledEmailProps,
 } from 'src/core/ports/email.gateway';
 
-// TODO(NOW+T): test email
-
 @Injectable()
 export class SmtpEmailGateway implements EmailGateway {
   constructor(
@@ -64,7 +62,8 @@ export class SmtpEmailGateway implements EmailGateway {
     const value = this.i18n.translate(key, {
       lng: language,
       ns: this.translationNamespace,
-      args,
+      returnObjects: true,
+      ...args,
     });
     const isObject = typeof value === 'object' && value !== null;
     const hasTitle =
