@@ -80,12 +80,10 @@ export class Env {
   @IsString()
   @IsNotEmpty()
   WEBLATE_API_URL: string;
-  // TODO(NOW): clean other vars
 
   @IsString()
   @IsOptional()
   WEBLATE_API_TOKEN: string;
-  // TODO(NOW): clean other vars
 
   @IsNumber()
   @Transform(({ value }) => parseInt(value, 10))
@@ -96,23 +94,6 @@ export class Env {
   @Transform(({ value }) => value === 'true')
   @IsOptional()
   I18N_DEBUG: boolean;
-  // TODO(NOW): clean other vars
-
-  @IsString()
-  @IsNotEmpty()
-  TRANSLATIONS_ENDPOINT: string;
-
-  @IsString()
-  @IsOptional()
-  TRANSLATIONS_ENDPOINT_SUFFIX: string;
-
-  @IsString()
-  @IsOptional()
-  TRANSLATIONS_TOKEN: string;
-
-  @IsString()
-  @IsOptional()
-  TRANSLATIONS_BEARER_TOKEN: string;
 
   @IsString()
   @IsOptional()
@@ -125,10 +106,6 @@ export class Env {
   @IsString()
   @IsNotEmpty()
   EMAIL_ASSETS_BUCKET: string;
-
-  @IsString()
-  @IsNotEmpty()
-  EMAIL_TRANSLATIONS_COMPONENT: string;
 
   @IsString()
   @IsNotEmpty()
@@ -258,12 +235,11 @@ const test: Env = {
   S3_REGION: 'eu-east-1',
   S3_ACCESS_KEY: 'minio',
   S3_ACCESS_SECRET: 'minio123',
-  TRANSLATIONS_ENDPOINT: 'http://localhost:3000/api/translations',
-  TRANSLATIONS_ENDPOINT_SUFFIX: '',
-  TRANSLATIONS_TOKEN: 'test',
-  TRANSLATIONS_BEARER_TOKEN: '',
+  WEBLATE_API_URL: 'http://localhost:8000/api',
+  WEBLATE_API_TOKEN: '',
+  WEBLATE_RELOAD_INTERVAL: 0, // TODO(NOW+1): see if rename into I18N_RELOAD_INTERVAL
+  I18N_DEBUG: false,
   EMAIL_ASSETS_BUCKET: 'assets',
-  EMAIL_TRANSLATIONS_COMPONENT: 'email',
   EMAIL_ASSETS_PUBLIC_ENDPOINT: 'http://localhost:9000/assets',
   APP_LINK_APPLE_STORE: 'https://apple.com',
   APP_LINK_PLAY_STORE: 'https://play.google.com',

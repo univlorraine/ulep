@@ -27,37 +27,11 @@ import { I18nModule } from '@app/common/i18n/i18n.module';
             url: env.get('WEBLATE_API_URL'),
             token: env.get('WEBLATE_API_TOKEN'),
             reloadInterval: env.get('WEBLATE_RELOAD_INTERVAL'),
-            // TODO(NOW+1): see how to factorize with instance translation
-            // endpoint: env.get('TRANSLATIONS_ENDPOINT'),
-            // endpointSuffix: env.get('TRANSLATIONS_ENDPOINT_SUFFIX'),
-            // token: env.get('TRANSLATIONS_TOKEN'),
-            // bearerToken: env.get('TRANSLATIONS_BEARER_TOKEN'),
           },
         };
       },
       inject: [ConfigService],
     }),
-    // TODO(NOW+1): remove i18n-nest if don't use a
-    // I18nModule.forRootAsync({
-    //   useFactory: async (env: ConfigService<Env, true>) => {
-    //     const fallbackLanguage = env
-    //       .get<string>('DEFAULT_TRANSLATION_LANGUAGE')
-    //       .toLowerCase();
-    //     console.info(`Default translation language: ${fallbackLanguage}`);
-    //     return {
-    //       fallbackLanguage,
-    //       loaderOptions: {
-    //         path: 'i18n/',
-    //         watch: process.env.NODE_ENV !== 'production',
-    //       },
-    //     };
-    //   },
-    //   resolvers: [
-    //     { use: QueryResolver, options: ['lang'] },
-    //     AcceptLanguageResolver,
-    //   ],
-    //   inject: [ConfigService],
-    // }),
     KeycloakModule.registerAsync({
       isGlobal: true,
       imports: [ConfigModule],

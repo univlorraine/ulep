@@ -1,7 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { Env } from 'src/configuration';
-import { I18nService as test } from 'nestjs-i18n';
 import { I18nService, MailerService } from '@app/common';
 
 import {
@@ -16,6 +15,8 @@ import {
   TandemValidationNoticeEmailProps,
   TandemCanceledEmailProps,
 } from 'src/core/ports/email.gateway';
+
+// TODO(NOW+1): emails NS configurable
 
 @Injectable()
 export class SmtpEmailGateway implements EmailGateway {
@@ -46,7 +47,9 @@ export class SmtpEmailGateway implements EmailGateway {
   }
 
   private get footer() {
-    return this.i18n.translate('emails.footer');
+    return this.i18n.translate('footer', {
+      ns: 'emails',
+    });
   }
 
   private translate(
@@ -54,7 +57,11 @@ export class SmtpEmailGateway implements EmailGateway {
     language: string,
     args?: Record<string, any>,
   ): Record<string, any> {
-    const value = this.i18n.translate(key, { lang: language, args });
+    const value = this.i18n.translate(key, {
+      lng: language,
+      ns: 'emails',
+      args,
+    });
     const isObject = typeof value === 'object' && value !== null;
     const hasTitle =
       isObject && 'title' in value && typeof value.title === 'string';
@@ -69,7 +76,7 @@ export class SmtpEmailGateway implements EmailGateway {
   }
 
   async sendWelcomeMail(props: SendWelcomeMailProps): Promise<void> {
-    const translations = this.translate('emails.welcome', props.language, {
+    const translations = this.translate('welcome', props.language, {
       ...props,
     });
 
@@ -90,7 +97,7 @@ export class SmtpEmailGateway implements EmailGateway {
     props: NewUserRegistrationNoticeEmailProps,
   ): Promise<void> {
     const translations = this.translate(
-      'emails.newUserRegistrationNotice',
+      'newUserRegistrationNotice',
       props.language,
       { ...props },
     );
@@ -111,7 +118,7 @@ export class SmtpEmailGateway implements EmailGateway {
     props: PasswordChangeDeniedEmailProps,
   ): Promise<void> {
     const translations = this.translate(
-      'emails.passwordChangeDenied',
+      'passwordChangeDenied',
       props.language,
       { ...props },
     );
@@ -132,11 +139,9 @@ export class SmtpEmailGateway implements EmailGateway {
   async sendAccountBlockedEmail(
     props: AccountBlockedEmailProps,
   ): Promise<void> {
-    const translations = this.translate(
-      'emails.accountBlocked',
-      props.language,
-      { ...props },
-    );
+    const translations = this.translate('accountBlocked', props.language, {
+      ...props,
+    });
 
     await this.mailer.sendMail({
       to: props.to,
@@ -155,7 +160,7 @@ export class SmtpEmailGateway implements EmailGateway {
     props: TandemValidationNoticeEmailProps,
   ): Promise<void> {
     const translations = this.translate(
-      'emails.tandemValidationNotice',
+      'tandemValidationNotice',
       props.language,
     );
 
@@ -172,7 +177,7 @@ export class SmtpEmailGateway implements EmailGateway {
   }
 
   async sendNewPartnerEmail(props: NewPartnerEmail): Promise<void> {
-    const translations = this.translate('emails.newTandem', props.language, {
+    const translations = this.translate('newTandem', props.language, {
       ...props,
     });
 
@@ -192,11 +197,9 @@ export class SmtpEmailGateway implements EmailGateway {
   async sendNewTandemNoticeEmail(
     props: NewTandemNoticeEmailProps,
   ): Promise<void> {
-    const translations = this.translate(
-      'emails.newTandemNotice',
-      props.language,
-      { ...props },
-    );
+    const translations = this.translate('newTandemNotice', props.language, {
+      ...props,
+    });
 
     await this.mailer.sendMail({
       to: props.to,
@@ -213,11 +216,9 @@ export class SmtpEmailGateway implements EmailGateway {
   async sendTandemCanceledEmail(
     props: TandemCanceledEmailProps,
   ): Promise<void> {
-    const translations = this.translate(
-      'emails.tandemCanceled',
-      props.language,
-      { ...props },
-    );
+    const translations = this.translate('tandemCanceled', props.language, {
+      ...props,
+    });
 
     await this.mailer.sendMail({
       to: props.to,
@@ -236,7 +237,7 @@ export class SmtpEmailGateway implements EmailGateway {
     props: TandemCanceledNoticeEmailProps,
   ): Promise<void> {
     const translations = this.translate(
-      'emails.tandemCanceledNotice',
+      'tandemCanceledNotice',
       props.language,
       { ...props },
     );

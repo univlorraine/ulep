@@ -257,8 +257,10 @@ export class UserController {
         avatarSignedUrl,
       },
       (value: string) =>
+        // TODO(NOW+1): update
+        // TODO(NOW+1): doc weblate + config
         `${this.i18n.translate(value, {
-          lang: userData.profile.nativeLanguage.code,
+          lng: userData.profile.nativeLanguage.code,
         })}`,
     );
 

@@ -5,6 +5,7 @@ metadata:
   labels:
     {{- include "etandem.labels" . | nindent 4 }}
 spec:
+  # TODO(NOW+1): update
   {{- if not .Values.api.autoscaling.enabled }}
   replicas: {{ .Values.api.replicaCount }}
   {{- end }}
