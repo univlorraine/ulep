@@ -100,11 +100,7 @@ export class GenerateTandemsUsecase {
         const potentialPairLearningLanguage = learningLanguagesToPair[j];
 
         if (learningLanguageToPair.isExclusive()) {
-          if (
-            potentialPairLearningLanguage.isExclusive() &&
-            learningLanguageToPair.sameTandemEmail === potentialPairLearningLanguage.profile.user.email &&
-            potentialPairLearningLanguage.sameTandemEmail === learningLanguageToPair.profile.user.email
-          ) {
+          if (learningLanguageToPair.isExclusiveWithLearningLanguage(potentialPairLearningLanguage)) {
             possiblePairs.push(
               new Match({
                 owner: learningLanguageToPair,

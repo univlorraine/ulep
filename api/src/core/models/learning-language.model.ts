@@ -73,6 +73,15 @@ export class LearningLanguage {
     return !!this.sameTandemEmail;
   }
 
+  public isExclusiveWithLearningLanguage(learningLanguage: LearningLanguage) {
+    return (
+      this.isExclusive() &&
+      learningLanguage.isExclusive() &&
+      this.sameTandemEmail === learningLanguage.profile.user.email &&
+      this.profile.user.email === learningLanguage.sameTandemEmail
+    );
+  }
+
   public isDiscovery(learningLanguageMatch?: LearningLanguage) {
     if (learningLanguageMatch) {
       if (

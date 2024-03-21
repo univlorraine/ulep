@@ -6,7 +6,7 @@ import { Collection } from '@app/common';
 import { Inject, Injectable, Logger } from '@nestjs/common';
 import { RessourceDoesNotExist } from 'src/core/errors';
 import { LearningLanguageHasNoAssociatedProfile } from 'src/core/errors/tandem-exceptions';
-import { LearningLanguage, Match } from 'src/core/models';
+import { LearningLanguage, Match, MatchScores } from 'src/core/models';
 import {
   LANGUAGE_REPOSITORY,
   LanguageRepository,
@@ -63,7 +63,7 @@ export class GetLearningLanguageMatchesUsecase {
       await this.languageRepository.getLanguagesProposedToLearning()
     ).filter((language) => !language.isJokerLanguage());
 
-    let targets = [];
+    let targets: LearningLanguage[] = [];
     if (learningLanguage.language.isJokerLanguage()) {
       const languageIdsSpokenByOwner = owner.spokenLanguages.map(
         (language) => language.id,
@@ -107,13 +107,25 @@ export class GetLearningLanguageMatchesUsecase {
       if (target.profile.id === owner.id) continue;
       if (refusedPartnersMap.has(target.id)) continue;
 
-      const match = this.matchService.computeMatchScore(
-        learningLanguage,
-        target,
-        languagesAvailableForLearning,
-      );
+      if (learningLanguage.isExclusive()) {
+        if (learningLanguage.isExclusiveWithLearningLanguage(target)) {
+          potentialMatchs.push(
+            new Match({
+              owner: learningLanguage,
+              target: target,
+              scores: MatchScores.exclusivity(),
+            }),
+          );
+        }
+      } else {
+        const match = this.matchService.computeMatchScore(
+          learningLanguage,
+          target,
+          languagesAvailableForLearning,
+        );
 
-      potentialMatchs.push(match);
+        potentialMatchs.push(match);
+      }
     }
 
     const matchs = potentialMatchs
