@@ -6,3 +6,4 @@
 */
 -- AlterTable
 ALTER TABLE "tandem_history" ADD COLUMN     "user_email" TEXT NOT NULL;
+ALTER TABLE "learning_languages" ADD COLUMN     "same_tandem_email" TEXT;

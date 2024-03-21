@@ -56,6 +56,7 @@ export class CreateProfileCommand {
     learningType: LearningType;
     sameGender: boolean;
     sameAge: boolean;
+    sameTandemEmail?: string;
     campusId?: string;
     certificateOption?: boolean;
     specificProgram?: boolean;
@@ -147,7 +148,6 @@ export class CreateProfileUsecase {
             );
           }
         }
-
         return new LearningLanguage({
           id: this.uuidProvider.generate(),
           language,
@@ -155,6 +155,7 @@ export class CreateProfileUsecase {
           learningType: learningLanguage.learningType,
           sameGender: learningLanguage.sameGender,
           sameAge: learningLanguage.sameAge,
+          sameTandemEmail: learningLanguage.sameTandemEmail,
           certificateOption: learningLanguage.certificateOption,
           specificProgram: learningLanguage.specificProgram,
           campus: campus,
