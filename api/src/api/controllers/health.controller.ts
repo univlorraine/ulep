@@ -1,4 +1,4 @@
-import { Controller, Get, Param, SerializeOptions } from '@nestjs/common';
+import { Controller, Get, SerializeOptions } from '@nestjs/common';
 import {
   HealthCheck,
   HealthCheckService,
@@ -24,18 +24,5 @@ export class HealthController {
     return this.healthCheckService.check([
       () => this.prisma.pingCheck('prisma', this.prismaService),
     ]);
-  }
-
-  @Get('test/:id')
-  @HealthCheck()
-  @SerializeOptions({ strategy: 'exposeAll' })
-  async test(@Param('id') id: string): Promise<any> {
-    // TODO(NOW): remove
-    const test = this.i18n.translate('welcome.title', {
-      ns: 'emails',
-      lng: id,
-    });
-    console.log('test', test, ' - ', id);
-    return test;
   }
 }

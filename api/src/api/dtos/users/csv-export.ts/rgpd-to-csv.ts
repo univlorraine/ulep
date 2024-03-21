@@ -8,8 +8,6 @@ interface UserPersonalDataToCsvParams {
   avatarSignedUrl?: string;
 }
 
-// TODO(NOW+T): test
-
 export const userPersonalDataToCsv = (
   { userData, avatarSignedUrl }: UserPersonalDataToCsvParams,
   translate: (key: string, opts?: { ns: string }) => string,

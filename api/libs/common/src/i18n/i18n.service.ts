@@ -1,6 +1,3 @@
-// import i18next from 'i18next';
-// Inspire commit 5c06febdcfb91e891224e37406cc43d3975f9441
-
 import * as i18n from 'i18next';
 import * as HttpBackend from 'i18next-http-backend';
 import {
@@ -34,7 +31,7 @@ export type I18nTranslation =
 @Injectable()
 export class I18nService implements OnModuleInit, OnModuleDestroy {
   #logger: Logger;
-  #i18n: any;
+  #i18n: any; // TODO(NOW): fix typing
   #i18nReload: NodeJS.Timer;
 
   #knownLanguages: Set<string>;
@@ -56,6 +53,7 @@ export class I18nService implements OnModuleInit, OnModuleDestroy {
 
     const url = `${this.config.http.url}/translations/ulep/{{ns}}/{{lng}}/file/`;
 
+    // TODO(NOW): fix or explaing typing
     this.#i18n = i18n.use(HttpBackend as any);
     await this.#i18n.init({
       fallbackLng: this.config.fallbackLanguage || 'en',
@@ -166,8 +164,8 @@ export class I18nService implements OnModuleInit, OnModuleDestroy {
     }
   }
 
+  // TODO(NOW): Fix typing
   public translate(key: string, opts: any) {
-    console.log('opts', opts);
     return this.#i18n.t(key, opts);
   }
 
