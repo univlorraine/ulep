@@ -2,6 +2,7 @@ import * as request from 'supertest';
 import { Test } from '@nestjs/testing';
 import { AppModule } from 'src/app.module';
 import {
+  I18nService,
   InterestCategoryFactory,
   InterestFactory,
   LanguageFactory,
@@ -15,6 +16,7 @@ import { LANGUAGE_REPOSITORY } from 'src/core/ports/language.repository';
 import { AuthenticationGuard } from 'src/api/guards';
 import InMemoryEmailGateway from 'src/providers/gateway/in-memory-email.gateway';
 import { EMAIL_GATEWAY } from 'src/core/ports/email.gateway';
+import { InMemoryI18nService } from 'src/providers/services/in-memory.i18n.provider';
 
 describe('Interests', () => {
   let app: TestServer;
@@ -26,6 +28,7 @@ describe('Interests', () => {
   const repository = new InMemoryInterestRepository();
   const languageRepository = new InMemoryLanguageRepository();
   const inMemoryEmail = new InMemoryEmailGateway();
+  const inMemoryI18n = new InMemoryI18nService();
 
   beforeAll(async () => {
     const language = languageFactory.makeOne({ code: 'fr' });
@@ -40,6 +43,8 @@ describe('Interests', () => {
       .useValue(languageRepository)
       .overrideProvider(EMAIL_GATEWAY)
       .useValue(inMemoryEmail)
+      .overrideProvider(I18nService)
+      .useValue(inMemoryI18n)
       .overrideGuard(AuthenticationGuard)
       .useValue(TestAuthGuard)
       .compile();

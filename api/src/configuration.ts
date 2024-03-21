@@ -237,7 +237,7 @@ const test: Env = {
   S3_REGION: 'eu-east-1',
   S3_ACCESS_KEY: 'minio',
   S3_ACCESS_SECRET: 'minio123',
-  WEBLATE_API_URL: 'http://localhost:8000/api',
+  WEBLATE_API_URL: 'http://localhost:3000/api/translations',
   WEBLATE_API_TOKEN: '',
   I18N_RELOAD_INTERVAL: 0,
   APP_TRANSLATION_NAMESPACE: 'app',
