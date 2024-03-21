@@ -199,16 +199,6 @@ const removeTrailingSlash = (url: string): string => {
   return url;
 };
 
-export const getTranslationsEndpoint = (
-  lng: string,
-  component: string,
-): string => {
-  const endpoint = process.env.TRANSLATIONS_ENDPOINT || '';
-  const suffix = process.env.TRANSLATIONS_ENDPOINT_SUFFIX || '';
-  // %2F work with github and gitlab but / doesn't with gitlab ( ??? )
-  return `${endpoint}%2F${lng}%2F${component}.json${suffix}`;
-};
-
 export const getLoggerLevels = (logLevel: string): LogLevel[] => {
   const level: LogLevel[] = [];
   switch (logLevel) {
@@ -228,8 +218,6 @@ export const getLoggerLevels = (logLevel: string): LogLevel[] => {
   }
   return level;
 };
-
-// TODO(NOW+1): update docker-compose
 
 /// Testing configuration
 const test: Env = {

@@ -62,11 +62,13 @@ export class I18nService implements OnModuleInit, OnModuleDestroy {
       backend: {
         loadPath: url,
         crossDomain: true,
-        withCredentials: true,
+        withCredentials: !!this.config.http.token,
         customHeaders: () => {
-          return {
-            Authorization: `Token ${this.config.http.token}`,
-          };
+          return this.config.http.token
+            ? {
+                Authorization: `Token ${this.config.http.token}`,
+              }
+            : {};
         },
         reloadInterval:
           this.config.http.reloadInterval || DEFAULT_RELOAD_INTERVAL,
