@@ -16,7 +16,7 @@ import {
   TandemCanceledEmailProps,
 } from 'src/core/ports/email.gateway';
 
-// TODO(NOW+1): emails NS configurable
+// TODO(NOW+T): test email
 
 @Injectable()
 export class SmtpEmailGateway implements EmailGateway {
@@ -25,6 +25,10 @@ export class SmtpEmailGateway implements EmailGateway {
     private readonly i18n: I18nService,
     private readonly mailer: MailerService,
   ) {}
+
+  private get translationNamespace() {
+    return this.env.get('EMAIL_TRANSLATION_NAMESPACE') || 'emails';
+  }
 
   private get images() {
     const endpoint = this.env.get('EMAIL_ASSETS_PUBLIC_ENDPOINT');
@@ -48,7 +52,7 @@ export class SmtpEmailGateway implements EmailGateway {
 
   private get footer() {
     return this.i18n.translate('footer', {
-      ns: 'emails',
+      ns: this.translationNamespace,
     });
   }
 
@@ -59,7 +63,7 @@ export class SmtpEmailGateway implements EmailGateway {
   ): Record<string, any> {
     const value = this.i18n.translate(key, {
       lng: language,
-      ns: 'emails',
+      ns: this.translationNamespace,
       args,
     });
     const isObject = typeof value === 'object' && value !== null;

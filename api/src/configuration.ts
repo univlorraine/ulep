@@ -90,6 +90,18 @@ export class Env {
   @IsOptional()
   WEBLATE_RELOAD_INTERVAL: number;
 
+  @IsString()
+  @IsOptional()
+  APP_TRANSLATION_NAMESPACE: string;
+
+  @IsString()
+  @IsOptional()
+  API_TRANSLATION_NAMESPACE: string;
+
+  @IsString()
+  @IsOptional()
+  EMAIL_TRANSLATION_NAMESPACE: string;
+
   @IsBoolean()
   @Transform(({ value }) => value === 'true')
   @IsOptional()
@@ -238,6 +250,9 @@ const test: Env = {
   WEBLATE_API_URL: 'http://localhost:8000/api',
   WEBLATE_API_TOKEN: '',
   WEBLATE_RELOAD_INTERVAL: 0, // TODO(NOW+1): see if rename into I18N_RELOAD_INTERVAL
+  APP_TRANSLATION_NAMESPACE: 'app',
+  API_TRANSLATION_NAMESPACE: 'api',
+  EMAIL_TRANSLATION_NAMESPACE: 'emails',
   I18N_DEBUG: false,
   EMAIL_ASSETS_BUCKET: 'assets',
   EMAIL_ASSETS_PUBLIC_ENDPOINT: 'http://localhost:9000/assets',

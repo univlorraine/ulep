@@ -62,9 +62,6 @@ import { userPersonalDataToCsv } from '../dtos/users/csv-export.ts';
 @Controller('users')
 @Swagger.ApiTags('Users')
 export class UserController {
-  // Expiration time for presigned url
-  #expirationTime: number;
-
   constructor(
     private readonly createUserUsecase: CreateUserUsecase,
     private readonly uploadAvatarUsecase: UploadAvatarUsecase,
@@ -80,11 +77,10 @@ export class UserController {
     private readonly revokeSessionsUsecase: RevokeSessionsUsecase,
     private readonly getUserPersonalData: GetUserPersonalData,
     private readonly i18n: I18nService,
-    @Inject(STORAGE_INTERFACE) private readonly storage: StorageInterface,
-    env: ConfigService<Env, true>,
-  ) {
-    this.#expirationTime = env.get('SIGNED_URL_EXPIRATION_IN_SECONDS');
-  }
+    @Inject(STORAGE_INTERFACE)
+    private readonly storage: StorageInterface,
+    private readonly env: ConfigService<Env, true>,
+  ) {}
 
   @Post()
   @UseInterceptors(FileInterceptor('file'))
@@ -247,20 +243,23 @@ export class UserController {
       ? await this.storage.temporaryUrl(
           userData.user.avatar.bucket,
           userData.user.avatar.name,
-          this.#expirationTime,
+          this.env.get('SIGNED_URL_EXPIRATION_IN_SECONDS'),
         )
       : undefined;
+
+    const appTranslationNs = this.env.get('APP_TRANSLATION_NAMESPACE') || 'app';
+    const apiTranslationNs = this.env.get('API_TRANSLATION_NAMESPACE') || 'api';
 
     const csv = userPersonalDataToCsv(
       {
         userData,
         avatarSignedUrl,
       },
-      (value: string) =>
-        // TODO(NOW+1): update
-        // TODO(NOW+1): doc weblate + config
+      (value: string, opts?: { ns: string }) =>
+        // TODO(NOW+doc): config weblate (zh) + doc env variables
         `${this.i18n.translate(value, {
           lng: userData.profile.nativeLanguage.code,
+          ns: opts?.ns === 'app' ? appTranslationNs : apiTranslationNs,
         })}`,
     );
 

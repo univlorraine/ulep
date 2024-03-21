@@ -8,9 +8,11 @@ interface UserPersonalDataToCsvParams {
   avatarSignedUrl?: string;
 }
 
+// TODO(NOW+T): test
+
 export const userPersonalDataToCsv = (
   { userData, avatarSignedUrl }: UserPersonalDataToCsvParams,
-  translate: (key: string) => string,
+  translate: (key: string, opts?: { ns: string }) => string,
 ) => {
   const content = formatUserPersonalData({
     ...userData,
@@ -30,11 +32,11 @@ export const userPersonalDataToCsv = (
     header: true,
     cast: {
       boolean: (value) =>
-        translate(`api.export.values.${value ? 'true' : 'false'}`),
+        translate(`export.values.${value ? 'true' : 'false'}`),
       date: (value) => dateFormater.format(value),
       string: (value, { header, column }) => {
         if (header) {
-          return translate(`api.export.headers.${value}`);
+          return translate(`export.headers.${value}`);
         } else {
           let key: string;
           switch (column) {
@@ -58,7 +60,7 @@ export const userPersonalDataToCsv = (
               break;
           }
           if (key) {
-            return translate(`api.export.values.${key}.${value}`);
+            return translate(`export.values.${key}.${value}`);
           } else {
             return value;
           }
@@ -79,30 +81,34 @@ export const userPersonalDataToCsv = (
           column === 'native_language' ||
           column === 'learning_request_language'
         ) {
-          return translate(`translation.languages_code.${value.code}`);
+          return translate(`languages_code.${value.code}`, {
+            ns: 'app',
+          });
         } else if (column === 'mastered_languages') {
           return JSON.stringify(
             value.map((item: Language) =>
-              translate(`translation.languages_code.${item.code}`),
+              translate(`languages_code.${item.code}`, { ns: 'app' }),
             ),
           );
         } else if (column === 'suggested_languages') {
           return JSON.stringify(
             value.map((item) => ({
-              [translate('api.export.headers.arrayKeys.language')]: translate(
-                `translation.languages_code.${item.code}`,
+              [translate('export.headers.arrayKeys.language')]: translate(
+                `languages_code.${item.code}`,
+                { ns: 'app' },
               ),
-              [translate('api.export.headers.arrayKeys.suggestion_date')]:
+              [translate('export.headers.arrayKeys.suggestion_date')]:
                 dateFormater.format(item.suggestion_date),
             })),
           );
         } else if (column === 'historized_tandems') {
           return JSON.stringify(
             value.map((item) => ({
-              [translate('api.export.headers.arrayKeys.language')]: translate(
-                `translation.languages_code.${item.code}`,
+              [translate('export.headers.arrayKeys.language')]: translate(
+                `languages_code.${item.code}`,
+                { ns: 'app' },
               ),
-              [translate('api.export.headers.arrayKeys.historization_date')]:
+              [translate('export.headers.arrayKeys.historization_date')]:
                 dateFormater.format(item.historization_date),
             })),
           );
