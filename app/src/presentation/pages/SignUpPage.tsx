@@ -12,7 +12,6 @@ import RadioButton from '../components/RadioButton';
 import TextInput from '../components/TextInput';
 import WebLayoutCentered from '../components/layout/WebLayoutCentered';
 import styles from './css/SignUp.module.css';
-import { Capacitor } from '@capacitor/core';
 import { SignUpInformationsParams } from './SignUpInformationsPage';
 import { Keyboard } from '@capacitor/keyboard';
 
@@ -22,7 +21,8 @@ interface SignUpPageParams {
 
 const SignUpPage: React.FC = () => {
     const { t } = useTranslation();
-    const { browserAdapter, capacitorAdapter, configuration, getAllCountries, getInitialUrlUsecase, retrievePerson } = useConfig();
+    const { browserAdapter, deviceAdapter, configuration, getAllCountries, getInitialUrlUsecase, retrievePerson } =
+        useConfig();
     const updateProfileSignUp = useStoreActions((state) => state.updateProfileSignUp);
     const profileSignUp = useStoreState((state) => state.profileSignUp);
     const [showToast] = useIonToast();
@@ -217,7 +217,7 @@ const SignUpPage: React.FC = () => {
                                 staffFunction,
                             });
                             const redirectUri = encodeURIComponent(
-                                capacitorAdapter.isNativePlatform() ? 'ulep://auth' : `${window.location.origin}/auth`
+                                deviceAdapter.isNativePlatform() ? 'ulep://auth' : `${window.location.origin}/auth`
                             );
 
                             await browserAdapter.open(getInitialUrlUsecase.execute(redirectUri), '_self');
