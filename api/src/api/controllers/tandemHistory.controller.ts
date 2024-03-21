@@ -1,11 +1,8 @@
 import { Controller, Get, Query, UseGuards } from '@nestjs/common';
 import * as Swagger from '@nestjs/swagger';
-import { CollectionResponse } from '../decorators';
-import { TandemResponse } from '../dtos';
 import { AuthenticationGuard } from '../guards';
 import { GetOtherUserEmailInTandemUsecase } from 'src/core/usecases/tandemHistory/get-email-from-history-tandem.usecase';
-import { GetOtherUserEmailInTandemRequest } from 'src/api/dtos/tandem-history';
-import { GetEmailFromHistoricTandemResponse } from 'src/api/dtos/tandem-history/get-email-from-history-tandem.response';
+import { GetOtherUserEmailInTandemRequest, GetEmailFromHistoricTandemResponse } from 'src/api/dtos/tandem-history';
 
 @Controller('tandem-history')
 @Swagger.ApiTags('Tandem History')
