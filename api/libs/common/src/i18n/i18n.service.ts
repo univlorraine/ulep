@@ -170,4 +170,11 @@ export class I18nService implements OnModuleInit, OnModuleDestroy {
     console.log('opts', opts);
     return this.#i18n.t(key, opts);
   }
+
+  public hasLanguageBundle(language: string, namespace: string) {
+    return this.#i18n.hasResourceBundle(language, namespace);
+  }
+  public getLanguageBundle(language: string, namespace: string) {
+    return this.#i18n.getResourceBundle(language, namespace);
+  }
 }

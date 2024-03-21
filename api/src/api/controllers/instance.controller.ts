@@ -1,3 +1,4 @@
+import { I18nService } from '@app/common';
 import { Body, Controller, Get, Logger, Param, Put } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import * as Swagger from '@nestjs/swagger';
@@ -16,6 +17,7 @@ export class InstanceController {
     private readonly getInstanceUsecase: GetInstanceUsecase,
     private readonly updateInstanceUsecase: UpdateInstanceUsecase,
     private readonly env: ConfigService<Env, true>,
+    private readonly i18n: I18nService,
   ) {}
 
   @Get('config')
@@ -38,40 +40,15 @@ export class InstanceController {
     return InstanceResponse.fromDomain(instance);
   }
 
-  @Get('locales/:lng/:type')
-  async locales(
-    @Param('lng') lng: string,
-    @Param('type') type: string,
-  ): Promise<string> {
-    // %2F work with github and gitlab but / doesn't with gitlab ( ??? )
-    const endpoint = this.env.get('TRANSLATIONS_ENDPOINT');
-    const suffix = this.env.get('TRANSLATIONS_ENDPOINT_SUFFIX');
-    const url = `${endpoint}%2F${lng}%2F${type}.json${suffix || ''}`;
+  @Get('locales/:lng/translation')
+  async locales(@Param('lng') lng: string): Promise<string> {
+    const appNamespace = 'app'; // TODO(NOW+1): env variable
 
-    const headers = new Headers();
-    if (this.env.get('TRANSLATIONS_TOKEN')) {
-      headers.append('PRIVATE-TOKEN', this.env.get('TRANSLATIONS_TOKEN'));
-    } else if (this.env.get('TRANSLATIONS_BEARER_TOKEN')) {
-      headers.append(
-        'Authorization',
-        `Bearer ${this.env.get('TRANSLATIONS_BEARER_TOKEN')}`,
-      );
-    } else {
-      this.logger.debug(
-        'No authentication setup to fetch instance translations',
-      );
+    if (this.i18n.hasLanguageBundle(lng, appNamespace)) {
+      const res = this.i18n.getLanguageBundle(lng, appNamespace);
+      return JSON.stringify(res);
     }
 
-    const result = await fetch(url, {
-      headers,
-    });
-
-    if (!result.ok) {
-      throw new RessourceDoesNotExist();
-    }
-
-    const locale = await result.json();
-
-    return JSON.stringify(locale);
+    throw new RessourceDoesNotExist();
   }
 }
