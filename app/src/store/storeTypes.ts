@@ -45,7 +45,7 @@ export interface SignUpStorePayload {
     role?: Role;
     sameAge?: boolean;
     sameGender?: boolean;
-    sameTandem?: boolean;
+    sameTandemEmail?: string;
     staffFunction?: string;
     timezone?: string;
     university?: University;

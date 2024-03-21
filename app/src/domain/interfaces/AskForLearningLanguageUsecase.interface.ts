@@ -11,7 +11,8 @@ interface AskForLearningLanguageUsecaseInterface {
         sameGender: boolean,
         campusId?: string,
         isForCertificate?: boolean,
-        isForProgram?: boolean
+        isForProgram?: boolean,
+        sameTandemEmail?: string
     ): Promise<LearningLanguage | Error>;
 }
 export default AskForLearningLanguageUsecaseInterface;

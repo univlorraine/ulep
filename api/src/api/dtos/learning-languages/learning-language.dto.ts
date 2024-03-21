@@ -37,6 +37,11 @@ export class LearningLanguageDto {
   @IsBoolean()
   sameAge: boolean;
 
+  @ApiProperty()
+  @IsString()
+  @IsOptional()
+  sameTandemEmail?: string;
+
   @ApiProperty({ type: 'string' })
   @IsUUID()
   @IsOptional()
@@ -65,6 +70,7 @@ export class LearningLanguageDto {
       learningType: learningLanguage.learningType,
       sameGender: learningLanguage.sameGender,
       sameAge: learningLanguage.sameAge,
+      sameTandemEmail: learningLanguage.sameTandemEmail,
       campusId: learningLanguage.campus?.id,
       certificateOption: learningLanguage.certificateOption,
       specificProgram: learningLanguage.specificProgram,

@@ -14,6 +14,7 @@ interface LearningLanguageProps {
   learningType: LearningType;
   sameGender: boolean;
   sameAge: boolean;
+  sameTandemEmail?: string;
   certificateOption?: boolean;
   specificProgram?: boolean;
   campus?: Campus;
@@ -34,6 +35,7 @@ export class LearningLanguage {
   readonly specificProgram?: boolean;
   readonly campus?: Campus;
   tandemLanguage?: Language;
+  readonly sameTandemEmail?: string;
 
   constructor({
     id,
@@ -49,6 +51,7 @@ export class LearningLanguage {
     specificProgram,
     campus,
     tandemLanguage,
+    sameTandemEmail,
   }: LearningLanguageProps) {
     this.id = id;
     this.language = language;
@@ -63,6 +66,11 @@ export class LearningLanguage {
     this.specificProgram = specificProgram;
     this.campus = campus;
     this.tandemLanguage = tandemLanguage;
+    this.sameTandemEmail = sameTandemEmail;
+  }
+
+  public isExclusive() {
+    return !!this.sameTandemEmail;
   }
 
   public isDiscovery(learningLanguageMatch?: LearningLanguage) {

@@ -41,7 +41,8 @@ const PairingFinalPage: React.FC = () => {
             Boolean(profileSignUp.sameGender),
             profileSignUp.campus?.id,
             Boolean(profileSignUp.isForCertificate),
-            Boolean(profileSignUp.isForProgram)
+            Boolean(profileSignUp.isForProgram),
+            profileSignUp.sameTandemEmail
         );
 
         if (result instanceof Error) {

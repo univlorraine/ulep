@@ -36,6 +36,7 @@ export interface CreateLearningLanguageCommand {
   learningType: LearningType;
   sameGender: boolean;
   sameAge: boolean;
+  sameTandemEmail?: string;
   campusId?: string;
   certificateOption?: boolean;
   specificProgram?: boolean;
@@ -115,6 +116,7 @@ export class CreateLearningLanguageUseCase {
       learningType: command.learningType,
       sameGender: command.sameGender,
       sameAge: command.sameAge,
+      sameTandemEmail: command.sameTandemEmail,
       certificateOption: command.certificateOption,
       specificProgram: command.specificProgram,
       campus: campus,

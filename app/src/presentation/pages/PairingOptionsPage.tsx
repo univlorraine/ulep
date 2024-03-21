@@ -35,7 +35,7 @@ const PairingOptionsPage: React.FC = () => {
     };
 
     const onNextStepPressed = () => {
-        updateProfileSignUp({ sameTandem, isForCertificate, isForProgram });
+        updateProfileSignUp({ isForCertificate, isForProgram, sameTandemEmail: historicEmailPartner });
         return history.push(`/pairing/end`);
     };
 
