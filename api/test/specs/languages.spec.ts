@@ -2,13 +2,14 @@ import * as request from 'supertest';
 import { Test } from '@nestjs/testing';
 import { AppModule } from 'src/app.module';
 import { InMemoryLanguageRepository } from 'src/providers/persistance/repositories/in-memory-language-repository';
-import { LanguageFactory } from '@app/common';
+import { I18nService, LanguageFactory } from '@app/common';
 import { LANGUAGE_REPOSITORY } from 'src/core/ports/language.repository';
 import { TestServer } from './test.server';
 import { AuthenticationGuard } from 'src/api/guards';
 import { TestAuthGuard } from '../utils/TestAuthGuard';
 import InMemoryEmailGateway from 'src/providers/gateway/in-memory-email.gateway';
 import { EMAIL_GATEWAY } from 'src/core/ports/email.gateway';
+import { InMemoryI18nService } from 'src/providers/services/in-memory.i18n.provider';
 
 describe('Languages', () => {
   let app: TestServer;
@@ -16,6 +17,7 @@ describe('Languages', () => {
   const factory = new LanguageFactory();
   const repository = new InMemoryLanguageRepository();
   const inMemoryEmail = new InMemoryEmailGateway();
+  const inMemoryI18n = new InMemoryI18nService();
 
   beforeAll(async () => {
     const module = await Test.createTestingModule({
@@ -25,6 +27,8 @@ describe('Languages', () => {
       .useValue(repository)
       .overrideProvider(EMAIL_GATEWAY)
       .useValue(inMemoryEmail)
+      .overrideProvider(I18nService)
+      .useValue(inMemoryI18n)
       .overrideGuard(AuthenticationGuard)
       .useValue(TestAuthGuard)
       .compile();

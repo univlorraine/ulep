@@ -1,6 +1,6 @@
 import { Test } from '@nestjs/testing';
 import { AppModule } from 'src/app.module';
-import { KeycloakUserFactory, LanguageFactory } from '@app/common';
+import { I18nService, KeycloakUserFactory, LanguageFactory } from '@app/common';
 import { TestServer } from './test.server';
 import { InMemoryLearningObjectiveRepository } from 'src/providers/persistance/repositories/in-memory-objective.repository';
 import { InMemoryLanguageRepository } from 'src/providers/persistance/repositories/in-memory-language-repository';
@@ -11,6 +11,7 @@ import { TestAuthGuard } from '../utils/TestAuthGuard';
 import { AUTHENTICATOR, InMemoryAuthenticator } from 'src/api/services';
 import { EMAIL_GATEWAY } from 'src/core/ports/email.gateway';
 import InMemoryEmailGateway from 'src/providers/gateway/in-memory-email.gateway';
+import { InMemoryI18nService } from 'src/providers/services/in-memory.i18n.provider';
 
 describe('Objectives', () => {
   let app: TestServer;
@@ -24,6 +25,7 @@ describe('Objectives', () => {
   const { keycloakUser } = new KeycloakUserFactory().makeOne();
   const authenticator = new InMemoryAuthenticator(keycloakUser);
   const inMemoryEmail = new InMemoryEmailGateway();
+  const inMemoryI18n = new InMemoryI18nService();
 
   beforeAll(async () => {
     languageRepository.init([language]);
@@ -39,6 +41,8 @@ describe('Objectives', () => {
       .useValue(authenticator)
       .overrideProvider(EMAIL_GATEWAY)
       .useValue(inMemoryEmail)
+      .overrideProvider(I18nService)
+      .useValue(inMemoryI18n)
       .overrideGuard(AuthenticationGuard)
       .useValue(TestAuthGuard)
       .compile();
