@@ -256,7 +256,6 @@ export class UserController {
         avatarSignedUrl,
       },
       (value: string, opts?: { ns: string }) =>
-        // TODO(NOW+doc): config weblate (zh) + doc env variables
         `${this.i18n.translate(value, {
           lng: userData.profile.nativeLanguage.code,
           ns: opts?.ns === 'app' ? appTranslationNs : apiTranslationNs,
