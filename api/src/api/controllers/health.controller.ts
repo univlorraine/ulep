@@ -14,7 +14,6 @@ export class HealthController {
     private readonly healthCheckService: HealthCheckService,
     private readonly prisma: PrismaHealthIndicator,
     private readonly prismaService: PrismaService,
-    private readonly i18n: I18nService,
   ) {}
 
   @Get()
