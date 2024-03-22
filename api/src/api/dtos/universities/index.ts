@@ -21,6 +21,7 @@ import {
 import { IsAfterThan } from 'src/api/validators';
 import { CampusResponse } from '../campus';
 import { CountryResponse } from 'src/api/dtos/countries';
+import { LanguageResponse } from 'src/api/dtos/languages';
 
 export class CreateUniversityRequest implements CreateUniversityCommand {
   @Swagger.ApiProperty({ type: 'string', isArray: true })
@@ -93,6 +94,11 @@ export class CreateUniversityRequest implements CreateUniversityCommand {
   @IsOptional()
   @IsEmail()
   notificationEmail?: string;
+
+  @Swagger.ApiProperty({ type: 'string', format: 'array' })
+  @IsArray()
+  @IsOptional()
+  specificLanguagesAvailableIds: string[];
 }
 
 export class UpdateUniversityRequest
@@ -166,6 +172,11 @@ export class UpdateUniversityRequest
   @IsEmail()
   @IsOptional()
   notificationEmail?: string;
+
+  @Swagger.ApiProperty({ type: 'string', format: 'array' })
+  @IsArray()
+  @IsOptional()
+  specificLanguagesAvailableIds: string[];
 }
 
 export class CreateUniversityPartnerRequest
@@ -237,6 +248,11 @@ export class CreateUniversityPartnerRequest
   @IsEmail()
   @IsOptional()
   notificationEmail?: string;
+
+  @Swagger.ApiProperty({ type: 'string', format: 'array' })
+  @IsArray()
+  @IsOptional()
+  specificLanguagesAvailableIds: string[];
 }
 
 export class UniversityResponse {
@@ -308,6 +324,10 @@ export class UniversityResponse {
   @Expose({ groups: ['read'] })
   notificationEmail?: string;
 
+  @Swagger.ApiProperty({ type: LanguageResponse, isArray: true })
+  @Expose({ groups: ['university:read'] })
+  specificLanguagesAvailable: LanguageResponse[];
+
   constructor(partial: Partial<UniversityResponse>) {
     Object.assign(this, partial);
   }
@@ -331,6 +351,9 @@ export class UniversityResponse {
       pairingMode: university.pairingMode,
       maxTandemsPerUser: university.maxTandemsPerUser,
       notificationEmail: university.notificationEmail,
+      specificLanguagesAvailable: university.specificLanguagesAvailable.map(
+        LanguageResponse.fromLanguage,
+      ),
     });
   }
 }

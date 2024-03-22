@@ -9,6 +9,10 @@ import {
   COUNTRY_REPOSITORY,
   CountryRepository,
 } from 'src/core/ports/country.repository';
+import {
+  LANGUAGE_REPOSITORY,
+  LanguageRepository,
+} from 'src/core/ports/language.repository';
 
 export class UpdateUniversityCommand {
   id: string;
@@ -25,6 +29,7 @@ export class UpdateUniversityCommand {
   pairingMode: PairingMode;
   maxTandemsPerUser: number;
   notificationEmail?: string;
+  specificLanguagesAvailableIds: string[];
 }
 
 @Injectable()
@@ -34,6 +39,8 @@ export class UpdateUniversityUsecase {
   constructor(
     @Inject(COUNTRY_REPOSITORY)
     private readonly countryRepository: CountryRepository,
+    @Inject(LANGUAGE_REPOSITORY)
+    private readonly languageRepository: LanguageRepository,
     @Inject(UNIVERSITY_REPOSITORY)
     private readonly universityRepository: UniversityRepository,
   ) {}
@@ -43,6 +50,18 @@ export class UpdateUniversityUsecase {
     const university = await this.universityRepository.ofId(command.id);
     if (!university) {
       throw new RessourceDoesNotExist();
+    }
+
+    const specificLanguagesAvailable = await Promise.all(
+      command.specificLanguagesAvailableIds.map((id) =>
+        this.languageRepository.ofId(id),
+      ),
+    );
+
+    if (specificLanguagesAvailable.some((language) => !language)) {
+      throw new RessourceDoesNotExist(
+        'One or more specified language IDs do not exist.',
+      );
     }
 
     const country = await this.countryRepository.ofId(command.countryId);
@@ -67,6 +86,7 @@ export class UpdateUniversityUsecase {
         pairingMode: command.pairingMode,
         maxTandemsPerUser: command.maxTandemsPerUser,
         notificationEmail: command.notificationEmail,
+        specificLanguagesAvailable,
       }),
     );
   }

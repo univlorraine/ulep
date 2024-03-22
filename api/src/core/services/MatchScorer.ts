@@ -75,7 +75,7 @@ export class MatchScorer implements IMatchScorer {
   };
 
   // Note: A learning language can only match a language spoken by the potential match profile. As all
-  // languages spoken are approximated with the same skill level ,we approximate the compatibility 
+  // languages spoken are approximated with the same skill level ,we approximate the compatibility
   // score only with learning language levels. We consider in this method that compatibility
   // has already been asserted (i.e. learningLanguage 1 is spoken by profile 2 and learningLanguage 2 is spoken by profile 1).
   // Note: to preserve this approximation, it is mandatory that matrix are symetrics
@@ -182,9 +182,9 @@ export class MatchScorer implements IMatchScorer {
 
   /**
    * Compute learning compatibility score between 2 learning languages.
-   * @param learningLanguage1 
-   * @param learningLanguage2 
-   * @returns 
+   * @param learningLanguage1
+   * @param learningLanguage2
+   * @returns
    */
   private computeLearningCompatibility(learningLanguage1: LearningLanguage, learningLanguage2: LearningLanguage): number {
     const isDiscovery = learningLanguage1.isDiscovery(learningLanguage2) || learningLanguage2.isDiscovery(learningLanguage1);
@@ -323,6 +323,18 @@ export class MatchScorer implements IMatchScorer {
       if (!profile2.canLearnALanguageFromProfile(profile1, availableLanguages)) {
         return false;
       }
+    }
+
+    // Check if language1 is available for learning language
+    if (!availableLanguages.find(lang => lang.id === learningLanguage1.language.id) &&
+       !learningLanguage1.isAvailableInUniversity()) {
+        return  false
+    }
+
+        // Check if language2 is available for learning language
+    if (!availableLanguages.find(lang => lang.id === learningLanguage2.language.id) &&
+        !learningLanguage2.isAvailableInUniversity()) {
+        return false;
     }
 
     if (!learningLanguage1.isCompatibleWithLearningLanguage(learningLanguage2) ||

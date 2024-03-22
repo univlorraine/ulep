@@ -1,11 +1,15 @@
 import { Inject, Injectable } from '@nestjs/common';
 import { DomainError, RessourceDoesNotExist } from 'src/core/errors';
-import { PairingMode, University } from 'src/core/models';
+import { Language, PairingMode, University } from 'src/core/models';
 import { Campus } from 'src/core/models/campus.model';
 import {
   COUNTRY_REPOSITORY,
   CountryRepository,
 } from 'src/core/ports/country.repository';
+import {
+  LANGUAGE_REPOSITORY,
+  LanguageRepository,
+} from 'src/core/ports/language.repository';
 import {
   UNIVERSITY_REPOSITORY,
   UniversityRepository,
@@ -30,6 +34,7 @@ export class CreateUniversityCommand {
   pairingMode: PairingMode;
   maxTandemsPerUser: number;
   notificationEmail?: string;
+  specificLanguagesAvailableIds: string[];
 }
 
 @Injectable()
@@ -37,6 +42,8 @@ export class CreateUniversityUsecase {
   constructor(
     @Inject(COUNTRY_REPOSITORY)
     private readonly countryRepository: CountryRepository,
+    @Inject(LANGUAGE_REPOSITORY)
+    private readonly languageRepository: LanguageRepository,
     @Inject(UNIVERSITY_REPOSITORY)
     private readonly universityRepository: UniversityRepository,
     @Inject(UUID_PROVIDER)
@@ -53,6 +60,18 @@ export class CreateUniversityUsecase {
 
     if (!country) {
       throw new RessourceDoesNotExist('Country does not exist');
+    }
+
+    const specificLanguagesAvailable = await Promise.all(
+      command.specificLanguagesAvailableIds.map((id) =>
+        this.languageRepository.ofId(id),
+      ),
+    );
+
+    if (specificLanguagesAvailable.some((language) => !language)) {
+      throw new RessourceDoesNotExist(
+        'One or more specified language IDs do not exist.',
+      );
     }
 
     const instance = await this.universityRepository.ofName(command.name);
@@ -86,6 +105,7 @@ export class CreateUniversityUsecase {
       pairingMode: command.pairingMode,
       maxTandemsPerUser: command.maxTandemsPerUser,
       notificationEmail: command.notificationEmail,
+      specificLanguagesAvailable,
     });
 
     return this.universityRepository.create(university);
