@@ -85,7 +85,7 @@ class ProfileSignUp {
 
     public sameGender?: boolean;
 
-    public sameTandemEmail?: string;
+    public sameTandem?: boolean;
 
     public staffFunction?: string;
 

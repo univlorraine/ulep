@@ -327,15 +327,12 @@ export class MatchScorer implements IMatchScorer {
     }
 
     // Check if a learning language is exclusive and the other is not
-    if(
-        (learningLanguage1.isExclusive() && !learningLanguage2.isExclusive()) ||
-        (!learningLanguage1.isExclusive() && learningLanguage2.isExclusive())
-    ) {
+    if(learningLanguage1.isExclusive() !== learningLanguage2.isExclusive()) {
       return false;
     }
 
     // Check if learning languages are exclusives and doesn't have same tandem email
-    if(learningLanguage1.isExclusive() && !learningLanguage2.isExclusiveWithLearningLanguage(learningLanguage2)){
+    if(learningLanguage1.isExclusive() && !learningLanguage1.isExclusiveWithLearningLanguage(learningLanguage2)){
       return false;
     }
 

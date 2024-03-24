@@ -100,7 +100,11 @@ export class GenerateTandemsUsecase {
         const potentialPairLearningLanguage = learningLanguagesToPair[j];
 
         if (learningLanguageToPair.isExclusive()) {
-          if (learningLanguageToPair.isExclusiveWithLearningLanguage(potentialPairLearningLanguage)) {
+          if (
+            learningLanguageToPair.isExclusiveWithLearningLanguage(
+              potentialPairLearningLanguage,
+            )
+          ) {
             possiblePairs.push(
               new Match({
                 owner: learningLanguageToPair,
@@ -108,6 +112,7 @@ export class GenerateTandemsUsecase {
                 scores: MatchScores.exclusivity(),
               }),
             );
+            break;
           }
         } else {
           if (

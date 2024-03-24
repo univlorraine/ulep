@@ -5,7 +5,7 @@ import { HistorizedTandem } from 'src/core/models/historized-tandem.model';
 export class GetEmailFromHistoricTandemResponse {
   @Swagger.ApiProperty({ type: 'string', nullable: true })
   @Expose({ groups: ['read'] })
-  email: string | undefined = undefined;
+  email?: string;
 
   constructor(partial: Partial<GetEmailFromHistoricTandemResponse>) {
     Object.assign(this, partial);

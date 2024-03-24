@@ -116,6 +116,7 @@ export class GetLearningLanguageMatchesUsecase {
               scores: MatchScores.exclusivity(),
             }),
           );
+          break;
         }
       } else {
         const match = this.matchService.computeMatchScore(

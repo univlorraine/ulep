@@ -38,9 +38,9 @@ export class LearningLanguageDto {
   sameAge: boolean;
 
   @ApiProperty()
-  @IsString()
+  @IsBoolean()
   @IsOptional()
-  sameTandemEmail?: string;
+  sameTandem: boolean;
 
   @ApiProperty({ type: 'string' })
   @IsUUID()
@@ -60,20 +60,6 @@ export class LearningLanguageDto {
   constructor(partial: Partial<LearningLanguageDto>) {
     Object.assign(this, partial, {
       code: partial?.code || JOKER_LANGUAGE_CODE,
-    });
-  }
-
-  static fromDomain(learningLanguage: LearningLanguage): LearningLanguageDto {
-    return new LearningLanguageDto({
-      code: learningLanguage.language.code,
-      level: learningLanguage.level,
-      learningType: learningLanguage.learningType,
-      sameGender: learningLanguage.sameGender,
-      sameAge: learningLanguage.sameAge,
-      sameTandemEmail: learningLanguage.sameTandemEmail,
-      campusId: learningLanguage.campus?.id,
-      certificateOption: learningLanguage.certificateOption,
-      specificProgram: learningLanguage.specificProgram,
     });
   }
 }

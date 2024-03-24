@@ -39,10 +39,10 @@ const PairingFinalPage: React.FC = () => {
             profileSignUp.pedagogy,
             Boolean(profileSignUp.sameAge),
             Boolean(profileSignUp.sameGender),
+            Boolean(profileSignUp.sameTandem),
             profileSignUp.campus?.id,
             Boolean(profileSignUp.isForCertificate),
             Boolean(profileSignUp.isForProgram),
-            profileSignUp.sameTandemEmail
         );
 
         if (result instanceof Error) {
