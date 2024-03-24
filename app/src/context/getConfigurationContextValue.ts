@@ -28,6 +28,8 @@ import GetUniversityUsecase from '../domain/usecases/GetUniversityUsecase';
 import GetMediaObjectUsecase from '../domain/usecases/GetMediaObjectUsecase';
 import RevokeSessionsUsecase from '../domain/usecases/RevokeSessionsUsecase';
 import GetHistoricEmailPartnerUsecase from '../domain/usecases/GetHistoricEmailPartnerUsecase';
+import BrowserAdapter from '../adapter/BrowserAdapter';
+import DeviceAdapter from '../adapter/DeviceAdapter';
 
 interface GetConfigContextValueProps {
     apiUrl: string;
@@ -52,7 +54,9 @@ const getConfigContextValue = ({
     configuration,
     logout,
 }: GetConfigContextValueProps): ConfigContextValueType => {
+    const browserAdapter = new BrowserAdapter();
     const cameraAdapter = new CameraAdapter();
+    const deviceAdapter = new DeviceAdapter();
     const domainHttpAdapter = new DomainHttpAdapter(apiUrl, accessToken, refreshToken, languageCode, setTokens, logout);
 
     const askForAccountDeletion = new AskForAccountDeletion(domainHttpAdapter);
@@ -89,11 +93,13 @@ const getConfigContextValue = ({
         askForAccountDeletion,
         askForLanguage,
         askForLearningLanguage,
+        browserAdapter,
         cameraAdapter,
         configuration,
         createProfile,
         createReport,
         createUser,
+        deviceAdapter,
         getAllInterestCategories,
         getAllCountries,
         getAllGoals,

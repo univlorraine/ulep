@@ -5,7 +5,11 @@ import {
   Injectable,
   Logger,
 } from '@nestjs/common';
-import { RessourceDoesNotExist, UnauthorizedOperation } from 'src/core/errors';
+import {
+  RessourceAlreadyExists,
+  RessourceDoesNotExist,
+  UnauthorizedOperation,
+} from 'src/core/errors';
 import { Gender, Role, User } from 'src/core/models';
 import {
   COUNTRY_REPOSITORY,
@@ -140,6 +144,8 @@ export class CreateUserUsecase {
           console.error('Error sending registration notice email', error);
         }
       }
+    } else {
+      throw new RessourceAlreadyExists('User already exist');
     }
 
     return user;
