@@ -196,7 +196,6 @@ workflows:
               only:
                 - develop
                 - main
-                - fix/translations-missing
 
   check_admin:
     jobs:
