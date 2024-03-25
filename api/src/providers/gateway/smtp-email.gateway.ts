@@ -71,8 +71,12 @@ export class SmtpEmailGateway implements EmailGateway {
     const hasBody =
       isObject && 'bodyHtml' in value && typeof value.bodyHtml === 'string';
 
+    // TODO(NOW): fix here: can reproduce with account blocked
     if (!hasTitle || !hasBody) {
-      throw new Error(`Invalid translation for key: ${key}`);
+      console.error('value', value);
+      throw new Error(
+        `Invalid translation for key: ${key} and language ${language}`,
+      );
     }
 
     return value;
