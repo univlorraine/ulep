@@ -15,7 +15,6 @@ interface UniversityCommand {
     openServiceDate: Date;
     closeServiceDate: Date;
     maxTandemsPerUser: number;
-    specificLanguagesAvailable: LanguageCommand[];
 }
 
 export const universityCommandToDomain = (command: UniversityCommand) => {
@@ -30,8 +29,7 @@ export const universityCommandToDomain = (command: UniversityCommand) => {
         new Date(command.admissionEnd),
         new Date(command.openServiceDate),
         new Date(command.closeServiceDate),
-        command.maxTandemsPerUser,
-        command.specificLanguagesAvailable.map(languageCommandToDomain)
+        command.maxTandemsPerUser
     );
 };
 

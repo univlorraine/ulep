@@ -176,6 +176,9 @@
             "no": "Non"
         }
     },
+    "langauges_picker": {
+        "placeholder": "Choisir une langue supplémentaire"
+    },
     "login": {
         "connect": "Connexion",
         "loginError": "Mauvais email ou mot de passe",
@@ -355,6 +358,7 @@
             "resourcesUrl": "Url des ressources de langues de l'université",
             "service_dont_include_admission_date": "Les dates d'inscriptions doivent être dans les dates d'ouverture de service",
             "sites": "Campus de rencontre",
+            "specificLanguages": "Langues spécifiques",
             "timezone": "Timezone",
             "website": "Site web de l'université",
             "id": "ID",
@@ -374,6 +378,7 @@
             "country": "Pays de l'université",
             "domains": "Liste des noms de domaines pour l'inscription",
             "domains_error": "Le nom de domaine doit commencer par un @",
+            "languages": "Liste des langues supplémentaires disponnibles pour l'apprentissage",
             "name": "Nom de l'université",
             "service_dont_include_admission_date": "Les dates d'inscriptions doivent être dans les dates d'ouverture de service",
             "max_tandems_per_user_error": "Le nombre maximum de tandems par utilisateur doit être compris entre 1 et 3",

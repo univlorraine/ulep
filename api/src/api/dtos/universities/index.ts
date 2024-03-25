@@ -325,7 +325,7 @@ export class UniversityResponse {
   notificationEmail?: string;
 
   @Swagger.ApiProperty({ type: LanguageResponse, isArray: true })
-  @Expose({ groups: ['university:read'] })
+  @Expose({ groups: ['read'] })
   specificLanguagesAvailable: LanguageResponse[];
 
   constructor(partial: Partial<UniversityResponse>) {

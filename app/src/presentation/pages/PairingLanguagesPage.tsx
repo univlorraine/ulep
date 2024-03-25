@@ -37,9 +37,8 @@ const PairingLanguagesPage: React.FC = () => {
             return await showToast({ message: t(globalLanguages.message), duration: 1000 });
         }
 
-        const learnableLanguages = [...globalLanguages, ...university.specificLanguages].filter(
-            (language, index, self) =>
-                index === self.findIndex((l) => l.code === language.code) && // Filtre pour unicité basée sur le code
+        const learnableLanguages = globalLanguages.filter(
+            (language) =>
                 profile?.nativeLanguage.code !== language.code &&
                 !profile?.learningLanguages?.find((learningLanguage) => language.code === learningLanguage.code)
         );

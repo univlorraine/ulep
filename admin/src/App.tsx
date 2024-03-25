@@ -27,7 +27,7 @@ import reports from './pages/report';
 import reportCategories from './pages/report-categories';
 import suggestedLanguages from './pages/suggested-languages';
 import universities from './pages/universities';
-import authProvider, { ADMIN_PERMISSION, SUPER_ADMIN_PERMISSION } from './providers/authProvider';
+import authProvider, { MANAGER_PERMISSION, SUPER_ADMIN_PERMISSION } from './providers/authProvider';
 import customDataProvider from './providers/customDataProvider';
 import i18nProvider from './providers/i18nProvider';
 import queryClient from './queryClient';
@@ -73,7 +73,7 @@ const App = () => {
                         options={{ label: translate('administrators.label') }}
                         {...administrators}
                     />
-                    {permissions === ADMIN_PERMISSION && (
+                    {permissions === MANAGER_PERMISSION && (
                         <Resource
                             edit={universities.admin.edit}
                             name="universities"

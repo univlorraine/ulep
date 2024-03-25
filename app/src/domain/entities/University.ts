@@ -13,8 +13,7 @@ class University {
         public readonly admissionEnd: Date,
         public readonly openServiceDate: Date,
         public readonly closeServiceDate: Date,
-        public readonly maxTandemsPerUser: number,
-        public readonly specificLanguages: Language[]
+        public readonly maxTandemsPerUser: number
     ) {}
 }
 

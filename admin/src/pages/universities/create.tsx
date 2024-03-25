@@ -63,7 +63,7 @@ const CreateUniversity = () => {
 
     return (
         <Create title={translate('universities.create.title')}>
-            <UniversityForm handleSubmit={handleSubmit} tradKey="create" />
+            <UniversityForm canAddNewLanguages={false} handleSubmit={handleSubmit} tradKey="create" />
         </Create>
     );
 };
