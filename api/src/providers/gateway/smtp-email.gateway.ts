@@ -59,23 +59,17 @@ export class SmtpEmailGateway implements EmailGateway {
     language: string,
     args?: Record<string, any>,
   ): Record<string, any> {
-    const value = this.i18n.translate(key, {
+    const title = this.i18n.translate(`${key}.title`, {
       lng: language,
       ns: this.translationNamespace,
-      returnObjects: true,
       ...args,
     });
-    const isObject = typeof value === 'object' && value !== null;
-    const hasTitle =
-      isObject && 'title' in value && typeof value.title === 'string';
-    const hasBody =
-      isObject && 'bodyHtml' in value && typeof value.bodyHtml === 'string';
-
-    if (!hasTitle || !hasBody) {
-      throw new Error(`Invalid translation for key: ${key}`);
-    }
-
-    return value;
+    const bodyHtml = this.i18n.translate(`${key}.bodyHtml`, {
+      lng: language,
+      ns: this.translationNamespace,
+      ...args,
+    });
+    return { title, bodyHtml };
   }
 
   async sendWelcomeMail(props: SendWelcomeMailProps): Promise<void> {
