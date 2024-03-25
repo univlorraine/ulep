@@ -17,7 +17,7 @@
             "title": "Mise à jour d'un administrateur",
             "university": "Mettez à jour l'université à administrer"
         },
-        "confirmDeleteOwnAccount": "Êtes-vous sûr(e) de vouloir supprimer votre utilisateur ?\n Vous êtes actuelemment connecté(e) a ce compte, après la suppression vous serez déconnecté(e)."
+        "confirmDeleteOwnAccount": "Êtes-vous sûr(e) de vouloir supprimer votre utilisateur ?\n Vous êtes actuellement connecté(e) à ce compte, après la suppression vous serez déconnecté(e)."
     },
     "campus": {
         "create": {
