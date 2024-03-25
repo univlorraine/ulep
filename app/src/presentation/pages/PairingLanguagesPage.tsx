@@ -30,20 +30,21 @@ const PairingLanguagesPage: React.FC = () => {
 
     const getLanguages = async () => {
         setIsLoadingLanguages(true);
-        let result = await getAllLanguages.execute(university.isCentral ? 'PRIMARY' : 'PARTNER');
+        let globalLanguages = await getAllLanguages.execute(university.isCentral ? 'PRIMARY' : 'PARTNER');
         setIsLoadingLanguages(false);
 
-        if (result instanceof Error) {
-            return await showToast({ message: t(result.message), duration: 1000 });
+        if (globalLanguages instanceof Error) {
+            return await showToast({ message: t(globalLanguages.message), duration: 1000 });
         }
 
-        return setLanguages(
-            result.filter(
-                (language) =>
-                    profile?.nativeLanguage.code !== language.code &&
-                    !profile?.learningLanguages?.find((learningLanguage) => language.code === learningLanguage.code)
-            )
+        const learnableLanguages = [...globalLanguages, ...university.specificLanguages].filter(
+            (language, index, self) =>
+                index === self.findIndex((l) => l.code === language.code) && // Filtre pour unicité basée sur le code
+                profile?.nativeLanguage.code !== language.code &&
+                !profile?.learningLanguages?.find((learningLanguage) => language.code === learningLanguage.code)
         );
+
+        return setLanguages(learnableLanguages);
     };
 
     const continueSignUp = async () => {
