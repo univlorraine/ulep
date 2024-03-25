@@ -86,9 +86,9 @@ export class Env {
   WEBLATE_API_TOKEN: string;
 
   @IsNumber()
-  @Transform(({ value }) => parseInt(value, 10))
+  @Transform(({ value }) => (value ? parseInt(value, 10) : undefined))
   @IsOptional()
-  I18N_RELOAD_INTERVAL: number;
+  I18N_RELOAD_INTERVAL?: number;
 
   @IsString()
   @IsOptional()
@@ -105,7 +105,7 @@ export class Env {
   @IsBoolean()
   @Transform(({ value }) => value === 'true')
   @IsOptional()
-  I18N_DEBUG: boolean;
+  I18N_DEBUG?: boolean;
 
   @IsString()
   @IsOptional()
@@ -239,11 +239,9 @@ const test: Env = {
   S3_ACCESS_SECRET: 'minio123',
   WEBLATE_API_URL: 'http://localhost:3000/api/translations',
   WEBLATE_API_TOKEN: '',
-  I18N_RELOAD_INTERVAL: 0,
   APP_TRANSLATION_NAMESPACE: 'app',
   API_TRANSLATION_NAMESPACE: 'api',
   EMAIL_TRANSLATION_NAMESPACE: 'emails',
-  I18N_DEBUG: false,
   EMAIL_ASSETS_BUCKET: 'assets',
   EMAIL_ASSETS_PUBLIC_ENDPOINT: 'http://localhost:9000/assets',
   APP_LINK_APPLE_STORE: 'https://apple.com',

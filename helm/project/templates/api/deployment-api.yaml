@@ -133,6 +133,8 @@ spec:
                   key: weblate-token
             - name: I18N_RELOAD_INTERVAL
               value: "{{ .Values.api.env.i18nReloadInterval }}"
+            - name: I18N_DEBUG
+              value: "{{ .Values.api.env.i18nDebug }}"
             - name: APP_TRANSLATION_NAMESPACE
               value: "{{ .Values.api.env.appTranslationNamespace }}"
             - name: API_TRANSLATION_NAMESPACE
