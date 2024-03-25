@@ -1,7 +1,47 @@
 import React from 'react';
-import { Datagrid, List, Loading, ReferenceField, TextField, useGetIdentity, useTranslate } from 'react-admin';
+import {
+    Datagrid,
+    List,
+    Loading,
+    ReferenceField,
+    TextField,
+    useGetIdentity,
+    useTranslate,
+    useRecordContext,
+    UserIdentity,
+    DeleteButton,
+    useLogout,
+    ListProps,
+} from 'react-admin';
+import Administrator from '../../entities/Administrator';
 
-const AdministratorList = (props: any) => {
+interface DeleteAdministratorButtonProps {
+    identity: UserIdentity;
+}
+
+const DeleteAdministratorButton = ({ identity }: DeleteAdministratorButtonProps) => {
+    const record = useRecordContext();
+    const logout = useLogout();
+    const translate = useTranslate();
+
+    const disconnect = () => {
+        window.setTimeout(logout, 600);
+    };
+
+    if (record.id === identity.id) {
+        return (
+            <DeleteButton
+                confirmContent={translate('administrators.confirmDeleteOwnAccount')}
+                mutationMode="pessimistic"
+                onClick={disconnect}
+            />
+        );
+    }
+
+    return <DeleteButton mutationMode="pessimistic" />;
+};
+
+const AdministratorList = (props: ListProps<Administrator>) => {
     const translate = useTranslate();
     const { data: identity, isLoading: isLoadingIdentity } = useGetIdentity();
 
@@ -17,7 +57,7 @@ const AdministratorList = (props: any) => {
             title={translate('administrators.label')}
             {...props}
         >
-            <Datagrid rowClick="edit">
+            <Datagrid bulkActionButtons={false} rowClick="edit">
                 <TextField label={translate('global.email')} source="email" />
                 <TextField label={translate('global.firstname')} source="firstname" />
                 <TextField label={translate('global.lastname')} source="lastname" />
@@ -30,6 +70,7 @@ const AdministratorList = (props: any) => {
                         source="universityId"
                     />
                 )}
+                <DeleteAdministratorButton identity={identity} />
             </Datagrid>
         </List>
     );
