@@ -52,16 +52,26 @@ const LoginForm: React.FC<LoginFormProps> = ({ goBack, onLogin }) => {
             </IonHeader>
             <IonContent>
                 <div className={style['main-content']}>
+                    <CircleAvatar
+                        backgroundImage={AvatarPng}
+                        height={36}
+                        viewClassName={style['icons']}
+                        width={36}
+                    />
+                    <div className={`ion-text-center`}>
+                        <h1 className={style.title}>{t('login_page.title')}</h1>
+                    </div>
+                    <div className={style['bottom-container']}>
+                        <p className={style['sso-text']}>
+                            {t('login_page.sso_title', { name: configuration.mainUniversityName })}
+                        </p>
+                        <button className="tertiary-button large-margin-vertical center-button" onClick={ssoLogin}>
+                            {t('login_page.sso_button')}
+                        </button>
+                    </div>
+                    <div className={style.separator} />
                     <form onSubmit={handleLogin}>
-                        <CircleAvatar
-                            backgroundImage={AvatarPng}
-                            height={36}
-                            viewClassName={style['icons']}
-                            width={36}
-                        />
-                        <div className={`ion-text-center`}>
-                            <h1 className={style.title}>{t('login_page.title')}</h1>
-                        </div>
+                        
                         <div className="ion-text-center">
                             <p className={style.subtitle}>{t('login_page.subtitle')}</p>
                         </div>
@@ -87,15 +97,6 @@ const LoginForm: React.FC<LoginFormProps> = ({ goBack, onLogin }) => {
                             </IonRouterLink>
                         </div>
                     </form>
-                    <div className={style.separator} />
-                    <div className={style['bottom-container']}>
-                        <p className={style['sso-text']}>
-                            {t('login_page.sso_title', { name: configuration.mainUniversityName })}
-                        </p>
-                        <button className="tertiary-button large-margin-vertical center-button" onClick={ssoLogin}>
-                            {t('login_page.sso_button')}
-                        </button>
-                    </div>
                 </div>
             </IonContent>
         </div>
