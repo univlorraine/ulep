@@ -109,6 +109,10 @@ export class University {
       learningType !== LearningType.ETANDEM
     ) {
       return true;
+    } else if (
+      this.specificLanguagesAvailable.find((l) => l.id === language.id)
+    ) {
+      return true;
     }
 
     return false;

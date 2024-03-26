@@ -9,7 +9,7 @@ class GetUniversityLanguagesUsecase implements GetUniversityLanguagesUsecaseInte
     async execute(universityId: string): Promise<Language[] | Error> {
         try {
             const httpResponse: HttpResponse<LanguageCommand[]> = await this.domainHttpAdapter.get(
-                `/university/${universityId}/languages`
+                `/universities/${universityId}/languages`
             );
 
             if (!httpResponse.parsedBody) {
