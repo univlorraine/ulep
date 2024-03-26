@@ -339,6 +339,7 @@ model LearningLanguages {
   same_age                Boolean
   certificate_option      Boolean?
   specific_program        Boolean?
+  has_priority            Boolean?
   campus_id               String?
   tandem_id               String?
   tandem_language_code_id String?

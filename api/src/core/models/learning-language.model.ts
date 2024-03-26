@@ -14,6 +14,7 @@ interface LearningLanguageProps {
   learningType: LearningType;
   sameGender: boolean;
   sameAge: boolean;
+  hasPriority?: boolean;
   certificateOption?: boolean;
   specificProgram?: boolean;
   campus?: Campus;
@@ -30,6 +31,7 @@ export class LearningLanguage {
   readonly learningType: LearningType;
   readonly sameGender: boolean;
   readonly sameAge: boolean;
+  readonly hasPriority?: boolean;
   readonly certificateOption?: boolean;
   readonly specificProgram?: boolean;
   readonly campus?: Campus;
@@ -49,6 +51,7 @@ export class LearningLanguage {
     specificProgram,
     campus,
     tandemLanguage,
+    hasPriority,
   }: LearningLanguageProps) {
     this.id = id;
     this.language = language;
@@ -63,6 +66,7 @@ export class LearningLanguage {
     this.specificProgram = specificProgram;
     this.campus = campus;
     this.tandemLanguage = tandemLanguage;
+    this.hasPriority = hasPriority;
   }
 
   public isDiscovery(learningLanguageMatch?: LearningLanguage) {

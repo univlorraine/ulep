@@ -1,5 +1,6 @@
 import { Collection, SortOrder } from '@app/common';
 import { LearningLanguage, LearningLanguageWithTandem } from '../models';
+import { HistorizedUnmatchedLearningLanguage } from 'src/core/models/historized-unmatched-learning-language';
 
 export const LEARNING_LANGUAGE_REPOSITORY = 'learning-language.repository';
 
@@ -61,4 +62,9 @@ export interface LearningLanguageRepository {
     learningLanguages: LearningLanguage[],
     purgeId: string,
   ): Promise<void>;
+
+  getHistoricUnmatchedLearningLanguageByUserIdAndLanguageId(
+    userId: string,
+    languageId: string,
+  ): Promise<HistorizedUnmatchedLearningLanguage>;
 }

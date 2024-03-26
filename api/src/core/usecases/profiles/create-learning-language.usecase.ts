@@ -107,6 +107,12 @@ export class CreateLearningLanguageUseCase {
       }
     }
 
+    const historizedUnmatchedLearningLanguage =
+      await this.learningLanguageRepository.getHistoricUnmatchedLearningLanguageByUserIdAndLanguageId(
+        profile.user.id,
+        language.id,
+      );
+
     const item = new LearningLanguage({
       id: this.uuidProvider.generate(),
       language,
@@ -117,6 +123,7 @@ export class CreateLearningLanguageUseCase {
       sameAge: command.sameAge,
       certificateOption: command.certificateOption,
       specificProgram: command.specificProgram,
+      hasPriority: Boolean(historizedUnmatchedLearningLanguage),
       campus: campus,
     });
 

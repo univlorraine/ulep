@@ -135,24 +135,30 @@ export class GenerateTandemsUsecase {
     this.logger.verbose(`Computed ${possiblePairs.length} potential pairs`);
 
     const sortedLearningLanguages = learningLanguagesToPair.sort((a, b) => {
-      if (
-        a.profile.user.university.isCentralUniversity() ===
-        b.profile.user.university.isCentralUniversity()
-      ) {
-        if (a.profile.user.role === b.profile.user.role) {
-          if (a.specificProgram === b.specificProgram) {
-            return a.createdAt?.getTime() - b.createdAt?.getTime();
-          } else if (!!a.specificProgram) {
+      if (a.hasPriority && b.hasPriority) {
+        if (
+          a.profile.user.university.isCentralUniversity() ===
+          b.profile.user.university.isCentralUniversity()
+        ) {
+          if (a.profile.user.role === b.profile.user.role) {
+            if (a.specificProgram === b.specificProgram) {
+              return a.createdAt?.getTime() - b.createdAt?.getTime();
+            } else if (!!a.specificProgram) {
+              return -1;
+            } else {
+              return 1;
+            }
+          } else if (a.profile.user.role === Role.STAFF) {
             return -1;
           } else {
             return 1;
           }
-        } else if (a.profile.user.role === Role.STAFF) {
+        } else if (a.profile.user.university.isCentralUniversity()) {
           return -1;
         } else {
           return 1;
         }
-      } else if (a.profile.user.university.isCentralUniversity()) {
+      } else if (a.hasPriority) {
         return -1;
       } else {
         return 1;

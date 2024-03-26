@@ -17,6 +17,11 @@ import {
   learningLanguageMapper,
   learningLanguageWithTandemMapper,
 } from '../mappers/learningLanguage.mapper';
+import {
+  HistorizedUnmatchedLearningLanguageRelation,
+  historizedUnmatchedLearningLanguageMapper,
+} from 'src/providers/persistance/mappers/historizedUnmatchedLearningLanguage.mapper';
+import { HistorizedUnmatchedLearningLanguage } from 'src/core/models/historized-unmatched-learning-language';
 
 @Injectable()
 export class PrismaLearningLanguageRepository
@@ -480,5 +485,21 @@ export class PrismaLearningLanguageRepository
         language_code_id: l.language.id,
       })),
     });
+  }
+
+  async getHistoricUnmatchedLearningLanguageByUserIdAndLanguageId(
+    userId: string,
+    languageId: string,
+  ): Promise<HistorizedUnmatchedLearningLanguage> {
+    const res = await this.prisma.unmatchedLearningLanguages.findFirst({
+      where: { language_code_id: languageId, user_id: userId },
+      include: HistorizedUnmatchedLearningLanguageRelation,
+    });
+
+    if (!res) {
+      return undefined;
+    }
+
+    return historizedUnmatchedLearningLanguageMapper(res);
   }
 }

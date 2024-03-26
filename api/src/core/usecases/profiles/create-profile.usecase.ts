@@ -30,6 +30,10 @@ import {
   LanguageRepository,
 } from 'src/core/ports/language.repository';
 import {
+  LEARNING_LANGUAGE_REPOSITORY,
+  LearningLanguageRepository,
+} from 'src/core/ports/learning-language.repository';
+import {
   LearningObjectiveRepository,
   OBJECTIVE_REPOSITORY,
 } from 'src/core/ports/objective.repository';
@@ -75,6 +79,8 @@ export class CreateProfileUsecase {
     private readonly usersRepository: UserRepository,
     @Inject(PROFILE_REPOSITORY)
     private readonly profilesRepository: ProfileRepository,
+    @Inject(LEARNING_LANGUAGE_REPOSITORY)
+    private readonly learningLanguageRepository: LearningLanguageRepository,
     @Inject(LANGUAGE_REPOSITORY)
     private readonly languageRepository: LanguageRepository,
     @Inject(INTEREST_REPOSITORY)
@@ -148,6 +154,12 @@ export class CreateProfileUsecase {
           }
         }
 
+        const historizedUnmatchedLearningLanguage =
+          await this.learningLanguageRepository.getHistoricUnmatchedLearningLanguageByUserIdAndLanguageId(
+            profile.user.id,
+            language.id,
+          );
+
         return new LearningLanguage({
           id: this.uuidProvider.generate(),
           language,
@@ -157,6 +169,7 @@ export class CreateProfileUsecase {
           sameAge: learningLanguage.sameAge,
           certificateOption: learningLanguage.certificateOption,
           specificProgram: learningLanguage.specificProgram,
+          hasPriority: Boolean(historizedUnmatchedLearningLanguage),
           campus: campus,
         });
       }),
