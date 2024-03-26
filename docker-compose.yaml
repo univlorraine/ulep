@@ -1,4 +1,4 @@
-version: '3.4'
+version: "3.4"
 
 services:
   api:
@@ -25,9 +25,8 @@ services:
       S3_REGION: ${S3_REGION:-eu-east-1}
       S3_ACCESS_KEY: ${MINIO_USER:-minio}
       S3_ACCESS_SECRET: ${MINIO_PASSWORD:-!ChangeMe!}
-      TRANSLATIONS_ENDPOINT: ${TRANSLATIONS_ENDPOINT:-https://raw.githubusercontent.com/thetribeio/locales_ulep/main/locales/}
-      TRANSLATIONS_ENDPOINT_SUFFIX: ${TRANSLATIONS_ENDPOINT_SUFFIX:-}
-      TRANSLATIONS_TOKEN: ${TRANSLATIONS_TOKEN:-}
+      WEBLATE_API_URL: ${WEBLATE_API_URL:-https://weblate.ulep.thestaging.io/api}
+      WEBLATE_API_TOKEN: ${WEBLATE_API_TOKEN:-} # Needs to be configured to avoid reaching rate limit by calling public endpoint of Weblate
       CONNECTOR_URL: ${CONNECTOR_URL:-}
       CONNECTOR_TOKEN: ${CONNECTOR_TOKEN:-}
       EMAIL_ASSETS_BUCKET: ${EMAIL_ASSETS_BUCKET:-assets}

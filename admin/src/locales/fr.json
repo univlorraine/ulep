@@ -16,7 +16,8 @@
             "password": "Veuillez saisir un mot de passe pour l'administrateur ( 1 majuscule, 1 minuscule et 1 chiffre ) si vous voulez le mettre à jour",
             "title": "Mise à jour d'un administrateur",
             "university": "Mettez à jour l'université à administrer"
-        }
+        },
+        "confirmDeleteOwnAccount": "Êtes-vous sûr(e) de vouloir supprimer votre utilisateur ?\n Vous êtes actuellement connecté(e) à ce compte, après la suppression vous serez déconnecté(e)."
     },
     "campus": {
         "create": {

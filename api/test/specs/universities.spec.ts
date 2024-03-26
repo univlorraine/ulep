@@ -3,6 +3,7 @@ import { Test } from '@nestjs/testing';
 import { AppModule } from 'src/app.module';
 import {
   CountryFactory,
+  I18nService,
   KeycloakUserFactory,
   LanguageFactory,
   UniversityFactory,
@@ -25,6 +26,7 @@ import InMemoryEmailGateway from 'src/providers/gateway/in-memory-email.gateway'
 import { LEARNING_LANGUAGE_REPOSITORY } from 'src/core/ports/learning-language.repository';
 import { InMemoryLearningLanguageRepository } from 'src/providers/persistance/repositories/in-memory-learning-language-repository';
 import { KeycloakClient } from '@app/keycloak';
+import { InMemoryI18nService } from 'src/providers/services/in-memory.i18n.provider';
 
 describe('Universities', () => {
   let app: TestServer;
@@ -50,6 +52,7 @@ describe('Universities', () => {
 
   const repository = new InMemoryUniversityRepository();
   const inMemoryEmail = new InMemoryEmailGateway();
+  const inMemoryI18n = new InMemoryI18nService();
 
   beforeAll(async () => {
     userRepositoy.init([user]);
@@ -82,6 +85,8 @@ describe('Universities', () => {
       .useValue(inMemoryEmail)
       .overrideGuard(AuthenticationGuard)
       .useValue(TestAuthGuard)
+      .overrideProvider(I18nService)
+      .useValue(inMemoryI18n)
       .overrideProvider(AUTHENTICATOR)
       .useValue(authenticator)
       .overrideProvider(LEARNING_LANGUAGE_REPOSITORY)

@@ -124,21 +124,23 @@ spec:
                 secretKeyRef:
                   name: "{{ include "etandem.fullname" . }}-secret-{{ .Values.api.name }}"
                   key: minio-secret-key
-            - name: TRANSLATIONS_ENDPOINT
-              value: "{{ .Values.api.env.translationsEndpoint }}"
-            - name: TRANSLATIONS_ENDPOINT_SUFFIX
-              value: "{{ .Values.api.env.translationsEndpointSuffix }}"
-            - name: TRANSLATIONS_TOKEN
+            - name: WEBLATE_API_URL
+              value: "{{ .Values.api.env.weblateApiUrl }}"
+            - name: WEBLATE_API_TOKEN
               valueFrom:
                 secretKeyRef:
                   name: "{{ include "etandem.fullname" . }}-secret-{{ .Values.api.name }}"
-                  key: translations-token
-            - name: TRANSLATIONS_BEARER_TOKEN
-              valueFrom:
-                secretKeyRef:
-                  name: "{{ include "etandem.fullname" . }}-secret-{{ .Values.api.name }}"
-                  key: translations-bearer-token
-                  optional: true
+                  key: weblate-token
+            - name: I18N_RELOAD_INTERVAL
+              value: "{{ .Values.api.env.i18nReloadInterval }}"
+            - name: I18N_DEBUG
+              value: "{{ .Values.api.env.i18nDebug }}"
+            - name: APP_TRANSLATION_NAMESPACE
+              value: "{{ .Values.api.env.appTranslationNamespace }}"
+            - name: API_TRANSLATION_NAMESPACE
+              value: "{{ .Values.api.env.apiTranslationNamespace }}"
+            - name: EMAIL_TRANSLATION_NAMESPACE
+              value: "{{ .Values.api.env.emailTranslationNamespace }}"
             - name: CONNECTOR_URL
               value: "{{ .Values.api.env.connectorUrl }}"
             - name: CONNECTOR_TOKEN
