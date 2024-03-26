@@ -14,6 +14,14 @@
 }
 
 .levels-container {
-    column-count: 2;
-    column-gap: 10px;
+    /* column-count: 2; */
+    /* column-gap: 10px; */
+    display: flex;
+    flex-flow: row wrap;
+    column-gap: 2%;
+}
+.level-container-override {
+    composes: level-container;
+    width: 49%;
+    
 }
