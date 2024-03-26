@@ -351,7 +351,7 @@ export class UniversityResponse {
       pairingMode: university.pairingMode,
       maxTandemsPerUser: university.maxTandemsPerUser,
       notificationEmail: university.notificationEmail,
-      specificLanguagesAvailable: university.specificLanguagesAvailable.map(
+      specificLanguagesAvailable: university.specificLanguagesAvailable?.map(
         LanguageResponse.fromLanguage,
       ),
     });

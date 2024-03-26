@@ -62,16 +62,19 @@ export class CreateUniversityUsecase {
       throw new RessourceDoesNotExist('Country does not exist');
     }
 
-    const specificLanguagesAvailable = await Promise.all(
-      command.specificLanguagesAvailableIds.map((id) =>
-        this.languageRepository.ofId(id),
-      ),
-    );
-
-    if (specificLanguagesAvailable.some((language) => !language)) {
-      throw new RessourceDoesNotExist(
-        'One or more specified language IDs do not exist.',
+    let specificLanguagesAvailable: Language[] = [];
+    if (command.specificLanguagesAvailableIds?.length > 0) {
+      specificLanguagesAvailable = await Promise.all(
+        command.specificLanguagesAvailableIds.map((id) =>
+          this.languageRepository.ofId(id),
+        ),
       );
+
+      if (specificLanguagesAvailable.some((language) => !language)) {
+        throw new RessourceDoesNotExist(
+          'One or more specified language IDs do not exist.',
+        );
+      }
     }
 
     const instance = await this.universityRepository.ofName(command.name);
