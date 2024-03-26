@@ -14,8 +14,6 @@
 }
 
 .levels-container {
-    /* column-count: 2; */
-    /* column-gap: 10px; */
     display: flex;
     flex-flow: row wrap;
     column-gap: 2%;
