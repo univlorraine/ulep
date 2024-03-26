@@ -33,7 +33,7 @@ describe('askForLearningLanguage', () => {
         expect.assertions(2);
         jest.spyOn(adapter, 'post');
         adapter.mockJson({ parsedBody: httpCallResponse });
-        await usecase.execute('id', languagePayload, 'A1', 'TANDEM', true, true);
+        await usecase.execute('id', languagePayload, 'A1', 'TANDEM', true, true, true);
         expect(adapter.post).toHaveBeenCalledTimes(1);
         expect(adapter.post).toHaveBeenCalledWith(`/profiles/id/learning-language`, {
             code: 'FR',
@@ -43,6 +43,7 @@ describe('askForLearningLanguage', () => {
             specificProgram: undefined,
             sameAge: true,
             sameGender: true,
+            sameTandem: true,
             learningType: 'TANDEM',
         });
     });
@@ -52,7 +53,7 @@ describe('askForLearningLanguage', () => {
 
         adapter.mockJson({ parsedBody: httpCallResponse });
 
-        const result = await usecase.execute('id', languagePayload, 'A1', 'TANDEM', true, true);
+        const result = await usecase.execute('id', languagePayload, 'A1', 'TANDEM', true, true, true);
         expect(result).toStrictEqual(
             new LearningLanguage('id', 'FR', 'Français', 'A1', 'TANDEM', true, true, false, false)
         );
@@ -63,7 +64,7 @@ describe('askForLearningLanguage', () => {
 
         adapter.mockJson({});
 
-        const result = await usecase.execute('id', languagePayload, 'A1', 'TANDEM', true, true);
+        const result = await usecase.execute('id', languagePayload, 'A1', 'TANDEM', true, true, true);
         expect(result).toBeInstanceOf(Error);
     });
 
@@ -72,14 +73,14 @@ describe('askForLearningLanguage', () => {
 
         adapter.mockError({ status: 409 });
 
-        const result = await usecase.execute('id', languagePayload, 'A1', 'TANDEM', true, true);
+        const result = await usecase.execute('id', languagePayload, 'A1', 'TANDEM', true, true, true);
         expect(result).toBeInstanceOf(Error);
     });
 
     it('execute must return an error if adapter return an error without status', async () => {
         expect.assertions(1);
         adapter.mockError({});
-        const result = await usecase.execute('id', languagePayload, 'A1', 'TANDEM', true, true);
+        const result = await usecase.execute('id', languagePayload, 'A1', 'TANDEM', true, true, true);
         expect(result).toStrictEqual(new Error('errors.global'));
     });
 });
