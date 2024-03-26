@@ -28,6 +28,10 @@ import {
   UuidProviderInterface,
 } from 'src/core/ports/uuid.provider';
 import { DeleteUserUsecase } from '../user';
+import {
+  LEARNING_LANGUAGE_REPOSITORY,
+  LearningLanguageRepository,
+} from 'src/core/ports/learning-language.repository';
 
 export class UserTandemPurgeCommand {
   userId: string;
@@ -45,6 +49,8 @@ export class ArchiveTandemsAndDeleteUsersUsecase {
     private readonly purgeRepository: PurgeRepository,
     @Inject(TANDEM_REPOSITORY)
     private readonly tandemRepository: TandemRepository,
+    @Inject(LEARNING_LANGUAGE_REPOSITORY)
+    private readonly learningLanguageRepository: LearningLanguageRepository,
     @Inject(USER_REPOSITORY)
     private readonly userRepository: UserRepository,
     @Inject(REPORT_REPOSITORY)
@@ -56,11 +62,16 @@ export class ArchiveTandemsAndDeleteUsersUsecase {
     private readonly deleteUsersUsecase: DeleteUserUsecase,
   ) {}
 
+  //TODO: Ajouter les lignes des utiliaateurs qui n'ont pas eu de tandems
+  //TODO: Ajouter la priorités des tandems qui n'ont pas eu de tandems
+  //TODO: Détecter si une demande est une nouvelle demande qui n'avait pas eu de matching au prealable
   async execute(command: UserTandemPurgeCommand): Promise<Purge> {
     // Create purge
     const purge = await this.createNewPurge(command.userId);
     // Blacklist users who have been banned
     await this.blacklistUsers();
+    // Archive all unmatched learning languages
+    await this.archiveUnmatchedLearningLanguages(purge.id);
     // Retrieve all users who have an active tandem
     const activeTandems = await this.archiveTandems(purge.id);
     const usersWithActiveTandem = this.getUserIdFromTandems(activeTandems);
@@ -92,6 +103,16 @@ export class ArchiveTandemsAndDeleteUsersUsecase {
     ]);
 
     return activeTandems.items;
+  }
+
+  private async archiveUnmatchedLearningLanguages(purgeId: string) {
+    const unmatchedLearningLanguages =
+      await this.learningLanguageRepository.getUnmatchedLearningLanguages();
+
+    await this.learningLanguageRepository.archiveUnmatchedLearningLanguages(
+      unmatchedLearningLanguages,
+      purgeId,
+    );
   }
 
   private async deleteUsers(usersWithActiveTandem: string[]): Promise<void> {

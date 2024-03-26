@@ -47,6 +47,8 @@ export interface LearningLanguageRepository {
     universityIds: string[],
   ) => Promise<LearningLanguage[]>;
 
+  getUnmatchedLearningLanguages: () => Promise<LearningLanguage[]>;
+
   hasAnActiveTandem: (id: string) => Promise<boolean>;
 
   OfUniversities: (
@@ -54,4 +56,9 @@ export interface LearningLanguageRepository {
   ) => Promise<Collection<LearningLanguageWithTandem>>;
 
   delete(id: string): Promise<void>;
+
+  archiveUnmatchedLearningLanguages(
+    learningLanguages: LearningLanguage[],
+    purgeId: string,
+  ): Promise<void>;
 }

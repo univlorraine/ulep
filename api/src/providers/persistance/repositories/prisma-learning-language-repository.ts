@@ -455,4 +455,30 @@ export class PrismaLearningLanguageRepository
       totalItems: count,
     };
   }
+
+  async getUnmatchedLearningLanguages() {
+    const learningLanguages = await this.prisma.learningLanguages.findMany({
+      where: {
+        Tandem: {
+          is: null,
+        },
+      },
+    });
+
+    return learningLanguages.map(learningLanguageMapper);
+  }
+
+  async archiveUnmatchedLearningLanguages(
+    learningLanguages: LearningLanguage[],
+    purgeId: string,
+  ) {
+    await this.prisma.unmatchedLearningLanguages.createMany({
+      data: learningLanguages.map((l) => ({
+        id: l.id,
+        user_id: l.profile.user.id,
+        purge_id: purgeId,
+        language_code_id: l.language.id,
+      })),
+    });
+  }
 }

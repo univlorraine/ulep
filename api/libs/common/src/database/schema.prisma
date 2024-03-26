@@ -59,6 +59,7 @@ model LanguageCodes {
   LearningLanguages      LearningLanguages[]  @relation("LearningLanguageLanguage")
   JokerLearningLanguages LearningLanguages[]  @relation("TandemLanguage")
   TandemHistory          TandemHistory[]
+  UnmatchedLearningLanguages UnmatchedLearningLanguages[]
 
   @@unique([name])
   @@unique([code])
@@ -427,6 +428,7 @@ model Purges {
   author_id     String
   created_at    DateTime        @default(now())
   TandemHistory TandemHistory[]
+  UnmatchedLearningLanguages UnmatchedLearningLanguages[]
 
   @@map("purges")
 }
@@ -452,4 +454,17 @@ model TandemHistory {
 
   @@unique([user_id, tandem_id])
   @@map("tandem_history")
+}
+
+model UnmatchedLearningLanguages {
+  id               String        @id @default(uuid())
+  user_id          String
+  purge_id         String
+  language_code_id String
+  created_at       DateTime      @default(now())
+  Purge            Purges        @relation(fields: [purge_id], references: [id], onDelete: Cascade)
+  Language         LanguageCodes @relation(fields: [language_code_id], references: [id])
+
+  @@unique([user_id])
+  @@map("unmatched_learning_languages")
 }
