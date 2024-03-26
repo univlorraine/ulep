@@ -12,10 +12,8 @@ import RadioButton from '../components/RadioButton';
 import TextInput from '../components/TextInput';
 import WebLayoutCentered from '../components/layout/WebLayoutCentered';
 import styles from './css/SignUp.module.css';
-import { Capacitor } from '@capacitor/core';
 import { SignUpInformationsParams } from './SignUpInformationsPage';
 import { Keyboard } from '@capacitor/keyboard';
-import { openBrowser } from '../utils';
 
 interface SignUpPageParams {
     fromIdp: boolean;
@@ -23,7 +21,8 @@ interface SignUpPageParams {
 
 const SignUpPage: React.FC = () => {
     const { t } = useTranslation();
-    const { configuration, getAllCountries, getInitialUrlUsecase, retrievePerson } = useConfig();
+    const { browserAdapter, deviceAdapter, configuration, getAllCountries, getInitialUrlUsecase, retrievePerson } =
+        useConfig();
     const updateProfileSignUp = useStoreActions((state) => state.updateProfileSignUp);
     const profileSignUp = useStoreState((state) => state.profileSignUp);
     const [showToast] = useIonToast();
@@ -218,10 +217,10 @@ const SignUpPage: React.FC = () => {
                                 staffFunction,
                             });
                             const redirectUri = encodeURIComponent(
-                                Capacitor.isNativePlatform() ? 'ulep://auth' : `${window.location.origin}/auth`
+                                deviceAdapter.isNativePlatform() ? 'ulep://auth' : `${window.location.origin}/auth`
                             );
 
-                            await openBrowser(getInitialUrlUsecase.execute(redirectUri), '_self');
+                            await browserAdapter.open(getInitialUrlUsecase.execute(redirectUri), '_self');
                         }}
                     >
                         {t('signup_page.sso_button')}

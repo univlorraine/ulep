@@ -4,7 +4,7 @@ import { ApiModule } from './api/api.module';
 import { KeycloakModule } from '@app/keycloak';
 import { Env } from './configuration';
 import { MailerModule } from '@app/common';
-import { AcceptLanguageResolver, I18nModule, QueryResolver } from 'nestjs-i18n';
+import { I18nModule } from '@app/common/i18n/i18n.module';
 
 @Module({
   imports: [
@@ -12,24 +12,24 @@ import { AcceptLanguageResolver, I18nModule, QueryResolver } from 'nestjs-i18n';
       isGlobal: true,
       validate: Env.validate,
     }),
-    I18nModule.forRootAsync({
+    I18nModule.registerAsync({
+      isGlobal: true,
+      imports: [ConfigModule],
       useFactory: async (env: ConfigService<Env, true>) => {
         const fallbackLanguage = env
-          .get<string>('DEFAULT_TRANSLATION_LANGUAGE')
+          .get('DEFAULT_TRANSLATION_LANGUAGE')
           .toLowerCase();
         console.info(`Default translation language: ${fallbackLanguage}`);
         return {
-          fallbackLanguage,
-          loaderOptions: {
-            path: 'i18n/',
-            watch: process.env.NODE_ENV !== 'production',
+          fallbackLanguage: fallbackLanguage,
+          debug: env.get('I18N_DEBUG'),
+          http: {
+            url: env.get('WEBLATE_API_URL'),
+            token: env.get('WEBLATE_API_TOKEN'),
+            reloadInterval: env.get('I18N_RELOAD_INTERVAL'),
           },
         };
       },
-      resolvers: [
-        { use: QueryResolver, options: ['lang'] },
-        AcceptLanguageResolver,
-      ],
       inject: [ConfigService],
     }),
     KeycloakModule.registerAsync({

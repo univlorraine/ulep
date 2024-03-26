@@ -5,7 +5,7 @@ import {
   PrismaHealthIndicator,
 } from '@nestjs/terminus';
 import * as Swagger from '@nestjs/swagger';
-import { PrismaService } from '@app/common';
+import { I18nService, PrismaService } from '@app/common';
 
 @Controller('health')
 @Swagger.ApiExcludeController()

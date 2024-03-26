@@ -3,6 +3,8 @@ PODS:
     - CapacitorCordova
   - CapacitorApp (5.0.2):
     - Capacitor
+  - CapacitorBrowser (5.2.0):
+    - Capacitor
   - CapacitorCamera (5.0.5):
     - Capacitor
   - CapacitorCordova (5.0.4)
@@ -28,6 +30,7 @@ PODS:
 DEPENDENCIES:
   - "Capacitor (from `../../node_modules/.pnpm/@capacitor+ios@5.0.4_@capacitor+core@5.0.4/node_modules/@capacitor/ios`)"
   - "CapacitorApp (from `../../node_modules/.pnpm/@capacitor+app@5.0.2_@capacitor+core@5.0.4/node_modules/@capacitor/app`)"
+  - "CapacitorBrowser (from `../../node_modules/.pnpm/@capacitor+browser@5.2.0_@capacitor+core@5.0.4/node_modules/@capacitor/browser`)"
   - "CapacitorCamera (from `../../node_modules/.pnpm/@capacitor+camera@5.0.5_@capacitor+core@5.0.4/node_modules/@capacitor/camera`)"
   - "CapacitorCordova (from `../../node_modules/.pnpm/@capacitor+ios@5.0.4_@capacitor+core@5.0.4/node_modules/@capacitor/ios`)"
   - "CapacitorDevice (from `../../node_modules/.pnpm/@capacitor+device@5.0.2_@capacitor+core@5.0.4/node_modules/@capacitor/device`)"
@@ -48,6 +51,8 @@ EXTERNAL SOURCES:
     :path: "../../node_modules/.pnpm/@capacitor+ios@5.0.4_@capacitor+core@5.0.4/node_modules/@capacitor/ios"
   CapacitorApp:
     :path: "../../node_modules/.pnpm/@capacitor+app@5.0.2_@capacitor+core@5.0.4/node_modules/@capacitor/app"
+  CapacitorBrowser:
+    :path: "../../node_modules/.pnpm/@capacitor+browser@5.2.0_@capacitor+core@5.0.4/node_modules/@capacitor/browser"
   CapacitorCamera:
     :path: "../../node_modules/.pnpm/@capacitor+camera@5.0.5_@capacitor+core@5.0.4/node_modules/@capacitor/camera"
   CapacitorCordova:
@@ -70,6 +75,7 @@ EXTERNAL SOURCES:
 SPEC CHECKSUMS:
   Capacitor: d3d4463573438b9fa65326d1f3549da6f4c21634
   CapacitorApp: 28fef1fd75b2b3686e875216806fb8416d421097
+  CapacitorBrowser: a6deae9e5bf87f62b62a753cff7992c5def9e771
   CapacitorCamera: 834aade2952a06bd1e46c078d1068a980f37f8c9
   CapacitorCordova: b1fe6bf1f36974a8e4a9044b342d22d49c0996d6
   CapacitorDevice: 980e172f6fbfa0a945c73f908adc74b5a031e7d4
@@ -82,6 +88,6 @@ SPEC CHECKSUMS:
   SentryCapacitor: 24d2fdc00e259b9cd9454a2331444ab6c41141be
   SentryPrivate: 4350d865f898224ab9fa02b37d6ee7fbb623f47e
 
-PODFILE CHECKSUM: ba033a10cdf073f1c7fae391e5d000559e8c9725
+PODFILE CHECKSUM: cb07e84d7004c390b38dab332ed6712c63febde4
 
 COCOAPODS: 1.12.1

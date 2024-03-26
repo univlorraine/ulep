@@ -1,3 +1,4 @@
+import { LogLevel } from '@nestjs/common';
 import { Transform, plainToClass } from 'class-transformer';
 import {
   IsBoolean,
@@ -78,19 +79,33 @@ export class Env {
 
   @IsString()
   @IsNotEmpty()
-  TRANSLATIONS_ENDPOINT: string;
+  WEBLATE_API_URL: string;
 
   @IsString()
   @IsOptional()
-  TRANSLATIONS_ENDPOINT_SUFFIX: string;
+  WEBLATE_API_TOKEN: string;
+
+  @IsNumber()
+  @Transform(({ value }) => parseInt(value, 10))
+  @IsOptional()
+  I18N_RELOAD_INTERVAL: number;
 
   @IsString()
   @IsOptional()
-  TRANSLATIONS_TOKEN: string;
+  APP_TRANSLATION_NAMESPACE: string;
 
   @IsString()
   @IsOptional()
-  TRANSLATIONS_BEARER_TOKEN: string;
+  API_TRANSLATION_NAMESPACE: string;
+
+  @IsString()
+  @IsOptional()
+  EMAIL_TRANSLATION_NAMESPACE: string;
+
+  @IsBoolean()
+  @Transform(({ value }) => value === 'true')
+  @IsOptional()
+  I18N_DEBUG: boolean;
 
   @IsString()
   @IsOptional()
@@ -103,10 +118,6 @@ export class Env {
   @IsString()
   @IsNotEmpty()
   EMAIL_ASSETS_BUCKET: string;
-
-  @IsString()
-  @IsNotEmpty()
-  EMAIL_TRANSLATIONS_COMPONENT: string;
 
   @IsString()
   @IsNotEmpty()
@@ -188,14 +199,24 @@ const removeTrailingSlash = (url: string): string => {
   return url;
 };
 
-export const getTranslationsEndpoint = (
-  lng: string,
-  component: string,
-): string => {
-  const endpoint = process.env.TRANSLATIONS_ENDPOINT || '';
-  const suffix = process.env.TRANSLATIONS_ENDPOINT_SUFFIX || '';
-  // %2F work with github and gitlab but / doesn't with gitlab ( ??? )
-  return `${endpoint}%2F${lng}%2F${component}.json${suffix}`;
+export const getLoggerLevels = (logLevel: string): LogLevel[] => {
+  const level: LogLevel[] = [];
+  switch (logLevel) {
+    case 'verbose':
+      level.push('verbose');
+    case 'debug':
+      level.push('debug');
+    case 'warn':
+      level.push('warn');
+    case 'error':
+      level.push('error');
+    case 'log':
+      level.push('log');
+      break;
+    default:
+      break;
+  }
+  return level;
 };
 
 /// Testing configuration
@@ -216,12 +237,14 @@ const test: Env = {
   S3_REGION: 'eu-east-1',
   S3_ACCESS_KEY: 'minio',
   S3_ACCESS_SECRET: 'minio123',
-  TRANSLATIONS_ENDPOINT: 'http://localhost:3000/api/translations',
-  TRANSLATIONS_ENDPOINT_SUFFIX: '',
-  TRANSLATIONS_TOKEN: 'test',
-  TRANSLATIONS_BEARER_TOKEN: '',
+  WEBLATE_API_URL: 'http://localhost:3000/api/translations',
+  WEBLATE_API_TOKEN: '',
+  I18N_RELOAD_INTERVAL: 0,
+  APP_TRANSLATION_NAMESPACE: 'app',
+  API_TRANSLATION_NAMESPACE: 'api',
+  EMAIL_TRANSLATION_NAMESPACE: 'emails',
+  I18N_DEBUG: false,
   EMAIL_ASSETS_BUCKET: 'assets',
-  EMAIL_TRANSLATIONS_COMPONENT: 'email',
   EMAIL_ASSETS_PUBLIC_ENDPOINT: 'http://localhost:9000/assets',
   APP_LINK_APPLE_STORE: 'https://apple.com',
   APP_LINK_PLAY_STORE: 'https://play.google.com',

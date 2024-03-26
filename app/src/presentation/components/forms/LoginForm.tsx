@@ -8,7 +8,6 @@ import TextInput from '../TextInput';
 import style from './Form.module.css';
 import Tokens from '../../../domain/entities/Tokens';
 import { Capacitor } from '@capacitor/core';
-import { openBrowser } from '../../utils';
 
 interface LoginFormProps {
     goBack: () => void;
@@ -17,7 +16,7 @@ interface LoginFormProps {
 
 const LoginForm: React.FC<LoginFormProps> = ({ goBack, onLogin }) => {
     const { t } = useTranslation();
-    const { configuration, getInitialUrlUsecase, login } = useConfig();
+    const { browserAdapter, deviceAdapter, configuration, getInitialUrlUsecase, login } = useConfig();
     const [email, setEmail] = useState<string>('');
     const [password, setPassword] = useState<string>('');
     const [showLoading, hideLoading] = useIonLoading();
@@ -37,10 +36,10 @@ const LoginForm: React.FC<LoginFormProps> = ({ goBack, onLogin }) => {
 
     const ssoLogin = async (): Promise<void> => {
         const redirectUri = encodeURIComponent(
-            Capacitor.isNativePlatform() ? 'ulep://auth' : `${window.location.origin}/auth`
+            deviceAdapter.isNativePlatform() ? 'ulep://auth' : `${window.location.origin}/auth`
         );
 
-        await openBrowser(getInitialUrlUsecase.execute(redirectUri), '_self');
+        await browserAdapter.open(getInitialUrlUsecase.execute(redirectUri), '_self');
     };
 
     return (

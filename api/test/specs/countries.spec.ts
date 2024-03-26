@@ -1,7 +1,7 @@
 import * as request from 'supertest';
 import { Test } from '@nestjs/testing';
 import { AppModule } from 'src/app.module';
-import { CountryFactory } from '@app/common';
+import { CountryFactory, I18nService } from '@app/common';
 import { COUNTRY_REPOSITORY } from 'src/core/ports/country.repository';
 import { InMemoryCountryCodesRepository } from 'src/providers/persistance/repositories/in-memory-country-repository';
 import { TestServer } from './test.server';
@@ -9,6 +9,7 @@ import { TestAuthGuard } from '../utils/TestAuthGuard';
 import { AuthenticationGuard } from 'src/api/guards';
 import InMemoryEmailGateway from 'src/providers/gateway/in-memory-email.gateway';
 import { EMAIL_GATEWAY } from 'src/core/ports/email.gateway';
+import { InMemoryI18nService } from 'src/providers/services/in-memory.i18n.provider';
 
 describe('Countries', () => {
   let app: TestServer;
@@ -16,6 +17,7 @@ describe('Countries', () => {
   const factory = new CountryFactory();
   const repository = new InMemoryCountryCodesRepository();
   const inMemoryEmail = new InMemoryEmailGateway();
+  const inMemoryI18n = new InMemoryI18nService();
 
   beforeAll(async () => {
     const module = await Test.createTestingModule({
@@ -25,6 +27,8 @@ describe('Countries', () => {
       .useValue(repository)
       .overrideProvider(EMAIL_GATEWAY)
       .useValue(inMemoryEmail)
+      .overrideProvider(I18nService)
+      .useValue(inMemoryI18n)
       .overrideGuard(AuthenticationGuard)
       .useValue(TestAuthGuard)
       .compile();

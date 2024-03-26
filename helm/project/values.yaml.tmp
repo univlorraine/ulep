@@ -40,9 +40,8 @@ api:
     minioUrl: https://minio-api.ulep.thestaging.io
     minioAccessKey: *minioAccessKey
     minioSecretKey: *minioSecretKey
-    translationsEndpoint: https://gitlab.univ-lorraine.fr/api/v4/projects/7519/repository/files/locales
-    translationsEndpointSuffix: /raw?ref=master
-    translationsToken: glpat-v3-kKL4hk4nrktHRGkyu
+    weblateApiUrl: https://weblate.ulep.thestaging.io/api # TO CHANGE
+    weblateApiToken: # required
     connectorUrl: https://auth.ulep.thestaging.io
     connectorToken: 5f8a2b8c-8b0a-4b9e-9b0a-4b9e9b0a4b9e
     emailsAssetsBucket: assets
