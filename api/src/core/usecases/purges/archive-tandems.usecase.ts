@@ -62,21 +62,22 @@ export class ArchiveTandemsAndDeleteUsersUsecase {
     private readonly deleteUsersUsecase: DeleteUserUsecase,
   ) {}
 
-  //TODO: Ajouter les lignes des utiliaateurs qui n'ont pas eu de tandems
-  //TODO: Ajouter la priorités des tandems qui n'ont pas eu de tandems
-  //TODO: Détecter si une demande est une nouvelle demande qui n'avait pas eu de matching au prealable
   async execute(command: UserTandemPurgeCommand): Promise<Purge> {
     // Create purge
     const purge = await this.createNewPurge(command.userId);
     // Blacklist users who have been banned
     await this.blacklistUsers();
     // Archive all unmatched learning languages
-    await this.archiveUnmatchedLearningLanguages(purge.id);
+    const userWithUnmatchedLearningLanguages =
+      await this.archiveUnmatchedLearningLanguages(purge.id);
     // Retrieve all users who have an active tandem
     const activeTandems = await this.archiveTandems(purge.id);
     const usersWithActiveTandem = this.getUserIdFromTandems(activeTandems);
-    // Delete users who do not have an active tandem and are not administrators
-    await this.deleteUsers(usersWithActiveTandem);
+    // Delete inactives users and are not administrators
+    await this.deleteUsers([
+      ...usersWithActiveTandem,
+      ...userWithUnmatchedLearningLanguages,
+    ]);
     // Delete closed reports
     await this.deleteClosedReports();
 
@@ -113,9 +114,11 @@ export class ArchiveTandemsAndDeleteUsersUsecase {
       unmatchedLearningLanguages,
       purgeId,
     );
+
+    return unmatchedLearningLanguages.map((l) => l.profile.user.id);
   }
 
-  private async deleteUsers(usersWithActiveTandem: string[]): Promise<void> {
+  private async deleteUsers(usersToKeep: string[]): Promise<void> {
     // Retrieve all administrators
     const administratorsId = (await this.keycloak.getAdministrators()).map(
       (administrator) => administrator.id,
@@ -129,7 +132,7 @@ export class ArchiveTandemsAndDeleteUsersUsecase {
       // Check if the user is an administrator
       const isAdministrator = administratorsId.includes(user.id);
       // Check if the user has an active tandem
-      const isUserWithActiveTandem = usersWithActiveTandem.includes(user.id);
+      const isUserWithActiveTandem = usersToKeep.includes(user.id);
       if (isAdministrator || isUserWithActiveTandem) {
         // If the user is an administrator or has an active tandem, skip
         continue;

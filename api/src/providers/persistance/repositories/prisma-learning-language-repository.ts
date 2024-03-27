@@ -71,6 +71,7 @@ export class PrismaLearningLanguageRepository
         learning_type: item.learningType,
         same_gender: item.sameGender,
         same_age: item.sameAge,
+        has_priority: item.hasPriority,
         certificate_option: item.certificateOption,
         specific_program: item.specificProgram,
         Campus: item.campus && {
@@ -468,6 +469,7 @@ export class PrismaLearningLanguageRepository
           is: null,
         },
       },
+      include: LearningLanguageRelations,
     });
 
     return learningLanguages.map(learningLanguageMapper);
@@ -477,6 +479,8 @@ export class PrismaLearningLanguageRepository
     learningLanguages: LearningLanguage[],
     purgeId: string,
   ) {
+    await this.prisma.unmatchedLearningLanguages.deleteMany({});
+
     await this.prisma.unmatchedLearningLanguages.createMany({
       data: learningLanguages.map((l) => ({
         id: l.id,

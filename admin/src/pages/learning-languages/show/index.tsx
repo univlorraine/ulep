@@ -84,6 +84,7 @@ const LearningLanguageShow = () => {
                     label={translate('learning_languages.show.fields.specificProgram')}
                     source="specificProgram"
                 />
+                <BooleanField label={translate('learning_languages.show.fields.hasPriority')} source="hasPriority" />
             </SimpleShowLayout>
 
             <Box sx={{ padding: 2 }}>

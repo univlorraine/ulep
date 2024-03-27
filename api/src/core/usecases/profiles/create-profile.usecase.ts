@@ -156,7 +156,7 @@ export class CreateProfileUsecase {
 
         const historizedUnmatchedLearningLanguage =
           await this.learningLanguageRepository.getHistoricUnmatchedLearningLanguageByUserIdAndLanguageId(
-            profile.user.id,
+            user.id,
             language.id,
           );
 

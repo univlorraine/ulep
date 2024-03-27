@@ -464,7 +464,8 @@
                 "sameAge": "Même âge",
                 "age": "Âge",
                 "certificateOption": "Option certificat",
-                "specificProgram": "Option programme spécifique"
+                "specificProgram": "Option programme spécifique",
+                "hasPriority": "Langue prioritaire ( sans réponse au cycle précedent )"
             },
             "tandems": {
                 "error": "Une erreur est survenue lors de la récupération des tandems",

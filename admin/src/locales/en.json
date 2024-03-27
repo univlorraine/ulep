@@ -446,7 +446,8 @@
                 "sameAge": "Same age",
                 "age": "Age",
                 "certificateOption": "Certificate option",
-                "specificProgram": "Specific program"
+                "specificProgram": "Specific program",
+                "hasPriority": "Priority language (no response to previous cycle)"
             },
             "tandems": {
                 "error": "An error occured while fetching tandems",

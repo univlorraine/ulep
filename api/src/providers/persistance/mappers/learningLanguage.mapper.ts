@@ -42,11 +42,12 @@ export const learningLanguageMapper = (
     createdAt: instance.created_at,
     updatedAt: instance.updated_at,
     learningType: LearningType[instance.learning_type],
-    sameAge: instance.same_age,
-    sameGender: instance.same_gender,
+    sameAge: Boolean(instance.same_age),
+    sameGender: Boolean(instance.same_gender),
     campus: instance.Campus && campusMapper(instance.Campus),
-    certificateOption: instance.certificate_option,
-    specificProgram: instance.specific_program,
+    certificateOption: Boolean(instance.certificate_option),
+    specificProgram: Boolean(instance.specific_program),
+    hasPriority: Boolean(instance.has_priority),
     tandemLanguage:
       instance.TandemLanguage && languageMapper(instance.TandemLanguage),
   });

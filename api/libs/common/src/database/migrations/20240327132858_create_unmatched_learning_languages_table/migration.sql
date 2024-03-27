@@ -1,3 +1,6 @@
+-- AlterTable
+ALTER TABLE "learning_languages" ADD COLUMN     "has_priority" BOOLEAN;
+
 -- CreateTable
 CREATE TABLE "unmatched_learning_languages" (
     "id" TEXT NOT NULL,
@@ -10,7 +13,7 @@ CREATE TABLE "unmatched_learning_languages" (
 );
 
 -- CreateIndex
-CREATE UNIQUE INDEX "unmatched_learning_languages_user_id_key" ON "unmatched_learning_languages"("user_id");
+CREATE UNIQUE INDEX "unmatched_learning_languages_user_id_language_code_id_key" ON "unmatched_learning_languages"("user_id", "language_code_id");
 
 -- AddForeignKey
 ALTER TABLE "unmatched_learning_languages" ADD CONSTRAINT "unmatched_learning_languages_purge_id_fkey" FOREIGN KEY ("purge_id") REFERENCES "purges"("id") ON DELETE CASCADE ON UPDATE CASCADE;
