@@ -1,6 +1,10 @@
 <#macro registrationLayout bodyClass="" displayInfo=false displayMessage=true displayRequiredFields=false>
 <!DOCTYPE html>
-<html class="${properties.kcHtmlClass!}" lang="${locale}">
+<#if locale??>
+   <html class="${properties.kcHtmlClass!}" lang="${locale}">
+<#else>
+   <html class="${properties.kcHtmlClass!}">
+</#if>
 
 <head>
     <meta charset="utf-8">
