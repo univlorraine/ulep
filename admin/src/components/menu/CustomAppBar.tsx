@@ -1,7 +1,15 @@
 import ExitToAppIcon from '@mui/icons-material/ExitToApp';
-import { Typography, Box } from '@mui/material';
+import { Typography, Box, Divider } from '@mui/material';
 import * as React from 'react';
-import { AppBar, UserMenu, MenuItemLink, useTranslate, useLogout } from 'react-admin';
+import {
+    LocalesMenuButton,
+    LoadingIndicator,
+    AppBar,
+    UserMenu,
+    MenuItemLink,
+    useTranslate,
+    useLogout,
+} from 'react-admin';
 
 const CustomUserMenu = (props: any) => {
     const translate = useTranslate();
@@ -19,13 +27,30 @@ const CustomUserMenu = (props: any) => {
     );
 };
 
-const CustomAppBar = (props: any) => (
-    <AppBar {...props} userMenu={<CustomUserMenu />}>
-        <Box alignItems="center" display="flex" width="100%">
-            <Typography color="inherit" id="react-admin-title" variant="h6" />
-            <Box flexGrow={1} />
-        </Box>
-    </AppBar>
-);
+const CustomAppBar = (props: any) => {
+    const translate = useTranslate();
+
+    return (
+        <>
+            <AppBar
+                {...props}
+                toolbar={
+                    <>
+                        <LoadingIndicator />
+                        <LocalesMenuButton />
+                    </>
+                }
+                userMenu={<CustomUserMenu />}
+            >
+                <Box alignItems="center" display="flex" gap="16px" width="100%">
+                    <img alt="" src="/ulep_logo.png" />
+                    <Typography variant="h6">{translate('header.title')}</Typography>
+                    <Box flexGrow={1} />
+                </Box>
+            </AppBar>
+            <Divider />
+        </>
+    );
+};
 
 export default CustomAppBar;

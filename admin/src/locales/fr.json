@@ -86,6 +86,9 @@
             "other": "Autre"
         }
     },
+    "header": {
+        "title": "ULEP Administration"
+    },
     "instance": {
         "label": "Instance",
         "name": "Nom de l'instance",
