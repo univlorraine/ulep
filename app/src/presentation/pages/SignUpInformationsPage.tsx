@@ -9,7 +9,7 @@ import Checkbox from '../components/Checkbox';
 import RadioButton from '../components/RadioButton';
 import TextInput from '../components/TextInput';
 import WebLayoutCentered from '../components/layout/WebLayoutCentered';
-import { isEmailCorrect, isNameCorrect, isPasswordCorrect, openBrowserHref } from '../utils';
+import { isEmailCorrect, isNameCorrect, isPasswordCorrect } from '../utils';
 import styles from './css/SignUp.module.css';
 
 export interface SignUpInformationsParams {
@@ -23,7 +23,7 @@ export interface SignUpInformationsParams {
 
 const SignUpInformationsPage: React.FC = () => {
     const { t } = useTranslation();
-    const { cameraAdapter, configuration, createUser } = useConfig();
+    const { browserAdapter, cameraAdapter, configuration, createUser } = useConfig();
     const [showToast] = useIonToast();
     const history = useHistory();
     const location = useLocation<SignUpInformationsParams>();
@@ -284,11 +284,11 @@ const SignUpInformationsPage: React.FC = () => {
                     name={
                         <>
                             {`${t('signup_informations_page.cgu.prefix')} `}
-                            <a href={configuration.cguUrl} onClick={openBrowserHref}>{`${t(
+                            <a href={configuration.cguUrl} onClick={browserAdapter.openLinkInBrowser}>{`${t(
                                 'signup_informations_page.cgu.cgu'
                             )}`}</a>
                             {` ${t('signup_informations_page.cgu.separator')} `}
-                            <a href={configuration.confidentialityUrl} onClick={openBrowserHref}>{`${t(
+                            <a href={configuration.confidentialityUrl} onClick={browserAdapter.openLinkInBrowser}>{`${t(
                                 'signup_informations_page.cgu.confidentiality'
                             )}`}</a>
                             {` ${t('signup_informations_page.cgu.suffix')}`}

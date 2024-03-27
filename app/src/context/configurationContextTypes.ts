@@ -26,13 +26,17 @@ import GetUniversityInterface from '../domain/interfaces/GetUniversity.interface
 import GetMediaObjectUsecaseInterface from '../domain/interfaces/GetMediaObjectUsecase.interface';
 import RevokeSessionsUsecaseInterface from '../domain/interfaces/RevokeSessionsUsecase.interface';
 import GetInitialUrlUsecaseInterface from '../domain/interfaces/AuthStandardFlow/GetInitialUrlUsecase.interface';
+import BrowserAdapterInterface from '../adapter/interfaces/BrowserAdapter.interface';
+import DeviceAdapterInterface from '../adapter/interfaces/DeviceAdapter.interface';
 
 export interface ConfigContextValueType {
     accessToken: string;
     askForAccountDeletion: AskForAccountDeletionUsecaseInterface;
     askForLanguage: AskForLanguageUsecaseInterface;
     askForLearningLanguage: AskForLearningLanguageUsecaseInterface;
+    browserAdapter: BrowserAdapterInterface;
     cameraAdapter: CameraAdapterInterface;
+    deviceAdapter: DeviceAdapterInterface;
     configuration: Configuration;
     createProfile: CreateProfileUsecaseInterface;
     createReport: CreateReportUsecaseInterface;

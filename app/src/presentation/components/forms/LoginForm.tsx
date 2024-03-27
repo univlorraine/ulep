@@ -8,7 +8,6 @@ import TextInput from '../TextInput';
 import style from './Form.module.css';
 import Tokens from '../../../domain/entities/Tokens';
 import { Capacitor } from '@capacitor/core';
-import { openBrowser } from '../../utils';
 
 interface LoginFormProps {
     goBack: () => void;
@@ -17,7 +16,7 @@ interface LoginFormProps {
 
 const LoginForm: React.FC<LoginFormProps> = ({ goBack, onLogin }) => {
     const { t } = useTranslation();
-    const { configuration, getInitialUrlUsecase, login } = useConfig();
+    const { browserAdapter, deviceAdapter, configuration, getInitialUrlUsecase, login } = useConfig();
     const [email, setEmail] = useState<string>('');
     const [password, setPassword] = useState<string>('');
     const [showLoading, hideLoading] = useIonLoading();
@@ -37,10 +36,10 @@ const LoginForm: React.FC<LoginFormProps> = ({ goBack, onLogin }) => {
 
     const ssoLogin = async (): Promise<void> => {
         const redirectUri = encodeURIComponent(
-            Capacitor.isNativePlatform() ? 'ulep://auth' : `${window.location.origin}/auth`
+            deviceAdapter.isNativePlatform() ? 'ulep://auth' : `${window.location.origin}/auth`
         );
 
-        await openBrowser(getInitialUrlUsecase.execute(redirectUri), '_self');
+        await browserAdapter.open(getInitialUrlUsecase.execute(redirectUri), '_self');
     };
 
     return (
@@ -52,16 +51,26 @@ const LoginForm: React.FC<LoginFormProps> = ({ goBack, onLogin }) => {
             </IonHeader>
             <IonContent>
                 <div className={style['main-content']}>
+                    <CircleAvatar
+                        backgroundImage={AvatarPng}
+                        height={36}
+                        viewClassName={style['icons']}
+                        width={36}
+                    />
+                    <div className={`ion-text-center`}>
+                        <h1 className={style.title}>{t('login_page.title')}</h1>
+                    </div>
+                    <div className={style['bottom-container']}>
+                        <p className={style['sso-text']}>
+                            {t('login_page.sso_title', { name: configuration.mainUniversityName })}
+                        </p>
+                        <button className="tertiary-button large-margin-vertical center-button" onClick={ssoLogin}>
+                            {t('login_page.sso_button')}
+                        </button>
+                    </div>
+                    <div className={style.separator} />
                     <form onSubmit={handleLogin}>
-                        <CircleAvatar
-                            backgroundImage={AvatarPng}
-                            height={36}
-                            viewClassName={style['icons']}
-                            width={36}
-                        />
-                        <div className={`ion-text-center`}>
-                            <h1 className={style.title}>{t('login_page.title')}</h1>
-                        </div>
+                        
                         <div className="ion-text-center">
                             <p className={style.subtitle}>{t('login_page.subtitle')}</p>
                         </div>
@@ -87,15 +96,6 @@ const LoginForm: React.FC<LoginFormProps> = ({ goBack, onLogin }) => {
                             </IonRouterLink>
                         </div>
                     </form>
-                    <div className={style.separator} />
-                    <div className={style['bottom-container']}>
-                        <p className={style['sso-text']}>
-                            {t('login_page.sso_title', { name: configuration.mainUniversityName })}
-                        </p>
-                        <button className="tertiary-button large-margin-vertical center-button" onClick={ssoLogin}>
-                            {t('login_page.sso_button')}
-                        </button>
-                    </div>
                 </div>
             </IonContent>
         </div>

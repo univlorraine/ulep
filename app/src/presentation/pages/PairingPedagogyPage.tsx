@@ -56,7 +56,7 @@ const PairingPedagogyPage: React.FC = () => {
             title: t('pairing_pedagogy_page.both_title'),
             button: t('pairing_pedagogy_page.both_button'),
             value: LearningType.BOTH,
-            display: university.isCentral,
+            display: university.isCentral && profileSignUp.learningLanguage?.code !== '*',
         },
     ];
 
