@@ -43,6 +43,8 @@ const theme: RaThemeOptions = {
                     color: '#ffffff',
                     backgroundColor: '#000000',
                     borderRadius: '4px',
+                    boxShadow:
+                        '0px 1px 5px 0px rgba(0, 0, 0, 0.12), 0px 2px 2px 0px rgba(0, 0, 0, 0.14), 0px 3px 1px -2px rgba(0, 0, 0, 0.20)',
                     '& .RaLoadingIndicator-loadedIcon': {
                         padding: '4px 10px',
                         fontSize: '13px',
@@ -53,7 +55,7 @@ const theme: RaThemeOptions = {
                             height: '18px',
                         },
                     },
-                    '& .MuiButtonBase-root::after': {
+                    '& .RaLoadingIndicator-loadedIcon::after': {
                         content: '"Actualiser"',
                         marginLeft: '5px',
                     },

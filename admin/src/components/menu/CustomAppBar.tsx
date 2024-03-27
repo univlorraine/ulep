@@ -1,5 +1,5 @@
 import ExitToAppIcon from '@mui/icons-material/ExitToApp';
-import { Typography, Box, Divider } from '@mui/material';
+import { Avatar, Typography, Box, Divider } from '@mui/material';
 import * as React from 'react';
 import {
     LocalesMenuButton,
@@ -9,14 +9,44 @@ import {
     MenuItemLink,
     useTranslate,
     useLogout,
+    useGetIdentity,
+    useGetOne,
+    UserIdentity,
 } from 'react-admin';
+
+const CustomAvatar = ({ userIdentity }: { userIdentity: UserIdentity }) => {
+    const { data: userData } = useGetOne('users/administrators', { id: userIdentity?.id });
+
+    if (userData) {
+        const { firstname, lastname } = userData;
+
+        return (
+            <Avatar>
+                {firstname.charAt(0)}
+                {lastname.charAt(0)}
+            </Avatar>
+        );
+    }
+
+    return <Avatar />;
+};
+
+const AppAvatar = () => {
+    const { data: userIdentity } = useGetIdentity();
+
+    if (userIdentity) {
+        return <CustomAvatar userIdentity={userIdentity} />;
+    }
+
+    return <Avatar />;
+};
 
 const CustomUserMenu = (props: any) => {
     const translate = useTranslate();
     const logout = useLogout();
 
     return (
-        <UserMenu {...props}>
+        <UserMenu {...props} icon={<AppAvatar />}>
             <MenuItemLink
                 leftIcon={<ExitToAppIcon />}
                 onClick={logout}
