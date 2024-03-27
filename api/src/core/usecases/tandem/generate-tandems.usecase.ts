@@ -135,7 +135,7 @@ export class GenerateTandemsUsecase {
     this.logger.verbose(`Computed ${possiblePairs.length} potential pairs`);
 
     const sortedLearningLanguages = learningLanguagesToPair.sort((a, b) => {
-      if (a.hasPriority && b.hasPriority) {
+      if (a.hasPriority === b.hasPriority) {
         if (
           a.profile.user.university.isCentralUniversity() ===
           b.profile.user.university.isCentralUniversity()

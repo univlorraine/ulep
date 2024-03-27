@@ -6,6 +6,8 @@ import {
   Tandem,
   TandemStatus,
 } from 'src/core/models';
+import { HistorizedUnmatchedLearningLanguage } from 'src/core/models/historized-unmatched-learning-language';
+import Purge from 'src/core/models/purge.model';
 import {
   LearningLanguageRepository,
   LearningLanguageRepositoryGetProps,
@@ -16,6 +18,10 @@ export class InMemoryLearningLanguageRepository
 {
   #learningLanguages: Map<string, LearningLanguage>;
   #tandemsPerLearningLanguages: Map<string, Tandem>;
+  #historicUnmatchedLearningLanguages: Map<
+    string,
+    HistorizedUnmatchedLearningLanguage
+  >;
 
   init(profiles: Profile[], existingTandems?: Tandem[]) {
     this.#learningLanguages = profiles.reduce((accumulator, profile) => {
@@ -191,5 +197,51 @@ export class InMemoryLearningLanguageRepository
         totalItems: values.length,
       }),
     );
+  }
+
+  getHistoricUnmatchedLearningLanguageByUserIdAndLanguageId(
+    userId: string,
+    languageId: string,
+  ): Promise<HistorizedUnmatchedLearningLanguage> {
+    return Promise.resolve(
+      Array.from(this.#historicUnmatchedLearningLanguages.values()).find(
+        (historizedUnmatchedLearningLanguage) =>
+          historizedUnmatchedLearningLanguage.userId === userId &&
+          historizedUnmatchedLearningLanguage.language.id === languageId,
+      ),
+    );
+  }
+
+  getUnmatchedLearningLanguages(): Promise<LearningLanguage[]> {
+    return Promise.resolve(
+      Array.from(this.#learningLanguages.values()).filter(
+        (learningLanguage) => !learningLanguage.tandemLanguage,
+      ),
+    );
+  }
+
+  archiveUnmatchedLearningLanguages(
+    learningLanguages: LearningLanguage[],
+    purgeId: string,
+  ): Promise<void> {
+    learningLanguages.forEach((learningLanguage) => {
+      const purge = new Purge({
+        id: purgeId,
+        createdAt: new Date(),
+      });
+      this.#learningLanguages.set(learningLanguage.id, undefined);
+      this.#historicUnmatchedLearningLanguages.set(
+        learningLanguage.id,
+        new HistorizedUnmatchedLearningLanguage({
+          id: learningLanguage.id,
+          userId: learningLanguage.profile.user.id,
+          purge,
+          createdAt: new Date(),
+          language: learningLanguage.language,
+        }),
+      );
+    });
+
+    return Promise.resolve();
   }
 }

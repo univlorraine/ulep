@@ -1427,6 +1427,105 @@ describe('GenerateTandem UC', () => {
       },
     });
 
+    test('should generate tandem for priority tandem before other', async () => {
+      const bestUser = new Profile({
+        user: new User({
+          id: 'user1',
+          acceptsEmail: true,
+          email: '',
+          firstname: '',
+          lastname: '',
+          gender: Gender.MALE,
+          age: 19,
+          university: centralUniversity,
+          role: Role.STUDENT,
+          country,
+          avatar: null,
+          deactivatedReason: '',
+        }),
+        id: 'FR_1',
+        nativeLanguage: french,
+        masteredLanguages: [],
+        meetingFrequency: MeetingFrequency.ONCE_A_WEEK,
+        learningLanguages: [
+          new LearningLanguage({
+            id: 'FR_1-LL_EN_B2',
+            language: english,
+            level: ProficiencyLevel.B2,
+            createdAt: new Date('2023-04-08T10:00:00.000Z'),
+            learningType: LearningType.ETANDEM,
+            sameGender: false,
+            sameAge: false,
+            specificProgram: false,
+          }),
+        ],
+        objectives: [],
+        interests: [],
+        biography: {
+          superpower: faker.lorem.sentence(),
+          favoritePlace: faker.lorem.sentence(),
+          experience: faker.lorem.sentence(),
+          anecdote: faker.lorem.sentence(),
+        },
+      });
+
+      const priorityUser = new Profile({
+        user: new User({
+          id: 'user2',
+          acceptsEmail: true,
+          email: '',
+          firstname: '',
+          lastname: '',
+          gender: Gender.FEMALE,
+          age: 50,
+          university: centralUniversity,
+          role: Role.STUDENT,
+          country,
+          avatar: null,
+          deactivatedReason: '',
+        }),
+        id: 'FR_2',
+        nativeLanguage: french,
+        masteredLanguages: [],
+        meetingFrequency: MeetingFrequency.ONCE_A_WEEK,
+        learningLanguages: [
+          new LearningLanguage({
+            id: 'FR_2-LL_EN_B2',
+            language: english,
+            level: ProficiencyLevel.B2,
+            createdAt: new Date('2023-04-18T10:00:00.000Z'),
+            learningType: LearningType.ETANDEM,
+            sameGender: false,
+            sameAge: false,
+            specificProgram: false,
+            hasPriority: true,
+          }),
+        ],
+        objectives: [],
+        interests: [],
+        biography: {
+          superpower: faker.lorem.sentence(),
+          favoritePlace: faker.lorem.sentence(),
+          experience: faker.lorem.sentence(),
+          anecdote: faker.lorem.sentence(),
+        },
+      });
+
+      learningLanguageRepository.init([bestUser, match, priorityUser]);
+
+      await uc.execute({
+        universityIds: [centralUniversity.id, subsidiaryUniveristy1.id],
+      });
+
+      const tandems = await tandemsRepository.getExistingTandems();
+      expect(
+        checkTandemArrayContainsTandem(tandems, {
+          a: match.learningLanguages[0],
+          b: priorityUser.learningLanguages[0],
+        }),
+      ).toBeTruthy();
+    });
+
     test('should generate tandem for staff before student', async () => {
       const bestUser = new Profile({
         user: new User({
