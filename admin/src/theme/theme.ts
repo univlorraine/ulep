@@ -26,6 +26,13 @@ const theme: RaThemeOptions = {
     } as PaletteOptions,
     components: {
         ...defaultTheme.components,
+        MuiDivider: {
+            styleOverrides: {
+                root: {
+                    margin: '8px 0',
+                },
+            },
+        },
         MuiAppBar: {
             styleOverrides: {
                 root: {
@@ -58,6 +65,10 @@ const theme: RaThemeOptions = {
                     '& .RaLoadingIndicator-loadedIcon::after': {
                         content: '"Actualiser"',
                         marginLeft: '5px',
+                    },
+                    '& .RaLoadingIndicator-loader': {
+                        left: '45%',
+                        top: '6px',
                     },
                 },
             },

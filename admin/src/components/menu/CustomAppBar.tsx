@@ -1,5 +1,5 @@
 import ExitToAppIcon from '@mui/icons-material/ExitToApp';
-import { Avatar, Typography, Box, Divider } from '@mui/material';
+import { Avatar, Typography, Box, Divider, ListItem, ListSubheader } from '@mui/material';
 import * as React from 'react';
 import {
     LocalesMenuButton,
@@ -31,22 +31,27 @@ const CustomAvatar = ({ userIdentity }: { userIdentity: UserIdentity }) => {
     return <Avatar />;
 };
 
-const AppAvatar = () => {
-    const { data: userIdentity } = useGetIdentity();
+const Username = ({ userIdentity }: { userIdentity: UserIdentity }) => {
+    const { data: userData } = useGetOne('users/administrators', { id: userIdentity?.id });
+    const { firstname, lastname, email } = userData;
 
-    if (userIdentity) {
-        return <CustomAvatar userIdentity={userIdentity} />;
-    }
-
-    return <Avatar />;
+    return (
+        <>
+            <ListItem>{`${firstname} ${lastname}`}</ListItem>
+            <ListSubheader sx={{ lineHeight: 'inherit', marginBottom: '12px' }}>{email}</ListSubheader>
+        </>
+    );
 };
 
 const CustomUserMenu = (props: any) => {
     const translate = useTranslate();
     const logout = useLogout();
+    const { data: userIdentity } = useGetIdentity();
 
     return (
-        <UserMenu {...props} icon={<AppAvatar />}>
+        <UserMenu {...props} icon={userIdentity ? <CustomAvatar userIdentity={userIdentity} /> : <Avatar />}>
+            {userIdentity && <Username userIdentity={userIdentity} />}
+            <Divider />
             <MenuItemLink
                 leftIcon={<ExitToAppIcon />}
                 onClick={logout}
