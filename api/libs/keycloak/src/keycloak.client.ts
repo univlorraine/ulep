@@ -13,7 +13,8 @@ import {
 } from './keycloak.configuration';
 import {
   InvalidCredentialsException,
-  UserAlreadyExistException,
+  UnexpectedErrorException,
+  UserPasswordNotValidException,
 } from './keycloak.errors';
 import RoleRepresentation, {
   CreateUserProps,
@@ -336,8 +337,14 @@ export class KeycloakClient {
       },
     );
     if (!response.ok) {
-      this.logger.error(JSON.stringify(await response.json()));
-      throw new UserAlreadyExistException();
+      const error = await response.json();
+      this.logger.error(JSON.stringify(error));
+
+      if (error.errorMessage === 'Password policy not met') {
+        throw new UserPasswordNotValidException();
+      }
+
+      throw new UnexpectedErrorException();
     }
 
     const user = await this.getUserByEmail(props.email);
