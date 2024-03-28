@@ -27,7 +27,7 @@ const load = async () => {
     });
 
     const deleteCurrent = !!values.delete;
-    const seedRandomDataset = true;
+    const seedRandomDataset = values.seed === 'random';
     const seedULDataset = values.seed === 'ul';
 
     if (deleteCurrent) {
