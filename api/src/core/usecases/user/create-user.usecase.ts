@@ -1,10 +1,5 @@
 import { KeycloakClient } from '@app/keycloak';
-import {
-  BadRequestException,
-  Inject,
-  Injectable,
-  Logger,
-} from '@nestjs/common';
+import { BadRequestException, Inject, Injectable } from '@nestjs/common';
 import {
   RessourceAlreadyExists,
   RessourceDoesNotExist,
@@ -24,6 +19,7 @@ import {
   USER_REPOSITORY,
   UserRepository,
 } from 'src/core/ports/user.repository';
+import { utcToZonedTime } from 'date-fns-tz';
 
 export class CreateUserCommand {
   email: string;
@@ -43,8 +39,6 @@ export class CreateUserCommand {
 
 @Injectable()
 export class CreateUserUsecase {
-  private readonly logger = new Logger(CreateUserUsecase.name);
-
   constructor(
     private readonly keycloak: KeycloakClient,
     @Inject(USER_REPOSITORY)
@@ -89,8 +83,17 @@ export class CreateUserUsecase {
       throw new BadRequestException('Domain is invalid');
     }
 
-    const now = new Date();
-    if (university.admissionEnd < now || university.admissionStart > now) {
+    const now = utcToZonedTime(new Date(), university.timezone);
+    const admissionEndTimezoned = utcToZonedTime(
+      university.admissionEnd,
+      university.timezone,
+    );
+    const admissionStartTimezoned = utcToZonedTime(
+      university.admissionStart,
+      university.timezone,
+    );
+
+    if (admissionEndTimezoned < now || admissionStartTimezoned > now) {
       throw new BadRequestException('Registration unavailable');
     }
 
