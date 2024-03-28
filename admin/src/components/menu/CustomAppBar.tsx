@@ -51,14 +51,16 @@ const CustomUserMenu = (props: any) => {
 
     return (
         <UserMenu {...props} icon={userIdentity ? <CustomAvatar userIdentity={userIdentity} /> : <Avatar />}>
-            {userIdentity && <Username userIdentity={userIdentity} />}
-            <Divider />
             {userIdentity && (
-                <MenuItemLink
-                    leftIcon={<PersonIcon />}
-                    primaryText={translate('global.profile')}
-                    to={`/users/administrators/${userIdentity.id}`}
-                />
+                <>
+                    <Username userIdentity={userIdentity} />
+                    <Divider />
+                    <MenuItemLink
+                        leftIcon={<PersonIcon />}
+                        primaryText={translate('global.profile')}
+                        to={`/users/administrators/${userIdentity.id}`}
+                    />
+                </>
             )}
             <Divider />
             <MenuItemLink

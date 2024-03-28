@@ -1,19 +1,6 @@
 import { PaletteOptions } from '@mui/material';
 import { RaThemeOptions, defaultTheme } from 'react-admin';
 
-const colors = {
-    black: '000000',
-    white: 'FFFFFF',
-    grey: '767676',
-    greyLight: 'ECEDED',
-    green: 'F60C36',
-    yellowLight: 'FDEE66',
-    orange: 'FF8700',
-    red: 'F60C36',
-};
-
-console.log(colors);
-
 const theme: RaThemeOptions = {
     ...defaultTheme,
     palette: {
