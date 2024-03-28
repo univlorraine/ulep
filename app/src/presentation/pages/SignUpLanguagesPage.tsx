@@ -54,6 +54,9 @@ const SignUpLanguagesPage: React.FC = () => {
     };
 
     const pushOtherLanguage = (item: Language | undefined, index: number) => {
+        if (!item && index === 0) {
+            return setOtherLanguages([]);
+        }
         const currentOtherLanguages = [...otherLanguages];
         currentOtherLanguages[index] = item;
         setOtherLanguages(currentOtherLanguages);
