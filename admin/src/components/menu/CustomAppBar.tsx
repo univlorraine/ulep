@@ -11,29 +11,23 @@ import {
     useTranslate,
     useLogout,
     useGetIdentity,
-    useGetOne,
-    UserIdentity,
+    GetOneResult,
 } from 'react-admin';
+import Administrator from '../../entities/Administrator';
+import customDataProvider from '../../providers/customDataProvider';
 
-const CustomAvatar = ({ userIdentity }: { userIdentity: UserIdentity }) => {
-    const { data: userData } = useGetOne('users/administrators', { id: userIdentity?.id });
+const CustomAvatar = ({ userData }: { userData: Administrator }) => {
+    const { firstname, lastname } = userData;
 
-    if (userData) {
-        const { firstname, lastname } = userData;
-
-        return (
-            <Avatar>
-                {firstname.charAt(0)}
-                {lastname.charAt(0)}
-            </Avatar>
-        );
-    }
-
-    return <Avatar />;
+    return (
+        <Avatar>
+            {firstname.charAt(0)}
+            {lastname.charAt(0)}
+        </Avatar>
+    );
 };
 
-const Username = ({ userIdentity }: { userIdentity: UserIdentity }) => {
-    const { data: userData } = useGetOne('users/administrators', { id: userIdentity?.id });
+const Username = ({ userData }: { userData: Administrator }) => {
     const { firstname, lastname, email } = userData;
 
     return (
@@ -47,20 +41,42 @@ const Username = ({ userIdentity }: { userIdentity: UserIdentity }) => {
 const CustomUserMenu = (props: any) => {
     const translate = useTranslate();
     const logout = useLogout();
-    const { data: userIdentity } = useGetIdentity();
+    const { data: userIdentity, isLoading } = useGetIdentity();
+    const [userData, setUserData] = React.useState<Administrator | null>(null);
+
+    const getUserData = async () => {
+        if (!userIdentity) {
+            return;
+        }
+        const userDataResult: GetOneResult<Administrator> = await customDataProvider.getOne('users/administrators', {
+            id: userIdentity.id as string,
+        });
+        if (userDataResult) {
+            setUserData(userDataResult.data);
+        }
+    };
+
+    React.useEffect(() => {
+        if (isLoading) {
+            return;
+        }
+        getUserData().catch((error) => {
+            throw Error(error);
+        });
+    }, [isLoading]);
 
     return (
-        <UserMenu {...props} icon={userIdentity ? <CustomAvatar userIdentity={userIdentity} /> : <Avatar />}>
-            {userIdentity && (
-                <>
-                    <Username userIdentity={userIdentity} />
+        <UserMenu {...props} icon={userData ? <CustomAvatar userData={userData} /> : <Avatar />}>
+            {userData && (
+                <div>
+                    <Username userData={userData} />
                     <Divider />
                     <MenuItemLink
                         leftIcon={<PersonIcon />}
                         primaryText={translate('global.profile')}
-                        to={`/users/administrators/${userIdentity.id}`}
+                        to={`/users/administrators/${userData.id}`}
                     />
-                </>
+                </div>
             )}
             <Divider />
             <MenuItemLink
