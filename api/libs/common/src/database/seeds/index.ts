@@ -27,11 +27,15 @@ const load = async () => {
     });
 
     const deleteCurrent = !!values.delete;
-    const seedRandomDataset = values.seed === 'random';
+    const seedRandomDataset = true;
     const seedULDataset = values.seed === 'ul';
 
     if (deleteCurrent) {
       console.info('[DB seed] delete existing data');
+      await prisma.unmatchedLearningLanguages.deleteMany();
+      await prisma.blacklist.deleteMany();
+      await prisma.purges.deleteMany();
+      await prisma.tandemHistory.deleteMany();
       await prisma.learningLanguages.deleteMany();
       await prisma.masteredLanguages.deleteMany();
       await prisma.users.deleteMany();
