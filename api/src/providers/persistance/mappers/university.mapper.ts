@@ -2,15 +2,18 @@ import * as Prisma from '@prisma/client';
 import { PairingMode, University } from 'src/core/models';
 import { campusMapper } from './campus.mapper';
 import { countryMapper } from 'src/providers/persistance/mappers/country.mapper';
+import { languageMapper } from 'src/providers/persistance/mappers/language.mapper';
 
 export const UniversityRelations = {
   Country: true,
   Places: true,
+  SpecificLanguagesAvailable: true,
 };
 
 export type UniversitySnapshot = Prisma.Organizations & {
   Country: Prisma.CountryCodes;
   Places: Prisma.Places[];
+  SpecificLanguagesAvailable: Prisma.LanguageCodes[];
 };
 
 export const universityMapper = (snapshot: UniversitySnapshot): University => {
@@ -31,5 +34,8 @@ export const universityMapper = (snapshot: UniversitySnapshot): University => {
     pairingMode: PairingMode[snapshot.pairing_mode],
     maxTandemsPerUser: snapshot.max_tandems_per_user,
     notificationEmail: snapshot.notification_email,
+    specificLanguagesAvailable: snapshot.SpecificLanguagesAvailable.map(
+      (language) => languageMapper(language),
+    ),
   });
 };

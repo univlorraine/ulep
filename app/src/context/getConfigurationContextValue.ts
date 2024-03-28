@@ -27,8 +27,10 @@ import { ConfigContextValueType } from './configurationContextTypes';
 import GetUniversityUsecase from '../domain/usecases/GetUniversityUsecase';
 import GetMediaObjectUsecase from '../domain/usecases/GetMediaObjectUsecase';
 import RevokeSessionsUsecase from '../domain/usecases/RevokeSessionsUsecase';
+import GetHistoricEmailPartnerUsecase from '../domain/usecases/GetHistoricEmailPartnerUsecase';
 import BrowserAdapter from '../adapter/BrowserAdapter';
 import DeviceAdapter from '../adapter/DeviceAdapter';
+import GetUniversityLanguagesUsecase from '../domain/usecases/GetUniversityLanguagesUsecase';
 
 interface GetConfigContextValueProps {
     apiUrl: string;
@@ -70,9 +72,11 @@ const getConfigContextValue = ({
     const getAllReportCategories = new GetAllReportCategoriesUsecase(domainHttpAdapter);
     const getAllTandems = new GetAllTandemsUsecase(domainHttpAdapter);
     const getAllUniversities = new GetAllUniversitiesUsecase(domainHttpAdapter);
+    const getHistoricEmailPartner = new GetHistoricEmailPartnerUsecase(domainHttpAdapter);
     const getProfile = new GetProfileByUserIdUsecase(domainHttpAdapter);
     const getQuizzByLevel = new GetQuizzByLevelUsecase(domainHttpAdapter);
     const getUser = new GetUserUsecase(domainHttpAdapter);
+    const getUniversityLanguages = new GetUniversityLanguagesUsecase(domainHttpAdapter);
     const getMediaObject = new GetMediaObjectUsecase(domainHttpAdapter);
     const getUniversity = new GetUniversityUsecase(domainHttpAdapter);
     const login = new LoginUsecase(domainHttpAdapter, setTokens);
@@ -105,11 +109,13 @@ const getConfigContextValue = ({
         getAllReportCategories,
         getAllTandems,
         getAllUniversities,
+        getHistoricEmailPartner,
         getMediaObject,
         getProfile,
         getQuizzByLevel,
         getUser,
         getUniversity,
+        getUniversityLanguages,
         login,
         resetPassword,
         updateAvatar,

@@ -44,7 +44,7 @@ const PairingSelectCEFRPage: React.FC = () => {
                             return (
                                 <button
                                     key={level}
-                                    className={pairingSelectLevelStyles['level-container']}
+                                    className={pairingSelectLevelStyles['level-container-override']}
                                     onClick={() => setSelectedLevel(level)}
                                     style={{
                                         backgroundColor:

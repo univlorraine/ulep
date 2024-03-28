@@ -77,6 +77,7 @@ const SignUpLanguagesPage: React.FC = () => {
             headerColor={configuration.primaryColor}
             headerPercentage={36}
             headerTitle={t('global.create_account_title')}
+            hasGoBackButton={false}
         >
             <div className={styles.body}>
                 <h1 className={styles.title}>{t('signup_languages_page.title')}</h1>

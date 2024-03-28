@@ -61,6 +61,10 @@ export class LearningLanguageResponse {
   @Expose({ groups: ['read'] })
   hasPriority: boolean;
 
+  @ApiProperty({ type: 'string', example: 'john@example.com' })
+  @Expose({ groups: ['read'] })
+  sameTandemEmail?: string;
+
   @ApiProperty({ type: 'string', enum: LearningType })
   @Expose({ groups: ['read'] })
   learningType: LearningType;
@@ -92,6 +96,7 @@ export class LearningLanguageResponse {
       sameGender: learningLanguage.sameGender,
       sameAge: learningLanguage.sameAge,
       hasPriority: learningLanguage.hasPriority,
+      sameTandemEmail: learningLanguage.sameTandemEmail,
       tandemLanguage:
         learningLanguage.tandemLanguage &&
         LanguageResponse.fromLanguage(learningLanguage.tandemLanguage),

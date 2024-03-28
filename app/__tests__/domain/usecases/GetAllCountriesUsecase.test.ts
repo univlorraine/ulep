@@ -4,7 +4,7 @@ import Country from '../../../src/domain/entities/Country';
 import GetAllCountriesUsecase from '../../../src/domain/usecases/GetAllCountriesUsecase';
 import DomainHttpAdapter from '../../mocks/adapters/HttpAdapter';
 
-const usecaseResponse: CountryCommand[] = [{ id: 'id', name: 'name', code: 'code', emoji: '🤖', universities: [] }];
+const httpCallResponse: CountryCommand[] = [{ id: 'id', name: 'name', code: 'code', emoji: '🤖', universities: [] }];
 
 describe('getAllCountries', () => {
     let adapter: DomainHttpAdapter;
@@ -21,7 +21,7 @@ describe('getAllCountries', () => {
     it('execute function must call DomainHttpAdapter with specific path and params', async () => {
         expect.assertions(2);
         jest.spyOn(adapter, 'get');
-        adapter.mockJson({ parsedBody: usecaseResponse });
+        adapter.mockJson({ parsedBody: httpCallResponse });
         await usecase.execute();
         expect(adapter.get).toHaveBeenCalledTimes(1);
         expect(adapter.get).toHaveBeenCalledWith('/countries/universities', {}, false);
@@ -30,7 +30,7 @@ describe('getAllCountries', () => {
     it('execute must return an expected response', async () => {
         expect.assertions(1);
 
-        adapter.mockJson({ parsedBody: usecaseResponse });
+        adapter.mockJson({ parsedBody: httpCallResponse });
 
         const result = (await usecase.execute()) as Country[];
         expect(result).toHaveLength(1);

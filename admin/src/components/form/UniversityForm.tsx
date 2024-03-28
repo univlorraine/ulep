@@ -19,12 +19,14 @@ import daysjs from 'dayjs';
 import React, { useState } from 'react';
 import { useTranslate, useNotify, Form } from 'react-admin';
 import Country from '../../entities/Country';
+import Language from '../../entities/Language';
 import { PairingMode } from '../../entities/University';
 import i18nProvider from '../../providers/i18nProvider';
 import inputStyle from '../../theme/inputStyle';
 import isCodeValid from '../../utils/isCodeValid';
 import isUrlValid from '../../utils/isUrlValid';
 import CountriesPicker from '../CountriesPicker';
+import LanguagesPicker from '../LanguagesPicker';
 import TimezonePicker from '../TimezonePicker';
 
 interface UniversityFormProps {
@@ -48,8 +50,10 @@ interface UniversityFormProps {
         pairingMode: string,
         maxTandemsPerUser: number,
         website?: string,
-        notificationEmail?: string
+        notificationEmail?: string,
+        specificLanguagesAvailable?: Language[]
     ) => void;
+    canAddNewLanguages: boolean;
     name?: string;
     timezone?: string;
     tradKey?: string;
@@ -57,6 +61,7 @@ interface UniversityFormProps {
     pairingMode?: string;
     maxTandemsPerUser?: number;
     notificationEmail?: string;
+    specificLanguagesAvailable?: Language[];
 }
 
 const styles = { my: 2, width: '100%' };
@@ -66,9 +71,11 @@ interface PairingModeOption {
     label: string;
 }
 
+// TODO: refactor this component on back-office refactor
 const UniversityForm: React.FC<UniversityFormProps> = ({
     admissionEndDate,
     admissionStartDate,
+    canAddNewLanguages,
     openServiceDate,
     closeServiceDate,
     codes,
@@ -82,6 +89,7 @@ const UniversityForm: React.FC<UniversityFormProps> = ({
     pairingMode,
     maxTandemsPerUser,
     notificationEmail,
+    specificLanguagesAvailable,
 }) => {
     const translate = useTranslate();
     const notify = useNotify();
@@ -109,6 +117,13 @@ const UniversityForm: React.FC<UniversityFormProps> = ({
     const [newPairingMode, setNewPairingMode] = useState<string>(pairingMode || 'MANUAL');
     const [newMaxTandemsPerUser, setNewMaxTandemsPerUser] = useState<number>(maxTandemsPerUser || 1);
     const [newNotificationEmail, setNewNotificationEmail] = useState<string>(notificationEmail || '');
+    const [newLanguages, setNewLanguages] = useState<Language[]>(specificLanguagesAvailable || []);
+
+    const addLanguage = (language: Language) => setNewLanguages([...newLanguages, language]);
+
+    const removeLanguage = (languageToRemove: Language) => {
+        setNewLanguages(newLanguages.filter((language) => language.code !== languageToRemove.code));
+    };
 
     const addCode = (code: string) => {
         if (!isCodeValid(code)) {
@@ -189,7 +204,8 @@ const UniversityForm: React.FC<UniversityFormProps> = ({
             newPairingMode,
             newMaxTandemsPerUser,
             newWebsite,
-            newNotificationEmail
+            newNotificationEmail,
+            newLanguages
         );
     };
 
@@ -414,6 +430,30 @@ const UniversityForm: React.FC<UniversityFormProps> = ({
                         />
                     </Box>
 
+                    {newLanguages.length > 0 && (
+                        <Typography variant="subtitle1">{translate('universities.updatelanguage')}</Typography>
+                    )}
+                    {canAddNewLanguages && (
+                        <>
+                            <Table>
+                                <TableBody>
+                                    {newLanguages.map((language) => (
+                                        <TableRow key={language.code}>
+                                            <TableCell sx={{ width: 10 }}>
+                                                <Button onClick={() => removeLanguage(language)}>
+                                                    <DeleteIcon />
+                                                </Button>
+                                            </TableCell>
+                                            <TableCell>{translate(`languages_code.${language.code}`)}</TableCell>
+                                        </TableRow>
+                                    ))}
+                                </TableBody>
+                            </Table>
+                            <Box alignItems="center" display="flex" flexDirection="row">
+                                <LanguagesPicker onChange={addLanguage} value={newLanguages} hideGlobalLanguages />
+                            </Box>
+                        </>
+                    )}
                     <Button
                         color="primary"
                         disabled={

@@ -44,6 +44,7 @@ export const learningLanguageMapper = (
     learningType: LearningType[instance.learning_type],
     sameAge: Boolean(instance.same_age),
     sameGender: Boolean(instance.same_gender),
+    sameTandemEmail: instance.same_tandem_email,
     campus: instance.Campus && campusMapper(instance.Campus),
     certificateOption: Boolean(instance.certificate_option),
     specificProgram: Boolean(instance.specific_program),

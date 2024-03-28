@@ -7,6 +7,7 @@ export * from './proficiency';
 export * from './profiles';
 export * from './report';
 export * from './tandem';
+export * from './tandemHistory';
 export * from './university';
 export * from './user';
 export * from './learningLanguage';

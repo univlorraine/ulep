@@ -30,6 +30,7 @@ import { UniversityConnectorController } from './controllers/universityConnector
 import { UlUniversityConnectorService } from 'src/providers/gateway/ul-university-connector';
 import { PurgesController } from './controllers/purge.controller';
 import { ConfigModule } from '@nestjs/config';
+import { TandemHistoryController } from 'src/api/controllers/tandemHistory.controller';
 
 @Module({
   imports: [CoreModule, TerminusModule, HttpModule, ConfigModule],
@@ -47,6 +48,7 @@ import { ConfigModule } from '@nestjs/config';
     ReportController,
     SecurityController,
     TandemController,
+    TandemHistoryController,
     UniversityController,
     UploadsController,
     UserController,

@@ -1,9 +1,7 @@
-import { CountryRepository } from './../../ports/country.repository';
 import { ProfileRepository } from '../../ports/profile.repository';
 import { Inject } from '@nestjs/common';
 import { RessourceDoesNotExist } from 'src/core/errors';
 import {
-  CountryCode,
   Profile,
   SuggestedLanguage,
   Tandem,
@@ -11,16 +9,19 @@ import {
   User,
 } from 'src/core/models';
 import { HistorizedTandem } from 'src/core/models/historized-tandem.model';
-import { COUNTRY_REPOSITORY } from 'src/core/ports/country.repository';
 import {
   LANGUAGE_REPOSITORY,
   LanguageRepository,
 } from 'src/core/ports/language.repository';
 import { PROFILE_REPOSITORY } from 'src/core/ports/profile.repository';
 import {
+  TANDEM_HISTORY_REPOSITORY,
+  TandemHistoryRepository,
+} from 'src/core/ports/tandem-history.repository';
+import {
   TANDEM_REPOSITORY,
   TandemRepository,
-} from 'src/core/ports/tandems.repository';
+} from 'src/core/ports/tandem.repository';
 import {
   USER_REPOSITORY,
   UserRepository,
@@ -45,6 +46,8 @@ export class GetUserPersonalData {
     private readonly profileRepository: ProfileRepository,
     @Inject(TANDEM_REPOSITORY)
     private readonly tandemRepository: TandemRepository,
+    @Inject(TANDEM_HISTORY_REPOSITORY)
+    private readonly tandemHistoryRepository: TandemHistoryRepository,
   ) {}
 
   async execute(id: string): Promise<UserPersonalData> {
@@ -64,7 +67,7 @@ export class GetUserPersonalData {
       await this.languageRepository.getLanguagesSuggestedByUser(user.id);
 
     const historizedTandems =
-      await this.tandemRepository.getHistorizedTandemForUser(user.id);
+      await this.tandemHistoryRepository.getHistorizedTandemForUser(user.id);
 
     const activeTandems = (
       await this.tandemRepository.getTandemsForProfile(profile.id)

@@ -42,6 +42,10 @@ import {
   ProfileRepository,
 } from 'src/core/ports/profile.repository';
 import {
+  TANDEM_HISTORY_REPOSITORY,
+  TandemHistoryRepository,
+} from 'src/core/ports/tandem-history.repository';
+import {
   USER_REPOSITORY,
   UserRepository,
 } from 'src/core/ports/user.repository';
@@ -60,6 +64,7 @@ export class CreateProfileCommand {
     learningType: LearningType;
     sameGender: boolean;
     sameAge: boolean;
+    sameTandem: boolean;
     campusId?: string;
     certificateOption?: boolean;
     specificProgram?: boolean;
@@ -87,6 +92,8 @@ export class CreateProfileUsecase {
     private readonly interestsRepository: InterestRepository,
     @Inject(OBJECTIVE_REPOSITORY)
     private readonly objectiveRepository: LearningObjectiveRepository,
+    @Inject(TANDEM_HISTORY_REPOSITORY)
+    private readonly tandemHistoryRepository: TandemHistoryRepository,
     @Inject(UUID_PROVIDER)
     private readonly uuidProvider: UuidProviderInterface,
     @Inject(EMAIL_GATEWAY)
@@ -159,6 +166,19 @@ export class CreateProfileUsecase {
             user.id,
             language.id,
           );
+        let sameTandemEmail;
+        if (learningLanguage.sameTandem) {
+          const historyTandem =
+            await this.tandemHistoryRepository.getHistoryTandemFormUserIdAndLanguageId(
+              user.id,
+              language.id,
+            );
+          sameTandemEmail =
+            await this.tandemHistoryRepository.getOtherUserInTandemHistory(
+              user.id,
+              historyTandem.tandemId,
+            );
+        }
 
         return new LearningLanguage({
           id: this.uuidProvider.generate(),
@@ -167,6 +187,7 @@ export class CreateProfileUsecase {
           learningType: learningLanguage.learningType,
           sameGender: learningLanguage.sameGender,
           sameAge: learningLanguage.sameAge,
+          sameTandemEmail,
           certificateOption: learningLanguage.certificateOption,
           specificProgram: learningLanguage.specificProgram,
           hasPriority: Boolean(historizedUnmatchedLearningLanguage),

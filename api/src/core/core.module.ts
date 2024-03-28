@@ -82,6 +82,7 @@ import {
   DeleteProfileUsecase,
   DeleteAvatarUsecase,
   GetUserPersonalData,
+  GetOtherUserEmailInTandemUsecase,
 } from './usecases';
 import { UploadObjectiveImageUsecase } from 'src/core/usecases/media/upload-objective-image.usecase';
 import { UpdateObjectiveUsecase } from 'src/core/usecases/objective/update-objective.usecase';
@@ -177,6 +178,8 @@ const usecases: Provider[] = [
   GetLearningLanguageOfProfileUsecase,
   GetLearningLanguageTandemUsecase,
   DeleteLearningLanguageUsecase,
+  // History Tandem
+  GetOtherUserEmailInTandemUsecase,
   // Tandems
   CreateTandemUsecase,
   GenerateTandemsUsecase,

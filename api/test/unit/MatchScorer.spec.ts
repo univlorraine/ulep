@@ -388,6 +388,7 @@ describe('Score', () => {
       interests: 0,
       meetingFrequency: 0,
       certificateOption: 0,
+      isExclusive: 0,
     });
     expect(res.total).toBe(0);
   });
