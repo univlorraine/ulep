@@ -1,7 +1,15 @@
 import React from 'react';
-import { useTranslate } from 'react-admin';
+import { BooleanField, useTranslate } from 'react-admin';
 import { LearningType } from '../../entities/LearningLanguage';
 import { Gender } from '../../entities/User';
+
+export const DisplaySameTandem = ({ sameTandemEmail }: { sameTandemEmail?: string }) => {
+    if (sameTandemEmail) {
+        return <p>{sameTandemEmail}</p>;
+    }
+
+    return <BooleanField record={{ sameTandemEmail: false }} source="sameTandemEmail" />;
+};
 
 export const DisplayRole = ({ role }: { role?: UserRole }) => {
     const translate = useTranslate();

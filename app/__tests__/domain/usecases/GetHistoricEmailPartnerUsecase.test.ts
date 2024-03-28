@@ -1,17 +1,17 @@
-import { CollectionCommand } from '../../../src/command/CollectionCommand';
-import CountryCommand from '../../../src/command/CountryCommand';
-import Country from '../../../src/domain/entities/Country';
-import GetAllCountriesUsecase from '../../../src/domain/usecases/GetAllCountriesUsecase';
+import GetHistoricEmailPartnerUsecase from '../../../src/domain/usecases/GetHistoricEmailPartnerUsecase';
 import DomainHttpAdapter from '../../mocks/adapters/HttpAdapter';
 
-const httpCallResponse: CountryCommand[] = [{ id: 'id', name: 'name', code: 'code', emoji: '🤖', universities: [] }];
+const email = 'myemail@email.com';
+const httpCallResponse: { email: string } = { email };
+const userId = 'userId';
+const languageId = 'languageId';
 
-describe('getAllCountries', () => {
+describe('getHistoricEmailPartner', () => {
     let adapter: DomainHttpAdapter;
-    let usecase: GetAllCountriesUsecase;
+    let usecase: GetHistoricEmailPartnerUsecase;
     beforeAll(() => {
         adapter = new DomainHttpAdapter();
-        usecase = new GetAllCountriesUsecase(adapter);
+        usecase = new GetHistoricEmailPartnerUsecase(adapter);
     });
 
     afterEach(() => {
@@ -22,9 +22,11 @@ describe('getAllCountries', () => {
         expect.assertions(2);
         jest.spyOn(adapter, 'get');
         adapter.mockJson({ parsedBody: httpCallResponse });
-        await usecase.execute();
+        await usecase.execute(userId, languageId);
         expect(adapter.get).toHaveBeenCalledTimes(1);
-        expect(adapter.get).toHaveBeenCalledWith('/countries/universities', {}, false);
+        expect(adapter.get).toHaveBeenCalledWith(
+            `/tandem-history/partner-email?userId=${userId}&languageId=${languageId}`
+        );
     });
 
     it('execute must return an expected response', async () => {
@@ -32,8 +34,8 @@ describe('getAllCountries', () => {
 
         adapter.mockJson({ parsedBody: httpCallResponse });
 
-        const result = (await usecase.execute()) as Country[];
-        expect(result).toHaveLength(1);
+        const result = await usecase.execute(userId, languageId);
+        expect(result).toBe(email);
     });
 
     it('execute must return an expected response without parsed body', async () => {
@@ -41,14 +43,14 @@ describe('getAllCountries', () => {
 
         adapter.mockJson({});
 
-        const result = await usecase.execute();
-        expect(result).toBeInstanceOf(Error);
+        const result = await usecase.execute(userId, languageId);
+        expect(result).toBeUndefined();
     });
 
     it('execute must return an error if adapter return an error without status', async () => {
         expect.assertions(1);
         adapter.mockError({});
-        const result = await usecase.execute();
-        expect(result).toStrictEqual(new Error('errors.global'));
+        const result = await usecase.execute(userId, languageId);
+        expect(result).toBeUndefined();
     });
 });

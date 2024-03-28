@@ -4,7 +4,7 @@ import CategoryInterests from '../../../src/domain/entities/CategoryInterests';
 import GetAllInterestCategoriesUsecase from '../../../src/domain/usecases/GetAllInterestCategoriesUsecase';
 import DomainHttpAdapter from '../../mocks/adapters/HttpAdapter';
 
-const usecaseResponse: CollectionCommand<CategoryInterestsCommand> = {
+const httpCallResponse: CollectionCommand<CategoryInterestsCommand> = {
     items: [{ id: 'id', name: 'name', interests: [{ id: 'id', name: 'name' }] }],
     totalItems: 1,
 };
@@ -24,7 +24,7 @@ describe('getAllGoals', () => {
     it('execute function must call DomainHttpAdapter with specific path and params', async () => {
         expect.assertions(2);
         jest.spyOn(adapter, 'get');
-        adapter.mockJson({ parsedBody: usecaseResponse });
+        adapter.mockJson({ parsedBody: httpCallResponse });
         await usecase.execute();
         expect(adapter.get).toHaveBeenCalledTimes(1);
         expect(adapter.get).toHaveBeenCalledWith('/interests/categories');
@@ -33,7 +33,7 @@ describe('getAllGoals', () => {
     it('execute must return an expected response', async () => {
         expect.assertions(1);
 
-        adapter.mockJson({ parsedBody: usecaseResponse });
+        adapter.mockJson({ parsedBody: httpCallResponse });
 
         const result = (await usecase.execute()) as CategoryInterests[];
         expect(result).toHaveLength(1);

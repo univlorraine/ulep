@@ -4,7 +4,7 @@ import GetAllTandemsUsecase from '../../../src/domain/usecases/GetAllTandemsUsec
 import userResult from '../../fixtures/user';
 import DomainHttpAdapter from '../../mocks/adapters/HttpAdapter';
 
-const usecaseResponse: TandemCommand[] = [
+const httpCallResponse: TandemCommand[] = [
     {
         id: 'id',
         status: 'DRAFT',
@@ -27,7 +27,7 @@ const usecaseResponse: TandemCommand[] = [
                         id: 'id',
                         code: 'CN',
                         name: 'Chinese',
-                        learningType: "TANDEM",
+                        learningType: 'TANDEM',
                         level: 'A0',
                     },
                 ],
@@ -57,7 +57,7 @@ const usecaseResponse: TandemCommand[] = [
             code: 'EN',
             name: 'English',
             level: 'A1',
-            learningType: 'ETANDEM'
+            learningType: 'ETANDEM',
         },
     },
 ];
@@ -77,7 +77,7 @@ describe('getAllTandems', () => {
     it('execute function must call DomainHttpAdapter with specific path and params', async () => {
         expect.assertions(2);
         jest.spyOn(adapter, 'get');
-        adapter.mockJson({ parsedBody: usecaseResponse });
+        adapter.mockJson({ parsedBody: httpCallResponse });
         await usecase.execute('id');
         expect(adapter.get).toHaveBeenCalledTimes(1);
         expect(adapter.get).toHaveBeenCalledWith('/profiles/id/tandems');
@@ -86,7 +86,7 @@ describe('getAllTandems', () => {
     it('execute must return an expected response', async () => {
         expect.assertions(1);
 
-        adapter.mockJson({ parsedBody: usecaseResponse });
+        adapter.mockJson({ parsedBody: httpCallResponse });
 
         const result = (await usecase.execute('id')) as Tandem[];
         expect(result).toHaveLength(1);

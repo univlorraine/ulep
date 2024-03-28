@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
-import { TandemRepository } from '../../../core/ports/tandems.repository';
+import { TandemRepository } from '../../../core/ports/tandem.repository';
 import { Collection } from '@app/common';
-import { FindWhereProps } from '../../../core/ports/tandems.repository';
+import { FindWhereProps } from '../../../core/ports/tandem.repository';
 import { Tandem, TandemStatus } from '../../../core/models';
 import { HistorizedTandem } from 'src/core/models/historized-tandem.model';
 

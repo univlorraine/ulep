@@ -3,7 +3,7 @@ import Question from '../../../src/domain/entities/Question';
 import GetQuizzByLevelUsecase from '../../../src/domain/usecases/GetQuizzByLevelUsecase';
 import DomainHttpAdapter from '../../mocks/adapters/HttpAdapter';
 
-const usecaseResponse: QuestionCommand[] = [
+const httpCallResponse: QuestionCommand[] = [
     { id: 'id', value: 'question', answer: true },
     { id: 'id2', value: 'question2', answer: true },
 ];
@@ -23,7 +23,7 @@ describe('getQuizzByLevel', () => {
     it('execute function must call DomainHttpAdapter with specific path and params', async () => {
         expect.assertions(2);
         jest.spyOn(adapter, 'get');
-        adapter.mockJson({ parsedBody: usecaseResponse });
+        adapter.mockJson({ parsedBody: httpCallResponse });
         await usecase.execute('A1');
         expect(adapter.get).toHaveBeenCalledTimes(1);
         expect(adapter.get).toHaveBeenCalledWith('/proficiency/questions/level/A1');
@@ -32,7 +32,7 @@ describe('getQuizzByLevel', () => {
     it('execute must return an expected response', async () => {
         expect.assertions(1);
 
-        adapter.mockJson({ parsedBody: usecaseResponse });
+        adapter.mockJson({ parsedBody: httpCallResponse });
 
         const result = (await usecase.execute('A1')) as Question[];
         expect(result).toHaveLength(2);

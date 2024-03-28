@@ -4,7 +4,7 @@ import { Tandem, TandemStatus } from 'src/core/models';
 import {
   TANDEM_REPOSITORY,
   TandemRepository,
-} from 'src/core/ports/tandems.repository';
+} from 'src/core/ports/tandem.repository';
 
 export class GetTandemsCommand {
   page: number;

@@ -15,9 +15,10 @@ class AskForLearningLanguageUsecase implements AskForLearningLanguageUsecaseInte
         learningType: Pedagogy,
         sameAge: boolean,
         sameGender: boolean,
+        sameTandem: boolean,
         campusId?: string,
         isForCertificate?: boolean,
-        isForProgram?: boolean
+        isForProgram?: boolean,
     ): Promise<LearningLanguage | Error> {
         try {
             const httpResponse: HttpResponse<LearningLanguageResult> = await this.domainHttpAdapter.post(
@@ -31,6 +32,7 @@ class AskForLearningLanguageUsecase implements AskForLearningLanguageUsecaseInte
                     campusId,
                     certificateOption: isForCertificate,
                     specificProgram: isForProgram,
+                    sameTandem,
                 }
             );
 

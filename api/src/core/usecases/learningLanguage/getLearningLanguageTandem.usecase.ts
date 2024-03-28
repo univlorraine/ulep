@@ -4,7 +4,7 @@ import { Tandem } from 'src/core/models';
 import {
   TANDEM_REPOSITORY,
   TandemRepository,
-} from 'src/core/ports/tandems.repository';
+} from 'src/core/ports/tandem.repository';
 
 interface GetLearningLanguageTandemQuery {
   id: string;
