@@ -104,8 +104,12 @@ export class LearningLanguage {
     return false;
   }
 
-  public isAvailableInUniversity(): boolean{
-    return !!this.profile.user.university.specificLanguagesAvailable.find((lang) => lang.id === this.language.id);
+  public isAvailableInUniversity(): boolean {
+    return Boolean(
+      this.profile.user.university.specificLanguagesAvailable.find(
+        (lang) => lang.id === this.language.id,
+      ),
+    );
   }
 }
 
