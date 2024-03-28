@@ -167,7 +167,7 @@ export class PrismaLanguageRepository implements LanguageRepository {
 
     if (!languageCode) return;
 
-    const suggestedLanguages = this.prisma.suggestedLanguages.findUnique({
+    const suggestedLanguages = await this.prisma.suggestedLanguages.findUnique({
       where: {
         language_code_id_user_id: {
           language_code_id: languageCode.id,
