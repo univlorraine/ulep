@@ -4,7 +4,7 @@ import University from '../../../src/domain/entities/University';
 import GetAllUniversitiesUsecase from '../../../src/domain/usecases/GetAllUniversitiesUsecase';
 import DomainHttpAdapter from '../../mocks/adapters/HttpAdapter';
 
-const usecaseResponse: CollectionCommand<UniversityCommand> = {
+const httpCallResponse: CollectionCommand<UniversityCommand> = {
     items: [
         {
             id: 'id',
@@ -42,7 +42,7 @@ describe('getAllUniversities', () => {
     it('execute function must call DomainHttpAdapter with specific path and params', async () => {
         expect.assertions(2);
         jest.spyOn(adapter, 'get');
-        adapter.mockJson({ parsedBody: usecaseResponse });
+        adapter.mockJson({ parsedBody: httpCallResponse });
         await usecase.execute();
         expect(adapter.get).toHaveBeenCalledTimes(1);
         expect(adapter.get).toHaveBeenCalledWith('/universities', {}, false);
@@ -51,7 +51,7 @@ describe('getAllUniversities', () => {
     it('execute must return an expected response', async () => {
         expect.assertions(1);
 
-        adapter.mockJson({ parsedBody: usecaseResponse });
+        adapter.mockJson({ parsedBody: httpCallResponse });
 
         const result = (await usecase.execute()) as University[];
         expect(result).toHaveLength(1);

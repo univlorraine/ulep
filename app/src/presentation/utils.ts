@@ -158,12 +158,6 @@ export const BACKGROUND_WEB_STYLE_INLINE = {
     backgroundSize: '100%',
 };
 
-export const isPasswordCorrect = (password: string) => {
-    const regex = /((?=.*\d)|(?=.*\W+))(?![.\n])(?=.*[A-Z])(?=.*[a-z]).*$/;
-
-    return regex.test(password);
-};
-
 export const isEmailCorrect = (email: string) => {
     const regex = /^[\w-\.+]+@([\w-]+\.)+[\w-]{2,4}$/;
 

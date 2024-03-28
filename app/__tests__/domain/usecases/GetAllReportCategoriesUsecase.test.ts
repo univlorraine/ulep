@@ -4,7 +4,7 @@ import ReportCategory from '../../../src/domain/entities/ReportCategory';
 import GetAllReportCategoriesUsecase from '../../../src/domain/usecases/GetAllReportCategoriesUsecase';
 import DomainHttpAdapter from '../../mocks/adapters/HttpAdapter';
 
-const usecaseResponse: CollectionCommand<ReportCategoryCommand> = {
+const httpCallResponse: CollectionCommand<ReportCategoryCommand> = {
     items: [{ id: 'id', name: 'name' }],
     totalItems: 1,
 };
@@ -24,7 +24,7 @@ describe('getAllReportCategories', () => {
     it('execute function must call DomainHttpAdapter with specific path and params', async () => {
         expect.assertions(2);
         jest.spyOn(adapter, 'get');
-        adapter.mockJson({ parsedBody: usecaseResponse });
+        adapter.mockJson({ parsedBody: httpCallResponse });
         await usecase.execute();
         expect(adapter.get).toHaveBeenCalledTimes(1);
         expect(adapter.get).toHaveBeenCalledWith('/reports/categories');
@@ -33,7 +33,7 @@ describe('getAllReportCategories', () => {
     it('execute must return an expected response', async () => {
         expect.assertions(1);
 
-        adapter.mockJson({ parsedBody: usecaseResponse });
+        adapter.mockJson({ parsedBody: httpCallResponse });
 
         const result = (await usecase.execute()) as ReportCategory[];
         expect(result).toHaveLength(1);

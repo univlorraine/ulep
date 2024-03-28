@@ -2003,6 +2003,209 @@ describe('GenerateTandem UC', () => {
     });
   });
 
+  test('should generate tandem for exclusive learning language', async () => {
+    const emailA = faker.internet.email();
+    const emailB = faker.internet.email();
+
+    const userA = new Profile({
+      user: new User({
+        id: 'user1',
+        acceptsEmail: true,
+        email: emailA,
+        firstname: '',
+        lastname: '',
+        gender: Gender.MALE,
+        age: 19,
+        university: centralUniversity,
+        role: Role.STUDENT,
+        country,
+        avatar: null,
+        deactivatedReason: '',
+      }),
+      id: 'FR_1',
+      nativeLanguage: french,
+      masteredLanguages: [],
+      meetingFrequency: MeetingFrequency.ONCE_A_WEEK,
+      learningLanguages: [
+        new LearningLanguage({
+          id: 'FR_1-LL_EN_B2',
+          language: english,
+          level: ProficiencyLevel.B2,
+          createdAt: new Date('2023-08-28T10:00:00.000Z'),
+          learningType: LearningType.ETANDEM,
+          sameGender: false,
+          sameAge: false,
+          sameTandemEmail: emailB
+        }),
+      ],
+      objectives: [],
+      interests: [],
+      biography: {
+        superpower: faker.lorem.sentence(),
+        favoritePlace: faker.lorem.sentence(),
+        experience: faker.lorem.sentence(),
+        anecdote: faker.lorem.sentence(),
+      },
+    });
+
+    const userB = new Profile({
+        user: new User({
+          id: 'user2',
+          acceptsEmail: true,
+          email: emailB,
+          firstname: '',
+          lastname: '',
+          gender: Gender.MALE,
+          age: 19,
+          university: centralUniversity,
+          role: Role.STUDENT,
+          country,
+          avatar: null,
+          deactivatedReason: '',
+        }),
+        id: 'FR_JOKER',
+        nativeLanguage: english,
+        masteredLanguages: [],
+        meetingFrequency: MeetingFrequency.ONCE_A_WEEK,
+        learningLanguages: [
+          new LearningLanguage({
+            id: 'FR_1-LL_JOKER',
+            language: joker,
+            level: ProficiencyLevel.B2,
+            createdAt: new Date('2023-08-28T10:00:00.000Z'),
+            learningType: LearningType.ETANDEM,
+            sameGender: false,
+            sameAge: false,
+            sameTandemEmail: emailA
+          }),
+        ],
+        objectives: [],
+        interests: [],
+        biography: {
+          superpower: faker.lorem.sentence(),
+          favoritePlace: faker.lorem.sentence(),
+          experience: faker.lorem.sentence(),
+          anecdote: faker.lorem.sentence(),
+        },
+      });
+
+    learningLanguageRepository.init([userA, userB]);
+
+    await uc.execute({
+      universityIds: [centralUniversity.id],
+    });
+
+    const tandems = await tandemsRepository.getExistingTandems();
+
+    expect(
+      checkTandemArrayContainsTandem(tandems, {
+        a: userA.learningLanguages[0],
+        b: userB.learningLanguages[0],
+      }),
+    ).toBeTruthy();
+  });
+
+  test('should NOT generate tandem for exclusive learning language', async () => {
+    const emailA = faker.internet.email();
+    const emailB = faker.internet.email();
+
+    const userA = new Profile({
+      user: new User({
+        id: 'user1',
+        acceptsEmail: true,
+        email: emailA,
+        firstname: '',
+        lastname: '',
+        gender: Gender.MALE,
+        age: 19,
+        university: centralUniversity,
+        role: Role.STUDENT,
+        country,
+        avatar: null,
+        deactivatedReason: '',
+      }),
+      id: 'FR_1',
+      nativeLanguage: french,
+      masteredLanguages: [],
+      meetingFrequency: MeetingFrequency.ONCE_A_WEEK,
+      learningLanguages: [
+        new LearningLanguage({
+          id: 'FR_1-LL_EN_B2',
+          language: english,
+          level: ProficiencyLevel.B2,
+          createdAt: new Date('2023-08-28T10:00:00.000Z'),
+          learningType: LearningType.ETANDEM,
+          sameGender: false,
+          sameAge: false,
+          sameTandemEmail: emailB
+        }),
+      ],
+      objectives: [],
+      interests: [],
+      biography: {
+        superpower: faker.lorem.sentence(),
+        favoritePlace: faker.lorem.sentence(),
+        experience: faker.lorem.sentence(),
+        anecdote: faker.lorem.sentence(),
+      },
+    });
+
+    const userB = new Profile({
+        user: new User({
+          id: 'user2',
+          acceptsEmail: true,
+          email: emailB,
+          firstname: '',
+          lastname: '',
+          gender: Gender.MALE,
+          age: 19,
+          university: centralUniversity,
+          role: Role.STUDENT,
+          country,
+          avatar: null,
+          deactivatedReason: '',
+        }),
+        id: 'FR_JOKER',
+        nativeLanguage: english,
+        masteredLanguages: [],
+        meetingFrequency: MeetingFrequency.ONCE_A_WEEK,
+        learningLanguages: [
+          new LearningLanguage({
+            id: 'FR_1-LL_JOKER',
+            language: joker,
+            level: ProficiencyLevel.B2,
+            createdAt: new Date('2023-08-28T10:00:00.000Z'),
+            learningType: LearningType.ETANDEM,
+            sameGender: false,
+            sameAge: false,
+          }),
+        ],
+        objectives: [],
+        interests: [],
+        biography: {
+          superpower: faker.lorem.sentence(),
+          favoritePlace: faker.lorem.sentence(),
+          experience: faker.lorem.sentence(),
+          anecdote: faker.lorem.sentence(),
+        },
+      });
+
+    learningLanguageRepository.init([userA, userB]);
+
+    await uc.execute({
+      universityIds: [centralUniversity.id],
+    });
+
+    const tandems = await tandemsRepository.getExistingTandems();
+
+    expect(
+      checkTandemArrayContainsTandem(tandems, {
+        a: userA.learningLanguages[0],
+        b: userB.learningLanguages[0],
+      }),
+    ).toBeFalsy();
+  });
+
   test('joker language should only match with spoken/learnt language supported by univeristy', async () => {
     const ksCountry = {
       id: 'ks',
@@ -2105,3 +2308,5 @@ describe('GenerateTandem UC', () => {
     ).toBeTruthy();
   });
 });
+
+

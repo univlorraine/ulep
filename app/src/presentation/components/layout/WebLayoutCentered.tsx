@@ -11,6 +11,7 @@ interface WebLayoutCenteredProps {
     headerColor: string;
     headerPercentage: number;
     headerTitle: string;
+    hasGoBackButton?: boolean;
     children: ReactElement;
 }
 
@@ -20,6 +21,7 @@ const WebLayoutCentered: React.FC<WebLayoutCenteredProps> = ({
     headerColor,
     headerPercentage,
     headerTitle,
+    hasGoBackButton = true,
     children,
 }) => {
     const { width } = useWindowDimensions();
@@ -34,7 +36,13 @@ const WebLayoutCentered: React.FC<WebLayoutCenteredProps> = ({
                 )}
                 <div style={{ backgroundColor: isHybrid ? 'white' : headerColor }} className="page content-wrapper">
                     <div className="white-centered-div">
-                        <Header goBackPressed={goBackPressed} progressColor={headerColor} progressPercentage={headerPercentage} title={headerTitle} />
+                        <Header
+                            hasGoBackButton={hasGoBackButton}
+                            goBackPressed={goBackPressed}
+                            progressColor={headerColor}
+                            progressPercentage={headerPercentage}
+                            title={headerTitle}
+                        />
                         {children}
                     </div>
                 </div>

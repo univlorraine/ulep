@@ -19,7 +19,7 @@ import {
 import {
   TANDEM_REPOSITORY,
   TandemRepository,
-} from 'src/core/ports/tandems.repository';
+} from 'src/core/ports/tandem.repository';
 import {
   UNIVERSITY_REPOSITORY,
   UniversityRepository,

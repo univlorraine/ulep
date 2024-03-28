@@ -449,6 +449,7 @@
                 "sameGender": "Same gender",
                 "gender": "Gender",
                 "sameAge": "Same age",
+                "sameTandemEmail": "Same tandem as previous cycle",
                 "age": "Age",
                 "certificateOption": "Certificate option",
                 "specificProgram": "Specific program"

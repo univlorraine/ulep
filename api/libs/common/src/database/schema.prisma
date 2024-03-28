@@ -338,6 +338,7 @@ model LearningLanguages {
   learning_type           String
   same_gender             Boolean
   same_age                Boolean
+  same_tandem_email       String?
   certificate_option      Boolean?
   specific_program        Boolean?
   campus_id               String?
@@ -445,6 +446,7 @@ model Blacklist {
 model TandemHistory {
   id               String        @id @default(uuid())
   user_id          String
+  user_email       String
   purge_id         String
   tandem_id        String
   language_code_id String

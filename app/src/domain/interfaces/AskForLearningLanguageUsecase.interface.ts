@@ -9,9 +9,10 @@ interface AskForLearningLanguageUsecaseInterface {
         learningType: Pedagogy,
         sameAge: boolean,
         sameGender: boolean,
+        sameTandem: boolean,
         campusId?: string,
         isForCertificate?: boolean,
-        isForProgram?: boolean
+        isForProgram?: boolean,
     ): Promise<LearningLanguage | Error>;
 }
 export default AskForLearningLanguageUsecaseInterface;

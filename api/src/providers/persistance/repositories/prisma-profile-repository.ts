@@ -63,6 +63,7 @@ export class PrismaProfileRepository implements ProfileRepository {
               learning_type: learningLanguage.learningType,
               same_gender: learningLanguage.sameGender,
               same_age: learningLanguage.sameAge,
+              same_tandem_email: learningLanguage.sameTandemEmail,
               certificate_option: learningLanguage.certificateOption,
               specific_program: learningLanguage.specificProgram,
               Campus: learningLanguage.campus && {

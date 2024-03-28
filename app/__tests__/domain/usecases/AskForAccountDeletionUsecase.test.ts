@@ -2,7 +2,7 @@ import { LanguageAskedCommand } from '../../../src/command/LanguageCommand';
 import AskForAccountDeletionUsecase from '../../../src/domain/usecases/AskForAccountDeletionUsecase';
 import DomainHttpAdapter from '../../mocks/adapters/HttpAdapter';
 
-const usecaseResponse: LanguageAskedCommand = { code: 'FR', count: 10 };
+const httpCallResponse: LanguageAskedCommand = { code: 'FR', count: 10 };
 
 describe('getAllCountries', () => {
     let adapter: DomainHttpAdapter;
@@ -19,7 +19,7 @@ describe('getAllCountries', () => {
     it('execute function must call DomainHttpAdapter with specific path and params', async () => {
         expect.assertions(2);
         jest.spyOn(adapter, 'post');
-        adapter.mockJson({ parsedBody: usecaseResponse });
+        adapter.mockJson({ parsedBody: httpCallResponse });
         await usecase.execute();
         expect(adapter.post).toHaveBeenCalledTimes(1);
         expect(adapter.post).toHaveBeenCalledWith(`/reports/unsubscribe`, {});
@@ -28,7 +28,7 @@ describe('getAllCountries', () => {
     it('execute must return an expected response', async () => {
         expect.assertions(1);
 
-        adapter.mockJson({ parsedBody: usecaseResponse });
+        adapter.mockJson({ parsedBody: httpCallResponse });
 
         const result = await usecase.execute();
         expect(result).toBe(undefined);

@@ -170,7 +170,8 @@ export class MatchScorer implements IMatchScorer {
       goals: this.computeSameGoalsBonus(profile1, profile2),
       interests: this.computeSameInterestBonus(profile1, profile2),
       meetingFrequency: this.computeMeetingFrequencyBonus(profile1, profile2),
-      certificateOption: this.computeCertificateOptionBonus(learningLanguage1, learningLanguage2)
+      certificateOption: this.computeCertificateOptionBonus(learningLanguage1, learningLanguage2),
+      isExclusive: 0,
     });
 
     return new Match({
@@ -331,10 +332,20 @@ export class MatchScorer implements IMatchScorer {
         return  false
     }
 
-        // Check if language2 is available for learning language
+    // Check if language2 is available for learning language
     if (!availableLanguages.find(lang => lang.id === learningLanguage2.language.id) &&
         !learningLanguage2.isAvailableInUniversity()) {
         return false;
+    }
+      
+    // Check if a learning language is exclusive and the other is not
+    if(learningLanguage1.isExclusive() !== learningLanguage2.isExclusive()) {
+      return false;
+    }
+
+    // Check if learning languages are exclusives and doesn't have same tandem email
+    if(learningLanguage1.isExclusive() && !learningLanguage1.isExclusiveWithLearningLanguage(learningLanguage2)){
+      return false;
     }
 
     if (!learningLanguage1.isCompatibleWithLearningLanguage(learningLanguage2) ||

@@ -1,9 +1,9 @@
-import { TandemRepository } from '../../ports/tandems.repository';
+import { TandemRepository } from '../../ports/tandem.repository';
 import { Inject, Injectable, Logger } from '@nestjs/common';
 import { DomainError, RessourceDoesNotExist } from 'src/core/errors';
 import { Tandem, TandemStatus, User } from 'src/core/models';
 import { EMAIL_GATEWAY, EmailGateway } from 'src/core/ports/email.gateway';
-import { TANDEM_REPOSITORY } from 'src/core/ports/tandems.repository';
+import { TANDEM_REPOSITORY } from 'src/core/ports/tandem.repository';
 import {
   UNIVERSITY_REPOSITORY,
   UniversityRepository,

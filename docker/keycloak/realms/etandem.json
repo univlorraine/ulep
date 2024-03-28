@@ -119,7 +119,7 @@
       "subGroups": []
     }
   ],
-  "passwordPolicy": "digits(1) and lowerCase(1) and upperCase(1)",
+  "passwordPolicy": "length(8) and digits(1) and lowerCase(1) and upperCase(1)",
   "users": [
     {
       "id": "8ef3f4a1-c828-4172-9f50-5820482f7969",

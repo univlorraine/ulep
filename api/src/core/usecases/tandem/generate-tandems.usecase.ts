@@ -1,6 +1,7 @@
 import { Inject, Injectable, Logger } from '@nestjs/common';
 import {
   Match,
+  MatchScores,
   PairingMode,
   Role,
   Tandem,
@@ -27,7 +28,7 @@ import {
 import {
   TANDEM_REPOSITORY,
   TandemRepository,
-} from 'src/core/ports/tandems.repository';
+} from 'src/core/ports/tandem.repository';
 import {
   UUID_PROVIDER,
   UuidProviderInterface,
@@ -98,33 +99,50 @@ export class GenerateTandemsUsecase {
       for (let j = i + 1; j < learningLanguagesToPair.length; j++) {
         const potentialPairLearningLanguage = learningLanguagesToPair[j];
 
-        if (
-          learningLanguageToPair.profile.id !==
-          potentialPairLearningLanguage.profile.id
-        ) {
+        if (learningLanguageToPair.isExclusive()) {
           if (
-            learningLanguageToPair.profile.user.university.isCentralUniversity() ||
-            potentialPairLearningLanguage.profile.user.university.isCentralUniversity()
+            learningLanguageToPair.isExclusiveWithLearningLanguage(
+              potentialPairLearningLanguage,
+            )
+          ) {
+            possiblePairs.push(
+              new Match({
+                owner: learningLanguageToPair,
+                target: potentialPairLearningLanguage,
+                scores: MatchScores.exclusivity(),
+              }),
+            );
+            break;
+          }
+        } else {
+          if (
+            learningLanguageToPair.profile.id !==
+            potentialPairLearningLanguage.profile.id
           ) {
             if (
-              !refusedTandemsIdMap.has(
-                getLearningLanguagesHash([
-                  learningLanguageToPair.id,
-                  potentialPairLearningLanguage.id,
-                ]),
-              )
+              learningLanguageToPair.profile.user.university.isCentralUniversity() ||
+              potentialPairLearningLanguage.profile.user.university.isCentralUniversity()
             ) {
-              const match = this.scorer.computeMatchScore(
-                learningLanguageToPair,
-                potentialPairLearningLanguage,
-                languagesThatCanBeLearnt,
-              );
-
               if (
-                match.total > TRESHOLD_VIABLE_PAIR &&
-                match.isAValidTandem()
+                !refusedTandemsIdMap.has(
+                  getLearningLanguagesHash([
+                    learningLanguageToPair.id,
+                    potentialPairLearningLanguage.id,
+                  ]),
+                )
               ) {
-                possiblePairs.push(match);
+                const match = this.scorer.computeMatchScore(
+                  learningLanguageToPair,
+                  potentialPairLearningLanguage,
+                  languagesThatCanBeLearnt,
+                );
+
+                if (
+                  match.total > TRESHOLD_VIABLE_PAIR &&
+                  match.isAValidTandem()
+                ) {
+                  possiblePairs.push(match);
+                }
               }
             }
           }

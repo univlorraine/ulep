@@ -4,7 +4,7 @@ import Goal from '../../../src/domain/entities/Goal';
 import GetAllGoalsUsecase from '../../../src/domain/usecases/GetAllGoalsUsecase';
 import DomainHttpAdapter from '../../mocks/adapters/HttpAdapter';
 
-const usecaseResponse: CollectionCommand<GoalCommand> = {
+const httpCallResponse: CollectionCommand<GoalCommand> = {
     items: [{ id: 'id', name: 'name', image: { id: 'id', mimeType: 'image/jpg' } }],
     totalItems: 1,
 };
@@ -24,7 +24,7 @@ describe('getAllGoals', () => {
     it('execute function must call DomainHttpAdapter with specific path and params', async () => {
         expect.assertions(2);
         jest.spyOn(adapter, 'get');
-        adapter.mockJson({ parsedBody: usecaseResponse });
+        adapter.mockJson({ parsedBody: httpCallResponse });
         await usecase.execute();
         expect(adapter.get).toHaveBeenCalledTimes(1);
         expect(adapter.get).toHaveBeenCalledWith('/objectives');
@@ -33,7 +33,7 @@ describe('getAllGoals', () => {
     it('execute must return an expected response', async () => {
         expect.assertions(1);
 
-        adapter.mockJson({ parsedBody: usecaseResponse });
+        adapter.mockJson({ parsedBody: httpCallResponse });
 
         const result = (await usecase.execute()) as Goal[];
         expect(result).toHaveLength(1);
