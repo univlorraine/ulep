@@ -14,7 +14,7 @@ const theme: RaThemeOptions = {
         },
     } as PaletteOptions,
     typography: {
-        fontFamily: ['Roboto', 'Arial', 'sans-serif'].join(','),
+        fontFamily: 'Roboto, Arial, sans-serif',
         body1: {
             fontSize: '1rem',
             color: '#212121',

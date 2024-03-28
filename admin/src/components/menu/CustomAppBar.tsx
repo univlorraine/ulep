@@ -12,11 +12,16 @@ import {
     useLogout,
     useGetIdentity,
     GetOneResult,
+    useNotify,
 } from 'react-admin';
 import Administrator from '../../entities/Administrator';
 import customDataProvider from '../../providers/customDataProvider';
 
-const CustomAvatar = ({ userData }: { userData: Administrator }) => {
+type UserData = {
+    userData: Administrator;
+};
+
+const CustomAvatar = ({ userData }: UserData) => {
     const { firstname, lastname } = userData;
 
     return (
@@ -27,7 +32,7 @@ const CustomAvatar = ({ userData }: { userData: Administrator }) => {
     );
 };
 
-const Username = ({ userData }: { userData: Administrator }) => {
+const Username = ({ userData }: UserData) => {
     const { firstname, lastname, email } = userData;
 
     return (
@@ -41,6 +46,7 @@ const Username = ({ userData }: { userData: Administrator }) => {
 const CustomUserMenu = (props: any) => {
     const translate = useTranslate();
     const logout = useLogout();
+    const notify = useNotify();
     const { data: userIdentity, isLoading } = useGetIdentity();
     const [userData, setUserData] = React.useState<Administrator | null>(null);
 
@@ -48,21 +54,29 @@ const CustomUserMenu = (props: any) => {
         if (!userIdentity) {
             return;
         }
-        const userDataResult: GetOneResult<Administrator> = await customDataProvider.getOne('users/administrators', {
-            id: userIdentity.id as string,
-        });
-        if (userDataResult) {
-            setUserData(userDataResult.data);
+
+        try {
+            const userDataResult: GetOneResult<Administrator> = await customDataProvider.getOne(
+                'users/administrators',
+                {
+                    id: userIdentity.id as string,
+                }
+            );
+            if (userDataResult) {
+                setUserData(userDataResult.data);
+            }
+        } catch (error) {
+            console.error(error);
+            throw error;
         }
     };
 
     React.useEffect(() => {
-        if (isLoading) {
-            return;
+        if (!isLoading) {
+            getUserData().catch((error) => {
+                notify(translate('global.userDataError'), { type: error });
+            });
         }
-        getUserData().catch((error) => {
-            throw Error(error);
-        });
     }, [isLoading]);
 
     return (
@@ -76,9 +90,9 @@ const CustomUserMenu = (props: any) => {
                         primaryText={translate('global.profile')}
                         to={`/users/administrators/${userData.id}`}
                     />
+                    <Divider />
                 </div>
             )}
-            <Divider />
             <MenuItemLink
                 leftIcon={<ExitToAppIcon />}
                 onClick={logout}
@@ -89,20 +103,18 @@ const CustomUserMenu = (props: any) => {
     );
 };
 
+const CustomToolbar = () => (
+    <>
+        <LoadingIndicator />
+        <LocalesMenuButton />
+    </>
+);
+
 const CustomAppBar = (props: any) => {
     const translate = useTranslate();
 
     return (
-        <AppBar
-            {...props}
-            toolbar={
-                <>
-                    <LoadingIndicator />
-                    <LocalesMenuButton />
-                </>
-            }
-            userMenu={<CustomUserMenu />}
-        >
+        <AppBar {...props} toolbar={<CustomToolbar />} userMenu={<CustomUserMenu />}>
             <Box alignItems="center" display="flex" gap="16px" width="100%">
                 <img alt="" src="/ulep_logo.png" />
                 <Typography variant="h1">{translate('header.title')}</Typography>
