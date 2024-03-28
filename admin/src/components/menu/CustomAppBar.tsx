@@ -1,4 +1,5 @@
 import ExitToAppIcon from '@mui/icons-material/ExitToApp';
+import PersonIcon from '@mui/icons-material/Person';
 import { Avatar, Typography, Box, Divider, ListItem, ListSubheader } from '@mui/material';
 import * as React from 'react';
 import {
@@ -52,11 +53,19 @@ const CustomUserMenu = (props: any) => {
         <UserMenu {...props} icon={userIdentity ? <CustomAvatar userIdentity={userIdentity} /> : <Avatar />}>
             {userIdentity && <Username userIdentity={userIdentity} />}
             <Divider />
+            {userIdentity && (
+                <MenuItemLink
+                    leftIcon={<PersonIcon />}
+                    primaryText={translate('global.profile')}
+                    to={`/users/administrators/${userIdentity.id}`}
+                />
+            )}
+            <Divider />
             <MenuItemLink
                 leftIcon={<ExitToAppIcon />}
                 onClick={logout}
                 primaryText={translate('global.disconnect')}
-                to=""
+                to="/"
             />
         </UserMenu>
     );
@@ -66,25 +75,22 @@ const CustomAppBar = (props: any) => {
     const translate = useTranslate();
 
     return (
-        <>
-            <AppBar
-                {...props}
-                toolbar={
-                    <>
-                        <LoadingIndicator />
-                        <LocalesMenuButton />
-                    </>
-                }
-                userMenu={<CustomUserMenu />}
-            >
-                <Box alignItems="center" display="flex" gap="16px" width="100%">
-                    <img alt="" src="/ulep_logo.png" />
-                    <Typography variant="h6">{translate('header.title')}</Typography>
-                    <Box flexGrow={1} />
-                </Box>
-            </AppBar>
-            <Divider />
-        </>
+        <AppBar
+            {...props}
+            toolbar={
+                <>
+                    <LoadingIndicator />
+                    <LocalesMenuButton />
+                </>
+            }
+            userMenu={<CustomUserMenu />}
+        >
+            <Box alignItems="center" display="flex" gap="16px" width="100%">
+                <img alt="" src="/ulep_logo.png" />
+                <Typography variant="h1">{translate('header.title')}</Typography>
+                <Box flexGrow={1} />
+            </Box>
+        </AppBar>
     );
 };
 

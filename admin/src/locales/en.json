@@ -60,6 +60,7 @@
         "language": "Language",
         "lastname": "Lastname",
         "new_translation": "New translation",
+        "profile": "Profile",
         "password": "Password",
         "reported": "Reported",
         "role": "Role",

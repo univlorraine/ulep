@@ -18,12 +18,26 @@ const theme: RaThemeOptions = {
     ...defaultTheme,
     palette: {
         primary: {
-            main: '#000000',
+            main: '#FFFFFF',
+            contrastText: '#212121',
         },
         secondary: {
             main: '#fdee66',
+            contrastText: '#212121',
         },
     } as PaletteOptions,
+    typography: {
+        fontFamily: ['Roboto', 'Arial', 'sans-serif'].join(','),
+        body1: {
+            fontSize: '1rem',
+            color: '#212121',
+        },
+        h1: {
+            fontSize: '1.2rem',
+            fontWeight: '600',
+            color: '#212121',
+        },
+    },
     components: {
         ...defaultTheme.components,
         MuiDivider: {
@@ -37,10 +51,18 @@ const theme: RaThemeOptions = {
             styleOverrides: {
                 root: {
                     backgroundColor: '#FFFFFF',
+                    borderBottom: '1px solid #e0e0e0',
                     boxShadow: 'none',
                     '& .MuiToolbar-root': {
                         gap: '16px',
                     },
+                },
+            },
+        },
+        RaSidebar: {
+            styleOverrides: {
+                root: {
+                    borderRight: '1px solid #e0e0e0',
                 },
             },
         },
@@ -73,6 +95,21 @@ const theme: RaThemeOptions = {
                 },
             },
         },
+        RaMenuItemLink: {
+            styleOverrides: {
+                root: {
+                    lineHeight: '2.2',
+                    color: '#212121',
+                    fontSize: '0.9rem',
+                    '& .RaMenuItemLink-icon': {
+                        marginRight: '10px',
+                    },
+                    '&.RaMenuItemLink-active': {
+                        backgroundColor: '#fdee66',
+                    },
+                },
+            },
+        },
         RaChipField: {
             styleOverrides: {
                 root: {
@@ -87,9 +124,6 @@ const theme: RaThemeOptions = {
     sidebar: {
         width: 260,
         closedWidth: 55,
-    },
-    typography: {
-        fontFamily: ['-apple-system', 'BlinkMacSystemFont', '"Segoe UI"', 'Arial', 'sans-serif'].join(','),
     },
 };
 

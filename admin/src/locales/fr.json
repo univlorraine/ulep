@@ -62,6 +62,7 @@
         "lastname": "Nom",
         "new_translation": "Nouvelle traduction",
         "password": "Mot de passe",
+        "profile": "Profil",
         "reported": "Signalé",
         "role": "Rôle",
         "save": "Enregistrer",
@@ -236,7 +237,7 @@
         "division": "Département",
         "country": "Pays",
         "interests": "Centre d'intérêts",
-        "label": "Utilisateurs",
+        "label": "Inscrits",
         "language_title": "Langues",
         "learning_language": {
             "name": "Nom de langue d'apprentissage",
