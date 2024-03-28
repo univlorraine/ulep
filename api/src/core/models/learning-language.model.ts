@@ -105,10 +105,8 @@ export class LearningLanguage {
   }
 
   public isAvailableInUniversity(): boolean {
-    return Boolean(
-      this.profile.user.university.specificLanguagesAvailable.find(
-        (lang) => lang.id === this.language.id,
-      ),
+    return this.profile.user.university.specificLanguagesAvailable.some(
+      (lang) => lang.id === this.language.id,
     );
   }
 }
