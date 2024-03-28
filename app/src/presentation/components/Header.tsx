@@ -9,17 +9,31 @@ interface HeaderProps {
     progressColor: string;
     progressPercentage: number;
     title: string;
+    hasGoBackButton: boolean;
 }
 
-const Header: React.FC<HeaderProps> = ({ goBackPressed, progressColor, progressPercentage, title }) => {
+const Header: React.FC<HeaderProps> = ({
+    goBackPressed,
+    progressColor,
+    progressPercentage,
+    title,
+    hasGoBackButton,
+}) => {
     const history = useHistory();
     return (
         <IonHeader>
             <ProgressBar color={progressColor} percentage={progressPercentage} />
             <div className={styles.container}>
-                <button className={styles['image-div']} onClick={() => goBackPressed ? goBackPressed() : history.goBack()}>
-                    <img alt="goBack" className={styles.image} src={LeftChevronSvg} />
-                </button>
+                <div>
+                    {hasGoBackButton && (
+                        <button
+                            className={styles['image-div']}
+                            onClick={() => (goBackPressed ? goBackPressed() : history.goBack())}
+                        >
+                            <img alt="goBack" className={styles.image} src={LeftChevronSvg} />
+                        </button>
+                    )}
+                </div>
                 <h1 className={styles.title}>{title}</h1>
                 <div />
             </div>
