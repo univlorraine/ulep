@@ -24,6 +24,7 @@ import { Role, Roles } from '../decorators/roles.decorator';
 import {
   CreateUniversityPartnerRequest,
   CreateUniversityRequest,
+  LanguageResponse,
   UniversityResponse,
   UpdateUniversityRequest,
 } from '../dtos';
@@ -86,6 +87,21 @@ export class UniversityController {
     const instance = await this.getUniversityUsecase.execute(id);
 
     return UniversityResponse.fromUniversity(instance);
+  }
+
+  @Get(':id/languages')
+  @UseGuards(AuthenticationGuard)
+  @SerializeOptions({ groups: ['read', 'university:read'] })
+  @Swagger.ApiOperation({
+    summary: 'Get the specifics languages of a university.',
+  })
+  @Swagger.ApiOkResponse({ type: LanguageResponse, isArray: true })
+  async getLanguages(@Param('id', ParseUUIDPipe) id: string) {
+    const university = await this.getUniversityUsecase.execute(id);
+
+    return university.specificLanguagesAvailable.map(
+      LanguageResponse.fromLanguage,
+    );
   }
 
   @Put(':id')

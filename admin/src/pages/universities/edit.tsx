@@ -2,6 +2,7 @@ import React from 'react';
 import { useTranslate, useNotify, useRedirect, useUpdate, Edit, WithRecord } from 'react-admin';
 import UniversityForm from '../../components/form/UniversityForm';
 import Country from '../../entities/Country';
+import Language from '../../entities/Language';
 import University from '../../entities/University';
 
 const EditUniversity = () => {
@@ -24,7 +25,8 @@ const EditUniversity = () => {
         pairingMode: string,
         maxTandemsPerUser: number,
         website?: string,
-        notificationEmail?: string
+        notificationEmail?: string,
+        specificLanguagesAvailable?: Language[]
     ) => {
         const payload = {
             name,
@@ -40,6 +42,7 @@ const EditUniversity = () => {
             pairingMode,
             maxTandemsPerUser,
             notificationEmail: notificationEmail || undefined,
+            specificLanguagesAvailableIds: specificLanguagesAvailable?.map((language) => language.id),
         };
         try {
             return await update(
@@ -70,6 +73,7 @@ const EditUniversity = () => {
                     <UniversityForm
                         admissionEndDate={record.admissionEnd}
                         admissionStartDate={record.admissionStart}
+                        canAddNewLanguages={!!record.parent}
                         closeServiceDate={record.closeServiceDate}
                         codes={record.codes}
                         country={record.country}
@@ -87,7 +91,8 @@ const EditUniversity = () => {
                             pairingMode: string,
                             maxTandemsPerUser: number,
                             website?: string,
-                            notificationEmail?: string
+                            notificationEmail?: string,
+                            specificLanguagesAvailable?: Language[]
                         ) =>
                             handleSubmit(
                                 record.id,
@@ -103,7 +108,8 @@ const EditUniversity = () => {
                                 pairingMode,
                                 maxTandemsPerUser,
                                 website,
-                                notificationEmail
+                                notificationEmail,
+                                specificLanguagesAvailable
                             )
                         }
                         maxTandemsPerUser={record.maxTandemsPerUser}

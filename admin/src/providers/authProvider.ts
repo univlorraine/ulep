@@ -10,7 +10,7 @@ export interface Identity {
 }
 
 export const SUPER_ADMIN_PERMISSION = 'super-admin';
-export const ADMIN_PERMISSION = 'admin';
+export const MANAGER_PERMISSION = 'admin';
 
 export const http = async (method: string, path: string, init: Omit<RequestInit, 'method'> = {}) => {
     const response = await fetch(path, {
@@ -130,7 +130,7 @@ const authProvider: AuthProvider = {
             return Promise.reject(new Error("Can't decode access token."));
         }
 
-        return Promise.resolve(decoded.universityId ? ADMIN_PERMISSION : SUPER_ADMIN_PERMISSION);
+        return Promise.resolve(decoded.universityId ? MANAGER_PERMISSION : SUPER_ADMIN_PERMISSION);
     },
     async getIdentity(): Promise<Identity> {
         const accessToken = jwtManager.getToken('access_token');

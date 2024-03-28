@@ -1,5 +1,6 @@
 import Campus from '../domain/entities/Campus';
 import University from '../domain/entities/University';
+import LanguageCommand, { languageCommandToDomain } from './LanguageCommand';
 
 interface UniversityCommand {
     id: string;
@@ -28,7 +29,7 @@ export const universityCommandToDomain = (command: UniversityCommand) => {
         new Date(command.admissionEnd),
         new Date(command.openServiceDate),
         new Date(command.closeServiceDate),
-        command.maxTandemsPerUser,
+        command.maxTandemsPerUser
     );
 };
 

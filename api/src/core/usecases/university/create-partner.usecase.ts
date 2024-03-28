@@ -6,6 +6,10 @@ import {
   CountryRepository,
 } from 'src/core/ports/country.repository';
 import {
+  LANGUAGE_REPOSITORY,
+  LanguageRepository,
+} from 'src/core/ports/language.repository';
+import {
   UNIVERSITY_REPOSITORY,
   UniversityRepository,
 } from 'src/core/ports/university.repository';
@@ -28,6 +32,7 @@ export class CreatePartnerUniversityCommand {
   pairingMode: PairingMode;
   maxTandemsPerUser: number;
   notificationEmail?: string;
+  specificLanguagesAvailableIds: string[];
 }
 
 @Injectable()
@@ -35,6 +40,8 @@ export class CreatePartnerUniversityUsecase {
   constructor(
     @Inject(COUNTRY_REPOSITORY)
     private readonly countryRepository: CountryRepository,
+    @Inject(LANGUAGE_REPOSITORY)
+    private readonly languageRepository: LanguageRepository,
     @Inject(UNIVERSITY_REPOSITORY)
     private readonly universityRepository: UniversityRepository,
     @Inject(UUID_PROVIDER)
@@ -51,6 +58,24 @@ export class CreatePartnerUniversityUsecase {
 
     if (!country) {
       throw new RessourceDoesNotExist('Country does not exist');
+    }
+
+    let specificLanguages = [];
+    if (
+      command.specificLanguagesAvailableIds &&
+      command.specificLanguagesAvailableIds.length > 0
+    ) {
+      specificLanguages = await Promise.all(
+        command.specificLanguagesAvailableIds.map((id) =>
+          this.languageRepository.ofId(id),
+        ),
+      );
+
+      if (specificLanguages.some((language) => !language)) {
+        throw new RessourceDoesNotExist(
+          'One or more specified language IDs do not exist.',
+        );
+      }
     }
 
     const oldUniversity = await this.universityRepository.ofName(command.name);
@@ -75,6 +100,7 @@ export class CreatePartnerUniversityUsecase {
       pairingMode: command.pairingMode,
       maxTandemsPerUser: command.maxTandemsPerUser,
       notificationEmail: command.notificationEmail,
+      specificLanguagesAvailable: specificLanguages,
     });
 
     return this.universityRepository.create(university);

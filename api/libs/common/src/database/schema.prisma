@@ -59,6 +59,7 @@ model LanguageCodes {
   LearningLanguages      LearningLanguages[]  @relation("LearningLanguageLanguage")
   JokerLearningLanguages LearningLanguages[]  @relation("TandemLanguage")
   TandemHistory          TandemHistory[]
+  Organizations          Organizations[]
 
   @@unique([name])
   @@unique([code])
@@ -95,6 +96,7 @@ model Organizations {
   RoutineExecutions    RoutineExecutions[]
   ValidatedTandems     Tandems[]
   RefusedTandems       RefusedTandems[]
+  SpecificLanguagesAvailable   LanguageCodes[]
 
   @@unique([name])
   @@map("organizations")

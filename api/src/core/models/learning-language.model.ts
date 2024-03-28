@@ -120,6 +120,12 @@ export class LearningLanguage {
 
     return false;
   }
+
+  public isAvailableInUniversity(): boolean {
+    return this.profile.user.university.specificLanguagesAvailable.some(
+      (lang) => lang.id === this.language.id,
+    );
+  }
 }
 
 interface LearningLanguageWithTandemProps extends LearningLanguageProps {

@@ -28,6 +28,11 @@ export class PrismaUniversityRepository implements UniversityRepository {
             name: campus.name,
           })),
         },
+        SpecificLanguagesAvailable: {
+          connect: university.specificLanguagesAvailable.map((language) => ({
+            id: language.id,
+          })),
+        },
         timezone: university.timezone,
         admissionStartDate: university.admissionStart,
         admissionEndDate: university.admissionEnd,
@@ -121,6 +126,11 @@ export class PrismaUniversityRepository implements UniversityRepository {
         Country: {
           connect: { id: university.country.id },
         },
+        SpecificLanguagesAvailable: {
+            connect: university.specificLanguagesAvailable.map((language) => ({
+              id: language.id,
+            })),
+          },
         pairing_mode: university.pairingMode,
         max_tandems_per_user: university.maxTandemsPerUser,
         notification_email: university.notificationEmail,

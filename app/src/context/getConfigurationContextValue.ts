@@ -30,6 +30,7 @@ import RevokeSessionsUsecase from '../domain/usecases/RevokeSessionsUsecase';
 import GetHistoricEmailPartnerUsecase from '../domain/usecases/GetHistoricEmailPartnerUsecase';
 import BrowserAdapter from '../adapter/BrowserAdapter';
 import DeviceAdapter from '../adapter/DeviceAdapter';
+import GetUniversityLanguagesUsecase from '../domain/usecases/GetUniversityLanguagesUsecase';
 
 interface GetConfigContextValueProps {
     apiUrl: string;
@@ -75,6 +76,7 @@ const getConfigContextValue = ({
     const getProfile = new GetProfileByUserIdUsecase(domainHttpAdapter);
     const getQuizzByLevel = new GetQuizzByLevelUsecase(domainHttpAdapter);
     const getUser = new GetUserUsecase(domainHttpAdapter);
+    const getUniversityLanguages = new GetUniversityLanguagesUsecase(domainHttpAdapter);
     const getMediaObject = new GetMediaObjectUsecase(domainHttpAdapter);
     const getUniversity = new GetUniversityUsecase(domainHttpAdapter);
     const login = new LoginUsecase(domainHttpAdapter, setTokens);
@@ -113,6 +115,7 @@ const getConfigContextValue = ({
         getQuizzByLevel,
         getUser,
         getUniversity,
+        getUniversityLanguages,
         login,
         resetPassword,
         updateAvatar,

@@ -29,6 +29,7 @@ import GetInitialUrlUsecaseInterface from '../domain/interfaces/AuthStandardFlow
 import GetHistoricEmailPartnerUsecaseInterface from '../domain/interfaces/GetHistoricEmailPartnerUsecase.interface';
 import BrowserAdapterInterface from '../adapter/interfaces/BrowserAdapter.interface';
 import DeviceAdapterInterface from '../adapter/interfaces/DeviceAdapter.interface';
+import GetUniversityLanguagesUsecaseInterface from '../domain/interfaces/GetUniversityLanguagesUsecase.interface';
 
 export interface ConfigContextValueType {
     accessToken: string;
@@ -55,6 +56,7 @@ export interface ConfigContextValueType {
     getQuizzByLevel: GetQuizzByLevelUsecaseInterface;
     getUser: GetUserUsecaseInterface;
     getUniversity: GetUniversityInterface;
+    getUniversityLanguages: GetUniversityLanguagesUsecaseInterface;
     login: LoginUsecaseInterface;
     resetPassword: ResetPasswordUsecaseInterface;
     updateAvatar: UpdateAvatarUsecaseInterface;

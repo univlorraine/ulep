@@ -12,6 +12,7 @@ import {
     Show,
     FunctionField,
 } from 'react-admin';
+import Language from '../../entities/Language';
 import University from '../../entities/University';
 
 const UniversityShowAction = () => (
@@ -98,6 +99,22 @@ const UniversityShow = (props: any) => {
                 />
                 <TextField label={translate('universities.show.id')} source="id" />
                 <TextField label={translate('universities.show.notificationEmail')} source="notificationEmail" />
+                <ArrayField
+                    label={translate('universities.show.specificLanguages')}
+                    sortable={false}
+                    source="specificLanguagesAvailable"
+                >
+                    <SingleFieldList>
+                        <FunctionField
+                            render={(record: Language) => (
+                                <ChipField
+                                    record={{ name: translate(`languages_code.${record.code}`) }}
+                                    source="name"
+                                />
+                            )}
+                        />
+                    </SingleFieldList>
+                </ArrayField>
             </SimpleShowLayout>
         </Show>
     );
