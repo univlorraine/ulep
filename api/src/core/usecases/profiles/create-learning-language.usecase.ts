@@ -114,6 +114,12 @@ export class CreateLearningLanguageUseCase {
       }
     }
 
+    const historizedUnmatchedLearningLanguage =
+      await this.learningLanguageRepository.getHistoricUnmatchedLearningLanguageByUserIdAndLanguageId(
+        profile.user.id,
+        language.id,
+      );
+
     let sameTandemEmail;
     if (command.sameTandem) {
       const historyTandem =
@@ -136,9 +142,10 @@ export class CreateLearningLanguageUseCase {
       learningType: command.learningType,
       sameGender: command.sameGender,
       sameAge: command.sameAge,
-      sameTandemEmail: sameTandemEmail,
+      sameTandemEmail,
       certificateOption: command.certificateOption,
       specificProgram: command.specificProgram,
+      hasPriority: Boolean(historizedUnmatchedLearningLanguage),
       campus: campus,
     });
 

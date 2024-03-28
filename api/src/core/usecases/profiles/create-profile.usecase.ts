@@ -30,6 +30,10 @@ import {
   LanguageRepository,
 } from 'src/core/ports/language.repository';
 import {
+  LEARNING_LANGUAGE_REPOSITORY,
+  LearningLanguageRepository,
+} from 'src/core/ports/learning-language.repository';
+import {
   LearningObjectiveRepository,
   OBJECTIVE_REPOSITORY,
 } from 'src/core/ports/objective.repository';
@@ -80,6 +84,8 @@ export class CreateProfileUsecase {
     private readonly usersRepository: UserRepository,
     @Inject(PROFILE_REPOSITORY)
     private readonly profilesRepository: ProfileRepository,
+    @Inject(LEARNING_LANGUAGE_REPOSITORY)
+    private readonly learningLanguageRepository: LearningLanguageRepository,
     @Inject(LANGUAGE_REPOSITORY)
     private readonly languageRepository: LanguageRepository,
     @Inject(INTEREST_REPOSITORY)
@@ -155,6 +161,11 @@ export class CreateProfileUsecase {
           }
         }
 
+        const historizedUnmatchedLearningLanguage =
+          await this.learningLanguageRepository.getHistoricUnmatchedLearningLanguageByUserIdAndLanguageId(
+            user.id,
+            language.id,
+          );
         let sameTandemEmail;
         if (learningLanguage.sameTandem) {
           const historyTandem =
@@ -179,6 +190,7 @@ export class CreateProfileUsecase {
           sameTandemEmail,
           certificateOption: learningLanguage.certificateOption,
           specificProgram: learningLanguage.specificProgram,
+          hasPriority: Boolean(historizedUnmatchedLearningLanguage),
           campus: campus,
         });
       }),

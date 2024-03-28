@@ -17,6 +17,11 @@ import {
   learningLanguageMapper,
   learningLanguageWithTandemMapper,
 } from '../mappers/learningLanguage.mapper';
+import {
+  HistorizedUnmatchedLearningLanguageRelation,
+  historizedUnmatchedLearningLanguageMapper,
+} from 'src/providers/persistance/mappers/historizedUnmatchedLearningLanguage.mapper';
+import { HistorizedUnmatchedLearningLanguage } from 'src/core/models/historized-unmatched-learning-language';
 
 @Injectable()
 export class PrismaLearningLanguageRepository
@@ -66,6 +71,7 @@ export class PrismaLearningLanguageRepository
         learning_type: item.learningType,
         same_gender: item.sameGender,
         same_age: item.sameAge,
+        has_priority: item.hasPriority,
         certificate_option: item.certificateOption,
         specific_program: item.specificProgram,
         Campus: item.campus && {
@@ -454,5 +460,50 @@ export class PrismaLearningLanguageRepository
       items: items.map(learningLanguageWithTandemMapper),
       totalItems: count,
     };
+  }
+
+  async getUnmatchedLearningLanguages() {
+    const learningLanguages = await this.prisma.learningLanguages.findMany({
+      where: {
+        Tandem: {
+          is: null,
+        },
+      },
+      include: LearningLanguageRelations,
+    });
+
+    return learningLanguages.map(learningLanguageMapper);
+  }
+
+  async archiveUnmatchedLearningLanguages(
+    learningLanguages: LearningLanguage[],
+    purgeId: string,
+  ) {
+    await this.prisma.unmatchedLearningLanguages.deleteMany({});
+
+    await this.prisma.unmatchedLearningLanguages.createMany({
+      data: learningLanguages.map((l) => ({
+        id: l.id,
+        user_id: l.profile.user.id,
+        purge_id: purgeId,
+        language_code_id: l.language.id,
+      })),
+    });
+  }
+
+  async getHistoricUnmatchedLearningLanguageByUserIdAndLanguageId(
+    userId: string,
+    languageId: string,
+  ): Promise<HistorizedUnmatchedLearningLanguage> {
+    const res = await this.prisma.unmatchedLearningLanguages.findFirst({
+      where: { language_code_id: languageId, user_id: userId },
+      include: HistorizedUnmatchedLearningLanguageRelation,
+    });
+
+    if (!res) {
+      return undefined;
+    }
+
+    return historizedUnmatchedLearningLanguageMapper(res);
   }
 }

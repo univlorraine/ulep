@@ -8,7 +8,7 @@ import {
 
 export const SuggestedLanguageRelations = {
   LanguageCode: true,
-  User: { include: UserRelations },
+  User: { include: UserRelations() },
 };
 
 export type SuggestedLanguageSnapshot = Prisma.SuggestedLanguages & {

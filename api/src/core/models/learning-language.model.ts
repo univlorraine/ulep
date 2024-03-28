@@ -14,6 +14,7 @@ interface LearningLanguageProps {
   learningType: LearningType;
   sameGender: boolean;
   sameAge: boolean;
+  hasPriority?: boolean;
   sameTandemEmail?: string;
   certificateOption?: boolean;
   specificProgram?: boolean;
@@ -31,6 +32,7 @@ export class LearningLanguage {
   readonly learningType: LearningType;
   readonly sameGender: boolean;
   readonly sameAge: boolean;
+  readonly hasPriority?: boolean;
   readonly certificateOption?: boolean;
   readonly specificProgram?: boolean;
   readonly campus?: Campus;
@@ -51,6 +53,7 @@ export class LearningLanguage {
     specificProgram,
     campus,
     tandemLanguage,
+    hasPriority,
     sameTandemEmail,
   }: LearningLanguageProps) {
     this.id = id;
@@ -66,6 +69,7 @@ export class LearningLanguage {
     this.specificProgram = specificProgram;
     this.campus = campus;
     this.tandemLanguage = tandemLanguage;
+    this.hasPriority = hasPriority;
     this.sameTandemEmail = sameTandemEmail;
   }
 
