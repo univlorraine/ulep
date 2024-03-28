@@ -67,15 +67,13 @@ const CustomUserMenu = (props: any) => {
             }
         } catch (error) {
             console.error(error);
-            throw error;
+            notify(translate('global.userDataError'), { type: 'error' });
         }
     };
 
     React.useEffect(() => {
         if (!isLoading) {
-            getUserData().catch((error) => {
-                notify(translate('global.userDataError'), { type: error });
-            });
+            getUserData();
         }
     }, [isLoading]);
 
