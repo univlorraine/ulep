@@ -55,6 +55,7 @@
         "content": "Contenu",
         "disconnect": "Déconnexion",
         "email": "Email",
+        "etandem": "E-tandem",
         "firstname": "Prénom",
         "gender": "Genre",
         "image": "Image",
@@ -62,6 +63,7 @@
         "lastname": "Nom",
         "new_translation": "Nouvelle traduction",
         "password": "Mot de passe",
+        "profile": "Profil",
         "reported": "Signalé",
         "role": "Rôle",
         "save": "Enregistrer",
@@ -69,7 +71,7 @@
         "student": "Etudiant",
         "translations": "Traductions",
         "university": "Université",
-        "etandem": "E-tandem",
+        "userDataError": "Une erreur est survenue lors de la récupération de vos informations",
         "tandem": "Tandem",
         "both": "Les deux",
         "deleted_user": "Utilisateur supprimé",
@@ -85,6 +87,9 @@
             "female": "Femme",
             "other": "Autre"
         }
+    },
+    "header": {
+        "title": "ULEP Administration"
     },
     "instance": {
         "label": "Instance",
@@ -236,7 +241,7 @@
         "division": "Département",
         "country": "Pays",
         "interests": "Centre d'intérêts",
-        "label": "Utilisateurs",
+        "label": "Inscrits",
         "language_title": "Langues",
         "learning_language": {
             "name": "Nom de langue d'apprentissage",
