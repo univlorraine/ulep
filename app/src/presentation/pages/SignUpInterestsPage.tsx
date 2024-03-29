@@ -4,7 +4,7 @@ import { useTranslation } from 'react-i18next';
 import { useHistory } from 'react-router';
 import { useConfig } from '../../context/ConfigurationContext';
 import CategoryInterests, { Interest } from '../../domain/entities/CategoryInterests';
-import { useStoreActions } from '../../store/storeTypes';
+import { useStoreActions, useStoreState } from '../../store/storeTypes';
 import WebLayoutCentered from '../components/layout/WebLayoutCentered';
 import styles from './css/SignUp.module.css';
 import interestStyle from './css/SignUpInterests.module.css';
@@ -15,8 +15,9 @@ const SignUpInterestsPage: React.FC = () => {
     const [showToast] = useIonToast();
     const history = useHistory();
     const updateProfileSignUp = useStoreActions((state) => state.updateProfileSignUp);
+    const profileEdit = useStoreState((store) => store.profileSignUp);
     const [catergoriesInterests, setCatergoriesInterests] = useState<CategoryInterests[]>([]);
-    const [userInterests, setUserInterests] = useState<string[]>([]);
+    const [userInterests, setUserInterests] = useState<string[]>(profileEdit.interests ? profileEdit.interests : []);
 
     const getInterests = async () => {
         const result = await getAllInterestCategories.execute();

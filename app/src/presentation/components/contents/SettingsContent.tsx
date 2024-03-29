@@ -8,6 +8,7 @@ import { useStoreActions, useStoreState } from '../../../store/storeTypes';
 import Dropdown from '../DropDown';
 import styles from './SettingsContent.module.css';
 import ConfirmModal from '../modals/ConfirmModal';
+import { useHistory } from 'react-router';
 
 interface SettingsContentProps {
     onBackPressed: () => void;
@@ -16,6 +17,7 @@ interface SettingsContentProps {
 
 const SettingsContent: React.FC<SettingsContentProps> = ({ onBackPressed, onDisconnect }) => {
     const { t } = useTranslation();
+    const history = useHistory();
     const { askForAccountDeletion, browserAdapter, configuration, updateNotificationPermission } = useConfig();
     const setLanguage = useStoreActions((state) => state.setLanguage);
     const currentLanguage = useStoreState((state) => state.language);
@@ -101,6 +103,10 @@ const SettingsContent: React.FC<SettingsContentProps> = ({ onBackPressed, onDisc
             </a>
 
             <span className={styles.subtitle}>{t('home_page.settings.account')}</span>
+            <button className={styles['setting-container']} onClick={() => history.push('/edit/informations')}>
+                <span>{t('home_page.settings.edit-account')}</span>
+                <img alt="right-arrow" src={ArrowRightSvg} />
+            </button>
             <button className={styles['setting-container']} onClick={() => setIsModalOpen(true)}>
                 <span>{t('home_page.settings.unsubscribe')}</span>
                 <img alt="right-arrow" src={ArrowRightSvg} />

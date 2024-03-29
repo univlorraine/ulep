@@ -4,7 +4,7 @@ import { useTranslation } from 'react-i18next';
 import { useHistory } from 'react-router';
 import { useConfig } from '../../context/ConfigurationContext';
 import Language from '../../domain/entities/Language';
-import { useStoreActions } from '../../store/storeTypes';
+import { useStoreActions, useStoreState } from '../../store/storeTypes';
 import Dropdown, { DropDownItem } from '../components/DropDown';
 import WebLayoutCentered from '../components/layout/WebLayoutCentered';
 import styles from './css/SignUp.module.css';
@@ -16,9 +16,14 @@ const SignUpLanguagesPage: React.FC = () => {
     const updateProfileSignUp = useStoreActions((state) => state.updateProfileSignUp);
     const [showToast] = useIonToast();
     const history = useHistory();
+    const profileSignUp = useStoreState((state) => state.profileSignUp);
     const [languages, setLanguages] = useState<DropDownItem<Language | undefined>[]>([]);
-    const [myLanguage, setMyLanguage] = useState<Language | undefined>();
-    const [otherLanguages, setOtherLanguages] = useState<(Language | undefined)[]>([]);
+    const [myLanguage, setMyLanguage] = useState<Language | undefined>(
+        profileSignUp?.nativeLanguage ? profileSignUp.nativeLanguage : undefined
+    );
+    const [otherLanguages, setOtherLanguages] = useState<(Language | undefined)[]>(
+        profileSignUp?.otherLanguages ? profileSignUp?.otherLanguages : []
+    );
 
     const getLanguagesData = async () => {
         const result = await getAllLanguages.execute();
@@ -85,6 +90,7 @@ const SignUpLanguagesPage: React.FC = () => {
                 <div className="large-margin-bottom">
                     <Dropdown<Language | undefined>
                         onChange={setMyLanguage}
+                        value={languages.find((language) => myLanguage?.code === language.value?.code)}
                         options={languages}
                         placeholder={t('signup_languages_page.placeholder_primary_language')}
                         title={t('signup_languages_page.language')}
@@ -95,6 +101,7 @@ const SignUpLanguagesPage: React.FC = () => {
                     <div className="margin-bottom">
                         <Dropdown<Language | undefined>
                             onChange={(item) => pushOtherLanguage(item, 0)}
+                            value={languages.find((language) => otherLanguages[0]?.code === language.value?.code)}
                             options={languages.filter(
                                 (language) =>
                                     language.value?.name !== myLanguage?.name &&
@@ -109,6 +116,7 @@ const SignUpLanguagesPage: React.FC = () => {
                 {otherLanguages[0] && (
                     <Dropdown<Language | undefined>
                         onChange={(item) => pushOtherLanguage(item, 1)}
+                        value={languages.find((language) => otherLanguages[1]?.code === language.value?.code)}
                         options={languages.filter(
                             (language) =>
                                 language.value?.name !== myLanguage?.name &&

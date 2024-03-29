@@ -5,7 +5,7 @@ import { useHistory } from 'react-router';
 import { WritingSkillPng } from '../../assets';
 import { useConfig } from '../../context/ConfigurationContext';
 import Goal from '../../domain/entities/Goal';
-import { useStoreActions } from '../../store/storeTypes';
+import { useStoreActions, useStoreState } from '../../store/storeTypes';
 import WebLayoutCentered from '../components/layout/WebLayoutCentered';
 import styles from './css/SignUp.module.css';
 import goalsStyles from './css/SignUpGoals.module.css';
@@ -16,9 +16,10 @@ const SignUpGoalsPage: React.FC = () => {
     const { configuration, getAllGoals } = useConfig();
     const [showToast] = useIonToast();
     const history = useHistory();
+    const profileEdit = useStoreState((store) => store.profileSignUp);
     const updateProfileSignUp = useStoreActions((state) => state.updateProfileSignUp);
     const [goals, setGoals] = useState<Goal[]>([]);
-    const [userGoals, setUserGoals] = useState<Goal[]>([]);
+    const [userGoals, setUserGoals] = useState<Goal[]>(profileEdit.goals ? profileEdit.goals : []);
 
     const getGoals = async () => {
         const result = await getAllGoals.execute();
@@ -77,24 +78,21 @@ const SignUpGoalsPage: React.FC = () => {
                                     style={{
                                         backgroundColor:
                                             userGoals.length === 0 ||
-                                                userGoals.findIndex((userGoal) => userGoal.id === goal.id) === -1
+                                            userGoals.findIndex((userGoal) => userGoal.id === goal.id) === -1
                                                 ? '#F2F4F7'
                                                 : '#FDEE66',
                                     }}
                                 >
-                                    {goal.image ?
+                                    {goal.image ? (
                                         <NetworkImage
                                             id={goal.image.id}
                                             alt={goal.id}
                                             className={goalsStyles.image}
                                             placeholder={WritingSkillPng}
                                         />
-                                        : <img
-                                            alt={goal.id}
-                                            className={goalsStyles.image}
-                                            src={WritingSkillPng}
-                                        />
-                                    }
+                                    ) : (
+                                        <img alt={goal.id} className={goalsStyles.image} src={WritingSkillPng} />
+                                    )}
                                     <span className={goalsStyles.description}>{goal.name}</span>
                                 </button>
                             );
