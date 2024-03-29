@@ -11,3 +11,4 @@ The purge will delete all the data from the database exept:
 - Tandems history (only the last pair of tandems will be kept)
 - Reports
 - Banned
+ 
