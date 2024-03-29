@@ -5,8 +5,7 @@ const theme: RaThemeOptions = {
     ...defaultTheme,
     palette: {
         primary: {
-            main: '#FFFFFF',
-            contrastText: '#212121',
+            main: '#212121',
         },
         secondary: {
             main: '#fdee66',
