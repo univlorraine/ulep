@@ -41,7 +41,7 @@ export interface SignUpStorePayload {
     otherLanguages?: Language[];
     password?: string;
     pedagogy?: Pedagogy;
-    profilePicture?: string;
+    profilePicture?: File;
     role?: Role;
     sameAge?: boolean;
     sameGender?: boolean;

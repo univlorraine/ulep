@@ -11,7 +11,7 @@ const SignupFinalPage: React.FC = () => {
     const { t } = useTranslation();
     const history = useHistory();
     const [showToast] = useIonToast();
-    const { configuration, createProfile } = useConfig();
+    const { configuration, createProfile, editProfile } = useConfig();
     const profileSignUp = useStoreState((state) => state.profileSignUp);
     const profile = useStoreState((state) => state.profile);
     const user = useStoreState((state) => state.user);
@@ -52,6 +52,22 @@ const SignupFinalPage: React.FC = () => {
         return history.push('/pairing/languages');
     };
 
+    const onUpdateProfile = async () => {
+        if (!profile) {
+            return await showToast({ message: t('errors.global'), duration: 1000 });
+        }
+
+        const result = await editProfile.execute(profile.id, profileSignUp);
+    };
+
+    const nextStep = async () => {
+        if (profile?.id) {
+            return await onUpdateProfile();
+        }
+
+        return await onCreateProfile();
+    };
+
     return (
         <SuccessLayout
             backgroundIconColor={configuration.primaryBackgroundImageColor}
@@ -64,7 +80,7 @@ const SignupFinalPage: React.FC = () => {
                 }, ${t('signup_end_page.account')}`}</h1>
                 <Avatar user={user} className={styles.image} />
                 <p className={styles.description}>{t('signup_end_page.description')}</p>
-                <button className="primary-button" onClick={onCreateProfile}>
+                <button className="primary-button" onClick={nextStep}>
                     {t('signup_end_page.validate_button')}
                 </button>
             </div>

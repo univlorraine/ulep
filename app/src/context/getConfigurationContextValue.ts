@@ -31,7 +31,7 @@ import GetHistoricEmailPartnerUsecase from '../domain/usecases/GetHistoricEmailP
 import BrowserAdapter from '../adapter/BrowserAdapter';
 import DeviceAdapter from '../adapter/DeviceAdapter';
 import GetUniversityLanguagesUsecase from '../domain/usecases/GetUniversityLanguagesUsecase';
-import EditUserUsecase from '../domain/usecases/EditUserUsecase';
+import EditProfileUsecase from '../domain/usecases/EditProfileUsecase';
 
 interface GetConfigContextValueProps {
     apiUrl: string;
@@ -89,7 +89,7 @@ const getConfigContextValue = ({
     const updateNotificationPermission = new UpdateNotificationPermissionUsecase(domainHttpAdapter);
 
     const createUser = new CreateUserUsecase(domainHttpAdapter, login, setUser);
-    const editUser = new EditUserUsecase(domainHttpAdapter, setUser);
+    const editProfile = new EditProfileUsecase(domainHttpAdapter, setUser);
     const retrievePerson = new RetrievePersonInfoUsecase(domainHttpAdapter);
 
     return {
@@ -103,7 +103,7 @@ const getConfigContextValue = ({
         createProfile,
         createReport,
         createUser,
-        editUser,
+        editProfile,
         deviceAdapter,
         getAllInterestCategories,
         getAllCountries,

@@ -131,7 +131,7 @@ const SignUpInformationsPage: React.FC = () => {
             age,
             email,
             password,
-            profilePicture: profilePicture ? URL.createObjectURL(profilePicture) : undefined,
+            profilePicture,
         });
 
         return history.push('/signup/languages');

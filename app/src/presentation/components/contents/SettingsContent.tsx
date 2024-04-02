@@ -104,7 +104,7 @@ const SettingsContent: React.FC<SettingsContentProps> = ({ onBackPressed, onDisc
 
             <span className={styles.subtitle}>{t('home_page.settings.account')}</span>
             <button className={styles['setting-container']} onClick={() => history.push('/edit/informations')}>
-                <span>{t('home_page.settings.edit-account')}</span>
+                <span>{t('home_page.settings.edit_account')}</span>
                 <img alt="right-arrow" src={ArrowRightSvg} />
             </button>
             <button className={styles['setting-container']} onClick={() => setIsModalOpen(true)}>

@@ -75,7 +75,7 @@ class ProfileSignUp {
 
     public pedagogy?: Pedagogy;
 
-    public profilePicture?: string;
+    public profilePicture?: File;
 
     public otherLanguages?: Language[];
 
