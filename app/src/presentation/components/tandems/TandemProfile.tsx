@@ -50,21 +50,19 @@ const TandemProfile: React.FC<TandemProfileProps> = ({
                 <span className={styles.category}>{t(`global.email`)}</span>
                 <div className={styles['text-container']}>{profile.user.email}</div>
 
-                <>
-                    <span className={styles.category}>{t(`home_page.tandem_validated.goals`)}</span>
-                    <div className={styles['text-container']}>
-                        <span>{`${t(`home_page.tandem_validated.type.${pedagogy}`)} ( ${level} ) ${codeLanguageToFlag(
-                            partnerLearningLanguage.code
-                        )}`}</span>{' '}
-                        <br />
-                        {profile.goals.map((goal) => (
-                            <React.Fragment key={goal.id}>
-                                {goal.name}
-                                <br />
-                            </React.Fragment>
-                        ))}
-                    </div>
-                </>
+                <span className={styles.category}>{t(`home_page.tandem_validated.goals`)}</span>
+                <div className={styles['text-container']}>
+                    <span>{`${t(`home_page.tandem_validated.type.${pedagogy}`)} ( ${level} ) ${codeLanguageToFlag(
+                        partnerLearningLanguage.code
+                    )}`}</span>{' '}
+                    <br />
+                    {profile.goals.map((goal) => (
+                        <React.Fragment key={goal.id}>
+                            {goal.name}
+                            <br />
+                        </React.Fragment>
+                    ))}
+                </div>
 
                 <span className={styles.category}>{t(`home_page.tandem_validated.languages`)}</span>
                 <div className={styles['text-container']}>
