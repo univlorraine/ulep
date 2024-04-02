@@ -120,21 +120,14 @@ export class PrismaUserRepository implements UserRepository {
   }
 
   async blacklist(users: User[]): Promise<void> {
-    const blacklist = await this.prisma.blacklist.findMany();
+    await this.prisma.blacklist.deleteMany();
 
-    for (const user of users) {
-      const index = blacklist.findIndex((it) => it.email === user.email);
-      if (index !== -1) {
-        continue;
-      }
-
-      await this.prisma.blacklist.create({
-        data: {
-          user_id: user.id,
-          email: user.email,
-        },
-      });
-    }
+    await this.prisma.blacklist.createMany({
+      data: users.map((user) => ({
+        user_id: user.id,
+        email: user.email,
+      })),
+    });
   }
 
   async isBlacklisted(email: string): Promise<boolean> {
