@@ -4,3 +4,4 @@ export * from './get-profile.usecase';
 export * from './get-profiles.usecase';
 export * from './create-learning-language.usecase';
 export * from './delete-profile.usecase';
+export * from './update-profile.usecase';

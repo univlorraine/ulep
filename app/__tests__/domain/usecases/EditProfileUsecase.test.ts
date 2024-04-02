@@ -101,8 +101,8 @@ describe('editProfile', () => {
             {
                 age: profileSignUp.age,
                 availabilities: profileSignUp.availabilities,
-                availabilityNote: profileSignUp.availabilityNote,
-                availabilityNotePrivacy: profileSignUp.availabilityNotePrivate,
+                availabilitiesNote: profileSignUp.availabilityNote,
+                availabilitiesNotePrivacy: profileSignUp.availabilityNotePrivate,
                 biography: {
                     superpower: profileSignUp.biography?.power,
                     favoritePlace: profileSignUp.biography?.place,
@@ -114,8 +114,8 @@ describe('editProfile', () => {
                 interests: profileSignUp.interests,
                 lastname: profileSignUp.lastname,
                 masteredLanguageCodes: profileSignUp.otherLanguages?.map((language) => language.code),
-                nativeLanguageCode: profileSignUp.nativeLanguage?.code,
                 meetingFrequency: profileSignUp.frequency,
+                nativeLanguageCode: profileSignUp.nativeLanguage?.code,
                 objectives: profileSignUp.goals?.map((goal) => goal.id),
             },
             {},

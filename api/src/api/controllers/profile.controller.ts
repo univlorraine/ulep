@@ -5,7 +5,6 @@ import {
   Controller,
   Delete,
   Get,
-  Logger,
   Param,
   ParseUUIDPipe,
   Post,
@@ -13,6 +12,8 @@ import {
   SerializeOptions,
   Headers,
   UseGuards,
+  UploadedFile,
+  UseInterceptors,
 } from '@nestjs/common';
 import * as Swagger from '@nestjs/swagger';
 import {
@@ -26,6 +27,8 @@ import {
   DeleteUserUsecase,
   DeleteAvatarUsecase,
   GetLearningLanguageOfProfileUsecase,
+  UploadAvatarUsecase,
+  UpdateProfileUsecase,
 } from 'src/core/usecases';
 import { CollectionResponse, CurrentUser } from '../decorators';
 import { Role, Roles } from '../decorators/roles.decorator';
@@ -38,13 +41,14 @@ import {
   LearningLanguageResponse,
 } from '../dtos';
 import { AuthenticationGuard } from '../guards';
-import { Profile } from 'src/core/models';
+import { Profile, User } from 'src/core/models';
+import { FileInterceptor } from '@nestjs/platform-express';
+import { ImagesFilePipe } from 'src/api/validators';
+import { UpdateProfileRequest } from 'src/api/dtos/profiles/update-profile.request';
 
 @Controller('profiles')
 @Swagger.ApiTags('Profiles')
 export class ProfileController {
-  private readonly logger = new Logger(ProfileController.name);
-
   constructor(
     private readonly createProfileUsecase: CreateProfileUsecase,
     private readonly getLearningLanguageOfProfileUsecase: GetLearningLanguageOfProfileUsecase,
@@ -56,6 +60,8 @@ export class ProfileController {
     private readonly createLearningLanguageUsecase: CreateLearningLanguageUseCase,
     private readonly deleteUserUsecase: DeleteUserUsecase,
     private readonly deleteAvatarUsecase: DeleteAvatarUsecase,
+    private readonly updateProfileUsecase: UpdateProfileUsecase,
+    private readonly uploadAvatarUsecase: UploadAvatarUsecase,
   ) {}
 
   @Post()
@@ -72,6 +78,36 @@ export class ProfileController {
       ...body,
       user: user.sub,
     });
+
+    return ProfileResponse.fromDomain(profile);
+  }
+
+  @Post('edit/:id')
+  @UseInterceptors(FileInterceptor('file'))
+  @Swagger.ApiOperation({ summary: 'Edit profile ressource.' })
+  @Swagger.ApiConsumes('multipart/form-data')
+  @Swagger.ApiCreatedResponse({ type: ProfileResponse })
+  async edit(
+    @Param('id', ParseUUIDPipe) id: string,
+    @Body() body: UpdateProfileRequest,
+    @UploadedFile(new ImagesFilePipe()) file?: Express.Multer.File,
+  ) {
+    //TODO: Change biography type
+    let profile = await this.updateProfileUsecase.execute(id, {
+      ...body,
+      biography: body.biography as unknown as { [key: string]: string },
+    });
+
+    if (file) {
+      const upload = await this.uploadAvatarUsecase.execute({
+        userId: profile.user.id,
+        file,
+      });
+      profile = new Profile({
+        ...profile,
+        user: new User({ ...profile.user, avatar: upload }),
+      });
+    }
 
     return ProfileResponse.fromDomain(profile);
   }

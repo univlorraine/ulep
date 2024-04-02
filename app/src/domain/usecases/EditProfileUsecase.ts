@@ -7,8 +7,8 @@ import EditProfileUsecaseInterface from '../interfaces/EditProfileUsecase.interf
 interface EditProfilePayload {
     age?: number;
     availabilities?: Availabilites;
-    availabilityNote?: string;
-    availabilityNotePrivacy?: boolean;
+    availabilitiesNote?: string;
+    availabilitiesNotePrivacy?: boolean;
     biography?: {
         superpower?: string;
         favoritePlace?: string;
@@ -34,8 +34,8 @@ class EditProfileUsecase implements EditProfileUsecaseInterface {
             const body: EditProfilePayload = {
                 age: payload.age,
                 availabilities: payload.availabilities,
-                availabilityNote: payload.availabilityNote,
-                availabilityNotePrivacy: payload.availabilityNotePrivate,
+                availabilitiesNote: payload.availabilityNote,
+                availabilitiesNotePrivacy: payload.availabilityNotePrivate,
                 biography: {
                     superpower: payload.biography?.power,
                     favoritePlace: payload.biography?.place,

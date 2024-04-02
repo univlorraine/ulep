@@ -105,29 +105,6 @@ export class UserController {
     return UserResponse.fromDomain(user);
   }
 
-  @Post('edit/:id')
-  @UseInterceptors(FileInterceptor('file'))
-  @Swagger.ApiOperation({ summary: 'Edit user ressource.' })
-  @Swagger.ApiConsumes('multipart/form-data')
-  @Swagger.ApiCreatedResponse({ type: UserResponse })
-  async edit(
-    @Param('id', ParseUUIDPipe) id: string,
-    @Body() body: UpdateUserRequest,
-    @UploadedFile(new ImagesFilePipe()) file?: Express.Multer.File,
-  ) {
-    let user = await this.updateUserUsecase.execute(id, body);
-
-    if (file) {
-      const upload = await this.uploadAvatarUsecase.execute({
-        userId: user.id,
-        file,
-      });
-      user = new User({ ...user, avatar: upload });
-    }
-
-    return UserResponse.fromDomain(user);
-  }
-
   @Get()
   @Roles(Role.ADMIN)
   @UseGuards(AuthenticationGuard)
