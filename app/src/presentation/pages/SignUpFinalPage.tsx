@@ -15,6 +15,7 @@ const SignupFinalPage: React.FC = () => {
     const profileSignUp = useStoreState((state) => state.profileSignUp);
     const profile = useStoreState((state) => state.profile);
     const user = useStoreState((state) => state.user);
+    const isUpdate = profile?.id;
 
     const onCreateProfile = async () => {
         if (
@@ -58,10 +59,16 @@ const SignupFinalPage: React.FC = () => {
         }
 
         const result = await editProfile.execute(profile.id, profileSignUp);
+
+        if (result instanceof Error) {
+            return await showToast({ message: t(result.message), duration: 1000 });
+        }
+
+        return history.push('/home');
     };
 
     const nextStep = async () => {
-        if (profile?.id) {
+        if (isUpdate) {
             return await onUpdateProfile();
         }
 
@@ -79,7 +86,11 @@ const SignupFinalPage: React.FC = () => {
                     profile?.user.firstname.trim() || user?.firstname.trim()
                 }, ${t('signup_end_page.account')}`}</h1>
                 <Avatar user={user} className={styles.image} />
-                <p className={styles.description}>{t('signup_end_page.description')}</p>
+                {!isUpdate ? (
+                    <p className={styles.description}>{t('signup_end_page.description')}</p>
+                ) : (
+                    <div className="margin" />
+                )}
                 <button className="primary-button" onClick={nextStep}>
                     {t('signup_end_page.validate_button')}
                 </button>

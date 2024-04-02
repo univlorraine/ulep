@@ -21,6 +21,7 @@ const SettingsContent: React.FC<SettingsContentProps> = ({ onBackPressed, onDisc
     const { askForAccountDeletion, browserAdapter, configuration, updateNotificationPermission } = useConfig();
     const setLanguage = useStoreActions((state) => state.setLanguage);
     const currentLanguage = useStoreState((state) => state.language);
+    const setProfileSignUp = useStoreActions((state) => state.updateProfileSignUp);
     const [showToast] = useIonToast();
     const profile = useStoreState((state) => state.profile);
     const updateProfile = useStoreActions((state) => state.updateProfile);
@@ -58,6 +59,37 @@ const SettingsContent: React.FC<SettingsContentProps> = ({ onBackPressed, onDisc
 
     const updateLanguage = (code: string) => {
         setLanguage({ language: code });
+    };
+
+    const onEditAccount = () => {
+        if (!profile) {
+            return;
+        }
+
+        setProfileSignUp({
+            availabilities: profile.availabilities,
+            availabilityNote: profile.availabilitiesNote,
+            availabilityNotePrivate: profile.availabilitiesNotePrivacy,
+            biography: {
+                power: profile.biography.superpower,
+                place: profile.biography.favoritePlace,
+                travel: profile.biography.experience,
+                incredible: profile.biography.anecdote,
+            },
+            frequency: profile.frequency,
+            goals: profile.goals,
+            learningLanguage: profile.learningLanguages[0],
+            nativeLanguage: profile.nativeLanguage,
+            otherLanguages: profile.learningLanguages,
+            interests: profile.interests.map((interest) => interest.id),
+            firstname: profile.user.firstname,
+            lastname: profile.user.lastname,
+            gender: profile.user.gender,
+            age: profile.user.age,
+            email: profile.user.email,
+            university: profile.user.university,
+        });
+        history.push('/edit/informations');
     };
 
     return (
@@ -103,7 +135,7 @@ const SettingsContent: React.FC<SettingsContentProps> = ({ onBackPressed, onDisc
             </a>
 
             <span className={styles.subtitle}>{t('home_page.settings.account')}</span>
-            <button className={styles['setting-container']} onClick={() => history.push('/edit/informations')}>
+            <button className={styles['setting-container']} onClick={onEditAccount}>
                 <span>{t('home_page.settings.edit_account')}</span>
                 <img alt="right-arrow" src={ArrowRightSvg} />
             </button>

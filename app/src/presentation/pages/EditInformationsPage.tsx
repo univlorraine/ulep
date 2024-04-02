@@ -6,20 +6,20 @@ import { useStoreActions, useStoreState } from '../../store/storeTypes';
 import RadioButton from '../components/RadioButton';
 import TextInput from '../components/TextInput';
 import WebLayoutCentered from '../components/layout/WebLayoutCentered';
-import { isNameCorrect } from '../utils';
+import { isEmailCorrect, isNameCorrect } from '../utils';
 import styles from './css/SignUp.module.css';
 import { PlusPng } from '../../assets';
 import { useHistory } from 'react-router';
 
 const EditInformationsPage: React.FC = () => {
     const { t } = useTranslation();
-    const { cameraAdapter, configuration, editUser } = useConfig();
+    const { cameraAdapter, configuration } = useConfig();
     const history = useHistory();
     const [showToast] = useIonToast();
-    const user = useStoreState((state) => state.user);
     const profile = useStoreState((state) => state.profile);
-    const profileEdit = useStoreState((store) => store.profileSignUp);
-    const updateProfileSignUp = useStoreActions((state) => state.updateProfileSignUp);
+    const updateProfile = useStoreActions((store) => store.updateProfileSignUp);
+
+    const [email, setEmail] = useState<string>(profile?.user ? profile!.user.email : '');
     const [firstname, setFirstname] = useState<string>(profile?.user ? profile!.user.firstname : '');
     const [lastname, setLastname] = useState<string>(profile?.user ? profile!.user.lastname : '');
     const [gender, setGender] = useState<Gender | undefined>(profile?.user ? profile!.user!.gender : undefined);
@@ -29,14 +29,18 @@ const EditInformationsPage: React.FC = () => {
     const [errorMessage, setErrorMessage] = useState<{ type: string; message: string }>();
 
     const allFieldHasValue = () => {
-        return gender && age && firstname && lastname;
+        return (profile?.user.university.isCentral || email) && gender && age && firstname && lastname;
     };
 
     const openGallery = async () => {
         setProfilePicture(await cameraAdapter.getPictureFromGallery());
     };
 
-    const editProfile = async () => {
+    const nextStep = async () => {
+        if (!profile?.user.university.isCentral && (!email || !isEmailCorrect(email))) {
+            return setErrorMessage({ type: 'email', message: t('signup_informations_page.error_email') });
+        }
+
         if (!firstname || !isNameCorrect(firstname)) {
             return setErrorMessage({ type: 'firstname', message: t('signup_informations_page.error_firstname') });
         }
@@ -53,73 +57,17 @@ const EditInformationsPage: React.FC = () => {
             return setErrorMessage({ type: 'age', message: t('signup_informations_page.error_age') });
         }
 
-        const userId = profile?.user.id;
-
-        if (!userId) return;
-
-        const result = await editUser.execute(userId, firstname, lastname, gender, age);
-
-        if (result instanceof Error) {
-            if (result.message === 'signup_informations_page.error_domain') {
-                return setErrorMessage({ type: 'email', message: t(result.message) });
-            }
-
-            if (result.message === 'signup_informations_page.error_code') {
-                return setErrorMessage({ type: 'code', message: t(result.message) });
-            }
-            return await showToast({ message: t(result.message), duration: 3000 });
-        }
-
-        console.log(profile);
-        updateProfileSignUp({
-            availabilities: profile.availabilities,
-            availabilityNote: profile.availabilitiesNote,
-            availabilityNotePrivate: profile.availabilitiesNotePrivacy,
-            biography: {
-                power: profile.biography.superpower,
-                place: profile.biography.favoritePlace,
-                travel: profile.biography.experience,
-                incredible: profile.biography.anecdote,
-            },
-            frequency: profile.frequency,
-            goals: profile.goals,
-            learningLanguage: profile.learningLanguages[0],
-            nativeLanguage: profile.nativeLanguage,
-            otherLanguages: profile.learningLanguages,
-            interests: profile.interests.map((interest) => interest.id),
+        updateProfile({
             firstname,
             lastname,
             gender,
             age,
-            email: profile.user.email,
-            profilePicture: profilePicture ? URL.createObjectURL(profilePicture) : undefined,
+            email,
+            profilePicture,
         });
 
         return history.push('/signup/languages');
     };
-
-    const userUlAutomaticValues = async () => {
-        setFirstname(profileEdit.firstname || '');
-        setLastname(profileEdit.lastname || '');
-        setGender(profileEdit.gender || undefined);
-        setAge(profileEdit.age || undefined);
-    };
-
-    useEffect(() => {
-        updateProfileSignUp({
-            firstname: user?.firstname,
-            lastname: user?.lastname,
-            gender: user?.gender,
-            age: user?.age,
-            email: user?.email,
-        });
-    }, [user]);
-
-    useEffect(() => {
-        if (profileEdit.university?.isCentral) {
-            userUlAutomaticValues();
-        }
-    }, []);
 
     return (
         <WebLayoutCentered
@@ -197,13 +145,25 @@ const EditInformationsPage: React.FC = () => {
                     value={age ? `${age}` : ''}
                 />
 
+                {!profile?.user.university.isCentral && (
+                    <TextInput
+                        autocomplete="email"
+                        errorMessage={errorMessage?.type === 'email' ? errorMessage.message : undefined}
+                        onChange={setEmail}
+                        placeholder={t('signup_informations_page.placeholder_email')}
+                        title={t('global.email')}
+                        type="email"
+                        value={email}
+                    />
+                )}
+
                 <div className={styles['bottom-container']}>
                     <button
                         className={`primary-button small-margin-top large-margin-bottom ${
                             !allFieldHasValue() ? 'disabled' : ''
                         }`}
                         disabled={!allFieldHasValue()}
-                        onClick={editProfile}
+                        onClick={nextStep}
                     >
                         {t('signup_informations_page.validate_button')}
                     </button>
