@@ -31,6 +31,7 @@ import GetHistoricEmailPartnerUsecase from '../domain/usecases/GetHistoricEmailP
 import BrowserAdapter from '../adapter/BrowserAdapter';
 import DeviceAdapter from '../adapter/DeviceAdapter';
 import GetUniversityLanguagesUsecase from '../domain/usecases/GetUniversityLanguagesUsecase';
+import GetPartnersToUniversityUsecase from '../domain/usecases/GetPartnersToUniversityUsecase';
 
 interface GetConfigContextValueProps {
     apiUrl: string;
@@ -73,6 +74,7 @@ const getConfigContextValue = ({
     const getAllTandems = new GetAllTandemsUsecase(domainHttpAdapter);
     const getAllUniversities = new GetAllUniversitiesUsecase(domainHttpAdapter);
     const getHistoricEmailPartner = new GetHistoricEmailPartnerUsecase(domainHttpAdapter);
+    const getPartnersToUniversity = new GetPartnersToUniversityUsecase(domainHttpAdapter);
     const getProfile = new GetProfileByUserIdUsecase(domainHttpAdapter);
     const getQuizzByLevel = new GetQuizzByLevelUsecase(domainHttpAdapter);
     const getUser = new GetUserUsecase(domainHttpAdapter);
@@ -111,6 +113,7 @@ const getConfigContextValue = ({
         getAllUniversities,
         getHistoricEmailPartner,
         getMediaObject,
+        getPartnersToUniversity,
         getProfile,
         getQuizzByLevel,
         getUser,

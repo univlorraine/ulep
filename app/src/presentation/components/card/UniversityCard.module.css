@@ -1,0 +1,40 @@
+.container {
+    align-items: center;
+    display: flex;
+    flex-direction: row;
+    margin-top: 12px;
+}
+
+.central {
+    background-color: var(--primary-color);
+}
+
+.logo {
+    background-color: white;
+    height: 96px;
+    border-radius: 100%;
+    margin: 24px;
+    width: 96px;
+}
+
+.partner {
+    background-color: var(--secondary-color);
+}
+
+.subtitle {
+    color: #000;
+    font-family: 'Roboto';
+    font-size: 16px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: 10px;
+}
+
+.title {
+    color: #000;
+    font-family: 'Maven Pro';
+    font-size: 20px;
+    font-style: normal;
+    font-weight: 700;
+    line-height: 25px;
+}
