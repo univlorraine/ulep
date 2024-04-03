@@ -35,7 +35,7 @@ class EditProfileUsecase implements EditProfileUsecaseInterface {
                 age: payload.age,
                 availabilities: payload.availabilities,
                 availabilitiesNote: payload.availabilityNote,
-                availabilitiesNotePrivacy: payload.availabilityNotePrivate,
+                availabilitiesNotePrivacy: Boolean(payload.availabilityNotePrivate),
                 biography: {
                     superpower: payload.biography?.power,
                     favoritePlace: payload.biography?.place,

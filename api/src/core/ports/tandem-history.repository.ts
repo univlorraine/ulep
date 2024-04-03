@@ -12,4 +12,5 @@ export interface TandemHistoryRepository {
     tandemHistoryId: string,
   ): Promise<HistorizedTandem>;
   getHistorizedTandemForUser(userId: string): Promise<HistorizedTandem[]>;
+  update(userId: string, email: string): Promise<void>;
 }
