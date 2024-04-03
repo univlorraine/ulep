@@ -78,6 +78,7 @@ model Organizations {
   name                 String
   codes                String[]            @default([])
   domains              String[]            @default([])
+  image_id        String?       @unique
   timezone             String
   admissionStartDate   DateTime
   admissionEndDate     DateTime
@@ -98,6 +99,8 @@ model Organizations {
   ValidatedTandems     Tandems[]
   RefusedTandems       RefusedTandems[]
   SpecificLanguagesAvailable   LanguageCodes[]
+  Image                 MediaObjects? @relation(fields: [image_id], references: [id])
+
 
   @@unique([name])
   @@map("organizations")
@@ -177,6 +180,7 @@ model MediaObjects {
   updated_at DateTime            @updatedAt
   User       Users?
   Goal       LearningObjectives?
+  University Organizations?
 
   @@unique([name, bucket])
   @@map("media_objects")

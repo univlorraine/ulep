@@ -9,7 +9,9 @@ import {
   Post,
   Put,
   SerializeOptions,
+  UploadedFile,
   UseGuards,
+  UseInterceptors,
 } from '@nestjs/common';
 import * as Swagger from '@nestjs/swagger';
 import {
@@ -29,6 +31,10 @@ import {
   UpdateUniversityRequest,
 } from '../dtos';
 import { AuthenticationGuard } from '../guards';
+import { ImagesFilePipe } from 'src/api/validators';
+import { FileInterceptor } from '@nestjs/platform-express';
+import { UploadUniversityImageUsecase } from 'src/core/usecases';
+import { University } from 'src/core/models';
 
 @Controller('universities')
 @Swagger.ApiTags('Universities')
@@ -40,17 +46,31 @@ export class UniversityController {
     private readonly getUniversitiesUsecase: GetUniversitiesUsecase,
     private readonly updateUniversityUsecase: UpdateUniversityUsecase,
     private readonly deleteUniversityUsecase: DeleteUniversityUsecase,
+    private readonly uploadUniversityImageUsecase: UploadUniversityImageUsecase,
   ) {}
 
   @Post()
   @Roles(Role.ADMIN)
+  @UseInterceptors(FileInterceptor('file'))
   @UseGuards(AuthenticationGuard)
   @Swagger.ApiOperation({ summary: 'Create a new University ressource.' })
+  @Swagger.ApiConsumes('multipart/form-data')
   @Swagger.ApiCreatedResponse({ type: UniversityResponse })
-  async create(@Body() body: CreateUniversityRequest) {
-    const instance = await this.createUniversityUsecase.execute(body);
+  async create(
+    @Body() body: CreateUniversityRequest,
+    @UploadedFile(new ImagesFilePipe()) file?: Express.Multer.File,
+  ) {
+    let university = await this.createUniversityUsecase.execute(body);
 
-    return UniversityResponse.fromUniversity(instance);
+    if (file) {
+      const upload = await this.uploadUniversityImageUsecase.execute({
+        id: university.id,
+        file,
+      });
+      university = new University({ ...university, logo: upload });
+    }
+
+    return UniversityResponse.fromUniversity(new University(university));
   }
 
   @Post('partners')
@@ -106,17 +126,28 @@ export class UniversityController {
 
   @Put(':id')
   @Roles(Role.ADMIN)
+  @UseInterceptors(FileInterceptor('file'))
   @UseGuards(AuthenticationGuard)
-  @Swagger.ApiOperation({ summary: 'Updates a University ressource.' })
+  @Swagger.ApiOperation({ summary: 'Updates an University ressource.' })
   @Swagger.ApiOkResponse()
   async update(
     @Param('id', ParseUUIDPipe) id: string,
     @Body() request: UpdateUniversityRequest,
+    @UploadedFile(new ImagesFilePipe()) file?: Express.Multer.File,
   ) {
-    const university = await this.updateUniversityUsecase.execute({
+    let university = await this.updateUniversityUsecase.execute({
       id,
       ...request,
     });
+
+    if (file) {
+      const upload = await this.uploadUniversityImageUsecase.execute({
+        id: university.id,
+        file,
+      });
+
+      university = new University({ ...university, logo: upload });
+    }
 
     return UniversityResponse.fromUniversity(university);
   }

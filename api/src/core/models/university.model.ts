@@ -2,6 +2,7 @@ import { CountryCode } from 'src/core/models/country-code.model';
 import { Campus } from './campus.model';
 import { Language, LanguageStatus } from './language.model';
 import { LearningType } from './profile.model';
+import { MediaObject } from 'src/core/models/media.model';
 
 export enum PairingMode {
   MANUAL = 'MANUAL',
@@ -11,6 +12,7 @@ export enum PairingMode {
 
 export interface UniversityProps {
   id: string;
+  logo?: MediaObject;
   name: string;
   parent?: string;
   country: CountryCode;
@@ -31,6 +33,8 @@ export interface UniversityProps {
 
 export class University {
   readonly id: string;
+
+  readonly logo?: MediaObject;
 
   readonly name: string;
 
@@ -66,22 +70,23 @@ export class University {
 
   constructor(props: UniversityProps) {
     this.id = props.id;
-    this.name = props.name;
-    this.parent = props.parent;
-    this.codes = props.codes;
-    this.country = props.country;
-    this.campus = props.campus;
-    this.domains = props.domains;
-    this.timezone = props.timezone;
     this.admissionStart = props.admissionStart;
     this.admissionEnd = props.admissionEnd;
-    this.openServiceDate = props.openServiceDate;
+    this.campus = props.campus;
     this.closeServiceDate = props.closeServiceDate;
-    this.website = props.website;
-    this.pairingMode = props.pairingMode || PairingMode.MANUAL;
+    this.codes = props.codes;
+    this.country = props.country;
+    this.domains = props.domains;
+    this.logo = props.logo;
     this.maxTandemsPerUser = props.maxTandemsPerUser;
+    this.name = props.name;
     this.notificationEmail = props.notificationEmail;
+    this.openServiceDate = props.openServiceDate;
+    this.pairingMode = props.pairingMode || PairingMode.MANUAL;
+    this.parent = props.parent;
     this.specificLanguagesAvailable = props.specificLanguagesAvailable || [];
+    this.timezone = props.timezone;
+    this.website = props.website;
   }
 
   static create(props: UniversityProps): University {

@@ -1,4 +1,4 @@
-import { LearningObjective, MediaObject, User } from '../models';
+import { LearningObjective, MediaObject, University, User } from '../models';
 
 export const MEDIA_OBJECT_REPOSITORY = 'media-object.repository';
 
@@ -9,6 +9,11 @@ export interface MediaObjectRepository {
 
   saveObjectiveImage: (
     objective: LearningObjective,
+    object: MediaObject,
+  ) => Promise<void>;
+
+  saveUniversityImage: (
+    university: University,
     object: MediaObject,
   ) => Promise<void>;
 
