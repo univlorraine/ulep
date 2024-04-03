@@ -8,10 +8,14 @@ const useGetTandems = () => {
     const { getAllTandems } = useConfig();
     const profile = useStoreState((state) => state.profile);
 
-    const [tandemsResult, setTandemsResult] = useState<{ tandems: Tandem[]; error: Error | undefined, isLoading: boolean }>({
+    const [tandemsResult, setTandemsResult] = useState<{
+        tandems: Tandem[];
+        error: Error | undefined;
+        isLoading: boolean;
+    }>({
         tandems: [],
         error: undefined,
-        isLoading: false
+        isLoading: false,
     });
 
     if (!profile) return tandemsResult;
@@ -42,7 +46,11 @@ const useGetTandems = () => {
                         );
                     }
                 });
-                setTandemsResult({ tandems: [...result, ...waitingLearningLanguages], error: undefined, isLoading: false });
+                setTandemsResult({
+                    tandems: [...result, ...waitingLearningLanguages],
+                    error: undefined,
+                    isLoading: false,
+                });
             }
         };
 

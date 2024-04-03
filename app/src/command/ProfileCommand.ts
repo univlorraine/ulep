@@ -34,7 +34,7 @@ interface ProfileCommand {
         sunday: string;
     };
     availabilitiesNote?: string;
-    availavilitiesNotePrivacy?: boolean;
+    availabilitiesNotePrivacy?: boolean;
     biography: {
         anecdote: string;
         experience: string;
@@ -72,7 +72,7 @@ export const profileCommandToDomain = (command: ProfileCommand): Profile => {
         },
         userResultToDomain(command.user),
         command.availabilitiesNote,
-        command.availavilitiesNotePrivacy
+        command.availabilitiesNotePrivacy
     );
 };
 
