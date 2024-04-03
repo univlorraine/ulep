@@ -18,6 +18,7 @@ import {
   CreatePartnerUniversityUsecase,
   CreateUniversityUsecase,
   DeleteUniversityUsecase,
+  GetPartnersToUniversityUsecase,
   GetUniversitiesUsecase,
   GetUniversityUsecase,
   UpdateUniversityUsecase,
@@ -43,6 +44,7 @@ export class UniversityController {
     private readonly createUniversityUsecase: CreateUniversityUsecase,
     private readonly createPartnerUniversityUsecase: CreatePartnerUniversityUsecase,
     private readonly getUniversityUsecase: GetUniversityUsecase,
+    private readonly getPartnersToUniversity: GetPartnersToUniversityUsecase,
     private readonly getUniversitiesUsecase: GetUniversitiesUsecase,
     private readonly updateUniversityUsecase: UpdateUniversityUsecase,
     private readonly deleteUniversityUsecase: DeleteUniversityUsecase,
@@ -107,6 +109,19 @@ export class UniversityController {
     const instance = await this.getUniversityUsecase.execute(id);
 
     return UniversityResponse.fromUniversity(instance);
+  }
+
+  @Get(':id/partners')
+  @UseGuards(AuthenticationGuard)
+  @SerializeOptions({ groups: ['read'] })
+  @Swagger.ApiOperation({
+    summary: 'Get all the partner universities for an university.',
+  })
+  @Swagger.ApiOkResponse({ type: UniversityResponse })
+  async findPartners(@Param('id', ParseUUIDPipe) id: string) {
+    const instance = await this.getPartnersToUniversity.execute(id);
+
+    return instance.map(UniversityResponse.fromUniversity);
   }
 
   @Get(':id/languages')
