@@ -20,12 +20,14 @@ import React, { useState } from 'react';
 import { useTranslate, useNotify, Form } from 'react-admin';
 import Country from '../../entities/Country';
 import Language from '../../entities/Language';
+import MediaObject from '../../entities/MediaObject';
 import { PairingMode } from '../../entities/University';
 import i18nProvider from '../../providers/i18nProvider';
 import inputStyle from '../../theme/inputStyle';
 import isCodeValid from '../../utils/isCodeValid';
 import isUrlValid from '../../utils/isUrlValid';
 import CountriesPicker from '../CountriesPicker';
+import ImageUploader from '../ImageUploader';
 import LanguagesPicker from '../LanguagesPicker';
 import TimezonePicker from '../TimezonePicker';
 
@@ -51,9 +53,11 @@ interface UniversityFormProps {
         maxTandemsPerUser: number,
         website?: string,
         notificationEmail?: string,
-        specificLanguagesAvailable?: Language[]
+        specificLanguagesAvailable?: Language[],
+        file?: File
     ) => void;
     canAddNewLanguages: boolean;
+    image?: MediaObject;
     name?: string;
     timezone?: string;
     tradKey?: string;
@@ -82,6 +86,7 @@ const UniversityForm: React.FC<UniversityFormProps> = ({
     country,
     domains,
     handleSubmit,
+    image,
     name,
     tradKey = 'create',
     timezone,
@@ -118,6 +123,7 @@ const UniversityForm: React.FC<UniversityFormProps> = ({
     const [newMaxTandemsPerUser, setNewMaxTandemsPerUser] = useState<number>(maxTandemsPerUser || 1);
     const [newNotificationEmail, setNewNotificationEmail] = useState<string>(notificationEmail || '');
     const [newLanguages, setNewLanguages] = useState<Language[]>(specificLanguagesAvailable || []);
+    const [file, setFile] = useState<File>();
 
     const addLanguage = (language: Language) => setNewLanguages([...newLanguages, language]);
 
@@ -205,7 +211,8 @@ const UniversityForm: React.FC<UniversityFormProps> = ({
             newMaxTandemsPerUser,
             newWebsite,
             newNotificationEmail,
-            newLanguages
+            newLanguages,
+            file
         );
     };
 
@@ -230,6 +237,8 @@ const UniversityForm: React.FC<UniversityFormProps> = ({
         <LocalizationProvider adapterLocale={locale} dateAdapter={AdapterDayjs}>
             <Form>
                 <Box display="flex" flexDirection="column" sx={{ m: 4 }}>
+                    <Typography variant="subtitle1">{translate(`universities.${tradKey}.logo`)}</Typography>
+                    <ImageUploader image={image} onImageSelect={setFile} />
                     <Typography variant="subtitle1">{translate(`universities.${tradKey}.name`)}</Typography>
 
                     <Box alignItems="center" display="flex" flexDirection="row" sx={{ mb: 2 }}>
