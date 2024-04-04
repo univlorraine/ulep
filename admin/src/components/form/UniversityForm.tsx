@@ -431,7 +431,7 @@ const UniversityForm: React.FC<UniversityFormProps> = ({
                     </Box>
 
                     {newLanguages.length > 0 && (
-                        <Typography variant="subtitle1">{translate('universities.updatelanguage')}</Typography>
+                        <Typography variant="subtitle1">{translate('universities.specific_language')}</Typography>
                     )}
                     {canAddNewLanguages && (
                         <>

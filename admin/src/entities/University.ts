@@ -1,5 +1,6 @@
 import Campus from './Campus';
 import Country from './Country';
+import Language from './Language';
 
 export enum PairingMode {
     MANUAL = 'MANUAL',
@@ -24,6 +25,7 @@ type University = {
     maxTandemsPerUser: number;
     website: string;
     notificationEmail?: string;
+    specificLanguagesAvailable?: Language[];
 };
 
 export default University;
