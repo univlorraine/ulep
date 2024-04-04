@@ -95,7 +95,7 @@ export class I18nService implements OnModuleInit, OnModuleDestroy {
 
     const res = await fetch(translationsUrl, {
       headers: {
-        Authorization: `Bearer ${this.config.http.token}`,
+        Authorization: `Token ${this.config.http.token}`,
       },
     });
     if (!res.ok) {
