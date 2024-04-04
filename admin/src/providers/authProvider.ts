@@ -5,6 +5,11 @@ import jwtManager from './jwtManager';
 export interface Identity {
     id: string;
     fullName?: string;
+    data: {
+        firstname: string;
+        lastname: string;
+        email: string;
+    };
     universityId?: string;
     isCentralUniversity: boolean;
 }
@@ -163,6 +168,7 @@ const authProvider: AuthProvider = {
 
         return Promise.resolve({
             id: decoded.sub,
+            data: decoded,
             fullName: '',
             universityId,
             isCentralUniversity,

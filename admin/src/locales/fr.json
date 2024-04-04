@@ -23,7 +23,7 @@
         "create": {
             "title": "Création d'un campus"
         },
-        "label": "Campus",
+        "label": "Campus univ. centrale",
         "name": "Nom des campus de l'université principale",
         "update": {
             "error": "Une erreur est survenue pendant la mise à jour d'un campus",
@@ -71,7 +71,6 @@
         "student": "Etudiant",
         "translations": "Traductions",
         "university": "Université",
-        "userDataError": "Une erreur est survenue lors de la récupération de vos informations",
         "tandem": "Tandem",
         "both": "Les deux",
         "deleted_user": "Utilisateur supprimé",
