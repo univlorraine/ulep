@@ -117,6 +117,7 @@ const EditUniversity = () => {
                         notificationEmail={record.notificationEmail}
                         openServiceDate={record.openServiceDate}
                         pairingMode={record.pairingMode}
+                        specificLanguagesAvailable={record.specificLanguagesAvailable}
                         timezone={record.timezone}
                         tradKey="update"
                         website={record.website}

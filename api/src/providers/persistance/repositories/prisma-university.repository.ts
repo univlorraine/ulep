@@ -127,10 +127,11 @@ export class PrismaUniversityRepository implements UniversityRepository {
           connect: { id: university.country.id },
         },
         SpecificLanguagesAvailable: {
-            connect: university.specificLanguagesAvailable.map((language) => ({
-              id: language.id,
-            })),
-          },
+          set: [],
+          connect: university.specificLanguagesAvailable.map((language) => ({
+            id: language.id,
+          })),
+        },
         pairing_mode: university.pairingMode,
         max_tandems_per_user: university.maxTandemsPerUser,
         notification_email: university.notificationEmail,

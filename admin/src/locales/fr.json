@@ -372,6 +372,7 @@
             "max_tandems_per_user": "Nombre maximum de tandems par utilisateur",
             "notificationEmail": "Email pour les notifications"
         },
+        "specific_language": "Langues spécifiques",
         "update": {
             "admission_end": "Fin de date d'inscription à l'université",
             "admission_error": "La date de fin d'admission doit être après la date de début",
