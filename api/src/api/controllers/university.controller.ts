@@ -119,9 +119,12 @@ export class UniversityController {
   })
   @Swagger.ApiOkResponse({ type: UniversityResponse })
   async findPartners(@Param('id', ParseUUIDPipe) id: string) {
-    const instance = await this.getPartnersToUniversity.execute(id);
+    const universities = await this.getPartnersToUniversity.execute(id);
 
-    return instance.map(UniversityResponse.fromUniversity);
+    return new Collection<UniversityResponse>({
+      items: universities.map(UniversityResponse.fromUniversity),
+      totalItems: universities.length,
+    });
   }
 
   @Get(':id/languages')
