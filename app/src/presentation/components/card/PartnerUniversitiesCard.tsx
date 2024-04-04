@@ -13,7 +13,7 @@ const PartnerUniversitiesCard: React.FC<UniversityCardProps> = ({ universities }
     const [currentIndex, setCurrentIndex] = useState<number>(0);
     return (
         <div className="home-card">
-            <span className="home-card-title">{t('home_page.my_university.title')}</span>
+            <span className="home-card-title">{t('home_page.partner_universities.title')}</span>
             <UniversityCard university={universities[currentIndex]} />
             <div className={styles['container-button']}>
                 {universities.map((_, index) => (

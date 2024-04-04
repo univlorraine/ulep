@@ -78,6 +78,9 @@
             "period": "Période d'ouverture",
             "title": "Mon université"
         },
+        "partner_universities": {
+            "title": "Universités partnaires"
+        },
         "profile": {
             "disconnect": "Se déconnecter",
             "edit": "Editer mon profil",

@@ -15,7 +15,7 @@ interface UniversityCommand {
     openServiceDate: Date;
     closeServiceDate: Date;
     maxTandemsPerUser: number;
-    logo?: string;
+    logo?: { id: string; mimeType: string };
 }
 
 export const universityCommandToDomain = (command: UniversityCommand) => {
@@ -31,7 +31,7 @@ export const universityCommandToDomain = (command: UniversityCommand) => {
         new Date(command.openServiceDate),
         new Date(command.closeServiceDate),
         command.maxTandemsPerUser,
-        command.logo
+        command.logo?.id
     );
 };
 
