@@ -17,6 +17,7 @@ export class MatchScores {
   readonly interests: number;
   readonly meetingFrequency: number;
   readonly certificateOption: number;
+  readonly isExclusive: number;
 
   constructor(props: {
     level: number;
@@ -26,6 +27,7 @@ export class MatchScores {
     interests: number;
     meetingFrequency: number;
     certificateOption: number;
+    isExclusive: number;
   }) {
     this.level = props.level;
     this.age = props.age;
@@ -34,6 +36,7 @@ export class MatchScores {
     this.interests = props.interests;
     this.meetingFrequency = props.meetingFrequency;
     this.certificateOption = props.certificateOption;
+    this.isExclusive = props.isExclusive;
   }
 
   static empty(): MatchScores {
@@ -45,6 +48,20 @@ export class MatchScores {
       interests: 0,
       meetingFrequency: 0,
       certificateOption: 0,
+      isExclusive: 0,
+    });
+  }
+
+  static exclusivity(): MatchScores {
+    return new MatchScores({
+      level: 0,
+      age: 0,
+      status: 0,
+      goals: 0,
+      interests: 0,
+      meetingFrequency: 0,
+      certificateOption: 0,
+      isExclusive: 1,
     });
   }
 }
@@ -75,7 +92,7 @@ export class Match {
       });
     }
 
-    if (total !== 0 && props.scores.level === 0) {
+    if (total !== 0 && props.scores.level === 0 && props.scores.isExclusive === 0) {
       throw new DomainError({
         message: 'Langage score must be not null if total is not null',
       });

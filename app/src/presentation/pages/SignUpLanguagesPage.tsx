@@ -54,6 +54,9 @@ const SignUpLanguagesPage: React.FC = () => {
     };
 
     const pushOtherLanguage = (item: Language | undefined, index: number) => {
+        if (!item && index === 0) {
+            return setOtherLanguages([]);
+        }
         const currentOtherLanguages = [...otherLanguages];
         currentOtherLanguages[index] = item;
         setOtherLanguages(currentOtherLanguages);
@@ -77,6 +80,7 @@ const SignUpLanguagesPage: React.FC = () => {
             headerColor={configuration.primaryColor}
             headerPercentage={36}
             headerTitle={t('global.create_account_title')}
+            hasGoBackButton={false}
         >
             <div className={styles.body}>
                 <h1 className={styles.title}>{t('signup_languages_page.title')}</h1>

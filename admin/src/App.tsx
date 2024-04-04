@@ -1,12 +1,14 @@
-import EmojiEventsIcon from '@mui/icons-material/EmojiEvents';
-import FlagIcon from '@mui/icons-material/Flag';
+import CheckCircleIcon from '@mui/icons-material/CheckCircle';
+import HelpIcon from '@mui/icons-material/Help';
 import InterestsIcon from '@mui/icons-material/Interests';
 import LanguageIcon from '@mui/icons-material/Language';
+import PeopleIcon from '@mui/icons-material/People';
 import PersonIcon from '@mui/icons-material/Person';
+import PersonAddIcon from '@mui/icons-material/PersonAdd';
 import PublicIcon from '@mui/icons-material/Public';
-import QuizIcon from '@mui/icons-material/Quiz';
-import SchoolIcon from '@mui/icons-material/School';
+import SchoolOutlinedIcon from '@mui/icons-material/SchoolOutlined';
 import SettingsIcon from '@mui/icons-material/Settings';
+import WarningAmberOutlinedIcon from '@mui/icons-material/WarningAmberOutlined';
 import React from 'react';
 import { Admin, Resource, useTranslate } from 'react-admin';
 import CustomLayout from './components/layout/layout';
@@ -27,7 +29,7 @@ import reports from './pages/report';
 import reportCategories from './pages/report-categories';
 import suggestedLanguages from './pages/suggested-languages';
 import universities from './pages/universities';
-import authProvider, { ADMIN_PERMISSION, SUPER_ADMIN_PERMISSION } from './providers/authProvider';
+import authProvider, { MANAGER_PERMISSION, SUPER_ADMIN_PERMISSION } from './providers/authProvider';
 import customDataProvider from './providers/customDataProvider';
 import i18nProvider from './providers/i18nProvider';
 import queryClient from './queryClient';
@@ -50,19 +52,19 @@ const App = () => {
             {(permissions) => (
                 <>
                     <Resource
-                        icon={PersonIcon}
+                        icon={PersonAddIcon}
                         name="profiles"
                         options={{ label: translate('profiles.label') }}
                         {...profiles}
                     />
                     <Resource
-                        icon={PersonIcon}
+                        icon={PeopleIcon}
                         name="learning-languages"
                         options={{ label: translate('learning_languages.label') }}
                         {...learningLanguages}
                     />
                     <Resource
-                        icon={FlagIcon}
+                        icon={WarningAmberOutlinedIcon}
                         name="reports"
                         options={{ label: translate('reports.label') }}
                         {...reports}
@@ -73,7 +75,7 @@ const App = () => {
                         options={{ label: translate('administrators.label') }}
                         {...administrators}
                     />
-                    {permissions === ADMIN_PERMISSION && (
+                    {permissions === MANAGER_PERMISSION && (
                         <Resource
                             edit={universities.admin.edit}
                             name="universities"
@@ -127,32 +129,32 @@ const App = () => {
                                 {...categoryInterest}
                             />
                             <Resource
-                                icon={EmojiEventsIcon}
+                                icon={CheckCircleIcon}
                                 name="objectives"
                                 options={{ label: translate('objectives.label') }}
                                 {...objectives}
                             />
                             <Resource
-                                icon={SchoolIcon}
+                                icon={SchoolOutlinedIcon}
                                 name="campus"
                                 options={{ label: translate('campus.label') }}
                                 {...campus}
                             />
                             <Resource
-                                icon={QuizIcon}
+                                icon={HelpIcon}
                                 name="proficiency/questions"
                                 options={{ label: translate('questions.label') }}
                                 {...questions}
                             />
                             <Resource
-                                icon={SchoolIcon}
+                                icon={SchoolOutlinedIcon}
                                 name="universities"
                                 options={{ label: translate('universities.label') }}
                                 recordRepresentation="name"
                                 {...universities}
                             />
                             <Resource
-                                icon={FlagIcon}
+                                icon={WarningAmberOutlinedIcon}
                                 name="reports/categories"
                                 options={{ label: translate('report_categories.label') }}
                                 {...reportCategories}

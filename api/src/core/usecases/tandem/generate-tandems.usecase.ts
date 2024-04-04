@@ -1,6 +1,7 @@
 import { Inject, Injectable, Logger } from '@nestjs/common';
 import {
   Match,
+  MatchScores,
   PairingMode,
   Role,
   Tandem,
@@ -27,7 +28,7 @@ import {
 import {
   TANDEM_REPOSITORY,
   TandemRepository,
-} from 'src/core/ports/tandems.repository';
+} from 'src/core/ports/tandem.repository';
 import {
   UUID_PROVIDER,
   UuidProviderInterface,
@@ -98,33 +99,50 @@ export class GenerateTandemsUsecase {
       for (let j = i + 1; j < learningLanguagesToPair.length; j++) {
         const potentialPairLearningLanguage = learningLanguagesToPair[j];
 
-        if (
-          learningLanguageToPair.profile.id !==
-          potentialPairLearningLanguage.profile.id
-        ) {
+        if (learningLanguageToPair.isExclusive()) {
           if (
-            learningLanguageToPair.profile.user.university.isCentralUniversity() ||
-            potentialPairLearningLanguage.profile.user.university.isCentralUniversity()
+            learningLanguageToPair.isExclusiveWithLearningLanguage(
+              potentialPairLearningLanguage,
+            )
+          ) {
+            possiblePairs.push(
+              new Match({
+                owner: learningLanguageToPair,
+                target: potentialPairLearningLanguage,
+                scores: MatchScores.exclusivity(),
+              }),
+            );
+            break;
+          }
+        } else {
+          if (
+            learningLanguageToPair.profile.id !==
+            potentialPairLearningLanguage.profile.id
           ) {
             if (
-              !refusedTandemsIdMap.has(
-                getLearningLanguagesHash([
-                  learningLanguageToPair.id,
-                  potentialPairLearningLanguage.id,
-                ]),
-              )
+              learningLanguageToPair.profile.user.university.isCentralUniversity() ||
+              potentialPairLearningLanguage.profile.user.university.isCentralUniversity()
             ) {
-              const match = this.scorer.computeMatchScore(
-                learningLanguageToPair,
-                potentialPairLearningLanguage,
-                languagesThatCanBeLearnt,
-              );
-
               if (
-                match.total > TRESHOLD_VIABLE_PAIR &&
-                match.isAValidTandem()
+                !refusedTandemsIdMap.has(
+                  getLearningLanguagesHash([
+                    learningLanguageToPair.id,
+                    potentialPairLearningLanguage.id,
+                  ]),
+                )
               ) {
-                possiblePairs.push(match);
+                const match = this.scorer.computeMatchScore(
+                  learningLanguageToPair,
+                  potentialPairLearningLanguage,
+                  languagesThatCanBeLearnt,
+                );
+
+                if (
+                  match.total > TRESHOLD_VIABLE_PAIR &&
+                  match.isAValidTandem()
+                ) {
+                  possiblePairs.push(match);
+                }
               }
             }
           }
@@ -135,24 +153,30 @@ export class GenerateTandemsUsecase {
     this.logger.verbose(`Computed ${possiblePairs.length} potential pairs`);
 
     const sortedLearningLanguages = learningLanguagesToPair.sort((a, b) => {
-      if (
-        a.profile.user.university.isCentralUniversity() ===
-        b.profile.user.university.isCentralUniversity()
-      ) {
-        if (a.profile.user.role === b.profile.user.role) {
-          if (a.specificProgram === b.specificProgram) {
-            return a.createdAt?.getTime() - b.createdAt?.getTime();
-          } else if (!!a.specificProgram) {
+      if (a.hasPriority === b.hasPriority) {
+        if (
+          a.profile.user.university.isCentralUniversity() ===
+          b.profile.user.university.isCentralUniversity()
+        ) {
+          if (a.profile.user.role === b.profile.user.role) {
+            if (a.specificProgram === b.specificProgram) {
+              return a.createdAt?.getTime() - b.createdAt?.getTime();
+            } else if (!!a.specificProgram) {
+              return -1;
+            } else {
+              return 1;
+            }
+          } else if (a.profile.user.role === Role.STAFF) {
             return -1;
           } else {
             return 1;
           }
-        } else if (a.profile.user.role === Role.STAFF) {
+        } else if (a.profile.user.university.isCentralUniversity()) {
           return -1;
         } else {
           return 1;
         }
-      } else if (a.profile.user.university.isCentralUniversity()) {
+      } else if (a.hasPriority) {
         return -1;
       } else {
         return 1;

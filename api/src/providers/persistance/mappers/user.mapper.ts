@@ -6,11 +6,11 @@ import {
 } from './university.mapper';
 import { Gender, MediaObject, Role, User, UserStatus } from 'src/core/models';
 
-export const UserRelations = {
+export const UserRelations = () => ({
   Organization: { include: UniversityRelations },
   Nationality: true,
   Avatar: true,
-};
+});
 
 export type UserSnapshot = Prisma.Users & {
   Organization: UniversitySnapshot;

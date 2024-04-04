@@ -14,7 +14,7 @@ import {
 import {
   TANDEM_REPOSITORY,
   TandemRepository,
-} from 'src/core/ports/tandems.repository';
+} from 'src/core/ports/tandem.repository';
 import {
   USER_REPOSITORY,
   UserRepository,
@@ -28,6 +28,10 @@ import {
   UuidProviderInterface,
 } from 'src/core/ports/uuid.provider';
 import { DeleteUserUsecase } from '../user';
+import {
+  LEARNING_LANGUAGE_REPOSITORY,
+  LearningLanguageRepository,
+} from 'src/core/ports/learning-language.repository';
 
 export class UserTandemPurgeCommand {
   userId: string;
@@ -45,6 +49,8 @@ export class ArchiveTandemsAndDeleteUsersUsecase {
     private readonly purgeRepository: PurgeRepository,
     @Inject(TANDEM_REPOSITORY)
     private readonly tandemRepository: TandemRepository,
+    @Inject(LEARNING_LANGUAGE_REPOSITORY)
+    private readonly learningLanguageRepository: LearningLanguageRepository,
     @Inject(USER_REPOSITORY)
     private readonly userRepository: UserRepository,
     @Inject(REPORT_REPOSITORY)
@@ -61,11 +67,17 @@ export class ArchiveTandemsAndDeleteUsersUsecase {
     const purge = await this.createNewPurge(command.userId);
     // Blacklist users who have been banned
     await this.blacklistUsers();
+    // Archive all unmatched learning languages
+    const userWithUnmatchedLearningLanguages =
+      await this.archiveUnmatchedLearningLanguages(purge.id);
     // Retrieve all users who have an active tandem
     const activeTandems = await this.archiveTandems(purge.id);
     const usersWithActiveTandem = this.getUserIdFromTandems(activeTandems);
-    // Delete users who do not have an active tandem and are not administrators
-    await this.deleteUsers(usersWithActiveTandem);
+    // Delete inactives users and are not administrators
+    await this.deleteUsers([
+      ...usersWithActiveTandem,
+      ...userWithUnmatchedLearningLanguages,
+    ]);
     // Delete closed reports
     await this.deleteClosedReports();
 
@@ -94,7 +106,19 @@ export class ArchiveTandemsAndDeleteUsersUsecase {
     return activeTandems.items;
   }
 
-  private async deleteUsers(usersWithActiveTandem: string[]): Promise<void> {
+  private async archiveUnmatchedLearningLanguages(purgeId: string) {
+    const unmatchedLearningLanguages =
+      await this.learningLanguageRepository.getUnmatchedLearningLanguages();
+
+    await this.learningLanguageRepository.archiveUnmatchedLearningLanguages(
+      unmatchedLearningLanguages,
+      purgeId,
+    );
+
+    return unmatchedLearningLanguages.map((l) => l.profile.user.id);
+  }
+
+  private async deleteUsers(usersToKeep: string[]): Promise<void> {
     // Retrieve all administrators
     const administratorsId = (await this.keycloak.getAdministrators()).map(
       (administrator) => administrator.id,
@@ -108,7 +132,7 @@ export class ArchiveTandemsAndDeleteUsersUsecase {
       // Check if the user is an administrator
       const isAdministrator = administratorsId.includes(user.id);
       // Check if the user has an active tandem
-      const isUserWithActiveTandem = usersWithActiveTandem.includes(user.id);
+      const isUserWithActiveTandem = usersToKeep.includes(user.id);
       if (isAdministrator || isUserWithActiveTandem) {
         // If the user is an administrator or has an active tandem, skip
         continue;

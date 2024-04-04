@@ -21,7 +21,8 @@
         "no-empty-function": "off",
         "no-useless-constructor": "off",
         "prettier/prettier": "error",
-        "no-unused-vars": ["error", { "varsIgnorePattern": "React" }]
+        "no-unused-vars": ["error", { "varsIgnorePattern": "React" }],
+        "@typescript-eslint/no-floating-promises": "off"
     },
     "overrides": [
         {

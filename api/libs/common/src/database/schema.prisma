@@ -59,6 +59,8 @@ model LanguageCodes {
   LearningLanguages      LearningLanguages[]  @relation("LearningLanguageLanguage")
   JokerLearningLanguages LearningLanguages[]  @relation("TandemLanguage")
   TandemHistory          TandemHistory[]
+  UnmatchedLearningLanguages UnmatchedLearningLanguages[]
+  Organizations          Organizations[]
 
   @@unique([name])
   @@unique([code])
@@ -95,6 +97,7 @@ model Organizations {
   RoutineExecutions    RoutineExecutions[]
   ValidatedTandems     Tandems[]
   RefusedTandems       RefusedTandems[]
+  SpecificLanguagesAvailable   LanguageCodes[]
 
   @@unique([name])
   @@map("organizations")
@@ -336,8 +339,10 @@ model LearningLanguages {
   learning_type           String
   same_gender             Boolean
   same_age                Boolean
+  same_tandem_email       String?
   certificate_option      Boolean?
   specific_program        Boolean?
+  has_priority            Boolean?
   campus_id               String?
   tandem_id               String?
   tandem_language_code_id String?
@@ -427,6 +432,7 @@ model Purges {
   author_id     String
   created_at    DateTime        @default(now())
   TandemHistory TandemHistory[]
+  UnmatchedLearningLanguages UnmatchedLearningLanguages[]
 
   @@map("purges")
 }
@@ -443,6 +449,7 @@ model Blacklist {
 model TandemHistory {
   id               String        @id @default(uuid())
   user_id          String
+  user_email       String
   purge_id         String
   tandem_id        String
   language_code_id String
@@ -452,4 +459,17 @@ model TandemHistory {
 
   @@unique([user_id, tandem_id])
   @@map("tandem_history")
+}
+
+model UnmatchedLearningLanguages {
+  id               String        @id @default(uuid())
+  user_id          String
+  purge_id         String
+  language_code_id String
+  created_at       DateTime      @default(now())
+  Purge            Purges        @relation(fields: [purge_id], references: [id], onDelete: Cascade)
+  Language         LanguageCodes @relation(fields: [language_code_id], references: [id])
+
+  @@unique([user_id, language_code_id])
+  @@map("unmatched_learning_languages")
 }

@@ -63,15 +63,15 @@ class CreateUserUsecase implements CreateUserUsecaseInterface {
                 body.file = avatar;
             }
 
-            if(division) {
+            if (division) {
                 body.division = division;
             }
 
-            if(diploma) {
+            if (diploma) {
                 body.diploma = diploma;
             }
 
-            if(staffFunction) {
+            if (staffFunction) {
                 body.staffFunction = staffFunction;
             }
 
@@ -124,7 +124,11 @@ class CreateUserUsecase implements CreateUserUsecaseInterface {
             if (error.statusCode === 400 && error.message === 'Code is invalid') {
                 return new Error('signup_informations_page.error_code');
             }
-            
+
+            if (error.statusCode === 400 && error.message === 'User password is not valid') {
+                return new Error('signup_informations_page.error_password');
+            }
+
             return new Error('errors.global');
         }
     }

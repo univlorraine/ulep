@@ -7,7 +7,7 @@ import {
 import {
   TandemRepository,
   TANDEM_REPOSITORY,
-} from 'src/core/ports/tandems.repository';
+} from 'src/core/ports/tandem.repository';
 
 export class GetTandemsForProfileCommand {
   profile: string;

@@ -47,7 +47,7 @@ export class PrismaUserRepository implements UserRepository {
     const instances = await this.prisma.users.findMany({
       skip: offset,
       take: limit,
-      include: UserRelations,
+      include: UserRelations(),
     });
 
     const users: User[] = instances.map((item) => userMapper(item));
@@ -60,7 +60,7 @@ export class PrismaUserRepository implements UserRepository {
       where: {
         id,
       },
-      include: UserRelations,
+      include: UserRelations(),
     });
 
     if (!instance) {
@@ -75,7 +75,7 @@ export class PrismaUserRepository implements UserRepository {
       where: {
         status: status.toString(),
       },
-      include: UserRelations,
+      include: UserRelations(),
     });
 
     return instances.map((item) => userMapper(item));
@@ -103,7 +103,7 @@ export class PrismaUserRepository implements UserRepository {
       where: {
         id: user.id,
       },
-      include: UserRelations,
+      include: UserRelations(),
     });
 
     return userMapper(updatedUser);
@@ -120,21 +120,14 @@ export class PrismaUserRepository implements UserRepository {
   }
 
   async blacklist(users: User[]): Promise<void> {
-    const blacklist = await this.prisma.blacklist.findMany();
+    await this.prisma.blacklist.deleteMany();
 
-    for (const user of users) {
-      const index = blacklist.findIndex((it) => it.email === user.email);
-      if (index !== -1) {
-        continue;
-      }
-
-      await this.prisma.blacklist.create({
-        data: {
-          user_id: user.id,
-          email: user.email,
-        },
-      });
-    }
+    await this.prisma.blacklist.createMany({
+      data: users.map((user) => ({
+        user_id: user.id,
+        email: user.email,
+      })),
+    });
   }
 
   async isBlacklisted(email: string): Promise<boolean> {

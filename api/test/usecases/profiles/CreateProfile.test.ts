@@ -23,6 +23,7 @@ import { InMemoryUserRepository } from '../../../src/providers/persistance/repos
 import { InMemoryLearningObjectiveRepository } from '../../../src/providers/persistance/repositories/in-memory-objective.repository';
 import InMemoryEmailGateway from '../../../src/providers/gateway/in-memory-email.gateway';
 import { UuidProvider } from '../../../src/providers/services/uuid.provider';
+import { InMemoryTandemHistoryRepository } from 'src/providers/persistance/repositories/in-memory-tandem-history.repository';
 
 describe('CreateProfile', () => {
   const userFactory = new UserFactory();
@@ -36,6 +37,7 @@ describe('CreateProfile', () => {
   const languageRepository = new InMemoryLanguageRepository();
   const interestRepository = new InMemoryInterestRepository();
   const objectivesRepository = new InMemoryLearningObjectiveRepository();
+  const tandemHistoryRepository = new InMemoryTandemHistoryRepository();
   const uuidProvider = new UuidProvider();
   const emailGateway = new InMemoryEmailGateway();
 
@@ -75,6 +77,7 @@ describe('CreateProfile', () => {
     languageRepository,
     interestRepository,
     objectivesRepository,
+    tandemHistoryRepository,
     uuidProvider,
     emailGateway,
   );
@@ -125,6 +128,7 @@ describe('CreateProfile', () => {
             learningType: LearningType.ETANDEM,
             sameGender: true,
             sameAge: true,
+            sameTandem: false,
           },
         ],
         objectives: [],
@@ -153,6 +157,7 @@ describe('CreateProfile', () => {
             learningType: LearningType.ETANDEM,
             sameGender: true,
             sameAge: true,
+            sameTandem: false,
           },
         ],
         objectives: [],
@@ -181,6 +186,7 @@ describe('CreateProfile', () => {
             learningType: LearningType.ETANDEM,
             sameGender: true,
             sameAge: true,
+            sameTandem: false,
           },
         ],
         objectives: [],
@@ -209,6 +215,7 @@ describe('CreateProfile', () => {
             learningType: LearningType.ETANDEM,
             sameGender: true,
             sameAge: true,
+            sameTandem: false,
           },
         ],
         masteredLanguageCodes: [nativeLanguage.code],
@@ -238,6 +245,7 @@ describe('CreateProfile', () => {
             learningType: LearningType.ETANDEM,
             sameGender: true,
             sameAge: true,
+            sameTandem: false,
           },
         ],
         masteredLanguageCodes: [learningLanguage.code],

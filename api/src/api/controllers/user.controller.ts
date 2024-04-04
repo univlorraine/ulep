@@ -77,6 +77,7 @@ export class UserController {
     private readonly revokeSessionsUsecase: RevokeSessionsUsecase,
     private readonly getUserPersonalData: GetUserPersonalData,
     private readonly i18n: I18nService,
+
     @Inject(STORAGE_INTERFACE)
     private readonly storage: StorageInterface,
     private readonly env: ConfigService<Env, true>,

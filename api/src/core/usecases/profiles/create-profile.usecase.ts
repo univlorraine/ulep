@@ -30,6 +30,10 @@ import {
   LanguageRepository,
 } from 'src/core/ports/language.repository';
 import {
+  LEARNING_LANGUAGE_REPOSITORY,
+  LearningLanguageRepository,
+} from 'src/core/ports/learning-language.repository';
+import {
   LearningObjectiveRepository,
   OBJECTIVE_REPOSITORY,
 } from 'src/core/ports/objective.repository';
@@ -37,6 +41,10 @@ import {
   PROFILE_REPOSITORY,
   ProfileRepository,
 } from 'src/core/ports/profile.repository';
+import {
+  TANDEM_HISTORY_REPOSITORY,
+  TandemHistoryRepository,
+} from 'src/core/ports/tandem-history.repository';
 import {
   USER_REPOSITORY,
   UserRepository,
@@ -56,6 +64,7 @@ export class CreateProfileCommand {
     learningType: LearningType;
     sameGender: boolean;
     sameAge: boolean;
+    sameTandem: boolean;
     campusId?: string;
     certificateOption?: boolean;
     specificProgram?: boolean;
@@ -75,12 +84,16 @@ export class CreateProfileUsecase {
     private readonly usersRepository: UserRepository,
     @Inject(PROFILE_REPOSITORY)
     private readonly profilesRepository: ProfileRepository,
+    @Inject(LEARNING_LANGUAGE_REPOSITORY)
+    private readonly learningLanguageRepository: LearningLanguageRepository,
     @Inject(LANGUAGE_REPOSITORY)
     private readonly languageRepository: LanguageRepository,
     @Inject(INTEREST_REPOSITORY)
     private readonly interestsRepository: InterestRepository,
     @Inject(OBJECTIVE_REPOSITORY)
     private readonly objectiveRepository: LearningObjectiveRepository,
+    @Inject(TANDEM_HISTORY_REPOSITORY)
+    private readonly tandemHistoryRepository: TandemHistoryRepository,
     @Inject(UUID_PROVIDER)
     private readonly uuidProvider: UuidProviderInterface,
     @Inject(EMAIL_GATEWAY)
@@ -148,6 +161,25 @@ export class CreateProfileUsecase {
           }
         }
 
+        const historizedUnmatchedLearningLanguage =
+          await this.learningLanguageRepository.getHistoricUnmatchedLearningLanguageByUserIdAndLanguageId(
+            user.id,
+            language.id,
+          );
+        let sameTandemEmail;
+        if (learningLanguage.sameTandem) {
+          const historyTandem =
+            await this.tandemHistoryRepository.getHistoryTandemFormUserIdAndLanguageId(
+              user.id,
+              language.id,
+            );
+          sameTandemEmail =
+            await this.tandemHistoryRepository.getOtherUserInTandemHistory(
+              user.id,
+              historyTandem.tandemId,
+            );
+        }
+
         return new LearningLanguage({
           id: this.uuidProvider.generate(),
           language,
@@ -155,8 +187,10 @@ export class CreateProfileUsecase {
           learningType: learningLanguage.learningType,
           sameGender: learningLanguage.sameGender,
           sameAge: learningLanguage.sameAge,
+          sameTandemEmail,
           certificateOption: learningLanguage.certificateOption,
           specificProgram: learningLanguage.specificProgram,
+          hasPriority: Boolean(historizedUnmatchedLearningLanguage),
           campus: campus,
         });
       }),

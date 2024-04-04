@@ -9,7 +9,7 @@ import Checkbox from '../components/Checkbox';
 import RadioButton from '../components/RadioButton';
 import TextInput from '../components/TextInput';
 import WebLayoutCentered from '../components/layout/WebLayoutCentered';
-import { isEmailCorrect, isNameCorrect, isPasswordCorrect } from '../utils';
+import { isEmailCorrect, isNameCorrect } from '../utils';
 import styles from './css/SignUp.module.css';
 
 export interface SignUpInformationsParams {
@@ -84,7 +84,7 @@ const SignUpInformationsPage: React.FC = () => {
             return history.push('/signup/');
         }
 
-        if (!fromIdp && (!password || !isPasswordCorrect(password))) {
+        if (!fromIdp && !password) {
             return setErrorMessage({ type: 'password', message: t('signup_informations_page.error_password') });
         }
 
@@ -117,6 +117,11 @@ const SignUpInformationsPage: React.FC = () => {
             if (result.message === 'signup_informations_page.error_code') {
                 return setErrorMessage({ type: 'code', message: t(result.message) });
             }
+
+            if (result.message === 'signup_informations_page.password_error') {
+                return setErrorMessage({ type: 'password', message: t(result.message) });
+            }
+
             return await showToast({ message: t(result.message), duration: 3000 });
         }
         updateProfileSignUp({

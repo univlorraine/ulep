@@ -25,6 +25,10 @@ import {
   ProfileRepository,
 } from 'src/core/ports/profile.repository';
 import {
+  TANDEM_HISTORY_REPOSITORY,
+  TandemHistoryRepository,
+} from 'src/core/ports/tandem-history.repository';
+import {
   UUID_PROVIDER,
   UuidProviderInterface,
 } from 'src/core/ports/uuid.provider';
@@ -36,6 +40,7 @@ export interface CreateLearningLanguageCommand {
   learningType: LearningType;
   sameGender: boolean;
   sameAge: boolean;
+  sameTandem: boolean;
   campusId?: string;
   certificateOption?: boolean;
   specificProgram?: boolean;
@@ -52,6 +57,8 @@ export class CreateLearningLanguageUseCase {
     private readonly languageRepository: LanguageRepository,
     @Inject(LEARNING_LANGUAGE_REPOSITORY)
     private readonly learningLanguageRepository: LearningLanguageRepository,
+    @Inject(TANDEM_HISTORY_REPOSITORY)
+    private readonly tandemHistoryRepository: TandemHistoryRepository,
     @Inject(UUID_PROVIDER)
     private readonly uuidProvider: UuidProviderInterface,
   ) {}
@@ -107,6 +114,26 @@ export class CreateLearningLanguageUseCase {
       }
     }
 
+    const historizedUnmatchedLearningLanguage =
+      await this.learningLanguageRepository.getHistoricUnmatchedLearningLanguageByUserIdAndLanguageId(
+        profile.user.id,
+        language.id,
+      );
+
+    let sameTandemEmail;
+    if (command.sameTandem) {
+      const historyTandem =
+        await this.tandemHistoryRepository.getHistoryTandemFormUserIdAndLanguageId(
+          profile.user.id,
+          language.id,
+        );
+      sameTandemEmail =
+        await this.tandemHistoryRepository.getOtherUserInTandemHistory(
+          profile.user.id,
+          historyTandem.tandemId,
+        );
+    }
+
     const item = new LearningLanguage({
       id: this.uuidProvider.generate(),
       language,
@@ -115,8 +142,10 @@ export class CreateLearningLanguageUseCase {
       learningType: command.learningType,
       sameGender: command.sameGender,
       sameAge: command.sameAge,
+      sameTandemEmail,
       certificateOption: command.certificateOption,
       specificProgram: command.specificProgram,
+      hasPriority: Boolean(historizedUnmatchedLearningLanguage),
       campus: campus,
     });
 

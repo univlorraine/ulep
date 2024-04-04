@@ -14,7 +14,7 @@ import Loader from '../components/Loader';
 
 const PairingLanguagesPage: React.FC = () => {
     const { t } = useTranslation();
-    const { configuration, getAllLanguages } = useConfig();
+    const { configuration, getAllLanguages, getUniversityLanguages } = useConfig();
     const [showToast] = useIonToast();
     const history = useHistory();
     const [languages, setLanguages] = useState<Language[]>([]);
@@ -30,20 +30,27 @@ const PairingLanguagesPage: React.FC = () => {
 
     const getLanguages = async () => {
         setIsLoadingLanguages(true);
-        let result = await getAllLanguages.execute(university.isCentral ? 'PRIMARY' : 'PARTNER');
+        let [globalLanguages, universityLanguages] = await Promise.all([
+            getAllLanguages.execute(university.isCentral ? 'PRIMARY' : 'PARTNER'),
+            getUniversityLanguages.execute(university.id),
+        ]);
         setIsLoadingLanguages(false);
 
-        if (result instanceof Error) {
-            return await showToast({ message: t(result.message), duration: 1000 });
+        if (globalLanguages instanceof Error) {
+            return await showToast({ message: t(globalLanguages.message), duration: 1000 });
         }
 
-        return setLanguages(
-            result.filter(
-                (language) =>
-                    profile?.nativeLanguage.code !== language.code &&
-                    !profile?.learningLanguages?.find((learningLanguage) => language.code === learningLanguage.code)
-            )
+        if (universityLanguages instanceof Error) {
+            return await showToast({ message: t(universityLanguages.message), duration: 1000 });
+        }
+
+        const learnableLanguages = [...globalLanguages, ...universityLanguages].filter(
+            (language) =>
+                profile?.nativeLanguage.code !== language.code &&
+                !profile?.learningLanguages?.find((learningLanguage) => language.code === learningLanguage.code)
         );
+
+        return setLanguages(learnableLanguages);
     };
 
     const continueSignUp = async () => {

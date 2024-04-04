@@ -8,8 +8,14 @@ export class InvalidCredentialsException extends KeycloakException {
   }
 }
 
-export class UserAlreadyExistException extends KeycloakException {
+export class UnexpectedErrorException extends KeycloakException {
   constructor() {
-    super('User exists with same email', 409);
+    super('Unexpected error occurred', 500);
+  }
+}
+
+export class UserPasswordNotValidException extends KeycloakException {
+  constructor() {
+    super('User password is not valid', 400);
   }
 }

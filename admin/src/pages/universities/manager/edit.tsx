@@ -74,6 +74,7 @@ const EditUniversity = () => {
                     <UniversityForm
                         admissionEndDate={record.admissionEnd}
                         admissionStartDate={record.admissionStart}
+                        canAddNewLanguages={false}
                         closeServiceDate={record.closeServiceDate}
                         codes={record.codes}
                         country={record.country}

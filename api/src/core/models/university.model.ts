@@ -26,6 +26,7 @@ export interface UniversityProps {
   pairingMode?: PairingMode;
   maxTandemsPerUser: number;
   notificationEmail?: string;
+  specificLanguagesAvailable?: Language[];
 }
 
 export class University {
@@ -61,6 +62,8 @@ export class University {
 
   readonly notificationEmail?: string;
 
+  readonly specificLanguagesAvailable: Language[];
+
   constructor(props: UniversityProps) {
     this.id = props.id;
     this.name = props.name;
@@ -78,6 +81,7 @@ export class University {
     this.pairingMode = props.pairingMode || PairingMode.MANUAL;
     this.maxTandemsPerUser = props.maxTandemsPerUser;
     this.notificationEmail = props.notificationEmail;
+    this.specificLanguagesAvailable = props.specificLanguagesAvailable || [];
   }
 
   static create(props: UniversityProps): University {
@@ -103,6 +107,10 @@ export class University {
       this.isCentralUniversity() &&
       language.mainUniversityStatus === LanguageStatus.SECONDARY &&
       learningType !== LearningType.ETANDEM
+    ) {
+      return true;
+    } else if (
+      this.specificLanguagesAvailable.find((l) => l.id === language.id)
     ) {
       return true;
     }

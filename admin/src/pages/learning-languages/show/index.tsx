@@ -11,7 +11,7 @@ import {
     useRecordContext,
     useTranslate,
 } from 'react-admin';
-import { DisplayGender, DisplayLearningType, DisplayRole } from '../../../components/translated';
+import { DisplayGender, DisplayLearningType, DisplayRole, DisplaySameTandem } from '../../../components/translated';
 import Language from '../../../entities/Language';
 import { LearningLanguage, getLearningLanguageUniversityAndCampusString } from '../../../entities/LearningLanguage';
 import ProfileLink from '../ui/ProfileLink';
@@ -75,6 +75,10 @@ const LearningLanguageShow = () => {
                     render={(data: LearningLanguage) => <DisplayGender gender={data.profile?.user.gender} />}
                 />
                 <BooleanField label={translate('learning_languages.show.fields.sameAge')} source="sameAge" />
+                <FunctionField
+                    label={translate('learning_languages.show.fields.sameTandemEmail')}
+                    render={(data: LearningLanguage) => <DisplaySameTandem sameTandemEmail={data.sameTandemEmail} />}
+                />
                 <TextField label={translate('learning_languages.show.fields.age')} source="profile.user.age" />
                 <BooleanField
                     label={translate('learning_languages.show.fields.certificateOption')}
@@ -84,6 +88,7 @@ const LearningLanguageShow = () => {
                     label={translate('learning_languages.show.fields.specificProgram')}
                     source="specificProgram"
                 />
+                <BooleanField label={translate('learning_languages.show.fields.hasPriority')} source="hasPriority" />
             </SimpleShowLayout>
 
             <Box sx={{ padding: 2 }}>

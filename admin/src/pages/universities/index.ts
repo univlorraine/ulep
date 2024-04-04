@@ -1,8 +1,8 @@
-import AdminEditUniversity from './admin/edit';
-import AdminUniversityShow from './admin/show';
 import CreateUniversity from './create';
 import EditUniversity from './edit';
 import UniversityList from './list';
+import AdminEditUniversity from './manager/edit';
+import AdminUniversityShow from './manager/show';
 import UniversityShow from './show';
 
 export default {

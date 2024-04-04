@@ -54,12 +54,14 @@
         "content": "Content",
         "disconnect": "Disconnect",
         "email": "Email",
+        "etandem": "E-tandem",
         "firstname": "Firstname",
         "gender": "Gender",
         "image": "Image",
         "language": "Language",
         "lastname": "Lastname",
         "new_translation": "New translation",
+        "profile": "Profile",
         "password": "Password",
         "reported": "Reported",
         "role": "Role",
@@ -68,7 +70,7 @@
         "student": "Student",
         "translations": "Translations",
         "university": "University",
-        "etandem": "E-tandem",
+        "userDataError": "An error occurred while retrieving your information",
         "tandem": "Tandem",
         "both": "Both",
         "deleted_user": "Deleted user",
@@ -84,6 +86,9 @@
             "female": "Female",
             "other": "Other"
         }
+    },
+    "header": {
+        "title": "ULEP Administration"
     },
     "instance": {
         "label": "Instance",
@@ -173,6 +178,9 @@
             "yes": "Yes",
             "no": "No"
         }
+    },
+    "langauges_picker": {
+        "placeholder": "Choose an additional language"
     },
     "login": {
         "connect": "Connect",
@@ -338,6 +346,7 @@
             "service_dont_include_admission_date": "Registration dates must be within service opening dates",
             "resourcesUrl": "university's languages resources URL",
             "sites": "Meeting campus",
+            "specificLanguages": "Specific languages",
             "timezone": "Timezone",
             "website": "University website",
             "id": "ID",
@@ -359,6 +368,7 @@
             "country": "University country",
             "domains": "Domain name list for inscription",
             "domains_error": "Domain name must start with @",
+            "languages": "List of additional languages available for learning",
             "name": "University name",
             "timezone": "University timezone",
             "title": "Update an university",
@@ -444,9 +454,11 @@
                 "sameGender": "Same gender",
                 "gender": "Gender",
                 "sameAge": "Same age",
+                "sameTandemEmail": "Same tandem as previous cycle",
                 "age": "Age",
                 "certificateOption": "Certificate option",
-                "specificProgram": "Specific program"
+                "specificProgram": "Specific program",
+                "hasPriority": "Priority language (no response to previous cycle)"
             },
             "tandems": {
                 "error": "An error occured while fetching tandems",

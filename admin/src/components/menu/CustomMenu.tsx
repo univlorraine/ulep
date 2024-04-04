@@ -2,7 +2,7 @@ import SchoolIcon from '@mui/icons-material/School';
 import SettingsIcon from '@mui/icons-material/Settings';
 import React from 'react';
 import { Menu, usePermissions, useGetIdentity, useTranslate } from 'react-admin';
-import { ADMIN_PERMISSION, SUPER_ADMIN_PERMISSION } from '../../providers/authProvider';
+import { MANAGER_PERMISSION, SUPER_ADMIN_PERMISSION } from '../../providers/authProvider';
 
 const CustomMenu = () => {
     const { data } = useGetIdentity();
@@ -14,7 +14,7 @@ const CustomMenu = () => {
             <Menu.ResourceItem name="profiles" />
             <Menu.ResourceItem name="learning-languages" />
             <Menu.ResourceItem name="users/administrators" />
-            {permissions === ADMIN_PERMISSION && data && data.universityId && (
+            {permissions === MANAGER_PERMISSION && data && data.universityId && (
                 <Menu.Item
                     leftIcon={<SchoolIcon />}
                     primaryText={translate('universities.label')}

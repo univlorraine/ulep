@@ -22,6 +22,8 @@ export type LearningLanguage = {
     campus?: Campus;
     certificateOption?: boolean;
     specificProgram?: boolean;
+    hasPriority?: boolean;
+    sameTandemEmail?: string;
 };
 
 export type LearningLanguageTandem = {

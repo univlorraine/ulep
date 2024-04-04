@@ -15,7 +15,7 @@ import { REPORT_REPOSITORY } from 'src/core/ports/report.repository';
 import { PrismaReportRepository } from './persistance/repositories/prisma-report.repository';
 import { STORAGE_INTERFACE } from 'src/core/ports/storage.interface';
 import { MinioStorage } from './storage/minio.storage';
-import { TANDEM_REPOSITORY } from 'src/core/ports/tandems.repository';
+import { TANDEM_REPOSITORY } from 'src/core/ports/tandem.repository';
 import { PrismaTandemRepository } from './persistance/repositories/prisma-tandem-repository';
 import { UNIVERSITY_REPOSITORY } from 'src/core/ports/university.repository';
 import { PrismaUniversityRepository } from './persistance/repositories/prisma-university.repository';
@@ -41,6 +41,8 @@ import { PrismaInstanceRepository } from 'src/providers/persistance/repositories
 import { PURGE_REPOSITORY } from 'src/core/ports/purge.repository';
 import { PrismaPurgeRepository } from './persistance/repositories/prisma-purge.repository';
 import { ConfigModule } from '@nestjs/config';
+import { TANDEM_HISTORY_REPOSITORY } from 'src/core/ports/tandem-history.repository';
+import { PrismaTandemHistoryRepository } from 'src/providers/persistance/repositories/prisma-tandem-history-repository';
 
 const providers: Provider[] = [
   { provide: INSTANCE_REPOSITORY, useClass: PrismaInstanceRepository },
@@ -91,6 +93,10 @@ const providers: Provider[] = [
   {
     provide: TANDEM_REPOSITORY,
     useClass: PrismaTandemRepository,
+  },
+  {
+    provide: TANDEM_HISTORY_REPOSITORY,
+    useClass: PrismaTandemHistoryRepository,
   },
   {
     provide: UNIVERSITY_REPOSITORY,

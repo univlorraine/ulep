@@ -55,6 +55,7 @@
         "content": "Contenu",
         "disconnect": "Déconnexion",
         "email": "Email",
+        "etandem": "E-tandem",
         "firstname": "Prénom",
         "gender": "Genre",
         "image": "Image",
@@ -62,6 +63,7 @@
         "lastname": "Nom",
         "new_translation": "Nouvelle traduction",
         "password": "Mot de passe",
+        "profile": "Profil",
         "reported": "Signalé",
         "role": "Rôle",
         "save": "Enregistrer",
@@ -69,7 +71,7 @@
         "student": "Etudiant",
         "translations": "Traductions",
         "university": "Université",
-        "etandem": "E-tandem",
+        "userDataError": "Une erreur est survenue lors de la récupération de vos informations",
         "tandem": "Tandem",
         "both": "Les deux",
         "deleted_user": "Utilisateur supprimé",
@@ -85,6 +87,9 @@
             "female": "Femme",
             "other": "Autre"
         }
+    },
+    "header": {
+        "title": "ULEP Administration"
     },
     "instance": {
         "label": "Instance",
@@ -177,6 +182,9 @@
             "no": "Non"
         }
     },
+    "langauges_picker": {
+        "placeholder": "Choisir une langue supplémentaire"
+    },
     "login": {
         "connect": "Connexion",
         "loginError": "Mauvais email ou mot de passe",
@@ -233,7 +241,7 @@
         "division": "Département",
         "country": "Pays",
         "interests": "Centre d'intérêts",
-        "label": "Utilisateurs",
+        "label": "Inscrits",
         "language_title": "Langues",
         "learning_language": {
             "name": "Nom de langue d'apprentissage",
@@ -356,6 +364,7 @@
             "resourcesUrl": "Url des ressources de langues de l'université",
             "service_dont_include_admission_date": "Les dates d'inscriptions doivent être dans les dates d'ouverture de service",
             "sites": "Campus de rencontre",
+            "specificLanguages": "Langues spécifiques",
             "timezone": "Timezone",
             "website": "Site web de l'université",
             "id": "ID",
@@ -375,6 +384,7 @@
             "country": "Pays de l'université",
             "domains": "Liste des noms de domaines pour l'inscription",
             "domains_error": "Le nom de domaine doit commencer par un @",
+            "languages": "Liste des langues supplémentaires disponnibles pour l'apprentissage",
             "name": "Nom de l'université",
             "service_dont_include_admission_date": "Les dates d'inscriptions doivent être dans les dates d'ouverture de service",
             "max_tandems_per_user_error": "Le nombre maximum de tandems par utilisateur doit être compris entre 1 et 3",
@@ -462,9 +472,11 @@
                 "sameGender": "Même genre",
                 "gender": "Genre",
                 "sameAge": "Même âge",
+                "sameTandemEmail": "Même tandem que le cycle précédent",
                 "age": "Âge",
                 "certificateOption": "Option certificat",
-                "specificProgram": "Option programme spécifique"
+                "specificProgram": "Option programme spécifique",
+                "hasPriority": "Langue prioritaire ( sans réponse au cycle précedent )"
             },
             "tandems": {
                 "error": "Une erreur est survenue lors de la récupération des tandems",

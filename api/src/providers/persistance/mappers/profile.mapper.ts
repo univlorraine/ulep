@@ -17,7 +17,7 @@ import { campusMapper } from './campus.mapper';
 
 export const ProfilesRelations = {
   User: {
-    include: UserRelations,
+    include: UserRelations(),
   },
   Goals: {
     include: { TextContent: TextContentRelations },

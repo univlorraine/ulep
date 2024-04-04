@@ -14,6 +14,8 @@ interface LearningLanguageProps {
   learningType: LearningType;
   sameGender: boolean;
   sameAge: boolean;
+  hasPriority?: boolean;
+  sameTandemEmail?: string;
   certificateOption?: boolean;
   specificProgram?: boolean;
   campus?: Campus;
@@ -30,10 +32,12 @@ export class LearningLanguage {
   readonly learningType: LearningType;
   readonly sameGender: boolean;
   readonly sameAge: boolean;
+  readonly hasPriority?: boolean;
   readonly certificateOption?: boolean;
   readonly specificProgram?: boolean;
   readonly campus?: Campus;
   tandemLanguage?: Language;
+  readonly sameTandemEmail?: string;
 
   constructor({
     id,
@@ -49,6 +53,8 @@ export class LearningLanguage {
     specificProgram,
     campus,
     tandemLanguage,
+    hasPriority,
+    sameTandemEmail,
   }: LearningLanguageProps) {
     this.id = id;
     this.language = language;
@@ -63,6 +69,21 @@ export class LearningLanguage {
     this.specificProgram = specificProgram;
     this.campus = campus;
     this.tandemLanguage = tandemLanguage;
+    this.hasPriority = hasPriority;
+    this.sameTandemEmail = sameTandemEmail;
+  }
+
+  public isExclusive() {
+    return !!this.sameTandemEmail;
+  }
+
+  public isExclusiveWithLearningLanguage(learningLanguage: LearningLanguage) {
+    return (
+      this.isExclusive() &&
+      learningLanguage.isExclusive() &&
+      this.sameTandemEmail === learningLanguage.profile.user.email &&
+      this.profile.user.email === learningLanguage.sameTandemEmail
+    );
   }
 
   public isDiscovery(learningLanguageMatch?: LearningLanguage) {
@@ -102,6 +123,12 @@ export class LearningLanguage {
     }
 
     return false;
+  }
+
+  public isAvailableInUniversity(): boolean {
+    return this.profile.user.university.specificLanguagesAvailable.some(
+      (lang) => lang.id === this.language.id,
+    );
   }
 }
 

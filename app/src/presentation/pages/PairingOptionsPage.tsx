@@ -1,30 +1,53 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { useHistory } from 'react-router';
+import { Redirect, useHistory } from 'react-router';
 import { useConfig } from '../../context/ConfigurationContext';
 import { useStoreActions } from '../../store/storeTypes';
 import WebLayoutCentered from '../components/layout/WebLayoutCentered';
 import pairingOptionsStyles from './css/PairingOptions.module.css';
 import styles from './css/SignUp.module.css';
+import { useStoreState } from '../../store/storeTypes';
 
 const PairingOptionsPage: React.FC = () => {
     const { t } = useTranslation();
-    const { configuration } = useConfig();
+    const { configuration, getHistoricEmailPartner } = useConfig();
     const history = useHistory();
+    const profile = useStoreState((store) => store.profile);
+    const profileSignUp = useStoreState((store) => store.profileSignUp);
     const updateProfileSignUp = useStoreActions((store) => store.updateProfileSignUp);
     const [sameTandem, setSameTandem] = useState<boolean>(false);
     const [isForCertificate, setIsForCertificate] = useState<boolean>(false);
     const [isForProgram, setIsForProgram] = useState<boolean>(false);
+    const [historicEmailPartner, setHistoricEmailPartner] = useState<string | undefined>(undefined);
+    const language = profileSignUp?.learningLanguage;
+
+    if (!profile) {
+        return <Redirect to={'/signup'} />;
+    }
+
+    if (!language) {
+        return <Redirect to={'/pairing/languages'} />;
+    }
+
+    const getHistoricEmailPartnerFromApi = async () => {
+        const email = await getHistoricEmailPartner.execute(profile.user.id, language.id);
+        setHistoricEmailPartner(email);
+    };
 
     const onNextStepPressed = () => {
-        updateProfileSignUp({ sameTandem, isForCertificate, isForProgram });
+        updateProfileSignUp({ isForCertificate, isForProgram, sameTandem });
         return history.push(`/pairing/end`);
     };
 
     const onNonePressed = () => {
+        setSameTandem(false);
         setIsForCertificate(false);
         setIsForProgram(false);
     };
+
+    useEffect(() => {
+        getHistoricEmailPartnerFromApi();
+    }, []);
 
     return (
         <WebLayoutCentered
@@ -37,17 +60,17 @@ const PairingOptionsPage: React.FC = () => {
                 <div>
                     <h1 className="title">{t('pairing_options_page.title')}</h1>
                     <div className={pairingOptionsStyles.content}>
-                        {/*
-                        <button
-                            className={pairingOptionsStyles['preference-container']}
-                            style={{ background: sameTandem ? configuration.secondaryColor : '#F2F4F7' }}
-                            onClick={() => setSameTandem(!sameTandem)}
-                        >
-                            <p className={pairingOptionsStyles['preference-text']}>
-                                {t('pairing_options_page.same_tandem')}
-                            </p>
-                        </button>
-                        */}
+                        {historicEmailPartner && (
+                            <button
+                                className={pairingOptionsStyles['preference-container']}
+                                style={{ background: sameTandem ? configuration.secondaryColor : '#F2F4F7' }}
+                                onClick={() => setSameTandem(!sameTandem)}
+                            >
+                                <p className={pairingOptionsStyles['preference-text']}>
+                                    {`${t('pairing_options_page.same_tandem')} : ${historicEmailPartner}`}
+                                </p>
+                            </button>
+                        )}
                         <button
                             className={pairingOptionsStyles['preference-container']}
                             style={{ background: isForCertificate ? configuration.secondaryColor : '#F2F4F7' }}
@@ -74,7 +97,9 @@ const PairingOptionsPage: React.FC = () => {
                             className={pairingOptionsStyles['preference-container']}
                             style={{
                                 background:
-                                    !isForCertificate && !isForProgram ? configuration.secondaryColor : '#F2F4F7',
+                                    !sameTandem && !isForCertificate && !isForProgram
+                                        ? configuration.secondaryColor
+                                        : '#F2F4F7',
                             }}
                             onClick={onNonePressed}
                         >
