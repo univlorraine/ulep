@@ -1,13 +1,13 @@
+.central {
+    background-color: var(--primary-color);
+}
+
 .container {
     align-items: center;
     border-radius: 5px;
     display: flex;
     flex-direction: row;
     margin-top: 12px;
-}
-
-.central {
-    background-color: var(--primary-color);
 }
 
 .logo {
