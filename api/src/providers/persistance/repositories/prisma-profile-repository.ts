@@ -158,9 +158,11 @@ export class PrismaProfileRepository implements ProfileRepository {
           connect: { id: profile.nativeLanguage.id },
         },
         MasteredLanguages: {
-          set: [],
+          deleteMany: { profile_id: profile.id },
           create: profile.masteredLanguages.map((language) => {
-            return { LanguageCode: { connect: { code: language.code } } };
+            return {
+              LanguageCode: { connect: { code: language.code } },
+            };
           }),
         },
         Goals: {

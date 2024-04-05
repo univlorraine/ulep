@@ -12,8 +12,6 @@ import {
   SerializeOptions,
   Headers,
   UseGuards,
-  UploadedFile,
-  UseInterceptors,
 } from '@nestjs/common';
 import * as Swagger from '@nestjs/swagger';
 import {
@@ -27,7 +25,6 @@ import {
   DeleteUserUsecase,
   DeleteAvatarUsecase,
   GetLearningLanguageOfProfileUsecase,
-  UploadAvatarUsecase,
   UpdateProfileUsecase,
 } from 'src/core/usecases';
 import { CollectionResponse, CurrentUser } from '../decorators';
@@ -42,8 +39,6 @@ import {
 } from '../dtos';
 import { AuthenticationGuard } from '../guards';
 import { Profile, User } from 'src/core/models';
-import { FileInterceptor } from '@nestjs/platform-express';
-import { ImagesFilePipe } from 'src/api/validators';
 import { UpdateProfileRequest } from 'src/api/dtos/profiles/update-profile.request';
 
 @Controller('profiles')
@@ -61,7 +56,6 @@ export class ProfileController {
     private readonly deleteUserUsecase: DeleteUserUsecase,
     private readonly deleteAvatarUsecase: DeleteAvatarUsecase,
     private readonly updateProfileUsecase: UpdateProfileUsecase,
-    private readonly uploadAvatarUsecase: UploadAvatarUsecase,
   ) {}
 
   @Post()
@@ -89,8 +83,7 @@ export class ProfileController {
     @Param('id', ParseUUIDPipe) id: string,
     @Body() body: UpdateProfileRequest,
   ) {
-    //TODO: Change biography type
-    let profile = await this.updateProfileUsecase.execute(id, {
+    const profile = await this.updateProfileUsecase.execute(id, {
       ...body,
       biography: body.biography as unknown as { [key: string]: string },
     });

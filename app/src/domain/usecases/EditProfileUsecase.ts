@@ -12,7 +12,7 @@ class EditProfileUsecase implements EditProfileUsecaseInterface {
             const data = {
                 availabilities: payload.availabilities,
                 availabilitiesNote: payload.availabilityNote,
-                availabilitiesNotePrivate: payload.availabilityNotePrivate,
+                availabilitiesNotePrivacy: payload.availabilityNotePrivate,
                 biography: {
                     superpower: payload.biography?.power,
                     favoritePlace: payload.biography?.place,

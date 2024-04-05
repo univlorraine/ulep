@@ -9,7 +9,6 @@ import { Gender, MeetingFrequency } from 'src/core/models';
 export class UpdateProfileRequest {
   @Swagger.ApiProperty({ type: AvailabilitesDto })
   @IsOptional()
-  @Type(() => AvailabilitesDto)
   availabilities: AvailabilitesDto;
 
   @Swagger.ApiProperty({ type: 'string' })
@@ -23,7 +22,6 @@ export class UpdateProfileRequest {
 
   @Swagger.ApiProperty({ type: BiographyDto })
   @IsOptional()
-  @Type(() => BiographyDto)
   biography: BiographyDto;
 
   @Swagger.ApiProperty({ type: 'string', format: 'uuid', isArray: true })

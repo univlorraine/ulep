@@ -25,7 +25,7 @@ import {
   OBJECTIVE_REPOSITORY,
 } from 'src/core/ports/objective.repository';
 
-export class UpdateUserCommand {
+export class UpdateProfileCommand {
   availabilities?: Availabilites;
   availabilitiesNote?: string;
   availabilitiesNotePrivacy?: boolean;
@@ -50,7 +50,7 @@ export class UpdateProfileUsecase {
     private readonly profileRepository: ProfileRepository,
   ) {}
 
-  async execute(id: string, command: UpdateUserCommand): Promise<Profile> {
+  async execute(id: string, command: UpdateProfileCommand): Promise<Profile> {
     const profile = await this.profileRepository.ofId(id);
 
     if (!profile) {

@@ -1,11 +1,10 @@
 import { HttpResponse } from '../../adapter/BaseHttpAdapter';
 import { HttpAdapterInterface } from '../../adapter/DomainHttpAdapter';
-import ProfileCommand, { profileCommandToDomain } from '../../command/ProfileCommand';
 import UserResult, { userResultToDomain } from '../../command/UserResult';
 import EditUserUsecaseInterface from '../interfaces/EditUserUsecase.interface';
 
 class EditUserUsecase implements EditUserUsecaseInterface {
-    constructor(private readonly domainHttpAdapter: HttpAdapterInterface, private readonly setUser: Function) {}
+    constructor(private readonly domainHttpAdapter: HttpAdapterInterface, private readonly setUserUpdated: Function) {}
 
     async execute(
         userId: string,
@@ -38,8 +37,10 @@ class EditUserUsecase implements EditUserUsecaseInterface {
                 return new Error('errors.global');
             }
 
-            return this.setUser({
+            return this.setUserUpdated({
                 user: userResultToDomain(httpResponse.parsedBody),
+                keepProfile: true,
+                keepProfileSignUp: true,
             });
         } catch (err: any) {
             const error = err.error;
