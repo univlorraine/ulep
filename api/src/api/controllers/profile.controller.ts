@@ -83,31 +83,17 @@ export class ProfileController {
   }
 
   @Post('edit/:id')
-  @UseInterceptors(FileInterceptor('file'))
   @Swagger.ApiOperation({ summary: 'Edit profile ressource.' })
-  @Swagger.ApiConsumes('multipart/form-data')
   @Swagger.ApiCreatedResponse({ type: ProfileResponse })
   async edit(
     @Param('id', ParseUUIDPipe) id: string,
     @Body() body: UpdateProfileRequest,
-    @UploadedFile(new ImagesFilePipe()) file?: Express.Multer.File,
   ) {
     //TODO: Change biography type
     let profile = await this.updateProfileUsecase.execute(id, {
       ...body,
       biography: body.biography as unknown as { [key: string]: string },
     });
-
-    if (file) {
-      const upload = await this.uploadAvatarUsecase.execute({
-        userId: profile.user.id,
-        file,
-      });
-      profile = new Profile({
-        ...profile,
-        user: new User({ ...profile.user, avatar: upload }),
-      });
-    }
 
     return ProfileResponse.fromDomain(profile);
   }

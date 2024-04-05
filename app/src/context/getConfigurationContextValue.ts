@@ -32,6 +32,7 @@ import BrowserAdapter from '../adapter/BrowserAdapter';
 import DeviceAdapter from '../adapter/DeviceAdapter';
 import GetUniversityLanguagesUsecase from '../domain/usecases/GetUniversityLanguagesUsecase';
 import EditProfileUsecase from '../domain/usecases/EditProfileUsecase';
+import EditUserUsecase from '../domain/usecases/EditUserUsecase';
 
 interface GetConfigContextValueProps {
     apiUrl: string;
@@ -89,7 +90,8 @@ const getConfigContextValue = ({
     const updateNotificationPermission = new UpdateNotificationPermissionUsecase(domainHttpAdapter);
 
     const createUser = new CreateUserUsecase(domainHttpAdapter, login, setUser);
-    const editProfile = new EditProfileUsecase(domainHttpAdapter, setUser);
+    const editProfile = new EditProfileUsecase(domainHttpAdapter, setProfile);
+    const editUser = new EditUserUsecase(domainHttpAdapter, setUser);
     const retrievePerson = new RetrievePersonInfoUsecase(domainHttpAdapter);
 
     return {
@@ -104,6 +106,7 @@ const getConfigContextValue = ({
         createReport,
         createUser,
         editProfile,
+        editUser,
         deviceAdapter,
         getAllInterestCategories,
         getAllCountries,

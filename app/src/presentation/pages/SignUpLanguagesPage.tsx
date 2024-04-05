@@ -25,6 +25,11 @@ const SignUpLanguagesPage: React.FC = () => {
         profileSignUp?.otherLanguages ? profileSignUp?.otherLanguages : []
     );
 
+    const updateNativeLanguage = (language: Language | undefined) => {
+        setMyLanguage(language);
+        setOtherLanguages([undefined, undefined]);
+    };
+
     const getLanguagesData = async () => {
         const result = await getAllLanguages.execute();
 
@@ -89,7 +94,7 @@ const SignUpLanguagesPage: React.FC = () => {
 
                 <div className="large-margin-bottom">
                     <Dropdown<Language | undefined>
-                        onChange={setMyLanguage}
+                        onChange={updateNativeLanguage}
                         value={languages.find((language) => myLanguage?.code === language.value?.code)}
                         options={languages}
                         placeholder={t('signup_languages_page.placeholder_primary_language')}

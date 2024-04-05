@@ -34,7 +34,9 @@ const SignUpAvailabilitiesPage: React.FC = () => {
     const university = user?.university || profileSignUp.university;
     const [timezone, setTimezone] = useState<string | undefined>(university?.timezone);
     const [availabilities, setAvailabilities] = useState<Availabilites>(
-        profileEdit.availabilities ?? initialAvailabilities
+        profileEdit.availabilities && Object.keys(profileEdit.availabilities).length > 0
+            ? profileEdit.availabilities
+            : initialAvailabilities
     );
     const [openAvailabilityModal, setOpenAvailabilityModal] = useState<{
         id: string;

@@ -20,10 +20,14 @@ class BaseHttpAdapter {
         let encodedBody: any;
 
         if (contentType === 'multipart/form-data') {
-            encodedBody = new FormData();
-            Object.keys(body).forEach((key) => {
-                encodedBody.append(key, body[key]);
-            });
+            if (body instanceof FormData) {
+                encodedBody = body;
+            } else {
+                encodedBody = new FormData();
+                Object.keys(body).forEach((key) => {
+                    encodedBody.append(key, body[key]);
+                });
+            }
         } else {
             encodedBody = JSON.stringify(body);
         }

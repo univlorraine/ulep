@@ -14,6 +14,10 @@ import { EMAIL_GATEWAY, EmailGateway } from 'src/core/ports/email.gateway';
 import { ConfigService } from '@nestjs/config';
 import { Env } from 'src/configuration';
 import { KeycloakClient } from '@app/keycloak';
+import {
+  TANDEM_HISTORY_REPOSITORY,
+  TandemHistoryRepository,
+} from 'src/core/ports/tandem-history.repository';
 
 export class UpdateUserCommand {
   status?: UserStatus;
@@ -36,6 +40,8 @@ export class UpdateUserUsecase {
     private readonly tandemRepository: TandemRepository,
     @Inject(EMAIL_GATEWAY)
     private readonly emailGateway: EmailGateway,
+    @Inject(TANDEM_HISTORY_REPOSITORY)
+    private readonly tandemHistoryRepository: TandemHistoryRepository,
     private readonly env: ConfigService<Env, true>,
     private readonly keycloakClient: KeycloakClient,
   ) {}
@@ -65,6 +71,10 @@ export class UpdateUserUsecase {
         ...command,
       }),
     );
+
+    if (command.email !== user.email) {
+      await this.tandemHistoryRepository.update(user.id, command.email);
+    }
 
     if (
       command.status === UserStatus.CANCELED &&

@@ -1,15 +1,12 @@
 import { Inject, Injectable } from '@nestjs/common';
-import { USER_REPOSITORY, UserRepository } from '../../ports/user.repository';
 import { DomainErrorCode, RessourceDoesNotExist } from 'src/core/errors';
 import {
   Availabilites,
-  Gender,
   Interest,
   Language,
   LearningObjective,
   MeetingFrequency,
   Profile,
-  User,
 } from 'src/core/models';
 import {
   PROFILE_REPOSITORY,
@@ -27,23 +24,13 @@ import {
   LearningObjectiveRepository,
   OBJECTIVE_REPOSITORY,
 } from 'src/core/ports/objective.repository';
-import {
-  TANDEM_HISTORY_REPOSITORY,
-  TandemHistoryRepository,
-} from 'src/core/ports/tandem-history.repository';
-import { KeycloakClient } from '@app/keycloak/keycloak.client';
 
 export class UpdateUserCommand {
-  age?: number;
   availabilities?: Availabilites;
   availabilitiesNote?: string;
   availabilitiesNotePrivacy?: boolean;
   biography?: { [key: string]: string };
-  email?: string;
-  firstname?: string;
-  gender?: Gender;
   interests: string[];
-  lastname?: string;
   masteredLanguageCodes?: string[];
   meetingFrequency: MeetingFrequency;
   nativeLanguageCode: string;
@@ -59,13 +46,8 @@ export class UpdateProfileUsecase {
     private readonly languageRepository: LanguageRepository,
     @Inject(OBJECTIVE_REPOSITORY)
     private readonly objectiveRepository: LearningObjectiveRepository,
-    @Inject(USER_REPOSITORY)
-    private readonly userRepository: UserRepository,
     @Inject(PROFILE_REPOSITORY)
     private readonly profileRepository: ProfileRepository,
-    @Inject(TANDEM_HISTORY_REPOSITORY)
-    private readonly tandemHistoryRepository: TandemHistoryRepository,
-    private readonly keycloakClient: KeycloakClient,
   ) {}
 
   async execute(id: string, command: UpdateUserCommand): Promise<Profile> {
@@ -73,11 +55,6 @@ export class UpdateProfileUsecase {
 
     if (!profile) {
       throw new RessourceDoesNotExist();
-    }
-
-    const keycloakUser = await this.keycloakClient.getUserById(profile.user.id);
-    if (!keycloakUser) {
-      throw new RessourceDoesNotExist('User does not exist');
     }
 
     const interests = await Promise.all(
@@ -98,18 +75,6 @@ export class UpdateProfileUsecase {
       command.objectives.map((id) => this.tryToFindTheObjectiveOfId(id)),
     );
 
-    // Update user associated with the profile
-    await this.userRepository.update(
-      new User({
-        ...profile.user,
-        ...(command.age && { age: command.age }),
-        ...(command.email && { email: command.email }),
-        ...(command.firstname && { firstname: command.firstname }),
-        ...(command.gender && { gender: command.gender }),
-        ...(command.lastname && { lastname: command.lastname }),
-      }),
-    );
-
     const newProfile = new Profile({
       ...profile,
       ...(command.availabilities && { availabilities: command.availabilities }),
@@ -123,17 +88,10 @@ export class UpdateProfileUsecase {
       ...(command.meetingFrequency && {
         meetingFrequency: command.meetingFrequency,
       }),
-      ...(nativeLanguage && { nativeLanguage: nativeLanguage }),
-      ...(masteredLanguages && { masteredLanguages: masteredLanguages }),
-      ...(interests && { interests: interests }),
-      ...(objectives && { objectives: objectives }),
-    });
-
-    await this.tandemHistoryRepository.update(profile.user.id, command.email);
-
-    await this.keycloakClient.updateUser({
-      id: keycloakUser.id,
-      email: command.email || keycloakUser.email,
+      ...(nativeLanguage && { nativeLanguage }),
+      ...(masteredLanguages && { masteredLanguages }),
+      ...(interests && { interests }),
+      ...(objectives && { objectives }),
     });
 
     const updatedProfile = await this.profileRepository.update(newProfile);

@@ -2,7 +2,7 @@ import { useIonToast } from '@ionic/react';
 import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useConfig } from '../../context/ConfigurationContext';
-import { useStoreActions, useStoreState } from '../../store/storeTypes';
+import { useStoreState } from '../../store/storeTypes';
 import RadioButton from '../components/RadioButton';
 import TextInput from '../components/TextInput';
 import WebLayoutCentered from '../components/layout/WebLayoutCentered';
@@ -10,14 +10,14 @@ import { isEmailCorrect, isNameCorrect } from '../utils';
 import styles from './css/SignUp.module.css';
 import { PlusPng } from '../../assets';
 import { useHistory } from 'react-router';
+import NetworkImage from '../components/NetworkImage';
 
 const EditInformationsPage: React.FC = () => {
     const { t } = useTranslation();
-    const { cameraAdapter, configuration } = useConfig();
+    const { editUser, cameraAdapter, configuration } = useConfig();
     const history = useHistory();
     const [showToast] = useIonToast();
     const profile = useStoreState((state) => state.profile);
-    const updateProfile = useStoreActions((store) => store.updateProfileSignUp);
 
     const [email, setEmail] = useState<string>(profile?.user ? profile!.user.email : '');
     const [firstname, setFirstname] = useState<string>(profile?.user ? profile!.user.firstname : '');
@@ -57,14 +57,19 @@ const EditInformationsPage: React.FC = () => {
             return setErrorMessage({ type: 'age', message: t('signup_informations_page.error_age') });
         }
 
-        updateProfile({
-            firstname,
-            lastname,
-            gender,
+        const result = await editUser.execute(
+            profile!.user.id,
             age,
             email,
-            profilePicture,
-        });
+            firstname,
+            gender,
+            lastname,
+            profilePicture
+        );
+
+        if (result instanceof Error) {
+            return await showToast({ message: t(result.message), duration: 3000 });
+        }
 
         return history.push('/signup/languages');
     };
@@ -80,14 +85,19 @@ const EditInformationsPage: React.FC = () => {
                 <h1 className={styles.title}>{t('signup_informations_page.title')}</h1>
 
                 <button className="secondary-button" onClick={() => openGallery()}>
-                    <img
-                        alt="plus"
-                        className={styles.image}
-                        src={profilePicture ? URL.createObjectURL(profilePicture) : PlusPng}
-                    />
+                    {!profilePicture && profile?.user.avatar && (
+                        <NetworkImage id={profile.user.avatar.id} className={styles.image} />
+                    )}
+                    {(profilePicture || !profile?.user.avatar) && (
+                        <img
+                            alt="plus"
+                            className={styles.image}
+                            src={profilePicture ? URL.createObjectURL(profilePicture) : PlusPng}
+                        />
+                    )}
                     <p>
                         {t(
-                            profilePicture
+                            profilePicture || profile?.user.avatar
                                 ? 'signup_informations_page.photo_selected'
                                 : 'signup_informations_page.photo'
                         )}

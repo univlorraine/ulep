@@ -4,7 +4,7 @@ import { useTranslation } from 'react-i18next';
 import { useHistory, useLocation } from 'react-router';
 import { PlusPng } from '../../assets';
 import { useConfig } from '../../context/ConfigurationContext';
-import { useStoreActions, useStoreState } from '../../store/storeTypes';
+import { useStoreState } from '../../store/storeTypes';
 import Checkbox from '../components/Checkbox';
 import RadioButton from '../components/RadioButton';
 import TextInput from '../components/TextInput';
@@ -29,7 +29,6 @@ const SignUpInformationsPage: React.FC = () => {
     const location = useLocation<SignUpInformationsParams>();
     const { fromIdp } = location.state || {};
     const profileSignUp = useStoreState((store) => store.profileSignUp);
-    const updateProfileSignUp = useStoreActions((state) => state.updateProfileSignUp);
     const [firstname, setFirstname] = useState<string>('');
     const [lastname, setLastname] = useState<string>('');
     const [gender, setGender] = useState<Gender | undefined>();
@@ -124,15 +123,6 @@ const SignUpInformationsPage: React.FC = () => {
 
             return await showToast({ message: t(result.message), duration: 3000 });
         }
-        updateProfileSignUp({
-            firstname,
-            lastname,
-            gender,
-            age,
-            email,
-            password,
-            profilePicture,
-        });
 
         return history.push('/signup/languages');
     };
