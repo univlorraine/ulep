@@ -13,7 +13,6 @@ const biography = {
 } as BiographySignUp;
 
 const profileSignUp: ProfileSignUp = {
-    age: 22,
     availabilities: {
         monday: 'AVAILABLE',
         tuesday: 'AVAILABLE',
@@ -31,11 +30,8 @@ const profileSignUp: ProfileSignUp = {
         travel: 'travel',
         incredible: 'incredible',
     },
-    firstname: 'firstname',
-    gender: 'MALE',
     goals: [{ id: 'id', name: 'goalId' }],
     interests: ['interestId'],
-    lastname: 'lastname',
     otherLanguages: [{ id: 'id', code: 'EN', name: 'English' }],
     frequency: 'ONCE_A_WEEK',
     nativeLanguage: {
@@ -96,31 +92,26 @@ describe('editProfile', () => {
         adapter.mockJson({ parsedBody: {} });
         await usecase.execute('id', profileSignUp);
         expect(adapter.post).toHaveBeenCalledTimes(1);
-        expect(adapter.post).toHaveBeenCalledWith(
-            '/profiles/edit/id/',
-            {
-                age: profileSignUp.age,
-                availabilities: profileSignUp.availabilities,
-                availabilitiesNote: profileSignUp.availabilityNote,
-                availabilitiesNotePrivacy: profileSignUp.availabilityNotePrivate,
-                biography: {
-                    superpower: profileSignUp.biography?.power,
-                    favoritePlace: profileSignUp.biography?.place,
-                    experience: profileSignUp.biography?.travel,
-                    anecdote: profileSignUp.biography?.incredible,
-                },
-                firstname: profileSignUp.firstname,
-                gender: profileSignUp.gender,
-                interests: profileSignUp.interests,
-                lastname: profileSignUp.lastname,
-                masteredLanguageCodes: profileSignUp.otherLanguages?.map((language) => language.code),
-                meetingFrequency: profileSignUp.frequency,
-                nativeLanguageCode: profileSignUp.nativeLanguage?.code,
-                objectives: profileSignUp.goals?.map((goal) => goal.id),
+        expect(adapter.post).toHaveBeenCalledWith('/profiles/edit/id/', {
+            age: profileSignUp.age,
+            availabilities: profileSignUp.availabilities,
+            availabilitiesNote: profileSignUp.availabilityNote,
+            availabilitiesNotePrivacy: profileSignUp.availabilityNotePrivate,
+            biography: {
+                superpower: profileSignUp.biography?.power,
+                favoritePlace: profileSignUp.biography?.place,
+                experience: profileSignUp.biography?.travel,
+                anecdote: profileSignUp.biography?.incredible,
             },
-            {},
-            'multipart/form-data'
-        );
+            firstname: profileSignUp.firstname,
+            gender: profileSignUp.gender,
+            interests: profileSignUp.interests,
+            lastname: profileSignUp.lastname,
+            masteredLanguageCodes: profileSignUp.otherLanguages?.map((language) => language.code),
+            meetingFrequency: profileSignUp.frequency,
+            nativeLanguageCode: profileSignUp.nativeLanguage?.code,
+            objectives: profileSignUp.goals?.map((goal) => goal.id),
+        });
     });
 
     it('execute must return an expected response', async () => {
@@ -149,24 +140,17 @@ describe('editProfile', () => {
         expect(result).toStrictEqual(new Error('errors.global'));
     });
 
-    it('execute must return an error if adapter has code 400 with image weight error message', async () => {
-        expect.assertions(1);
-        adapter.mockError({ error: { statusCode: 400, message: 'expected size' } });
-        const result = await usecase.execute('id', profileSignUp);
-        expect(result).toStrictEqual(new Error('signup_informations_page.error_picture_weight'));
-    });
-
-    it('execute must return an error if adapter has code 400 with image type error message', async () => {
-        expect.assertions(1);
-        adapter.mockError({ error: { statusCode: 400, message: 'expected type' } });
-        const result = await usecase.execute('id', profileSignUp);
-        expect(result).toStrictEqual(new Error('signup_informations_page.error_picture_format'));
-    });
-
     it('execute must return an error if adapter has code 401 with forbidden error message', async () => {
         expect.assertions(1);
         adapter.mockError({ error: { statusCode: 401, message: 'unauthorized' } });
         const result = await usecase.execute('id', profileSignUp);
         expect(result).toStrictEqual(new Error('signup_informations_page.error_unauthorized'));
+    });
+
+    it('execute must return an unexpected error', async () => {
+        expect.assertions(1);
+        adapter.mockError({ error: { statusCode: 409, message: 'unauthorized' } });
+        const result = await usecase.execute('id', profileSignUp);
+        expect(result).toStrictEqual(new Error('errors.global'));
     });
 });

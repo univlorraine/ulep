@@ -35,11 +35,9 @@ class EditProfileUsecase implements EditProfileUsecaseInterface {
                 return new Error('errors.global');
             }
 
-            this.setProfile({
+            return this.setProfile({
                 profile: profileCommandToDomain(httpResponse.parsedBody),
             });
-
-            return;
         } catch (err: any) {
             const error = err.error;
 

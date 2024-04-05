@@ -3,6 +3,15 @@ import { HttpAdapterInterface } from '../../adapter/DomainHttpAdapter';
 import UserResult, { userResultToDomain } from '../../command/UserResult';
 import EditUserUsecaseInterface from '../interfaces/EditUserUsecase.interface';
 
+interface UserEditPayload {
+    age: number;
+    email: string;
+    firstname: string;
+    gender: Gender;
+    lastname: string;
+    file?: File;
+}
+
 class EditUserUsecase implements EditUserUsecaseInterface {
     constructor(private readonly domainHttpAdapter: HttpAdapterInterface, private readonly setUserUpdated: Function) {}
 
@@ -16,19 +25,21 @@ class EditUserUsecase implements EditUserUsecaseInterface {
         avatar?: File
     ): Promise<void | Error> {
         try {
-            const formData = new FormData();
-            formData.append('age', `${age}`);
-            formData.append('email', email);
-            formData.append('firstname', firstname);
-            formData.append('gender', gender);
-            formData.append('lastname', lastname);
+            const body: UserEditPayload = {
+                email,
+                firstname,
+                lastname,
+                gender,
+                age,
+            };
+
             if (avatar) {
-                formData.append('file', avatar);
+                body.file = avatar;
             }
 
             const httpResponse: HttpResponse<UserResult> = await this.domainHttpAdapter.post(
                 `/users/${userId}/`,
-                formData,
+                body,
                 {},
                 'multipart/form-data'
             );
