@@ -79,7 +79,7 @@ const SettingsContent: React.FC<SettingsContentProps> = ({ onBackPressed, onDisc
             frequency: profile.frequency,
             goals: profile.goals,
             nativeLanguage: profile.nativeLanguage,
-            otherLanguages: profile.learningLanguages,
+            otherLanguages: profile.masteredLanguages,
             interests: profile.interests.map((interest) => interest.id),
             firstname: profile.user.firstname,
             lastname: profile.user.lastname,
