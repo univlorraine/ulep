@@ -20,7 +20,10 @@ const TandemStatusContent: React.FC<TandemStatusContentProps> = ({ onFindNewTand
     const waiting = status === 'DRAFT' || status === 'VALIDATED_BY_ONE_UNIVERSITY';
     const tradKey = waiting ? 'draft' : 'not_found';
     return (
-        <div className={styles.container} style={{ backgroundColor: configuration.secondaryColor }}>
+        <div
+            className={`${styles.container} content-wrapper`}
+            style={{ backgroundColor: configuration.secondaryColor }}
+        >
             <Background className={styles.image} style={{ color: configuration.secondaryBackgroundImageColor }} />
             <button
                 className={styles['close-container']}
