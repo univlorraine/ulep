@@ -62,7 +62,7 @@ export class I18nService implements OnModuleInit, OnModuleDestroy {
       backend: {
         loadPath: url,
         crossDomain: true,
-        withCredentials: !!this.config.http.token,
+        withCredentials: Boolean(this.config.http.token),
         customHeaders: () => {
           return this.config.http.token
             ? {
@@ -75,10 +75,12 @@ export class I18nService implements OnModuleInit, OnModuleDestroy {
       },
     });
 
-    this.#i18nReload = setInterval(
-      () => this.loadNewLanguagesAndComponents,
-      this.config.http.reloadInterval || DEFAULT_RELOAD_INTERVAL,
-    );
+    if (!this.#i18nReload) {
+      this.#i18nReload = setInterval(
+        () => this.loadNewLanguagesAndComponents,
+        this.config.http.reloadInterval || DEFAULT_RELOAD_INTERVAL,
+      );
+    }
   }
 
   onModuleDestroy() {
