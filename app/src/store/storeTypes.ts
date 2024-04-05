@@ -72,8 +72,8 @@ interface UpdateProfile {
 
 interface UserStorePayload {
     user: User;
-    keepProfile: boolean;
-    keepProfileSignUp: boolean;
+    keepProfile?: boolean;
+    keepProfileSignUp?: boolean;
 }
 interface StoreInterface {
     accessToken: string;
