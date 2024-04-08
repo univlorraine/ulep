@@ -67,7 +67,11 @@ const PairingConfirmLanguagePage: React.FC = () => {
                     </div>
                 </div>
                 <div className={`large-margin-top extra-large-margin-bottom`}>
-                    <button className={`primary-button`} onClick={continueSignUp}>
+                    <button
+                        aria-label={t('pairing_confirm_language_page.validate_button') as string}
+                        className={`primary-button`}
+                        onClick={continueSignUp}
+                    >
                         {t('pairing_confirm_language_page.validate_button')}
                     </button>
                 </div>

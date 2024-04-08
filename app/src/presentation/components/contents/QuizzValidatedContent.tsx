@@ -59,12 +59,20 @@ const QuizzValidatedContent: React.FC<QuizzValidatedContentProps> = ({
                     : t('pairing_quizz_validation.description')}
             </p>
             {onNextQuizz && (
-                <button className="secondary-button" onClick={onNextQuizz}>
+                <button
+                    aria-label={t('pairing_quizz_validation.next_button') as string}
+                    className="secondary-button"
+                    onClick={onNextQuizz}
+                >
                     {t('pairing_quizz_validation.next_button')}
                 </button>
             )}
             {onNextStep && (
-                <button className={`primary-button ${styles.button}`} onClick={onNextStep}>
+                <button
+                    aria-label={t('pairing_quizz_validation.next_step_button') as string}
+                    className={`primary-button ${styles.button}`}
+                    onClick={onNextStep}
+                >
                     {t('pairing_quizz_validation.next_step_button')}
                 </button>
             )}

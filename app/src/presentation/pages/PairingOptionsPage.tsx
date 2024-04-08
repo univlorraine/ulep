@@ -62,6 +62,7 @@ const PairingOptionsPage: React.FC = () => {
                     <div className={pairingOptionsStyles.content}>
                         {historicEmailPartner && (
                             <button
+                                aria-label={`${t('pairing_options_page.same_tandem')} : ${historicEmailPartner}`}
                                 className={pairingOptionsStyles['preference-container']}
                                 style={{ background: sameTandem ? configuration.secondaryColor : '#F2F4F7' }}
                                 onClick={() => setSameTandem(!sameTandem)}
@@ -72,6 +73,7 @@ const PairingOptionsPage: React.FC = () => {
                             </button>
                         )}
                         <button
+                            aria-label={t('pairing_options_page.certificat') as string}
                             className={pairingOptionsStyles['preference-container']}
                             style={{ background: isForCertificate ? configuration.secondaryColor : '#F2F4F7' }}
                             onClick={() => setIsForCertificate(!isForCertificate)}
@@ -81,6 +83,7 @@ const PairingOptionsPage: React.FC = () => {
                             </p>
                         </button>
                         <button
+                            aria-label={t('pairing_options_page.program') as string}
                             className={pairingOptionsStyles['preference-container']}
                             style={{ background: isForProgram ? configuration.secondaryColor : '#F2F4F7' }}
                             onClick={() => setIsForProgram(!isForProgram)}
@@ -94,6 +97,7 @@ const PairingOptionsPage: React.FC = () => {
                         </button>
 
                         <button
+                            aria-label={t('pairing_options_page.none') as string}
                             className={pairingOptionsStyles['preference-container']}
                             style={{
                                 background:
@@ -107,7 +111,11 @@ const PairingOptionsPage: React.FC = () => {
                         </button>
                     </div>
                 </div>
-                <button className={`primary-button extra-large-margin-bottom`} onClick={onNextStepPressed}>
+                <button
+                    aria-label={t('pairing_options_page.validate_button') as string}
+                    className={`primary-button extra-large-margin-bottom`}
+                    onClick={onNextStepPressed}
+                >
                     {t('pairing_options_page.validate_button')}
                 </button>
             </div>

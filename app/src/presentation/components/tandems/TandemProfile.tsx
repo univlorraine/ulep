@@ -37,11 +37,12 @@ const TandemProfile: React.FC<TandemProfileProps> = ({
         <div className={styles.container} style={{ backgroundColor: configuration.secondaryColor }}>
             <Background className={styles.image} style={{ color: configuration.secondaryBackgroundImageColor }} />
             <button
+                aria-label={t('global.go_back') as string}
                 className={styles['back-button']}
                 style={{ justifyContent: !isHybrid ? 'flex-end' : 'flex-start' }}
                 onClick={onClose}
             >
-                <img alt="back" src={!isHybrid ? CloseBlackSvg : ArrowLeftSvg} />
+                <img alt={t('global.go_back') as string} src={!isHybrid ? CloseBlackSvg : ArrowLeftSvg} />
             </button>
             <div className={styles.content}>
                 <span className="title extra-large-margin-bottom">{t(`home_page.tandem_validated.title`)}</span>

@@ -109,6 +109,7 @@ const TextInput: React.FC<TextInputProps> = ({
 
                     {type === 'password' && (
                         <button
+                            aria-label="Show password"
                             className={style['eye-button']}
                             type="button"
                             onClick={() => setShowPassword(!showPasword)}

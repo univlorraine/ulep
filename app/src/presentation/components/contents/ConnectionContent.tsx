@@ -21,7 +21,11 @@ const ConnectionContent: React.FC<ConnectionContentProps> = ({ onLoginPressed, o
                     width={76}
                 />
                 <p className={style.title}>{t('connection_page.connect_title')}</p>
-                <button className={`primary-button ${style['card-button']}`} onClick={onLoginPressed}>
+                <button
+                    aria-label={t('connection_page.connect_button') as string}
+                    className={`primary-button ${style['card-button']}`}
+                    onClick={onLoginPressed}
+                >
                     {t('connection_page.connect_button')}
                 </button>
             </div>
@@ -35,7 +39,11 @@ const ConnectionContent: React.FC<ConnectionContentProps> = ({ onLoginPressed, o
                     width={76}
                 />
                 <p className={style.title}>{t('connection_page.signup_title')}</p>
-                <button className={`primary-button ${style['card-button']}`} onClick={onSignUpPressed}>
+                <button
+                    aria-label={t('connection_page.signup_button') as string}
+                    className={`primary-button ${style['card-button']}`}
+                    onClick={onSignUpPressed}
+                >
                     {t('connection_page.signup_button')}
                 </button>
             </div>

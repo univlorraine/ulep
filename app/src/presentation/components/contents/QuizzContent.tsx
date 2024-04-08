@@ -48,10 +48,14 @@ const QuizzContent: React.FC<QuizzContentProps> = ({ onQuizzOver, questions, qui
                 </div>
             </div>
             <div className={`${styles['button-container']} extra-large-margin-bottom`}>
-                <button className="primary-button large-margin-bottom" onClick={() => answer(true)}>
+                <button
+                    aria-label={t('global.yes') as string}
+                    className="primary-button large-margin-bottom"
+                    onClick={() => answer(true)}
+                >
                     {t('global.yes')}
                 </button>
-                <button className="primary-button" onClick={() => answer(false)}>
+                <button aria-label={t('global.no') as string} className="primary-button" onClick={() => answer(false)}>
                     {t('global.no')}
                 </button>
             </div>

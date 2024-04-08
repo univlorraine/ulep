@@ -3,6 +3,7 @@ import { useHistory } from 'react-router';
 import { LeftChevronSvg } from '../../assets';
 import styles from './Header.module.css';
 import ProgressBar from './ProgressBar';
+import { useTranslation } from 'react-i18next';
 
 interface HeaderProps {
     goBackPressed?: () => void;
@@ -20,6 +21,7 @@ const Header: React.FC<HeaderProps> = ({
     hasGoBackButton,
 }) => {
     const history = useHistory();
+    const { t } = useTranslation();
     return (
         <IonHeader>
             <ProgressBar color={progressColor} percentage={progressPercentage} />
@@ -27,10 +29,11 @@ const Header: React.FC<HeaderProps> = ({
                 <div>
                     {hasGoBackButton && (
                         <button
+                            aria-label={t('global.go_back') as string}
                             className={styles['image-div']}
                             onClick={() => (goBackPressed ? goBackPressed() : history.goBack())}
                         >
-                            <img alt="goBack" className={styles.image} src={LeftChevronSvg} />
+                            <img alt={t('global.go_back') as string} className={styles.image} src={LeftChevronSvg} />
                         </button>
                     )}
                 </div>

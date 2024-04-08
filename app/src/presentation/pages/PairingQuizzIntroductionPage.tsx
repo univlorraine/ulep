@@ -30,6 +30,7 @@ const PairingQuizzIntroductionPage: React.FC = ({}) => {
                 </div>
                 <div>
                     <button
+                        aria-label={t('pairing_quizz_introduction_page.validate_button') as string}
                         className="primary-button extra-large-margin-bottom"
                         onClick={() => history.push(`/pairing/language/quizz`)}
                     >

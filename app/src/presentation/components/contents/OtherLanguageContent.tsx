@@ -76,6 +76,7 @@ const OtherLanguageContent: React.FC<OtherLanguageContentProps> = ({ displayJoke
             </div>
             <div className={`large-margin-top extra-large-margin-bottom`}>
                 <button
+                    aria-label={t('pairing_other_languages_page.validate_button') as string}
                     className={`primary-button ${!selectedLaguage ? 'disabled' : ''}`}
                     disabled={!selectedLaguage}
                     onClick={nextStep}

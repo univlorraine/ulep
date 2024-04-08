@@ -58,7 +58,11 @@ const PairingUnavailableLanguagePage: React.FC = () => {
                                 {t('pairing_unavailable_language_page.next_title')}
                             </p>
                             <div className={styles['button-container']}>
-                                <button className="primary-button" onClick={() => history.push('/pairing/languages')}>
+                                <button
+                                    aria-label={t('pairing_unavailable_language_page.next_button') as string}
+                                    className="primary-button"
+                                    onClick={() => history.push('/pairing/languages')}
+                                >
                                     {t('pairing_unavailable_language_page.next_button')}
                                 </button>
                             </div>
@@ -68,7 +72,11 @@ const PairingUnavailableLanguagePage: React.FC = () => {
                                 {t('pairing_unavailable_language_page.pedagogy_title')}
                             </p>
                             <div className={styles['button-container']}>
-                                <button className="primary-button" onClick={() => history.replace('/pairing/pedagogy')}>
+                                <button
+                                    aria-label={t('pairing_unavailable_language_page.pedagogy_button') as string}
+                                    className="primary-button"
+                                    onClick={() => history.replace('/pairing/pedagogy')}
+                                >
                                     {t('pairing_unavailable_language_page.pedagogy_button')}
                                 </button>
                             </div>
@@ -78,7 +86,11 @@ const PairingUnavailableLanguagePage: React.FC = () => {
                                 {t('pairing_unavailable_language_page.ressource_title')}
                             </p>
                             <div className={styles['button-container']}>
-                                <button onClick={navigateToRessource} className="primary-button">
+                                <button
+                                    aria-label={t('pairing_unavailable_language_page.ressource_button') as string}
+                                    onClick={navigateToRessource}
+                                    className="primary-button"
+                                >
                                     {t('pairing_unavailable_language_page.ressource_button')}
                                 </button>
                             </div>

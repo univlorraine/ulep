@@ -83,9 +83,13 @@ const HomePage: React.FC = () => {
                             <span className={styles.hello}>{`${t('global.hello')} ${profile.user.firstname}`}</span>
                         </div>
                         {isHybrid && (
-                            <button className={styles['avatar-container']} onClick={onProfilePressed}>
+                            <button
+                                aria-label={t('global.change_avatar') as string}
+                                className={styles['avatar-container']}
+                                onClick={onProfilePressed}
+                            >
                                 <Avatar user={profile.user} className={styles.avatar} />
-                                <img alt="arrow-down" src={ArrowDownSvg} />
+                                <img alt="" src={ArrowDownSvg} />
                             </button>
                         )}
                     </div>
@@ -124,10 +128,14 @@ const HomePage: React.FC = () => {
                         )}
                     </div>
                     <div className={styles['report-container']}>
-                        <button className={`tertiary-button ${styles.report}`} onClick={onReportPressed}>
+                        <button
+                            aria-label={t('home_page.report.report_button') as string}
+                            className={`tertiary-button ${styles.report}`}
+                            onClick={onReportPressed}
+                        >
                             {
                                 <>
-                                    <img alt="report" className="margin-right" src={ReportSvg} />
+                                    <img alt="" className="margin-right" src={ReportSvg} />
                                     <span>{t('home_page.report.report_button')}</span>
                                 </>
                             }

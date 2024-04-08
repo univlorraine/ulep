@@ -73,6 +73,7 @@ const SignUpGoalsPage: React.FC = () => {
                             return (
                                 <button
                                     key={goal.id}
+                                    aria-label={goal.name}
                                     className={goalsStyles['goal-container']}
                                     onClick={() => goalPressed(goal)}
                                     style={{
@@ -86,7 +87,7 @@ const SignUpGoalsPage: React.FC = () => {
                                     {goal.image ? (
                                         <NetworkImage
                                             id={goal.image.id}
-                                            alt={goal.id}
+                                            alt={goal.name}
                                             className={goalsStyles.image}
                                             placeholder={WritingSkillPng}
                                         />
@@ -101,6 +102,7 @@ const SignUpGoalsPage: React.FC = () => {
                 </div>
                 <div className={`${goalsStyles['bottom-container']} large-margin-top`}>
                     <button
+                        aria-label={t('signup_goals_page.pass_button') as string}
                         className={`tertiary-button`}
                         disabled={goals.length === 0}
                         onClick={() => continueSignUp([])}
@@ -108,6 +110,7 @@ const SignUpGoalsPage: React.FC = () => {
                         {t('signup_goals_page.pass_button')}
                     </button>
                     <button
+                        aria-label={t('signup_goals_page.validate_button') as string}
                         className={`primary-button ${userGoals.length === 0 ? 'disabled' : ''}`}
                         disabled={userGoals.length === 0}
                         onClick={() => continueSignUp(userGoals)}

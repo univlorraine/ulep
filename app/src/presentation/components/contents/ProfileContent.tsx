@@ -51,7 +51,7 @@ const ProfileContent: React.FC<ProfileContentProps> = ({ onClose, onParameterPre
     return (
         <div className={styles.container}>
             <div>
-                <button className={styles['back-button']} onClick={onClose}>
+                <button aria-label="Close profile" className={styles['back-button']} onClick={onClose}>
                     <img alt="arrow-left" src={ArrowLeftSvg} />
                 </button>
             </div>
@@ -65,7 +65,11 @@ const ProfileContent: React.FC<ProfileContentProps> = ({ onClose, onParameterPre
                 <span className={styles.name}>{`${profile.user.firstname} ${profile.user.lastname}`}</span>
                 <span className={styles.university}>{profile.user.university.name}</span>
 
-                <button className={`${styles.button} margin-bottom`} onClick={changeAvatar}>
+                <button
+                    aria-label={t('home_page.profile.edit') as string}
+                    className={`${styles.button} margin-bottom`}
+                    onClick={changeAvatar}
+                >
                     <div className={styles['button-container']}>
                         <img alt="edit" src={EditPng} />
                         <span className="margin-left">{t('home_page.profile.edit')}</span>
@@ -73,7 +77,11 @@ const ProfileContent: React.FC<ProfileContentProps> = ({ onClose, onParameterPre
                     <img alt="arrow-right" src={ArrowRightSvg} />
                 </button>
 
-                <button className={`${styles.button} margin-bottom`} onClick={onParameterPressed}>
+                <button
+                    aria-label={t('home_page.profile.parameters') as string}
+                    className={`${styles.button} margin-bottom`}
+                    onClick={onParameterPressed}
+                >
                     <div className={styles['button-container']}>
                         <img alt="parameter" src={ParameterPng} />
                         <span className="margin-left">{t('home_page.profile.parameters')}</span>
@@ -81,7 +89,11 @@ const ProfileContent: React.FC<ProfileContentProps> = ({ onClose, onParameterPre
                     <img alt="arrow-right" src={ArrowRightSvg} />
                 </button>
 
-                <button className={styles.button} onClick={handleLogout}>
+                <button
+                    aria-label={t('home_page.profile.disconnect') as string}
+                    className={styles.button}
+                    onClick={handleLogout}
+                >
                     <div className={styles['button-container']}>
                         <img alt="disconnect" src={SmallAvatarPng} />
                         <span className="margin-left">{t('home_page.profile.disconnect')}</span>

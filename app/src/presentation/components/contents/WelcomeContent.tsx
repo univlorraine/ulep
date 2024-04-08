@@ -11,6 +11,7 @@ import {
     ChineseBubble,
     HiBubbleSvg,
 } from '../../../assets';
+import { useTranslation } from 'react-i18next';
 
 interface HomeTheme {
     background: string;
@@ -32,6 +33,7 @@ interface WelcomeContentProps {
 const WelcomeContent: React.FC<WelcomeContentProps> = ({ onPress }) => {
     const [currentTheme, setCurrentTheme] = useState<HomeTheme>(themes[0]);
     const { width } = useWindowDimensions();
+    const { t } = useTranslation();
     const isHybrid = width < HYBRID_MAX_WIDTH;
 
     const onButtonPressed = () => {
@@ -59,12 +61,17 @@ const WelcomeContent: React.FC<WelcomeContentProps> = ({ onPress }) => {
             <div style={backgroundStyle} className={`content-wrapper container`}>
                 <img src={currentTheme.image} alt="bubble" className={style['bubble']} />
                 <span className={style['welcome-text']}>
-                    Bienvenue sur ULEP,
-                    <p className={style['welcome-subtext']}>le meilleur moyen de pratiquer une langue</p>
+                    {t('global.welcome')}
+                    <p className={style['welcome-subtext']}>{t('global.welcome_subtext')}</p>
                 </span>
 
-                <button className={style.button} disabled={!onPress} onClick={onButtonPressed}>
-                    <p className={style['button-text']}>Apprends une nouvelle langue en tandem</p>
+                <button
+                    aria-label={t('global.welcome_btn') as string}
+                    className={style.button}
+                    disabled={!onPress}
+                    onClick={onButtonPressed}
+                >
+                    <p className={style['button-text']}>{t('global.welcome_btn')}</p>
                 </button>
             </div>
         </IonContent>

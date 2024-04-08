@@ -24,6 +24,7 @@ const FlagBubble: React.FC<FlagBubbleProps> = ({ disabled, isSelected, language,
                 backgroundColor: isSelected ? configuration.secondaryDarkColor : configuration.secondaryColor,
             }}
             onClick={() => (onPressed ? onPressed(language) : null)}
+            aria-label={t(`languages_code.${language.code}`) as string}
         >
             <span className={styles.flag}>{codeLanguageToFlag(language.code)}</span>
             <span className={styles.country} style={{ color: textColor }}>

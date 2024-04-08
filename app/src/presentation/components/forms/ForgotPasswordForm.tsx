@@ -31,8 +31,8 @@ const ForgotPasswordForm = () => {
     return (
         <div className="container">
             <IonHeader className="ion-no-border">
-                <IonButton fill="clear" onClick={() => history.goBack()}>
-                    <img alt="goBack" src={LeftChevronSvg} />
+                <IonButton aria-label={t('global.go_back') as string} fill="clear" onClick={() => history.goBack()}>
+                    <img alt={t('global.go_back') as string} src={LeftChevronSvg} />
                 </IonButton>
             </IonHeader>
             <IonContent>
@@ -49,7 +49,9 @@ const ForgotPasswordForm = () => {
                         type="email"
                     />
                     <div className={style['bottom-container']}>
-                        <button className="primary-button">{t('forgot_password_page.button')}</button>
+                        <button aria-label={t('forgot_password_page.button') as string} className="primary-button">
+                            {t('forgot_password_page.button')}
+                        </button>
                     </div>
                 </form>
             </IonContent>

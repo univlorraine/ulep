@@ -26,11 +26,12 @@ const TandemStatusContent: React.FC<TandemStatusContentProps> = ({ onFindNewTand
         >
             <Background className={styles.image} style={{ color: configuration.secondaryBackgroundImageColor }} />
             <button
+                aria-label=""
                 className={styles['close-container']}
                 style={{ justifyContent: !isHybrid ? 'flex-end' : 'flex-start' }}
                 onClick={onClose}
             >
-                <img alt="left-arrow" src={!isHybrid ? CloseBlackSvg : ArrowLeftSvg} />
+                <img alt="" src={!isHybrid ? CloseBlackSvg : ArrowLeftSvg} />
             </button>
             <div className={styles.content}>
                 <span className="title extra-large-margin-bottom">{t(`home_page.tandem_${tradKey}.title`)}</span>
@@ -38,16 +39,28 @@ const TandemStatusContent: React.FC<TandemStatusContentProps> = ({ onFindNewTand
                 <span className="subtitle extra-large-margin-bottom">{t(`home_page.tandem_${tradKey}.subtitle`)}</span>
                 {status === 'INACTIVE' && (
                     <div className={styles['bottom-container']}>
-                        <button className="tertiary-button extra-large-margin-bottom" onClick={onClose}>
+                        <button
+                            aria-label={t('home_page.tandem_not_found.button_pass') as string}
+                            className="tertiary-button extra-large-margin-bottom"
+                            onClick={onClose}
+                        >
                             {t('home_page.tandem_not_found.button_pass')}
                         </button>
-                        <button className="primary-button extra-large-margin-bottom" onClick={onClose}>
+                        <button
+                            aria-label={t('home_page.tandem_not_found.button') as string}
+                            className="primary-button extra-large-margin-bottom"
+                            onClick={onClose}
+                        >
                             {t('home_page.tandem_not_found.button')}
                         </button>
                     </div>
                 )}
                 {waiting && (
-                    <button className="primary-button extra-large-margin-bottom" onClick={onClose}>
+                    <button
+                        aria-label={t('home_page.tandem_draft.button') as string}
+                        className="primary-button extra-large-margin-bottom"
+                        onClick={onClose}
+                    >
                         {t('home_page.tandem_draft.button')}
                     </button>
                 )}

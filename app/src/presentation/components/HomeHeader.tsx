@@ -14,13 +14,13 @@ const HomeHeader: React.FC<HomeHeaderProps> = ({ user, onPicturePressed }) => {
         <IonHeader>
             <div className={styles['header-container']}>
                 <div className={styles['logo-container']}>
-                    <img alt="logo" className={styles.logo} src={LogoTextSvg} />
+                    <img alt="ULEP" className={styles.logo} src={LogoTextSvg} />
                     <div className={styles['header-separator']} />
                     <span className={styles['app-name']}>ULEP</span>
                 </div>
-                <button className={styles['avatar-container']} onClick={onPicturePressed}>
+                <button aria-label="Change avatar" className={styles['avatar-container']} onClick={onPicturePressed}>
                     <Avatar user={user} className={styles.avatar} />
-                    <img alt="arrow-down" src={ArrowDownSvg} />
+                    <img alt="Change avatar" src={ArrowDownSvg} />
                 </button>
             </div>
         </IonHeader>
