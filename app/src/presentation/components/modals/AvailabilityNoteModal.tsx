@@ -9,16 +9,24 @@ interface AvailabilityNoteModalProps {
     isVisible: boolean;
     onClose: () => void;
     onValidate: (note?: string, isPrivate?: boolean) => void;
+    defaultIsPrivate?: boolean;
+    defaultNote?: string;
 }
 
-const AvailabilityNoteModal: React.FC<AvailabilityNoteModalProps> = ({ isVisible, onClose, onValidate }) => {
+const AvailabilityNoteModal: React.FC<AvailabilityNoteModalProps> = ({
+    defaultIsPrivate = false,
+    defaultNote = '',
+    isVisible,
+    onClose,
+    onValidate,
+}) => {
     const { t } = useTranslation();
-    const [isPrivate, setIsPrivate] = useState<boolean>(false);
-    const [note, setNote] = useState<string>('');
+    const [isPrivate, setIsPrivate] = useState<boolean>(defaultIsPrivate);
+    const [note, setNote] = useState<string>(defaultNote);
 
     useEffect(() => {
-        setIsPrivate(false);
-        setNote('');
+        setIsPrivate(defaultIsPrivate);
+        setNote(defaultNote);
     }, [isVisible]);
     return (
         <Modal isVisible={isVisible} onClose={onClose}>

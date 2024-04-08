@@ -145,13 +145,40 @@ export class PrismaProfileRepository implements ProfileRepository {
     };
   }
 
-  async update(profile: Profile): Promise<void> {
+  async update(profile: Profile): Promise<Profile> {
     await this.prisma.profiles.update({
       where: { id: profile.id },
       data: {
-        // TODO
+        meeting_frequency: profile.meetingFrequency,
+        availabilities: JSON.stringify(profile.availabilities),
+        availabilities_note: profile.availabilitiesNote,
+        availabilities_note_privacy: profile.availavilitiesNotePrivacy,
+        bio: profile.biography,
+        NativeLanguage: {
+          connect: { id: profile.nativeLanguage.id },
+        },
+        MasteredLanguages: {
+          deleteMany: { profile_id: profile.id },
+          create: profile.masteredLanguages.map((language) => {
+            return {
+              LanguageCode: { connect: { code: language.code } },
+            };
+          }),
+        },
+        Goals: {
+          set: [],
+          connect: profile.objectives.map((goal) => ({ id: goal.id })),
+        },
+        Interests: {
+          set: [],
+          connect: profile.interests.map((interest) => ({ id: interest.id })),
+        },
       },
     });
+
+    const updatedProfile = await this.ofId(profile.id);
+
+    return updatedProfile;
   }
 
   async delete(profile: Profile): Promise<void> {

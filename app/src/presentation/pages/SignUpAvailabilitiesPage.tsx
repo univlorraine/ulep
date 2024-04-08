@@ -30,10 +30,14 @@ const SignUpAvailabilitiesPage: React.FC = () => {
     const updateProfileSignUp = useStoreActions((state) => state.updateProfileSignUp);
     const profileSignUp = useStoreState((state) => state.profileSignUp);
     const user = useStoreState((state) => state.user);
+    const profileEdit = useStoreState((store) => store.profileSignUp);
     const university = user?.university || profileSignUp.university;
-    // @ts-ignore
-    const [timezone, setTimezone] = useState<string>(university?.timezone);
-    const [availabilities, setAvailabilities] = useState<Availabilites>(initialAvailabilities);
+    const [timezone, setTimezone] = useState<string | undefined>(university?.timezone);
+    const [availabilities, setAvailabilities] = useState<Availabilites>(
+        profileEdit.availabilities && Object.keys(profileEdit.availabilities).length > 0
+            ? profileEdit.availabilities
+            : initialAvailabilities
+    );
     const [openAvailabilityModal, setOpenAvailabilityModal] = useState<{
         id: string;
         occurence: AvailabilitiesOptions;
@@ -117,6 +121,8 @@ const SignUpAvailabilitiesPage: React.FC = () => {
                     isVisible={openFinalModal}
                     onClose={() => setOpenFinalModal(false)}
                     onValidate={continueSignUp}
+                    defaultIsPrivate={profileEdit?.availabilityNotePrivate}
+                    defaultNote={profileEdit?.availabilityNote}
                 />
             </div>
         </WebLayoutCentered>

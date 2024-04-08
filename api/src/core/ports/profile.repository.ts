@@ -46,7 +46,7 @@ export interface ProfileRepository {
 
   create: (profile: Profile) => Promise<void>;
 
-  update: (profile: Profile) => Promise<void>;
+  update: (profile: Profile) => Promise<Profile>;
 
   findAll: (
     offset?: number,

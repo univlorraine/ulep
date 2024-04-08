@@ -5,7 +5,6 @@ import {
   Controller,
   Delete,
   Get,
-  Logger,
   Param,
   ParseUUIDPipe,
   Post,
@@ -26,6 +25,7 @@ import {
   DeleteUserUsecase,
   DeleteAvatarUsecase,
   GetLearningLanguageOfProfileUsecase,
+  UpdateProfileUsecase,
 } from 'src/core/usecases';
 import { CollectionResponse, CurrentUser } from '../decorators';
 import { Role, Roles } from '../decorators/roles.decorator';
@@ -38,13 +38,12 @@ import {
   LearningLanguageResponse,
 } from '../dtos';
 import { AuthenticationGuard } from '../guards';
-import { Profile } from 'src/core/models';
+import { Profile, User } from 'src/core/models';
+import { UpdateProfileRequest } from 'src/api/dtos/profiles/update-profile.request';
 
 @Controller('profiles')
 @Swagger.ApiTags('Profiles')
 export class ProfileController {
-  private readonly logger = new Logger(ProfileController.name);
-
   constructor(
     private readonly createProfileUsecase: CreateProfileUsecase,
     private readonly getLearningLanguageOfProfileUsecase: GetLearningLanguageOfProfileUsecase,
@@ -56,6 +55,7 @@ export class ProfileController {
     private readonly createLearningLanguageUsecase: CreateLearningLanguageUseCase,
     private readonly deleteUserUsecase: DeleteUserUsecase,
     private readonly deleteAvatarUsecase: DeleteAvatarUsecase,
+    private readonly updateProfileUsecase: UpdateProfileUsecase,
   ) {}
 
   @Post()
@@ -71,6 +71,21 @@ export class ProfileController {
     const profile = await this.createProfileUsecase.execute({
       ...body,
       user: user.sub,
+    });
+
+    return ProfileResponse.fromDomain(profile);
+  }
+
+  @Post('edit/:id')
+  @Swagger.ApiOperation({ summary: 'Edit profile ressource.' })
+  @Swagger.ApiCreatedResponse({ type: ProfileResponse })
+  async edit(
+    @Param('id', ParseUUIDPipe) id: string,
+    @Body() body: UpdateProfileRequest,
+  ) {
+    const profile = await this.updateProfileUsecase.execute(id, {
+      ...body,
+      biography: body.biography as unknown as { [key: string]: string },
     });
 
     return ProfileResponse.fromDomain(profile);

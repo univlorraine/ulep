@@ -97,6 +97,18 @@ export class UpdateUserRequest {
   @IsOptional()
   lastname?: string;
 
+  @Swagger.ApiProperty({ type: 'string', enum: Gender })
+  @IsString()
+  @IsOptional()
+  gender?: Gender;
+
+  @Swagger.ApiProperty({ type: 'number' })
+  @Transform(({ value }) => Number(value))
+  @IsInt()
+  @Min(1)
+  @IsOptional()
+  age?: number;
+
   @Swagger.ApiProperty({ type: 'string', enum: UserStatus })
   @IsOptional()
   status?: UserStatus;

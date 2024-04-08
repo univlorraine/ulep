@@ -11,10 +11,11 @@ const SignupFinalPage: React.FC = () => {
     const { t } = useTranslation();
     const history = useHistory();
     const [showToast] = useIonToast();
-    const { configuration, createProfile } = useConfig();
+    const { configuration, createProfile, editProfile } = useConfig();
     const profileSignUp = useStoreState((state) => state.profileSignUp);
     const profile = useStoreState((state) => state.profile);
     const user = useStoreState((state) => state.user);
+    const isUpdate = profile?.id;
 
     const onCreateProfile = async () => {
         if (
@@ -52,6 +53,28 @@ const SignupFinalPage: React.FC = () => {
         return history.push('/pairing/languages');
     };
 
+    const onUpdateProfile = async () => {
+        if (!profile) {
+            return await showToast({ message: t('errors.global'), duration: 1000 });
+        }
+
+        const result = await editProfile.execute(profile.id, profileSignUp);
+
+        if (result instanceof Error) {
+            return await showToast({ message: t(result.message), duration: 1000 });
+        }
+
+        return history.push('/home');
+    };
+
+    const nextStep = async () => {
+        if (isUpdate) {
+            return await onUpdateProfile();
+        }
+
+        return await onCreateProfile();
+    };
+
     return (
         <SuccessLayout
             backgroundIconColor={configuration.primaryBackgroundImageColor}
@@ -63,8 +86,12 @@ const SignupFinalPage: React.FC = () => {
                     profile?.user.firstname.trim() || user?.firstname.trim()
                 }, ${t('signup_end_page.account')}`}</h1>
                 <Avatar user={user} className={styles.image} />
-                <p className={styles.description}>{t('signup_end_page.description')}</p>
-                <button className="primary-button" onClick={onCreateProfile}>
+                {!isUpdate ? (
+                    <p className={styles.description}>{t('signup_end_page.description')}</p>
+                ) : (
+                    <div className="margin" />
+                )}
+                <button className="primary-button" onClick={nextStep}>
                     {t('signup_end_page.validate_button')}
                 </button>
             </div>

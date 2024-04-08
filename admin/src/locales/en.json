@@ -356,6 +356,7 @@
             "max_tandems_per_user": "Maximum number of tandems per user",
             "notificationEmail": "Email for notifications"
         },
+        "specific_language": "Specific languages",
         "update": {
             "admission_end": "University admission due date",
             "admission_error": "Admission due date must be after admission start date",

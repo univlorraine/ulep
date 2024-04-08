@@ -13,11 +13,12 @@ interface DropdownProps<T> {
     options: DropDownItem<T>[];
     placeholder?: string | null;
     title?: string | null;
+    value?: DropDownItem<T>;
 }
 
-const Dropdown = <T,>({ onChange, options, placeholder, title }: DropdownProps<T>) => {
+const Dropdown = <T,>({ onChange, options, placeholder, value, title }: DropdownProps<T>) => {
     const [selectedOption, setSelectedOption] = useState<DropDownItem<T> | undefined>(
-        !placeholder ? options[0] : undefined
+        value ? value : !placeholder ? options[0] : undefined
     );
     const prevOptions = useRef<DropDownItem<T>[]>(options);
 
@@ -46,7 +47,7 @@ const Dropdown = <T,>({ onChange, options, placeholder, title }: DropdownProps<T
                     expanded-icon={ArrowUpSvg}
                     labelPlacement="stacked"
                     onIonChange={(e) => handleOptionClick(e.detail.value)}
-                    selectedText={selectedOption?.label}
+                    selectedText={selectedOption?.label ?? value?.label}
                 >
                     {options.map((option) => (
                         <IonSelectOption key={option.label} value={option}>
