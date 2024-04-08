@@ -91,7 +91,7 @@ const SignUpGoalsPage: React.FC = () => {
                                             placeholder={WritingSkillPng}
                                         />
                                     ) : (
-                                        <img alt={goal.id} className={goalsStyles.image} src={WritingSkillPng} />
+                                        <img alt="" className={goalsStyles.image} src={WritingSkillPng} />
                                     )}
                                     <span className={goalsStyles.description}>{goal.name}</span>
                                 </button>
