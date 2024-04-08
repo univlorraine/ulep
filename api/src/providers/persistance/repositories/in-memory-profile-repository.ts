@@ -29,10 +29,12 @@ export class InMemoryProfileRepository implements ProfileRepository {
     this.#profiles.set(profile.id, profile);
   }
 
-  async update(profile: Profile): Promise<void> {
+  async update(profile: Profile): Promise<Profile> {
     if (this.#profiles.has(profile.id)) {
       this.#profiles.set(profile.id, profile);
     }
+
+    return this.#profiles.get(profile.id);
   }
 
   async findAll(offset?: number, limit?: number): Promise<Collection<Profile>> {
