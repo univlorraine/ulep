@@ -97,6 +97,26 @@ export const createProfiles = async (
       );
     }
 
+    let testedLanguages = [];
+    if (index % 5 === 0) {
+      testedLanguages = faker.helpers
+        .arrayElements(
+          languages.filter(
+            (language) =>
+              language.code !== nativeLanguageCode &&
+              !learningLanguages.some(
+                (learningLanguage) =>
+                  learningLanguage.language.code === language.code,
+              ),
+          ),
+          { min: 1, max: 3 },
+        )
+        .map((language) => ({
+          language: language,
+          level: enumValue(ProficiencyLevel),
+        }));
+    }
+
     await prisma.profiles.create({
       data: {
         User: { connect: { id: user.id } },
@@ -104,6 +124,12 @@ export const createProfiles = async (
         MasteredLanguages: {
           create: masteredLanguages.map((language) => ({
             language_code_id: language.id,
+          })),
+        },
+        TestedLanguages: {
+          create: testedLanguages.map((testedLanguage) => ({
+            language_code_id: testedLanguage.language.id,
+            level: testedLanguage.level,
           })),
         },
         Goals: {
