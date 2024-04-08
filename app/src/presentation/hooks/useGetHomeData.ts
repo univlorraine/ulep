@@ -3,36 +3,47 @@ import Tandem from '../../domain/entities/Tandem';
 import { useConfig } from '../../context/ConfigurationContext';
 import { useStoreState } from '../../store/storeTypes';
 import { LearningType } from '../pages/PairingPedagogyPage';
+import University from '../../domain/entities/University';
 
-const useGetTandems = () => {
-    const { getAllTandems } = useConfig();
+const useGetHomeData = () => {
+    const { getAllTandems, getPartnersToUniversity } = useConfig();
     const profile = useStoreState((state) => state.profile);
 
-    const [tandemsResult, setTandemsResult] = useState<{
+    const [homeResult, setHomeResult] = useState<{
         tandems: Tandem[];
+        partnerUniversities: University[];
         error: Error | undefined;
         isLoading: boolean;
     }>({
         tandems: [],
+        partnerUniversities: [],
         error: undefined,
         isLoading: false,
     });
 
-    if (!profile) return tandemsResult;
+    if (!profile) return homeResult;
 
     useEffect(() => {
         const fetchData = async () => {
-            setTandemsResult({
-                ...tandemsResult,
+            setHomeResult({
+                ...homeResult,
                 isLoading: true,
             });
-            const result = await getAllTandems.execute(profile.id);
-            if (result instanceof Error) {
-                setTandemsResult({ tandems: [], error: result, isLoading: false });
+            const tandemsResult = await getAllTandems.execute(profile.id);
+            const partnersUniversityResult = await getPartnersToUniversity.execute(profile.user.university.id);
+            if (tandemsResult instanceof Error) {
+                setHomeResult({ tandems: [], partnerUniversities: [], error: tandemsResult, isLoading: false });
+            } else if (partnersUniversityResult instanceof Error) {
+                setHomeResult({
+                    tandems: [],
+                    partnerUniversities: [],
+                    error: partnersUniversityResult,
+                    isLoading: false,
+                });
             } else {
                 const waitingLearningLanguages: Tandem[] = [];
                 profile?.learningLanguages.map((learningLanguage) => {
-                    if (!result.find((tandem) => tandem.learningLanguage.id === learningLanguage.id)) {
+                    if (!tandemsResult.find((tandem) => tandem.learningLanguage.id === learningLanguage.id)) {
                         // TODO(futur) : Change this logic to get it from api ?
                         waitingLearningLanguages.push(
                             new Tandem(
@@ -46,8 +57,9 @@ const useGetTandems = () => {
                         );
                     }
                 });
-                setTandemsResult({
-                    tandems: [...result, ...waitingLearningLanguages],
+                setHomeResult({
+                    tandems: [...tandemsResult, ...waitingLearningLanguages],
+                    partnerUniversities: partnersUniversityResult,
                     error: undefined,
                     isLoading: false,
                 });
@@ -57,7 +69,7 @@ const useGetTandems = () => {
         fetchData();
     }, [profile]);
 
-    return tandemsResult;
+    return homeResult;
 };
 
-export default useGetTandems;
+export default useGetHomeData;

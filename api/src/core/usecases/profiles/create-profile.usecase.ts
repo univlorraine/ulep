@@ -72,7 +72,6 @@ export class CreateProfileCommand {
   objectives: string[];
   meetingFrequency: MeetingFrequency;
   interests: string[];
-  bios?: string;
 }
 
 @Injectable()

@@ -2,7 +2,9 @@ import React from 'react';
 import { useTranslate, useNotify, useRedirect, useUpdate, Edit, WithRecord, Loading } from 'react-admin';
 import UniversityForm from '../../../components/form/UniversityForm';
 import Country from '../../../entities/Country';
+import Language from '../../../entities/Language';
 import University from '../../../entities/University';
+import universityToFormData from '../universityToFormData';
 import useSecurityContext from './useSecurityContext';
 
 const EditUniversity = () => {
@@ -28,11 +30,13 @@ const EditUniversity = () => {
         pairingMode: string,
         maxTandemsPerUser: number,
         website?: string,
-        notificationEmail?: string
+        notificationEmail?: string,
+        specificLanguagesAvailable?: Language[],
+        file?: File
     ) => {
-        const payload = {
+        const formData = universityToFormData(
             name,
-            countryId: country.id,
+            country,
             timezone,
             admissionStart,
             admissionEnd,
@@ -40,15 +44,18 @@ const EditUniversity = () => {
             closeServiceDate,
             codes,
             domains,
-            website,
             pairingMode,
             maxTandemsPerUser,
-            notificationEmail: notificationEmail || undefined,
-        };
+            website,
+            notificationEmail,
+            specificLanguagesAvailable,
+            file
+        );
+
         try {
             return await update(
                 `universities/${id}`,
-                { data: payload },
+                { data: formData },
                 {
                     onSettled: (_, error: unknown) => {
                         if (!error) {
@@ -92,7 +99,9 @@ const EditUniversity = () => {
                             pairingMode: string,
                             maxTandemsPerUser: number,
                             website?: string,
-                            notificationEmail?: string
+                            notificationEmail?: string,
+                            specificLanguagesAvailable?: Language[],
+                            file?: File
                         ) =>
                             handleSubmit(
                                 record.id,
@@ -108,7 +117,9 @@ const EditUniversity = () => {
                                 pairingMode,
                                 maxTandemsPerUser,
                                 website,
-                                notificationEmail
+                                notificationEmail,
+                                specificLanguagesAvailable,
+                                file
                             )
                         }
                         maxTandemsPerUser={record.maxTandemsPerUser}

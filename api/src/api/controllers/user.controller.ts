@@ -209,17 +209,28 @@ export class UserController {
     return UserResponse.fromDomain(instance);
   }
 
-  @Patch(':id')
+  @Post(':id')
   @Roles(Role.ADMIN)
   @OwnerAllowed((request) => request.params.id)
+  @UseInterceptors(FileInterceptor('file'))
+  @Swagger.ApiConsumes('multipart/form-data')
   @UseGuards(AuthenticationGuard)
   @Swagger.ApiOperation({ summary: 'Updates a User ressource.' })
   @Swagger.ApiOkResponse({ type: UserResponse })
   async update(
     @Param('id', ParseUUIDPipe) id: string,
     @Body() body: UpdateUserRequest,
+    @UploadedFile(new ImagesFilePipe()) file?: Express.Multer.File,
   ) {
-    const user = await this.updateUserUsecase.execute(id, body);
+    let user = await this.updateUserUsecase.execute(id, body);
+
+    if (file) {
+      const upload = await this.uploadAvatarUsecase.execute({
+        userId: user.id,
+        file,
+      });
+      user = new User({ ...user, avatar: upload });
+    }
     return UserResponse.fromDomain(user);
   }
 

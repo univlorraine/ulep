@@ -50,4 +50,14 @@ export class InMemoryTandemHistoryRepository
   getHistorizedTandemForUser(userId: string): Promise<HistorizedTandem[]> {
     throw new Error('Not implemented');
   }
+
+  update(userId: string, email: string): Promise<void> {
+    this.#tandemsHistory.forEach((tandem) => {
+      if (tandem.userId === userId) {
+        tandem.userEmail = email;
+      }
+    });
+
+    return Promise.resolve();
+  }
 }

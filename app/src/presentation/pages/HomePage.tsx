@@ -15,10 +15,12 @@ import WaitingTandemList from '../components/tandems/WaitingTandemList';
 import useWindowDimensions from '../hooks/useWindowDimensions';
 import { HYBRID_MAX_WIDTH } from '../utils';
 import styles from './css/Home.module.css';
-import useGetTandems from '../hooks/useGetTandems';
 import Avatar from '../components/Avatar';
 import useLogout from '../hooks/useLogout';
 import Loader from '../components/Loader';
+import MyUniversityCard from '../components/card/MyUniversityCard';
+import PartnerUniversitiesCard from '../components/card/PartnerUniversitiesCard';
+import useGetHomeData from '../hooks/useGetHomeData';
 
 const HomePage: React.FC = () => {
     const { t } = useTranslation();
@@ -32,7 +34,8 @@ const HomePage: React.FC = () => {
     const [displayReport, setDisplayReport] = useState<boolean>(false);
     const [selectedTandem, setSelectedTandem] = useState<Tandem>();
 
-    const { tandems, error, isLoading } = useGetTandems();
+    const { tandems, partnerUniversities, error, isLoading } = useGetHomeData();
+
     const { handleLogout } = useLogout();
 
     if (error) {
@@ -99,6 +102,10 @@ const HomePage: React.FC = () => {
                                     profile={profile}
                                     tandems={tandems}
                                 />
+                                <MyUniversityCard university={profile.user.university} />
+                                {partnerUniversities?.length && (
+                                    <PartnerUniversitiesCard universities={partnerUniversities} />
+                                )}
                             </>
                         )}
                     </div>

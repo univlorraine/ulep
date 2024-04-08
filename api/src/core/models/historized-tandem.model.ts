@@ -14,7 +14,7 @@ export interface HistorizedTandemProps {
 export class HistorizedTandem {
   readonly id: string;
   readonly userId: string;
-  readonly userEmail: string;
+  userEmail: string;
   readonly purge: Purge;
   readonly createdAt: Date;
   readonly language: Language;
