@@ -1,7 +1,12 @@
 import { Injectable } from '@nestjs/common';
 import { PrismaService } from '@app/common';
 import { MediaObjectRepository } from 'src/core/ports/media-object.repository';
-import { LearningObjective, MediaObject, User } from 'src/core/models';
+import {
+  LearningObjective,
+  MediaObject,
+  University,
+  User,
+} from 'src/core/models';
 
 @Injectable()
 export class PrismaMediaObjectRepository implements MediaObjectRepository {
@@ -38,6 +43,26 @@ export class PrismaMediaObjectRepository implements MediaObjectRepository {
         Goal: {
           connect: {
             id: objective.id,
+          },
+        },
+      },
+    });
+  }
+
+  async saveUniversityImage(
+    university: University,
+    object: MediaObject,
+  ): Promise<void> {
+    await this.prisma.mediaObjects.create({
+      data: {
+        id: object.id,
+        name: object.name,
+        bucket: object.bucket,
+        mime: object.mimetype,
+        size: object.size,
+        University: {
+          connect: {
+            id: university.id,
           },
         },
       },

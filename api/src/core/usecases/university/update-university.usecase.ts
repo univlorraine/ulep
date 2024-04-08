@@ -52,16 +52,19 @@ export class UpdateUniversityUsecase {
       throw new RessourceDoesNotExist();
     }
 
-    const specificLanguagesAvailable = await Promise.all(
-      command.specificLanguagesAvailableIds.map((id) =>
-        this.languageRepository.ofId(id),
-      ),
-    );
-
-    if (specificLanguagesAvailable.some((language) => !language)) {
-      throw new RessourceDoesNotExist(
-        'One or more specified language IDs do not exist.',
+    let specificLanguagesAvailable = [];
+    if (command.specificLanguagesAvailableIds) {
+      specificLanguagesAvailable = await Promise.all(
+        command.specificLanguagesAvailableIds.map((id) =>
+          this.languageRepository.ofId(id),
+        ),
       );
+
+      if (specificLanguagesAvailable.some((language) => !language)) {
+        throw new RessourceDoesNotExist(
+          'One or more specified language IDs do not exist.',
+        );
+      }
     }
 
     const country = await this.countryRepository.ofId(command.countryId);

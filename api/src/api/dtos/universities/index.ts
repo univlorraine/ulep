@@ -22,6 +22,7 @@ import { IsAfterThan } from 'src/api/validators';
 import { CampusResponse } from '../campus';
 import { CountryResponse } from 'src/api/dtos/countries';
 import { LanguageResponse } from 'src/api/dtos/languages';
+import { MediaObjectResponse } from 'src/api/dtos';
 
 export class CreateUniversityRequest implements CreateUniversityCommand {
   @Swagger.ApiProperty({ type: 'string', isArray: true })
@@ -328,6 +329,10 @@ export class UniversityResponse {
   @Expose({ groups: ['read'] })
   specificLanguagesAvailable: LanguageResponse[];
 
+  @Swagger.ApiPropertyOptional({ type: MediaObjectResponse })
+  @Expose({ groups: ['read'] })
+  logo?: MediaObjectResponse;
+
   constructor(partial: Partial<UniversityResponse>) {
     Object.assign(this, partial);
   }
@@ -335,6 +340,9 @@ export class UniversityResponse {
   static fromUniversity(university: University) {
     return new UniversityResponse({
       id: university.id,
+      logo: university.logo
+        ? MediaObjectResponse.fromMediaObject(university.logo)
+        : undefined,
       name: university.name,
       country: CountryResponse.fromDomain(university.country),
       parent: university.parent,

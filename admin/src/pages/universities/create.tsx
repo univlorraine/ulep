@@ -2,6 +2,8 @@ import React from 'react';
 import { Create, useTranslate, useCreate, useNotify, useRedirect } from 'react-admin';
 import UniversityForm from '../../components/form/UniversityForm';
 import Country from '../../entities/Country';
+import Language from '../../entities/Language';
+import universityToFormData from './universityToFormData';
 
 const CreateUniversity = () => {
     const translate = useTranslate();
@@ -22,11 +24,13 @@ const CreateUniversity = () => {
         pairingMode: string,
         maxTandemsPerUser: number,
         website?: string,
-        notificationEmail?: string
+        notificationEmail?: string,
+        specificLanguagesAvailable?: Language[],
+        file?: File
     ) => {
-        const payload = {
+        const formData = universityToFormData(
             name,
-            countryId: country.id,
+            country,
             timezone,
             admissionStart,
             admissionEnd,
@@ -37,13 +41,15 @@ const CreateUniversity = () => {
             pairingMode,
             maxTandemsPerUser,
             website,
-            notificationEmail: notificationEmail || undefined,
-        };
+            notificationEmail,
+            specificLanguagesAvailable,
+            file
+        );
 
         try {
             return await create(
                 'universities/partners',
-                { data: payload },
+                { data: formData },
                 {
                     onSettled: (_, error: unknown) => {
                         if (!error) {

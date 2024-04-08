@@ -68,7 +68,7 @@ const payload: ProfileCommand = {
         sunday: 'AVAILABLE',
     },
     availabilitiesNote: 'note',
-    availavilitiesNotePrivacy: false,
+    availabilitiesNotePrivacy: false,
     user: userResult,
 };
 

@@ -30,6 +30,7 @@ import GetHistoricEmailPartnerUsecaseInterface from '../domain/interfaces/GetHis
 import BrowserAdapterInterface from '../adapter/interfaces/BrowserAdapter.interface';
 import DeviceAdapterInterface from '../adapter/interfaces/DeviceAdapter.interface';
 import GetUniversityLanguagesUsecaseInterface from '../domain/interfaces/GetUniversityLanguagesUsecase.interface';
+import GetPartnersToUniversityUsecaseInterface from '../domain/interfaces/GetPartnersToUniversityUsecase.interface';
 import EditProfileUsecaseInterface from '../domain/interfaces/EditProfileUsecase.interface';
 import EditUserUsecaseInterface from '../domain/interfaces/EditUserUsecase.interface';
 
@@ -56,6 +57,7 @@ export interface ConfigContextValueType {
     getAllUniversities: GetAllUniversitiesUsecaseInterface;
     getHistoricEmailPartner: GetHistoricEmailPartnerUsecaseInterface;
     getMediaObject: GetMediaObjectUsecaseInterface;
+    getPartnersToUniversity: GetPartnersToUniversityUsecaseInterface;
     getProfile: GetProfileUsecaseInterface;
     getQuizzByLevel: GetQuizzByLevelUsecaseInterface;
     getUser: GetUserUsecaseInterface;

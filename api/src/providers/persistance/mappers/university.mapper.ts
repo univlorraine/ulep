@@ -1,17 +1,19 @@
 import * as Prisma from '@prisma/client';
-import { PairingMode, University } from 'src/core/models';
+import { MediaObject, PairingMode, University } from 'src/core/models';
 import { campusMapper } from './campus.mapper';
 import { countryMapper } from 'src/providers/persistance/mappers/country.mapper';
 import { languageMapper } from 'src/providers/persistance/mappers/language.mapper';
 
 export const UniversityRelations = {
   Country: true,
+  Image: true,
   Places: true,
   SpecificLanguagesAvailable: true,
 };
 
 export type UniversitySnapshot = Prisma.Organizations & {
   Country: Prisma.CountryCodes;
+  Image: Prisma.MediaObjects;
   Places: Prisma.Places[];
   SpecificLanguagesAvailable: Prisma.LanguageCodes[];
 };
@@ -37,5 +39,14 @@ export const universityMapper = (snapshot: UniversitySnapshot): University => {
     specificLanguagesAvailable: snapshot.SpecificLanguagesAvailable.map(
       (language) => languageMapper(language),
     ),
+    logo:
+      snapshot.Image &&
+      new MediaObject({
+        id: snapshot.Image.id,
+        name: snapshot.Image.name,
+        bucket: snapshot.Image.bucket,
+        mimetype: snapshot.Image.mime,
+        size: snapshot.Image.size,
+      }),
   });
 };

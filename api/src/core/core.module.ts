@@ -83,6 +83,8 @@ import {
   DeleteAvatarUsecase,
   GetUserPersonalData,
   GetOtherUserEmailInTandemUsecase,
+  UploadUniversityImageUsecase,
+  GetPartnersToUniversityUsecase,
   UpdateProfileUsecase,
 } from './usecases';
 import { UploadObjectiveImageUsecase } from 'src/core/usecases/media/upload-objective-image.usecase';
@@ -134,6 +136,7 @@ const usecases: Provider[] = [
   DeleteObjectiveImageUsecase,
   UploadAvatarUsecase,
   UploadObjectiveImageUsecase,
+  UploadUniversityImageUsecase,
   // Objectives
   CreateObjectiveUsecase,
   DeleteObjectiveUsecase,
@@ -193,6 +196,7 @@ const usecases: Provider[] = [
   CreatePartnerUniversityUsecase,
   CreateUniversityUsecase,
   DeleteUniversityUsecase,
+  GetPartnersToUniversityUsecase,
   GetUniversitiesUsecase,
   GetUniversityUsecase,
   UpdateUniversityUsecase,
