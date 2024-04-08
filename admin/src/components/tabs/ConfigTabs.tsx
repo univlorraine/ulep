@@ -4,7 +4,7 @@ import PageTitle from '../PageTitle';
 import getFilteredTabs from './getFilteredTabs';
 import LinkTabs from './LinkTabs';
 
-const ConfigPagesHeader = () => {
+const ConfigTabs = () => {
     const translate = useTranslate();
 
     return (
@@ -14,4 +14,4 @@ const ConfigPagesHeader = () => {
         </>
     );
 };
-export default ConfigPagesHeader;
+export default ConfigTabs;

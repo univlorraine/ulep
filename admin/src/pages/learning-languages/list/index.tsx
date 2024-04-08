@@ -15,6 +15,7 @@ import {
     TextInput,
     BulkDeleteButton,
 } from 'react-admin';
+import PageTitle from '../../../components/PageTitle';
 import { DisplayRole } from '../../../components/translated';
 import UniversitiesPicker from '../../../components/UniversitiesPicker';
 import Language from '../../../entities/Language';
@@ -64,7 +65,8 @@ const LearningLanguageList = () => {
     }
 
     return (
-        <Box sx={{ marginTop: 2 }}>
+        <Box>
+            <PageTitle>{translate('learning_languages.title')}</PageTitle>
             {identity.isCentralUniversity && (
                 <UniversitiesPicker
                     filterUniversities={(university: University) => !isCentralUniversity(university)}

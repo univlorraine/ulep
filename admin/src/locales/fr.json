@@ -209,6 +209,7 @@
         },
         "label": "Objectifs",
         "name": "Nom",
+        "title": "Objectifs",
         "update": {
             "error": "Une erreur est survenue pendant la mise à jour d'un objectif",
             "title": "Mise à jour d'un objectif"
@@ -261,6 +262,7 @@
         "searchLastname": "Chercher par nom",
         "staffFunction": "Fonction",
         "status": "Statut",
+        "title": "Inscrits",
         "update": {
             "title": "Modifier le profil"
         }
@@ -282,6 +284,7 @@
             "level": "Niveau de la question",
             "name": "Intitulé de la question"
         },
+        "title": "Questions",
         "update": {
             "error": "Une erreur est survenue pendant la mise à jour de la question",
             "title": "Mise à jour d'une question"
@@ -542,7 +545,8 @@
                     "role": "Rôle"
                 }
             }
-        }
+        },
+        "title": "Demandes de tandem"
     },
     "universitiesPicker": {
         "error": "Une erreur est survenue lors de la récupération des universités"

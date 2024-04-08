@@ -116,8 +116,8 @@ const theme: RaThemeOptions = {
             styleOverrides: {
                 root: {
                     '&.RaChipField-chip': {
-                        backgroundColor: '#FFBF46',
-                        color: '#575761',
+                        backgroundColor: '#fdee66',
+                        color: '#212121',
                     },
                 },
             },

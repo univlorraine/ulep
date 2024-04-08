@@ -1,6 +1,7 @@
 import React from 'react';
 import { useTranslate, Edit, WithRecord, useUpdate, useRedirect, useNotify } from 'react-admin';
 import ProfileForm from '../../components/form/ProfileForm';
+import PageTitle from '../../components/PageTitle';
 import { Profile, ProfileFormPayload } from '../../entities/Profile';
 
 const ProfileEdit = () => {
@@ -37,12 +38,15 @@ const ProfileEdit = () => {
     };
 
     return (
-        <Edit title={translate('profiles.update.title')}>
-            <WithRecord<Profile>
-                label="profiles"
-                render={(record) => <ProfileForm handleSubmit={handleSubmit} record={record} />}
-            />
-        </Edit>
+        <>
+            <PageTitle>{translate('profiles.title')}</PageTitle>
+            <Edit title={translate('profiles.update.title')}>
+                <WithRecord<Profile>
+                    label="profiles"
+                    render={(record) => <ProfileForm handleSubmit={handleSubmit} record={record} />}
+                />
+            </Edit>
+        </>
     );
 };
 

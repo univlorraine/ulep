@@ -1,6 +1,7 @@
 import React from 'react';
 import { Create, useTranslate, useCreate, useNotify, useRedirect } from 'react-admin';
 import ObjectiveForm from '../../components/form/ObjectiveForm';
+import PageTitle from '../../components/PageTitle';
 import IndexedTranslation from '../../entities/IndexedTranslation';
 import indexedTranslationsToTranslations from '../../utils/indexedTranslationsToTranslations';
 
@@ -43,9 +44,12 @@ const CreateObjective = () => {
     };
 
     return (
-        <Create title={translate('objectives.create.title')}>
-            <ObjectiveForm handleSubmit={handleSubmit} />
-        </Create>
+        <>
+            <PageTitle>{translate('objectives.title')}</PageTitle>
+            <Create title={translate('objectives.create.title')}>
+                <ObjectiveForm handleSubmit={handleSubmit} />
+            </Create>
+        </>
     );
 };
 
