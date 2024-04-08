@@ -109,6 +109,7 @@
         "secondaryColor": "Secondary color of the application",
         "secondaryBackgroundColor": "Secondary color of the application's background image",
         "secondaryDarkColor": "Dark shade of the secondary color used for the application background",
+        "title": "Application configuration",
         "update_error": "An error occurred while updating the instance",
         "purge_modal": {
             "cancel": "Cancel",
@@ -287,6 +288,7 @@
         "in_progress": "In progress",
         "label": "Reports",
         "tabLabel": "Reports list",
+        "title": "Reports",
         "open": "Open",
         "status": "Status",
         "update": {
@@ -375,6 +377,7 @@
             "notificationEmail": "Email for notifications"
         },
         "specific_language": "Specific languages",
+        "title": "Partner universities",
         "update": {
             "admission_end": "University admission due date",
             "admission_error": "Admission due date must be after admission start date",
