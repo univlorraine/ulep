@@ -41,7 +41,7 @@ const QuizzContent: React.FC<QuizzContentProps> = ({ onQuizzOver, questions, qui
                         {`/${questions.length}`}
                     </span>
                     <div className={styles['level-container']}>
-                        <img alt="quizz" src={QuizzPng} />
+                        <img alt="" src={QuizzPng} />
                         {quizzLevel}
                     </div>
                     <span className={styles['question-title']}>{questions[currentIndex].question}</span>

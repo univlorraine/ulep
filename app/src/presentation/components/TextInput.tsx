@@ -114,7 +114,7 @@ const TextInput: React.FC<TextInputProps> = ({
                             type="button"
                             onClick={() => setShowPassword(!showPasword)}
                         >
-                            <img alt="eye" src={EyeSvg} />
+                            <img alt="" src={EyeSvg} />
                         </button>
                     )}
                 </IonItem>

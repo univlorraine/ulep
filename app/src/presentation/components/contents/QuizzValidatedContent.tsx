@@ -41,7 +41,7 @@ const QuizzValidatedContent: React.FC<QuizzValidatedContentProps> = ({
                 <p className="subtitle">{t(`pairing_quizz_validation.subtitle`)}</p>
             )}
             <div className={styles['image-container']}>
-                <img className={styles.image} alt="trophie" src={TrophiePng}></img>
+                <img className={styles.image} alt="" src={TrophiePng} />
                 <div className={styles.bubble}>
                     <FlagBubble language={language} textColor="white" isSelected disabled />
                 </div>
@@ -50,7 +50,7 @@ const QuizzValidatedContent: React.FC<QuizzValidatedContentProps> = ({
                 )}
             </div>
             <div className={styles['level-container']}>
-                <img alt="quizz" src={QuizzPng} />
+                <img alt="" src={QuizzPng} />
                 {`${quizzLevel} ${t('pairing_quizz_validation.validated')}`}
             </div>
             <p className={styles.description}>

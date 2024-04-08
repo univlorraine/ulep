@@ -51,8 +51,12 @@ const ProfileContent: React.FC<ProfileContentProps> = ({ onClose, onParameterPre
     return (
         <div className={styles.container}>
             <div>
-                <button aria-label="Close profile" className={styles['back-button']} onClick={onClose}>
-                    <img alt="arrow-left" src={ArrowLeftSvg} />
+                <button
+                    aria-label={t('global.close_profile') as string}
+                    className={styles['back-button']}
+                    onClick={onClose}
+                >
+                    <img alt="" src={ArrowLeftSvg} />
                 </button>
             </div>
             <div className={styles.content}>
@@ -71,10 +75,10 @@ const ProfileContent: React.FC<ProfileContentProps> = ({ onClose, onParameterPre
                     onClick={changeAvatar}
                 >
                     <div className={styles['button-container']}>
-                        <img alt="edit" src={EditPng} />
+                        <img alt="" src={EditPng} />
                         <span className="margin-left">{t('home_page.profile.edit')}</span>
                     </div>
-                    <img alt="arrow-right" src={ArrowRightSvg} />
+                    <img alt="" src={ArrowRightSvg} />
                 </button>
 
                 <button
@@ -83,10 +87,10 @@ const ProfileContent: React.FC<ProfileContentProps> = ({ onClose, onParameterPre
                     onClick={onParameterPressed}
                 >
                     <div className={styles['button-container']}>
-                        <img alt="parameter" src={ParameterPng} />
+                        <img alt="" src={ParameterPng} />
                         <span className="margin-left">{t('home_page.profile.parameters')}</span>
                     </div>
-                    <img alt="arrow-right" src={ArrowRightSvg} />
+                    <img alt="" src={ArrowRightSvg} />
                 </button>
 
                 <button
@@ -95,10 +99,10 @@ const ProfileContent: React.FC<ProfileContentProps> = ({ onClose, onParameterPre
                     onClick={handleLogout}
                 >
                     <div className={styles['button-container']}>
-                        <img alt="disconnect" src={SmallAvatarPng} />
+                        <img alt="" src={SmallAvatarPng} />
                         <span className="margin-left">{t('home_page.profile.disconnect')}</span>
                     </div>
-                    <img alt="arrow-right" src={ArrowRightSvg} />
+                    <img alt="" src={ArrowRightSvg} />
                 </button>
             </div>
         </div>

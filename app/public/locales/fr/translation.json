@@ -67,7 +67,8 @@
         "change_avatar": "Modifier mon avatar",
         "welcome": "Bienvenue sur ULEP,",
         "welcome_subtext": "le meilleur moyen de pratiquer une langue",
-        "welcome_btn": "Apprends une nouvelle langue en tandem"
+        "welcome_btn": "Apprends une nouvelle langue en tandem",
+        "close_profile": "Close profile"
     },
     "connection_page": {
         "connect_title": "As-tu déjà un compte ?",

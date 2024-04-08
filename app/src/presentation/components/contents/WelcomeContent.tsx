@@ -59,7 +59,7 @@ const WelcomeContent: React.FC<WelcomeContentProps> = ({ onPress }) => {
     return (
         <IonContent>
             <div style={backgroundStyle} className={`content-wrapper container`}>
-                <img src={currentTheme.image} alt="bubble" className={style['bubble']} />
+                <img src={currentTheme.image} alt={t('global.hello') as string} className={style['bubble']} />
                 <span className={style['welcome-text']}>
                     {t('global.welcome')}
                     <p className={style['welcome-subtext']}>{t('global.welcome_subtext')}</p>

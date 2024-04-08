@@ -90,7 +90,7 @@ const EditInformationsPage: React.FC = () => {
                     )}
                     {(profilePicture || !profile?.user.avatar) && (
                         <img
-                            alt="plus"
+                            alt=""
                             className={styles.image}
                             src={profilePicture ? URL.createObjectURL(profilePicture) : PlusPng}
                         />

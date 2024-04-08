@@ -163,7 +163,7 @@ const SettingsContent: React.FC<SettingsContentProps> = ({ onBackPressed, onDisc
                 onClick={onDisconnect}
             >
                 <span>{t('home_page.settings.logout')}</span>
-                <img alt="right-arrow" src={ArrowRightSvg} />
+                <img alt="" src={ArrowRightSvg} />
             </button>
             <ConfirmModal
                 isVisible={isModalOpen}

@@ -35,7 +35,7 @@ const TandemStatusContent: React.FC<TandemStatusContentProps> = ({ onFindNewTand
             </button>
             <div className={styles.content}>
                 <span className="title extra-large-margin-bottom">{t(`home_page.tandem_${tradKey}.title`)}</span>
-                <img alt="clock" className="extra-large-margin-bottom" src={waiting ? ClockPng : TandemNotFoundPng} />
+                <img alt="" className="extra-large-margin-bottom" src={waiting ? ClockPng : TandemNotFoundPng} />
                 <span className="subtitle extra-large-margin-bottom">{t(`home_page.tandem_${tradKey}.subtitle`)}</span>
                 {status === 'INACTIVE' && (
                     <div className={styles['bottom-container']}>

@@ -34,7 +34,7 @@ const OtherLanguageContent: React.FC<OtherLanguageContentProps> = ({ displayJoke
 
                 <div className={pairingOtherLanguagesStyles['joker-container']}>
                     <div className={pairingOtherLanguagesStyles['joker-image-container']}>
-                        <img alt="dice" className={pairingOtherLanguagesStyles.dice} src={DicePng} />
+                        <img alt="" className={pairingOtherLanguagesStyles.dice} src={DicePng} />
                         <div className={pairingOtherLanguagesStyles['joker-text-container']}>
                             <p className={pairingOtherLanguagesStyles['joker-description']}>
                                 {t('pairing_other_languages_page.joker_description')}
