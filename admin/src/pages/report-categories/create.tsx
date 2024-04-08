@@ -1,7 +1,7 @@
 import React from 'react';
 import { Create, useTranslate, useCreate, useNotify, useRedirect } from 'react-admin';
 import CategoryReportForm from '../../components/form/CategoryReportForm';
-import ReportsTabs from '../../components/tabs/ReportsTabs';
+import ReportsPagesHeader from '../../components/tabs/ReportsPagesHeader';
 import IndexedTranslation from '../../entities/IndexedTranslation';
 import indexedTranslationsToTranslations from '../../utils/indexedTranslationsToTranslations';
 
@@ -39,7 +39,7 @@ const CreateReportCategory = () => {
 
     return (
         <>
-            <ReportsTabs />
+            <ReportsPagesHeader />
             <Create title={translate('report_categories.create.title')}>
                 <CategoryReportForm handleSubmit={handleSubmit} tradKey="create" />
             </Create>

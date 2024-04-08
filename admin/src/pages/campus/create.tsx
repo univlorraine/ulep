@@ -1,7 +1,7 @@
 import React from 'react';
 import { useTranslate, useNotify, useRedirect, useCreate, Create } from 'react-admin';
 import CampusForm from '../../components/form/CampusForm';
-import UniversitiesTabs from '../../components/tabs/UniversitiesTabs';
+import UniversitiesPagesHeader from '../../components/tabs/UniversitiesPagesHeader';
 
 const CreateCampus = () => {
     const translate = useTranslate();
@@ -36,7 +36,7 @@ const CreateCampus = () => {
 
     return (
         <>
-            <UniversitiesTabs />
+            <UniversitiesPagesHeader />
             <Create title={translate('campus.create.title')}>
                 <CampusForm handleSubmit={(newName: string) => handleSubmit(newName)} />
             </Create>

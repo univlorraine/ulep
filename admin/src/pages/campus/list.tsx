@@ -1,13 +1,13 @@
 import React from 'react';
 import { useTranslate, List, Datagrid, TextField } from 'react-admin';
-import UniversitiesTabs from '../../components/tabs/UniversitiesTabs';
+import UniversitiesPagesHeader from '../../components/tabs/UniversitiesPagesHeader';
 
 const CampusList = (props: any) => {
     const translate = useTranslate();
 
     return (
         <>
-            <UniversitiesTabs />
+            <UniversitiesPagesHeader />
             <List exporter={false} pagination={false} title={translate('campus.label')} {...props}>
                 <Datagrid rowClick="edit">
                     <TextField label={translate('campus.name')} source="name" />

@@ -1,7 +1,7 @@
 import React from 'react';
 import { useTranslate, useNotify, useRedirect, useUpdate, Edit, WithRecord } from 'react-admin';
 import UniversityForm from '../../components/form/UniversityForm';
-import UniversitiesTabs from '../../components/tabs/UniversitiesTabs';
+import UniversitiesPagesHeader from '../../components/tabs/UniversitiesPagesHeader';
 import Country from '../../entities/Country';
 import Language from '../../entities/Language';
 import University from '../../entities/University';
@@ -72,7 +72,7 @@ const EditUniversity = () => {
 
     return (
         <>
-            <UniversitiesTabs />
+            <UniversitiesPagesHeader />
             <Edit title={translate('universities.update.title')}>
                 <WithRecord<University>
                     label="university"

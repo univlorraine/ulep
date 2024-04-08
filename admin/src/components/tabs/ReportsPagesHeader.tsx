@@ -4,7 +4,7 @@ import PageTitle from '../PageTitle';
 import getFilteredTabs from './getFilteredTabs';
 import LinkTabs from './LinkTabs';
 
-const ReportsTabs = () => {
+const ReportsPagesHeader = () => {
     const translate = useTranslate();
 
     return (
@@ -15,4 +15,4 @@ const ReportsTabs = () => {
     );
 };
 
-export default ReportsTabs;
+export default ReportsPagesHeader;

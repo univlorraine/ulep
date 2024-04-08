@@ -1,7 +1,7 @@
 import React from 'react';
 import { useTranslate, useNotify, useRedirect, useUpdate, WithRecord, Edit } from 'react-admin';
 import ReportForm from '../../components/form/ReportForm';
-import ReportsTabs from '../../components/tabs/ReportsTabs';
+import ReportsPagesHeader from '../../components/tabs/ReportsPagesHeader';
 import Report, { ReportStatus } from '../../entities/Report';
 
 const EditReport = () => {
@@ -39,7 +39,7 @@ const EditReport = () => {
 
     return (
         <>
-            <ReportsTabs />
+            <ReportsPagesHeader />
             <Edit title={translate('reports.update.title')}>
                 <WithRecord<Report>
                     render={(record) => (

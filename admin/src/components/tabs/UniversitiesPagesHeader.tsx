@@ -4,7 +4,7 @@ import PageTitle from '../PageTitle';
 import getFilteredTabs from './getFilteredTabs';
 import LinkTabs from './LinkTabs';
 
-const UniversitiesTabs = () => {
+const UniversitiesPagesHeader = () => {
     const translate = useTranslate();
 
     return (
@@ -15,4 +15,4 @@ const UniversitiesTabs = () => {
     );
 };
 
-export default UniversitiesTabs;
+export default UniversitiesPagesHeader;

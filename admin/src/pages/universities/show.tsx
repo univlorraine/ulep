@@ -13,7 +13,7 @@ import {
     FunctionField,
 } from 'react-admin';
 import ReferenceUploadField from '../../components/field/ReferenceUploadField';
-import UniversitiesTabs from '../../components/tabs/UniversitiesTabs';
+import UniversitiesPagesHeader from '../../components/tabs/UniversitiesPagesHeader';
 import Language from '../../entities/Language';
 import University from '../../entities/University';
 
@@ -28,7 +28,7 @@ const UniversityShow = (props: any) => {
 
     return (
         <>
-            <UniversitiesTabs />
+            <UniversitiesPagesHeader />
             <Show actions={<UniversityShowAction />} title={translate('universities.label')} {...props}>
                 <SimpleShowLayout sx={{ m: 3 }}>
                     <ReferenceUploadField label={translate('universities.show.logo')} source="logo.id" />
