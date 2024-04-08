@@ -1,4 +1,5 @@
 import FAQPng from './FAQ.png';
+import AdviceSvg from './advice.svg';
 import ArrowUpSvg from './arrow-up.svg';
 import ArrowDownSvg from './arrow-down.svg';
 import ArrowRightSvg from './arrow-right.svg';
@@ -36,6 +37,7 @@ import TrophiePng from './trophie.png';
 import WritingSkillPng from './writing_skill.png';
 
 export {
+    AdviceSvg,
     ArrowUpSvg,
     ArrowDownSvg,
     ArrowLeftSvg,

@@ -80,7 +80,12 @@
             "title": "Mon université"
         },
         "partner_universities": {
-            "title": "Universités partnaires"
+            "title": "Universités partenaires"
+        },
+        "proficiency_test": {
+            "button": "Faire le test",
+            "subtitle": "Mes langues",
+            "title": "Mon niveau"
         },
         "profile": {
             "disconnect": "Se déconnecter",

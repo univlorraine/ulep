@@ -13,7 +13,7 @@ import TandemStatusModal from '../components/modals/TandemStatusModal';
 import TandemList from '../components/tandems/TandemList';
 import WaitingTandemList from '../components/tandems/WaitingTandemList';
 import useWindowDimensions from '../hooks/useWindowDimensions';
-import { HYBRID_MAX_WIDTH } from '../utils';
+import { HYBRID_MAX_WIDTH, learningLanguagesToTestedLanguages } from '../utils';
 import styles from './css/Home.module.css';
 import Avatar from '../components/Avatar';
 import useLogout from '../hooks/useLogout';
@@ -21,6 +21,7 @@ import Loader from '../components/Loader';
 import MyUniversityCard from '../components/card/MyUniversityCard';
 import PartnerUniversitiesCard from '../components/card/PartnerUniversitiesCard';
 import useGetHomeData from '../hooks/useGetHomeData';
+import ProficiencyTestCard from '../components/card/ProficiencyTestCard';
 
 const HomePage: React.FC = () => {
     const { t } = useTranslation();
@@ -103,8 +104,16 @@ const HomePage: React.FC = () => {
                                     tandems={tandems}
                                 />
                                 <MyUniversityCard university={profile.user.university} />
-                                {partnerUniversities?.length && (
+                                {partnerUniversities?.length > 0 && (
                                     <PartnerUniversitiesCard universities={partnerUniversities} />
+                                )}
+                                {(profile.learningLanguages.length > 0 || profile.testedLanguages.length > 0) && (
+                                    <ProficiencyTestCard
+                                        testedLanguages={[
+                                            ...learningLanguagesToTestedLanguages(profile.learningLanguages),
+                                            ...profile.testedLanguages,
+                                        ]}
+                                    />
                                 )}
                             </>
                         )}

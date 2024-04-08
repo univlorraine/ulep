@@ -1,0 +1,38 @@
+.container {
+    background-color: var(--secondary-color);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.container-content {
+    align-items: center;
+    display: flex;
+    flex-direction: row;
+    justify-content: left;
+}
+
+.container-image {
+    align-items: center;
+    background-color: white;
+    border-radius: 50%;
+    display: flex;
+    height: 95px;
+    justify-content: center;
+    margin: 20px;
+    width: 95px;
+}
+
+.image {
+    height: 60px;
+    width: 60px;
+}
+
+.subtitle {
+    color: #000;
+    font-family: Roboto;
+    font-size: 20px;
+    font-style: normal;
+    font-weight: 700;
+    line-height: 10px;
+}

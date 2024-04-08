@@ -1,4 +1,5 @@
-import { Browser } from '@capacitor/browser';
+import LearningLanguage from '../domain/entities/LearningLanguage';
+import TestedLanguage from '../domain/entities/TestedLanguage';
 
 const countriesCodeWithFlags: [string, string][] = [
     ['aa', '🇪🇹'], // Afar - Ethiopia
@@ -223,6 +224,12 @@ export const isDomainValid = (email: string, domains: string[]) => {
 
 export const isCodeValid = (code: string, codesToCheck: string[]) => {
     return codesToCheck.some((codeToCheck) => codeToCheck === code);
+};
+
+export const learningLanguagesToTestedLanguages = (learningLanguages: LearningLanguage[]) => {
+    return learningLanguages.map(
+        (learningLanguage) => new TestedLanguage(learningLanguage.code, learningLanguage.name, learningLanguage.level)
+    );
 };
 
 export const compareArrays = (a: unknown[], b: unknown[]) => JSON.stringify(a) == JSON.stringify(b);
