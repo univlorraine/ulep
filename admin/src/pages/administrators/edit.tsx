@@ -1,6 +1,7 @@
 import React from 'react';
 import { useNotify, useRedirect, Edit, useTranslate, useUpdate, WithRecord } from 'react-admin';
 import AdministratorForm from '../../components/form/AdministratorForm';
+import ConfigTabs from '../../components/tabs/ConfigTabs';
 import Administrator, { AdministratorFormPayload } from '../../entities/Administrator';
 
 const EditAdministrator = () => {
@@ -32,22 +33,25 @@ const EditAdministrator = () => {
     };
 
     return (
-        <Edit title={translate('administrators.update.title')}>
-            <WithRecord<Administrator>
-                label="user/administrator"
-                render={(record) => (
-                    <AdministratorForm
-                        email={record.email}
-                        firstname={record.firstname}
-                        handleSubmit={handleSubmit}
-                        id={record.id}
-                        lastname={record.lastname}
-                        type="update"
-                        universityId={record.universityId || 'central'}
-                    />
-                )}
-            />
-        </Edit>
+        <>
+            <ConfigTabs />
+            <Edit title={translate('administrators.update.title')}>
+                <WithRecord<Administrator>
+                    label="user/administrator"
+                    render={(record) => (
+                        <AdministratorForm
+                            email={record.email}
+                            firstname={record.firstname}
+                            handleSubmit={handleSubmit}
+                            id={record.id}
+                            lastname={record.lastname}
+                            type="update"
+                            universityId={record.universityId || 'central'}
+                        />
+                    )}
+                />
+            </Edit>
+        </>
     );
 };
 

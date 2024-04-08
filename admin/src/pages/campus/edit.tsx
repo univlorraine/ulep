@@ -1,6 +1,7 @@
 import React from 'react';
 import { useTranslate, useNotify, useRedirect, useUpdate, Edit, WithRecord } from 'react-admin';
 import CampusForm from '../../components/form/CampusForm';
+import UniversitiesTabs from '../../components/tabs/UniversitiesTabs';
 import Campus from '../../entities/Campus';
 
 const EditCampus = () => {
@@ -36,17 +37,20 @@ const EditCampus = () => {
     };
 
     return (
-        <Edit title={translate('campus.update.title')}>
-            <WithRecord<Campus>
-                label="campus"
-                render={(record) => (
-                    <CampusForm
-                        handleSubmit={(newName: string) => handleSubmit(record.id, newName)}
-                        name={record.name}
-                    />
-                )}
-            />
-        </Edit>
+        <>
+            <UniversitiesTabs />
+            <Edit title={translate('campus.update.title')}>
+                <WithRecord<Campus>
+                    label="campus"
+                    render={(record) => (
+                        <CampusForm
+                            handleSubmit={(newName: string) => handleSubmit(record.id, newName)}
+                            name={record.name}
+                        />
+                    )}
+                />
+            </Edit>
+        </>
     );
 };
 

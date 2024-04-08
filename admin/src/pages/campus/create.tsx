@@ -1,6 +1,7 @@
 import React from 'react';
 import { useTranslate, useNotify, useRedirect, useCreate, Create } from 'react-admin';
 import CampusForm from '../../components/form/CampusForm';
+import UniversitiesTabs from '../../components/tabs/UniversitiesTabs';
 
 const CreateCampus = () => {
     const translate = useTranslate();
@@ -34,9 +35,12 @@ const CreateCampus = () => {
     };
 
     return (
-        <Create title={translate('campus.create.title')}>
-            <CampusForm handleSubmit={(newName: string) => handleSubmit(newName)} />
-        </Create>
+        <>
+            <UniversitiesTabs />
+            <Create title={translate('campus.create.title')}>
+                <CampusForm handleSubmit={(newName: string) => handleSubmit(newName)} />
+            </Create>
+        </>
     );
 };
 

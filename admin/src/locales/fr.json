@@ -9,6 +9,7 @@
             "university": "Veuillez sélectionner une université pour l'administrateur"
         },
         "label": "Administrateurs",
+        "tabLabel": "Administrateurs",
         "university": "Gestionnaire de",
         "update": {
             "email": "Mettez à jour l'email de l'utilisateur",
@@ -23,7 +24,8 @@
         "create": {
             "title": "Création d'un campus"
         },
-        "label": "Campus univ. centrale",
+        "label": "Campus",
+        "tabLabel": "Campus univ. centrale",
         "name": "Nom des campus de l'université principale",
         "update": {
             "error": "Une erreur est survenue pendant la mise à jour d'un campus",
@@ -33,11 +35,13 @@
     },
     "count_suggested_languages": {
         "label": "Total langues demandées",
+        "tabLabel": "Total langues demandées",
         "total": "Total"
     },
     "countries": {
         "code": "Code du pays",
         "label": "Pays",
+        "tabLabel": "Pays",
         "name": "Nom du pays"
     },
     "days": {
@@ -91,7 +95,8 @@
         "title": "ULEP Administration"
     },
     "instance": {
-        "label": "Instance",
+        "label": "Configuration",
+        "tabLabel": "Instance",
         "name": "Nom de l'instance",
         "email": "Email lié à l'instance",
         "cgu": "Url vers les conditions générales d'utilisations",
@@ -152,6 +157,7 @@
         },
         "interests": "Intérêts",
         "label": "Catégorie d'intérêts",
+        "tabLabel": "Catégorie d'intérêts",
         "name": "Nom",
         "update": {
             "name": "Nom de la catégorie",
@@ -161,6 +167,7 @@
     "languages": {
         "code": "Code de la langue",
         "label": "Langues",
+        "tabLabel": "Langues",
         "name": "Nom de la langue",
         "secondary_status": {
             "active": "Langue proposée",
@@ -181,7 +188,7 @@
             "no": "Non"
         }
     },
-    "langauges_picker": {
+    "languages_picker": {
         "placeholder": "Choisir une langue supplémentaire"
     },
     "login": {
@@ -287,6 +294,7 @@
         "content": "Contenu",
         "IN_PROGRESS": "En cours",
         "label": "Signalements",
+        "tabLabel": "Liste des signalements",
         "OPEN": "Ouvert",
         "status": "État",
         "update": {
@@ -302,7 +310,8 @@
             "name": "Nom de la nouvelle catégorie",
             "title": "Création d'une nouvelle catégorie"
         },
-        "label": "Categories de signalement",
+        "label": "Catégories",
+        "tabLabel": "Catégories",
         "show": {
             "name": "Nom de la catégorie de signalement"
         },
@@ -313,7 +322,8 @@
         }
     },
     "suggested_languages": {
-        "label": "Langues demandées"
+        "label": "Langues demandées",
+        "tabLabel": "Langues demandées"
     },
     "universities": {
         "code_button": "Ajouter un code",
@@ -348,6 +358,7 @@
             "automatic": "Automatique"
         },
         "label": "Universités",
+        "tabLabel": "Liste des universités",
         "name": "Nom de l'université",
         "parent": "Université centrale",
         "show": {

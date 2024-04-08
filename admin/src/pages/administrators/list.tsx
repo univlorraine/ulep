@@ -13,6 +13,7 @@ import {
     useLogout,
     ListProps,
 } from 'react-admin';
+import ConfigTabs from '../../components/tabs/ConfigTabs';
 import Administrator from '../../entities/Administrator';
 
 interface DeleteAdministratorButtonProps {
@@ -50,29 +51,32 @@ const AdministratorList = (props: ListProps<Administrator>) => {
     }
 
     return (
-        <List
-            exporter={false}
-            filter={!identity?.isCentralUniversity ? { universityId: identity.universityId } : undefined}
-            pagination={false}
-            title={translate('administrators.label')}
-            {...props}
-        >
-            <Datagrid bulkActionButtons={false} rowClick="edit">
-                <TextField label={translate('global.email')} source="email" />
-                <TextField label={translate('global.firstname')} source="firstname" />
-                <TextField label={translate('global.lastname')} source="lastname" />
+        <>
+            <ConfigTabs />
+            <List
+                exporter={false}
+                filter={!identity?.isCentralUniversity ? { universityId: identity.universityId } : undefined}
+                pagination={false}
+                title={translate('administrators.label')}
+                {...props}
+            >
+                <Datagrid bulkActionButtons={false} rowClick="edit">
+                    <TextField label={translate('global.email')} source="email" />
+                    <TextField label={translate('global.firstname')} source="firstname" />
+                    <TextField label={translate('global.lastname')} source="lastname" />
 
-                {identity.isCentralUniversity && (
-                    <ReferenceField
-                        emptyText={translate('administrators.all')}
-                        label={translate('administrators.university')}
-                        reference="universities"
-                        source="universityId"
-                    />
-                )}
-                <DeleteAdministratorButton identity={identity} />
-            </Datagrid>
-        </List>
+                    {identity.isCentralUniversity && (
+                        <ReferenceField
+                            emptyText={translate('administrators.all')}
+                            label={translate('administrators.university')}
+                            reference="universities"
+                            source="universityId"
+                        />
+                    )}
+                    <DeleteAdministratorButton identity={identity} />
+                </Datagrid>
+            </List>
+        </>
     );
 };
 

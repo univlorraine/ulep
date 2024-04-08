@@ -55,6 +55,7 @@ const CustomUserMenu = (props: any) => {
 
     return (
         <UserMenu {...props} icon={userData ? <CustomAvatar firstName={firstName} lastName={lastName} /> : <Avatar />}>
+            {/* Can't use a <div> for accessibility, and not a <> for MUI */}
             {userData && <Username email={email} firstName={firstName} lastName={lastName} />}
             {userData && <Divider />}
             {userData && (
