@@ -27,7 +27,8 @@ const Store = createStore<TokenStoreTypes>(
             }),
             setUser: action((state, payload) => {
                 state.user = payload.user ?? state.user;
-                state.profile = undefined;
+                state.profileSignUp = payload.keepProfileSignUp ? state.profileSignUp : new ProfileSignUp();
+                state.profile = payload.keepProfile ? state.profile : undefined;
             }),
             logout: action((state) => {
                 state.accessToken = '';

@@ -43,6 +43,7 @@ import SuspendedPage from '../pages/SuspendedPage';
 import PairingOtherLanguageSelectedPage from '../pages/PairingOtherLanguageSelectedPage';
 import useIsUniversityOpen from '../hooks/useIsUniversityOpen';
 import ServiceClosePage from '../pages/ServiceClosePage';
+import EditInformationsPage from '../pages/EditInformationsPage';
 
 const OfflineRouter: React.FC = () => {
     const profile = useStoreState((store) => store.profile);
@@ -168,6 +169,9 @@ const OfflineRouter: React.FC = () => {
                 </PrivateRoute>
                 <Route exact path="/signup/informations">
                     <SignUpInformationsPage />
+                </Route>
+                <Route exact path="/edit/informations">
+                    <EditInformationsPage />
                 </Route>
             </Switch>
         </IonRouterOutlet>

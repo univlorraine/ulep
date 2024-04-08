@@ -30,6 +30,8 @@ import GetHistoricEmailPartnerUsecaseInterface from '../domain/interfaces/GetHis
 import BrowserAdapterInterface from '../adapter/interfaces/BrowserAdapter.interface';
 import DeviceAdapterInterface from '../adapter/interfaces/DeviceAdapter.interface';
 import GetUniversityLanguagesUsecaseInterface from '../domain/interfaces/GetUniversityLanguagesUsecase.interface';
+import EditProfileUsecaseInterface from '../domain/interfaces/EditProfileUsecase.interface';
+import EditUserUsecaseInterface from '../domain/interfaces/EditUserUsecase.interface';
 
 export interface ConfigContextValueType {
     accessToken: string;
@@ -43,6 +45,8 @@ export interface ConfigContextValueType {
     createProfile: CreateProfileUsecaseInterface;
     createReport: CreateReportUsecaseInterface;
     createUser: CreateUserUsecaseInterface;
+    editProfile: EditProfileUsecaseInterface;
+    editUser: EditUserUsecaseInterface;
     getAllCountries: GetAllCountriesUsecaseInterface;
     getAllGoals: GetAllGoalsUsecaseInterface;
     getAllInterestCategories: GetAllInterestCategoriessUsecase;

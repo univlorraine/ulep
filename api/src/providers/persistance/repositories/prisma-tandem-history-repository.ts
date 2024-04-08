@@ -59,4 +59,13 @@ export class PrismaTandemHistoryRepository implements TandemHistoryRepository {
     });
     return res.map(historizedTandemMapper);
   }
+
+  async update(userId: string, email: string): Promise<void> {
+    await this.prisma.tandemHistory.updateMany({
+      where: { user_id: userId },
+      data: {
+        user_email: email,
+      },
+    });
+  }
 }

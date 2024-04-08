@@ -95,25 +95,14 @@ export class Profile {
     this.createdAt = props.createdAt;
     this.updatedAt = props.updatedAt;
 
-    this.assertLanguesAreUnique();
+    this.assertLanguagesAreUnique();
   }
 
-  protected assertLanguesAreUnique(): void {
+  protected assertLanguagesAreUnique(): void {
     const masteredLanguagesCodes = this.masteredLanguages.map((l) => l.code);
 
-    if (
-      this.learningLanguages.length &&
-      this.learningLanguages.some(
-        (learningLanguage) =>
-          learningLanguage.language.code === this.nativeLanguage.code,
-      )
-    ) {
-      throw new ProfileLanguagesException(
-        'Native language cannot be a learning language',
-      );
-    }
-
     if (masteredLanguagesCodes.includes(this.nativeLanguage.code)) {
+      console.log(masteredLanguagesCodes, this.nativeLanguage);
       throw new ProfileLanguagesException(
         'Native language cannot be a mastered language',
       );
