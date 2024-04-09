@@ -186,7 +186,7 @@ const OfflineRouter: React.FC = () => {
                 <PrivateRoute exact path="/cefr/quizz">
                     <QuizzPage />
                 </PrivateRoute>
-                <PrivateRoute exact path="/cefr/end">
+                <PrivateRoute exact path="/cefr/quizz/end">
                     <CEFRQuizzEndPage />
                 </PrivateRoute>
             </Switch>

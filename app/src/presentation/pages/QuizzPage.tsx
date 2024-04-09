@@ -71,7 +71,7 @@ const QuizzPage: React.FC = () => {
             updateProfileSignUp({ learningLanguageLevel: getPreviousLevel(currentQuizz) });
         }
 
-        return history.push(initialCefr ? `/pairing/language/quizz/end` : `/cefr/quizz/end`);
+        return history.push(initialCefr ? `/cefr/quizz/end` : `/pairing/language/quizz/end`, { initialCefr });
     };
 
     useEffect(() => {

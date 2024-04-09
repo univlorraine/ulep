@@ -4,7 +4,7 @@ import { useConfig } from '../../../context/ConfigurationContext';
 import { useStoreState } from '../../../store/storeTypes';
 import QuizzValidatedContent from '../../components/contents/QuizzValidatedContent';
 import WebLayoutCentered from '../../components/layout/WebLayoutCentered';
-import styles from './css/SignUp.module.css';
+import styles from '../css/SignUp.module.css';
 import { useIonToast } from '@ionic/react';
 import { compareCEFR } from '../../utils';
 

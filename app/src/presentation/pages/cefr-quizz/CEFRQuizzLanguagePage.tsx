@@ -6,7 +6,7 @@ import { useStoreActions, useStoreState } from '../../../store/storeTypes';
 import useGetLearnableLanguages from '../../hooks/useGetLearnableLanguages';
 import LearnableLanguagesContent from '../../components/contents/LearnableLanguagesContent';
 import WebLayoutCentered from '../../components/layout/WebLayoutCentered';
-import styles from './css/SignUp.module.css';
+import styles from '../css/SignUp.module.css';
 import { useConfig } from '../../../context/ConfigurationContext';
 
 const CEFRQuizzLanguagePage: React.FC = () => {
@@ -22,7 +22,7 @@ const CEFRQuizzLanguagePage: React.FC = () => {
         return <Redirect to={'/signup'} />;
     }
 
-    const { error, isLoading, languages } = useGetLearnableLanguages(university, true);
+    const { error, isLoading, languages } = useGetLearnableLanguages(university, true, []);
 
     if (error) {
         showToast({ message: t(error.message), duration: 1000 });
@@ -35,7 +35,7 @@ const CEFRQuizzLanguagePage: React.FC = () => {
 
         updateProfileSignUp({ learningLanguage: selectedLanguage });
 
-        return history.push(`/cefr/quizz`, { cefrToTest: languageLevel ?? 'A1' });
+        return history.push(`/cefr/quizz`, { initialCefr: languageLevel ?? 'A1' });
     };
 
     const navigateToHome = () => {

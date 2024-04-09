@@ -22,7 +22,7 @@ const PairingOtherLanguagesPage: React.FC = () => {
         return <Redirect to={'/signup'} />;
     }
 
-    const { error, languages } = useGetSuggestedLanguages();
+    const { error, languages } = useGetSuggestedLanguages(false, []);
 
     if (error) {
         showToast({ message: t(error.message), duration: 1000 });
