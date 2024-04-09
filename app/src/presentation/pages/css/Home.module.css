@@ -30,6 +30,7 @@
 
 .content {
     background-color: #f4f5fe;
+    margin-top: 12px;
 }
 
 .date {
@@ -91,6 +92,10 @@
         padding: 52px 180px;
     }
 
+    .content {
+        --ion-background-color: #f4f5fe;
+    }
+
     .report-container {
         align-self: center;
         align-items: center;
@@ -99,9 +104,5 @@
         justify-content: center;
         margin-top: 48px;
         width: 410px;
-    }
-
-    ion-content {
-        --ion-background-color: #f4f5fe;
     }
 }

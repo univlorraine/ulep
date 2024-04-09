@@ -1,7 +1,7 @@
 import { useIonToast } from '@ionic/react';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { Redirect, useHistory } from 'react-router';
+import { Redirect, useHistory, useLocation } from 'react-router';
 import { useConfig } from '../../context/ConfigurationContext';
 import Question from '../../domain/entities/Question';
 import { useStoreActions, useStoreState } from '../../store/storeTypes';
@@ -13,11 +13,19 @@ import WebLayoutCentered from '../components/layout/WebLayoutCentered';
 import { getNextLevel, getPreviousLevel } from '../utils';
 import styles from './css/SignUp.module.css';
 
+type PairingQuizzPageProps = {
+    languageLevel: CEFR;
+    isNewLanguage: boolean;
+    isProficiencyTest: boolean;
+};
+
 const PairingQuizzPage: React.FC = () => {
     const { configuration, getQuizzByLevel } = useConfig();
     const history = useHistory();
     const [showToast] = useIonToast();
     const { t } = useTranslation();
+    const location = useLocation<PairingQuizzPageProps>();
+    const { languageLevel, isNewLanguage, isProficiencyTest } = location.state;
     const updateProfileSignUp = useStoreActions((state) => state.updateProfileSignUp);
     const profileSignUp = useStoreState((state) => state.profileSignUp);
     const [questions, setQuestions] = useState<Question[]>([]);
@@ -53,7 +61,7 @@ const PairingQuizzPage: React.FC = () => {
             return setDisplayNextQuizz(true);
         }
 
-        if(percentage >= 80 && currentQuizz === 'C2') {
+        if (percentage >= 80 && currentQuizz === 'C2') {
             updateProfileSignUp({ learningLanguageLevel: currentQuizz });
         }
 
@@ -65,8 +73,14 @@ const PairingQuizzPage: React.FC = () => {
             updateProfileSignUp({ learningLanguageLevel: getPreviousLevel(currentQuizz) });
         }
 
-        return history.push(`/pairing/language/quizz/end`);
+        return history.push(`/pairing/language/quizz/end`, { isProficiencyTest, isNewLanguage, languageLevel });
     };
+
+    useEffect(() => {
+        if (isProficiencyTest && languageLevel) {
+            askQuizz(languageLevel !== 'A0' ? languageLevel : 'A1');
+        }
+    }, [isProficiencyTest, languageLevel]);
 
     if (displayNextQuizz && currentQuizz) {
         return (

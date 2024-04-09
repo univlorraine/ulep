@@ -73,7 +73,7 @@ const HomePage: React.FC = () => {
     }
 
     return (
-        <IonPage>
+        <IonPage className={styles.content}>
             {!isHybrid && <HomeHeader user={profile.user} onPicturePressed={onProfilePressed} />}
             <IonContent>
                 <div className={`${styles.container} content-wrapper`}>

@@ -20,7 +20,7 @@ interface ProfileCommand {
     testedLanguages: {
         code: string;
         name: string;
-        proficiency: CEFR;
+        level: CEFR;
     }[];
     learningLanguages: LearningLanguageResult[];
     objectives: {
@@ -57,7 +57,7 @@ export const profileCommandToDomain = (command: ProfileCommand): Profile => {
             (masteredLanguage) => new Language(masteredLanguage.code, masteredLanguage.code, masteredLanguage.name)
         ),
         command.testedLanguages.map(
-            (testedLanguage) => new TestedLanguage(testedLanguage.code, testedLanguage.name, testedLanguage.proficiency)
+            (testedLanguage) => new TestedLanguage(testedLanguage.code, testedLanguage.name, testedLanguage.level)
         ),
         command.learningLanguages.map(learningLanguageResultToDomain),
         command.objectives.map((goal) => goalCommandToDomain(goal)),

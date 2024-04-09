@@ -1,13 +1,17 @@
 import { useIonToast } from '@ionic/react';
 import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { Redirect, useHistory } from 'react-router';
+import { Redirect, useHistory, useLocation } from 'react-router';
 import { useConfig } from '../../context/ConfigurationContext';
 import Language from '../../domain/entities/Language';
 import { useStoreActions, useStoreState } from '../../store/storeTypes';
 import OtherLanguageContent from '../components/contents/OtherLanguageContent';
 import WebLayoutCentered from '../components/layout/WebLayoutCentered';
 import styles from './css/SignUp.module.css';
+
+type PairingOtherLanguagesPageProps = {
+    isProficiencyTest?: boolean;
+};
 
 const PairingOtherLanguagesPage: React.FC = () => {
     const { t } = useTranslation();
@@ -17,6 +21,8 @@ const PairingOtherLanguagesPage: React.FC = () => {
     const university = profile?.user.university;
     const updateProfileSignUp = useStoreActions((state) => state.updateProfileSignUp);
     const history = useHistory();
+    const location = useLocation<PairingOtherLanguagesPageProps>();
+    const isProficiencyTest = location.state?.isProficiencyTest;
     const [languages, setLanguages] = useState<Language[]>([]);
 
     if (!university) {
@@ -50,6 +56,27 @@ const PairingOtherLanguagesPage: React.FC = () => {
         return history.push(`/pairing/pedagogy`);
     };
 
+    const continueProficiencyTest = (selectedLanguage: Language) => {
+        const languageLevel = [...profile.learningLanguages, ...profile.testedLanguages].find(
+            (language) => language.code === selectedLanguage?.code
+        )?.level;
+
+        updateProfileSignUp({ learningLanguage: selectedLanguage });
+
+        return history.push(`/pairing/language/quizz`, {
+            isProficiencyTest,
+            isNewLanguage: !languageLevel,
+            languageLevel: languageLevel && languageLevel !== 'A0' ? languageLevel : 'A1',
+        });
+    };
+
+    const nextStep = (selectedLanguage: Language) => {
+        if (isProficiencyTest) {
+            return continueProficiencyTest(selectedLanguage);
+        }
+        return onOtherLanguageSelected(selectedLanguage);
+    };
+
     useEffect(() => {
         getLanguages();
     }, []);
@@ -62,7 +89,11 @@ const PairingOtherLanguagesPage: React.FC = () => {
             headerTitle={t('global.pairing_title')}
         >
             <div className={styles.body}>
-                <OtherLanguageContent languages={languages} onLanguageSelected={onOtherLanguageSelected} />
+                <OtherLanguageContent
+                    displayJoker={!isProficiencyTest}
+                    languages={languages}
+                    onLanguageSelected={nextStep}
+                />
             </div>
         </WebLayoutCentered>
     );

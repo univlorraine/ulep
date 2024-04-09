@@ -1,7 +1,7 @@
 import { useIonToast } from '@ionic/react';
 import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { Redirect, useHistory } from 'react-router';
+import { Redirect, useHistory, useLocation } from 'react-router';
 import { PlusPng } from '../../assets';
 import { useConfig } from '../../context/ConfigurationContext';
 import Language from '../../domain/entities/Language';
@@ -12,14 +12,20 @@ import pairingLanguagesStyles from './css/PairingLanguages.module.css';
 import styles from './css/SignUp.module.css';
 import Loader from '../components/Loader';
 
+type PairingLanguagesPageProps = {
+    isProficiencyTest?: boolean;
+};
+
 const PairingLanguagesPage: React.FC = () => {
     const { t } = useTranslation();
     const { configuration, getAllLanguages, getUniversityLanguages } = useConfig();
     const [showToast] = useIonToast();
     const history = useHistory();
+    const location = useLocation<PairingLanguagesPageProps>();
+    const isProficiencyTest = location.state?.isProficiencyTest;
     const [languages, setLanguages] = useState<Language[]>([]);
     const [isLoadingLanguages, setIsLoadingLanguages] = useState<boolean>(false);
-    const [selectedLaguage, setSelectedLanguage] = useState<Language>();
+    const [selectedLanguage, setSelectedLanguage] = useState<Language>();
     const updateProfileSignUp = useStoreActions((state) => state.updateProfileSignUp);
     const profile = useStoreState((state) => state.profile);
     const university = profile?.user.university;
@@ -47,15 +53,39 @@ const PairingLanguagesPage: React.FC = () => {
         const learnableLanguages = [...globalLanguages, ...universityLanguages].filter(
             (language) =>
                 profile?.nativeLanguage.code !== language.code &&
-                !profile?.learningLanguages?.find((learningLanguage) => language.code === learningLanguage.code)
+                (isProficiencyTest ||
+                    !profile?.learningLanguages?.find((learningLanguage) => language.code === learningLanguage.code))
         );
 
         return setLanguages(learnableLanguages);
     };
 
     const continueSignUp = async () => {
-        updateProfileSignUp({ learningLanguage: selectedLaguage });
+        updateProfileSignUp({ learningLanguage: selectedLanguage });
+
         return history.push(`/pairing/pedagogy`);
+    };
+
+    const continueProficiencyTest = async () => {
+        const languageLevel = [...profile.learningLanguages, ...profile.testedLanguages].find(
+            (language) => language.code === selectedLanguage?.code
+        )?.level;
+
+        updateProfileSignUp({ learningLanguage: selectedLanguage });
+
+        return history.push(`/pairing/language/quizz`, {
+            isProficiencyTest: true,
+            isNewLanguage: !languageLevel,
+            languageLevel: languageLevel && languageLevel !== 'A0' ? languageLevel : 'A1',
+        });
+    };
+
+    const nextStep = () => {
+        if (isProficiencyTest) {
+            return continueProficiencyTest();
+        }
+
+        return continueSignUp();
     };
 
     const navigateToHome = () => {
@@ -63,7 +93,7 @@ const PairingLanguagesPage: React.FC = () => {
     };
 
     const otherLanguage = () => {
-        return history.push(`/pairing/other-languages`);
+        return history.push(`/pairing/other-languages`, { isProficiencyTest });
     };
 
     useEffect(() => {
@@ -99,7 +129,7 @@ const PairingLanguagesPage: React.FC = () => {
                                         return (
                                             <FlagBubble
                                                 key={language.code}
-                                                isSelected={selectedLaguage?.code === language.code}
+                                                isSelected={selectedLanguage?.code === language.code}
                                                 language={language}
                                                 onPressed={setSelectedLanguage}
                                             />
@@ -114,9 +144,9 @@ const PairingLanguagesPage: React.FC = () => {
                             <div className={`extra-large-margin-bottom`}>
                                 {!!languages.length && (
                                     <button
-                                        className={`primary-button ${!selectedLaguage ? 'disabled' : ''}`}
-                                        disabled={!selectedLaguage}
-                                        onClick={continueSignUp}
+                                        className={`primary-button ${!selectedLanguage ? 'disabled' : ''}`}
+                                        disabled={!selectedLanguage}
+                                        onClick={nextStep}
                                     >
                                         {t('pairing_languages_page.validate_button')}
                                     </button>
