@@ -82,6 +82,22 @@ describe('editUserUsecase', () => {
         expect(result).toStrictEqual(new Error('errors.global'));
     });
 
+    it('execute must return an error if adapter has code 401 ', async () => {
+        expect.assertions(1);
+        adapter.mockError({ error: { statusCode: 401, message: 'unauthorized' } });
+        const result = await usecase.execute('id', 22, 'email', 'firstname', 'MALE', 'lastname', file);
+
+        expect(result).toStrictEqual(new Error('signup_informations_page.error_unauthorized'));
+    });
+
+    it('execute must return an error if adapter has code 409 ', async () => {
+        expect.assertions(1);
+        adapter.mockError({ error: { statusCode: 409, message: 'email already exist' } });
+        const result = await usecase.execute('id', 22, 'email', 'firstname', 'MALE', 'lastname', file);
+
+        expect(result).toStrictEqual(new Error('signup_informations_page.error_email_already_exist'));
+    });
+
     it('execute must return an error if adapter has code 400 with image weight error message', async () => {
         expect.assertions(1);
         adapter.mockError({ error: { statusCode: 400, message: 'expected size' } });
