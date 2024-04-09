@@ -44,6 +44,7 @@
         "age": "Âge",
         "binary": "Non binaire",
         "country": "Pays",
+        "cefr_quizz_title": "Test de niveau",
         "create_account_title": "Création de compte",
         "edit_account_title": "Modification de compte",
         "email": "Email",

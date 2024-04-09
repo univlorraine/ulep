@@ -36,10 +36,7 @@ const ProficiencyTestCard: React.FC<ProficiencyTestCardProps> = ({ testedLanguag
                     </div>
                 </div>
                 <div className={styles['card-button']}>
-                    <button
-                        className={`primary-button`}
-                        onClick={() => history.push('/pairing/languages', { isProficiencyTest: true })}
-                    >
+                    <button className={`primary-button`} onClick={() => history.push('/cefr/languages')}>
                         {t('home_page.proficiency_test.button')}
                     </button>
                 </div>

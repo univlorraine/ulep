@@ -13,19 +13,17 @@ import WebLayoutCentered from '../components/layout/WebLayoutCentered';
 import { getNextLevel, getPreviousLevel } from '../utils';
 import styles from './css/SignUp.module.css';
 
-type PairingQuizzPageProps = {
-    languageLevel: CEFR;
-    isNewLanguage: boolean;
-    isProficiencyTest: boolean;
+type QuizzPageProps = {
+    initialCefr?: CEFR;
 };
 
-const PairingQuizzPage: React.FC = () => {
+const QuizzPage: React.FC = () => {
     const { configuration, getQuizzByLevel } = useConfig();
     const history = useHistory();
     const [showToast] = useIonToast();
     const { t } = useTranslation();
-    const location = useLocation<PairingQuizzPageProps>();
-    const { languageLevel, isNewLanguage, isProficiencyTest } = location.state;
+    const location = useLocation<QuizzPageProps>();
+    const { initialCefr } = location.state;
     const updateProfileSignUp = useStoreActions((state) => state.updateProfileSignUp);
     const profileSignUp = useStoreState((state) => state.profileSignUp);
     const [questions, setQuestions] = useState<Question[]>([]);
@@ -73,14 +71,14 @@ const PairingQuizzPage: React.FC = () => {
             updateProfileSignUp({ learningLanguageLevel: getPreviousLevel(currentQuizz) });
         }
 
-        return history.push(`/pairing/language/quizz/end`, { isProficiencyTest, isNewLanguage, languageLevel });
+        return history.push(initialCefr ? `/pairing/language/quizz/end` : `/cefr/quizz/end`);
     };
 
     useEffect(() => {
-        if (isProficiencyTest && languageLevel) {
-            askQuizz(languageLevel !== 'A0' ? languageLevel : 'A1');
+        if (initialCefr) {
+            askQuizz(initialCefr !== 'A0' ? initialCefr : 'A1');
         }
-    }, [isProficiencyTest, languageLevel]);
+    }, [initialCefr]);
 
     if (displayNextQuizz && currentQuizz) {
         return (
@@ -104,8 +102,8 @@ const PairingQuizzPage: React.FC = () => {
         <WebLayoutCentered
             backgroundIconColor={configuration.secondaryBackgroundImageColor}
             headerColor={configuration.secondaryColor}
-            headerPercentage={60}
-            headerTitle={t('global.pairing_title')}
+            headerPercentage={initialCefr ? 100 : 60}
+            headerTitle={initialCefr ? t('global.cefr_quizz_title') : t('global.pairing_title')}
         >
             <div className={styles.body}>
                 {questions.length === 0 && <QuizzSelectionContent onQuizzSelected={askQuizz} />}
@@ -117,4 +115,4 @@ const PairingQuizzPage: React.FC = () => {
     );
 };
 
-export default PairingQuizzPage;
+export default QuizzPage;
