@@ -50,6 +50,7 @@ const payload: ProfileCommand = {
     },
     masteredLanguages: [{ code: 'EN', name: 'English' }],
     learningLanguages: [],
+    testedLanguages: [],
     objectives: [{ id: 'id', name: 'name', image: { id: 'id', mimeType: 'image/jpg' } }],
     meetingFrequency: 'ONCE_A_WEEK',
     biography: {

@@ -19,6 +19,7 @@ const payload: ProfileCommand = {
         name: 'Français',
     },
     masteredLanguages: [{ code: 'EN', name: 'English' }],
+    testedLanguages: [],
     learningLanguages: [],
     objectives: [{ id: 'id', name: 'name', image: { id: 'id', mimeType: 'image/jpg' } }],
     meetingFrequency: 'ONCE_A_WEEK',
@@ -38,7 +39,7 @@ const payload: ProfileCommand = {
         sunday: 'AVAILABLE',
     },
     availabilitiesNote: 'note',
-    user: userResult
+    user: userResult,
 };
 
 describe('createProfile', () => {

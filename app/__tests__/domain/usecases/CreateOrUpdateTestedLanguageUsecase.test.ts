@@ -1,8 +1,10 @@
 import ProfileCommand from '../../../src/command/ProfileCommand';
-import Profile from '../../../src/domain/entities/Profile';
-import GetProfileUsecase from '../../../src/domain/usecases/GetProfileUsecase';
+import Language from '../../../src/domain/entities/Language';
+import CreateOrUpdateTestedLanguageUsecase from '../../../src/domain/usecases/CreateOrUpdateTestedLanguageUsecase';
 import userResult from '../../fixtures/user';
 import DomainHttpAdapter from '../../mocks/adapters/HttpAdapter';
+
+const language = new Language('fr', 'fr', 'French');
 
 const payload: ProfileCommand = {
     id: 'id',
@@ -12,16 +14,8 @@ const payload: ProfileCommand = {
         name: 'Français',
     },
     masteredLanguages: [{ code: 'EN', name: 'English' }],
-    testedLanguages: [],
-    learningLanguages: [
-        {
-            id: 'id',
-            code: 'CN',
-            name: 'Chinese',
-            learningType: 'TANDEM',
-            level: 'A0',
-        },
-    ],
+    testedLanguages: [{ code: 'FR', name: 'French', level: 'A1' }],
+    learningLanguages: [],
     objectives: [{ id: 'id', name: 'name', image: { id: 'id', mimeType: 'image/jpg' } }],
     meetingFrequency: 'ONCE_A_WEEK',
     biography: {
@@ -43,12 +37,14 @@ const payload: ProfileCommand = {
     user: userResult,
 };
 
-describe('getProfile', () => {
+describe('createOrUpdateTestedLanguage', () => {
     let adapter: DomainHttpAdapter;
-    let usecase: GetProfileUsecase;
+    let mockedSetProfile: Function;
+    let usecase: CreateOrUpdateTestedLanguageUsecase;
     beforeAll(() => {
         adapter = new DomainHttpAdapter();
-        usecase = new GetProfileUsecase(adapter);
+        mockedSetProfile = jest.fn();
+        usecase = new CreateOrUpdateTestedLanguageUsecase(adapter, mockedSetProfile);
     });
 
     afterEach(() => {
@@ -57,20 +53,25 @@ describe('getProfile', () => {
 
     it('execute function must call DomainHttpAdapter with specific path and params', async () => {
         expect.assertions(2);
-        jest.spyOn(adapter, 'get');
+        jest.spyOn(adapter, 'post');
         adapter.mockJson({ parsedBody: {} });
-        await usecase.execute('accessToken');
-        expect(adapter.get).toHaveBeenCalledTimes(1);
-        expect(adapter.get).toHaveBeenCalledWith('/profiles/me', undefined, false, 'accessToken');
+        await usecase.execute('id', language, 'A1');
+        expect(adapter.post).toHaveBeenCalledTimes(1);
+        expect(adapter.post).toHaveBeenCalledWith('/profiles/id/tested-language', {
+            code: 'fr',
+            level: 'A1',
+        });
     });
 
     it('execute must return an expected response', async () => {
-        expect.assertions(1);
+        expect.assertions(2);
 
         adapter.mockJson({ parsedBody: payload });
 
-        const result = await usecase.execute('accessToken');
-        expect(result).toBeInstanceOf(Profile);
+        const result = await usecase.execute('id', language, 'A1');
+
+        expect(mockedSetProfile).toHaveBeenCalledTimes(1);
+        expect(result).toBeUndefined();
     });
 
     it('execute must return an expected response without parsed body', async () => {
@@ -78,14 +79,16 @@ describe('getProfile', () => {
 
         adapter.mockJson({});
 
-        const result = await usecase.execute('accessToken');
+        const result = await usecase.execute('id', language, 'A1');
+
         expect(result).toBeInstanceOf(Error);
     });
 
     it('execute must return an error if adapter return an error without status', async () => {
         expect.assertions(1);
         adapter.mockError({});
-        const result = await usecase.execute('accessToken');
+        const result = await usecase.execute('id', language, 'A1');
+
         expect(result).toStrictEqual(new Error('errors.global'));
     });
 });
