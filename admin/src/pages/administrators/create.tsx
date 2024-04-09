@@ -1,7 +1,7 @@
 import React from 'react';
 import { useNotify, useRedirect, useCreate, Create, useTranslate } from 'react-admin';
 import AdministratorForm from '../../components/form/AdministratorForm';
-import ConfigTabs from '../../components/tabs/ConfigTabs';
+import ConfigPagesHeader from '../../components/tabs/ConfigPagesHeader';
 import { AdministratorFormPayload } from '../../entities/Administrator';
 
 const CreateAdministrator = () => {
@@ -34,7 +34,7 @@ const CreateAdministrator = () => {
 
     return (
         <>
-            <ConfigTabs />
+            <ConfigPagesHeader />
             <Create title={translate('administrators.create.title')}>
                 <AdministratorForm handleSubmit={handleSubmit} type="create" />
             </Create>

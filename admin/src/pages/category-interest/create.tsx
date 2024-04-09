@@ -1,7 +1,7 @@
 import React from 'react';
 import { Create, useTranslate, useCreate, useNotify, useRedirect } from 'react-admin';
 import InterestForm from '../../components/form/InterestForm';
-import ConfigTabs from '../../components/tabs/ConfigTabs';
+import ConfigPagesHeader from '../../components/tabs/ConfigPagesHeader';
 import IndexedTranslation from '../../entities/IndexedTranslation';
 import indexedTranslationsToTranslations from '../../utils/indexedTranslationsToTranslations';
 
@@ -39,7 +39,7 @@ const CreateInterestCategory = () => {
 
     return (
         <>
-            <ConfigTabs />
+            <ConfigPagesHeader />
             <Create title={translate('interest_categories.create.title')}>
                 <InterestForm handleSubmit={handleSubmit} tradKey="interest_categories" tradModeKey="create" />
             </Create>

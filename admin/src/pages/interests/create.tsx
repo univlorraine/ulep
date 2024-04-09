@@ -2,7 +2,7 @@ import React from 'react';
 import { Create, useTranslate, useCreate, useNotify, useRedirect } from 'react-admin';
 import { useLocation } from 'react-router-dom';
 import InterestForm from '../../components/form/InterestForm';
-import ConfigTabs from '../../components/tabs/ConfigTabs';
+import ConfigPagesHeader from '../../components/tabs/ConfigPagesHeader';
 import IndexedTranslation from '../../entities/IndexedTranslation';
 import indexedTranslationsToTranslations from '../../utils/indexedTranslationsToTranslations';
 
@@ -43,7 +43,7 @@ const CreateInterest = () => {
 
     return (
         <>
-            <ConfigTabs />
+            <ConfigPagesHeader />
             <Create title={translate('interests.create.title')}>
                 <InterestForm handleSubmit={handleSubmit} tradKey="interests" tradModeKey="create" />
             </Create>

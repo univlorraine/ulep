@@ -1,13 +1,13 @@
 import React from 'react';
 import { useTranslate, Datagrid, List, TextField } from 'react-admin';
-import ConfigTabs from '../../components/tabs/ConfigTabs';
+import ConfigPagesHeader from '../../components/tabs/ConfigPagesHeader';
 
 const CountSuggestedLanguagesList = () => {
     const translation = useTranslate();
 
     return (
         <>
-            <ConfigTabs />
+            <ConfigPagesHeader />
             <List exporter={false}>
                 <Datagrid bulkActionButtons={false}>
                     <TextField label={translation('global.language')} sortable={false} source="language.name" />

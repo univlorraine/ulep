@@ -1,7 +1,7 @@
 import React from 'react';
 import { useTranslate, useNotify, useRedirect, useUpdate, Edit, WithRecord } from 'react-admin';
 import InstanceForm from '../../components/form/InstanceForm';
-import ConfigTabs from '../../components/tabs/ConfigTabs';
+import ConfigPagesHeader from '../../components/tabs/ConfigPagesHeader';
 import Instance from '../../entities/Instance';
 
 const EditInstance = () => {
@@ -34,7 +34,7 @@ const EditInstance = () => {
 
     return (
         <>
-            <ConfigTabs />
+            <ConfigPagesHeader />
             <Edit title={translate('instance.edit.title')}>
                 <WithRecord<Instance>
                     label="instance"

@@ -1,6 +1,6 @@
 import React from 'react';
 import { FunctionField, useTranslate, Datagrid, List, TextField } from 'react-admin';
-import ConfigTabs from '../../components/tabs/ConfigTabs';
+import ConfigPagesHeader from '../../components/tabs/ConfigPagesHeader';
 import User from '../../entities/User';
 
 const SuggestedLanguagesList = () => {
@@ -8,7 +8,7 @@ const SuggestedLanguagesList = () => {
 
     return (
         <>
-            <ConfigTabs />
+            <ConfigPagesHeader />
             <List exporter={false}>
                 <Datagrid bulkActionButtons={false}>
                     <TextField label={translation('global.firstname')} source="user.firstname" />

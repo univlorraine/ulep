@@ -1,7 +1,7 @@
 import React from 'react';
 import { useTranslate, useNotify, useRedirect, useUpdate, Edit, WithRecord } from 'react-admin';
 import InterestForm from '../../components/form/InterestForm';
-import ConfigTabs from '../../components/tabs/ConfigTabs';
+import ConfigPagesHeader from '../../components/tabs/ConfigPagesHeader';
 import IndexedTranslation from '../../entities/IndexedTranslation';
 import InterestCategory from '../../entities/InterestCategory';
 import Translation from '../../entities/Translation';
@@ -42,7 +42,7 @@ const EditInterestCategory = () => {
 
     return (
         <>
-            <ConfigTabs />
+            <ConfigPagesHeader />
             <Edit title={translate('interest_categories.update.title')}>
                 <WithRecord<InterestCategory>
                     label="interests/categories/"

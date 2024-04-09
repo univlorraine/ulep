@@ -18,7 +18,7 @@ import {
 } from 'react-admin';
 import { ColorField } from 'react-admin-color-picker';
 import usePurge from '../../components/menu/usePurge';
-import ConfigTabs from '../../components/tabs/ConfigTabs';
+import ConfigPagesHeader from '../../components/tabs/ConfigPagesHeader';
 import Instance from '../../entities/Instance';
 
 const InstanceShowAction = () => (
@@ -57,7 +57,7 @@ const InstanceShow = () => {
 
     return (
         <>
-            <ConfigTabs />
+            <ConfigPagesHeader />
             <Show actions={<InstanceShowAction />} title={translate('instance.label')}>
                 <SimpleShowLayout sx={{ m: 3 }}>
                     <TextField label={translate('instance.name')} source="name" />

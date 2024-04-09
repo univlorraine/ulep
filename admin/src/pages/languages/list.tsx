@@ -1,7 +1,7 @@
 import { Select, MenuItem } from '@mui/material';
 import React from 'react';
 import { useTranslate, FunctionField, Datagrid, List, TextField, useUpdate, useNotify, useRefresh } from 'react-admin';
-import ConfigTabs from '../../components/tabs/ConfigTabs';
+import ConfigPagesHeader from '../../components/tabs/ConfigPagesHeader';
 import Language from '../../entities/Language';
 
 const LanguageList = () => {
@@ -41,7 +41,7 @@ const LanguageList = () => {
 
     return (
         <>
-            <ConfigTabs />
+            <ConfigPagesHeader />
             <List exporter={false}>
                 <Datagrid bulkActionButtons={false}>
                     <TextField label={translate('languages.code')} source="code" />
