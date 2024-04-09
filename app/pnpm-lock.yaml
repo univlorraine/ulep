@@ -107,6 +107,9 @@ dependencies:
   react-loader-spinner:
     specifier: ^5.4.5
     version: 5.4.5(@babel/core@7.23.2)(react-dom@18.2.0)(react@18.2.0)
+  react-responsive-masonry:
+    specifier: ^2.2.0
+    version: 2.2.0
   react-router:
     specifier: ^5.3.4
     version: 5.3.4(react@18.2.0)
@@ -6876,6 +6879,10 @@ packages:
     resolution: {integrity: sha512-wViHqhAd8OHeLS/IRMJjTSDHF3U9eWi62F/MledQGPdJGDhodXJ9PBLNGr6WWL7qlH12Mt3TyTpbS+hGXMjCzQ==}
     engines: {node: '>=0.10.0'}
     dev: true
+
+  /react-responsive-masonry@2.2.0:
+    resolution: {integrity: sha512-IYbnfe2tWCZ3pvyTLyBWPj7uv5ZmNOULYMcAZi5a47ZLhSotOck1vkkISq6gP2qiyWdMvPfeMhjvYzUYGw9BOQ==}
+    dev: false
 
   /react-router-dom@5.3.4(react@18.2.0):
     resolution: {integrity: sha512-m4EqFMHv/Ih4kpcBCONHbkT68KoAeHN4p3lAGoNryfHi0dMy0kCzEZakiKRsvg5wHZ/JLrLW8o8KomWiz/qbYQ==}

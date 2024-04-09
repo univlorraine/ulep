@@ -29,9 +29,7 @@
 }
 
 .content {
-    display: grid;
-    grid-template-columns: repeat(1, 1fr);
-    grid-gap: 20px;
+    background-color: #f4f5fe;
 }
 
 .date {
@@ -93,11 +91,6 @@
         padding: 52px 180px;
     }
 
-    .content {
-        grid-template-columns: repeat(2, 1fr);
-        margin-top: 20px;
-    }
-
     .report-container {
         align-self: center;
         align-items: center;
@@ -106,5 +99,9 @@
         justify-content: center;
         margin-top: 48px;
         width: 410px;
+    }
+
+    ion-content {
+        --ion-background-color: #f4f5fe;
     }
 }

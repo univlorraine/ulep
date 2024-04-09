@@ -1,8 +1,16 @@
+.card-button {
+    margin-bottom: 20px;
+    margin-left: 20px;
+    margin-right: 20px;
+}
+
 .container {
     background-color: var(--secondary-color);
+    border-radius: 5px;
     display: flex;
     flex-direction: column;
     justify-content: center;
+    margin-top: 24px;
 }
 
 .container-content {

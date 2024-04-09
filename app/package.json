@@ -49,6 +49,7 @@
         "react-dom": "^18.2.0",
         "react-i18next": "^12.3.1",
         "react-loader-spinner": "^5.4.5",
+        "react-responsive-masonry": "^2.2.0",
         "react-router": "^5.3.4",
         "react-router-dom": "^5.3.4",
         "react-switch": "^7.0.0"
