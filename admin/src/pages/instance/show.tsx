@@ -18,6 +18,7 @@ import {
 } from 'react-admin';
 import { ColorField } from 'react-admin-color-picker';
 import usePurge from '../../components/menu/usePurge';
+import ConfigTabs from '../../components/tabs/ConfigTabs';
 import Instance from '../../entities/Instance';
 
 const InstanceShowAction = () => (
@@ -55,84 +56,90 @@ const InstanceShow = () => {
     };
 
     return (
-        <Show actions={<InstanceShowAction />} title={translate('instance.label')}>
-            <SimpleShowLayout sx={{ m: 3 }}>
-                <TextField label={translate('instance.name')} source="name" />
-                <EmailField label={translate('instance.email')} source="email" />
-                <UrlField label={translate('instance.cgu')} source="cguUrl" />
-                <UrlField label={translate('instance.confidentiality')} source="confidentialityUrl" />
-                <UrlField label={translate('instance.ressource')} source="ressourceUrl" />
-                <ColorField label={translate('instance.primaryColor')} source="primaryColor" />
-                <ColorField label={translate('instance.primaryBackgroundColor')} source="primaryBackgroundColor" />
-                <ColorField label={translate('instance.primaryDarkColor')} source="primaryDarkColor" />
-                <ColorField label={translate('instance.secondaryColor')} source="secondaryColor" />
-                <ColorField label={translate('instance.secondaryBackgroundColor')} source="secondaryBackgroundColor" />
-                <ColorField label={translate('instance.secondaryDarkColor')} source="secondaryDarkColor" />
-                <FunctionField
-                    render={(record: Instance) => (
-                        <div style={{ display: 'flex', alignItems: 'center', marginBottom: '1em' }}>
-                            <Typography color="inherit" variant="subtitle1">
-                                {translate('instance.maintenance')}
-                            </Typography>
-                            <Switch
-                                color="secondary"
-                                defaultChecked={record?.isInMaintenance}
-                                onChange={handleToggle}
-                                value={record?.isInMaintenance}
-                            />
+        <>
+            <ConfigTabs />
+            <Show actions={<InstanceShowAction />} title={translate('instance.label')}>
+                <SimpleShowLayout sx={{ m: 3 }}>
+                    <TextField label={translate('instance.name')} source="name" />
+                    <EmailField label={translate('instance.email')} source="email" />
+                    <UrlField label={translate('instance.cgu')} source="cguUrl" />
+                    <UrlField label={translate('instance.confidentiality')} source="confidentialityUrl" />
+                    <UrlField label={translate('instance.ressource')} source="ressourceUrl" />
+                    <ColorField label={translate('instance.primaryColor')} source="primaryColor" />
+                    <ColorField label={translate('instance.primaryBackgroundColor')} source="primaryBackgroundColor" />
+                    <ColorField label={translate('instance.primaryDarkColor')} source="primaryDarkColor" />
+                    <ColorField label={translate('instance.secondaryColor')} source="secondaryColor" />
+                    <ColorField
+                        label={translate('instance.secondaryBackgroundColor')}
+                        source="secondaryBackgroundColor"
+                    />
+                    <ColorField label={translate('instance.secondaryDarkColor')} source="secondaryDarkColor" />
+                    <FunctionField
+                        render={(record: Instance) => (
+                            <div style={{ display: 'flex', alignItems: 'center', marginBottom: '1em' }}>
+                                <Typography color="inherit" variant="subtitle1">
+                                    {translate('instance.maintenance')}
+                                </Typography>
+                                <Switch
+                                    color="secondary"
+                                    defaultChecked={record?.isInMaintenance}
+                                    onChange={handleToggle}
+                                    value={record?.isInMaintenance}
+                                />
+                            </div>
+                        )}
+                    />
+                    <Button color="secondary" onClick={() => setIsModalOpen(true)} variant="contained">
+                        <div
+                            style={{
+                                display: 'flex',
+                                alignItems: 'center',
+                                justifyContent: 'center',
+                            }}
+                        >
+                            <DeleteIcon />
+                            <Typography>{translate('purge.title')}</Typography>
                         </div>
-                    )}
-                />
-                <Button color="secondary" onClick={() => setIsModalOpen(true)} variant="contained">
-                    <div
-                        style={{
-                            display: 'flex',
-                            alignItems: 'center',
-                            justifyContent: 'center',
+                    </Button>
+                </SimpleShowLayout>
+                <Modal
+                    aria-describedby="confirm-modal"
+                    aria-labelledby="confirm-modal"
+                    onClose={handleCloseModal}
+                    open={isModalOpen}
+                >
+                    <Box
+                        sx={{
+                            position: 'absolute',
+                            top: '50%',
+                            left: '50%',
+                            transform: 'translate(-50%, -50%)',
+                            width: 400,
+                            bgcolor: 'background.paper',
+                            borderRadius: 2,
+                            p: 4,
                         }}
                     >
-                        <DeleteIcon />
-                        <Typography>{translate('purge.title')}</Typography>
-                    </div>
-                </Button>
-            </SimpleShowLayout>
-            <Modal
-                aria-describedby="confirm-modal"
-                aria-labelledby="confirm-modal"
-                onClose={handleCloseModal}
-                open={isModalOpen}
-            >
-                <Box
-                    sx={{
-                        position: 'absolute',
-                        top: '50%',
-                        left: '50%',
-                        transform: 'translate(-50%, -50%)',
-                        width: 400,
-                        bgcolor: 'background.paper',
-                        borderRadius: 2,
-                        p: 4,
-                    }}
-                >
-                    <>
-                        <p>{translate('instance.purge_modal.message')}</p>
-                        <Box sx={{ marginTop: 4, display: 'flex', justifyContent: 'space-around' }}>
-                            <Button
-                                label={translate('learning_languages.show.tandems.actions.ctaLabels.cancel')}
-                                onClick={handleCloseModal}
-                                variant="text"
-                            />
-                            <Button
-                                color="error"
-                                label={translate('learning_languages.show.tandems.actions.ctaLabels.confirm')}
-                                onClick={handlePurge}
-                                variant="outlined"
-                            />
-                        </Box>
-                    </>
-                </Box>
-            </Modal>
-        </Show>
+                        <>
+                            <p>{translate('instance.purge_modal.message')}</p>
+                            <Box sx={{ marginTop: 4, display: 'flex', justifyContent: 'space-around' }}>
+                                <Button
+                                    label={translate('learning_languages.show.tandems.actions.ctaLabels.cancel')}
+                                    onClick={handleCloseModal}
+                                    variant="text"
+                                />
+                                <Button
+                                    color="error"
+                                    label={translate('learning_languages.show.tandems.actions.ctaLabels.confirm')}
+                                    onClick={handlePurge}
+                                    variant="outlined"
+                                />
+                            </Box>
+                        </>
+                    </Box>
+                </Modal>
+            </Show>
+        </>
     );
 };
 

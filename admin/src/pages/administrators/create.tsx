@@ -1,6 +1,7 @@
 import React from 'react';
 import { useNotify, useRedirect, useCreate, Create, useTranslate } from 'react-admin';
 import AdministratorForm from '../../components/form/AdministratorForm';
+import ConfigTabs from '../../components/tabs/ConfigTabs';
 import { AdministratorFormPayload } from '../../entities/Administrator';
 
 const CreateAdministrator = () => {
@@ -32,9 +33,12 @@ const CreateAdministrator = () => {
     };
 
     return (
-        <Create title={translate('administrators.create.title')}>
-            <AdministratorForm handleSubmit={handleSubmit} type="create" />
-        </Create>
+        <>
+            <ConfigTabs />
+            <Create title={translate('administrators.create.title')}>
+                <AdministratorForm handleSubmit={handleSubmit} type="create" />
+            </Create>
+        </>
     );
 };
 

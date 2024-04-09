@@ -84,7 +84,7 @@ const theme: RaThemeOptions = {
         RaMenuItemLink: {
             styleOverrides: {
                 root: {
-                    lineHeight: '2.2',
+                    lineHeight: '2.4',
                     color: '#212121',
                     fontSize: '0.9rem',
                     '& .RaMenuItemLink-icon': {

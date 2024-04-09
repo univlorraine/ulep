@@ -1,6 +1,7 @@
 import React from 'react';
 import { useTranslate, useNotify, useRedirect, useUpdate, Edit, WithRecord } from 'react-admin';
 import InterestForm from '../../components/form/InterestForm';
+import ConfigTabs from '../../components/tabs/ConfigTabs';
 import IndexedTranslation from '../../entities/IndexedTranslation';
 import Interest from '../../entities/Interest';
 import Translation from '../../entities/Translation';
@@ -40,24 +41,27 @@ const EditInterest = () => {
     };
 
     return (
-        <Edit title={translate('interests.update.title')}>
-            <WithRecord<Interest>
-                label="interests"
-                render={(record) => (
-                    <InterestForm
-                        handleSubmit={(name: string, translations: IndexedTranslation[]) =>
-                            handleSubmit(record.id, name, translations)
-                        }
-                        name={record.name.content}
-                        tradKey="interests"
-                        tradModeKey="update"
-                        translations={record.name.translations?.map(
-                            (translation: Translation, index: number) => new IndexedTranslation(index, translation)
-                        )}
-                    />
-                )}
-            />
-        </Edit>
+        <>
+            <ConfigTabs />
+            <Edit title={translate('interests.update.title')}>
+                <WithRecord<Interest>
+                    label="interests"
+                    render={(record) => (
+                        <InterestForm
+                            handleSubmit={(name: string, translations: IndexedTranslation[]) =>
+                                handleSubmit(record.id, name, translations)
+                            }
+                            name={record.name.content}
+                            tradKey="interests"
+                            tradModeKey="update"
+                            translations={record.name.translations?.map(
+                                (translation: Translation, index: number) => new IndexedTranslation(index, translation)
+                            )}
+                        />
+                    )}
+                />
+            </Edit>
+        </>
     );
 };
 

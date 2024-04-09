@@ -9,6 +9,7 @@
             "university": "Please select a university for the administrator"
         },
         "label": "Administrators",
+        "tabLabel": "Administrators",
         "university": "Manager",
         "update": {
             "email": "Update user email",
@@ -23,6 +24,7 @@
             "title": "Create a campus"
         },
         "label": "Campus",
+        "tabLabel": "Central univ. campus",
         "name": "Centrale univertity name",
         "update": {
             "error": "An error occurred while updating the instance",
@@ -32,11 +34,13 @@
     },
     "count_suggested_languages": {
         "label": "Total languages requested",
+        "tabLabel": "Total languages requested",
         "total": "Total"
     },
     "countries": {
         "code": "Country code",
         "label": "Countries",
+        "tabLabel": "Countries",
         "name": "Country"
     },
     "days": {
@@ -70,7 +74,6 @@
         "student": "Student",
         "translations": "Translations",
         "university": "University",
-        "userDataError": "An error occurred while retrieving your information",
         "tandem": "Tandem",
         "both": "Both",
         "deleted_user": "Deleted user",
@@ -91,7 +94,8 @@
         "title": "ULEP Administration"
     },
     "instance": {
-        "label": "Instance",
+        "label": "Configuration",
+        "tabLabel": "Instance",
         "name": "Instance name",
         "email": "Email linked to the instance",
         "cgu": "Url to terms and conditions",
@@ -151,6 +155,7 @@
         },
         "interests": "Interests",
         "label": "Interest categories",
+        "tabLabel": "Interest categories",
         "name": "Name",
         "update": {
             "title": "Update an interest category"
@@ -159,6 +164,7 @@
     "languages": {
         "code": "Language code",
         "label": "Languages",
+        "tabLabel": "Languages",
         "name": "Language name",
         "secondary_status": {
             "active": "Active language",
@@ -179,7 +185,7 @@
             "no": "No"
         }
     },
-    "langauges_picker": {
+    "languages_picker": {
         "placeholder": "Choose an additional language"
     },
     "login": {
@@ -280,6 +286,7 @@
         "content": "Content",
         "in_progress": "In progress",
         "label": "Reports",
+        "tabLabel": "Reports list",
         "open": "Open",
         "status": "Status",
         "update": {
@@ -295,10 +302,20 @@
             "name": "Name of the new category",
             "title": "Creation of a new category"
         },
-        "label": "Categories report"
+        "label": "Categories",
+        "tabLabel": "Categories",
+        "show": {
+            "name": "Report category name"
+        },
+        "update": {
+            "error": "An error occurred while updating the category",
+            "name": "Report category name",
+            "title": "Report category update"
+        }
     },
     "suggested_languages": {
-        "label": "Asked languages"
+        "label": "Asked languages",
+        "tabLabel": "Asked languages"
     },
     "universities": {
         "create": {
@@ -329,6 +346,7 @@
             "automatic": "Automatic"
         },
         "label": "Universities",
+        "tabLabel": "Universities list",
         "id": "ID",
         "name": "University name",
         "parent": "Centrale university",
