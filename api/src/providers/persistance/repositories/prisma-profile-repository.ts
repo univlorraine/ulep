@@ -45,7 +45,7 @@ export class PrismaProfileRepository implements ProfileRepository {
         meeting_frequency: profile.meetingFrequency,
         availabilities: JSON.stringify(profile.availabilities),
         availabilities_note: profile.availabilitiesNote,
-        availabilities_note_privacy: profile.availavilitiesNotePrivacy,
+        availabilities_note_privacy: profile.availabilitiesNotePrivacy,
         bio: profile.biography,
         User: {
           connect: { id: profile.user.id },
@@ -152,7 +152,7 @@ export class PrismaProfileRepository implements ProfileRepository {
         meeting_frequency: profile.meetingFrequency,
         availabilities: JSON.stringify(profile.availabilities),
         availabilities_note: profile.availabilitiesNote,
-        availabilities_note_privacy: profile.availavilitiesNotePrivacy,
+        availabilities_note_privacy: profile.availabilitiesNotePrivacy,
         bio: profile.biography,
         NativeLanguage: {
           connect: { id: profile.nativeLanguage.id },
