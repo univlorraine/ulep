@@ -1,6 +1,5 @@
 import { Interest } from '../domain/entities/CategoryInterests';
 import Language from '../domain/entities/Language';
-import LearningLanguage from '../domain/entities/LearningLanguage';
 import Profile from '../domain/entities/Profile';
 import { goalCommandToDomain } from './GoalCommand';
 import learningLanguageResultToDomain, { LearningLanguageResult } from './LearningLanguageResult';

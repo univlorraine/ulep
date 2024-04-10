@@ -104,7 +104,7 @@ export const profileMapper = (instance: ProfileSnapshot): Profile => {
       sunday: availabilities['sunday'],
     },
     availabilitiesNote: instance.availabilities_note,
-    availavilitiesNotePrivacy: instance.availabilities_note_privacy,
+    availabilitiesNotePrivacy: instance.availabilities_note_privacy,
     biography: {
       superpower: instance.bio['superpower'],
       favoritePlace: instance.bio['favoritePlace'],

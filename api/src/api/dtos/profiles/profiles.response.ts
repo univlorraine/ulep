@@ -129,7 +129,7 @@ export class ProfileResponse {
       meetingFrequency: profile.meetingFrequency,
       availabilities: AvailabilitesDto.fromDomain(profile.availabilities),
       availabilitiesNote: profile.availabilitiesNote,
-      availabilitiesNotePrivacy: profile.availavilitiesNotePrivacy,
+      availabilitiesNotePrivacy: profile.availabilitiesNotePrivacy,
       biography:
         profile.biography && BiographyDto.fromDomain(profile.biography),
     });

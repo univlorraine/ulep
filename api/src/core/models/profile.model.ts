@@ -47,7 +47,7 @@ export type CreateProfileProps = {
   interests: Interest[];
   availabilities?: Availabilites;
   availabilitiesNote?: string;
-  availavilitiesNotePrivacy?: boolean;
+  availabilitiesNotePrivacy?: boolean;
   biography?: { [key: string]: string };
   createdAt?: Date;
   updatedAt?: Date;
@@ -64,7 +64,7 @@ export class Profile {
   readonly interests: Interest[];
   readonly availabilities?: Availabilites;
   readonly availabilitiesNote?: string;
-  readonly availavilitiesNotePrivacy?: boolean;
+  readonly availabilitiesNotePrivacy?: boolean;
   readonly biography?: { [key: string]: string };
   readonly createdAt?: Date;
   readonly updatedAt?: Date;
@@ -88,7 +88,7 @@ export class Profile {
     this.meetingFrequency = props.meetingFrequency;
     this.availabilities = props.availabilities;
     this.availabilitiesNote = props.availabilitiesNote;
-    this.availavilitiesNotePrivacy = props.availavilitiesNotePrivacy;
+    this.availabilitiesNotePrivacy = props.availabilitiesNotePrivacy;
     this.objectives = [...props.objectives];
     this.interests = [...props.interests];
     this.biography = props.biography;

@@ -137,7 +137,7 @@ export const createProfiles = async (
         meeting_frequency: instance.meetingFrequency,
         availabilities: JSON.stringify(instance.availabilities),
         availabilities_note: instance.availabilitiesNote,
-        availabilities_note_privacy: instance.availavilitiesNotePrivacy,
+        availabilities_note_privacy: instance.availabilitiesNotePrivacy,
         bio: instance.biography,
       },
     });

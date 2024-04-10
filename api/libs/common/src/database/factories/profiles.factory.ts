@@ -30,7 +30,7 @@ export class ProfileFactory extends ModelFactory<Profile> {
         sunday: enumValue(AvailabilitesOptions),
       },
       availabilitiesNote: faker.lorem.sentence(),
-      availavilitiesNotePrivacy: faker.datatype.boolean(),
+      availabilitiesNotePrivacy: faker.datatype.boolean(),
       biography: {
         superpower: faker.lorem.sentence(),
         favoritePlace: faker.lorem.sentence(),
