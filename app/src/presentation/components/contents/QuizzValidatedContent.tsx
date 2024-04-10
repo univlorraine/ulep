@@ -37,13 +37,15 @@ const QuizzValidatedContent: React.FC<QuizzValidatedContentProps> = ({
     return (
         <div className={styles.container}>
             <h1 className="title">{`${t(`pairing_quizz_validation.title`)}`}</h1>
-            {!newLevel && onNextStep && <p className="subtitle">{t(`pairing_quizz_validation.subtitle`)}</p>}
+            {newLevel === undefined && onNextStep && (
+                <p className="subtitle">{t(`pairing_quizz_validation.subtitle`)}</p>
+            )}
             <div className={styles['image-container']}>
                 <img className={styles.image} alt="trophie" src={TrophiePng}></img>
                 <div className={styles.bubble}>
                     <FlagBubble language={language} textColor="white" isSelected disabled />
                 </div>
-                {!isNewLanguage && !!newLevel && newLevel !== 0 && (
+                {!isNewLanguage && !!newLevel && (
                     <div className={styles['bubble-cefr']}>{`${newLevel >= 1 ? '+' : ''}${newLevel}`}</div>
                 )}
             </div>
@@ -66,7 +68,7 @@ const QuizzValidatedContent: React.FC<QuizzValidatedContentProps> = ({
                     {t('pairing_quizz_validation.next_step_button')}
                 </button>
             )}
-            {newLevel && newLevel > 0 && (
+            {!!newLevel && newLevel > 0 && (
                 <div className={styles.animation}>
                     <Lottie options={defaultOptions} height="100%" width="100%" />
                 </div>
