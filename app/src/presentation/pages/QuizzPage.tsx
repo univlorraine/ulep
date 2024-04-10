@@ -12,6 +12,7 @@ import SuccessLayout from '../components/layout/SuccessLayout';
 import WebLayoutCentered from '../components/layout/WebLayoutCentered';
 import { getNextLevel, getPreviousLevel } from '../utils';
 import styles from './css/SignUp.module.css';
+import Loader from '../components/Loader';
 
 type QuizzPageProps = {
     initialCefr?: CEFR;
@@ -29,6 +30,7 @@ const QuizzPage: React.FC = () => {
     const [questions, setQuestions] = useState<Question[]>([]);
     const [currentQuizz, setCurrentQuizz] = useState<CEFR | undefined>();
     const [displayNextQuizz, setDisplayNextQuizz] = useState<boolean>(false);
+    const [isLoading, setIsLoading] = useState<boolean>(Boolean(initialCefr));
 
     if (!profileSignUp.learningLanguage) {
         return <Redirect to={`/pairing/languages`} />;
@@ -38,6 +40,7 @@ const QuizzPage: React.FC = () => {
         if (!level) {
             return;
         }
+        setIsLoading(true);
 
         const result = await getQuizzByLevel.execute(level);
 
@@ -47,6 +50,7 @@ const QuizzPage: React.FC = () => {
 
         setQuestions(result);
         setDisplayNextQuizz(false);
+        setIsLoading(false);
         return setCurrentQuizz(level);
     };
 
@@ -106,9 +110,17 @@ const QuizzPage: React.FC = () => {
             headerTitle={initialCefr ? t('global.cefr_quizz_title') : t('global.pairing_title')}
         >
             <div className={styles.body}>
-                {questions.length === 0 && <QuizzSelectionContent onQuizzSelected={askQuizz} />}
-                {questions.length > 0 && currentQuizz && (
-                    <QuizzContent onQuizzOver={onQuizzOver} questions={questions} quizzLevel={currentQuizz} />
+                {isLoading ? (
+                    <div className={styles.loader}>
+                        <Loader />
+                    </div>
+                ) : (
+                    <>
+                        {questions.length === 0 && <QuizzSelectionContent onQuizzSelected={askQuizz} />}
+                        {questions.length > 0 && currentQuizz && (
+                            <QuizzContent onQuizzOver={onQuizzOver} questions={questions} quizzLevel={currentQuizz} />
+                        )}
+                    </>
                 )}
             </div>
         </WebLayoutCentered>
