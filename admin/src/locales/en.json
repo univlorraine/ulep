@@ -326,6 +326,10 @@
         "tabLabel": "Asked languages"
     },
     "universities": {
+        "admission_start": "Registration start",
+        "code_button": "Add a code",
+        "domain_button": "Add a domain",
+        "country": "Country",
         "create": {
             "admission_end": "Partner university admission due date",
             "admission_error": "Admission due date must be after admission start date",
@@ -348,16 +352,17 @@
             "max_tandems_per_user": "Maximum number of tandems per user",
             "notificationEmail": "Email for notifications"
         },
-        "pairingModes": {
-            "manual": "Manual",
-            "semi_automatic": "Semi-automatic",
-            "automatic": "Automatic"
-        },
         "label": "Universities",
         "tabLabel": "Universities list",
         "id": "ID",
         "name": "University name",
-        "parent": "Centrale university",
+        "pairing_mode": {
+            "automatic": "Automatic",
+            "label": "Pairing",
+            "manual": "Manual",
+            "semi_automatic": "Semi-auto"
+        },
+        "parent": "Central",
         "show": {
             "admission_start": "Admission start date",
             "admission_error": "Admission due date must be after admission start date",
@@ -383,6 +388,13 @@
             "notificationEmail": "Email for notifications"
         },
         "specific_language": "Specific languages",
+        "status": {
+            "closed": "Closed",
+            "label": "Status",
+            "open": "Open",
+            "soon": "Soon",
+            "suspended": "Suspended"
+        },
         "title": "Partner universities",
         "update": {
             "admission_end": "University admission due date",

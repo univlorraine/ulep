@@ -8,6 +8,12 @@ export enum PairingMode {
     AUTOMATIC = 'AUTOMATIC',
 }
 
+export enum Status {
+    CLOSED = 'CLOSED',
+    OPEN = 'OPEN',
+    SOON = 'SOON',
+}
+
 type University = {
     id: string;
     name: string;

@@ -219,15 +219,15 @@ const UniversityForm: React.FC<UniversityFormProps> = ({
     const pairingModeOptions: PairingModeOption[] = [
         {
             value: PairingMode.MANUAL,
-            label: translate(`universities.pairingModes.manual`),
+            label: translate(`universities.pairing_mode.manual`),
         },
         {
             value: PairingMode.SEMI_AUTOMATIC,
-            label: translate(`universities.pairingModes.semi_automatic`),
+            label: translate(`universities.pairing_mode.semi_automatic`),
         },
         {
             value: PairingMode.AUTOMATIC,
-            label: translate(`universities.pairingModes.automatic`),
+            label: translate(`universities.pairing_mode.automatic`),
         },
     ];
 

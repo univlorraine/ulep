@@ -89,6 +89,7 @@ export class UniversityController {
   }
 
   @Get()
+  @SerializeOptions({ groups: ['read', 'university:read'] })
   @Swagger.ApiOperation({ summary: 'Collection of University ressource.' })
   @Swagger.ApiOkResponse({ type: UniversityResponse, isArray: true })
   async getUniversities() {
