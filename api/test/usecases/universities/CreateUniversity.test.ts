@@ -23,6 +23,7 @@ describe('CreateUniversity', () => {
 
   const createUniversityUsecase = new CreateUniversityUsecase(
     countryRepository,
+    languageRepository,
     universityRepository,
     uuidProvider,
   );
@@ -44,6 +45,10 @@ describe('CreateUniversity', () => {
       countryId: countries[0].id,
       campusNames: [],
       pairingMode: PairingMode.AUTOMATIC,
+      openServiceDate: new Date('2000-01-01'),
+      closeServiceDate: new Date('2000-12-31'),
+      maxTandemsPerUser: 1,
+      specificLanguagesAvailableIds: [],
     });
 
     const instance = await universityRepository.ofName(
@@ -71,6 +76,10 @@ describe('CreateUniversity', () => {
         admissionStart: new Date('2000-01-01'),
         admissionEnd: new Date('2000-12-31'),
         pairingMode: PairingMode.AUTOMATIC,
+        openServiceDate: new Date('2000-01-01'),
+        closeServiceDate: new Date('2000-12-31'),
+        maxTandemsPerUser: 1,
+        specificLanguagesAvailableIds: [],
       });
     } catch (error) {
       exception = error;
