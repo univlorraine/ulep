@@ -99,7 +99,8 @@ const EditUniversity = () => {
                                 maxTandemsPerUser: number,
                                 website?: string,
                                 notificationEmail?: string,
-                                specificLanguagesAvailable?: Language[]
+                                specificLanguagesAvailable?: Language[],
+                                file?: File
                             ) =>
                                 handleSubmit(
                                     record.id,
@@ -116,7 +117,8 @@ const EditUniversity = () => {
                                     maxTandemsPerUser,
                                     website,
                                     notificationEmail,
-                                    specificLanguagesAvailable
+                                    specificLanguagesAvailable,
+                                    file
                                 )
                             }
                             maxTandemsPerUser={record.maxTandemsPerUser}
@@ -124,6 +126,7 @@ const EditUniversity = () => {
                             notificationEmail={record.notificationEmail}
                             openServiceDate={record.openServiceDate}
                             pairingMode={record.pairingMode}
+                            specificLanguagesAvailable={record.specificLanguagesAvailable}
                             timezone={record.timezone}
                             tradKey="update"
                             website={record.website}
