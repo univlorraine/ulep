@@ -1,4 +1,5 @@
-import { Browser } from '@capacitor/browser';
+import LearningLanguage from '../domain/entities/LearningLanguage';
+import TestedLanguage from '../domain/entities/TestedLanguage';
 
 const countriesCodeWithFlags: [string, string][] = [
     ['aa', '🇪🇹'], // Afar - Ethiopia
@@ -225,4 +226,25 @@ export const isCodeValid = (code: string, codesToCheck: string[]) => {
     return codesToCheck.some((codeToCheck) => codeToCheck === code);
 };
 
+export const learningLanguagesToTestedLanguages = (learningLanguages: LearningLanguage[]) => {
+    return learningLanguages.map(
+        (learningLanguage) => new TestedLanguage(learningLanguage.code, learningLanguage.name, learningLanguage.level)
+    );
+};
+
 export const compareArrays = (a: unknown[], b: unknown[]) => JSON.stringify(a) == JSON.stringify(b);
+
+export const compareCEFR = (levelA: CEFR, levelB: CEFR) => {
+    console.log(levelA, levelB);
+    const CEFRlevels: { [key: string]: number } = {
+        A0: 0,
+        A1: 1,
+        A2: 2,
+        B1: 3,
+        B2: 4,
+        C1: 5,
+        C2: 6,
+    };
+
+    return CEFRlevels[levelB] - CEFRlevels[levelA];
+};

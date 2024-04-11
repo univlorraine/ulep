@@ -1,7 +1,26 @@
+.animation {
+    position: absolute;
+    pointer-events: none;
+}
+
 .bubble {
     position: absolute;
     top: 0px;
     left: -30px;
+}
+
+.bubble-cefr {
+    align-items: center;
+    background-color: var(--color-secondary);
+    border: 1px solid #000;
+    border-radius: 50%;
+    display: flex;
+    height: 40px;
+    justify-content: center;
+    position: absolute;
+    bottom: 0;
+    right: 0;
+    width: 40px;
 }
 
 .button {

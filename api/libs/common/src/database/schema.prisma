@@ -53,6 +53,7 @@ model LanguageCodes {
 
   NativeLanguages        Profiles[]           @relation("NativeLanguage")
   MasteredLanguages      MasteredLanguages[]
+  TestedLanguages        TestedLanguages[]
   SuggestedLanguages     SuggestedLanguages[]
   Translations           Translations[]
   TextContents           TextContent[]
@@ -300,6 +301,7 @@ model Profiles {
   NativeLanguage    LanguageCodes        @relation("NativeLanguage", fields: [native_language_code_id], references: [id])
   LearningLanguages LearningLanguages[]
   MasteredLanguages MasteredLanguages[]
+  TestedLanguages   TestedLanguages[]
   Goals             LearningObjectives[]
   Interests         Interests[]
 
@@ -319,6 +321,19 @@ model MasteredLanguages {
 
   @@id([profile_id, language_code_id])
   @@map("mastered_languages")
+}
+
+model TestedLanguages {
+  profile_id       String
+  language_code_id String
+  created_at       DateTime      @default(now())
+  updated_at       DateTime      @updatedAt
+  level            String
+  Profile          Profiles      @relation(fields: [profile_id], references: [id], onDelete: Cascade)
+  LanguageCode     LanguageCodes @relation(fields: [language_code_id], references: [id])
+
+  @@id([profile_id, language_code_id])
+  @@map("tested_languages")
 }
 
 model LearningObjectives {

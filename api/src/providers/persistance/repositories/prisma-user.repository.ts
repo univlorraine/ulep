@@ -47,7 +47,7 @@ export class PrismaUserRepository implements UserRepository {
     const instances = await this.prisma.users.findMany({
       skip: offset,
       take: limit,
-      include: UserRelations(),
+      include: UserRelations,
     });
 
     const users: User[] = instances.map((item) => userMapper(item));
@@ -60,7 +60,7 @@ export class PrismaUserRepository implements UserRepository {
       where: {
         id,
       },
-      include: UserRelations(),
+      include: UserRelations,
     });
 
     if (!instance) {
@@ -75,7 +75,7 @@ export class PrismaUserRepository implements UserRepository {
       where: {
         status: status.toString(),
       },
-      include: UserRelations(),
+      include: UserRelations,
     });
 
     return instances.map((item) => userMapper(item));
@@ -103,7 +103,7 @@ export class PrismaUserRepository implements UserRepository {
       where: {
         id: user.id,
       },
-      include: UserRelations(),
+      include: UserRelations,
     });
 
     return userMapper(updatedUser);

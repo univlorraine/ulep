@@ -13,7 +13,7 @@ import TandemStatusModal from '../components/modals/TandemStatusModal';
 import TandemList from '../components/tandems/TandemList';
 import WaitingTandemList from '../components/tandems/WaitingTandemList';
 import useWindowDimensions from '../hooks/useWindowDimensions';
-import { HYBRID_MAX_WIDTH } from '../utils';
+import { HYBRID_MAX_WIDTH, learningLanguagesToTestedLanguages } from '../utils';
 import styles from './css/Home.module.css';
 import Avatar from '../components/Avatar';
 import useLogout from '../hooks/useLogout';
@@ -21,6 +21,8 @@ import Loader from '../components/Loader';
 import MyUniversityCard from '../components/card/MyUniversityCard';
 import PartnerUniversitiesCard from '../components/card/PartnerUniversitiesCard';
 import useGetHomeData from '../hooks/useGetHomeData';
+import ProficiencyTestCard from '../components/card/ProficiencyTestCard';
+import Masonry, { ResponsiveMasonry } from 'react-responsive-masonry';
 
 const HomePage: React.FC = () => {
     const { t } = useTranslation();
@@ -71,7 +73,7 @@ const HomePage: React.FC = () => {
     }
 
     return (
-        <IonPage>
+        <IonPage className={styles.content}>
             {!isHybrid && <HomeHeader user={profile.user} onPicturePressed={onProfilePressed} />}
             <IonContent>
                 <div className={`${styles.container} content-wrapper`}>
@@ -94,19 +96,31 @@ const HomePage: React.FC = () => {
                                 <Loader />
                             </div>
                         ) : (
-                            <>
-                                <TandemList onTandemPressed={onValidatedTandemPressed} tandems={tandems} />
-                                <WaitingTandemList
-                                    onTandemPressed={onTandemPressed}
-                                    onNewTandemAsked={() => history.push('pairing/languages')}
-                                    profile={profile}
-                                    tandems={tandems}
-                                />
-                                <MyUniversityCard university={profile.user.university} />
-                                {partnerUniversities?.length && (
-                                    <PartnerUniversitiesCard universities={partnerUniversities} />
-                                )}
-                            </>
+                            <ResponsiveMasonry columnsCountBreakPoints={{ 300: 1, 768: 2 }}>
+                                <Masonry className={styles.masonery} gutter="20px">
+                                    {tandems.find((tandem) => tandem.status === 'ACTIVE') && (
+                                        <TandemList onTandemPressed={onValidatedTandemPressed} tandems={tandems} />
+                                    )}
+                                    <WaitingTandemList
+                                        onTandemPressed={onTandemPressed}
+                                        onNewTandemAsked={() => history.push('pairing/languages')}
+                                        profile={profile}
+                                        tandems={tandems}
+                                    />
+                                    <MyUniversityCard university={profile.user.university} />
+                                    {partnerUniversities?.length > 0 && (
+                                        <PartnerUniversitiesCard universities={partnerUniversities} />
+                                    )}
+                                    {(profile.learningLanguages.length > 0 || profile.testedLanguages.length > 0) && (
+                                        <ProficiencyTestCard
+                                            testedLanguages={[
+                                                ...learningLanguagesToTestedLanguages(profile.learningLanguages),
+                                                ...profile.testedLanguages,
+                                            ]}
+                                        />
+                                    )}
+                                </Masonry>
+                            </ResponsiveMasonry>
                         )}
                     </div>
                     <div className={styles['report-container']}>

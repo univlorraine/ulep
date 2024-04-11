@@ -16,7 +16,7 @@ import PairingPedagogyPage from '../pages/PairingPedagogyPage';
 import PairingPreferencePage from '../pages/PairingPreferencePage';
 import PairingQuizzEndPage from '../pages/PairingQuizzEndPage';
 import PairingQuizzIntroductionPage from '../pages/PairingQuizzIntroductionPage';
-import PairingQuizzPage from '../pages/PairingQuizzPage';
+import QuizzPage from '../pages/QuizzPage';
 import PairingSelectCEFRPage from '../pages/PairingSelectCEFRPage';
 import PairingUnavailableLanguagePage from '../pages/PairingUnavailableLanguagePage';
 import SignUpAvailabilitiesPage from '../pages/SignUpAvailabilitiesPage';
@@ -44,6 +44,9 @@ import PairingOtherLanguageSelectedPage from '../pages/PairingOtherLanguageSelec
 import useIsUniversityOpen from '../hooks/useIsUniversityOpen';
 import ServiceClosePage from '../pages/ServiceClosePage';
 import EditInformationsPage from '../pages/EditInformationsPage';
+import CEFRQuizzLanguagePage from '../pages/cefr-quizz/CEFRQuizzLanguagePage';
+import CEFRQuizzOtherLanguagesPage from '../pages/cefr-quizz/CEFRQuizzOtherLanguagesPage';
+import CEFRQuizzEndPage from '../pages/cefr-quizz/CEFRQuizzEndPage';
 
 const OfflineRouter: React.FC = () => {
     const profile = useStoreState((store) => store.profile);
@@ -138,7 +141,7 @@ const OfflineRouter: React.FC = () => {
                     <PairingQuizzIntroductionPage />
                 </PrivateRoute>
                 <PrivateRoute exact path="/pairing/language/quizz">
-                    <PairingQuizzPage />
+                    <QuizzPage />
                 </PrivateRoute>
                 <PrivateRoute exact path="/pairing/level/select">
                     <PairingSelectCEFRPage />
@@ -173,6 +176,19 @@ const OfflineRouter: React.FC = () => {
                 <Route exact path="/edit/informations">
                     <EditInformationsPage />
                 </Route>
+                {/* Quizz route */}
+                <PrivateRoute exact path="/cefr/languages">
+                    <CEFRQuizzLanguagePage />
+                </PrivateRoute>
+                <PrivateRoute exact path="/cefr/languages/other">
+                    <CEFRQuizzOtherLanguagesPage />
+                </PrivateRoute>
+                <PrivateRoute exact path="/cefr/quizz">
+                    <QuizzPage />
+                </PrivateRoute>
+                <PrivateRoute exact path="/cefr/quizz/end">
+                    <CEFRQuizzEndPage />
+                </PrivateRoute>
             </Switch>
         </IonRouterOutlet>
     );

@@ -8,11 +8,12 @@ import useWindowDimensions from '../../hooks/useWindowDimensions';
 import { HYBRID_MAX_WIDTH } from '../../utils';
 
 interface OtherLanguageContentProps {
+    displayJoker: boolean;
     languages: Language[];
     onLanguageSelected: (language: Language) => void;
 }
 
-const OtherLanguageContent: React.FC<OtherLanguageContentProps> = ({ languages, onLanguageSelected }) => {
+const OtherLanguageContent: React.FC<OtherLanguageContentProps> = ({ displayJoker, languages, onLanguageSelected }) => {
     const { t } = useTranslation();
     const [selectedLaguage, setSelectedLanguage] = useState<Language>();
     const { width } = useWindowDimensions();
@@ -38,7 +39,7 @@ const OtherLanguageContent: React.FC<OtherLanguageContentProps> = ({ languages, 
                             <p className={pairingOtherLanguagesStyles['joker-description']}>
                                 {t('pairing_other_languages_page.joker_description')}
                             </p>
-                            {!isHybrid && (
+                            {displayJoker && !isHybrid && (
                                 <Checkbox
                                     isSelected={selectedLaguage?.code === '*'}
                                     onPressed={() => setSelectedLanguage(new Language('joker', '*', 'Joker'))}
@@ -48,7 +49,7 @@ const OtherLanguageContent: React.FC<OtherLanguageContentProps> = ({ languages, 
                             )}
                         </div>
                     </div>
-                    {isHybrid && (
+                    {displayJoker && isHybrid && (
                         <Checkbox
                             isSelected={selectedLaguage?.code === '*'}
                             onPressed={() => setSelectedLanguage(new Language('joker', '*', 'Joker'))}

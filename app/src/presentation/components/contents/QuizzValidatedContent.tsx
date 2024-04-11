@@ -3,12 +3,16 @@ import { QuizzPng, TrophiePng } from '../../../assets';
 import Language from '../../../domain/entities/Language';
 import FlagBubble from '../FlagBubble';
 import styles from './QuizzValidatedContent.module.css';
+import confetti from '../../../assets/animations/confetti.json';
+import Lottie from 'react-lottie';
 
 interface QuizzValidatedContentProps {
     language: Language;
     onNextQuizz?: () => void;
     onNextStep?: () => void;
     quizzLevel: string;
+    newLevel?: number;
+    isNewLanguage?: boolean;
 }
 
 const QuizzValidatedContent: React.FC<QuizzValidatedContentProps> = ({
@@ -16,18 +20,34 @@ const QuizzValidatedContent: React.FC<QuizzValidatedContentProps> = ({
     onNextQuizz,
     onNextStep,
     quizzLevel,
+    newLevel,
+    isNewLanguage,
 }) => {
     const { t } = useTranslation();
+
+    const defaultOptions = {
+        loop: false,
+        autoplay: true,
+        animationData: confetti,
+        rendererSettings: {
+            preserveAspectRatio: 'xMidYMid slice',
+        },
+    };
 
     return (
         <div className={styles.container}>
             <h1 className="title">{`${t(`pairing_quizz_validation.title`)}`}</h1>
-            {onNextStep && <p className="subtitle">{t(`pairing_quizz_validation.subtitle`)}</p>}
+            {newLevel === undefined && onNextStep && (
+                <p className="subtitle">{t(`pairing_quizz_validation.subtitle`)}</p>
+            )}
             <div className={styles['image-container']}>
                 <img className={styles.image} alt="trophie" src={TrophiePng}></img>
                 <div className={styles.bubble}>
                     <FlagBubble language={language} textColor="white" isSelected disabled />
                 </div>
+                {!isNewLanguage && !!newLevel && (
+                    <div className={styles['bubble-cefr']}>{`${newLevel >= 1 ? '+' : ''}${newLevel}`}</div>
+                )}
             </div>
             <div className={styles['level-container']}>
                 <img alt="quizz" src={QuizzPng} />
@@ -47,6 +67,11 @@ const QuizzValidatedContent: React.FC<QuizzValidatedContentProps> = ({
                 <button className={`primary-button ${styles.button}`} onClick={onNextStep}>
                     {t('pairing_quizz_validation.next_step_button')}
                 </button>
+            )}
+            {!!newLevel && newLevel > 0 && (
+                <div className={styles.animation}>
+                    <Lottie options={defaultOptions} height="100%" width="100%" />
+                </div>
             )}
         </div>
     );

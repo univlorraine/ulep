@@ -34,6 +34,7 @@ import GetUniversityLanguagesUsecase from '../domain/usecases/GetUniversityLangu
 import GetPartnersToUniversityUsecase from '../domain/usecases/GetPartnersToUniversityUsecase';
 import EditProfileUsecase from '../domain/usecases/EditProfileUsecase';
 import EditUserUsecase from '../domain/usecases/EditUserUsecase';
+import CreateOrUpdateTestedLanguageUsecase from '../domain/usecases/CreateOrUpdateTestedLanguageUsecase';
 
 interface GetConfigContextValueProps {
     apiUrl: string;
@@ -66,6 +67,7 @@ const getConfigContextValue = ({
     const askForAccountDeletion = new AskForAccountDeletion(domainHttpAdapter);
     const askForLanguage = new AskForLanguageUsecase(domainHttpAdapter);
     const askForLearningLanguage = new AskForLearningLanguageUsecase(domainHttpAdapter);
+    const createOrUpdateTestedLanguage = new CreateOrUpdateTestedLanguageUsecase(domainHttpAdapter, setProfile);
     const createProfile = new CreateProfileUsecase(domainHttpAdapter, setProfile);
     const createReport = new CreateReportUsecase(domainHttpAdapter);
     const getAllInterestCategories = new GetAllInterestCategoriesUsecase(domainHttpAdapter);
@@ -104,6 +106,7 @@ const getConfigContextValue = ({
         browserAdapter,
         cameraAdapter,
         configuration,
+        createOrUpdateTestedLanguage,
         createProfile,
         createReport,
         createUser,

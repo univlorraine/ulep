@@ -1,12 +1,15 @@
 import { UniversityFactory } from '@app/common';
 import { DeleteUniversityUsecase } from '../../../src/core/usecases';
 import { InMemoryUniversityRepository } from '../../../src/providers/persistance/repositories/in-memory-university-repository';
+import { InMemoryUserRepository } from 'src/providers/persistance/repositories/in-memory-user-repository';
 
 describe('DeleteUniversity', () => {
   const factory = new UniversityFactory();
+  const userRepository = new InMemoryUserRepository();
   const universityRepository = new InMemoryUniversityRepository();
   const deleteUniversityUsecase = new DeleteUniversityUsecase(
     universityRepository,
+    userRepository,
   );
 
   beforeEach(() => {

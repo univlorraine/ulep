@@ -43,6 +43,8 @@ import { PrismaPurgeRepository } from './persistance/repositories/prisma-purge.r
 import { ConfigModule } from '@nestjs/config';
 import { TANDEM_HISTORY_REPOSITORY } from 'src/core/ports/tandem-history.repository';
 import { PrismaTandemHistoryRepository } from 'src/providers/persistance/repositories/prisma-tandem-history-repository';
+import { TESTED_LANGUAGE_REPOSITORY } from 'src/core/ports/tested-language.repository';
+import { PrismaTestedLanguageRepository } from 'src/providers/persistance/repositories/prisma-tested-language-repository';
 
 const providers: Provider[] = [
   { provide: INSTANCE_REPOSITORY, useClass: PrismaInstanceRepository },
@@ -113,6 +115,10 @@ const providers: Provider[] = [
   {
     provide: LEARNING_LANGUAGE_REPOSITORY,
     useClass: PrismaLearningLanguageRepository,
+  },
+  {
+    provide: TESTED_LANGUAGE_REPOSITORY,
+    useClass: PrismaTestedLanguageRepository,
   },
   {
     provide: ROUTINE_EXECUTION_REPOSITORY,
