@@ -43,7 +43,6 @@ import {
 import { AuthenticationGuard } from '../guards';
 import { Profile } from 'src/core/models';
 
-
 @Controller('profiles')
 @Swagger.ApiTags('Profiles')
 export class ProfileController {
