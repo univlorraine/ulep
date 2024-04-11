@@ -45,6 +45,7 @@ const PairingLanguagesPage: React.FC = () => {
     return (
         <WebLayoutCentered
             backgroundIconColor={configuration.secondaryBackgroundImageColor}
+            goBackPressed={navigateToHome}
             headerColor={configuration.secondaryColor}
             headerPercentage={12}
             headerTitle={t('global.pairing_title')}

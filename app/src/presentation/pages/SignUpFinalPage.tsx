@@ -15,7 +15,7 @@ const SignupFinalPage: React.FC = () => {
     const profileSignUp = useStoreState((state) => state.profileSignUp);
     const profile = useStoreState((state) => state.profile);
     const user = useStoreState((state) => state.user);
-    const isUpdate = profile?.id;
+    const isUpdate = Boolean(profile?.id);
 
     const onCreateProfile = async () => {
         if (
