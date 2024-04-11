@@ -13,3 +13,4 @@ export * from './security';
 export * from './tandems';
 export * from './universities';
 export * from './users';
+export * from './tested-languages';

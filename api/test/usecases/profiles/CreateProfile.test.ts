@@ -24,6 +24,7 @@ import { InMemoryLearningObjectiveRepository } from '../../../src/providers/pers
 import InMemoryEmailGateway from '../../../src/providers/gateway/in-memory-email.gateway';
 import { UuidProvider } from '../../../src/providers/services/uuid.provider';
 import { InMemoryTandemHistoryRepository } from 'src/providers/persistance/repositories/in-memory-tandem-history.repository';
+import { InMemoryLearningLanguageRepository } from 'src/providers/persistance/repositories/in-memory-learning-language-repository';
 
 describe('CreateProfile', () => {
   const userFactory = new UserFactory();
@@ -35,6 +36,7 @@ describe('CreateProfile', () => {
   const profileRepository = new InMemoryProfileRepository();
   const universityRepository = new InMemoryUniversityRepository();
   const languageRepository = new InMemoryLanguageRepository();
+  const learningLanguageRepository = new InMemoryLearningLanguageRepository();
   const interestRepository = new InMemoryInterestRepository();
   const objectivesRepository = new InMemoryLearningObjectiveRepository();
   const tandemHistoryRepository = new InMemoryTandemHistoryRepository();
@@ -74,6 +76,7 @@ describe('CreateProfile', () => {
   const createProfileUsecase = new CreateProfileUsecase(
     userRepository,
     profileRepository,
+    learningLanguageRepository,
     languageRepository,
     interestRepository,
     objectivesRepository,
@@ -134,7 +137,6 @@ describe('CreateProfile', () => {
         objectives: [],
         meetingFrequency: MeetingFrequency.ONCE_A_WEEK,
         interests: [interest.id],
-        bios: 'I am a student',
       });
     } catch (error) {
       exception = error;
@@ -163,7 +165,6 @@ describe('CreateProfile', () => {
         objectives: [],
         meetingFrequency: MeetingFrequency.ONCE_A_WEEK,
         interests: [interest.id],
-        bios: 'I am a student',
       });
     } catch (error) {
       exception = error;
@@ -192,7 +193,6 @@ describe('CreateProfile', () => {
         objectives: [],
         meetingFrequency: MeetingFrequency.ONCE_A_WEEK,
         interests: [interest.id],
-        bios: 'I am a student',
       });
     } catch (error) {
       exception = error;
@@ -222,7 +222,6 @@ describe('CreateProfile', () => {
         objectives: [],
         meetingFrequency: MeetingFrequency.ONCE_A_WEEK,
         interests: [interest.id],
-        bios: 'I am a student',
       });
     } catch (error) {
       exception = error;
@@ -252,7 +251,6 @@ describe('CreateProfile', () => {
         objectives: [],
         meetingFrequency: MeetingFrequency.ONCE_A_WEEK,
         interests: [interest.id],
-        bios: 'I am a student',
       });
     } catch (error) {
       exception = error;

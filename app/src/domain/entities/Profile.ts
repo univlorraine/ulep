@@ -3,6 +3,7 @@ import Goal from './Goal';
 import Language from './Language';
 import LearningLanguage from './LearningLanguage';
 import { Availabilites } from './ProfileSignUp';
+import TestedLanguage from './TestedLanguage';
 import User from './User';
 
 class Profile {
@@ -10,6 +11,7 @@ class Profile {
         public readonly id: string,
         public readonly nativeLanguage: Language,
         public readonly masteredLanguages: Language[],
+        public readonly testedLanguages: TestedLanguage[],
         public learningLanguages: LearningLanguage[],
         public readonly goals: Goal[],
         public readonly frequency: MeetFrequency,

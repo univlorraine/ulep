@@ -85,6 +85,21 @@ export class PrismaLearningLanguageRepository
     await this.prisma.learningLanguages.delete({ where: { id } });
   }
 
+  async update(item: LearningLanguage): Promise<void> {
+    await this.prisma.learningLanguages.update({
+      where: { id: item.id },
+      data: {
+        level: item.level,
+        learning_type: item.learningType,
+        same_gender: item.sameGender,
+        same_age: item.sameAge,
+        has_priority: item.hasPriority,
+        certificate_option: item.certificateOption,
+        specific_program: item.specificProgram,
+      },
+    });
+  }
+
   async getAvailableLearningLanguagesSpeakingLanguageFromUniversities(
     languageId: string,
     universityIds: string[],

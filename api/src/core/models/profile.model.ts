@@ -1,3 +1,4 @@
+import { TestedLanguage } from 'src/core/models/tested-language.model';
 import { ProfileLanguagesException } from '../errors/profile-exceptions';
 import { Interest } from './interest.model';
 import { Language } from './language.model';
@@ -41,6 +42,7 @@ export type CreateProfileProps = {
   user: User;
   nativeLanguage: Language;
   masteredLanguages: Language[];
+  testedLanguages: TestedLanguage[];
   learningLanguages: LearningLanguage[];
   meetingFrequency: MeetingFrequency;
   objectives: LearningObjective[];
@@ -60,6 +62,7 @@ export class Profile {
   readonly masteredLanguages: Language[];
   readonly learningLanguages: LearningLanguage[];
   readonly meetingFrequency: MeetingFrequency;
+  readonly testedLanguages: TestedLanguage[];
   readonly objectives: LearningObjective[];
   readonly interests: Interest[];
   readonly availabilities?: Availabilites;
@@ -84,6 +87,7 @@ export class Profile {
     this.user = props.user;
     this.nativeLanguage = props.nativeLanguage;
     this.masteredLanguages = [...props.masteredLanguages];
+    this.testedLanguages = props.testedLanguages;
     this.learningLanguages = learningLanguages;
     this.meetingFrequency = props.meetingFrequency;
     this.availabilities = props.availabilities;

@@ -30,6 +30,13 @@
     text-align: center;
 }
 
+.loader {
+    width: 100%;
+    display: flex;
+    margin-top: 2rem;
+    justify-content: center;
+}
+
 .separator {
     background-color: black;
     height: 1px;

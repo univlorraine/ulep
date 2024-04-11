@@ -169,6 +169,7 @@ describe('Get learning languages match', () => {
     id: 'FR1',
     nativeLanguage: french,
     masteredLanguages: [],
+    testedLanguages: [],
     meetingFrequency: MeetingFrequency.ONCE_A_WEEK,
     learningLanguages: [
       new LearningLanguage({
@@ -208,6 +209,7 @@ describe('Get learning languages match', () => {
     id: 'EN1',
     nativeLanguage: english,
     masteredLanguages: [],
+    testedLanguages: [],
     meetingFrequency: MeetingFrequency.ONCE_A_WEEK,
     learningLanguages: [
       new LearningLanguage({
@@ -246,6 +248,7 @@ describe('Get learning languages match', () => {
     id: 'EN2',
     nativeLanguage: english,
     masteredLanguages: [],
+    testedLanguages: [],
     meetingFrequency: MeetingFrequency.ONCE_A_WEEK,
     learningLanguages: [
       new LearningLanguage({
@@ -284,6 +287,7 @@ describe('Get learning languages match', () => {
     id: 'EN3',
     nativeLanguage: english,
     masteredLanguages: [],
+    testedLanguages: [],
     meetingFrequency: MeetingFrequency.ONCE_A_WEEK,
     learningLanguages: [
       new LearningLanguage({
@@ -323,6 +327,7 @@ describe('Get learning languages match', () => {
     id: 'FR2',
     nativeLanguage: french,
     masteredLanguages: [],
+    testedLanguages: [],
     meetingFrequency: MeetingFrequency.ONCE_A_WEEK,
     learningLanguages: [
       new LearningLanguage({

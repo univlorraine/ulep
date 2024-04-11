@@ -3,6 +3,7 @@ import Configuration from '../domain/entities/Confirguration';
 import AskForAccountDeletionUsecaseInterface from '../domain/interfaces/AskForAccountDeletionUsecase.interface';
 import AskForLanguageUsecaseInterface from '../domain/interfaces/AskForLanguageUsecase.interface';
 import AskForLearningLanguageUsecaseInterface from '../domain/interfaces/AskForLearningLanguageUsecase.interface';
+import CreateOrUpdateTestedLanguageUsecaseInterface from '../domain/interfaces/CreateOrUpdateTestedLanguageUsecase.interface';
 import CreateProfileUsecaseInterface from '../domain/interfaces/CreateProfileUsecase.interface';
 import CreateReportUsecaseInterface from '../domain/interfaces/CreateReportUsecase.interface';
 import CreateUserUsecaseInterface from '../domain/interfaces/CreateUserUsecase.interface';
@@ -45,6 +46,7 @@ export interface ConfigContextValueType {
     configuration: Configuration;
     createProfile: CreateProfileUsecaseInterface;
     createReport: CreateReportUsecaseInterface;
+    createOrUpdateTestedLanguage: CreateOrUpdateTestedLanguageUsecaseInterface;
     createUser: CreateUserUsecaseInterface;
     editProfile: EditProfileUsecaseInterface;
     editUser: EditUserUsecaseInterface;
