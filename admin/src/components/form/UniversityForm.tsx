@@ -28,6 +28,7 @@ import isCodeValid from '../../utils/isCodeValid';
 import isUrlValid from '../../utils/isUrlValid';
 import CountriesPicker from '../CountriesPicker';
 import ImageUploader from '../ImageUploader';
+import LanguagePicker from '../LanguagePicker';
 import LanguagesPicker from '../LanguagesPicker';
 import TimezonePicker from '../TimezonePicker';
 
@@ -51,6 +52,7 @@ interface UniversityFormProps {
         domains: string[],
         pairingMode: string,
         maxTandemsPerUser: number,
+        nativeLanguage: Language,
         website?: string,
         notificationEmail?: string,
         specificLanguagesAvailable?: Language[],
@@ -61,6 +63,7 @@ interface UniversityFormProps {
     name?: string;
     timezone?: string;
     tradKey?: string;
+    nativeLanguage?: Language;
     website?: string;
     pairingMode?: string;
     maxTandemsPerUser?: number;
@@ -90,6 +93,7 @@ const UniversityForm: React.FC<UniversityFormProps> = ({
     name,
     tradKey = 'create',
     timezone,
+    nativeLanguage,
     website,
     pairingMode,
     maxTandemsPerUser,
@@ -122,6 +126,7 @@ const UniversityForm: React.FC<UniversityFormProps> = ({
     const [newPairingMode, setNewPairingMode] = useState<string>(pairingMode || 'MANUAL');
     const [newMaxTandemsPerUser, setNewMaxTandemsPerUser] = useState<number>(maxTandemsPerUser || 1);
     const [newNotificationEmail, setNewNotificationEmail] = useState<string>(notificationEmail || '');
+    const [newNativeLanguage, setNewNativeLanguage] = useState<Language | undefined>(nativeLanguage);
     const [newLanguages, setNewLanguages] = useState<Language[]>(specificLanguagesAvailable || []);
     const [file, setFile] = useState<File>();
 
@@ -172,7 +177,8 @@ const UniversityForm: React.FC<UniversityFormProps> = ({
             !admissionEnd ||
             !openService ||
             !closeService ||
-            !newWebsite
+            !newWebsite ||
+            !newNativeLanguage
         ) {
             return undefined;
         }
@@ -209,6 +215,7 @@ const UniversityForm: React.FC<UniversityFormProps> = ({
             newDomains,
             newPairingMode,
             newMaxTandemsPerUser,
+            newNativeLanguage,
             newWebsite,
             newNotificationEmail,
             newLanguages,
@@ -255,6 +262,14 @@ const UniversityForm: React.FC<UniversityFormProps> = ({
                     <Typography variant="subtitle1">{translate(`universities.${tradKey}.country`)}</Typography>
                     <Box alignItems="center" display="flex" flexDirection="row">
                         <CountriesPicker onChange={setNewCountry} value={newCountry} />
+                    </Box>
+
+                    <Typography variant="subtitle1">{translate(`universities.${tradKey}.language`)}</Typography>
+                    <Typography>
+                        {newNativeLanguage && translate(`languages_code.${newNativeLanguage.code}`)}
+                    </Typography>
+                    <Box alignItems="center" display="flex" flexDirection="row">
+                        <LanguagePicker onChange={setNewNativeLanguage} />
                     </Box>
 
                     <Typography variant="subtitle1">{translate(`universities.${tradKey}.timezone`)}</Typography>

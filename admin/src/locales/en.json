@@ -186,6 +186,9 @@
             "no": "No"
         }
     },
+    "language_picker": {
+        "placeholder": "Choose a language"
+    },
     "languages_picker": {
         "placeholder": "Choose an additional language"
     },
@@ -339,6 +342,7 @@
             "codes_error": "Code must has at least 6 characters and have a letter and a number",
             "country": "Partner university country",
             "domains": "Domain name list for inscription",
+            "language": "Default language",
             "logo": "University logo",
             "open_service": "Service opening date",
             "open_service_error": "Service opening date must be before closing date",
@@ -354,6 +358,7 @@
         },
         "label": "Universities",
         "tabLabel": "Universities list",
+        "language": "Language",
         "id": "ID",
         "name": "University name",
         "pairing_mode": {
@@ -372,6 +377,7 @@
             "confidentialityUrl": "Privacy rules URL",
             "country": "University country",
             "domains": "Allowed domain names",
+            "language": "Default language",
             "logo": "University logo",
             "name": "University name",
             "open_service": "Service opening date",
@@ -410,8 +416,10 @@
             "country": "University country",
             "domains": "Domain name list for inscription",
             "domains_error": "Domain name must start with @",
-            "logo": "University logo",
+            "error": "An error occurred while updating the university",
+            "language": "Default language",
             "languages": "List of additional languages available for learning",
+            "logo": "University logo",
             "name": "University name",
             "timezone": "University timezone",
             "title": "Update an university",

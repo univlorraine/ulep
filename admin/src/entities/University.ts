@@ -29,6 +29,7 @@ type University = {
     domains: string[];
     pairingMode: PairingMode;
     maxTandemsPerUser: number;
+    nativeLanguage: Language;
     website: string;
     notificationEmail?: string;
     specificLanguagesAvailable?: Language[];

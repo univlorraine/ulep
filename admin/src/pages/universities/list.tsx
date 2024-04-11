@@ -50,20 +50,24 @@ const UniversityList = (props: any) => {
                 >
                     <FunctionField
                         label={translate('universities.name')}
-                        render={(record: any) => (
+                        render={(record: University) => (
                             <UniversityName isMainUniversity={!record.parent} name={record.name} />
                         )}
                     />
                     <TextField label={translate('universities.country')} source="country.name" />
                     <FunctionField
+                        label={translate('universities.language')}
+                        render={(record: University) => translate(`languages_code.${record.nativeLanguage.code}`)}
+                    />
+                    <FunctionField
                         label={translate('universities.pairing_mode.label')}
-                        render={(record: any) =>
+                        render={(record: University) =>
                             translate(`universities.pairing_mode.${record.pairingMode.toLowerCase()}`)
                         }
                     />
                     <FunctionField
                         label={translate('universities.status.label')}
-                        render={(record: any) => {
+                        render={(record: University) => {
                             const currentDate = new Date(Date.now());
                             const currentDateTime = currentDate.getTime();
                             const twoWeeksLaterDateTime = currentDate.setDate(currentDate.getDate() + 2 * 7);

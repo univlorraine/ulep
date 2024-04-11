@@ -26,6 +26,7 @@ const EditUniversity = () => {
         domains: string[],
         pairingMode: string,
         maxTandemsPerUser: number,
+        nativeLanguage: Language,
         website?: string,
         notificationEmail?: string,
         specificLanguagesAvailable?: Language[],
@@ -43,6 +44,7 @@ const EditUniversity = () => {
             domains,
             pairingMode,
             maxTandemsPerUser,
+            nativeLanguage,
             website,
             notificationEmail,
             specificLanguagesAvailable,
@@ -97,6 +99,7 @@ const EditUniversity = () => {
                                 domains: string[],
                                 pairingMode: string,
                                 maxTandemsPerUser: number,
+                                nativeLanguage: Language,
                                 website?: string,
                                 notificationEmail?: string,
                                 specificLanguagesAvailable?: Language[],
@@ -115,6 +118,7 @@ const EditUniversity = () => {
                                     domains,
                                     pairingMode,
                                     maxTandemsPerUser,
+                                    nativeLanguage,
                                     website,
                                     notificationEmail,
                                     specificLanguagesAvailable,
@@ -123,6 +127,7 @@ const EditUniversity = () => {
                             }
                             maxTandemsPerUser={record.maxTandemsPerUser}
                             name={record.name}
+                            nativeLanguage={record.nativeLanguage}
                             notificationEmail={record.notificationEmail}
                             openServiceDate={record.openServiceDate}
                             pairingMode={record.pairingMode}
