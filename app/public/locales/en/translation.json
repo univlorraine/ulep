@@ -60,7 +60,13 @@
         "tandem": "Tandem",
         "tandem_etandem": "Tandem / Etandem",
         "woman": "female",
-        "yes": "Yes"
+        "yes": "Yes",
+        "go_back": "Go back",
+        "change_avatar": "Update your avatar",
+        "welcome": "Welcome to ULEP,",
+        "welcome_subtext": "The best way to learn languages",
+        "welcome_btn": "Learn a new language in tandem",
+        "close": "Close"
     },
     "connection_page": {
         "connect_title": "Already have an account ?",

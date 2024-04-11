@@ -120,6 +120,7 @@ const TextInput: React.FC<TextInputProps> = ({
                 </IonItem>
             ) : (
                 <textarea
+                    aria-label={title}
                     className={`${style['area-text']} ${
                         errorMessage ? style['area-text-error'] : style['area-text-text']
                     }`}

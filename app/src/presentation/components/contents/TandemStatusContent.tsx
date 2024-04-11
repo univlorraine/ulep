@@ -26,7 +26,7 @@ const TandemStatusContent: React.FC<TandemStatusContentProps> = ({ onFindNewTand
         >
             <Background className={styles.image} style={{ color: configuration.secondaryBackgroundImageColor }} />
             <button
-                aria-label=""
+                aria-label={t('global.close') as string}
                 className={styles['close-container']}
                 style={{ justifyContent: !isHybrid ? 'flex-end' : 'flex-start' }}
                 onClick={onClose}

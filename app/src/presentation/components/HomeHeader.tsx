@@ -3,6 +3,7 @@ import { ArrowDownSvg, LogoTextSvg } from '../../assets';
 import styles from './HomeHeader.module.css';
 import User from '../../domain/entities/User';
 import Avatar from './Avatar';
+import { useTranslation } from 'react-i18next';
 
 interface HomeHeaderProps {
     user: User;
@@ -10,6 +11,7 @@ interface HomeHeaderProps {
 }
 
 const HomeHeader: React.FC<HomeHeaderProps> = ({ user, onPicturePressed }) => {
+    const { t } = useTranslation();
     return (
         <IonHeader>
             <div className={styles['header-container']}>
@@ -18,9 +20,13 @@ const HomeHeader: React.FC<HomeHeaderProps> = ({ user, onPicturePressed }) => {
                     <div className={styles['header-separator']} />
                     <span className={styles['app-name']}>ULEP</span>
                 </div>
-                <button aria-label="Change avatar" className={styles['avatar-container']} onClick={onPicturePressed}>
+                <button
+                    aria-label={t('global.change_avatar') as string}
+                    className={styles['avatar-container']}
+                    onClick={onPicturePressed}
+                >
                     <Avatar user={user} className={styles.avatar} />
-                    <img alt="Change avatar" src={ArrowDownSvg} />
+                    <img alt={t('global.change_avatar') as string} src={ArrowDownSvg} />
                 </button>
             </div>
         </IonHeader>

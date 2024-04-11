@@ -51,11 +51,7 @@ const ProfileContent: React.FC<ProfileContentProps> = ({ onClose, onParameterPre
     return (
         <div className={styles.container}>
             <div>
-                <button
-                    aria-label={t('global.close_profile') as string}
-                    className={styles['back-button']}
-                    onClick={onClose}
-                >
+                <button aria-label={t('global.close') as string} className={styles['back-button']} onClick={onClose}>
                     <img alt="" src={ArrowLeftSvg} />
                 </button>
             </div>

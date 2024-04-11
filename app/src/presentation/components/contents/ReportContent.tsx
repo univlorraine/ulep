@@ -58,7 +58,7 @@ const ReportContent: React.FC<ReportContentProps> = ({ onGoBack, onReportSent })
 
     return (
         <div className={styles.content}>
-            <div className={styles.header}>
+            <div className={styles.header} role="navigation">
                 {isHybrid ? (
                     <button
                         aria-label={t('global.go_back') as string}
@@ -83,7 +83,7 @@ const ReportContent: React.FC<ReportContentProps> = ({ onGoBack, onReportSent })
                     <div />
                 )}
             </div>
-            <div className={styles.container}>
+            <div className={styles.container} role="main">
                 <h1 className="title large-margin-bottom">{t('home_page.report.title')}</h1>
                 <div className={styles.category}>
                     <Dropdown

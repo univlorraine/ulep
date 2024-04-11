@@ -9,7 +9,15 @@ export default defineConfig({
     optimizeDeps: {
         exclude: [`@capacitor/camera`],
     },
-    plugins: [react(), legacy(), svgr(), sitemap()],
+    plugins: [
+        react(),
+        legacy(),
+        svgr(),
+        sitemap({
+            hostname: process.env.VITE_APP_URL,
+            readable: true,
+        }),
+    ],
     define: {
         APP_VERSION: JSON.stringify(process.env.npm_package_version),
     },
