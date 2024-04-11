@@ -5,7 +5,7 @@ import SuccessLayout from '../components/layout/SuccessLayout';
 import styles from './css/SignUpFinalPage.module.css';
 import { useIonToast } from '@ionic/react';
 import Avatar from '../components/Avatar';
-import { Redirect, useHistory } from 'react-router';
+import { useHistory } from 'react-router';
 
 const SignupFinalPage: React.FC = () => {
     const { t } = useTranslation();
@@ -16,20 +16,6 @@ const SignupFinalPage: React.FC = () => {
     const profile = useStoreState((state) => state.profile);
     const user = useStoreState((state) => state.user);
     const isUpdate = Boolean(profile?.id);
-
-    const isProfileSignUpEmpty =
-        !profileSignUp.nativeLanguage ||
-        !profileSignUp.otherLanguages ||
-        !profileSignUp.goals ||
-        !profileSignUp.frequency ||
-        !profileSignUp.interests ||
-        !profileSignUp.biography ||
-        !profileSignUp.availabilities;
-
-    // If we have a profile and no profileSignUp, we must go to home
-    if (isProfileSignUpEmpty && isUpdate) {
-        return <Redirect to="/home" />;
-    }
 
     const onCreateProfile = async () => {
         if (
