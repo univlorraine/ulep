@@ -110,6 +110,7 @@
         "secondaryColor": "Couleur secondaire de l'application",
         "secondaryBackgroundColor": "Couleur secondaire de l'image de fond de l'application",
         "secondaryDarkColor": "Nuance sombre de la couleur secondaire utilisé pour le fond de l'application",
+        "title": "Configuration de l'application",
         "update_error": "Une erreur est survenue pendant la mise à jour de l'instance",
         "purge_modal": {
             "cancel": "Annuler",
@@ -208,6 +209,7 @@
         },
         "label": "Objectifs",
         "name": "Nom",
+        "title": "Objectifs",
         "update": {
             "error": "Une erreur est survenue pendant la mise à jour d'un objectif",
             "title": "Mise à jour d'un objectif"
@@ -260,6 +262,7 @@
         "searchLastname": "Chercher par nom",
         "staffFunction": "Fonction",
         "status": "Statut",
+        "title": "Inscrits",
         "update": {
             "title": "Modifier le profil"
         }
@@ -281,6 +284,7 @@
             "level": "Niveau de la question",
             "name": "Intitulé de la question"
         },
+        "title": "Questions",
         "update": {
             "error": "Une erreur est survenue pendant la mise à jour de la question",
             "title": "Mise à jour d'une question"
@@ -295,6 +299,7 @@
         "IN_PROGRESS": "En cours",
         "label": "Signalements",
         "tabLabel": "Liste des signalements",
+        "title": "Signalements",
         "OPEN": "Ouvert",
         "status": "État",
         "update": {
@@ -385,6 +390,7 @@
             "notificationEmail": "Email pour les notifications"
         },
         "specific_language": "Langues spécifiques",
+        "title": "Universités partenaires",
         "update": {
             "admission_end": "Fin de date d'inscription à l'université",
             "admission_error": "La date de fin d'admission doit être après la date de début",
@@ -539,7 +545,8 @@
                     "role": "Rôle"
                 }
             }
-        }
+        },
+        "title": "Demandes de tandem"
     },
     "universitiesPicker": {
         "error": "Une erreur est survenue lors de la récupération des universités"

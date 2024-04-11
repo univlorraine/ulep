@@ -10,7 +10,7 @@ import {
     ArrayField,
     Datagrid,
 } from 'react-admin';
-import ConfigTabs from '../../components/tabs/ConfigTabs';
+import ConfigPagesHeader from '../../components/tabs/ConfigPagesHeader';
 
 const InterestShowAction = () => (
     <TopToolbar>
@@ -24,7 +24,7 @@ const InterestShow = () => {
 
     return (
         <>
-            <ConfigTabs />
+            <ConfigPagesHeader />
             <Show actions={<InterestShowAction />} title={translate('interests.label')}>
                 <SimpleShowLayout sx={{ m: 3 }}>
                     <TextField label={translate('interests.show.name')} source="name.content" />

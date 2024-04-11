@@ -1,7 +1,7 @@
 import React from 'react';
 import { Create, useTranslate, useCreate, useNotify, useRedirect } from 'react-admin';
 import UniversityForm from '../../components/form/UniversityForm';
-import UniversitiesTabs from '../../components/tabs/UniversitiesTabs';
+import UniversitiesPagesHeader from '../../components/tabs/UniversitiesPagesHeader';
 import Country from '../../entities/Country';
 import Language from '../../entities/Language';
 import universityToFormData from './universityToFormData';
@@ -70,7 +70,7 @@ const CreateUniversity = () => {
 
     return (
         <>
-            <UniversitiesTabs />
+            <UniversitiesPagesHeader />
             <Create title={translate('universities.create.title')}>
                 <UniversityForm canAddNewLanguages={false} handleSubmit={handleSubmit} tradKey="create" />
             </Create>

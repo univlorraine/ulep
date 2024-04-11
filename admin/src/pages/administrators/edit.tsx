@@ -1,7 +1,7 @@
 import React from 'react';
 import { useNotify, useRedirect, Edit, useTranslate, useUpdate, WithRecord } from 'react-admin';
 import AdministratorForm from '../../components/form/AdministratorForm';
-import ConfigTabs from '../../components/tabs/ConfigTabs';
+import ConfigPagesHeader from '../../components/tabs/ConfigPagesHeader';
 import Administrator, { AdministratorFormPayload } from '../../entities/Administrator';
 
 const EditAdministrator = () => {
@@ -34,7 +34,7 @@ const EditAdministrator = () => {
 
     return (
         <>
-            <ConfigTabs />
+            <ConfigPagesHeader />
             <Edit title={translate('administrators.update.title')}>
                 <WithRecord<Administrator>
                     label="user/administrator"

@@ -9,7 +9,7 @@ import {
     ArrayField,
     Datagrid,
 } from 'react-admin';
-import ReportsTabs from '../../components/tabs/ReportsTabs';
+import ReportsPagesHeader from '../../components/tabs/ReportsPagesHeader';
 
 const ReportCategoryShowAction = () => (
     <TopToolbar>
@@ -22,7 +22,7 @@ const ReportCategoryShow = () => {
 
     return (
         <>
-            <ReportsTabs />
+            <ReportsPagesHeader />
             <Show actions={<ReportCategoryShowAction />} title={translate('report_categories.label')}>
                 <SimpleShowLayout sx={{ m: 3 }}>
                     <TextField label={translate('report_categories.show.name')} source="name.content" />

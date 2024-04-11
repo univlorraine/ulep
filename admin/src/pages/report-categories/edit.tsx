@@ -1,7 +1,7 @@
 import React from 'react';
 import { useTranslate, useNotify, useRedirect, useUpdate, WithRecord, Edit } from 'react-admin';
 import CategoryReportForm from '../../components/form/CategoryReportForm';
-import ReportsTabs from '../../components/tabs/ReportsTabs';
+import ReportsPagesHeader from '../../components/tabs/ReportsPagesHeader';
 import IndexedTranslation from '../../entities/IndexedTranslation';
 import ReportCategory from '../../entities/ReportCategory';
 import Translation from '../../entities/Translation';
@@ -42,7 +42,7 @@ const EditReportCategory = () => {
 
     return (
         <>
-            <ReportsTabs />
+            <ReportsPagesHeader />
             <Edit title={translate('report_categories.update.title')}>
                 <WithRecord<ReportCategory>
                     label="interests"

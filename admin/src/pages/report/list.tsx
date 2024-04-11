@@ -11,7 +11,7 @@ import {
     Loading,
     useGetIdentity,
 } from 'react-admin';
-import ReportsTabs from '../../components/tabs/ReportsTabs';
+import ReportsPagesHeader from '../../components/tabs/ReportsPagesHeader';
 
 const ReportFilter = (props: any) => {
     const translate = useTranslate();
@@ -41,7 +41,7 @@ const ReportList = () => {
 
     return (
         <>
-            <ReportsTabs />
+            <ReportsPagesHeader />
             <List
                 exporter={false}
                 filter={!identity?.isCentralUniversity ? { universityId: identity.universityId } : undefined}

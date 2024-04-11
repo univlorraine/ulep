@@ -21,7 +21,11 @@ const theme: RaThemeOptions = {
         h1: {
             fontSize: '1.2rem',
             fontWeight: '600',
-            color: '#212121',
+        },
+        h2: {
+            fontSize: '2.4rem',
+            fontWeight: '400',
+            padding: '16px 0',
         },
     },
     components: {
@@ -49,6 +53,18 @@ const theme: RaThemeOptions = {
             styleOverrides: {
                 root: {
                     borderRight: '1px solid #e0e0e0',
+                },
+            },
+        },
+        RaLayout: {
+            styleOverrides: {
+                root: {
+                    '& .RaLayout-appFrame': {
+                        marginTop: '56px',
+                    },
+                    '& .RaLayout-content': {
+                        padding: '46px 21px',
+                    },
                 },
             },
         },
@@ -100,8 +116,8 @@ const theme: RaThemeOptions = {
             styleOverrides: {
                 root: {
                     '&.RaChipField-chip': {
-                        backgroundColor: '#FFBF46',
-                        color: '#575761',
+                        backgroundColor: '#fdee66',
+                        color: '#212121',
                     },
                 },
             },

@@ -13,7 +13,7 @@ import {
     useLogout,
     ListProps,
 } from 'react-admin';
-import ConfigTabs from '../../components/tabs/ConfigTabs';
+import ConfigPagesHeader from '../../components/tabs/ConfigPagesHeader';
 import Administrator from '../../entities/Administrator';
 
 interface DeleteAdministratorButtonProps {
@@ -52,7 +52,7 @@ const AdministratorList = (props: ListProps<Administrator>) => {
 
     return (
         <>
-            <ConfigTabs />
+            <ConfigPagesHeader />
             <List
                 exporter={false}
                 filter={!identity?.isCentralUniversity ? { universityId: identity.universityId } : undefined}

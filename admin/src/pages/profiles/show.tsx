@@ -14,6 +14,7 @@ import {
     EditButton,
     TopToolbar,
 } from 'react-admin';
+import PageTitle from '../../components/PageTitle';
 import Availabilites from '../../entities/Availabilities';
 import Language from '../../entities/Language';
 import { LearningLanguage } from '../../entities/LearningLanguage';
@@ -197,10 +198,18 @@ const ProfileTab = () => {
     );
 };
 
-const ProfileShow = (props: any) => (
-    <Show actions={<ShowActions />} title={<Title />} {...props}>
-        <ProfileTab />
-    </Show>
-);
+const ProfileShow = (props: any) => {
+    const translate = useTranslate();
+
+    return (
+        <>
+            <PageTitle>{translate('profiles.title')}</PageTitle>
+
+            <Show actions={<ShowActions />} title={<Title />} {...props}>
+                <ProfileTab />
+            </Show>
+        </>
+    );
+};
 
 export default ProfileShow;

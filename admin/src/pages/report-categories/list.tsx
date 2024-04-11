@@ -1,10 +1,10 @@
 import React from 'react';
 import { List, Datagrid, TextField } from 'react-admin';
-import ReportsTabs from '../../components/tabs/ReportsTabs';
+import ReportsPagesHeader from '../../components/tabs/ReportsPagesHeader';
 
 const ReportCategoryList = () => (
     <>
-        <ReportsTabs />
+        <ReportsPagesHeader />
         <List bulkActionButtons={false} exporter={false} pagination={false}>
             <Datagrid rowClick="show">
                 <TextField source="name" />

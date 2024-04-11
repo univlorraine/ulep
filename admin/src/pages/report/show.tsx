@@ -1,6 +1,6 @@
 import React from 'react';
 import { TopToolbar, EditButton, useTranslate, Show, SimpleShowLayout, TextField, FunctionField } from 'react-admin';
-import ReportsTabs from '../../components/tabs/ReportsTabs';
+import ReportsPagesHeader from '../../components/tabs/ReportsPagesHeader';
 import Report from '../../entities/Report';
 
 const ReportShowAction = () => (
@@ -14,7 +14,7 @@ const ReportShow = () => {
 
     return (
         <>
-            <ReportsTabs />
+            <ReportsPagesHeader />
             <Show actions={<ReportShowAction />} title={translate('reports.label')}>
                 <SimpleShowLayout sx={{ m: 3 }}>
                     <TextField

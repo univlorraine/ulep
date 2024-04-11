@@ -3,7 +3,7 @@ import { Typography } from '@mui/material';
 import React from 'react';
 import { useTranslate, FunctionField, ArrayField, List, Datagrid, CreateButton, TopToolbar } from 'react-admin';
 import { Link, useNavigate } from 'react-router-dom';
-import ConfigTabs from '../../components/tabs/ConfigTabs';
+import ConfigPagesHeader from '../../components/tabs/ConfigPagesHeader';
 import InterestCategory from '../../entities/InterestCategory';
 
 const InterestCategoryAction = () => (
@@ -18,7 +18,7 @@ const InterestCategoryList = () => {
 
     return (
         <>
-            <ConfigTabs />
+            <ConfigPagesHeader />
             <List actions={<InterestCategoryAction />} exporter={false}>
                 <Datagrid bulkActionButtons={false}>
                     <FunctionField

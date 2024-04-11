@@ -21,6 +21,7 @@ import {
     useGetIdentity,
     Loading,
 } from 'react-admin';
+import PageTitle from '../../components/PageTitle';
 import Language from '../../entities/Language';
 import { Profile } from '../../entities/Profile';
 import User from '../../entities/User';
@@ -135,66 +136,75 @@ const ProfileList = (props: any) => {
     }
 
     return (
-        <List
-            exporter={false}
-            filter={{
-                university: !identity?.isCentralUniversity ? identity?.universityId : undefined,
-            }}
-            filters={<ProfileFilter />}
-            title={translate('profiles.label')}
-            {...props}
-        >
-            <Datagrid rowClick="show">
-                <FunctionField
-                    label={translate('global.role')}
-                    render={(record: { user: User }) => translate(`global.${record.user.role.toLowerCase()}`)}
-                    source="user.role"
-                />
-                <TextField label={translate('global.lastname')} source="user.lastname" sortable />
-                <TextField label={translate('global.firstname')} source="user.firstname" sortable />
-                <TextField label={translate('global.email')} source="user.email" sortable />
-                <TextField label={translate('global.university')} sortable={false} source="user.university.name" />
-                <FunctionField
-                    label={translate('profiles.native_language')}
-                    render={(profile: Profile) => translate(`languages_code.${profile.nativeLanguage.code}`)}
-                    sortable={false}
-                    source="nativeLanguageCode"
-                />
-                <ArrayField
-                    label={translate('profiles.mastered_languages')}
-                    sortable={false}
-                    source="masteredLanguages"
-                >
-                    <SingleFieldList linkType={false}>
-                        <FunctionField
-                            render={(record: Language) => (
-                                <ChipField
-                                    record={{ name: translate(`languages_code.${record.code}`) }}
-                                    source="name"
-                                />
-                            )}
-                        />
-                    </SingleFieldList>
-                </ArrayField>
-                <BooleanField label={translate('profiles.certificate')} sortable={false} source="certificateOption" />
-                <FunctionField
-                    label={translate('profiles.status')}
-                    render={(record: { user: User }) => (
-                        <Select
-                            onChange={(value) => onUpdateUserStatus(record.user.id, value.target.value as UserStatus)}
-                            onClick={(e) => e.stopPropagation()}
-                            size="small"
-                            value={record.user.status ?? 'ACTIVE'}
-                        >
-                            <MenuItem value="ACTIVE">{translate('global.userStatus.active')}</MenuItem>
-                            <MenuItem value="REPORTED">{translate('global.userStatus.reported')}</MenuItem>
-                            <MenuItem value="BANNED">{translate('global.userStatus.banned')}</MenuItem>
-                            <MenuItem value="CANCELED">{translate('global.userStatus.canceled')}</MenuItem>
-                        </Select>
-                    )}
-                />
-            </Datagrid>
-        </List>
+        <>
+            <PageTitle>{translate('profiles.title')}</PageTitle>
+            <List
+                exporter={false}
+                filter={{
+                    university: !identity?.isCentralUniversity ? identity?.universityId : undefined,
+                }}
+                filters={<ProfileFilter />}
+                title={translate('profiles.label')}
+                {...props}
+            >
+                <Datagrid rowClick="show">
+                    <FunctionField
+                        label={translate('global.role')}
+                        render={(record: { user: User }) => translate(`global.${record.user.role.toLowerCase()}`)}
+                        source="user.role"
+                    />
+                    <TextField label={translate('global.lastname')} source="user.lastname" sortable />
+                    <TextField label={translate('global.firstname')} source="user.firstname" sortable />
+                    <TextField label={translate('global.email')} source="user.email" sortable />
+                    <TextField label={translate('global.university')} sortable={false} source="user.university.name" />
+                    <FunctionField
+                        label={translate('profiles.native_language')}
+                        render={(profile: Profile) => translate(`languages_code.${profile.nativeLanguage.code}`)}
+                        sortable={false}
+                        source="nativeLanguageCode"
+                    />
+                    <ArrayField
+                        label={translate('profiles.mastered_languages')}
+                        sortable={false}
+                        source="masteredLanguages"
+                    >
+                        <SingleFieldList linkType={false}>
+                            <FunctionField
+                                render={(record: Language) => (
+                                    <ChipField
+                                        record={{ name: translate(`languages_code.${record.code}`) }}
+                                        source="name"
+                                    />
+                                )}
+                            />
+                        </SingleFieldList>
+                    </ArrayField>
+                    <BooleanField
+                        label={translate('profiles.certificate')}
+                        sortable={false}
+                        source="certificateOption"
+                    />
+                    <FunctionField
+                        label={translate('profiles.status')}
+                        render={(record: { user: User }) => (
+                            <Select
+                                onChange={(value) =>
+                                    onUpdateUserStatus(record.user.id, value.target.value as UserStatus)
+                                }
+                                onClick={(e) => e.stopPropagation()}
+                                size="small"
+                                value={record.user.status ?? 'ACTIVE'}
+                            >
+                                <MenuItem value="ACTIVE">{translate('global.userStatus.active')}</MenuItem>
+                                <MenuItem value="REPORTED">{translate('global.userStatus.reported')}</MenuItem>
+                                <MenuItem value="BANNED">{translate('global.userStatus.banned')}</MenuItem>
+                                <MenuItem value="CANCELED">{translate('global.userStatus.canceled')}</MenuItem>
+                            </Select>
+                        )}
+                    />
+                </Datagrid>
+            </List>
+        </>
     );
 };
 

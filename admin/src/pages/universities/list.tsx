@@ -1,7 +1,7 @@
 import CheckIcon from '@mui/icons-material/Check';
 import React from 'react';
 import { FunctionField, useTranslate, List, Datagrid, TextField, BulkDeleteButton } from 'react-admin';
-import UniversitiesTabs from '../../components/tabs/UniversitiesTabs';
+import UniversitiesPagesHeader from '../../components/tabs/UniversitiesPagesHeader';
 import University from '../../entities/University';
 
 const UniversityBulkActionsToolbar = () => <BulkDeleteButton mutationMode="pessimistic" />;
@@ -11,7 +11,7 @@ const UniversityList = (props: any) => {
 
     return (
         <>
-            <UniversitiesTabs />
+            <UniversitiesPagesHeader />
             <List exporter={false} pagination={false} title={translate('universities.label')} {...props}>
                 <Datagrid
                     bulkActionButtons={<UniversityBulkActionsToolbar />}

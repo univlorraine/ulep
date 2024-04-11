@@ -1,13 +1,13 @@
 import React from 'react';
 import { useTranslate, List, Datagrid, TextField } from 'react-admin';
-import ConfigTabs from '../../components/tabs/ConfigTabs';
+import ConfigPagesHeader from '../../components/tabs/ConfigPagesHeader';
 
 const CountryList = () => {
     const translate = useTranslate();
 
     return (
         <>
-            <ConfigTabs />
+            <ConfigPagesHeader />
             <List exporter={false}>
                 <Datagrid bulkActionButtons={false}>
                     <TextField label={translate('countries.code')} source="code" />
