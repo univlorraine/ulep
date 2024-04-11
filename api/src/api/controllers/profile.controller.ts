@@ -38,7 +38,7 @@ import {
   LearningLanguageResponse,
 } from '../dtos';
 import { AuthenticationGuard } from '../guards';
-import { Profile, User } from 'src/core/models';
+import { Profile } from 'src/core/models';
 import { UpdateProfileRequest } from 'src/api/dtos/profiles/update-profile.request';
 
 @Controller('profiles')
