@@ -1,5 +1,5 @@
 import { faker } from '@faker-js/faker';
-import { Language } from 'src/core/models';
+import { Language, LanguageStatus } from 'src/core/models';
 import { ModelFactory } from './model.factory';
 
 export class LanguageFactory extends ModelFactory<Language> {
