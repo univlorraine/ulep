@@ -8,11 +8,11 @@ import {
   LanguageRepository,
   SuggestedLanguageQueryOrderBy,
 } from 'src/core/ports/language.repository';
+import { languageMapper } from '../mappers/language.mapper';
 import {
   SuggestedLanguageRelations,
-  languageMapper,
   suggestedLanguageMapper,
-} from '../mappers/language.mapper';
+} from '../mappers/suggestedLanguage.mapper';
 
 type CountAllSuggestedLanguagesResult = {
   id: string;

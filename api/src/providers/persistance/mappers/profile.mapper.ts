@@ -18,7 +18,7 @@ import { testedLanguageMapper } from 'src/providers/persistance/mappers/testedLa
 
 export const ProfilesRelations = {
   User: {
-    include: UserRelations(),
+    include: UserRelations,
   },
   Goals: {
     include: { TextContent: TextContentRelations },
