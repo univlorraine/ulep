@@ -14,7 +14,6 @@ export default defineConfig({
         legacy(),
         svgr(),
         sitemap({
-            hostname: process.env.VITE_APP_URL,
             readable: true,
         }),
     ],
