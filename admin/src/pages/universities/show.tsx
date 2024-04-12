@@ -103,7 +103,7 @@ const UniversityShow = (props: any) => {
                     <FunctionField
                         label={translate('universities.show.pairingMode')}
                         render={(data: University) =>
-                            translate(`universities.pairingModes.${data.pairingMode.toLowerCase()}`)
+                            translate(`universities.pairing_mode.${data.pairingMode.toLowerCase()}`)
                         }
                     />
                     <TextField label={translate('universities.show.id')} source="id" />
