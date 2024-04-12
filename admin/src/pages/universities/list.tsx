@@ -12,6 +12,10 @@ type UniversityNameProps = {
     isMainUniversity?: boolean;
 };
 
+type UniversityStatusProps = {
+    record: University;
+};
+
 const UniversityName = ({ name, isMainUniversity = false }: UniversityNameProps) => {
     const translate = useTranslate();
 
@@ -31,6 +35,25 @@ const UniversityName = ({ name, isMainUniversity = false }: UniversityNameProps)
             </Box>
         </Box>
     );
+};
+
+const UniversityStatus = ({ record }: UniversityStatusProps) => {
+    const translate = useTranslate();
+    const currentDate = new Date(Date.now());
+    const currentDateTime = currentDate.getTime();
+    const twoWeeksLaterDateTime = currentDate.setDate(currentDate.getDate() + 2 * 7);
+    const admissionStartTime = new Date(record.admissionStart).getTime();
+    const admissionEndTime = new Date(record.admissionEnd).getTime();
+
+    if (currentDateTime >= admissionStartTime && currentDateTime <= admissionEndTime) {
+        return <ColoredChips color="success" label={translate(`universities.status.${Status.OPEN.toLowerCase()}`)} />;
+    }
+
+    if (currentDateTime < admissionStartTime && twoWeeksLaterDateTime >= admissionStartTime) {
+        return <ColoredChips color="secondary" label={translate(`universities.status.${Status.SOON.toLowerCase()}`)} />;
+    }
+
+    return <ColoredChips color="default" label={translate(`universities.status.${Status.CLOSED.toLowerCase()}`)} />;
 };
 
 const UniversityBulkActionsToolbar = () => <BulkDeleteButton mutationMode="pessimistic" />;
@@ -67,38 +90,7 @@ const UniversityList = (props: any) => {
                     />
                     <FunctionField
                         label={translate('universities.status.label')}
-                        render={(record: University) => {
-                            const currentDate = new Date(Date.now());
-                            const currentDateTime = currentDate.getTime();
-                            const twoWeeksLaterDateTime = currentDate.setDate(currentDate.getDate() + 2 * 7);
-                            const admissionStartTime = new Date(record.admissionStart).getTime();
-                            const admissionEndTime = new Date(record.admissionEnd).getTime();
-
-                            if (currentDateTime >= admissionStartTime && currentDateTime <= admissionEndTime) {
-                                return (
-                                    <ColoredChips
-                                        color="success"
-                                        label={translate(`universities.status.${Status.OPEN.toLowerCase()}`)}
-                                    />
-                                );
-                            }
-
-                            if (currentDateTime < admissionStartTime && twoWeeksLaterDateTime >= admissionStartTime) {
-                                return (
-                                    <ColoredChips
-                                        color="secondary"
-                                        label={translate(`universities.status.${Status.SOON.toLowerCase()}`)}
-                                    />
-                                );
-                            }
-
-                            return (
-                                <ColoredChips
-                                    color="default"
-                                    label={translate(`universities.status.${Status.CLOSED.toLowerCase()}`)}
-                                />
-                            );
-                        }}
+                        render={(record: University) => <UniversityStatus record={record} />}
                     />
                     <DateField
                         label={translate('universities.admission_start')}
