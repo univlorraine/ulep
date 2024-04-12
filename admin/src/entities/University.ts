@@ -8,6 +8,12 @@ export enum PairingMode {
     AUTOMATIC = 'AUTOMATIC',
 }
 
+export enum Status {
+    CLOSED = 'CLOSED',
+    OPEN = 'OPEN',
+    SOON = 'SOON',
+}
+
 type University = {
     id: string;
     name: string;
@@ -23,6 +29,7 @@ type University = {
     domains: string[];
     pairingMode: PairingMode;
     maxTandemsPerUser: number;
+    nativeLanguage: Language;
     website: string;
     notificationEmail?: string;
     specificLanguagesAvailable?: Language[];

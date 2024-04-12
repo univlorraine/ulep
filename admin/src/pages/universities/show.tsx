@@ -34,6 +34,10 @@ const UniversityShow = (props: any) => {
                     <ReferenceUploadField label={translate('universities.show.logo')} source="logo.id" />
                     <TextField label={translate('universities.show.name')} source="name" />
                     <TextField label={translate('universities.show.country')} source="country.name" />
+                    <FunctionField
+                        label={translate('universities.show.language')}
+                        render={(record: University) => translate(`languages_code.${record.nativeLanguage.code}`)}
+                    />
                     <TextField label={translate('universities.show.timezone')} source="timezone" />
                     <DateField
                         label={translate('universities.show.admission_start')}
@@ -99,7 +103,7 @@ const UniversityShow = (props: any) => {
                     <FunctionField
                         label={translate('universities.show.pairingMode')}
                         render={(data: University) =>
-                            translate(`universities.pairingModes.${data.pairingMode.toLowerCase()}`)
+                            translate(`universities.pairing_mode.${data.pairingMode.toLowerCase()}`)
                         }
                     />
                     <TextField label={translate('universities.show.id')} source="id" />

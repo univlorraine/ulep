@@ -49,6 +49,7 @@ describe('CreateUniversity', () => {
       closeServiceDate: new Date('2000-12-31'),
       maxTandemsPerUser: 1,
       specificLanguagesAvailableIds: [],
+      nativeLanguageId: 'languageId',
     });
 
     const instance = await universityRepository.ofName(
@@ -80,6 +81,7 @@ describe('CreateUniversity', () => {
         closeServiceDate: new Date('2000-12-31'),
         maxTandemsPerUser: 1,
         specificLanguagesAvailableIds: [],
+        nativeLanguageId: 'languageId',
       });
     } catch (error) {
       exception = error;

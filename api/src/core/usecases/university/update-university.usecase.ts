@@ -30,6 +30,7 @@ export class UpdateUniversityCommand {
   maxTandemsPerUser: number;
   notificationEmail?: string;
   specificLanguagesAvailableIds: string[];
+  nativeLanguageId: string;
 }
 
 @Injectable()
@@ -67,6 +68,13 @@ export class UpdateUniversityUsecase {
       }
     }
 
+    const nativeLanguage = await this.languageRepository.ofId(
+      command.nativeLanguageId,
+    );
+    if (!nativeLanguage) {
+      throw new RessourceDoesNotExist('Native language does not exist');
+    }
+
     const country = await this.countryRepository.ofId(command.countryId);
     if (!country) {
       throw new RessourceDoesNotExist('Country does not exist');
@@ -90,6 +98,7 @@ export class UpdateUniversityUsecase {
         maxTandemsPerUser: command.maxTandemsPerUser,
         notificationEmail: command.notificationEmail,
         specificLanguagesAvailable,
+        nativeLanguage,
       }),
     );
   }

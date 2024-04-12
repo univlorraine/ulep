@@ -5,6 +5,7 @@ export const createCentralUniversityPlaceholder = async (
   prisma: PrismaClient,
 ) => {
   const countries = await prisma.countryCodes.findMany();
+  const languageCodes = await prisma.languageCodes.findMany();
   const now = new Date();
 
   await prisma.organizations.create({
@@ -18,6 +19,11 @@ export const createCentralUniversityPlaceholder = async (
       admissionEndDate: new Date(now.getFullYear(), 11, 31),
       openServiceDate: new Date(now.getFullYear(), 0, 1),
       closeServiceDate: new Date(now.getFullYear(), 11, 31),
+      NativeLanguage: {
+        connect: {
+          id: languageCodes.find((language) => language.code === 'fr').id,
+        },
+      },
     },
   });
 };
@@ -31,6 +37,7 @@ export enum UniversitySeedIDs {
 
 export const createUniversities = async (prisma: PrismaClient) => {
   const countries = await prisma.countryCodes.findMany();
+  const languageCodes = await prisma.languageCodes.findMany();
   const now = new Date();
 
   await prisma.organizations.create({
@@ -61,6 +68,11 @@ export const createUniversities = async (prisma: PrismaClient) => {
       closeServiceDate: new Date(now.getFullYear(), 11, 31),
       website: 'https://www.univ-lorraine.fr/',
       notification_email: 'notification+lorraine@test.fr',
+      NativeLanguage: {
+        connect: {
+          id: languageCodes.find((language) => language.code === 'fr').id,
+        },
+      },
     },
   });
 
@@ -82,6 +94,11 @@ export const createUniversities = async (prisma: PrismaClient) => {
       website: 'https://www.birmingham.ac.uk',
       pairing_mode: PairingMode.SEMI_AUTOMATIC,
       notification_email: 'notification+birm@test.fr',
+      NativeLanguage: {
+        connect: {
+          id: languageCodes.find((language) => language.code === 'en').id,
+        },
+      },
     },
   });
 
@@ -102,6 +119,11 @@ export const createUniversities = async (prisma: PrismaClient) => {
       closeServiceDate: new Date(now.getFullYear(), 11, 31),
       website: 'https://www.toto.de',
       pairing_mode: PairingMode.AUTOMATIC,
+      NativeLanguage: {
+        connect: {
+          id: languageCodes.find((language) => language.code === 'de').id,
+        },
+      },
     },
   });
 
@@ -122,6 +144,11 @@ export const createUniversities = async (prisma: PrismaClient) => {
       closeServiceDate: new Date(now.getFullYear(), 11, 31),
       website: 'https://www.toto.ca',
       pairing_mode: PairingMode.SEMI_AUTOMATIC,
+      NativeLanguage: {
+        connect: {
+          id: languageCodes.find((language) => language.code === 'en').id,
+        },
+      },
     },
   });
 };
