@@ -92,7 +92,8 @@
         }
     },
     "header": {
-        "title": "ULEP Administration"
+        "title": "ULEP Administration",
+        "update": "Actualiser"
     },
     "instance": {
         "label": "Configuration",
