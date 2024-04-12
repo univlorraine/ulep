@@ -160,6 +160,23 @@ export class Env {
   SMTP_SENDER: string;
 
   @IsString()
+  @IsNotEmpty()
+  FIREBASE_PROJECT_ID: string;
+
+  @IsString()
+  @IsNotEmpty()
+  FIREBASE_PRIVATE_KEY: string;
+
+  @IsString()
+  @IsNotEmpty()
+  FIREBASE_CLIENT_EMAIL: string;
+
+  @IsNumber()
+  @IsNotEmpty()
+  @Transform(({ value }) => parseInt(value, 10))
+  FIREBASE_PARALLEL_LIMIT: number;
+
+  @IsString()
   @IsOptional()
   SENTRY_DSN?: string;
 
@@ -252,6 +269,10 @@ const test: Env = {
   SMTP_SECURE: false,
   SMTP_IGNORE_TLS: true,
   SMTP_SENDER: 'sender@localhost',
+  FIREBASE_PROJECT_ID: 'firebase-project-id',
+  FIREBASE_PRIVATE_KEY: 'firebase-private-key',
+  FIREBASE_CLIENT_EMAIL: 'firebase-client-email',
+  FIREBASE_PARALLEL_LIMIT: 3,
   CANCEL_TRESHOLD_IN_MIN: 15,
   SIGNED_URL_EXPIRATION_IN_SECONDS: 60,
 };

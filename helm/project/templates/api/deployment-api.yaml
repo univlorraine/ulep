@@ -169,6 +169,23 @@ spec:
               value: "{{ .Values.api.env.smtpSender }}"
             - name: SENTRY_DSN
               value: "{{ .Values.api.env.sentryDsn }}"
+            - name: FIREBASE_PROJECT_ID
+              valueFrom:
+                secretKeyRef:
+                  name: "{{ include "etandem.fullname" . }}-secret-{{ .Values.api.name }}"
+                  key: firebase-project-id
+            - name: FIREBASE_PRIVATE_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: "{{ include "etandem.fullname" . }}-secret-{{ .Values.api.name }}"
+                  key: firebase-private-key
+            - name: FIREBASE_CLIENT_EMAIL
+              valueFrom:
+                secretKeyRef:
+                  name: "{{ include "etandem.fullname" . }}-secret-{{ .Values.api.name }}"
+                  key: firebase-client-email
+            - name: FIREBASE_PARALLEL_LIMIT
+              value: "{{ .Values.api.env.firebaseParallelLimit }}"
             - name: CANCEL_TRESHOLD_IN_MIN
               value: "{{ .Values.api.env.cancelTresholdInMin }}"
             - name: SIGNED_URL_EXPIRATION_IN_SECONDS
