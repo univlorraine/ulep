@@ -30,13 +30,6 @@ const theme: RaThemeOptions = {
     },
     components: {
         ...defaultTheme.components,
-        MuiDivider: {
-            styleOverrides: {
-                root: {
-                    margin: '8px 0',
-                },
-            },
-        },
         MuiAppBar: {
             styleOverrides: {
                 root: {
@@ -49,10 +42,29 @@ const theme: RaThemeOptions = {
                 },
             },
         },
-        RaSidebar: {
+        RaChipField: {
             styleOverrides: {
                 root: {
-                    borderRight: '1px solid #e0e0e0',
+                    '&.RaChipField-chip': {
+                        backgroundColor: '#fdee66',
+                        color: '#212121',
+                    },
+                },
+            },
+        },
+        MuiDivider: {
+            styleOverrides: {
+                root: {
+                    margin: '8px 0',
+                },
+            },
+        },
+        MuiTableCell: {
+            styleOverrides: {
+                root: {
+                    '&.RaDatagrid-headerCell': {
+                        fontWeight: 'bold',
+                    },
                 },
             },
         },
@@ -64,6 +76,15 @@ const theme: RaThemeOptions = {
                     },
                     '& .RaLayout-content': {
                         padding: '46px 21px',
+                    },
+                },
+            },
+        },
+        RaList: {
+            styleOverrides: {
+                root: {
+                    '& .RaList-content': {
+                        boxShadow: 'none',
                     },
                 },
             },
@@ -112,13 +133,10 @@ const theme: RaThemeOptions = {
                 },
             },
         },
-        RaChipField: {
+        RaSidebar: {
             styleOverrides: {
                 root: {
-                    '&.RaChipField-chip': {
-                        backgroundColor: '#fdee66',
-                        color: '#212121',
-                    },
+                    borderRight: '1px solid #e0e0e0',
                 },
             },
         },
