@@ -68,6 +68,20 @@ const theme: RaThemeOptions = {
                 },
             },
         },
+        RaCreateButton: {
+            styleOverrides: {
+                root: {
+                    backgroundColor: '#000000',
+                    color: '#FFFFFF',
+                    padding: '5px 9px',
+                    boxShadow:
+                        '0px 1px 5px 0px rgba(0, 0, 0, 0.12), 0px 2px 2px 0px rgba(0, 0, 0, 0.14), 0px 3px 1px -2px rgba(0, 0, 0, 0.20)',
+                    '&:hover': {
+                        backgroundColor: '#212121',
+                    },
+                },
+            },
+        },
         RaLayout: {
             styleOverrides: {
                 root: {
