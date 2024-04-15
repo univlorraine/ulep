@@ -9,6 +9,7 @@
             "university": "Veuillez sélectionner une université pour l'administrateur"
         },
         "label": "Administrateurs",
+        "tabLabel": "Administrateurs",
         "university": "Gestionnaire de",
         "update": {
             "email": "Mettez à jour l'email de l'utilisateur",
@@ -24,6 +25,7 @@
             "title": "Création d'un campus"
         },
         "label": "Campus",
+        "tabLabel": "Campus univ. centrale",
         "name": "Nom des campus de l'université principale",
         "update": {
             "error": "Une erreur est survenue pendant la mise à jour d'un campus",
@@ -33,11 +35,13 @@
     },
     "count_suggested_languages": {
         "label": "Total langues demandées",
+        "tabLabel": "Total langues demandées",
         "total": "Total"
     },
     "countries": {
         "code": "Code du pays",
         "label": "Pays",
+        "tabLabel": "Pays",
         "name": "Nom du pays"
     },
     "days": {
@@ -71,7 +75,6 @@
         "student": "Etudiant",
         "translations": "Traductions",
         "university": "Université",
-        "userDataError": "Une erreur est survenue lors de la récupération de vos informations",
         "tandem": "Tandem",
         "both": "Les deux",
         "deleted_user": "Utilisateur supprimé",
@@ -89,10 +92,12 @@
         }
     },
     "header": {
-        "title": "ULEP Administration"
+        "title": "ULEP Administration",
+        "update": "Actualiser"
     },
     "instance": {
-        "label": "Instance",
+        "label": "Configuration",
+        "tabLabel": "Instance",
         "name": "Nom de l'instance",
         "email": "Email lié à l'instance",
         "cgu": "Url vers les conditions générales d'utilisations",
@@ -106,6 +111,7 @@
         "secondaryColor": "Couleur secondaire de l'application",
         "secondaryBackgroundColor": "Couleur secondaire de l'image de fond de l'application",
         "secondaryDarkColor": "Nuance sombre de la couleur secondaire utilisé pour le fond de l'application",
+        "title": "Configuration de l'application",
         "update_error": "Une erreur est survenue pendant la mise à jour de l'instance",
         "purge_modal": {
             "cancel": "Annuler",
@@ -153,6 +159,7 @@
         },
         "interests": "Intérêts",
         "label": "Catégorie d'intérêts",
+        "tabLabel": "Catégorie d'intérêts",
         "name": "Nom",
         "update": {
             "name": "Nom de la catégorie",
@@ -162,6 +169,7 @@
     "languages": {
         "code": "Code de la langue",
         "label": "Langues",
+        "tabLabel": "Langues",
         "name": "Nom de la langue",
         "secondary_status": {
             "active": "Langue proposée",
@@ -182,7 +190,10 @@
             "no": "Non"
         }
     },
-    "langauges_picker": {
+    "language_picker": {
+        "placeholder": "Choisir une langue"
+    },
+    "languages_picker": {
         "placeholder": "Choisir une langue supplémentaire"
     },
     "login": {
@@ -202,6 +213,7 @@
         },
         "label": "Objectifs",
         "name": "Nom",
+        "title": "Objectifs",
         "update": {
             "error": "Une erreur est survenue pendant la mise à jour d'un objectif",
             "title": "Mise à jour d'un objectif"
@@ -254,6 +266,7 @@
         "searchLastname": "Chercher par nom",
         "staffFunction": "Fonction",
         "status": "Statut",
+        "title": "Inscrits",
         "update": {
             "title": "Modifier le profil"
         }
@@ -275,6 +288,7 @@
             "level": "Niveau de la question",
             "name": "Intitulé de la question"
         },
+        "title": "Questions",
         "update": {
             "error": "Une erreur est survenue pendant la mise à jour de la question",
             "title": "Mise à jour d'une question"
@@ -288,6 +302,8 @@
         "content": "Contenu",
         "IN_PROGRESS": "En cours",
         "label": "Signalements",
+        "tabLabel": "Liste des signalements",
+        "title": "Signalements",
         "OPEN": "Ouvert",
         "status": "État",
         "update": {
@@ -303,7 +319,8 @@
             "name": "Nom de la nouvelle catégorie",
             "title": "Création d'une nouvelle catégorie"
         },
-        "label": "Categories de signalement",
+        "label": "Catégories",
+        "tabLabel": "Catégories",
         "show": {
             "name": "Nom de la catégorie de signalement"
         },
@@ -314,11 +331,14 @@
         }
     },
     "suggested_languages": {
-        "label": "Langues demandées"
+        "label": "Langues demandées",
+        "tabLabel": "Langues demandées"
     },
     "universities": {
+        "admission_start": "Début des inscriptions",
         "code_button": "Ajouter un code",
         "domain_button": "Ajouter un domaine",
+        "country": "Pays",
         "create": {
             "admission_end": "Fin de date d'inscription à la nouvelle université partenaire",
             "admission_error": "La date de fin d'admission doit être après la date de début",
@@ -333,6 +353,7 @@
             "domains": "Liste des noms de domaines pour l'inscription",
             "domains_error": "Le nom de domaine doit commencer par un @",
             "error": "Une erreur est survenue lors de la création de l'université",
+            "language": "Langue par défaut",
             "logo": "Logo de l'université",
             "name": "Nom de la nouvelle université partenaire",
             "timezone": "Timezone de la nouvelle université partenaire",
@@ -343,14 +364,17 @@
             "max_tandems_per_user": "Nombre maximum de tandems par utilisateur",
             "notificationEmail": "Email pour les notifications"
         },
-        "pairingModes": {
-            "manual": "Manuel",
-            "semi_automatic": "Semi-automatique",
-            "automatic": "Automatique"
-        },
+        "language": "Langue",
         "label": "Universités",
+        "tabLabel": "Liste des universités",
         "name": "Nom de l'université",
-        "parent": "Université centrale",
+        "pairing_mode": {
+            "automatic": "Automatique",
+            "label": "Appariement",
+            "manual": "Manuel",
+            "semi_automatic": "Semi-auto"
+        },
+        "parent": "Centrale",
         "show": {
             "admission_start": "Début de date d'admission",
             "admission_end": "Fin de date d'admission",
@@ -361,6 +385,7 @@
             "confidentialityUrl": "Url des règles de confidentialités",
             "country": "Pays de l'université",
             "domains": "Nom de domaines autorisés",
+            "language": "Langue par défaut",
             "logo": "Logo de l'université",
             "name": "Nom de l'université",
             "resourcesUrl": "Url des ressources de langues de l'université",
@@ -375,6 +400,14 @@
             "notificationEmail": "Email pour les notifications"
         },
         "specific_language": "Langues spécifiques",
+        "status": {
+            "closed": "Fermée",
+            "label": "Status",
+            "open": "Ouverte",
+            "soon": "Bientôt",
+            "suspended": "Suspendue"
+        },
+        "title": "Universités partenaires",
         "update": {
             "admission_end": "Fin de date d'inscription à l'université",
             "admission_error": "La date de fin d'admission doit être après la date de début",
@@ -387,6 +420,8 @@
             "country": "Pays de l'université",
             "domains": "Liste des noms de domaines pour l'inscription",
             "domains_error": "Le nom de domaine doit commencer par un @",
+            "error": "Une erreur est survenue lors de la mise à jour de l'université",
+            "language": "Langue par défaut",
             "languages": "Liste des langues supplémentaires disponnibles pour l'apprentissage",
             "logo": "Logo de l'université",
             "name": "Nom de l'université",
@@ -529,7 +564,8 @@
                     "role": "Rôle"
                 }
             }
-        }
+        },
+        "title": "Demandes de tandem"
     },
     "universitiesPicker": {
         "error": "Une erreur est survenue lors de la récupération des universités"

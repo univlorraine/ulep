@@ -45,6 +45,7 @@ describe('GetProfile', () => {
     user: user,
     nativeLanguage: nativeLanguage,
     masteredLanguages: [],
+    testedLanguages: [],
     learningLanguages: [
       new LearningLanguage({
         id: 'learning-language-uuid-1',

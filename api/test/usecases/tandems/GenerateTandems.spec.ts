@@ -189,6 +189,7 @@ describe('GenerateTandem UC', () => {
     codes: [],
     domains: [],
     maxTandemsPerUser: 3,
+    nativeLanguage: french,
   });
 
   const french1 = new Profile({
@@ -209,6 +210,7 @@ describe('GenerateTandem UC', () => {
     id: 'FR1',
     nativeLanguage: french,
     masteredLanguages: [],
+    testedLanguages: [],
     meetingFrequency: MeetingFrequency.ONCE_A_WEEK,
     learningLanguages: [
       new LearningLanguage({
@@ -247,6 +249,7 @@ describe('GenerateTandem UC', () => {
     id: 'FR2',
     nativeLanguage: french,
     masteredLanguages: [deutch],
+    testedLanguages: [],
     meetingFrequency: MeetingFrequency.ONCE_A_WEEK,
     learningLanguages: [
       new LearningLanguage({
@@ -285,6 +288,7 @@ describe('GenerateTandem UC', () => {
     id: 'FR3',
     nativeLanguage: french,
     masteredLanguages: [],
+    testedLanguages: [],
     meetingFrequency: MeetingFrequency.ONCE_A_WEEK,
     learningLanguages: [
       new LearningLanguage({
@@ -323,6 +327,7 @@ describe('GenerateTandem UC', () => {
     id: 'SP1',
     nativeLanguage: spanish,
     masteredLanguages: [],
+    testedLanguages: [],
     meetingFrequency: MeetingFrequency.TWICE_A_MONTH,
     learningLanguages: [
       new LearningLanguage({
@@ -361,6 +366,7 @@ describe('GenerateTandem UC', () => {
     id: 'SP2',
     nativeLanguage: spanish,
     masteredLanguages: [english],
+    testedLanguages: [],
     meetingFrequency: MeetingFrequency.ONCE_A_WEEK,
     learningLanguages: [
       new LearningLanguage({
@@ -399,6 +405,7 @@ describe('GenerateTandem UC', () => {
     id: 'EN1',
     nativeLanguage: english,
     masteredLanguages: [],
+    testedLanguages: [],
     meetingFrequency: MeetingFrequency.ONCE_A_WEEK,
     learningLanguages: [
       new LearningLanguage({
@@ -437,6 +444,7 @@ describe('GenerateTandem UC', () => {
     id: 'EN2',
     nativeLanguage: english,
     masteredLanguages: [],
+    testedLanguages: [],
     meetingFrequency: MeetingFrequency.ONCE_A_WEEK,
     learningLanguages: [
       new LearningLanguage({
@@ -475,6 +483,7 @@ describe('GenerateTandem UC', () => {
     id: 'DE',
     nativeLanguage: deutch,
     masteredLanguages: [spanish],
+    testedLanguages: [],
     meetingFrequency: MeetingFrequency.ONCE_A_WEEK,
     learningLanguages: [
       new LearningLanguage({
@@ -655,6 +664,7 @@ describe('GenerateTandem UC', () => {
       id: 'MALE1',
       nativeLanguage: french,
       masteredLanguages: [],
+      testedLanguages: [],
       meetingFrequency: MeetingFrequency.ONCE_A_WEEK,
       learningLanguages: [
         new LearningLanguage({
@@ -694,6 +704,7 @@ describe('GenerateTandem UC', () => {
       id: 'FEMALE',
       nativeLanguage: english,
       masteredLanguages: [],
+      testedLanguages: [],
       meetingFrequency: MeetingFrequency.ONCE_A_WEEK,
       learningLanguages: [
         new LearningLanguage({
@@ -749,6 +760,7 @@ describe('GenerateTandem UC', () => {
       id: 'FR_TANDEM',
       nativeLanguage: french,
       masteredLanguages: [],
+      testedLanguages: [],
       meetingFrequency: MeetingFrequency.ONCE_A_WEEK,
       learningLanguages: [
         new LearningLanguage({
@@ -790,6 +802,7 @@ describe('GenerateTandem UC', () => {
       id: 'EN_TANDEM',
       nativeLanguage: english,
       masteredLanguages: [],
+      testedLanguages: [],
       meetingFrequency: MeetingFrequency.ONCE_A_WEEK,
       learningLanguages: [
         new LearningLanguage({
@@ -831,6 +844,7 @@ describe('GenerateTandem UC', () => {
       id: 'EN_TANDEM',
       nativeLanguage: english,
       masteredLanguages: [],
+      testedLanguages: [],
       meetingFrequency: MeetingFrequency.ONCE_A_WEEK,
       learningLanguages: [
         new LearningLanguage({
@@ -872,6 +886,7 @@ describe('GenerateTandem UC', () => {
       id: 'FR_ETANDEM',
       nativeLanguage: french,
       masteredLanguages: [],
+      testedLanguages: [],
       meetingFrequency: MeetingFrequency.ONCE_A_WEEK,
       learningLanguages: [
         new LearningLanguage({
@@ -912,6 +927,7 @@ describe('GenerateTandem UC', () => {
       id: 'EN_ETANDEM',
       nativeLanguage: english,
       masteredLanguages: [],
+      testedLanguages: [],
       meetingFrequency: MeetingFrequency.ONCE_A_WEEK,
       learningLanguages: [
         new LearningLanguage({
@@ -952,6 +968,7 @@ describe('GenerateTandem UC', () => {
       id: 'FR_BOTH',
       nativeLanguage: french,
       masteredLanguages: [],
+      testedLanguages: [],
       meetingFrequency: MeetingFrequency.ONCE_A_WEEK,
       learningLanguages: [
         new LearningLanguage({
@@ -993,6 +1010,7 @@ describe('GenerateTandem UC', () => {
       id: 'EN_BOTH',
       nativeLanguage: english,
       masteredLanguages: [],
+      testedLanguages: [],
       meetingFrequency: MeetingFrequency.ONCE_A_WEEK,
       learningLanguages: [
         new LearningLanguage({
@@ -1140,6 +1158,7 @@ describe('GenerateTandem UC', () => {
       codes: [],
       domains: [],
       maxTandemsPerUser: 3,
+      nativeLanguage: french,
     });
     const campusMadrid = new Campus({
       id: 'campusMadrid',
@@ -1160,6 +1179,7 @@ describe('GenerateTandem UC', () => {
       codes: [],
       domains: [],
       maxTandemsPerUser: 3,
+      nativeLanguage: french,
     });
 
     const studentSubsidiary1 = new Profile({
@@ -1180,6 +1200,7 @@ describe('GenerateTandem UC', () => {
       id: 'EN_SUB',
       nativeLanguage: english,
       masteredLanguages: [],
+      testedLanguages: [],
       meetingFrequency: MeetingFrequency.ONCE_A_WEEK,
       learningLanguages: [
         new LearningLanguage({
@@ -1218,6 +1239,7 @@ describe('GenerateTandem UC', () => {
       id: 'SP_SUB',
       nativeLanguage: spanish,
       masteredLanguages: [],
+      testedLanguages: [],
       meetingFrequency: MeetingFrequency.ONCE_A_WEEK,
       learningLanguages: [
         new LearningLanguage({
@@ -1288,7 +1310,8 @@ describe('GenerateTandem UC', () => {
       codes: [],
       domains: [],
       maxTandemsPerUser: 3,
-      specificLanguagesAvailable: [otherLanguage]
+      specificLanguagesAvailable: [otherLanguage],
+      nativeLanguage: french,
     });
 
     const studentSubsidiary = new Profile({
@@ -1309,6 +1332,7 @@ describe('GenerateTandem UC', () => {
       id: 'EN_SUB',
       nativeLanguage: french,
       masteredLanguages: [],
+      testedLanguages: [],
       meetingFrequency: MeetingFrequency.ONCE_A_WEEK,
       learningLanguages: [
         new LearningLanguage({
@@ -1347,6 +1371,7 @@ describe('GenerateTandem UC', () => {
       id: 'SP_SUB',
       nativeLanguage: otherLanguage,
       masteredLanguages: [],
+      testedLanguages: [],
       meetingFrequency: MeetingFrequency.ONCE_A_WEEK,
       learningLanguages: [
         new LearningLanguage({
@@ -1410,6 +1435,7 @@ describe('GenerateTandem UC', () => {
       codes: [],
       domains: [],
       maxTandemsPerUser: 3,
+      nativeLanguage: french,
     });
 
     const studentSubsidiary = new Profile({
@@ -1430,6 +1456,7 @@ describe('GenerateTandem UC', () => {
       id: 'EN_SUB',
       nativeLanguage: french,
       masteredLanguages: [],
+      testedLanguages: [],
       meetingFrequency: MeetingFrequency.ONCE_A_WEEK,
       learningLanguages: [
         new LearningLanguage({
@@ -1468,6 +1495,7 @@ describe('GenerateTandem UC', () => {
       id: 'SP_SUB',
       nativeLanguage: otherLanguage,
       masteredLanguages: [],
+      testedLanguages: [],
       meetingFrequency: MeetingFrequency.ONCE_A_WEEK,
       learningLanguages: [
         new LearningLanguage({
@@ -1521,6 +1549,7 @@ describe('GenerateTandem UC', () => {
       codes: [],
       domains: [],
       maxTandemsPerUser: 3,
+      nativeLanguage: french,
     });
 
     const profile1 = new Profile({
@@ -1541,6 +1570,7 @@ describe('GenerateTandem UC', () => {
       id: 'FR_SUB',
       nativeLanguage: french,
       masteredLanguages: [],
+      testedLanguages: [],
       meetingFrequency: MeetingFrequency.ONCE_A_WEEK,
       learningLanguages: [
         new LearningLanguage({
@@ -1579,6 +1609,7 @@ describe('GenerateTandem UC', () => {
       id: 'EN_SUB',
       nativeLanguage: english,
       masteredLanguages: [],
+      testedLanguages: [],
       meetingFrequency: MeetingFrequency.ONCE_A_WEEK,
       learningLanguages: [
         new LearningLanguage({
@@ -1629,6 +1660,7 @@ describe('GenerateTandem UC', () => {
       codes: [],
       domains: [],
       maxTandemsPerUser: 3,
+      nativeLanguage: french,
     });
     const match = new Profile({
       user: new User({
@@ -1648,6 +1680,7 @@ describe('GenerateTandem UC', () => {
       id: 'EN_1',
       nativeLanguage: english,
       masteredLanguages: [],
+      testedLanguages: [],
       meetingFrequency: MeetingFrequency.ONCE_A_WEEK,
       learningLanguages: [
         new LearningLanguage({
@@ -1689,6 +1722,7 @@ describe('GenerateTandem UC', () => {
         id: 'FR_1',
         nativeLanguage: french,
         masteredLanguages: [],
+        testedLanguages: [],
         meetingFrequency: MeetingFrequency.ONCE_A_WEEK,
         learningLanguages: [
           new LearningLanguage({
@@ -1730,6 +1764,7 @@ describe('GenerateTandem UC', () => {
         id: 'FR_2',
         nativeLanguage: french,
         masteredLanguages: [],
+        testedLanguages: [],
         meetingFrequency: MeetingFrequency.ONCE_A_WEEK,
         learningLanguages: [
           new LearningLanguage({
@@ -1788,6 +1823,7 @@ describe('GenerateTandem UC', () => {
         id: 'FR_1',
         nativeLanguage: french,
         masteredLanguages: [],
+        testedLanguages: [],
         meetingFrequency: MeetingFrequency.ONCE_A_WEEK,
         learningLanguages: [
           new LearningLanguage({
@@ -1829,6 +1865,7 @@ describe('GenerateTandem UC', () => {
         id: 'FR_2',
         nativeLanguage: french,
         masteredLanguages: [],
+        testedLanguages: [],
         meetingFrequency: MeetingFrequency.ONCE_A_WEEK,
         learningLanguages: [
           new LearningLanguage({
@@ -1886,6 +1923,7 @@ describe('GenerateTandem UC', () => {
         id: 'FR_1',
         nativeLanguage: french,
         masteredLanguages: [],
+        testedLanguages: [],
         meetingFrequency: MeetingFrequency.ONCE_A_WEEK,
         learningLanguages: [
           new LearningLanguage({
@@ -1927,6 +1965,7 @@ describe('GenerateTandem UC', () => {
         id: 'FR_2',
         nativeLanguage: french,
         masteredLanguages: [],
+        testedLanguages: [],
         meetingFrequency: MeetingFrequency.ONCE_A_WEEK,
         learningLanguages: [
           new LearningLanguage({
@@ -1984,6 +2023,7 @@ describe('GenerateTandem UC', () => {
         id: 'FR_1',
         nativeLanguage: french,
         masteredLanguages: [],
+        testedLanguages: [],
         meetingFrequency: MeetingFrequency.ONCE_A_WEEK,
         learningLanguages: [
           new LearningLanguage({
@@ -2025,6 +2065,7 @@ describe('GenerateTandem UC', () => {
         id: 'FR_2',
         nativeLanguage: french,
         masteredLanguages: [],
+        testedLanguages: [],
         meetingFrequency: MeetingFrequency.ONCE_A_WEEK,
         learningLanguages: [
           new LearningLanguage({
@@ -2064,6 +2105,7 @@ describe('GenerateTandem UC', () => {
         id: 'EN_1',
         nativeLanguage: english,
         masteredLanguages: [],
+        testedLanguages: [],
         meetingFrequency: MeetingFrequency.ONCE_A_WEEK,
         learningLanguages: [
           new LearningLanguage({
@@ -2124,6 +2166,7 @@ describe('GenerateTandem UC', () => {
       id: 'FR_1',
       nativeLanguage: french,
       masteredLanguages: [],
+      testedLanguages: [],
       meetingFrequency: MeetingFrequency.ONCE_A_WEEK,
       learningLanguages: [
         new LearningLanguage({
@@ -2134,7 +2177,7 @@ describe('GenerateTandem UC', () => {
           learningType: LearningType.ETANDEM,
           sameGender: false,
           sameAge: false,
-          sameTandemEmail: emailB
+          sameTandemEmail: emailB,
         }),
       ],
       objectives: [],
@@ -2148,45 +2191,46 @@ describe('GenerateTandem UC', () => {
     });
 
     const userB = new Profile({
-        user: new User({
-          id: 'user2',
-          acceptsEmail: true,
-          email: emailB,
-          firstname: '',
-          lastname: '',
-          gender: Gender.MALE,
-          age: 19,
-          university: centralUniversity,
-          role: Role.STUDENT,
-          country,
-          avatar: null,
-          deactivatedReason: '',
+      user: new User({
+        id: 'user2',
+        acceptsEmail: true,
+        email: emailB,
+        firstname: '',
+        lastname: '',
+        gender: Gender.MALE,
+        age: 19,
+        university: centralUniversity,
+        role: Role.STUDENT,
+        country,
+        avatar: null,
+        deactivatedReason: '',
+      }),
+      id: 'FR_JOKER',
+      nativeLanguage: english,
+      masteredLanguages: [],
+      testedLanguages: [],
+      meetingFrequency: MeetingFrequency.ONCE_A_WEEK,
+      learningLanguages: [
+        new LearningLanguage({
+          id: 'FR_1-LL_JOKER',
+          language: joker,
+          level: ProficiencyLevel.B2,
+          createdAt: new Date('2023-08-28T10:00:00.000Z'),
+          learningType: LearningType.ETANDEM,
+          sameGender: false,
+          sameAge: false,
+          sameTandemEmail: emailA,
         }),
-        id: 'FR_JOKER',
-        nativeLanguage: english,
-        masteredLanguages: [],
-        meetingFrequency: MeetingFrequency.ONCE_A_WEEK,
-        learningLanguages: [
-          new LearningLanguage({
-            id: 'FR_1-LL_JOKER',
-            language: joker,
-            level: ProficiencyLevel.B2,
-            createdAt: new Date('2023-08-28T10:00:00.000Z'),
-            learningType: LearningType.ETANDEM,
-            sameGender: false,
-            sameAge: false,
-            sameTandemEmail: emailA
-          }),
-        ],
-        objectives: [],
-        interests: [],
-        biography: {
-          superpower: faker.lorem.sentence(),
-          favoritePlace: faker.lorem.sentence(),
-          experience: faker.lorem.sentence(),
-          anecdote: faker.lorem.sentence(),
-        },
-      });
+      ],
+      objectives: [],
+      interests: [],
+      biography: {
+        superpower: faker.lorem.sentence(),
+        favoritePlace: faker.lorem.sentence(),
+        experience: faker.lorem.sentence(),
+        anecdote: faker.lorem.sentence(),
+      },
+    });
 
     learningLanguageRepository.init([userA, userB]);
 
@@ -2226,6 +2270,7 @@ describe('GenerateTandem UC', () => {
       id: 'FR_1',
       nativeLanguage: french,
       masteredLanguages: [],
+      testedLanguages: [],
       meetingFrequency: MeetingFrequency.ONCE_A_WEEK,
       learningLanguages: [
         new LearningLanguage({
@@ -2236,7 +2281,7 @@ describe('GenerateTandem UC', () => {
           learningType: LearningType.ETANDEM,
           sameGender: false,
           sameAge: false,
-          sameTandemEmail: emailB
+          sameTandemEmail: emailB,
         }),
       ],
       objectives: [],
@@ -2250,44 +2295,45 @@ describe('GenerateTandem UC', () => {
     });
 
     const userB = new Profile({
-        user: new User({
-          id: 'user2',
-          acceptsEmail: true,
-          email: emailB,
-          firstname: '',
-          lastname: '',
-          gender: Gender.MALE,
-          age: 19,
-          university: centralUniversity,
-          role: Role.STUDENT,
-          country,
-          avatar: null,
-          deactivatedReason: '',
+      user: new User({
+        id: 'user2',
+        acceptsEmail: true,
+        email: emailB,
+        firstname: '',
+        lastname: '',
+        gender: Gender.MALE,
+        age: 19,
+        university: centralUniversity,
+        role: Role.STUDENT,
+        country,
+        avatar: null,
+        deactivatedReason: '',
+      }),
+      id: 'FR_JOKER',
+      nativeLanguage: english,
+      masteredLanguages: [],
+      testedLanguages: [],
+      meetingFrequency: MeetingFrequency.ONCE_A_WEEK,
+      learningLanguages: [
+        new LearningLanguage({
+          id: 'FR_1-LL_JOKER',
+          language: joker,
+          level: ProficiencyLevel.B2,
+          createdAt: new Date('2023-08-28T10:00:00.000Z'),
+          learningType: LearningType.ETANDEM,
+          sameGender: false,
+          sameAge: false,
         }),
-        id: 'FR_JOKER',
-        nativeLanguage: english,
-        masteredLanguages: [],
-        meetingFrequency: MeetingFrequency.ONCE_A_WEEK,
-        learningLanguages: [
-          new LearningLanguage({
-            id: 'FR_1-LL_JOKER',
-            language: joker,
-            level: ProficiencyLevel.B2,
-            createdAt: new Date('2023-08-28T10:00:00.000Z'),
-            learningType: LearningType.ETANDEM,
-            sameGender: false,
-            sameAge: false,
-          }),
-        ],
-        objectives: [],
-        interests: [],
-        biography: {
-          superpower: faker.lorem.sentence(),
-          favoritePlace: faker.lorem.sentence(),
-          experience: faker.lorem.sentence(),
-          anecdote: faker.lorem.sentence(),
-        },
-      });
+      ],
+      objectives: [],
+      interests: [],
+      biography: {
+        superpower: faker.lorem.sentence(),
+        favoritePlace: faker.lorem.sentence(),
+        experience: faker.lorem.sentence(),
+        anecdote: faker.lorem.sentence(),
+      },
+    });
 
     learningLanguageRepository.init([userA, userB]);
 
@@ -2331,6 +2377,7 @@ describe('GenerateTandem UC', () => {
       id: 'FR_JOKER',
       nativeLanguage: french,
       masteredLanguages: [],
+      testedLanguages: [],
       meetingFrequency: MeetingFrequency.ONCE_A_WEEK,
       learningLanguages: [
         new LearningLanguage({
@@ -2370,6 +2417,7 @@ describe('GenerateTandem UC', () => {
       id: 'KS',
       nativeLanguage: otherLanguage,
       masteredLanguages: [],
+      testedLanguages: [],
       meetingFrequency: MeetingFrequency.ONCE_A_WEEK,
       learningLanguages: [
         new LearningLanguage({
@@ -2407,5 +2455,3 @@ describe('GenerateTandem UC', () => {
     ).toBeTruthy();
   });
 });
-
-

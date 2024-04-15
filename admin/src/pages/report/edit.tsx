@@ -1,6 +1,7 @@
 import React from 'react';
 import { useTranslate, useNotify, useRedirect, useUpdate, WithRecord, Edit } from 'react-admin';
 import ReportForm from '../../components/form/ReportForm';
+import ReportsPagesHeader from '../../components/tabs/ReportsPagesHeader';
 import Report, { ReportStatus } from '../../entities/Report';
 
 const EditReport = () => {
@@ -37,22 +38,25 @@ const EditReport = () => {
     };
 
     return (
-        <Edit title={translate('reports.update.title')}>
-            <WithRecord<Report>
-                render={(record) => (
-                    <ReportForm
-                        category={record.category.name}
-                        comment={record.comment}
-                        content={record.content}
-                        handleSubmit={(status: ReportStatus, comment?: string) =>
-                            handleSubmit(record.id, status, comment)
-                        }
-                        status={record.status}
-                        user={record.user}
-                    />
-                )}
-            />
-        </Edit>
+        <>
+            <ReportsPagesHeader />
+            <Edit title={translate('reports.update.title')}>
+                <WithRecord<Report>
+                    render={(record) => (
+                        <ReportForm
+                            category={record.category.name}
+                            comment={record.comment}
+                            content={record.content}
+                            handleSubmit={(status: ReportStatus, comment?: string) =>
+                                handleSubmit(record.id, status, comment)
+                            }
+                            status={record.status}
+                            user={record.user}
+                        />
+                    )}
+                />
+            </Edit>
+        </>
     );
 };
 

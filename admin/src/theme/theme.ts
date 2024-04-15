@@ -21,18 +21,15 @@ const theme: RaThemeOptions = {
         h1: {
             fontSize: '1.2rem',
             fontWeight: '600',
-            color: '#212121',
+        },
+        h2: {
+            fontSize: '2.4rem',
+            fontWeight: '400',
+            padding: '16px 0',
         },
     },
     components: {
         ...defaultTheme.components,
-        MuiDivider: {
-            styleOverrides: {
-                root: {
-                    margin: '8px 0',
-                },
-            },
-        },
         MuiAppBar: {
             styleOverrides: {
                 root: {
@@ -45,10 +42,64 @@ const theme: RaThemeOptions = {
                 },
             },
         },
-        RaSidebar: {
+        RaChipField: {
             styleOverrides: {
                 root: {
-                    borderRight: '1px solid #e0e0e0',
+                    '&.RaChipField-chip': {
+                        backgroundColor: '#fdee66',
+                        color: '#212121',
+                    },
+                },
+            },
+        },
+        MuiDivider: {
+            styleOverrides: {
+                root: {
+                    margin: '8px 0',
+                },
+            },
+        },
+        MuiTableCell: {
+            styleOverrides: {
+                root: {
+                    '&.RaDatagrid-headerCell': {
+                        fontWeight: 'bold',
+                    },
+                },
+            },
+        },
+        RaCreateButton: {
+            styleOverrides: {
+                root: {
+                    backgroundColor: '#000000',
+                    color: '#FFFFFF',
+                    padding: '5px 9px',
+                    boxShadow:
+                        '0px 1px 5px 0px rgba(0, 0, 0, 0.12), 0px 2px 2px 0px rgba(0, 0, 0, 0.14), 0px 3px 1px -2px rgba(0, 0, 0, 0.20)',
+                    '&:hover': {
+                        backgroundColor: '#212121',
+                    },
+                },
+            },
+        },
+        RaLayout: {
+            styleOverrides: {
+                root: {
+                    '& .RaLayout-appFrame': {
+                        marginTop: '56px',
+                    },
+                    '& .RaLayout-content': {
+                        padding: '46px 21px',
+                    },
+                },
+            },
+        },
+        RaList: {
+            styleOverrides: {
+                root: {
+                    '& .RaList-content': {
+                        boxShadow: 'none',
+                    },
                 },
             },
         },
@@ -70,10 +121,6 @@ const theme: RaThemeOptions = {
                             height: '18px',
                         },
                     },
-                    '& .RaLoadingIndicator-loadedIcon::after': {
-                        content: '"Actualiser"',
-                        marginLeft: '5px',
-                    },
                     '& .RaLoadingIndicator-loader': {
                         left: '45%',
                         top: '6px',
@@ -84,7 +131,7 @@ const theme: RaThemeOptions = {
         RaMenuItemLink: {
             styleOverrides: {
                 root: {
-                    lineHeight: '2.2',
+                    lineHeight: '2.4',
                     color: '#212121',
                     fontSize: '0.9rem',
                     '& .RaMenuItemLink-icon': {
@@ -96,13 +143,10 @@ const theme: RaThemeOptions = {
                 },
             },
         },
-        RaChipField: {
+        RaSidebar: {
             styleOverrides: {
                 root: {
-                    '&.RaChipField-chip': {
-                        backgroundColor: '#FFBF46',
-                        color: '#575761',
-                    },
+                    borderRight: '1px solid #e0e0e0',
                 },
             },
         },

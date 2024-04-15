@@ -11,86 +11,61 @@ import {
     useTranslate,
     useLogout,
     useGetIdentity,
-    GetOneResult,
-    useNotify,
 } from 'react-admin';
-import Administrator from '../../entities/Administrator';
-import customDataProvider from '../../providers/customDataProvider';
 
-type UserData = {
-    userData: Administrator;
+type CustomAvatarProps = {
+    lastName: string;
+    firstName: string;
 };
 
-const CustomAvatar = ({ userData }: UserData) => {
-    const { firstname, lastname } = userData;
-
-    return (
-        <Avatar>
-            {firstname.charAt(0)}
-            {lastname.charAt(0)}
-        </Avatar>
-    );
+type UsernameProps = {
+    lastName: string;
+    firstName: string;
+    email: string;
 };
 
-const Username = ({ userData }: UserData) => {
-    const { firstname, lastname, email } = userData;
+const CustomAvatar = ({ lastName, firstName }: CustomAvatarProps) => (
+    <Avatar>
+        {firstName.charAt(0)}
+        {lastName.charAt(0)}
+    </Avatar>
+);
 
-    return (
-        <>
-            <ListItem>{`${firstname} ${lastname}`}</ListItem>
-            <ListSubheader sx={{ lineHeight: 'inherit', marginBottom: '12px' }}>{email}</ListSubheader>
-        </>
-    );
-};
+const Username = ({ lastName, firstName, email }: UsernameProps) => (
+    <>
+        <ListItem>{`${firstName} ${lastName}`}</ListItem>
+        <ListSubheader sx={{ lineHeight: 'inherit', marginBottom: '12px' }}>{email}</ListSubheader>
+    </>
+);
 
 const CustomUserMenu = (props: any) => {
     const translate = useTranslate();
     const logout = useLogout();
-    const notify = useNotify();
-    const { data: userIdentity, isLoading } = useGetIdentity();
-    const [userData, setUserData] = React.useState<Administrator | null>(null);
 
-    const getUserData = async () => {
-        if (!userIdentity) {
-            return;
-        }
-
-        try {
-            const userDataResult: GetOneResult<Administrator> = await customDataProvider.getOne(
-                'users/administrators',
-                {
-                    id: userIdentity.id as string,
-                }
-            );
-            if (userDataResult) {
-                setUserData(userDataResult.data);
-            }
-        } catch (error) {
-            console.error(error);
-            notify(translate('global.userDataError'), { type: 'error' });
-        }
-    };
-
-    React.useEffect(() => {
-        if (!isLoading) {
-            getUserData();
-        }
-    }, [isLoading]);
+    const { data: userData } = useGetIdentity();
+    let lastName;
+    let firstName;
+    let email;
+    if (userData) {
+        const { family_name: familyName, given_name: givenName, email: userEmail } = userData.data;
+        lastName = familyName;
+        firstName = givenName;
+        email = userEmail;
+    }
 
     return (
-        <UserMenu {...props} icon={userData ? <CustomAvatar userData={userData} /> : <Avatar />}>
+        <UserMenu {...props} icon={userData ? <CustomAvatar firstName={firstName} lastName={lastName} /> : <Avatar />}>
+            {/* Can't use a <div> for accessibility, and not a <> for MUI */}
+            {userData && <Username email={email} firstName={firstName} lastName={lastName} />}
+            {userData && <Divider />}
             {userData && (
-                <div>
-                    <Username userData={userData} />
-                    <Divider />
-                    <MenuItemLink
-                        leftIcon={<PersonIcon />}
-                        primaryText={translate('global.profile')}
-                        to={`/users/administrators/${userData.id}`}
-                    />
-                    <Divider />
-                </div>
+                <MenuItemLink
+                    leftIcon={<PersonIcon />}
+                    primaryText={translate('global.profile')}
+                    to={`/users/administrators/${userData.id}`}
+                />
             )}
+            {userData && <Divider />}
             <MenuItemLink
                 leftIcon={<ExitToAppIcon />}
                 onClick={logout}
@@ -101,12 +76,23 @@ const CustomUserMenu = (props: any) => {
     );
 };
 
-const CustomToolbar = () => (
-    <>
-        <LoadingIndicator />
-        <LocalesMenuButton />
-    </>
-);
+const CustomToolbar = () => {
+    const translate = useTranslate();
+
+    return (
+        <>
+            <LoadingIndicator
+                sx={{
+                    '& .RaLoadingIndicator-loadedIcon::after': {
+                        content: `"${translate('header.update')}"`,
+                        marginLeft: '5px',
+                    },
+                }}
+            />
+            <LocalesMenuButton />
+        </>
+    );
+};
 
 const CustomAppBar = (props: any) => {
     const translate = useTranslate();

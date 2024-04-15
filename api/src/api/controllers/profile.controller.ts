@@ -26,6 +26,7 @@ import {
   DeleteAvatarUsecase,
   GetLearningLanguageOfProfileUsecase,
   UpdateProfileUsecase,
+  CreateOrUpdateTestedLanguageUsecase,
 } from 'src/core/usecases';
 import { CollectionResponse, CurrentUser } from '../decorators';
 import { Role, Roles } from '../decorators/roles.decorator';
@@ -36,10 +37,11 @@ import {
   UserTandemResponse,
   LearningLanguageDto,
   LearningLanguageResponse,
+  TestedLanguageProps,
+  UpdateProfileRequest,
 } from '../dtos';
 import { AuthenticationGuard } from '../guards';
-import { Profile, User } from 'src/core/models';
-import { UpdateProfileRequest } from 'src/api/dtos/profiles/update-profile.request';
+import { Profile } from 'src/core/models';
 
 @Controller('profiles')
 @Swagger.ApiTags('Profiles')
@@ -56,6 +58,7 @@ export class ProfileController {
     private readonly deleteUserUsecase: DeleteUserUsecase,
     private readonly deleteAvatarUsecase: DeleteAvatarUsecase,
     private readonly updateProfileUsecase: UpdateProfileUsecase,
+    private readonly createOrUpdateTestedLanguageUsecase: CreateOrUpdateTestedLanguageUsecase,
   ) {}
 
   @Post()
@@ -253,5 +256,24 @@ export class ProfileController {
     return languages.map((language) =>
       LearningLanguageResponse.fromDomain(language, false),
     );
+  }
+
+  @Post(':id/tested-language')
+  @UseGuards(AuthenticationGuard)
+  @Swagger.ApiOperation({
+    summary: 'Create or update a tested language',
+  })
+  @Swagger.ApiOkResponse({ type: ProfileResponse })
+  @Swagger.ApiNotFoundResponse({ description: 'Resource does not exist' })
+  async createOrUpdateTestedLanguage(
+    @Param('id', ParseUUIDPipe) id: string,
+    @Body() body: TestedLanguageProps,
+  ): Promise<ProfileResponse> {
+    const profile = await this.createOrUpdateTestedLanguageUsecase.execute({
+      ...body,
+      profileId: id,
+    });
+
+    return ProfileResponse.fromDomain(profile);
   }
 }

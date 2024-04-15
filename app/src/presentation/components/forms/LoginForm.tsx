@@ -7,7 +7,6 @@ import CircleAvatar from '../CircleAvatar';
 import TextInput from '../TextInput';
 import style from './Form.module.css';
 import Tokens from '../../../domain/entities/Tokens';
-import { Capacitor } from '@capacitor/core';
 
 interface LoginFormProps {
     goBack: () => void;
@@ -46,17 +45,12 @@ const LoginForm: React.FC<LoginFormProps> = ({ goBack, onLogin }) => {
         <div className="container">
             <IonHeader className="ion-no-border">
                 <IonButton fill="clear" onClick={goBack}>
-                    <img alt="goBack" src={LeftChevronSvg} />
+                    <img alt={t('global.go_back') as string} src={LeftChevronSvg} />
                 </IonButton>
             </IonHeader>
             <IonContent>
                 <div className={style['main-content']}>
-                    <CircleAvatar
-                        backgroundImage={AvatarPng}
-                        height={36}
-                        viewClassName={style['icons']}
-                        width={36}
-                    />
+                    <CircleAvatar backgroundImage={AvatarPng} height={36} viewClassName={style['icons']} width={36} />
                     <div className={`ion-text-center`}>
                         <h1 className={style.title}>{t('login_page.title')}</h1>
                     </div>
@@ -64,13 +58,16 @@ const LoginForm: React.FC<LoginFormProps> = ({ goBack, onLogin }) => {
                         <p className={style['sso-text']}>
                             {t('login_page.sso_title', { name: configuration.mainUniversityName })}
                         </p>
-                        <button className="tertiary-button large-margin-vertical center-button" onClick={ssoLogin}>
+                        <button
+                            aria-label={t('login_page.sso_button') as string}
+                            className="tertiary-button large-margin-vertical center-button"
+                            onClick={ssoLogin}
+                        >
                             {t('login_page.sso_button')}
                         </button>
                     </div>
                     <div className={style.separator} />
                     <form onSubmit={handleLogin}>
-                        
                         <div className="ion-text-center">
                             <p className={style.subtitle}>{t('login_page.subtitle')}</p>
                         </div>
@@ -89,7 +86,12 @@ const LoginForm: React.FC<LoginFormProps> = ({ goBack, onLogin }) => {
                             value={password}
                         />
                         <div className={style['bottom-container']}>
-                            <button className="primary-button center-button">{t('login_page.button')}</button>
+                            <button
+                                aria-label={t('login_page.button') as string}
+                                className="primary-button center-button"
+                            >
+                                {t('login_page.button')}
+                            </button>
 
                             <IonRouterLink className="secondary-button large-margin-top" routerLink="/forgot-password">
                                 {t('login_page.forgot')}

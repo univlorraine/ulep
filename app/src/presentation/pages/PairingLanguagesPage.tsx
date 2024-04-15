@@ -1,25 +1,19 @@
 import { useIonToast } from '@ionic/react';
-import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Redirect, useHistory } from 'react-router';
-import { PlusPng } from '../../assets';
-import { useConfig } from '../../context/ConfigurationContext';
 import Language from '../../domain/entities/Language';
 import { useStoreActions, useStoreState } from '../../store/storeTypes';
-import FlagBubble from '../components/FlagBubble';
+import useGetLearnableLanguages from '../hooks/useGetLearnableLanguages';
+import LearnableLanguagesContent from '../components/contents/LearnableLanguagesContent';
 import WebLayoutCentered from '../components/layout/WebLayoutCentered';
-import pairingLanguagesStyles from './css/PairingLanguages.module.css';
 import styles from './css/SignUp.module.css';
-import Loader from '../components/Loader';
+import { useConfig } from '../../context/ConfigurationContext';
 
 const PairingLanguagesPage: React.FC = () => {
     const { t } = useTranslation();
-    const { configuration, getAllLanguages, getUniversityLanguages } = useConfig();
     const [showToast] = useIonToast();
     const history = useHistory();
-    const [languages, setLanguages] = useState<Language[]>([]);
-    const [isLoadingLanguages, setIsLoadingLanguages] = useState<boolean>(false);
-    const [selectedLaguage, setSelectedLanguage] = useState<Language>();
+    const { configuration } = useConfig();
     const updateProfileSignUp = useStoreActions((state) => state.updateProfileSignUp);
     const profile = useStoreState((state) => state.profile);
     const university = profile?.user.university;
@@ -28,33 +22,15 @@ const PairingLanguagesPage: React.FC = () => {
         return <Redirect to={'/signup'} />;
     }
 
-    const getLanguages = async () => {
-        setIsLoadingLanguages(true);
-        let [globalLanguages, universityLanguages] = await Promise.all([
-            getAllLanguages.execute(university.isCentral ? 'PRIMARY' : 'PARTNER'),
-            getUniversityLanguages.execute(university.id),
-        ]);
-        setIsLoadingLanguages(false);
+    const { error, isLoading, languages } = useGetLearnableLanguages(university, false, []);
 
-        if (globalLanguages instanceof Error) {
-            return await showToast({ message: t(globalLanguages.message), duration: 1000 });
-        }
+    if (error) {
+        showToast({ message: t(error.message), duration: 1000 });
+    }
 
-        if (universityLanguages instanceof Error) {
-            return await showToast({ message: t(universityLanguages.message), duration: 1000 });
-        }
+    const continueSignUp = async (selectedLanguage: Language) => {
+        updateProfileSignUp({ learningLanguage: selectedLanguage });
 
-        const learnableLanguages = [...globalLanguages, ...universityLanguages].filter(
-            (language) =>
-                profile?.nativeLanguage.code !== language.code &&
-                !profile?.learningLanguages?.find((learningLanguage) => language.code === learningLanguage.code)
-        );
-
-        return setLanguages(learnableLanguages);
-    };
-
-    const continueSignUp = async () => {
-        updateProfileSignUp({ learningLanguage: selectedLaguage });
         return history.push(`/pairing/pedagogy`);
     };
 
@@ -62,74 +38,27 @@ const PairingLanguagesPage: React.FC = () => {
         return history.push('/home');
     };
 
-    const otherLanguage = () => {
+    const otherLanguages = () => {
         return history.push(`/pairing/other-languages`);
     };
-
-    useEffect(() => {
-        getLanguages();
-    }, []);
 
     return (
         <WebLayoutCentered
             backgroundIconColor={configuration.secondaryBackgroundImageColor}
+            goBackPressed={navigateToHome}
             headerColor={configuration.secondaryColor}
             headerPercentage={12}
             headerTitle={t('global.pairing_title')}
         >
             <div className={styles.body}>
-                <div className={pairingLanguagesStyles.content}>
-                    <h1 className="title">{t('pairing_languages_page.title')}</h1>
-                    {isLoadingLanguages ? (
-                        <div className={pairingLanguagesStyles.loader}>
-                            <Loader />
-                        </div>
-                    ) : (
-                        <>
-                            <p className="subtitle">
-                                {t(
-                                    languages.length
-                                        ? 'pairing_languages_page.subtitle'
-                                        : 'pairing_languages_page.no_languages'
-                                )}
-                            </p>
-                            <div className={pairingLanguagesStyles['languages-container']}>
-                                {!!languages.length &&
-                                    languages.map((language) => {
-                                        return (
-                                            <FlagBubble
-                                                key={language.code}
-                                                isSelected={selectedLaguage?.code === language.code}
-                                                language={language}
-                                                onPressed={setSelectedLanguage}
-                                            />
-                                        );
-                                    })}
-                                {!isLoadingLanguages && university.isCentral && (
-                                    <button style={{ background: 'none' }} onClick={otherLanguage}>
-                                        <img alt="plus" className={pairingLanguagesStyles.image} src={PlusPng} />
-                                    </button>
-                                )}
-                            </div>
-                            <div className={`extra-large-margin-bottom`}>
-                                {!!languages.length && (
-                                    <button
-                                        className={`primary-button ${!selectedLaguage ? 'disabled' : ''}`}
-                                        disabled={!selectedLaguage}
-                                        onClick={continueSignUp}
-                                    >
-                                        {t('pairing_languages_page.validate_button')}
-                                    </button>
-                                )}
-                                {!languages.length && (
-                                    <button className={`primary-button`} onClick={navigateToHome}>
-                                        {t('pairing_languages_page.home_button')}
-                                    </button>
-                                )}
-                            </div>
-                        </>
-                    )}
-                </div>
+                <LearnableLanguagesContent
+                    abortStep={navigateToHome}
+                    isLoading={isLoading}
+                    languages={languages}
+                    navigateToOtherLanguages={otherLanguages}
+                    nextStep={continueSignUp}
+                    university={university}
+                />
             </div>
         </WebLayoutCentered>
     );

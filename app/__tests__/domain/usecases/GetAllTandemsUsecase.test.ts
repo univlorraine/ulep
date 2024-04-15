@@ -22,6 +22,7 @@ const httpCallResponse: TandemCommand[] = [
                     name: 'Français',
                 },
                 masteredLanguages: [{ code: 'EN', name: 'English' }],
+                testedLanguages: [],
                 learningLanguages: [
                     {
                         id: 'id',

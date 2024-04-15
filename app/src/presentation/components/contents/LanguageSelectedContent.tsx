@@ -12,12 +12,7 @@ interface LanguageSelectedContentProps {
     onNextPressed: () => void;
 }
 
-const LanguageSelectedContent: React.FC<LanguageSelectedContentProps> = ({
-    language,
-    mode,
-    user,
-    onNextPressed,
-}) => {
+const LanguageSelectedContent: React.FC<LanguageSelectedContentProps> = ({ language, mode, user, onNextPressed }) => {
     const { t } = useTranslation();
 
     return (
@@ -37,7 +32,11 @@ const LanguageSelectedContent: React.FC<LanguageSelectedContentProps> = ({
                     </h1>
                 )}
                 <p className={styles.description}>{t(`pairing_${mode}_language_page.not_alone.description`)}</p>
-                <button className={'primary-button large-margin-top'} onClick={onNextPressed}>
+                <button
+                    aria-label={t(`pairing_${mode}_language_page.not_alone.validate_button`) as string}
+                    className={'primary-button large-margin-top'}
+                    onClick={onNextPressed}
+                >
                     {t(`pairing_${mode}_language_page.not_alone.validate_button`)}
                 </button>
             </div>

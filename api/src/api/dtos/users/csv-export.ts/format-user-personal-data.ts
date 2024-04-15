@@ -51,7 +51,7 @@ const profileToExportInfos = (profile: Profile) => ({
   saturday_availabilities: profile.availabilities['saturday'],
   sunday_availabilities: profile.availabilities['sunday'],
   availabilities_note: profile.availabilitiesNote,
-  availabilities_note_is_private: !!profile.availavilitiesNotePrivacy,
+  availabilities_note_is_private: !!profile.availabilitiesNotePrivacy,
   profile_created_at: profile.createdAt,
   profile_last_update: profile.updatedAt,
 });

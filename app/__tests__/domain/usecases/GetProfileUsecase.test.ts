@@ -12,12 +12,13 @@ const payload: ProfileCommand = {
         name: 'Français',
     },
     masteredLanguages: [{ code: 'EN', name: 'English' }],
+    testedLanguages: [],
     learningLanguages: [
         {
             id: 'id',
             code: 'CN',
             name: 'Chinese',
-            learningType: "TANDEM",
+            learningType: 'TANDEM',
             level: 'A0',
         },
     ],

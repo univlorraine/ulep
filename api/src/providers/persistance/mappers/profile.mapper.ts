@@ -14,10 +14,11 @@ import {
 import { UserRelations, UserSnapshot, userMapper } from './user.mapper';
 import { languageMapper } from './language.mapper';
 import { campusMapper } from './campus.mapper';
+import { testedLanguageMapper } from 'src/providers/persistance/mappers/testedLanguage.mapper';
 
 export const ProfilesRelations = {
   User: {
-    include: UserRelations(),
+    include: UserRelations,
   },
   Goals: {
     include: { TextContent: TextContentRelations },
@@ -30,6 +31,11 @@ export const ProfilesRelations = {
   },
   NativeLanguage: true,
   MasteredLanguages: { include: { LanguageCode: true } },
+  TestedLanguages: {
+    include: {
+      LanguageCode: true,
+    },
+  },
   LearningLanguages: {
     include: {
       LanguageCode: true,
@@ -56,6 +62,9 @@ export type ProfileSnapshot = Prisma.Profiles & {
   MasteredLanguages: (Prisma.MasteredLanguages & {
     LanguageCode: Prisma.LanguageCodes;
   })[];
+  TestedLanguages: (Prisma.TestedLanguages & {
+    LanguageCode: Prisma.LanguageCodes;
+  })[];
 };
 
 export const profileMapper = (instance: ProfileSnapshot): Profile => {
@@ -67,6 +76,7 @@ export const profileMapper = (instance: ProfileSnapshot): Profile => {
     masteredLanguages: instance.MasteredLanguages.map((language) =>
       languageMapper(language.LanguageCode),
     ),
+    testedLanguages: instance.TestedLanguages.map(testedLanguageMapper),
     learningLanguages: instance.LearningLanguages.map(
       (learningLanguage) =>
         new LearningLanguage({
@@ -104,7 +114,7 @@ export const profileMapper = (instance: ProfileSnapshot): Profile => {
       sunday: availabilities['sunday'],
     },
     availabilitiesNote: instance.availabilities_note,
-    availavilitiesNotePrivacy: instance.availabilities_note_privacy,
+    availabilitiesNotePrivacy: instance.availabilities_note_privacy,
     biography: {
       superpower: instance.bio['superpower'],
       favoritePlace: instance.bio['favoritePlace'],

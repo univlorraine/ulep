@@ -135,6 +135,7 @@ describe('Score', () => {
       codes: [],
       domains: [],
       maxTandemsPerUser: 3,
+      nativeLanguage: frenchLanguage,
     });
     const profile1 = new Profile({
       user: new User({
@@ -154,6 +155,7 @@ describe('Score', () => {
       id: 'FR1',
       nativeLanguage: frenchLanguage,
       masteredLanguages: [],
+      testedLanguages: [],
       meetingFrequency: MeetingFrequency.ONCE_A_WEEK,
       learningLanguages: [],
       objectives: [],
@@ -183,6 +185,7 @@ describe('Score', () => {
       id: 'EN1',
       nativeLanguage: spanishLanguage,
       masteredLanguages: [],
+      testedLanguages: [],
       meetingFrequency: MeetingFrequency.ONCE_A_WEEK,
       learningLanguages: [],
       objectives: [],
@@ -295,6 +298,7 @@ describe('Score', () => {
       codes: [],
       domains: [],
       maxTandemsPerUser: 3,
+      nativeLanguage: frenchLanguage,
     });
     const profile1 = new Profile({
       user: new User({
@@ -314,6 +318,7 @@ describe('Score', () => {
       id: 'FR1',
       nativeLanguage: frenchLanguage,
       masteredLanguages: [],
+      testedLanguages: [],
       meetingFrequency: MeetingFrequency.ONCE_A_WEEK,
       learningLanguages: [],
       objectives,
@@ -343,6 +348,7 @@ describe('Score', () => {
       id: 'EN1',
       nativeLanguage: englishLanguage,
       masteredLanguages: [],
+      testedLanguages: [],
       meetingFrequency: MeetingFrequency.ONCE_A_WEEK,
       learningLanguages: [],
       objectives,

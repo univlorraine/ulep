@@ -1,3 +1,4 @@
+import { TestedLanguage } from 'src/core/models/tested-language.model';
 import { ProfileLanguagesException } from '../errors/profile-exceptions';
 import { Interest } from './interest.model';
 import { Language } from './language.model';
@@ -41,13 +42,14 @@ export type CreateProfileProps = {
   user: User;
   nativeLanguage: Language;
   masteredLanguages: Language[];
+  testedLanguages: TestedLanguage[];
   learningLanguages: LearningLanguage[];
   meetingFrequency: MeetingFrequency;
   objectives: LearningObjective[];
   interests: Interest[];
   availabilities?: Availabilites;
   availabilitiesNote?: string;
-  availavilitiesNotePrivacy?: boolean;
+  availabilitiesNotePrivacy?: boolean;
   biography?: { [key: string]: string };
   createdAt?: Date;
   updatedAt?: Date;
@@ -60,11 +62,12 @@ export class Profile {
   readonly masteredLanguages: Language[];
   readonly learningLanguages: LearningLanguage[];
   readonly meetingFrequency: MeetingFrequency;
+  readonly testedLanguages: TestedLanguage[];
   readonly objectives: LearningObjective[];
   readonly interests: Interest[];
   readonly availabilities?: Availabilites;
   readonly availabilitiesNote?: string;
-  readonly availavilitiesNotePrivacy?: boolean;
+  readonly availabilitiesNotePrivacy?: boolean;
   readonly biography?: { [key: string]: string };
   readonly createdAt?: Date;
   readonly updatedAt?: Date;
@@ -84,11 +87,12 @@ export class Profile {
     this.user = props.user;
     this.nativeLanguage = props.nativeLanguage;
     this.masteredLanguages = [...props.masteredLanguages];
+    this.testedLanguages = props.testedLanguages;
     this.learningLanguages = learningLanguages;
     this.meetingFrequency = props.meetingFrequency;
     this.availabilities = props.availabilities;
     this.availabilitiesNote = props.availabilitiesNote;
-    this.availavilitiesNotePrivacy = props.availavilitiesNotePrivacy;
+    this.availabilitiesNotePrivacy = props.availabilitiesNotePrivacy;
     this.objectives = [...props.objectives];
     this.interests = [...props.interests];
     this.biography = props.biography;

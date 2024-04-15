@@ -206,6 +206,7 @@ export class CreateProfileUsecase {
       nativeLanguage,
       masteredLanguages,
       learningLanguages,
+      testedLanguages: [],
       objectives,
       interests,
     });

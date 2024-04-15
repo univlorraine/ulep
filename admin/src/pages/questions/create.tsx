@@ -1,6 +1,7 @@
 import React from 'react';
 import { Create, useTranslate, useCreate, useNotify, useRedirect } from 'react-admin';
 import QuestionForm from '../../components/form/QuestionForm';
+import PageTitle from '../../components/PageTitle';
 import IndexedTranslation from '../../entities/IndexedTranslation';
 import indexedTranslationsToTranslations from '../../utils/indexedTranslationsToTranslations';
 
@@ -38,9 +39,12 @@ const CreateQuestion = () => {
     };
 
     return (
-        <Create title={translate('objectives.create.title')}>
-            <QuestionForm handleSubmit={handleSubmit} />
-        </Create>
+        <>
+            <PageTitle>{translate('questions.title')}</PageTitle>
+            <Create title={translate('objectives.create.title')}>
+                <QuestionForm handleSubmit={handleSubmit} />
+            </Create>
+        </>
     );
 };
 

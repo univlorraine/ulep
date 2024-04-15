@@ -1,7 +1,7 @@
 import { Interest } from '../domain/entities/CategoryInterests';
 import Language from '../domain/entities/Language';
-import LearningLanguage from '../domain/entities/LearningLanguage';
 import Profile from '../domain/entities/Profile';
+import TestedLanguage from '../domain/entities/TestedLanguage';
 import { goalCommandToDomain } from './GoalCommand';
 import learningLanguageResultToDomain, { LearningLanguageResult } from './LearningLanguageResult';
 import UserResult, { userResultToDomain } from './UserResult';
@@ -16,6 +16,11 @@ interface ProfileCommand {
     masteredLanguages: {
         code: string;
         name: string;
+    }[];
+    testedLanguages: {
+        code: string;
+        name: string;
+        level: CEFR;
     }[];
     learningLanguages: LearningLanguageResult[];
     objectives: {
@@ -50,6 +55,9 @@ export const profileCommandToDomain = (command: ProfileCommand): Profile => {
         new Language(command.nativeLanguage.code, command.nativeLanguage.code, command.nativeLanguage.name),
         command.masteredLanguages.map(
             (masteredLanguage) => new Language(masteredLanguage.code, masteredLanguage.code, masteredLanguage.name)
+        ),
+        command.testedLanguages.map(
+            (testedLanguage) => new TestedLanguage(testedLanguage.code, testedLanguage.name, testedLanguage.level)
         ),
         command.learningLanguages.map(learningLanguageResultToDomain),
         command.objectives.map((goal) => goalCommandToDomain(goal)),

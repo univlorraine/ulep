@@ -29,6 +29,7 @@ export interface UniversityProps {
   maxTandemsPerUser: number;
   notificationEmail?: string;
   specificLanguagesAvailable?: Language[];
+  nativeLanguage: Language;
 }
 
 export class University {
@@ -68,6 +69,8 @@ export class University {
 
   readonly specificLanguagesAvailable: Language[];
 
+  readonly nativeLanguage: Language;
+
   constructor(props: UniversityProps) {
     this.id = props.id;
     this.admissionStart = props.admissionStart;
@@ -87,6 +90,7 @@ export class University {
     this.specificLanguagesAvailable = props.specificLanguagesAvailable || [];
     this.timezone = props.timezone;
     this.website = props.website;
+    this.nativeLanguage = props.nativeLanguage;
   }
 
   static create(props: UniversityProps): University {

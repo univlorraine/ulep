@@ -15,7 +15,7 @@ const SignupFinalPage: React.FC = () => {
     const profileSignUp = useStoreState((state) => state.profileSignUp);
     const profile = useStoreState((state) => state.profile);
     const user = useStoreState((state) => state.user);
-    const isUpdate = profile?.id;
+    const isUpdate = Boolean(profile?.id);
 
     const onCreateProfile = async () => {
         if (
@@ -83,7 +83,7 @@ const SignupFinalPage: React.FC = () => {
         >
             <div className={styles.container}>
                 <h1 className={styles.title}>{`${t('signup_end_page.thanks')} ${
-                    profile?.user.firstname.trim() || user?.firstname.trim()
+                    user?.firstname.trim() || profile?.user.firstname.trim()
                 }, ${t('signup_end_page.account')}`}</h1>
                 <Avatar user={user} className={styles.image} />
                 {!isUpdate ? (
@@ -91,7 +91,11 @@ const SignupFinalPage: React.FC = () => {
                 ) : (
                     <div className="margin" />
                 )}
-                <button className="primary-button" onClick={nextStep}>
+                <button
+                    aria-label={t('signup_end_page.validate_button') as string}
+                    className="primary-button"
+                    onClick={nextStep}
+                >
                     {t('signup_end_page.validate_button')}
                 </button>
             </div>

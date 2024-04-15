@@ -206,6 +206,7 @@ const SignUpPage: React.FC = () => {
                 {/* Loggin button */}
                 {university && university.isCentral && !isLoggedIn && (
                     <button
+                        aria-label={t('signup_page.sso_button') as string}
                         className="tertiary-button large-margin-vertical"
                         onClick={async () => {
                             updateProfileSignUp({
@@ -269,6 +270,7 @@ const SignUpPage: React.FC = () => {
                         </p>
                     )}
                     <button
+                        aria-label={t('signup_page.validate_button') as string}
                         className={`primary-button ${!isFormValid ? 'disabled' : ''}`}
                         disabled={!isFormValid}
                         onClick={continueSignUp}

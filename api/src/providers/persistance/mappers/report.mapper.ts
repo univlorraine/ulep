@@ -12,7 +12,7 @@ import {
 } from 'src/providers/persistance/mappers/user.mapper';
 
 export const ReportRelations = {
-  User: { include: UserRelations() },
+  User: { include: UserRelations },
   Category: {
     include: {
       TextContent: TextContentRelations,

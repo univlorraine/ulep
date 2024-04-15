@@ -9,6 +9,7 @@
             "university": "Please select a university for the administrator"
         },
         "label": "Administrators",
+        "tabLabel": "Administrators",
         "university": "Manager",
         "update": {
             "email": "Update user email",
@@ -23,6 +24,7 @@
             "title": "Create a campus"
         },
         "label": "Campus",
+        "tabLabel": "Central univ. campus",
         "name": "Centrale univertity name",
         "update": {
             "error": "An error occurred while updating the instance",
@@ -32,11 +34,13 @@
     },
     "count_suggested_languages": {
         "label": "Total languages requested",
+        "tabLabel": "Total languages requested",
         "total": "Total"
     },
     "countries": {
         "code": "Country code",
         "label": "Countries",
+        "tabLabel": "Countries",
         "name": "Country"
     },
     "days": {
@@ -70,7 +74,6 @@
         "student": "Student",
         "translations": "Translations",
         "university": "University",
-        "userDataError": "An error occurred while retrieving your information",
         "tandem": "Tandem",
         "both": "Both",
         "deleted_user": "Deleted user",
@@ -88,10 +91,12 @@
         }
     },
     "header": {
-        "title": "ULEP Administration"
+        "title": "ULEP Administration",
+        "update": "Update"
     },
     "instance": {
-        "label": "Instance",
+        "label": "Configuration",
+        "tabLabel": "Instance",
         "name": "Instance name",
         "email": "Email linked to the instance",
         "cgu": "Url to terms and conditions",
@@ -105,6 +110,7 @@
         "secondaryColor": "Secondary color of the application",
         "secondaryBackgroundColor": "Secondary color of the application's background image",
         "secondaryDarkColor": "Dark shade of the secondary color used for the application background",
+        "title": "Application configuration",
         "update_error": "An error occurred while updating the instance",
         "purge_modal": {
             "cancel": "Cancel",
@@ -151,6 +157,7 @@
         },
         "interests": "Interests",
         "label": "Interest categories",
+        "tabLabel": "Interest categories",
         "name": "Name",
         "update": {
             "title": "Update an interest category"
@@ -159,6 +166,7 @@
     "languages": {
         "code": "Language code",
         "label": "Languages",
+        "tabLabel": "Languages",
         "name": "Language name",
         "secondary_status": {
             "active": "Active language",
@@ -179,7 +187,10 @@
             "no": "No"
         }
     },
-    "langauges_picker": {
+    "language_picker": {
+        "placeholder": "Choose a language"
+    },
+    "languages_picker": {
         "placeholder": "Choose an additional language"
     },
     "login": {
@@ -199,6 +210,7 @@
         },
         "label": "Objectives",
         "name": "Name",
+        "title": "Objectives",
         "update": {
             "error": "An error occurred while updating the objective",
             "title": "Update an objective"
@@ -250,7 +262,11 @@
         "summary": "Summary",
         "searchLastname": "Lastname",
         "staffFunction": "Function",
-        "status": "Status"
+        "status": "Status",
+        "title": "Profiles",
+        "update": {
+            "title": "Modify profile"
+        }
     },
     "purge": {
         "error": "An error occurred while the purge",
@@ -269,6 +285,7 @@
             "level": "Question level",
             "name": "Question title"
         },
+        "title": "Questions",
         "update": {
             "error": "An error occurred while updating the question",
             "title": "Update a question"
@@ -280,6 +297,8 @@
         "content": "Content",
         "in_progress": "In progress",
         "label": "Reports",
+        "tabLabel": "Reports list",
+        "title": "Reports",
         "open": "Open",
         "status": "Status",
         "update": {
@@ -295,12 +314,26 @@
             "name": "Name of the new category",
             "title": "Creation of a new category"
         },
-        "label": "Categories report"
+        "label": "Categories",
+        "tabLabel": "Categories",
+        "show": {
+            "name": "Report category name"
+        },
+        "update": {
+            "error": "An error occurred while updating the category",
+            "name": "Report category name",
+            "title": "Report category update"
+        }
     },
     "suggested_languages": {
-        "label": "Asked languages"
+        "label": "Asked languages",
+        "tabLabel": "Asked languages"
     },
     "universities": {
+        "admission_start": "Registration start",
+        "code_button": "Add a code",
+        "domain_button": "Add a domain",
+        "country": "Country",
         "create": {
             "admission_end": "Partner university admission due date",
             "admission_error": "Admission due date must be after admission start date",
@@ -310,6 +343,7 @@
             "codes_error": "Code must has at least 6 characters and have a letter and a number",
             "country": "Partner university country",
             "domains": "Domain name list for inscription",
+            "language": "Default language",
             "logo": "University logo",
             "open_service": "Service opening date",
             "open_service_error": "Service opening date must be before closing date",
@@ -323,15 +357,18 @@
             "max_tandems_per_user": "Maximum number of tandems per user",
             "notificationEmail": "Email for notifications"
         },
-        "pairingModes": {
-            "manual": "Manual",
-            "semi_automatic": "Semi-automatic",
-            "automatic": "Automatic"
-        },
         "label": "Universities",
+        "tabLabel": "Universities list",
+        "language": "Language",
         "id": "ID",
         "name": "University name",
-        "parent": "Centrale university",
+        "pairing_mode": {
+            "automatic": "Automatic",
+            "label": "Pairing",
+            "manual": "Manual",
+            "semi_automatic": "Semi-auto"
+        },
+        "parent": "Central",
         "show": {
             "admission_start": "Admission start date",
             "admission_error": "Admission due date must be after admission start date",
@@ -341,6 +378,7 @@
             "confidentialityUrl": "Privacy rules URL",
             "country": "University country",
             "domains": "Allowed domain names",
+            "language": "Default language",
             "logo": "University logo",
             "name": "University name",
             "open_service": "Service opening date",
@@ -357,6 +395,14 @@
             "notificationEmail": "Email for notifications"
         },
         "specific_language": "Specific languages",
+        "status": {
+            "closed": "Closed",
+            "label": "Status",
+            "open": "Open",
+            "soon": "Soon",
+            "suspended": "Suspended"
+        },
+        "title": "Partner universities",
         "update": {
             "admission_end": "University admission due date",
             "admission_error": "Admission due date must be after admission start date",
@@ -371,8 +417,10 @@
             "country": "University country",
             "domains": "Domain name list for inscription",
             "domains_error": "Domain name must start with @",
-            "logo": "University logo",
+            "error": "An error occurred while updating the university",
+            "language": "Default language",
             "languages": "List of additional languages available for learning",
+            "logo": "University logo",
             "name": "University name",
             "timezone": "University timezone",
             "title": "Update an university",
@@ -511,7 +559,8 @@
                     "role": "Role"
                 }
             }
-        }
+        },
+        "title": "Tandem requests"
     },
     "universitiesPicker": {
         "error": "An error occured while fetching universities"

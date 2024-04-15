@@ -14,6 +14,7 @@ const Checkbox: React.FC<CheckboxProps> = ({ isSelected, onPressed, name, textCl
                 onClick={onPressed}
                 style={{ backgroundColor: !isSelected ? 'white' : 'black' }}
                 className={isSelected ? styles['checkbox-selected'] : styles['checkbox-unselected']}
+                aria-label={isSelected ? `Check ${name}` : `Uncheck ${name}`}
             >
                 {isSelected && <img alt="check" className={styles.image} src={CheckSvg} />}
             </button>

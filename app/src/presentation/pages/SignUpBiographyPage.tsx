@@ -118,6 +118,7 @@ const SignUpBiographyPage: React.FC = () => {
                 </div>
                 <div className={`${biographyStyles['bottom-container']} large-margin-top extra-large-margin-bottom`}>
                     <button
+                        aria-label={t('signup_biography_page.validate_button') as string}
                         className={`primary-button ${isAFieldEmpty ? 'disabled' : ''}`}
                         disabled={isAFieldEmpty}
                         onClick={continueSignUp}

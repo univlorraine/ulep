@@ -1,6 +1,7 @@
 import React from 'react';
 import { useTranslate, useNotify, useRedirect, useUpdate, Edit, WithRecord } from 'react-admin';
 import InterestForm from '../../components/form/InterestForm';
+import ConfigPagesHeader from '../../components/tabs/ConfigPagesHeader';
 import IndexedTranslation from '../../entities/IndexedTranslation';
 import InterestCategory from '../../entities/InterestCategory';
 import Translation from '../../entities/Translation';
@@ -40,24 +41,27 @@ const EditInterestCategory = () => {
     };
 
     return (
-        <Edit title={translate('interest_categories.update.title')}>
-            <WithRecord<InterestCategory>
-                label="interests/categories/"
-                render={(record) => (
-                    <InterestForm
-                        handleSubmit={(name: string, translations: IndexedTranslation[]) =>
-                            handleSubmit(record.id, name, translations)
-                        }
-                        name={record.name.content}
-                        tradKey="interest_categories"
-                        tradModeKey="update"
-                        translations={record.name.translations?.map(
-                            (translation: Translation, index: number) => new IndexedTranslation(index, translation)
-                        )}
-                    />
-                )}
-            />
-        </Edit>
+        <>
+            <ConfigPagesHeader />
+            <Edit title={translate('interest_categories.update.title')}>
+                <WithRecord<InterestCategory>
+                    label="interests/categories/"
+                    render={(record) => (
+                        <InterestForm
+                            handleSubmit={(name: string, translations: IndexedTranslation[]) =>
+                                handleSubmit(record.id, name, translations)
+                            }
+                            name={record.name.content}
+                            tradKey="interest_categories"
+                            tradModeKey="update"
+                            translations={record.name.translations?.map(
+                                (translation: Translation, index: number) => new IndexedTranslation(index, translation)
+                            )}
+                        />
+                    )}
+                />
+            </Edit>
+        </>
     );
 };
 

@@ -9,6 +9,7 @@ import { Language } from 'src/core/models';
 import { LearningLanguageResponse } from '../learning-languages';
 import { IsObject, ValidateNested, IsBoolean } from 'class-validator';
 import { AvailabilitesDto } from 'src/api/dtos/profiles/availabilities';
+import { TestedLanguageResponse } from 'src/api/dtos/tested-languages/tested-language.response';
 
 class NativeLanguageResponse {
   @ApiProperty({ type: 'string', example: 'FR' })
@@ -68,6 +69,13 @@ export class ProfileResponse {
   )
   masteredLanguages: MasteredLanguageResponse[];
 
+  @ApiProperty()
+  @Expose({ groups: ['read'] })
+  @Transform(({ value }) =>
+    value.map((testedLanguage) => new TestedLanguageResponse(testedLanguage)),
+  )
+  testedLanguages: TestedLanguageResponse[];
+
   @ApiProperty({ type: ObjectiveResponse, isArray: true })
   @Expose({ groups: ['read'] })
   objectives: ObjectiveResponse[];
@@ -117,6 +125,9 @@ export class ProfileResponse {
         name: masteredLanguage.name,
         code: masteredLanguage.code,
       })),
+      testedLanguages: profile.testedLanguages
+        ? profile.testedLanguages.map(TestedLanguageResponse.fromDomain)
+        : [],
       learningLanguages: profile.learningLanguages.map((ll) =>
         LearningLanguageResponse.fromDomain(ll),
       ),
@@ -129,7 +140,7 @@ export class ProfileResponse {
       meetingFrequency: profile.meetingFrequency,
       availabilities: AvailabilitesDto.fromDomain(profile.availabilities),
       availabilitiesNote: profile.availabilitiesNote,
-      availabilitiesNotePrivacy: profile.availavilitiesNotePrivacy,
+      availabilitiesNotePrivacy: profile.availabilitiesNotePrivacy,
       biography:
         profile.biography && BiographyDto.fromDomain(profile.biography),
     });

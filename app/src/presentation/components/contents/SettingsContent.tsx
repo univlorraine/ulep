@@ -93,8 +93,12 @@ const SettingsContent: React.FC<SettingsContentProps> = ({ onBackPressed, onDisc
 
     return (
         <div className={styles.container}>
-            <button className={styles['back-button']} onClick={onBackPressed}>
-                <img alt="arrow-left" src={ArrowLeftSvg} />
+            <button
+                aria-label={t('global.go_back') as string}
+                className={styles['back-button']}
+                onClick={onBackPressed}
+            >
+                <img alt={t('global.go_back') as string} src={ArrowLeftSvg} />
             </button>
             <h1 className={styles.title}>{t('home_page.settings.title')}</h1>
 
@@ -107,7 +111,10 @@ const SettingsContent: React.FC<SettingsContentProps> = ({ onBackPressed, onDisc
                 />
             </div>
             <span className={styles.subtitle}>{t('home_page.settings.other')}</span>
-            <button className={styles['setting-container']}>
+            <button
+                aria-label={t('home_page.settings.notifications') as string}
+                className={styles['setting-container']}
+            >
                 <span>{t('home_page.settings.notifications')}</span>
                 <Switch
                     onChange={() => onUpdateNotification()}
@@ -122,7 +129,7 @@ const SettingsContent: React.FC<SettingsContentProps> = ({ onBackPressed, onDisc
                 className={styles['setting-container']}
             >
                 <span>{t('home_page.settings.confidentiality')}</span>
-                <img alt="right-arrow" src={ArrowRightSvg} />
+                <img alt="" src={ArrowRightSvg} />
             </a>
             <a
                 href={configuration.cguUrl}
@@ -130,21 +137,33 @@ const SettingsContent: React.FC<SettingsContentProps> = ({ onBackPressed, onDisc
                 className={`${styles['setting-container']} large-margin-bottom`}
             >
                 <span>{t('home_page.settings.CGU')}</span>
-                <img alt="right-arrow" src={ArrowRightSvg} />
+                <img alt="" src={ArrowRightSvg} />
             </a>
 
             <span className={styles.subtitle}>{t('home_page.settings.account')}</span>
-            <button className={styles['setting-container']} onClick={onEditAccount}>
+            <button
+                aria-label={t('home_page.settings.edit_account') as string}
+                className={styles['setting-container']}
+                onClick={onEditAccount}
+            >
                 <span>{t('home_page.settings.edit_account')}</span>
-                <img alt="right-arrow" src={ArrowRightSvg} />
+                <img alt="" src={ArrowRightSvg} />
             </button>
-            <button className={styles['setting-container']} onClick={() => setIsModalOpen(true)}>
+            <button
+                aria-label={t('home_page.settings.unsubscribe') as string}
+                className={styles['setting-container']}
+                onClick={() => setIsModalOpen(true)}
+            >
                 <span>{t('home_page.settings.unsubscribe')}</span>
-                <img alt="right-arrow" src={ArrowRightSvg} />
+                <img alt="" src={ArrowRightSvg} />
             </button>
-            <button className={styles['setting-container']} onClick={onDisconnect}>
+            <button
+                aria-label={t('home_page.settings.logout') as string}
+                className={styles['setting-container']}
+                onClick={onDisconnect}
+            >
                 <span>{t('home_page.settings.logout')}</span>
-                <img alt="right-arrow" src={ArrowRightSvg} />
+                <img alt="" src={ArrowRightSvg} />
             </button>
             <ConfirmModal
                 isVisible={isModalOpen}

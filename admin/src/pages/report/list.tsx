@@ -11,6 +11,7 @@ import {
     Loading,
     useGetIdentity,
 } from 'react-admin';
+import ReportsPagesHeader from '../../components/tabs/ReportsPagesHeader';
 
 const ReportFilter = (props: any) => {
     const translate = useTranslate();
@@ -39,25 +40,28 @@ const ReportList = () => {
     }
 
     return (
-        <List
-            exporter={false}
-            filter={!identity?.isCentralUniversity ? { universityId: identity.universityId } : undefined}
-            filters={<ReportFilter />}
-        >
-            <Datagrid rowClick="show">
-                <TextField label={translate('reports.category')} source="category.name" />
-                <TextField label={translate('global.lastname')} source="user.lastname" />
-                <TextField label={translate('global.firstname')} source="user.firstname" />
-                <TextField label={translate('global.university')} source="user.university.name" />
-                <FunctionField
-                    label={translate('reports.status')}
-                    render={(record: any) => translate(`reports.${record.status}`)}
-                    source="status"
-                />
-                <TextField label={translate('reports.content')} source="content" />
-                <DateField label={translate('reports.created_at')} source="createdAt" />
-            </Datagrid>
-        </List>
+        <>
+            <ReportsPagesHeader />
+            <List
+                exporter={false}
+                filter={!identity?.isCentralUniversity ? { universityId: identity.universityId } : undefined}
+                filters={<ReportFilter />}
+            >
+                <Datagrid rowClick="show">
+                    <TextField label={translate('reports.category')} source="category.name" />
+                    <TextField label={translate('global.lastname')} source="user.lastname" />
+                    <TextField label={translate('global.firstname')} source="user.firstname" />
+                    <TextField label={translate('global.university')} source="user.university.name" />
+                    <FunctionField
+                        label={translate('reports.status')}
+                        render={(record: any) => translate(`reports.${record.status}`)}
+                        source="status"
+                    />
+                    <TextField label={translate('reports.content')} source="content" />
+                    <DateField label={translate('reports.created_at')} source="createdAt" />
+                </Datagrid>
+            </List>
+        </>
     );
 };
 

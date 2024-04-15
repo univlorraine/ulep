@@ -5,6 +5,7 @@ import {
   STORAGE_INTERFACE,
   StorageInterface,
 } from 'src/core/ports/storage.interface';
+import { KeycloakClient } from '@app/keycloak';
 
 export class DeleteUserCommand {
   id: string;
@@ -15,6 +16,7 @@ export class DeleteUserUsecase {
   constructor(
     @Inject(USER_REPOSITORY)
     private readonly userRepository: UserRepository,
+    private readonly keycloak: KeycloakClient,
     @Inject(STORAGE_INTERFACE)
     private readonly storage: StorageInterface,
   ) {}
@@ -29,6 +31,8 @@ export class DeleteUserUsecase {
     if (instance.avatar) {
       await this.storage.delete(instance.avatar.bucket, instance.avatar.name);
     }
+
+    await this.keycloak.deleteUser(command.id);
 
     return this.userRepository.delete(command.id);
   }

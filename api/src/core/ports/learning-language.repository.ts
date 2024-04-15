@@ -58,6 +58,8 @@ export interface LearningLanguageRepository {
 
   delete(id: string): Promise<void>;
 
+  update(learningLanguage: LearningLanguage): Promise<void>;
+
   archiveUnmatchedLearningLanguages(
     learningLanguages: LearningLanguage[],
     purgeId: string,

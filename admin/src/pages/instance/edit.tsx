@@ -1,6 +1,7 @@
 import React from 'react';
 import { useTranslate, useNotify, useRedirect, useUpdate, Edit, WithRecord } from 'react-admin';
 import InstanceForm from '../../components/form/InstanceForm';
+import ConfigPagesHeader from '../../components/tabs/ConfigPagesHeader';
 import Instance from '../../entities/Instance';
 
 const EditInstance = () => {
@@ -32,12 +33,15 @@ const EditInstance = () => {
     };
 
     return (
-        <Edit title={translate('instance.edit.title')}>
-            <WithRecord<Instance>
-                label="instance"
-                render={(record) => <InstanceForm handleSubmit={handleSubmit} instance={record} />}
-            />
-        </Edit>
+        <>
+            <ConfigPagesHeader />
+            <Edit title={translate('instance.edit.title')}>
+                <WithRecord<Instance>
+                    label="instance"
+                    render={(record) => <InstanceForm handleSubmit={handleSubmit} instance={record} />}
+                />
+            </Edit>
+        </>
     );
 };
 

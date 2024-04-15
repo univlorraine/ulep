@@ -10,6 +10,7 @@ import {
     ArrayField,
     Datagrid,
 } from 'react-admin';
+import ConfigPagesHeader from '../../components/tabs/ConfigPagesHeader';
 
 const InterestCategoryShowAction = () => (
     <TopToolbar>
@@ -22,18 +23,21 @@ const InterestCategoryShow = () => {
     const translate = useTranslate();
 
     return (
-        <Show actions={<InterestCategoryShowAction />} title={translate('interest_categories.label')}>
-            <SimpleShowLayout sx={{ m: 3 }}>
-                <TextField label={translate('interests.show.name')} source="name.content" />
+        <>
+            <ConfigPagesHeader />
+            <Show actions={<InterestCategoryShowAction />} title={translate('interest_categories.label')}>
+                <SimpleShowLayout sx={{ m: 3 }}>
+                    <TextField label={translate('interests.show.name')} source="name.content" />
 
-                <ArrayField label={translate('global.translations')} source="name.translations">
-                    <Datagrid bulkActionButtons={false}>
-                        <TextField label="Code" source="language" />
-                        <TextField label="Contenu" source="content" />
-                    </Datagrid>
-                </ArrayField>
-            </SimpleShowLayout>
-        </Show>
+                    <ArrayField label={translate('global.translations')} source="name.translations">
+                        <Datagrid bulkActionButtons={false}>
+                            <TextField label="Code" source="language" />
+                            <TextField label="Contenu" source="content" />
+                        </Datagrid>
+                    </ArrayField>
+                </SimpleShowLayout>
+            </Show>
+        </>
     );
 };
 

@@ -33,6 +33,7 @@ const PairingSelectCEFRPage: React.FC = () => {
                     <h1 className="title">{t('pairing_select_level_page.title')}</h1>
                     <p className="subtitle">{t('pairing_select_level_page.subtitle')}</p>
                     <button
+                        aria-label={'A0' + t('pairing_select_level_page.no_knowledge')}
                         className={pairingSelectLevelStyles['level-container']}
                         onClick={() => setSelectedLevel('A0')}
                         style={{ backgroundColor: selectedLevel === 'A0' ? configuration.secondaryColor : '#F2F4F7' }}
@@ -44,6 +45,7 @@ const PairingSelectCEFRPage: React.FC = () => {
                             return (
                                 <button
                                     key={level}
+                                    aria-label={level}
                                     className={pairingSelectLevelStyles['level-container-override']}
                                     onClick={() => setSelectedLevel(level)}
                                     style={{
@@ -59,6 +61,7 @@ const PairingSelectCEFRPage: React.FC = () => {
                 </div>
                 <div className="extra-large-margin-bottom">
                     <button
+                        aria-label={t('pairing_select_level_page.validate_button') as string}
                         className={`primary-button ${!selectedLevel ? 'disabled' : ''}`}
                         disabled={!selectedLevel}
                         onClick={onValidateCefr}
@@ -66,6 +69,7 @@ const PairingSelectCEFRPage: React.FC = () => {
                         {t('pairing_select_level_page.validate_button')}
                     </button>
                     <button
+                        aria-label={t('pairing_select_level_page.test_button') as string}
                         className="secondary-button large-margin-top"
                         onClick={() => history.push(`/pairing/language/quizz/introduction`)}
                     >

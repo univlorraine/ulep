@@ -8,11 +8,12 @@ import useWindowDimensions from '../../hooks/useWindowDimensions';
 import { HYBRID_MAX_WIDTH } from '../../utils';
 
 interface OtherLanguageContentProps {
+    displayJoker: boolean;
     languages: Language[];
     onLanguageSelected: (language: Language) => void;
 }
 
-const OtherLanguageContent: React.FC<OtherLanguageContentProps> = ({ languages, onLanguageSelected }) => {
+const OtherLanguageContent: React.FC<OtherLanguageContentProps> = ({ displayJoker, languages, onLanguageSelected }) => {
     const { t } = useTranslation();
     const [selectedLaguage, setSelectedLanguage] = useState<Language>();
     const { width } = useWindowDimensions();
@@ -33,12 +34,12 @@ const OtherLanguageContent: React.FC<OtherLanguageContentProps> = ({ languages, 
 
                 <div className={pairingOtherLanguagesStyles['joker-container']}>
                     <div className={pairingOtherLanguagesStyles['joker-image-container']}>
-                        <img alt="dice" className={pairingOtherLanguagesStyles.dice} src={DicePng} />
+                        <img alt="" className={pairingOtherLanguagesStyles.dice} src={DicePng} />
                         <div className={pairingOtherLanguagesStyles['joker-text-container']}>
                             <p className={pairingOtherLanguagesStyles['joker-description']}>
                                 {t('pairing_other_languages_page.joker_description')}
                             </p>
-                            {!isHybrid && (
+                            {displayJoker && !isHybrid && (
                                 <Checkbox
                                     isSelected={selectedLaguage?.code === '*'}
                                     onPressed={() => setSelectedLanguage(new Language('joker', '*', 'Joker'))}
@@ -48,7 +49,7 @@ const OtherLanguageContent: React.FC<OtherLanguageContentProps> = ({ languages, 
                             )}
                         </div>
                     </div>
-                    {isHybrid && (
+                    {displayJoker && isHybrid && (
                         <Checkbox
                             isSelected={selectedLaguage?.code === '*'}
                             onPressed={() => setSelectedLanguage(new Language('joker', '*', 'Joker'))}
@@ -75,6 +76,7 @@ const OtherLanguageContent: React.FC<OtherLanguageContentProps> = ({ languages, 
             </div>
             <div className={`large-margin-top extra-large-margin-bottom`}>
                 <button
+                    aria-label={t('pairing_other_languages_page.validate_button') as string}
                     className={`primary-button ${!selectedLaguage ? 'disabled' : ''}`}
                     disabled={!selectedLaguage}
                     onClick={nextStep}
