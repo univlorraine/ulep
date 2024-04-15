@@ -42,3 +42,6 @@ migration: ## Create a migration from changes in schema and apply it to the data
 
 seed: ## Seed the database with test data
 	@$(NEST) pnpm seed
+
+seed-random: ## Seed the database with test and random data
+	@$(NEST) pnpm seed:random
