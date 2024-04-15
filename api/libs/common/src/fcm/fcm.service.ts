@@ -20,11 +20,11 @@ export interface FCMConfiguration {
 export const FCM_CONFIGURATION = 'FCM_CONFIGURATION';
 
 export interface FCMOptions {
-  data: {
+  data?: {
     [key: string]: string;
   };
   image: string;
-  message: string;
+  body: string;
   title: string;
   token: string;
 }
@@ -105,7 +105,7 @@ export class FCMService implements OnModuleInit, OnModuleDestroy {
           token: message.token,
           notification: {
             title: message.title,
-            body: message.message,
+            body: message.body,
             image: message.image,
           },
           data: message.data,
