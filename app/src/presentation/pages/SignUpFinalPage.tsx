@@ -83,7 +83,7 @@ const SignupFinalPage: React.FC = () => {
         >
             <div className={styles.container}>
                 <h1 className={styles.title}>{`${t('signup_end_page.thanks')} ${
-                    profile?.user.firstname.trim() || user?.firstname.trim()
+                    user?.firstname.trim() || profile?.user.firstname.trim()
                 }, ${t('signup_end_page.account')}`}</h1>
                 <Avatar user={user} className={styles.image} />
                 {!isUpdate ? (

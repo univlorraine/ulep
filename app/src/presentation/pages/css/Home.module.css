@@ -93,9 +93,12 @@
     }
 
     .content {
-        margin-top: 12px;
         background-color: #f4f5fe;
         --ion-background-color: #f4f5fe;
+    }
+
+    .masonery-content {
+        margin-top: 12px;
     }
 
     .report-container {
