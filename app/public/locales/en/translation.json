@@ -63,9 +63,9 @@
         "yes": "Yes",
         "go_back": "Go back",
         "change_avatar": "Update your avatar",
-        "welcome": "Welcome to ULEP,",
-        "welcome_subtext": "The best way to learn languages",
-        "welcome_btn": "Learn a new language in tandem",
+        "welcome": "Bienvenue sur ULEP,",
+        "welcome_subtext": "le meilleur moyen de pratiquer une langue",
+        "welcome_btn": "Apprends une nouvelle langue en tandem",
         "close": "Close"
     },
     "connection_page": {
