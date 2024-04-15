@@ -45,6 +45,7 @@ const SignUpFrequencyPage: React.FC = () => {
                         return (
                             <button
                                 key={freq}
+                                aria-label={t(`signup_frequency_page.${freq}`) as string}
                                 className={frequencyStyle['frequency-container']}
                                 onClick={() => setFrequency(freq)}
                                 style={{ background: freq !== frequency ? '#F2F4F7' : '#FDEE66' }}
@@ -58,6 +59,7 @@ const SignUpFrequencyPage: React.FC = () => {
                 </div>
                 <div className="extra-large-margin-bottom">
                     <button
+                        aria-label={t('signup_frequency_page.validate_button') as string}
                         className={`primary-button ${frequency === undefined ? 'disabled' : ''}`}
                         disabled={frequency === undefined}
                         onClick={continueSignUp}

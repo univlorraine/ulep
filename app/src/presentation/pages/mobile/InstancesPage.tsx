@@ -35,7 +35,7 @@ const InstancesPage: React.FC<InstancesPageProps> = ({ onValidate }) => {
     const [selectedInstance, setSelectedInstance] = useState<Instance>();
 
     useEffect(() => {
-        if(instances.length === 1) {
+        if (instances.length === 1) {
             onValidate(instances[0].apiUrl);
         }
     }, []);
@@ -48,17 +48,19 @@ const InstancesPage: React.FC<InstancesPageProps> = ({ onValidate }) => {
                 {instances.map((instance) => (
                     <button
                         key={instance.apiUrl}
+                        aria-label={instance.name}
                         className={`${styles.instance} ${
                             selectedInstance?.apiUrl === instance.apiUrl && styles['primary-instance']
                         }`}
                         onClick={() => setSelectedInstance(instance)}
                     >
-                        <img className={styles.image} src={instance.image} />
+                        <img alt="" className={styles.image} src={instance.image} />
                         <p className={styles['instance-name']}>{instance.name}</p>
                     </button>
                 ))}
             </div>
             <button
+                aria-label={t('instance.button') as string}
                 className={`primary-button ${styles.button} ${!selectedInstance ? 'disabled' : ''}`}
                 disabled={!selectedInstance}
                 onClick={() => onValidate(selectedInstance!.apiUrl)}

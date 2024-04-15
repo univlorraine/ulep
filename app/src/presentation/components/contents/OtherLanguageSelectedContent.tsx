@@ -39,7 +39,11 @@ const OtherLanguageSelectedContent: React.FC<OtherLanguageSelectedContentProps> 
                 </p>
             </div>
             <div className={`large-margin-top extra-large-margin-bottom`}>
-                <button className={`primary-button `} onClick={onNextStep}>
+                <button
+                    aria-label={t('pairing_other_languages_page.selected_language.validate_button') as string}
+                    className={`primary-button `}
+                    onClick={onNextStep}
+                >
                     {t('pairing_other_languages_page.selected_language.validate_button')}
                 </button>
             </div>

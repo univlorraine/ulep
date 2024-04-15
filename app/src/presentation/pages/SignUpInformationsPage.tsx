@@ -162,9 +162,19 @@ const SignUpInformationsPage: React.FC = () => {
             <div className={styles.body}>
                 <h1 className={styles.title}>{t('signup_informations_page.title')}</h1>
 
-                <button className="secondary-button" onClick={() => openGallery()}>
+                <button
+                    aria-label={
+                        t(
+                            profilePicture
+                                ? 'signup_informations_page.photo_selected'
+                                : 'signup_informations_page.photo'
+                        ) as string
+                    }
+                    className="secondary-button"
+                    onClick={() => openGallery()}
+                >
                     <img
-                        alt="plus"
+                        alt=""
                         className={styles.image}
                         src={profilePicture ? URL.createObjectURL(profilePicture) : PlusPng}
                     />
@@ -293,6 +303,7 @@ const SignUpInformationsPage: React.FC = () => {
 
                 <div className={styles['bottom-container']}>
                     <button
+                        aria-label={t('signup_informations_page.validate_button') as string}
                         className={`primary-button small-margin-top large-margin-bottom ${
                             !allFieldHasValue() ? 'disabled' : ''
                         }`}

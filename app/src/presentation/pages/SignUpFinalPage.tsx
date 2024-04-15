@@ -91,7 +91,11 @@ const SignupFinalPage: React.FC = () => {
                 ) : (
                     <div className="margin" />
                 )}
-                <button className="primary-button" onClick={nextStep}>
+                <button
+                    aria-label={t('signup_end_page.validate_button') as string}
+                    className="primary-button"
+                    onClick={nextStep}
+                >
                     {t('signup_end_page.validate_button')}
                 </button>
             </div>

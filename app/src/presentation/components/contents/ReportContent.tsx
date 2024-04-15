@@ -58,24 +58,32 @@ const ReportContent: React.FC<ReportContentProps> = ({ onGoBack, onReportSent })
 
     return (
         <div className={styles.content}>
-            <div className={styles.header}>
+            <div className={styles.header} role="navigation">
                 {isHybrid ? (
-                    <button className={styles['back-button']} onClick={onGoBack}>
-                        <img alt="go-back" src={ArrowLeftSvg} />
+                    <button
+                        aria-label={t('global.go_back') as string}
+                        className={styles['back-button']}
+                        onClick={onGoBack}
+                    >
+                        <img alt={t('global.go_back') as string} src={ArrowLeftSvg} />
                     </button>
                 ) : (
                     <div />
                 )}
                 <span>{t('global.account')}</span>
                 {!isHybrid ? (
-                    <button className={styles['back-button']} onClick={onGoBack}>
-                        <img alt="go-back" src={CloseBlackSvg} />
+                    <button
+                        aria-label={t('global.go_back') as string}
+                        className={styles['back-button']}
+                        onClick={onGoBack}
+                    >
+                        <img alt={t('global.go_back') as string} src={CloseBlackSvg} />
                     </button>
                 ) : (
                     <div />
                 )}
             </div>
-            <div className={styles.container}>
+            <div className={styles.container} role="main">
                 <h1 className="title large-margin-bottom">{t('home_page.report.title')}</h1>
                 <div className={styles.category}>
                     <Dropdown
@@ -93,6 +101,7 @@ const ReportContent: React.FC<ReportContentProps> = ({ onGoBack, onReportSent })
                 />
                 <div className={styles['button-container']}>
                     <button
+                        aria-label={t('home_page.report.send_button') as string}
                         className={`primary-button ${!selectedCategory ? 'disabled' : ''}`}
                         disabled={!selectedCategory}
                         onClick={sendReport}

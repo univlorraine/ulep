@@ -53,7 +53,8 @@
         "react-responsive-masonry": "^2.2.0",
         "react-router": "^5.3.4",
         "react-router-dom": "^5.3.4",
-        "react-switch": "^7.0.0"
+        "react-switch": "^7.0.0",
+        "vite-plugin-sitemap": "^0.5.3"
     },
     "devDependencies": {
         "@capacitor/cli": "5.0.4",
