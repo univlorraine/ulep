@@ -121,10 +121,6 @@ const theme: RaThemeOptions = {
                             height: '18px',
                         },
                     },
-                    '& .RaLoadingIndicator-loadedIcon::after': {
-                        content: '"Actualiser"',
-                        marginLeft: '5px',
-                    },
                     '& .RaLoadingIndicator-loader': {
                         left: '45%',
                         top: '6px',
