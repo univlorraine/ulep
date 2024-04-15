@@ -26,6 +26,7 @@
         "@capacitor/ios": "5.0.4",
         "@capacitor/keyboard": "5.0.2",
         "@capacitor/preferences": "^5.0.2",
+        "@capacitor/push-notifications": "^5.1.1",
         "@capacitor/splash-screen": "^5.0.5",
         "@capacitor/status-bar": "5.0.2",
         "@ionic/pwa-elements": "^3.2.1",

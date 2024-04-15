@@ -35,6 +35,7 @@ import GetPartnersToUniversityUsecase from '../domain/usecases/GetPartnersToUniv
 import EditProfileUsecase from '../domain/usecases/EditProfileUsecase';
 import EditUserUsecase from '../domain/usecases/EditUserUsecase';
 import CreateOrUpdateTestedLanguageUsecase from '../domain/usecases/CreateOrUpdateTestedLanguageUsecase';
+import NotificationAdapter from '../adapter/NotificationAdapter';
 
 interface GetConfigContextValueProps {
     apiUrl: string;
@@ -85,6 +86,7 @@ const getConfigContextValue = ({
     const getUniversityLanguages = new GetUniversityLanguagesUsecase(domainHttpAdapter);
     const getMediaObject = new GetMediaObjectUsecase(domainHttpAdapter);
     const getUniversity = new GetUniversityUsecase(domainHttpAdapter);
+    const notificationAdapter = new NotificationAdapter();
     const login = new LoginUsecase(domainHttpAdapter, setTokens);
     const revokeSessionsUsecase = new RevokeSessionsUsecase(domainHttpAdapter);
     const getTokenFromCodeUsecase = new GetTokenFromCodeUsecase(domainHttpAdapter, setTokens);
@@ -129,6 +131,7 @@ const getConfigContextValue = ({
         getUniversity,
         getUniversityLanguages,
         login,
+        notificationAdapter,
         resetPassword,
         updateAvatar,
         updateNotificationPermission,

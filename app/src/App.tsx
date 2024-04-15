@@ -4,7 +4,7 @@ import { IonReactRouter } from '@ionic/react-router';
 import { StoreProvider, useStoreRehydrated } from 'easy-peasy';
 import { useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
-import { ConfigContext } from './context/ConfigurationContext';
+import { ConfigContext, useConfig } from './context/ConfigurationContext';
 import getConfigContextValue from './context/getConfigurationContextValue';
 import Router from './presentation/router/Router';
 import React from 'react';
@@ -47,6 +47,33 @@ if (import.meta.env.VITE_SENTRY_DSN) {
         tracesSampleRate: 1.0,
     });
 }
+
+const AppCore = () => {
+    const { notificationAdapter } = useConfig();
+
+    useEffect(() => {
+        notificationAdapter.notificationPermission();
+        notificationAdapter.registrationListener((token: string) => {
+            console.log('Device token:', token);
+        });
+        notificationAdapter.errorListener((error: Error) => {
+            console.error('Registration error:', error);
+        });
+        notificationAdapter.notificationReceivedListener((notification: any) => {
+            console.log('Received notification:', notification);
+        });
+        notificationAdapter.notificationActionListener((notification: any) => {
+            console.log('Notification action performed:', notification);
+        });
+    }, []);
+
+    return (
+        <IonReactRouter>
+            <Router />
+            <AppUrlListener />
+        </IonReactRouter>
+    );
+};
 
 const AppContext = () => {
     const { i18n } = useTranslation();
@@ -98,10 +125,7 @@ const AppContext = () => {
                 logout,
             })}
         >
-            <IonReactRouter>
-                <Router />
-                <AppUrlListener />
-            </IonReactRouter>
+            <AppCore />
         </ConfigContext.Provider>
     );
 };
