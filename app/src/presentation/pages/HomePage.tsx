@@ -94,7 +94,7 @@ const HomePage: React.FC = () => {
                         )}
                     </div>
                     {isHybrid && <div className={styles.separator} />}
-                    <div className={styles.content}>
+                    <div className={styles['masonery-content']}>
                         {isLoading ? (
                             <div className={styles.loaderContainer}>
                                 <Loader />

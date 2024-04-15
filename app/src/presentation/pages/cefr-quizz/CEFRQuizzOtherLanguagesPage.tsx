@@ -7,7 +7,7 @@ import { useStoreActions, useStoreState } from '../../../store/storeTypes';
 import OtherLanguageContent from '../../components/contents/OtherLanguageContent';
 import WebLayoutCentered from '../../components/layout/WebLayoutCentered';
 import styles from '../css/SignUp.module.css';
-import useGetLearnableLanguages from '../../hooks/useGetLearnableLanguages';
+import useGetSuggestedLanguages from '../../hooks/useGetSuggestedLanguages';
 
 const PairingOtherLanguagesPage: React.FC = () => {
     const { t } = useTranslation();
@@ -22,7 +22,7 @@ const PairingOtherLanguagesPage: React.FC = () => {
         return <Redirect to={'/signup'} />;
     }
 
-    const { error, languages } = useGetLearnableLanguages(university, true, []);
+    const { error, languages } = useGetSuggestedLanguages(true, []);
 
     if (error) {
         showToast({ message: t(error.message), duration: 1000 });
