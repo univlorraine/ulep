@@ -32,10 +32,12 @@ import {
   UpdateAdministratorUsecase,
   UpdateUserUsecase,
   GetUserPersonalData,
+  AddDeviceUsecase,
 } from '../../core/usecases/user';
 import { CollectionResponse, CurrentUser } from '../decorators';
 import { Role, Roles } from '../decorators/roles.decorator';
 import {
+  AddDeviceRequest,
   AdministratorResponse,
   CreateAdministratorRequest,
   CreateUserRequest,
@@ -62,6 +64,7 @@ import { userPersonalDataToCsv } from '../dtos/users/csv-export.ts';
 @Swagger.ApiTags('Users')
 export class UserController {
   constructor(
+    private readonly addDeviceUsecase: AddDeviceUsecase,
     private readonly createUserUsecase: CreateUserUsecase,
     private readonly uploadAvatarUsecase: UploadAvatarUsecase,
     private readonly getUsersUsecase: GetUsersUsecase,
@@ -195,6 +198,16 @@ export class UserController {
   @Swagger.ApiOperation({ summary: 'Revoke User sessions.' })
   async rekoveSessions(@CurrentUser() user: KeycloakUser) {
     return this.revokeSessionsUsecase.execute(user.sub);
+  }
+
+  @Post('add-device')
+  @UseGuards(AuthenticationGuard)
+  @Swagger.ApiOperation({ summary: 'Add a device to a user.' })
+  async addDevice(
+    @CurrentUser() user: KeycloakUser,
+    @Body() body: AddDeviceRequest,
+  ) {
+    return this.addDeviceUsecase.execute(user.sub, body);
   }
 
   @Get(':id')

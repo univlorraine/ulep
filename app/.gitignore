@@ -38,3 +38,4 @@ dist/
 # Cypress
 cypress/videos
 cypress/screenshots
+google-services.json

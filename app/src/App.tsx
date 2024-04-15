@@ -49,22 +49,24 @@ if (import.meta.env.VITE_SENTRY_DSN) {
 }
 
 const AppCore = () => {
-    const { notificationAdapter } = useConfig();
+    const { deviceAdapter, notificationAdapter } = useConfig();
 
     useEffect(() => {
-        notificationAdapter.notificationPermission();
-        notificationAdapter.registrationListener((token: string) => {
-            console.log('Device token:', token);
-        });
-        notificationAdapter.errorListener((error: Error) => {
-            console.error('Registration error:', error);
-        });
-        notificationAdapter.notificationReceivedListener((notification: any) => {
-            console.log('Received notification:', notification);
-        });
-        notificationAdapter.notificationActionListener((notification: any) => {
-            console.log('Notification action performed:', notification);
-        });
+        if (deviceAdapter.isNativePlatform()) {
+            notificationAdapter.notificationPermission();
+            notificationAdapter.registrationListener((token: string) => {
+                console.log('Device token:', token);
+            });
+            notificationAdapter.errorListener((error: Error) => {
+                console.error('Registration error:', error);
+            });
+            notificationAdapter.notificationReceivedListener((notification: any) => {
+                console.log('Received notification:', notification);
+            });
+            notificationAdapter.notificationActionListener((notification: any) => {
+                console.log('Notification action performed:', notification);
+            });
+        }
     }, []);
 
     return (
