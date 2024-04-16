@@ -16,6 +16,7 @@
     },
     "dependencies": {
         "@babel/preset-env": "7.22.10",
+        "@capacitor-community/fcm": "^5.0.3",
         "@capacitor/android": "5.0.4",
         "@capacitor/app": "5.0.2",
         "@capacitor/browser": "^5.2.0",

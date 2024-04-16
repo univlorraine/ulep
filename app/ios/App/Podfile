@@ -11,6 +11,7 @@ install! 'cocoapods', :disable_input_output_paths => true
 def capacitor_pods
   pod 'Capacitor', :path => '../../node_modules/.pnpm/@capacitor+ios@5.0.4_@capacitor+core@5.0.4/node_modules/@capacitor/ios'
   pod 'CapacitorCordova', :path => '../../node_modules/.pnpm/@capacitor+ios@5.0.4_@capacitor+core@5.0.4/node_modules/@capacitor/ios'
+  pod 'CapacitorCommunityFcm', :path => '../../node_modules/.pnpm/@capacitor-community+fcm@5.0.3_@capacitor+core@5.0.4/node_modules/@capacitor-community/fcm'
   pod 'CapacitorApp', :path => '../../node_modules/.pnpm/@capacitor+app@5.0.2_@capacitor+core@5.0.4/node_modules/@capacitor/app'
   pod 'CapacitorBrowser', :path => '../../node_modules/.pnpm/@capacitor+browser@5.2.0_@capacitor+core@5.0.4/node_modules/@capacitor/browser'
   pod 'CapacitorCamera', :path => '../../node_modules/.pnpm/@capacitor+camera@5.0.5_@capacitor+core@5.0.4/node_modules/@capacitor/camera'
@@ -18,6 +19,7 @@ def capacitor_pods
   pod 'CapacitorHaptics', :path => '../../node_modules/.pnpm/@capacitor+haptics@5.0.2_@capacitor+core@5.0.4/node_modules/@capacitor/haptics'
   pod 'CapacitorKeyboard', :path => '../../node_modules/.pnpm/@capacitor+keyboard@5.0.2_@capacitor+core@5.0.4/node_modules/@capacitor/keyboard'
   pod 'CapacitorPreferences', :path => '../../node_modules/.pnpm/@capacitor+preferences@5.0.2_@capacitor+core@5.0.4/node_modules/@capacitor/preferences'
+  pod 'CapacitorPushNotifications', :path => '../../node_modules/.pnpm/@capacitor+push-notifications@5.1.1_@capacitor+core@5.0.4/node_modules/@capacitor/push-notifications'
   pod 'CapacitorSplashScreen', :path => '../../node_modules/.pnpm/@capacitor+splash-screen@5.0.5_@capacitor+core@5.0.4/node_modules/@capacitor/splash-screen'
   pod 'CapacitorStatusBar', :path => '../../node_modules/.pnpm/@capacitor+status-bar@5.0.2_@capacitor+core@5.0.4/node_modules/@capacitor/status-bar'
   pod 'SentryCapacitor', :path => '../../node_modules/.pnpm/@sentry+capacitor@0.14.0_@capacitor+core@5.0.4_@sentry+react@7.73.0/node_modules/@sentry/capacitor'
@@ -38,6 +40,13 @@ target 'staging' do
     # Add your Pods here
   end
 
-post_install do |installer|
-  assertDeploymentTarget(installer)
+  post_install do |installer|
+    installer.pods_project.targets.each do |target|
+        target.build_configurations.each do |config|
+        xcconfig_path = config.base_configuration_reference.real_path
+        xcconfig = File.read(xcconfig_path)
+        xcconfig_mod = xcconfig.gsub(/DT_TOOLCHAIN_DIR/, "TOOLCHAIN_DIR")
+        File.open(xcconfig_path, "w") { |file| file << xcconfig_mod }
+        end
+    end
 end

@@ -1,5 +1,6 @@
 import { ActionPerformed, PushNotifications, PushNotificationSchema, Token } from '@capacitor/push-notifications';
 import NotificationAdapterInterface from './interfaces/NotificationAdapter.interface';
+import { FCM } from '@capacitor-community/fcm';
 
 class NotificationAdapter implements NotificationAdapterInterface {
     errorListener(callback: Function) {
@@ -30,8 +31,11 @@ class NotificationAdapter implements NotificationAdapterInterface {
     }
 
     registrationListener(callback: Function) {
-        PushNotifications.addListener('registration', (token: Token) => {
-            return callback(token.value);
+        PushNotifications.addListener('registration', async () => {
+            // Use this to get fcm token rather than apns token for ios
+            const { token } = await FCM.getToken();
+
+            return callback(token);
         });
     }
 

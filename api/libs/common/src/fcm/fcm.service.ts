@@ -69,23 +69,30 @@ export class FCMService implements OnModuleInit, OnModuleDestroy {
     const batchResponse = await mapLimit<FCMOptions, BatchResponse>(
       batchedMessages,
       this.config.firebaseParallelLimit,
-      (batchedMessages) => this.handleBatch(batchedMessages, dryRun),
+      async (batchedMessages) =>
+        await this.handleBatch(batchedMessages, dryRun),
     );
 
-    return batchResponse.reduce(
-      ({ responses, successCount, failureCount }, currentResponse) => {
+    const batchReduced = batchResponse.reduce(
+      (acc, current) => {
         return {
-          responses: responses.concat(currentResponse.responses),
-          successCount: successCount + currentResponse.successCount,
-          failureCount: failureCount + currentResponse.failureCount,
+          responses: acc.responses.concat(current.responses),
+          successCount: acc.successCount + current.successCount,
+          failureCount: acc.failureCount + current.failureCount,
         };
       },
       {
         responses: [],
         successCount: 0,
         failureCount: 0,
-      } as BatchResponse,
+      },
     );
+
+    this.#logger.log(
+      `FCMService sent ${batchReduced.successCount} notifications successfully and ${batchReduced.failureCount} failed`,
+    );
+
+    return batchReduced;
   }
 
   private async sendAll(

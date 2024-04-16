@@ -49,17 +49,18 @@ export class FCMNotificationGateway implements NotificationGateway {
   }
 
   async sendWelcomeNotification(props: SendWelcomeNotification): Promise<void> {
-    await this.sender.sendNotifications(
-      props.to.map((notification) => ({
+    const image = this.images.notification;
+    const notifications = props.to.map((notification) => {
+      const translation = this.translate('welcome', notification.language, {
+        ...props,
+      });
+      return {
         token: notification.token,
-        title: this.translate('welcome', notification.language, {
-          ...props,
-        }).title,
-        body: this.translate('welcome', notification.language, {
-          ...props,
-        }).body,
-        image: this.images.notification,
-      })),
-    );
+        title: translation.title,
+        body: translation.body,
+        image,
+      };
+    });
+    await this.sender.sendNotifications(notifications);
   }
 }

@@ -50,9 +50,10 @@ if (import.meta.env.VITE_SENTRY_DSN) {
 
 const AppCore = () => {
     const { addDevice, deviceAdapter, notificationAdapter } = useConfig();
+    const profile = useStoreState((state) => state.profile);
 
     useEffect(() => {
-        if (deviceAdapter.isNativePlatform()) {
+        if (profile && deviceAdapter.isNativePlatform()) {
             notificationAdapter.notificationPermission();
             notificationAdapter.registrationListener((token: string) => {
                 addDevice.execute(token, deviceAdapter.isAndroid(), deviceAdapter.isIos());
