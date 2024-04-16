@@ -1,6 +1,5 @@
 -- CreateTable
 CREATE TABLE "Device" (
-    "id" TEXT NOT NULL,
     "token" TEXT NOT NULL,
     "is_android" BOOLEAN NOT NULL DEFAULT false,
     "is_ios" BOOLEAN NOT NULL DEFAULT false,
@@ -8,7 +7,7 @@ CREATE TABLE "Device" (
     "created_at" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updated_at" TIMESTAMP(3) NOT NULL,
 
-    CONSTRAINT "Device_pkey" PRIMARY KEY ("id")
+    CONSTRAINT "Device_pkey" PRIMARY KEY ("token")
 );
 
 -- AddForeignKey

@@ -1,5 +1,6 @@
 import CameraAdapterInterface from '../adapter/interfaces/CameraAdapter.interface';
 import Configuration from '../domain/entities/Confirguration';
+import AddDeviceUsecaseInterface from '../domain/interfaces/AddDeviceUsecase.interface';
 import AskForAccountDeletionUsecaseInterface from '../domain/interfaces/AskForAccountDeletionUsecase.interface';
 import AskForLanguageUsecaseInterface from '../domain/interfaces/AskForLanguageUsecase.interface';
 import AskForLearningLanguageUsecaseInterface from '../domain/interfaces/AskForLearningLanguageUsecase.interface';
@@ -38,6 +39,7 @@ import NotificationAdapterInterface from '../adapter/interfaces/NotificationAdap
 
 export interface ConfigContextValueType {
     accessToken: string;
+    addDevice: AddDeviceUsecaseInterface;
     askForAccountDeletion: AskForAccountDeletionUsecaseInterface;
     askForLanguage: AskForLanguageUsecaseInterface;
     askForLearningLanguage: AskForLearningLanguageUsecaseInterface;

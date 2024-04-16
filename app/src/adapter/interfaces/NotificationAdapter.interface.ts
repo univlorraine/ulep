@@ -4,6 +4,7 @@ interface NotificationAdapterInterface {
     notificationPermission(): Promise<void>;
     notificationReceivedListener(callback: Function): void;
     registrationListener(callback: Function): void;
+    removeListeners(): void;
 }
 
 export default NotificationAdapterInterface;

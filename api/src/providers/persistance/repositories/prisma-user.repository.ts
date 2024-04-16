@@ -151,10 +151,9 @@ export class PrismaUserRepository implements UserRepository {
       data: {
         Devices: {
           create: {
-            id: props.id,
             token: props.token,
-            isAndroid: props.isAndroid,
-            isIos: props.isIos,
+            is_android: props.isAndroid,
+            is_ios: props.isIos,
           },
         },
       },

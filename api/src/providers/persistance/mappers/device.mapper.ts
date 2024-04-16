@@ -5,7 +5,6 @@ export type DeviceSnapshot = Prisma.Device;
 
 export const deviceMapper = (snapshot: DeviceSnapshot): Device => {
   return new Device({
-    id: snapshot.id,
     token: snapshot.token,
     isAndroid: snapshot.is_android,
     isIos: snapshot.is_ios,

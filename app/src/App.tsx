@@ -49,13 +49,13 @@ if (import.meta.env.VITE_SENTRY_DSN) {
 }
 
 const AppCore = () => {
-    const { deviceAdapter, notificationAdapter } = useConfig();
+    const { addDevice, deviceAdapter, notificationAdapter } = useConfig();
 
     useEffect(() => {
         if (deviceAdapter.isNativePlatform()) {
             notificationAdapter.notificationPermission();
             notificationAdapter.registrationListener((token: string) => {
-                console.log('Device token:', token);
+                addDevice.execute(token, deviceAdapter.isAndroid(), deviceAdapter.isIos());
             });
             notificationAdapter.errorListener((error: Error) => {
                 console.error('Registration error:', error);
@@ -67,6 +67,10 @@ const AppCore = () => {
                 console.log('Notification action performed:', notification);
             });
         }
+
+        return () => {
+            notificationAdapter.removeListeners();
+        };
     }, []);
 
     return (

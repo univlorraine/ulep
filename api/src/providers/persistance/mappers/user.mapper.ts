@@ -21,7 +21,7 @@ export type UserSnapshot = Prisma.Users & {
   Organization: UniversitySnapshot;
   Nationality?: Prisma.CountryCodes;
   Avatar: Prisma.MediaObjects;
-  Devices: DeviceSnapshot[];
+  Devices?: DeviceSnapshot[];
 };
 
 export const userMapper = (snapshot: UserSnapshot): User => {
@@ -52,6 +52,6 @@ export const userMapper = (snapshot: UserSnapshot): User => {
     deactivated: snapshot.deactivated,
     createdAt: snapshot.created_at,
     updatedAt: snapshot.updated_at,
-    devices: snapshot.Devices.map(deviceMapper),
+    devices: snapshot.Devices && snapshot.Devices.map(deviceMapper),
   });
 };

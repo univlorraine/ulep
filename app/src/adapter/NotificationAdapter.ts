@@ -34,6 +34,10 @@ class NotificationAdapter implements NotificationAdapterInterface {
             return callback(token.value);
         });
     }
+
+    removeListeners(): void {
+        PushNotifications.removeAllListeners();
+    }
 }
 
 export default NotificationAdapter;

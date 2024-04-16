@@ -170,10 +170,9 @@ model Users {
 }
 
 model Device {
-    id          String          @id @default(uuid())
-    token       String
-    is_android   Boolean         @default(false)
-    is_ios       Boolean         @default(false)
+    token       String          @id
+    is_android   Boolean        @default(false)
+    is_ios       Boolean        @default(false)
     user_id     String
     created_at  DateTime        @default(now())
     updated_at  DateTime        @updatedAt
