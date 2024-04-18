@@ -37,7 +37,8 @@ export class CronService {
 
   @Cron('0 14 * * *')
   async processDailyNotifications() {
-    const today = new Date();
+    this.#logger.log('processDailyNotifications');
+    const today = new Date(Date.now());
     const universities = await this.universityRepository.findAll();
     const instance = await this.instanceRepository.getInstance();
 
@@ -65,6 +66,7 @@ export class CronService {
             universityIds: [university.id],
             hasActiveTandem: true,
           });
+
         activeLearningLanguagesToNotify.items.map(
           (activeLearningLanguageToNotify) => {
             const profile = activeLearningLanguageToNotify.profile;
