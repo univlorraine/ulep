@@ -132,7 +132,6 @@ export class CreateUserUsecase {
           division: command.division,
           diploma: command.diploma,
           staffFunction: command.staffFunction,
-          devices: [],
         }),
       );
 
