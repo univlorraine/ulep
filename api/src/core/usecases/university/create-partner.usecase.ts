@@ -33,6 +33,7 @@ export class CreatePartnerUniversityCommand {
   maxTandemsPerUser: number;
   notificationEmail?: string;
   specificLanguagesAvailableIds: string[];
+  nativeLanguageId: string;
 }
 
 @Injectable()
@@ -58,6 +59,14 @@ export class CreatePartnerUniversityUsecase {
 
     if (!country) {
       throw new RessourceDoesNotExist('Country does not exist');
+    }
+
+    const nativeLanguage = await this.languageRepository.ofId(
+      command.nativeLanguageId,
+    );
+
+    if (!nativeLanguage) {
+      throw new RessourceDoesNotExist('Native language does not exist.');
     }
 
     let specificLanguages = [];
@@ -101,6 +110,7 @@ export class CreatePartnerUniversityUsecase {
       maxTandemsPerUser: command.maxTandemsPerUser,
       notificationEmail: command.notificationEmail,
       specificLanguagesAvailable: specificLanguages,
+      nativeLanguage,
     });
 
     return this.universityRepository.create(university);

@@ -20,7 +20,7 @@ import { AuthenticationGuard } from 'src/api/guards';
 import { TestAuthGuard } from '../utils/TestAuthGuard';
 import { InMemoryCountryCodesRepository } from 'src/providers/persistance/repositories/in-memory-country-repository';
 import { COUNTRY_REPOSITORY } from 'src/core/ports/country.repository';
-import { PairingMode } from 'src/core/models';
+import { Language, LanguageStatus, PairingMode } from 'src/core/models';
 import { EMAIL_GATEWAY } from 'src/core/ports/email.gateway';
 import InMemoryEmailGateway from 'src/providers/gateway/in-memory-email.gateway';
 import { LEARNING_LANGUAGE_REPOSITORY } from 'src/core/ports/learning-language.repository';
@@ -29,6 +29,8 @@ import { KeycloakClient } from '@app/keycloak';
 import { InMemoryI18nService } from 'src/providers/services/in-memory.i18n.provider';
 import { NOTIFICATION_GATEWAY } from 'src/core/ports/notification.gateway';
 import InMemoryNotificaitonGateway from 'src/providers/gateway/in-memory-notification.gateway';
+import { faker } from '@faker-js/faker';
+import { LANGUAGE_REPOSITORY } from '../../src/core/ports/language.repository';
 
 describe('Universities', () => {
   let app: TestServer;
@@ -60,6 +62,7 @@ describe('Universities', () => {
   beforeAll(async () => {
     userRepositoy.init([user]);
     countryRepository.init([country]);
+    languageRepository.init(languages);
 
     const keycloak = new KeycloakClient({
       realm: 'test',
@@ -94,6 +97,8 @@ describe('Universities', () => {
       .useValue(inMemoryI18n)
       .overrideProvider(AUTHENTICATOR)
       .useValue(authenticator)
+      .overrideProvider(LANGUAGE_REPOSITORY)
+      .useValue(languageRepository)
       .overrideProvider(LEARNING_LANGUAGE_REPOSITORY)
       .useValue(learningLanguageRepository)
       .overrideProvider(KeycloakClient)
@@ -107,7 +112,6 @@ describe('Universities', () => {
   beforeEach(() => {
     countryRepository.init([country]);
     repository.reset();
-    languageRepository.reset();
   });
 
   afterAll(async () => {
@@ -132,6 +136,7 @@ describe('Universities', () => {
         countryId: country.id,
         pairingMode: PairingMode.SEMI_AUTOMATIC,
         maxTandemsPerUser: 3,
+        nativeLanguageId: languages[0].id,
       })
       .expect(201);
   });
@@ -157,6 +162,7 @@ describe('Universities', () => {
         website: 'https://www.ox.ac.uk/',
         pairingMode: PairingMode.SEMI_AUTOMATIC,
         maxTandemsPerUser: 3,
+        nativeLanguageId: languages[0].id,
       })
       .expect(400);
   });
@@ -176,6 +182,7 @@ describe('Universities', () => {
         closeServiceDate: '2024-12-31',
         website: 'https://www.ox.ac.uk/',
         maxTandemsPerUser: 3,
+        nativeLanguageId: languages[0].id,
       })
       .expect(400);
   });

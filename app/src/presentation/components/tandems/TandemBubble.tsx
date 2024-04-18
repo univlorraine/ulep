@@ -18,7 +18,9 @@ const TandemBubble: React.FC<TandemBubbleProps> = ({ language, onTandemPressed, 
                 <span className={styles.name}>{profile?.user.firstname}</span>
             </div>
             <div className={styles['flag-container']}>
-                <span className={styles.flag}>{codeLanguageToFlag(language.code)}</span>
+                <span className={styles.flag} role="img" aria-label={language.name}>
+                    {codeLanguageToFlag(language.code)}
+                </span>
             </div>
         </button>
     );

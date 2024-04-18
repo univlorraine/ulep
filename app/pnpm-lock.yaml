@@ -128,6 +128,9 @@ dependencies:
   react-switch:
     specifier: ^7.0.0
     version: 7.0.0(react-dom@18.2.0)(react@18.2.0)
+  vite-plugin-sitemap:
+    specifier: ^0.5.3
+    version: 0.5.3
 
 devDependencies:
   '@capacitor/cli':
@@ -7970,6 +7973,10 @@ packages:
       - supports-color
       - terser
     dev: true
+
+  /vite-plugin-sitemap@0.5.3:
+    resolution: {integrity: sha512-DSqZLAkXaNgoJLcaxjJHrfWjIIiZRSuZIseE7ihJYUvPFG4OsvXn/+Oujmzbs+6tV7yu1dn7uhWXpV7QuiH/1g==}
+    dev: false
 
   /vite-plugin-svgr@3.2.0(typescript@4.9.3)(vite@4.1.0):
     resolution: {integrity: sha512-Uvq6niTvhqJU6ga78qLKBFJSDvxWhOnyfQSoKpDPMAGxJPo5S3+9hyjExE5YDj6Lpa4uaLkGc1cBgxXov+LjSw==}

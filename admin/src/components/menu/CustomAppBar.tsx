@@ -76,12 +76,23 @@ const CustomUserMenu = (props: any) => {
     );
 };
 
-const CustomToolbar = () => (
-    <>
-        <LoadingIndicator />
-        <LocalesMenuButton />
-    </>
-);
+const CustomToolbar = () => {
+    const translate = useTranslate();
+
+    return (
+        <>
+            <LoadingIndicator
+                sx={{
+                    '& .RaLoadingIndicator-loadedIcon::after': {
+                        content: `"${translate('header.update')}"`,
+                        marginLeft: '5px',
+                    },
+                }}
+            />
+            <LocalesMenuButton />
+        </>
+    );
+};
 
 const CustomAppBar = (props: any) => {
     const translate = useTranslate();

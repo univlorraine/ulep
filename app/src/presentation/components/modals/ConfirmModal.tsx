@@ -18,10 +18,15 @@ const ConfirmModal: React.FC<ConfirmModalProps> = ({ isVisible, onClose, onValid
                 <div className={styles.container}>
                     <span className={styles.title}>{title}</span>
                     <div className={styles['button-container']}>
-                        <button className="tertiary-button" onClick={() => onClose()}>
+                        <button
+                            aria-label={t('confirm_modal.cancel') as string}
+                            className="tertiary-button"
+                            onClick={() => onClose()}
+                        >
                             {t('confirm_modal.cancel')}
                         </button>
                         <button
+                            aria-label={t('confirm_modal.validate') as string}
                             className={`primary-button margin-left`}
                             onClick={() => onValidate()}
                         >

@@ -60,14 +60,19 @@ const LearnableLanguagesContent: React.FC<LearnableLanguagesContentProps> = ({
                                 );
                             })}
                         {!isLoading && university.isCentral && (
-                            <button style={{ background: 'none' }} onClick={navigateToOtherLanguages}>
-                                <img alt="plus" className={styles.image} src={PlusPng} />
+                            <button
+                                aria-label={t('pairing_other_languages_page.selected_language.title') as string}
+                                style={{ background: 'none' }}
+                                onClick={navigateToOtherLanguages}
+                            >
+                                <img alt="" className={styles.image} src={PlusPng} />
                             </button>
                         )}
                     </div>
                     <div className={`extra-large-margin-bottom`}>
                         {!!languages.length && (
                             <button
+                                aria-label={t('pairing_languages_page.validate_button') as string}
                                 className={`primary-button ${!selectedLanguage ? 'disabled' : ''}`}
                                 disabled={!selectedLanguage}
                                 onClick={sendLanguage}
@@ -76,7 +81,11 @@ const LearnableLanguagesContent: React.FC<LearnableLanguagesContentProps> = ({
                             </button>
                         )}
                         {!languages.length && (
-                            <button className={`primary-button`} onClick={abortStep}>
+                            <button
+                                aria-label={t('pairing_languages_page.home_button') as string}
+                                className={`primary-button`}
+                                onClick={abortStep}
+                            >
                                 {t('pairing_languages_page.home_button')}
                             </button>
                         )}

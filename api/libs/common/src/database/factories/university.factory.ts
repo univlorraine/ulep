@@ -1,6 +1,19 @@
 import { faker } from '@faker-js/faker';
-import { University } from '../../../../../src/core/models';
+import {
+  Language,
+  LanguageStatus,
+  University,
+} from '../../../../../src/core/models';
 import { ModelFactory } from './model.factory';
+
+const french = new Language({
+  id: faker.string.uuid(),
+  code: 'fr',
+  name: 'french',
+  mainUniversityStatus: LanguageStatus.PRIMARY,
+  secondaryUniversityActive: true,
+  isDiscovery: false,
+});
 
 export class UniversityFactory extends ModelFactory<University> {
   getDefaults(): Partial<University> {
@@ -13,6 +26,7 @@ export class UniversityFactory extends ModelFactory<University> {
       admissionEnd: new Date('2020-12-31'),
       maxTandemsPerUser: 1,
       website: faker.internet.url(),
+      nativeLanguage: french,
     };
   }
 }

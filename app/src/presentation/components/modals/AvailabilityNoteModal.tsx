@@ -48,10 +48,15 @@ const AvailabilityNoteModal: React.FC<AvailabilityNoteModalProps> = ({
                         />
                     </div>
                     <div className={styles['button-container']}>
-                        <button className="tertiary-button" onClick={() => onValidate()}>
+                        <button
+                            aria-label={t('signup_availabilities_page.modal.pass_button') as string}
+                            className="tertiary-button"
+                            onClick={() => onValidate()}
+                        >
                             {t('signup_availabilities_page.modal.pass_button')}
                         </button>
                         <button
+                            aria-label={t('signup_availabilities_page.modal.validate_button') as string}
                             className={`primary-button margin-left ${note.trim().length === 0 ? 'disabled' : ''}`}
                             disabled={note.trim().length === 0}
                             onClick={() => onValidate(note, isPrivate)}

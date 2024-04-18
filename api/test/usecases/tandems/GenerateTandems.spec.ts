@@ -189,6 +189,7 @@ describe('GenerateTandem UC', () => {
     codes: [],
     domains: [],
     maxTandemsPerUser: 3,
+    nativeLanguage: french,
   });
 
   const french1 = new Profile({
@@ -1157,6 +1158,7 @@ describe('GenerateTandem UC', () => {
       codes: [],
       domains: [],
       maxTandemsPerUser: 3,
+      nativeLanguage: french,
     });
     const campusMadrid = new Campus({
       id: 'campusMadrid',
@@ -1177,6 +1179,7 @@ describe('GenerateTandem UC', () => {
       codes: [],
       domains: [],
       maxTandemsPerUser: 3,
+      nativeLanguage: french,
     });
 
     const studentSubsidiary1 = new Profile({
@@ -1308,6 +1311,7 @@ describe('GenerateTandem UC', () => {
       domains: [],
       maxTandemsPerUser: 3,
       specificLanguagesAvailable: [otherLanguage],
+      nativeLanguage: french,
     });
 
     const studentSubsidiary = new Profile({
@@ -1431,6 +1435,7 @@ describe('GenerateTandem UC', () => {
       codes: [],
       domains: [],
       maxTandemsPerUser: 3,
+      nativeLanguage: french,
     });
 
     const studentSubsidiary = new Profile({
@@ -1544,6 +1549,7 @@ describe('GenerateTandem UC', () => {
       codes: [],
       domains: [],
       maxTandemsPerUser: 3,
+      nativeLanguage: french,
     });
 
     const profile1 = new Profile({
@@ -1654,6 +1660,7 @@ describe('GenerateTandem UC', () => {
       codes: [],
       domains: [],
       maxTandemsPerUser: 3,
+      nativeLanguage: french,
     });
     const match = new Profile({
       user: new User({

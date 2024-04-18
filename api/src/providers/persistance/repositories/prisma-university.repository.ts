@@ -33,6 +33,9 @@ export class PrismaUniversityRepository implements UniversityRepository {
             id: language.id,
           })),
         },
+        NativeLanguage: {
+          connect: { id: university.nativeLanguage.id },
+        },
         timezone: university.timezone,
         admissionStartDate: university.admissionStart,
         admissionEndDate: university.admissionEnd,
@@ -125,6 +128,9 @@ export class PrismaUniversityRepository implements UniversityRepository {
         website: university.website,
         Country: {
           connect: { id: university.country.id },
+        },
+        NativeLanguage: {
+          connect: { id: university.nativeLanguage.id },
         },
         SpecificLanguagesAvailable: {
           set: [],

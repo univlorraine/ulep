@@ -9,6 +9,7 @@ export const UniversityRelations = {
   Image: true,
   Places: true,
   SpecificLanguagesAvailable: true,
+  NativeLanguage: true,
 };
 
 export type UniversitySnapshot = Prisma.Organizations & {
@@ -16,6 +17,7 @@ export type UniversitySnapshot = Prisma.Organizations & {
   Image: Prisma.MediaObjects;
   Places: Prisma.Places[];
   SpecificLanguagesAvailable: Prisma.LanguageCodes[];
+  NativeLanguage: Prisma.LanguageCodes;
 };
 
 export const universityMapper = (snapshot: UniversitySnapshot): University => {
@@ -39,6 +41,7 @@ export const universityMapper = (snapshot: UniversitySnapshot): University => {
     specificLanguagesAvailable: snapshot.SpecificLanguagesAvailable.map(
       (language) => languageMapper(language),
     ),
+    nativeLanguage: languageMapper(snapshot.NativeLanguage),
     logo:
       snapshot.Image &&
       new MediaObject({

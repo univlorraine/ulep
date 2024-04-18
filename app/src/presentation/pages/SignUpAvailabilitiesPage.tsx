@@ -106,7 +106,11 @@ const SignUpAvailabilitiesPage: React.FC = () => {
                     })}
                 </div>
                 <div className={`large-margin-top extra-large-margin-bottom`}>
-                    <button className="primary-button" onClick={() => setOpenFinalModal(true)}>
+                    <button
+                        aria-label={t('signup_availabilities_page.validate_button') as string}
+                        className="primary-button"
+                        onClick={() => setOpenFinalModal(true)}
+                    >
                         {t('signup_availabilities_page.validate_button')}
                     </button>
                 </div>

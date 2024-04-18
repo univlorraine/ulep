@@ -30,13 +30,6 @@ const theme: RaThemeOptions = {
     },
     components: {
         ...defaultTheme.components,
-        MuiDivider: {
-            styleOverrides: {
-                root: {
-                    margin: '8px 0',
-                },
-            },
-        },
         MuiAppBar: {
             styleOverrides: {
                 root: {
@@ -49,10 +42,43 @@ const theme: RaThemeOptions = {
                 },
             },
         },
-        RaSidebar: {
+        RaChipField: {
             styleOverrides: {
                 root: {
-                    borderRight: '1px solid #e0e0e0',
+                    '&.RaChipField-chip': {
+                        backgroundColor: '#fdee66',
+                        color: '#212121',
+                    },
+                },
+            },
+        },
+        MuiDivider: {
+            styleOverrides: {
+                root: {
+                    margin: '8px 0',
+                },
+            },
+        },
+        MuiTableCell: {
+            styleOverrides: {
+                root: {
+                    '&.RaDatagrid-headerCell': {
+                        fontWeight: 'bold',
+                    },
+                },
+            },
+        },
+        RaCreateButton: {
+            styleOverrides: {
+                root: {
+                    backgroundColor: '#000000',
+                    color: '#FFFFFF',
+                    padding: '5px 9px',
+                    boxShadow:
+                        '0px 1px 5px 0px rgba(0, 0, 0, 0.12), 0px 2px 2px 0px rgba(0, 0, 0, 0.14), 0px 3px 1px -2px rgba(0, 0, 0, 0.20)',
+                    '&:hover': {
+                        backgroundColor: '#212121',
+                    },
                 },
             },
         },
@@ -64,6 +90,15 @@ const theme: RaThemeOptions = {
                     },
                     '& .RaLayout-content': {
                         padding: '46px 21px',
+                    },
+                },
+            },
+        },
+        RaList: {
+            styleOverrides: {
+                root: {
+                    '& .RaList-content': {
+                        boxShadow: 'none',
                     },
                 },
             },
@@ -85,10 +120,6 @@ const theme: RaThemeOptions = {
                             width: '18px',
                             height: '18px',
                         },
-                    },
-                    '& .RaLoadingIndicator-loadedIcon::after': {
-                        content: '"Actualiser"',
-                        marginLeft: '5px',
                     },
                     '& .RaLoadingIndicator-loader': {
                         left: '45%',
@@ -112,13 +143,10 @@ const theme: RaThemeOptions = {
                 },
             },
         },
-        RaChipField: {
+        RaSidebar: {
             styleOverrides: {
                 root: {
-                    '&.RaChipField-chip': {
-                        backgroundColor: '#fdee66',
-                        color: '#212121',
-                    },
+                    borderRight: '1px solid #e0e0e0',
                 },
             },
         },

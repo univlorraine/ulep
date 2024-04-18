@@ -109,16 +109,18 @@ const TextInput: React.FC<TextInputProps> = ({
 
                     {type === 'password' && (
                         <button
+                            aria-label="Show password"
                             className={style['eye-button']}
                             type="button"
                             onClick={() => setShowPassword(!showPasword)}
                         >
-                            <img alt="eye" src={EyeSvg} />
+                            <img alt="" src={EyeSvg} />
                         </button>
                     )}
                 </IonItem>
             ) : (
                 <textarea
+                    aria-label={title}
                     className={`${style['area-text']} ${
                         errorMessage ? style['area-text-error'] : style['area-text-text']
                     }`}

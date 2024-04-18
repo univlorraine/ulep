@@ -34,6 +34,7 @@ const AvailabilityModal: React.FC<AvailabilityModalProps> = ({
                     <span className={styles.title}>{title}</span>
 
                     <button
+                        aria-label={t('signup_availabilities_page.UNAVAILABLE') as string}
                         style={{ backgroundColor: occurrence === 'UNAVAILABLE' ? '#FDEE66' : '#F2F4F7' }}
                         className={styles['occurence-container']}
                         onClick={() => setAvailabilitiesOptions('UNAVAILABLE')}
@@ -42,6 +43,7 @@ const AvailabilityModal: React.FC<AvailabilityModalProps> = ({
                     </button>
 
                     <button
+                        aria-label={t('signup_availabilities_page.AVAILABLE') as string}
                         style={{ backgroundColor: occurrence === 'AVAILABLE' ? '#FDEE66' : '#F2F4F7' }}
                         className={styles['occurence-container']}
                         onClick={() => setAvailabilitiesOptions('AVAILABLE')}
@@ -50,6 +52,7 @@ const AvailabilityModal: React.FC<AvailabilityModalProps> = ({
                     </button>
 
                     <button
+                        aria-label={t('signup_availabilities_page.VERY_AVAILABLE') as string}
                         style={{ backgroundColor: occurrence === 'VERY_AVAILABLE' ? '#FDEE66' : '#F2F4F7' }}
                         className={styles['occurence-container']}
                         onClick={() => setAvailabilitiesOptions('VERY_AVAILABLE')}
@@ -57,7 +60,11 @@ const AvailabilityModal: React.FC<AvailabilityModalProps> = ({
                         <p className={styles['occurence-text']}>{t('signup_availabilities_page.VERY_AVAILABLE')}</p>
                     </button>
 
-                    <button className="primary-button margin-top" onClick={() => onValidate(occurrence)}>
+                    <button
+                        aria-label={t('signup_availabilities_page.modal.validate_button') as string}
+                        className="primary-button margin-top"
+                        onClick={() => onValidate(occurrence)}
+                    >
                         {t('signup_availabilities_page.modal.validate_button')}
                     </button>
                 </div>

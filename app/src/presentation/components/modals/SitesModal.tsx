@@ -22,6 +22,7 @@ const SitesModal: React.FC<AvailabilityModalProps> = ({ isVisible, onClose, onVa
                         sites.map((campus) => {
                             return (
                                 <button
+                                    aria-label={campus.name}
                                     key={campus.id}
                                     style={{ backgroundColor: currentCampus === campus ? '#FDEE66' : '#F2F4F7' }}
                                     className={styles['occurence-container']}
@@ -33,6 +34,7 @@ const SitesModal: React.FC<AvailabilityModalProps> = ({ isVisible, onClose, onVa
                         })}
 
                     <button
+                        aria-label={t('signup_availabilities_page.modal.validate_button') as string}
                         className={`primary-button margin-top ${currentCampus ? '' : 'disabled'}`}
                         disabled={!currentCampus}
                         onClick={() => onValidate(currentCampus)}

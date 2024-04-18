@@ -28,6 +28,7 @@ const AvailabilityLine: React.FC<AvailabilityLineProps> = ({ availability, day, 
             className={styles.container}
             disabled={!onPress}
             onClick={() => (onPress ? onPress({ id: day, occurence: availability }) : null)}
+            aria-label={t(`signup_availabilities_page.${availability}`) as string}
         >
             <span
                 className={styles['availability-day']}

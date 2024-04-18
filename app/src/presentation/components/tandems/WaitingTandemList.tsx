@@ -38,7 +38,11 @@ const WaitingTandemList: React.FC<WaitingTandemListProps> = ({
                     })}
             </div>
             {profile && !hasReachedMaxTandems && (
-                <button className="primary-button margin-top large-margin-bottom" onClick={onNewTandemAsked}>
+                <button
+                    aria-label={t('home_page.waiting_tandem.button') as string}
+                    className="primary-button margin-top large-margin-bottom"
+                    onClick={onNewTandemAsked}
+                >
                     {t('home_page.waiting_tandem.button')}
                 </button>
             )}

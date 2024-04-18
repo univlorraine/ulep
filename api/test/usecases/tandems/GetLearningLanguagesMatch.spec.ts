@@ -133,6 +133,7 @@ describe('Get learning languages match', () => {
     codes: [],
     domains: [],
     maxTandemsPerUser: 3,
+    nativeLanguage: french,
   });
   const partnerUniversity = new University({
     id: 'university2',
@@ -148,6 +149,7 @@ describe('Get learning languages match', () => {
     codes: [],
     domains: [],
     maxTandemsPerUser: 3,
+    nativeLanguage: french,
   });
   universityRepository.init([centralUniversity, partnerUniversity]);
 

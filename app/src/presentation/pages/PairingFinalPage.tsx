@@ -42,7 +42,7 @@ const PairingFinalPage: React.FC = () => {
             Boolean(profileSignUp.sameTandem),
             profileSignUp.campus?.id,
             Boolean(profileSignUp.isForCertificate),
-            Boolean(profileSignUp.isForProgram),
+            Boolean(profileSignUp.isForProgram)
         );
 
         if (result instanceof Error) {
@@ -80,7 +80,12 @@ const PairingFinalPage: React.FC = () => {
                     'pairing_final_page.congratulation'
                 )},`}</span>
                 <span className={styles.description}>{t('pairing_final_page.congratulation_text')}</span>
-                <button className="primary-button large-margin-top" disabled={loading} onClick={askNewLanguage}>
+                <button
+                    aria-label={t('pairing_final_page.validate_button') as string}
+                    className="primary-button large-margin-top"
+                    disabled={loading}
+                    onClick={askNewLanguage}
+                >
                     {t('pairing_final_page.validate_button')}
                 </button>
             </div>

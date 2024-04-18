@@ -26,6 +26,7 @@ const EditUniversity = () => {
         domains: string[],
         pairingMode: string,
         maxTandemsPerUser: number,
+        nativeLanguage: Language,
         website?: string,
         notificationEmail?: string,
         specificLanguagesAvailable?: Language[],
@@ -43,6 +44,7 @@ const EditUniversity = () => {
             domains,
             pairingMode,
             maxTandemsPerUser,
+            nativeLanguage,
             website,
             notificationEmail,
             specificLanguagesAvailable,
@@ -97,9 +99,11 @@ const EditUniversity = () => {
                                 domains: string[],
                                 pairingMode: string,
                                 maxTandemsPerUser: number,
+                                nativeLanguage: Language,
                                 website?: string,
                                 notificationEmail?: string,
-                                specificLanguagesAvailable?: Language[]
+                                specificLanguagesAvailable?: Language[],
+                                file?: File
                             ) =>
                                 handleSubmit(
                                     record.id,
@@ -114,16 +118,20 @@ const EditUniversity = () => {
                                     domains,
                                     pairingMode,
                                     maxTandemsPerUser,
+                                    nativeLanguage,
                                     website,
                                     notificationEmail,
-                                    specificLanguagesAvailable
+                                    specificLanguagesAvailable,
+                                    file
                                 )
                             }
                             maxTandemsPerUser={record.maxTandemsPerUser}
                             name={record.name}
+                            nativeLanguage={record.nativeLanguage}
                             notificationEmail={record.notificationEmail}
                             openServiceDate={record.openServiceDate}
                             pairingMode={record.pairingMode}
+                            specificLanguagesAvailable={record.specificLanguagesAvailable}
                             timezone={record.timezone}
                             tradKey="update"
                             website={record.website}

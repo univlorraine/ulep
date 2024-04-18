@@ -100,6 +100,10 @@ export class CreateUniversityRequest implements CreateUniversityCommand {
   @IsArray()
   @IsOptional()
   specificLanguagesAvailableIds: string[];
+
+  @Swagger.ApiProperty({ type: 'string' })
+  @IsString()
+  nativeLanguageId: string;
 }
 
 export class UpdateUniversityRequest
@@ -178,6 +182,11 @@ export class UpdateUniversityRequest
   @IsArray()
   @IsOptional()
   specificLanguagesAvailableIds: string[];
+
+  @Swagger.ApiProperty({ type: 'string' })
+  @IsString()
+  @IsOptional()
+  nativeLanguageId: string;
 }
 
 export class CreateUniversityPartnerRequest
@@ -254,6 +263,10 @@ export class CreateUniversityPartnerRequest
   @IsArray()
   @IsOptional()
   specificLanguagesAvailableIds: string[];
+
+  @Swagger.ApiProperty({ type: 'string' })
+  @IsString()
+  nativeLanguageId: string;
 }
 
 export class UniversityResponse {
@@ -329,6 +342,10 @@ export class UniversityResponse {
   @Expose({ groups: ['read'] })
   specificLanguagesAvailable: LanguageResponse[];
 
+  @Swagger.ApiProperty({ type: LanguageResponse })
+  @Expose({ groups: ['read'] })
+  nativeLanguage: LanguageResponse;
+
   @Swagger.ApiPropertyOptional({ type: MediaObjectResponse })
   @Expose({ groups: ['read'] })
   logo?: MediaObjectResponse;
@@ -362,6 +379,7 @@ export class UniversityResponse {
       specificLanguagesAvailable: university.specificLanguagesAvailable?.map(
         LanguageResponse.fromLanguage,
       ),
+      nativeLanguage: LanguageResponse.fromLanguage(university.nativeLanguage),
     });
   }
 }

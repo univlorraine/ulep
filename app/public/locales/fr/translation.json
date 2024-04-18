@@ -62,7 +62,13 @@
         "tandem": "Tandem",
         "tandem_etandem": "Tandem / Etandem",
         "woman": "Féminin",
-        "yes": "Oui"
+        "yes": "Oui",
+        "go_back": "Retour",
+        "change_avatar": "Modifier mon avatar",
+        "welcome": "Bienvenue sur ULEP,",
+        "welcome_subtext": "le meilleur moyen de pratiquer une langue",
+        "welcome_btn": "Apprends une nouvelle langue en tandem",
+        "close": "Fermer"
     },
     "connection_page": {
         "connect_title": "As-tu déjà un compte ?",

@@ -135,6 +135,7 @@ describe('Score', () => {
       codes: [],
       domains: [],
       maxTandemsPerUser: 3,
+      nativeLanguage: frenchLanguage,
     });
     const profile1 = new Profile({
       user: new User({
@@ -297,6 +298,7 @@ describe('Score', () => {
       codes: [],
       domains: [],
       maxTandemsPerUser: 3,
+      nativeLanguage: frenchLanguage,
     });
     const profile1 = new Profile({
       user: new User({
