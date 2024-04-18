@@ -143,7 +143,7 @@ workflows:
             vars:
                 PACKAGE_NAME: "fr.univlorraine.ulep"
                 # GOOGLE_PLAY_TRACK: alpha
-            node: 16.14.0
+            node: 18.12.0
             xcode: 14.2
             java: 19.0.1
         triggering:
@@ -181,7 +181,7 @@ workflows:
                 - $CM_BUILD_DIR/mobile/ios/Pods
                 - $CM_BUILD_DIR/mobile/node_modules
         environment:
-            node: 16.14.0
+            node: 18.12.0
             xcode: 14.2
             cocoapods: 1.11.2
             android_signing:
