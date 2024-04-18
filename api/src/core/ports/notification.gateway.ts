@@ -9,6 +9,17 @@ export interface SendWelcomeNotification {
   to: Notification[];
 }
 
+export interface SendTandemClosureNoticeNotification {
+  to: Notification[];
+  university: {
+    name: string;
+    closeDate: Date;
+  };
+}
+
 export interface NotificationGateway {
   sendWelcomeNotification(props: SendWelcomeNotification): Promise<void>;
+  sendTandemClosureNoticeNotification(
+    props: SendTandemClosureNoticeNotification,
+  ): Promise<void>;
 }

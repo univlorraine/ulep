@@ -5,6 +5,7 @@ import { KeycloakModule } from '@app/keycloak';
 import { Env } from './configuration';
 import { FCMModule, MailerModule } from '@app/common';
 import { I18nModule } from '@app/common/i18n/i18n.module';
+import { ScheduleModule } from '@nestjs/schedule';
 
 @Module({
   imports: [
@@ -12,6 +13,7 @@ import { I18nModule } from '@app/common/i18n/i18n.module';
       isGlobal: true,
       validate: Env.validate,
     }),
+    ScheduleModule.forRoot(),
     FCMModule.registerAsync({
       isGlobal: true,
       imports: [ConfigModule],

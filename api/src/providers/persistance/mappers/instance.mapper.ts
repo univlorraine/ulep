@@ -1,7 +1,7 @@
-import * as Prisma from '@prisma/client';
+import { Instance as PrismaInstance } from '@prisma/client';
 import { Instance } from 'src/core/models/Instance.model';
 
-export type InstanceSnapshot = Prisma.Instance;
+export type InstanceSnapshot = PrismaInstance;
 
 export const instanceMapper = (instanceSnapshot: InstanceSnapshot) => {
   return new Instance({
@@ -18,5 +18,7 @@ export const instanceMapper = (instanceSnapshot: InstanceSnapshot) => {
     secondaryBackgroundColor: instanceSnapshot.secondary_background_color,
     secondaryDarkColor: instanceSnapshot.secondary_dark_color,
     isInMaintenance: instanceSnapshot.is_in_maintenance,
+    daysBeforeClosureNotification:
+      instanceSnapshot.days_before_closure_notification,
   });
 };

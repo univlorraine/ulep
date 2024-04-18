@@ -9,6 +9,7 @@ import {
   SendWelcomeMailProps,
   TandemCanceledEmailProps,
   TandemCanceledNoticeEmailProps,
+  TandemClosureNoticeEmailProps,
   TandemValidationNoticeEmailProps,
 } from 'src/core/ports/email.gateway';
 
@@ -53,6 +54,12 @@ export default class InMemoryEmailGateway implements EmailGateway {
 
   sendTandemCanceledNoticeEmail(
     props: TandemCanceledNoticeEmailProps,
+  ): Promise<void> {
+    return Promise.resolve();
+  }
+
+  sendTandemClosureNoticeEmail(
+    props: TandemClosureNoticeEmailProps,
   ): Promise<void> {
     return Promise.resolve();
   }

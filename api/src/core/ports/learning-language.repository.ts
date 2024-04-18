@@ -15,8 +15,8 @@ export enum LearningLanguageQuerySortKey {
 }
 
 export interface LearningLanguageRepositoryGetProps {
-  page: number;
-  limit: number;
+  page?: number;
+  limit?: number;
   universityIds: string[];
   hasActiveTandem?: boolean;
   hasActionableTandem?: boolean;
