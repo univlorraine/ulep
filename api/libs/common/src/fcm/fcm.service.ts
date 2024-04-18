@@ -44,11 +44,18 @@ export class FCMService implements OnModuleInit, OnModuleDestroy {
   }
 
   async onModuleDestroy() {
-    await firebase.app().delete();
+    if (firebase.apps.length > 0) {
+      await firebase.app().delete();
+    }
   }
 
   private initialize() {
-    if (firebase.apps.length > 0) {
+    if (
+      firebase.apps.length > 0 ||
+      !this.config.firebaseProjectId ||
+      !this.config.firebasePrivateKey ||
+      !this.config.firebaseClientEmail
+    ) {
       return;
     }
     const serviceAccount: firebase.ServiceAccount = {
