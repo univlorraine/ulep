@@ -1,4 +1,4 @@
-import { Inject, Injectable } from '@nestjs/common';
+import { Inject, Injectable, Logger } from '@nestjs/common';
 import { Cron } from '@nestjs/schedule';
 import { EMAIL_GATEWAY, EmailGateway } from 'src/core/ports/email.gateway';
 import {
@@ -17,10 +17,11 @@ import {
   UNIVERSITY_REPOSITORY,
   UniversityRepository,
 } from 'src/core/ports/university.repository';
-import { format } from 'date-fns';
+import { format } from 'date-fns-tz';
 
 @Injectable()
 export class CronService {
+  #logger = new Logger(CronService.name);
   constructor(
     @Inject(EMAIL_GATEWAY)
     private readonly emailGateway: EmailGateway,
@@ -34,7 +35,7 @@ export class CronService {
     private readonly learningLanguageRepository: LearningLanguageRepository,
   ) {}
 
-  @Cron('0 0 * * *')
+  @Cron('0 14 * * *')
   async processDailyNotifications() {
     const today = new Date();
     const universities = await this.universityRepository.findAll();
@@ -42,12 +43,23 @@ export class CronService {
 
     universities.items.forEach(async (university) => {
       const deviceToNotify: { token: string; language: string }[] = [];
+      // Get initial date to send notification
       const universityCloseDate = new Date(university.closeServiceDate);
       universityCloseDate.setDate(
         universityCloseDate.getDate() - instance.daysBeforeClosureNotification,
       );
 
-      if (today >= universityCloseDate) {
+      // Send notification every week
+      const daysSinceNotificationStart = Math.floor(
+        today.getTime() - universityCloseDate.getTime(),
+      );
+
+      // Check if today is the day to send notifications ( every week, after the initial date and before the close date )
+      if (
+        today >= universityCloseDate &&
+        today <= university.closeServiceDate &&
+        daysSinceNotificationStart % 7 === 0
+      ) {
         const activeLearningLanguagesToNotify =
           await this.learningLanguageRepository.OfUniversities({
             universityIds: [university.id],
