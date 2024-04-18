@@ -55,6 +55,10 @@ export class InstanceResponse {
   @Expose({ groups: ['read'] })
   isInMaintenance: boolean;
 
+  @ApiProperty({ type: 'number' })
+  @Expose({ groups: ['read'] })
+  daysBeforeClosureNotification: number;
+
   constructor(partial: Partial<InstanceResponse>) {
     Object.assign(this, partial);
   }
@@ -73,6 +77,7 @@ export class InstanceResponse {
       secondaryBackgroundColor: instance.secondaryBackgroundColor,
       secondaryDarkColor: instance.secondaryDarkColor,
       isInMaintenance: instance.isInMaintenance,
+      daysBeforeClosureNotification: instance.daysBeforeClosureNotification,
     });
   }
 }
