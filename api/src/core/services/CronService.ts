@@ -17,6 +17,7 @@ import {
   UNIVERSITY_REPOSITORY,
   UniversityRepository,
 } from 'src/core/ports/university.repository';
+import { format } from 'date-fns';
 
 @Injectable()
 export class CronService {
@@ -65,7 +66,7 @@ export class CronService {
               },
               university: {
                 name: university.name,
-                closeDate: university.closeServiceDate,
+                closeDate: format(university.closeServiceDate, 'dd/MM/yyyy'),
               },
             });
 
@@ -85,7 +86,7 @@ export class CronService {
         to: deviceToNotify,
         university: {
           name: university.name,
-          closeDate: university.closeServiceDate,
+          closeDate: format(university.closeServiceDate, 'dd/MM/yyyy'),
         },
       });
     });

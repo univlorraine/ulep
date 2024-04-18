@@ -61,7 +61,7 @@ export interface TandemClosureNoticeEmailProps {
   to: string;
   language: string;
   user: { firstname: string; lastname: string };
-  university: { name: string; closeDate: Date };
+  university: { name: string; closeDate: string };
 }
 
 export interface EmailGateway {

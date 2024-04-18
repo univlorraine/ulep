@@ -13,7 +13,7 @@ export interface SendTandemClosureNoticeNotification {
   to: Notification[];
   university: {
     name: string;
-    closeDate: Date;
+    closeDate: string;
   };
 }
 
