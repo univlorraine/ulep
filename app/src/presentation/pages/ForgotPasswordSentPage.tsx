@@ -42,7 +42,11 @@ const ForgotPasswordSentPage: React.FC = () => {
                     width={150}
                 />
                 <div className={style.button}>
-                    <button className="primary-button" onClick={() => sendEmail()}>
+                    <button
+                        aria-label={t('forgot_password_sent_page.button') as string}
+                        className="primary-button"
+                        onClick={() => sendEmail()}
+                    >
                         {t('forgot_password_sent_page.button')}
                     </button>
                 </div>

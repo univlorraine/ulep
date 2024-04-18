@@ -136,6 +136,7 @@ const SignUpLanguagesPage: React.FC = () => {
 
                 <div className={styles['bottom-container']}>
                     <button
+                        aria-label={t('signup_languages_page.validate_button') as string}
                         disabled={!myLanguage}
                         className={`primary-button large-margin-bottom ${!myLanguage ? 'disabled' : ''}`}
                         onClick={continueSignUp}

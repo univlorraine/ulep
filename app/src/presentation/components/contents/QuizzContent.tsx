@@ -41,17 +41,21 @@ const QuizzContent: React.FC<QuizzContentProps> = ({ onQuizzOver, questions, qui
                         {`/${questions.length}`}
                     </span>
                     <div className={styles['level-container']}>
-                        <img alt="quizz" src={QuizzPng} />
+                        <img alt="" src={QuizzPng} />
                         {quizzLevel}
                     </div>
                     <span className={styles['question-title']}>{questions[currentIndex].question}</span>
                 </div>
             </div>
             <div className={`${styles['button-container']} extra-large-margin-bottom`}>
-                <button className="primary-button large-margin-bottom" onClick={() => answer(true)}>
+                <button
+                    aria-label={t('global.yes') as string}
+                    className="primary-button large-margin-bottom"
+                    onClick={() => answer(true)}
+                >
                     {t('global.yes')}
                 </button>
-                <button className="primary-button" onClick={() => answer(false)}>
+                <button aria-label={t('global.no') as string} className="primary-button" onClick={() => answer(false)}>
                     {t('global.no')}
                 </button>
             </div>

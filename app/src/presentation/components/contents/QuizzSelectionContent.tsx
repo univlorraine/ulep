@@ -32,6 +32,7 @@ const QuizzSelectionContent: React.FC<QuizzSelectionContentProps> = ({ onQuizzSe
                 {quizzData.map((quizz, index) => {
                     return (
                         <button
+                            aria-label={quizz.title}
                             key={quizz.value}
                             className={styles['level-container']}
                             onClick={() => setSelectQuizz(quizz.value)}
@@ -60,13 +61,18 @@ const QuizzSelectionContent: React.FC<QuizzSelectionContentProps> = ({ onQuizzSe
             </div>
             <div>
                 <button
+                    aria-label={t('pairing_quizz_description_page.validate_button') as string}
                     className={`primary-button large-margin-bottom ${!selectQuizz ? 'disabled' : ''}`}
                     disabled={!selectQuizz}
                     onClick={() => onQuizzSelected(selectQuizz)}
                 >
                     {t('pairing_quizz_description_page.validate_button')}
                 </button>
-                <button className="secondary-button extra-large-margin-bottom" onClick={() => onQuizzSelected('A1')}>
+                <button
+                    aria-label={t('pairing_quizz_description_page.pass_button') as string}
+                    className="secondary-button extra-large-margin-bottom"
+                    onClick={() => onQuizzSelected('A1')}
+                >
                     {t('pairing_quizz_description_page.pass_button')}
                 </button>
             </div>

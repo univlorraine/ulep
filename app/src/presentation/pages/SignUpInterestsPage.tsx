@@ -73,6 +73,7 @@ const SignUpInterestsPage: React.FC = () => {
                                         const isInclued = userInterests.includes(interest.id);
                                         return (
                                             <button
+                                                aria-label={interest.name}
                                                 className={interestStyle.tags}
                                                 key={interest.id}
                                                 onClick={() => interestPressed(interest)}
@@ -93,6 +94,7 @@ const SignUpInterestsPage: React.FC = () => {
                 </div>
                 <div className="extra-large-margin-bottom">
                     <button
+                        aria-label={t('signup_interests_page.validate_button') as string}
                         className={`primary-button ${userInterests.length < 5 ? 'disabled' : ''}`}
                         disabled={userInterests.length < 5}
                         onClick={continueSignUp}

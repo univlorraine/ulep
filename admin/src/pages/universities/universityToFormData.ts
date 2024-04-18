@@ -13,6 +13,7 @@ const universityToFormData = (
     domains: string[],
     pairingMode: string,
     maxTandemsPerUser: number,
+    nativeLanguage: Language,
     website?: string,
     notificationEmail?: string,
     specificLanguagesAvailable?: Language[],
@@ -34,6 +35,7 @@ const universityToFormData = (
     });
     formData.append('pairingMode', pairingMode);
     formData.append('maxTandemsPerUser', maxTandemsPerUser.toString());
+    formData.append('nativeLanguageId', nativeLanguage.id);
 
     if (website) formData.append('website', website);
     if (specificLanguagesAvailable) {

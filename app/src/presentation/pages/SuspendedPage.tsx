@@ -58,7 +58,11 @@ const SuspendedPage: React.FC<SuspendedPageProps> = ({ status }) => {
                         </p>
                     </div>
                     <div className="extra-large-margin-bottom">
-                        <button className={`primary-button `} onClick={() => setReportMode(true)}>
+                        <button
+                            aria-label={t('suspended_page.validate_button') as string}
+                            className={`primary-button `}
+                            onClick={() => setReportMode(true)}
+                        >
                             {t('suspended_page.validate_button')}
                         </button>
                     </div>

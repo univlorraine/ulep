@@ -77,18 +77,32 @@ export class UniversityController {
 
   @Post('partners')
   @Roles(Role.ADMIN)
+  @UseInterceptors(FileInterceptor('file'))
   @UseGuards(AuthenticationGuard)
+  @Swagger.ApiConsumes('multipart/form-data')
   @Swagger.ApiOperation({
     summary: 'Create a new partner University ressource.',
   })
   @Swagger.ApiCreatedResponse({ type: UniversityResponse })
-  async createPartnerUniversity(@Body() body: CreateUniversityPartnerRequest) {
-    const university = await this.createPartnerUniversityUsecase.execute(body);
+  async createPartnerUniversity(
+    @Body() body: CreateUniversityPartnerRequest,
+    @UploadedFile(new ImagesFilePipe()) file?: Express.Multer.File,
+  ) {
+    let university = await this.createPartnerUniversityUsecase.execute(body);
+
+    if (file) {
+      const upload = await this.uploadUniversityImageUsecase.execute({
+        id: university.id,
+        file,
+      });
+      university = new University({ ...university, logo: upload });
+    }
 
     return UniversityResponse.fromUniversity(university);
   }
 
   @Get()
+  @SerializeOptions({ groups: ['read', 'university:read'] })
   @Swagger.ApiOperation({ summary: 'Collection of University ressource.' })
   @Swagger.ApiOkResponse({ type: UniversityResponse, isArray: true })
   async getUniversities() {

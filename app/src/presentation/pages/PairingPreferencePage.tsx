@@ -37,6 +37,7 @@ const PairingPreferencePage: React.FC = () => {
                     <h1 className="title">{t('pairing_preference_page.title')}</h1>
                     <div className={pairingPreferenceStyles.content}>
                         <button
+                            aria-label={t('pairing_preference_page.same_gender') as string}
                             className={pairingPreferenceStyles['preference-container']}
                             style={{ background: sameGender ? configuration.secondaryColor : '#F2F4F7' }}
                             onClick={() => setSameGender(!sameGender)}
@@ -46,6 +47,7 @@ const PairingPreferencePage: React.FC = () => {
                             </p>
                         </button>
                         <button
+                            aria-label={t('pairing_preference_page.same_age') as string}
                             className={pairingPreferenceStyles['preference-container']}
                             style={{ background: sameAge ? configuration.secondaryColor : '#F2F4F7' }}
                             onClick={() => setSameAge(!sameAge)}
@@ -55,6 +57,7 @@ const PairingPreferencePage: React.FC = () => {
                             </p>
                         </button>
                         <button
+                            aria-label={t('pairing_preference_page.none') as string}
                             className={pairingPreferenceStyles['preference-container']}
                             style={{ background: !sameAge && !sameGender ? configuration.secondaryColor : '#F2F4F7' }}
                             onClick={onNonePressed}
@@ -65,7 +68,11 @@ const PairingPreferencePage: React.FC = () => {
                         </button>
                     </div>
                 </div>
-                <button className="primary-button extra-large-margin-bottom" onClick={onNextStepPressed}>
+                <button
+                    aria-label={t('pairing_preference_page.validate_button') as string}
+                    className="primary-button extra-large-margin-bottom"
+                    onClick={onNextStepPressed}
+                >
                     {t('pairing_preference_page.validate_button')}
                 </button>
             </div>

@@ -12,7 +12,7 @@ const ColoredCard = <T,>({ buttonName, color, onPressed, title, value }: Colored
     return (
         <div key={title} className={styles['container']} style={{ backgroundColor: color }}>
             <span className={styles['title']}>{title}</span>
-            <button className="primary-button" onClick={() => onPressed(value)}>
+            <button aria-label={buttonName} className="primary-button" onClick={() => onPressed(value)}>
                 {buttonName}
             </button>
         </div>

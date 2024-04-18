@@ -17,9 +17,11 @@ You can use this project with Docker. Simply go to the project directory and run
 ```bash
 docker compose build --pull --no-cache
 ```
+
 Note: replace !Changeme! by your own values in [docker-compose.yml](./docker-compose.yaml)
 
 If you launch the project locally (i.e. with dev [docker-compose.override.yml](./docker-compose.override.yml) file), install node_modules for [api](./api/) and [admin](./admin/) projects before launching containers:
+
 ```bash
 cd api
 pnpm install
@@ -42,14 +44,22 @@ This will build and run the project on your localhost. You now have access to th
 
 ## Database initilization
 
-To initialize database schema, run the migrations: 
+To initialize database schema, run the migrations:
+
 ```bash
 make migration
 ```
 
 To seed database:
+
 ```bash
 make seed
+```
+
+To seed database with random flag:
+
+```bash
+make seed-random
 ```
 
 ## Keycloak
@@ -78,6 +88,7 @@ Note: an "admin" role already exist for backoffice user. It is needed in order t
 ### Migrations
 
 You can generate a new migration from database schema with:
+
 ```bash
 make migration
 ```

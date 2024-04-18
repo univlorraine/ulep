@@ -92,7 +92,8 @@
         }
     },
     "header": {
-        "title": "ULEP Administration"
+        "title": "ULEP Administration",
+        "update": "Actualiser"
     },
     "instance": {
         "label": "Configuration",
@@ -188,6 +189,9 @@
             "yes": "Oui",
             "no": "Non"
         }
+    },
+    "language_picker": {
+        "placeholder": "Choisir une langue"
     },
     "languages_picker": {
         "placeholder": "Choisir une langue supplémentaire"
@@ -331,8 +335,10 @@
         "tabLabel": "Langues demandées"
     },
     "universities": {
+        "admission_start": "Début des inscriptions",
         "code_button": "Ajouter un code",
         "domain_button": "Ajouter un domaine",
+        "country": "Pays",
         "create": {
             "admission_end": "Fin de date d'inscription à la nouvelle université partenaire",
             "admission_error": "La date de fin d'admission doit être après la date de début",
@@ -347,6 +353,7 @@
             "domains": "Liste des noms de domaines pour l'inscription",
             "domains_error": "Le nom de domaine doit commencer par un @",
             "error": "Une erreur est survenue lors de la création de l'université",
+            "language": "Langue par défaut",
             "logo": "Logo de l'université",
             "name": "Nom de la nouvelle université partenaire",
             "timezone": "Timezone de la nouvelle université partenaire",
@@ -357,15 +364,17 @@
             "max_tandems_per_user": "Nombre maximum de tandems par utilisateur",
             "notificationEmail": "Email pour les notifications"
         },
-        "pairingModes": {
-            "manual": "Manuel",
-            "semi_automatic": "Semi-automatique",
-            "automatic": "Automatique"
-        },
+        "language": "Langue",
         "label": "Universités",
         "tabLabel": "Liste des universités",
         "name": "Nom de l'université",
-        "parent": "Université centrale",
+        "pairing_mode": {
+            "automatic": "Automatique",
+            "label": "Appariement",
+            "manual": "Manuel",
+            "semi_automatic": "Semi-auto"
+        },
+        "parent": "Centrale",
         "show": {
             "admission_start": "Début de date d'admission",
             "admission_end": "Fin de date d'admission",
@@ -376,6 +385,7 @@
             "confidentialityUrl": "Url des règles de confidentialités",
             "country": "Pays de l'université",
             "domains": "Nom de domaines autorisés",
+            "language": "Langue par défaut",
             "logo": "Logo de l'université",
             "name": "Nom de l'université",
             "resourcesUrl": "Url des ressources de langues de l'université",
@@ -390,6 +400,13 @@
             "notificationEmail": "Email pour les notifications"
         },
         "specific_language": "Langues spécifiques",
+        "status": {
+            "closed": "Fermée",
+            "label": "Status",
+            "open": "Ouverte",
+            "soon": "Bientôt",
+            "suspended": "Suspendue"
+        },
         "title": "Universités partenaires",
         "update": {
             "admission_end": "Fin de date d'inscription à l'université",
@@ -403,6 +420,8 @@
             "country": "Pays de l'université",
             "domains": "Liste des noms de domaines pour l'inscription",
             "domains_error": "Le nom de domaine doit commencer par un @",
+            "error": "Une erreur est survenue lors de la mise à jour de l'université",
+            "language": "Langue par défaut",
             "languages": "Liste des langues supplémentaires disponnibles pour l'apprentissage",
             "logo": "Logo de l'université",
             "name": "Nom de l'université",

@@ -51,8 +51,8 @@ const ProfileContent: React.FC<ProfileContentProps> = ({ onClose, onParameterPre
     return (
         <div className={styles.container}>
             <div>
-                <button className={styles['back-button']} onClick={onClose}>
-                    <img alt="arrow-left" src={ArrowLeftSvg} />
+                <button aria-label={t('global.close') as string} className={styles['back-button']} onClick={onClose}>
+                    <img alt="" src={ArrowLeftSvg} />
                 </button>
             </div>
             <div className={styles.content}>
@@ -65,28 +65,40 @@ const ProfileContent: React.FC<ProfileContentProps> = ({ onClose, onParameterPre
                 <span className={styles.name}>{`${profile.user.firstname} ${profile.user.lastname}`}</span>
                 <span className={styles.university}>{profile.user.university.name}</span>
 
-                <button className={`${styles.button} margin-bottom`} onClick={changeAvatar}>
+                <button
+                    aria-label={t('home_page.profile.edit') as string}
+                    className={`${styles.button} margin-bottom`}
+                    onClick={changeAvatar}
+                >
                     <div className={styles['button-container']}>
-                        <img alt="edit" src={EditPng} />
+                        <img alt="" src={EditPng} />
                         <span className="margin-left">{t('home_page.profile.edit')}</span>
                     </div>
-                    <img alt="arrow-right" src={ArrowRightSvg} />
+                    <img alt="" src={ArrowRightSvg} />
                 </button>
 
-                <button className={`${styles.button} margin-bottom`} onClick={onParameterPressed}>
+                <button
+                    aria-label={t('home_page.profile.parameters') as string}
+                    className={`${styles.button} margin-bottom`}
+                    onClick={onParameterPressed}
+                >
                     <div className={styles['button-container']}>
-                        <img alt="parameter" src={ParameterPng} />
+                        <img alt="" src={ParameterPng} />
                         <span className="margin-left">{t('home_page.profile.parameters')}</span>
                     </div>
-                    <img alt="arrow-right" src={ArrowRightSvg} />
+                    <img alt="" src={ArrowRightSvg} />
                 </button>
 
-                <button className={styles.button} onClick={handleLogout}>
+                <button
+                    aria-label={t('home_page.profile.disconnect') as string}
+                    className={styles.button}
+                    onClick={handleLogout}
+                >
                     <div className={styles['button-container']}>
-                        <img alt="disconnect" src={SmallAvatarPng} />
+                        <img alt="" src={SmallAvatarPng} />
                         <span className="margin-left">{t('home_page.profile.disconnect')}</span>
                     </div>
-                    <img alt="arrow-right" src={ArrowRightSvg} />
+                    <img alt="" src={ArrowRightSvg} />
                 </button>
             </div>
         </div>

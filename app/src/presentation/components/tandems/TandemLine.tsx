@@ -34,11 +34,13 @@ const TandemLine: React.FC<TandemLineProps> = ({ language, profile, onPressed, s
         <button className={styles.container} onClick={onPressed}>
             <div className={styles['left-container']}>
                 <div className={styles['flag-container']}>
-                    <span className={styles.flag}>{codeLanguageToFlag(language.code)}</span>
+                    <span className={styles.flag} role="img" aria-label={language.name}>
+                        {codeLanguageToFlag(language.code)}
+                    </span>
                 </div>
                 <span className={styles.title}>{t(getTitleFromStatusAndProfile(status, !!profile))}</span>
             </div>
-            <img alt="arrow-right" src={ArrowRightSvg} />
+            <img alt="" src={ArrowRightSvg} />
         </button>
     );
 };
