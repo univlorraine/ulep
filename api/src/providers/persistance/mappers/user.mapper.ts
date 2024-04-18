@@ -5,17 +5,23 @@ import {
   universityMapper,
 } from './university.mapper';
 import { Gender, MediaObject, Role, User, UserStatus } from 'src/core/models';
+import {
+  DeviceSnapshot,
+  deviceMapper,
+} from 'src/providers/persistance/mappers/device.mapper';
 
 export const UserRelations = {
   Organization: { include: UniversityRelations },
   Nationality: true,
   Avatar: true,
+  Devices: true,
 };
 
 export type UserSnapshot = Prisma.Users & {
   Organization: UniversitySnapshot;
   Nationality?: Prisma.CountryCodes;
   Avatar: Prisma.MediaObjects;
+  Devices?: DeviceSnapshot[];
 };
 
 export const userMapper = (snapshot: UserSnapshot): User => {
@@ -46,5 +52,6 @@ export const userMapper = (snapshot: UserSnapshot): User => {
     deactivated: snapshot.deactivated,
     createdAt: snapshot.created_at,
     updatedAt: snapshot.updated_at,
+    devices: snapshot.Devices && snapshot.Devices.map(deviceMapper),
   });
 };

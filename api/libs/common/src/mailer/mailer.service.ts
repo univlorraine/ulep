@@ -50,7 +50,7 @@ export class MailerService implements OnModuleInit, OnModuleDestroy {
   }
 
   onModuleDestroy() {
-    this.#transporter.close();
+    if (this.#transporter && this.#transporter.close) this.#transporter.close();
   }
 
   private createTransporter() {

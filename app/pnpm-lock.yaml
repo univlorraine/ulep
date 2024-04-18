@@ -8,6 +8,9 @@ dependencies:
   '@babel/preset-env':
     specifier: 7.22.10
     version: 7.22.10(@babel/core@7.23.2)
+  '@capacitor-community/fcm':
+    specifier: ^5.0.3
+    version: 5.0.3(@capacitor/core@5.0.4)
   '@capacitor/android':
     specifier: 5.0.4
     version: 5.0.4(@capacitor/core@5.0.4)
@@ -38,6 +41,9 @@ dependencies:
   '@capacitor/preferences':
     specifier: ^5.0.2
     version: 5.0.2(@capacitor/core@5.0.4)
+  '@capacitor/push-notifications':
+    specifier: ^5.1.1
+    version: 5.1.1(@capacitor/core@5.0.4)
   '@capacitor/splash-screen':
     specifier: ^5.0.5
     version: 5.0.5(@capacitor/core@5.0.4)
@@ -1345,6 +1351,14 @@ packages:
     resolution: {integrity: sha512-0hYQ8SB4Db5zvZB4axdMHGwEaQjkZzFjQiN9LVYvIFB2nSUHW9tYpxWriPrWDASIxiaXax83REcLxuSdnGPZtw==}
     dev: true
 
+  /@capacitor-community/fcm@5.0.3(@capacitor/core@5.0.4):
+    resolution: {integrity: sha512-FzR7LoK2oDUjYgKpxgczOlQacLEBZtmtjntAmP0t7ZRcADiYr51hMSBm+M1dUXXUBVMpz+bx33YUa2p9ALaPAQ==}
+    peerDependencies:
+      '@capacitor/core': ^5.0.0
+    dependencies:
+      '@capacitor/core': 5.0.4
+    dev: false
+
   /@capacitor/android@5.0.4(@capacitor/core@5.0.4):
     resolution: {integrity: sha512-WtXmjRQ0bCtFkwBID/jVEPbqnh0uR9wTSgkW7QNzogDuA0iyJJI2nxDfT9knUmg6mne/CnfTXg093zzdc13C0w==}
     peerDependencies:
@@ -1443,6 +1457,14 @@ packages:
 
   /@capacitor/preferences@5.0.2(@capacitor/core@5.0.4):
     resolution: {integrity: sha512-NOBA4TFC9sq0UU13dKHCDqNsD3X5TGPFgtGvRcJorBvbllUwMMBAbkjF5iCVsoenAN55d77Qh9wXufewdMpXjg==}
+    peerDependencies:
+      '@capacitor/core': ^5.0.0
+    dependencies:
+      '@capacitor/core': 5.0.4
+    dev: false
+
+  /@capacitor/push-notifications@5.1.1(@capacitor/core@5.0.4):
+    resolution: {integrity: sha512-lPtjlMG/PXKZEQjFFI3uqDqC8XaVjOosStvMZMVgxHgn2U45J3QRznUdVR0d6XqLmHnilxLs8ZNislkie0QfPA==}
     peerDependencies:
       '@capacitor/core': ^5.0.0
     dependencies:

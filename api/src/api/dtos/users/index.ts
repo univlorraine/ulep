@@ -207,6 +207,20 @@ export class UpdateAdministratorRequest {
   @IsOptional()
   password?: string;
 }
+
+export class AddDeviceRequest {
+  @Swagger.ApiProperty({ type: 'string' })
+  @IsString()
+  token: string;
+
+  @Swagger.ApiProperty({ type: 'boolean' })
+  @IsBoolean()
+  isAndroid: boolean;
+
+  @Swagger.ApiProperty({ type: 'boolean' })
+  @IsBoolean()
+  isIos: boolean;
+}
 export class UserResponse {
   @Swagger.ApiProperty({ type: 'string', format: 'uuid' })
   @Expose({ groups: ['read'] })

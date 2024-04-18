@@ -1,121 +1,128 @@
 version: "3.4"
 
 services:
-  api:
-    build:
-      context: ./api
-      target: api_prod
-    depends_on:
-      - database
-    restart: unless-stopped
-    environment:
-      ADMIN_URL: ${ADMIN_URL:-http://localhost:3001}
-      APP_URL: ${APP_URL:-http://localhost:5173}
-      LOG_LEVEL: ${LOG_LEVEL:-debug} # verbose, debug, log, warn or error
-      DEFAULT_TRANSLATION_LANGUAGE: ${DEFAULT_TRANSLATION_LANGUAGE:-fr}
-      DATABASE_URL: postgresql://${POSTGRES_USER:-postgres}:${POSTGRES_PASSWORD:-!ChangeMe!}@database:5432/${POSTGRES_DB:-ulep}?schema=public
-      KEYCLOAK_BASE_URL: ${KEYCLOAK_BASE_URL:-http://auth:8080}
-      KEYCLOAK_REALM: ${KEYCLOAK_REALM:-etandem}
-      KEYCLOAK_ADMIN: ${KEYCLOAK_ADMIN:-admin}
-      KEYCLOAK_ADMIN_PASSWORD: ${KEYCLOAK_PASSWORD:-!ChangeMe!}
-      KEYCLOAK_CLIENT_ID: ${KEYCLOAK_CLIENT_ID:-api}
-      KEYCLOAK_CLIENT_SECRET: ${KEYCLOAK_CLIENT_SECRET:-bN49BuApmmtAODeOWOG8iKOOuJdN3KE6}
-      KEYCLOAK_ADMIN_GROUP_ID: ${KEYCLOAK_ADMIN_GROUP_ID:-02736a0f-4679-4329-a877-2ce87aaea569}
-      S3_URL: ${S3_URL:-http://minio:9000}
-      S3_REGION: ${S3_REGION:-eu-east-1}
-      S3_ACCESS_KEY: ${MINIO_USER:-minio}
-      S3_ACCESS_SECRET: ${MINIO_PASSWORD:-!ChangeMe!}
-      WEBLATE_API_URL: ${WEBLATE_API_URL:-https://weblate.ulep.thestaging.io/api}
-      WEBLATE_API_TOKEN: ${WEBLATE_API_TOKEN:-} # Needs to be configured to avoid reaching rate limit by calling public endpoint of Weblate
-      CONNECTOR_URL: ${CONNECTOR_URL:-}
-      CONNECTOR_TOKEN: ${CONNECTOR_TOKEN:-}
-      EMAIL_ASSETS_BUCKET: ${EMAIL_ASSETS_BUCKET:-assets}
-      EMAIL_TRANSLATIONS_COMPONENT: ${EMAIL_TRANSLATIONS_COMPONENT:-emails}
-      EMAIL_ASSETS_PUBLIC_ENDPOINT: ${EMAIL_ASSETS_PUBLIC_ENDPOINT:-http://localhost:9000}
-      APP_LINK_APPLE_STORE: ${APP_LINK_APPLE_STORE:-http://apple-store.fr/etandem}
-      APP_LINK_PLAY_STORE: ${APP_LINK_PLAY_STORE:-http://play-store.fr/etandem}
-      SMTP_DISABLE_BOOT_VERIFICATION: ${SMTP_DISABLE_BOOT_VERIFICATION:-true}
-      SMTP_HOST: ${SMTP_HOST:-mailer}
-      SMTP_PORT: ${SMTP_PORT:-1025}
-      SMTP_SECURE: ${SMTP_SECURE:-false}
-      SMTP_IGNORE_TLS: ${SMTP_IGNORE_TLS:-true}
-      SMTP_SENDER: ${SMTP_SENDER:-test@ulep.fr}
-      SENTRY_DSN: ${API_SENTRY_DSN:-}
-      CANCEL_TRESHOLD_IN_MINUTES: ${CANCEL_TRESHOLD_IN_MINUTES:-15}
-      SIGNED_URL_EXPIRATION_IN_SECONDS: ${SIGNED_URL_EXPIRATION_IN_SECONDS:-600}
+    api:
+        build:
+            context: ./api
+            target: api_prod
+        depends_on:
+            - database
+        restart: unless-stopped
+        environment:
+            ADMIN_URL: ${ADMIN_URL:-http://localhost:3001}
+            APP_URL: ${APP_URL:-http://localhost:5173}
+            LOG_LEVEL: ${LOG_LEVEL:-debug} # verbose, debug, log, warn or error
+            DEFAULT_TRANSLATION_LANGUAGE: ${DEFAULT_TRANSLATION_LANGUAGE:-fr}
+            DATABASE_URL: postgresql://${POSTGRES_USER:-postgres}:${POSTGRES_PASSWORD:-!ChangeMe!}@database:5432/${POSTGRES_DB:-ulep}?schema=public
+            KEYCLOAK_BASE_URL: ${KEYCLOAK_BASE_URL:-http://auth:8080}
+            KEYCLOAK_REALM: ${KEYCLOAK_REALM:-etandem}
+            KEYCLOAK_ADMIN: ${KEYCLOAK_ADMIN:-admin}
+            KEYCLOAK_ADMIN_PASSWORD: ${KEYCLOAK_PASSWORD:-!ChangeMe!}
+            KEYCLOAK_CLIENT_ID: ${KEYCLOAK_CLIENT_ID:-api}
+            KEYCLOAK_CLIENT_SECRET: ${KEYCLOAK_CLIENT_SECRET:-bN49BuApmmtAODeOWOG8iKOOuJdN3KE6}
+            KEYCLOAK_ADMIN_GROUP_ID: ${KEYCLOAK_ADMIN_GROUP_ID:-02736a0f-4679-4329-a877-2ce87aaea569}
+            S3_URL: ${S3_URL:-http://minio:9000}
+            S3_REGION: ${S3_REGION:-eu-east-1}
+            S3_ACCESS_KEY: ${MINIO_USER:-minio}
+            S3_ACCESS_SECRET: ${MINIO_PASSWORD:-!ChangeMe!}
+            WEBLATE_API_URL: ${WEBLATE_API_URL:-https://weblate.ulep.thestaging.io/api}
+            WEBLATE_API_TOKEN: ${WEBLATE_API_TOKEN:-} # Needs to be configured to avoid reaching rate limit by calling public endpoint of Weblate
+            CONNECTOR_URL: ${CONNECTOR_URL:-}
+            CONNECTOR_TOKEN: ${CONNECTOR_TOKEN:-}
+            EMAIL_ASSETS_BUCKET: ${EMAIL_ASSETS_BUCKET:-assets}
+            EMAIL_TRANSLATIONS_COMPONENT: ${EMAIL_TRANSLATIONS_COMPONENT:-emails}
+            EMAIL_ASSETS_PUBLIC_ENDPOINT: ${EMAIL_ASSETS_PUBLIC_ENDPOINT:-http://localhost:9000}
+            NOTIFICATION_ASSETS_BUCKET: ${NOTIFICATION_ASSETS_BUCKET:-assets}
+            NOTIFICATION_TRANSLATIONS_COMPONENT: ${NOTIFICATION_TRANSLATIONS_COMPONENT:-notifications}
+            NOTIFICATION_ASSETS_PUBLIC_ENDPOINT: ${NOTIFICATION_ASSETS_PUBLIC_ENDPOINT:-http://localhost:9000}
+            APP_LINK_APPLE_STORE: ${APP_LINK_APPLE_STORE:-http://apple-store.fr/etandem}
+            APP_LINK_PLAY_STORE: ${APP_LINK_PLAY_STORE:-http://play-store.fr/etandem}
+            SMTP_DISABLE_BOOT_VERIFICATION: ${SMTP_DISABLE_BOOT_VERIFICATION:-true}
+            SMTP_HOST: ${SMTP_HOST:-mailer}
+            SMTP_PORT: ${SMTP_PORT:-1025}
+            SMTP_SECURE: ${SMTP_SECURE:-false}
+            SMTP_IGNORE_TLS: ${SMTP_IGNORE_TLS:-true}
+            SMTP_SENDER: ${SMTP_SENDER:-test@ulep.fr}
+            FIREBASE_PROJECT_ID: ${FIREBASE_PROJECT_ID:-}
+            FIREBASE_PRIVATE_KEY: ${FIREBASE_PRIVATE_KEY:-}
+            FIREBASE_CLIENT_EMAIL: ${FIREBASE_CLIENT_EMAIL:-}
+            FIREBASE_PARALLEL_LIMIT: ${FIREBASE_PARALLEL_LIMIT:-3}
+            SENTRY_DSN: ${API_SENTRY_DSN:-}
+            CANCEL_TRESHOLD_IN_MINUTES: ${CANCEL_TRESHOLD_IN_MINUTES:-15}
+            SIGNED_URL_EXPIRATION_IN_SECONDS: ${SIGNED_URL_EXPIRATION_IN_SECONDS:-600}
 
-  admin:
-    build:
-      context: ./admin
-      target: admin_prod
-    depends_on:
-      - api
-    environment:
-      REACT_APP_API_URL: ${REACT_APP_API_URL:-http://localhost:3000}
-      REACT_APP_KEYCLOAK_URL: ${REACT_APP_KEYCLOAK_URL:-http://localhost:8080}
-      REACT_APP_KEYCLOAK_REALM: ${REACT_APP_KEYCLOAK_REALM:-etandem}
-      REACT_APP_KEYCLOAK_CLIENT_ID: ${REACT_APP_KEYCLOAK_CLIENT_ID:-react-admin}
-      REACT_APP_KEYCLOAK_CLIENT_SECRET: ${REACT_APP_KEYCLOAK_CLIENT_SECRET:-uKBywX2HlxfvKgxZoKZrbiBSx49CST6W}
-      REACT_APP_SENTRY_DSN: ${ADMIN_SENTRY_DSN:-}
-      WDS_SOCKET_PORT: 0
+    admin:
+        build:
+            context: ./admin
+            target: admin_prod
+        depends_on:
+            - api
+        environment:
+            REACT_APP_API_URL: ${REACT_APP_API_URL:-http://localhost:3000}
+            REACT_APP_KEYCLOAK_URL: ${REACT_APP_KEYCLOAK_URL:-http://localhost:8080}
+            REACT_APP_KEYCLOAK_REALM: ${REACT_APP_KEYCLOAK_REALM:-etandem}
+            REACT_APP_KEYCLOAK_CLIENT_ID: ${REACT_APP_KEYCLOAK_CLIENT_ID:-react-admin}
+            REACT_APP_KEYCLOAK_CLIENT_SECRET: ${REACT_APP_KEYCLOAK_CLIENT_SECRET:-uKBywX2HlxfvKgxZoKZrbiBSx49CST6W}
+            REACT_APP_SENTRY_DSN: ${ADMIN_SENTRY_DSN:-}
+            WDS_SOCKET_PORT: 0
 
-  auth:
-    image: quay.io/keycloak/keycloak:21.1.2
-    depends_on:
-      - database
-    volumes:
-      - ./docker/keycloak/providers:/opt/keycloak/providers
-      - ./docker/keycloak/realms:/opt/keycloak/data/import
-      - ./docker/keycloak/themes:/opt/keycloak/themes
-    command: start --import-realm
-    environment:
-      KEYCLOAK_ADMIN: ${KEYCLOAK_USER:-admin}
-      KEYCLOAK_ADMIN_PASSWORD: ${KEYCLOAK_PASSWORD:-!ChangeMe!}
-      KC_DB: postgres
-      KC_DB_USERNAME: ${POSTGRES_USER:-postgres}
-      KC_DB_PASSWORD: ${POSTGRES_PASSWORD:-!ChangeMe!}
-      KC_DB_URL: jdbc:postgresql://database:5432/${POSTGRES_DB:-ulep}
-      KC_DB_SCHEMA: keycloak
-      KC_HOSTNAME_URL: ${KEYCLOAK_BASE_URL:-http://localhost:8080}
-      KC_HOSTNAME_ADMIN_URL: ${KEYCLOAK_BASE_URL:-http://localhost:8080}
+    auth:
+        image: quay.io/keycloak/keycloak:21.1.2
+        depends_on:
+            - database
+        volumes:
+            - ./docker/keycloak/providers:/opt/keycloak/providers
+            - ./docker/keycloak/realms:/opt/keycloak/data/import
+            - ./docker/keycloak/themes:/opt/keycloak/themes
+        command: start --import-realm
+        environment:
+            KEYCLOAK_ADMIN: ${KEYCLOAK_USER:-admin}
+            KEYCLOAK_ADMIN_PASSWORD: ${KEYCLOAK_PASSWORD:-!ChangeMe!}
+            KC_DB: postgres
+            KC_DB_USERNAME: ${POSTGRES_USER:-postgres}
+            KC_DB_PASSWORD: ${POSTGRES_PASSWORD:-!ChangeMe!}
+            KC_DB_URL: jdbc:postgresql://database:5432/${POSTGRES_DB:-ulep}
+            KC_DB_SCHEMA: keycloak
+            KC_HOSTNAME_URL: ${KEYCLOAK_BASE_URL:-http://localhost:8080}
+            KC_HOSTNAME_ADMIN_URL: ${KEYCLOAK_BASE_URL:-http://localhost:8080}
 
-  database:
-    image: postgres:${POSTGRES_VERSION:-14}-alpine
-    environment:
-      POSTGRES_DB: ${POSTGRES_DB:-ulep}
-      POSTGRES_USER: ${POSTGRES_USER:-postgres}
-      # You should definitely change the password in production
-      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-!ChangeMe!}
-    volumes:
-      - ./docker/database/db.sql:/docker-entrypoint-initdb.d/db.sql
-      - db_data:/var/lib/postgresql/data
-      # you may use a bind-mounted host directory instead, so that it is harder to accidentally remove the volume and lose all your data!
-      # - ./docker/database/data:/var/lib/postgresql/data
+    database:
+        image: postgres:${POSTGRES_VERSION:-14}-alpine
+        environment:
+            POSTGRES_DB: ${POSTGRES_DB:-ulep}
+            POSTGRES_USER: ${POSTGRES_USER:-postgres}
+            # You should definitely change the password in production
+            POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-!ChangeMe!}
+        volumes:
+            - ./docker/database/db.sql:/docker-entrypoint-initdb.d/db.sql
+            - db_data:/var/lib/postgresql/data
+            # you may use a bind-mounted host directory instead, so that it is harder to accidentally remove the volume and lose all your data!
+            # - ./docker/database/data:/var/lib/postgresql/data
 
-  minio:
-    image: minio/minio:latest
-    command: server /data/minio --console-address :9001
-    environment:
-      MINIO_ROOT_USER: ${MINIO_USER:-minio}
-      MINIO_ROOT_PASSWORD: ${MINIO_PASSWORD:-!ChangeMe!}
-    volumes:
-      - ./docker/minio:/data/minio
+    minio:
+        image: minio/minio:latest
+        command: server /data/minio --console-address :9001
+        environment:
+            MINIO_ROOT_USER: ${MINIO_USER:-minio}
+            MINIO_ROOT_PASSWORD: ${MINIO_PASSWORD:-!ChangeMe!}
+        volumes:
+            - ./docker/minio:/data/minio
 
-  # weblate:
-  #   image: weblate/weblate:latest
-  #   depends_on:
-  #     - database
-  #   ports:
-  #     - 8999:8080
-  #   environment:
-  #     WEBLATE_SITE_DOMAIN: ${DOMAIN_NAME:-localhost}
-  #     WEBLATE_ADMIN_NAME: ${WEBLATE_USER:-admin}
-  #     WEBLATE_ADMIN_PASSWORD: ${WEBLATE_PASSWORD:-!ChangeMe!}
-  #     POSTGRES_USER: ${POSTGRES_USER:-postgres}
-  #     POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-!ChangeMe!}
-  #     POSTGRES_HOST: database
-  #     POSTGRES_PORT: 5432
-  #     POSTGRES_DATABASE: ${WEBLATE_DB:-weblate} # ? TODO use custom schema
+    # weblate:
+    #   image: weblate/weblate:latest
+    #   depends_on:
+    #     - database
+    #   ports:
+    #     - 8999:8080
+    #   environment:
+    #     WEBLATE_SITE_DOMAIN: ${DOMAIN_NAME:-localhost}
+    #     WEBLATE_ADMIN_NAME: ${WEBLATE_USER:-admin}
+    #     WEBLATE_ADMIN_PASSWORD: ${WEBLATE_PASSWORD:-!ChangeMe!}
+    #     POSTGRES_USER: ${POSTGRES_USER:-postgres}
+    #     POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-!ChangeMe!}
+    #     POSTGRES_HOST: database
+    #     POSTGRES_PORT: 5432
+    #     POSTGRES_DATABASE: ${WEBLATE_DB:-weblate} # ? TODO use custom schema
 
 volumes:
-  db_data:
+    db_data:

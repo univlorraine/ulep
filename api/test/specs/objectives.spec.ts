@@ -12,6 +12,8 @@ import { AUTHENTICATOR, InMemoryAuthenticator } from 'src/api/services';
 import { EMAIL_GATEWAY } from 'src/core/ports/email.gateway';
 import InMemoryEmailGateway from 'src/providers/gateway/in-memory-email.gateway';
 import { InMemoryI18nService } from 'src/providers/services/in-memory.i18n.provider';
+import { NOTIFICATION_GATEWAY } from 'src/core/ports/notification.gateway';
+import InMemoryNotificaitonGateway from 'src/providers/gateway/in-memory-notification.gateway';
 
 describe('Objectives', () => {
   let app: TestServer;
@@ -25,6 +27,7 @@ describe('Objectives', () => {
   const { keycloakUser } = new KeycloakUserFactory().makeOne();
   const authenticator = new InMemoryAuthenticator(keycloakUser);
   const inMemoryEmail = new InMemoryEmailGateway();
+  const inMemoryNotification = new InMemoryNotificaitonGateway();
   const inMemoryI18n = new InMemoryI18nService();
 
   beforeAll(async () => {
@@ -41,6 +44,8 @@ describe('Objectives', () => {
       .useValue(authenticator)
       .overrideProvider(EMAIL_GATEWAY)
       .useValue(inMemoryEmail)
+      .overrideProvider(NOTIFICATION_GATEWAY)
+      .useValue(inMemoryNotification)
       .overrideProvider(I18nService)
       .useValue(inMemoryI18n)
       .overrideGuard(AuthenticationGuard)
