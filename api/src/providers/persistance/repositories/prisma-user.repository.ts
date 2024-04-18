@@ -160,9 +160,9 @@ export class PrismaUserRepository implements UserRepository {
     });
   }
 
-  async removeDevice(id: string): Promise<void> {
+  async removeDevice(token: string): Promise<void> {
     await this.prisma.device.delete({
-      where: { id },
+      where: { token },
     });
   }
 }

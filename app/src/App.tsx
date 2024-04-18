@@ -72,7 +72,7 @@ const AppCore = () => {
         return () => {
             notificationAdapter.removeListeners();
         };
-    }, []);
+    }, [profile]);
 
     return (
         <IonReactRouter>

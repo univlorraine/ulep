@@ -28,7 +28,6 @@ export class AddDeviceUsecase {
     return await this.userRepository.addDevice(
       user.id,
       new Device({
-        id: command.token,
         token: command.token,
         isAndroid: command.isAndroid,
         isIos: command.isIos,

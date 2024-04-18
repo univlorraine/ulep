@@ -116,6 +116,13 @@ export class FCMService implements OnModuleInit, OnModuleDestroy {
             image: message.image,
           },
           data: message.data,
+          apns: {
+            payload: {
+              aps: {
+                contentAvailable: true,
+              },
+            },
+          },
         }));
 
       return await this.sendAll(notifications, dryRun);

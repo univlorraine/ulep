@@ -2,6 +2,9 @@
 include ':capacitor-android'
 project(':capacitor-android').projectDir = new File('../node_modules/.pnpm/@capacitor+android@5.0.4_@capacitor+core@5.0.4/node_modules/@capacitor/android/capacitor')
 
+include ':capacitor-community-fcm'
+project(':capacitor-community-fcm').projectDir = new File('../node_modules/.pnpm/@capacitor-community+fcm@5.0.3_@capacitor+core@5.0.4/node_modules/@capacitor-community/fcm/android')
+
 include ':capacitor-app'
 project(':capacitor-app').projectDir = new File('../node_modules/.pnpm/@capacitor+app@5.0.2_@capacitor+core@5.0.4/node_modules/@capacitor/app/android')
 
