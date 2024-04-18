@@ -34,7 +34,7 @@ const TandemProfile: React.FC<TandemProfileProps> = ({
     const { width } = useWindowDimensions();
     const isHybrid = width < HYBRID_MAX_WIDTH;
     return (
-        <div className={styles.container} style={{ backgroundColor: configuration.secondaryColor }}>
+        <div className={`content-wrapper ${styles.container}`} style={{ backgroundColor: configuration.secondaryColor }}>
             <Background className={styles.image} style={{ color: configuration.secondaryBackgroundImageColor }} />
             <button
                 aria-label={t('global.go_back') as string}
