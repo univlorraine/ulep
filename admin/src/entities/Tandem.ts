@@ -2,6 +2,7 @@ export enum TandemStatus {
     INACTIVE = 'INACTIVE',
     DRAFT = 'DRAFT',
     VALIDATED_BY_ONE_UNIVERSITY = 'VALIDATED_BY_ONE_UNIVERSITY',
+    PAUSED = 'PAUSED',
     ACTIVE = 'ACTIVE',
 }
 

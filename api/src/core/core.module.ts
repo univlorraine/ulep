@@ -88,6 +88,7 @@ import {
   UpdateProfileUsecase,
   CreateOrUpdateTestedLanguageUsecase,
   AddDeviceUsecase,
+  UpdateTandemUsecase,
 } from './usecases';
 import { UploadObjectiveImageUsecase } from 'src/core/usecases/media/upload-objective-image.usecase';
 import { UpdateObjectiveUsecase } from 'src/core/usecases/objective/update-objective.usecase';
@@ -195,6 +196,7 @@ const usecases: Provider[] = [
   GetLearningLanguageMatchesUsecase,
   ValidateTandemUsecase,
   RefuseTandemUsecase,
+  UpdateTandemUsecase,
   // Universities
   CreatePartnerUniversityUsecase,
   CreateUniversityUsecase,

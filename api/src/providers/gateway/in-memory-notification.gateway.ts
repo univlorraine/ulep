@@ -1,13 +1,17 @@
-import {
-  NotificationGateway,
-  SendWelcomeNotification,
-} from 'src/core/ports/notification.gateway';
+import { NotificationGateway } from 'src/core/ports/notification.gateway';
 
 export default class InMemoryNotificaitonGateway
   implements NotificationGateway
 {
   sendWelcomeNotification(): Promise<void> {
-    console.log('Notificaiton send');
-    return;
+    return Promise.resolve();
+  }
+
+  sendPausedTandemNotification(): Promise<void> {
+    return Promise.resolve();
+  }
+
+  sendUnpausedTandemNotification(): Promise<void> {
+    return Promise.resolve();
   }
 }
