@@ -5,11 +5,16 @@
   "registrationEmailAsUsername": true,
   "accessTokenLifespan": 600,
   "accessCodeLifespan": 600,
-  "requiredCredentials": ["password"],
+  "requiredCredentials": [
+    "password"
+  ],
   "internationalizationEnabled": true,
   "loginTheme": "ulep",
   "emailTheme": "ulep",
-  "supportedLocales": ["en", "fr"],
+  "supportedLocales": [
+    "en",
+    "fr"
+  ],
   "defaultLocale": "fr",
   "smtpServer": {
     "starttls": "false",
@@ -77,7 +82,9 @@
       "protocol": "openid-connect",
       "standardFlowEnabled": true,
       "directAccessGrantsEnabled": true,
-      "redirectUris": ["http://localhost:3001/auth-callback"],
+      "redirectUris": [
+        "http://localhost:3001/auth-callback"
+      ],
       "protocolMappers": [
         {
           "id": "c07966d2-645c-4b0b-ba91-52916817d597",
@@ -105,16 +112,20 @@
       "name": "Administrators",
       "path": "/Administrators",
       "attributes": {},
-      "realmRoles": ["admin"],
+      "realmRoles": [
+        "admin"
+      ],
       "clientRoles": {},
       "subGroups": []
     },
     {
       "id": "eba50e06-d584-4fc8-9d6b-908169202cea",
-      "name": "Managers",
-      "path": "/Managers",
+      "name": "Animators",
+      "path": "/Animators",
       "attributes": {},
-      "realmRoles": ["manager"],
+      "realmRoles": [
+        "animator"
+      ],
       "clientRoles": {},
       "subGroups": []
     }
@@ -131,7 +142,9 @@
       "serviceAccountClientId": "api",
       "disableableCredentialTypes": [],
       "requiredActions": [],
-      "realmRoles": ["default-roles-etandem"],
+      "realmRoles": [
+        "default-roles-etandem"
+      ],
       "clientRoles": {
         "realm-management": [
           "query-users",
@@ -156,8 +169,8 @@
       },
       {
         "id": "01a25df8-b1ef-42e6-8052-efccce028672",
-        "name": "manager",
-        "description": "Group of users who can manage all parts of their universities",
+        "name": "animator",
+        "description": "Group of users who can read and write some parts of the back office",
         "composite": false,
         "clientRole": false,
         "containerId": "616eb353-7524-4a46-9cf3-44612cba6c90",
