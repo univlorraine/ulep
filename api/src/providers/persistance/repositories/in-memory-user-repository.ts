@@ -1,10 +1,12 @@
 import { Collection } from '@app/common';
+import { Device } from 'src/core/models';
 import { User, UserStatus } from 'src/core/models/user.model';
 import { UserRepository, WhereProps } from 'src/core/ports/user.repository';
 
 export class InMemoryUserRepository implements UserRepository {
   #users: User[] = [];
   #blacklist: string[] = [];
+  #devices: Device[] = [];
 
   get users(): User[] {
     return this.#users;
@@ -86,5 +88,29 @@ export class InMemoryUserRepository implements UserRepository {
     return this.#users.filter(
       (user) => user.university?.id === props.universityId,
     ).length;
+  }
+
+  async addDevice(id: string, props: Device): Promise<void> {
+    const user = this.#users.find((user) => user.id === id);
+    this.#devices.push(props);
+
+    if (user) {
+      user.devices = [...user.devices, props];
+    }
+
+    return Promise.resolve();
+  }
+
+  async removeDevice(token: string): Promise<void> {
+    const user = this.#users.find((user) =>
+      user.devices.some((device) => device.token === token),
+    );
+    this.#devices = this.#devices.filter((device) => device.token !== token);
+
+    if (user) {
+      user.devices = user.devices.filter((device) => device.token !== token);
+    }
+
+    return Promise.resolve();
   }
 }

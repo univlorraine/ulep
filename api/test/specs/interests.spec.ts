@@ -17,6 +17,8 @@ import { AuthenticationGuard } from 'src/api/guards';
 import InMemoryEmailGateway from 'src/providers/gateway/in-memory-email.gateway';
 import { EMAIL_GATEWAY } from 'src/core/ports/email.gateway';
 import { InMemoryI18nService } from 'src/providers/services/in-memory.i18n.provider';
+import InMemoryNotificaitonGateway from 'src/providers/gateway/in-memory-notification.gateway';
+import { NOTIFICATION_GATEWAY } from 'src/core/ports/notification.gateway';
 
 describe('Interests', () => {
   let app: TestServer;
@@ -28,6 +30,7 @@ describe('Interests', () => {
   const repository = new InMemoryInterestRepository();
   const languageRepository = new InMemoryLanguageRepository();
   const inMemoryEmail = new InMemoryEmailGateway();
+  const inMemoryNotification = new InMemoryNotificaitonGateway();
   const inMemoryI18n = new InMemoryI18nService();
 
   beforeAll(async () => {
@@ -39,6 +42,8 @@ describe('Interests', () => {
     })
       .overrideProvider(INTEREST_REPOSITORY)
       .useValue(repository)
+      .overrideProvider(NOTIFICATION_GATEWAY)
+      .useValue(inMemoryNotification)
       .overrideProvider(LANGUAGE_REPOSITORY)
       .useValue(languageRepository)
       .overrideProvider(EMAIL_GATEWAY)

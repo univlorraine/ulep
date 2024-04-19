@@ -2,7 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { Collection, PrismaService } from '@app/common';
 import { UserRelations, userMapper } from '../mappers/user.mapper';
 import { UserRepository, WhereProps } from 'src/core/ports/user.repository';
-import { User, UserStatus } from 'src/core/models';
+import { Device, User, UserStatus } from 'src/core/models';
 import { UniversityRelations } from '../mappers';
 
 @Injectable()
@@ -143,5 +143,26 @@ export class PrismaUserRepository implements UserRepository {
     });
 
     return countUsers;
+  }
+
+  async addDevice(id: string, props: Device): Promise<void> {
+    await this.prisma.users.update({
+      where: { id },
+      data: {
+        Devices: {
+          create: {
+            token: props.token,
+            is_android: props.isAndroid,
+            is_ios: props.isIos,
+          },
+        },
+      },
+    });
+  }
+
+  async removeDevice(token: string): Promise<void> {
+    await this.prisma.device.delete({
+      where: { token },
+    });
   }
 }

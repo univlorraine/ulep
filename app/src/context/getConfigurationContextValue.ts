@@ -35,6 +35,8 @@ import GetPartnersToUniversityUsecase from '../domain/usecases/GetPartnersToUniv
 import EditProfileUsecase from '../domain/usecases/EditProfileUsecase';
 import EditUserUsecase from '../domain/usecases/EditUserUsecase';
 import CreateOrUpdateTestedLanguageUsecase from '../domain/usecases/CreateOrUpdateTestedLanguageUsecase';
+import NotificationAdapter from '../adapter/NotificationAdapter';
+import AddDeviceUsecase from '../domain/usecases/AddDeviceUsecase';
 
 interface GetConfigContextValueProps {
     apiUrl: string;
@@ -64,6 +66,7 @@ const getConfigContextValue = ({
     const deviceAdapter = new DeviceAdapter();
     const domainHttpAdapter = new DomainHttpAdapter(apiUrl, accessToken, refreshToken, languageCode, setTokens, logout);
 
+    const addDevice = new AddDeviceUsecase(domainHttpAdapter);
     const askForAccountDeletion = new AskForAccountDeletion(domainHttpAdapter);
     const askForLanguage = new AskForLanguageUsecase(domainHttpAdapter);
     const askForLearningLanguage = new AskForLearningLanguageUsecase(domainHttpAdapter);
@@ -85,6 +88,7 @@ const getConfigContextValue = ({
     const getUniversityLanguages = new GetUniversityLanguagesUsecase(domainHttpAdapter);
     const getMediaObject = new GetMediaObjectUsecase(domainHttpAdapter);
     const getUniversity = new GetUniversityUsecase(domainHttpAdapter);
+    const notificationAdapter = new NotificationAdapter();
     const login = new LoginUsecase(domainHttpAdapter, setTokens);
     const revokeSessionsUsecase = new RevokeSessionsUsecase(domainHttpAdapter);
     const getTokenFromCodeUsecase = new GetTokenFromCodeUsecase(domainHttpAdapter, setTokens);
@@ -100,6 +104,7 @@ const getConfigContextValue = ({
 
     return {
         accessToken,
+        addDevice,
         askForAccountDeletion,
         askForLanguage,
         askForLearningLanguage,
@@ -129,6 +134,7 @@ const getConfigContextValue = ({
         getUniversity,
         getUniversityLanguages,
         login,
+        notificationAdapter,
         resetPassword,
         updateAvatar,
         updateNotificationPermission,
