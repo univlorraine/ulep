@@ -35,6 +35,7 @@ import TandemPng from './tandem.png';
 import TandemNotFoundPng from './tandem_not_found.png';
 import TrophiePng from './trophie.png';
 import WritingSkillPng from './writing_skill.png';
+import InfoSvg from './info.svg';
 
 export {
     AdviceSvg,
@@ -60,6 +61,7 @@ export {
     EyeSvg,
     FAQPng,
     HiBubbleSvg,
+    InfoSvg,
     LeftChevronSvg,
     LogoSvg,
     LogoTextSvg,

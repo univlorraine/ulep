@@ -1,8 +1,8 @@
-import { useIonToast } from '@ionic/react';
+import { IonPopover, useIonPopover, useIonToast } from '@ionic/react';
 import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useHistory, useLocation } from 'react-router';
-import { PlusPng } from '../../assets';
+import { InfoSvg, PlusPng } from '../../assets';
 import { useConfig } from '../../context/ConfigurationContext';
 import { useStoreState } from '../../store/storeTypes';
 import Checkbox from '../components/Checkbox';
@@ -20,6 +20,40 @@ export interface SignUpInformationsParams {
     centralAge?: number;
     fromIdp?: boolean;
 }
+
+const PasswordInfo = () => {
+    const { t } = useTranslation();
+    const rules: string[] = t('signup_informations_page.password_infos.rules', { returnObjects: true }) || [];
+
+    return (
+        <>
+            <button
+                id="password-info"
+                className={styles['password-infos-btn']}
+                aria-label={t('signup_informations_page.password_infos.btn') as string}
+            >
+                <img src={InfoSvg} alt={t('signup_informations_page.password_infos.btn') as string} />
+            </button>
+            <IonPopover
+                trigger="password-info"
+                side="bottom"
+                alignment="center"
+                size="cover"
+                className={styles['password-infos-popover']}
+            >
+                <div className={styles['password-infos']}>
+                    <img src={InfoSvg} alt={t('signup_informations_page.password_infos.btn') as string} />
+                    {Array.isArray(rules) && (
+                        <div className={styles['password-infos-rules']}>
+                            <span>{t('signup_informations_page.password_infos.title')}</span>
+                            <ul>{Array.isArray(rules) && rules.map((rule, index) => <li key={index}>{rule}</li>)}</ul>
+                        </div>
+                    )}
+                </div>
+            </IonPopover>
+        </>
+    );
+};
 
 const SignUpInformationsPage: React.FC = () => {
     const { t } = useTranslation();
@@ -260,27 +294,27 @@ const SignUpInformationsPage: React.FC = () => {
                 )}
 
                 {!fromIdp && (
-                    <TextInput
-                        autocomplete="new-password"
-                        errorMessage={errorMessage?.type === 'password' ? errorMessage.message : undefined}
-                        onChange={setPassword}
-                        placeholder={t('signup_informations_page.placeholder_password')}
-                        title={t('global.password')}
-                        type="password"
-                        value={password}
-                    />
-                )}
-
-                {!fromIdp && (
-                    <TextInput
-                        autocomplete="new-password"
-                        errorMessage={errorMessage?.type === 'confirm' ? errorMessage.message : undefined}
-                        onChange={setConfirmPassword}
-                        placeholder={t('signup_informations_page.placeholder_confirm_password')}
-                        title={t('signup_informations_page.confirm_password')}
-                        type="password"
-                        value={confirmPassword}
-                    />
+                    <>
+                        <TextInput
+                            autocomplete="new-password"
+                            errorMessage={errorMessage?.type === 'password' ? errorMessage.message : undefined}
+                            onChange={setPassword}
+                            placeholder={t('signup_informations_page.placeholder_password')}
+                            title={t('global.password')}
+                            type="password"
+                            value={password}
+                            fieldInfo={<PasswordInfo />}
+                        />
+                        <TextInput
+                            autocomplete="new-password"
+                            errorMessage={errorMessage?.type === 'confirm' ? errorMessage.message : undefined}
+                            onChange={setConfirmPassword}
+                            placeholder={t('signup_informations_page.placeholder_confirm_password')}
+                            title={t('signup_informations_page.confirm_password')}
+                            type="password"
+                            value={confirmPassword}
+                        />
+                    </>
                 )}
 
                 <Checkbox

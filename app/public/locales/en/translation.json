@@ -386,6 +386,10 @@
     "signup_informations_page": {
         "code": "Code",
         "confirm_password": "Confirm your password",
+        "password_infos": {
+            "title": "The password must contain at least :",
+            "rules": ["8 characters", "1 uppercase character", "1 lowercase character", "1 digit"]
+        },
         "cgu": {
             "confidentiality": "privacy policy",
             "cgu": "terms of use",
@@ -402,7 +406,7 @@
         "error_firstname": "Please enter a valid first name",
         "error_gender": "Please select a gender",
         "error_lastname": "Please enter a valid last name",
-        "error_password": "Please enter a valid password",
+        "error_password": "Please enter a valid password. The password must contain at least : 8 characters, 1 uppercase character, 1 lowercase character, 1 digit",
         "error_picture_format": "The selected image does not have a valid format (JPG, PNG or JPEG)",
         "error_picture_weight": "The selected image is too heavy",
         "photo": "Add a photo",

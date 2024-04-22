@@ -12,6 +12,22 @@
     margin-bottom: 40px;
 }
 
+.password-infos-btn {
+    background-color: transparent;
+    width: 20px;
+    height: 20px;
+    margin: 0 0.5rem;
+}
+
+.password-infos-popover {
+    max-height: 100%;
+}
+
+.password-infos {
+    display: flex;
+    padding: 20px;
+}
+
 .image {
     align-self: center;
     border-radius: 50%;
