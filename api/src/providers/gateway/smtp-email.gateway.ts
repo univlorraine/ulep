@@ -234,7 +234,7 @@ export class SmtpEmailGateway implements EmailGateway {
   async sendTandemPausedEmail(
     props: TandemPausedUnpausedEmailProps,
   ): Promise<void> {
-    const translations = this.translate('tandemPaused', props.language, {
+    const translations = this.translate('tandemPausedNotice', props.language, {
       ...props,
     });
 
@@ -254,9 +254,13 @@ export class SmtpEmailGateway implements EmailGateway {
   async sendAdminTandemPausedEmail(
     props: TandemPausedUnpausedEmailProps,
   ): Promise<void> {
-    const translations = this.translate('tandemPausedAdmin', props.language, {
-      ...props,
-    });
+    const translations = this.translate(
+      'tandemPausedAdminNotice',
+      props.language,
+      {
+        ...props,
+      },
+    );
 
     await this.mailer.sendMail({
       to: props.to,
@@ -274,9 +278,13 @@ export class SmtpEmailGateway implements EmailGateway {
   async sendTandemUnpausedEmail(
     props: TandemPausedUnpausedEmailProps,
   ): Promise<void> {
-    const translations = this.translate('tandemUnpaused', props.language, {
-      ...props,
-    });
+    const translations = this.translate(
+      'tandemUnpausedNotice',
+      props.language,
+      {
+        ...props,
+      },
+    );
 
     await this.mailer.sendMail({
       to: props.to,
@@ -294,9 +302,13 @@ export class SmtpEmailGateway implements EmailGateway {
   async sendAdminTandemUnpausedEmail(
     props: TandemPausedUnpausedEmailProps,
   ): Promise<void> {
-    const translations = this.translate('tandemUnpausedAdmin', props.language, {
-      ...props,
-    });
+    const translations = this.translate(
+      'tandemUnpausedAdminNotice',
+      props.language,
+      {
+        ...props,
+      },
+    );
 
     await this.mailer.sendMail({
       to: props.to,

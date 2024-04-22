@@ -5,6 +5,7 @@ export interface LearningLanguagesParams {
         universityIds: string[];
         hasActiveTandem?: boolean;
         hasActionableTandem?: boolean;
+        hasPausedTandem?: boolean;
         profile: {
             user: {
                 lastname: string;
@@ -47,6 +48,7 @@ export const LearningLanguagesQuery = (params: LearningLanguagesParams): string 
         universityIds: params.filter.universityIds,
         hasActiveTandem: params.filter.hasActiveTandem,
         hasActionableTandem: params.filter.hasActionableTandem,
+        hasPausedTandem: params.filter.hasPausedTandem,
         page: params.pagination.page,
         limit: params.pagination.perPage,
         field: handleOrderField(params.sort?.field),
