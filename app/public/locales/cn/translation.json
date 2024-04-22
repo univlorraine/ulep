@@ -369,7 +369,6 @@
         "error_firstname": "请输入有效的名字",
         "error_gender": "请选择性别",
         "error_lastname": "请输入有效的姓氏",
-        "error_password": "请输入有效的密码",
         "error_picture_format": "",
         "error_picture_weight": "",
         "photo": "添加照片",
