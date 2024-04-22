@@ -235,7 +235,6 @@ export const learningLanguagesToTestedLanguages = (learningLanguages: LearningLa
 export const compareArrays = (a: unknown[], b: unknown[]) => JSON.stringify(a) == JSON.stringify(b);
 
 export const compareCEFR = (levelA: CEFR, levelB: CEFR) => {
-    console.log(levelA, levelB);
     const CEFRlevels: { [key: string]: number } = {
         A0: 0,
         A1: 1,

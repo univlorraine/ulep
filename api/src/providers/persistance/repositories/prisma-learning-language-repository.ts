@@ -361,15 +361,11 @@ export class PrismaLearningLanguageRepository
 
     if (hasPausedTandem === true) {
       tandemWhereClauses.push({
-        OR: [
-          {
-            Tandem: {
-              status: {
-                equals: TandemStatus.PAUSED,
-              },
-            },
+        Tandem: {
+          status: {
+            equals: TandemStatus.PAUSED,
           },
-        ],
+        },
       });
     } else if (hasActiveTandem === false) {
       tandemWhereClauses.push({

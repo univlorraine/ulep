@@ -65,7 +65,6 @@ export class FCMNotificationGateway implements NotificationGateway {
   }
 
   async sendPausedTandemNotification(props: NotificationParams): Promise<void> {
-    console.log(this.images);
     const image = this.images.notification;
     const notifications = props.to.map((notification) => {
       const translation = this.translate(
