@@ -4,7 +4,7 @@ import { Env } from 'src/configuration';
 import { FCMService, I18nService } from '@app/common';
 import {
   NotificationGateway,
-  SendWelcomeNotification,
+  NotificationParams,
 } from 'src/core/ports/notification.gateway';
 
 @Injectable()
@@ -48,12 +48,55 @@ export class FCMNotificationGateway implements NotificationGateway {
     return { title, body };
   }
 
-  async sendWelcomeNotification(props: SendWelcomeNotification): Promise<void> {
+  async sendWelcomeNotification(props: NotificationParams): Promise<void> {
     const image = this.images.notification;
     const notifications = props.to.map((notification) => {
       const translation = this.translate('welcome', notification.language, {
         ...props,
       });
+      return {
+        token: notification.token,
+        title: translation.title,
+        body: translation.body,
+        image,
+      };
+    });
+    await this.sender.sendNotifications(notifications);
+  }
+
+  async sendPausedTandemNotification(props: NotificationParams): Promise<void> {
+    console.log(this.images);
+    const image = this.images.notification;
+    const notifications = props.to.map((notification) => {
+      const translation = this.translate(
+        'tandemPaused',
+        notification.language,
+        {
+          ...props,
+        },
+      );
+      return {
+        token: notification.token,
+        title: translation.title,
+        body: translation.body,
+        image,
+      };
+    });
+    await this.sender.sendNotifications(notifications);
+  }
+
+  async sendUnpausedTandemNotification(
+    props: NotificationParams,
+  ): Promise<void> {
+    const image = this.images.notification;
+    const notifications = props.to.map((notification) => {
+      const translation = this.translate(
+        'tandemUnpaused',
+        notification.language,
+        {
+          ...props,
+        },
+      );
       return {
         token: notification.token,
         title: translation.title,

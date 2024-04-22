@@ -61,7 +61,7 @@ const ShowTandems = () => {
         }
     );
 
-    const hasActiveTandem = tandem?.status === TandemStatus.ACTIVE;
+    const hasActiveTandem = tandem?.status === TandemStatus.ACTIVE || tandem?.status === TandemStatus.PAUSED;
     const hasTandemWaitingForValidation = tandem?.status === TandemStatus.VALIDATED_BY_ONE_UNIVERSITY;
 
     const { selectedUniversityIds } = useLearningLanguagesStore();
@@ -142,6 +142,8 @@ const ShowTandems = () => {
                         <TandemActions
                             learningLanguageIds={[record?.id.toString(), tandem.partnerLearningLanguage.id]}
                             onTandemAction={handleTandemAction}
+                            tandemId={tandem?.id}
+                            tandemStatus={tandem?.status}
                             disableCreateButton
                             relaunchGlobalRoutineOnRefuse
                         />

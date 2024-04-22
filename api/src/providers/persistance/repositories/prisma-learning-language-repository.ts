@@ -299,6 +299,7 @@ export class PrismaLearningLanguageRepository
     orderBy,
     hasActiveTandem,
     hasActionableTandem,
+    hasPausedTandem,
     lastname,
   }: LearningLanguageRepositoryGetProps): Promise<
     Collection<LearningLanguageWithTandem>
@@ -346,6 +347,39 @@ export class PrismaLearningLanguageRepository
             Tandem: {
               status: {
                 in: [TandemStatus.ACTIVE, TandemStatus.INACTIVE],
+              },
+            },
+          },
+          {
+            Tandem: {
+              is: null,
+            },
+          },
+        ],
+      });
+    }
+
+    if (hasPausedTandem === true) {
+      tandemWhereClauses.push({
+        OR: [
+          {
+            Tandem: {
+              status: {
+                equals: TandemStatus.PAUSED,
+              },
+            },
+          },
+        ],
+      });
+    } else if (hasActiveTandem === false) {
+      tandemWhereClauses.push({
+        OR: [
+          {
+            Tandem: {
+              status: {
+                not: {
+                  equals: TandemStatus.ACTIVE,
+                },
               },
             },
           },

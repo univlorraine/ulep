@@ -5,9 +5,13 @@ export interface Notification {
   language: string;
 }
 
-export type NotificationFunction = (params: {
+export type NotificationParams = {
   to: Notification[];
-}) => Promise<void>;
+};
+
+export type NotificationFunction = (
+  params: NotificationParams,
+) => Promise<void>;
 
 export interface NotificationGateway {
   sendWelcomeNotification: NotificationFunction;
