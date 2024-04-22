@@ -5,14 +5,9 @@ import {
   TandemRepository,
 } from 'src/core/ports/tandem.repository';
 import { RessourceDoesNotExist } from 'src/core/errors';
-import {
-  EMAIL_GATEWAY,
-  EmailGateway,
-  TandemPausedUnpausedFunction,
-} from 'src/core/ports/email.gateway';
+import { EMAIL_GATEWAY, EmailGateway } from 'src/core/ports/email.gateway';
 import {
   NOTIFICATION_GATEWAY,
-  NotificationFunction,
   NotificationGateway,
 } from 'src/core/ports/notification.gateway';
 
@@ -138,15 +133,18 @@ export class UpdateTandemUsecase {
     const universityB = profileB.user.university;
     if (paused) {
       if (universityA.notificationEmail) {
-        this.emailGateway.sendTandemPausedEmail({
+        this.emailGateway.sendAdminTandemPausedEmail({
           to: universityA.notificationEmail,
           language: universityA.nativeLanguage.code,
           ...payloadA,
         });
       }
 
-      if (universityB.notificationEmail) {
-        this.emailGateway.sendTandemPausedEmail({
+      if (
+        universityB.notificationEmail &&
+        universityB.notificationEmail !== universityA.notificationEmail
+      ) {
+        this.emailGateway.sendAdminTandemPausedEmail({
           to: universityB.notificationEmail,
           language: universityB.nativeLanguage.code,
           ...payloadB,
@@ -154,15 +152,18 @@ export class UpdateTandemUsecase {
       }
     } else {
       if (universityA.notificationEmail) {
-        this.emailGateway.sendTandemUnpausedEmail({
+        this.emailGateway.sendAdminTandemUnpausedEmail({
           to: universityA.notificationEmail,
           language: universityA.nativeLanguage.code,
           ...payloadA,
         });
       }
 
-      if (universityB.notificationEmail) {
-        this.emailGateway.sendTandemUnpausedEmail({
+      if (
+        universityB.notificationEmail &&
+        universityB.notificationEmail !== universityA.notificationEmail
+      ) {
+        this.emailGateway.sendAdminTandemUnpausedEmail({
           to: universityB.notificationEmail,
           language: universityB.nativeLanguage.code,
           ...payloadB,
