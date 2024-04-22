@@ -21,9 +21,24 @@ export interface SignUpInformationsParams {
     fromIdp?: boolean;
 }
 
-const PasswordInfo = () => {
+const RulesInfo = ({ displayImage = true }) => {
     const { t } = useTranslation();
     const rules: string[] = t('signup_informations_page.password_infos.rules', { returnObjects: true }) || [];
+    return (
+        <div className={displayImage ? styles['password-infos'] : ''}>
+            {displayImage && <img src={InfoSvg} alt={t('signup_informations_page.password_infos.btn') as string} />}
+            {Array.isArray(rules) && (
+                <div className={styles['password-infos-rules']}>
+                    <span>{t('signup_informations_page.password_infos.title')}</span>
+                    <ul>{Array.isArray(rules) && rules.map((rule, index) => <li key={index}>{rule}</li>)}</ul>
+                </div>
+            )}
+        </div>
+    );
+};
+
+const PasswordInfo = () => {
+    const { t } = useTranslation();
 
     return (
         <>
@@ -41,15 +56,7 @@ const PasswordInfo = () => {
                 size="auto"
                 className={styles['password-infos-popover']}
             >
-                <div className={styles['password-infos']}>
-                    <img src={InfoSvg} alt={t('signup_informations_page.password_infos.btn') as string} />
-                    {Array.isArray(rules) && (
-                        <div className={styles['password-infos-rules']}>
-                            <span>{t('signup_informations_page.password_infos.title')}</span>
-                            <ul>{Array.isArray(rules) && rules.map((rule, index) => <li key={index}>{rule}</li>)}</ul>
-                        </div>
-                    )}
-                </div>
+                <RulesInfo />
             </IonPopover>
         </>
     );
@@ -151,7 +158,7 @@ const SignUpInformationsPage: React.FC = () => {
                 return setErrorMessage({ type: 'code', message: t(result.message) });
             }
 
-            if (result.message === 'signup_informations_page.password_error') {
+            if (result.message === 'signup_informations_page.error_password') {
                 return setErrorMessage({ type: 'password', message: t(result.message) });
             }
 
@@ -297,7 +304,9 @@ const SignUpInformationsPage: React.FC = () => {
                     <>
                         <TextInput
                             autocomplete="new-password"
-                            errorMessage={errorMessage?.type === 'password' ? errorMessage.message : undefined}
+                            errorMessage={
+                                errorMessage?.type === 'password' ? <RulesInfo displayImage={false} /> : undefined
+                            }
                             onChange={setPassword}
                             placeholder={t('signup_informations_page.placeholder_password')}
                             title={t('global.password')}

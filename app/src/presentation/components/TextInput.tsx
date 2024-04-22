@@ -64,7 +64,7 @@ export type AutocompleteTypes =
 interface TextInputProps {
     autocomplete?: AutocompleteTypes;
     customHeight?: number;
-    errorMessage?: string | null;
+    errorMessage?: JSX.Element | string | null;
     placeholder?: string | null;
     onChange: (text: string) => void;
     title: string;
