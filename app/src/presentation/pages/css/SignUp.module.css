@@ -20,6 +20,9 @@
 }
 
 .password-infos-popover {
+    &::part(content) {
+        width: 90%;
+    }
     max-height: 100%;
 }
 
@@ -90,5 +93,11 @@
         padding: 0px 64px;
         width: 660px;
         z-index: 2;
+    }
+
+    .password-infos-popover {
+        &::part(content) {
+            width: 20%;
+        }
     }
 }

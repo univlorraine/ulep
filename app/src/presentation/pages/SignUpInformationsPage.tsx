@@ -38,7 +38,7 @@ const PasswordInfo = () => {
                 trigger="password-info"
                 side="bottom"
                 alignment="center"
-                size="cover"
+                size="auto"
                 className={styles['password-infos-popover']}
             >
                 <div className={styles['password-infos']}>
