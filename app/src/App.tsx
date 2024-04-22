@@ -70,7 +70,9 @@ const AppCore = () => {
         }
 
         return () => {
-            notificationAdapter.removeListeners();
+            if (deviceAdapter.isNativePlatform()) {
+                notificationAdapter.removeListeners();
+            }
         };
     }, [profile]);
 
