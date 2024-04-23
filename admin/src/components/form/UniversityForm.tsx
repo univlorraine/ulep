@@ -481,6 +481,7 @@ const UniversityForm: React.FC<UniversityFormProps> = ({
                     <Button
                         color="primary"
                         disabled={
+                            !newNativeLanguage ||
                             !newCountry ||
                             !newTimezone ||
                             !newName ||
