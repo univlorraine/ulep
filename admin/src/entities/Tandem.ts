@@ -12,3 +12,5 @@ export type TandemSummary = {
 };
 
 export const isTandemActive = (tandem?: TandemSummary) => tandem?.status === TandemStatus.ACTIVE;
+
+export const isTandemPaused = (tandem?: TandemSummary) => tandem?.status === TandemStatus.PAUSED;

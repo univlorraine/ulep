@@ -472,6 +472,13 @@
                         "no": "Non"
                     }
                 },
+                "pausedTandem": {
+                    "label": "Tandem en pause",
+                    "choices": {
+                        "yes": "Oui",
+                        "no": "Non"
+                    }
+                },
                 "user_lastname": {
                     "label": "Nom d'utilisateur"
                 }
@@ -492,6 +499,7 @@
                 "createdAt": "Créé le",
                 "university": "Université",
                 "hasActiveTandem": "En tandem",
+                "hasPausedTandem": "Tandem en pause",
                 "actionPossible": "Tandem en attente",
                 "specificProgram": "Programme spécifique",
                 "reported": "Signalé",
@@ -554,7 +562,9 @@
                     "refuseMessage": "Vous êtes sur le point de refuser / annuler un tandem. Êtes-vous sur ?",
                     "ctaLabels": {
                         "cancel": "Annuler",
-                        "confirm": "Confirmer"
+                        "confirm": "Confirmer",
+                        "pause": "Mettre en pause",
+                        "free": "Libérer"
                     },
                     "error": "Une erreur est survenue"
                 },

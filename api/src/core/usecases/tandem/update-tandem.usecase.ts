@@ -5,14 +5,9 @@ import {
   TandemRepository,
 } from 'src/core/ports/tandem.repository';
 import { RessourceDoesNotExist } from 'src/core/errors';
-import {
-  EMAIL_GATEWAY,
-  EmailGateway,
-  TandemPausedUnpausedFunction,
-} from 'src/core/ports/email.gateway';
+import { EMAIL_GATEWAY, EmailGateway } from 'src/core/ports/email.gateway';
 import {
   NOTIFICATION_GATEWAY,
-  NotificationFunction,
   NotificationGateway,
 } from 'src/core/ports/notification.gateway';
 
@@ -47,34 +42,17 @@ export class UpdateTandemUsecase {
     );
 
     if (command.status === 'PAUSED' && tandem.status === 'ACTIVE') {
-      this.sendNotifications(
-        tandem,
-        this.notificationGateway.sendPausedTandemNotification,
-      );
-      this.sendEmail(
-        tandem,
-        this.emailGateway.sendTandemPausedEmail,
-        this.emailGateway.sendAdminTandemPausedEmail,
-      );
+      this.sendNotifications(tandem, true);
+      this.sendEmail(tandem, true);
     }
 
     if (command.status === 'ACTIVE' && tandem.status === 'PAUSED') {
-      this.sendNotifications(
-        tandem,
-        this.notificationGateway.sendUnpausedTandemNotification,
-      );
-      this.sendEmail(
-        tandem,
-        this.emailGateway.sendTandemUnpausedEmail,
-        this.emailGateway.sendAdminTandemUnpausedEmail,
-      );
+      this.sendNotifications(tandem, false);
+      this.sendEmail(tandem, false);
     }
   }
 
-  private sendNotifications(
-    tandem: Tandem,
-    notificationFunction: NotificationFunction,
-  ) {
+  private sendNotifications(tandem: Tandem, paused: boolean) {
     const notifications = tandem.learningLanguages
       .map((language) => {
         return language.profile.user.devices.map((device) => {
@@ -86,14 +64,18 @@ export class UpdateTandemUsecase {
       })
       .flat();
 
-    notificationFunction({ to: notifications });
+    if (paused) {
+      return this.notificationGateway.sendPausedTandemNotification({
+        to: notifications,
+      });
+    }
+
+    return this.notificationGateway.sendUnpausedTandemNotification({
+      to: notifications,
+    });
   }
 
-  private sendEmail(
-    tandem,
-    sendEmailFunction: TandemPausedUnpausedFunction,
-    sendAdminEmailFunction: TandemPausedUnpausedFunction,
-  ) {
+  private sendEmail(tandem, paused: boolean) {
     const profileA = tandem.learningLanguages[0].profile;
     const profileB = tandem.learningLanguages[1].profile;
     const payloadA = {
@@ -121,34 +103,72 @@ export class UpdateTandemUsecase {
       },
     };
 
-    sendEmailFunction({
-      to: profileA.user.email,
-      language: profileA.nativeLanguage.code,
-      ...payloadA,
-    });
-
-    sendEmailFunction({
-      to: profileB.user.email,
-      language: profileB.nativeLanguage.code,
-      ...payloadB,
-    });
-
-    const universityA = profileA.user.university;
-    const universityB = profileB.user.university;
-    if (universityA.notificationEmail) {
-      sendAdminEmailFunction({
-        to: universityA.notificationEmail,
-        language: universityA.nativeLanguage.code,
+    if (paused) {
+      this.emailGateway.sendTandemPausedEmail({
+        to: profileA.user.email,
+        language: profileA.nativeLanguage.code,
         ...payloadA,
+      });
+
+      this.emailGateway.sendTandemPausedEmail({
+        to: profileB.user.email,
+        language: profileB.nativeLanguage.code,
+        ...payloadB,
+      });
+    } else {
+      this.emailGateway.sendTandemUnpausedEmail({
+        to: profileA.user.email,
+        language: profileA.nativeLanguage.code,
+        ...payloadA,
+      });
+
+      this.emailGateway.sendTandemUnpausedEmail({
+        to: profileB.user.email,
+        language: profileB.nativeLanguage.code,
+        ...payloadB,
       });
     }
 
-    if (universityB.notificationEmail) {
-      sendAdminEmailFunction({
-        to: universityB.notificationEmail,
-        language: universityB.nativeLanguage.code,
-        ...payloadB,
-      });
+    const universityA = profileA.user.university;
+    const universityB = profileB.user.university;
+    if (paused) {
+      if (universityA.notificationEmail) {
+        this.emailGateway.sendAdminTandemPausedEmail({
+          to: universityA.notificationEmail,
+          language: universityA.nativeLanguage.code,
+          ...payloadA,
+        });
+      }
+
+      if (
+        universityB.notificationEmail &&
+        universityB.notificationEmail !== universityA.notificationEmail
+      ) {
+        this.emailGateway.sendAdminTandemPausedEmail({
+          to: universityB.notificationEmail,
+          language: universityB.nativeLanguage.code,
+          ...payloadB,
+        });
+      }
+    } else {
+      if (universityA.notificationEmail) {
+        this.emailGateway.sendAdminTandemUnpausedEmail({
+          to: universityA.notificationEmail,
+          language: universityA.nativeLanguage.code,
+          ...payloadA,
+        });
+      }
+
+      if (
+        universityB.notificationEmail &&
+        universityB.notificationEmail !== universityA.notificationEmail
+      ) {
+        this.emailGateway.sendAdminTandemUnpausedEmail({
+          to: universityB.notificationEmail,
+          language: universityB.nativeLanguage.code,
+          ...payloadB,
+        });
+      }
     }
   }
 }
