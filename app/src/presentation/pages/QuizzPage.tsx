@@ -16,6 +16,7 @@ import Loader from '../components/Loader';
 
 type QuizzPageProps = {
     initialCefr?: CEFR;
+    isQuizzTest?: boolean;
 };
 
 const QuizzPage: React.FC = () => {
@@ -24,7 +25,7 @@ const QuizzPage: React.FC = () => {
     const [showToast] = useIonToast();
     const { t } = useTranslation();
     const location = useLocation<QuizzPageProps>();
-    const initialCefr = location.state?.initialCefr;
+    const { initialCefr, isQuizzTest } = location.state;
     const updateProfileSignUp = useStoreActions((state) => state.updateProfileSignUp);
     const profileSignUp = useStoreState((state) => state.profileSignUp);
     const [questions, setQuestions] = useState<Question[]>([]);
@@ -75,7 +76,7 @@ const QuizzPage: React.FC = () => {
             updateProfileSignUp({ learningLanguageLevel: getPreviousLevel(currentQuizz) });
         }
 
-        return history.push(initialCefr ? `/cefr/quizz/end` : `/pairing/language/quizz/end`, { initialCefr });
+        return history.push(isQuizzTest ? `/cefr/quizz/end` : `/pairing/language/quizz/end`, { initialCefr });
     };
 
     useEffect(() => {
