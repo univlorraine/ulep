@@ -35,7 +35,7 @@ const CEFRQuizzLanguagePage: React.FC = () => {
 
         updateProfileSignUp({ learningLanguage: selectedLanguage });
 
-        return history.push(`/cefr/quizz`, { initialCefr: languageLevel ?? 'A1' });
+        return history.push(`/cefr/quizz`, { initialCefr: languageLevel ?? undefined, isQuizzTest: true });
     };
 
     const navigateToHome = () => {
