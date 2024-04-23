@@ -161,6 +161,7 @@ export class UniversityController {
   @UseInterceptors(FileInterceptor('file'))
   @UseGuards(AuthenticationGuard)
   @Swagger.ApiOperation({ summary: 'Updates an University ressource.' })
+  @Swagger.ApiConsumes('multipart/form-data')
   @Swagger.ApiOkResponse()
   async update(
     @Param('id', ParseUUIDPipe) id: string,
