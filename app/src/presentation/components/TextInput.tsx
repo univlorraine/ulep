@@ -88,7 +88,6 @@ const TextInput: React.FC<TextInputProps> = ({
 }) => {
     const [showPasword, setShowPassword] = useState<boolean>(false);
     const inputId = `input-${title}}`;
-    // const FieldInfo = new fieldInfo();
     return (
         <div className={`${style.container} large-margin-bottom`}>
             <span className={style['input-label']}>{title}</span>
