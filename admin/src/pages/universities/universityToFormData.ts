@@ -30,15 +30,9 @@ const universityToFormData = (
     codes.forEach((code, index) => {
         formData.append(`codes[${index}]`, code);
     });
-    if (domains[0] !== undefined) {
-        console.log('Dans le if');
-        domains.forEach((domain, index) => {
-            formData.append(`domains[${index}]`, domain);
-        });
-    } else {
-        console.log('Dans le else');
-        formData.set('domains[]', `${[undefined]}`);
-    }
+    domains.forEach((domain, index) => {
+        formData.append(`domains[${index}]`, domain);
+    });
     formData.append('pairingMode', pairingMode);
     formData.append('maxTandemsPerUser', maxTandemsPerUser.toString());
     formData.append('nativeLanguageId', nativeLanguage.id);
@@ -46,7 +40,7 @@ const universityToFormData = (
     if (website) formData.append('website', website);
     if (specificLanguagesAvailable) {
         specificLanguagesAvailable.forEach((language, index) => {
-            formData.append(`specificLanguagesAvailable[${index}]`, language.id);
+            formData.append(`specificLanguagesAvailableIds[${index}]`, language.id);
         });
     }
     if (notificationEmail) formData.append('notificationEmail', notificationEmail);
