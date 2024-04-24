@@ -279,15 +279,17 @@ const SignUpInformationsPage: React.FC = () => {
                     value={age ? `${age}` : ''}
                 />
 
-                <TextInput
-                    autocomplete="email"
-                    errorMessage={errorMessage?.type === 'email' ? errorMessage.message : undefined}
-                    onChange={setEmail}
-                    placeholder={t('signup_informations_page.placeholder_email')}
-                    title={t('global.email')}
-                    type="email"
-                    value={email}
-                />
+                {!fromIdp && (
+                    <TextInput
+                        autocomplete="email"
+                        errorMessage={errorMessage?.type === 'email' ? errorMessage.message : undefined}
+                        onChange={setEmail}
+                        placeholder={t('signup_informations_page.placeholder_email')}
+                        title={t('global.email')}
+                        type="email"
+                        value={email}
+                    />
+                )}
 
                 {profileSignUp.university?.hasCode && (
                     <TextInput
