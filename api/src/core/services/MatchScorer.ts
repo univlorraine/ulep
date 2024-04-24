@@ -327,17 +327,17 @@ export class MatchScorer implements IMatchScorer {
     }
 
     // Check if language1 is available for learning language
-    if (!availableLanguages.find(lang => lang.id === learningLanguage1.language.id) &&
+    if (!learningLanguage1.language.isJokerLanguage() && !availableLanguages.find(lang => lang.id === learningLanguage1.language.id) &&
        !learningLanguage1.isAvailableInUniversity()) {
         return  false
     }
 
     // Check if language2 is available for learning language
-    if (!availableLanguages.find(lang => lang.id === learningLanguage2.language.id) &&
+    if (!learningLanguage2.language.isJokerLanguage() && !availableLanguages.find(lang => lang.id === learningLanguage2.language.id) &&
         !learningLanguage2.isAvailableInUniversity()) {
         return false;
     }
-      
+
     // Check if a learning language is exclusive and the other is not
     if(learningLanguage1.isExclusive() !== learningLanguage2.isExclusive()) {
       return false;
