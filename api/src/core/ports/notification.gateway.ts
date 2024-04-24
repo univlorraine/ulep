@@ -13,7 +13,18 @@ export type NotificationFunction = (
   params: NotificationParams,
 ) => Promise<void>;
 
+export interface SendTandemClosureNoticeNotification {
+  to: Notification[];
+  university: {
+    name: string;
+    closeDate: string;
+  };
+}
+
 export interface NotificationGateway {
+  sendTandemClosureNoticeNotification(
+    props: SendTandemClosureNoticeNotification,
+  ): Promise<void>;
   sendWelcomeNotification: NotificationFunction;
   sendPausedTandemNotification: NotificationFunction;
   sendUnpausedTandemNotification: NotificationFunction;

@@ -7,6 +7,10 @@ export default class InMemoryNotificaitonGateway
     return Promise.resolve();
   }
 
+  sendTandemClosureNoticeNotification(): Promise<void> {
+    return Promise.resolve();
+  }
+
   sendPausedTandemNotification(): Promise<void> {
     return Promise.resolve();
   }

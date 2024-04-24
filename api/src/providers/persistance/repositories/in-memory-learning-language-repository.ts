@@ -190,11 +190,17 @@ export class InMemoryLearningLanguageRepository
       universityIds.includes(ll.profile.user.university.id),
     );
 
-    const firstItem = (page - 1) * limit;
-    const items = values.slice(firstItem, firstItem + limit).map((item) => {
+    let items = values.map((item) => {
       const tandem = this.#tandemsPerLearningLanguages.get(item.id);
       return { ...item, tandem };
     });
+    if (limit && page) {
+      const firstItem = (page - 1) * limit;
+      items = values.slice(firstItem, firstItem + limit).map((item) => {
+        const tandem = this.#tandemsPerLearningLanguages.get(item.id);
+        return { ...item, tandem };
+      });
+    }
 
     return Promise.resolve(
       new Collection<LearningLanguageWithTandem>({

@@ -64,6 +64,12 @@ export interface TandemCanceledNoticeEmailProps {
   partner: { firstname: string; lastname: string; university: string };
 }
 
+export interface TandemClosureNoticeEmailProps {
+  to: string;
+  language: string;
+  user: { firstname: string; lastname: string };
+  university: { name: string; closeDate: string };
+}
 export type TandemPausedUnpausedFunction = (
   params: TandemPausedUnpausedEmailProps,
 ) => Promise<void>;
@@ -114,5 +120,10 @@ export interface EmailGateway {
   // Notifies the administrator about the dissolution of a Tandem.
   sendTandemCanceledNoticeEmail(
     props: TandemCanceledNoticeEmailProps,
+  ): Promise<void>;
+
+  // Notifies the user about the closure of the university
+  sendTandemClosureNoticeEmail(
+    props: TandemClosureNoticeEmailProps,
   ): Promise<void>;
 }

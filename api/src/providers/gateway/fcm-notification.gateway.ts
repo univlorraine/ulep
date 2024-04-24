@@ -4,6 +4,7 @@ import { Env } from 'src/configuration';
 import { FCMService, I18nService } from '@app/common';
 import {
   NotificationGateway,
+  SendTandemClosureNoticeNotification,
   NotificationParams,
 } from 'src/core/ports/notification.gateway';
 
@@ -64,6 +65,28 @@ export class FCMNotificationGateway implements NotificationGateway {
     await this.sender.sendNotifications(notifications);
   }
 
+  async sendTandemClosureNoticeNotification(
+    props: SendTandemClosureNoticeNotification,
+  ): Promise<void> {
+    const image = this.images.notification;
+    const notifications = props.to.map((notification) => {
+      const translation = this.translate(
+        'tandemClosureNotice',
+        notification.language,
+        {
+          ...props,
+        },
+      );
+      return {
+        token: notification.token,
+        title: translation.title,
+        body: translation.body,
+        image,
+      };
+    });
+    await this.sender.sendNotifications(notifications);
+  }
+
   async sendPausedTandemNotification(props: NotificationParams): Promise<void> {
     const image = this.images.notification;
     const notifications = props.to.map((notification) => {
@@ -103,6 +126,7 @@ export class FCMNotificationGateway implements NotificationGateway {
         image,
       };
     });
+
     await this.sender.sendNotifications(notifications);
   }
 }

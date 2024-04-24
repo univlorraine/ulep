@@ -21,6 +21,7 @@ model Instance {
   secondary_color            String
   secondary_background_color String
   secondary_dark_color       String
+  days_before_closure_notification      Int       @default(30)
   is_in_maintenance          Boolean @default(false)
 }
 

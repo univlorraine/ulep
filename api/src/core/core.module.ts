@@ -2,6 +2,7 @@ import { ValidateTandemUsecase } from './usecases/tandem/validate-tandem.usecase
 import { Module, Provider } from '@nestjs/common';
 import { ProvidersModule } from 'src/providers/providers.module';
 import { MatchScorer } from './services/MatchScorer';
+import { CronService } from 'src/core/services/CronService';
 import {
   AddLanguageRequestUsecase,
   CountAllSuggestedLanguageUsecase,
@@ -227,7 +228,7 @@ const usecases: Provider[] = [
   ResetPasswordUsecase,
 ];
 
-const services: Provider[] = [MatchScorer];
+const services: Provider[] = [MatchScorer, CronService];
 
 @Module({
   imports: [ProvidersModule],
