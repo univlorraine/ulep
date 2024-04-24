@@ -3,6 +3,7 @@ import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Redirect, useHistory, useLocation } from 'react-router';
 import { useConfig } from '../../context/ConfigurationContext';
+import Language from '../../domain/entities/Language';
 import Question from '../../domain/entities/Question';
 import { useStoreActions, useStoreState } from '../../store/storeTypes';
 import QuizzContent from '../components/contents/QuizzContent';
@@ -17,6 +18,7 @@ import Loader from '../components/Loader';
 type QuizzPageProps = {
     initialCefr?: CEFR;
     isQuizzTest?: boolean;
+    language?: Language;
 };
 
 const QuizzPage: React.FC = () => {
@@ -25,7 +27,7 @@ const QuizzPage: React.FC = () => {
     const [showToast] = useIonToast();
     const { t } = useTranslation();
     const location = useLocation<QuizzPageProps>();
-    const { initialCefr, isQuizzTest } = location.state;
+    const { initialCefr, isQuizzTest, language } = location.state;
     const updateProfileSignUp = useStoreActions((state) => state.updateProfileSignUp);
     const profileSignUp = useStoreState((state) => state.profileSignUp);
     const [questions, setQuestions] = useState<Question[]>([]);
@@ -33,7 +35,7 @@ const QuizzPage: React.FC = () => {
     const [displayNextQuizz, setDisplayNextQuizz] = useState<boolean>(false);
     const [isLoading, setIsLoading] = useState<boolean>(Boolean(initialCefr));
 
-    if (!profileSignUp.learningLanguage) {
+    if (!profileSignUp.learningLanguage && !language) {
         return <Redirect to={`/pairing/languages`} />;
     }
 
@@ -64,19 +66,21 @@ const QuizzPage: React.FC = () => {
             return setDisplayNextQuizz(true);
         }
 
-        if (percentage >= 80 && currentQuizz === 'C2') {
-            updateProfileSignUp({ learningLanguageLevel: currentQuizz });
-        }
+        let level = currentQuizz;
 
         if (percentage < 10 && currentQuizz === 'A1') {
-            updateProfileSignUp({ learningLanguageLevel: 'A0' });
+            level = 'A0';
+        } else if (percentage < 80) {
+            level = getPreviousLevel(currentQuizz);
         }
 
-        if (percentage < 80) {
-            updateProfileSignUp({ learningLanguageLevel: getPreviousLevel(currentQuizz) });
+        if (isQuizzTest) {
+            return history.push(`/cefr/quizz/end`, { initialCefr, language, level });
         }
 
-        return history.push(isQuizzTest ? `/cefr/quizz/end` : `/pairing/language/quizz/end`, { initialCefr });
+        updateProfileSignUp({ learningLanguageLevel: level });
+
+        return history.push(`/pairing/language/quizz/end`);
     };
 
     useEffect(() => {
@@ -94,7 +98,7 @@ const QuizzPage: React.FC = () => {
             >
                 <div className={styles.body}>
                     <QuizzValidatedContent
-                        language={profileSignUp.learningLanguage}
+                        language={profileSignUp.learningLanguage || language!}
                         onNextQuizz={() => askQuizz(getNextLevel(currentQuizz))}
                         quizzLevel={currentQuizz}
                     />
