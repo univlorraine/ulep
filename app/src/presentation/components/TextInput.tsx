@@ -64,6 +64,7 @@ export type AutocompleteTypes =
 interface TextInputProps {
     autocomplete?: AutocompleteTypes;
     customHeight?: number;
+    disabled?: boolean;
     errorMessage?: JSX.Element | string | null;
     placeholder?: string | null;
     onChange: (text: string) => void;
@@ -77,6 +78,7 @@ interface TextInputProps {
 const TextInput: React.FC<TextInputProps> = ({
     autocomplete = 'off',
     customHeight,
+    disabled,
     errorMessage,
     onChange,
     placeholder,
@@ -100,6 +102,7 @@ const TextInput: React.FC<TextInputProps> = ({
                     <IonInput
                         id={inputId}
                         aria-label={title}
+                        disabled={disabled}
                         class={style.input}
                         onIonInput={(e: any) => onChange(e.target.value)}
                         placeholder={placeholder ?? ''}
