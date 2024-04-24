@@ -183,7 +183,6 @@ class DomainHttpAdapter extends BaseHttpAdapter implements HttpAdapterInterface 
 
     logoutAndRedirect() {
         this.logout();
-        window.location.href = '/login';
     }
 }
 
