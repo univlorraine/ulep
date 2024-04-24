@@ -41,6 +41,7 @@ import {
   AdministratorResponse,
   CreateAdministratorRequest,
   CreateUserRequest,
+  KeycloakGroupResponse,
   PaginationDto,
   UpdateAdministratorRequest,
   UpdateUserRequest,
@@ -59,6 +60,7 @@ import {
 import { ConfigService } from '@nestjs/config';
 import { Env } from 'src/configuration';
 import { userPersonalDataToCsv } from '../dtos/users/csv-export.ts';
+import { GetKeycloakGroupsUsecase } from '../../core/usecases/user/get-keycloak-groups.usecase';
 
 @Controller('users')
 @Swagger.ApiTags('Users')
@@ -78,8 +80,8 @@ export class UserController {
     private readonly deleteAdministratorUsecase: DeleteAdministratorUsecase,
     private readonly revokeSessionsUsecase: RevokeSessionsUsecase,
     private readonly getUserPersonalData: GetUserPersonalData,
+    private readonly getKeycloakGroupsUsecase: GetKeycloakGroupsUsecase,
     private readonly i18n: I18nService,
-
     @Inject(STORAGE_INTERFACE)
     private readonly storage: StorageInterface,
     private readonly env: ConfigService<Env, true>,
@@ -155,7 +157,11 @@ export class UserController {
   @UseGuards(AuthenticationGuard)
   @Swagger.ApiOperation({ summary: 'Create an Administrator ressource.' })
   @Swagger.ApiCreatedResponse({ type: AdministratorResponse })
-  async createAdministrator(@Body() body: CreateAdministratorRequest) {
+  async createAdministrator(
+    @Body() body: CreateAdministratorRequest,
+    @CurrentUser() user: KeycloakUser,
+  ) {
+    const userRoles = user.realm_access.roles;
     const admin = await this.createAdministratorUsecase.execute(body);
 
     return AdministratorResponse.fromDomain(admin);
@@ -208,6 +214,17 @@ export class UserController {
     @Body() body: AddDeviceRequest,
   ) {
     return this.addDeviceUsecase.execute(user.sub, body);
+  }
+
+  @Get('groups')
+  @Roles(Role.ADMIN)
+  @UseGuards(AuthenticationGuard)
+  @Swagger.ApiOperation({ summary: 'Collection of Keycloak groups.' })
+  @CollectionResponse(KeycloakGroupResponse)
+  async findAllKeycloakGroups(@CurrentUser() user: KeycloakUser) {
+    const groups = await this.getKeycloakGroupsUsecase.execute();
+
+    return groups.map(KeycloakGroupResponse.fromDomain);
   }
 
   @Get(':id')

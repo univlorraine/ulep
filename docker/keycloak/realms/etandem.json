@@ -120,7 +120,29 @@
     },
     {
       "id": "eba50e06-d584-4fc8-9d6b-908169202cea",
-      "name": "Animators",
+      "name": "Super-Admin",
+      "path": "/SuperAdministrators",
+      "attributes": {},
+      "realmRoles": [
+        "super-admin"
+      ],
+      "clientRoles": {},
+      "subGroups": []
+    },
+    {
+      "id": "35b2c4d1-8e2f-4a51-b983-6fe4a8f36a72",
+      "name": "Manager",
+      "path": "/Managers",
+      "attributes": {},
+      "realmRoles": [
+        "manager"
+      ],
+      "clientRoles": {},
+      "subGroups": []
+    },
+    {
+      "id": "7d9f3a22-5b7c-4d96-90a1-1e86f0c249d5",
+      "name": "Animator",
       "path": "/Animators",
       "attributes": {},
       "realmRoles": [
@@ -161,7 +183,25 @@
       {
         "id": "4451442a-a6cc-40cf-bf4a-4128cca5dcd5",
         "name": "admin",
+        "description": "Group of users who has access to the back-office",
+        "composite": false,
+        "clientRole": false,
+        "containerId": "616eb353-7524-4a46-9cf3-44612cba6c90",
+        "attributes": {}
+      },
+      {
+        "id": "5e7a81d9-5b0a-4ed2-8dfc-93fe45419eac",
+        "name": "super-admin",
         "description": "Group of users who can manage all parts of the application",
+        "composite": false,
+        "clientRole": false,
+        "containerId": "616eb353-7524-4a46-9cf3-44612cba6c90",
+        "attributes": {}
+      },
+      {
+        "id": "c2f02632-0e07-4591-8385-70a5c3efb0b2",
+        "name": "manager",
+        "description": "Group of users who can manage all parts of their universities",
         "composite": false,
         "clientRole": false,
         "containerId": "616eb353-7524-4a46-9cf3-44612cba6c90",
@@ -170,7 +210,7 @@
       {
         "id": "01a25df8-b1ef-42e6-8052-efccce028672",
         "name": "animator",
-        "description": "Group of users who can read and write some parts of the back office",
+        "description": "Group of users who can read and write some parts of their university",
         "composite": false,
         "clientRole": false,
         "containerId": "616eb353-7524-4a46-9cf3-44612cba6c90",

@@ -1,4 +1,8 @@
-import { KeycloakClient } from '@app/keycloak';
+import {
+  KeycloakClient,
+  KeycloakGroup,
+  KeycloakRealmRoles,
+} from '@app/keycloak';
 import { BadRequestException, Inject, Injectable } from '@nestjs/common';
 import { RessourceDoesNotExist } from 'src/core/errors';
 import {
@@ -12,6 +16,7 @@ export class CreateAdministratorCommand {
   lastname: string;
   password: string;
   universityId?: string;
+  groups: KeycloakGroup[];
 }
 
 @Injectable()
@@ -30,12 +35,15 @@ export class CreateAdministratorUsecase {
     let user = await this.keycloakClient.getUserByEmail(command.email);
 
     if (!user) {
+      // The realmRoles property to assign a role on user creation does not work
+      // See the current issue : https://github.com/keycloak/keycloak/issues/13390
       user = await this.keycloakClient.createAdministrator({
         email: command.email,
         firstname: command.firstname,
         lastname: command.lastname,
         password: command.password,
         universityId: command.universityId,
+        groups: command.groups.map((group) => group.name),
       });
     } else {
       const isAdministator = await this.isAdministator(user.id);
@@ -52,10 +60,14 @@ export class CreateAdministratorUsecase {
         lastname: command.lastname,
         password: hasCredentials ? undefined : command.password,
         universityId: command.universityId,
+        groups: command.groups,
       });
     }
 
-    await this.keycloakClient.addUserToAdministrators(user.id);
+    await this.keycloakClient.addRealmRoleToUser(
+      user.id,
+      KeycloakRealmRoles.ADMIN,
+    );
 
     return user;
   }

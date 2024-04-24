@@ -1,10 +1,12 @@
-import { Box, Typography, Input } from '@mui/material';
-import React, { useState } from 'react';
+import DeleteIcon from '@mui/icons-material/Delete';
+import { Box, Input, Table, TableBody, TableCell, TableRow, Typography } from '@mui/material';
+import React, { useEffect, useState } from 'react';
 import { Button, Loading, useGetIdentity, useTranslate } from 'react-admin';
-import { AdministratorFormPayload } from '../../entities/Administrator';
+import { AdministratorFormPayload, KeycloakGroup } from '../../entities/Administrator';
 import University from '../../entities/University';
 import inputStyle from '../../theme/inputStyle';
 import isPasswordValid from '../../utils/isPasswordValid';
+import AdminGroupsPicker from '../AdminGroupsPicker';
 import UniversityPicker from '../UniversityPicker';
 
 interface AdministratorFormProps {
@@ -14,6 +16,7 @@ interface AdministratorFormProps {
     handleSubmit: (payload: AdministratorFormPayload) => void;
     lastname?: string;
     universityId?: string;
+    groups?: KeycloakGroup[];
     type: string;
 }
 
@@ -24,6 +27,7 @@ const AdministratorForm: React.FC<AdministratorFormProps> = ({
     handleSubmit,
     lastname,
     universityId,
+    groups,
     type,
 }) => {
     const translate = useTranslate();
@@ -32,7 +36,21 @@ const AdministratorForm: React.FC<AdministratorFormProps> = ({
     const [newFirstname, setNewFirstname] = useState<string>(firstname || '');
     const [newLastname, setNewLastname] = useState<string>(lastname || '');
     const [university, setUniversity] = useState<University>();
+    const [newGroups, setNewGroups] = useState<KeycloakGroup[]>(groups || []);
     const { data: identity, isLoading: isLoadingIdentity } = useGetIdentity();
+
+    // React-admin fetches the data after rendering the component, and does not re-render after it
+    // Other fields are filled from the cache, so they don't need an update
+    useEffect(() => {
+        if (groups) {
+            setNewGroups(groups);
+        }
+    }, [groups]);
+
+    const addGroup = (newGroup: KeycloakGroup) => setNewGroups([...newGroups, newGroup]);
+    const removeGroup = (groupToRemove: KeycloakGroup) => {
+        setNewGroups(newGroups.filter((group) => group !== groupToRemove));
+    };
 
     if (isLoadingIdentity || !identity) {
         return <Loading />;
@@ -47,6 +65,11 @@ const AdministratorForm: React.FC<AdministratorFormProps> = ({
     };
 
     const onCreatePressed = () => {
+        let updatedGroups: KeycloakGroup[] = groups ?? [];
+        if (newGroups.length !== 0) {
+            updatedGroups = newGroups;
+        }
+
         handleSubmit({
             id,
             email: newEmail,
@@ -54,6 +77,7 @@ const AdministratorForm: React.FC<AdministratorFormProps> = ({
             lastname: newLastname,
             password,
             universityId: getUniversityId(),
+            groups: updatedGroups,
         });
     };
 
@@ -80,6 +104,27 @@ const AdministratorForm: React.FC<AdministratorFormProps> = ({
                     <UniversityPicker initialValue={universityId} onChange={setUniversity} value={university} />
                 </>
             )}
+
+            <Typography variant="subtitle1">{translate(`administrators.${type}.group`)}</Typography>
+            <>
+                <Table>
+                    <TableBody>
+                        {newGroups.map((group) => (
+                            <TableRow key={group.name}>
+                                <TableCell sx={{ width: 10 }}>
+                                    <Button onClick={() => removeGroup(group)}>
+                                        <DeleteIcon />
+                                    </Button>
+                                </TableCell>
+                                <TableCell>{group.name}</TableCell>
+                            </TableRow>
+                        ))}
+                    </TableBody>
+                </Table>
+                <Box alignItems="center" display="flex" flexDirection="row">
+                    <AdminGroupsPicker onChange={addGroup} value={newGroups} />
+                </Box>
+            </>
 
             <Typography variant="subtitle1">{translate('global.firstname')}</Typography>
             <Box alignItems="center" display="flex" flexDirection="row">

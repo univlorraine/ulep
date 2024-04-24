@@ -59,7 +59,7 @@ export class Env {
 
   @IsString()
   @IsNotEmpty()
-  KEYCLOAK_ADMIN_GROUP_ID: string;
+  KEYCLOAK_ADMIN_ROLE_NAME: string;
 
   @IsString()
   @IsNotEmpty()
@@ -262,7 +262,7 @@ const test: Env = {
   KEYCLOAK_ADMIN_PASSWORD: 'admin',
   KEYCLOAK_CLIENT_ID: 'admin-cli',
   KEYCLOAK_CLIENT_SECRET: 'f0a0c0e0-0000-0000-0000-000000000000',
-  KEYCLOAK_ADMIN_GROUP_ID: 'admin',
+  KEYCLOAK_ADMIN_ROLE_NAME: 'admin',
   S3_URL: 'http://minio:9000',
   S3_REGION: 'eu-east-1',
   S3_ACCESS_KEY: 'minio',

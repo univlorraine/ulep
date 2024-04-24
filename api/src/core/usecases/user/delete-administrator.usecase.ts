@@ -1,5 +1,5 @@
 import { Inject, Injectable } from '@nestjs/common';
-import { KeycloakClient } from '@app/keycloak';
+import { KeycloakClient, KeycloakRealmRoles } from '@app/keycloak';
 import {
   PROFILE_REPOSITORY,
   ProfileRepository,
@@ -32,6 +32,9 @@ export class DeleteAdministratorUsecase {
       return this.keycloak.deleteUser(command.id);
     }
 
-    await this.keycloak.removeUserFromAdministrators(command.id);
+    await this.keycloak.removeRealmRoleToUser(
+      command.id,
+      KeycloakRealmRoles.ADMIN,
+    );
   }
 }

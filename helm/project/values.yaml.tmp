@@ -38,7 +38,7 @@ api:
     keycloakAdmin: admin
     keycloakClientId: api
     keycloakClientSecret: *keycloakClientSecret
-    keycloakAdminGroupId: 02736a0f-4679-4329-a877-2ce87aaea569
+    keycloakAdminRoleName: admin
     minioUrl: https://minio-api.ulep.thestaging.io
     minioAccessKey: *minioAccessKey
     minioSecretKey: *minioSecretKey

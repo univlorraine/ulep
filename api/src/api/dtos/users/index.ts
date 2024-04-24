@@ -1,5 +1,5 @@
 import * as Swagger from '@nestjs/swagger';
-import { Expose, Transform } from 'class-transformer';
+import { Expose, Transform, Type } from 'class-transformer';
 import {
   IsString,
   IsNotEmpty,
@@ -10,12 +10,13 @@ import {
   Length,
   IsOptional,
   IsBoolean,
+  IsArray,
 } from 'class-validator';
 import { UniversityResponse } from '../universities';
 import { CreateUserCommand } from 'src/core/usecases/user';
 import { Gender, Role, User, UserStatus } from 'src/core/models/user.model';
 import { MediaObjectResponse } from '../medias';
-import { UserRepresentation } from '@app/keycloak';
+import { KeycloakGroup, UserRepresentation } from '@app/keycloak';
 
 export class CreateUserRequest implements CreateUserCommand {
   @Swagger.ApiProperty({ type: 'string', format: 'email' })
@@ -144,6 +145,10 @@ export class AdministratorResponse {
   @Expose({ groups: ['read'] })
   universityId?: string;
 
+  @Swagger.ApiProperty()
+  @Expose({ groups: ['read'] })
+  groups?: KeycloakGroupResponse[];
+
   constructor(partial: Partial<AdministratorResponse>) {
     Object.assign(this, partial);
   }
@@ -155,6 +160,35 @@ export class AdministratorResponse {
       universityId: user.attributes?.universityId?.[0],
       firstname: user.firstName,
       lastname: user.lastName,
+      groups: user.groups
+        ? user.groups.map(KeycloakGroupResponse.fromDomain)
+        : [],
+    });
+  }
+}
+
+export class KeycloakGroupResponse {
+  @Swagger.ApiProperty({ type: 'string', format: 'uuid' })
+  @Expose({ groups: ['read'] })
+  id: string;
+
+  @Swagger.ApiProperty({ type: 'string' })
+  @Expose({ groups: ['read'] })
+  name: string;
+
+  @Swagger.ApiProperty({ type: 'string' })
+  @Expose({ groups: ['read'] })
+  path: string;
+
+  constructor(partial: Partial<KeycloakGroupResponse>) {
+    Object.assign(this, partial);
+  }
+
+  static fromDomain(group: KeycloakGroup) {
+    return new KeycloakGroupResponse({
+      id: group.id,
+      name: group.name,
+      path: group.path,
     });
   }
 }
@@ -180,6 +214,10 @@ export class CreateAdministratorRequest {
   @Swagger.ApiProperty({ type: 'string' })
   @IsString()
   password: string;
+
+  @Swagger.ApiProperty({ type: 'string' })
+  @IsArray()
+  groups: KeycloakGroup[];
 }
 
 export class UpdateAdministratorRequest {
@@ -210,6 +248,10 @@ export class UpdateAdministratorRequest {
   @IsString()
   @IsOptional()
   password?: string;
+
+  @Swagger.ApiProperty({ type: 'string' })
+  @IsArray()
+  groups: KeycloakGroup[];
 }
 
 export class AddDeviceRequest {
@@ -225,6 +267,7 @@ export class AddDeviceRequest {
   @IsBoolean()
   isIos: boolean;
 }
+
 export class UserResponse {
   @Swagger.ApiProperty({ type: 'string', format: 'uuid' })
   @Expose({ groups: ['read'] })

@@ -351,6 +351,18 @@ const customDataProvider = {
 
         return response;
     },
+    getKeycloackGroups: async () => {
+        const url = `${process.env.REACT_APP_API_URL}/users/groups`;
+        const response = await fetch(url, httpClientOptions({ method: 'GET' }));
+
+        if (!response.ok) {
+            await throwError(response);
+        }
+
+        const result = await response.json();
+
+        return result;
+    },
 } as unknown as DataProvider;
 
 export default addRefreshAuthToDataProvider(customDataProvider, refreshAuth);

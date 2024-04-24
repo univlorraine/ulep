@@ -4,7 +4,7 @@ import { Divider } from '@mui/material';
 import Box from '@mui/material/Box';
 import React, { useState } from 'react';
 import { Menu, usePermissions, useGetIdentity, useTranslate } from 'react-admin';
-import { MANAGER_PERMISSION, SUPER_ADMIN_PERMISSION } from '../../providers/authProvider';
+import { Role } from '../../providers/authProvider';
 import useCurrentPathname from './useCurrentPathname';
 
 export type LinkPage = {
@@ -12,7 +12,7 @@ export type LinkPage = {
     type: string;
     id?: string;
     label: string;
-    permission?: string;
+    role?: string;
 };
 
 export type SubMenusType = {
@@ -68,7 +68,7 @@ export const subMenus: SubMenusType = {
             resource: 'reports/categories',
             type: 'list',
             label: 'report_categories.tabLabel',
-            permission: SUPER_ADMIN_PERMISSION,
+            role: Role.SUPER_ADMIN,
         },
     ],
     universities: [
@@ -115,14 +115,14 @@ const CustomMenu = () => {
         <Menu sx={{ display: 'flex' }}>
             <Menu.ResourceItem name="profiles" />
             <Menu.ResourceItem name="learning-languages" />
-            {permissions === MANAGER_PERMISSION && data && data.universityId && (
+            {permissions.checkRole(Role.MANAGER) && data && data.universityId && (
                 <Menu.Item
                     leftIcon={<SchoolIcon />}
                     primaryText={translate('universities.label')}
                     to={`/universities/${data.universityId}/show`}
                 />
             )}
-            {permissions === SUPER_ADMIN_PERMISSION && (
+            {permissions.checkRole(Role.SUPER_ADMIN) && (
                 // Note: div is mandatory to group these Menu.Item as Fragment throw an error from MUI component
                 <div>
                     <Box ref={(newRef: HTMLDivElement) => setUniversitiesRef(newRef)}>
@@ -133,7 +133,7 @@ const CustomMenu = () => {
                 </div>
             )}
             <Menu.ResourceItem name="reports" />
-            {permissions === SUPER_ADMIN_PERMISSION && (
+            {permissions.checkRole(Role.SUPER_ADMIN) && (
                 // Note: div is mandatory to group these Menu.Item as Fragment throw an error from MUI component
                 <div>
                     <Divider sx={{ margin: '0 !important' }} />

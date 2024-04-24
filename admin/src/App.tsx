@@ -29,7 +29,7 @@ import reports from './pages/report';
 import reportCategories from './pages/report-categories';
 import suggestedLanguages from './pages/suggested-languages';
 import universities from './pages/universities';
-import authProvider, { MANAGER_PERMISSION, SUPER_ADMIN_PERMISSION } from './providers/authProvider';
+import authProvider, { GetPermissionsInterface, Role } from './providers/authProvider';
 import customDataProvider from './providers/customDataProvider';
 import i18nProvider from './providers/i18nProvider';
 import queryClient from './queryClient';
@@ -49,7 +49,7 @@ const App = () => {
             theme={theme}
             requireAuth
         >
-            {(permissions) => (
+            {(permissions: GetPermissionsInterface) => (
                 <>
                     <Resource
                         icon={PersonAddIcon}
@@ -75,7 +75,7 @@ const App = () => {
                         options={{ label: translate('administrators.label') }}
                         {...administrators}
                     />
-                    {permissions === MANAGER_PERMISSION && (
+                    {permissions.checkRole(Role.MANAGER) && (
                         <Resource
                             edit={universities.admin.edit}
                             name="universities"
@@ -84,7 +84,7 @@ const App = () => {
                             show={universities.admin.show}
                         />
                     )}
-                    {permissions === SUPER_ADMIN_PERMISSION && (
+                    {permissions.checkRole(Role.SUPER_ADMIN) && (
                         <>
                             <Resource
                                 icon={SettingsIcon}

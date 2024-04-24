@@ -8,6 +8,12 @@ export class KeycloakUser {
   universityLogin?: string;
 }
 
+export type KeycloakGroup = {
+  id: string;
+  name: string;
+  path: string;
+};
+
 export type KeycloakEmailAction =
   | 'VERIFY_EMAIL'
   | 'UPDATE_PASSWORD'
@@ -26,6 +32,7 @@ export interface UserRepresentation {
   emailVerified: boolean;
   userProfileMetadata: UserProfileMetadata;
   attributes: { [index: string]: string[] };
+  groups?: KeycloakGroup[];
 }
 
 interface UserProfileMetadata {
@@ -57,6 +64,10 @@ export default interface RoleRepresentation {
   attributes?: { [index: string]: string[] };
 }
 
+export enum KeycloakRealmRoles {
+  ADMIN = 'admin',
+}
+
 export interface Composites {
   realm?: string[];
   client?: Client;
@@ -76,6 +87,7 @@ interface KeycloakKey {
   kid: string;
   x5c: string;
 }
+
 export interface CreateUserProps {
   email: string;
   password: string;
@@ -93,6 +105,7 @@ export interface CreateAdministratorProps {
   lastname: string;
   password: string;
   universityId?: string;
+  groups: string[];
 }
 
 export interface UpdateAdministratorProps {
@@ -102,6 +115,7 @@ export interface UpdateAdministratorProps {
   email?: string;
   password?: string;
   universityId?: string;
+  groups?: KeycloakGroup[];
 }
 
 export interface UpdateAdministratorPayload {

@@ -7,5 +7,5 @@ export interface KeycloakConfiguration {
   password: string;
   clientId: string;
   clientSecret: string;
-  adminGroupId: string;
+  adminRoleName: string;
 }

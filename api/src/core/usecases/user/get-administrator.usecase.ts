@@ -6,8 +6,8 @@ export class GetAdministratorUsecase {
   constructor(private readonly keycloak: KeycloakClient) {}
 
   async execute(id: string) {
-    const result = await this.keycloak.getUserById(id);
+    const administrator = await this.keycloak.getUserById(id, true);
 
-    return result;
+    return administrator;
   }
 }
