@@ -62,7 +62,7 @@ model LanguageCodes {
   JokerLearningLanguages LearningLanguages[]  @relation("TandemLanguage")
   TandemHistory          TandemHistory[]
   UnmatchedLearningLanguages UnmatchedLearningLanguages[]
-  SpecificLanguagesOrganizations          Organizations[]    @relation("SpecificLanguagesOrganizations")
+  SpecificLanguagesOrganizations          Organizations[]
   NativeLanguageOrganizations          Organizations[]    @relation("NativeLanguageOrganizations")
 
   @@unique([name])
@@ -102,7 +102,7 @@ model Organizations {
   RoutineExecutions    RoutineExecutions[]
   ValidatedTandems     Tandems[]
   RefusedTandems       RefusedTandems[]
-  SpecificLanguagesAvailable   LanguageCodes[]  @relation("SpecificLanguagesOrganizations")
+  SpecificLanguagesAvailable   LanguageCodes[]
   NativeLanguage              LanguageCodes     @relation("NativeLanguageOrganizations", fields: [language_code_id], references: [id])
   Image                 MediaObjects? @relation(fields: [image_id], references: [id])
 

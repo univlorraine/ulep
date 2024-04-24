@@ -106,7 +106,6 @@ export class Profile {
     const masteredLanguagesCodes = this.masteredLanguages.map((l) => l.code);
 
     if (masteredLanguagesCodes.includes(this.nativeLanguage.code)) {
-      console.log(masteredLanguagesCodes, this.nativeLanguage);
       throw new ProfileLanguagesException(
         'Native language cannot be a mastered language',
       );

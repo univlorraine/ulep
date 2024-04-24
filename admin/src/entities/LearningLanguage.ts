@@ -28,7 +28,7 @@ export type LearningLanguage = {
 
 export type LearningLanguageTandem = {
     id: string;
-    status: string;
+    status: TandemStatus;
     userLearningLanguage: LearningLanguage;
     partnerLearningLanguage: LearningLanguage;
     universityValidations: string[];
@@ -44,6 +44,7 @@ export type LearningLanguageTandem = {
 export const learningLanguageHasPossibleAction = (learningLanguage?: LearningLanguage) =>
     learningLanguage?.tandem?.status &&
     learningLanguage?.tandem?.status !== TandemStatus.ACTIVE &&
+    learningLanguage?.tandem?.status !== TandemStatus.PAUSED &&
     learningLanguage?.tandem?.status !== TandemStatus.INACTIVE;
 
 export const getLearningLanguageUniversityAndCampusString = (learningLanguage?: LearningLanguage) => {

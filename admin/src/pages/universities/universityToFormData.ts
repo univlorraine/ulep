@@ -40,7 +40,7 @@ const universityToFormData = (
     if (website) formData.append('website', website);
     if (specificLanguagesAvailable) {
         specificLanguagesAvailable.forEach((language, index) => {
-            formData.append(`specificLanguagesAvailable[${index}]`, language.id);
+            formData.append(`specificLanguagesAvailableIds[${index}]`, language.id);
         });
     }
     if (notificationEmail) formData.append('notificationEmail', notificationEmail);

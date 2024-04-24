@@ -11,6 +11,7 @@ interface GetLearningLanguagesQuery {
   universityIds: string[];
   hasActiveTandem?: boolean;
   hasActionableTandem?: boolean;
+  hasPausedTandem?: boolean;
   lastname?: string;
   page: number;
   limit: number;

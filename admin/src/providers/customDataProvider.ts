@@ -12,6 +12,7 @@ import {
 } from 'react-admin';
 import Language from '../entities/Language';
 import { RoutineExecution } from '../entities/RoutineExecution';
+import { TandemStatus } from '../entities/Tandem';
 import AdministratorsQuery from '../queries/AdministratorsQuery';
 import CountriesQuery from '../queries/CountriesQuery';
 import InterestsQuery from '../queries/InterestsQuery';
@@ -304,6 +305,17 @@ const customDataProvider = {
             relaunch: !!relaunchGlobalRoutine,
         });
         const response = await fetch(url, httpClientOptions({ method: 'POST', body }));
+
+        if (!response.ok) {
+            await throwError(response);
+        }
+    },
+    updateTandem: async (tandemId: string, tandemStatus: TandemStatus): Promise<void> => {
+        const url = `${process.env.REACT_APP_API_URL}/tandems/${tandemId}`;
+        const body = JSON.stringify({
+            status: tandemStatus,
+        });
+        const response = await fetch(url, httpClientOptions({ method: 'PUT', body }));
 
         if (!response.ok) {
             await throwError(response);

@@ -1,8 +1,4 @@
-import {
-  NotificationGateway,
-  SendTandemClosureNoticeNotification,
-  SendWelcomeNotification,
-} from 'src/core/ports/notification.gateway';
+import { NotificationGateway } from 'src/core/ports/notification.gateway';
 
 export default class InMemoryNotificaitonGateway
   implements NotificationGateway
@@ -11,9 +7,15 @@ export default class InMemoryNotificaitonGateway
     return Promise.resolve();
   }
 
-  sendTandemClosureNoticeNotification(
-    props: SendTandemClosureNoticeNotification,
-  ): Promise<void> {
+  sendTandemClosureNoticeNotification(): Promise<void> {
+    return Promise.resolve();
+  }
+
+  sendPausedTandemNotification(): Promise<void> {
+    return Promise.resolve();
+  }
+
+  sendUnpausedTandemNotification(): Promise<void> {
     return Promise.resolve();
   }
 }

@@ -1,26 +1,25 @@
 @media (width >=480px) {
-    .logo-background {
-        margin-top: 20px;
-    }
+  .logo-background {
+    margin-top: 20px;
+  }
 
-    form {
-        margin-top: 10px;
-    }
+  form {
+    margin-top: 10px;
+  }
 
-    .label-container {
-        font-size: 1rem;
-    }
+  .label-container {
+    font-size: 1rem;
+  }
 
-    .input-container>input {
-        font-size: 0.875rem;
-    }
+  .input-container > input {
+    font-size: 0.875rem;
+  }
 
+  .verification-code-cta {
+    margin-top: 10px;
+  }
 
-    .verification-code-cta {
-        margin-top: 10px;
-    }
-
-    .acceptance-inputs {
-        margin-top: 20px;
-    }
+  .acceptance-inputs {
+    margin-top: 20px;
+  }
 }

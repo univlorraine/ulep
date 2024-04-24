@@ -15,6 +15,7 @@ import {
   TandemValidationNoticeEmailProps,
   TandemCanceledEmailProps,
   TandemClosureNoticeEmailProps,
+  TandemPausedUnpausedEmailProps,
 } from 'src/core/ports/email.gateway';
 
 @Injectable()
@@ -222,6 +223,98 @@ export class SmtpEmailGateway implements EmailGateway {
       to: props.to,
       subject: translations.title,
       template: 'user',
+      variables: {
+        links: this.links,
+        images: this.images,
+        ...translations,
+        footer: this.footer,
+      },
+    });
+  }
+
+  async sendTandemPausedEmail(
+    props: TandemPausedUnpausedEmailProps,
+  ): Promise<void> {
+    const translations = this.translate('tandemPausedNotice', props.language, {
+      ...props,
+    });
+
+    await this.mailer.sendMail({
+      to: props.to,
+      subject: translations.title,
+      template: 'user',
+      variables: {
+        links: this.links,
+        images: this.images,
+        ...translations,
+        footer: this.footer,
+      },
+    });
+  }
+
+  async sendAdminTandemPausedEmail(
+    props: TandemPausedUnpausedEmailProps,
+  ): Promise<void> {
+    const translations = this.translate(
+      'tandemPausedAdminNotice',
+      props.language,
+      {
+        ...props,
+      },
+    );
+
+    await this.mailer.sendMail({
+      to: props.to,
+      subject: translations.title,
+      template: 'admin',
+      variables: {
+        links: this.links,
+        images: this.images,
+        ...translations,
+        footer: this.footer,
+      },
+    });
+  }
+
+  async sendTandemUnpausedEmail(
+    props: TandemPausedUnpausedEmailProps,
+  ): Promise<void> {
+    const translations = this.translate(
+      'tandemUnpausedNotice',
+      props.language,
+      {
+        ...props,
+      },
+    );
+
+    await this.mailer.sendMail({
+      to: props.to,
+      subject: translations.title,
+      template: 'user',
+      variables: {
+        links: this.links,
+        images: this.images,
+        ...translations,
+        footer: this.footer,
+      },
+    });
+  }
+
+  async sendAdminTandemUnpausedEmail(
+    props: TandemPausedUnpausedEmailProps,
+  ): Promise<void> {
+    const translations = this.translate(
+      'tandemUnpausedAdminNotice',
+      props.language,
+      {
+        ...props,
+      },
+    );
+
+    await this.mailer.sendMail({
+      to: props.to,
+      subject: translations.title,
+      template: 'admin',
       variables: {
         links: this.links,
         images: this.images,

@@ -34,7 +34,7 @@ const PairingOtherLanguagesPage: React.FC = () => {
         )?.level;
 
         updateProfileSignUp({ learningLanguage: selectedLanguage });
-        return history.push(`/cefr/quizz`, { initialCefr: languageLevel ?? 'A1' });
+        return history.push(`/cefr/quizz`, { initialCefr: languageLevel, isQuizzTest: true });
     };
 
     return (

@@ -5,3 +5,4 @@ export * from './get-tandems.usecase';
 export * from './get-learning-languages-matchs.usecase';
 export * from './validate-tandem.usecase';
 export * from './refuse-tandem.usecase';
+export * from './update-tandem.usecase';

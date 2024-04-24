@@ -5,9 +5,13 @@ export interface Notification {
   language: string;
 }
 
-export interface SendWelcomeNotification {
+export type NotificationParams = {
   to: Notification[];
-}
+};
+
+export type NotificationFunction = (
+  params: NotificationParams,
+) => Promise<void>;
 
 export interface SendTandemClosureNoticeNotification {
   to: Notification[];
@@ -18,8 +22,10 @@ export interface SendTandemClosureNoticeNotification {
 }
 
 export interface NotificationGateway {
-  sendWelcomeNotification(props: SendWelcomeNotification): Promise<void>;
   sendTandemClosureNoticeNotification(
     props: SendTandemClosureNoticeNotification,
   ): Promise<void>;
+  sendWelcomeNotification: NotificationFunction;
+  sendPausedTandemNotification: NotificationFunction;
+  sendUnpausedTandemNotification: NotificationFunction;
 }

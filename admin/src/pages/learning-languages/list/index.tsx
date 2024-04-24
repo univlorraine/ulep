@@ -21,7 +21,7 @@ import UniversitiesPicker from '../../../components/UniversitiesPicker';
 import Language from '../../../entities/Language';
 import { LearningLanguage, learningLanguageHasPossibleAction } from '../../../entities/LearningLanguage';
 import { getProfileDisplayName } from '../../../entities/Profile';
-import { isTandemActive } from '../../../entities/Tandem';
+import { isTandemActive, isTandemPaused } from '../../../entities/Tandem';
 import University, { isCentralUniversity } from '../../../entities/University';
 import useLearningLanguagesStore from '../useLearningLanguagesStore';
 import Actions from './Actions';
@@ -52,6 +52,15 @@ const LearningLanguageList = () => {
             ]}
             label={translate('learning_languages.list.filters.activeTandem.label')}
             source="hasActiveTandem"
+        />,
+        <SelectInput
+            key="pausedTandemFilter"
+            choices={[
+                { id: true, name: translate('learning_languages.list.filters.pausedTandem.choices.yes') },
+                { id: false, name: translate('learning_languages.list.filters.pausedTandem.choices.no') },
+            ]}
+            label={translate('learning_languages.list.filters.pausedTandem.label')}
+            source="hasPausedTandem"
         />,
         <TextInput
             key="userLastname"
@@ -155,6 +164,17 @@ const LearningLanguageList = () => {
                         label={translate('learning_languages.list.tableColumns.hasActiveTandem')}
                         render={(record: LearningLanguage) =>
                             isTandemActive(record.tandem) && (
+                                <Box sx={{ textAlign: 'center' }}>
+                                    <Check />
+                                </Box>
+                            )
+                        }
+                        sortable={false}
+                    />
+                    <FunctionField
+                        label={translate('learning_languages.list.tableColumns.hasPausedTandem')}
+                        render={(record: LearningLanguage) =>
+                            isTandemPaused(record.tandem) && (
                                 <Box sx={{ textAlign: 'center' }}>
                                     <Check />
                                 </Box>

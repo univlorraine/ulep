@@ -10,6 +10,7 @@ import {
   TandemCanceledEmailProps,
   TandemCanceledNoticeEmailProps,
   TandemClosureNoticeEmailProps,
+  TandemPausedUnpausedEmailProps,
   TandemValidationNoticeEmailProps,
 } from 'src/core/ports/email.gateway';
 
@@ -49,6 +50,28 @@ export default class InMemoryEmailGateway implements EmailGateway {
   }
 
   sendTandemCanceledEmail(props: TandemCanceledEmailProps): Promise<void> {
+    return Promise.resolve();
+  }
+
+  sendTandemPausedEmail(props: TandemPausedUnpausedEmailProps): Promise<void> {
+    return Promise.resolve();
+  }
+
+  sendTandemUnpausedEmail(
+    props: TandemPausedUnpausedEmailProps,
+  ): Promise<void> {
+    return Promise.resolve();
+  }
+
+  sendAdminTandemPausedEmail(
+    props: TandemPausedUnpausedEmailProps,
+  ): Promise<void> {
+    return Promise.resolve();
+  }
+
+  sendAdminTandemUnpausedEmail(
+    props: TandemPausedUnpausedEmailProps,
+  ): Promise<void> {
     return Promise.resolve();
   }
 
