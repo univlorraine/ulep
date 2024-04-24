@@ -27,6 +27,8 @@ import { LEARNING_LANGUAGE_REPOSITORY } from 'src/core/ports/learning-language.r
 import { InMemoryLearningLanguageRepository } from 'src/providers/persistance/repositories/in-memory-learning-language-repository';
 import { KeycloakClient } from '@app/keycloak';
 import { InMemoryI18nService } from 'src/providers/services/in-memory.i18n.provider';
+import { NOTIFICATION_GATEWAY } from 'src/core/ports/notification.gateway';
+import InMemoryNotificaitonGateway from 'src/providers/gateway/in-memory-notification.gateway';
 import { faker } from '@faker-js/faker';
 import { LANGUAGE_REPOSITORY } from '../../src/core/ports/language.repository';
 
@@ -54,6 +56,7 @@ describe('Universities', () => {
 
   const repository = new InMemoryUniversityRepository();
   const inMemoryEmail = new InMemoryEmailGateway();
+  const inMemoryNotification = new InMemoryNotificaitonGateway();
   const inMemoryI18n = new InMemoryI18nService();
 
   beforeAll(async () => {
@@ -86,6 +89,8 @@ describe('Universities', () => {
       .useValue(userRepositoy)
       .overrideProvider(EMAIL_GATEWAY)
       .useValue(inMemoryEmail)
+      .overrideProvider(NOTIFICATION_GATEWAY)
+      .useValue(inMemoryNotification)
       .overrideGuard(AuthenticationGuard)
       .useValue(TestAuthGuard)
       .overrideProvider(I18nService)

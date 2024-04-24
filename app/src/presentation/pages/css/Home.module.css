@@ -111,3 +111,14 @@
         width: 410px;
     }
 }
+
+@media (min-width: 768px) and (max-width: 1024px){
+    .container {
+        background-color: white;
+        display: flex;
+        flex-direction: column;
+        height: 100%;
+        padding: 20px;
+        width: 100%;
+    }
+}

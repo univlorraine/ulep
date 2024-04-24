@@ -101,6 +101,7 @@
         "email": "Email linked to the instance",
         "cgu": "Url to terms and conditions",
         "confidentiality": "Url to confidentiality rules",
+        "daysBeforeClosureNotification": "Number of days before the service closure notification",
         "ressource": "Url to language resource",
         "primaryColor": "Primary color of the application",
         "primaryBackgroundColor": "Primary color of the application's background image",
@@ -123,6 +124,7 @@
             "email": "Email linked to instance",
             "cgu": "Url to terms and conditions",
             "confidentiality": "Url to confidentiality rules",
+            "daysBeforeClosureNotification": "Number of days before the service closure notification",
             "ressource": "Url to language resources",
             "primaryColor": "Primary color of the application",
             "primaryBackgroundColor": "Primary color of the application's background image",
@@ -467,6 +469,13 @@
                         "no": "No"
                     }
                 },
+                "pausedTandem": {
+                    "label": "Paused tandems",
+                    "choices": {
+                        "yes": "Yes",
+                        "no": "Non"
+                    }
+                },
                 "user_lastname": {
                     "label": "Lastname"
                 }
@@ -487,6 +496,7 @@
                 "createdAt": "Created",
                 "university": "University",
                 "hasActiveTandem": "In tandem",
+                "hasPausedTandem": "Tandem paused",
                 "actionPossible": "Pending tandem",
                 "specificProgram": "Specific program",
                 "role": "Role",
@@ -549,7 +559,9 @@
                     "refuseMessage": "You're about to refuse a tandem. Do you confirm?",
                     "ctaLabels": {
                         "cancel": "Cancel",
-                        "confirm": "Confirm"
+                        "confirm": "Confirm",
+                        "free": "Free",
+                        "pause": "Pause"
                     },
                     "error": "An error occured&"
                 },

@@ -55,6 +55,7 @@ export class LearningLanguageController {
       universityIds,
       hasActiveTandem,
       hasActionableTandem,
+      hasPausedTandem,
       field,
       order,
     }: GetLearningLanguagesRequest,
@@ -71,6 +72,7 @@ export class LearningLanguageController {
       orderBy,
       hasActiveTandem,
       hasActionableTandem,
+      hasPausedTandem,
       lastname,
     });
 

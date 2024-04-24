@@ -102,6 +102,7 @@
         "email": "Email lié à l'instance",
         "cgu": "Url vers les conditions générales d'utilisations",
         "confidentiality": "Url vers les règles de confidentialités",
+        "daysBeforeClosureNotification": "Nombre de jours avant la notification de fermeture du service",
         "ressource": "Url vers les ressources de langues",
         "primaryColor": "Couleur primaire de l'application",
         "primaryBackgroundColor": "Couleur primaire de l'image de fond de l'application",
@@ -124,6 +125,7 @@
             "email": "Email lié à l'instance",
             "cgu": "Url vers les conditions générales d'utilisations",
             "confidentiality": "Url vers les règles de confidentialités",
+            "daysBeforeClosureNotification": "Nombre de jours avant la notification de fermeture du service",
             "ressource": "Url vers les ressources de langues",
             "primaryColor": "Couleur primaire de l'application",
             "primaryBackgroundColor": "Couleur primaire de l'image de fond de l'application",
@@ -472,6 +474,13 @@
                         "no": "Non"
                     }
                 },
+                "pausedTandem": {
+                    "label": "Tandem en pause",
+                    "choices": {
+                        "yes": "Oui",
+                        "no": "Non"
+                    }
+                },
                 "user_lastname": {
                     "label": "Nom d'utilisateur"
                 }
@@ -492,6 +501,7 @@
                 "createdAt": "Créé le",
                 "university": "Université",
                 "hasActiveTandem": "En tandem",
+                "hasPausedTandem": "Tandem en pause",
                 "actionPossible": "Tandem en attente",
                 "specificProgram": "Programme spécifique",
                 "reported": "Signalé",
@@ -554,7 +564,9 @@
                     "refuseMessage": "Vous êtes sur le point de refuser / annuler un tandem. Êtes-vous sur ?",
                     "ctaLabels": {
                         "cancel": "Annuler",
-                        "confirm": "Confirmer"
+                        "confirm": "Confirmer",
+                        "pause": "Mettre en pause",
+                        "free": "Libérer"
                     },
                     "error": "Une erreur est survenue"
                 },

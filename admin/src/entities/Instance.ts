@@ -11,6 +11,7 @@ type Instance = {
     secondaryBackgroundColor: string;
     secondaryDarkColor: string;
     isInMaintenance: boolean;
+    daysBeforeClosureNotification: number;
 };
 
 export default Instance;

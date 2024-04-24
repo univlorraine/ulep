@@ -128,6 +128,7 @@ const EditUniversity = () => {
                         }
                         maxTandemsPerUser={record.maxTandemsPerUser}
                         name={record.name}
+                        nativeLanguage={record.nativeLanguage}
                         notificationEmail={record.notificationEmail}
                         openServiceDate={record.openServiceDate}
                         pairingMode={record.pairingMode}

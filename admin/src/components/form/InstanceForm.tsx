@@ -25,6 +25,9 @@ const InstanceForm: React.FC<InstanceFormProps> = ({ handleSubmit, instance }) =
         instance.secondaryBackgroundColor
     );
     const [newSecondaryDarkColor, setNewSecondaryDarkColor] = useState<string>(instance.secondaryDarkColor);
+    const [newDaysBeforeClosureNotification, setNewDaysBeforeClosureNotification] = useState<number>(
+        instance.daysBeforeClosureNotification
+    );
 
     const allFieldsFilled =
         newName &&
@@ -53,6 +56,7 @@ const InstanceForm: React.FC<InstanceFormProps> = ({ handleSubmit, instance }) =
             secondaryBackgroundColor: newSecondaryBackgroundColor,
             secondaryDarkColor: newSecondaryDarkColor,
             isInMaintenance: instance.isInMaintenance,
+            daysBeforeClosureNotification: newDaysBeforeClosureNotification,
         };
 
         return handleSubmit(newInstance);
@@ -163,6 +167,19 @@ const InstanceForm: React.FC<InstanceFormProps> = ({ handleSubmit, instance }) =
                 onChange={(_, colors) => setNewSecondaryDarkColor(colors.hex)}
                 value={newSecondaryDarkColor}
             />
+            <Typography variant="subtitle1">{translate(`instance.edit.daysBeforeClosureNotification`)}</Typography>
+
+            <Box alignItems="center" display="flex" flexDirection="row">
+                <Input
+                    name="DaysBeforeClosureNotification"
+                    onChange={(e) => setNewDaysBeforeClosureNotification(Number(e.target.value))}
+                    sx={inputStyle}
+                    type="number"
+                    value={newDaysBeforeClosureNotification}
+                    disableUnderline
+                    required
+                />
+            </Box>
 
             <Button
                 color="primary"

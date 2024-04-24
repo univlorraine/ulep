@@ -11,6 +11,9 @@ const baseConfig: CapacitorConfig = {
         App: {
             customUrlScheme: 'ulep',
         },
+        PushNotifications: {
+            presentationOptions: ['badge', 'sound', 'alert'],
+        },
         Keyboard: {
             resize: 'native',
             style: 'DARK',

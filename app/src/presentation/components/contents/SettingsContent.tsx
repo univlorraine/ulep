@@ -92,7 +92,7 @@ const SettingsContent: React.FC<SettingsContentProps> = ({ onBackPressed, onDisc
     };
 
     return (
-        <div className={styles.container}>
+        <div className={`content-wrapper ${styles.container}`}>
             <button
                 aria-label={t('global.go_back') as string}
                 className={styles['back-button']}

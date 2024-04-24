@@ -102,6 +102,10 @@ export class Env {
   @IsOptional()
   EMAIL_TRANSLATION_NAMESPACE: string;
 
+  @IsString()
+  @IsOptional()
+  NOTIFICATION_TRANSLATION_NAMESPACE: string;
+
   @IsBoolean()
   @Transform(({ value }) => value === 'true')
   @IsOptional()
@@ -123,6 +127,15 @@ export class Env {
   @IsNotEmpty()
   @Transform(({ value }) => removeTrailingSlash(value))
   EMAIL_ASSETS_PUBLIC_ENDPOINT: string;
+
+  @IsString()
+  @IsNotEmpty()
+  NOTIFICATION_ASSETS_BUCKET: string;
+
+  @IsString()
+  @IsNotEmpty()
+  @Transform(({ value }) => removeTrailingSlash(value))
+  NOTIFICATION_ASSETS_PUBLIC_ENDPOINT: string;
 
   @IsString()
   @IsNotEmpty()
@@ -158,6 +171,23 @@ export class Env {
   @IsString()
   @IsNotEmpty()
   SMTP_SENDER: string;
+
+  @IsString()
+  @IsNotEmpty()
+  FIREBASE_PROJECT_ID: string;
+
+  @IsString()
+  @IsNotEmpty()
+  FIREBASE_PRIVATE_KEY: string;
+
+  @IsString()
+  @IsNotEmpty()
+  FIREBASE_CLIENT_EMAIL: string;
+
+  @IsNumber()
+  @IsNotEmpty()
+  @Transform(({ value }) => parseInt(value, 10))
+  FIREBASE_PARALLEL_LIMIT: number;
 
   @IsString()
   @IsOptional()
@@ -242,8 +272,11 @@ const test: Env = {
   APP_TRANSLATION_NAMESPACE: 'app',
   API_TRANSLATION_NAMESPACE: 'api',
   EMAIL_TRANSLATION_NAMESPACE: 'emails',
+  NOTIFICATION_TRANSLATION_NAMESPACE: 'notifications',
   EMAIL_ASSETS_BUCKET: 'assets',
   EMAIL_ASSETS_PUBLIC_ENDPOINT: 'http://localhost:9000/assets',
+  NOTIFICATION_ASSETS_BUCKET: 'assets',
+  NOTIFICATION_ASSETS_PUBLIC_ENDPOINT: 'http://localhost:9000/assets',
   APP_LINK_APPLE_STORE: 'https://apple.com',
   APP_LINK_PLAY_STORE: 'https://play.google.com',
   SMTP_DISABLE_BOOT_VERIFICATION: false,
@@ -252,6 +285,10 @@ const test: Env = {
   SMTP_SECURE: false,
   SMTP_IGNORE_TLS: true,
   SMTP_SENDER: 'sender@localhost',
+  FIREBASE_PROJECT_ID: '',
+  FIREBASE_PRIVATE_KEY: '',
+  FIREBASE_CLIENT_EMAIL: '',
+  FIREBASE_PARALLEL_LIMIT: 3,
   CANCEL_TRESHOLD_IN_MIN: 15,
   SIGNED_URL_EXPIRATION_IN_SECONDS: 60,
 };

@@ -141,16 +141,22 @@ spec:
               value: "{{ .Values.api.env.apiTranslationNamespace }}"
             - name: EMAIL_TRANSLATION_NAMESPACE
               value: "{{ .Values.api.env.emailTranslationNamespace }}"
+            - name: NOTIFICATION_TRANSLATION_NAMESPACE
+              value: "{{ .Values.api.env.notificationTranslationNamespace }}"
             - name: CONNECTOR_URL
               value: "{{ .Values.api.env.connectorUrl }}"
             - name: CONNECTOR_TOKEN
               value: "{{ .Values.api.env.connectorToken }}"
             - name: EMAIL_ASSETS_BUCKET
               value: "{{ .Values.api.env.emailsAssetsBucket }}"
+            - name: NOTIFICATION_ASSETS_BUCKET
+              value: "{{ .Values.api.env.notificationAssetsBucket }}"
             - name: EMAIL_TRANSLATIONS_COMPONENT
               value: "{{ .Values.api.env.emailsTranslationsComponent }}"
             - name: EMAIL_ASSETS_PUBLIC_ENDPOINT
               value: "https://{{ .Values.api.env.emailsAssetsPublicEndpoint }}.{{ .Values.domain }}"
+            - name: NOTIFICATION_ASSETS_PUBLIC_ENDPOINT
+              value: "https://{{ .Values.api.env.notificationAssetsPublicEndpoint }}.{{ .Values.domain }}"
             - name: APP_LINK_APPLE_STORE
               value: "{{ .Values.api.env.appLinkAppleStore }}"
             - name: APP_LINK_PLAY_STORE
@@ -169,6 +175,23 @@ spec:
               value: "{{ .Values.api.env.smtpSender }}"
             - name: SENTRY_DSN
               value: "{{ .Values.api.env.sentryDsn }}"
+            - name: FIREBASE_PROJECT_ID
+              valueFrom:
+                secretKeyRef:
+                  name: "{{ include "etandem.fullname" . }}-secret-{{ .Values.api.name }}"
+                  key: firebase-project-id
+            - name: FIREBASE_PRIVATE_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: "{{ include "etandem.fullname" . }}-secret-{{ .Values.api.name }}"
+                  key: firebase-private-key
+            - name: FIREBASE_CLIENT_EMAIL
+              valueFrom:
+                secretKeyRef:
+                  name: "{{ include "etandem.fullname" . }}-secret-{{ .Values.api.name }}"
+                  key: firebase-client-email
+            - name: FIREBASE_PARALLEL_LIMIT
+              value: "{{ .Values.api.env.firebaseParallelLimit }}"
             - name: CANCEL_TRESHOLD_IN_MIN
               value: "{{ .Values.api.env.cancelTresholdInMin }}"
             - name: SIGNED_URL_EXPIRATION_IN_SECONDS

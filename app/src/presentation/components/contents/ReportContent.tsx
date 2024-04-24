@@ -57,7 +57,7 @@ const ReportContent: React.FC<ReportContentProps> = ({ onGoBack, onReportSent })
     }, []);
 
     return (
-        <div className={styles.content}>
+        <div className={`content-wrapper ${styles.content}`}>
             <div className={styles.header} role="navigation">
                 {isHybrid ? (
                     <button

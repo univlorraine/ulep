@@ -5,6 +5,14 @@
     <#elseif section = "form">
         <form id="kc-passwd-update-form" class="${properties.kcFormClass!}" action="${url.loginAction}" method="post">
             <div class="${properties.kcFormGroupClass!}">
+                <#if messagesPerField.existsError('password-confirm')>
+                    <div class="${properties.kcAlertClass!} alert-danger">
+                        <span class="${properties.kcFeedbackErrorIcon!}"></span>
+                        <p class="${properties.kcAlertTitleClass!}">
+                            ${kcSanitize(messagesPerField.get('password-confirm'))?no_esc}
+                        </p>
+                    </div>
+                </#if>
                 <div class="${properties.kcLabelWrapperClass!}">
                     <label for="password-new" class="${properties.kcLabelClass!}">${msg("passwordTitle")}</label>
                 </div>
@@ -49,12 +57,6 @@
                             <span>${msg("displayConfirmPassword")}</span>
                         </div>
                     </div>
-
-                    <#if messagesPerField.existsError('password-confirm')>
-                        <span id="input-error-password-confirm" class="${properties.kcInputErrorMessageClass!}" aria-live="polite">
-                            ${kcSanitize(messagesPerField.get('password-confirm'))?no_esc}
-                        </span>
-                    </#if>
 
                 </div>
             </div>

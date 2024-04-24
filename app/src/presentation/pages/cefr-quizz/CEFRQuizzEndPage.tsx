@@ -2,6 +2,7 @@ import { useTranslation } from 'react-i18next';
 import { Redirect, useHistory, useLocation } from 'react-router';
 import { useConfig } from '../../../context/ConfigurationContext';
 import { useStoreState } from '../../../store/storeTypes';
+import Language from '../../../domain/entities/Language';
 import QuizzValidatedContent from '../../components/contents/QuizzValidatedContent';
 import WebLayoutCentered from '../../components/layout/WebLayoutCentered';
 import styles from '../css/SignUp.module.css';
@@ -10,6 +11,8 @@ import { compareCEFR } from '../../utils';
 
 type CEFRQuizzEndPageProps = {
     initialCefr: CEFR;
+    language: Language;
+    level: CEFR;
 };
 
 const CEFRQuizzEndPage: React.FC = () => {
@@ -17,13 +20,13 @@ const CEFRQuizzEndPage: React.FC = () => {
     const history = useHistory();
     const location = useLocation<CEFRQuizzEndPageProps>();
     const profile = useStoreState((state) => state.profile);
-    const { initialCefr } = location.state;
+    const { initialCefr, language, level } = location.state;
     const profileSignUp = useStoreState((state) => state.profileSignUp);
     const [showToast] = useIonToast();
     const { t } = useTranslation();
 
-    if (!profileSignUp.learningLanguage || !profileSignUp.learningLanguageLevel) {
-        return <Redirect to={`/pairing/languages`} />;
+    if (!language) {
+        return <Redirect to={`/home`} />;
     }
 
     const isNewLanguage = !(
@@ -32,11 +35,7 @@ const CEFRQuizzEndPage: React.FC = () => {
     );
 
     const nextStep = async () => {
-        const result = await createOrUpdateTestedLanguage.execute(
-            profile!.id,
-            profileSignUp.learningLanguage!,
-            profileSignUp.learningLanguageLevel!
-        );
+        const result = await createOrUpdateTestedLanguage.execute(profile!.id, language, level);
 
         if (result instanceof Error) {
             return await showToast({ message: t(result.message), duration: 1000 });
@@ -54,11 +53,11 @@ const CEFRQuizzEndPage: React.FC = () => {
         >
             <div className={styles.body}>
                 <QuizzValidatedContent
-                    newLevel={compareCEFR(initialCefr, profileSignUp.learningLanguageLevel)}
+                    newLevel={compareCEFR(initialCefr, level)}
                     isNewLanguage={isNewLanguage}
-                    language={profileSignUp.learningLanguage}
+                    language={language}
                     onNextStep={nextStep}
-                    quizzLevel={profileSignUp.learningLanguageLevel}
+                    quizzLevel={level}
                 />
             </div>
         </WebLayoutCentered>

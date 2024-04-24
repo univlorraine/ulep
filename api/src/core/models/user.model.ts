@@ -1,3 +1,4 @@
+import Device from './device.model';
 import { CountryCode } from './country-code.model';
 import { Language } from './language.model';
 import { MediaObject } from './media.model';
@@ -41,6 +42,7 @@ export type UserProps = {
   deactivated?: boolean;
   createdAt?: Date;
   updatedAt?: Date;
+  devices?: Device[];
 };
 
 export class User {
@@ -63,6 +65,7 @@ export class User {
   readonly staffFunction?: string;
   readonly createdAt?: Date;
   readonly updatedAt?: Date;
+  devices: Device[];
 
   constructor(props: UserProps) {
     this.id = props.id;
@@ -84,6 +87,7 @@ export class User {
     this.deactivated = props.deactivated;
     this.createdAt = props.createdAt;
     this.updatedAt = props.updatedAt;
+    this.devices = props.devices ?? [];
   }
 
   public filterLearnableLanguages(languages: Language[]): Language[] {

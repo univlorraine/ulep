@@ -2,6 +2,7 @@ import { ValidateTandemUsecase } from './usecases/tandem/validate-tandem.usecase
 import { Module, Provider } from '@nestjs/common';
 import { ProvidersModule } from 'src/providers/providers.module';
 import { MatchScorer } from './services/MatchScorer';
+import { CronService } from 'src/core/services/CronService';
 import {
   AddLanguageRequestUsecase,
   CountAllSuggestedLanguageUsecase,
@@ -87,6 +88,8 @@ import {
   GetPartnersToUniversityUsecase,
   UpdateProfileUsecase,
   CreateOrUpdateTestedLanguageUsecase,
+  AddDeviceUsecase,
+  UpdateTandemUsecase,
 } from './usecases';
 import { UploadObjectiveImageUsecase } from 'src/core/usecases/media/upload-objective-image.usecase';
 import { UpdateObjectiveUsecase } from 'src/core/usecases/objective/update-objective.usecase';
@@ -194,6 +197,7 @@ const usecases: Provider[] = [
   GetLearningLanguageMatchesUsecase,
   ValidateTandemUsecase,
   RefuseTandemUsecase,
+  UpdateTandemUsecase,
   // Universities
   CreatePartnerUniversityUsecase,
   CreateUniversityUsecase,
@@ -203,6 +207,7 @@ const usecases: Provider[] = [
   GetUniversityUsecase,
   UpdateUniversityUsecase,
   // Users
+  AddDeviceUsecase,
   CreateAdministratorUsecase,
   CreateUserUsecase,
   DeleteAdministratorUsecase,
@@ -223,7 +228,7 @@ const usecases: Provider[] = [
   ResetPasswordUsecase,
 ];
 
-const services: Provider[] = [MatchScorer];
+const services: Provider[] = [MatchScorer, CronService];
 
 @Module({
   imports: [ProvidersModule],

@@ -9,3 +9,4 @@ export * from './delete-administrator.usecase';
 export * from './update-administrator.usecase';
 export * from './get-administrator.usecase';
 export * from './get-user-personal-data.usecase';
+export * from './add-device.usecase';

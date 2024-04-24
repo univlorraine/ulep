@@ -25,7 +25,7 @@ const PairingUnavailableLanguagePage: React.FC = () => {
     const user = profile?.user;
 
     const navigateToRessource = () => {
-        history.push(configuration.ressourceUrl);
+        window.open(configuration.ressourceUrl, '_blank');
     };
 
     if (!language || !user) {
