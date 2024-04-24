@@ -2,7 +2,7 @@ import { useIonToast } from '@ionic/react';
 import { useTranslation } from 'react-i18next';
 import { Redirect, useHistory } from 'react-router';
 import Language from '../../../domain/entities/Language';
-import { useStoreActions, useStoreState } from '../../../store/storeTypes';
+import { useStoreState } from '../../../store/storeTypes';
 import useGetLearnableLanguages from '../../hooks/useGetLearnableLanguages';
 import LearnableLanguagesContent from '../../components/contents/LearnableLanguagesContent';
 import WebLayoutCentered from '../../components/layout/WebLayoutCentered';
@@ -14,7 +14,6 @@ const CEFRQuizzLanguagePage: React.FC = () => {
     const [showToast] = useIonToast();
     const history = useHistory();
     const { configuration } = useConfig();
-    const updateProfileSignUp = useStoreActions((state) => state.updateProfileSignUp);
     const profile = useStoreState((state) => state.profile);
     const university = profile?.user.university;
 
@@ -33,9 +32,11 @@ const CEFRQuizzLanguagePage: React.FC = () => {
             (language) => language.code === selectedLanguage?.code
         )?.level;
 
-        updateProfileSignUp({ learningLanguage: selectedLanguage });
-
-        return history.push(`/cefr/quizz`, { initialCefr: languageLevel ?? undefined, isQuizzTest: true });
+        return history.push(`/cefr/quizz`, {
+            initialCefr: languageLevel ?? undefined,
+            isQuizzTest: true,
+            language: selectedLanguage,
+        });
     };
 
     const navigateToHome = () => {

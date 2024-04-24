@@ -117,10 +117,10 @@ const HomePage: React.FC = () => {
                                     )}
                                     {(profile.learningLanguages.length > 0 || profile.testedLanguages.length > 0) && (
                                         <ProficiencyTestCard
-                                            testedLanguages={[
-                                                ...learningLanguagesToTestedLanguages(profile.learningLanguages),
-                                                ...profile.testedLanguages,
-                                            ]}
+                                            testedLanguages={learningLanguagesToTestedLanguages(
+                                                profile.learningLanguages,
+                                                profile.testedLanguages
+                                            )}
                                         />
                                     )}
                                 </Masonry>
