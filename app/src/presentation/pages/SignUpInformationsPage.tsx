@@ -282,6 +282,7 @@ const SignUpInformationsPage: React.FC = () => {
                 <TextInput
                     autocomplete="email"
                     errorMessage={errorMessage?.type === 'email' ? errorMessage.message : undefined}
+                    disabled={fromIdp}
                     onChange={setEmail}
                     placeholder={t('signup_informations_page.placeholder_email')}
                     title={t('global.email')}
