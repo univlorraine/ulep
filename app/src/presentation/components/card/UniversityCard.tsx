@@ -15,7 +15,7 @@ const UniversityCard: React.FC<UniversityCardProps> = ({ university }) => {
     return (
         <div className={`${styles.container} ${university.isCentral ? styles.central : styles.partner}`}>
             {university.logo ? (
-                <NetworkImage id={university.logo} alt={university.id} className={styles.logo} />
+                <NetworkImage id={university.logo} alt="" role='presentation' className={styles.logo} />
             ) : (
                 <div className={styles.logo} />
             )}
