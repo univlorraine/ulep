@@ -19,6 +19,14 @@ scripts:
       name: Linter
       script: |
           cd app && pnpm lint
+    - &setup_preprod_google_services_android
+      name: Add google-services.json in android
+      script: |
+          echo $GOOGLE_SERVICES_ANDROID_PREPROD | base64 --decode > $CM_BUILD_DIR/mobile/android/app/google-services.json
+    - &setup_preprod_google_services_ios
+      name: Add GoogleService-Info.plist in ios
+      script: |
+          echo $GOOGLE_SERVICES_IOS_PREPROD | base64 --decode > $CM_BUILD_DIR/mobile/ios/GoogleService-Info.plist
     - &test_e2e
       name: Test end to end
       script: |
@@ -105,6 +113,7 @@ workflows:
     #               source: true
     #     scripts:
     #         - *add_staging_environment_file
+    #         - *setup_preprod_google_services_ios
     #         - *install_pnpm
     #         - *install_pnpm_dependency
     #         - *pnpm_build
@@ -155,6 +164,7 @@ workflows:
                   source: true
         scripts:
             - *add_staging_environment_file
+            - *setup_preprod_google_services_android
             - *setup_keystore
             - *install_pnpm
             - *install_pnpm_dependency
