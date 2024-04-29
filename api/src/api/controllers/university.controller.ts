@@ -35,7 +35,8 @@ import { AuthenticationGuard } from '../guards';
 import { ImagesFilePipe } from 'src/api/validators';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { UploadUniversityImageUsecase } from 'src/core/usecases';
-import { University, UniversityWithKeycloakContact } from 'src/core/models';
+import { University } from 'src/core/models';
+import { UniversityKeycloakInterceptor } from 'src/api/interceptors/university-keycloak-contact.interceptor';
 
 @Controller('universities')
 @Swagger.ApiTags('Universities')
@@ -62,8 +63,9 @@ export class UniversityController {
     @Body() body: CreateUniversityRequest,
     @UploadedFile(new ImagesFilePipe()) file?: Express.Multer.File,
   ) {
-    let university: UniversityWithKeycloakContact =
-      await this.createUniversityUsecase.execute(body);
+    let university: University = await this.createUniversityUsecase.execute(
+      body,
+    );
 
     if (file) {
       const upload = await this.uploadUniversityImageUsecase.execute({
@@ -73,10 +75,7 @@ export class UniversityController {
       university = new University({ ...university, logo: upload });
     }
 
-    return UniversityResponse.fromUniversity(
-      university,
-      university.defaultContact,
-    );
+    return UniversityResponse.fromUniversity(university);
   }
 
   @Post('partners')
@@ -92,7 +91,7 @@ export class UniversityController {
     @Body() body: CreateUniversityPartnerRequest,
     @UploadedFile(new ImagesFilePipe()) file?: Express.Multer.File,
   ) {
-    let university: UniversityWithKeycloakContact =
+    let university: University =
       await this.createPartnerUniversityUsecase.execute(body);
 
     if (file) {
@@ -103,25 +102,20 @@ export class UniversityController {
       university = new University({ ...university, logo: upload });
     }
 
-    return UniversityResponse.fromUniversity(
-      university,
-      university.defaultContact,
-    );
+    return UniversityResponse.fromUniversity(university);
   }
 
   @Get()
   @SerializeOptions({ groups: ['read', 'university:read'] })
   @Swagger.ApiOperation({ summary: 'Collection of University ressource.' })
   @Swagger.ApiOkResponse({ type: UniversityResponse, isArray: true })
+  @UseInterceptors(UniversityKeycloakInterceptor)
   async getUniversities() {
     const universities = await this.getUniversitiesUsecase.execute();
 
     return new Collection({
       items: universities.items.map((university) =>
-        UniversityResponse.fromUniversity(
-          university,
-          university.defaultContact,
-        ),
+        UniversityResponse.fromUniversity(university),
       ),
       totalItems: universities.totalItems,
     });
@@ -135,10 +129,7 @@ export class UniversityController {
   async findOne(@Param('id', ParseUUIDPipe) id: string) {
     const university = await this.getUniversityUsecase.execute(id);
 
-    return UniversityResponse.fromUniversity(
-      university,
-      university.defaultContact,
-    );
+    return UniversityResponse.fromUniversity(university);
   }
 
   @Get(':id/partners')
@@ -181,11 +172,10 @@ export class UniversityController {
     @Body() request: UpdateUniversityRequest,
     @UploadedFile(new ImagesFilePipe()) file?: Express.Multer.File,
   ) {
-    let university: UniversityWithKeycloakContact =
-      await this.updateUniversityUsecase.execute({
-        id,
-        ...request,
-      });
+    let university: University = await this.updateUniversityUsecase.execute({
+      id,
+      ...request,
+    });
 
     if (file) {
       const upload = await this.uploadUniversityImageUsecase.execute({
@@ -196,10 +186,7 @@ export class UniversityController {
       university = new University({ ...university, logo: upload });
     }
 
-    return UniversityResponse.fromUniversity(
-      university,
-      university.defaultContact,
-    );
+    return UniversityResponse.fromUniversity(university);
   }
 
   @Delete(':id')

@@ -4,11 +4,7 @@ import {
   UniversityRepository,
 } from '../../ports/university.repository';
 import { RessourceDoesNotExist } from 'src/core/errors';
-import {
-  PairingMode,
-  University,
-  UniversityWithKeycloakContact,
-} from 'src/core/models';
+import { PairingMode, University } from 'src/core/models';
 import {
   COUNTRY_REPOSITORY,
   CountryRepository,
@@ -17,7 +13,6 @@ import {
   LANGUAGE_REPOSITORY,
   LanguageRepository,
 } from 'src/core/ports/language.repository';
-import { KeycloakClient } from '@app/keycloak';
 
 export class UpdateUniversityCommand {
   id: string;
@@ -50,7 +45,6 @@ export class UpdateUniversityUsecase {
     private readonly languageRepository: LanguageRepository,
     @Inject(UNIVERSITY_REPOSITORY)
     private readonly universityRepository: UniversityRepository,
-    private readonly keycloakClient: KeycloakClient,
   ) {}
 
   async execute(command: UpdateUniversityCommand) {
@@ -87,11 +81,6 @@ export class UpdateUniversityUsecase {
       throw new RessourceDoesNotExist('Country does not exist');
     }
 
-    const defaultKeycloakContact = await this.handleDefaultContact(
-      university,
-      command.defaultContactId,
-    );
-
     const universityToUpdate = new University({
       id: university.id,
       name: command.name,
@@ -117,32 +106,6 @@ export class UpdateUniversityUsecase {
       universityToUpdate,
     );
 
-    return new UniversityWithKeycloakContact({
-      ...updatedUniversity,
-      defaultContact: defaultKeycloakContact,
-    });
+    return new University(updatedUniversity);
   }
-
-  private handleDefaultContact = async (
-    university: University,
-    contactId?: string,
-  ) => {
-    let keycloakContact;
-    if (contactId) {
-      keycloakContact = await this.keycloakClient.getUserById(contactId);
-      if (!keycloakContact) {
-        throw new RessourceDoesNotExist(
-          "Administrator contact doesn't exists.",
-        );
-      }
-      return keycloakContact;
-    }
-
-    if (university.defaultContactId) {
-      keycloakContact = await this.keycloakClient.getUserById(
-        university.defaultContactId,
-      );
-    }
-    return keycloakContact;
-  };
 }

@@ -339,6 +339,10 @@ export class UniversityResponse {
   @Expose({ groups: ['university:read'] })
   website?: string;
 
+  @Swagger.ApiPropertyOptional({ type: 'string' })
+  @Expose({ groups: ['university:read'] })
+  defaultContactId?: string;
+
   @Swagger.ApiPropertyOptional({ type: AdministratorResponse })
   @Expose({ groups: ['university:read'] })
   defaultContact?: AdministratorResponse;
@@ -371,10 +375,7 @@ export class UniversityResponse {
     Object.assign(this, partial);
   }
 
-  static fromUniversity(
-    university: University,
-    defaultContact?: UserRepresentation,
-  ) {
+  static fromUniversity(university: University) {
     return new UniversityResponse({
       id: university.id,
       logo: university.logo
@@ -400,9 +401,7 @@ export class UniversityResponse {
         LanguageResponse.fromLanguage,
       ),
       nativeLanguage: LanguageResponse.fromLanguage(university.nativeLanguage),
-      defaultContact: defaultContact
-        ? AdministratorResponse.fromDomain(defaultContact)
-        : null,
+      defaultContactId: university.defaultContactId,
     });
   }
 }

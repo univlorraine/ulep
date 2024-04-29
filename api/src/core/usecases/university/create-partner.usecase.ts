@@ -1,11 +1,7 @@
 import { KeycloakClient } from '@app/keycloak';
 import { Inject, Injectable } from '@nestjs/common';
 import { DomainError, RessourceDoesNotExist } from 'src/core/errors';
-import {
-  PairingMode,
-  University,
-  UniversityWithKeycloakContact,
-} from 'src/core/models';
+import { PairingMode, University } from 'src/core/models';
 import {
   COUNTRY_REPOSITORY,
   CountryRepository,
@@ -94,12 +90,17 @@ export class CreatePartnerUniversityUsecase {
       }
     }
 
-    const defaultKeycloakContact = command.defaultContactId
-      ? await this.keycloakClient.getUserById(command.defaultContactId)
-      : null;
+    let defaultKeycloakContact;
+    if (command.defaultContactId) {
+      defaultKeycloakContact = await this.keycloakClient.getUserById(
+        command.defaultContactId,
+      );
 
-    if (!defaultKeycloakContact) {
-      throw new RessourceDoesNotExist("Administrator contact doesn't exists.");
+      if (!defaultKeycloakContact) {
+        throw new RessourceDoesNotExist(
+          "Administrator contact doesn't exists.",
+        );
+      }
     }
 
     const oldUniversity = await this.universityRepository.ofName(command.name);
@@ -126,14 +127,11 @@ export class CreatePartnerUniversityUsecase {
       notificationEmail: command.notificationEmail,
       specificLanguagesAvailable: specificLanguages,
       nativeLanguage,
-      defaultContactId: defaultKeycloakContact.id,
+      defaultContactId: defaultKeycloakContact?.id,
     });
 
     const newUniversity = await this.universityRepository.create(university);
 
-    return new UniversityWithKeycloakContact({
-      ...newUniversity,
-      defaultContact: defaultKeycloakContact,
-    });
+    return newUniversity;
   }
 }

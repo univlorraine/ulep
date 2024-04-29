@@ -4,15 +4,12 @@ import {
   UniversityRepository,
 } from '../../ports/university.repository';
 import { RessourceDoesNotExist } from 'src/core/errors';
-import { KeycloakClient } from '@app/keycloak';
-import { UniversityWithKeycloakContact } from 'src/core/models';
 
 @Injectable()
 export class GetUniversityUsecase {
   constructor(
     @Inject(UNIVERSITY_REPOSITORY)
     private readonly universityRepository: UniversityRepository,
-    private readonly keycloakClient: KeycloakClient,
   ) {}
 
   async execute(id: string) {
@@ -22,13 +19,6 @@ export class GetUniversityUsecase {
       throw new RessourceDoesNotExist();
     }
 
-    const defaultKeycloakContact = university.defaultContactId
-      ? await this.keycloakClient.getUserById(university.defaultContactId)
-      : null;
-
-    return new UniversityWithKeycloakContact({
-      ...university,
-      defaultContact: defaultKeycloakContact,
-    });
+    return university;
   }
 }

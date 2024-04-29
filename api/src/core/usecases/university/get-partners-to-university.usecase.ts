@@ -5,15 +5,13 @@ import {
 } from '../../ports/university.repository';
 import { RessourceDoesNotExist } from 'src/core/errors';
 import { Collection } from '@app/common';
-import { KeycloakClient } from '@app/keycloak';
-import { UniversityWithKeycloakContact } from 'src/core/models';
+import { University } from 'src/core/models';
 
 @Injectable()
 export class GetPartnersToUniversityUsecase {
   constructor(
     @Inject(UNIVERSITY_REPOSITORY)
     private readonly universityRepository: UniversityRepository,
-    private readonly keycloakClient: KeycloakClient,
   ) {}
 
   async execute(id: string) {
@@ -34,19 +32,8 @@ export class GetPartnersToUniversityUsecase {
       ];
     }
 
-    return new Collection<UniversityWithKeycloakContact>({
-      items: await Promise.all(
-        partnerUniversities.map(async (university) => {
-          const defaultKeycloakContact = university.defaultContactId
-            ? await this.keycloakClient.getUserById(university.defaultContactId)
-            : null;
-
-          return new UniversityWithKeycloakContact({
-            ...university,
-            defaultContact: defaultKeycloakContact,
-          });
-        }),
-      ),
+    return new Collection<University>({
+      items: partnerUniversities,
       totalItems: partnerUniversities.length,
     });
   }

@@ -132,14 +132,3 @@ export class University {
     return false;
   }
 }
-
-export class UniversityWithKeycloakContact extends University {
-  readonly defaultContact?: UserRepresentation;
-
-  constructor(
-    props: UniversityProps & { defaultContact?: UserRepresentation },
-  ) {
-    super(props);
-    this.defaultContact = props.defaultContact;
-  }
-}
