@@ -13,6 +13,7 @@ import {
   LANGUAGE_REPOSITORY,
   LanguageRepository,
 } from 'src/core/ports/language.repository';
+import { KeycloakClient } from '@app/keycloak';
 
 export class UpdateUniversityCommand {
   id: string;
@@ -31,6 +32,7 @@ export class UpdateUniversityCommand {
   notificationEmail?: string;
   specificLanguagesAvailableIds: string[];
   nativeLanguageId: string;
+  defaultContactId: string;
 }
 
 @Injectable()
@@ -44,6 +46,7 @@ export class UpdateUniversityUsecase {
     private readonly languageRepository: LanguageRepository,
     @Inject(UNIVERSITY_REPOSITORY)
     private readonly universityRepository: UniversityRepository,
+    private readonly keycloakClient: KeycloakClient,
   ) {}
 
   async execute(command: UpdateUniversityCommand) {
@@ -80,7 +83,15 @@ export class UpdateUniversityUsecase {
       throw new RessourceDoesNotExist('Country does not exist');
     }
 
-    return this.universityRepository.update(
+    const defaultKeycloakContact = university.defaultContactId
+      ? await this.keycloakClient.getUserById(university.defaultContactId)
+      : null;
+
+    if (!defaultKeycloakContact) {
+      throw new RessourceDoesNotExist("Administrator contact doesn't exists.");
+    }
+
+    const updatedUniversity = await this.universityRepository.update(
       new University({
         id: university.id,
         name: command.name,
@@ -99,7 +110,13 @@ export class UpdateUniversityUsecase {
         notificationEmail: command.notificationEmail,
         specificLanguagesAvailable,
         nativeLanguage,
+        defaultContactId: command.defaultContactId,
       }),
     );
+
+    return {
+      updatedUniversity,
+      defaultKeycloakContact,
+    };
   }
 }

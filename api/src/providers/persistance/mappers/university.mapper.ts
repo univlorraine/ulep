@@ -38,6 +38,7 @@ export const universityMapper = (snapshot: UniversitySnapshot): University => {
     pairingMode: PairingMode[snapshot.pairing_mode],
     maxTandemsPerUser: snapshot.max_tandems_per_user,
     notificationEmail: snapshot.notification_email,
+    defaultContactId: snapshot.default_contact_id,
     specificLanguagesAvailable: snapshot.SpecificLanguagesAvailable.map(
       (language) => languageMapper(language),
     ),

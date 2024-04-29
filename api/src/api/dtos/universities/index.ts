@@ -22,7 +22,8 @@ import { IsAfterThan } from 'src/api/validators';
 import { CampusResponse } from '../campus';
 import { CountryResponse } from 'src/api/dtos/countries';
 import { LanguageResponse } from 'src/api/dtos/languages';
-import { MediaObjectResponse } from 'src/api/dtos';
+import { AdministratorResponse, MediaObjectResponse } from 'src/api/dtos';
+import { UserRepresentation } from '@app/keycloak';
 
 export class CreateUniversityRequest implements CreateUniversityCommand {
   @Swagger.ApiProperty({ type: 'string', isArray: true })
@@ -104,6 +105,10 @@ export class CreateUniversityRequest implements CreateUniversityCommand {
   @Swagger.ApiProperty({ type: 'string' })
   @IsString()
   nativeLanguageId: string;
+
+  @Swagger.ApiProperty({ type: 'string' })
+  @IsString()
+  defaultContactId: string;
 }
 
 export class UpdateUniversityRequest
@@ -187,6 +192,10 @@ export class UpdateUniversityRequest
   @IsString()
   @IsOptional()
   nativeLanguageId: string;
+
+  @Swagger.ApiProperty({ type: 'string' })
+  @IsString()
+  defaultContactId: string;
 }
 
 export class CreateUniversityPartnerRequest
@@ -267,6 +276,10 @@ export class CreateUniversityPartnerRequest
   @Swagger.ApiProperty({ type: 'string' })
   @IsString()
   nativeLanguageId: string;
+
+  @Swagger.ApiProperty({ type: 'string' })
+  @IsString()
+  defaultContactId: string;
 }
 
 export class UniversityResponse {
@@ -326,6 +339,10 @@ export class UniversityResponse {
   @Expose({ groups: ['university:read'] })
   website?: string;
 
+  @Swagger.ApiPropertyOptional({ type: AdministratorResponse })
+  @Expose({ groups: ['university:read'] })
+  defaultContact?: AdministratorResponse;
+
   @Swagger.ApiProperty({ type: 'string', enum: PairingMode })
   @Expose({ groups: ['read'] })
   pairingMode: PairingMode;
@@ -354,7 +371,10 @@ export class UniversityResponse {
     Object.assign(this, partial);
   }
 
-  static fromUniversity(university: University) {
+  static fromUniversity(
+    university: University,
+    defaultContact?: UserRepresentation,
+  ) {
     return new UniversityResponse({
       id: university.id,
       logo: university.logo
@@ -380,6 +400,9 @@ export class UniversityResponse {
         LanguageResponse.fromLanguage,
       ),
       nativeLanguage: LanguageResponse.fromLanguage(university.nativeLanguage),
+      defaultContact: defaultContact
+        ? AdministratorResponse.fromDomain(defaultContact)
+        : null,
     });
   }
 }

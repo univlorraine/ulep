@@ -47,6 +47,7 @@ export class PrismaUniversityRepository implements UniversityRepository {
         pairing_mode: university.pairingMode,
         max_tandems_per_user: university.maxTandemsPerUser,
         notification_email: university.notificationEmail,
+        default_contact_id: university.defaultContactId,
       },
     });
 
@@ -141,6 +142,7 @@ export class PrismaUniversityRepository implements UniversityRepository {
         pairing_mode: university.pairingMode,
         max_tandems_per_user: university.maxTandemsPerUser,
         notification_email: university.notificationEmail,
+        default_contact_id: university.defaultContactId,
       },
     });
 

@@ -62,17 +62,24 @@ export class UniversityController {
     @Body() body: CreateUniversityRequest,
     @UploadedFile(new ImagesFilePipe()) file?: Express.Multer.File,
   ) {
-    let university = await this.createUniversityUsecase.execute(body);
+    let university: University;
+    const { newUniversity, defaultKeycloakContact } =
+      await this.createUniversityUsecase.execute(body);
 
     if (file) {
       const upload = await this.uploadUniversityImageUsecase.execute({
-        id: university.id,
+        id: newUniversity.id,
         file,
       });
-      university = new University({ ...university, logo: upload });
+      university = new University({ ...newUniversity, logo: upload });
+    } else {
+      university = new University(newUniversity);
     }
 
-    return UniversityResponse.fromUniversity(new University(university));
+    return UniversityResponse.fromUniversity(
+      university,
+      defaultKeycloakContact,
+    );
   }
 
   @Post('partners')
@@ -88,17 +95,24 @@ export class UniversityController {
     @Body() body: CreateUniversityPartnerRequest,
     @UploadedFile(new ImagesFilePipe()) file?: Express.Multer.File,
   ) {
-    let university = await this.createPartnerUniversityUsecase.execute(body);
+    let university: University;
+    const { newUniversity, defaultKeycloakContact } =
+      await this.createPartnerUniversityUsecase.execute(body);
 
     if (file) {
       const upload = await this.uploadUniversityImageUsecase.execute({
         id: university.id,
         file,
       });
-      university = new University({ ...university, logo: upload });
+      university = new University({ ...newUniversity, logo: upload });
+    } else {
+      university = new University(newUniversity);
     }
 
-    return UniversityResponse.fromUniversity(university);
+    return UniversityResponse.fromUniversity(
+      university,
+      defaultKeycloakContact,
+    );
   }
 
   @Get()
@@ -108,10 +122,7 @@ export class UniversityController {
   async getUniversities() {
     const universities = await this.getUniversitiesUsecase.execute();
 
-    return new Collection<UniversityResponse>({
-      items: universities.items.map(UniversityResponse.fromUniversity),
-      totalItems: universities.totalItems,
-    });
+    return universities;
   }
 
   @Get(':id')
@@ -120,9 +131,13 @@ export class UniversityController {
   @Swagger.ApiOperation({ summary: 'University ressource.' })
   @Swagger.ApiOkResponse({ type: UniversityResponse })
   async findOne(@Param('id', ParseUUIDPipe) id: string) {
-    const instance = await this.getUniversityUsecase.execute(id);
+    const { university, defaultKeycloakContact } =
+      await this.getUniversityUsecase.execute(id);
 
-    return UniversityResponse.fromUniversity(instance);
+    return UniversityResponse.fromUniversity(
+      university,
+      defaultKeycloakContact,
+    );
   }
 
   @Get(':id/partners')
@@ -135,10 +150,7 @@ export class UniversityController {
   async findPartners(@Param('id', ParseUUIDPipe) id: string) {
     const universities = await this.getPartnersToUniversity.execute(id);
 
-    return new Collection<UniversityResponse>({
-      items: universities.map(UniversityResponse.fromUniversity),
-      totalItems: universities.length,
-    });
+    return universities;
   }
 
   @Get(':id/languages')
@@ -149,7 +161,7 @@ export class UniversityController {
   })
   @Swagger.ApiOkResponse({ type: LanguageResponse, isArray: true })
   async getLanguages(@Param('id', ParseUUIDPipe) id: string) {
-    const university = await this.getUniversityUsecase.execute(id);
+    const { university } = await this.getUniversityUsecase.execute(id);
 
     return university.specificLanguagesAvailable.map(
       LanguageResponse.fromLanguage,
@@ -168,10 +180,12 @@ export class UniversityController {
     @Body() request: UpdateUniversityRequest,
     @UploadedFile(new ImagesFilePipe()) file?: Express.Multer.File,
   ) {
-    let university = await this.updateUniversityUsecase.execute({
-      id,
-      ...request,
-    });
+    let university: University;
+    const { updatedUniversity, defaultKeycloakContact } =
+      await this.updateUniversityUsecase.execute({
+        id,
+        ...request,
+      });
 
     if (file) {
       const upload = await this.uploadUniversityImageUsecase.execute({
@@ -179,10 +193,15 @@ export class UniversityController {
         file,
       });
 
-      university = new University({ ...university, logo: upload });
+      university = new University({ ...updatedUniversity, logo: upload });
+    } else {
+      university = new University(updatedUniversity);
     }
 
-    return UniversityResponse.fromUniversity(university);
+    return UniversityResponse.fromUniversity(
+      university,
+      defaultKeycloakContact,
+    );
   }
 
   @Delete(':id')
