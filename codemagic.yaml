@@ -42,10 +42,10 @@ scripts:
       name: Set Android SDK location
       script: |
           echo "sdk.dir=$ANDROID_SDK_ROOT" > "$CM_BUILD_DIR/app/android/local.properties"
-    - &update_dependency
+    - &update_dependency_android
       name: Update dependencies and copy web assets to native project
       script: |
-          cd app && npx cap sync # <- update native dependencies and copy web assets to native project
+          cd app && npx cap sync android # <- update native dependencies and copy web assets to native project
     # - &setup_xcode
     #   name: Set up code signing settings on Xcode project
     #   script: |
@@ -171,7 +171,7 @@ workflows:
             - *install_pnpm_dependency
             - *pnpm_build
             - *set_sdk_location
-            - *update_dependency
+            - *update_dependency_android
             - *build_apk
         artifacts:
             - $CM_BUILD_DIR/app/android/app/build/outputs/**/*.apk
