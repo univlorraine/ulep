@@ -120,7 +120,7 @@ export class ArchiveTandemsAndDeleteUsersUsecase {
 
   private async deleteUsers(usersToKeep: string[]): Promise<void> {
     // Retrieve all administrators
-    const administratorsId = (await this.keycloak.getAdministrators()).map(
+    const administratorsIds = (await this.keycloak.getAdministrators()).map(
       (administrator) => administrator.id,
     );
     // Retrieve the total number of users in keycloak
@@ -130,7 +130,7 @@ export class ArchiveTandemsAndDeleteUsersUsecase {
     // Loop through all users in keycloak
     for (const user of keycloakUsers) {
       // Check if the user is an administrator
-      const isAdministrator = administratorsId.includes(user.id);
+      const isAdministrator = administratorsIds.includes(user.id);
       // Check if the user has an active tandem
       const isUserWithActiveTandem = usersToKeep.includes(user.id);
       if (isAdministrator || isUserWithActiveTandem) {
@@ -146,7 +146,10 @@ export class ArchiveTandemsAndDeleteUsersUsecase {
     // We call the deleteUsersUsecase for each user to delete the user's image from the storage.
     const users = await this.userRepository.findAll();
     for (const user of users.items) {
-      await this.deleteUsersUsecase.execute({ id: user.id });
+      await this.deleteUsersUsecase.execute({
+        id: user.id,
+        shouldKeepKeycloakUser: true,
+      });
     }
   }
 

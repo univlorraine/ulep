@@ -9,6 +9,7 @@ import { KeycloakClient } from '@app/keycloak';
 
 export class DeleteUserCommand {
   id: string;
+  shouldKeepKeycloakUser?: boolean;
 }
 
 @Injectable()
@@ -32,7 +33,9 @@ export class DeleteUserUsecase {
       await this.storage.delete(instance.avatar.bucket, instance.avatar.name);
     }
 
-    await this.keycloak.deleteUser(command.id);
+    if (!command.shouldKeepKeycloakUser) {
+      await this.keycloak.deleteUser(command.id);
+    }
 
     return this.userRepository.delete(command.id);
   }
