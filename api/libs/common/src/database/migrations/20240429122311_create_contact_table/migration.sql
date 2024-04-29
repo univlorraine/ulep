@@ -5,7 +5,7 @@
 
 */
 -- AlterTable
-ALTER TABLE "organizations" ADD COLUMN     "default_contact_id" TEXT,
+ALTER TABLE "organizations" ADD COLUMN     "default_contact_id" TEXT;
 
 -- AlterTable
 ALTER TABLE "users" ADD COLUMN     "contact_id" TEXT;

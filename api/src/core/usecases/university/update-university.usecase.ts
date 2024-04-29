@@ -4,7 +4,11 @@ import {
   UniversityRepository,
 } from '../../ports/university.repository';
 import { RessourceDoesNotExist } from 'src/core/errors';
-import { PairingMode, University } from 'src/core/models';
+import {
+  PairingMode,
+  University,
+  UniversityWithKeycloakContact,
+} from 'src/core/models';
 import {
   COUNTRY_REPOSITORY,
   CountryRepository,
@@ -32,7 +36,7 @@ export class UpdateUniversityCommand {
   notificationEmail?: string;
   specificLanguagesAvailableIds: string[];
   nativeLanguageId: string;
-  defaultContactId: string;
+  defaultContactId?: string;
 }
 
 @Injectable()
@@ -83,40 +87,62 @@ export class UpdateUniversityUsecase {
       throw new RessourceDoesNotExist('Country does not exist');
     }
 
-    const defaultKeycloakContact = university.defaultContactId
-      ? await this.keycloakClient.getUserById(university.defaultContactId)
-      : null;
-
-    if (!defaultKeycloakContact) {
-      throw new RessourceDoesNotExist("Administrator contact doesn't exists.");
-    }
-
-    const updatedUniversity = await this.universityRepository.update(
-      new University({
-        id: university.id,
-        name: command.name,
-        country,
-        codes: command.codes || [],
-        domains: command.domains || [],
-        timezone: command.timezone,
-        admissionEnd: command.admissionEnd,
-        admissionStart: command.admissionStart,
-        openServiceDate: command.openServiceDate,
-        closeServiceDate: command.closeServiceDate,
-        campus: university.campus,
-        website: command.website,
-        pairingMode: command.pairingMode,
-        maxTandemsPerUser: command.maxTandemsPerUser,
-        notificationEmail: command.notificationEmail,
-        specificLanguagesAvailable,
-        nativeLanguage,
-        defaultContactId: command.defaultContactId,
-      }),
+    const defaultKeycloakContact = await this.handleDefaultContact(
+      university,
+      command.defaultContactId,
     );
 
-    return {
-      updatedUniversity,
-      defaultKeycloakContact,
-    };
+    const universityToUpdate = new University({
+      id: university.id,
+      name: command.name,
+      country,
+      codes: command.codes || [],
+      domains: command.domains || [],
+      timezone: command.timezone,
+      admissionEnd: command.admissionEnd,
+      admissionStart: command.admissionStart,
+      openServiceDate: command.openServiceDate,
+      closeServiceDate: command.closeServiceDate,
+      campus: university.campus,
+      website: command.website,
+      pairingMode: command.pairingMode,
+      maxTandemsPerUser: command.maxTandemsPerUser,
+      notificationEmail: command.notificationEmail,
+      specificLanguagesAvailable,
+      nativeLanguage,
+      defaultContactId: command.defaultContactId || university.defaultContactId,
+    });
+
+    const updatedUniversity = await this.universityRepository.update(
+      universityToUpdate,
+    );
+
+    return new UniversityWithKeycloakContact({
+      ...updatedUniversity,
+      defaultContact: defaultKeycloakContact,
+    });
   }
+
+  private handleDefaultContact = async (
+    university: University,
+    contactId?: string,
+  ) => {
+    let keycloakContact;
+    if (contactId) {
+      keycloakContact = await this.keycloakClient.getUserById(contactId);
+      if (!keycloakContact) {
+        throw new RessourceDoesNotExist(
+          "Administrator contact doesn't exists.",
+        );
+      }
+      return keycloakContact;
+    }
+
+    if (university.defaultContactId) {
+      keycloakContact = await this.keycloakClient.getUserById(
+        university.defaultContactId,
+      );
+    }
+    return keycloakContact;
+  };
 }

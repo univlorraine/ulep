@@ -4,9 +4,8 @@ import {
   UniversityRepository,
 } from '../../ports/university.repository';
 import { KeycloakClient } from '@app/keycloak';
-import { RessourceDoesNotExist } from 'src/core/errors';
 import { Collection } from '@app/common';
-import { UniversityResponse } from 'src/api/dtos';
+import { UniversityWithKeycloakContact } from 'src/core/models';
 
 @Injectable()
 export class GetUniversitiesUsecase {
@@ -19,17 +18,17 @@ export class GetUniversitiesUsecase {
   async execute() {
     const universities = await this.repository.findAll();
 
-    return new Collection<UniversityResponse>({
+    return new Collection<UniversityWithKeycloakContact>({
       items: await Promise.all(
         universities.items.map(async (university) => {
           const defaultKeycloakContact = university.defaultContactId
             ? await this.keycloakClient.getUserById(university.defaultContactId)
             : null;
 
-          return UniversityResponse.fromUniversity(
-            university,
-            defaultKeycloakContact,
-          );
+          return new UniversityWithKeycloakContact({
+            ...university,
+            defaultContact: defaultKeycloakContact,
+          });
         }),
       ),
       totalItems: universities.totalItems,

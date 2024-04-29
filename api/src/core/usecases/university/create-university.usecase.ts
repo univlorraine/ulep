@@ -1,7 +1,12 @@
 import { KeycloakClient } from '@app/keycloak';
 import { Inject, Injectable } from '@nestjs/common';
 import { DomainError, RessourceDoesNotExist } from 'src/core/errors';
-import { Language, PairingMode, University } from 'src/core/models';
+import {
+  Language,
+  PairingMode,
+  University,
+  UniversityWithKeycloakContact,
+} from 'src/core/models';
 import { Campus } from 'src/core/models/campus.model';
 import {
   COUNTRY_REPOSITORY,
@@ -133,9 +138,11 @@ export class CreateUniversityUsecase {
       defaultContactId: defaultKeycloakContact.id,
     });
 
-    return {
-      newUniversity: await this.universityRepository.create(university),
-      defaultKeycloakContact,
-    };
+    const newUniversity = await this.universityRepository.create(university);
+
+    return new UniversityWithKeycloakContact({
+      ...newUniversity,
+      defaultContact: defaultKeycloakContact,
+    });
   }
 }

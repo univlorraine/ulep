@@ -35,7 +35,7 @@ import { AuthenticationGuard } from '../guards';
 import { ImagesFilePipe } from 'src/api/validators';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { UploadUniversityImageUsecase } from 'src/core/usecases';
-import { University } from 'src/core/models';
+import { University, UniversityWithKeycloakContact } from 'src/core/models';
 
 @Controller('universities')
 @Swagger.ApiTags('Universities')
@@ -62,23 +62,20 @@ export class UniversityController {
     @Body() body: CreateUniversityRequest,
     @UploadedFile(new ImagesFilePipe()) file?: Express.Multer.File,
   ) {
-    let university: University;
-    const { newUniversity, defaultKeycloakContact } =
+    let university: UniversityWithKeycloakContact =
       await this.createUniversityUsecase.execute(body);
 
     if (file) {
       const upload = await this.uploadUniversityImageUsecase.execute({
-        id: newUniversity.id,
+        id: university.id,
         file,
       });
-      university = new University({ ...newUniversity, logo: upload });
-    } else {
-      university = new University(newUniversity);
+      university = new University({ ...university, logo: upload });
     }
 
     return UniversityResponse.fromUniversity(
       university,
-      defaultKeycloakContact,
+      university.defaultContact,
     );
   }
 
@@ -95,8 +92,7 @@ export class UniversityController {
     @Body() body: CreateUniversityPartnerRequest,
     @UploadedFile(new ImagesFilePipe()) file?: Express.Multer.File,
   ) {
-    let university: University;
-    const { newUniversity, defaultKeycloakContact } =
+    let university: UniversityWithKeycloakContact =
       await this.createPartnerUniversityUsecase.execute(body);
 
     if (file) {
@@ -104,14 +100,12 @@ export class UniversityController {
         id: university.id,
         file,
       });
-      university = new University({ ...newUniversity, logo: upload });
-    } else {
-      university = new University(newUniversity);
+      university = new University({ ...university, logo: upload });
     }
 
     return UniversityResponse.fromUniversity(
       university,
-      defaultKeycloakContact,
+      university.defaultContact,
     );
   }
 
@@ -122,7 +116,15 @@ export class UniversityController {
   async getUniversities() {
     const universities = await this.getUniversitiesUsecase.execute();
 
-    return universities;
+    return new Collection({
+      items: universities.items.map((university) =>
+        UniversityResponse.fromUniversity(
+          university,
+          university.defaultContact,
+        ),
+      ),
+      totalItems: universities.totalItems,
+    });
   }
 
   @Get(':id')
@@ -131,12 +133,11 @@ export class UniversityController {
   @Swagger.ApiOperation({ summary: 'University ressource.' })
   @Swagger.ApiOkResponse({ type: UniversityResponse })
   async findOne(@Param('id', ParseUUIDPipe) id: string) {
-    const { university, defaultKeycloakContact } =
-      await this.getUniversityUsecase.execute(id);
+    const university = await this.getUniversityUsecase.execute(id);
 
     return UniversityResponse.fromUniversity(
       university,
-      defaultKeycloakContact,
+      university.defaultContact,
     );
   }
 
@@ -161,7 +162,7 @@ export class UniversityController {
   })
   @Swagger.ApiOkResponse({ type: LanguageResponse, isArray: true })
   async getLanguages(@Param('id', ParseUUIDPipe) id: string) {
-    const { university } = await this.getUniversityUsecase.execute(id);
+    const university = await this.getUniversityUsecase.execute(id);
 
     return university.specificLanguagesAvailable.map(
       LanguageResponse.fromLanguage,
@@ -180,8 +181,7 @@ export class UniversityController {
     @Body() request: UpdateUniversityRequest,
     @UploadedFile(new ImagesFilePipe()) file?: Express.Multer.File,
   ) {
-    let university: University;
-    const { updatedUniversity, defaultKeycloakContact } =
+    let university: UniversityWithKeycloakContact =
       await this.updateUniversityUsecase.execute({
         id,
         ...request,
@@ -193,14 +193,12 @@ export class UniversityController {
         file,
       });
 
-      university = new University({ ...updatedUniversity, logo: upload });
-    } else {
-      university = new University(updatedUniversity);
+      university = new University({ ...university, logo: upload });
     }
 
     return UniversityResponse.fromUniversity(
       university,
-      defaultKeycloakContact,
+      university.defaultContact,
     );
   }
 

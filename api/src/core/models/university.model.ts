@@ -3,6 +3,7 @@ import { Campus } from './campus.model';
 import { Language, LanguageStatus } from './language.model';
 import { LearningType } from './profile.model';
 import { MediaObject } from 'src/core/models/media.model';
+import { UserRepresentation } from '@app/keycloak';
 
 export enum PairingMode {
   MANUAL = 'MANUAL',
@@ -129,5 +130,16 @@ export class University {
     }
 
     return false;
+  }
+}
+
+export class UniversityWithKeycloakContact extends University {
+  readonly defaultContact?: UserRepresentation;
+
+  constructor(
+    props: UniversityProps & { defaultContact?: UserRepresentation },
+  ) {
+    super(props);
+    this.defaultContact = props.defaultContact;
   }
 }

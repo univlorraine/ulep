@@ -5,6 +5,7 @@ import {
 } from '../../ports/university.repository';
 import { RessourceDoesNotExist } from 'src/core/errors';
 import { KeycloakClient } from '@app/keycloak';
+import { UniversityWithKeycloakContact } from 'src/core/models';
 
 @Injectable()
 export class GetUniversityUsecase {
@@ -25,10 +26,9 @@ export class GetUniversityUsecase {
       ? await this.keycloakClient.getUserById(university.defaultContactId)
       : null;
 
-    if (!defaultKeycloakContact) {
-      throw new RessourceDoesNotExist("Administrator contact doesn't exists.");
-    }
-
-    return { university, defaultKeycloakContact };
+    return new UniversityWithKeycloakContact({
+      ...university,
+      defaultContact: defaultKeycloakContact,
+    });
   }
 }
