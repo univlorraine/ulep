@@ -2,6 +2,7 @@ import { KeycloakClient } from '@app/keycloak';
 import {
   CallHandler,
   ExecutionContext,
+  Inject,
   Injectable,
   NestInterceptor,
 } from '@nestjs/common';
@@ -16,7 +17,9 @@ import {
 
 @Injectable()
 export class UniversityKeycloakInterceptor implements NestInterceptor {
-  constructor(private readonly keycloakClient: KeycloakClient) {}
+  constructor(
+    @Inject(KeycloakClient) private readonly keycloakClient: KeycloakClient,
+  ) {}
 
   intercept(context: ExecutionContext, next: CallHandler): Observable<any> {
     return next.handle().pipe(
@@ -50,6 +53,10 @@ export class UniversityKeycloakInterceptor implements NestInterceptor {
       });
     }
 
+    if (data instanceof UniversityResponse) {
+      return this.getUniversityWithKeycloakContact(data);
+    }
+
     return data;
   }
 
@@ -62,6 +69,7 @@ export class UniversityKeycloakInterceptor implements NestInterceptor {
       );
       return new UniversityResponse({
         ...university,
+        defaultContactId: undefined,
         defaultContact: AdministratorResponse.fromDomain(keycloakData),
       });
     }

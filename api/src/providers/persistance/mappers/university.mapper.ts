@@ -5,6 +5,7 @@ import { countryMapper } from 'src/providers/persistance/mappers/country.mapper'
 import { languageMapper } from 'src/providers/persistance/mappers/language.mapper';
 
 export const UniversityRelations = {
+  Contact: true,
   Country: true,
   Image: true,
   Places: true,
@@ -13,6 +14,7 @@ export const UniversityRelations = {
 };
 
 export type UniversitySnapshot = Prisma.Organizations & {
+  Contact?: Prisma.Contacts;
   Country: Prisma.CountryCodes;
   Image: Prisma.MediaObjects;
   Places: Prisma.Places[];
@@ -38,7 +40,7 @@ export const universityMapper = (snapshot: UniversitySnapshot): University => {
     pairingMode: PairingMode[snapshot.pairing_mode],
     maxTandemsPerUser: snapshot.max_tandems_per_user,
     notificationEmail: snapshot.notification_email,
-    defaultContactId: snapshot.default_contact_id,
+    defaultContactId: snapshot.Contact?.id,
     specificLanguagesAvailable: snapshot.SpecificLanguagesAvailable.map(
       (language) => languageMapper(language),
     ),

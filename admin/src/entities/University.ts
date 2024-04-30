@@ -1,3 +1,4 @@
+import Administrator from './Administrator';
 import Campus from './Campus';
 import Country from './Country';
 import Language from './Language';
@@ -33,6 +34,7 @@ type University = {
     website: string;
     notificationEmail?: string;
     specificLanguagesAvailable?: Language[];
+    defaultContact: Administrator;
 };
 
 export default University;

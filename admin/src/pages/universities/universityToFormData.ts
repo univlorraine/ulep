@@ -1,3 +1,4 @@
+import Administrator from '../../entities/Administrator';
 import Country from '../../entities/Country';
 import Language from '../../entities/Language';
 
@@ -17,6 +18,7 @@ const universityToFormData = (
     website?: string,
     notificationEmail?: string,
     specificLanguagesAvailable?: Language[],
+    defaultContact?: Administrator,
     file?: File
 ) => {
     const formData = new FormData();
@@ -44,6 +46,7 @@ const universityToFormData = (
         });
     }
     if (notificationEmail) formData.append('notificationEmail', notificationEmail);
+    if (defaultContact) formData.append('defaultContactId', defaultContact.id);
     if (file) formData.append('file', file);
 
     return formData;

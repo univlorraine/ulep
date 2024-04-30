@@ -36,7 +36,7 @@ import { ImagesFilePipe } from 'src/api/validators';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { UploadUniversityImageUsecase } from 'src/core/usecases';
 import { University } from 'src/core/models';
-import { UniversityKeycloakInterceptor } from 'src/api/interceptors/university-keycloak-contact.interceptor';
+import { UniversityKeycloakInterceptor } from 'src/api/interceptors';
 
 @Controller('universities')
 @Swagger.ApiTags('Universities')
@@ -109,7 +109,6 @@ export class UniversityController {
   @SerializeOptions({ groups: ['read', 'university:read'] })
   @Swagger.ApiOperation({ summary: 'Collection of University ressource.' })
   @Swagger.ApiOkResponse({ type: UniversityResponse, isArray: true })
-  @UseInterceptors(UniversityKeycloakInterceptor)
   async getUniversities() {
     const universities = await this.getUniversitiesUsecase.execute();
 
@@ -123,6 +122,7 @@ export class UniversityController {
 
   @Get(':id')
   @UseGuards(AuthenticationGuard)
+  @UseInterceptors(UniversityKeycloakInterceptor)
   @SerializeOptions({ groups: ['read', 'university:read'] })
   @Swagger.ApiOperation({ summary: 'University ressource.' })
   @Swagger.ApiOkResponse({ type: UniversityResponse })
@@ -163,6 +163,7 @@ export class UniversityController {
   @Put(':id')
   @Roles(Role.ADMIN)
   @UseInterceptors(FileInterceptor('file'))
+  @UseInterceptors(UniversityKeycloakInterceptor)
   @UseGuards(AuthenticationGuard)
   @Swagger.ApiOperation({ summary: 'Updates an University ressource.' })
   @Swagger.ApiConsumes('multipart/form-data')
