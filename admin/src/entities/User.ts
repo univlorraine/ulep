@@ -1,3 +1,4 @@
+import Administrator from './Administrator';
 import University from './University';
 
 export enum Gender {
@@ -16,6 +17,7 @@ type User = {
     gender: Gender;
     university: University;
     age: number;
+    contact: Administrator;
 };
 
 export default User;

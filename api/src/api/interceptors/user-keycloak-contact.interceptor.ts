@@ -11,12 +11,11 @@ import { map } from 'rxjs/operators';
 import {
   AdministratorResponse,
   ProfileResponse,
-  UniversityResponse,
   UserResponse,
 } from 'src/api/dtos';
 
 @Injectable()
-export class UniversityKeycloakInterceptor implements NestInterceptor {
+export class UserKeycloakContactInterceptor implements NestInterceptor {
   constructor(
     @Inject(KeycloakClient) private readonly keycloakClient: KeycloakClient,
   ) {}
@@ -30,26 +29,32 @@ export class UniversityKeycloakInterceptor implements NestInterceptor {
   }
 
   private async handleResponseForPipe(data: any) {
-    if (data instanceof UniversityResponse) {
-      return this.getUniversityWithKeycloakContact(data);
+    if (data instanceof ProfileResponse) {
+      const user = await this.getUserWithKeycloakContact(data.user);
+      return new ProfileResponse({
+        ...data,
+        user,
+      });
+    }
+
+    if (data instanceof UserResponse) {
+      return await this.getUserWithKeycloakContact(data);
     }
 
     return data;
   }
 
-  private async getUniversityWithKeycloakContact(
-    university: UniversityResponse,
-  ) {
-    if (university.defaultContactId) {
+  private async getUserWithKeycloakContact(user: UserResponse) {
+    if (user.contactId) {
       const keycloakData = await this.keycloakClient.getUserById(
-        university.defaultContactId,
+        user.contactId,
       );
-      return new UniversityResponse({
-        ...university,
-        defaultContactId: undefined,
-        defaultContact: AdministratorResponse.fromDomain(keycloakData),
+      return new UserResponse({
+        ...user,
+        contactId: undefined,
+        contact: AdministratorResponse.fromDomain(keycloakData),
       });
     }
-    return university;
+    return user;
   }
 }

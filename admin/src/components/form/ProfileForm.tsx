@@ -1,8 +1,10 @@
 import { Box, Typography, Input } from '@mui/material';
 import React, { useState } from 'react';
 import { Button, Loading, useGetIdentity, useTranslate } from 'react-admin';
+import Administrator from '../../entities/Administrator';
 import { Profile, ProfileFormPayload } from '../../entities/Profile';
 import inputStyle from '../../theme/inputStyle';
+import AdministratorPicker from '../AdministratorPicker';
 
 interface ProfileFormProps {
     record: Profile;
@@ -14,6 +16,7 @@ const ProfileForm: React.FC<ProfileFormProps> = ({ record, handleSubmit }) => {
     const [newEmail, setNewEmail] = useState<string>(record.user.email || '');
     const [newFirstname, setNewFirstname] = useState<string>(record.user.firstname || '');
     const [newLastname, setNewLastname] = useState<string>(record.user.lastname || '');
+    const [newContact, setNewContact] = useState<Administrator>(record.user.contact || '');
     const { data: identity, isLoading: isLoadingIdentity } = useGetIdentity();
 
     if (isLoadingIdentity || !identity) {
@@ -24,6 +27,7 @@ const ProfileForm: React.FC<ProfileFormProps> = ({ record, handleSubmit }) => {
             email: newEmail,
             firstname: newFirstname,
             lastname: newLastname,
+            contactId: newContact.id,
         });
 
     return (
@@ -66,6 +70,14 @@ const ProfileForm: React.FC<ProfileFormProps> = ({ record, handleSubmit }) => {
                     value={newLastname}
                     disableUnderline
                     required
+                />
+            </Box>
+            <Typography variant="subtitle1">{translate(`profiles.contact`)}</Typography>
+            <Box alignItems="center" display="flex" flexDirection="row">
+                <AdministratorPicker
+                    onChange={setNewContact}
+                    universityId={record.user.university.parent ? record.user.university.id : undefined}
+                    value={newContact}
                 />
             </Box>
 

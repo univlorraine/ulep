@@ -152,6 +152,16 @@ export class PrismaUniversityRepository implements UniversityRepository {
       },
     });
 
+    // Update all users that have no contact with the universitie's default contact
+    if (university.defaultContactId) {
+      await this.prisma.users.updateMany({
+        where: {
+          AND: [{ organization_id: university.id }, { contact_id: null }],
+        },
+        data: { contact_id: university.defaultContactId },
+      });
+    }
+
     const updatedUniversity = await this.prisma.organizations.findUnique({
       where: { id: university.id },
       include: UniversityRelations,

@@ -27,6 +27,7 @@ export class PrismaUserRepository implements UserRepository {
         deactivated_reason: user.deactivatedReason,
       },
       include: {
+        Contact: true,
         Organization: { include: UniversityRelations },
         Nationality: true,
         Avatar: true,
@@ -96,6 +97,7 @@ export class PrismaUserRepository implements UserRepository {
         status: user.status,
         deactivated_reason: user.deactivatedReason,
         accepts_email: user.acceptsEmail,
+        Contact: { connect: { id: user.contactId } },
       },
     });
 
