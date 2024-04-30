@@ -31,7 +31,7 @@ export interface UniversityProps {
   notificationEmail?: string;
   specificLanguagesAvailable?: Language[];
   nativeLanguage: Language;
-  defaultContactId: string;
+  defaultContactId?: string;
 }
 
 export class University {

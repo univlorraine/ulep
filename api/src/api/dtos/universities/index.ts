@@ -23,7 +23,6 @@ import { CampusResponse } from '../campus';
 import { CountryResponse } from 'src/api/dtos/countries';
 import { LanguageResponse } from 'src/api/dtos/languages';
 import { AdministratorResponse, MediaObjectResponse } from 'src/api/dtos';
-import { UserRepresentation } from '@app/keycloak';
 
 export class CreateUniversityRequest implements CreateUniversityCommand {
   @Swagger.ApiProperty({ type: 'string', isArray: true })
@@ -105,10 +104,6 @@ export class CreateUniversityRequest implements CreateUniversityCommand {
   @Swagger.ApiProperty({ type: 'string' })
   @IsString()
   nativeLanguageId: string;
-
-  @Swagger.ApiProperty({ type: 'string' })
-  @IsString()
-  defaultContactId: string;
 }
 
 export class UpdateUniversityRequest
@@ -276,10 +271,6 @@ export class CreateUniversityPartnerRequest
   @Swagger.ApiProperty({ type: 'string' })
   @IsString()
   nativeLanguageId: string;
-
-  @Swagger.ApiProperty({ type: 'string' })
-  @IsString()
-  defaultContactId: string;
 }
 
 export class UniversityResponse {

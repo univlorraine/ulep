@@ -1,4 +1,3 @@
-import { KeycloakClient } from '@app/keycloak';
 import { Inject, Injectable } from '@nestjs/common';
 import { DomainError, RessourceDoesNotExist } from 'src/core/errors';
 import { PairingMode, University } from 'src/core/models';
@@ -35,7 +34,6 @@ export class CreatePartnerUniversityCommand {
   notificationEmail?: string;
   specificLanguagesAvailableIds: string[];
   nativeLanguageId: string;
-  defaultContactId: string;
 }
 
 @Injectable()
@@ -49,7 +47,6 @@ export class CreatePartnerUniversityUsecase {
     private readonly universityRepository: UniversityRepository,
     @Inject(UUID_PROVIDER)
     private readonly uuidProvider: UuidProviderInterface,
-    private readonly keycloakClient: KeycloakClient,
   ) {}
 
   async execute(command: CreatePartnerUniversityCommand) {
@@ -90,19 +87,6 @@ export class CreatePartnerUniversityUsecase {
       }
     }
 
-    let defaultKeycloakContact;
-    if (command.defaultContactId) {
-      defaultKeycloakContact = await this.keycloakClient.getUserById(
-        command.defaultContactId,
-      );
-
-      if (!defaultKeycloakContact) {
-        throw new RessourceDoesNotExist(
-          "Administrator contact doesn't exists.",
-        );
-      }
-    }
-
     const oldUniversity = await this.universityRepository.ofName(command.name);
     if (oldUniversity) {
       throw new DomainError({ message: 'University name must be unique' });
@@ -127,7 +111,6 @@ export class CreatePartnerUniversityUsecase {
       notificationEmail: command.notificationEmail,
       specificLanguagesAvailable: specificLanguages,
       nativeLanguage,
-      defaultContactId: defaultKeycloakContact?.id,
     });
 
     const newUniversity = await this.universityRepository.create(university);
