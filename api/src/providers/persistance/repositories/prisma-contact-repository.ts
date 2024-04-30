@@ -42,14 +42,15 @@ export class PrismaContactRepository implements ContactRepository {
       await this.prisma.users.update({
         where: { id: user.id },
         data: {
-          Contact: {
-            connect: {
-              id:
-                user.Organization.default_contact_id === id
-                  ? null
-                  : user.Organization.default_contact_id,
-            },
-          },
+          Contact:
+            user.Organization.default_contact_id &&
+            user.Organization.default_contact_id !== id
+              ? {
+                  connect: {
+                    id: user.Organization.default_contact_id,
+                  },
+                }
+              : undefined,
         },
       });
     }
