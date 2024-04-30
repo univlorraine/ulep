@@ -4,6 +4,19 @@ export type KeycloakGroup = {
     path: string;
 };
 
+export enum Role {
+    ADMIN = 'admin',
+    SUPER_ADMIN = 'super-admin',
+    ANIMATOR = 'animator',
+    MANAGER = 'manager',
+}
+
+export enum AdminGroup {
+    SUPER_ADMIN = 'SuperAdministrators',
+    ANIMATOR = 'Animators',
+    MANAGER = 'Managers',
+}
+
 type Administrator = {
     id: string;
     email: string;

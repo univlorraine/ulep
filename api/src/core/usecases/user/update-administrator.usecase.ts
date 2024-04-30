@@ -1,4 +1,9 @@
-import { KeycloakClient, KeycloakGroup } from '@app/keycloak';
+import {
+  KeycloakClient,
+  KeycloakGroup,
+  KeycloakGroups,
+  KeycloakRealmRoles,
+} from '@app/keycloak';
 import { Inject, Injectable } from '@nestjs/common';
 import { RessourceDoesNotExist } from 'src/core/errors';
 import {
@@ -24,7 +29,10 @@ export class UpdateAdministratorUsecase {
     private readonly universityRepository: UniversityRepository,
   ) {}
 
-  async execute(command: UpdateAdministratorCommand) {
+  async execute(
+    command: UpdateAdministratorCommand,
+    currentUserRoles: string[],
+  ) {
     if (command.universityId) {
       const university = await this.universityRepository.ofId(
         command.universityId,
@@ -36,6 +44,12 @@ export class UpdateAdministratorUsecase {
     const admin = await this.keycloakClient.getUserById(command.id);
     if (!admin) {
       throw new RessourceDoesNotExist('Administrator does not exist');
+    }
+
+    if (!currentUserRoles.includes(KeycloakRealmRoles.SUPER_ADMIN)) {
+      command.groups = command.groups.filter(
+        (group) => group.name !== KeycloakGroups.SUPER_ADMIN,
+      );
     }
 
     const keycloakUser = await this.keycloakClient.updateUser({

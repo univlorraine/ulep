@@ -161,8 +161,10 @@ export class UserController {
     @Body() body: CreateAdministratorRequest,
     @CurrentUser() user: KeycloakUser,
   ) {
-    const userRoles = user.realm_access.roles;
-    const admin = await this.createAdministratorUsecase.execute(body);
+    const admin = await this.createAdministratorUsecase.execute(
+      body,
+      user.realm_access.roles,
+    );
 
     return AdministratorResponse.fromDomain(admin);
   }
@@ -172,8 +174,14 @@ export class UserController {
   @UseGuards(AuthenticationGuard)
   @Swagger.ApiOperation({ summary: 'Update an Administrator ressource.' })
   @Swagger.ApiCreatedResponse({ type: AdministratorResponse })
-  async updateAdministrator(@Body() body: UpdateAdministratorRequest) {
-    const admin = await this.updateAdministratorUsecase.execute(body);
+  async updateAdministrator(
+    @Body() body: UpdateAdministratorRequest,
+    @CurrentUser() user: KeycloakUser,
+  ) {
+    const admin = await this.updateAdministratorUsecase.execute(
+      body,
+      user.realm_access.roles,
+    );
 
     return AdministratorResponse.fromDomain(admin);
   }

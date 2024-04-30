@@ -1,4 +1,5 @@
 import { AuthProvider, addRefreshAuthToAuthProvider } from 'react-admin';
+import { Role } from '../entities/Administrator';
 import { isCentralUniversity as checkIsCentralUniversity } from '../entities/University';
 import jwtManager from './jwtManager';
 
@@ -17,13 +18,6 @@ export interface Identity {
 export interface GetPermissionsInterface {
     checkRole: (roleToCheck: Role) => boolean;
     checkRoles: (roleToCheck: Role[]) => boolean;
-}
-
-export enum Role {
-    ADMIN = 'admin',
-    SUPER_ADMIN = 'super-admin',
-    ANIMATOR = 'animator',
-    MANAGER = 'manager',
 }
 
 export const http = async (method: string, path: string, init: Omit<RequestInit, 'method'> = {}) => {

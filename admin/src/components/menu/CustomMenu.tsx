@@ -4,7 +4,7 @@ import { Divider } from '@mui/material';
 import Box from '@mui/material/Box';
 import React, { useState } from 'react';
 import { Menu, usePermissions, useGetIdentity, useTranslate } from 'react-admin';
-import { Role } from '../../providers/authProvider';
+import { Role } from '../../entities/Administrator';
 import useCurrentPathname from './useCurrentPathname';
 
 export type LinkPage = {
@@ -22,40 +22,46 @@ export type SubMenusType = {
 export const subMenus: SubMenusType = {
     configuration: [
         {
-            resource: 'instance',
-            id: 'config',
-            type: 'show',
-            label: 'instance.tabLabel',
-        },
-        {
             resource: 'users/administrators',
             type: 'list',
             label: 'administrators.tabLabel',
         },
         {
+            resource: 'instance',
+            id: 'config',
+            type: 'show',
+            label: 'instance.tabLabel',
+            role: Role.SUPER_ADMIN,
+        },
+        {
             resource: 'languages',
             type: 'list',
             label: 'languages.tabLabel',
+            role: Role.SUPER_ADMIN,
         },
         {
             resource: 'languages/requests',
             type: 'list',
             label: 'suggested_languages.tabLabel',
+            role: Role.SUPER_ADMIN,
         },
         {
             resource: 'languages/requests/count',
             type: 'list',
             label: 'count_suggested_languages.tabLabel',
+            role: Role.SUPER_ADMIN,
         },
         {
             resource: 'interests/categories',
             type: 'list',
             label: 'interest_categories.tabLabel',
+            role: Role.SUPER_ADMIN,
         },
         {
             resource: 'countries',
             type: 'list',
             label: 'countries.tabLabel',
+            role: Role.SUPER_ADMIN,
         },
     ],
     reports: [
@@ -133,19 +139,14 @@ const CustomMenu = () => {
                 </div>
             )}
             <Menu.ResourceItem name="reports" />
-            {permissions.checkRole(Role.SUPER_ADMIN) && (
-                // Note: div is mandatory to group these Menu.Item as Fragment throw an error from MUI component
-                <div>
-                    <Divider sx={{ margin: '0 !important' }} />
-                    <Box ref={(newRef: HTMLDivElement) => setConfigurationRef(newRef)}>
-                        <Menu.Item
-                            leftIcon={<SettingsIcon />}
-                            primaryText={translate('instance.label')}
-                            to="/instance/config/show"
-                        />
-                    </Box>
-                </div>
-            )}
+            <Divider sx={{ margin: '0 !important' }} />
+            <Box ref={(newRef: HTMLDivElement) => setConfigurationRef(newRef)}>
+                <Menu.Item
+                    leftIcon={<SettingsIcon />}
+                    primaryText={translate('instance.label')}
+                    to="/users/administrators"
+                />
+            </Box>
         </Menu>
     );
 };

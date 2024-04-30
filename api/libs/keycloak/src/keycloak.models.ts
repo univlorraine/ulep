@@ -66,6 +66,11 @@ export default interface RoleRepresentation {
 
 export enum KeycloakRealmRoles {
   ADMIN = 'admin',
+  SUPER_ADMIN = 'super-admin',
+}
+
+export enum KeycloakGroups {
+  SUPER_ADMIN = 'SuperAdministrators',
 }
 
 export interface Composites {

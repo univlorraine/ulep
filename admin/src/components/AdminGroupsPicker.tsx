@@ -1,16 +1,15 @@
 import { FormControl, MenuItem, Select } from '@mui/material';
 import React, { useEffect, useState } from 'react';
-import { useDataProvider, useNotify, useTranslate } from 'react-admin';
-import { KeycloakGroup } from '../entities/Administrator';
+import { useDataProvider, useNotify, usePermissions, useTranslate } from 'react-admin';
+import { AdminGroup, KeycloakGroup, Role } from '../entities/Administrator';
 
 interface GroupsPickerProps {
     onChange: (value: KeycloakGroup) => void;
     value?: KeycloakGroup[];
 }
 
-const adminGroupNames = ['SuperAdministrators', 'Animators', 'Managers'];
-
 const AdminGroupsPicker: React.FC<GroupsPickerProps> = ({ onChange, value }) => {
+    const { permissions } = usePermissions();
     const dataProvider = useDataProvider();
     const notify = useNotify();
     const translate = useTranslate();
@@ -34,12 +33,18 @@ const AdminGroupsPicker: React.FC<GroupsPickerProps> = ({ onChange, value }) => 
     }, []);
 
     // Filter keycloakGroups to keep only admin ones
+    const adminGroupNames = Object.values(AdminGroup) as string[];
     const adminGroups = keycloakGroups.filter((keycloakGroup) => adminGroupNames.includes(keycloakGroup.name));
 
     // Filter adminGroups to remove it from the picker if it's already selected
-    const filteredGroups = adminGroups.filter(
+    let filteredGroups = adminGroups.filter(
         (keycloakGroup) => !value?.find((group) => group.name === keycloakGroup.name)
     );
+
+    // Filter 'SuperAdministrators' group if the user does not have the 'super-admin' role himself
+    if (!permissions.checkRole(Role.SUPER_ADMIN)) {
+        filteredGroups = filteredGroups.filter((group) => group.name !== AdminGroup.SUPER_ADMIN);
+    }
 
     return (
         <FormControl>
