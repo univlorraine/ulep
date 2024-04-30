@@ -27,7 +27,11 @@ const QuizzPage: React.FC = () => {
     const [showToast] = useIonToast();
     const { t } = useTranslation();
     const location = useLocation<QuizzPageProps>();
-    const { initialCefr, isQuizzTest, language } = location.state;
+    const { initialCefr, isQuizzTest, language } = location.state || {
+        initialCefr: undefined,
+        isQuizzTest: false,
+        language: undefined,
+    };
     const updateProfileSignUp = useStoreActions((state) => state.updateProfileSignUp);
     const profileSignUp = useStoreState((state) => state.profileSignUp);
     const [questions, setQuestions] = useState<Question[]>([]);
