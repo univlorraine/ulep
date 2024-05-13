@@ -117,6 +117,10 @@ export class UpdateUserRequest {
   @IsOptional()
   @IsBoolean()
   acceptsEmail: boolean;
+
+  @Swagger.ApiProperty({ type: 'string' })
+  @IsOptional()
+  contactId?: string;
 }
 
 export class AdministratorResponse {
@@ -282,6 +286,14 @@ export class UserResponse {
   @Expose({ groups: ['read'] })
   acceptsEmail: boolean;
 
+  @Swagger.ApiPropertyOptional({ type: 'string' })
+  @Expose({ groups: ['read'] })
+  contactId?: string;
+
+  @Swagger.ApiPropertyOptional({ type: AdministratorResponse })
+  @Expose({ groups: ['read'] })
+  contact?: AdministratorResponse;
+
   constructor(partial: Partial<UserResponse>) {
     Object.assign(this, partial);
   }
@@ -302,6 +314,7 @@ export class UserResponse {
       division: user.division,
       diploma: user.diploma,
       staffFunction: user.staffFunction,
+      contactId: user.contactId,
       avatar: user.avatar
         ? MediaObjectResponse.fromMediaObject(user.avatar)
         : null,

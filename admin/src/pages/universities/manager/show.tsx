@@ -34,6 +34,14 @@ const UniversityShow = (props: any) => {
                 <TextField label={translate('universities.show.name')} source="name" />
                 <TextField label={translate('universities.show.country')} source="country.name" />
                 <FunctionField
+                    label={translate('universities.show.defaultContact')}
+                    render={(record: University) =>
+                        record.defaultContact
+                            ? `${record.defaultContact.firstname} ${record.defaultContact.lastname}`
+                            : translate('universities.show.noDefaultContact')
+                    }
+                />
+                <FunctionField
                     label={translate('universities.show.language')}
                     render={(record: University) => translate(`languages_code.${record.nativeLanguage.code}`)}
                 />

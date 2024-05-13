@@ -13,12 +13,12 @@ export class GetUniversityUsecase {
   ) {}
 
   async execute(id: string) {
-    const instance = await this.universityRepository.ofId(id);
+    const university = await this.universityRepository.ofId(id);
 
-    if (!instance) {
+    if (!university) {
       throw new RessourceDoesNotExist();
     }
 
-    return instance;
+    return university;
   }
 }

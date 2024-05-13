@@ -12,6 +12,7 @@ import {
   SerializeOptions,
   Headers,
   UseGuards,
+  UseInterceptors,
 } from '@nestjs/common';
 import * as Swagger from '@nestjs/swagger';
 import {
@@ -42,6 +43,7 @@ import {
 } from '../dtos';
 import { AuthenticationGuard } from '../guards';
 import { Profile } from 'src/core/models';
+import { UserKeycloakContactInterceptor } from 'src/api/interceptors';
 
 @Controller('profiles')
 @Swagger.ApiTags('Profiles')
@@ -208,6 +210,7 @@ export class ProfileController {
   @Get(':id')
   @Roles(Role.ADMIN)
   @UseGuards(AuthenticationGuard)
+  @UseInterceptors(UserKeycloakContactInterceptor)
   @SerializeOptions({ groups: ['read', 'profile:read'] })
   @Swagger.ApiOperation({ summary: 'Retrieve a Profile ressource.' })
   @Swagger.ApiOkResponse({ type: ProfileResponse })

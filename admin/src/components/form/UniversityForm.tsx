@@ -18,6 +18,7 @@ import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import daysjs from 'dayjs';
 import React, { useState } from 'react';
 import { useTranslate, useNotify, Form } from 'react-admin';
+import Administrator from '../../entities/Administrator';
 import Country from '../../entities/Country';
 import Language from '../../entities/Language';
 import MediaObject from '../../entities/MediaObject';
@@ -26,6 +27,7 @@ import i18nProvider from '../../providers/i18nProvider';
 import inputStyle from '../../theme/inputStyle';
 import isCodeValid from '../../utils/isCodeValid';
 import isUrlValid from '../../utils/isUrlValid';
+import AdministratorPicker from '../AdministratorPicker';
 import CountriesPicker from '../CountriesPicker';
 import ImageUploader from '../ImageUploader';
 import LanguagePicker from '../LanguagePicker';
@@ -35,10 +37,11 @@ import TimezonePicker from '../TimezonePicker';
 interface UniversityFormProps {
     admissionEndDate?: string;
     admissionStartDate?: string;
-    openServiceDate?: string;
+    canAddNewLanguages: boolean;
     closeServiceDate?: string;
     codes?: string[];
     country?: Country;
+    defaultContact?: Administrator;
     domains?: string[];
     handleSubmit: (
         name: string,
@@ -56,19 +59,21 @@ interface UniversityFormProps {
         website?: string,
         notificationEmail?: string,
         specificLanguagesAvailable?: Language[],
+        defaultContact?: Administrator,
         file?: File
     ) => void;
-    canAddNewLanguages: boolean;
     image?: MediaObject;
+    maxTandemsPerUser?: number;
     name?: string;
+    nativeLanguage?: Language;
+    notificationEmail?: string;
+    openServiceDate?: string;
+    pairingMode?: string;
+    specificLanguagesAvailable?: Language[];
     timezone?: string;
     tradKey?: string;
-    nativeLanguage?: Language;
+    universityId?: string;
     website?: string;
-    pairingMode?: string;
-    maxTandemsPerUser?: number;
-    notificationEmail?: string;
-    specificLanguagesAvailable?: Language[];
 }
 
 const styles = { my: 2, width: '100%' };
@@ -87,6 +92,7 @@ const UniversityForm: React.FC<UniversityFormProps> = ({
     closeServiceDate,
     codes,
     country,
+    defaultContact,
     domains,
     handleSubmit,
     image,
@@ -99,6 +105,7 @@ const UniversityForm: React.FC<UniversityFormProps> = ({
     maxTandemsPerUser,
     notificationEmail,
     specificLanguagesAvailable,
+    universityId,
 }) => {
     const translate = useTranslate();
     const notify = useNotify();
@@ -128,8 +135,8 @@ const UniversityForm: React.FC<UniversityFormProps> = ({
     const [newNotificationEmail, setNewNotificationEmail] = useState<string>(notificationEmail || '');
     const [newNativeLanguage, setNewNativeLanguage] = useState<Language | undefined>(nativeLanguage);
     const [newLanguages, setNewLanguages] = useState<Language[]>(specificLanguagesAvailable || []);
+    const [newDefaultContact, setNewDefaultContact] = useState<Administrator | undefined>(defaultContact);
     const [file, setFile] = useState<File>();
-
     const addLanguage = (language: Language) => setNewLanguages([...newLanguages, language]);
 
     const removeLanguage = (languageToRemove: Language) => {
@@ -219,6 +226,7 @@ const UniversityForm: React.FC<UniversityFormProps> = ({
             newWebsite,
             newNotificationEmail,
             newLanguages,
+            newDefaultContact,
             file
         );
     };
@@ -271,6 +279,21 @@ const UniversityForm: React.FC<UniversityFormProps> = ({
                     <Box alignItems="center" display="flex" flexDirection="row">
                         <LanguagePicker onChange={setNewNativeLanguage} />
                     </Box>
+
+                    {tradKey === 'update' && (
+                        <>
+                            <Typography variant="subtitle1">
+                                {translate(`universities.${tradKey}.defaultContact`)}
+                            </Typography>
+                            <Box alignItems="center" display="flex" flexDirection="row">
+                                <AdministratorPicker
+                                    onChange={setNewDefaultContact}
+                                    universityId={universityId}
+                                    value={newDefaultContact}
+                                />
+                            </Box>
+                        </>
+                    )}
 
                     <Typography variant="subtitle1">{translate(`universities.${tradKey}.timezone`)}</Typography>
                     <Box alignItems="center" display="flex" flexDirection="row">

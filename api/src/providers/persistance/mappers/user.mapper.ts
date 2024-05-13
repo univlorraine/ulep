@@ -11,6 +11,7 @@ import {
 } from 'src/providers/persistance/mappers/device.mapper';
 
 export const UserRelations = {
+  Contact: true,
   Organization: { include: UniversityRelations },
   Nationality: true,
   Avatar: true,
@@ -18,6 +19,7 @@ export const UserRelations = {
 };
 
 export type UserSnapshot = Prisma.Users & {
+  Contact: Prisma.Contacts;
   Organization: UniversitySnapshot;
   Nationality?: Prisma.CountryCodes;
   Avatar: Prisma.MediaObjects;
@@ -53,5 +55,6 @@ export const userMapper = (snapshot: UserSnapshot): User => {
     createdAt: snapshot.created_at,
     updatedAt: snapshot.updated_at,
     devices: snapshot.Devices && snapshot.Devices.map(deviceMapper),
+    contactId: snapshot.Contact?.id,
   });
 };

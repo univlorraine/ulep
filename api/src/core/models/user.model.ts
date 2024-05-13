@@ -33,6 +33,7 @@ export type UserProps = {
   role: Role;
   country: CountryCode;
   avatar?: MediaObject;
+  contactId?: string;
   status?: UserStatus;
   deactivatedReason?: string;
   acceptsEmail: boolean;
@@ -65,6 +66,7 @@ export class User {
   readonly staffFunction?: string;
   readonly createdAt?: Date;
   readonly updatedAt?: Date;
+  readonly contactId: string;
   devices: Device[];
 
   constructor(props: UserProps) {
@@ -88,6 +90,7 @@ export class User {
     this.createdAt = props.createdAt;
     this.updatedAt = props.updatedAt;
     this.devices = props.devices ?? [];
+    this.contactId = props.contactId;
   }
 
   public filterLearnableLanguages(languages: Language[]): Language[] {

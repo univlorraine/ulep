@@ -25,8 +25,10 @@ export class PrismaUserRepository implements UserRepository {
         staff_function: user.staffFunction,
         Nationality: { connect: { id: user.country.id } },
         deactivated_reason: user.deactivatedReason,
+        Contact: { connect: { id: user.contactId } },
       },
       include: {
+        Contact: true,
         Organization: { include: UniversityRelations },
         Nationality: true,
         Avatar: true,
@@ -96,6 +98,14 @@ export class PrismaUserRepository implements UserRepository {
         status: user.status,
         deactivated_reason: user.deactivatedReason,
         accepts_email: user.acceptsEmail,
+        Contact: {
+          connectOrCreate: {
+            where: { id: user.contactId },
+            create: {
+              id: user.contactId,
+            },
+          },
+        },
       },
     });
 

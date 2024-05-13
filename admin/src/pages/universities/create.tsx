@@ -2,6 +2,7 @@ import React from 'react';
 import { Create, useTranslate, useCreate, useNotify, useRedirect } from 'react-admin';
 import UniversityForm from '../../components/form/UniversityForm';
 import UniversitiesPagesHeader from '../../components/tabs/UniversitiesPagesHeader';
+import Administrator from '../../entities/Administrator';
 import Country from '../../entities/Country';
 import Language from '../../entities/Language';
 import universityToFormData from './universityToFormData';
@@ -28,6 +29,7 @@ const CreateUniversity = () => {
         website?: string,
         notificationEmail?: string,
         specificLanguagesAvailable?: Language[],
+        defaultContact?: Administrator,
         file?: File
     ) => {
         const formData = universityToFormData(
@@ -46,6 +48,7 @@ const CreateUniversity = () => {
             website,
             notificationEmail,
             specificLanguagesAvailable,
+            defaultContact,
             file
         );
 
