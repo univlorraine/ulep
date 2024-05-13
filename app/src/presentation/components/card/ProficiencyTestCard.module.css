@@ -28,6 +28,8 @@
     height: 95px;
     justify-content: center;
     margin: 20px;
+    min-height: 95px;
+    min-width: 95px;
     width: 95px;
 }
 
@@ -43,4 +45,9 @@
     font-style: normal;
     font-weight: 700;
     line-height: 10px;
+}
+
+.tested-languages {
+    white-space: nowrap;
+    display: inline-block;
 }
