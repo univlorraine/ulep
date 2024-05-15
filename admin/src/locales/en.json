@@ -23,11 +23,11 @@
         "confirmDeleteOwnAccount": "Are you sure you want to delete your user?\n You are currently logged in to this account, after deletion you will be logged out."
     },
     "admin_groups_picker": {
-        "animators": "Animator",
+        "animator": "Animator",
         "error": "Error retrieving administrator groups",
-        "managers": "Manager",
+        "manager": "Manager",
         "placeholder": "Add an administrator group",
-        "superadministrators": "Super Administrator"
+        "administrator": "Super Administrator"
     },
     "campus": {
         "create": {

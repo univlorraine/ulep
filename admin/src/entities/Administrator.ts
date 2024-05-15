@@ -12,9 +12,9 @@ export enum Role {
 }
 
 export enum AdminGroup {
-    SUPER_ADMIN = 'SuperAdministrators',
-    ANIMATOR = 'Animators',
-    MANAGER = 'Managers',
+    SUPER_ADMIN = 'Administrator',
+    ANIMATOR = 'Animator',
+    MANAGER = 'Manager',
 }
 
 type Administrator = {
@@ -23,7 +23,7 @@ type Administrator = {
     firstname: string;
     lastname: string;
     universityId: string;
-    groups: KeycloakGroup[];
+    group: KeycloakGroup;
 };
 
 export interface AdministratorFormPayload {
@@ -33,7 +33,7 @@ export interface AdministratorFormPayload {
     lastname?: string;
     password?: string;
     universityId?: string;
-    groups: string[] | KeycloakGroup[];
+    group: KeycloakGroup;
 }
 
 export default Administrator;

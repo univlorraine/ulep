@@ -107,7 +107,7 @@ import { ArchiveTandemsAndDeleteUsersUsecase } from './usecases/purges/archive-t
 import { ResetPasswordUsecase } from './usecases/security/reset-password.usecase';
 import { DeleteLearningLanguageUsecase } from './usecases/learningLanguage/delete-learning-langugage.usecase';
 import { RevokeSessionsUsecase } from './usecases/user/revoke-sessions.usecase';
-import { GetKeycloakGroupsUsecase } from './usecases/user/get-keycloak-groups.usecase';
+import { GetKeycloakAdminGroupsUsecase } from './usecases/user/get-keycloak-admin-groups.usecase';
 
 const usecases: Provider[] = [
   //Campus
@@ -222,7 +222,7 @@ const usecases: Provider[] = [
   ArchiveTandemsAndDeleteUsersUsecase,
   RevokeSessionsUsecase,
   GetUserPersonalData,
-  GetKeycloakGroupsUsecase,
+  GetKeycloakAdminGroupsUsecase,
   // Instance
   GetInstanceUsecase,
   UpdateInstanceUsecase,

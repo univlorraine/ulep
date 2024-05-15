@@ -1,4 +1,4 @@
-import { AuthProvider, addRefreshAuthToAuthProvider } from 'react-admin';
+import { AuthProvider, UserIdentity, addRefreshAuthToAuthProvider } from 'react-admin';
 import { Role } from '../entities/Administrator';
 import { isCentralUniversity as checkIsCentralUniversity } from '../entities/University';
 import jwtManager from './jwtManager';
@@ -148,7 +148,7 @@ const authProvider: AuthProvider = {
 
         return Promise.resolve(permissions);
     },
-    async getIdentity(): Promise<Identity> {
+    async getIdentity(): Promise<UserIdentity> {
         const accessToken = jwtManager.getToken('access_token');
         if (!accessToken) {
             return Promise.reject(new Error('Fail to get access token'));
@@ -180,7 +180,10 @@ const authProvider: AuthProvider = {
         return Promise.resolve({
             id: decoded.sub,
             data: decoded,
+            firstName: decoded.given_name,
+            lastName: decoded.family_name,
             fullName: '',
+            email: decoded.email,
             universityId,
             isCentralUniversity,
         });

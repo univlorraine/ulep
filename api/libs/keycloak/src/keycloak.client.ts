@@ -747,9 +747,7 @@ export class KeycloakClient {
   /*
    * Get administrators users
    */
-  public async getAdministrators(
-    universityId?: string,
-  ): Promise<UserRepresentation[]> {
+  public async getAdministrators(): Promise<UserRepresentation[]> {
     const response = await fetch(
       `${this.configuration.baseUrl}/admin/realms/${this.configuration.realm}/roles/${this.configuration.adminRoleName}/users`,
       {
@@ -762,19 +760,11 @@ export class KeycloakClient {
     );
 
     if (!response.ok) {
-      console.log(response);
       this.logger.error(JSON.stringify(await response.json()));
       throw new UnexpectedErrorException();
     }
 
-    let administrators = await response.json();
-
-    if (universityId) {
-      administrators = administrators.filter(
-        (administrator) =>
-          administrator.attributes?.universityId == universityId,
-      );
-    }
+    const administrators = await response.json();
 
     return administrators;
   }

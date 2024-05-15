@@ -10,11 +10,18 @@ import {
   Length,
   IsOptional,
   IsBoolean,
-  IsArray,
+  IsObject,
+  IsNotEmptyObject,
 } from 'class-validator';
 import { UniversityResponse } from '../universities';
 import { CreateUserCommand } from 'src/core/usecases/user';
-import { Gender, Role, User, UserStatus } from 'src/core/models/user.model';
+import {
+  AdminGroup,
+  Gender,
+  Role,
+  User,
+  UserStatus,
+} from 'src/core/models/user.model';
 import { MediaObjectResponse } from '../medias';
 import { KeycloakGroup, UserRepresentation } from '@app/keycloak';
 
@@ -124,49 +131,6 @@ export class UpdateUserRequest {
   contactId?: string;
 }
 
-export class AdministratorResponse {
-  @Swagger.ApiProperty({ type: 'string', format: 'uuid' })
-  @Expose({ groups: ['read'] })
-  id: string;
-
-  @Swagger.ApiProperty({ type: 'string', format: 'email' })
-  @Expose({ groups: ['read'] })
-  email: string;
-
-  @Swagger.ApiProperty({ type: 'string' })
-  @Expose({ groups: ['read'] })
-  firstname: string;
-
-  @Swagger.ApiProperty({ type: 'string' })
-  @Expose({ groups: ['read'] })
-  lastname: string;
-
-  @Swagger.ApiProperty({ type: 'string', format: 'uuid' })
-  @Expose({ groups: ['read'] })
-  universityId?: string;
-
-  @Swagger.ApiProperty()
-  @Expose({ groups: ['read'] })
-  groups?: KeycloakGroupResponse[];
-
-  constructor(partial: Partial<AdministratorResponse>) {
-    Object.assign(this, partial);
-  }
-
-  static fromDomain(user: UserRepresentation) {
-    return new AdministratorResponse({
-      id: user.id,
-      email: user.email,
-      universityId: user.attributes?.universityId?.[0],
-      firstname: user.firstName,
-      lastname: user.lastName,
-      groups: user.groups
-        ? user.groups.map(KeycloakGroupResponse.fromDomain)
-        : [],
-    });
-  }
-}
-
 export class KeycloakGroupResponse {
   @Swagger.ApiProperty({ type: 'string', format: 'uuid' })
   @Expose({ groups: ['read'] })
@@ -193,6 +157,67 @@ export class KeycloakGroupResponse {
   }
 }
 
+export class AdministratorResponse {
+  @Swagger.ApiProperty({ type: 'string', format: 'uuid' })
+  @Expose({ groups: ['read'] })
+  id: string;
+
+  @Swagger.ApiProperty({ type: 'string', format: 'email' })
+  @Expose({ groups: ['read'] })
+  email: string;
+
+  @Swagger.ApiProperty({ type: 'string' })
+  @Expose({ groups: ['read'] })
+  firstname: string;
+
+  @Swagger.ApiProperty({ type: 'string' })
+  @Expose({ groups: ['read'] })
+  lastname: string;
+
+  @Swagger.ApiProperty({ type: 'string', format: 'uuid' })
+  @Expose({ groups: ['read'] })
+  universityId?: string;
+
+  @Swagger.ApiProperty()
+  @Expose({ groups: ['read'] })
+  group?: KeycloakGroupResponse;
+
+  constructor(partial: Partial<AdministratorResponse>) {
+    Object.assign(this, partial);
+  }
+
+  static fromDomain(user: UserRepresentation) {
+    const adminGroupNames = Object.values(AdminGroup) as string[];
+
+    return new AdministratorResponse({
+      id: user.id,
+      email: user.email,
+      universityId: user.attributes?.universityId?.[0],
+      firstname: user.firstName,
+      lastname: user.lastName,
+      group: user.groups
+        ? KeycloakGroupResponse.fromDomain(
+            user.groups.find((group) => adminGroupNames.includes(group.name)),
+          )
+        : null,
+    });
+  }
+}
+
+class KeycloakGroupRequest implements KeycloakGroup {
+  @Swagger.ApiProperty({ type: 'string' })
+  @IsString()
+  id: string;
+
+  @Swagger.ApiProperty({ type: 'string' })
+  @IsString()
+  name: string;
+
+  @Swagger.ApiProperty({ type: 'string' })
+  @IsString()
+  path: string;
+}
+
 export class CreateAdministratorRequest {
   @Swagger.ApiProperty({ type: 'string', format: 'email' })
   @IsEmail()
@@ -216,8 +241,10 @@ export class CreateAdministratorRequest {
   password: string;
 
   @Swagger.ApiProperty({ type: 'string' })
-  @IsArray()
-  groups: KeycloakGroup[];
+  @IsObject()
+  @IsNotEmptyObject()
+  @Type(() => KeycloakGroupRequest)
+  group: KeycloakGroupRequest;
 }
 
 export class UpdateAdministratorRequest {
@@ -250,8 +277,8 @@ export class UpdateAdministratorRequest {
   password?: string;
 
   @Swagger.ApiProperty({ type: 'string' })
-  @IsArray()
-  groups: KeycloakGroup[];
+  @IsObject()
+  group: KeycloakGroup;
 }
 
 export class AddDeviceRequest {

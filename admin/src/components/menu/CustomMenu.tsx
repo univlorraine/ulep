@@ -139,14 +139,18 @@ const CustomMenu = () => {
                 </div>
             )}
             <Menu.ResourceItem name="reports" />
-            <Divider sx={{ margin: '0 !important' }} />
-            <Box ref={(newRef: HTMLDivElement) => setConfigurationRef(newRef)}>
-                <Menu.Item
-                    leftIcon={<SettingsIcon />}
-                    primaryText={translate('instance.label')}
-                    to="/users/administrators"
-                />
-            </Box>
+            {!permissions.checkRole(Role.ANIMATOR) && (
+                <>
+                    <Divider sx={{ margin: '0 !important' }} />
+                    <Box ref={(newRef: HTMLDivElement) => setConfigurationRef(newRef)}>
+                        <Menu.Item
+                            leftIcon={<SettingsIcon />}
+                            primaryText={translate('instance.label')}
+                            to="/users/administrators"
+                        />
+                    </Box>
+                </>
+            )}
         </Menu>
     );
 };

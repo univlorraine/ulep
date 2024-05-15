@@ -13,6 +13,7 @@ import React from 'react';
 import { Admin, Resource, useTranslate } from 'react-admin';
 import CustomLayout from './components/layout/layout';
 import { Role } from './entities/Administrator';
+import EditAdministratorProfile from './pages/admin-profile/edit';
 import administrators from './pages/administrators';
 import LoginPage from './pages/auth/login';
 import campus from './pages/campus';
@@ -52,6 +53,7 @@ const App = () => {
         >
             {(permissions: GetPermissionsInterface) => (
                 <>
+                    <Resource edit={EditAdministratorProfile} name="admin-profile" />
                     <Resource
                         icon={PersonAddIcon}
                         name="profiles"
@@ -78,11 +80,11 @@ const App = () => {
                     />
                     {permissions.checkRole(Role.MANAGER) && (
                         <Resource
-                            edit={universities.admin.edit}
+                            edit={universities.manager.edit}
                             name="universities"
                             options={{ label: translate('universities.label') }}
                             recordRepresentation="name"
-                            show={universities.admin.show}
+                            show={universities.manager.show}
                         />
                     )}
                     {permissions.checkRole(Role.SUPER_ADMIN) && (

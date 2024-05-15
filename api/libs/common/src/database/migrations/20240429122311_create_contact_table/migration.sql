@@ -1,9 +1,3 @@
-/*
-  Warnings:
-
-  - A unique constraint covering the columns `[default_contact_id]` on the table `organizations` will be added. If there are existing duplicate values, this will fail.
-
-*/
 -- AlterTable
 ALTER TABLE "organizations" ADD COLUMN     "default_contact_id" TEXT;
 

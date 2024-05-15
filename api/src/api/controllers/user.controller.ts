@@ -60,7 +60,7 @@ import {
 import { ConfigService } from '@nestjs/config';
 import { Env } from 'src/configuration';
 import { userPersonalDataToCsv } from '../dtos/users/csv-export.ts';
-import { GetKeycloakGroupsUsecase } from '../../core/usecases/user/get-keycloak-groups.usecase';
+import { GetKeycloakAdminGroupsUsecase } from '../../core/usecases/user/get-keycloak-admin-groups.usecase';
 
 @Controller('users')
 @Swagger.ApiTags('Users')
@@ -80,7 +80,7 @@ export class UserController {
     private readonly deleteAdministratorUsecase: DeleteAdministratorUsecase,
     private readonly revokeSessionsUsecase: RevokeSessionsUsecase,
     private readonly getUserPersonalData: GetUserPersonalData,
-    private readonly getKeycloakGroupsUsecase: GetKeycloakGroupsUsecase,
+    private readonly getKeycloakAdminGroupsUsecase: GetKeycloakAdminGroupsUsecase,
     private readonly i18n: I18nService,
     @Inject(STORAGE_INTERFACE)
     private readonly storage: StorageInterface,
@@ -132,11 +132,10 @@ export class UserController {
   @Swagger.ApiOperation({ summary: 'Collection of Administrator ressource.' })
   @CollectionResponse(UserResponse)
   async findAllAdministrators(
+    @CurrentUser() user: KeycloakUser,
     @Query() { universityId }: GetAdministratorsQueryParams,
   ) {
-    const administrators = await this.getAdministratorsUsecase.execute(
-      universityId,
-    );
+    const administrators = await this.getAdministratorsUsecase.execute(user);
 
     return administrators.map(AdministratorResponse.fromDomain);
   }
@@ -174,14 +173,8 @@ export class UserController {
   @UseGuards(AuthenticationGuard)
   @Swagger.ApiOperation({ summary: 'Update an Administrator ressource.' })
   @Swagger.ApiCreatedResponse({ type: AdministratorResponse })
-  async updateAdministrator(
-    @Body() body: UpdateAdministratorRequest,
-    @CurrentUser() user: KeycloakUser,
-  ) {
-    const admin = await this.updateAdministratorUsecase.execute(
-      body,
-      user.realm_access.roles,
-    );
+  async updateAdministrator(@Body() body: UpdateAdministratorRequest) {
+    const admin = await this.updateAdministratorUsecase.execute(body);
 
     return AdministratorResponse.fromDomain(admin);
   }
@@ -224,13 +217,13 @@ export class UserController {
     return this.addDeviceUsecase.execute(user.sub, body);
   }
 
-  @Get('groups')
+  @Get('admin/groups')
   @Roles(Role.ADMIN)
   @UseGuards(AuthenticationGuard)
   @Swagger.ApiOperation({ summary: 'Collection of Keycloak groups.' })
   @CollectionResponse(KeycloakGroupResponse)
-  async findAllKeycloakGroups(@CurrentUser() user: KeycloakUser) {
-    const groups = await this.getKeycloakGroupsUsecase.execute();
+  async findAllKeycloakGroups() {
+    const groups = await this.getKeycloakAdminGroupsUsecase.execute();
 
     return groups.map(KeycloakGroupResponse.fromDomain);
   }

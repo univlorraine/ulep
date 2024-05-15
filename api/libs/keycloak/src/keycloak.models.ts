@@ -31,7 +31,7 @@ export interface UserRepresentation {
   email: string;
   emailVerified: boolean;
   userProfileMetadata: UserProfileMetadata;
-  attributes: { [index: string]: string[] };
+  attributes: { [index: string]: string };
   groups?: KeycloakGroup[];
 }
 

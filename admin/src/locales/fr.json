@@ -23,11 +23,11 @@
         "confirmDeleteOwnAccount": "Êtes-vous sûr(e) de vouloir supprimer votre utilisateur ?\n Vous êtes actuellement connecté(e) à ce compte, après la suppression vous serez déconnecté(e)."
     },
     "admin_groups_picker": {
-        "animators": "Animateur",
+        "animator": "Animateur",
         "error": "Erreur lors de la récupération des groupes d'administrateur",
-        "managers": "Manager",
+        "manager": "Manageur",
         "placeholder": "Ajouter un groupe d'administrateur",
-        "superadministrators": "Super administrateur"
+        "administrator": "Super administrateur"
     },
     "campus": {
         "create": {
@@ -70,6 +70,7 @@
         "email": "Email",
         "etandem": "E-tandem",
         "firstname": "Prénom",
+        "group": "Groupe",
         "gender": "Genre",
         "image": "Image",
         "language": "Langue",

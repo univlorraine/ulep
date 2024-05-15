@@ -1,7 +1,6 @@
 import {
   KeycloakClient,
   KeycloakGroup,
-  KeycloakGroups,
   KeycloakRealmRoles,
 } from '@app/keycloak';
 import { BadRequestException, Inject, Injectable } from '@nestjs/common';
@@ -17,7 +16,7 @@ export class CreateAdministratorCommand {
   lastname: string;
   password: string;
   universityId?: string;
-  groups: KeycloakGroup[];
+  group: KeycloakGroup;
 }
 
 @Injectable()
@@ -37,9 +36,9 @@ export class CreateAdministratorUsecase {
     }
 
     if (!currentUserRoles.includes(KeycloakRealmRoles.SUPER_ADMIN)) {
-      command.groups = command.groups.filter(
-        (group) => group.name !== KeycloakGroups.SUPER_ADMIN,
-      );
+      // command.group = command.groups.filter(
+      //   (group) => group.name !== KeycloakGroups.SUPER_ADMIN,
+      // );
     }
 
     let user = await this.keycloakClient.getUserByEmail(command.email);
@@ -53,7 +52,7 @@ export class CreateAdministratorUsecase {
         lastname: command.lastname,
         password: command.password,
         universityId: command.universityId,
-        groups: command.groups.map((group) => group.name),
+        groups: [command.group.name],
       });
     } else {
       const isAdministator = await this.isAdministator(user.id);
@@ -70,7 +69,7 @@ export class CreateAdministratorUsecase {
         lastname: command.lastname,
         password: hasCredentials ? undefined : command.password,
         universityId: command.universityId,
-        groups: command.groups,
+        groups: [command.group],
       });
     }
 

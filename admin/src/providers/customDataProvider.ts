@@ -351,8 +351,8 @@ const customDataProvider = {
 
         return response;
     },
-    getKeycloackGroups: async () => {
-        const url = `${process.env.REACT_APP_API_URL}/users/groups`;
+    getKeycloackAdminGroups: async () => {
+        const url = `${process.env.REACT_APP_API_URL}/users/admin/groups`;
         const response = await fetch(url, httpClientOptions({ method: 'GET' }));
 
         if (!response.ok) {
