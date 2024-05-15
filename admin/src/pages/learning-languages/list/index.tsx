@@ -15,6 +15,7 @@ import {
     TextInput,
     BulkDeleteButton,
     usePermissions,
+    useRefresh,
 } from 'react-admin';
 import PageTitle from '../../../components/PageTitle';
 import { DisplayRole } from '../../../components/translated';
@@ -33,6 +34,7 @@ const LearningLanguageBulkActionsToolbar = () => <BulkDeleteButton mutationMode=
 const LearningLanguageList = () => {
     const { permissions } = usePermissions();
     const translate = useTranslate();
+    const refresh = useRefresh();
     const { selectedUniversityIds, setSelectedUniversityIds } = useLearningLanguagesStore();
 
     const { data: identity, isLoading: isLoadingIdentity } = useGetIdentity();
@@ -94,6 +96,7 @@ const LearningLanguageList = () => {
                 actions={
                     <Actions
                         enableLaunchGlobalRoutine={identity.isCentralUniversity}
+                        onGlobalRoutineEnded={refresh}
                         universityIds={[...selectedUniversityIds, identity.universityId]}
                     />
                 }
