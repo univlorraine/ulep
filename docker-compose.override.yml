@@ -27,6 +27,11 @@ services:
         ports:
             - ${AUTH_PORT:-8080}:8080
 
+    mongo:
+        platform: linux/arm64
+        ports:
+            - 27017:27017
+
     database:
         ports:
             - 5432:5432
