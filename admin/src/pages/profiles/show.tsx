@@ -13,8 +13,11 @@ import {
     Identifier,
     EditButton,
     TopToolbar,
+    usePermissions,
+    ShowActionsProps,
 } from 'react-admin';
 import PageTitle from '../../components/PageTitle';
+import { Role } from '../../entities/Administrator';
 import Availabilites from '../../entities/Availabilities';
 import Language from '../../entities/Language';
 import { LearningLanguage } from '../../entities/LearningLanguage';
@@ -36,10 +39,14 @@ const Title = () => {
     );
 };
 
-export const ShowActions = () => (
+interface CustomShowActionsProps extends ShowActionsProps {
+    readOnly: boolean;
+}
+
+export const ShowActions = ({ readOnly }: CustomShowActionsProps) => (
     <TopToolbar>
         <ProfileExportButton />
-        <EditButton />
+        {!readOnly && <EditButton />}
     </TopToolbar>
 );
 
@@ -208,12 +215,15 @@ const ProfileTab = () => {
 
 const ProfileShow = (props: any) => {
     const translate = useTranslate();
+    const { permissions } = usePermissions();
+
+    const readOnly: boolean = permissions.checkRole(Role.ANIMATOR);
 
     return (
         <>
             <PageTitle>{translate('profiles.title')}</PageTitle>
 
-            <Show actions={<ShowActions />} title={<Title />} {...props}>
+            <Show actions={<ShowActions readOnly={readOnly} />} title={<Title />} {...props}>
                 <ProfileTab />
             </Show>
         </>

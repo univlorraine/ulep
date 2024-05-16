@@ -71,7 +71,7 @@ describe('Universities', () => {
       clientId: 'test',
       clientSecret: 'secret',
       baseUrl: 'http://localhost:8080/auth',
-      adminGroupId: 'admin',
+      adminRoleName: 'admin',
     });
 
     jest
@@ -188,26 +188,26 @@ describe('Universities', () => {
   });
 
   /*it('should create partner university', async () => {
-    const university = universityFactory.makeOne();
-    repository.init([university]);
-
-    await request(app.getHttpServer())
-      .post(`/universities/partners`)
-      .set('Authorization', `Bearer ${keycloakUser.sub}`)
-      .send({
-        admissionStart: '2021-12-31',
-        admissionEnd: '2021-01-01',
-        openServiceDate: '2022-01-01',
-        closeServiceDate: '2024-12-31',
-        name: 'University of Oxford',
-        timezone: 'Europe/London',
-        website: 'https://www.ox.ac.uk/',
-        codes: [],
-        domains: [],
-        countryId: country.id,
-      })
-      .expect(201);
-  });*/
+      const university = universityFactory.makeOne();
+      repository.init([university]);
+  
+      await request(app.getHttpServer())
+        .post(`/universities/partners`)
+        .set('Authorization', `Bearer ${keycloakUser.sub}`)
+        .send({
+          admissionStart: '2021-12-31',
+          admissionEnd: '2021-01-01',
+          openServiceDate: '2022-01-01',
+          closeServiceDate: '2024-12-31',
+          name: 'University of Oxford',
+          timezone: 'Europe/London',
+          website: 'https://www.ox.ac.uk/',
+          codes: [],
+          domains: [],
+          countryId: country.id,
+        })
+        .expect(201);
+    });*/
 
   it('should return all universities', async () => {
     countryRepository.init([country]);

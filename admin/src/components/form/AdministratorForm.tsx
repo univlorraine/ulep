@@ -1,10 +1,11 @@
-import { Box, Typography, Input } from '@mui/material';
+import { Box, Input, Typography } from '@mui/material';
 import React, { useState } from 'react';
-import { Button, Loading, useGetIdentity, useTranslate } from 'react-admin';
-import { AdministratorFormPayload } from '../../entities/Administrator';
+import { Button, Loading, useGetIdentity, useNotify, usePermissions, useTranslate } from 'react-admin';
+import { AdministratorFormPayload, KeycloakGroup, Role } from '../../entities/Administrator';
 import University from '../../entities/University';
 import inputStyle from '../../theme/inputStyle';
 import isPasswordValid from '../../utils/isPasswordValid';
+import AdminGroupPicker from '../AdminGroupPicker';
 import UniversityPicker from '../UniversityPicker';
 
 interface AdministratorFormProps {
@@ -14,7 +15,9 @@ interface AdministratorFormProps {
     handleSubmit: (payload: AdministratorFormPayload) => void;
     lastname?: string;
     universityId?: string;
+    group?: KeycloakGroup;
     type: string;
+    isProfileEdit?: boolean;
 }
 
 const AdministratorForm: React.FC<AdministratorFormProps> = ({
@@ -24,14 +27,19 @@ const AdministratorForm: React.FC<AdministratorFormProps> = ({
     handleSubmit,
     lastname,
     universityId,
+    group,
     type,
+    isProfileEdit = false,
 }) => {
     const translate = useTranslate();
+    const notify = useNotify();
+    const { permissions } = usePermissions();
     const [newEmail, setNewEmail] = useState<string>(email || '');
     const [password, setPassword] = useState<string>('');
     const [newFirstname, setNewFirstname] = useState<string>(firstname || '');
     const [newLastname, setNewLastname] = useState<string>(lastname || '');
     const [university, setUniversity] = useState<University>();
+    const [newGroup, setNewGroup] = useState<KeycloakGroup | undefined>(group);
     const { data: identity, isLoading: isLoadingIdentity } = useGetIdentity();
 
     if (isLoadingIdentity || !identity) {
@@ -43,17 +51,22 @@ const AdministratorForm: React.FC<AdministratorFormProps> = ({
             return identity.universityId;
         }
 
-        return university?.parent ? university?.id : undefined;
+        return university?.id;
     };
 
     const onCreatePressed = () => {
-        handleSubmit({
+        if (!newGroup) {
+            return notify(translate('admin_groups_picker.mandatory'));
+        }
+
+        return handleSubmit({
             id,
             email: newEmail,
             firstname: newFirstname,
             lastname: newLastname,
             password,
             universityId: getUniversityId(),
+            group: newGroup,
         });
     };
 
@@ -74,10 +87,19 @@ const AdministratorForm: React.FC<AdministratorFormProps> = ({
                 />
             </Box>
 
-            {identity?.isCentralUniversity && (
+            {!isProfileEdit && (
                 <>
-                    <Typography variant="subtitle1">{translate(`administrators.${type}.university`)}</Typography>
-                    <UniversityPicker initialValue={universityId} onChange={setUniversity} value={university} />
+                    {permissions.checkRole(Role.SUPER_ADMIN) && (
+                        <>
+                            <Typography variant="subtitle1">
+                                {translate(`administrators.${type}.university`)}
+                            </Typography>
+                            <UniversityPicker initialValue={universityId} onChange={setUniversity} value={university} />
+                        </>
+                    )}
+
+                    <Typography variant="subtitle1">{translate('admin_groups_picker.placeholder')}</Typography>
+                    <AdminGroupPicker onChange={setNewGroup} value={newGroup} />
                 </>
             )}
 

@@ -14,11 +14,13 @@ import {
     useTranslate,
     TextInput,
     BulkDeleteButton,
+    usePermissions,
     useRefresh,
 } from 'react-admin';
 import PageTitle from '../../../components/PageTitle';
 import { DisplayRole } from '../../../components/translated';
 import UniversitiesPicker from '../../../components/UniversitiesPicker';
+import { Role } from '../../../entities/Administrator';
 import Language from '../../../entities/Language';
 import { LearningLanguage, learningLanguageHasPossibleAction } from '../../../entities/LearningLanguage';
 import { getProfileDisplayName } from '../../../entities/Profile';
@@ -30,6 +32,7 @@ import Actions from './Actions';
 const LearningLanguageBulkActionsToolbar = () => <BulkDeleteButton mutationMode="pessimistic" />;
 
 const LearningLanguageList = () => {
+    const { permissions } = usePermissions();
     const translate = useTranslate();
     const refresh = useRefresh();
     const { selectedUniversityIds, setSelectedUniversityIds } = useLearningLanguagesStore();
@@ -75,6 +78,8 @@ const LearningLanguageList = () => {
         return <Loading />;
     }
 
+    const readOnly: boolean = permissions.checkRole(Role.ANIMATOR);
+
     return (
         <Box>
             <PageTitle>{translate('learning_languages.title')}</PageTitle>
@@ -103,7 +108,7 @@ const LearningLanguageList = () => {
                 }}
                 filters={filters}
             >
-                <Datagrid bulkActionButtons={<LearningLanguageBulkActionsToolbar />} rowClick="show">
+                <Datagrid bulkActionButtons={!readOnly && <LearningLanguageBulkActionsToolbar />} rowClick="show">
                     <FunctionField
                         label={translate('learning_languages.list.tableColumns.name')}
                         render={(record: LearningLanguage) => getProfileDisplayName(record.profile)}
