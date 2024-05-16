@@ -25,6 +25,7 @@ export class UpdateUserCommand {
   email?: string;
   firstname?: string;
   lastname?: string;
+  contactId?: string;
 }
 
 @Injectable()
@@ -63,6 +64,15 @@ export class UpdateUserUsecase {
         lastname: command.lastname || user.lastname,
         email: command.email || user.email,
       });
+    }
+
+    if (command.contactId) {
+      const keycloakUser = await this.keycloakClient.getUserById(
+        command.contactId,
+      );
+      if (!keycloakUser) {
+        throw new RessourceDoesNotExist('Contact does not exist');
+      }
     }
 
     const update = await this.userRepository.update(

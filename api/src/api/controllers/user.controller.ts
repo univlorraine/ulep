@@ -41,6 +41,7 @@ import {
   AdministratorResponse,
   CreateAdministratorRequest,
   CreateUserRequest,
+  KeycloakGroupResponse,
   PaginationDto,
   UpdateAdministratorRequest,
   UpdateUserRequest,
@@ -49,7 +50,6 @@ import {
 import { AuthenticationGuard } from '../guards';
 import { ImagesFilePipe } from '../validators/images.validator';
 import { User } from 'src/core/models';
-import { GetAdministratorsQueryParams } from 'src/api/dtos/users/administrators-filter';
 import { RevokeSessionsUsecase } from 'src/core/usecases/user/revoke-sessions.usecase';
 import { OwnerAllowed } from '../decorators/owner.decorator';
 import {
@@ -59,6 +59,7 @@ import {
 import { ConfigService } from '@nestjs/config';
 import { Env } from 'src/configuration';
 import { userPersonalDataToCsv } from '../dtos/users/csv-export.ts';
+import { GetKeycloakAdminGroupsUsecase } from '../../core/usecases/user/get-keycloak-admin-groups.usecase';
 
 @Controller('users')
 @Swagger.ApiTags('Users')
@@ -78,8 +79,8 @@ export class UserController {
     private readonly deleteAdministratorUsecase: DeleteAdministratorUsecase,
     private readonly revokeSessionsUsecase: RevokeSessionsUsecase,
     private readonly getUserPersonalData: GetUserPersonalData,
+    private readonly getKeycloakAdminGroupsUsecase: GetKeycloakAdminGroupsUsecase,
     private readonly i18n: I18nService,
-
     @Inject(STORAGE_INTERFACE)
     private readonly storage: StorageInterface,
     private readonly env: ConfigService<Env, true>,
@@ -129,12 +130,8 @@ export class UserController {
   @UseGuards(AuthenticationGuard)
   @Swagger.ApiOperation({ summary: 'Collection of Administrator ressource.' })
   @CollectionResponse(UserResponse)
-  async findAllAdministrators(
-    @Query() { universityId }: GetAdministratorsQueryParams,
-  ) {
-    const administrators = await this.getAdministratorsUsecase.execute(
-      universityId,
-    );
+  async findAllAdministrators(@CurrentUser() user: KeycloakUser) {
+    const administrators = await this.getAdministratorsUsecase.execute(user);
 
     return administrators.map(AdministratorResponse.fromDomain);
   }
@@ -208,6 +205,17 @@ export class UserController {
     @Body() body: AddDeviceRequest,
   ) {
     return this.addDeviceUsecase.execute(user.sub, body);
+  }
+
+  @Get('admin/groups')
+  @Roles(Role.ADMIN)
+  @UseGuards(AuthenticationGuard)
+  @Swagger.ApiOperation({ summary: 'Collection of Keycloak groups.' })
+  @CollectionResponse(KeycloakGroupResponse)
+  async findAllKeycloakGroups() {
+    const groups = await this.getKeycloakAdminGroupsUsecase.execute();
+
+    return groups.map(KeycloakGroupResponse.fromDomain);
   }
 
   @Get(':id')

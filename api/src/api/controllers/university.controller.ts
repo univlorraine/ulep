@@ -36,6 +36,7 @@ import { ImagesFilePipe } from 'src/api/validators';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { UploadUniversityImageUsecase } from 'src/core/usecases';
 import { University } from 'src/core/models';
+import { UniversityKeycloakInterceptor } from 'src/api/interceptors';
 
 @Controller('universities')
 @Swagger.ApiTags('Universities')
@@ -62,7 +63,9 @@ export class UniversityController {
     @Body() body: CreateUniversityRequest,
     @UploadedFile(new ImagesFilePipe()) file?: Express.Multer.File,
   ) {
-    let university = await this.createUniversityUsecase.execute(body);
+    let university: University = await this.createUniversityUsecase.execute(
+      body,
+    );
 
     if (file) {
       const upload = await this.uploadUniversityImageUsecase.execute({
@@ -72,7 +75,7 @@ export class UniversityController {
       university = new University({ ...university, logo: upload });
     }
 
-    return UniversityResponse.fromUniversity(new University(university));
+    return UniversityResponse.fromUniversity(university);
   }
 
   @Post('partners')
@@ -88,7 +91,8 @@ export class UniversityController {
     @Body() body: CreateUniversityPartnerRequest,
     @UploadedFile(new ImagesFilePipe()) file?: Express.Multer.File,
   ) {
-    let university = await this.createPartnerUniversityUsecase.execute(body);
+    let university: University =
+      await this.createPartnerUniversityUsecase.execute(body);
 
     if (file) {
       const upload = await this.uploadUniversityImageUsecase.execute({
@@ -108,21 +112,24 @@ export class UniversityController {
   async getUniversities() {
     const universities = await this.getUniversitiesUsecase.execute();
 
-    return new Collection<UniversityResponse>({
-      items: universities.items.map(UniversityResponse.fromUniversity),
+    return new Collection({
+      items: universities.items.map((university) =>
+        UniversityResponse.fromUniversity(university),
+      ),
       totalItems: universities.totalItems,
     });
   }
 
   @Get(':id')
   @UseGuards(AuthenticationGuard)
+  @UseInterceptors(UniversityKeycloakInterceptor)
   @SerializeOptions({ groups: ['read', 'university:read'] })
   @Swagger.ApiOperation({ summary: 'University ressource.' })
   @Swagger.ApiOkResponse({ type: UniversityResponse })
   async findOne(@Param('id', ParseUUIDPipe) id: string) {
-    const instance = await this.getUniversityUsecase.execute(id);
+    const university = await this.getUniversityUsecase.execute(id);
 
-    return UniversityResponse.fromUniversity(instance);
+    return UniversityResponse.fromUniversity(university);
   }
 
   @Get(':id/partners')
@@ -135,10 +142,7 @@ export class UniversityController {
   async findPartners(@Param('id', ParseUUIDPipe) id: string) {
     const universities = await this.getPartnersToUniversity.execute(id);
 
-    return new Collection<UniversityResponse>({
-      items: universities.map(UniversityResponse.fromUniversity),
-      totalItems: universities.length,
-    });
+    return universities;
   }
 
   @Get(':id/languages')
@@ -159,6 +163,7 @@ export class UniversityController {
   @Put(':id')
   @Roles(Role.ADMIN)
   @UseInterceptors(FileInterceptor('file'))
+  @UseInterceptors(UniversityKeycloakInterceptor)
   @UseGuards(AuthenticationGuard)
   @Swagger.ApiOperation({ summary: 'Updates an University ressource.' })
   @Swagger.ApiConsumes('multipart/form-data')
@@ -168,7 +173,7 @@ export class UniversityController {
     @Body() request: UpdateUniversityRequest,
     @UploadedFile(new ImagesFilePipe()) file?: Express.Multer.File,
   ) {
-    let university = await this.updateUniversityUsecase.execute({
+    let university: University = await this.updateUniversityUsecase.execute({
       id,
       ...request,
     });

@@ -42,6 +42,7 @@ const EditAdministrator = () => {
                         <AdministratorForm
                             email={record.email}
                             firstname={record.firstname}
+                            group={record.group}
                             handleSubmit={handleSubmit}
                             id={record.id}
                             lastname={record.lastname}

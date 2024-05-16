@@ -31,6 +31,7 @@ export class UpdateUniversityCommand {
   notificationEmail?: string;
   specificLanguagesAvailableIds: string[];
   nativeLanguageId: string;
+  defaultContactId?: string;
 }
 
 @Injectable()
@@ -80,26 +81,31 @@ export class UpdateUniversityUsecase {
       throw new RessourceDoesNotExist('Country does not exist');
     }
 
-    return this.universityRepository.update(
-      new University({
-        id: university.id,
-        name: command.name,
-        country,
-        codes: command.codes || [],
-        domains: command.domains || [],
-        timezone: command.timezone,
-        admissionEnd: command.admissionEnd,
-        admissionStart: command.admissionStart,
-        openServiceDate: command.openServiceDate,
-        closeServiceDate: command.closeServiceDate,
-        campus: university.campus,
-        website: command.website,
-        pairingMode: command.pairingMode,
-        maxTandemsPerUser: command.maxTandemsPerUser,
-        notificationEmail: command.notificationEmail,
-        specificLanguagesAvailable,
-        nativeLanguage,
-      }),
+    const universityToUpdate = new University({
+      id: university.id,
+      name: command.name,
+      country,
+      codes: command.codes || [],
+      domains: command.domains || [],
+      timezone: command.timezone,
+      admissionEnd: command.admissionEnd,
+      admissionStart: command.admissionStart,
+      openServiceDate: command.openServiceDate,
+      closeServiceDate: command.closeServiceDate,
+      campus: university.campus,
+      website: command.website,
+      pairingMode: command.pairingMode,
+      maxTandemsPerUser: command.maxTandemsPerUser,
+      notificationEmail: command.notificationEmail,
+      specificLanguagesAvailable,
+      nativeLanguage,
+      defaultContactId: command.defaultContactId || university.defaultContactId,
+    });
+
+    const updatedUniversity = await this.universityRepository.update(
+      universityToUpdate,
     );
+
+    return new University(updatedUniversity);
   }
 }

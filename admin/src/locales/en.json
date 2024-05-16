@@ -6,7 +6,8 @@
             "error": "An error occurred while creating an administrator",
             "password": "Please enter a password for the administrator (1 uppercase, 1 lowercase and 1 number)",
             "title": "Creating an administrator",
-            "university": "Please select a university for the administrator"
+            "university": "Please select a university for the administrator",
+            "group": "Please select one or more groups for the administrator"
         },
         "label": "Administrators",
         "tabLabel": "Administrators",
@@ -16,8 +17,18 @@
             "error": "An error occurred while updating an administrator",
             "password": "Please enter an administrator password (1 uppercase, 1 lowercase and 1 number) if you want to update it",
             "title": "Updating an administrator",
-            "university": "Update the university to administer"
-        }
+            "university": "Update the university to administer",
+            "group": "Update the group(s) of the administrator"
+        },
+        "confirmDeleteOwnAccount": "Are you sure you want to delete your user?\n You are currently logged in to this account, after deletion you will be logged out."
+    },
+    "admin_groups_picker": {
+        "animator": "Animator",
+        "error": "Error retrieving administrator groups",
+        "manager": "Manager",
+        "placeholder": "Add an administrator group",
+        "administrator": "Super Administrator",
+        "mandatory": "An administrator must be associated with a group"
     },
     "campus": {
         "create": {
@@ -60,11 +71,14 @@
         "email": "Email",
         "etandem": "E-tandem",
         "firstname": "Firstname",
+        "defaultContact": "Default contact",
+        "noDefaultContact": "No default contact",
         "gender": "Gender",
         "image": "Image",
         "language": "Language",
         "lastname": "Lastname",
         "new_translation": "New translation",
+        "noAdministartorFound": "No administrator found",
         "profile": "Profile",
         "password": "Password",
         "reported": "Reported",
@@ -250,6 +264,8 @@
         "certificate": "Certificate",
         "diploma": "Diploma",
         "division": "Division",
+        "contact": "Contact",
+        "noContact": "No contact",
         "country": "Country",
         "interests": "Interests",
         "label": "Users",
@@ -344,6 +360,7 @@
             "codes": "Codes list for inscription",
             "codes_error": "Code must has at least 6 characters and have a letter and a number",
             "country": "Partner university country",
+            "defaultContact": "Default contact",
             "domains": "Domain name list for inscription",
             "language": "Default language",
             "logo": "University logo",
@@ -378,6 +395,8 @@
             "close_service": "Service closure date",
             "codes": "Inscription codes",
             "confidentialityUrl": "Privacy rules URL",
+            "defaultContact": "Default contact",
+            "noDefaultContact": "No default contact",
             "country": "University country",
             "domains": "Allowed domain names",
             "language": "Default language",
@@ -417,6 +436,7 @@
             "codes": "Codes list for inscription",
             "codes_error": "Code must has at least 6 characters and have a letter and a number",
             "country": "University country",
+            "defaultContact": "Default contact",
             "domains": "Domain name list for inscription",
             "domains_error": "Domain name must start with @",
             "error": "An error occurred while updating the university",

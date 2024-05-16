@@ -4,6 +4,19 @@ import { Language } from './language.model';
 import { MediaObject } from './media.model';
 import { University } from './university.model';
 
+export enum AdminGroup {
+  SUPER_ADMIN = 'Administrator',
+  ANIMATOR = 'Animator',
+  MANAGER = 'Manager',
+}
+
+export enum AdminRole {
+  ADMIN = 'admin',
+  SUPER_ADMIN = 'super-admin',
+  ANIMATOR = 'animator',
+  MANAGER = 'manager',
+}
+
 export enum UserStatus {
   ACTIVE = 'ACTIVE',
   BANNED = 'BANNED',
@@ -33,6 +46,7 @@ export type UserProps = {
   role: Role;
   country: CountryCode;
   avatar?: MediaObject;
+  contactId?: string;
   status?: UserStatus;
   deactivatedReason?: string;
   acceptsEmail: boolean;
@@ -65,6 +79,7 @@ export class User {
   readonly staffFunction?: string;
   readonly createdAt?: Date;
   readonly updatedAt?: Date;
+  readonly contactId: string;
   devices: Device[];
 
   constructor(props: UserProps) {
@@ -88,6 +103,7 @@ export class User {
     this.createdAt = props.createdAt;
     this.updatedAt = props.updatedAt;
     this.devices = props.devices ?? [];
+    this.contactId = props.contactId;
   }
 
   public filterLearnableLanguages(languages: Language[]): Language[] {

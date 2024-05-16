@@ -10,23 +10,29 @@ export class PrismaUserRepository implements UserRepository {
   constructor(private readonly prisma: PrismaService) {}
 
   async create(user: User): Promise<User> {
+    const data: any = {
+      id: user.id,
+      Organization: { connect: { id: user.university.id } },
+      email: user.email,
+      firstname: user.firstname,
+      lastname: user.lastname,
+      age: user.age,
+      gender: user.gender,
+      role: user.role,
+      diploma: user.diploma,
+      division: user.division,
+      staff_function: user.staffFunction,
+      Nationality: { connect: { id: user.country.id } },
+      deactivated_reason: user.deactivatedReason,
+    };
+
+    if (user.contactId) {
+      data.Contact = { connect: { id: user.contactId } };
+    }
     const instance = await this.prisma.users.create({
-      data: {
-        id: user.id,
-        Organization: { connect: { id: user.university.id } },
-        email: user.email,
-        firstname: user.firstname,
-        lastname: user.lastname,
-        age: user.age,
-        gender: user.gender,
-        role: user.role,
-        diploma: user.diploma,
-        division: user.division,
-        staff_function: user.staffFunction,
-        Nationality: { connect: { id: user.country.id } },
-        deactivated_reason: user.deactivatedReason,
-      },
+      data,
       include: {
+        Contact: true,
         Organization: { include: UniversityRelations },
         Nationality: true,
         Avatar: true,
@@ -82,21 +88,34 @@ export class PrismaUserRepository implements UserRepository {
   }
 
   async update(user: User): Promise<User> {
+    const data: any = {
+      Organization: { connect: { id: user.university.id } },
+      email: user.email,
+      firstname: user.firstname,
+      lastname: user.lastname,
+      age: user.age,
+      gender: user.gender,
+      role: user.role,
+      Nationality: { connect: { id: user.country.id } },
+      status: user.status,
+      deactivated_reason: user.deactivatedReason,
+      accepts_email: user.acceptsEmail,
+    };
+
+    if (user.contactId) {
+      data.Contact = {
+        connectOrCreate: {
+          where: { id: user.contactId },
+          create: {
+            id: user.contactId,
+          },
+        },
+      };
+    }
+
     await this.prisma.users.update({
       where: { id: user.id },
-      data: {
-        Organization: { connect: { id: user.university.id } },
-        email: user.email,
-        firstname: user.firstname,
-        lastname: user.lastname,
-        age: user.age,
-        gender: user.gender,
-        role: user.role,
-        Nationality: { connect: { id: user.country.id } },
-        status: user.status,
-        deactivated_reason: user.deactivatedReason,
-        accepts_email: user.acceptsEmail,
-      },
+      data,
     });
 
     const updatedUser = await this.prisma.users.findUnique({

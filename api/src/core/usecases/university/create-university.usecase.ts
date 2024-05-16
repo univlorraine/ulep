@@ -121,6 +121,8 @@ export class CreateUniversityUsecase {
       nativeLanguage,
     });
 
-    return this.universityRepository.create(university);
+    const newUniversity = await this.universityRepository.create(university);
+
+    return newUniversity;
   }
 }

@@ -1,5 +1,5 @@
 import * as Swagger from '@nestjs/swagger';
-import { Expose, Transform } from 'class-transformer';
+import { Expose, Transform, Type } from 'class-transformer';
 import {
   IsString,
   IsNotEmpty,
@@ -10,12 +10,20 @@ import {
   Length,
   IsOptional,
   IsBoolean,
+  IsObject,
+  IsNotEmptyObject,
 } from 'class-validator';
 import { UniversityResponse } from '../universities';
 import { CreateUserCommand } from 'src/core/usecases/user';
-import { Gender, Role, User, UserStatus } from 'src/core/models/user.model';
+import {
+  AdminGroup,
+  Gender,
+  Role,
+  User,
+  UserStatus,
+} from 'src/core/models/user.model';
 import { MediaObjectResponse } from '../medias';
-import { UserRepresentation } from '@app/keycloak';
+import { KeycloakGroup, UserRepresentation } from '@app/keycloak';
 
 export class CreateUserRequest implements CreateUserCommand {
   @Swagger.ApiProperty({ type: 'string', format: 'email' })
@@ -117,6 +125,36 @@ export class UpdateUserRequest {
   @IsOptional()
   @IsBoolean()
   acceptsEmail: boolean;
+
+  @Swagger.ApiProperty({ type: 'string' })
+  @IsOptional()
+  contactId?: string;
+}
+
+export class KeycloakGroupResponse {
+  @Swagger.ApiProperty({ type: 'string', format: 'uuid' })
+  @Expose({ groups: ['read'] })
+  id: string;
+
+  @Swagger.ApiProperty({ type: 'string' })
+  @Expose({ groups: ['read'] })
+  name: string;
+
+  @Swagger.ApiProperty({ type: 'string' })
+  @Expose({ groups: ['read'] })
+  path: string;
+
+  constructor(partial: Partial<KeycloakGroupResponse>) {
+    Object.assign(this, partial);
+  }
+
+  static fromDomain(group: KeycloakGroup) {
+    return new KeycloakGroupResponse({
+      id: group.id,
+      name: group.name,
+      path: group.path,
+    });
+  }
 }
 
 export class AdministratorResponse {
@@ -140,19 +178,44 @@ export class AdministratorResponse {
   @Expose({ groups: ['read'] })
   universityId?: string;
 
+  @Swagger.ApiProperty()
+  @Expose({ groups: ['read'] })
+  group?: KeycloakGroupResponse;
+
   constructor(partial: Partial<AdministratorResponse>) {
     Object.assign(this, partial);
   }
 
   static fromDomain(user: UserRepresentation) {
+    const adminGroupNames = Object.values(AdminGroup) as string[];
+
     return new AdministratorResponse({
       id: user.id,
       email: user.email,
       universityId: user.attributes?.universityId?.[0],
       firstname: user.firstName,
       lastname: user.lastName,
+      group: user.groups
+        ? KeycloakGroupResponse.fromDomain(
+            user.groups.find((group) => adminGroupNames.includes(group.name)),
+          )
+        : null,
     });
   }
+}
+
+class KeycloakGroupRequest implements KeycloakGroup {
+  @Swagger.ApiProperty({ type: 'string' })
+  @IsString()
+  id: string;
+
+  @Swagger.ApiProperty({ type: 'string' })
+  @IsString()
+  name: string;
+
+  @Swagger.ApiProperty({ type: 'string' })
+  @IsString()
+  path: string;
 }
 
 export class CreateAdministratorRequest {
@@ -176,6 +239,12 @@ export class CreateAdministratorRequest {
   @Swagger.ApiProperty({ type: 'string' })
   @IsString()
   password: string;
+
+  @Swagger.ApiProperty({ type: 'string' })
+  @IsObject()
+  @IsNotEmptyObject()
+  @Type(() => KeycloakGroupRequest)
+  group: KeycloakGroupRequest;
 }
 
 export class UpdateAdministratorRequest {
@@ -206,6 +275,10 @@ export class UpdateAdministratorRequest {
   @IsString()
   @IsOptional()
   password?: string;
+
+  @Swagger.ApiProperty({ type: 'string' })
+  @IsObject()
+  group: KeycloakGroup;
 }
 
 export class AddDeviceRequest {
@@ -221,6 +294,7 @@ export class AddDeviceRequest {
   @IsBoolean()
   isIos: boolean;
 }
+
 export class UserResponse {
   @Swagger.ApiProperty({ type: 'string', format: 'uuid' })
   @Expose({ groups: ['read'] })
@@ -282,6 +356,14 @@ export class UserResponse {
   @Expose({ groups: ['read'] })
   acceptsEmail: boolean;
 
+  @Swagger.ApiPropertyOptional({ type: 'string' })
+  @Expose({ groups: ['read'] })
+  contactId?: string;
+
+  @Swagger.ApiPropertyOptional({ type: AdministratorResponse })
+  @Expose({ groups: ['read'] })
+  contact?: AdministratorResponse;
+
   constructor(partial: Partial<UserResponse>) {
     Object.assign(this, partial);
   }
@@ -302,6 +384,7 @@ export class UserResponse {
       division: user.division,
       diploma: user.diploma,
       staffFunction: user.staffFunction,
+      contactId: user.contactId,
       avatar: user.avatar
         ? MediaObjectResponse.fromMediaObject(user.avatar)
         : null,

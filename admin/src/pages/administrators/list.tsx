@@ -12,6 +12,7 @@ import {
     DeleteButton,
     useLogout,
     ListProps,
+    FunctionField,
 } from 'react-admin';
 import ConfigPagesHeader from '../../components/tabs/ConfigPagesHeader';
 import Administrator from '../../entities/Administrator';
@@ -64,6 +65,12 @@ const AdministratorList = (props: ListProps<Administrator>) => {
                     <TextField label={translate('global.email')} source="email" />
                     <TextField label={translate('global.firstname')} source="firstname" />
                     <TextField label={translate('global.lastname')} source="lastname" />
+                    <FunctionField
+                        label={translate('global.group')}
+                        render={(admin: Administrator) =>
+                            translate(`admin_groups_picker.${admin.group.name.toLowerCase()}`)
+                        }
+                    />
 
                     {identity.isCentralUniversity && (
                         <ReferenceField

@@ -102,6 +102,7 @@ const AppContext = () => {
         const getLanguage = async () => {
             const deviceLanguage = await Device.getLanguageCode();
             i18n.changeLanguage(language || deviceLanguage.value);
+            document.documentElement.lang = language || deviceLanguage.value;
         };
         if (isReady) {
             getLanguage();

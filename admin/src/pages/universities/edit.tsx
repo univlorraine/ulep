@@ -2,6 +2,7 @@ import React from 'react';
 import { useTranslate, useNotify, useRedirect, useUpdate, Edit, WithRecord } from 'react-admin';
 import UniversityForm from '../../components/form/UniversityForm';
 import UniversitiesPagesHeader from '../../components/tabs/UniversitiesPagesHeader';
+import Administrator from '../../entities/Administrator';
 import Country from '../../entities/Country';
 import Language from '../../entities/Language';
 import University from '../../entities/University';
@@ -30,6 +31,7 @@ const EditUniversity = () => {
         website?: string,
         notificationEmail?: string,
         specificLanguagesAvailable?: Language[],
+        defaultContact?: Administrator,
         file?: File
     ) => {
         const formData = universityToFormData(
@@ -48,6 +50,7 @@ const EditUniversity = () => {
             website,
             notificationEmail,
             specificLanguagesAvailable,
+            defaultContact,
             file
         );
 
@@ -86,6 +89,7 @@ const EditUniversity = () => {
                             closeServiceDate={record.closeServiceDate}
                             codes={record.codes}
                             country={record.country}
+                            defaultContact={record.defaultContact}
                             domains={record.domains}
                             handleSubmit={(
                                 name: string,
@@ -103,6 +107,7 @@ const EditUniversity = () => {
                                 website?: string,
                                 notificationEmail?: string,
                                 specificLanguagesAvailable?: Language[],
+                                defaultContact?: Administrator,
                                 file?: File
                             ) =>
                                 handleSubmit(
@@ -122,6 +127,7 @@ const EditUniversity = () => {
                                     website,
                                     notificationEmail,
                                     specificLanguagesAvailable,
+                                    defaultContact,
                                     file
                                 )
                             }
@@ -134,6 +140,7 @@ const EditUniversity = () => {
                             specificLanguagesAvailable={record.specificLanguagesAvailable}
                             timezone={record.timezone}
                             tradKey="update"
+                            universityId={record.parent ? record.id : undefined}
                             website={record.website}
                         />
                     )}

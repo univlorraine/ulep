@@ -6,7 +6,8 @@
             "error": "Une erreur est survenue lors de la création d'un administrateur",
             "password": "Veuillez saisir un mot de passe pour l'administrateur ( 1 majuscule, 1 minuscule et 1 chiffre )",
             "title": "Création d'un administrateur",
-            "university": "Veuillez sélectionner une université pour l'administrateur"
+            "university": "Veuillez sélectionner une université pour l'administrateur",
+            "group": "Veuillez sélectionner un ou plusieurs groupe(s) pour l'administrateur"
         },
         "label": "Administrateurs",
         "tabLabel": "Administrateurs",
@@ -16,9 +17,18 @@
             "error": "Une erreur est survenue lors de la mise à jour d'un administrateur",
             "password": "Veuillez saisir un mot de passe pour l'administrateur ( 1 majuscule, 1 minuscule et 1 chiffre ) si vous voulez le mettre à jour",
             "title": "Mise à jour d'un administrateur",
-            "university": "Mettez à jour l'université à administrer"
+            "university": "Mettez à jour l'université à administrer",
+            "group": "Mettez à jour le(s) rôle(s) de l'administrateur"
         },
         "confirmDeleteOwnAccount": "Êtes-vous sûr(e) de vouloir supprimer votre utilisateur ?\n Vous êtes actuellement connecté(e) à ce compte, après la suppression vous serez déconnecté(e)."
+    },
+    "admin_groups_picker": {
+        "animator": "Animateur",
+        "error": "Erreur lors de la récupération des groupes d'administrateur",
+        "manager": "Manageur",
+        "placeholder": "Veuillez sélectionner un groupe d'administrateur",
+        "administrator": "Super administrateur",
+        "mandatory": "Un administrateur doit être associé à un groupe"
     },
     "campus": {
         "create": {
@@ -61,11 +71,13 @@
         "email": "Email",
         "etandem": "E-tandem",
         "firstname": "Prénom",
+        "group": "Groupe",
         "gender": "Genre",
         "image": "Image",
         "language": "Langue",
         "lastname": "Nom",
         "new_translation": "Nouvelle traduction",
+        "noAdministartorFound": "Aucun administrateur trouvé",
         "password": "Mot de passe",
         "profile": "Profil",
         "reported": "Signalé",
@@ -256,6 +268,8 @@
         "country": "Pays",
         "interests": "Centre d'intérêts",
         "label": "Inscrits",
+        "contact": "Contact",
+        "noContact": "Aucun contact",
         "language_title": "Langues",
         "learning_language": {
             "name": "Nom de langue d'apprentissage",
@@ -349,6 +363,7 @@
             "open_service_error": "La date d'ouverture du service doit être avant la date de fermeture",
             "close_service": "Date de fermeture du service",
             "close_service_error": "La date de fermeture du service doit être après la date d'ouverture",
+            "defaultContact": "Contact par défaut",
             "codes": "Liste des codes pour l'inscription",
             "codes_error": "Le code doit faire une taille de 6 min. et avoir au moins une lettre et un chiffre",
             "country": "Pays de la nouvelle université partenaire",
@@ -386,6 +401,8 @@
             "codes": "Codes d'inscriptions",
             "confidentialityUrl": "Url des règles de confidentialités",
             "country": "Pays de l'université",
+            "defaultContact": "Contact par défaut",
+            "noDefaultContact": "Aucun contact par défaut",
             "domains": "Nom de domaines autorisés",
             "language": "Langue par défaut",
             "logo": "Logo de l'université",
@@ -420,6 +437,7 @@
             "codes": "Liste des codes pour l'inscription",
             "codes_error": "Le code doit faire une taille de 6 min. et avoir au moins une lettre et un chiffre",
             "country": "Pays de l'université",
+            "defaultContact": "Contact par défaut",
             "domains": "Liste des noms de domaines pour l'inscription",
             "domains_error": "Le nom de domaine doit commencer par un @",
             "error": "Une erreur est survenue lors de la mise à jour de l'université",

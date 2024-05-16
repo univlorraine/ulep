@@ -21,6 +21,7 @@ export interface ProfileFormPayload {
     firstname?: string;
     lastname?: string;
     password?: string;
+    contactId?: string;
 }
 
 export const getProfileDisplayName = (profile?: Profile): string =>
