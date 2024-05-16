@@ -222,6 +222,9 @@ minio:
       - hosts:
          - minio-api.ulep.thestaging.io
         secretName: minio-api
+  env:
+     - name: MINIO_DEFAULT_BUCKETS
+       value: "assets,i18n,images:private,objective:private"
 
 admin:
   name: "admin"
