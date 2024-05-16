@@ -1,9 +1,11 @@
 name: Bump Version
 
 on:
-    push:
-        branches:
-            - develop
+  pull_request:
+    branches:
+      - master
+    types:
+      - opened 
 
 jobs:
     bump-version:
