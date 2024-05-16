@@ -11,7 +11,7 @@ jobs:
 
         steps:
             - name: Checkout repository
-              uses: actions/checkout@v3.5.2
+              uses: actions/checkout@v2
               with:
                 ssh-key: ${{ secrets.BUMP_VERSION_SECRET }}
 
@@ -39,9 +39,7 @@ jobs:
                   cd ..
 
             - name: Commit and push changes
-              run: |
-                  git config --global user.name 'github-actions[bot]'
-                  git config --global user.email 'github-actions[bot]@users.noreply.github.com'
+              run: |                  
                   git add admin/package.json api/package.json app/package.json
                   git commit -m 'chore: bump minor version in package.json files'
                   git push
