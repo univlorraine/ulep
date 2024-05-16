@@ -27,7 +27,8 @@
         "error": "Error retrieving administrator groups",
         "manager": "Manager",
         "placeholder": "Add an administrator group",
-        "administrator": "Super Administrator"
+        "administrator": "Super Administrator",
+        "mandatory": "An administrator must be associated with a group"
     },
     "campus": {
         "create": {

@@ -27,18 +27,9 @@ export class CreateAdministratorUsecase {
     private readonly universityRepository: UniversityRepository,
   ) {}
 
-  async execute(
-    command: CreateAdministratorCommand,
-    currentUserRoles: string[],
-  ) {
+  async execute(command: CreateAdministratorCommand) {
     if (command.universityId) {
       await this.assertUniversityExist(command.universityId);
-    }
-
-    if (!currentUserRoles.includes(KeycloakRealmRoles.SUPER_ADMIN)) {
-      // command.group = command.groups.filter(
-      //   (group) => group.name !== KeycloakGroups.SUPER_ADMIN,
-      // );
     }
 
     let user = await this.keycloakClient.getUserByEmail(command.email);

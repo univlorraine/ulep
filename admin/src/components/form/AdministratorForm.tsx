@@ -55,7 +55,9 @@ const AdministratorForm: React.FC<AdministratorFormProps> = ({
     };
 
     const onCreatePressed = () => {
-        if (!newGroup) return notify('');
+        if (!newGroup) {
+            return notify(translate('admin_groups_picker.mandatory'));
+        }
 
         return handleSubmit({
             id,

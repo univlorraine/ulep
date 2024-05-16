@@ -50,7 +50,6 @@ import {
 import { AuthenticationGuard } from '../guards';
 import { ImagesFilePipe } from '../validators/images.validator';
 import { User } from 'src/core/models';
-import { GetAdministratorsQueryParams } from 'src/api/dtos/users/administrators-filter';
 import { RevokeSessionsUsecase } from 'src/core/usecases/user/revoke-sessions.usecase';
 import { OwnerAllowed } from '../decorators/owner.decorator';
 import {
@@ -131,10 +130,7 @@ export class UserController {
   @UseGuards(AuthenticationGuard)
   @Swagger.ApiOperation({ summary: 'Collection of Administrator ressource.' })
   @CollectionResponse(UserResponse)
-  async findAllAdministrators(
-    @CurrentUser() user: KeycloakUser,
-    @Query() { universityId }: GetAdministratorsQueryParams,
-  ) {
+  async findAllAdministrators(@CurrentUser() user: KeycloakUser) {
     const administrators = await this.getAdministratorsUsecase.execute(user);
 
     return administrators.map(AdministratorResponse.fromDomain);
@@ -156,14 +152,8 @@ export class UserController {
   @UseGuards(AuthenticationGuard)
   @Swagger.ApiOperation({ summary: 'Create an Administrator ressource.' })
   @Swagger.ApiCreatedResponse({ type: AdministratorResponse })
-  async createAdministrator(
-    @Body() body: CreateAdministratorRequest,
-    @CurrentUser() user: KeycloakUser,
-  ) {
-    const admin = await this.createAdministratorUsecase.execute(
-      body,
-      user.realm_access.roles,
-    );
+  async createAdministrator(@Body() body: CreateAdministratorRequest) {
+    const admin = await this.createAdministratorUsecase.execute(body);
 
     return AdministratorResponse.fromDomain(admin);
   }

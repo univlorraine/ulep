@@ -108,7 +108,7 @@ const LearningLanguageList = () => {
                 }}
                 filters={filters}
             >
-                <Datagrid bulkActionButtons={readOnly ? false : <LearningLanguageBulkActionsToolbar />} rowClick="show">
+                <Datagrid bulkActionButtons={!readOnly && <LearningLanguageBulkActionsToolbar />} rowClick="show">
                     <FunctionField
                         label={translate('learning_languages.list.tableColumns.name')}
                         render={(record: LearningLanguage) => getProfileDisplayName(record.profile)}

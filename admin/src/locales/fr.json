@@ -26,8 +26,9 @@
         "animator": "Animateur",
         "error": "Erreur lors de la récupération des groupes d'administrateur",
         "manager": "Manageur",
-        "placeholder": "Ajouter un groupe d'administrateur",
-        "administrator": "Super administrateur"
+        "placeholder": "Veuillez sélectionner un groupe d'administrateur",
+        "administrator": "Super administrateur",
+        "mandatory": "Un administrateur doit être associé à un groupe"
     },
     "campus": {
         "create": {
