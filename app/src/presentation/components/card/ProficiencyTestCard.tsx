@@ -25,10 +25,11 @@ const ProficiencyTestCard: React.FC<ProficiencyTestCardProps> = ({ testedLanguag
                         <div>
                             {testedLanguages.map((testedLanguage, index) => (
                                 <span
+                                    className={styles['tested-languages']}
                                     role="img"
                                     aria-label={`${testedLanguage.level} ${testedLanguage.name}`}
                                     key={index}
-                                >{`( ${testedLanguage.level} ) ${codeLanguageToFlag(testedLanguage.code)}${
+                                >{`${codeLanguageToFlag(testedLanguage.code)} ( ${testedLanguage.level} )${
                                     index !== testedLanguages.length - 1 ? ', ' : ''
                                 }`}</span>
                             ))}

@@ -4,6 +4,19 @@ import { Language } from './language.model';
 import { MediaObject } from './media.model';
 import { University } from './university.model';
 
+export enum AdminGroup {
+  SUPER_ADMIN = 'Administrator',
+  ANIMATOR = 'Animator',
+  MANAGER = 'Manager',
+}
+
+export enum AdminRole {
+  ADMIN = 'admin',
+  SUPER_ADMIN = 'super-admin',
+  ANIMATOR = 'animator',
+  MANAGER = 'manager',
+}
+
 export enum UserStatus {
   ACTIVE = 'ACTIVE',
   BANNED = 'BANNED',

@@ -6,7 +6,8 @@
             "error": "An error occurred while creating an administrator",
             "password": "Please enter a password for the administrator (1 uppercase, 1 lowercase and 1 number)",
             "title": "Creating an administrator",
-            "university": "Please select a university for the administrator"
+            "university": "Please select a university for the administrator",
+            "group": "Please select one or more groups for the administrator"
         },
         "label": "Administrators",
         "tabLabel": "Administrators",
@@ -16,8 +17,18 @@
             "error": "An error occurred while updating an administrator",
             "password": "Please enter an administrator password (1 uppercase, 1 lowercase and 1 number) if you want to update it",
             "title": "Updating an administrator",
-            "university": "Update the university to administer"
-        }
+            "university": "Update the university to administer",
+            "group": "Update the group(s) of the administrator"
+        },
+        "confirmDeleteOwnAccount": "Are you sure you want to delete your user?\n You are currently logged in to this account, after deletion you will be logged out."
+    },
+    "admin_groups_picker": {
+        "animator": "Animator",
+        "error": "Error retrieving administrator groups",
+        "manager": "Manager",
+        "placeholder": "Add an administrator group",
+        "administrator": "Super Administrator",
+        "mandatory": "An administrator must be associated with a group"
     },
     "campus": {
         "create": {
