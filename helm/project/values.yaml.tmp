@@ -176,9 +176,9 @@ minio:
   global:
     storageClass: scw-bssd
   image:
-    tag: 2023.9.30-debian-11-r0
+    tag: 2024.5.10-debian-12-r2
   clientImage:
-    tag: 2023.9.29-debian-11-r0
+    tag: 2024.5.10-debian-12-r2
   auth:
     rootUser: *minioAccessKey
     rootPassword: *minioSecretKey
@@ -221,10 +221,8 @@ minio:
     extraTls:
       - hosts:
          - minio-api.ulep.thestaging.io
-        secretName: minio-api
-  env:
-     - name: MINIO_DEFAULT_BUCKETS
-       value: "assets,i18n,images:private,objective:private"
+        secretName: minio-api  
+  defaultBuckets: "i18n,assets,objective:private,images:private"
 
 admin:
   name: "admin"
