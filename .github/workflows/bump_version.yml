@@ -1,0 +1,41 @@
+name: Bump Version
+
+on:
+    push:
+        branches:
+            - develop
+
+jobs:
+    bump-version:
+        runs-on: ubuntu-latest
+
+        steps:
+            - name: Checkout repository
+              uses: actions/checkout@v2
+
+            - name: Set up Node.js
+              uses: actions/setup-node@v2
+              with:
+                  node-version: "14"
+
+            - name: Install npm version bump utility
+              run: npm install -g npm-version-bump
+
+            - name: Bump version in admin/package.json
+              run: npm-version-bump minor -f admin/package.json
+
+            - name: Bump version in api/package.json
+              run: npm-version-bump minor -f api/package.json
+
+            - name: Bump version in app/package.json
+              run: npm-version-bump minor -f app/package.json
+
+            - name: Commit and push changes
+              run: |
+                  git config --global user.name 'github-actions[bot]'
+                  git config --global user.email 'github-actions[bot]@users.noreply.github.com'
+                  git add admin/package.json api/package.json app/package.json
+                  git commit -m 'chore: bump minor version in package.json files'
+                  git push
+              env:
+                  GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
