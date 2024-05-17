@@ -20,8 +20,10 @@ import {
     ChipField,
     useGetIdentity,
     Loading,
+    usePermissions,
 } from 'react-admin';
 import PageTitle from '../../components/PageTitle';
+import { Role } from '../../entities/Administrator';
 import Language from '../../entities/Language';
 import { Profile } from '../../entities/Profile';
 import User from '../../entities/User';
@@ -105,6 +107,7 @@ const ProfileFilter = (props: any) => {
 };
 
 const ProfileList = (props: any) => {
+    const { permissions } = usePermissions();
     const translate = useTranslate();
 
     const { data: identity, isLoading: isLoadingIdentity } = useGetIdentity();
@@ -135,6 +138,8 @@ const ProfileList = (props: any) => {
         return <Loading />;
     }
 
+    const readOnly: boolean = permissions.checkRole(Role.ANIMATOR);
+
     return (
         <>
             <PageTitle>{translate('profiles.title')}</PageTitle>
@@ -145,9 +150,10 @@ const ProfileList = (props: any) => {
                 }}
                 filters={<ProfileFilter />}
                 title={translate('profiles.label')}
+                readOnly
                 {...props}
             >
-                <Datagrid rowClick="show">
+                <Datagrid bulkActionButtons={readOnly ? false : undefined} rowClick="show" aria-readonly>
                     <FunctionField
                         label={translate('global.role')}
                         render={(record: { user: User }) => translate(`global.${record.user.role.toLowerCase()}`)}
@@ -186,21 +192,25 @@ const ProfileList = (props: any) => {
                     />
                     <FunctionField
                         label={translate('profiles.status')}
-                        render={(record: { user: User }) => (
-                            <Select
-                                onChange={(value) =>
-                                    onUpdateUserStatus(record.user.id, value.target.value as UserStatus)
-                                }
-                                onClick={(e) => e.stopPropagation()}
-                                size="small"
-                                value={record.user.status ?? 'ACTIVE'}
-                            >
-                                <MenuItem value="ACTIVE">{translate('global.userStatus.active')}</MenuItem>
-                                <MenuItem value="REPORTED">{translate('global.userStatus.reported')}</MenuItem>
-                                <MenuItem value="BANNED">{translate('global.userStatus.banned')}</MenuItem>
-                                <MenuItem value="CANCELED">{translate('global.userStatus.canceled')}</MenuItem>
-                            </Select>
-                        )}
+                        render={(record: { user: User }) =>
+                            readOnly ? (
+                                translate(`global.userStatus.${(record.user.status ?? 'ACTIVE').toLowerCase()}`)
+                            ) : (
+                                <Select
+                                    onChange={(value) =>
+                                        onUpdateUserStatus(record.user.id, value.target.value as UserStatus)
+                                    }
+                                    onClick={(e) => e.stopPropagation()}
+                                    size="small"
+                                    value={record.user.status ?? 'ACTIVE'}
+                                >
+                                    <MenuItem value="ACTIVE">{translate('global.userStatus.active')}</MenuItem>
+                                    <MenuItem value="REPORTED">{translate('global.userStatus.reported')}</MenuItem>
+                                    <MenuItem value="BANNED">{translate('global.userStatus.banned')}</MenuItem>
+                                    <MenuItem value="CANCELED">{translate('global.userStatus.canceled')}</MenuItem>
+                                </Select>
+                            )
+                        }
                     />
                 </Datagrid>
             </List>

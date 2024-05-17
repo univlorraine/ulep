@@ -6,7 +6,8 @@
             "error": "Une erreur est survenue lors de la création d'un administrateur",
             "password": "Veuillez saisir un mot de passe pour l'administrateur ( 1 majuscule, 1 minuscule et 1 chiffre )",
             "title": "Création d'un administrateur",
-            "university": "Veuillez sélectionner une université pour l'administrateur"
+            "university": "Veuillez sélectionner une université pour l'administrateur",
+            "group": "Veuillez sélectionner un ou plusieurs groupe(s) pour l'administrateur"
         },
         "label": "Administrateurs",
         "tabLabel": "Administrateurs",
@@ -16,9 +17,18 @@
             "error": "Une erreur est survenue lors de la mise à jour d'un administrateur",
             "password": "Veuillez saisir un mot de passe pour l'administrateur ( 1 majuscule, 1 minuscule et 1 chiffre ) si vous voulez le mettre à jour",
             "title": "Mise à jour d'un administrateur",
-            "university": "Mettez à jour l'université à administrer"
+            "university": "Mettez à jour l'université à administrer",
+            "group": "Mettez à jour le(s) rôle(s) de l'administrateur"
         },
         "confirmDeleteOwnAccount": "Êtes-vous sûr(e) de vouloir supprimer votre utilisateur ?\n Vous êtes actuellement connecté(e) à ce compte, après la suppression vous serez déconnecté(e)."
+    },
+    "admin_groups_picker": {
+        "animator": "Animateur",
+        "error": "Erreur lors de la récupération des groupes d'administrateur",
+        "manager": "Manageur",
+        "placeholder": "Veuillez sélectionner un groupe d'administrateur",
+        "administrator": "Super administrateur",
+        "mandatory": "Un administrateur doit être associé à un groupe"
     },
     "campus": {
         "create": {
@@ -61,6 +71,7 @@
         "email": "Email",
         "etandem": "E-tandem",
         "firstname": "Prénom",
+        "group": "Groupe",
         "gender": "Genre",
         "image": "Image",
         "language": "Langue",

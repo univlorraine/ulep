@@ -55,7 +55,7 @@ import { ScheduleModule } from '@nestjs/schedule';
         password: env.get<string>('KEYCLOAK_ADMIN_PASSWORD'),
         clientId: env.get<string>('KEYCLOAK_CLIENT_ID'),
         clientSecret: env.get<string>('KEYCLOAK_CLIENT_SECRET'),
-        adminGroupId: env.get<string>('KEYCLOAK_ADMIN_GROUP_ID'),
+        adminRoleName: env.get<string>('KEYCLOAK_ADMIN_ROLE_NAME'),
       }),
       inject: [ConfigService],
     }),
