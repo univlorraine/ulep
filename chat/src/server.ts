@@ -3,10 +3,14 @@ import {
     INestApplication,
     ValidationPipe,
 } from '@nestjs/common';
-import { NestFactory } from '@nestjs/core';
+import { NestFactory, Reflector } from '@nestjs/core';
 import { NestExpressApplication } from '@nestjs/platform-express';
 import { DocumentBuilder, OpenAPIObject, SwaggerModule } from '@nestjs/swagger';
 import { AppModule } from './app.module';
+import {
+    CollectionInterceptor,
+    HttpLoggerInterceptor,
+} from 'src/api/interceptors';
 
 export class Server {
     public async run(port: number): Promise<INestApplication> {
@@ -16,6 +20,7 @@ export class Server {
         );
 
         this.addGlobalPipes(app);
+        this.addGlobalInterceptors(app);
         this.addCORSConfiguration(app);
 
         if (process.env.NODE_ENV !== 'production') {
@@ -35,6 +40,18 @@ export class Server {
                 forbidNonWhitelisted: true,
             }),
         );
+    }
+
+    protected addGlobalInterceptors(app: INestApplication): void {
+        app.useGlobalInterceptors(
+            new ClassSerializerInterceptor(app.get(Reflector), {
+                strategy: 'excludeAll',
+                groups: ['read'],
+            }),
+        );
+
+        app.useGlobalInterceptors(new HttpLoggerInterceptor());
+        app.useGlobalInterceptors(new CollectionInterceptor());
     }
 
     protected addCORSConfiguration(app: INestApplication): void {

@@ -13,6 +13,16 @@ services:
             SMTP_HOST: mailer
             SMTP_PORT: 1025
             SMTP_SENDER: test@thetribe.io
+
+    chat:
+        build:
+            context: ./chat
+            target: chat_dev
+        volumes:
+            - ./chat:/srv/app
+        ports:
+            - ${CHAT_PORT:-3002}:3000
+
     admin:
         build:
             context: ./admin

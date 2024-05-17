@@ -1,5 +1,6 @@
 generator client {
   provider = "prisma-client-js"
+    binaryTargets = ["native", "linux-musl-arm64-openssl-3.0.x"]
 }
 
 datasource db {
@@ -11,9 +12,10 @@ model Conversation {
   id                String        @id @default(uuid()) @map("_id")
   createdAt         DateTime      @default(now())
   participantIds    String[]
-  messages          Message[]
   lastActivityAt    DateTime      @default(now())
   metadata          Json          @default("{}")
+
+  Messages          Message[]
 
   @@map("conversations")
 }
@@ -23,11 +25,23 @@ model Message {
   createdAt             DateTime     @default(now())
   conversationId        String
   content               String
-  userId                String
-  userName              String
+  isReported            Boolean      @default(false)
+  ownerId               String
   type                  String
+  updatedAt             DateTime     @updatedAt
 
   Conversation          Conversation @relation(fields: [conversationId], references: [id], onDelete: Cascade)
+  Owner                 Owner        @relation(fields: [ownerId], references: [id], onDelete: Cascade)
 
   @@map("messages")
+}
+
+model Owner {
+  id          String      @id @map("_id")
+  name        String
+  image       String
+
+  Messages    Message[]
+
+  @@map("owners")
 }
