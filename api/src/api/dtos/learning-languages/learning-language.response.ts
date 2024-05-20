@@ -28,7 +28,7 @@ export class LearningLanguageResponse {
   @Expose({ groups: ['read'] })
   level: string;
 
-  @ApiProperty({ type: ProfileResponse })
+  @ApiProperty({ type: () => () => ProfileResponse })
   @Expose({ groups: ['read'] })
   profile: ProfileResponse;
 
@@ -37,7 +37,7 @@ export class LearningLanguageResponse {
   @Expose({ groups: ['read'] })
   createdAt?: Date;
 
-  @ApiProperty({ type: CampusResponse, nullable: true })
+  @ApiProperty({ type: () => () => CampusResponse, nullable: true })
   @Expose({ groups: ['read'] })
   campus: CampusResponse;
 
@@ -69,7 +69,7 @@ export class LearningLanguageResponse {
   @Expose({ groups: ['read'] })
   learningType: LearningType;
 
-  @ApiProperty({ type: LanguageResponse })
+  @ApiProperty({ type: () => LanguageResponse })
   @Expose({ groups: ['read'] })
   tandemLanguage?: LanguageResponse;
 
@@ -114,7 +114,7 @@ export class LearningLanguageResponse {
 }
 
 export class LearningLanguageWithTandemResponse extends LearningLanguageResponse {
-  @ApiProperty({ type: TandemResponse })
+  @ApiProperty({ type: () => TandemResponse })
   @Expose({ groups: ['read'] })
   @Optional()
   tandem?: TandemResponse;

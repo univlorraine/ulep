@@ -282,7 +282,7 @@ export class UniversityResponse {
   @Expose({ groups: ['read'] })
   name: string;
 
-  @Swagger.ApiProperty({ type: CountryResponse })
+  @Swagger.ApiProperty({ type: () => CountryResponse })
   @Expose({ groups: ['university:read'] })
   country: CountryResponse;
 
@@ -294,7 +294,7 @@ export class UniversityResponse {
   @Expose({ groups: ['read'] })
   timezone: string;
 
-  @Swagger.ApiProperty({ type: CampusResponse, isArray: true })
+  @Swagger.ApiProperty({ type: () => CampusResponse, isArray: true })
   @Expose({ groups: ['read'] })
   sites: CampusResponse[];
 
@@ -334,7 +334,7 @@ export class UniversityResponse {
   @Expose({ groups: ['university:read'] })
   defaultContactId?: string;
 
-  @Swagger.ApiPropertyOptional({ type: AdministratorResponse })
+  @Swagger.ApiPropertyOptional({ type: () => AdministratorResponse })
   @Expose({ groups: ['university:read'] })
   defaultContact?: AdministratorResponse;
 
@@ -350,15 +350,15 @@ export class UniversityResponse {
   @Expose({ groups: ['read'] })
   notificationEmail?: string;
 
-  @Swagger.ApiProperty({ type: LanguageResponse, isArray: true })
+  @Swagger.ApiProperty({ type: () => LanguageResponse, isArray: true })
   @Expose({ groups: ['read'] })
   specificLanguagesAvailable: LanguageResponse[];
 
-  @Swagger.ApiProperty({ type: LanguageResponse })
+  @Swagger.ApiProperty({ type: () => LanguageResponse })
   @Expose({ groups: ['read'] })
   nativeLanguage: LanguageResponse;
 
-  @Swagger.ApiPropertyOptional({ type: MediaObjectResponse })
+  @Swagger.ApiPropertyOptional({ type: () => MediaObjectResponse })
   @Expose({ groups: ['read'] })
   logo?: MediaObjectResponse;
 

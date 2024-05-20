@@ -110,7 +110,7 @@ export class GetReportCategoryResponse {
   @Expose({ groups: ['read'] })
   id: string;
 
-  @Swagger.ApiProperty({ type: TextContentResponse })
+  @Swagger.ApiProperty({ type: () => TextContentResponse })
   @Expose({ groups: ['read'] })
   name: TextContentResponse;
 
@@ -143,7 +143,7 @@ export class ReportResponse {
   @Expose({ groups: ['read'] })
   content: string;
 
-  @Swagger.ApiPropertyOptional({ type: UserResponse })
+  @Swagger.ApiPropertyOptional({ type: () => UserResponse })
   @Expose({ groups: ['read'] })
   user?: UserResponse;
 

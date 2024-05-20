@@ -7,7 +7,7 @@ import { AvailabilitesDto } from 'src/api/dtos/profiles/availabilities';
 import { Gender, MeetingFrequency } from 'src/core/models';
 
 export class UpdateProfileRequest {
-  @Swagger.ApiProperty({ type: AvailabilitesDto })
+  @Swagger.ApiProperty({ type: () => AvailabilitesDto })
   @IsOptional()
   availabilities: AvailabilitesDto;
 
@@ -20,7 +20,7 @@ export class UpdateProfileRequest {
   @IsOptional()
   availabilitiesNotePrivacy?: boolean;
 
-  @Swagger.ApiProperty({ type: BiographyDto })
+  @Swagger.ApiProperty({ type: () => BiographyDto })
   @IsOptional()
   biography: BiographyDto;
 
