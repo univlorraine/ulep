@@ -10,16 +10,11 @@ interface AdministratorPickerProps {
 }
 
 const AdministratorPicker: React.FC<AdministratorPickerProps> = ({ onChange, universityId, value }) => {
-    const { data, isLoading } = useGetList('users/administrators', { filter: { universityId } });
+    const { data: dataPicker, isLoading } = useGetList('users/administrators', { filter: { universityId } });
     const translate = useTranslate();
 
-    if (isLoading || !data) {
+    if (isLoading || !dataPicker) {
         return <Loading />;
-    }
-
-    let dataPicker = data;
-    if (data.length > 0 && !universityId) {
-        dataPicker = data.filter((administrator: Administrator) => !administrator.universityId);
     }
 
     return (
@@ -28,7 +23,7 @@ const AdministratorPicker: React.FC<AdministratorPickerProps> = ({ onChange, uni
                 <Select
                     id="administrators-picker"
                     onChange={(administrator) =>
-                        onChange(data.find((a: Administrator) => administrator.target.value === a.id))
+                        onChange(dataPicker.find((a: Administrator) => administrator.target.value === a.id))
                     }
                     sx={{ mb: 2, width: '100%' }}
                     value={value ? value.id : ''}
