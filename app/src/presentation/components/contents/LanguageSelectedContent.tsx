@@ -31,7 +31,14 @@ const LanguageSelectedContent: React.FC<LanguageSelectedContentProps> = ({ langu
                         {t(`pairing_${mode}_language_page.not_alone.description_title`)}
                     </h1>
                 )}
-                <p className={styles.description}>{t(`pairing_${mode}_language_page.not_alone.description`)}</p>
+                {language.code !== '*' && (
+                    <p className={styles.description}>{t(`pairing_${mode}_language_page.not_alone.description`)}</p>
+                )}
+                {mode === 'confirm' && language.code === '*' && (
+                    <p className={styles.description}>
+                        {t(`pairing_${mode}_language_page.not_alone.description_joker`)}
+                    </p>
+                )}
                 <button
                     aria-label={t(`pairing_${mode}_language_page.not_alone.validate_button`) as string}
                     className={'primary-button large-margin-top'}

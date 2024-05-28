@@ -189,6 +189,7 @@
         "mode_meet": "Mode de rencontre",
         "not_alone": {
             "description": "Vérifions ton niveau ensemble !",
+            "description_joker": "Tu peux passer à la suite !",
             "description_title": "Maintenant",
             "subtitle": "",
             "title": "Tu y es presque !",
