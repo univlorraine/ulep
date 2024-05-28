@@ -7,6 +7,7 @@ import CircleAvatar from '../CircleAvatar';
 import TextInput from '../TextInput';
 import style from './Form.module.css';
 import Tokens from '../../../domain/entities/Tokens';
+import useLogout from '../../hooks/useLogout';
 
 interface LoginFormProps {
     goBack: () => void;
@@ -16,6 +17,7 @@ interface LoginFormProps {
 const LoginForm: React.FC<LoginFormProps> = ({ goBack, onLogin }) => {
     const { t } = useTranslation();
     const { browserAdapter, deviceAdapter, configuration, getInitialUrlUsecase, login } = useConfig();
+    const { handleLogout } = useLogout();
     const [email, setEmail] = useState<string>('');
     const [password, setPassword] = useState<string>('');
     const [showLoading, hideLoading] = useIonLoading();
@@ -98,6 +100,14 @@ const LoginForm: React.FC<LoginFormProps> = ({ goBack, onLogin }) => {
                             </IonRouterLink>
                         </div>
                     </form>
+                    {deviceAdapter.isNativePlatform() && (
+                        <span
+                            className={`${style.subtitle} ${style['update-instance']}`}
+                            onClick={() => handleLogout()}
+                        >
+                            {t('login_page.update_instance')}
+                        </span>
+                    )}
                 </div>
             </IonContent>
         </div>
