@@ -5,7 +5,7 @@ import { useStoreState } from '../../store/storeTypes';
 import { LearningType } from '../pages/PairingPedagogyPage';
 import University from '../../domain/entities/University';
 
-const useGetHomeData = () => {
+const useGetHomeData = (refresh?: boolean) => {
     const { getAllTandems } = useConfig();
     const profile = useStoreState((state) => state.profile);
 
@@ -75,7 +75,7 @@ const useGetHomeData = () => {
         };
 
         fetchData();
-    }, [profile]);
+    }, [profile, refresh]);
 
     return homeResult;
 };
