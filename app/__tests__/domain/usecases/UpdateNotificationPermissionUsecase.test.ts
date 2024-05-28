@@ -17,11 +17,11 @@ describe('updateNotificationPermission', () => {
 
     it('execute function must call DomainHttpAdapter with specific path and params', async () => {
         expect.assertions(2);
-        jest.spyOn(adapter, 'patch');
+        jest.spyOn(adapter, 'post');
         adapter.mockJson({ parsedBody: {} });
         await usecase.execute('id', false);
-        expect(adapter.patch).toHaveBeenCalledTimes(1);
-        expect(adapter.patch).toHaveBeenCalledWith('/users/id', { acceptsEmail: false });
+        expect(adapter.post).toHaveBeenCalledTimes(1);
+        expect(adapter.post).toHaveBeenCalledWith('/users/id', { acceptsEmail: false });
     });
 
     it('execute must return an expected response', async () => {

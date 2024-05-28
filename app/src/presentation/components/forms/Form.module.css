@@ -60,6 +60,11 @@
     text-align: center;
 }
 
+.update-instance {
+    padding: 0px 0px 20px 0px;
+    text-decoration: underline;
+}
+
 @media (min-width: 768px) {
     .main-content {
         padding: 0 30px;
