@@ -36,7 +36,7 @@ export class TextContentResponse {
   @Expose({ groups: ['read'] })
   language: string;
 
-  @Swagger.ApiProperty({ type: TranslationResponse })
+  @Swagger.ApiProperty({ type: () => TranslationResponse })
   @Expose({ groups: ['read'] })
   translations: TranslationResponse[];
 

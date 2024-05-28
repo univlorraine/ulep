@@ -52,7 +52,7 @@ export class MatchResponse {
   @Expose({ groups: ['read'] })
   score: MatchScoreDto;
 
-  @ApiProperty({ type: LanguageResponse })
+  @ApiProperty({ type: () => LanguageResponse })
   @Expose({ groups: ['read'] })
   tandemLanguage?: LanguageResponse;
 

@@ -348,7 +348,7 @@ export class UserResponse {
   @Expose({ groups: ['read'] })
   status?: UserStatus;
 
-  @Swagger.ApiPropertyOptional({ type: MediaObjectResponse })
+  @Swagger.ApiPropertyOptional({ type: () => MediaObjectResponse })
   @Expose({ groups: ['read'] })
   avatar?: MediaObjectResponse;
 
@@ -360,7 +360,7 @@ export class UserResponse {
   @Expose({ groups: ['read'] })
   contactId?: string;
 
-  @Swagger.ApiPropertyOptional({ type: AdministratorResponse })
+  @Swagger.ApiPropertyOptional({ type: () => AdministratorResponse })
   @Expose({ groups: ['read'] })
   contact?: AdministratorResponse;
 

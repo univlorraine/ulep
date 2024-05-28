@@ -114,7 +114,7 @@ export class GetInterestCategoryResponse {
   @Expose({ groups: ['read'] })
   id: string;
 
-  @Swagger.ApiProperty({ type: TextContentResponse })
+  @Swagger.ApiProperty({ type: () => TextContentResponse })
   @Expose({ groups: ['read'] })
   name: TextContentResponse;
 
