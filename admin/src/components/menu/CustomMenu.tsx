@@ -140,7 +140,7 @@ const CustomMenu = () => {
             )}
             <Menu.ResourceItem name="reports" />
             {!permissions.checkRole(Role.ANIMATOR) && (
-                <>
+                <div>
                     <Divider sx={{ margin: '0 !important' }} />
                     <Box ref={(newRef: HTMLDivElement) => setConfigurationRef(newRef)}>
                         <Menu.Item
@@ -149,7 +149,7 @@ const CustomMenu = () => {
                             to="/users/administrators"
                         />
                     </Box>
-                </>
+                </div>
             )}
         </Menu>
     );

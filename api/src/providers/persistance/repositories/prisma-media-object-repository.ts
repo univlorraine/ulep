@@ -29,6 +29,18 @@ export class PrismaMediaObjectRepository implements MediaObjectRepository {
     });
   }
 
+  async saveAdminAvatar(object: MediaObject): Promise<void> {
+    await this.prisma.mediaObjects.create({
+      data: {
+        id: object.id,
+        name: object.name,
+        bucket: object.bucket,
+        mime: object.mimetype,
+        size: object.size,
+      },
+    });
+  }
+
   async saveObjectiveImage(
     objective: LearningObjective,
     object: MediaObject,

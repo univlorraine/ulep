@@ -119,6 +119,7 @@ export interface UpdateAdministratorProps {
   password?: string;
   universityId?: string;
   groups?: KeycloakGroup[];
+  mimetype?: string;
 }
 
 export interface UpdateAdministratorPayload {
@@ -132,6 +133,7 @@ export interface UpdateAdministratorPayload {
   }[];
   attributes?: {
     universityId: string;
+    mimetype?: string;
   };
 }
 

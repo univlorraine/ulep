@@ -13,6 +13,8 @@ export interface StorageInterface {
 
   temporaryUrl(bucket: string, name: string, expiry: number): Promise<string>;
 
+  fileExists(bucket: string, name: string): Promise<boolean>;
+
   directoryExists(directory: string): Promise<boolean>;
 
   createDirectory(directory: string): Promise<void>;

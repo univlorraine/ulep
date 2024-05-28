@@ -21,7 +21,6 @@ import { useTranslate, useNotify, Form } from 'react-admin';
 import Administrator from '../../entities/Administrator';
 import Country from '../../entities/Country';
 import Language from '../../entities/Language';
-import MediaObject from '../../entities/MediaObject';
 import { PairingMode } from '../../entities/University';
 import i18nProvider from '../../providers/i18nProvider';
 import inputStyle from '../../theme/inputStyle';
@@ -62,7 +61,6 @@ interface UniversityFormProps {
         defaultContact?: Administrator,
         file?: File
     ) => void;
-    image?: MediaObject;
     maxTandemsPerUser?: number;
     name?: string;
     nativeLanguage?: Language;
@@ -95,7 +93,6 @@ const UniversityForm: React.FC<UniversityFormProps> = ({
     defaultContact,
     domains,
     handleSubmit,
-    image,
     name,
     tradKey = 'create',
     timezone,
@@ -253,7 +250,7 @@ const UniversityForm: React.FC<UniversityFormProps> = ({
             <Form>
                 <Box display="flex" flexDirection="column" sx={{ m: 4 }}>
                     <Typography variant="subtitle1">{translate(`universities.${tradKey}.logo`)}</Typography>
-                    <ImageUploader image={image} onImageSelect={setFile} />
+                    <ImageUploader onImageSelect={setFile} source="image.id" />
                     <Typography variant="subtitle1">{translate(`universities.${tradKey}.name`)}</Typography>
 
                     <Box alignItems="center" display="flex" flexDirection="row" sx={{ mb: 2 }}>
