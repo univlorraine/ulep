@@ -181,12 +181,15 @@ export class ProfileController {
   @Swagger.ApiOkResponse({ type: UserTandemResponse, isArray: true })
   async getTandems(
     @Param('id', ParseUUIDPipe) id: string,
+    @Headers('Language-code') languageCode?: string,
   ): Promise<UserTandemResponse[]> {
     const tandems = await this.getTandemsForProfileUsecase.execute({
       profile: id,
     });
 
-    return tandems.map((tandem) => UserTandemResponse.fromDomain(id, tandem));
+    return tandems.map((tandem) =>
+      UserTandemResponse.fromDomain(id, tandem, languageCode),
+    );
   }
 
   @Get('me')

@@ -67,7 +67,11 @@ export class UserTandemResponse {
     Object.assign(this, partial);
   }
 
-  static fromDomain(profileId: string, tandem: Tandem): UserTandemResponse {
+  static fromDomain(
+    profileId: string,
+    tandem: Tandem,
+    languageCode?: string,
+  ): UserTandemResponse {
     const { learningLanguageProfile, learningLanguagePartner } =
       tandem.learningLanguages.reduce<{
         learningLanguageProfile: LearningLanguage;
@@ -96,6 +100,7 @@ export class UserTandemResponse {
       partnerLearningLanguage: LearningLanguageResponse.fromDomain(
         learningLanguagePartner,
         true,
+        languageCode,
       ),
       status: tandem.status,
       userLearningLanguage: LearningLanguageResponse.fromDomain(

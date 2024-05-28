@@ -35,8 +35,9 @@ const HomePage: React.FC = () => {
     const [displayProfile, setDisplayProfile] = useState<boolean>(false);
     const [displayReport, setDisplayReport] = useState<boolean>(false);
     const [selectedTandem, setSelectedTandem] = useState<Tandem>();
+    const [refresh, setRefresh] = useState<boolean>(false);
 
-    const { tandems, partnerUniversities, error, isLoading } = useGetHomeData();
+    const { tandems, partnerUniversities, error, isLoading } = useGetHomeData(refresh);
 
     const { handleLogout } = useLogout();
 
@@ -150,6 +151,7 @@ const HomePage: React.FC = () => {
                         isVisible={displayProfile}
                         onClose={() => setDisplayProfile(false)}
                         onDisconnect={handleLogout}
+                        onLanguageChange={() => setRefresh(!refresh)}
                         profile={profile}
                     />
                     <TandemStatusModal

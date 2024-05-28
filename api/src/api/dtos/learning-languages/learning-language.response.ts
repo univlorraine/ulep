@@ -80,6 +80,7 @@ export class LearningLanguageResponse {
   static fromDomain(
     learningLanguage: LearningLanguage,
     includeProfile = false,
+    languageCode?: string,
   ): LearningLanguageResponse {
     const response = new LearningLanguageResponse({
       id: learningLanguage.id,
@@ -105,7 +106,10 @@ export class LearningLanguageResponse {
     if (includeProfile) {
       return new LearningLanguageResponse({
         ...response,
-        profile: ProfileResponse.fromDomain(learningLanguage.profile),
+        profile: ProfileResponse.fromDomain(
+          learningLanguage.profile,
+          languageCode,
+        ),
       });
     }
 
