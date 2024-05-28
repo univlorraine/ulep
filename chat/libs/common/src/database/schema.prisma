@@ -24,14 +24,16 @@ model Message {
   id                    String       @id @default(uuid()) @map("_id")
   createdAt             DateTime     @default(now())
   conversationId        String
-  content               String
+  content               String?
   isReported            Boolean      @default(false)
   ownerId               String
-  type                  String
+  type                  String       @default("text")
   updatedAt             DateTime     @updatedAt
+  mediaObjectId         String?
 
   Conversation          Conversation @relation(fields: [conversationId], references: [id], onDelete: Cascade)
   Owner                 Owner        @relation(fields: [ownerId], references: [id], onDelete: Cascade)
+  MediaObject           MediaObject?
 
   @@map("messages")
 }
@@ -44,4 +46,20 @@ model Owner {
   Messages    Message[]
 
   @@map("owners")
+}
+
+model MediaObject {
+  id         String              @id @default(uuid()) @map("_id")
+  name       String
+  bucket     String
+  mime       String
+  size       Int
+  created_at DateTime            @default(now())
+  updated_at DateTime            @updatedAt
+  messageId  String              @unique
+
+  Message   Message             @relation(fields: [messageId], references: [id], onDelete: Cascade)
+
+  @@unique([name, bucket])
+  @@map("media_objects")
 }
