@@ -1,6 +1,9 @@
 import { Prisma } from '@prisma/client';
 import { Conversation } from 'src/core/models';
-import { MessagesRelations, messageMapper } from 'src/providers/mappers';
+import {
+    MessagesRelations,
+    messageMapper,
+} from 'src/providers/persistance/mappers';
 
 const ConversationInclude = Prisma.validator<Prisma.ConversationInclude>()({
     Messages: MessagesRelations,
@@ -19,7 +22,9 @@ export const conversationMapper = (
         id: snapshot.id,
         usersIds: snapshot.participantIds,
         lastActivity: snapshot.lastActivityAt,
-        lastMessage: messageMapper(snapshot.Messages[0]), // TODO: Update this to get the true last message
+        lastMessage: snapshot.Messages[0]
+            ? messageMapper(snapshot.Messages[0])
+            : null, // TODO: Update this to get the true last message
         metadata: snapshot.metadata,
         createdAt: snapshot.createdAt,
     });

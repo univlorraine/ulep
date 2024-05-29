@@ -7,6 +7,10 @@ import { MESSAGE_REPOSITORY } from 'src/core/ports/message.repository';
 import { PrismaMessageRepository } from 'src/providers/persistance/repositories/prisma-message.repository';
 import { UUID_PROVIDER } from 'src/core/ports/uuid.provider';
 import { UuidProvider } from 'src/providers/services/uuid.provider';
+import { CONVERSATION_REPOSITORY } from 'src/core/ports/conversation.repository';
+import { PrismaConversationRepository } from 'src/providers/persistance/repositories/prisma-conversation.repository';
+import { MEDIA_OBJECT_REPOSITORY } from 'src/core/ports/media-object.repository';
+import { PrismaMediaObjectRepository } from 'src/providers/persistance/repositories/prisma-media-object.repository';
 
 const providers: Provider[] = [
     {
@@ -18,8 +22,16 @@ const providers: Provider[] = [
         useClass: MinioStorage,
     },
     {
+        provide: MEDIA_OBJECT_REPOSITORY,
+        useClass: PrismaMediaObjectRepository,
+    },
+    {
         provide: MESSAGE_REPOSITORY,
         useClass: PrismaMessageRepository,
+    },
+    {
+        provide: CONVERSATION_REPOSITORY,
+        useClass: PrismaConversationRepository,
     },
 ];
 

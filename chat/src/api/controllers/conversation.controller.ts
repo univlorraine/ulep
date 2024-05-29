@@ -5,21 +5,22 @@ import {
     Get,
     Param,
     Post,
-    Query,
     UploadedFile,
     UseGuards,
     UseInterceptors,
 } from '@nestjs/common';
 import { FileInterceptor } from '@nestjs/platform-express';
 import * as Swagger from '@nestjs/swagger';
+import { CreateConversationRequest } from 'src/api/dtos/conversation';
 import { ConversationResponse } from 'src/api/dtos/conversation/conversation.response';
-import { GetConversationRequest } from 'src/api/dtos/conversation/getConversations.request';
-import { SendMessageRequest } from 'src/api/dtos/message';
+import { MessageResponse, SendMessageRequest } from 'src/api/dtos/message';
 import { CollectionResponse } from 'src/api/dtos/pagination';
 import { AuthenticationGuard } from 'src/api/guards';
+import { MediaObject } from 'src/core/models/media.model';
 import { CreateMessageUsecase, UploadMediaUsecase } from 'src/core/usecases';
 import { CreateConversationUsecase } from 'src/core/usecases/conversation/create-conversation.usecase';
 import { DeleteConversationUsecase } from 'src/core/usecases/conversation/delete-conversation.usecase';
+import { GetConversationFromUserIdUsecase } from 'src/core/usecases/conversation/get-conversation-from-user-id.usecase';
 
 @Controller('conversations')
 @Swagger.ApiTags('Conversations')
@@ -28,18 +29,24 @@ export class ConversationController {
         private createMessageUsecase: CreateMessageUsecase,
         private createConversationUsecase: CreateConversationUsecase,
         private deleteConversationUsecase: DeleteConversationUsecase,
+        private getConversationFromUserIdUsecase: GetConversationFromUserIdUsecase,
         private uploadMediaUsecase: UploadMediaUsecase,
     ) {}
 
-    @Get('/')
+    @Get('/:id')
     @UseGuards(AuthenticationGuard)
-    @Swagger.ApiOperation({ summary: 'Get all conversations' })
+    @Swagger.ApiOperation({ summary: 'Get all conversations from id' })
     async getConversations(
-        @Query() filters: GetConversationRequest,
+        @Param('id') conversationId: string,
     ): Promise<CollectionResponse<ConversationResponse>> {
+        const conversations =
+            await this.getConversationFromUserIdUsecase.execute({
+                id: conversationId,
+            });
+
         return new CollectionResponse<ConversationResponse>({
-            items: [],
-            totalItems: 0,
+            items: conversations.map(ConversationResponse.from),
+            totalItems: conversations.length,
         });
     }
 
@@ -47,12 +54,13 @@ export class ConversationController {
     @UseGuards(AuthenticationGuard)
     @Swagger.ApiOperation({ summary: 'Create a conversation' })
     async createConversation(
-        @Query() filters: GetConversationRequest,
-    ): Promise<CollectionResponse<ConversationResponse>> {
-        return new CollectionResponse<ConversationResponse>({
-            items: [],
-            totalItems: 0,
+        @Body() body: CreateConversationRequest,
+    ): Promise<ConversationResponse> {
+        const conversation = await this.createConversationUsecase.execute({
+            userIds: body.userIds,
+            metadata: body.metadata,
         });
+        return ConversationResponse.from(conversation);
     }
 
     @Delete('/:id')
@@ -72,7 +80,7 @@ export class ConversationController {
         @Param('id') conversationId: string,
         @Body() body: SendMessageRequest,
         @UploadedFile() file?: Express.Multer.File,
-    ): Promise<string | undefined> {
+    ): Promise<MessageResponse | undefined> {
         const message = await this.createMessageUsecase.execute({
             content: body.content,
             conversationId,
@@ -82,14 +90,15 @@ export class ConversationController {
             mimetype: file?.mimetype,
         });
 
+        let media: MediaObject;
         if (file) {
-            const media = await this.uploadMediaUsecase.execute({
+            media = await this.uploadMediaUsecase.execute({
                 file,
                 messageId: message.id,
                 conversationId,
             });
         }
 
-        return;
+        return MessageResponse.from(message, media);
     }
 }

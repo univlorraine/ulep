@@ -1,6 +1,8 @@
 import { Inject, Injectable } from '@nestjs/common';
-import { MEDIA_OBJECT_REPOSITORY } from '../../ports/media-object.repository';
-import { ConversationRepository } from 'src/core/ports/conversation.repository';
+import {
+    CONVERSATION_REPOSITORY,
+    ConversationRepository,
+} from 'src/core/ports/conversation.repository';
 
 export class CreateConversationCommand {
     userIds: string[];
@@ -10,7 +12,7 @@ export class CreateConversationCommand {
 @Injectable()
 export class CreateConversationUsecase {
     constructor(
-        @Inject(MEDIA_OBJECT_REPOSITORY)
+        @Inject(CONVERSATION_REPOSITORY)
         private readonly conversationRepository: ConversationRepository,
     ) {}
 

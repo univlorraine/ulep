@@ -21,7 +21,7 @@ services:
         volumes:
             - ./chat:/srv/app
         ports:
-            - ${CHAT_PORT:-3002}:3000
+            - ${CHAT_PORT:-3003}:3000
 
     admin:
         build:

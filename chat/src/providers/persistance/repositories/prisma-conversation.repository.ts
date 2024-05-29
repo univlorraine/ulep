@@ -4,12 +4,30 @@ import { Conversation } from 'src/core/models';
 import {
     ConversationRelations,
     conversationMapper,
-} from 'src/providers/mappers';
+} from 'src/providers/persistance/mappers';
 import { ConversationRepository } from 'src/core/ports/conversation.repository';
 
 @Injectable()
 export class PrismaConversationRepository implements ConversationRepository {
     constructor(private readonly prisma: PrismaService) {}
+
+    async findById(conversationId: string): Promise<Conversation> {
+        const conversation = await this.prisma.conversation.findUnique({
+            where: { id: conversationId },
+            ...ConversationRelations,
+        });
+
+        return conversationMapper(conversation);
+    }
+
+    async findByUserId(userId: string): Promise<Conversation[]> {
+        const conversations = await this.prisma.conversation.findMany({
+            where: { participantIds: { has: userId } },
+            ...ConversationRelations,
+        });
+
+        return conversations.map(conversationMapper);
+    }
 
     async create(userIds: string[], metadata: any): Promise<Conversation> {
         const conversation = await this.prisma.conversation.create({
@@ -34,7 +52,7 @@ export class PrismaConversationRepository implements ConversationRepository {
     ): Promise<Conversation> {
         const conversation = await this.prisma.conversation.update({
             where: { id },
-            data: { metadata },
+            data: { participantIds: userIds, metadata },
             ...ConversationRelations,
         });
 

@@ -1,7 +1,7 @@
 import { Prisma } from '@prisma/client';
 import { Message } from 'src/core/models';
 import { MessageType } from 'src/core/models/message.model';
-import { ownerMapper } from 'src/providers/mappers';
+import { ownerMapper } from 'src/providers/persistance/mappers';
 
 const MessagesInclude = Prisma.validator<Prisma.MessageInclude>()({
     Owner: true,

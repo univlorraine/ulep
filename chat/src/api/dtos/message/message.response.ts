@@ -1,45 +1,42 @@
 import * as Swagger from '@nestjs/swagger';
-import { IsBoolean, IsNotEmpty, IsOptional, IsString } from 'class-validator';
-import { Message } from 'src/core/models/message.model';
+import { Expose } from 'class-transformer';
+import { IsNotEmpty, IsString } from 'class-validator';
+import { OwnerResponse } from 'src/api/dtos/owner/owner.response';
+import { MediaObject } from 'src/core/models/media.model';
+import { Message, MessageType } from 'src/core/models/message.model';
 
 export class MessageResponse {
     @Swagger.ApiProperty({ type: 'string', format: 'uuid' })
-    @IsString()
-    @IsNotEmpty()
+    @Expose({ groups: ['read'] })
     id: string;
 
-    @Swagger.ApiProperty()
-    @IsString()
-    @IsNotEmpty()
+    @Swagger.ApiProperty({ type: 'string' })
+    @Expose({ groups: ['read'] })
     content: string;
 
     @Swagger.ApiProperty({ type: 'string', format: 'uuid' })
-    @IsString()
-    @IsNotEmpty()
-    owner: string;
-
-    @Swagger.ApiPropertyOptional({ type: 'boolean' })
-    @IsBoolean()
-    @IsOptional()
-    isMine?: boolean;
+    @Expose({ groups: ['read'] })
+    owner: OwnerResponse;
 
     @Swagger.ApiProperty({ type: 'string', format: 'date-time' })
+    @Expose({ groups: ['read'] })
     createdAt: Date;
+
+    @Swagger.ApiProperty({ type: 'string' })
+    @Expose({ groups: ['read'] })
+    type: MessageType;
 
     constructor(partial: Partial<MessageResponse>) {
         Object.assign(this, partial);
     }
 
-    static from(
-        message: Message,
-        { user }: { user?: string },
-    ): MessageResponse {
+    static from(message: Message, media?: MediaObject): MessageResponse {
         return new MessageResponse({
             id: message.id,
-            content: message.content,
-            owner: message.owner,
-            isMine: user ? message.owner === user : undefined,
             createdAt: message.createdAt,
+            content: media ? media.id : message.content,
+            owner: OwnerResponse.from(message.owner),
+            type: message.type,
         });
     }
 }

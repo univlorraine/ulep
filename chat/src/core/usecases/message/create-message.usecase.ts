@@ -1,6 +1,10 @@
-import { Inject } from '@nestjs/common';
+import { Inject, NotFoundException } from '@nestjs/common';
 import { Message, MessageType } from 'src/core/models';
 import { Owner } from 'src/core/models/owner.model';
+import {
+    CONVERSATION_REPOSITORY,
+    ConversationRepository,
+} from 'src/core/ports/conversation.repository';
 import {
     MESSAGE_REPOSITORY,
     MessageRepository,
@@ -19,6 +23,8 @@ interface CreateMessageCommand {
 
 export class CreateMessageUsecase {
     constructor(
+        @Inject(CONVERSATION_REPOSITORY)
+        private readonly conversationRepository: ConversationRepository,
         @Inject(MESSAGE_REPOSITORY)
         private readonly messageRepository: MessageRepository,
         @Inject(UUID_PROVIDER)
@@ -26,7 +32,13 @@ export class CreateMessageUsecase {
     ) {}
 
     async execute(command: CreateMessageCommand) {
-        //TODO: Check if conversation exists
+        const conversation = await this.conversationRepository.findById(
+            command.conversationId,
+        );
+
+        if (!conversation) {
+            throw new NotFoundException('Conversation not found');
+        }
 
         const message = new Message({
             id: this.uuidProvider.generate(),
@@ -40,7 +52,10 @@ export class CreateMessageUsecase {
             type: this.categorizeFileType(command.mimetype),
             isReported: false,
         });
-        return this.messageRepository.create(message);
+
+        await this.messageRepository.create(message);
+
+        return message;
     }
 
     private categorizeFileType(mimeType?: string): MessageType {
