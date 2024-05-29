@@ -31,7 +31,9 @@ const AvailabilityModal: React.FC<AvailabilityModalProps> = ({
         <Modal isVisible={isVisible} onClose={onClose}>
             <div>
                 <div className={styles.container}>
-                    <span className={styles.title}>{title}</span>
+                    <span className={styles.title} id="dialog_label">
+                        {title}
+                    </span>
 
                     <button
                         aria-label={t('signup_availabilities_page.UNAVAILABLE') as string}
