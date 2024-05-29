@@ -43,11 +43,10 @@ export class I18nService implements OnModuleInit {
 
     this.#i18n = i18n.use(HttpBackend as unknown as i18n.Module);
 
-    console.log({ url });
     await this.#i18n.init({
       fallbackLng: this.config.fallbackLanguage || 'en',
       ns: NAMESPACES,
-      debug: true, //this.config.debug,
+      debug: this.config.debug,
       preload: LANGUAGES,
       backend: {
         loadPath: url,
