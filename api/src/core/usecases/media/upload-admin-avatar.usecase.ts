@@ -47,6 +47,12 @@ export class UploadAdminAvatarUsecase {
       size: file.size,
     });
 
+    const previousImage = await this.tryToFindTheAvatarOfUser(user);
+
+    if (previousImage) {
+      await this.deletePreviousAvatar(previousImage);
+    }
+
     await this.deletePreviousAvatar(image);
     await this.storageInterface.write(image.bucket, image.name, file);
     await this.mediaObjectRepository.saveAdminAvatar(image);
@@ -61,6 +67,12 @@ export class UploadAdminAvatarUsecase {
     }
 
     return instance;
+  }
+
+  private tryToFindTheAvatarOfUser(
+    user: UserRepresentation,
+  ): Promise<MediaObject | null> {
+    return this.mediaObjectRepository.avatarOfUser(user.id);
   }
 
   private async deletePreviousAvatar(image: MediaObject | null) {

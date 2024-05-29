@@ -8,6 +8,7 @@ import {
   USER_REPOSITORY,
   UserRepository,
 } from 'src/core/ports/user.repository';
+import { KeycloakClient } from '@app/keycloak';
 
 export class DeleteUniversityCommand {
   id: string;
@@ -20,6 +21,7 @@ export class DeleteUniversityUsecase {
     private readonly universityRepository: UniversityRepository,
     @Inject(USER_REPOSITORY)
     private readonly userRepository: UserRepository,
+    private readonly keycloakService: KeycloakClient,
   ) {}
 
   async execute(command: DeleteUniversityCommand) {
@@ -34,6 +36,7 @@ export class DeleteUniversityUsecase {
 
     await this.assertUniversityHaveNoPartnersUniversity(command.id);
     await this.assertUniversityHaveNoUsers(command.id);
+    await this.assertUniversityHaveNoAdministrators(command.id);
 
     return this.universityRepository.remove(command.id);
   }
@@ -52,6 +55,20 @@ export class DeleteUniversityUsecase {
     if (countUsers > 0) {
       throw new DomainError({
         message: 'Cannot delete university with users',
+      });
+    }
+  }
+
+  private async assertUniversityHaveNoAdministrators(id: string) {
+    let administrators = await this.keycloakService.getAdministrators();
+
+    administrators = administrators.filter(
+      (administrator) => administrator.attributes.universityId[0] === id,
+    );
+
+    if (administrators.length > 0) {
+      throw new DomainError({
+        message: 'Cannot delete university with administrators',
       });
     }
   }
