@@ -13,7 +13,8 @@ export class UpdateAdministratorCommand {
   email?: string;
   password?: string;
   universityId?: string;
-  group: KeycloakGroup;
+  group?: KeycloakGroup;
+  mimetype?: string;
 }
 
 @Injectable()
@@ -44,7 +45,7 @@ export class UpdateAdministratorUsecase {
       lastname: command.lastname || admin.lastName,
       email: command.email || admin.email,
       password: command.password,
-      universityId: command.universityId,
+      universityId: command.universityId || admin.attributes?.universityId,
       groups: [command.group],
     });
 

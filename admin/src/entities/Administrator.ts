@@ -34,6 +34,7 @@ export interface AdministratorFormPayload {
     password?: string;
     universityId?: string;
     group: KeycloakGroup;
+    file: File | undefined;
 }
 
 export default Administrator;

@@ -9,6 +9,8 @@ export interface MediaObjectProps {
   size: number;
 }
 
+const DEFAULT_BUCKET = 'images';
+
 export class MediaObject {
   readonly id: string;
 
@@ -28,10 +30,13 @@ export class MediaObject {
     this.size = props.size;
   }
 
-  static image(file: Express.Multer.File, bucketName = 'images'): MediaObject {
-    const id = v4();
-    const extension = this.getFileExtension(file.mimetype);
-    const name = `${id}${extension}`;
+  static image(
+    file: Express.Multer.File,
+    bucketName = DEFAULT_BUCKET,
+    preferredId = undefined,
+  ): MediaObject {
+    const id = preferredId || v4();
+    const name = this.getFileName(id, file.mimetype);
 
     return new MediaObject({
       id,
@@ -40,6 +45,15 @@ export class MediaObject {
       mimetype: file.mimetype,
       size: file.size,
     });
+  }
+
+  static getDefaultBucket() {
+    return DEFAULT_BUCKET;
+  }
+
+  static getFileName(id: string, mimetype: string): string {
+    const extension = this.getFileExtension(mimetype);
+    return `${id}${extension}`;
   }
 
   private static getFileExtension(contentType: string): string {

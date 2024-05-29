@@ -20,6 +20,7 @@ import {
 import { FileInterceptor } from '@nestjs/platform-express';
 import * as Swagger from '@nestjs/swagger';
 import { UploadAvatarUsecase } from 'src/core/usecases';
+import { UploadAdminAvatarUsecase } from 'src/core/usecases';
 import {
   CreateAdministratorUsecase,
   CreateUserUsecase,
@@ -45,11 +46,12 @@ import {
   PaginationDto,
   UpdateAdministratorRequest,
   UpdateUserRequest,
+  UserRepresentationWithAvatar,
   UserResponse,
 } from '../dtos';
 import { AuthenticationGuard } from '../guards';
 import { ImagesFilePipe } from '../validators/images.validator';
-import { User } from 'src/core/models';
+import { MediaObject, User } from 'src/core/models';
 import { RevokeSessionsUsecase } from 'src/core/usecases/user/revoke-sessions.usecase';
 import { OwnerAllowed } from '../decorators/owner.decorator';
 import {
@@ -68,6 +70,7 @@ export class UserController {
     private readonly addDeviceUsecase: AddDeviceUsecase,
     private readonly createUserUsecase: CreateUserUsecase,
     private readonly uploadAvatarUsecase: UploadAvatarUsecase,
+    private readonly uploadAdminAvatarUsecase: UploadAdminAvatarUsecase,
     private readonly getUsersUsecase: GetUsersUsecase,
     private readonly getUserUsecase: GetUserUsecase,
     private readonly updateUserUsecase: UpdateUserUsecase,
@@ -149,22 +152,62 @@ export class UserController {
 
   @Post('administrators')
   @Roles(Role.ADMIN)
+  @UseInterceptors(FileInterceptor('file'))
   @UseGuards(AuthenticationGuard)
   @Swagger.ApiOperation({ summary: 'Create an Administrator ressource.' })
   @Swagger.ApiCreatedResponse({ type: AdministratorResponse })
-  async createAdministrator(@Body() body: CreateAdministratorRequest) {
-    const admin = await this.createAdministratorUsecase.execute(body);
+  async createAdministrator(
+    @Body() body: CreateAdministratorRequest,
+    @UploadedFile(new ImagesFilePipe()) file?: Express.Multer.File,
+  ) {
+    let admin: UserRepresentationWithAvatar =
+      await this.createAdministratorUsecase.execute(body);
+
+    if (file) {
+      await this.uploadAdminAvatarUsecase.execute({
+        userId: admin.id,
+        file,
+      });
+      admin = {
+        ...admin,
+        image: MediaObject.image(
+          file,
+          MediaObject.getDefaultBucket(),
+          admin.id,
+        ),
+      };
+    }
 
     return AdministratorResponse.fromDomain(admin);
   }
 
   @Put('administrators')
   @Roles(Role.ADMIN)
+  @UseInterceptors(FileInterceptor('file'))
   @UseGuards(AuthenticationGuard)
   @Swagger.ApiOperation({ summary: 'Update an Administrator ressource.' })
   @Swagger.ApiCreatedResponse({ type: AdministratorResponse })
-  async updateAdministrator(@Body() body: UpdateAdministratorRequest) {
-    const admin = await this.updateAdministratorUsecase.execute(body);
+  async updateAdministrator(
+    @Body() body: UpdateAdministratorRequest,
+    @UploadedFile(new ImagesFilePipe()) file?: Express.Multer.File,
+  ) {
+    let admin: UserRepresentationWithAvatar =
+      await this.updateAdministratorUsecase.execute(body);
+
+    if (file) {
+      await this.uploadAdminAvatarUsecase.execute({
+        userId: admin.id,
+        file,
+      });
+      admin = {
+        ...admin,
+        image: MediaObject.image(
+          file,
+          MediaObject.getDefaultBucket(),
+          admin.id,
+        ),
+      };
+    }
 
     return AdministratorResponse.fromDomain(admin);
   }
@@ -279,7 +322,8 @@ export class UserController {
         )
       : undefined;
 
-    const appTranslationNs = this.env.get('APP_TRANSLATION_NAMESPACE') || 'app';
+    const appTranslationNs =
+      this.env.get('APP_TRANSLATION_NAMESPACE') || 'translation';
     const apiTranslationNs = this.env.get('API_TRANSLATION_NAMESPACE') || 'api';
 
     const csv = userPersonalDataToCsv(
@@ -290,7 +334,7 @@ export class UserController {
       (value: string, opts?: { ns: string }) =>
         `${this.i18n.translate(value, {
           lng: userData.profile.nativeLanguage.code,
-          ns: opts?.ns === 'app' ? appTranslationNs : apiTranslationNs,
+          ns: opts?.ns === 'translation' ? appTranslationNs : apiTranslationNs,
         })}`,
     );
 

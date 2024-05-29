@@ -6,7 +6,7 @@ import { ReportStatus } from 'src/core/models';
 import { ReportQuerySortKey } from 'src/core/ports/report.repository';
 
 export class GetReportsQueryParams extends PaginationDto {
-  @Swagger.ApiPropertyOptional({ type: ReportStatus })
+  @Swagger.ApiPropertyOptional({ type: () => ReportStatus })
   @IsOptional()
   @IsEnum(ReportStatus)
   status?: ReportStatus;

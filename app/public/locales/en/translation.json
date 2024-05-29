@@ -16,7 +16,7 @@
         "userDoesntExist": "This username does not exist",
         "userWrongCredentials": "Authentication error: Bad email or bad password.",
         "connecteur": "",
-        "fileSizeExceed": "The file is too big, it must be less than {maxSize}"
+        "fileSizeExceed": "The file is too big, it must be less than {{maxSize}}Mo"
     },
     "error_page": {
         "title": "An error has occurred",
@@ -166,7 +166,8 @@
         "sso_button": "Authenticate myself",
         "sso_title": "Student of {{name}}, log in with university credentials",
         "subtitle": "Sign in with your university credentials to continue using the application",
-        "title": "Sign in"
+        "title": "Sign in",
+        "update_instance": "Change instance"
     },
     "pairing_confirm_language_page": {
         "language_title": "Preferred language",

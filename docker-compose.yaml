@@ -9,11 +9,11 @@ services:
       - database
     restart: unless-stopped
     environment:
-      ADMIN_URL: ${ADMIN_URL:-http://localhost:3001}
-      APP_URL: ${APP_URL:-http://localhost:5173}
+      ADMIN_URL: ${ADMIN_URL:-http://0.0.0.0:3001}
+      APP_URL: ${APP_URL:-http://0.0.0.0:5173}
       LOG_LEVEL: ${LOG_LEVEL:-debug} # verbose, debug, log, warn or error
       DEFAULT_TRANSLATION_LANGUAGE: ${DEFAULT_TRANSLATION_LANGUAGE:-fr}
-      DATABASE_URL: postgresql://${POSTGRES_USER:-postgres}:${POSTGRES_PASSWORD:-!ChangeMe!}@database:5432/${POSTGRES_DB:-ulep}?schema=public
+      DATABASE_URL: postgresql://${POSTGRES_USER:-postgres}:${POSTGRES_PASSWORD:-!ChangeMe!}@database:5432/${POSTGRES_DB:-ulep}?schema=public&connection_limit=1
       KEYCLOAK_BASE_URL: ${KEYCLOAK_BASE_URL:-http://auth:8080}
       KEYCLOAK_REALM: ${KEYCLOAK_REALM:-etandem}
       KEYCLOAK_ADMIN: ${KEYCLOAK_ADMIN:-admin}
@@ -25,16 +25,15 @@ services:
       S3_REGION: ${S3_REGION:-eu-east-1}
       S3_ACCESS_KEY: ${MINIO_USER:-minio}
       S3_ACCESS_SECRET: ${MINIO_PASSWORD:-!ChangeMe!}
-      WEBLATE_API_URL: ${WEBLATE_API_URL:-https://weblate.ulep.thestaging.io/api}
-      WEBLATE_API_TOKEN: ${WEBLATE_API_TOKEN:-} # Needs to be configured to avoid reaching rate limit by calling public endpoint of Weblate
+      I18N_MINIO_URL: ${I18N_MINIO_URL:-https://minio-api.ulep.thestaging.io/i18n}
       CONNECTOR_URL: ${CONNECTOR_URL:-}
       CONNECTOR_TOKEN: ${CONNECTOR_TOKEN:-}
       EMAIL_ASSETS_BUCKET: ${EMAIL_ASSETS_BUCKET:-assets}
       EMAIL_TRANSLATIONS_COMPONENT: ${EMAIL_TRANSLATIONS_COMPONENT:-emails}
-      EMAIL_ASSETS_PUBLIC_ENDPOINT: ${EMAIL_ASSETS_PUBLIC_ENDPOINT:-http://localhost:9000}
+      EMAIL_ASSETS_PUBLIC_ENDPOINT: ${EMAIL_ASSETS_PUBLIC_ENDPOINT:-http://0.0.0.0:9000}
       NOTIFICATION_ASSETS_BUCKET: ${NOTIFICATION_ASSETS_BUCKET:-assets}
       NOTIFICATION_TRANSLATIONS_COMPONENT: ${NOTIFICATION_TRANSLATIONS_COMPONENT:-notifications}
-      NOTIFICATION_ASSETS_PUBLIC_ENDPOINT: ${NOTIFICATION_ASSETS_PUBLIC_ENDPOINT:-http://localhost:9000}
+      NOTIFICATION_ASSETS_PUBLIC_ENDPOINT: ${NOTIFICATION_ASSETS_PUBLIC_ENDPOINT:-http://0.0.0.0:9000}
       APP_LINK_APPLE_STORE: ${APP_LINK_APPLE_STORE:-http://apple-store.fr/etandem}
       APP_LINK_PLAY_STORE: ${APP_LINK_PLAY_STORE:-http://play-store.fr/etandem}
       SMTP_DISABLE_BOOT_VERIFICATION: ${SMTP_DISABLE_BOOT_VERIFICATION:-true}
@@ -58,8 +57,8 @@ services:
     depends_on:
       - api
     environment:
-      REACT_APP_API_URL: ${REACT_APP_API_URL:-http://localhost:3000}
-      REACT_APP_KEYCLOAK_URL: ${REACT_APP_KEYCLOAK_URL:-http://localhost:8080}
+      REACT_APP_API_URL: ${REACT_APP_API_URL:-http://0.0.0.0:3002}
+      REACT_APP_KEYCLOAK_URL: ${REACT_APP_KEYCLOAK_URL:-http://0.0.0.0:8080}
       REACT_APP_KEYCLOAK_REALM: ${REACT_APP_KEYCLOAK_REALM:-etandem}
       REACT_APP_KEYCLOAK_CLIENT_ID: ${REACT_APP_KEYCLOAK_CLIENT_ID:-react-admin}
       REACT_APP_KEYCLOAK_CLIENT_SECRET: ${REACT_APP_KEYCLOAK_CLIENT_SECRET:-uKBywX2HlxfvKgxZoKZrbiBSx49CST6W}
@@ -83,8 +82,8 @@ services:
       KC_DB_PASSWORD: ${POSTGRES_PASSWORD:-!ChangeMe!}
       KC_DB_URL: jdbc:postgresql://database:5432/${POSTGRES_DB:-ulep}
       KC_DB_SCHEMA: keycloak
-      KC_HOSTNAME_URL: ${KEYCLOAK_BASE_URL:-http://localhost:8080}
-      KC_HOSTNAME_ADMIN_URL: ${KEYCLOAK_BASE_URL:-http://localhost:8080}
+      KC_HOSTNAME_URL: ${KEYCLOAK_BASE_URL:-http://0.0.0.0:8080}
+      KC_HOSTNAME_ADMIN_URL: ${KEYCLOAK_BASE_URL:-http://0.0.0.0:8080}
 
   database:
     image: postgres:${POSTGRES_VERSION:-14}-alpine

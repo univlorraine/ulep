@@ -13,18 +13,16 @@ const UniversityPicker: React.FC<UniversityPickerProps> = ({ initialValue, onCha
     const { data, isLoading } = useGetList('universities');
 
     useEffect(() => {
-        if (initialValue && data) {
-            onChange(
-                data.find(
-                    (university: University) =>
-                        university.id === initialValue ||
-                        (initialValue === 'central' && isCentralUniversity(university))
-                )
+        if (data) {
+            const initialUniverisity = data.find(
+                (university: University) =>
+                    university.id === initialValue || (initialValue === 'central' && isCentralUniversity(university))
             );
+            onChange(initialUniverisity || data[0]);
         }
     }, [data]);
 
-    if (isLoading || !data) {
+    if (isLoading || !data || !value) {
         return <div />;
     }
 
@@ -34,7 +32,7 @@ const UniversityPicker: React.FC<UniversityPickerProps> = ({ initialValue, onCha
                 id="university-picker"
                 onChange={(university) => onChange(data.find((u: University) => university.target.value === u.id))}
                 sx={{ mb: 2, width: '100%' }}
-                value={value ? value.id : data[0].id}
+                value={value.id}
                 variant="standard"
                 disableUnderline
             >

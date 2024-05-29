@@ -53,7 +53,7 @@ export class CreateProfileRequest
   @IsNotEmpty({ each: true })
   interests: string[];
 
-  @Swagger.ApiProperty({ type: AvailabilitesDto })
+  @Swagger.ApiProperty({ type: () => AvailabilitesDto })
   @Transform(({ value }) => new AvailabilitesDto(value))
   @IsObject()
   @ValidateNested()
@@ -69,7 +69,7 @@ export class CreateProfileRequest
   @IsOptional()
   availabilitiesNotePrivacy?: boolean;
 
-  @Swagger.ApiProperty({ type: BiographyDto })
+  @Swagger.ApiProperty({ type: () => BiographyDto })
   @Transform(({ value }) => new BiographyDto(value))
   @IsObject()
   @ValidateNested()

@@ -56,7 +56,6 @@ const EditObjective = () => {
                             handleSubmit={(name: string, translations: IndexedTranslation[], file?: File) =>
                                 handleSubmit(record.id, name, translations, file)
                             }
-                            image={record.image}
                             name={record.name.content}
                             tranlsations={record.name.translations.map(
                                 (translation, index) => new IndexedTranslation(index, translation)

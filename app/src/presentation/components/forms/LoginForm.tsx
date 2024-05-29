@@ -1,4 +1,4 @@
-import { IonButton, IonContent, IonHeader, IonRouterLink, useIonLoading, useIonToast } from '@ionic/react';
+import { IonButton, IonContent, IonHeader, IonRouterLink, useIonLoading } from '@ionic/react';
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { AvatarPng, LeftChevronSvg } from '../../../assets';
@@ -7,6 +7,7 @@ import CircleAvatar from '../CircleAvatar';
 import TextInput from '../TextInput';
 import style from './Form.module.css';
 import Tokens from '../../../domain/entities/Tokens';
+import useLogout from '../../hooks/useLogout';
 
 interface LoginFormProps {
     goBack: () => void;
@@ -16,10 +17,11 @@ interface LoginFormProps {
 const LoginForm: React.FC<LoginFormProps> = ({ goBack, onLogin }) => {
     const { t } = useTranslation();
     const { browserAdapter, deviceAdapter, configuration, getInitialUrlUsecase, login } = useConfig();
+    const { handleLogout } = useLogout();
     const [email, setEmail] = useState<string>('');
     const [password, setPassword] = useState<string>('');
+    const [errorMessage, setErrorMessage] = useState<string>('');
     const [showLoading, hideLoading] = useIonLoading();
-    const [showToast] = useIonToast();
 
     const handleLogin = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
@@ -27,8 +29,9 @@ const LoginForm: React.FC<LoginFormProps> = ({ goBack, onLogin }) => {
         const result = await login.execute(email, password);
         if (result instanceof Error) {
             await hideLoading();
-            return await showToast({ message: t(result.message), duration: 5000 });
+            return setErrorMessage(result.message);
         }
+        setErrorMessage('');
         await hideLoading();
         onLogin(result);
     };
@@ -85,6 +88,7 @@ const LoginForm: React.FC<LoginFormProps> = ({ goBack, onLogin }) => {
                             type="password"
                             value={password}
                         />
+                        {errorMessage && <p className={style['error-message']}>{t(errorMessage)}</p>}
                         <div className={style['bottom-container']}>
                             <button
                                 aria-label={t('login_page.button') as string}
@@ -98,6 +102,14 @@ const LoginForm: React.FC<LoginFormProps> = ({ goBack, onLogin }) => {
                             </IonRouterLink>
                         </div>
                     </form>
+                    {deviceAdapter.isNativePlatform() && (
+                        <span
+                            className={`${style.subtitle} ${style['update-instance']}`}
+                            onClick={() => handleLogout()}
+                        >
+                            {t('login_page.update_instance')}
+                        </span>
+                    )}
                 </div>
             </IonContent>
         </div>

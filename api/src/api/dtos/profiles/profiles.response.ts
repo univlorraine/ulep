@@ -84,11 +84,11 @@ export class ProfileResponse {
   @Expose({ groups: ['read'] })
   meetingFrequency: MeetingFrequency;
 
-  @ApiProperty({ type: InterestResponse, isArray: true })
+  @ApiProperty({ type: () => InterestResponse, isArray: true })
   @Expose({ groups: ['read'] })
   interests: InterestResponse[];
 
-  @ApiProperty({ type: AvailabilitesDto })
+  @ApiProperty({ type: () => AvailabilitesDto })
   @Transform(({ value }) => new AvailabilitesDto(value))
   @Expose({ groups: ['read'] })
   @IsObject()
@@ -105,7 +105,7 @@ export class ProfileResponse {
   @IsBoolean()
   availabilitiesNotePrivacy: boolean;
 
-  @ApiProperty({ type: BiographyDto, nullable: true })
+  @ApiProperty({ type: () => BiographyDto, nullable: true })
   @Expose({ groups: ['read'] })
   biography?: BiographyDto;
 

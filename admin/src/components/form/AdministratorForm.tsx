@@ -6,6 +6,7 @@ import University from '../../entities/University';
 import inputStyle from '../../theme/inputStyle';
 import isPasswordValid from '../../utils/isPasswordValid';
 import AdminGroupPicker from '../AdminGroupPicker';
+import ImageUploader from '../ImageUploader';
 import UniversityPicker from '../UniversityPicker';
 
 interface AdministratorFormProps {
@@ -34,20 +35,21 @@ const AdministratorForm: React.FC<AdministratorFormProps> = ({
     const translate = useTranslate();
     const notify = useNotify();
     const { permissions } = usePermissions();
+    const { data: identity, isLoading: isLoadingIdentity } = useGetIdentity();
     const [newEmail, setNewEmail] = useState<string>(email || '');
     const [password, setPassword] = useState<string>('');
     const [newFirstname, setNewFirstname] = useState<string>(firstname || '');
     const [newLastname, setNewLastname] = useState<string>(lastname || '');
     const [university, setUniversity] = useState<University>();
     const [newGroup, setNewGroup] = useState<KeycloakGroup | undefined>(group);
-    const { data: identity, isLoading: isLoadingIdentity } = useGetIdentity();
+    const [file, setFile] = useState<File>();
 
     if (isLoadingIdentity || !identity) {
         return <Loading />;
     }
 
     const getUniversityId = (): string | undefined => {
-        if (!identity.isCentralUniversity) {
+        if (!permissions.checkRole(Role.SUPER_ADMIN)) {
             return identity.universityId;
         }
 
@@ -67,13 +69,15 @@ const AdministratorForm: React.FC<AdministratorFormProps> = ({
             password,
             universityId: getUniversityId(),
             group: newGroup,
+            file,
         });
     };
 
     return (
         <Box sx={{ m: 4 }}>
-            <Typography variant="subtitle1">{translate(`administrators.${type}.email`)}</Typography>
+            <ImageUploader onImageSelect={setFile} source="image.id" />
 
+            <Typography variant="subtitle1">{translate(`administrators.${type}.email`)}</Typography>
             <Box alignItems="center" display="flex" flexDirection="row">
                 <Input
                     name="Email"
@@ -145,7 +149,6 @@ const AdministratorForm: React.FC<AdministratorFormProps> = ({
             <Button
                 color="primary"
                 disabled={
-                    (!university && identity.isCentralUniversity) ||
                     (email && !password ? false : !password || !isPasswordValid(password)) ||
                     !newFirstname ||
                     !newLastname ||

@@ -4,6 +4,16 @@
     margin-bottom: 20px;
 }
 
+.error-message {
+    color: #f60c36;
+    font-family: 'Maven Pro', sans-serif;
+    font-size: 13px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: 17px;
+    margin: 0px 0px 20px 0px;
+}
+
 .form-container {
     display: flex;
     flex-direction: column;
@@ -58,6 +68,11 @@
     font-weight: 700;
     line-height: 40px;
     text-align: center;
+}
+
+.update-instance {
+    padding: 0px 0px 20px 0px;
+    text-decoration: underline;
 }
 
 @media (min-width: 768px) {

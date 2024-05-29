@@ -11,11 +11,12 @@ import ConfirmModal from '../modals/ConfirmModal';
 import { useHistory } from 'react-router';
 
 interface SettingsContentProps {
+    onLanguageChange?: () => void;
     onBackPressed: () => void;
     onDisconnect: () => void;
 }
 
-const SettingsContent: React.FC<SettingsContentProps> = ({ onBackPressed, onDisconnect }) => {
+const SettingsContent: React.FC<SettingsContentProps> = ({ onBackPressed, onDisconnect, onLanguageChange }) => {
     const { t } = useTranslation();
     const history = useHistory();
     const { askForAccountDeletion, browserAdapter, configuration, updateNotificationPermission } = useConfig();
@@ -59,6 +60,7 @@ const SettingsContent: React.FC<SettingsContentProps> = ({ onBackPressed, onDisc
 
     const updateLanguage = (code: string) => {
         setLanguage({ language: code });
+        onLanguageChange?.();
     };
 
     const onEditAccount = () => {
