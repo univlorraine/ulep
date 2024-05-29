@@ -41,7 +41,7 @@ spec:
           securityContext:
             {{- toYaml .Values.securityContext | nindent 12 }}
           image: "{{ .Values.weblate.image.repository }}:{{ .Values.weblate.image.tag }}"
-          imagePullPolicy: {{ .Values.weblate.image.pullPolicy }}
+          imagePullPolicy: {{ .Values.weblate.image.pullPolicy }}          
           ports:
             - name: http
               containerPort: 8080
@@ -93,11 +93,11 @@ spec:
                 name: "{{ .Values.name }}-secret-{{ .Values.weblate.name }}"
           volumeMounts:
           - name: "{{ .Values.weblate.name }}-data"
-            mountPath: /app/data
+            mountPath: /app/data          
       volumes:
       - name: "{{ .Values.weblate.name }}-data"
         persistentVolumeClaim:
-          claimName:  "{{ .Values.name }}-pvc-{{ .Values.weblate.name }}"
+          claimName:  "{{ .Values.name }}-pvc-{{ .Values.weblate.name }}"     
       {{- with .Values.nodeSelector }}
       nodeSelector:
         {{- toYaml . | nindent 8 }}

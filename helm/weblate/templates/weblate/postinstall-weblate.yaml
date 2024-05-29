@@ -1,0 +1,34 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: {{ .Release.Name }}-{{ .Release.Revision }}
+  annotations:
+    "helm.sh/hook": post-install
+    "helm.sh/hook-weight": "-5"    
+spec:
+  template:
+    spec:
+      containers:
+      - name: post-install-weblate-job-{{ .Release.Revision }}
+        image: alpine:3.20
+        imagePullPolicy: IfNotPresent
+        command: [ "/bin/sh", "-c", "/opt/scripts/inject.sh"]
+        env:
+          - name: WEBLATE_SITE_DOMAIN
+            value: {{ .Values.weblate.env.site }}.{{ .Values.domain }}
+          - name: PSQL_USER
+            value: {{ .Values.global.postgresql.auth.username }}
+          - name: PSQL_PASSWORD
+            value: {{ .Values.global.postgresql.auth.password }}
+          - name: PSQL_DATABASE
+            value: {{ .Values.global.postgresql.auth.database }}
+        volumeMounts:
+          - name: config-volume
+            mountPath: /opt/scripts
+      volumes:
+        - name: config-volume
+          configMap:
+            name: {{ .Release.Name }}-postinstall-configmap
+            defaultMode: 0777        
+      restartPolicy: Never
+      terminationGracePeriodSeconds: 0
