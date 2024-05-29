@@ -80,12 +80,12 @@ export const userPersonalDataToCsv = (
           column === 'learning_request_language'
         ) {
           return translate(`languages_code.${value.code}`, {
-            ns: 'app',
+            ns: 'translation',
           });
         } else if (column === 'mastered_languages') {
           return JSON.stringify(
             value.map((item: Language) =>
-              translate(`languages_code.${item.code}`, { ns: 'app' }),
+              translate(`languages_code.${item.code}`, { ns: 'translation' }),
             ),
           );
         } else if (column === 'suggested_languages') {
@@ -93,7 +93,7 @@ export const userPersonalDataToCsv = (
             value.map((item) => ({
               [translate('export.headers.arrayKeys.language')]: translate(
                 `languages_code.${item.code}`,
-                { ns: 'app' },
+                { ns: 'translation' },
               ),
               [translate('export.headers.arrayKeys.suggestion_date')]:
                 dateFormater.format(item.suggestion_date),
@@ -104,7 +104,7 @@ export const userPersonalDataToCsv = (
             value.map((item) => ({
               [translate('export.headers.arrayKeys.language')]: translate(
                 `languages_code.${item.code}`,
-                { ns: 'app' },
+                { ns: 'translation' },
               ),
               [translate('export.headers.arrayKeys.historization_date')]:
                 dateFormater.format(item.historization_date),

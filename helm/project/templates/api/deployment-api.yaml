@@ -124,15 +124,10 @@ spec:
                 secretKeyRef:
                   name: "{{ include "etandem.fullname" . }}-secret-{{ .Values.api.name }}"
                   key: minio-secret-key
-            - name: WEBLATE_API_URL
-              value: "{{ .Values.api.env.weblateApiUrl }}"
-            - name: WEBLATE_API_TOKEN
-              valueFrom:
-                secretKeyRef:
-                  name: "{{ include "etandem.fullname" . }}-secret-{{ .Values.api.name }}"
-                  key: weblate-token
             - name: I18N_RELOAD_INTERVAL
               value: "{{ .Values.api.env.i18nReloadInterval }}"
+            - name: I18N_MINIO_URL
+              value: "{{ .Values.api.env.i18nMinioUrl }}"
             - name: I18N_DEBUG
               value: "{{ .Values.api.env.i18nDebug }}"
             - name: APP_TRANSLATION_NAMESPACE

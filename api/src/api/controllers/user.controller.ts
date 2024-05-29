@@ -322,7 +322,8 @@ export class UserController {
         )
       : undefined;
 
-    const appTranslationNs = this.env.get('APP_TRANSLATION_NAMESPACE') || 'app';
+    const appTranslationNs =
+      this.env.get('APP_TRANSLATION_NAMESPACE') || 'translation';
     const apiTranslationNs = this.env.get('API_TRANSLATION_NAMESPACE') || 'api';
 
     const csv = userPersonalDataToCsv(
@@ -333,7 +334,7 @@ export class UserController {
       (value: string, opts?: { ns: string }) =>
         `${this.i18n.translate(value, {
           lng: userData.profile.nativeLanguage.code,
-          ns: opts?.ns === 'app' ? appTranslationNs : apiTranslationNs,
+          ns: opts?.ns === 'translation' ? appTranslationNs : apiTranslationNs,
         })}`,
     );
 

@@ -42,7 +42,8 @@ export class InstanceController {
 
   @Get('locales/:lng/translation')
   async locales(@Param('lng') lng: string): Promise<string> {
-    const appNamespace = this.env.get('APP_TRANSLATION_NAMESPACE') || 'app';
+    const appNamespace =
+      this.env.get('APP_TRANSLATION_NAMESPACE') || 'translation';
 
     if (this.i18n.hasLanguageBundle(lng, appNamespace)) {
       const res = this.i18n.getLanguageBundle(lng, appNamespace);

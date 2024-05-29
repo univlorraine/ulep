@@ -77,18 +77,14 @@ export class Env {
   @IsNotEmpty()
   S3_ACCESS_SECRET: string;
 
-  @IsString()
-  @IsNotEmpty()
-  WEBLATE_API_URL: string;
-
-  @IsString()
-  @IsOptional()
-  WEBLATE_API_TOKEN: string;
-
   @IsNumber()
   @Transform(({ value }) => (value ? parseInt(value, 10) : undefined))
   @IsOptional()
   I18N_RELOAD_INTERVAL?: number;
+
+  @IsString()
+  @IsOptional()
+  I18N_MINIO_URL?: string;
 
   @IsString()
   @IsOptional()
@@ -267,9 +263,8 @@ const test: Env = {
   S3_REGION: 'eu-east-1',
   S3_ACCESS_KEY: 'minio',
   S3_ACCESS_SECRET: 'minio123',
-  WEBLATE_API_URL: 'http://localhost:3000/api/translations',
-  WEBLATE_API_TOKEN: '',
-  APP_TRANSLATION_NAMESPACE: 'app',
+  I18N_MINIO_URL: 'https://minio-api.ulep.thestaging.io/i18n',
+  APP_TRANSLATION_NAMESPACE: 'translation',
   API_TRANSLATION_NAMESPACE: 'api',
   EMAIL_TRANSLATION_NAMESPACE: 'emails',
   NOTIFICATION_TRANSLATION_NAMESPACE: 'notifications',
