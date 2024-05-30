@@ -10,6 +10,7 @@ import { AppModule } from './app.module';
 import {
     CollectionInterceptor,
     HttpLoggerInterceptor,
+    SentryInterceptor,
 } from 'src/api/interceptors';
 
 export class Server {
@@ -49,6 +50,11 @@ export class Server {
                 groups: ['read'],
             }),
         );
+
+        if (process.env.NODE_ENV !== 'test' && process.env.SENTRY_DSN) {
+            console.info('Sentry interceptor enabled');
+            app.useGlobalInterceptors(new SentryInterceptor());
+        }
 
         app.useGlobalInterceptors(new HttpLoggerInterceptor());
         app.useGlobalInterceptors(new CollectionInterceptor());
