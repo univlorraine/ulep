@@ -24,8 +24,8 @@ RUN pnpm prisma generate
 # Development image
 FROM chat_deps as chat_dev
 
-EXPOSE 3000
-ENV PORT 3000
+EXPOSE 3003
+ENV PORT 3003
 
 CMD ["sh", "-c", "pnpm start:dev"]
 
@@ -49,8 +49,8 @@ RUN adduser -S -u 1001 nestjs
 
 USER nestjs
 
-EXPOSE 3000
+EXPOSE 3003
 
-ENV PORT 3000
+ENV PORT 3003
 
 CMD ["pnpm", "run", "start:prod"]

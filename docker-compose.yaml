@@ -96,9 +96,9 @@ services:
         environment:
             ADMIN_URL: ${ADMIN_URL:-http://localhost:3001}
             APP_URL: ${APP_URL:-http://localhost:5173}
-            API_URL: ${API_URL:-http://localhost:3000}
+            API_URL: ${API_URL:-http://localhost:3002}
             LOG_LEVEL: ${LOG_LEVEL:-debug} # verbose, debug, log, warn or error
-            DATABASE_URL: mongodb://${MONGODB_ROOT_USER:-ulep}:${MONGODB_ROOT_PASSWORD:-!ChangeMe!}@mongo:27017/${MONGODB_DATABASE:-ulep}
+            DATABASE_URL: ${DATABASE_URL:-mongodb://${MONGODB_ROOT_USER:-ulep}:${MONGODB_ROOT_PASSWORD:-!ChangeMe!}@mongo:27017/${MONGODB_DATABASE:-ulep}?authSource=admin&replicaSet=rs0}
             KEYCLOAK_BASE_URL: ${KEYCLOAK_BASE_URL:-http://auth:8080}
             KEYCLOAK_REALM: ${KEYCLOAK_REALM:-etandem}
             KEYCLOAK_ADMIN: ${KEYCLOAK_ADMIN:-admin}
@@ -112,16 +112,32 @@ services:
 
     mongo:
         image: mongo:6-jammy
-        command: ["mongod", "--auth"]
+        command:
+            [
+                "mongod",
+                "--replSet",
+                "rs0",
+                "--auth",
+                "--keyFile",
+                "/etc/keyfile.key",
+            ]
         environment:
             MONGO_INITDB_ROOT_USERNAME: ${MONGO_INITDB_ROOT_USERNAME:-root}
             MONGO_INITDB_ROOT_PASSWORD: ${MONGO_INITDB_ROOT_PASSWORD:-!ChangeMe!}
-            MONGO_INITDB_DATABASE: ${MONGO_INITDB_DATABASE:-ulep}
-            MONGO_USERNAME: ${MONGO_USERNAME:-ulep}
-            MONGO_PASSWORD: ${MONGO_PASSWORD:-!ChangeMe!}
         volumes:
             - chat_data:/data/db
             - ./docker/database/mongo-init.js:/docker-entrypoint-initdb.d/mongo-init.js
+            - ./docker/database/keyfile.key:/etc/keyfile.key
+
+    init-replica:
+        image: mongo:6-jammy
+        depends_on:
+            - mongo
+        entrypoint: >
+            bash -c "
+            sleep 10;
+            echo 'rs.initiate({_id: \"rs0\", members: [{ _id: 0, host: \"mongo:27017\" }]})' | mongosh --host mongo --authenticationDatabase admin -u root -p ${MONGO_INITDB_ROOT_PASSWORD};
+            "
 
     database:
         image: postgres:${POSTGRES_VERSION:-14}-alpine
