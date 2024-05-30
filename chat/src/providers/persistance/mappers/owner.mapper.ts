@@ -1,7 +1,7 @@
 import { Prisma } from '@prisma/client';
 import { Owner } from 'src/core/models/owner.model';
 
-const OwnerInclude = Prisma.validator<Prisma.OwnerInclude>();
+const OwnerInclude = {};
 
 export const OwnerRelations = { include: OwnerInclude };
 
