@@ -5,9 +5,10 @@ import { ConversationController } from 'src/api/controllers/conversation.control
 import { TerminusModule } from '@nestjs/terminus';
 import { HealthController } from 'src/api/controllers/health.controller';
 import { PrismaService } from '@app/common';
+import { CoreModule } from 'src/core/core.module';
 
 @Module({
-    imports: [TerminusModule],
+    imports: [CoreModule, TerminusModule],
     controllers: [ConversationController, HealthController],
     providers: [
         {

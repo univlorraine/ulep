@@ -1,27 +1,32 @@
+import { Owner } from 'src/core/models/owner.model';
+
 export type MessageType = 'text' | 'image' | 'audio' | 'file';
 
 interface MessageProps {
     id: string;
-    createdAt: Date;
+    conversationId: string;
     content: string;
     isReported: boolean;
-    owner: string;
+    owner: Owner;
     type: MessageType;
-    updatedAt: Date;
+    createdAt?: Date;
+    updatedAt?: Date;
 }
 
 export class Message {
     readonly id: string;
     readonly content: string;
-    readonly createdAt: Date;
+    readonly conversationId: string;
     readonly isReported: boolean;
-    readonly owner: string;
+    readonly owner: Owner;
     readonly type: MessageType;
-    readonly updatedAt: Date;
+    readonly createdAt?: Date;
+    readonly updatedAt?: Date;
 
     constructor(props: MessageProps) {
         this.id = props.id;
         this.content = props.content;
+        this.conversationId = props.conversationId;
         this.createdAt = props.createdAt;
         this.isReported = props.isReported;
         this.owner = props.owner;

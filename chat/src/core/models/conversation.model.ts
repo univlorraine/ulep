@@ -5,7 +5,7 @@ interface ConversationProps {
     createdAt: Date;
     usersIds: string[];
     lastActivity: Date;
-    lastMessage: Message;
+    lastMessage?: Message;
     metadata: any;
 }
 
@@ -14,7 +14,7 @@ export class Conversation {
     readonly createdAt: Date;
     readonly usersIds: string[];
     readonly lastActivity: Date;
-    readonly lastMessage: Message;
+    readonly lastMessage?: Message;
     readonly metadata: any;
 
     constructor(props: ConversationProps) {
