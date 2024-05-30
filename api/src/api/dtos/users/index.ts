@@ -24,6 +24,11 @@ import {
 } from 'src/core/models/user.model';
 import { MediaObjectResponse } from '../medias';
 import { KeycloakGroup, UserRepresentation } from '@app/keycloak';
+import { MediaObject } from 'src/core/models';
+
+export interface UserRepresentationWithAvatar extends UserRepresentation {
+  image?: MediaObject;
+}
 
 export class CreateUserRequest implements CreateUserCommand {
   @Swagger.ApiProperty({ type: 'string', format: 'email' })
@@ -182,11 +187,15 @@ export class AdministratorResponse {
   @Expose({ groups: ['read'] })
   group?: KeycloakGroupResponse;
 
+  @Swagger.ApiPropertyOptional({ type: MediaObjectResponse })
+  @Expose({ groups: ['read'] })
+  image?: MediaObjectResponse;
+
   constructor(partial: Partial<AdministratorResponse>) {
     Object.assign(this, partial);
   }
 
-  static fromDomain(user: UserRepresentation) {
+  static fromDomain(user: UserRepresentationWithAvatar) {
     const adminGroupNames = Object.values(AdminGroup) as string[];
 
     return new AdministratorResponse({
@@ -195,6 +204,9 @@ export class AdministratorResponse {
       universityId: user.attributes?.universityId?.[0],
       firstname: user.firstName,
       lastname: user.lastName,
+      image: user.image
+        ? MediaObjectResponse.fromMediaObject(user.image)
+        : null,
       group: user.groups
         ? KeycloakGroupResponse.fromDomain(
             user.groups.find((group) => adminGroupNames.includes(group.name)),
@@ -348,7 +360,7 @@ export class UserResponse {
   @Expose({ groups: ['read'] })
   status?: UserStatus;
 
-  @Swagger.ApiPropertyOptional({ type: MediaObjectResponse })
+  @Swagger.ApiPropertyOptional({ type: () => MediaObjectResponse })
   @Expose({ groups: ['read'] })
   avatar?: MediaObjectResponse;
 
@@ -360,7 +372,7 @@ export class UserResponse {
   @Expose({ groups: ['read'] })
   contactId?: string;
 
-  @Swagger.ApiPropertyOptional({ type: AdministratorResponse })
+  @Swagger.ApiPropertyOptional({ type: () => AdministratorResponse })
   @Expose({ groups: ['read'] })
   contact?: AdministratorResponse;
 

@@ -154,7 +154,10 @@ export class ProficiencyTestResponse {
   @Expose({ groups: ['read'] })
   level: ProficiencyLevel;
 
-  @Swagger.ApiProperty({ type: ProficiencyQuestionResponse, isArray: true })
+  @Swagger.ApiProperty({
+    type: () => ProficiencyQuestionResponse,
+    isArray: true,
+  })
   @Expose({ groups: ['test:read'] })
   questions: ProficiencyQuestionResponse[];
 

@@ -59,11 +59,11 @@ export class SuggestedLanguageResponse {
   @Expose({ groups: ['read'] })
   id: string;
 
-  @Swagger.ApiProperty({ type: LanguageCodeResponse })
+  @Swagger.ApiProperty({ type: () => LanguageCodeResponse })
   @Expose({ groups: ['read'] })
   language: LanguageCodeResponse;
 
-  @Swagger.ApiProperty({ type: UserResponse })
+  @Swagger.ApiProperty({ type: () => UserResponse })
   @Expose({ groups: ['read'] })
   user: UserResponse;
 
@@ -85,7 +85,7 @@ export class AllSuggestedLanguageCountResponse {
   @Expose({ groups: ['read'] })
   id: string;
 
-  @Swagger.ApiProperty({ type: LanguageCodeResponse })
+  @Swagger.ApiProperty({ type: () => LanguageCodeResponse })
   @Expose({ groups: ['read'] })
   language: LanguageCodeResponse;
 

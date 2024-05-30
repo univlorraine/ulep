@@ -37,8 +37,7 @@ import { ScheduleModule } from '@nestjs/schedule';
           fallbackLanguage: fallbackLanguage,
           debug: env.get('I18N_DEBUG'),
           http: {
-            url: env.get('WEBLATE_API_URL'),
-            token: env.get('WEBLATE_API_TOKEN'),
+            url: env.get('I18N_MINIO_URL'),
             reloadInterval: env.get('I18N_RELOAD_INTERVAL'),
           },
         };

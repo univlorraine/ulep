@@ -2,7 +2,6 @@ import { Box, Typography, Input } from '@mui/material';
 import React, { useState } from 'react';
 import { Button, useTranslate } from 'react-admin';
 import IndexedTranslation from '../../entities/IndexedTranslation';
-import MediaObject from '../../entities/MediaObject';
 import inputStyle from '../../theme/inputStyle';
 import ImageUploader from '../ImageUploader';
 import TranslationForm from './TranslationForm';
@@ -10,11 +9,10 @@ import TranslationForm from './TranslationForm';
 interface ObjectiveFormProps {
     handleSubmit: (name: string, translations: IndexedTranslation[], file?: File) => Promise<void>;
     name?: string;
-    image?: MediaObject;
     tranlsations?: IndexedTranslation[];
 }
 
-const ObjectiveForm: React.FC<ObjectiveFormProps> = ({ handleSubmit, name, image, tranlsations }) => {
+const ObjectiveForm: React.FC<ObjectiveFormProps> = ({ handleSubmit, name, tranlsations }) => {
     const translate = useTranslate();
     const [currentName, setCurrentName] = useState<string | undefined>(name || '');
     const [file, setFile] = useState<File>();
@@ -47,7 +45,7 @@ const ObjectiveForm: React.FC<ObjectiveFormProps> = ({ handleSubmit, name, image
             <Typography sx={{ mt: 4 }} variant="subtitle1">
                 {translate('objectives.create.image')}
             </Typography>
-            <ImageUploader image={image} onImageSelect={setFile} />
+            <ImageUploader onImageSelect={setFile} source="image.id" />
             <Box sx={{ mt: 4 }}>
                 <TranslationForm setTranslations={setCurrentTranslations} translations={currentTranslations} />
             </Box>

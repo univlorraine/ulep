@@ -162,20 +162,18 @@ const authProvider: AuthProvider = {
         let { universityId } = decoded;
         let isCentralUniversity = false;
 
-        if (!universityId) {
-            const universitiesRes = await fetch(`${process.env.REACT_APP_API_URL}/universities`, {
-                headers: {
-                    Authorization: `Bearer ${accessToken}`,
-                },
-            });
-            const universities = await universitiesRes.json();
-            const centralUniversity = universities?.items?.find(checkIsCentralUniversity);
-            if (!centralUniversity) {
-                return Promise.reject(new Error('No central university defined'));
-            }
-            universityId = centralUniversity.id;
-            isCentralUniversity = true;
+        const universitiesRes = await fetch(`${process.env.REACT_APP_API_URL}/universities`, {
+            headers: {
+                Authorization: `Bearer ${accessToken}`,
+            },
+        });
+        const universities = await universitiesRes.json();
+        const centralUniversity = universities?.items?.find(checkIsCentralUniversity);
+        if (!centralUniversity) {
+            return Promise.reject(new Error('No central university defined'));
         }
+        universityId = centralUniversity.id;
+        isCentralUniversity = true;
 
         return Promise.resolve({
             id: decoded.sub,

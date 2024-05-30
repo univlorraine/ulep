@@ -19,11 +19,13 @@ const AdminGroupPicker: React.FC<GroupPickerProps> = ({ onChange, value }) => {
         try {
             const fetchedKeycloakGroups: KeycloakGroup[] = await dataProvider.getKeycloackAdminGroups();
 
-            return setKeycloackGroups(
-                fetchedKeycloakGroups.filter(
-                    (group) => permissions.checkRole(Role.SUPER_ADMIN) || group.name !== AdminGroup.SUPER_ADMIN
-                )
+            const filteredGroups = fetchedKeycloakGroups.filter(
+                (group) => permissions.checkRole(Role.SUPER_ADMIN) || group.name !== AdminGroup.SUPER_ADMIN
             );
+
+            if (!value) onChange(filteredGroups[0]);
+
+            return setKeycloackGroups(filteredGroups);
         } catch (err) {
             console.error(err);
 
@@ -35,7 +37,7 @@ const AdminGroupPicker: React.FC<GroupPickerProps> = ({ onChange, value }) => {
         fetchKeycloakGroups();
     }, []);
 
-    const defaultValue = value || keycloakGroups[0];
+    if (keycloakGroups.length === 0 || !value) return <>Loading..</>;
 
     return (
         <FormControl>
@@ -43,7 +45,7 @@ const AdminGroupPicker: React.FC<GroupPickerProps> = ({ onChange, value }) => {
                 id="group-picker"
                 onChange={(group) => onChange(keycloakGroups.find((g) => group.target.value === g.id) as KeycloakGroup)}
                 sx={{ mb: 2, width: '100%' }}
-                value={defaultValue && defaultValue.id}
+                value={value && value.id}
                 variant="standard"
                 disableUnderline
             >

@@ -39,7 +39,7 @@ docker compose up --detach
 This will build and run the project on your localhost. You now have access to the following services:
 
 - [Admin](http://localhost:3001)
-- [Api](http://localhost:3000)
+- [Api](http://localhost:3002)
 - [Keycloak](http://localhost:8080)
 - [Minio](http://localhost:9000)
 

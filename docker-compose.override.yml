@@ -1,58 +1,60 @@
 version: "3.4"
 
 services:
-    api:
-        build:
-            context: ./api
-            target: api_dev
-        volumes:
-            - ./api:/srv/app
-        ports:
-            - ${API_PORT:-3000}:3000
-        environment:
-            SMTP_HOST: mailer
-            SMTP_PORT: 1025
-            SMTP_SENDER: test@thetribe.io
+  api:
+    build:
+      context: ./api
+      target: api_dev
+    volumes:
+      - ./api:/srv/app
+    ports:
+      - ${API_PORT:-3000}:3000
+    environment:
+      SMTP_HOST: mailer
+      SMTP_PORT: 1025
+      SMTP_SENDER: test@thetribe.io
+    tty: true
+    stdin_open: true
 
-    chat:
-        build:
-            context: ./chat
-            target: chat_dev
-        volumes:
-            - ./chat:/srv/app
-        ports:
-            - ${CHAT_PORT:-3003}:3000
+  chat:
+    build:
+      context: ./chat
+      target: chat_dev
+    volumes:
+      - ./chat:/srv/app
+    ports:
+      - ${CHAT_PORT:-3003}:3000
 
-    admin:
-        build:
-            context: ./admin
-            target: admin_dev
-        volumes:
-            - ./admin:/srv/app
-        ports:
-            - ${ADMIN_PORT:-3001}:3000
+  admin:
+    build:
+      context: ./admin
+      target: admin_dev
+    volumes:
+      - ./admin:/srv/app
+    ports:
+      - ${ADMIN_PORT:-3001}:3000
 
-    auth:
-        command: "start-dev --import-realm  --spi-theme-cache-themes=false --spi-theme-cache-templates=false "
-        ports:
-            - ${AUTH_PORT:-8080}:8080
+  mongo:
+    platform: linux/arm64
+    ports:
+      - 27017:27017
 
-    mongo:
-        platform: linux/arm64
-        ports:
-            - 27017:27017
+  database:
+    ports:
+      - 5432:5432
 
-    database:
-        ports:
-            - 5432:5432
+  auth:
+    command: "start-dev --import-realm  --spi-theme-cache-themes=false --spi-theme-cache-templates=false "
+    ports:
+      - ${AUTH_PORT:-8080}:8080
 
-    minio:
-        ports:
-            - ${MINIO_PORT:-9000}:9000
-            - ${MINIO_CONSOLE_PORT:-9001}:9001
+  minio:
+    ports:
+      - ${MINIO_PORT:-9000}:9000
+      - ${MINIO_CONSOLE_PORT:-9001}:9001
 
-    mailer:
-        image: schickling/mailcatcher
-        ports:
-            - "1025:1025"
-            - "1080:1080"
+  mailer:
+    image: schickling/mailcatcher
+    ports:
+      - "1025:1025"
+      - "1080:1080"

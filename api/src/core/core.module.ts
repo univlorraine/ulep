@@ -67,6 +67,7 @@ import {
   UpdateUniversityUsecase,
   UpdateUserUsecase,
   UploadAvatarUsecase,
+  UploadAdminAvatarUsecase,
   UpdateReportCategoryUsecase,
   CreateUnsubscribeReportUsecase,
   GetLearningLanguagesUsecase,
@@ -140,6 +141,7 @@ const usecases: Provider[] = [
   GetMediaObjectUsecase,
   DeleteObjectiveImageUsecase,
   UploadAvatarUsecase,
+  UploadAdminAvatarUsecase,
   UploadObjectiveImageUsecase,
   UploadUniversityImageUsecase,
   // Objectives

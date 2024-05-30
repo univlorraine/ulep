@@ -2,14 +2,14 @@ import { Box, Typography } from '@mui/material';
 import Button from '@mui/material/Button';
 import React, { useRef, useState } from 'react';
 import { useTranslate } from 'react-admin';
-import MediaObject from '../entities/MediaObject';
+import ReferenceUploadField from './field/ReferenceUploadField';
 
 interface ImageUploaderProps {
-    image?: MediaObject;
+    source?: string;
     onImageSelect: (file: File) => void;
 }
 
-const ImageUploader: React.FC<ImageUploaderProps> = ({ image, onImageSelect }) => {
+const ImageUploader: React.FC<ImageUploaderProps> = ({ source, onImageSelect }) => {
     const translate = useTranslate();
     const [isDragOver, setDragOver] = useState<boolean>(false);
     const [currentFile, setCurrentFile] = useState<File>();
@@ -65,14 +65,13 @@ const ImageUploader: React.FC<ImageUploaderProps> = ({ image, onImageSelect }) =
                 type="file"
             />
 
-            {image && !currentFile && (
+            {source && !currentFile && (
                 <Button onClick={() => fileInputRef.current?.click()}>
-                    <img alt="preview" src={image.url} style={{ height: 150, width: 150 }} />
+                    <ReferenceUploadField source={source} />
                 </Button>
             )}
 
             {!currentFile &&
-                !image &&
                 (isDragOver ? (
                     <Typography variant="body1">{translate('uploader.drop_image')}</Typography>
                 ) : (

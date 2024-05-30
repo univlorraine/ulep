@@ -8,15 +8,11 @@ interface ProfileModalProps {
     isVisible: boolean;
     onClose: () => void;
     onDisconnect: () => void;
+    onLanguageChange?: () => void;
     profile: Profile;
 }
 
-const ProfileModal: React.FC<ProfileModalProps> = ({
-    isVisible,
-    onClose,
-    onDisconnect,
-    profile
-}) => {
+const ProfileModal: React.FC<ProfileModalProps> = ({ isVisible, onClose, onDisconnect, onLanguageChange, profile }) => {
     const [displaySettings, setDisplaySettings] = useState<boolean>(false);
 
     return (
@@ -28,7 +24,11 @@ const ProfileModal: React.FC<ProfileModalProps> = ({
                     profile={profile}
                 />
             ) : (
-                <SettingsContent onBackPressed={() => setDisplaySettings(false)} onDisconnect={onDisconnect} />
+                <SettingsContent
+                    onBackPressed={() => setDisplaySettings(false)}
+                    onDisconnect={onDisconnect}
+                    onLanguageChange={onLanguageChange}
+                />
             )}
         </Modal>
     );

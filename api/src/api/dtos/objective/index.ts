@@ -42,11 +42,11 @@ export class GetObjectiveResponse {
   @Expose({ groups: ['read'] })
   id: string;
 
-  @Swagger.ApiPropertyOptional({ type: MediaObjectResponse })
+  @Swagger.ApiPropertyOptional({ type: () => MediaObjectResponse })
   @Expose({ groups: ['read'] })
   image?: MediaObjectResponse;
 
-  @Swagger.ApiProperty({ type: TextContentResponse })
+  @Swagger.ApiProperty({ type: () => TextContentResponse })
   @Expose({ groups: ['read'] })
   name: TextContentResponse;
 
@@ -69,7 +69,7 @@ export class ObjectiveResponse {
   @Expose({ groups: ['read'] })
   id: string;
 
-  @Swagger.ApiPropertyOptional({ type: MediaObjectResponse })
+  @Swagger.ApiPropertyOptional({ type: () => MediaObjectResponse })
   @Expose({ groups: ['read'] })
   image?: MediaObjectResponse;
 

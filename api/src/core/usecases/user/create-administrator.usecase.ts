@@ -45,6 +45,11 @@ export class CreateAdministratorUsecase {
         universityId: command.universityId,
         groups: [command.group.name],
       });
+
+      await this.keycloakClient.addRealmRoleToUser(
+        user.id,
+        KeycloakRealmRoles.ADMIN,
+      );
     } else {
       const isAdministator = await this.isAdministator(user.id);
       if (isAdministator) {
@@ -63,11 +68,6 @@ export class CreateAdministratorUsecase {
         groups: [command.group],
       });
     }
-
-    await this.keycloakClient.addRealmRoleToUser(
-      user.id,
-      KeycloakRealmRoles.ADMIN,
-    );
 
     return user;
   }

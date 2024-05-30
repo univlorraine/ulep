@@ -450,6 +450,8 @@ export class KeycloakClient {
 
     const updatedAdmin = await this.getUserById(props.id, true);
 
+    if (!props.groups[0]?.name) return updatedAdmin;
+
     // We have to update groups manually, because the update doesn't work for the "groups" UserRepresentation key
     // https://github.com/keycloak/keycloak/discussions/8552
     const existingGroups = updatedAdmin.groups;
