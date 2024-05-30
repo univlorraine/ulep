@@ -40,6 +40,10 @@ export class CreateMessageUsecase {
             throw new NotFoundException('Conversation not found');
         }
 
+        if (!conversation.usersIds.includes(command.ownerId)) {
+            throw new NotFoundException('User not found in conversation');
+        }
+
         const message = new Message({
             id: this.uuidProvider.generate(),
             content: command.content,
@@ -53,9 +57,9 @@ export class CreateMessageUsecase {
             isReported: false,
         });
 
-        await this.messageRepository.create(message);
+        const createdMessage = await this.messageRepository.create(message);
 
-        return message;
+        return createdMessage;
     }
 
     private categorizeFileType(mimeType?: string): MessageType {

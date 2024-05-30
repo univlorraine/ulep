@@ -30,6 +30,7 @@ export class ConversationController {
         private createConversationUsecase: CreateConversationUsecase,
         private deleteConversationUsecase: DeleteConversationUsecase,
         private getConversationFromUserIdUsecase: GetConversationFromUserIdUsecase,
+
         private uploadMediaUsecase: UploadMediaUsecase,
     ) {}
 
@@ -92,6 +93,7 @@ export class ConversationController {
 
         let media: MediaObject;
         if (file) {
+            //TODO: Upload lighter image then heavier image
             media = await this.uploadMediaUsecase.execute({
                 file,
                 messageId: message.id,

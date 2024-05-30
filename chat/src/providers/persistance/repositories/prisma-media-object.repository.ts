@@ -2,13 +2,12 @@ import { Injectable } from '@nestjs/common';
 import { PrismaService } from '@app/common';
 import { MediaObjectRepository } from 'src/core/ports/media-object.repository';
 import { MediaObject } from 'src/core/models/media.model';
-import { Message } from 'src/core/models';
 
 @Injectable()
 export class PrismaMediaObjectRepository implements MediaObjectRepository {
     constructor(private readonly prisma: PrismaService) {}
 
-    async saveFile(object: MediaObject, message: Message): Promise<void> {
+    async saveFile(object: MediaObject, messageId: string): Promise<void> {
         await this.prisma.mediaObject.create({
             data: {
                 id: object.id,
@@ -16,7 +15,7 @@ export class PrismaMediaObjectRepository implements MediaObjectRepository {
                 bucket: object.bucket,
                 mime: object.mimetype,
                 size: object.size,
-                Message: { connect: { id: message.id } },
+                Message: { connect: { id: messageId } },
             },
         });
     }

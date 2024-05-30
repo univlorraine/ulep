@@ -1,6 +1,8 @@
 import { Inject, Injectable } from '@nestjs/common';
-import { MEDIA_OBJECT_REPOSITORY } from '../../ports/media-object.repository';
-import { ConversationRepository } from 'src/core/ports/conversation.repository';
+import {
+    CONVERSATION_REPOSITORY,
+    ConversationRepository,
+} from 'src/core/ports/conversation.repository';
 
 export class DeleteConversationCommand {
     id: string;
@@ -9,7 +11,7 @@ export class DeleteConversationCommand {
 @Injectable()
 export class DeleteConversationUsecase {
     constructor(
-        @Inject(MEDIA_OBJECT_REPOSITORY)
+        @Inject(CONVERSATION_REPOSITORY)
         private readonly conversationRepository: ConversationRepository,
     ) {}
 

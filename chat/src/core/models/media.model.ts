@@ -29,11 +29,12 @@ export class MediaObject {
 
     static image(
         file: Express.Multer.File,
-        bucketName = 'images',
+        bucketName = 'chat',
+        conversationId: string,
     ): MediaObject {
         const id = v4();
         const extension = file.mimetype;
-        const name = `${id}${extension}`;
+        const name = `${conversationId}/${id}.${extension.split('/')[1]}`;
 
         return new MediaObject({
             id,

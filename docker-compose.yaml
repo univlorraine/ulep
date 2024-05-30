@@ -128,6 +128,7 @@ services:
             - chat_data:/data/db
             - ./docker/database/mongo-init.js:/docker-entrypoint-initdb.d/mongo-init.js
             - ./docker/database/keyfile.key:/etc/keyfile.key
+
     init-replica:
         image: mongo:6-jammy
         depends_on:
