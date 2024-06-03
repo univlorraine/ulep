@@ -24,6 +24,11 @@ services:
       - ./chat:/srv/app
     ports:
       - ${CHAT_PORT:-3003}:3000
+      - ${CHAT_SOCKET_PORT:-5001}:5000
+
+  redis:
+    ports:
+      - ${REDIS_PORT:-6379}:6379
 
   admin:
     build:
