@@ -7,11 +7,12 @@ import useLastGlobalRoutineExecution from './useLastGlobalRoutineExecution';
 import useLaunchGlobalRoutine from './useLaunchGlobalRoutine';
 
 interface ActionsProps {
-    universityIds: string[];
     enableLaunchGlobalRoutine?: boolean;
+    onGlobalRoutineEnded?: () => void;
+    universityIds: string[];
 }
 
-const Actions = ({ universityIds, enableLaunchGlobalRoutine }: ActionsProps) => {
+const Actions = ({ enableLaunchGlobalRoutine, onGlobalRoutineEnded, universityIds }: ActionsProps) => {
     const translate = useTranslate();
     const notify = useNotify();
 
@@ -21,7 +22,7 @@ const Actions = ({ universityIds, enableLaunchGlobalRoutine }: ActionsProps) => 
         data: lastGlobalRoutineExecution,
         isLoading: isLoadingLastGlobalRoutine,
         refetch: refetchGlobalRoutine,
-    } = useLastGlobalRoutineExecution();
+    } = useLastGlobalRoutineExecution(onGlobalRoutineEnded);
 
     const globalRoutineIsCurrentlyRunning = lastGlobalRoutineExecution?.status === RoutineExecutionStatus.ON_GOING;
 

@@ -1,5 +1,6 @@
 import CameraAdapterInterface from '../adapter/interfaces/CameraAdapter.interface';
 import Configuration from '../domain/entities/Confirguration';
+import AddDeviceUsecaseInterface from '../domain/interfaces/AddDeviceUsecase.interface';
 import AskForAccountDeletionUsecaseInterface from '../domain/interfaces/AskForAccountDeletionUsecase.interface';
 import AskForLanguageUsecaseInterface from '../domain/interfaces/AskForLanguageUsecase.interface';
 import AskForLearningLanguageUsecaseInterface from '../domain/interfaces/AskForLearningLanguageUsecase.interface';
@@ -34,9 +35,11 @@ import GetUniversityLanguagesUsecaseInterface from '../domain/interfaces/GetUniv
 import GetPartnersToUniversityUsecaseInterface from '../domain/interfaces/GetPartnersToUniversityUsecase.interface';
 import EditProfileUsecaseInterface from '../domain/interfaces/EditProfileUsecase.interface';
 import EditUserUsecaseInterface from '../domain/interfaces/EditUserUsecase.interface';
+import NotificationAdapterInterface from '../adapter/interfaces/NotificationAdapter.interface';
 
 export interface ConfigContextValueType {
     accessToken: string;
+    addDevice: AddDeviceUsecaseInterface;
     askForAccountDeletion: AskForAccountDeletionUsecaseInterface;
     askForLanguage: AskForLanguageUsecaseInterface;
     askForLearningLanguage: AskForLearningLanguageUsecaseInterface;
@@ -66,6 +69,7 @@ export interface ConfigContextValueType {
     getUniversity: GetUniversityInterface;
     getUniversityLanguages: GetUniversityLanguagesUsecaseInterface;
     login: LoginUsecaseInterface;
+    notificationAdapter: NotificationAdapterInterface;
     resetPassword: ResetPasswordUsecaseInterface;
     updateAvatar: UpdateAvatarUsecaseInterface;
     updateNotificationPermission: UpdateNotificationPermissionUsecaseInterface;

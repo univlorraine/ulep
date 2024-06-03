@@ -2,6 +2,7 @@ import { ApiPropertyOptional } from '@nestjs/swagger';
 import {
   IsEmail,
   IsHexColor,
+  IsNumber,
   IsOptional,
   IsString,
   IsUrl,
@@ -66,4 +67,9 @@ export class UpdateInstanceRequest {
   @ApiPropertyOptional({ type: 'boolean' })
   @IsOptional()
   isInMaintenance?: boolean;
+
+  @ApiPropertyOptional({ type: 'number' })
+  @IsOptional()
+  @IsNumber()
+  daysBeforeClosureNotification?: number;
 }

@@ -27,6 +27,8 @@ import { LEARNING_LANGUAGE_REPOSITORY } from 'src/core/ports/learning-language.r
 import { InMemoryLearningLanguageRepository } from 'src/providers/persistance/repositories/in-memory-learning-language-repository';
 import { KeycloakClient } from '@app/keycloak';
 import { InMemoryI18nService } from 'src/providers/services/in-memory.i18n.provider';
+import { NOTIFICATION_GATEWAY } from 'src/core/ports/notification.gateway';
+import InMemoryNotificaitonGateway from 'src/providers/gateway/in-memory-notification.gateway';
 import { faker } from '@faker-js/faker';
 import { LANGUAGE_REPOSITORY } from '../../src/core/ports/language.repository';
 
@@ -54,6 +56,7 @@ describe('Universities', () => {
 
   const repository = new InMemoryUniversityRepository();
   const inMemoryEmail = new InMemoryEmailGateway();
+  const inMemoryNotification = new InMemoryNotificaitonGateway();
   const inMemoryI18n = new InMemoryI18nService();
 
   beforeAll(async () => {
@@ -68,7 +71,7 @@ describe('Universities', () => {
       clientId: 'test',
       clientSecret: 'secret',
       baseUrl: 'http://localhost:8080/auth',
-      adminGroupId: 'admin',
+      adminRoleName: 'admin',
     });
 
     jest
@@ -86,6 +89,8 @@ describe('Universities', () => {
       .useValue(userRepositoy)
       .overrideProvider(EMAIL_GATEWAY)
       .useValue(inMemoryEmail)
+      .overrideProvider(NOTIFICATION_GATEWAY)
+      .useValue(inMemoryNotification)
       .overrideGuard(AuthenticationGuard)
       .useValue(TestAuthGuard)
       .overrideProvider(I18nService)
@@ -183,26 +188,26 @@ describe('Universities', () => {
   });
 
   /*it('should create partner university', async () => {
-    const university = universityFactory.makeOne();
-    repository.init([university]);
-
-    await request(app.getHttpServer())
-      .post(`/universities/partners`)
-      .set('Authorization', `Bearer ${keycloakUser.sub}`)
-      .send({
-        admissionStart: '2021-12-31',
-        admissionEnd: '2021-01-01',
-        openServiceDate: '2022-01-01',
-        closeServiceDate: '2024-12-31',
-        name: 'University of Oxford',
-        timezone: 'Europe/London',
-        website: 'https://www.ox.ac.uk/',
-        codes: [],
-        domains: [],
-        countryId: country.id,
-      })
-      .expect(201);
-  });*/
+      const university = universityFactory.makeOne();
+      repository.init([university]);
+  
+      await request(app.getHttpServer())
+        .post(`/universities/partners`)
+        .set('Authorization', `Bearer ${keycloakUser.sub}`)
+        .send({
+          admissionStart: '2021-12-31',
+          admissionEnd: '2021-01-01',
+          openServiceDate: '2022-01-01',
+          closeServiceDate: '2024-12-31',
+          name: 'University of Oxford',
+          timezone: 'Europe/London',
+          website: 'https://www.ox.ac.uk/',
+          codes: [],
+          domains: [],
+          countryId: country.id,
+        })
+        .expect(201);
+    });*/
 
   it('should return all universities', async () => {
     countryRepository.init([country]);

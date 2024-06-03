@@ -45,6 +45,10 @@ import { TANDEM_HISTORY_REPOSITORY } from 'src/core/ports/tandem-history.reposit
 import { PrismaTandemHistoryRepository } from 'src/providers/persistance/repositories/prisma-tandem-history-repository';
 import { TESTED_LANGUAGE_REPOSITORY } from 'src/core/ports/tested-language.repository';
 import { PrismaTestedLanguageRepository } from 'src/providers/persistance/repositories/prisma-tested-language-repository';
+import { FCMNotificationGateway } from 'src/providers/gateway/fcm-notification.gateway';
+import { NOTIFICATION_GATEWAY } from 'src/core/ports/notification.gateway';
+import { CONTACT_REPOSITORY } from 'src/core/ports/contact.repository';
+import { PrismaContactRepository } from 'src/providers/persistance/repositories/prisma-contact-repository';
 
 const providers: Provider[] = [
   { provide: INSTANCE_REPOSITORY, useClass: PrismaInstanceRepository },
@@ -131,6 +135,14 @@ const providers: Provider[] = [
   {
     provide: EMAIL_GATEWAY,
     useClass: SmtpEmailGateway,
+  },
+  {
+    provide: NOTIFICATION_GATEWAY,
+    useClass: FCMNotificationGateway,
+  },
+  {
+    provide: CONTACT_REPOSITORY,
+    useClass: PrismaContactRepository,
   },
 ];
 

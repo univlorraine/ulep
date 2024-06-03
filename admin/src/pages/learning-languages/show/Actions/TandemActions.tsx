@@ -2,16 +2,20 @@ import { Check, Clear } from '@mui/icons-material';
 import { Box, CircularProgress, IconButton, Modal } from '@mui/material';
 import React, { useState } from 'react';
 import { Button, useNotify, useTranslate } from 'react-admin';
+import { TandemStatus } from '../../../../entities/Tandem';
 import useCreateTandem from './useCreateTandem';
 import useRefuseTandem from './useRefuseTandem';
+import useUpdateTandem from './useUpdateTandem';
 import useValidateTandem from './useValidateTandem';
 
 export enum TandemAction {
     ACCEPT = 'ACCEPT',
     REFUSE = 'REFUSE',
+    PAUSE = 'PAUSE',
 }
 
 interface TandemActionsProps {
+    tandemStatus?: TandemStatus;
     tandemId?: string;
     learningLanguageIds?: string[];
     onTandemAction: (modalAction?: TandemAction) => void;
@@ -21,6 +25,7 @@ interface TandemActionsProps {
 }
 
 const TandemActions = ({
+    tandemStatus,
     tandemId,
     learningLanguageIds,
     onTandemAction,
@@ -71,6 +76,11 @@ const TandemActions = ({
         onError,
     });
 
+    const { mutate: updateTandem, isLoading: isLoadingUpdateTandem } = useUpdateTandem({
+        onSuccess,
+        onError,
+    });
+
     const handleConfirm = () => {
         if (modalAction === TandemAction.ACCEPT) {
             if (tandemId) {
@@ -117,7 +127,10 @@ const TandemActions = ({
                         p: 4,
                     }}
                 >
-                    {isLoadingValidateTandem || isLoadingCreateTandem || isLoadingRefuseTandem ? (
+                    {isLoadingValidateTandem ||
+                    isLoadingCreateTandem ||
+                    isLoadingRefuseTandem ||
+                    isLoadingUpdateTandem ? (
                         <CircularProgress />
                     ) : (
                         <>
@@ -147,6 +160,24 @@ const TandemActions = ({
             <IconButton aria-label="reject" color="error" onClick={() => handleAction(TandemAction.REFUSE)}>
                 <Clear />
             </IconButton>
+            {tandemId && (tandemStatus === TandemStatus.ACTIVE || tandemStatus === TandemStatus.PAUSED) && (
+                <Button
+                    color="info"
+                    label={translate(
+                        `learning_languages.show.tandems.actions.ctaLabels.${
+                            tandemStatus === TandemStatus.PAUSED ? 'free' : 'pause'
+                        }`
+                    )}
+                    onClick={() =>
+                        updateTandem({
+                            tandemId,
+                            tandemStatus:
+                                tandemStatus === TandemStatus.PAUSED ? TandemStatus.ACTIVE : TandemStatus.PAUSED,
+                        })
+                    }
+                    variant="outlined"
+                />
+            )}
         </>
     );
 };

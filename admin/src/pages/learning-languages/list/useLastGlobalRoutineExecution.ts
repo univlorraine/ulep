@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useDataProvider, useNotify, useTranslate } from 'react-admin';
 import { useQuery } from 'react-query';
 import { RoutineExecution, RoutineExecutionStatus } from '../../../entities/RoutineExecution';
@@ -6,7 +6,7 @@ import { RoutineExecution, RoutineExecutionStatus } from '../../../entities/Rout
 const DEFAULT_POLLING_DELAY = 5 * 1000;
 const QUERY_KEY = ['GLOBAL_ROUTINE', 'LAST_EXECUTION'];
 
-const useLastGlobalRoutineExecution = (pollingDelayInSec?: number) => {
+const useLastGlobalRoutineExecution = (onGlobalRoutineEnded?: () => void, pollingDelayInSec?: number) => {
     const notify = useNotify();
     const translate = useTranslate();
 
@@ -34,6 +34,12 @@ const useLastGlobalRoutineExecution = (pollingDelayInSec?: number) => {
             },
         }
     );
+
+    useEffect(() => {
+        if (data?.status === RoutineExecutionStatus.ENDED) {
+            onGlobalRoutineEnded?.();
+        }
+    }, [data?.status]);
 
     return { data, isLoading, isError, refetch };
 };

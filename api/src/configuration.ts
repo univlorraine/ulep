@@ -59,7 +59,7 @@ export class Env {
 
   @IsString()
   @IsNotEmpty()
-  KEYCLOAK_ADMIN_GROUP_ID: string;
+  KEYCLOAK_ADMIN_ROLE_NAME: string;
 
   @IsString()
   @IsNotEmpty()
@@ -77,18 +77,14 @@ export class Env {
   @IsNotEmpty()
   S3_ACCESS_SECRET: string;
 
-  @IsString()
-  @IsNotEmpty()
-  WEBLATE_API_URL: string;
-
-  @IsString()
-  @IsOptional()
-  WEBLATE_API_TOKEN: string;
-
   @IsNumber()
   @Transform(({ value }) => (value ? parseInt(value, 10) : undefined))
   @IsOptional()
   I18N_RELOAD_INTERVAL?: number;
+
+  @IsString()
+  @IsOptional()
+  I18N_MINIO_URL?: string;
 
   @IsString()
   @IsOptional()
@@ -101,6 +97,10 @@ export class Env {
   @IsString()
   @IsOptional()
   EMAIL_TRANSLATION_NAMESPACE: string;
+
+  @IsString()
+  @IsOptional()
+  NOTIFICATION_TRANSLATION_NAMESPACE: string;
 
   @IsBoolean()
   @Transform(({ value }) => value === 'true')
@@ -123,6 +123,15 @@ export class Env {
   @IsNotEmpty()
   @Transform(({ value }) => removeTrailingSlash(value))
   EMAIL_ASSETS_PUBLIC_ENDPOINT: string;
+
+  @IsString()
+  @IsNotEmpty()
+  NOTIFICATION_ASSETS_BUCKET: string;
+
+  @IsString()
+  @IsNotEmpty()
+  @Transform(({ value }) => removeTrailingSlash(value))
+  NOTIFICATION_ASSETS_PUBLIC_ENDPOINT: string;
 
   @IsString()
   @IsNotEmpty()
@@ -158,6 +167,23 @@ export class Env {
   @IsString()
   @IsNotEmpty()
   SMTP_SENDER: string;
+
+  @IsString()
+  @IsNotEmpty()
+  FIREBASE_PROJECT_ID: string;
+
+  @IsString()
+  @IsNotEmpty()
+  FIREBASE_PRIVATE_KEY: string;
+
+  @IsString()
+  @IsNotEmpty()
+  FIREBASE_CLIENT_EMAIL: string;
+
+  @IsNumber()
+  @IsNotEmpty()
+  @Transform(({ value }) => parseInt(value, 10))
+  FIREBASE_PARALLEL_LIMIT: number;
 
   @IsString()
   @IsOptional()
@@ -232,18 +258,20 @@ const test: Env = {
   KEYCLOAK_ADMIN_PASSWORD: 'admin',
   KEYCLOAK_CLIENT_ID: 'admin-cli',
   KEYCLOAK_CLIENT_SECRET: 'f0a0c0e0-0000-0000-0000-000000000000',
-  KEYCLOAK_ADMIN_GROUP_ID: 'admin',
+  KEYCLOAK_ADMIN_ROLE_NAME: 'admin',
   S3_URL: 'http://minio:9000',
   S3_REGION: 'eu-east-1',
   S3_ACCESS_KEY: 'minio',
   S3_ACCESS_SECRET: 'minio123',
-  WEBLATE_API_URL: 'http://localhost:3000/api/translations',
-  WEBLATE_API_TOKEN: '',
-  APP_TRANSLATION_NAMESPACE: 'app',
+  I18N_MINIO_URL: 'https://minio-api.ulep.thestaging.io/i18n',
+  APP_TRANSLATION_NAMESPACE: 'translation',
   API_TRANSLATION_NAMESPACE: 'api',
   EMAIL_TRANSLATION_NAMESPACE: 'emails',
+  NOTIFICATION_TRANSLATION_NAMESPACE: 'notifications',
   EMAIL_ASSETS_BUCKET: 'assets',
   EMAIL_ASSETS_PUBLIC_ENDPOINT: 'http://localhost:9000/assets',
+  NOTIFICATION_ASSETS_BUCKET: 'assets',
+  NOTIFICATION_ASSETS_PUBLIC_ENDPOINT: 'http://localhost:9000/assets',
   APP_LINK_APPLE_STORE: 'https://apple.com',
   APP_LINK_PLAY_STORE: 'https://play.google.com',
   SMTP_DISABLE_BOOT_VERIFICATION: false,
@@ -252,6 +280,10 @@ const test: Env = {
   SMTP_SECURE: false,
   SMTP_IGNORE_TLS: true,
   SMTP_SENDER: 'sender@localhost',
+  FIREBASE_PROJECT_ID: '',
+  FIREBASE_PRIVATE_KEY: '',
+  FIREBASE_CLIENT_EMAIL: '',
+  FIREBASE_PARALLEL_LIMIT: 3,
   CANCEL_TRESHOLD_IN_MIN: 15,
   SIGNED_URL_EXPIRATION_IN_SECONDS: 60,
 };

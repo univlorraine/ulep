@@ -4,6 +4,8 @@ import {
   UniversityRepository,
 } from '../../ports/university.repository';
 import { RessourceDoesNotExist } from 'src/core/errors';
+import { Collection } from '@app/common';
+import { University } from 'src/core/models';
 
 @Injectable()
 export class GetPartnersToUniversityUsecase {
@@ -30,6 +32,9 @@ export class GetPartnersToUniversityUsecase {
       ];
     }
 
-    return partnerUniversities;
+    return new Collection<University>({
+      items: partnerUniversities,
+      totalItems: partnerUniversities.length,
+    });
   }
 }

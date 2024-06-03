@@ -4,7 +4,7 @@ import { Divider } from '@mui/material';
 import Box from '@mui/material/Box';
 import React, { useState } from 'react';
 import { Menu, usePermissions, useGetIdentity, useTranslate } from 'react-admin';
-import { MANAGER_PERMISSION, SUPER_ADMIN_PERMISSION } from '../../providers/authProvider';
+import { Role } from '../../entities/Administrator';
 import useCurrentPathname from './useCurrentPathname';
 
 export type LinkPage = {
@@ -12,7 +12,7 @@ export type LinkPage = {
     type: string;
     id?: string;
     label: string;
-    permission?: string;
+    role?: string;
 };
 
 export type SubMenusType = {
@@ -22,40 +22,46 @@ export type SubMenusType = {
 export const subMenus: SubMenusType = {
     configuration: [
         {
-            resource: 'instance',
-            id: 'config',
-            type: 'show',
-            label: 'instance.tabLabel',
-        },
-        {
             resource: 'users/administrators',
             type: 'list',
             label: 'administrators.tabLabel',
         },
         {
+            resource: 'instance',
+            id: 'config',
+            type: 'show',
+            label: 'instance.tabLabel',
+            role: Role.SUPER_ADMIN,
+        },
+        {
             resource: 'languages',
             type: 'list',
             label: 'languages.tabLabel',
+            role: Role.SUPER_ADMIN,
         },
         {
             resource: 'languages/requests',
             type: 'list',
             label: 'suggested_languages.tabLabel',
+            role: Role.SUPER_ADMIN,
         },
         {
             resource: 'languages/requests/count',
             type: 'list',
             label: 'count_suggested_languages.tabLabel',
+            role: Role.SUPER_ADMIN,
         },
         {
             resource: 'interests/categories',
             type: 'list',
             label: 'interest_categories.tabLabel',
+            role: Role.SUPER_ADMIN,
         },
         {
             resource: 'countries',
             type: 'list',
             label: 'countries.tabLabel',
+            role: Role.SUPER_ADMIN,
         },
     ],
     reports: [
@@ -68,7 +74,7 @@ export const subMenus: SubMenusType = {
             resource: 'reports/categories',
             type: 'list',
             label: 'report_categories.tabLabel',
-            permission: SUPER_ADMIN_PERMISSION,
+            role: Role.SUPER_ADMIN,
         },
     ],
     universities: [
@@ -115,14 +121,14 @@ const CustomMenu = () => {
         <Menu sx={{ display: 'flex' }}>
             <Menu.ResourceItem name="profiles" />
             <Menu.ResourceItem name="learning-languages" />
-            {permissions === MANAGER_PERMISSION && data && data.universityId && (
+            {permissions.checkRole(Role.MANAGER) && data && data.universityId && (
                 <Menu.Item
                     leftIcon={<SchoolIcon />}
                     primaryText={translate('universities.label')}
                     to={`/universities/${data.universityId}/show`}
                 />
             )}
-            {permissions === SUPER_ADMIN_PERMISSION && (
+            {permissions.checkRole(Role.SUPER_ADMIN) && (
                 // Note: div is mandatory to group these Menu.Item as Fragment throw an error from MUI component
                 <div>
                     <Box ref={(newRef: HTMLDivElement) => setUniversitiesRef(newRef)}>
@@ -133,15 +139,14 @@ const CustomMenu = () => {
                 </div>
             )}
             <Menu.ResourceItem name="reports" />
-            {permissions === SUPER_ADMIN_PERMISSION && (
-                // Note: div is mandatory to group these Menu.Item as Fragment throw an error from MUI component
+            {!permissions.checkRole(Role.ANIMATOR) && (
                 <div>
                     <Divider sx={{ margin: '0 !important' }} />
                     <Box ref={(newRef: HTMLDivElement) => setConfigurationRef(newRef)}>
                         <Menu.Item
                             leftIcon={<SettingsIcon />}
                             primaryText={translate('instance.label')}
-                            to="/instance/config/show"
+                            to="/users/administrators"
                         />
                     </Box>
                 </div>

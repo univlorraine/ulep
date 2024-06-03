@@ -21,6 +21,7 @@ model Instance {
   secondary_color            String
   secondary_background_color String
   secondary_dark_color       String
+  days_before_closure_notification      Int       @default(30)
   is_in_maintenance          Boolean @default(false)
 }
 
@@ -61,7 +62,7 @@ model LanguageCodes {
   JokerLearningLanguages LearningLanguages[]  @relation("TandemLanguage")
   TandemHistory          TandemHistory[]
   UnmatchedLearningLanguages UnmatchedLearningLanguages[]
-  SpecificLanguagesOrganizations          Organizations[]    @relation("SpecificLanguagesOrganizations")
+  SpecificLanguagesOrganizations          Organizations[]
   NativeLanguageOrganizations          Organizations[]    @relation("NativeLanguageOrganizations")
 
   @@unique([name])
@@ -81,7 +82,7 @@ model Organizations {
   name                 String
   codes                String[]            @default([])
   domains              String[]            @default([])
-  image_id        String?       @unique
+  image_id             String?             @unique
   timezone             String
   admissionStartDate   DateTime
   admissionEndDate     DateTime
@@ -93,6 +94,7 @@ model Organizations {
   pairing_mode         String              @default("MANUAL")
   max_tandems_per_user Int                 @default(1)
   notification_email   String?
+  default_contact_id   String?             @unique
   Parent               Organizations?      @relation("Organizations", fields: [parent_id], references: [id], onDelete: Cascade)
   Childrens            Organizations[]     @relation("Organizations")
   Country              CountryCodes        @relation(fields: [country_code_id], references: [id])
@@ -101,10 +103,10 @@ model Organizations {
   RoutineExecutions    RoutineExecutions[]
   ValidatedTandems     Tandems[]
   RefusedTandems       RefusedTandems[]
-  SpecificLanguagesAvailable   LanguageCodes[]  @relation("SpecificLanguagesOrganizations")
+  SpecificLanguagesAvailable   LanguageCodes[]
   NativeLanguage              LanguageCodes     @relation("NativeLanguageOrganizations", fields: [language_code_id], references: [id])
   Image                 MediaObjects? @relation(fields: [image_id], references: [id])
-
+  Contact               Contacts?      @relation(fields: [default_contact_id], references: [id])
 
   @@unique([name])
   @@map("organizations")
@@ -136,6 +138,15 @@ model SuggestedLanguages {
   @@map("suggested_languages")
 }
 
+model Contacts {
+  id                String          @id
+  organization_id   String?
+  User              Users[]
+  Organizations     Organizations?
+
+  @@map("contacts")
+}
+
 //  * ****************************************************
 //  * Users
 //  * ****************************************************
@@ -147,6 +158,7 @@ model Users {
   firstname          String
   lastname           String
   age                Int
+  contact_id         String?
   gender             String
   role               String
   status             String?              @default("ACTIVE")
@@ -166,9 +178,21 @@ model Users {
   Reports            Reports[]
   Profiles           Profiles?
   SuggestedLanguages SuggestedLanguages[]
+  Devices            Device[]
+  Contact            Contacts?            @relation(fields: [contact_id], references: [id])
 
   @@unique([email])
   @@map("users")
+}
+
+model Device {
+    token        String          @id
+    is_android   Boolean         @default(false)
+    is_ios       Boolean         @default(false)
+    user_id      String
+    created_at   DateTime        @default(now())
+    updated_at   DateTime        @updatedAt
+    User         Users           @relation(fields: [user_id], references: [id], onDelete: Cascade)
 }
 
 //  * ****************************************************

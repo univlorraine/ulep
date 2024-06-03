@@ -1,13 +1,25 @@
-import { Injectable } from '@nestjs/common';
+import { Inject, Injectable } from '@nestjs/common';
 import { KeycloakClient } from '@app/keycloak';
+import { UserRepresentationWithAvatar } from 'src/api/dtos/users';
+import {
+  MEDIA_OBJECT_REPOSITORY,
+  MediaObjectRepository,
+} from 'src/core/ports/media-object.repository';
 
 @Injectable()
 export class GetAdministratorUsecase {
-  constructor(private readonly keycloak: KeycloakClient) {}
+  constructor(
+    @Inject(MEDIA_OBJECT_REPOSITORY)
+    private readonly mediaObjectRepository: MediaObjectRepository,
+    private readonly keycloak: KeycloakClient,
+  ) {}
 
-  async execute(id: string) {
-    const result = await this.keycloak.getUserById(id);
+  async execute(id: string): Promise<UserRepresentationWithAvatar> {
+    const administrator = await this.keycloak.getUserById(id, true);
 
-    return result;
+    return {
+      ...administrator,
+      image: await this.mediaObjectRepository.findOne(administrator.id),
+    };
   }
 }

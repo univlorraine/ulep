@@ -226,16 +226,25 @@ export const isCodeValid = (code: string, codesToCheck: string[]) => {
     return codesToCheck.some((codeToCheck) => codeToCheck === code);
 };
 
-export const learningLanguagesToTestedLanguages = (learningLanguages: LearningLanguage[]) => {
-    return learningLanguages.map(
+export const learningLanguagesToTestedLanguages = (
+    learningLanguages: LearningLanguage[],
+    testedLanguages: TestedLanguage[]
+) => {
+    const convertedLearningLanguages = learningLanguages.map(
         (learningLanguage) => new TestedLanguage(learningLanguage.code, learningLanguage.name, learningLanguage.level)
     );
+
+    testedLanguages.map((testedLanguage) => {
+        if (!convertedLearningLanguages.find((learningLanguage) => learningLanguage.code === testedLanguage.code)) {
+            convertedLearningLanguages.push(testedLanguage);
+        }
+    });
+    return convertedLearningLanguages;
 };
 
 export const compareArrays = (a: unknown[], b: unknown[]) => JSON.stringify(a) == JSON.stringify(b);
 
 export const compareCEFR = (levelA: CEFR, levelB: CEFR) => {
-    console.log(levelA, levelB);
     const CEFRlevels: { [key: string]: number } = {
         A0: 0,
         A1: 1,

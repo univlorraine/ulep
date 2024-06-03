@@ -14,7 +14,9 @@ keycloakAdminPassword: &keycloakAdminPassword AZE123aze
 keycloakClientSecret: &keycloakClientSecret bN49BuApmmtAODeOWOG8iKOOuJdN3KE6
 minioAccessKey: &minioAccessKey minio
 minioSecretKey: &minioSecretKey AZE123aze
-appEnv: staging
+firebaseProjectId: &firebaseProjectId firebase-project-id ##CHANGE THIS
+firebasePrivateKey: &firebasePrivateKey firebase-private-key ##CHANGE THIS WITH -----BEGIN PRIVATE KEY-----\nPRIVATE KEY\n-----END PRIVATE KEY-----
+firebaseClientEmail: &firebaseClientEmail firebase-client-email ##CHANGE THIS
 
 api:
   name: api
@@ -36,7 +38,7 @@ api:
     keycloakAdmin: admin
     keycloakClientId: api
     keycloakClientSecret: *keycloakClientSecret
-    keycloakAdminGroupId: 02736a0f-4679-4329-a877-2ce87aaea569
+    keycloakAdminRoleName: admin
     minioUrl: https://minio-api.ulep.thestaging.io
     minioAccessKey: *minioAccessKey
     minioSecretKey: *minioSecretKey
@@ -45,8 +47,10 @@ api:
     connectorUrl: https://auth.ulep.thestaging.io
     connectorToken: 5f8a2b8c-8b0a-4b9e-9b0a-4b9e9b0a4b9e
     emailsAssetsBucket: assets
+    notificationAssetsBucket: assets
     emailsTranslationsComponent: emails
     emailsAssetsPublicEndpoint: *minioUrl
+    notificationAssetsPublicEndpoint: *minioUrl
     appLinkAppleStore: https://www.apple.com/fr/app-store/etandem
     appLinkPlayStore: https://play.google.com/store/apps/etandem
     smtpDisableBootVerification: false
@@ -55,6 +59,10 @@ api:
     smtpSecure: false
     smtpIgnoreTLS: true
     smtpSender: contact@ulep.fr
+    firebaseProjectId: *firebaseProjectId
+    firebasePrivateKey: *firebasePrivateKey
+    firebaseClientEmail: *firebaseClientEmail
+    firebaseParallelLimit: 3
     sentryDsn: https://3306ec4562fb4cfab0be7feaf5bf136a@glitchtip.ulep.thestaging.io/1
     cancelTresholdInMin: 15
     signedUrlExpirationInSeconds: 3600

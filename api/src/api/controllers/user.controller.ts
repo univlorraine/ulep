@@ -20,6 +20,7 @@ import {
 import { FileInterceptor } from '@nestjs/platform-express';
 import * as Swagger from '@nestjs/swagger';
 import { UploadAvatarUsecase } from 'src/core/usecases';
+import { UploadAdminAvatarUsecase } from 'src/core/usecases';
 import {
   CreateAdministratorUsecase,
   CreateUserUsecase,
@@ -32,22 +33,25 @@ import {
   UpdateAdministratorUsecase,
   UpdateUserUsecase,
   GetUserPersonalData,
+  AddDeviceUsecase,
 } from '../../core/usecases/user';
 import { CollectionResponse, CurrentUser } from '../decorators';
 import { Role, Roles } from '../decorators/roles.decorator';
 import {
+  AddDeviceRequest,
   AdministratorResponse,
   CreateAdministratorRequest,
   CreateUserRequest,
+  KeycloakGroupResponse,
   PaginationDto,
   UpdateAdministratorRequest,
   UpdateUserRequest,
+  UserRepresentationWithAvatar,
   UserResponse,
 } from '../dtos';
 import { AuthenticationGuard } from '../guards';
 import { ImagesFilePipe } from '../validators/images.validator';
-import { User } from 'src/core/models';
-import { GetAdministratorsQueryParams } from 'src/api/dtos/users/administrators-filter';
+import { MediaObject, User } from 'src/core/models';
 import { RevokeSessionsUsecase } from 'src/core/usecases/user/revoke-sessions.usecase';
 import { OwnerAllowed } from '../decorators/owner.decorator';
 import {
@@ -57,13 +61,16 @@ import {
 import { ConfigService } from '@nestjs/config';
 import { Env } from 'src/configuration';
 import { userPersonalDataToCsv } from '../dtos/users/csv-export.ts';
+import { GetKeycloakAdminGroupsUsecase } from '../../core/usecases/user/get-keycloak-admin-groups.usecase';
 
 @Controller('users')
 @Swagger.ApiTags('Users')
 export class UserController {
   constructor(
+    private readonly addDeviceUsecase: AddDeviceUsecase,
     private readonly createUserUsecase: CreateUserUsecase,
     private readonly uploadAvatarUsecase: UploadAvatarUsecase,
+    private readonly uploadAdminAvatarUsecase: UploadAdminAvatarUsecase,
     private readonly getUsersUsecase: GetUsersUsecase,
     private readonly getUserUsecase: GetUserUsecase,
     private readonly updateUserUsecase: UpdateUserUsecase,
@@ -75,8 +82,8 @@ export class UserController {
     private readonly deleteAdministratorUsecase: DeleteAdministratorUsecase,
     private readonly revokeSessionsUsecase: RevokeSessionsUsecase,
     private readonly getUserPersonalData: GetUserPersonalData,
+    private readonly getKeycloakAdminGroupsUsecase: GetKeycloakAdminGroupsUsecase,
     private readonly i18n: I18nService,
-
     @Inject(STORAGE_INTERFACE)
     private readonly storage: StorageInterface,
     private readonly env: ConfigService<Env, true>,
@@ -126,12 +133,8 @@ export class UserController {
   @UseGuards(AuthenticationGuard)
   @Swagger.ApiOperation({ summary: 'Collection of Administrator ressource.' })
   @CollectionResponse(UserResponse)
-  async findAllAdministrators(
-    @Query() { universityId }: GetAdministratorsQueryParams,
-  ) {
-    const administrators = await this.getAdministratorsUsecase.execute(
-      universityId,
-    );
+  async findAllAdministrators(@CurrentUser() user: KeycloakUser) {
+    const administrators = await this.getAdministratorsUsecase.execute(user);
 
     return administrators.map(AdministratorResponse.fromDomain);
   }
@@ -149,22 +152,62 @@ export class UserController {
 
   @Post('administrators')
   @Roles(Role.ADMIN)
+  @UseInterceptors(FileInterceptor('file'))
   @UseGuards(AuthenticationGuard)
   @Swagger.ApiOperation({ summary: 'Create an Administrator ressource.' })
   @Swagger.ApiCreatedResponse({ type: AdministratorResponse })
-  async createAdministrator(@Body() body: CreateAdministratorRequest) {
-    const admin = await this.createAdministratorUsecase.execute(body);
+  async createAdministrator(
+    @Body() body: CreateAdministratorRequest,
+    @UploadedFile(new ImagesFilePipe()) file?: Express.Multer.File,
+  ) {
+    let admin: UserRepresentationWithAvatar =
+      await this.createAdministratorUsecase.execute(body);
+
+    if (file) {
+      await this.uploadAdminAvatarUsecase.execute({
+        userId: admin.id,
+        file,
+      });
+      admin = {
+        ...admin,
+        image: MediaObject.image(
+          file,
+          MediaObject.getDefaultBucket(),
+          admin.id,
+        ),
+      };
+    }
 
     return AdministratorResponse.fromDomain(admin);
   }
 
   @Put('administrators')
   @Roles(Role.ADMIN)
+  @UseInterceptors(FileInterceptor('file'))
   @UseGuards(AuthenticationGuard)
   @Swagger.ApiOperation({ summary: 'Update an Administrator ressource.' })
   @Swagger.ApiCreatedResponse({ type: AdministratorResponse })
-  async updateAdministrator(@Body() body: UpdateAdministratorRequest) {
-    const admin = await this.updateAdministratorUsecase.execute(body);
+  async updateAdministrator(
+    @Body() body: UpdateAdministratorRequest,
+    @UploadedFile(new ImagesFilePipe()) file?: Express.Multer.File,
+  ) {
+    let admin: UserRepresentationWithAvatar =
+      await this.updateAdministratorUsecase.execute(body);
+
+    if (file) {
+      await this.uploadAdminAvatarUsecase.execute({
+        userId: admin.id,
+        file,
+      });
+      admin = {
+        ...admin,
+        image: MediaObject.image(
+          file,
+          MediaObject.getDefaultBucket(),
+          admin.id,
+        ),
+      };
+    }
 
     return AdministratorResponse.fromDomain(admin);
   }
@@ -195,6 +238,27 @@ export class UserController {
   @Swagger.ApiOperation({ summary: 'Revoke User sessions.' })
   async rekoveSessions(@CurrentUser() user: KeycloakUser) {
     return this.revokeSessionsUsecase.execute(user.sub);
+  }
+
+  @Post('add-device')
+  @UseGuards(AuthenticationGuard)
+  @Swagger.ApiOperation({ summary: 'Add a device to a user.' })
+  async addDevice(
+    @CurrentUser() user: KeycloakUser,
+    @Body() body: AddDeviceRequest,
+  ) {
+    return this.addDeviceUsecase.execute(user.sub, body);
+  }
+
+  @Get('admin/groups')
+  @Roles(Role.ADMIN)
+  @UseGuards(AuthenticationGuard)
+  @Swagger.ApiOperation({ summary: 'Collection of Keycloak groups.' })
+  @CollectionResponse(KeycloakGroupResponse)
+  async findAllKeycloakGroups() {
+    const groups = await this.getKeycloakAdminGroupsUsecase.execute();
+
+    return groups.map(KeycloakGroupResponse.fromDomain);
   }
 
   @Get(':id')
@@ -258,7 +322,8 @@ export class UserController {
         )
       : undefined;
 
-    const appTranslationNs = this.env.get('APP_TRANSLATION_NAMESPACE') || 'app';
+    const appTranslationNs =
+      this.env.get('APP_TRANSLATION_NAMESPACE') || 'translation';
     const apiTranslationNs = this.env.get('API_TRANSLATION_NAMESPACE') || 'api';
 
     const csv = userPersonalDataToCsv(
@@ -269,7 +334,7 @@ export class UserController {
       (value: string, opts?: { ns: string }) =>
         `${this.i18n.translate(value, {
           lng: userData.profile.nativeLanguage.code,
-          ns: opts?.ns === 'app' ? appTranslationNs : apiTranslationNs,
+          ns: opts?.ns === 'translation' ? appTranslationNs : apiTranslationNs,
         })}`,
     );
 

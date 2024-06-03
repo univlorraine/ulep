@@ -4,6 +4,7 @@ import {
   GenerateTandemsUsecase,
   GetTandemsUsecase,
   RefuseTandemUsecase,
+  UpdateTandemUsecase,
 } from 'src/core/usecases/tandem';
 import { RoutineStatus } from 'src/core/models/routine-execution.model';
 import {
@@ -14,6 +15,7 @@ import {
   Param,
   ParseUUIDPipe,
   Post,
+  Put,
   Query,
   UseGuards,
 } from '@nestjs/common';
@@ -28,7 +30,10 @@ import {
 } from '../dtos';
 import { Role, Roles } from '../decorators/roles.decorator';
 import { AuthenticationGuard } from '../guards';
-import { GenerateTandemsRequest } from '../dtos/tandems/generate-tandems.request';
+import {
+  GenerateTandemsRequest,
+  UpdateTandemRequest,
+} from '../dtos/tandems/generate-tandems.request';
 import {
   ROUTINE_EXECUTION_REPOSITORY,
   RoutineExecutionRepository,
@@ -44,6 +49,7 @@ export class TandemController {
     private readonly createTandemUsecase: CreateTandemUsecase,
     private readonly validateTandemUsecase: ValidateTandemUsecase,
     private readonly refuseTandemUsecase: RefuseTandemUsecase,
+    private readonly updateTandemUsecase: UpdateTandemUsecase,
     @Inject(ROUTINE_EXECUTION_REPOSITORY)
     private readonly routineExecutionRepository: RoutineExecutionRepository,
   ) {}
@@ -160,5 +166,16 @@ export class TandemController {
     if (body.relaunch) {
       this.relaunchLastRoutine(user);
     }
+  }
+
+  @Put(':id')
+  @Roles(Role.ADMIN)
+  @UseGuards(AuthenticationGuard)
+  @Swagger.ApiOperation({ summary: 'Update a tandem' })
+  async updateTandem(
+    @Param('id', ParseUUIDPipe) id: string,
+    @Body() request: UpdateTandemRequest,
+  ): Promise<void> {
+    await this.updateTandemUsecase.execute({ id, ...request });
   }
 }

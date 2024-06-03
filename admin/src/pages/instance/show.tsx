@@ -15,6 +15,7 @@ import {
     Button,
     useRefresh,
     FunctionField,
+    NumberField,
 } from 'react-admin';
 import { ColorField } from 'react-admin-color-picker';
 import usePurge from '../../components/menu/usePurge';
@@ -74,6 +75,10 @@ const InstanceShow = () => {
                         source="secondaryBackgroundColor"
                     />
                     <ColorField label={translate('instance.secondaryDarkColor')} source="secondaryDarkColor" />
+                    <NumberField
+                        label={translate('instance.daysBeforeClosureNotification')}
+                        source="daysBeforeClosureNotification"
+                    />
                     <FunctionField
                         render={(record: Instance) => (
                             <div style={{ display: 'flex', alignItems: 'center', marginBottom: '1em' }}>

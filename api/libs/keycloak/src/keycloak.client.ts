@@ -361,7 +361,7 @@ export class KeycloakClient {
   }
 
   /*
-   * Creates a new user in Keycloak.
+   * Creates a new admin user in Keycloak.
    */
   async createAdministrator(
     props: CreateAdministratorProps,
@@ -389,9 +389,11 @@ export class KeycloakClient {
           attributes: {
             universityId: props.universityId,
           },
+          groups: props.groups,
         }),
       },
     );
+
     if (!response.ok) {
       const result = await response.json();
       this.logger.error(JSON.stringify(result));
@@ -446,7 +448,34 @@ export class KeycloakClient {
       throw new HttpException({ message: result }, 500);
     }
 
-    const updatedAdmin = await this.getUserById(props.id);
+    const updatedAdmin = await this.getUserById(props.id, true);
+
+    if (!props.groups[0]?.name) return updatedAdmin;
+
+    // We have to update groups manually, because the update doesn't work for the "groups" UserRepresentation key
+    // https://github.com/keycloak/keycloak/discussions/8552
+    const existingGroups = updatedAdmin.groups;
+    const groupsToSet = props.groups;
+
+    groupsToSet.forEach((groupToSet) => {
+      if (
+        // If the group is not set and should be
+        !existingGroups.some(
+          (existingGroup) => existingGroup.id === groupToSet.id,
+        )
+      ) {
+        this.addUserToAGroup(props.id, groupToSet.id);
+      }
+    });
+
+    existingGroups.forEach((existingGroup) => {
+      if (
+        // If the group is set but should not be
+        !groupsToSet.some((groupToSet) => groupToSet.id === existingGroup.id)
+      ) {
+        this.removeUserFromAGroup(props.id, existingGroup.id);
+      }
+    });
 
     return updatedAdmin;
   }
@@ -537,7 +566,10 @@ export class KeycloakClient {
     return count;
   }
 
-  async getUserById(userId: string): Promise<UserRepresentation> {
+  async getUserById(
+    userId: string,
+    withGroups = false,
+  ): Promise<UserRepresentation> {
     const url = `${this.configuration.baseUrl}/admin/realms/${this.configuration.realm}/users/${userId}`;
     const response = await fetch(url, {
       method: 'GET',
@@ -554,7 +586,31 @@ export class KeycloakClient {
     }
 
     const user = await response.json();
+
+    if (withGroups) {
+      user.groups = await this.getUserGroups(user.id);
+    }
+
     return user;
+  }
+
+  async getUserGroups(userId: string) {
+    const url = `${this.configuration.baseUrl}/admin/realms/${this.configuration.realm}/users/${userId}/groups`;
+    const response = await fetch(url, {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${await this.getAccessToken()}`,
+      },
+    });
+
+    if (!response.ok) {
+      const result = await response.json();
+      this.logger.error(JSON.stringify(result));
+      throw new HttpException({ message: result }, response.status);
+    }
+
+    return response.json();
   }
 
   async getUserByEmail(email: string): Promise<UserRepresentation> {
@@ -588,11 +644,11 @@ export class KeycloakClient {
   }
 
   /*
-   * Add user to group
+   * Add user to a group
    */
-  async addUserToAdministrators(userId: string): Promise<void> {
+  async addUserToAGroup(userId: string, groupId: string): Promise<void> {
     await fetch(
-      `${this.configuration.baseUrl}/admin/realms/${this.configuration.realm}/users/${userId}/groups/${this.configuration.adminGroupId}`,
+      `${this.configuration.baseUrl}/admin/realms/${this.configuration.realm}/users/${userId}/groups/${groupId}`,
       {
         method: 'PUT',
         headers: {
@@ -603,9 +659,12 @@ export class KeycloakClient {
     );
   }
 
-  async removeUserFromAdministrators(userId: string): Promise<void> {
+  /*
+   * Remove user from a group
+   */
+  async removeUserFromAGroup(userId: string, groupId: string): Promise<void> {
     await fetch(
-      `${this.configuration.baseUrl}/admin/realms/${this.configuration.realm}/users/${userId}/groups/${this.configuration.adminGroupId}`,
+      `${this.configuration.baseUrl}/admin/realms/${this.configuration.realm}/users/${userId}/groups/${groupId}`,
       {
         method: 'DELETE',
         headers: {
@@ -614,6 +673,29 @@ export class KeycloakClient {
         },
       },
     );
+  }
+
+  /*
+   * Get all groups
+   */
+  async getAllGroups() {
+    const url = `${this.configuration.baseUrl}/admin/realms/${this.configuration.realm}/groups`;
+    const response = await fetch(url, {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${await this.getAccessToken()}`,
+      },
+    });
+
+    if (!response.ok || response.status !== 200) {
+      const message = await response.json();
+      throw new HttpException({ message: message }, response.status);
+    }
+
+    const groups = await response.json();
+
+    return groups;
   }
 
   /*
@@ -641,13 +723,35 @@ export class KeycloakClient {
   }
 
   /*
+   * Add realm-level role mappings to the user
+   */
+  async removeRealmRoleToUser(userId: string, roleName: string): Promise<void> {
+    const role = await this.getRealmRole(roleName);
+
+    await fetch(
+      `${this.configuration.baseUrl}/admin/realms/${this.configuration.realm}/users/${userId}/role-mappings/realm`,
+      {
+        method: 'DELETE',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${await this.getAccessToken()}`,
+        },
+        body: JSON.stringify([
+          {
+            id: role.id,
+            name: role.name,
+          },
+        ]),
+      },
+    );
+  }
+
+  /*
    * Get administrators users
    */
-  public async getAdministrators(
-    universityId?: string,
-  ): Promise<UserRepresentation[]> {
+  public async getAdministrators(): Promise<UserRepresentation[]> {
     const response = await fetch(
-      `${this.configuration.baseUrl}/admin/realms/${this.configuration.realm}/groups/${this.configuration.adminGroupId}/members`,
+      `${this.configuration.baseUrl}/admin/realms/${this.configuration.realm}/roles/${this.configuration.adminRoleName}/users`,
       {
         method: 'GET',
         headers: {
@@ -657,14 +761,12 @@ export class KeycloakClient {
       },
     );
 
-    let administrators = await response.json();
-
-    if (universityId) {
-      administrators = administrators.filter(
-        (administrator) =>
-          administrator.attributes?.universityId == universityId,
-      );
+    if (!response.ok) {
+      this.logger.error(JSON.stringify(await response.json()));
+      throw new UnexpectedErrorException();
     }
+
+    const administrators = await response.json();
 
     return administrators;
   }

@@ -10,7 +10,7 @@ export default {
     create: CreateUniversity,
     list: UniversityList,
     show: UniversityShow,
-    admin: {
+    manager: {
         edit: AdminEditUniversity,
         show: AdminUniversityShow,
     },

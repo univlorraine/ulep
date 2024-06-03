@@ -12,6 +12,7 @@ import {
   SerializeOptions,
   Headers,
   UseGuards,
+  UseInterceptors,
 } from '@nestjs/common';
 import * as Swagger from '@nestjs/swagger';
 import {
@@ -42,6 +43,7 @@ import {
 } from '../dtos';
 import { AuthenticationGuard } from '../guards';
 import { Profile } from 'src/core/models';
+import { UserKeycloakContactInterceptor } from 'src/api/interceptors';
 
 @Controller('profiles')
 @Swagger.ApiTags('Profiles')
@@ -179,12 +181,15 @@ export class ProfileController {
   @Swagger.ApiOkResponse({ type: UserTandemResponse, isArray: true })
   async getTandems(
     @Param('id', ParseUUIDPipe) id: string,
+    @Headers('Language-code') languageCode?: string,
   ): Promise<UserTandemResponse[]> {
     const tandems = await this.getTandemsForProfileUsecase.execute({
       profile: id,
     });
 
-    return tandems.map((tandem) => UserTandemResponse.fromDomain(id, tandem));
+    return tandems.map((tandem) =>
+      UserTandemResponse.fromDomain(id, tandem, languageCode),
+    );
   }
 
   @Get('me')
@@ -208,6 +213,7 @@ export class ProfileController {
   @Get(':id')
   @Roles(Role.ADMIN)
   @UseGuards(AuthenticationGuard)
+  @UseInterceptors(UserKeycloakContactInterceptor)
   @SerializeOptions({ groups: ['read', 'profile:read'] })
   @Swagger.ApiOperation({ summary: 'Retrieve a Profile ressource.' })
   @Swagger.ApiOkResponse({ type: ProfileResponse })

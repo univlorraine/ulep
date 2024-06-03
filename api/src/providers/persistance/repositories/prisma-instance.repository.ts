@@ -34,6 +34,8 @@ export class PrismaInstanceRepository implements InstanceRepository {
         secondary_background_color: instance.secondaryBackgroundColor,
         secondary_dark_color: instance.secondaryDarkColor,
         is_in_maintenance: instance.isInMaintenance,
+        days_before_closure_notification:
+          instance.daysBeforeClosureNotification,
       },
     });
 

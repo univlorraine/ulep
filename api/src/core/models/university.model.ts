@@ -3,6 +3,7 @@ import { Campus } from './campus.model';
 import { Language, LanguageStatus } from './language.model';
 import { LearningType } from './profile.model';
 import { MediaObject } from 'src/core/models/media.model';
+import { UserRepresentation } from '@app/keycloak';
 
 export enum PairingMode {
   MANUAL = 'MANUAL',
@@ -30,6 +31,7 @@ export interface UniversityProps {
   notificationEmail?: string;
   specificLanguagesAvailable?: Language[];
   nativeLanguage: Language;
+  defaultContactId?: string;
 }
 
 export class University {
@@ -71,6 +73,8 @@ export class University {
 
   readonly nativeLanguage: Language;
 
+  readonly defaultContactId: string;
+
   constructor(props: UniversityProps) {
     this.id = props.id;
     this.admissionStart = props.admissionStart;
@@ -91,6 +95,7 @@ export class University {
     this.timezone = props.timezone;
     this.website = props.website;
     this.nativeLanguage = props.nativeLanguage;
+    this.defaultContactId = props.defaultContactId;
   }
 
   static create(props: UniversityProps): University {

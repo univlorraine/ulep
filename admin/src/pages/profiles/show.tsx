@@ -14,8 +14,11 @@ import {
     EditButton,
     TopToolbar,
     BooleanField,
+    usePermissions,
+    ShowActionsProps,
 } from 'react-admin';
 import PageTitle from '../../components/PageTitle';
+import { Role } from '../../entities/Administrator';
 import Availabilites from '../../entities/Availabilities';
 import Language from '../../entities/Language';
 import { LearningLanguage } from '../../entities/LearningLanguage';
@@ -37,10 +40,14 @@ const Title = () => {
     );
 };
 
-export const ShowActions = () => (
+interface CustomShowActionsProps extends ShowActionsProps {
+    readOnly: boolean;
+}
+
+export const ShowActions = ({ readOnly }: CustomShowActionsProps) => (
     <TopToolbar>
         <ProfileExportButton />
-        <EditButton />
+        {!readOnly && <EditButton />}
     </TopToolbar>
 );
 
@@ -65,6 +72,14 @@ const ProfileTab = () => {
                 <TextField label={translate('global.age')} source="user.age" />
                 <TextField label={translate('global.gender')} source="user.gender" />
                 <TextField label={translate('global.university')} source="user.university.name" />
+                <FunctionField
+                    label={translate('profiles.contact')}
+                    render={(record: Profile) =>
+                        record.user.contact
+                            ? `${record.user.contact.firstname} ${record.user.contact.lastname}`
+                            : translate('profiles.noContact')
+                    }
+                />
                 <FunctionField
                     label={translate('learning_languages.show.fields.status')}
                     render={(record: { user: User }) =>
@@ -205,12 +220,15 @@ const ProfileTab = () => {
 
 const ProfileShow = (props: any) => {
     const translate = useTranslate();
+    const { permissions } = usePermissions();
+
+    const readOnly: boolean = permissions.checkRole(Role.ANIMATOR);
 
     return (
         <>
             <PageTitle>{translate('profiles.title')}</PageTitle>
 
-            <Show actions={<ShowActions />} title={<Title />} {...props}>
+            <Show actions={<ShowActions readOnly={readOnly} />} title={<Title />} {...props}>
                 <ProfileTab />
             </Show>
         </>

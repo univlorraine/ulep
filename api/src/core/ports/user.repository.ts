@@ -1,5 +1,5 @@
 import { Collection } from '@app/common';
-import { User, UserStatus } from '../models';
+import { Device, User, UserStatus } from '../models';
 
 export const USER_REPOSITORY = 'user.repository';
 
@@ -27,4 +27,8 @@ export interface UserRepository {
   isBlacklisted(email: string): Promise<boolean>;
 
   count(props: WhereProps): Promise<number>;
+
+  addDevice(id: string, props: Device): Promise<void>;
+
+  removeDevice(id: string): Promise<void>;
 }

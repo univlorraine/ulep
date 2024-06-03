@@ -7,6 +7,8 @@ export interface MediaObjectRepository {
 
   saveAvatar: (user: User, object: MediaObject) => Promise<void>;
 
+  saveAdminAvatar(object: MediaObject): Promise<void>;
+
   saveObjectiveImage: (
     objective: LearningObjective,
     object: MediaObject,

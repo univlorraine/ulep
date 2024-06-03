@@ -10,8 +10,10 @@ import {
     DateField,
     Loading,
     useGetIdentity,
+    usePermissions,
 } from 'react-admin';
 import ReportsPagesHeader from '../../components/tabs/ReportsPagesHeader';
+import { Role } from '../../entities/Administrator';
 
 const ReportFilter = (props: any) => {
     const translate = useTranslate();
@@ -32,12 +34,15 @@ const ReportFilter = (props: any) => {
 };
 
 const ReportList = () => {
+    const { permissions } = usePermissions();
     const translate = useTranslate();
     const { data: identity, isLoading: isLoadingIdentity } = useGetIdentity();
 
     if (isLoadingIdentity || !identity) {
         return <Loading />;
     }
+
+    const readOnly: boolean = permissions.checkRole(Role.ANIMATOR);
 
     return (
         <>
@@ -47,7 +52,7 @@ const ReportList = () => {
                 filter={!identity?.isCentralUniversity ? { universityId: identity.universityId } : undefined}
                 filters={<ReportFilter />}
             >
-                <Datagrid rowClick="show">
+                <Datagrid bulkActionButtons={readOnly ? false : undefined} rowClick="show">
                     <TextField label={translate('reports.category')} source="category.name" />
                     <TextField label={translate('global.lastname')} source="user.lastname" />
                     <TextField label={translate('global.firstname')} source="user.firstname" />

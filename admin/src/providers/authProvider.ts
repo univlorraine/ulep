@@ -1,4 +1,5 @@
-import { AuthProvider, addRefreshAuthToAuthProvider } from 'react-admin';
+import { AuthProvider, UserIdentity, addRefreshAuthToAuthProvider } from 'react-admin';
+import { Role } from '../entities/Administrator';
 import { isCentralUniversity as checkIsCentralUniversity } from '../entities/University';
 import jwtManager from './jwtManager';
 
@@ -14,8 +15,10 @@ export interface Identity {
     isCentralUniversity: boolean;
 }
 
-export const SUPER_ADMIN_PERMISSION = 'super-admin';
-export const MANAGER_PERMISSION = 'admin';
+export interface GetPermissionsInterface {
+    checkRole: (roleToCheck: Role) => boolean;
+    checkRoles: (roleToCheck: Role[]) => boolean;
+}
 
 export const http = async (method: string, path: string, init: Omit<RequestInit, 'method'> = {}) => {
     const response = await fetch(path, {
@@ -124,20 +127,28 @@ const authProvider: AuthProvider = {
 
         return Promise.resolve();
     },
-    getPermissions() {
+    getPermissions(): Promise<GetPermissionsInterface> {
         const accessToken = jwtManager.getToken('access_token');
         if (!accessToken) {
             return Promise.reject(new Error('Access token not found.'));
         }
 
         const decoded: any = jwtManager.decodeToken(accessToken);
+
         if (!decoded) {
             return Promise.reject(new Error("Can't decode access token."));
         }
 
-        return Promise.resolve(decoded.universityId ? MANAGER_PERMISSION : SUPER_ADMIN_PERMISSION);
+        const roles = decoded.realm_access?.roles;
+
+        const permissions = {
+            checkRole: (roleToCheck: Role) => roles.includes(roleToCheck),
+            checkRoles: (rolesToCheck: Role[]) => rolesToCheck.some((roleToCheck) => roles.includes(roleToCheck)),
+        };
+
+        return Promise.resolve(permissions);
     },
-    async getIdentity(): Promise<Identity> {
+    async getIdentity(): Promise<UserIdentity> {
         const accessToken = jwtManager.getToken('access_token');
         if (!accessToken) {
             return Promise.reject(new Error('Fail to get access token'));
@@ -151,25 +162,26 @@ const authProvider: AuthProvider = {
         let { universityId } = decoded;
         let isCentralUniversity = false;
 
-        if (!universityId) {
-            const universitiesRes = await fetch(`${process.env.REACT_APP_API_URL}/universities`, {
-                headers: {
-                    Authorization: `Bearer ${accessToken}`,
-                },
-            });
-            const universities = await universitiesRes.json();
-            const centralUniversity = universities?.items?.find(checkIsCentralUniversity);
-            if (!centralUniversity) {
-                return Promise.reject(new Error('No central university defined'));
-            }
-            universityId = centralUniversity.id;
-            isCentralUniversity = true;
+        const universitiesRes = await fetch(`${process.env.REACT_APP_API_URL}/universities`, {
+            headers: {
+                Authorization: `Bearer ${accessToken}`,
+            },
+        });
+        const universities = await universitiesRes.json();
+        const centralUniversity = universities?.items?.find(checkIsCentralUniversity);
+        if (!centralUniversity) {
+            return Promise.reject(new Error('No central university defined'));
         }
+        universityId = centralUniversity.id;
+        isCentralUniversity = true;
 
         return Promise.resolve({
             id: decoded.sub,
             data: decoded,
+            firstName: decoded.given_name,
+            lastName: decoded.family_name,
             fullName: '',
+            email: decoded.email,
             universityId,
             isCentralUniversity,
         });

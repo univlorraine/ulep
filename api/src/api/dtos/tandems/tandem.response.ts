@@ -9,7 +9,7 @@ export class TandemResponse {
   @Expose({ groups: ['read'] })
   id: string | null = null;
 
-  @Swagger.ApiProperty({ type: LearningLanguageResponse, isArray: true })
+  @Swagger.ApiProperty({ type: () => LearningLanguageResponse, isArray: true })
   @Expose({ groups: ['read'] })
   learningLanguages: LearningLanguageResponse[];
 
@@ -43,7 +43,7 @@ export class UserTandemResponse {
   @Expose({ groups: ['read'] })
   id: string | null = null;
 
-  @Swagger.ApiProperty({ type: LearningLanguageResponse })
+  @Swagger.ApiProperty({ type: () => LearningLanguageResponse })
   @Expose({ groups: ['read'] })
   partnerLearningLanguage: LearningLanguageResponse;
 
@@ -51,7 +51,7 @@ export class UserTandemResponse {
   @Expose({ groups: ['read'] })
   status: TandemStatus;
 
-  @Swagger.ApiProperty({ type: LearningLanguageResponse })
+  @Swagger.ApiProperty({ type: () => LearningLanguageResponse })
   @Expose({ groups: ['read'] })
   userLearningLanguage: LearningLanguageResponse;
 
@@ -67,7 +67,11 @@ export class UserTandemResponse {
     Object.assign(this, partial);
   }
 
-  static fromDomain(profileId: string, tandem: Tandem): UserTandemResponse {
+  static fromDomain(
+    profileId: string,
+    tandem: Tandem,
+    languageCode?: string,
+  ): UserTandemResponse {
     const { learningLanguageProfile, learningLanguagePartner } =
       tandem.learningLanguages.reduce<{
         learningLanguageProfile: LearningLanguage;
@@ -96,6 +100,7 @@ export class UserTandemResponse {
       partnerLearningLanguage: LearningLanguageResponse.fromDomain(
         learningLanguagePartner,
         true,
+        languageCode,
       ),
       status: tandem.status,
       userLearningLanguage: LearningLanguageResponse.fromDomain(

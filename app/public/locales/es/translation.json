@@ -369,7 +369,6 @@
         "error_firstname": "Inscriba un nombre válido",
         "error_gender": "Escoja el género",
         "error_lastname": "Inscriba un apellido válido",
-        "error_password": "Inscriba una contraseña válida",
         "error_picture_format": "",
         "error_picture_weight": "",
         "photo": "Agregar una foto",

@@ -1,9 +1,29 @@
+export type KeycloakGroup = {
+    id: string;
+    name: string;
+    path: string;
+};
+
+export enum Role {
+    ADMIN = 'admin',
+    SUPER_ADMIN = 'super-admin',
+    ANIMATOR = 'animator',
+    MANAGER = 'manager',
+}
+
+export enum AdminGroup {
+    SUPER_ADMIN = 'Administrator',
+    ANIMATOR = 'Animator',
+    MANAGER = 'Manager',
+}
+
 type Administrator = {
     id: string;
     email: string;
     firstname: string;
     lastname: string;
     universityId: string;
+    group: KeycloakGroup;
 };
 
 export interface AdministratorFormPayload {
@@ -13,6 +33,8 @@ export interface AdministratorFormPayload {
     lastname?: string;
     password?: string;
     universityId?: string;
+    group: KeycloakGroup;
+    file: File | undefined;
 }
 
 export default Administrator;

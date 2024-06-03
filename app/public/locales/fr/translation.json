@@ -16,7 +16,7 @@
         "userDoesntExist": "L'utilisateur n'existe pas",
         "userWrongCredentials": "Authentification en erreur : mauvais email ou mauvais mot de passe.",
         "connecteur": "Erreur lors de la récupération des informations utilisateur",
-        "fileSizeExceed": "Le fichier est trop volumineux, il doit être inférieur à {maxSize}"
+        "fileSizeExceed": "Le fichier est trop volumineux, il doit être inférieur à {{maxSize}}Mo"
     },
     "error_page": {
         "title": "Une erreur est survenue",
@@ -181,13 +181,15 @@
         "sso_button": "M’authentifier",
         "sso_title": "Étudiant de l’{{name}}, connecte-toi avec des identifiants de l’université",
         "subtitle": "Connecte-toi avec tes identifiants de l’université pour continuer à utiliser l’application",
-        "title": "Se connecter"
+        "title": "Se connecter",
+        "update_instance": "Changer d'instance"
     },
     "pairing_confirm_language_page": {
         "language_title": "Langue souhaitée",
         "mode_meet": "Mode de rencontre",
         "not_alone": {
             "description": "Vérifions ton niveau ensemble !",
+            "description_joker": "Tu peux passer à la suite !",
             "description_title": "Maintenant",
             "subtitle": "",
             "title": "Tu y es presque !",
@@ -405,6 +407,10 @@
     "signup_informations_page": {
         "code": "Code",
         "confirm_password": "Confirme ton mot de passe",
+        "password_infos": {
+            "title": "Le mot de passe doit contenir au moins :",
+            "rules": ["8 caractères", "1 caractère MAJUSCULE", "1 caractère minuscule", "1 chiffre"]
+        },
         "cgu": {
             "confidentiality": "politique de confidentialité",
             "cgu": "conditions d'utilisation",
@@ -421,7 +427,6 @@
         "error_firstname": "Veuillez saisir un prénom valide",
         "error_gender": "Veuillez choisir un genre",
         "error_lastname": "Veuillez saisir un nom valide",
-        "error_password": "Veuillez saisir un mot de passe valide",
         "error_picture_format": "L'image séléctionnée n'a pas un format valide ( JPG, PNG ou JPEG )",
         "error_picture_weight": "L'image séléctionnée est trop lourde",
         "photo": "Ajouter une photo",

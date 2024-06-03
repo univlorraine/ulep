@@ -369,7 +369,6 @@
         "error_firstname": "Bitte gib einen gültigen Vornamen ein",
         "error_gender": "Bitte wähle ein Geschlecht",
         "error_lastname": "Bitte gib einen gültigen Namen ein",
-        "error_password": "Bitte gib ein gültiges Passwort ein",
         "error_picture_format": "",
         "error_picture_weight": "",
         "photo": "ein Foto hinzufügen",

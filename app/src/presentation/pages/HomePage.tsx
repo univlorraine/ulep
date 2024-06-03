@@ -35,8 +35,9 @@ const HomePage: React.FC = () => {
     const [displayProfile, setDisplayProfile] = useState<boolean>(false);
     const [displayReport, setDisplayReport] = useState<boolean>(false);
     const [selectedTandem, setSelectedTandem] = useState<Tandem>();
+    const [refresh, setRefresh] = useState<boolean>(false);
 
-    const { tandems, partnerUniversities, error, isLoading } = useGetHomeData();
+    const { tandems, partnerUniversities, error, isLoading } = useGetHomeData(refresh);
 
     const { handleLogout } = useLogout();
 
@@ -117,10 +118,10 @@ const HomePage: React.FC = () => {
                                     )}
                                     {(profile.learningLanguages.length > 0 || profile.testedLanguages.length > 0) && (
                                         <ProficiencyTestCard
-                                            testedLanguages={[
-                                                ...learningLanguagesToTestedLanguages(profile.learningLanguages),
-                                                ...profile.testedLanguages,
-                                            ]}
+                                            testedLanguages={learningLanguagesToTestedLanguages(
+                                                profile.learningLanguages,
+                                                profile.testedLanguages
+                                            )}
                                         />
                                     )}
                                 </Masonry>
@@ -150,6 +151,7 @@ const HomePage: React.FC = () => {
                         isVisible={displayProfile}
                         onClose={() => setDisplayProfile(false)}
                         onDisconnect={handleLogout}
+                        onLanguageChange={() => setRefresh(!refresh)}
                         profile={profile}
                     />
                     <TandemStatusModal

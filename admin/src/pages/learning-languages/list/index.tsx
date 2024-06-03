@@ -14,14 +14,17 @@ import {
     useTranslate,
     TextInput,
     BulkDeleteButton,
+    usePermissions,
+    useRefresh,
 } from 'react-admin';
 import PageTitle from '../../../components/PageTitle';
 import { DisplayRole } from '../../../components/translated';
 import UniversitiesPicker from '../../../components/UniversitiesPicker';
+import { Role } from '../../../entities/Administrator';
 import Language from '../../../entities/Language';
 import { LearningLanguage, learningLanguageHasPossibleAction } from '../../../entities/LearningLanguage';
 import { getProfileDisplayName } from '../../../entities/Profile';
-import { isTandemActive } from '../../../entities/Tandem';
+import { isTandemActive, isTandemPaused } from '../../../entities/Tandem';
 import University, { isCentralUniversity } from '../../../entities/University';
 import useLearningLanguagesStore from '../useLearningLanguagesStore';
 import Actions from './Actions';
@@ -29,7 +32,9 @@ import Actions from './Actions';
 const LearningLanguageBulkActionsToolbar = () => <BulkDeleteButton mutationMode="pessimistic" />;
 
 const LearningLanguageList = () => {
+    const { permissions } = usePermissions();
     const translate = useTranslate();
+    const refresh = useRefresh();
     const { selectedUniversityIds, setSelectedUniversityIds } = useLearningLanguagesStore();
 
     const { data: identity, isLoading: isLoadingIdentity } = useGetIdentity();
@@ -53,6 +58,15 @@ const LearningLanguageList = () => {
             label={translate('learning_languages.list.filters.activeTandem.label')}
             source="hasActiveTandem"
         />,
+        <SelectInput
+            key="pausedTandemFilter"
+            choices={[
+                { id: true, name: translate('learning_languages.list.filters.pausedTandem.choices.yes') },
+                { id: false, name: translate('learning_languages.list.filters.pausedTandem.choices.no') },
+            ]}
+            label={translate('learning_languages.list.filters.pausedTandem.label')}
+            source="hasPausedTandem"
+        />,
         <TextInput
             key="userLastname"
             label={translate('learning_languages.list.filters.user_lastname.label')}
@@ -63,6 +77,8 @@ const LearningLanguageList = () => {
     if (isLoadingIdentity || !identity) {
         return <Loading />;
     }
+
+    const readOnly: boolean = permissions.checkRole(Role.ANIMATOR);
 
     return (
         <Box>
@@ -80,6 +96,7 @@ const LearningLanguageList = () => {
                 actions={
                     <Actions
                         enableLaunchGlobalRoutine={identity.isCentralUniversity}
+                        onGlobalRoutineEnded={refresh}
                         universityIds={[...selectedUniversityIds, identity.universityId]}
                     />
                 }
@@ -91,7 +108,7 @@ const LearningLanguageList = () => {
                 }}
                 filters={filters}
             >
-                <Datagrid bulkActionButtons={<LearningLanguageBulkActionsToolbar />} rowClick="show">
+                <Datagrid bulkActionButtons={!readOnly && <LearningLanguageBulkActionsToolbar />} rowClick="show">
                     <FunctionField
                         label={translate('learning_languages.list.tableColumns.name')}
                         render={(record: LearningLanguage) => getProfileDisplayName(record.profile)}
@@ -155,6 +172,17 @@ const LearningLanguageList = () => {
                         label={translate('learning_languages.list.tableColumns.hasActiveTandem')}
                         render={(record: LearningLanguage) =>
                             isTandemActive(record.tandem) && (
+                                <Box sx={{ textAlign: 'center' }}>
+                                    <Check />
+                                </Box>
+                            )
+                        }
+                        sortable={false}
+                    />
+                    <FunctionField
+                        label={translate('learning_languages.list.tableColumns.hasPausedTandem')}
+                        render={(record: LearningLanguage) =>
+                            isTandemPaused(record.tandem) && (
                                 <Box sx={{ textAlign: 'center' }}>
                                     <Check />
                                 </Box>

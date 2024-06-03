@@ -1,4 +1,4 @@
-import { KeycloakClient } from '@app/keycloak';
+import { KeycloakClient, KeycloakGroup } from '@app/keycloak';
 import { Inject, Injectable } from '@nestjs/common';
 import { RessourceDoesNotExist } from 'src/core/errors';
 import {
@@ -13,6 +13,8 @@ export class UpdateAdministratorCommand {
   email?: string;
   password?: string;
   universityId?: string;
+  group?: KeycloakGroup;
+  mimetype?: string;
 }
 
 @Injectable()
@@ -43,7 +45,8 @@ export class UpdateAdministratorUsecase {
       lastname: command.lastname || admin.lastName,
       email: command.email || admin.email,
       password: command.password,
-      universityId: command.universityId,
+      universityId: command.universityId || admin.attributes?.universityId,
+      groups: [command.group],
     });
 
     return keycloakUser;

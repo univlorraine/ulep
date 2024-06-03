@@ -10,6 +10,8 @@ import { TestAuthGuard } from '../utils/TestAuthGuard';
 import InMemoryEmailGateway from 'src/providers/gateway/in-memory-email.gateway';
 import { EMAIL_GATEWAY } from 'src/core/ports/email.gateway';
 import { InMemoryI18nService } from 'src/providers/services/in-memory.i18n.provider';
+import InMemoryNotificaitonGateway from 'src/providers/gateway/in-memory-notification.gateway';
+import { NOTIFICATION_GATEWAY } from 'src/core/ports/notification.gateway';
 
 describe('Languages', () => {
   let app: TestServer;
@@ -17,6 +19,7 @@ describe('Languages', () => {
   const factory = new LanguageFactory();
   const repository = new InMemoryLanguageRepository();
   const inMemoryEmail = new InMemoryEmailGateway();
+  const inMemoryNotification = new InMemoryNotificaitonGateway();
   const inMemoryI18n = new InMemoryI18nService();
 
   beforeAll(async () => {
@@ -27,6 +30,8 @@ describe('Languages', () => {
       .useValue(repository)
       .overrideProvider(EMAIL_GATEWAY)
       .useValue(inMemoryEmail)
+      .overrideProvider(NOTIFICATION_GATEWAY)
+      .useValue(inMemoryNotification)
       .overrideProvider(I18nService)
       .useValue(inMemoryI18n)
       .overrideGuard(AuthenticationGuard)

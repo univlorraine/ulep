@@ -16,6 +16,9 @@
 		504EC3121FED79650016851F /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 504EC3101FED79650016851F /* LaunchScreen.storyboard */; };
 		50B271D11FEDC1A000F3C39B /* public in Resources */ = {isa = PBXBuildFile; fileRef = 50B271D01FEDC1A000F3C39B /* public */; };
 		A9C95A20321D7710660AAED3 /* Pods_dev.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8123F43B09C850434ED7D4E1 /* Pods_dev.framework */; };
+		DFE6D46D2BD018C900E8A204 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = DFE6D46C2BCFE74200E8A204 /* GoogleService-Info.plist */; };
+		DFE6D46E2BD018C900E8A204 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = DFE6D46C2BCFE74200E8A204 /* GoogleService-Info.plist */; };
+		DFE6D46F2BD018CA00E8A204 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = DFE6D46C2BCFE74200E8A204 /* GoogleService-Info.plist */; };
 		DFED42992A2DF3D8005F5C5F /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 504EC3071FED79650016851F /* AppDelegate.swift */; };
 		DFED429D2A2DF3D8005F5C5F /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 504EC3101FED79650016851F /* LaunchScreen.storyboard */; };
 		DFED429E2A2DF3D8005F5C5F /* public in Resources */ = {isa = PBXBuildFile; fileRef = 50B271D01FEDC1A000F3C39B /* public */; };
@@ -55,6 +58,7 @@
 		DF6C61BC2AE7B616007E8109 /* dev.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = dev.entitlements; sourceTree = "<group>"; };
 		DF6C61BD2AE7B63C007E8109 /* staging.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = staging.entitlements; sourceTree = "<group>"; };
 		DF6C61BE2AE7B658007E8109 /* prod.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = prod.entitlements; sourceTree = "<group>"; };
+		DFE6D46C2BCFE74200E8A204 /* GoogleService-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		DFED42A72A2DF3D8005F5C5F /* staging.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = staging.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		DFED42B92A2DF3E1005F5C5F /* prod.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = prod.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		E857A56BFF7B01840EC770AD /* Pods_staging.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_staging.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -102,6 +106,7 @@
 		504EC2FB1FED79650016851F = {
 			isa = PBXGroup;
 			children = (
+				DFE6D46C2BCFE74200E8A204 /* GoogleService-Info.plist */,
 				DF6C61BE2AE7B658007E8109 /* prod.entitlements */,
 				DF6C61BD2AE7B63C007E8109 /* staging.entitlements */,
 				DF6C61BC2AE7B616007E8109 /* dev.entitlements */,
@@ -265,6 +270,7 @@
 				50379B232058CBB4000EE86E /* capacitor.config.json in Resources */,
 				504EC30D1FED79650016851F /* Main.storyboard in Resources */,
 				2FAD9763203C412B000D30F8 /* config.xml in Resources */,
+				DFE6D46D2BD018C900E8A204 /* GoogleService-Info.plist in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -278,6 +284,7 @@
 				DFED42A02A2DF3D8005F5C5F /* capacitor.config.json in Resources */,
 				DFED42A12A2DF3D8005F5C5F /* Main.storyboard in Resources */,
 				DFED42A22A2DF3D8005F5C5F /* config.xml in Resources */,
+				DFE6D46E2BD018C900E8A204 /* GoogleService-Info.plist in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -291,6 +298,7 @@
 				DFED42B22A2DF3E1005F5C5F /* capacitor.config.json in Resources */,
 				DFED42B32A2DF3E1005F5C5F /* Main.storyboard in Resources */,
 				DFED42B42A2DF3E1005F5C5F /* config.xml in Resources */,
+				DFE6D46F2BD018CA00E8A204 /* GoogleService-Info.plist in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
