@@ -104,8 +104,8 @@ export class Server {
     protected async buildWebSocketAdapter(
         app: INestApplication,
     ): Promise<void> {
-        const redisIoAdapter = new RedisIoAdapter();
-        await redisIoAdapter.connectToRedis({ url: process.env.REDIS_URL });
+        const redisIoAdapter = new RedisIoAdapter(app);
+        await redisIoAdapter.connectToRedis(process.env.REDIS_URL);
         app.useWebSocketAdapter(redisIoAdapter);
     }
 }

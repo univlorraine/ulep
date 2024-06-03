@@ -16,8 +16,10 @@ import { ROOM_REPOSITORY } from 'src/core/ports/room.repository';
 import { KeycloakClient } from '@app/keycloak';
 
 @WebSocketGateway(5000, {
-    transports: ['websocket'],
-    path: '/socket',
+    cors: {
+        origin: '*',
+        methods: ['GET'],
+    },
 })
 export class HubGateway
     implements OnGatewayConnection, OnGatewayDisconnect, HubGateway
