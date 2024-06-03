@@ -13,6 +13,7 @@ import {
     Identifier,
     EditButton,
     TopToolbar,
+    BooleanField,
     usePermissions,
     ShowActionsProps,
 } from 'react-admin';
@@ -147,6 +148,10 @@ const ProfileTab = () => {
                             source="name"
                         />
                         <TextField source="level" />
+                        <BooleanField
+                            label={translate('learning_languages.show.fields.hasPriority')}
+                            source="hasPriority"
+                        />
                     </Datagrid>
                 </ArrayField>
             </TabbedShowLayout.Tab>
