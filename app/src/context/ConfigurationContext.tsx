@@ -6,6 +6,7 @@ import getConfigContextValue from './getConfigurationContextValue';
 export const ConfigContext = createContext<ConfigContextValueType>(
     getConfigContextValue({
         apiUrl: '',
+        chatUrl: '',
         languageCode: '',
         accessToken: '',
         refreshToken: '',
