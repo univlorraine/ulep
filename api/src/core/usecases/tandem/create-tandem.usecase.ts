@@ -7,6 +7,7 @@ import {
   Tandem,
   TandemStatus,
 } from 'src/core/models';
+import { CHAT_SERVICE, ChatServicePort } from 'src/core/ports/chat.service';
 import { EMAIL_GATEWAY, EmailGateway } from 'src/core/ports/email.gateway';
 import {
   LANGUAGE_REPOSITORY,
@@ -51,6 +52,8 @@ export class CreateTandemUsecase {
     private readonly uuidProvider: UuidProvider,
     @Inject(EMAIL_GATEWAY)
     private readonly emailGateway: EmailGateway,
+    @Inject(CHAT_SERVICE)
+    private readonly chatService: ChatServicePort,
   ) {}
 
   async execute(command: CreateTandemCommand): Promise<Tandem> {
@@ -160,6 +163,15 @@ export class CreateTandemUsecase {
 
     if (tandem.status === TandemStatus.ACTIVE) {
       await this.sendTamdemBecomeActiveEmails(tandem);
+      //TODO : Add animator in conversation
+      this.chatService.createConversation(
+        tandem.id,
+        [
+          tandem.learningLanguages[0].profile.user.id,
+          tandem.learningLanguages[1].profile.user.id,
+        ],
+        {},
+      );
     }
 
     return tandem;

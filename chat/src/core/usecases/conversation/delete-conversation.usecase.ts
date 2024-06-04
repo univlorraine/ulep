@@ -16,6 +16,14 @@ export class DeleteConversationUsecase {
     ) {}
 
     async execute(command: DeleteConversationCommand) {
+        const conversation = await this.conversationRepository.findById(
+            command.id,
+        );
+
+        if (!conversation) {
+            return;
+        }
+
         await this.conversationRepository.delete(command.id);
     }
 }

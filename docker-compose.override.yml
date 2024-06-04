@@ -8,7 +8,7 @@ services:
     volumes:
       - ./api:/srv/app
     ports:
-      - ${API_PORT:-3000}:3000
+      - ${API_PORT:-3002}:3000
     environment:
       SMTP_HOST: mailer
       SMTP_PORT: 1025

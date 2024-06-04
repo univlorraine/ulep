@@ -198,6 +198,9 @@ export class Env {
   @Transform(({ value }) => parseInt(value, 10))
   SIGNED_URL_EXPIRATION_IN_SECONDS: number;
 
+  @IsString()
+  CHAT_URL: string;
+
   static validate(configuration: Record<string, unknown>): Env {
     const env = plainToClass(Env, configuration, {
       enableImplicitConversion: false,
@@ -248,6 +251,7 @@ export const getLoggerLevels = (logLevel: string): LogLevel[] => {
 /// Testing configuration
 const test: Env = {
   ADMIN_URL: 'http://localhost:3000',
+  CHAT_URL: 'http://localhost:5001',
   APP_URL: 'http://localhost:4200',
   LOG_LEVEL: 'error',
   DEFAULT_TRANSLATION_LANGUAGE: 'fr',
