@@ -40,6 +40,7 @@ import { Role, Roles } from '../decorators/roles.decorator';
 import {
   AddDeviceRequest,
   AdministratorResponse,
+  AdministratorsQuery,
   CreateAdministratorRequest,
   CreateUserRequest,
   KeycloakGroupResponse,
@@ -133,8 +134,14 @@ export class UserController {
   @UseGuards(AuthenticationGuard)
   @Swagger.ApiOperation({ summary: 'Collection of Administrator ressource.' })
   @CollectionResponse(UserResponse)
-  async findAllAdministrators(@CurrentUser() user: KeycloakUser) {
-    const administrators = await this.getAdministratorsUsecase.execute(user);
+  async findAllAdministrators(
+    @CurrentUser() user: KeycloakUser,
+    @Query() { universityId }: AdministratorsQuery,
+  ) {
+    const administrators = await this.getAdministratorsUsecase.execute(
+      user,
+      universityId,
+    );
 
     return administrators.map(AdministratorResponse.fromDomain);
   }

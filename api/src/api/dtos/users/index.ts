@@ -30,6 +30,13 @@ export interface UserRepresentationWithAvatar extends UserRepresentation {
   image?: MediaObject;
 }
 
+export class AdministratorsQuery {
+  @Type(() => String)
+  @IsString()
+  @IsOptional()
+  readonly universityId?: string;
+}
+
 export class CreateUserRequest implements CreateUserCommand {
   @Swagger.ApiProperty({ type: 'string', format: 'email' })
   @IsEmail()
