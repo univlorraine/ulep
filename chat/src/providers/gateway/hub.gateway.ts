@@ -1,6 +1,7 @@
 import {
     OnGatewayConnection,
     OnGatewayDisconnect,
+    SubscribeMessage,
     WebSocketGateway,
     WebSocketServer,
 } from '@nestjs/websockets';
@@ -79,8 +80,9 @@ export class HubGateway
     /**
      * Publish an update to a specific conversation.
      */
-    publish(update: Message): void {
-        this.server.to(update.conversationId).emit('*', update);
+    @SubscribeMessage('publish')
+    publish(client: Socket, message: Message): void {
+        this.server.to(message.conversationId).emit('message', message);
     }
 
     /**

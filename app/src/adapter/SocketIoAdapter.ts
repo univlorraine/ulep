@@ -28,8 +28,16 @@ class SocketIoAdapter implements SocketIoAdapterInterface {
     }
 
     async emit(message: Message): Promise<Message> {
-        await this.socket?.emit(message.conversationId, message);
+        await this.socket?.emit('publish', message);
         return message;
+    }
+
+    onMessage(handler: (message: Message) => void): void {
+        this.socket?.on('message', handler);
+    }
+
+    offMessage(): void {
+        this.socket?.off('message');
     }
 }
 

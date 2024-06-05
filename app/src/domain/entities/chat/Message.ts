@@ -1,7 +1,12 @@
-export type MessageType = 'text' | 'image' | 'audio' | 'file';
+export enum MessageType {
+    Text = 'text',
+    Image = 'image',
+    Audio = 'audio',
+    File = 'file',
+}
 
 export class MessageOwner {
-    constructor(public readonly id: string, public readonly name: string, public readonly image: string) {}
+    constructor(public readonly id: string, public readonly name: string, public readonly image?: string) {}
 }
 
 export class Message {

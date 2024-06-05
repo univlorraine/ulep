@@ -49,16 +49,10 @@ if (import.meta.env.VITE_SENTRY_DSN) {
 }
 
 const AppCore = () => {
-    const { addDevice, deviceAdapter, notificationAdapter, socketIoAdapter } = useConfig();
+    const { addDevice, deviceAdapter, notificationAdapter } = useConfig();
     const profile = useStoreState((state) => state.profile);
 
     useEffect(() => {
-        if (profile) {
-            socketIoAdapter.connect();
-        } else {
-            socketIoAdapter.disconnect();
-        }
-
         if (profile && deviceAdapter.isNativePlatform()) {
             notificationAdapter.notificationPermission();
             notificationAdapter.registrationListener((token: string) => {
@@ -79,7 +73,6 @@ const AppCore = () => {
             if (deviceAdapter.isNativePlatform()) {
                 notificationAdapter.removeListeners();
             }
-            socketIoAdapter.disconnect();
         };
     }, [profile]);
 
