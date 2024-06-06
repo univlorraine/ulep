@@ -190,6 +190,7 @@ export class UpdateUniversityRequest
 
   @Swagger.ApiProperty({ type: 'string' })
   @IsString()
+  @IsOptional()
   defaultContactId: string;
 }
 
