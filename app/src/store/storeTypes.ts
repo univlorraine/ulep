@@ -57,6 +57,7 @@ interface LanguagePayload {
 
 interface ApiUrlPayload {
     apiUrl: string;
+    chatUrl: string;
 }
 
 interface ProfileStorePayload {
@@ -78,6 +79,7 @@ interface UserStorePayload {
 interface StoreInterface {
     accessToken: string;
     apiUrl: string;
+    chatUrl: string;
     language: string;
     logout: Action<StoreInterface>;
     refreshToken: string;

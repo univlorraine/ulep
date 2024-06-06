@@ -88,6 +88,7 @@ const AppContext = () => {
     const { i18n } = useTranslation();
     const accessToken = useStoreState((state) => state.accessToken);
     const apiUrl = useStoreState((state) => state.apiUrl);
+    const chatUrl = useStoreState((state) => state.chatUrl);
     const language = useStoreState((state) => state.language);
     const refreshToken = useStoreState((state) => state.refreshToken);
     const setProfile = useStoreActions((state) => state.setProfile);
@@ -125,6 +126,7 @@ const AppContext = () => {
         <ConfigContext.Provider
             value={getConfigContextValue({
                 apiUrl: import.meta.env.VITE_API_URL || apiUrl,
+                chatUrl: import.meta.env.VITE_CHAT_URL || chatUrl,
                 languageCode: i18n.language,
                 accessToken,
                 refreshToken,
@@ -150,7 +152,13 @@ const AppInstance: React.FC = () => {
     }
 
     if (!apiUrl && !import.meta.env.VITE_API_URL)
-        return <InstancesPage onValidate={(url: string) => setApiUrl({ apiUrl: url })} />;
+        return (
+            <InstancesPage
+                onValidate={({ apiUrl, chatUrl }: { apiUrl: string; chatUrl: string }) =>
+                    setApiUrl({ apiUrl, chatUrl })
+                }
+            />
+        );
 
     return <AppContext />;
 };

@@ -11,6 +11,7 @@ services:
     environment:
       ADMIN_URL: ${ADMIN_URL:-http://0.0.0.0:3001}
       APP_URL: ${APP_URL:-http://0.0.0.0:5173}
+      CHAT_URL: ${CHAT_URL:-http://chat:3000}
       LOG_LEVEL: ${LOG_LEVEL:-debug} # verbose, debug, log, warn or error
       DEFAULT_TRANSLATION_LANGUAGE: ${DEFAULT_TRANSLATION_LANGUAGE:-fr}
       DATABASE_URL: postgresql://${POSTGRES_USER:-postgres}:${POSTGRES_PASSWORD:-!ChangeMe!}@database:5432/${POSTGRES_DB:-ulep}?schema=public&connection_limit=1
@@ -91,6 +92,7 @@ services:
       target: chat_prod
     depends_on:
       - mongo
+      - redis
     restart: unless-stopped
     environment:
       ADMIN_URL: ${ADMIN_URL:-http://0.0.0.0:3001}
@@ -109,6 +111,12 @@ services:
       S3_ACCESS_KEY: ${MINIO_USER:-minio}
       S3_ACCESS_SECRET: ${MINIO_PASSWORD:-!ChangeMe!}
       SENTRY_DSN: ${CHAT_SENTRY_DSN:-}
+      REDIS_URL: ${REDIS_URL:-redis://redis:6379}
+
+  redis:
+    image: redis:latest
+    volumes:
+      - redis_data:/data
 
   mongo:
     image: mongo:6-jammy
@@ -171,3 +179,4 @@ services:
 volumes:
   db_data:
   chat_data:
+  redis_data:

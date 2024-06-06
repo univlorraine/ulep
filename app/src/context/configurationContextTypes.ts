@@ -36,6 +36,7 @@ import GetPartnersToUniversityUsecaseInterface from '../domain/interfaces/GetPar
 import EditProfileUsecaseInterface from '../domain/interfaces/EditProfileUsecase.interface';
 import EditUserUsecaseInterface from '../domain/interfaces/EditUserUsecase.interface';
 import NotificationAdapterInterface from '../adapter/interfaces/NotificationAdapter.interface';
+import SocketIoAdapterInterface from '../adapter/interfaces/SocketIoAdapter.interface';
 
 export interface ConfigContextValueType {
     accessToken: string;
@@ -71,6 +72,7 @@ export interface ConfigContextValueType {
     login: LoginUsecaseInterface;
     notificationAdapter: NotificationAdapterInterface;
     resetPassword: ResetPasswordUsecaseInterface;
+    socketIoAdapter: SocketIoAdapterInterface;
     updateAvatar: UpdateAvatarUsecaseInterface;
     updateNotificationPermission: UpdateNotificationPermissionUsecaseInterface;
     retrievePerson: RetrievePersonInfoUsecaseInterface;

@@ -27,6 +27,9 @@ FROM chat_deps as chat_dev
 EXPOSE 3003
 ENV PORT 3003
 
+EXPOSE 5000
+ENV WEBSOCKET_PORT 5000
+
 CMD ["sh", "-c", "pnpm start:dev"]
 
 # Build stage
@@ -50,7 +53,9 @@ RUN adduser -S -u 1001 nestjs
 USER nestjs
 
 EXPOSE 3003
-
 ENV PORT 3003
+
+EXPOSE 5000
+ENV WEBSOCKET_PORT 5000
 
 CMD ["pnpm", "run", "start:prod"]

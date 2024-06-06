@@ -12,6 +12,7 @@ import {
     HttpLoggerInterceptor,
     SentryInterceptor,
 } from 'src/api/interceptors';
+import { RedisIoAdapter } from '@app/common';
 
 export class Server {
     public async run(port: number): Promise<INestApplication> {
@@ -23,6 +24,7 @@ export class Server {
         this.addGlobalPipes(app);
         this.addGlobalInterceptors(app);
         this.addCORSConfiguration(app);
+        await this.buildWebSocketAdapter(app);
 
         if (process.env.NODE_ENV !== 'production') {
             this.buildAPIDocumentation(app);
@@ -97,5 +99,13 @@ export class Server {
         );
 
         SwaggerModule.setup('docs', app, document);
+    }
+
+    protected async buildWebSocketAdapter(
+        app: INestApplication,
+    ): Promise<void> {
+        const redisIoAdapter = new RedisIoAdapter(app);
+        await redisIoAdapter.connectToRedis(process.env.REDIS_URL);
+        app.useWebSocketAdapter(redisIoAdapter);
     }
 }

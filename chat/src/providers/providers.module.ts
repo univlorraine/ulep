@@ -1,5 +1,5 @@
 import { Module, Provider } from '@nestjs/common';
-import { PrismaService } from '@app/common';
+import { PrismaService, RedisModule } from '@app/common';
 import { STORAGE_INTERFACE } from 'src/core/ports/storage.interface';
 import { MinioStorage } from './storage/minio.storage';
 import { ConfigModule } from '@nestjs/config';
@@ -11,6 +11,10 @@ import { CONVERSATION_REPOSITORY } from 'src/core/ports/conversation.repository'
 import { PrismaConversationRepository } from 'src/providers/persistance/repositories/prisma-conversation.repository';
 import { MEDIA_OBJECT_REPOSITORY } from 'src/core/ports/media-object.repository';
 import { PrismaMediaObjectRepository } from 'src/providers/persistance/repositories/prisma-media-object.repository';
+import { HUB_GATEWAY } from 'src/core/ports/hub.gateway';
+import { HubGateway } from 'src/providers/gateway/hub.gateway';
+import { ROOM_REPOSITORY } from 'src/core/ports/room.repository';
+import { RedisRoomService } from 'src/providers/services/room.service';
 
 const providers: Provider[] = [
     {
@@ -33,10 +37,18 @@ const providers: Provider[] = [
         provide: CONVERSATION_REPOSITORY,
         useClass: PrismaConversationRepository,
     },
+    {
+        provide: HUB_GATEWAY,
+        useClass: HubGateway,
+    },
+    {
+        provide: ROOM_REPOSITORY,
+        useClass: RedisRoomService,
+    },
 ];
 
 @Module({
-    imports: [ConfigModule],
+    imports: [ConfigModule, RedisModule],
     providers: [PrismaService, ...providers],
     exports: [...providers],
 })

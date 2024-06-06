@@ -49,6 +49,8 @@ import { FCMNotificationGateway } from 'src/providers/gateway/fcm-notification.g
 import { NOTIFICATION_GATEWAY } from 'src/core/ports/notification.gateway';
 import { CONTACT_REPOSITORY } from 'src/core/ports/contact.repository';
 import { PrismaContactRepository } from 'src/providers/persistance/repositories/prisma-contact-repository';
+import { CHAT_SERVICE } from 'src/core/ports/chat.service';
+import { ChatService } from 'src/providers/services/chat.service';
 
 const providers: Provider[] = [
   { provide: INSTANCE_REPOSITORY, useClass: PrismaInstanceRepository },
@@ -143,6 +145,10 @@ const providers: Provider[] = [
   {
     provide: CONTACT_REPOSITORY,
     useClass: PrismaContactRepository,
+  },
+  {
+    provide: CHAT_SERVICE,
+    useClass: ChatService,
   },
 ];
 

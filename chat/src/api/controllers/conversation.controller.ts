@@ -22,6 +22,7 @@ import { CreateConversationUsecase } from 'src/core/usecases/conversation/create
 import { DeleteConversationUsecase } from 'src/core/usecases/conversation/delete-conversation.usecase';
 import { GetConversationFromUserIdUsecase } from 'src/core/usecases/conversation/get-conversation-from-user-id.usecase';
 
+//TODO: Allow route only for rest api
 @Controller('conversations')
 @Swagger.ApiTags('Conversations')
 export class ConversationController {
@@ -35,14 +36,13 @@ export class ConversationController {
     ) {}
 
     @Get('/:id')
-    @UseGuards(AuthenticationGuard)
     @Swagger.ApiOperation({ summary: 'Get all conversations from id' })
     async getConversations(
-        @Param('id') conversationId: string,
+        @Param('id') userId: string,
     ): Promise<CollectionResponse<ConversationResponse>> {
         const conversations =
             await this.getConversationFromUserIdUsecase.execute({
-                id: conversationId,
+                id: userId,
             });
 
         return new CollectionResponse<ConversationResponse>({
@@ -52,20 +52,19 @@ export class ConversationController {
     }
 
     @Post('/')
-    @UseGuards(AuthenticationGuard)
     @Swagger.ApiOperation({ summary: 'Create a conversation' })
     async createConversation(
         @Body() body: CreateConversationRequest,
     ): Promise<ConversationResponse> {
         const conversation = await this.createConversationUsecase.execute({
             userIds: body.userIds,
+            tandemId: body.tandemId,
             metadata: body.metadata,
         });
         return ConversationResponse.from(conversation);
     }
 
     @Delete('/:id')
-    @UseGuards(AuthenticationGuard)
     @Swagger.ApiOperation({ summary: 'Delete a conversation' })
     async deleteConversation(
         @Param('id') conversationId: string,
