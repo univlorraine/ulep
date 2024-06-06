@@ -1,8 +1,7 @@
 import { Prisma } from '@prisma/client';
-import { Message } from 'src/core/models';
 import { Owner } from 'src/core/models/owner.model';
 
-const OwnerInclude = Prisma.validator<Prisma.MessageInclude>();
+const OwnerInclude = {};
 
 export const OwnerRelations = { include: OwnerInclude };
 

@@ -17,6 +17,10 @@ export class PrismaConversationRepository implements ConversationRepository {
             ...ConversationRelations,
         });
 
+        if (!conversation) {
+            return null;
+        }
+
         return conversationMapper(conversation);
     }
 
@@ -29,9 +33,14 @@ export class PrismaConversationRepository implements ConversationRepository {
         return conversations.map(conversationMapper);
     }
 
-    async create(userIds: string[], metadata: any): Promise<Conversation> {
+    async create(
+        id: string,
+        userIds: string[],
+        metadata: any,
+    ): Promise<Conversation> {
         const conversation = await this.prisma.conversation.create({
             data: {
+                id,
                 participantIds: userIds,
                 metadata: metadata,
             },

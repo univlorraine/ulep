@@ -3,9 +3,11 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
 import { ApiModule } from './api/api.module';
 import { Env } from './configuration';
 import { KeycloakModule } from '@app/keycloak/keycloak.module';
+import { RedisModule } from '@app/common';
 
 @Module({
     imports: [
+        RedisModule,
         ConfigModule.forRoot({
             isGlobal: true,
             validate: Env.validate,

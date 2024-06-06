@@ -37,9 +37,11 @@ import EditUserUsecase from '../domain/usecases/EditUserUsecase';
 import CreateOrUpdateTestedLanguageUsecase from '../domain/usecases/CreateOrUpdateTestedLanguageUsecase';
 import NotificationAdapter from '../adapter/NotificationAdapter';
 import AddDeviceUsecase from '../domain/usecases/AddDeviceUsecase';
+import SocketIoAdapter from '../adapter/SocketIoAdapter';
 
 interface GetConfigContextValueProps {
     apiUrl: string;
+    chatUrl: string;
     languageCode: string;
     accessToken: string;
     refreshToken: string;
@@ -52,6 +54,7 @@ interface GetConfigContextValueProps {
 
 const getConfigContextValue = ({
     apiUrl,
+    chatUrl,
     languageCode,
     accessToken,
     refreshToken,
@@ -65,6 +68,7 @@ const getConfigContextValue = ({
     const cameraAdapter = new CameraAdapter();
     const deviceAdapter = new DeviceAdapter();
     const domainHttpAdapter = new DomainHttpAdapter(apiUrl, accessToken, refreshToken, languageCode, setTokens, logout);
+    const socketIoAdapter = new SocketIoAdapter(chatUrl, accessToken);
 
     const addDevice = new AddDeviceUsecase(domainHttpAdapter);
     const askForAccountDeletion = new AskForAccountDeletion(domainHttpAdapter);
@@ -136,6 +140,7 @@ const getConfigContextValue = ({
         login,
         notificationAdapter,
         resetPassword,
+        socketIoAdapter,
         updateAvatar,
         updateNotificationPermission,
         retrievePerson,

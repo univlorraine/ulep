@@ -7,10 +7,12 @@ const Store = createStore<TokenStoreTypes>(
         {
             accessToken: '',
             apiUrl: '',
+            chatUrl: '',
             language: '',
             refreshToken: '',
             setApiUrl: action((state, payload) => {
                 state.apiUrl = payload.apiUrl;
+                state.chatUrl = payload.chatUrl;
             }),
             setLanguage: action((state, payload) => {
                 state.language = payload.language;
@@ -36,6 +38,7 @@ const Store = createStore<TokenStoreTypes>(
                 state.refreshToken = '';
                 state.user = undefined;
                 state.apiUrl = '';
+                state.chatUrl = '';
             }),
             profile: undefined,
             profileSignUp: new ProfileSignUp(),

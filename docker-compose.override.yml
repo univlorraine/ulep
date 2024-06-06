@@ -8,7 +8,7 @@ services:
     volumes:
       - ./api:/srv/app
     ports:
-      - ${API_PORT:-3000}:3000
+      - ${API_PORT:-3002}:3000
     environment:
       SMTP_HOST: mailer
       SMTP_PORT: 1025
@@ -24,6 +24,11 @@ services:
       - ./chat:/srv/app
     ports:
       - ${CHAT_PORT:-3003}:3000
+      - ${CHAT_SOCKET_PORT:-5001}:5000
+
+  redis:
+    ports:
+      - ${REDIS_PORT:-6379}:6379
 
   admin:
     build:
