@@ -10,9 +10,11 @@ import { MEDIA_OBJECT_REPOSITORY } from 'src/core/ports/media-object.repository'
 import { InMemoryMediaObjectRepository } from 'src/providers/persistance/repositories/in-memory-media-object.repository';
 import { MESSAGE_REPOSITORY } from 'src/core/ports/message.repository';
 import { InMemoryMessageRepository } from 'src/providers/persistance/repositories/in-memory-message.repository';
-import { Conversation, Message } from 'src/core/models';
+import { Conversation, Message, MessageType } from 'src/core/models';
 import { Owner } from 'src/core/models/owner.model';
 import { MediaObject } from 'src/core/models/media.model';
+import { HubGateway } from '../mocks/hub.gateway';
+import { HUB_GATEWAY } from 'src/core/ports/hub.gateway';
 
 describe('Conversations', () => {
     let app: TestServer;
@@ -60,7 +62,7 @@ describe('Conversations', () => {
         content: 'Hello World',
         owner: owner1,
         isReported: false,
-        type: 'text',
+        type: MessageType.Text,
     });
 
     const message2 = new Message({
@@ -69,7 +71,7 @@ describe('Conversations', () => {
         content: 'Hello World',
         owner: owner2,
         isReported: false,
-        type: 'text',
+        type: MessageType.Text,
     });
 
     const MEDIA_OBJECT1_ID = 'imageId';
@@ -87,7 +89,7 @@ describe('Conversations', () => {
         content: MEDIA_OBJECT1_ID,
         owner: owner2,
         isReported: false,
-        type: 'image',
+        type: MessageType.Text,
     });
 
     beforeAll(async () => {
@@ -102,6 +104,8 @@ describe('Conversations', () => {
             .useValue(inMemoryMediaObjectRepository)
             .overrideProvider(MESSAGE_REPOSITORY)
             .useValue(inMemoryMessageRepository)
+            .overrideProvider(HUB_GATEWAY)
+            .useValue(new HubGateway())
             .compile();
 
         app = TestServer.create(module.createNestApplication());
