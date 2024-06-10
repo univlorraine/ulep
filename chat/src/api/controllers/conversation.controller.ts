@@ -5,19 +5,28 @@ import {
     Get,
     Param,
     Post,
+    Query,
     UploadedFile,
     UseGuards,
     UseInterceptors,
 } from '@nestjs/common';
 import { FileInterceptor } from '@nestjs/platform-express';
 import * as Swagger from '@nestjs/swagger';
-import { CreateConversationRequest } from 'src/api/dtos/conversation';
+import {
+    CreateConversationRequest,
+    GetMessagesQueryParams,
+} from 'src/api/dtos/conversation';
 import { ConversationResponse } from 'src/api/dtos/conversation/conversation.response';
 import { MessageResponse, SendMessageRequest } from 'src/api/dtos/message';
 import { CollectionResponse } from 'src/api/dtos/pagination';
 import { AuthenticationGuard } from 'src/api/guards';
+import { Message } from 'src/core/models';
 import { MediaObject } from 'src/core/models/media.model';
-import { CreateMessageUsecase, UploadMediaUsecase } from 'src/core/usecases';
+import {
+    CreateMessageUsecase,
+    GetMessagesFromConversationIdUsecase,
+    UploadMediaUsecase,
+} from 'src/core/usecases';
 import { CreateConversationUsecase } from 'src/core/usecases/conversation/create-conversation.usecase';
 import { DeleteConversationUsecase } from 'src/core/usecases/conversation/delete-conversation.usecase';
 import { GetConversationFromUserIdUsecase } from 'src/core/usecases/conversation/get-conversation-from-user-id.usecase';
@@ -30,14 +39,34 @@ export class ConversationController {
         private createMessageUsecase: CreateMessageUsecase,
         private createConversationUsecase: CreateConversationUsecase,
         private deleteConversationUsecase: DeleteConversationUsecase,
+        private getMessagesFromConversationIdUsecase: GetMessagesFromConversationIdUsecase,
         private getConversationFromUserIdUsecase: GetConversationFromUserIdUsecase,
-
         private uploadMediaUsecase: UploadMediaUsecase,
     ) {}
 
+    @Get('messages/:id')
+    @Swagger.ApiOperation({ summary: 'Get all messages from conversation id' })
+    async getConversations(
+        @Param('id') userId: string,
+        @Query() params: GetMessagesQueryParams,
+    ): Promise<CollectionResponse<MessageResponse>> {
+        const messages =
+            await this.getMessagesFromConversationIdUsecase.execute({
+                id: userId,
+                pagination: { offset: params.offset, limit: params.limit },
+            });
+
+        return new CollectionResponse<MessageResponse>({
+            items: messages.map((message: Message) =>
+                MessageResponse.from(message),
+            ),
+            totalItems: messages.length,
+        });
+    }
+
     @Get('/:id')
     @Swagger.ApiOperation({ summary: 'Get all conversations from id' })
-    async getConversations(
+    async getConversationsFromUserId(
         @Param('id') userId: string,
     ): Promise<CollectionResponse<ConversationResponse>> {
         const conversations =

@@ -1,6 +1,9 @@
 import { Injectable } from '@nestjs/common';
 import { PrismaService } from '@app/common';
-import { MessageRepository } from 'src/core/ports/message.repository';
+import {
+    MessageFilters,
+    MessageRepository,
+} from 'src/core/ports/message.repository';
 import { Message } from 'src/core/models';
 import {
     MessagesRelations,
@@ -74,5 +77,29 @@ export class PrismaMessageRepository implements MessageRepository {
         });
 
         return messageMapper(newMessage);
+    }
+
+    async findMessagesByConversationId(
+        conversationId: string,
+        filters: MessageFilters,
+    ): Promise<Message[]> {
+        const filter = {};
+
+        if (filters.limit !== undefined) {
+            filter['take'] = filters.limit;
+        }
+
+        if (filters.offset !== undefined) {
+            filter['skip'] = filters.offset;
+        }
+
+        const messages = await this.prisma.message.findMany({
+            where: { conversationId },
+            ...filter,
+            orderBy: { updatedAt: 'desc' },
+            ...MessagesRelations,
+        });
+
+        return messages.map(messageMapper);
     }
 }

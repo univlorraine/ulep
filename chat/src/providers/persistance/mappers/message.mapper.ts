@@ -6,6 +6,7 @@ import { ownerMapper } from 'src/providers/persistance/mappers';
 const MessagesInclude = Prisma.validator<Prisma.MessageInclude>()({
     Owner: true,
     Conversation: true,
+    MediaObject: true,
 });
 
 export const MessagesRelations = { include: MessagesInclude };
@@ -17,7 +18,7 @@ export type MessagesSnapshot = Prisma.MessageGetPayload<
 export const messageMapper = (snapshot: MessagesSnapshot): Message => {
     return new Message({
         id: snapshot.id,
-        content: snapshot.content,
+        content: snapshot.MediaObject?.id ?? snapshot.content,
         createdAt: snapshot.createdAt,
         updatedAt: snapshot.updatedAt,
         conversationId: snapshot.conversationId,

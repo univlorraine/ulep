@@ -4,7 +4,9 @@ import {
     CreateMessageUsecase,
     DeleteConversationUsecase,
     GetConversationFromUserIdUsecase,
+    GetMessagesFromConversationIdUsecase,
     UpdateConversationUsecase,
+    UpdateMessageUsecase,
     UploadMediaUsecase,
 } from 'src/core/usecases';
 import { ProvidersModule } from 'src/providers/providers.module';
@@ -14,8 +16,10 @@ const usecases: Provider[] = [
     CreateMessageUsecase,
     DeleteConversationUsecase,
     GetConversationFromUserIdUsecase,
+    GetMessagesFromConversationIdUsecase,
     UploadMediaUsecase,
     UpdateConversationUsecase,
+    UpdateMessageUsecase,
 ];
 
 const services: Provider[] = [];
