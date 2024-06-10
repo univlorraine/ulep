@@ -53,24 +53,12 @@ export class CreateMessageUsecase {
                 image: command.ownerImage,
             }),
             conversationId: command.conversationId,
-            type: this.categorizeFileType(command.mimetype),
+            type: Message.categorizeFileType(command.mimetype),
             isReported: false,
         });
 
         const createdMessage = await this.messageRepository.create(message);
 
         return createdMessage;
-    }
-
-    private categorizeFileType(mimeType?: string): MessageType {
-        if (!mimeType) {
-            return MessageType.Text;
-        } else if (mimeType.startsWith('audio/')) {
-            return MessageType.Audio;
-        } else if (mimeType.startsWith('image/')) {
-            return MessageType.Image;
-        } else {
-            return MessageType.File;
-        }
     }
 }

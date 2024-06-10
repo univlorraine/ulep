@@ -56,4 +56,23 @@ export class PrismaMessageRepository implements MessageRepository {
 
         return message ? messageMapper(message) : null;
     }
+
+    async update(message: Message): Promise<Message> {
+        await this.prisma.message.update({
+            where: { id: message.id },
+            data: {
+                content: message.content,
+                isReported: message.isReported,
+                type: message.type,
+            },
+            ...MessagesRelations,
+        });
+
+        const newMessage = await this.prisma.message.findUnique({
+            where: { id: message.id },
+            ...MessagesRelations,
+        });
+
+        return messageMapper(newMessage);
+    }
 }
