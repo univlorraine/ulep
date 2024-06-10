@@ -5,13 +5,14 @@ import {
 } from 'src/core/ports/conversation.repository';
 import {
     MESSAGE_REPOSITORY,
-    MessageFilters,
+    MessagePagination,
     MessageRepository,
 } from 'src/core/ports/message.repository';
 
 export class GetMessagesFromConversationIdCommand {
     id: string;
-    pagination: MessageFilters;
+    pagination: MessagePagination;
+    filter: string;
 }
 
 @Injectable()
@@ -36,6 +37,7 @@ export class GetMessagesFromConversationIdUsecase {
             await this.messageRepository.findMessagesByConversationId(
                 command.id,
                 command.pagination,
+                command.filter,
             );
 
         return messages;

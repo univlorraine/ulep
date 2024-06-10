@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { Collection } from '@app/common';
 import {
-    MessageFilters,
+    MessagePagination,
     MessageRepository,
 } from 'src/core/ports/message.repository';
 import { Message } from 'src/core/models/message.model';
@@ -65,7 +65,8 @@ export class InMemoryMessageRepository implements MessageRepository {
 
     async findMessagesByConversationId(
         conversationId: string,
-        filters: MessageFilters,
+        pagination?: MessagePagination,
+        filter?: string,
     ): Promise<Message[]> {
         return this.#messages.filter(
             (message) => message.conversationId === conversationId,

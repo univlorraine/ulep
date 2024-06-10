@@ -2,7 +2,7 @@ import { Message } from 'src/core/models';
 
 export const MESSAGE_REPOSITORY = 'message.repository';
 
-export type MessageFilters = {
+export type MessagePagination = {
     offset?: number;
     limit?: number;
 };
@@ -12,7 +12,8 @@ export interface MessageRepository {
     findById: (id: string) => Promise<Message | null>;
     findMessagesByConversationId: (
         id: string,
-        filters?: MessageFilters,
+        pagination?: MessagePagination,
+        filter?: string,
     ) => Promise<Message[]>;
     update: (message: Message) => Promise<Message>;
 }

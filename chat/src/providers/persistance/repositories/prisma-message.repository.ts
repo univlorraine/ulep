@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { PrismaService } from '@app/common';
 import {
-    MessageFilters,
+    MessagePagination,
     MessageRepository,
 } from 'src/core/ports/message.repository';
 import { Message } from 'src/core/models';
@@ -81,21 +81,29 @@ export class PrismaMessageRepository implements MessageRepository {
 
     async findMessagesByConversationId(
         conversationId: string,
-        filters: MessageFilters,
+        pagination: MessagePagination,
+        filter?: string,
     ): Promise<Message[]> {
-        const filter = {};
+        const messagesPagination = {};
+        const where = { conversationId };
 
-        if (filters.limit !== undefined) {
-            filter['take'] = filters.limit;
+        if (pagination.limit !== undefined) {
+            messagesPagination['take'] = pagination.limit;
         }
 
-        if (filters.offset !== undefined) {
-            filter['skip'] = filters.offset;
+        if (pagination.offset !== undefined) {
+            messagesPagination['skip'] = pagination.offset;
+        }
+
+        if (filter) {
+            where['content'] = {
+                contains: filter,
+            };
         }
 
         const messages = await this.prisma.message.findMany({
-            where: { conversationId },
-            ...filter,
+            where,
+            ...messagesPagination,
             orderBy: { updatedAt: 'desc' },
             ...MessagesRelations,
         });

@@ -54,6 +54,7 @@ export class ConversationController {
             await this.getMessagesFromConversationIdUsecase.execute({
                 id: userId,
                 pagination: { offset: params.offset, limit: params.limit },
+                filter: params.messageFilter,
             });
 
         return new CollectionResponse<MessageResponse>({
