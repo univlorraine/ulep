@@ -6,6 +6,7 @@ import {
   NotificationGateway,
   SendTandemClosureNoticeNotification,
   NotificationParams,
+  SendMessageNotification,
 } from 'src/core/ports/notification.gateway';
 
 @Injectable()
@@ -119,6 +120,23 @@ export class FCMNotificationGateway implements NotificationGateway {
           ...props,
         },
       );
+      return {
+        token: notification.token,
+        title: translation.title,
+        body: translation.body,
+        image,
+      };
+    });
+
+    await this.sender.sendNotifications(notifications);
+  }
+
+  async sendMessageNotification(props: SendMessageNotification): Promise<void> {
+    const image = this.images.notification;
+    const notifications = props.to.map((notification) => {
+      const translation = this.translate('message', notification.language, {
+        ...props,
+      });
       return {
         token: notification.token,
         title: translation.title,

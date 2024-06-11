@@ -9,6 +9,10 @@ import {
     MESSAGE_REPOSITORY,
     MessageRepository,
 } from 'src/core/ports/message.repository';
+import {
+    NOTIFICATION_SERVICE,
+    NotificationServicePort,
+} from 'src/core/ports/notification.service';
 import { UUID_PROVIDER } from 'src/core/ports/uuid.provider';
 import { UuidProvider } from 'src/providers/services/uuid.provider';
 
@@ -29,6 +33,8 @@ export class CreateMessageUsecase {
         private readonly messageRepository: MessageRepository,
         @Inject(UUID_PROVIDER)
         private readonly uuidProvider: UuidProvider,
+        @Inject(NOTIFICATION_SERVICE)
+        private readonly notificationService: NotificationServicePort,
     ) {}
 
     async execute(command: CreateMessageCommand) {
@@ -58,6 +64,12 @@ export class CreateMessageUsecase {
         });
 
         const createdMessage = await this.messageRepository.create(message);
+
+        this.notificationService.sendNotification(
+            message.owner.id,
+            conversation.usersIds.filter((id) => id !== message.owner.id),
+            message.content,
+        );
 
         return createdMessage;
     }

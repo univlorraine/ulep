@@ -74,6 +74,14 @@ export type TandemPausedUnpausedFunction = (
   params: TandemPausedUnpausedEmailProps,
 ) => Promise<void>;
 
+export interface NewMessageEmailProps {
+  to: string;
+  language: string;
+  content: string;
+  user: { firstname: string; lastname: string };
+  sender: { firstname: string; lastname: string };
+}
+
 export interface EmailGateway {
   // Notifies a user with a welcome email.
   sendWelcomeMail(props: SendWelcomeMailProps): Promise<void>;
@@ -126,4 +134,7 @@ export interface EmailGateway {
   sendTandemClosureNoticeEmail(
     props: TandemClosureNoticeEmailProps,
   ): Promise<void>;
+
+  // Notifies users about a new message
+  sendNewMessageEmail(props: NewMessageEmailProps): Promise<void>;
 }

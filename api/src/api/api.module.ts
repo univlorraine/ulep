@@ -31,6 +31,7 @@ import { UlUniversityConnectorService } from 'src/providers/gateway/ul-universit
 import { PurgesController } from './controllers/purge.controller';
 import { ConfigModule } from '@nestjs/config';
 import { TandemHistoryController } from 'src/api/controllers/tandemHistory.controller';
+import { NotificationController } from 'src/api/controllers/notification.controller';
 
 @Module({
   imports: [CoreModule, TerminusModule, HttpModule, ConfigModule],
@@ -41,6 +42,7 @@ import { TandemHistoryController } from 'src/api/controllers/tandemHistory.contr
     InterestController,
     InstanceController,
     LanguageController,
+    NotificationController,
     ObjectiveController,
     ProficiencyController,
     ProfileController,

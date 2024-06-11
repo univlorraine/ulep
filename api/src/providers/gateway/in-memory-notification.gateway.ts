@@ -18,4 +18,8 @@ export default class InMemoryNotificaitonGateway
   sendUnpausedTandemNotification(): Promise<void> {
     return Promise.resolve();
   }
+
+  sendMessageNotification(): Promise<void> {
+    return Promise.resolve();
+  }
 }
