@@ -1,6 +1,9 @@
 import { Injectable } from '@nestjs/common';
 import { Collection, PrismaService } from '@app/common';
-import { UniversityRepository } from 'src/core/ports/university.repository';
+import {
+  UniversityRepository,
+  UpdateUniversityResponse,
+} from 'src/core/ports/university.repository';
 import {
   UniversityRelations,
   universityMapper,
@@ -113,7 +116,7 @@ export class PrismaUniversityRepository implements UniversityRepository {
     return universityMapper(result);
   }
 
-  async update(university: University): Promise<University> {
+  async update(university: University): Promise<UpdateUniversityResponse> {
     await this.prisma.organizations.update({
       where: { id: university.id },
       data: {
@@ -152,8 +155,15 @@ export class PrismaUniversityRepository implements UniversityRepository {
       },
     });
 
+    let users = [];
     // Update all users that have no contact with the universitie's default contact
     if (university.defaultContactId) {
+      users = await this.prisma.users.findMany({
+        where: {
+          AND: [{ organization_id: university.id }, { contact_id: null }],
+        },
+      });
+
       await this.prisma.users.updateMany({
         where: {
           AND: [{ organization_id: university.id }, { contact_id: null }],
@@ -167,7 +177,10 @@ export class PrismaUniversityRepository implements UniversityRepository {
       include: UniversityRelations,
     });
 
-    return universityMapper(updatedUniversity);
+    return {
+      university: universityMapper(updatedUniversity),
+      usersId: users.map((user) => user.id),
+    };
   }
 
   async remove(id: string): Promise<void> {

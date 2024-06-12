@@ -6,6 +6,8 @@ import {
   StorageInterface,
 } from 'src/core/ports/storage.interface';
 import { KeycloakClient } from '@app/keycloak';
+import { CHAT_SERVICE } from 'src/core/ports/chat.service';
+import { ChatService } from 'src/providers/services/chat.service';
 
 export class DeleteUserCommand {
   id: string;
@@ -20,6 +22,8 @@ export class DeleteUserUsecase {
     private readonly keycloak: KeycloakClient,
     @Inject(STORAGE_INTERFACE)
     private readonly storage: StorageInterface,
+    @Inject(CHAT_SERVICE)
+    private readonly chatService: ChatService,
   ) {}
 
   async execute(command: DeleteUserCommand) {
@@ -36,6 +40,8 @@ export class DeleteUserUsecase {
     if (!command.shouldKeepKeycloakUser) {
       await this.keycloak.deleteUser(command.id);
     }
+
+    await this.chatService.deleteConversationByUserId(command.id);
 
     return this.userRepository.delete(command.id);
   }

@@ -18,6 +18,8 @@ import {
   TANDEM_HISTORY_REPOSITORY,
   TandemHistoryRepository,
 } from 'src/core/ports/tandem-history.repository';
+import { CHAT_SERVICE } from 'src/core/ports/chat.service';
+import { ChatService } from 'src/providers/services/chat.service';
 
 export class UpdateUserCommand {
   status?: UserStatus;
@@ -43,6 +45,8 @@ export class UpdateUserUsecase {
     private readonly emailGateway: EmailGateway,
     @Inject(TANDEM_HISTORY_REPOSITORY)
     private readonly tandemHistoryRepository: TandemHistoryRepository,
+    @Inject(CHAT_SERVICE)
+    private readonly chatService: ChatService,
     private readonly env: ConfigService<Env, true>,
     private readonly keycloakClient: KeycloakClient,
   ) {}
@@ -75,12 +79,15 @@ export class UpdateUserUsecase {
       }
     }
 
-    const update = await this.userRepository.update(
+    const { user: update, newContactId } = await this.userRepository.update(
       new User({
         ...user,
         ...command,
       }),
     );
+
+    // Create a conversation with the new contact and delete the old one
+    await this.handleConversation(user, newContactId);
 
     if (command.email !== user.email) {
       await this.tandemHistoryRepository.update(user.id, command.email);
@@ -200,6 +207,15 @@ export class UpdateUserUsecase {
       this.logger.error(
         `Error sending email to user ${user.id} after ban: ${error}`,
       );
+    }
+  }
+
+  private async handleConversation(user: User, newContactId: string) {
+    if (newContactId !== user.contactId) {
+      await this.chatService.createConversation([newContactId, user.id]);
+      if (user.contactId) {
+        await this.chatService.deleteConversationByContactId(user.contactId);
+      }
     }
   }
 }

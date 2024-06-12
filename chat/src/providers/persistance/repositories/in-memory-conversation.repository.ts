@@ -2,6 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { Collection } from '@app/common';
 import { ConversationRepository } from 'src/core/ports/conversation.repository';
 import { Conversation } from 'src/core/models/conversation.model';
+import { v4 as uuidv4 } from 'uuid';
 
 @Injectable()
 export class InMemoryConversationRepository implements ConversationRepository {
@@ -89,6 +90,29 @@ export class InMemoryConversationRepository implements ConversationRepository {
             this.#conversations.splice(index, 1);
         }
 
+        return Promise.resolve();
+    }
+
+    deleteAll(): Promise<void> {
+        this.#conversations = [];
+        return Promise.resolve();
+    }
+
+    deleteUserFromConversations(userId: string): Promise<void> {
+        this.#conversations = this.#conversations.filter(
+            (conversation) => !conversation.usersIds.includes(userId),
+        );
+        return Promise.resolve();
+    }
+
+    createConversations(participants: string[][]): Promise<void> {
+        this.#conversations = participants.map((participantIds) => ({
+            id: uuidv4(),
+            usersIds: participantIds,
+            metadata: {},
+            createdAt: new Date(),
+            lastActivity: new Date(),
+        }));
         return Promise.resolve();
     }
 }

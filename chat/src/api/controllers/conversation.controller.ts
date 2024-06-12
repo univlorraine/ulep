@@ -17,19 +17,21 @@ import {
     GetMessagesQueryParams,
 } from 'src/api/dtos/conversation';
 import { ConversationResponse } from 'src/api/dtos/conversation/conversation.response';
+import { CreateConversationsRequest } from 'src/api/dtos/conversation/create-conversations.request';
 import { MessageResponse, SendMessageRequest } from 'src/api/dtos/message';
 import { CollectionResponse } from 'src/api/dtos/pagination';
 import { AuthenticationGuard } from 'src/api/guards';
 import { Message } from 'src/core/models';
 import { MediaObject } from 'src/core/models/media.model';
 import {
+    CreateConversationUsecase,
     CreateMessageUsecase,
+    CreateMultipleConversationsUsecase,
+    DeleteConversationUsecase,
+    GetConversationFromUserIdUsecase,
     GetMessagesFromConversationIdUsecase,
     UploadMediaUsecase,
 } from 'src/core/usecases';
-import { CreateConversationUsecase } from 'src/core/usecases/conversation/create-conversation.usecase';
-import { DeleteConversationUsecase } from 'src/core/usecases/conversation/delete-conversation.usecase';
-import { GetConversationFromUserIdUsecase } from 'src/core/usecases/conversation/get-conversation-from-user-id.usecase';
 
 //TODO: Allow route only for rest api
 @Controller('conversations')
@@ -37,6 +39,7 @@ import { GetConversationFromUserIdUsecase } from 'src/core/usecases/conversation
 export class ConversationController {
     constructor(
         private createMessageUsecase: CreateMessageUsecase,
+        private createMultipleConversationsUsecase: CreateMultipleConversationsUsecase,
         private createConversationUsecase: CreateConversationUsecase,
         private deleteConversationUsecase: DeleteConversationUsecase,
         private getMessagesFromConversationIdUsecase: GetMessagesFromConversationIdUsecase,
@@ -94,9 +97,35 @@ export class ConversationController {
         return ConversationResponse.from(conversation);
     }
 
+    @Post('/multi')
+    @Swagger.ApiOperation({ summary: 'Create some conversations' })
+    async createConversations(
+        @Body() body: CreateConversationsRequest,
+    ): Promise<void> {
+        await this.createMultipleConversationsUsecase.execute({
+            participants: body.participants,
+        });
+    }
+
     @Delete('/:id')
     @Swagger.ApiOperation({ summary: 'Delete a conversation' })
     async deleteConversation(
+        @Param('id') conversationId: string,
+    ): Promise<void> {
+        await this.deleteConversationUsecase.execute({ id: conversationId });
+    }
+
+    @Delete('contact/:id')
+    @Swagger.ApiOperation({ summary: 'Delete a conversation' })
+    async deleteContactConversation(
+        @Param('id') conversationId: string,
+    ): Promise<void> {
+        await this.deleteConversationUsecase.execute({ id: conversationId });
+    }
+
+    @Delete('users/:id')
+    @Swagger.ApiOperation({ summary: 'Delete a conversation' })
+    async deleteUserConversation(
         @Param('id') conversationId: string,
     ): Promise<void> {
         await this.deleteConversationUsecase.execute({ id: conversationId });

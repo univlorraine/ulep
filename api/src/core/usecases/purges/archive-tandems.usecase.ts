@@ -32,6 +32,8 @@ import {
   LEARNING_LANGUAGE_REPOSITORY,
   LearningLanguageRepository,
 } from 'src/core/ports/learning-language.repository';
+import { CHAT_SERVICE } from 'src/core/ports/chat.service';
+import { ChatService } from 'src/providers/services/chat.service';
 
 export class UserTandemPurgeCommand {
   userId: string;
@@ -55,6 +57,8 @@ export class ArchiveTandemsAndDeleteUsersUsecase {
     private readonly userRepository: UserRepository,
     @Inject(REPORT_REPOSITORY)
     private readonly reportRepository: ReportRepository,
+    @Inject(CHAT_SERVICE)
+    private readonly chatService: ChatService,
     // TOOD: create interface for KeycloakClient ?
     private readonly keycloak: KeycloakClient,
     @Inject(UUID_PROVIDER)
@@ -80,6 +84,8 @@ export class ArchiveTandemsAndDeleteUsersUsecase {
     ]);
     // Delete closed reports
     await this.deleteClosedReports();
+    // Delete everything in chat api
+    await this.chatService.deleteAllConversations();
 
     return purge;
   }

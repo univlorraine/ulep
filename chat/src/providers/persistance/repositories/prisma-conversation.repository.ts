@@ -50,8 +50,26 @@ export class PrismaConversationRepository implements ConversationRepository {
         return conversationMapper(conversation);
     }
 
+    async createConversations(participants: string[][]): Promise<void> {
+        await this.prisma.conversation.createMany({
+            data: participants.map((participantIds) => ({
+                participantIds,
+            })),
+        });
+    }
+
     async delete(id: string): Promise<void> {
         await this.prisma.conversation.delete({ where: { id } });
+    }
+
+    async deleteUserFromConversations(userId: string): Promise<void> {
+        await this.prisma.conversation.deleteMany({
+            where: { participantIds: { has: userId } },
+        });
+    }
+
+    async deleteAll(): Promise<void> {
+        await this.prisma.conversation.deleteMany();
     }
 
     async update(
