@@ -35,13 +35,13 @@ export class PrismaConversationRepository implements ConversationRepository {
 
     async create(
         id: string,
-        userIds: string[],
+        usersIds: string[],
         metadata: any,
     ): Promise<Conversation> {
         const conversation = await this.prisma.conversation.create({
             data: {
                 id,
-                participantIds: userIds,
+                participantIds: usersIds,
                 metadata: metadata,
             },
             ...ConversationRelations,
@@ -56,12 +56,12 @@ export class PrismaConversationRepository implements ConversationRepository {
 
     async update(
         id: string,
-        userIds: string[],
+        usersIds: string[],
         metadata: any,
     ): Promise<Conversation> {
         const conversation = await this.prisma.conversation.update({
             where: { id },
-            data: { participantIds: userIds, metadata },
+            data: { participantIds: usersIds, metadata },
             ...ConversationRelations,
         });
 

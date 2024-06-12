@@ -64,13 +64,13 @@ export class CreateMessageUsecase {
 
     private categorizeFileType(mimeType?: string): MessageType {
         if (!mimeType) {
-            return 'text';
+            return MessageType.Text;
         } else if (mimeType.startsWith('audio/')) {
-            return 'audio';
+            return MessageType.Audio;
         } else if (mimeType.startsWith('image/')) {
-            return 'image';
+            return MessageType.Image;
         } else {
-            return 'file';
+            return MessageType.File;
         }
     }
 }

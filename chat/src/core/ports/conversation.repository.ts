@@ -5,7 +5,7 @@ export const CONVERSATION_REPOSITORY = 'conversation.repository';
 export interface ConversationRepository {
     create: (
         id: string,
-        userIds: string[],
+        usersIds: string[],
         metadata: any,
     ) => Promise<Conversation>;
     delete: (conversationId: string) => Promise<void>;
@@ -13,7 +13,7 @@ export interface ConversationRepository {
     findByUserId: (userId: string) => Promise<Conversation[]>;
     update: (
         conversationId: string,
-        userIds: string[],
+        usersIds: string[],
         metadata: any,
     ) => Promise<Conversation>;
 }

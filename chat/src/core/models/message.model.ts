@@ -1,6 +1,11 @@
 import { Owner } from 'src/core/models/owner.model';
 
-export type MessageType = 'text' | 'image' | 'audio' | 'file';
+export enum MessageType {
+    Text = 'text',
+    Image = 'image',
+    Audio = 'audio',
+    File = 'file',
+}
 
 interface MessageProps {
     id: string;
