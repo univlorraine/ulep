@@ -6,11 +6,11 @@ export const MEDIA_READ = 'media:read';
 
 export class MediaObjectResponse {
   @Swagger.ApiProperty({ type: 'string', format: 'uuid' })
-  @Expose({ groups: ['read'] })
+  @Expose({ groups: ['read', 'chat'] })
   id: string;
 
   @Swagger.ApiProperty({ type: 'string' })
-  @Expose({ groups: ['read'] })
+  @Expose({ groups: ['read', 'chat'] })
   mimeType: string;
 
   @Swagger.ApiPropertyOptional({ type: 'string', format: 'url' })

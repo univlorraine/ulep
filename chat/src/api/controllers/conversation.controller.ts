@@ -54,12 +54,12 @@ export class ConversationController {
     @Get('messages/:id')
     @Swagger.ApiOperation({ summary: 'Get all messages from conversation id' })
     async getConversations(
-        @Param('id') userId: string,
+        @Param('id') conversationId: string,
         @Query() params: GetMessagesQueryParams,
     ): Promise<CollectionResponse<MessageResponse>> {
         const messages =
             await this.getMessagesFromConversationIdUsecase.execute({
-                id: userId,
+                id: conversationId,
                 pagination: { offset: params.offset, limit: params.limit },
                 filter: params.messageFilter,
             });

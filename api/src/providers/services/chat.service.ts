@@ -50,6 +50,49 @@ export class ChatService implements ChatServicePort {
     }
   }
 
+  async getAllConversationsFromUserId(
+    userId: string,
+    limit: number,
+    offset: number,
+  ): Promise<any> {
+    try {
+      const response = await axios.get(
+        `${this.env.get(
+          'CHAT_URL',
+        )}/conversations/${userId}?limit=${limit}&offset=${offset}`,
+        { headers: this.headers },
+      );
+
+      return response.data;
+    } catch (error) {
+      this.logger.error('Error while getting all conversations', { error });
+    }
+  }
+
+  async getMessagesFromConversationId(
+    conversationId: string,
+    limit: number,
+    offset: number,
+    messageFilter?: string,
+  ): Promise<any> {
+    try {
+      const response = await axios.get(
+        `${this.env.get(
+          'CHAT_URL',
+        )}/conversations/messages/${conversationId}?limit=${limit}&offset=${offset}${
+          messageFilter ? `&messageFilter=${messageFilter}` : ''
+        }`,
+        { headers: this.headers },
+      );
+
+      return response.data;
+    } catch (error) {
+      this.logger.error('Error while getting messages from conversation', {
+        error,
+      });
+    }
+  }
+
   async deleteConversation(tandemId: string): Promise<any> {
     try {
       const response = await axios.delete(
