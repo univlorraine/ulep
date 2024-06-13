@@ -4,7 +4,7 @@ import {
   KeycloakUser,
   UserRepresentation,
 } from '@app/keycloak';
-import { AdminGroup, AdminRole } from 'src/core/models';
+import { AdminRole } from 'src/core/models';
 import {
   MEDIA_OBJECT_REPOSITORY,
   MediaObjectRepository,
@@ -65,7 +65,7 @@ export class GetAdministratorsUsecase {
   ) {
     return administrators.filter(
       (administrator) =>
-        administrator.attributes?.universityId[0] === universityId,
+        administrator.attributes?.universityId?.[0] === universityId,
     );
   }
 }
