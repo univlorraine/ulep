@@ -88,6 +88,7 @@ export const profileMapper = (instance: ProfileSnapshot): Profile => {
           learningType: LearningType[learningLanguage.learning_type],
           sameAge: learningLanguage.same_age,
           sameGender: learningLanguage.same_gender,
+          hasPriority: learningLanguage.has_priority,
           campus:
             learningLanguage.Campus && campusMapper(learningLanguage.Campus),
           certificateOption: learningLanguage.certificate_option,

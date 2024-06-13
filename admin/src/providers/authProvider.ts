@@ -159,9 +159,6 @@ const authProvider: AuthProvider = {
             return Promise.reject(new Error('Fail to decode token'));
         }
 
-        let { universityId } = decoded;
-        let isCentralUniversity = false;
-
         const universitiesRes = await fetch(`${process.env.REACT_APP_API_URL}/universities`, {
             headers: {
                 Authorization: `Bearer ${accessToken}`,
@@ -172,8 +169,7 @@ const authProvider: AuthProvider = {
         if (!centralUniversity) {
             return Promise.reject(new Error('No central university defined'));
         }
-        universityId = centralUniversity.id;
-        isCentralUniversity = true;
+        const isCentralUniversity = decoded.universityId === centralUniversity.id;
 
         return Promise.resolve({
             id: decoded.sub,
@@ -182,7 +178,7 @@ const authProvider: AuthProvider = {
             lastName: decoded.family_name,
             fullName: '',
             email: decoded.email,
-            universityId,
+            universityId: decoded.universityId,
             isCentralUniversity,
         });
     },
