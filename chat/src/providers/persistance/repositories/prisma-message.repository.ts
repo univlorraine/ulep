@@ -69,8 +69,20 @@ export class PrismaMessageRepository implements MessageRepository {
             messagesPagination['take'] = pagination.limit;
         }
 
-        if (pagination.offset !== undefined) {
-            messagesPagination['skip'] = pagination.offset;
+        if (pagination.lastMessageId) {
+            const lastMessage = await this.prisma.message.findFirst({
+                where: {
+                    id: pagination.lastMessageId,
+                },
+            });
+
+            if (lastMessage) {
+                where['createdAt'] = {
+                    gt: lastMessage.createdAt,
+                };
+            } else {
+                return [];
+            }
         }
 
         if (filter) {

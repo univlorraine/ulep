@@ -52,7 +52,6 @@ export class ChatController {
     });
   }
 
-  //TODO: Handle last message ID
   @Get('messages/:id')
   @SerializeOptions({ groups: ['chat'] })
   @Swagger.ApiOperation({ summary: 'Get messages from a conversation.' })
@@ -65,7 +64,7 @@ export class ChatController {
     const messages = await this.getMessagesFromConversationUsecase.execute({
       conversationId: id,
       limit: params.limit,
-      offset: params.page,
+      lastMessageId: params.lastMessageId,
       messageFilter: params.messageFilter,
     });
 

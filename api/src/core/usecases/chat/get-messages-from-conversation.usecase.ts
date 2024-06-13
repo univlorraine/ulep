@@ -12,7 +12,7 @@ import {
 export class GetMessagesFromConversationCommand {
   conversationId: string;
   limit: number;
-  offset: number;
+  lastMessageId?: string;
   messageFilter?: string;
 }
 
@@ -30,7 +30,7 @@ export class GetMessagesFromConversationUsecase {
       await this.chatService.getMessagesFromConversationId(
         command.conversationId,
         command.limit,
-        command.offset,
+        command.lastMessageId,
         command.messageFilter,
       );
 

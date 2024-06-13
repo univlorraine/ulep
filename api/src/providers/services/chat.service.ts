@@ -72,16 +72,16 @@ export class ChatService implements ChatServicePort {
   async getMessagesFromConversationId(
     conversationId: string,
     limit: number,
-    offset: number,
+    lastMessageId?: string,
     messageFilter?: string,
   ): Promise<any> {
     try {
       const response = await axios.get(
         `${this.env.get(
           'CHAT_URL',
-        )}/conversations/messages/${conversationId}?limit=${limit}&offset=${offset}${
-          messageFilter ? `&messageFilter=${messageFilter}` : ''
-        }`,
+        )}/conversations/messages/${conversationId}?limit=${limit}${
+          lastMessageId ? `&lastMessageId=${lastMessageId}` : ''
+        }${messageFilter ? `&messageFilter=${messageFilter}` : ''}`,
         { headers: this.headers },
       );
 

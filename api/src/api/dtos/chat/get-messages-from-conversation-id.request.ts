@@ -5,4 +5,8 @@ export class GetMessagesQueryParams extends PaginationDto {
   @IsString()
   @IsOptional()
   messageFilter: string;
+
+  @IsString()
+  @IsOptional()
+  lastMessageId: string;
 }

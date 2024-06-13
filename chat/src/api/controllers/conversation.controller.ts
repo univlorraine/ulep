@@ -60,7 +60,10 @@ export class ConversationController {
         const messages =
             await this.getMessagesFromConversationIdUsecase.execute({
                 id: conversationId,
-                pagination: { offset: params.offset, limit: params.limit },
+                pagination: {
+                    lastMessageId: params.lastMessageId,
+                    limit: params.limit,
+                },
                 filter: params.messageFilter,
             });
 

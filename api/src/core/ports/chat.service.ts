@@ -47,7 +47,7 @@ export interface ChatServicePort {
   getMessagesFromConversationId(
     conversationId: string,
     limit: number,
-    offset: number,
+    lastMessageId?: string,
     messageFilter?: string,
   ): Promise<Collection<Message>>;
   createConversation(
