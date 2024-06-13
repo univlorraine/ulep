@@ -4,7 +4,7 @@ import { IsNotEmpty, IsOptional, IsString } from 'class-validator';
 export class CreateConversationRequest {
     @Swagger.ApiProperty({ type: 'string' })
     @IsString()
-    @IsNotEmpty()
+    @IsOptional()
     tandemId: string;
 
     @Swagger.ApiProperty({ type: 'string', isArray: true })

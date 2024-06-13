@@ -27,7 +27,9 @@ import {
     CreateConversationUsecase,
     CreateMessageUsecase,
     CreateMultipleConversationsUsecase,
+    DeleteContactConversationUsecase,
     DeleteConversationUsecase,
+    DeleteUserConversationUsecase,
     GetConversationFromUserIdUsecase,
     GetMessagesFromConversationIdUsecase,
     UploadMediaUsecase,
@@ -42,6 +44,8 @@ export class ConversationController {
         private createMultipleConversationsUsecase: CreateMultipleConversationsUsecase,
         private createConversationUsecase: CreateConversationUsecase,
         private deleteConversationUsecase: DeleteConversationUsecase,
+        private deleteContactConversationUsecase: DeleteContactConversationUsecase,
+        private deleteUserConversationUsecase: DeleteUserConversationUsecase,
         private getMessagesFromConversationIdUsecase: GetMessagesFromConversationIdUsecase,
         private getConversationFromUserIdUsecase: GetConversationFromUserIdUsecase,
         private uploadMediaUsecase: UploadMediaUsecase,
@@ -120,15 +124,19 @@ export class ConversationController {
     async deleteContactConversation(
         @Param('id') conversationId: string,
     ): Promise<void> {
-        await this.deleteConversationUsecase.execute({ id: conversationId });
+        await this.deleteContactConversationUsecase.execute({
+            id: conversationId,
+        });
     }
 
-    @Delete('users/:id')
+    @Delete('user/:id')
     @Swagger.ApiOperation({ summary: 'Delete a conversation' })
     async deleteUserConversation(
         @Param('id') conversationId: string,
     ): Promise<void> {
-        await this.deleteConversationUsecase.execute({ id: conversationId });
+        await this.deleteUserConversationUsecase.execute({
+            id: conversationId,
+        });
     }
 
     @Post('/:id/message')

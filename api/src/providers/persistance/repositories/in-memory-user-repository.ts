@@ -1,7 +1,11 @@
 import { Collection } from '@app/common';
 import { Device } from 'src/core/models';
 import { User, UserStatus } from 'src/core/models/user.model';
-import { UserRepository, WhereProps } from 'src/core/ports/user.repository';
+import {
+  UpdateUserResponse,
+  UserRepository,
+  WhereProps,
+} from 'src/core/ports/user.repository';
 
 export class InMemoryUserRepository implements UserRepository {
   #users: User[] = [];
@@ -53,14 +57,14 @@ export class InMemoryUserRepository implements UserRepository {
     return users;
   }
 
-  async update(user: User): Promise<User> {
+  async update(user: User): Promise<UpdateUserResponse> {
     const index = this.#users.findIndex((it) => it.id === user.id);
 
     if (index !== -1) {
       this.#users[index] = user;
     }
 
-    return this.#users[index];
+    return { user: this.#users[index], newContactId: null };
   }
 
   async delete(id: string): Promise<void> {

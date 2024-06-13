@@ -30,8 +30,7 @@ export class ChatService implements ChatServicePort {
 
       return response.data;
     } catch (error) {
-      this.logger.error('Error while creating conversation', error);
-      throw new Error('HTTP request failed');
+      this.logger.error('Error while creating conversation', { error });
     }
   }
 
@@ -47,8 +46,7 @@ export class ChatService implements ChatServicePort {
 
       return response.data;
     } catch (error) {
-      this.logger.error('Error while creating conversation', error);
-      throw new Error('HTTP request failed');
+      this.logger.error('Error while creating conversation', { error });
     }
   }
 
@@ -61,8 +59,7 @@ export class ChatService implements ChatServicePort {
 
       return response.data;
     } catch (error) {
-      this.logger.error('Error while deleting conversation', error);
-      throw new Error('HTTP request failed');
+      this.logger.error('Error while deleting conversation', { error });
     }
   }
 
@@ -75,8 +72,7 @@ export class ChatService implements ChatServicePort {
 
       return response.data;
     } catch (error) {
-      this.logger.error('Error while deleting conversation', error);
-      throw new Error('HTTP request failed');
+      this.logger.error('Error while deleting conversation', { error });
     }
   }
 
@@ -89,8 +85,7 @@ export class ChatService implements ChatServicePort {
 
       return response.data;
     } catch (error) {
-      this.logger.error('Error while deleting conversation', error);
-      throw new Error('HTTP request failed');
+      this.logger.error('Error while deleting conversation', { error });
     }
   }
 
@@ -103,8 +98,7 @@ export class ChatService implements ChatServicePort {
 
       return response.data;
     } catch (error) {
-      this.logger.error('Error while deleting conversation', error);
-      throw new Error('HTTP request failed');
+      this.logger.error('Error while deleting conversation', { error });
     }
   }
 }

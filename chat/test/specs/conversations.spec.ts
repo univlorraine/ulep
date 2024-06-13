@@ -183,13 +183,13 @@ describe('Conversations', () => {
 
     test('Delete user from conversations', async () => {
         await request(app.getHttpServer())
-            .delete(`/conversations/${OWNER1_ID}`)
+            .delete(`/conversations/user/${OWNER1_ID}`)
             .expect(200);
     });
 
     test('Delete contact from conversations', async () => {
         await request(app.getHttpServer())
-            .delete(`/conversations/${OWNER1_ID}`)
+            .delete(`/conversations/contact/${OWNER1_ID}`)
             .expect(200);
     });
 
