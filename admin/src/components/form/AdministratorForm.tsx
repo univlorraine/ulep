@@ -1,7 +1,7 @@
 import { Box, Input, Typography } from '@mui/material';
 import React, { useState } from 'react';
 import { Button, Loading, useGetIdentity, useNotify, usePermissions, useTranslate } from 'react-admin';
-import { AdministratorFormPayload, KeycloakGroup, Role } from '../../entities/Administrator';
+import { AdministratorFormPayload, KeycloakGroup, AdminGroup, Role } from '../../entities/Administrator';
 import University from '../../entities/University';
 import inputStyle from '../../theme/inputStyle';
 import isPasswordValid from '../../utils/isPasswordValid';
@@ -49,11 +49,11 @@ const AdministratorForm: React.FC<AdministratorFormProps> = ({
     }
 
     const getUniversityId = (): string | undefined => {
-        if (!permissions.checkRole(Role.SUPER_ADMIN)) {
-            return identity.universityId;
+        if (university) {
+            return university?.id;
         }
 
-        return university?.id;
+        return identity.universityId;
     };
 
     const onCreatePressed = () => {
@@ -93,17 +93,22 @@ const AdministratorForm: React.FC<AdministratorFormProps> = ({
 
             {!isProfileEdit && (
                 <>
-                    {permissions.checkRole(Role.SUPER_ADMIN) && (
-                        <>
-                            <Typography variant="subtitle1">
-                                {translate(`administrators.${type}.university`)}
-                            </Typography>
-                            <UniversityPicker initialValue={universityId} onChange={setUniversity} value={university} />
-                        </>
-                    )}
-
                     <Typography variant="subtitle1">{translate('admin_groups_picker.placeholder')}</Typography>
                     <AdminGroupPicker onChange={setNewGroup} value={newGroup} />
+
+                    {newGroup?.name === AdminGroup.SUPER_ADMIN ||
+                        (permissions.checkRole(Role.SUPER_ADMIN) && (
+                            <>
+                                <Typography variant="subtitle1">
+                                    {translate(`administrators.${type}.university`)}
+                                </Typography>
+                                <UniversityPicker
+                                    initialValue={universityId}
+                                    onChange={setUniversity}
+                                    value={university}
+                                />
+                            </>
+                        ))}
                 </>
             )}
 
