@@ -152,8 +152,6 @@ export class ConversationController {
             content: body.content,
             conversationId,
             ownerId: body.senderId,
-            ownerName: body.senderName,
-            ownerImage: body.senderImage,
             mimetype: file?.mimetype,
         });
 

@@ -1,7 +1,6 @@
 import { NotFoundException } from '@nestjs/common';
 import { Conversation, Message, MessageType } from 'src/core/models';
-import { Owner } from 'src/core/models/owner.model';
-import { CreateMessageUsecase, UploadMediaUsecase } from 'src/core/usecases';
+import { UploadMediaUsecase } from 'src/core/usecases';
 import { InMemoryConversationRepository } from 'src/providers/persistance/repositories/in-memory-conversation.repository';
 import { InMemoryMediaObjectRepository } from 'src/providers/persistance/repositories/in-memory-media-object.repository';
 import { InMemoryMessageRepository } from 'src/providers/persistance/repositories/in-memory-message.repository';
@@ -31,17 +30,12 @@ const conversation = new Conversation({
     lastActivity: new Date(),
     metadata: {},
 });
-const owner1 = new Owner({
-    id: USER_ID1,
-    name: 'ownerName1',
-    image: 'ownerImage1',
-});
 
 const message = new Message({
     id: 'messageId',
     conversationId: tandemId,
     createdAt: new Date(),
-    owner: owner1,
+    ownerId: USER_ID1,
     type: MessageType.Image,
     content: '',
     isReported: false,

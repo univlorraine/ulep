@@ -1,6 +1,5 @@
 import { Inject, NotFoundException } from '@nestjs/common';
-import { Message, MessageType } from 'src/core/models';
-import { Owner } from 'src/core/models/owner.model';
+import { Message } from 'src/core/models';
 import {
     CONVERSATION_REPOSITORY,
     ConversationRepository,
@@ -20,8 +19,6 @@ interface CreateMessageCommand {
     content: string;
     conversationId: string;
     ownerId: string;
-    ownerName: string;
-    ownerImage: string;
     mimetype?: string;
 }
 
@@ -53,11 +50,7 @@ export class CreateMessageUsecase {
         const message = new Message({
             id: this.uuidProvider.generate(),
             content: command.content,
-            owner: new Owner({
-                id: command.ownerId,
-                name: command.ownerName,
-                image: command.ownerImage,
-            }),
+            ownerId: command.ownerId,
             conversationId: command.conversationId,
             type: Message.categorizeFileType(command.mimetype),
             isReported: false,
@@ -66,8 +59,8 @@ export class CreateMessageUsecase {
         const createdMessage = await this.messageRepository.create(message);
 
         this.notificationService.sendNotification(
-            message.owner.id,
-            conversation.usersIds.filter((id) => id !== message.owner.id),
+            message.ownerId,
+            conversation.usersIds.filter((id) => id !== message.ownerId),
             message.content,
         );
 

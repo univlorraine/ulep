@@ -1,13 +1,10 @@
 import { Conversation, Message, MessageType } from 'src/core/models';
-import { Owner } from 'src/core/models/owner.model';
 import { GetMessagesFromConversationIdUsecase } from 'src/core/usecases';
 import { InMemoryConversationRepository } from 'src/providers/persistance/repositories/in-memory-conversation.repository';
 import { InMemoryMessageRepository } from 'src/providers/persistance/repositories/in-memory-message.repository';
 
 const USER_ID1 = 'user1';
 const USER_ID2 = 'user2';
-const owner1 = new Owner({ id: USER_ID1, name: 'name1', image: 'image1' });
-const owner2 = new Owner({ id: USER_ID2, name: 'name2', image: 'image2' });
 const tandemId1 = 'tandemId1';
 const tandemId2 = 'tandemId2';
 const conversation1 = new Conversation({
@@ -29,7 +26,7 @@ const conversation2 = new Conversation({
 const message1 = new Message({
     id: 'message1',
     conversationId: tandemId1,
-    owner: owner1,
+    ownerId: USER_ID1,
     content: 'Hello',
     createdAt: new Date(),
     isReported: false,
@@ -39,7 +36,7 @@ const message1 = new Message({
 const message2 = new Message({
     id: 'message2',
     conversationId: tandemId1,
-    owner: owner2,
+    ownerId: USER_ID2,
     content: 'Hello you',
     createdAt: new Date(),
     isReported: false,
@@ -49,7 +46,7 @@ const message2 = new Message({
 const message3 = new Message({
     id: 'message3',
     conversationId: tandemId2,
-    owner: owner2,
+    ownerId: USER_ID1,
     content: 'Hello',
     createdAt: new Date(),
     isReported: false,

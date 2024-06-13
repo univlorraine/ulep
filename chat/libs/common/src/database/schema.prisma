@@ -32,20 +32,9 @@ model Message {
   mediaObjectId         String?
 
   Conversation          Conversation @relation(fields: [conversationId], references: [id], onDelete: Cascade)
-  Owner                 Owner        @relation(fields: [ownerId], references: [id], onDelete: Cascade)
   MediaObject           MediaObject?
 
   @@map("messages")
-}
-
-model Owner {
-  id          String      @id @map("_id")
-  name        String
-  image       String
-
-  Messages    Message[]
-
-  @@map("owners")
 }
 
 model MediaObject {

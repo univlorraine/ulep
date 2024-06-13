@@ -11,7 +11,6 @@ import { InMemoryMediaObjectRepository } from 'src/providers/persistance/reposit
 import { MESSAGE_REPOSITORY } from 'src/core/ports/message.repository';
 import { InMemoryMessageRepository } from 'src/providers/persistance/repositories/in-memory-message.repository';
 import { Conversation, Message, MessageType } from 'src/core/models';
-import { Owner } from 'src/core/models/owner.model';
 import { MediaObject } from 'src/core/models/media.model';
 import { HubGateway } from '../mocks/hub.gateway';
 import { HUB_GATEWAY } from 'src/core/ports/hub.gateway';
@@ -46,23 +45,11 @@ describe('Conversations', () => {
         metadata: {},
     });
 
-    const owner1 = new Owner({
-        id: OWNER1_ID,
-        name: 'John Doe',
-        image: 'path/to/image.jpg',
-    });
-
-    const owner2 = new Owner({
-        id: OWNER2_ID,
-        name: 'Jane Doe',
-        image: 'path/to/image.jpg',
-    });
-
     const message1 = new Message({
         id: 'message-123',
         conversationId: CONVERSATION1_ID,
         content: 'Hello World',
-        owner: owner1,
+        ownerId: OWNER1_ID,
         isReported: false,
         type: MessageType.Text,
     });
@@ -71,7 +58,7 @@ describe('Conversations', () => {
         id: 'message-456',
         conversationId: CONVERSATION1_ID,
         content: 'Hello World',
-        owner: owner2,
+        ownerId: OWNER2_ID,
         isReported: false,
         type: MessageType.Text,
     });
@@ -89,7 +76,7 @@ describe('Conversations', () => {
         id: 'message-image',
         conversationId: CONVERSATION1_ID,
         content: MEDIA_OBJECT1_ID,
-        owner: owner2,
+        ownerId: OWNER2_ID,
         isReported: false,
         type: MessageType.Text,
     });
@@ -196,9 +183,7 @@ describe('Conversations', () => {
     test('Send a message in a conversation', async () => {
         const messageData = {
             content: 'Hello World',
-            senderId: owner1.id,
-            senderName: owner1.name,
-            senderImage: owner1.image,
+            senderId: OWNER1_ID,
         };
 
         const { body } = await request(app.getHttpServer())
@@ -208,15 +193,13 @@ describe('Conversations', () => {
 
         expect(body.content).toEqual('Hello World');
         expect(body.type).toEqual('text');
-        expect(body.owner.id).toEqual(owner1.id);
+        expect(body.ownerId).toEqual(OWNER1_ID);
     });
 
     test('Send a message in a conversation where the user doesnt exist', async () => {
         const messageData = {
             content: 'Hello World',
-            senderId: owner1.id,
-            senderName: owner1.name,
-            senderImage: owner1.image,
+            senderId: OWNER1_ID,
         };
 
         await request(app.getHttpServer())

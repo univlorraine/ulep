@@ -1,7 +1,5 @@
 import * as Swagger from '@nestjs/swagger';
 import { Expose } from 'class-transformer';
-import { IsNotEmpty, IsString } from 'class-validator';
-import { OwnerResponse } from 'src/api/dtos/owner/owner.response';
 import { MediaObject } from 'src/core/models/media.model';
 import { Message, MessageType } from 'src/core/models/message.model';
 
@@ -16,7 +14,7 @@ export class MessageResponse {
 
     @Swagger.ApiProperty({ type: 'string', format: 'uuid' })
     @Expose({ groups: ['read'] })
-    owner: OwnerResponse;
+    ownerId: string;
 
     @Swagger.ApiProperty({ type: 'string', format: 'date-time' })
     @Expose({ groups: ['read'] })
@@ -35,7 +33,7 @@ export class MessageResponse {
             id: message.id,
             createdAt: message.createdAt,
             content: media ? media.id : message.content,
-            owner: OwnerResponse.from(message.owner),
+            ownerId: message.ownerId,
             type: message.type,
         });
     }

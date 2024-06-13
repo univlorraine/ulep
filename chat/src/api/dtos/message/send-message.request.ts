@@ -6,10 +6,4 @@ export class SendMessageRequest {
 
     @IsString()
     senderId: string;
-
-    @IsString()
-    senderName: string;
-
-    @IsString()
-    senderImage: string;
 }

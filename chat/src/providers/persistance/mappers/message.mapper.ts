@@ -1,10 +1,8 @@
 import { Prisma } from '@prisma/client';
 import { Message } from 'src/core/models';
 import { MessageType } from 'src/core/models/message.model';
-import { ownerMapper } from 'src/providers/persistance/mappers';
 
 const MessagesInclude = Prisma.validator<Prisma.MessageInclude>()({
-    Owner: true,
     Conversation: true,
     MediaObject: true,
 });
@@ -23,7 +21,7 @@ export const messageMapper = (snapshot: MessagesSnapshot): Message => {
         updatedAt: snapshot.updatedAt,
         conversationId: snapshot.conversationId,
         isReported: snapshot.isReported,
-        owner: ownerMapper(snapshot.Owner),
+        ownerId: snapshot.ownerId,
         type: snapshot.type as MessageType,
     });
 };
