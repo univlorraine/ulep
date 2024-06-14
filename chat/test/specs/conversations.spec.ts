@@ -51,6 +51,7 @@ describe('Conversations', () => {
         content: 'Hello World',
         ownerId: OWNER1_ID,
         isReported: false,
+        isDeleted: false,
         type: MessageType.Text,
     });
 
@@ -60,6 +61,7 @@ describe('Conversations', () => {
         content: 'Hello World',
         ownerId: OWNER2_ID,
         isReported: false,
+        isDeleted: false,
         type: MessageType.Text,
     });
 
@@ -78,6 +80,7 @@ describe('Conversations', () => {
         content: MEDIA_OBJECT1_ID,
         ownerId: OWNER2_ID,
         isReported: false,
+        isDeleted: false,
         type: MessageType.Text,
     });
 

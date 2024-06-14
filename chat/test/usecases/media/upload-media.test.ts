@@ -39,6 +39,7 @@ const message = new Message({
     type: MessageType.Image,
     content: '',
     isReported: false,
+    isDeleted: false,
 });
 
 jest.mock('../../mocks/minio.storage', () => {

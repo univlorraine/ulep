@@ -30,6 +30,7 @@ const message1 = new Message({
     content: 'Hello',
     createdAt: new Date(),
     isReported: false,
+    isDeleted: false,
     type: MessageType.Text,
 });
 
@@ -40,6 +41,7 @@ const message2 = new Message({
     content: 'Hello you',
     createdAt: new Date(),
     isReported: false,
+    isDeleted: false,
     type: MessageType.Text,
 });
 
@@ -50,6 +52,7 @@ const message3 = new Message({
     content: 'Hello',
     createdAt: new Date(),
     isReported: false,
+    isDeleted: false,
     type: MessageType.Text,
 });
 

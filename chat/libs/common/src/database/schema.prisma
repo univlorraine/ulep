@@ -26,6 +26,7 @@ model Message {
   conversationId        String
   content               String?
   isReported            Boolean      @default(false)
+  isDeleted             Boolean      @default(false)
   ownerId               String
   type                  String       @default("text")
   updatedAt             DateTime     @updatedAt

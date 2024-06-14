@@ -14,6 +14,7 @@ const message = new Message({
     content: 'content',
     createdAt: new Date(),
     isReported: false,
+    isDeleted: false,
 });
 
 describe('UpdateMessage', () => {

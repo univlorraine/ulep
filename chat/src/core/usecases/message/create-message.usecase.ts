@@ -54,6 +54,7 @@ export class CreateMessageUsecase {
             conversationId: command.conversationId,
             type: Message.categorizeFileType(command.mimetype),
             isReported: false,
+            isDeleted: false,
         });
 
         const createdMessage = await this.messageRepository.create(message);

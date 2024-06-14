@@ -17,6 +17,10 @@ export class ChatService implements ChatServicePort {
     tandemId?: string,
     metadata: any = {},
   ): Promise<any> {
+    if (!this.env.get('CHAT_URL')) {
+      return;
+    }
+
     try {
       const response = await axios.post(
         this.env.get('CHAT_URL') + '/conversations',
@@ -35,6 +39,10 @@ export class ChatService implements ChatServicePort {
   }
 
   async createConversations(participants: string[][]): Promise<any> {
+    if (!this.env.get('CHAT_URL')) {
+      return;
+    }
+
     try {
       const response = await axios.post(
         this.env.get('CHAT_URL') + '/conversations/multi',
@@ -55,6 +63,10 @@ export class ChatService implements ChatServicePort {
     limit: number,
     offset: number,
   ): Promise<any> {
+    if (!this.env.get('CHAT_URL')) {
+      return;
+    }
+
     try {
       const response = await axios.get(
         `${this.env.get(
@@ -75,6 +87,10 @@ export class ChatService implements ChatServicePort {
     lastMessageId?: string,
     messageFilter?: string,
   ): Promise<any> {
+    if (!this.env.get('CHAT_URL')) {
+      return;
+    }
+
     try {
       const response = await axios.get(
         `${this.env.get(
@@ -94,6 +110,10 @@ export class ChatService implements ChatServicePort {
   }
 
   async deleteConversation(tandemId: string): Promise<any> {
+    if (!this.env.get('CHAT_URL')) {
+      return;
+    }
+
     try {
       const response = await axios.delete(
         this.env.get('CHAT_URL') + '/conversations/' + tandemId,
@@ -107,6 +127,10 @@ export class ChatService implements ChatServicePort {
   }
 
   async deleteConversationByContactId(contactId: string): Promise<any> {
+    if (!this.env.get('CHAT_URL')) {
+      return;
+    }
+
     try {
       const response = await axios.delete(
         this.env.get('CHAT_URL') + '/conversations/contact/' + contactId,
@@ -120,6 +144,10 @@ export class ChatService implements ChatServicePort {
   }
 
   async deleteConversationByUserId(userId: string): Promise<any> {
+    if (!this.env.get('CHAT_URL')) {
+      return;
+    }
+
     try {
       const response = await axios.delete(
         this.env.get('CHAT_URL') + '/conversations/user/' + userId,
@@ -133,6 +161,10 @@ export class ChatService implements ChatServicePort {
   }
 
   async deleteAllConversations(): Promise<any> {
+    if (!this.env.get('CHAT_URL')) {
+      return;
+    }
+
     try {
       const response = await axios.delete(
         this.env.get('CHAT_URL') + '/purge/',
