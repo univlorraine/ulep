@@ -11,6 +11,10 @@
     background-color: white;
 }
 
+ion-header {
+    background-color: var(--primary-color);
+}
+
 ion-tab-button {
     max-width: none;
 }

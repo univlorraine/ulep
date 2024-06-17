@@ -1,10 +1,9 @@
-import { IonIcon, IonLabel, IonRouterOutlet, IonTabBar, IonTabButton, IonTabs } from '@ionic/react';
+import { IonRouterOutlet } from '@ionic/react';
 import React from 'react';
 import { Route, Switch } from 'react-router-dom';
 import ConnectPage from '../pages/ConnectPage';
 import ForgotPasswordPage from '../pages/ForgotPasswordPage';
 import ForgotPasswordSentPage from '../pages/ForgotPasswordSentPage';
-import HomePage from '../pages/HomePage';
 import LoginPage from '../pages/LoginPage';
 import PairingConfirmLanguagePage from '../pages/PairingConfirmLanguagePage';
 import PairingFinalPage from '../pages/PairingFinalPage';
@@ -50,6 +49,7 @@ import CEFRQuizzEndPage from '../pages/cefr-quizz/CEFRQuizzEndPage';
 import BottomBar from './BottomBar';
 import { useConfig } from '../../context/ConfigurationContext';
 import ConversationsPage from '../pages/ConversationsPage';
+import HomePage from '../pages/HomePage';
 
 const OfflineRouter: React.FC = () => {
     const { deviceAdapter } = useConfig();
