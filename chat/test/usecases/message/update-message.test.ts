@@ -1,25 +1,20 @@
 import { NotFoundException } from '@nestjs/common';
 import { Message, MessageType } from 'src/core/models';
-import { Owner } from 'src/core/models/owner.model';
 import { UpdateMessageUsecase } from 'src/core/usecases';
 import { InMemoryMessageRepository } from 'src/providers/persistance/repositories/in-memory-message.repository';
 
 const USER_ID1 = 'user1';
 const tandemId = 'tandemId';
-const owner1 = new Owner({
-    id: USER_ID1,
-    name: 'ownerName1',
-    image: 'ownerImage1',
-});
 
 const message = new Message({
     id: 'messageId',
     conversationId: tandemId,
-    owner: owner1,
+    ownerId: USER_ID1,
     type: MessageType.Text,
     content: 'content',
     createdAt: new Date(),
     isReported: false,
+    isDeleted: false,
 });
 
 describe('UpdateMessage', () => {

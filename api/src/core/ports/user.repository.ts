@@ -19,6 +19,8 @@ export interface UserRepository {
 
   ofId(id: string): Promise<User | null>;
 
+  ofIds(ids: string[]): Promise<User[]>;
+
   ofStatus(status: UserStatus): Promise<User[]>;
 
   update(user: User): Promise<UpdateUserResponse>;

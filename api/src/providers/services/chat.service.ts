@@ -17,6 +17,10 @@ export class ChatService implements ChatServicePort {
     tandemId?: string,
     metadata: any = {},
   ): Promise<any> {
+    if (!this.env.get('CHAT_URL')) {
+      return;
+    }
+
     try {
       const response = await axios.post(
         this.env.get('CHAT_URL') + '/conversations',
@@ -35,6 +39,10 @@ export class ChatService implements ChatServicePort {
   }
 
   async createConversations(participants: string[][]): Promise<any> {
+    if (!this.env.get('CHAT_URL')) {
+      return;
+    }
+
     try {
       const response = await axios.post(
         this.env.get('CHAT_URL') + '/conversations/multi',
@@ -50,7 +58,62 @@ export class ChatService implements ChatServicePort {
     }
   }
 
+  async getAllConversationsFromUserId(
+    userId: string,
+    limit: number,
+    offset: number,
+  ): Promise<any> {
+    if (!this.env.get('CHAT_URL')) {
+      return;
+    }
+
+    try {
+      const response = await axios.get(
+        `${this.env.get(
+          'CHAT_URL',
+        )}/conversations/${userId}?limit=${limit}&offset=${offset}`,
+        { headers: this.headers },
+      );
+
+      return response.data;
+    } catch (error) {
+      this.logger.error('Error while getting all conversations', { error });
+    }
+  }
+
+  async getMessagesFromConversationId(
+    conversationId: string,
+    limit: number,
+    lastMessageId?: string,
+    messageFilter?: string,
+  ): Promise<any> {
+    if (!this.env.get('CHAT_URL')) {
+      return;
+    }
+
+    try {
+      const response = await axios.get(
+        `${this.env.get(
+          'CHAT_URL',
+        )}/conversations/messages/${conversationId}?limit=${limit}${
+          lastMessageId ? `&lastMessageId=${lastMessageId}` : ''
+        }${messageFilter ? `&messageFilter=${messageFilter}` : ''}`,
+        { headers: this.headers },
+      );
+
+      return response.data;
+    } catch (error) {
+      this.logger.error('Error while getting messages from conversation', {
+        error,
+      });
+    }
+  }
+
   async deleteConversation(tandemId: string): Promise<any> {
+    if (!this.env.get('CHAT_URL')) {
+      return;
+    }
+
     try {
       const response = await axios.delete(
         this.env.get('CHAT_URL') + '/conversations/' + tandemId,
@@ -64,6 +127,10 @@ export class ChatService implements ChatServicePort {
   }
 
   async deleteConversationByContactId(contactId: string): Promise<any> {
+    if (!this.env.get('CHAT_URL')) {
+      return;
+    }
+
     try {
       const response = await axios.delete(
         this.env.get('CHAT_URL') + '/conversations/contact/' + contactId,
@@ -77,6 +144,10 @@ export class ChatService implements ChatServicePort {
   }
 
   async deleteConversationByUserId(userId: string): Promise<any> {
+    if (!this.env.get('CHAT_URL')) {
+      return;
+    }
+
     try {
       const response = await axios.delete(
         this.env.get('CHAT_URL') + '/conversations/user/' + userId,
@@ -90,6 +161,10 @@ export class ChatService implements ChatServicePort {
   }
 
   async deleteAllConversations(): Promise<any> {
+    if (!this.env.get('CHAT_URL')) {
+      return;
+    }
+
     try {
       const response = await axios.delete(
         this.env.get('CHAT_URL') + '/purge/',

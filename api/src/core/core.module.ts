@@ -110,6 +110,10 @@ import { DeleteLearningLanguageUsecase } from './usecases/learningLanguage/delet
 import { RevokeSessionsUsecase } from './usecases/user/revoke-sessions.usecase';
 import { GetKeycloakAdminGroupsUsecase } from './usecases/user/get-keycloak-admin-groups.usecase';
 import { SendMessageNotificationUsecase } from 'src/core/usecases/notifications';
+import {
+  GetAllConversationsFromUserIdUsecase,
+  GetMessagesFromConversationUsecase,
+} from 'src/core/usecases/chat';
 
 const usecases: Provider[] = [
   //Campus
@@ -233,6 +237,9 @@ const usecases: Provider[] = [
   ResetPasswordUsecase,
   // Notifications
   SendMessageNotificationUsecase,
+  // Chat
+  GetAllConversationsFromUserIdUsecase,
+  GetMessagesFromConversationUsecase,
 ];
 
 const services: Provider[] = [MatchScorer, CronService];

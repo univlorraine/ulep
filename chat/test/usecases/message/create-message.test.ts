@@ -1,6 +1,5 @@
 import { NotFoundException } from '@nestjs/common';
 import { Conversation, MessageType } from 'src/core/models';
-import { Owner } from 'src/core/models/owner.model';
 import { CreateMessageUsecase } from 'src/core/usecases';
 import { InMemoryConversationRepository } from 'src/providers/persistance/repositories/in-memory-conversation.repository';
 import { InMemoryMessageRepository } from 'src/providers/persistance/repositories/in-memory-message.repository';
@@ -17,16 +16,6 @@ const conversation = new Conversation({
     usersIds: [USER_ID1, USER_ID2],
     lastActivity: new Date(),
     metadata: {},
-});
-const owner1 = new Owner({
-    id: USER_ID1,
-    name: 'ownerName1',
-    image: 'ownerImage1',
-});
-const owner3 = new Owner({
-    id: USER_ID3,
-    name: 'ownerName3',
-    image: 'ownerImage3',
 });
 
 jest.mock('../../mocks/notification.service', () => {
@@ -61,8 +50,6 @@ describe('CreateMessage', () => {
             content: 'content',
             conversationId: tandemId,
             ownerId: USER_ID1,
-            ownerName: owner1.name,
-            ownerImage: owner1.image,
             mimetype: '',
         });
         expect(notificationService.sendNotification).toHaveBeenCalled();
@@ -75,8 +62,6 @@ describe('CreateMessage', () => {
             content: '',
             conversationId: tandemId,
             ownerId: USER_ID1,
-            ownerName: owner1.name,
-            ownerImage: owner1.image,
             mimetype: 'image/png',
         });
         expect(notificationService.sendNotification).toHaveBeenCalled();
@@ -89,8 +74,6 @@ describe('CreateMessage', () => {
             content: '',
             conversationId: tandemId,
             ownerId: USER_ID1,
-            ownerName: owner1.name,
-            ownerImage: owner1.image,
             mimetype: 'audio/mpeg',
         });
         expect(notificationService.sendNotification).toHaveBeenCalled();
@@ -103,8 +86,6 @@ describe('CreateMessage', () => {
             content: '',
             conversationId: tandemId,
             ownerId: USER_ID1,
-            ownerName: owner1.name,
-            ownerImage: owner1.image,
             mimetype: 'application/pdf',
         });
         expect(notificationService.sendNotification).toHaveBeenCalled();
@@ -118,8 +99,6 @@ describe('CreateMessage', () => {
                 content: '',
                 conversationId: 'wrongId',
                 ownerId: USER_ID1,
-                ownerName: owner1.name,
-                ownerImage: owner1.image,
                 mimetype: 'application/pdf',
             }),
         ).rejects.toThrow(new NotFoundException('Conversation not found'));
@@ -130,9 +109,7 @@ describe('CreateMessage', () => {
             createMessageUsecase.execute({
                 content: 'content',
                 conversationId: tandemId,
-                ownerId: owner3.id,
-                ownerName: owner3.name,
-                ownerImage: owner3.image,
+                ownerId: USER_ID3,
                 mimetype: '',
             }),
         ).rejects.toThrow(

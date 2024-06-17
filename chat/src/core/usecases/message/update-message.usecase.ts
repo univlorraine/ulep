@@ -6,8 +6,9 @@ import {
 
 interface CreateMessageCommand {
     messageId: string;
-    content: string;
-    isReported: boolean;
+    content?: string;
+    isReported?: boolean;
+    isDeleted?: boolean;
 }
 
 export class UpdateMessageUsecase {
@@ -27,6 +28,10 @@ export class UpdateMessageUsecase {
 
         const updatedMessage = await this.messageRepository.update({
             ...message,
+            isDeleted:
+                command.isDeleted !== undefined
+                    ? command.isDeleted
+                    : message.isDeleted,
             isReported:
                 command.isReported !== undefined
                     ? command.isReported

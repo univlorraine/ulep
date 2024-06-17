@@ -1,5 +1,3 @@
-import { Owner } from 'src/core/models/owner.model';
-
 export enum MessageType {
     Text = 'text',
     Image = 'image',
@@ -12,7 +10,8 @@ interface MessageProps {
     conversationId: string;
     content: string;
     isReported: boolean;
-    owner: Owner;
+    isDeleted: boolean;
+    ownerId: string;
     type: MessageType;
     createdAt?: Date;
     updatedAt?: Date;
@@ -23,7 +22,8 @@ export class Message {
     readonly content: string;
     readonly conversationId: string;
     readonly isReported: boolean;
-    readonly owner: Owner;
+    readonly isDeleted: boolean;
+    readonly ownerId: string;
     readonly type: MessageType;
     readonly createdAt?: Date;
     readonly updatedAt?: Date;
@@ -34,7 +34,8 @@ export class Message {
         this.conversationId = props.conversationId;
         this.createdAt = props.createdAt;
         this.isReported = props.isReported;
-        this.owner = props.owner;
+        this.isDeleted = props.isDeleted;
+        this.ownerId = props.ownerId;
         this.type = props.type;
         this.updatedAt = props.updatedAt;
     }

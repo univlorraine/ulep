@@ -15,35 +15,13 @@ export class PrismaMessageRepository implements MessageRepository {
     constructor(private readonly prisma: PrismaService) {}
 
     async create(message: Message): Promise<Message> {
-        let owner = await this.prisma.owner.findUnique({
-            where: { id: message.owner.id },
-        });
-
-        if (owner) {
-            owner = await this.prisma.owner.update({
-                where: { id: message.owner.id },
-                data: {
-                    name: message.owner.name,
-                    image: message.owner.image,
-                },
-            });
-        } else {
-            owner = await this.prisma.owner.create({
-                data: {
-                    id: message.owner.id,
-                    name: message.owner.name,
-                    image: message.owner.image,
-                },
-            });
-        }
-
         const messageSent = await this.prisma.message.create({
             data: {
                 content: message.content,
                 isReported: message.isReported,
                 type: message.type,
+                ownerId: message.ownerId,
                 Conversation: { connect: { id: message.conversationId } },
-                Owner: { connect: { id: message.owner.id } },
             },
             ...MessagesRelations,
         });
@@ -91,8 +69,20 @@ export class PrismaMessageRepository implements MessageRepository {
             messagesPagination['take'] = pagination.limit;
         }
 
-        if (pagination.offset !== undefined) {
-            messagesPagination['skip'] = pagination.offset;
+        if (pagination.lastMessageId) {
+            const lastMessage = await this.prisma.message.findFirst({
+                where: {
+                    id: pagination.lastMessageId,
+                },
+            });
+
+            if (lastMessage) {
+                where['createdAt'] = {
+                    gt: lastMessage.createdAt,
+                };
+            } else {
+                return [];
+            }
         }
 
         if (filter) {

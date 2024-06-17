@@ -309,19 +309,19 @@ export class AddDeviceRequest {
 
 export class UserResponse {
   @Swagger.ApiProperty({ type: 'string', format: 'uuid' })
-  @Expose({ groups: ['read'] })
+  @Expose({ groups: ['read', 'chat'] })
   id: string;
 
   @Swagger.ApiProperty({ type: 'string', format: 'email' })
-  @Expose({ groups: ['read'] })
+  @Expose({ groups: ['read', 'chat'] })
   email: string;
 
   @Swagger.ApiProperty({ type: 'string' })
-  @Expose({ groups: ['read'] })
+  @Expose({ groups: ['read', 'chat'] })
   firstname: string;
 
   @Swagger.ApiProperty({ type: 'string' })
-  @Expose({ groups: ['read'] })
+  @Expose({ groups: ['read', 'chat'] })
   lastname: string;
 
   @Swagger.ApiProperty({ type: 'string' })
@@ -361,7 +361,7 @@ export class UserResponse {
   status?: UserStatus;
 
   @Swagger.ApiPropertyOptional({ type: () => MediaObjectResponse })
-  @Expose({ groups: ['read'] })
+  @Expose({ groups: ['read', 'chat'] })
   avatar?: MediaObjectResponse;
 
   @Swagger.ApiPropertyOptional({ type: 'boolean' })

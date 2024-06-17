@@ -80,6 +80,17 @@ export class PrismaUserRepository implements UserRepository {
     return userMapper(instance);
   }
 
+  async ofIds(ids: string[]): Promise<User[]> {
+    const instances = await this.prisma.users.findMany({
+      where: {
+        id: { in: ids },
+      },
+      include: UserRelations,
+    });
+
+    return instances.map((item) => userMapper(item));
+  }
+
   async ofStatus(status: UserStatus): Promise<User[]> {
     const instances = await this.prisma.users.findMany({
       where: {

@@ -19,6 +19,7 @@ export class MessageController {
             messageId,
             isReported: command.isReported,
             content: command.content,
+            isDeleted: command.isDeleted,
         });
 
         return new MessageResponse(message);

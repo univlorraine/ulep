@@ -32,11 +32,13 @@ import { PurgesController } from './controllers/purge.controller';
 import { ConfigModule } from '@nestjs/config';
 import { TandemHistoryController } from 'src/api/controllers/tandemHistory.controller';
 import { NotificationController } from 'src/api/controllers/notification.controller';
+import { ChatController } from 'src/api/controllers/chat.controller';
 
 @Module({
   imports: [CoreModule, TerminusModule, HttpModule, ConfigModule],
   controllers: [
     CampusController,
+    ChatController,
     CountryController,
     HealthController,
     InterestController,

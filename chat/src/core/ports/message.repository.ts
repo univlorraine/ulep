@@ -3,7 +3,7 @@ import { Message } from 'src/core/models';
 export const MESSAGE_REPOSITORY = 'message.repository';
 
 export type MessagePagination = {
-    offset?: number;
+    lastMessageId?: string;
     limit?: number;
 };
 
