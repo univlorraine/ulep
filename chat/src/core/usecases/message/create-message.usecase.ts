@@ -9,6 +9,10 @@ import {
     MESSAGE_REPOSITORY,
     MessageRepository,
 } from 'src/core/ports/message.repository';
+import {
+    NOTIFICATION_SERVICE,
+    NotificationServicePort,
+} from 'src/core/ports/notification.service';
 import { UUID_PROVIDER } from 'src/core/ports/uuid.provider';
 import { UuidProvider } from 'src/providers/services/uuid.provider';
 
@@ -29,6 +33,8 @@ export class CreateMessageUsecase {
         private readonly messageRepository: MessageRepository,
         @Inject(UUID_PROVIDER)
         private readonly uuidProvider: UuidProvider,
+        @Inject(NOTIFICATION_SERVICE)
+        private readonly notificationService: NotificationServicePort,
     ) {}
 
     async execute(command: CreateMessageCommand) {
@@ -53,24 +59,18 @@ export class CreateMessageUsecase {
                 image: command.ownerImage,
             }),
             conversationId: command.conversationId,
-            type: this.categorizeFileType(command.mimetype),
+            type: Message.categorizeFileType(command.mimetype),
             isReported: false,
         });
 
         const createdMessage = await this.messageRepository.create(message);
 
-        return createdMessage;
-    }
+        this.notificationService.sendNotification(
+            message.owner.id,
+            conversation.usersIds.filter((id) => id !== message.owner.id),
+            message.content,
+        );
 
-    private categorizeFileType(mimeType?: string): MessageType {
-        if (!mimeType) {
-            return MessageType.Text;
-        } else if (mimeType.startsWith('audio/')) {
-            return MessageType.Audio;
-        } else if (mimeType.startsWith('image/')) {
-            return MessageType.Image;
-        } else {
-            return MessageType.File;
-        }
+        return createdMessage;
     }
 }

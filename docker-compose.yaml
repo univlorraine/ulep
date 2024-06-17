@@ -97,7 +97,7 @@ services:
     environment:
       ADMIN_URL: ${ADMIN_URL:-http://0.0.0.0:3001}
       APP_URL: ${APP_URL:-http://0.0.0.0:5173}
-      API_URL: ${API_URL:-http://0.0.0.0:3002}
+      API_URL: ${API_URL:-http://api:3000}
       LOG_LEVEL: ${LOG_LEVEL:-debug} # verbose, debug, log, warn or error
       DATABASE_URL: ${DATABASE_URL:-mongodb://${MONGODB_ROOT_USER:-ulep}:${MONGODB_ROOT_PASSWORD:-!ChangeMe!}@mongo:27017/${MONGODB_DATABASE:-ulep}?authSource=admin&replicaSet=rs0}
       KEYCLOAK_BASE_URL: ${KEYCLOAK_BASE_URL:-http://auth:8080}

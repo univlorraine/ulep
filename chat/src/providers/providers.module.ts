@@ -15,6 +15,8 @@ import { HUB_GATEWAY } from 'src/core/ports/hub.gateway';
 import { HubGateway } from 'src/providers/gateway/hub.gateway';
 import { ROOM_REPOSITORY } from 'src/core/ports/room.repository';
 import { RedisRoomService } from 'src/providers/services/room.service';
+import { NOTIFICATION_SERVICE } from 'src/core/ports/notification.service';
+import { NotificationService } from 'src/providers/services/notification.service';
 
 const providers: Provider[] = [
     {
@@ -44,6 +46,10 @@ const providers: Provider[] = [
     {
         provide: ROOM_REPOSITORY,
         useClass: RedisRoomService,
+    },
+    {
+        provide: NOTIFICATION_SERVICE,
+        useClass: NotificationService,
     },
 ];
 

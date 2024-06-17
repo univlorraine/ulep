@@ -163,18 +163,27 @@ export class CreateTandemUsecase {
 
     if (tandem.status === TandemStatus.ACTIVE) {
       await this.sendTamdemBecomeActiveEmails(tandem);
-      //TODO : Add animator in conversation
-      this.chatService.createConversation(
-        tandem.id,
-        [
-          tandem.learningLanguages[0].profile.user.id,
-          tandem.learningLanguages[1].profile.user.id,
-        ],
-        {},
-      );
+      await this.createConversation(tandem);
     }
 
     return tandem;
+  }
+
+  private async createConversation(tandem: Tandem): Promise<void> {
+    const participantIds = [
+      tandem.learningLanguages[0].profile.user.id,
+      tandem.learningLanguages[1].profile.user.id,
+      tandem.learningLanguages[0].profile.user.contactId,
+    ];
+
+    if (
+      tandem.learningLanguages[0].profile.user.contactId !==
+      tandem.learningLanguages[1].profile.user.contactId
+    ) {
+      participantIds.push(tandem.learningLanguages[1].profile.user.contactId);
+    }
+
+    await this.chatService.createConversation(participantIds, tandem.id, {});
   }
 
   private async tryToFindLearningLanguages(id: string) {

@@ -5,6 +5,7 @@ import { CreateMessageUsecase } from 'src/core/usecases';
 import { InMemoryConversationRepository } from 'src/providers/persistance/repositories/in-memory-conversation.repository';
 import { InMemoryMessageRepository } from 'src/providers/persistance/repositories/in-memory-message.repository';
 import { UuidProvider } from 'src/providers/services/uuid.provider';
+import { NotificationService } from '../../mocks/notification.service';
 
 const USER_ID1 = 'user1';
 const USER_ID2 = 'user2';
@@ -28,15 +29,27 @@ const owner3 = new Owner({
     image: 'ownerImage3',
 });
 
+jest.mock('../../mocks/notification.service', () => {
+    return {
+        NotificationService: jest.fn().mockImplementation(() => {
+            return {
+                sendNotification: jest.fn(),
+            };
+        }),
+    };
+});
+
 describe('CreateMessage', () => {
     const inMemoryConversationRepository = new InMemoryConversationRepository();
     const inMemoryMessageRepository = new InMemoryMessageRepository();
     const uuidProvider = new UuidProvider();
+    const notificationService = new NotificationService();
 
     const createMessageUsecase = new CreateMessageUsecase(
         inMemoryConversationRepository,
         inMemoryMessageRepository,
         uuidProvider,
+        notificationService,
     );
 
     beforeEach(() => {
@@ -52,6 +65,7 @@ describe('CreateMessage', () => {
             ownerImage: owner1.image,
             mimetype: '',
         });
+        expect(notificationService.sendNotification).toHaveBeenCalled();
         expect(message).toBeDefined();
         expect(message.type).toBe(MessageType.Text);
     });
@@ -65,6 +79,7 @@ describe('CreateMessage', () => {
             ownerImage: owner1.image,
             mimetype: 'image/png',
         });
+        expect(notificationService.sendNotification).toHaveBeenCalled();
         expect(message).toBeDefined();
         expect(message.type).toBe(MessageType.Image);
     });
@@ -78,6 +93,7 @@ describe('CreateMessage', () => {
             ownerImage: owner1.image,
             mimetype: 'audio/mpeg',
         });
+        expect(notificationService.sendNotification).toHaveBeenCalled();
         expect(message).toBeDefined();
         expect(message.type).toBe(MessageType.Audio);
     });
@@ -91,6 +107,7 @@ describe('CreateMessage', () => {
             ownerImage: owner1.image,
             mimetype: 'application/pdf',
         });
+        expect(notificationService.sendNotification).toHaveBeenCalled();
         expect(message).toBeDefined();
         expect(message.type).toBe(MessageType.File);
     });

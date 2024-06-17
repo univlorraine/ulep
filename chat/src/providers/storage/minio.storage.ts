@@ -4,134 +4,173 @@ import { File, StorageInterface } from 'src/core/ports/storage.interface';
 import { Readable } from 'stream';
 import { Env } from 'src/configuration';
 import {
-  CreateBucketCommand,
-  DeleteObjectCommand,
-  GetObjectCommand,
-  HeadBucketCommand,
-  HeadObjectCommand,
-  PutObjectCommand,
-  S3Client,
-  S3ServiceException,
-  PutBucketPolicyCommand,
+    CreateBucketCommand,
+    DeleteObjectCommand,
+    GetObjectCommand,
+    HeadBucketCommand,
+    HeadObjectCommand,
+    PutObjectCommand,
+    S3Client,
+    S3ServiceException,
+    PutBucketPolicyCommand,
+    ListObjectsCommand,
+    DeleteObjectsCommand,
 } from '@aws-sdk/client-s3';
 import { getSignedUrl } from '@aws-sdk/s3-request-presigner';
 
 @Injectable()
 export class MinioStorage implements StorageInterface {
-  #logger = new Logger(MinioStorage.name);
+    #logger = new Logger(MinioStorage.name);
 
-  #client: S3Client;
+    #client: S3Client;
 
-  constructor(env: ConfigService<Env, true>) {
-    this.#client = new S3Client({
-      endpoint: env.get('S3_URL'),
-      region: env.get('S3_REGION'),
-      runtime: 'node',
-      credentials: {
-        accessKeyId: env.get('S3_ACCESS_KEY'),
-        secretAccessKey: env.get('S3_ACCESS_SECRET'),
-      },
-      forcePathStyle: true,
-    });
-  }
-
-  async read(bucket: string, filename: string): Promise<Readable> {
-    const command = new GetObjectCommand({ Bucket: bucket, Key: filename });
-    const response = await this.#client.send(command);
-
-    if (response.Body instanceof Readable) {
-      return response.Body;
+    constructor(env: ConfigService<Env, true>) {
+        this.#client = new S3Client({
+            endpoint: env.get('S3_URL'),
+            region: env.get('S3_REGION'),
+            runtime: 'node',
+            credentials: {
+                accessKeyId: env.get('S3_ACCESS_KEY'),
+                secretAccessKey: env.get('S3_ACCESS_SECRET'),
+            },
+            forcePathStyle: true,
+        });
     }
 
-    throw new Error('No response body was provided');
-  }
+    async read(bucket: string, filename: string): Promise<Readable> {
+        const command = new GetObjectCommand({ Bucket: bucket, Key: filename });
+        const response = await this.#client.send(command);
 
-  async write(bucket: string, name: string, file: File): Promise<void> {
-    const bucketExists = await this.directoryExists(bucket);
+        if (response.Body instanceof Readable) {
+            return response.Body;
+        }
 
-    if (!bucketExists) {
-      await this.createDirectory(bucket);
-      await this.makeBucketPrivate(bucket);
+        throw new Error('No response body was provided');
     }
 
-    const command = new PutObjectCommand({
-      Bucket: bucket,
-      Key: name,
-      Body: file.buffer,
-      ContentType: file.mimetype,
-      ContentLength: file.size,
-      ACL: 'private',
-    });
+    async write(bucket: string, name: string, file: File): Promise<void> {
+        const bucketExists = await this.directoryExists(bucket);
 
-    await this.#client.send(command);
-  }
+        if (!bucketExists) {
+            await this.createDirectory(bucket);
+            await this.makeBucketPrivate(bucket);
+        }
 
-  async delete(bucket: string, name: string): Promise<void> {
-    const bucketExists = await this.directoryExists(bucket);
-    if (!bucketExists) {
-      return;
+        const command = new PutObjectCommand({
+            Bucket: bucket,
+            Key: name,
+            Body: file.buffer,
+            ContentType: file.mimetype,
+            ContentLength: file.size,
+            ACL: 'private',
+        });
+
+        await this.#client.send(command);
     }
 
-    const command = new DeleteObjectCommand({ Bucket: bucket, Key: name });
+    async delete(bucket: string, name: string): Promise<void> {
+        const bucketExists = await this.directoryExists(bucket);
+        if (!bucketExists) {
+            return;
+        }
 
-    await this.#client.send(command);
-  }
+        const command = new DeleteObjectCommand({ Bucket: bucket, Key: name });
 
-  // eslint-disable-next-line prettier/prettier
-  async temporaryUrl(bucket: string, name: string, expiry: number): Promise<string> {
-    const command = new GetObjectCommand({ Bucket: bucket, Key: name });
-
-    return getSignedUrl(this.#client, command, { expiresIn: expiry });
-  }
-
-  async fileExists(bucket: string, name: string): Promise<boolean> {
-    try {
-      const command = new HeadObjectCommand({ Bucket: bucket, Key: name });
-      await this.#client.send(command);
-
-      return true;
-    } catch (e) {
-      // eslint-disable-next-line prettier/prettier
-      if (e instanceof S3ServiceException && e.$metadata.httpStatusCode === 404) {
-        return false;
-      }
-
-      throw e;
+        await this.#client.send(command);
     }
-  }
 
-  async directoryExists(bucket: string): Promise<boolean> {
-    const command = new HeadBucketCommand({ Bucket: bucket });
-    try {
-      await this.#client.send(command);
-      return true;
-    } catch (error) {
-      return false;
+    // eslint-disable-next-line prettier/prettier
+    async temporaryUrl(
+        bucket: string,
+        name: string,
+        expiry: number,
+    ): Promise<string> {
+        const command = new GetObjectCommand({ Bucket: bucket, Key: name });
+
+        return getSignedUrl(this.#client, command, { expiresIn: expiry });
     }
-  }
 
-  async createDirectory(directory: string): Promise<void> {
-    const command = new CreateBucketCommand({
-      Bucket: directory,
-      ACL: 'private',
-    });
+    async fileExists(bucket: string, name: string): Promise<boolean> {
+        try {
+            const command = new HeadObjectCommand({
+                Bucket: bucket,
+                Key: name,
+            });
+            await this.#client.send(command);
 
-    await this.#client.send(command);
-  }
+            return true;
+        } catch (e) {
+            // eslint-disable-next-line prettier/prettier
+            if (
+                e instanceof S3ServiceException &&
+                e.$metadata.httpStatusCode === 404
+            ) {
+                return false;
+            }
 
-  private async makeBucketPrivate(bucket: string): Promise<void> {
-    const command = new PutBucketPolicyCommand({
-      Bucket: bucket,
-      Policy: JSON.stringify({
-        Version: '2012-10-17',
-        Statement: [],
-      }),
-    });
-
-    try {
-      await this.#client.send(command);
-    } catch (err) {
-      this.#logger.error(err);
+            throw e;
+        }
     }
-  }
+
+    async directoryExists(bucket: string): Promise<boolean> {
+        const command = new HeadBucketCommand({ Bucket: bucket });
+        try {
+            await this.#client.send(command);
+            return true;
+        } catch (error) {
+            return false;
+        }
+    }
+
+    async createDirectory(directory: string): Promise<void> {
+        const command = new CreateBucketCommand({
+            Bucket: directory,
+            ACL: 'private',
+        });
+
+        await this.#client.send(command);
+    }
+
+    private async makeBucketPrivate(bucket: string): Promise<void> {
+        const command = new PutBucketPolicyCommand({
+            Bucket: bucket,
+            Policy: JSON.stringify({
+                Version: '2012-10-17',
+                Statement: [],
+            }),
+        });
+
+        try {
+            await this.#client.send(command);
+        } catch (err) {
+            this.#logger.error(err);
+        }
+    }
+
+    public async deleteBucketContents(bucket: string): Promise<void> {
+        const bucketExists = await this.directoryExists(bucket);
+        if (!bucketExists) {
+            this.#logger.error(`Bucket ${bucket} does not exist.`);
+            return;
+        }
+
+        await this.deleteAllObjectsInBucket(bucket);
+    }
+
+    private async deleteAllObjectsInBucket(bucket: string): Promise<void> {
+        const listObjectsCommand = new ListObjectsCommand({ Bucket: bucket });
+        const { Contents } = await this.#client.send(listObjectsCommand);
+
+        if (Contents.length > 0) {
+            const deleteParams = {
+                Bucket: bucket,
+                Delete: {
+                    Objects: Contents.map(({ Key }) => ({ Key })),
+                    Quiet: false,
+                },
+            };
+            const deleteObjectsCommand = new DeleteObjectsCommand(deleteParams);
+            await this.#client.send(deleteObjectsCommand);
+        }
+    }
 }

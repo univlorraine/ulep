@@ -1,7 +1,11 @@
 import { Injectable } from '@nestjs/common';
 import { Collection, PrismaService } from '@app/common';
 import { UserRelations, userMapper } from '../mappers/user.mapper';
-import { UserRepository, WhereProps } from 'src/core/ports/user.repository';
+import {
+  UpdateUserResponse,
+  UserRepository,
+  WhereProps,
+} from 'src/core/ports/user.repository';
 import { Device, User, UserStatus } from 'src/core/models';
 import { UniversityRelations } from '../mappers';
 
@@ -87,7 +91,7 @@ export class PrismaUserRepository implements UserRepository {
     return instances.map((item) => userMapper(item));
   }
 
-  async update(user: User): Promise<User> {
+  async update(user: User): Promise<UpdateUserResponse> {
     const data: any = {
       Organization: { connect: { id: user.university.id } },
       email: user.email,
@@ -111,6 +115,7 @@ export class PrismaUserRepository implements UserRepository {
           },
         },
       };
+      //TODO : Create conversation with user and contact
     }
 
     await this.prisma.users.update({
@@ -125,7 +130,10 @@ export class PrismaUserRepository implements UserRepository {
       include: UserRelations,
     });
 
-    return userMapper(updatedUser);
+    return {
+      user: userMapper(updatedUser),
+      newContactId: user.contactId,
+    };
   }
 
   async delete(id: string): Promise<void> {

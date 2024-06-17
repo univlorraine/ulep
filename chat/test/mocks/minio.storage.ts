@@ -41,4 +41,8 @@ export class MinioStorage implements StorageInterface {
     private async makeBucketPrivate(bucket: string): Promise<void> {
         this.logger.debug('Make bucket private', bucket);
     }
+
+    async deleteBucketContents(bucket: string): Promise<void> {
+        this.logger.debug('Delete bucket contents', bucket);
+    }
 }

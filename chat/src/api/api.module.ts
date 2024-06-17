@@ -6,10 +6,11 @@ import { TerminusModule } from '@nestjs/terminus';
 import { HealthController } from 'src/api/controllers/health.controller';
 import { PrismaService } from '@app/common';
 import { CoreModule } from 'src/core/core.module';
+import { PurgeController } from 'src/api/controllers/purge.controller';
 
 @Module({
     imports: [CoreModule, TerminusModule],
-    controllers: [ConversationController, HealthController],
+    controllers: [ConversationController, HealthController, PurgeController],
     providers: [
         {
             provide: AUTHENTICATOR,

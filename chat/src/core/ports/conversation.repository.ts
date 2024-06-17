@@ -8,7 +8,10 @@ export interface ConversationRepository {
         usersIds: string[],
         metadata: any,
     ) => Promise<Conversation>;
+    createConversations: (participants: string[][]) => Promise<void>;
     delete: (conversationId: string) => Promise<void>;
+    deleteUserFromConversations: (userId: string) => Promise<void>;
+    deleteAll: () => Promise<void>;
     findById: (conversationId: string) => Promise<Conversation | undefined>;
     findByUserId: (userId: string) => Promise<Conversation[]>;
     update: (

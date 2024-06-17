@@ -7,6 +7,11 @@ export type WhereProps = {
   universityId?: string;
 };
 
+export interface UpdateUserResponse {
+  user: User;
+  newContactId: string;
+}
+
 export interface UserRepository {
   create(user: User): Promise<User>;
 
@@ -16,7 +21,7 @@ export interface UserRepository {
 
   ofStatus(status: UserStatus): Promise<User[]>;
 
-  update(user: User): Promise<User>;
+  update(user: User): Promise<UpdateUserResponse>;
 
   delete(id: string): Promise<void>;
 

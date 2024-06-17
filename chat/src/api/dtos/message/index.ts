@@ -1,2 +1,2 @@
 export * from './message.response';
-export * from './sendMessage.request';
+export * from './send-message.request';

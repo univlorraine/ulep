@@ -13,8 +13,8 @@ export class ChatService implements ChatServicePort {
   constructor(private readonly env: ConfigService<Env, true>) {}
 
   async createConversation(
-    tandemId: string,
     users: string[],
+    tandemId?: string,
     metadata: any = {},
   ): Promise<any> {
     try {
@@ -30,8 +30,23 @@ export class ChatService implements ChatServicePort {
 
       return response.data;
     } catch (error) {
-      this.logger.error('Error while creating conversation', error);
-      throw new Error('HTTP request failed');
+      this.logger.error('Error while creating conversation', { error });
+    }
+  }
+
+  async createConversations(participants: string[][]): Promise<any> {
+    try {
+      const response = await axios.post(
+        this.env.get('CHAT_URL') + '/conversations/multi',
+        {
+          participants,
+        },
+        { headers: this.headers },
+      );
+
+      return response.data;
+    } catch (error) {
+      this.logger.error('Error while creating conversation', { error });
     }
   }
 
@@ -44,8 +59,46 @@ export class ChatService implements ChatServicePort {
 
       return response.data;
     } catch (error) {
-      this.logger.error('Error while deleting conversation', error);
-      throw new Error('HTTP request failed');
+      this.logger.error('Error while deleting conversation', { error });
+    }
+  }
+
+  async deleteConversationByContactId(contactId: string): Promise<any> {
+    try {
+      const response = await axios.delete(
+        this.env.get('CHAT_URL') + '/conversations/contact/' + contactId,
+        { headers: this.headers },
+      );
+
+      return response.data;
+    } catch (error) {
+      this.logger.error('Error while deleting conversation', { error });
+    }
+  }
+
+  async deleteConversationByUserId(userId: string): Promise<any> {
+    try {
+      const response = await axios.delete(
+        this.env.get('CHAT_URL') + '/conversations/user/' + userId,
+        { headers: this.headers },
+      );
+
+      return response.data;
+    } catch (error) {
+      this.logger.error('Error while deleting conversation', { error });
+    }
+  }
+
+  async deleteAllConversations(): Promise<any> {
+    try {
+      const response = await axios.delete(
+        this.env.get('CHAT_URL') + '/purge/',
+        { headers: this.headers },
+      );
+
+      return response.data;
+    } catch (error) {
+      this.logger.error('Error while deleting conversation', { error });
     }
   }
 }

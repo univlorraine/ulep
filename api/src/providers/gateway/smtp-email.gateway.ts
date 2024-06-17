@@ -16,6 +16,7 @@ import {
   TandemCanceledEmailProps,
   TandemClosureNoticeEmailProps,
   TandemPausedUnpausedEmailProps,
+  NewMessageEmailProps,
 } from 'src/core/ports/email.gateway';
 
 @Injectable()
@@ -349,6 +350,24 @@ export class SmtpEmailGateway implements EmailGateway {
     props: TandemClosureNoticeEmailProps,
   ): Promise<void> {
     const translations = this.translate('tandemClosureNotice', props.language, {
+      ...props,
+    });
+
+    await this.mailer.sendMail({
+      to: props.to,
+      subject: translations.title,
+      template: 'user',
+      variables: {
+        links: this.links,
+        images: this.images,
+        ...translations,
+        footer: this.footer,
+      },
+    });
+  }
+
+  async sendNewMessageEmail(props: NewMessageEmailProps): Promise<void> {
+    const translations = this.translate('message', props.language, {
       ...props,
     });
 

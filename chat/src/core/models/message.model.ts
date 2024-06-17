@@ -38,4 +38,16 @@ export class Message {
         this.type = props.type;
         this.updatedAt = props.updatedAt;
     }
+
+    public static categorizeFileType(mimeType?: string): MessageType {
+        if (!mimeType) {
+            return MessageType.Text;
+        } else if (mimeType.startsWith('audio/')) {
+            return MessageType.Audio;
+        } else if (mimeType.startsWith('image/')) {
+            return MessageType.Image;
+        } else {
+            return MessageType.File;
+        }
+    }
 }

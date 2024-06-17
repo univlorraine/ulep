@@ -15,6 +15,8 @@ import { Owner } from 'src/core/models/owner.model';
 import { MediaObject } from 'src/core/models/media.model';
 import { HubGateway } from '../mocks/hub.gateway';
 import { HUB_GATEWAY } from 'src/core/ports/hub.gateway';
+import { NotificationService } from '../mocks/notification.service';
+import { NOTIFICATION_SERVICE } from 'src/core/ports/notification.service';
 
 describe('Conversations', () => {
     let app: TestServer;
@@ -104,6 +106,8 @@ describe('Conversations', () => {
             .useValue(inMemoryMediaObjectRepository)
             .overrideProvider(MESSAGE_REPOSITORY)
             .useValue(inMemoryMessageRepository)
+            .overrideProvider(NOTIFICATION_SERVICE)
+            .useValue(new NotificationService())
             .overrideProvider(HUB_GATEWAY)
             .useValue(new HubGateway())
             .compile();
@@ -159,9 +163,33 @@ describe('Conversations', () => {
         expect(body.id).toEqual('conversation-789');
     });
 
+    test('Create multiple conversations', async () => {
+        const participants = [
+            [OWNER1_ID, OWNER2_ID],
+            [OWNER1_ID, OWNER3_ID],
+        ];
+
+        await request(app.getHttpServer())
+            .post('/conversations/multi')
+            .send({ participants })
+            .expect(201);
+    });
+
     test('Delete a conversation', async () => {
         await request(app.getHttpServer())
             .delete(`/conversations/${conversation1.id}`)
+            .expect(200);
+    });
+
+    test('Delete user from conversations', async () => {
+        await request(app.getHttpServer())
+            .delete(`/conversations/user/${OWNER1_ID}`)
+            .expect(200);
+    });
+
+    test('Delete contact from conversations', async () => {
+        await request(app.getHttpServer())
+            .delete(`/conversations/contact/${OWNER1_ID}`)
             .expect(200);
     });
 

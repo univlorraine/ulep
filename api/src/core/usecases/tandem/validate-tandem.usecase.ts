@@ -2,12 +2,14 @@ import { TandemRepository } from '../../ports/tandem.repository';
 import { Inject, Injectable, Logger } from '@nestjs/common';
 import { DomainError, RessourceDoesNotExist } from 'src/core/errors';
 import { Tandem, TandemStatus, User } from 'src/core/models';
+import { CHAT_SERVICE } from 'src/core/ports/chat.service';
 import { EMAIL_GATEWAY, EmailGateway } from 'src/core/ports/email.gateway';
 import { TANDEM_REPOSITORY } from 'src/core/ports/tandem.repository';
 import {
   UNIVERSITY_REPOSITORY,
   UniversityRepository,
 } from 'src/core/ports/university.repository';
+import { ChatService } from 'src/providers/services/chat.service';
 
 interface ValidateTandemCommand {
   id: string;
@@ -25,6 +27,8 @@ export class ValidateTandemUsecase {
     private readonly universityRepository: UniversityRepository,
     @Inject(EMAIL_GATEWAY)
     private readonly emailGateway: EmailGateway,
+    @Inject(CHAT_SERVICE)
+    private readonly chatService: ChatService,
   ) {}
 
   async execute(command: ValidateTandemCommand): Promise<void> {
@@ -71,6 +75,10 @@ export class ValidateTandemUsecase {
     await this.tandemRepository.update(updatedTandem);
 
     if (updatedTandem.status === TandemStatus.ACTIVE) {
+      await this.createConversation(updatedTandem);
+    }
+
+    if (updatedTandem.status === TandemStatus.ACTIVE) {
       const [learningLanguage1, learningLanguage2] = tandem.learningLanguages;
       if (learningLanguage1.profile.user.acceptsEmail) {
         await this.sendTamdemValidatedEmail({
@@ -88,6 +96,23 @@ export class ValidateTandemUsecase {
         });
       }
     }
+  }
+
+  private async createConversation(tandem: Tandem): Promise<void> {
+    const participantIds = [
+      tandem.learningLanguages[0].profile.user.id,
+      tandem.learningLanguages[1].profile.user.id,
+      tandem.learningLanguages[0].profile.user.contactId,
+    ];
+
+    if (
+      tandem.learningLanguages[0].profile.user.contactId !==
+      tandem.learningLanguages[1].profile.user.contactId
+    ) {
+      participantIds.push(tandem.learningLanguages[1].profile.user.contactId);
+    }
+
+    await this.chatService.createConversation(participantIds, tandem.id, {});
   }
 
   private async sendTamdemValidatedEmail(props: {

@@ -2,6 +2,7 @@
 import {
   AccountBlockedEmailProps,
   EmailGateway,
+  NewMessageEmailProps,
   NewPartnerEmail,
   NewTandemNoticeEmailProps,
   NewUserRegistrationNoticeEmailProps,
@@ -84,6 +85,10 @@ export default class InMemoryEmailGateway implements EmailGateway {
   sendTandemClosureNoticeEmail(
     props: TandemClosureNoticeEmailProps,
   ): Promise<void> {
+    return Promise.resolve();
+  }
+
+  sendNewMessageEmail(props: NewMessageEmailProps): Promise<void> {
     return Promise.resolve();
   }
 }

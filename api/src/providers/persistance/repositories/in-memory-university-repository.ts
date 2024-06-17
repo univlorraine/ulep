@@ -1,7 +1,10 @@
 import { Collection } from '@app/common';
 import { Injectable } from '@nestjs/common';
 import { University } from 'src/core/models/university.model';
-import { UniversityRepository } from 'src/core/ports/university.repository';
+import {
+  UniversityRepository,
+  UpdateUniversityResponse,
+} from 'src/core/ports/university.repository';
 
 @Injectable()
 export class InMemoryUniversityRepository implements UniversityRepository {
@@ -48,14 +51,14 @@ export class InMemoryUniversityRepository implements UniversityRepository {
     return this.#universities.find((university) => university.name === name);
   }
 
-  async update(university: University): Promise<University> {
+  async update(university: University): Promise<UpdateUniversityResponse> {
     const index = this.#universities.findIndex((u) => u.id === university.id);
 
     if (index !== -1) {
       const university = this.#universities[index];
       this.#universities[index] = university;
     }
-    return university;
+    return { university, usersId: [] };
   }
 
   async remove(id: string): Promise<void> {
