@@ -22,6 +22,10 @@
         "title": "Une erreur est survenue",
         "subtitle": "Veuillez nous excusez mais une erreur est survenue, veuillez rafraichir la page ou effectuer un retour en arrière"
     },
+    "bottom_bar": {
+        "home": "Accueil",
+        "conversations": "Conversations"
+    },
     "maintenance_page": {
         "title": "Maitenance en cours",
         "subtitle": "Veuillez nous excusez mais une maintenance est en cours"

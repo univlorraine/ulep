@@ -22,6 +22,10 @@
         "title": "An error has occurred",
         "subtitle": "We apologize but an error has occurred, please refresh the page or go back"
     },
+    "bottom_bar": {
+        "home": "Home",
+        "conversations": "Conversations"
+    },
     "maintenance_page": {
         "title": "Maintenance is in progress",
         "subtitle": "We apologize, but maintenance is in progress."

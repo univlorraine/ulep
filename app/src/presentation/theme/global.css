@@ -11,6 +11,21 @@
     background-color: white;
 }
 
+ion-tab-button {
+    max-width: none;
+}
+
+ion-tab-button.tab-selected {
+    --background: black !important;
+}
+
+ion-tab-button.tab-selected span,
+ion-tab-button.tab-selected img {
+    --background-selected: black !important;
+    color: white !important;
+    filter: brightness(0) invert(1);
+}
+
 .ion-background-yellow {
     --ion-background-color: #fdee66;
 }
