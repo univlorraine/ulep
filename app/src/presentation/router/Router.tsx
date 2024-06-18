@@ -4,7 +4,6 @@ import { Route, Switch } from 'react-router-dom';
 import ConnectPage from '../pages/ConnectPage';
 import ForgotPasswordPage from '../pages/ForgotPasswordPage';
 import ForgotPasswordSentPage from '../pages/ForgotPasswordSentPage';
-import HomePage from '../pages/HomePage';
 import LoginPage from '../pages/LoginPage';
 import PairingConfirmLanguagePage from '../pages/PairingConfirmLanguagePage';
 import PairingFinalPage from '../pages/PairingFinalPage';
@@ -47,8 +46,13 @@ import EditInformationsPage from '../pages/EditInformationsPage';
 import CEFRQuizzLanguagePage from '../pages/cefr-quizz/CEFRQuizzLanguagePage';
 import CEFRQuizzOtherLanguagesPage from '../pages/cefr-quizz/CEFRQuizzOtherLanguagesPage';
 import CEFRQuizzEndPage from '../pages/cefr-quizz/CEFRQuizzEndPage';
+import BottomBar from './BottomBar';
+import { useConfig } from '../../context/ConfigurationContext';
+import ConversationsPage from '../pages/ConversationsPage';
+import HomePage from '../pages/HomePage';
 
 const OfflineRouter: React.FC = () => {
+    const { deviceAdapter } = useConfig();
     const profile = useStoreState((store) => store.profile);
     const { openDate, closeDate, isUniversityOpen } = useIsUniversityOpen(profile?.user.university.id, [
         profile?.user.university.id,
@@ -86,9 +90,6 @@ const OfflineRouter: React.FC = () => {
                 <Route exact path="/auth">
                     <AuthFlowPage />
                 </Route>
-                <PrivateRoute exact path="/home">
-                    <HomePage />
-                </PrivateRoute>
                 <MobileRoute exact path={'/tandem-profil'}>
                     <TandemProfilePage />
                 </MobileRoute>
@@ -189,6 +190,19 @@ const OfflineRouter: React.FC = () => {
                 <PrivateRoute exact path="/cefr/quizz/end">
                     <CEFRQuizzEndPage />
                 </PrivateRoute>
+                {/* Bottom bar for native platform */}
+                {deviceAdapter.isNativePlatform() && <BottomBar />}
+                {/* Routes for web platform */}
+                {!deviceAdapter.isNativePlatform() && (
+                    <>
+                        <PrivateRoute exact path="/home">
+                            <HomePage />
+                        </PrivateRoute>
+                        <PrivateRoute exact path="/conversations">
+                            <ConversationsPage />
+                        </PrivateRoute>
+                    </>
+                )}
             </Switch>
         </IonRouterOutlet>
     );
