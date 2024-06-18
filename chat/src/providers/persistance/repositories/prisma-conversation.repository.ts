@@ -27,6 +27,9 @@ export class PrismaConversationRepository implements ConversationRepository {
     async findByUserId(userId: string): Promise<Conversation[]> {
         const conversations = await this.prisma.conversation.findMany({
             where: { participantIds: { has: userId } },
+            orderBy: {
+                createdAt: 'desc',
+            },
             ...ConversationRelations,
             include: {
                 Messages: {
@@ -36,6 +39,19 @@ export class PrismaConversationRepository implements ConversationRepository {
                     },
                 },
             },
+        });
+
+        conversations.sort((a, b) => {
+            const lastMessageA = a.Messages[0]?.createdAt;
+            const lastMessageB = b.Messages[0]?.createdAt;
+
+            if (lastMessageA > lastMessageB) {
+                return -1;
+            } else if (lastMessageA < lastMessageB) {
+                return 1;
+            } else {
+                return 0;
+            }
         });
 
         return conversations.map(conversationMapper);

@@ -2,6 +2,7 @@
     margin-left: 12px;
     display: flex;
     flex-direction: column;
+    max-width: 100%;
 }
 
 .date {
@@ -28,6 +29,7 @@
 .left-line {
     display: flex;
     align-items: center;
+    width: 90%;
 }
 
 .line {
@@ -55,4 +57,8 @@
     font-family: 'Maven Pro', sans-serif;
     font-size: 13px;
     font-weight: 400;
+    line-height: 1.5;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
 }
