@@ -29,7 +29,7 @@
 .left-line {
     display: flex;
     align-items: center;
-    width: 90%;
+    width: 80%;
 }
 
 .line {
@@ -61,4 +61,10 @@
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
+}
+
+@media (min-width: 768px) {
+    .left-line {
+        width: 90%;
+    }
 }
