@@ -25,7 +25,7 @@ const useGetConversations = () => {
                 ...conversationResult,
                 isLoading: true,
             });
-            const conversationsResult = await getConversations.execute(profile.id);
+            const conversationsResult = await getConversations.execute(profile.user.id);
             if (conversationsResult instanceof Error) {
                 setConversationResult({ conversations: [], error: conversationsResult, isLoading: false });
             } else {

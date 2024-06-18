@@ -1,21 +1,13 @@
-import { UserMessage } from '../domain/entities/User';
+import { UserChat } from '../domain/entities/User';
 import { Message, MessageType } from '../domain/entities/chat/Message';
-import MediaObjectCommand from './MediaObjectCommand';
-
-interface MessageUserCommand {
-    id: string;
-    firstname: string;
-    lastname: string;
-    email: string;
-    avatar?: MediaObjectCommand;
-}
+import UserChatCommand from './UserChatCommand';
 
 interface MessageCommand {
     id: string;
     content: string;
     conversationId: string;
     createdAt: Date;
-    sender: MessageUserCommand;
+    sender: UserChatCommand;
     type: string;
 }
 
@@ -25,11 +17,12 @@ export const messageCommandToDomain = (command: MessageCommand) => {
         command.content,
         command.conversationId,
         command.createdAt,
-        new UserMessage(
+        new UserChat(
             command.sender.id,
             command.sender.firstname,
             command.sender.lastname,
             command.sender.email,
+            command.sender.isAdministrator,
             command.sender.avatar
         ),
         command.type as MessageType
