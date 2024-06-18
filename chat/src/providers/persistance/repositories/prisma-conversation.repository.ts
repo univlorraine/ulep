@@ -28,6 +28,14 @@ export class PrismaConversationRepository implements ConversationRepository {
         const conversations = await this.prisma.conversation.findMany({
             where: { participantIds: { has: userId } },
             ...ConversationRelations,
+            include: {
+                Messages: {
+                    take: 1,
+                    orderBy: {
+                        createdAt: 'desc',
+                    },
+                },
+            },
         });
 
         return conversations.map(conversationMapper);

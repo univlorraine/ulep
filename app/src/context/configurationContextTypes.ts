@@ -37,6 +37,8 @@ import EditProfileUsecaseInterface from '../domain/interfaces/EditProfileUsecase
 import EditUserUsecaseInterface from '../domain/interfaces/EditUserUsecase.interface';
 import NotificationAdapterInterface from '../adapter/interfaces/NotificationAdapter.interface';
 import SocketIoAdapterInterface from '../adapter/interfaces/SocketIoAdapter.interface';
+import GetConversationsUsecaseInterface from '../domain/interfaces/chat/GetConversationsUsecase.interface';
+import GetMessagesFromConversationUsecaseInterface from '../domain/interfaces/chat/GetMessagesFromConversationUsecase.interface';
 
 export interface ConfigContextValueType {
     accessToken: string;
@@ -61,8 +63,10 @@ export interface ConfigContextValueType {
     getAllReportCategories: GetAllReportCategoriesUsecaseInterface;
     getAllTandems: GetAllTandemsUsecaseInterface;
     getAllUniversities: GetAllUniversitiesUsecaseInterface;
+    getConversations: GetConversationsUsecaseInterface;
     getHistoricEmailPartner: GetHistoricEmailPartnerUsecaseInterface;
     getMediaObject: GetMediaObjectUsecaseInterface;
+    getMessagesFromConversation: GetMessagesFromConversationUsecaseInterface;
     getPartnersToUniversity: GetPartnersToUniversityUsecaseInterface;
     getProfile: GetProfileUsecaseInterface;
     getQuizzByLevel: GetQuizzByLevelUsecaseInterface;

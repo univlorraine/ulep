@@ -38,6 +38,8 @@ import CreateOrUpdateTestedLanguageUsecase from '../domain/usecases/CreateOrUpda
 import NotificationAdapter from '../adapter/NotificationAdapter';
 import AddDeviceUsecase from '../domain/usecases/AddDeviceUsecase';
 import SocketIoAdapter from '../adapter/SocketIoAdapter';
+import GetConversationsUsecase from '../domain/usecases/GetConversationsUsecase';
+import GetMessagesFromConversationUsecase from '../domain/usecases/GetMessagesFromConversationUsecase';
 
 interface GetConfigContextValueProps {
     apiUrl: string;
@@ -106,6 +108,10 @@ const getConfigContextValue = ({
     const editUser = new EditUserUsecase(domainHttpAdapter, setUser);
     const retrievePerson = new RetrievePersonInfoUsecase(domainHttpAdapter);
 
+    //Chat
+    const getConversations = new GetConversationsUsecase(domainHttpAdapter);
+    const getMessagesFromConversation = new GetMessagesFromConversationUsecase(domainHttpAdapter);
+
     return {
         accessToken,
         addDevice,
@@ -129,8 +135,10 @@ const getConfigContextValue = ({
         getAllReportCategories,
         getAllTandems,
         getAllUniversities,
+        getConversations,
         getHistoricEmailPartner,
         getMediaObject,
+        getMessagesFromConversation,
         getPartnersToUniversity,
         getProfile,
         getQuizzByLevel,
