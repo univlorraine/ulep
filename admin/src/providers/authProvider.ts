@@ -6,19 +6,29 @@ import jwtManager from './jwtManager';
 export interface Identity {
     id: string;
     fullName?: string;
-    data: {
-        firstname: string;
-        lastname: string;
-        email: string;
-    };
+    firstName: string;
+    lastName: string;
+    email: string;
     universityId?: string;
     isCentralUniversity: boolean;
+    data: any;
 }
 
 export interface GetPermissionsInterface {
     checkRole: (roleToCheck: Role) => boolean;
     checkRoles: (roleToCheck: Role[]) => boolean;
 }
+
+const canAccessAdmin = (decoded: any) => {
+    if (!decoded) {
+        return false;
+    }
+
+    const isAdmin = decoded.realm_access?.roles.includes('admin');
+    const isSuperAdmin = decoded.realm_access?.roles.includes('super-admin');
+
+    return isAdmin && (decoded.universityId || isSuperAdmin);
+};
 
 export const http = async (method: string, path: string, init: Omit<RequestInit, 'method'> = {}) => {
     const response = await fetch(path, {
@@ -80,13 +90,11 @@ const authProvider: AuthProvider = {
 
         // Check that user has admin role to authorize login
         const decoded: any = jwtManager.decodeToken(payload.accessToken);
-        if (decoded) {
-            const isAdmin = decoded.realm_access?.roles.includes('admin');
-            if (isAdmin) {
-                jwtManager.setTokens(payload.accessToken, payload.refreshToken);
 
-                return Promise.resolve();
-            }
+        if (canAccessAdmin(decoded)) {
+            jwtManager.setTokens(payload.accessToken, payload.refreshToken);
+
+            return Promise.resolve();
         }
 
         return Promise.reject(new Error('Login fail.'));
@@ -159,9 +167,6 @@ const authProvider: AuthProvider = {
             return Promise.reject(new Error('Fail to decode token'));
         }
 
-        let { universityId } = decoded;
-        let isCentralUniversity = false;
-
         const universitiesRes = await fetch(`${process.env.REACT_APP_API_URL}/universities`, {
             headers: {
                 Authorization: `Bearer ${accessToken}`,
@@ -172,18 +177,26 @@ const authProvider: AuthProvider = {
         if (!centralUniversity) {
             return Promise.reject(new Error('No central university defined'));
         }
-        universityId = centralUniversity.id;
-        isCentralUniversity = true;
+        const isCentralUniversity = decoded.universityId === centralUniversity.id;
 
-        return Promise.resolve({
+        const identity: Identity = {
             id: decoded.sub,
             data: decoded,
             firstName: decoded.given_name,
             lastName: decoded.family_name,
             fullName: '',
             email: decoded.email,
-            universityId,
             isCentralUniversity,
+        };
+
+        if (decoded.realm_access?.roles.includes('super-admin')) {
+            return Promise.resolve({ ...identity, universityId: centralUniversity.id, isCentralUniversity: true });
+        }
+
+        return Promise.resolve({
+            ...identity,
+            universityId: decoded.universityId,
+            isCentralUniversity: decoded.universityId === centralUniversity.id,
         });
     },
     async handleCallback() {
@@ -202,13 +215,11 @@ const authProvider: AuthProvider = {
             const payload = await response.json();
 
             const decoded: any = jwtManager.decodeToken(payload.accessToken);
-            if (decoded) {
-                const isAdmin = decoded.realm_access?.roles.includes('admin');
-                if (isAdmin) {
-                    jwtManager.setTokens(payload.accessToken, payload.refreshToken);
 
-                    return;
-                }
+            if (canAccessAdmin(decoded)) {
+                jwtManager.setTokens(payload.accessToken, payload.refreshToken);
+
+                return;
             }
         }
 

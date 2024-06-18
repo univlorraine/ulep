@@ -75,7 +75,7 @@ spec:
             periodSeconds: {{ .Values.api.probes.liveness.periodSeconds }}
             failureThreshold: {{ .Values.api.probes.liveness.failureThreshold }}
           resources:
-            {{- toYaml .Values.resources | nindent 12 }}
+            {{- toYaml .Values.api.resources | nindent 12 }}
           env:
             - name: ADMIN_URL
               value: "https://{{ .Values.adminUrl }}.{{ .Values.domain }}"

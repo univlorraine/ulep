@@ -144,14 +144,18 @@ export class PrismaUniversityRepository implements UniversityRepository {
         pairing_mode: university.pairingMode,
         max_tandems_per_user: university.maxTandemsPerUser,
         notification_email: university.notificationEmail,
-        Contact: {
-          connectOrCreate: {
-            where: { id: university.defaultContactId },
-            create: {
-              id: university.defaultContactId,
-            },
-          },
-        },
+        ...(university.defaultContactId
+          ? {
+              Contact: {
+                connectOrCreate: {
+                  where: { id: university.defaultContactId },
+                  create: {
+                    id: university.defaultContactId,
+                  },
+                },
+              },
+            }
+          : {}),
       },
     });
 

@@ -15,11 +15,13 @@ import ChineseBubble from './china-bubble.svg';
 import ClockPng from './clock.png';
 import CloseSvg from './close.svg';
 import CloseBlackSvg from './close_black.svg';
+import ConversationsSvg from './bottom-bar/conversations.svg';
 import CreateAccountPng from './create-account-logo.png';
 import DicePng from './dice.png';
 import EditPng from './edit.png';
 import EyeSvg from './eye.svg';
 import HiBubbleSvg from './hi-bubble.svg';
+import HomeSvg from './bottom-bar/home.svg';
 import ArrowLeftSvg from './left-arrow.svg';
 import LeftChevronSvg from './left-chevron.svg';
 import LogoTextSvg from './logo-text.svg';
@@ -55,12 +57,14 @@ export {
     ClockPng,
     CloseBlackSvg,
     CloseSvg,
+    ConversationsSvg,
     CreateAccountPng,
     DicePng,
     EditPng,
     EyeSvg,
     FAQPng,
     HiBubbleSvg,
+    HomeSvg,
     InfoSvg,
     LeftChevronSvg,
     LogoSvg,

@@ -1,4 +1,4 @@
-import { useIonToast } from '@ionic/react';
+import { IonRadio, IonRadioGroup, useIonToast } from '@ionic/react';
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useConfig } from '../../context/ConfigurationContext';
@@ -127,23 +127,19 @@ const EditInformationsPage: React.FC = () => {
                 <div className="margin-bottom">
                     <h2 className={`${styles.subtitle} no-margin-top`}>{t('global.gender')}</h2>
 
-                    <RadioButton
-                        isSelected={gender === 'FEMALE'}
-                        onPressed={() => setGender('FEMALE')}
-                        name={t('global.woman')}
-                    />
-
-                    <RadioButton
-                        isSelected={gender === 'MALE'}
-                        onPressed={() => setGender('MALE')}
-                        name={t('global.men')}
-                    />
-
-                    <RadioButton
-                        isSelected={gender === 'OTHER'}
-                        onPressed={() => setGender('OTHER')}
-                        name={t('global.binary')}
-                    />
+                    <IonRadioGroup value={gender} onIonChange={(ev) => setGender(ev.detail.value)}>
+                        <IonRadio labelPlacement="end" value="FEMALE">
+                            {t('global.woman')}
+                        </IonRadio>
+                        <br />
+                        <IonRadio labelPlacement="end" value="MALE">
+                            {t('global.men')}
+                        </IonRadio>
+                        <br />
+                        <IonRadio labelPlacement="end" value="OTHER">
+                            {t('global.binary')}
+                        </IonRadio>
+                    </IonRadioGroup>
                 </div>
 
                 <TextInput
