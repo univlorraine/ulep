@@ -173,12 +173,16 @@ export class CreateTandemUsecase {
     const participantIds = [
       tandem.learningLanguages[0].profile.user.id,
       tandem.learningLanguages[1].profile.user.id,
-      tandem.learningLanguages[0].profile.user.contactId,
     ];
 
+    if (tandem.learningLanguages[0].profile.user.contactId) {
+      participantIds.push(tandem.learningLanguages[0].profile.user.contactId);
+    }
+
     if (
+      tandem.learningLanguages[1].profile.user.contactId &&
       tandem.learningLanguages[0].profile.user.contactId !==
-      tandem.learningLanguages[1].profile.user.contactId
+        tandem.learningLanguages[1].profile.user.contactId
     ) {
       participantIds.push(tandem.learningLanguages[1].profile.user.contactId);
     }

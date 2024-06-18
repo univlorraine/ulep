@@ -3,9 +3,10 @@ import { useStoreState } from '../../store/storeTypes';
 import useWindowDimensions from '../hooks/useWindowDimensions';
 import { HYBRID_MAX_WIDTH } from '../utils';
 import OnlineWebLayout from '../components/layout/OnlineWebLayout';
-import { IonContent, IonPage, useIonToast } from '@ionic/react';
+import { useIonToast } from '@ionic/react';
 import useGetConversations from '../hooks/useGetConversations';
 import { useTranslation } from 'react-i18next';
+import ConversationsContent from '../components/contents/ConversationsContent';
 
 const ConversationsPage: React.FC = () => {
     const { t } = useTranslation();
@@ -25,18 +26,12 @@ const ConversationsPage: React.FC = () => {
     }
 
     if (isHybrid) {
-        return (
-            <IonPage>
-                <IonContent>Conversations</IonContent>
-            </IonPage>
-        );
+        return <ConversationsContent conversations={conversations} profile={profile} isLoading={isLoading} />;
     }
 
     return (
         <OnlineWebLayout profile={profile}>
-            <IonPage>
-                <IonContent>Conversations</IonContent>
-            </IonPage>
+            <ConversationsContent conversations={conversations} profile={profile} isLoading={isLoading} />
         </OnlineWebLayout>
     );
 };

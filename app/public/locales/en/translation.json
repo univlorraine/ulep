@@ -22,6 +22,17 @@
         "title": "An error has occurred",
         "subtitle": "We apologize but an error has occurred, please refresh the page or go back"
     },
+    "message": {
+        "type": {
+            "noMessage": "No message",
+            "image": "Image",
+            "audio": "Audio",
+            "file": "File"
+        }
+    },
+    "date": {
+        "yesterday": "Yesterday"
+    },
     "navigation": {
         "bottom_bar": {
             "home": "Home",
@@ -88,6 +99,9 @@
         "cancel": "Cancel",
         "title": "Are you sure you want to delete your account?",
         "validate": "Confirm"
+    },
+    "conversations": {
+        "title": "My messaging"
     },
     "home_page": {
         "profile": {

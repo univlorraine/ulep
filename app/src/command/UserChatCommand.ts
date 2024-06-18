@@ -13,9 +13,9 @@ interface UserChatCommand {
 export const userChatCommandToDomain = (command: UserChatCommand) => {
     return new UserChat(
         command.id,
-        command.email,
         command.firstname,
         command.lastname,
+        command.email,
         command.isAdministrator,
         command.avatar ? mediaObjectCommandToDomain(command.avatar) : undefined
     );

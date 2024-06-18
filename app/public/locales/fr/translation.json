@@ -22,6 +22,17 @@
         "title": "Une erreur est survenue",
         "subtitle": "Veuillez nous excusez mais une erreur est survenue, veuillez rafraichir la page ou effectuer un retour en arrière"
     },
+    "message": {
+        "type": {
+            "noMessage": "Aucun message",
+            "image": "Image",
+            "audio": "Audio",
+            "file": "Fichier"
+        }
+    },
+    "date": {
+        "yesterday": "Hier"
+    },
     "navigation": {
         "bottom_bar": {
             "home": "Accueil",
@@ -90,6 +101,9 @@
         "cancel": "Annuler",
         "title": "Voulez-vous vraiment supprimer votre compte ?",
         "validate": "Confirmer"
+    },
+    "conversations": {
+        "title": "Ma messagerie"
     },
     "home_page": {
         "my_university": {

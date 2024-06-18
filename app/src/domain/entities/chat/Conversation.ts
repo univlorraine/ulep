@@ -8,6 +8,25 @@ class Conversation {
         public readonly createdAt: Date,
         public readonly lastMessage?: Message
     ) {}
+
+    /**
+     * Get the main conversation partner.
+     * If there is only one participant, return it -> University Contact.
+     * If there are multiple participants, return the first one that is not an administrator -> Tandem Contact.
+     */
+    public getMainConversationPartner(userId: string): UserChat {
+        const otherParticipants = this.participants.filter((participant) => participant.id !== userId);
+        if (otherParticipants.length === 1) {
+            return otherParticipants[0];
+        }
+
+        const tandemContact = otherParticipants.find((participant) => !participant.isAdministrator);
+        if (tandemContact) {
+            return tandemContact;
+        }
+
+        return otherParticipants[0];
+    }
 }
 
 export default Conversation;

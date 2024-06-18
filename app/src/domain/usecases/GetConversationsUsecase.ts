@@ -20,6 +20,7 @@ class GetConversationsUsecase implements GetConversationsUsecaseInterface {
 
             return httpResponse.parsedBody.items.map((conversation) => conversationCommandToDomain(conversation));
         } catch (error: any) {
+            console.error({ error });
             return new Error('errors.global');
         }
     }
