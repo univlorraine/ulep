@@ -4,7 +4,7 @@ import {
   KeycloakUser,
   UserRepresentation,
 } from '@app/keycloak';
-import { AdminGroup, AdminRole } from 'src/core/models';
+import { AdminRole } from 'src/core/models';
 import {
   MEDIA_OBJECT_REPOSITORY,
   MediaObjectRepository,
@@ -19,7 +19,10 @@ export class GetAdministratorsUsecase {
     private readonly keycloak: KeycloakClient,
   ) {}
 
-  async execute(user?: KeycloakUser): Promise<UserRepresentationWithAvatar[]> {
+  async execute(
+    user?: KeycloakUser,
+    universityId?: string,
+  ): Promise<UserRepresentationWithAvatar[]> {
     const result = await this.keycloak.getAdministrators();
 
     const administratorsWithGroups = await Promise.all(
@@ -39,6 +42,13 @@ export class GetAdministratorsUsecase {
       })),
     );
 
+    if (universityId) {
+      return this.filterByUniversity(
+        administratorsWithGroupsAndAvatar,
+        universityId,
+      );
+    }
+
     if (user.realm_access.roles.includes(AdminRole.SUPER_ADMIN)) {
       return administratorsWithGroupsAndAvatar;
     }
@@ -55,10 +65,7 @@ export class GetAdministratorsUsecase {
   ) {
     return administrators.filter(
       (administrator) =>
-        administrator.attributes?.universityId == universityId &&
-        administrator.groups?.some(
-          (group) => group.name !== AdminGroup.SUPER_ADMIN,
-        ),
+        administrator.attributes?.universityId?.[0] === universityId,
     );
   }
 }

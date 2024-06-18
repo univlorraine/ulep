@@ -1,4 +1,4 @@
-import { useIonToast } from '@ionic/react';
+import { IonRadio, IonRadioGroup, useIonToast } from '@ionic/react';
 import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useHistory, useLocation } from 'react-router';
@@ -169,16 +169,16 @@ const SignUpPage: React.FC = () => {
 
                 {/* Role selectors */}
                 <h2 className={styles.subtitle}>{t('signup_page.profile_title')}</h2>
-                <RadioButton
-                    isSelected={selectedRole === 'STUDENT'}
-                    onPressed={() => setSelectedRole('STUDENT')}
-                    name={t('signup_page.student_role')}
-                />
-                <RadioButton
-                    isSelected={selectedRole === 'STAFF'}
-                    onPressed={() => setSelectedRole('STAFF')}
-                    name={t('signup_page.staff_role')}
-                />
+                <IonRadioGroup value={selectedRole} onIonChange={(ev) => setSelectedRole(ev.detail.value)}>
+                    <IonRadio labelPlacement="end" value="STUDENT">
+                        {t('signup_page.student_role')}
+                    </IonRadio>
+                    <br />
+                    <IonRadio labelPlacement="end" value="STAFF">
+                        {t('signup_page.staff_role')}
+                    </IonRadio>
+                </IonRadioGroup>
+
                 {(!university || !isLoggedIn) && (
                     <>
                         {/* Country selector */}

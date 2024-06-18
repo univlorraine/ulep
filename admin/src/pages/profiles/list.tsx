@@ -28,10 +28,12 @@ import Language from '../../entities/Language';
 import { Profile } from '../../entities/Profile';
 import User from '../../entities/User';
 
-const ProfileFilter = (props: any) => {
-    const translate = useTranslate();
+export interface ProfileFilterProps {
+    displayAllUniversities: boolean;
+}
 
-    const { data: identity } = useGetIdentity();
+const ProfileFilter = ({ displayAllUniversities, ...props }: ProfileFilterProps) => {
+    const translate = useTranslate();
 
     const { data: languages } = useGetList('languages', {
         pagination: { page: 1, perPage: 250 },
@@ -57,7 +59,7 @@ const ProfileFilter = (props: any) => {
             <ReferenceInput label={translate('profiles.country')} reference="countries" source="user.country">
                 <SelectInput label={translate('profiles.country')} optionText="name" optionValue="code" />
             </ReferenceInput>
-            {identity?.isCentralUniversity && (
+            {displayAllUniversities && (
                 <ReferenceInput
                     label={translate('global.university')}
                     reference="universities"
@@ -139,6 +141,7 @@ const ProfileList = (props: any) => {
     }
 
     const readOnly: boolean = permissions.checkRole(Role.ANIMATOR);
+    const displayAllUniversities = Boolean(identity?.isCentralUniversity && permissions.checkRole(Role.SUPER_ADMIN));
 
     return (
         <>
@@ -146,9 +149,9 @@ const ProfileList = (props: any) => {
             <List
                 exporter={false}
                 filter={{
-                    university: !identity?.isCentralUniversity ? identity?.universityId : undefined,
+                    university: !displayAllUniversities ? identity?.universityId : undefined,
                 }}
-                filters={<ProfileFilter />}
+                filters={<ProfileFilter displayAllUniversities={displayAllUniversities} />}
                 title={translate('profiles.label')}
                 readOnly
                 {...props}
