@@ -10,9 +10,15 @@ interface ConversationsContentProps {
     conversations: Conversation[];
     isLoading: boolean;
     profile: Profile;
+    onConversationPressed: (conversation: Conversation) => void;
 }
 
-const ConversationsContent: React.FC<ConversationsContentProps> = ({ conversations, isLoading, profile }) => {
+const ConversationsContent: React.FC<ConversationsContentProps> = ({
+    conversations,
+    isLoading,
+    onConversationPressed,
+    profile,
+}) => {
     const { t } = useTranslation();
 
     return (
@@ -22,7 +28,13 @@ const ConversationsContent: React.FC<ConversationsContentProps> = ({ conversatio
                     <div className={styles.header}>
                         <span className={styles.title}>{t('conversations.title')}</span>
                     </div>
-                    {!isLoading && <ConversationsLines conversations={conversations} userId={profile.user.id} />}
+                    {!isLoading && (
+                        <ConversationsLines
+                            conversations={conversations}
+                            onConversationPressed={onConversationPressed}
+                            userId={profile.user.id}
+                        />
+                    )}
                     {isLoading && <Loader />}
                 </div>
             </IonContent>

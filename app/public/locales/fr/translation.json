@@ -91,6 +91,12 @@
         "welcome_btn": "Apprends une nouvelle langue en tandem",
         "close": "Fermer"
     },
+    "chat": {
+        "title": "Messages avec {{name}}",
+        "input": {
+            "placeholder": "Écris ton message..."
+        }
+    },
     "connection_page": {
         "connect_title": "As-tu déjà un compte ?",
         "connect_button": "Se connecter",

@@ -1,5 +1,6 @@
 import FAQPng from './FAQ.png';
 import AdviceSvg from './advice.svg';
+import ArrowLeftSvg from './left-arrow.svg';
 import ArrowUpSvg from './arrow-up.svg';
 import ArrowDownSvg from './arrow-down.svg';
 import ArrowRightSvg from './arrow-right.svg';
@@ -22,15 +23,17 @@ import EditPng from './edit.png';
 import EyeSvg from './eye.svg';
 import HiBubbleSvg from './hi-bubble.svg';
 import HomeSvg from './bottom-bar/home.svg';
-import ArrowLeftSvg from './left-arrow.svg';
 import LeftChevronSvg from './left-chevron.svg';
 import LogoTextSvg from './logo-text.svg';
 import LogoSvg from './logo.svg';
 import MailBoxPng from './mailbox.png';
 import ParameterPng from './parameter.png';
+import PaperclipSvg from './paperclip.svg';
+import PictureSvg from './picture.svg';
 import PlusPng from './plus.png';
 import QuizzPng from './quizz.png';
 import ReportSvg from './report.svg';
+import SenderSvg from './sender.svg';
 import SmallAvatarPng from './small-avatar.png';
 import StarPng from './star.png';
 import TandemPng from './tandem.png';
@@ -38,6 +41,7 @@ import TandemNotFoundPng from './tandem_not_found.png';
 import TrophiePng from './trophie.png';
 import WritingSkillPng from './writing_skill.png';
 import InfoSvg from './info.svg';
+import KebabSvg from './kebab.svg';
 
 export {
     AdviceSvg,
@@ -69,11 +73,15 @@ export {
     LeftChevronSvg,
     LogoSvg,
     LogoTextSvg,
+    KebabSvg,
     MailBoxPng,
     ParameterPng,
+    PaperclipSvg,
+    PictureSvg,
     PlusPng,
     QuizzPng,
     ReportSvg,
+    SenderSvg,
     SmallAvatarPng,
     StarPng,
     TandemNotFoundPng,

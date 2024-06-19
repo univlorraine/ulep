@@ -1,4 +1,4 @@
-import { Redirect } from 'react-router';
+import { Redirect, useHistory } from 'react-router';
 import { useStoreState } from '../../store/storeTypes';
 import useWindowDimensions from '../hooks/useWindowDimensions';
 import { HYBRID_MAX_WIDTH } from '../utils';
@@ -10,6 +10,7 @@ import ConversationsContent from '../components/contents/ConversationsContent';
 
 const ConversationsPage: React.FC = () => {
     const { t } = useTranslation();
+    const history = useHistory();
     const [showToast] = useIonToast();
     const { width } = useWindowDimensions();
     const isHybrid = width < HYBRID_MAX_WIDTH;
@@ -26,12 +27,24 @@ const ConversationsPage: React.FC = () => {
     }
 
     if (isHybrid) {
-        return <ConversationsContent conversations={conversations} profile={profile} isLoading={isLoading} />;
+        return (
+            <ConversationsContent
+                conversations={conversations}
+                profile={profile}
+                isLoading={isLoading}
+                onConversationPressed={(conversation) => history.push(`/chat`, { conversation })}
+            />
+        );
     }
 
     return (
         <OnlineWebLayout profile={profile}>
-            <ConversationsContent conversations={conversations} profile={profile} isLoading={isLoading} />
+            <ConversationsContent
+                conversations={conversations}
+                profile={profile}
+                isLoading={isLoading}
+                onConversationPressed={() => {}}
+            />
         </OnlineWebLayout>
     );
 };

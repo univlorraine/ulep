@@ -52,13 +52,14 @@ const getPreviewMessage = (userId: string, message?: Message) => {
 interface ConversationLineProps {
     conversation: Conversation;
     userId: string;
+    onPressed: (conversation: Conversation) => void;
 }
 
-const ConversationLine: React.FC<ConversationLineProps> = ({ conversation, userId }) => {
+const ConversationLine: React.FC<ConversationLineProps> = ({ conversation, onPressed, userId }) => {
     const { t } = useTranslation();
     const mainParticipant = conversation.getMainConversationPartner(userId);
     return (
-        <button className={styles.line}>
+        <button className={styles.line} onClick={() => onPressed(conversation)}>
             <div className={styles['left-line']}>
                 <ConversationAvatar
                     avatar={mainParticipant.avatar}
