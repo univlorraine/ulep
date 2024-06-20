@@ -7,47 +7,55 @@ import Conversation from '../../../domain/entities/chat/Conversation';
 
 interface ChatContentProps {
     conversation: Conversation;
-    goBack: () => void;
+    goBack?: () => void;
     isHybrid: boolean;
     userId: string;
 }
 
-const ChatContent: React.FC<ChatContentProps> = ({ conversation, isHybrid, goBack, userId }) => {
+const Content: React.FC<Omit<ChatContentProps, 'isHybrid'>> = ({ conversation, goBack, userId }) => {
     const { t } = useTranslation();
     const [message, setMessage] = useState<string>('');
 
     return (
-        <IonPage>
-            <IonHeader>
-                <div className={styles.header}>
-                    {isHybrid ? <IonIcon icon={LeftChevronSvg} onClick={goBack} /> : <div />}
-                    <span className={styles.title}>
-                        {t('chat.title', { name: conversation.getMainConversationPartner(userId).firstname })}
-                    </span>
-                    <IonIcon icon={KebabSvg} />
-                </div>
-            </IonHeader>
-            <IonContent>
-                <div className={styles.container}>
-                    <div className={styles.messages} />
-                    <div className={styles.footer}>
-                        <div>
-                            <IonIcon className={styles.icon} icon={PictureSvg} />
-                            <IonIcon className={styles.icon} icon={PaperclipSvg} />
-                        </div>
-                        <div className={styles['sender-view']}>
-                            <textarea
-                                className={styles.input}
-                                maxLength={1000}
-                                onChange={(e) => setMessage(e.target.value)}
-                                placeholder={t('chat.input.placeholder') ?? ''}
-                                value={message}
-                            />
-                            <IonIcon className={styles.sender} icon={SenderSvg} />
-                        </div>
+        <div className={styles.content}>
+            <div className={styles.header}>
+                {goBack ? <IonIcon icon={LeftChevronSvg} onClick={goBack} /> : <div />}
+                <span className={styles.title}>
+                    {t('chat.title', { name: conversation.getMainConversationPartner(userId).firstname })}
+                </span>
+                <IonIcon icon={KebabSvg} />
+            </div>
+            <div className={styles.container}>
+                <div className={styles.messages} />
+                <div className={styles.footer}>
+                    <div>
+                        <IonIcon className={styles.icon} icon={PictureSvg} />
+                        <IonIcon className={styles.icon} icon={PaperclipSvg} />
+                    </div>
+                    <div className={styles['sender-view']}>
+                        <textarea
+                            className={styles.input}
+                            maxLength={1000}
+                            onChange={(e) => setMessage(e.target.value)}
+                            placeholder={t('chat.input.placeholder') ?? ''}
+                            value={message}
+                        />
+                        <IonIcon className={styles.sender} icon={SenderSvg} />
                     </div>
                 </div>
-            </IonContent>
+            </div>
+        </div>
+    );
+};
+
+const ChatContent: React.FC<ChatContentProps> = ({ conversation, isHybrid, goBack, userId }) => {
+    if (!isHybrid) {
+        return <Content conversation={conversation} goBack={goBack} userId={userId} />;
+    }
+
+    return (
+        <IonPage className={styles.content}>
+            <Content conversation={conversation} goBack={goBack} userId={userId} />
         </IonPage>
     );
 };

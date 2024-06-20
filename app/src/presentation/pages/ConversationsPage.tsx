@@ -7,6 +7,10 @@ import { useIonToast } from '@ionic/react';
 import useGetConversations from '../hooks/useGetConversations';
 import { useTranslation } from 'react-i18next';
 import ConversationsContent from '../components/contents/ConversationsContent';
+import { useState } from 'react';
+import Conversation from '../../domain/entities/chat/Conversation';
+import ChatContent from '../components/contents/ChatContent';
+import styles from './css/ConversationsPage.module.css';
 
 const ConversationsPage: React.FC = () => {
     const { t } = useTranslation();
@@ -15,6 +19,7 @@ const ConversationsPage: React.FC = () => {
     const { width } = useWindowDimensions();
     const isHybrid = width < HYBRID_MAX_WIDTH;
     const profile = useStoreState((state) => state.profile);
+    const [currentConversation, setCurrentConversation] = useState<Conversation | null>(null);
 
     const { conversations, error, isLoading } = useGetConversations();
 
@@ -31,6 +36,7 @@ const ConversationsPage: React.FC = () => {
             <ConversationsContent
                 conversations={conversations}
                 profile={profile}
+                isHybrid={isHybrid}
                 isLoading={isLoading}
                 onConversationPressed={(conversation) => history.push(`/chat`, { conversation })}
             />
@@ -39,12 +45,18 @@ const ConversationsPage: React.FC = () => {
 
     return (
         <OnlineWebLayout profile={profile}>
-            <ConversationsContent
-                conversations={conversations}
-                profile={profile}
-                isLoading={isLoading}
-                onConversationPressed={() => {}}
-            />
+            <div className={styles.container}>
+                <ConversationsContent
+                    conversations={conversations}
+                    profile={profile}
+                    isHybrid={isHybrid}
+                    isLoading={isLoading}
+                    onConversationPressed={(conversation) => setCurrentConversation(conversation)}
+                />
+                {currentConversation && (
+                    <ChatContent conversation={currentConversation} userId={profile.user.id} isHybrid={isHybrid} />
+                )}
+            </div>
         </OnlineWebLayout>
     );
 };
