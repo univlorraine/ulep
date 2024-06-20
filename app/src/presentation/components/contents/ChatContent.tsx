@@ -4,6 +4,8 @@ import styles from './ChatContent.module.css';
 import { KebabSvg, LeftChevronSvg, PaperclipSvg, PictureSvg, SenderSvg } from '../../../assets';
 import { useTranslation } from 'react-i18next';
 import Conversation from '../../../domain/entities/chat/Conversation';
+import useGetMessagesFromConversation from '../../hooks/useGetMessagesFromConversation';
+import MessagesList from '../chat/MessagesList';
 
 interface ChatContentProps {
     conversation: Conversation;
@@ -16,6 +18,8 @@ const Content: React.FC<Omit<ChatContentProps, 'isHybrid'>> = ({ conversation, g
     const { t } = useTranslation();
     const [message, setMessage] = useState<string>('');
 
+    const { messages, isLoading, error, loadMessages } = useGetMessagesFromConversation(conversation.id);
+
     return (
         <div className={styles.content}>
             <div className={styles.header}>
@@ -26,7 +30,7 @@ const Content: React.FC<Omit<ChatContentProps, 'isHybrid'>> = ({ conversation, g
                 <IonIcon icon={KebabSvg} />
             </div>
             <div className={styles.container}>
-                <div className={styles.messages} />
+                <MessagesList messages={messages} loadMessages={loadMessages} userId={userId} />
                 <div className={styles.footer}>
                     <div>
                         <IonIcon className={styles.icon} icon={PictureSvg} />

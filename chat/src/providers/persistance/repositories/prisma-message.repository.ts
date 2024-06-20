@@ -94,7 +94,7 @@ export class PrismaMessageRepository implements MessageRepository {
         const messages = await this.prisma.message.findMany({
             where,
             ...messagesPagination,
-            orderBy: { updatedAt: 'desc' },
+            orderBy: { updatedAt: 'asc' },
             ...MessagesRelations,
         });
 

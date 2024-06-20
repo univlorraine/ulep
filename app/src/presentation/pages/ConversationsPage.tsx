@@ -46,15 +46,19 @@ const ConversationsPage: React.FC = () => {
     return (
         <OnlineWebLayout profile={profile}>
             <div className={styles.container}>
-                <ConversationsContent
-                    conversations={conversations}
-                    profile={profile}
-                    isHybrid={isHybrid}
-                    isLoading={isLoading}
-                    onConversationPressed={(conversation) => setCurrentConversation(conversation)}
-                />
+                <div className={styles.conversationContent}>
+                    <ConversationsContent
+                        conversations={conversations}
+                        profile={profile}
+                        isHybrid={isHybrid}
+                        isLoading={isLoading}
+                        onConversationPressed={(conversation) => setCurrentConversation(conversation)}
+                    />
+                </div>
                 {currentConversation && (
-                    <ChatContent conversation={currentConversation} userId={profile.user.id} isHybrid={isHybrid} />
+                    <div className={styles.chatContent}>
+                        <ChatContent conversation={currentConversation} userId={profile.user.id} isHybrid={isHybrid} />
+                    </div>
                 )}
             </div>
         </OnlineWebLayout>

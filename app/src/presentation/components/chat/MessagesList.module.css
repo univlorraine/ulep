@@ -1,0 +1,17 @@
+.messages {
+    flex: 1;
+    height: 100%;
+    width: 100%;
+}
+
+.currentUser,
+.otherUser {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    width: 100%;
+}
+
+.otherUser {
+    align-items: flex-start;
+}
