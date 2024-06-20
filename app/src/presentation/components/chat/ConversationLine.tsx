@@ -72,7 +72,9 @@ const ConversationLine: React.FC<ConversationLineProps> = ({ conversation, onPre
                 </div>
             </div>
             {conversation.lastMessage && (
-                <span className={styles.date}>{conversation.lastMessage.getMessageDate()}</span>
+                <span className={styles.date}>{`${t(
+                    conversation.lastMessage.getMessageDate()
+                )} ${conversation.lastMessage.getMessageHour()}`}</span>
             )}
         </button>
     );

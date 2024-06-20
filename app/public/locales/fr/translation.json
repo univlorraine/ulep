@@ -31,6 +31,7 @@
         }
     },
     "date": {
+        "today": "Aujourd'hui",
         "yesterday": "Hier"
     },
     "navigation": {
@@ -92,6 +93,7 @@
         "close": "Fermer"
     },
     "chat": {
+        "me": "Moi",
         "title": "Messages avec {{name}}",
         "input": {
             "placeholder": "Écris ton message..."

@@ -25,7 +25,7 @@ const ChatPage = () => {
         return <Redirect to="/" />;
     }
 
-    return <ChatContent conversation={conversation} goBack={goBack} userId={profile.id} isHybrid />;
+    return <ChatContent conversation={conversation} goBack={goBack} userId={profile.user.id} isHybrid />;
 };
 
 export default ChatPage;

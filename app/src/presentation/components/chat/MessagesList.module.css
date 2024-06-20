@@ -1,3 +1,13 @@
+.dateSeparator {
+    font-family: 'Maven Pro', sans-serif;
+    font-size: 18px;
+    font-weight: 700;
+    color: black;
+    justify-content: center;
+    display: flex;
+    margin: 10px;
+}
+
 .messages {
     flex: 1;
     height: 100%;
