@@ -1,14 +1,29 @@
-import { UserChat } from '../domain/entities/User';
-import { Message, MessageType } from '../domain/entities/chat/Message';
+import { Message, MessageType, MessageWithoutSender } from '../domain/entities/chat/Message';
 import UserChatCommand, { userChatCommandToDomain } from './UserChatCommand';
 
-interface MessageCommand {
+//From Domain api
+export interface MessageCommand {
     id: string;
     content: string;
     createdAt: Date;
     user: UserChatCommand;
     type: string;
 }
+
+// From Chat api
+export interface MessageWithoutSenderCommand extends MessageCommand {
+    ownerId: string;
+}
+
+export const messageWithoutSenderCommandToDomain = (command: MessageWithoutSenderCommand) => {
+    return new MessageWithoutSender(
+        command.id,
+        command.content,
+        new Date(command.createdAt),
+        command.ownerId,
+        command.type as MessageType
+    );
+};
 
 export const messageCommandToDomain = (command: MessageCommand) => {
     return new Message(
@@ -19,5 +34,3 @@ export const messageCommandToDomain = (command: MessageCommand) => {
         command.type as MessageType
     );
 };
-
-export default MessageCommand;

@@ -1,10 +1,10 @@
-import { Injectable } from '@nestjs/common';
 import { PrismaService } from '@app/common';
+import { Injectable } from '@nestjs/common';
+import { Message } from 'src/core/models';
 import {
     MessagePagination,
     MessageRepository,
 } from 'src/core/ports/message.repository';
-import { Message } from 'src/core/models';
 import {
     MessagesRelations,
     messageMapper,
@@ -94,7 +94,7 @@ export class PrismaMessageRepository implements MessageRepository {
         const messages = await this.prisma.message.findMany({
             where,
             ...messagesPagination,
-            orderBy: { updatedAt: 'asc' },
+            orderBy: { updatedAt: 'desc' },
             ...MessagesRelations,
         });
 

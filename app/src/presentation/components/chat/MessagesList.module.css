@@ -11,6 +11,9 @@
 .messages {
     flex: 1;
     height: 100%;
+    max-height: 100%;
+    overflow: hidden;
+    overflow-y: auto; /* Permet le défilement vertical si le contenu dépasse la hauteur maximale */
     width: 100%;
 }
 

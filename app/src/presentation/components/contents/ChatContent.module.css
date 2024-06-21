@@ -1,14 +1,15 @@
 .container {
+    border-left: 1px solid #00000020;
     background-color: #fff8b7;
     display: flex;
     flex: 1;
     flex-direction: column;
     justify-content: space-between;
+    height: 100%;
     width: 100%;
 }
 
 .content {
-    border-left: 1px solid #00000020;
     flex: 1;
     display: flex;
     flex-direction: column;
@@ -29,6 +30,7 @@
     align-items: center;
     display: flex;
     justify-content: space-between;
+    flex-shrink: 0;
     height: 50px;
     padding: 12px;
 }

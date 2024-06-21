@@ -1,9 +1,9 @@
-import { useState, useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { useConfig } from '../../context/ConfigurationContext';
-import { useStoreState } from '../../store/storeTypes';
 import { Message } from '../../domain/entities/chat/Message';
+import { useStoreState } from '../../store/storeTypes';
 
-const useGetMessagesFromConversation = (conversationId: string) => {
+const useHandleMessagesFromConversation = (conversationId: string) => {
     const { getMessagesFromConversation } = useConfig();
     const [lastMessageId, setLastMessageId] = useState<string>();
     const profile = useStoreState((state) => state.profile);
@@ -18,7 +18,15 @@ const useGetMessagesFromConversation = (conversationId: string) => {
         isLoading: false,
     });
 
-    if (!profile) return { ...messagesResult, loadMessages: () => {} };
+    if (!profile) return { ...messagesResult, loadMessages: () => {}, addNewMessage: () => {} };
+
+    const addNewMessage = (message: Message) => {
+        setMessagesResult((current) => ({
+            messages: [message, ...current.messages],
+            error: undefined,
+            isLoading: false,
+        }));
+    };
 
     const loadMessages = async () => {
         const messagesConversationResult = await getMessagesFromConversation.execute(conversationId, lastMessageId, 20);
@@ -64,7 +72,7 @@ const useGetMessagesFromConversation = (conversationId: string) => {
         fetchData();
     }, [profile, conversationId]);
 
-    return { ...messagesResult, loadMessages };
+    return { ...messagesResult, loadMessages, addNewMessage };
 };
 
-export default useGetMessagesFromConversation;
+export default useHandleMessagesFromConversation;

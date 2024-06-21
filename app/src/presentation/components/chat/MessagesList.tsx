@@ -1,8 +1,8 @@
 import { isSameDay } from 'date-fns';
+import { useTranslation } from 'react-i18next';
 import { Message } from '../../../domain/entities/chat/Message';
 import MessageText from './MessageText';
 import styles from './MessagesList.module.css';
-import { useTranslation } from 'react-i18next';
 
 interface MessagesListProps {
     messages: Message[];
@@ -12,6 +12,7 @@ interface MessagesListProps {
 
 const MessagesList: React.FC<MessagesListProps> = ({ messages, loadMessages, userId }) => {
     const { t } = useTranslation();
+
     const handleScroll = (event: React.UIEvent<HTMLDivElement>) => {
         const { scrollTop } = event.currentTarget;
 
@@ -24,7 +25,9 @@ const MessagesList: React.FC<MessagesListProps> = ({ messages, loadMessages, use
         const messageElements: React.ReactNode[] = [];
         let lastDate: Date | null = null;
 
-        messages.forEach((message, index) => {
+        const reversedMessages = [...messages].reverse();
+
+        reversedMessages.forEach((message, index) => {
             const messageDate = new Date(message.createdAt);
             const isCurrentUserMessage = message.isMine(userId);
 
