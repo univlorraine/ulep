@@ -66,9 +66,8 @@ const Content: React.FC<Omit<ChatContentProps, 'isHybrid'>> = ({ conversation, g
         };
     }, []);
 
-    //TODO: Start scroll on bottom
     return (
-        <div className={styles.content}>
+        <div className={styles.container}>
             <div className={styles.header}>
                 {goBack ? <IonIcon icon={LeftChevronSvg} onClick={goBack} /> : <div />}
                 <span className={styles.title}>
@@ -76,23 +75,21 @@ const Content: React.FC<Omit<ChatContentProps, 'isHybrid'>> = ({ conversation, g
                 </span>
                 <IonIcon icon={KebabSvg} />
             </div>
-            <div className={styles.container}>
-                <MessagesList messages={messages} loadMessages={loadMessages} userId={profile.user.id} />
-                <div className={styles.footer}>
-                    <div>
-                        <IonIcon className={styles.icon} icon={PictureSvg} />
-                        <IonIcon className={styles.icon} icon={PaperclipSvg} />
-                    </div>
-                    <div className={styles['sender-view']}>
-                        <textarea
-                            className={styles.input}
-                            maxLength={1000}
-                            onChange={(e) => setMessage(e.target.value)}
-                            placeholder={t('chat.input.placeholder') ?? ''}
-                            value={message}
-                        />
-                        <IonIcon className={styles.sender} icon={SenderSvg} onClick={onSendPressed} />
-                    </div>
+            <MessagesList messages={messages} loadMessages={loadMessages} userId={profile.user.id} />
+            <div className={styles.footer}>
+                <div>
+                    <IonIcon className={styles.icon} icon={PictureSvg} />
+                    <IonIcon className={styles.icon} icon={PaperclipSvg} />
+                </div>
+                <div className={styles['sender-view']}>
+                    <textarea
+                        className={styles.input}
+                        maxLength={1000}
+                        onChange={(e) => setMessage(e.target.value)}
+                        placeholder={t('chat.input.placeholder') ?? ''}
+                        value={message}
+                    />
+                    <IonIcon className={styles.sender} icon={SenderSvg} onClick={onSendPressed} />
                 </div>
             </div>
         </div>

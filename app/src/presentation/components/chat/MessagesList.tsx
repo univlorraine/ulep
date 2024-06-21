@@ -1,4 +1,5 @@
 import { isSameDay } from 'date-fns';
+import { useEffect, useRef } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Message } from '../../../domain/entities/chat/Message';
 import MessageText from './MessageText';
@@ -12,6 +13,16 @@ interface MessagesListProps {
 
 const MessagesList: React.FC<MessagesListProps> = ({ messages, loadMessages, userId }) => {
     const { t } = useTranslation();
+    const messagesEndRef = useRef<HTMLDivElement | null>(null);
+
+    const scrollToBottom = () => {
+        messagesEndRef.current?.scrollIntoView({ behavior: 'instant' });
+    };
+
+    // On mount, scroll to bottom
+    useEffect(() => {
+        scrollToBottom();
+    }, [messages]);
 
     const handleScroll = (event: React.UIEvent<HTMLDivElement>) => {
         const { scrollTop } = event.currentTarget;
@@ -46,6 +57,8 @@ const MessagesList: React.FC<MessagesListProps> = ({ messages, loadMessages, use
                 </div>
             );
         });
+
+        messageElements.push(<div ref={messagesEndRef} />);
 
         return messageElements;
     };

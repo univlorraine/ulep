@@ -4,16 +4,8 @@
     display: flex;
     flex: 1;
     flex-direction: column;
-    justify-content: space-between;
     height: 100%;
     width: 100%;
-}
-
-.content {
-    flex: 1;
-    display: flex;
-    flex-direction: column;
-    height: 100%;
 }
 
 .footer {
@@ -28,6 +20,7 @@
 
 .header {
     align-items: center;
+    background-color: white;
     display: flex;
     justify-content: space-between;
     flex-shrink: 0;
