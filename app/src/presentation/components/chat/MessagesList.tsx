@@ -16,6 +16,8 @@ interface MessagesListProps {
 const MessagesList: React.FC<MessagesListProps> = ({ messages, isScrollOver, loadMessages, userId }) => {
     const { t } = useTranslation();
     const messagesEndRef = useRef<HTMLDivElement | null>(null);
+    const scrollPositionRef = useRef<number>(0);
+    const previousScrollHeightRef = useRef<number>(0);
     const [isLoading, setIsLoading] = useState(false);
 
     const scrollToBottom = () => {
@@ -24,24 +26,30 @@ const MessagesList: React.FC<MessagesListProps> = ({ messages, isScrollOver, loa
 
     useEffect(() => {
         const messagesContainer = messagesEndRef.current?.parentElement;
-        // Check if every messages are visible, if yes, load more messages
-        if (messagesContainer && messagesContainer.scrollHeight <= messagesContainer.clientHeight) {
-            loadMessages();
-            // Scroll to bottom if there is more message than the container height
-        } else if (!isLoading) {
-            scrollToBottom();
-            // Set loading to false if there is more message loaded
-        } else {
-            setIsLoading(false);
+        if (messagesContainer) {
+            if (isLoading) {
+                const newScrollHeight = messagesContainer.scrollHeight;
+                const heightDifference = newScrollHeight - previousScrollHeightRef.current;
+                messagesContainer.scrollTop = scrollPositionRef.current + heightDifference;
+                setIsLoading(false);
+            } else if (messagesContainer.scrollHeight <= messagesContainer.clientHeight) {
+                loadMessages();
+            } else {
+                scrollToBottom();
+            }
         }
     }, [messages]);
 
     const handleScroll = (event: React.UIEvent<HTMLDivElement>) => {
-        const { scrollTop } = event.currentTarget;
+        const { scrollTop, scrollHeight } = event.currentTarget;
 
-        if (!isLoading && !isScrollOver && scrollTop < 200) {
+        if (!isLoading && !isScrollOver && scrollTop === 0) {
             setIsLoading(true);
-            loadMessages();
+            setTimeout(() => {
+                scrollPositionRef.current = scrollTop;
+                previousScrollHeightRef.current = scrollHeight;
+                loadMessages();
+            }, 2000);
         }
     };
 
@@ -80,7 +88,8 @@ const MessagesList: React.FC<MessagesListProps> = ({ messages, isScrollOver, loa
         <div className={styles.messages} onScroll={handleScroll}>
             {isLoading && (
                 <div className={styles.loader}>
-                    <Loader color="#FFF" height={30} width={30} />
+                    {/* TODO: Upgrade to use a better loader */}
+                    <Loader color="#000" height={30} width={30} />
                 </div>
             )}
             {renderMessages()}
