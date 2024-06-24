@@ -2,6 +2,7 @@ import { Typography } from '@mui/material';
 import React from 'react';
 import { useRedirect } from 'react-admin';
 import { Profile, getProfileDisplayName } from '../../../entities/Profile';
+import codeLanguageToFlag from '../../../utils/codeLanguageToFlag';
 
 interface ProfileLinkParams {
     profile: Profile;
@@ -21,7 +22,7 @@ const ProfileLink = ({ profile, variant }: ProfileLinkParams) => {
             // will juste lead to syle not applied)
             variant={variant as any}
         >
-            {getProfileDisplayName(profile)}
+            {getProfileDisplayName(profile)} ({codeLanguageToFlag(profile.nativeLanguage.code)})
         </Typography>
     );
 };

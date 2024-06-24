@@ -1,109 +1,249 @@
-import { Box } from '@mui/material';
+import { Box, Typography } from '@mui/material';
 import React from 'react';
 
-import {
-    BooleanField,
-    DateField,
-    FunctionField,
-    Show,
-    SimpleShowLayout,
-    TextField,
-    useRecordContext,
-    useTranslate,
-} from 'react-admin';
-import PageTitle from '../../../components/PageTitle';
+import { BooleanField, DateField, FunctionField, Show, TabbedShowLayout, TextField, useTranslate } from 'react-admin';
+import CustomAvatar from '../../../components/CustomAvatar';
 import { DisplayGender, DisplayLearningType, DisplayRole, DisplaySameTandem } from '../../../components/translated';
+import WarningCircle from '../../../components/WarningCircle';
 import Language from '../../../entities/Language';
 import { LearningLanguage, getLearningLanguageUniversityAndCampusString } from '../../../entities/LearningLanguage';
+import codeLanguageToFlag from '../../../utils/codeLanguageToFlag';
 import ProfileLink from '../ui/ProfileLink';
 import ShowTandems from './ShowTandems';
 
-const Title = () => {
-    const record = useRecordContext();
-    const translate = useTranslate();
-
-    if (!record?.profile?.user) {
-        return null;
-    }
-
-    return (
-        <span>
-            {record.profile.user.firstname} {record.profile.user.lastname} -{' '}
-            {translate(`languages_code.${record.code}`)}
-        </span>
-    );
-};
+import './show.css';
+import TandemCard, { TandemType } from './TandemCard';
 
 const LearningLanguageShow = () => {
     const translate = useTranslate();
 
     return (
-        <>
-            <PageTitle>{translate('learning_languages.title')}</PageTitle>
-            <Show title={<Title />}>
-                <SimpleShowLayout>
-                    <FunctionField
-                        render={(data: LearningLanguage) =>
-                            data?.profile && <ProfileLink profile={data.profile} variant="h5" />
-                        }
-                    />
-                    <FunctionField
-                        label={translate('learning_languages.list.tableColumns.university')}
-                        render={(data: LearningLanguage) => getLearningLanguageUniversityAndCampusString(data)}
-                    />
-                    <DateField label={translate('learning_languages.show.fields.createdAt')} source="createdAt" />
-                    <FunctionField
-                        label={translate('learning_languages.list.tableColumns.learnedLanguage')}
-                        render={(record: Language) => translate(`languages_code.${record.code}`)}
-                        source="code"
-                    />
-                    <TextField label={translate('learning_languages.show.fields.level')} source="level" />
-                    <FunctionField
-                        label={translate('learning_languages.show.fields.status')}
-                        render={(data: LearningLanguage) =>
-                            translate(`global.userStatus.${data.profile.user.status?.toLowerCase()}`)
-                        }
-                    />
-                    <FunctionField
-                        label={translate('learning_languages.show.fields.role')}
-                        render={(data: LearningLanguage) => <DisplayRole role={data.profile?.user.role} />}
-                    />
-                    <FunctionField
-                        label={translate('learning_languages.show.fields.learningType')}
-                        render={(data: LearningLanguage) => <DisplayLearningType learningType={data.learningType} />}
-                    />
-                    <BooleanField label={translate('learning_languages.show.fields.sameGender')} source="sameGender" />
-                    <FunctionField
-                        label={translate('learning_languages.show.fields.gender')}
-                        render={(data: LearningLanguage) => <DisplayGender gender={data.profile?.user.gender} />}
-                    />
-                    <BooleanField label={translate('learning_languages.show.fields.sameAge')} source="sameAge" />
-                    <FunctionField
-                        label={translate('learning_languages.show.fields.sameTandemEmail')}
-                        render={(data: LearningLanguage) => (
-                            <DisplaySameTandem sameTandemEmail={data.sameTandemEmail} />
-                        )}
-                    />
-                    <TextField label={translate('learning_languages.show.fields.age')} source="profile.user.age" />
-                    <BooleanField
-                        label={translate('learning_languages.show.fields.certificateOption')}
-                        source="certificateOption"
-                    />
-                    <BooleanField
-                        label={translate('learning_languages.show.fields.specificProgram')}
-                        source="specificProgram"
-                    />
-                    <BooleanField
-                        label={translate('learning_languages.show.fields.hasPriority')}
-                        source="hasPriority"
-                    />
-                </SimpleShowLayout>
+        <Show>
+            <FunctionField
+                render={(data: LearningLanguage) => (
+                    <Box sx={{ marginBottom: 2, '& .MuiTypography-h2': { color: 'black' } }}>
+                        <ProfileLink profile={data.profile} variant="h2" />
+                    </Box>
+                )}
+            />
+            <TabbedShowLayout>
+                <TabbedShowLayout.Tab label="Espagnol (en attente)">
+                    <Typography sx={{ marginTop: 4 }} variant="h3">
+                        {translate('learning_languages.show.management.title')}
+                    </Typography>
 
-                <Box sx={{ padding: 2 }}>
-                    <ShowTandems />
-                </Box>
-            </Show>
-        </>
+                    <Box className="tandem-management">
+                        <Box className="profile">
+                            <Typography sx={{ marginBottom: 9 }} variant="h4">
+                                {translate('learning_languages.show.management.applicant_profile')}
+                            </Typography>
+                            <FunctionField
+                                render={(data: LearningLanguage) => (
+                                    <div className="line profile-name">
+                                        <CustomAvatar
+                                            avatarId={data.profile.user.avatar.id}
+                                            firstName={data.profile.user.firstname}
+                                            lastName={data.profile.user.lastname}
+                                            sx={{ width: '35px', height: '35px', fontSize: '1rem' }}
+                                        />
+                                        <ProfileLink profile={data.profile} />
+                                    </div>
+                                )}
+                            />
+                            <FunctionField
+                                render={() => (
+                                    <div className="line">
+                                        <span className="label">
+                                            {translate('learning_languages.show.fields.createdAt')}
+                                        </span>
+                                        <span>
+                                            <DateField source="createdAt" />
+                                        </span>
+                                    </div>
+                                )}
+                            />
+                            <FunctionField
+                                render={(data: LearningLanguage) => (
+                                    <div className="line">
+                                        <span className="label">
+                                            {translate('learning_languages.show.fields.gender')}
+                                        </span>
+                                        <span>
+                                            <DisplayGender gender={data.profile?.user.gender} />
+                                            {data.sameGender && <WarningCircle />}
+                                        </span>
+                                    </div>
+                                )}
+                            />
+                            <FunctionField
+                                render={(data: LearningLanguage) => (
+                                    <div className="line">
+                                        <span className="label">{translate('learning_languages.show.fields.age')}</span>
+                                        <span>
+                                            <TextField source="profile.user.age" />
+                                            {data.sameGender && <WarningCircle />}
+                                        </span>
+                                    </div>
+                                )}
+                            />
+                            <FunctionField
+                                render={(data: LearningLanguage) => (
+                                    <div className="line">
+                                        <span className="label">
+                                            {translate('learning_languages.list.tableColumns.university')}
+                                        </span>
+                                        <span>{getLearningLanguageUniversityAndCampusString(data)}</span>
+                                    </div>
+                                )}
+                            />
+                            <FunctionField
+                                render={(record: Language) => (
+                                    <div className="line">
+                                        <span className="label">
+                                            {translate('learning_languages.list.tableColumns.learnedLanguage')}
+                                        </span>
+                                        <span>{codeLanguageToFlag(record.code)}</span>
+                                    </div>
+                                )}
+                                source="code"
+                            />
+                            <FunctionField
+                                render={() => (
+                                    <div className="line">
+                                        <span className="label">
+                                            {translate('learning_languages.show.fields.level')}
+                                        </span>
+                                        <TextField
+                                            label={translate('learning_languages.show.fields.level')}
+                                            source="level"
+                                        />
+                                    </div>
+                                )}
+                            />
+                            <FunctionField
+                                render={(data: LearningLanguage) => (
+                                    <div className="line">
+                                        <span className="label">
+                                            {translate('learning_languages.show.fields.status')}
+                                        </span>
+                                        <span>
+                                            {translate(`global.userStatus.${data.profile.user.status?.toLowerCase()}`)}
+                                        </span>
+                                    </div>
+                                )}
+                            />
+                            <FunctionField
+                                render={(data: LearningLanguage) => (
+                                    <div className="line">
+                                        <span className="label">
+                                            {translate('learning_languages.show.fields.role')}
+                                        </span>
+                                        <span>
+                                            <DisplayRole role={data.profile?.user.role} />
+                                        </span>
+                                    </div>
+                                )}
+                            />
+                            <FunctionField
+                                render={(data: LearningLanguage) => (
+                                    <div className="line">
+                                        <span className="label">
+                                            {translate('learning_languages.show.fields.learningType')}
+                                        </span>
+                                        <span>
+                                            <DisplayLearningType learningType={data.learningType} />
+                                        </span>
+                                    </div>
+                                )}
+                            />
+                            <FunctionField
+                                render={(data: LearningLanguage) => (
+                                    <div className="line">
+                                        <span className="label">
+                                            {translate('learning_languages.show.fields.sameTandemEmail')}
+                                        </span>
+                                        <span>
+                                            <DisplaySameTandem sameTandemEmail={data.sameTandemEmail} />
+                                        </span>
+                                    </div>
+                                )}
+                            />
+                            <FunctionField
+                                render={() => (
+                                    <div className="line">
+                                        <span className="label">
+                                            {translate('learning_languages.show.fields.sameGender')}
+                                        </span>
+                                        <span>
+                                            <BooleanField source="sameGender" />
+                                        </span>
+                                    </div>
+                                )}
+                            />
+                            <FunctionField
+                                render={() => (
+                                    <div className="line">
+                                        <span className="label">
+                                            {translate('learning_languages.show.fields.sameAge')}
+                                        </span>
+                                        <span>
+                                            <BooleanField source="sameAge" />
+                                        </span>
+                                    </div>
+                                )}
+                            />
+                            <FunctionField
+                                render={() => (
+                                    <div className="line">
+                                        <span className="label">
+                                            {translate('learning_languages.show.fields.certificateOption')}
+                                        </span>
+                                        <span>
+                                            <BooleanField source="certificateOption" />
+                                        </span>
+                                    </div>
+                                )}
+                            />
+                            <FunctionField
+                                render={() => (
+                                    <div className="line">
+                                        <span className="label">
+                                            {translate('learning_languages.show.fields.specificProgram')}
+                                        </span>
+                                        <span>
+                                            <BooleanField source="specificProgram" />
+                                        </span>
+                                    </div>
+                                )}
+                            />
+                            <FunctionField
+                                render={() => (
+                                    <div className="line">
+                                        <span className="label">
+                                            {translate('learning_languages.show.fields.hasPriority')}
+                                        </span>
+                                        <span>
+                                            <BooleanField source="hasPriority" />
+                                        </span>
+                                    </div>
+                                )}
+                            />
+                        </Box>
+
+                        <TandemCard tandemType={TandemType.BEST_OVERALL} />
+                        <TandemCard tandemType={TandemType.BEST_MATCH} />
+                    </Box>
+
+                    <Box sx={{ padding: 2 }}>
+                        <Typography sx={{ marginTop: 4 }} variant="h3">
+                            {translate('learning_languages.show.other_proposals.title')}
+                        </Typography>
+                        <ShowTandems />
+                    </Box>
+                </TabbedShowLayout.Tab>
+                <TabbedShowLayout.Tab label="Anglais (apparié)">Lorem ipsum</TabbedShowLayout.Tab>
+            </TabbedShowLayout>
+        </Show>
     );
 };
 export default LearningLanguageShow;

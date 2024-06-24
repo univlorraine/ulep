@@ -1,6 +1,7 @@
 import { Box, FormControl, InputLabel, MenuItem, Select, SelectChangeEvent, TextField } from '@mui/material';
 import React from 'react';
-import { useTranslate } from 'react-admin';
+import { useGetList, useTranslate } from 'react-admin';
+import University from '../../../../entities/University';
 
 interface TandemFiltersParams {
     firstname?: string;
@@ -9,12 +10,25 @@ interface TandemFiltersParams {
     setLastname: (value: string) => void;
     role?: UserRole;
     setRole: (value?: UserRole) => void;
+    universityId?: string;
+    setUniversityId: (value?: string) => void;
 }
 
 const ROLE_ALL_VALUE = 'ALL';
+const UNIVERSITY_ALL_VALUE = 'ALL';
 
-const TandemFilters = ({ firstname, setFirstname, lastname, setLastname, role, setRole }: TandemFiltersParams) => {
+const TandemFilters = ({
+    firstname,
+    setFirstname,
+    lastname,
+    setLastname,
+    role,
+    setRole,
+    universityId,
+    setUniversityId,
+}: TandemFiltersParams) => {
     const translate = useTranslate();
+    const { data: universities } = useGetList('universities');
 
     return (
         <Box sx={{ display: 'flex', gap: '1rem' }}>
@@ -56,6 +70,34 @@ const TandemFilters = ({ firstname, setFirstname, lastname, setLastname, role, s
                     <MenuItem value="STAFF">{translate('global.staff')}</MenuItem>
                 </Select>
             </FormControl>
+            {universities && (
+                <FormControl sx={{ minWidth: '300px' }}>
+                    <InputLabel id="university-filter-label">
+                        {translate('learning_languages.show.tandems.filters.university')}
+                    </InputLabel>
+                    <Select
+                        id="university-filter"
+                        label={translate('learning_languages.show.tandems.filters.university')}
+                        labelId="university-filter-label"
+                        onChange={(event: SelectChangeEvent) => {
+                            console.log({ event });
+                            if (event.target.value === UNIVERSITY_ALL_VALUE) {
+                                setUniversityId(undefined);
+                            } else {
+                                setUniversityId(event.target.value as string);
+                            }
+                        }}
+                        value={universityId || UNIVERSITY_ALL_VALUE}
+                    >
+                        <MenuItem value={UNIVERSITY_ALL_VALUE}>{translate('global.all')}</MenuItem>
+                        {universities.map((university: University) => (
+                            <MenuItem key={university.id} value={university.id}>
+                                {university.name}
+                            </MenuItem>
+                        ))}
+                    </Select>
+                </FormControl>
+            )}
         </Box>
     );
 };

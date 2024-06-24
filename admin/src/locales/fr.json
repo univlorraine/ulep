@@ -532,6 +532,20 @@
             "noUniversitySelected": "Merci de sélectionner une ou plusieurs universités pour l'appariement"
         },
         "show": {
+            "management": {
+                "title": "Gestion du tandem",
+                "applicant_profile": "Profil du demandeur",
+                "best_tandem": "Meilleur tandem",
+                "best_tandem_desc": "Meilleure solution possible au niveau de votre programme pour créer le maximum de tandems.",
+                "best_match": "Correspondance idéale",
+                "best_match_desc": "Meilleure solution possible en prenant en compte les préférences du demandeur et du candidat.",
+                "ok": "Ok",
+                "no": "Non",
+                "validate": "Valider"
+            },
+            "other_proposals": {
+                "title": "Autres propositions parmi les universités partenaires"
+            },
             "fields": {
                 "createdAt": "Date demande",
                 "learnedLanguage": "Langue demandé",
@@ -547,7 +561,8 @@
                 "age": "Âge",
                 "certificateOption": "Option certificat",
                 "specificProgram": "Option programme spécifique",
-                "hasPriority": "Langue prioritaire ( sans réponse au cycle précedent )"
+                "hasPriority": "Langue prioritaire ( sans réponse au cycle précedent )",
+                "score": "Score"
             },
             "tandems": {
                 "error": "Une erreur est survenue lors de la récupération des tandems",
@@ -595,7 +610,8 @@
                 "filters": {
                     "firstname": "Prénom",
                     "lastname": "Nom",
-                    "role": "Rôle"
+                    "role": "Rôle",
+                    "university": "Université"
                 }
             }
         },

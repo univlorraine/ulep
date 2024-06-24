@@ -18,6 +18,9 @@ type User = {
     university: University;
     age: number;
     contact: Administrator;
+    avatar: {
+        id: string;
+    };
 };
 
 export default User;

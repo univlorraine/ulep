@@ -11,11 +11,15 @@ const theme: RaThemeOptions = {
             main: '#fdee66',
             contrastText: '#212121',
         },
+        info: {
+            main: '#2196f3',
+            contrastText: '#ffffff',
+        },
     } as PaletteOptions,
     typography: {
         fontFamily: 'Roboto, Arial, sans-serif',
         body1: {
-            fontSize: '1rem',
+            fontSize: '0.875rem',
             color: '#212121',
         },
         h1: {
@@ -26,6 +30,18 @@ const theme: RaThemeOptions = {
             fontSize: '2.4rem',
             fontWeight: '400',
             padding: '16px 0',
+        },
+        h3: {
+            fontSize: '1.2rem',
+            fontWeight: '600',
+            borderBottom: '1px solid #e0e0e0',
+            paddingBottom: '10px',
+            marginBottom: '10px',
+        },
+        h4: {
+            fontSize: '1rem',
+            fontWeight: '600',
+            marginBottom: '10px',
         },
     },
     components: {
@@ -56,6 +72,13 @@ const theme: RaThemeOptions = {
             styleOverrides: {
                 root: {
                     margin: '8px 0',
+                },
+            },
+        },
+        MuiPaper: {
+            styleOverrides: {
+                root: {
+                    boxShadow: 'none',
                 },
             },
         },
@@ -147,6 +170,15 @@ const theme: RaThemeOptions = {
             styleOverrides: {
                 root: {
                     borderRight: '1px solid #e0e0e0',
+                },
+            },
+        },
+        RaTabbedShowLayout: {
+            styleOverrides: {
+                root: {
+                    '& .RaTabbedShowLayout-content': {
+                        padding: '0',
+                    },
                 },
             },
         },

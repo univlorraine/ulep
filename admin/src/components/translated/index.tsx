@@ -2,6 +2,7 @@ import React from 'react';
 import { BooleanField, useTranslate } from 'react-admin';
 import { LearningType } from '../../entities/LearningLanguage';
 import { Gender } from '../../entities/User';
+import ColoredChips, { ChipsColors } from '../ColoredChips';
 
 export const DisplaySameTandem = ({ sameTandemEmail }: { sameTandemEmail?: string }) => {
     if (sameTandemEmail) {
@@ -11,13 +12,22 @@ export const DisplaySameTandem = ({ sameTandemEmail }: { sameTandemEmail?: strin
     return <BooleanField record={{ sameTandemEmail: false }} source="sameTandemEmail" />;
 };
 
-export const DisplayRole = ({ role }: { role?: UserRole }) => {
+export const DisplayRole = ({ role, chipsColor }: { role?: UserRole; chipsColor?: ChipsColors }) => {
     const translate = useTranslate();
+
     switch (role) {
         case 'STAFF':
-            return <>{translate('global.staff')}</>;
+            return chipsColor ? (
+                <ColoredChips color={chipsColor} label={translate('global.staff')} />
+            ) : (
+                <>{translate('global.staff')}</>
+            );
         case 'STUDENT':
-            return <>{translate('global.student')}</>;
+            return chipsColor ? (
+                <ColoredChips color={chipsColor} label={translate('global.student')} />
+            ) : (
+                <>{translate('global.student')}</>
+            );
         default:
             return null;
     }

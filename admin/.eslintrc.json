@@ -22,7 +22,8 @@
         "no-useless-constructor": "off",
         "prettier/prettier": "error",
         "no-unused-vars": ["error", { "varsIgnorePattern": "React" }],
-        "@typescript-eslint/no-floating-promises": "off"
+        "@typescript-eslint/no-floating-promises": "off",
+        "react/react-in-jsx-scope": "off"
     },
     "overrides": [
         {

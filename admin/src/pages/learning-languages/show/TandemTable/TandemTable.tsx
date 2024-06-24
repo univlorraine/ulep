@@ -2,12 +2,14 @@ import { Table, TableBody, TableCell, TableHead, TableRow, TablePagination } fro
 import Popover from '@mui/material/Popover';
 import Typography from '@mui/material/Typography';
 import React, { useState } from 'react';
-import { useTranslate } from 'react-admin';
+import { FunctionField, useTranslate } from 'react-admin';
+import ColoredChips from '../../../../components/ColoredChips';
 import { DisplayGender, DisplayLearningType, DisplayRole } from '../../../../components/translated';
 import Language from '../../../../entities/Language';
-import { LearningType } from '../../../../entities/LearningLanguage';
+import { LearningLanguage, LearningType } from '../../../../entities/LearningLanguage';
 import { MatchScore } from '../../../../entities/Match';
 import { Profile } from '../../../../entities/Profile';
+import codeLanguageToFlag from '../../../../utils/codeLanguageToFlag';
 import ProfileLink from '../../ui/ProfileLink';
 import { Pagination } from './usePagination';
 
@@ -52,7 +54,7 @@ const TandemTable = ({ rows, actions, displayTandemLanguage, pagination }: Tande
     const open = Boolean(anchorEl);
 
     return (
-        <Table>
+        <Table className="tandem-table">
             <TableHead>
                 <TableRow>
                     {displayTandemLanguage && (
@@ -63,7 +65,6 @@ const TandemTable = ({ rows, actions, displayTandemLanguage, pagination }: Tande
                     <TableCell>{translate('learning_languages.show.tandems.tableColumns.profile')}</TableCell>
                     <TableCell>{translate('learning_languages.show.tandems.tableColumns.learnedLanguage')}</TableCell>
                     <TableCell>{translate('learning_languages.show.tandems.tableColumns.level')}</TableCell>
-                    <TableCell>{translate('learning_languages.show.tandems.tableColumns.university')}</TableCell>
                     <TableCell>{translate('learning_languages.show.tandems.tableColumns.role')}</TableCell>
                     <TableCell>{translate('learning_languages.show.tandems.tableColumns.learningType')}</TableCell>
                     <TableCell>{translate('learning_languages.show.tandems.tableColumns.gender')}</TableCell>
@@ -80,19 +81,36 @@ const TandemTable = ({ rows, actions, displayTandemLanguage, pagination }: Tande
                     <TableRow key={partner.id}>
                         {displayTandemLanguage && (
                             <TableCell>
-                                {[partner.profile.nativeLanguage, ...partner.profile.masteredLanguages]
-                                    .map((language) => translate(`languages_code.${language.code}`))
-                                    .join(', ')}
+                                {[partner.profile.nativeLanguage, ...partner.profile.masteredLanguages].map(
+                                    (language) => (
+                                        <ColoredChips
+                                            key={language.code}
+                                            color="default"
+                                            label={codeLanguageToFlag(language.code)}
+                                        />
+                                    )
+                                )}
                             </TableCell>
                         )}
                         <TableCell>
                             <ProfileLink profile={partner.profile} />
+                            <Typography sx={{ color: '#767676' }}>{partner.profile.user.university.name}</Typography>
                         </TableCell>
-                        <TableCell>{translate(`languages_code.${partner.code}`)}</TableCell>
-                        <TableCell>{partner.level}</TableCell>
-                        <TableCell>{partner.profile.user.university.name}</TableCell>
                         <TableCell>
-                            <DisplayRole role={partner.profile.user.role} />
+                            <ColoredChips color="default" label={codeLanguageToFlag(partner.code)} />
+                        </TableCell>
+                        <TableCell>{partner.level}</TableCell>
+                        <TableCell>
+                            <FunctionField
+                                render={(data: LearningLanguage) => (
+                                    <DisplayRole
+                                        chipsColor={
+                                            partner.profile.user.role === data.profile.user.role ? 'success' : 'error'
+                                        }
+                                        role={partner.profile.user.role}
+                                    />
+                                )}
+                            />
                         </TableCell>
                         <TableCell>
                             <DisplayLearningType
