@@ -10,10 +10,12 @@ const useHandleMessagesFromConversation = (conversationId: string) => {
 
     const [messagesResult, setMessagesResult] = useState<{
         messages: Message[];
+        isScrollOver: boolean;
         error: Error | undefined;
         isLoading: boolean;
     }>({
         messages: [],
+        isScrollOver: false,
         error: undefined,
         isLoading: false,
     });
@@ -23,40 +25,31 @@ const useHandleMessagesFromConversation = (conversationId: string) => {
     const addNewMessage = (message: Message) => {
         setMessagesResult((current) => ({
             messages: [message, ...current.messages],
+            isScrollOver: current.isScrollOver,
             error: undefined,
             isLoading: false,
         }));
     };
 
     const loadMessages = async () => {
-        const messagesConversationResult = await getMessagesFromConversation.execute(conversationId, lastMessageId, 20);
+        const messagesConversationResult = await getMessagesFromConversation.execute(conversationId, lastMessageId, 10);
         if (messagesConversationResult instanceof Error) {
-            return setMessagesResult({ messages: [], error: messagesConversationResult, isLoading: false });
-        }
-
-        if (messagesConversationResult.length > 0) {
-            setLastMessageId(messagesConversationResult[messagesConversationResult.length - 1].id);
-            setMessagesResult({
-                messages: [...messagesResult.messages, ...messagesConversationResult],
-                error: undefined,
+            return setMessagesResult({
+                messages: [],
+                error: messagesConversationResult,
                 isLoading: false,
+                isScrollOver: false,
             });
-        }
-    };
-
-    const loadFirstMessages = async () => {
-        const messagesConversationResult = await getMessagesFromConversation.execute(conversationId);
-        if (messagesConversationResult instanceof Error) {
-            return setMessagesResult({ messages: [], error: messagesConversationResult, isLoading: false });
         }
 
         if (messagesConversationResult.length > 0) {
             setLastMessageId(messagesConversationResult[messagesConversationResult.length - 1].id);
         }
         setMessagesResult({
-            messages: messagesConversationResult,
+            messages: [...messagesResult.messages, ...messagesConversationResult],
             error: undefined,
             isLoading: false,
+            isScrollOver: messagesConversationResult.length < 10,
         });
     };
 
@@ -66,7 +59,7 @@ const useHandleMessagesFromConversation = (conversationId: string) => {
                 ...messagesResult,
                 isLoading: true,
             });
-            await loadFirstMessages();
+            await loadMessages();
         };
 
         fetchData();

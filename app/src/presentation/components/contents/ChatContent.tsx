@@ -24,7 +24,7 @@ const Content: React.FC<Omit<ChatContentProps, 'isHybrid'>> = ({ conversation, g
     const [message, setMessage] = useState<string>('');
 
     //TODO: Handle is loading and error
-    const { messages, isLoading, error, loadMessages, addNewMessage } = useHandleMessagesFromConversation(
+    const { messages, isLoading, isScrollOver, error, loadMessages, addNewMessage } = useHandleMessagesFromConversation(
         conversation.id
     );
 
@@ -75,7 +75,12 @@ const Content: React.FC<Omit<ChatContentProps, 'isHybrid'>> = ({ conversation, g
                 </span>
                 <IonIcon icon={KebabSvg} />
             </div>
-            <MessagesList messages={messages} loadMessages={loadMessages} userId={profile.user.id} />
+            <MessagesList
+                messages={messages}
+                loadMessages={loadMessages}
+                userId={profile.user.id}
+                isScrollOver={isScrollOver}
+            />
             <div className={styles.footer}>
                 <div>
                     <IonIcon className={styles.icon} icon={PictureSvg} />
