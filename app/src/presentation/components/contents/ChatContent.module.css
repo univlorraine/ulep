@@ -61,3 +61,8 @@
     font-size: 17px;
     font-weight: 700;
 }
+
+.preview-image {
+    height: 130px;
+    margin: 12px;
+}

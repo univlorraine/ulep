@@ -33,6 +33,18 @@
     font-size: 12px;
 }
 
+.messageImage {
+    display: block;
+    padding: 12px;
+    max-height: 20%;
+    max-width: 80%;
+}
+
+.image {
+    max-height: 300px;
+    max-width: 100%;
+}
+
 .name {
     color: black;
     font-family: 'Maven Pro', sans-serif;

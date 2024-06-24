@@ -20,8 +20,9 @@ interface ChatContentProps {
 
 const Content: React.FC<Omit<ChatContentProps, 'isHybrid'>> = ({ conversation, goBack, profile }) => {
     const { t } = useTranslation();
-    const { sendMessage, socketIoAdapter } = useConfig();
+    const { cameraAdapter, sendMessage, socketIoAdapter } = useConfig();
     const [message, setMessage] = useState<string>('');
+    const [imageToSend, setImageToSend] = useState<File | undefined>();
 
     //TODO: Handle is loading and error
     const { messages, isLoading, isScrollOver, error, loadMessages, addNewMessage } = useHandleMessagesFromConversation(
@@ -31,7 +32,8 @@ const Content: React.FC<Omit<ChatContentProps, 'isHybrid'>> = ({ conversation, g
     const onSendPressed = async () => {
         //TODO: Send message in conversation for now - idea ( no id = currently sent ? )
         setMessage('');
-        const messageResult = await sendMessage.execute(conversation.id, profile.user.id, message);
+        setImageToSend(undefined);
+        const messageResult = await sendMessage.execute(conversation.id, profile.user.id, message, imageToSend);
         //TODO: Handle error for message
         if (messageResult instanceof Error) {
             return;
@@ -66,6 +68,14 @@ const Content: React.FC<Omit<ChatContentProps, 'isHybrid'>> = ({ conversation, g
         };
     }, []);
 
+    const handleImageClick = async () => {
+        const image = await cameraAdapter.getPictureFromGallery();
+        if (image) {
+            setImageToSend(image);
+            setMessage('');
+        }
+    };
+
     return (
         <div className={styles.container}>
             <div className={styles.header}>
@@ -83,17 +93,20 @@ const Content: React.FC<Omit<ChatContentProps, 'isHybrid'>> = ({ conversation, g
             />
             <div className={styles.footer}>
                 <div>
-                    <IonIcon className={styles.icon} icon={PictureSvg} />
+                    <IonIcon className={styles.icon} icon={PictureSvg} onClick={handleImageClick} />
                     <IonIcon className={styles.icon} icon={PaperclipSvg} />
                 </div>
                 <div className={styles['sender-view']}>
-                    <textarea
-                        className={styles.input}
-                        maxLength={1000}
-                        onChange={(e) => setMessage(e.target.value)}
-                        placeholder={t('chat.input.placeholder') ?? ''}
-                        value={message}
-                    />
+                    {imageToSend && <img className={styles['preview-image']} src={URL.createObjectURL(imageToSend)} />}
+                    {!imageToSend && (
+                        <textarea
+                            className={styles.input}
+                            maxLength={1000}
+                            onChange={(e) => setMessage(e.target.value)}
+                            placeholder={t('chat.input.placeholder') ?? ''}
+                            value={message}
+                        />
+                    )}
                     <IonIcon className={styles.sender} icon={SenderSvg} onClick={onSendPressed} />
                 </div>
             </div>

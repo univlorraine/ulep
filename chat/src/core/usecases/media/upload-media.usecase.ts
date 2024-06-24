@@ -1,4 +1,13 @@
 import { Inject, Injectable, NotFoundException } from '@nestjs/common';
+import { MediaObject } from 'src/core/models/media.model';
+import {
+    CONVERSATION_REPOSITORY,
+    ConversationRepository,
+} from 'src/core/ports/conversation.repository';
+import {
+    MESSAGE_REPOSITORY,
+    MessageRepository,
+} from 'src/core/ports/message.repository';
 import {
     MEDIA_OBJECT_REPOSITORY,
     MediaObjectRepository,
@@ -8,15 +17,6 @@ import {
     STORAGE_INTERFACE,
     StorageInterface,
 } from '../../ports/storage.interface';
-import { MediaObject } from 'src/core/models/media.model';
-import {
-    MESSAGE_REPOSITORY,
-    MessageRepository,
-} from 'src/core/ports/message.repository';
-import {
-    CONVERSATION_REPOSITORY,
-    ConversationRepository,
-} from 'src/core/ports/conversation.repository';
 
 export class UploadMediaCommand {
     conversationId: string;
@@ -47,7 +47,13 @@ export class UploadMediaUsecase {
             command.messageId,
         );
 
-        return avatar;
+        return this.storageInterface.temporaryUrl(
+            'chat',
+            `${command.conversationId}/${avatar.id}.${
+                avatar.mimetype.split('/')[1]
+            }`,
+            3600,
+        );
     }
 
     private async upload(

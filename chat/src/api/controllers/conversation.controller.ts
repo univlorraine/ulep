@@ -22,7 +22,6 @@ import { MessageResponse, SendMessageRequest } from 'src/api/dtos/message';
 import { CollectionResponse } from 'src/api/dtos/pagination';
 import { AuthenticationGuard } from 'src/api/guards';
 import { Message } from 'src/core/models';
-import { MediaObject } from 'src/core/models/media.model';
 import {
     CreateConversationUsecase,
     CreateMessageUsecase,
@@ -158,16 +157,16 @@ export class ConversationController {
             mimetype: file?.mimetype,
         });
 
-        let media: MediaObject;
         if (file) {
             //TODO: Upload lighter image then heavier image
-            media = await this.uploadMediaUsecase.execute({
+            const url = await this.uploadMediaUsecase.execute({
                 file,
                 messageId: message.id,
                 conversationId,
             });
+            message.content = url;
         }
 
-        return MessageResponse.from(message, media);
+        return MessageResponse.from(message);
     }
 }
