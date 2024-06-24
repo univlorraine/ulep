@@ -21,7 +21,7 @@ const MessagesList: React.FC<MessagesListProps> = ({ messages, isScrollOver, loa
     const [isLoading, setIsLoading] = useState(false);
 
     const scrollToBottom = () => {
-        messagesEndRef.current?.scrollIntoView({ behavior: 'instant' });
+        messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
     };
 
     useEffect(() => {

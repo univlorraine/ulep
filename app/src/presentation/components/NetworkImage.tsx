@@ -8,7 +8,7 @@ type NetworkImageProps = {
 } & Omit<React.ComponentPropsWithRef<'img'>, 'src'>;
 
 const NetworkImage: React.FC<NetworkImageProps> = ({ id, placeholder, isFromChat = false, ...props }) => {
-    const { loading, image, error } = useGetMediaObject({ id, isFromChat });
+    const { loading, image, error } = useGetMediaObject({ id });
 
     if (loading) {
         return <IonSpinner color={'primary'}></IonSpinner>;

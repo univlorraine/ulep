@@ -1,5 +1,5 @@
 import Conversation from '../domain/entities/chat/Conversation';
-import MessageCommand, { messageCommandToDomain } from './MessageCommand';
+import { MessageCommand, messageCommandToDomain } from './MessageCommand';
 import UserChatCommand, { userChatCommandToDomain } from './UserChatCommand';
 
 interface ConversationCommand {

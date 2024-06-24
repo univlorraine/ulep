@@ -1,7 +1,7 @@
 import { HttpResponse } from '../../adapter/BaseHttpAdapter';
 import { HttpAdapterInterface } from '../../adapter/DomainHttpAdapter';
 import { CollectionCommand } from '../../command/CollectionCommand';
-import MessageCommand, { messageCommandToDomain } from '../../command/MessageCommand';
+import { MessageCommand, messageCommandToDomain } from '../../command/MessageCommand';
 import { Message } from '../entities/chat/Message';
 import GetMessagesFromConversationUsecaseInterface from '../interfaces/chat/GetMessagesFromConversationUsecase.interface';
 
