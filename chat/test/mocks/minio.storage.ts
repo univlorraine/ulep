@@ -23,7 +23,7 @@ export class MinioStorage implements StorageInterface {
         expiry: number,
     ): Promise<string> {
         this.logger.debug('Temporary url', bucket, name, expiry);
-        return '';
+        return `${bucket}/${name}`;
     }
 
     async fileExists(bucket: string, name: string): Promise<boolean> {
