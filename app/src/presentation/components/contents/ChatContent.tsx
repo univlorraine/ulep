@@ -1,7 +1,7 @@
 import { IonIcon, IonPage } from '@ionic/react';
 import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { KebabSvg, LeftChevronSvg, PaperclipSvg, PictureSvg, SenderSvg } from '../../../assets';
+import { CloseBlackSvg, KebabSvg, LeftChevronSvg, PaperclipSvg, PictureSvg, SenderSvg } from '../../../assets';
 import { useConfig } from '../../../context/ConfigurationContext';
 import Profile from '../../../domain/entities/Profile';
 import { UserChat } from '../../../domain/entities/User';
@@ -97,7 +97,14 @@ const Content: React.FC<Omit<ChatContentProps, 'isHybrid'>> = ({ conversation, g
                     <IonIcon className={styles.icon} icon={PaperclipSvg} />
                 </div>
                 <div className={styles['sender-view']}>
-                    {imageToSend && <img className={styles['preview-image']} src={URL.createObjectURL(imageToSend)} />}
+                    {imageToSend && (
+                        <div className={styles['preview-image-container']}>
+                            <button className={styles['cancel-image-button']} onClick={() => setImageToSend(undefined)}>
+                                <img src={CloseBlackSvg} />
+                            </button>
+                            <img className={styles['preview-image']} src={URL.createObjectURL(imageToSend)} />
+                        </div>
+                    )}
                     {!imageToSend && (
                         <textarea
                             className={styles.input}
