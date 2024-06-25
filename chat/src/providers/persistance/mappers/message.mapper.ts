@@ -14,7 +14,6 @@ export type MessagesSnapshot = Prisma.MessageGetPayload<
 >;
 
 export const messageMapper = (snapshot: MessagesSnapshot): Message => {
-    console.log(snapshot.MediaObject);
     return new Message({
         id: snapshot.id,
         content: snapshot.MediaObject?.id
