@@ -44,16 +44,9 @@
 }
 
 .sender-view {
-    align-items: center;
     display: flex;
     justify-content: space-between;
     width: 100%;
-}
-
-.sender {
-    height: 44px;
-    padding-left: 12px;
-    width: 44px;
 }
 
 .title {
@@ -71,7 +64,7 @@
     width: 40px;
 }
 
-.preview-image-container {
+.preview-container {
     position: relative;
     display: inline-block;
     max-width: 80%;
@@ -85,6 +78,17 @@
     padding: 2px;
     top: 0;
     right: 0;
+    height: 20px;
+    width: 20px;
+}
+
+.cancel-audio-button {
+    background-color: black;
+    border-radius: 50%;
+    position: absolute;
+    padding: 2px;
+    top: -10px;
+    right: -10px;
     height: 20px;
     width: 20px;
 }

@@ -21,7 +21,6 @@ import { CreateConversationsRequest } from 'src/api/dtos/conversation/create-con
 import { MessageResponse, SendMessageRequest } from 'src/api/dtos/message';
 import { CollectionResponse } from 'src/api/dtos/pagination';
 import { AuthenticationGuard } from 'src/api/guards';
-import { Message } from 'src/core/models';
 import {
     CreateConversationUsecase,
     CreateMessageUsecase,
@@ -67,9 +66,7 @@ export class ConversationController {
             });
 
         return new CollectionResponse<MessageResponse>({
-            items: messages.map((message: Message) =>
-                MessageResponse.from(message),
-            ),
+            items: messages.map(MessageResponse.from),
             totalItems: messages.length,
         });
     }

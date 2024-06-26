@@ -48,7 +48,10 @@ export class GetMessagesFromConversationIdUsecase {
             );
 
         for (const message of messages) {
-            if (message.type === MessageType.Image) {
+            if (
+                message.type === MessageType.Image ||
+                message.type === MessageType.Audio
+            ) {
                 message.content = await this.storage.temporaryUrl(
                     'chat',
                     `${conversation.id}/${message.content}`,

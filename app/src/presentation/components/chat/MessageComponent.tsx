@@ -1,5 +1,6 @@
 import { useTranslation } from 'react-i18next';
 import { Message } from '../../../domain/entities/chat/Message';
+import AudioLine from '../AudioLine';
 import styles from './MessageComponent.module.css';
 
 interface MessageProps {
@@ -19,6 +20,8 @@ const MessageComponent: React.FC<MessageProps> = ({ message, isCurrentUserMessag
                 return <MessageText message={message} isCurrentUserMessage={isCurrentUserMessage} />;
             case 'image':
                 return <MessageImage message={message} isCurrentUserMessage={isCurrentUserMessage} />;
+            case 'audio':
+                return <MessageAudio message={message} isCurrentUserMessage={isCurrentUserMessage} />;
             default:
                 return null;
         }
@@ -47,6 +50,16 @@ const MessageImage: React.FC<MessageProps> = ({ message, isCurrentUserMessage })
     return (
         <div className={`${styles.messageImage} ${messageClass}`}>
             <img className={styles.image} src={message.content} />
+        </div>
+    );
+};
+
+const MessageAudio: React.FC<MessageProps> = ({ message, isCurrentUserMessage }) => {
+    const messageClass = isCurrentUserMessage ? styles.currentUser : styles.otherUser;
+
+    return (
+        <div className={`${styles.messageAudio} ${messageClass}`}>
+            <AudioLine audioFile={message.content} />
         </div>
     );
 };

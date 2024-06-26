@@ -2,6 +2,7 @@ import BrowserAdapterInterface from '../adapter/interfaces/BrowserAdapter.interf
 import CameraAdapterInterface from '../adapter/interfaces/CameraAdapter.interface';
 import DeviceAdapterInterface from '../adapter/interfaces/DeviceAdapter.interface';
 import NotificationAdapterInterface from '../adapter/interfaces/NotificationAdapter.interface';
+import RecorderAdapterInterface from '../adapter/interfaces/RecorderAdapter.interface';
 import SocketIoAdapterInterface from '../adapter/interfaces/SocketIoAdapter.interface';
 import Configuration from '../domain/entities/Confirguration';
 import AddDeviceUsecaseInterface from '../domain/interfaces/AddDeviceUsecase.interface';
@@ -50,6 +51,7 @@ export interface ConfigContextValueType {
     browserAdapter: BrowserAdapterInterface;
     cameraAdapter: CameraAdapterInterface;
     deviceAdapter: DeviceAdapterInterface;
+    recorderAdapter: RecorderAdapterInterface;
     configuration: Configuration;
     createProfile: CreateProfileUsecaseInterface;
     createReport: CreateReportUsecaseInterface;

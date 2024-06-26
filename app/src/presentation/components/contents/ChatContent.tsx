@@ -1,13 +1,15 @@
 import { IonIcon, IonPage } from '@ionic/react';
 import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { CloseBlackSvg, KebabSvg, LeftChevronSvg, PaperclipSvg, PictureSvg, SenderSvg } from '../../../assets';
+import { CloseBlackSvg, KebabSvg, LeftChevronSvg, PaperclipSvg, PictureSvg } from '../../../assets';
 import { useConfig } from '../../../context/ConfigurationContext';
 import Profile from '../../../domain/entities/Profile';
 import { UserChat } from '../../../domain/entities/User';
 import Conversation from '../../../domain/entities/chat/Conversation';
 import { MessageWithConversationId } from '../../../domain/entities/chat/Message';
 import useHandleMessagesFromConversation from '../../hooks/useHandleMessagesFromConversation';
+import AudioLine from '../AudioLine';
+import RecordingButton from '../RecordingButton';
 import MessagesList from '../chat/MessagesList';
 import styles from './ChatContent.module.css';
 
@@ -20,25 +22,41 @@ interface ChatContentProps {
 
 const Content: React.FC<Omit<ChatContentProps, 'isHybrid'>> = ({ conversation, goBack, profile }) => {
     const { t } = useTranslation();
-    const { cameraAdapter, sendMessage, socketIoAdapter } = useConfig();
+    const { cameraAdapter, recorderAdapter, sendMessage, socketIoAdapter } = useConfig();
     const [message, setMessage] = useState<string>('');
     const [imageToSend, setImageToSend] = useState<File | undefined>();
+    const [audioFile, setAudioFile] = useState<File | undefined>();
+    const [isRecording, setIsRecording] = useState<boolean>(false);
 
-    //TODO: Handle is loading and error
-    const { messages, isLoading, isScrollOver, error, loadMessages, addNewMessage } = useHandleMessagesFromConversation(
+    const { messages, isScrollOver, error, loadMessages, addNewMessage } = useHandleMessagesFromConversation(
         conversation.id
     );
 
     const onSendPressed = async () => {
-        //TODO: Send message in conversation for now - idea ( no id = currently sent ? )
+        if (isRecording) {
+            return;
+        }
+
+        if (!message && !imageToSend && !audioFile) {
+            return;
+        }
+
+        let fileToSend: File | undefined;
+        if (audioFile) {
+            fileToSend = audioFile;
+        } else if (imageToSend) {
+            fileToSend = imageToSend;
+        }
+
         setMessage('');
         setImageToSend(undefined);
-        const messageResult = await sendMessage.execute(conversation.id, profile.user.id, message, imageToSend);
+        setAudioFile(undefined);
+
+        const messageResult = await sendMessage.execute(conversation.id, profile.user.id, message, fileToSend);
         //TODO: Handle error for message
         if (messageResult instanceof Error) {
             return;
         }
-        //TODO: Display message as sent now ?
         socketIoAdapter.emit(
             new MessageWithConversationId(
                 messageResult.id,
@@ -56,6 +74,27 @@ const Content: React.FC<Omit<ChatContentProps, 'isHybrid'>> = ({ conversation, g
                 conversation.id
             )
         );
+    };
+
+    const handleStartRecord = () => {
+        // If we are already recording or if we have an audio file, we don't want to start a new recording
+        if (isRecording || audioFile) {
+            return;
+        }
+
+        setIsRecording(true);
+        recorderAdapter.startRecording((audio) => {
+            setIsRecording(false);
+            setAudioFile(audio);
+        });
+    };
+
+    const handleStopRecord = () => {
+        setIsRecording(false);
+        recorderAdapter.stopRecording((audio) => {
+            setIsRecording(false);
+            setAudioFile(audio);
+        });
     };
 
     useEffect(() => {
@@ -98,14 +137,22 @@ const Content: React.FC<Omit<ChatContentProps, 'isHybrid'>> = ({ conversation, g
                 </div>
                 <div className={styles['sender-view']}>
                     {imageToSend && (
-                        <div className={styles['preview-image-container']}>
+                        <div className={styles['preview-container']}>
                             <button className={styles['cancel-image-button']} onClick={() => setImageToSend(undefined)}>
                                 <img src={CloseBlackSvg} />
                             </button>
                             <img className={styles['preview-image']} src={URL.createObjectURL(imageToSend)} />
                         </div>
                     )}
-                    {!imageToSend && (
+                    {audioFile && (
+                        <div className={styles['preview-container']}>
+                            <button className={styles['cancel-audio-button']} onClick={() => setAudioFile(undefined)}>
+                                <img src={CloseBlackSvg} style={{ filter: 'invert(1)' }} />
+                            </button>
+                            <AudioLine audioFile={audioFile} />
+                        </div>
+                    )}
+                    {!imageToSend && !audioFile && (
                         <textarea
                             className={styles.input}
                             maxLength={1000}
@@ -114,7 +161,12 @@ const Content: React.FC<Omit<ChatContentProps, 'isHybrid'>> = ({ conversation, g
                             value={message}
                         />
                     )}
-                    <IonIcon className={styles.sender} icon={SenderSvg} onClick={onSendPressed} />
+                    <RecordingButton
+                        mode={message || imageToSend || audioFile ? 'send' : 'record'}
+                        onSendPressed={onSendPressed}
+                        handleStartRecord={handleStartRecord}
+                        handleStopRecord={handleStopRecord}
+                    />
                 </div>
             </div>
         </div>

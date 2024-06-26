@@ -40,26 +40,31 @@ export class HubGateway
      * Add user to all conversations he is registered to when he connects.
      */
     async handleConnection(socket: Socket) {
-        const user = await this.computeUserIdFromToken(
-            socket.handshake.auth.token,
-        );
-        if (user) {
-            // Find all conversations the user is registered to.
-            const conversations =
-                await this.conversationRepository.findByUserId(user);
-            // Join user to all conversations he is registered to.
-            this.server
-                .in(socket.id)
-                .socketsJoin(
-                    conversations.map((conversation) => conversation.id),
-                );
-            // Save user socket id.
-            this.roomService.setUserSocketId(user, socket.id);
-            // Save user to all conversations he is registered to.
-            for (const conversation of conversations) {
-                this.roomService.addUserToTopic(conversation.id, user);
+        try {
+            const user = await this.computeUserIdFromToken(
+                socket.handshake.auth.token,
+            );
+
+            if (user) {
+                // Find all conversations the user is registered to.
+                const conversations =
+                    await this.conversationRepository.findByUserId(user);
+                // Join user to all conversations he is registered to.
+                this.server
+                    .in(socket.id)
+                    .socketsJoin(
+                        conversations.map((conversation) => conversation.id),
+                    );
+                // Save user socket id.
+                this.roomService.setUserSocketId(user, socket.id);
+                // Save user to all conversations he is registered to.
+                for (const conversation of conversations) {
+                    this.roomService.addUserToTopic(conversation.id, user);
+                }
+            } else {
+                socket.disconnect();
             }
-        } else {
+        } catch (error) {
             socket.disconnect();
         }
     }

@@ -40,6 +40,11 @@
     max-width: 80%;
 }
 
+.messageAudio {
+    padding: 12px;
+    max-width: 80%;
+}
+
 .image {
     max-height: 300px;
     max-width: 100%;
