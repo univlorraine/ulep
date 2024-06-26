@@ -5,14 +5,13 @@ export class RecorderAdapter implements RecorderAdapterInterface {
     private recordingTimeout: NodeJS.Timeout | null = null;
     private startTime: number | null = null;
 
-    async startRecording(onStop: (audio: File) => void) {
+    async startRecording(onStop: (audio?: File, error?: Error) => void) {
         try {
             const permissionStatus = await VoiceRecorder.hasAudioRecordingPermission();
             if (!permissionStatus.value) {
                 const requestPermission = await VoiceRecorder.requestAudioRecordingPermission();
                 if (!requestPermission.value) {
-                    console.error("Permission refusée pour l'enregistrement audio");
-                    return;
+                    return onStop(undefined, new Error('record.error.permission'));
                 }
             }
 
@@ -23,11 +22,12 @@ export class RecorderAdapter implements RecorderAdapterInterface {
                 this.stopRecording(onStop);
             }, 60000);
         } catch (error) {
-            console.error('Erreur lors de la vérification ou de la demande de permission', error);
+            console.error(error);
+            onStop(undefined, new Error('record.error.unexpected'));
         }
     }
 
-    stopRecording(onStop: (audio: File) => void) {
+    stopRecording(onStop: (audio?: File, error?: Error) => void) {
         if (this.recordingTimeout) {
             clearTimeout(this.recordingTimeout);
             this.recordingTimeout = null;
@@ -51,7 +51,8 @@ export class RecorderAdapter implements RecorderAdapterInterface {
                 }
             })
             .catch((error) => {
-                console.error("Erreur lors de l'arrêt de l'enregistrement", error);
+                console.error(error);
+                onStop(undefined, new Error('record.error.unexpected'));
             });
     }
 

@@ -1,4 +1,4 @@
-import { IonIcon, IonPage } from '@ionic/react';
+import { IonIcon, IonPage, useIonToast } from '@ionic/react';
 import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { CloseBlackSvg, KebabSvg, LeftChevronSvg, PaperclipSvg, PictureSvg } from '../../../assets';
@@ -22,6 +22,7 @@ interface ChatContentProps {
 
 const Content: React.FC<Omit<ChatContentProps, 'isHybrid'>> = ({ conversation, goBack, profile }) => {
     const { t } = useTranslation();
+    const [showToast] = useIonToast();
     const { cameraAdapter, recorderAdapter, sendMessage, socketIoAdapter } = useConfig();
     const [message, setMessage] = useState<string>('');
     const [imageToSend, setImageToSend] = useState<File | undefined>();
@@ -83,7 +84,13 @@ const Content: React.FC<Omit<ChatContentProps, 'isHybrid'>> = ({ conversation, g
         }
 
         setIsRecording(true);
-        recorderAdapter.startRecording((audio) => {
+        recorderAdapter.startRecording((audio, error) => {
+            if (error) {
+                return showToast({
+                    message: t(error.message),
+                    duration: 5000,
+                });
+            }
             setIsRecording(false);
             setAudioFile(audio);
         });
@@ -91,7 +98,13 @@ const Content: React.FC<Omit<ChatContentProps, 'isHybrid'>> = ({ conversation, g
 
     const handleStopRecord = () => {
         setIsRecording(false);
-        recorderAdapter.stopRecording((audio) => {
+        recorderAdapter.stopRecording((audio, error) => {
+            if (error) {
+                return showToast({
+                    message: t(error.message),
+                    duration: 5000,
+                });
+            }
             setIsRecording(false);
             setAudioFile(audio);
         });

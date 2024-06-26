@@ -34,6 +34,12 @@
         "today": "Aujourd'hui",
         "yesterday": "Hier"
     },
+    "record": {
+        "error": {
+            "permission": "Permission refusée",
+            "unexpected": "Erreur inconnue"
+        }
+    },
     "navigation": {
         "bottom_bar": {
             "home": "Accueil",
