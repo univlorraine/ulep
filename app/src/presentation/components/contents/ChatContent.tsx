@@ -34,11 +34,7 @@ const Content: React.FC<Omit<ChatContentProps, 'isHybrid'>> = ({ conversation, g
     );
 
     const onSendPressed = async () => {
-        if (isRecording) {
-            return;
-        }
-
-        if (!message && !imageToSend && !audioFile) {
+        if (isRecording || (!message && !imageToSend && !audioFile)) {
             return;
         }
 
@@ -54,10 +50,14 @@ const Content: React.FC<Omit<ChatContentProps, 'isHybrid'>> = ({ conversation, g
         setAudioFile(undefined);
 
         const messageResult = await sendMessage.execute(conversation.id, profile.user.id, message, fileToSend);
-        //TODO: Handle error for message
+
         if (messageResult instanceof Error) {
-            return;
+            return showToast({
+                message: t(messageResult.message),
+                duration: 5000,
+            });
         }
+
         socketIoAdapter.emit(
             new MessageWithConversationId(
                 messageResult.id,
