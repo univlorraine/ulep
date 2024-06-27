@@ -23,7 +23,7 @@ class FileAdapter implements FileAdapterInterface {
         return undefined;
     }
 
-    private async createFileFromPickedFile(pickedFile: PickedFile): Promise<File> {
+    private async createFileFromPickedFile(pickedFile: PickedFile): Promise<File | undefined> {
         if (pickedFile.blob) {
             // For web use the blob directly
             return new File([pickedFile.blob], pickedFile.name, { type: pickedFile.mimeType });
@@ -44,7 +44,7 @@ class FileAdapter implements FileAdapterInterface {
             return new File([blob], pickedFile.name, { type: pickedFile.mimeType });
         }
 
-        throw new Error('Impossible de créer un fichier à partir des données fournies');
+        return undefined;
     }
 }
 
