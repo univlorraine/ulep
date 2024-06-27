@@ -2,6 +2,7 @@ import BrowserAdapter from '../adapter/BrowserAdapter';
 import CameraAdapter from '../adapter/CameraAdapter';
 import DeviceAdapter from '../adapter/DeviceAdapter';
 import DomainHttpAdapter from '../adapter/DomainHttpAdapter';
+import FileAdapter from '../adapter/FileAdapter';
 import NotificationAdapter from '../adapter/NotificationAdapter';
 import { RecorderAdapter } from '../adapter/RecorderAdapter';
 import SocketIoAdapter from '../adapter/SocketIoAdapter';
@@ -130,6 +131,7 @@ const getConfigContextValue = ({
     const retrievePerson = new RetrievePersonInfoUsecase(domainHttpAdapter);
 
     //Chat
+    const fileAdapter = new FileAdapter();
     const recorderAdapter = new RecorderAdapter();
     const getConversations = new GetConversationsUsecase(domainHttpAdapter);
     const getMessagesFromConversation = new GetMessagesFromConversationUsecase(domainHttpAdapter);
@@ -150,6 +152,7 @@ const getConfigContextValue = ({
         createUser,
         editProfile,
         editUser,
+        fileAdapter,
         deviceAdapter,
         getAllInterestCategories,
         getAllCountries,

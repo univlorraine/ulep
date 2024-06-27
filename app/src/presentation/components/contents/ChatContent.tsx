@@ -13,6 +13,8 @@ import RecordingButton from '../RecordingButton';
 import MessagesList from '../chat/MessagesList';
 import styles from './ChatContent.module.css';
 
+//TODO: modale to display picture on full screen ( almost ? )
+
 interface ChatContentProps {
     conversation: Conversation;
     goBack?: () => void;
@@ -23,10 +25,11 @@ interface ChatContentProps {
 const Content: React.FC<Omit<ChatContentProps, 'isHybrid'>> = ({ conversation, goBack, profile }) => {
     const { t } = useTranslation();
     const [showToast] = useIonToast();
-    const { cameraAdapter, recorderAdapter, sendMessage, socketIoAdapter } = useConfig();
+    const { cameraAdapter, fileAdapter, recorderAdapter, sendMessage, socketIoAdapter } = useConfig();
     const [message, setMessage] = useState<string>('');
     const [imageToSend, setImageToSend] = useState<File | undefined>();
     const [audioFile, setAudioFile] = useState<File | undefined>();
+    const [fileToSend, setFileToSend] = useState<File | undefined>();
     const [isRecording, setIsRecording] = useState<boolean>(false);
 
     const { messages, isScrollOver, error, loadMessages, addNewMessage } = useHandleMessagesFromConversation(
@@ -34,22 +37,27 @@ const Content: React.FC<Omit<ChatContentProps, 'isHybrid'>> = ({ conversation, g
     );
 
     const onSendPressed = async () => {
-        if (isRecording || (!message && !imageToSend && !audioFile)) {
+        if (isRecording || (!message && !imageToSend && !audioFile && !fileToSend)) {
             return;
         }
 
-        let fileToSend: File | undefined;
+        let file: File | undefined;
+        let filename: string | undefined;
         if (audioFile) {
-            fileToSend = audioFile;
+            file = audioFile;
         } else if (imageToSend) {
-            fileToSend = imageToSend;
+            file = imageToSend;
+        } else if (fileToSend) {
+            file = fileToSend;
+            filename = fileToSend.name;
         }
 
         setMessage('');
         setImageToSend(undefined);
         setAudioFile(undefined);
+        setFileToSend(undefined);
 
-        const messageResult = await sendMessage.execute(conversation.id, profile.user.id, message, fileToSend);
+        const messageResult = await sendMessage.execute(conversation.id, profile.user.id, message, file, filename);
 
         if (messageResult instanceof Error) {
             return showToast({
@@ -128,6 +136,13 @@ const Content: React.FC<Omit<ChatContentProps, 'isHybrid'>> = ({ conversation, g
         }
     };
 
+    const handleFileClick = async () => {
+        const file = await fileAdapter.getFile();
+        if (file) {
+            setFileToSend(file);
+        }
+    };
+
     return (
         <div className={styles.container}>
             <div className={styles.header}>
@@ -146,7 +161,7 @@ const Content: React.FC<Omit<ChatContentProps, 'isHybrid'>> = ({ conversation, g
             <div className={styles.footer}>
                 <div>
                     <IonIcon className={styles.icon} icon={PictureSvg} onClick={handleImageClick} />
-                    <IonIcon className={styles.icon} icon={PaperclipSvg} />
+                    <IonIcon className={styles.icon} icon={PaperclipSvg} onClick={handleFileClick} />
                 </div>
                 <div className={styles['sender-view']}>
                     {imageToSend && (
@@ -165,7 +180,15 @@ const Content: React.FC<Omit<ChatContentProps, 'isHybrid'>> = ({ conversation, g
                             <AudioLine audioFile={audioFile} />
                         </div>
                     )}
-                    {!imageToSend && !audioFile && (
+                    {fileToSend && (
+                        <div className={styles['preview-file-container']}>
+                            <button className={styles['cancel-audio-button']} onClick={() => setFileToSend(undefined)}>
+                                <img src={CloseBlackSvg} style={{ filter: 'invert(1)' }} />
+                            </button>
+                            <span>{fileToSend.name}</span>
+                        </div>
+                    )}
+                    {!imageToSend && !audioFile && !fileToSend && (
                         <textarea
                             className={styles.input}
                             maxLength={1000}
@@ -175,7 +198,7 @@ const Content: React.FC<Omit<ChatContentProps, 'isHybrid'>> = ({ conversation, g
                         />
                     )}
                     <RecordingButton
-                        mode={message || imageToSend || audioFile ? 'send' : 'record'}
+                        mode={message || imageToSend || audioFile || fileToSend ? 'send' : 'record'}
                         onSendPressed={onSendPressed}
                         handleStartRecord={handleStartRecord}
                         handleStopRecord={handleStopRecord}

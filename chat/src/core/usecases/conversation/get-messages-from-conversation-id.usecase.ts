@@ -50,11 +50,12 @@ export class GetMessagesFromConversationIdUsecase {
         for (const message of messages) {
             if (
                 message.type === MessageType.Image ||
-                message.type === MessageType.Audio
+                message.type === MessageType.Audio ||
+                message.type === MessageType.File
             ) {
                 message.content = await this.storage.temporaryUrl(
                     'chat',
-                    `${conversation.id}/${message.content}`,
+                    message.content,
                     3600,
                 );
             }

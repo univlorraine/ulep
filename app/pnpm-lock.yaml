@@ -50,6 +50,9 @@ dependencies:
   '@capacitor/status-bar':
     specifier: 5.0.2
     version: 5.0.2(@capacitor/core@5.0.4)
+  '@capawesome/capacitor-file-picker':
+    specifier: ^6.0.0
+    version: 6.0.0(@capacitor/core@5.0.4)
   '@ionic/pwa-elements':
     specifier: ^3.2.1
     version: 3.2.1
@@ -1495,6 +1498,14 @@ packages:
     resolution: {integrity: sha512-5emXUQzx9WnQHnxzapghrqm8P80z7IPLM83PTsfN+NOkm3uw3ZOxB4T7qy9NBV2Zp+GCEpr1UrNBowxV7Ami3Q==}
     peerDependencies:
       '@capacitor/core': ^5.0.0
+    dependencies:
+      '@capacitor/core': 5.0.4
+    dev: false
+
+  /@capawesome/capacitor-file-picker@6.0.0(@capacitor/core@5.0.4):
+    resolution: {integrity: sha512-u5TiigO1zuM5H29F5YkWcLLD0prsV78TlgkBY86IoAZZe72g6cyICwGzaUPq8DlkvARoUwIrU0ItEz7c1ePOew==}
+    peerDependencies:
+      '@capacitor/core': ^6.0.0
     dependencies:
       '@capacitor/core': 5.0.4
     dev: false
