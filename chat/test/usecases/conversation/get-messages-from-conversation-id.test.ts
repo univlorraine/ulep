@@ -2,6 +2,7 @@ import { Conversation, Message, MessageType } from 'src/core/models';
 import { GetMessagesFromConversationIdUsecase } from 'src/core/usecases';
 import { InMemoryConversationRepository } from 'src/providers/persistance/repositories/in-memory-conversation.repository';
 import { InMemoryMessageRepository } from 'src/providers/persistance/repositories/in-memory-message.repository';
+import { MinioStorage } from '../../mocks/minio.storage';
 
 const USER_ID1 = 'user1';
 const USER_ID2 = 'user2';
@@ -59,11 +60,13 @@ const message3 = new Message({
 describe('GetConversationFromUserIdUsecase', () => {
     const inMemoryMessageRepository = new InMemoryMessageRepository();
     const inMemoryConversationRepository = new InMemoryConversationRepository();
+    const storageMocked = new MinioStorage();
 
     const getMessagesFromConversationIdUsecase =
         new GetMessagesFromConversationIdUsecase(
             inMemoryConversationRepository,
             inMemoryMessageRepository,
+            storageMocked,
         );
 
     beforeEach(() => {

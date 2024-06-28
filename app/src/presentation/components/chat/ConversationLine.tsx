@@ -1,12 +1,10 @@
 import React from 'react';
-import styles from './ConversationLine.module.css';
-import Conversation from '../../../domain/entities/chat/Conversation';
-import NetworkImage from '../NetworkImage';
-import MediaObject from '../../../domain/entities/MediaObject';
-import { Message } from '../../../domain/entities/chat/Message';
 import { useTranslation } from 'react-i18next';
-
-//TODO: Sort covnersation by last message date or conversation creation date
+import MediaObject from '../../../domain/entities/MediaObject';
+import Conversation from '../../../domain/entities/chat/Conversation';
+import { Message } from '../../../domain/entities/chat/Message';
+import NetworkImage from '../NetworkImage';
+import styles from './ConversationLine.module.css';
 
 interface ConversationAvatarProps {
     avatar?: MediaObject;
@@ -30,17 +28,17 @@ const ConversationAvatar: React.FC<ConversationAvatarProps> = ({ avatar, firstna
     );
 };
 
-const getPreviewMessage = (userId: string, message?: Message) => {
+const getPreviewMessage = (userId: string, translate: (key: string) => string, message?: Message) => {
     if (!message) {
-        return 'message.type.noMessage';
+        return translate('message.type.noMessage');
     }
     switch (message.type) {
         case 'image':
-            return 'message.type.image';
+            return translate('message.type.image');
         case 'audio':
-            return 'message.type.audio';
+            return translate('message.type.audio');
         case 'file':
-            return 'message.type.file';
+            return translate('message.type.file');
         default:
             if (message.isMine(userId)) {
                 return message.content;
@@ -68,7 +66,7 @@ const ConversationLine: React.FC<ConversationLineProps> = ({ conversation, onPre
                 />
                 <div className={styles.content}>
                     <span className={styles.name}>{mainParticipant.firstname}</span>
-                    <span className={styles.message}>{t(getPreviewMessage(userId, conversation.lastMessage))}</span>
+                    <span className={styles.message}>{getPreviewMessage(userId, t, conversation.lastMessage)}</span>
                 </div>
             </div>
             {conversation.lastMessage && (

@@ -1,10 +1,10 @@
-import { Injectable } from '@nestjs/common';
 import { PrismaService } from '@app/common';
+import { Injectable } from '@nestjs/common';
+import { Message } from 'src/core/models';
 import {
     MessagePagination,
     MessageRepository,
 } from 'src/core/ports/message.repository';
-import { Message } from 'src/core/models';
 import {
     MessagesRelations,
     messageMapper,
@@ -78,7 +78,7 @@ export class PrismaMessageRepository implements MessageRepository {
 
             if (lastMessage) {
                 where['createdAt'] = {
-                    gt: lastMessage.createdAt,
+                    lt: lastMessage.createdAt,
                 };
             } else {
                 return [];
@@ -93,8 +93,8 @@ export class PrismaMessageRepository implements MessageRepository {
 
         const messages = await this.prisma.message.findMany({
             where,
+            orderBy: { updatedAt: 'desc' },
             ...messagesPagination,
-            orderBy: { updatedAt: 'asc' },
             ...MessagesRelations,
         });
 

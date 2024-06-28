@@ -1,15 +1,15 @@
+import { useIonToast } from '@ionic/react';
+import { useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { Redirect, useHistory } from 'react-router';
+import Conversation from '../../domain/entities/chat/Conversation';
 import { useStoreState } from '../../store/storeTypes';
+import ChatContent from '../components/contents/ChatContent';
+import ConversationsContent from '../components/contents/ConversationsContent';
+import OnlineWebLayout from '../components/layout/OnlineWebLayout';
+import useGetConversations from '../hooks/useGetConversations';
 import useWindowDimensions from '../hooks/useWindowDimensions';
 import { HYBRID_MAX_WIDTH } from '../utils';
-import OnlineWebLayout from '../components/layout/OnlineWebLayout';
-import { useIonToast } from '@ionic/react';
-import useGetConversations from '../hooks/useGetConversations';
-import { useTranslation } from 'react-i18next';
-import ConversationsContent from '../components/contents/ConversationsContent';
-import { useState } from 'react';
-import Conversation from '../../domain/entities/chat/Conversation';
-import ChatContent from '../components/contents/ChatContent';
 import styles from './css/ConversationsPage.module.css';
 
 const ConversationsPage: React.FC = () => {
@@ -57,7 +57,7 @@ const ConversationsPage: React.FC = () => {
                 </div>
                 {currentConversation && (
                     <div className={styles.chatContent}>
-                        <ChatContent conversation={currentConversation} userId={profile.user.id} isHybrid={isHybrid} />
+                        <ChatContent conversation={currentConversation} profile={profile} isHybrid={isHybrid} />
                     </div>
                 )}
             </div>

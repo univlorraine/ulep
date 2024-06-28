@@ -1,6 +1,7 @@
+import socketIo, { Socket } from 'socket.io-client';
+import { UserChat } from '../domain/entities/User';
 import { Message } from '../domain/entities/chat/Message';
 import SocketIoAdapterInterface from './interfaces/SocketIoAdapter.interface';
-import socketIo, { Socket } from 'socket.io-client';
 
 class SocketIoAdapter implements SocketIoAdapterInterface {
     private accessToken?: string;
@@ -16,7 +17,7 @@ class SocketIoAdapter implements SocketIoAdapterInterface {
         if (this.socket && this.socket.connected) {
             return true;
         }
-        this.socket = await socketIo(this.chatUrl, { auth: { token: this.accessToken } });
+        this.socket = socketIo(this.chatUrl, { auth: { token: this.accessToken } });
         return this.socket?.connected;
     }
 
@@ -33,11 +34,28 @@ class SocketIoAdapter implements SocketIoAdapterInterface {
     }
 
     onMessage(handler: (message: Message) => void): void {
-        this.socket?.on('message', handler);
+        this.socket!.on('message', (message: Message) => {
+            handler(
+                new Message(
+                    message.id,
+                    message.content,
+                    new Date(message.createdAt),
+                    new UserChat(
+                        message.sender.id,
+                        message.sender.firstname,
+                        message.sender.lastname,
+                        message.sender.email,
+                        false,
+                        message.sender.avatar
+                    ),
+                    message.type
+                )
+            );
+        });
     }
 
     offMessage(): void {
-        this.socket?.off('message');
+        this.socket!.off('message');
     }
 }
 

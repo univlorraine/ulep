@@ -1,5 +1,5 @@
-import { UserChat } from '../User';
 import { differenceInCalendarDays, format, isToday, isYesterday } from 'date-fns';
+import { UserChat } from '../User';
 
 export enum MessageType {
     Text = 'text',
@@ -8,18 +8,14 @@ export enum MessageType {
     File = 'file',
 }
 
-export class Message {
+export class MessageWithoutSender {
     constructor(
         public readonly id: string,
         public readonly content: string,
         public readonly createdAt: Date,
-        public readonly sender: UserChat,
+        public readonly senderId: string,
         public readonly type: MessageType
     ) {}
-
-    public isMine(userId: string): boolean {
-        return this.sender.id === userId;
-    }
 
     public getMessageDate(): string {
         const now = new Date();
@@ -43,5 +39,34 @@ export class Message {
 
     public getMessageHour(): string {
         return format(this.createdAt, 'HH:mm');
+    }
+
+    public isMine(userId: string): boolean {
+        return this.senderId === userId;
+    }
+}
+
+export class Message extends MessageWithoutSender {
+    constructor(
+        public readonly id: string,
+        public readonly content: string,
+        public readonly createdAt: Date,
+        public readonly sender: UserChat,
+        public readonly type: MessageType
+    ) {
+        super(id, content, createdAt, sender.id, type);
+    }
+}
+
+export class MessageWithConversationId extends Message {
+    constructor(
+        public readonly id: string,
+        public readonly content: string,
+        public readonly createdAt: Date,
+        public readonly sender: UserChat,
+        public readonly type: MessageType,
+        public readonly conversationId: string
+    ) {
+        super(id, content, createdAt, sender, type);
     }
 }
