@@ -1,6 +1,5 @@
 import jwtDecode, { JwtPayload } from 'jwt-decode';
 import BaseHttpAdapter, { Body, HttpResponse } from './BaseHttpAdapter';
-import { UseIonRouterResult } from '@ionic/react';
 
 export interface HttpAdapterInterface {
     get: (path: string, args?: RequestInit, isTokenNeeded?: boolean, accessToken?: string) => Promise<Response>;
@@ -42,6 +41,8 @@ type Action = 'get' | 'post' | 'delete' | 'put' | 'patch';
 class DomainHttpAdapter extends BaseHttpAdapter implements HttpAdapterInterface {
     accessToken: string = '';
 
+    authUrl: string = '';
+
     apiUrl: string = '';
 
     languageCode: string = '';
@@ -54,6 +55,7 @@ class DomainHttpAdapter extends BaseHttpAdapter implements HttpAdapterInterface 
 
     constructor(
         apiUrl: string,
+        authUrl: string,
         accessToken: string,
         refreshToken: string,
         languageCode: string,
@@ -63,6 +65,7 @@ class DomainHttpAdapter extends BaseHttpAdapter implements HttpAdapterInterface 
         super();
         this.accessToken = accessToken;
         this.apiUrl = apiUrl;
+        this.authUrl = authUrl;
         this.languageCode = languageCode;
         this.refreshToken = refreshToken;
         this.setStorageTokens = setTokens;
@@ -158,7 +161,7 @@ class DomainHttpAdapter extends BaseHttpAdapter implements HttpAdapterInterface 
         }
 
         const response: HttpResponse<RefreshUsecaseCommand> = await super.post(
-            `${this.apiUrl}/authentication/refresh-token`,
+            `${this.authUrl}/authentication/refresh-token`,
             {},
             { token: this.refreshToken }
         );

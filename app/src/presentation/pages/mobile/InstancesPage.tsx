@@ -1,14 +1,15 @@
 import { IonPage } from '@ionic/react';
-import ULLogo from '../../../assets/instances/ul-logo.svg';
 import { useEffect, useState } from 'react';
-import styles from '../css/InstancePage.module.css';
 import { useTranslation } from 'react-i18next';
+import ULLogo from '../../../assets/instances/ul-logo.svg';
+import styles from '../css/InstancePage.module.css';
 
 interface Instance {
     apiUrl: string;
     chatUrl: string;
     image: string;
     name: string;
+    socketChatUrl: string;
 }
 
 const instances: Instance[] = [
@@ -17,6 +18,7 @@ const instances: Instance[] = [
         name: 'Université de Lorraine et ses partenaires',
         apiUrl: import.meta.env.VITE_UL_API_URL,
         chatUrl: import.meta.env.VITE_CHAT_URL,
+        socketChatUrl: import.meta.env.VITE_SOCKET_CHAT_URL,
     },
 ];
 
@@ -26,11 +28,18 @@ if (import.meta.env.VITE_ENV === 'dev') {
         name: 'Localhost dev mode',
         apiUrl: import.meta.env.VITE_LOCAL_API,
         chatUrl: import.meta.env.VITE_CHAT_URL,
+        socketChatUrl: import.meta.env.VITE_SOCKET_CHAT_URL,
     });
 }
 
+export interface ValidateInstance {
+    apiUrl: string;
+    chatUrl: string;
+    socketChatUrl: string;
+}
+
 interface InstancesPageProps {
-    onValidate: ({ apiUrl, chatUrl }: { apiUrl: string; chatUrl: string }) => void;
+    onValidate: ({ apiUrl, chatUrl, socketChatUrl }: ValidateInstance) => void;
 }
 
 const InstancesPage: React.FC<InstancesPageProps> = ({ onValidate }) => {
@@ -39,7 +48,11 @@ const InstancesPage: React.FC<InstancesPageProps> = ({ onValidate }) => {
 
     useEffect(() => {
         if (instances.length === 1) {
-            onValidate({ apiUrl: instances[0].apiUrl, chatUrl: instances[0].chatUrl });
+            onValidate({
+                apiUrl: instances[0].apiUrl,
+                chatUrl: instances[0].chatUrl,
+                socketChatUrl: instances[0].socketChatUrl,
+            });
         }
     }, []);
 
@@ -66,7 +79,13 @@ const InstancesPage: React.FC<InstancesPageProps> = ({ onValidate }) => {
                 aria-label={t('instance.button') as string}
                 className={`primary-button ${styles.button} ${!selectedInstance ? 'disabled' : ''}`}
                 disabled={!selectedInstance}
-                onClick={() => onValidate({ apiUrl: selectedInstance!.apiUrl, chatUrl: selectedInstance!.chatUrl })}
+                onClick={() =>
+                    onValidate({
+                        apiUrl: selectedInstance!.apiUrl,
+                        chatUrl: selectedInstance!.chatUrl,
+                        socketChatUrl: selectedInstance!.socketChatUrl,
+                    })
+                }
             >
                 {t('instance.button')}
             </button>

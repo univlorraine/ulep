@@ -1,6 +1,6 @@
 import { Collection } from '@app/common';
+import { UserRepresentation } from '@app/keycloak';
 import { User } from 'src/core/models';
-
 export const CHAT_SERVICE = 'chat.service';
 
 export type Conversation = {
@@ -15,7 +15,7 @@ export type Conversation = {
 export type ConversationWithUsers = {
   id: string;
   createdAt: Date;
-  users: User[];
+  users: (User | UserRepresentation)[];
   lastActivity: Date;
   lastMessage?: MessageWithUser;
   metadata: any;
@@ -33,7 +33,7 @@ export interface MessageWithUser {
   id: string;
   content: string;
   createdAt: Date;
-  user: User;
+  user: User | UserRepresentation;
   type: string;
 }
 

@@ -1,6 +1,6 @@
 import * as Swagger from '@nestjs/swagger';
 import { Expose } from 'class-transformer';
-import { UserResponse } from 'src/api/dtos/users';
+import { UserChatResponse } from 'src/api/dtos/chat/user-conversation.response';
 import { MessageWithUser } from 'src/core/ports/chat.service';
 
 export class MessageResponse {
@@ -12,9 +12,9 @@ export class MessageResponse {
   @Expose({ groups: ['chat'] })
   content: string;
 
-  @Swagger.ApiProperty({ type: UserResponse })
+  @Swagger.ApiProperty({ type: UserChatResponse })
   @Expose({ groups: ['chat'] })
-  user: UserResponse;
+  user: UserChatResponse;
 
   @Swagger.ApiProperty({ type: 'string', format: 'date-time' })
   @Expose({ groups: ['chat'] })
@@ -33,7 +33,7 @@ export class MessageResponse {
       id: message.id,
       createdAt: message.createdAt,
       content: message.content,
-      user: UserResponse.fromDomain(message.user),
+      user: UserChatResponse.fromDomain(message.user),
       type: message.type,
     });
   }

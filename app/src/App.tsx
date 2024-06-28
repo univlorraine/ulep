@@ -1,37 +1,36 @@
 import { Device } from '@capacitor/device';
 import { IonApp, setupIonicReact } from '@ionic/react';
 import { IonReactRouter } from '@ionic/react-router';
+import * as Sentry from '@sentry/react';
 import { StoreProvider, useStoreRehydrated } from 'easy-peasy';
-import { useEffect } from 'react';
+import React, { useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import { ConfigContext, useConfig } from './context/ConfigurationContext';
 import getConfigContextValue from './context/getConfigurationContextValue';
 import Router from './presentation/router/Router';
-import React from 'react';
 import { useStoreActions, useStoreState } from './store/storeTypes';
-import * as Sentry from '@sentry/react';
 /* Core CSS required for Ionic components to work properly */
 import '@ionic/react/css/core.css';
 
 /* Basic CSS for apps built with Ionic */
 import '@ionic/react/css/normalize.css';
+import '@ionic/react/css/padding.css';
 import '@ionic/react/css/structure.css';
 import '@ionic/react/css/typography.css';
-import '@ionic/react/css/padding.css';
 
 /* Theme variables */
+import { polyfillCountryFlagEmojis } from 'country-flag-emoji-polyfill';
+import useFetchConfiguration from './presentation/hooks/useFetchConfiguration';
+import useFetchI18NBackend from './presentation/hooks/useFetchI18NBackend';
+import ErrorPage from './presentation/pages/ErrorPage';
+import MaintenancePage from './presentation/pages/MaintenancePage';
+import InstancesPage, { ValidateInstance } from './presentation/pages/mobile/InstancesPage';
+import AppUrlListener from './presentation/router/AppUrlListener';
 import './presentation/theme/button.css';
 import './presentation/theme/global.css';
 import './presentation/theme/margin.css';
 import './presentation/theme/variables.css';
 import Store from './store/store';
-import InstancesPage from './presentation/pages/mobile/InstancesPage';
-import useFetchConfiguration from './presentation/hooks/useFetchConfiguration';
-import useFetchI18NBackend from './presentation/hooks/useFetchI18NBackend';
-import ErrorPage from './presentation/pages/ErrorPage';
-import AppUrlListener from './presentation/router/AppUrlListener';
-import MaintenancePage from './presentation/pages/MaintenancePage';
-import { polyfillCountryFlagEmojis } from 'country-flag-emoji-polyfill';
 
 polyfillCountryFlagEmojis();
 setupIonicReact();
@@ -127,6 +126,7 @@ const AppContext = () => {
             value={getConfigContextValue({
                 apiUrl: import.meta.env.VITE_API_URL || apiUrl,
                 chatUrl: import.meta.env.VITE_CHAT_URL || chatUrl,
+                socketChatUrl: import.meta.env.VITE_SOCKET_CHAT_URL || chatUrl,
                 languageCode: i18n.language,
                 accessToken,
                 refreshToken,
@@ -154,8 +154,8 @@ const AppInstance: React.FC = () => {
     if (!apiUrl && !import.meta.env.VITE_API_URL)
         return (
             <InstancesPage
-                onValidate={({ apiUrl, chatUrl }: { apiUrl: string; chatUrl: string }) =>
-                    setApiUrl({ apiUrl, chatUrl })
+                onValidate={({ apiUrl, chatUrl, socketChatUrl }: ValidateInstance) =>
+                    setApiUrl({ apiUrl, chatUrl, socketChatUrl })
                 }
             />
         );

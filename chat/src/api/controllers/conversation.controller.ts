@@ -21,8 +21,6 @@ import { CreateConversationsRequest } from 'src/api/dtos/conversation/create-con
 import { MessageResponse, SendMessageRequest } from 'src/api/dtos/message';
 import { CollectionResponse } from 'src/api/dtos/pagination';
 import { AuthenticationGuard } from 'src/api/guards';
-import { Message } from 'src/core/models';
-import { MediaObject } from 'src/core/models/media.model';
 import {
     CreateConversationUsecase,
     CreateMessageUsecase,
@@ -68,9 +66,7 @@ export class ConversationController {
             });
 
         return new CollectionResponse<MessageResponse>({
-            items: messages.map((message: Message) =>
-                MessageResponse.from(message),
-            ),
+            items: messages.map(MessageResponse.from),
             totalItems: messages.length,
         });
     }
@@ -158,16 +154,17 @@ export class ConversationController {
             mimetype: file?.mimetype,
         });
 
-        let media: MediaObject;
         if (file) {
             //TODO: Upload lighter image then heavier image
-            media = await this.uploadMediaUsecase.execute({
+            const url = await this.uploadMediaUsecase.execute({
                 file,
-                messageId: message.id,
+                message,
                 conversationId,
+                filename: body.filename,
             });
+            message.content = url;
         }
 
-        return MessageResponse.from(message, media);
+        return MessageResponse.from(message);
     }
 }

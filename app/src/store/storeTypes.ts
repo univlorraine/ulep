@@ -3,12 +3,12 @@ import Campus from '../domain/entities/Campus';
 import Country from '../domain/entities/Country';
 import Goal from '../domain/entities/Goal';
 import Language from '../domain/entities/Language';
+import LearningLanguage from '../domain/entities/LearningLanguage';
+import MediaObject from '../domain/entities/MediaObject';
 import Profile from '../domain/entities/Profile';
 import ProfileSignUp, { Availabilites, BiographySignUp } from '../domain/entities/ProfileSignUp';
 import University from '../domain/entities/University';
 import User from '../domain/entities/User';
-import MediaObject from '../domain/entities/MediaObject';
-import LearningLanguage from '../domain/entities/LearningLanguage';
 
 export interface TokenStorePayload {
     accessToken: string;
@@ -58,6 +58,7 @@ interface LanguagePayload {
 interface ApiUrlPayload {
     apiUrl: string;
     chatUrl: string;
+    socketChatUrl: string;
 }
 
 interface ProfileStorePayload {

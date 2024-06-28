@@ -1,4 +1,7 @@
+import { KeycloakClient, UserRepresentation } from '@app/keycloak';
 import { Inject, Injectable } from '@nestjs/common';
+import { RessourceDoesNotExist } from 'src/core/errors';
+import { User } from 'src/core/models';
 import {
   CHAT_SERVICE,
   ChatServicePort,
@@ -23,6 +26,7 @@ export class GetAllConversationsFromUserIdUsecase {
     private readonly chatService: ChatServicePort,
     @Inject(USER_REPOSITORY)
     private readonly userRepository: UserRepository,
+    private readonly keycloakClient: KeycloakClient,
   ) {}
 
   async execute(command: GetAllConversationsFromUserIdCommand) {
@@ -52,7 +56,22 @@ export class GetAllConversationsFromUserIdUsecase {
     const users = await this.userRepository.ofIds(
       Array.from(allUserIds) as string[],
     );
-    const userMap = new Map(users.map((user) => [user.id, user]));
+    const userMap = new Map(
+      users.map((user: User | UserRepresentation) => [user.id, user]),
+    );
+
+    const missingUserIds = Array.from(allUserIds).filter(
+      (id: string) => !userMap.has(id) || userMap.get(id) === undefined,
+    ) as string[];
+
+    for (const id of missingUserIds) {
+      const userDetails = await this.keycloakClient.getUserById(id);
+      if (userDetails) {
+        userMap.set(id, userDetails);
+      } else {
+        throw new RessourceDoesNotExist(`User not found with id: ${id}`);
+      }
+    }
 
     // Replace userIds by user objects in conversations
     const updatedConversations = conversations.map(
