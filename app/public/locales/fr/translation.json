@@ -99,6 +99,7 @@
         "close": "Fermer"
     },
     "chat": {
+        "fileDownloaded": "Fichier téléchargé",
         "me": "Moi",
         "title": "Messages avec {{name}}",
         "input": {

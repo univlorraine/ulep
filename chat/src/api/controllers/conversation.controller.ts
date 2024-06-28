@@ -158,8 +158,9 @@ export class ConversationController {
             //TODO: Upload lighter image then heavier image
             const url = await this.uploadMediaUsecase.execute({
                 file,
-                messageId: message.id,
+                message,
                 conversationId,
+                filename: body.filename,
             });
             message.content = url;
         }

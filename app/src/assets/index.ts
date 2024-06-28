@@ -18,6 +18,7 @@ import CloseSvg from './close.svg';
 import CloseBlackSvg from './close_black.svg';
 import CreateAccountPng from './create-account-logo.png';
 import DicePng from './dice.png';
+import DownloadSvg from './download.svg';
 import EditPng from './edit.png';
 import EyeSvg from './eye.svg';
 import HiBubbleSvg from './hi-bubble.svg';
@@ -67,6 +68,7 @@ export {
     ConversationsSvg,
     CreateAccountPng,
     DicePng,
+    DownloadSvg,
     EditPng,
     EyeSvg,
     FAQPng,

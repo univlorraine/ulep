@@ -97,6 +97,7 @@
         "close": "Close"
     },
     "chat": {
+        "fileDownloaded": "File downloaded",
         "me": "Me",
         "title": "Messages with {{name}}",
         "input": {

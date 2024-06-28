@@ -1,6 +1,7 @@
 import BrowserAdapterInterface from '../adapter/interfaces/BrowserAdapter.interface';
 import CameraAdapterInterface from '../adapter/interfaces/CameraAdapter.interface';
 import DeviceAdapterInterface from '../adapter/interfaces/DeviceAdapter.interface';
+import FileAdapterInterface from '../adapter/interfaces/FileAdapter.interface';
 import NotificationAdapterInterface from '../adapter/interfaces/NotificationAdapter.interface';
 import RecorderAdapterInterface from '../adapter/interfaces/RecorderAdapter.interface';
 import SocketIoAdapterInterface from '../adapter/interfaces/SocketIoAdapter.interface';
@@ -57,6 +58,7 @@ export interface ConfigContextValueType {
     createReport: CreateReportUsecaseInterface;
     createOrUpdateTestedLanguage: CreateOrUpdateTestedLanguageUsecaseInterface;
     createUser: CreateUserUsecaseInterface;
+    fileAdapter: FileAdapterInterface;
     editProfile: EditProfileUsecaseInterface;
     editUser: EditUserUsecaseInterface;
     getAllCountries: GetAllCountriesUsecaseInterface;

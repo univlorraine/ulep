@@ -71,6 +71,18 @@
     max-height: 300px;
 }
 
+.preview-file-container {
+    background-color: var(--primary-color);
+    border-radius: 8px;
+    position: relative;
+    display: flex;
+    max-width: 80%;
+    max-height: 300px;
+    justify-content: center;
+    align-items: center;
+    padding: 12px;
+}
+
 .cancel-image-button {
     background-color: white;
     border-radius: 50%;
