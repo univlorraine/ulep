@@ -1,15 +1,19 @@
-import { IonIcon, IonPage } from '@ionic/react';
+import { IonIcon, IonPage, useIonToast } from '@ionic/react';
 import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { KebabSvg, LeftChevronSvg, PaperclipSvg, PictureSvg, SenderSvg } from '../../../assets';
+import { CloseBlackSvg, KebabSvg, LeftChevronSvg, PaperclipSvg, PictureSvg } from '../../../assets';
 import { useConfig } from '../../../context/ConfigurationContext';
 import Profile from '../../../domain/entities/Profile';
 import { UserChat } from '../../../domain/entities/User';
 import Conversation from '../../../domain/entities/chat/Conversation';
 import { MessageWithConversationId } from '../../../domain/entities/chat/Message';
 import useHandleMessagesFromConversation from '../../hooks/useHandleMessagesFromConversation';
+import AudioLine from '../AudioLine';
+import RecordingButton from '../RecordingButton';
 import MessagesList from '../chat/MessagesList';
 import styles from './ChatContent.module.css';
+
+//TODO: modale to display picture on full screen ( almost ? )
 
 interface ChatContentProps {
     conversation: Conversation;
@@ -20,23 +24,48 @@ interface ChatContentProps {
 
 const Content: React.FC<Omit<ChatContentProps, 'isHybrid'>> = ({ conversation, goBack, profile }) => {
     const { t } = useTranslation();
-    const { sendMessage, socketIoAdapter } = useConfig();
+    const [showToast] = useIonToast();
+    const { cameraAdapter, fileAdapter, recorderAdapter, sendMessage, socketIoAdapter } = useConfig();
     const [message, setMessage] = useState<string>('');
+    const [imageToSend, setImageToSend] = useState<File | undefined>();
+    const [audioFile, setAudioFile] = useState<File | undefined>();
+    const [fileToSend, setFileToSend] = useState<File | undefined>();
+    const [isRecording, setIsRecording] = useState<boolean>(false);
 
-    //TODO: Handle is loading and error
-    const { messages, isLoading, isScrollOver, error, loadMessages, addNewMessage } = useHandleMessagesFromConversation(
+    const { messages, isScrollOver, error, loadMessages, addNewMessage } = useHandleMessagesFromConversation(
         conversation.id
     );
 
     const onSendPressed = async () => {
-        //TODO: Send message in conversation for now - idea ( no id = currently sent ? )
-        setMessage('');
-        const messageResult = await sendMessage.execute(conversation.id, profile.user.id, message);
-        //TODO: Handle error for message
-        if (messageResult instanceof Error) {
+        if (isRecording || (!message && !imageToSend && !audioFile && !fileToSend)) {
             return;
         }
-        //TODO: Display message as sent now ?
+
+        let file: File | undefined;
+        let filename: string | undefined;
+        if (audioFile) {
+            file = audioFile;
+        } else if (imageToSend) {
+            file = imageToSend;
+        } else if (fileToSend) {
+            file = fileToSend;
+            filename = fileToSend.name;
+        }
+
+        setMessage('');
+        setImageToSend(undefined);
+        setAudioFile(undefined);
+        setFileToSend(undefined);
+
+        const messageResult = await sendMessage.execute(conversation.id, profile.user.id, message, file, filename);
+
+        if (messageResult instanceof Error) {
+            return showToast({
+                message: t(messageResult.message),
+                duration: 5000,
+            });
+        }
+
         socketIoAdapter.emit(
             new MessageWithConversationId(
                 messageResult.id,
@@ -56,6 +85,39 @@ const Content: React.FC<Omit<ChatContentProps, 'isHybrid'>> = ({ conversation, g
         );
     };
 
+    const handleStartRecord = () => {
+        // If we are already recording or if we have an audio file, we don't want to start a new recording
+        if (isRecording || audioFile) {
+            return;
+        }
+
+        setIsRecording(true);
+        recorderAdapter.startRecording((audio, error) => {
+            if (error) {
+                return showToast({
+                    message: t(error.message),
+                    duration: 5000,
+                });
+            }
+            setIsRecording(false);
+            setAudioFile(audio);
+        });
+    };
+
+    const handleStopRecord = () => {
+        setIsRecording(false);
+        recorderAdapter.stopRecording((audio, error) => {
+            if (error) {
+                return showToast({
+                    message: t(error.message),
+                    duration: 5000,
+                });
+            }
+            setIsRecording(false);
+            setAudioFile(audio);
+        });
+    };
+
     useEffect(() => {
         socketIoAdapter.connect();
         socketIoAdapter.onMessage(addNewMessage);
@@ -65,6 +127,21 @@ const Content: React.FC<Omit<ChatContentProps, 'isHybrid'>> = ({ conversation, g
             socketIoAdapter.offMessage();
         };
     }, []);
+
+    const handleImageClick = async () => {
+        const image = await cameraAdapter.getPictureFromGallery();
+        if (image) {
+            setImageToSend(image);
+            setMessage('');
+        }
+    };
+
+    const handleFileClick = async () => {
+        const file = await fileAdapter.getFile();
+        if (file) {
+            setFileToSend(file);
+        }
+    };
 
     return (
         <div className={styles.container}>
@@ -83,18 +160,49 @@ const Content: React.FC<Omit<ChatContentProps, 'isHybrid'>> = ({ conversation, g
             />
             <div className={styles.footer}>
                 <div>
-                    <IonIcon className={styles.icon} icon={PictureSvg} />
-                    <IonIcon className={styles.icon} icon={PaperclipSvg} />
+                    <IonIcon className={styles.icon} icon={PictureSvg} onClick={handleImageClick} />
+                    <IonIcon className={styles.icon} icon={PaperclipSvg} onClick={handleFileClick} />
                 </div>
                 <div className={styles['sender-view']}>
-                    <textarea
-                        className={styles.input}
-                        maxLength={1000}
-                        onChange={(e) => setMessage(e.target.value)}
-                        placeholder={t('chat.input.placeholder') ?? ''}
-                        value={message}
+                    {imageToSend && (
+                        <div className={styles['preview-container']}>
+                            <button className={styles['cancel-image-button']} onClick={() => setImageToSend(undefined)}>
+                                <img src={CloseBlackSvg} />
+                            </button>
+                            <img className={styles['preview-image']} src={URL.createObjectURL(imageToSend)} />
+                        </div>
+                    )}
+                    {audioFile && (
+                        <div className={styles['preview-container']}>
+                            <button className={styles['cancel-audio-button']} onClick={() => setAudioFile(undefined)}>
+                                <img src={CloseBlackSvg} style={{ filter: 'invert(1)' }} />
+                            </button>
+                            <AudioLine audioFile={audioFile} />
+                        </div>
+                    )}
+                    {fileToSend && (
+                        <div className={styles['preview-file-container']}>
+                            <button className={styles['cancel-audio-button']} onClick={() => setFileToSend(undefined)}>
+                                <img src={CloseBlackSvg} style={{ filter: 'invert(1)' }} />
+                            </button>
+                            <span>{fileToSend.name}</span>
+                        </div>
+                    )}
+                    {!imageToSend && !audioFile && !fileToSend && (
+                        <textarea
+                            className={styles.input}
+                            maxLength={1000}
+                            onChange={(e) => setMessage(e.target.value)}
+                            placeholder={t('chat.input.placeholder') ?? ''}
+                            value={message}
+                        />
+                    )}
+                    <RecordingButton
+                        mode={message || imageToSend || audioFile || fileToSend ? 'send' : 'record'}
+                        onSendPressed={onSendPressed}
+                        handleStartRecord={handleStartRecord}
+                        handleStopRecord={handleStopRecord}
                     />
-                    <IonIcon className={styles.sender} icon={SenderSvg} onClick={onSendPressed} />
                 </div>
             </div>
         </div>

@@ -5,7 +5,8 @@ interface SendMessageUsecaseInterface {
         conversationId: string,
         senderId: string,
         content?: string,
-        file?: File
+        file?: File,
+        filename?: string
     ): Promise<MessageWithoutSender | Error>;
 }
 

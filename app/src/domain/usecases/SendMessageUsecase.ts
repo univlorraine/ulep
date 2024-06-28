@@ -8,6 +8,7 @@ type MessagePayload = {
     content?: string;
     senderId: string;
     file?: File;
+    filename?: string;
 };
 
 class SendMessageUsecase implements SendMessageUsecaseInterface {
@@ -17,7 +18,8 @@ class SendMessageUsecase implements SendMessageUsecaseInterface {
         conversationId: string,
         senderId: string,
         content?: string,
-        file?: File
+        file?: File,
+        filename?: string
     ): Promise<MessageWithoutSender | Error> {
         try {
             const body: MessagePayload = {
@@ -27,6 +29,10 @@ class SendMessageUsecase implements SendMessageUsecaseInterface {
 
             if (file) {
                 body.file = file;
+            }
+
+            if (filename) {
+                body.filename = filename;
             }
 
             const httpResponse: HttpResponse<MessageWithoutSenderCommand> = await this.chatHttpAdapter.post(

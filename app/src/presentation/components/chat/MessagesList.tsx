@@ -3,7 +3,7 @@ import { useEffect, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Message } from '../../../domain/entities/chat/Message';
 import Loader from '../Loader';
-import MessageText from './MessageText';
+import MessageComponent from './MessageComponent';
 import styles from './MessagesList.module.css';
 
 interface MessagesListProps {
@@ -21,7 +21,7 @@ const MessagesList: React.FC<MessagesListProps> = ({ messages, isScrollOver, loa
     const [isLoading, setIsLoading] = useState(false);
 
     const scrollToBottom = () => {
-        messagesEndRef.current?.scrollIntoView({ behavior: 'instant' });
+        messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
     };
 
     useEffect(() => {
@@ -74,7 +74,7 @@ const MessagesList: React.FC<MessagesListProps> = ({ messages, isScrollOver, loa
 
             messageElements.push(
                 <div key={index} className={isCurrentUserMessage ? styles.currentUser : styles.otherUser}>
-                    <MessageText message={message} isCurrentUserMessage={isCurrentUserMessage} />
+                    <MessageComponent message={message} isCurrentUserMessage={isCurrentUserMessage} />
                 </div>
             );
         });

@@ -44,20 +44,75 @@
 }
 
 .sender-view {
-    align-items: center;
     display: flex;
     justify-content: space-between;
     width: 100%;
-}
-
-.sender {
-    height: 44px;
-    padding-left: 12px;
-    width: 44px;
 }
 
 .title {
     font-family: 'Roboto', sans-serif;
     font-size: 17px;
     font-weight: 700;
+}
+
+.preview-image {
+    border-radius: 10%;
+    margin: 12px;
+    object-fit: cover;
+    object-position: center;
+    height: 40px;
+    width: 40px;
+}
+
+.preview-container {
+    position: relative;
+    display: inline-block;
+    max-width: 80%;
+    max-height: 300px;
+}
+
+.preview-file-container {
+    background-color: var(--primary-color);
+    border-radius: 8px;
+    position: relative;
+    display: flex;
+    max-width: 80%;
+    max-height: 300px;
+    justify-content: center;
+    align-items: center;
+    padding: 12px;
+}
+
+.cancel-image-button {
+    background-color: white;
+    border-radius: 50%;
+    position: absolute;
+    padding: 2px;
+    top: 0;
+    right: 0;
+    height: 20px;
+    width: 20px;
+}
+
+.cancel-audio-button {
+    background-color: black;
+    border-radius: 50%;
+    position: absolute;
+    padding: 2px;
+    top: -10px;
+    right: -10px;
+    height: 20px;
+    width: 20px;
+}
+
+@media (min-width: 768px) {
+    .cancel-image-button {
+        height: 30px;
+        width: 30px;
+    }
+
+    .preview-image {
+        height: 60px;
+        width: 60px;
+    }
 }

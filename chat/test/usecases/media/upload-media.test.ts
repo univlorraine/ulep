@@ -5,7 +5,6 @@ import { InMemoryConversationRepository } from 'src/providers/persistance/reposi
 import { InMemoryMediaObjectRepository } from 'src/providers/persistance/repositories/in-memory-media-object.repository';
 import { InMemoryMessageRepository } from 'src/providers/persistance/repositories/in-memory-message.repository';
 import { MinioStorage } from '../../mocks/minio.storage';
-import { MediaObject } from 'src/core/models/media.model';
 
 const mockFile: Express.Multer.File = {
     fieldname: 'file',
@@ -47,6 +46,7 @@ jest.mock('../../mocks/minio.storage', () => {
         MinioStorage: jest.fn().mockImplementation(() => {
             return {
                 write: jest.fn().mockResolvedValue('some value'),
+                temporaryUrl: jest.fn().mockResolvedValue('some value'),
             };
         }),
     };
@@ -79,7 +79,7 @@ describe('UploadMedia', () => {
 
         expect(mockedStorage.write).toHaveBeenCalled();
         expect(inMemoryMediaRepository.mediaObjects).toHaveLength(1);
-        expect(media).toBeInstanceOf(MediaObject);
+        expect(media).toBe('some value');
     });
 
     it('Should throw an error if the message does not exist', async () => {
