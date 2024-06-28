@@ -48,15 +48,20 @@ export class GetMessagesFromConversationIdUsecase {
             );
 
         for (const message of messages) {
-            if (message.type === MessageType.Image) {
+            if (
+                (message.type === MessageType.Image ||
+                    message.type === MessageType.Audio ||
+                    message.type === MessageType.File) &&
+                message.content
+            ) {
                 message.content = await this.storage.temporaryUrl(
                     'chat',
-                    `${conversation.id}/${message.content}`,
+                    message.content,
                     3600,
                 );
             }
         }
 
-        return messages;
+        return messages.filter((message) => message.content);
     }
 }

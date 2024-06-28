@@ -17,9 +17,7 @@ export const messageMapper = (snapshot: MessagesSnapshot): Message => {
     return new Message({
         id: snapshot.id,
         content: snapshot.MediaObject?.id
-            ? `${snapshot.MediaObject.id}.${
-                  snapshot.MediaObject.mime.split('/')[1]
-              }`
+            ? snapshot.MediaObject.name
             : snapshot.content,
         createdAt: snapshot.createdAt,
         updatedAt: snapshot.updatedAt,

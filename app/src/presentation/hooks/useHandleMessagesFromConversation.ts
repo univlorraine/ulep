@@ -32,6 +32,11 @@ const useHandleMessagesFromConversation = (conversationId: string) => {
     };
 
     const loadMessages = async () => {
+        if (messagesResult.isScrollOver) return;
+        setMessagesResult({
+            ...messagesResult,
+            isLoading: true,
+        });
         const messagesConversationResult = await getMessagesFromConversation.execute(conversationId, lastMessageId, 10);
         if (messagesConversationResult instanceof Error) {
             return setMessagesResult({
@@ -55,10 +60,6 @@ const useHandleMessagesFromConversation = (conversationId: string) => {
 
     useEffect(() => {
         const fetchData = async () => {
-            setMessagesResult({
-                ...messagesResult,
-                isLoading: true,
-            });
             await loadMessages();
         };
 

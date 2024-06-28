@@ -2,7 +2,9 @@ import BrowserAdapter from '../adapter/BrowserAdapter';
 import CameraAdapter from '../adapter/CameraAdapter';
 import DeviceAdapter from '../adapter/DeviceAdapter';
 import DomainHttpAdapter from '../adapter/DomainHttpAdapter';
+import FileAdapter from '../adapter/FileAdapter';
 import NotificationAdapter from '../adapter/NotificationAdapter';
+import { RecorderAdapter } from '../adapter/RecorderAdapter';
 import SocketIoAdapter from '../adapter/SocketIoAdapter';
 import Configuration from '../domain/entities/Confirguration';
 import AddDeviceUsecase from '../domain/usecases/AddDeviceUsecase';
@@ -129,6 +131,8 @@ const getConfigContextValue = ({
     const retrievePerson = new RetrievePersonInfoUsecase(domainHttpAdapter);
 
     //Chat
+    const fileAdapter = new FileAdapter(deviceAdapter);
+    const recorderAdapter = new RecorderAdapter();
     const getConversations = new GetConversationsUsecase(domainHttpAdapter);
     const getMessagesFromConversation = new GetMessagesFromConversationUsecase(domainHttpAdapter);
     const sendMessage = new SendMessageUsecase(chatHttpAdapter);
@@ -148,6 +152,7 @@ const getConfigContextValue = ({
         createUser,
         editProfile,
         editUser,
+        fileAdapter,
         deviceAdapter,
         getAllInterestCategories,
         getAllCountries,
@@ -173,6 +178,7 @@ const getConfigContextValue = ({
         socketIoAdapter,
         updateAvatar,
         updateNotificationPermission,
+        recorderAdapter,
         retrievePerson,
         getTokenFromCodeUsecase,
         getInitialUrlUsecase,
