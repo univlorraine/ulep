@@ -1,12 +1,10 @@
 import React from 'react';
-import styles from './ConversationLine.module.css';
-import Conversation from '../../../domain/entities/chat/Conversation';
-import NetworkImage from '../NetworkImage';
-import MediaObject from '../../../domain/entities/MediaObject';
-import { Message } from '../../../domain/entities/chat/Message';
 import { useTranslation } from 'react-i18next';
-
-//TODO: Sort covnersation by last message date or conversation creation date
+import MediaObject from '../../../domain/entities/MediaObject';
+import Conversation from '../../../domain/entities/chat/Conversation';
+import { Message } from '../../../domain/entities/chat/Message';
+import NetworkImage from '../NetworkImage';
+import styles from './ConversationLine.module.css';
 
 interface ConversationAvatarProps {
     avatar?: MediaObject;
@@ -30,17 +28,17 @@ const ConversationAvatar: React.FC<ConversationAvatarProps> = ({ avatar, firstna
     );
 };
 
-const getPreviewMessage = (userId: string, message?: Message) => {
+const getPreviewMessage = (userId: string, translate: (key: string) => string, message?: Message) => {
     if (!message) {
-        return 'message.type.noMessage';
+        return translate('message.type.noMessage');
     }
     switch (message.type) {
         case 'image':
-            return 'message.type.image';
+            return translate('message.type.image');
         case 'audio':
-            return 'message.type.audio';
+            return translate('message.type.audio');
         case 'file':
-            return 'message.type.file';
+            return translate('message.type.file');
         default:
             if (message.isMine(userId)) {
                 return message.content;
@@ -52,13 +50,14 @@ const getPreviewMessage = (userId: string, message?: Message) => {
 interface ConversationLineProps {
     conversation: Conversation;
     userId: string;
+    onPressed: (conversation: Conversation) => void;
 }
 
-const ConversationLine: React.FC<ConversationLineProps> = ({ conversation, userId }) => {
+const ConversationLine: React.FC<ConversationLineProps> = ({ conversation, onPressed, userId }) => {
     const { t } = useTranslation();
     const mainParticipant = conversation.getMainConversationPartner(userId);
     return (
-        <button className={styles.line}>
+        <button className={styles.line} onClick={() => onPressed(conversation)}>
             <div className={styles['left-line']}>
                 <ConversationAvatar
                     avatar={mainParticipant.avatar}
@@ -67,11 +66,13 @@ const ConversationLine: React.FC<ConversationLineProps> = ({ conversation, userI
                 />
                 <div className={styles.content}>
                     <span className={styles.name}>{mainParticipant.firstname}</span>
-                    <span className={styles.message}>{t(getPreviewMessage(userId, conversation.lastMessage))}</span>
+                    <span className={styles.message}>{getPreviewMessage(userId, t, conversation.lastMessage)}</span>
                 </div>
             </div>
             {conversation.lastMessage && (
-                <span className={styles.date}>{conversation.lastMessage.getMessageDate()}</span>
+                <span className={styles.date}>{`${t(
+                    conversation.lastMessage.getMessageDate()
+                )} ${conversation.lastMessage.getMessageHour()}`}</span>
             )}
         </button>
     );

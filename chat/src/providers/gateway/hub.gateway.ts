@@ -1,3 +1,5 @@
+import { KeycloakClient } from '@app/keycloak';
+import { Inject, Logger } from '@nestjs/common';
 import {
     OnGatewayConnection,
     OnGatewayDisconnect,
@@ -6,21 +8,16 @@ import {
     WebSocketServer,
 } from '@nestjs/websockets';
 import { Server, Socket } from 'socket.io';
-import { Inject, Logger } from '@nestjs/common';
 import { Message } from 'src/core/models';
 import {
     CONVERSATION_REPOSITORY,
     ConversationRepository,
 } from 'src/core/ports/conversation.repository';
-import { RedisRoomService } from 'src/providers/services/room.service';
 import { ROOM_REPOSITORY } from 'src/core/ports/room.repository';
-import { KeycloakClient } from '@app/keycloak';
+import { RedisRoomService } from 'src/providers/services/room.service';
 
 @WebSocketGateway(5000, {
-    cors: {
-        origin: '*',
-        methods: ['GET'],
-    },
+    cors: true,
 })
 export class HubGateway
     implements OnGatewayConnection, OnGatewayDisconnect, HubGateway
@@ -43,26 +40,31 @@ export class HubGateway
      * Add user to all conversations he is registered to when he connects.
      */
     async handleConnection(socket: Socket) {
-        const user = await this.computeUserIdFromToken(
-            socket.handshake.auth.token,
-        );
-        if (user) {
-            // Find all conversations the user is registered to.
-            const conversations =
-                await this.conversationRepository.findByUserId(user);
-            // Join user to all conversations he is registered to.
-            this.server
-                .in(socket.id)
-                .socketsJoin(
-                    conversations.map((conversation) => conversation.id),
-                );
-            // Save user socket id.
-            this.roomService.setUserSocketId(user, socket.id);
-            // Save user to all conversations he is registered to.
-            for (const conversation of conversations) {
-                this.roomService.addUserToTopic(conversation.id, user);
+        try {
+            const user = await this.computeUserIdFromToken(
+                socket.handshake.auth.token,
+            );
+
+            if (user) {
+                // Find all conversations the user is registered to.
+                const conversations =
+                    await this.conversationRepository.findByUserId(user);
+                // Join user to all conversations he is registered to.
+                this.server
+                    .in(socket.id)
+                    .socketsJoin(
+                        conversations.map((conversation) => conversation.id),
+                    );
+                // Save user socket id.
+                this.roomService.setUserSocketId(user, socket.id);
+                // Save user to all conversations he is registered to.
+                for (const conversation of conversations) {
+                    this.roomService.addUserToTopic(conversation.id, user);
+                }
+            } else {
+                socket.disconnect();
             }
-        } else {
+        } catch (error) {
             socket.disconnect();
         }
     }
@@ -82,7 +84,10 @@ export class HubGateway
      */
     @SubscribeMessage('publish')
     publish(client: Socket, message: Message): void {
-        this.server.to(message.conversationId).emit('message', message);
+        this.server
+            .to(message.conversationId)
+            .timeout(1000)
+            .emit('message', message);
     }
 
     /**

@@ -9,6 +9,7 @@
 
 .content {
     background-color: white;
+    flex: 1;
 }
 
 .header {

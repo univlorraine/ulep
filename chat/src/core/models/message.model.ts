@@ -19,7 +19,7 @@ interface MessageProps {
 
 export class Message {
     readonly id: string;
-    readonly content: string;
+    content: string;
     readonly conversationId: string;
     readonly isReported: boolean;
     readonly isDeleted: boolean;

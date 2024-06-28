@@ -1,4 +1,14 @@
 import { Inject, Injectable, NotFoundException } from '@nestjs/common';
+import { Message } from 'src/core/models';
+import { MediaObject } from 'src/core/models/media.model';
+import {
+    CONVERSATION_REPOSITORY,
+    ConversationRepository,
+} from 'src/core/ports/conversation.repository';
+import {
+    MESSAGE_REPOSITORY,
+    MessageRepository,
+} from 'src/core/ports/message.repository';
 import {
     MEDIA_OBJECT_REPOSITORY,
     MediaObjectRepository,
@@ -8,20 +18,12 @@ import {
     STORAGE_INTERFACE,
     StorageInterface,
 } from '../../ports/storage.interface';
-import { MediaObject } from 'src/core/models/media.model';
-import {
-    MESSAGE_REPOSITORY,
-    MessageRepository,
-} from 'src/core/ports/message.repository';
-import {
-    CONVERSATION_REPOSITORY,
-    ConversationRepository,
-} from 'src/core/ports/conversation.repository';
 
 export class UploadMediaCommand {
     conversationId: string;
-    messageId: string;
+    message: Message;
     file: File;
+    filename?: string;
 }
 
 @Injectable()
@@ -39,25 +41,35 @@ export class UploadMediaUsecase {
 
     async execute(command: UploadMediaCommand) {
         await this.assetConversationExist(command.conversationId);
-        await this.assetMessageExist(command.messageId);
+        await this.assetMessageExist(command.message.id);
 
-        const avatar = await this.upload(
+        const file = await this.upload(
             command.file,
             command.conversationId,
-            command.messageId,
+            command.message,
+            command.filename,
         );
 
-        return avatar;
+        return this.storageInterface.temporaryUrl(
+            'chat',
+            `${command.conversationId}/${
+                command.filename
+                    ? command.filename
+                    : `${file.id}.${file.mimetype.split('/')[1]}`
+            }`,
+            3600,
+        );
     }
 
     private async upload(
         file: Express.Multer.File,
         conversationId: string,
-        messageId: string,
+        message: Message,
+        filename?: string,
     ): Promise<MediaObject> {
-        const image = MediaObject.image(file, 'chat', conversationId);
+        const image = MediaObject.image(file, 'chat', conversationId, filename);
         await this.storageInterface.write('chat', image.name, file);
-        await this.mediaObjectRepository.saveFile(image, messageId);
+        await this.mediaObjectRepository.saveFile(image, message.id);
 
         return image;
     }

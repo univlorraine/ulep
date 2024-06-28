@@ -31,7 +31,14 @@
         }
     },
     "date": {
+        "today": "Today",
         "yesterday": "Yesterday"
+    },
+    "record": {
+        "error": {
+            "permission": "Permission denied",
+            "unexpected": "Unexpected error"
+        }
     },
     "navigation": {
         "bottom_bar": {
@@ -88,6 +95,14 @@
         "welcome_subtext": "le meilleur moyen de pratiquer une langue",
         "welcome_btn": "Apprends une nouvelle langue en tandem",
         "close": "Close"
+    },
+    "chat": {
+        "fileDownloaded": "File downloaded",
+        "me": "Me",
+        "title": "Messages with {{name}}",
+        "input": {
+            "placeholder": "Write your message..."
+        }
     },
     "connection_page": {
         "connect_title": "Already have an account ?",

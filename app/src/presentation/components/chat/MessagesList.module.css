@@ -1,0 +1,37 @@
+.dateSeparator {
+    font-family: 'Maven Pro', sans-serif;
+    font-size: 18px;
+    font-weight: 700;
+    color: black;
+    justify-content: center;
+    display: flex;
+    margin: 10px;
+}
+
+.messages {
+    flex: 1;
+    height: 100%;
+    max-height: 100%;
+    overflow: hidden;
+    overflow-y: auto;
+    width: 100%;
+}
+
+.currentUser,
+.otherUser {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    width: 100%;
+}
+
+.otherUser {
+    align-items: flex-start;
+}
+
+.loader {
+    align-items: center;
+    justify-content: center;
+    display: flex;
+    margin: 8px;
+}

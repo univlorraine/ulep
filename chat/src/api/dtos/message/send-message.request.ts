@@ -1,4 +1,4 @@
-import { IsString } from 'class-validator';
+import { IsOptional, IsString } from 'class-validator';
 
 export class SendMessageRequest {
     @IsString()
@@ -6,4 +6,8 @@ export class SendMessageRequest {
 
     @IsString()
     senderId: string;
+
+    @IsString()
+    @IsOptional()
+    filename?: string;
 }
