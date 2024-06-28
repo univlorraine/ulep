@@ -31,7 +31,14 @@
         }
     },
     "date": {
+        "today": "Aujourd'hui",
         "yesterday": "Hier"
+    },
+    "record": {
+        "error": {
+            "permission": "Permission refusée",
+            "unexpected": "Erreur inconnue"
+        }
     },
     "navigation": {
         "bottom_bar": {
@@ -92,6 +99,8 @@
         "close": "Fermer"
     },
     "chat": {
+        "fileDownloaded": "Fichier téléchargé",
+        "me": "Moi",
         "title": "Messages avec {{name}}",
         "input": {
             "placeholder": "Écris ton message..."

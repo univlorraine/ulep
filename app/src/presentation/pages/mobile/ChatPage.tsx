@@ -1,7 +1,7 @@
 import { Redirect, useHistory, useLocation } from 'react-router';
-import ChatContent from '../../components/contents/ChatContent';
 import Conversation from '../../../domain/entities/chat/Conversation';
 import { useStoreState } from '../../../store/storeTypes';
+import ChatContent from '../../components/contents/ChatContent';
 
 interface ChatPageProps {
     conversation: Conversation;
@@ -25,7 +25,7 @@ const ChatPage = () => {
         return <Redirect to="/" />;
     }
 
-    return <ChatContent conversation={conversation} goBack={goBack} userId={profile.id} isHybrid />;
+    return <ChatContent conversation={conversation} goBack={goBack} profile={profile} isHybrid />;
 };
 
 export default ChatPage;

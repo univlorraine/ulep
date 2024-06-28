@@ -31,7 +31,14 @@
         }
     },
     "date": {
+        "today": "Today",
         "yesterday": "Yesterday"
+    },
+    "record": {
+        "error": {
+            "permission": "Permission denied",
+            "unexpected": "Unexpected error"
+        }
     },
     "navigation": {
         "bottom_bar": {
@@ -90,6 +97,8 @@
         "close": "Close"
     },
     "chat": {
+        "fileDownloaded": "File downloaded",
+        "me": "Me",
         "title": "Messages with {{name}}",
         "input": {
             "placeholder": "Write your message..."

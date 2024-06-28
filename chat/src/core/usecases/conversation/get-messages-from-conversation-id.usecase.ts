@@ -1,4 +1,5 @@
 import { Inject, Injectable, NotFoundException } from '@nestjs/common';
+import { MessageType } from 'src/core/models';
 import {
     CONVERSATION_REPOSITORY,
     ConversationRepository,
@@ -8,6 +9,10 @@ import {
     MessagePagination,
     MessageRepository,
 } from 'src/core/ports/message.repository';
+import {
+    STORAGE_INTERFACE,
+    StorageInterface,
+} from 'src/core/ports/storage.interface';
 
 export class GetMessagesFromConversationIdCommand {
     id: string;
@@ -22,6 +27,8 @@ export class GetMessagesFromConversationIdUsecase {
         private readonly conversationRepository: ConversationRepository,
         @Inject(MESSAGE_REPOSITORY)
         private readonly messageRepository: MessageRepository,
+        @Inject(STORAGE_INTERFACE)
+        private readonly storage: StorageInterface,
     ) {}
 
     async execute(command: GetMessagesFromConversationIdCommand) {
@@ -40,6 +47,21 @@ export class GetMessagesFromConversationIdUsecase {
                 command.filter,
             );
 
-        return messages;
+        for (const message of messages) {
+            if (
+                (message.type === MessageType.Image ||
+                    message.type === MessageType.Audio ||
+                    message.type === MessageType.File) &&
+                message.content
+            ) {
+                message.content = await this.storage.temporaryUrl(
+                    'chat',
+                    message.content,
+                    3600,
+                );
+            }
+        }
+
+        return messages.filter((message) => message.content);
     }
 }
