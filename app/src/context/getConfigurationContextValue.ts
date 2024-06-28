@@ -131,7 +131,7 @@ const getConfigContextValue = ({
     const retrievePerson = new RetrievePersonInfoUsecase(domainHttpAdapter);
 
     //Chat
-    const fileAdapter = new FileAdapter();
+    const fileAdapter = new FileAdapter(deviceAdapter);
     const recorderAdapter = new RecorderAdapter();
     const getConversations = new GetConversationsUsecase(domainHttpAdapter);
     const getMessagesFromConversation = new GetMessagesFromConversationUsecase(domainHttpAdapter);

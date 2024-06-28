@@ -1,5 +1,7 @@
+import { useIonToast } from '@ionic/react';
 import { useTranslation } from 'react-i18next';
 import { DownloadSvg } from '../../../assets';
+import { useConfig } from '../../../context/ConfigurationContext';
 import { Message } from '../../../domain/entities/chat/Message';
 import AudioLine from '../AudioLine';
 import styles from './MessageComponent.module.css';
@@ -68,27 +70,25 @@ const MessageAudio: React.FC<MessageProps> = ({ message, isCurrentUserMessage })
 };
 
 const MessageFile: React.FC<MessageProps> = ({ message, isCurrentUserMessage }) => {
+    const { fileAdapter } = useConfig();
+    const { t } = useTranslation();
+    const [showToast] = useIonToast();
     const messageClass = isCurrentUserMessage ? styles.currentUser : styles.otherUser;
-    const file = message.content.split('/')[5].split('?')[0];
+    const fileName = message.content.split('/')[5].split('?')[0];
 
     const handleDownload = async () => {
-        const response = await fetch(message.content);
-        const blob = await response.blob();
-        const url = window.URL.createObjectURL(blob);
-        const a = document.createElement('a');
-        a.href = url;
-        a.download = file;
-        document.body.appendChild(a);
-        a.click();
-        document.body.removeChild(a);
-        window.URL.revokeObjectURL(url);
+        await fileAdapter.saveFile(message.content, fileName);
+        showToast({
+            message: t('chat.fileDownloaded'),
+            duration: 2000,
+        });
     };
 
     return (
         <div className={`${styles.messageFile} ${messageClass}`}>
             <button className={styles.downloadButton} onClick={handleDownload}>
                 <div className={styles.downloadContainer}>
-                    <span className={styles.downloadTitle}>{file}</span>
+                    <span className={styles.downloadTitle}>{fileName}</span>
                     <img className={styles.download} src={DownloadSvg} alt="Download" />
                 </div>
             </button>

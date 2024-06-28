@@ -10,49 +10,52 @@ dependencies:
     version: 7.22.10(@babel/core@7.23.2)
   '@capacitor-community/fcm':
     specifier: ^5.0.3
-    version: 5.0.3(@capacitor/core@5.0.4)
+    version: 5.0.3(@capacitor/core@5.6.0)
   '@capacitor/android':
     specifier: 5.0.4
-    version: 5.0.4(@capacitor/core@5.0.4)
+    version: 5.0.4(@capacitor/core@5.6.0)
   '@capacitor/app':
     specifier: 5.0.2
-    version: 5.0.2(@capacitor/core@5.0.4)
+    version: 5.0.2(@capacitor/core@5.6.0)
   '@capacitor/browser':
     specifier: ^5.2.0
-    version: 5.2.0(@capacitor/core@5.0.4)
+    version: 5.2.0(@capacitor/core@5.6.0)
   '@capacitor/camera':
     specifier: ^5.0.5
-    version: 5.0.5(@capacitor/core@5.0.4)
+    version: 5.0.5(@capacitor/core@5.6.0)
   '@capacitor/core':
-    specifier: 5.0.4
-    version: 5.0.4
+    specifier: 5.6.0
+    version: 5.6.0
   '@capacitor/device':
     specifier: 5.0.2
-    version: 5.0.2(@capacitor/core@5.0.4)
+    version: 5.0.2(@capacitor/core@5.6.0)
+  '@capacitor/filesystem':
+    specifier: 5.2.0
+    version: 5.2.0(@capacitor/core@5.6.0)
   '@capacitor/haptics':
     specifier: 5.0.2
-    version: 5.0.2(@capacitor/core@5.0.4)
+    version: 5.0.2(@capacitor/core@5.6.0)
   '@capacitor/ios':
     specifier: 5.0.4
-    version: 5.0.4(@capacitor/core@5.0.4)
+    version: 5.0.4(@capacitor/core@5.6.0)
   '@capacitor/keyboard':
     specifier: 5.0.2
-    version: 5.0.2(@capacitor/core@5.0.4)
+    version: 5.0.2(@capacitor/core@5.6.0)
   '@capacitor/preferences':
     specifier: ^5.0.2
-    version: 5.0.2(@capacitor/core@5.0.4)
+    version: 5.0.2(@capacitor/core@5.6.0)
   '@capacitor/push-notifications':
     specifier: ^5.1.1
-    version: 5.1.1(@capacitor/core@5.0.4)
+    version: 5.1.1(@capacitor/core@5.6.0)
   '@capacitor/splash-screen':
     specifier: ^5.0.5
-    version: 5.0.5(@capacitor/core@5.0.4)
+    version: 5.0.5(@capacitor/core@5.6.0)
   '@capacitor/status-bar':
     specifier: 5.0.2
-    version: 5.0.2(@capacitor/core@5.0.4)
+    version: 5.0.2(@capacitor/core@5.6.0)
   '@capawesome/capacitor-file-picker':
-    specifier: ^6.0.0
-    version: 6.0.0(@capacitor/core@5.0.4)
+    specifier: ^5.0.0
+    version: 5.3.0(@capacitor/core@5.6.0)
   '@ionic/pwa-elements':
     specifier: ^3.2.1
     version: 3.2.1
@@ -64,7 +67,7 @@ dependencies:
     version: 7.7.3(react-dom@18.2.0)(react-router-dom@5.3.4)(react-router@5.3.4)(react@18.2.0)
   '@sentry/capacitor':
     specifier: ^0.14.0
-    version: 0.14.0(@capacitor/core@5.0.4)(@sentry/react@7.73.0)
+    version: 0.14.0(@capacitor/core@5.6.0)(@sentry/react@7.73.0)
   '@sentry/react':
     specifier: 7.73.0
     version: 7.73.0(react@18.2.0)
@@ -76,7 +79,7 @@ dependencies:
     version: 5.3.3
   capacitor-voice-recorder:
     specifier: ^5.0.0
-    version: 5.0.0(@capacitor/core@5.0.4)
+    version: 5.0.0(@capacitor/core@5.6.0)
   country-flag-emoji-polyfill:
     specifier: ^0.1.4
     version: 0.1.4
@@ -1366,44 +1369,44 @@ packages:
     resolution: {integrity: sha512-0hYQ8SB4Db5zvZB4axdMHGwEaQjkZzFjQiN9LVYvIFB2nSUHW9tYpxWriPrWDASIxiaXax83REcLxuSdnGPZtw==}
     dev: true
 
-  /@capacitor-community/fcm@5.0.3(@capacitor/core@5.0.4):
+  /@capacitor-community/fcm@5.0.3(@capacitor/core@5.6.0):
     resolution: {integrity: sha512-FzR7LoK2oDUjYgKpxgczOlQacLEBZtmtjntAmP0t7ZRcADiYr51hMSBm+M1dUXXUBVMpz+bx33YUa2p9ALaPAQ==}
     peerDependencies:
       '@capacitor/core': ^5.0.0
     dependencies:
-      '@capacitor/core': 5.0.4
+      '@capacitor/core': 5.6.0
     dev: false
 
-  /@capacitor/android@5.0.4(@capacitor/core@5.0.4):
+  /@capacitor/android@5.0.4(@capacitor/core@5.6.0):
     resolution: {integrity: sha512-WtXmjRQ0bCtFkwBID/jVEPbqnh0uR9wTSgkW7QNzogDuA0iyJJI2nxDfT9knUmg6mne/CnfTXg093zzdc13C0w==}
     peerDependencies:
       '@capacitor/core': ^5.0.0
     dependencies:
-      '@capacitor/core': 5.0.4
+      '@capacitor/core': 5.6.0
     dev: false
 
-  /@capacitor/app@5.0.2(@capacitor/core@5.0.4):
+  /@capacitor/app@5.0.2(@capacitor/core@5.6.0):
     resolution: {integrity: sha512-TRs5Iu94+IfUJ4iiljWC0tuVsHXBOD4asADggpUH6DnwlQo3cVuRnFK+A0jJnWW9GvlFy9uTsXxytzzXP/V0vQ==}
     peerDependencies:
       '@capacitor/core': ^5.0.0
     dependencies:
-      '@capacitor/core': 5.0.4
+      '@capacitor/core': 5.6.0
     dev: false
 
-  /@capacitor/browser@5.2.0(@capacitor/core@5.0.4):
+  /@capacitor/browser@5.2.0(@capacitor/core@5.6.0):
     resolution: {integrity: sha512-pWFrsNPOG6DlDWGl+bJqTWLvoJ2vvV27LKaSZ/A7S4td4bK3umwZmgGlp8ispjpYiurjliT25Ae8I+ywMV8X9w==}
     peerDependencies:
       '@capacitor/core': ^5.0.0
     dependencies:
-      '@capacitor/core': 5.0.4
+      '@capacitor/core': 5.6.0
     dev: false
 
-  /@capacitor/camera@5.0.5(@capacitor/core@5.0.4):
+  /@capacitor/camera@5.0.5(@capacitor/core@5.6.0):
     resolution: {integrity: sha512-faaV0ptt1iXPw+qU3ZhppZXiBqIGNewrB4feMyMt1z055D5cV6DXRJUBF2PuR+vmRWRWoJZhI84lAzORE3FGcg==}
     peerDependencies:
       '@capacitor/core': ^5.0.0
     dependencies:
-      '@capacitor/core': 5.0.4
+      '@capacitor/core': 5.6.0
     dev: false
 
   /@capacitor/cli@5.0.4:
@@ -1432,82 +1435,90 @@ packages:
       - supports-color
     dev: true
 
-  /@capacitor/core@5.0.4:
-    resolution: {integrity: sha512-BFvziz9jM87pLHW2sXPNIzwrdmI5mAP0tBsBHgXoCO2+wVdpvIMYCpcst5BuTULaMz5JBFZZ6g6nqwgfs+SMCA==}
+  /@capacitor/core@5.6.0:
+    resolution: {integrity: sha512-xJhCOUGPHw0QYDA3YH+CmL6qiV9DH4Ij3yPxSenymjrtLuXI197u9ddCZwGEwgVIkh9kGZBBKzsNkn89SZ2gdQ==}
     dependencies:
       tslib: 2.6.2
     dev: false
 
-  /@capacitor/device@5.0.2(@capacitor/core@5.0.4):
+  /@capacitor/device@5.0.2(@capacitor/core@5.6.0):
     resolution: {integrity: sha512-RpFNxtxWoqi32Q984UMv8Uca8yirPuUCfJQNhp9zyXYA3x0Ks59xgimyBXsJiQXwAgA75W7PAttTalF5bulJIQ==}
     peerDependencies:
       '@capacitor/core': ^5.0.0
     dependencies:
-      '@capacitor/core': 5.0.4
+      '@capacitor/core': 5.6.0
     dev: false
 
-  /@capacitor/haptics@5.0.2(@capacitor/core@5.0.4):
+  /@capacitor/filesystem@5.2.0(@capacitor/core@5.6.0):
+    resolution: {integrity: sha512-fyv+yWVFfglobPPveIRm4+ryMGI8vW27vjX63HDwB7K5fscSYajid+ie3qfwl2wkbPhlX8KTPes7IPij0lCmQg==}
+    peerDependencies:
+      '@capacitor/core': ^5.1.1
+    dependencies:
+      '@capacitor/core': 5.6.0
+    dev: false
+
+  /@capacitor/haptics@5.0.2(@capacitor/core@5.6.0):
     resolution: {integrity: sha512-HGkvL3a8yW26YVR7pfgMpkJrspD0+9sUrBB77SWR/GqQV+m32FTx9ECGlw+sHhwLnv0XtFx4PocIL5SlU1m3Vw==}
     peerDependencies:
       '@capacitor/core': ^5.0.0
     dependencies:
-      '@capacitor/core': 5.0.4
+      '@capacitor/core': 5.6.0
     dev: false
 
-  /@capacitor/ios@5.0.4(@capacitor/core@5.0.4):
+  /@capacitor/ios@5.0.4(@capacitor/core@5.6.0):
     resolution: {integrity: sha512-JVyggBTbHR1OWqxTRysgGKhZHDuM0AQwCIbylvEpza5X0zmaltbQxVC83abcwOKsgNJnrcuv+HUgV+LXg8Dk4Q==}
     peerDependencies:
       '@capacitor/core': ^5.0.0
     dependencies:
-      '@capacitor/core': 5.0.4
+      '@capacitor/core': 5.6.0
     dev: false
 
-  /@capacitor/keyboard@5.0.2(@capacitor/core@5.0.4):
+  /@capacitor/keyboard@5.0.2(@capacitor/core@5.6.0):
     resolution: {integrity: sha512-5qauopAd9Dlltzi87i/WHMBsocCf0BJqVxRZ3H+kifQm4BLHGokrzuanddEJd6MPOnglSl3H3C9oElJB3wkVVQ==}
     peerDependencies:
       '@capacitor/core': ^5.0.0
     dependencies:
-      '@capacitor/core': 5.0.4
+      '@capacitor/core': 5.6.0
     dev: false
 
-  /@capacitor/preferences@5.0.2(@capacitor/core@5.0.4):
+  /@capacitor/preferences@5.0.2(@capacitor/core@5.6.0):
     resolution: {integrity: sha512-NOBA4TFC9sq0UU13dKHCDqNsD3X5TGPFgtGvRcJorBvbllUwMMBAbkjF5iCVsoenAN55d77Qh9wXufewdMpXjg==}
     peerDependencies:
       '@capacitor/core': ^5.0.0
     dependencies:
-      '@capacitor/core': 5.0.4
+      '@capacitor/core': 5.6.0
     dev: false
 
-  /@capacitor/push-notifications@5.1.1(@capacitor/core@5.0.4):
+  /@capacitor/push-notifications@5.1.1(@capacitor/core@5.6.0):
     resolution: {integrity: sha512-lPtjlMG/PXKZEQjFFI3uqDqC8XaVjOosStvMZMVgxHgn2U45J3QRznUdVR0d6XqLmHnilxLs8ZNislkie0QfPA==}
     peerDependencies:
       '@capacitor/core': ^5.0.0
     dependencies:
-      '@capacitor/core': 5.0.4
+      '@capacitor/core': 5.6.0
     dev: false
 
-  /@capacitor/splash-screen@5.0.5(@capacitor/core@5.0.4):
+  /@capacitor/splash-screen@5.0.5(@capacitor/core@5.6.0):
     resolution: {integrity: sha512-KOBHE3YCfTXDnDz348ZTLeH1vrS8Cq+UpXlouzlGW8KwssUlXodRIsO5cQz1xK3VM+UJVm7iDQUONZFAcIMQeg==}
     peerDependencies:
       '@capacitor/core': ^5.0.0
     dependencies:
-      '@capacitor/core': 5.0.4
+      '@capacitor/core': 5.6.0
     dev: false
 
-  /@capacitor/status-bar@5.0.2(@capacitor/core@5.0.4):
+  /@capacitor/status-bar@5.0.2(@capacitor/core@5.6.0):
     resolution: {integrity: sha512-5emXUQzx9WnQHnxzapghrqm8P80z7IPLM83PTsfN+NOkm3uw3ZOxB4T7qy9NBV2Zp+GCEpr1UrNBowxV7Ami3Q==}
     peerDependencies:
       '@capacitor/core': ^5.0.0
     dependencies:
-      '@capacitor/core': 5.0.4
+      '@capacitor/core': 5.6.0
     dev: false
 
-  /@capawesome/capacitor-file-picker@6.0.0(@capacitor/core@5.0.4):
-    resolution: {integrity: sha512-u5TiigO1zuM5H29F5YkWcLLD0prsV78TlgkBY86IoAZZe72g6cyICwGzaUPq8DlkvARoUwIrU0ItEz7c1ePOew==}
+  /@capawesome/capacitor-file-picker@5.3.0(@capacitor/core@5.6.0):
+    resolution: {integrity: sha512-r+cfD+9FCBXMYtckSovgi7WoMWT5cxzNDaH3SDNuiORiyQklOl+7DExfhW00p1DqsDR+f50nADk/NBb4IsGVYg==}
     peerDependencies:
-      '@capacitor/core': ^6.0.0
+      '@capacitor/core': ^5.0.0
     dependencies:
-      '@capacitor/core': 5.0.4
+      '@capacitor/core': 5.6.0
     dev: false
 
   /@colors/colors@1.5.0:
@@ -2460,7 +2471,7 @@ packages:
       tslib: 2.6.2
     dev: false
 
-  /@sentry/capacitor@0.14.0(@capacitor/core@5.0.4)(@sentry/react@7.73.0):
+  /@sentry/capacitor@0.14.0(@capacitor/core@5.6.0)(@sentry/react@7.73.0):
     resolution: {integrity: sha512-dRsWu1yG0JP57LXDV0Eq3FMfCVDIY0KreAuF9/qeCdfSRJrxwy/j37eDJZN6PDe3x20212V6p3BphDjt7rNGRw==}
     requiresBuild: true
     peerDependencies:
@@ -2479,7 +2490,7 @@ packages:
       '@sentry/vue':
         optional: true
     dependencies:
-      '@capacitor/core': 5.0.4
+      '@capacitor/core': 5.6.0
       '@sentry/browser': 7.73.0
       '@sentry/core': 7.73.0
       '@sentry/hub': 7.73.0
@@ -3689,12 +3700,12 @@ packages:
   /caniuse-lite@1.0.30001561:
     resolution: {integrity: sha512-NTt0DNoKe958Q0BE0j0c1V9jbUzhBxHIEJy7asmGrpE0yG63KTV7PLHPnK2E1O9RsQrQ081I3NLuXGS6zht3cw==}
 
-  /capacitor-voice-recorder@5.0.0(@capacitor/core@5.0.4):
+  /capacitor-voice-recorder@5.0.0(@capacitor/core@5.6.0):
     resolution: {integrity: sha512-rCZgbmdmj9eXlotziRnIXWoo+7/aGKM1dSeSrgaEmayu9aTs8xkwhpx9eeVe24VDC6sfMHTnwMl5311Ryr/yFA==}
     peerDependencies:
       '@capacitor/core': ^5.0.0
     dependencies:
-      '@capacitor/core': 5.0.4
+      '@capacitor/core': 5.6.0
       get-blob-duration: 1.2.0
     dev: false
 
