@@ -98,16 +98,7 @@ export class ProfileController {
     return ProfileResponse.fromDomain(profile);
   }
 
-  @Get()
-  @Roles(Role.ADMIN)
-  @UseGuards(AuthenticationGuard)
-  @Swagger.ApiOperation({
-    summary: 'Retrieve the collection of Profile ressource.',
-  })
-  @CollectionResponse(ProfileResponse)
-  async getCollection(
-    @Query() query: ProfileQueryFilter,
-  ): Promise<Collection<ProfileResponse>> {
+  private async getProfiles(query: ProfileQueryFilter) {
     const {
       email,
       firstname,
@@ -159,6 +150,36 @@ export class ProfileController {
     });
   }
 
+  @Get()
+  @Roles(Role.ADMIN)
+  @UseGuards(AuthenticationGuard)
+  @SerializeOptions({ groups: ['read'] })
+  @Swagger.ApiOperation({
+    summary: 'Retrieve the collection of Profile ressource.',
+  })
+  @CollectionResponse(ProfileResponse)
+  async getCollection(
+    @Query() query: ProfileQueryFilter,
+  ): Promise<Collection<ProfileResponse>> {
+    return this.getProfiles(query);
+  }
+
+  @Get('/with-tandem')
+  @Roles(Role.ADMIN)
+  @UseGuards(AuthenticationGuard)
+  @SerializeOptions({
+    groups: ['read', 'learning-language:tandem', 'learning-language:profile'],
+  })
+  @Swagger.ApiOperation({
+    summary: 'Retrieve the collection of Profile ressource with tandems.',
+  })
+  @CollectionResponse(ProfileResponse)
+  async getCollectionWithTandems(
+    @Query() query: ProfileQueryFilter,
+  ): Promise<Collection<ProfileResponse>> {
+    return this.getProfiles(query);
+  }
+
   @Delete(':id')
   @Roles(Role.ADMIN)
   @UseGuards(AuthenticationGuard)
@@ -186,6 +207,7 @@ export class ProfileController {
 
   @Get(':id/tandems')
   @UseGuards(AuthenticationGuard)
+  @SerializeOptions({ groups: ['read', 'learning-language:profile'] })
   @Swagger.ApiOperation({
     summary: 'Retrieve the collection of Tandem ressource.',
   })
@@ -258,6 +280,7 @@ export class ProfileController {
 
   @Get(':id/learning-language')
   @UseGuards(AuthenticationGuard)
+  @SerializeOptions({ groups: ['read', 'learning-language:profile'] })
   @Swagger.ApiOperation({
     summary: 'Retrieve the collection of learning languages ressource.',
   })
@@ -271,7 +294,7 @@ export class ProfileController {
     });
 
     return languages.map((language) =>
-      LearningLanguageResponse.fromDomain(language, false),
+      LearningLanguageResponse.fromDomain(language),
     );
   }
 

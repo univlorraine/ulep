@@ -6,7 +6,11 @@ import {
   ProfileRepository,
 } from 'src/core/ports/profile.repository';
 import { Profile } from 'src/core/models';
-import { ProfilesRelations, profileMapper } from '../mappers';
+import {
+  ProfilesRelations,
+  ProfilesRelationsWithTandemProfile,
+  profileMapper,
+} from '../mappers';
 
 @Injectable()
 export class PrismaProfileRepository implements ProfileRepository {
@@ -131,16 +135,44 @@ export class PrismaProfileRepository implements ProfileRepository {
       order = { User: { [orderBy.field]: orderBy.order } };
     }
 
-    const users = await this.prisma.profiles.findMany({
+    const profiles = await this.prisma.profiles.findMany({
       where: wherePayload,
       skip: offset,
       orderBy: order,
       take: limit,
-      include: ProfilesRelations,
+      include: ProfilesRelationsWithTandemProfile,
     });
 
+    // filter learning languages into the tandem array to remove the root profile one
+    /* const profilesWithOnlyMatchingTandemProfile = profiles.map((profile) => {
+      const filteredLearningLanguages = profile.LearningLanguages.map(
+        (learningLanguage) => {
+          if (learningLanguage.Tandem) {
+            const filteredLearningLanguages =
+              learningLanguage.Tandem?.LearningLanguages.filter(
+                (tandemLL) => tandemLL.profile_id !== profile.id,
+              );
+            return {
+              ...learningLanguage,
+              Tandem: {
+                ...learningLanguage.Tandem,
+                LearningLanguages: filteredLearningLanguages,
+              },
+            };
+          } else {
+            return learningLanguage;
+          }
+        },
+      );
+      return {
+        ...profile,
+        LearningLanguages: filteredLearningLanguages,
+      };
+    }); */
+
     return {
-      items: users.map(profileMapper),
+      // items: profilesWithOnlyMatchingTandemProfile.map(profileMapper),
+      items: profiles.map(profileMapper),
       totalItems: count,
     };
   }

@@ -41,7 +41,7 @@ const LearningLanguageShow = () => {
                                 render={(data: LearningLanguage) => (
                                     <div className="line profile-name">
                                         <CustomAvatar
-                                            avatarId={data.profile.user.avatar.id}
+                                            avatarId={data.profile.user.avatar?.id}
                                             firstName={data.profile.user.firstname}
                                             lastName={data.profile.user.lastname}
                                             sx={{ width: '35px', height: '35px', fontSize: '1rem' }}

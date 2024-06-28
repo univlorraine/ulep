@@ -99,7 +99,6 @@ export class UserTandemResponse {
       id: tandem.id,
       partnerLearningLanguage: LearningLanguageResponse.fromDomain(
         learningLanguagePartner,
-        true,
         languageCode,
       ),
       status: tandem.status,

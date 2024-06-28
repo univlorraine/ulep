@@ -62,7 +62,7 @@ export class MatchResponse {
 
   static fromDomain(instance: Match): MatchResponse {
     return new MatchResponse({
-      target: LearningLanguageResponse.fromDomain(instance.target, true),
+      target: LearningLanguageResponse.fromDomain(instance.target),
       score: new MatchScoreDto({
         level: instance.scores.level,
         age: instance.scores.age,

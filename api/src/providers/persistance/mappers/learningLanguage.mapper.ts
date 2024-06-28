@@ -14,10 +14,39 @@ import {
 } from 'src/core/models';
 import { languageMapper } from './language.mapper';
 import { campusMapper } from './campus.mapper';
+import { UserRelations } from './user.mapper';
+import { TextContentRelations } from './translation.mapper';
 
 export const LearningLanguageRelations = {
   Profile: {
-    include: ProfilesRelations,
+    include: {
+      User: {
+        include: UserRelations,
+      },
+      Goals: {
+        include: { TextContent: TextContentRelations },
+      },
+      Interests: {
+        include: {
+          TextContent: TextContentRelations,
+          Category: { include: { TextContent: TextContentRelations } },
+        },
+      },
+      NativeLanguage: true,
+      MasteredLanguages: { include: { LanguageCode: true } },
+      TestedLanguages: {
+        include: {
+          LanguageCode: true,
+        },
+      },
+      LearningLanguages: {
+        include: {
+          LanguageCode: true,
+          Tandem: true,
+          Campus: true,
+        },
+      },
+    },
   },
   LanguageCode: true,
   Campus: true,
