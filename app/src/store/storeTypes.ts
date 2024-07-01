@@ -81,6 +81,7 @@ interface StoreInterface {
     accessToken: string;
     apiUrl: string;
     chatUrl: string;
+    socketChatUrl: string;
     language: string;
     logout: Action<StoreInterface>;
     refreshToken: string;

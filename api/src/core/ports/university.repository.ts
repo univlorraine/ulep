@@ -1,5 +1,5 @@
 import { Collection } from '@app/common';
-import { University, User } from '../models';
+import { University } from '../models';
 
 export const UNIVERSITY_REPOSITORY = 'university.repository';
 

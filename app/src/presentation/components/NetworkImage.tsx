@@ -3,11 +3,10 @@ import useGetMediaObject from '../hooks/useGetMediaObject';
 
 type NetworkImageProps = {
     id: string;
-    isFromChat?: boolean;
     placeholder?: string;
 } & Omit<React.ComponentPropsWithRef<'img'>, 'src'>;
 
-const NetworkImage: React.FC<NetworkImageProps> = ({ id, placeholder, isFromChat = false, ...props }) => {
+const NetworkImage: React.FC<NetworkImageProps> = ({ id, placeholder, ...props }) => {
     const { loading, image, error } = useGetMediaObject({ id });
 
     if (loading) {

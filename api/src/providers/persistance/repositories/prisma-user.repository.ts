@@ -1,13 +1,13 @@
-import { Injectable } from '@nestjs/common';
 import { Collection, PrismaService } from '@app/common';
-import { UserRelations, userMapper } from '../mappers/user.mapper';
+import { Injectable } from '@nestjs/common';
+import { Device, User, UserStatus } from 'src/core/models';
 import {
   UpdateUserResponse,
   UserRepository,
   WhereProps,
 } from 'src/core/ports/user.repository';
-import { Device, User, UserStatus } from 'src/core/models';
 import { UniversityRelations } from '../mappers';
+import { UserRelations, userMapper } from '../mappers/user.mapper';
 
 @Injectable()
 export class PrismaUserRepository implements UserRepository {
@@ -126,7 +126,6 @@ export class PrismaUserRepository implements UserRepository {
           },
         },
       };
-      //TODO : Create conversation with user and contact
     }
 
     await this.prisma.users.update({

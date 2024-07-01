@@ -24,7 +24,7 @@ export const conversationMapper = (
         lastActivity: snapshot.lastActivityAt,
         lastMessage: snapshot.Messages[0]
             ? messageMapper(snapshot.Messages[0])
-            : null, // TODO: Update this to get the true last message
+            : null,
         metadata: snapshot.metadata,
         createdAt: snapshot.createdAt,
     });

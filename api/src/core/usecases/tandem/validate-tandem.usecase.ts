@@ -1,4 +1,3 @@
-import { TandemRepository } from '../../ports/tandem.repository';
 import { Inject, Injectable, Logger } from '@nestjs/common';
 import { DomainError, RessourceDoesNotExist } from 'src/core/errors';
 import { Tandem, TandemStatus, User } from 'src/core/models';
@@ -10,6 +9,7 @@ import {
   UniversityRepository,
 } from 'src/core/ports/university.repository';
 import { ChatService } from 'src/providers/services/chat.service';
+import { TandemRepository } from '../../ports/tandem.repository';
 
 interface ValidateTandemCommand {
   id: string;
@@ -103,18 +103,6 @@ export class ValidateTandemUsecase {
       tandem.learningLanguages[0].profile.user.id,
       tandem.learningLanguages[1].profile.user.id,
     ];
-
-    if (tandem.learningLanguages[0].profile.user.contactId) {
-      participantIds.push(tandem.learningLanguages[0].profile.user.contactId);
-    }
-
-    if (
-      tandem.learningLanguages[1].profile.user.contactId &&
-      tandem.learningLanguages[0].profile.user.contactId !==
-        tandem.learningLanguages[1].profile.user.contactId
-    ) {
-      participantIds.push(tandem.learningLanguages[1].profile.user.contactId);
-    }
 
     await this.chatService.createConversation(participantIds, tandem.id, {});
   }
