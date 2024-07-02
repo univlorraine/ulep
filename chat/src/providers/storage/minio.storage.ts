@@ -161,7 +161,7 @@ export class MinioStorage implements StorageInterface {
         const listObjectsCommand = new ListObjectsCommand({ Bucket: bucket });
         const { Contents } = await this.#client.send(listObjectsCommand);
 
-        if (Contents.length > 0) {
+        if (Contents && Contents.length > 0) {
             const deleteParams = {
                 Bucket: bucket,
                 Delete: {

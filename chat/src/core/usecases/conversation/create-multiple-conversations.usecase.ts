@@ -2,10 +2,11 @@ import { Inject, Injectable } from '@nestjs/common';
 import {
     CONVERSATION_REPOSITORY,
     ConversationRepository,
+    CreateConversations,
 } from 'src/core/ports/conversation.repository';
 
 export class CreateMultipleConversationsCommand {
-    participants: string[][];
+    conversations: CreateConversations[];
 }
 
 @Injectable()
@@ -16,8 +17,43 @@ export class CreateMultipleConversationsUsecase {
     ) {}
 
     async execute(command: CreateMultipleConversationsCommand) {
-        await this.conversationRepository.createConversations(
-            command.participants,
+        const tandemIds = command.conversations
+            .filter((conversation) => conversation.tandemId)
+            .map((conversation) => conversation.tandemId);
+
+        const participantGroups = command.conversations.map(
+            (conversation) => conversation.participants,
         );
+
+        const existingConversations =
+            await this.conversationRepository.findConversationsByIdsOrParticipants(
+                tandemIds,
+                participantGroups,
+            );
+
+        const newConversations = command.conversations.filter(
+            (conversation) => {
+                const existsByTandemId = existingConversations.some(
+                    (existing) => existing.id === conversation.tandemId,
+                );
+
+                const existsByParticipants = existingConversations.some(
+                    (existing) =>
+                        existing.usersIds.length ===
+                            conversation.participants.length &&
+                        existing.usersIds.every((participant) =>
+                            conversation.participants.includes(participant),
+                        ),
+                );
+
+                return !existsByTandemId && !existsByParticipants;
+            },
+        );
+
+        if (newConversations.length > 0) {
+            await this.conversationRepository.createConversations(
+                newConversations,
+            );
+        }
     }
 }

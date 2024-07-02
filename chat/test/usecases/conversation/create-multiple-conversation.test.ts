@@ -18,9 +18,14 @@ describe('CreateMultipleConversations', () => {
 
     it('Should create a new conversations', async () => {
         await createMultipleConversationsUsecase.execute({
-            participants: [
-                [USER_ID1, USER_ID2],
-                [USER_ID3, USER_ID4],
+            conversations: [
+                {
+                    participants: [USER_ID1, USER_ID2],
+                },
+                {
+                    participants: [USER_ID3, USER_ID4],
+                    tandemId: 'tandemId2',
+                },
             ],
         });
 

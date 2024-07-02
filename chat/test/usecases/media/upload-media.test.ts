@@ -41,6 +41,17 @@ const message = new Message({
     isDeleted: false,
 });
 
+const wrongMessage = new Message({
+    id: 'wrongId',
+    conversationId: tandemId,
+    createdAt: new Date(),
+    ownerId: USER_ID1,
+    type: MessageType.Image,
+    content: '',
+    isReported: false,
+    isDeleted: false,
+});
+
 jest.mock('../../mocks/minio.storage', () => {
     return {
         MinioStorage: jest.fn().mockImplementation(() => {
@@ -73,7 +84,7 @@ describe('UploadMedia', () => {
     it('Should create a new media', async () => {
         const media = await uploadMediaUsecase.execute({
             conversationId: tandemId,
-            messageId: message.id,
+            message: message,
             file: mockFile,
         });
 
@@ -86,7 +97,7 @@ describe('UploadMedia', () => {
         expect(
             uploadMediaUsecase.execute({
                 conversationId: tandemId,
-                messageId: 'wrongId',
+                message: wrongMessage,
                 file: mockFile,
             }),
         ).rejects.toThrow(new NotFoundException('Message not found'));
@@ -96,7 +107,7 @@ describe('UploadMedia', () => {
         expect(
             uploadMediaUsecase.execute({
                 conversationId: 'wrongId',
-                messageId: message.id,
+                message: message,
                 file: mockFile,
             }),
         ).rejects.toThrow(new NotFoundException('Conversation not found'));

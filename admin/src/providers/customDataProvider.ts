@@ -17,7 +17,7 @@ import AdministratorsQuery from '../queries/AdministratorsQuery';
 import CountriesQuery from '../queries/CountriesQuery';
 import InterestsQuery from '../queries/InterestsQuery';
 import LanguagesQuery from '../queries/LanguagesQuery';
-import { LearningLanguagesQuery, LearningLanguageMatchesQuery } from '../queries/LearningLanguagesQuery';
+import { LearningLanguageMatchesQuery, LearningLanguagesQuery } from '../queries/LearningLanguagesQuery';
 import ProfilesQuery from '../queries/ProfilesQuery';
 import QuestionsQuery from '../queries/QuestionsQuery';
 import ReportsQuery from '../queries/ReportsQuery';
@@ -335,6 +335,14 @@ const customDataProvider = {
     },
     purge: async (): Promise<void> => {
         const url = `${process.env.REACT_APP_API_URL}/purges`;
+        const response = await fetch(url, httpClientOptions({ method: 'POST' }));
+
+        if (!response.ok) {
+            await throwError(response);
+        }
+    },
+    generateConversations: async (): Promise<void> => {
+        const url = `${process.env.REACT_APP_API_URL}/chat/generate-conversation`;
         const response = await fetch(url, httpClientOptions({ method: 'POST' }));
 
         if (!response.ok) {

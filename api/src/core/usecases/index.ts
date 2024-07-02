@@ -1,6 +1,9 @@
+export * from './chat';
 export * from './country';
+export * from './instance';
 export * from './interest';
 export * from './language';
+export * from './learningLanguage';
 export * from './media';
 export * from './objective';
 export * from './proficiency';
@@ -10,5 +13,3 @@ export * from './tandem';
 export * from './tandemHistory';
 export * from './university';
 export * from './user';
-export * from './learningLanguage';
-export * from './instance';

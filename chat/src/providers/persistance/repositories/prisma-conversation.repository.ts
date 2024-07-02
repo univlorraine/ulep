@@ -1,11 +1,14 @@
-import { Injectable } from '@nestjs/common';
 import { PrismaService } from '@app/common';
+import { Injectable } from '@nestjs/common';
 import { Conversation } from 'src/core/models';
+import {
+    ConversationRepository,
+    CreateConversations,
+} from 'src/core/ports/conversation.repository';
 import {
     ConversationRelations,
     conversationMapper,
 } from 'src/providers/persistance/mappers';
-import { ConversationRepository } from 'src/core/ports/conversation.repository';
 
 @Injectable()
 export class PrismaConversationRepository implements ConversationRepository {
@@ -74,10 +77,38 @@ export class PrismaConversationRepository implements ConversationRepository {
         return conversationMapper(conversation);
     }
 
-    async createConversations(participants: string[][]): Promise<void> {
+    async findConversationsByIdsOrParticipants(
+        ids: string[],
+        participantsGroup: string[][],
+    ): Promise<Conversation[]> {
+        const existingConversations = await this.prisma.conversation.findMany({
+            where: {
+                OR: [
+                    { id: { in: ids } },
+                    ...participantsGroup.map((participants) => ({
+                        OR: participants.map((participant) => ({
+                            participantIds: { has: participant },
+                        })),
+                    })),
+                ],
+            },
+            ...ConversationRelations,
+        });
+
+        if (!existingConversations) {
+            return [];
+        }
+
+        return existingConversations.map(conversationMapper);
+    }
+
+    async createConversations(
+        conversations: CreateConversations[],
+    ): Promise<void> {
         await this.prisma.conversation.createMany({
-            data: participants.map((participantIds) => ({
-                participantIds,
+            data: conversations.map((conversation) => ({
+                participantIds: conversation.participants,
+                id: conversation.tandemId,
             })),
         });
     }

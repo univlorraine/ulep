@@ -1,8 +1,13 @@
-import axios from 'axios';
 import { Injectable, Logger } from '@nestjs/common';
-import { ChatServicePort } from 'src/core/ports/chat.service';
 import { ConfigService } from '@nestjs/config';
+import axios from 'axios';
 import { Env } from 'src/configuration';
+import { ChatServicePort } from 'src/core/ports/chat.service';
+
+export interface CreateConversations {
+  participants: string[];
+  tandemId?: string;
+}
 
 @Injectable()
 export class ChatService implements ChatServicePort {
@@ -38,7 +43,9 @@ export class ChatService implements ChatServicePort {
     }
   }
 
-  async createConversations(participants: string[][]): Promise<any> {
+  async createConversations(
+    conversations: CreateConversations[],
+  ): Promise<any> {
     if (!this.env.get('CHAT_URL')) {
       return;
     }
@@ -47,7 +54,7 @@ export class ChatService implements ChatServicePort {
       const response = await axios.post(
         this.env.get('CHAT_URL') + '/conversations/multi',
         {
-          participants,
+          conversations,
         },
         { headers: this.headers },
       );

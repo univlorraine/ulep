@@ -106,7 +106,7 @@ export class ConversationController {
         @Body() body: CreateConversationsRequest,
     ): Promise<void> {
         await this.createMultipleConversationsUsecase.execute({
-            participants: body.participants,
+            conversations: body.conversations,
         });
     }
 
