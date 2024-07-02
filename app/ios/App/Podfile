@@ -23,6 +23,7 @@ def capacitor_pods
   pod 'CapacitorSplashScreen', :path => '../../node_modules/.pnpm/@capacitor+splash-screen@5.0.5_@capacitor+core@5.0.4/node_modules/@capacitor/splash-screen'
   pod 'CapacitorStatusBar', :path => '../../node_modules/.pnpm/@capacitor+status-bar@5.0.2_@capacitor+core@5.0.4/node_modules/@capacitor/status-bar'
   pod 'SentryCapacitor', :path => '../../node_modules/.pnpm/@sentry+capacitor@0.14.0_@capacitor+core@5.0.4_@sentry+react@7.73.0/node_modules/@sentry/capacitor'
+  pod 'CapacitorJitsiMeet', :path => '../../node_modules/.pnpm/capacitor-jitsi-meet@6.0.0/node_modules/capacitor-jitsi-meet'
 end
 
 target 'dev' do

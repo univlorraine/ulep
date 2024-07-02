@@ -21,7 +21,7 @@ commands:
             cd api && npm i pnpm@8.6.9
 
 jobs:
-##### Code Quality #####
+  ##### Code Quality #####
   sonar-check:
     docker:
       - image: cimg/node:18.16.1
@@ -41,7 +41,7 @@ jobs:
               -Dsonar.projectKey=thetribeio_etandem_AY2OFcz_UJJxCOVDfrTu \
               -Dsonar.sources=.  \
               -Dsonar.host.url=https://ecocode.thetribe.dev
-##### API #####
+  ##### API #####
   install-api:
     executor: node-executor
     working_directory: ~/api
@@ -94,7 +94,7 @@ jobs:
             echo "$DOCKER_PASS" | docker login rg.fr-par.scw.cloud/ulep -u nologin --password-stdin
             docker push rg.fr-par.scw.cloud/ulep/api-prod:latest && docker push rg.fr-par.scw.cloud/ulep/api-prod:1.0.<< pipeline.number >>
             docker push rg.fr-par.scw.cloud/ulep/api-init:latest && docker push rg.fr-par.scw.cloud/ulep/api-init:1.0.<< pipeline.number >>
-##### ADMIN #####
+  ##### ADMIN #####
   lint-admin:
     executor: node-executor
     working_directory: ~/api
@@ -157,7 +157,7 @@ jobs:
             echo "$DOCKER_PASS" | docker login rg.fr-par.scw.cloud/ulep -u nologin --password-stdin
             docker push rg.fr-par.scw.cloud/ulep/webapp:latest && docker push rg.fr-par.scw.cloud/ulep/webapp:1.0.<< pipeline.number >>
 
-#### AUTH ####
+  #### AUTH ####
   build-docker-auth:
     executor: node-executor
     steps:
@@ -220,7 +220,6 @@ workflows:
                 - develop
                 - main
 
-
   build_auth:
     jobs:
       - build-docker-auth:
@@ -229,5 +228,3 @@ workflows:
               only:
                 - develop
                 - main
-
-

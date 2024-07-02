@@ -1,0 +1,11 @@
+interfaceConfig.APP_NAME = 'Etandem - Videoconference';
+interfaceConfig.DISABLE_JOIN_LEAVE_NOTIFICATIONS = true;
+interfaceConfig.DISABLE_PRESENCE_STATUS = true;
+interfaceConfig.DISABLE_TRANSCRIPTION_SUBTITLES = true;
+interfaceConfig.DISABLE_VIDEO_BACKGROUND = true;
+interfaceConfig.ENABLE_DIAL_OUT = false;
+interfaceConfig.GENERATE_ROOMNAMES_ON_WELCOME_PAGE = false;
+interfaceConfig.RECENT_LIST_ENABLED = false;
+interfaceConfig.SHOW_JITSI_WATERMARK = false;
+interfaceConfig.ENABLE_LOBBY = false;
+interfaceConfig.ENABLE_PREJOIN_PAGE = false;

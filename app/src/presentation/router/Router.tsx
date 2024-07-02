@@ -46,6 +46,7 @@ import EditInformationsPage from '../pages/EditInformationsPage';
 import CEFRQuizzLanguagePage from '../pages/cefr-quizz/CEFRQuizzLanguagePage';
 import CEFRQuizzOtherLanguagesPage from '../pages/cefr-quizz/CEFRQuizzOtherLanguagesPage';
 import CEFRQuizzEndPage from '../pages/cefr-quizz/CEFRQuizzEndPage';
+import JitsiPage from '../pages/Jitsi';
 import BottomBar from './BottomBar';
 import { useConfig } from '../../context/ConfigurationContext';
 import ConversationsPage from '../pages/ConversationsPage';
@@ -105,6 +106,9 @@ const OfflineRouter: React.FC = () => {
                 <MobileRoute exact path={'/tandem-status'}>
                     <TandemStatusPage />
                 </MobileRoute>
+                <PrivateRoute exact path="/jitsi">
+                    <JitsiPage />
+                </PrivateRoute>
                 <PrivateRoute exact path="/pairing/languages">
                     <PairingLanguagesPage />
                 </PrivateRoute>

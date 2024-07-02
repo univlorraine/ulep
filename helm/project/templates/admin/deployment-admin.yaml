@@ -69,6 +69,8 @@ spec:
               value: "https://{{ .Values.apiUrl }}.{{ .Values.domain }}"
             - name: REACT_APP_SENTRY_DSN
               value: "{{ .Values.admin.env.sentryDsn }}"
+            - name: REACT_APP_JITSI_DOMAIN
+              value: "{{ .Values.jitsiUrl }}.{{ .Values.domain }}"
       {{- with .Values.nodeSelector }}
       nodeSelector:
         {{- toYaml . | nindent 8 }}

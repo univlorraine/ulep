@@ -37,3 +37,6 @@ project(':capacitor-status-bar').projectDir = new File('../node_modules/.pnpm/@c
 
 include ':sentry-capacitor'
 project(':sentry-capacitor').projectDir = new File('../node_modules/.pnpm/@sentry+capacitor@0.14.0_@capacitor+core@5.0.4_@sentry+react@7.73.0/node_modules/@sentry/capacitor/android')
+
+include ':capacitor-jitsi-meet'
+project(':capacitor-jitsi-meet').projectDir = new File('../node_modules/.pnpm/capacitor-jitsi-meet@6.0.0/node_modules/capacitor-jitsi-meet/android')

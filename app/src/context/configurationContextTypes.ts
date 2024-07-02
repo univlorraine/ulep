@@ -36,6 +36,7 @@ import GetPartnersToUniversityUsecaseInterface from '../domain/interfaces/GetPar
 import EditProfileUsecaseInterface from '../domain/interfaces/EditProfileUsecase.interface';
 import EditUserUsecaseInterface from '../domain/interfaces/EditUserUsecase.interface';
 import NotificationAdapterInterface from '../adapter/interfaces/NotificationAdapter.interface';
+import GetJitsiTokenUsecaseInterface from '../domain/interfaces/GetJitsiTokenUsecase.interface';
 
 export interface ConfigContextValueType {
     accessToken: string;
@@ -64,6 +65,7 @@ export interface ConfigContextValueType {
     getMediaObject: GetMediaObjectUsecaseInterface;
     getPartnersToUniversity: GetPartnersToUniversityUsecaseInterface;
     getProfile: GetProfileUsecaseInterface;
+    getJitsiToken: GetJitsiTokenUsecaseInterface;
     getQuizzByLevel: GetQuizzByLevelUsecaseInterface;
     getUser: GetUserUsecaseInterface;
     getUniversity: GetUniversityInterface;

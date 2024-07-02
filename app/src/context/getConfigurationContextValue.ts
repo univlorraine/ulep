@@ -37,6 +37,7 @@ import EditUserUsecase from '../domain/usecases/EditUserUsecase';
 import CreateOrUpdateTestedLanguageUsecase from '../domain/usecases/CreateOrUpdateTestedLanguageUsecase';
 import NotificationAdapter from '../adapter/NotificationAdapter';
 import AddDeviceUsecase from '../domain/usecases/AddDeviceUsecase';
+import GetJitsiTokenUsecase from '../domain/usecases/GetJitsiTokenUsecase';
 
 interface GetConfigContextValueProps {
     apiUrl: string;
@@ -83,6 +84,7 @@ const getConfigContextValue = ({
     const getHistoricEmailPartner = new GetHistoricEmailPartnerUsecase(domainHttpAdapter);
     const getPartnersToUniversity = new GetPartnersToUniversityUsecase(domainHttpAdapter);
     const getProfile = new GetProfileByUserIdUsecase(domainHttpAdapter);
+    const getJitsiToken = new GetJitsiTokenUsecase(domainHttpAdapter);
     const getQuizzByLevel = new GetQuizzByLevelUsecase(domainHttpAdapter);
     const getUser = new GetUserUsecase(domainHttpAdapter);
     const getUniversityLanguages = new GetUniversityLanguagesUsecase(domainHttpAdapter);
@@ -129,6 +131,7 @@ const getConfigContextValue = ({
         getMediaObject,
         getPartnersToUniversity,
         getProfile,
+        getJitsiToken,
         getQuizzByLevel,
         getUser,
         getUniversity,

@@ -109,6 +109,7 @@ import { ResetPasswordUsecase } from './usecases/security/reset-password.usecase
 import { DeleteLearningLanguageUsecase } from './usecases/learningLanguage/delete-learning-langugage.usecase';
 import { RevokeSessionsUsecase } from './usecases/user/revoke-sessions.usecase';
 import { GetKeycloakAdminGroupsUsecase } from './usecases/user/get-keycloak-admin-groups.usecase';
+import { GetJitsiTokenUsecase } from './usecases/jitsi/get-jitsi-token.usecase';
 
 const usecases: Provider[] = [
   //Campus
@@ -230,6 +231,7 @@ const usecases: Provider[] = [
   UpdateInstanceUsecase,
   // Security
   ResetPasswordUsecase,
+  GetJitsiTokenUsecase,
 ];
 
 const services: Provider[] = [MatchScorer, CronService];

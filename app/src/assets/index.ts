@@ -38,6 +38,9 @@ import TandemNotFoundPng from './tandem_not_found.png';
 import TrophiePng from './trophie.png';
 import WritingSkillPng from './writing_skill.png';
 import InfoSvg from './info.svg';
+import CameraSvg from './camera.svg';
+import ChatSvg from './chat.svg';
+import CalendarSvg from './calendar.svg';
 
 export {
     AdviceSvg,
@@ -52,6 +55,9 @@ export {
     BackgroundSvg,
     BackgroundYellowPng,
     BonjourBubbleSvg,
+    CalendarSvg,
+    CameraSvg,
+    ChatSvg,
     CheckSvg,
     ChineseBubble,
     ClockPng,
