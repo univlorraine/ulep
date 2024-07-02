@@ -11,6 +11,7 @@ services:
     environment:
       ADMIN_URL: ${ADMIN_URL:-http://0.0.0.0:3001}
       APP_URL: ${APP_URL:-http://0.0.0.0:5173}
+      CHAT_URL: ${CHAT_URL:-http://chat:3000}
       LOG_LEVEL: ${LOG_LEVEL:-debug} # verbose, debug, log, warn or error
       DEFAULT_TRANSLATION_LANGUAGE: ${DEFAULT_TRANSLATION_LANGUAGE:-fr}
       DATABASE_URL: postgresql://${POSTGRES_USER:-postgres}:${POSTGRES_PASSWORD:-!ChangeMe!}@database:5432/${POSTGRES_DB:-ulep}?schema=public&connection_limit=1
@@ -85,19 +86,71 @@ services:
       KC_HOSTNAME_URL: ${KEYCLOAK_BASE_URL:-http://0.0.0.0:8080}
       KC_HOSTNAME_ADMIN_URL: ${KEYCLOAK_BASE_URL:-http://0.0.0.0:8080}
 
+  chat:
+    build:
+      context: ./chat
+      target: chat_prod
+    depends_on:
+      - mongo
+      - redis
+    restart: unless-stopped
+    environment:
+      ADMIN_URL: ${ADMIN_URL:-http://0.0.0.0:3001}
+      APP_URL: ${APP_URL:-http://0.0.0.0:5173}
+      API_URL: ${API_URL:-http://api:3000}
+      LOG_LEVEL: ${LOG_LEVEL:-debug} # verbose, debug, log, warn or error
+      DATABASE_URL: ${DATABASE_URL:-mongodb://${MONGODB_ROOT_USER:-ulep}:${MONGODB_ROOT_PASSWORD:-!ChangeMe!}@mongo:27017/${MONGODB_DATABASE:-ulep}?authSource=admin&replicaSet=rs0}
+      KEYCLOAK_BASE_URL: ${KEYCLOAK_BASE_URL:-http://auth:8080}
+      KEYCLOAK_REALM: ${KEYCLOAK_REALM:-etandem}
+      KEYCLOAK_ADMIN: ${KEYCLOAK_ADMIN:-admin}
+      KEYCLOAK_ADMIN_PASSWORD: ${KEYCLOAK_PASSWORD:-!ChangeMe!}
+      KEYCLOAK_CLIENT_ID: ${KEYCLOAK_CLIENT_ID:-api}
+      KEYCLOAK_CLIENT_SECRET: ${KEYCLOAK_CLIENT_SECRET:-bN49BuApmmtAODeOWOG8iKOOuJdN3KE6}
+      S3_URL: ${S3_URL:-http://minio:9000}
+      S3_REGION: ${S3_REGION:-eu-east-1}
+      S3_ACCESS_KEY: ${MINIO_USER:-minio}
+      S3_ACCESS_SECRET: ${MINIO_PASSWORD:-!ChangeMe!}
+      SENTRY_DSN: ${CHAT_SENTRY_DSN:-}
+      REDIS_URL: ${REDIS_URL:-redis://redis:6379}
+
+  redis:
+    image: redis:latest
+    volumes:
+      - redis_data:/data
+
+  mongo:
+    image: mongo:6-jammy
+    command:
+      ["mongod", "--replSet", "rs0", "--auth", "--keyFile", "/etc/keyfile.key"]
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: ${MONGO_INITDB_ROOT_USERNAME:-root}
+      MONGO_INITDB_ROOT_PASSWORD: ${MONGO_INITDB_ROOT_PASSWORD:-!ChangeMe!}
+    volumes:
+      - chat_data:/data/db
+      - ./docker/database/mongo-init.js:/docker-entrypoint-initdb.d/mongo-init.js
+      - ./docker/database/keyfile.key:/etc/keyfile.key
+
+  init-replica:
+    image: mongo:6-jammy
+    depends_on:
+      - mongo
+    entrypoint: >
+      bash -c "
+      sleep 10;
+      echo 'rs.initiate({_id: \"rs0\", members: [{ _id: 0, host: \"mongo:27017\" }]})' | mongosh --host mongo --authenticationDatabase admin -u root -p ${MONGO_INITDB_ROOT_PASSWORD};
+      "
+
   database:
     image: postgres:${POSTGRES_VERSION:-14}-alpine
     environment:
       POSTGRES_DB: ${POSTGRES_DB:-ulep}
       POSTGRES_USER: ${POSTGRES_USER:-postgres}
-      # You should definitely change the password in production
       POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-!ChangeMe!}
     volumes:
       - ./docker/database/db.sql:/docker-entrypoint-initdb.d/db.sql
       - db_data:/var/lib/postgresql/data
       # you may use a bind-mounted host directory instead, so that it is harder to accidentally remove the volume and lose all your data!
       # - ./docker/database/data:/var/lib/postgresql/data
-
   minio:
     image: minio/minio:latest
     command: server /data/minio --console-address :9001
@@ -107,21 +160,23 @@ services:
     volumes:
       - ./docker/minio:/data/minio
 
-  # weblate:
-  #   image: weblate/weblate:latest
-  #   depends_on:
-  #     - database
-  #   ports:
-  #     - 8999:8080
-  #   environment:
-  #     WEBLATE_SITE_DOMAIN: ${DOMAIN_NAME:-localhost}
-  #     WEBLATE_ADMIN_NAME: ${WEBLATE_USER:-admin}
-  #     WEBLATE_ADMIN_PASSWORD: ${WEBLATE_PASSWORD:-!ChangeMe!}
-  #     POSTGRES_USER: ${POSTGRES_USER:-postgres}
-  #     POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-!ChangeMe!}
-  #     POSTGRES_HOST: database
-  #     POSTGRES_PORT: 5432
-  #     POSTGRES_DATABASE: ${WEBLATE_DB:-weblate} # ? TODO use custom schema
+    # weblate:
+    #   image: weblate/weblate:latest
+    #   depends_on:
+    #     - database
+    #   ports:
+    #     - 8999:8080
+    #   environment:
+    #     WEBLATE_SITE_DOMAIN: ${DOMAIN_NAME:-localhost}
+    #     WEBLATE_ADMIN_NAME: ${WEBLATE_USER:-admin}
+    #     WEBLATE_ADMIN_PASSWORD: ${WEBLATE_PASSWORD:-!ChangeMe!}
+    #     POSTGRES_USER: ${POSTGRES_USER:-postgres}
+    #     POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-!ChangeMe!}
+    #     POSTGRES_HOST: database
+    #     POSTGRES_PORT: 5432
+    #     POSTGRES_DATABASE: ${WEBLATE_DB:-weblate} # ? TODO use custom schema
 
 volumes:
   db_data:
+  chat_data:
+  redis_data:

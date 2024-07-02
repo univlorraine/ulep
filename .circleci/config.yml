@@ -175,6 +175,24 @@ jobs:
             echo "$DOCKER_PASS" | docker login rg.fr-par.scw.cloud/ulep -u nologin --password-stdin
             docker push rg.fr-par.scw.cloud/ulep/auth-prod:latest && docker push rg.fr-par.scw.cloud/ulep/auth-prod:1.0.<< pipeline.number >>
 
+  #### Chat ####
+  build-docker-chat:
+    executor: node-executor
+    steps:
+      - checkout
+      - setup_remote_docker:
+          version: 20.10.14
+      - run:
+          name: Build docker image
+          command: |
+            export DOCKER_BUILDKIT=1
+            cd chat && docker build --platform=linux/amd64 -t rg.fr-par.scw.cloud/ulep/chat-prod:latest -t rg.fr-par.scw.cloud/ulep/chat-prod:1.0.<< pipeline.number >> .
+      - run:
+          name: Push docker image
+          command: |
+            echo "$DOCKER_PASS" | docker login rg.fr-par.scw.cloud/ulep -u nologin --password-stdin
+            docker push rg.fr-par.scw.cloud/ulep/chat-prod:latest && docker push rg.fr-par.scw.cloud/ulep/chat-prod:1.0.<< pipeline.number >>
+
 workflows:
   version: 2
   check_api:
@@ -228,3 +246,12 @@ workflows:
               only:
                 - develop
                 - main
+
+  build_chat:
+    jobs:
+      - build-docker-chat:
+        filters:
+          branches:
+            only:
+              - develop
+              - main

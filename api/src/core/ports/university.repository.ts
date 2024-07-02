@@ -3,6 +3,11 @@ import { University } from '../models';
 
 export const UNIVERSITY_REPOSITORY = 'university.repository';
 
+export interface UpdateUniversityResponse {
+  university: University;
+  usersId: string[];
+}
+
 export interface UniversityRepository {
   create(university: University): Promise<University>;
 
@@ -16,7 +21,7 @@ export interface UniversityRepository {
 
   ofName(name: string): Promise<University | null>;
 
-  update(university: University): Promise<University>;
+  update(university: University): Promise<UpdateUniversityResponse>;
 
   remove(id: string): Promise<void>;
 }

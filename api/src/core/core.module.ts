@@ -1,15 +1,29 @@
-import { ValidateTandemUsecase } from './usecases/tandem/validate-tandem.usecase';
 import { Module, Provider } from '@nestjs/common';
-import { ProvidersModule } from 'src/providers/providers.module';
-import { MatchScorer } from './services/MatchScorer';
 import { CronService } from 'src/core/services/CronService';
 import {
+  CreateCampusUsecase,
+  DeleteCampusUsecase,
+  GetCampusByIdUsecase,
+  GetCampusUsecase,
+  UpdateCampusUsecase,
+} from 'src/core/usecases/campus';
+import { FindAllSuggestedLanguageUsecase } from 'src/core/usecases/language/find-all-suggested-language.usecase';
+import { DeleteObjectiveImageUsecase } from 'src/core/usecases/media/delete-objective-image.usecase';
+import { UploadObjectiveImageUsecase } from 'src/core/usecases/media/upload-objective-image.usecase';
+import { SendMessageNotificationUsecase } from 'src/core/usecases/notifications';
+import { UpdateObjectiveUsecase } from 'src/core/usecases/objective/update-objective.usecase';
+import { ProvidersModule } from 'src/providers/providers.module';
+import { MatchScorer } from './services/MatchScorer';
+import {
+  AddDeviceUsecase,
   AddLanguageRequestUsecase,
   CountAllSuggestedLanguageUsecase,
+  CreateAdministratorUsecase,
   CreateInterestCategoryUsecase,
   CreateInterestUsecase,
   CreateLearningLanguageUseCase,
   CreateObjectiveUsecase,
+  CreateOrUpdateTestedLanguageUsecase,
   CreatePartnerUniversityUsecase,
   CreateProfileUsecase,
   CreateQuestionUsecase,
@@ -18,10 +32,14 @@ import {
   CreateTandemUsecase,
   CreateTestUsecase,
   CreateUniversityUsecase,
+  CreateUnsubscribeReportUsecase,
   CreateUserUsecase,
+  DeleteAdministratorUsecase,
+  DeleteAvatarUsecase,
   DeleteInterestCategoryUsecase,
   DeleteInterestUsecase,
   DeleteObjectiveUsecase,
+  DeleteProfileUsecase,
   DeleteQuestionUsecase,
   DeleteReportCategoryUsecase,
   DeleteReportUsecase,
@@ -31,22 +49,34 @@ import {
   FindAllLanguageCodeUsecase,
   FindAllObjectiveUsecase,
   FindOneObjectiveUsecase,
+  GenerateConversationsUsecase,
   GenerateTandemsUsecase,
+  GetAdministratorUsecase,
+  GetAdministratorsUsecase,
+  GetAllConversationsFromUserIdUsecase,
   GetCategoriesUsecase,
-  GetReportCategoryByIdUsecase,
   GetCountriesUniversitiesUsecase,
   GetCountriesUsecase,
+  GetInstanceUsecase,
   GetInterestCategoryUsecase,
   GetInterestUsecase,
   GetInterestsByCategoriesUsecase,
+  GetLearningLanguageMatchesUsecase,
+  GetLearningLanguageOfIdUsecase,
+  GetLearningLanguageOfProfileUsecase,
+  GetLearningLanguagesUsecase,
   GetLevelsUsecase,
   GetMediaObjectUsecase,
+  GetMessagesFromConversationUsecase,
+  GetOtherUserEmailInTandemUsecase,
+  GetPartnersToUniversityUsecase,
   GetProfileByUserIdUsecase,
   GetProfileUsecase,
   GetProfilesUsecase,
   GetQuestionUsecase,
   GetQuestionsByLevelUsecase,
   GetQuestionsUsecase,
+  GetReportCategoryByIdUsecase,
   GetReportUsecase,
   GetReportsByStatusUsecase,
   GetTandemsForProfileUsecase,
@@ -55,61 +85,35 @@ import {
   GetTestsUsecase,
   GetUniversitiesUsecase,
   GetUniversityUsecase,
-  GetLearningLanguageMatchesUsecase,
+  GetUserPersonalData,
   GetUserUsecase,
   GetUsersUsecase,
+  RefuseTandemUsecase,
+  UpdateAdministratorUsecase,
   UpdateCountryStatusUsecase,
+  UpdateInstanceUsecase,
   UpdateInterestCategoryUsecase,
   UpdateInterestUsecase,
   UpdateLanguageCodeUsecase,
+  UpdateProfileUsecase,
   UpdateQuestionUsecase,
+  UpdateReportCategoryUsecase,
   UpdateReportStatusUsecase,
+  UpdateTandemUsecase,
   UpdateUniversityUsecase,
   UpdateUserUsecase,
-  UploadAvatarUsecase,
   UploadAdminAvatarUsecase,
-  UpdateReportCategoryUsecase,
-  CreateUnsubscribeReportUsecase,
-  GetLearningLanguagesUsecase,
-  GetLearningLanguageOfIdUsecase,
-  GetLearningLanguageOfProfileUsecase,
-  RefuseTandemUsecase,
-  GetInstanceUsecase,
-  UpdateInstanceUsecase,
-  GetAdministratorsUsecase,
-  CreateAdministratorUsecase,
-  DeleteAdministratorUsecase,
-  UpdateAdministratorUsecase,
-  GetAdministratorUsecase,
-  DeleteProfileUsecase,
-  DeleteAvatarUsecase,
-  GetUserPersonalData,
-  GetOtherUserEmailInTandemUsecase,
+  UploadAvatarUsecase,
   UploadUniversityImageUsecase,
-  GetPartnersToUniversityUsecase,
-  UpdateProfileUsecase,
-  CreateOrUpdateTestedLanguageUsecase,
-  AddDeviceUsecase,
-  UpdateTandemUsecase,
 } from './usecases';
-import { UploadObjectiveImageUsecase } from 'src/core/usecases/media/upload-objective-image.usecase';
-import { UpdateObjectiveUsecase } from 'src/core/usecases/objective/update-objective.usecase';
-import { DeleteObjectiveImageUsecase } from 'src/core/usecases/media/delete-objective-image.usecase';
-import {
-  CreateCampusUsecase,
-  DeleteCampusUsecase,
-  GetCampusByIdUsecase,
-  GetCampusUsecase,
-  UpdateCampusUsecase,
-} from 'src/core/usecases/campus';
-import { FindAllSuggestedLanguageUsecase } from 'src/core/usecases/language/find-all-suggested-language.usecase';
+import { GetJitsiTokenUsecase } from './usecases/jitsi/get-jitsi-token.usecase';
+import { DeleteLearningLanguageUsecase } from './usecases/learningLanguage/delete-learning-langugage.usecase';
 import { GetLearningLanguageTandemUsecase } from './usecases/learningLanguage/getLearningLanguageTandem.usecase';
 import { ArchiveTandemsAndDeleteUsersUsecase } from './usecases/purges/archive-tandems.usecase';
 import { ResetPasswordUsecase } from './usecases/security/reset-password.usecase';
-import { DeleteLearningLanguageUsecase } from './usecases/learningLanguage/delete-learning-langugage.usecase';
-import { RevokeSessionsUsecase } from './usecases/user/revoke-sessions.usecase';
+import { ValidateTandemUsecase } from './usecases/tandem/validate-tandem.usecase';
 import { GetKeycloakAdminGroupsUsecase } from './usecases/user/get-keycloak-admin-groups.usecase';
-import { GetJitsiTokenUsecase } from './usecases/jitsi/get-jitsi-token.usecase';
+import { RevokeSessionsUsecase } from './usecases/user/revoke-sessions.usecase';
 
 const usecases: Provider[] = [
   //Campus
@@ -232,6 +236,12 @@ const usecases: Provider[] = [
   // Security
   ResetPasswordUsecase,
   GetJitsiTokenUsecase,
+  // Notifications
+  SendMessageNotificationUsecase,
+  // Chat
+  GenerateConversationsUsecase,
+  GetAllConversationsFromUserIdUsecase,
+  GetMessagesFromConversationUsecase,
 ];
 
 const services: Provider[] = [MatchScorer, CronService];

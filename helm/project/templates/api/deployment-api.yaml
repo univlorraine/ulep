@@ -110,6 +110,8 @@ spec:
                   key: keycloak-client-secret
             - name: KEYCLOAK_ADMIN_ROLE_NAME
               value: "{{ .Values.api.env.keycloakAdminRoleName }}"
+            - name: WEBLATE_API_URL
+              value: "{{ .Values.api.env.weblateApiUrl }}"
             - name: S3_URL
               value: "{{ .Values.api.env.minioUrl }}"
             - name: S3_REGION

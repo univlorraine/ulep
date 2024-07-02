@@ -51,6 +51,7 @@ import BottomBar from './BottomBar';
 import { useConfig } from '../../context/ConfigurationContext';
 import ConversationsPage from '../pages/ConversationsPage';
 import HomePage from '../pages/HomePage';
+import ChatPage from '../pages/mobile/ChatPage';
 
 const OfflineRouter: React.FC = () => {
     const { deviceAdapter } = useConfig();
@@ -105,6 +106,9 @@ const OfflineRouter: React.FC = () => {
                 </MobileRoute>
                 <MobileRoute exact path={'/tandem-status'}>
                     <TandemStatusPage />
+                </MobileRoute>
+                <MobileRoute exact path={'/chat'}>
+                    <ChatPage />
                 </MobileRoute>
                 <PrivateRoute exact path="/jitsi">
                     <JitsiPage />

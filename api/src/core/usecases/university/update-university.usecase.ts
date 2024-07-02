@@ -1,10 +1,7 @@
 import { Inject, Injectable, Logger } from '@nestjs/common';
-import {
-  UNIVERSITY_REPOSITORY,
-  UniversityRepository,
-} from '../../ports/university.repository';
 import { RessourceDoesNotExist } from 'src/core/errors';
 import { PairingMode, University } from 'src/core/models';
+import { CHAT_SERVICE } from 'src/core/ports/chat.service';
 import {
   COUNTRY_REPOSITORY,
   CountryRepository,
@@ -13,6 +10,11 @@ import {
   LANGUAGE_REPOSITORY,
   LanguageRepository,
 } from 'src/core/ports/language.repository';
+import { ChatService } from 'src/providers/services/chat.service';
+import {
+  UNIVERSITY_REPOSITORY,
+  UniversityRepository,
+} from '../../ports/university.repository';
 
 export class UpdateUniversityCommand {
   id: string;
@@ -45,6 +47,8 @@ export class UpdateUniversityUsecase {
     private readonly languageRepository: LanguageRepository,
     @Inject(UNIVERSITY_REPOSITORY)
     private readonly universityRepository: UniversityRepository,
+    @Inject(CHAT_SERVICE)
+    private readonly chatService: ChatService,
   ) {}
 
   async execute(command: UpdateUniversityCommand) {
@@ -102,10 +106,30 @@ export class UpdateUniversityUsecase {
       defaultContactId: command.defaultContactId || university.defaultContactId,
     });
 
-    const updatedUniversity = await this.universityRepository.update(
-      universityToUpdate,
+    const { university: updatedUniversity, usersId } =
+      await this.universityRepository.update(universityToUpdate);
+
+    await this.handleConversation(
+      updatedUniversity,
+      university.defaultContactId,
+      usersId,
     );
 
     return new University(updatedUniversity);
+  }
+
+  private async handleConversation(
+    university: University,
+    oldContactId: string,
+    usersToUpdate: string[],
+  ) {
+    if (oldContactId !== university.defaultContactId) {
+      await this.chatService.deleteConversationByContactId(oldContactId);
+      await this.chatService.createConversations(
+        usersToUpdate.map((userId) => ({
+          participants: [userId, university.defaultContactId],
+        })),
+      );
+    }
   }
 }

@@ -1,12 +1,23 @@
+import BrowserAdapter from '../adapter/BrowserAdapter';
 import CameraAdapter from '../adapter/CameraAdapter';
+import DeviceAdapter from '../adapter/DeviceAdapter';
 import DomainHttpAdapter from '../adapter/DomainHttpAdapter';
+import FileAdapter from '../adapter/FileAdapter';
+import NotificationAdapter from '../adapter/NotificationAdapter';
+import { RecorderAdapter } from '../adapter/RecorderAdapter';
+import SocketIoAdapter from '../adapter/SocketIoAdapter';
 import Configuration from '../domain/entities/Confirguration';
+import AddDeviceUsecase from '../domain/usecases/AddDeviceUsecase';
 import AskForAccountDeletion from '../domain/usecases/AskForAccountDeletionUsecase';
 import AskForLanguageUsecase from '../domain/usecases/AskForLanguageUsecase';
 import AskForLearningLanguageUsecase from '../domain/usecases/AskForLearningLanguageUsecase';
+import { GetInitialUrlUsecase, GetTokenFromCodeUsecase } from '../domain/usecases/AuthStandardFlow';
+import CreateOrUpdateTestedLanguageUsecase from '../domain/usecases/CreateOrUpdateTestedLanguageUsecase';
 import CreateProfileUsecase from '../domain/usecases/CreateProfileUsecase';
 import CreateReportUsecase from '../domain/usecases/CreateReportUsecase';
 import CreateUserUsecase from '../domain/usecases/CreateUserUsecase';
+import EditProfileUsecase from '../domain/usecases/EditProfileUsecase';
+import EditUserUsecase from '../domain/usecases/EditUserUsecase';
 import GetAllCountriesUsecase from '../domain/usecases/GetAllCountriesUsecase';
 import GetAllGoalsUsecase from '../domain/usecases/GetAllGoalsUsecase';
 import GetAllInterestCategoriesUsecase from '../domain/usecases/GetAllInterestCategoriesUsecase';
@@ -14,33 +25,30 @@ import GetAllLanguagesUsecase from '../domain/usecases/GetAllLanguagesUsecase';
 import GetAllReportCategoriesUsecase from '../domain/usecases/GetAllReportCategoriesUsecase';
 import GetAllTandemsUsecase from '../domain/usecases/GetAllTandemsUsecase';
 import GetAllUniversitiesUsecase from '../domain/usecases/GetAllUniversitiesUsecase';
+import GetConversationsUsecase from '../domain/usecases/GetConversationsUsecase';
+import GetHistoricEmailPartnerUsecase from '../domain/usecases/GetHistoricEmailPartnerUsecase';
+import GetMediaObjectUsecase from '../domain/usecases/GetMediaObjectUsecase';
+import GetMessagesFromConversationUsecase from '../domain/usecases/GetMessagesFromConversationUsecase';
+import GetPartnersToUniversityUsecase from '../domain/usecases/GetPartnersToUniversityUsecase';
 import GetProfileByUserIdUsecase from '../domain/usecases/GetProfileUsecase';
 import GetQuizzByLevelUsecase from '../domain/usecases/GetQuizzByLevelUsecase';
-import { GetTokenFromCodeUsecase, GetInitialUrlUsecase } from '../domain/usecases/AuthStandardFlow';
+import GetUniversityLanguagesUsecase from '../domain/usecases/GetUniversityLanguagesUsecase';
+import GetUniversityUsecase from '../domain/usecases/GetUniversityUsecase';
 import GetUserUsecase from '../domain/usecases/GetUserUsecase';
 import LoginUsecase from '../domain/usecases/LoginUsecase';
 import ResetPasswordUsecase from '../domain/usecases/ResetPasswordUsecase';
 import RetrievePersonInfoUsecase from '../domain/usecases/RetrievePersonInfoUsecase';
+import RevokeSessionsUsecase from '../domain/usecases/RevokeSessionsUsecase';
+import SendMessageUsecase from '../domain/usecases/SendMessageUsecase';
 import UpdateAvatarUsecase from '../domain/usecases/UpdateAvatarUsecase';
 import UpdateNotificationPermissionUsecase from '../domain/usecases/UpdateNotificationPermissionUsecase';
 import { ConfigContextValueType } from './configurationContextTypes';
-import GetUniversityUsecase from '../domain/usecases/GetUniversityUsecase';
-import GetMediaObjectUsecase from '../domain/usecases/GetMediaObjectUsecase';
-import RevokeSessionsUsecase from '../domain/usecases/RevokeSessionsUsecase';
-import GetHistoricEmailPartnerUsecase from '../domain/usecases/GetHistoricEmailPartnerUsecase';
-import BrowserAdapter from '../adapter/BrowserAdapter';
-import DeviceAdapter from '../adapter/DeviceAdapter';
-import GetUniversityLanguagesUsecase from '../domain/usecases/GetUniversityLanguagesUsecase';
-import GetPartnersToUniversityUsecase from '../domain/usecases/GetPartnersToUniversityUsecase';
-import EditProfileUsecase from '../domain/usecases/EditProfileUsecase';
-import EditUserUsecase from '../domain/usecases/EditUserUsecase';
-import CreateOrUpdateTestedLanguageUsecase from '../domain/usecases/CreateOrUpdateTestedLanguageUsecase';
-import NotificationAdapter from '../adapter/NotificationAdapter';
-import AddDeviceUsecase from '../domain/usecases/AddDeviceUsecase';
 import GetJitsiTokenUsecase from '../domain/usecases/GetJitsiTokenUsecase';
 
 interface GetConfigContextValueProps {
     apiUrl: string;
+    chatUrl: string;
+    socketChatUrl: string;
     languageCode: string;
     accessToken: string;
     refreshToken: string;
@@ -53,6 +61,8 @@ interface GetConfigContextValueProps {
 
 const getConfigContextValue = ({
     apiUrl,
+    chatUrl,
+    socketChatUrl,
     languageCode,
     accessToken,
     refreshToken,
@@ -65,7 +75,25 @@ const getConfigContextValue = ({
     const browserAdapter = new BrowserAdapter();
     const cameraAdapter = new CameraAdapter();
     const deviceAdapter = new DeviceAdapter();
-    const domainHttpAdapter = new DomainHttpAdapter(apiUrl, accessToken, refreshToken, languageCode, setTokens, logout);
+    const domainHttpAdapter = new DomainHttpAdapter(
+        apiUrl,
+        apiUrl,
+        accessToken,
+        refreshToken,
+        languageCode,
+        setTokens,
+        logout
+    );
+    const chatHttpAdapter = new DomainHttpAdapter(
+        chatUrl,
+        apiUrl,
+        accessToken,
+        refreshToken,
+        languageCode,
+        setTokens,
+        logout
+    );
+    const socketIoAdapter = new SocketIoAdapter(socketChatUrl, accessToken);
 
     const addDevice = new AddDeviceUsecase(domainHttpAdapter);
     const askForAccountDeletion = new AskForAccountDeletion(domainHttpAdapter);
@@ -104,6 +132,13 @@ const getConfigContextValue = ({
     const editUser = new EditUserUsecase(domainHttpAdapter, setUser);
     const retrievePerson = new RetrievePersonInfoUsecase(domainHttpAdapter);
 
+    //Chat
+    const fileAdapter = new FileAdapter(deviceAdapter);
+    const recorderAdapter = new RecorderAdapter();
+    const getConversations = new GetConversationsUsecase(domainHttpAdapter);
+    const getMessagesFromConversation = new GetMessagesFromConversationUsecase(domainHttpAdapter);
+    const sendMessage = new SendMessageUsecase(chatHttpAdapter);
+
     return {
         accessToken,
         addDevice,
@@ -119,6 +154,7 @@ const getConfigContextValue = ({
         createUser,
         editProfile,
         editUser,
+        fileAdapter,
         deviceAdapter,
         getAllInterestCategories,
         getAllCountries,
@@ -127,8 +163,10 @@ const getConfigContextValue = ({
         getAllReportCategories,
         getAllTandems,
         getAllUniversities,
+        getConversations,
         getHistoricEmailPartner,
         getMediaObject,
+        getMessagesFromConversation,
         getPartnersToUniversity,
         getProfile,
         getJitsiToken,
@@ -139,8 +177,11 @@ const getConfigContextValue = ({
         login,
         notificationAdapter,
         resetPassword,
+        sendMessage,
+        socketIoAdapter,
         updateAvatar,
         updateNotificationPermission,
+        recorderAdapter,
         retrievePerson,
         getTokenFromCodeUsecase,
         getInitialUrlUsecase,

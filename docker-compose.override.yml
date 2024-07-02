@@ -1,4 +1,4 @@
-version: '3.4'
+version: "3.4"
 
 services:
   api:
@@ -16,6 +16,20 @@ services:
     tty: true
     stdin_open: true
 
+  chat:
+    build:
+      context: ./chat
+      target: chat_dev
+    volumes:
+      - ./chat:/srv/app
+    ports:
+      - ${CHAT_PORT:-3003}:3000
+      - ${CHAT_SOCKET_PORT:-5001}:5000
+
+  redis:
+    ports:
+      - ${REDIS_PORT:-6379}:6379
+
   admin:
     build:
       context: ./admin
@@ -25,14 +39,19 @@ services:
     ports:
       - ${ADMIN_PORT:-3001}:3000
 
-  auth:
-    command: 'start-dev --import-realm  --spi-theme-cache-themes=false --spi-theme-cache-templates=false '
+  mongo:
+    platform: linux/arm64
     ports:
-      - ${AUTH_PORT:-8080}:8080
+      - 27017:27017
 
   database:
     ports:
       - 5432:5432
+
+  auth:
+    command: "start-dev --import-realm  --spi-theme-cache-themes=false --spi-theme-cache-templates=false "
+    ports:
+      - ${AUTH_PORT:-8080}:8080
 
   minio:
     ports:
@@ -42,5 +61,5 @@ services:
   mailer:
     image: schickling/mailcatcher
     ports:
-      - '1025:1025'
-      - '1080:1080'
+      - "1025:1025"
+      - "1080:1080"
