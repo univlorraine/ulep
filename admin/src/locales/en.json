@@ -290,6 +290,10 @@
         "error": "An error occurred while the purge",
         "title": "Purge"
     },
+    "generateConversation": {
+        "error": "An error occurred while the conversation generation",
+        "title": "Conversation generation"
+    },
     "questions": {
         "create": {
             "error": "Error on question creation",
