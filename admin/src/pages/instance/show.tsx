@@ -1,8 +1,7 @@
-import React from 'react';
 import DeleteIcon from '@mui/icons-material/Delete';
 import QuestionAnswerIcon from '@mui/icons-material/QuestionAnswer';
 import { Box, CircularProgress, Modal, Switch, SwitchProps, Typography } from '@mui/material';
-import { useState } from 'react';
+import React, { useState } from 'react';
 import {
     Button,
     EditButton,
