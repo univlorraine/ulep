@@ -4,6 +4,7 @@ import {
   Get,
   Param,
   ParseUUIDPipe,
+  Post,
   Query,
   SerializeOptions,
   UseGuards,
@@ -11,21 +12,22 @@ import {
 import * as Swagger from '@nestjs/swagger';
 import { AuthenticationGuard } from '../guards';
 
-import { CampusResponse } from 'src/api/dtos/campus';
-import {
-  GetAllConversationsFromUserIdUsecase,
-  GetMessagesFromConversationUsecase,
-} from 'src/core/usecases/chat';
 import {
   ConversationResponse,
   GetConversationRequest,
   GetMessagesQueryParams,
   MessageResponse,
 } from 'src/api/dtos/chat';
+import {
+  GenerateConversationsUsecase,
+  GetAllConversationsFromUserIdUsecase,
+  GetMessagesFromConversationUsecase,
+} from 'src/core/usecases/chat';
 @Controller('chat')
 @Swagger.ApiTags('Chat')
 export class ChatController {
   constructor(
+    private readonly generateConversationsUsecase: GenerateConversationsUsecase,
     private readonly getAllConversationsFromUserIdUsecase: GetAllConversationsFromUserIdUsecase,
     private readonly getMessagesFromConversationUsecase: GetMessagesFromConversationUsecase,
   ) {}
@@ -33,7 +35,7 @@ export class ChatController {
   @Get(':id')
   @SerializeOptions({ groups: ['chat'] })
   @Swagger.ApiOperation({ summary: 'Get all conversations for user id.' })
-  @Swagger.ApiOkResponse({ type: CampusResponse, isArray: true })
+  @Swagger.ApiOkResponse({ type: ConversationResponse, isArray: true })
   @UseGuards(AuthenticationGuard)
   async getAllConversations(
     @Param('id', ParseUUIDPipe) id: string,
@@ -55,7 +57,7 @@ export class ChatController {
   @Get('messages/:id')
   @SerializeOptions({ groups: ['chat'] })
   @Swagger.ApiOperation({ summary: 'Get messages from a conversation.' })
-  @Swagger.ApiOkResponse({ type: CampusResponse, isArray: true })
+  @Swagger.ApiOkResponse({ type: MessageResponse, isArray: true })
   @UseGuards(AuthenticationGuard)
   async getMessagesFromConversation(
     @Param('id', ParseUUIDPipe) id: string,
@@ -72,5 +74,16 @@ export class ChatController {
       items: messages.map(MessageResponse.from),
       totalItems: messages.length,
     });
+  }
+
+  @Post('generate-conversation')
+  @SerializeOptions({ groups: ['chat'] })
+  @UseGuards(AuthenticationGuard)
+  @Swagger.ApiOperation({
+    summary: 'Generate all conversations for all tandems.',
+  })
+  @UseGuards(AuthenticationGuard)
+  async generateAllMissingConversations() {
+    await this.generateConversationsUsecase.execute();
   }
 }

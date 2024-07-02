@@ -1,8 +1,10 @@
-import { Injectable } from '@nestjs/common';
 import { Collection } from '@app/common';
-import { ConversationRepository } from 'src/core/ports/conversation.repository';
+import { Injectable } from '@nestjs/common';
 import { Conversation } from 'src/core/models/conversation.model';
-import { v4 as uuidv4 } from 'uuid';
+import {
+    ConversationRepository,
+    CreateConversations,
+} from 'src/core/ports/conversation.repository';
 
 @Injectable()
 export class InMemoryConversationRepository implements ConversationRepository {
@@ -36,6 +38,21 @@ export class InMemoryConversationRepository implements ConversationRepository {
     async findByUserId(userId: string): Promise<Conversation[]> {
         return this.#conversations.filter((conversation) =>
             conversation.usersIds.includes(userId),
+        );
+    }
+
+    async findConversationsByIdsOrParticipants(
+        ids: string[],
+        participants: string[][],
+    ): Promise<Conversation[]> {
+        return this.#conversations.filter(
+            (conversation) =>
+                ids.includes(conversation.id) ||
+                participants.some((participant) =>
+                    conversation.usersIds.every((user) =>
+                        participant.includes(user),
+                    ),
+                ),
         );
     }
 
@@ -105,10 +122,10 @@ export class InMemoryConversationRepository implements ConversationRepository {
         return Promise.resolve();
     }
 
-    createConversations(participants: string[][]): Promise<void> {
-        this.#conversations = participants.map((participantIds) => ({
-            id: uuidv4(),
-            usersIds: participantIds,
+    createConversations(conversations: CreateConversations[]): Promise<void> {
+        this.#conversations = conversations.map((conversation) => ({
+            id: conversation.tandemId,
+            usersIds: conversation.participants,
             metadata: {},
             createdAt: new Date(),
             lastActivity: new Date(),

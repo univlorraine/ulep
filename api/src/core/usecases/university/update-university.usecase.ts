@@ -1,10 +1,7 @@
 import { Inject, Injectable, Logger } from '@nestjs/common';
-import {
-  UNIVERSITY_REPOSITORY,
-  UniversityRepository,
-} from '../../ports/university.repository';
 import { RessourceDoesNotExist } from 'src/core/errors';
 import { PairingMode, University } from 'src/core/models';
+import { CHAT_SERVICE } from 'src/core/ports/chat.service';
 import {
   COUNTRY_REPOSITORY,
   CountryRepository,
@@ -13,8 +10,11 @@ import {
   LANGUAGE_REPOSITORY,
   LanguageRepository,
 } from 'src/core/ports/language.repository';
-import { CHAT_SERVICE } from 'src/core/ports/chat.service';
 import { ChatService } from 'src/providers/services/chat.service';
+import {
+  UNIVERSITY_REPOSITORY,
+  UniversityRepository,
+} from '../../ports/university.repository';
 
 export class UpdateUniversityCommand {
   id: string;
@@ -126,7 +126,9 @@ export class UpdateUniversityUsecase {
     if (oldContactId !== university.defaultContactId) {
       await this.chatService.deleteConversationByContactId(oldContactId);
       await this.chatService.createConversations(
-        usersToUpdate.map((userId) => [userId, university.defaultContactId]),
+        usersToUpdate.map((userId) => ({
+          participants: [userId, university.defaultContactId],
+        })),
       );
     }
   }
