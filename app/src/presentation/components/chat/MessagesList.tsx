@@ -72,11 +72,13 @@ const MessagesList: React.FC<MessagesListProps> = ({ messages, isScrollOver, loa
                 lastDate = messageDate;
             }
 
-            messageElements.push(
-                <div key={index} className={isCurrentUserMessage ? styles.currentUser : styles.otherUser}>
-                    <MessageComponent message={message} isCurrentUserMessage={isCurrentUserMessage} />
-                </div>
-            );
+            if (message.content) {
+                messageElements.push(
+                    <div key={message.id} className={isCurrentUserMessage ? styles.currentUser : styles.otherUser}>
+                        <MessageComponent message={message} isCurrentUserMessage={isCurrentUserMessage} />
+                    </div>
+                );
+            }
         });
 
         messageElements.push(<div ref={messagesEndRef} />);

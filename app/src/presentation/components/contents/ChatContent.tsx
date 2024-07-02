@@ -9,6 +9,7 @@ import Conversation from '../../../domain/entities/chat/Conversation';
 import { MessageWithConversationId } from '../../../domain/entities/chat/Message';
 import useHandleMessagesFromConversation from '../../hooks/useHandleMessagesFromConversation';
 import AudioLine from '../AudioLine';
+import Loader from '../Loader';
 import RecordingButton from '../RecordingButton';
 import MessagesList from '../chat/MessagesList';
 import styles from './ChatContent.module.css';
@@ -32,7 +33,7 @@ const Content: React.FC<Omit<ChatContentProps, 'isHybrid'>> = ({ conversation, g
     const [fileToSend, setFileToSend] = useState<File | undefined>();
     const [isRecording, setIsRecording] = useState<boolean>(false);
 
-    const { messages, isScrollOver, error, loadMessages, addNewMessage } = useHandleMessagesFromConversation(
+    const { messages, isScrollOver, error, isLoading, loadMessages, addNewMessage } = useHandleMessagesFromConversation(
         conversation.id
     );
 
@@ -152,12 +153,19 @@ const Content: React.FC<Omit<ChatContentProps, 'isHybrid'>> = ({ conversation, g
                 </span>
                 <IonIcon icon={KebabSvg} />
             </div>
-            <MessagesList
-                messages={messages}
-                loadMessages={loadMessages}
-                userId={profile.user.id}
-                isScrollOver={isScrollOver}
-            />
+            {!isLoading && (
+                <MessagesList
+                    messages={messages}
+                    loadMessages={loadMessages}
+                    userId={profile.user.id}
+                    isScrollOver={isScrollOver}
+                />
+            )}
+            {isLoading && (
+                <div className={styles.loader}>
+                    <Loader />
+                </div>
+            )}
             <div className={styles.footer}>
                 <div>
                     <IonIcon className={styles.icon} icon={PictureSvg} onClick={handleImageClick} />

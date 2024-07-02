@@ -62,6 +62,6 @@ export class GetMessagesFromConversationIdUsecase {
             }
         }
 
-        return messages.filter((message) => message.content);
+        return messages;
     }
 }
