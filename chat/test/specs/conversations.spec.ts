@@ -1,21 +1,21 @@
-import * as request from 'supertest';
 import { Test } from '@nestjs/testing';
-import { AppModule } from 'src/app.module';
-import { TestServer } from './test.server';
-import { TestAuthGuard } from '../utils/TestAuthGuard';
 import { AuthenticationGuard } from 'src/api/guards';
-import { InMemoryConversationRepository } from 'src/providers/persistance/repositories/in-memory-conversation.repository';
-import { CONVERSATION_REPOSITORY } from 'src/core/ports/conversation.repository';
-import { MEDIA_OBJECT_REPOSITORY } from 'src/core/ports/media-object.repository';
-import { InMemoryMediaObjectRepository } from 'src/providers/persistance/repositories/in-memory-media-object.repository';
-import { MESSAGE_REPOSITORY } from 'src/core/ports/message.repository';
-import { InMemoryMessageRepository } from 'src/providers/persistance/repositories/in-memory-message.repository';
+import { AppModule } from 'src/app.module';
 import { Conversation, Message, MessageType } from 'src/core/models';
 import { MediaObject } from 'src/core/models/media.model';
-import { HubGateway } from '../mocks/hub.gateway';
+import { CONVERSATION_REPOSITORY } from 'src/core/ports/conversation.repository';
 import { HUB_GATEWAY } from 'src/core/ports/hub.gateway';
-import { NotificationService } from '../mocks/notification.service';
+import { MEDIA_OBJECT_REPOSITORY } from 'src/core/ports/media-object.repository';
+import { MESSAGE_REPOSITORY } from 'src/core/ports/message.repository';
 import { NOTIFICATION_SERVICE } from 'src/core/ports/notification.service';
+import { InMemoryConversationRepository } from 'src/providers/persistance/repositories/in-memory-conversation.repository';
+import { InMemoryMediaObjectRepository } from 'src/providers/persistance/repositories/in-memory-media-object.repository';
+import { InMemoryMessageRepository } from 'src/providers/persistance/repositories/in-memory-message.repository';
+import * as request from 'supertest';
+import { HubGateway } from '../mocks/hub.gateway';
+import { NotificationService } from '../mocks/notification.service';
+import { TestAuthGuard } from '../utils/TestAuthGuard';
+import { TestServer } from './test.server';
 
 describe('Conversations', () => {
     let app: TestServer;
@@ -154,14 +154,17 @@ describe('Conversations', () => {
     });
 
     test('Create multiple conversations', async () => {
-        const participants = [
-            [OWNER1_ID, OWNER2_ID],
-            [OWNER1_ID, OWNER3_ID],
+        const conversations = [
+            { participants: [OWNER1_ID, OWNER2_ID] },
+            {
+                participants: [OWNER1_ID, OWNER3_ID],
+                tandemId: 'conversation-789',
+            },
         ];
 
         await request(app.getHttpServer())
             .post('/conversations/multi')
-            .send({ participants })
+            .send({ conversations })
             .expect(201);
     });
 
