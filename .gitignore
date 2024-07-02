@@ -23,4 +23,6 @@ docker/minio/.minio.sys
 values-local.yaml
 
 docker/minio/*
-keyfile.key
+
+#helm values
+*.values.yaml

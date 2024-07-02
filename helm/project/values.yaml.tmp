@@ -66,6 +66,11 @@ api:
     sentryDsn: https://3306ec4562fb4cfab0be7feaf5bf136a@glitchtip.ulep.thestaging.io/1
     cancelTresholdInMin: 15
     signedUrlExpirationInSeconds: 3600
+    notificationTranslationNamespace:
+    notificationAssetsBucket:
+    notificationAssetsPublicEndpoint:
+
+
   autoscaling:
     enabled: false
     minReplicas: 1

@@ -1,0 +1,16 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: "{{ include "etandem.fullname" . }}-{{ .Values.chat.name }}"
+  labels:
+    {{- include "etandem.labels" . | nindent 4 }}
+spec:
+  type: {{ .Values.chat.service.type }}
+  ports:
+    - port: {{ .Values.chat.service.port }}
+      targetPort: direct
+      protocol: TCP
+      name: direct
+  selector:
+    app.kubernetes.io/name: "{{ include "etandem.name" . }}-{{ .Values.chat.name }}"
+    app.kubernetes.io/instance: "{{ .Release.Name }}"

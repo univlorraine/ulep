@@ -5,5 +5,11 @@ dependencies:
 - name: minio
   repository: oci://registry-1.docker.io/bitnamicharts
   version: 12.8.11
-digest: sha256:fa01e6965418614968d4e43eb5fcd72aed8c73302a0499efc856a40f045aaaea
-generated: "2023-11-09T16:25:55.348105+01:00"
+- name: mongodb
+  repository: https://charts.bitnami.com/bitnami
+  version: 15.6.2
+- name: redis
+  repository: https://charts.bitnami.com/bitnami
+  version: 19.5.2
+digest: sha256:6081721734dbbf6a9420401e699c1ee5de625817f5fc7761bf84a2badd9bf37a
+generated: "2024-06-12T15:03:22.864659303+02:00"
