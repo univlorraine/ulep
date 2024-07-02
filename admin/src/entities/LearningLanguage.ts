@@ -1,5 +1,7 @@
 import Campus from './Campus';
+// eslint-disable-next-line import/no-cycle
 import { Profile } from './Profile';
+// eslint-disable-next-line import/no-cycle
 import { TandemStatus, TandemSummary } from './Tandem';
 
 export enum LearningType {

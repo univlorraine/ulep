@@ -1,3 +1,6 @@
+// eslint-disable-next-line import/no-cycle
+import { LearningLanguage } from './LearningLanguage';
+
 export enum TandemStatus {
     INACTIVE = 'INACTIVE',
     DRAFT = 'DRAFT',
@@ -9,6 +12,8 @@ export enum TandemStatus {
 export type TandemSummary = {
     id: string;
     status: TandemStatus;
+    learningLanguages: LearningLanguage[];
+    compatibilityScore: number;
 };
 
 export const isTandemActive = (tandem?: TandemSummary) => tandem?.status === TandemStatus.ACTIVE;

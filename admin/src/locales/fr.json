@@ -505,6 +505,9 @@
                 },
                 "user_lastname": {
                     "label": "Nom d'utilisateur"
+                },
+                "university": {
+                    "label": "Université"
                 }
             },
             "globalRoutineModal": {
@@ -527,9 +530,15 @@
                 "actionPossible": "Tandem en attente",
                 "specificProgram": "Programme spécifique",
                 "reported": "Signalé",
-                "role": "Rôle"
+                "role": "Rôle",
+                "age": "Âge",
+                "score": "Score",
+                "pairing": "Appariement",
+                "actions": "Actions",
+                "type": "Type"
             },
-            "noUniversitySelected": "Merci de sélectionner une ou plusieurs universités pour l'appariement"
+            "noUniversitySelected": "Merci de sélectionner une ou plusieurs universités pour l'appariement",
+            "noTandem": "Pas de profil proposé pour le tandem"
         },
         "show": {
             "management": {
@@ -615,7 +624,23 @@
                 }
             }
         },
-        "title": "Demandes de tandem"
+        "title": "Demandes de tandem",
+        "status": {
+            "INACTIVE": "Inactif",
+            "DRAFT": "En attente",
+            "VALIDATED_BY_ONE_UNIVERSITY": "Validé par une université",
+            "PAUSED": "En pause",
+            "ACTIVE": "Apparié"
+        },
+        "types": {
+            "BOTH": "E-tandem / Tandem",
+            "ETANDEM": "E-tandem",
+            "TANDEM": "Tandem"
+        },
+        "roles": {
+            "STAFF": "Personnel",
+            "STUDENT": "Etudiant"
+        }
     },
     "universitiesPicker": {
         "error": "Une erreur est survenue lors de la récupération des universités"

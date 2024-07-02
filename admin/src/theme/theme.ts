@@ -15,6 +15,10 @@ const theme: RaThemeOptions = {
             main: '#2196f3',
             contrastText: '#ffffff',
         },
+        warning: {
+            main: '#ff8700',
+            contrastText: '#ffffff',
+        },
     } as PaletteOptions,
     typography: {
         fontFamily: 'Roboto, Arial, sans-serif',
@@ -43,6 +47,11 @@ const theme: RaThemeOptions = {
             fontWeight: '600',
             marginBottom: '10px',
         },
+        subtitle1: {
+            fontSize: '0.875rem',
+            color: '#212121',
+            fontWeight: '700',
+        },
     },
     components: {
         ...defaultTheme.components,
@@ -54,6 +63,16 @@ const theme: RaThemeOptions = {
                     boxShadow: 'none',
                     '& .MuiToolbar-root': {
                         gap: '16px',
+                    },
+                },
+            },
+        },
+        MuiButton: {
+            styleOverrides: {
+                root: {
+                    '&.MuiButton-textPrimary': {
+                        borderRadius: '4px',
+                        border: '1px solid #000000',
                     },
                 },
             },
@@ -102,6 +121,7 @@ const theme: RaThemeOptions = {
                     '&:hover': {
                         backgroundColor: '#212121',
                     },
+                    border: 'none !important',
                 },
             },
         },

@@ -143,36 +143,12 @@ export class PrismaProfileRepository implements ProfileRepository {
       include: ProfilesRelationsWithTandemProfile,
     });
 
-    // filter learning languages into the tandem array to remove the root profile one
-    /* const profilesWithOnlyMatchingTandemProfile = profiles.map((profile) => {
-      const filteredLearningLanguages = profile.LearningLanguages.map(
-        (learningLanguage) => {
-          if (learningLanguage.Tandem) {
-            const filteredLearningLanguages =
-              learningLanguage.Tandem?.LearningLanguages.filter(
-                (tandemLL) => tandemLL.profile_id !== profile.id,
-              );
-            return {
-              ...learningLanguage,
-              Tandem: {
-                ...learningLanguage.Tandem,
-                LearningLanguages: filteredLearningLanguages,
-              },
-            };
-          } else {
-            return learningLanguage;
-          }
-        },
-      );
-      return {
-        ...profile,
-        LearningLanguages: filteredLearningLanguages,
-      };
-    }); */
+    const profilesWithLearningLanguages = profiles.filter(
+      (profile) => profile.LearningLanguages.length !== 0,
+    );
 
     return {
-      // items: profilesWithOnlyMatchingTandemProfile.map(profileMapper),
-      items: profiles.map(profileMapper),
+      items: profilesWithLearningLanguages.map(profileMapper),
       totalItems: count,
     };
   }

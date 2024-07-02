@@ -502,6 +502,9 @@
                 },
                 "user_lastname": {
                     "label": "Lastname"
+                },
+                "university": {
+                    "label": "University"
                 }
             },
             "globalRoutineModal": {
@@ -524,9 +527,15 @@
                 "actionPossible": "Pending tandem",
                 "specificProgram": "Specific program",
                 "role": "Role",
-                "reported": "Reported"
+                "reported": "Reported",
+                "age": "Age",
+                "score": "Score",
+                "pairing": "Pairing",
+                "actions": "Actions",
+                "type": "Type"
             },
-            "noUniversitySelected": "Please select one or more universities for pairing"
+            "noUniversitySelected": "Please select one or more universities for pairing",
+            "noTandem": "No profile proposed for the tandem"
         },
         "show": {
             "management": {
@@ -612,7 +621,23 @@
                 }
             }
         },
-        "title": "Tandem requests"
+        "title": "Tandem requests",
+        "status": {
+            "INACTIVE": "Inactive",
+            "DRAFT": "Waiting",
+            "VALIDATED_BY_ONE_UNIVERSITY": "Validated by one university",
+            "PAUSED": "Paused",
+            "ACTIVE": "Paired"
+        },
+        "types": {
+            "BOTH": "E-tandem / Tandem",
+            "ETANDEM": "E-tandem",
+            "TANDEM": "Tandem"
+        },
+        "roles": {
+            "STAFF": "Personnel",
+            "STUDENT": "Etudiant"
+        }
     },
     "universitiesPicker": {
         "error": "An error occured while fetching universities"

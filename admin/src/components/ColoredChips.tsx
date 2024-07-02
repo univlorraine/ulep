@@ -5,7 +5,7 @@ export type ChipsColors = 'primary' | 'secondary' | 'success' | 'error' | 'info'
 
 type ColoredChipsProps = {
     color: ChipsColors;
-    label: string;
+    label: string | number;
 };
 
 const ColoredChips = ({ color, label }: ColoredChipsProps) => <Chip color={color} label={label} />;
