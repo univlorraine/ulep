@@ -33,6 +33,12 @@ export class RefreshTokenRequest {
   token: string;
 }
 
+export class ResetPasswordRequest {
+  @ApiProperty({ description: 'The user email' })
+  @IsString()
+  email: string;
+}
+
 export class BearerTokensResponse {
   @ApiProperty({ type: 'string' })
   @Expose({ groups: ['read'] })
@@ -47,8 +53,12 @@ export class BearerTokensResponse {
   }
 }
 
-export class ResetPasswordRequest {
-  @ApiProperty({ description: 'The user email' })
-  @IsString()
-  email: string;
+export class JitsiTokensResponse {
+  @ApiProperty({ type: 'string' })
+  @Expose({ groups: ['read'] })
+  token: string;
+
+  constructor(partial: Partial<JitsiTokensResponse>) {
+    Object.assign(this, partial);
+  }
 }

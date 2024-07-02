@@ -66,6 +66,11 @@ api:
     sentryDsn: https://3306ec4562fb4cfab0be7feaf5bf136a@glitchtip.ulep.thestaging.io/1
     cancelTresholdInMin: 15
     signedUrlExpirationInSeconds: 3600
+    notificationTranslationNamespace:
+    notificationAssetsBucket:
+    notificationAssetsPublicEndpoint:
+
+
   autoscaling:
     enabled: false
     minReplicas: 1
@@ -314,6 +319,82 @@ webapp:
     tls:
       - hosts:
           - *webappUrl
+
+jitsi-meet:
+  name: 'jitsi'
+  publicURL: 'https://jitsi.ulep.thestaging.io'
+  enableAuth: true
+  enableGuests: false
+  tz: Europe/Paris
+
+  web:
+    ingress:
+      enabled: true
+      className: traefik
+      annotations:
+        kubernetes.io/ingress.class: traefik
+        cert-manager.io/cluster-issuer: 'letsencrypt'
+        kubernetes.io/tls-acme: 'true'
+        traefik.ingress.kubernetes.io/router.entrypoints: 'websecure'
+      hosts:
+        - host: 'jitsi.ulep.thestaging.io'
+          paths: ['/']
+      tls:
+        - secretName: jitsi-tls
+          hosts:
+            - 'jitsi.ulep.thestaging.io'
+    extraVolumes:
+      - name: 'jitsi-meet-swp'
+        configMap:
+          name: 'jitsi-meet-swp'
+          items:
+            - key: 'custom-config.js'
+              path: 'custom-config.js'
+            - key: 'custom-interface_config.js'
+              path: 'custom-interface_config.js'
+    extraVolumeMounts:
+      - name: 'jitsi-meet-swp'
+        mountPath: '/config/custom-config.js'
+        subPath: 'custom-config.js'
+      - name: 'jitsi-meet-swp'
+        mountPath: '/config/custom-interface_config.js'
+        subPath: 'custom-interface_config.js'
+
+  jvb:
+    UDPPort: 30378
+    useHostPort: true
+    publicIPs:
+      - 51.159.157.213
+    # useNodeIP: true
+    service:
+      enabled: true
+      type: LoadBalancer
+    securityContext:
+      allowPrivilegeEscalation: false
+      seccompProfile:
+        type: 'RuntimeDefault'
+      readOnlyRootFilesystem: false
+      runAsNonRoot: false
+
+  prosody:
+    persistence:
+      enabled: false
+    extraEnvs:
+      - name: 'AUTH_TYPE'
+        value: 'jwt'
+      - name: 'JWT_APP_ID'
+        value: 'api'
+      - name: 'JWT_APP_SECRET'
+        value: 'bN49BuApmmtAODeOWOG8iKOOuJdN3KE6'
+    securityContext:
+      allowPrivilegeEscalation: false
+      seccompProfile:
+        type: 'RuntimeDefault'
+      readOnlyRootFilesystem: false
+      runAsNonRoot: false
+
+  jibri:
+    enable: false
 
 serviceAccount:
   # Specifies whether a service account should be created

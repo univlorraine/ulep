@@ -7,11 +7,6 @@ import {
   GetCampusUsecase,
   UpdateCampusUsecase,
 } from 'src/core/usecases/campus';
-import {
-  GenerateConversationsUsecase,
-  GetAllConversationsFromUserIdUsecase,
-  GetMessagesFromConversationUsecase,
-} from 'src/core/usecases/chat';
 import { FindAllSuggestedLanguageUsecase } from 'src/core/usecases/language/find-all-suggested-language.usecase';
 import { DeleteObjectiveImageUsecase } from 'src/core/usecases/media/delete-objective-image.usecase';
 import { UploadObjectiveImageUsecase } from 'src/core/usecases/media/upload-objective-image.usecase';
@@ -54,9 +49,11 @@ import {
   FindAllLanguageCodeUsecase,
   FindAllObjectiveUsecase,
   FindOneObjectiveUsecase,
+  GenerateConversationsUsecase,
   GenerateTandemsUsecase,
   GetAdministratorUsecase,
   GetAdministratorsUsecase,
+  GetAllConversationsFromUserIdUsecase,
   GetCategoriesUsecase,
   GetCountriesUniversitiesUsecase,
   GetCountriesUsecase,
@@ -70,6 +67,7 @@ import {
   GetLearningLanguagesUsecase,
   GetLevelsUsecase,
   GetMediaObjectUsecase,
+  GetMessagesFromConversationUsecase,
   GetOtherUserEmailInTandemUsecase,
   GetPartnersToUniversityUsecase,
   GetProfileByUserIdUsecase,
@@ -108,6 +106,7 @@ import {
   UploadAvatarUsecase,
   UploadUniversityImageUsecase,
 } from './usecases';
+import { GetJitsiTokenUsecase } from './usecases/jitsi/get-jitsi-token.usecase';
 import { DeleteLearningLanguageUsecase } from './usecases/learningLanguage/delete-learning-langugage.usecase';
 import { GetLearningLanguageTandemUsecase } from './usecases/learningLanguage/getLearningLanguageTandem.usecase';
 import { ArchiveTandemsAndDeleteUsersUsecase } from './usecases/purges/archive-tandems.usecase';
@@ -236,6 +235,7 @@ const usecases: Provider[] = [
   UpdateInstanceUsecase,
   // Security
   ResetPasswordUsecase,
+  GetJitsiTokenUsecase,
   // Notifications
   SendMessageNotificationUsecase,
   // Chat

@@ -38,6 +38,8 @@ spec:
         env:
           - name: VITE_API_URL
             value: "https://{{ .Values.apiUrl }}.{{ .Values.domain }}"
+          - name: VITE_JITSI_DOMAIN
+            value: "{{ .Values.jitsiUrl }}.{{ .Values.domain }}"
         volumeMounts:
           - name: "{{ .Values.webapp.name }}-build"
             mountPath: /usr/share/nginx/html/

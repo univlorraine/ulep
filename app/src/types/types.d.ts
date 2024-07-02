@@ -12,6 +12,10 @@ declare global {
     type TandemStatus = 'ACTIVE' | 'INACTIVE' | 'DRAFT' | 'VALIDATED_BY_ONE_UNIVERSITY';
     type UserStatus = 'ACTIVE' | 'REPORTED' | 'BANNED' | 'CANCELED';
     type AvailabilitiesOptions = 'UNAVAILABLE' | 'AVAILABLE' | 'VERY_AVAILABLE';
+
+
+    // TODO(industrialization): remove when jitsi lib meet imported with types
+    const JitsiMeetJS: any;
 }
 
 export {};

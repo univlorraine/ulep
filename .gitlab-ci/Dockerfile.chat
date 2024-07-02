@@ -1,0 +1,49 @@
+#syntax=docker/dockerfile:1.4
+
+# Valeur par défaut de l'argument NODE_VERSION
+ARG NODE_VERSION=18
+# Valeur par défaut de l'argument NODE_ENV_CI
+ARG NODE_ENV_CI=production
+
+#### Image node image avec activation de pnpm
+FROM node:$NODE_VERSION-alpine as chat_base
+
+# https://github.com/nodejs/docker-node/tree/b4117f9333da4138b03a546ec926ef50a31506c3#nodealpine
+RUN apk add --no-cache libc6-compat
+
+WORKDIR /srv/app
+
+# Pour pouvoir utiliser pnpm (https://fek.io/blog/what-is-corepack-in-node-js/)
+RUN corepack enable && \
+	corepack prepare --activate pnpm@latest && \
+	pnpm config -g set store-dir /.pnpm-store
+
+#### Build UL sans copie des sources dans l'image
+FROM chat_base AS chat_ul
+
+# https://stackoverflow.com/questions/53681522/share-variable-in-multi-stage-dockerfile-arg-before-from-not-substituted
+ARG NODE_ENV_CI
+
+WORKDIR /srv/app
+
+# Copie du manifest file
+COPY ./package.json /srv/app/package.json
+# Copie des sources buildées
+COPY ./dist /srv/app/dist
+# Copie des modules nodes dans le dossier /srv/app/node_modules du container
+COPY ./node_modules /srv/app/node_modules
+# Copie du dossier template
+COPY ./templates /srv/app/templates
+
+ENV NODE_ENV $NODE_ENV_CI
+# RUN echo ${NODE_ENV}
+
+RUN addgroup -S -g 1001 nodejs  && \
+	adduser -S -u 1001 nestjs
+
+USER nestjs
+
+EXPOSE 3000
+ENV PORT 3000
+
+CMD ["pnpm", "run", "start:prod"]

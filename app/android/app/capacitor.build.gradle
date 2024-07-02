@@ -24,6 +24,7 @@ dependencies {
     implementation project(':capawesome-capacitor-file-picker')
     implementation project(':sentry-capacitor')
     implementation project(':capacitor-voice-recorder')
+    implementation project(':capacitor-jitsi-meet')
 
 }
 
