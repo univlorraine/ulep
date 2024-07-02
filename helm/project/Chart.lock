@@ -13,3 +13,8 @@ dependencies:
   version: 19.5.2
 digest: sha256:6081721734dbbf6a9420401e699c1ee5de625817f5fc7761bf84a2badd9bf37a
 generated: "2024-06-12T15:03:22.864659303+02:00"
+- name: jitsi-meet
+  repository: https://jitsi-contrib.github.io/jitsi-helm/
+  version: 1.3.8
+digest: sha256:d11e0e96f50fc3528af8076e1111e942fdc690c9ded2485d2621c17eb6c2fe1e
+generated: "2024-06-18T17:29:56.294656+02:00"

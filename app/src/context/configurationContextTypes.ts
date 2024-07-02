@@ -42,6 +42,7 @@ import UpdateNotificationPermissionUsecaseInterface from '../domain/interfaces/U
 import GetConversationsUsecaseInterface from '../domain/interfaces/chat/GetConversationsUsecase.interface';
 import GetMessagesFromConversationUsecaseInterface from '../domain/interfaces/chat/GetMessagesFromConversationUsecase.interface';
 import SendMessageUsecaseInterface from '../domain/interfaces/chat/SendMessageUsecase.interface';
+import GetJitsiTokenUsecaseInterface from '../domain/interfaces/GetJitsiTokenUsecase.interface';
 
 export interface ConfigContextValueType {
     accessToken: string;
@@ -74,6 +75,7 @@ export interface ConfigContextValueType {
     getMessagesFromConversation: GetMessagesFromConversationUsecaseInterface;
     getPartnersToUniversity: GetPartnersToUniversityUsecaseInterface;
     getProfile: GetProfileUsecaseInterface;
+    getJitsiToken: GetJitsiTokenUsecaseInterface;
     getQuizzByLevel: GetQuizzByLevelUsecaseInterface;
     getUser: GetUserUsecaseInterface;
     getUniversity: GetUniversityInterface;

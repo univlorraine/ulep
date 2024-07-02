@@ -114,6 +114,7 @@ import {
   GetAllConversationsFromUserIdUsecase,
   GetMessagesFromConversationUsecase,
 } from 'src/core/usecases/chat';
+import { GetJitsiTokenUsecase } from './usecases/jitsi/get-jitsi-token.usecase';
 
 const usecases: Provider[] = [
   //Campus
@@ -235,6 +236,7 @@ const usecases: Provider[] = [
   UpdateInstanceUsecase,
   // Security
   ResetPasswordUsecase,
+  GetJitsiTokenUsecase,
   // Notifications
   SendMessageNotificationUsecase,
   // Chat
