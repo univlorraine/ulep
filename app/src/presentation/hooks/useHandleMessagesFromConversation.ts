@@ -31,13 +31,17 @@ const useHandleMessagesFromConversation = (conversationId: string) => {
         }));
     };
 
-    const loadMessages = async () => {
-        if (messagesResult.isScrollOver) return;
+    const loadMessages = async (isFirstMessage = false) => {
+        if (!isFirstMessage && messagesResult.isScrollOver) return;
         setMessagesResult({
             ...messagesResult,
-            isLoading: true,
+            isLoading: isFirstMessage, // Reload conversation only if it's the first message
         });
-        const messagesConversationResult = await getMessagesFromConversation.execute(conversationId, lastMessageId, 10);
+        const messagesConversationResult = await getMessagesFromConversation.execute(
+            conversationId,
+            isFirstMessage ? undefined : lastMessageId,
+            10
+        );
         if (messagesConversationResult instanceof Error) {
             return setMessagesResult({
                 messages: [],
@@ -50,8 +54,11 @@ const useHandleMessagesFromConversation = (conversationId: string) => {
         if (messagesConversationResult.length > 0) {
             setLastMessageId(messagesConversationResult[messagesConversationResult.length - 1].id);
         }
+
         setMessagesResult({
-            messages: [...messagesResult.messages, ...messagesConversationResult],
+            messages: isFirstMessage
+                ? messagesConversationResult
+                : [...messagesResult.messages, ...messagesConversationResult],
             error: undefined,
             isLoading: false,
             isScrollOver: messagesConversationResult.length < 10,
@@ -60,7 +67,7 @@ const useHandleMessagesFromConversation = (conversationId: string) => {
 
     useEffect(() => {
         const fetchData = async () => {
-            await loadMessages();
+            await loadMessages(true);
         };
 
         fetchData();

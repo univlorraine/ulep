@@ -9,6 +9,8 @@ interface AudioLineProps {
 const AudioLine: React.FC<AudioLineProps> = ({ audioFile }) => {
     const [isPlaying, setIsPlaying] = useState(false);
     const [progress, setProgress] = useState(0);
+    const [duration, setDuration] = useState(0);
+
     let audioFileString = '';
     if (typeof audioFile === 'string') {
         audioFileString = audioFile;
@@ -18,10 +20,12 @@ const AudioLine: React.FC<AudioLineProps> = ({ audioFile }) => {
     const audioRef = useRef(new Audio(audioFileString));
 
     useEffect(() => {
+        if (duration === 0) return;
+
         const audio = audioRef.current;
 
         const handleTimeUpdate = () => {
-            setProgress((audio.currentTime / audio.duration) * 100);
+            setProgress((audio.currentTime / duration) * 100);
         };
 
         const handleEnded = () => {
@@ -37,7 +41,19 @@ const AudioLine: React.FC<AudioLineProps> = ({ audioFile }) => {
             audio.removeEventListener('timeupdate', handleTimeUpdate);
             audio.removeEventListener('ended', handleEnded);
         };
-    }, []);
+    }, [duration]);
+
+    // Go to the end of the audio file to get the duration (infinity problem : https://stackoverflow.com/questions/21522036/html-audio-tag-duration-always-infinity )
+    useEffect(() => {
+        const audio = audioRef.current;
+        if (duration === 0 && (audio.duration === Infinity || Number.isNaN(audio.duration))) {
+            audio.currentTime = 100000000;
+            setTimeout(() => {
+                audio.currentTime = 0;
+                setDuration(audio.duration);
+            }, 1000);
+        }
+    }, [audioFile, audioRef, audioRef.current.duration]);
 
     const togglePlayPause = () => {
         const audio = audioRef.current;

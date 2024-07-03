@@ -14,7 +14,7 @@
     display: flex;
     align-items: flex-start;
     flex-direction: column;
-    height: 104px;
+    min-height: 104px;
     padding: 12px;
 }
 
@@ -43,6 +43,13 @@
     width: 100%;
 }
 
+.loader {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100%;
+}
+
 .sender-view {
     display: flex;
     justify-content: space-between;
@@ -69,6 +76,17 @@
     display: inline-block;
     max-width: 80%;
     max-height: 300px;
+}
+
+.preview-audio-container {
+    background-color: var(--primary-color);
+    border-radius: 12px;
+    position: relative;
+    display: inline-block;
+    max-width: 80%;
+    max-height: 300px;
+    margin-top: 12px;
+    padding: 5px 10px;
 }
 
 .preview-file-container {
