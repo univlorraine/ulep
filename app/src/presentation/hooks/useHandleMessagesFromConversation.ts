@@ -35,7 +35,7 @@ const useHandleMessagesFromConversation = (conversationId: string) => {
         if (!isFirstMessage && messagesResult.isScrollOver) return;
         setMessagesResult({
             ...messagesResult,
-            isLoading: true,
+            isLoading: isFirstMessage, // Reload conversation only if it's the first message
         });
         const messagesConversationResult = await getMessagesFromConversation.execute(
             conversationId,
