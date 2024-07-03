@@ -153,15 +153,14 @@ const Content: React.FC<Omit<ChatContentProps, 'isHybrid'>> = ({ conversation, g
                 </span>
                 <IonIcon icon={KebabSvg} />
             </div>
-            {!isLoading && (
+            {!isLoading ? (
                 <MessagesList
                     messages={messages}
                     loadMessages={loadMessages}
                     userId={profile.user.id}
                     isScrollOver={isScrollOver}
                 />
-            )}
-            {isLoading && (
+            ) : (
                 <div className={styles.loader}>
                     <Loader />
                 </div>
