@@ -181,7 +181,7 @@ const Content: React.FC<Omit<ChatContentProps, 'isHybrid'>> = ({ conversation, g
                         </div>
                     )}
                     {audioFile && (
-                        <div className={styles['preview-container']}>
+                        <div className={styles['preview-audio-container']}>
                             <button className={styles['cancel-audio-button']} onClick={() => setAudioFile(undefined)}>
                                 <img src={CloseBlackSvg} style={{ filter: 'invert(1)' }} />
                             </button>
