@@ -4,6 +4,7 @@ import TandemProfile from '../tandems/TandemProfile';
 import Modal from './Modal';
 
 interface TandemProfileModalProps {
+    id?: string;
     isVisible: boolean;
     onClose: () => void;
     language?: Language;
@@ -13,14 +14,31 @@ interface TandemProfileModalProps {
     profile?: Profile;
 }
 
-const TandemProfileModal: React.FC<TandemProfileModalProps> = ({ isVisible, language, level, onClose, partnerLearningLanguage, pedagogy, profile }) => {
-    if (!language || !profile || !level ||!pedagogy || !partnerLearningLanguage) {
+const TandemProfileModal: React.FC<TandemProfileModalProps> = ({
+    id,
+    isVisible,
+    language,
+    level,
+    onClose,
+    partnerLearningLanguage,
+    pedagogy,
+    profile,
+}) => {
+    if (!id || !language || !profile || !level || !pedagogy || !partnerLearningLanguage) {
         return <div />;
     }
 
     return (
         <Modal isVisible={isVisible} onClose={onClose} hideWhiteBackground>
-            <TandemProfile language={language} level={level} onClose={onClose} partnerLearningLanguage={partnerLearningLanguage} pedagogy={pedagogy} profile={profile} />
+            <TandemProfile
+                id={id}
+                language={language}
+                level={level}
+                onClose={onClose}
+                partnerLearningLanguage={partnerLearningLanguage}
+                pedagogy={pedagogy}
+                profile={profile}
+            />
         </Modal>
     );
 };

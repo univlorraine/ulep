@@ -5,6 +5,7 @@ import Profile from '../../../domain/entities/Profile';
 import TandemProfile from '../../components/tandems/TandemProfile';
 
 interface TandemProfileState {
+    id: string;
     language: Language;
     pedagogy: Pedagogy;
     profile: Profile;
@@ -15,14 +16,22 @@ interface TandemProfileState {
 const TandemProfilePage: React.FC = () => {
     const history = useHistory();
     const location = useLocation<TandemProfileState>();
-    const { language, level, pedagogy, profile, tandemLearningLanguage } = location.state || {};
+    const { id, language, level, pedagogy, profile, tandemLearningLanguage } = location.state || {};
 
     if (!profile || !language) {
         return <Redirect to="/home" />;
     }
     return (
         <IonPage>
-            <TandemProfile language={language} level={level} onClose={() => history.push('/home')} partnerLearningLanguage={tandemLearningLanguage} pedagogy={pedagogy} profile={profile} />
+            <TandemProfile
+                id={id}
+                language={language}
+                level={level}
+                onClose={() => history.push('/home')}
+                partnerLearningLanguage={tandemLearningLanguage}
+                pedagogy={pedagogy}
+                profile={profile}
+            />
         </IonPage>
     );
 };

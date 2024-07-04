@@ -1,7 +1,7 @@
 import { useIonToast } from '@ionic/react';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { Redirect, useHistory } from 'react-router';
+import { Redirect, useHistory, useLocation } from 'react-router';
 import Conversation from '../../domain/entities/chat/Conversation';
 import { useStoreState } from '../../store/storeTypes';
 import ChatContent from '../components/contents/ChatContent';
@@ -12,16 +12,29 @@ import useWindowDimensions from '../hooks/useWindowDimensions';
 import { HYBRID_MAX_WIDTH } from '../utils';
 import styles from './css/ConversationsPage.module.css';
 
+interface ConversationsPageParams {
+    tandemId: string;
+}
+
 const ConversationsPage: React.FC = () => {
     const { t } = useTranslation();
     const history = useHistory();
+    const location = useLocation<ConversationsPageParams>();
+    const { tandemId } = location.state || {};
     const [showToast] = useIonToast();
     const { width } = useWindowDimensions();
     const isHybrid = width < HYBRID_MAX_WIDTH;
     const profile = useStoreState((state) => state.profile);
-    const [currentConversation, setCurrentConversation] = useState<Conversation | null>(null);
+    const [currentConversation, setCurrentConversation] = useState<Conversation | null>();
 
     const { conversations, error, isLoading } = useGetConversations();
+
+    useEffect(() => {
+        if (tandemId && !currentConversation) {
+            const conversation = conversations.find((conversation) => conversation.id === tandemId);
+            setCurrentConversation(conversation);
+        }
+    }, [conversations]);
 
     if (error) {
         showToast({ message: t(error.message), duration: 5000 });
