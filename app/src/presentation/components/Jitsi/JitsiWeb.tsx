@@ -1,9 +1,11 @@
 import { JitsiMeeting } from '@jitsi/react-sdk';
-import { useRef } from 'react';
 import IJitsiMeetExternalApi from '@jitsi/react-sdk/lib/types/IJitsiMeetExternalApi';
+import { useRef } from 'react';
+import { useHistory } from 'react-router';
 import { JitsiProps } from './VisioContainer';
 
 const JitsiWeb = ({ jitsiDomain, language, roomName, jitsiToken }: JitsiProps) => {
+    const history = useHistory();
     const apiRef = useRef<IJitsiMeetExternalApi>();
 
     const handleApiReady = (apiObj: IJitsiMeetExternalApi) => {
@@ -65,7 +67,7 @@ const JitsiWeb = ({ jitsiDomain, language, roomName, jitsiToken }: JitsiProps) =
                     // you can also store it locally to execute commands
                     handleApiReady(externalApi);
                 }}
-                onReadyToClose={() => console.log('Jitsi Meet is ready to be closed')}
+                onReadyToClose={() => history.push('/home')}
                 getIFrameRef={(iframeRef) => {
                     iframeRef.style.height = '100%';
                 }}
