@@ -1,6 +1,6 @@
 import socketIo, { Socket } from 'socket.io-client';
 import { UserChat } from '../domain/entities/User';
-import { Message } from '../domain/entities/chat/Message';
+import { Message, MessageWithConversationId } from '../domain/entities/chat/Message';
 import SocketIoAdapterInterface from './interfaces/SocketIoAdapter.interface';
 
 class SocketIoAdapter implements SocketIoAdapterInterface {
@@ -33,8 +33,15 @@ class SocketIoAdapter implements SocketIoAdapterInterface {
         return message;
     }
 
-    onMessage(handler: (message: Message) => void): void {
-        this.socket!.on('message', (message: Message) => {
+    onMessage(conversationId: string, handler: (message: Message) => void): void {
+        //TODO: Later if asked we can call antoher function to update the last message conversation through this
+        //TODO: If not conversationId then call the handler for other conversation that will call an injected function to parent
+        //TODO: that will update ConversationContent ( WEB ONLY )
+        this.socket!.on('message', (message: MessageWithConversationId) => {
+            if (conversationId !== message.conversationId) {
+                return;
+            }
+
             handler(
                 new Message(
                     message.id,

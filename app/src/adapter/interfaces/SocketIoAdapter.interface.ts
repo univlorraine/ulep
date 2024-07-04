@@ -5,7 +5,7 @@ interface SocketIoAdapterInterface {
     disconnect(): Promise<boolean>;
     emit(message: Message): Promise<Message>;
     offMessage(): void;
-    onMessage(handler: (message: Message) => void): void;
+    onMessage(conversationId: string, handler: (message: Message) => void): void;
 }
 
 export default SocketIoAdapterInterface;

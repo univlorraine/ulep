@@ -121,13 +121,13 @@ const Content: React.FC<Omit<ChatContentProps, 'isHybrid'>> = ({ conversation, g
 
     useEffect(() => {
         socketIoAdapter.connect();
-        socketIoAdapter.onMessage(addNewMessage);
+        socketIoAdapter.onMessage(conversation.id, addNewMessage);
 
         return () => {
             socketIoAdapter.disconnect();
             socketIoAdapter.offMessage();
         };
-    }, []);
+    }, [conversation.id]);
 
     const handleImageClick = async () => {
         const image = await cameraAdapter.getPictureFromGallery();
