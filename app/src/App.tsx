@@ -3,7 +3,7 @@ import { IonApp, setupIonicReact } from '@ionic/react';
 import { IonReactRouter } from '@ionic/react-router';
 import * as Sentry from '@sentry/react';
 import { StoreProvider, useStoreRehydrated } from 'easy-peasy';
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import { ConfigContext, useConfig } from './context/ConfigurationContext';
 import getConfigContextValue from './context/getConfigurationContextValue';
@@ -163,53 +163,12 @@ const AppInstance: React.FC = () => {
     return <AppContext />;
 };
 
-const ScriptsContainer = ({ children }: { children: React.ReactElement }) => {
-    const [isScript1Loaded, setIsScript1Loaded] = useState<boolean>(false);
-    const [isScript2Loaded, setIsScript2Loaded] = useState<boolean>(false);
-    const [isReady, setIsReady] = useState<boolean>(false);
-    // TODO(industrialization): publish lib-jitsi-meet on npm to install it ourself (+ import types)
-
-    useEffect(() => {
-        if (isScript1Loaded && isScript2Loaded) {
-            setIsReady(true);
-        }
-    }, [isScript1Loaded, isScript2Loaded, setIsReady]);
-
-    useEffect(() => {
-        const script1 = document.createElement('script');
-        script1.src = 'https://code.jquery.com/jquery-3.5.1.min.js';
-        script1.async = true;
-        document.body.appendChild(script1);
-        script1.addEventListener('load', () => {
-            setIsScript1Loaded(true);
-        });
-
-        const script2 = document.createElement('script');
-        script2.src = 'https://meet.jit.si/libs/lib-jitsi-meet.min.js';
-        script2.async = true;
-        document.body.appendChild(script2);
-        script2.addEventListener('load', () => {
-            setIsScript2Loaded(true);
-        });
-
-        return () => {
-            document.body.removeChild(script1);
-            document.body.removeChild(script2);
-        };
-    }, []);
-
-    if (!isReady) return null;
-    return children;
-};
-
 const App: React.FC = () => {
     return (
         <IonApp>
-            <ScriptsContainer>
-                <StoreProvider store={Store}>
-                    <AppInstance />
-                </StoreProvider>
-            </ScriptsContainer>
+            <StoreProvider store={Store}>
+                <AppInstance />
+            </StoreProvider>
         </IonApp>
     );
 };
