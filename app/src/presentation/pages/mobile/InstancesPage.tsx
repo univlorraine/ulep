@@ -17,8 +17,8 @@ const instances: Instance[] = [
         image: ULLogo,
         name: 'Université de Lorraine et ses partenaires',
         apiUrl: import.meta.env.VITE_UL_API_URL,
-        chatUrl: import.meta.env.VITE_CHAT_URL,
-        socketChatUrl: import.meta.env.VITE_SOCKET_CHAT_URL,
+        chatUrl: import.meta.env.VITE_UL_CHAT_URL,
+        socketChatUrl: import.meta.env.VITE_UL_SOCKET_CHAT_URL,
     },
 ];
 
@@ -27,8 +27,8 @@ if (import.meta.env.VITE_ENV === 'dev') {
         image: ULLogo,
         name: 'Localhost dev mode',
         apiUrl: import.meta.env.VITE_LOCAL_API,
-        chatUrl: import.meta.env.VITE_CHAT_URL,
-        socketChatUrl: import.meta.env.VITE_SOCKET_CHAT_URL,
+        chatUrl: import.meta.env.VITE_LOCAL_CHAT_URL,
+        socketChatUrl: import.meta.env.VITE_LOCAL_SOCKET_CHAT_URL,
     });
 }
 

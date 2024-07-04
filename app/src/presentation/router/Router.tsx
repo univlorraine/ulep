@@ -1,23 +1,34 @@
 import { IonRouterOutlet } from '@ionic/react';
 import React from 'react';
 import { Route, Switch } from 'react-router-dom';
+import { useStoreState } from '../../store/storeTypes';
+import useIsUniversityOpen from '../hooks/useIsUniversityOpen';
+import useWindowDimensions from '../hooks/useWindowDimensions';
+import AuthFlowPage from '../pages/AuthFlowPage';
 import ConnectPage from '../pages/ConnectPage';
+import ConversationsPage from '../pages/ConversationsPage';
+import EditInformationsPage from '../pages/EditInformationsPage';
 import ForgotPasswordPage from '../pages/ForgotPasswordPage';
 import ForgotPasswordSentPage from '../pages/ForgotPasswordSentPage';
+import HomePage from '../pages/HomePage';
+import JitsiPage from '../pages/Jitsi';
 import LoginPage from '../pages/LoginPage';
 import PairingConfirmLanguagePage from '../pages/PairingConfirmLanguagePage';
 import PairingFinalPage from '../pages/PairingFinalPage';
 import PairingLanguagesPage from '../pages/PairingLanguagesPage';
 import PairingLevelPage from '../pages/PairingLevelPage';
+import PairingLevelStartPage from '../pages/PairingLevelStartPage';
 import PairingOptionsPage from '../pages/PairingOptionsPage';
+import PairingOtherLanguageSelectedPage from '../pages/PairingOtherLanguageSelectedPage';
 import PairingOtherLanguagesPage from '../pages/PairingOtherLanguagesPage';
 import PairingPedagogyPage from '../pages/PairingPedagogyPage';
 import PairingPreferencePage from '../pages/PairingPreferencePage';
 import PairingQuizzEndPage from '../pages/PairingQuizzEndPage';
 import PairingQuizzIntroductionPage from '../pages/PairingQuizzIntroductionPage';
-import QuizzPage from '../pages/QuizzPage';
 import PairingSelectCEFRPage from '../pages/PairingSelectCEFRPage';
 import PairingUnavailableLanguagePage from '../pages/PairingUnavailableLanguagePage';
+import QuizzPage from '../pages/QuizzPage';
+import ServiceClosePage from '../pages/ServiceClosePage';
 import SignUpAvailabilitiesPage from '../pages/SignUpAvailabilitiesPage';
 import SignUpBiographyPage from '../pages/SignUpBiographyPage';
 import SignupFinalPage from '../pages/SignUpFinalPage';
@@ -25,36 +36,27 @@ import SignUpFrequencyPage from '../pages/SignUpFrequencyPage';
 import SignUpGoalsPage from '../pages/SignUpGoalsPage';
 import SignUpInformationsPage from '../pages/SignUpInformationsPage';
 import SignUpInterestsPage from '../pages/SignUpInterestsPage';
-import AuthFlowPage from '../pages/AuthFlowPage';
 import SignUpLanguagesPage from '../pages/SignUpLanguagesPage';
 import SignUpPage from '../pages/SignUpPage';
+import SuspendedPage from '../pages/SuspendedPage';
 import WelcomePage from '../pages/WelcomePage';
+import CEFRQuizzEndPage from '../pages/cefr-quizz/CEFRQuizzEndPage';
+import CEFRQuizzLanguagePage from '../pages/cefr-quizz/CEFRQuizzLanguagePage';
+import CEFRQuizzOtherLanguagesPage from '../pages/cefr-quizz/CEFRQuizzOtherLanguagesPage';
+import ChatPage from '../pages/mobile/ChatPage';
 import ProfilePage from '../pages/mobile/ProfilePage';
 import ReportPage from '../pages/mobile/ReportPage';
 import SettingsPage from '../pages/mobile/SettingsPage';
 import TandemProfilePage from '../pages/mobile/TandemProfilePage';
 import TandemStatusPage from '../pages/mobile/TandemStatusPage';
+import { HYBRID_MAX_WIDTH } from '../utils';
+import BottomBar from './BottomBar';
 import MobileRoute from './MobileRoute';
 import PrivateRoute from './PrivateRoute';
-import PairingLevelStartPage from '../pages/PairingLevelStartPage';
-import { useStoreState } from '../../store/storeTypes';
-import SuspendedPage from '../pages/SuspendedPage';
-import PairingOtherLanguageSelectedPage from '../pages/PairingOtherLanguageSelectedPage';
-import useIsUniversityOpen from '../hooks/useIsUniversityOpen';
-import ServiceClosePage from '../pages/ServiceClosePage';
-import EditInformationsPage from '../pages/EditInformationsPage';
-import CEFRQuizzLanguagePage from '../pages/cefr-quizz/CEFRQuizzLanguagePage';
-import CEFRQuizzOtherLanguagesPage from '../pages/cefr-quizz/CEFRQuizzOtherLanguagesPage';
-import CEFRQuizzEndPage from '../pages/cefr-quizz/CEFRQuizzEndPage';
-import JitsiPage from '../pages/Jitsi';
-import BottomBar from './BottomBar';
-import { useConfig } from '../../context/ConfigurationContext';
-import ConversationsPage from '../pages/ConversationsPage';
-import HomePage from '../pages/HomePage';
-import ChatPage from '../pages/mobile/ChatPage';
 
 const OfflineRouter: React.FC = () => {
-    const { deviceAdapter } = useConfig();
+    const { width } = useWindowDimensions();
+    const isHybrid = width < HYBRID_MAX_WIDTH;
     const profile = useStoreState((store) => store.profile);
     const { openDate, closeDate, isUniversityOpen } = useIsUniversityOpen(profile?.user.university.id, [
         profile?.user.university.id,
@@ -198,10 +200,9 @@ const OfflineRouter: React.FC = () => {
                 <PrivateRoute exact path="/cefr/quizz/end">
                     <CEFRQuizzEndPage />
                 </PrivateRoute>
-                {/* Bottom bar for native platform */}
-                {deviceAdapter.isNativePlatform() && <BottomBar />}
-                {/* Routes for web platform */}
-                {!deviceAdapter.isNativePlatform() && (
+                {isHybrid ? (
+                    <BottomBar />
+                ) : (
                     <>
                         <PrivateRoute exact path="/home">
                             <HomePage />

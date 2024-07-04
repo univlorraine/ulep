@@ -1,20 +1,21 @@
 import React from 'react';
 import { useTranslation } from 'react-i18next';
+import { useHistory } from 'react-router';
 import { ArrowLeftSvg, CameraSvg, ChatSvg, CloseBlackSvg } from '../../../assets';
 import { ReactComponent as Background } from '../../../assets/background.svg';
 import { useConfig } from '../../../context/ConfigurationContext';
 import Language from '../../../domain/entities/Language';
 import Profile from '../../../domain/entities/Profile';
 import { Availabilites } from '../../../domain/entities/ProfileSignUp';
+import { useStoreState } from '../../../store/storeTypes';
 import useWindowDimensions from '../../hooks/useWindowDimensions';
 import { HYBRID_MAX_WIDTH, codeLanguageToFlag } from '../../utils';
 import AvailabilityLine from '../AvailabilityLine';
 import TandemCard from './TandemCard';
 import styles from './TandemProfile.module.css';
-import { useStoreState } from '../../../store/storeTypes';
-import { useHistory } from 'react-router';
 
 interface TandemProfileProps {
+    id: string;
     language: Language;
     level: CEFR;
     onClose: () => void;
@@ -24,6 +25,7 @@ interface TandemProfileProps {
 }
 
 const TandemProfile: React.FC<TandemProfileProps> = ({
+    id,
     language,
     level,
     onClose,
@@ -52,7 +54,7 @@ const TandemProfile: React.FC<TandemProfileProps> = ({
     };
 
     const onOpenChat = () => {
-        // TODO: Open chat
+        history.push('/conversations', { tandemId: id });
     };
 
     return (

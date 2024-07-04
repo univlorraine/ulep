@@ -4,16 +4,16 @@ import { useTranslation } from 'react-i18next';
 import { Redirect, useHistory } from 'react-router';
 import Tandem from '../../domain/entities/Tandem';
 import { useStoreState } from '../../store/storeTypes';
+import HomeContent from '../components/contents/HomeContent';
+import OnlineWebLayout from '../components/layout/OnlineWebLayout';
 import ProfileModal from '../components/modals/ProfileModal';
 import ReportModal from '../components/modals/ReportModal';
 import TandemProfileModal from '../components/modals/TandemProfileModal';
 import TandemStatusModal from '../components/modals/TandemStatusModal';
+import useGetHomeData from '../hooks/useGetHomeData';
+import useLogout from '../hooks/useLogout';
 import useWindowDimensions from '../hooks/useWindowDimensions';
 import { HYBRID_MAX_WIDTH } from '../utils';
-import useLogout from '../hooks/useLogout';
-import useGetHomeData from '../hooks/useGetHomeData';
-import HomeContent from '../components/contents/HomeContent';
-import OnlineWebLayout from '../components/layout/OnlineWebLayout';
 
 const HomePage: React.FC = () => {
     const { t } = useTranslation();
@@ -105,6 +105,7 @@ const HomePage: React.FC = () => {
             />
             <TandemProfileModal
                 isVisible={!!selectedTandem && selectedTandem.status === 'ACTIVE'}
+                id={selectedTandem?.id}
                 language={selectedTandem?.learningLanguage}
                 level={selectedTandem?.level}
                 onClose={() => setSelectedTandem(undefined)}
