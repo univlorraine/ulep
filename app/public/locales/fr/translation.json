@@ -145,7 +145,8 @@
             "report_button": "Signaler un problème",
             "report_sent": "Le signalement a été envoyé",
             "send_button": "Envoyer",
-            "title": "Signaler"
+            "title": "Signaler",
+            "note_required": "La note est obligatoire"
         },
         "settings": {
             "account": "Mon compte",
