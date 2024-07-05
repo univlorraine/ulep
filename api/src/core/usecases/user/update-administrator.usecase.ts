@@ -15,6 +15,7 @@ export class UpdateAdministratorCommand {
   universityId?: string;
   group?: KeycloakGroup;
   mimetype?: string;
+  shouldRemoveAdminRole?: boolean;
 }
 
 @Injectable()
@@ -39,6 +40,10 @@ export class UpdateAdministratorUsecase {
       throw new RessourceDoesNotExist('Administrator does not exist');
     }
 
+    if (command.shouldRemoveAdminRole) {
+      await this.keycloakClient.removeRealmRoleToUser(admin.id, 'admin');
+    }
+
     const keycloakUser = await this.keycloakClient.updateUser({
       id: admin.id,
       firstname: command.firstname || admin.firstName,
@@ -46,7 +51,7 @@ export class UpdateAdministratorUsecase {
       email: command.email || admin.email,
       password: command.password,
       universityId: command.universityId || admin.attributes?.universityId,
-      groups: [command.group],
+      groups: !command.shouldRemoveAdminRole ? [command.group] : [],
     });
 
     return keycloakUser;
