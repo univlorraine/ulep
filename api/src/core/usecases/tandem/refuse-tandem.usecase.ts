@@ -20,6 +20,7 @@ import {
 } from 'src/core/ports/university.repository';
 import { UUID_PROVIDER } from 'src/core/ports/uuid.provider';
 import { UuidProvider } from 'src/providers/services/uuid.provider';
+import { CHAT_SERVICE, ChatServicePort } from 'src/core/ports/chat.service';
 
 export type RefuseTandemCommand = {
   learningLanguageIds: string[];
@@ -43,6 +44,8 @@ export class RefuseTandemUsecase {
     private readonly refusedTandemsRepository: RefusedTandemsRepository,
     @Inject(EMAIL_GATEWAY)
     private readonly emailGateway: EmailGateway,
+    @Inject(CHAT_SERVICE)
+    private readonly chatService: ChatServicePort,
   ) {}
 
   async execute(command: RefuseTandemCommand): Promise<void> {
@@ -78,6 +81,7 @@ export class RefuseTandemUsecase {
 
       await this.tandemRepository.delete(existingTandem.id);
       this.sendTandemCancelledEmails(existingTandem);
+      this.chatService.deleteConversation(existingTandem.id);
     }
 
     const refusedTandem = new RefusedTandem({

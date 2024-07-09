@@ -1,0 +1,22 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: ulep-mongo-postinstall-configmap
+data:
+  mongo-init.js: |-
+    const rootUsername = "{{ .Values.chat.env.mongoInitUser }}";
+    const rootPassword = "{{ .Values.chat.env.mongoInitPassword }}";
+    const mongoUser = "{{ .Values.chat.env.mongoUser }}";
+    const mongoPassword = "{{ .Values.chat.env.mongoPassword }}";
+    const mongoDatabase = "{{ .Values.chat.env.mongoDatabase }}";
+
+    // Connect to the admin database
+    db = new Mongo().getDB("admin");
+    db.auth(rootUsername,rootPassword);
+
+    // Create application user
+    db.createUser({
+        user: mongoUser,
+        pwd: mongoPassword,
+        roles: [{ role: "readWrite", db: mongoDatabase }],
+    });

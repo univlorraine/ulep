@@ -1,23 +1,25 @@
 import DeleteIcon from '@mui/icons-material/Delete';
-import { Typography, Switch, SwitchProps, Box, Modal } from '@mui/material';
+import QuestionAnswerIcon from '@mui/icons-material/QuestionAnswer';
+import { Box, CircularProgress, Modal, Switch, SwitchProps, Typography } from '@mui/material';
 import React, { useState } from 'react';
 import {
-    TopToolbar,
+    Button,
     EditButton,
-    useTranslate,
+    EmailField,
+    FunctionField,
+    NumberField,
     Show,
     SimpleShowLayout,
     TextField,
+    TopToolbar,
     UrlField,
-    EmailField,
     useNotify,
-    useUpdate,
-    Button,
     useRefresh,
-    FunctionField,
-    NumberField,
+    useTranslate,
+    useUpdate,
 } from 'react-admin';
 import { ColorField } from 'react-admin-color-picker';
+import useGenerateConversation from '../../components/menu/useGenerateConversation';
 import usePurge from '../../components/menu/usePurge';
 import ConfigPagesHeader from '../../components/tabs/ConfigPagesHeader';
 import Instance from '../../entities/Instance';
@@ -34,6 +36,7 @@ const InstanceShow = () => {
     const notify = useNotify();
     const refresh = useRefresh();
     const { mutate: purge } = usePurge();
+    const { mutate: generateConversations, isLoading: isGeneratingConversations } = useGenerateConversation();
     const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
 
     const handleToggle: SwitchProps['onChange'] = async (event) => {
@@ -48,6 +51,12 @@ const InstanceShow = () => {
 
     const handlePurge = async () => {
         await purge();
+        setIsModalOpen(false);
+        refresh();
+    };
+
+    const handleGenerateConversations = async () => {
+        await generateConversations();
         setIsModalOpen(false);
         refresh();
     };
@@ -103,7 +112,25 @@ const InstanceShow = () => {
                             }}
                         >
                             <DeleteIcon />
-                            <Typography>{translate('purge.title')}</Typography>
+                            <Typography style={{ marginLeft: 12 }}>{translate('purge.title')}</Typography>
+                        </div>
+                    </Button>
+                    <Button color="secondary" onClick={handleGenerateConversations} variant="contained">
+                        <div
+                            style={{
+                                display: 'flex',
+                                alignItems: 'center',
+                                justifyContent: 'center',
+                            }}
+                        >
+                            <QuestionAnswerIcon />
+                            {isGeneratingConversations ? (
+                                <CircularProgress size={25} />
+                            ) : (
+                                <Typography style={{ marginLeft: 12 }}>
+                                    {translate('generateConversation.title')}
+                                </Typography>
+                            )}
                         </div>
                     </Button>
                 </SimpleShowLayout>

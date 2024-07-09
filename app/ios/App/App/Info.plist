@@ -33,6 +33,8 @@
 	<string></string>
 	<key>LSRequiresIPhoneOS</key>
 	<true/>
+	<key>NSMicrophoneUsageDescription</key>
+	<string>Microphone permission needed to record audio for voice messages</string>
 	<key>NSCameraUsageDescription</key>
 	<string>Camera permission needed to access filesystem</string>
 	<key>NSPhotoLibraryAddUsageDescription</key>

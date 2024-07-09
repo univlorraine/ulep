@@ -1,0 +1,125 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name:  "{{ include "etandem.fullname" . }}-{{ .Values.chat.name }}"
+  labels:
+    {{- include "etandem.labels" . | nindent 4 }}
+spec:
+  {{- if not .Values.chat.autoscaling.enabled }}
+  replicas: {{ .Values.chat.replicaCount }}
+  {{- end }}
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: "{{ include "etandem.name" . }}-{{ .Values.chat.name }}"
+      app.kubernetes.io/instance: "{{ .Release.Name }}"
+  template:
+    metadata:
+      {{- with .Values.podAnnotations }}
+      annotations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      labels:
+        app.kubernetes.io/name: "{{ include "etandem.name" . }}-{{ .Values.chat.name }}"
+        app.kubernetes.io/instance: "{{ .Release.Name }}"
+    spec:
+      {{- with .Values.imagePullSecrets }}
+      imagePullSecrets:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      serviceAccountName: {{ include "etandem.serviceAccountName" . }}
+      securityContext:
+        {{- toYaml .Values.podSecurityContext | nindent 8 }}
+      containers:        
+        - name: {{ .Chart.Name }}
+          securityContext:
+            {{- toYaml .Values.securityContext | nindent 12 }}
+          image: "{{ .Values.chat.image.repository }}:{{ .Values.chat.image.tag | default .Chart.AppVersion }}"
+          imagePullPolicy: {{ .Values.chat.image.pullPolicy }}          
+          ports:
+            - name: http
+              containerPort: {{ .Values.chat.service.appPort }}
+              protocol: TCP
+            - name: ws
+              containerPort: {{ .Values.chat.service.appPortWs }}
+              protocol: TCP
+          readinessProbe:
+            httpGet:
+              path: /health
+              port: {{ .Values.chat.service.appPort }}
+            initialDelaySeconds: {{ .Values.chat.probes.readiness.initialDelaySeconds }}
+            periodSeconds: {{ .Values.chat.probes.readiness.periodSeconds }}
+            failureThreshold: {{ .Values.chat.probes.readiness.failureThreshold }}
+          livenessProbe:
+            httpGet:
+              path: /health
+              port: {{ .Values.chat.service.appPort }}
+            initialDelaySeconds: {{ .Values.chat.probes.liveness.initialDelaySeconds }}
+            periodSeconds: {{ .Values.chat.probes.liveness.periodSeconds }}
+            failureThreshold: {{ .Values.chat.probes.liveness.failureThreshold }}
+          resources:
+            {{- toYaml .Values.resources | nindent 12 }}
+          env:
+            - name: ADMIN_URL
+              value: https://{{ .Values.adminUrl }}.{{ .Values.domain }}
+            - name: APP_URL
+              value: https://{{ .Values.webappUrl }}.{{ .Values.domain }}
+            - name: API_URL
+              value: https://{{ .Values.apiUrl }}.{{ .Values.domain }}
+            - name: DEBUG
+              value: "*"
+            - name: LOG_LEVEL
+              value: {{ .Values.chat.env.mongoLogLevel }}
+            - name: DATABASE_URL            
+              valueFrom:
+                secretKeyRef:
+                  name: "{{ include "etandem.fullname" . }}-secret-{{ .Values.chat.name }}"
+                  key: database-url
+            - name: REDIS_URL            
+              valueFrom:
+                secretKeyRef:
+                  name: "{{ include "etandem.fullname" . }}-secret-{{ .Values.chat.name }}"
+                  key: redis-url
+            - name: KEYCLOAK_BASE_URL
+              value: "https://{{ .Values.keycloakUrl }}.{{ .Values.domain }}"
+            - name: KEYCLOAK_REALM
+              value: "{{ .Values.api.env.keycloakRealm }}"
+            - name: KEYCLOAK_ADMIN
+              value: "{{ .Values.api.env.keycloakAdmin }}"
+            - name: KEYCLOAK_ADMIN_PASSWORD              
+              valueFrom:                
+                secretKeyRef:
+                  name: "{{ include "etandem.fullname" . }}-secret-{{ .Values.api.name }}"
+                  key: keycloak-admin-password
+            - name: KEYCLOAK_CLIENT_ID
+              value: "{{ .Values.api.env.keycloakClientId }}"
+            - name: KEYCLOAK_CLIENT_SECRET
+              valueFrom:
+                secretKeyRef:
+                  name: "{{ include "etandem.fullname" . }}-secret-{{ .Values.api.name }}"
+                  key: keycloak-client-secret
+            - name: S3_URL
+              value: "{{ .Values.api.env.minioUrl }}"
+            - name: S3_REGION
+              value: "eu-west-1"
+            - name: S3_ACCESS_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: "{{ include "etandem.fullname" . }}-secret-{{ .Values.api.name }}"
+                  key: minio-access-key
+            - name: S3_ACCESS_SECRET
+              valueFrom:
+                secretKeyRef:
+                  name: "{{ include "etandem.fullname" . }}-secret-{{ .Values.api.name }}"
+                  key: minio-secret-key
+      {{- with .Values.nodeSelector }}
+      nodeSelector:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.affinity }}
+      affinity:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.tolerations }}
+      tolerations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}

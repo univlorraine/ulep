@@ -1,9 +1,13 @@
-import { Injectable } from '@nestjs/common';
 import { Collection, PrismaService } from '@app/common';
-import { UserRelations, userMapper } from '../mappers/user.mapper';
-import { UserRepository, WhereProps } from 'src/core/ports/user.repository';
+import { Injectable } from '@nestjs/common';
 import { Device, User, UserStatus } from 'src/core/models';
+import {
+  UpdateUserResponse,
+  UserRepository,
+  WhereProps,
+} from 'src/core/ports/user.repository';
 import { UniversityRelations } from '../mappers';
+import { UserRelations, userMapper } from '../mappers/user.mapper';
 
 @Injectable()
 export class PrismaUserRepository implements UserRepository {
@@ -76,6 +80,17 @@ export class PrismaUserRepository implements UserRepository {
     return userMapper(instance);
   }
 
+  async ofIds(ids: string[]): Promise<User[]> {
+    const instances = await this.prisma.users.findMany({
+      where: {
+        id: { in: ids },
+      },
+      include: UserRelations,
+    });
+
+    return instances.map((item) => userMapper(item));
+  }
+
   async ofStatus(status: UserStatus): Promise<User[]> {
     const instances = await this.prisma.users.findMany({
       where: {
@@ -87,7 +102,7 @@ export class PrismaUserRepository implements UserRepository {
     return instances.map((item) => userMapper(item));
   }
 
-  async update(user: User): Promise<User> {
+  async update(user: User): Promise<UpdateUserResponse> {
     const data: any = {
       Organization: { connect: { id: user.university.id } },
       email: user.email,
@@ -125,7 +140,10 @@ export class PrismaUserRepository implements UserRepository {
       include: UserRelations,
     });
 
-    return userMapper(updatedUser);
+    return {
+      user: userMapper(updatedUser),
+      newContactId: user.contactId,
+    };
   }
 
   async delete(id: string): Promise<void> {

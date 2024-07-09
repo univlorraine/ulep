@@ -90,6 +90,21 @@ stages:
   rules:
     - if: $WORKING_DIR == "api" && $DOCKERFILE_PATH != "$WORKING_DIR/Dockerfile"
 
+⚙️ chat:
+  extends: .build
+  script:
+    - pnpm prisma generate
+    - pnpm run build
+    # - pnpm install --prod (génère une erreur dans le pod même en mode prod : Error: Cannot find module '@faker-js/faker')
+  artifacts:
+    paths:
+      - $CI_PROJECT_DIR/$WORKING_DIR/dist
+      - $CI_PROJECT_DIR/$WORKING_DIR/package.json
+      - $CI_PROJECT_DIR/$WORKING_DIR/node_modules
+    expire_in: 1 hour
+  rules:
+    - if: $WORKING_DIR == "chat" && $DOCKERFILE_PATH != "$WORKING_DIR/Dockerfile"
+
 # Build de l'admin (uniquement si on utilise un Dockerfile différent de celui par défaut)
 🖥️ admin:
   extends: .build
@@ -117,6 +132,8 @@ stages:
     - job: 🖥️ admin
       optional: true
     - job: ⚙️ api
+      optional: true
+    - job: ⚙️ chat
       optional: true
   image:
     name: gcr.io/kaniko-project/executor:debug

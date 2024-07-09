@@ -1,11 +1,13 @@
 import React from 'react';
 import { useTranslation } from 'react-i18next';
-import { ArrowLeftSvg, CloseBlackSvg } from '../../../assets';
+import { useHistory } from 'react-router';
+import { ArrowLeftSvg, CameraSvg, ChatSvg, CloseBlackSvg } from '../../../assets';
 import { ReactComponent as Background } from '../../../assets/background.svg';
 import { useConfig } from '../../../context/ConfigurationContext';
 import Language from '../../../domain/entities/Language';
 import Profile from '../../../domain/entities/Profile';
 import { Availabilites } from '../../../domain/entities/ProfileSignUp';
+import { useStoreState } from '../../../store/storeTypes';
 import useWindowDimensions from '../../hooks/useWindowDimensions';
 import { HYBRID_MAX_WIDTH, codeLanguageToFlag } from '../../utils';
 import AvailabilityLine from '../AvailabilityLine';
@@ -13,6 +15,7 @@ import TandemCard from './TandemCard';
 import styles from './TandemProfile.module.css';
 
 interface TandemProfileProps {
+    id: string;
     language: Language;
     level: CEFR;
     onClose: () => void;
@@ -22,6 +25,7 @@ interface TandemProfileProps {
 }
 
 const TandemProfile: React.FC<TandemProfileProps> = ({
+    id,
     language,
     level,
     onClose,
@@ -33,19 +37,72 @@ const TandemProfile: React.FC<TandemProfileProps> = ({
     const { configuration } = useConfig();
     const { width } = useWindowDimensions();
     const isHybrid = width < HYBRID_MAX_WIDTH;
+    const meProfile = useStoreState((state) => state.profile);
+    const history = useHistory();
+
+    if (!meProfile) {
+        return null;
+    }
+
+    const onOpenVideoCall = () => {
+        const [firstProfileId, secondProfileId] = [meProfile.user.id, profile.user.id].sort();
+
+        history.push({
+            pathname: '/jitsi',
+            search: `?roomName=${firstProfileId}_${secondProfileId}`,
+        });
+    };
+
+    const onOpenChat = () => {
+        history.push('/conversations', { tandemId: id });
+    };
+
     return (
-        <div className={`content-wrapper ${styles.container}`} style={{ backgroundColor: configuration.secondaryColor }}>
+        <div
+            className={`content-wrapper ${styles.container}`}
+            style={{ backgroundColor: configuration.secondaryColor }}
+        >
             <Background className={styles.image} style={{ color: configuration.secondaryBackgroundImageColor }} />
-            <button
-                aria-label={t('global.go_back') as string}
-                className={styles['back-button']}
-                style={{ justifyContent: !isHybrid ? 'flex-end' : 'flex-start' }}
-                onClick={onClose}
-            >
-                <img alt={t('global.go_back') as string} src={!isHybrid ? CloseBlackSvg : ArrowLeftSvg} />
-            </button>
+            <div className={styles.actions}>
+                {isHybrid && (
+                    <button
+                        aria-label={t('global.go_back') as string}
+                        className={styles['back-button']}
+                        style={{ alignItems: 'center', display: 'flex', flexGrow: 2 }}
+                        onClick={onClose}
+                    >
+                        <img alt={t('global.go_back') as string} src={ArrowLeftSvg} />
+                    </button>
+                )}
+                <button
+                    aria-label={t('global.open_chat') as string}
+                    className={styles['action-button']}
+                    onClick={onOpenChat}
+                >
+                    <img alt={t('global.open_chat') as string} src={ChatSvg} />
+                </button>
+                <button
+                    aria-label={t('global.start_video_call') as string}
+                    className={styles['action-button']}
+                    onClick={onOpenVideoCall}
+                >
+                    <img alt={t('global.start_video_call') as string} src={CameraSvg} />
+                </button>
+                {!isHybrid && (
+                    <button
+                        aria-label={t('global.go_back') as string}
+                        className={styles['back-button']}
+                        style={{ paddingLeft: '20px' }}
+                        onClick={onClose}
+                    >
+                        <img alt={t('global.go_back') as string} src={CloseBlackSvg} />
+                    </button>
+                )}
+            </div>
             <div className={styles.content}>
-                <span className="title extra-large-margin-bottom">{t(`home_page.tandem_validated.title`)}</span>
+                <span className="title extra-large-margin-bottom large-margin-top">
+                    {t(`home_page.tandem_validated.title`)}
+                </span>
                 <TandemCard profile={profile} language={language} />
 
                 <span className={styles.category}>{t(`global.email`)}</span>

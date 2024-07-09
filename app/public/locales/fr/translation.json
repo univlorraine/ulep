@@ -22,6 +22,34 @@
         "title": "Une erreur est survenue",
         "subtitle": "Veuillez nous excusez mais une erreur est survenue, veuillez rafraichir la page ou effectuer un retour en arrière"
     },
+    "message": {
+        "type": {
+            "noMessage": "Aucun message",
+            "image": "Image",
+            "audio": "Audio",
+            "file": "Fichier"
+        }
+    },
+    "date": {
+        "today": "Aujourd'hui",
+        "yesterday": "Hier"
+    },
+    "record": {
+        "error": {
+            "permission": "Permission refusée",
+            "unexpected": "Erreur inconnue"
+        }
+    },
+    "navigation": {
+        "bottom_bar": {
+            "home": "Accueil",
+            "conversations": "Conversations"
+        },
+        "sidebar": {
+            "home": "Accueil",
+            "conversations": "Conversations"
+        }
+    },
     "maintenance_page": {
         "title": "Maitenance en cours",
         "subtitle": "Veuillez nous excusez mais une maintenance est en cours"
@@ -70,6 +98,14 @@
         "welcome_btn": "Apprends une nouvelle langue en tandem",
         "close": "Fermer"
     },
+    "chat": {
+        "fileDownloaded": "Fichier téléchargé",
+        "me": "Moi",
+        "title": "Messages avec {{name}}",
+        "input": {
+            "placeholder": "Écris ton message..."
+        }
+    },
     "connection_page": {
         "connect_title": "As-tu déjà un compte ?",
         "connect_button": "Se connecter",
@@ -80,6 +116,9 @@
         "cancel": "Annuler",
         "title": "Voulez-vous vraiment supprimer votre compte ?",
         "validate": "Confirmer"
+    },
+    "conversations": {
+        "title": "Ma messagerie"
     },
     "home_page": {
         "my_university": {

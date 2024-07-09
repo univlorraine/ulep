@@ -1,0 +1,50 @@
+.container {
+    background-color: white;
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    padding: 20px;
+    width: 100%;
+}
+
+.content {
+    background-color: white;
+    flex: 1;
+}
+
+.header {
+    padding-bottom: 20px;
+    border-bottom: 1px solid #ebebeb;
+    width: 100%;
+}
+
+.title {
+    color: #000;
+    font-family: 'Roboto';
+    font-size: 37px;
+    font-style: normal;
+    font-weight: 700;
+    line-height: 40px;
+}
+
+@media (min-width: 768px) {
+    .container {
+        background-color: #f4f5fe;
+    }
+
+    .content {
+        background-color: #f4f5fe;
+        --ion-background-color: #f4f5fe;
+    }
+}
+
+@media (min-width: 768px) and (max-width: 1024px) {
+    .container {
+        background-color: white;
+        display: flex;
+        flex-direction: column;
+        height: 100%;
+        padding: 20px;
+        width: 100%;
+    }
+}

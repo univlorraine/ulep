@@ -21,6 +21,15 @@ export interface SendTandemClosureNoticeNotification {
   };
 }
 
+export interface SendMessageNotification {
+  to: Notification[];
+  content: string;
+  sender: {
+    firstname: string;
+    lastname: string;
+  };
+}
+
 export interface NotificationGateway {
   sendTandemClosureNoticeNotification(
     props: SendTandemClosureNoticeNotification,
@@ -28,4 +37,5 @@ export interface NotificationGateway {
   sendWelcomeNotification: NotificationFunction;
   sendPausedTandemNotification: NotificationFunction;
   sendUnpausedTandemNotification: NotificationFunction;
+  sendMessageNotification(props: SendMessageNotification): Promise<void>;
 }

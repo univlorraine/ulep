@@ -81,6 +81,8 @@ spec:
               value: "https://{{ .Values.adminUrl }}.{{ .Values.domain }}"
             - name: APP_URL
               value: "https://{{ .Values.api.env.appUrl }}.{{ .Values.domain }}"
+            - name: CHAT_URL
+              value: "https://{{ .Values.chatUrl }}.{{ .Values.domain }}"
             - name: LOG_LEVEL
               value: "{{ .Values.api.env.logLevel }}"
             - name: DEFAULT_TRANSLATION_LANGUAGE
@@ -110,6 +112,8 @@ spec:
                   key: keycloak-client-secret
             - name: KEYCLOAK_ADMIN_ROLE_NAME
               value: "{{ .Values.api.env.keycloakAdminRoleName }}"
+            - name: WEBLATE_API_URL
+              value: "{{ .Values.api.env.weblateApiUrl }}"
             - name: S3_URL
               value: "{{ .Values.api.env.minioUrl }}"
             - name: S3_REGION

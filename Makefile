@@ -3,6 +3,7 @@ DOCKER_COMP = docker compose
 
 # Docker containers
 NEST = $(DOCKER_COMP) exec api
+CHAT = $(DOCKER_COMP) exec chat
 
 SERVICE ?= $(shell bash -c 'read -p "Service: " service; echo $$service')
 
@@ -39,6 +40,9 @@ lint: ## Lint the code and fix issues
 
 migration: ## Create a migration from changes in schema and apply it to the database.
 	@$(NEST) pnpm migrate
+
+migration-chat: ## Create a migration from changes in schema and apply it to the database.
+	@$(CHAT) pnpm migrate
 
 seed: ## Seed the database with test data
 	@$(NEST) pnpm seed

@@ -1,8 +1,9 @@
 import { TailSpin } from 'react-loader-spinner';
-import { useConfig } from '../../context/ConfigurationContext';
 import { Style } from 'react-loader-spinner/dist/type';
+import { useConfig } from '../../context/ConfigurationContext';
 
 interface LoaderParams {
+    color?: string;
     height?: string | number;
     width?: string | number;
     radius?: string | number;
@@ -12,12 +13,12 @@ interface LoaderParams {
     strokeWidth?: string | number;
 }
 
-const Loader = ({ height, width, radius, ariaLabel, wrapperStyle, wrapperClass, strokeWidth }: LoaderParams) => {
+const Loader = ({ height, width, radius, ariaLabel, wrapperStyle, wrapperClass, strokeWidth, color }: LoaderParams) => {
     const { configuration } = useConfig();
 
     return (
         <TailSpin
-            color={configuration.primaryColor}
+            color={color || configuration.primaryColor}
             radius={radius || '1'}
             visible={true}
             strokeWidth={strokeWidth}

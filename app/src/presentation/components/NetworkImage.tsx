@@ -1,7 +1,7 @@
-import useGetMediaObject from "../hooks/useGetMediaObject";
-import { IonSpinner } from "@ionic/react";
+import { IonSpinner } from '@ionic/react';
+import useGetMediaObject from '../hooks/useGetMediaObject';
 
-type NetworkImageProps =  {
+type NetworkImageProps = {
     id: string;
     placeholder?: string;
 } & Omit<React.ComponentPropsWithRef<'img'>, 'src'>;
@@ -10,12 +10,10 @@ const NetworkImage: React.FC<NetworkImageProps> = ({ id, placeholder, ...props }
     const { loading, image, error } = useGetMediaObject({ id });
 
     if (loading) {
-        return <IonSpinner color={"primary"}></IonSpinner>;
+        return <IonSpinner color={'primary'}></IonSpinner>;
     }
 
-    return (
-        <img src={error ? placeholder : image} {...props} />
-    );
+    return <img src={error ? placeholder : image} {...props} />;
 };
 
 export default NetworkImage;

@@ -20,6 +20,8 @@ import {
   UserRepository,
 } from 'src/core/ports/user.repository';
 import { utcToZonedTime } from 'date-fns-tz';
+import { CHAT_SERVICE } from 'src/core/ports/chat.service';
+import { ChatService } from 'src/providers/services/chat.service';
 
 export class CreateUserCommand {
   email: string;
@@ -49,6 +51,8 @@ export class CreateUserUsecase {
     private readonly countryRepository: CountryRepository,
     @Inject(EMAIL_GATEWAY)
     private readonly emailGateway: EmailGateway,
+    @Inject(CHAT_SERVICE)
+    private readonly chatService: ChatService,
   ) {}
 
   async execute(command: CreateUserCommand): Promise<User> {
@@ -135,6 +139,13 @@ export class CreateUserUsecase {
           contactId: university.defaultContactId,
         }),
       );
+
+      if (university.defaultContactId) {
+        await this.chatService.createConversation([
+          university.defaultContactId,
+          user.id,
+        ]);
+      }
 
       // Notify the university about the new registration
       if (user.university.notificationEmail) {

@@ -1,4 +1,4 @@
-import { KeycloakClient } from '@app/keycloak';
+import { KeycloakClient, KeycloakUser } from '@app/keycloak';
 import {
   Body,
   Controller,
@@ -7,6 +7,7 @@ import {
   Post,
   Query,
   Res,
+  UseGuards,
 } from '@nestjs/common';
 import * as Swagger from '@nestjs/swagger';
 import {
@@ -15,10 +16,14 @@ import {
   BearerTokensResponse,
   RefreshTokenRequest,
   ResetPasswordRequest,
+  JitsiTokensResponse,
 } from '../dtos';
 import { ConfigService } from '@nestjs/config';
 import { Env } from 'src/configuration';
 import { ResetPasswordUsecase } from 'src/core/usecases/security/reset-password.usecase';
+import { AuthenticationGuard } from '../guards';
+import { CurrentUser } from '../decorators';
+import { GetJitsiTokenUsecase } from 'src/core/usecases/jitsi/get-jitsi-token.usecase';
 
 @Controller('authentication')
 @Swagger.ApiTags('Authentication')
@@ -30,6 +35,7 @@ export class SecurityController {
   constructor(
     private readonly keycloakClient: KeycloakClient,
     private readonly resetPasswordUsecase: ResetPasswordUsecase,
+    private readonly getJitsiTokenUsecase: GetJitsiTokenUsecase,
     env: ConfigService<Env, true>,
   ) {
     this.#appUrl = env.get('APP_URL');
@@ -61,6 +67,18 @@ export class SecurityController {
     const url = await this.keycloakClient.getStandardFlowUrl(redirect);
 
     res.redirect(url);
+  }
+
+  @Get('jitsi/token')
+  @UseGuards(AuthenticationGuard)
+  @Swagger.ApiOperation({ summary: 'Request a Jisti JWT token.' })
+  @Swagger.ApiResponse({ status: 302 })
+  async getJitsiToken(
+    @CurrentUser() user: KeycloakUser,
+  ): Promise<JitsiTokensResponse> {
+    const token = await this.getJitsiTokenUsecase.execute(user);
+
+    return new JitsiTokensResponse({ token });
   }
 
   @Post('flow/code')

@@ -21,4 +21,15 @@ class User {
     ) {}
 }
 
+export class UserChat implements Pick<User, 'id' | 'firstname' | 'lastname' | 'avatar' | 'email'> {
+    constructor(
+        public readonly id: string,
+        public readonly firstname: string,
+        public readonly lastname: string,
+        public readonly email: string,
+        public readonly isAdministrator: boolean,
+        public readonly avatar?: MediaObject
+    ) {}
+}
+
 export default User;

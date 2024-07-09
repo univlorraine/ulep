@@ -15,8 +15,13 @@ class CameraAdapter implements CameraAdapterInterface {
             const file = new File([blob], 'avatar', { type: blob.type });
             return file;
         }
+
         return undefined;
     };
-}
 
+    checkPermissions = async () => {
+        const res = await Camera.checkPermissions();
+        await Camera.requestPermissions({ permissions: ['camera'] });
+    };
+}
 export default CameraAdapter;
