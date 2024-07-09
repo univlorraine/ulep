@@ -15,7 +15,7 @@ import PageTitle from '../../../components/PageTitle';
 import { DisplayGender, DisplayLearningType, DisplayRole, DisplaySameTandem } from '../../../components/translated';
 import Language from '../../../entities/Language';
 import { LearningLanguage, getLearningLanguageUniversityAndCampusString } from '../../../entities/LearningLanguage';
-import ProfileLink from '../ui/ProfileLink';
+import ProfileLink from '../ui/ProfileTandemLink';
 import ShowTandems from './ShowTandems.old';
 
 const Title = () => {

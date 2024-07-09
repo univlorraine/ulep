@@ -1,35 +1,65 @@
+import { TabContext, TabList } from '@mui/lab';
+import { Box, Tab, Typography } from '@mui/material';
 import React from 'react';
 
-import { FunctionField, Show } from 'react-admin';
+import { FunctionField, Show, SimpleShowLayout, useRecordContext, useTranslate } from 'react-admin';
+
+import { useLocation } from 'react-router-dom';
+import { ProfileWithTandems, getProfileDisplayName } from '../../../entities/Profile';
+import codeLanguageToFlag from '../../../utils/codeLanguageToFlag';
+import LearningLanguageTabContent from './LearninLanguageTabContent';
 
 import './show.css';
-import { ProfileWithTandems } from '../../../entities/Profile';
+
+const TabsComponent = () => {
+    const translate = useTranslate();
+    const record: ProfileWithTandems = useRecordContext();
+
+    const { state: learningLanguageCode } = useLocation();
+    const [value, setValue] = React.useState(
+        learningLanguageCode?.learningLanguageCode || record.learningLanguages[0].code
+    );
+    const handleChange = (event: React.SyntheticEvent, newValue: string) => {
+        setValue(newValue);
+    };
+
+    return (
+        <TabContext value={value}>
+            <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
+                <TabList onChange={handleChange}>
+                    {record.learningLanguages.map((learningLanguage) => {
+                        const label = learningLanguage.tandem
+                            ? `${learningLanguage.name} (${translate(
+                                  `learning_languages.status.${learningLanguage.tandem.status}`
+                              )})`
+                            : learningLanguage.name;
+
+                        return <Tab key={learningLanguage.code} label={label} value={learningLanguage.code} />;
+                    })}
+                </TabList>
+            </Box>
+            {record.learningLanguages.map((learningLanguage) => (
+                <LearningLanguageTabContent key={learningLanguage.code} learningLanguage={learningLanguage} />
+            ))}
+        </TabContext>
+    );
+};
 
 const LearningLanguageShow = () => (
     <Show>
         <FunctionField
-            render={(record: ProfileWithTandems) => {
-                console.log(record);
-
-                return <div />;
-            }}
-        />
-        {/*             <TabbedShowLayout>
-                <TabbedShowLayout.Tab label="Espagnol (en attente)">
-                    <Typography sx={{ marginTop: 4 }} variant="h3">
-                        {translate('learning_languages.show.management.title')}
+            render={(profile: ProfileWithTandems) => (
+                <Box sx={{ marginBottom: 2 }}>
+                    <Typography variant="h2">
+                        {getProfileDisplayName(profile)} ({codeLanguageToFlag(profile.nativeLanguage.code)})
                     </Typography>
-
-                    <Box className="tandem-management" />
-
-                    <Box sx={{ padding: 2 }}>
-                        <Typography sx={{ marginTop: 4 }} variant="h3">
-                            {translate('learning_languages.show.other_proposals.title')}
-                        </Typography>
-                    </Box>
-                </TabbedShowLayout.Tab>
-                <TabbedShowLayout.Tab label="Anglais (apparié)">Lorem ipsum</TabbedShowLayout.Tab>
-            </TabbedShowLayout> */}
+                </Box>
+            )}
+        />
+        <SimpleShowLayout>
+            <TabsComponent />
+        </SimpleShowLayout>
     </Show>
 );
+
 export default LearningLanguageShow;

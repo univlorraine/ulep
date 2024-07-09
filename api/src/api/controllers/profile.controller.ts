@@ -168,7 +168,12 @@ export class ProfileController {
   @Roles(Role.ADMIN)
   @UseGuards(AuthenticationGuard)
   @SerializeOptions({
-    groups: ['read', 'learning-language:tandem', 'learning-language:profile'],
+    groups: [
+      'read',
+      'learning-language:tandem',
+      'learning-language:profile',
+      'tandem:university-validations',
+    ],
   })
   @Swagger.ApiOperation({
     summary: 'Retrieve the collection of Profile ressource with tandems.',
@@ -258,6 +263,31 @@ export class ProfileController {
     const profile = await this.getProfileUsecase.execute({ id });
 
     return ProfileResponse.fromDomain(profile, languageCode);
+  }
+
+  @Get('/with-tandem/:id')
+  @Roles(Role.ADMIN)
+  @UseGuards(AuthenticationGuard)
+  @SerializeOptions({
+    groups: [
+      'read',
+      'learning-language:tandem',
+      'learning-language:profile',
+      'tandem:university-validations',
+    ],
+  })
+  @Swagger.ApiOperation({
+    summary: 'Retrieve the collection of Profile ressource with tandems.',
+  })
+  @CollectionResponse(ProfileResponse)
+  async getProfileWithTandems(
+    @Param('id', ParseUUIDPipe) id: string,
+  ): Promise<ProfileResponse> {
+    const profile = await this.getProfileUsecase.execute({ id });
+
+    console.log({ profile: profile.learningLanguages[0].tandem });
+
+    return ProfileResponse.fromDomain(profile);
   }
 
   @Post(':id/learning-language')

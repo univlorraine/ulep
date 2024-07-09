@@ -20,7 +20,9 @@ import { LearningLanguage } from '../../../entities/LearningLanguage';
 import { ProfileWithTandems, getProfileDisplayName } from '../../../entities/Profile';
 import codeLanguageToFlag from '../../../utils/codeLanguageToFlag';
 import isAgeCriterionMet from '../../../utils/isAgeCriterionMet';
-import ProfileLink from '../ui/ProfileLink';
+import TandemActions from '../show/Actions/TandemActions';
+import ProfileTandemDetailLink from '../ui/ProfileTandemDetailLink';
+import ProfileLink from '../ui/ProfileTandemLink';
 import useLearningLanguagesStore from '../useLearningLanguagesStore';
 import PairingActions from './PairingActions';
 
@@ -49,25 +51,38 @@ const LearningLanguageList = () => {
 
     const { data: universities } = useGetList('universities');
 
-    const filters = [
-        <SelectInput
-            key="universityFilter"
-            choices={universities}
-            label={translate('learning_languages.list.filters.university.label')}
-            source="user.university"
-            alwaysOn
-        />,
-        <TextInput
-            key="userLastname"
-            label={translate('learning_languages.list.filters.user_lastname.label')}
-            source="user.lastname"
-            alwaysOn
-        />,
-    ];
+    const adaptedFilters = identity?.isCentralUniversity
+        ? [
+              <SelectInput
+                  key="universityFilter"
+                  choices={universities}
+                  label={translate('learning_languages.list.filters.university.label')}
+                  source="user.university"
+                  alwaysOn
+              />,
+              <TextInput
+                  key="userLastname"
+                  label={translate('learning_languages.list.filters.user_lastname.label')}
+                  source="user.lastname"
+                  alwaysOn
+              />,
+          ]
+        : [
+              <TextInput
+                  key="userLastname"
+                  label={translate('learning_languages.list.filters.user_lastname.label')}
+                  source="user.lastname"
+                  alwaysOn
+              />,
+          ];
+
+    const filters = universities ? adaptedFilters : [];
 
     if (isLoadingIdentity || !identity) {
         return <Loading />;
     }
+
+    console.log({ identity });
 
     return (
         <Box className="profiles-with-tandem-list">
@@ -87,6 +102,9 @@ const LearningLanguageList = () => {
                     </TopToolbar>
                 }
                 exporter={false}
+                filter={{
+                    university: identity?.isCentralUniversity ? undefined : identity.universityId,
+                }}
                 filters={filters}
             >
                 <Datagrid bulkActionButtons={false}>
@@ -103,7 +121,7 @@ const LearningLanguageList = () => {
                                 {record.learningLanguages.map((learningLanguage) => {
                                     if (learningLanguage.tandem) {
                                         return (
-                                            <Box key={learningLanguage.code} className="line tandem">
+                                            <Box key={learningLanguage.code} className="line tandem profile">
                                                 <PeopleAltIcon color="disabled" fontSize="small" />
                                                 <Box sx={{ display: 'flex', flexDirection: 'column' }}>
                                                     {getProfileDisplayName(
@@ -127,7 +145,7 @@ const LearningLanguageList = () => {
                                     }
 
                                     return (
-                                        <Box key={learningLanguage.code} className="line tandem">
+                                        <Box key={learningLanguage.code} className="line tandem profile">
                                             <PeopleAltIcon color="disabled" fontSize="small" />
                                             {translate('learning_languages.list.noTandem')}{' '}
                                             {codeLanguageToFlag(learningLanguage.code)}
@@ -174,26 +192,29 @@ const LearningLanguageList = () => {
                         render={(record: ProfileWithTandems) => (
                             <>
                                 <Box className="line">
-                                    <ColoredChips color="default" label={record.user.age} />
+                                    <ColoredChips color="default" label={record.user.age} variant="outlined" />
                                 </Box>
                                 {record.learningLanguages.map((learningLanguage: LearningLanguage) => {
                                     if (learningLanguage.tandem) {
+                                        const criterionColor = isAgeCriterionMet(
+                                            record.user.age,
+                                            learningLanguage.tandem.learningLanguages[0].profile.user.age
+                                        )
+                                            ? 'success'
+                                            : 'error';
+                                        const isAgeCritetionNeeded = learningLanguage.sameAge
+                                            ? criterionColor
+                                            : 'success';
+
                                         return (
                                             <Box key={learningLanguage.code} className="line tandem">
                                                 <ColoredChips
                                                     key={learningLanguage.code}
-                                                    color={
-                                                        isAgeCriterionMet(
-                                                            record.user.age,
-                                                            learningLanguage.tandem.learningLanguages[0].profile.user
-                                                                .age
-                                                        )
-                                                            ? 'success'
-                                                            : 'error'
-                                                    }
+                                                    color={isAgeCritetionNeeded}
                                                     label={
                                                         learningLanguage.tandem.learningLanguages[0].profile.user.age
                                                     }
+                                                    variant="outlined"
                                                 />
                                             </Box>
                                         );
@@ -212,6 +233,7 @@ const LearningLanguageList = () => {
                                     <ColoredChips
                                         color="default"
                                         label={translate(`learning_languages.roles.${record.user.role}`)}
+                                        variant="outlined"
                                     />
                                 </Box>
                                 {record.learningLanguages.map((learningLanguage: LearningLanguage) => {
@@ -229,6 +251,7 @@ const LearningLanguageList = () => {
                                                     label={translate(
                                                         `learning_languages.roles.${learningLanguage.tandem.learningLanguages[0].profile.user.role}`
                                                     )}
+                                                    variant="outlined"
                                                 />
                                             </Box>
                                         );
@@ -243,12 +266,12 @@ const LearningLanguageList = () => {
                         label={translate('learning_languages.list.tableColumns.score')}
                         render={(record: ProfileWithTandems) => (
                             <>
-                                <div className="line" />
+                                <Box className="line" />
                                 {record.learningLanguages.map((learningLanguage: LearningLanguage) => {
                                     if (learningLanguage.tandem) {
                                         return (
                                             <Box key={learningLanguage.code} className="line tandem">
-                                                {learningLanguage.tandem.compatibilityScore * 100}%
+                                                {(learningLanguage.tandem.compatibilityScore * 100).toFixed(0)}%
                                             </Box>
                                         );
                                     }
@@ -262,7 +285,7 @@ const LearningLanguageList = () => {
                         label={translate('learning_languages.list.tableColumns.type')}
                         render={(record: ProfileWithTandems) => (
                             <>
-                                <div className="line" />
+                                <Box className="line" />
                                 {record.learningLanguages.map((learningLanguage: LearningLanguage) => {
                                     if (learningLanguage.tandem) {
                                         return (
@@ -283,7 +306,7 @@ const LearningLanguageList = () => {
                         label={translate('learning_languages.list.tableColumns.pairing')}
                         render={(record: ProfileWithTandems) => (
                             <>
-                                <div className="line" />
+                                <Box className="line" />
                                 {record.learningLanguages.map((learningLanguage: LearningLanguage) => {
                                     if (learningLanguage.tandem) {
                                         return (
@@ -300,7 +323,78 @@ const LearningLanguageList = () => {
                     />
                     <FunctionField
                         label={translate('learning_languages.list.tableColumns.actions')}
-                        render={() => <div />}
+                        render={(record: ProfileWithTandems) => (
+                            <>
+                                <Box className="line" />
+                                {record.learningLanguages.map((learningLanguage: LearningLanguage) => {
+                                    if (
+                                        learningLanguage.tandem &&
+                                        learningLanguage.tandem.status !== 'ACTIVE' &&
+                                        learningLanguage.tandem.status !== 'PAUSED'
+                                    ) {
+                                        return (
+                                            <Box key={learningLanguage.code} className="line">
+                                                <TandemActions
+                                                    learningLanguageIds={[
+                                                        learningLanguage.id,
+                                                        learningLanguage.tandem.learningLanguages[0].id,
+                                                    ]}
+                                                    onTandemAction={() => refresh()}
+                                                    relaunchGlobalRoutineOnAccept={
+                                                        !learningLanguage.tandem ||
+                                                        learningLanguage?.id !==
+                                                            learningLanguage.tandem.learningLanguages[0].id
+                                                    }
+                                                    relaunchGlobalRoutineOnRefuse={
+                                                        learningLanguage?.id ===
+                                                        learningLanguage.tandem.learningLanguages[0].id
+                                                    }
+                                                />
+                                            </Box>
+                                        );
+                                    }
+
+                                    if (
+                                        learningLanguage.tandem &&
+                                        (learningLanguage.tandem.status === 'ACTIVE' ||
+                                            learningLanguage.tandem.status === 'PAUSED')
+                                    ) {
+                                        return (
+                                            <Box key={learningLanguage.code} className="line">
+                                                <TandemActions
+                                                    learningLanguageIds={[
+                                                        learningLanguage.id,
+                                                        learningLanguage.tandem.learningLanguages[0].id,
+                                                    ]}
+                                                    onTandemAction={() => refresh()}
+                                                    tandemId={learningLanguage.tandem?.id}
+                                                    tandemStatus={learningLanguage.tandem?.status}
+                                                    disableCreateButton
+                                                    relaunchGlobalRoutineOnRefuse
+                                                />
+                                            </Box>
+                                        );
+                                    }
+
+                                    return <Box key={learningLanguage.code} className="line tandem" />;
+                                })}
+                            </>
+                        )}
+                    />
+                    <FunctionField
+                        render={(record: ProfileWithTandems) => (
+                            <>
+                                <Box className="line" />
+                                {record.learningLanguages.map((learningLanguage: LearningLanguage) => (
+                                    <Box key={learningLanguage.code} className="line">
+                                        <ProfileTandemDetailLink
+                                            learningLanguageCode={learningLanguage.code}
+                                            profile={record}
+                                        />
+                                    </Box>
+                                ))}
+                            </>
+                        )}
                     />
                 </Datagrid>
             </List>

@@ -67,16 +67,6 @@ const theme: RaThemeOptions = {
                 },
             },
         },
-        MuiButton: {
-            styleOverrides: {
-                root: {
-                    '&.MuiButton-textPrimary': {
-                        borderRadius: '4px',
-                        border: '1px solid #000000',
-                    },
-                },
-            },
-        },
         RaChipField: {
             styleOverrides: {
                 root: {

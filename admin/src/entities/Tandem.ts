@@ -14,6 +14,9 @@ export type TandemSummary = {
     status: TandemStatus;
     learningLanguages: LearningLanguage[];
     compatibilityScore: number;
+    universityValidations?: string[];
+    createdAt: Date;
+    updatedAt: Date;
 };
 
 export const isTandemActive = (tandem?: TandemSummary) => tandem?.status === TandemStatus.ACTIVE;

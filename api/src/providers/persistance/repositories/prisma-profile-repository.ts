@@ -19,7 +19,7 @@ export class PrismaProfileRepository implements ProfileRepository {
   async ofId(id: string): Promise<Profile | null> {
     const entry = await this.prisma.profiles.findUnique({
       where: { id },
-      include: ProfilesRelations,
+      include: ProfilesRelationsWithTandemProfile,
     });
 
     if (!entry) {

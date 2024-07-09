@@ -14,6 +14,7 @@
 .tandem-management .description {
     color: #767676;
     margin-bottom: 18px;
+    height: 50px;
 }
 
 div.tandem-management > div {
@@ -27,10 +28,16 @@ div.tandem-management > div {
 }
 
 .tandem-management .line {
-    padding: 15px 0;
+    height: 50px;
     display: flex;
+    align-items: center;
     gap: 10px;
     border-bottom: 1px solid #e0e0e0;
+}
+
+.tandem-management .value {
+    display: flex;
+    align-items: center;
 }
 
 .line.profile-name {
@@ -58,4 +65,16 @@ div.tandem-management > div {
 
 .tandem-table th {
     font-weight: 700;
+}
+
+.tandem-table .chips-box {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+}
+
+.tandem-actions {
+    display: flex;
+    gap: 10px;
+    margin: 15px 0;
 }

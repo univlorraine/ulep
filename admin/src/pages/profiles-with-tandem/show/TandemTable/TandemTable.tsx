@@ -1,16 +1,16 @@
-import { Table, TableBody, TableCell, TableHead, TableRow, TablePagination } from '@mui/material';
+import { Table, TableBody, TableCell, TableHead, TableRow, TablePagination, Box } from '@mui/material';
 import Popover from '@mui/material/Popover';
 import Typography from '@mui/material/Typography';
 import React, { useState } from 'react';
-import { FunctionField, useTranslate } from 'react-admin';
+import { useRecordContext, useTranslate } from 'react-admin';
 import ColoredChips from '../../../../components/ColoredChips';
-import { DisplayGender, DisplayLearningType, DisplayRole } from '../../../../components/translated';
+import { DisplayGender, DisplayLearningType } from '../../../../components/translated';
 import Language from '../../../../entities/Language';
-import { LearningLanguage, LearningType } from '../../../../entities/LearningLanguage';
+import { LearningType } from '../../../../entities/LearningLanguage';
 import { MatchScore } from '../../../../entities/Match';
-import { Profile } from '../../../../entities/Profile';
+import { Profile, ProfileWithTandems } from '../../../../entities/Profile';
 import codeLanguageToFlag from '../../../../utils/codeLanguageToFlag';
-import ProfileLink from '../../ui/ProfileLink';
+import ProfileLink from '../../ui/ProfileTandemLink';
 import { Pagination } from './usePagination';
 
 export interface TandemPartner {
@@ -36,6 +36,7 @@ interface TandemTableProps {
 
 const TandemTable = ({ rows, actions, displayTandemLanguage, pagination }: TandemTableProps) => {
     const translate = useTranslate();
+    const record: ProfileWithTandems = useRecordContext();
 
     const [anchorEl, setAnchorEl] = React.useState<HTMLElement | null>(null);
     const [selectedMatchScore, setSelectedMatchScore] = useState<MatchScore | undefined>();
@@ -81,15 +82,17 @@ const TandemTable = ({ rows, actions, displayTandemLanguage, pagination }: Tande
                     <TableRow key={partner.id}>
                         {displayTandemLanguage && (
                             <TableCell>
-                                {[partner.profile.nativeLanguage, ...partner.profile.masteredLanguages].map(
-                                    (language) => (
-                                        <ColoredChips
-                                            key={language.code}
-                                            color="default"
-                                            label={codeLanguageToFlag(language.code)}
-                                        />
-                                    )
-                                )}
+                                <Box className="chips-box">
+                                    {[partner.profile.nativeLanguage, ...partner.profile.masteredLanguages].map(
+                                        (language) => (
+                                            <ColoredChips
+                                                key={language.code}
+                                                color="default"
+                                                label={codeLanguageToFlag(language.code)}
+                                            />
+                                        )
+                                    )}
+                                </Box>
                             </TableCell>
                         )}
                         <TableCell>
@@ -101,15 +104,10 @@ const TandemTable = ({ rows, actions, displayTandemLanguage, pagination }: Tande
                         </TableCell>
                         <TableCell>{partner.level}</TableCell>
                         <TableCell>
-                            <FunctionField
-                                render={(data: LearningLanguage) => (
-                                    <DisplayRole
-                                        chipsColor={
-                                            partner.profile.user.role === data.profile.user.role ? 'success' : 'error'
-                                        }
-                                        role={partner.profile.user.role}
-                                    />
-                                )}
+                            <ColoredChips
+                                color={partner.profile.user.role === record.user.role ? 'success' : 'error'}
+                                label={translate(`learning_languages.roles.${partner.profile.user.role}`)}
+                                variant="outlined"
                             />
                         </TableCell>
                         <TableCell>
@@ -123,37 +121,39 @@ const TandemTable = ({ rows, actions, displayTandemLanguage, pagination }: Tande
                         </TableCell>
                         <TableCell>{partner.profile.user.age}</TableCell>
                         <TableCell>
-                            <div>
-                                <Typography
-                                    aria-haspopup="true"
-                                    aria-owns={open ? 'mouse-over-popover' : undefined}
-                                    onMouseEnter={(event) => handlePopoverOpen(event, partner.matchScore)}
-                                    onMouseLeave={handlePopoverClose}
-                                >
-                                    {partner.compatibilityScore ? `${partner.compatibilityScore * 100}%` : 'N/A'}
-                                </Typography>
-                            </div>
+                            <Typography
+                                aria-haspopup="true"
+                                aria-owns={open ? 'mouse-over-popover' : undefined}
+                                onMouseEnter={(event) => handlePopoverOpen(event, partner.matchScore)}
+                                onMouseLeave={handlePopoverClose}
+                            >
+                                {partner.compatibilityScore
+                                    ? `${(partner.compatibilityScore * 100).toFixed(0)}%`
+                                    : 'N/A'}
+                            </Typography>
                         </TableCell>
                         <TableCell>{new Date(partner.createdAt).toLocaleDateString()}</TableCell>
                         {actions && <TableCell>{actions(partner)}</TableCell>}
                     </TableRow>
                 ))}
+                {pagination && (
+                    <tr>
+                        <TablePagination
+                            count={pagination.count}
+                            onPageChange={(event: unknown, newPage: number) => {
+                                pagination.handleChangePage(newPage);
+                            }}
+                            onRowsPerPageChange={(event: React.ChangeEvent<HTMLInputElement>) => {
+                                pagination.handleChangeRowsPerPage(parseInt(event.target.value, 10));
+                            }}
+                            page={pagination.page}
+                            rowsPerPage={pagination.rowsPerPage}
+                            rowsPerPageOptions={pagination.rowsPerPageOptions}
+                        />
+                    </tr>
+                )}
             </TableBody>
 
-            {pagination && (
-                <TablePagination
-                    count={pagination.count}
-                    onPageChange={(event: unknown, newPage: number) => {
-                        pagination.handleChangePage(newPage);
-                    }}
-                    onRowsPerPageChange={(event: React.ChangeEvent<HTMLInputElement>) => {
-                        pagination.handleChangeRowsPerPage(parseInt(event.target.value, 10));
-                    }}
-                    page={pagination.page}
-                    rowsPerPage={pagination.rowsPerPage}
-                    rowsPerPageOptions={pagination.rowsPerPageOptions}
-                />
-            )}
             <Popover
                 PaperProps={{
                     style: {

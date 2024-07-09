@@ -142,6 +142,35 @@ const customDataProvider = {
             return { data: { ...data, id: 'config' } };
         }
 
+        if (resource === 'profiles/with-tandem') {
+            // Filter the learning-languages array contained into the tandem subobject
+            // to remove the root profile one (and keep only the pair one)
+            const filteredLearningLanguages = data.learningLanguages.map((learningLanguage: LearningLanguage) => {
+                if (learningLanguage.tandem) {
+                    const filteredLL = learningLanguage.tandem?.learningLanguages.filter(
+                        (tandemLL) => tandemLL.profile.id !== data.id
+                    );
+
+                    return {
+                        ...learningLanguage,
+                        tandem: {
+                            ...learningLanguage.tandem,
+                            learningLanguages: filteredLL,
+                        },
+                    };
+                }
+
+                return learningLanguage;
+            });
+
+            return {
+                data: {
+                    ...data,
+                    learningLanguages: filteredLearningLanguages,
+                },
+            };
+        }
+
         return { data };
     },
     delete: async (resource: string, params: DeleteParams) => {

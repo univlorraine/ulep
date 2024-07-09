@@ -6,8 +6,11 @@ export type ChipsColors = 'primary' | 'secondary' | 'success' | 'error' | 'info'
 type ColoredChipsProps = {
     color: ChipsColors;
     label: string | number;
+    variant?: 'filled' | 'outlined';
 };
 
-const ColoredChips = ({ color, label }: ColoredChipsProps) => <Chip color={color} label={label} />;
+const ColoredChips = ({ color, label, variant = 'filled' }: ColoredChipsProps) => (
+    <Chip color={color} label={label} variant={variant} />
+);
 
 export default ColoredChips;

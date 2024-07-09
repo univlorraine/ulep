@@ -73,7 +73,7 @@ const Actions = ({
                         label={translate('learning_languages.list.actions.globalRoutine.ctaLabel')}
                         onClick={() => setConfirmModalIsOpen(true)}
                         startIcon={<PlayArrow />}
-                        variant="text"
+                        variant="outlined"
                     />
                 )}
             </Box>

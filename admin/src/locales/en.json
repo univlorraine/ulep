@@ -547,13 +547,18 @@
                 "best_match_desc": "Best possible solution, taking into account the preferences of both applicant and candidate.",
                 "ok": "Ok",
                 "no": "No",
-                "validate": "Validate"
+                "validate": "Validate",
+                "refuse": "Refuse",
+                "current_tandem": "Current tandem",
+                "pairing_infos": "Pairing informations"
             },
             "other_proposals": {
                 "title": "Other proposals from partner universities"
             },
             "fields": {
                 "createdAt": "Date",
+                "tandemCreatedAt": "Tandem creation date",
+                "tandemUpdatedAt": "Last update",
                 "learnedLanguage": "Requested language",
                 "level": "Level",
                 "status": "Status",
@@ -568,7 +573,8 @@
                 "certificateOption": "Certificate option",
                 "specificProgram": "Specific program",
                 "hasPriority": "Priority language (no response to previous cycle)",
-                "score": "Score"
+                "score": "Score",
+                "nativeLanguage": "Native language"
             },
             "tandems": {
                 "error": "An error occured while fetching tandems",
@@ -595,11 +601,10 @@
                     "learningType": "Mode",
                     "gender": "Gender",
                     "age": "Age",
-                    "spokenLanguages": "Spoken languages"
+                    "spokenLanguages": "Spoken languages",
+                    "nativeLanguage": "Native language"
                 },
                 "globalSuggestions": {
-                    "title": "Tandem suggested with overall process",
-                    "titleNotCentralUniversity": "Proposed tandem",
                     "noResult": "No result"
                 },
                 "actions": {
@@ -635,8 +640,8 @@
             "TANDEM": "Tandem"
         },
         "roles": {
-            "STAFF": "Personnel",
-            "STUDENT": "Etudiant"
+            "STAFF": "Staff",
+            "STUDENT": "Student"
         }
     },
     "universitiesPicker": {

@@ -550,13 +550,18 @@
                 "best_match_desc": "Meilleure solution possible en prenant en compte les préférences du demandeur et du candidat.",
                 "ok": "Ok",
                 "no": "Non",
-                "validate": "Valider"
+                "validate": "Valider",
+                "refuse": "Refuser",
+                "current_tandem": "Tandem",
+                "pairing_infos": "Informations sur l'appariement"
             },
             "other_proposals": {
                 "title": "Autres propositions parmi les universités partenaires"
             },
             "fields": {
                 "createdAt": "Date demande",
+                "tandemCreatedAt": "Date de début",
+                "tandemUpdatedAt": "Dernière mise à jour",
                 "learnedLanguage": "Langue demandé",
                 "level": "Niveau",
                 "status": "Statut",
@@ -570,8 +575,9 @@
                 "age": "Âge",
                 "certificateOption": "Option certificat",
                 "specificProgram": "Option programme spécifique",
-                "hasPriority": "Langue prioritaire ( sans réponse au cycle précedent )",
-                "score": "Score"
+                "hasPriority": "Langue prioritaire (sans réponse au cycle précedent)",
+                "score": "Score",
+                "nativeLanguage": "Langue native"
             },
             "tandems": {
                 "error": "Une erreur est survenue lors de la récupération des tandems",
@@ -601,8 +607,6 @@
                     "spokenLanguages": "Langues parlées"
                 },
                 "globalSuggestions": {
-                    "title": "Tandem proposé par le calcul global",
-                    "titleNotCentralUniversity": "Tandem proposé",
                     "noResult": "Aucun résultat"
                 },
                 "actions": {

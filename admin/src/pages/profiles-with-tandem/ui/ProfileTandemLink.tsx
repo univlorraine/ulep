@@ -15,7 +15,7 @@ const ProfileLink = ({ profile, variant }: ProfileLinkParams) => {
     return (
         <Typography
             onClick={() => {
-                redirect('show', 'profiles', profile.id);
+                redirect('show', 'profiles/with-tandem', profile.id);
             }}
             sx={{ cursor: 'pointer', color: '#3737d5' }}
             // Note: shortcut to avoid typing as precisely as Typography (an error

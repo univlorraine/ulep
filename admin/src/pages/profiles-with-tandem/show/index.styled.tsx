@@ -8,11 +8,11 @@ import WarningCircle from '../../../components/WarningCircle';
 import Language from '../../../entities/Language';
 import { LearningLanguage, getLearningLanguageUniversityAndCampusString } from '../../../entities/LearningLanguage';
 import codeLanguageToFlag from '../../../utils/codeLanguageToFlag';
-import ProfileLink from '../ui/ProfileLink';
+import ProfileLink from '../ui/ProfileTandemLink';
 import ShowTandems from './ShowTandems';
 
 import './show.css';
-import TandemCard, { TandemType } from './TandemCard';
+// import TandemCard, { TandemType } from './TandemCard';
 
 const LearningLanguageShow = () => {
     const translate = useTranslate();
@@ -230,8 +230,8 @@ const LearningLanguageShow = () => {
                             />
                         </Box>
 
-                        <TandemCard tandemType={TandemType.BEST_OVERALL} />
-                        <TandemCard tandemType={TandemType.BEST_MATCH} />
+                        {/*                         <TandemCard tandemType={TandemType.BEST_OVERALL} />
+                        <TandemCard tandemType={TandemType.BEST_MATCH} /> */}
                     </Box>
 
                     <Box sx={{ padding: 2 }}>
