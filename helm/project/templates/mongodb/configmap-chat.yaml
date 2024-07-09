@@ -4,32 +4,19 @@ metadata:
   name: ulep-mongo-postinstall-configmap
 data:
   mongo-init.js: |-
-    const rootUsername = "root";
-    const rootPassword = "!ChangeMe!";
-    const database = "ulep";
+    const rootUsername = "{{ .Values.chat.env.mongoInitUser }}";
+    const rootPassword = "{{ .Values.chat.env.mongoInitPassword }}";
+    const mongoUser = "{{ .Values.chat.env.mongoUser }}";
+    const mongoPassword = "{{ .Values.chat.env.mongoPassword }}";
+    const mongoDatabase = "{{ .Values.chat.env.mongoDatabase }}";
 
     // Connect to the admin database
     db = new Mongo().getDB("admin");
-
-    // Create root user
-    db.createUser({
-        user: rootUsername,
-        pwd: rootPassword,
-        roles: [
-            { role: "userAdminAnyDatabase", db: "admin" },
-            { role: "readWrite", db: database },
-        ],
-    });
-
-    // Switch to application database
-    db = new Mongo().getDB(database);
-
-    // Authenticate as root user
     db.auth(rootUsername,rootPassword);
 
     // Create application user
     db.createUser({
-        user: rootUsername,
-        pwd: rootPassword,
-        roles: [{ role: "readWrite", db: database }],
+        user: mongoUser,
+        pwd: mongoPassword,
+        roles: [{ role: "readWrite", db: mongoDatabase }],
     });

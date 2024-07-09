@@ -36,20 +36,23 @@ spec:
           image: "{{ .Values.chat.image.repository }}:{{ .Values.chat.image.tag | default .Chart.AppVersion }}"
           imagePullPolicy: {{ .Values.chat.image.pullPolicy }}          
           ports:
-            - name: direct
-              containerPort: 3000
-              protocol: TCP          
+            - name: http
+              containerPort: {{ .Values.chat.service.appPort }}
+              protocol: TCP
+            - name: ws
+              containerPort: {{ .Values.chat.service.appPortWs }}
+              protocol: TCP
           readinessProbe:
             httpGet:
               path: /health
-              port: 3000
+              port: {{ .Values.chat.service.appPort }}
             initialDelaySeconds: {{ .Values.chat.probes.readiness.initialDelaySeconds }}
             periodSeconds: {{ .Values.chat.probes.readiness.periodSeconds }}
             failureThreshold: {{ .Values.chat.probes.readiness.failureThreshold }}
           livenessProbe:
             httpGet:
               path: /health
-              port: 3000
+              port: {{ .Values.chat.service.appPort }}
             initialDelaySeconds: {{ .Values.chat.probes.liveness.initialDelaySeconds }}
             periodSeconds: {{ .Values.chat.probes.liveness.periodSeconds }}
             failureThreshold: {{ .Values.chat.probes.liveness.failureThreshold }}

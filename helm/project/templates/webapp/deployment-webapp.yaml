@@ -40,6 +40,10 @@ spec:
             value: "https://{{ .Values.apiUrl }}.{{ .Values.domain }}"
           - name: VITE_JITSI_DOMAIN
             value: "{{ .Values.jitsiUrl }}.{{ .Values.domain }}"
+          - name: VITE_CHAT_URL
+            value: "https://{{ .Values.chatUrl }}.{{ .Values.domain }}"
+          - name: VITE_SOCKET_CHAT_URL
+            value: "https://{{ .Values.socketChatUrl }}.{{ .Values.domain }}"
         volumeMounts:
           - name: "{{ .Values.webapp.name }}-build"
             mountPath: /usr/share/nginx/html/

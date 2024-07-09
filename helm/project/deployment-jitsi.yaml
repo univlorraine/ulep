@@ -1,6 +1,0 @@
-kind: Deployment
-apiVersion: apps/v1
-metadata:
-  name: 'ulep-prosody'
-  annotations:
-    reloader.stakater.com/auto: 'true'

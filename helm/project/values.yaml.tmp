@@ -320,6 +320,79 @@ webapp:
       - hosts:
           - *webappUrl
 
+chat:
+  name: 'chat'
+  replicaCount: 1
+  image:
+    repository: 'rg.fr-par.scw.cloud/ulep/chat-prod'
+    tag: '1.0.2397'
+    pullPolicy: IfNotPresent
+  env:
+    mongoInitUser: 'root'
+    mongoInitPassword: 'AZE123aze'
+    mongoInitDatabase: 'ulep'
+    mongoUser: 'ulep'
+    mongoPassword: 'AZE123aze'
+    mongoDatabase: 'ulep'
+    mongoLogLevel: 'debug'
+  autoscaling:
+    enabled: false
+    minReplicas: 1
+    maxReplicas: 2
+    targetCPUUtilizationPercentage: 80
+  service:
+    type: ClusterIP
+    port: 80
+    wsPort: 8080
+    appPort: 3000
+    appPortWs: 5000
+  probes:
+    readiness:
+      initialDelaySeconds: 0
+      periodSeconds: 10
+      failureThreshold: 6
+    liveness:
+      initialDelaySeconds: 0
+      periodSeconds: 5
+      failureThreshold: 5
+  ingress:
+    enabled: true
+    className: traefik
+    annotations:
+      kubernetes.io/ingress.class: 'traefik'
+      cert-manager.io/cluster-issuer: 'letsencrypt'
+      kubernetes.io/tls-acme: 'true'
+    hosts:
+      - host: chat
+        paths: [/]
+    tls:
+      - hosts:
+          - chat
+
+mongodb:
+  image:
+    debug: true
+    pullPolicy: Always
+  architecture: replicaset
+  replicaCount: 1
+  persistence:
+    size: 8Gi
+  auth:
+    rootUser: 'root'
+    rootPassword: 'AZE123aze'
+    usernames: ['ulep']
+    passwords: ['AZE123aze']
+    databases: ['ulep']
+  initdbScriptsConfigMap: ulep-mongo-postinstall-configmap
+
+redis:
+  pullPolicy: IfNotPresent
+  replicaCount: 1
+  persistence:
+    size: 8Gi
+  auth:
+    enabled: false
+
 jitsi-meet:
   name: 'jitsi'
   publicURL: 'https://jitsi.ulep.thestaging.io'

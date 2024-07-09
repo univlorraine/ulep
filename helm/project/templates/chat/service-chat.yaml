@@ -8,9 +8,13 @@ spec:
   type: {{ .Values.chat.service.type }}
   ports:
     - port: {{ .Values.chat.service.port }}
-      targetPort: direct
+      targetPort: http
       protocol: TCP
-      name: direct
+      name: http
+    - port: {{ .Values.chat.service.wsPort }}
+      targetPort: ws
+      protocol: TCP
+      name: ws
   selector:
     app.kubernetes.io/name: "{{ include "etandem.name" . }}-{{ .Values.chat.name }}"
     app.kubernetes.io/instance: "{{ .Release.Name }}"

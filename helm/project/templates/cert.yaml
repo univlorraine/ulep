@@ -10,7 +10,8 @@ spec:
     - '{{ .Values.adminUrl }}.{{ .Values.domain }}'
     - '{{ .Values.keycloakUrl }}.{{ .Values.domain }}'
     - '{{ .Values.webappUrl }}.{{ .Values.domain }}'
-    - '{{ .Values.jitsiUrl }}.{{ .Values.domain }}'
+    - '{{ .Values.chatUrl }}.{{ .Values.domain }}'
+    - '{{ .Values.socketChatUrl }}.{{ .Values.domain }}'
   issuerRef:
     name: '{{ .Values.issuerName }}'
     kind: ClusterIssuer

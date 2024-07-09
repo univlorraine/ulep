@@ -81,6 +81,8 @@ spec:
               value: "https://{{ .Values.adminUrl }}.{{ .Values.domain }}"
             - name: APP_URL
               value: "https://{{ .Values.api.env.appUrl }}.{{ .Values.domain }}"
+            - name: CHAT_URL
+              value: "https://{{ .Values.chatUrl }}.{{ .Values.domain }}"
             - name: LOG_LEVEL
               value: "{{ .Values.api.env.logLevel }}"
             - name: DEFAULT_TRANSLATION_LANGUAGE
