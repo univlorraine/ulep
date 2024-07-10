@@ -16,7 +16,7 @@ keystoreProperties.load(new FileInputStream(keystorePropertiesFile));
 
 android {
     namespace "fr.univlorraine.ulep"
-    compileSdkVersion rootProject.ext.compileSdkVersion
+    compileSdk rootProject.ext.compileSdkVersion
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_17
         targetCompatibility JavaVersion.VERSION_17
