@@ -3,7 +3,8 @@ import React from 'react';
 
 import { BooleanField, useRefresh, useTranslate } from 'react-admin';
 import CustomAvatar from '../../../components/CustomAvatar';
-import { DisplayGender, DisplayLearningType, DisplayRole, DisplaySameTandem } from '../../../components/translated';
+import { DisplayLearningType, DisplaySameTandem } from '../../../components/translated';
+import UserStatusChips from '../../../components/UserStatusChips';
 import { LearningLanguage } from '../../../entities/LearningLanguage';
 import { ProfileWithTandems } from '../../../entities/Profile';
 import codeLanguageToFlag from '../../../utils/codeLanguageToFlag';
@@ -32,15 +33,31 @@ type ComponentTitleProps = {
     partnerType?: PartnerType;
     hasTandemWaitingForValidation?: boolean;
     hasActiveTandem?: boolean;
+    partenerStatus?: UserStatus;
 };
 
-const ComponentTitle = ({ partnerType, hasTandemWaitingForValidation, hasActiveTandem }: ComponentTitleProps) => {
+const ComponentTitle = ({ title, status }: { title: string; status: UserStatus }) => (
+    <Box className="profile-header">
+        <Typography variant="h4">{title}</Typography>
+        {status && <UserStatusChips status={status} />}
+    </Box>
+);
+
+const ComponentHeader = ({
+    partnerType,
+    hasTandemWaitingForValidation,
+    hasActiveTandem,
+    partenerStatus,
+}: ComponentTitleProps) => {
     const translate = useTranslate();
 
     if (partnerType === PartnerType.BEST_OVERALL) {
         return (
             <>
-                <Typography variant="h4">🏆 {translate('learning_languages.show.management.best_tandem')}</Typography>
+                <ComponentTitle
+                    status={partenerStatus}
+                    title={`🏆 ${translate('learning_languages.show.management.best_tandem')}`}
+                />
                 <Typography className="description">
                     {translate('learning_languages.show.management.best_tandem_desc')}
                 </Typography>
@@ -50,7 +67,10 @@ const ComponentTitle = ({ partnerType, hasTandemWaitingForValidation, hasActiveT
     if (partnerType === PartnerType.BEST_MATCH) {
         return (
             <>
-                <Typography variant="h4">🪄 {translate('learning_languages.show.management.best_match')}</Typography>
+                <ComponentTitle
+                    status={partenerStatus}
+                    title={`🪄 ${translate('learning_languages.show.management.best_match')}`}
+                />
                 <Typography className="description">
                     {translate('learning_languages.show.management.best_match_desc')}
                 </Typography>
@@ -59,11 +79,19 @@ const ComponentTitle = ({ partnerType, hasTandemWaitingForValidation, hasActiveT
     }
     if (hasTandemWaitingForValidation) {
         return (
-            <Typography variant="h4">{translate('learning_languages.show.tandems.waitingValidation.title')}</Typography>
+            <ComponentTitle
+                status={partenerStatus}
+                title={translate('learning_languages.show.tandems.waitingValidation.title')}
+            />
         );
     }
     if (hasActiveTandem) {
-        return <Typography variant="h4">{translate('learning_languages.show.management.current_tandem')}</Typography>;
+        return (
+            <ComponentTitle
+                status={partenerStatus}
+                title={translate('learning_languages.show.management.current_tandem')}
+            />
+        );
     }
 
     return null;
@@ -99,9 +127,10 @@ const TandemCard = ({
 
     return (
         <Box>
-            <ComponentTitle
+            <ComponentHeader
                 hasActiveTandem={hasActiveTandem}
                 hasTandemWaitingForValidation={hasTandemWaitingForValidation}
+                partenerStatus={partnerLearningLanguage?.profile.user.status}
                 partnerType={partnerType}
             />
 
@@ -133,7 +162,9 @@ const TandemCard = ({
                     <div className="line">
                         <span className="label">{translate('learning_languages.show.fields.gender')}</span>
                         <span className="value">
-                            <DisplayGender gender={partnerLearningLanguage.profile.user.gender} />
+                            {translate(
+                                `global.genderValues.${partnerLearningLanguage.profile.user.gender.toLowerCase()}`
+                            )}
                             <ChipsElement
                                 isOk={
                                     userLearningLanguage.sameGender
@@ -193,7 +224,7 @@ const TandemCard = ({
                     <div className="line">
                         <span className="label">{translate('learning_languages.show.fields.role')}</span>
                         <span>
-                            <DisplayRole role={partnerLearningLanguage.profile.user.role} />
+                            {translate(`learning_languages.roles.${partnerLearningLanguage.profile.user.role}`)}
                         </span>
                     </div>
 

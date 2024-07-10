@@ -45,7 +45,6 @@ const theme: RaThemeOptions = {
         h4: {
             fontSize: '1rem',
             fontWeight: '600',
-            marginBottom: '10px',
         },
         subtitle1: {
             fontSize: '0.875rem',

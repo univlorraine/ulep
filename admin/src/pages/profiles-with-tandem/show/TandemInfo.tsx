@@ -17,7 +17,9 @@ const TandemInfo = ({ tandem, hasActiveTandem, userLearningLanguage, partnerLear
 
     return (
         <Box>
-            <Typography variant="h4">{translate('learning_languages.show.management.pairing_infos')}</Typography>
+            <Typography className="profile-header" variant="h4">
+                {translate('learning_languages.show.management.pairing_infos')}
+            </Typography>
             <div className="line">
                 <span className="label">
                     <Typography>{translate('learning_languages.show.fields.tandemCreatedAt')}</Typography>

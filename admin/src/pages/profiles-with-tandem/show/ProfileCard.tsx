@@ -2,7 +2,8 @@ import { Box, Typography } from '@mui/material';
 import React from 'react';
 import { BooleanField, useTranslate } from 'react-admin';
 import CustomAvatar from '../../../components/CustomAvatar';
-import { DisplayGender, DisplaySameTandem } from '../../../components/translated';
+import { DisplaySameTandem } from '../../../components/translated';
+import UserStatusChips from '../../../components/UserStatusChips';
 import WarningCircle from '../../../components/WarningCircle';
 import { LearningLanguage } from '../../../entities/LearningLanguage';
 import { ProfileWithTandems } from '../../../entities/Profile';
@@ -12,7 +13,7 @@ import ProfileLink from '../ui/ProfileLink';
 type ProfileCardProps = {
     record: ProfileWithTandems;
     learningLanguage: LearningLanguage;
-    hasActiveTandem?: boolean;
+    hasActiveTandem: boolean;
 };
 
 const ProfileCard = ({ record, learningLanguage, hasActiveTandem }: ProfileCardProps) => {
@@ -20,8 +21,13 @@ const ProfileCard = ({ record, learningLanguage, hasActiveTandem }: ProfileCardP
 
     return (
         <Box className="profile">
-            <Typography variant="h4">{translate('learning_languages.show.management.applicant_profile')}</Typography>
-            {hasActiveTandem && <Typography className="description" />}
+            <Box className="profile-header">
+                <Typography variant="h4">
+                    {translate('learning_languages.show.management.applicant_profile')}
+                </Typography>
+                {record.user.status && <UserStatusChips status={record.user.status} />}
+            </Box>
+            {!hasActiveTandem && <Typography className="description" />}
 
             <div className="line profile-name">
                 <CustomAvatar
@@ -41,7 +47,7 @@ const ProfileCard = ({ record, learningLanguage, hasActiveTandem }: ProfileCardP
             <div className="line">
                 <span className="label">{translate('learning_languages.show.fields.gender')}</span>
                 <span>
-                    <DisplayGender gender={record.user.gender} />
+                    {translate(`global.genderValues.${record.user.gender.toLowerCase()}`)}
                     {learningLanguage.sameGender && <WarningCircle />}
                 </span>
             </div>

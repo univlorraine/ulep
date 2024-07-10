@@ -68,7 +68,11 @@ const LearningLanguageTabContent = ({ learningLanguage }: { learningLanguage: Le
                 </Typography>
 
                 <Box className="tandem-management">
-                    <ProfileCard learningLanguage={learningLanguage} record={record} />
+                    <ProfileCard
+                        hasActiveTandem={hasActiveTandem}
+                        learningLanguage={learningLanguage}
+                        record={record}
+                    />
 
                     <PartnerCard
                         compatibilityScore={learningLanguage.tandem.compatibilityScore}
@@ -99,7 +103,11 @@ const LearningLanguageTabContent = ({ learningLanguage }: { learningLanguage: Le
                 </Typography>
 
                 <Box className="tandem-management">
-                    <ProfileCard learningLanguage={learningLanguage} record={record} />
+                    <ProfileCard
+                        hasActiveTandem={hasActiveTandem}
+                        learningLanguage={learningLanguage}
+                        record={record}
+                    />
 
                     <PartnerCard
                         compatibilityScore={learningLanguage.tandem.compatibilityScore}
@@ -124,7 +132,7 @@ const LearningLanguageTabContent = ({ learningLanguage }: { learningLanguage: Le
             </Typography>
 
             <Box className="tandem-management">
-                <ProfileCard learningLanguage={learningLanguage} record={record} />
+                <ProfileCard hasActiveTandem={hasActiveTandem} learningLanguage={learningLanguage} record={record} />
 
                 <PartnerCard
                     compatibilityScore={learningLanguage.tandem?.compatibilityScore}

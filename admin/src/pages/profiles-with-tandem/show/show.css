@@ -27,6 +27,14 @@ div.tandem-management > div {
     background-color: #f7f7f7;
 }
 
+.tandem-management .profile-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 10px;
+    height: 30px;
+}
+
 .tandem-management .line {
     height: 50px;
     display: flex;

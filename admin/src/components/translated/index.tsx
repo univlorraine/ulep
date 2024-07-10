@@ -12,6 +12,7 @@ export const DisplaySameTandem = ({ sameTandemEmail }: { sameTandemEmail?: strin
     return <BooleanField record={{ sameTandemEmail: false }} source="sameTandemEmail" />;
 };
 
+// TODO: remove this component with learning-languages pages
 export const DisplayRole = ({ role, chipsColor }: { role?: UserRole; chipsColor?: ChipsColors }) => {
     const translate = useTranslate();
 
@@ -61,6 +62,7 @@ export const DisplayLearningType = ({
     }
 };
 
+// TODO: remove this component with learning-languages pages
 export const DisplayGender = ({ gender }: { gender: Gender }) => {
     const translate = useTranslate();
 

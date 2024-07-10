@@ -4,7 +4,7 @@ import Typography from '@mui/material/Typography';
 import React, { useState } from 'react';
 import { useRecordContext, useTranslate } from 'react-admin';
 import ColoredChips from '../../../../components/ColoredChips';
-import { DisplayGender, DisplayLearningType } from '../../../../components/translated';
+import { DisplayLearningType } from '../../../../components/translated';
 import Language from '../../../../entities/Language';
 import { LearningType } from '../../../../entities/LearningLanguage';
 import { MatchScore } from '../../../../entities/Match';
@@ -117,7 +117,7 @@ const TandemTable = ({ rows, actions, displayTandemLanguage, pagination }: Tande
                             />
                         </TableCell>
                         <TableCell>
-                            <DisplayGender gender={partner.profile.user.gender} />
+                            {translate(`global.genderValues.${partner.profile.user.gender.toLowerCase()}`)}
                         </TableCell>
                         <TableCell>{partner.profile.user.age}</TableCell>
                         <TableCell>
