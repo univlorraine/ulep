@@ -1,5 +1,5 @@
 import List from './list';
-import Show from './show/index.old';
+import Show from './show';
 
 export default {
     list: List,
