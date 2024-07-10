@@ -31,8 +31,6 @@ const LearningLanguageTabContent = ({ learningLanguage }: { learningLanguage: Le
 
     const hasTandemWaitingForValidation = learningLanguage.tandem?.status === TandemStatus.VALIDATED_BY_ONE_UNIVERSITY;
 
-    console.log({ record });
-
     const { selectedUniversityIds } = useLearningLanguagesStore();
 
     const {

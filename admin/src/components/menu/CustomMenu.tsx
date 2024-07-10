@@ -91,14 +91,28 @@ export const subMenus: SubMenusType = {
     ],
 };
 
-const manageActiveClass = (ref: HTMLDivElement, subMenuName: string, currentPathname: string) => {
-    const resources = subMenus[subMenuName].map((link) => link.resource);
+const RA_ACTIVE_CLASS = 'RaMenuItemLink-active';
+
+const manageSubMenusActiveClass = (ref: HTMLDivElement, currentPathname: string, subMenuName: string) => {
     const aElement = ref.firstElementChild;
+
+    const resources = subMenus[subMenuName].map((link) => link.resource);
     const currentResource = resources.filter((resource) => currentPathname.startsWith(resource.split('/')[0])); // The resource is split because of "interest" subpages
+
     if (aElement && currentResource.length !== 0) {
-        aElement.classList.add('RaMenuItemLink-active');
+        aElement.classList.add(RA_ACTIVE_CLASS);
     } else if (aElement) {
-        aElement.classList.remove('RaMenuItemLink-active');
+        aElement.classList.remove(RA_ACTIVE_CLASS);
+    }
+};
+
+const manageCurrentPathActiveClass = (ref: HTMLDivElement, currentPathname: string) => {
+    const aElement = ref.firstElementChild;
+
+    if (currentPathname.includes('profiles/with-tandem')) {
+        aElement?.classList.remove(RA_ACTIVE_CLASS);
+    } else if (currentPathname.includes('profiles')) {
+        aElement?.classList.add(RA_ACTIVE_CLASS);
     }
 };
 
@@ -109,17 +123,25 @@ const CustomMenu = () => {
     const currentPathname = useCurrentPathname();
     const [universitiesRef, setUniversitiesRef] = useState<HTMLDivElement>();
     const [configurationRef, setConfigurationRef] = useState<HTMLDivElement>();
+    const [profilesRef, setProfilesRef] = useState<HTMLDivElement>();
 
     if (universitiesRef) {
-        manageActiveClass(universitiesRef, 'universities', currentPathname);
+        manageSubMenusActiveClass(universitiesRef, currentPathname, 'universities');
     }
     if (configurationRef) {
-        manageActiveClass(configurationRef, 'configuration', currentPathname);
+        manageSubMenusActiveClass(configurationRef, currentPathname, 'configuration');
+    }
+    if (profilesRef) {
+        manageCurrentPathActiveClass(profilesRef, currentPathname);
     }
 
     return (
         <Menu sx={{ display: 'flex' }}>
-            <Menu.ResourceItem name="profiles" />
+            <Box ref={(newRef: HTMLDivElement) => setProfilesRef(newRef)}>
+                <Menu.ResourceItem name="profiles" />
+            </Box>
+            <Menu.ResourceItem name="profiles/with-tandem" />
+
             <Menu.ResourceItem name="learning-languages" />
             {permissions.checkRole(Role.MANAGER) && data && data.universityId && (
                 <Menu.Item

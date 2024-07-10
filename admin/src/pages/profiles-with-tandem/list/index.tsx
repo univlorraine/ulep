@@ -82,8 +82,6 @@ const LearningLanguageList = () => {
         return <Loading />;
     }
 
-    console.log({ identity });
-
     return (
         <Box className="profiles-with-tandem-list">
             <PageTitle>{translate('learning_languages.title')}</PageTitle>

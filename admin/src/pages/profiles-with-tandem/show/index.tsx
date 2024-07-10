@@ -7,7 +7,7 @@ import { FunctionField, Show, SimpleShowLayout, useRecordContext, useTranslate }
 import { useLocation } from 'react-router-dom';
 import { ProfileWithTandems, getProfileDisplayName } from '../../../entities/Profile';
 import codeLanguageToFlag from '../../../utils/codeLanguageToFlag';
-import LearningLanguageTabContent from './LearninLanguageTabContent';
+import LearningLanguageTabContent from './LearningLanguageTabContent';
 
 import './show.css';
 
