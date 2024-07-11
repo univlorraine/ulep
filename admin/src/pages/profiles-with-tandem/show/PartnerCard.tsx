@@ -12,7 +12,7 @@ import codeLanguageToFlag from '../../../utils/codeLanguageToFlag';
 
 import './show.css';
 import isAgeCriterionMet from '../../../utils/isAgeCriterionMet';
-import ProfileLink from '../../learning-languages/ui/ProfileLink';
+import ProfileLink from '../ui/ProfileLink';
 import TandemActions from './Actions/TandemActions';
 
 export enum PartnerType {
@@ -142,9 +142,9 @@ const TandemCard = ({
                 <>
                     <div className="line profile-name">
                         <CustomAvatar
-                            avatarId="null"
-                            firstName="Pablo"
-                            lastName="Costa"
+                            avatarId={partnerLearningLanguage.profile.user.avatar?.id}
+                            firstName={partnerLearningLanguage.profile.user.firstname}
+                            lastName={partnerLearningLanguage.profile.user.lastname}
                             sx={{ width: '35px', height: '35px', fontSize: '1rem' }}
                         />
                         <ProfileLink profile={partnerLearningLanguage.profile} />

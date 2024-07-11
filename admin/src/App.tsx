@@ -23,7 +23,6 @@ import countries from './pages/countries';
 import instance from './pages/instance';
 import interests from './pages/interests';
 import languages from './pages/languages';
-import learningLanguages from './pages/learning-languages';
 import objectives from './pages/objectives';
 import profiles from './pages/profiles';
 import profilesWithTandem from './pages/profiles-with-tandem';
@@ -60,12 +59,6 @@ const App = () => {
                         name="profiles"
                         options={{ label: translate('profiles.label') }}
                         {...profiles}
-                    />
-                    <Resource
-                        icon={PeopleIcon}
-                        name="learning-languages"
-                        options={{ label: translate('learning_languages.label') }}
-                        {...learningLanguages}
                     />
                     <Resource
                         icon={PeopleIcon}
