@@ -17,8 +17,30 @@ import './show.css';
 import ProfileCard from './ProfileCard';
 import TandemInfo from './TandemInfo';
 
-const LearningLanguageTabContent = ({ learningLanguage }: { learningLanguage: LearningLanguage }) => {
+type TabPanelLayoutProps = {
+    children: React.ReactNode;
+    learningLanguage: LearningLanguage;
+};
+
+const TabPanelLayout = ({ children, learningLanguage }: TabPanelLayoutProps) => {
     const translate = useTranslate();
+
+    return (
+        <TabPanel key={learningLanguage.code} value={learningLanguage.code}>
+            <Typography sx={{ marginTop: 4 }} variant="h3">
+                {translate('learning_languages.show.management.title')}
+            </Typography>
+
+            {children}
+        </TabPanel>
+    );
+};
+
+type LearningLanguageTabContentProps = {
+    learningLanguage: LearningLanguage;
+};
+
+const LearningLanguageTabContent = ({ learningLanguage }: LearningLanguageTabContentProps) => {
     const record: ProfileWithTandems = useRecordContext();
 
     const { data: identity, isLoading: isLoadingIdentity } = useGetIdentity();
@@ -28,7 +50,6 @@ const LearningLanguageTabContent = ({ learningLanguage }: { learningLanguage: Le
     const hasActiveTandem =
         learningLanguage.tandem?.status === TandemStatus.ACTIVE ||
         learningLanguage.tandem?.status === TandemStatus.PAUSED;
-
     const hasTandemWaitingForValidation = learningLanguage.tandem?.status === TandemStatus.VALIDATED_BY_ONE_UNIVERSITY;
 
     const { selectedUniversityIds } = useLearningLanguagesStore();
@@ -62,11 +83,7 @@ const LearningLanguageTabContent = ({ learningLanguage }: { learningLanguage: Le
 
     if (learningLanguage.tandem && hasActiveTandem) {
         return (
-            <TabPanel key={learningLanguage.code} value={learningLanguage.code}>
-                <Typography sx={{ marginTop: 4 }} variant="h3">
-                    {translate('learning_languages.show.management.title')}
-                </Typography>
-
+            <TabPanelLayout learningLanguage={learningLanguage}>
                 <Box className="tandem-management">
                     <ProfileCard
                         hasActiveTandem={hasActiveTandem}
@@ -77,6 +94,7 @@ const LearningLanguageTabContent = ({ learningLanguage }: { learningLanguage: Le
                     <PartnerCard
                         compatibilityScore={learningLanguage.tandem.compatibilityScore}
                         partnerLearningLanguage={learningLanguage.tandem.learningLanguages[0]}
+                        tandem={learningLanguage.tandem}
                         userLearningLanguage={learningLanguage}
                         userProfile={record}
                         hasActiveTandem
@@ -89,7 +107,7 @@ const LearningLanguageTabContent = ({ learningLanguage }: { learningLanguage: Le
                         userLearningLanguage={learningLanguage}
                     />
                 </Box>
-            </TabPanel>
+            </TabPanelLayout>
         );
     }
 
@@ -97,11 +115,7 @@ const LearningLanguageTabContent = ({ learningLanguage }: { learningLanguage: Le
         const isUserValidationNeeded = !learningLanguage.tandem.universityValidations?.includes(identity?.universityId);
 
         return (
-            <TabPanel key={learningLanguage.code} value={learningLanguage.code}>
-                <Typography sx={{ marginTop: 4 }} variant="h3">
-                    {translate('learning_languages.show.management.title')}
-                </Typography>
-
+            <TabPanelLayout learningLanguage={learningLanguage}>
                 <Box className="tandem-management">
                     <ProfileCard
                         hasActiveTandem={hasActiveTandem}
@@ -114,23 +128,19 @@ const LearningLanguageTabContent = ({ learningLanguage }: { learningLanguage: Le
                         hasTandemWaitingForValidation={hasTandemWaitingForValidation}
                         isUserValidationNeeded={isUserValidationNeeded}
                         partnerLearningLanguage={learningLanguage.tandem.learningLanguages[0]}
-                        tandemId={learningLanguage.tandem.id}
+                        tandem={learningLanguage.tandem}
                         userLearningLanguage={learningLanguage}
                         userProfile={record}
                     />
 
                     <TandemInfo tandem={learningLanguage.tandem} />
                 </Box>
-            </TabPanel>
+            </TabPanelLayout>
         );
     }
 
     return (
-        <TabPanel key={learningLanguage.code} value={learningLanguage.code}>
-            <Typography sx={{ marginTop: 4 }} variant="h3">
-                {translate('learning_languages.show.management.title')}
-            </Typography>
-
+        <TabPanelLayout learningLanguage={learningLanguage}>
             <Box className="tandem-management">
                 <ProfileCard hasActiveTandem={hasActiveTandem} learningLanguage={learningLanguage} record={record} />
 
@@ -138,15 +148,16 @@ const LearningLanguageTabContent = ({ learningLanguage }: { learningLanguage: Le
                     compatibilityScore={learningLanguage.tandem?.compatibilityScore}
                     partnerLearningLanguage={learningLanguage.tandem?.learningLanguages[0]}
                     partnerType={PartnerType.BEST_OVERALL}
+                    tandem={learningLanguage?.tandem}
                     userLearningLanguage={learningLanguage}
                     userProfile={record}
                 />
 
                 <PartnerCard
                     compatibilityScore={bestMatch?.score.total}
-                    currentTandemLearningLanguage={learningLanguage.tandem?.learningLanguages[0]}
                     partnerLearningLanguage={bestMatch?.target}
                     partnerType={PartnerType.BEST_MATCH}
+                    tandem={learningLanguage?.tandem}
                     userLearningLanguage={learningLanguage}
                     userProfile={record}
                 />
@@ -154,15 +165,15 @@ const LearningLanguageTabContent = ({ learningLanguage }: { learningLanguage: Le
 
             {!isLoadingMatches && matches && (
                 <OtherProposals
-                    currentTandemLearningLanguage={learningLanguage.tandem?.learningLanguages[0]}
                     isErrorMatches={isErrorMatches}
                     isJokerLearningLanguage={isJokerLearningLanguage}
                     isLoadingMatches={isLoadingMatches}
                     matches={matches.slice(1)}
+                    tandem={learningLanguage?.tandem}
                     userLearningLanguage={learningLanguage}
                 />
             )}
-        </TabPanel>
+        </TabPanelLayout>
     );
 };
 

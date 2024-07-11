@@ -337,7 +337,7 @@ const LearningLanguageList = () => {
                                                         learningLanguage.id,
                                                         learningLanguage.tandem.learningLanguages[0].id,
                                                     ]}
-                                                    onTandemAction={() => refresh()}
+                                                    onTandemAction={refresh}
                                                     relaunchGlobalRoutineOnAccept={
                                                         !learningLanguage.tandem ||
                                                         learningLanguage?.id !==
@@ -364,7 +364,7 @@ const LearningLanguageList = () => {
                                                         learningLanguage.id,
                                                         learningLanguage.tandem.learningLanguages[0].id,
                                                     ]}
-                                                    onTandemAction={() => refresh()}
+                                                    onTandemAction={refresh}
                                                     tandemId={learningLanguage.tandem?.id}
                                                     tandemStatus={learningLanguage.tandem?.status}
                                                     disableCreateButton

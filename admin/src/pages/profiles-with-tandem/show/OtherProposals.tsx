@@ -5,6 +5,7 @@ import { useRecordContext, useRefresh, useTranslate } from 'react-admin';
 import { LearningLanguage, getEffectiveLearningType } from '../../../entities/LearningLanguage';
 import { Match } from '../../../entities/Match';
 import { ProfileWithTandems } from '../../../entities/Profile';
+import { Tandem } from '../../../entities/Tandem';
 import { PairingMode } from '../../../entities/University';
 import TandemActions from './Actions/TandemActions';
 import TandemFilters from './TandemTable/TandemFilters';
@@ -18,7 +19,7 @@ type OtherProposalsProps = {
     isErrorMatches: boolean;
     isJokerLearningLanguage: boolean;
     userLearningLanguage: LearningLanguage;
-    currentTandemLearningLanguage: LearningLanguage | undefined;
+    tandem: Tandem | undefined;
 };
 
 const OtherProposals = ({
@@ -27,7 +28,7 @@ const OtherProposals = ({
     isErrorMatches,
     isJokerLearningLanguage,
     userLearningLanguage,
-    currentTandemLearningLanguage,
+    tandem,
 }: OtherProposalsProps) => {
     const translate = useTranslate();
     const record: ProfileWithTandems = useRecordContext();
@@ -89,10 +90,10 @@ const OtherProposals = ({
                                                         onTandemAction={handleTandemAction}
                                                         relaunchGlobalRoutineOnAccept={
                                                             !userLearningLanguage.tandem ||
-                                                            currentTandemLearningLanguage?.id !== partner.id
+                                                            tandem?.learningLanguages[0].id !== partner.id
                                                         }
                                                         relaunchGlobalRoutineOnRefuse={
-                                                            currentTandemLearningLanguage?.id === partner.id
+                                                            tandem?.learningLanguages[0]?.id === partner.id
                                                         }
                                                     />
                                                 )}

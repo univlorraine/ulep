@@ -7,6 +7,7 @@ import { DisplayLearningType, DisplaySameTandem } from '../../../components/tran
 import UserStatusChips from '../../../components/UserStatusChips';
 import { LearningLanguage } from '../../../entities/LearningLanguage';
 import { ProfileWithTandems } from '../../../entities/Profile';
+import { TandemStatus, Tandem } from '../../../entities/Tandem';
 import codeLanguageToFlag from '../../../utils/codeLanguageToFlag';
 
 import './show.css';
@@ -103,11 +104,10 @@ type TandemCardProps = {
     userProfile: ProfileWithTandems;
     userLearningLanguage: LearningLanguage;
     compatibilityScore: number | undefined;
-    currentTandemLearningLanguage?: LearningLanguage | undefined;
     hasActiveTandem?: boolean;
     isUserValidationNeeded?: boolean;
     hasTandemWaitingForValidation?: boolean;
-    tandemId?: string;
+    tandem?: Tandem;
 };
 
 const TandemCard = ({
@@ -116,11 +116,10 @@ const TandemCard = ({
     userLearningLanguage,
     userProfile,
     compatibilityScore,
-    currentTandemLearningLanguage,
     hasActiveTandem = false,
     isUserValidationNeeded = false,
     hasTandemWaitingForValidation = false,
-    tandemId,
+    tandem,
 }: TandemCardProps) => {
     const translate = useTranslate();
     const refresh = useRefresh();
@@ -134,7 +133,8 @@ const TandemCard = ({
                 partnerType={partnerType}
             />
 
-            {!partnerLearningLanguage && (
+            {(!partnerLearningLanguage ||
+                (partnerType === PartnerType.BEST_OVERALL && tandem?.status === TandemStatus.INACTIVE)) && (
                 <Box>{translate('learning_languages.show.tandems.globalSuggestions.noResult')}</Box>
             )}
 
@@ -292,13 +292,13 @@ const TandemCard = ({
                     {!hasActiveTandem && !hasTandemWaitingForValidation && (
                         <TandemActions
                             learningLanguageIds={[userLearningLanguage.id, partnerLearningLanguage.id]}
-                            onTandemAction={() => refresh()}
+                            onTandemAction={refresh}
                             relaunchGlobalRoutineOnAccept={
                                 !userLearningLanguage.tandem ||
-                                currentTandemLearningLanguage?.id !== partnerLearningLanguage.id
+                                tandem?.learningLanguages[0].id !== partnerLearningLanguage.id
                             }
                             relaunchGlobalRoutineOnRefuse={
-                                currentTandemLearningLanguage?.id === partnerLearningLanguage.id
+                                tandem?.learningLanguages[0]?.id === partnerLearningLanguage.id
                             }
                         />
                     )}
@@ -306,8 +306,8 @@ const TandemCard = ({
                     {isUserValidationNeeded && (
                         <TandemActions
                             learningLanguageIds={[userLearningLanguage.id, partnerLearningLanguage.id]}
-                            onTandemAction={() => refresh()}
-                            tandemId={tandemId}
+                            onTandemAction={refresh}
+                            tandemId={tandem?.id}
                             relaunchGlobalRoutineOnRefuse
                         />
                     )}
