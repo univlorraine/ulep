@@ -482,27 +482,6 @@
                 }
             },
             "filters": {
-                "activeTandem": {
-                    "label": "En tandem",
-                    "choices": {
-                        "yes": "Oui",
-                        "no": "Non"
-                    }
-                },
-                "actionableTandem": {
-                    "label": "Tandems en attente",
-                    "choices": {
-                        "yes": "Oui",
-                        "no": "Non"
-                    }
-                },
-                "pausedTandem": {
-                    "label": "Tandem en pause",
-                    "choices": {
-                        "yes": "Oui",
-                        "no": "Non"
-                    }
-                },
                 "user_lastname": {
                     "label": "Nom d'utilisateur"
                 },
@@ -523,13 +502,7 @@
                 "name": "Nom",
                 "learnedLanguage": "Langue demandée",
                 "level": "Niveau",
-                "createdAt": "Créé le",
                 "university": "Université",
-                "hasActiveTandem": "En tandem",
-                "hasPausedTandem": "Tandem en pause",
-                "actionPossible": "Tandem en attente",
-                "specificProgram": "Programme spécifique",
-                "reported": "Signalé",
                 "role": "Rôle",
                 "age": "Âge",
                 "score": "Score",

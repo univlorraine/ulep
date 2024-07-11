@@ -479,27 +479,6 @@
                 }
             },
             "filters": {
-                "activeTandem": {
-                    "label": "In tandem",
-                    "choices": {
-                        "yes": "Yes",
-                        "no": "No"
-                    }
-                },
-                "actionableTandem": {
-                    "label": "Pending tandems",
-                    "choices": {
-                        "yes": "Yes",
-                        "no": "No"
-                    }
-                },
-                "pausedTandem": {
-                    "label": "Paused tandems",
-                    "choices": {
-                        "yes": "Yes",
-                        "no": "Non"
-                    }
-                },
                 "user_lastname": {
                     "label": "Lastname"
                 },
@@ -520,14 +499,8 @@
                 "name": "Name",
                 "learnedLanguage": "Requested language",
                 "level": "Level",
-                "createdAt": "Created",
                 "university": "University",
-                "hasActiveTandem": "In tandem",
-                "hasPausedTandem": "Tandem paused",
-                "actionPossible": "Pending tandem",
-                "specificProgram": "Specific program",
                 "role": "Role",
-                "reported": "Reported",
                 "age": "Age",
                 "score": "Score",
                 "pairing": "Pairing",
