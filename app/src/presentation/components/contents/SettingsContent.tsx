@@ -1,14 +1,14 @@
 import { useIonToast } from '@ionic/react';
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
+import { useHistory } from 'react-router';
 import Switch from 'react-switch';
 import { ArrowLeftSvg, ArrowRightSvg } from '../../../assets';
 import { useConfig } from '../../../context/ConfigurationContext';
 import { useStoreActions, useStoreState } from '../../../store/storeTypes';
 import Dropdown from '../DropDown';
-import styles from './SettingsContent.module.css';
 import ConfirmModal from '../modals/ConfirmModal';
-import { useHistory } from 'react-router';
+import styles from './SettingsContent.module.css';
 
 interface SettingsContentProps {
     onLanguageChange?: () => void;
@@ -130,16 +130,16 @@ const SettingsContent: React.FC<SettingsContentProps> = ({ onBackPressed, onDisc
                 onClick={browserAdapter.openLinkInBrowser}
                 className={styles['setting-container']}
             >
-                <span>{t('home_page.settings.confidentiality')}</span>
-                <img alt="" src={ArrowRightSvg} />
+                <span onClick={(e) => e.stopPropagation()}>{t('home_page.settings.confidentiality')}</span>
+                <img onClick={(e) => e.stopPropagation()} alt="" src={ArrowRightSvg} />
             </a>
             <a
                 href={configuration.cguUrl}
                 onClick={browserAdapter.openLinkInBrowser}
                 className={`${styles['setting-container']} large-margin-bottom`}
             >
-                <span>{t('home_page.settings.CGU')}</span>
-                <img alt="" src={ArrowRightSvg} />
+                <span onClick={(e) => e.stopPropagation()}>{t('home_page.settings.CGU')}</span>
+                <img onClick={(e) => e.stopPropagation()} alt="" src={ArrowRightSvg} />
             </a>
 
             <span className={styles.subtitle}>{t('home_page.settings.account')}</span>
