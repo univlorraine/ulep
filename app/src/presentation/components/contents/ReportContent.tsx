@@ -42,6 +42,11 @@ const ReportContent: React.FC<ReportContentProps> = ({ onGoBack, onReportSent })
         if (!selectedCategory) {
             return;
         }
+
+        if (note.length === 0) {
+            return await showToast({ message: t('home_page.report.note_required'), duration: 2000 });
+        }
+
         const result = await createReport.execute(selectedCategory.id, note);
 
         if (result instanceof Error) {
