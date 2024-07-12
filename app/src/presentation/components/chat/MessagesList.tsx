@@ -1,7 +1,7 @@
 import { isSameDay } from 'date-fns';
-import { useEffect, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Message } from '../../../domain/entities/chat/Message';
+import { useMessages } from '../../hooks/useMessages';
 import Loader from '../Loader';
 import MessageComponent from './MessageComponent';
 import styles from './MessagesList.module.css';
@@ -15,43 +15,7 @@ interface MessagesListProps {
 
 const MessagesList: React.FC<MessagesListProps> = ({ messages, isScrollOver, loadMessages, userId }) => {
     const { t } = useTranslation();
-    const messagesEndRef = useRef<HTMLDivElement | null>(null);
-    const scrollPositionRef = useRef<number>(0);
-    const previousScrollHeightRef = useRef<number>(0);
-    const [isLoading, setIsLoading] = useState(false);
-
-    const scrollToBottom = () => {
-        messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
-    };
-
-    useEffect(() => {
-        const messagesContainer = messagesEndRef.current?.parentElement;
-        if (messagesContainer) {
-            if (isLoading) {
-                const newScrollHeight = messagesContainer.scrollHeight;
-                const heightDifference = newScrollHeight - previousScrollHeightRef.current;
-                messagesContainer.scrollTop = scrollPositionRef.current + heightDifference;
-                setIsLoading(false);
-            } else if (messagesContainer.scrollHeight <= messagesContainer.clientHeight) {
-                loadMessages();
-            } else {
-                scrollToBottom();
-            }
-        }
-    }, [messages]);
-
-    const handleScroll = (event: React.UIEvent<HTMLDivElement>) => {
-        const { scrollTop, scrollHeight } = event.currentTarget;
-
-        if (!isLoading && !isScrollOver && scrollTop === 0) {
-            setIsLoading(true);
-            setTimeout(() => {
-                scrollPositionRef.current = scrollTop;
-                previousScrollHeightRef.current = scrollHeight;
-                loadMessages();
-            }, 2000);
-        }
-    };
+    const { isLoading, messagesEndRef, handleScroll } = useMessages({ messages, isScrollOver, loadMessages });
 
     const renderMessages = () => {
         const messageElements: React.ReactNode[] = [];
@@ -59,7 +23,7 @@ const MessagesList: React.FC<MessagesListProps> = ({ messages, isScrollOver, loa
 
         const reversedMessages = [...messages].reverse();
 
-        reversedMessages.forEach((message, index) => {
+        reversedMessages.forEach((message) => {
             const messageDate = new Date(message.createdAt);
             const isCurrentUserMessage = message.isMine(userId);
 
@@ -81,8 +45,6 @@ const MessagesList: React.FC<MessagesListProps> = ({ messages, isScrollOver, loa
             }
         });
 
-        messageElements.push(<div ref={messagesEndRef} />);
-
         return messageElements;
     };
 
@@ -95,6 +57,7 @@ const MessagesList: React.FC<MessagesListProps> = ({ messages, isScrollOver, loa
                 </div>
             )}
             {renderMessages()}
+            <div ref={messagesEndRef} />
         </div>
     );
 };
