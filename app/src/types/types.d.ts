@@ -15,6 +15,7 @@ declare global {
 
     interface Window { // Pour matomo (UL)
         _mtm: any;
+        _paq: any;
     }
 
     // TODO(industrialization): remove when jitsi lib meet imported with types
