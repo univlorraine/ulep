@@ -13,7 +13,6 @@ const TimezonePicker: React.FC<TimezonePickerProps> = ({ onChange, value }) => (
             onChange={(timezone) => onChange(timezone.target.value)}
             sx={{ mb: 2, width: '100%' }}
             value={value ?? ''}
-            variant="standard"
             disableUnderline
         >
             {/* @ts-ignore */}

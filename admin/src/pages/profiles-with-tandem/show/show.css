@@ -1,9 +1,9 @@
-.MuiPaper-root {
-    box-shadow: none;
+.profiles-with-tandem--show .RaSimpleShowLayout {
+    padding: 0;
 }
 
-.MuiDivider-root {
-    display: none;
+.profiles-with-tandem--show .RaSimpleShowLayout-row {
+    border-bottom: 0 !important;
 }
 
 .tandem-management {

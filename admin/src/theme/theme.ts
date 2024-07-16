@@ -66,20 +66,47 @@ const theme: RaThemeOptions = {
                 },
             },
         },
-        RaChipField: {
-            styleOverrides: {
-                root: {
-                    '&.RaChipField-chip': {
-                        backgroundColor: '#fdee66',
-                        color: '#212121',
-                    },
-                },
-            },
-        },
         MuiDivider: {
             styleOverrides: {
                 root: {
                     margin: '8px 0',
+                },
+            },
+        },
+        MuiIconButton: {
+            styleOverrides: {
+                root: {
+                    marginRight: '0 !important',
+                },
+            },
+        },
+        MuiInputBase: {
+            styleOverrides: {
+                root: {
+                    '& .MuiInputBase-input': {
+                        padding: '12px',
+                    },
+                },
+            },
+        },
+        MuiInputAdornment: {
+            styleOverrides: {
+                root: {
+                    margin: '0 !important',
+                },
+            },
+        },
+        MuiOutlinedInput: {
+            styleOverrides: {
+                root: {
+                    width: '100%',
+                },
+            },
+        },
+        MuiFormControl: {
+            styleOverrides: {
+                root: {
+                    margin: '0 !important',
                 },
             },
         },
@@ -90,11 +117,44 @@ const theme: RaThemeOptions = {
                 },
             },
         },
+        MuiSelect: {
+            styleOverrides: {
+                root: {
+                    margin: '0 !important',
+                },
+            },
+        },
         MuiTableCell: {
             styleOverrides: {
                 root: {
+                    padding: '10px 18px',
                     '&.RaDatagrid-headerCell': {
                         fontWeight: 'bold',
+                    },
+                },
+            },
+        },
+        MuiTabs: {
+            styleOverrides: {
+                root: {
+                    borderBottom: '1px solid #e0e0e0',
+                },
+            },
+        },
+        MuiTabPanel: {
+            styleOverrides: {
+                root: {
+                    padding: '0',
+                    width: '100%',
+                },
+            },
+        },
+        RaChipField: {
+            styleOverrides: {
+                root: {
+                    '&.RaChipField-chip': {
+                        backgroundColor: '#fdee66',
+                        color: '#212121',
                     },
                 },
             },
@@ -111,6 +171,24 @@ const theme: RaThemeOptions = {
                         backgroundColor: '#212121',
                     },
                     border: 'none !important',
+                },
+            },
+        },
+        RaFilterButton: {
+            styleOverrides: {
+                root: {
+                    border: '1px solid #000',
+                    borderRadius: '4px',
+                },
+            },
+        },
+        RaLabeled: {
+            styleOverrides: {
+                root: {
+                    '& .RaLabeled-label': {
+                        fontSize: '0.9rem',
+                        width: '200px',
+                    },
                 },
             },
         },
@@ -179,6 +257,40 @@ const theme: RaThemeOptions = {
             styleOverrides: {
                 root: {
                     borderRight: '1px solid #e0e0e0',
+                    '& .RaSidebar-fixed': {
+                        borderRight: '1px solid #e0e0e0',
+                    },
+                },
+            },
+        },
+        RaSimpleShowLayout: {
+            styleOverrides: {
+                root: {
+                    padding: '0',
+                    '& .RaSimpleShowLayout-row': {
+                        display: 'flex',
+                        flexDirection: 'row',
+                        gap: '30px',
+                        alignItems: 'center',
+                        borderBottom: '1px dotted #e0e0e0',
+                        padding: '8px',
+                        margin: '0',
+                    },
+                },
+            },
+        },
+        RaTab: {
+            styleOverrides: {
+                root: {
+                    '& .RaTab-row': {
+                        display: 'flex',
+                        flexDirection: 'row',
+                        gap: '30px',
+                        alignItems: 'center',
+                        borderBottom: '1px dotted #e0e0e0',
+                        padding: '8px',
+                        margin: '0',
+                    },
                 },
             },
         },
@@ -187,6 +299,9 @@ const theme: RaThemeOptions = {
                 root: {
                     '& .RaTabbedShowLayout-content': {
                         padding: '0',
+                    },
+                    '& .MuiDivider-root': {
+                        display: 'none',
                     },
                 },
             },

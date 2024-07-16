@@ -109,6 +109,7 @@
         "update": "Update"
     },
     "instance": {
+        "actions": "Actions",
         "label": "Configuration",
         "tabLabel": "Instance",
         "name": "Instance name",

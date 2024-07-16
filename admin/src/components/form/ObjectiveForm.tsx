@@ -1,8 +1,7 @@
-import { Box, Typography, Input } from '@mui/material';
+import { Box, Typography, OutlinedInput } from '@mui/material';
 import React, { useState } from 'react';
 import { Button, useTranslate } from 'react-admin';
 import IndexedTranslation from '../../entities/IndexedTranslation';
-import inputStyle from '../../theme/inputStyle';
 import ImageUploader from '../ImageUploader';
 import TranslationForm from './TranslationForm';
 
@@ -30,15 +29,13 @@ const ObjectiveForm: React.FC<ObjectiveFormProps> = ({ handleSubmit, name, tranl
         <Box sx={{ m: 4 }}>
             <Typography variant="subtitle1">{translate('objectives.create.name')}</Typography>
 
-            <Box alignItems="center" display="flex" flexDirection="row">
-                <Input name="Language" sx={{ mx: 4, my: 2, width: 40 }} value="FR" disableUnderline />
-                <Input
+            <Box alignItems="center" display="flex" flexDirection="row" gap="10px">
+                <OutlinedInput name="Language" sx={{ width: '80px' }} value="FR" />
+                <OutlinedInput
                     name="Content"
                     onChange={(e) => setCurrentName(e.target.value)}
                     placeholder={translate('global.content')}
-                    sx={inputStyle}
                     value={currentName}
-                    disableUnderline
                     required
                 />
             </Box>

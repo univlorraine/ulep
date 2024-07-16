@@ -2,7 +2,6 @@ import { Box, Typography, Input } from '@mui/material';
 import React, { useEffect, useState } from 'react';
 import { Button, useTranslate } from 'react-admin';
 import IndexedTranslation from '../../entities/IndexedTranslation';
-import inputStyle from '../../theme/inputStyle';
 import TranslationForm from './TranslationForm';
 
 interface CategoryReportProps {
@@ -37,7 +36,6 @@ const CategoryReportForm: React.FC<CategoryReportProps> = ({
                     name="Content"
                     onChange={(e) => setNewName(e.target.value)}
                     placeholder={translate('global.content')}
-                    sx={inputStyle}
                     value={newName}
                     disableUnderline
                     required

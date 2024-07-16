@@ -33,7 +33,6 @@ const UniversityPicker: React.FC<UniversityPickerProps> = ({ initialValue, onCha
                 onChange={(university) => onChange(data.find((u: University) => university.target.value === u.id))}
                 sx={{ mb: 2, width: '100%' }}
                 value={value.id}
-                variant="standard"
                 disableUnderline
             >
                 {data.map((university: University) => (

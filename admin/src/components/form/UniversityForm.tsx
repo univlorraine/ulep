@@ -2,7 +2,6 @@ import DeleteIcon from '@mui/icons-material/Delete';
 import {
     Box,
     Typography,
-    Input,
     Button,
     Table,
     TableBody,
@@ -11,6 +10,7 @@ import {
     FormControl,
     Select,
     MenuItem,
+    OutlinedInput,
 } from '@mui/material';
 import { DateTimePicker } from '@mui/x-date-pickers';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
@@ -23,7 +23,6 @@ import Country from '../../entities/Country';
 import Language from '../../entities/Language';
 import { PairingMode } from '../../entities/University';
 import i18nProvider from '../../providers/i18nProvider';
-import inputStyle from '../../theme/inputStyle';
 import isCodeValid from '../../utils/isCodeValid';
 import isUrlValid from '../../utils/isUrlValid';
 import AdministratorPicker from '../AdministratorPicker';
@@ -81,7 +80,6 @@ interface PairingModeOption {
     label: string;
 }
 
-// TODO: refactor this component on back-office refactor
 const UniversityForm: React.FC<UniversityFormProps> = ({
     admissionEndDate,
     admissionStartDate,
@@ -248,274 +246,314 @@ const UniversityForm: React.FC<UniversityFormProps> = ({
     return (
         <LocalizationProvider adapterLocale={locale} dateAdapter={AdapterDayjs}>
             <Form>
-                <Box display="flex" flexDirection="column" sx={{ m: 4 }}>
-                    <Typography variant="subtitle1">{translate(`universities.${tradKey}.logo`)}</Typography>
-                    <ImageUploader onImageSelect={setFile} source="image.id" />
-                    <Typography variant="subtitle1">{translate(`universities.${tradKey}.name`)}</Typography>
+                <Box display="flex" flexDirection="row" gap="50px" sx={{ m: 4 }}>
+                    <Box flex="1" sx={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>
+                        <Box>
+                            <Typography variant="subtitle1">{translate(`universities.${tradKey}.logo`)}</Typography>
+                            <ImageUploader onImageSelect={setFile} source="image.id" />
+                        </Box>
 
-                    <Box alignItems="center" display="flex" flexDirection="row" sx={{ mb: 2 }}>
-                        <Input
-                            name="Name"
-                            onChange={(e) => setNewName(e.target.value)}
-                            sx={inputStyle}
-                            value={newName}
-                            disableUnderline
-                            required
-                        />
-                    </Box>
+                        <Box>
+                            <Typography variant="subtitle1">{translate(`universities.${tradKey}.name`)}</Typography>
+                            <OutlinedInput
+                                name="Name"
+                                onChange={(e) => setNewName(e.target.value)}
+                                value={newName}
+                                required
+                            />
+                        </Box>
 
-                    <Typography variant="subtitle1">{translate(`universities.${tradKey}.country`)}</Typography>
-                    <Box alignItems="center" display="flex" flexDirection="row">
-                        <CountriesPicker onChange={setNewCountry} value={newCountry} />
-                    </Box>
+                        <Box>
+                            <Typography variant="subtitle1">{translate(`universities.${tradKey}.country`)}</Typography>
+                            <CountriesPicker onChange={setNewCountry} value={newCountry} />
+                        </Box>
 
-                    <Typography variant="subtitle1">{translate(`universities.${tradKey}.language`)}</Typography>
-                    <Typography>
-                        {newNativeLanguage && translate(`languages_code.${newNativeLanguage.code}`)}
-                    </Typography>
-                    <Box alignItems="center" display="flex" flexDirection="row">
-                        <LanguagePicker onChange={setNewNativeLanguage} />
-                    </Box>
-
-                    {tradKey === 'update' && (
-                        <>
-                            <Typography variant="subtitle1">
-                                {translate(`universities.${tradKey}.defaultContact`)}
+                        <Box>
+                            <Typography variant="subtitle1">{translate(`universities.${tradKey}.language`)}</Typography>
+                            <Typography>
+                                {newNativeLanguage && translate(`languages_code.${newNativeLanguage.code}`)}
                             </Typography>
-                            <Box alignItems="center" display="flex" flexDirection="row">
+                            <LanguagePicker onChange={setNewNativeLanguage} />
+                        </Box>
+
+                        {tradKey === 'update' && (
+                            <Box>
+                                <Typography variant="subtitle1">
+                                    {translate(`universities.${tradKey}.defaultContact`)}
+                                </Typography>
                                 <AdministratorPicker
                                     onChange={setNewDefaultContact}
                                     universityId={universityId}
                                     value={newDefaultContact}
                                 />
                             </Box>
-                        </>
-                    )}
+                        )}
 
-                    <Typography variant="subtitle1">{translate(`universities.${tradKey}.timezone`)}</Typography>
-                    <Box alignItems="center" display="flex" flexDirection="row">
-                        <TimezonePicker onChange={setNewTimezone} value={newTimezone} />
-                    </Box>
+                        <Box>
+                            <Typography variant="subtitle1">{translate(`universities.${tradKey}.timezone`)}</Typography>
+                            <TimezonePicker onChange={setNewTimezone} value={newTimezone} />
+                        </Box>
 
-                    <Typography variant="subtitle1">{translate(`universities.${tradKey}.admission_start`)}</Typography>
-                    <Box alignItems="center" display="flex" flexDirection="row">
-                        <DateTimePicker
-                            ampm={false}
-                            // @ts-ignore
-                            defaultValue={daysjs(admissionStartDate)}
-                            onChange={setNewAdmissionStartDate}
-                            sx={{ my: 2, width: '100%' }}
-                            disableUnderline
-                        />
-                    </Box>
+                        <Box>
+                            <Typography variant="subtitle1">
+                                {translate(`universities.${tradKey}.max_tandems_per_user`)}
+                            </Typography>
+                            <OutlinedInput
+                                name="maxTandemsPerUser"
+                                onChange={(e) => setNewMaxTandemsPerUser(parseInt(e.target.value, 10))}
+                                type="number"
+                                value={newMaxTandemsPerUser}
+                                required
+                            />
+                        </Box>
 
-                    <Typography variant="subtitle1">{translate(`universities.${tradKey}.admission_end`)}</Typography>
-                    <Box alignItems="center" display="flex" flexDirection="row">
-                        <DateTimePicker
-                            ampm={false}
-                            // @ts-ignore
-                            defaultValue={daysjs(admissionEndDate)}
-                            onChange={setNewAdmissionEndDate}
-                            sx={{ my: 2, width: '100%' }}
-                        />
-                    </Box>
-
-                    <Typography variant="subtitle1">{translate(`universities.${tradKey}.open_service`)}</Typography>
-                    <Box alignItems="center" display="flex" flexDirection="row">
-                        <DateTimePicker
-                            ampm={false}
-                            // @ts-ignore
-                            defaultValue={daysjs(openServiceDate)}
-                            onChange={setNewOpenServiceDate}
-                            sx={{ my: 2, width: '100%' }}
-                            disableUnderline
-                        />
-                    </Box>
-
-                    <Typography variant="subtitle1">{translate(`universities.${tradKey}.close_service`)}</Typography>
-                    <Box alignItems="center" display="flex" flexDirection="row">
-                        <DateTimePicker
-                            ampm={false}
-                            // @ts-ignore
-                            defaultValue={daysjs(closeServiceDate)}
-                            onChange={setNewCloseServiceDate}
-                            sx={{ my: 2, width: '100%' }}
-                        />
-                    </Box>
-
-                    <Typography variant="subtitle1">
-                        {translate(`universities.${tradKey}.max_tandems_per_user`)}
-                    </Typography>
-                    <Box alignItems="center" display="flex" flexDirection="row" sx={{ mb: 2 }}>
-                        <Input
-                            name="maxTandemsPerUser"
-                            onChange={(e) => setNewMaxTandemsPerUser(parseInt(e.target.value, 10))}
-                            sx={inputStyle}
-                            type="number"
-                            value={newMaxTandemsPerUser}
-                            disableUnderline
-                            required
-                        />
-                    </Box>
-
-                    <Typography variant="subtitle1">{translate(`universities.${tradKey}.codes`)}</Typography>
-                    <Table>
-                        <TableBody>
-                            {newCodes.map((code) => (
-                                <TableRow key={code}>
-                                    <TableCell sx={{ width: 10 }}>
-                                        <Button onClick={() => removeCode(code)}>
-                                            <DeleteIcon />
-                                        </Button>
-                                    </TableCell>
-                                    <TableCell>{code}</TableCell>
-                                </TableRow>
-                            ))}
-                        </TableBody>
-                    </Table>
-                    <Box alignItems="center" display="flex" flexDirection="column">
-                        <Input
-                            onChange={(e) => setNewCode(e.target.value)}
-                            placeholder="Ajouter un nouveau code"
-                            sx={styles}
-                            value={newCode}
-                        />
-                        <Button
-                            color="primary"
-                            disabled={!newCode}
-                            onClick={() => addCode(newCode)}
-                            sx={{ ...styles, height: 30 }}
-                            variant="contained"
-                        >
-                            {translate('universities.code_button')}
-                        </Button>
-                    </Box>
-
-                    <Typography variant="subtitle1">{translate(`universities.${tradKey}.domains`)}</Typography>
-                    <Table>
-                        <TableBody>
-                            {newDomains.map((domain) => (
-                                <TableRow key={domain}>
-                                    <TableCell sx={{ width: 10 }}>
-                                        <Button onClick={() => removeDomain(domain)}>
-                                            <DeleteIcon />
-                                        </Button>
-                                    </TableCell>
-                                    <TableCell>{domain}</TableCell>
-                                </TableRow>
-                            ))}
-                        </TableBody>
-                    </Table>
-
-                    <Box alignItems="center" display="flex" flexDirection="column">
-                        <Input
-                            onChange={(e) => setNewDomain(e.target.value)}
-                            placeholder="Ajouter un nouveau domaine"
-                            sx={styles}
-                            value={newDomain}
-                        />
-                        <Button
-                            color="primary"
-                            disabled={!newDomain}
-                            onClick={() => addDomain(newDomain)}
-                            sx={{ ...styles, height: 30 }}
-                            variant="contained"
-                        >
-                            {translate('universities.domain_button')}
-                        </Button>
-                    </Box>
-
-                    <Typography variant="subtitle1">{translate(`universities.${tradKey}.website`)}</Typography>
-
-                    <Box alignItems="center" display="flex" flexDirection="row">
-                        <Input
-                            name="Website"
-                            onChange={(e) => setNewWebsite(e.target.value)}
-                            sx={inputStyle}
-                            value={newWebsite}
-                            disableUnderline
-                            required
-                        />
-                    </Box>
-
-                    <Typography variant="subtitle1">{translate(`universities.${tradKey}.pairingMode`)}</Typography>
-                    <Box alignItems="center" display="flex" flexDirection="row">
-                        <FormControl>
-                            <Select
-                                id="pairingMode-picker"
-                                onChange={(event) => {
-                                    setNewPairingMode(event.target.value);
-                                }}
-                                sx={{ mb: 2, width: '100%' }}
-                                value={newPairingMode}
-                                variant="standard"
-                                disableUnderline
-                            >
-                                {pairingModeOptions.map((pairingModeOption: PairingModeOption) => (
-                                    <MenuItem key={pairingModeOption.value} value={pairingModeOption.value}>
-                                        {pairingModeOption.label}
-                                    </MenuItem>
-                                ))}
-                            </Select>
-                        </FormControl>
-                    </Box>
-
-                    <Typography variant="subtitle1">
-                        {translate(`universities.${tradKey}.notificationEmail`)}
-                    </Typography>
-                    <Box alignItems="center" display="flex" flexDirection="row" sx={{ mb: 2 }}>
-                        <Input
-                            name="notificationEmail"
-                            onChange={(e) => setNewNotificationEmail(e.target.value)}
-                            sx={inputStyle}
-                            value={newNotificationEmail}
-                            disableUnderline
-                            required
-                        />
-                    </Box>
-
-                    {newLanguages.length > 0 && (
-                        <Typography variant="subtitle1">{translate('universities.specific_language')}</Typography>
-                    )}
-                    {canAddNewLanguages && (
-                        <>
+                        <Box>
+                            <Typography variant="subtitle1">{translate(`universities.${tradKey}.codes`)}</Typography>
                             <Table>
                                 <TableBody>
-                                    {newLanguages.map((language) => (
-                                        <TableRow key={language.code}>
-                                            <TableCell sx={{ width: 10 }}>
-                                                <Button onClick={() => removeLanguage(language)}>
+                                    {newCodes.map((code) => (
+                                        <TableRow key={code}>
+                                            <TableCell sx={{ width: 10, padding: '0' }}>
+                                                <Button onClick={() => removeCode(code)}>
                                                     <DeleteIcon />
                                                 </Button>
                                             </TableCell>
-                                            <TableCell>{translate(`languages_code.${language.code}`)}</TableCell>
+                                            <TableCell sx={{ padding: '0' }}>{code}</TableCell>
                                         </TableRow>
                                     ))}
                                 </TableBody>
                             </Table>
-                            <Box alignItems="center" display="flex" flexDirection="row">
-                                <LanguagesPicker onChange={addLanguage} value={newLanguages} hideGlobalLanguages />
+                            <Box sx={{ display: 'flex', flexDirection: 'row', alignItems: 'center', gap: '10px' }}>
+                                <OutlinedInput
+                                    onChange={(e) => setNewCode(e.target.value)}
+                                    placeholder="Ajouter un nouveau code"
+                                    sx={styles}
+                                    value={newCode}
+                                />
+                                <Button
+                                    color="primary"
+                                    disabled={!newCode}
+                                    onClick={() => addCode(newCode)}
+                                    sx={{ ...styles, height: '100%', width: '200px' }}
+                                    variant="contained"
+                                >
+                                    {translate('universities.code_button')}
+                                </Button>
                             </Box>
-                        </>
-                    )}
-                    <Button
-                        color="primary"
-                        disabled={
-                            !newNativeLanguage ||
-                            !newCountry ||
-                            !newTimezone ||
-                            !newName ||
-                            (!newAdmissionStartDate && !admissionStartDate) ||
-                            (!newAdmissionEndDate && !admissionEndDate) ||
-                            !newWebsite
-                        }
-                        onClick={onSendUniversity}
-                        sx={styles}
-                        variant="contained"
-                    >
-                        {translate('global.save')}
-                    </Button>
+                        </Box>
+
+                        <Box>
+                            <Typography variant="subtitle1">{translate(`universities.${tradKey}.domains`)}</Typography>
+                            <Table>
+                                <TableBody>
+                                    {newDomains.map((domain) => (
+                                        <TableRow key={domain}>
+                                            <TableCell sx={{ width: 10, padding: '0' }}>
+                                                <Button onClick={() => removeDomain(domain)}>
+                                                    <DeleteIcon />
+                                                </Button>
+                                            </TableCell>
+                                            <TableCell sx={{ padding: '0' }}>{domain}</TableCell>
+                                        </TableRow>
+                                    ))}
+                                </TableBody>
+                            </Table>
+                            <Box sx={{ display: 'flex', flexDirection: 'row', alignItems: 'center', gap: '10px' }}>
+                                <OutlinedInput
+                                    onChange={(e) => setNewDomain(e.target.value)}
+                                    placeholder="Ajouter un nouveau domaine"
+                                    sx={styles}
+                                    value={newDomain}
+                                />
+                                <Button
+                                    color="primary"
+                                    disabled={!newDomain}
+                                    onClick={() => addDomain(newDomain)}
+                                    sx={{ ...styles, height: '100%', width: '200px' }}
+                                    variant="contained"
+                                >
+                                    {translate('universities.domain_button')}
+                                </Button>
+                            </Box>
+                        </Box>
+
+                        <Box>
+                            <Typography variant="subtitle1">{translate(`universities.${tradKey}.website`)}</Typography>
+                            <Box alignItems="center" display="flex" flexDirection="row">
+                                <OutlinedInput
+                                    name="Website"
+                                    onChange={(e) => setNewWebsite(e.target.value)}
+                                    value={newWebsite}
+                                    required
+                                />
+                            </Box>
+                        </Box>
+
+                        <Box>
+                            <Typography variant="subtitle1">
+                                {translate(`universities.${tradKey}.pairingMode`)}
+                            </Typography>
+                            <Box alignItems="center" display="flex" flexDirection="row">
+                                <FormControl>
+                                    <Select
+                                        id="pairingMode-picker"
+                                        onChange={(event) => {
+                                            setNewPairingMode(event.target.value);
+                                        }}
+                                        sx={{ mb: 2, width: '100%' }}
+                                        value={newPairingMode}
+                                        disableUnderline
+                                    >
+                                        {pairingModeOptions.map((pairingModeOption: PairingModeOption) => (
+                                            <MenuItem key={pairingModeOption.value} value={pairingModeOption.value}>
+                                                {pairingModeOption.label}
+                                            </MenuItem>
+                                        ))}
+                                    </Select>
+                                </FormControl>
+                            </Box>
+                        </Box>
+
+                        <Box>
+                            <Typography variant="subtitle1">
+                                {translate(`universities.${tradKey}.notificationEmail`)}
+                            </Typography>
+                            <Box alignItems="center" display="flex" flexDirection="row" sx={{ mb: 2 }}>
+                                <OutlinedInput
+                                    name="notificationEmail"
+                                    onChange={(e) => setNewNotificationEmail(e.target.value)}
+                                    value={newNotificationEmail}
+                                    required
+                                />
+                            </Box>
+                        </Box>
+
+                        <Box>
+                            {(newLanguages.length > 0 || canAddNewLanguages) && (
+                                <Typography variant="subtitle1">
+                                    {translate('universities.specific_language')}
+                                </Typography>
+                            )}
+                            {canAddNewLanguages && (
+                                <>
+                                    <Table>
+                                        <TableBody>
+                                            {newLanguages.map((language) => (
+                                                <TableRow key={language.code}>
+                                                    <TableCell sx={{ width: 10, padding: '0' }}>
+                                                        <Button onClick={() => removeLanguage(language)}>
+                                                            <DeleteIcon />
+                                                        </Button>
+                                                    </TableCell>
+                                                    <TableCell sx={{ padding: '0' }}>
+                                                        {translate(`languages_code.${language.code}`)}
+                                                    </TableCell>
+                                                </TableRow>
+                                            ))}
+                                        </TableBody>
+                                    </Table>
+                                    <Box
+                                        sx={{
+                                            display: 'flex',
+                                            flexDirection: 'row',
+                                            alignItems: 'center',
+                                            gap: '10px',
+                                            marginTop: '10px',
+                                        }}
+                                    >
+                                        <LanguagesPicker
+                                            onChange={addLanguage}
+                                            value={newLanguages}
+                                            hideGlobalLanguages
+                                        />
+                                    </Box>
+                                </>
+                            )}
+                        </Box>
+                    </Box>
+
+                    <Box flex="1" sx={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>
+                        <Box>
+                            <Typography variant="subtitle1">
+                                {translate(`universities.${tradKey}.admission_start`)}
+                            </Typography>
+                            <Box alignItems="center" display="flex" flexDirection="row">
+                                <DateTimePicker
+                                    ampm={false}
+                                    // @ts-ignore
+                                    defaultValue={daysjs(admissionStartDate)}
+                                    onChange={setNewAdmissionStartDate}
+                                    sx={{ my: 2, width: '100%' }}
+                                    disableUnderline
+                                />
+                            </Box>
+                        </Box>
+
+                        <Box>
+                            <Typography variant="subtitle1">
+                                {translate(`universities.${tradKey}.admission_end`)}
+                            </Typography>
+                            <Box alignItems="center" display="flex" flexDirection="row">
+                                <DateTimePicker
+                                    ampm={false}
+                                    // @ts-ignore
+                                    defaultValue={daysjs(admissionEndDate)}
+                                    onChange={setNewAdmissionEndDate}
+                                    sx={{ my: 2, width: '100%' }}
+                                />
+                            </Box>
+                        </Box>
+
+                        <Box>
+                            <Typography variant="subtitle1">
+                                {translate(`universities.${tradKey}.open_service`)}
+                            </Typography>
+                            <Box alignItems="center" display="flex" flexDirection="row">
+                                <DateTimePicker
+                                    ampm={false}
+                                    // @ts-ignore
+                                    defaultValue={daysjs(openServiceDate)}
+                                    onChange={setNewOpenServiceDate}
+                                    sx={{ my: 2, width: '100%' }}
+                                    disableUnderline
+                                />
+                            </Box>
+                        </Box>
+
+                        <Box>
+                            <Typography variant="subtitle1">
+                                {translate(`universities.${tradKey}.close_service`)}
+                            </Typography>
+                            <Box alignItems="center" display="flex" flexDirection="row">
+                                <DateTimePicker
+                                    ampm={false}
+                                    // @ts-ignore
+                                    defaultValue={daysjs(closeServiceDate)}
+                                    onChange={setNewCloseServiceDate}
+                                    sx={{ my: 2, width: '100%' }}
+                                />
+                            </Box>
+                        </Box>
+                    </Box>
                 </Box>
+
+                <Button
+                    color="primary"
+                    disabled={
+                        !newNativeLanguage ||
+                        !newCountry ||
+                        !newTimezone ||
+                        !newName ||
+                        (!newAdmissionStartDate && !admissionStartDate) ||
+                        (!newAdmissionEndDate && !admissionEndDate) ||
+                        !newWebsite
+                    }
+                    onClick={onSendUniversity}
+                    sx={styles}
+                    variant="contained"
+                >
+                    {translate('global.save')}
+                </Button>
             </Form>
         </LocalizationProvider>
     );

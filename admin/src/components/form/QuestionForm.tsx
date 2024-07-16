@@ -2,7 +2,6 @@ import { Box, Typography, Input } from '@mui/material';
 import React, { useEffect, useState } from 'react';
 import { Button, useTranslate } from 'react-admin';
 import IndexedTranslation from '../../entities/IndexedTranslation';
-import inputStyle from '../../theme/inputStyle';
 import QuizzLevelPicker from '../QuizzLevelPicker';
 import TranslationForm from './TranslationForm';
 
@@ -34,31 +33,35 @@ const QuestionForm: React.FC<QuestionFormProps> = ({ handleSubmit, name, level, 
     };
 
     return (
-        <Box component="form" sx={{ m: 4 }} noValidate>
-            <Typography variant="subtitle1">{translate('questions.create.level')}</Typography>
-            <QuizzLevelPicker onChange={setCurrentLevel} value={currentLevel} />
-            <Typography variant="subtitle1">{translate('questions.create.name')}</Typography>
-            <Box alignItems="center" display="flex" flexDirection="row">
-                <Input name="Language" sx={{ mx: 4, my: 2, width: 40 }} value="FR" disableUnderline />
-                <Input
-                    name="Content"
-                    onChange={(e) => setCurrentName(e.target.value)}
-                    placeholder={translate('global.content')}
-                    sx={inputStyle}
-                    value={currentName}
-                    disableUnderline
-                    multiline
-                    required
-                />
+        <Box component="form" sx={{ display: 'flex', flexDirection: 'column', gap: '20px' }} noValidate>
+            <Box>
+                <Typography variant="subtitle1">{translate('questions.create.level')}</Typography>
+                <QuizzLevelPicker onChange={setCurrentLevel} value={currentLevel} />
             </Box>
-            <Box sx={{ mt: 4 }}>
+            <Box>
+                <Typography variant="subtitle1">{translate('questions.create.name')}</Typography>
+                <Box alignItems="center" display="flex" flexDirection="row">
+                    <Input name="Language" sx={{ mx: 4, my: 2, width: '40px' }} value="FR" disableUnderline />
+                    <Input
+                        name="Content"
+                        onChange={(e) => setCurrentName(e.target.value)}
+                        placeholder={translate('global.content')}
+                        sx={{ width: '100%' }}
+                        value={currentName}
+                        disableUnderline
+                        multiline
+                        required
+                    />
+                </Box>
+            </Box>
+            <Box>
                 <TranslationForm setTranslations={setCurrentTranslations} translations={currentTranslations} />
             </Box>
             <Button
                 color="primary"
                 disabled={!currentLevel || !currentName}
                 onClick={sumbit}
-                sx={{ mt: 4, width: 300 }}
+                sx={{ mt: 4, width: '100%' }}
                 type="button"
                 variant="contained"
             >

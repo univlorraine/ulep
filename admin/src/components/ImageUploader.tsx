@@ -46,7 +46,7 @@ const ImageUploader: React.FC<ImageUploaderProps> = ({ source, onImageSelect }) 
             onDragOver={handleDragOver}
             onDrop={handleDrop}
             sx={{
-                border: isDragOver ? '2px dashed grey' : '2px solid lightgrey',
+                border: isDragOver ? '1px dashed grey' : '1px solid lightgrey',
                 borderRadius: 2,
                 padding: 2,
                 display: 'flex',

@@ -25,7 +25,7 @@ const TabsComponent = () => {
 
     return (
         <TabContext value={value}>
-            <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
+            <Box sx={{ width: '100%' }}>
                 <TabList onChange={handleChange}>
                     {record.learningLanguages.map((learningLanguage) => {
                         const label = learningLanguage.tandem
@@ -46,20 +46,22 @@ const TabsComponent = () => {
 };
 
 const LearningLanguageShow = () => (
-    <Show>
-        <FunctionField
-            render={(profile: ProfileWithTandems) => (
-                <Box sx={{ marginBottom: 2 }}>
-                    <Typography variant="h2">
-                        {getProfileDisplayName(profile)} ({codeLanguageToFlag(profile.nativeLanguage.code)})
-                    </Typography>
-                </Box>
-            )}
-        />
-        <SimpleShowLayout>
-            <TabsComponent />
-        </SimpleShowLayout>
-    </Show>
+    <Box className="profiles-with-tandem--show">
+        <Show>
+            <FunctionField
+                render={(profile: ProfileWithTandems) => (
+                    <Box sx={{ marginBottom: 2 }}>
+                        <Typography variant="h2">
+                            {getProfileDisplayName(profile)} ({codeLanguageToFlag(profile.nativeLanguage.code)})
+                        </Typography>
+                    </Box>
+                )}
+            />
+            <SimpleShowLayout sx={{ '& .RaSimpleShowLayout-row': { flexDirection: 'column', gap: '0' } }}>
+                <TabsComponent />
+            </SimpleShowLayout>
+        </Show>
+    </Box>
 );
 
 export default LearningLanguageShow;
