@@ -154,7 +154,7 @@ const LearningLanguageTabContent = ({ learningLanguage }: LearningLanguageTabCon
                     userProfile={record}
                 />
 
-                {!isLoadingMatches && bestMatch && !isAutomaticPairingMode && (
+                {!isAutomaticPairingMode && (
                     <PartnerCard
                         compatibilityScore={bestMatch?.score.total}
                         partnerLearningLanguage={bestMatch?.target}
@@ -165,7 +165,6 @@ const LearningLanguageTabContent = ({ learningLanguage }: LearningLanguageTabCon
                     />
                 )}
             </Box>
-
             {!isLoadingMatches && matches && !isAutomaticPairingMode && (
                 <OtherProposals
                     isErrorMatches={isErrorMatches}

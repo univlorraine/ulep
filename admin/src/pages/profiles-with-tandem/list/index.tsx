@@ -22,7 +22,7 @@ import codeLanguageToFlag from '../../../utils/codeLanguageToFlag';
 import isAgeCriterionMet from '../../../utils/isAgeCriterionMet';
 import TandemActions from '../show/Actions/TandemActions';
 import ProfileTandemDetailLink from '../ui/ProfileTandemDetailLink';
-import ProfileLink from '../ui/ProfileTandemLink';
+import ProfileWithTandemLink from '../ui/ProfileTandemLink';
 import useLearningLanguagesStore from '../useLearningLanguagesStore';
 import PairingActions from './PairingActions';
 
@@ -112,7 +112,7 @@ const LearningLanguageList = () => {
                             <>
                                 <Box className="line profile">
                                     <Box sx={{ display: 'flex', flexDirection: 'column' }}>
-                                        <ProfileLink profile={record} variant="subtitle1" />
+                                        <ProfileWithTandemLink profile={record} variant="subtitle1" />
                                         <Typography sx={{ color: '#767676' }}>{record.user.university.name}</Typography>
                                     </Box>
                                 </Box>

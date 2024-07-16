@@ -1,7 +1,6 @@
-import { Box, Typography, Input } from '@mui/material';
+import { Box, Typography, OutlinedInput } from '@mui/material';
 import React, { useEffect, useState } from 'react';
 import { Button, useTranslate } from 'react-admin';
-import inuputStyle from '../../theme/inputStyle';
 
 interface CampusFormProps {
     handleSubmit: (name: string) => void;
@@ -17,18 +16,17 @@ const CampusForm: React.FC<CampusFormProps> = ({ handleSubmit, name }) => {
     }, [name]);
 
     return (
-        <Box sx={{ m: 4 }}>
-            <Typography variant="subtitle1">{translate(`campus.update.name`)}</Typography>
-
-            <Box alignItems="center" display="flex" flexDirection="row">
-                <Input
-                    onChange={(e) => setNewName(e.target.value)}
-                    placeholder={translate('global.content')}
-                    sx={inuputStyle}
-                    value={newName}
-                    disableUnderline
-                    required
-                />
+        <Box sx={{ m: 4, display: 'flex', flexDirection: 'column', gap: '20px' }}>
+            <Box>
+                <Typography variant="subtitle1">{translate(`campus.update.name`)}</Typography>
+                <Box alignItems="center" display="flex" flexDirection="row">
+                    <OutlinedInput
+                        onChange={(e) => setNewName(e.target.value)}
+                        placeholder={translate('global.content')}
+                        value={newName}
+                        required
+                    />
+                </Box>
             </Box>
 
             <Button

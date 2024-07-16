@@ -156,7 +156,12 @@ const ProfileList = (props: any) => {
                 readOnly
                 {...props}
             >
-                <Datagrid bulkActionButtons={readOnly ? false : undefined} rowClick="show" aria-readonly>
+                <Datagrid
+                    bulkActionButtons={readOnly ? false : undefined}
+                    rowClick="show"
+                    sx={{ paddingTop: '20px' }}
+                    aria-readonly
+                >
                     <FunctionField
                         label={translate('global.role')}
                         render={(record: { user: User }) => translate(`global.${record.user.role.toLowerCase()}`)}

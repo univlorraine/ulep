@@ -1,9 +1,8 @@
-import { Typography, Box, Input } from '@mui/material';
+import { Typography, Box, OutlinedInput } from '@mui/material';
 import React from 'react';
 import { Button, useTranslate } from 'react-admin';
 import IndexedTranslation from '../../entities/IndexedTranslation';
 import Translation from '../../entities/Translation';
-import inputStyle from '../../theme/inputStyle';
 import TranslationLanguagePicker from '../TranslationLanguagePicker';
 
 interface TranslationFormProps {
@@ -27,21 +26,26 @@ const TranslationForm: React.FC<TranslationFormProps> = ({ setTranslations, tran
     };
 
     return (
-        <div>
+        <Box>
             <Typography variant="subtitle1">{translate('global.translations')}</Typography>
             {translations.map((item, index) => (
-                <Box key={item.index} alignItems="center" display="flex" flexDirection="row">
+                <Box
+                    key={item.index}
+                    alignItems="center"
+                    display="flex"
+                    flexDirection="row"
+                    gap="20px"
+                    marginBottom="20px"
+                >
                     <TranslationLanguagePicker
                         onChange={(value: TranslatedLanguage) => onTraductionLanguageAdded(value, index)}
                         value={translations[index].translation.language}
                     />
-                    <Input
+                    <OutlinedInput
                         name={`Content${item.index}`}
                         onChange={(e) => onTraductionContentAdded(e.target.value, index)}
                         placeholder={translate('global.content')}
-                        sx={inputStyle}
                         value={translations[index].translation.content}
-                        disableUnderline
                     />
                 </Box>
             ))}
@@ -58,11 +62,12 @@ const TranslationForm: React.FC<TranslationFormProps> = ({ setTranslations, tran
                         ])
                     }
                     type="button"
+                    variant="outlined"
                 >
                     <>{translate('global.new_translation')}</>
                 </Button>
             </Box>
-        </div>
+        </Box>
     );
 };
 

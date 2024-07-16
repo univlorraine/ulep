@@ -27,7 +27,6 @@ const AdministratorPicker: React.FC<AdministratorPickerProps> = ({ onChange, uni
                     }
                     sx={{ mb: 2, width: '100%' }}
                     value={value ? value.id : ''}
-                    variant="standard"
                     disableUnderline
                 >
                     {dataPicker.map((administrator: Administrator) => (

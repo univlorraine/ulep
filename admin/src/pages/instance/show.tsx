@@ -69,71 +69,90 @@ const InstanceShow = () => {
         <>
             <ConfigPagesHeader />
             <Show actions={<InstanceShowAction />} title={translate('instance.label')}>
-                <SimpleShowLayout sx={{ m: 3 }}>
-                    <TextField label={translate('instance.name')} source="name" />
-                    <EmailField label={translate('instance.email')} source="email" />
-                    <UrlField label={translate('instance.cgu')} source="cguUrl" />
-                    <UrlField label={translate('instance.confidentiality')} source="confidentialityUrl" />
-                    <UrlField label={translate('instance.ressource')} source="ressourceUrl" />
-                    <ColorField label={translate('instance.primaryColor')} source="primaryColor" />
-                    <ColorField label={translate('instance.primaryBackgroundColor')} source="primaryBackgroundColor" />
-                    <ColorField label={translate('instance.primaryDarkColor')} source="primaryDarkColor" />
-                    <ColorField label={translate('instance.secondaryColor')} source="secondaryColor" />
-                    <ColorField
-                        label={translate('instance.secondaryBackgroundColor')}
-                        source="secondaryBackgroundColor"
-                    />
-                    <ColorField label={translate('instance.secondaryDarkColor')} source="secondaryDarkColor" />
-                    <NumberField
-                        label={translate('instance.daysBeforeClosureNotification')}
-                        source="daysBeforeClosureNotification"
-                    />
-                    <FunctionField
-                        render={(record: Instance) => (
-                            <div style={{ display: 'flex', alignItems: 'center', marginBottom: '1em' }}>
-                                <Typography color="inherit" variant="subtitle1">
-                                    {translate('instance.maintenance')}
-                                </Typography>
+                <Box sx={{ display: 'flex', gap: '30px' }}>
+                    <SimpleShowLayout sx={{ m: 3, flex: '1' }}>
+                        <TextField label={translate('instance.name')} source="name" />
+                        <EmailField label={translate('instance.email')} source="email" />
+                        <UrlField label={translate('instance.cgu')} source="cguUrl" />
+                        <UrlField label={translate('instance.confidentiality')} source="confidentialityUrl" />
+                        <UrlField label={translate('instance.ressource')} source="ressourceUrl" />
+                        <NumberField
+                            label={translate('instance.daysBeforeClosureNotification')}
+                            source="daysBeforeClosureNotification"
+                        />
+                        <FunctionField
+                            label={translate('instance.maintenance')}
+                            render={(record: Instance) => (
                                 <Switch
                                     color="secondary"
                                     defaultChecked={record?.isInMaintenance}
                                     onChange={handleToggle}
                                     value={record?.isInMaintenance}
                                 />
-                            </div>
-                        )}
-                    />
-                    <Button color="secondary" onClick={() => setIsModalOpen(true)} variant="contained">
-                        <div
-                            style={{
-                                display: 'flex',
-                                alignItems: 'center',
-                                justifyContent: 'center',
-                            }}
-                        >
-                            <DeleteIcon />
-                            <Typography style={{ marginLeft: 12 }}>{translate('purge.title')}</Typography>
-                        </div>
-                    </Button>
-                    <Button color="secondary" onClick={handleGenerateConversations} variant="contained">
-                        <div
-                            style={{
-                                display: 'flex',
-                                alignItems: 'center',
-                                justifyContent: 'center',
-                            }}
-                        >
-                            <QuestionAnswerIcon />
-                            {isGeneratingConversations ? (
-                                <CircularProgress size={25} />
-                            ) : (
-                                <Typography style={{ marginLeft: 12 }}>
-                                    {translate('generateConversation.title')}
-                                </Typography>
                             )}
-                        </div>
-                    </Button>
-                </SimpleShowLayout>
+                        />
+                        <FunctionField
+                            label={translate('instance.actions')}
+                            render={() => (
+                                <Box
+                                    sx={{
+                                        display: 'flex',
+                                        flexDirection: 'row',
+                                        alignItems: 'flex-start',
+                                        gap: '20px',
+                                    }}
+                                >
+                                    <Button color="secondary" onClick={() => setIsModalOpen(true)} variant="contained">
+                                        <div
+                                            style={{
+                                                display: 'flex',
+                                                alignItems: 'center',
+                                                justifyContent: 'center',
+                                            }}
+                                        >
+                                            <DeleteIcon />
+                                            <Typography style={{ marginLeft: 12 }}>
+                                                {translate('purge.title')}
+                                            </Typography>
+                                        </div>
+                                    </Button>
+                                    <Button color="secondary" onClick={handleGenerateConversations} variant="contained">
+                                        <div
+                                            style={{
+                                                display: 'flex',
+                                                alignItems: 'center',
+                                                justifyContent: 'center',
+                                            }}
+                                        >
+                                            <QuestionAnswerIcon />
+                                            {isGeneratingConversations ? (
+                                                <CircularProgress size={25} />
+                                            ) : (
+                                                <Typography style={{ marginLeft: 12 }}>
+                                                    {translate('generateConversation.title')}
+                                                </Typography>
+                                            )}
+                                        </div>
+                                    </Button>
+                                </Box>
+                            )}
+                        />
+                    </SimpleShowLayout>
+                    <SimpleShowLayout sx={{ m: 3, flex: '1' }}>
+                        <ColorField label={translate('instance.primaryColor')} source="primaryColor" />
+                        <ColorField
+                            label={translate('instance.primaryBackgroundColor')}
+                            source="primaryBackgroundColor"
+                        />
+                        <ColorField label={translate('instance.primaryDarkColor')} source="primaryDarkColor" />
+                        <ColorField label={translate('instance.secondaryColor')} source="secondaryColor" />
+                        <ColorField
+                            label={translate('instance.secondaryBackgroundColor')}
+                            source="secondaryBackgroundColor"
+                        />
+                        <ColorField label={translate('instance.secondaryDarkColor')} source="secondaryDarkColor" />
+                    </SimpleShowLayout>
+                </Box>
                 <Modal
                     aria-describedby="confirm-modal"
                     aria-labelledby="confirm-modal"

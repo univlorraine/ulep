@@ -46,7 +46,6 @@ const AdminGroupPicker: React.FC<GroupPickerProps> = ({ onChange, value }) => {
                 onChange={(group) => onChange(keycloakGroups.find((g) => group.target.value === g.id) as KeycloakGroup)}
                 sx={{ mb: 2, width: '100%' }}
                 value={value && value.id}
-                variant="standard"
                 disableUnderline
             >
                 {keycloakGroups.map((group: KeycloakGroup) => (

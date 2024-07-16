@@ -22,7 +22,6 @@ const QuizzLevelPicker: React.FC<QuizzLevelPickerProps> = ({ onChange, value }) 
                 onChange={(quizz) => onChange(quizz.target.value)}
                 sx={{ mx: 4, my: 2 }}
                 value={value ?? ''}
-                variant="standard"
                 disableUnderline
             >
                 {data.map((quizz: Quizz) => (

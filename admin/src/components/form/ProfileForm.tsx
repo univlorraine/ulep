@@ -1,9 +1,8 @@
-import { Box, Typography, Input } from '@mui/material';
+import { Box, Typography, OutlinedInput } from '@mui/material';
 import React, { useState } from 'react';
 import { Button, Loading, useGetIdentity, useTranslate } from 'react-admin';
 import Administrator from '../../entities/Administrator';
 import { Profile, ProfileFormPayload } from '../../entities/Profile';
-import inputStyle from '../../theme/inputStyle';
 import AdministratorPicker from '../AdministratorPicker';
 
 interface ProfileFormProps {
@@ -31,61 +30,65 @@ const ProfileForm: React.FC<ProfileFormProps> = ({ record, handleSubmit }) => {
         });
 
     return (
-        <Box sx={{ m: 4 }}>
-            <Typography variant="subtitle1">{translate(`global.email`)}</Typography>
-
-            <Box alignItems="center" display="flex" flexDirection="row">
-                <Input
-                    name="Email"
-                    onChange={(e) => setNewEmail(e.target.value)}
-                    placeholder={translate('global.email')}
-                    sx={inputStyle}
-                    type="email"
-                    value={newEmail}
-                    disableUnderline
-                    required
-                />
+        <Box display="flex" flexDirection="column" gap="30px">
+            <Box>
+                <Typography variant="subtitle1">{translate(`global.email`)}</Typography>
+                <Box alignItems="center" display="flex" flexDirection="row">
+                    <OutlinedInput
+                        name="Email"
+                        onChange={(e) => setNewEmail(e.target.value)}
+                        placeholder={translate('global.email')}
+                        type="email"
+                        value={newEmail}
+                        required
+                    />
+                </Box>
             </Box>
 
-            <Typography variant="subtitle1">{translate('global.firstname')}</Typography>
-            <Box alignItems="center" display="flex" flexDirection="row">
-                <Input
-                    name="Firstname"
-                    onChange={(e) => setNewFirstname(e.target.value)}
-                    placeholder={translate('global.firstname')}
-                    sx={inputStyle}
-                    value={newFirstname}
-                    disableUnderline
-                    required
-                />
+            <Box display="flex" flexDirection="row" gap="30px">
+                <Box flex="1">
+                    <Typography variant="subtitle1">{translate('global.firstname')}</Typography>
+                    <Box alignItems="center" display="flex" flexDirection="row">
+                        <OutlinedInput
+                            name="Firstname"
+                            onChange={(e) => setNewFirstname(e.target.value)}
+                            placeholder={translate('global.firstname')}
+                            value={newFirstname}
+                            required
+                        />
+                    </Box>
+                </Box>
+
+                <Box flex="1">
+                    <Typography variant="subtitle1">{translate(`global.lastname`)}</Typography>
+                    <Box alignItems="center" display="flex" flexDirection="row">
+                        <OutlinedInput
+                            name="Lastname"
+                            onChange={(e) => setNewLastname(e.target.value)}
+                            placeholder={translate('global.lastname')}
+                            value={newLastname}
+                            required
+                        />
+                    </Box>
+                </Box>
             </Box>
 
-            <Typography variant="subtitle1">{translate(`global.lastname`)}</Typography>
-            <Box alignItems="center" display="flex" flexDirection="row">
-                <Input
-                    name="Lastname"
-                    onChange={(e) => setNewLastname(e.target.value)}
-                    placeholder={translate('global.lastname')}
-                    sx={inputStyle}
-                    value={newLastname}
-                    disableUnderline
-                    required
-                />
-            </Box>
-            <Typography variant="subtitle1">{translate(`profiles.contact`)}</Typography>
-            <Box alignItems="center" display="flex" flexDirection="row">
-                <AdministratorPicker
-                    onChange={setNewContact}
-                    universityId={record.user.university.id}
-                    value={newContact}
-                />
+            <Box>
+                <Typography variant="subtitle1">{translate(`profiles.contact`)}</Typography>
+                <Box alignItems="center" display="flex" flexDirection="row">
+                    <AdministratorPicker
+                        onChange={setNewContact}
+                        universityId={record.user.university.id}
+                        value={newContact}
+                    />
+                </Box>
             </Box>
 
             <Button
                 color="primary"
                 disabled={!newFirstname || !newLastname || !newEmail}
                 onClick={onCreatePressed}
-                sx={{ mt: 4, width: '100%' }}
+                sx={{ mt: 3 }}
                 type="button"
                 variant="contained"
             >
