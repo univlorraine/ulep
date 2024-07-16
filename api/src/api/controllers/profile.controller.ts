@@ -285,8 +285,6 @@ export class ProfileController {
   ): Promise<ProfileResponse> {
     const profile = await this.getProfileUsecase.execute({ id });
 
-    console.log({ profile: profile.learningLanguages[0].tandem });
-
     return ProfileResponse.fromDomain(profile);
   }
 

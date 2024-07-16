@@ -8,11 +8,11 @@ type UserStatusChipsProps = {
 const UserStatusChips = ({ status }: UserStatusChipsProps) => {
     const translate = useTranslate();
 
-    if (status && status !== 'ACTIVE') {
-        return <ColoredChips color="error" label={translate(`global.userStatus.${status.toLowerCase()}`)} />;
+    if (!status || status === 'ACTIVE') {
+        return null;
     }
 
-    return null;
+    return <ColoredChips color="error" label={translate(`global.userStatus.${status.toLowerCase()}`)} />;
 };
 
 export default UserStatusChips;
