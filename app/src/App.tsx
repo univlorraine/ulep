@@ -31,7 +31,6 @@ import './presentation/theme/global.css';
 import './presentation/theme/margin.css';
 import './presentation/theme/variables.css';
 import Store from './store/store';
-import { useHistory } from 'react-router';
 
 polyfillCountryFlagEmojis();
 setupIonicReact();
