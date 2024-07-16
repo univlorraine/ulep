@@ -64,7 +64,7 @@ const LinkTabs = ({ links }: LinkTabsProps) => {
         <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
             {value !== undefined ? (
                 <TabContext value={value}>
-                    <TabList onChange={handleChange} value={value}>
+                    <TabList onChange={handleChange}>
                         {links.map((link) => (
                             <Tab
                                 key={getLinkKey(link)}

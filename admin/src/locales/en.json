@@ -479,29 +479,11 @@
                 }
             },
             "filters": {
-                "activeTandem": {
-                    "label": "In tandem",
-                    "choices": {
-                        "yes": "Yes",
-                        "no": "No"
-                    }
-                },
-                "actionableTandem": {
-                    "label": "Pending tandems",
-                    "choices": {
-                        "yes": "Yes",
-                        "no": "No"
-                    }
-                },
-                "pausedTandem": {
-                    "label": "Paused tandems",
-                    "choices": {
-                        "yes": "Yes",
-                        "no": "Non"
-                    }
-                },
                 "user_lastname": {
                     "label": "Lastname"
+                },
+                "university": {
+                    "label": "University"
                 }
             },
             "globalRoutineModal": {
@@ -517,20 +499,39 @@
                 "name": "Name",
                 "learnedLanguage": "Requested language",
                 "level": "Level",
-                "createdAt": "Created",
                 "university": "University",
-                "hasActiveTandem": "In tandem",
-                "hasPausedTandem": "Tandem paused",
-                "actionPossible": "Pending tandem",
-                "specificProgram": "Specific program",
                 "role": "Role",
-                "reported": "Reported"
+                "age": "Age",
+                "score": "Score",
+                "pairing": "Pairing",
+                "actions": "Actions",
+                "type": "Type"
             },
-            "noUniversitySelected": "Please select one or more universities for pairing"
+            "noUniversitySelected": "Please select one or more universities for pairing",
+            "noTandem": "No profile proposed for the tandem"
         },
         "show": {
+            "management": {
+                "title": "Tandem management",
+                "applicant_profile": "Applicant profile",
+                "best_tandem": "Best tandem",
+                "best_tandem_desc": "The best possible solution for your program to create the maximum number of tandems.",
+                "best_match": "Best match",
+                "best_match_desc": "Best possible solution, taking into account the preferences of both applicant and candidate.",
+                "ok": "Ok",
+                "no": "No",
+                "validate": "Validate",
+                "refuse": "Refuse",
+                "current_tandem": "Current tandem",
+                "pairing_infos": "Pairing informations"
+            },
+            "other_proposals": {
+                "title": "Other proposals from partner universities"
+            },
             "fields": {
                 "createdAt": "Date",
+                "tandemCreatedAt": "Tandem creation date",
+                "tandemUpdatedAt": "Last update",
                 "learnedLanguage": "Requested language",
                 "level": "Level",
                 "status": "Status",
@@ -544,7 +545,9 @@
                 "age": "Age",
                 "certificateOption": "Certificate option",
                 "specificProgram": "Specific program",
-                "hasPriority": "Priority language (no response to previous cycle)"
+                "hasPriority": "Priority language (no response to previous cycle)",
+                "score": "Score",
+                "nativeLanguage": "Native language"
             },
             "tandems": {
                 "error": "An error occured while fetching tandems",
@@ -571,11 +574,10 @@
                     "learningType": "Mode",
                     "gender": "Gender",
                     "age": "Age",
-                    "spokenLanguages": "Spoken languages"
+                    "spokenLanguages": "Spoken languages",
+                    "nativeLanguage": "Native language"
                 },
                 "globalSuggestions": {
-                    "title": "Tandem suggested with overall process",
-                    "titleNotCentralUniversity": "Proposed tandem",
                     "noResult": "No result"
                 },
                 "actions": {
@@ -592,11 +594,28 @@
                 "filters": {
                     "firstname": "Firstname",
                     "lastname": "Lastname",
-                    "role": "Role"
+                    "role": "Role",
+                    "university": "University"
                 }
             }
         },
-        "title": "Tandem requests"
+        "title": "Tandem requests",
+        "status": {
+            "INACTIVE": "Inactive",
+            "DRAFT": "Waiting",
+            "VALIDATED_BY_ONE_UNIVERSITY": "Validated by one university",
+            "PAUSED": "Paused",
+            "ACTIVE": "Paired"
+        },
+        "types": {
+            "BOTH": "E-tandem / Tandem",
+            "ETANDEM": "E-tandem",
+            "TANDEM": "Tandem"
+        },
+        "roles": {
+            "STAFF": "Staff",
+            "STUDENT": "Student"
+        }
     },
     "universitiesPicker": {
         "error": "An error occured while fetching universities"

@@ -10,16 +10,8 @@ import {
     useGetIdentity,
     useUserMenu,
     UserIdentity,
-    useGetOne,
-    ImageField,
-    Identifier,
 } from 'react-admin';
-
-type CustomAvatarProps = {
-    userId: Identifier;
-    firstName: string;
-    lastName: string;
-};
+import CustomAvatar from '../CustomAvatar';
 
 type UsernameProps = {
     user: UserIdentity;
@@ -27,31 +19,6 @@ type UsernameProps = {
 
 type AdminMenuProps = {
     user: UserIdentity | undefined;
-};
-
-const CustomAvatar = ({ userId, firstName, lastName }: CustomAvatarProps) => {
-    const { data, isLoading, error } = useGetOne(
-        'uploads',
-        { id: userId },
-        {
-            retry: false,
-        }
-    );
-    const label = `${firstName} ${lastName}`;
-
-    if (error || isLoading || !data.url)
-        return (
-            <Avatar>
-                {firstName.charAt(0)}
-                {lastName.charAt(0)}
-            </Avatar>
-        );
-
-    return (
-        <Avatar>
-            <ImageField label={label} record={data} source="url" title={String(label)} />
-        </Avatar>
-    );
 };
 
 const Username = ({ user }: UsernameProps) => (
@@ -92,7 +59,7 @@ const AdminMenu = ({ user }: AdminMenuProps) => {
 const CustomUserMenu = (props: any) => {
     const { data: user } = useGetIdentity();
     const avatar = user ? (
-        <CustomAvatar firstName={user.firstName} lastName={user.lastName} userId={user.id} />
+        <CustomAvatar avatarId={user.id} firstName={user.firstName} lastName={user.lastName} />
     ) : (
         <Avatar />
     );

@@ -23,9 +23,9 @@ import countries from './pages/countries';
 import instance from './pages/instance';
 import interests from './pages/interests';
 import languages from './pages/languages';
-import learningLanguages from './pages/learning-languages';
 import objectives from './pages/objectives';
 import profiles from './pages/profiles';
+import profilesWithTandem from './pages/profiles-with-tandem';
 import questions from './pages/questions';
 import reports from './pages/report';
 import reportCategories from './pages/report-categories';
@@ -62,9 +62,9 @@ const App = () => {
                     />
                     <Resource
                         icon={PeopleIcon}
-                        name="learning-languages"
+                        name="profiles/with-tandem"
                         options={{ label: translate('learning_languages.label') }}
-                        {...learningLanguages}
+                        {...profilesWithTandem}
                     />
                     <Resource
                         icon={WarningAmberOutlinedIcon}

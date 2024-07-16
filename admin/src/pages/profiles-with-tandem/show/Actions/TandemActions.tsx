@@ -1,5 +1,4 @@
-import { Check, Clear } from '@mui/icons-material';
-import { Box, CircularProgress, IconButton, Modal } from '@mui/material';
+import { Box, CircularProgress, Modal } from '@mui/material';
 import React, { useState } from 'react';
 import { Button, useNotify, useTranslate } from 'react-admin';
 import { TandemStatus } from '../../../../entities/Tandem';
@@ -152,32 +151,42 @@ const TandemActions = ({
                     )}
                 </Box>
             </Modal>
-            {!disableCreateButton && (
-                <IconButton aria-label="accept" color="success" onClick={() => handleAction(TandemAction.ACCEPT)}>
-                    <Check />
-                </IconButton>
-            )}
-            <IconButton aria-label="reject" color="error" onClick={() => handleAction(TandemAction.REFUSE)}>
-                <Clear />
-            </IconButton>
-            {tandemId && (tandemStatus === TandemStatus.ACTIVE || tandemStatus === TandemStatus.PAUSED) && (
+            <Box className="tandem-actions">
+                {tandemId && (tandemStatus === TandemStatus.ACTIVE || tandemStatus === TandemStatus.PAUSED) && (
+                    <Button
+                        color="info"
+                        label={translate(
+                            `learning_languages.show.tandems.actions.ctaLabels.${
+                                tandemStatus === TandemStatus.PAUSED ? 'free' : 'pause'
+                            }`
+                        )}
+                        onClick={() =>
+                            updateTandem({
+                                tandemId,
+                                tandemStatus:
+                                    tandemStatus === TandemStatus.PAUSED ? TandemStatus.ACTIVE : TandemStatus.PAUSED,
+                            })
+                        }
+                        variant="outlined"
+                    />
+                )}
+                {!disableCreateButton && (
+                    <Button
+                        aria-label="accept"
+                        color="success"
+                        label={translate('learning_languages.show.management.validate')}
+                        onClick={() => handleAction(TandemAction.ACCEPT)}
+                        variant="contained"
+                    />
+                )}
                 <Button
-                    color="info"
-                    label={translate(
-                        `learning_languages.show.tandems.actions.ctaLabels.${
-                            tandemStatus === TandemStatus.PAUSED ? 'free' : 'pause'
-                        }`
-                    )}
-                    onClick={() =>
-                        updateTandem({
-                            tandemId,
-                            tandemStatus:
-                                tandemStatus === TandemStatus.PAUSED ? TandemStatus.ACTIVE : TandemStatus.PAUSED,
-                        })
-                    }
-                    variant="outlined"
+                    aria-label="reject"
+                    color="error"
+                    label={translate('learning_languages.show.management.refuse')}
+                    onClick={() => handleAction(TandemAction.REFUSE)}
+                    variant="contained"
                 />
-            )}
+            </Box>
         </>
     );
 };

@@ -5,9 +5,10 @@ const useTandemMatchesFilters = (matches: Match[]) => {
     const [firstnameFilter, setFirstnameFilter] = useState<string>();
     const [lastnameFilter, setLastnameFilter] = useState<string>();
     const [roleFilter, setRoleFilter] = useState<UserRole>();
+    const [universityIdFilter, setUniversityIdFilter] = useState<string>();
 
     const filteredMatches =
-        firstnameFilter || lastnameFilter || roleFilter
+        firstnameFilter || lastnameFilter || roleFilter || universityIdFilter
             ? matches.filter((match) => {
                   if (
                       firstnameFilter &&
@@ -24,6 +25,9 @@ const useTandemMatchesFilters = (matches: Match[]) => {
                   if (roleFilter && match.target.profile.user.role !== roleFilter) {
                       return false;
                   }
+                  if (universityIdFilter && match.target.profile.user.university.id !== universityIdFilter) {
+                      return false;
+                  }
 
                   return true;
               })
@@ -37,6 +41,8 @@ const useTandemMatchesFilters = (matches: Match[]) => {
         setLastnameFilter,
         roleFilter,
         setRoleFilter,
+        universityIdFilter,
+        setUniversityIdFilter,
     };
 };
 

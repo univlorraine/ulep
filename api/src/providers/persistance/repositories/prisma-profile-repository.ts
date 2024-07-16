@@ -6,7 +6,11 @@ import {
   ProfileRepository,
 } from 'src/core/ports/profile.repository';
 import { Profile } from 'src/core/models';
-import { ProfilesRelations, profileMapper } from '../mappers';
+import {
+  ProfilesRelations,
+  ProfilesRelationsWithTandemProfile,
+  profileMapper,
+} from '../mappers';
 
 @Injectable()
 export class PrismaProfileRepository implements ProfileRepository {
@@ -15,7 +19,7 @@ export class PrismaProfileRepository implements ProfileRepository {
   async ofId(id: string): Promise<Profile | null> {
     const entry = await this.prisma.profiles.findUnique({
       where: { id },
-      include: ProfilesRelations,
+      include: ProfilesRelationsWithTandemProfile,
     });
 
     if (!entry) {
@@ -131,16 +135,20 @@ export class PrismaProfileRepository implements ProfileRepository {
       order = { User: { [orderBy.field]: orderBy.order } };
     }
 
-    const users = await this.prisma.profiles.findMany({
+    const profiles = await this.prisma.profiles.findMany({
       where: wherePayload,
       skip: offset,
       orderBy: order,
       take: limit,
-      include: ProfilesRelations,
+      include: ProfilesRelationsWithTandemProfile,
     });
 
+    const profilesWithLearningLanguages = profiles.filter(
+      (profile) => profile.LearningLanguages.length !== 0,
+    );
+
     return {
-      items: users.map(profileMapper),
+      items: profilesWithLearningLanguages.map(profileMapper),
       totalItems: count,
     };
   }

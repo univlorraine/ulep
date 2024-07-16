@@ -1,18 +1,26 @@
 import { PlayArrow } from '@mui/icons-material';
 import { Modal, Box, CircularProgress } from '@mui/material';
 import React, { useState } from 'react';
-import { Button, FilterButton, TopToolbar, useNotify, useTranslate } from 'react-admin';
+import { Button, useNotify, useTranslate } from 'react-admin';
+import UniversitiesPicker from '../../../components/UniversitiesPicker';
 import { RoutineExecutionStatus } from '../../../entities/RoutineExecution';
+import University, { isCentralUniversity } from '../../../entities/University';
 import useLastGlobalRoutineExecution from './useLastGlobalRoutineExecution';
 import useLaunchGlobalRoutine from './useLaunchGlobalRoutine';
 
 interface ActionsProps {
-    enableLaunchGlobalRoutine?: boolean;
     onGlobalRoutineEnded?: () => void;
     universityIds: string[];
+    selectedUniversityIds: string[];
+    setSelectedUniversityIds: (ids: string[]) => void;
 }
 
-const Actions = ({ enableLaunchGlobalRoutine, onGlobalRoutineEnded, universityIds }: ActionsProps) => {
+const Actions = ({
+    onGlobalRoutineEnded,
+    universityIds,
+    selectedUniversityIds,
+    setSelectedUniversityIds,
+}: ActionsProps) => {
     const translate = useTranslate();
     const notify = useNotify();
 
@@ -40,18 +48,18 @@ const Actions = ({ enableLaunchGlobalRoutine, onGlobalRoutineEnded, universityId
         mutate(universityIds);
     };
 
-    if (!enableLaunchGlobalRoutine) {
-        return (
-            <TopToolbar>
-                <FilterButton disableSaveQuery />
-            </TopToolbar>
-        );
-    }
-
     return (
-        <>
-            <TopToolbar>
-                <FilterButton disableSaveQuery />
+        <Box sx={{ display: 'flex', gap: '50px', alignItems: 'center' }}>
+            <Box sx={{ flex: '1' }}>
+                <UniversitiesPicker
+                    filterUniversities={(university: University) => !isCentralUniversity(university)}
+                    label={translate('learning_languages.list.universitiesPicker.label')}
+                    onSelected={(ids) => setSelectedUniversityIds(ids)}
+                    placeholder={translate('learning_languages.list.universitiesPicker.label')}
+                    value={selectedUniversityIds}
+                />
+            </Box>
+            <Box sx={{ width: 'fit-content' }}>
                 {isLoadingLastGlobalRoutine && <CircularProgress size={15} />}
                 {!isLoadingLastGlobalRoutine && globalRoutineIsCurrentlyRunning && (
                     <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, padding: 0.5 }}>
@@ -61,14 +69,14 @@ const Actions = ({ enableLaunchGlobalRoutine, onGlobalRoutineEnded, universityId
                 )}
                 {!isLoadingLastGlobalRoutine && !globalRoutineIsCurrentlyRunning && (
                     <Button
-                        color="secondary"
+                        color="primary"
                         label={translate('learning_languages.list.actions.globalRoutine.ctaLabel')}
                         onClick={() => setConfirmModalIsOpen(true)}
                         startIcon={<PlayArrow />}
-                        variant="text"
+                        variant="outlined"
                     />
                 )}
-            </TopToolbar>
+            </Box>
             <Modal
                 aria-describedby="modal-modal-description"
                 aria-labelledby="modal-modal-title"
@@ -120,7 +128,7 @@ const Actions = ({ enableLaunchGlobalRoutine, onGlobalRoutineEnded, universityId
                     )}
                 </Box>
             </Modal>
-        </>
+        </Box>
     );
 };
 

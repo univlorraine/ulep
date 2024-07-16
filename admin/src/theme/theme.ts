@@ -11,11 +11,19 @@ const theme: RaThemeOptions = {
             main: '#fdee66',
             contrastText: '#212121',
         },
+        info: {
+            main: '#2196f3',
+            contrastText: '#ffffff',
+        },
+        warning: {
+            main: '#ff8700',
+            contrastText: '#ffffff',
+        },
     } as PaletteOptions,
     typography: {
         fontFamily: 'Roboto, Arial, sans-serif',
         body1: {
-            fontSize: '1rem',
+            fontSize: '0.875rem',
             color: '#212121',
         },
         h1: {
@@ -26,6 +34,22 @@ const theme: RaThemeOptions = {
             fontSize: '2.4rem',
             fontWeight: '400',
             padding: '16px 0',
+        },
+        h3: {
+            fontSize: '1.2rem',
+            fontWeight: '600',
+            borderBottom: '1px solid #e0e0e0',
+            paddingBottom: '10px',
+            marginBottom: '10px',
+        },
+        h4: {
+            fontSize: '1rem',
+            fontWeight: '600',
+        },
+        subtitle1: {
+            fontSize: '0.875rem',
+            color: '#212121',
+            fontWeight: '700',
         },
     },
     components: {
@@ -59,6 +83,13 @@ const theme: RaThemeOptions = {
                 },
             },
         },
+        MuiPaper: {
+            styleOverrides: {
+                root: {
+                    boxShadow: 'none',
+                },
+            },
+        },
         MuiTableCell: {
             styleOverrides: {
                 root: {
@@ -79,6 +110,7 @@ const theme: RaThemeOptions = {
                     '&:hover': {
                         backgroundColor: '#212121',
                     },
+                    border: 'none !important',
                 },
             },
         },
@@ -147,6 +179,15 @@ const theme: RaThemeOptions = {
             styleOverrides: {
                 root: {
                     borderRight: '1px solid #e0e0e0',
+                },
+            },
+        },
+        RaTabbedShowLayout: {
+            styleOverrides: {
+                root: {
+                    '& .RaTabbedShowLayout-content': {
+                        padding: '0',
+                    },
                 },
             },
         },
