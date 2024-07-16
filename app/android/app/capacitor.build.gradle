@@ -23,8 +23,8 @@ dependencies {
     implementation project(':capacitor-status-bar')
     implementation project(':capawesome-capacitor-file-picker')
     implementation project(':sentry-capacitor')
-    implementation project(':capacitor-voice-recorder')
     implementation project(':capacitor-jitsi-meet')
+    implementation project(':capacitor-voice-recorder')
 
 }
 

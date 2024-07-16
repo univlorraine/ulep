@@ -1,25 +1,25 @@
+import { KeycloakClient } from '@app/keycloak';
 import { Inject, Injectable, Logger } from '@nestjs/common';
-import { USER_REPOSITORY, UserRepository } from '../../ports/user.repository';
+import { ConfigService } from '@nestjs/config';
+import { Env } from 'src/configuration';
 import { RessourceDoesNotExist } from 'src/core/errors';
 import { Tandem, TandemStatus, User, UserStatus } from 'src/core/models';
+import { CHAT_SERVICE } from 'src/core/ports/chat.service';
+import { EMAIL_GATEWAY, EmailGateway } from 'src/core/ports/email.gateway';
 import {
   PROFILE_REPOSITORY,
   ProfileRepository,
 } from 'src/core/ports/profile.repository';
 import {
-  TANDEM_REPOSITORY,
-  TandemRepository,
-} from 'src/core/ports/tandem.repository';
-import { EMAIL_GATEWAY, EmailGateway } from 'src/core/ports/email.gateway';
-import { ConfigService } from '@nestjs/config';
-import { Env } from 'src/configuration';
-import { KeycloakClient } from '@app/keycloak';
-import {
   TANDEM_HISTORY_REPOSITORY,
   TandemHistoryRepository,
 } from 'src/core/ports/tandem-history.repository';
-import { CHAT_SERVICE } from 'src/core/ports/chat.service';
+import {
+  TANDEM_REPOSITORY,
+  TandemRepository,
+} from 'src/core/ports/tandem.repository';
 import { ChatService } from 'src/providers/services/chat.service';
+import { USER_REPOSITORY, UserRepository } from '../../ports/user.repository';
 
 export class UpdateUserCommand {
   status?: UserStatus;

@@ -17,25 +17,37 @@ import {
   UseGuards,
   UseInterceptors,
 } from '@nestjs/common';
+import { ConfigService } from '@nestjs/config';
 import { FileInterceptor } from '@nestjs/platform-express';
 import * as Swagger from '@nestjs/swagger';
-import { UploadAvatarUsecase } from 'src/core/usecases';
-import { UploadAdminAvatarUsecase } from 'src/core/usecases';
+import { Env } from 'src/configuration';
+import { MediaObject, User } from 'src/core/models';
 import {
+  STORAGE_INTERFACE,
+  StorageInterface,
+} from 'src/core/ports/storage.interface';
+import {
+  UploadAdminAvatarUsecase,
+  UploadAvatarUsecase,
+} from 'src/core/usecases';
+import { RevokeSessionsUsecase } from 'src/core/usecases/user/revoke-sessions.usecase';
+import {
+  AddDeviceUsecase,
   CreateAdministratorUsecase,
   CreateUserUsecase,
   DeleteAdministratorUsecase,
   DeleteUserUsecase,
   GetAdministratorUsecase,
   GetAdministratorsUsecase,
+  GetUserPersonalData,
   GetUserUsecase,
   GetUsersUsecase,
   UpdateAdministratorUsecase,
   UpdateUserUsecase,
-  GetUserPersonalData,
-  AddDeviceUsecase,
 } from '../../core/usecases/user';
+import { GetKeycloakAdminGroupsUsecase } from '../../core/usecases/user/get-keycloak-admin-groups.usecase';
 import { CollectionResponse, CurrentUser } from '../decorators';
+import { OwnerAllowed } from '../decorators/owner.decorator';
 import { Role, Roles } from '../decorators/roles.decorator';
 import {
   AddDeviceRequest,
@@ -50,19 +62,9 @@ import {
   UserRepresentationWithAvatar,
   UserResponse,
 } from '../dtos';
+import { userPersonalDataToCsv } from '../dtos/users/csv-export.ts';
 import { AuthenticationGuard } from '../guards';
 import { ImagesFilePipe } from '../validators/images.validator';
-import { MediaObject, User } from 'src/core/models';
-import { RevokeSessionsUsecase } from 'src/core/usecases/user/revoke-sessions.usecase';
-import { OwnerAllowed } from '../decorators/owner.decorator';
-import {
-  STORAGE_INTERFACE,
-  StorageInterface,
-} from 'src/core/ports/storage.interface';
-import { ConfigService } from '@nestjs/config';
-import { Env } from 'src/configuration';
-import { userPersonalDataToCsv } from '../dtos/users/csv-export.ts';
-import { GetKeycloakAdminGroupsUsecase } from '../../core/usecases/user/get-keycloak-admin-groups.usecase';
 
 @Controller('users')
 @Swagger.ApiTags('Users')
@@ -224,9 +226,16 @@ export class UserController {
   @UseGuards(AuthenticationGuard)
   @Swagger.ApiOperation({ summary: 'Delete an administrator' })
   async deleteAdministrator(@Param('id', ParseUUIDPipe) id: string) {
-    await this.deleteAdministratorUsecase.execute({ id });
+    const user = await this.getUserUsecase.execute(id, false);
 
-    return;
+    if (user) {
+      return await this.updateAdministratorUsecase.execute({
+        id,
+        shouldRemoveAdminRole: true,
+      });
+    } else {
+      return await this.deleteAdministratorUsecase.execute({ id });
+    }
   }
 
   @Get('me')
