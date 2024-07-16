@@ -71,3 +71,13 @@ stages:
   rules:
     - changes:
         - app/**/*
+
+# CI du chat
+🧩 chat:
+  extends: .package ci
+  variables:
+    WORKING_DIR: chat
+    IMAGE_NAME: ulep/chat
+  rules:
+    - changes:
+        - chat/**/*
