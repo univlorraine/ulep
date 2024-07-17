@@ -3,6 +3,7 @@ import { useEffect, useRef, useState } from 'react';
 import { ArrowDownSvg, ArrowUpSvg } from '../../assets';
 import { compareArrays } from '../utils';
 import styles from './DropDown.module.css';
+import RequiredField from './forms/RequiredField';
 
 export interface DropDownItem<T> {
     label: string;
@@ -15,9 +16,19 @@ interface DropdownProps<T> {
     title?: string | null;
     ariaLabel?: string | null;
     value?: DropDownItem<T>;
+    required?: boolean;
 }
 
-const Dropdown = <T,>({ onChange, options, placeholder, value, title, ariaLabel, ...props }: DropdownProps<T>) => {
+const Dropdown = <T,>({
+    onChange,
+    options,
+    placeholder,
+    value,
+    title,
+    ariaLabel,
+    required = false,
+    ...props
+}: DropdownProps<T>) => {
     const [selectedOption, setSelectedOption] = useState<DropDownItem<T> | undefined>(
         value ? value : !placeholder ? options[0] : undefined
     );
@@ -37,7 +48,9 @@ const Dropdown = <T,>({ onChange, options, placeholder, value, title, ariaLabel,
 
     return (
         <div className={styles.container}>
-            <span className={styles.title}>{title}</span>
+            <span className={styles.title}>
+                {title} {required && <RequiredField />}
+            </span>
             <IonItem lines="none" className={`ion-no-padding ${styles.item}`}>
                 <IonSelect
                     interface="popover"

@@ -58,6 +58,7 @@ const SignUpFrequencyPage: React.FC = () => {
                     })}
                 </div>
                 <div className="extra-large-margin-bottom">
+                    <p style={{ textAlign: 'center' }}>{t('signup_frequency_page.required_mention')}</p>
                     <button
                         aria-label={t('signup_frequency_page.validate_button') as string}
                         className={`primary-button ${frequency === undefined ? 'disabled' : ''}`}

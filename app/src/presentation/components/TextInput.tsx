@@ -2,6 +2,7 @@ import { IonInput, IonItem } from '@ionic/react';
 import React, { useState } from 'react';
 import { EyeSvg } from '../../assets';
 import style from './TextInput.module.css';
+import RequiredField from './forms/RequiredField';
 
 export type AutocompleteTypes =
     | 'on'
@@ -72,6 +73,7 @@ interface TextInputProps {
     value: string;
     maxLength?: number;
     fieldInfo?: JSX.Element;
+    required?: boolean;
 }
 
 const TextInput: React.FC<TextInputProps> = ({
@@ -86,12 +88,15 @@ const TextInput: React.FC<TextInputProps> = ({
     value,
     maxLength,
     fieldInfo = null,
+    required = false,
 }) => {
     const [showPasword, setShowPassword] = useState<boolean>(false);
     const inputId = `input-${title}}`;
     return (
         <div className={`${style.container} large-margin-bottom`}>
-            <span className={style['input-label']}>{title}</span>
+            <span className={style['input-label']}>
+                {title} {required && <RequiredField />}
+            </span>
             {fieldInfo}
             {type !== 'text-area' ? (
                 <IonItem
