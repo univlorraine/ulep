@@ -63,7 +63,7 @@ const ReportContent: React.FC<ReportContentProps> = ({ onClose }) => {
     }, []);
 
     return (
-        <div className={`content-wrapper ${styles.content}`}>
+        <div id="modal-content" className={`content-wrapper ${styles.content}`}>
             <div className={styles.header} role="navigation">
                 {isHybrid ? (
                     <button
