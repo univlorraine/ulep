@@ -77,7 +77,7 @@ const UniversityList = (props: any) => {
                             <UniversityName isMainUniversity={!record.parent} name={record.name} />
                         )}
                     />
-                    <TextField label={translate('universities.country')} source="country.name" />
+                    <TextField label={translate('universities.country')} sortable={false} source="country.name" />
                     <FunctionField
                         label={translate('universities.language')}
                         render={(record: University) => translate(`languages_code.${record.nativeLanguage.code}`)}
@@ -95,6 +95,7 @@ const UniversityList = (props: any) => {
                     <DateField
                         label={translate('universities.admission_start')}
                         locales={locale}
+                        sortable={false}
                         source="admissionStart"
                     />
                 </Datagrid>

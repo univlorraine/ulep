@@ -152,6 +152,7 @@ const LearningLanguageList = () => {
                                 })}
                             </>
                         )}
+                        sortable={false}
                         source="profile.user.university"
                     />
                     <FunctionField
