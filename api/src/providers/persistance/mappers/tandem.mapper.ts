@@ -14,17 +14,19 @@ export const TandemRelations = {
 };
 
 export type TandemSnapshot = Prisma.Tandems & {
-  LearningLanguages: LearningLanguageSnapshot[];
-  UniversityValidations: Prisma.Organizations[];
+  LearningLanguages?: LearningLanguageSnapshot[];
+  UniversityValidations?: Prisma.Organizations[];
 };
 
-export const tandemMapper = (instance: TandemSnapshot): Tandem =>
-  new Tandem({
+export const tandemMapper = (instance: TandemSnapshot): Tandem => {
+  return new Tandem({
     id: instance.id,
-    learningLanguages: instance.LearningLanguages.map(learningLanguageMapper),
+    learningLanguages: instance.LearningLanguages?.map(learningLanguageMapper),
     status: TandemStatus[instance.status],
     universityValidations:
       instance.UniversityValidations?.map((university) => university.id) || [],
     compatibilityScore: instance.compatibilityScore / 100,
     createdAt: instance.created_at,
+    updatedAt: instance.updated_at,
   });
+};

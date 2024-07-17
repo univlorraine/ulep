@@ -1,8 +1,8 @@
-import { Chip } from '@material-ui/core';
-import { Typography } from '@mui/material';
+import { Box, Typography } from '@mui/material';
 import React from 'react';
 import { useTranslate, FunctionField, ArrayField, List, Datagrid, CreateButton, TopToolbar } from 'react-admin';
 import { Link, useNavigate } from 'react-router-dom';
+import ColoredChips from '../../components/ColoredChips';
 import ConfigPagesHeader from '../../components/tabs/ConfigPagesHeader';
 import InterestCategory from '../../entities/InterestCategory';
 
@@ -29,7 +29,7 @@ const InterestCategoryList = () => {
                                 style={{
                                     fontSize: '0.875rem',
                                     textDecoration: 'none',
-                                    color: 'rgba(0, 0, 0, 0.87)',
+                                    color: '#212121',
                                     cursor: 'pointer',
                                 }}
                                 to={`/interests/categories/${record.id}/show`}
@@ -45,18 +45,10 @@ const InterestCategoryList = () => {
                     >
                         <FunctionField
                             render={(record: InterestCategory) => (
-                                <div>
+                                <Box style={{ display: 'flex', flexDirection: 'row', gap: '5px' }}>
                                     {record.interests.map((interest: any) => (
                                         <Link key={interest.id} to={`/interests/${interest.id}/show`}>
-                                            <Chip
-                                                key={interest.id}
-                                                label={interest.name}
-                                                style={{
-                                                    backgroundColor: '#FFBF46',
-                                                    margin: '0 5px 5px 0',
-                                                    cursor: 'pointer',
-                                                }}
-                                            />
+                                            <ColoredChips color="secondary" label={interest.name} />
                                         </Link>
                                     ))}
                                     <button
@@ -71,9 +63,9 @@ const InterestCategoryList = () => {
                                         }}
                                         type="button"
                                     >
-                                        <Chip label="+" style={{ margin: '0 5px 5px 0', cursor: 'pointer' }} />
+                                        <ColoredChips color="default" label="+" />
                                     </button>
-                                </div>
+                                </Box>
                             )}
                         />
                     </ArrayField>

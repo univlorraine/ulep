@@ -1,14 +1,16 @@
-import { Table, TableBody, TableCell, TableHead, TableRow, TablePagination } from '@mui/material';
+import { Table, TableBody, TableCell, TableHead, TableRow, TablePagination, Box } from '@mui/material';
 import Popover from '@mui/material/Popover';
 import Typography from '@mui/material/Typography';
 import React, { useState } from 'react';
-import { useTranslate } from 'react-admin';
-import { DisplayGender, DisplayLearningType, DisplayRole } from '../../../../components/translated';
+import { useRecordContext, useTranslate } from 'react-admin';
+import ColoredChips from '../../../../components/ColoredChips';
+import { DisplayLearningType } from '../../../../components/translated';
 import Language from '../../../../entities/Language';
 import { LearningType } from '../../../../entities/LearningLanguage';
 import { MatchScore } from '../../../../entities/Match';
-import { Profile } from '../../../../entities/Profile';
-import ProfileLink from '../../ui/ProfileLink';
+import { Profile, ProfileWithTandems } from '../../../../entities/Profile';
+import codeLanguageToFlag from '../../../../utils/codeLanguageToFlag';
+import ProfileLink from '../../ui/ProfileTandemLink';
 import { Pagination } from './usePagination';
 
 export interface TandemPartner {
@@ -34,6 +36,7 @@ interface TandemTableProps {
 
 const TandemTable = ({ rows, actions, displayTandemLanguage, pagination }: TandemTableProps) => {
     const translate = useTranslate();
+    const record: ProfileWithTandems = useRecordContext();
 
     const [anchorEl, setAnchorEl] = React.useState<HTMLElement | null>(null);
     const [selectedMatchScore, setSelectedMatchScore] = useState<MatchScore | undefined>();
@@ -52,7 +55,7 @@ const TandemTable = ({ rows, actions, displayTandemLanguage, pagination }: Tande
     const open = Boolean(anchorEl);
 
     return (
-        <Table>
+        <Table className="tandem-table">
             <TableHead>
                 <TableRow>
                     {displayTandemLanguage && (
@@ -63,7 +66,6 @@ const TandemTable = ({ rows, actions, displayTandemLanguage, pagination }: Tande
                     <TableCell>{translate('learning_languages.show.tandems.tableColumns.profile')}</TableCell>
                     <TableCell>{translate('learning_languages.show.tandems.tableColumns.learnedLanguage')}</TableCell>
                     <TableCell>{translate('learning_languages.show.tandems.tableColumns.level')}</TableCell>
-                    <TableCell>{translate('learning_languages.show.tandems.tableColumns.university')}</TableCell>
                     <TableCell>{translate('learning_languages.show.tandems.tableColumns.role')}</TableCell>
                     <TableCell>{translate('learning_languages.show.tandems.tableColumns.learningType')}</TableCell>
                     <TableCell>{translate('learning_languages.show.tandems.tableColumns.gender')}</TableCell>
@@ -80,19 +82,33 @@ const TandemTable = ({ rows, actions, displayTandemLanguage, pagination }: Tande
                     <TableRow key={partner.id}>
                         {displayTandemLanguage && (
                             <TableCell>
-                                {[partner.profile.nativeLanguage, ...partner.profile.masteredLanguages]
-                                    .map((language) => translate(`languages_code.${language.code}`))
-                                    .join(', ')}
+                                <Box className="chips-box">
+                                    {[partner.profile.nativeLanguage, ...partner.profile.masteredLanguages].map(
+                                        (language) => (
+                                            <ColoredChips
+                                                key={language.code}
+                                                color="default"
+                                                label={codeLanguageToFlag(language.code)}
+                                            />
+                                        )
+                                    )}
+                                </Box>
                             </TableCell>
                         )}
                         <TableCell>
                             <ProfileLink profile={partner.profile} />
+                            <Typography sx={{ color: '#767676' }}>{partner.profile.user.university.name}</Typography>
                         </TableCell>
-                        <TableCell>{translate(`languages_code.${partner.code}`)}</TableCell>
-                        <TableCell>{partner.level}</TableCell>
-                        <TableCell>{partner.profile.user.university.name}</TableCell>
                         <TableCell>
-                            <DisplayRole role={partner.profile.user.role} />
+                            <ColoredChips color="default" label={codeLanguageToFlag(partner.code)} />
+                        </TableCell>
+                        <TableCell>{partner.level}</TableCell>
+                        <TableCell>
+                            <ColoredChips
+                                color={partner.profile.user.role === record.user.role ? 'success' : 'error'}
+                                label={translate(`learning_languages.roles.${partner.profile.user.role}`)}
+                                variant="outlined"
+                            />
                         </TableCell>
                         <TableCell>
                             <DisplayLearningType
@@ -101,41 +117,43 @@ const TandemTable = ({ rows, actions, displayTandemLanguage, pagination }: Tande
                             />
                         </TableCell>
                         <TableCell>
-                            <DisplayGender gender={partner.profile.user.gender} />
+                            {translate(`global.genderValues.${partner.profile.user.gender.toLowerCase()}`)}
                         </TableCell>
                         <TableCell>{partner.profile.user.age}</TableCell>
                         <TableCell>
-                            <div>
-                                <Typography
-                                    aria-haspopup="true"
-                                    aria-owns={open ? 'mouse-over-popover' : undefined}
-                                    onMouseEnter={(event) => handlePopoverOpen(event, partner.matchScore)}
-                                    onMouseLeave={handlePopoverClose}
-                                >
-                                    {partner.compatibilityScore ? `${partner.compatibilityScore * 100}%` : 'N/A'}
-                                </Typography>
-                            </div>
+                            <Typography
+                                aria-haspopup="true"
+                                aria-owns={open ? 'mouse-over-popover' : undefined}
+                                onMouseEnter={(event) => handlePopoverOpen(event, partner.matchScore)}
+                                onMouseLeave={handlePopoverClose}
+                            >
+                                {partner.compatibilityScore
+                                    ? `${(partner.compatibilityScore * 100).toFixed(0)}%`
+                                    : 'N/A'}
+                            </Typography>
                         </TableCell>
                         <TableCell>{new Date(partner.createdAt).toLocaleDateString()}</TableCell>
                         {actions && <TableCell>{actions(partner)}</TableCell>}
                     </TableRow>
                 ))}
+                {pagination && (
+                    <tr>
+                        <TablePagination
+                            count={pagination.count}
+                            onPageChange={(event: unknown, newPage: number) => {
+                                pagination.handleChangePage(newPage);
+                            }}
+                            onRowsPerPageChange={(event: React.ChangeEvent<HTMLInputElement>) => {
+                                pagination.handleChangeRowsPerPage(parseInt(event.target.value, 10));
+                            }}
+                            page={pagination.page}
+                            rowsPerPage={pagination.rowsPerPage}
+                            rowsPerPageOptions={pagination.rowsPerPageOptions}
+                        />
+                    </tr>
+                )}
             </TableBody>
 
-            {pagination && (
-                <TablePagination
-                    count={pagination.count}
-                    onPageChange={(event: unknown, newPage: number) => {
-                        pagination.handleChangePage(newPage);
-                    }}
-                    onRowsPerPageChange={(event: React.ChangeEvent<HTMLInputElement>) => {
-                        pagination.handleChangeRowsPerPage(parseInt(event.target.value, 10));
-                    }}
-                    page={pagination.page}
-                    rowsPerPage={pagination.rowsPerPage}
-                    rowsPerPageOptions={pagination.rowsPerPageOptions}
-                />
-            )}
             <Popover
                 PaperProps={{
                     style: {

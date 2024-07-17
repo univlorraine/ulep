@@ -2,7 +2,6 @@ import { Box, Typography, Input } from '@mui/material';
 import React, { useEffect, useState } from 'react';
 import { Button, useTranslate } from 'react-admin';
 import IndexedTranslation from '../../entities/IndexedTranslation';
-import inputStyle from '../../theme/inputStyle';
 import TranslationForm from './TranslationForm';
 
 interface InterestFormProps {
@@ -34,12 +33,11 @@ const InterestForm: React.FC<InterestFormProps> = ({
             <Typography variant="subtitle1">{translate(`${tradKey}.${tradModeKey}.name`)}</Typography>
 
             <Box alignItems="center" display="flex" flexDirection="row">
-                <Input name="Language" sx={{ mx: 4, my: 2, width: 40 }} value="FR" disableUnderline />
+                <Input name="Language" sx={{ mx: 4, my: 2, width: '80px' }} value="FR" disableUnderline />
                 <Input
                     name="Content"
                     onChange={(e) => setNewName(e.target.value)}
                     placeholder={translate('global.content')}
-                    sx={inputStyle}
                     value={newName}
                     disableUnderline
                     required

@@ -31,11 +31,16 @@ const TandemStatusContent: React.FC<TandemStatusContentProps> = ({ onFindNewTand
                 style={{ justifyContent: !isHybrid ? 'flex-end' : 'flex-start' }}
                 onClick={onClose}
             >
-                <img alt="" src={!isHybrid ? CloseBlackSvg : ArrowLeftSvg} />
+                <img alt="" src={!isHybrid ? CloseBlackSvg : ArrowLeftSvg} aria-hidden={true} />
             </button>
             <div className={styles.content}>
                 <span className="title extra-large-margin-bottom">{t(`home_page.tandem_${tradKey}.title`)}</span>
-                <img alt="" className="extra-large-margin-bottom" src={waiting ? ClockPng : TandemNotFoundPng} />
+                <img
+                    alt=""
+                    className="extra-large-margin-bottom"
+                    src={waiting ? ClockPng : TandemNotFoundPng}
+                    aria-hidden={true}
+                />
                 <span className="subtitle extra-large-margin-bottom">{t(`home_page.tandem_${tradKey}.subtitle`)}</span>
                 {status === 'INACTIVE' && (
                     <div className={styles['bottom-container']}>

@@ -1,4 +1,4 @@
-import { IonPopover, IonRadio, IonRadioGroup, useIonPopover, useIonToast } from '@ionic/react';
+import { IonPopover, IonRadio, IonRadioGroup, useIonToast } from '@ionic/react';
 import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useHistory, useLocation } from 'react-router';
@@ -6,7 +6,6 @@ import { InfoSvg, PlusPng } from '../../assets';
 import { useConfig } from '../../context/ConfigurationContext';
 import { useStoreState } from '../../store/storeTypes';
 import Checkbox from '../components/Checkbox';
-import RadioButton from '../components/RadioButton';
 import TextInput from '../components/TextInput';
 import WebLayoutCentered from '../components/layout/WebLayoutCentered';
 import { isEmailCorrect, isNameCorrect } from '../utils';
@@ -251,16 +250,20 @@ const SignUpInformationsPage: React.FC = () => {
                 <div className="margin-bottom">
                     <h2 className={`${styles.subtitle} no-margin-top`}>{t('global.gender')}</h2>
 
-                    <IonRadioGroup value={gender} onIonChange={(ev) => setGender(ev.detail.value)}>
-                        <IonRadio labelPlacement="end" value="FEMALE">
+                    <IonRadioGroup
+                        value={gender}
+                        onIonChange={(ev) => setGender(ev.detail.value)}
+                        aria-label={t('global.gender') as string}
+                    >
+                        <IonRadio labelPlacement="end" value="FEMALE" aria-label={t('global.woman') as string}>
                             {t('global.woman')}
                         </IonRadio>
                         <br />
-                        <IonRadio labelPlacement="end" value="MALE">
+                        <IonRadio labelPlacement="end" value="MALE" aria-label={t('global.man') as string}>
                             {t('global.men')}
                         </IonRadio>
                         <br />
-                        <IonRadio labelPlacement="end" value="OTHER">
+                        <IonRadio labelPlacement="end" value="OTHER" aria-label={t('global.binary') as string}>
                             {t('global.binary')}
                         </IonRadio>
                     </IonRadioGroup>

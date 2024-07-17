@@ -68,26 +68,35 @@ const SignUpInterestsPage: React.FC = () => {
                         return (
                             <div key={categoryInterest.id}>
                                 <span className={interestStyle['category-title']}>{categoryInterest.name}</span>
-                                <div className={interestStyle['interests-container']}>
+                                <ul className={interestStyle['interests-container']}>
                                     {categoryInterest.interests.map((interest) => {
                                         const isInclued = userInterests.includes(interest.id);
                                         return (
-                                            <button
-                                                aria-label={interest.name}
-                                                className={interestStyle.tags}
-                                                key={interest.id}
-                                                onClick={() => interestPressed(interest)}
-                                                style={{
-                                                    backgroundColor: isInclued ? '#FDEE66' : 'white',
-                                                    borderWidth: 1,
-                                                    borderColor: isInclued ? '#FDEE66' : 'black',
-                                                }}
-                                            >
-                                                <span className={interestStyle['tags-text']}>{interest.name}</span>
-                                            </button>
+                                            <li key={interest.id}>
+                                                <button
+                                                    aria-label={interest.name}
+                                                    className={interestStyle.tags}
+                                                    onClick={() => interestPressed(interest)}
+                                                    role="checkbox"
+                                                    aria-checked={isInclued}
+                                                    disabled={userInterests.length === 10 ? !isInclued : false}
+                                                    style={{
+                                                        backgroundColor: isInclued ? '#FDEE66' : 'white',
+                                                        borderWidth: 1,
+                                                        borderColor: isInclued ? '#FDEE66' : 'black',
+                                                    }}
+                                                >
+                                                    <span
+                                                        className={interestStyle['tags-text']}
+                                                        style={{ fontWeight: isInclued ? 'bold' : 'normal' }}
+                                                    >
+                                                        {interest.name}
+                                                    </span>
+                                                </button>
+                                            </li>
                                         );
                                     })}
-                                </div>
+                                </ul>
                             </div>
                         );
                     })}

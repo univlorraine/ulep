@@ -43,7 +43,6 @@ const LanguagesPicker: React.FC<LanguagesPickerProps> = ({ hideGlobalLanguages, 
                 }
                 renderValue={() => translate('languages_picker.placeholder')}
                 sx={{ mb: 2, width: '100%' }}
-                variant="standard"
                 disableUnderline
             >
                 {filteredLanguages.map((language: Language) => (

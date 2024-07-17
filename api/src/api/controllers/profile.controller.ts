@@ -5,45 +5,46 @@ import {
   Controller,
   Delete,
   Get,
+  Headers,
   Param,
   ParseUUIDPipe,
   Post,
   Query,
   SerializeOptions,
-  Headers,
   UseGuards,
   UseInterceptors,
 } from '@nestjs/common';
 import * as Swagger from '@nestjs/swagger';
+import { UserKeycloakContactInterceptor } from 'src/api/interceptors';
+import { Profile } from 'src/core/models';
 import {
+  CreateLearningLanguageUseCase,
+  CreateOrUpdateTestedLanguageUsecase,
   CreateProfileUsecase,
+  DeleteAvatarUsecase,
+  DeleteProfileUsecase,
+  DeleteUserUsecase,
+  GetAdministratorUsecase,
+  GetLearningLanguageOfProfileUsecase,
   GetProfileByUserIdUsecase,
   GetProfileUsecase,
   GetProfilesUsecase,
   GetTandemsForProfileUsecase,
-  CreateLearningLanguageUseCase,
-  DeleteProfileUsecase,
-  DeleteUserUsecase,
-  DeleteAvatarUsecase,
-  GetLearningLanguageOfProfileUsecase,
   UpdateProfileUsecase,
-  CreateOrUpdateTestedLanguageUsecase,
 } from 'src/core/usecases';
 import { CollectionResponse, CurrentUser } from '../decorators';
 import { Role, Roles } from '../decorators/roles.decorator';
 import {
   CreateProfileRequest,
-  ProfileQueryFilter,
-  ProfileResponse,
-  UserTandemResponse,
   LearningLanguageDto,
   LearningLanguageResponse,
+  ProfileQueryFilter,
+  ProfileResponse,
   TestedLanguageProps,
   UpdateProfileRequest,
+  UserTandemResponse,
 } from '../dtos';
 import { AuthenticationGuard } from '../guards';
-import { Profile } from 'src/core/models';
-import { UserKeycloakContactInterceptor } from 'src/api/interceptors';
 
 @Controller('profiles')
 @Swagger.ApiTags('Profiles')
@@ -61,6 +62,7 @@ export class ProfileController {
     private readonly deleteAvatarUsecase: DeleteAvatarUsecase,
     private readonly updateProfileUsecase: UpdateProfileUsecase,
     private readonly createOrUpdateTestedLanguageUsecase: CreateOrUpdateTestedLanguageUsecase,
+    private readonly getAdminUsecase: GetAdministratorUsecase,
   ) {}
 
   @Post()
@@ -96,16 +98,7 @@ export class ProfileController {
     return ProfileResponse.fromDomain(profile);
   }
 
-  @Get()
-  @Roles(Role.ADMIN)
-  @UseGuards(AuthenticationGuard)
-  @Swagger.ApiOperation({
-    summary: 'Retrieve the collection of Profile ressource.',
-  })
-  @CollectionResponse(ProfileResponse)
-  async getCollection(
-    @Query() query: ProfileQueryFilter,
-  ): Promise<Collection<ProfileResponse>> {
+  private async getProfiles(query: ProfileQueryFilter) {
     const {
       email,
       firstname,
@@ -157,6 +150,41 @@ export class ProfileController {
     });
   }
 
+  @Get()
+  @Roles(Role.ADMIN)
+  @UseGuards(AuthenticationGuard)
+  @SerializeOptions({ groups: ['read'] })
+  @Swagger.ApiOperation({
+    summary: 'Retrieve the collection of Profile ressource.',
+  })
+  @CollectionResponse(ProfileResponse)
+  async getCollection(
+    @Query() query: ProfileQueryFilter,
+  ): Promise<Collection<ProfileResponse>> {
+    return this.getProfiles(query);
+  }
+
+  @Get('/with-tandem')
+  @Roles(Role.ADMIN)
+  @UseGuards(AuthenticationGuard)
+  @SerializeOptions({
+    groups: [
+      'read',
+      'learning-language:tandem',
+      'learning-language:profile',
+      'tandem:university-validations',
+    ],
+  })
+  @Swagger.ApiOperation({
+    summary: 'Retrieve the collection of Profile ressource with tandems.',
+  })
+  @CollectionResponse(ProfileResponse)
+  async getCollectionWithTandems(
+    @Query() query: ProfileQueryFilter,
+  ): Promise<Collection<ProfileResponse>> {
+    return this.getProfiles(query);
+  }
+
   @Delete(':id')
   @Roles(Role.ADMIN)
   @UseGuards(AuthenticationGuard)
@@ -167,14 +195,24 @@ export class ProfileController {
   async delete(@Param('id', ParseUUIDPipe) id: string): Promise<void> {
     const profile = await this.getItem(id);
     await this.deleteProfileUsecase.execute({ id });
-    await this.deleteAvatarUsecase.execute({ userId: profile.user.id });
-    await this.deleteUserUsecase.execute({ id: profile.user.id });
+
+    const admin = await this.getAdminUsecase.execute(profile.user.id);
+
+    if (admin.groups.length === 0) {
+      await this.deleteAvatarUsecase.execute({ userId: profile.user.id });
+    }
+
+    await this.deleteUserUsecase.execute({
+      id: profile.user.id,
+      shouldKeepKeycloakUser: admin.groups.length !== 0,
+    });
 
     return;
   }
 
   @Get(':id/tandems')
   @UseGuards(AuthenticationGuard)
+  @SerializeOptions({ groups: ['read', 'learning-language:profile'] })
   @Swagger.ApiOperation({
     summary: 'Retrieve the collection of Tandem ressource.',
   })
@@ -227,6 +265,29 @@ export class ProfileController {
     return ProfileResponse.fromDomain(profile, languageCode);
   }
 
+  @Get('/with-tandem/:id')
+  @Roles(Role.ADMIN)
+  @UseGuards(AuthenticationGuard)
+  @SerializeOptions({
+    groups: [
+      'read',
+      'learning-language:tandem',
+      'learning-language:profile',
+      'tandem:university-validations',
+    ],
+  })
+  @Swagger.ApiOperation({
+    summary: 'Retrieve the collection of Profile ressource with tandems.',
+  })
+  @CollectionResponse(ProfileResponse)
+  async getProfileWithTandems(
+    @Param('id', ParseUUIDPipe) id: string,
+  ): Promise<ProfileResponse> {
+    const profile = await this.getProfileUsecase.execute({ id });
+
+    return ProfileResponse.fromDomain(profile);
+  }
+
   @Post(':id/learning-language')
   @UseGuards(AuthenticationGuard)
   @SerializeOptions({ groups: ['read', 'profile:read'] })
@@ -247,6 +308,7 @@ export class ProfileController {
 
   @Get(':id/learning-language')
   @UseGuards(AuthenticationGuard)
+  @SerializeOptions({ groups: ['read', 'learning-language:profile'] })
   @Swagger.ApiOperation({
     summary: 'Retrieve the collection of learning languages ressource.',
   })
@@ -260,7 +322,7 @@ export class ProfileController {
     });
 
     return languages.map((language) =>
-      LearningLanguageResponse.fromDomain(language, false),
+      LearningLanguageResponse.fromDomain(language),
     );
   }
 

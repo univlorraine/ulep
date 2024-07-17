@@ -74,6 +74,7 @@ const AppCore = () => {
             }
         };
     }, [profile]);
+    
 
     return (
         <IonReactRouter>

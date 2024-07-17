@@ -10,8 +10,8 @@ const CountryList = () => {
             <ConfigPagesHeader />
             <List exporter={false}>
                 <Datagrid bulkActionButtons={false}>
-                    <TextField label={translate('countries.code')} source="code" />
-                    <TextField label={translate('countries.name')} source="name" />
+                    <TextField label={translate('countries.code')} sortable={false} source="code" />
+                    <TextField label={translate('countries.name')} sortable={false} source="name" />
                 </Datagrid>
             </List>
         </>

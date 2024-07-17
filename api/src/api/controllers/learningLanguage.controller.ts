@@ -9,6 +9,7 @@ import {
   Param,
   ParseUUIDPipe,
   Query,
+  SerializeOptions,
   UseGuards,
 } from '@nestjs/common';
 import * as Swagger from '@nestjs/swagger';
@@ -42,6 +43,7 @@ export class LearningLanguageController {
   @Get()
   @Roles(Role.ADMIN)
   @UseGuards(AuthenticationGuard)
+  @SerializeOptions({ groups: ['read', 'learning-language:profile'] })
   @Swagger.ApiOperation({
     summary: 'Retrieve the collection of Learning languages resource.',
   })
@@ -78,7 +80,7 @@ export class LearningLanguageController {
 
     return new Collection<LearningLanguageWithTandemResponse>({
       items: result.items.map((ll) =>
-        LearningLanguageWithTandemResponse.fromDomain(ll, true),
+        LearningLanguageWithTandemResponse.fromDomain(ll),
       ),
       totalItems: result.totalItems,
     });
@@ -86,6 +88,7 @@ export class LearningLanguageController {
 
   @Get(':id')
   @UseGuards(AuthenticationGuard)
+  @SerializeOptions({ groups: ['read', 'learning-language:profile'] })
   @Swagger.ApiOperation({ summary: 'Get a Learning language ressource.' })
   @Swagger.ApiOkResponse({ type: LearningLanguageResponse, isArray: true })
   @Swagger.ApiNotFoundResponse({ description: 'Resource not found' })
@@ -96,12 +99,13 @@ export class LearningLanguageController {
       id,
     });
 
-    return LearningLanguageResponse.fromDomain(learningLanguage, true);
+    return LearningLanguageResponse.fromDomain(learningLanguage);
   }
 
   @Get(':id/matches')
   @Roles(Role.ADMIN)
   @UseGuards(AuthenticationGuard)
+  @SerializeOptions({ groups: ['read', 'learning-language:profile'] })
   @Swagger.ApiOperation({
     summary: "Retrieve learning language's matches",
   })
@@ -126,6 +130,7 @@ export class LearningLanguageController {
   @Get(':id/tandems')
   @Roles(Role.ADMIN)
   @UseGuards(AuthenticationGuard)
+  @SerializeOptions({ groups: ['read', 'learning-language:profile'] })
   @Swagger.ApiOperation({
     summary: "Retrieve learning language's tandem",
   })

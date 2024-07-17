@@ -11,6 +11,8 @@ import {
     fetchUtils,
 } from 'react-admin';
 import Language from '../entities/Language';
+import { LearningLanguage } from '../entities/LearningLanguage';
+import { ProfileWithTandems } from '../entities/Profile';
 import { RoutineExecution } from '../entities/RoutineExecution';
 import { TandemStatus } from '../entities/Tandem';
 import AdministratorsQuery from '../queries/AdministratorsQuery';
@@ -140,6 +142,35 @@ const customDataProvider = {
             return { data: { ...data, id: 'config' } };
         }
 
+        if (resource === 'profiles/with-tandem') {
+            // Filter the learning-languages array contained into the tandem subobject
+            // to remove the root profile one (and keep only the pair one)
+            const filteredLearningLanguages = data.learningLanguages.map((learningLanguage: LearningLanguage) => {
+                if (learningLanguage.tandem) {
+                    const filteredLL = learningLanguage.tandem?.learningLanguages.filter(
+                        (tandemLL) => tandemLL.profile.id !== data.id
+                    );
+
+                    return {
+                        ...learningLanguage,
+                        tandem: {
+                            ...learningLanguage.tandem,
+                            learningLanguages: filteredLL,
+                        },
+                    };
+                }
+
+                return learningLanguage;
+            });
+
+            return {
+                data: {
+                    ...data,
+                    learningLanguages: filteredLearningLanguages,
+                },
+            };
+        }
+
         return { data };
     },
     delete: async (resource: string, params: DeleteParams) => {
@@ -182,6 +213,9 @@ const customDataProvider = {
             case 'profiles':
                 url.search = ProfilesQuery(params);
                 break;
+            case 'profiles/with-tandem':
+                url.search = ProfilesQuery(params);
+                break;
             case 'reports':
                 url.search = ReportsQuery(params);
                 break;
@@ -220,6 +254,39 @@ const customDataProvider = {
                 })),
                 total: result.totalItems,
             };
+        }
+
+        if (resource === 'profiles/with-tandem') {
+            // Filter the learning-languages array contained into the tandem subobject
+            // to remove the root profile one (and keep only the pair one)
+            const profilesWithOnlyMatchingTandemProfile = result.items.map((profile: ProfileWithTandems) => {
+                const filteredLearningLanguages = profile.learningLanguages.map(
+                    (learningLanguage: LearningLanguage) => {
+                        if (learningLanguage.tandem) {
+                            const filteredLL = learningLanguage.tandem?.learningLanguages.filter(
+                                (tandemLL) => tandemLL.profile.id !== profile.id
+                            );
+
+                            return {
+                                ...learningLanguage,
+                                tandem: {
+                                    ...learningLanguage.tandem,
+                                    learningLanguages: filteredLL,
+                                },
+                            };
+                        }
+
+                        return learningLanguage;
+                    }
+                );
+
+                return {
+                    ...profile,
+                    learningLanguages: filteredLearningLanguages,
+                };
+            });
+
+            return { data: profilesWithOnlyMatchingTandemProfile, total: result.totalItems };
         }
 
         if (!result.items) {

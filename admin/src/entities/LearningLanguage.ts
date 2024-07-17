@@ -1,6 +1,8 @@
 import Campus from './Campus';
+// eslint-disable-next-line import/no-cycle
 import { Profile } from './Profile';
-import { TandemStatus, TandemSummary } from './Tandem';
+// eslint-disable-next-line import/no-cycle
+import { TandemStatus, Tandem } from './Tandem';
 
 export enum LearningType {
     ETANDEM = 'ETANDEM',
@@ -15,7 +17,7 @@ export type LearningLanguage = {
     name: string;
     createdAt: Date;
     profile: Profile;
-    tandem?: TandemSummary;
+    tandem?: Tandem;
     sameGender: boolean;
     learningType: LearningType;
     sameAge: boolean;

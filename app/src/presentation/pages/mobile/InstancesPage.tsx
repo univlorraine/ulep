@@ -70,7 +70,7 @@ const InstancesPage: React.FC<InstancesPageProps> = ({ onValidate }) => {
                         }`}
                         onClick={() => setSelectedInstance(instance)}
                     >
-                        <img alt="" className={styles.image} src={instance.image} />
+                        <img alt="" className={styles.image} src={instance.image} aria-hidden={true} />
                         <p className={styles['instance-name']}>{instance.name}</p>
                     </button>
                 ))}

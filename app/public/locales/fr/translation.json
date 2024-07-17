@@ -96,7 +96,9 @@
         "welcome": "Bienvenue sur ULEP,",
         "welcome_subtext": "le meilleur moyen de pratiquer une langue",
         "welcome_btn": "Apprends une nouvelle langue en tandem",
-        "close": "Fermer"
+        "close": "Fermer",
+        "signup-progress-bar-label": "Progression de l'inscription",
+        "required_fields_mention": "Les champs suivis d'un {{asterisk}} sont obligatoires"
     },
     "chat": {
         "fileDownloaded": "Fichier téléchargé",
@@ -145,7 +147,8 @@
             "report_button": "Signaler un problème",
             "report_sent": "Le signalement a été envoyé",
             "send_button": "Envoyer",
-            "title": "Signaler"
+            "title": "Signaler",
+            "note_required": "La note est obligatoire"
         },
         "settings": {
             "account": "Mon compte",
@@ -332,7 +335,8 @@
         },
         "subtitle": "Choisis tes préférences",
         "title": "Choix de la langue",
-        "validate_button": "Valider et continuer"
+        "validate_button": "Valider et continuer",
+        "choosing_another_language": "Choix d'une autre langue"
     },
     "pairing_pedagogy_page": {
         "both_button": "TANDEM OU E-TANDEM",
@@ -487,6 +491,7 @@
     },
     "signup_page": {
         "country_placeholder": "Sélectionne un pays dans la liste",
+        "country_aria_label": "Sélectionner le pays de votre université, afin de choisir votre université",
         "department_title": "Département",
         "diplome_title": "Diplôme",
         "error": "Vous ne pourrez pas aller plus loin dans le processus d’inscription",

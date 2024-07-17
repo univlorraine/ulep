@@ -1,15 +1,15 @@
 import { useIonToast } from '@ionic/react';
+import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { ArrowLeftSvg, ArrowRightSvg, EditPng, ParameterPng, SmallAvatarPng } from '../../../assets';
 import { useConfig } from '../../../context/ConfigurationContext';
-import { useStoreActions } from '../../../store/storeTypes';
-import styles from './ProfileContent.module.css';
-import { useState } from 'react';
-import Avatar from '../Avatar';
 import Profile from '../../../domain/entities/Profile';
 import { AvatarMaxSizeError } from '../../../domain/usecases/UpdateAvatarUsecase';
+import { useStoreActions } from '../../../store/storeTypes';
 import useLogout from '../../hooks/useLogout';
+import Avatar from '../Avatar';
 import Loader from '../Loader';
+import styles from './ProfileContent.module.css';
 
 interface ProfileContentProps {
     onClose: () => void;
@@ -52,7 +52,7 @@ const ProfileContent: React.FC<ProfileContentProps> = ({ onClose, onParameterPre
         <div className={`content-wrapper ${styles.container}`}>
             <div>
                 <button aria-label={t('global.close') as string} className={styles['back-button']} onClick={onClose}>
-                    <img alt="" src={ArrowLeftSvg} />
+                    <img alt="" src={ArrowLeftSvg} aria-hidden={true} />
                 </button>
             </div>
             <div className={styles.content}>
@@ -71,10 +71,10 @@ const ProfileContent: React.FC<ProfileContentProps> = ({ onClose, onParameterPre
                     onClick={changeAvatar}
                 >
                     <div className={styles['button-container']}>
-                        <img alt="" src={EditPng} />
+                        <img alt="" src={EditPng} aria-hidden={true} />
                         <span className="margin-left">{t('home_page.profile.edit')}</span>
                     </div>
-                    <img alt="" src={ArrowRightSvg} />
+                    <img alt="" src={ArrowRightSvg} aria-hidden={true} />
                 </button>
 
                 <button
@@ -83,10 +83,10 @@ const ProfileContent: React.FC<ProfileContentProps> = ({ onClose, onParameterPre
                     onClick={onParameterPressed}
                 >
                     <div className={styles['button-container']}>
-                        <img alt="" src={ParameterPng} />
+                        <img alt="" src={ParameterPng} aria-hidden={true} />
                         <span className="margin-left">{t('home_page.profile.parameters')}</span>
                     </div>
-                    <img alt="" src={ArrowRightSvg} />
+                    <img alt="" src={ArrowRightSvg} aria-hidden={true} />
                 </button>
 
                 <button
@@ -95,7 +95,7 @@ const ProfileContent: React.FC<ProfileContentProps> = ({ onClose, onParameterPre
                     onClick={handleLogout}
                 >
                     <div className={styles['button-container']}>
-                        <img alt="" src={SmallAvatarPng} />
+                        <img alt="" src={SmallAvatarPng} aria-hidden={true} />
                         <span className="margin-left">{t('home_page.profile.disconnect')}</span>
                     </div>
                     <img alt="" src={ArrowRightSvg} />

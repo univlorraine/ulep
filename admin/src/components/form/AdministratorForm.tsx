@@ -1,9 +1,8 @@
-import { Box, Input, Typography } from '@mui/material';
+import { Box, OutlinedInput, Typography } from '@mui/material';
 import React, { useState } from 'react';
 import { Button, Loading, useGetIdentity, useNotify, usePermissions, useTranslate } from 'react-admin';
-import { AdministratorFormPayload, KeycloakGroup, AdminGroup, Role } from '../../entities/Administrator';
+import { AdminGroup, AdministratorFormPayload, KeycloakGroup, Role } from '../../entities/Administrator';
 import University from '../../entities/University';
-import inputStyle from '../../theme/inputStyle';
 import isPasswordValid from '../../utils/isPasswordValid';
 import AdminGroupPicker from '../AdminGroupPicker';
 import ImageUploader from '../ImageUploader';
@@ -74,31 +73,32 @@ const AdministratorForm: React.FC<AdministratorFormProps> = ({
     };
 
     return (
-        <Box sx={{ m: 4 }}>
+        <Box sx={{ m: 4, display: 'flex', flexDirection: 'column', gap: '20px' }}>
             <ImageUploader onImageSelect={setFile} source="image.id" />
 
-            <Typography variant="subtitle1">{translate(`administrators.${type}.email`)}</Typography>
-            <Box alignItems="center" display="flex" flexDirection="row">
-                <Input
-                    name="Email"
-                    onChange={(e) => setNewEmail(e.target.value)}
-                    placeholder={translate('global.email')}
-                    sx={inputStyle}
-                    type="email"
-                    value={newEmail}
-                    disableUnderline
-                    required
-                />
+            <Box>
+                <Typography variant="subtitle1">{translate(`administrators.${type}.email`)}</Typography>
+                <Box alignItems="center" display="flex" flexDirection="row">
+                    <OutlinedInput
+                        name="Email"
+                        onChange={(e) => setNewEmail(e.target.value)}
+                        placeholder={translate('global.email')}
+                        type="email"
+                        value={newEmail}
+                        required
+                    />
+                </Box>
             </Box>
 
             {!isProfileEdit && (
                 <>
-                    <Typography variant="subtitle1">{translate('admin_groups_picker.placeholder')}</Typography>
-                    <AdminGroupPicker onChange={setNewGroup} value={newGroup} />
-
+                    <Box>
+                        <Typography variant="subtitle1">{translate('admin_groups_picker.placeholder')}</Typography>
+                        <AdminGroupPicker onChange={setNewGroup} value={newGroup} />
+                    </Box>
                     {newGroup?.name === AdminGroup.SUPER_ADMIN ||
                         (permissions.checkRole(Role.SUPER_ADMIN) && (
-                            <>
+                            <Box>
                                 <Typography variant="subtitle1">
                                     {translate(`administrators.${type}.university`)}
                                 </Typography>
@@ -107,48 +107,48 @@ const AdministratorForm: React.FC<AdministratorFormProps> = ({
                                     onChange={setUniversity}
                                     value={university}
                                 />
-                            </>
+                            </Box>
                         ))}
                 </>
             )}
 
-            <Typography variant="subtitle1">{translate('global.firstname')}</Typography>
-            <Box alignItems="center" display="flex" flexDirection="row">
-                <Input
-                    name="Firstname"
-                    onChange={(e) => setNewFirstname(e.target.value)}
-                    placeholder={translate('global.firstname')}
-                    sx={inputStyle}
-                    value={newFirstname}
-                    disableUnderline
-                    required
-                />
+            <Box>
+                <Typography variant="subtitle1">{translate('global.firstname')}</Typography>
+                <Box alignItems="center" display="flex" flexDirection="row">
+                    <OutlinedInput
+                        name="Firstname"
+                        onChange={(e) => setNewFirstname(e.target.value)}
+                        placeholder={translate('global.firstname')}
+                        value={newFirstname}
+                        required
+                    />
+                </Box>
             </Box>
 
-            <Typography variant="subtitle1">{translate(`global.lastname`)}</Typography>
-            <Box alignItems="center" display="flex" flexDirection="row">
-                <Input
-                    name="Lastname"
-                    onChange={(e) => setNewLastname(e.target.value)}
-                    placeholder={translate('global.lastname')}
-                    sx={inputStyle}
-                    value={newLastname}
-                    disableUnderline
-                    required
-                />
+            <Box>
+                <Typography variant="subtitle1">{translate(`global.lastname`)}</Typography>
+                <Box alignItems="center" display="flex" flexDirection="row">
+                    <OutlinedInput
+                        name="Lastname"
+                        onChange={(e) => setNewLastname(e.target.value)}
+                        placeholder={translate('global.lastname')}
+                        value={newLastname}
+                        required
+                    />
+                </Box>
             </Box>
 
-            <Typography variant="subtitle1">{translate(`administrators.${type}.password`)}</Typography>
-            <Box alignItems="center" display="flex" flexDirection="row">
-                <Input
-                    name="Password"
-                    onChange={(e) => setPassword(e.target.value)}
-                    placeholder={translate('global.password')}
-                    sx={inputStyle}
-                    value={password}
-                    disableUnderline
-                    required
-                />
+            <Box>
+                <Typography variant="subtitle1">{translate(`administrators.${type}.password`)}</Typography>
+                <Box alignItems="center" display="flex" flexDirection="row">
+                    <OutlinedInput
+                        name="Password"
+                        onChange={(e) => setPassword(e.target.value)}
+                        placeholder={translate('global.password')}
+                        value={password}
+                        required
+                    />
+                </Box>
             </Box>
 
             <Button

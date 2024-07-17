@@ -2,8 +2,8 @@ import { useTranslation } from 'react-i18next';
 import { ArrowRightSvg } from '../../../assets';
 import Language from '../../../domain/entities/Language';
 import Profile from '../../../domain/entities/Profile';
-import styles from './TandemLine.module.css';
 import { codeLanguageToFlag } from '../../utils';
+import styles from './TandemLine.module.css';
 
 interface TandemLineProps {
     language: Language;
@@ -40,7 +40,7 @@ const TandemLine: React.FC<TandemLineProps> = ({ language, profile, onPressed, s
                 </div>
                 <span className={styles.title}>{t(getTitleFromStatusAndProfile(status, !!profile))}</span>
             </div>
-            <img alt="" src={ArrowRightSvg} />
+            <img alt="" src={ArrowRightSvg} aria-hidden={true} />
         </button>
     );
 };

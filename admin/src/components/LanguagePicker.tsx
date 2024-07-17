@@ -26,7 +26,6 @@ const LanguagePicker: React.FC<LanguagePickerProps> = ({ onChange }) => {
                 onChange={(language) => onChange(languages.find((c: Language) => language.target.value === c.id))}
                 renderValue={() => translate('language_picker.placeholder')}
                 sx={{ mb: 2, width: '100%' }}
-                variant="standard"
                 disableUnderline
             >
                 {languages.map((language: Language) => (

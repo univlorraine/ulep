@@ -29,7 +29,7 @@ export class LearningLanguageResponse {
   level: string;
 
   @ApiProperty({ type: () => () => ProfileResponse })
-  @Expose({ groups: ['read'] })
+  @Expose({ groups: ['learning-language:profile'] })
   profile: ProfileResponse;
 
   @ApiProperty({ type: 'date' })
@@ -69,6 +69,10 @@ export class LearningLanguageResponse {
   @Expose({ groups: ['read'] })
   learningType: LearningType;
 
+  @ApiProperty({ type: () => TandemResponse })
+  @Expose({ groups: ['learning-language:tandem'] })
+  tandem?: TandemResponse;
+
   @ApiProperty({ type: () => LanguageResponse })
   @Expose({ groups: ['read'] })
   tandemLanguage?: LanguageResponse;
@@ -79,7 +83,6 @@ export class LearningLanguageResponse {
 
   static fromDomain(
     learningLanguage: LearningLanguage,
-    includeProfile = false,
     languageCode?: string,
   ): LearningLanguageResponse {
     const response = new LearningLanguageResponse({
@@ -98,20 +101,16 @@ export class LearningLanguageResponse {
       sameAge: learningLanguage.sameAge,
       hasPriority: learningLanguage.hasPriority,
       sameTandemEmail: learningLanguage.sameTandemEmail,
+      tandem:
+        learningLanguage.tandem &&
+        TandemResponse.fromDomain(learningLanguage.tandem),
       tandemLanguage:
         learningLanguage.tandemLanguage &&
         LanguageResponse.fromLanguage(learningLanguage.tandemLanguage),
+      profile:
+        learningLanguage.profile &&
+        ProfileResponse.fromDomain(learningLanguage.profile, languageCode),
     });
-
-    if (includeProfile) {
-      return new LearningLanguageResponse({
-        ...response,
-        profile: ProfileResponse.fromDomain(
-          learningLanguage.profile,
-          languageCode,
-        ),
-      });
-    }
 
     return response;
   }
@@ -130,10 +129,9 @@ export class LearningLanguageWithTandemResponse extends LearningLanguageResponse
 
   static fromDomain(
     learningLanguage: LearningLanguageWithTandem,
-    includeProfile = false,
   ): LearningLanguageWithTandemResponse {
     return new LearningLanguageWithTandemResponse({
-      ...LearningLanguageResponse.fromDomain(learningLanguage, includeProfile),
+      ...LearningLanguageResponse.fromDomain(learningLanguage),
       tandem:
         learningLanguage.tandem &&
         TandemResponse.fromDomain(learningLanguage.tandem),

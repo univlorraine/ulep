@@ -7,7 +7,7 @@ const ReportCategoryList = () => (
         <ReportsPagesHeader />
         <List bulkActionButtons={false} exporter={false} pagination={false}>
             <Datagrid rowClick="show">
-                <TextField source="name" />
+                <TextField sortable={false} source="name" />
             </Datagrid>
         </List>
     </>

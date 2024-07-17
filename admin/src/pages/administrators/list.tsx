@@ -62,14 +62,15 @@ const AdministratorList = (props: ListProps<Administrator>) => {
                 {...props}
             >
                 <Datagrid bulkActionButtons={false} rowClick="edit">
-                    <TextField label={translate('global.email')} source="email" />
-                    <TextField label={translate('global.firstname')} source="firstname" />
-                    <TextField label={translate('global.lastname')} source="lastname" />
+                    <TextField label={translate('global.email')} sortable={false} source="email" />
+                    <TextField label={translate('global.firstname')} sortable={false} source="firstname" />
+                    <TextField label={translate('global.lastname')} sortable={false} source="lastname" />
                     <FunctionField
                         label={translate('global.group')}
                         render={(admin: Administrator) =>
                             translate(`admin_groups_picker.${admin.group.name.toLowerCase()}`)
                         }
+                        sortable={false}
                     />
 
                     {identity.isCentralUniversity && (
@@ -77,6 +78,7 @@ const AdministratorList = (props: ListProps<Administrator>) => {
                             emptyText={translate('administrators.all')}
                             label={translate('administrators.university')}
                             reference="universities"
+                            sortable={false}
                             source="universityId"
                         />
                     )}

@@ -21,6 +21,18 @@ export class TandemResponse {
   @Expose({ groups: ['read'] })
   compatibilityScore: number;
 
+  @Swagger.ApiProperty({ type: 'string', isArray: true })
+  @Expose({ groups: ['tandem:university-validations'] })
+  universityValidations?: string[];
+
+  @Swagger.ApiProperty({ type: 'date' })
+  @Expose({ groups: ['read'] })
+  updatedAt?: Date;
+
+  @Swagger.ApiProperty({ type: 'date' })
+  @Expose({ groups: ['read'] })
+  createdAt?: Date;
+
   constructor(partial: Partial<TandemResponse>) {
     Object.assign(this, partial);
   }
@@ -34,6 +46,9 @@ export class TandemResponse {
         ) || [],
       status: tandem.status,
       compatibilityScore: tandem.compatibilityScore,
+      universityValidations: tandem.universityValidations,
+      createdAt: tandem.createdAt,
+      updatedAt: tandem.updatedAt,
     });
   }
 }
@@ -99,7 +114,6 @@ export class UserTandemResponse {
       id: tandem.id,
       partnerLearningLanguage: LearningLanguageResponse.fromDomain(
         learningLanguagePartner,
-        true,
         languageCode,
       ),
       status: tandem.status,

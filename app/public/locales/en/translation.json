@@ -131,7 +131,8 @@
             "report_button": "Report a problem",
             "report_sent": "",
             "send_button": "Send",
-            "title": "Report"
+            "title": "Report",
+            "note_required": "The note is required"
         },
         "settings": {
             "account": "My account",

@@ -1,9 +1,8 @@
-import { Box, Typography, Input } from '@mui/material';
+import { Box, Typography, OutlinedInput } from '@mui/material';
 import { MuiColorInput } from 'mui-color-input';
 import React, { useState } from 'react';
 import { Button, useTranslate } from 'react-admin';
 import Instance from '../../entities/Instance';
-import inputStyle from '../../theme/inputStyle';
 
 interface InstanceFormProps {
     handleSubmit: (instance: Instance) => void;
@@ -63,124 +62,142 @@ const InstanceForm: React.FC<InstanceFormProps> = ({ handleSubmit, instance }) =
     };
 
     return (
-        <Box sx={{ m: 4 }}>
-            <Typography variant="subtitle1">{translate(`instance.edit.name`)}</Typography>
+        <>
+            <Box sx={{ m: 4, display: 'flex', flexDirection: 'row', gap: '50px' }}>
+                <Box sx={{ flex: '1', display: 'flex', flexDirection: 'column', gap: '20px' }}>
+                    <Box>
+                        <Typography variant="subtitle1">{translate(`instance.edit.name`)}</Typography>
+                        <Box alignItems="center" display="flex" flexDirection="row">
+                            <OutlinedInput onChange={(e) => setNewName(e.target.value)} value={newName} required />
+                        </Box>
+                    </Box>
 
-            <Box alignItems="center" display="flex" flexDirection="row">
-                <Input
-                    onChange={(e) => setNewName(e.target.value)}
-                    sx={inputStyle}
-                    value={newName}
-                    disableUnderline
-                    required
-                />
+                    <Box>
+                        <Typography variant="subtitle1">{translate(`instance.edit.email`)}</Typography>
+                        <Box alignItems="center" display="flex" flexDirection="row">
+                            <OutlinedInput
+                                name="Email"
+                                onChange={(e) => setNewEmail(e.target.value)}
+                                type="email"
+                                value={newEmail}
+                                required
+                            />
+                        </Box>
+                    </Box>
+
+                    <Box>
+                        <Typography variant="subtitle1">{translate(`instance.edit.cgu`)}</Typography>
+                        <Box alignItems="center" display="flex" flexDirection="row">
+                            <OutlinedInput
+                                name="Cgu"
+                                onChange={(e) => setNewCgu(e.target.value)}
+                                type="url"
+                                value={newCgu}
+                                required
+                            />
+                        </Box>
+                    </Box>
+
+                    <Box>
+                        <Typography variant="subtitle1">{translate(`instance.edit.confidentiality`)}</Typography>
+                        <Box alignItems="center" display="flex" flexDirection="row">
+                            <OutlinedInput
+                                name="Confidentiality"
+                                onChange={(e) => setNewConfidentiality(e.target.value)}
+                                type="url"
+                                value={newConfidentiality}
+                                required
+                            />
+                        </Box>
+                    </Box>
+
+                    <Box>
+                        <Typography variant="subtitle1">{translate(`instance.edit.ressource`)}</Typography>
+                        <Box alignItems="center" display="flex" flexDirection="row">
+                            <OutlinedInput
+                                name="Ressource"
+                                onChange={(e) => setNewRessource(e.target.value)}
+                                type="url"
+                                value={newRessource}
+                                required
+                            />
+                        </Box>
+                    </Box>
+
+                    <Box>
+                        <Typography variant="subtitle1">
+                            {translate(`instance.edit.daysBeforeClosureNotification`)}
+                        </Typography>
+                        <Box alignItems="center" display="flex" flexDirection="row">
+                            <OutlinedInput
+                                name="DaysBeforeClosureNotification"
+                                onChange={(e) => setNewDaysBeforeClosureNotification(Number(e.target.value))}
+                                type="number"
+                                value={newDaysBeforeClosureNotification}
+                                required
+                            />
+                        </Box>
+                    </Box>
+                </Box>
+
+                <Box sx={{ flex: '1', display: 'flex', flexDirection: 'column', gap: '20px' }}>
+                    <Box>
+                        <Typography variant="subtitle1">{translate(`instance.edit.primaryColor`)}</Typography>
+                        <MuiColorInput
+                            format="hex"
+                            onChange={(_, colors) => setNewPrimaryColor(colors.hex)}
+                            value={newPrimaryColor}
+                        />
+                    </Box>
+
+                    <Box>
+                        <Typography variant="subtitle1">{translate(`instance.edit.primaryBackgroundColor`)}</Typography>
+                        <MuiColorInput
+                            format="hex"
+                            onChange={(_, colors) => setNewPrimaryBackgroundColor(colors.hex)}
+                            value={newPrimaryBackgroundColor}
+                        />
+                    </Box>
+
+                    <Box>
+                        <Typography variant="subtitle1">{translate(`instance.edit.primaryDarkColor`)}</Typography>
+                        <MuiColorInput
+                            format="hex"
+                            onChange={(_, colors) => setNewPrimaryDarkColor(colors.hex)}
+                            value={newPrimaryDarkColor}
+                        />
+                    </Box>
+
+                    <Box>
+                        <Typography variant="subtitle1">{translate(`instance.edit.secondaryColor`)}</Typography>
+                        <MuiColorInput
+                            format="hex"
+                            onChange={(_, colors) => setNewSecondaryColor(colors.hex)}
+                            value={newSecondaryColor}
+                        />
+                    </Box>
+
+                    <Box>
+                        <Typography variant="subtitle1">
+                            {translate(`instance.edit.secondaryBackgroundColor`)}
+                        </Typography>
+                        <MuiColorInput
+                            format="hex"
+                            onChange={(_, colors) => setNewSecondaryBackgroundColor(colors.hex)}
+                            value={newSecondaryBackgroundColor}
+                        />
+                    </Box>
+
+                    <Box>
+                        <Typography variant="subtitle1">{translate(`instance.edit.secondaryDarkColor`)}</Typography>
+                        <MuiColorInput
+                            format="hex"
+                            onChange={(_, colors) => setNewSecondaryDarkColor(colors.hex)}
+                            value={newSecondaryDarkColor}
+                        />
+                    </Box>
+                </Box>
             </Box>
-
-            <Typography variant="subtitle1">{translate(`instance.edit.email`)}</Typography>
-
-            <Box alignItems="center" display="flex" flexDirection="row">
-                <Input
-                    name="Email"
-                    onChange={(e) => setNewEmail(e.target.value)}
-                    sx={inputStyle}
-                    type="email"
-                    value={newEmail}
-                    disableUnderline
-                    required
-                />
-            </Box>
-            <Typography variant="subtitle1">{translate(`instance.edit.cgu`)}</Typography>
-
-            <Box alignItems="center" display="flex" flexDirection="row">
-                <Input
-                    name="Cgu"
-                    onChange={(e) => setNewCgu(e.target.value)}
-                    sx={inputStyle}
-                    type="url"
-                    value={newCgu}
-                    disableUnderline
-                    required
-                />
-            </Box>
-
-            <Typography variant="subtitle1">{translate(`instance.edit.confidentiality`)}</Typography>
-
-            <Box alignItems="center" display="flex" flexDirection="row">
-                <Input
-                    name="Confidentiality"
-                    onChange={(e) => setNewConfidentiality(e.target.value)}
-                    sx={inputStyle}
-                    type="url"
-                    value={newConfidentiality}
-                    disableUnderline
-                    required
-                />
-            </Box>
-
-            <Typography variant="subtitle1">{translate(`instance.edit.ressource`)}</Typography>
-
-            <Box alignItems="center" display="flex" flexDirection="row">
-                <Input
-                    name="Ressource"
-                    onChange={(e) => setNewRessource(e.target.value)}
-                    sx={inputStyle}
-                    type="url"
-                    value={newRessource}
-                    disableUnderline
-                    required
-                />
-            </Box>
-
-            <Typography variant="subtitle1">{translate(`instance.edit.primaryColor`)}</Typography>
-            <MuiColorInput
-                format="hex"
-                onChange={(_, colors) => setNewPrimaryColor(colors.hex)}
-                value={newPrimaryColor}
-            />
-            <Typography variant="subtitle1">{translate(`instance.edit.primaryBackgroundColor`)}</Typography>
-            <MuiColorInput
-                format="hex"
-                onChange={(_, colors) => setNewPrimaryBackgroundColor(colors.hex)}
-                value={newPrimaryBackgroundColor}
-            />
-            <Typography variant="subtitle1">{translate(`instance.edit.primaryDarkColor`)}</Typography>
-            <MuiColorInput
-                format="hex"
-                onChange={(_, colors) => setNewPrimaryDarkColor(colors.hex)}
-                value={newPrimaryDarkColor}
-            />
-            <Typography variant="subtitle1">{translate(`instance.edit.secondaryColor`)}</Typography>
-            <MuiColorInput
-                format="hex"
-                onChange={(_, colors) => setNewSecondaryColor(colors.hex)}
-                value={newSecondaryColor}
-            />
-            <Typography variant="subtitle1">{translate(`instance.edit.secondaryBackgroundColor`)}</Typography>
-            <MuiColorInput
-                format="hex"
-                onChange={(_, colors) => setNewSecondaryBackgroundColor(colors.hex)}
-                value={newSecondaryBackgroundColor}
-            />
-            <Typography variant="subtitle1">{translate(`instance.edit.secondaryDarkColor`)}</Typography>
-            <MuiColorInput
-                format="hex"
-                onChange={(_, colors) => setNewSecondaryDarkColor(colors.hex)}
-                value={newSecondaryDarkColor}
-            />
-            <Typography variant="subtitle1">{translate(`instance.edit.daysBeforeClosureNotification`)}</Typography>
-
-            <Box alignItems="center" display="flex" flexDirection="row">
-                <Input
-                    name="DaysBeforeClosureNotification"
-                    onChange={(e) => setNewDaysBeforeClosureNotification(Number(e.target.value))}
-                    sx={inputStyle}
-                    type="number"
-                    value={newDaysBeforeClosureNotification}
-                    disableUnderline
-                    required
-                />
-            </Box>
-
             <Button
                 color="primary"
                 disabled={!allFieldsFilled}
@@ -191,7 +208,7 @@ const InstanceForm: React.FC<InstanceFormProps> = ({ handleSubmit, instance }) =
             >
                 <span>{translate('global.save')}</span>
             </Button>
-        </Box>
+        </>
     );
 };
 

@@ -6,7 +6,7 @@ const ReportPage: React.FC = () => {
     const history = useHistory();
     return (
         <IonPage>
-            <ReportContent onGoBack={history.goBack} onReportSent={history.goBack} />
+            <ReportContent onClose={history.goBack} />
         </IonPage>
     );
 };
