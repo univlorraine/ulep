@@ -1,8 +1,5 @@
-import { IonContent } from '@ionic/react';
 import { useEffect, useState } from 'react';
-import useWindowDimensions from '../../hooks/useWindowDimensions';
-import { BACKGROUND_HYBRID_STYLE_INLINE, BACKGROUND_WEB_STYLE_INLINE, HYBRID_MAX_WIDTH } from '../../utils';
-import style from './WelcomeContent.module.css';
+import { useTranslation } from 'react-i18next';
 import {
     BackgroundBluePng,
     BackgroundRedPng,
@@ -11,7 +8,9 @@ import {
     ChineseBubble,
     HiBubbleSvg,
 } from '../../../assets';
-import { useTranslation } from 'react-i18next';
+import useWindowDimensions from '../../hooks/useWindowDimensions';
+import { BACKGROUND_HYBRID_STYLE_INLINE, BACKGROUND_WEB_STYLE_INLINE, HYBRID_MAX_WIDTH } from '../../utils';
+import style from './WelcomeContent.module.css';
 
 interface HomeTheme {
     background: string;
@@ -57,24 +56,22 @@ const WelcomeContent: React.FC<WelcomeContentProps> = ({ onPress }) => {
           };
     //TODO: Add mising logo on the top
     return (
-        <IonContent>
-            <div style={backgroundStyle} className={`content-wrapper container`}>
-                <img src={currentTheme.image} alt={t('global.hello') as string} className={style['bubble']} />
-                <span className={style['welcome-text']}>
-                    {t('global.welcome')}
-                    <p className={style['welcome-subtext']}>{t('global.welcome_subtext')}</p>
-                </span>
+        <div style={backgroundStyle} className={`content-wrapper container`}>
+            <img src={currentTheme.image} alt={t('global.hello') as string} className={style['bubble']} />
+            <h1 className={style['welcome-text']}>
+                {t('global.welcome')}
+                <p className={style['welcome-subtext']}>{t('global.welcome_subtext')}</p>
+            </h1>
 
-                <button
-                    aria-label={t('global.welcome_btn') as string}
-                    className={style.button}
-                    disabled={!onPress}
-                    onClick={onButtonPressed}
-                >
-                    <p className={style['button-text']}>{t('global.welcome_btn')}</p>
-                </button>
-            </div>
-        </IonContent>
+            <button
+                aria-label={t('global.welcome_btn') as string}
+                className={style.button}
+                disabled={!onPress}
+                onClick={onButtonPressed}
+            >
+                <p className={style['button-text']}>{t('global.welcome_btn')}</p>
+            </button>
+        </div>
     );
 };
 

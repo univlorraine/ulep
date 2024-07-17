@@ -9,7 +9,7 @@ interface ReportModalProps {
 const ReportModal: React.FC<ReportModalProps> = ({ isVisible, onClose }) => {
     return (
         <Modal isVisible={isVisible} onClose={onClose} hideWhiteBackground>
-            <ReportContent onGoBack={onClose} onReportSent={onClose} />
+            <ReportContent onClose={onClose} />
         </Modal>
     );
 };

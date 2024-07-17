@@ -1,11 +1,11 @@
-import { useTranslation } from 'react-i18next';
-import Language from '../../../domain/entities/Language';
-import FlagBubble from '../FlagBubble';
-import { PlusPng } from '../../../assets';
-import styles from './LearnableLanguagesContent.module.css';
-import Loader from '../Loader';
 import { useState } from 'react';
+import { useTranslation } from 'react-i18next';
+import { PlusPng } from '../../../assets';
+import Language from '../../../domain/entities/Language';
 import University from '../../../domain/entities/University';
+import FlagBubble from '../FlagBubble';
+import Loader from '../Loader';
+import styles from './LearnableLanguagesContent.module.css';
 
 interface LearnableLanguagesContentProps {
     abortStep: () => void;
@@ -47,25 +47,33 @@ const LearnableLanguagesContent: React.FC<LearnableLanguagesContentProps> = ({
                             languages.length ? 'pairing_languages_page.subtitle' : 'pairing_languages_page.no_languages'
                         )}
                     </p>
-                    <div className={styles['languages-container']}>
+                    <div
+                        className={styles['languages-container']}
+                        role="radiogroup"
+                        aria-label={t('pairing_languages_page.title') as string}
+                    >
                         {!!languages.length &&
                             languages.map((language) => {
+                                const isSelected = selectedLanguage?.code === language.code;
                                 return (
                                     <FlagBubble
                                         key={language.code}
-                                        isSelected={selectedLanguage?.code === language.code}
+                                        isSelected={isSelected}
+                                        role="radio"
+                                        aria-checked={isSelected}
                                         language={language}
                                         onPressed={setSelectedLanguage}
+                                        textColor={isSelected ? 'white' : 'black'}
                                     />
                                 );
                             })}
                         {!isLoading && university.isCentral && (
                             <button
-                                aria-label={t('pairing_other_languages_page.selected_language.title') as string}
+                                aria-label={t('pairing_other_languages_page.choosing_another_language') as string}
                                 style={{ background: 'none' }}
                                 onClick={navigateToOtherLanguages}
                             >
-                                <img alt="" className={styles.image} src={PlusPng} />
+                                <img alt="" className={styles.image} src={PlusPng} aria-hidden={true} />
                             </button>
                         )}
                     </div>

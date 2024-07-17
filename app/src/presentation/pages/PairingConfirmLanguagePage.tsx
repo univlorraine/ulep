@@ -63,7 +63,7 @@ const PairingConfirmLanguagePage: React.FC = () => {
                         )} ${pedagogyToTitle(profileSignUp.pedagogy, campusName)} ${codeLanguageToFlag(
                             profileSignUp.learningLanguage.code
                         )}`}</p>
-                        <img alt="" src={TandemPng} />
+                        <img alt="" src={TandemPng} aria-hidden={true} />
                     </div>
                 </div>
                 <div className={`large-margin-top extra-large-margin-bottom`}>

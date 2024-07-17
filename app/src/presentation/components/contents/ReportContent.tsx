@@ -11,11 +11,10 @@ import TextInput from '../TextInput';
 import styles from './ReportContent.module.css';
 
 interface ReportContentProps {
-    onGoBack: () => void;
-    onReportSent: () => void;
+    onClose: () => void;
 }
 
-const ReportContent: React.FC<ReportContentProps> = ({ onGoBack, onReportSent }) => {
+const ReportContent: React.FC<ReportContentProps> = ({ onClose }) => {
     const { t } = useTranslation();
     const { createReport, getAllReportCategories } = useConfig();
     const [showToast] = useIonToast();
@@ -24,6 +23,8 @@ const ReportContent: React.FC<ReportContentProps> = ({ onGoBack, onReportSent })
     const [note, setNote] = useState<string>('');
     const { width } = useWindowDimensions();
     const isHybrid = width < HYBRID_MAX_WIDTH;
+
+    const buttonDisabled = !selectedCategory || note.length === 0;
 
     const getCategories = async () => {
         const result = await getAllReportCategories.execute();
@@ -39,7 +40,7 @@ const ReportContent: React.FC<ReportContentProps> = ({ onGoBack, onReportSent })
     };
 
     const sendReport = async () => {
-        if (!selectedCategory) {
+        if (buttonDisabled) {
             return;
         }
 
@@ -53,7 +54,7 @@ const ReportContent: React.FC<ReportContentProps> = ({ onGoBack, onReportSent })
             return await showToast({ message: t(result.message), duration: 1000 });
         }
 
-        onReportSent();
+        onClose();
         return await showToast({ message: t('home_page.report.report_sent'), duration: 2000 });
     };
 
@@ -68,7 +69,7 @@ const ReportContent: React.FC<ReportContentProps> = ({ onGoBack, onReportSent })
                     <button
                         aria-label={t('global.go_back') as string}
                         className={styles['back-button']}
-                        onClick={onGoBack}
+                        onClick={onClose}
                     >
                         <img alt={t('global.go_back') as string} src={ArrowLeftSvg} />
                     </button>
@@ -80,7 +81,7 @@ const ReportContent: React.FC<ReportContentProps> = ({ onGoBack, onReportSent })
                     <button
                         aria-label={t('global.go_back') as string}
                         className={styles['back-button']}
-                        onClick={onGoBack}
+                        onClick={onClose}
                     >
                         <img alt={t('global.go_back') as string} src={CloseBlackSvg} />
                     </button>
@@ -107,8 +108,8 @@ const ReportContent: React.FC<ReportContentProps> = ({ onGoBack, onReportSent })
                 <div className={styles['button-container']}>
                     <button
                         aria-label={t('home_page.report.send_button') as string}
-                        className={`primary-button ${!selectedCategory ? 'disabled' : ''}`}
-                        disabled={!selectedCategory}
+                        className={`primary-button ${buttonDisabled ? 'disabled' : ''}`}
+                        disabled={buttonDisabled}
                         onClick={sendReport}
                     >
                         {t('home_page.report.send_button')}

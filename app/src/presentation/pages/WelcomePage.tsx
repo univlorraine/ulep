@@ -1,12 +1,12 @@
-import { IonPage } from '@ionic/react';
+import { IonContent, IonPage } from '@ionic/react';
+import { useEffect } from 'react';
 import { useHistory, useLocation } from 'react-router';
 import ConnexionContent from '../components/contents/ConnectionContent';
 import WelcomeContent from '../components/contents/WelcomeContent';
 import WebLayout from '../components/layout/WebLayout';
+import useRedirectToHomeIfLogged from '../hooks/useRedirectToHomeIfLogged';
 import useWindowDimensions from '../hooks/useWindowDimensions';
 import { HYBRID_MAX_WIDTH } from '../utils';
-import { useEffect } from 'react';
-import useRedirectToHomeIfLogged from '../hooks/useRedirectToHomeIfLogged';
 
 const WelcomePage: React.FC = () => {
     const history = useHistory();
@@ -24,19 +24,21 @@ const WelcomePage: React.FC = () => {
 
     return (
         <IonPage>
-            {width < HYBRID_MAX_WIDTH ? (
-                <WelcomeContent onPress={() => history.push('/connect')} />
-            ) : (
-                <WebLayout
-                    leftComponent={<WelcomeContent />}
-                    rightComponent={
-                        <ConnexionContent
-                            onLoginPressed={() => history.push('/login')}
-                            onSignUpPressed={() => history.push('/signup')}
-                        />
-                    }
-                />
-            )}
+            <IonContent>
+                {width < HYBRID_MAX_WIDTH ? (
+                    <WelcomeContent onPress={() => history.push('/connect')} />
+                ) : (
+                    <WebLayout
+                        leftComponent={<WelcomeContent />}
+                        rightComponent={
+                            <ConnexionContent
+                                onLoginPressed={() => history.push('/login')}
+                                onSignUpPressed={() => history.push('/signup')}
+                            />
+                        }
+                    />
+                )}
+            </IonContent>
         </IonPage>
     );
 };

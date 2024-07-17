@@ -7,9 +7,9 @@ import { useConfig } from '../../context/ConfigurationContext';
 import Goal from '../../domain/entities/Goal';
 import { useStoreActions, useStoreState } from '../../store/storeTypes';
 import WebLayoutCentered from '../components/layout/WebLayoutCentered';
+import NetworkImage from '../components/NetworkImage';
 import styles from './css/SignUp.module.css';
 import goalsStyles from './css/SignUpGoals.module.css';
-import NetworkImage from '../components/NetworkImage';
 
 const SignUpGoalsPage: React.FC = () => {
     const { t } = useTranslation();
@@ -70,19 +70,16 @@ const SignUpGoalsPage: React.FC = () => {
 
                     <div className={`${goalsStyles['goals-container']} large-margin-top`}>
                         {goals.map((goal) => {
+                            const isIncluded = userGoals.findIndex((userGoal) => userGoal.id === goal.id) !== -1;
                             return (
                                 <button
+                                    role="checkbox"
+                                    aria-checked={isIncluded}
                                     key={goal.id}
                                     aria-label={goal.name}
                                     className={goalsStyles['goal-container']}
                                     onClick={() => goalPressed(goal)}
-                                    style={{
-                                        backgroundColor:
-                                            userGoals.length === 0 ||
-                                            userGoals.findIndex((userGoal) => userGoal.id === goal.id) === -1
-                                                ? '#F2F4F7'
-                                                : '#FDEE66',
-                                    }}
+                                    style={{ backgroundColor: isIncluded ? '#FDEE66' : '#F2F4F7' }}
                                 >
                                     {goal.image ? (
                                         <NetworkImage
@@ -92,9 +89,19 @@ const SignUpGoalsPage: React.FC = () => {
                                             placeholder={WritingSkillPng}
                                         />
                                     ) : (
-                                        <img alt="" className={goalsStyles.image} src={WritingSkillPng} />
+                                        <img
+                                            alt=""
+                                            className={goalsStyles.image}
+                                            src={WritingSkillPng}
+                                            aria-hidden={true}
+                                        />
                                     )}
-                                    <span className={goalsStyles.description}>{goal.name}</span>
+                                    <span
+                                        className={goalsStyles.description}
+                                        style={{ fontWeight: isIncluded ? 'bold' : 'normal' }}
+                                    >
+                                        {goal.name}
+                                    </span>
                                 </button>
                             );
                         })}

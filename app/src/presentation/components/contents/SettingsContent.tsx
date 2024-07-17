@@ -149,7 +149,7 @@ const SettingsContent: React.FC<SettingsContentProps> = ({ onBackPressed, onDisc
                 onClick={onEditAccount}
             >
                 <span>{t('home_page.settings.edit_account')}</span>
-                <img alt="" src={ArrowRightSvg} />
+                <img alt="" src={ArrowRightSvg} aria-hidden={true} />
             </button>
             <button
                 aria-label={t('home_page.settings.unsubscribe') as string}
@@ -157,7 +157,7 @@ const SettingsContent: React.FC<SettingsContentProps> = ({ onBackPressed, onDisc
                 onClick={() => setIsModalOpen(true)}
             >
                 <span>{t('home_page.settings.unsubscribe')}</span>
-                <img alt="" src={ArrowRightSvg} />
+                <img alt="" src={ArrowRightSvg} aria-hidden={true} />
             </button>
             <button
                 aria-label={t('home_page.settings.logout') as string}
@@ -165,7 +165,7 @@ const SettingsContent: React.FC<SettingsContentProps> = ({ onBackPressed, onDisc
                 onClick={onDisconnect}
             >
                 <span>{t('home_page.settings.logout')}</span>
-                <img alt="" src={ArrowRightSvg} />
+                <img alt="" src={ArrowRightSvg} aria-hidden={true} />
             </button>
             <ConfirmModal
                 isVisible={isModalOpen}

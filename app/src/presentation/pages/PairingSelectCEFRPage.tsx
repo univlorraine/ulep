@@ -21,6 +21,8 @@ const PairingSelectCEFRPage: React.FC = () => {
         return history.push(`/pairing/language/quizz/end`);
     };
 
+    const isNoKnoledgeSelected = selectedLevel === 'A0';
+
     return (
         <WebLayoutCentered
             backgroundIconColor={configuration.secondaryBackgroundImageColor}
@@ -33,27 +35,35 @@ const PairingSelectCEFRPage: React.FC = () => {
                     <h1 className="title">{t('pairing_select_level_page.title')}</h1>
                     <p className="subtitle">{t('pairing_select_level_page.subtitle')}</p>
                     <button
-                        aria-label={'A0' + t('pairing_select_level_page.no_knowledge')}
+                        aria-label={'A0 ' + t('pairing_select_level_page.no_knowledge')}
+                        role="checkbox"
+                        aria-checked={isNoKnoledgeSelected}
                         className={pairingSelectLevelStyles['level-container']}
                         onClick={() => setSelectedLevel('A0')}
-                        style={{ backgroundColor: selectedLevel === 'A0' ? configuration.secondaryColor : '#F2F4F7' }}
+                        style={{
+                            backgroundColor: isNoKnoledgeSelected ? configuration.secondaryColor : '#F2F4F7',
+                            fontWeight: isNoKnoledgeSelected ? 'bold' : 'normal',
+                        }}
                     >
-                        {'A0'} <br /> {t('pairing_select_level_page.no_knowledge')}
+                        {isNoKnoledgeSelected ? '✔️' : ''} {'A0'} <br /> {t('pairing_select_level_page.no_knowledge')}
                     </button>
-                    <div className={pairingSelectLevelStyles['levels-container']}>
+                    <div className={pairingSelectLevelStyles['levels-container']} role="radiogroup">
                         {levels.map((level) => {
+                            const isSelected = selectedLevel === level;
                             return (
                                 <button
                                     key={level}
+                                    role="radio"
                                     aria-label={level}
+                                    aria-checked={isSelected}
                                     className={pairingSelectLevelStyles['level-container-override']}
                                     onClick={() => setSelectedLevel(level)}
                                     style={{
-                                        backgroundColor:
-                                            selectedLevel === level ? configuration.secondaryColor : '#F2F4F7',
+                                        backgroundColor: isSelected ? configuration.secondaryColor : '#F2F4F7',
+                                        fontWeight: isSelected ? 'bold' : 'normal',
                                     }}
                                 >
-                                    {level}
+                                    {isSelected ? '✔️' : ''} {level}
                                 </button>
                             );
                         })}
