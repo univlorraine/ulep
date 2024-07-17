@@ -10,7 +10,7 @@ const CampusList = (props: any) => {
             <UniversitiesPagesHeader />
             <List exporter={false} pagination={false} title={translate('campus.label')} {...props}>
                 <Datagrid rowClick="edit">
-                    <TextField label={translate('campus.name')} source="name" />
+                    <TextField label={translate('campus.name')} sortable={false} source="name" />
                 </Datagrid>
             </List>
         </>

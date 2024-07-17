@@ -71,6 +71,7 @@
         "email": "Email",
         "etandem": "E-tandem",
         "firstname": "Firstname",
+        "group": "Group",
         "defaultContact": "Default contact",
         "noDefaultContact": "No default contact",
         "gender": "Gender",
