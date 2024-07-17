@@ -4,7 +4,7 @@ import { Button, Loading, useGetIdentity, useNotify, usePermissions, useTranslat
 import { AdminGroup, AdministratorFormPayload, KeycloakGroup, Role } from '../../entities/Administrator';
 import University from '../../entities/University';
 import isPasswordValid from '../../utils/isPasswordValid';
-import AdminGroupPicker from '../AdminGroupPicker';
+import AdminGroupPicker from '../adminGroups/AdminGroupPicker';
 import ImageUploader from '../ImageUploader';
 import UniversityPicker from '../UniversityPicker';
 

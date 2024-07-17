@@ -1,6 +1,16 @@
 import { Select, MenuItem } from '@mui/material';
 import React from 'react';
-import { useTranslate, FunctionField, Datagrid, List, TextField, useUpdate, useNotify, useRefresh } from 'react-admin';
+import {
+    useTranslate,
+    FunctionField,
+    Datagrid,
+    List,
+    TextField,
+    useUpdate,
+    useNotify,
+    useRefresh,
+    TextInput,
+} from 'react-admin';
 import ConfigPagesHeader from '../../components/tabs/ConfigPagesHeader';
 import Language from '../../entities/Language';
 
@@ -39,18 +49,23 @@ const LanguageList = () => {
         );
     };
 
+    const filters = [
+        <TextInput key="languageCode" label={translate('languages.filters.language_code')} source="code" alwaysOn />,
+        <TextInput key="languageName" label={translate('languages.filters.language_name')} source="name" alwaysOn />,
+    ];
+
     return (
         <>
             <ConfigPagesHeader />
-            <List exporter={false}>
+            <List exporter={false} filters={filters}>
                 <Datagrid bulkActionButtons={false}>
                     <TextField label={translate('languages.code')} source="code" />
                     <FunctionField
                         label={translate('languages.name')}
                         render={(record: Language) => translate(`languages_code.${record.code}`)}
                         sortable={false}
-                        source="code"
                     />
+                    <TextField label={translate('languages.original_name')} sortable={false} source="name" />
                     <FunctionField
                         label={translate('languages.status.title')}
                         render={(record: Language) => (

@@ -33,4 +33,12 @@ export class FindAllLanguageParams extends PaginationDto {
   @Swagger.ApiPropertyOptional({ type: 'string' })
   @IsOptional()
   order?: SortOrder;
+
+  @Swagger.ApiPropertyOptional({ type: 'string' })
+  @IsOptional()
+  code?: string;
+
+  @Swagger.ApiPropertyOptional({ type: 'string' })
+  @IsOptional()
+  name?: string;
 }

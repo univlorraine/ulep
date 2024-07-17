@@ -10,7 +10,6 @@ import {
     addRefreshAuthToDataProvider,
     fetchUtils,
 } from 'react-admin';
-import Language from '../entities/Language';
 import { LearningLanguage } from '../entities/LearningLanguage';
 import { ProfileWithTandems } from '../entities/Profile';
 import { RoutineExecution } from '../entities/RoutineExecution';
@@ -245,16 +244,6 @@ const customDataProvider = {
         }
 
         const result = await response.json();
-
-        if (resource === 'languages') {
-            return {
-                data: result.items.map((language: Language) => ({
-                    ...language,
-                    name: `languages_code.${language.code}`,
-                })),
-                total: result.totalItems,
-            };
-        }
 
         if (resource === 'profiles/with-tandem') {
             // Filter the learning-languages array contained into the tandem subobject
