@@ -56,7 +56,7 @@ const HomeContent: React.FC<HomeContentProps> = ({
                 <div className={styles['header']}>
                     <div className={styles['hello-container']}>
                         <span className={styles.date}>{formattedDate}</span>
-                        <span className={styles.hello}>{`${t('global.hello')} ${profile.user.firstname}`}</span>
+                        <h1 className={styles.hello}>{`${t('global.hello')} ${profile.user.firstname}`}</h1>
                     </div>
                     {isHybrid && (
                         <button
@@ -65,7 +65,7 @@ const HomeContent: React.FC<HomeContentProps> = ({
                             onClick={onProfilePressed}
                         >
                             <Avatar user={profile.user} className={styles.avatar} />
-                            <img alt="" src={ArrowDownSvg} />
+                            <img alt="" src={ArrowDownSvg} aria-hidden={true} />
                         </button>
                     )}
                 </div>
@@ -111,7 +111,7 @@ const HomeContent: React.FC<HomeContentProps> = ({
                     >
                         {
                             <>
-                                <img alt="" className="margin-right" src={ReportSvg} />
+                                <img alt="" className="margin-right" src={ReportSvg} aria-hidden={true} />
                                 <span>{t('home_page.report.report_button')}</span>
                             </>
                         }

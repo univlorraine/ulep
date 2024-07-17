@@ -1,8 +1,7 @@
-import { useState } from 'react';
+import { IonInput, IonItem } from '@ionic/react';
+import React, { useState } from 'react';
 import { EyeSvg } from '../../assets';
 import style from './TextInput.module.css';
-import { IonInput, IonItem } from '@ionic/react';
-import React from 'react';
 
 export type AutocompleteTypes =
     | 'on'
@@ -121,7 +120,7 @@ const TextInput: React.FC<TextInputProps> = ({
                             type="button"
                             onClick={() => setShowPassword(!showPasword)}
                         >
-                            <img alt="" src={EyeSvg} />
+                            <img alt="" src={EyeSvg} aria-hidden={true} />
                         </button>
                     )}
                 </IonItem>

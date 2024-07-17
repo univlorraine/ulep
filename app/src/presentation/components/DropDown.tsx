@@ -1,8 +1,8 @@
-import React, { useEffect, useRef, useState } from 'react';
-import { ArrowUpSvg, ArrowDownSvg } from '../../assets';
-import styles from './DropDown.module.css';
-import { compareArrays } from '../utils';
 import { IonItem, IonSelect, IonSelectOption } from '@ionic/react';
+import { useEffect, useRef, useState } from 'react';
+import { ArrowDownSvg, ArrowUpSvg } from '../../assets';
+import { compareArrays } from '../utils';
+import styles from './DropDown.module.css';
 
 export interface DropDownItem<T> {
     label: string;
@@ -13,10 +13,11 @@ interface DropdownProps<T> {
     options: DropDownItem<T>[];
     placeholder?: string | null;
     title?: string | null;
+    ariaLabel?: string | null;
     value?: DropDownItem<T>;
 }
 
-const Dropdown = <T,>({ onChange, options, placeholder, value, title }: DropdownProps<T>) => {
+const Dropdown = <T,>({ onChange, options, placeholder, value, title, ariaLabel, ...props }: DropdownProps<T>) => {
     const [selectedOption, setSelectedOption] = useState<DropDownItem<T> | undefined>(
         value ? value : !placeholder ? options[0] : undefined
     );
@@ -40,7 +41,7 @@ const Dropdown = <T,>({ onChange, options, placeholder, value, title }: Dropdown
             <IonItem lines="none" className={`ion-no-padding ${styles.item}`}>
                 <IonSelect
                     interface="popover"
-                    aria-label={title || undefined}
+                    aria-label={ariaLabel || title || undefined}
                     class={styles.select}
                     placeholder={placeholder ? placeholder : undefined}
                     toggle-icon={ArrowDownSvg}
@@ -48,6 +49,7 @@ const Dropdown = <T,>({ onChange, options, placeholder, value, title }: Dropdown
                     labelPlacement="stacked"
                     onIonChange={(e) => handleOptionClick(e.detail.value)}
                     selectedText={selectedOption?.label ?? value?.label}
+                    {...props}
                 >
                     {options.map((option) => (
                         <IonSelectOption key={option.label} value={option}>

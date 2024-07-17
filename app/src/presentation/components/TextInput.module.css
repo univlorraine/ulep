@@ -60,6 +60,10 @@
     border-width: 0px;
 }
 
+.input-text:focus-within {
+    border: 1px solid #000;
+}
+
 .input-wrapper {
     --ion-background-color: transparent;
 }

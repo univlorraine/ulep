@@ -1,3 +1,4 @@
+import { Keyboard } from '@capacitor/keyboard';
 import { IonRadio, IonRadioGroup, useIonToast } from '@ionic/react';
 import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
@@ -8,12 +9,10 @@ import University from '../../domain/entities/University';
 import { useStoreActions, useStoreState } from '../../store/storeTypes';
 import Dropdown, { DropDownItem } from '../components/DropDown';
 import ErrorMessage from '../components/ErrorMessage';
-import RadioButton from '../components/RadioButton';
-import TextInput from '../components/TextInput';
 import WebLayoutCentered from '../components/layout/WebLayoutCentered';
+import TextInput from '../components/TextInput';
 import styles from './css/SignUp.module.css';
 import { SignUpInformationsParams } from './SignUpInformationsPage';
-import { Keyboard } from '@capacitor/keyboard';
 
 interface SignUpPageParams {
     fromIdp: boolean;
@@ -169,12 +168,16 @@ const SignUpPage: React.FC = () => {
 
                 {/* Role selectors */}
                 <h2 className={styles.subtitle}>{t('signup_page.profile_title')}</h2>
-                <IonRadioGroup value={selectedRole} onIonChange={(ev) => setSelectedRole(ev.detail.value)}>
-                    <IonRadio labelPlacement="end" value="STUDENT">
+                <IonRadioGroup
+                    value={selectedRole}
+                    onIonChange={(ev) => setSelectedRole(ev.detail.value)}
+                    aria-required={true}
+                >
+                    <IonRadio labelPlacement="end" value="STUDENT" aria-label={t('signup_page.student_role') as string}>
                         {t('signup_page.student_role')}
                     </IonRadio>
                     <br />
-                    <IonRadio labelPlacement="end" value="STAFF">
+                    <IonRadio labelPlacement="end" value="STAFF" aria-label={t('signup_page.staff_role') as string}>
                         {t('signup_page.staff_role')}
                     </IonRadio>
                 </IonRadioGroup>
@@ -187,7 +190,9 @@ const SignUpPage: React.FC = () => {
                                 onChange={onCountrySelected}
                                 options={countries}
                                 placeholder={country?.name || t('signup_page.country_placeholder')}
-                                title={t('global.country')}
+                                title={t('global.country') as string}
+                                ariaLabel={t('signup_page.country_aria_label') as string}
+                                aria-required={true}
                             />
                         </div>
                         {/* University selector */}
@@ -197,6 +202,7 @@ const SignUpPage: React.FC = () => {
                                     onChange={setUniversity}
                                     options={universities}
                                     title={t('signup_page.university_title')}
+                                    aria-required={true}
                                 />
                             </div>
                         )}
@@ -227,6 +233,7 @@ const SignUpPage: React.FC = () => {
                         {t('signup_page.sso_button')}
                     </button>
                 )}
+
                 {/* Department selector. */}
                 {university && selectedRole && (
                     <div className="large-margin-top">

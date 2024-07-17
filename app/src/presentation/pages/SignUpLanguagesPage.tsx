@@ -7,8 +7,8 @@ import Language from '../../domain/entities/Language';
 import { useStoreActions, useStoreState } from '../../store/storeTypes';
 import Dropdown, { DropDownItem } from '../components/DropDown';
 import WebLayoutCentered from '../components/layout/WebLayoutCentered';
-import styles from './css/SignUp.module.css';
 import { codeLanguageToFlag } from '../utils';
+import styles from './css/SignUp.module.css';
 
 const SignUpLanguagesPage: React.FC = () => {
     const { t } = useTranslation();
@@ -105,34 +105,37 @@ const SignUpLanguagesPage: React.FC = () => {
                     />
                 </div>
 
-                {myLanguage && (
-                    <div className="margin-bottom">
+                <div role="group">
+                    {myLanguage && (
+                        <div className="margin-bottom">
+                            <Dropdown<Language | undefined>
+                                onChange={(item) => pushOtherLanguage(item, 0)}
+                                value={languages.find((language) => otherLanguages[0]?.code === language.value?.code)}
+                                options={languages.filter(
+                                    (language) =>
+                                        language.value?.name !== myLanguage?.name &&
+                                        (!otherLanguages[1] || otherLanguages[1].name !== language.value?.name)
+                                )}
+                                placeholder={t('signup_languages_page.placeholder_first_optional_language')}
+                                title={t('signup_languages_page.other_languages')}
+                            />
+                        </div>
+                    )}
+
+                    {otherLanguages[0] && (
                         <Dropdown<Language | undefined>
-                            onChange={(item) => pushOtherLanguage(item, 0)}
-                            value={languages.find((language) => otherLanguages[0]?.code === language.value?.code)}
+                            onChange={(item) => pushOtherLanguage(item, 1)}
+                            value={languages.find((language) => otherLanguages[1]?.code === language.value?.code)}
                             options={languages.filter(
                                 (language) =>
                                     language.value?.name !== myLanguage?.name &&
-                                    (!otherLanguages[1] || otherLanguages[1].name !== language.value?.name)
+                                    (!otherLanguages[0] || otherLanguages[0].name !== language.value?.name)
                             )}
-                            placeholder={t('signup_languages_page.placeholder_first_optional_language')}
+                            placeholder={t('signup_languages_page.placeholder_second_optional_language')}
                             title={t('signup_languages_page.other_languages')}
                         />
-                    </div>
-                )}
-
-                {otherLanguages[0] && (
-                    <Dropdown<Language | undefined>
-                        onChange={(item) => pushOtherLanguage(item, 1)}
-                        value={languages.find((language) => otherLanguages[1]?.code === language.value?.code)}
-                        options={languages.filter(
-                            (language) =>
-                                language.value?.name !== myLanguage?.name &&
-                                (!otherLanguages[0] || otherLanguages[0].name !== language.value?.name)
-                        )}
-                        placeholder={t('signup_languages_page.placeholder_second_optional_language')}
-                    />
-                )}
+                    )}
+                </div>
 
                 <div className={styles['bottom-container']}>
                     <button

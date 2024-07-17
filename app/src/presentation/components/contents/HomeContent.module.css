@@ -33,7 +33,7 @@
 }
 
 .date {
-    color: #a8a8a8;
+    color: #5a5959;
     font-family: 'Maven Pro';
     font-size: 16px;
     font-style: normal;
@@ -48,6 +48,7 @@
     font-style: normal;
     font-weight: 700;
     line-height: 40px;
+    margin: 0;
 }
 
 .header {
@@ -112,7 +113,7 @@
     }
 }
 
-@media (min-width: 768px) and (max-width: 1024px){
+@media (min-width: 768px) and (max-width: 1024px) {
     .container {
         background-color: white;
         display: flex;

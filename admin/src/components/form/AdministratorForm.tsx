@@ -1,7 +1,7 @@
 import { Box, OutlinedInput, Typography } from '@mui/material';
 import React, { useState } from 'react';
 import { Button, Loading, useGetIdentity, useNotify, usePermissions, useTranslate } from 'react-admin';
-import { AdministratorFormPayload, KeycloakGroup, AdminGroup, Role } from '../../entities/Administrator';
+import { AdminGroup, AdministratorFormPayload, KeycloakGroup, Role } from '../../entities/Administrator';
 import University from '../../entities/University';
 import isPasswordValid from '../../utils/isPasswordValid';
 import AdminGroupPicker from '../AdminGroupPicker';

@@ -2,6 +2,7 @@ import { IonContent, IonPage } from '@ionic/react';
 import { ReactElement } from 'react';
 import { ReactComponent as Background } from '../../../assets/background.svg';
 import useWindowDimensions from '../../hooks/useWindowDimensions';
+import styles from '../../pages/css/SignUp.module.css';
 import { HYBRID_MAX_WIDTH } from '../../utils';
 import Header from '../Header';
 
@@ -28,25 +29,23 @@ const WebLayoutCentered: React.FC<WebLayoutCenteredProps> = ({
     const isHybrid = width < HYBRID_MAX_WIDTH;
     return (
         <IonPage>
-            <IonContent>
-                {!isHybrid && (
-                    <div className="background-image-container">
-                        <Background style={{ color: backgroundIconColor }} className="background-image" />
-                    </div>
-                )}
-                <div style={{ backgroundColor: isHybrid ? 'white' : headerColor }} className="page content-wrapper">
-                    <div className="white-centered-div">
-                        <Header
-                            hasGoBackButton={hasGoBackButton}
-                            goBackPressed={goBackPressed}
-                            progressColor={headerColor}
-                            progressPercentage={headerPercentage}
-                            title={headerTitle}
-                        />
-                        {children}
-                    </div>
+            {!isHybrid && (
+                <div className="background-image-container">
+                    <Background style={{ color: backgroundIconColor }} className="background-image" />
                 </div>
-            </IonContent>
+            )}
+            <div style={{ backgroundColor: isHybrid ? 'white' : headerColor }} className="page content-wrapper">
+                <div className="white-centered-div">
+                    <Header
+                        hasGoBackButton={hasGoBackButton}
+                        goBackPressed={goBackPressed}
+                        progressColor={headerColor}
+                        progressPercentage={headerPercentage}
+                        title={headerTitle}
+                    />
+                    <IonContent className={styles.body}>{children}</IonContent>
+                </div>
+            </div>
         </IonPage>
     );
 };

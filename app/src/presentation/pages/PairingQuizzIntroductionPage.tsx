@@ -22,7 +22,7 @@ const PairingQuizzIntroductionPage: React.FC = ({}) => {
                 <div className={quizzIntroductionStyle.container}>
                     <h1 className="title">{t('pairing_quizz_introduction_page.title')}</h1>
                     <p className="subtitle">{t('pairing_quizz_introduction_page.subtitle')}</p>
-                    <img alt="" className={quizzIntroductionStyle.image} src={StarPng} />
+                    <img alt="" className={quizzIntroductionStyle.image} src={StarPng} aria-hidden={true} />
                     <p className={quizzIntroductionStyle.description}>
                         {t('pairing_quizz_introduction_page.description')}
                     </p>

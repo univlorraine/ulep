@@ -4,7 +4,7 @@ import Language from '../../domain/entities/Language';
 import { codeLanguageToFlag } from '../utils';
 import styles from './FlagBubble.module.css';
 
-interface FlagBubbleProps {
+interface FlagBubbleProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
     disabled?: boolean;
     language: Language;
     isSelected: boolean;
@@ -12,7 +12,14 @@ interface FlagBubbleProps {
     textColor?: string;
 }
 
-const FlagBubble: React.FC<FlagBubbleProps> = ({ disabled, isSelected, language, onPressed, textColor = 'black' }) => {
+const FlagBubble: React.FC<FlagBubbleProps> = ({
+    disabled,
+    isSelected,
+    language,
+    onPressed,
+    textColor = 'black',
+    ...props
+}) => {
     const { configuration } = useConfig();
     const { t } = useTranslation();
     return (
@@ -25,9 +32,12 @@ const FlagBubble: React.FC<FlagBubbleProps> = ({ disabled, isSelected, language,
             }}
             onClick={() => (onPressed ? onPressed(language) : null)}
             aria-label={t(`languages_code.${language.code}`) as string}
+            {...props}
         >
-            <span className={styles.flag}>{codeLanguageToFlag(language.code)}</span>
-            <span className={styles.country} style={{ color: textColor }}>
+            <span className={styles.flag} aria-hidden={true}>
+                {codeLanguageToFlag(language.code)}
+            </span>
+            <span className={styles.country} style={{ color: textColor, fontWeight: isSelected ? 'bold' : 'normal' }}>
                 {t(`languages_code.${language.code}`)}
             </span>
         </button>

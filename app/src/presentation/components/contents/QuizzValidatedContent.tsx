@@ -1,10 +1,10 @@
 import { useTranslation } from 'react-i18next';
+import Lottie from 'react-lottie';
 import { QuizzPng, TrophiePng } from '../../../assets';
+import confetti from '../../../assets/animations/confetti.json';
 import Language from '../../../domain/entities/Language';
 import FlagBubble from '../FlagBubble';
 import styles from './QuizzValidatedContent.module.css';
-import confetti from '../../../assets/animations/confetti.json';
-import Lottie from 'react-lottie';
 
 interface QuizzValidatedContentProps {
     language: Language;
@@ -50,7 +50,7 @@ const QuizzValidatedContent: React.FC<QuizzValidatedContentProps> = ({
                 )}
             </div>
             <div className={styles['level-container']}>
-                <img alt="" src={QuizzPng} />
+                <img alt="" src={QuizzPng} aria-hidden={true} />
                 {`${quizzLevel} ${t('pairing_quizz_validation.validated')}`}
             </div>
             <p className={styles.description}>

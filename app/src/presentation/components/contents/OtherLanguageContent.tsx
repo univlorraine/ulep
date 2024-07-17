@@ -2,10 +2,10 @@ import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { DicePng } from '../../../assets';
 import Language from '../../../domain/entities/Language';
-import Checkbox from '../Checkbox';
-import pairingOtherLanguagesStyles from './OtherLanguageContent.module.css';
 import useWindowDimensions from '../../hooks/useWindowDimensions';
 import { HYBRID_MAX_WIDTH } from '../../utils';
+import Checkbox from '../Checkbox';
+import pairingOtherLanguagesStyles from './OtherLanguageContent.module.css';
 
 interface OtherLanguageContentProps {
     displayJoker: boolean;
@@ -34,7 +34,7 @@ const OtherLanguageContent: React.FC<OtherLanguageContentProps> = ({ displayJoke
 
                 <div className={pairingOtherLanguagesStyles['joker-container']}>
                     <div className={pairingOtherLanguagesStyles['joker-image-container']}>
-                        <img alt="" className={pairingOtherLanguagesStyles.dice} src={DicePng} />
+                        <img alt="" className={pairingOtherLanguagesStyles.dice} src={DicePng} aria-hidden={true} />
                         <div className={pairingOtherLanguagesStyles['joker-text-container']}>
                             <p className={pairingOtherLanguagesStyles['joker-description']}>
                                 {t('pairing_other_languages_page.joker_description')}
