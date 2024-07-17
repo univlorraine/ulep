@@ -60,7 +60,7 @@ const WelcomeContent: React.FC<WelcomeContentProps> = ({ onPress }) => {
             <img src={currentTheme.image} alt={t('global.hello') as string} className={style['bubble']} />
             <h1 className={style['welcome-text']}>
                 {t('global.welcome')}
-                <p className={style['welcome-subtext']}>{t('global.welcome_subtext')}</p>
+                <span className={style['welcome-subtext']}>{t('global.welcome_subtext')}</span>
             </h1>
 
             <button
