@@ -101,6 +101,8 @@ const SignUpInterestsPage: React.FC = () => {
                         );
                     })}
                 </div>
+                <p style={{ textAlign: 'center' }}>{t('signup_interests_page.required_mention')}</p>
+
                 <div className="extra-large-margin-bottom">
                     <button
                         aria-label={t('signup_interests_page.validate_button') as string}

@@ -9,6 +9,8 @@ import University from '../../domain/entities/University';
 import { useStoreActions, useStoreState } from '../../store/storeTypes';
 import Dropdown, { DropDownItem } from '../components/DropDown';
 import ErrorMessage from '../components/ErrorMessage';
+import RequiredField from '../components/forms/RequiredField';
+import RequiredFieldsMention from '../components/forms/RequiredFieldsMention';
 import WebLayoutCentered from '../components/layout/WebLayoutCentered';
 import TextInput from '../components/TextInput';
 import styles from './css/SignUp.module.css';
@@ -165,9 +167,12 @@ const SignUpPage: React.FC = () => {
         >
             <div className={styles.body}>
                 <h1 className={styles.title}>{t('signup_page.title')}</h1>
+                <RequiredFieldsMention />
 
                 {/* Role selectors */}
-                <h2 className={styles.subtitle}>{t('signup_page.profile_title')}</h2>
+                <h2 className={styles.subtitle}>
+                    {t('signup_page.profile_title')} <RequiredField />
+                </h2>
                 <IonRadioGroup
                     value={selectedRole}
                     onIonChange={(ev) => setSelectedRole(ev.detail.value)}
@@ -181,7 +186,6 @@ const SignUpPage: React.FC = () => {
                         {t('signup_page.staff_role')}
                     </IonRadio>
                 </IonRadioGroup>
-
                 {(!university || !isLoggedIn) && (
                     <>
                         {/* Country selector */}
@@ -193,6 +197,7 @@ const SignUpPage: React.FC = () => {
                                 title={t('global.country') as string}
                                 ariaLabel={t('signup_page.country_aria_label') as string}
                                 aria-required={true}
+                                required={true}
                             />
                         </div>
                         {/* University selector */}
@@ -203,12 +208,12 @@ const SignUpPage: React.FC = () => {
                                     options={universities}
                                     title={t('signup_page.university_title')}
                                     aria-required={true}
+                                    required={true}
                                 />
                             </div>
                         )}
                     </>
                 )}
-
                 {/* Loggin button */}
                 {university && university.isCentral && !isLoggedIn && (
                     <button
@@ -233,7 +238,6 @@ const SignUpPage: React.FC = () => {
                         {t('signup_page.sso_button')}
                     </button>
                 )}
-
                 {/* Department selector. */}
                 {university && selectedRole && (
                     <div className="large-margin-top">
@@ -263,9 +267,7 @@ const SignUpPage: React.FC = () => {
                         maxLength={50}
                     />
                 )}
-
                 {displayError && <ErrorMessage description={t('signup_page.error')} />}
-
                 {/* continue action button */}
                 <div className={styles['bottom-container']}>
                     {!selectedRole && (
