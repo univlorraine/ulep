@@ -63,7 +63,7 @@ export class DeleteUniversityUsecase {
     let administrators = await this.keycloakService.getAdministrators();
 
     administrators = administrators.filter(
-      (administrator) => administrator.attributes.universityId?.[0] === id,
+      (administrator) => administrator.attributes?.universityId?.[0] === id,
     );
 
     if (administrators.length > 0) {
