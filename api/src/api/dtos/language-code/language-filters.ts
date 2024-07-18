@@ -5,7 +5,7 @@ import { IsBoolean, IsOptional } from 'class-validator';
 import { PaginationDto } from 'src/api/dtos/pagination';
 import { LanguageStatus } from 'src/core/models';
 import {
-  LanguageFilter,
+  LanguageStatusFilter,
   LanguageQuerySortFilter,
 } from 'src/core/ports/language.repository';
 
@@ -21,7 +21,7 @@ export class FindAllLanguageParams extends PaginationDto {
     enum: [LanguageStatus, 'PARTNER'],
   })
   @IsOptional()
-  status?: LanguageFilter;
+  status?: LanguageStatusFilter;
 
   @Swagger.ApiPropertyOptional({
     type: 'string',
