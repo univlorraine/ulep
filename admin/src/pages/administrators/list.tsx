@@ -122,8 +122,6 @@ const AdministratorList = (props: ListProps<Administrator>) => {
 
     const filters = universities && adminGroups ? adaptedFilters : [];
 
-    console.log({ identity });
-
     return (
         <>
             <ConfigPagesHeader />
