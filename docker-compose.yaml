@@ -1,4 +1,4 @@
-version: '3.4'
+version: "3.4"
 
 services:
   api:
@@ -128,7 +128,15 @@ services:
     volumes:
       - chat_data:/data/db
       - ./docker/database/mongo-init.js:/docker-entrypoint-initdb.d/mongo-init.js
-      - ./docker/database/keyfile.key:/etc/keyfile.key
+      - ./docker/database/keyfile.key:/etc/keyfile.key.devel
+    entrypoint:
+      - bash
+      - -c
+      - |
+        cp /etc/keyfile.key.devel /etc/keyfile.key
+        chmod 400 /etc/keyfile.key
+        chown 999:999 /etc/keyfile.key
+        exec docker-entrypoint.sh $$@
 
   init-replica:
     image: mongo:7-jammy
