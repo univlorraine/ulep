@@ -110,6 +110,7 @@ import { GetJitsiTokenUsecase } from './usecases/jitsi/get-jitsi-token.usecase';
 import { DeleteLearningLanguageUsecase } from './usecases/learningLanguage/delete-learning-langugage.usecase';
 import { GetLearningLanguageTandemUsecase } from './usecases/learningLanguage/getLearningLanguageTandem.usecase';
 import { ArchiveTandemsAndDeleteUsersUsecase } from './usecases/purges/archive-tandems.usecase';
+import { LogoutAllSessionsUsecase } from './usecases/security/logout-all-sessions.usecase';
 import { ResetPasswordUsecase } from './usecases/security/reset-password.usecase';
 import { ValidateTandemUsecase } from './usecases/tandem/validate-tandem.usecase';
 import { GetKeycloakAdminGroupsUsecase } from './usecases/user/get-keycloak-admin-groups.usecase';
@@ -236,6 +237,7 @@ const usecases: Provider[] = [
   // Security
   ResetPasswordUsecase,
   GetJitsiTokenUsecase,
+  LogoutAllSessionsUsecase,
   // Notifications
   SendMessageNotificationUsecase,
   // Chat

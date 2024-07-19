@@ -143,6 +143,10 @@ export interface GetUsersProps {
   first?: number;
   max?: number;
   enabled?: boolean;
+  attributes?: {
+    key: string;
+    value: string;
+  };
 }
 
 export interface OpenIdConfiguration {
