@@ -119,7 +119,7 @@ services:
       - redis_data:/data
 
   mongo:
-    image: mongo:6-jammy
+    image: mongo:7-jammy
     command:
       ["mongod", "--replSet", "rs0", "--auth", "--keyFile", "/etc/keyfile.key"]
     environment:
@@ -131,7 +131,7 @@ services:
       - ./docker/database/keyfile.key:/etc/keyfile.key
 
   init-replica:
-    image: mongo:6-jammy
+    image: mongo:7-jammy
     depends_on:
       - mongo
     entrypoint: >
