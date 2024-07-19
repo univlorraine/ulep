@@ -40,7 +40,6 @@ services:
       - ${ADMIN_PORT:-3001}:3000
 
   mongo:
-    platform: linux/arm64
     ports:
       - 27017:27017
 
