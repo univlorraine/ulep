@@ -8,13 +8,23 @@ interface RecordingButtonProps {
     onSendPressed: () => void;
     handleStartRecord: () => void;
     handleStopRecord: () => void;
+    isBlocked: boolean;
 }
 
-const RecordingButton = ({ mode, onSendPressed, handleStartRecord, handleStopRecord }: RecordingButtonProps) => {
+const RecordingButton = ({
+    mode,
+    onSendPressed,
+    handleStartRecord,
+    handleStopRecord,
+    isBlocked,
+}: RecordingButtonProps) => {
     const [recording, setRecording] = useState(false);
     const [time, setTime] = useState(0);
 
     useEffect(() => {
+        if (isBlocked) {
+            return;
+        }
         let timer: NodeJS.Timeout;
         if (recording && mode === 'record') {
             timer = setInterval(() => {
@@ -26,10 +36,10 @@ const RecordingButton = ({ mode, onSendPressed, handleStartRecord, handleStopRec
             setTime(0);
         }
         return () => clearInterval(timer);
-    }, [recording, mode]);
+    }, [recording, mode, isBlocked]);
 
     const startRecording = () => {
-        if (mode === 'send') {
+        if (mode === 'send' || isBlocked) {
             return;
         }
         setRecording(true);
@@ -37,7 +47,7 @@ const RecordingButton = ({ mode, onSendPressed, handleStartRecord, handleStopRec
     };
 
     const stopRecording = () => {
-        if (mode === 'send') {
+        if (mode === 'send' || isBlocked) {
             return;
         }
         setRecording(false);
@@ -48,7 +58,7 @@ const RecordingButton = ({ mode, onSendPressed, handleStartRecord, handleStopRec
     return (
         <div className={styles['container']}>
             {recording && <div className={styles['timer']}>{time}s</div>}
-            <button className={styles['sender-button']}>
+            <button className={styles['sender-button']} disabled={isBlocked}>
                 <IonIcon
                     className={styles[mode === 'send' ? 'sender' : 'recorder']}
                     icon={mode === 'send' ? SenderSvg : RecordSvg}

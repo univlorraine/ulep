@@ -15,7 +15,7 @@ import MessagesList from '../chat/MessagesList';
 import styles from './ChatContent.module.css';
 
 //TODO: modale to display picture on full screen ( almost ? )
-
+const isBlocked = true;
 interface ChatContentProps {
     conversation: Conversation;
     goBack?: () => void;
@@ -130,6 +130,9 @@ const Content: React.FC<Omit<ChatContentProps, 'isHybrid'>> = ({ conversation, g
     }, [conversation.id]);
 
     const handleImageClick = async () => {
+        if (isBlocked) {
+            return;
+        }
         const image = await cameraAdapter.getPictureFromGallery();
         if (image) {
             setImageToSend(image);
@@ -138,6 +141,9 @@ const Content: React.FC<Omit<ChatContentProps, 'isHybrid'>> = ({ conversation, g
     };
 
     const handleFileClick = async () => {
+        if (isBlocked) {
+            return;
+        }
         const file = await fileAdapter.getFile();
         if (file) {
             setFileToSend(file);
@@ -200,8 +206,12 @@ const Content: React.FC<Omit<ChatContentProps, 'isHybrid'>> = ({ conversation, g
                             className={styles.input}
                             maxLength={1000}
                             onChange={(e) => setMessage(e.target.value)}
-                            placeholder={t('chat.input.placeholder') ?? ''}
+                            placeholder={
+                                t(isBlocked ? 'chat.input.placeholder.blocked' : 'chat.input.placeholder.unblocked') ??
+                                ''
+                            }
                             value={message}
+                            disabled={isBlocked}
                         />
                     )}
                     <RecordingButton
@@ -209,6 +219,7 @@ const Content: React.FC<Omit<ChatContentProps, 'isHybrid'>> = ({ conversation, g
                         onSendPressed={onSendPressed}
                         handleStartRecord={handleStartRecord}
                         handleStopRecord={handleStopRecord}
+                        isBlocked={isBlocked}
                     />
                 </div>
             </div>

@@ -101,7 +101,10 @@
         "me": "Me",
         "title": "Messages with {{name}}",
         "input": {
-            "placeholder": "Write your message..."
+            "placeholder": {
+                "blocked": "The tandem is on pause, you cannot send messages",
+                "unblocked": "Write your message..."
+            }
         }
     },
     "connection_page": {
