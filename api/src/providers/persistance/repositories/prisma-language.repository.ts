@@ -2,7 +2,8 @@ import { Injectable } from '@nestjs/common';
 import { Collection, PrismaService } from '@app/common';
 import { Language, LanguageStatus, SuggestedLanguage } from 'src/core/models';
 import {
-  LanguageFilter,
+  LanguageStatusFilter,
+  LanguageFilters,
   LanguagePagination,
   LanguageQueryOrderBy,
   LanguageRepository,
@@ -124,14 +125,24 @@ export class PrismaLanguageRepository implements LanguageRepository {
 
   async all(
     orderBy: LanguageQueryOrderBy,
-    status: LanguageFilter,
+    status: LanguageStatusFilter,
     pagination: LanguagePagination,
+    filters?: LanguageFilters,
   ): Promise<Collection<Language>> {
-    let where;
+    const where: any = {
+      code: {
+        contains: filters.code,
+        mode: 'insensitive',
+      },
+      name: {
+        contains: filters.name,
+        mode: 'insensitive',
+      },
+    };
     if (status === 'PARTNER') {
-      where = { secondaryUniversityActive: true };
+      where.secondaryUniversityActive = true;
     } else if (status) {
-      where = { mainUniversityStatus: status };
+      where.mainUniversityStatus = status;
     }
 
     const count = await this.prisma.languageCodes.count({

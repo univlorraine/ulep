@@ -1,5 +1,5 @@
 import React from 'react';
-import { useTranslate, Datagrid, List, TextField } from 'react-admin';
+import { useTranslate, Datagrid, List, TextField, FunctionField } from 'react-admin';
 import ConfigPagesHeader from '../../components/tabs/ConfigPagesHeader';
 
 const CountSuggestedLanguagesList = () => {
@@ -10,7 +10,11 @@ const CountSuggestedLanguagesList = () => {
             <ConfigPagesHeader />
             <List exporter={false}>
                 <Datagrid bulkActionButtons={false}>
-                    <TextField label={translation('global.language')} sortable={false} source="language.name" />
+                    <FunctionField
+                        label={translation('global.language')}
+                        render={(record: any) => translation(`languages_code.${record.language.code}`)}
+                        sortable={false}
+                    />
                     <TextField label={translation('count_suggested_languages.total')} sortable={false} source="count" />
                 </Datagrid>
             </List>

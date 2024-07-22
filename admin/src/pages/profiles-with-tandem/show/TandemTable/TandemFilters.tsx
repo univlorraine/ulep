@@ -80,7 +80,6 @@ const TandemFilters = ({
                         label={translate('learning_languages.show.tandems.filters.university')}
                         labelId="university-filter-label"
                         onChange={(event: SelectChangeEvent) => {
-                            console.log({ event });
                             if (event.target.value === UNIVERSITY_ALL_VALUE) {
                                 setUniversityId(undefined);
                             } else {

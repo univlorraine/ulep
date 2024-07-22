@@ -9,7 +9,10 @@ import {
   MEDIA_OBJECT_REPOSITORY,
   MediaObjectRepository,
 } from 'src/core/ports/media-object.repository';
-import { UserRepresentationWithAvatar } from 'src/api/dtos';
+import {
+  AdministratorsQuery,
+  UserRepresentationWithAvatar,
+} from 'src/api/dtos';
 
 @Injectable()
 export class GetAdministratorsUsecase {
@@ -21,7 +24,7 @@ export class GetAdministratorsUsecase {
 
   async execute(
     user?: KeycloakUser,
-    universityId?: string,
+    query?: AdministratorsQuery,
   ): Promise<UserRepresentationWithAvatar[]> {
     const result = await this.keycloak.getAdministrators();
 
@@ -42,11 +45,8 @@ export class GetAdministratorsUsecase {
       })),
     );
 
-    if (universityId) {
-      return this.filterByUniversity(
-        administratorsWithGroupsAndAvatar,
-        universityId,
-      );
+    if (query) {
+      return this.filterByQuery(administratorsWithGroupsAndAvatar, query);
     }
 
     if (user.realm_access.roles.includes(AdminRole.SUPER_ADMIN)) {
@@ -57,6 +57,51 @@ export class GetAdministratorsUsecase {
       administratorsWithGroupsAndAvatar,
       user.universityId,
     );
+  }
+
+  filterByQuery(
+    administrators: UserRepresentationWithAvatar[],
+    query: AdministratorsQuery,
+  ) {
+    let filteredAdministrators = [...administrators];
+
+    if (query?.universityId) {
+      filteredAdministrators = this.filterByUniversity(
+        filteredAdministrators,
+        query.universityId,
+      );
+    }
+
+    if (query?.lastname) {
+      console.log('has lastname query');
+      filteredAdministrators = filteredAdministrators.filter((administrator) =>
+        administrator.lastName
+          .toLowerCase()
+          .includes(query.lastname.toLowerCase()),
+      );
+    }
+
+    if (query?.firstname) {
+      filteredAdministrators = filteredAdministrators.filter((administrator) =>
+        administrator.firstName
+          .toLowerCase()
+          .includes(query.firstname.toLowerCase()),
+      );
+    }
+
+    if (query?.email) {
+      filteredAdministrators = filteredAdministrators.filter((administrator) =>
+        administrator.email.toLowerCase().includes(query.email.toLowerCase()),
+      );
+    }
+
+    if (query?.groupId) {
+      filteredAdministrators = filteredAdministrators.filter(
+        (administrator) => administrator.groups[0].id === query.groupId,
+      );
+    }
+
+    return filteredAdministrators;
   }
 
   filterByUniversity(
