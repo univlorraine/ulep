@@ -6,7 +6,8 @@ class Conversation {
         public readonly id: string,
         public readonly participants: UserChat[],
         public readonly createdAt: Date,
-        public readonly lastMessage?: Message
+        public readonly lastMessage?: Message,
+        public readonly isBlocked: boolean = false
     ) {}
 
     /**

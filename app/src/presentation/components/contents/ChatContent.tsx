@@ -15,7 +15,6 @@ import MessagesList from '../chat/MessagesList';
 import styles from './ChatContent.module.css';
 
 //TODO: modale to display picture on full screen ( almost ? )
-const isBlocked = true;
 interface ChatContentProps {
     conversation: Conversation;
     goBack?: () => void;
@@ -32,6 +31,7 @@ const Content: React.FC<Omit<ChatContentProps, 'isHybrid'>> = ({ conversation, g
     const [audioFile, setAudioFile] = useState<File | undefined>();
     const [fileToSend, setFileToSend] = useState<File | undefined>();
     const [isRecording, setIsRecording] = useState<boolean>(false);
+    const isBlocked = conversation.isBlocked;
 
     const { messages, isScrollOver, error, isLoading, loadMessages, addNewMessage } = useHandleMessagesFromConversation(
         conversation.id
