@@ -62,3 +62,13 @@ export class JitsiTokensResponse {
     Object.assign(this, partial);
   }
 }
+
+export class LogoutResponse {
+  @ApiProperty({ type: 'boolean' })
+  @Expose({ groups: ['read'] })
+  success: boolean;
+
+  constructor(partial: Partial<LogoutResponse>) {
+    Object.assign(this, partial);
+  }
+}

@@ -34,6 +34,7 @@ api:
     appUrl: *webappUrl
     logLevel: warn
     defaultTranslationLanguage: fr
+    webServiceLogoutToken: eOWOG8iKOOuJdN3KE6bN49BuApmmtAOD
     keycloakRealm: etandem
     keycloakAdmin: admin
     keycloakClientId: api

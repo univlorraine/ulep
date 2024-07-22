@@ -201,6 +201,10 @@ export class Env {
   @IsString()
   CHAT_URL: string;
 
+  @IsString()
+  @IsOptional()
+  WEB_SERVICE_LOGOUT_TOKEN: string;
+
   static validate(configuration: Record<string, unknown>): Env {
     const env = plainToClass(Env, configuration, {
       enableImplicitConversion: false,
@@ -290,4 +294,5 @@ const test: Env = {
   FIREBASE_PARALLEL_LIMIT: 3,
   CANCEL_TRESHOLD_IN_MIN: 15,
   SIGNED_URL_EXPIRATION_IN_SECONDS: 60,
+  WEB_SERVICE_LOGOUT_TOKEN: 'test',
 };

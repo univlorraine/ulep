@@ -87,6 +87,8 @@ spec:
               value: "{{ .Values.api.env.logLevel }}"
             - name: DEFAULT_TRANSLATION_LANGUAGE
               value: "{{ .Values.api.env.defaultTranslationLanguage }}"
+            - name: WEB_SERVICE_LOGOUT_TOKEN
+              value: "{{ .Values.api.env.webServiceLogoutToken }}"
             - name: DATABASE_URL
               valueFrom:
                 secretKeyRef:
