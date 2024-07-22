@@ -3,9 +3,10 @@ import { Inject, Injectable } from '@nestjs/common';
 import { JOKER_LANGUAGE_CODE, Language } from 'src/core/models';
 import {
   LANGUAGE_REPOSITORY,
-  LanguageFilter,
+  LanguageStatusFilter,
   LanguageQueryOrderBy,
   LanguageRepository,
+  LanguageFilters,
 } from 'src/core/ports/language.repository';
 
 export class FindAllLanguageCodeCommand {
@@ -13,7 +14,8 @@ export class FindAllLanguageCodeCommand {
   limit?: number;
   page?: number;
   orderBy: LanguageQueryOrderBy;
-  status?: LanguageFilter;
+  status?: LanguageStatusFilter;
+  filters: LanguageFilters;
 }
 
 @Injectable()
@@ -30,12 +32,15 @@ export class FindAllLanguageCodeUsecase {
       limit = 30,
       orderBy,
       status,
+      filters,
     } = command;
     const languages = await this.languageRepository.all(
       orderBy,
       status,
       pagination ? { page, limit } : undefined,
+      filters,
     );
+
     return new Collection<Language>({
       items: languages.items.filter(
         (language) => language.code !== JOKER_LANGUAGE_CODE,

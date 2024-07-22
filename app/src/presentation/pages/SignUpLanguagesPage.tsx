@@ -6,6 +6,7 @@ import { useConfig } from '../../context/ConfigurationContext';
 import Language from '../../domain/entities/Language';
 import { useStoreActions, useStoreState } from '../../store/storeTypes';
 import Dropdown, { DropDownItem } from '../components/DropDown';
+import RequiredFieldsMention from '../components/forms/RequiredFieldsMention';
 import WebLayoutCentered from '../components/layout/WebLayoutCentered';
 import { codeLanguageToFlag } from '../utils';
 import styles from './css/SignUp.module.css';
@@ -94,6 +95,7 @@ const SignUpLanguagesPage: React.FC = () => {
         >
             <div className={styles.body}>
                 <h1 className={styles.title}>{t('signup_languages_page.title')}</h1>
+                <RequiredFieldsMention />
 
                 <div className="large-margin-bottom">
                     <Dropdown<Language | undefined>
@@ -102,6 +104,7 @@ const SignUpLanguagesPage: React.FC = () => {
                         options={languages}
                         placeholder={t('signup_languages_page.placeholder_primary_language')}
                         title={t('signup_languages_page.language')}
+                        required={true}
                     />
                 </div>
 

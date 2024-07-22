@@ -10,6 +10,15 @@
             "group": "Veuillez sélectionner un ou plusieurs groupe(s) pour l'administrateur"
         },
         "label": "Administrateurs",
+        "list": {
+            "filters": {
+                "university": "Université",
+                "group": "Groupe",
+                "user_lastname": "Nom",
+                "user_firstname": "Prénom",
+                "user_email": "Email"
+            }
+        },
         "tabLabel": "Administrateurs",
         "university": "Gestionnaire de",
         "update": {
@@ -27,7 +36,7 @@
         "error": "Erreur lors de la récupération des groupes d'administrateur",
         "manager": "Manageur",
         "placeholder": "Veuillez sélectionner un groupe d'administrateur",
-        "administrator": "Super administrateur",
+        "administrator": "Administrateur",
         "mandatory": "Un administrateur doit être associé à un groupe"
     },
     "campus": {
@@ -184,6 +193,11 @@
     "languages": {
         "code": "Code de la langue",
         "label": "Langues",
+        "original_name": "Nom de la langue original",
+        "filters": {
+            "language_code": "Code de la langue",
+            "language_name": "Nom de la langue original"
+        },
         "tabLabel": "Langues",
         "name": "Nom de la langue",
         "secondary_status": {

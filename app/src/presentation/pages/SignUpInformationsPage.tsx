@@ -7,6 +7,8 @@ import { useConfig } from '../../context/ConfigurationContext';
 import { useStoreState } from '../../store/storeTypes';
 import Checkbox from '../components/Checkbox';
 import TextInput from '../components/TextInput';
+import RequiredField from '../components/forms/RequiredField';
+import RequiredFieldsMention from '../components/forms/RequiredFieldsMention';
 import WebLayoutCentered from '../components/layout/WebLayoutCentered';
 import { isEmailCorrect, isNameCorrect } from '../utils';
 import styles from './css/SignUp.module.css';
@@ -201,6 +203,7 @@ const SignUpInformationsPage: React.FC = () => {
         >
             <div className={styles.body}>
                 <h1 className={styles.title}>{t('signup_informations_page.title')}</h1>
+                <RequiredFieldsMention />
 
                 <button
                     aria-label={
@@ -235,6 +238,7 @@ const SignUpInformationsPage: React.FC = () => {
                     title={t('global.firstname')}
                     type="text"
                     value={firstname}
+                    required={true}
                 />
 
                 <TextInput
@@ -245,10 +249,13 @@ const SignUpInformationsPage: React.FC = () => {
                     title={t('global.lastname')}
                     type="text"
                     value={lastname}
+                    required={true}
                 />
 
                 <div className="margin-bottom">
-                    <h2 className={`${styles.subtitle} no-margin-top`}>{t('global.gender')}</h2>
+                    <h2 className={`${styles.subtitle} no-margin-top`}>
+                        {t('global.gender')} <RequiredField />
+                    </h2>
 
                     <IonRadioGroup
                         value={gender}
@@ -276,6 +283,7 @@ const SignUpInformationsPage: React.FC = () => {
                     title={t('global.age')}
                     type="text"
                     value={age ? `${age}` : ''}
+                    required={true}
                 />
 
                 <TextInput
@@ -287,6 +295,7 @@ const SignUpInformationsPage: React.FC = () => {
                     title={t('global.email')}
                     type="email"
                     value={email}
+                    required={true}
                 />
 
                 {profileSignUp.university?.hasCode && (
@@ -297,6 +306,7 @@ const SignUpInformationsPage: React.FC = () => {
                         title={t('signup_informations_page.code')}
                         type="text"
                         value={code}
+                        required={true}
                     />
                 )}
 
@@ -313,6 +323,7 @@ const SignUpInformationsPage: React.FC = () => {
                             type="password"
                             value={password}
                             fieldInfo={<PasswordInfo />}
+                            required={true}
                         />
                         <TextInput
                             autocomplete="new-password"
@@ -322,6 +333,7 @@ const SignUpInformationsPage: React.FC = () => {
                             title={t('signup_informations_page.confirm_password')}
                             type="password"
                             value={confirmPassword}
+                            required={true}
                         />
                     </>
                 )}
@@ -339,7 +351,7 @@ const SignUpInformationsPage: React.FC = () => {
                             <a href={configuration.confidentialityUrl} onClick={browserAdapter.openLinkInBrowser}>{`${t(
                                 'signup_informations_page.cgu.confidentiality'
                             )}`}</a>
-                            {` ${t('signup_informations_page.cgu.suffix')}`}
+                            {` ${t('signup_informations_page.cgu.suffix')}`} <RequiredField />
                         </>
                     }
                 />

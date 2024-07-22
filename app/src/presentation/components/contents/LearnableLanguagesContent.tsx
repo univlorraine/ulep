@@ -78,6 +78,7 @@ const LearnableLanguagesContent: React.FC<LearnableLanguagesContentProps> = ({
                         )}
                     </div>
                     <div className={`extra-large-margin-bottom`}>
+                        <p style={{ textAlign: 'center' }}>{t('pairing_languages_page.required_mention')}</p>
                         {!!languages.length && (
                             <button
                                 aria-label={t('pairing_languages_page.validate_button') as string}

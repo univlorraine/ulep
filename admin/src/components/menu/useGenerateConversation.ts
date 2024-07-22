@@ -1,12 +1,12 @@
 import { useDataProvider, useNotify } from 'react-admin';
 import { useMutation } from 'react-query';
 
-interface UsePurgeParams {
+interface UseGenerateConversationParams {
     onSuccess?: () => void;
     onError?: (error: unknown) => void;
 }
 
-const useGenerateConversation = (options?: UsePurgeParams) => {
+const useGenerateConversation = (options?: UseGenerateConversationParams) => {
     const dataProvider = useDataProvider();
     const notify = useNotify();
 

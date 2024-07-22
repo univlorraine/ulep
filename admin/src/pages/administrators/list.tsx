@@ -13,7 +13,11 @@ import {
     useLogout,
     ListProps,
     FunctionField,
+    SelectInput,
+    TextInput,
+    useGetList,
 } from 'react-admin';
+import useGetAdminGroups from '../../components/adminGroups/useGetAdminGroups';
 import ConfigPagesHeader from '../../components/tabs/ConfigPagesHeader';
 import Administrator from '../../entities/Administrator';
 
@@ -46,20 +50,88 @@ const DeleteAdministratorButton = ({ identity }: DeleteAdministratorButtonProps)
 const AdministratorList = (props: ListProps<Administrator>) => {
     const translate = useTranslate();
     const { data: identity, isLoading: isLoadingIdentity } = useGetIdentity();
+    const { data: universities } = useGetList('universities');
+    const adminGroups = useGetAdminGroups();
 
     if (isLoadingIdentity || !identity) {
         return <Loading />;
     }
+
+    const adaptedFilters = identity?.isCentralUniversity
+        ? [
+              <SelectInput
+                  key="universityFilter"
+                  choices={universities}
+                  label={translate('administrators.list.filters.university')}
+                  source="university"
+                  alwaysOn
+              />,
+              <SelectInput
+                  key="groupFilter"
+                  choices={adminGroups}
+                  label={translate('administrators.list.filters.group')}
+                  source="group"
+                  alwaysOn
+              />,
+              <TextInput
+                  key="userLastname"
+                  label={translate('administrators.list.filters.user_lastname')}
+                  source="lastname"
+                  alwaysOn
+              />,
+              <TextInput
+                  key="userFirstname"
+                  label={translate('administrators.list.filters.user_firstname')}
+                  source="firstname"
+                  alwaysOn
+              />,
+              <TextInput
+                  key="userEmail"
+                  label={translate('administrators.list.filters.user_email')}
+                  source="email"
+                  alwaysOn
+              />,
+          ]
+        : [
+              <SelectInput
+                  key="groupFilter"
+                  choices={adminGroups}
+                  label={translate('administrators.list.filters.group')}
+                  source="group"
+                  alwaysOn
+              />,
+              <TextInput
+                  key="userLastname"
+                  label={translate('administrators.list.filters.user_lastname')}
+                  source="lastname"
+                  alwaysOn
+              />,
+              <TextInput
+                  key="userFirstname"
+                  label={translate('administrators.list.filters.user_firstname')}
+                  source="firstname"
+                  alwaysOn
+              />,
+              <TextInput
+                  key="userEmail"
+                  label={translate('administrators.list.filters.user_email')}
+                  source="email"
+                  alwaysOn
+              />,
+          ];
+
+    const filters = universities && adminGroups ? adaptedFilters : [];
 
     return (
         <>
             <ConfigPagesHeader />
             <List
                 exporter={false}
-                filter={!identity?.isCentralUniversity ? { universityId: identity.universityId } : undefined}
+                filter={!identity?.isCentralUniversity ? { university: identity.universityId } : undefined}
                 pagination={false}
                 title={translate('administrators.label')}
                 {...props}
+                filters={filters}
             >
                 <Datagrid bulkActionButtons={false} rowClick="edit">
                     <TextField label={translate('global.email')} sortable={false} source="email" />

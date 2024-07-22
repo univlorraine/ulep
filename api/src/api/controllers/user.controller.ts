@@ -138,11 +138,11 @@ export class UserController {
   @CollectionResponse(UserResponse)
   async findAllAdministrators(
     @CurrentUser() user: KeycloakUser,
-    @Query() { universityId }: AdministratorsQuery,
+    @Query() query: AdministratorsQuery,
   ) {
     const administrators = await this.getAdministratorsUsecase.execute(
       user,
-      universityId,
+      query,
     );
 
     return administrators.map(AdministratorResponse.fromDomain);

@@ -4,6 +4,7 @@ import { useHistory } from 'react-router';
 import { useConfig } from '../../context/ConfigurationContext';
 import { useStoreActions, useStoreState } from '../../store/storeTypes';
 import TextInput from '../components/TextInput';
+import RequiredFieldsMention from '../components/forms/RequiredFieldsMention';
 import WebLayoutCentered from '../components/layout/WebLayoutCentered';
 import styles from './css/SignUp.module.css';
 import biographyStyles from './css/SignUpBiography.module.css';
@@ -71,6 +72,7 @@ const SignUpBiographyPage: React.FC = () => {
                 <div>
                     <h1 className="title">{t('signup_biography_page.title')}</h1>
                     <h2 className="subtitle">{t('signup_biography_page.subtitle')}</h2>
+                    <RequiredFieldsMention />
 
                     <div className={biographyStyles['input-container']}>
                         <TextInput
@@ -80,6 +82,7 @@ const SignUpBiographyPage: React.FC = () => {
                             title={t('signup_biography_page.power_title')}
                             type="text-area"
                             value={powerBiography}
+                            required={true}
                         />
                     </div>
 
@@ -91,6 +94,7 @@ const SignUpBiographyPage: React.FC = () => {
                             title={t('signup_biography_page.incredible_title')}
                             type="text-area"
                             value={incredibleBiography}
+                            required={true}
                         />
                     </div>
 
@@ -102,6 +106,7 @@ const SignUpBiographyPage: React.FC = () => {
                             title={t('signup_biography_page.place_title')}
                             type="text-area"
                             value={placeBiography}
+                            required={true}
                         />
                     </div>
 
@@ -113,6 +118,7 @@ const SignUpBiographyPage: React.FC = () => {
                             title={t('signup_biography_page.travel_title')}
                             type="text-area"
                             value={travelBiography}
+                            required={true}
                         />
                     </div>
                 </div>

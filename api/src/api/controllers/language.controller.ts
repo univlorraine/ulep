@@ -51,7 +51,16 @@ export class LanguageController {
   @Swagger.ApiOkResponse({ type: LanguageResponse, isArray: true })
   async findAll(
     @Query()
-    { pagination, limit, page, status, order, field }: FindAllLanguageParams,
+    {
+      pagination,
+      limit,
+      page,
+      status,
+      order,
+      field,
+      code,
+      name,
+    }: FindAllLanguageParams,
   ) {
     const languages = await this.findAllLanguagesUsecase.execute({
       pagination,
@@ -61,6 +70,10 @@ export class LanguageController {
       orderBy: {
         field,
         order,
+      },
+      filters: {
+        code,
+        name,
       },
     });
 

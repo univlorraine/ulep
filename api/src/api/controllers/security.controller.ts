@@ -4,26 +4,29 @@ import {
   Controller,
   Get,
   Logger,
+  Param,
   Post,
   Query,
   Res,
   UseGuards,
 } from '@nestjs/common';
+import { ConfigService } from '@nestjs/config';
 import * as Swagger from '@nestjs/swagger';
+import { Env } from 'src/configuration';
+import { GetJitsiTokenUsecase } from 'src/core/usecases/jitsi/get-jitsi-token.usecase';
+import { LogoutAllSessionsUsecase } from 'src/core/usecases/security/logout-all-sessions.usecase';
+import { ResetPasswordUsecase } from 'src/core/usecases/security/reset-password.usecase';
+import { CurrentUser } from '../decorators';
 import {
-  BearerTokensRequest,
   BearerTokensFromCodeRequest,
+  BearerTokensRequest,
   BearerTokensResponse,
+  JitsiTokensResponse,
+  LogoutResponse,
   RefreshTokenRequest,
   ResetPasswordRequest,
-  JitsiTokensResponse,
 } from '../dtos';
-import { ConfigService } from '@nestjs/config';
-import { Env } from 'src/configuration';
-import { ResetPasswordUsecase } from 'src/core/usecases/security/reset-password.usecase';
 import { AuthenticationGuard } from '../guards';
-import { CurrentUser } from '../decorators';
-import { GetJitsiTokenUsecase } from 'src/core/usecases/jitsi/get-jitsi-token.usecase';
 
 @Controller('authentication')
 @Swagger.ApiTags('Authentication')
@@ -35,6 +38,7 @@ export class SecurityController {
   constructor(
     private readonly keycloakClient: KeycloakClient,
     private readonly resetPasswordUsecase: ResetPasswordUsecase,
+    private readonly logoutAllSessionsUsecase: LogoutAllSessionsUsecase,
     private readonly getJitsiTokenUsecase: GetJitsiTokenUsecase,
     env: ConfigService<Env, true>,
   ) {
@@ -55,6 +59,33 @@ export class SecurityController {
     return new BearerTokensResponse(credentials);
   }
 
+  @Get('logout-all-sessions/:token/:login')
+  @Swagger.ApiOperation({ summary: 'Logout user by email.' })
+  @Swagger.ApiOkResponse({ type: LogoutResponse })
+  async logout(
+    @Param('login') login: string,
+    @Param('token') token: string,
+  ): Promise<LogoutResponse> {
+    const success = await this.logoutAllSessionsUsecase.execute({
+      login,
+      token,
+    });
+
+    return new LogoutResponse({ success });
+  }
+
+  @Get('jitsi/token')
+  @UseGuards(AuthenticationGuard)
+  @Swagger.ApiOperation({ summary: 'Request a Jisti JWT token.' })
+  @Swagger.ApiOkResponse({ type: JitsiTokensResponse })
+  async getJitsiToken(
+    @CurrentUser() user: KeycloakUser,
+  ): Promise<JitsiTokensResponse> {
+    const token = await this.getJitsiTokenUsecase.execute(user);
+
+    return new JitsiTokensResponse({ token });
+  }
+
   @Get('flow')
   @Swagger.ApiOperation({ summary: 'Initiate a standard browser login.' })
   @Swagger.ApiResponse({ status: 302 })
@@ -67,18 +98,6 @@ export class SecurityController {
     const url = await this.keycloakClient.getStandardFlowUrl(redirect);
 
     res.redirect(url);
-  }
-
-  @Get('jitsi/token')
-  @UseGuards(AuthenticationGuard)
-  @Swagger.ApiOperation({ summary: 'Request a Jisti JWT token.' })
-  @Swagger.ApiResponse({ status: 302 })
-  async getJitsiToken(
-    @CurrentUser() user: KeycloakUser,
-  ): Promise<JitsiTokensResponse> {
-    const token = await this.getJitsiTokenUsecase.execute(user);
-
-    return new JitsiTokensResponse({ token });
   }
 
   @Post('flow/code')

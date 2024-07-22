@@ -25,16 +25,32 @@ import {
 import { MediaObjectResponse } from '../medias';
 import { KeycloakGroup, UserRepresentation } from '@app/keycloak';
 import { MediaObject } from 'src/core/models';
+import { ApiPropertyOptional } from '@nestjs/swagger';
 
 export interface UserRepresentationWithAvatar extends UserRepresentation {
   image?: MediaObject;
 }
 
 export class AdministratorsQuery {
-  @Type(() => String)
-  @IsString()
+  @ApiPropertyOptional({ type: 'string' })
   @IsOptional()
-  readonly universityId?: string;
+  universityId?: string;
+
+  @ApiPropertyOptional({ type: 'string' })
+  @IsOptional()
+  firstname?: string;
+
+  @ApiPropertyOptional({ type: 'string' })
+  @IsOptional()
+  lastname?: string;
+
+  @ApiPropertyOptional({ type: 'string' })
+  @IsOptional()
+  email?: string;
+
+  @ApiPropertyOptional({ type: 'string' })
+  @IsOptional()
+  groupId?: string;
 }
 
 export class CreateUserRequest implements CreateUserCommand {

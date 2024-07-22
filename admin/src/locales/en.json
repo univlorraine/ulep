@@ -10,6 +10,15 @@
             "group": "Please select one or more groups for the administrator"
         },
         "label": "Administrators",
+        "list": {
+            "filters": {
+                "university": "University",
+                "group": "Group",
+                "user_lastname": "Lastname",
+                "user_firstname": "Firstname",
+                "user_email": "Email"
+            }
+        },
         "tabLabel": "Administrators",
         "university": "Manager",
         "update": {
@@ -27,7 +36,7 @@
         "error": "Error retrieving administrator groups",
         "manager": "Manager",
         "placeholder": "Add an administrator group",
-        "administrator": "Super Administrator",
+        "administrator": "Administrator",
         "mandatory": "An administrator must be associated with a group"
     },
     "campus": {
@@ -184,6 +193,11 @@
     "languages": {
         "code": "Language code",
         "label": "Languages",
+        "original_name": "Original language name",
+        "filters": {
+            "language_code": "Language code",
+            "language_name": "Original language name"
+        },
         "tabLabel": "Languages",
         "name": "Language name",
         "secondary_status": {

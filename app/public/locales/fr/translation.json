@@ -98,7 +98,8 @@
         "welcome_btn": "Apprends une nouvelle langue en tandem",
         "close": "Fermer",
         "signup-progress-bar-label": "Progression de l'inscription",
-        "required_fields_mention": "Les champs suivis d'un {{asterisk}} sont obligatoires"
+        "required_fields_mention_part1": "Les champs suivis d'un",
+        "required_fields_mention_part2": "sont obligatoires"
     },
     "chat": {
         "fileDownloaded": "Fichier téléchargé",
@@ -309,7 +310,8 @@
         "subtitle": "Quelle langue veux-tu travailler avec ton tandem ?",
         "no_languages": "Aucune langue disponible",
         "title": "Choix de la langue",
-        "validate_button": "Valider et continuer"
+        "validate_button": "Valider et continuer",
+        "required_mention": "Vous devez choisir votre langue d'apprentissage"
     },
     "pairing_level_page": {
         "know_button": "Go",
@@ -429,7 +431,8 @@
         "title": "Tes disponibilités",
         "TWICE_A_MONTH": "2 fois / mois",
         "TWICE_A_WEEK": "2 fois / semaine",
-        "validate_button": "Valider et continuer"
+        "validate_button": "Valider et continuer",
+        "required_mention": "Vous devez choisir votre fréquence de rencontre"
     },
     "signup_goals_page": {
         "pass_button": "Passer",
@@ -487,7 +490,8 @@
     "signup_interests_page": {
         "subtitle": "Tes centres d’intérêts nous servent à trouver un tandem qui te correspond.",
         "title": "Choisis au moins 5 centres d’intérêts",
-        "validate_button": "Valider et continuer"
+        "validate_button": "Valider et continuer",
+        "required_mention": "Vous devez choisir entre 5 et 10 centres d'intérêts"
     },
     "signup_page": {
         "country_placeholder": "Sélectionne un pays dans la liste",

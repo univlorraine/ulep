@@ -6,6 +6,7 @@ import {
   Logger,
 } from '@nestjs/common';
 import * as jwt from 'jsonwebtoken';
+import { Client, Issuer, TokenSet } from 'openid-client';
 import * as qs from 'querystring';
 import {
   KEYCLOAK_CONFIGURATION,
@@ -17,20 +18,19 @@ import {
   UserPasswordNotValidException,
 } from './keycloak.errors';
 import RoleRepresentation, {
-  CreateUserProps,
-  GetUsersProps,
-  KeycloakEmailAction,
-  KeycloakCertsResponse,
-  UserRepresentation,
-  KeycloakUser,
   CreateAdministratorProps,
-  UpdateAdministratorProps,
-  UpdateAdministratorPayload,
-  OpenIdConfiguration,
+  CreateUserProps,
   CredentialRepresentation,
+  GetUsersProps,
+  KeycloakCertsResponse,
+  KeycloakEmailAction,
+  KeycloakUser,
+  OpenIdConfiguration,
+  UpdateAdministratorPayload,
+  UpdateAdministratorProps,
+  UserRepresentation,
   UserSession,
 } from './keycloak.models';
-import { Client, Issuer, TokenSet } from 'openid-client';
 
 export interface Credentials {
   accessToken: string;
@@ -510,6 +510,7 @@ export class KeycloakClient {
     first,
     max,
     enabled,
+    attributes,
   }: GetUsersProps): Promise<UserRepresentation[]> {
     const url = new URL(
       `${this.configuration.baseUrl}/admin/realms/${this.configuration.realm}/users`,
@@ -533,6 +534,10 @@ export class KeycloakClient {
 
     if (max) {
       url.searchParams.append('max', max.toString());
+    }
+
+    if (attributes) {
+      url.searchParams.append('q', `${attributes.key}:${attributes.value}`);
     }
 
     const response = await fetch(url.toString(), {
@@ -615,6 +620,22 @@ export class KeycloakClient {
 
   async getUserByEmail(email: string): Promise<UserRepresentation> {
     const users = await this.getUsers({ email, max: 1 });
+
+    if (users.length === 0) {
+      return;
+    }
+
+    return users[0];
+  }
+
+  async getUserByUniversityLogin(login: string): Promise<UserRepresentation> {
+    const users = await this.getUsers({
+      attributes: {
+        key: 'universityLogin',
+        value: login,
+      },
+      max: 1,
+    });
 
     if (users.length === 0) {
       return;
