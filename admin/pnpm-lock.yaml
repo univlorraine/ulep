@@ -84,10 +84,10 @@ importers:
         specifier: ^1.0.3
         version: 1.0.3(ra-core@4.16.19(history@5.3.0)(react-dom@18.3.1(react@18.3.1))(react-hook-form@7.52.1(react@18.3.1))(react-router-dom@6.25.1(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(react-router@6.25.1(react@18.3.1))(react@18.3.1))(react@18.3.1)
       react-dom:
-        specifier: ^18.2.0
+        specifier: ^18.3.1
         version: 18.3.1(react@18.3.1)
       react-router-dom:
-        specifier: ^6.15.0
+        specifier: ^6.25.1
         version: 6.25.1(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
       web-vitals:
         specifier: ^0.2.4
