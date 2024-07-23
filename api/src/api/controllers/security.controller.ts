@@ -3,6 +3,7 @@ import {
   Body,
   Controller,
   Get,
+  Headers,
   Logger,
   Param,
   Post,
@@ -59,16 +60,16 @@ export class SecurityController {
     return new BearerTokensResponse(credentials);
   }
 
-  @Get('logout-all-sessions/:token/:login')
+  @Get('logout-all-sessions/:login')
   @Swagger.ApiOperation({ summary: 'Logout user by email.' })
   @Swagger.ApiOkResponse({ type: LogoutResponse })
   async logout(
     @Param('login') login: string,
-    @Param('token') token: string,
+    @Headers('Authorization') token?: string,
   ): Promise<LogoutResponse> {
     const success = await this.logoutAllSessionsUsecase.execute({
       login,
-      token,
+      token: token?.replace('Bearer ', ''),
     });
 
     return new LogoutResponse({ success });
