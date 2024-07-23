@@ -1,5 +1,4 @@
-import { Typography } from '@mui/material';
-import React from 'react';
+import { Typography, TypographyProps } from '@mui/material';
 import { useRedirect } from 'react-admin';
 import { Profile, getProfileDisplayName } from '../../../entities/Profile';
 import codeLanguageToFlag from '../../../utils/codeLanguageToFlag';
@@ -9,7 +8,7 @@ interface ProfileLinkParams {
     variant?: string;
 }
 
-const ProfileLink = ({ profile, variant }: ProfileLinkParams) => {
+const ProfileLink = ({ profile, variant = 'body1' }: ProfileLinkParams) => {
     const redirect = useRedirect();
 
     return (
@@ -20,7 +19,7 @@ const ProfileLink = ({ profile, variant }: ProfileLinkParams) => {
             sx={{ cursor: 'pointer', color: '#3737d5' }}
             // Note: shortcut to avoid typing as precisely as Typography (an error
             // will juste lead to syle not applied)
-            variant={variant as any}
+            variant={variant as TypographyProps['variant']}
         >
             {getProfileDisplayName(profile)} ({codeLanguageToFlag(profile.nativeLanguage.code)})
         </Typography>
