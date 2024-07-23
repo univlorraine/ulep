@@ -1,13 +1,17 @@
 import { KeycloakClient, UserRepresentation } from '@app/keycloak';
 import { Inject, Injectable } from '@nestjs/common';
 import { RessourceDoesNotExist } from 'src/core/errors';
-import { User } from 'src/core/models';
+import { TandemStatus, User } from 'src/core/models';
 import {
   CHAT_SERVICE,
   ChatServicePort,
   ConversationWithUsers,
   MessageWithUser,
 } from 'src/core/ports/chat.service';
+import {
+  TANDEM_REPOSITORY,
+  TandemRepository,
+} from 'src/core/ports/tandem.repository';
 import {
   USER_REPOSITORY,
   UserRepository,
@@ -26,6 +30,8 @@ export class GetAllConversationsFromUserIdUsecase {
     private readonly chatService: ChatServicePort,
     @Inject(USER_REPOSITORY)
     private readonly userRepository: UserRepository,
+    @Inject(TANDEM_REPOSITORY)
+    private readonly tandemRepository: TandemRepository,
     private readonly keycloakClient: KeycloakClient,
   ) {}
 
@@ -51,6 +57,10 @@ export class GetAllConversationsFromUserIdUsecase {
         allUserIds.add(conversation.lastMessage.ownerId);
       }
     });
+
+    const tandems = await this.tandemRepository.ofIds(
+      conversations.map((conversation) => conversation.id),
+    );
 
     // Get users data in one query
     const users = await this.userRepository.ofIds(
@@ -79,6 +89,11 @@ export class GetAllConversationsFromUserIdUsecase {
         ({
           ...conversation,
           users: conversation.usersIds.map((id) => userMap.get(id)),
+          metadata: {
+            isBlocked:
+              tandems.find((tandem) => tandem.id === conversation.id)
+                ?.status === TandemStatus.PAUSED,
+          },
           lastMessage: conversation.lastMessage
             ? ({
                 ...conversation.lastMessage,

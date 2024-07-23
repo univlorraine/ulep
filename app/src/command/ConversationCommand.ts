@@ -7,6 +7,9 @@ interface ConversationCommand {
     lastMessage?: MessageCommand;
     users: UserChatCommand[];
     createdAt: string;
+    metadata?: {
+        isBlocked?: boolean;
+    };
 }
 
 export const conversationCommandToDomain = (command: ConversationCommand) => {
@@ -14,7 +17,8 @@ export const conversationCommandToDomain = (command: ConversationCommand) => {
         command.id,
         command.users.map((user) => userChatCommandToDomain(user)),
         new Date(command.createdAt),
-        command.lastMessage ? messageCommandToDomain(command.lastMessage) : undefined
+        command.lastMessage ? messageCommandToDomain(command.lastMessage) : undefined,
+        command.metadata?.isBlocked
     );
 };
 

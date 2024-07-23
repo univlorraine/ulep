@@ -1,8 +1,10 @@
-import { Injectable } from '@nestjs/common';
 import { Collection, PrismaService } from '@app/common';
-import { TandemRepository } from '../../../core/ports/tandem.repository';
-import { FindWhereProps } from '../../../core/ports/tandem.repository';
+import { Injectable } from '@nestjs/common';
 import { Tandem, TandemStatus } from '../../../core/models';
+import {
+  FindWhereProps,
+  TandemRepository,
+} from '../../../core/ports/tandem.repository';
 import { TandemRelations, tandemMapper } from '../mappers/tandem.mapper';
 
 @Injectable()
@@ -264,6 +266,18 @@ export class PrismaTandemRepository implements TandemRepository {
     }
 
     return tandemMapper(res);
+  }
+
+  async ofIds(ids: string[]): Promise<Tandem[]> {
+    const tandems = await this.prisma.tandems.findMany({
+      where: {
+        id: {
+          in: ids,
+        },
+      },
+    });
+
+    return tandems.map(tandemMapper);
   }
 
   async update(tandem: Tandem): Promise<void> {
