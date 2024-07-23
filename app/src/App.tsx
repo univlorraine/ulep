@@ -74,7 +74,6 @@ const AppCore = () => {
             }
         };
     }, [profile]);
-    
 
     return (
         <IonReactRouter>
@@ -89,6 +88,7 @@ const AppContext = () => {
     const accessToken = useStoreState((state) => state.accessToken);
     const apiUrl = useStoreState((state) => state.apiUrl);
     const chatUrl = useStoreState((state) => state.chatUrl);
+    const socketChatUrl = useStoreState((state) => state.socketChatUrl);
     const language = useStoreState((state) => state.language);
     const refreshToken = useStoreState((state) => state.refreshToken);
     const setProfile = useStoreActions((state) => state.setProfile);
@@ -127,7 +127,7 @@ const AppContext = () => {
             value={getConfigContextValue({
                 apiUrl: import.meta.env.VITE_API_URL || apiUrl,
                 chatUrl: import.meta.env.VITE_CHAT_URL || chatUrl,
-                socketChatUrl: import.meta.env.VITE_SOCKET_CHAT_URL || chatUrl,
+                socketChatUrl: import.meta.env.VITE_SOCKET_CHAT_URL || socketChatUrl,
                 languageCode: i18n.language,
                 accessToken,
                 refreshToken,

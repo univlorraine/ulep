@@ -5,9 +5,10 @@ interface CheckboxProps {
     onPressed: () => void;
     name: JSX.Element | string | null;
     textClass?: string;
+    ariaLabel?: string;
 }
 
-const Checkbox: React.FC<CheckboxProps> = ({ isSelected, onPressed, name, textClass }) => {
+const Checkbox: React.FC<CheckboxProps> = ({ isSelected, onPressed, name, textClass, ariaLabel }) => {
     const handleClick = (e: React.MouseEvent<HTMLButtonElement>) => {
         e.preventDefault();
         onPressed();
@@ -18,7 +19,7 @@ const Checkbox: React.FC<CheckboxProps> = ({ isSelected, onPressed, name, textCl
                 onClick={onPressed}
                 style={{ backgroundColor: !isSelected ? 'white' : 'black' }}
                 className={isSelected ? styles['checkbox-selected'] : styles['checkbox-unselected']}
-                aria-label={name as string}
+                aria-label={ariaLabel ?? (name as string)}
                 aria-checked={isSelected}
                 role="checkbox"
             >

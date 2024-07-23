@@ -16,6 +16,8 @@ export interface TandemRepository {
 
   ofId(id: string): Promise<Tandem>;
 
+  ofIds(ids: string[]): Promise<Tandem[]>;
+
   update(tandem: Tandem): Promise<void>;
 
   findWhere(props: FindWhereProps): Promise<Collection<Tandem>>;

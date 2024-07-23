@@ -1,9 +1,11 @@
-import { Injectable } from '@nestjs/common';
-import { TandemRepository } from '../../../core/ports/tandem.repository';
 import { Collection } from '@app/common';
-import { FindWhereProps } from '../../../core/ports/tandem.repository';
-import { Tandem, TandemStatus } from '../../../core/models';
+import { Injectable } from '@nestjs/common';
 import { HistorizedTandem } from 'src/core/models/historized-tandem.model';
+import { Tandem, TandemStatus } from '../../../core/models';
+import {
+  FindWhereProps,
+  TandemRepository,
+} from '../../../core/ports/tandem.repository';
 
 @Injectable()
 export class InMemoryTandemRepository implements TandemRepository {
@@ -105,6 +107,12 @@ export class InMemoryTandemRepository implements TandemRepository {
 
   ofId(id: string): Promise<Tandem> {
     return Promise.resolve(this.#tandems.find((tandem) => tandem.id === id));
+  }
+
+  ofIds(ids: string[]): Promise<Tandem[]> {
+    return Promise.resolve(
+      this.#tandems.filter((tandem) => ids.includes(tandem.id)),
+    );
   }
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
