@@ -51,7 +51,11 @@ const ProfileContent: React.FC<ProfileContentProps> = ({ onClose, onParameterPre
     return (
         <div className={`content-wrapper ${styles.container}`}>
             <div>
-                <button aria-label={t('global.close') as string} className={styles['back-button']} onClick={onClose}>
+                <button
+                    aria-label={t('global.close_profile') as string}
+                    className={styles['back-button']}
+                    onClick={onClose}
+                >
                     <img alt="" src={ArrowLeftSvg} aria-hidden={true} />
                 </button>
             </div>

@@ -176,6 +176,7 @@ const SignUpPage: React.FC = () => {
                 <IonRadioGroup
                     value={selectedRole}
                     onIonChange={(ev) => setSelectedRole(ev.detail.value)}
+                    aria-label={t('signup_page.role_aria_label') as string}
                     aria-required={true}
                 >
                     <IonRadio labelPlacement="end" value="STUDENT" aria-label={t('signup_page.student_role') as string}>
@@ -207,6 +208,7 @@ const SignUpPage: React.FC = () => {
                                     onChange={setUniversity}
                                     options={universities}
                                     title={t('signup_page.university_title')}
+                                    ariaLabel={t('signup_page.university_aria_label') as string}
                                     aria-required={true}
                                     required={true}
                                 />

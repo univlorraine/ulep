@@ -99,7 +99,8 @@
         "close": "Fermer",
         "signup-progress-bar-label": "Progression de l'inscription",
         "required_fields_mention_part1": "Les champs suivis d'un",
-        "required_fields_mention_part2": "sont obligatoires"
+        "required_fields_mention_part2": "sont obligatoires",
+        "close_profile": "Fermer le profil"
     },
     "chat": {
         "fileDownloaded": "Fichier téléchargé",
@@ -141,7 +142,7 @@
         },
         "profile": {
             "disconnect": "Se déconnecter",
-            "edit": "Editer mon profil",
+            "edit": "Modifier mon avatar",
             "parameters": "Paramètres",
             "title": "Profile"
         },
@@ -451,7 +452,9 @@
         "placeholder_first_optional_language": "Vous pouvez selectionner une première langue maîtrisée",
         "placeholder_second_optional_language": "Vous pouvez selectionner une seconde langue maîtrisée",
         "title": "Langues parlées",
-        "validate_button": "Valider et continuer"
+        "validate_button": "Valider et continuer",
+        "aria_label": "Sélectionner votre langue natale, votre langue parlée et vos langues maîtrisées",
+        "mastered_aria_label": "Sélectionner vos langues maîtrisées"
     },
     "signup_informations_page": {
         "code": "Code",
@@ -465,7 +468,8 @@
             "cgu": "conditions d'utilisation",
             "prefix": "Accepter les",
             "separator": "et la",
-            "suffix": " pour utiliser l'application."
+            "suffix": " pour utiliser l'application.",
+            "aria_label": "Accepter les conditions d'utilisation et la politique de confidentialité pour utiliser l'application"
         },
         "error_age": "Veuillez saisir un âge valide",
         "error_code": "Veuillez saisir un code valide",
@@ -512,7 +516,9 @@
         "student_role": "Étudiant·e",
         "title": "Mon profil",
         "university_title": "Établissement",
-        "validate_button": "Valider et continuer"
+        "validate_button": "Valider et continuer",
+        "university_aria_label": "Sélectionner votre université",
+        "role_aria_label": "Sélectionner votre rôle dans l'université"
     },
     "suspended_page": {
         "contact_us": "Contacte-nous pour plus d'informations.",

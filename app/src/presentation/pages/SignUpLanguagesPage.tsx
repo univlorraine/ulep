@@ -104,11 +104,12 @@ const SignUpLanguagesPage: React.FC = () => {
                         options={languages}
                         placeholder={t('signup_languages_page.placeholder_primary_language')}
                         title={t('signup_languages_page.language')}
+                        ariaLabel={t('signup_languages_page.aria_label') as string}
                         required={true}
                     />
                 </div>
 
-                <div role="group">
+                <div role="group" aria-label={t('signup_languages_page.mastered_aria_label') as string}>
                     {myLanguage && (
                         <div className="margin-bottom">
                             <Dropdown<Language | undefined>

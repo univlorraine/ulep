@@ -341,6 +341,7 @@ const SignUpInformationsPage: React.FC = () => {
                 <Checkbox
                     isSelected={CGUChecked}
                     onPressed={() => setCGUChecked(!CGUChecked)}
+                    ariaLabel={t('signup_informations_page.cgu.aria_label') as string}
                     name={
                         <>
                             {`${t('signup_informations_page.cgu.prefix')} `}
