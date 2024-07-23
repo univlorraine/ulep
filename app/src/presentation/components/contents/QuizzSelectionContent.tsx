@@ -29,35 +29,40 @@ const QuizzSelectionContent: React.FC<QuizzSelectionContentProps> = ({ onQuizzSe
             <div>
                 <h1 className="title">{t('pairing_quizz_description_page.title')}</h1>
                 <p className="subtitle">{t('pairing_quizz_description_page.subtitle')}</p>
-                {quizzData.map((quizz, index) => {
-                    return (
-                        <button
-                            aria-label={quizz.title}
-                            key={quizz.value}
-                            className={styles['level-container']}
-                            onClick={() => setSelectQuizz(quizz.value)}
-                            style={{
-                                backgroundColor: quizz.value === selectQuizz ? configuration.secondaryColor : '#F2F4F7',
-                            }}
-                        >
-                            <div className={styles['bubble-container']}>
-                                <div
-                                    className={styles.bubble}
-                                    style={{ backgroundColor: index >= 1 ? 'black' : 'white' }}
-                                />
-                                <div
-                                    className={styles.bubble}
-                                    style={{ backgroundColor: index >= 2 ? 'black' : 'white' }}
-                                />
-                                <div
-                                    className={styles.bubble}
-                                    style={{ backgroundColor: index >= 3 ? 'black' : 'white' }}
-                                />
-                            </div>
-                            {quizz.title}
-                        </button>
-                    );
-                })}
+                <div role="radiogroup" aria-label={t('pairing_quizz_description_page.aria_label') as string}>
+                    {quizzData.map((quizz, index) => {
+                        return (
+                            <button
+                                role="radio"
+                                aria-checked={selectQuizz === quizz.value}
+                                aria-label={quizz.title}
+                                key={quizz.value}
+                                className={styles['level-container']}
+                                onClick={() => setSelectQuizz(quizz.value)}
+                                style={{
+                                    backgroundColor:
+                                        quizz.value === selectQuizz ? configuration.secondaryColor : '#F2F4F7',
+                                }}
+                            >
+                                <div className={styles['bubble-container']}>
+                                    <div
+                                        className={styles.bubble}
+                                        style={{ backgroundColor: index >= 1 ? 'black' : 'white' }}
+                                    />
+                                    <div
+                                        className={styles.bubble}
+                                        style={{ backgroundColor: index >= 2 ? 'black' : 'white' }}
+                                    />
+                                    <div
+                                        className={styles.bubble}
+                                        style={{ backgroundColor: index >= 3 ? 'black' : 'white' }}
+                                    />
+                                </div>
+                                {quizz.title}
+                            </button>
+                        );
+                    })}
+                </div>
             </div>
             <div>
                 <button

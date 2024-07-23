@@ -47,7 +47,7 @@
 }
 
 .card-button {
-    max-width: 250px;
+    max-width: 16em;
 }
 
 @media (min-width: 768px) {

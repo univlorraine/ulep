@@ -30,11 +30,15 @@ const WebLayoutCentered: React.FC<WebLayoutCenteredProps> = ({
     return (
         <IonPage>
             {!isHybrid && (
-                <div className="background-image-container">
-                    <Background style={{ color: backgroundIconColor }} className="background-image" />
+                <div className="background-image-container" style={{ backgroundColor: headerColor }}>
+                    <Background
+                        style={{ color: backgroundIconColor }}
+                        className="background-image"
+                        aria-hidden={true}
+                    />
                 </div>
             )}
-            <div style={{ backgroundColor: isHybrid ? 'white' : headerColor }} className="page content-wrapper">
+            <div style={{ backgroundColor: isHybrid ? 'white' : 'transparent' }} className="page content-wrapper">
                 <div className="white-centered-div">
                     <Header
                         hasGoBackButton={hasGoBackButton}

@@ -15,7 +15,7 @@ const ProgressBar: React.FC<ProgressBarProps> = ({ color, percentage }) => {
             aria-valuenow={percentage}
             aria-valuemin={0}
             aria-valuemax={100}
-            aria-label={t('grobal.signup-progress-bar-label') as string}
+            aria-label={t('global.signup-progress-bar-label') as string}
         >
             <div className={styles['color-bar']} style={{ backgroundColor: color, width: `${percentage}%` }} />
         </div>

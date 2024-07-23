@@ -19,7 +19,7 @@
 
 .center-button {
     align-self: center;
-    max-width: 250px;
+    max-width: 16em;
 }
 
 .primary-button.disabled {
