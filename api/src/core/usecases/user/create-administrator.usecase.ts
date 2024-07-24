@@ -67,6 +67,11 @@ export class CreateAdministratorUsecase {
         universityId: command.universityId,
         groups: [command.group],
       });
+
+      await this.keycloakClient.addRealmRoleToUser(
+        user.id,
+        KeycloakRealmRoles.ADMIN,
+      );
     }
 
     return user;
