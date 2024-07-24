@@ -72,12 +72,6 @@ const App = () => {
                         options={{ label: translate('reports.label') }}
                         {...reports}
                     />
-                    <Resource
-                        icon={PersonIcon}
-                        name="users/administrators"
-                        options={{ label: translate('administrators.label') }}
-                        {...administrators}
-                    />
                     {permissions.checkRole(Role.MANAGER) && (
                         <Resource
                             edit={universities.manager.edit}
@@ -85,6 +79,14 @@ const App = () => {
                             options={{ label: translate('universities.label') }}
                             recordRepresentation="name"
                             show={universities.manager.show}
+                        />
+                    )}
+                    {permissions.checkRoles([Role.MANAGER, Role.SUPER_ADMIN]) && (
+                        <Resource
+                            icon={PersonIcon}
+                            name="users/administrators"
+                            options={{ label: translate('administrators.label') }}
+                            {...administrators}
                         />
                     )}
                     {permissions.checkRole(Role.SUPER_ADMIN) && (
