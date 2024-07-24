@@ -151,7 +151,7 @@ const Content: React.FC<Omit<ChatContentProps, 'isHybrid'>> = ({ conversation, g
     };
 
     return (
-        <div className={styles.container}>
+        <div className={`${styles.container} content-wrapper`}>
             <div className={styles.header}>
                 {goBack ? <IonIcon icon={LeftChevronSvg} onClick={goBack} /> : <div />}
                 <span className={styles.title}>
