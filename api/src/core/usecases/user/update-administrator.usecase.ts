@@ -1,5 +1,5 @@
 import { KeycloakClient, KeycloakGroup } from '@app/keycloak';
-import { Inject, Injectable } from '@nestjs/common';
+import { BadRequestException, Inject, Injectable } from '@nestjs/common';
 import { RessourceDoesNotExist } from 'src/core/errors';
 import {
   UNIVERSITY_REPOSITORY,
@@ -44,16 +44,24 @@ export class UpdateAdministratorUsecase {
       await this.keycloakClient.removeRealmRoleToUser(admin.id, 'admin');
     }
 
-    const keycloakUser = await this.keycloakClient.updateUser({
-      id: admin.id,
-      firstname: command.firstname || admin.firstName,
-      lastname: command.lastname || admin.lastName,
-      email: command.email || admin.email,
-      password: command.password,
-      universityId: command.universityId || admin.attributes?.universityId,
-      groups: !command.shouldRemoveAdminRole ? [command.group] : [],
-    });
-
-    return keycloakUser;
+    try {
+      const keycloakUser = await this.keycloakClient.updateUser({
+        id: admin.id,
+        firstname: command.firstname || admin.firstName,
+        lastname: command.lastname || admin.lastName,
+        email: command.email || admin.email,
+        password: command.password,
+        universityId: command.universityId || admin.attributes?.universityId,
+        groups: !command.shouldRemoveAdminRole ? [command.group] : [],
+      });
+      return keycloakUser;
+    } catch (error) {
+      if (
+        error.response.message.errorMessage ===
+        'User exists with same username or email'
+      ) {
+        throw new BadRequestException('Email is already used');
+      }
+    }
   }
 }

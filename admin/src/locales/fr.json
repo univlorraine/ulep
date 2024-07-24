@@ -4,6 +4,7 @@
         "create": {
             "email": "Veuillez saisir l'email du nouvel administrateur",
             "error": "Une erreur est survenue lors de la création d'un administrateur",
+            "error_already_admin": "L'utilisateur est déjà un administrateur",
             "password": "Veuillez saisir un mot de passe pour l'administrateur ( 1 majuscule, 1 minuscule et 1 chiffre )",
             "title": "Création d'un administrateur",
             "university": "Veuillez sélectionner une université pour l'administrateur",
@@ -24,6 +25,7 @@
         "update": {
             "email": "Mettez à jour l'email de l'utilisateur",
             "error": "Une erreur est survenue lors de la mise à jour d'un administrateur",
+            "error_mail": "Cet email est utilisé par un autre utilisateur",
             "password": "Veuillez saisir un mot de passe pour l'administrateur ( 1 majuscule, 1 minuscule et 1 chiffre ) si vous voulez le mettre à jour",
             "title": "Mise à jour d'un administrateur",
             "university": "Mettez à jour l'université à administrer",

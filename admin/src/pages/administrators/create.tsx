@@ -28,9 +28,13 @@ const CreateAdministrator = () => {
                 'users/administrators',
                 { data: formData },
                 {
-                    onSettled: (_, error: unknown) => {
+                    onSettled: (_, error: any) => {
                         if (!error) {
                             return redirect('/users/administrators');
+                        }
+
+                        if (error.message === 'User is already an administrator') {
+                            return notify('administrators.create.error_already_admin');
                         }
 
                         return notify('administrators.create.error');
