@@ -10,6 +10,7 @@ import { LearningType } from '../../../../entities/LearningLanguage';
 import { MatchScore } from '../../../../entities/Match';
 import { Profile, ProfileWithTandems } from '../../../../entities/Profile';
 import codeLanguageToFlag from '../../../../utils/codeLanguageToFlag';
+import hasTandemManagementPermission from '../../hasTandemManagementPermission';
 import ProfileLink from '../../ui/ProfileTandemLink';
 import { Pagination } from './usePagination';
 
@@ -72,7 +73,7 @@ const TandemTable = ({ rows, actions, displayTandemLanguage, pagination }: Tande
                     <TableCell>{translate('learning_languages.show.tandems.tableColumns.age')}</TableCell>
                     <TableCell>{translate('learning_languages.show.tandems.tableColumns.score')}</TableCell>
                     <TableCell>{translate('learning_languages.show.tandems.tableColumns.date')}</TableCell>
-                    {actions && (
+                    {actions && hasTandemManagementPermission() && (
                         <TableCell>{translate('learning_languages.show.tandems.tableColumns.actions')}</TableCell>
                     )}
                 </TableRow>
@@ -133,7 +134,7 @@ const TandemTable = ({ rows, actions, displayTandemLanguage, pagination }: Tande
                             </Typography>
                         </TableCell>
                         <TableCell>{new Date(partner.createdAt).toLocaleDateString()}</TableCell>
-                        {actions && <TableCell>{actions(partner)}</TableCell>}
+                        {actions && hasTandemManagementPermission() && <TableCell>{actions(partner)}</TableCell>}
                     </TableRow>
                 ))}
                 {pagination && (
