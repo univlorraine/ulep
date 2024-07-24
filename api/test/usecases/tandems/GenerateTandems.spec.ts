@@ -1,29 +1,29 @@
 import { faker } from '@faker-js/faker';
 import {
-  CountryCode,
-  Gender,
-  Language,
-  LanguageStatus,
-  LearningLanguage,
-  LearningType,
-  MeetingFrequency,
-  ProficiencyLevel,
-  Profile,
-  Role,
-  Tandem,
-  TandemStatus,
-  University,
-  User,
+    CountryCode,
+    Gender,
+    Language,
+    LanguageStatus,
+    LearningLanguage,
+    LearningType,
+    MeetingFrequency,
+    ProficiencyLevel,
+    Profile,
+    Role,
+    Tandem,
+    TandemStatus,
+    University,
+    User,
 } from 'src/core/models';
 import { Campus } from 'src/core/models/campus.model';
 import { GenerateTandemsUsecase } from 'src/core/usecases';
+import InMemoryEmailGateway from 'src/providers/gateway/in-memory-email.gateway';
 import { InMemoryCountryCodesRepository } from 'src/providers/persistance/repositories/in-memory-country-repository';
 import { InMemoryLanguageRepository } from 'src/providers/persistance/repositories/in-memory-language-repository';
 import { InMemoryLearningLanguageRepository } from 'src/providers/persistance/repositories/in-memory-learning-language-repository';
-import { InMemoryTandemRepository } from 'src/providers/persistance/repositories/in-memory-tandem-repository';
 import { InMemoryRefusedTandemsRepository } from 'src/providers/persistance/repositories/in-memory-refused-tandems-repository';
+import { InMemoryTandemRepository } from 'src/providers/persistance/repositories/in-memory-tandem-repository';
 import { UuidProvider } from 'src/providers/services/uuid.provider';
-import InMemoryEmailGateway from 'src/providers/gateway/in-memory-email.gateway';
 
 // Note: learning language comparison is based on ID
 const checkTandemArrayContainsTandem = (
@@ -181,6 +181,23 @@ describe('GenerateTandem UC', () => {
     country,
     name: 'university 1',
     campus: [lorraineCampus, strasbourgCampus],
+    timezone: 'GMT+1',
+    admissionStart: new Date(),
+    admissionEnd: new Date(),
+    openServiceDate: new Date(),
+    closeServiceDate: new Date(),
+    codes: [],
+    domains: [],
+    maxTandemsPerUser: 3,
+    nativeLanguage: french,
+  });
+
+  const partnerUniversity = new University({
+    id: 'university2',
+    country,
+    name: 'university 2',
+    campus: [],
+    parent: centralUniversity.id,
     timezone: 'GMT+1',
     admissionStart: new Date(),
     admissionEnd: new Date(),
@@ -908,6 +925,46 @@ describe('GenerateTandem UC', () => {
       },
     });
 
+    const frenchPartnerEtandem = new Profile({
+        user: new User({
+          id: 'user3',
+          acceptsEmail: true,
+          email: '',
+          firstname: '',
+          lastname: '',
+          gender: Gender.MALE,
+          age: 19,
+          university: partnerUniversity,
+          role: Role.STUDENT,
+          country,
+          avatar: null,
+          deactivatedReason: '',
+        }),
+        id: 'FR_ETANDEM',
+        nativeLanguage: french,
+        masteredLanguages: [],
+        testedLanguages: [],
+        meetingFrequency: MeetingFrequency.ONCE_A_WEEK,
+        learningLanguages: [
+          new LearningLanguage({
+            id: 'FR_ETANDEM-EN_B2',
+            language: english,
+            level: ProficiencyLevel.B2,
+            learningType: LearningType.ETANDEM,
+            sameGender: false,
+            sameAge: false,
+          }),
+        ],
+        objectives: [],
+        interests: [],
+        biography: {
+          superpower: faker.lorem.sentence(),
+          favoritePlace: faker.lorem.sentence(),
+          experience: faker.lorem.sentence(),
+          anecdote: faker.lorem.sentence(),
+        },
+      });
+
     // English learning french in etandem
     const englishEtandem = new Profile({
       user: new User({
@@ -1046,7 +1103,7 @@ describe('GenerateTandem UC', () => {
       ).toBeTruthy();
     });
 
-    test('Etandem - ETandem', async () => {
+    test('Etandem central - Etandem central', async () => {
       learningLanguageRepository.init([frenchEtandem, englishEtandem]);
       await uc.execute({
         universityIds: [centralUniversity.id],
@@ -1057,8 +1114,22 @@ describe('GenerateTandem UC', () => {
           a: frenchEtandem.learningLanguages[0],
           b: englishEtandem.learningLanguages[0],
         }),
-      ).toBeTruthy();
+      ).toBeFalsy();
     });
+
+    test('Etandem central - Etandem partner', async () => {
+        learningLanguageRepository.init([frenchPartnerEtandem, englishEtandem]);
+        await uc.execute({
+          universityIds: [centralUniversity.id, partnerUniversity.id],
+        });
+        const tandems = await tandemsRepository.getExistingTandems();
+        expect(
+          checkTandemArrayContainsTandem(tandems, {
+            a: frenchPartnerEtandem.learningLanguages[0],
+            b: englishEtandem.learningLanguages[0],
+          }),
+        ).toBeTruthy();
+      });
 
     test('Both - whatever', async () => {
       learningLanguageRepository.init([frenchBoth, englishTandem]);
