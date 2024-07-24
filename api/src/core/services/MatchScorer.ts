@@ -1,8 +1,8 @@
 import { Language, LearningLanguage, LearningType } from 'src/core/models';
 /* eslint-disable prettier/prettier */
 import { Injectable, Logger } from '@nestjs/common';
-import { Match, MatchScores, Profile } from '../models';
 import { InvalidCoeficientsError, SameProfilesError } from '../errors/match-exceptions';
+import { Match, MatchScores, Profile } from '../models';
 
 export type Coeficients = {
   level: number;
@@ -367,6 +367,16 @@ export class MatchScorer implements IMatchScorer {
     )) {
       return false;
     }
+
+    // Check if both learning languages are tandems and have the same campus
+    // Bug 4017 - L'appariement en mode e-tandem seulement devrait se faire avec les universités partenaires
+    if (
+        learningLanguage1.learningType === LearningType.ETANDEM &&
+        learningLanguage2.learningType === LearningType.ETANDEM &&
+        profile1.user.university.id === profile2.user.university.id
+      ) {
+        return false;
+      }
 
     // Check same campus if tandem
     if (
