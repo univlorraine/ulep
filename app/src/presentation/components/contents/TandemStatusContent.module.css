@@ -35,6 +35,8 @@
     position: relative;
     padding: 0px 20px;
     z-index: 2;
+    overflow-y: auto;
+    width: 100%;
 }
 
 .image {

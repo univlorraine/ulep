@@ -1,11 +1,11 @@
+import { IonPage } from '@ionic/react';
 import React, { useState } from 'react';
-import { IonContent, IonPage } from '@ionic/react';
-import styles from './OnlineWebLayout.module.css';
-import Sidebar from './Sidebar';
+import Profile from '../../../domain/entities/Profile';
+import useLogout from '../../hooks/useLogout';
 import HomeHeader from '../HomeHeader';
 import ProfileModal from '../modals/ProfileModal';
-import useLogout from '../../hooks/useLogout';
-import Profile from '../../../domain/entities/Profile';
+import styles from './OnlineWebLayout.module.css';
+import Sidebar from './Sidebar';
 
 interface OnlineLayoutProps {
     profile: Profile;
@@ -24,7 +24,7 @@ const OnlineWebLayout: React.FC<OnlineLayoutProps> = ({ children, profile }) => 
             <HomeHeader user={profile!.user} onPicturePressed={onProfilePressed} />
             <div className={styles.container}>
                 <Sidebar />
-                <IonContent className={styles.content}>{children}</IonContent>
+                <div className={styles.content}>{children}</div>
             </div>
             <ProfileModal
                 isVisible={displayProfile}
