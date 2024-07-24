@@ -76,7 +76,7 @@ const HomeContent: React.FC<HomeContentProps> = ({
                             <Loader />
                         </div>
                     ) : (
-                        <ResponsiveMasonry columnsCountBreakPoints={{ 300: 1, 768: 2 }}>
+                        <ResponsiveMasonry columnsCountBreakPoints={{ 300: 1, 1024: 2 }}>
                             <Masonry className={styles.masonery} gutter="20px">
                                 {tandems.find((tandem) => tandem.status === 'ACTIVE') && (
                                     <TandemList onTandemPressed={onValidatedTandemPressed} tandems={tandems} />
