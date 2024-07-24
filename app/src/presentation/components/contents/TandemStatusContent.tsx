@@ -17,7 +17,7 @@ const TandemStatusContent: React.FC<TandemStatusContentProps> = ({ onFindNewTand
     const { t } = useTranslation();
     const { width } = useWindowDimensions();
     const isHybrid = width < HYBRID_MAX_WIDTH;
-    const waiting = status === 'DRAFT' || status === 'VALIDATED_BY_ONE_UNIVERSITY';
+    const waiting = status === 'DRAFT' || status === 'VALIDATED_BY_ONE_UNIVERSITY' || status === 'PAUSED';
     const tradKey = waiting ? 'draft' : 'not_found';
     return (
         <div

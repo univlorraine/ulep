@@ -25,11 +25,16 @@ const getTitleFromStatusAndProfile = (status: TandemStatus, hasProfile: boolean)
         return 'home_page.waiting_tandem.tandem_not_found';
     }
 
+    if(status === 'PAUSED') {
+        return 'home_page.waiting_tandem.tandem_paused';
+    }
+
     return '';
 };
 
 const TandemLine: React.FC<TandemLineProps> = ({ language, profile, onPressed, status }) => {
     const { t } = useTranslation();
+    console.log(getTitleFromStatusAndProfile(status, !!profile))
     return (
         <button className={styles.container} onClick={onPressed}>
             <div className={styles['left-container']}>

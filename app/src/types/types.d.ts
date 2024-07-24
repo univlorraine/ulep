@@ -9,7 +9,7 @@ declare global {
         | 'THREE_TIMES_A_MONTH';
     type Pedagogy = 'TANDEM' | 'ETANDEM' | 'BOTH';
     type Role = 'STAFF' | 'STUDENT';
-    type TandemStatus = 'ACTIVE' | 'INACTIVE' | 'DRAFT' | 'VALIDATED_BY_ONE_UNIVERSITY';
+    type TandemStatus = 'ACTIVE' | 'INACTIVE' | 'DRAFT' | 'VALIDATED_BY_ONE_UNIVERSITY' | 'PAUSED';
     type UserStatus = 'ACTIVE' | 'REPORTED' | 'BANNED' | 'CANCELED';
     type AvailabilitiesOptions = 'UNAVAILABLE' | 'AVAILABLE' | 'VERY_AVAILABLE';
 
@@ -22,4 +22,5 @@ declare global {
     const JitsiMeetJS: any;
 }
 
-export {};
+export { };
+

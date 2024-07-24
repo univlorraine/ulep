@@ -204,6 +204,7 @@
             "tandem_draft": "En attente d'un tandem",
             "tandem_not_found": "Tandem non trouvé",
             "tandem_unavailable": "Tandem indisponible",
+            "tandem_paused": "Tandem en pause",
             "title": "Mes demandes en attentes"
         }
     },
