@@ -49,7 +49,18 @@ const Actions = ({
     };
 
     return (
-        <Box sx={{ display: 'flex', gap: '50px', alignItems: 'center' }}>
+        <Box
+            sx={{
+                backgroundColor: '#fcfcfc',
+                display: 'flex',
+                gap: '50px',
+                alignItems: 'center',
+                padding: '20px',
+                border: '1px solid #e0e0e0',
+                borderRadius: '10px',
+                marginBottom: '20px',
+            }}
+        >
             <Box sx={{ flex: '1' }}>
                 <UniversitiesPicker
                     filterUniversities={(university: University) => !isCentralUniversity(university)}
