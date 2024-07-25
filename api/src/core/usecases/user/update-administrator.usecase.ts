@@ -62,6 +62,7 @@ export class UpdateAdministratorUsecase {
       ) {
         throw new BadRequestException('Email is already used');
       }
+      throw error;
     }
   }
 }
