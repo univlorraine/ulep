@@ -34,7 +34,6 @@ const getTitleFromStatusAndProfile = (status: TandemStatus, hasProfile: boolean)
 
 const TandemLine: React.FC<TandemLineProps> = ({ language, profile, onPressed, status }) => {
     const { t } = useTranslation();
-    console.log(getTitleFromStatusAndProfile(status, !!profile))
     return (
         <button className={styles.container} onClick={onPressed}>
             <div className={styles['left-container']}>
