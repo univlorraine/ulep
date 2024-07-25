@@ -120,6 +120,7 @@ const Content: React.FC<Omit<ChatContentProps, 'isHybrid'>> = ({ conversation, g
     };
 
     useEffect(() => {
+        recorderAdapter.requestPermission();
         socketIoAdapter.connect();
         socketIoAdapter.onMessage(conversation.id, addNewMessage);
 
