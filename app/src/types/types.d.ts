@@ -13,7 +13,8 @@ declare global {
     type UserStatus = 'ACTIVE' | 'REPORTED' | 'BANNED' | 'CANCELED';
     type AvailabilitiesOptions = 'UNAVAILABLE' | 'AVAILABLE' | 'VERY_AVAILABLE';
 
-    interface Window { // Pour matomo (UL)
+    interface Window {
+        // Pour matomo (UL)
         _mtm: any;
         _paq: any;
     }
@@ -21,6 +22,3 @@ declare global {
     // TODO(industrialization): remove when jitsi lib meet imported with types
     const JitsiMeetJS: any;
 }
-
-export { };
-
