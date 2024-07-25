@@ -22,3 +22,5 @@ declare global {
     // TODO(industrialization): remove when jitsi lib meet imported with types
     const JitsiMeetJS: any;
 }
+
+export {};
