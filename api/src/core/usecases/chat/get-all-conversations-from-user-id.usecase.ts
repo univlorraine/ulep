@@ -43,7 +43,11 @@ export class GetAllConversationsFromUserIdUsecase {
         command.offset,
       );
 
-    if (conversationsCollection.totalItems === 0) {
+    if (
+      !conversationsCollection ||
+      !conversationsCollection.totalItems ||
+      conversationsCollection.totalItems === 0
+    ) {
       return [];
     }
 
