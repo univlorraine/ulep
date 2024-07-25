@@ -11,15 +11,18 @@ import {
     TopToolbar,
     useGetIdentity,
     useGetList,
+    usePermissions,
     useRefresh,
     useTranslate,
 } from 'react-admin';
 import ColoredChips, { ChipsColors } from '../../../components/ColoredChips';
 import PageTitle from '../../../components/PageTitle';
+import { Role } from '../../../entities/Administrator';
 import { LearningLanguage } from '../../../entities/LearningLanguage';
 import { ProfileWithTandems, getProfileDisplayName } from '../../../entities/Profile';
 import codeLanguageToFlag from '../../../utils/codeLanguageToFlag';
 import isAgeCriterionMet from '../../../utils/isAgeCriterionMet';
+import hasTandemManagementPermission from '../hasTandemManagementPermission';
 import TandemActions from '../show/Actions/TandemActions';
 import ProfileTandemDetailLink from '../ui/ProfileTandemDetailLink';
 import ProfileWithTandemLink from '../ui/ProfileTandemLink';
@@ -46,6 +49,7 @@ const LearningLanguageList = () => {
     const translate = useTranslate();
     const refresh = useRefresh();
     const { selectedUniversityIds, setSelectedUniversityIds } = useLearningLanguagesStore();
+    const { permissions } = usePermissions();
 
     const { data: identity, isLoading: isLoadingIdentity } = useGetIdentity();
 
@@ -85,7 +89,7 @@ const LearningLanguageList = () => {
     return (
         <Box className="profiles-with-tandem-list">
             <PageTitle>{translate('learning_languages.title')}</PageTitle>
-            {identity.isCentralUniversity && (
+            {identity.isCentralUniversity && permissions.checkRole(Role.SUPER_ADMIN) && (
                 <PairingActions
                     onGlobalRoutineEnded={refresh}
                     selectedUniversityIds={selectedUniversityIds}
@@ -320,66 +324,68 @@ const LearningLanguageList = () => {
                             </>
                         )}
                     />
-                    <FunctionField
-                        label={translate('learning_languages.list.tableColumns.actions')}
-                        render={(record: ProfileWithTandems) => (
-                            <>
-                                <Box className="line" />
-                                {record.learningLanguages.map((learningLanguage: LearningLanguage) => {
-                                    if (
-                                        learningLanguage.tandem &&
-                                        learningLanguage.tandem.status !== 'ACTIVE' &&
-                                        learningLanguage.tandem.status !== 'PAUSED'
-                                    ) {
-                                        return (
-                                            <Box key={learningLanguage.code} className="line">
-                                                <TandemActions
-                                                    learningLanguageIds={[
-                                                        learningLanguage.id,
-                                                        learningLanguage.tandem.learningLanguages[0].id,
-                                                    ]}
-                                                    onTandemAction={refresh}
-                                                    relaunchGlobalRoutineOnAccept={
-                                                        !learningLanguage.tandem ||
-                                                        learningLanguage?.id !==
+                    {hasTandemManagementPermission() && (
+                        <FunctionField
+                            label={translate('learning_languages.list.tableColumns.actions')}
+                            render={(record: ProfileWithTandems) => (
+                                <>
+                                    <Box className="line" />
+                                    {record.learningLanguages.map((learningLanguage: LearningLanguage) => {
+                                        if (
+                                            learningLanguage.tandem &&
+                                            learningLanguage.tandem.status !== 'ACTIVE' &&
+                                            learningLanguage.tandem.status !== 'PAUSED'
+                                        ) {
+                                            return (
+                                                <Box key={learningLanguage.code} className="line">
+                                                    <TandemActions
+                                                        learningLanguageIds={[
+                                                            learningLanguage.id,
+                                                            learningLanguage.tandem.learningLanguages[0].id,
+                                                        ]}
+                                                        onTandemAction={refresh}
+                                                        relaunchGlobalRoutineOnAccept={
+                                                            !learningLanguage.tandem ||
+                                                            learningLanguage?.id !==
+                                                                learningLanguage.tandem.learningLanguages[0].id
+                                                        }
+                                                        relaunchGlobalRoutineOnRefuse={
+                                                            learningLanguage?.id ===
                                                             learningLanguage.tandem.learningLanguages[0].id
-                                                    }
-                                                    relaunchGlobalRoutineOnRefuse={
-                                                        learningLanguage?.id ===
-                                                        learningLanguage.tandem.learningLanguages[0].id
-                                                    }
-                                                />
-                                            </Box>
-                                        );
-                                    }
+                                                        }
+                                                    />
+                                                </Box>
+                                            );
+                                        }
 
-                                    if (
-                                        learningLanguage.tandem &&
-                                        (learningLanguage.tandem.status === 'ACTIVE' ||
-                                            learningLanguage.tandem.status === 'PAUSED')
-                                    ) {
-                                        return (
-                                            <Box key={learningLanguage.code} className="line">
-                                                <TandemActions
-                                                    learningLanguageIds={[
-                                                        learningLanguage.id,
-                                                        learningLanguage.tandem.learningLanguages[0].id,
-                                                    ]}
-                                                    onTandemAction={refresh}
-                                                    tandemId={learningLanguage.tandem?.id}
-                                                    tandemStatus={learningLanguage.tandem?.status}
-                                                    disableCreateButton
-                                                    relaunchGlobalRoutineOnRefuse
-                                                />
-                                            </Box>
-                                        );
-                                    }
+                                        if (
+                                            learningLanguage.tandem &&
+                                            (learningLanguage.tandem.status === 'ACTIVE' ||
+                                                learningLanguage.tandem.status === 'PAUSED')
+                                        ) {
+                                            return (
+                                                <Box key={learningLanguage.code} className="line">
+                                                    <TandemActions
+                                                        learningLanguageIds={[
+                                                            learningLanguage.id,
+                                                            learningLanguage.tandem.learningLanguages[0].id,
+                                                        ]}
+                                                        onTandemAction={refresh}
+                                                        tandemId={learningLanguage.tandem?.id}
+                                                        tandemStatus={learningLanguage.tandem?.status}
+                                                        disableCreateButton
+                                                        relaunchGlobalRoutineOnRefuse
+                                                    />
+                                                </Box>
+                                            );
+                                        }
 
-                                    return <Box key={learningLanguage.code} className="line tandem" />;
-                                })}
-                            </>
-                        )}
-                    />
+                                        return <Box key={learningLanguage.code} className="line tandem" />;
+                                    })}
+                                </>
+                            )}
+                        />
+                    )}
                     <FunctionField
                         render={(record: ProfileWithTandems) => (
                             <>

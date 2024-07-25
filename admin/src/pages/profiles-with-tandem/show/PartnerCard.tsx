@@ -12,6 +12,7 @@ import codeLanguageToFlag from '../../../utils/codeLanguageToFlag';
 
 import './show.css';
 import isAgeCriterionMet from '../../../utils/isAgeCriterionMet';
+import hasTandemManagementPermission from '../hasTandemManagementPermission';
 import ProfileLink from '../ui/ProfileLink';
 import TandemActions from './Actions/TandemActions';
 
@@ -294,7 +295,7 @@ const TandemCard = ({
                         </span>
                     </div>
 
-                    {!hasActiveTandem && !hasTandemWaitingForValidation && (
+                    {hasTandemManagementPermission() && !hasActiveTandem && !hasTandemWaitingForValidation && (
                         <TandemActions
                             learningLanguageIds={[userLearningLanguage.id, partnerLearningLanguage.id]}
                             onTandemAction={refresh}
@@ -308,7 +309,7 @@ const TandemCard = ({
                         />
                     )}
 
-                    {isUserValidationNeeded && (
+                    {hasTandemManagementPermission() && isUserValidationNeeded && (
                         <TandemActions
                             learningLanguageIds={[userLearningLanguage.id, partnerLearningLanguage.id]}
                             onTandemAction={refresh}
