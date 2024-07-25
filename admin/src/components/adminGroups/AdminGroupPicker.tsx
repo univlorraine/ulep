@@ -11,10 +11,9 @@ interface GroupPickerProps {
 
 const AdminGroupPicker: React.FC<GroupPickerProps> = ({ onChange, value }) => {
     const translate = useTranslate();
-
     const keycloakGroups = useGetAdminGroup();
 
-    if (keycloakGroups.length === 0 || !value) return <>Loading..</>;
+    if (keycloakGroups.length === 0) return <>Loading..</>;
 
     return (
         <FormControl>

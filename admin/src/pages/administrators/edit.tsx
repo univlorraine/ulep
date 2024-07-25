@@ -29,9 +29,13 @@ const EditAdministrator = () => {
                 'users/administrators',
                 { data: formData },
                 {
-                    onSettled: (_, error: unknown) => {
+                    onSettled: (_, error: any) => {
                         if (!error) {
                             return redirect('/users/administrators');
+                        }
+
+                        if (error.message === 'Email is already used') {
+                            return notify('administrators.update.error_mail');
                         }
 
                         return notify('administrators.update.error');
