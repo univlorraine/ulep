@@ -1,15 +1,15 @@
 import { Inject, Injectable } from '@nestjs/common';
-import { Tandem, TandemStatus } from 'src/core/models';
-import {
-  TANDEM_REPOSITORY,
-  TandemRepository,
-} from 'src/core/ports/tandem.repository';
 import { RessourceDoesNotExist } from 'src/core/errors';
+import { Tandem, TandemStatus } from 'src/core/models';
 import { EMAIL_GATEWAY, EmailGateway } from 'src/core/ports/email.gateway';
 import {
   NOTIFICATION_GATEWAY,
   NotificationGateway,
 } from 'src/core/ports/notification.gateway';
+import {
+  TANDEM_REPOSITORY,
+  TandemRepository,
+} from 'src/core/ports/tandem.repository';
 
 export class UpdateTandemCommand {
   id: string;
@@ -55,12 +55,14 @@ export class UpdateTandemUsecase {
   private sendNotifications(tandem: Tandem, paused: boolean) {
     const notifications = tandem.learningLanguages
       .map((language) => {
-        return language.profile.user.devices.map((device) => {
-          return {
-            token: device.token,
-            language: language.profile.nativeLanguage.code,
-          };
-        });
+        return language.profile.user.acceptsEmail
+          ? language.profile.user.devices.map((device) => {
+              return {
+                token: device.token,
+                language: language.profile.nativeLanguage.code,
+              };
+            })
+          : [];
       })
       .flat();
 
@@ -104,29 +106,37 @@ export class UpdateTandemUsecase {
     };
 
     if (paused) {
-      this.emailGateway.sendTandemPausedEmail({
-        to: profileA.user.email,
-        language: profileA.nativeLanguage.code,
-        ...payloadA,
-      });
+      if (profileA.user.acceptsEmail) {
+        this.emailGateway.sendTandemPausedEmail({
+          to: profileA.user.email,
+          language: profileA.nativeLanguage.code,
+          ...payloadA,
+        });
+      }
 
-      this.emailGateway.sendTandemPausedEmail({
-        to: profileB.user.email,
-        language: profileB.nativeLanguage.code,
-        ...payloadB,
-      });
+      if (profileB.user.acceptsEmail) {
+        this.emailGateway.sendTandemPausedEmail({
+          to: profileB.user.email,
+          language: profileB.nativeLanguage.code,
+          ...payloadB,
+        });
+      }
     } else {
-      this.emailGateway.sendTandemUnpausedEmail({
-        to: profileA.user.email,
-        language: profileA.nativeLanguage.code,
-        ...payloadA,
-      });
+      if (profileA.user.acceptsEmail) {
+        this.emailGateway.sendTandemUnpausedEmail({
+          to: profileA.user.email,
+          language: profileA.nativeLanguage.code,
+          ...payloadA,
+        });
+      }
 
-      this.emailGateway.sendTandemUnpausedEmail({
-        to: profileB.user.email,
-        language: profileB.nativeLanguage.code,
-        ...payloadB,
-      });
+      if (profileB.user.acceptsEmail) {
+        this.emailGateway.sendTandemUnpausedEmail({
+          to: profileB.user.email,
+          language: profileB.nativeLanguage.code,
+          ...payloadB,
+        });
+      }
     }
 
     const universityA = profileA.user.university;

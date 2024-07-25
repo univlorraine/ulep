@@ -1,23 +1,23 @@
 import { Inject, Injectable, Logger } from '@nestjs/common';
 import { Cron } from '@nestjs/schedule';
+import { format } from 'date-fns-tz';
 import { EMAIL_GATEWAY, EmailGateway } from 'src/core/ports/email.gateway';
 import {
-  INSTANCE_REPOSITORY,
-  InstanceRepository,
+    INSTANCE_REPOSITORY,
+    InstanceRepository,
 } from 'src/core/ports/instance.repository';
 import {
-  LEARNING_LANGUAGE_REPOSITORY,
-  LearningLanguageRepository,
+    LEARNING_LANGUAGE_REPOSITORY,
+    LearningLanguageRepository,
 } from 'src/core/ports/learning-language.repository';
 import {
-  NOTIFICATION_GATEWAY,
-  NotificationGateway,
+    NOTIFICATION_GATEWAY,
+    NotificationGateway,
 } from 'src/core/ports/notification.gateway';
 import {
-  UNIVERSITY_REPOSITORY,
-  UniversityRepository,
+    UNIVERSITY_REPOSITORY,
+    UniversityRepository,
 } from 'src/core/ports/university.repository';
-import { format } from 'date-fns-tz';
 
 @Injectable()
 export class CronService {
@@ -70,6 +70,10 @@ export class CronService {
         activeLearningLanguagesToNotify.items.map(
           (activeLearningLanguageToNotify) => {
             const profile = activeLearningLanguageToNotify.profile;
+
+            if(!profile.user.acceptsEmail) {
+              return;
+            }
 
             this.emailGateway.sendTandemClosureNoticeEmail({
               to: profile.user.email,

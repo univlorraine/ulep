@@ -4,16 +4,16 @@ import { Profile } from 'src/core/models';
 import { User } from 'src/core/models/user.model';
 import { EMAIL_GATEWAY, EmailGateway } from 'src/core/ports/email.gateway';
 import {
-  NOTIFICATION_GATEWAY,
-  NotificationGateway,
+    NOTIFICATION_GATEWAY,
+    NotificationGateway,
 } from 'src/core/ports/notification.gateway';
 import {
-  PROFILE_REPOSITORY,
-  ProfileRepository,
+    PROFILE_REPOSITORY,
+    ProfileRepository,
 } from 'src/core/ports/profile.repository';
 import {
-  USER_REPOSITORY,
-  UserRepository,
+    USER_REPOSITORY,
+    UserRepository,
 } from 'src/core/ports/user.repository';
 
 export type SendMessageNotificationCommand = {
@@ -45,7 +45,7 @@ export class SendMessageNotificationUsecase {
       this.profileRepository.ofUser(userId),
     );
     const profiles = (await Promise.all(profilePromises)).filter(
-      (user) => user !== null,
+      (profile) => profile !== null && profile.user.acceptsEmail,
     );
 
     this.sendEmailToUsers(profiles, sender, command.content);
