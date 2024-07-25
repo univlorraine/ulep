@@ -563,7 +563,7 @@
                 "specificProgram": "Specific program",
                 "hasPriority": "Priority language (no response to previous cycle)",
                 "score": "Score",
-                "nativeLanguage": "Native language"
+                "masteredLanguages": "Mastered languages"
             },
             "tandems": {
                 "error": "An error occured while fetching tandems",

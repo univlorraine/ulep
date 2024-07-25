@@ -71,8 +71,13 @@ const ProfileCard = ({ record, learningLanguage, hasActiveTandem }: ProfileCardP
             </div>
 
             <div className="line">
-                <span className="label">{translate('learning_languages.show.fields.nativeLanguage')}</span>
-                <span>{codeLanguageToFlag(record.nativeLanguage.code)}</span>
+                <span className="label">{translate('learning_languages.show.fields.masteredLanguages')}</span>
+                <span style={{ display: 'flex', gap: '10px', justifyContent: 'flex-start' }}>
+                    <span>{codeLanguageToFlag(record.nativeLanguage.code)}</span>
+                    {record.masteredLanguages.map((language) => (
+                        <span key={language.code}>{codeLanguageToFlag(language.code)}</span>
+                    ))}
+                </span>
             </div>
 
             <div className="line">
