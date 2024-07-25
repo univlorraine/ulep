@@ -21,6 +21,7 @@ const TandemStatusContent: React.FC<TandemStatusContentProps> = ({ onFindNewTand
     const tradKey = waiting ? 'draft' : 'not_found';
     return (
         <div
+            id="modal-content"
             className={`${styles.container} content-wrapper`}
             style={{ backgroundColor: configuration.secondaryColor }}
         >

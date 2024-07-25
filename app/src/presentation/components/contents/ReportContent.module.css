@@ -4,7 +4,6 @@
 
 .button-container {
     margin-top: auto;
-    margin-bottom: 80px;
     width: 100%;
 }
 
@@ -25,7 +24,6 @@
     align-items: center;
     display: flex;
     flex-direction: column;
-    height: 100%;
     padding: 0px 20px;
     width: 100%;
     z-index: 2;
@@ -54,6 +52,6 @@
     }
 
     .container {
-        padding: 60px;
+        padding: 20px 60px;
     }
 }

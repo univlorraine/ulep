@@ -16,3 +16,8 @@
     padding: 20px;
     width: 336px;
 }
+
+#modal-content {
+    position: relative;
+    z-index: 998;
+}

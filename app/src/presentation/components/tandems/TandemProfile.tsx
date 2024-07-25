@@ -59,6 +59,7 @@ const TandemProfile: React.FC<TandemProfileProps> = ({
 
     return (
         <div
+            id="modal-content"
             className={`content-wrapper ${styles.container}`}
             style={{ backgroundColor: configuration.secondaryColor }}
         >
