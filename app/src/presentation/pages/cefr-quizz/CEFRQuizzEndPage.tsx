@@ -1,13 +1,13 @@
+import { useIonToast } from '@ionic/react';
 import { useTranslation } from 'react-i18next';
 import { Redirect, useHistory, useLocation } from 'react-router';
 import { useConfig } from '../../../context/ConfigurationContext';
-import { useStoreState } from '../../../store/storeTypes';
 import Language from '../../../domain/entities/Language';
+import { useStoreState } from '../../../store/storeTypes';
 import QuizzValidatedContent from '../../components/contents/QuizzValidatedContent';
 import WebLayoutCentered from '../../components/layout/WebLayoutCentered';
-import styles from '../css/SignUp.module.css';
-import { useIonToast } from '@ionic/react';
 import { compareCEFR } from '../../utils';
+import styles from '../css/SignUp.module.css';
 
 type CEFRQuizzEndPageProps = {
     initialCefr: CEFR;
@@ -21,7 +21,6 @@ const CEFRQuizzEndPage: React.FC = () => {
     const location = useLocation<CEFRQuizzEndPageProps>();
     const profile = useStoreState((state) => state.profile);
     const { initialCefr, language, level } = location.state;
-    const profileSignUp = useStoreState((state) => state.profileSignUp);
     const [showToast] = useIonToast();
     const { t } = useTranslation();
 
@@ -30,9 +29,10 @@ const CEFRQuizzEndPage: React.FC = () => {
     }
 
     const isNewLanguage = !(
-        profile!.learningLanguages.find((language) => language.code === profileSignUp.learningLanguage?.code) ||
-        profile!.testedLanguages.find((language) => language.code === profileSignUp.learningLanguage?.code)
+        profile!.learningLanguages.find((l) => l.code === language.code) ||
+        profile!.testedLanguages.find((l) => l.code === language.code)
     );
+
 
     const nextStep = async () => {
         const result = await createOrUpdateTestedLanguage.execute(profile!.id, language, level);
