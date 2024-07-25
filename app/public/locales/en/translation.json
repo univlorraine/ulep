@@ -185,6 +185,7 @@
             "tandem_draft": "Pending tandem",
             "tandem_not_found": "Tandem not found",
             "tandem_unavailable": "Tandem unavailable",
+            "tandem_paused": "Tandem paused",
             "title": "My pending requests"
         }
     },
