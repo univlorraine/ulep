@@ -1,12 +1,11 @@
 import React from 'react';
-import { useNotify, useRedirect, Edit, useTranslate, useUpdate, WithRecord } from 'react-admin';
+import { useNotify, Edit, useTranslate, useUpdate, WithRecord } from 'react-admin';
 import AdministratorForm from '../../components/form/AdministratorForm';
 import Administrator, { AdministratorFormPayload } from '../../entities/Administrator';
 
 const EditAdministratorProfile = () => {
     const translate = useTranslate();
     const [update] = useUpdate();
-    const redirect = useRedirect();
     const notify = useNotify();
 
     const handleSubmit = async (payload: AdministratorFormPayload) => {
@@ -17,7 +16,7 @@ const EditAdministratorProfile = () => {
                 {
                     onSettled: (_, error: unknown) => {
                         if (!error) {
-                            return redirect('/users/administrators');
+                            return notify('ra.notification.updated', { messageArgs: { smart_count: 1 } });
                         }
 
                         return notify('administrators.update.error');
