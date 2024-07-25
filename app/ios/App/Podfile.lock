@@ -1,5 +1,5 @@
 PODS:
-  - Capacitor (6.1.0):
+  - Capacitor (6.1.1):
     - CapacitorCordova
   - CapacitorApp (6.0.0):
     - Capacitor
@@ -10,7 +10,7 @@ PODS:
   - CapacitorCommunityFcm (5.0.3):
     - Capacitor
     - Firebase/Messaging
-  - CapacitorCordova (6.1.0)
+  - CapacitorCordova (6.1.1)
   - CapacitorDevice (6.0.0):
     - Capacitor
   - CapacitorFilesystem (6.0.0):
@@ -120,12 +120,12 @@ PODS:
   - SentryPrivate (8.8.0)
 
 DEPENDENCIES:
-  - "Capacitor (from `../../node_modules/.pnpm/@capacitor+ios@6.1.0_@capacitor+core@6.1.0/node_modules/@capacitor/ios`)"
+  - "Capacitor (from `../../node_modules/.pnpm/@capacitor+ios@6.1.1_@capacitor+core@6.1.0/node_modules/@capacitor/ios`)"
   - "CapacitorApp (from `../../node_modules/.pnpm/@capacitor+app@6.0.0_@capacitor+core@6.1.0/node_modules/@capacitor/app`)"
   - "CapacitorBrowser (from `../../node_modules/.pnpm/@capacitor+browser@6.0.1_@capacitor+core@6.1.0/node_modules/@capacitor/browser`)"
   - "CapacitorCamera (from `../../node_modules/.pnpm/@capacitor+camera@6.0.1_@capacitor+core@6.1.0/node_modules/@capacitor/camera`)"
   - "CapacitorCommunityFcm (from `../../node_modules/.pnpm/@capacitor-community+fcm@5.0.3_@capacitor+core@6.1.0/node_modules/@capacitor-community/fcm`)"
-  - "CapacitorCordova (from `../../node_modules/.pnpm/@capacitor+ios@6.1.0_@capacitor+core@6.1.0/node_modules/@capacitor/ios`)"
+  - "CapacitorCordova (from `../../node_modules/.pnpm/@capacitor+ios@6.1.1_@capacitor+core@6.1.0/node_modules/@capacitor/ios`)"
   - "CapacitorDevice (from `../../node_modules/.pnpm/@capacitor+device@6.0.0_@capacitor+core@6.1.0/node_modules/@capacitor/device`)"
   - "CapacitorFilesystem (from `../../node_modules/.pnpm/@capacitor+filesystem@6.0.0_@capacitor+core@6.1.0/node_modules/@capacitor/filesystem`)"
   - "CapacitorHaptics (from `../../node_modules/.pnpm/@capacitor+haptics@6.0.0_@capacitor+core@6.1.0/node_modules/@capacitor/haptics`)"
@@ -137,7 +137,7 @@ DEPENDENCIES:
   - "CapacitorStatusBar (from `../../node_modules/.pnpm/@capacitor+status-bar@6.0.0_@capacitor+core@6.1.0/node_modules/@capacitor/status-bar`)"
   - "CapacitorVoiceRecorder (from `../../node_modules/.pnpm/capacitor-voice-recorder@5.0.0_@capacitor+core@6.1.0/node_modules/capacitor-voice-recorder`)"
   - "CapawesomeCapacitorFilePicker (from `../../node_modules/.pnpm/@capawesome+capacitor-file-picker@5.3.0_@capacitor+core@6.1.0/node_modules/@capawesome/capacitor-file-picker`)"
-  - "SentryCapacitor (from `../../node_modules/.pnpm/@sentry+capacitor@0.14.0_@capacitor+core@6.1.0_@sentry+react@7.73.0_react@18.3.1_/node_modules/@sentry/capacitor`)"
+  - "SentryCapacitor (from `../../node_modules/.pnpm/@sentry+capacitor@0.14.0_@capacitor+core@6.1.0_@sentry+react@7.73.0/node_modules/@sentry/capacitor`)"
 
 SPEC REPOS:
   trunk:
@@ -159,7 +159,7 @@ SPEC REPOS:
 
 EXTERNAL SOURCES:
   Capacitor:
-    :path: "../../node_modules/.pnpm/@capacitor+ios@6.1.0_@capacitor+core@6.1.0/node_modules/@capacitor/ios"
+    :path: "../../node_modules/.pnpm/@capacitor+ios@6.1.1_@capacitor+core@6.1.0/node_modules/@capacitor/ios"
   CapacitorApp:
     :path: "../../node_modules/.pnpm/@capacitor+app@6.0.0_@capacitor+core@6.1.0/node_modules/@capacitor/app"
   CapacitorBrowser:
@@ -169,7 +169,7 @@ EXTERNAL SOURCES:
   CapacitorCommunityFcm:
     :path: "../../node_modules/.pnpm/@capacitor-community+fcm@5.0.3_@capacitor+core@6.1.0/node_modules/@capacitor-community/fcm"
   CapacitorCordova:
-    :path: "../../node_modules/.pnpm/@capacitor+ios@6.1.0_@capacitor+core@6.1.0/node_modules/@capacitor/ios"
+    :path: "../../node_modules/.pnpm/@capacitor+ios@6.1.1_@capacitor+core@6.1.0/node_modules/@capacitor/ios"
   CapacitorDevice:
     :path: "../../node_modules/.pnpm/@capacitor+device@6.0.0_@capacitor+core@6.1.0/node_modules/@capacitor/device"
   CapacitorFilesystem:
@@ -193,15 +193,15 @@ EXTERNAL SOURCES:
   CapawesomeCapacitorFilePicker:
     :path: "../../node_modules/.pnpm/@capawesome+capacitor-file-picker@5.3.0_@capacitor+core@6.1.0/node_modules/@capawesome/capacitor-file-picker"
   SentryCapacitor:
-    :path: "../../node_modules/.pnpm/@sentry+capacitor@0.14.0_@capacitor+core@6.1.0_@sentry+react@7.73.0_react@18.3.1_/node_modules/@sentry/capacitor"
+    :path: "../../node_modules/.pnpm/@sentry+capacitor@0.14.0_@capacitor+core@6.1.0_@sentry+react@7.73.0/node_modules/@sentry/capacitor"
 
 SPEC CHECKSUMS:
-  Capacitor: 187bd7847b6f71467015a20200a1a071be3e5f14
+  Capacitor: 8941aba4364ba9d1b22188569001f2ce45cc2b00
   CapacitorApp: 9d53aec7101f7b030a950c5bdc4df8612576b279
   CapacitorBrowser: 473c7fd70ddbe541608ff09ec1be14da0078279e
   CapacitorCamera: 3b77b3e8311b98220de65e63445c0e4d0b30ce3a
   CapacitorCommunityFcm: 3e42b0f0460c791aa5f2b142113db2e94dcbb797
-  CapacitorCordova: be703980ca797f847c3356f78fa175d21c8330c2
+  CapacitorCordova: 8f2cc8d8d3619c566e9418fe8772064a94266106
   CapacitorDevice: f8fd88f9edd1261c55a109f32015b09bbbfdc4a0
   CapacitorFilesystem: 60e59ba274c234a979e7a3be2552feaadcee4263
   CapacitorHaptics: 9ebc9363f0e9b8eb4295088a0b474530acf1859b
@@ -230,6 +230,6 @@ SPEC CHECKSUMS:
   SentryCapacitor: 24d2fdc00e259b9cd9454a2331444ab6c41141be
   SentryPrivate: 4350d865f898224ab9fa02b37d6ee7fbb623f47e
 
-PODFILE CHECKSUM: cc39af3168d8f7021da2ffcca138f835159cc160
+PODFILE CHECKSUM: 7a5a06949ce0174c7736dbde821c2d4f9814e337
 
-COCOAPODS: 1.15.2
+COCOAPODS: 1.12.1
