@@ -14,6 +14,7 @@ import { FileInterceptor } from '@nestjs/platform-express';
 import * as Swagger from '@nestjs/swagger';
 import {
     CreateConversationRequest,
+    GetConversationsQueryParams,
     GetMessagesQueryParams,
 } from 'src/api/dtos/conversation';
 import { ConversationResponse } from 'src/api/dtos/conversation/conversation.response';
@@ -98,15 +99,21 @@ export class ConversationController {
     @Swagger.ApiOperation({ summary: 'Get all conversations from id' })
     async getConversationsFromUserId(
         @Param('id') userId: string,
+        @Query() query: GetConversationsQueryParams,
     ): Promise<CollectionResponse<ConversationResponse>> {
         const conversations =
             await this.getConversationFromUserIdUsecase.execute({
                 id: userId,
+                pagination: {
+                    limit: query.limit,
+                    offset: query.offset,
+                },
+                filteredProfilesIds: query.filteredProfilesIds,
             });
 
         return new CollectionResponse<ConversationResponse>({
-            items: conversations.map(ConversationResponse.from),
-            totalItems: conversations.length,
+            items: conversations.items.map(ConversationResponse.from),
+            totalItems: conversations.totalItems,
         });
     }
 

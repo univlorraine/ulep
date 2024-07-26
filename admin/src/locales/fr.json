@@ -54,6 +54,17 @@
             "title": "Mise à jour d'un campus"
         }
     },
+    "chat": {
+        "label": "Conversations",
+        "title": "Conversations",
+        "list": {
+            "filters": {
+                "lastname": "Nom",
+                "firstname": "Prénom",
+                "university": "Université"
+            }
+        }
+    },
     "count_suggested_languages": {
         "label": "Total langues demandées",
         "tabLabel": "Total langues demandées",

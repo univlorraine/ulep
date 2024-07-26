@@ -1,5 +1,6 @@
 import { Collection } from '@app/common';
 import { UserRepresentation } from '@app/keycloak';
+import { GetConversationQuery } from 'src/api/dtos/chat';
 import { User } from 'src/core/models';
 export const CHAT_SERVICE = 'chat.service';
 
@@ -51,6 +52,7 @@ export interface ChatServicePort {
     userId: string,
     limit: number,
     offset: number,
+    filteredProfilesIds?: string[],
   ): Promise<Collection<Conversation>>;
   getMessagesFromConversationId(
     conversationId: string,

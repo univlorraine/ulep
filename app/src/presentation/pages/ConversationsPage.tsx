@@ -60,6 +60,8 @@ const ConversationsPage: React.FC = () => {
         );
     }
 
+    console.log({ conversations });
+
     return (
         <OnlineWebLayout profile={profile}>
             <div className={styles.container}>

@@ -1,9 +1,11 @@
-import { PrismaService } from '@app/common';
+import { Collection, PrismaService } from '@app/common';
 import { Injectable } from '@nestjs/common';
 import { Conversation } from 'src/core/models';
 import {
+    ConversationPagination,
     ConversationRepository,
     CreateConversations,
+    GetConversationQuery,
 } from 'src/core/ports/conversation.repository';
 import {
     ConversationRelations,
@@ -27,9 +29,43 @@ export class PrismaConversationRepository implements ConversationRepository {
         return conversationMapper(conversation);
     }
 
-    async findByUserId(userId: string): Promise<Conversation[]> {
+    async findByUserId(
+        userId: string,
+        pagination: ConversationPagination,
+        filteredProfilesIds?: string[],
+    ): Promise<Collection<Conversation>> {
+        const count = await this.prisma.conversation.count();
+
+        const conversationPagination = {};
+        if (pagination.limit !== undefined) {
+            conversationPagination['take'] = pagination.limit;
+        }
+
+        if (pagination.offset !== undefined) {
+            conversationPagination['skip'] = pagination.offset;
+        }
+
+        console.log({ filteredProfilesIds });
+
+        let where: any = {
+            participantIds: { has: userId },
+        };
+
+        if (filteredProfilesIds) {
+            where = {
+                AND: [
+                    { participantIds: { has: userId } },
+                    {
+                        OR: filteredProfilesIds.map((id) => ({
+                            participantIds: { has: id },
+                        })),
+                    },
+                ],
+            };
+        }
+
         const conversations = await this.prisma.conversation.findMany({
-            where: { participantIds: { has: userId } },
+            where: where,
             orderBy: {
                 createdAt: 'desc',
             },
@@ -42,6 +78,7 @@ export class PrismaConversationRepository implements ConversationRepository {
                     },
                 },
             },
+            ...conversationPagination,
         });
 
         conversations.sort((a, b) => {
@@ -57,7 +94,12 @@ export class PrismaConversationRepository implements ConversationRepository {
             }
         });
 
-        return conversations.map(conversationMapper);
+        console.log({ conversations });
+
+        return new Collection<Conversation>({
+            items: conversations.map(conversationMapper),
+            totalItems: count,
+        });
     }
 
     async create(

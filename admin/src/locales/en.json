@@ -54,6 +54,17 @@
             "title": "Update campus"
         }
     },
+    "chat": {
+        "label": "Conversations",
+        "title": "Conversations",
+        "list": {
+            "filters": {
+                "lastname": "Lastname",
+                "firstname": "Firstname",
+                "university": "University"
+            }
+        }
+    },
     "count_suggested_languages": {
         "label": "Total languages requested",
         "tabLabel": "Total languages requested",

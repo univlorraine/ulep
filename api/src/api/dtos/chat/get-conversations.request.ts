@@ -1,11 +1,18 @@
 import * as Swagger from '@nestjs/swagger';
+import { ApiPropertyOptional } from '@nestjs/swagger';
 import { IsNotEmpty, IsOptional, IsString } from 'class-validator';
 import { PaginationDto } from 'src/api/dtos/pagination';
 
-export class GetConversationRequest extends PaginationDto {
-  @Swagger.ApiProperty({ type: 'string', format: 'uuid', required: false })
+export class GetConversationQuery extends PaginationDto {
+  @ApiPropertyOptional({ type: 'string' })
   @IsOptional()
-  @IsString()
-  @IsNotEmpty()
-  userId: string;
+  firstname?: string;
+
+  @ApiPropertyOptional({ type: 'string' })
+  @IsOptional()
+  lastname?: string;
+
+  @ApiPropertyOptional({ type: 'string' })
+  @IsOptional()
+  university?: string;
 }

@@ -1,5 +1,7 @@
+import { Collection } from '@app/common';
 import { KeycloakClient, UserRepresentation } from '@app/keycloak';
 import { Inject, Injectable } from '@nestjs/common';
+import { GetConversationQuery } from 'src/api/dtos/chat';
 import { RessourceDoesNotExist } from 'src/core/errors';
 import { TandemStatus, User } from 'src/core/models';
 import {
@@ -13,6 +15,11 @@ import {
   TandemRepository,
 } from 'src/core/ports/tandem.repository';
 import {
+  PROFILE_REPOSITORY,
+  ProfileQueryWhere,
+  ProfileRepository,
+} from 'src/core/ports/profile.repository';
+import {
   USER_REPOSITORY,
   UserRepository,
 } from 'src/core/ports/user.repository';
@@ -21,6 +28,7 @@ export class GetAllConversationsFromUserIdCommand {
   userId: string;
   limit: number;
   offset: number;
+  filters: ProfileQueryWhere;
 }
 
 @Injectable()
@@ -33,14 +41,41 @@ export class GetAllConversationsFromUserIdUsecase {
     @Inject(TANDEM_REPOSITORY)
     private readonly tandemRepository: TandemRepository,
     private readonly keycloakClient: KeycloakClient,
+    @Inject(PROFILE_REPOSITORY)
+    private readonly profileRepository: ProfileRepository,
   ) {}
 
   async execute(command: GetAllConversationsFromUserIdCommand) {
+    const hasFilter =
+      command.filters.user.firstname.contains ||
+      command.filters.user.lastname.contains ||
+      command.filters.user.university.contains;
+
+    let filteredProfilesList: string[] = [];
+
+    if (hasFilter) {
+      const profiles = await this.profileRepository.findAll(
+        undefined,
+        undefined,
+        undefined,
+        command.filters,
+      );
+
+      const filteredProfilesIds = new Set<string>();
+      profiles.items.forEach((profile) => {
+        filteredProfilesIds.add(profile.user.id);
+      });
+
+      filteredProfilesList = Array.from(filteredProfilesIds);
+    }
+
+    // We then get corresponding conversations from Chat
     const conversationsCollection =
       await this.chatService.getAllConversationsFromUserId(
         command.userId,
         command.limit,
         command.offset,
+        filteredProfilesList.length > 0 ? filteredProfilesList : undefined,
       );
 
     if (
@@ -48,7 +83,10 @@ export class GetAllConversationsFromUserIdUsecase {
       !conversationsCollection.totalItems ||
       conversationsCollection.totalItems === 0
     ) {
-      return [];
+      return new Collection<ConversationWithUsers>({
+        items: [],
+        totalItems: 0,
+      });
     }
 
     const conversations = conversationsCollection.items;
@@ -107,6 +145,9 @@ export class GetAllConversationsFromUserIdUsecase {
         } as ConversationWithUsers),
     );
 
-    return updatedConversations;
+    return new Collection<ConversationWithUsers>({
+      items: updatedConversations,
+      totalItems: conversationsCollection.totalItems,
+    });
   }
 }

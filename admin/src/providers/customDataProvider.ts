@@ -14,7 +14,9 @@ import { LearningLanguage } from '../entities/LearningLanguage';
 import { ProfileWithTandems } from '../entities/Profile';
 import { RoutineExecution } from '../entities/RoutineExecution';
 import { TandemStatus } from '../entities/Tandem';
+import User from '../entities/User';
 import AdministratorsQuery from '../queries/AdministratorsQuery';
+import ChatQuery from '../queries/ChatQuery';
 import CountriesQuery from '../queries/CountriesQuery';
 import InterestsQuery from '../queries/InterestsQuery';
 import LanguagesQuery from '../queries/LanguagesQuery';
@@ -206,6 +208,10 @@ const customDataProvider = {
             case 'users/administrators':
                 url.search = AdministratorsQuery(params);
                 break;
+            case 'chat':
+                url = new URL(`${process.env.REACT_APP_API_URL}/chat/${params.filter.id}`);
+                url.search = ChatQuery(params);
+                break;
             case 'countries':
                 url.search = CountriesQuery(params);
                 break;
@@ -244,6 +250,16 @@ const customDataProvider = {
         }
 
         const result = await response.json();
+
+        if (resource === 'chat') {
+            const conversationsWithPartner = result.items.map((conversation: any) => {
+                const partner = conversation.users.find((user: User) => user.id !== params.filter.id);
+
+                return { ...conversation, partner };
+            });
+
+            return { data: conversationsWithPartner, total: result.totalItems };
+        }
 
         if (resource === 'profiles/with-tandem') {
             // Filter the learning-languages array contained into the tandem subobject
