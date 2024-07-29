@@ -332,14 +332,16 @@
         }
     },
     "reports": {
-        "closed": "Closed",
+        "category": "Report category",
+        "CLOSED": "Closed",
         "comment": "Administrator's comments",
         "content": "Content",
-        "in_progress": "In progress",
+        "created_at": "Submission date",
+        "IN_PROGRESS": "In progress",
         "label": "Reports",
         "tabLabel": "Reports list",
         "title": "Reports",
-        "open": "Open",
+        "OPEN": "Open",
         "status": "Status",
         "update": {
             "comment": "Update report comment",

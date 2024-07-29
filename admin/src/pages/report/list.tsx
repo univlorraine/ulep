@@ -53,18 +53,16 @@ const ReportList = () => {
                 filters={<ReportFilter />}
             >
                 <Datagrid bulkActionButtons={readOnly ? false : undefined} rowClick="show">
-                    <TextField label={translate('reports.category')} sortable={false} source="category.name" />
-                    <TextField label={translate('global.lastname')} sortable={false} source="user.lastname" />
-                    <TextField label={translate('global.firstname')} sortable={false} source="user.firstname" />
-                    <TextField label={translate('global.university')} sortable={false} source="user.university.name" />
+                    <TextField label={translate('reports.category')} source="category.name" />
+                    <TextField label={translate('global.lastname')} source="user.lastname" />
+                    <TextField label={translate('global.firstname')} source="user.firstname" />
+                    <TextField label={translate('global.university')} source="user.university.name" />
                     <FunctionField
                         label={translate('reports.status')}
                         render={(record: any) => translate(`reports.${record.status}`)}
-                        sortable={false}
-                        source="status"
                     />
                     <TextField label={translate('reports.content')} sortable={false} source="content" />
-                    <DateField label={translate('reports.created_at')} sortable={false} source="createdAt" />
+                    <DateField label={translate('reports.created_at')} source="createdAt" />
                 </Datagrid>
             </List>
         </>
