@@ -56,10 +56,6 @@ export class ChatController {
               contains: params.lastname,
               mode: ModeQuery.INSENSITIVE,
             },
-            university: {
-              contains: params.university,
-              mode: ModeQuery.INSENSITIVE,
-            },
           },
         },
       });

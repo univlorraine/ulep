@@ -8,7 +8,6 @@ export interface ChatParams {
     filter: {
         lastname?: string;
         firstname?: string;
-        university?: string;
     };
 }
 
@@ -18,7 +17,6 @@ const ChatQuery = (params: ChatParams) => {
         limit: params.pagination.perPage,
         firstname: params.filter.firstname,
         lastname: params.filter.lastname,
-        university: params.filter.university,
     };
 
     return new URLSearchParams(qsAdapter().stringify(query)).toString();

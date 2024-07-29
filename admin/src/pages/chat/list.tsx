@@ -6,10 +6,8 @@ import {
     List,
     Loading,
     minLength,
-    SelectInput,
     TextInput,
     useGetIdentity,
-    useGetList,
     useTranslate,
 } from 'react-admin';
 import CustomAvatar from '../../components/CustomAvatar';
@@ -20,7 +18,6 @@ import MessagesList from '../chat-messages/list';
 const ChatList = () => {
     const { data: identity, isLoading: isLoadingIdentity } = useGetIdentity();
     const translate = useTranslate();
-    const { data: universities } = useGetList('universities');
 
     const [currentConversation, setCurrentConversation] = useState<Conversation | null>(null);
 
@@ -42,12 +39,6 @@ const ChatList = () => {
             label={translate('chat.list.filters.firstname')}
             source="firstname"
             validate={[minLength(3)]}
-        />,
-        <SelectInput
-            key="university"
-            choices={universities}
-            label={translate('chat.list.filters.university')}
-            source="university"
         />,
     ];
 

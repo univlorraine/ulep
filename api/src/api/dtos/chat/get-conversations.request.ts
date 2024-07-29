@@ -11,8 +11,4 @@ export class GetConversationQuery extends PaginationDto {
   @ApiPropertyOptional({ type: 'string' })
   @IsOptional()
   lastname?: string;
-
-  @ApiPropertyOptional({ type: 'string' })
-  @IsOptional()
-  university?: string;
 }

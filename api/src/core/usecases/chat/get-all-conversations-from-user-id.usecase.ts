@@ -48,8 +48,7 @@ export class GetAllConversationsFromUserIdUsecase {
   async execute(command: GetAllConversationsFromUserIdCommand) {
     const hasFilter =
       command.filters.user.firstname.contains ||
-      command.filters.user.lastname.contains ||
-      command.filters.user.university.contains;
+      command.filters.user.lastname.contains;
 
     let filteredProfilesList: string[] = [];
 
