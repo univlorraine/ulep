@@ -127,6 +127,9 @@ const customDataProvider = {
             case 'learning-languages/tandems':
                 url = new URL(`${process.env.REACT_APP_API_URL}/learning-languages/${params.id}/tandems`);
                 break;
+            case 'chat':
+                url = new URL(`${process.env.REACT_APP_API_URL}/chat/messages/${params.id}`);
+                break;
             default:
                 break;
         }
@@ -139,8 +142,14 @@ const customDataProvider = {
 
         const data = await response.json();
 
+        console.log({ data });
+
         if (resource === 'instance') {
             return { data: { ...data, id: 'config' } };
+        }
+
+        if (resource === 'chat') {
+            return { data: { ...data, id: params.id } };
         }
 
         if (resource === 'profiles/with-tandem') {
@@ -204,6 +213,8 @@ const customDataProvider = {
     getList: async (resource: string, params: any) => {
         let url = new URL(`${process.env.REACT_APP_API_URL}/${resource}`);
 
+        console.log({ resource, params });
+
         switch (resource) {
             case 'users/administrators':
                 url.search = AdministratorsQuery(params);
@@ -211,6 +222,9 @@ const customDataProvider = {
             case 'chat':
                 url = new URL(`${process.env.REACT_APP_API_URL}/chat/${params.filter.id}`);
                 url.search = ChatQuery(params);
+                break;
+            case 'chat/messages':
+                url = new URL(`${process.env.REACT_APP_API_URL}/chat/messages/${params.filter.conversationId}`);
                 break;
             case 'countries':
                 url.search = CountriesQuery(params);

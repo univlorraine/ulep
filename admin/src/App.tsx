@@ -20,6 +20,7 @@ import LoginPage from './pages/auth/login';
 import campus from './pages/campus';
 import categoryInterest from './pages/category-interest';
 import chat from './pages/chat';
+import chatMessages from './pages/chat-messages';
 import countSuggestedLanguages from './pages/count-suggested-languages';
 import countries from './pages/countries';
 import instance from './pages/instance';
@@ -75,6 +76,7 @@ const App = () => {
                         {...reports}
                     />
                     <Resource icon={ChatIcon} name="chat" options={{ label: translate('chat.label') }} {...chat} />
+                    <Resource name="chat/messages" {...chatMessages} />
                     {permissions.checkRole(Role.MANAGER) && (
                         <Resource
                             edit={universities.manager.edit}

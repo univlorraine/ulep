@@ -1,7 +1,7 @@
-import { Box } from '@mui/material';
-import React from 'react';
+import { Box, Drawer } from '@mui/material';
+import React, { useState } from 'react';
 import {
-    Datagrid,
+    DatagridConfigurable,
     FunctionField,
     List,
     Loading,
@@ -15,11 +15,18 @@ import {
 import CustomAvatar from '../../components/CustomAvatar';
 import PageTitle from '../../components/PageTitle';
 import { Conversation } from '../../entities/Conversation';
+import MessagesList from '../chat-messages/list';
 
 const ChatList = () => {
     const { data: identity, isLoading: isLoadingIdentity } = useGetIdentity();
     const translate = useTranslate();
     const { data: universities } = useGetList('universities');
+
+    const [currentConversation, setCurrentConversation] = useState<Conversation | null>(null);
+
+    /*     const handleClose = useCallback(() => {
+        setCurrentConversation(null);
+    }, []); */
 
     if (isLoadingIdentity || !identity) return <Loading />;
 
@@ -45,55 +52,82 @@ const ChatList = () => {
     ];
 
     return (
-        <>
-            <PageTitle>{translate('chat.title')}</PageTitle>
-            <List
-                exporter={false}
-                filter={{
-                    id: identity.id,
-                }}
-                filters={filters}
-            >
-                <Datagrid bulkActionButtons={false} rowClick="show">
-                    <FunctionField
-                        label=""
-                        render={(record: Conversation) => (
-                            <Box sx={{ display: 'flex', justifyContent: 'space-between', padding: '10px' }}>
-                                <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
-                                    <CustomAvatar
-                                        avatarId={record.partner.avatar?.id}
-                                        firstName={record.partner.firstname}
-                                        lastName={record.partner.lastname}
-                                    />
-                                    <Box>
-                                        <p style={{ fontWeight: 'bold', fontSize: '1.2rem', margin: '0' }}>
-                                            {record.partner.lastname} {record.partner.firstname}
-                                        </p>
-                                        <p style={{ color: 'gray', margin: '0' }}>{record.lastMessage?.content}</p>
+        <Box>
+            <Box>
+                <PageTitle>{translate('chat.title')}</PageTitle>
+                <List
+                    exporter={false}
+                    filter={{
+                        id: identity.id,
+                    }}
+                    filters={filters}
+                    sx={{
+                        flexGrow: 1,
+                        transition: (theme: any) =>
+                            theme.transitions.create(['all'], {
+                                duration: theme.transitions.duration.enteringScreen,
+                            }),
+                        marginRight: currentConversation ? '700px' : 0,
+                    }}
+                >
+                    <DatagridConfigurable
+                        bulkActionButtons={false}
+                        rowClick={(_, __, record) => {
+                            setCurrentConversation(record as Conversation);
+
+                            // Disable the default rowClick behavior
+                            return false;
+                        }}
+                    >
+                        <FunctionField
+                            label=""
+                            render={(record: Conversation) => (
+                                <Box sx={{ display: 'flex', justifyContent: 'space-between', padding: '10px' }}>
+                                    <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
+                                        <CustomAvatar
+                                            avatarId={record.partner.avatar?.id}
+                                            firstName={record.partner.firstname}
+                                            lastName={record.partner.lastname}
+                                        />
+                                        <Box>
+                                            <p style={{ fontWeight: 'bold', fontSize: '1.2rem', margin: '0' }}>
+                                                {record.partner.lastname} {record.partner.firstname}
+                                            </p>
+                                            <p style={{ color: 'gray', margin: '0' }}>{record.lastMessage?.content}</p>
+                                        </Box>
                                     </Box>
+                                    {record.lastMessage && (
+                                        <Box>
+                                            <p>
+                                                {new Date(record.lastMessage.createdAt).toLocaleDateString(undefined, {
+                                                    weekday: 'long',
+                                                    year: 'numeric',
+                                                    month: 'long',
+                                                    day: 'numeric',
+                                                    hour: 'numeric',
+                                                    minute: 'numeric',
+                                                })}
+                                            </p>
+                                        </Box>
+                                    )}
                                 </Box>
-                                {record.lastMessage && (
-                                    <Box>
-                                        <p>
-                                            {new Date(record.lastMessage.createdAt).toLocaleDateString(undefined, {
-                                                weekday: 'long',
-                                                year: 'numeric',
-                                                month: 'long',
-                                                day: 'numeric',
-                                                hour: 'numeric',
-                                                minute: 'numeric',
-                                            })}
-                                        </p>
-                                    </Box>
-                                )}
-                            </Box>
-                        )}
-                        sortable={false}
-                        source="code"
-                    />
-                </Datagrid>
-            </List>
-        </>
+                            )}
+                            sortable={false}
+                            source="code"
+                        />
+                    </DatagridConfigurable>
+                </List>
+            </Box>
+            <Drawer
+                anchor="right"
+                // onClose={handleClose}
+                open={!!currentConversation}
+                sx={{ zIndex: 100 }}
+                variant="persistent"
+            >
+                {currentConversation && <MessagesList conversation={currentConversation} />}
+            </Drawer>
+        </Box>
     );
 };
 

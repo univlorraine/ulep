@@ -63,6 +63,9 @@
                 "firstname": "Firstname",
                 "university": "University"
             }
+        },
+        "show": {
+            "title": "Messages with %{partner}"
         }
     },
     "count_suggested_languages": {

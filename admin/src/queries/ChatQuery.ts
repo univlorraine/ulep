@@ -21,8 +21,6 @@ const ChatQuery = (params: ChatParams) => {
         university: params.filter.university,
     };
 
-    console.log({ query });
-
     return new URLSearchParams(qsAdapter().stringify(query)).toString();
 };
 

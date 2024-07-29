@@ -45,8 +45,6 @@ export class PrismaConversationRepository implements ConversationRepository {
             conversationPagination['skip'] = pagination.offset;
         }
 
-        console.log({ filteredProfilesIds });
-
         let where: any = {
             participantIds: { has: userId },
         };
@@ -93,8 +91,6 @@ export class PrismaConversationRepository implements ConversationRepository {
                 return 0;
             }
         });
-
-        console.log({ conversations });
 
         return new Collection<Conversation>({
             items: conversations.map(conversationMapper),

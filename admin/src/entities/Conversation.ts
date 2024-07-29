@@ -6,7 +6,7 @@ export type Conversation = {
     lastMessage?: Message;
 };
 
-type Message = {
+export type Message = {
     id: string;
     content: string;
     createdAt: string;
