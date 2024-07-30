@@ -504,6 +504,9 @@
                 },
                 "university": {
                     "label": "Université"
+                },
+                "learningLanguage": {
+                    "label": "Langue demandée"
                 }
             },
             "globalRoutineModal": {

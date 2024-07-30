@@ -46,6 +46,18 @@ export class InMemoryProfileRepository implements ProfileRepository {
     };
   }
 
+  async findAllWithTandems(
+    offset?: number,
+    limit?: number,
+  ): Promise<Collection<Profile>> {
+    const allItems = Array.from(this.#profiles.values());
+
+    return {
+      items: allItems.slice(offset, offset + limit),
+      totalItems: allItems.length,
+    };
+  }
+
   async delete(profile: Profile): Promise<void> {
     this.#profiles.delete(profile.id);
   }

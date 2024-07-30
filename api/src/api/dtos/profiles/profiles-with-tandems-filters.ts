@@ -1,0 +1,17 @@
+import { ApiPropertyOptional } from '@nestjs/swagger';
+import { IsOptional } from 'class-validator';
+import { PaginationDto } from '../pagination';
+
+export class ProfileWithTandemsQueryFilter extends PaginationDto {
+  @ApiPropertyOptional({ type: 'string' })
+  @IsOptional()
+  lastname?: string;
+
+  @ApiPropertyOptional({ type: 'uuid' })
+  @IsOptional()
+  university?: string;
+
+  @ApiPropertyOptional({ type: 'string' })
+  @IsOptional()
+  learningLanguage?: string;
+}

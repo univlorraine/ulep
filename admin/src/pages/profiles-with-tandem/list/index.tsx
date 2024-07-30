@@ -1,6 +1,7 @@
 import PeopleAltIcon from '@mui/icons-material/PeopleAlt';
 import { Box, Typography } from '@mui/material';
 import {
+    AutocompleteInput,
     Datagrid,
     FilterButton,
     FunctionField,
@@ -50,9 +51,13 @@ const LearningLanguageList = () => {
     const refresh = useRefresh();
     const { selectedUniversityIds, setSelectedUniversityIds } = useLearningLanguagesStore();
     const { permissions } = usePermissions();
-
     const { data: identity, isLoading: isLoadingIdentity } = useGetIdentity();
-
+    const { data: languages } = useGetList('languages', {
+        pagination: {
+            page: 1,
+            perPage: 9999,
+        },
+    });
     const { data: universities } = useGetList('universities');
 
     const adaptedFilters = identity?.isCentralUniversity
@@ -68,6 +73,16 @@ const LearningLanguageList = () => {
                   key="userLastname"
                   label={translate('learning_languages.list.filters.user_lastname.label')}
                   source="user.lastname"
+                  alwaysOn
+              />,
+              <AutocompleteInput
+                  key="learningLanguage"
+                  choices={languages?.map((language) => ({
+                      id: language.id,
+                      name: `${codeLanguageToFlag(language.code)}`,
+                  }))}
+                  label={translate('learning_languages.list.filters.learningLanguage.label')}
+                  source="learningLanguage"
                   alwaysOn
               />,
           ]

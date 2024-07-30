@@ -1,9 +1,10 @@
 import { Injectable } from '@nestjs/common';
-import { Collection, PrismaService } from '@app/common';
+import { Collection, ModeQuery, PrismaService } from '@app/common';
 import {
   ProfileQueryOrderBy,
   ProfileQueryWhere,
   ProfileRepository,
+  ProfileWithTandemsQueryWhere,
 } from 'src/core/ports/profile.repository';
 import { Profile } from 'src/core/models';
 import {
@@ -139,6 +140,55 @@ export class PrismaProfileRepository implements ProfileRepository {
       where: wherePayload,
       skip: offset,
       orderBy: order,
+      take: limit,
+      include: ProfilesRelations,
+    });
+
+    const profilesWithLearningLanguages = profiles.filter(
+      (profile) => profile.LearningLanguages.length !== 0,
+    );
+
+    return {
+      items: profilesWithLearningLanguages.map(profileMapper),
+      totalItems: count,
+    };
+  }
+
+  async findAllWithTandems(
+    offset?: number,
+    limit?: number,
+    where?: ProfileWithTandemsQueryWhere,
+  ): Promise<Collection<Profile>> {
+    const wherePayload: any = where
+      ? {
+          User: {
+            Organization: { id: where.user.university },
+            lastname: {
+              contains: where.user.lastname,
+              mode: ModeQuery.INSENSITIVE,
+            },
+          },
+          ...(where.learningLanguage && {
+            LearningLanguages: {
+              some: {
+                LanguageCode: { id: where.learningLanguage },
+              },
+            },
+          }),
+        }
+      : {};
+
+    const count = await this.prisma.profiles.count({
+      where: wherePayload,
+    });
+    // If skip is out of range, return an empty array
+    if (offset >= count) {
+      return { items: [], totalItems: count };
+    }
+
+    const profiles = await this.prisma.profiles.findMany({
+      where: wherePayload,
+      skip: offset,
       take: limit,
       include: ProfilesRelationsWithTandemProfile,
     });

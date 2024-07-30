@@ -29,6 +29,7 @@ import {
   GetProfileByUserIdUsecase,
   GetProfileUsecase,
   GetProfilesUsecase,
+  GetProfilesWithTandemsUsecase,
   GetTandemsForProfileUsecase,
   UpdateProfileUsecase,
 } from 'src/core/usecases';
@@ -45,6 +46,7 @@ import {
   UserTandemResponse,
 } from '../dtos';
 import { AuthenticationGuard } from '../guards';
+import { ProfileWithTandemsQueryFilter } from '../dtos/profiles/profiles-with-tandems-filters';
 
 @Controller('profiles')
 @Swagger.ApiTags('Profiles')
@@ -53,6 +55,7 @@ export class ProfileController {
     private readonly createProfileUsecase: CreateProfileUsecase,
     private readonly getLearningLanguageOfProfileUsecase: GetLearningLanguageOfProfileUsecase,
     private readonly getProfilesUsecase: GetProfilesUsecase,
+    private readonly getProfilesWithTandemsUsecase: GetProfilesWithTandemsUsecase,
     private readonly getProfileByUserIdUsecase: GetProfileByUserIdUsecase,
     private readonly getProfileUsecase: GetProfileUsecase,
     private readonly deleteProfileUsecase: DeleteProfileUsecase,
@@ -98,7 +101,17 @@ export class ProfileController {
     return ProfileResponse.fromDomain(profile);
   }
 
-  private async getProfiles(query: ProfileQueryFilter) {
+  @Get()
+  @Roles(Role.ADMIN)
+  @UseGuards(AuthenticationGuard)
+  @SerializeOptions({ groups: ['read'] })
+  @Swagger.ApiOperation({
+    summary: 'Retrieve the collection of Profile ressource.',
+  })
+  @CollectionResponse(ProfileResponse)
+  async getCollection(
+    @Query() query: ProfileQueryFilter,
+  ): Promise<Collection<ProfileResponse>> {
     const {
       email,
       firstname,
@@ -150,20 +163,6 @@ export class ProfileController {
     });
   }
 
-  @Get()
-  @Roles(Role.ADMIN)
-  @UseGuards(AuthenticationGuard)
-  @SerializeOptions({ groups: ['read'] })
-  @Swagger.ApiOperation({
-    summary: 'Retrieve the collection of Profile ressource.',
-  })
-  @CollectionResponse(ProfileResponse)
-  async getCollection(
-    @Query() query: ProfileQueryFilter,
-  ): Promise<Collection<ProfileResponse>> {
-    return this.getProfiles(query);
-  }
-
   @Get('/with-tandem')
   @Roles(Role.ADMIN)
   @UseGuards(AuthenticationGuard)
@@ -180,9 +179,30 @@ export class ProfileController {
   })
   @CollectionResponse(ProfileResponse)
   async getCollectionWithTandems(
-    @Query() query: ProfileQueryFilter,
+    @Query() query: ProfileWithTandemsQueryFilter,
   ): Promise<Collection<ProfileResponse>> {
-    return this.getProfiles(query);
+    const { lastname, university, learningLanguage, page, limit } = query;
+
+    console.log({ query });
+
+    const profiles = await this.getProfilesWithTandemsUsecase.execute({
+      page,
+      limit,
+      where: {
+        user: {
+          lastname: lastname,
+          university: university,
+        },
+        learningLanguage: learningLanguage,
+      },
+    });
+
+    return new Collection<ProfileResponse>({
+      items: profiles.items.map((profile: Profile) =>
+        ProfileResponse.fromDomain(profile),
+      ),
+      totalItems: profiles.totalItems,
+    });
   }
 
   @Delete(':id')

@@ -34,6 +34,14 @@ export interface ProfileQueryWhere {
   nativeLanguageCode?: string;
 }
 
+export interface ProfileWithTandemsQueryWhere {
+  user: {
+    lastname?: string;
+    university?: string;
+  };
+  learningLanguage?: string;
+}
+
 export interface ProfileQueryOrderBy {
   field: ProfileQuerySortKey;
   order: SortOrder;
@@ -53,6 +61,12 @@ export interface ProfileRepository {
     limit?: number,
     orderBy?: ProfileQueryOrderBy,
     where?: ProfileQueryWhere,
+  ) => Promise<Collection<Profile>>;
+
+  findAllWithTandems: (
+    offset?: number,
+    limit?: number,
+    where?: ProfileWithTandemsQueryWhere,
   ) => Promise<Collection<Profile>>;
 
   delete: (profile: Profile) => Promise<void>;

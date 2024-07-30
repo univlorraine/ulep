@@ -20,6 +20,7 @@ import InterestsQuery from '../queries/InterestsQuery';
 import LanguagesQuery from '../queries/LanguagesQuery';
 import { LearningLanguageMatchesQuery, LearningLanguagesQuery } from '../queries/LearningLanguagesQuery';
 import ProfilesQuery from '../queries/ProfilesQuery';
+import ProfilesWithTandemsQuery from '../queries/ProfilesWithTandemsQuery';
 import QuestionsQuery from '../queries/QuestionsQuery';
 import ReportsQuery from '../queries/ReportsQuery';
 import { http, refreshAuth } from './authProvider';
@@ -213,7 +214,7 @@ const customDataProvider = {
                 url.search = ProfilesQuery(params);
                 break;
             case 'profiles/with-tandem':
-                url.search = ProfilesQuery(params);
+                url.search = ProfilesWithTandemsQuery(params);
                 break;
             case 'reports':
                 url.search = ReportsQuery(params);
