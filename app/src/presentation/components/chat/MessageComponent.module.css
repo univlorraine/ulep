@@ -25,7 +25,6 @@
     flex-direction: row;
     align-items: center;
     justify-content: center;
-    padding: 16px;
     text-decoration: underline;
     text-decoration-color: black;
 }
@@ -52,7 +51,6 @@
 
 .message {
     display: block;
-    padding: 10px 20px;
     max-width: 80%;
     word-wrap: break-word;
     color: black;
@@ -63,19 +61,18 @@
 
 .messageImage {
     display: block;
-    padding: 12px;
     max-height: 20%;
     max-width: 80%;
 }
 
 .messageAudio {
-    padding: 12px;
     max-width: 80%;
 }
 
 .image {
     max-height: 300px;
     max-width: 100%;
+    padding: 8px 0px;
 }
 
 .name {
@@ -110,4 +107,24 @@
     border-radius: 20px 20px 20px 0px;
     text-align: left;
     margin-right: auto;
+}
+
+.reportButton {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.reportButtonText {
+    color: black;
+}
+
+.fullHeightPopover {
+    height: 100vh;
+    width: 100vw;
+}
+
+ion-popover::part(backdrop) {
+    height: 100vh;
+    width: 100vw;
 }
