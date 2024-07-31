@@ -1,5 +1,6 @@
 import { Collection, SortOrder, StringFilter } from '@app/common';
 import { Profile } from '../models';
+import { ProfileWithTandemsProfiles } from '../models/profileWithTandemsProfiles.model';
 
 export const PROFILE_REPOSITORY = 'profile.repository';
 
@@ -67,7 +68,7 @@ export interface ProfileRepository {
     offset?: number,
     limit?: number,
     where?: ProfileWithTandemsProfilesQueryWhere,
-  ) => Promise<Collection<Profile>>;
+  ) => Promise<Collection<ProfileWithTandemsProfiles>>;
 
   delete: (profile: Profile) => Promise<void>;
 }

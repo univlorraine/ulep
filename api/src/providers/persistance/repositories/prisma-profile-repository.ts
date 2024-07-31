@@ -9,9 +9,11 @@ import {
 import { Profile } from 'src/core/models';
 import {
   ProfilesRelations,
-  ProfilesRelationsWithTandemProfile,
   profileMapper,
+  ProfilesRelationsWithTandemProfile,
+  profileWithTandemsProfilesMapper,
 } from '../mappers';
+import { ProfileWithTandemsProfiles } from 'src/core/models/profileWithTandemsProfiles.model';
 
 @Injectable()
 export class PrismaProfileRepository implements ProfileRepository {
@@ -20,7 +22,7 @@ export class PrismaProfileRepository implements ProfileRepository {
   async ofId(id: string): Promise<Profile | null> {
     const entry = await this.prisma.profiles.findUnique({
       where: { id },
-      include: ProfilesRelationsWithTandemProfile,
+      include: ProfilesRelations, // TODO: make a specific usecase / request for tandems profiles associated to one profile
     });
 
     if (!entry) {
@@ -158,7 +160,7 @@ export class PrismaProfileRepository implements ProfileRepository {
     offset?: number,
     limit?: number,
     where?: ProfileWithTandemsProfilesQueryWhere,
-  ): Promise<Collection<Profile>> {
+  ): Promise<Collection<ProfileWithTandemsProfiles>> {
     const wherePayload: any = where
       ? {
           User: {
@@ -198,7 +200,9 @@ export class PrismaProfileRepository implements ProfileRepository {
     );
 
     return {
-      items: profilesWithLearningLanguages.map(profileMapper),
+      items: profilesWithLearningLanguages.map(
+        profileWithTandemsProfilesMapper,
+      ),
       totalItems: count,
     };
   }

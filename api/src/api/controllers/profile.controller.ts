@@ -47,6 +47,8 @@ import {
 } from '../dtos';
 import { AuthenticationGuard } from '../guards';
 import { ProfileWithTandemsQueryFilter } from '../dtos/profiles/profiles-with-tandems-filters';
+import { ProfileWithTandemsProfilesResponse } from '../dtos/profiles/profiles-with-tandems-profiles.response';
+import { ProfileWithTandemsProfiles } from 'src/core/models/profileWithTandemsProfiles.model';
 
 @Controller('profiles')
 @Swagger.ApiTags('Profiles')
@@ -181,7 +183,7 @@ export class ProfileController {
   @CollectionResponse(ProfileResponse)
   async getCollectionWithTandems(
     @Query() query: ProfileWithTandemsQueryFilter,
-  ): Promise<Collection<ProfileResponse>> {
+  ): Promise<Collection<ProfileWithTandemsProfilesResponse>> {
     const { lastname, university, learningLanguage, page, limit } = query;
 
     const profiles = await this.getProfilesWithTandemsProfilesUsecase.execute({
@@ -196,9 +198,9 @@ export class ProfileController {
       },
     });
 
-    return new Collection<ProfileResponse>({
-      items: profiles.items.map((profile: Profile) =>
-        ProfileResponse.fromDomain(profile),
+    return new Collection<ProfileWithTandemsProfilesResponse>({
+      items: profiles.items.map((profile: ProfileWithTandemsProfiles) =>
+        ProfileWithTandemsProfilesResponse.fromDomain(profile),
       ),
       totalItems: profiles.totalItems,
     });
