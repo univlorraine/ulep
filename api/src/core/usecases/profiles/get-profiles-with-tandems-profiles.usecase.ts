@@ -2,26 +2,26 @@ import { Inject, Injectable } from '@nestjs/common';
 import {
   PROFILE_REPOSITORY,
   ProfileRepository,
-  ProfileWithTandemsQueryWhere,
+  ProfileWithTandemsProfilesQueryWhere,
 } from '../../ports/profile.repository';
 
-export class GetProfilesWithTandemsCommand {
+export class GetProfilesWithTandemsProfilesCommand {
   page: number;
   limit: number;
-  where?: ProfileWithTandemsQueryWhere;
+  where?: ProfileWithTandemsProfilesQueryWhere;
 }
 
 @Injectable()
-export class GetProfilesWithTandemsUsecase {
+export class GetProfilesWithTandemsProfilesUsecase {
   constructor(
     @Inject(PROFILE_REPOSITORY)
     private readonly profileRepository: ProfileRepository,
   ) {}
 
-  async execute(command: GetProfilesWithTandemsCommand) {
+  async execute(command: GetProfilesWithTandemsProfilesCommand) {
     const { page, limit, where } = command;
     const offset = (page - 1) * limit;
-    const result = await this.profileRepository.findAllWithTandems(
+    const result = await this.profileRepository.findAllWithTandemsProfiles(
       offset,
       limit,
       where,

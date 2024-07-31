@@ -213,7 +213,7 @@ const customDataProvider = {
             case 'profiles':
                 url.search = ProfilesQuery(params);
                 break;
-            case 'profiles/with-tandem':
+            case 'profiles/with-tandems-profiles':
                 url.search = ProfilesWithTandemsQuery(params);
                 break;
             case 'reports':
@@ -246,7 +246,7 @@ const customDataProvider = {
 
         const result = await response.json();
 
-        if (resource === 'profiles/with-tandem') {
+        if (resource === 'profiles/with-tandems-profiles') {
             // Filter the learning-languages array contained into the tandem subobject
             // to remove the root profile one (and keep only the pair one)
             const profilesWithOnlyMatchingTandemProfile = result.items.map((profile: ProfileWithTandems) => {

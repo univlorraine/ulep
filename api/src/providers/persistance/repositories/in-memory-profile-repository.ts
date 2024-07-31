@@ -46,7 +46,7 @@ export class InMemoryProfileRepository implements ProfileRepository {
     };
   }
 
-  async findAllWithTandems(
+  async findAllWithTandemsProfiles(
     offset?: number,
     limit?: number,
   ): Promise<Collection<Profile>> {

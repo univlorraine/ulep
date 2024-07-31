@@ -4,7 +4,7 @@ import {
   ProfileQueryOrderBy,
   ProfileQueryWhere,
   ProfileRepository,
-  ProfileWithTandemsQueryWhere,
+  ProfileWithTandemsProfilesQueryWhere,
 } from 'src/core/ports/profile.repository';
 import { Profile } from 'src/core/models';
 import {
@@ -154,10 +154,10 @@ export class PrismaProfileRepository implements ProfileRepository {
     };
   }
 
-  async findAllWithTandems(
+  async findAllWithTandemsProfiles(
     offset?: number,
     limit?: number,
-    where?: ProfileWithTandemsQueryWhere,
+    where?: ProfileWithTandemsProfilesQueryWhere,
   ): Promise<Collection<Profile>> {
     const wherePayload: any = where
       ? {

@@ -34,7 +34,7 @@ export interface ProfileQueryWhere {
   nativeLanguageCode?: string;
 }
 
-export interface ProfileWithTandemsQueryWhere {
+export interface ProfileWithTandemsProfilesQueryWhere {
   user: {
     lastname?: string;
     university?: string;
@@ -63,10 +63,10 @@ export interface ProfileRepository {
     where?: ProfileQueryWhere,
   ) => Promise<Collection<Profile>>;
 
-  findAllWithTandems: (
+  findAllWithTandemsProfiles: (
     offset?: number,
     limit?: number,
-    where?: ProfileWithTandemsQueryWhere,
+    where?: ProfileWithTandemsProfilesQueryWhere,
   ) => Promise<Collection<Profile>>;
 
   delete: (profile: Profile) => Promise<void>;
