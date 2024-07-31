@@ -152,6 +152,7 @@ export class ConversationController {
             conversationId,
             ownerId: body.senderId,
             mimetype: file?.mimetype,
+            originalFilename: body.filename,
         });
 
         if (file) {

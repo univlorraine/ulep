@@ -67,7 +67,12 @@ export class UploadMediaUsecase {
         message: Message,
         filename?: string,
     ): Promise<MediaObject> {
-        const image = MediaObject.image(file, 'chat', conversationId, filename);
+        const image = MediaObject.generate(
+            file,
+            'chat',
+            conversationId,
+            filename,
+        );
         await this.storageInterface.write('chat', image.name, file);
         await this.mediaObjectRepository.saveFile(image, message.id);
 

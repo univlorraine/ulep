@@ -3,6 +3,7 @@ export enum MessageType {
     Image = 'image',
     Audio = 'audio',
     File = 'file',
+    Link = 'link',
 }
 
 interface MessageProps {
@@ -15,6 +16,7 @@ interface MessageProps {
     type: MessageType;
     createdAt?: Date;
     updatedAt?: Date;
+    metadata?: any;
 }
 
 export class Message {
@@ -27,6 +29,7 @@ export class Message {
     readonly type: MessageType;
     readonly createdAt?: Date;
     readonly updatedAt?: Date;
+    readonly metadata?: any;
 
     constructor(props: MessageProps) {
         this.id = props.id;
@@ -38,6 +41,7 @@ export class Message {
         this.ownerId = props.ownerId;
         this.type = props.type;
         this.updatedAt = props.updatedAt;
+        this.metadata = props.metadata;
     }
 
     public static categorizeFileType(mimeType?: string): MessageType {

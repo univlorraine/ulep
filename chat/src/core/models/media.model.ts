@@ -27,7 +27,7 @@ export class MediaObject {
         this.size = props.size;
     }
 
-    static image(
+    static generate(
         file: Express.Multer.File,
         bucketName = 'chat',
         conversationId: string,

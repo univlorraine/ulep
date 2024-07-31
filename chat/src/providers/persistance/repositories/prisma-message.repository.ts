@@ -21,6 +21,7 @@ export class PrismaMessageRepository implements MessageRepository {
                 isReported: message.isReported,
                 type: message.type,
                 ownerId: message.ownerId,
+                metadata: message.metadata,
                 Conversation: { connect: { id: message.conversationId } },
             },
             ...MessagesRelations,
