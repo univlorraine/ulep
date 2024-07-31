@@ -2,15 +2,15 @@ import { IonContent } from '@ionic/react';
 import { Redirect, useHistory, useLocation } from 'react-router';
 import Conversation from '../../../domain/entities/chat/Conversation';
 import { useStoreState } from '../../../store/storeTypes';
-import ChatContent from '../../components/contents/ChatContent';
+import MediaContent from '../../components/contents/MediaContent';
 
-interface ChatPageProps {
+interface MediaPageProps {
     conversation: Conversation;
 }
 
-const ChatPage = () => {
+const MediaPage = () => {
     const history = useHistory();
-    const location = useLocation<ChatPageProps>();
+    const location = useLocation<MediaPageProps>();
     const { conversation } = location.state;
     const profile = useStoreState((state) => state.profile);
 
@@ -23,14 +23,14 @@ const ChatPage = () => {
     }
 
     const goBack = () => {
-        history.push('/conversations');
+        history.push('/chat', { conversation });
     };
 
     return (
         <IonContent>
-            <ChatContent conversation={conversation} goBack={goBack} profile={profile} isHybrid />
+            <MediaContent conversation={conversation} goBack={goBack} profile={profile} isHybrid />
         </IonContent>
     );
 };
 
-export default ChatPage;
+export default MediaPage;

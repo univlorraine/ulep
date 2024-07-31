@@ -1,0 +1,113 @@
+.header {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    margin-bottom: 4px;
+    width: 100%;
+}
+
+.alignRight {
+    justify-content: flex-end;
+}
+
+.alignLeft {
+    justify-content: flex-start;
+}
+
+.downloadButton {
+    background-color: transparent;
+    border: none;
+}
+
+.downloadContainer {
+    color: black;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    padding: 5px;
+    text-decoration: underline;
+    text-decoration-color: black;
+}
+
+.download {
+    margin: 8px;
+    width: 28px;
+    height: 28px;
+}
+
+.downloadTitle {
+    font-family: 'Poppins', sans-serif;
+    font-weight: 400;
+    font-size: 12px;
+}
+
+.messageContainer {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    margin: 12px;
+}
+
+.imageMessageContainer {
+    width: 100px;
+    height: 100px;
+    display: inline-block;
+    margin: 5px;
+}
+
+.message {
+    display: block;
+    padding: 10px 20px;
+    max-width: 80%;
+    word-wrap: break-word;
+    color: black;
+    font-family: 'Poppins', sans-serif;
+    font-weight: 400;
+    font-size: 12px;
+}
+
+.messageFile {
+    padding: 12px;
+    max-width: 80%;
+}
+
+.image {
+    height: 100px;
+    width: 100px;
+    object-fit: cover;
+}
+
+.name {
+    color: black;
+    font-family: 'Maven Pro', sans-serif;
+    font-weight: 400;
+    font-size: 14px;
+    margin-right: 8px;
+}
+
+.date {
+    color: black;
+    font-family: 'Maven Pro', sans-serif;
+    font-weight: 400;
+    font-size: 10px;
+}
+
+.name,
+.date {
+    display: inline-block;
+}
+
+.currentUser {
+    background-color: var(--primary-color);
+    border-radius: 20px 20px 0px 20px;
+    text-align: right;
+    margin-left: auto;
+}
+
+.otherUser {
+    background-color: white;
+    border-radius: 20px 20px 20px 0px;
+    text-align: left;
+    margin-right: auto;
+}

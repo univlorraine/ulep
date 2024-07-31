@@ -1,11 +1,16 @@
 import * as Swagger from '@nestjs/swagger';
 import { Type } from 'class-transformer';
 import { IsInt, IsOptional, IsString, Max, Min } from 'class-validator';
+import { MessageType } from 'src/core/models';
 
 export class GetMessagesQueryParams {
     @IsString()
     @IsOptional()
-    messageFilter?: string;
+    contentFilter?: string;
+
+    @IsString()
+    @IsOptional()
+    typeFilter?: MessageType;
 
     @Swagger.ApiProperty({ required: false, default: 30 })
     @IsOptional()

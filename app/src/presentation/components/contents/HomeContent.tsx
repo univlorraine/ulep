@@ -1,4 +1,3 @@
-import { IonContent } from '@ionic/react';
 import { useTranslation } from 'react-i18next';
 import Masonry, { ResponsiveMasonry } from 'react-responsive-masonry';
 import { useHistory } from 'react-router';
@@ -51,7 +50,7 @@ const HomeContent: React.FC<HomeContentProps> = ({
         .padStart(2, '0')}`;
 
     return (
-        <IonContent className={styles.content}>
+        <div className={styles.content}>
             <div className={`${styles.container} content-wrapper`}>
                 <div className={styles['header']}>
                     <div className={styles['hello-container']}>
@@ -118,7 +117,7 @@ const HomeContent: React.FC<HomeContentProps> = ({
                     </button>
                 </div>
             </div>
-        </IonContent>
+        </div>
     );
 };
 

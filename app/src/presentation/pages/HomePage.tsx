@@ -1,4 +1,4 @@
-import { useIonToast } from '@ionic/react';
+import { IonContent, useIonToast } from '@ionic/react';
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Redirect, useHistory } from 'react-router';
@@ -59,31 +59,35 @@ const HomePage: React.FC = () => {
 
     if (isHybrid) {
         return (
-            <HomeContent
-                onProfilePressed={onProfilePressed}
-                onReportPressed={onReportPressed}
-                onTandemPressed={onTandemPressed}
-                onValidatedTandemPressed={onValidatedTandemPressed}
-                isLoading={isLoading}
-                profile={profile}
-                tandems={tandems}
-                partnerUniversities={partnerUniversities}
-            />
+            <IonContent>
+                <HomeContent
+                    onProfilePressed={onProfilePressed}
+                    onReportPressed={onReportPressed}
+                    onTandemPressed={onTandemPressed}
+                    onValidatedTandemPressed={onValidatedTandemPressed}
+                    isLoading={isLoading}
+                    profile={profile}
+                    tandems={tandems}
+                    partnerUniversities={partnerUniversities}
+                />
+            </IonContent>
         );
     }
 
     return (
-        <OnlineWebLayout profile={profile}>
-            <HomeContent
-                isLoading={isLoading}
-                profile={profile}
-                onProfilePressed={onProfilePressed}
-                onReportPressed={onReportPressed}
-                onTandemPressed={onTandemPressed}
-                onValidatedTandemPressed={onValidatedTandemPressed}
-                tandems={tandems}
-                partnerUniversities={partnerUniversities}
-            />
+        <>
+            <OnlineWebLayout profile={profile}>
+                <HomeContent
+                    isLoading={isLoading}
+                    profile={profile}
+                    onProfilePressed={onProfilePressed}
+                    onReportPressed={onReportPressed}
+                    onTandemPressed={onTandemPressed}
+                    onValidatedTandemPressed={onValidatedTandemPressed}
+                    tandems={tandems}
+                    partnerUniversities={partnerUniversities}
+                />
+            </OnlineWebLayout>
             <ReportModal isVisible={displayReport} onClose={() => setDisplayReport(false)} />
             <ProfileModal
                 isVisible={displayProfile}
@@ -113,7 +117,7 @@ const HomePage: React.FC = () => {
                 pedagogy={selectedTandem?.pedagogy}
                 profile={selectedTandem?.partner}
             />
-        </OnlineWebLayout>
+        </>
     );
 };
 

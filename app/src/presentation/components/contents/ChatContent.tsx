@@ -1,6 +1,18 @@
-import { IonIcon, IonPage, useIonToast } from '@ionic/react';
+import {
+    IonButton,
+    IonContent,
+    IonIcon,
+    IonItem,
+    IonLabel,
+    IonList,
+    IonPage,
+    IonPopover,
+    useIonToast,
+} from '@ionic/react';
+import { imageOutline, searchOutline } from 'ionicons/icons';
 import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
+import { useHistory } from 'react-router';
 import { CloseBlackSvg, KebabSvg, LeftChevronSvg, PaperclipSvg, PictureSvg } from '../../../assets';
 import { useConfig } from '../../../context/ConfigurationContext';
 import Profile from '../../../domain/entities/Profile';
@@ -20,9 +32,10 @@ interface ChatContentProps {
     goBack?: () => void;
     isHybrid: boolean;
     profile: Profile;
+    setCurrentContent?: (content: string) => void;
 }
 
-const Content: React.FC<Omit<ChatContentProps, 'isHybrid'>> = ({ conversation, goBack, profile }) => {
+const Content: React.FC<ChatContentProps> = ({ conversation, goBack, profile, setCurrentContent, isHybrid }) => {
     const { t } = useTranslation();
     const [showToast] = useIonToast();
     const { cameraAdapter, fileAdapter, recorderAdapter, sendMessage, socketIoAdapter } = useConfig();
@@ -32,6 +45,8 @@ const Content: React.FC<Omit<ChatContentProps, 'isHybrid'>> = ({ conversation, g
     const [fileToSend, setFileToSend] = useState<File | undefined>();
     const [isRecording, setIsRecording] = useState<boolean>(false);
     const isBlocked = conversation.isBlocked;
+    const [showMenu, setShowMenu] = useState(false);
+    const history = useHistory();
 
     const { messages, isScrollOver, error, isLoading, loadMessages, addNewMessage } = useHandleMessagesFromConversation(
         conversation.id
@@ -152,13 +167,61 @@ const Content: React.FC<Omit<ChatContentProps, 'isHybrid'>> = ({ conversation, g
     };
 
     return (
-        <div className={`${styles.container} content-wrapper`}>
+        <div className={`${styles.container}`}>
             <div className={styles.header}>
-                {goBack ? <IonIcon icon={LeftChevronSvg} onClick={goBack} /> : <div />}
-                <span className={styles.title}>
+                {goBack && (
+                    <IonButton
+                        fill="clear"
+                        onClick={goBack}
+                        aria-label={t('chat.conversation_menu.aria_label') as string}
+                    >
+                        <IonIcon icon={LeftChevronSvg} size="medium" aria-hidden="true" />
+                    </IonButton>
+                )}
+                <h2 className={styles.title}>
                     {t('chat.title', { name: conversation.getMainConversationPartner(profile.user.id).firstname })}
-                </span>
-                <IonIcon icon={KebabSvg} />
+                </h2>
+                <IonButton
+                    fill="clear"
+                    id="click-trigger"
+                    className={styles['kebab-button']}
+                    onClick={() => setShowMenu(!showMenu)}
+                    aria-label={t('chat.conversation_menu.aria_label') as string}
+                >
+                    <IonIcon icon={KebabSvg} size="medium" aria-hidden="true" />
+                </IonButton>
+                <IonPopover trigger="click-trigger" triggerAction="click" showBackdrop={false}>
+                    <IonContent>
+                        <IonList lines="none">
+                            <IonItem
+                                button={true}
+                                onClick={() =>
+                                    setCurrentContent
+                                        ? setCurrentContent('media')
+                                        : history.push('/media', { conversation })
+                                }
+                            >
+                                <IonIcon icon={imageOutline} aria-hidden="true" />
+                                <IonLabel className={styles['chat-popover-label']}>
+                                    {t('chat.conversation_menu.medias')}
+                                </IonLabel>
+                            </IonItem>
+                            <IonItem
+                                button={true}
+                                onClick={() =>
+                                    setCurrentContent
+                                        ? setCurrentContent('search')
+                                        : history.push('/search', { conversation })
+                                }
+                            >
+                                <IonIcon icon={searchOutline} aria-hidden="true" />
+                                <IonLabel className={styles['chat-popover-label']}>
+                                    {t('chat.conversation_menu.search')}
+                                </IonLabel>
+                            </IonItem>
+                        </IonList>
+                    </IonContent>
+                </IonPopover>
             </div>
             {!isLoading ? (
                 <MessagesList
@@ -228,14 +291,28 @@ const Content: React.FC<Omit<ChatContentProps, 'isHybrid'>> = ({ conversation, g
     );
 };
 
-const ChatContent: React.FC<ChatContentProps> = ({ conversation, isHybrid, goBack, profile }) => {
+const ChatContent: React.FC<ChatContentProps> = ({ conversation, isHybrid, goBack, profile, setCurrentContent }) => {
     if (!isHybrid) {
-        return <Content conversation={conversation} goBack={goBack} profile={profile} />;
+        return (
+            <Content
+                conversation={conversation}
+                goBack={goBack}
+                profile={profile}
+                isHybrid={isHybrid}
+                setCurrentContent={setCurrentContent}
+            />
+        );
     }
 
     return (
         <IonPage className={styles.content}>
-            <Content conversation={conversation} goBack={goBack} profile={profile} />
+            <Content
+                conversation={conversation}
+                goBack={goBack}
+                profile={profile}
+                isHybrid={isHybrid}
+                setCurrentContent={setCurrentContent}
+            />
         </IonPage>
     );
 };

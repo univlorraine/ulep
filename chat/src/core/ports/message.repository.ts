@@ -1,4 +1,4 @@
-import { Message } from 'src/core/models';
+import { Message, MessageType } from 'src/core/models';
 
 export const MESSAGE_REPOSITORY = 'message.repository';
 
@@ -13,7 +13,8 @@ export interface MessageRepository {
     findMessagesByConversationId: (
         id: string,
         pagination?: MessagePagination,
-        filter?: string,
+        contentFilter?: string,
+        typeFilter?: MessageType,
     ) => Promise<Message[]>;
     update: (message: Message) => Promise<Message>;
 }

@@ -92,7 +92,8 @@ export class ChatService implements ChatServicePort {
     conversationId: string,
     limit: number,
     lastMessageId?: string,
-    messageFilter?: string,
+    contentFilter?: string,
+    typeFilter?: string,
   ): Promise<any> {
     if (!this.env.get('CHAT_URL')) {
       return;
@@ -104,7 +105,9 @@ export class ChatService implements ChatServicePort {
           'CHAT_URL',
         )}/conversations/messages/${conversationId}?limit=${limit}${
           lastMessageId ? `&lastMessageId=${lastMessageId}` : ''
-        }${messageFilter ? `&messageFilter=${messageFilter}` : ''}`,
+        }${contentFilter ? `&contentFilter=${contentFilter}` : ''}${
+          typeFilter ? `&typeFilter=${typeFilter}` : ''
+        }`,
         { headers: this.headers },
       );
 

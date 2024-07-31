@@ -111,6 +111,16 @@
                 "blocked": "Le tandem est en pause, tu ne peux pas envoyer de messages",
                 "unblocked": "Écris ton message..."
             }
+        },
+        "conversation_menu": {
+            "aria_label": "Menu de la conversation",
+            "search": "Rechercher dans la conversation",
+            "medias": "Afficher les médias"
+        },
+        "medias": {
+            "title": "Médias partagés",
+            "files": "Fichiers",
+            "images": "Images"
         }
     },
     "connection_page": {

@@ -105,6 +105,16 @@
                 "blocked": "The tandem is on pause, you cannot send messages",
                 "unblocked": "Write your message..."
             }
+        },
+        "conversation_menu": {
+            "aria_label": "Conversation menu",
+            "search": "Search in conversation",
+            "medias": "Show media"
+        },
+        "medias": {
+            "title": "Shared media",
+            "files": "Files",
+            "images": "Images"
         }
     },
     "connection_page": {

@@ -1,16 +1,15 @@
 import { IonRadio, IonRadioGroup, useIonToast } from '@ionic/react';
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
+import { useHistory } from 'react-router';
+import { PlusPng } from '../../assets';
 import { useConfig } from '../../context/ConfigurationContext';
 import { useStoreState } from '../../store/storeTypes';
-import RadioButton from '../components/RadioButton';
+import NetworkImage from '../components/NetworkImage';
 import TextInput from '../components/TextInput';
 import WebLayoutCentered from '../components/layout/WebLayoutCentered';
 import { isEmailCorrect, isNameCorrect } from '../utils';
 import styles from './css/SignUp.module.css';
-import { PlusPng } from '../../assets';
-import { useHistory } from 'react-router';
-import NetworkImage from '../components/NetworkImage';
 
 const EditInformationsPage: React.FC = () => {
     const { t } = useTranslation();
@@ -86,7 +85,7 @@ const EditInformationsPage: React.FC = () => {
 
                 <button className="secondary-button" onClick={() => openGallery()}>
                     {!profilePicture && profile?.user.avatar && (
-                        <NetworkImage id={profile.user.avatar.id} className={styles.image} />
+                        <NetworkImage id={profile.user.avatar.id} className={styles.image} aria-hidden={true} />
                     )}
                     {(profilePicture || !profile?.user.avatar) && (
                         <img
