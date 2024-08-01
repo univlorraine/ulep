@@ -92,7 +92,7 @@ workflows:
   # ionic-capacitor-ios-workflow:
   #     name: Build and Deploy IOS
   #     max_build_duration: 120
-  #     instance_type: mac_pro
+  #     instance_type: mac_mini_m1
   #     integrations:
   #         app_store_connect: theTribe
   #     environment:
@@ -105,7 +105,7 @@ workflows:
   #             XCODE_SCHEME: "staging"
   #             APP_STORE_APP_ID: $APP_STORE_APP_ID
   #         node: 16.14.0
-  #         xcode: 14.2
+  #         xcode: 15.0
   #         cocoapods: 1.11.2
   #     triggering:
   #         events:
@@ -145,7 +145,7 @@ workflows:
   ionic-capacitor-android-workflow:
     name: Build and Deploy Android
     max_build_duration: 120
-    instance_type: mac_pro
+    instance_type: mac_mini_m1 #mac_mini_m2 is only available on fixed price annual plan.
     environment:
       android_signing:
       - theTribe
@@ -156,7 +156,7 @@ workflows:
         PACKAGE_NAME: "fr.univlorraine.ulep"
         # GOOGLE_PLAY_TRACK: alpha
       node: 18.12.0
-      xcode: 14.2
+      xcode: 15.0
       cocoapods: 1.12.1
       java: 19.0.1
     triggering:
@@ -189,14 +189,14 @@ workflows:
   analyse-and-test:
     name: Ionic analyse and test
     max_build_duration: 120
-    instance_type: mac_pro
+    instance_type: mac_mini_m1
     cache:
       cache_paths:
       - $CM_BUILD_DIR/mobile/ios/Pods
       - $CM_BUILD_DIR/mobile/node_modules
     environment:
       node: 18.12.0
-      xcode: 14.2
+      xcode: 15.0
       cocoapods: 1.12.1
       groups:
       - staging
