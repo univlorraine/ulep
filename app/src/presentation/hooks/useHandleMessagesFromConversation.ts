@@ -3,7 +3,17 @@ import { useConfig } from '../../context/ConfigurationContext';
 import { Message, MessageType } from '../../domain/entities/chat/Message';
 import { useStoreState } from '../../store/storeTypes';
 
-const useHandleMessagesFromConversation = (conversationId: string, typeFilter?: MessageType) => {
+interface UseHandleMessagesFromConversationProps {
+    conversationId: string;
+    typeFilter?: MessageType;
+    limit?: number;
+}
+
+const useHandleMessagesFromConversation = ({
+    conversationId,
+    typeFilter,
+    limit = 10,
+}: UseHandleMessagesFromConversationProps) => {
     const { getMessagesFromConversation } = useConfig();
     const [lastMessageId, setLastMessageId] = useState<string>();
     const profile = useStoreState((state) => state.profile);
@@ -39,7 +49,7 @@ const useHandleMessagesFromConversation = (conversationId: string, typeFilter?: 
         });
         const messagesConversationResult = await getMessagesFromConversation.execute(conversationId, {
             lastMessageId: isFirstMessage ? undefined : lastMessageId,
-            limit: 10,
+            limit,
             typeFilter,
         });
         if (messagesConversationResult instanceof Error) {

@@ -48,9 +48,9 @@ const Content: React.FC<ChatContentProps> = ({ conversation, goBack, profile, se
     const [showMenu, setShowMenu] = useState(false);
     const history = useHistory();
 
-    const { messages, isScrollOver, error, isLoading, loadMessages, addNewMessage } = useHandleMessagesFromConversation(
-        conversation.id
-    );
+    const { messages, isScrollOver, isLoading, loadMessages, addNewMessage } = useHandleMessagesFromConversation({
+        conversationId: conversation.id,
+    });
 
     const onSendPressed = async () => {
         if (isRecording || (!message && !imageToSend && !audioFile && !fileToSend)) {
@@ -167,7 +167,7 @@ const Content: React.FC<ChatContentProps> = ({ conversation, goBack, profile, se
     };
 
     return (
-        <div className={`${styles.container}`}>
+        <div className={`${styles.container} content-wrapper`}>
             <div className={styles.header}>
                 {goBack && (
                     <IonButton

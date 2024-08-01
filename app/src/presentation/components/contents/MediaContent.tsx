@@ -20,13 +20,14 @@ interface MediaContentProps {
 const Content: React.FC<Omit<MediaContentProps, 'isHybrid'>> = ({ conversation, goBack, profile }) => {
     const { t } = useTranslation();
     const [selectedFilter, setSelectedFilter] = useState<MessageType>(MessageType.Image);
-    const { messages, isScrollOver, isLoading, loadMessages } = useHandleMessagesFromConversation(
-        conversation.id,
-        selectedFilter
-    );
+    const { messages, isScrollOver, isLoading, loadMessages } = useHandleMessagesFromConversation({
+        conversationId: conversation.id,
+        typeFilter: selectedFilter,
+        limit: 30,
+    });
 
     return (
-        <div className={styles.container}>
+        <div className={`${styles.container} content-wrapper`}>
             <div className={styles.header}>
                 <div className={styles['header-title']}>
                     {goBack && (
@@ -39,7 +40,7 @@ const Content: React.FC<Omit<MediaContentProps, 'isHybrid'>> = ({ conversation, 
                         </IonButton>
                     )}
                     <h2 className={styles.title}>{t('chat.medias.title')}</h2>
-                    <div style={{ width: '50px' }} />
+                    <div style={{ width: '50px' }} aria-hidden="true" />
                 </div>
                 <IonList lines="none" className={styles['header-filters']}>
                     <IonItem

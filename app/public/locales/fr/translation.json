@@ -100,7 +100,8 @@
         "signup-progress-bar-label": "Progression de l'inscription",
         "required_fields_mention_part1": "Les champs suivis d'un",
         "required_fields_mention_part2": "sont obligatoires",
-        "close_profile": "Fermer le profil"
+        "close_profile": "Fermer le profil",
+        "download": "Télécharger"
     },
     "chat": {
         "fileDownloaded": "Fichier téléchargé",

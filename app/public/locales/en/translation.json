@@ -94,7 +94,8 @@
         "welcome": "Bienvenue sur ULEP,",
         "welcome_subtext": "le meilleur moyen de pratiquer une langue",
         "welcome_btn": "Apprends une nouvelle langue en tandem",
-        "close": "Close"
+        "close": "Close",
+        "download": "Download"
     },
     "chat": {
         "fileDownloaded": "File downloaded",

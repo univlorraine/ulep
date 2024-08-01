@@ -1,4 +1,4 @@
-import { useIonToast } from '@ionic/react';
+import { IonButton, IonIcon, useIonToast } from '@ionic/react';
 import { useTranslation } from 'react-i18next';
 import { DownloadSvg } from '../../../assets';
 import { useConfig } from '../../../context/ConfigurationContext';
@@ -65,12 +65,16 @@ const MessageFile: React.FC<MessageProps> = ({ message, isCurrentUserMessage }) 
 
     return (
         <div className={`${styles.messageFile} ${messageClass}`}>
-            <button className={styles.downloadButton} onClick={handleDownload}>
+            <IonButton fill="clear" className={styles.downloadButton} onClick={handleDownload}>
                 <div className={styles.downloadContainer}>
                     <span className={styles.downloadTitle}>{fileName}</span>
-                    <img className={styles.download} src={DownloadSvg} alt="Download" />
+                    <IonIcon
+                        className={styles.download}
+                        icon={DownloadSvg}
+                        aria-label={t('gloabl.download') as string}
+                    />
                 </div>
-            </button>
+            </IonButton>
         </div>
     );
 };

@@ -17,6 +17,7 @@
 .downloadButton {
     background-color: transparent;
     border: none;
+    text-transform: none;
 }
 
 .downloadContainer {
