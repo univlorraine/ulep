@@ -25,27 +25,27 @@ class OGImageResponse {
 class OGResponse {
     @Swagger.ApiProperty({ type: 'string' })
     @Expose({ groups: ['read'] })
-    ogSiteName: string;
+    ogSiteName?: string;
 
     @Swagger.ApiProperty({ type: 'string' })
     @Expose({ groups: ['read'] })
-    ogUrl: string;
+    ogUrl?: string;
 
     @Swagger.ApiProperty({ type: 'string' })
     @Expose({ groups: ['read'] })
-    ogLocale: string;
+    ogLocale?: string;
 
     @Swagger.ApiProperty({ type: 'array' })
     @Expose({ groups: ['read'] })
-    ogImage: any[];
+    ogImage?: OGImageResponse[];
 
     @Swagger.ApiProperty({ type: 'string' })
     @Expose({ groups: ['read'] })
-    ogTitle: string;
+    ogTitle?: string;
 
     @Swagger.ApiProperty({ type: 'string' })
     @Expose({ groups: ['read'] })
-    ogDescription: string;
+    ogDescription?: string;
 
     constructor(partial: Partial<OGResponse>) {
         Object.assign(this, partial);
@@ -56,7 +56,10 @@ class OGResponse {
             ogSiteName: metadata.ogSiteName,
             ogUrl: metadata.ogUrl,
             ogLocale: metadata.ogLocale,
-            ogImage: metadata.ogImage.map(OGImageResponse.from),
+            ogImage:
+                metadata.ogImage && metadata.ogImage.length > 0
+                    ? metadata.ogImage.map(OGImageResponse.from)
+                    : [],
             ogTitle: metadata.ogTitle,
             ogDescription: metadata.ogDescription,
         });
@@ -78,7 +81,9 @@ class MetadataMessageResponse {
     static from(metadata: any): MetadataMessageResponse {
         return new MetadataMessageResponse({
             originalFilename: metadata.originalFilename,
-            openGraphResult: OGResponse.from(metadata.openGraphResult),
+            openGraphResult: metadata.openGraphResult
+                ? OGResponse.from(metadata.openGraphResult)
+                : undefined,
         });
     }
 }
@@ -112,7 +117,6 @@ export class MessageResponse {
     }
 
     static from(message: Message): MessageResponse {
-        console.log(message.metadata.openGraphResult.ogImage);
         return new MessageResponse({
             id: message.id,
             createdAt: message.createdAt,
