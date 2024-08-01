@@ -58,6 +58,10 @@ export class GetMessagesFromConversationUsecase {
       (message) =>
         ({
           ...message,
+          metadata: {
+            openGraphResult: message.metadata?.openGraphResult,
+            originalFilename: message.metadata?.originalFilename,
+          },
           user: userMap.get(message.ownerId),
         } as MessageWithUser),
     );

@@ -27,6 +27,7 @@ export interface Message {
   createdAt: Date;
   ownerId: string;
   type: string;
+  metadata: any;
 }
 
 export interface MessageWithUser {
@@ -35,6 +36,7 @@ export interface MessageWithUser {
   createdAt: Date;
   user: User | UserRepresentation;
   type: string;
+  metadata: any;
 }
 
 //TODO: Change any to a proper type
