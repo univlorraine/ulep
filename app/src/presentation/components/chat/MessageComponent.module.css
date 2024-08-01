@@ -14,12 +14,9 @@
     justify-content: flex-start;
 }
 
-.downloadButton {
+.downloadContainer {
     background-color: transparent;
     border: none;
-}
-
-.downloadContainer {
     color: black;
     display: flex;
     flex-direction: row;
@@ -36,6 +33,7 @@
 }
 
 .downloadTitle {
+    color: black;
     font-family: 'Poppins', sans-serif;
     font-weight: 400;
     font-size: 12px;

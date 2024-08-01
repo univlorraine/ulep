@@ -3,7 +3,7 @@ import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { DownloadSvg } from '../../../assets';
 import { useConfig } from '../../../context/ConfigurationContext';
-import { Message } from '../../../domain/entities/chat/Message';
+import { Message, MessageType } from '../../../domain/entities/chat/Message';
 import AudioLine from '../AudioLine';
 import styles from './MessageComponent.module.css';
 
@@ -55,7 +55,7 @@ const MessageComponent: React.FC<MessageProps> = ({ message, isCurrentUserMessag
 
     const renderMessageContent = (onMessagePressed: (e: React.MouseEvent<HTMLIonButtonElement>) => void) => {
         switch (message.type) {
-            case 'text':
+            case MessageType.Text:
                 return (
                     <MessageText
                         message={message}
@@ -63,7 +63,7 @@ const MessageComponent: React.FC<MessageProps> = ({ message, isCurrentUserMessag
                         onMessagePressed={onMessagePressed}
                     />
                 );
-            case 'image':
+            case MessageType.Image:
                 return (
                     <MessageImage
                         message={message}
@@ -71,7 +71,7 @@ const MessageComponent: React.FC<MessageProps> = ({ message, isCurrentUserMessag
                         onMessagePressed={onMessagePressed}
                     />
                 );
-            case 'audio':
+            case MessageType.Audio:
                 return (
                     <MessageAudio
                         message={message}
@@ -79,7 +79,7 @@ const MessageComponent: React.FC<MessageProps> = ({ message, isCurrentUserMessag
                         onMessagePressed={onMessagePressed}
                     />
                 );
-            case 'file':
+            case MessageType.File:
                 return (
                     <MessageFile
                         message={message}
@@ -185,14 +185,12 @@ const MessageFile: React.FC<MessageProps> = ({ message, isCurrentUserMessage, on
             onClick={onMessagePressed}
         >
             <IonButton fill="clear" className={styles.downloadButton} onClick={handleDownload}>
-                <div className={styles.downloadContainer}>
-                    <IonText className={styles.downloadTitle}>{fileName}</IonText>
-                    <IonIcon
-                        aria-label={t('chat.ariaLabelFileDownloaded', { filename: fileName }) as string}
-                        className={styles.download}
-                        src={DownloadSvg}
-                    />
-                </div>
+                <IonText className={styles.downloadTitle}>{fileName}</IonText>
+                <IonIcon
+                    aria-label={t('chat.ariaLabelFileDownloaded', { filename: fileName }) as string}
+                    className={styles.download}
+                    src={DownloadSvg}
+                />
             </IonButton>
         </IonButton>
     );
