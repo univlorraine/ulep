@@ -71,12 +71,11 @@
 }
 
 .linkText {
-    margin: 20px 0px;
+    margin: 10px 0px;
 }
 
 .messageImage {
     display: block;
-    padding: 12px;
     max-height: 20%;
     max-width: 80%;
 }
