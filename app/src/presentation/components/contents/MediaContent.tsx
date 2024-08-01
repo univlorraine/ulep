@@ -42,10 +42,22 @@ const Content: React.FC<Omit<MediaContentProps, 'isHybrid'>> = ({ conversation, 
                     <div style={{ width: '50px' }} />
                 </div>
                 <IonList lines="none" className={styles['header-filters']}>
-                    <IonItem button={true} onClick={() => setSelectedFilter(MessageType.Image)}>
+                    <IonItem
+                        button={true}
+                        onClick={() => setSelectedFilter(MessageType.Image)}
+                        className={`${styles.btnFilters} ${
+                            selectedFilter === MessageType.Image ? styles.btnFiltersActive : ''
+                        }`}
+                    >
                         <IonLabel>{t('chat.medias.images')}</IonLabel>
                     </IonItem>
-                    <IonItem button={true} onClick={() => setSelectedFilter(MessageType.File)}>
+                    <IonItem
+                        button={true}
+                        onClick={() => setSelectedFilter(MessageType.File)}
+                        className={`${styles.btnFilters} ${
+                            selectedFilter === MessageType.File ? styles.btnFiltersActive : ''
+                        }`}
+                    >
                         <IonLabel>{t('chat.medias.files')}</IonLabel>
                     </IonItem>
                 </IonList>

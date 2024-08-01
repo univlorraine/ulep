@@ -114,7 +114,8 @@
         "medias": {
             "title": "Shared media",
             "files": "Files",
-            "images": "Images"
+            "images": "Images",
+            "images-alt": "Shared image"
         }
     },
     "connection_page": {

@@ -44,7 +44,8 @@ const MediaComponent: React.FC<MessageProps> = ({ message, isCurrentUserMessage 
 };
 
 const MessageImage: React.FC<MessageProps> = ({ message }) => {
-    return <img className={styles.image} src={message.content} />;
+    const { t } = useTranslation();
+    return <img className={styles.image} src={message.content} alt={t('chat.medias.images-alt') as string} />;
 };
 
 const MessageFile: React.FC<MessageProps> = ({ message, isCurrentUserMessage }) => {

@@ -120,7 +120,8 @@
         "medias": {
             "title": "Médias partagés",
             "files": "Fichiers",
-            "images": "Images"
+            "images": "Images",
+            "images-alt": "Image partagée"
         }
     },
     "connection_page": {
