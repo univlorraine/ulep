@@ -1,9 +1,9 @@
 import React from 'react';
 import { Button, useRedirect } from 'react-admin';
-import { Profile } from '../../../entities/Profile';
+import { ProfileWithTandemsProfiles } from '../../../entities/ProfileWithTandemsProfiles';
 
 interface ProfileLinkParams {
-    profile: Profile;
+    profile: ProfileWithTandemsProfiles;
     learningLanguageCode: string;
 }
 

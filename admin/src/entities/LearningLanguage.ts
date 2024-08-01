@@ -2,7 +2,7 @@ import Campus from './Campus';
 // eslint-disable-next-line import/no-cycle
 import { Profile } from './Profile';
 // eslint-disable-next-line import/no-cycle
-import { TandemStatus, Tandem } from './Tandem';
+import { TandemStatus, Tandem, TandemWithPartnerLearningLanguage } from './Tandem';
 
 export enum LearningType {
     ETANDEM = 'ETANDEM',
@@ -18,6 +18,24 @@ export type LearningLanguage = {
     createdAt: Date;
     profile: Profile;
     tandem?: Tandem;
+    sameGender: boolean;
+    learningType: LearningType;
+    sameAge: boolean;
+    campus?: Campus;
+    certificateOption?: boolean;
+    specificProgram?: boolean;
+    hasPriority?: boolean;
+    sameTandemEmail?: string;
+};
+
+export type LearningLanguageWithTandem = {
+    id: string;
+    code: string;
+    level: string;
+    name: string;
+    createdAt: Date;
+    profile: Profile;
+    tandem?: TandemWithPartnerLearningLanguage;
     sameGender: boolean;
     learningType: LearningType;
     sameAge: boolean;

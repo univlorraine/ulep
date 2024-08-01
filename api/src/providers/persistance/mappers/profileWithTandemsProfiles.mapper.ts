@@ -3,13 +3,13 @@ import { ProfilesRelations } from './profile.mapper';
 import { userMapper, UserRelations, UserSnapshot } from './user.mapper';
 import { languageMapper } from './language.mapper';
 import {
-  LearningLanguage,
+  LearningLanguageWithTandemWithPartnerLearningLanguage,
   LearningType,
   ProficiencyLevel,
 } from 'src/core/models';
 import { campusMapper } from './campus.mapper';
-import { tandemMapper } from './tandem.mapper';
 import { ProfileWithTandemsProfiles } from 'src/core/models/profileWithTandemsProfiles.model';
+import { tandemWithPartnerLearningLanguageMapper } from './tandemWithPartnerLearningLanguage.mapper';
 
 export type ProfileWithTandemsProfilesSnapshot = Prisma.Profiles & {
   User: UserSnapshot;
@@ -56,7 +56,6 @@ export const ProfilesRelationsWithTandemProfile = {
 export const profileWithTandemsProfilesMapper = (
   instance: ProfileWithTandemsProfilesSnapshot,
 ): ProfileWithTandemsProfiles => {
-  const availabilities = JSON.parse(instance.availabilities as string);
   return new ProfileWithTandemsProfiles({
     id: instance.id,
     user: userMapper(instance.User),
@@ -66,7 +65,7 @@ export const profileWithTandemsProfilesMapper = (
     ),
     learningLanguages: instance.LearningLanguages.map(
       (learningLanguage) =>
-        new LearningLanguage({
+        new LearningLanguageWithTandemWithPartnerLearningLanguage({
           id: learningLanguage.id,
           createdAt: learningLanguage.created_at,
           updatedAt: learningLanguage.updated_at,
@@ -79,7 +78,11 @@ export const profileWithTandemsProfilesMapper = (
           campus:
             learningLanguage.Campus && campusMapper(learningLanguage.Campus),
           tandem:
-            learningLanguage.Tandem && tandemMapper(learningLanguage.Tandem),
+            learningLanguage.Tandem &&
+            tandemWithPartnerLearningLanguageMapper(
+              learningLanguage.Tandem,
+              instance.id,
+            ),
           certificateOption: learningLanguage.certificate_option,
           specificProgram: learningLanguage.specific_program,
         }),

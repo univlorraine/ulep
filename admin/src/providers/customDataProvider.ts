@@ -11,7 +11,6 @@ import {
     fetchUtils,
 } from 'react-admin';
 import { LearningLanguage } from '../entities/LearningLanguage';
-import { ProfileWithTandems } from '../entities/Profile';
 import { RoutineExecution } from '../entities/RoutineExecution';
 import { TandemStatus } from '../entities/Tandem';
 import AdministratorsQuery from '../queries/AdministratorsQuery';
@@ -245,39 +244,6 @@ const customDataProvider = {
         }
 
         const result = await response.json();
-
-        if (resource === 'profiles/with-tandems-profiles') {
-            // Filter the learning-languages array contained into the tandem subobject
-            // to remove the root profile one (and keep only the pair one)
-            const profilesWithOnlyMatchingTandemProfile = result.items.map((profile: ProfileWithTandems) => {
-                const filteredLearningLanguages = profile.learningLanguages.map(
-                    (learningLanguage: LearningLanguage) => {
-                        if (learningLanguage.tandem) {
-                            const filteredLL = learningLanguage.tandem?.learningLanguages.filter(
-                                (tandemLL) => tandemLL.profile.id !== profile.id
-                            );
-
-                            return {
-                                ...learningLanguage,
-                                tandem: {
-                                    ...learningLanguage.tandem,
-                                    learningLanguages: filteredLL,
-                                },
-                            };
-                        }
-
-                        return learningLanguage;
-                    }
-                );
-
-                return {
-                    ...profile,
-                    learningLanguages: filteredLearningLanguages,
-                };
-            });
-
-            return { data: profilesWithOnlyMatchingTandemProfile, total: result.totalItems };
-        }
 
         if (!result.items) {
             return { data: result, total: result.length };

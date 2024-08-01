@@ -6,7 +6,7 @@ import CustomAvatar from '../../../components/CustomAvatar';
 import { DisplayLearningType, DisplaySameTandem } from '../../../components/translated';
 import UserStatusChips from '../../../components/UserStatusChips';
 import { LearningLanguage } from '../../../entities/LearningLanguage';
-import { ProfileWithTandems } from '../../../entities/Profile';
+import { ProfileWithTandemsProfiles } from '../../../entities/ProfileWithTandemsProfiles';
 import { TandemStatus, Tandem } from '../../../entities/Tandem';
 import codeLanguageToFlag from '../../../utils/codeLanguageToFlag';
 
@@ -102,7 +102,7 @@ const ComponentHeader = ({
 type TandemCardProps = {
     partnerType?: PartnerType;
     partnerLearningLanguage: LearningLanguage | undefined;
-    userProfile: ProfileWithTandems;
+    userProfile: ProfileWithTandemsProfiles;
     userLearningLanguage: LearningLanguage;
     compatibilityScore: number | undefined;
     hasActiveTandem?: boolean;

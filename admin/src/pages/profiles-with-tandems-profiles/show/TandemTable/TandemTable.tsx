@@ -8,7 +8,8 @@ import { DisplayLearningType } from '../../../../components/translated';
 import Language from '../../../../entities/Language';
 import { LearningType } from '../../../../entities/LearningLanguage';
 import { MatchScore } from '../../../../entities/Match';
-import { Profile, ProfileWithTandems } from '../../../../entities/Profile';
+import { Profile } from '../../../../entities/Profile';
+import { ProfileWithTandemsProfiles } from '../../../../entities/ProfileWithTandemsProfiles';
 import codeLanguageToFlag from '../../../../utils/codeLanguageToFlag';
 import hasTandemManagementPermission from '../../hasTandemManagementPermission';
 import ProfileLink from '../../ui/ProfileTandemLink';
@@ -37,7 +38,7 @@ interface TandemTableProps {
 
 const TandemTable = ({ rows, actions, displayTandemLanguage, pagination }: TandemTableProps) => {
     const translate = useTranslate();
-    const record: ProfileWithTandems = useRecordContext();
+    const record: ProfileWithTandemsProfiles = useRecordContext();
 
     const [anchorEl, setAnchorEl] = React.useState<HTMLElement | null>(null);
     const [selectedMatchScore, setSelectedMatchScore] = useState<MatchScore | undefined>();

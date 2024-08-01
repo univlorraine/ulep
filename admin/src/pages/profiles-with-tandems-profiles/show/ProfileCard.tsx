@@ -6,12 +6,12 @@ import { DisplaySameTandem } from '../../../components/translated';
 import UserStatusChips from '../../../components/UserStatusChips';
 import WarningCircle from '../../../components/WarningCircle';
 import { LearningLanguage } from '../../../entities/LearningLanguage';
-import { ProfileWithTandems } from '../../../entities/Profile';
+import { ProfileWithTandemsProfiles } from '../../../entities/ProfileWithTandemsProfiles';
 import codeLanguageToFlag from '../../../utils/codeLanguageToFlag';
 import ProfileLink from '../ui/ProfileLink';
 
 type ProfileCardProps = {
-    record: ProfileWithTandems;
+    record: ProfileWithTandemsProfiles;
     learningLanguage: LearningLanguage;
     hasActiveTandem: boolean;
 };

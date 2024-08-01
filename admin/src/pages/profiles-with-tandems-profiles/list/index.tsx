@@ -19,8 +19,9 @@ import {
 import ColoredChips, { ChipsColors } from '../../../components/ColoredChips';
 import PageTitle from '../../../components/PageTitle';
 import { Role } from '../../../entities/Administrator';
-import { LearningLanguage } from '../../../entities/LearningLanguage';
-import { ProfileWithTandems, getProfileDisplayName } from '../../../entities/Profile';
+import { LearningLanguageWithTandem } from '../../../entities/LearningLanguage';
+import { getProfileDisplayName } from '../../../entities/Profile';
+import { ProfileWithTandemsProfiles } from '../../../entities/ProfileWithTandemsProfiles';
 import codeLanguageToFlag from '../../../utils/codeLanguageToFlag';
 import isAgeCriterionMet from '../../../utils/isAgeCriterionMet';
 import hasTandemManagementPermission from '../hasTandemManagementPermission';
@@ -93,6 +94,16 @@ const LearningLanguageList = () => {
                   source="user.lastname"
                   alwaysOn
               />,
+              <AutocompleteInput
+                  key="learningLanguage"
+                  choices={languages?.map((language) => ({
+                      id: language.id,
+                      name: `${codeLanguageToFlag(language.code)}`,
+                  }))}
+                  label={translate('learning_languages.list.filters.learningLanguage.label')}
+                  source="learningLanguage"
+                  alwaysOn
+              />,
           ];
 
     const filters = universities ? adaptedFilters : [];
@@ -112,7 +123,7 @@ const LearningLanguageList = () => {
                     universityIds={[...selectedUniversityIds, identity.universityId]}
                 />
             )}
-            <List<ProfileWithTandems>
+            <List<ProfileWithTandemsProfiles>
                 actions={
                     <TopToolbar>
                         <FilterButton disableSaveQuery />
@@ -127,7 +138,7 @@ const LearningLanguageList = () => {
                 <Datagrid bulkActionButtons={false}>
                     <FunctionField
                         label={translate('learning_languages.list.tableColumns.name')}
-                        render={(record: ProfileWithTandems) => (
+                        render={(record: ProfileWithTandemsProfiles) => (
                             <>
                                 <Box className="line profile">
                                     <Box sx={{ display: 'flex', flexDirection: 'column' }}>
@@ -142,17 +153,17 @@ const LearningLanguageList = () => {
                                                 <PeopleAltIcon color="disabled" fontSize="small" />
                                                 <Box sx={{ display: 'flex', flexDirection: 'column' }}>
                                                     {getProfileDisplayName(
-                                                        learningLanguage.tandem.learningLanguages[0].profile
+                                                        learningLanguage.tandem.partnerLearningLanguage.profile
                                                     )}{' '}
                                                     (
                                                     {codeLanguageToFlag(
-                                                        learningLanguage.tandem.learningLanguages[0].profile
+                                                        learningLanguage.tandem.partnerLearningLanguage.profile
                                                             .nativeLanguage.code
                                                     )}
                                                     )
                                                     <Typography sx={{ color: '#767676' }}>
                                                         {
-                                                            learningLanguage.tandem.learningLanguages[0].profile.user
+                                                            learningLanguage.tandem.partnerLearningLanguage.profile.user
                                                                 .university.name
                                                         }
                                                     </Typography>
@@ -176,10 +187,10 @@ const LearningLanguageList = () => {
                     />
                     <FunctionField
                         label={translate('learning_languages.list.tableColumns.learnedLanguage')}
-                        render={(record: ProfileWithTandems) => (
+                        render={(record: ProfileWithTandemsProfiles) => (
                             <>
                                 <Box className="line">
-                                    {record.learningLanguages.map((learningLanguage: LearningLanguage) => (
+                                    {record.learningLanguages.map((learningLanguage: LearningLanguageWithTandem) => (
                                         <ColoredChips
                                             key={learningLanguage.code}
                                             color="default"
@@ -187,7 +198,7 @@ const LearningLanguageList = () => {
                                         />
                                     ))}
                                 </Box>
-                                {record.learningLanguages.map((learningLanguage: LearningLanguage) => {
+                                {record.learningLanguages.map((learningLanguage: LearningLanguageWithTandem) => {
                                     if (learningLanguage.tandem) {
                                         return (
                                             <Box key={learningLanguage.code} className="line tandem">
@@ -207,16 +218,16 @@ const LearningLanguageList = () => {
                     />
                     <FunctionField
                         label={translate('learning_languages.list.tableColumns.age')}
-                        render={(record: ProfileWithTandems) => (
+                        render={(record: ProfileWithTandemsProfiles) => (
                             <>
                                 <Box className="line">
                                     <ColoredChips color="default" label={record.user.age} variant="outlined" />
                                 </Box>
-                                {record.learningLanguages.map((learningLanguage: LearningLanguage) => {
+                                {record.learningLanguages.map((learningLanguage: LearningLanguageWithTandem) => {
                                     if (learningLanguage.tandem) {
                                         const criterionColor = isAgeCriterionMet(
                                             record.user.age,
-                                            learningLanguage.tandem.learningLanguages[0].profile.user.age
+                                            learningLanguage.tandem.partnerLearningLanguage.profile.user.age
                                         )
                                             ? 'success'
                                             : 'error';
@@ -230,7 +241,7 @@ const LearningLanguageList = () => {
                                                     key={learningLanguage.code}
                                                     color={isAgeCritetionNeeded}
                                                     label={
-                                                        learningLanguage.tandem.learningLanguages[0].profile.user.age
+                                                        learningLanguage.tandem.partnerLearningLanguage.profile.user.age
                                                     }
                                                     variant="outlined"
                                                 />
@@ -245,7 +256,7 @@ const LearningLanguageList = () => {
                     />
                     <FunctionField
                         label={translate('learning_languages.list.tableColumns.role')}
-                        render={(record: ProfileWithTandems) => (
+                        render={(record: ProfileWithTandemsProfiles) => (
                             <>
                                 <Box className="line">
                                     <ColoredChips
@@ -254,7 +265,7 @@ const LearningLanguageList = () => {
                                         variant="outlined"
                                     />
                                 </Box>
-                                {record.learningLanguages.map((learningLanguage: LearningLanguage) => {
+                                {record.learningLanguages.map((learningLanguage: LearningLanguageWithTandem) => {
                                     if (learningLanguage.tandem) {
                                         return (
                                             <Box key={learningLanguage.code} className="line tandem">
@@ -262,12 +273,13 @@ const LearningLanguageList = () => {
                                                     key={learningLanguage.code}
                                                     color={
                                                         record.user.role ===
-                                                        learningLanguage.tandem.learningLanguages[0].profile.user.role
+                                                        learningLanguage.tandem.partnerLearningLanguage.profile.user
+                                                            .role
                                                             ? 'success'
                                                             : 'error'
                                                     }
                                                     label={translate(
-                                                        `learning_languages.roles.${learningLanguage.tandem.learningLanguages[0].profile.user.role}`
+                                                        `learning_languages.roles.${learningLanguage.tandem.partnerLearningLanguage.profile.user.role}`
                                                     )}
                                                     variant="outlined"
                                                 />
@@ -282,10 +294,10 @@ const LearningLanguageList = () => {
                     />
                     <FunctionField
                         label={translate('learning_languages.list.tableColumns.score')}
-                        render={(record: ProfileWithTandems) => (
+                        render={(record: ProfileWithTandemsProfiles) => (
                             <>
                                 <Box className="line" />
-                                {record.learningLanguages.map((learningLanguage: LearningLanguage) => {
+                                {record.learningLanguages.map((learningLanguage: LearningLanguageWithTandem) => {
                                     if (learningLanguage.tandem) {
                                         return (
                                             <Box key={learningLanguage.code} className="line tandem">
@@ -301,15 +313,15 @@ const LearningLanguageList = () => {
                     />
                     <FunctionField
                         label={translate('learning_languages.list.tableColumns.type')}
-                        render={(record: ProfileWithTandems) => (
+                        render={(record: ProfileWithTandemsProfiles) => (
                             <>
                                 <Box className="line" />
-                                {record.learningLanguages.map((learningLanguage: LearningLanguage) => {
+                                {record.learningLanguages.map((learningLanguage: LearningLanguageWithTandem) => {
                                     if (learningLanguage.tandem) {
                                         return (
                                             <Box key={learningLanguage.code} className="line tandem">
                                                 {translate(
-                                                    `learning_languages.types.${learningLanguage.tandem.learningLanguages[0].learningType}`
+                                                    `learning_languages.types.${learningLanguage.tandem.partnerLearningLanguage.learningType}`
                                                 )}
                                             </Box>
                                         );
@@ -322,10 +334,10 @@ const LearningLanguageList = () => {
                     />
                     <FunctionField
                         label={translate('learning_languages.list.tableColumns.pairing')}
-                        render={(record: ProfileWithTandems) => (
+                        render={(record: ProfileWithTandemsProfiles) => (
                             <>
                                 <Box className="line" />
-                                {record.learningLanguages.map((learningLanguage: LearningLanguage) => {
+                                {record.learningLanguages.map((learningLanguage: LearningLanguageWithTandem) => {
                                     if (learningLanguage.tandem) {
                                         return (
                                             <Box key={learningLanguage.code} className="line tandem">
@@ -342,10 +354,10 @@ const LearningLanguageList = () => {
                     {hasTandemManagementPermission() && (
                         <FunctionField
                             label={translate('learning_languages.list.tableColumns.actions')}
-                            render={(record: ProfileWithTandems) => (
+                            render={(record: ProfileWithTandemsProfiles) => (
                                 <>
                                     <Box className="line" />
-                                    {record.learningLanguages.map((learningLanguage: LearningLanguage) => {
+                                    {record.learningLanguages.map((learningLanguage: LearningLanguageWithTandem) => {
                                         if (
                                             learningLanguage.tandem &&
                                             learningLanguage.tandem.status !== 'ACTIVE' &&
@@ -356,17 +368,17 @@ const LearningLanguageList = () => {
                                                     <TandemActions
                                                         learningLanguageIds={[
                                                             learningLanguage.id,
-                                                            learningLanguage.tandem.learningLanguages[0].id,
+                                                            learningLanguage.tandem.partnerLearningLanguage.id,
                                                         ]}
                                                         onTandemAction={refresh}
                                                         relaunchGlobalRoutineOnAccept={
                                                             !learningLanguage.tandem ||
                                                             learningLanguage?.id !==
-                                                                learningLanguage.tandem.learningLanguages[0].id
+                                                                learningLanguage.tandem.partnerLearningLanguage.id
                                                         }
                                                         relaunchGlobalRoutineOnRefuse={
                                                             learningLanguage?.id ===
-                                                            learningLanguage.tandem.learningLanguages[0].id
+                                                            learningLanguage.tandem.partnerLearningLanguage.id
                                                         }
                                                     />
                                                 </Box>
@@ -383,7 +395,7 @@ const LearningLanguageList = () => {
                                                     <TandemActions
                                                         learningLanguageIds={[
                                                             learningLanguage.id,
-                                                            learningLanguage.tandem.learningLanguages[0].id,
+                                                            learningLanguage.tandem.partnerLearningLanguage.id,
                                                         ]}
                                                         onTandemAction={refresh}
                                                         tandemId={learningLanguage.tandem?.id}
@@ -402,10 +414,10 @@ const LearningLanguageList = () => {
                         />
                     )}
                     <FunctionField
-                        render={(record: ProfileWithTandems) => (
+                        render={(record: ProfileWithTandemsProfiles) => (
                             <>
                                 <Box className="line" />
-                                {record.learningLanguages.map((learningLanguage: LearningLanguage) => (
+                                {record.learningLanguages.map((learningLanguage: LearningLanguageWithTandem) => (
                                     <Box key={learningLanguage.code} className="line">
                                         <ProfileTandemDetailLink
                                             learningLanguageCode={learningLanguage.code}

@@ -1,15 +1,11 @@
 import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
 import { Expose, Transform } from 'class-transformer';
-import { InterestResponse } from 'src/api/dtos/interests';
-import { MeetingFrequency, Profile } from 'src/core/models/profile.model';
 import { UserResponse } from '../users';
-import { ObjectiveResponse } from '../objective';
-import { BiographyDto } from './biography';
-import { Language } from 'src/core/models';
-import { LearningLanguageResponse } from '../learning-languages';
-import { IsObject, ValidateNested, IsBoolean } from 'class-validator';
-import { AvailabilitesDto } from 'src/api/dtos/profiles/availabilities';
-import { TestedLanguageResponse } from 'src/api/dtos/tested-languages/tested-language.response';
+import {
+  Language,
+  LearningLanguageWithTandemWithPartnerLearningLanguage,
+} from 'src/core/models';
+import { LearningLanguageWithTandemsProfilesResponse } from '../learning-languages';
 import { ProfileWithTandemsProfiles } from 'src/core/models/profileWithTandemsProfiles.model';
 
 class NativeLanguageResponse {
@@ -51,10 +47,7 @@ export class ProfileWithTandemsProfilesResponse {
 
   @ApiProperty()
   @Expose({ groups: ['read'] })
-  @Transform(({ value }) =>
-    value.map((val) => new LearningLanguageResponse(val)),
-  )
-  learningLanguages: LearningLanguageResponse[];
+  learningLanguages: LearningLanguageWithTandemsProfilesResponse[];
 
   @ApiProperty()
   @Expose({ groups: ['read'] })
@@ -88,8 +81,9 @@ export class ProfileWithTandemsProfilesResponse {
         name: masteredLanguage.name,
         code: masteredLanguage.code,
       })),
-      learningLanguages: profile.learningLanguages.map((ll) =>
-        LearningLanguageResponse.fromDomain(ll),
+      learningLanguages: profile.learningLanguages.map(
+        (ll: LearningLanguageWithTandemWithPartnerLearningLanguage) =>
+          LearningLanguageWithTandemsProfilesResponse.fromDomain(ll),
       ),
     });
   }

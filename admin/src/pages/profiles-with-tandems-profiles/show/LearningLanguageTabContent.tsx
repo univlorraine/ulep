@@ -6,7 +6,7 @@ import { useGetIdentity, useGetList, useRecordContext, useTranslate } from 'reac
 
 import { isJoker, LearningLanguage } from '../../../entities/LearningLanguage';
 import { Match } from '../../../entities/Match';
-import { ProfileWithTandems } from '../../../entities/Profile';
+import { ProfileWithTandemsProfiles } from '../../../entities/ProfileWithTandemsProfiles';
 import { TandemStatus } from '../../../entities/Tandem';
 import { isCentralUniversity, PairingMode } from '../../../entities/University';
 import useLearningLanguagesStore from '../useLearningLanguagesStore';
@@ -41,7 +41,7 @@ type LearningLanguageTabContentProps = {
 };
 
 const LearningLanguageTabContent = ({ learningLanguage }: LearningLanguageTabContentProps) => {
-    const record: ProfileWithTandems = useRecordContext();
+    const record: ProfileWithTandemsProfiles = useRecordContext();
 
     const { data: identity, isLoading: isLoadingIdentity } = useGetIdentity();
 
