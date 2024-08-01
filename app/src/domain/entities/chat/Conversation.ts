@@ -15,8 +15,8 @@ class Conversation {
      * If there is only one participant, return it -> University Contact.
      * If there are multiple participants, return the first one that is not an administrator -> Tandem Contact.
      */
-    public getMainConversationPartner(userId: string): UserChat {
-        const otherParticipants = this.participants.filter((participant) => participant.id !== userId);
+    public static getMainConversationPartner(conversation: Conversation, userId: string): UserChat {
+        const otherParticipants = conversation.participants.filter((participant) => participant.id !== userId);
         if (otherParticipants.length === 1) {
             return otherParticipants[0];
         }

@@ -179,7 +179,9 @@ const Content: React.FC<ChatContentProps> = ({ conversation, goBack, profile, se
                     </IonButton>
                 )}
                 <h2 className={styles.title}>
-                    {t('chat.title', { name: conversation.getMainConversationPartner(profile.user.id).firstname })}
+                    {t('chat.title', {
+                        name: Conversation.getMainConversationPartner(conversation, profile.user.id).firstname,
+                    })}
                 </h2>
                 <IonButton
                     fill="clear"

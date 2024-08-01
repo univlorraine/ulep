@@ -8,8 +8,6 @@ const useHandleMessagesFromConversation = (conversationId: string, typeFilter?: 
     const [lastMessageId, setLastMessageId] = useState<string>();
     const profile = useStoreState((state) => state.profile);
 
-    console.log({ typeFilter });
-
     const [messagesResult, setMessagesResult] = useState<{
         messages: Message[];
         isScrollOver: boolean;

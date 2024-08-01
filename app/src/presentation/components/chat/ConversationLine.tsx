@@ -56,7 +56,7 @@ interface ConversationLineProps {
 
 const ConversationLine: React.FC<ConversationLineProps> = ({ conversation, onPressed, userId }) => {
     const { t } = useTranslation();
-    const mainParticipant = conversation.getMainConversationPartner(userId);
+    const mainParticipant = Conversation.getMainConversationPartner(conversation, userId);
     return (
         <IonItem className={styles.line}>
             <IonButton
