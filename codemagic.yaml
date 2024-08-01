@@ -92,7 +92,7 @@ workflows:
   # ionic-capacitor-ios-workflow:
   #     name: Build and Deploy IOS
   #     max_build_duration: 120
-  #     instance_type: mac_pro
+  #     instance_type: mac_mini_m2
   #     integrations:
   #         app_store_connect: theTribe
   #     environment:
@@ -145,7 +145,7 @@ workflows:
   ionic-capacitor-android-workflow:
     name: Build and Deploy Android
     max_build_duration: 120
-    instance_type: mac_pro
+    instance_type: mac_mini_m2
     environment:
       android_signing:
       - theTribe
@@ -189,7 +189,7 @@ workflows:
   analyse-and-test:
     name: Ionic analyse and test
     max_build_duration: 120
-    instance_type: mac_pro
+    instance_type: mac_mini_m2
     cache:
       cache_paths:
       - $CM_BUILD_DIR/mobile/ios/Pods
