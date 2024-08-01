@@ -1,5 +1,5 @@
 import Language from './Language';
-import { LearningLanguageWithTandem } from './LearningLanguage';
+import { LearningLanguageWithTandemWithPartnerProfile } from './LearningLanguage';
 import User from './User';
 
 export interface ProfileWithTandemsProfiles {
@@ -7,6 +7,6 @@ export interface ProfileWithTandemsProfiles {
     user: User;
     nativeLanguage: Language;
     masteredLanguages: Language[];
-    learningLanguages: LearningLanguageWithTandem[];
+    learningLanguages: LearningLanguageWithTandemWithPartnerProfile[];
     createdAt?: Date;
 }

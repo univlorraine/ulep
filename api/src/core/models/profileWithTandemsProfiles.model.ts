@@ -1,6 +1,5 @@
 import { Language } from './language.model';
 import { LearningLanguage } from './learning-language.model';
-import { ProficiencyLevel } from './proficiency.model';
 import { User } from './user.model';
 
 export type CreateProfileWithTandemsProfilesProps = {
@@ -23,16 +22,7 @@ export class ProfileWithTandemsProfiles {
   readonly updatedAt?: Date;
 
   constructor(props: CreateProfileWithTandemsProfilesProps) {
-    const learningLanguages = [...props.learningLanguages].map(
-      (learningLanguage) =>
-        new LearningLanguage({
-          ...learningLanguage,
-          level: learningLanguage.language.isJokerLanguage()
-            ? ProficiencyLevel.A0
-            : learningLanguage.level,
-        }),
-    );
-
+    const learningLanguages = [...props.learningLanguages];
     this.id = props.id;
     this.user = props.user;
     this.nativeLanguage = props.nativeLanguage;

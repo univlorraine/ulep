@@ -7,3 +7,4 @@ export * from './delete-profile.usecase';
 export * from './update-profile.usecase';
 export * from './create-or-update-tested-language.usecase';
 export * from './get-profiles-with-tandems-profiles.usecase';
+export * from './get-profile-with-tandems-profiles.usecase';

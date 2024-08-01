@@ -51,6 +51,10 @@ export interface ProfileQueryOrderBy {
 export interface ProfileRepository {
   ofId: (id: string) => Promise<Profile | null>;
 
+  ofIdWithTandemsProfiles: (
+    id: string,
+  ) => Promise<ProfileWithTandemsProfiles | null>;
+
   ofUser: (userId: string) => Promise<Profile | null>;
 
   create: (profile: Profile) => Promise<void>;

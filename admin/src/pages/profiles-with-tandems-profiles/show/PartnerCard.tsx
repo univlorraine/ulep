@@ -5,9 +5,9 @@ import { BooleanField, useRefresh, useTranslate } from 'react-admin';
 import CustomAvatar from '../../../components/CustomAvatar';
 import { DisplayLearningType, DisplaySameTandem } from '../../../components/translated';
 import UserStatusChips from '../../../components/UserStatusChips';
-import { LearningLanguage } from '../../../entities/LearningLanguage';
+import { LearningLanguage, LearningLanguageWithTandemWithPartnerProfile } from '../../../entities/LearningLanguage';
 import { ProfileWithTandemsProfiles } from '../../../entities/ProfileWithTandemsProfiles';
-import { TandemStatus, Tandem } from '../../../entities/Tandem';
+import { TandemStatus, TandemWithPartnerLearningLanguage } from '../../../entities/Tandem';
 import codeLanguageToFlag from '../../../utils/codeLanguageToFlag';
 
 import './show.css';
@@ -103,12 +103,12 @@ type TandemCardProps = {
     partnerType?: PartnerType;
     partnerLearningLanguage: LearningLanguage | undefined;
     userProfile: ProfileWithTandemsProfiles;
-    userLearningLanguage: LearningLanguage;
+    userLearningLanguage: LearningLanguageWithTandemWithPartnerProfile;
     compatibilityScore: number | undefined;
     hasActiveTandem?: boolean;
     isUserValidationNeeded?: boolean;
     hasTandemWaitingForValidation?: boolean;
-    tandem?: Tandem;
+    tandem?: TandemWithPartnerLearningLanguage;
 };
 
 const TandemCard = ({
@@ -301,10 +301,10 @@ const TandemCard = ({
                             onTandemAction={refresh}
                             relaunchGlobalRoutineOnAccept={
                                 !userLearningLanguage.tandem ||
-                                tandem?.learningLanguages[0].id !== partnerLearningLanguage.id
+                                tandem?.partnerLearningLanguage.id !== partnerLearningLanguage.id
                             }
                             relaunchGlobalRoutineOnRefuse={
-                                tandem?.learningLanguages[0]?.id === partnerLearningLanguage.id
+                                tandem?.partnerLearningLanguage.id === partnerLearningLanguage.id
                             }
                         />
                     )}

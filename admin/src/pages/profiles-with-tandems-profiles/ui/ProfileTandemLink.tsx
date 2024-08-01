@@ -15,7 +15,7 @@ const ProfileWithTandemLink = ({ profile, variant = 'body1' }: ProfileWithTandem
     return (
         <Typography
             onClick={() => {
-                redirect('show', 'profiles/with-tandem', profile.id);
+                redirect('show', 'profiles/with-tandems-profiles', profile.id);
             }}
             sx={{ cursor: 'pointer', color: '#3737d5', fontWeight: '700' }}
             // Note: shortcut to avoid typing as precisely as Typography (an error

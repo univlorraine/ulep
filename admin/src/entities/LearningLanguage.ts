@@ -28,7 +28,7 @@ export type LearningLanguage = {
     sameTandemEmail?: string;
 };
 
-export type LearningLanguageWithTandem = {
+export type LearningLanguageWithTandemWithPartnerProfile = {
     id: string;
     code: string;
     level: string;
@@ -78,7 +78,9 @@ export const getLearningLanguageUniversityAndCampusString = (learningLanguage?: 
     return `${learningLanguage.profile.user.university.name}`;
 };
 
-export const isJoker = (learningLanguage?: LearningLanguage): boolean => {
+export const isJoker = (
+    learningLanguage?: LearningLanguage | LearningLanguageWithTandemWithPartnerProfile
+): boolean => {
     if (learningLanguage?.code === '*') {
         return true;
     }
@@ -87,8 +89,8 @@ export const isJoker = (learningLanguage?: LearningLanguage): boolean => {
 };
 
 export const getEffectiveLearningType = (
-    learningLanguage1: LearningLanguage,
-    learningLanguage2: LearningLanguage
+    learningLanguage1: LearningLanguage | LearningLanguageWithTandemWithPartnerProfile,
+    learningLanguage2: LearningLanguage | LearningLanguageWithTandemWithPartnerProfile
 ): LearningType => {
     switch (learningLanguage1.learningType) {
         case LearningType.BOTH:

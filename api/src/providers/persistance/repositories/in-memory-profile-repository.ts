@@ -17,6 +17,10 @@ export class InMemoryProfileRepository implements ProfileRepository {
     return this.#profiles.get(id);
   }
 
+  async ofIdWithTandemsProfiles(id: string): Promise<Profile> {
+    return this.#profiles.get(id);
+  }
+
   async ofUser(id: string): Promise<Profile> {
     for (const profile of this.#profiles.values()) {
       if (profile.user.id === id) {

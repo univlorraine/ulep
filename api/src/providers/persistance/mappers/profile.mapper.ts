@@ -93,8 +93,6 @@ export const profileMapper = (instance: ProfileSnapshot): Profile => {
           hasPriority: learningLanguage.has_priority,
           campus:
             learningLanguage.Campus && campusMapper(learningLanguage.Campus),
-          tandem:
-            learningLanguage.Tandem && tandemMapper(learningLanguage.Tandem),
           certificateOption: learningLanguage.certificate_option,
           specificProgram: learningLanguage.specific_program,
         }),

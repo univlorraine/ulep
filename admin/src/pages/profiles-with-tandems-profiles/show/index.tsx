@@ -5,7 +5,7 @@ import { FunctionField, Show, SimpleShowLayout, useRecordContext, useTranslate }
 import { useLocation } from 'react-router-dom';
 import { ProfileWithTandemsProfiles } from '../../../entities/ProfileWithTandemsProfiles';
 import codeLanguageToFlag from '../../../utils/codeLanguageToFlag';
-// import LearningLanguageTabContent from './LearningLanguageTabContent';
+import LearningLanguageTabContent from './LearningLanguageTabContent';
 
 import './show.css';
 
@@ -36,9 +36,9 @@ const TabsComponent = () => {
                     })}
                 </TabList>
             </Box>
-            {/*             {record.learningLanguages.map((learningLanguage) => (
+            {record.learningLanguages.map((learningLanguage) => (
                 <LearningLanguageTabContent key={learningLanguage.code} learningLanguage={learningLanguage} />
-            ))} */}
+            ))}
         </TabContext>
     );
 };
@@ -50,7 +50,7 @@ const LearningLanguageShow = () => (
                 render={(profile: ProfileWithTandemsProfiles) => (
                     <Box sx={{ marginBottom: 2 }}>
                         <Typography variant="h2">
-                            `${profile.user.lastname} ${profile.user.firstname}` (
+                            {profile.user.lastname} {profile.user.firstname} (
                             {codeLanguageToFlag(profile.nativeLanguage.code)})
                         </Typography>
                     </Box>

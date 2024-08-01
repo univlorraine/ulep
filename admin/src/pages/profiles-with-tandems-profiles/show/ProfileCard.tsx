@@ -5,14 +5,14 @@ import CustomAvatar from '../../../components/CustomAvatar';
 import { DisplaySameTandem } from '../../../components/translated';
 import UserStatusChips from '../../../components/UserStatusChips';
 import WarningCircle from '../../../components/WarningCircle';
-import { LearningLanguage } from '../../../entities/LearningLanguage';
+import { LearningLanguageWithTandemWithPartnerProfile } from '../../../entities/LearningLanguage';
 import { ProfileWithTandemsProfiles } from '../../../entities/ProfileWithTandemsProfiles';
 import codeLanguageToFlag from '../../../utils/codeLanguageToFlag';
 import ProfileLink from '../ui/ProfileLink';
 
 type ProfileCardProps = {
     record: ProfileWithTandemsProfiles;
-    learningLanguage: LearningLanguage;
+    learningLanguage: LearningLanguageWithTandemWithPartnerProfile;
     hasActiveTandem: boolean;
 };
 

@@ -22,7 +22,7 @@ export class PrismaProfileRepository implements ProfileRepository {
   async ofId(id: string): Promise<Profile | null> {
     const entry = await this.prisma.profiles.findUnique({
       where: { id },
-      include: ProfilesRelations, // TODO: make a specific usecase / request for tandems profiles associated to one profile
+      include: ProfilesRelations,
     });
 
     if (!entry) {
@@ -30,6 +30,21 @@ export class PrismaProfileRepository implements ProfileRepository {
     }
 
     return profileMapper(entry);
+  }
+
+  async ofIdWithTandemsProfiles(
+    id: string,
+  ): Promise<ProfileWithTandemsProfiles | null> {
+    const entry = await this.prisma.profiles.findUnique({
+      where: { id },
+      include: ProfilesRelationsWithTandemProfile,
+    });
+
+    if (!entry) {
+      return null;
+    }
+
+    return profileWithTandemsProfilesMapper(entry);
   }
 
   async ofUser(id: string): Promise<Profile | null> {

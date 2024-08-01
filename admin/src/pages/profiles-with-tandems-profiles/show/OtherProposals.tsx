@@ -2,9 +2,12 @@
 import { Box, CircularProgress, Typography } from '@mui/material';
 import React, { useEffect } from 'react';
 import { useRefresh, useTranslate } from 'react-admin';
-import { LearningLanguage, getEffectiveLearningType } from '../../../entities/LearningLanguage';
+import {
+    LearningLanguageWithTandemWithPartnerProfile,
+    getEffectiveLearningType,
+} from '../../../entities/LearningLanguage';
 import { Match } from '../../../entities/Match';
-import { Tandem } from '../../../entities/Tandem';
+import { TandemWithPartnerLearningLanguage } from '../../../entities/Tandem';
 import TandemActions from './Actions/TandemActions';
 import TandemFilters from './TandemTable/TandemFilters';
 import TandemTable from './TandemTable/TandemTable';
@@ -16,8 +19,8 @@ type OtherProposalsProps = {
     isLoadingMatches: boolean;
     isErrorMatches: boolean;
     isJokerLearningLanguage: boolean;
-    userLearningLanguage: LearningLanguage;
-    tandem: Tandem | undefined;
+    userLearningLanguage: LearningLanguageWithTandemWithPartnerProfile;
+    tandem: TandemWithPartnerLearningLanguage | undefined;
 };
 
 const OtherProposals = ({
@@ -85,10 +88,10 @@ const OtherProposals = ({
                                                 onTandemAction={handleTandemAction}
                                                 relaunchGlobalRoutineOnAccept={
                                                     !userLearningLanguage.tandem ||
-                                                    tandem?.learningLanguages[0].id !== partner.id
+                                                    tandem?.partnerLearningLanguage.id !== partner.id
                                                 }
                                                 relaunchGlobalRoutineOnRefuse={
-                                                    tandem?.learningLanguages[0]?.id === partner.id
+                                                    tandem?.partnerLearningLanguage?.id === partner.id
                                                 }
                                             />
                                         )}

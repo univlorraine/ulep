@@ -13,7 +13,7 @@ const ProfileTandemDetailLink = ({ profile, learningLanguageCode }: ProfileLinkP
     return (
         <Button
             onClick={() => {
-                redirect('show', 'profiles/with-tandem', profile.id, {}, { learningLanguageCode });
+                redirect('show', 'profiles/with-tandems-profiles', profile.id, {}, { learningLanguageCode });
             }}
             sx={{ cursor: 'pointer' }}
             variant="text"
