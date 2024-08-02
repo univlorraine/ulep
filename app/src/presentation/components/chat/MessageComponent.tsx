@@ -189,7 +189,7 @@ const MessageFile: React.FC<MessageProps> = ({ message, isCurrentUserMessage, on
                 <IonIcon
                     aria-label={t('chat.ariaLabelFileDownloaded', { filename: fileName }) as string}
                     className={styles.download}
-                    src={DownloadSvg}
+                    icon={DownloadSvg}
                 />
             </IonButton>
         </IonButton>
