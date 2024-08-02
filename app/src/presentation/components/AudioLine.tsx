@@ -55,7 +55,9 @@ const AudioLine: React.FC<AudioLineProps> = ({ audioFile }) => {
         }
     }, [audioFile, audioRef, audioRef.current.duration]);
 
-    const togglePlayPause = () => {
+    const togglePlayPause = (event: React.MouseEvent<HTMLButtonElement>) => {
+        event.preventDefault();
+        event.stopPropagation();
         const audio = audioRef.current;
         if (isPlaying) {
             audio.pause();

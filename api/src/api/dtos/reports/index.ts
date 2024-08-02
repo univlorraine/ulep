@@ -64,6 +64,15 @@ export class CreateReportRequest implements Omit<CreateReportCommand, 'owner'> {
   content: string;
 }
 
+export class CreateReportMessageRequest
+  implements Omit<CreateReportCommand, 'owner' | 'category'>
+{
+  @Swagger.ApiProperty({ type: 'string' })
+  @IsString()
+  @IsNotEmpty()
+  content: string;
+}
+
 export class UpdateReportStatusRequest
   implements Omit<UpdateReportStatusCommand, 'id'>
 {

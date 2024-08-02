@@ -104,8 +104,11 @@
         "download": "Télécharger"
     },
     "chat": {
+        "ariaLabelFileDownloaded": "Téléchargement du fichier : {{filename}}",
         "fileDownloaded": "Fichier téléchargé",
+        "messageReport": "Message envoyé par : {{firstname}} {{lastname}} le {{date}} ---- {{message}}",
         "me": "Moi",
+        "messageReported": "Message signalé",
         "title": "Messages avec {{name}}",
         "input": {
             "placeholder": {
@@ -123,7 +126,8 @@
             "files": "Fichiers",
             "images": "Images",
             "images-alt": "Image partagée"
-        }
+        },
+        "reportMessageButton": "Signaler le message"
     },
     "connection_page": {
         "connect_title": "As-tu déjà un compte ?",

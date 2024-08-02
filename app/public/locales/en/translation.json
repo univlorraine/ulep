@@ -98,8 +98,11 @@
         "download": "Download"
     },
     "chat": {
+        "ariaLabelFileDownloaded": "Downloading file : {{filename}}",
         "fileDownloaded": "File downloaded",
         "me": "Me",
+        "messageReport": "Message sent by {{firstname}} {{lastname}} on {{date}} --- {{message}}",
+        "messageReported": "Message reported",
         "title": "Messages with {{name}}",
         "input": {
             "placeholder": {
@@ -117,7 +120,8 @@
             "files": "Files",
             "images": "Images",
             "images-alt": "Shared image"
-        }
+        },
+        "reportMessageButton": "Report message"
     },
     "connection_page": {
         "connect_title": "Already have an account ?",

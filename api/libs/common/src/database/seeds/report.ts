@@ -2,6 +2,13 @@ import { PrismaClient } from '@prisma/client';
 
 const categoryReports = [
   {
+    text: 'Conversation',
+    translations: [
+      { code: 'en', content: 'Conversation' },
+      { code: 'zh', content: '消息' },
+    ],
+  },
+  {
     text: 'Signaler un comportement',
     translations: [
       { code: 'en', content: 'Report behavior' },
