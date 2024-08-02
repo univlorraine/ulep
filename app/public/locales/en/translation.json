@@ -94,7 +94,8 @@
         "welcome": "Bienvenue sur ULEP,",
         "welcome_subtext": "le meilleur moyen de pratiquer une langue",
         "welcome_btn": "Apprends une nouvelle langue en tandem",
-        "close": "Close"
+        "close": "Close",
+        "download": "Download"
     },
     "chat": {
         "ariaLabelFileDownloaded": "Downloading file : {{filename}}",
@@ -108,6 +109,17 @@
                 "blocked": "The tandem is on pause, you cannot send messages",
                 "unblocked": "Write your message..."
             }
+        },
+        "conversation_menu": {
+            "aria_label": "Conversation menu",
+            "search": "Search in conversation",
+            "medias": "Show media"
+        },
+        "medias": {
+            "title": "Shared media",
+            "files": "Files",
+            "images": "Images",
+            "images-alt": "Shared image"
         },
         "reportMessageButton": "Report message"
     },

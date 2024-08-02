@@ -14,7 +14,20 @@ export const useMessages = ({ messages, isScrollOver, loadMessages }: UseMessage
     const previousScrollHeightRef = useRef<number>(0);
     let loadNewMessage = false;
 
-    const scrollToBottom = () => {
+    const allImagesLoaded = async () =>
+        Promise.all(
+            Array.from(document.images)
+                .filter((img) => !img.complete)
+                .map(
+                    (img) =>
+                        new Promise((resolve) => {
+                            img.onload = img.onerror = resolve;
+                        })
+                )
+        );
+
+    const scrollToBottom = async () => {
+        await allImagesLoaded();
         messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
     };
 

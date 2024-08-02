@@ -19,6 +19,14 @@
 }
 
 .header {
+    display: flex;
+    align-items: center;
+    background-color: white;
+    flex-direction: column;
+}
+
+.header-title {
+    width: 100%;
     align-items: center;
     background-color: white;
     display: flex;
@@ -26,6 +34,21 @@
     flex-shrink: 0;
     height: 50px;
     padding: 12px;
+}
+
+.header-filters {
+    display: flex;
+    align-items: center;
+    flex-direction: row;
+    padding: 0;
+}
+
+.btnFilters {
+    border-bottom: 5px solid white;
+}
+
+.btnFiltersActive {
+    border-bottom: 5px solid var(--primary-color);
 }
 
 .icon {

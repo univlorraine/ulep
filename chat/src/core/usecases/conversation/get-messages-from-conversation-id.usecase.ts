@@ -17,7 +17,8 @@ import {
 export class GetMessagesFromConversationIdCommand {
     id: string;
     pagination: MessagePagination;
-    filter: string;
+    contentFilter: string;
+    typeFilter: MessageType;
 }
 
 @Injectable()
@@ -44,7 +45,8 @@ export class GetMessagesFromConversationIdUsecase {
             await this.messageRepository.findMessagesByConversationId(
                 command.id,
                 command.pagination,
-                command.filter,
+                command.contentFilter,
+                command.typeFilter,
             );
 
         for (const message of messages) {

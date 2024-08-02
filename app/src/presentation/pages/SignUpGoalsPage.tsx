@@ -87,6 +87,7 @@ const SignUpGoalsPage: React.FC = () => {
                                             alt={goal.name}
                                             className={goalsStyles.image}
                                             placeholder={WritingSkillPng}
+                                            aria-hidden={true}
                                         />
                                     ) : (
                                         <img

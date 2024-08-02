@@ -1,3 +1,4 @@
+import { IonList } from '@ionic/react';
 import Conversation from '../../../domain/entities/chat/Conversation';
 import ConversationLine from './ConversationLine';
 import styles from './ConversationsLines.module.css';
@@ -10,7 +11,7 @@ interface ConversationsLinesProps {
 
 const ConversationsLines: React.FC<ConversationsLinesProps> = ({ conversations, onConversationPressed, userId }) => {
     return (
-        <div className={styles.container}>
+        <IonList inset={true} className={styles.container}>
             {conversations.map((conversation) => (
                 <ConversationLine
                     key={conversation.id}
@@ -19,7 +20,7 @@ const ConversationsLines: React.FC<ConversationsLinesProps> = ({ conversations, 
                     userId={userId}
                 />
             ))}
-        </div>
+        </IonList>
     );
 };
 

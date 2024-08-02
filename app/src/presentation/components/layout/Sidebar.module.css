@@ -5,7 +5,7 @@
     flex-direction: column;
     padding: 40px;
     height: 100%;
-    width: 260px;
+    max-width: 260px;
 }
 
 .line {
@@ -23,4 +23,10 @@
     font-size: 16px;
     font-weight: 500;
     margin-left: 16px;
+}
+
+@media (min-width: 768px) and (max-width: 1024px) {
+    .container {
+        padding: 20px;
+    }
 }

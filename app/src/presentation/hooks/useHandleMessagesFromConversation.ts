@@ -1,9 +1,19 @@
 import { useEffect, useState } from 'react';
 import { useConfig } from '../../context/ConfigurationContext';
-import { Message } from '../../domain/entities/chat/Message';
+import { Message, MessageType } from '../../domain/entities/chat/Message';
 import { useStoreState } from '../../store/storeTypes';
 
-const useHandleMessagesFromConversation = (conversationId: string) => {
+interface UseHandleMessagesFromConversationProps {
+    conversationId: string;
+    typeFilter?: MessageType;
+    limit?: number;
+}
+
+const useHandleMessagesFromConversation = ({
+    conversationId,
+    typeFilter,
+    limit = 10,
+}: UseHandleMessagesFromConversationProps) => {
     const { getMessagesFromConversation } = useConfig();
     const [lastMessageId, setLastMessageId] = useState<string>();
     const profile = useStoreState((state) => state.profile);
@@ -37,11 +47,11 @@ const useHandleMessagesFromConversation = (conversationId: string) => {
             ...messagesResult,
             isLoading: isFirstMessage, // Reload conversation only if it's the first message
         });
-        const messagesConversationResult = await getMessagesFromConversation.execute(
-            conversationId,
-            isFirstMessage ? undefined : lastMessageId,
-            10
-        );
+        const messagesConversationResult = await getMessagesFromConversation.execute(conversationId, {
+            lastMessageId: isFirstMessage ? undefined : lastMessageId,
+            limit,
+            typeFilter,
+        });
         if (messagesConversationResult instanceof Error) {
             return setMessagesResult({
                 messages: [],
@@ -71,7 +81,7 @@ const useHandleMessagesFromConversation = (conversationId: string) => {
         };
 
         fetchData();
-    }, [profile, conversationId]);
+    }, [profile, conversationId, typeFilter]);
 
     return { ...messagesResult, loadMessages, addNewMessage };
 };

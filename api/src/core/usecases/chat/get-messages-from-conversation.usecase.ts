@@ -13,7 +13,8 @@ export class GetMessagesFromConversationCommand {
   conversationId: string;
   limit: number;
   lastMessageId?: string;
-  messageFilter?: string;
+  contentFilter?: string;
+  typeFilter?: string;
 }
 
 @Injectable()
@@ -31,7 +32,8 @@ export class GetMessagesFromConversationUsecase {
         command.conversationId,
         command.limit,
         command.lastMessageId,
-        command.messageFilter,
+        command.contentFilter,
+        command.typeFilter,
       );
 
     if (messagesCollection && messagesCollection.totalItems === 0) {

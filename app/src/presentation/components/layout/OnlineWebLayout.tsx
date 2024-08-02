@@ -1,4 +1,4 @@
-import { IonPage } from '@ionic/react';
+import { IonContent, IonPage } from '@ionic/react';
 import React, { useState } from 'react';
 import Profile from '../../../domain/entities/Profile';
 import useLogout from '../../hooks/useLogout';
@@ -24,7 +24,7 @@ const OnlineWebLayout: React.FC<OnlineLayoutProps> = ({ children, profile }) => 
             <HomeHeader user={profile!.user} onPicturePressed={onProfilePressed} />
             <div className={styles.container}>
                 <Sidebar />
-                <div className={styles.content}>{children}</div>
+                <IonContent className={styles.content}>{children}</IonContent>
             </div>
             <ProfileModal
                 isVisible={displayProfile}

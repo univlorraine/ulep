@@ -2,7 +2,9 @@
     margin-left: 12px;
     display: flex;
     flex-direction: column;
-    max-width: 100%;
+    text-transform: none;
+    text-align: left;
+    width: 100%;
 }
 
 .date {
@@ -11,6 +13,8 @@
     font-size: 13px;
     font-weight: 400;
     color: black;
+    text-transform: none;
+    text-align: right;
 }
 
 .image {
@@ -24,22 +28,34 @@
     justify-content: center;
     height: 50px;
     width: 50px;
+    min-width: 50px;
+    min-height: 50px;
 }
 
-.left-line {
+.top-line {
     display: flex;
     align-items: center;
-    width: 80%;
+    width: 100%;
+    justify-content: space-between;
+}
+
+.button {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: none;
+    border: none;
+    cursor: pointer;
+    width: 100%;
 }
 
 .line {
     background: none;
-    border-bottom: 1px solid #d7d7d7d7;
     display: flex;
     align-items: center;
     flex-direction: row;
     justify-content: space-between;
-    padding: 10px;
+    padding: 5px 0;
     text-align: left;
     width: 100%;
 }
@@ -57,14 +73,10 @@
     font-family: 'Maven Pro', sans-serif;
     font-size: 13px;
     font-weight: 400;
-    line-height: 1.5;
+    line-height: 1.5em;
     overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
-}
-
-@media (min-width: 768px) {
-    .left-line {
-        width: 90%;
-    }
+    text-overflow: clip;
+    word-wrap: break-word;
+    max-height: 1.5em;
+    inline-size: 100%;
 }

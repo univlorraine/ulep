@@ -1,10 +1,10 @@
-import { IonContent, IonPage } from '@ionic/react';
+import { IonPage } from '@ionic/react';
 import { useTranslation } from 'react-i18next';
-import styles from './ConversationsContent.module.css';
 import Conversation from '../../../domain/entities/chat/Conversation';
-import ConversationsLines from '../chat/ConversationsLines';
 import Profile from '../../../domain/entities/Profile';
+import ConversationsLines from '../chat/ConversationsLines';
 import Loader from '../Loader';
+import styles from './ConversationsContent.module.css';
 
 interface ConversationsContentProps {
     conversations: Conversation[];
@@ -23,21 +23,19 @@ const Content: React.FC<Omit<ConversationsContentProps, 'isHybrid'>> = ({
     const { t } = useTranslation();
 
     return (
-        <IonContent>
-            <div className={`${styles.container}`}>
-                <div className={styles.header}>
-                    <span className={styles.title}>{t('conversations.title')}</span>
-                </div>
-                {!isLoading && (
-                    <ConversationsLines
-                        conversations={conversations}
-                        onConversationPressed={onConversationPressed}
-                        userId={profile.user.id}
-                    />
-                )}
-                {isLoading && <Loader />}
+        <div className={`${styles.container}`}>
+            <div className={styles.header}>
+                <h1 className={styles.title}>{t('conversations.title')}</h1>
             </div>
-        </IonContent>
+            {!isLoading && (
+                <ConversationsLines
+                    conversations={conversations}
+                    onConversationPressed={onConversationPressed}
+                    userId={profile.user.id}
+                />
+            )}
+            {isLoading && <Loader />}
+        </div>
     );
 };
 

@@ -48,7 +48,8 @@ export interface ChatServicePort {
     conversationId: string,
     limit: number,
     lastMessageId?: string,
-    messageFilter?: string,
+    contentFilter?: string,
+    typeFilter?: string,
   ): Promise<Collection<Message>>;
   createConversation(
     users: string[],
