@@ -26,5 +26,6 @@ export const messageMapper = (snapshot: MessagesSnapshot): Message => {
         isDeleted: snapshot.isDeleted,
         ownerId: snapshot.ownerId,
         type: snapshot.type as MessageType,
+        metadata: snapshot.metadata,
     });
 };

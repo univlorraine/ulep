@@ -5,6 +5,7 @@ import { DownloadSvg } from '../../../assets';
 import { useConfig } from '../../../context/ConfigurationContext';
 import { Message, MessageType } from '../../../domain/entities/chat/Message';
 import AudioLine from '../AudioLine';
+import OGCard from '../card/OGCard';
 import styles from './MessageComponent.module.css';
 
 interface MessageProps {
@@ -82,6 +83,14 @@ const MessageComponent: React.FC<MessageProps> = ({ message, isCurrentUserMessag
             case MessageType.File:
                 return (
                     <MessageFile
+                        message={message}
+                        isCurrentUserMessage={isCurrentUserMessage}
+                        onMessagePressed={onMessagePressed}
+                    />
+                );
+            case MessageType.Link:
+                return (
+                    <MessageLink
                         message={message}
                         isCurrentUserMessage={isCurrentUserMessage}
                         onMessagePressed={onMessagePressed}
@@ -165,7 +174,7 @@ const MessageFile: React.FC<MessageProps> = ({ message, isCurrentUserMessage, on
     const { t } = useTranslation();
     const [showToast] = useIonToast();
     const messageClass = isCurrentUserMessage ? styles.currentUser : styles.otherUser;
-    const fileName = message.content.split('/')[5].split('?')[0];
+    const fileName = message.metadata?.originalFilename;
 
     const handleDownload = async (e: React.MouseEvent<HTMLIonButtonElement>) => {
         e.preventDefault();
@@ -192,6 +201,29 @@ const MessageFile: React.FC<MessageProps> = ({ message, isCurrentUserMessage, on
                     icon={DownloadSvg}
                 />
             </IonButton>
+        </IonButton>
+    );
+};
+
+const MessageLink: React.FC<MessageProps> = ({ message, isCurrentUserMessage, onMessagePressed }) => {
+    const messageClass = isCurrentUserMessage ? styles.currentUser : styles.otherUser;
+
+    return (
+        <IonButton
+            id={`message-container-${message.id}`}
+            fill="clear"
+            className={`${styles.messageLink} ${messageClass}`}
+            onClick={onMessagePressed}
+        >
+            <div className={styles.outerContainer}>
+                <OGCard
+                    imageUrl={message.metadata?.openGraphResult?.ogImage[0].url}
+                    title={message.metadata?.openGraphResult?.ogTitle}
+                    description={message.metadata?.openGraphResult?.ogDescription}
+                    url={message.content}
+                />
+                <IonText className={styles.linkText}>{message.content}</IonText>
+            </div>
         </IonButton>
     );
 };

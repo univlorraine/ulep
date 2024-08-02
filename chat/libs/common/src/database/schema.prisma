@@ -31,6 +31,7 @@ model Message {
   type                  String       @default("text")
   updatedAt             DateTime     @updatedAt
   mediaObjectId         String?
+  metadata              Json         @default("{}")
 
   Conversation          Conversation @relation(fields: [conversationId], references: [id], onDelete: Cascade)
   MediaObject           MediaObject?

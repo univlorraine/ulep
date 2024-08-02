@@ -23,7 +23,7 @@ export class UploadMediaCommand {
     conversationId: string;
     message: Message;
     file: File;
-    filename?: string;
+    filename: string;
 }
 
 @Injectable()
@@ -50,24 +50,21 @@ export class UploadMediaUsecase {
             command.filename,
         );
 
-        return this.storageInterface.temporaryUrl(
-            'chat',
-            `${command.conversationId}/${
-                command.filename
-                    ? command.filename
-                    : `${file.id}.${file.mimetype.split('/')[1]}`
-            }`,
-            3600,
-        );
+        return this.storageInterface.temporaryUrl('chat', file.name, 3600);
     }
 
     private async upload(
         file: Express.Multer.File,
         conversationId: string,
         message: Message,
-        filename?: string,
+        filename: string,
     ): Promise<MediaObject> {
-        const image = MediaObject.image(file, 'chat', conversationId, filename);
+        const image = MediaObject.generate(
+            file,
+            'chat',
+            conversationId,
+            filename,
+        );
         await this.storageInterface.write('chat', image.name, file);
         await this.mediaObjectRepository.saveFile(image, message.id);
 

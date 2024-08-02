@@ -1,5 +1,5 @@
 import { Inject, NotFoundException } from '@nestjs/common';
-import { Message } from 'src/core/models';
+import { Message, MessageType } from 'src/core/models';
 import {
     CONVERSATION_REPOSITORY,
     ConversationRepository,
@@ -14,11 +14,15 @@ import {
 } from 'src/core/ports/notification.service';
 import { UUID_PROVIDER } from 'src/core/ports/uuid.provider';
 import { UuidProvider } from 'src/providers/services/uuid.provider';
+const openGraphScraper = require('open-graph-scraper');
+
+const URL_REGEX = /(https?:\/\/[^\s]+)/g;
 
 interface CreateMessageCommand {
     content: string;
     conversationId: string;
     ownerId: string;
+    originalFilename?: string;
     mimetype?: string;
 }
 
@@ -47,14 +51,31 @@ export class CreateMessageUsecase {
             throw new NotFoundException('User not found in conversation');
         }
 
+        let openGraphResult: any;
+        const url = command.content
+            ? command.content.match(URL_REGEX)[0]
+            : undefined;
+        if (url) {
+            const result = await openGraphScraper({ url });
+            if (result.result.success) {
+                openGraphResult = result.result;
+            }
+        }
+
         const message = new Message({
             id: this.uuidProvider.generate(),
             content: command.content,
             ownerId: command.ownerId,
             conversationId: command.conversationId,
-            type: Message.categorizeFileType(command.mimetype),
+            type: openGraphResult
+                ? MessageType.Link
+                : await Message.categorizeFileType(command.mimetype),
             isReported: false,
             isDeleted: false,
+            metadata: {
+                originalFilename: command.originalFilename,
+                openGraphResult: openGraphResult,
+            },
         });
 
         const createdMessage = await this.messageRepository.create(message);

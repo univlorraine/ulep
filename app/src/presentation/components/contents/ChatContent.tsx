@@ -61,8 +61,10 @@ const Content: React.FC<ChatContentProps> = ({ conversation, goBack, profile, se
         let filename: string | undefined;
         if (audioFile) {
             file = audioFile;
+            filename = audioFile.name;
         } else if (imageToSend) {
             file = imageToSend;
+            filename = imageToSend.name;
         } else if (fileToSend) {
             file = fileToSend;
             filename = fileToSend.name;
@@ -96,7 +98,8 @@ const Content: React.FC<ChatContentProps> = ({ conversation, goBack, profile, se
                     profile.user.avatar
                 ),
                 messageResult.type,
-                conversation.id
+                conversation.id,
+                messageResult.metadata
             )
         );
     };

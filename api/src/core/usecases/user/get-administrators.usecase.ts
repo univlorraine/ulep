@@ -1,18 +1,18 @@
-import { Inject, Injectable } from '@nestjs/common';
 import {
   KeycloakClient,
   KeycloakUser,
   UserRepresentation,
 } from '@app/keycloak';
+import { Inject, Injectable } from '@nestjs/common';
+import {
+  AdministratorsQuery,
+  UserRepresentationWithAvatar,
+} from 'src/api/dtos';
 import { AdminRole } from 'src/core/models';
 import {
   MEDIA_OBJECT_REPOSITORY,
   MediaObjectRepository,
 } from 'src/core/ports/media-object.repository';
-import {
-  AdministratorsQuery,
-  UserRepresentationWithAvatar,
-} from 'src/api/dtos';
 
 @Injectable()
 export class GetAdministratorsUsecase {
@@ -73,7 +73,6 @@ export class GetAdministratorsUsecase {
     }
 
     if (query?.lastname) {
-      console.log('has lastname query');
       filteredAdministrators = filteredAdministrators.filter((administrator) =>
         administrator.lastName
           .toLowerCase()

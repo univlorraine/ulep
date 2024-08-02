@@ -57,6 +57,24 @@
     font-size: 12px;
 }
 
+.messageLink {
+    max-height: 20%;
+    max-width: 50%;
+    word-wrap: break-word;
+    font-family: 'Poppins', sans-serif;
+    font-weight: 400;
+    font-size: 12px;
+}
+
+.linkText {
+    margin: 10px 0px;
+    color: black;
+    font-family: 'Poppins', sans-serif;
+    font-weight: 400;
+    font-size: 12px;
+    text-transform: none;
+}
+
 .messageImage {
     display: block;
     max-height: 20%;
@@ -107,6 +125,12 @@
     margin-right: auto;
 }
 
+.outerContainer {
+    display: inline-flex;
+    justify-content: center;
+    flex-direction: column;
+    width: fit-content;
+}
 .reportButton {
     display: flex;
     justify-content: center;

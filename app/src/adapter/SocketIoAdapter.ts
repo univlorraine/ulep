@@ -55,7 +55,8 @@ class SocketIoAdapter implements SocketIoAdapterInterface {
                         false,
                         message.sender.avatar
                     ),
-                    message.type
+                    message.type,
+                    message.metadata
                 )
             );
         });

@@ -153,9 +153,10 @@ export class ConversationController {
             conversationId,
             ownerId: body.senderId,
             mimetype: file?.mimetype,
+            originalFilename: body.filename,
         });
 
-        if (file) {
+        if (file && body.filename) {
             //TODO: Upload lighter image then heavier image
             const url = await this.uploadMediaUsecase.execute({
                 file,
