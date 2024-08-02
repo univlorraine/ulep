@@ -77,7 +77,7 @@ const MessageFile: React.FC<MessageProps> = ({ message, isCurrentUserMessage }) 
     const { t } = useTranslation();
     const [showToast] = useIonToast();
     const messageClass = isCurrentUserMessage ? styles.currentUser : styles.otherUser;
-    const fileName = message.content.split('/')[5].split('?')[0];
+    const fileName = message.metadata?.originalFilename;
 
     const handleDownload = async () => {
         await fileAdapter.saveFile(message.content, fileName);

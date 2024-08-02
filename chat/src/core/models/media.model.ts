@@ -31,13 +31,11 @@ export class MediaObject {
         file: Express.Multer.File,
         bucketName = 'chat',
         conversationId: string,
-        fileName?: string,
+        fileName: string,
     ): MediaObject {
         const id = v4();
-        const extension = file.mimetype;
-        const name = `${conversationId}/${
-            fileName ? fileName : `${id}.${extension.split('/')[1]}`
-        }`;
+        const extension = fileName.split('.').pop();
+        const name = `${conversationId}/${id}.${extension}`;
 
         return new MediaObject({
             id,

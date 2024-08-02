@@ -9,6 +9,11 @@ export enum MessageType {
     Link = 'link',
 }
 
+interface MessageMetadata {
+    originalFilename: string;
+    openGraphResult: any;
+}
+
 export class MessageWithoutSender {
     constructor(
         public readonly id: string,
@@ -16,7 +21,7 @@ export class MessageWithoutSender {
         public readonly createdAt: Date,
         public readonly senderId: string,
         public readonly type: MessageType,
-        public readonly metadata: any
+        public readonly metadata: MessageMetadata
     ) {}
 
     public getMessageDate(): string {
@@ -55,7 +60,7 @@ export class Message extends MessageWithoutSender {
         public readonly createdAt: Date,
         public readonly sender: UserChat,
         public readonly type: MessageType,
-        public readonly metadata: any
+        public readonly metadata: MessageMetadata
     ) {
         super(id, content, createdAt, sender.id, type, metadata);
     }

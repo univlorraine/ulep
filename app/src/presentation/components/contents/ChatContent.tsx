@@ -46,8 +46,10 @@ const Content: React.FC<Omit<ChatContentProps, 'isHybrid'>> = ({ conversation, g
         let filename: string | undefined;
         if (audioFile) {
             file = audioFile;
+            filename = audioFile.name;
         } else if (imageToSend) {
             file = imageToSend;
+            filename = imageToSend.name;
         } else if (fileToSend) {
             file = fileToSend;
             filename = fileToSend.name;
@@ -81,7 +83,8 @@ const Content: React.FC<Omit<ChatContentProps, 'isHybrid'>> = ({ conversation, g
                     profile.user.avatar
                 ),
                 messageResult.type,
-                conversation.id
+                conversation.id,
+                messageResult.metadata
             )
         );
     };

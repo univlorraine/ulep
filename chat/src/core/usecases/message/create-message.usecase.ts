@@ -22,8 +22,8 @@ interface CreateMessageCommand {
     content: string;
     conversationId: string;
     ownerId: string;
-    mimetype?: string;
     originalFilename?: string;
+    mimetype?: string;
 }
 
 export class CreateMessageUsecase {
@@ -52,8 +52,11 @@ export class CreateMessageUsecase {
         }
 
         let openGraphResult: any;
-        if (URL_REGEX.test(command.content)) {
-            const result = await openGraphScraper({ url: command.content });
+        const url = command.content
+            ? command.content.match(URL_REGEX)[0]
+            : undefined;
+        if (url) {
+            const result = await openGraphScraper({ url });
             if (result.result.success) {
                 openGraphResult = result.result;
             }

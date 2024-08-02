@@ -72,6 +72,11 @@
 
 .linkText {
     margin: 10px 0px;
+    color: black;
+    font-family: 'Poppins', sans-serif;
+    font-weight: 400;
+    font-size: 12px;
+    text-transform: none;
 }
 
 .messageImage {

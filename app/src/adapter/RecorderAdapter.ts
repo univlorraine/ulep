@@ -46,7 +46,7 @@ export class RecorderAdapter implements RecorderAdapterInterface {
                     }
 
                     const audioBlob = this.base64ToBlob(result.value.recordDataBase64, 'audio/wav');
-                    const audioFile = new File([audioBlob], 'audio.wav', { type: 'audio/wav' });
+                    const audioFile = new File([audioBlob], `${Date.now()}.wav`, { type: 'audio/wav' });
                     this.startTime = null;
                     onStop(audioFile);
                 }
