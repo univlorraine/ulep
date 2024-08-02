@@ -55,6 +55,7 @@ const JitsiWeb = ({ jitsiDomain, language, roomName, jitsiToken }: JitsiProps) =
                         'microphone',
                         'camera',
                         'hangup',
+                        'desktop',
                         'profile',
                         'chat',
                         'settings',
