@@ -2,7 +2,10 @@ import { Injectable, Logger } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import axios from 'axios';
 import { Env } from 'src/configuration';
-import { ChatServicePort } from 'src/core/ports/chat.service';
+import {
+  ChatPaginationDirection,
+  ChatServicePort,
+} from 'src/core/ports/chat.service';
 
 export interface CreateConversations {
   participants: string[];
@@ -94,6 +97,7 @@ export class ChatService implements ChatServicePort {
     lastMessageId?: string,
     contentFilter?: string,
     typeFilter?: string,
+    direction?: ChatPaginationDirection,
   ): Promise<any> {
     if (!this.env.get('CHAT_URL')) {
       return;
@@ -107,7 +111,7 @@ export class ChatService implements ChatServicePort {
           lastMessageId ? `&lastMessageId=${lastMessageId}` : ''
         }${contentFilter ? `&contentFilter=${contentFilter}` : ''}${
           typeFilter ? `&typeFilter=${typeFilter}` : ''
-        }`,
+        }${direction ? `&direction=${direction}` : ''}`,
         { headers: this.headers },
       );
 

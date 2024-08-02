@@ -95,9 +95,10 @@ export class PrismaMessageRepository implements MessageRepository {
                 where,
                 cursor,
                 skip:
-                    pagination.direction === MessagePaginationDirection.BOTH
-                        ? 0
-                        : 1,
+                    pagination.lastMessageId &&
+                    pagination.direction === MessagePaginationDirection.FORWARD
+                        ? 1
+                        : 0,
                 orderBy: { createdAt: 'desc' },
                 ...messagesPagination,
                 ...MessagesRelations,

@@ -1,6 +1,7 @@
 import { Inject, Injectable } from '@nestjs/common';
 import {
   CHAT_SERVICE,
+  ChatPaginationDirection,
   ChatServicePort,
   MessageWithUser,
 } from 'src/core/ports/chat.service';
@@ -15,6 +16,7 @@ export class GetMessagesFromConversationCommand {
   lastMessageId?: string;
   contentFilter?: string;
   typeFilter?: string;
+  direction?: ChatPaginationDirection;
 }
 
 @Injectable()
@@ -34,6 +36,7 @@ export class GetMessagesFromConversationUsecase {
         command.lastMessageId,
         command.contentFilter,
         command.typeFilter,
+        command.direction,
       );
 
     if (messagesCollection && messagesCollection.totalItems === 0) {
