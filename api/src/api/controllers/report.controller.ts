@@ -14,9 +14,14 @@ import {
   Query,
   UseGuards,
 } from '@nestjs/common';
+import { ConfigService } from '@nestjs/config';
 import * as Swagger from '@nestjs/swagger';
+import { GetReportsQueryParams } from 'src/api/dtos/reports/reports-filters';
+import { Env } from 'src/configuration';
+import { ReportStatus } from 'src/core/models';
 import {
   CreateReportCategoryUsecase,
+  CreateReportMessageUsecase,
   CreateReportUsecase,
   CreateUnsubscribeReportUsecase,
   DeleteReportCategoryUsecase,
@@ -32,6 +37,7 @@ import { CurrentUser } from '../decorators';
 import { Role, Roles } from '../decorators/roles.decorator';
 import {
   CreateReportCategoryRequest,
+  CreateReportMessageRequest,
   CreateReportRequest,
   GetReportCategoryResponse,
   ReportCategoryResponse,
@@ -40,10 +46,6 @@ import {
   UpdateReportStatusRequest,
 } from '../dtos';
 import { AuthenticationGuard } from '../guards';
-import { GetReportsQueryParams } from 'src/api/dtos/reports/reports-filters';
-import { ReportStatus } from 'src/core/models';
-import { ConfigService } from '@nestjs/config';
-import { Env } from 'src/configuration';
 
 @Controller('reports')
 @Swagger.ApiTags('Reports')
@@ -56,6 +58,7 @@ export class ReportController {
     private readonly createReportCategoryUsecase: CreateReportCategoryUsecase,
     private readonly createUnsubscribeUsecase: CreateUnsubscribeReportUsecase,
     private readonly createReportUsecase: CreateReportUsecase,
+    private readonly createReportMessageUsecase: CreateReportMessageUsecase,
     private readonly findReportCategoriesUsecase: GetCategoriesUsecase,
     private readonly findReportCategoryByIdUsecase: GetReportCategoryByIdUsecase,
     private readonly getReportsByStatusUsecase: GetReportsByStatusUsecase,
@@ -139,6 +142,22 @@ export class ReportController {
     @CurrentUser() user: KeycloakUser,
   ) {
     const instance = await this.createReportUsecase.execute({
+      ...body,
+      owner: user.sub,
+    });
+
+    return ReportResponse.fromDomain(instance);
+  }
+
+  @Post('message')
+  @UseGuards(AuthenticationGuard)
+  @Swagger.ApiOperation({ summary: 'Create a new Report message ressource.' })
+  @Swagger.ApiCreatedResponse({ type: ReportResponse })
+  async createReportMessage(
+    @Body() body: CreateReportMessageRequest,
+    @CurrentUser() user: KeycloakUser,
+  ) {
+    const instance = await this.createReportMessageUsecase.execute({
       ...body,
       owner: user.sub,
     });

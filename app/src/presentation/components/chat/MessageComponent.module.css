@@ -14,18 +14,14 @@
     justify-content: flex-start;
 }
 
-.downloadButton {
+.downloadContainer {
     background-color: transparent;
     border: none;
-}
-
-.downloadContainer {
     color: black;
     display: flex;
     flex-direction: row;
     align-items: center;
     justify-content: center;
-    padding: 16px;
     text-decoration: underline;
     text-decoration-color: black;
 }
@@ -37,6 +33,7 @@
 }
 
 .downloadTitle {
+    color: black;
     font-family: 'Poppins', sans-serif;
     font-weight: 400;
     font-size: 12px;
@@ -52,7 +49,6 @@
 
 .message {
     display: block;
-    padding: 10px 20px;
     max-width: 80%;
     word-wrap: break-word;
     color: black;
@@ -86,13 +82,13 @@
 }
 
 .messageAudio {
-    padding: 12px;
     max-width: 80%;
 }
 
 .image {
     max-height: 300px;
     max-width: 100%;
+    padding: 8px 0px;
 }
 
 .name {
@@ -134,4 +130,23 @@
     justify-content: center;
     flex-direction: column;
     width: fit-content;
+}
+.reportButton {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.reportButtonText {
+    color: black;
+}
+
+.fullHeightPopover {
+    height: 100vh;
+    width: 100vw;
+}
+
+ion-popover::part(backdrop) {
+    height: 100vh;
+    width: 100vw;
 }

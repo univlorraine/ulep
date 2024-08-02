@@ -1,6 +1,9 @@
 import { User } from 'src/core/models/user.model';
 import { TextContent } from './translation.model';
 
+// WARNING: Change this value if you want to change the category name in seeds
+export const CONVERSATION_CATEGORY = 'Conversation';
+
 export enum ReportStatus {
   OPEN = 'OPEN',
   IN_PROGRESS = 'IN_PROGRESS',
