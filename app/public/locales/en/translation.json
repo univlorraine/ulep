@@ -97,15 +97,19 @@
         "close": "Close"
     },
     "chat": {
+        "ariaLabelFileDownloaded": "Downloading file : {{filename}}",
         "fileDownloaded": "File downloaded",
         "me": "Me",
+        "messageReport": "Message sent by {{firstname}} {{lastname}} on {{date}} --- {{message}}",
+        "messageReported": "Message reported",
         "title": "Messages with {{name}}",
         "input": {
             "placeholder": {
                 "blocked": "The tandem is on pause, you cannot send messages",
                 "unblocked": "Write your message..."
             }
-        }
+        },
+        "reportMessageButton": "Report message"
     },
     "connection_page": {
         "connect_title": "Already have an account ?",

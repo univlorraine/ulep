@@ -14,6 +14,7 @@ import AskForLearningLanguageUsecase from '../domain/usecases/AskForLearningLang
 import { GetInitialUrlUsecase, GetTokenFromCodeUsecase } from '../domain/usecases/AuthStandardFlow';
 import CreateOrUpdateTestedLanguageUsecase from '../domain/usecases/CreateOrUpdateTestedLanguageUsecase';
 import CreateProfileUsecase from '../domain/usecases/CreateProfileUsecase';
+import CreateReportMessageUsecase from '../domain/usecases/CreateReportMessageUsecase';
 import CreateReportUsecase from '../domain/usecases/CreateReportUsecase';
 import CreateUserUsecase from '../domain/usecases/CreateUserUsecase';
 import EditProfileUsecase from '../domain/usecases/EditProfileUsecase';
@@ -27,6 +28,7 @@ import GetAllTandemsUsecase from '../domain/usecases/GetAllTandemsUsecase';
 import GetAllUniversitiesUsecase from '../domain/usecases/GetAllUniversitiesUsecase';
 import GetConversationsUsecase from '../domain/usecases/GetConversationsUsecase';
 import GetHistoricEmailPartnerUsecase from '../domain/usecases/GetHistoricEmailPartnerUsecase';
+import GetJitsiTokenUsecase from '../domain/usecases/GetJitsiTokenUsecase';
 import GetMediaObjectUsecase from '../domain/usecases/GetMediaObjectUsecase';
 import GetMessagesFromConversationUsecase from '../domain/usecases/GetMessagesFromConversationUsecase';
 import GetPartnersToUniversityUsecase from '../domain/usecases/GetPartnersToUniversityUsecase';
@@ -43,7 +45,6 @@ import SendMessageUsecase from '../domain/usecases/SendMessageUsecase';
 import UpdateAvatarUsecase from '../domain/usecases/UpdateAvatarUsecase';
 import UpdateNotificationPermissionUsecase from '../domain/usecases/UpdateNotificationPermissionUsecase';
 import { ConfigContextValueType } from './configurationContextTypes';
-import GetJitsiTokenUsecase from '../domain/usecases/GetJitsiTokenUsecase';
 
 interface GetConfigContextValueProps {
     apiUrl: string;
@@ -102,6 +103,7 @@ const getConfigContextValue = ({
     const createOrUpdateTestedLanguage = new CreateOrUpdateTestedLanguageUsecase(domainHttpAdapter, setProfile);
     const createProfile = new CreateProfileUsecase(domainHttpAdapter, setProfile);
     const createReport = new CreateReportUsecase(domainHttpAdapter);
+    const createReportMessage = new CreateReportMessageUsecase(domainHttpAdapter);
     const getAllInterestCategories = new GetAllInterestCategoriesUsecase(domainHttpAdapter);
     const getAllCountries = new GetAllCountriesUsecase(domainHttpAdapter);
     const getAllGoals = new GetAllGoalsUsecase(domainHttpAdapter);
@@ -151,6 +153,7 @@ const getConfigContextValue = ({
         createOrUpdateTestedLanguage,
         createProfile,
         createReport,
+        createReportMessage,
         createUser,
         editProfile,
         editUser,
