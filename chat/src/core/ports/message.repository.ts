@@ -2,9 +2,16 @@ import { Message, MessageType } from 'src/core/models';
 
 export const MESSAGE_REPOSITORY = 'message.repository';
 
+export enum MessagePaginationDirection {
+    FORWARD = 'forward',
+    BACKWARD = 'backward',
+    BOTH = 'both',
+}
+
 export type MessagePagination = {
     lastMessageId?: string;
     limit?: number;
+    direction?: MessagePaginationDirection;
 };
 
 export interface MessageRepository {

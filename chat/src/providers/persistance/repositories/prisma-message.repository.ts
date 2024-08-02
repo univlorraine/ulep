@@ -3,6 +3,7 @@ import { Injectable } from '@nestjs/common';
 import { Message, MessageType } from 'src/core/models';
 import {
     MessagePagination,
+    MessagePaginationDirection,
     MessageRepository,
 } from 'src/core/ports/message.repository';
 import {
@@ -66,25 +67,12 @@ export class PrismaMessageRepository implements MessageRepository {
     ): Promise<Message[]> {
         const messagesPagination = {};
         const where = { conversationId };
+        const cursor = pagination.lastMessageId
+            ? { id: pagination.lastMessageId }
+            : undefined;
 
         if (pagination.limit !== undefined) {
             messagesPagination['take'] = pagination.limit;
-        }
-
-        if (pagination.lastMessageId) {
-            const lastMessage = await this.prisma.message.findFirst({
-                where: {
-                    id: pagination.lastMessageId,
-                },
-            });
-
-            if (lastMessage) {
-                where['createdAt'] = {
-                    lt: lastMessage.createdAt,
-                };
-            } else {
-                return [];
-            }
         }
 
         if (contentFilter) {
@@ -97,12 +85,41 @@ export class PrismaMessageRepository implements MessageRepository {
             where['type'] = typeFilter;
         }
 
-        const messages = await this.prisma.message.findMany({
-            where,
-            orderBy: { updatedAt: 'desc' },
-            ...messagesPagination,
-            ...MessagesRelations,
-        });
+        let messages = [];
+
+        if (
+            pagination.direction === MessagePaginationDirection.FORWARD ||
+            pagination.direction === MessagePaginationDirection.BOTH
+        ) {
+            messages = await this.prisma.message.findMany({
+                where,
+                cursor,
+                skip:
+                    pagination.direction === MessagePaginationDirection.BOTH
+                        ? 0
+                        : 1,
+                orderBy: { createdAt: 'desc' },
+                ...messagesPagination,
+                ...MessagesRelations,
+            });
+        }
+
+        if (
+            pagination.direction === MessagePaginationDirection.BACKWARD ||
+            pagination.direction === MessagePaginationDirection.BOTH
+        ) {
+            messagesPagination['take'] = -pagination.limit;
+            const reverseMessages = await this.prisma.message.findMany({
+                where,
+                cursor,
+                skip: 1,
+                orderBy: { createdAt: 'desc' },
+                ...messagesPagination,
+                ...MessagesRelations,
+            });
+
+            messages = [...reverseMessages, ...messages];
+        }
 
         return messages.map(messageMapper);
     }

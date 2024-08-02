@@ -21,6 +21,7 @@ import { CreateConversationsRequest } from 'src/api/dtos/conversation/create-con
 import { MessageResponse, SendMessageRequest } from 'src/api/dtos/message';
 import { CollectionResponse } from 'src/api/dtos/pagination';
 import { AuthenticationGuard } from 'src/api/guards';
+import { MessagePaginationDirection } from 'src/core/ports/message.repository';
 import {
     CreateConversationUsecase,
     CreateMessageUsecase,
@@ -61,6 +62,8 @@ export class ConversationController {
                 pagination: {
                     lastMessageId: params.lastMessageId,
                     limit: params.limit,
+                    direction:
+                        params.direction ?? MessagePaginationDirection.FORWARD,
                 },
                 contentFilter: params.contentFilter,
                 typeFilter: params.typeFilter,
