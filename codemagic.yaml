@@ -158,7 +158,7 @@ workflows:
       node: 18.12.0
       xcode: 15.0
       cocoapods: 1.12.1
-      java: 19.0.1
+      java: 21.0.3
     triggering:
       events:
       - push
