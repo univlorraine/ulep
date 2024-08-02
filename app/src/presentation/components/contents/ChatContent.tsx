@@ -9,7 +9,7 @@ import Profile from '../../../domain/entities/Profile';
 import Conversation from '../../../domain/entities/chat/Conversation';
 import useHandleMessagesFromConversation from '../../hooks/useHandleMessagesFromConversation';
 import Loader from '../Loader';
-import ChatFooter from '../chat/ChatInputSender';
+import ChatInputSender from '../chat/ChatInputSender';
 import MessagesList from '../chat/MessagesList';
 import styles from './ChatContent.module.css';
 
@@ -115,7 +115,7 @@ const Content: React.FC<ChatContentProps> = ({ conversation, goBack, profile, se
                     <Loader />
                 </div>
             )}
-            <ChatFooter isBlocked={isBlocked} profile={profile} conversation={conversation} />
+            <ChatInputSender isBlocked={isBlocked} profile={profile} conversation={conversation} />
         </div>
     );
 };
