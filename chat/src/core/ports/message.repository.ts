@@ -23,5 +23,9 @@ export interface MessageRepository {
         contentFilter?: string,
         typeFilter?: MessageType,
     ) => Promise<Message[]>;
+    searchMessagesIdByConversationId: (
+        id: string,
+        search: string,
+    ) => Promise<string[]>;
     update: (message: Message) => Promise<Message>;
 }

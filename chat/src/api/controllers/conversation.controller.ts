@@ -31,6 +31,7 @@ import {
     DeleteUserConversationUsecase,
     GetConversationFromUserIdUsecase,
     GetMessagesFromConversationIdUsecase,
+    SearchMessagesIdFromConversationIdUsecase,
     UploadMediaUsecase,
 } from 'src/core/usecases';
 
@@ -47,6 +48,7 @@ export class ConversationController {
         private deleteUserConversationUsecase: DeleteUserConversationUsecase,
         private getMessagesFromConversationIdUsecase: GetMessagesFromConversationIdUsecase,
         private getConversationFromUserIdUsecase: GetConversationFromUserIdUsecase,
+        private searchMessagesIdFromConversationIdUsecase: SearchMessagesIdFromConversationIdUsecase,
         private uploadMediaUsecase: UploadMediaUsecase,
     ) {}
 
@@ -73,6 +75,23 @@ export class ConversationController {
             items: messages.map(MessageResponse.from),
             totalItems: messages.length,
         });
+    }
+
+    @Get('messages/:id/:search')
+    @Swagger.ApiOperation({
+        summary: 'Search all messages ids from conversation id',
+    })
+    async searchMessages(
+        @Param('id') conversationId: string,
+        @Param('search') search: string,
+    ): Promise<string[]> {
+        const messagesIds =
+            await this.searchMessagesIdFromConversationIdUsecase.execute({
+                id: conversationId,
+                search: search,
+            });
+
+        return messagesIds;
     }
 
     @Get('/:id')

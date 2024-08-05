@@ -59,6 +59,24 @@ export class PrismaMessageRepository implements MessageRepository {
         return messageMapper(newMessage);
     }
 
+    async searchMessagesIdByConversationId(
+        conversationId: string,
+        search: string,
+    ): Promise<string[]> {
+        const messagesIds = await this.prisma.message.findMany({
+            where: {
+                conversationId,
+                content: {
+                    contains: search,
+                },
+            },
+            orderBy: { createdAt: 'desc' },
+            take: 300,
+        });
+
+        return messagesIds.map((message) => message.id);
+    }
+
     async findMessagesByConversationId(
         conversationId: string,
         pagination: MessagePagination,
