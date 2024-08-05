@@ -1,8 +1,10 @@
-import { IonButton, IonIcon, useIonToast } from '@ionic/react';
+import { IonButton, IonIcon, IonText, useIonToast } from '@ionic/react';
+import { documentOutline, linkOutline, musicalNoteOutline } from 'ionicons/icons';
 import { useTranslation } from 'react-i18next';
 import { DownloadSvg } from '../../../assets';
 import { useConfig } from '../../../context/ConfigurationContext';
 import { Message, MessageType } from '../../../domain/entities/chat/Message';
+import AudioLine from '../AudioLine';
 import styles from './MediaComponent.module.css';
 
 interface MessageProps {
@@ -11,17 +13,16 @@ interface MessageProps {
 }
 
 const MediaComponent: React.FC<MessageProps> = ({ message, isCurrentUserMessage }) => {
-    const { t } = useTranslation();
-    const headerClass = isCurrentUserMessage ? styles.alignRight : styles.alignLeft;
-    const name = isCurrentUserMessage ? t('chat.me') : `${message.sender.firstname} ${message.sender.lastname}`;
-    const date = `${t(message.getMessageDate())} ${message.getMessageHour()}`;
-
     const renderMessageContent = () => {
         switch (message.type) {
             case MessageType.Image:
                 return <MessageImage message={message} />;
             case MessageType.File:
                 return <MessageFile message={message} isCurrentUserMessage={isCurrentUserMessage} />;
+            case MessageType.Audio:
+                return <MessageAudio message={message} isCurrentUserMessage={isCurrentUserMessage} />;
+            case MessageType.Link:
+                return <MessageLink message={message} isCurrentUserMessage={isCurrentUserMessage} />;
             default:
                 return null;
         }
@@ -29,15 +30,9 @@ const MediaComponent: React.FC<MessageProps> = ({ message, isCurrentUserMessage 
 
     return (
         <div
+            role="list"
             className={`${message.type === MessageType.Image ? styles.imageMessageContainer : styles.messageContainer}`}
         >
-            {message.type !== MessageType.Image && (
-                <div className={`${styles.header} ${headerClass}`}>
-                    <span className={styles.name}>{name}</span>
-                    <span className={styles.date}>{date}</span>
-                </div>
-            )}
-
             {renderMessageContent()}
         </div>
     );
@@ -48,11 +43,51 @@ const MessageImage: React.FC<MessageProps> = ({ message }) => {
     return <img className={styles.image} src={message.content} alt={t('chat.medias.images-alt') as string} />;
 };
 
-const MessageFile: React.FC<MessageProps> = ({ message, isCurrentUserMessage }) => {
+const MessageAudio: React.FC<MessageProps> = ({ message, isCurrentUserMessage }) => {
+    return (
+        <div className={styles.messageAudio}>
+            <IonIcon icon={musicalNoteOutline} size="large" />
+            <AudioLine audioFile={message.content} />
+        </div>
+    );
+};
+
+const MessageLink: React.FC<MessageProps> = ({ message }) => {
+    const { browserAdapter } = useConfig();
+    const og = message.metadata?.openGraphResult;
+
+    const openLink = async () => {
+        await browserAdapter.open(message.content);
+    };
+
+    return (
+        <IonButton
+            id={`message-container-${message.id}`}
+            fill="clear"
+            className={styles.messageLink}
+            onClick={openLink}
+        >
+            <div className={styles.linkContainer}>
+                <div className={styles.linkImageContainer}>
+                    {og?.ogImage?.[0]?.url ? (
+                        <img src={og?.ogImage?.[0]?.url} alt={og?.ogTitle} className={styles.linkImage} />
+                    ) : (
+                        <IonIcon icon={linkOutline} size="medium" className={styles.linkIcon} />
+                    )}
+                </div>
+                <div className={styles.linkTextContainer}>
+                    <IonText className={styles.linkText}>{og?.ogTitle}</IonText>
+                    <IonText className={styles.linkText}>{og?.ogUrl}</IonText>
+                </div>
+            </div>
+        </IonButton>
+    );
+};
+
+const MessageFile: React.FC<MessageProps> = ({ message }) => {
     const { fileAdapter } = useConfig();
     const { t } = useTranslation();
     const [showToast] = useIonToast();
-    const messageClass = isCurrentUserMessage ? styles.currentUser : styles.otherUser;
     const fileName = message.content.split('/')[5].split('?')[0];
 
     const handleDownload = async () => {
@@ -64,10 +99,13 @@ const MessageFile: React.FC<MessageProps> = ({ message, isCurrentUserMessage }) 
     };
 
     return (
-        <div className={`${styles.messageFile} ${messageClass}`}>
+        <div className={styles.messageFile} role="listitem">
             <IonButton fill="clear" className={styles.downloadButton} onClick={handleDownload}>
                 <div className={styles.downloadContainer}>
-                    <span className={styles.downloadTitle}>{fileName}</span>
+                    <div className={styles.downloadIconContainer}>
+                        <IonIcon icon={documentOutline} size="large" />
+                        <span className={styles.downloadTitle}>{decodeURI(fileName)}</span>
+                    </div>
                     <IonIcon
                         className={styles.download}
                         icon={DownloadSvg}

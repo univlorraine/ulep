@@ -1,4 +1,5 @@
-import { IonList } from '@ionic/react';
+import { IonList, IonText } from '@ionic/react';
+import { useTranslation } from 'react-i18next';
 import Conversation from '../../../domain/entities/chat/Conversation';
 import ConversationLine from './ConversationLine';
 import styles from './ConversationsLines.module.css';
@@ -7,19 +8,31 @@ interface ConversationsLinesProps {
     conversations: Conversation[];
     userId: string;
     onConversationPressed: (conversation: Conversation) => void;
+    currentConversation?: Conversation;
 }
 
-const ConversationsLines: React.FC<ConversationsLinesProps> = ({ conversations, onConversationPressed, userId }) => {
+const ConversationsLines: React.FC<ConversationsLinesProps> = ({
+    conversations,
+    onConversationPressed,
+    userId,
+    currentConversation,
+}) => {
+    const { t } = useTranslation();
     return (
-        <IonList inset={true} className={styles.container}>
-            {conversations.map((conversation) => (
-                <ConversationLine
-                    key={conversation.id}
-                    conversation={conversation}
-                    onPressed={onConversationPressed}
-                    userId={userId}
-                />
-            ))}
+        <IonList lines="full" className={styles.container}>
+            {conversations.length > 0 ? (
+                conversations.map((conversation) => (
+                    <ConversationLine
+                        key={conversation.id}
+                        conversation={conversation}
+                        onPressed={onConversationPressed}
+                        userId={userId}
+                        currentConversation={currentConversation}
+                    />
+                ))
+            ) : (
+                <IonText className={styles.no_conversations}>{t('chat.no_conversations')}</IonText>
+            )}
         </IonList>
     );
 };

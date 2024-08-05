@@ -45,6 +45,7 @@ const Content: React.FC<Omit<MediaContentProps, 'isHybrid'>> = ({ conversation, 
                 <IonList lines="none" className={styles['header-filters']}>
                     <IonItem
                         button={true}
+                        detail={false}
                         onClick={() => setSelectedFilter(MessageType.Image)}
                         className={`${styles.btnFilters} ${
                             selectedFilter === MessageType.Image ? styles.btnFiltersActive : ''
@@ -54,12 +55,33 @@ const Content: React.FC<Omit<MediaContentProps, 'isHybrid'>> = ({ conversation, 
                     </IonItem>
                     <IonItem
                         button={true}
+                        detail={false}
                         onClick={() => setSelectedFilter(MessageType.File)}
                         className={`${styles.btnFilters} ${
                             selectedFilter === MessageType.File ? styles.btnFiltersActive : ''
                         }`}
                     >
                         <IonLabel>{t('chat.medias.files')}</IonLabel>
+                    </IonItem>
+                    <IonItem
+                        button={true}
+                        detail={false}
+                        onClick={() => setSelectedFilter(MessageType.Audio)}
+                        className={`${styles.btnFilters} ${
+                            selectedFilter === MessageType.Audio ? styles.btnFiltersActive : ''
+                        }`}
+                    >
+                        <IonLabel>{t('chat.medias.audios')}</IonLabel>
+                    </IonItem>
+                    <IonItem
+                        button={true}
+                        detail={false}
+                        onClick={() => setSelectedFilter(MessageType.Link)}
+                        className={`${styles.btnFilters} ${
+                            selectedFilter === MessageType.Link ? styles.btnFiltersActive : ''
+                        }`}
+                    >
+                        <IonLabel>{t('chat.medias.links')}</IonLabel>
                     </IonItem>
                 </IonList>
             </div>

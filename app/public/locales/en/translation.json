@@ -119,9 +119,13 @@
             "title": "Shared media",
             "files": "Files",
             "images": "Images",
-            "images-alt": "Shared image"
+            "images-alt": "Shared image",
+            "audios": "Audios",
+            "links": "Links"
         },
-        "reportMessageButton": "Report message"
+        "reportMessageButton": "Report message",
+        "no_messages": "No messages",
+        "no_conversations": "No conversations"
     },
     "connection_page": {
         "connect_title": "Already have an account ?",

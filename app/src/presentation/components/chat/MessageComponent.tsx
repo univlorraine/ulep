@@ -217,7 +217,7 @@ const MessageLink: React.FC<MessageProps> = ({ message, isCurrentUserMessage, on
         >
             <div className={styles.outerContainer}>
                 <OGCard
-                    imageUrl={message.metadata?.openGraphResult?.ogImage[0].url}
+                    imageUrl={message.metadata?.openGraphResult?.ogImage?.[0]?.url}
                     title={message.metadata?.openGraphResult?.ogTitle}
                     description={message.metadata?.openGraphResult?.ogDescription}
                     url={message.content}

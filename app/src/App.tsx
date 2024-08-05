@@ -61,10 +61,10 @@ const AppCore = () => {
                 console.error('Registration error:', error);
             });
             notificationAdapter.notificationReceivedListener((notification: any) => {
-                console.log('Received notification:', notification);
+                console.info('Received notification:', notification);
             });
             notificationAdapter.notificationActionListener((notification: any) => {
-                console.log('Notification action performed:', notification);
+                console.info('Notification action performed:', notification);
             });
         }
 

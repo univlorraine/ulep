@@ -75,6 +75,7 @@ const Content: React.FC<ChatContentProps> = ({ conversation, goBack, profile, se
                         <IonList lines="none">
                             <IonItem
                                 button={true}
+                                detail={false}
                                 onClick={() =>
                                     setCurrentContent
                                         ? setCurrentContent('media')
@@ -88,6 +89,7 @@ const Content: React.FC<ChatContentProps> = ({ conversation, goBack, profile, se
                             </IonItem>
                             <IonItem
                                 button={true}
+                                detail={false}
                                 onClick={() =>
                                     setCurrentContent
                                         ? setCurrentContent('search')

@@ -39,7 +39,7 @@ export const useMessages = ({ messages, isScrollOver, loadMessages }: UseMessage
                 const heightDifference = newScrollHeight - previousScrollHeightRef.current;
                 messagesContainer.scrollTop = scrollPositionRef.current + heightDifference;
                 setIsLoading(false);
-            } else if (messagesContainer.scrollHeight <= messagesContainer.clientHeight) {
+            } else if (messages.length > 0 && messagesContainer.scrollHeight <= messagesContainer.clientHeight) {
                 loadMessages();
             } else {
                 scrollToBottom();

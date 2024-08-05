@@ -6,71 +6,17 @@
     width: 100%;
 }
 
-.alignRight {
-    justify-content: flex-end;
-}
-
-.alignLeft {
-    justify-content: flex-start;
-}
-
-.downloadButton {
-    background-color: transparent;
-    border: none;
-    text-transform: none;
-}
-
-.downloadContainer {
-    color: black;
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-    justify-content: center;
-    padding: 5px;
-    text-decoration: underline;
-    text-decoration-color: black;
-}
-
-.download {
-    margin: 8px;
-    width: 28px;
-    height: 28px;
-}
-
-.downloadTitle {
-    font-family: 'Poppins', sans-serif;
-    font-weight: 400;
-    font-size: 12px;
-}
-
 .messageContainer {
-    display: flex;
-    flex-direction: column;
-    align-items: flex-start;
     margin: 12px;
 }
+
+/* Image */
 
 .imageMessageContainer {
     width: 100px;
     height: 100px;
     display: inline-block;
     margin: 5px;
-}
-
-.message {
-    display: block;
-    padding: 10px 20px;
-    max-width: 80%;
-    word-wrap: break-word;
-    color: black;
-    font-family: 'Poppins', sans-serif;
-    font-weight: 400;
-    font-size: 12px;
-}
-
-.messageFile {
-    padding: 12px;
-    max-width: 80%;
 }
 
 .image {
@@ -80,36 +26,106 @@
     cursor: pointer;
 }
 
-.name {
-    color: black;
-    font-family: 'Maven Pro', sans-serif;
-    font-weight: 400;
-    font-size: 14px;
-    margin-right: 8px;
+/* Audio */
+
+.messageAudio {
+    background: white;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 8px 1.1em;
+    width: 100%;
 }
 
-.date {
-    color: black;
-    font-family: 'Maven Pro', sans-serif;
-    font-weight: 400;
-    font-size: 10px;
+/* File */
+
+.messageFile {
+    width: 100%;
+    background-color: white;
 }
 
-.name,
-.date {
+.downloadButton {
+    background-color: transparent;
+    border: none;
+    text-transform: none;
+    width: 100%;
+    margin: 0;
+    padding: 0;
+}
+
+.downloadContainer {
+    color: black;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    text-decoration: underline;
+    text-decoration-color: black;
+    width: 100%;
+}
+
+.download {
+    margin: 8px;
+    width: 28px;
+    height: 28px;
+}
+
+.downloadIconContainer {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    gap: 1em;
+}
+
+.downloadTitle {
+    font-family: 'Poppins', sans-serif;
+    font-weight: 400;
+    font-size: 12px;
+}
+
+/* Link */
+
+.linkContainer {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: start;
+    gap: 1em;
+    width: 100%;
+}
+
+.messageLink {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    background-color: white;
+    justify-content: start;
+}
+
+.linkImageContainer {
     display: inline-block;
 }
 
-.currentUser {
-    background-color: var(--primary-color);
-    border-radius: 20px 20px 0px 20px;
-    text-align: right;
-    margin-left: auto;
+.linkImage {
+    width: 60px;
+    height: 60px;
+    object-fit: cover;
 }
 
-.otherUser {
-    background-color: white;
-    border-radius: 20px 20px 20px 0px;
-    text-align: left;
-    margin-right: auto;
+.linkTextContainer {
+    text-transform: none;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: center;
+    gap: 0.5em;
+    color: black;
+}
+
+.linkIcon {
+    width: 30px;
+    height: 30px;
+    padding: 15px;
+    background-color: var(--ion-color-light);
 }
