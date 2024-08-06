@@ -20,7 +20,6 @@ export interface SignUpInformationsParams {
     centralGender?: Gender;
     centralAge?: number;
     fromIdp?: boolean;
-    close: () => void;
 }
 
 interface RulesInfoProps {
