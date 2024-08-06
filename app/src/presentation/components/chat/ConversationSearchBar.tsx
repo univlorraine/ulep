@@ -10,13 +10,17 @@ import styles from './ConversationSearchBar.module.css';
 interface ConversationSearchBarProps {
     conversation: Conversation;
     loadMessages: (messageId: string) => void;
+    clearSearch: () => void;
     setIsSearchMode: (isSearchMode: boolean) => void;
+    onSearchIsEmpty: () => void;
 }
 
 const ConversationSearchBar: React.FC<ConversationSearchBarProps> = ({
     setIsSearchMode,
     conversation,
     loadMessages,
+    onSearchIsEmpty,
+    clearSearch,
 }) => {
     const { searchMessagesIdsFromConversation } = useConfig();
     const [showToast] = useIonToast();
@@ -24,6 +28,9 @@ const ConversationSearchBar: React.FC<ConversationSearchBarProps> = ({
     const [currentIndex, setCurrentIndex] = useState<number>(0);
 
     const searchForMessages = async (searchText: string) => {
+        if (searchText.length <= 1) {
+            return;
+        }
         const messagesIds = await searchMessagesIdsFromConversation.execute(conversation.id, searchText);
 
         if (messagesIds instanceof Error) {
@@ -36,17 +43,24 @@ const ConversationSearchBar: React.FC<ConversationSearchBarProps> = ({
 
         setMessagesIds(messagesIds);
         setCurrentIndex(0);
-        loadMessages(messagesIds[currentIndex]);
+        if (messagesIds.length === 0) {
+            onSearchIsEmpty();
+        } else {
+            loadMessages(messagesIds[currentIndex]);
+        }
     };
 
     const onClear = () => {
         setMessagesIds([]);
         setCurrentIndex(0);
         setIsSearchMode(false);
+        clearSearch();
     };
 
     const goPrevious = () => {
-        if (currentIndex < messagesIds.length - 1) {
+        if (messagesIds.length === 0) {
+            return;
+        } else if (currentIndex < messagesIds.length - 1) {
             setCurrentIndex(currentIndex + 1);
             loadMessages(messagesIds[currentIndex + 1]);
         } else {
@@ -56,7 +70,9 @@ const ConversationSearchBar: React.FC<ConversationSearchBarProps> = ({
     };
 
     const goNext = () => {
-        if (currentIndex > 0) {
+        if (messagesIds.length === 0) {
+            return;
+        } else if (currentIndex > 0) {
             setCurrentIndex(currentIndex - 1);
             loadMessages(messagesIds[currentIndex - 1]);
         } else {

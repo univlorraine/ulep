@@ -96,6 +96,7 @@ const MessageComponent: React.FC<MessageProps> = ({ message, isCurrentUserMessag
                         message={message}
                         isCurrentUserMessage={isCurrentUserMessage}
                         onMessagePressed={onMessagePressed}
+                        currentMessageSearchId={currentMessageSearchId}
                     />
                 );
             default:
@@ -214,14 +215,21 @@ const MessageFile: React.FC<MessageProps> = ({ message, isCurrentUserMessage, on
     );
 };
 
-const MessageLink: React.FC<MessageProps> = ({ message, isCurrentUserMessage, onMessagePressed }) => {
+const MessageLink: React.FC<MessageProps> = ({
+    message,
+    isCurrentUserMessage,
+    onMessagePressed,
+    currentMessageSearchId,
+}) => {
     const messageClass = isCurrentUserMessage ? styles.currentUser : styles.otherUser;
 
     return (
         <IonButton
             id={`message-container-${message.id}`}
             fill="clear"
-            className={`${styles.messageLink} ${messageClass}`}
+            className={`${styles.messageLink} ${messageClass} ${
+                message.id === currentMessageSearchId ? styles.searchMessage : ''
+            }`}
             onClick={onMessagePressed}
         >
             <div className={styles.outerContainer}>

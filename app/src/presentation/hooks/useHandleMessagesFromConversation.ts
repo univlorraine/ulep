@@ -34,7 +34,8 @@ const useHandleMessagesFromConversation = ({
         isLoading: false,
     });
 
-    if (!profile) return { ...messagesResult, loadMessages: () => {}, addNewMessage: () => {} };
+    if (!profile)
+        return { ...messagesResult, loadMessages: () => {}, addNewMessage: () => {}, clearMessages: () => {} };
 
     const addNewMessage = (message: Message) => {
         setMessagesResult((current) => ({
@@ -131,6 +132,18 @@ const useHandleMessagesFromConversation = ({
         }
     };
 
+    const clearMessages = () => {
+        setLastMessageForwardId(undefined);
+        setLastMessageBackwardId(undefined);
+        setMessagesResult({
+            messages: [],
+            error: undefined,
+            isLoading: false,
+            isScrollForwardOver: false,
+            isScrollBackwardOver: false,
+        });
+    };
+
     useEffect(() => {
         const fetchData = async () => {
             await loadMessages(true);
@@ -139,7 +152,7 @@ const useHandleMessagesFromConversation = ({
         fetchData();
     }, [profile, conversationId, typeFilter]);
 
-    return { ...messagesResult, loadMessages, addNewMessage };
+    return { ...messagesResult, loadMessages, addNewMessage, clearMessages };
 };
 
 export default useHandleMessagesFromConversation;

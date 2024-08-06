@@ -32,14 +32,26 @@ const Content: React.FC<ChatContentProps> = ({ conversation, goBack, profile, se
     const [isSearchMode, setIsSearchMode] = useState<boolean>(false);
     const history = useHistory();
 
-    const { messages, isScrollForwardOver, isScrollBackwardOver, isLoading, loadMessages, addNewMessage } =
-        useHandleMessagesFromConversation({
-            conversationId: conversation.id,
-        });
+    const {
+        messages,
+        isScrollForwardOver,
+        isScrollBackwardOver,
+        isLoading,
+        loadMessages,
+        addNewMessage,
+        clearMessages,
+    } = useHandleMessagesFromConversation({
+        conversationId: conversation.id,
+    });
 
     const setSearchMode = () => {
         setShowMenu(false);
         setIsSearchMode(true);
+    };
+
+    const unsetSearchMode = () => {
+        setIsSearchMode(false);
+        setCurrentMessageSearchId(undefined);
     };
 
     const loadMessageFromSearch = (messageId: string) => {
@@ -115,6 +127,8 @@ const Content: React.FC<ChatContentProps> = ({ conversation, goBack, profile, se
                     conversation={conversation}
                     loadMessages={loadMessageFromSearch}
                     setIsSearchMode={setIsSearchMode}
+                    onSearchIsEmpty={clearMessages}
+                    clearSearch={unsetSearchMode}
                 />
             )}
             {!isLoading ? (

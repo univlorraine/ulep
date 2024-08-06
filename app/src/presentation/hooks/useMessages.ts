@@ -41,6 +41,8 @@ export const useMessages = ({
     };
 
     useEffect(() => {
+        if (!messages.length) return;
+
         const messagesContainer = messagesEndRef.current?.parentElement;
         if (messagesContainer) {
             // If the user scrolls up, we need to move the scroll to the last message from previous pagination
@@ -64,6 +66,8 @@ export const useMessages = ({
     }, [messages]);
 
     const handleScroll = (event: React.UIEvent<HTMLDivElement>) => {
+        if (messages.length === 0) return;
+
         const { scrollTop, scrollHeight, clientHeight } = event.currentTarget;
 
         const handleForwardScroll = () => {

@@ -1,3 +1,4 @@
+import { IonText } from '@ionic/react';
 import { isSameDay } from 'date-fns';
 import { useTranslation } from 'react-i18next';
 import { MessagePaginationDirection } from '../../../domain/entities/chat/Conversation';
@@ -36,6 +37,13 @@ const MessagesList: React.FC<MessagesListProps> = ({
     const renderMessages = () => {
         const messageElements: React.ReactNode[] = [];
         let lastDate: Date | null = null;
+
+        if (messages.length === 0)
+            return (
+                <div className={styles['no-messages']}>
+                    <IonText>{t('chat.noMessages')}</IonText>
+                </div>
+            );
 
         const reversedMessages = [...messages].reverse();
 

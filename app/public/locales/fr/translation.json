@@ -109,6 +109,7 @@
         "messageReport": "Message envoyé par : {{firstname}} {{lastname}} le {{date}} ---- {{message}}",
         "me": "Moi",
         "messageReported": "Message signalé",
+        "noMessages": "Il n'y a aucun message",
         "title": "Messages avec {{name}}",
         "input": {
             "placeholder": {

@@ -103,6 +103,7 @@
         "me": "Me",
         "messageReport": "Message sent by {{firstname}} {{lastname}} on {{date}} --- {{message}}",
         "messageReported": "Message reported",
+        "noMessages": "There is no message",
         "search": {
             "placeholder": "Search in conversation"
         },
