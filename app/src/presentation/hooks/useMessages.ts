@@ -26,9 +26,14 @@ export const useMessages = ({ messages, isScrollOver, loadMessages }: UseMessage
                 )
         );
 
+    const wait = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms));
+
     const scrollToBottom = async () => {
         await allImagesLoaded();
         messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
+        // Tricks to scroll to the bottom
+        await wait(1000);
+        messagesEndRef.current?.scrollIntoView({ behavior: 'smooth', block: 'end' });
     };
 
     useEffect(() => {

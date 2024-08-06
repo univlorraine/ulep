@@ -9,20 +9,19 @@ import styles from './MediaComponent.module.css';
 
 interface MessageProps {
     message: Message;
-    isCurrentUserMessage?: boolean;
 }
 
-const MediaComponent: React.FC<MessageProps> = ({ message, isCurrentUserMessage }) => {
+const MediaComponent: React.FC<MessageProps> = ({ message }) => {
     const renderMessageContent = () => {
         switch (message.type) {
             case MessageType.Image:
                 return <MessageImage message={message} />;
             case MessageType.File:
-                return <MessageFile message={message} isCurrentUserMessage={isCurrentUserMessage} />;
+                return <MessageFile message={message} />;
             case MessageType.Audio:
-                return <MessageAudio message={message} isCurrentUserMessage={isCurrentUserMessage} />;
+                return <MessageAudio message={message} />;
             case MessageType.Link:
-                return <MessageLink message={message} isCurrentUserMessage={isCurrentUserMessage} />;
+                return <MessageLink message={message} />;
             default:
                 return null;
         }
@@ -43,7 +42,7 @@ const MessageImage: React.FC<MessageProps> = ({ message }) => {
     return <img className={styles.image} src={message.content} alt={t('chat.medias.images-alt') as string} />;
 };
 
-const MessageAudio: React.FC<MessageProps> = ({ message, isCurrentUserMessage }) => {
+const MessageAudio: React.FC<MessageProps> = ({ message }) => {
     return (
         <div className={styles.messageAudio}>
             <IonIcon icon={musicalNoteOutline} size="large" />
@@ -70,14 +69,16 @@ const MessageLink: React.FC<MessageProps> = ({ message }) => {
             <div className={styles.linkContainer}>
                 <div className={styles.linkImageContainer}>
                     {og?.ogImage?.[0]?.url ? (
-                        <img src={og?.ogImage?.[0]?.url} alt={og?.ogTitle} className={styles.linkImage} />
+                        <div className={styles.linkImage}>
+                            <img src={og?.ogImage?.[0]?.url} alt={og?.ogTitle} className={styles.linkImageImg} />
+                        </div>
                     ) : (
                         <IonIcon icon={linkOutline} size="medium" className={styles.linkIcon} />
                     )}
                 </div>
                 <div className={styles.linkTextContainer}>
                     <IonText className={styles.linkText}>{og?.ogTitle}</IonText>
-                    <IonText className={styles.linkText}>{og?.ogUrl}</IonText>
+                    <IonText className={styles.linkTextUrl}>{og?.ogUrl}</IonText>
                 </div>
             </div>
         </IonButton>

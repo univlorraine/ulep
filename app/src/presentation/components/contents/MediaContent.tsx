@@ -93,8 +93,8 @@ const Content: React.FC<Omit<MediaContentProps, 'isHybrid'>> = ({ conversation, 
                 <MediasList
                     messages={messages}
                     loadMessages={loadMessages}
-                    userId={profile.user.id}
                     isScrollOver={isScrollOver}
+                    selectedFilter={selectedFilter}
                 />
             )}
         </div>

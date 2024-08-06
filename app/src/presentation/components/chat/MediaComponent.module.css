@@ -12,16 +12,21 @@
 
 /* Image */
 
+.messageContent {
+    margin: 0 auto;
+}
+
 .imageMessageContainer {
-    width: 100px;
-    height: 100px;
+    width: 90px;
+    height: 90px;
     display: inline-block;
     margin: 5px;
+    background-color: white;
 }
 
 .image {
-    height: 100px;
-    width: 100px;
+    height: 100%;
+    width: 100%;
     object-fit: cover;
     cursor: pointer;
 }
@@ -71,6 +76,7 @@
 }
 
 .downloadIconContainer {
+    text-align: left;
     display: flex;
     flex-direction: row;
     align-items: center;
@@ -113,7 +119,20 @@
     object-fit: cover;
 }
 
+.linkImageImg {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.linkTextUrl {
+    font-size: 0.8em;
+    white-space: nowrap;
+    overflow: hidden;
+}
+
 .linkTextContainer {
+    text-align: left;
     text-transform: none;
     display: flex;
     flex-direction: column;
