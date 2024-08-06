@@ -1,6 +1,12 @@
 import { UserChat } from '../User';
 import { Message } from './Message';
 
+export enum MessagePaginationDirection {
+    BACKWARD = 'backward',
+    FORWARD = 'forward',
+    BOTH = 'both',
+}
+
 class Conversation {
     constructor(
         public readonly id: string,

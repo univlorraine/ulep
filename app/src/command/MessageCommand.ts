@@ -28,7 +28,6 @@ export const messageWithoutSenderCommandToDomain = (command: MessageWithoutSende
 };
 
 export const messageCommandToDomain = (command: MessageCommand) => {
-    console.log(command.metadata);
     return new Message(
         command.id,
         command.content,

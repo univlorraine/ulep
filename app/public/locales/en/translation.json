@@ -103,6 +103,9 @@
         "me": "Me",
         "messageReport": "Message sent by {{firstname}} {{lastname}} on {{date}} --- {{message}}",
         "messageReported": "Message reported",
+        "search": {
+            "placeholder": "Search in conversation"
+        },
         "title": "Messages with {{name}}",
         "input": {
             "placeholder": {

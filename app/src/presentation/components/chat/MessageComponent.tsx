@@ -11,10 +11,11 @@ import styles from './MessageComponent.module.css';
 interface MessageProps {
     isCurrentUserMessage: boolean;
     message: Message;
+    currentMessageSearchId?: string;
     onMessagePressed?: (e: React.MouseEvent<HTMLIonButtonElement>) => void;
 }
 
-const MessageComponent: React.FC<MessageProps> = ({ message, isCurrentUserMessage }) => {
+const MessageComponent: React.FC<MessageProps> = ({ message, isCurrentUserMessage, currentMessageSearchId }) => {
     const { t } = useTranslation();
     const { createReportMessage } = useConfig();
     const [showToast] = useIonToast();
@@ -62,6 +63,7 @@ const MessageComponent: React.FC<MessageProps> = ({ message, isCurrentUserMessag
                         message={message}
                         isCurrentUserMessage={isCurrentUserMessage}
                         onMessagePressed={onMessagePressed}
+                        currentMessageSearchId={currentMessageSearchId}
                     />
                 );
             case MessageType.Image:
@@ -129,14 +131,21 @@ const MessageComponent: React.FC<MessageProps> = ({ message, isCurrentUserMessag
     );
 };
 
-const MessageText: React.FC<MessageProps> = ({ message, isCurrentUserMessage, onMessagePressed }) => {
+const MessageText: React.FC<MessageProps> = ({
+    message,
+    isCurrentUserMessage,
+    onMessagePressed,
+    currentMessageSearchId,
+}) => {
     const messageClass = isCurrentUserMessage ? styles.currentUser : styles.otherUser;
 
     return (
         <IonButton
             id={`message-container-${message.id}`}
             fill="clear"
-            className={`${styles.message} ${messageClass}`}
+            className={`${styles.message} ${messageClass} ${
+                message.id === currentMessageSearchId ? styles.searchMessage : ''
+            }`}
             onClick={onMessagePressed}
         >
             {message.content}

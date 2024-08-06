@@ -35,3 +35,7 @@
     display: flex;
     margin: 8px;
 }
+
+.currentSearchMessage {
+    background-color: var(--secondary-color);
+}

@@ -1,18 +1,27 @@
 import { useEffect, useRef, useState } from 'react';
+import { MessagePaginationDirection } from '../../domain/entities/chat/Conversation';
 import { Message } from '../../domain/entities/chat/Message';
 
 interface UseMessagesProps {
     messages: Message[];
-    isScrollOver: boolean;
-    loadMessages: () => void;
+    isScrollForwardOver: boolean;
+    isScrollBackwardOver: boolean;
+    isSearchMode: boolean;
+    loadMessages: (direction: MessagePaginationDirection) => void;
 }
 
-export const useMessages = ({ messages, isScrollOver, loadMessages }: UseMessagesProps) => {
+export const useMessages = ({
+    messages,
+    isScrollForwardOver,
+    isScrollBackwardOver,
+    isSearchMode = false,
+    loadMessages,
+}: UseMessagesProps) => {
     const [isLoading, setIsLoading] = useState(false);
+    const [direction, setDirection] = useState<MessagePaginationDirection>();
     const messagesEndRef = useRef<HTMLDivElement | null>(null);
     const scrollPositionRef = useRef<number>(0);
     const previousScrollHeightRef = useRef<number>(0);
-    let loadNewMessage = false;
 
     const allImagesLoaded = async () =>
         Promise.all(
@@ -26,7 +35,7 @@ export const useMessages = ({ messages, isScrollOver, loadMessages }: UseMessage
                 )
         );
 
-    const scrollToBottom = async () => {
+    const scrollToMessageRef = async () => {
         await allImagesLoaded();
         messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
     };
@@ -34,27 +43,47 @@ export const useMessages = ({ messages, isScrollOver, loadMessages }: UseMessage
     useEffect(() => {
         const messagesContainer = messagesEndRef.current?.parentElement;
         if (messagesContainer) {
-            if (isLoading) {
+            // If the user scrolls up, we need to move the scroll to the last message from previous pagination
+            if (isLoading && direction === MessagePaginationDirection.FORWARD) {
                 const newScrollHeight = messagesContainer.scrollHeight;
                 const heightDifference = newScrollHeight - previousScrollHeightRef.current;
                 messagesContainer.scrollTop = scrollPositionRef.current + heightDifference;
                 setIsLoading(false);
+                // If the user scrolls down, we need to stay at the same position
+            } else if (isLoading && direction === MessagePaginationDirection.BACKWARD) {
+                setIsLoading(false);
+                return;
+                // If there is less message displaying than the size screen, we need to load more
             } else if (messagesContainer.scrollHeight <= messagesContainer.clientHeight) {
-                loadMessages();
+                loadMessages(MessagePaginationDirection.FORWARD);
+                // If its the first time we load the conversation, we need to go to the ref message ( search or last message )
             } else {
-                scrollToBottom();
+                scrollToMessageRef();
             }
         }
     }, [messages]);
 
     const handleScroll = (event: React.UIEvent<HTMLDivElement>) => {
-        const { scrollTop, scrollHeight } = event.currentTarget;
+        const { scrollTop, scrollHeight, clientHeight } = event.currentTarget;
 
-        if (!loadNewMessage && !isScrollOver && scrollTop === 0) {
+        const handleForwardScroll = () => {
             setIsLoading(true);
             scrollPositionRef.current = scrollTop;
             previousScrollHeightRef.current = scrollHeight;
-            loadMessages();
+            setDirection(MessagePaginationDirection.FORWARD);
+            loadMessages(MessagePaginationDirection.FORWARD);
+        };
+
+        const handleBackwardScroll = () => {
+            setIsLoading(true);
+            setDirection(MessagePaginationDirection.BACKWARD);
+            loadMessages(MessagePaginationDirection.BACKWARD);
+        };
+
+        if (!isLoading && !isScrollForwardOver && scrollTop === 0) {
+            handleForwardScroll();
+        } else if (!isLoading && isSearchMode && !isScrollBackwardOver && scrollTop + clientHeight >= scrollHeight) {
+            handleBackwardScroll();
         }
     };
 

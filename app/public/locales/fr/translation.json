@@ -116,6 +116,9 @@
                 "unblocked": "Écris ton message..."
             }
         },
+        "search": {
+            "placeholder": "Rechercher dans la conversation"
+        },
         "conversation_menu": {
             "aria_label": "Menu de la conversation",
             "search": "Rechercher dans la conversation",

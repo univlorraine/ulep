@@ -1,5 +1,6 @@
 import { isSameDay } from 'date-fns';
 import { useTranslation } from 'react-i18next';
+import { MessagePaginationDirection } from '../../../domain/entities/chat/Conversation';
 import { Message } from '../../../domain/entities/chat/Message';
 import { useMessages } from '../../hooks/useMessages';
 import Loader from '../Loader';
@@ -7,15 +8,30 @@ import MessageComponent from './MessageComponent';
 import styles from './MessagesList.module.css';
 
 interface MessagesListProps {
+    currentMessageSearchId?: string;
     messages: Message[];
-    isScrollOver: boolean;
-    loadMessages: () => void;
+    isScrollForwardOver: boolean;
+    isScrollBackwardOver: boolean;
+    loadMessages: (direction: MessagePaginationDirection) => void;
     userId: string;
 }
 
-const MessagesList: React.FC<MessagesListProps> = ({ messages, isScrollOver, loadMessages, userId }) => {
+const MessagesList: React.FC<MessagesListProps> = ({
+    currentMessageSearchId,
+    messages,
+    isScrollForwardOver,
+    isScrollBackwardOver,
+    loadMessages,
+    userId,
+}) => {
     const { t } = useTranslation();
-    const { isLoading, messagesEndRef, handleScroll } = useMessages({ messages, isScrollOver, loadMessages });
+    const { isLoading, messagesEndRef, handleScroll } = useMessages({
+        messages,
+        isScrollForwardOver,
+        isScrollBackwardOver,
+        isSearchMode: Boolean(currentMessageSearchId),
+        loadMessages,
+    });
 
     const renderMessages = () => {
         const messageElements: React.ReactNode[] = [];
@@ -38,8 +54,16 @@ const MessagesList: React.FC<MessagesListProps> = ({ messages, isScrollOver, loa
 
             if (message.content) {
                 messageElements.push(
-                    <div key={message.id} className={isCurrentUserMessage ? styles.currentUser : styles.otherUser}>
-                        <MessageComponent message={message} isCurrentUserMessage={isCurrentUserMessage} />
+                    <div
+                        ref={message.id === currentMessageSearchId ? messagesEndRef : null}
+                        key={message.id}
+                        className={isCurrentUserMessage ? styles.currentUser : styles.otherUser}
+                    >
+                        <MessageComponent
+                            currentMessageSearchId={currentMessageSearchId}
+                            message={message}
+                            isCurrentUserMessage={isCurrentUserMessage}
+                        />
                     </div>
                 );
             }
@@ -57,7 +81,7 @@ const MessagesList: React.FC<MessagesListProps> = ({ messages, isScrollOver, loa
                 </div>
             )}
             {renderMessages()}
-            <div ref={messagesEndRef} />
+            <div ref={!currentMessageSearchId ? messagesEndRef : null} />
         </div>
     );
 };
