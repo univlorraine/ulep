@@ -453,7 +453,8 @@
         "confirm_password": "Confirm your password",
         "password_infos": {
             "title": "The password must contain at least :",
-            "rules": ["8 characters", "1 uppercase character", "1 lowercase character", "1 digit"]
+            "rules": ["8 characters", "1 uppercase character", "1 lowercase character", "1 digit"],
+            "close": "Close password information"
         },
         "cgu": {
             "confidentiality": "privacy policy",

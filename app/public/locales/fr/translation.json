@@ -482,7 +482,8 @@
         "confirm_password": "Confirme ton mot de passe",
         "password_infos": {
             "title": "Le mot de passe doit contenir au moins :",
-            "rules": ["8 caractères", "1 caractère MAJUSCULE", "1 caractère minuscule", "1 chiffre"]
+            "rules": ["8 caractères", "1 caractère MAJUSCULE", "1 caractère minuscule", "1 chiffre"],
+            "close": "Fermer les informations de mot de passe"
         },
         "cgu": {
             "confidentiality": "politique de confidentialité",
