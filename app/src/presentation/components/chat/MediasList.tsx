@@ -15,7 +15,13 @@ interface MediasListProps {
 
 const MediasList: React.FC<MediasListProps> = ({ messages, isScrollOver, loadMessages, userId }) => {
     const { t } = useTranslation();
-    const { isLoading, messagesEndRef, handleScroll } = useMessages({ messages, isScrollOver, loadMessages });
+    const { isLoading, messagesEndRef, handleScroll } = useMessages({
+        messages,
+        isScrollForwardOver: isScrollOver,
+        isScrollBackwardOver: false,
+        loadMessages,
+        isSearchMode: false,
+    });
 
     const renderMessages = () => {
         const messageElements: React.ReactNode[] = [];

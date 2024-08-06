@@ -86,6 +86,7 @@ describe('UploadMedia', () => {
             conversationId: tandemId,
             message: message,
             file: mockFile,
+            filename: 'testfile.png',
         });
 
         expect(mockedStorage.write).toHaveBeenCalled();
@@ -99,6 +100,7 @@ describe('UploadMedia', () => {
                 conversationId: tandemId,
                 message: wrongMessage,
                 file: mockFile,
+                filename: 'testfile.png',
             }),
         ).rejects.toThrow(new NotFoundException('Message not found'));
     });
@@ -109,6 +111,7 @@ describe('UploadMedia', () => {
                 conversationId: 'wrongId',
                 message: message,
                 file: mockFile,
+                filename: 'testfile.png',
             }),
         ).rejects.toThrow(new NotFoundException('Conversation not found'));
     });
