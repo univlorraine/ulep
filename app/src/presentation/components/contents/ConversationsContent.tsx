@@ -12,6 +12,7 @@ interface ConversationsContentProps {
     isLoading: boolean;
     profile: Profile;
     onConversationPressed: (conversation: Conversation) => void;
+    currentConversation?: Conversation;
 }
 
 const Content: React.FC<Omit<ConversationsContentProps, 'isHybrid'>> = ({
@@ -19,6 +20,7 @@ const Content: React.FC<Omit<ConversationsContentProps, 'isHybrid'>> = ({
     isLoading,
     onConversationPressed,
     profile,
+    currentConversation,
 }) => {
     const { t } = useTranslation();
 
@@ -32,6 +34,7 @@ const Content: React.FC<Omit<ConversationsContentProps, 'isHybrid'>> = ({
                     conversations={conversations}
                     onConversationPressed={onConversationPressed}
                     userId={profile.user.id}
+                    currentConversation={currentConversation}
                 />
             )}
             {isLoading && <Loader />}
@@ -41,6 +44,7 @@ const Content: React.FC<Omit<ConversationsContentProps, 'isHybrid'>> = ({
 
 const ConversationsContent: React.FC<ConversationsContentProps> = ({
     conversations,
+    currentConversation,
     isHybrid,
     isLoading,
     onConversationPressed,
@@ -53,17 +57,19 @@ const ConversationsContent: React.FC<ConversationsContentProps> = ({
                 isLoading={isLoading}
                 onConversationPressed={onConversationPressed}
                 profile={profile}
+                currentConversation={currentConversation}
             />
         );
     }
 
     return (
-        <IonPage className={styles.content}>
+        <IonPage className={`${styles.content} content-wrapper`}>
             <Content
                 conversations={conversations}
                 isLoading={isLoading}
                 onConversationPressed={onConversationPressed}
                 profile={profile}
+                currentConversation={currentConversation}
             />
         </IonPage>
     );

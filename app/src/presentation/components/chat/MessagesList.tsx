@@ -38,7 +38,11 @@ const MessagesList: React.FC<MessagesListProps> = ({ messages, isScrollOver, loa
 
             if (message.content) {
                 messageElements.push(
-                    <div key={message.id} className={isCurrentUserMessage ? styles.currentUser : styles.otherUser}>
+                    <div
+                        role="listitem"
+                        key={message.id}
+                        className={isCurrentUserMessage ? styles.currentUser : styles.otherUser}
+                    >
                         <MessageComponent message={message} isCurrentUserMessage={isCurrentUserMessage} />
                     </div>
                 );
@@ -49,7 +53,7 @@ const MessagesList: React.FC<MessagesListProps> = ({ messages, isScrollOver, loa
     };
 
     return (
-        <div className={styles.messages} onScroll={handleScroll}>
+        <div className={styles.messages} onScroll={handleScroll} role="list">
             {isLoading && (
                 <div className={styles.loader}>
                     {/* TODO: Upgrade to use a better loader */}

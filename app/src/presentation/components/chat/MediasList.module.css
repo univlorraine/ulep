@@ -17,6 +17,16 @@
     width: 100%;
 }
 
+.messagesContainer {
+    width: min-content;
+    margin: 0 auto;
+}
+
+.messagesContent {
+    width: 100%;
+    min-width: 300px;
+}
+
 .currentUser,
 .otherUser {
     display: flex;
@@ -34,4 +44,16 @@
     justify-content: center;
     display: flex;
     margin: 8px;
+}
+
+@media (min-width: 1280px) {
+    .messagesContent {
+        min-width: 500px;
+    }
+}
+
+@media (min-width: 1600px) {
+    .messagesContent {
+        min-width: 600px;
+    }
 }
