@@ -1,12 +1,14 @@
+import { IonItem, IonList } from '@ionic/react';
 import React from 'react';
 import { useTranslation } from 'react-i18next';
-import { useHistory } from 'react-router';
+import { useHistory, useLocation } from 'react-router';
 import { ConversationsSvg, HomeSvg } from '../../../assets';
 import styles from './Sidebar.module.css';
 
 const Sidebar: React.FC = () => {
     const history = useHistory();
     const { t } = useTranslation();
+    const location = useLocation();
 
     const navigateToHome = () => {
         history.push('/home');
@@ -17,17 +19,26 @@ const Sidebar: React.FC = () => {
     };
 
     return (
-        <div className={styles.container}>
-            <button className={styles.line} onClick={navigateToHome}>
+        <IonList lines="none" className={styles.container}>
+            <IonItem
+                button={true}
+                className={styles.line}
+                onClick={navigateToHome}
+                color={location.pathname === '/home' ? 'light' : undefined}
+            >
                 <img alt="" src={HomeSvg} aria-hidden={true} />
                 <span className={styles.title}>{t('navigation.sidebar.home')}</span>
-            </button>
-
-            <button className={styles.line} onClick={navigateToConversations}>
+            </IonItem>
+            <IonItem
+                button={true}
+                className={styles.line}
+                onClick={navigateToConversations}
+                color={location.pathname === '/conversations' ? 'light' : undefined}
+            >
                 <img alt="" src={ConversationsSvg} aria-hidden={true} />
                 <span className={styles.title}>{t('navigation.sidebar.conversations')}</span>
-            </button>
-        </div>
+            </IonItem>
+        </IonList>
     );
 };
 

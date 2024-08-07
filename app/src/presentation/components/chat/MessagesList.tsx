@@ -64,6 +64,7 @@ const MessagesList: React.FC<MessagesListProps> = ({
                 messageElements.push(
                     <div
                         ref={message.id === currentMessageSearchId ? messagesEndRef : null}
+                        role="listitem"
                         key={message.id}
                         className={isCurrentUserMessage ? styles.currentUser : styles.otherUser}
                     >
@@ -81,7 +82,7 @@ const MessagesList: React.FC<MessagesListProps> = ({
     };
 
     return (
-        <div className={styles.messages} onScroll={handleScroll}>
+        <div className={styles.messages} onScroll={handleScroll} role="list">
             {isLoading && (
                 <div className={styles.loader}>
                     {/* TODO: Upgrade to use a better loader */}

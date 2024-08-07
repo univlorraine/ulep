@@ -70,6 +70,7 @@ const ConversationsPage: React.FC = () => {
                         isHybrid={isHybrid}
                         isLoading={isLoading}
                         onConversationPressed={(conversation) => setCurrentConversation(conversation)}
+                        currentConversation={currentConversation}
                     />
                 </div>
                 {currentConversation && (

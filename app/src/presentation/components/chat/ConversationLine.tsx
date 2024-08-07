@@ -1,4 +1,4 @@
-import { IonButton, IonItem } from '@ionic/react';
+import { IonAvatar, IonItem } from '@ionic/react';
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 import MediaObject from '../../../domain/entities/MediaObject';
@@ -18,12 +18,12 @@ const ConversationAvatar: React.FC<ConversationAvatarProps> = ({ avatar, firstna
         <>
             {avatar && <NetworkImage className={styles.image} id={avatar.id} aria-hidden={true} />}
             {!avatar && (
-                <div className={styles.image} aria-hidden={true}>
+                <IonAvatar className={styles.image} aria-hidden={true}>
                     <span className={styles.avatarLetter}>
                         {firstname[0].toUpperCase()}
                         {lastname[0].toUpperCase()}
                     </span>
-                </div>
+                </IonAvatar>
             )}
         </>
     );
@@ -52,19 +52,26 @@ interface ConversationLineProps {
     conversation: Conversation;
     userId: string;
     onPressed: (conversation: Conversation) => void;
+    currentConversation?: Conversation;
 }
 
-const ConversationLine: React.FC<ConversationLineProps> = ({ conversation, onPressed, userId }) => {
+const ConversationLine: React.FC<ConversationLineProps> = ({
+    conversation,
+    currentConversation,
+    onPressed,
+    userId,
+}) => {
     const { t } = useTranslation();
     const mainParticipant = Conversation.getMainConversationPartner(conversation, userId);
     return (
-        <IonItem className={styles.line}>
-            <IonButton
-                fill="clear"
-                onClick={() => onPressed(conversation)}
-                className={styles.button}
-                aria-label={t('chat.conversation_menu.aria_label') as string}
-            >
+        <IonItem
+            className={styles.line}
+            button={true}
+            onClick={() => onPressed(conversation)}
+            aria-label={t('chat.conversation_menu.aria_label') as string}
+            color={conversation.id === currentConversation?.id ? 'light' : undefined}
+        >
+            <div className={styles.container}>
                 <ConversationAvatar
                     avatar={mainParticipant.avatar}
                     firstname={mainParticipant.firstname}
@@ -81,7 +88,7 @@ const ConversationLine: React.FC<ConversationLineProps> = ({ conversation, onPre
                     </div>
                     <span className={styles.message}>{getPreviewMessage(userId, t, conversation.lastMessage)}</span>
                 </div>
-            </IonButton>
+            </div>
         </IonItem>
     );
 };

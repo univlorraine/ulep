@@ -101,6 +101,7 @@ const Content: React.FC<ChatContentProps> = ({ conversation, goBack, profile, se
                         <IonList lines="none">
                             <IonItem
                                 button={true}
+                                detail={false}
                                 onClick={() =>
                                     setCurrentContent
                                         ? setCurrentContent('media')
@@ -112,7 +113,7 @@ const Content: React.FC<ChatContentProps> = ({ conversation, goBack, profile, se
                                     {t('chat.conversation_menu.medias')}
                                 </IonLabel>
                             </IonItem>
-                            <IonItem button={true} onClick={setSearchMode}>
+                            <IonItem button={true} detail={false} onClick={setSearchMode}>
                                 <IonIcon icon={searchOutline} aria-hidden="true" />
                                 <IonLabel className={styles['chat-popover-label']}>
                                     {t('chat.conversation_menu.search')}

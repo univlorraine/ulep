@@ -1,6 +1,6 @@
 import { isSameDay } from 'date-fns';
 import { useTranslation } from 'react-i18next';
-import { Message } from '../../../domain/entities/chat/Message';
+import { Message, MessageType } from '../../../domain/entities/chat/Message';
 import { useMessages } from '../../hooks/useMessages';
 import Loader from '../Loader';
 import MediaComponent from './MediaComponent';
@@ -10,10 +10,10 @@ interface MediasListProps {
     messages: Message[];
     isScrollOver: boolean;
     loadMessages: () => void;
-    userId: string;
+    selectedFilter: MessageType;
 }
 
-const MediasList: React.FC<MediasListProps> = ({ messages, isScrollOver, loadMessages, userId }) => {
+const MediasList: React.FC<MediasListProps> = ({ messages, isScrollOver, loadMessages, selectedFilter }) => {
     const { t } = useTranslation();
     const { isLoading, messagesEndRef, handleScroll } = useMessages({
         messages,
@@ -24,30 +24,39 @@ const MediasList: React.FC<MediasListProps> = ({ messages, isScrollOver, loadMes
     });
 
     const renderMessages = () => {
-        const messageElements: React.ReactNode[] = [];
+        const containerElements: React.ReactNode[] = [];
+        const messageElements: { [key: string]: React.ReactNode[] } = {};
         let lastDate: Date | null = null;
 
         const reversedMessages = [...messages].reverse();
 
-        reversedMessages.forEach((message) => {
+        reversedMessages.forEach((message, index) => {
             const messageDate = new Date(message.createdAt);
-            const isCurrentUserMessage = message.isMine(userId);
 
             if (!lastDate || !isSameDay(lastDate, messageDate)) {
-                messageElements.push(
-                    <div key={`id-${message.id}`} className={styles.dateSeparator}>
-                        {t(message.getMessageDate())}
-                    </div>
-                );
+                messageElements[t(message.getMessageDate())] = [];
                 lastDate = messageDate;
             }
 
             if (message.content) {
-                messageElements.push(<MediaComponent message={message} isCurrentUserMessage={isCurrentUserMessage} />);
+                messageElements[t(message.getMessageDate())].push(<MediaComponent message={message} />);
             }
         });
 
-        return messageElements;
+        Object.keys(messageElements).forEach((key) => {
+            containerElements.push(
+                <div key={`id-header-${key}`} className={styles.dateSeparator}>
+                    {key}
+                </div>
+            );
+            containerElements.push(
+                <div key={`id-${key}`} className={styles.messagesContent}>
+                    {[...messageElements[key]]}
+                </div>
+            );
+        });
+
+        return containerElements;
     };
 
     return (
@@ -58,7 +67,11 @@ const MediasList: React.FC<MediasListProps> = ({ messages, isScrollOver, loadMes
                     <Loader color="#000" height={30} width={30} />
                 </div>
             )}
-            {renderMessages()}
+            {selectedFilter === MessageType.Image ? (
+                <div className={styles.messagesContainer}>{renderMessages()}</div>
+            ) : (
+                renderMessages()
+            )}
             <div ref={messagesEndRef} />
         </div>
     );

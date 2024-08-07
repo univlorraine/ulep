@@ -129,9 +129,13 @@
             "title": "Médias partagés",
             "files": "Fichiers",
             "images": "Images",
-            "images-alt": "Image partagée"
+            "images-alt": "Image partagée",
+            "audios": "Audios",
+            "links": "Liens"
         },
-        "reportMessageButton": "Signaler le message"
+        "reportMessageButton": "Signaler le message",
+        "no_messages": "Aucun message",
+        "no_conversations": "Aucune conversation"
     },
     "connection_page": {
         "connect_title": "As-tu déjà un compte ?",

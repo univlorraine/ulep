@@ -1,8 +1,8 @@
-import { IonImg, IonText } from '@ionic/react';
+import { IonText } from '@ionic/react';
 import styles from './OGCard.module.css';
 
 interface OGCardProps {
-    imageUrl: string;
+    imageUrl?: string;
     title: string;
     description: string;
     url: string;
@@ -11,9 +11,11 @@ interface OGCardProps {
 const OGCard: React.FC<OGCardProps> = ({ imageUrl, title, description, url }) => {
     return (
         <div className={styles.container}>
-            <div className={styles.image}>
-                <IonImg src={imageUrl} />
-            </div>
+            {imageUrl && (
+                <div className={styles.image}>
+                    <img src={imageUrl} />
+                </div>
+            )}
             <div className={styles.content}>
                 <IonText className={styles.title}>{title}</IonText>
                 <IonText className={styles.description}>{description}</IonText>
