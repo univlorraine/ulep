@@ -41,6 +41,7 @@ import LoginUsecase from '../domain/usecases/LoginUsecase';
 import ResetPasswordUsecase from '../domain/usecases/ResetPasswordUsecase';
 import RetrievePersonInfoUsecase from '../domain/usecases/RetrievePersonInfoUsecase';
 import RevokeSessionsUsecase from '../domain/usecases/RevokeSessionsUsecase';
+import SearchMessagesIdsFromConversationUsecase from '../domain/usecases/SearchMessagesIdsFromConversationUsecase';
 import SendMessageUsecase from '../domain/usecases/SendMessageUsecase';
 import UpdateAvatarUsecase from '../domain/usecases/UpdateAvatarUsecase';
 import UpdateNotificationPermissionUsecase from '../domain/usecases/UpdateNotificationPermissionUsecase';
@@ -140,6 +141,7 @@ const getConfigContextValue = ({
     const getConversations = new GetConversationsUsecase(domainHttpAdapter);
     const getMessagesFromConversation = new GetMessagesFromConversationUsecase(domainHttpAdapter);
     const sendMessage = new SendMessageUsecase(chatHttpAdapter);
+    const searchMessagesIdsFromConversation = new SearchMessagesIdsFromConversationUsecase(chatHttpAdapter);
 
     return {
         accessToken,
@@ -180,6 +182,7 @@ const getConfigContextValue = ({
         login,
         notificationAdapter,
         resetPassword,
+        searchMessagesIdsFromConversation,
         sendMessage,
         socketIoAdapter,
         updateAvatar,

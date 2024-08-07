@@ -39,6 +39,10 @@
     font-size: 12px;
 }
 
+.searchMessage {
+    background-color: var(--secondary-color) !important;
+}
+
 .messageContainer {
     display: flex;
     flex-direction: column;

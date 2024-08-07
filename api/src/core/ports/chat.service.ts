@@ -39,6 +39,12 @@ export interface MessageWithUser {
   metadata: any;
 }
 
+export enum ChatPaginationDirection {
+  FORWARD = 'forward',
+  BACKWARD = 'backward',
+  BOTH = 'both',
+}
+
 //TODO: Change any to a proper type
 export interface ChatServicePort {
   getAllConversationsFromUserId(
@@ -52,6 +58,7 @@ export interface ChatServicePort {
     lastMessageId?: string,
     contentFilter?: string,
     typeFilter?: string,
+    direction?: ChatPaginationDirection,
   ): Promise<Collection<Message>>;
   createConversation(
     users: string[],

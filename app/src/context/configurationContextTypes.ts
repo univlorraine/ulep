@@ -43,6 +43,7 @@ import UpdateAvatarUsecaseInterface from '../domain/interfaces/UpdateAvatarUseca
 import UpdateNotificationPermissionUsecaseInterface from '../domain/interfaces/UpdateNotificationPermissionUsecase.interface';
 import GetConversationsUsecaseInterface from '../domain/interfaces/chat/GetConversationsUsecase.interface';
 import GetMessagesFromConversationUsecaseInterface from '../domain/interfaces/chat/GetMessagesFromConversationUsecase.interface';
+import SearchMessagesIdsFromConversationUsecaseInterface from '../domain/interfaces/chat/SearchMessagesIdsFromConversationUsecase.interface';
 import SendMessageUsecaseInterface from '../domain/interfaces/chat/SendMessageUsecase.interface';
 
 export interface ConfigContextValueType {
@@ -86,6 +87,7 @@ export interface ConfigContextValueType {
     notificationAdapter: NotificationAdapterInterface;
     resetPassword: ResetPasswordUsecaseInterface;
     sendMessage: SendMessageUsecaseInterface;
+    searchMessagesIdsFromConversation: SearchMessagesIdsFromConversationUsecaseInterface;
     socketIoAdapter: SocketIoAdapterInterface;
     updateAvatar: UpdateAvatarUsecaseInterface;
     updateNotificationPermission: UpdateNotificationPermissionUsecaseInterface;

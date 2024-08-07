@@ -78,14 +78,16 @@ describe('GetConversationFromUserIdUsecase', () => {
         const messages1 = await getMessagesFromConversationIdUsecase.execute({
             id: tandemId1,
             pagination: undefined,
-            filter: undefined,
+            contentFilter: undefined,
+            typeFilter: undefined,
         });
         expect(messages1).toHaveLength(2);
 
         const messages2 = await getMessagesFromConversationIdUsecase.execute({
             id: tandemId2,
             pagination: undefined,
-            filter: undefined,
+            contentFilter: undefined,
+            typeFilter: undefined,
         });
         expect(messages2).toHaveLength(1);
     });

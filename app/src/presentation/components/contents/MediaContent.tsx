@@ -20,7 +20,7 @@ interface MediaContentProps {
 const Content: React.FC<Omit<MediaContentProps, 'isHybrid'>> = ({ conversation, goBack, profile }) => {
     const { t } = useTranslation();
     const [selectedFilter, setSelectedFilter] = useState<MessageType>(MessageType.Image);
-    const { messages, isScrollOver, isLoading, loadMessages } = useHandleMessagesFromConversation({
+    const { messages, isScrollForwardOver, isLoading, loadMessages } = useHandleMessagesFromConversation({
         conversationId: conversation.id,
         typeFilter: selectedFilter,
         limit: 30,
@@ -93,7 +93,7 @@ const Content: React.FC<Omit<MediaContentProps, 'isHybrid'>> = ({ conversation, 
                 <MediasList
                     messages={messages}
                     loadMessages={loadMessages}
-                    isScrollOver={isScrollOver}
+                    isScrollOver={isScrollForwardOver}
                     selectedFilter={selectedFilter}
                 />
             )}

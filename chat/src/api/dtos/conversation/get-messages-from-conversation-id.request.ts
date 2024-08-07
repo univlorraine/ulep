@@ -1,7 +1,8 @@
 import * as Swagger from '@nestjs/swagger';
 import { Type } from 'class-transformer';
-import { IsInt, IsOptional, IsString, Max, Min } from 'class-validator';
+import { IsEnum, IsInt, IsOptional, IsString, Max, Min } from 'class-validator';
 import { MessageType } from 'src/core/models';
+import { MessagePaginationDirection } from 'src/core/ports/message.repository';
 
 export class GetMessagesQueryParams {
     @IsString()
@@ -24,4 +25,9 @@ export class GetMessagesQueryParams {
     @IsOptional()
     @IsString()
     readonly lastMessageId: string;
+
+    @Swagger.ApiProperty({ type: String, required: false })
+    @IsOptional()
+    @IsEnum(MessagePaginationDirection)
+    readonly direction: MessagePaginationDirection;
 }

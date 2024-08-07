@@ -6,10 +6,11 @@ import { useHistory } from 'react-router';
 import { KebabSvg, LeftChevronSvg } from '../../../assets';
 import { useConfig } from '../../../context/ConfigurationContext';
 import Profile from '../../../domain/entities/Profile';
-import Conversation from '../../../domain/entities/chat/Conversation';
+import Conversation, { MessagePaginationDirection } from '../../../domain/entities/chat/Conversation';
 import useHandleMessagesFromConversation from '../../hooks/useHandleMessagesFromConversation';
 import Loader from '../Loader';
 import ChatInputSender from '../chat/ChatInputSender';
+import ConversationSearchBar from '../chat/ConversationSearchBar';
 import MessagesList from '../chat/MessagesList';
 import styles from './ChatContent.module.css';
 
@@ -27,11 +28,36 @@ const Content: React.FC<ChatContentProps> = ({ conversation, goBack, profile, se
     const { recorderAdapter, socketIoAdapter } = useConfig();
     const isBlocked = conversation.isBlocked;
     const [showMenu, setShowMenu] = useState(false);
+    const [currentMessageSearchId, setCurrentMessageSearchId] = useState<string>();
+    const [isSearchMode, setIsSearchMode] = useState<boolean>(false);
     const history = useHistory();
 
-    const { messages, isScrollOver, isLoading, loadMessages, addNewMessage } = useHandleMessagesFromConversation({
+    const {
+        messages,
+        isScrollForwardOver,
+        isScrollBackwardOver,
+        isLoading,
+        loadMessages,
+        addNewMessage,
+        clearMessages,
+    } = useHandleMessagesFromConversation({
         conversationId: conversation.id,
     });
+
+    const setSearchMode = () => {
+        setShowMenu(false);
+        setIsSearchMode(true);
+    };
+
+    const unsetSearchMode = () => {
+        setIsSearchMode(false);
+        setCurrentMessageSearchId(undefined);
+    };
+
+    const loadMessageFromSearch = (messageId: string) => {
+        setCurrentMessageSearchId(messageId);
+        loadMessages(true, MessagePaginationDirection.BOTH, messageId);
+    };
 
     useEffect(() => {
         recorderAdapter.requestPermission();
@@ -70,7 +96,7 @@ const Content: React.FC<ChatContentProps> = ({ conversation, goBack, profile, se
                 >
                     <IonIcon icon={KebabSvg} size="medium" aria-hidden="true" />
                 </IonButton>
-                <IonPopover trigger="click-trigger" triggerAction="click" showBackdrop={false}>
+                <IonPopover trigger="click-trigger" triggerAction="click" isOpen={showMenu} showBackdrop={false}>
                     <IonContent>
                         <IonList lines="none">
                             <IonItem
@@ -87,15 +113,7 @@ const Content: React.FC<ChatContentProps> = ({ conversation, goBack, profile, se
                                     {t('chat.conversation_menu.medias')}
                                 </IonLabel>
                             </IonItem>
-                            <IonItem
-                                button={true}
-                                detail={false}
-                                onClick={() =>
-                                    setCurrentContent
-                                        ? setCurrentContent('search')
-                                        : history.push('/search', { conversation })
-                                }
-                            >
+                            <IonItem button={true} detail={false} onClick={setSearchMode}>
                                 <IonIcon icon={searchOutline} aria-hidden="true" />
                                 <IonLabel className={styles['chat-popover-label']}>
                                     {t('chat.conversation_menu.search')}
@@ -105,19 +123,30 @@ const Content: React.FC<ChatContentProps> = ({ conversation, goBack, profile, se
                     </IonContent>
                 </IonPopover>
             </div>
+            {isSearchMode && (
+                <ConversationSearchBar
+                    conversation={conversation}
+                    loadMessages={loadMessageFromSearch}
+                    setIsSearchMode={setIsSearchMode}
+                    onSearchIsEmpty={clearMessages}
+                    clearSearch={unsetSearchMode}
+                />
+            )}
             {!isLoading ? (
                 <MessagesList
+                    currentMessageSearchId={currentMessageSearchId}
                     messages={messages}
-                    loadMessages={loadMessages}
+                    loadMessages={(direction) => loadMessages(false, direction)}
                     userId={profile.user.id}
-                    isScrollOver={isScrollOver}
+                    isScrollForwardOver={isScrollForwardOver}
+                    isScrollBackwardOver={isScrollBackwardOver}
                 />
             ) : (
                 <div className={styles.loader}>
                     <Loader />
                 </div>
             )}
-            <ChatInputSender isBlocked={isBlocked} profile={profile} conversation={conversation} />
+            {!isSearchMode && <ChatInputSender isBlocked={isBlocked} profile={profile} conversation={conversation} />}
         </div>
     );
 };

@@ -21,6 +21,7 @@ import { CreateConversationsRequest } from 'src/api/dtos/conversation/create-con
 import { MessageResponse, SendMessageRequest } from 'src/api/dtos/message';
 import { CollectionResponse } from 'src/api/dtos/pagination';
 import { AuthenticationGuard } from 'src/api/guards';
+import { MessagePaginationDirection } from 'src/core/ports/message.repository';
 import {
     CreateConversationUsecase,
     CreateMessageUsecase,
@@ -30,6 +31,7 @@ import {
     DeleteUserConversationUsecase,
     GetConversationFromUserIdUsecase,
     GetMessagesFromConversationIdUsecase,
+    SearchMessagesIdFromConversationIdUsecase,
     UploadMediaUsecase,
 } from 'src/core/usecases';
 
@@ -46,6 +48,7 @@ export class ConversationController {
         private deleteUserConversationUsecase: DeleteUserConversationUsecase,
         private getMessagesFromConversationIdUsecase: GetMessagesFromConversationIdUsecase,
         private getConversationFromUserIdUsecase: GetConversationFromUserIdUsecase,
+        private searchMessagesIdFromConversationIdUsecase: SearchMessagesIdFromConversationIdUsecase,
         private uploadMediaUsecase: UploadMediaUsecase,
     ) {}
 
@@ -61,6 +64,8 @@ export class ConversationController {
                 pagination: {
                     lastMessageId: params.lastMessageId,
                     limit: params.limit,
+                    direction:
+                        params.direction ?? MessagePaginationDirection.FORWARD,
                 },
                 contentFilter: params.contentFilter,
                 typeFilter: params.typeFilter,
@@ -70,6 +75,23 @@ export class ConversationController {
             items: messages.map(MessageResponse.from),
             totalItems: messages.length,
         });
+    }
+
+    @Get('messages/:id/:search')
+    @Swagger.ApiOperation({
+        summary: 'Search all messages ids from conversation id',
+    })
+    async searchMessages(
+        @Param('id') conversationId: string,
+        @Param('search') search: string,
+    ): Promise<string[]> {
+        const messagesIds =
+            await this.searchMessagesIdFromConversationIdUsecase.execute({
+                id: conversationId,
+                search: search,
+            });
+
+        return messagesIds;
     }
 
     @Get('/:id')

@@ -109,12 +109,16 @@
         "messageReport": "Message envoyé par : {{firstname}} {{lastname}} le {{date}} ---- {{message}}",
         "me": "Moi",
         "messageReported": "Message signalé",
+        "noMessages": "Il n'y a aucun message",
         "title": "Messages avec {{name}}",
         "input": {
             "placeholder": {
                 "blocked": "Le tandem est en pause, tu ne peux pas envoyer de messages",
                 "unblocked": "Écris ton message..."
             }
+        },
+        "search": {
+            "placeholder": "Rechercher dans la conversation"
         },
         "conversation_menu": {
             "aria_label": "Menu de la conversation",

@@ -69,6 +69,7 @@ export class ChatController {
       lastMessageId: params.lastMessageId,
       contentFilter: params.contentFilter,
       typeFilter: params.typeFilter,
+      direction: params.direction,
     });
 
     return new Collection<MessageResponse>({
