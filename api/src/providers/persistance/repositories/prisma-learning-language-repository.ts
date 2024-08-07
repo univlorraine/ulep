@@ -1,27 +1,27 @@
+import { Collection, ModeQuery, PrismaService } from '@app/common';
+import { Injectable } from '@nestjs/common';
 import {
   LearningLanguage,
   LearningLanguageWithTandem,
   TandemStatus,
   UserStatus,
 } from 'src/core/models';
-import { Collection, ModeQuery, PrismaService } from '@app/common';
-import { Injectable } from '@nestjs/common';
+import { HistorizedUnmatchedLearningLanguage } from 'src/core/models/historized-unmatched-learning-language';
 import {
   LearningLanguageQuerySortKey,
   LearningLanguageRepository,
   LearningLanguageRepositoryGetProps,
 } from 'src/core/ports/learning-language.repository';
 import {
+  HistorizedUnmatchedLearningLanguageRelation,
+  historizedUnmatchedLearningLanguageMapper,
+} from 'src/providers/persistance/mappers/historizedUnmatchedLearningLanguage.mapper';
+import {
   LearningLanguageRelations,
   LearningLanguageWithTandemRelations,
   learningLanguageMapper,
   learningLanguageWithTandemMapper,
 } from '../mappers/learningLanguage.mapper';
-import {
-  HistorizedUnmatchedLearningLanguageRelation,
-  historizedUnmatchedLearningLanguageMapper,
-} from 'src/providers/persistance/mappers/historizedUnmatchedLearningLanguage.mapper';
-import { HistorizedUnmatchedLearningLanguage } from 'src/core/models/historized-unmatched-learning-language';
 
 @Injectable()
 export class PrismaLearningLanguageRepository
@@ -499,10 +499,14 @@ export class PrismaLearningLanguageRepository
       }
     }
 
+    let pagination = { skip: undefined, take: undefined };
+    if (page && limit) {
+      pagination = { skip: (page - 1) * limit, take: limit };
+    }
+
     const items = await this.prisma.learningLanguages.findMany({
       where: wherePayload,
-      skip: (page - 1) * limit,
-      take: limit,
+      ...pagination,
       include: LearningLanguageWithTandemRelations,
       orderBy: orderByPayload,
     });
