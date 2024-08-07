@@ -189,6 +189,7 @@ minio:
   statefulset:
     replicaCount: 2
     drivesPerNode: 2
+  defaultBuckets: "i18n,assets,objective:private,images:private"
   ingress:
     enabled: true
     ingressClassName: traefik
