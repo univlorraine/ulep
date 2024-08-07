@@ -250,8 +250,8 @@ workflows:
   build_chat:
     jobs:
       - build-docker-chat:
-        filters:
-          branches:
-            only:
-              - develop
-              - main
+          filters:
+            branches:
+              only:
+                - develop
+                - main
