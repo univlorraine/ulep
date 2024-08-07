@@ -58,7 +58,7 @@ export const useMessages = ({
                 // If there is less message displaying than the size screen, we need to load more
             } else if (messagesContainer.scrollHeight <= messagesContainer.clientHeight) {
                 loadMessages(MessagePaginationDirection.FORWARD);
-                // If its the firs
+                // Else its the first time we load the conversation, we need to go to the ref message ( search or last message )
             } else {
                 scrollToMessageRef();
             }
