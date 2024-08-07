@@ -1,7 +1,5 @@
 import { Box, Chip, Typography } from '@mui/material';
-import React from 'react';
-
-import { BooleanField, useRefresh, useTranslate } from 'react-admin';
+import { BooleanField, usePermissions, useRefresh, useTranslate } from 'react-admin';
 import CustomAvatar from '../../../components/CustomAvatar';
 import { DisplayLearningType, DisplaySameTandem } from '../../../components/translated';
 import UserStatusChips from '../../../components/UserStatusChips';
@@ -9,12 +7,11 @@ import { LearningLanguage, LearningLanguageWithTandemWithPartnerProfile } from '
 import { ProfileWithTandemsProfiles } from '../../../entities/ProfileWithTandemsProfiles';
 import { TandemStatus, TandemWithPartnerLearningLanguage } from '../../../entities/Tandem';
 import codeLanguageToFlag from '../../../utils/codeLanguageToFlag';
-
-import './show.css';
 import isAgeCriterionMet from '../../../utils/isAgeCriterionMet';
 import hasTandemManagementPermission from '../hasTandemManagementPermission';
 import ProfileLink from '../ui/ProfileLink';
 import TandemActions from './Actions/TandemActions';
+import './show.css';
 
 export enum PartnerType {
     BEST_OVERALL = 'bestOverall',
@@ -124,6 +121,7 @@ const TandemCard = ({
 }: TandemCardProps) => {
     const translate = useTranslate();
     const refresh = useRefresh();
+    const { permissions } = usePermissions();
 
     return (
         <Box>
@@ -295,21 +293,23 @@ const TandemCard = ({
                         </span>
                     </div>
 
-                    {hasTandemManagementPermission() && !hasActiveTandem && !hasTandemWaitingForValidation && (
-                        <TandemActions
-                            learningLanguageIds={[userLearningLanguage.id, partnerLearningLanguage.id]}
-                            onTandemAction={refresh}
-                            relaunchGlobalRoutineOnAccept={
-                                !userLearningLanguage.tandem ||
-                                tandem?.partnerLearningLanguage.id !== partnerLearningLanguage.id
-                            }
-                            relaunchGlobalRoutineOnRefuse={
-                                tandem?.partnerLearningLanguage.id === partnerLearningLanguage.id
-                            }
-                        />
-                    )}
+                    {hasTandemManagementPermission(permissions) &&
+                        !hasActiveTandem &&
+                        !hasTandemWaitingForValidation && (
+                            <TandemActions
+                                learningLanguageIds={[userLearningLanguage.id, partnerLearningLanguage.id]}
+                                onTandemAction={refresh}
+                                relaunchGlobalRoutineOnAccept={
+                                    !userLearningLanguage.tandem ||
+                                    tandem?.partnerLearningLanguage.id !== partnerLearningLanguage.id
+                                }
+                                relaunchGlobalRoutineOnRefuse={
+                                    tandem?.partnerLearningLanguage.id === partnerLearningLanguage.id
+                                }
+                            />
+                        )}
 
-                    {hasTandemManagementPermission() && isUserValidationNeeded && (
+                    {hasTandemManagementPermission(permissions) && isUserValidationNeeded && (
                         <TandemActions
                             learningLanguageIds={[userLearningLanguage.id, partnerLearningLanguage.id]}
                             onTandemAction={refresh}

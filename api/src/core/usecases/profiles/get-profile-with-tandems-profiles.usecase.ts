@@ -17,7 +17,6 @@ export class GetProfileWithTandemsProfilesUsecase {
   ) {}
 
   async execute(command: GetProfileWithTandemsProfilesCommand) {
-    console.log('GetProfileWithTandemsProfilesUsecase');
     const profile = await this.profileRepository.ofIdWithTandemsProfiles(
       command.id,
     );

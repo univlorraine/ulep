@@ -366,7 +366,7 @@ const LearningLanguageList = () => {
                             </>
                         )}
                     />
-                    {hasTandemManagementPermission() && (
+                    {hasTandemManagementPermission(permissions) && (
                         <FunctionField
                             label={translate('learning_languages.list.tableColumns.actions')}
                             render={(record: ProfileWithTandemsProfiles) => (
