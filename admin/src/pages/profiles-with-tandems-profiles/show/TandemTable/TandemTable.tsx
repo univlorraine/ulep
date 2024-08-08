@@ -1,14 +1,15 @@
-import { Table, TableBody, TableCell, TableHead, TableRow, TablePagination, Box } from '@mui/material';
+import { Box, Table, TableBody, TableCell, TableHead, TablePagination, TableRow } from '@mui/material';
 import Popover from '@mui/material/Popover';
 import Typography from '@mui/material/Typography';
 import React, { useState } from 'react';
-import { useRecordContext, useTranslate } from 'react-admin';
+import { usePermissions, useRecordContext, useTranslate } from 'react-admin';
 import ColoredChips from '../../../../components/ColoredChips';
 import { DisplayLearningType } from '../../../../components/translated';
 import Language from '../../../../entities/Language';
 import { LearningType } from '../../../../entities/LearningLanguage';
 import { MatchScore } from '../../../../entities/Match';
-import { Profile, ProfileWithTandems } from '../../../../entities/Profile';
+import { Profile } from '../../../../entities/Profile';
+import { ProfileWithTandemsProfiles } from '../../../../entities/ProfileWithTandemsProfiles';
 import codeLanguageToFlag from '../../../../utils/codeLanguageToFlag';
 import hasTandemManagementPermission from '../../hasTandemManagementPermission';
 import ProfileLink from '../../ui/ProfileTandemLink';
@@ -37,8 +38,8 @@ interface TandemTableProps {
 
 const TandemTable = ({ rows, actions, displayTandemLanguage, pagination }: TandemTableProps) => {
     const translate = useTranslate();
-    const record: ProfileWithTandems = useRecordContext();
-
+    const record: ProfileWithTandemsProfiles = useRecordContext();
+    const { permissions } = usePermissions();
     const [anchorEl, setAnchorEl] = React.useState<HTMLElement | null>(null);
     const [selectedMatchScore, setSelectedMatchScore] = useState<MatchScore | undefined>();
 
@@ -73,7 +74,7 @@ const TandemTable = ({ rows, actions, displayTandemLanguage, pagination }: Tande
                     <TableCell>{translate('learning_languages.show.tandems.tableColumns.age')}</TableCell>
                     <TableCell>{translate('learning_languages.show.tandems.tableColumns.score')}</TableCell>
                     <TableCell>{translate('learning_languages.show.tandems.tableColumns.date')}</TableCell>
-                    {actions && hasTandemManagementPermission() && (
+                    {actions && hasTandemManagementPermission(permissions) && (
                         <TableCell>{translate('learning_languages.show.tandems.tableColumns.actions')}</TableCell>
                     )}
                 </TableRow>
@@ -134,7 +135,9 @@ const TandemTable = ({ rows, actions, displayTandemLanguage, pagination }: Tande
                             </Typography>
                         </TableCell>
                         <TableCell>{new Date(partner.createdAt).toLocaleDateString()}</TableCell>
-                        {actions && hasTandemManagementPermission() && <TableCell>{actions(partner)}</TableCell>}
+                        {actions && hasTandemManagementPermission(permissions) && (
+                            <TableCell>{actions(partner)}</TableCell>
+                        )}
                     </TableRow>
                 ))}
                 {pagination && (

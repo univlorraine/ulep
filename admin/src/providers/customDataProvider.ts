@@ -10,8 +10,6 @@ import {
     addRefreshAuthToDataProvider,
     fetchUtils,
 } from 'react-admin';
-import { LearningLanguage } from '../entities/LearningLanguage';
-import { ProfileWithTandems } from '../entities/Profile';
 import { RoutineExecution } from '../entities/RoutineExecution';
 import { TandemStatus } from '../entities/Tandem';
 import AdministratorsQuery from '../queries/AdministratorsQuery';
@@ -20,6 +18,7 @@ import InterestsQuery from '../queries/InterestsQuery';
 import LanguagesQuery from '../queries/LanguagesQuery';
 import { LearningLanguageMatchesQuery, LearningLanguagesQuery } from '../queries/LearningLanguagesQuery';
 import ProfilesQuery from '../queries/ProfilesQuery';
+import ProfilesWithTandemsQuery from '../queries/ProfilesWithTandemsQuery';
 import QuestionsQuery from '../queries/QuestionsQuery';
 import ReportsQuery from '../queries/ReportsQuery';
 import { http, refreshAuth } from './authProvider';
@@ -141,35 +140,6 @@ const customDataProvider = {
             return { data: { ...data, id: 'config' } };
         }
 
-        if (resource === 'profiles/with-tandem') {
-            // Filter the learning-languages array contained into the tandem subobject
-            // to remove the root profile one (and keep only the pair one)
-            const filteredLearningLanguages = data.learningLanguages.map((learningLanguage: LearningLanguage) => {
-                if (learningLanguage.tandem) {
-                    const filteredLL = learningLanguage.tandem?.learningLanguages.filter(
-                        (tandemLL) => tandemLL.profile.id !== data.id
-                    );
-
-                    return {
-                        ...learningLanguage,
-                        tandem: {
-                            ...learningLanguage.tandem,
-                            learningLanguages: filteredLL,
-                        },
-                    };
-                }
-
-                return learningLanguage;
-            });
-
-            return {
-                data: {
-                    ...data,
-                    learningLanguages: filteredLearningLanguages,
-                },
-            };
-        }
-
         return { data };
     },
     delete: async (resource: string, params: DeleteParams) => {
@@ -212,8 +182,8 @@ const customDataProvider = {
             case 'profiles':
                 url.search = ProfilesQuery(params);
                 break;
-            case 'profiles/with-tandem':
-                url.search = ProfilesQuery(params);
+            case 'profiles/with-tandems-profiles':
+                url.search = ProfilesWithTandemsQuery(params);
                 break;
             case 'reports':
                 url.search = ReportsQuery(params);
@@ -244,39 +214,6 @@ const customDataProvider = {
         }
 
         const result = await response.json();
-
-        if (resource === 'profiles/with-tandem') {
-            // Filter the learning-languages array contained into the tandem subobject
-            // to remove the root profile one (and keep only the pair one)
-            const profilesWithOnlyMatchingTandemProfile = result.items.map((profile: ProfileWithTandems) => {
-                const filteredLearningLanguages = profile.learningLanguages.map(
-                    (learningLanguage: LearningLanguage) => {
-                        if (learningLanguage.tandem) {
-                            const filteredLL = learningLanguage.tandem?.learningLanguages.filter(
-                                (tandemLL) => tandemLL.profile.id !== profile.id
-                            );
-
-                            return {
-                                ...learningLanguage,
-                                tandem: {
-                                    ...learningLanguage.tandem,
-                                    learningLanguages: filteredLL,
-                                },
-                            };
-                        }
-
-                        return learningLanguage;
-                    }
-                );
-
-                return {
-                    ...profile,
-                    learningLanguages: filteredLearningLanguages,
-                };
-            });
-
-            return { data: profilesWithOnlyMatchingTandemProfile, total: result.totalItems };
-        }
 
         if (!result.items) {
             return { data: result, total: result.length };

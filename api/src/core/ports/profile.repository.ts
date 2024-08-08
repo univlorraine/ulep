@@ -1,5 +1,6 @@
 import { Collection, SortOrder, StringFilter } from '@app/common';
 import { Profile } from '../models';
+import { ProfileWithTandemsProfiles } from '../models/profileWithTandemsProfiles.model';
 
 export const PROFILE_REPOSITORY = 'profile.repository';
 
@@ -34,6 +35,14 @@ export interface ProfileQueryWhere {
   nativeLanguageCode?: string;
 }
 
+export interface ProfileWithTandemsProfilesQueryWhere {
+  user: {
+    lastname?: string;
+    university?: string;
+  };
+  learningLanguage?: string;
+}
+
 export interface ProfileQueryOrderBy {
   field: ProfileQuerySortKey;
   order: SortOrder;
@@ -41,6 +50,10 @@ export interface ProfileQueryOrderBy {
 
 export interface ProfileRepository {
   ofId: (id: string) => Promise<Profile | null>;
+
+  ofIdWithTandemsProfiles: (
+    id: string,
+  ) => Promise<ProfileWithTandemsProfiles | null>;
 
   ofUser: (userId: string) => Promise<Profile | null>;
 
@@ -54,6 +67,12 @@ export interface ProfileRepository {
     orderBy?: ProfileQueryOrderBy,
     where?: ProfileQueryWhere,
   ) => Promise<Collection<Profile>>;
+
+  findAllWithTandemsProfiles: (
+    offset?: number,
+    limit?: number,
+    where?: ProfileWithTandemsProfilesQueryWhere,
+  ) => Promise<Collection<ProfileWithTandemsProfiles>>;
 
   delete: (profile: Profile) => Promise<void>;
 }

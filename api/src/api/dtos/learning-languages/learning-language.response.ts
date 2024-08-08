@@ -5,11 +5,13 @@ import { ProfileResponse } from '../profiles';
 import {
   LearningLanguage,
   LearningLanguageWithTandem,
+  LearningLanguageWithTandemWithPartnerLearningLanguage,
   LearningType,
 } from 'src/core/models';
 import { Optional } from '@nestjs/common';
 import { TandemResponse } from '../tandems';
 import { CampusResponse } from '../campus';
+import { TandemWithPartnerLearningLanguageResponse } from '../tandems/tandem-with-patner-learning-language.response';
 
 export class LearningLanguageResponse {
   @ApiProperty({ type: 'string', format: 'uuid' })
@@ -69,10 +71,6 @@ export class LearningLanguageResponse {
   @Expose({ groups: ['read'] })
   learningType: LearningType;
 
-  @ApiProperty({ type: () => TandemResponse })
-  @Expose({ groups: ['learning-language:tandem'] })
-  tandem?: TandemResponse;
-
   @ApiProperty({ type: () => LanguageResponse })
   @Expose({ groups: ['read'] })
   tandemLanguage?: LanguageResponse;
@@ -101,9 +99,6 @@ export class LearningLanguageResponse {
       sameAge: learningLanguage.sameAge,
       hasPriority: learningLanguage.hasPriority,
       sameTandemEmail: learningLanguage.sameTandemEmail,
-      tandem:
-        learningLanguage.tandem &&
-        TandemResponse.fromDomain(learningLanguage.tandem),
       tandemLanguage:
         learningLanguage.tandemLanguage &&
         LanguageResponse.fromLanguage(learningLanguage.tandemLanguage),
@@ -135,6 +130,30 @@ export class LearningLanguageWithTandemResponse extends LearningLanguageResponse
       tandem:
         learningLanguage.tandem &&
         TandemResponse.fromDomain(learningLanguage.tandem),
+    });
+  }
+}
+
+export class LearningLanguageWithTandemsProfilesResponse extends LearningLanguageResponse {
+  @ApiProperty({ type: () => TandemWithPartnerLearningLanguageResponse })
+  @Expose({ groups: ['read'] })
+  tandem?: TandemWithPartnerLearningLanguageResponse;
+
+  constructor(partial: Partial<LearningLanguageWithTandemsProfilesResponse>) {
+    super(partial);
+    Object.assign(this, partial);
+  }
+
+  static fromDomain(
+    learningLanguage: LearningLanguageWithTandemWithPartnerLearningLanguage,
+  ): LearningLanguageWithTandemsProfilesResponse {
+    return new LearningLanguageWithTandemsProfilesResponse({
+      ...LearningLanguageResponse.fromDomain(learningLanguage),
+      tandem:
+        learningLanguage.tandem &&
+        TandemWithPartnerLearningLanguageResponse.fromDomain(
+          learningLanguage.tandem,
+        ),
     });
   }
 }
