@@ -4,7 +4,7 @@ import CameraAdapterInterface from './interfaces/CameraAdapter.interface';
 class CameraAdapter implements CameraAdapterInterface {
     getPictureFromGallery = async () => {
         const image = await Camera.getPhoto({
-            quality: 90,
+            quality: 70,
             resultType: CameraResultType.Uri,
             source: CameraSource.Photos,
         });
@@ -12,7 +12,9 @@ class CameraAdapter implements CameraAdapterInterface {
         if (image.webPath) {
             const response = await fetch(image.webPath);
             const blob = await response.blob();
-            const file = new File([blob], 'avatar', { type: blob.type });
+            const fileName = image.webPath?.split('/').pop() || 'avatar';
+
+            const file = new File([blob], fileName + '.' + image.format, { type: blob.type });
             return file;
         }
 

@@ -1,7 +1,7 @@
-import { Injectable } from '@nestjs/common';
 import { Collection } from '@app/common';
-import { MediaObjectRepository } from 'src/core/ports/media-object.repository';
+import { Injectable } from '@nestjs/common';
 import { MediaObject } from 'src/core/models/media.model';
+import { MediaObjectRepository } from 'src/core/ports/media-object.repository';
 
 @Injectable()
 export class InMemoryMediaObjectRepository implements MediaObjectRepository {
@@ -38,6 +38,11 @@ export class InMemoryMediaObjectRepository implements MediaObjectRepository {
         const existingMedia = this.#messageMediaMap.get(messageId) || [];
         existingMedia.push(object);
         this.#messageMediaMap.set(messageId, existingMedia);
+        return Promise.resolve();
+    }
+
+    async saveThumbnail(object: MediaObject, messageId: string): Promise<void> {
+        this.#mediaObjects.push(object);
         return Promise.resolve();
     }
 
