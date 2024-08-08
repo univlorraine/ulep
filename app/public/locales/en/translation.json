@@ -104,6 +104,9 @@
         "messageReport": "Message sent by {{firstname}} {{lastname}} on {{date}} --- {{message}}",
         "messageReported": "Message reported",
         "noMessages": "There is no message",
+        "send_button": {
+            "aria_label": "Stay pressed to record an audio or write your message to switch to send mode"
+        },
         "search": {
             "placeholder": "Search in conversation"
         },
