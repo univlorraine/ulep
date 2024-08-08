@@ -176,7 +176,7 @@ const MessageFile: React.FC<MessageProps> = ({ message, isCurrentUserMessage }) 
     };
 
     return (
-        <div className={`${messageClass}`}>
+        <div className={messageClass}>
             <IonButton fill="clear" className={styles.downloadButton} onClick={handleDownload}>
                 <IonText className={styles.downloadTitle}>{fileName}</IonText>
                 <IonIcon
