@@ -191,6 +191,8 @@ const MessageFile: React.FC<MessageProps> = ({ message, isCurrentUserMessage }) 
 
 const MessageLink: React.FC<MessageProps> = ({ message, isCurrentUserMessage, currentMessageSearchId }) => {
     const messageClass = isCurrentUserMessage ? styles.currentUser : styles.otherUser;
+    const linkRegex = /(https?:\/\/[^\s]+)/g;
+    const parts = message.content.split(linkRegex);
 
     return (
         <div
@@ -204,7 +206,17 @@ const MessageLink: React.FC<MessageProps> = ({ message, isCurrentUserMessage, cu
                 description={message.metadata?.openGraphResult?.ogDescription}
                 url={message.content}
             />
-            <IonText className={styles.linkText}>{message.content}</IonText>
+            <IonText className={styles.linkText}>
+                {parts.map((part, index) =>
+                    linkRegex.test(part) ? (
+                        <a key={index} href={part} target="_blank" rel="noopener noreferrer">
+                            {part}
+                        </a>
+                    ) : (
+                        part
+                    )
+                )}
+            </IonText>
         </div>
     );
 };
