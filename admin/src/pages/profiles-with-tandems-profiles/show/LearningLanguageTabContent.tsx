@@ -4,9 +4,9 @@ import React from 'react';
 
 import { useGetIdentity, useGetList, useRecordContext, useTranslate } from 'react-admin';
 
-import { isJoker, LearningLanguage } from '../../../entities/LearningLanguage';
+import { isJoker, LearningLanguageWithTandemWithPartnerProfile } from '../../../entities/LearningLanguage';
 import { Match } from '../../../entities/Match';
-import { ProfileWithTandems } from '../../../entities/Profile';
+import { ProfileWithTandemsProfiles } from '../../../entities/ProfileWithTandemsProfiles';
 import { TandemStatus } from '../../../entities/Tandem';
 import { isCentralUniversity, PairingMode } from '../../../entities/University';
 import useLearningLanguagesStore from '../useLearningLanguagesStore';
@@ -19,7 +19,7 @@ import TandemInfo from './TandemInfo';
 
 type TabPanelLayoutProps = {
     children: React.ReactNode;
-    learningLanguage: LearningLanguage;
+    learningLanguage: LearningLanguageWithTandemWithPartnerProfile;
 };
 
 const TabPanelLayout = ({ children, learningLanguage }: TabPanelLayoutProps) => {
@@ -37,11 +37,11 @@ const TabPanelLayout = ({ children, learningLanguage }: TabPanelLayoutProps) => 
 };
 
 type LearningLanguageTabContentProps = {
-    learningLanguage: LearningLanguage;
+    learningLanguage: LearningLanguageWithTandemWithPartnerProfile;
 };
 
 const LearningLanguageTabContent = ({ learningLanguage }: LearningLanguageTabContentProps) => {
-    const record: ProfileWithTandems = useRecordContext();
+    const record: ProfileWithTandemsProfiles = useRecordContext();
 
     const { data: identity, isLoading: isLoadingIdentity } = useGetIdentity();
 
@@ -94,7 +94,7 @@ const LearningLanguageTabContent = ({ learningLanguage }: LearningLanguageTabCon
 
                     <PartnerCard
                         compatibilityScore={learningLanguage.tandem.compatibilityScore}
-                        partnerLearningLanguage={learningLanguage.tandem.learningLanguages[0]}
+                        partnerLearningLanguage={learningLanguage.tandem.partnerLearningLanguage}
                         tandem={learningLanguage.tandem}
                         userLearningLanguage={learningLanguage}
                         userProfile={record}
@@ -103,7 +103,7 @@ const LearningLanguageTabContent = ({ learningLanguage }: LearningLanguageTabCon
 
                     <TandemInfo
                         hasActiveTandem={hasActiveTandem}
-                        partnerLearningLanguage={learningLanguage.tandem.learningLanguages[0]}
+                        partnerLearningLanguage={learningLanguage.tandem.partnerLearningLanguage}
                         tandem={learningLanguage.tandem}
                         userLearningLanguage={learningLanguage}
                     />
@@ -128,7 +128,7 @@ const LearningLanguageTabContent = ({ learningLanguage }: LearningLanguageTabCon
                         compatibilityScore={learningLanguage.tandem.compatibilityScore}
                         hasTandemWaitingForValidation={hasTandemWaitingForValidation}
                         isUserValidationNeeded={isUserValidationNeeded}
-                        partnerLearningLanguage={learningLanguage.tandem.learningLanguages[0]}
+                        partnerLearningLanguage={learningLanguage.tandem.partnerLearningLanguage}
                         tandem={learningLanguage.tandem}
                         userLearningLanguage={learningLanguage}
                         userProfile={record}
@@ -147,7 +147,7 @@ const LearningLanguageTabContent = ({ learningLanguage }: LearningLanguageTabCon
 
                 <PartnerCard
                     compatibilityScore={learningLanguage.tandem?.compatibilityScore}
-                    partnerLearningLanguage={learningLanguage.tandem?.learningLanguages[0]}
+                    partnerLearningLanguage={learningLanguage.tandem?.partnerLearningLanguage}
                     partnerType={PartnerType.BEST_OVERALL}
                     tandem={learningLanguage?.tandem}
                     userLearningLanguage={learningLanguage}

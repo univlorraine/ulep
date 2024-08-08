@@ -140,7 +140,7 @@ const CustomMenu = () => {
             <Box ref={(newRef: HTMLDivElement) => setProfilesRef(newRef)}>
                 <Menu.ResourceItem name="profiles" />
             </Box>
-            <Menu.ResourceItem name="profiles/with-tandem" />
+            <Menu.ResourceItem name="profiles/with-tandems-profiles" />
             {permissions.checkRole(Role.MANAGER) && data && data.universityId && (
                 <Menu.Item
                     leftIcon={<SchoolIcon />}

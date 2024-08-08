@@ -1,13 +1,13 @@
 import { Box, Typography } from '@mui/material';
 import { useRefresh, useTranslate } from 'react-admin';
-import { LearningLanguage } from '../../../entities/LearningLanguage';
-import { Tandem } from '../../../entities/Tandem';
+import { LearningLanguage, LearningLanguageWithTandemWithPartnerProfile } from '../../../entities/LearningLanguage';
+import { TandemWithPartnerLearningLanguage } from '../../../entities/Tandem';
 import TandemActions from './Actions/TandemActions';
 
 type TandemInfoProps = {
-    tandem: Tandem;
+    tandem: TandemWithPartnerLearningLanguage;
     hasActiveTandem?: boolean;
-    userLearningLanguage?: LearningLanguage;
+    userLearningLanguage?: LearningLanguageWithTandemWithPartnerProfile;
     partnerLearningLanguage?: LearningLanguage;
 };
 

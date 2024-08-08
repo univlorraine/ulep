@@ -1,9 +1,9 @@
 import React from 'react';
 import { Button, useRedirect } from 'react-admin';
-import { Profile } from '../../../entities/Profile';
+import { ProfileWithTandemsProfiles } from '../../../entities/ProfileWithTandemsProfiles';
 
 interface ProfileLinkParams {
-    profile: Profile;
+    profile: ProfileWithTandemsProfiles;
     learningLanguageCode: string;
 }
 
@@ -13,7 +13,7 @@ const ProfileTandemDetailLink = ({ profile, learningLanguageCode }: ProfileLinkP
     return (
         <Button
             onClick={() => {
-                redirect('show', 'profiles/with-tandem', profile.id, {}, { learningLanguageCode });
+                redirect('show', 'profiles/with-tandems-profiles', profile.id, {}, { learningLanguageCode });
             }}
             sx={{ cursor: 'pointer' }}
             variant="text"

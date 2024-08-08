@@ -46,31 +46,6 @@ export const ProfilesRelations = {
   },
 };
 
-export const ProfilesRelationsWithTandemProfile = {
-  ...ProfilesRelations,
-  LearningLanguages: {
-    include: {
-      LanguageCode: true,
-      Tandem: {
-        include: {
-          LearningLanguages: {
-            include: {
-              Profile: {
-                include: ProfilesRelations,
-              },
-              LanguageCode: true,
-              Campus: true,
-              TandemLanguage: true,
-            },
-          },
-          UniversityValidations: true,
-        },
-      },
-      Campus: true,
-    },
-  },
-};
-
 export type ProfileSnapshot = Prisma.Profiles & {
   User: UserSnapshot;
   Goals: (Prisma.LearningObjectives & {
@@ -118,8 +93,6 @@ export const profileMapper = (instance: ProfileSnapshot): Profile => {
           hasPriority: learningLanguage.has_priority,
           campus:
             learningLanguage.Campus && campusMapper(learningLanguage.Campus),
-          tandem:
-            learningLanguage.Tandem && tandemMapper(learningLanguage.Tandem),
           certificateOption: learningLanguage.certificate_option,
           specificProgram: learningLanguage.specific_program,
         }),

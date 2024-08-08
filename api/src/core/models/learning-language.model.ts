@@ -3,6 +3,7 @@ import { Language } from './language.model';
 import { ProficiencyLevel } from './proficiency.model';
 import { LearningType, Profile } from './profile.model';
 import { Tandem } from './tandem.model';
+import { TandemWithPartnerLearningLanguage } from './tandemWithPartnerLearningLanguage.model';
 
 interface LearningLanguageProps {
   id: string;
@@ -20,7 +21,6 @@ interface LearningLanguageProps {
   specificProgram?: boolean;
   campus?: Campus;
   tandemLanguage?: Language;
-  tandem?: Tandem;
 }
 
 export class LearningLanguage {
@@ -37,7 +37,6 @@ export class LearningLanguage {
   readonly certificateOption?: boolean;
   readonly specificProgram?: boolean;
   readonly campus?: Campus;
-  readonly tandem?: Tandem;
   tandemLanguage?: Language;
   readonly sameTandemEmail?: string;
 
@@ -54,7 +53,6 @@ export class LearningLanguage {
     certificateOption,
     specificProgram,
     campus,
-    tandem,
     tandemLanguage,
     hasPriority,
     sameTandemEmail,
@@ -71,7 +69,6 @@ export class LearningLanguage {
     this.certificateOption = certificateOption;
     this.specificProgram = specificProgram;
     this.campus = campus;
-    this.tandem = tandem;
     this.tandemLanguage = tandemLanguage;
     this.hasPriority = hasPriority;
     this.sameTandemEmail = sameTandemEmail;
@@ -144,6 +141,22 @@ export class LearningLanguageWithTandem extends LearningLanguage {
   readonly tandem?: Tandem;
 
   constructor(props: LearningLanguageWithTandemProps) {
+    super(props);
+    this.tandem = props.tandem;
+  }
+}
+
+interface LearningLanguageWithTandemWithPartnerLearningLanguageProps
+  extends LearningLanguageProps {
+  tandem?: TandemWithPartnerLearningLanguage;
+}
+
+export class LearningLanguageWithTandemWithPartnerLearningLanguage extends LearningLanguage {
+  readonly tandem?: TandemWithPartnerLearningLanguage;
+
+  constructor(
+    props: LearningLanguageWithTandemWithPartnerLearningLanguageProps,
+  ) {
     super(props);
     this.tandem = props.tandem;
   }

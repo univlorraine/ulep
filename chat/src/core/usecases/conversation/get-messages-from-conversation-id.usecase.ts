@@ -48,7 +48,6 @@ export class GetMessagesFromConversationIdUsecase {
                 command.contentFilter,
                 command.typeFilter,
             );
-
         for (const message of messages) {
             if (
                 (message.type === MessageType.Image ||
@@ -61,6 +60,18 @@ export class GetMessagesFromConversationIdUsecase {
                     message.content,
                     3600,
                 );
+
+                if (
+                    message.type === MessageType.Image &&
+                    message.metadata.thumbnail
+                ) {
+                    message.metadata.thumbnail =
+                        await this.storage.temporaryUrl(
+                            'chat',
+                            message.metadata.thumbnail,
+                            3600,
+                        );
+                }
             }
         }
 

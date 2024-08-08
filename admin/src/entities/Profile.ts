@@ -1,7 +1,5 @@
 import Interest from './Interest';
 import Language from './Language';
-// eslint-disable-next-line import/no-cycle
-import { LearningLanguage } from './LearningLanguage';
 import Objective from './Objective';
 import User from './User';
 
@@ -15,10 +13,6 @@ export interface Profile {
     interests: Interest[];
     biography?: { [key: string]: string };
     createdAt?: Date;
-}
-
-export interface ProfileWithTandems extends Profile {
-    learningLanguages: LearningLanguage[];
 }
 
 export interface ProfileFormPayload {

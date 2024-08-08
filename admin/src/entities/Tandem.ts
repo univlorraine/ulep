@@ -19,6 +19,16 @@ export type Tandem = {
     updatedAt: Date;
 };
 
+export type TandemWithPartnerLearningLanguage = {
+    id: string;
+    status: TandemStatus;
+    partnerLearningLanguage: LearningLanguage;
+    compatibilityScore: number;
+    universityValidations?: string[];
+    createdAt: Date;
+    updatedAt: Date;
+};
+
 export const isTandemActive = (tandem?: Tandem) => tandem?.status === TandemStatus.ACTIVE;
 
 export const isTandemPaused = (tandem?: Tandem) => tandem?.status === TandemStatus.PAUSED;

@@ -25,7 +25,7 @@ import interests from './pages/interests';
 import languages from './pages/languages';
 import objectives from './pages/objectives';
 import profiles from './pages/profiles';
-import profilesWithTandem from './pages/profiles-with-tandem';
+import profilesWithTandem from './pages/profiles-with-tandems-profiles';
 import questions from './pages/questions';
 import reports from './pages/report';
 import reportCategories from './pages/report-categories';
@@ -62,7 +62,7 @@ const App = () => {
                     />
                     <Resource
                         icon={PeopleIcon}
-                        name="profiles/with-tandem"
+                        name="profiles/with-tandems-profiles"
                         options={{ label: translate('learning_languages.label') }}
                         {...profilesWithTandem}
                     />

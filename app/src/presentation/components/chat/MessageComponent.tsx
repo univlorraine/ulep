@@ -143,7 +143,7 @@ const MessageImage: React.FC<MessageProps> = ({ message, isCurrentUserMessage })
 
     return (
         <div className={`${styles.messageImage} ${messageClass}`}>
-            <img className={styles.image} src={message.content} />
+            <img className={styles.image} src={message.getThumbnail()} />
         </div>
     );
 };

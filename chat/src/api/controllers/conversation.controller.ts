@@ -179,14 +179,15 @@ export class ConversationController {
         });
 
         if (file && body.filename) {
-            //TODO: Upload lighter image then heavier image
-            const url = await this.uploadMediaUsecase.execute({
-                file,
-                message,
-                conversationId,
-                filename: body.filename,
-            });
-            message.content = url;
+            const { fileUrl, thumbnailUrl } =
+                await this.uploadMediaUsecase.execute({
+                    file,
+                    message,
+                    conversationId,
+                    filename: body.filename,
+                });
+            message.content = fileUrl;
+            message.metadata.thumbnail = thumbnailUrl;
         }
 
         return MessageResponse.from(message);

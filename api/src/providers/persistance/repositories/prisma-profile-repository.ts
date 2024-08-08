@@ -1,22 +1,40 @@
 import { Injectable } from '@nestjs/common';
-import { Collection, PrismaService } from '@app/common';
+import { Collection, ModeQuery, PrismaService } from '@app/common';
 import {
   ProfileQueryOrderBy,
   ProfileQueryWhere,
   ProfileRepository,
+  ProfileWithTandemsProfilesQueryWhere,
 } from 'src/core/ports/profile.repository';
 import { Profile } from 'src/core/models';
 import {
   ProfilesRelations,
-  ProfilesRelationsWithTandemProfile,
   profileMapper,
+  ProfilesRelationsWithTandemProfile,
+  profileWithTandemsProfilesMapper,
 } from '../mappers';
+import { ProfileWithTandemsProfiles } from 'src/core/models/profileWithTandemsProfiles.model';
 
 @Injectable()
 export class PrismaProfileRepository implements ProfileRepository {
   constructor(private readonly prisma: PrismaService) {}
 
   async ofId(id: string): Promise<Profile | null> {
+    const entry = await this.prisma.profiles.findUnique({
+      where: { id },
+      include: ProfilesRelations,
+    });
+
+    if (!entry) {
+      return null;
+    }
+
+    return profileMapper(entry);
+  }
+
+  async ofIdWithTandemsProfiles(
+    id: string,
+  ): Promise<ProfileWithTandemsProfiles | null> {
     const entry = await this.prisma.profiles.findUnique({
       where: { id },
       include: ProfilesRelationsWithTandemProfile,
@@ -26,7 +44,7 @@ export class PrismaProfileRepository implements ProfileRepository {
       return null;
     }
 
-    return profileMapper(entry);
+    return profileWithTandemsProfilesMapper(entry);
   }
 
   async ofUser(id: string): Promise<Profile | null> {
@@ -140,7 +158,7 @@ export class PrismaProfileRepository implements ProfileRepository {
       skip: offset,
       orderBy: order,
       take: limit,
-      include: ProfilesRelationsWithTandemProfile,
+      include: ProfilesRelations,
     });
 
     const profilesWithLearningLanguages = profiles.filter(
@@ -149,6 +167,57 @@ export class PrismaProfileRepository implements ProfileRepository {
 
     return {
       items: profilesWithLearningLanguages.map(profileMapper),
+      totalItems: count,
+    };
+  }
+
+  async findAllWithTandemsProfiles(
+    offset?: number,
+    limit?: number,
+    where?: ProfileWithTandemsProfilesQueryWhere,
+  ): Promise<Collection<ProfileWithTandemsProfiles>> {
+    const wherePayload: any = where
+      ? {
+          User: {
+            Organization: { id: where.user.university },
+            lastname: {
+              contains: where.user.lastname,
+              mode: ModeQuery.INSENSITIVE,
+            },
+          },
+          ...(where.learningLanguage && {
+            LearningLanguages: {
+              some: {
+                LanguageCode: { id: where.learningLanguage },
+              },
+            },
+          }),
+        }
+      : {};
+
+    const count = await this.prisma.profiles.count({
+      where: wherePayload,
+    });
+    // If skip is out of range, return an empty array
+    if (offset >= count) {
+      return { items: [], totalItems: count };
+    }
+
+    const profiles = await this.prisma.profiles.findMany({
+      where: wherePayload,
+      skip: offset,
+      take: limit,
+      include: ProfilesRelationsWithTandemProfile,
+    });
+
+    const profilesWithLearningLanguages = profiles.filter(
+      (profile) => profile.LearningLanguages.length !== 0,
+    );
+
+    return {
+      items: profilesWithLearningLanguages.map(
+        profileWithTandemsProfilesMapper,
+      ),
       totalItems: count,
     };
   }
