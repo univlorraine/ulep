@@ -1,7 +1,7 @@
 import { IonButton, IonIcon, IonPopover, IonText, useIonToast } from '@ionic/react';
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { DownloadSvg } from '../../../assets';
+import { DownloadSvg, KebabSvg } from '../../../assets';
 import { useConfig } from '../../../context/ConfigurationContext';
 import { Message, MessageType } from '../../../domain/entities/chat/Message';
 import AudioLine from '../AudioLine';
@@ -48,54 +48,34 @@ const MessageComponent: React.FC<MessageProps> = ({ message, isCurrentUserMessag
         });
     };
 
-    const onMessagePressed = (e: React.MouseEvent<HTMLIonButtonElement>) => {
+    const onOpenActionsPopover = (e: React.MouseEvent<HTMLIonButtonElement>) => {
         e.preventDefault();
         e.stopPropagation();
         setPopoverEvent(e);
         setDisplayPopover(!displayPopover);
     };
 
-    const renderMessageContent = (onMessagePressed: (e: React.MouseEvent<HTMLIonButtonElement>) => void) => {
+    const renderMessageContent = () => {
         switch (message.type) {
             case MessageType.Text:
                 return (
                     <MessageText
                         message={message}
                         isCurrentUserMessage={isCurrentUserMessage}
-                        onMessagePressed={onMessagePressed}
                         currentMessageSearchId={currentMessageSearchId}
                     />
                 );
             case MessageType.Image:
-                return (
-                    <MessageImage
-                        message={message}
-                        isCurrentUserMessage={isCurrentUserMessage}
-                        onMessagePressed={onMessagePressed}
-                    />
-                );
+                return <MessageImage message={message} isCurrentUserMessage={isCurrentUserMessage} />;
             case MessageType.Audio:
-                return (
-                    <MessageAudio
-                        message={message}
-                        isCurrentUserMessage={isCurrentUserMessage}
-                        onMessagePressed={onMessagePressed}
-                    />
-                );
+                return <MessageAudio message={message} isCurrentUserMessage={isCurrentUserMessage} />;
             case MessageType.File:
-                return (
-                    <MessageFile
-                        message={message}
-                        isCurrentUserMessage={isCurrentUserMessage}
-                        onMessagePressed={onMessagePressed}
-                    />
-                );
+                return <MessageFile message={message} isCurrentUserMessage={isCurrentUserMessage} />;
             case MessageType.Link:
                 return (
                     <MessageLink
                         message={message}
                         isCurrentUserMessage={isCurrentUserMessage}
-                        onMessagePressed={onMessagePressed}
                         currentMessageSearchId={currentMessageSearchId}
                     />
                 );
@@ -111,7 +91,19 @@ const MessageComponent: React.FC<MessageProps> = ({ message, isCurrentUserMessag
                     <IonText className={styles.name}>{name}</IonText>
                     <IonText className={styles.date}>{date}</IonText>
                 </div>
-                {renderMessageContent(onMessagePressed)}
+                <div className={styles.messageContent}>
+                    {renderMessageContent()}
+                    {!isCurrentUserMessage && (
+                        <IonButton
+                            fill="clear"
+                            className={styles.rightMessageMenu}
+                            onClick={onOpenActionsPopover}
+                            size="small"
+                        >
+                            <IonIcon icon={KebabSvg} />
+                        </IonButton>
+                    )}
+                </div>
             </div>
             <IonPopover
                 event={popoverEvent}
@@ -132,54 +124,41 @@ const MessageComponent: React.FC<MessageProps> = ({ message, isCurrentUserMessag
     );
 };
 
-const MessageText: React.FC<MessageProps> = ({
-    message,
-    isCurrentUserMessage,
-    onMessagePressed,
-    currentMessageSearchId,
-}) => {
+const MessageText: React.FC<MessageProps> = ({ message, isCurrentUserMessage, currentMessageSearchId }) => {
     const messageClass = isCurrentUserMessage ? styles.currentUser : styles.otherUser;
 
     return (
-        <IonButton
-            id={`message-container-${message.id}`}
-            fill="clear"
+        <div
             className={`${styles.message} ${messageClass} ${
                 message.id === currentMessageSearchId ? styles.searchMessage : ''
             }`}
-            onClick={onMessagePressed}
         >
             {message.content}
-        </IonButton>
+        </div>
     );
 };
 
-const MessageImage: React.FC<MessageProps> = ({ message, isCurrentUserMessage, onMessagePressed }) => {
+const MessageImage: React.FC<MessageProps> = ({ message, isCurrentUserMessage }) => {
     const messageClass = isCurrentUserMessage ? styles.currentUser : styles.otherUser;
 
     return (
-        <IonButton
-            id={`message-container-${message.id}`}
-            fill="clear"
-            className={`${styles.messageImage} ${messageClass}`}
-            onClick={onMessagePressed}
-        >
+        <div className={`${styles.messageImage} ${messageClass}`}>
             <img className={styles.image} src={message.getThumbnail()} />
-        </IonButton>
+        </div>
     );
 };
 
-const MessageAudio: React.FC<MessageProps> = ({ message, isCurrentUserMessage, onMessagePressed }) => {
+const MessageAudio: React.FC<MessageProps> = ({ message, isCurrentUserMessage }) => {
     const messageClass = isCurrentUserMessage ? styles.currentUser : styles.otherUser;
 
     return (
-        <IonButton fill="clear" className={`${styles.messageAudio} ${messageClass}`} onClick={onMessagePressed}>
+        <div className={`${styles.messageAudio} ${messageClass}`}>
             <AudioLine audioFile={message.content} />
-        </IonButton>
+        </div>
     );
 };
 
-const MessageFile: React.FC<MessageProps> = ({ message, isCurrentUserMessage, onMessagePressed }) => {
+const MessageFile: React.FC<MessageProps> = ({ message, isCurrentUserMessage }) => {
     const { fileAdapter } = useConfig();
     const { t } = useTranslation();
     const [showToast] = useIonToast();
@@ -197,12 +176,7 @@ const MessageFile: React.FC<MessageProps> = ({ message, isCurrentUserMessage, on
     };
 
     return (
-        <IonButton
-            id={`message-container-${message.id}`}
-            fill="clear"
-            className={`${messageClass}`}
-            onClick={onMessagePressed}
-        >
+        <div className={messageClass}>
             <IonButton fill="clear" className={styles.downloadButton} onClick={handleDownload}>
                 <IonText className={styles.downloadTitle}>{fileName}</IonText>
                 <IonIcon
@@ -211,37 +185,27 @@ const MessageFile: React.FC<MessageProps> = ({ message, isCurrentUserMessage, on
                     icon={DownloadSvg}
                 />
             </IonButton>
-        </IonButton>
+        </div>
     );
 };
 
-const MessageLink: React.FC<MessageProps> = ({
-    message,
-    isCurrentUserMessage,
-    onMessagePressed,
-    currentMessageSearchId,
-}) => {
+const MessageLink: React.FC<MessageProps> = ({ message, isCurrentUserMessage, currentMessageSearchId }) => {
     const messageClass = isCurrentUserMessage ? styles.currentUser : styles.otherUser;
 
     return (
-        <IonButton
-            id={`message-container-${message.id}`}
-            fill="clear"
+        <div
             className={`${styles.messageLink} ${messageClass} ${
                 message.id === currentMessageSearchId ? styles.searchMessage : ''
-            }`}
-            onClick={onMessagePressed}
+            } ${styles.outerContainer}`}
         >
-            <div className={styles.outerContainer}>
-                <OGCard
-                    imageUrl={message.metadata?.openGraphResult?.ogImage?.[0]?.url}
-                    title={message.metadata?.openGraphResult?.ogTitle}
-                    description={message.metadata?.openGraphResult?.ogDescription}
-                    url={message.content}
-                />
-                <IonText className={styles.linkText}>{message.content}</IonText>
-            </div>
-        </IonButton>
+            <OGCard
+                imageUrl={message.metadata?.openGraphResult?.ogImage?.[0]?.url}
+                title={message.metadata?.openGraphResult?.ogTitle}
+                description={message.metadata?.openGraphResult?.ogDescription}
+                url={message.content}
+            />
+            <IonText className={styles.linkText}>{message.content}</IonText>
+        </div>
     );
 };
 
