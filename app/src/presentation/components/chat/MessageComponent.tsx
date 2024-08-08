@@ -164,7 +164,7 @@ const MessageImage: React.FC<MessageProps> = ({ message, isCurrentUserMessage, o
             className={`${styles.messageImage} ${messageClass}`}
             onClick={onMessagePressed}
         >
-            <img className={styles.image} src={message.content} />
+            <img className={styles.image} src={message.getThumbnail()} />
         </IonButton>
     );
 };

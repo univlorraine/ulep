@@ -39,7 +39,7 @@ const MediaComponent: React.FC<MessageProps> = ({ message }) => {
 
 const MessageImage: React.FC<MessageProps> = ({ message }) => {
     const { t } = useTranslation();
-    return <img className={styles.image} src={message.content} alt={t('chat.medias.images-alt') as string} />;
+    return <img className={styles.image} src={message.getThumbnail()} alt={t('chat.medias.images-alt') as string} />;
 };
 
 const MessageAudio: React.FC<MessageProps> = ({ message }) => {

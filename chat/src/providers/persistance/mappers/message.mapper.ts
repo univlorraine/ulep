@@ -5,6 +5,7 @@ import { MessageType } from 'src/core/models/message.model';
 const MessagesInclude = Prisma.validator<Prisma.MessageInclude>()({
     Conversation: true,
     MediaObject: true,
+    Thumbnail: true,
 });
 
 export const MessagesRelations = { include: MessagesInclude };
@@ -26,6 +27,11 @@ export const messageMapper = (snapshot: MessagesSnapshot): Message => {
         isDeleted: snapshot.isDeleted,
         ownerId: snapshot.ownerId,
         type: snapshot.type as MessageType,
-        metadata: snapshot.metadata,
+        metadata: {
+            ...(snapshot.metadata as any),
+            thumbnail: snapshot.Thumbnail?.id
+                ? snapshot.Thumbnail?.name
+                : undefined,
+        },
     });
 };

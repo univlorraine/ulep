@@ -32,10 +32,13 @@ export class MediaObject {
         bucketName = 'chat',
         conversationId: string,
         fileName: string,
+        isThumbnail?: boolean,
     ): MediaObject {
         const id = v4();
-        const extension = fileName.split('.').pop();
-        const name = `${conversationId}/${id}.${extension}`;
+        const extension = fileName.split('.')[1];
+        const name = `${conversationId}/${id}${
+            isThumbnail ? '_thumbnail' : ''
+        }.${extension}`;
 
         return new MediaObject({
             id,
