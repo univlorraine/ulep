@@ -48,7 +48,7 @@ const MessageComponent: React.FC<MessageProps> = ({ message, isCurrentUserMessag
         });
     };
 
-    const onMessagePressed = (e: React.MouseEvent<HTMLIonButtonElement>) => {
+    const onOpenActionsPopover = (e: React.MouseEvent<HTMLIonButtonElement>) => {
         e.preventDefault();
         e.stopPropagation();
         setPopoverEvent(e);
@@ -97,7 +97,7 @@ const MessageComponent: React.FC<MessageProps> = ({ message, isCurrentUserMessag
                         <IonButton
                             fill="clear"
                             className={styles.rightMessageMenu}
-                            onClick={onMessagePressed}
+                            onClick={onOpenActionsPopover}
                             size="small"
                         >
                             <IonIcon icon={KebabSvg} />
@@ -196,17 +196,15 @@ const MessageLink: React.FC<MessageProps> = ({ message, isCurrentUserMessage, cu
         <div
             className={`${styles.messageLink} ${messageClass} ${
                 message.id === currentMessageSearchId ? styles.searchMessage : ''
-            }`}
+            } ${styles.outerContainer}`}
         >
-            <div className={styles.outerContainer}>
-                <OGCard
-                    imageUrl={message.metadata?.openGraphResult?.ogImage?.[0]?.url}
-                    title={message.metadata?.openGraphResult?.ogTitle}
-                    description={message.metadata?.openGraphResult?.ogDescription}
-                    url={message.content}
-                />
-                <IonText className={styles.linkText}>{message.content}</IonText>
-            </div>
+            <OGCard
+                imageUrl={message.metadata?.openGraphResult?.ogImage?.[0]?.url}
+                title={message.metadata?.openGraphResult?.ogTitle}
+                description={message.metadata?.openGraphResult?.ogDescription}
+                url={message.content}
+            />
+            <IonText className={styles.linkText}>{message.content}</IonText>
         </div>
     );
 };
