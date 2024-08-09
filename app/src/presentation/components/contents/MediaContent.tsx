@@ -15,9 +15,10 @@ interface MediaContentProps {
     goBack?: () => void;
     isHybrid: boolean;
     profile: Profile;
+    setImageToDisplay?: (image: string) => void;
 }
 
-const Content: React.FC<Omit<MediaContentProps, 'isHybrid'>> = ({ conversation, goBack, profile }) => {
+const Content: React.FC<Omit<MediaContentProps, 'isHybrid'>> = ({ conversation, goBack, setImageToDisplay }) => {
     const { t } = useTranslation();
     const [selectedFilter, setSelectedFilter] = useState<MessageType>(MessageType.Image);
     const { messages, isScrollForwardOver, isLoading, loadMessages } = useHandleMessagesFromConversation({
@@ -95,20 +96,33 @@ const Content: React.FC<Omit<MediaContentProps, 'isHybrid'>> = ({ conversation, 
                     loadMessages={loadMessages}
                     isScrollOver={isScrollForwardOver}
                     selectedFilter={selectedFilter}
+                    setImageToDisplay={setImageToDisplay}
                 />
             )}
         </div>
     );
 };
 
-const MediaContent: React.FC<MediaContentProps> = ({ conversation, isHybrid, goBack, profile }) => {
+const MediaContent: React.FC<MediaContentProps> = ({ conversation, isHybrid, goBack, profile, setImageToDisplay }) => {
     if (!isHybrid) {
-        return <Content conversation={conversation} goBack={goBack} profile={profile} />;
+        return (
+            <Content
+                conversation={conversation}
+                goBack={goBack}
+                profile={profile}
+                setImageToDisplay={setImageToDisplay}
+            />
+        );
     }
 
     return (
         <IonPage className={styles.content}>
-            <Content conversation={conversation} goBack={goBack} profile={profile} />
+            <Content
+                conversation={conversation}
+                goBack={goBack}
+                profile={profile}
+                setImageToDisplay={setImageToDisplay}
+            />
         </IonPage>
     );
 };

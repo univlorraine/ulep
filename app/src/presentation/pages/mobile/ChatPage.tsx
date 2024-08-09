@@ -28,7 +28,13 @@ const ChatPage = () => {
 
     return (
         <IonContent>
-            <ChatContent conversation={conversation} goBack={goBack} profile={profile} isHybrid />
+            <ChatContent
+                conversation={conversation}
+                goBack={goBack}
+                profile={profile}
+                isHybrid
+                setImageToDisplay={() => {}}
+            />
         </IonContent>
     );
 };

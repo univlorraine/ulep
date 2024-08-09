@@ -21,9 +21,16 @@ interface ChatContentProps {
     isHybrid: boolean;
     profile: Profile;
     setCurrentContent?: (content: string) => void;
+    setImageToDisplay: (imageUrl: string) => void;
 }
 
-const Content: React.FC<ChatContentProps> = ({ conversation, goBack, profile, setCurrentContent }) => {
+const Content: React.FC<ChatContentProps> = ({
+    conversation,
+    goBack,
+    profile,
+    setCurrentContent,
+    setImageToDisplay,
+}) => {
     const { t } = useTranslation();
     const { recorderAdapter, socketIoAdapter } = useConfig();
     const isBlocked = conversation.isBlocked;
@@ -140,6 +147,7 @@ const Content: React.FC<ChatContentProps> = ({ conversation, goBack, profile, se
                     userId={profile.user.id}
                     isScrollForwardOver={isScrollForwardOver}
                     isScrollBackwardOver={isScrollBackwardOver}
+                    setImageToDisplay={setImageToDisplay}
                 />
             ) : (
                 <div className={styles.loader}>
@@ -151,7 +159,14 @@ const Content: React.FC<ChatContentProps> = ({ conversation, goBack, profile, se
     );
 };
 
-const ChatContent: React.FC<ChatContentProps> = ({ conversation, isHybrid, goBack, profile, setCurrentContent }) => {
+const ChatContent: React.FC<ChatContentProps> = ({
+    conversation,
+    isHybrid,
+    goBack,
+    profile,
+    setCurrentContent,
+    setImageToDisplay,
+}) => {
     if (!isHybrid) {
         return (
             <Content
@@ -160,6 +175,7 @@ const ChatContent: React.FC<ChatContentProps> = ({ conversation, isHybrid, goBac
                 profile={profile}
                 isHybrid={isHybrid}
                 setCurrentContent={setCurrentContent}
+                setImageToDisplay={setImageToDisplay}
             />
         );
     }
@@ -172,6 +188,7 @@ const ChatContent: React.FC<ChatContentProps> = ({ conversation, isHybrid, goBac
                 profile={profile}
                 isHybrid={isHybrid}
                 setCurrentContent={setCurrentContent}
+                setImageToDisplay={setImageToDisplay}
             />
         </IonPage>
     );
