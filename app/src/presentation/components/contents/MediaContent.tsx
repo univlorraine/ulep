@@ -116,7 +116,7 @@ const MediaContent: React.FC<MediaContentProps> = ({ conversation, isHybrid, goB
     }
 
     return (
-        <IonPage className={styles.content}>
+        <IonPage>
             <Content
                 conversation={conversation}
                 goBack={goBack}

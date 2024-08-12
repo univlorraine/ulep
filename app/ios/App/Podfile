@@ -25,7 +25,7 @@ def capacitor_pods
   pod 'CapacitorStatusBar', :path => '../../node_modules/.pnpm/@capacitor+status-bar@6.0.0_@capacitor+core@6.1.0/node_modules/@capacitor/status-bar'
   pod 'CapawesomeCapacitorFilePicker', :path => '../../node_modules/.pnpm/@capawesome+capacitor-file-picker@5.3.0_@capacitor+core@6.1.0/node_modules/@capawesome/capacitor-file-picker'
   pod 'SentryCapacitor', :path => '../../node_modules/.pnpm/@sentry+capacitor@0.14.0_@capacitor+core@6.1.0_@sentry+react@7.73.0/node_modules/@sentry/capacitor'
-  pod 'CapacitorJitsiMeet', :path => '../../node_modules/.pnpm/capacitor-jitsi-meet@6.0.0/node_modules/capacitor-jitsi-meet'
+  pod 'CapacitorJitsiMeet', :path => '../../node_modules/.pnpm/github.com+thetribeio+capacitor-jitsi-meet@9539ae149b91e009d3026c0efab478ebc1fc4e7a/node_modules/capacitor-jitsi-meet'
   pod 'CapacitorVoiceRecorder', :path => '../../node_modules/.pnpm/capacitor-voice-recorder@5.0.0_@capacitor+core@6.1.0/node_modules/capacitor-voice-recorder'
 end
 
