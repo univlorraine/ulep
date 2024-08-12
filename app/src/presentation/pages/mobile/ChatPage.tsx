@@ -30,8 +30,6 @@ const ChatPage = () => {
         history.push('/conversations');
     };
 
-    console.log(imageToDisplay);
-
     return (
         <>
             <IonContent>
