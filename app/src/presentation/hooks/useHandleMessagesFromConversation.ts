@@ -70,7 +70,7 @@ const useHandleMessagesFromConversation = ({
         if (isFirstMessage && messageId) {
             lastMessageId = messageId;
             // If we are in normal mode with forward and backward
-        } else if (!isFirstMessage || !messageId) {
+        } else if (!isFirstMessage && !messageId) {
             lastMessageId =
                 direction === MessagePaginationDirection.FORWARD ? lastMessageForwardId : lastMessageBackwardId;
         }
@@ -105,7 +105,9 @@ const useHandleMessagesFromConversation = ({
 
         if (direction === MessagePaginationDirection.BACKWARD) {
             setMessagesResult({
-                messages: [...messagesConversationResult, ...messagesResult.messages],
+                messages: isFirstMessage
+                    ? messagesConversationResult
+                    : [...messagesConversationResult, ...messagesResult.messages],
                 error: undefined,
                 isLoading: false,
                 isScrollBackwardOver: messagesConversationResult.length < limit,
@@ -113,7 +115,9 @@ const useHandleMessagesFromConversation = ({
             });
         } else if (direction === MessagePaginationDirection.FORWARD) {
             setMessagesResult({
-                messages: [...messagesResult.messages, ...messagesConversationResult],
+                messages: isFirstMessage
+                    ? messagesConversationResult
+                    : [...messagesResult.messages, ...messagesConversationResult],
                 error: undefined,
                 isLoading: false,
                 isScrollForwardOver: messagesConversationResult.length < limit,

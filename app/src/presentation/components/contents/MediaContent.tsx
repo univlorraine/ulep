@@ -15,7 +15,7 @@ interface MediaContentProps {
     goBack?: () => void;
     isHybrid: boolean;
     profile: Profile;
-    setImageToDisplay?: (image: string) => void;
+    setImageToDisplay: (image: string) => void;
 }
 
 const Content: React.FC<Omit<MediaContentProps, 'isHybrid'>> = ({ conversation, goBack, setImageToDisplay }) => {

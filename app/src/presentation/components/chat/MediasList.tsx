@@ -11,7 +11,7 @@ interface MediasListProps {
     isScrollOver: boolean;
     loadMessages: () => void;
     selectedFilter: MessageType;
-    setImageToDisplay?: (image: string) => void;
+    setImageToDisplay: (image: string) => void;
 }
 
 const MediasList: React.FC<MediasListProps> = ({
@@ -50,7 +50,9 @@ const MediasList: React.FC<MediasListProps> = ({
                     <MediaComponent
                         key={message.id}
                         message={message}
-                        setImageToDisplay={message.type === MessageType.Image ? setImageToDisplay : undefined}
+                        setImageToDisplay={
+                            message.type === MessageType.Image ? (image) => setImageToDisplay(image) : undefined
+                        }
                     />
                 );
             }
