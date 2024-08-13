@@ -9,8 +9,7 @@ import PublicIcon from '@mui/icons-material/Public';
 import SchoolOutlinedIcon from '@mui/icons-material/SchoolOutlined';
 import SettingsIcon from '@mui/icons-material/Settings';
 import WarningAmberOutlinedIcon from '@mui/icons-material/WarningAmberOutlined';
-import React from 'react';
-import { Admin, Resource, useTranslate } from 'react-admin';
+import { Admin, Resource } from 'react-admin';
 import CustomLayout from './components/layout/layout';
 import { Role } from './entities/Administrator';
 import EditAdministratorProfile from './pages/admin-profile/edit';
@@ -38,8 +37,6 @@ import queryClient from './queryClient';
 import theme from './theme/theme';
 
 const App = () => {
-    const translate = useTranslate();
-
     return (
         <Admin
             authProvider={authProvider}
@@ -57,26 +54,26 @@ const App = () => {
                     <Resource
                         icon={PersonAddIcon}
                         name="profiles"
-                        options={{ label: translate('profiles.label') }}
+                        options={{ label: 'profiles.label' }}
                         {...profiles}
                     />
                     <Resource
                         icon={PeopleIcon}
                         name="profiles/with-tandems-profiles"
-                        options={{ label: translate('learning_languages.label') }}
+                        options={{ label: 'learning_languages.label' }}
                         {...profilesWithTandem}
                     />
                     <Resource
                         icon={WarningAmberOutlinedIcon}
                         name="reports"
-                        options={{ label: translate('reports.label') }}
+                        options={{ label: 'reports.label' }}
                         {...reports}
                     />
                     {permissions.checkRole(Role.MANAGER) && (
                         <Resource
                             edit={universities.manager.edit}
                             name="universities"
-                            options={{ label: translate('universities.label') }}
+                            options={{ label: 'universities.label' }}
                             recordRepresentation="name"
                             show={universities.manager.show}
                         />
@@ -85,7 +82,7 @@ const App = () => {
                         <Resource
                             icon={PersonIcon}
                             name="users/administrators"
-                            options={{ label: translate('administrators.label') }}
+                            options={{ label: 'administrators.label' }}
                             {...administrators}
                         />
                     )}
@@ -94,74 +91,74 @@ const App = () => {
                             <Resource
                                 icon={SettingsIcon}
                                 name="instance"
-                                options={{ label: translate('instance.label') }}
+                                options={{ label: 'instance.label' }}
                                 {...instance}
                             />
                             <Resource
                                 icon={PublicIcon}
                                 name="countries"
-                                options={{ label: translate('countries.label') }}
+                                options={{ label: 'countries.label' }}
                                 {...countries}
                             />
                             <Resource
                                 icon={LanguageIcon}
                                 name="languages"
-                                options={{ label: translate('languages.label') }}
+                                options={{ label: 'languages.label' }}
                                 {...languages}
                             />
                             <Resource
                                 icon={LanguageIcon}
                                 name="languages/requests"
-                                options={{ label: translate('suggested_languages.label') }}
+                                options={{ label: 'suggested_languages.label' }}
                                 {...suggestedLanguages}
                             />
                             <Resource
                                 icon={LanguageIcon}
                                 name="languages/requests/count"
-                                options={{ label: translate('count_suggested_languages.label') }}
+                                options={{ label: 'count_suggested_languages.label' }}
                                 {...countSuggestedLanguages}
                             />
                             <Resource
                                 icon={InterestsIcon}
                                 name="interests"
-                                options={{ label: translate('interests.label') }}
+                                options={{ label: 'interests.label' }}
                                 {...interests}
                             />
                             <Resource
                                 icon={InterestsIcon}
                                 name="interests/categories"
-                                options={{ label: translate('interest_categories.label') }}
+                                options={{ label: 'interest_categories.label' }}
                                 {...categoryInterest}
                             />
                             <Resource
                                 icon={CheckCircleIcon}
                                 name="objectives"
-                                options={{ label: translate('objectives.label') }}
+                                options={{ label: 'objectives.label' }}
                                 {...objectives}
                             />
                             <Resource
                                 icon={SchoolOutlinedIcon}
                                 name="campus"
-                                options={{ label: translate('campus.label') }}
+                                options={{ label: 'campus.label' }}
                                 {...campus}
                             />
                             <Resource
                                 icon={HelpIcon}
                                 name="proficiency/questions"
-                                options={{ label: translate('questions.label') }}
+                                options={{ label: 'questions.label' }}
                                 {...questions}
                             />
                             <Resource
                                 icon={SchoolOutlinedIcon}
                                 name="universities"
-                                options={{ label: translate('universities.label') }}
+                                options={{ label: 'universities.label' }}
                                 recordRepresentation="name"
                                 {...universities}
                             />
                             <Resource
                                 icon={WarningAmberOutlinedIcon}
                                 name="reports/categories"
-                                options={{ label: translate('report_categories.label') }}
+                                options={{ label: 'report_categories.label' }}
                                 {...reportCategories}
                             />
                         </>
