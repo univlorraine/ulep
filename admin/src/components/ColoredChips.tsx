@@ -1,5 +1,4 @@
-import Chip from '@mui/material/Chip';
-import React from 'react';
+import Chip, { ChipProps } from '@mui/material/Chip';
 
 export type ChipsColors = 'primary' | 'secondary' | 'success' | 'error' | 'info' | 'warning' | 'default' | undefined;
 
@@ -10,7 +9,7 @@ type ColoredChipsProps = {
 };
 
 const ColoredChips = ({ color, label, variant = 'filled' }: ColoredChipsProps) => (
-    <Chip color={color} label={label} variant={variant} />
+    <Chip color={color} label={label} variant={variant as ChipProps['variant']} />
 );
 
 export default ColoredChips;
