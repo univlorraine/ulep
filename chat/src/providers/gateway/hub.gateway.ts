@@ -41,6 +41,7 @@ export class HubGateway
      */
     async handleConnection(socket: Socket) {
         try {
+            console.log(socket);
             const user = await this.computeUserIdFromToken(
                 socket.handshake.auth.token,
             );
@@ -50,15 +51,18 @@ export class HubGateway
                 const conversations =
                     await this.conversationRepository.findByUserId(user);
                 // Join user to all conversations he is registered to.
+
                 this.server
                     .in(socket.id)
                     .socketsJoin(
-                        conversations.map((conversation) => conversation.id),
+                        conversations.items.map(
+                            (conversation) => conversation.id,
+                        ),
                     );
                 // Save user socket id.
                 this.roomService.setUserSocketId(user, socket.id);
                 // Save user to all conversations he is registered to.
-                for (const conversation of conversations) {
+                for (const conversation of conversations.items) {
                     this.roomService.addUserToTopic(conversation.id, user);
                 }
             } else {
@@ -66,6 +70,7 @@ export class HubGateway
             }
         } catch (error) {
             socket.disconnect();
+            console.error(error);
         }
     }
 

@@ -4,6 +4,7 @@ export type Conversation = {
     id: string;
     partner: User;
     lastMessage?: Message;
+    isBlocked: boolean;
 };
 
 export type Message = {

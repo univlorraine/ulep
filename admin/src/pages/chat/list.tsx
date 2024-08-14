@@ -1,24 +1,27 @@
 import { Box, Drawer } from '@mui/material';
-import React, { useState } from 'react';
+import { useState } from 'react';
 import {
     DatagridConfigurable,
     FunctionField,
     List,
     Loading,
     minLength,
+    Pagination,
     TextInput,
     useGetIdentity,
+    useLocaleState,
     useTranslate,
 } from 'react-admin';
+import ChatContent from '../../components/chat/ChatContent';
 import CustomAvatar from '../../components/CustomAvatar';
 import PageTitle from '../../components/PageTitle';
 import { Conversation } from '../../entities/Conversation';
-import MessagesList from '../chat-messages/list';
+import getLocaleCode from '../../utils/getLocaleCode';
 
 const ChatList = () => {
     const { data: identity, isLoading: isLoadingIdentity } = useGetIdentity();
     const translate = useTranslate();
-
+    const [locale] = useLocaleState();
     const [currentConversation, setCurrentConversation] = useState<Conversation | null>(null);
 
     /*     const handleClose = useCallback(() => {
@@ -52,13 +55,15 @@ const ChatList = () => {
                         id: identity.id,
                     }}
                     filters={filters}
+                    pagination={<Pagination rowsPerPageOptions={[5]} />}
+                    perPage={5}
                     sx={{
                         flexGrow: 1,
                         transition: (theme: any) =>
                             theme.transitions.create(['all'], {
                                 duration: theme.transitions.duration.enteringScreen,
                             }),
-                        marginRight: currentConversation ? '700px' : 0,
+                        marginRight: currentConversation ? '500px' : 0,
                     }}
                 >
                     <DatagridConfigurable
@@ -73,7 +78,10 @@ const ChatList = () => {
                         <FunctionField
                             label=""
                             render={(record: Conversation) => (
-                                <Box sx={{ display: 'flex', justifyContent: 'space-between', padding: '10px' }}>
+                                <Box
+                                    key={record.id}
+                                    sx={{ display: 'flex', justifyContent: 'space-between', padding: '10px' }}
+                                >
                                     <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
                                         <CustomAvatar
                                             avatarId={record.partner.avatar?.id}
@@ -89,16 +97,13 @@ const ChatList = () => {
                                     </Box>
                                     {record.lastMessage && (
                                         <Box>
-                                            <p>
-                                                {new Date(record.lastMessage.createdAt).toLocaleDateString(undefined, {
-                                                    weekday: 'long',
-                                                    year: 'numeric',
-                                                    month: 'long',
-                                                    day: 'numeric',
-                                                    hour: 'numeric',
-                                                    minute: 'numeric',
-                                                })}
-                                            </p>
+                                            {new Date(record.lastMessage.createdAt).toLocaleString(
+                                                getLocaleCode(locale),
+                                                {
+                                                    dateStyle: 'long',
+                                                    timeStyle: 'short',
+                                                }
+                                            )}
                                         </Box>
                                     )}
                                 </Box>
@@ -116,7 +121,7 @@ const ChatList = () => {
                 sx={{ zIndex: 100 }}
                 variant="persistent"
             >
-                {currentConversation && <MessagesList conversation={currentConversation} />}
+                {currentConversation && <ChatContent conversation={currentConversation} />}
             </Drawer>
         </Box>
     );

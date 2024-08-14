@@ -2,8 +2,8 @@ import SchoolIcon from '@mui/icons-material/School';
 import SettingsIcon from '@mui/icons-material/Settings';
 import { Divider } from '@mui/material';
 import Box from '@mui/material/Box';
-import React, { useState } from 'react';
-import { Menu, usePermissions, useGetIdentity, useTranslate, useCreatePath } from 'react-admin';
+import { useState } from 'react';
+import { Menu, useCreatePath, useGetIdentity, usePermissions, useTranslate } from 'react-admin';
 import { Role } from '../../entities/Administrator';
 import useCurrentPathname from './useCurrentPathname';
 
@@ -138,7 +138,7 @@ const CustomMenu = () => {
 
     return (
         <Menu sx={{ display: 'flex' }}>
-            <Box ref={(newRef: HTMLDivElement) => setProfilesRef(newRef)}>
+            <Box ref={(newRef: HTMLDivElement) => setProfilesRef(newRef)} sx={{ marginTop: 0 }}>
                 <Menu.ResourceItem name="profiles" />
             </Box>
             <Menu.ResourceItem name="profiles/with-tandem" />

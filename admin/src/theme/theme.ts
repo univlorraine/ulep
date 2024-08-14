@@ -201,6 +201,9 @@ const theme: RaThemeOptions = {
                     '& .RaLayout-content': {
                         padding: '46px 21px',
                     },
+                    '& .RaSidebar-docked ': {
+                        height: 'calc(100vh - 56px)',
+                    },
                 },
             },
         },

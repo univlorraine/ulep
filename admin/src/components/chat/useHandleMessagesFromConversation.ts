@@ -1,8 +1,69 @@
+// import { useState } from 'react';
+// import { useDataProvider } from 'react-admin';
+
+// interface ChatMessages {
+//     items: ChatMessage[];
+//     conversationId?: string;
+//     totalItems?: number;
+// }
+
+// interface ChatMessage {
+//     id: string;
+//     content: string;
+//     user: {
+//         id: string;
+//         firstName: string;
+//         lastName: string;
+//         email: string;
+//     };
+//     createdAt: string;
+// }
+
+// interface UseMessagesProps {
+//     conversationId: string;
+// }
+
+// const useMessages = ({ conversationId }: UseMessagesProps) => {
+//     const [messages, setMessages] = useState<ChatMessages>({ items: [], conversationId });
+//     const dataProvider = useDataProvider();
+
+//     console.log('refreshing messages');
+//     const fetchMessages = async (lastMessageId?: string, direction?: 'forward' | 'backward') => {
+//         console.log('fetchMessages', { lastMessageId, direction, conversationId });
+//         const newMessages: ChatMessages = await dataProvider.getChatMessagesByConversationId(
+//             conversationId,
+//             lastMessageId,
+//             direction
+//         );
+//         if (newMessages.items.some((message) => message.id !== lastMessageId)) {
+//             setMessages((prevMessages) => ({
+//                 items: [
+//                     ...newMessages.items.reverse(),
+//                     ...(prevMessages.conversationId === conversationId ? prevMessages.items : []),
+//                 ],
+//                 conversationId,
+//                 totalItems: newMessages.totalItems,
+//             }));
+//         }
+//     };
+
+//     const handleScroll = (event: React.UIEvent<HTMLDivElement>) => {
+//         const { scrollTop, clientHeight, scrollHeight } = event.currentTarget;
+//         console.log('handleScroll', { scrollTop, clientHeight, scrollHeight });
+//         if (scrollTop === 0) {
+//             console.log('scroll top');
+//             fetchMessages(messages.items[0].id, 'forward');
+//         }
+//     };
+
+//     return { messages, fetchMessages, handleScroll };
+// };
+
+// export default useMessages;
+
 import { useEffect, useState } from 'react';
-import { useConfig } from '../../context/ConfigurationContext';
-import { MessagePaginationDirection } from '../../domain/entities/chat/Conversation';
-import { Message, MessageType } from '../../domain/entities/chat/Message';
-import { useStoreState } from '../../store/storeTypes';
+import { useDataProvider } from 'react-admin';
+import { Message, MessagePaginationDirection, MessageType } from '../../entities/Message';
 
 interface UseHandleMessagesFromConversationProps {
     conversationId: string;
@@ -10,15 +71,20 @@ interface UseHandleMessagesFromConversationProps {
     limit?: number;
 }
 
-const useHandleMessagesFromConversation = ({
+interface LoadMessagesProps {
+    messageId?: string;
+    direction?: MessagePaginationDirection;
+    isFirstMessage?: boolean;
+}
+
+function useHandleMessagesFromConversation({
     conversationId,
     typeFilter,
     limit = 10,
-}: UseHandleMessagesFromConversationProps) => {
-    const { getMessagesFromConversation } = useConfig();
+}: UseHandleMessagesFromConversationProps) {
+    const dataProvider = useDataProvider();
     const [lastMessageForwardId, setLastMessageForwardId] = useState<string>();
     const [lastMessageBackwardId, setLastMessageBackwardId] = useState<string>();
-    const profile = useStoreState((state) => state.profile);
 
     const [messagesResult, setMessagesResult] = useState<{
         messages: Message[];
@@ -34,8 +100,8 @@ const useHandleMessagesFromConversation = ({
         isLoading: false,
     });
 
-    if (!profile)
-        return { ...messagesResult, loadMessages: () => {}, addNewMessage: () => {}, clearMessages: () => {} };
+    // if (!profile)
+    //     return { ...messagesResult, loadMessages: () => {}, addNewMessage: () => {}, clearMessages: () => {} };
 
     const addNewMessage = (message: Message) => {
         setMessagesResult((current) => ({
@@ -47,11 +113,11 @@ const useHandleMessagesFromConversation = ({
         }));
     };
 
-    const loadMessages = async (
+    const loadMessages = async ({
+        messageId,
+        direction = MessagePaginationDirection.FORWARD,
         isFirstMessage = false,
-        direction: MessagePaginationDirection = MessagePaginationDirection.FORWARD,
-        messageId?: string
-    ) => {
+    }: LoadMessagesProps) => {
         if (
             (!isFirstMessage &&
                 direction === MessagePaginationDirection.FORWARD &&
@@ -75,7 +141,8 @@ const useHandleMessagesFromConversation = ({
                 direction === MessagePaginationDirection.FORWARD ? lastMessageForwardId : lastMessageBackwardId;
         }
 
-        const messagesConversationResult = await getMessagesFromConversation.execute(conversationId, {
+        const messagesConversationResult = await dataProvider.getChatMessagesByConversationId({
+            conversationId,
             lastMessageId,
             limit,
             typeFilter,
@@ -83,7 +150,7 @@ const useHandleMessagesFromConversation = ({
         });
 
         if (messagesConversationResult instanceof Error) {
-            return setMessagesResult({
+            setMessagesResult({
                 messages: [],
                 error: messagesConversationResult,
                 isLoading: false,
@@ -124,8 +191,8 @@ const useHandleMessagesFromConversation = ({
                 isScrollBackwardOver: false,
             });
         } else if (direction === MessagePaginationDirection.BOTH) {
-            //Info: isScrollForwardOver and isScrollBackwardOver are set to false because we are loading messages from both directions
-            //Info: we cannot know if we are before the limit of messages on forward or backward, so we set to false
+            // Info: isScrollForwardOver and isScrollBackwardOver are set to false because we are loading messages from both directions
+            // Info: we cannot know if we are before the limit of messages on forward or backward, so we set to false
             setMessagesResult({
                 messages: messagesConversationResult,
                 error: undefined,
@@ -149,14 +216,10 @@ const useHandleMessagesFromConversation = ({
     };
 
     useEffect(() => {
-        const fetchData = async () => {
-            await loadMessages(true);
-        };
-
-        fetchData();
-    }, [profile, conversationId, typeFilter]);
+        loadMessages({ isFirstMessage: true });
+    }, [conversationId, typeFilter]);
 
     return { ...messagesResult, loadMessages, addNewMessage, clearMessages };
-};
+}
 
 export default useHandleMessagesFromConversation;

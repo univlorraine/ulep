@@ -1,8 +1,6 @@
 import { Collection } from '@app/common';
 import { KeycloakClient, UserRepresentation } from '@app/keycloak';
 import { Inject, Injectable } from '@nestjs/common';
-import { GetConversationQuery } from 'src/api/dtos/chat';
-import { RessourceDoesNotExist } from 'src/core/errors';
 import { TandemStatus, User } from 'src/core/models';
 import {
   CHAT_SERVICE,
@@ -11,14 +9,14 @@ import {
   MessageWithUser,
 } from 'src/core/ports/chat.service';
 import {
-  TANDEM_REPOSITORY,
-  TandemRepository,
-} from 'src/core/ports/tandem.repository';
-import {
   PROFILE_REPOSITORY,
   ProfileQueryWhere,
   ProfileRepository,
 } from 'src/core/ports/profile.repository';
+import {
+  TANDEM_REPOSITORY,
+  TandemRepository,
+} from 'src/core/ports/tandem.repository';
 import {
   USER_REPOSITORY,
   UserRepository,
@@ -116,33 +114,38 @@ export class GetAllConversationsFromUserIdUsecase {
     ) as string[];
 
     for (const id of missingUserIds) {
-      const userDetails = await this.keycloakClient.getUserById(id);
-      if (userDetails) {
+      try {
+        const userDetails = await this.keycloakClient.getUserById(id);
         userMap.set(id, userDetails);
-      } else {
-        throw new RessourceDoesNotExist(`User not found with id: ${id}`);
+      } catch (error) {
+        userMap.delete(id);
       }
     }
 
     // Replace userIds by user objects in conversations
-    const updatedConversations = conversations.map(
-      (conversation) =>
-        ({
-          ...conversation,
-          users: conversation.usersIds.map((id) => userMap.get(id)),
-          metadata: {
-            isBlocked:
-              tandems.find((tandem) => tandem.id === conversation.id)
-                ?.status === TandemStatus.PAUSED,
-          },
-          lastMessage: conversation.lastMessage
-            ? ({
-                ...conversation.lastMessage,
-                user: userMap.get(conversation.lastMessage.ownerId),
-              } as MessageWithUser)
-            : undefined,
-        } as ConversationWithUsers),
-    );
+    const updatedConversations = conversations
+      .map(
+        (conversation) =>
+          ({
+            ...conversation,
+            users: conversation.usersIds.map((id) => userMap.get(id)),
+            metadata: {
+              isBlocked:
+                tandems.find((tandem) => tandem.id === conversation.id)
+                  ?.status === TandemStatus.PAUSED,
+            },
+            lastMessage: conversation.lastMessage
+              ? ({
+                  ...conversation.lastMessage,
+                  user: userMap.get(conversation.lastMessage.ownerId),
+                } as MessageWithUser)
+              : undefined,
+            lastActivityAt: conversation.lastActivity,
+          } as ConversationWithUsers),
+      )
+      .filter((conversation) =>
+        conversation.users.every((user) => user !== undefined),
+      );
 
     return new Collection<ConversationWithUsers>({
       items: updatedConversations,

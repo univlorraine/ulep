@@ -33,7 +33,7 @@ export interface ConversationRepository {
     findById: (conversationId: string) => Promise<Conversation | undefined>;
     findByUserId: (
         userId: string,
-        pagination: ConversationPagination,
+        pagination?: ConversationPagination,
         filteredProfilesIds?: string[],
     ) => Promise<Collection<Conversation>>;
     findConversationsByIdsOrParticipants: (
@@ -45,4 +45,5 @@ export interface ConversationRepository {
         usersIds: string[],
         metadata: any,
     ) => Promise<Conversation>;
+    updateLastActivityAt: (conversationId: string) => Promise<void>;
 }

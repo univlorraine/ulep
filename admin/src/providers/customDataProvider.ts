@@ -11,6 +11,7 @@ import {
     fetchUtils,
 } from 'react-admin';
 import { LearningLanguage } from '../entities/LearningLanguage';
+import { MessageType } from '../entities/Message';
 import { ProfileWithTandems } from '../entities/Profile';
 import { RoutineExecution } from '../entities/RoutineExecution';
 import { TandemStatus } from '../entities/Tandem';
@@ -26,6 +27,9 @@ import QuestionsQuery from '../queries/QuestionsQuery';
 import ReportsQuery from '../queries/ReportsQuery';
 import { http, refreshAuth } from './authProvider';
 import jwtManager from './jwtManager';
+import SocketIoProvider from './socketIoProvider';
+
+let socketIoProviderInstance: SocketIoProvider | null = null;
 
 const httpClientOptions = (options: any = {}) => {
     const newOptions = options;
@@ -142,8 +146,6 @@ const customDataProvider = {
 
         const data = await response.json();
 
-        console.log({ data });
-
         if (resource === 'instance') {
             return { data: { ...data, id: 'config' } };
         }
@@ -212,8 +214,6 @@ const customDataProvider = {
     },
     getList: async (resource: string, params: any) => {
         let url = new URL(`${process.env.REACT_APP_API_URL}/${resource}`);
-
-        console.log({ resource, params });
 
         switch (resource) {
             case 'users/administrators':
@@ -456,6 +456,41 @@ const customDataProvider = {
         const result = await response.json();
 
         return result;
+    },
+    getChatMessagesByConversationId: async ({
+        conversationId,
+        lastMessageId,
+        direction,
+        limit = 10,
+        typeFilter,
+    }: {
+        conversationId: string;
+        lastMessageId?: string;
+        direction?: 'forward' | 'backward';
+        limit?: number;
+        typeFilter?: MessageType;
+    }): Promise<any> => {
+        const url = `${process.env.REACT_APP_API_URL}/chat/messages/${conversationId}?limit=${limit}${
+            lastMessageId ? `&lastMessageId=${lastMessageId}` : ''
+        }${direction ? `&direction=${direction}` : ''}${typeFilter ? `&typeFilter=${typeFilter}` : ''}`;
+        const response = await fetch(url, httpClientOptions({ method: 'GET' }));
+
+        if (!response.ok) {
+            await throwError(response);
+        }
+
+        const result = await response.json();
+
+        return result.items;
+    },
+    getSocketIoProvider: (): SocketIoProvider | null => {
+        const accessToken = jwtManager.getToken('access_token');
+        const socketUrl = process.env.REACT_APP_SOCKET_CHAT_URL;
+        if (!socketIoProviderInstance && socketUrl && accessToken) {
+            socketIoProviderInstance = new SocketIoProvider(socketUrl, accessToken);
+        }
+
+        return socketIoProviderInstance;
     },
 } as unknown as DataProvider;
 

@@ -1,6 +1,5 @@
 import { Collection } from '@app/common';
 import { UserRepresentation } from '@app/keycloak';
-import { GetConversationQuery } from 'src/api/dtos/chat';
 import { User } from 'src/core/models';
 export const CHAT_SERVICE = 'chat.service';
 
@@ -17,7 +16,7 @@ export type ConversationWithUsers = {
   id: string;
   createdAt: Date;
   users: (User | UserRepresentation)[];
-  lastActivity: Date;
+  lastActivityAt: Date;
   lastMessage?: MessageWithUser;
   metadata: any;
 };

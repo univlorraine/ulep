@@ -30,6 +30,10 @@ export class ConversationResponse {
   @Expose({ groups: ['chat'] })
   createdAt: Date;
 
+  @Swagger.ApiProperty({ type: 'string', format: 'date-time' })
+  @Expose({ groups: ['chat'] })
+  lastActivityAt: Date;
+
   @Swagger.ApiProperty({ type: UserResponse, isArray: true })
   @Expose({ groups: ['chat'] })
   users: UserChatResponse[];
@@ -50,6 +54,7 @@ export class ConversationResponse {
     return new ConversationResponse({
       id: conversation.id,
       createdAt: conversation.createdAt,
+      lastActivityAt: conversation.lastActivityAt,
       users: conversation.users.map(UserChatResponse.fromDomain),
       metadata: MetadataResponse.from(conversation.metadata),
       lastMessage: conversation.lastMessage

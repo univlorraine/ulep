@@ -1,11 +1,11 @@
 import { Collection, PrismaService } from '@app/common';
 import { Injectable } from '@nestjs/common';
+import { Prisma } from '@prisma/client';
 import { Conversation } from 'src/core/models';
 import {
     ConversationPagination,
     ConversationRepository,
     CreateConversations,
-    GetConversationQuery,
 } from 'src/core/ports/conversation.repository';
 import {
     ConversationRelations,
@@ -31,18 +31,19 @@ export class PrismaConversationRepository implements ConversationRepository {
 
     async findByUserId(
         userId: string,
-        pagination: ConversationPagination,
+        pagination?: ConversationPagination,
         filteredProfilesIds?: string[],
     ): Promise<Collection<Conversation>> {
-        const count = await this.prisma.conversation.count();
-
-        const conversationPagination = {};
-        if (pagination.limit !== undefined) {
-            conversationPagination['take'] = pagination.limit;
+        const conversationPagination: Prisma.ConversationFindManyArgs = {
+            take: 50,
+            skip: 0,
+        };
+        if (pagination?.limit) {
+            conversationPagination.take = pagination.limit;
         }
 
-        if (pagination.offset !== undefined) {
-            conversationPagination['skip'] = pagination.offset;
+        if (pagination?.offset) {
+            conversationPagination.skip = pagination.offset;
         }
 
         let where: any = {
@@ -62,12 +63,14 @@ export class PrismaConversationRepository implements ConversationRepository {
             };
         }
 
+        const count = await this.prisma.conversation.count({ where });
+
         const conversations = await this.prisma.conversation.findMany({
             where: where,
             orderBy: {
-                createdAt: 'desc',
+                lastActivityAt: 'desc',
             },
-            ...ConversationRelations,
+            distinct: ['id'],
             include: {
                 Messages: {
                     take: 1,
@@ -77,19 +80,6 @@ export class PrismaConversationRepository implements ConversationRepository {
                 },
             },
             ...conversationPagination,
-        });
-
-        conversations.sort((a, b) => {
-            const lastMessageA = a.Messages[0]?.createdAt;
-            const lastMessageB = b.Messages[0]?.createdAt;
-
-            if (lastMessageA > lastMessageB) {
-                return -1;
-            } else if (lastMessageA < lastMessageB) {
-                return 1;
-            } else {
-                return 0;
-            }
         });
 
         return new Collection<Conversation>({
@@ -177,5 +167,12 @@ export class PrismaConversationRepository implements ConversationRepository {
         });
 
         return conversationMapper(conversation);
+    }
+
+    async updateLastActivityAt(conversationId: string): Promise<void> {
+        await this.prisma.conversation.update({
+            where: { id: conversationId },
+            data: { lastActivityAt: new Date() },
+        });
     }
 }

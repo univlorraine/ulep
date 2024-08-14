@@ -65,7 +65,8 @@
             }
         },
         "show": {
-            "title": "Messages with %{partner}"
+            "title": "Messages with %{partner}",
+            "you": "You"
         }
     },
     "count_suggested_languages": {
