@@ -114,7 +114,7 @@ jobs:
       - checkout
       - run:
           name: Install Dependencies
-          command: cd admin && pnpm i --frozen-lockfile
+          command: cd admin && pnpm i --no-frozen-lockfile
       - run:
           name: Run build
           command: cd admin && pnpm run build
