@@ -1,3 +1,4 @@
+import { MessageType } from './Message';
 import User from './User';
 
 export type Conversation = {
@@ -11,4 +12,5 @@ export type Message = {
     id: string;
     content: string;
     createdAt: string;
+    type: MessageType;
 };

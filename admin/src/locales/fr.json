@@ -72,6 +72,12 @@
             "title": "Messages avec %{partner}",
             "you": "Vous",
             "close": "Fermer"
+        },
+        "messageType": {
+            "link": "Lien",
+            "image": "Image",
+            "audio": "Audio",
+            "file": "Fichier"
         }
     },
     "count_suggested_languages": {
