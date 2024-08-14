@@ -1,5 +1,5 @@
 import { IonIcon, useIonToast } from '@ionic/react';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { CloseBlackSvg, PaperclipSvg, PictureSvg } from '../../../assets';
 import { useConfig } from '../../../context/ConfigurationContext';
@@ -82,7 +82,6 @@ const ChatInputSender: React.FC<ChatInputSenderProps> = ({ isBlocked, profile, c
     };
 
     const onSendPressed = async () => {
-        console.log('onSendPressed', message, imageToSend, audioFile, fileToSend);
         if (isRecording || (!message && !imageToSend && !audioFile && !fileToSend)) {
             return;
         }
@@ -133,6 +132,13 @@ const ChatInputSender: React.FC<ChatInputSenderProps> = ({ isBlocked, profile, c
             )
         );
     };
+
+    useEffect(() => {
+        setMessage('');
+        setImageToSend(undefined);
+        setAudioFile(undefined);
+        setFileToSend(undefined);
+    }, [conversation]);
 
     return (
         <div className={styles.footer}>
