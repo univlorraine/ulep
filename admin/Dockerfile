@@ -41,7 +41,7 @@ FROM node:20-alpine AS admin_prod
 
 WORKDIR /srv/app
 
-COPY --from=admin_builder --link /srv/app/build ./build
+COPY --from=admin_builder --link /srv/app/ ./build
 
 # RUN addgroup -S -g 1001 nodejs
 RUN npm i -g serve
@@ -49,6 +49,5 @@ RUN npm i -g serve
 EXPOSE 80
 ENV PORT 80
 ENV NODE_ENV production
-
 
 # CMD ["bash", "-c", "serve -s build -l 80"]
