@@ -42,7 +42,7 @@ FROM admin_builder AS admin_prod
 ENV NODE_ENV production
 
 # RUN addgroup -S -g 1001 nodejs
-# RUN npm i -g serve
+RUN npm i -g serve
 
 # EXPOSE 80
 
