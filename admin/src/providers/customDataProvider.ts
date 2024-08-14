@@ -492,6 +492,37 @@ const customDataProvider = {
 
         return socketIoProviderInstance;
     },
+    sendMessage: async (
+        conversationId: string,
+        senderId: string,
+        content?: string,
+        file?: File,
+        filename?: string
+    ): Promise<any> => {
+        const url = `${process.env.REACT_APP_CHAT_URL}/conversations/${conversationId}/message`;
+        const body = new FormData();
+        body.append('senderId', senderId);
+
+        if (content) {
+            body.append('content', content);
+        }
+        if (file) {
+            body.append('file', file);
+        }
+        if (filename) {
+            body.append('filename', filename);
+        }
+
+        const response = await fetch(url, httpClientOptions({ method: 'POST', body }));
+
+        if (!response.ok) {
+            await throwError(response);
+        }
+
+        const result = await response.json();
+
+        return { data: result };
+    },
 } as unknown as DataProvider;
 
 export default addRefreshAuthToDataProvider(customDataProvider, refreshAuth);

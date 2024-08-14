@@ -2,7 +2,8 @@ import { IsOptional, IsString } from 'class-validator';
 
 export class SendMessageRequest {
     @IsString()
-    content: string;
+    @IsOptional()
+    content?: string;
 
     @IsString()
     senderId: string;

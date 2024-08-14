@@ -73,6 +73,8 @@ const AudioLine = ({ audioFile }: AudioLineProps) => {
     return (
         <Box
             sx={{
+                backgroundColor: 'secondary.main',
+                borderRadius: '5px',
                 display: 'flex',
                 flexDirection: 'row',
                 alignItems: 'center',

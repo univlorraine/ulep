@@ -82,7 +82,6 @@ const ChatInputSender: React.FC<ChatInputSenderProps> = ({ isBlocked, profile, c
     };
 
     const onSendPressed = async () => {
-        console.log('onSendPressed', message, imageToSend, audioFile, fileToSend);
         if (isRecording || (!message && !imageToSend && !audioFile && !fileToSend)) {
             return;
         }

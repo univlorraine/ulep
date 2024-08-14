@@ -1,66 +1,3 @@
-// import { useState } from 'react';
-// import { useDataProvider } from 'react-admin';
-
-// interface ChatMessages {
-//     items: ChatMessage[];
-//     conversationId?: string;
-//     totalItems?: number;
-// }
-
-// interface ChatMessage {
-//     id: string;
-//     content: string;
-//     user: {
-//         id: string;
-//         firstName: string;
-//         lastName: string;
-//         email: string;
-//     };
-//     createdAt: string;
-// }
-
-// interface UseMessagesProps {
-//     conversationId: string;
-// }
-
-// const useMessages = ({ conversationId }: UseMessagesProps) => {
-//     const [messages, setMessages] = useState<ChatMessages>({ items: [], conversationId });
-//     const dataProvider = useDataProvider();
-
-//     console.log('refreshing messages');
-//     const fetchMessages = async (lastMessageId?: string, direction?: 'forward' | 'backward') => {
-//         console.log('fetchMessages', { lastMessageId, direction, conversationId });
-//         const newMessages: ChatMessages = await dataProvider.getChatMessagesByConversationId(
-//             conversationId,
-//             lastMessageId,
-//             direction
-//         );
-//         if (newMessages.items.some((message) => message.id !== lastMessageId)) {
-//             setMessages((prevMessages) => ({
-//                 items: [
-//                     ...newMessages.items.reverse(),
-//                     ...(prevMessages.conversationId === conversationId ? prevMessages.items : []),
-//                 ],
-//                 conversationId,
-//                 totalItems: newMessages.totalItems,
-//             }));
-//         }
-//     };
-
-//     const handleScroll = (event: React.UIEvent<HTMLDivElement>) => {
-//         const { scrollTop, clientHeight, scrollHeight } = event.currentTarget;
-//         console.log('handleScroll', { scrollTop, clientHeight, scrollHeight });
-//         if (scrollTop === 0) {
-//             console.log('scroll top');
-//             fetchMessages(messages.items[0].id, 'forward');
-//         }
-//     };
-
-//     return { messages, fetchMessages, handleScroll };
-// };
-
-// export default useMessages;
-
 import { useEffect, useState } from 'react';
 import { useDataProvider } from 'react-admin';
 import { Message, MessagePaginationDirection, MessageType } from '../../entities/Message';
@@ -99,9 +36,6 @@ function useHandleMessagesFromConversation({
         error: undefined,
         isLoading: false,
     });
-
-    // if (!profile)
-    //     return { ...messagesResult, loadMessages: () => {}, addNewMessage: () => {}, clearMessages: () => {} };
 
     const addNewMessage = (message: Message) => {
         setMessagesResult((current) => ({

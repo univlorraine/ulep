@@ -64,9 +64,14 @@
                 "university": "Université"
             }
         },
+        "audioRecorder": {
+            "error": "Erreur lors de l'enregistrement de l'audio",
+            "permission": "Vous devez autoriser l'accès au microphone pour enregistrer un audio"
+        },
         "show": {
             "title": "Messages avec %{partner}",
-            "you": "Vous"
+            "you": "Vous",
+            "close": "Fermer"
         }
     },
     "count_suggested_languages": {

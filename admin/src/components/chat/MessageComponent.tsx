@@ -1,6 +1,6 @@
 import FileDownloadIcon from '@mui/icons-material/FileDownload';
-import { Box, Button, colors, Link, Typography } from '@mui/material';
-import { useId } from 'react';
+import { Box, Button, colors, Link, Modal, Typography } from '@mui/material';
+import { useId, useState } from 'react';
 import { RaRecord, useLocaleState, useTranslate } from 'react-admin';
 import User from '../../entities/User';
 import handleDownloadFile from '../../utils/downloadFile';
@@ -51,8 +51,51 @@ const MessageText = ({ message }: MessagePropsWithoutUserId) => (
     <Typography sx={{ textWrap: 'wrap', overflow: 'hidden' }}>{message.content}</Typography>
 );
 
-const MessageImage = ({ message }: MessagePropsWithoutUserId) => <img alt="message" src={message.content} />;
+const MessageImage = ({ message }: MessagePropsWithoutUserId) => {
+    const [open, setOpen] = useState(false);
+    const thumbnail = message.metadata?.thumbnail ?? message.content;
+    const translate = useTranslate();
 
+    const handleOpen = () => setOpen(true);
+    const handleClose = () => setOpen(false);
+
+    return (
+        <>
+            <Button onClick={handleOpen}>
+                <img alt="message" src={thumbnail} style={{ width: '100%', height: '100%' }} />
+            </Button>
+            <Modal onClose={handleClose} open={open}>
+                <Box
+                    sx={{
+                        position: 'fixed',
+                        top: 0,
+                        left: 0,
+                        width: '100%',
+                        height: '100%',
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                        backgroundColor: 'rgba(0, 0, 0, 0.8)',
+                    }}
+                >
+                    <img alt="message" src={message.content} style={{ maxWidth: '100%', maxHeight: '100%' }} />
+                    <Button
+                        onClick={handleClose}
+                        sx={{
+                            position: 'absolute',
+                            top: 16,
+                            right: 16,
+                            color: 'white',
+                            backgroundColor: 'rgba(0, 0, 0, 0.5)',
+                        }}
+                    >
+                        {translate('chat.show.close')}
+                    </Button>
+                </Box>
+            </Modal>
+        </>
+    );
+};
 const MessageAudio = ({ message }: MessagePropsWithoutUserId) => <AudioLine audioFile={message.content} />;
 
 const MessageLink = ({ message }: MessagePropsWithoutUserId) => (

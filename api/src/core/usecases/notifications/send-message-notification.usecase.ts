@@ -1,19 +1,20 @@
+import { KeycloakClient, UserRepresentation } from '@app/keycloak';
 import { Inject, Injectable } from '@nestjs/common';
 import { RessourceDoesNotExist } from 'src/core/errors';
 import { Profile } from 'src/core/models';
 import { User } from 'src/core/models/user.model';
 import { EMAIL_GATEWAY, EmailGateway } from 'src/core/ports/email.gateway';
 import {
-    NOTIFICATION_GATEWAY,
-    NotificationGateway,
+  NOTIFICATION_GATEWAY,
+  NotificationGateway,
 } from 'src/core/ports/notification.gateway';
 import {
-    PROFILE_REPOSITORY,
-    ProfileRepository,
+  PROFILE_REPOSITORY,
+  ProfileRepository,
 } from 'src/core/ports/profile.repository';
 import {
-    USER_REPOSITORY,
-    UserRepository,
+  USER_REPOSITORY,
+  UserRepository,
 } from 'src/core/ports/user.repository';
 
 export type SendMessageNotificationCommand = {
@@ -33,12 +34,21 @@ export class SendMessageNotificationUsecase {
     private readonly notificationGateway: NotificationGateway,
     @Inject(EMAIL_GATEWAY)
     private readonly emailGateway: EmailGateway,
+    private readonly keycloakService: KeycloakClient,
   ) {}
 
   async execute(command: SendMessageNotificationCommand): Promise<void> {
-    const sender = await this.userRepository.ofId(command.senderId);
+    let sender: User | UserRepresentation = await this.userRepository.ofId(
+      command.senderId,
+    );
     if (!sender) {
-      throw new RessourceDoesNotExist('Sender not found');
+      const keycloakUser = await this.keycloakService.getUserById(
+        command.senderId,
+      );
+      if (!keycloakUser) {
+        throw new RessourceDoesNotExist('Sender not found');
+      }
+      sender = keycloakUser;
     }
 
     const profilePromises = command.usersId.map((userId) =>
@@ -48,14 +58,24 @@ export class SendMessageNotificationUsecase {
       (profile) => profile !== null && profile.user.acceptsEmail,
     );
 
-    this.sendEmailToUsers(profiles, sender, command.content);
-    this.sendPushNotificationToUsers(profiles, sender, command.content);
+    const firstname =
+      sender instanceof User ? sender.firstname : sender.firstName;
+    const lastname = sender instanceof User ? sender.lastname : sender.lastName;
+
+    this.sendEmailToUsers(profiles, firstname, lastname, command.content);
+    this.sendPushNotificationToUsers(
+      profiles,
+      firstname,
+      lastname,
+      command.content,
+    );
   }
 
   private async sendPushNotificationToUsers(
     profiles: Profile[],
-    sender: User,
-    content,
+    firstname: string,
+    lastname: string,
+    content: string,
   ) {
     const notifications = profiles
       .map((profile) => {
@@ -76,15 +96,16 @@ export class SendMessageNotificationUsecase {
       to: notifications,
       content,
       sender: {
-        firstname: sender.firstname,
-        lastname: sender.lastname,
+        firstname,
+        lastname,
       },
     });
   }
 
   private async sendEmailToUsers(
     profiles: Profile[],
-    sender: User,
+    firstname: string,
+    lastname: string,
     content: string,
   ) {
     for (const profile of profiles) {
@@ -97,7 +118,7 @@ export class SendMessageNotificationUsecase {
             firstname: profile.user.firstname,
             lastname: profile.user.lastname,
           },
-          sender: { firstname: sender.firstname, lastname: sender.lastname },
+          sender: { firstname, lastname },
         });
       }
     }

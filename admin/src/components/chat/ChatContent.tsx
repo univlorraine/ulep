@@ -13,41 +13,14 @@ interface ChatContentProps {
 
 const ChatContent = ({ conversation }: ChatContentProps) => {
     const translate = useTranslate();
-    // const { isBlocked } = conversation;
-    // const [showMenu, setShowMenu] = useState(false);
-    // const [currentMessageSearchId, setCurrentMessageSearchId] = useState<string>();
-    // const [isSearchMode, setIsSearchMode] = useState<boolean>(false);
     const user = useGetIdentity();
     const dataProvider = useDataProvider();
-    const [socketIoProvider, setSocketIoProvider] = useState<SocketIoProvider | null>(null);
-    console.log({ conversation });
+    const [socketIoProvider, setSocketIoProvider] = useState<SocketIoProvider | undefined>();
 
-    const {
-        messages,
-        isScrollForwardOver,
-        isScrollBackwardOver,
-        isLoading,
-        loadMessages,
-        addNewMessage,
-        // clearMessages,
-    } = useHandleMessagesFromConversation({
-        conversationId: conversation.id,
-    });
-
-    // const setSearchMode = () => {
-    //     setShowMenu(false);
-    //     setIsSearchMode(true);
-    // };
-
-    // const unsetSearchMode = () => {
-    //     setIsSearchMode(false);
-    //     setCurrentMessageSearchId(undefined);
-    // };
-
-    // const loadMessageFromSearch = (messageId: string) => {
-    //     setCurrentMessageSearchId(messageId);
-    //     loadMessages(true, MessagePaginationDirection.BOTH, messageId);
-    // };
+    const { messages, isScrollForwardOver, isScrollBackwardOver, isLoading, loadMessages, addNewMessage } =
+        useHandleMessagesFromConversation({
+            conversationId: conversation.id,
+        });
 
     useEffect(() => {
         socketIoProvider?.connect();
@@ -98,7 +71,11 @@ const ChatContent = ({ conversation }: ChatContentProps) => {
             )}
 
             <Box sx={{ display: 'flex', flexDirection: 'column', borderTop: '1px solid #E0E0E0' }}>
-                <ChatInputSender />
+                <ChatInputSender
+                    conversation={conversation}
+                    profile={user.identity as UserIdentity}
+                    socketIoProvider={socketIoProvider}
+                />
             </Box>
         </Container>
     );

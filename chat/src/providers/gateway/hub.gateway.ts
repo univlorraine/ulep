@@ -41,7 +41,6 @@ export class HubGateway
      */
     async handleConnection(socket: Socket) {
         try {
-            console.log(socket);
             const user = await this.computeUserIdFromToken(
                 socket.handshake.auth.token,
             );
