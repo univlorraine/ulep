@@ -35,17 +35,20 @@ WORKDIR /srv/app
 COPY --link . .
 COPY --from=admin_deps --link /srv/app/node_modules ./node_modules
 
-# RUN pnpm run build
+RUN pnpm run build
 
-FROM admin_builder AS admin_prod
+FROM node:20-alpine AS admin_prod
 
-ENV NODE_ENV production
+WORKDIR /srv/app
+
+COPY --from=admin_builder --link /srv/app/build ./build
 
 # RUN addgroup -S -g 1001 nodejs
 RUN npm i -g serve
 
-# EXPOSE 80
+EXPOSE 80
+ENV PORT 80
+ENV NODE_ENV production
 
-# ENV PORT 80
 
 # CMD ["bash", "-c", "serve -s build -l 80"]
