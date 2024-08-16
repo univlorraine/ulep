@@ -19,9 +19,7 @@ class SocketIoProvider {
         }
         this.socket = socketIo(this.chatUrl, { auth: { token: this.accessToken } });
 
-        this.socket?.on('disconnect', () => {
-            console.log('disconnect');
-        });
+        // TODO: handle disconnect
     }
 
     disconnect(): void {

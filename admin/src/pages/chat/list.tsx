@@ -12,9 +12,9 @@ import {
     useLocaleState,
     useTranslate,
 } from 'react-admin';
+import ChatContent from '../../components/chat/ChatContent';
 import CustomAvatar from '../../components/CustomAvatar';
 import PageTitle from '../../components/PageTitle';
-import ChatContent from '../../components/chat/ChatContent';
 import { Conversation } from '../../entities/Conversation';
 import { MessageType } from '../../entities/Message';
 import getLocaleCode from '../../utils/getLocaleCode';
