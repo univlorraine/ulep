@@ -112,7 +112,8 @@
         "noMessages": "Il n'y a aucun message",
         "title": "Messages avec {{name}}",
         "send_button": {
-            "aria_label": "Restez appuyé pour enregister un audio ou écrivez votre message pour passer en mode envoie"
+            "record_aria_label": "Restez appuyé pour enregister un audio ou écrivez votre message pour passer en mode envoie",
+            "send_aria_label": "Envoyer le message"
         },
         "input": {
             "placeholder": {
@@ -138,7 +139,9 @@
         },
         "reportMessageButton": "Signaler le message",
         "no_messages": "Aucun message",
-        "no_conversations": "Aucune conversation"
+        "no_conversations": "Aucune conversation",
+        "send_image_aria_label": "Envoyer une image",
+        "send_file_aria_label": "Envoyer un fichier"
     },
     "connection_page": {
         "connect_title": "As-tu déjà un compte ?",

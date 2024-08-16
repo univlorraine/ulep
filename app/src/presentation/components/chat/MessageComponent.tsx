@@ -41,6 +41,8 @@ const MessageComponent: React.FC<MessageProps> = ({
             })
         );
 
+        setDisplayPopover(false);
+
         if (result instanceof Error) {
             return showToast({
                 message: t(result.message),
@@ -196,7 +198,7 @@ const MessageFile: React.FC<MessageProps> = ({ message, isCurrentUserMessage }) 
     return (
         <div className={messageClass}>
             <IonButton fill="clear" className={styles.downloadButton} onClick={handleDownload}>
-                <IonText className={styles.downloadTitle}>{fileName}</IonText>
+                <IonText className={styles.downloadTitle}>{decodeURI(fileName)}</IonText>
                 <IonIcon
                     aria-label={t('chat.ariaLabelFileDownloaded', { filename: fileName }) as string}
                     className={styles.download}
