@@ -127,11 +127,12 @@ export class CreateLearningLanguageUseCase {
           profile.user.id,
           language.id,
         );
-      sameTandemEmail =
+      const otherUser =
         await this.tandemHistoryRepository.getOtherUserInTandemHistory(
           profile.user.id,
           historyTandem.tandemId,
         );
+      sameTandemEmail = otherUser.userEmail;
     }
 
     const item = new LearningLanguage({

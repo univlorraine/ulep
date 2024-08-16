@@ -71,6 +71,7 @@ export class PrismaLearningLanguageRepository
         learning_type: item.learningType,
         same_gender: item.sameGender,
         same_age: item.sameAge,
+        same_tandem_email: item.sameTandemEmail,
         has_priority: item.hasPriority,
         certificate_option: item.certificateOption,
         specific_program: item.specificProgram,

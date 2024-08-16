@@ -1,11 +1,11 @@
-import { Injectable } from '@nestjs/common';
 import { PrismaService } from '@app/common';
+import { Injectable } from '@nestjs/common';
 import { HistorizedTandem } from 'src/core/models/historized-tandem.model';
+import { TandemHistoryRepository } from 'src/core/ports/tandem-history.repository';
 import {
   HistorizedTandemRelation,
   historizedTandemMapper,
 } from '../mappers/historizedTandem.mapper';
-import { TandemHistoryRepository } from 'src/core/ports/tandem-history.repository';
 
 @Injectable()
 export class PrismaTandemHistoryRepository implements TandemHistoryRepository {

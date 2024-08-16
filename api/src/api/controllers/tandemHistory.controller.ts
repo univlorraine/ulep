@@ -1,8 +1,11 @@
 import { Controller, Get, Query, UseGuards } from '@nestjs/common';
 import * as Swagger from '@nestjs/swagger';
-import { AuthenticationGuard } from '../guards';
+import {
+  GetEmailFromHistoricTandemResponse,
+  GetOtherUserEmailInTandemRequest,
+} from 'src/api/dtos/tandem-history';
 import { GetOtherUserEmailInTandemUsecase } from 'src/core/usecases/tandemHistory/get-email-from-history-tandem.usecase';
-import { GetOtherUserEmailInTandemRequest, GetEmailFromHistoricTandemResponse } from 'src/api/dtos/tandem-history';
+import { AuthenticationGuard } from '../guards';
 
 @Controller('tandem-history')
 @Swagger.ApiTags('Tandem History')
@@ -25,6 +28,8 @@ export class TandemHistoryController {
         userId,
       });
 
-    return GetEmailFromHistoricTandemResponse.fromDomain(historizedTandem);
+    return historizedTandem
+      ? GetEmailFromHistoricTandemResponse.fromDomain(historizedTandem)
+      : undefined;
   }
 }
