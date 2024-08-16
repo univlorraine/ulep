@@ -141,7 +141,7 @@ const CustomMenu = () => {
             <Box ref={(newRef: HTMLDivElement) => setProfilesRef(newRef)} sx={{ marginTop: 0 }}>
                 <Menu.ResourceItem name="profiles" />
             </Box>
-            <Menu.ResourceItem name="profiles/with-tandem" />
+            <Menu.ResourceItem name="profiles/with-tandems-profiles" />
             <Menu.ResourceItem name="chat" />
             {permissions.checkRole(Role.MANAGER) && data && data.universityId && (
                 <Menu.Item

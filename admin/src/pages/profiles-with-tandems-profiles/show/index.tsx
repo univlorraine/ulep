@@ -1,11 +1,9 @@
 import { TabContext, TabList } from '@mui/lab';
 import { Box, Tab, Typography } from '@mui/material';
 import React from 'react';
-
 import { FunctionField, Show, SimpleShowLayout, useRecordContext, useTranslate } from 'react-admin';
-
 import { useLocation } from 'react-router-dom';
-import { ProfileWithTandems, getProfileDisplayName } from '../../../entities/Profile';
+import { ProfileWithTandemsProfiles } from '../../../entities/ProfileWithTandemsProfiles';
 import codeLanguageToFlag from '../../../utils/codeLanguageToFlag';
 import LearningLanguageTabContent from './LearningLanguageTabContent';
 
@@ -13,7 +11,7 @@ import './show.css';
 
 const TabsComponent = () => {
     const translate = useTranslate();
-    const record: ProfileWithTandems = useRecordContext();
+    const record: ProfileWithTandemsProfiles = useRecordContext();
 
     const { state: learningLanguageCode } = useLocation();
     const [value, setValue] = React.useState(
@@ -49,10 +47,11 @@ const LearningLanguageShow = () => (
     <Box className="profiles-with-tandem--show">
         <Show>
             <FunctionField
-                render={(profile: ProfileWithTandems) => (
+                render={(profile: ProfileWithTandemsProfiles) => (
                     <Box sx={{ marginBottom: 2 }}>
                         <Typography variant="h2">
-                            {getProfileDisplayName(profile)} ({codeLanguageToFlag(profile.nativeLanguage.code)})
+                            {profile.user.lastname} {profile.user.firstname} (
+                            {codeLanguageToFlag(profile.nativeLanguage.code)})
                         </Typography>
                     </Box>
                 )}

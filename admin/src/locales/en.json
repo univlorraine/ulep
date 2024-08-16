@@ -530,6 +530,9 @@
                 },
                 "university": {
                     "label": "University"
+                },
+                "learningLanguage": {
+                    "label": "Language"
                 }
             },
             "globalRoutineModal": {

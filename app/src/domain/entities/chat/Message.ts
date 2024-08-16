@@ -12,6 +12,7 @@ export enum MessageType {
 interface MessageMetadata {
     originalFilename: string;
     openGraphResult: any;
+    thumbnail?: string;
 }
 
 export class MessageWithoutSender {
@@ -50,6 +51,13 @@ export class MessageWithoutSender {
 
     public isMine(userId: string): boolean {
         return this.senderId === userId;
+    }
+
+    public getThumbnail(): string | undefined {
+        if (this.type === MessageType.Image) {
+            return this.metadata.thumbnail ?? this.content;
+        }
+        return undefined;
     }
 }
 

@@ -1,10 +1,11 @@
 import { Typography, TypographyProps } from '@mui/material';
 import { useRedirect } from 'react-admin';
-import { Profile, getProfileDisplayName } from '../../../entities/Profile';
+import { Profile } from '../../../entities/Profile';
+import { ProfileWithTandemsProfiles } from '../../../entities/ProfileWithTandemsProfiles';
 import codeLanguageToFlag from '../../../utils/codeLanguageToFlag';
 
 interface ProfileWithTandemLinkParams {
-    profile: Profile;
+    profile: Profile | ProfileWithTandemsProfiles;
     variant?: string;
 }
 
@@ -14,14 +15,14 @@ const ProfileWithTandemLink = ({ profile, variant = 'body1' }: ProfileWithTandem
     return (
         <Typography
             onClick={() => {
-                redirect('show', 'profiles/with-tandem', profile.id);
+                redirect('show', 'profiles/with-tandems-profiles', profile.id);
             }}
             sx={{ cursor: 'pointer', color: '#3737d5', fontWeight: '700' }}
             // Note: shortcut to avoid typing as precisely as Typography (an error
             // will juste lead to syle not applied)
             variant={variant as TypographyProps['variant']}
         >
-            {getProfileDisplayName(profile)} ({codeLanguageToFlag(profile.nativeLanguage.code)})
+            {profile.user.lastname} {profile.user.firstname} ({codeLanguageToFlag(profile.nativeLanguage.code)})
         </Typography>
     );
 };

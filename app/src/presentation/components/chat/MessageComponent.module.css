@@ -51,6 +51,22 @@
     width: 100%;
 }
 
+.leftMessageMenu {
+    margin-left: auto;
+}
+
+.rightMessageMenu {
+    padding: 0px;
+    margin-right: auto;
+}
+
+.messageContent {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    width: 100%;
+}
+
 .message {
     display: block;
     max-width: 80%;
@@ -93,7 +109,7 @@
 .image {
     max-height: 300px;
     max-width: 100%;
-    padding: 8px 0px;
+    padding: 8px;
 }
 
 .name {
@@ -121,13 +137,14 @@
     border-radius: 20px 20px 0px 20px;
     text-align: right;
     margin-left: auto;
+    padding: 8px;
 }
 
 .otherUser {
     background-color: white;
     border-radius: 20px 20px 20px 0px;
     text-align: left;
-    margin-right: auto;
+    padding: 8px;
 }
 
 .outerContainer {

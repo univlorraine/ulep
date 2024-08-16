@@ -1,0 +1,56 @@
+import * as Swagger from '@nestjs/swagger';
+import { Expose } from 'class-transformer';
+import { Tandem, TandemStatus } from '../../../core/models/tandem.model';
+import { LearningLanguage } from 'src/core/models';
+import { LearningLanguageResponse } from '../learning-languages';
+import { TandemWithPartnerLearningLanguage } from 'src/core/models/tandemWithPartnerLearningLanguage.model';
+
+export class TandemWithPartnerLearningLanguageResponse {
+  @Swagger.ApiProperty({ type: 'string', format: 'uuid', nullable: true })
+  @Expose({ groups: ['read'] })
+  id: string | null = null;
+
+  @Swagger.ApiProperty({ type: () => LearningLanguageResponse, isArray: true })
+  @Expose({ groups: ['read'] })
+  partnerLearningLanguage: LearningLanguageResponse;
+
+  @Swagger.ApiProperty({ type: 'string', enum: TandemStatus })
+  @Expose({ groups: ['read'] })
+  status: TandemStatus;
+
+  @Swagger.ApiProperty({ type: 'number' })
+  @Expose({ groups: ['read'] })
+  compatibilityScore: number;
+
+  @Swagger.ApiProperty({ type: 'string', isArray: true })
+  @Expose({ groups: ['tandem:university-validations'] })
+  universityValidations?: string[];
+
+  @Swagger.ApiProperty({ type: 'date' })
+  @Expose({ groups: ['read'] })
+  updatedAt?: Date;
+
+  @Swagger.ApiProperty({ type: 'date' })
+  @Expose({ groups: ['read'] })
+  createdAt?: Date;
+
+  constructor(partial: Partial<TandemWithPartnerLearningLanguageResponse>) {
+    Object.assign(this, partial);
+  }
+
+  static fromDomain(
+    tandem: TandemWithPartnerLearningLanguage,
+  ): TandemWithPartnerLearningLanguageResponse {
+    return new TandemWithPartnerLearningLanguageResponse({
+      id: tandem.id,
+      partnerLearningLanguage: LearningLanguageResponse.fromDomain(
+        tandem.partnerLearningLanguage,
+      ),
+      status: tandem.status,
+      compatibilityScore: tandem.compatibilityScore,
+      universityValidations: tandem.universityValidations,
+      createdAt: tandem.createdAt,
+      updatedAt: tandem.updatedAt,
+    });
+  }
+}

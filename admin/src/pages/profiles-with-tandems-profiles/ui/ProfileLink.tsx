@@ -1,10 +1,11 @@
 import { Typography, TypographyProps } from '@mui/material';
 import { useRedirect } from 'react-admin';
-import { Profile, getProfileDisplayName } from '../../../entities/Profile';
+import { Profile } from '../../../entities/Profile';
+import { ProfileWithTandemsProfiles } from '../../../entities/ProfileWithTandemsProfiles';
 import codeLanguageToFlag from '../../../utils/codeLanguageToFlag';
 
 interface ProfileLinkParams {
-    profile: Profile;
+    profile: Profile | ProfileWithTandemsProfiles;
     variant?: string;
 }
 
@@ -21,7 +22,7 @@ const ProfileLink = ({ profile, variant = 'body1' }: ProfileLinkParams) => {
             // will juste lead to syle not applied)
             variant={variant as TypographyProps['variant']}
         >
-            {getProfileDisplayName(profile)} ({codeLanguageToFlag(profile.nativeLanguage.code)})
+            {profile.user.lastname} {profile.user.firstname} ({codeLanguageToFlag(profile.nativeLanguage.code)})
         </Typography>
     );
 };

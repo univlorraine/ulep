@@ -12,6 +12,7 @@
 
 .profiles-with-tandem-list .line.tandem.profile {
     padding-left: 10px;
+    min-width: 200px;
 }
 
 .profiles-with-tandem-list th {

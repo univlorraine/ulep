@@ -26,7 +26,7 @@ import interests from './pages/interests';
 import languages from './pages/languages';
 import objectives from './pages/objectives';
 import profiles from './pages/profiles';
-import profilesWithTandem from './pages/profiles-with-tandem';
+import profilesWithTandem from './pages/profiles-with-tandems-profiles';
 import questions from './pages/questions';
 import reports from './pages/report';
 import reportCategories from './pages/report-categories';
@@ -55,7 +55,7 @@ const App = () => (
                 <Resource icon={PersonAddIcon} name="profiles" options={{ label: 'profiles.label' }} {...profiles} />
                 <Resource
                     icon={PeopleIcon}
-                    name="profiles/with-tandem"
+                    name="profiles/with-tandems-profiles"
                     options={{ label: 'learning_languages.label' }}
                     {...profilesWithTandem}
                 />
@@ -66,7 +66,6 @@ const App = () => (
                     {...reports}
                 />
                 <Resource icon={ChatIcon} name="chat" options={{ label: 'chat.label' }} {...chat} />
-                {/* <Resource name="chat/messages" {...chatMessages} /> */}
                 {permissions.checkRole(Role.MANAGER) && (
                     <Resource
                         edit={universities.manager.edit}

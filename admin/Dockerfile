@@ -1,9 +1,9 @@
 #syntax=docker/dockerfile:1.4
 
 # Base node image with pnpm enabled
-FROM node:18-alpine as admin_base
+FROM node:20-alpine as admin_base
 
-RUN apk add --no-cache libc6-compat
+# RUN apk add --no-cache libc6-compat
 
 WORKDIR /srv/app
 
@@ -37,16 +37,17 @@ COPY --from=admin_deps --link /srv/app/node_modules ./node_modules
 
 RUN pnpm run build
 
-FROM admin_builder AS admin_prod
+FROM node:20-alpine AS admin_prod
 
-ENV NODE_ENV production
+WORKDIR /srv/app
 
-RUN addgroup -S -g 1001 nodejs
-RUN adduser -S -u 1001 nestjs
+COPY --from=admin_builder --link /srv/app/ ./build
+
+# RUN addgroup -S -g 1001 nodejs
 RUN npm i -g serve
 
 EXPOSE 80
-
 ENV PORT 80
+ENV NODE_ENV production
 
-CMD ["bash", "-c", "serve -s build -l 80"]
+# CMD ["bash", "-c", "serve -s build -l 80"]
