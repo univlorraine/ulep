@@ -111,6 +111,9 @@
         "messageReported": "Message signalé",
         "noMessages": "Il n'y a aucun message",
         "title": "Messages avec {{name}}",
+        "send_button": {
+            "aria_label": "Restez appuyé pour enregister un audio ou écrivez votre message pour passer en mode envoie"
+        },
         "input": {
             "placeholder": {
                 "blocked": "Le tandem est en pause, tu ne peux pas envoyer de messages",

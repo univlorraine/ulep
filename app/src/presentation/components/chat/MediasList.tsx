@@ -11,14 +11,21 @@ interface MediasListProps {
     isScrollOver: boolean;
     loadMessages: () => void;
     selectedFilter: MessageType;
+    setImageToDisplay: (image: string) => void;
 }
 
-const MediasList: React.FC<MediasListProps> = ({ messages, isScrollOver, loadMessages, selectedFilter }) => {
+const MediasList: React.FC<MediasListProps> = ({
+    messages,
+    isScrollOver,
+    loadMessages,
+    selectedFilter,
+    setImageToDisplay,
+}) => {
     const { t } = useTranslation();
     const { isLoading, messagesEndRef, handleScroll } = useMessages({
         messages,
         isScrollForwardOver: isScrollOver,
-        isScrollBackwardOver: false,
+        isScrollBackwardOver: true,
         loadMessages,
         isSearchMode: false,
     });
@@ -39,7 +46,15 @@ const MediasList: React.FC<MediasListProps> = ({ messages, isScrollOver, loadMes
             }
 
             if (message.content) {
-                messageElements[t(message.getMessageDate())].push(<MediaComponent message={message} />);
+                messageElements[t(message.getMessageDate())].push(
+                    <MediaComponent
+                        key={message.id}
+                        message={message}
+                        setImageToDisplay={
+                            message.type === MessageType.Image ? (image) => setImageToDisplay(image) : undefined
+                        }
+                    />
+                );
             }
         });
 

@@ -25,11 +25,11 @@
 
 .header-container {
     align-items: center;
+    background-color: white;
     display: flex;
     flex-direction: row;
     justify-content: space-between;
-    margin: 0px 40px;
-    padding: 16px 0px;
+    padding: 16px 40px;
 }
 
 .logo {

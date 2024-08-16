@@ -9,6 +9,7 @@
 }
 
 .messages {
+    background-color: #fff8b7;
     flex: 1;
     height: 100%;
     max-height: 100%;

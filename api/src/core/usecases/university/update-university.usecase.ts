@@ -126,9 +126,11 @@ export class UpdateUniversityUsecase {
     if (oldContactId !== university.defaultContactId) {
       await this.chatService.deleteConversationByContactId(oldContactId);
       await this.chatService.createConversations(
-        usersToUpdate.map((userId) => ({
-          participants: [userId, university.defaultContactId],
-        })),
+        usersToUpdate
+          .filter((userId) => userId !== university.defaultContactId)
+          .map((userId) => ({
+            participants: [userId, university.defaultContactId],
+          })),
       );
     }
   }

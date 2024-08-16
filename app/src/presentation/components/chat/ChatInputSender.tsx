@@ -1,4 +1,4 @@
-import { IonIcon, useIonToast } from '@ionic/react';
+import { IonButton, IonIcon, useIonToast } from '@ionic/react';
 import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { CloseBlackSvg, PaperclipSvg, PictureSvg } from '../../../assets';
@@ -143,8 +143,12 @@ const ChatInputSender: React.FC<ChatInputSenderProps> = ({ isBlocked, profile, c
     return (
         <div className={styles.footer}>
             <div>
-                <IonIcon className={styles.icon} icon={PictureSvg} onClick={handleImageClick} />
-                <IonIcon className={styles.icon} icon={PaperclipSvg} onClick={handleFileClick} />
+                <IonButton fill="clear" size="small" onClick={handleImageClick}>
+                    <IonIcon className={styles.icon} icon={PictureSvg} />
+                </IonButton>
+                <IonButton fill="clear" size="small" onClick={handleFileClick}>
+                    <IonIcon className={styles.icon} icon={PaperclipSvg} />
+                </IonButton>
             </div>
             <div className={styles['sender-view']}>
                 {imageToSend && (

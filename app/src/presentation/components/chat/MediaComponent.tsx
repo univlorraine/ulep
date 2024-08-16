@@ -9,13 +9,14 @@ import styles from './MediaComponent.module.css';
 
 interface MessageProps {
     message: Message;
+    setImageToDisplay?: (image: string) => void;
 }
 
-const MediaComponent: React.FC<MessageProps> = ({ message }) => {
+const MediaComponent: React.FC<MessageProps> = ({ message, setImageToDisplay }) => {
     const renderMessageContent = () => {
         switch (message.type) {
             case MessageType.Image:
-                return <MessageImage message={message} />;
+                return <MessageImage message={message} setImageToDisplay={setImageToDisplay} />;
             case MessageType.File:
                 return <MessageFile message={message} />;
             case MessageType.Audio:
@@ -37,9 +38,19 @@ const MediaComponent: React.FC<MessageProps> = ({ message }) => {
     );
 };
 
-const MessageImage: React.FC<MessageProps> = ({ message }) => {
+const MessageImage: React.FC<MessageProps> = ({ message, setImageToDisplay }) => {
     const { t } = useTranslation();
-    return <img className={styles.image} src={message.getThumbnail()} alt={t('chat.medias.images-alt') as string} />;
+
+    const showModal = () => {
+        if (setImageToDisplay) {
+            setImageToDisplay(message.content);
+        }
+    };
+    return (
+        <IonButton className={styles['image-button']} fill="clear" onClick={showModal}>
+            <img className={styles.image} src={message.getThumbnail()} alt={t('chat.medias.images-alt') as string} />
+        </IonButton>
+    );
 };
 
 const MessageAudio: React.FC<MessageProps> = ({ message }) => {

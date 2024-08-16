@@ -13,9 +13,15 @@ interface MessageProps {
     message: Message;
     currentMessageSearchId?: string;
     onMessagePressed?: (e: React.MouseEvent<HTMLIonButtonElement>) => void;
+    setImageToDisplay?: (imageUrl: string) => void;
 }
 
-const MessageComponent: React.FC<MessageProps> = ({ message, isCurrentUserMessage, currentMessageSearchId }) => {
+const MessageComponent: React.FC<MessageProps> = ({
+    message,
+    isCurrentUserMessage,
+    currentMessageSearchId,
+    setImageToDisplay,
+}) => {
     const { t } = useTranslation();
     const { createReportMessage } = useConfig();
     const [showToast] = useIonToast();
@@ -66,7 +72,13 @@ const MessageComponent: React.FC<MessageProps> = ({ message, isCurrentUserMessag
                     />
                 );
             case MessageType.Image:
-                return <MessageImage message={message} isCurrentUserMessage={isCurrentUserMessage} />;
+                return (
+                    <MessageImage
+                        message={message}
+                        isCurrentUserMessage={isCurrentUserMessage}
+                        setImageToDisplay={setImageToDisplay}
+                    />
+                );
             case MessageType.Audio:
                 return <MessageAudio message={message} isCurrentUserMessage={isCurrentUserMessage} />;
             case MessageType.File:
@@ -138,13 +150,19 @@ const MessageText: React.FC<MessageProps> = ({ message, isCurrentUserMessage, cu
     );
 };
 
-const MessageImage: React.FC<MessageProps> = ({ message, isCurrentUserMessage }) => {
+const MessageImage: React.FC<MessageProps> = ({ message, isCurrentUserMessage, setImageToDisplay }) => {
     const messageClass = isCurrentUserMessage ? styles.currentUser : styles.otherUser;
 
+    const openModal = () => {
+        if (setImageToDisplay) {
+            setImageToDisplay(message.content);
+        }
+    };
+
     return (
-        <div className={`${styles.messageImage} ${messageClass}`}>
+        <IonButton fill="clear" className={`${styles.messageImage} ${messageClass}`} onClick={openModal}>
             <img className={styles.image} src={message.getThumbnail()} />
-        </div>
+        </IonButton>
     );
 };
 
@@ -191,6 +209,8 @@ const MessageFile: React.FC<MessageProps> = ({ message, isCurrentUserMessage }) 
 
 const MessageLink: React.FC<MessageProps> = ({ message, isCurrentUserMessage, currentMessageSearchId }) => {
     const messageClass = isCurrentUserMessage ? styles.currentUser : styles.otherUser;
+    const linkRegex = /(https?:\/\/[^\s]+)/g;
+    const parts = message.content.split(linkRegex);
 
     return (
         <div
@@ -204,7 +224,17 @@ const MessageLink: React.FC<MessageProps> = ({ message, isCurrentUserMessage, cu
                 description={message.metadata?.openGraphResult?.ogDescription}
                 url={message.content}
             />
-            <IonText className={styles.linkText}>{message.content}</IonText>
+            <IonText className={styles.linkText}>
+                {parts.map((part, index) =>
+                    linkRegex.test(part) ? (
+                        <a key={index} href={part} target="_blank" rel="noopener noreferrer">
+                            {part}
+                        </a>
+                    ) : (
+                        part
+                    )
+                )}
+            </IonText>
         </div>
     );
 };
