@@ -54,6 +54,19 @@
     font-size: 14px;
 }
 
+.title-container {
+    display: flex;
+    align-items: center;
+    flex-direction: row;
+}
+
+.camera {
+    background-color: #000;
+    border-radius: 4px;
+    color: white;
+    margin-left: 12px;
+}
+
 @media (min-width: 768px) {
     .header {
         padding: 12px;
