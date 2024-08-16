@@ -10,7 +10,8 @@ import PublicIcon from '@mui/icons-material/Public';
 import SchoolOutlinedIcon from '@mui/icons-material/SchoolOutlined';
 import SettingsIcon from '@mui/icons-material/Settings';
 import WarningAmberOutlinedIcon from '@mui/icons-material/WarningAmberOutlined';
-import { Admin, Resource } from 'react-admin';
+import { Admin, CustomRoutes, Resource } from 'react-admin';
+import { Route } from 'react-router-dom';
 import CustomLayout from './components/layout/layout';
 import { Role } from './entities/Administrator';
 import EditAdministratorProfile from './pages/admin-profile/edit';
@@ -23,6 +24,7 @@ import countSuggestedLanguages from './pages/count-suggested-languages';
 import countries from './pages/countries';
 import instance from './pages/instance';
 import interests from './pages/interests';
+import JitsiPage from './pages/jitsi/JitsiPage';
 import languages from './pages/languages';
 import objectives from './pages/objectives';
 import profiles from './pages/profiles';
@@ -160,6 +162,9 @@ const App = () => (
                         />
                     </>
                 )}
+                <CustomRoutes>
+                    <Route element={<JitsiPage />} path="/jitsi" />
+                </CustomRoutes>
             </>
         )}
     </Admin>

@@ -25,10 +25,6 @@ const ChatList = () => {
     const [locale] = useLocaleState();
     const [currentConversation, setCurrentConversation] = useState<Conversation | null>(null);
 
-    /*     const handleClose = useCallback(() => {
-        setCurrentConversation(null);
-    }, []); */
-
     if (isLoadingIdentity || !identity) return <Loading />;
 
     const filters = [
@@ -138,13 +134,7 @@ const ChatList = () => {
                     </DatagridConfigurable>
                 </List>
             </Box>
-            <Drawer
-                anchor="right"
-                // onClose={handleClose}
-                open={!!currentConversation}
-                sx={{ zIndex: 100 }}
-                variant="persistent"
-            >
+            <Drawer anchor="right" open={!!currentConversation} sx={{ zIndex: 100 }} variant="persistent">
                 {currentConversation && <ChatContent conversation={currentConversation} />}
             </Drawer>
         </Box>
