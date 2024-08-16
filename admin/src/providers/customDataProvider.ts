@@ -460,6 +460,16 @@ const customDataProvider = {
 
         return { data: result };
     },
+    getJitsiToken: async (): Promise<string> => {
+        const url = `${process.env.REACT_APP_API_URL}/authentication/jitsi/token`;
+        const response = await fetch(url, httpClientOptions({ method: 'GET' }));
+
+        if (!response.ok) {
+            await throwError(response);
+        }
+
+        return response.json();
+    },
 } as unknown as DataProvider;
 
 export default addRefreshAuthToDataProvider(customDataProvider, refreshAuth);

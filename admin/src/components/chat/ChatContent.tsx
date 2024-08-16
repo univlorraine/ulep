@@ -1,6 +1,7 @@
-import { Box, Container, Typography } from '@mui/material';
+import { VideoCall } from '@mui/icons-material';
+import { Box, Container, IconButton, Typography } from '@mui/material';
 import { useEffect, useState } from 'react';
-import { Loading, useDataProvider, useGetIdentity, useTranslate } from 'react-admin';
+import { Loading, useDataProvider, useGetIdentity, useRedirect, useTranslate } from 'react-admin';
 import { Conversation } from '../../entities/Conversation';
 import SocketIoProvider from '../../providers/socketIoProvider';
 import ChatInputSender from './ChatInputSender';
@@ -14,6 +15,7 @@ interface ChatContentProps {
 const ChatContent = ({ conversation }: ChatContentProps) => {
     const translate = useTranslate();
     const user = useGetIdentity();
+    const redirect = useRedirect();
     const dataProvider = useDataProvider();
     const [socketIoProvider, setSocketIoProvider] = useState<SocketIoProvider | undefined>();
 
@@ -52,11 +54,30 @@ const ChatContent = ({ conversation }: ChatContentProps) => {
                 padding: ['0', '0', '0'],
             }}
         >
-            <Typography flex="1" sx={{ lineHeight: 3, paddingLeft: 2, borderBottom: '1px solid #E0E0E0' }} variant="h6">
-                {translate('chat.show.title', {
-                    partner: `${conversation?.partner?.lastname} ${conversation?.partner?.firstname}`,
-                })}
-            </Typography>
+            <Box
+                sx={{
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'space-between',
+                    flexDirection: 'row',
+                    lineHeight: 3,
+                    paddingLeft: 2,
+                    paddingRight: 2,
+                    borderBottom: '1px solid #E0E0E0',
+                }}
+            >
+                <Typography variant="h6">
+                    {translate('chat.show.title', {
+                        partner: `${conversation?.partner?.lastname} ${conversation?.partner?.firstname}`,
+                    })}
+                </Typography>
+                <IconButton
+                    onClick={() => redirect(`/jitsi?roomName=${conversation.partner?.id}_${user.identity?.id}`)}
+                >
+                    <VideoCall />
+                </IconButton>
+            </Box>
+
             {isLoading ? (
                 <Loading />
             ) : (
