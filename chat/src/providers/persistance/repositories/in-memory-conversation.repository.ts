@@ -35,10 +35,15 @@ export class InMemoryConversationRepository implements ConversationRepository {
         );
     }
 
-    async findByUserId(userId: string): Promise<Conversation[]> {
-        return this.#conversations.filter((conversation) =>
+    async findByUserId(userId: string): Promise<Collection<Conversation>> {
+        const conversations = this.#conversations.filter((conversation) =>
             conversation.usersIds.includes(userId),
         );
+
+        return new Collection<Conversation>({
+            items: conversations,
+            totalItems: conversations.length,
+        });
     }
 
     async findConversationsByIdsOrParticipants(
@@ -96,6 +101,10 @@ export class InMemoryConversationRepository implements ConversationRepository {
         this.#conversations[index] = updatedConversation;
 
         return Promise.resolve(updatedConversation);
+    }
+
+    async updateLastActivityAt(conversationId: string): Promise<void> {
+        return;
     }
 
     delete(id: string): Promise<void> {

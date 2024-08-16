@@ -54,6 +54,32 @@
             "title": "Mise à jour d'un campus"
         }
     },
+    "chat": {
+        "label": "Conversations",
+        "title": "Conversations",
+        "list": {
+            "filters": {
+                "lastname": "Nom",
+                "firstname": "Prénom",
+                "university": "Université"
+            }
+        },
+        "audioRecorder": {
+            "error": "Erreur lors de l'enregistrement de l'audio",
+            "permission": "Vous devez autoriser l'accès au microphone pour enregistrer un audio"
+        },
+        "show": {
+            "title": "Messages avec %{partner}",
+            "you": "Vous",
+            "close": "Fermer"
+        },
+        "messageType": {
+            "link": "Lien",
+            "image": "Image",
+            "audio": "Audio",
+            "file": "Fichier"
+        }
+    },
     "count_suggested_languages": {
         "label": "Total langues demandées",
         "tabLabel": "Total langues demandées",

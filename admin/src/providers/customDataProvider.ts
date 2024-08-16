@@ -10,9 +10,12 @@ import {
     addRefreshAuthToDataProvider,
     fetchUtils,
 } from 'react-admin';
+import { MessageType } from '../entities/Message';
 import { RoutineExecution } from '../entities/RoutineExecution';
 import { TandemStatus } from '../entities/Tandem';
+import User from '../entities/User';
 import AdministratorsQuery from '../queries/AdministratorsQuery';
+import ChatQuery from '../queries/ChatQuery';
 import CountriesQuery from '../queries/CountriesQuery';
 import InterestsQuery from '../queries/InterestsQuery';
 import LanguagesQuery from '../queries/LanguagesQuery';
@@ -23,6 +26,9 @@ import QuestionsQuery from '../queries/QuestionsQuery';
 import ReportsQuery from '../queries/ReportsQuery';
 import { http, refreshAuth } from './authProvider';
 import jwtManager from './jwtManager';
+import SocketIoProvider from './socketIoProvider';
+
+let socketIoProviderInstance: SocketIoProvider | null = null;
 
 const httpClientOptions = (options: any = {}) => {
     const newOptions = options;
@@ -124,6 +130,9 @@ const customDataProvider = {
             case 'learning-languages/tandems':
                 url = new URL(`${process.env.REACT_APP_API_URL}/learning-languages/${params.id}/tandems`);
                 break;
+            case 'chat':
+                url = new URL(`${process.env.REACT_APP_API_URL}/chat/messages/${params.id}`);
+                break;
             default:
                 break;
         }
@@ -138,6 +147,10 @@ const customDataProvider = {
 
         if (resource === 'instance') {
             return { data: { ...data, id: 'config' } };
+        }
+
+        if (resource === 'chat') {
+            return { data: { ...data, id: params.id } };
         }
 
         return { data };
@@ -175,6 +188,13 @@ const customDataProvider = {
         switch (resource) {
             case 'users/administrators':
                 url.search = AdministratorsQuery(params);
+                break;
+            case 'chat':
+                url = new URL(`${process.env.REACT_APP_API_URL}/chat/${params.filter.id}`);
+                url.search = ChatQuery(params);
+                break;
+            case 'chat/messages':
+                url = new URL(`${process.env.REACT_APP_API_URL}/chat/messages/${params.filter.conversationId}`);
                 break;
             case 'countries':
                 url.search = CountriesQuery(params);
@@ -214,6 +234,16 @@ const customDataProvider = {
         }
 
         const result = await response.json();
+
+        if (resource === 'chat') {
+            const conversationsWithPartner = result.items.map((conversation: any) => {
+                const partner = conversation.users.find((user: User) => user.id !== params.filter.id);
+
+                return { ...conversation, partner };
+            });
+
+            return { data: conversationsWithPartner, total: result.totalItems };
+        }
 
         if (!result.items) {
             return { data: result, total: result.length };
@@ -363,6 +393,72 @@ const customDataProvider = {
         const result = await response.json();
 
         return result;
+    },
+    getChatMessagesByConversationId: async ({
+        conversationId,
+        lastMessageId,
+        direction,
+        limit = 10,
+        typeFilter,
+    }: {
+        conversationId: string;
+        lastMessageId?: string;
+        direction?: 'forward' | 'backward';
+        limit?: number;
+        typeFilter?: MessageType;
+    }): Promise<any> => {
+        const url = `${process.env.REACT_APP_API_URL}/chat/messages/${conversationId}?limit=${limit}${
+            lastMessageId ? `&lastMessageId=${lastMessageId}` : ''
+        }${direction ? `&direction=${direction}` : ''}${typeFilter ? `&typeFilter=${typeFilter}` : ''}`;
+        const response = await fetch(url, httpClientOptions({ method: 'GET' }));
+
+        if (!response.ok) {
+            await throwError(response);
+        }
+
+        const result = await response.json();
+
+        return result.items;
+    },
+    getSocketIoProvider: (): SocketIoProvider | null => {
+        const accessToken = jwtManager.getToken('access_token');
+        const socketUrl = process.env.REACT_APP_SOCKET_CHAT_URL;
+        if (!socketIoProviderInstance && socketUrl && accessToken) {
+            socketIoProviderInstance = new SocketIoProvider(socketUrl, accessToken);
+        }
+
+        return socketIoProviderInstance;
+    },
+    sendMessage: async (
+        conversationId: string,
+        senderId: string,
+        content?: string,
+        file?: File,
+        filename?: string
+    ): Promise<any> => {
+        const url = `${process.env.REACT_APP_CHAT_URL}/conversations/${conversationId}/message`;
+        const body = new FormData();
+        body.append('senderId', senderId);
+
+        if (content) {
+            body.append('content', content);
+        }
+        if (file) {
+            body.append('file', file);
+        }
+        if (filename) {
+            body.append('filename', filename);
+        }
+
+        const response = await fetch(url, httpClientOptions({ method: 'POST', body }));
+
+        if (!response.ok) {
+            await throwError(response);
+        }
+
+        const result = await response.json();
+
+        return { data: result };
     },
 } as unknown as DataProvider;
 

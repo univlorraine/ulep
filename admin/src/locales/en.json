@@ -54,6 +54,32 @@
             "title": "Update campus"
         }
     },
+    "chat": {
+        "label": "Conversations",
+        "title": "Conversations",
+        "list": {
+            "filters": {
+                "lastname": "Lastname",
+                "firstname": "Firstname",
+                "university": "University"
+            }
+        },
+        "audioRecorder": {
+            "error": "An error occurred while recording the audio",
+            "permission": "You must allow access to the microphone to record an audio"
+        },
+        "show": {
+            "title": "Messages with %{partner}",
+            "you": "You",
+            "close": "Close"
+        },
+        "messageType": {
+            "link": "Link",
+            "image": "Image",
+            "audio": "Audio",
+            "file": "File"
+        }
+    },
     "count_suggested_languages": {
         "label": "Total languages requested",
         "tabLabel": "Total languages requested",

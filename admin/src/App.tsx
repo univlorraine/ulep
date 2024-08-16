@@ -1,3 +1,4 @@
+import ChatIcon from '@mui/icons-material/Chat';
 import CheckCircleIcon from '@mui/icons-material/CheckCircle';
 import HelpIcon from '@mui/icons-material/Help';
 import InterestsIcon from '@mui/icons-material/Interests';
@@ -17,6 +18,7 @@ import administrators from './pages/administrators';
 import LoginPage from './pages/auth/login';
 import campus from './pages/campus';
 import categoryInterest from './pages/category-interest';
+import chat from './pages/chat';
 import countSuggestedLanguages from './pages/count-suggested-languages';
 import countries from './pages/countries';
 import instance from './pages/instance';
@@ -63,6 +65,7 @@ const App = () => (
                     options={{ label: 'reports.label' }}
                     {...reports}
                 />
+                <Resource icon={ChatIcon} name="chat" options={{ label: 'chat.label' }} {...chat} />
                 {permissions.checkRole(Role.MANAGER) && (
                     <Resource
                         edit={universities.manager.edit}

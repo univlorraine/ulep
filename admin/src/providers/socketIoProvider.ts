@@ -1,14 +1,14 @@
 import socketIo, { Socket } from 'socket.io-client';
-import { UserChat } from '../domain/entities/User';
-import { Message, MessageWithConversationId } from '../domain/entities/chat/Message';
-import SocketIoAdapterInterface from './interfaces/SocketIoAdapter.interface';
+import { Message, MessageWithConversationId, UserChat } from '../entities/Message';
 
-class SocketIoAdapter implements SocketIoAdapterInterface {
-    private accessToken?: string;
+class SocketIoProvider {
+    private accessToken: string | null;
+
     private chatUrl: string;
+
     private socket: Socket | null = null;
 
-    constructor(chatUrl: string, accessToken?: string) {
+    constructor(chatUrl: string, accessToken: string | null) {
         this.accessToken = accessToken;
         this.chatUrl = chatUrl;
     }
@@ -18,6 +18,8 @@ class SocketIoAdapter implements SocketIoAdapterInterface {
             return;
         }
         this.socket = socketIo(this.chatUrl, { auth: { token: this.accessToken } });
+
+        // TODO: handle disconnect
     }
 
     disconnect(): void {
@@ -28,14 +30,12 @@ class SocketIoAdapter implements SocketIoAdapterInterface {
 
     emit(message: Message): Message {
         this.socket?.emit('publish', message);
+
         return message;
     }
 
     onMessage(conversationId: string, handler: (message: Message) => void): void {
-        //TODO: Later if asked we can call antoher function to update the last message conversation through this
-        //TODO: If not conversationId then call the handler for other conversation that will call an injected function to parent
-        //TODO: that will update ConversationContent ( WEB ONLY )
-        this.socket!.on('message', (message: MessageWithConversationId) => {
+        this.socket?.on('message', (message: MessageWithConversationId) => {
             if (conversationId !== message.conversationId) {
                 return;
             }
@@ -61,8 +61,8 @@ class SocketIoAdapter implements SocketIoAdapterInterface {
     }
 
     offMessage(): void {
-        this.socket!.off('message');
+        this.socket?.off('message');
     }
 }
 
-export default SocketIoAdapter;
+export default SocketIoProvider;

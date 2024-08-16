@@ -1,7 +1,9 @@
-import { PrismaService } from '@app/common';
+import { Collection, PrismaService } from '@app/common';
 import { Injectable } from '@nestjs/common';
+import { Prisma } from '@prisma/client';
 import { Conversation } from 'src/core/models';
 import {
+    ConversationPagination,
     ConversationRepository,
     CreateConversations,
 } from 'src/core/ports/conversation.repository';
@@ -27,13 +29,48 @@ export class PrismaConversationRepository implements ConversationRepository {
         return conversationMapper(conversation);
     }
 
-    async findByUserId(userId: string): Promise<Conversation[]> {
+    async findByUserId(
+        userId: string,
+        pagination?: ConversationPagination,
+        filteredProfilesIds?: string[],
+    ): Promise<Collection<Conversation>> {
+        const conversationPagination: Prisma.ConversationFindManyArgs = {
+            take: 50,
+            skip: 0,
+        };
+        if (pagination?.limit) {
+            conversationPagination.take = pagination.limit;
+        }
+
+        if (pagination?.offset) {
+            conversationPagination.skip = pagination.offset;
+        }
+
+        let where: any = {
+            participantIds: { has: userId },
+        };
+
+        if (filteredProfilesIds) {
+            where = {
+                AND: [
+                    { participantIds: { has: userId } },
+                    {
+                        OR: filteredProfilesIds.map((id) => ({
+                            participantIds: { has: id },
+                        })),
+                    },
+                ],
+            };
+        }
+
+        const count = await this.prisma.conversation.count({ where });
+
         const conversations = await this.prisma.conversation.findMany({
-            where: { participantIds: { has: userId } },
+            where: where,
             orderBy: {
-                createdAt: 'desc',
+                lastActivityAt: 'desc',
             },
-            ...ConversationRelations,
+            distinct: ['id'],
             include: {
                 Messages: {
                     take: 1,
@@ -42,22 +79,13 @@ export class PrismaConversationRepository implements ConversationRepository {
                     },
                 },
             },
+            ...conversationPagination,
         });
 
-        conversations.sort((a, b) => {
-            const lastMessageA = a.Messages[0]?.createdAt;
-            const lastMessageB = b.Messages[0]?.createdAt;
-
-            if (lastMessageA > lastMessageB) {
-                return -1;
-            } else if (lastMessageA < lastMessageB) {
-                return 1;
-            } else {
-                return 0;
-            }
+        return new Collection<Conversation>({
+            items: conversations.map(conversationMapper),
+            totalItems: count,
         });
-
-        return conversations.map(conversationMapper);
     }
 
     async create(
@@ -139,5 +167,12 @@ export class PrismaConversationRepository implements ConversationRepository {
         });
 
         return conversationMapper(conversation);
+    }
+
+    async updateLastActivityAt(conversationId: string): Promise<void> {
+        await this.prisma.conversation.update({
+            where: { id: conversationId },
+            data: { lastActivityAt: new Date() },
+        });
     }
 }

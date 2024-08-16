@@ -1,8 +1,6 @@
 import { useEffect, useState } from 'react';
-import { useConfig } from '../../context/ConfigurationContext';
-import { MessagePaginationDirection } from '../../domain/entities/chat/Conversation';
-import { Message, MessageType } from '../../domain/entities/chat/Message';
-import { useStoreState } from '../../store/storeTypes';
+import { useDataProvider } from 'react-admin';
+import { Message, MessagePaginationDirection, MessageType } from '../../entities/Message';
 
 interface UseHandleMessagesFromConversationProps {
     conversationId: string;
@@ -10,15 +8,20 @@ interface UseHandleMessagesFromConversationProps {
     limit?: number;
 }
 
-const useHandleMessagesFromConversation = ({
+interface LoadMessagesProps {
+    messageId?: string;
+    direction?: MessagePaginationDirection;
+    isFirstMessage?: boolean;
+}
+
+function useHandleMessagesFromConversation({
     conversationId,
     typeFilter,
     limit = 10,
-}: UseHandleMessagesFromConversationProps) => {
-    const { getMessagesFromConversation } = useConfig();
+}: UseHandleMessagesFromConversationProps) {
+    const dataProvider = useDataProvider();
     const [lastMessageForwardId, setLastMessageForwardId] = useState<string>();
     const [lastMessageBackwardId, setLastMessageBackwardId] = useState<string>();
-    const profile = useStoreState((state) => state.profile);
 
     const [messagesResult, setMessagesResult] = useState<{
         messages: Message[];
@@ -34,9 +37,6 @@ const useHandleMessagesFromConversation = ({
         isLoading: false,
     });
 
-    if (!profile)
-        return { ...messagesResult, loadMessages: () => {}, addNewMessage: () => {}, clearMessages: () => {} };
-
     const addNewMessage = (message: Message) => {
         setMessagesResult((current) => ({
             messages: [message, ...current.messages],
@@ -47,11 +47,11 @@ const useHandleMessagesFromConversation = ({
         }));
     };
 
-    const loadMessages = async (
+    const loadMessages = async ({
+        messageId,
+        direction = MessagePaginationDirection.FORWARD,
         isFirstMessage = false,
-        direction: MessagePaginationDirection = MessagePaginationDirection.FORWARD,
-        messageId?: string
-    ) => {
+    }: LoadMessagesProps) => {
         if (
             (!isFirstMessage &&
                 direction === MessagePaginationDirection.FORWARD &&
@@ -75,7 +75,8 @@ const useHandleMessagesFromConversation = ({
                 direction === MessagePaginationDirection.FORWARD ? lastMessageForwardId : lastMessageBackwardId;
         }
 
-        const messagesConversationResult = await getMessagesFromConversation.execute(conversationId, {
+        const messagesConversationResult = await dataProvider.getChatMessagesByConversationId({
+            conversationId,
             lastMessageId,
             limit,
             typeFilter,
@@ -83,7 +84,7 @@ const useHandleMessagesFromConversation = ({
         });
 
         if (messagesConversationResult instanceof Error) {
-            return setMessagesResult({
+            setMessagesResult({
                 messages: [],
                 error: messagesConversationResult,
                 isLoading: false,
@@ -124,8 +125,8 @@ const useHandleMessagesFromConversation = ({
                 isScrollBackwardOver: false,
             });
         } else if (direction === MessagePaginationDirection.BOTH) {
-            //Info: isScrollForwardOver and isScrollBackwardOver are set to false because we are loading messages from both directions
-            //Info: we cannot know if we are before the limit of messages on forward or backward, so we set to false
+            // Info: isScrollForwardOver and isScrollBackwardOver are set to false because we are loading messages from both directions
+            // Info: we cannot know if we are before the limit of messages on forward or backward, so we set to false
             setMessagesResult({
                 messages: messagesConversationResult,
                 error: undefined,
@@ -149,14 +150,10 @@ const useHandleMessagesFromConversation = ({
     };
 
     useEffect(() => {
-        const fetchData = async () => {
-            await loadMessages(true);
-        };
-
-        fetchData();
-    }, [profile, conversationId, typeFilter]);
+        loadMessages({ isFirstMessage: true });
+    }, [conversationId, typeFilter]);
 
     return { ...messagesResult, loadMessages, addNewMessage, clearMessages };
-};
+}
 
 export default useHandleMessagesFromConversation;

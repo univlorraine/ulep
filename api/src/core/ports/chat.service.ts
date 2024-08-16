@@ -16,7 +16,7 @@ export type ConversationWithUsers = {
   id: string;
   createdAt: Date;
   users: (User | UserRepresentation)[];
-  lastActivity: Date;
+  lastActivityAt: Date;
   lastMessage?: MessageWithUser;
   metadata: any;
 };
@@ -51,6 +51,7 @@ export interface ChatServicePort {
     userId: string,
     limit: number,
     offset: number,
+    filteredProfilesIds?: string[],
   ): Promise<Collection<Conversation>>;
   getMessagesFromConversationId(
     conversationId: string,

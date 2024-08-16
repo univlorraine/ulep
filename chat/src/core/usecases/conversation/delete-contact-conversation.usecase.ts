@@ -20,7 +20,7 @@ export class DeleteContactConversationUsecase {
             command.id,
         );
 
-        conversations.forEach(async (conversation) => {
+        conversations.items.forEach(async (conversation) => {
             if (conversation.usersIds.length === 2) {
                 await this.conversationRepository.delete(conversation.id);
             } else {

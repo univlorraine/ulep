@@ -20,6 +20,7 @@ type User = {
     contact: Administrator;
     avatar: {
         id: string;
+        mimeType: string;
     };
 };
 

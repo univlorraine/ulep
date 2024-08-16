@@ -80,6 +80,8 @@ export class CreateMessageUsecase {
 
         const createdMessage = await this.messageRepository.create(message);
 
+        await this.conversationRepository.updateLastActivityAt(conversation.id);
+
         this.notificationService.sendNotification(
             message.ownerId,
             conversation.usersIds.filter((id) => id !== message.ownerId),

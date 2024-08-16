@@ -1,4 +1,6 @@
+import { KeycloakClient, UserRepresentation } from '@app/keycloak';
 import { Inject, Injectable } from '@nestjs/common';
+import { User } from 'src/core/models';
 import {
   CHAT_SERVICE,
   ChatPaginationDirection,
@@ -26,6 +28,7 @@ export class GetMessagesFromConversationUsecase {
     private readonly chatService: ChatServicePort,
     @Inject(USER_REPOSITORY)
     private readonly userRepository: UserRepository,
+    private readonly keycloakClient: KeycloakClient,
   ) {}
 
   async execute(command: GetMessagesFromConversationCommand) {
@@ -39,7 +42,11 @@ export class GetMessagesFromConversationUsecase {
         command.direction,
       );
 
-    if (messagesCollection && messagesCollection.totalItems === 0) {
+    if (
+      messagesCollection &&
+      !messagesCollection.items &&
+      messagesCollection.totalItems === 0
+    ) {
       return [];
     }
 
@@ -57,7 +64,22 @@ export class GetMessagesFromConversationUsecase {
     const users = await this.userRepository.ofIds(
       Array.from(allUserIds) as string[],
     );
-    const userMap = new Map(users.map((user) => [user.id, user]));
+    const userMap = new Map(
+      users.map((user: User | UserRepresentation) => [user.id, user]),
+    );
+
+    const missingUserIds = Array.from(allUserIds).filter(
+      (id: string) => !userMap.has(id) || userMap.get(id) === undefined,
+    ) as string[];
+
+    for (const id of missingUserIds) {
+      try {
+        const userDetails = await this.keycloakClient.getUserById(id);
+        userMap.set(id, userDetails);
+      } catch (error) {
+        userMap.delete(id);
+      }
+    }
     // Replace userIds by user objects in conversations
     const messagesWithUser = messages.map(
       (message) =>

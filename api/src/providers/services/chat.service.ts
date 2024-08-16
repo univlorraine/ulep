@@ -1,4 +1,4 @@
-import { Injectable, Logger } from '@nestjs/common';
+import { BadRequestException, Injectable, Logger } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import axios from 'axios';
 import { Env } from 'src/configuration';
@@ -72,22 +72,40 @@ export class ChatService implements ChatServicePort {
     userId: string,
     limit: number,
     offset: number,
+    filteredProfilesIds?: string[],
   ): Promise<any> {
     if (!this.env.get('CHAT_URL')) {
       return;
+    }
+
+    let params = new URLSearchParams();
+    if (filteredProfilesIds) {
+      filteredProfilesIds.forEach((id) => {
+        params.append('filteredProfilesIds[]', id);
+      });
     }
 
     try {
       const response = await axios.get(
         `${this.env.get(
           'CHAT_URL',
-        )}/conversations/${userId}?limit=${limit}&offset=${offset}`,
+        )}/conversations/${userId}?limit=${limit}&offset=${offset}${
+          filteredProfilesIds ? `&${params.toString()}` : ''
+        }`,
         { headers: this.headers },
       );
 
       return response.data;
     } catch (error) {
       this.logger.error('Error while getting all conversations', { error });
+
+      if (error.response.status === 431) {
+        throw new BadRequestException(
+          'Too many filtered users, please narrow down your search',
+        );
+      }
+
+      throw error;
     }
   }
 
