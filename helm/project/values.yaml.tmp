@@ -389,12 +389,14 @@ mongodb:
 
 redis:
   pullPolicy: IfNotPresent
-  replicaCount: 1
+  master:
+    count: 1
+  replica:
+    replicaCount: 1
   persistence:
     size: 8Gi
   auth:
     enabled: false
-
 jitsi-meet:
   name: 'jitsi'
   publicURL: 'https://jitsi.ulep.thestaging.io'
