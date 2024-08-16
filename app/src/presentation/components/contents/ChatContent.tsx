@@ -1,5 +1,5 @@
 import { IonButton, IonContent, IonIcon, IonItem, IonLabel, IonList, IonPage, IonPopover } from '@ionic/react';
-import { imageOutline, searchOutline } from 'ionicons/icons';
+import { imageOutline, searchOutline, videocam } from 'ionicons/icons';
 import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useHistory } from 'react-router';
@@ -59,6 +59,19 @@ const Content: React.FC<ChatContentProps> = ({ conversation, goBack, profile, se
         loadMessages(true, MessagePaginationDirection.BOTH, messageId);
     };
 
+    //WARNING: this is working because we have only 2 users in the conversation
+    const onOpenVideoCall = () => {
+        const [firstProfileId, secondProfileId] = [
+            profile.user.id,
+            conversation.participants.find((p) => p.id !== profile.user.id)?.id,
+        ].sort();
+
+        history.push({
+            pathname: '/jitsi',
+            search: `?roomName=${firstProfileId}_${secondProfileId}`,
+        });
+    };
+
     useEffect(() => {
         recorderAdapter.requestPermission();
         socketIoAdapter.connect();
@@ -82,11 +95,16 @@ const Content: React.FC<ChatContentProps> = ({ conversation, goBack, profile, se
                         <IonIcon icon={LeftChevronSvg} size="medium" aria-hidden="true" />
                     </IonButton>
                 )}
-                <h2 className={styles.title}>
-                    {t('chat.title', {
-                        name: Conversation.getMainConversationPartner(conversation, profile.user.id).firstname,
-                    })}
-                </h2>
+                <div className={styles['title-container']}>
+                    <h2 className={styles.title}>
+                        {t('chat.title', {
+                            name: Conversation.getMainConversationPartner(conversation, profile.user.id).firstname,
+                        })}
+                    </h2>
+                    <IonButton fill="clear" className={styles.camera} onClick={onOpenVideoCall}>
+                        <IonIcon icon={videocam} />
+                    </IonButton>
+                </div>
                 <IonButton
                     fill="clear"
                     id="click-trigger"
