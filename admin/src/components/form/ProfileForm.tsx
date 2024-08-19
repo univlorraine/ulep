@@ -1,4 +1,4 @@
-import { Box, Typography, OutlinedInput } from '@mui/material';
+import { Box, OutlinedInput, Typography } from '@mui/material';
 import React, { useState } from 'react';
 import { Button, Loading, useGetIdentity, useTranslate } from 'react-admin';
 import Administrator from '../../entities/Administrator';
@@ -78,7 +78,7 @@ const ProfileForm: React.FC<ProfileFormProps> = ({ record, handleSubmit }) => {
                 <Box alignItems="center" display="flex" flexDirection="row">
                     <AdministratorPicker
                         onChange={setNewContact}
-                        universityId={record.user.university.id}
+                        university={record.user.university.id}
                         value={newContact}
                     />
                 </Box>
