@@ -8,6 +8,11 @@
     max-width: 260px;
 }
 
+.image {
+    height: 24px;
+    width: 24px;
+}
+
 .line {
     align-items: center;
     background: none;
@@ -15,6 +20,20 @@
     display: flex;
     flex-direction: row;
     width: 100%;
+}
+
+.report-container {
+    border-radius: 10px;
+    border: 1px solid black;
+    display: flex;
+    margin-top: auto;
+    width: 100%;
+}
+
+.separator {
+    border-bottom: 2px solid #e0e0e0;
+    width: 100%;
+    margin: 18px 0;
 }
 
 .title {

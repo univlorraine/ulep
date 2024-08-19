@@ -47,7 +47,10 @@
         },
         "sidebar": {
             "home": "Accueil",
-            "conversations": "Conversations"
+            "conversations": "Conversations",
+            "disconnect": "Déconnexion",
+            "profile": "Profil",
+            "settings": "Paramètres"
         }
     },
     "maintenance_page": {
