@@ -392,7 +392,7 @@ redis:
   master:
     count: 1
   replica:
-    replicaCount: 1
+    replicaCount: 0
   persistence:
     size: 8Gi
   auth:
