@@ -84,11 +84,11 @@ const ConversationSearchBar: React.FC<ConversationSearchBarProps> = ({
     return (
         <div className={styles.searchContainer}>
             <IonSearchbar
-                placeholder={t('chat.search.placeholder') as string}
-                onIonChange={(e) => searchForMessages(e.detail.value as string)}
-                onIonCancel={onClear}
                 cancelButtonIcon={CloseBlackSvg}
                 cancelButtonText="close"
+                onIonChange={(e) => searchForMessages(e.detail.value as string)}
+                onIonCancel={onClear}
+                placeholder={t('chat.search.placeholder') as string}
                 showCancelButton="always"
             ></IonSearchbar>
             <IonButton fill="clear" className={styles.searchIcon} onClick={goPrevious}>

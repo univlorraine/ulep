@@ -59,6 +59,7 @@ const Content: React.FC<ChatContentProps> = ({
     const unsetSearchMode = () => {
         setIsSearchMode(false);
         setCurrentMessageSearchId(undefined);
+        loadMessages(true, MessagePaginationDirection.FORWARD);
     };
 
     const loadMessageFromSearch = (messageId: string) => {
