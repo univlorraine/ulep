@@ -12,7 +12,7 @@ import Sidebar from './Sidebar';
 interface OnlineLayoutProps {
     profile: Profile;
     children: React.ReactNode;
-    onRefresh: () => void;
+    onRefresh?: () => void;
 }
 
 const OnlineWebLayout: React.FC<OnlineLayoutProps> = ({ children, profile, onRefresh }) => {
