@@ -1,16 +1,11 @@
-import { IonButton, IonHeader } from '@ionic/react';
+import { IonHeader } from '@ionic/react';
 import { useTranslation } from 'react-i18next';
-import { ArrowDownSvg, LogoTextSvg } from '../../assets';
-import User from '../../domain/entities/User';
-import Avatar from './Avatar';
+import { LogoTextSvg } from '../../assets';
 import styles from './HomeHeader.module.css';
 
-interface HomeHeaderProps {
-    user: User;
-    onPicturePressed: () => void;
-}
+interface HomeHeaderProps {}
 
-const HomeHeader: React.FC<HomeHeaderProps> = ({ user, onPicturePressed }) => {
+const HomeHeader: React.FC<HomeHeaderProps> = () => {
     const { t } = useTranslation();
     return (
         <IonHeader>
@@ -20,15 +15,6 @@ const HomeHeader: React.FC<HomeHeaderProps> = ({ user, onPicturePressed }) => {
                     <div className={styles['header-separator']} />
                     <span className={styles['app-name']}>ULEP</span>
                 </div>
-                <IonButton
-                    fill="clear"
-                    aria-label={t('global.change_avatar') as string}
-                    className={styles['avatar-container']}
-                    onClick={onPicturePressed}
-                >
-                    <Avatar user={user} className={styles.avatar} />
-                    <img alt={t('global.change_avatar') as string} src={ArrowDownSvg} />
-                </IonButton>
             </div>
         </IonHeader>
     );

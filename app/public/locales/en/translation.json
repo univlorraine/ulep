@@ -43,7 +43,10 @@
     "navigation": {
         "bottom_bar": {
             "home": "Home",
-            "conversations": "Conversations"
+            "conversations": "Conversations",
+            "disconnect": "Disconnect",
+            "profile": "Profile",
+            "settings": "Settings"
         },
         "sidebar": {
             "home": "Home",

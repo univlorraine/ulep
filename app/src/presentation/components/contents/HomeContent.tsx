@@ -19,8 +19,8 @@ import styles from './HomeContent.module.css';
 interface HomeContentProps {
     isLoading: boolean;
     profile: Profile;
-    onProfilePressed: () => void;
-    onReportPressed: () => void;
+    onProfilePressed?: () => void;
+    onReportPressed?: () => void;
     onTandemPressed: (tandem: Tandem) => void;
     onValidatedTandemPressed: (tandem: Tandem) => void;
     tandems: Tandem[];
@@ -102,20 +102,22 @@ const HomeContent: React.FC<HomeContentProps> = ({
                         </ResponsiveMasonry>
                     )}
                 </div>
-                <div className={styles['report-container']}>
-                    <button
-                        aria-label={t('home_page.report.report_button') as string}
-                        className={`tertiary-button ${styles.report}`}
-                        onClick={onReportPressed}
-                    >
-                        {
-                            <>
-                                <img alt="" className="margin-right" src={ReportSvg} aria-hidden={true} />
-                                <span>{t('home_page.report.report_button')}</span>
-                            </>
-                        }
-                    </button>
-                </div>
+                {isHybrid && (
+                    <div className={styles['report-container']}>
+                        <button
+                            aria-label={t('home_page.report.report_button') as string}
+                            className={`tertiary-button ${styles.report}`}
+                            onClick={onReportPressed}
+                        >
+                            {
+                                <>
+                                    <img alt="" className="margin-right" src={ReportSvg} aria-hidden={true} />
+                                    <span>{t('home_page.report.report_button')}</span>
+                                </>
+                            }
+                        </button>
+                    </div>
+                )}
             </div>
         </div>
     );
