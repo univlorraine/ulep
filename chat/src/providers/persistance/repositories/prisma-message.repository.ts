@@ -68,6 +68,7 @@ export class PrismaMessageRepository implements MessageRepository {
                 conversationId,
                 content: {
                     contains: search,
+                    mode: 'insensitive',
                 },
             },
             orderBy: { createdAt: 'desc' },
