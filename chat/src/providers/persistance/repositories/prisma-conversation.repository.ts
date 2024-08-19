@@ -55,9 +55,13 @@ export class PrismaConversationRepository implements ConversationRepository {
                 AND: [
                     { participantIds: { has: userId } },
                     {
-                        OR: filteredProfilesIds.map((id) => ({
-                            participantIds: { has: id },
-                        })),
+                        OR: filteredProfilesIds
+                            .filter(
+                                (filteredUserId) => filteredUserId !== userId,
+                            )
+                            .map((id) => ({
+                                participantIds: { has: id },
+                            })),
                     },
                 ],
             };
