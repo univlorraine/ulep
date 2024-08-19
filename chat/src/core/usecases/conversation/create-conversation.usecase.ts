@@ -1,5 +1,9 @@
 import { Inject, Injectable } from '@nestjs/common';
-import { RessourceAlreadyExists } from 'src/core/errors';
+import {
+    DomainError,
+    DomainErrorCode,
+    RessourceAlreadyExists,
+} from 'src/core/errors';
 import {
     CONVERSATION_REPOSITORY,
     ConversationRepository,
@@ -32,6 +36,14 @@ export class CreateConversationUsecase {
             throw new RessourceAlreadyExists(
                 'Conversation with id: ' + conversationId + ' already exists',
             );
+        }
+
+        const uniqueUserIds = new Set(command.userIds);
+        if (uniqueUserIds.size !== command.userIds.length) {
+            throw new DomainError({
+                code: DomainErrorCode.BAD_REQUEST,
+                message: 'Duplicate user IDs found in the command',
+            });
         }
 
         const conversation = await this.conversationRepository.create(

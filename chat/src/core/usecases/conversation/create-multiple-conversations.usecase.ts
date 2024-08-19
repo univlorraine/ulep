@@ -46,7 +46,15 @@ export class CreateMultipleConversationsUsecase {
                         ),
                 );
 
-                return !existsByTandemId && !existsByParticipants;
+                const uniqueUserIds = new Set(conversation.participants);
+                const hasDifferentUserIds =
+                    uniqueUserIds.size !== conversation.participants.length;
+
+                return (
+                    !existsByTandemId &&
+                    !existsByParticipants &&
+                    !hasDifferentUserIds
+                );
             },
         );
 
