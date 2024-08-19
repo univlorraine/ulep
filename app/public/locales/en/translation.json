@@ -105,7 +105,8 @@
         "messageReported": "Message reported",
         "noMessages": "There is no message",
         "send_button": {
-            "aria_label": "Stay pressed to record an audio or write your message to switch to send mode"
+            "record_aria_label": "Stay pressed to record an audio or write your message to switch to send mode",
+            "send_aria_label": "Send message"
         },
         "search": {
             "placeholder": "Search in conversation"
@@ -132,7 +133,9 @@
         },
         "reportMessageButton": "Report message",
         "no_messages": "No messages",
-        "no_conversations": "No conversations"
+        "no_conversations": "No conversations",
+        "send_image_aria_label": "Send image",
+        "send_file_aria_label": "Send file"
     },
     "connection_page": {
         "connect_title": "Already have an account ?",

@@ -143,10 +143,20 @@ const ChatInputSender: React.FC<ChatInputSenderProps> = ({ isBlocked, profile, c
     return (
         <div className={styles.footer}>
             <div>
-                <IonButton fill="clear" size="small" onClick={handleImageClick}>
+                <IonButton
+                    fill="clear"
+                    size="small"
+                    onClick={handleImageClick}
+                    aria-label={t('chat.send_image_aria_label') as string}
+                >
                     <IonIcon className={styles.icon} icon={PictureSvg} />
                 </IonButton>
-                <IonButton fill="clear" size="small" onClick={handleFileClick}>
+                <IonButton
+                    fill="clear"
+                    size="small"
+                    onClick={handleFileClick}
+                    aria-label={t('chat.send_file_aria_label') as string}
+                >
                     <IonIcon className={styles.icon} icon={PaperclipSvg} />
                 </IonButton>
             </div>
