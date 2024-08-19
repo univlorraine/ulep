@@ -96,7 +96,7 @@ const ChatInputSender = ({ conversation, profile, socketIoProvider }: ChatInputS
                 messageReceived.id,
                 messageReceived.content,
                 messageReceived.createdAt,
-                new UserChat(profile.id, profile.firstname, profile.lastname, profile.email || '', true),
+                new UserChat(profile.id, profile.firstName, profile.lastName, profile.email || '', true),
                 messageReceived.type,
                 conversation.id,
                 messageReceived.metadata
