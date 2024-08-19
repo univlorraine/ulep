@@ -66,16 +66,10 @@ const Content: React.FC<ChatContentProps> = ({
         loadMessages(true, MessagePaginationDirection.BOTH, messageId);
     };
 
-    //WARNING: this is working because we have only 2 users in the conversation
     const onOpenVideoCall = () => {
-        const [firstProfileId, secondProfileId] = [
-            profile.user.id,
-            conversation.participants.find((p) => p.id !== profile.user.id)?.id,
-        ].sort();
-
         history.push({
             pathname: '/jitsi',
-            search: `?roomName=${firstProfileId}_${secondProfileId}`,
+            search: `?roomName=${conversation.id}`,
         });
     };
 

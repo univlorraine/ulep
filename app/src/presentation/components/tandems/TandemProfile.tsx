@@ -45,11 +45,9 @@ const TandemProfile: React.FC<TandemProfileProps> = ({
     }
 
     const onOpenVideoCall = () => {
-        const [firstProfileId, secondProfileId] = [meProfile.user.id, profile.user.id].sort();
-
         history.push({
             pathname: '/jitsi',
-            search: `?roomName=${firstProfileId}_${secondProfileId}`,
+            search: `?roomName=${id}`,
         });
     };
 
