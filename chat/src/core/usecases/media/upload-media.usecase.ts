@@ -44,7 +44,7 @@ export class UploadMediaUsecase {
         await this.assetConversationExist(command.conversationId);
         await this.assetMessageExist(command.message.id);
 
-        const fileUrl = await this.upload(
+        const { name, url } = await this.upload(
             command.file,
             command.conversationId,
             command.message,
@@ -62,7 +62,8 @@ export class UploadMediaUsecase {
         }
 
         return {
-            fileUrl,
+            name,
+            url,
             thumbnailUrl,
         };
     }
@@ -72,7 +73,7 @@ export class UploadMediaUsecase {
         conversationId: string,
         message: Message,
         filename: string,
-    ): Promise<string> {
+    ): Promise<{ name: string; url: string }> {
         const media = MediaObject.generate(
             file,
             'chat',
@@ -82,7 +83,14 @@ export class UploadMediaUsecase {
         await this.storageInterface.write('chat', media.name, file);
         await this.mediaObjectRepository.saveFile(media, message.id);
 
-        return this.storageInterface.temporaryUrl('chat', media.name, 3600);
+        return {
+            name: media.name,
+            url: await this.storageInterface.temporaryUrl(
+                'chat',
+                media.name,
+                3600,
+            ),
+        };
     }
 
     private async uploadThumbnail(

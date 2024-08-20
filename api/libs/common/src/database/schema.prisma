@@ -287,6 +287,7 @@ model Reports {
   status     String           @default("OPEN")
   comment    String?
   userId     String?
+  metadata   Json?
   createdAt  DateTime         @default(now())
   updatedAt  DateTime         @updatedAt
   Category   ReportCategories @relation(fields: [categoryId], references: [id], onDelete: Cascade)

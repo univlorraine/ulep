@@ -1,14 +1,17 @@
 import { HttpResponse } from '../../adapter/BaseHttpAdapter';
 import { HttpAdapterInterface } from '../../adapter/DomainHttpAdapter';
-import CreateReportUsecaseInterface from '../interfaces/CreateReportUsecase.interface';
+import { MessageType } from '../entities/chat/Message';
+import CreateReportMessageUsecaseInterface from '../interfaces/CreateReportMessageUsecase.interface';
 
-class CreateReportUsecase implements CreateReportUsecaseInterface {
+class CreateReportMessageUsecase implements CreateReportMessageUsecaseInterface {
     constructor(private readonly domainHttpAdapter: HttpAdapterInterface) {}
 
-    async execute(content: string): Promise<undefined | Error> {
+    async execute(content: string, filePath?: string, mediaType?: MessageType): Promise<undefined | Error> {
         try {
             const httpResponse: HttpResponse<undefined> = await this.domainHttpAdapter.post(`/reports/message`, {
                 content,
+                filePath,
+                mediaType,
             });
 
             if (!httpResponse.parsedBody) {
@@ -22,4 +25,4 @@ class CreateReportUsecase implements CreateReportUsecaseInterface {
     }
 }
 
-export default CreateReportUsecase;
+export default CreateReportMessageUsecase;

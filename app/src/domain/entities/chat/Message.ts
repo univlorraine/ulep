@@ -11,6 +11,7 @@ export enum MessageType {
 
 interface MessageMetadata {
     originalFilename: string;
+    filePath?: string;
     openGraphResult: any;
     thumbnail?: string;
 }

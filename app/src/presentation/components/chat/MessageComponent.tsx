@@ -33,12 +33,19 @@ const MessageComponent: React.FC<MessageProps> = ({
 
     const reportMessage = async () => {
         const result = await createReportMessage.execute(
-            t('chat.messageReport', {
-                firstname: message.sender.firstname,
-                lastname: message.sender.lastname,
-                date: message.createdAt.toLocaleDateString('fr-FR'),
-                message: message.content,
-            })
+            t(
+                message.type === MessageType.Text || message.type === MessageType.Link
+                    ? 'chat.messageReport'
+                    : 'chat.mediaReport',
+                {
+                    firstname: message.sender.firstname,
+                    lastname: message.sender.lastname,
+                    date: message.createdAt.toLocaleDateString('fr-FR'),
+                    message: message.content,
+                }
+            ),
+            message.metadata?.filePath,
+            message.type
         );
 
         if (result instanceof Error) {

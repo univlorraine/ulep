@@ -24,6 +24,7 @@ interface CreateMessageCommand {
     ownerId: string;
     originalFilename?: string;
     mimetype?: string;
+    filePath?: string;
 }
 
 export class CreateMessageUsecase {
@@ -73,6 +74,7 @@ export class CreateMessageUsecase {
             isReported: false,
             isDeleted: false,
             metadata: {
+                filePath: command.filePath,
                 originalFilename: command.originalFilename,
                 openGraphResult: openGraphResult,
             },

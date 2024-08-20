@@ -186,15 +186,16 @@ export class ConversationController {
         });
 
         if (file && body.filename) {
-            const { fileUrl, thumbnailUrl } =
+            const { name, url, thumbnailUrl } =
                 await this.uploadMediaUsecase.execute({
                     file,
                     message,
                     conversationId,
                     filename: body.filename,
                 });
-            message.content = fileUrl;
+            message.content = url;
             message.metadata.thumbnail = thumbnailUrl;
+            message.metadata.filePath = name;
         }
 
         return MessageResponse.from(message);
