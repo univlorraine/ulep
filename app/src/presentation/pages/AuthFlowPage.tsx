@@ -1,13 +1,12 @@
 import { IonPage, useIonToast } from '@ionic/react';
-import { useHistory, useLocation } from 'react-router';
 import { useEffect } from 'react';
-import { useConfig } from '../../context/ConfigurationContext';
-import CenterLayout from '../components/layout/CenterLayout';
 import { useTranslation } from 'react-i18next';
+import { useHistory, useLocation } from 'react-router';
+import { useConfig } from '../../context/ConfigurationContext';
 import Profile from '../../domain/entities/Profile';
 import User from '../../domain/entities/User';
 import { useStoreActions } from '../../store/storeTypes';
-import { Capacitor } from '@capacitor/core';
+import CenterLayout from '../components/layout/CenterLayout';
 import Loader from '../components/Loader';
 
 const AuthPage: React.FC = () => {
