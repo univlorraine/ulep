@@ -4,20 +4,18 @@ import { Message, MessageWithConversationId } from '../domain/entities/chat/Mess
 import SocketIoAdapterInterface from './interfaces/SocketIoAdapter.interface';
 
 class SocketIoAdapter implements SocketIoAdapterInterface {
-    private accessToken?: string;
     private chatUrl: string;
     private socket: Socket | null = null;
 
-    constructor(chatUrl: string, accessToken?: string) {
-        this.accessToken = accessToken;
+    constructor(chatUrl: string) {
         this.chatUrl = chatUrl;
     }
 
-    connect(): void {
+    connect(accessToken: string): void {
         if (this.socket && this.socket.connected) {
             return;
         }
-        this.socket = socketIo(this.chatUrl, { auth: { token: this.accessToken } });
+        this.socket = socketIo(this.chatUrl, { auth: { token: accessToken } });
     }
 
     disconnect(): void {

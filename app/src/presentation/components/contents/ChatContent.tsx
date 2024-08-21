@@ -7,6 +7,7 @@ import { KebabSvg, LeftChevronSvg } from '../../../assets';
 import { useConfig } from '../../../context/ConfigurationContext';
 import Profile from '../../../domain/entities/Profile';
 import Conversation, { MessagePaginationDirection } from '../../../domain/entities/chat/Conversation';
+import { useStoreState } from '../../../store/storeTypes';
 import useHandleMessagesFromConversation from '../../hooks/useHandleMessagesFromConversation';
 import Loader from '../Loader';
 import ChatInputSender from '../chat/ChatInputSender';
@@ -38,7 +39,7 @@ const Content: React.FC<ChatContentProps> = ({
     const [currentMessageSearchId, setCurrentMessageSearchId] = useState<string>();
     const [isSearchMode, setIsSearchMode] = useState<boolean>(false);
     const history = useHistory();
-
+    const accessToken = useStoreState((state) => state.accessToken);
     const {
         messages,
         isScrollForwardOver,
@@ -82,7 +83,7 @@ const Content: React.FC<ChatContentProps> = ({
 
     useEffect(() => {
         recorderAdapter.requestPermission();
-        socketIoAdapter.connect();
+        socketIoAdapter.connect(accessToken);
         socketIoAdapter.onMessage(conversation.id, addNewMessage);
 
         return () => {

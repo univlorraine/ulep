@@ -1,15 +1,13 @@
 import socketIo, { Socket } from 'socket.io-client';
 import { Message, MessageWithConversationId, UserChat } from '../entities/Message';
+import jwtManager from './jwtManager';
 
 class SocketIoProvider {
-    private accessToken: string | null;
-
     private chatUrl: string;
 
     private socket: Socket | null = null;
 
-    constructor(chatUrl: string, accessToken: string | null) {
-        this.accessToken = accessToken;
+    constructor(chatUrl: string) {
         this.chatUrl = chatUrl;
     }
 
@@ -17,9 +15,8 @@ class SocketIoProvider {
         if (this.socket && this.socket.connected) {
             return;
         }
-        this.socket = socketIo(this.chatUrl, { auth: { token: this.accessToken } });
-
-        // TODO: handle disconnect
+        const accessToken = jwtManager.getToken('access_token');
+        this.socket = socketIo(this.chatUrl, { auth: { token: accessToken } });
     }
 
     disconnect(): void {
