@@ -78,7 +78,7 @@ const ProfileForm: React.FC<ProfileFormProps> = ({ record, handleSubmit }) => {
                 <Box alignItems="center" display="flex" flexDirection="row">
                     <AdministratorPicker
                         onChange={setNewContact}
-                        university={record.user.university.id}
+                        universityId={record.user.university.id}
                         value={newContact}
                     />
                 </Box>

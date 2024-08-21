@@ -283,7 +283,7 @@ const UniversityForm: React.FC<UniversityFormProps> = ({
                                 </Typography>
                                 <AdministratorPicker
                                     onChange={setNewDefaultContact}
-                                    university={universityId}
+                                    universityId={universityId}
                                     value={newDefaultContact}
                                 />
                             </Box>

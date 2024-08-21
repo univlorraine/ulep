@@ -5,12 +5,12 @@ import Administrator from '../entities/Administrator';
 
 interface AdministratorPickerProps {
     onChange: (value: Administrator) => void;
-    university?: string;
+    universityId?: string;
     value?: Administrator;
 }
 
-const AdministratorPicker: React.FC<AdministratorPickerProps> = ({ onChange, university, value }) => {
-    const { data: dataPicker, isLoading } = useGetList('users/administrators', { filter: { university } });
+const AdministratorPicker: React.FC<AdministratorPickerProps> = ({ onChange, universityId, value }) => {
+    const { data: dataPicker, isLoading } = useGetList('users/administrators', { filter: { universityId } });
     const translate = useTranslate();
 
     if (isLoading || !dataPicker) {

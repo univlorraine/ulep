@@ -1,21 +1,20 @@
-import React from 'react';
 import {
     Datagrid,
+    DeleteButton,
+    FunctionField,
     List,
+    ListProps,
     Loading,
     ReferenceField,
+    SelectInput,
     TextField,
+    TextInput,
     useGetIdentity,
-    useTranslate,
+    useGetList,
+    useLogout,
     useRecordContext,
     UserIdentity,
-    DeleteButton,
-    useLogout,
-    ListProps,
-    FunctionField,
-    SelectInput,
-    TextInput,
-    useGetList,
+    useTranslate,
 } from 'react-admin';
 import useGetAdminGroups from '../../components/adminGroups/useGetAdminGroups';
 import ConfigPagesHeader from '../../components/tabs/ConfigPagesHeader';
@@ -56,71 +55,47 @@ const AdministratorList = (props: ListProps<Administrator>) => {
     if (isLoadingIdentity || !identity) {
         return <Loading />;
     }
+    const filtersBlock = [
+        <SelectInput
+            key="groupFilter"
+            choices={adminGroups}
+            label={translate('administrators.list.filters.group')}
+            source="groupId"
+            alwaysOn
+        />,
+        <TextInput
+            key="userLastname"
+            label={translate('administrators.list.filters.user_lastname')}
+            source="lastname"
+            alwaysOn
+        />,
+        <TextInput
+            key="userFirstname"
+            label={translate('administrators.list.filters.user_firstname')}
+            source="firstname"
+            alwaysOn
+        />,
+        <TextInput
+            key="userEmail"
+            label={translate('administrators.list.filters.user_email')}
+            source="email"
+            alwaysOn
+        />,
+    ];
 
-    const adaptedFilters = identity?.isCentralUniversity
-        ? [
-              <SelectInput
-                  key="universityFilter"
-                  choices={universities}
-                  label={translate('administrators.list.filters.university')}
-                  source="university"
-                  alwaysOn
-              />,
-              <SelectInput
-                  key="groupFilter"
-                  choices={adminGroups}
-                  label={translate('administrators.list.filters.group')}
-                  source="group"
-                  alwaysOn
-              />,
-              <TextInput
-                  key="userLastname"
-                  label={translate('administrators.list.filters.user_lastname')}
-                  source="lastname"
-                  alwaysOn
-              />,
-              <TextInput
-                  key="userFirstname"
-                  label={translate('administrators.list.filters.user_firstname')}
-                  source="firstname"
-                  alwaysOn
-              />,
-              <TextInput
-                  key="userEmail"
-                  label={translate('administrators.list.filters.user_email')}
-                  source="email"
-                  alwaysOn
-              />,
-          ]
-        : [
-              <SelectInput
-                  key="groupFilter"
-                  choices={adminGroups}
-                  label={translate('administrators.list.filters.group')}
-                  source="group"
-                  alwaysOn
-              />,
-              <TextInput
-                  key="userLastname"
-                  label={translate('administrators.list.filters.user_lastname')}
-                  source="lastname"
-                  alwaysOn
-              />,
-              <TextInput
-                  key="userFirstname"
-                  label={translate('administrators.list.filters.user_firstname')}
-                  source="firstname"
-                  alwaysOn
-              />,
-              <TextInput
-                  key="userEmail"
-                  label={translate('administrators.list.filters.user_email')}
-                  source="email"
-                  alwaysOn
-              />,
-          ];
+    if (identity?.isCentralUniversity) {
+        filtersBlock.unshift(
+            <SelectInput
+                key="universityFilter"
+                choices={universities}
+                label={translate('administrators.list.filters.university')}
+                source="universityId"
+                alwaysOn
+            />
+        );
+    }
 
-    const filters = universities && adminGroups ? adaptedFilters : [];
+    const filters = universities && adminGroups ? filtersBlock : [];
 
     return (
         <>
