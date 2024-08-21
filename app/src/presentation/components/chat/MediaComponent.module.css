@@ -1,0 +1,161 @@
+.header {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    margin-bottom: 4px;
+    width: 100%;
+}
+
+.messageContainer {
+    margin: 12px;
+}
+
+/* Image */
+
+.messageContent {
+    margin: 0 auto;
+}
+
+.imageMessageContainer {
+    width: 90px;
+    height: 90px;
+    display: inline-block;
+    margin: 5px;
+    background-color: white;
+    border-radius: 10px;
+}
+
+.image {
+    height: 100%;
+    width: 100%;
+    cursor: pointer;
+}
+
+.image-button {
+    align-items: center;
+    justify-content: center;
+    height: 100%;
+    width: 100%;
+    background-color: transparent;
+    border: none;
+    padding: 0;
+    margin: 0;
+}
+
+/* Audio */
+
+.messageAudio {
+    background: white;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 8px 1.1em;
+    width: 100%;
+}
+
+/* File */
+
+.messageFile {
+    width: 100%;
+    background-color: white;
+}
+
+.downloadButton {
+    background-color: transparent;
+    border: none;
+    text-transform: none;
+    width: 100%;
+    margin: 0;
+    padding: 0;
+}
+
+.downloadContainer {
+    color: black;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    text-decoration: underline;
+    text-decoration-color: black;
+    width: 100%;
+}
+
+.download {
+    margin: 8px;
+    width: 28px;
+    height: 28px;
+}
+
+.downloadIconContainer {
+    text-align: left;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    gap: 1em;
+}
+
+.downloadTitle {
+    font-family: 'Poppins', sans-serif;
+    font-weight: 400;
+    font-size: 12px;
+}
+
+/* Link */
+
+.linkContainer {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: start;
+    gap: 1em;
+    width: 100%;
+}
+
+.messageLink {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    background-color: white;
+    justify-content: start;
+}
+
+.linkImageContainer {
+    display: inline-block;
+}
+
+.linkImage {
+    width: 60px;
+    height: 60px;
+    object-fit: cover;
+}
+
+.linkImageImg {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.linkTextUrl {
+    font-size: 0.8em;
+    white-space: nowrap;
+    overflow: hidden;
+}
+
+.linkTextContainer {
+    text-align: left;
+    text-transform: none;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: center;
+    gap: 0.5em;
+    color: black;
+}
+
+.linkIcon {
+    width: 30px;
+    height: 30px;
+    padding: 15px;
+    background-color: var(--ion-color-light);
+}

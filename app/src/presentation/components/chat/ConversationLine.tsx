@@ -1,3 +1,4 @@
+import { IonAvatar, IonItem } from '@ionic/react';
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 import MediaObject from '../../../domain/entities/MediaObject';
@@ -15,14 +16,14 @@ interface ConversationAvatarProps {
 const ConversationAvatar: React.FC<ConversationAvatarProps> = ({ avatar, firstname, lastname }) => {
     return (
         <>
-            {avatar && <NetworkImage className={styles.image} id={avatar.id} />}
+            {avatar && <NetworkImage className={styles.image} id={avatar.id} aria-hidden={true} />}
             {!avatar && (
-                <div className={styles.image}>
+                <IonAvatar className={styles.image} aria-hidden={true}>
                     <span className={styles.avatarLetter}>
                         {firstname[0].toUpperCase()}
                         {lastname[0].toUpperCase()}
                     </span>
-                </div>
+                </IonAvatar>
             )}
         </>
     );
@@ -51,30 +52,44 @@ interface ConversationLineProps {
     conversation: Conversation;
     userId: string;
     onPressed: (conversation: Conversation) => void;
+    currentConversation?: Conversation;
 }
 
-const ConversationLine: React.FC<ConversationLineProps> = ({ conversation, onPressed, userId }) => {
+const ConversationLine: React.FC<ConversationLineProps> = ({
+    conversation,
+    currentConversation,
+    onPressed,
+    userId,
+}) => {
     const { t } = useTranslation();
-    const mainParticipant = conversation.getMainConversationPartner(userId);
+    const mainParticipant = Conversation.getMainConversationPartner(conversation, userId);
     return (
-        <button className={styles.line} onClick={() => onPressed(conversation)}>
-            <div className={styles['left-line']}>
+        <IonItem
+            className={styles.line}
+            button={true}
+            onClick={() => onPressed(conversation)}
+            aria-label={t('chat.conversation_menu.aria_label') as string}
+            color={conversation.id === currentConversation?.id ? 'light' : undefined}
+        >
+            <div className={styles.container}>
                 <ConversationAvatar
                     avatar={mainParticipant.avatar}
                     firstname={mainParticipant.firstname}
                     lastname={mainParticipant.lastname}
                 />
                 <div className={styles.content}>
-                    <span className={styles.name}>{mainParticipant.firstname}</span>
+                    <div className={styles['top-line']}>
+                        <span className={styles.name}>{mainParticipant.firstname}</span>
+                        {conversation.lastMessage && (
+                            <span className={styles.date}>{`${t(
+                                conversation.lastMessage.getMessageDate()
+                            )} ${conversation.lastMessage.getMessageHour()}`}</span>
+                        )}
+                    </div>
                     <span className={styles.message}>{getPreviewMessage(userId, t, conversation.lastMessage)}</span>
                 </div>
             </div>
-            {conversation.lastMessage && (
-                <span className={styles.date}>{`${t(
-                    conversation.lastMessage.getMessageDate()
-                )} ${conversation.lastMessage.getMessageHour()}`}</span>
-            )}
-        </button>
+        </IonItem>
     );
 };
 

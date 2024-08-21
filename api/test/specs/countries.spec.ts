@@ -1,17 +1,17 @@
-import * as request from 'supertest';
-import { Test } from '@nestjs/testing';
-import { AppModule } from 'src/app.module';
 import { CountryFactory, I18nService } from '@app/common';
-import { COUNTRY_REPOSITORY } from 'src/core/ports/country.repository';
-import { InMemoryCountryCodesRepository } from 'src/providers/persistance/repositories/in-memory-country-repository';
-import { TestServer } from './test.server';
-import { TestAuthGuard } from '../utils/TestAuthGuard';
+import { Test } from '@nestjs/testing';
 import { AuthenticationGuard } from 'src/api/guards';
-import InMemoryEmailGateway from 'src/providers/gateway/in-memory-email.gateway';
+import { AppModule } from 'src/app.module';
+import { COUNTRY_REPOSITORY } from 'src/core/ports/country.repository';
 import { EMAIL_GATEWAY } from 'src/core/ports/email.gateway';
-import { InMemoryI18nService } from 'src/providers/services/in-memory.i18n.provider';
-import InMemoryNotificaitonGateway from 'src/providers/gateway/in-memory-notification.gateway';
 import { NOTIFICATION_GATEWAY } from 'src/core/ports/notification.gateway';
+import InMemoryEmailGateway from 'src/providers/gateway/in-memory-email.gateway';
+import InMemoryNotificaitonGateway from 'src/providers/gateway/in-memory-notification.gateway';
+import { InMemoryCountryCodesRepository } from 'src/providers/persistance/repositories/in-memory-country-repository';
+import { InMemoryI18nService } from 'src/providers/services/in-memory.i18n.provider';
+import * as request from 'supertest';
+import { TestAuthGuard } from '../utils/TestAuthGuard';
+import { TestServer } from './test.server';
 
 describe('Countries', () => {
   let app: TestServer;
@@ -59,7 +59,7 @@ describe('Countries', () => {
       .expect(200);
 
     const { items, totalItems } = body;
-    expect(items).toHaveLength(30);
+    expect(items).toHaveLength(50);
     expect(totalItems).toEqual(100);
   });
 

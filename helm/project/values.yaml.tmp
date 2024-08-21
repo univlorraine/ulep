@@ -189,6 +189,7 @@ minio:
   statefulset:
     replicaCount: 2
     drivesPerNode: 2
+  defaultBuckets: "i18n,assets,objective:private,images:private"
   ingress:
     enabled: true
     ingressClassName: traefik
@@ -388,12 +389,14 @@ mongodb:
 
 redis:
   pullPolicy: IfNotPresent
-  replicaCount: 1
+  master:
+    count: 1
+  replica:
+    replicaCount: 0
   persistence:
     size: 8Gi
   auth:
     enabled: false
-
 jitsi-meet:
   name: 'jitsi'
   publicURL: 'https://jitsi.ulep.thestaging.io'

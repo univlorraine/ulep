@@ -1,4 +1,4 @@
-require_relative '../../node_modules/.pnpm/@capacitor+ios@6.1.0_@capacitor+core@6.1.0/node_modules/@capacitor/ios/scripts/pods_helpers'
+require_relative '../../node_modules/.pnpm/@capacitor+ios@6.1.1_@capacitor+core@6.1.0/node_modules/@capacitor/ios/scripts/pods_helpers'
 
 platform :ios, '15.0'
 use_frameworks!
@@ -9,8 +9,8 @@ use_frameworks!
 install! 'cocoapods', :disable_input_output_paths => true
 
 def capacitor_pods
-  pod 'Capacitor', :path => '../../node_modules/.pnpm/@capacitor+ios@6.1.0_@capacitor+core@6.1.0/node_modules/@capacitor/ios'
-  pod 'CapacitorCordova', :path => '../../node_modules/.pnpm/@capacitor+ios@6.1.0_@capacitor+core@6.1.0/node_modules/@capacitor/ios'
+  pod 'Capacitor', :path => '../../node_modules/.pnpm/@capacitor+ios@6.1.1_@capacitor+core@6.1.0/node_modules/@capacitor/ios'
+  pod 'CapacitorCordova', :path => '../../node_modules/.pnpm/@capacitor+ios@6.1.1_@capacitor+core@6.1.0/node_modules/@capacitor/ios'
   pod 'CapacitorCommunityFcm', :path => '../../node_modules/.pnpm/@capacitor-community+fcm@5.0.3_@capacitor+core@6.1.0/node_modules/@capacitor-community/fcm'
   pod 'CapacitorApp', :path => '../../node_modules/.pnpm/@capacitor+app@6.0.0_@capacitor+core@6.1.0/node_modules/@capacitor/app'
   pod 'CapacitorBrowser', :path => '../../node_modules/.pnpm/@capacitor+browser@6.0.1_@capacitor+core@6.1.0/node_modules/@capacitor/browser'
@@ -24,8 +24,8 @@ def capacitor_pods
   pod 'CapacitorSplashScreen', :path => '../../node_modules/.pnpm/@capacitor+splash-screen@6.0.1_@capacitor+core@6.1.0/node_modules/@capacitor/splash-screen'
   pod 'CapacitorStatusBar', :path => '../../node_modules/.pnpm/@capacitor+status-bar@6.0.0_@capacitor+core@6.1.0/node_modules/@capacitor/status-bar'
   pod 'CapawesomeCapacitorFilePicker', :path => '../../node_modules/.pnpm/@capawesome+capacitor-file-picker@5.3.0_@capacitor+core@6.1.0/node_modules/@capawesome/capacitor-file-picker'
-  pod 'SentryCapacitor', :path => '../../node_modules/.pnpm/@sentry+capacitor@0.14.0_@capacitor+core@6.1.0_@sentry+react@7.73.0_react@18.3.1_/node_modules/@sentry/capacitor'
-  pod 'CapacitorJitsiMeet', :path => '../../node_modules/.pnpm/capacitor-jitsi-meet@6.0.0/node_modules/capacitor-jitsi-meet'
+  pod 'SentryCapacitor', :path => '../../node_modules/.pnpm/@sentry+capacitor@0.14.0_@capacitor+core@6.1.0_@sentry+react@7.73.0/node_modules/@sentry/capacitor'
+  pod 'CapacitorJitsiMeet', :path => '../../node_modules/.pnpm/github.com+thetribeio+capacitor-jitsi-meet@9539ae149b91e009d3026c0efab478ebc1fc4e7a/node_modules/capacitor-jitsi-meet'
   pod 'CapacitorVoiceRecorder', :path => '../../node_modules/.pnpm/capacitor-voice-recorder@5.0.0_@capacitor+core@6.1.0/node_modules/capacitor-voice-recorder'
 end
 

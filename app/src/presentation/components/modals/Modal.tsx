@@ -3,13 +3,21 @@ import styles from './Modal.module.css';
 
 interface ModalProps {
     children: ReactElement;
+    className?: string;
     hideWhiteBackground?: boolean;
     isVisible: boolean;
     onClose: () => void;
     position?: 'center' | 'flex-end' | 'flex-start';
 }
 
-const Modal: React.FC<ModalProps> = ({ children, hideWhiteBackground, isVisible, onClose, position = 'center' }) => {
+const Modal: React.FC<ModalProps> = ({
+    children,
+    className,
+    hideWhiteBackground,
+    isVisible,
+    onClose,
+    position = 'center',
+}) => {
     const modalRef = useRef<HTMLDivElement>(null);
 
     const handleClickOutside = (event: MouseEvent) => {
@@ -38,14 +46,16 @@ const Modal: React.FC<ModalProps> = ({ children, hideWhiteBackground, isVisible,
             const firstElement = focusableElements[0] as HTMLElement;
             const lastElement = focusableElements[focusableElements.length - 1] as HTMLElement;
 
-            firstElement.focus();
+            if (firstElement) {
+                firstElement.focus();
+            }
 
             const handleTabKeyPress = (event: KeyboardEvent) => {
                 if (event.key === 'Tab') {
-                    if (event.shiftKey && document.activeElement === firstElement) {
+                    if (event.shiftKey && document.activeElement === firstElement && lastElement) {
                         event.preventDefault();
                         lastElement.focus();
-                    } else if (!event.shiftKey && document.activeElement === lastElement) {
+                    } else if (!event.shiftKey && document.activeElement === lastElement && firstElement) {
                         event.preventDefault();
                         firstElement.focus();
                     }
@@ -81,7 +91,7 @@ const Modal: React.FC<ModalProps> = ({ children, hideWhiteBackground, isVisible,
             aria-modal="true"
         >
             {!hideWhiteBackground && (
-                <div id="modal-content" className={styles['modal-content']}>
+                <div id="modal-content" className={`${styles['modal-content']} ${className}`}>
                     {children}
                 </div>
             )}

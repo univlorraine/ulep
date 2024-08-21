@@ -1,9 +1,9 @@
 import { Message } from '../../domain/entities/chat/Message';
 
 interface SocketIoAdapterInterface {
-    connect(): Promise<boolean>;
-    disconnect(): Promise<boolean>;
-    emit(message: Message): Promise<Message>;
+    connect(token: string): void;
+    disconnect(): void;
+    emit(message: Message): Message;
     offMessage(): void;
     onMessage(conversationId: string, handler: (message: Message) => void): void;
 }

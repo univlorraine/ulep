@@ -14,6 +14,7 @@ import { FileInterceptor } from '@nestjs/platform-express';
 import * as Swagger from '@nestjs/swagger';
 import {
     CreateConversationRequest,
+    GetConversationsQueryParams,
     GetMessagesQueryParams,
 } from 'src/api/dtos/conversation';
 import { ConversationResponse } from 'src/api/dtos/conversation/conversation.response';
@@ -21,6 +22,7 @@ import { CreateConversationsRequest } from 'src/api/dtos/conversation/create-con
 import { MessageResponse, SendMessageRequest } from 'src/api/dtos/message';
 import { CollectionResponse } from 'src/api/dtos/pagination';
 import { AuthenticationGuard } from 'src/api/guards';
+import { MessagePaginationDirection } from 'src/core/ports/message.repository';
 import {
     CreateConversationUsecase,
     CreateMessageUsecase,
@@ -30,6 +32,7 @@ import {
     DeleteUserConversationUsecase,
     GetConversationFromUserIdUsecase,
     GetMessagesFromConversationIdUsecase,
+    SearchMessagesIdFromConversationIdUsecase,
     UploadMediaUsecase,
 } from 'src/core/usecases';
 
@@ -46,12 +49,13 @@ export class ConversationController {
         private deleteUserConversationUsecase: DeleteUserConversationUsecase,
         private getMessagesFromConversationIdUsecase: GetMessagesFromConversationIdUsecase,
         private getConversationFromUserIdUsecase: GetConversationFromUserIdUsecase,
+        private searchMessagesIdFromConversationIdUsecase: SearchMessagesIdFromConversationIdUsecase,
         private uploadMediaUsecase: UploadMediaUsecase,
     ) {}
 
     @Get('messages/:id')
     @Swagger.ApiOperation({ summary: 'Get all messages from conversation id' })
-    async getConversations(
+    async getMessagesByConversationId(
         @Param('id') conversationId: string,
         @Query() params: GetMessagesQueryParams,
     ): Promise<CollectionResponse<MessageResponse>> {
@@ -61,8 +65,11 @@ export class ConversationController {
                 pagination: {
                     lastMessageId: params.lastMessageId,
                     limit: params.limit,
+                    direction:
+                        params.direction ?? MessagePaginationDirection.FORWARD,
                 },
-                filter: params.messageFilter,
+                contentFilter: params.contentFilter,
+                typeFilter: params.typeFilter,
             });
 
         return new CollectionResponse<MessageResponse>({
@@ -71,19 +78,42 @@ export class ConversationController {
         });
     }
 
+    @Get('messages/:id/:search')
+    @Swagger.ApiOperation({
+        summary: 'Search all messages ids from conversation id',
+    })
+    async searchMessages(
+        @Param('id') conversationId: string,
+        @Param('search') search: string,
+    ): Promise<string[]> {
+        const messagesIds =
+            await this.searchMessagesIdFromConversationIdUsecase.execute({
+                id: conversationId,
+                search: search,
+            });
+
+        return messagesIds;
+    }
+
     @Get('/:id')
     @Swagger.ApiOperation({ summary: 'Get all conversations from id' })
     async getConversationsFromUserId(
         @Param('id') userId: string,
+        @Query() query: GetConversationsQueryParams,
     ): Promise<CollectionResponse<ConversationResponse>> {
         const conversations =
             await this.getConversationFromUserIdUsecase.execute({
                 id: userId,
+                pagination: {
+                    limit: query.limit,
+                    offset: query.offset,
+                },
+                filteredProfilesIds: query.filteredProfilesIds,
             });
 
         return new CollectionResponse<ConversationResponse>({
-            items: conversations.map(ConversationResponse.from),
-            totalItems: conversations.length,
+            items: conversations.items.map(ConversationResponse.from),
+            totalItems: conversations.totalItems,
         });
     }
 
@@ -152,17 +182,20 @@ export class ConversationController {
             conversationId,
             ownerId: body.senderId,
             mimetype: file?.mimetype,
+            originalFilename: body.filename,
         });
 
-        if (file) {
-            //TODO: Upload lighter image then heavier image
-            const url = await this.uploadMediaUsecase.execute({
-                file,
-                message,
-                conversationId,
-                filename: body.filename,
-            });
+        if (file && body.filename) {
+            const { name, url, thumbnailUrl } =
+                await this.uploadMediaUsecase.execute({
+                    file,
+                    message,
+                    conversationId,
+                    filename: body.filename,
+                });
             message.content = url;
+            message.metadata.thumbnail = thumbnailUrl;
+            message.metadata.filePath = name;
         }
 
         return MessageResponse.from(message);

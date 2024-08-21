@@ -1,9 +1,9 @@
 import { Inject, Injectable } from '@nestjs/common';
+import { RessourceDoesNotExist } from 'src/core/errors';
 import {
   REPORT_REPOSITORY,
   ReportRepository,
 } from '../../ports/report.repository';
-import { RessourceDoesNotExist } from 'src/core/errors';
 
 export class DeleteReportCommand {
   id: string;

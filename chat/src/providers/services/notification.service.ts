@@ -1,6 +1,6 @@
-import axios from 'axios';
 import { Injectable, Logger } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
+import axios from 'axios';
 import { Env } from 'src/configuration';
 import { NotificationServicePort } from 'src/core/ports/notification.service';
 
@@ -25,7 +25,6 @@ export class NotificationService implements NotificationServicePort {
             );
         } catch (error) {
             this.logger.error('Error while sending notification', { error });
-            throw new Error('HTTP request failed');
         }
     }
 }

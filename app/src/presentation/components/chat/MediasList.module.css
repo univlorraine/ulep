@@ -1,0 +1,59 @@
+.dateSeparator {
+    font-family: 'Maven Pro', sans-serif;
+    font-size: 18px;
+    font-weight: 700;
+    color: black;
+    justify-content: center;
+    display: flex;
+    margin: 10px;
+}
+
+.messages {
+    flex: 1;
+    height: 100%;
+    max-height: 100%;
+    overflow: hidden;
+    overflow-y: auto;
+    width: 100%;
+}
+
+.messagesContainer {
+    width: min-content;
+    margin: 0 auto;
+}
+
+.messagesContent {
+    width: 100%;
+    min-width: 300px;
+}
+
+.currentUser,
+.otherUser {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    width: 100%;
+}
+
+.otherUser {
+    align-items: flex-start;
+}
+
+.loader {
+    align-items: center;
+    justify-content: center;
+    display: flex;
+    margin: 8px;
+}
+
+@media (min-width: 1280px) {
+    .messagesContent {
+        min-width: 500px;
+    }
+}
+
+@media (min-width: 1600px) {
+    .messagesContent {
+        min-width: 600px;
+    }
+}

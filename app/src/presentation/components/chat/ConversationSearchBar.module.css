@@ -1,0 +1,8 @@
+.searchContainer {
+    display: flex;
+    align-items: center;
+}
+
+.searchIcon {
+    color: #000;
+}

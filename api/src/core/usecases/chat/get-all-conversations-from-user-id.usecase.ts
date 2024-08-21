@@ -1,6 +1,6 @@
+import { Collection } from '@app/common';
 import { KeycloakClient, UserRepresentation } from '@app/keycloak';
 import { Inject, Injectable } from '@nestjs/common';
-import { RessourceDoesNotExist } from 'src/core/errors';
 import { TandemStatus, User } from 'src/core/models';
 import {
   CHAT_SERVICE,
@@ -8,6 +8,11 @@ import {
   ConversationWithUsers,
   MessageWithUser,
 } from 'src/core/ports/chat.service';
+import {
+  PROFILE_REPOSITORY,
+  ProfileQueryWhere,
+  ProfileRepository,
+} from 'src/core/ports/profile.repository';
 import {
   TANDEM_REPOSITORY,
   TandemRepository,
@@ -21,6 +26,7 @@ export class GetAllConversationsFromUserIdCommand {
   userId: string;
   limit: number;
   offset: number;
+  filters: ProfileQueryWhere;
 }
 
 @Injectable()
@@ -33,18 +39,51 @@ export class GetAllConversationsFromUserIdUsecase {
     @Inject(TANDEM_REPOSITORY)
     private readonly tandemRepository: TandemRepository,
     private readonly keycloakClient: KeycloakClient,
+    @Inject(PROFILE_REPOSITORY)
+    private readonly profileRepository: ProfileRepository,
   ) {}
 
   async execute(command: GetAllConversationsFromUserIdCommand) {
+    const hasFilter =
+      command.filters.user.firstname.contains ||
+      command.filters.user.lastname.contains;
+
+    let filteredProfilesList: string[] = [];
+
+    if (hasFilter) {
+      const profiles = await this.profileRepository.findAll(
+        undefined,
+        undefined,
+        undefined,
+        command.filters,
+      );
+
+      const filteredProfilesIds = new Set<string>();
+      profiles.items.forEach((profile) => {
+        filteredProfilesIds.add(profile.user.id);
+      });
+
+      filteredProfilesList = Array.from(filteredProfilesIds);
+    }
+
+    // We then get corresponding conversations from Chat
     const conversationsCollection =
       await this.chatService.getAllConversationsFromUserId(
         command.userId,
         command.limit,
         command.offset,
+        filteredProfilesList.length > 0 ? filteredProfilesList : undefined,
       );
 
-    if (conversationsCollection.totalItems === 0) {
-      return [];
+    if (
+      !conversationsCollection ||
+      !conversationsCollection.totalItems ||
+      conversationsCollection.totalItems === 0
+    ) {
+      return new Collection<ConversationWithUsers>({
+        items: [],
+        totalItems: 0,
+      });
     }
 
     const conversations = conversationsCollection.items;
@@ -75,34 +114,42 @@ export class GetAllConversationsFromUserIdUsecase {
     ) as string[];
 
     for (const id of missingUserIds) {
-      const userDetails = await this.keycloakClient.getUserById(id);
-      if (userDetails) {
+      try {
+        const userDetails = await this.keycloakClient.getUserById(id);
         userMap.set(id, userDetails);
-      } else {
-        throw new RessourceDoesNotExist(`User not found with id: ${id}`);
+      } catch (error) {
+        userMap.delete(id);
       }
     }
 
     // Replace userIds by user objects in conversations
-    const updatedConversations = conversations.map(
-      (conversation) =>
-        ({
-          ...conversation,
-          users: conversation.usersIds.map((id) => userMap.get(id)),
-          metadata: {
-            isBlocked:
-              tandems.find((tandem) => tandem.id === conversation.id)
-                ?.status === TandemStatus.PAUSED,
-          },
-          lastMessage: conversation.lastMessage
-            ? ({
-                ...conversation.lastMessage,
-                user: userMap.get(conversation.lastMessage.ownerId),
-              } as MessageWithUser)
-            : undefined,
-        } as ConversationWithUsers),
-    );
+    const updatedConversations = conversations
+      .map(
+        (conversation) =>
+          ({
+            ...conversation,
+            users: conversation.usersIds.map((id) => userMap.get(id)),
+            metadata: {
+              isBlocked:
+                tandems.find((tandem) => tandem.id === conversation.id)
+                  ?.status === TandemStatus.PAUSED,
+            },
+            lastMessage: conversation.lastMessage
+              ? ({
+                  ...conversation.lastMessage,
+                  user: userMap.get(conversation.lastMessage.ownerId),
+                } as MessageWithUser)
+              : undefined,
+            lastActivityAt: conversation.lastActivity,
+          } as ConversationWithUsers),
+      )
+      .filter((conversation) =>
+        conversation.users.every((user) => user !== undefined),
+      );
 
-    return updatedConversations;
+    return new Collection<ConversationWithUsers>({
+      items: updatedConversations,
+      totalItems: conversationsCollection.totalItems,
+    });
   }
 }

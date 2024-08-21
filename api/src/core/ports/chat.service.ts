@@ -16,7 +16,7 @@ export type ConversationWithUsers = {
   id: string;
   createdAt: Date;
   users: (User | UserRepresentation)[];
-  lastActivity: Date;
+  lastActivityAt: Date;
   lastMessage?: MessageWithUser;
   metadata: any;
 };
@@ -27,6 +27,7 @@ export interface Message {
   createdAt: Date;
   ownerId: string;
   type: string;
+  metadata: any;
 }
 
 export interface MessageWithUser {
@@ -35,6 +36,13 @@ export interface MessageWithUser {
   createdAt: Date;
   user: User | UserRepresentation;
   type: string;
+  metadata: any;
+}
+
+export enum ChatPaginationDirection {
+  FORWARD = 'forward',
+  BACKWARD = 'backward',
+  BOTH = 'both',
 }
 
 //TODO: Change any to a proper type
@@ -43,12 +51,15 @@ export interface ChatServicePort {
     userId: string,
     limit: number,
     offset: number,
+    filteredProfilesIds?: string[],
   ): Promise<Collection<Conversation>>;
   getMessagesFromConversationId(
     conversationId: string,
     limit: number,
     lastMessageId?: string,
-    messageFilter?: string,
+    contentFilter?: string,
+    typeFilter?: string,
+    direction?: ChatPaginationDirection,
   ): Promise<Collection<Message>>;
   createConversation(
     users: string[],

@@ -5,7 +5,12 @@
     flex-direction: column;
     padding: 40px;
     height: 100%;
-    width: 260px;
+    max-width: 260px;
+}
+
+.image {
+    height: 24px;
+    width: 24px;
 }
 
 .line {
@@ -14,8 +19,21 @@
     color: black;
     display: flex;
     flex-direction: row;
-    margin-bottom: 24px;
     width: 100%;
+}
+
+.report-container {
+    border-radius: 10px;
+    border: 1px solid black;
+    display: flex;
+    margin-top: auto;
+    width: 100%;
+}
+
+.separator {
+    border-bottom: 2px solid #e0e0e0;
+    width: 100%;
+    margin: 18px 0;
 }
 
 .title {
@@ -23,4 +41,10 @@
     font-size: 16px;
     font-weight: 500;
     margin-left: 16px;
+}
+
+@media (min-width: 768px) and (max-width: 1024px) {
+    .container {
+        padding: 20px;
+    }
 }

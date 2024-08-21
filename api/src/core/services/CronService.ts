@@ -1,5 +1,6 @@
 import { Inject, Injectable, Logger } from '@nestjs/common';
 import { Cron } from '@nestjs/schedule';
+import { format } from 'date-fns-tz';
 import { EMAIL_GATEWAY, EmailGateway } from 'src/core/ports/email.gateway';
 import {
   INSTANCE_REPOSITORY,
@@ -17,7 +18,6 @@ import {
   UNIVERSITY_REPOSITORY,
   UniversityRepository,
 } from 'src/core/ports/university.repository';
-import { format } from 'date-fns-tz';
 
 @Injectable()
 export class CronService {
@@ -46,13 +46,15 @@ export class CronService {
       const deviceToNotify: { token: string; language: string }[] = [];
       // Get initial date to send notification
       const universityCloseDate = new Date(university.closeServiceDate);
+      universityCloseDate.setHours(0, 0, 0, 0); // Normalize to midnight
       universityCloseDate.setDate(
         universityCloseDate.getDate() - instance.daysBeforeClosureNotification,
       );
 
       // Send notification every week
       const daysSinceNotificationStart = Math.floor(
-        today.getTime() - universityCloseDate.getTime(),
+        (today.getTime() - universityCloseDate.getTime()) /
+          (1000 * 60 * 60 * 24),
       );
 
       // Check if today is the day to send notifications ( every week, after the initial date and before the close date )
@@ -70,6 +72,10 @@ export class CronService {
         activeLearningLanguagesToNotify.items.map(
           (activeLearningLanguageToNotify) => {
             const profile = activeLearningLanguageToNotify.profile;
+
+            if (!profile.user.acceptsEmail) {
+              return;
+            }
 
             this.emailGateway.sendTandemClosureNoticeEmail({
               to: profile.user.email,

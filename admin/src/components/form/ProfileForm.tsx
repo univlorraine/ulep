@@ -1,4 +1,4 @@
-import { Box, Typography, OutlinedInput } from '@mui/material';
+import { Box, OutlinedInput, Typography } from '@mui/material';
 import React, { useState } from 'react';
 import { Button, Loading, useGetIdentity, useTranslate } from 'react-admin';
 import Administrator from '../../entities/Administrator';

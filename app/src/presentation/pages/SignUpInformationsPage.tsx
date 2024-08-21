@@ -1,8 +1,8 @@
-import { IonPopover, IonRadio, IonRadioGroup, useIonToast } from '@ionic/react';
+import { IonButton, IonIcon, IonPopover, IonRadio, IonRadioGroup, useIonToast } from '@ionic/react';
 import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useHistory, useLocation } from 'react-router';
-import { InfoSvg, PlusPng } from '../../assets';
+import { CloseBlackSvg, InfoSvg, PlusPng } from '../../assets';
 import { useConfig } from '../../context/ConfigurationContext';
 import { useStoreState } from '../../store/storeTypes';
 import Checkbox from '../components/Checkbox';
@@ -22,7 +22,11 @@ export interface SignUpInformationsParams {
     fromIdp?: boolean;
 }
 
-const RulesInfo = ({ displayImage = true }) => {
+interface RulesInfoProps {
+    displayImage?: boolean;
+}
+
+const RulesInfo: React.FC<RulesInfoProps> = ({ displayImage = true }) => {
     const { t } = useTranslation();
     const rules: string[] = t('signup_informations_page.password_infos.rules', { returnObjects: true }) || [];
     return (
@@ -40,6 +44,7 @@ const RulesInfo = ({ displayImage = true }) => {
 
 const PasswordInfo = () => {
     const { t } = useTranslation();
+    const [isPopoverOpen, setIsPopoverOpen] = useState<boolean>(false);
 
     return (
         <>
@@ -55,8 +60,18 @@ const PasswordInfo = () => {
                 side="bottom"
                 alignment="center"
                 size="auto"
+                isOpen={isPopoverOpen}
+                onDidPresent={() => setIsPopoverOpen(true)}
+                onDidDismiss={() => setIsPopoverOpen(false)}
                 className={styles['password-infos-popover']}
             >
+                <IonButton
+                    fill="clear"
+                    onClick={() => setIsPopoverOpen(false)}
+                    aria-label={t('signup_informations_page.password_infos.close') as string}
+                >
+                    <IonIcon icon={CloseBlackSvg} />
+                </IonButton>
                 <RulesInfo />
             </IonPopover>
         </>

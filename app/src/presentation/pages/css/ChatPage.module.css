@@ -1,0 +1,16 @@
+.image-modal {
+    background-color: white;
+    max-height: 80vh;
+    max-width: 80vw;
+    object-fit: contain;
+    margin: 0;
+    padding: 12px;
+}
+
+.modal {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0;
+    padding: 0;
+}

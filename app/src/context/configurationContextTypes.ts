@@ -14,6 +14,7 @@ import GetInitialUrlUsecaseInterface from '../domain/interfaces/AuthStandardFlow
 import GetTokenFromCodeUsecaseInterface from '../domain/interfaces/AuthStandardFlow/GetTokenFromCodeUsecase.interface';
 import CreateOrUpdateTestedLanguageUsecaseInterface from '../domain/interfaces/CreateOrUpdateTestedLanguageUsecase.interface';
 import CreateProfileUsecaseInterface from '../domain/interfaces/CreateProfileUsecase.interface';
+import CreateReportMessageUsecaseInterface from '../domain/interfaces/CreateReportMessageUsecase.interface';
 import CreateReportUsecaseInterface from '../domain/interfaces/CreateReportUsecase.interface';
 import CreateUserUsecaseInterface from '../domain/interfaces/CreateUserUsecase.interface';
 import EditProfileUsecaseInterface from '../domain/interfaces/EditProfileUsecase.interface';
@@ -26,6 +27,7 @@ import GetAllTandemsUsecaseInterface from '../domain/interfaces/GetAllTandemsUse
 import GetAllUniversitiesUsecaseInterface from '../domain/interfaces/GetAllUniversitiesUsecase.interface';
 import GetAllReportCategoriesUsecaseInterface from '../domain/interfaces/GetAlllReportCategoriesUsecase.interface';
 import GetHistoricEmailPartnerUsecaseInterface from '../domain/interfaces/GetHistoricEmailPartnerUsecase.interface';
+import GetJitsiTokenUsecaseInterface from '../domain/interfaces/GetJitsiTokenUsecase.interface';
 import GetMediaObjectUsecaseInterface from '../domain/interfaces/GetMediaObjectUsecase.interface';
 import GetPartnersToUniversityUsecaseInterface from '../domain/interfaces/GetPartnersToUniversityUsecase.interface';
 import GetProfileUsecaseInterface from '../domain/interfaces/GetProfileUsecase.interface';
@@ -41,8 +43,8 @@ import UpdateAvatarUsecaseInterface from '../domain/interfaces/UpdateAvatarUseca
 import UpdateNotificationPermissionUsecaseInterface from '../domain/interfaces/UpdateNotificationPermissionUsecase.interface';
 import GetConversationsUsecaseInterface from '../domain/interfaces/chat/GetConversationsUsecase.interface';
 import GetMessagesFromConversationUsecaseInterface from '../domain/interfaces/chat/GetMessagesFromConversationUsecase.interface';
+import SearchMessagesIdsFromConversationUsecaseInterface from '../domain/interfaces/chat/SearchMessagesIdsFromConversationUsecase.interface';
 import SendMessageUsecaseInterface from '../domain/interfaces/chat/SendMessageUsecase.interface';
-import GetJitsiTokenUsecaseInterface from '../domain/interfaces/GetJitsiTokenUsecase.interface';
 
 export interface ConfigContextValueType {
     accessToken: string;
@@ -57,6 +59,7 @@ export interface ConfigContextValueType {
     configuration: Configuration;
     createProfile: CreateProfileUsecaseInterface;
     createReport: CreateReportUsecaseInterface;
+    createReportMessage: CreateReportMessageUsecaseInterface;
     createOrUpdateTestedLanguage: CreateOrUpdateTestedLanguageUsecaseInterface;
     createUser: CreateUserUsecaseInterface;
     fileAdapter: FileAdapterInterface;
@@ -84,6 +87,7 @@ export interface ConfigContextValueType {
     notificationAdapter: NotificationAdapterInterface;
     resetPassword: ResetPasswordUsecaseInterface;
     sendMessage: SendMessageUsecaseInterface;
+    searchMessagesIdsFromConversation: SearchMessagesIdsFromConversationUsecaseInterface;
     socketIoAdapter: SocketIoAdapterInterface;
     updateAvatar: UpdateAvatarUsecaseInterface;
     updateNotificationPermission: UpdateNotificationPermissionUsecaseInterface;

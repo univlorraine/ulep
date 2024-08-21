@@ -2,7 +2,7 @@ import Campus from './Campus';
 // eslint-disable-next-line import/no-cycle
 import { Profile } from './Profile';
 // eslint-disable-next-line import/no-cycle
-import { TandemStatus, Tandem } from './Tandem';
+import { TandemStatus, Tandem, TandemWithPartnerLearningLanguage } from './Tandem';
 
 export enum LearningType {
     ETANDEM = 'ETANDEM',
@@ -18,6 +18,24 @@ export type LearningLanguage = {
     createdAt: Date;
     profile: Profile;
     tandem?: Tandem;
+    sameGender: boolean;
+    learningType: LearningType;
+    sameAge: boolean;
+    campus?: Campus;
+    certificateOption?: boolean;
+    specificProgram?: boolean;
+    hasPriority?: boolean;
+    sameTandemEmail?: string;
+};
+
+export type LearningLanguageWithTandemWithPartnerProfile = {
+    id: string;
+    code: string;
+    level: string;
+    name: string;
+    createdAt: Date;
+    profile: Profile;
+    tandem?: TandemWithPartnerLearningLanguage;
     sameGender: boolean;
     learningType: LearningType;
     sameAge: boolean;
@@ -60,7 +78,9 @@ export const getLearningLanguageUniversityAndCampusString = (learningLanguage?: 
     return `${learningLanguage.profile.user.university.name}`;
 };
 
-export const isJoker = (learningLanguage?: LearningLanguage): boolean => {
+export const isJoker = (
+    learningLanguage?: LearningLanguage | LearningLanguageWithTandemWithPartnerProfile
+): boolean => {
     if (learningLanguage?.code === '*') {
         return true;
     }
@@ -69,8 +89,8 @@ export const isJoker = (learningLanguage?: LearningLanguage): boolean => {
 };
 
 export const getEffectiveLearningType = (
-    learningLanguage1: LearningLanguage,
-    learningLanguage2: LearningLanguage
+    learningLanguage1: LearningLanguage | LearningLanguageWithTandemWithPartnerProfile,
+    learningLanguage2: LearningLanguage | LearningLanguageWithTandemWithPartnerProfile
 ): LearningType => {
     switch (learningLanguage1.learningType) {
         case LearningType.BOTH:

@@ -4,32 +4,28 @@ import { Message, MessageWithConversationId } from '../domain/entities/chat/Mess
 import SocketIoAdapterInterface from './interfaces/SocketIoAdapter.interface';
 
 class SocketIoAdapter implements SocketIoAdapterInterface {
-    private accessToken?: string;
     private chatUrl: string;
     private socket: Socket | null = null;
 
-    constructor(chatUrl: string, accessToken?: string) {
-        this.accessToken = accessToken;
+    constructor(chatUrl: string) {
         this.chatUrl = chatUrl;
     }
 
-    async connect(): Promise<boolean> {
+    connect(accessToken: string): void {
         if (this.socket && this.socket.connected) {
-            return true;
+            return;
         }
-        this.socket = socketIo(this.chatUrl, { auth: { token: this.accessToken } });
-        return this.socket?.connected;
+        this.socket = socketIo(this.chatUrl, { auth: { token: accessToken } });
     }
 
-    async disconnect(): Promise<boolean> {
+    disconnect(): void {
         if (this.socket && this.socket.connected) {
-            await this.socket?.disconnect();
+            this.socket.disconnect();
         }
-        return !this.socket?.connected;
     }
 
-    async emit(message: Message): Promise<Message> {
-        await this.socket?.emit('publish', message);
+    emit(message: Message): Message {
+        this.socket?.emit('publish', message);
         return message;
     }
 
@@ -55,7 +51,8 @@ class SocketIoAdapter implements SocketIoAdapterInterface {
                         false,
                         message.sender.avatar
                     ),
-                    message.type
+                    message.type,
+                    message.metadata
                 )
             );
         });

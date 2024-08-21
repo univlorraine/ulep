@@ -14,18 +14,14 @@
     justify-content: flex-start;
 }
 
-.downloadButton {
+.downloadContainer {
     background-color: transparent;
     border: none;
-}
-
-.downloadContainer {
     color: black;
     display: flex;
     flex-direction: row;
     align-items: center;
     justify-content: center;
-    padding: 16px;
     text-decoration: underline;
     text-decoration-color: black;
 }
@@ -37,9 +33,15 @@
 }
 
 .downloadTitle {
+    color: black;
     font-family: 'Poppins', sans-serif;
     font-weight: 400;
     font-size: 12px;
+    text-transform: none;
+}
+
+.searchMessage {
+    background-color: var(--secondary-color) !important;
 }
 
 .messageContainer {
@@ -50,32 +52,68 @@
     width: 100%;
 }
 
+.leftMessageMenu {
+    margin-left: auto;
+}
+
+.rightMessageMenu {
+    padding: 0px;
+    margin-right: auto;
+}
+
+.messageContent {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    width: 100%;
+}
+
 .message {
     display: block;
-    padding: 10px 20px;
     max-width: 80%;
     word-wrap: break-word;
     color: black;
     font-family: 'Poppins', sans-serif;
     font-weight: 400;
     font-size: 12px;
+    text-transform: none;
+    padding: 8px;
+}
+
+.messageLink {
+    max-height: 20%;
+    max-width: 50%;
+    word-wrap: break-word;
+    font-family: 'Poppins', sans-serif;
+    font-weight: 400;
+    font-size: 12px;
+    padding: 8px;
+}
+
+.linkText {
+    margin: 10px 0px;
+    color: black;
+    font-family: 'Poppins', sans-serif;
+    font-weight: 400;
+    font-size: 12px;
+    text-transform: none;
 }
 
 .messageImage {
     display: block;
-    padding: 12px;
     max-height: 20%;
     max-width: 80%;
 }
 
 .messageAudio {
-    padding: 12px;
     max-width: 80%;
+    padding: 8px;
 }
 
 .image {
     max-height: 300px;
     max-width: 100%;
+    padding: 8px;
 }
 
 .name {
@@ -109,5 +147,30 @@
     background-color: white;
     border-radius: 20px 20px 20px 0px;
     text-align: left;
-    margin-right: auto;
+}
+
+.outerContainer {
+    display: inline-flex;
+    justify-content: center;
+    flex-direction: column;
+    width: fit-content;
+}
+.reportButton {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.reportButtonText {
+    color: black;
+}
+
+.fullHeightPopover {
+    height: 100vh;
+    width: 100vw;
+}
+
+ion-popover::part(backdrop) {
+    height: 100vh;
+    width: 100vw;
 }

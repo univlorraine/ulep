@@ -47,7 +47,10 @@
         },
         "sidebar": {
             "home": "Accueil",
-            "conversations": "Conversations"
+            "conversations": "Conversations",
+            "disconnect": "Déconnexion",
+            "profile": "Profil",
+            "settings": "Paramètres"
         }
     },
     "maintenance_page": {
@@ -100,18 +103,49 @@
         "signup-progress-bar-label": "Progression de l'inscription",
         "required_fields_mention_part1": "Les champs suivis d'un",
         "required_fields_mention_part2": "sont obligatoires",
-        "close_profile": "Fermer le profil"
+        "close_profile": "Fermer le profil",
+        "download": "Télécharger"
     },
     "chat": {
+        "ariaLabelFileDownloaded": "Téléchargement du fichier : {{filename}}",
         "fileDownloaded": "Fichier téléchargé",
+        "messageReport": "Message envoyé par : {{firstname}} {{lastname}} le {{date}} ---- {{message}}",
+        "mediaReport": "Média envoyé par : {{firstname}} {{lastname}} le {{date}}",
         "me": "Moi",
+        "messageReported": "Message signalé",
+        "noMessages": "Il n'y a aucun message",
         "title": "Messages avec {{name}}",
+        "send_button": {
+            "record_aria_label": "Restez appuyé pour enregister un audio ou écrivez votre message pour passer en mode envoie",
+            "send_aria_label": "Envoyer le message"
+        },
         "input": {
             "placeholder": {
                 "blocked": "Le tandem est en pause, tu ne peux pas envoyer de messages",
                 "unblocked": "Écris ton message..."
             }
-        }
+        },
+        "search": {
+            "placeholder": "Rechercher dans la conversation"
+        },
+        "conversation_menu": {
+            "aria_label": "Menu de la conversation",
+            "search": "Rechercher dans la conversation",
+            "medias": "Afficher les médias"
+        },
+        "medias": {
+            "title": "Médias partagés",
+            "files": "Fichiers",
+            "images": "Images",
+            "images-alt": "Image partagée",
+            "audios": "Audios",
+            "links": "Liens"
+        },
+        "reportMessageButton": "Signaler le message",
+        "no_messages": "Aucun message",
+        "no_conversations": "Aucune conversation",
+        "send_image_aria_label": "Envoyer une image",
+        "send_file_aria_label": "Envoyer un fichier"
     },
     "connection_page": {
         "connect_title": "As-tu déjà un compte ?",
@@ -204,6 +238,7 @@
             "tandem_draft": "En attente d'un tandem",
             "tandem_not_found": "Tandem non trouvé",
             "tandem_unavailable": "Tandem indisponible",
+            "tandem_paused": "Tandem en pause",
             "title": "Mes demandes en attentes"
         }
     },
@@ -461,7 +496,8 @@
         "confirm_password": "Confirme ton mot de passe",
         "password_infos": {
             "title": "Le mot de passe doit contenir au moins :",
-            "rules": ["8 caractères", "1 caractère MAJUSCULE", "1 caractère minuscule", "1 chiffre"]
+            "rules": ["8 caractères", "1 caractère MAJUSCULE", "1 caractère minuscule", "1 chiffre"],
+            "close": "Fermer les informations de mot de passe"
         },
         "cgu": {
             "confidentiality": "politique de confidentialité",

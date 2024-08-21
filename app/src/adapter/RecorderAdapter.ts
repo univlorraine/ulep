@@ -5,17 +5,18 @@ export class RecorderAdapter implements RecorderAdapterInterface {
     private recordingTimeout: NodeJS.Timeout | null = null;
     private startTime: number | null = null;
 
+    async requestPermission() {
+        await VoiceRecorder.requestAudioRecordingPermission();
+    }
+
     async startRecording(onStop: (audio?: File, error?: Error) => void) {
         try {
-            const permissionStatus = await VoiceRecorder.hasAudioRecordingPermission();
-            if (!permissionStatus.value) {
-                const requestPermission = await VoiceRecorder.requestAudioRecordingPermission();
-                if (!requestPermission.value) {
-                    return onStop(undefined, new Error('record.error.permission'));
-                }
-            }
+            const requestPermission = await VoiceRecorder.requestAudioRecordingPermission();
 
-            VoiceRecorder.startRecording();
+            if (!requestPermission.value) {
+                return onStop(undefined, new Error('record.error.permission'));
+            }
+            await VoiceRecorder.startRecording();
             this.startTime = Date.now();
 
             this.recordingTimeout = setTimeout(() => {
@@ -45,7 +46,7 @@ export class RecorderAdapter implements RecorderAdapterInterface {
                     }
 
                     const audioBlob = this.base64ToBlob(result.value.recordDataBase64, 'audio/wav');
-                    const audioFile = new File([audioBlob], 'audio.wav', { type: 'audio/wav' });
+                    const audioFile = new File([audioBlob], `${Date.now()}.wav`, { type: 'audio/wav' });
                     this.startTime = null;
                     onStop(audioFile);
                 }

@@ -1,8 +1,9 @@
 import { PrismaService } from '@app/common';
 import { Injectable } from '@nestjs/common';
-import { Message } from 'src/core/models';
+import { Message, MessageType } from 'src/core/models';
 import {
     MessagePagination,
+    MessagePaginationDirection,
     MessageRepository,
 } from 'src/core/ports/message.repository';
 import {
@@ -21,6 +22,7 @@ export class PrismaMessageRepository implements MessageRepository {
                 isReported: message.isReported,
                 type: message.type,
                 ownerId: message.ownerId,
+                metadata: message.metadata,
                 Conversation: { connect: { id: message.conversationId } },
             },
             ...MessagesRelations,
@@ -57,46 +59,87 @@ export class PrismaMessageRepository implements MessageRepository {
         return messageMapper(newMessage);
     }
 
+    async searchMessagesIdByConversationId(
+        conversationId: string,
+        search: string,
+    ): Promise<string[]> {
+        const messagesIds = await this.prisma.message.findMany({
+            where: {
+                conversationId,
+                content: {
+                    contains: search,
+                    mode: 'insensitive',
+                },
+            },
+            orderBy: { createdAt: 'desc' },
+            take: 300,
+        });
+
+        return messagesIds.map((message) => message.id);
+    }
+
     async findMessagesByConversationId(
         conversationId: string,
         pagination: MessagePagination,
-        filter?: string,
+        contentFilter?: string,
+        typeFilter?: MessageType,
     ): Promise<Message[]> {
         const messagesPagination = {};
         const where = { conversationId };
+        const cursor = pagination.lastMessageId
+            ? { id: pagination.lastMessageId }
+            : undefined;
 
         if (pagination.limit !== undefined) {
             messagesPagination['take'] = pagination.limit;
         }
 
-        if (pagination.lastMessageId) {
-            const lastMessage = await this.prisma.message.findFirst({
-                where: {
-                    id: pagination.lastMessageId,
-                },
-            });
-
-            if (lastMessage) {
-                where['createdAt'] = {
-                    lt: lastMessage.createdAt,
-                };
-            } else {
-                return [];
-            }
-        }
-
-        if (filter) {
+        if (contentFilter) {
             where['content'] = {
-                contains: filter,
+                contains: contentFilter,
             };
         }
 
-        const messages = await this.prisma.message.findMany({
-            where,
-            orderBy: { updatedAt: 'desc' },
-            ...messagesPagination,
-            ...MessagesRelations,
-        });
+        if (typeFilter) {
+            where['type'] = typeFilter;
+        }
+
+        let messages = [];
+
+        if (
+            pagination.direction === MessagePaginationDirection.FORWARD ||
+            pagination.direction === MessagePaginationDirection.BOTH
+        ) {
+            messages = await this.prisma.message.findMany({
+                where,
+                cursor,
+                skip:
+                    pagination.lastMessageId &&
+                    pagination.direction === MessagePaginationDirection.FORWARD
+                        ? 1
+                        : 0,
+                orderBy: { createdAt: 'desc' },
+                ...messagesPagination,
+                ...MessagesRelations,
+            });
+        }
+
+        if (
+            pagination.direction === MessagePaginationDirection.BACKWARD ||
+            pagination.direction === MessagePaginationDirection.BOTH
+        ) {
+            messagesPagination['take'] = -pagination.limit;
+            const reverseMessages = await this.prisma.message.findMany({
+                where,
+                cursor,
+                skip: 1,
+                orderBy: { createdAt: 'desc' },
+                ...messagesPagination,
+                ...MessagesRelations,
+            });
+
+            messages = [...reverseMessages, ...messages];
+        }
 
         return messages.map(messageMapper);
     }

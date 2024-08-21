@@ -1,4 +1,3 @@
-import { IonContent } from '@ionic/react';
 import { useTranslation } from 'react-i18next';
 import Masonry, { ResponsiveMasonry } from 'react-responsive-masonry';
 import { useHistory } from 'react-router';
@@ -20,8 +19,8 @@ import styles from './HomeContent.module.css';
 interface HomeContentProps {
     isLoading: boolean;
     profile: Profile;
-    onProfilePressed: () => void;
-    onReportPressed: () => void;
+    onProfilePressed?: () => void;
+    onReportPressed?: () => void;
     onTandemPressed: (tandem: Tandem) => void;
     onValidatedTandemPressed: (tandem: Tandem) => void;
     tandems: Tandem[];
@@ -51,7 +50,7 @@ const HomeContent: React.FC<HomeContentProps> = ({
         .padStart(2, '0')}`;
 
     return (
-        <IonContent className={styles.content}>
+        <div className={styles.content}>
             <div className={`${styles.container} content-wrapper`}>
                 <div className={styles['header']}>
                     <div className={styles['hello-container']}>
@@ -76,7 +75,7 @@ const HomeContent: React.FC<HomeContentProps> = ({
                             <Loader />
                         </div>
                     ) : (
-                        <ResponsiveMasonry columnsCountBreakPoints={{ 300: 1, 768: 2 }}>
+                        <ResponsiveMasonry columnsCountBreakPoints={{ 300: 1, 1024: 2 }}>
                             <Masonry className={styles.masonery} gutter="20px">
                                 {tandems.find((tandem) => tandem.status === 'ACTIVE') && (
                                     <TandemList onTandemPressed={onValidatedTandemPressed} tandems={tandems} />
@@ -103,22 +102,24 @@ const HomeContent: React.FC<HomeContentProps> = ({
                         </ResponsiveMasonry>
                     )}
                 </div>
-                <div className={styles['report-container']}>
-                    <button
-                        aria-label={t('home_page.report.report_button') as string}
-                        className={`tertiary-button ${styles.report}`}
-                        onClick={onReportPressed}
-                    >
-                        {
-                            <>
-                                <img alt="" className="margin-right" src={ReportSvg} aria-hidden={true} />
-                                <span>{t('home_page.report.report_button')}</span>
-                            </>
-                        }
-                    </button>
-                </div>
+                {isHybrid && (
+                    <div className={styles['report-container']}>
+                        <button
+                            aria-label={t('home_page.report.report_button') as string}
+                            className={`tertiary-button ${styles.report}`}
+                            onClick={onReportPressed}
+                        >
+                            {
+                                <>
+                                    <img alt="" className="margin-right" src={ReportSvg} aria-hidden={true} />
+                                    <span>{t('home_page.report.report_button')}</span>
+                                </>
+                            }
+                        </button>
+                    </div>
+                )}
             </div>
-        </IonContent>
+        </div>
     );
 };
 

@@ -1,10 +1,17 @@
-import { Message } from 'src/core/models';
+import { Message, MessageType } from 'src/core/models';
 
 export const MESSAGE_REPOSITORY = 'message.repository';
+
+export enum MessagePaginationDirection {
+    FORWARD = 'forward',
+    BACKWARD = 'backward',
+    BOTH = 'both',
+}
 
 export type MessagePagination = {
     lastMessageId?: string;
     limit?: number;
+    direction?: MessagePaginationDirection;
 };
 
 export interface MessageRepository {
@@ -13,7 +20,12 @@ export interface MessageRepository {
     findMessagesByConversationId: (
         id: string,
         pagination?: MessagePagination,
-        filter?: string,
+        contentFilter?: string,
+        typeFilter?: MessageType,
     ) => Promise<Message[]>;
+    searchMessagesIdByConversationId: (
+        id: string,
+        search: string,
+    ) => Promise<string[]>;
     update: (message: Message) => Promise<Message>;
 }

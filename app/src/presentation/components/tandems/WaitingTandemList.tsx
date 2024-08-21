@@ -1,7 +1,7 @@
 import { useTranslation } from 'react-i18next';
+import Profile from '../../../domain/entities/Profile';
 import Tandem from '../../../domain/entities/Tandem';
 import TandemLine from './TandemLine';
-import Profile from '../../../domain/entities/Profile';
 
 interface WaitingTandemListProps {
     onNewTandemAsked: () => void;

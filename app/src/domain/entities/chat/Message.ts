@@ -6,6 +6,14 @@ export enum MessageType {
     Image = 'image',
     Audio = 'audio',
     File = 'file',
+    Link = 'link',
+}
+
+interface MessageMetadata {
+    originalFilename: string;
+    filePath?: string;
+    openGraphResult: any;
+    thumbnail?: string;
 }
 
 export class MessageWithoutSender {
@@ -14,7 +22,8 @@ export class MessageWithoutSender {
         public readonly content: string,
         public readonly createdAt: Date,
         public readonly senderId: string,
-        public readonly type: MessageType
+        public readonly type: MessageType,
+        public readonly metadata: MessageMetadata
     ) {}
 
     public getMessageDate(): string {
@@ -44,6 +53,13 @@ export class MessageWithoutSender {
     public isMine(userId: string): boolean {
         return this.senderId === userId;
     }
+
+    public getThumbnail(): string | undefined {
+        if (this.type === MessageType.Image) {
+            return this.metadata.thumbnail ?? this.content;
+        }
+        return undefined;
+    }
 }
 
 export class Message extends MessageWithoutSender {
@@ -52,9 +68,10 @@ export class Message extends MessageWithoutSender {
         public readonly content: string,
         public readonly createdAt: Date,
         public readonly sender: UserChat,
-        public readonly type: MessageType
+        public readonly type: MessageType,
+        public readonly metadata: MessageMetadata
     ) {
-        super(id, content, createdAt, sender.id, type);
+        super(id, content, createdAt, sender.id, type, metadata);
     }
 }
 
@@ -65,8 +82,9 @@ export class MessageWithConversationId extends Message {
         public readonly createdAt: Date,
         public readonly sender: UserChat,
         public readonly type: MessageType,
-        public readonly conversationId: string
+        public readonly conversationId: string,
+        public readonly metadata: any
     ) {
-        super(id, content, createdAt, sender, type);
+        super(id, content, createdAt, sender, type, metadata);
     }
 }

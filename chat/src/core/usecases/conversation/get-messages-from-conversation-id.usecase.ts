@@ -17,7 +17,8 @@ import {
 export class GetMessagesFromConversationIdCommand {
     id: string;
     pagination: MessagePagination;
-    filter: string;
+    contentFilter: string;
+    typeFilter: MessageType;
 }
 
 @Injectable()
@@ -44,9 +45,9 @@ export class GetMessagesFromConversationIdUsecase {
             await this.messageRepository.findMessagesByConversationId(
                 command.id,
                 command.pagination,
-                command.filter,
+                command.contentFilter,
+                command.typeFilter,
             );
-
         for (const message of messages) {
             if (
                 (message.type === MessageType.Image ||
@@ -54,11 +55,24 @@ export class GetMessagesFromConversationIdUsecase {
                     message.type === MessageType.File) &&
                 message.content
             ) {
+                message.metadata.filePath = message.content;
                 message.content = await this.storage.temporaryUrl(
                     'chat',
                     message.content,
                     3600,
                 );
+
+                if (
+                    message.type === MessageType.Image &&
+                    message.metadata.thumbnail
+                ) {
+                    message.metadata.thumbnail =
+                        await this.storage.temporaryUrl(
+                            'chat',
+                            message.metadata.thumbnail,
+                            3600,
+                        );
+                }
             }
         }
 

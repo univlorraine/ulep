@@ -1,25 +1,51 @@
+import { IonText } from '@ionic/react';
 import { isSameDay } from 'date-fns';
 import { useTranslation } from 'react-i18next';
-import { Message } from '../../../domain/entities/chat/Message';
+import { MessagePaginationDirection } from '../../../domain/entities/chat/Conversation';
+import { Message, MessageType } from '../../../domain/entities/chat/Message';
 import { useMessages } from '../../hooks/useMessages';
 import Loader from '../Loader';
 import MessageComponent from './MessageComponent';
 import styles from './MessagesList.module.css';
 
 interface MessagesListProps {
+    currentMessageSearchId?: string;
     messages: Message[];
-    isScrollOver: boolean;
-    loadMessages: () => void;
+    isScrollForwardOver: boolean;
+    isScrollBackwardOver: boolean;
+    loadMessages: (direction: MessagePaginationDirection) => void;
     userId: string;
+    setImageToDisplay: (imageUrl: string) => void;
 }
 
-const MessagesList: React.FC<MessagesListProps> = ({ messages, isScrollOver, loadMessages, userId }) => {
+const MessagesList: React.FC<MessagesListProps> = ({
+    currentMessageSearchId,
+    messages,
+    isScrollForwardOver,
+    isScrollBackwardOver,
+    loadMessages,
+    userId,
+    setImageToDisplay,
+}) => {
     const { t } = useTranslation();
-    const { isLoading, messagesEndRef, handleScroll } = useMessages({ messages, isScrollOver, loadMessages });
+    const { isLoading, messagesEndRef, handleScroll } = useMessages({
+        messages,
+        isScrollForwardOver,
+        isScrollBackwardOver,
+        isSearchMode: Boolean(currentMessageSearchId),
+        loadMessages,
+    });
 
     const renderMessages = () => {
         const messageElements: React.ReactNode[] = [];
         let lastDate: Date | null = null;
+
+        if (messages.length === 0)
+            return (
+                <div className={styles['no-messages']}>
+                    <IonText>{t('chat.noMessages')}</IonText>
+                </div>
+            );
 
         const reversedMessages = [...messages].reverse();
 
@@ -38,8 +64,18 @@ const MessagesList: React.FC<MessagesListProps> = ({ messages, isScrollOver, loa
 
             if (message.content) {
                 messageElements.push(
-                    <div key={message.id} className={isCurrentUserMessage ? styles.currentUser : styles.otherUser}>
-                        <MessageComponent message={message} isCurrentUserMessage={isCurrentUserMessage} />
+                    <div
+                        ref={message.id === currentMessageSearchId ? messagesEndRef : null}
+                        role="listitem"
+                        key={message.id}
+                        className={isCurrentUserMessage ? styles.currentUser : styles.otherUser}
+                    >
+                        <MessageComponent
+                            currentMessageSearchId={currentMessageSearchId}
+                            message={message}
+                            isCurrentUserMessage={isCurrentUserMessage}
+                            setImageToDisplay={message.type === MessageType.Image ? setImageToDisplay : undefined}
+                        />
                     </div>
                 );
             }
@@ -49,7 +85,7 @@ const MessagesList: React.FC<MessagesListProps> = ({ messages, isScrollOver, loa
     };
 
     return (
-        <div className={styles.messages} onScroll={handleScroll}>
+        <div className={styles.messages} onScroll={handleScroll} role="list">
             {isLoading && (
                 <div className={styles.loader}>
                     {/* TODO: Upgrade to use a better loader */}
@@ -57,7 +93,7 @@ const MessagesList: React.FC<MessagesListProps> = ({ messages, isScrollOver, loa
                 </div>
             )}
             {renderMessages()}
-            <div ref={messagesEndRef} />
+            <div ref={!currentMessageSearchId ? messagesEndRef : null} />
         </div>
     );
 };

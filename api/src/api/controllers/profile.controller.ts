@@ -29,6 +29,8 @@ import {
   GetProfileByUserIdUsecase,
   GetProfileUsecase,
   GetProfilesUsecase,
+  GetProfilesWithTandemsProfilesUsecase,
+  GetProfileWithTandemsProfilesUsecase,
   GetTandemsForProfileUsecase,
   UpdateProfileUsecase,
 } from 'src/core/usecases';
@@ -45,6 +47,9 @@ import {
   UserTandemResponse,
 } from '../dtos';
 import { AuthenticationGuard } from '../guards';
+import { ProfileWithTandemsQueryFilter } from '../dtos/profiles/profiles-with-tandems-filters';
+import { ProfileWithTandemsProfilesResponse } from '../dtos/profiles/profiles-with-tandems-profiles.response';
+import { ProfileWithTandemsProfiles } from 'src/core/models/profileWithTandemsProfiles.model';
 
 @Controller('profiles')
 @Swagger.ApiTags('Profiles')
@@ -53,6 +58,8 @@ export class ProfileController {
     private readonly createProfileUsecase: CreateProfileUsecase,
     private readonly getLearningLanguageOfProfileUsecase: GetLearningLanguageOfProfileUsecase,
     private readonly getProfilesUsecase: GetProfilesUsecase,
+    private readonly getProfilesWithTandemsProfilesUsecase: GetProfilesWithTandemsProfilesUsecase,
+    private readonly getProfileWithTandemsProfilesUsecase: GetProfileWithTandemsProfilesUsecase,
     private readonly getProfileByUserIdUsecase: GetProfileByUserIdUsecase,
     private readonly getProfileUsecase: GetProfileUsecase,
     private readonly deleteProfileUsecase: DeleteProfileUsecase,
@@ -98,7 +105,17 @@ export class ProfileController {
     return ProfileResponse.fromDomain(profile);
   }
 
-  private async getProfiles(query: ProfileQueryFilter) {
+  @Get()
+  @Roles(Role.ADMIN)
+  @UseGuards(AuthenticationGuard)
+  @SerializeOptions({ groups: ['read'] })
+  @Swagger.ApiOperation({
+    summary: 'Retrieve the collection of Profile ressource.',
+  })
+  @CollectionResponse(ProfileResponse)
+  async getCollection(
+    @Query() query: ProfileQueryFilter,
+  ): Promise<Collection<ProfileResponse>> {
     const {
       email,
       firstname,
@@ -150,21 +167,7 @@ export class ProfileController {
     });
   }
 
-  @Get()
-  @Roles(Role.ADMIN)
-  @UseGuards(AuthenticationGuard)
-  @SerializeOptions({ groups: ['read'] })
-  @Swagger.ApiOperation({
-    summary: 'Retrieve the collection of Profile ressource.',
-  })
-  @CollectionResponse(ProfileResponse)
-  async getCollection(
-    @Query() query: ProfileQueryFilter,
-  ): Promise<Collection<ProfileResponse>> {
-    return this.getProfiles(query);
-  }
-
-  @Get('/with-tandem')
+  @Get('/with-tandems-profiles')
   @Roles(Role.ADMIN)
   @UseGuards(AuthenticationGuard)
   @SerializeOptions({
@@ -176,13 +179,33 @@ export class ProfileController {
     ],
   })
   @Swagger.ApiOperation({
-    summary: 'Retrieve the collection of Profile ressource with tandems.',
+    summary:
+      'Retrieve the collection of Profile ressource with tandems for each learning language and corresponding profiles.',
   })
   @CollectionResponse(ProfileResponse)
   async getCollectionWithTandems(
-    @Query() query: ProfileQueryFilter,
-  ): Promise<Collection<ProfileResponse>> {
-    return this.getProfiles(query);
+    @Query() query: ProfileWithTandemsQueryFilter,
+  ): Promise<Collection<ProfileWithTandemsProfilesResponse>> {
+    const { lastname, university, learningLanguage, page, limit } = query;
+
+    const profiles = await this.getProfilesWithTandemsProfilesUsecase.execute({
+      page,
+      limit,
+      where: {
+        user: {
+          lastname: lastname,
+          university: university,
+        },
+        learningLanguage: learningLanguage,
+      },
+    });
+
+    return new Collection<ProfileWithTandemsProfilesResponse>({
+      items: profiles.items.map((profile: ProfileWithTandemsProfiles) =>
+        ProfileWithTandemsProfilesResponse.fromDomain(profile),
+      ),
+      totalItems: profiles.totalItems,
+    });
   }
 
   @Delete(':id')
@@ -265,7 +288,7 @@ export class ProfileController {
     return ProfileResponse.fromDomain(profile, languageCode);
   }
 
-  @Get('/with-tandem/:id')
+  @Get('/with-tandems-profiles/:id')
   @Roles(Role.ADMIN)
   @UseGuards(AuthenticationGuard)
   @SerializeOptions({
@@ -277,15 +300,17 @@ export class ProfileController {
     ],
   })
   @Swagger.ApiOperation({
-    summary: 'Retrieve the collection of Profile ressource with tandems.',
+    summary: 'Retrieve a Profile with tandems and associated profiles.',
   })
-  @CollectionResponse(ProfileResponse)
-  async getProfileWithTandems(
+  @CollectionResponse(ProfileWithTandemsProfilesResponse)
+  async getProfileWithTandemsProfiles(
     @Param('id', ParseUUIDPipe) id: string,
-  ): Promise<ProfileResponse> {
-    const profile = await this.getProfileUsecase.execute({ id });
+  ): Promise<ProfileWithTandemsProfilesResponse> {
+    const profile = await this.getProfileWithTandemsProfilesUsecase.execute({
+      id,
+    });
 
-    return ProfileResponse.fromDomain(profile);
+    return ProfileWithTandemsProfilesResponse.fromDomain(profile);
   }
 
   @Post(':id/learning-language')

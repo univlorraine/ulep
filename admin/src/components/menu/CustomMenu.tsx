@@ -2,8 +2,8 @@ import SchoolIcon from '@mui/icons-material/School';
 import SettingsIcon from '@mui/icons-material/Settings';
 import { Divider } from '@mui/material';
 import Box from '@mui/material/Box';
-import React, { useState } from 'react';
-import { Menu, usePermissions, useGetIdentity, useTranslate } from 'react-admin';
+import { useState } from 'react';
+import { Menu, useCreatePath, useGetIdentity, usePermissions, useTranslate } from 'react-admin';
 import { Role } from '../../entities/Administrator';
 import useCurrentPathname from './useCurrentPathname';
 
@@ -120,6 +120,7 @@ const CustomMenu = () => {
     const { data } = useGetIdentity();
     const { permissions } = usePermissions();
     const translate = useTranslate();
+    const createPath = useCreatePath();
     const currentPathname = useCurrentPathname();
     const [universitiesRef, setUniversitiesRef] = useState<HTMLDivElement>();
     const [configurationRef, setConfigurationRef] = useState<HTMLDivElement>();
@@ -137,15 +138,16 @@ const CustomMenu = () => {
 
     return (
         <Menu sx={{ display: 'flex' }}>
-            <Box ref={(newRef: HTMLDivElement) => setProfilesRef(newRef)}>
+            <Box ref={(newRef: HTMLDivElement) => setProfilesRef(newRef)} sx={{ marginTop: 0 }}>
                 <Menu.ResourceItem name="profiles" />
             </Box>
-            <Menu.ResourceItem name="profiles/with-tandem" />
+            <Menu.ResourceItem name="profiles/with-tandems-profiles" />
+            <Menu.ResourceItem name="chat" />
             {permissions.checkRole(Role.MANAGER) && data && data.universityId && (
                 <Menu.Item
                     leftIcon={<SchoolIcon />}
                     primaryText={translate('universities.label')}
-                    to={`/universities/${data.universityId}/show`}
+                    to={createPath({ resource: 'universities', id: data.universityId, type: 'show' })}
                 />
             )}
             {permissions.checkRole(Role.SUPER_ADMIN) && (

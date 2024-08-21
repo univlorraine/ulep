@@ -40,6 +40,16 @@ export class InMemoryReportsRepository implements ReportRepository {
     return category;
   }
 
+  async hasActiveReport(categoryId: string): Promise<boolean> {
+    const activeReports = this.#reports.filter(
+      (report) =>
+        report.category.id === categoryId &&
+        (report.status === 'OPEN' || report.status === 'IN_PROGRESS'),
+    );
+
+    return activeReports.length > 0;
+  }
+
   async findReportByUserIdAndCategory(
     userId: string,
     categoryId: any,

@@ -43,7 +43,10 @@
     "navigation": {
         "bottom_bar": {
             "home": "Home",
-            "conversations": "Conversations"
+            "conversations": "Conversations",
+            "disconnect": "Disconnect",
+            "profile": "Profile",
+            "settings": "Settings"
         },
         "sidebar": {
             "home": "Home",
@@ -94,18 +97,49 @@
         "welcome": "Bienvenue sur ULEP,",
         "welcome_subtext": "le meilleur moyen de pratiquer une langue",
         "welcome_btn": "Apprends une nouvelle langue en tandem",
-        "close": "Close"
+        "close": "Close",
+        "download": "Download"
     },
     "chat": {
+        "ariaLabelFileDownloaded": "Downloading file : {{filename}}",
         "fileDownloaded": "File downloaded",
         "me": "Me",
+        "messageReport": "Message sent by {{firstname}} {{lastname}} on {{date}} --- {{message}}",
+        "messageReported": "Message reported",
+        "mediaReport": "Media sent by {{firstname}} {{lastname}} on {{date}}",
+        "noMessages": "There is no message",
+        "send_button": {
+            "record_aria_label": "Stay pressed to record an audio or write your message to switch to send mode",
+            "send_aria_label": "Send message"
+        },
+        "search": {
+            "placeholder": "Search in conversation"
+        },
         "title": "Messages with {{name}}",
         "input": {
             "placeholder": {
                 "blocked": "The tandem is on pause, you cannot send messages",
                 "unblocked": "Write your message..."
             }
-        }
+        },
+        "conversation_menu": {
+            "aria_label": "Conversation menu",
+            "search": "Search in conversation",
+            "medias": "Show media"
+        },
+        "medias": {
+            "title": "Shared media",
+            "files": "Files",
+            "images": "Images",
+            "images-alt": "Shared image",
+            "audios": "Audios",
+            "links": "Links"
+        },
+        "reportMessageButton": "Report message",
+        "no_messages": "No messages",
+        "no_conversations": "No conversations",
+        "send_image_aria_label": "Send image",
+        "send_file_aria_label": "Send file"
     },
     "connection_page": {
         "connect_title": "Already have an account ?",
@@ -185,6 +219,7 @@
             "tandem_draft": "Pending tandem",
             "tandem_not_found": "Tandem not found",
             "tandem_unavailable": "Tandem unavailable",
+            "tandem_paused": "Tandem paused",
             "title": "My pending requests"
         }
     },
@@ -432,7 +467,8 @@
         "confirm_password": "Confirm your password",
         "password_infos": {
             "title": "The password must contain at least :",
-            "rules": ["8 characters", "1 uppercase character", "1 lowercase character", "1 digit"]
+            "rules": ["8 characters", "1 uppercase character", "1 lowercase character", "1 digit"],
+            "close": "Close password information"
         },
         "cgu": {
             "confidentiality": "privacy policy",

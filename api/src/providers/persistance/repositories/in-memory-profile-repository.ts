@@ -17,6 +17,10 @@ export class InMemoryProfileRepository implements ProfileRepository {
     return this.#profiles.get(id);
   }
 
+  async ofIdWithTandemsProfiles(id: string): Promise<Profile> {
+    return this.#profiles.get(id);
+  }
+
   async ofUser(id: string): Promise<Profile> {
     for (const profile of this.#profiles.values()) {
       if (profile.user.id === id) {
@@ -38,6 +42,18 @@ export class InMemoryProfileRepository implements ProfileRepository {
   }
 
   async findAll(offset?: number, limit?: number): Promise<Collection<Profile>> {
+    const allItems = Array.from(this.#profiles.values());
+
+    return {
+      items: allItems.slice(offset, offset + limit),
+      totalItems: allItems.length,
+    };
+  }
+
+  async findAllWithTandemsProfiles(
+    offset?: number,
+    limit?: number,
+  ): Promise<Collection<Profile>> {
     const allItems = Array.from(this.#profiles.values());
 
     return {

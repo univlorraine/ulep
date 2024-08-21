@@ -10,20 +10,25 @@ import {
     addRefreshAuthToDataProvider,
     fetchUtils,
 } from 'react-admin';
-import { LearningLanguage } from '../entities/LearningLanguage';
-import { ProfileWithTandems } from '../entities/Profile';
+import { MessageType } from '../entities/Message';
 import { RoutineExecution } from '../entities/RoutineExecution';
 import { TandemStatus } from '../entities/Tandem';
+import User from '../entities/User';
 import AdministratorsQuery from '../queries/AdministratorsQuery';
+import ChatQuery from '../queries/ChatQuery';
 import CountriesQuery from '../queries/CountriesQuery';
 import InterestsQuery from '../queries/InterestsQuery';
 import LanguagesQuery from '../queries/LanguagesQuery';
 import { LearningLanguageMatchesQuery, LearningLanguagesQuery } from '../queries/LearningLanguagesQuery';
 import ProfilesQuery from '../queries/ProfilesQuery';
+import ProfilesWithTandemsQuery from '../queries/ProfilesWithTandemsQuery';
 import QuestionsQuery from '../queries/QuestionsQuery';
 import ReportsQuery from '../queries/ReportsQuery';
 import { http, refreshAuth } from './authProvider';
 import jwtManager from './jwtManager';
+import SocketIoProvider from './socketIoProvider';
+
+let socketIoProviderInstance: SocketIoProvider | null = null;
 
 const httpClientOptions = (options: any = {}) => {
     const newOptions = options;
@@ -125,6 +130,9 @@ const customDataProvider = {
             case 'learning-languages/tandems':
                 url = new URL(`${process.env.REACT_APP_API_URL}/learning-languages/${params.id}/tandems`);
                 break;
+            case 'chat':
+                url = new URL(`${process.env.REACT_APP_API_URL}/chat/messages/${params.id}`);
+                break;
             default:
                 break;
         }
@@ -141,33 +149,8 @@ const customDataProvider = {
             return { data: { ...data, id: 'config' } };
         }
 
-        if (resource === 'profiles/with-tandem') {
-            // Filter the learning-languages array contained into the tandem subobject
-            // to remove the root profile one (and keep only the pair one)
-            const filteredLearningLanguages = data.learningLanguages.map((learningLanguage: LearningLanguage) => {
-                if (learningLanguage.tandem) {
-                    const filteredLL = learningLanguage.tandem?.learningLanguages.filter(
-                        (tandemLL) => tandemLL.profile.id !== data.id
-                    );
-
-                    return {
-                        ...learningLanguage,
-                        tandem: {
-                            ...learningLanguage.tandem,
-                            learningLanguages: filteredLL,
-                        },
-                    };
-                }
-
-                return learningLanguage;
-            });
-
-            return {
-                data: {
-                    ...data,
-                    learningLanguages: filteredLearningLanguages,
-                },
-            };
+        if (resource === 'chat') {
+            return { data: { ...data, id: params.id } };
         }
 
         return { data };
@@ -206,14 +189,21 @@ const customDataProvider = {
             case 'users/administrators':
                 url.search = AdministratorsQuery(params);
                 break;
+            case 'chat':
+                url = new URL(`${process.env.REACT_APP_API_URL}/chat/${params.filter.id}`);
+                url.search = ChatQuery(params);
+                break;
+            case 'chat/messages':
+                url = new URL(`${process.env.REACT_APP_API_URL}/chat/messages/${params.filter.conversationId}`);
+                break;
             case 'countries':
                 url.search = CountriesQuery(params);
                 break;
             case 'profiles':
                 url.search = ProfilesQuery(params);
                 break;
-            case 'profiles/with-tandem':
-                url.search = ProfilesQuery(params);
+            case 'profiles/with-tandems-profiles':
+                url.search = ProfilesWithTandemsQuery(params);
                 break;
             case 'reports':
                 url.search = ReportsQuery(params);
@@ -245,37 +235,14 @@ const customDataProvider = {
 
         const result = await response.json();
 
-        if (resource === 'profiles/with-tandem') {
-            // Filter the learning-languages array contained into the tandem subobject
-            // to remove the root profile one (and keep only the pair one)
-            const profilesWithOnlyMatchingTandemProfile = result.items.map((profile: ProfileWithTandems) => {
-                const filteredLearningLanguages = profile.learningLanguages.map(
-                    (learningLanguage: LearningLanguage) => {
-                        if (learningLanguage.tandem) {
-                            const filteredLL = learningLanguage.tandem?.learningLanguages.filter(
-                                (tandemLL) => tandemLL.profile.id !== profile.id
-                            );
+        if (resource === 'chat') {
+            const conversationsWithPartner = result.items.map((conversation: any) => {
+                const partner = conversation.users.find((user: User) => user.id !== params.filter.id);
 
-                            return {
-                                ...learningLanguage,
-                                tandem: {
-                                    ...learningLanguage.tandem,
-                                    learningLanguages: filteredLL,
-                                },
-                            };
-                        }
-
-                        return learningLanguage;
-                    }
-                );
-
-                return {
-                    ...profile,
-                    learningLanguages: filteredLearningLanguages,
-                };
+                return { ...conversation, partner };
             });
 
-            return { data: profilesWithOnlyMatchingTandemProfile, total: result.totalItems };
+            return { data: conversationsWithPartner, total: result.totalItems };
         }
 
         if (!result.items) {
@@ -426,6 +393,81 @@ const customDataProvider = {
         const result = await response.json();
 
         return result;
+    },
+    getChatMessagesByConversationId: async ({
+        conversationId,
+        lastMessageId,
+        direction,
+        limit = 10,
+        typeFilter,
+    }: {
+        conversationId: string;
+        lastMessageId?: string;
+        direction?: 'forward' | 'backward';
+        limit?: number;
+        typeFilter?: MessageType;
+    }): Promise<any> => {
+        const url = `${process.env.REACT_APP_API_URL}/chat/messages/${conversationId}?limit=${limit}${
+            lastMessageId ? `&lastMessageId=${lastMessageId}` : ''
+        }${direction ? `&direction=${direction}` : ''}${typeFilter ? `&typeFilter=${typeFilter}` : ''}`;
+        const response = await fetch(url, httpClientOptions({ method: 'GET' }));
+
+        if (!response.ok) {
+            await throwError(response);
+        }
+
+        const result = await response.json();
+
+        return result.items;
+    },
+    getSocketIoProvider: (): SocketIoProvider | null => {
+        const socketUrl = process.env.REACT_APP_SOCKET_CHAT_URL;
+        if (!socketIoProviderInstance && socketUrl) {
+            socketIoProviderInstance = new SocketIoProvider(socketUrl);
+        }
+
+        return socketIoProviderInstance;
+    },
+    sendMessage: async (
+        conversationId: string,
+        senderId: string,
+        content?: string,
+        file?: File,
+        filename?: string
+    ): Promise<any> => {
+        const url = `${process.env.REACT_APP_CHAT_URL}/conversations/${conversationId}/message`;
+        const body = new FormData();
+        body.append('senderId', senderId);
+
+        if (content) {
+            body.append('content', content);
+        }
+        if (file) {
+            body.append('file', file);
+        }
+        if (filename) {
+            body.append('filename', filename);
+        }
+
+        const response = await fetch(url, httpClientOptions({ method: 'POST', body }));
+
+        if (!response.ok) {
+            await throwError(response);
+        }
+
+        const result = await response.json();
+
+        return { data: result };
+    },
+    getJitsiToken: async (): Promise<string> => {
+        const url = `${process.env.REACT_APP_API_URL}/authentication/jitsi/token`;
+        const response = await fetch(url, httpClientOptions({ method: 'GET' }));
+
+        if (!response.ok) {
+            await throwError(response);
+        }
+
+        return response.json();
     },
 } as unknown as DataProvider;
 

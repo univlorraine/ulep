@@ -53,6 +53,6 @@
 }
 
 .tested-languages {
-    white-space: nowrap;
-    display: inline;
+    display: inline-block;
+    padding-right: 1rem;
 }

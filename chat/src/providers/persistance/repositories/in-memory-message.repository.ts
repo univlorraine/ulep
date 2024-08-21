@@ -1,10 +1,10 @@
-import { Injectable } from '@nestjs/common';
 import { Collection } from '@app/common';
+import { Injectable } from '@nestjs/common';
+import { Message } from 'src/core/models/message.model';
 import {
     MessagePagination,
     MessageRepository,
 } from 'src/core/ports/message.repository';
-import { Message } from 'src/core/models/message.model';
 
 @Injectable()
 export class InMemoryMessageRepository implements MessageRepository {
@@ -71,5 +71,15 @@ export class InMemoryMessageRepository implements MessageRepository {
         return this.#messages.filter(
             (message) => message.conversationId === conversationId,
         );
+    }
+
+    async searchMessagesIdByConversationId(
+        conversationId: string,
+        search: string,
+    ): Promise<string[]> {
+        return this.#messages
+            .filter((message) => message.conversationId === conversationId)
+            .filter((message) => message.content.includes(search))
+            .map((message) => message.id);
     }
 }

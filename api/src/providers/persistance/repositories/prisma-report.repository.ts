@@ -1,17 +1,17 @@
 import { Collection, PrismaService } from '@app/common';
 import { Injectable } from '@nestjs/common';
-import { TextContentRelations } from '../mappers/translation.mapper';
+import { Report, ReportCategory, ReportStatus } from 'src/core/models';
 import {
   ReportQueryOrderBy,
   ReportQueryWhere,
   ReportRepository,
 } from 'src/core/ports/report.repository';
-import { Report, ReportCategory, ReportStatus } from 'src/core/models';
 import {
   ReportRelations,
   reportCategoryMapper,
   reportMapper,
 } from '../mappers/report.mapper';
+import { TextContentRelations } from '../mappers/translation.mapper';
 
 @Injectable()
 export class PrismaReportRepository implements ReportRepository {
@@ -82,6 +82,7 @@ export class PrismaReportRepository implements ReportRepository {
         },
         status: report.status,
         content: report.content,
+        metadata: report.metadata,
       },
     });
 
@@ -108,6 +109,19 @@ export class PrismaReportRepository implements ReportRepository {
     });
 
     return category;
+  }
+
+  async hasActiveReport(categoryId: string): Promise<boolean> {
+    const count = await this.prisma.reports.count({
+      where: {
+        AND: [
+          { Category: { id: categoryId } },
+          { status: { in: [ReportStatus.OPEN, ReportStatus.IN_PROGRESS] } },
+        ],
+      },
+    });
+
+    return count > 0;
   }
 
   async reportsByStatus(status: ReportStatus): Promise<Report[]> {

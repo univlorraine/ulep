@@ -1,0 +1,50 @@
+.profiles-with-tandem-list .MuiTableRow-root.MuiTableRow-hover:hover {
+    background-color: #ffffff !important;
+}
+
+.profiles-with-tandem-list .line {
+    height: 64px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    border-bottom: 1px solid #e0e0e0;
+}
+
+.profiles-with-tandem-list .line.tandem.profile {
+    padding-left: 10px;
+    min-width: 200px;
+}
+
+.profiles-with-tandem-list th {
+    padding: 6px;
+}
+
+.profiles-with-tandem-list .line:last-of-type {
+    border-bottom: 0;
+}
+
+.profiles-with-tandem-list .MuiTableCell-root.MuiTableCell-paddingCheckbox {
+    padding-top: 20px !important;
+    vertical-align: top !important;
+}
+
+.profiles-with-tandem-list .MuiTable-root.RaDatagrid-table {
+    border-collapse: separate;
+    border-spacing: 0 60px;
+}
+
+.profiles-with-tandem-list .MuiTableRow-root.RaDatagrid-row {
+    margin-bottom: 50px;
+}
+
+.profiles-with-tandem-list .MuiTableCell-root:not(th) {
+    border-bottom: 1px solid #000000 !important;
+}
+
+.profiles-with-tandem-list .MuiTableCell-root.RaDatagrid-rowCell {
+    padding: 0;
+}
+
+.profiles-with-tandem-list .MuiTableHead-root.RaDatagrid-thead {
+    border-collapse: collapse !important;
+}

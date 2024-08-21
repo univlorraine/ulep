@@ -1,10 +1,10 @@
-import { IonContent, IonPage } from '@ionic/react';
+import { IonPage } from '@ionic/react';
 import { useTranslation } from 'react-i18next';
-import styles from './ConversationsContent.module.css';
 import Conversation from '../../../domain/entities/chat/Conversation';
-import ConversationsLines from '../chat/ConversationsLines';
 import Profile from '../../../domain/entities/Profile';
+import ConversationsLines from '../chat/ConversationsLines';
 import Loader from '../Loader';
+import styles from './ConversationsContent.module.css';
 
 interface ConversationsContentProps {
     conversations: Conversation[];
@@ -12,6 +12,7 @@ interface ConversationsContentProps {
     isLoading: boolean;
     profile: Profile;
     onConversationPressed: (conversation: Conversation) => void;
+    currentConversation?: Conversation;
 }
 
 const Content: React.FC<Omit<ConversationsContentProps, 'isHybrid'>> = ({
@@ -19,30 +20,31 @@ const Content: React.FC<Omit<ConversationsContentProps, 'isHybrid'>> = ({
     isLoading,
     onConversationPressed,
     profile,
+    currentConversation,
 }) => {
     const { t } = useTranslation();
 
     return (
-        <IonContent>
-            <div className={`${styles.container}`}>
-                <div className={styles.header}>
-                    <span className={styles.title}>{t('conversations.title')}</span>
-                </div>
-                {!isLoading && (
-                    <ConversationsLines
-                        conversations={conversations}
-                        onConversationPressed={onConversationPressed}
-                        userId={profile.user.id}
-                    />
-                )}
-                {isLoading && <Loader />}
+        <div className={`${styles.container}`}>
+            <div className={styles.header}>
+                <h1 className={styles.title}>{t('conversations.title')}</h1>
             </div>
-        </IonContent>
+            {!isLoading && (
+                <ConversationsLines
+                    conversations={conversations}
+                    onConversationPressed={onConversationPressed}
+                    userId={profile.user.id}
+                    currentConversation={currentConversation}
+                />
+            )}
+            {isLoading && <Loader />}
+        </div>
     );
 };
 
 const ConversationsContent: React.FC<ConversationsContentProps> = ({
     conversations,
+    currentConversation,
     isHybrid,
     isLoading,
     onConversationPressed,
@@ -55,17 +57,19 @@ const ConversationsContent: React.FC<ConversationsContentProps> = ({
                 isLoading={isLoading}
                 onConversationPressed={onConversationPressed}
                 profile={profile}
+                currentConversation={currentConversation}
             />
         );
     }
 
     return (
-        <IonPage className={styles.content}>
+        <IonPage className={`${styles.content} content-wrapper`}>
             <Content
                 conversations={conversations}
                 isLoading={isLoading}
                 onConversationPressed={onConversationPressed}
                 profile={profile}
+                currentConversation={currentConversation}
             />
         </IonPage>
     );

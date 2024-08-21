@@ -1,16 +1,17 @@
-import { IonIcon, IonPage, useIonToast } from '@ionic/react';
+import { IonButton, IonContent, IonIcon, IonItem, IonLabel, IonList, IonPage, IonPopover } from '@ionic/react';
+import { imageOutline, searchOutline, videocam } from 'ionicons/icons';
 import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { CloseBlackSvg, KebabSvg, LeftChevronSvg, PaperclipSvg, PictureSvg } from '../../../assets';
+import { useHistory } from 'react-router';
+import { KebabSvg, LeftChevronSvg } from '../../../assets';
 import { useConfig } from '../../../context/ConfigurationContext';
 import Profile from '../../../domain/entities/Profile';
-import { UserChat } from '../../../domain/entities/User';
-import Conversation from '../../../domain/entities/chat/Conversation';
-import { MessageWithConversationId } from '../../../domain/entities/chat/Message';
+import Conversation, { MessagePaginationDirection } from '../../../domain/entities/chat/Conversation';
+import { useStoreState } from '../../../store/storeTypes';
 import useHandleMessagesFromConversation from '../../hooks/useHandleMessagesFromConversation';
-import AudioLine from '../AudioLine';
 import Loader from '../Loader';
-import RecordingButton from '../RecordingButton';
+import ChatInputSender from '../chat/ChatInputSender';
+import ConversationSearchBar from '../chat/ConversationSearchBar';
 import MessagesList from '../chat/MessagesList';
 import styles from './ChatContent.module.css';
 
@@ -20,107 +21,63 @@ interface ChatContentProps {
     goBack?: () => void;
     isHybrid: boolean;
     profile: Profile;
+    setCurrentContent?: (content: string) => void;
+    setImageToDisplay: (imageUrl: string) => void;
 }
 
-const Content: React.FC<Omit<ChatContentProps, 'isHybrid'>> = ({ conversation, goBack, profile }) => {
+const Content: React.FC<ChatContentProps> = ({
+    conversation,
+    goBack,
+    profile,
+    setCurrentContent,
+    setImageToDisplay,
+}) => {
     const { t } = useTranslation();
-    const [showToast] = useIonToast();
-    const { cameraAdapter, fileAdapter, recorderAdapter, sendMessage, socketIoAdapter } = useConfig();
-    const [message, setMessage] = useState<string>('');
-    const [imageToSend, setImageToSend] = useState<File | undefined>();
-    const [audioFile, setAudioFile] = useState<File | undefined>();
-    const [fileToSend, setFileToSend] = useState<File | undefined>();
-    const [isRecording, setIsRecording] = useState<boolean>(false);
+    const { recorderAdapter, socketIoAdapter } = useConfig();
     const isBlocked = conversation.isBlocked;
+    const [showMenu, setShowMenu] = useState(false);
+    const [currentMessageSearchId, setCurrentMessageSearchId] = useState<string>();
+    const [isSearchMode, setIsSearchMode] = useState<boolean>(false);
+    const history = useHistory();
+    const accessToken = useStoreState((state) => state.accessToken);
+    const {
+        messages,
+        isScrollForwardOver,
+        isScrollBackwardOver,
+        isLoading,
+        loadMessages,
+        addNewMessage,
+        clearMessages,
+    } = useHandleMessagesFromConversation({
+        conversationId: conversation.id,
+    });
 
-    const { messages, isScrollOver, error, isLoading, loadMessages, addNewMessage } = useHandleMessagesFromConversation(
-        conversation.id
-    );
-
-    const onSendPressed = async () => {
-        if (isRecording || (!message && !imageToSend && !audioFile && !fileToSend)) {
-            return;
-        }
-
-        let file: File | undefined;
-        let filename: string | undefined;
-        if (audioFile) {
-            file = audioFile;
-        } else if (imageToSend) {
-            file = imageToSend;
-        } else if (fileToSend) {
-            file = fileToSend;
-            filename = fileToSend.name;
-        }
-
-        setMessage('');
-        setImageToSend(undefined);
-        setAudioFile(undefined);
-        setFileToSend(undefined);
-
-        const messageResult = await sendMessage.execute(conversation.id, profile.user.id, message, file, filename);
-
-        if (messageResult instanceof Error) {
-            return showToast({
-                message: t(messageResult.message),
-                duration: 5000,
-            });
-        }
-
-        socketIoAdapter.emit(
-            new MessageWithConversationId(
-                messageResult.id,
-                messageResult.content,
-                messageResult.createdAt,
-                new UserChat(
-                    profile.user.id,
-                    profile.user.firstname,
-                    profile.user.lastname,
-                    profile.user.email,
-                    false,
-                    profile.user.avatar
-                ),
-                messageResult.type,
-                conversation.id
-            )
-        );
+    const setSearchMode = () => {
+        setShowMenu(false);
+        setIsSearchMode(true);
     };
 
-    const handleStartRecord = () => {
-        // If we are already recording or if we have an audio file, we don't want to start a new recording
-        if (isRecording || audioFile) {
-            return;
-        }
-
-        setIsRecording(true);
-        recorderAdapter.startRecording((audio, error) => {
-            if (error) {
-                return showToast({
-                    message: t(error.message),
-                    duration: 5000,
-                });
-            }
-            setIsRecording(false);
-            setAudioFile(audio);
-        });
+    const unsetSearchMode = () => {
+        setIsSearchMode(false);
+        setCurrentMessageSearchId(undefined);
+        loadMessages(true, MessagePaginationDirection.FORWARD);
     };
 
-    const handleStopRecord = () => {
-        setIsRecording(false);
-        recorderAdapter.stopRecording((audio, error) => {
-            if (error) {
-                return showToast({
-                    message: t(error.message),
-                    duration: 5000,
-                });
-            }
-            setIsRecording(false);
-            setAudioFile(audio);
+    const loadMessageFromSearch = (messageId: string) => {
+        setCurrentMessageSearchId(messageId);
+        loadMessages(true, MessagePaginationDirection.BOTH, messageId);
+    };
+
+    const onOpenVideoCall = () => {
+        history.push({
+            pathname: '/jitsi',
+            search: `?roomName=${conversation.id}`,
         });
     };
 
     useEffect(() => {
-        socketIoAdapter.connect();
+        recorderAdapter.requestPermission();
+        socketIoAdapter.connect(accessToken);
         socketIoAdapter.onMessage(conversation.id, addNewMessage);
 
         return () => {
@@ -129,112 +86,124 @@ const Content: React.FC<Omit<ChatContentProps, 'isHybrid'>> = ({ conversation, g
         };
     }, [conversation.id]);
 
-    const handleImageClick = async () => {
-        if (isBlocked) {
-            return;
-        }
-        const image = await cameraAdapter.getPictureFromGallery();
-        if (image) {
-            setImageToSend(image);
-            setMessage('');
-        }
-    };
-
-    const handleFileClick = async () => {
-        if (isBlocked) {
-            return;
-        }
-        const file = await fileAdapter.getFile();
-        if (file) {
-            setFileToSend(file);
-        }
-    };
-
     return (
-        <div className={styles.container}>
+        <div className={`${styles.container} content-wrapper`}>
             <div className={styles.header}>
-                {goBack ? <IonIcon icon={LeftChevronSvg} onClick={goBack} /> : <div />}
-                <span className={styles.title}>
-                    {t('chat.title', { name: conversation.getMainConversationPartner(profile.user.id).firstname })}
-                </span>
-                <IonIcon icon={KebabSvg} />
+                {goBack && (
+                    <IonButton
+                        fill="clear"
+                        onClick={goBack}
+                        aria-label={t('chat.conversation_menu.aria_label') as string}
+                    >
+                        <IonIcon icon={LeftChevronSvg} size="medium" aria-hidden="true" />
+                    </IonButton>
+                )}
+                <div className={styles['title-container']}>
+                    <h2 className={styles.title}>
+                        {t('chat.title', {
+                            name: Conversation.getMainConversationPartner(conversation, profile.user.id).firstname,
+                        })}
+                    </h2>
+                    <IonButton fill="clear" className={styles.camera} onClick={onOpenVideoCall}>
+                        <IonIcon icon={videocam} />
+                    </IonButton>
+                </div>
+                <IonButton
+                    fill="clear"
+                    id="click-trigger"
+                    className={styles['kebab-button']}
+                    onClick={() => setShowMenu(!showMenu)}
+                    aria-label={t('chat.conversation_menu.aria_label') as string}
+                >
+                    <IonIcon icon={KebabSvg} size="medium" aria-hidden="true" />
+                </IonButton>
+                <IonPopover trigger="click-trigger" triggerAction="click" isOpen={showMenu} showBackdrop={false}>
+                    <IonContent>
+                        <IonList lines="none">
+                            <IonItem
+                                button={true}
+                                detail={false}
+                                onClick={() =>
+                                    setCurrentContent
+                                        ? setCurrentContent('media')
+                                        : history.push('/media', { conversation })
+                                }
+                            >
+                                <IonIcon icon={imageOutline} aria-hidden="true" />
+                                <IonLabel className={styles['chat-popover-label']}>
+                                    {t('chat.conversation_menu.medias')}
+                                </IonLabel>
+                            </IonItem>
+                            <IonItem button={true} detail={false} onClick={setSearchMode}>
+                                <IonIcon icon={searchOutline} aria-hidden="true" />
+                                <IonLabel className={styles['chat-popover-label']}>
+                                    {t('chat.conversation_menu.search')}
+                                </IonLabel>
+                            </IonItem>
+                        </IonList>
+                    </IonContent>
+                </IonPopover>
             </div>
+            {isSearchMode && (
+                <ConversationSearchBar
+                    conversation={conversation}
+                    loadMessages={loadMessageFromSearch}
+                    setIsSearchMode={setIsSearchMode}
+                    onSearchIsEmpty={clearMessages}
+                    clearSearch={unsetSearchMode}
+                />
+            )}
             {!isLoading ? (
                 <MessagesList
+                    currentMessageSearchId={currentMessageSearchId}
                     messages={messages}
-                    loadMessages={loadMessages}
+                    loadMessages={(direction) => loadMessages(false, direction)}
                     userId={profile.user.id}
-                    isScrollOver={isScrollOver}
+                    isScrollForwardOver={isScrollForwardOver}
+                    isScrollBackwardOver={isScrollBackwardOver}
+                    setImageToDisplay={setImageToDisplay}
                 />
             ) : (
                 <div className={styles.loader}>
                     <Loader />
                 </div>
             )}
-            <div className={styles.footer}>
-                <div>
-                    <IonIcon className={styles.icon} icon={PictureSvg} onClick={handleImageClick} />
-                    <IonIcon className={styles.icon} icon={PaperclipSvg} onClick={handleFileClick} />
-                </div>
-                <div className={styles['sender-view']}>
-                    {imageToSend && (
-                        <div className={styles['preview-container']}>
-                            <button className={styles['cancel-image-button']} onClick={() => setImageToSend(undefined)}>
-                                <img src={CloseBlackSvg} />
-                            </button>
-                            <img className={styles['preview-image']} src={URL.createObjectURL(imageToSend)} />
-                        </div>
-                    )}
-                    {audioFile && (
-                        <div className={styles['preview-audio-container']}>
-                            <button className={styles['cancel-audio-button']} onClick={() => setAudioFile(undefined)}>
-                                <img src={CloseBlackSvg} style={{ filter: 'invert(1)' }} />
-                            </button>
-                            <AudioLine audioFile={audioFile} />
-                        </div>
-                    )}
-                    {fileToSend && (
-                        <div className={styles['preview-file-container']}>
-                            <button className={styles['cancel-audio-button']} onClick={() => setFileToSend(undefined)}>
-                                <img src={CloseBlackSvg} style={{ filter: 'invert(1)' }} />
-                            </button>
-                            <span>{fileToSend.name}</span>
-                        </div>
-                    )}
-                    {!imageToSend && !audioFile && !fileToSend && (
-                        <textarea
-                            className={styles.input}
-                            maxLength={1000}
-                            onChange={(e) => setMessage(e.target.value)}
-                            placeholder={
-                                t(isBlocked ? 'chat.input.placeholder.blocked' : 'chat.input.placeholder.unblocked') ??
-                                ''
-                            }
-                            value={message}
-                            disabled={isBlocked}
-                        />
-                    )}
-                    <RecordingButton
-                        mode={message || imageToSend || audioFile || fileToSend ? 'send' : 'record'}
-                        onSendPressed={onSendPressed}
-                        handleStartRecord={handleStartRecord}
-                        handleStopRecord={handleStopRecord}
-                        isBlocked={isBlocked}
-                    />
-                </div>
-            </div>
+            {!isSearchMode && <ChatInputSender isBlocked={isBlocked} profile={profile} conversation={conversation} />}
         </div>
     );
 };
 
-const ChatContent: React.FC<ChatContentProps> = ({ conversation, isHybrid, goBack, profile }) => {
+const ChatContent: React.FC<ChatContentProps> = ({
+    conversation,
+    isHybrid,
+    goBack,
+    profile,
+    setCurrentContent,
+    setImageToDisplay,
+}) => {
     if (!isHybrid) {
-        return <Content conversation={conversation} goBack={goBack} profile={profile} />;
+        return (
+            <Content
+                conversation={conversation}
+                goBack={goBack}
+                profile={profile}
+                isHybrid={isHybrid}
+                setCurrentContent={setCurrentContent}
+                setImageToDisplay={setImageToDisplay}
+            />
+        );
     }
 
     return (
         <IonPage className={styles.content}>
-            <Content conversation={conversation} goBack={goBack} profile={profile} />
+            <Content
+                conversation={conversation}
+                goBack={goBack}
+                profile={profile}
+                isHybrid={isHybrid}
+                setCurrentContent={setCurrentContent}
+                setImageToDisplay={setImageToDisplay}
+            />
         </IonPage>
     );
 };

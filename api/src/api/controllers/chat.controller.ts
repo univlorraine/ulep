@@ -1,4 +1,4 @@
-import { Collection } from '@app/common';
+import { Collection, ModeQuery } from '@app/common';
 import {
   Controller,
   Get,
@@ -14,7 +14,7 @@ import { AuthenticationGuard } from '../guards';
 
 import {
   ConversationResponse,
-  GetConversationRequest,
+  GetConversationQuery,
   GetMessagesQueryParams,
   MessageResponse,
 } from 'src/api/dtos/chat';
@@ -39,18 +39,30 @@ export class ChatController {
   @UseGuards(AuthenticationGuard)
   async getAllConversations(
     @Param('id', ParseUUIDPipe) id: string,
-    @Query() params: GetConversationRequest,
+    @Query() params: GetConversationQuery,
   ): Promise<Collection<ConversationResponse>> {
     const conversations =
       await this.getAllConversationsFromUserIdUsecase.execute({
         userId: id,
         limit: params.limit,
-        offset: params.page,
+        offset: (params.page - 1) * params.limit,
+        filters: {
+          user: {
+            firstname: {
+              contains: params.firstname,
+              mode: ModeQuery.INSENSITIVE,
+            },
+            lastname: {
+              contains: params.lastname,
+              mode: ModeQuery.INSENSITIVE,
+            },
+          },
+        },
       });
 
     return new Collection<ConversationResponse>({
-      items: conversations.map(ConversationResponse.from),
-      totalItems: conversations.length,
+      items: conversations.items.map(ConversationResponse.from),
+      totalItems: conversations.totalItems,
     });
   }
 
@@ -67,7 +79,9 @@ export class ChatController {
       conversationId: id,
       limit: params.limit,
       lastMessageId: params.lastMessageId,
-      messageFilter: params.messageFilter,
+      contentFilter: params.contentFilter,
+      typeFilter: params.typeFilter,
+      direction: params.direction,
     });
 
     return new Collection<MessageResponse>({

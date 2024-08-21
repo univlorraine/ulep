@@ -25,6 +25,10 @@ const getTitleFromStatusAndProfile = (status: TandemStatus, hasProfile: boolean)
         return 'home_page.waiting_tandem.tandem_not_found';
     }
 
+    if(status === 'PAUSED') {
+        return 'home_page.waiting_tandem.tandem_paused';
+    }
+
     return '';
 };
 

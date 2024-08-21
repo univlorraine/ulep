@@ -49,7 +49,7 @@ class FileAdapter implements FileAdapterInterface {
         } else {
             const a = document.createElement('a');
             a.href = url;
-            a.download = filename;
+            a.download = filename || 'true';
             document.body.appendChild(a);
             a.click();
             document.body.removeChild(a);

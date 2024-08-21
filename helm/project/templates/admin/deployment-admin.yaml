@@ -71,6 +71,10 @@ spec:
               value: "{{ .Values.admin.env.sentryDsn }}"
             - name: REACT_APP_JITSI_DOMAIN
               value: "{{ .Values.jitsiUrl }}.{{ .Values.domain }}"
+            - name: REACT_APP_CHAT_URL
+              value: "https://{{ .Values.chatUrl }}.{{ .Values.domain }}"
+            - name: REACT_APP_SOCKET_CHAT_URL
+              value: "https://{{ .Values.socketChatUrl }}.{{ .Values.domain }}"
       {{- with .Values.nodeSelector }}
       nodeSelector:
         {{- toYaml . | nindent 8 }}

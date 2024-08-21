@@ -1,4 +1,5 @@
 import { Inject, Injectable, NotFoundException } from '@nestjs/common';
+import * as sharp from 'sharp';
 import { Message } from 'src/core/models';
 import { MediaObject } from 'src/core/models/media.model';
 import {
@@ -23,7 +24,7 @@ export class UploadMediaCommand {
     conversationId: string;
     message: Message;
     file: File;
-    filename?: string;
+    filename: string;
 }
 
 @Injectable()
@@ -43,35 +44,109 @@ export class UploadMediaUsecase {
         await this.assetConversationExist(command.conversationId);
         await this.assetMessageExist(command.message.id);
 
-        const file = await this.upload(
+        const { name, url } = await this.upload(
             command.file,
             command.conversationId,
             command.message,
             command.filename,
         );
 
-        return this.storageInterface.temporaryUrl(
-            'chat',
-            `${command.conversationId}/${
-                command.filename
-                    ? command.filename
-                    : `${file.id}.${file.mimetype.split('/')[1]}`
-            }`,
-            3600,
-        );
+        let thumbnailUrl = null;
+        if (command.file.mimetype.startsWith('image/')) {
+            thumbnailUrl = await this.uploadThumbnail(
+                command.file,
+                command.conversationId,
+                command.message,
+                command.filename,
+            );
+        }
+
+        return {
+            name,
+            url,
+            thumbnailUrl,
+        };
     }
 
     private async upload(
         file: Express.Multer.File,
         conversationId: string,
         message: Message,
-        filename?: string,
-    ): Promise<MediaObject> {
-        const image = MediaObject.image(file, 'chat', conversationId, filename);
-        await this.storageInterface.write('chat', image.name, file);
-        await this.mediaObjectRepository.saveFile(image, message.id);
+        filename: string,
+    ): Promise<{ name: string; url: string }> {
+        const media = MediaObject.generate(
+            file,
+            'chat',
+            conversationId,
+            filename,
+        );
+        await this.storageInterface.write('chat', media.name, file);
+        await this.mediaObjectRepository.saveFile(media, message.id);
 
-        return image;
+        return {
+            name: media.name,
+            url: await this.storageInterface.temporaryUrl(
+                'chat',
+                media.name,
+                3600,
+            ),
+        };
+    }
+
+    private async uploadThumbnail(
+        file: Express.Multer.File,
+        conversationId: string,
+        message: Message,
+        filename: string,
+    ): Promise<string | null> {
+        const load = await sharp(file.buffer);
+        const metadata = await load.metadata();
+        const height = metadata.height;
+        const width = metadata.width;
+        if (height > 600 || width > 600) {
+            const resizedBuffer = await sharp(file.buffer)
+                .resize({
+                    width: width > height ? 600 : null,
+                    height: height > width ? 600 : null,
+                    fit: 'inside',
+                }) // Reduce proportionally
+                .toBuffer();
+
+            const thumbnailFile: Express.Multer.File = {
+                fieldname: file.fieldname,
+                originalname: file.originalname,
+                encoding: file.encoding,
+                mimetype: file.mimetype,
+                size: resizedBuffer.length,
+                buffer: resizedBuffer,
+                destination: file.destination,
+                filename: `thumbnail_${filename}`,
+                path: file.path,
+                stream: file.stream,
+            };
+            const thumbnail = MediaObject.generate(
+                thumbnailFile,
+                'chat',
+                conversationId,
+                filename,
+                true,
+            );
+            await this.storageInterface.write(
+                'chat',
+                thumbnail.name,
+                thumbnailFile,
+            );
+            await this.mediaObjectRepository.saveThumbnail(
+                thumbnail,
+                message.id,
+            );
+
+            return this.storageInterface.temporaryUrl(
+                'chat',
+                thumbnail.name,
+                3600,
+            );
+        }
     }
 
     private async assetConversationExist(conversationId: string) {

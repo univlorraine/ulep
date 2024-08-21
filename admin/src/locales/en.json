@@ -4,6 +4,7 @@
         "create": {
             "email": "Please enter the email of the new administrator",
             "error": "An error occurred while creating an administrator",
+            "error_already_admin": "The user is already an administrator",
             "password": "Please enter a password for the administrator (1 uppercase, 1 lowercase and 1 number)",
             "title": "Creating an administrator",
             "university": "Please select a university for the administrator",
@@ -24,6 +25,7 @@
         "update": {
             "email": "Update user email",
             "error": "An error occurred while updating an administrator",
+            "error_mail": "The email is used by another user",
             "password": "Please enter an administrator password (1 uppercase, 1 lowercase and 1 number) if you want to update it",
             "title": "Updating an administrator",
             "university": "Update the university to administer",
@@ -50,6 +52,32 @@
             "error": "An error occurred while updating the instance",
             "name": "Campus name",
             "title": "Update campus"
+        }
+    },
+    "chat": {
+        "label": "Conversations",
+        "title": "Conversations",
+        "list": {
+            "filters": {
+                "lastname": "Lastname",
+                "firstname": "Firstname",
+                "university": "University"
+            }
+        },
+        "audioRecorder": {
+            "error": "An error occurred while recording the audio",
+            "permission": "You must allow access to the microphone to record an audio"
+        },
+        "show": {
+            "title": "Messages with %{partner}",
+            "you": "You",
+            "close": "Close"
+        },
+        "messageType": {
+            "link": "Link",
+            "image": "Image",
+            "audio": "Audio",
+            "file": "File"
         }
     },
     "count_suggested_languages": {
@@ -330,14 +358,16 @@
         }
     },
     "reports": {
-        "closed": "Closed",
+        "category": "Report category",
+        "CLOSED": "Closed",
         "comment": "Administrator's comments",
         "content": "Content",
-        "in_progress": "In progress",
+        "created_at": "Submission date",
+        "IN_PROGRESS": "In progress",
         "label": "Reports",
         "tabLabel": "Reports list",
         "title": "Reports",
-        "open": "Open",
+        "OPEN": "Open",
         "status": "Status",
         "update": {
             "comment": "Update report comment",
@@ -500,6 +530,9 @@
                 },
                 "university": {
                     "label": "University"
+                },
+                "learningLanguage": {
+                    "label": "Language"
                 }
             },
             "globalRoutineModal": {
@@ -563,7 +596,7 @@
                 "specificProgram": "Specific program",
                 "hasPriority": "Priority language (no response to previous cycle)",
                 "score": "Score",
-                "nativeLanguage": "Native language"
+                "masteredLanguages": "Mastered languages"
             },
             "tandems": {
                 "error": "An error occured while fetching tandems",

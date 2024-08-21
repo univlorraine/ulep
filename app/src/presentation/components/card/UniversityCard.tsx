@@ -1,8 +1,8 @@
+import { format } from 'date-fns';
 import { useTranslation } from 'react-i18next';
 import University from '../../../domain/entities/University';
-import styles from './UniversityCard.module.css';
-import { format } from 'date-fns';
 import NetworkImage from '../NetworkImage';
+import styles from './UniversityCard.module.css';
 
 interface UniversityCardProps {
     university: University;
@@ -15,9 +15,15 @@ const UniversityCard: React.FC<UniversityCardProps> = ({ university }) => {
     return (
         <div className={`${styles.container} ${university.isCentral ? styles.central : styles.partner}`}>
             {university.logo ? (
-                <NetworkImage id={university.logo} alt="" role='presentation' className={styles.logo} />
+                <NetworkImage
+                    id={university.logo}
+                    alt=""
+                    role="presentation"
+                    className={styles.logo}
+                    aria-hidden={true}
+                />
             ) : (
-                <div className={styles.logo} />
+                <div className={styles.logo} aria-hidden={true} />
             )}
             <div className={styles['text-container']}>
                 <span className={styles.title}>{university.name}</span>
