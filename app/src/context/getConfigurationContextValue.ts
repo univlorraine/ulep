@@ -95,7 +95,7 @@ const getConfigContextValue = ({
         setTokens,
         logout
     );
-    const socketIoAdapter = new SocketIoAdapter(socketChatUrl, accessToken);
+    const socketIoAdapter = new SocketIoAdapter(socketChatUrl);
 
     const addDevice = new AddDeviceUsecase(domainHttpAdapter);
     const askForAccountDeletion = new AskForAccountDeletion(domainHttpAdapter);

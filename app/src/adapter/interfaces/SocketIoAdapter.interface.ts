@@ -1,7 +1,7 @@
 import { Message } from '../../domain/entities/chat/Message';
 
 interface SocketIoAdapterInterface {
-    connect(): void;
+    connect(token: string): void;
     disconnect(): void;
     emit(message: Message): Message;
     offMessage(): void;

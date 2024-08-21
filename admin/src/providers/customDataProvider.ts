@@ -421,10 +421,9 @@ const customDataProvider = {
         return result.items;
     },
     getSocketIoProvider: (): SocketIoProvider | null => {
-        const accessToken = jwtManager.getToken('access_token');
         const socketUrl = process.env.REACT_APP_SOCKET_CHAT_URL;
-        if (!socketIoProviderInstance && socketUrl && accessToken) {
-            socketIoProviderInstance = new SocketIoProvider(socketUrl, accessToken);
+        if (!socketIoProviderInstance && socketUrl) {
+            socketIoProviderInstance = new SocketIoProvider(socketUrl);
         }
 
         return socketIoProviderInstance;
