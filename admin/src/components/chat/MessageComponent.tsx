@@ -16,7 +16,8 @@ interface MessageComponentProps {
               id: string;
               content: string;
               createdAt: string;
-              user: User;
+              user?: User;
+              sender?: User;
               senderId?: string;
               type: 'text' | 'image' | 'audio' | 'link' | 'file';
               metadata: unknown;
@@ -142,7 +143,8 @@ const MessageFile = ({ message }: MessagePropsWithoutUserId) => {
 const MessageComponent = ({ message, userId, ...props }: MessageComponentProps) => {
     const translate = useTranslate();
     const [locale] = useLocaleState();
-    const isCurrentUser = message.senderId ? message.senderId : message.user.id === userId;
+    const sender = message.senderId ? message.sender : message.user;
+    const isCurrentUser = sender.id === userId;
 
     const renderMessage = () => {
         switch (message.type) {
@@ -192,7 +194,7 @@ const MessageComponent = ({ message, userId, ...props }: MessageComponentProps) 
                 }}
             >
                 <Typography sx={{ fontWeight: 'bold', fontSize: 16 }}>
-                    {isCurrentUser ? translate('chat.show.you') : `${message.user.firstname} ${message.user.lastname}`}
+                    {isCurrentUser ? translate('chat.show.you') : `${sender.firstname} ${sender.lastname}`}
                 </Typography>
                 <Typography sx={{ fontSize: 12 }}>
                     {new Date(message.createdAt).toLocaleString(getLocaleCode(locale), {
