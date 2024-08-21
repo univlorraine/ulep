@@ -5,8 +5,8 @@ export interface AdministratorsParams {
         email?: string;
         firstname?: string;
         lastname?: string;
-        group?: string;
-        university?: string;
+        groupId?: string;
+        universityId?: string;
     };
 }
 
@@ -15,8 +15,8 @@ const AdministratorsQuery = (params: AdministratorsParams) => {
         email: params.filter.email,
         firstname: params.filter.firstname,
         lastname: params.filter.lastname,
-        groupId: params.filter.group,
-        universityId: params.filter.university,
+        groupId: params.filter.groupId,
+        universityId: params.filter.universityId,
     };
 
     return new URLSearchParams(qsAdapter().stringify(query)).toString();
