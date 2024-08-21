@@ -24,6 +24,7 @@ interface CreateMessageCommand {
     ownerId: string;
     originalFilename?: string;
     mimetype?: string;
+    filePath?: string;
 }
 
 export class CreateMessageUsecase {
@@ -56,9 +57,13 @@ export class CreateMessageUsecase {
             ? command.content.match(URL_REGEX)?.[0]
             : undefined;
         if (url) {
-            const result = await openGraphScraper({ url });
-            if (result.result.success) {
-                openGraphResult = result.result;
+            try {
+                const result = await openGraphScraper({ url });
+                if (result.result.success) {
+                    openGraphResult = result.result;
+                }
+            } catch (err) {
+                console.warn('Url not found for open graph', url);
             }
         }
 
@@ -73,6 +78,7 @@ export class CreateMessageUsecase {
             isReported: false,
             isDeleted: false,
             metadata: {
+                filePath: command.filePath,
                 originalFilename: command.originalFilename,
                 openGraphResult: openGraphResult,
             },

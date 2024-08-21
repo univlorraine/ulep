@@ -89,6 +89,7 @@ export class GetMessagesFromConversationUsecase {
             openGraphResult: message.metadata?.openGraphResult,
             originalFilename: message.metadata?.originalFilename,
             thumbnail: message.metadata?.thumbnail,
+            filePath: message.metadata?.filePath,
           },
           user: userMap.get(message.ownerId),
         } as MessageWithUser),

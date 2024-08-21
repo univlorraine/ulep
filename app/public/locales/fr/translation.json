@@ -110,6 +110,7 @@
         "ariaLabelFileDownloaded": "Téléchargement du fichier : {{filename}}",
         "fileDownloaded": "Fichier téléchargé",
         "messageReport": "Message envoyé par : {{firstname}} {{lastname}} le {{date}} ---- {{message}}",
+        "mediaReport": "Média envoyé par : {{firstname}} {{lastname}} le {{date}}",
         "me": "Moi",
         "messageReported": "Message signalé",
         "noMessages": "Il n'y a aucun message",

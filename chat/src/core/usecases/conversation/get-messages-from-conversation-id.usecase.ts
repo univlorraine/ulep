@@ -55,6 +55,7 @@ export class GetMessagesFromConversationIdUsecase {
                     message.type === MessageType.File) &&
                 message.content
             ) {
+                message.metadata.filePath = message.content;
                 message.content = await this.storage.temporaryUrl(
                     'chat',
                     message.content,

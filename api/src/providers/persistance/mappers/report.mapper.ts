@@ -1,15 +1,15 @@
 import * as Prisma from '@prisma/client';
-import {
-  TextContentRelations,
-  TextContentSnapshot,
-  textContentMapper,
-} from './translation.mapper';
 import { Report, ReportCategory, ReportStatus } from 'src/core/models';
 import {
   UserRelations,
   UserSnapshot,
   userMapper,
 } from 'src/providers/persistance/mappers/user.mapper';
+import {
+  TextContentRelations,
+  TextContentSnapshot,
+  textContentMapper,
+} from './translation.mapper';
 
 export const ReportRelations = {
   User: { include: UserRelations },
@@ -50,5 +50,6 @@ export const reportMapper = (snapshot: ReportSnapshot): Report => {
     user: snapshot.User ? userMapper(snapshot.User) : undefined,
     comment: snapshot.comment,
     createdAt: snapshot.createdAt,
+    metadata: snapshot.metadata,
   });
 };

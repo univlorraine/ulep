@@ -78,6 +78,10 @@ class MetadataMessageResponse {
     @Expose({ groups: ['read'] })
     thumbnail?: string;
 
+    @Swagger.ApiProperty({ type: 'string' })
+    @Expose({ groups: ['read'] })
+    filePath?: string;
+
     constructor(partial: Partial<MetadataMessageResponse>) {
         Object.assign(this, partial);
     }
@@ -89,6 +93,7 @@ class MetadataMessageResponse {
                 ? OGResponse.from(metadata.openGraphResult)
                 : undefined,
             thumbnail: metadata.thumbnail,
+            filePath: metadata.filePath,
         });
     }
 }

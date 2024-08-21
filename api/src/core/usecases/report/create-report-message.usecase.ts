@@ -18,6 +18,8 @@ import { USER_REPOSITORY, UserRepository } from '../../ports/user.repository';
 export class CreateReportMessageCommand {
   owner: string;
   content: string;
+  filePath?: string;
+  mediaType?: string;
 }
 
 @Injectable()
@@ -54,6 +56,10 @@ export class CreateReportMessageUsecase {
         category,
         status: ReportStatus.OPEN,
         user: owner,
+        metadata: {
+          filePath: command.filePath,
+          mediaType: command.mediaType,
+        },
       }),
     );
   }

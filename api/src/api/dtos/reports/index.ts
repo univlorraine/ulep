@@ -71,6 +71,14 @@ export class CreateReportMessageRequest
   @IsString()
   @IsNotEmpty()
   content: string;
+
+  @Swagger.ApiProperty({ type: 'string' })
+  @IsOptional()
+  filePath?: string;
+
+  @Swagger.ApiProperty({ type: 'string' })
+  @IsOptional()
+  mediaType?: string;
 }
 
 export class UpdateReportStatusRequest
@@ -135,6 +143,27 @@ export class GetReportCategoryResponse {
   }
 }
 
+class ReportMetadataResponse {
+  @Swagger.ApiProperty({ type: 'string' })
+  @Expose({ groups: ['read'] })
+  filePath: string;
+
+  @Swagger.ApiProperty({ type: 'string' })
+  @Expose({ groups: ['read'] })
+  mediaType: string;
+
+  constructor(partial: Partial<ReportMetadataResponse>) {
+    Object.assign(this, partial);
+  }
+
+  static fromDomain(instance: any): ReportMetadataResponse {
+    return new ReportMetadataResponse({
+      filePath: instance.filePath,
+      mediaType: instance.mediaType,
+    });
+  }
+}
+
 export class ReportResponse {
   @Swagger.ApiProperty({ type: 'string', format: 'uuid' })
   @Expose({ groups: ['read'] })
@@ -164,6 +193,10 @@ export class ReportResponse {
   @Expose({ groups: ['read'] })
   comment?: string;
 
+  @Swagger.ApiProperty({ type: 'string' })
+  @Expose({ groups: ['read'] })
+  metadata?: ReportMetadataResponse;
+
   constructor(partial: Partial<ReportResponse>) {
     Object.assign(this, partial);
   }
@@ -180,6 +213,9 @@ export class ReportResponse {
       user: instance.user ? UserResponse.fromDomain(instance.user) : undefined,
       createdAt: instance.createdAt,
       comment: instance.comment,
+      metadata: instance.metadata
+        ? ReportMetadataResponse.fromDomain(instance.metadata)
+        : undefined,
     });
   }
 }

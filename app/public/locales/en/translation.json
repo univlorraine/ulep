@@ -106,6 +106,7 @@
         "me": "Me",
         "messageReport": "Message sent by {{firstname}} {{lastname}} on {{date}} --- {{message}}",
         "messageReported": "Message reported",
+        "mediaReport": "Media sent by {{firstname}} {{lastname}} on {{date}}",
         "noMessages": "There is no message",
         "send_button": {
             "record_aria_label": "Stay pressed to record an audio or write your message to switch to send mode",
