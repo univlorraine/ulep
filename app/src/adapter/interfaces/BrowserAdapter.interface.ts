@@ -1,5 +1,5 @@
 interface BrowserAdapterInterface {
-    close: () => void;
+    close: () => Promise<void>;
     open: (url: string, windowName?: string) => Promise<void>;
     openLinkInBrowser: (event: React.MouseEvent<HTMLElement>) => Promise<void>;
 }

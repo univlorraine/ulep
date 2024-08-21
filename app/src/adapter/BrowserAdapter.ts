@@ -2,11 +2,11 @@ import { Browser } from '@capacitor/browser';
 import BrowserAdapterInterface from './interfaces/BrowserAdapter.interface';
 
 class BrowserAdapter implements BrowserAdapterInterface {
-    close = async () => await Browser.close();
-    open = async (url: string, windowName: string = '_blank') => await Browser.open({ url, windowName });
-    openLinkInBrowser = async (event: React.MouseEvent<HTMLElement>): Promise<void> => {
+    close = async () => Browser.close();
+    open = async (url: string, windowName: string = '_blank') => Browser.open({ url, windowName });
+    openLinkInBrowser = async (event: React.MouseEvent<HTMLElement>) => {
         event.preventDefault();
-        await this.open((event.target as HTMLAnchorElement).href);
+        return this.open((event.target as HTMLAnchorElement).href);
     };
 }
 

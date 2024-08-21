@@ -21,7 +21,10 @@ export class AddDeviceUsecase {
   async execute(id: string, command: AddDeviceCommand) {
     const user = await this.userRepository.ofId(id);
 
-    if (user.devices.find((device) => device.token === command.token)) {
+    if (
+      command.token &&
+      user.devices.find((device) => device.token === command.token)
+    ) {
       return;
     }
 
