@@ -57,9 +57,13 @@ export class CreateMessageUsecase {
             ? command.content.match(URL_REGEX)?.[0]
             : undefined;
         if (url) {
-            const result = await openGraphScraper({ url });
-            if (result.result.success) {
-                openGraphResult = result.result;
+            try {
+                const result = await openGraphScraper({ url });
+                if (result.result.success) {
+                    openGraphResult = result.result;
+                }
+            } catch (err) {
+                console.warn('Url not found for open graph', url);
             }
         }
 

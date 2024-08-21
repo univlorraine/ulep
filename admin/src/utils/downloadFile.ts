@@ -3,7 +3,7 @@ const handleDownloadFile = async (url: string, fileName?: string) => {
     const blob = await response.blob();
     const fileUrl = window.URL.createObjectURL(blob);
     const link = document.createElement('a');
-    link.download = fileName || 'true';
+    link.download = fileName || 'document';
     link.href = fileUrl;
     document.body.appendChild(link);
     link.click();

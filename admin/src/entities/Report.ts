@@ -1,4 +1,10 @@
+import { MessageType } from './Message';
 import User from './User';
+
+type MetadataReport = {
+    filePath?: string;
+    mediaType?: MessageType;
+};
 
 type Report = {
     id: string;
@@ -7,6 +13,7 @@ type Report = {
     user: User;
     status: ReportStatus;
     comment?: string;
+    metadata: MetadataReport;
 };
 
 export enum ReportStatus {

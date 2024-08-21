@@ -1,13 +1,52 @@
-import React from 'react';
-import { TopToolbar, EditButton, useTranslate, Show, SimpleShowLayout, TextField, FunctionField } from 'react-admin';
+import FileDownloadIcon from '@mui/icons-material/FileDownload';
+import {
+    Button,
+    EditButton,
+    FunctionField,
+    ImageField,
+    Show,
+    SimpleShowLayout,
+    TextField,
+    TopToolbar,
+    useRecordContext,
+    useTranslate,
+} from 'react-admin';
+import AudioLine from '../../components/chat/AudioLine';
 import ReportsPagesHeader from '../../components/tabs/ReportsPagesHeader';
+import { MessageType } from '../../entities/Message';
 import Report from '../../entities/Report';
+import handleDownloadFile from '../../utils/downloadFile';
 
 const ReportShowAction = () => (
     <TopToolbar>
         <EditButton />
     </TopToolbar>
 );
+
+const ReportMedia = () => {
+    const record = useRecordContext();
+    const translate = useTranslate();
+    const { filePath, mediaType } = record.metadata;
+
+    if (!mediaType || !filePath) {
+        return <TextField label={translate('global.content')} source="content" />;
+    }
+
+    const onDownload = () => {
+        handleDownloadFile(filePath);
+    };
+
+    switch (mediaType) {
+        case MessageType.Audio:
+            return <AudioLine audioFile={filePath} />;
+        case MessageType.Image:
+            return <ImageField source="metadata.filePath" sx={{ '& img': { minWidth: 200, minHeight: 200 } }} />;
+        case MessageType.File:
+            return <Button onClick={onDownload} startIcon={<FileDownloadIcon />} />;
+        default:
+            return <TextField source="content" />;
+    }
+};
 
 const ReportShow = () => {
     const translate = useTranslate();
@@ -38,7 +77,7 @@ const ReportShow = () => {
                         source="status"
                     />
                     <TextField label={translate('reports.category')} source="category.name" />
-                    <TextField label={translate('global.content')} source="content" />
+                    <FunctionField label={translate('global.content')} render={() => <ReportMedia />} />
                     <TextField label={translate('reports.comment')} source="comment" />
                 </SimpleShowLayout>
             </Show>
