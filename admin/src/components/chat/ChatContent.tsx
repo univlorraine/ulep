@@ -71,9 +71,7 @@ const ChatContent = ({ conversation }: ChatContentProps) => {
                         partner: `${conversation?.partner?.lastname} ${conversation?.partner?.firstname}`,
                     })}
                 </Typography>
-                <IconButton
-                    onClick={() => redirect(`/jitsi?roomName=${conversation.partner?.id}_${user.identity?.id}`)}
-                >
+                <IconButton onClick={() => redirect(`/jitsi?roomName=${conversation.id}`)}>
                     <VideoCall />
                 </IconButton>
             </Box>
