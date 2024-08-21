@@ -48,6 +48,8 @@ export interface ReportRepository {
     categoryId,
   ): Promise<Report | null>;
 
+  hasActiveReport(categoryId: string): Promise<boolean>;
+
   updateReport(
     id: string,
     status: ReportStatus,

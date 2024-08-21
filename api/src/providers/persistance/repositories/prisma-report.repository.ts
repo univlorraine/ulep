@@ -111,6 +111,19 @@ export class PrismaReportRepository implements ReportRepository {
     return category;
   }
 
+  async hasActiveReport(categoryId: string): Promise<boolean> {
+    const count = await this.prisma.reports.count({
+      where: {
+        AND: [
+          { Category: { id: categoryId } },
+          { status: { in: [ReportStatus.OPEN, ReportStatus.IN_PROGRESS] } },
+        ],
+      },
+    });
+
+    return count > 0;
+  }
+
   async reportsByStatus(status: ReportStatus): Promise<Report[]> {
     const reports = await this.prisma.reports.findMany({
       where: { status: { equals: status } },
