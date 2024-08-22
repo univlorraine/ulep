@@ -26,7 +26,7 @@ const ReportShowAction = () => (
 const ReportMedia = () => {
     const record = useRecordContext();
     const translate = useTranslate();
-    const { filePath, mediaType } = record.metadata;
+    const { filePath, mediaType } = record.metadata || {};
 
     if (!mediaType || !filePath) {
         return <TextField label={translate('global.content')} source="content" />;
