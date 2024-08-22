@@ -42,6 +42,7 @@ const Content: React.FC<ChatContentProps> = ({
     const accessToken = useStoreState((state) => state.accessToken);
     const {
         messages,
+        handleSendMessage,
         isScrollForwardOver,
         isScrollBackwardOver,
         isLoading,
@@ -168,7 +169,13 @@ const Content: React.FC<ChatContentProps> = ({
                     <Loader />
                 </div>
             )}
-            {!isSearchMode && <ChatInputSender isBlocked={isBlocked} profile={profile} conversation={conversation} />}
+            {!isSearchMode && (
+                <ChatInputSender
+                    isBlocked={isBlocked}
+                    conversation={conversation}
+                    handleSendMessage={handleSendMessage}
+                />
+            )}
         </div>
     );
 };

@@ -1,7 +1,10 @@
+import { useIonToast } from '@ionic/react';
 import { useEffect, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { useConfig } from '../../context/ConfigurationContext';
-import { MessagePaginationDirection } from '../../domain/entities/chat/Conversation';
-import { Message, MessageType } from '../../domain/entities/chat/Message';
+import Conversation, { MessagePaginationDirection } from '../../domain/entities/chat/Conversation';
+import { Message, MessageType, MessageWithConversationId } from '../../domain/entities/chat/Message';
+import { UserChat } from '../../domain/entities/User';
 import { useStoreState } from '../../store/storeTypes';
 
 interface UseHandleMessagesFromConversationProps {
@@ -15,10 +18,12 @@ const useHandleMessagesFromConversation = ({
     typeFilter,
     limit = 10,
 }: UseHandleMessagesFromConversationProps) => {
-    const { getMessagesFromConversation } = useConfig();
+    const { getMessagesFromConversation, sendMessage, socketIoAdapter } = useConfig();
     const [lastMessageForwardId, setLastMessageForwardId] = useState<string>();
     const [lastMessageBackwardId, setLastMessageBackwardId] = useState<string>();
     const profile = useStoreState((state) => state.profile);
+    const [showToast] = useIonToast();
+    const { t } = useTranslation();
 
     const [messagesResult, setMessagesResult] = useState<{
         messages: Message[];
@@ -35,7 +40,13 @@ const useHandleMessagesFromConversation = ({
     });
 
     if (!profile)
-        return { ...messagesResult, loadMessages: () => {}, addNewMessage: () => {}, clearMessages: () => {} };
+        return {
+            ...messagesResult,
+            loadMessages: () => {},
+            addNewMessage: () => {},
+            clearMessages: () => {},
+            handleSendMessage: () => {},
+        };
 
     const addNewMessage = (message: Message) => {
         setMessagesResult((current) => ({
@@ -45,6 +56,36 @@ const useHandleMessagesFromConversation = ({
             error: undefined,
             isLoading: false,
         }));
+    };
+
+    const handleSendMessage = async (conversation: Conversation, message: string, file?: File, filename?: string) => {
+        const messageResult = await sendMessage.execute(conversation.id, profile.user.id, message, file, filename);
+
+        if (messageResult instanceof Error) {
+            return showToast({
+                message: t(messageResult.message),
+                duration: 5000,
+            });
+        }
+
+        socketIoAdapter.emit(
+            new MessageWithConversationId(
+                messageResult.id,
+                messageResult.content,
+                messageResult.createdAt,
+                new UserChat(
+                    profile.user.id,
+                    profile.user.firstname,
+                    profile.user.lastname,
+                    profile.user.email,
+                    false,
+                    profile.user.avatar
+                ),
+                messageResult.type,
+                conversation.id,
+                messageResult.metadata
+            )
+        );
     };
 
     const loadMessages = async (
@@ -156,7 +197,7 @@ const useHandleMessagesFromConversation = ({
         fetchData();
     }, [profile, conversationId, typeFilter]);
 
-    return { ...messagesResult, loadMessages, addNewMessage, clearMessages };
+    return { ...messagesResult, loadMessages, addNewMessage, clearMessages, handleSendMessage };
 };
 
 export default useHandleMessagesFromConversation;
