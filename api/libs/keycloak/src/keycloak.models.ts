@@ -6,6 +6,8 @@ export class KeycloakUser {
   realm_access: RealmAccess;
   universityId?: string;
   universityLogin?: string;
+  given_name?: string;
+  family_name?: string;
 }
 
 export type KeycloakGroup = {
