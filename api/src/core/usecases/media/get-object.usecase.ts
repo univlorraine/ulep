@@ -1,9 +1,9 @@
-import { Inject, Injectable, NotFoundException } from '@nestjs/common';
+import { Inject, Injectable } from '@nestjs/common';
+import { MediaObject } from 'src/core/models';
 import {
   MEDIA_OBJECT_REPOSITORY,
   MediaObjectRepository,
 } from '../../ports/media-object.repository';
-import { MediaObject } from 'src/core/models';
 
 export class GetMediaObjectCommand {
   id: string;
@@ -18,10 +18,6 @@ export class GetMediaObjectUsecase {
 
   async execute(command: GetMediaObjectCommand): Promise<MediaObject> {
     const instance = await this.mediaObjectRepository.findOne(command.id);
-
-    if (!instance) {
-      throw new NotFoundException();
-    }
 
     return instance;
   }
