@@ -3,21 +3,18 @@ import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { CloseBlackSvg, PaperclipSvg, PictureSvg } from '../../../assets';
 import { useConfig } from '../../../context/ConfigurationContext';
-import Profile from '../../../domain/entities/Profile';
-import { UserChat } from '../../../domain/entities/User';
 import Conversation from '../../../domain/entities/chat/Conversation';
-import { MessageWithConversationId } from '../../../domain/entities/chat/Message';
 import AudioLine from '../AudioLine';
 import RecordingButton from '../RecordingButton';
 import styles from './ChatInputSender.module.css';
 
 interface ChatInputSenderProps {
     isBlocked: boolean;
-    profile: Profile;
     conversation: Conversation;
+    handleSendMessage: (conversation: Conversation, message: string, file?: File, filename?: string) => void;
 }
 
-const ChatInputSender: React.FC<ChatInputSenderProps> = ({ isBlocked, profile, conversation }) => {
+const ChatInputSender: React.FC<ChatInputSenderProps> = ({ isBlocked, conversation, handleSendMessage }) => {
     const { t } = useTranslation();
     const { cameraAdapter, fileAdapter, recorderAdapter, sendMessage, socketIoAdapter } = useConfig();
     const [showToast] = useIonToast();
@@ -104,33 +101,7 @@ const ChatInputSender: React.FC<ChatInputSenderProps> = ({ isBlocked, profile, c
         setAudioFile(undefined);
         setFileToSend(undefined);
 
-        const messageResult = await sendMessage.execute(conversation.id, profile.user.id, message, file, filename);
-
-        if (messageResult instanceof Error) {
-            return showToast({
-                message: t(messageResult.message),
-                duration: 5000,
-            });
-        }
-
-        socketIoAdapter.emit(
-            new MessageWithConversationId(
-                messageResult.id,
-                messageResult.content,
-                messageResult.createdAt,
-                new UserChat(
-                    profile.user.id,
-                    profile.user.firstname,
-                    profile.user.lastname,
-                    profile.user.email,
-                    false,
-                    profile.user.avatar
-                ),
-                messageResult.type,
-                conversation.id,
-                messageResult.metadata
-            )
-        );
+        handleSendMessage(conversation, message, file, filename);
     };
 
     useEffect(() => {
