@@ -1,13 +1,13 @@
 import { KeycloakUser } from '@app/keycloak';
 import { Inject, Injectable } from '@nestjs/common';
-import { GetUserUsecase } from '../user/get-user.usecase';
+import { ConfigService } from '@nestjs/config';
+import * as jwt from 'jsonwebtoken';
+import { Env } from 'src/configuration';
 import {
   STORAGE_INTERFACE,
   StorageInterface,
 } from 'src/core/ports/storage.interface';
-import { ConfigService } from '@nestjs/config';
-import { Env } from 'src/configuration';
-import * as jwt from 'jsonwebtoken';
+import { GetMediaObjectUsecase } from '../media';
 
 const sign = (
   id: string,
@@ -43,7 +43,7 @@ const sign = (
 @Injectable()
 export class GetJitsiTokenUsecase {
   constructor(
-    private readonly getUserUsecase: GetUserUsecase,
+    private readonly getMediaObjectUsecase: GetMediaObjectUsecase,
     @Inject(STORAGE_INTERFACE)
     private readonly storage: StorageInterface,
     private readonly env: ConfigService<Env, true>,
@@ -51,21 +51,20 @@ export class GetJitsiTokenUsecase {
 
   async execute(user: KeycloakUser): Promise<string> {
     const id = user.sub;
-    const me = await this.getUserUsecase.execute(id);
-
-    const avatarSignedUrl = me.avatar
+    const instance = await this.getMediaObjectUsecase.execute({ id });
+    const avatarSignedUrl = instance
       ? await this.storage.temporaryUrl(
-          me.avatar.bucket,
-          me.avatar.name,
+          instance.bucket,
+          instance.name,
           this.env.get('SIGNED_URL_EXPIRATION_IN_SECONDS'),
         )
       : undefined;
 
     return sign(
       id,
-      me.firstname,
-      me.lastname,
-      me.email,
+      user.given_name,
+      user.family_name,
+      user.email,
       avatarSignedUrl,
       '*', // TODO: add a list allowed room name
       this.env.get('KEYCLOAK_CLIENT_SECRET'),
