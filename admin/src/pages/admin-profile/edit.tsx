@@ -1,5 +1,4 @@
-import React from 'react';
-import { useNotify, Edit, useTranslate, useUpdate, WithRecord } from 'react-admin';
+import { Edit, useNotify, useTranslate, useUpdate, WithRecord } from 'react-admin';
 import AdministratorForm from '../../components/form/AdministratorForm';
 import Administrator, { AdministratorFormPayload } from '../../entities/Administrator';
 
@@ -9,10 +8,23 @@ const EditAdministratorProfile = () => {
     const notify = useNotify();
 
     const handleSubmit = async (payload: AdministratorFormPayload) => {
+        const formData = new FormData();
+
+        formData.append('id', payload.id || '');
+        formData.append('email', payload.email || '');
+        formData.append('firstname', payload.firstname || '');
+        formData.append('lastname', payload.lastname || '');
+        formData.append('password', payload.password || '');
+        formData.append('universityId', payload.universityId || '');
+        formData.append('group[id]', payload.group.id || '');
+        formData.append('group[name]', payload.group.name || '');
+        formData.append('group[path]', payload.group.path || '');
+        if (payload.file) formData.append('file', payload.file);
+
         try {
             return await update(
                 'users/administrators',
-                { data: payload },
+                { data: formData },
                 {
                     onSettled: (_, error: unknown) => {
                         if (!error) {

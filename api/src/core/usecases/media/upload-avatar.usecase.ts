@@ -1,16 +1,16 @@
 import { Inject, Injectable } from '@nestjs/common';
+import { UnauthorizedOperation } from 'src/core/errors';
+import { MediaObject, User } from 'src/core/models';
 import {
   MEDIA_OBJECT_REPOSITORY,
   MediaObjectRepository,
 } from '../../ports/media-object.repository';
-import { USER_REPOSITORY, UserRepository } from '../../ports/user.repository';
 import {
   File,
   STORAGE_INTERFACE,
   StorageInterface,
 } from '../../ports/storage.interface';
-import { MediaObject, User } from 'src/core/models';
-import { UnauthorizedOperation } from 'src/core/errors';
+import { USER_REPOSITORY, UserRepository } from '../../ports/user.repository';
 
 export class UploadAvatarCommand {
   userId: string;
@@ -59,7 +59,11 @@ export class UploadAvatarUsecase {
     user: User,
     file: Express.Multer.File,
   ): Promise<MediaObject> {
-    const image = MediaObject.image(file);
+    const image = MediaObject.image(
+      file,
+      MediaObject.getDefaultBucket(),
+      user.id,
+    );
     await this.storageInterface.write(image.bucket, image.name, file);
     await this.mediaObjectRepository.saveAvatar(user, image);
 

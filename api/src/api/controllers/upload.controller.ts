@@ -1,31 +1,31 @@
+import { KeycloakUser } from '@app/keycloak';
 import {
   Controller,
+  Get,
+  Inject,
+  Param,
   Post,
+  SerializeOptions,
+  UploadedFile,
   UseGuards,
   UseInterceptors,
-  UploadedFile,
-  Get,
-  Param,
-  Inject,
-  SerializeOptions,
 } from '@nestjs/common';
-import * as Swagger from '@nestjs/swagger';
+import { ConfigService } from '@nestjs/config';
 import { FileInterceptor } from '@nestjs/platform-express';
-import { KeycloakUser } from '@app/keycloak';
-import { MEDIA_READ, MediaObjectResponse } from '../dtos';
+import * as Swagger from '@nestjs/swagger';
+import { Env } from 'src/configuration';
+import {
+  STORAGE_INTERFACE,
+  StorageInterface,
+} from 'src/core/ports/storage.interface';
 import {
   GetMediaObjectUsecase,
   UploadAvatarUsecase,
 } from 'src/core/usecases/media';
 import { CurrentUser } from '../decorators';
+import { MEDIA_READ, MediaObjectResponse } from '../dtos';
 import { AuthenticationGuard } from '../guards';
 import { ImagesFilePipe } from '../validators/images.validator';
-import {
-  STORAGE_INTERFACE,
-  StorageInterface,
-} from 'src/core/ports/storage.interface';
-import { ConfigService } from '@nestjs/config';
-import { Env } from 'src/configuration';
 
 @Controller('uploads')
 @Swagger.ApiTags('Uploads')
@@ -74,21 +74,25 @@ export class UploadsController {
   @SerializeOptions({ groups: ['read', MEDIA_READ] })
   @Swagger.ApiOperation({ summary: 'MediaObject ressource' })
   @Swagger.ApiResponse({ type: MediaObjectResponse })
-  async findOne(@Param('id') id: string): Promise<MediaObjectResponse> {
+  async findOne(@Param('id') id: string): Promise<MediaObjectResponse | null> {
     const now = new Date().getTime();
     const instance = await this.getMediaObjectUsecase.execute({ id });
 
-    const url = await this.storage.temporaryUrl(
-      instance.bucket,
-      instance.name,
-      this.#expirationTime,
-    );
+    const url = instance
+      ? await this.storage.temporaryUrl(
+          instance.bucket,
+          instance.name,
+          this.#expirationTime,
+        )
+      : undefined;
 
-    return new MediaObjectResponse({
-      id: instance.id,
-      mimeType: instance.mimetype,
-      url,
-      expireAt: new Date(now + this.#expirationTime * 1000),
-    });
+    return url
+      ? new MediaObjectResponse({
+          id: instance.id,
+          mimeType: instance.mimetype,
+          url,
+          expireAt: new Date(now + this.#expirationTime * 1000),
+        })
+      : null;
   }
 }
