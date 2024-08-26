@@ -5,6 +5,7 @@
             "email": "Veuillez saisir l'email du nouvel administrateur",
             "error": "Une erreur est survenue lors de la création d'un administrateur",
             "error_already_admin": "L'utilisateur est déjà un administrateur",
+            "error_email": "L'email n'est pas valide",
             "password": "Veuillez saisir un mot de passe pour l'administrateur ( 1 majuscule, 1 minuscule et 1 chiffre )",
             "title": "Création d'un administrateur",
             "university": "Veuillez sélectionner une université pour l'administrateur",
