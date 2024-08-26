@@ -557,7 +557,19 @@
                 "type": "Type"
             },
             "noUniversitySelected": "Please select one or more universities for pairing",
-            "noTandem": "No profile proposed for the tandem"
+            "noTandem": "No profile proposed for the tandem",
+            "checkboxAction": {
+                "label": "selected item(s)",
+                "delete": "Delete",
+                "dialog": {
+                    "title": "Delete selected items",
+                    "message": "Are you sure you want to delete the selected items ?",
+                    "ctaLabels": {
+                        "confirm": "Confirm",
+                        "cancel": "Cancel"
+                    }
+                }
+            }
         },
         "show": {
             "management": {

@@ -557,7 +557,19 @@
                 "type": "Type"
             },
             "noUniversitySelected": "Merci de sélectionner une ou plusieurs universités pour l'appariement",
-            "noTandem": "Pas de profil proposé pour le tandem"
+            "noTandem": "Pas de profil proposé pour le tandem",
+            "checkboxAction": {
+                "label": "demande(s) sélectionné(s)",
+                "delete": "Supprimer",
+                "dialog": {
+                    "title": "Supprimer les demandes sélectionnées",
+                    "message": "Voulez-vous supprimer les demandes sélectionnées ?",
+                    "ctaLabels": {
+                        "confirm": "Confirmer",
+                        "cancel": "Annuler"
+                    }
+                }
+            }
         },
         "show": {
             "management": {
