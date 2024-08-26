@@ -31,7 +31,11 @@
             "university": "Mettez à jour l'université à administrer",
             "group": "Mettez à jour le(s) rôle(s) de l'administrateur"
         },
-        "confirmDeleteOwnAccount": "Êtes-vous sûr(e) de vouloir supprimer votre utilisateur ?\n Vous êtes actuellement connecté(e) à ce compte, après la suppression vous serez déconnecté(e)."
+        "delete": {
+            "title": "Supprimer %{name}",
+            "confirmDeleteOwnAccount": "Êtes-vous sûr(e) de vouloir supprimer votre utilisateur ?\n Vous êtes actuellement connecté(e) à ce compte, après la suppression vous serez déconnecté(e).",
+            "confirmDeleteAccount": "Êtes-vous sûr(e) de vouloir supprimer cet utilisateur ?"
+        }
     },
     "admin_groups_picker": {
         "animator": "Animateur",
