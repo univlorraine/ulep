@@ -1,8 +1,7 @@
 import Box from '@mui/material/Box';
-import React from 'react';
-import { FunctionField, useTranslate, List, Datagrid, TextField, BulkDeleteButton, DateField } from 'react-admin';
+import { BulkDeleteButton, Datagrid, DateField, FunctionField, List, TextField, useTranslate } from 'react-admin';
 import ColoredChips from '../../components/ColoredChips';
-import ReferenceUploadField from '../../components/field/ReferenceUploadField';
+import ReferenceUploadField from '../../components/field/ReferenceUploadImageField';
 import UniversitiesPagesHeader from '../../components/tabs/UniversitiesPagesHeader';
 import University, { Status } from '../../entities/University';
 import i18nProvider from '../../providers/i18nProvider';

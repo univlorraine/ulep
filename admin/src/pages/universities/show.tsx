@@ -1,19 +1,19 @@
 import { Box } from '@mui/material';
-import React from 'react';
 import {
-    TopToolbar,
-    EditButton,
     ArrayField,
-    SingleFieldList,
     ChipField,
     DateField,
-    useTranslate,
-    SimpleShowLayout,
-    TextField,
-    Show,
+    EditButton,
     FunctionField,
+    Show,
+    SimpleShowLayout,
+    SingleFieldList,
+    TextField,
+    TopToolbar,
+    useTranslate,
 } from 'react-admin';
-import ReferenceUploadField from '../../components/field/ReferenceUploadField';
+import ReferenceUploadFileField from '../../components/field/ReferenceUploadFileField';
+import ReferenceUploadField from '../../components/field/ReferenceUploadImageField';
 import UniversitiesPagesHeader from '../../components/tabs/UniversitiesPagesHeader';
 import Language from '../../entities/Language';
 import University from '../../entities/University';
@@ -96,6 +96,10 @@ const UniversityShow = (props: any) => {
                                 />
                             </SingleFieldList>
                         </ArrayField>
+                        <ReferenceUploadFileField
+                            label={translate('universities.show.defaultCertificateFile')}
+                            source="defaultCertificateFile.id"
+                        />
                     </SimpleShowLayout>
 
                     <SimpleShowLayout sx={{ m: 3, display: 'flex', flexDirection: 'column', gap: '30px' }}>

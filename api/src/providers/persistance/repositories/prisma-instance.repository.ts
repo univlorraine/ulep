@@ -1,14 +1,18 @@
-import { Injectable } from '@nestjs/common';
 import { PrismaService } from '@app/common';
-import { InstanceRepository } from 'src/core/ports/instance.repository';
+import { Injectable } from '@nestjs/common';
 import { Instance } from 'src/core/models/Instance.model';
+import { InstanceRepository } from 'src/core/ports/instance.repository';
 import { instanceMapper } from 'src/providers/persistance/mappers/instance.mapper';
 
 @Injectable()
 export class PrismaInstanceRepository implements InstanceRepository {
   constructor(private readonly prisma: PrismaService) {}
   async getInstance(): Promise<Instance> {
-    const instance = await this.prisma.instance.findFirst({});
+    const instance = await this.prisma.instance.findFirst({
+      include: {
+        DefaultCertificateFile: true,
+      },
+    });
 
     if (!instance) {
       return null;

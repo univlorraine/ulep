@@ -19,7 +19,8 @@ const universityToFormData = (
     notificationEmail?: string,
     specificLanguagesAvailable?: Language[],
     defaultContact?: Administrator,
-    file?: File
+    file?: File,
+    defaultCertificateFile?: File
 ) => {
     const formData = new FormData();
     formData.append('name', name);
@@ -48,6 +49,7 @@ const universityToFormData = (
     if (notificationEmail) formData.append('notificationEmail', notificationEmail);
     if (defaultContact) formData.append('defaultContactId', defaultContact.id);
     if (file) formData.append('file', file);
+    if (defaultCertificateFile) formData.append('defaultCertificateFile', defaultCertificateFile);
 
     return formData;
 };

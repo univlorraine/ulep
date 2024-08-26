@@ -1,12 +1,23 @@
 import { I18nService } from '@app/common';
-import { Body, Controller, Get, Logger, Param, Put } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Get,
+  Logger,
+  Param,
+  Put,
+  UploadedFile,
+  UseInterceptors,
+} from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
+import { FileInterceptor } from '@nestjs/platform-express';
 import * as Swagger from '@nestjs/swagger';
 import { InstanceResponse } from 'src/api/dtos/instance/instance.response';
 import { UpdateInstanceRequest } from 'src/api/dtos/instance/update-instance.request';
 import { Env } from 'src/configuration';
 import { RessourceDoesNotExist } from 'src/core/errors';
 import { GetInstanceUsecase, UpdateInstanceUsecase } from 'src/core/usecases';
+import { UploadInstanceDefaultCertificateUsecase } from 'src/core/usecases/media/upload-instance-default-certificate.usecase';
 
 @Controller('instance')
 @Swagger.ApiTags('Instance')
@@ -16,6 +27,7 @@ export class InstanceController {
   constructor(
     private readonly getInstanceUsecase: GetInstanceUsecase,
     private readonly updateInstanceUsecase: UpdateInstanceUsecase,
+    private readonly uploadInstanceDefaultCertificateUsecase: UploadInstanceDefaultCertificateUsecase,
     private readonly env: ConfigService<Env, true>,
     private readonly i18n: I18nService,
   ) {}
@@ -30,12 +42,20 @@ export class InstanceController {
   }
 
   @Put()
+  @UseInterceptors(FileInterceptor('defaultCertificateFile'))
   @Swagger.ApiOperation({ summary: 'Update the instance' })
   @Swagger.ApiCreatedResponse({ type: InstanceResponse })
   async updateInstance(
     @Body() body: UpdateInstanceRequest,
+    @UploadedFile() defaultCertificateFile: Express.Multer.File,
   ): Promise<InstanceResponse> {
     const instance = await this.updateInstanceUsecase.execute(body);
+
+    if (defaultCertificateFile) {
+      await this.uploadInstanceDefaultCertificateUsecase.execute({
+        file: defaultCertificateFile,
+      });
+    }
 
     return InstanceResponse.fromDomain(instance);
   }

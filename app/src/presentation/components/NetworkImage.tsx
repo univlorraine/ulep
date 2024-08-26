@@ -13,7 +13,7 @@ const NetworkImage: React.FC<NetworkImageProps> = ({ id, placeholder, ...props }
         return <IonSpinner color={'primary'}></IonSpinner>;
     }
 
-    return <img src={error ? placeholder : image} {...props} />;
+    return <img src={!image || error ? placeholder : image} {...props} />;
 };
 
 export default NetworkImage;

@@ -73,9 +73,9 @@ import {
   GetPartnersToUniversityUsecase,
   GetProfileByUserIdUsecase,
   GetProfileUsecase,
+  GetProfileWithTandemsProfilesUsecase,
   GetProfilesUsecase,
   GetProfilesWithTandemsProfilesUsecase,
-  GetProfileWithTandemsProfilesUsecase,
   GetQuestionUsecase,
   GetQuestionsByLevelUsecase,
   GetQuestionsUsecase,
@@ -113,6 +113,8 @@ import {
 import { GetJitsiTokenUsecase } from './usecases/jitsi/get-jitsi-token.usecase';
 import { DeleteLearningLanguageUsecase } from './usecases/learningLanguage/delete-learning-langugage.usecase';
 import { GetLearningLanguageTandemUsecase } from './usecases/learningLanguage/getLearningLanguageTandem.usecase';
+import { UploadInstanceDefaultCertificateUsecase } from './usecases/media/upload-instance-default-certificate.usecase';
+import { UploadUniversityDefaultCertificateUsecase } from './usecases/media/upload-university-default-certificate.usecase';
 import { ArchiveTandemsAndDeleteUsersUsecase } from './usecases/purges/archive-tandems.usecase';
 import { LogoutAllSessionsUsecase } from './usecases/security/logout-all-sessions.usecase';
 import { ResetPasswordUsecase } from './usecases/security/reset-password.usecase';
@@ -154,6 +156,8 @@ const usecases: Provider[] = [
   UploadAdminAvatarUsecase,
   UploadObjectiveImageUsecase,
   UploadUniversityImageUsecase,
+  UploadInstanceDefaultCertificateUsecase,
+  UploadUniversityDefaultCertificateUsecase,
   // Objectives
   CreateObjectiveUsecase,
   DeleteObjectiveUsecase,

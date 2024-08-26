@@ -1,9 +1,8 @@
 import { CountryCode } from 'src/core/models/country-code.model';
+import { MediaObject } from 'src/core/models/media.model';
 import { Campus } from './campus.model';
 import { Language, LanguageStatus } from './language.model';
 import { LearningType } from './profile.model';
-import { MediaObject } from 'src/core/models/media.model';
-import { UserRepresentation } from '@app/keycloak';
 
 export enum PairingMode {
   MANUAL = 'MANUAL',
@@ -32,6 +31,7 @@ export interface UniversityProps {
   specificLanguagesAvailable?: Language[];
   nativeLanguage: Language;
   defaultContactId?: string;
+  defaultCertificateFile?: MediaObject;
 }
 
 export class University {
@@ -75,6 +75,8 @@ export class University {
 
   readonly defaultContactId: string;
 
+  readonly defaultCertificateFile?: MediaObject;
+
   constructor(props: UniversityProps) {
     this.id = props.id;
     this.admissionStart = props.admissionStart;
@@ -96,6 +98,7 @@ export class University {
     this.website = props.website;
     this.nativeLanguage = props.nativeLanguage;
     this.defaultContactId = props.defaultContactId;
+    this.defaultCertificateFile = props.defaultCertificateFile;
   }
 
   static create(props: UniversityProps): University {

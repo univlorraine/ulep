@@ -69,8 +69,10 @@ export class MinioStorage implements StorageInterface {
     }
 
     async delete(bucket: string, name: string): Promise<void> {
-        const bucketExists = await this.directoryExists(bucket);
-        if (!bucketExists) {
+        if (
+            !(await this.directoryExists(bucket)) ||
+            !(await this.fileExists(bucket, name))
+        ) {
             return;
         }
 
@@ -79,7 +81,6 @@ export class MinioStorage implements StorageInterface {
         await this.#client.send(command);
     }
 
-    // eslint-disable-next-line prettier/prettier
     async temporaryUrl(
         bucket: string,
         name: string,
@@ -100,7 +101,6 @@ export class MinioStorage implements StorageInterface {
 
             return true;
         } catch (e) {
-            // eslint-disable-next-line prettier/prettier
             if (
                 e instanceof S3ServiceException &&
                 e.$metadata.httpStatusCode === 404

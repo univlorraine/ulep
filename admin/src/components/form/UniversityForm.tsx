@@ -27,6 +27,8 @@ import isCodeValid from '../../utils/isCodeValid';
 import isUrlValid from '../../utils/isUrlValid';
 import AdministratorPicker from '../AdministratorPicker';
 import CountriesPicker from '../CountriesPicker';
+import ReferenceUploadFileField from '../field/ReferenceUploadFileField';
+import FileUploader from '../FileUploader';
 import ImageUploader from '../ImageUploader';
 import LanguagePicker from '../LanguagePicker';
 import LanguagesPicker from '../LanguagesPicker';
@@ -58,7 +60,8 @@ interface UniversityFormProps {
         notificationEmail?: string,
         specificLanguagesAvailable?: Language[],
         defaultContact?: Administrator,
-        file?: File
+        file?: File,
+        certificateFile?: File
     ) => void;
     maxTandemsPerUser?: number;
     name?: string;
@@ -132,6 +135,7 @@ const UniversityForm: React.FC<UniversityFormProps> = ({
     const [newLanguages, setNewLanguages] = useState<Language[]>(specificLanguagesAvailable || []);
     const [newDefaultContact, setNewDefaultContact] = useState<Administrator | undefined>(defaultContact);
     const [file, setFile] = useState<File>();
+    const [newCertificateFile, setNewCertificateFile] = useState<File>();
     const addLanguage = (language: Language) => setNewLanguages([...newLanguages, language]);
 
     const removeLanguage = (languageToRemove: Language) => {
@@ -222,7 +226,8 @@ const UniversityForm: React.FC<UniversityFormProps> = ({
             newNotificationEmail,
             newLanguages,
             newDefaultContact,
-            file
+            file,
+            newCertificateFile
         );
     };
 
@@ -469,6 +474,23 @@ const UniversityForm: React.FC<UniversityFormProps> = ({
                                     </Box>
                                 </>
                             )}
+                        </Box>
+                        <Box>
+                            <Typography variant="subtitle1">
+                                {translate(`universities.create.defaultCertificateFile`)}
+                            </Typography>
+                            <FileUploader
+                                accept="application/pdf"
+                                fileType="PDF"
+                                onFileSelect={setNewCertificateFile}
+                                source="defaultCertificateFile.id"
+                            />
+                        </Box>
+                        <Box>
+                            <Typography variant="subtitle1">
+                                {translate(`universities.create.exampleDefaultCertificateFile`)}
+                            </Typography>
+                            <ReferenceUploadFileField source="exampleDefaultCertificateFile.id" />
                         </Box>
                     </Box>
 

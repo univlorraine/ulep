@@ -1,7 +1,10 @@
-import { Instance as PrismaInstance } from '@prisma/client';
+import * as Prisma from '@prisma/client';
+import { MediaObject } from 'src/core/models';
 import { Instance } from 'src/core/models/Instance.model';
 
-export type InstanceSnapshot = PrismaInstance;
+export type InstanceSnapshot = Prisma.Instance & {
+  DefaultCertificateFile: Prisma.MediaObjects;
+};
 
 export const instanceMapper = (instanceSnapshot: InstanceSnapshot) => {
   return new Instance({
@@ -20,5 +23,14 @@ export const instanceMapper = (instanceSnapshot: InstanceSnapshot) => {
     isInMaintenance: instanceSnapshot.is_in_maintenance,
     daysBeforeClosureNotification:
       instanceSnapshot.days_before_closure_notification,
+    defaultCertificateFile:
+      instanceSnapshot.DefaultCertificateFile &&
+      new MediaObject({
+        id: instanceSnapshot.DefaultCertificateFile.id,
+        name: instanceSnapshot.DefaultCertificateFile.name,
+        bucket: instanceSnapshot.DefaultCertificateFile.bucket,
+        mimetype: instanceSnapshot.DefaultCertificateFile.mime,
+        size: instanceSnapshot.DefaultCertificateFile.size,
+      }),
   });
 };
