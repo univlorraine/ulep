@@ -29,7 +29,7 @@ const ReportMedia = () => {
     const { filePath, mediaType } = record.metadata || {};
 
     if (!mediaType || !filePath) {
-        return <TextField label={translate('global.content')} source="content" />;
+        return <TextField component="pre" label={translate('global.content')} source="content" />;
     }
 
     const onDownload = () => {
@@ -44,7 +44,7 @@ const ReportMedia = () => {
         case MessageType.File:
             return <Button onClick={onDownload} startIcon={<FileDownloadIcon />} />;
         default:
-            return <TextField source="content" />;
+            return <TextField component="pre" source="content" />;
     }
 };
 
@@ -78,7 +78,7 @@ const ReportShow = () => {
                     />
                     <TextField label={translate('reports.category')} source="category.name" />
                     <FunctionField label={translate('global.content')} render={() => <ReportMedia />} />
-                    <TextField label={translate('reports.comment')} source="comment" />
+                    <TextField component="pre" label={translate('reports.comment')} source="comment" />
                 </SimpleShowLayout>
             </Show>
         </>

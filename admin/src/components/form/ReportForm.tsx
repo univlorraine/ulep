@@ -46,6 +46,7 @@ const ReportForm: React.FC<ReportProps> = ({ handleSubmit, category, content, st
                     placeholder={translate('global.content')}
                     value={newComment}
                     disableUnderline
+                    multiline
                     required
                 />
             </Box>
