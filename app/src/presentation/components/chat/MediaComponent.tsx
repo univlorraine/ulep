@@ -100,10 +100,10 @@ const MessageFile: React.FC<MessageProps> = ({ message }) => {
     const { fileAdapter } = useConfig();
     const { t } = useTranslation();
     const [showToast] = useIonToast();
-    const fileName = message.content.split('/')[5].split('?')[0];
+    const fileName = decodeURI(message.metadata?.originalFilename);
 
     const handleDownload = async () => {
-        await fileAdapter.saveFile(message.content, decodeURI(fileName));
+        await fileAdapter.saveFile(message.content, fileName);
         showToast({
             message: t('chat.fileDownloaded'),
             duration: 2000,
@@ -116,7 +116,7 @@ const MessageFile: React.FC<MessageProps> = ({ message }) => {
                 <div className={styles.downloadContainer}>
                     <div className={styles.downloadIconContainer}>
                         <IonIcon icon={documentOutline} size="large" />
-                        <span className={styles.downloadTitle}>{decodeURI(fileName)}</span>
+                        <span className={styles.downloadTitle}>{fileName}</span>
                     </div>
                     <IonIcon
                         className={styles.download}
