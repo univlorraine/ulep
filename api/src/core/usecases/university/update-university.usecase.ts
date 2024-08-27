@@ -10,6 +10,14 @@ import {
   LANGUAGE_REPOSITORY,
   LanguageRepository,
 } from 'src/core/ports/language.repository';
+import {
+  PROFILE_REPOSITORY,
+  ProfileRepository,
+} from 'src/core/ports/profile.repository';
+import {
+  TANDEM_REPOSITORY,
+  TandemRepository,
+} from 'src/core/ports/tandem.repository';
 import { ChatService } from 'src/providers/services/chat.service';
 import {
   UNIVERSITY_REPOSITORY,
@@ -47,6 +55,10 @@ export class UpdateUniversityUsecase {
     private readonly languageRepository: LanguageRepository,
     @Inject(UNIVERSITY_REPOSITORY)
     private readonly universityRepository: UniversityRepository,
+    @Inject(TANDEM_REPOSITORY)
+    private readonly tandemRepository: TandemRepository,
+    @Inject(PROFILE_REPOSITORY)
+    private readonly profileRepository: ProfileRepository,
     @Inject(CHAT_SERVICE)
     private readonly chatService: ChatService,
   ) {}
@@ -124,7 +136,18 @@ export class UpdateUniversityUsecase {
     usersToUpdate: string[],
   ) {
     if (oldContactId !== university.defaultContactId) {
-      await this.chatService.deleteConversationByContactId(oldContactId);
+      const profileAdmin = await this.profileRepository.ofUser(oldContactId);
+
+      let chatIdsToIgnore = [];
+      if (profileAdmin) {
+        chatIdsToIgnore = await this.tandemRepository.getTandemsForProfile(
+          profileAdmin.id,
+        );
+      }
+      await this.chatService.deleteConversationByContactId(
+        oldContactId,
+        chatIdsToIgnore.map((tandem) => tandem.id),
+      );
       await this.chatService.createConversations(
         usersToUpdate
           .filter((userId) => userId !== university.defaultContactId)

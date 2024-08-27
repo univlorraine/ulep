@@ -6,6 +6,7 @@ import {
 
 export class DeleteContactConversationCommand {
     id: string;
+    chatIdsToIgnore: string[];
 }
 
 @Injectable()
@@ -20,18 +21,29 @@ export class DeleteContactConversationUsecase {
             command.id,
         );
 
-        conversations.items.forEach(async (conversation) => {
-            if (conversation.usersIds.length === 2) {
-                await this.conversationRepository.delete(conversation.id);
-            } else {
-                await this.conversationRepository.update(
-                    conversation.id,
-                    conversation.usersIds.filter(
+        const chatIdsToIgnoreSet = new Set(command.chatIdsToIgnore);
+
+        const conversationsToDelete = conversations.items.filter(
+            (conversation) => !chatIdsToIgnoreSet.has(conversation.id),
+        );
+
+        const deletePromises = conversationsToDelete.map(
+            async (conversation) => {
+                if (conversation.usersIds.length === 2) {
+                    return this.conversationRepository.delete(conversation.id);
+                } else {
+                    const updatedUserIds = conversation.usersIds.filter(
                         (userId) => userId !== command.id,
-                    ),
-                    conversation.metadata,
-                );
-            }
-        });
+                    );
+                    return this.conversationRepository.update(
+                        conversation.id,
+                        updatedUserIds,
+                        conversation.metadata,
+                    );
+                }
+            },
+        );
+
+        await Promise.all(deletePromises);
     }
 }

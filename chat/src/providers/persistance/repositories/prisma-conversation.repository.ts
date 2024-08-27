@@ -35,8 +35,8 @@ export class PrismaConversationRepository implements ConversationRepository {
         filteredProfilesIds?: string[],
     ): Promise<Collection<Conversation>> {
         const conversationPagination: Prisma.ConversationFindManyArgs = {
-            take: 50,
-            skip: 0,
+            take: undefined,
+            skip: undefined,
         };
         if (pagination?.limit) {
             conversationPagination.take = pagination.limit;
