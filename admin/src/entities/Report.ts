@@ -16,6 +16,8 @@ type Report = {
     metadata: MetadataReport;
 };
 
+export const CONVERSATION_CATEGORY = 'Conversation';
+
 export enum ReportStatus {
     OPEN = 'OPEN',
     IN_PROGRESS = 'IN_PROGRESS',
