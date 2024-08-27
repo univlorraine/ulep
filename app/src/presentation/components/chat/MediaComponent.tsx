@@ -103,7 +103,7 @@ const MessageFile: React.FC<MessageProps> = ({ message }) => {
     const fileName = message.content.split('/')[5].split('?')[0];
 
     const handleDownload = async () => {
-        await fileAdapter.saveFile(message.content, fileName);
+        await fileAdapter.saveFile(message.content, decodeURI(fileName));
         showToast({
             message: t('chat.fileDownloaded'),
             duration: 2000,

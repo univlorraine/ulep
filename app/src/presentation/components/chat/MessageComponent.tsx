@@ -195,7 +195,7 @@ const MessageFile: React.FC<MessageProps> = ({ message, isCurrentUserMessage }) 
     const handleDownload = async (e: React.MouseEvent<HTMLIonButtonElement>) => {
         e.preventDefault();
         e.stopPropagation();
-        await fileAdapter.saveFile(message.content, fileName);
+        await fileAdapter.saveFile(message.content, decodeURI(fileName));
         showToast({
             message: t('chat.fileDownloaded'),
             duration: 2000,
