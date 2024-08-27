@@ -691,6 +691,11 @@
                 "certificateOption": "Option certificat",
                 "specificProgram": "Option programme spécifique",
                 "hasPriority": "Langue prioritaire (sans réponse au cycle précedent)",
+                "learningJournal": "Journal d'apprentissage confirmé",
+                "consultingInterview": "Entretien conseil",
+                "sharedCertificate": "Certificat partagé",
+                "certificateFile": "Certificat",
+                "generateCertificate": "Générer un certificat",
                 "score": "Score",
                 "masteredLanguages": "Langues maîtrisées"
             },

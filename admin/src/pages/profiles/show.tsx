@@ -1,22 +1,24 @@
-import React from 'react';
+import ContentPasteGoIcon from '@mui/icons-material/ContentPasteGo';
+import { IconButton } from '@mui/material';
 import {
-    TabbedShowLayout,
-    FunctionField,
-    useTranslate,
     ArrayField,
-    SingleFieldList,
-    ChipField,
-    TextField,
-    Show,
-    useRecordContext,
-    Datagrid,
-    Identifier,
-    EditButton,
-    TopToolbar,
     BooleanField,
     usePermissions,
     useGetIdentity,
+    ChipField,
+    Datagrid,
+    EditButton,
+    FunctionField,
+    Identifier,
+    Show,
+    SingleFieldList,
+    TabbedShowLayout,
+    TextField,
+    TopToolbar,
+    useRecordContext,
+    useTranslate,
 } from 'react-admin';
+import ReferenceUploadFileField from '../../components/field/ReferenceUploadFileField';
 import PageTitle from '../../components/PageTitle';
 import { Role } from '../../entities/Administrator';
 import Availabilites from '../../entities/Availabilities';
@@ -68,6 +70,10 @@ export const ShowActions = () => {
 const ProfileTab = () => {
     const translate = useTranslate();
     const recordContext = useRecordContext();
+
+    const openGenrateCertificateModal = () => {
+        console.log('openGenrateCertificateModal');
+    };
 
     return (
         <TabbedShowLayout syncWithLocation={false}>
@@ -158,7 +164,9 @@ const ProfileTab = () => {
                 <ArrayField source="learningLanguages">
                     <Datagrid bulkActionButtons={false} rowClick={(id: Identifier) => `/learning-languages/${id}/show`}>
                         <FunctionField
-                            render={(record: LearningLanguage) => translate(`languages_code.${record.code}`)}
+                            render={(record: Pick<LearningLanguage, 'name' | 'code'>) =>
+                                translate(`languages_code.${record.code}`)
+                            }
                             source="name"
                         />
                         <TextField source="level" />
@@ -166,6 +174,28 @@ const ProfileTab = () => {
                             label={translate('learning_languages.show.fields.hasPriority')}
                             source="hasPriority"
                         />
+                        <BooleanField
+                            label={translate('learning_languages.show.fields.learningJournal')}
+                            source="learningJournal"
+                        />
+                        <BooleanField
+                            label={translate('learning_languages.show.fields.consultingInterview')}
+                            source="consultingInterview"
+                        />
+                        <BooleanField
+                            label={translate('learning_languages.show.fields.sharedCertificate')}
+                            source="sharedCertificate"
+                        />
+                        <ReferenceUploadFileField
+                            label={translate('learning_languages.show.fields.certificateFile')}
+                            source="certificateFile.id"
+                        />
+                        <IconButton
+                            onClick={openGenrateCertificateModal}
+                            title={translate('learning_languages.show.fields.sharedCertificate')}
+                        >
+                            <ContentPasteGoIcon />
+                        </IconButton>
                     </Datagrid>
                 </ArrayField>
             </TabbedShowLayout.Tab>
