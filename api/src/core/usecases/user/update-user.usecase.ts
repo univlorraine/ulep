@@ -134,8 +134,8 @@ export class UpdateUserUsecase {
     }
   }
 
-  private async findUserTandems(user: string): Promise<Tandem[]> {
-    const profile = await this.profileRepository.ofUser(user);
+  private async findUserTandems(userId: string): Promise<Tandem[]> {
+    const profile = await this.profileRepository.ofUser(userId);
     if (!profile) {
       return [];
     }
@@ -212,10 +212,15 @@ export class UpdateUserUsecase {
 
   private async handleConversation(user: User, newContactId: string) {
     if (newContactId !== user.contactId) {
-      await this.chatService.createConversation([newContactId, user.id]);
       if (user.contactId) {
-        await this.chatService.deleteConversationByContactId(user.contactId);
+        const chatToIgnore = await this.findUserTandems(user.contactId);
+
+        await this.chatService.deleteConversationByContactId(
+          user.contactId,
+          chatToIgnore.map((chat) => chat.id),
+        );
       }
+      await this.chatService.createConversation([newContactId, user.id]);
     }
   }
 }
