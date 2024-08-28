@@ -1,6 +1,6 @@
 import {
     Datagrid,
-    DeleteButton,
+    DeleteWithConfirmButton,
     FunctionField,
     List,
     ListProps,
@@ -35,15 +35,24 @@ const DeleteAdministratorButton = ({ identity }: DeleteAdministratorButtonProps)
 
     if (record.id === identity.id) {
         return (
-            <DeleteButton
-                confirmContent={translate('administrators.confirmDeleteOwnAccount')}
+            <DeleteWithConfirmButton
+                confirmContent={translate('administrators.delete.confirmDeleteOwnAccount')}
+                confirmTitle={translate('administrators.delete.title', {
+                    name: `${record.firstname} ${record.lastname}`,
+                })}
                 mutationMode="pessimistic"
                 onClick={disconnect}
             />
         );
     }
 
-    return <DeleteButton mutationMode="pessimistic" />;
+    return (
+        <DeleteWithConfirmButton
+            confirmContent={translate('administrators.delete.confirmDeleteAccount')}
+            confirmTitle={translate('administrators.delete.title', { name: `${record.firstname} ${record.lastname}` })}
+            mutationMode="pessimistic"
+        />
+    );
 };
 
 const AdministratorList = (props: ListProps<Administrator>) => {

@@ -31,7 +31,11 @@
             "university": "Update the university to administer",
             "group": "Update the group(s) of the administrator"
         },
-        "confirmDeleteOwnAccount": "Are you sure you want to delete your user?\n You are currently logged in to this account, after deletion you will be logged out."
+        "delete": {
+            "title": "Delete %{name}",
+            "confirmDeleteOwnAccount": "Are you sure you want to delete your user?\n You are currently logged in to this account, after deletion you will be logged out.",
+            "confirmDeleteAccount": "Are you sure you want to delete this user?"
+        }
     },
     "admin_groups_picker": {
         "animator": "Animator",
