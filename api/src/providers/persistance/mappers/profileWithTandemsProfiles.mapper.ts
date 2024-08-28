@@ -1,15 +1,15 @@
 import * as Prisma from '@prisma/client';
-import { ProfilesRelations } from './profile.mapper';
-import { userMapper, UserRelations, UserSnapshot } from './user.mapper';
-import { languageMapper } from './language.mapper';
 import {
   LearningLanguageWithTandemWithPartnerLearningLanguage,
   LearningType,
   ProficiencyLevel,
 } from 'src/core/models';
-import { campusMapper } from './campus.mapper';
 import { ProfileWithTandemsProfiles } from 'src/core/models/profileWithTandemsProfiles.model';
+import { campusMapper } from './campus.mapper';
+import { languageMapper } from './language.mapper';
+import { ProfilesRelations } from './profile.mapper';
 import { tandemWithPartnerLearningLanguageMapper } from './tandemWithPartnerLearningLanguage.mapper';
+import { userMapper, UserRelations, UserSnapshot } from './user.mapper';
 
 export type ProfileWithTandemsProfilesSnapshot = Prisma.Profiles & {
   User: UserSnapshot;
@@ -74,6 +74,7 @@ export const profileWithTandemsProfilesMapper = (
           learningType: LearningType[learningLanguage.learning_type],
           sameAge: learningLanguage.same_age,
           sameGender: learningLanguage.same_gender,
+          sameTandemEmail: learningLanguage.same_tandem_email,
           hasPriority: learningLanguage.has_priority,
           campus:
             learningLanguage.Campus && campusMapper(learningLanguage.Campus),

@@ -17,6 +17,7 @@ import {
 import * as Swagger from '@nestjs/swagger';
 import { UserKeycloakContactInterceptor } from 'src/api/interceptors';
 import { Profile } from 'src/core/models';
+import { ProfileWithTandemsProfiles } from 'src/core/models/profileWithTandemsProfiles.model';
 import {
   CreateLearningLanguageUseCase,
   CreateOrUpdateTestedLanguageUsecase,
@@ -27,9 +28,9 @@ import {
   GetAdministratorUsecase,
   GetLearningLanguageOfProfileUsecase,
   GetProfileByUserIdUsecase,
-  GetProfileUsecase,
   GetProfilesUsecase,
   GetProfilesWithTandemsProfilesUsecase,
+  GetProfileUsecase,
   GetProfileWithTandemsProfilesUsecase,
   GetTandemsForProfileUsecase,
   UpdateProfileUsecase,
@@ -46,10 +47,9 @@ import {
   UpdateProfileRequest,
   UserTandemResponse,
 } from '../dtos';
-import { AuthenticationGuard } from '../guards';
 import { ProfileWithTandemsQueryFilter } from '../dtos/profiles/profiles-with-tandems-filters';
 import { ProfileWithTandemsProfilesResponse } from '../dtos/profiles/profiles-with-tandems-profiles.response';
-import { ProfileWithTandemsProfiles } from 'src/core/models/profileWithTandemsProfiles.model';
+import { AuthenticationGuard } from '../guards';
 
 @Controller('profiles')
 @Swagger.ApiTags('Profiles')

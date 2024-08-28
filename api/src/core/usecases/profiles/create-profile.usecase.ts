@@ -172,11 +172,12 @@ export class CreateProfileUsecase {
               user.id,
               language.id,
             );
-          sameTandemEmail =
+          const otherUser =
             await this.tandemHistoryRepository.getOtherUserInTandemHistory(
               user.id,
               historyTandem.tandemId,
             );
+          sameTandemEmail = otherUser.userEmail;
         }
 
         return new LearningLanguage({

@@ -11,6 +11,7 @@ import {
     fetchUtils,
 } from 'react-admin';
 import { MessageType } from '../entities/Message';
+import { CONVERSATION_CATEGORY } from '../entities/Report';
 import { RoutineExecution } from '../entities/RoutineExecution';
 import { TandemStatus } from '../entities/Tandem';
 import User from '../entities/User';
@@ -243,6 +244,15 @@ const customDataProvider = {
             });
 
             return { data: conversationsWithPartner, total: result.totalItems };
+        }
+
+        if (resource === 'reports/categories') {
+            // Category "Conversation" should not be edited, so it is made invisible
+            const categoriesWithoutConversation = result.items.filter(
+                (category: any) => category.name !== CONVERSATION_CATEGORY
+            );
+
+            return { data: categoriesWithoutConversation, total: result.totalItems };
         }
 
         if (!result.items) {

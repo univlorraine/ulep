@@ -1,17 +1,17 @@
-import { LanguageResponse } from './../languages/index';
+import { Optional } from '@nestjs/common';
 import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
 import { Expose } from 'class-transformer';
-import { ProfileResponse } from '../profiles';
 import {
   LearningLanguage,
   LearningLanguageWithTandem,
   LearningLanguageWithTandemWithPartnerLearningLanguage,
   LearningType,
 } from 'src/core/models';
-import { Optional } from '@nestjs/common';
-import { TandemResponse } from '../tandems';
 import { CampusResponse } from '../campus';
+import { ProfileResponse } from '../profiles';
+import { TandemResponse } from '../tandems';
 import { TandemWithPartnerLearningLanguageResponse } from '../tandems/tandem-with-patner-learning-language.response';
+import { LanguageResponse } from './../languages/index';
 
 export class LearningLanguageResponse {
   @ApiProperty({ type: 'string', format: 'uuid' })

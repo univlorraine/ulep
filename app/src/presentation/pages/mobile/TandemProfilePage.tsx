@@ -1,36 +1,30 @@
 import { IonPage } from '@ionic/react';
 import { Redirect, useHistory, useLocation } from 'react-router';
-import Language from '../../../domain/entities/Language';
-import Profile from '../../../domain/entities/Profile';
+import Tandem from '../../../domain/entities/Tandem';
 import TandemProfile from '../../components/tandems/TandemProfile';
 
-interface TandemProfileState {
-    id: string;
-    language: Language;
-    pedagogy: Pedagogy;
-    profile: Profile;
-    level: CEFR;
-    tandemLearningLanguage: Language;
+interface TandemProfilePageState {
+    tandem: Tandem;
 }
 
 const TandemProfilePage: React.FC = () => {
     const history = useHistory();
-    const location = useLocation<TandemProfileState>();
-    const { id, language, level, pedagogy, profile, tandemLearningLanguage } = location.state || {};
+    const location = useLocation<TandemProfilePageState>();
+    const { tandem } = location.state || {};
 
-    if (!profile || !language) {
+    if (!tandem.partner || !tandem.learningLanguage) {
         return <Redirect to="/home" />;
     }
     return (
         <IonPage>
             <TandemProfile
-                id={id}
-                language={language}
-                level={level}
+                id={tandem.id}
+                language={tandem.learningLanguage}
+                level={tandem.level}
                 onClose={() => history.push('/home')}
-                partnerLearningLanguage={tandemLearningLanguage}
-                pedagogy={pedagogy}
-                profile={profile}
+                partnerLearningLanguage={tandem.partnerLearningLanguage}
+                pedagogy={tandem.pedagogy}
+                profile={tandem.partner}
             />
         </IonPage>
     );

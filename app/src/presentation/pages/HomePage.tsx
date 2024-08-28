@@ -36,15 +36,7 @@ const HomePage: React.FC = () => {
         !isHybrid ? setSelectedTandem(tandem) : history.push('/tandem-status', { tandem });
 
     const onValidatedTandemPressed = (tandem: Tandem) =>
-        !isHybrid
-            ? setSelectedTandem(tandem)
-            : history.push('/tandem-profil', {
-                  profile: tandem.partner,
-                  language: tandem.learningLanguage,
-                  level: tandem.level,
-                  pedagogy: tandem.pedagogy,
-                  tandemLearningLanguage: tandem.partnerLearningLanguage,
-              });
+        !isHybrid ? setSelectedTandem(tandem) : history.push('/tandem-profil', { tandem });
 
     if (!profile) {
         return <Redirect to={'/'} />;

@@ -6,16 +6,15 @@ import {
   ProficiencyLevel,
   Profile,
 } from 'src/core/models';
+import { testedLanguageMapper } from 'src/providers/persistance/mappers/testedLanguage.mapper';
+import { campusMapper } from './campus.mapper';
+import { languageMapper } from './language.mapper';
 import {
   TextContentRelations,
   TextContentSnapshot,
   textContentMapper,
 } from './translation.mapper';
 import { UserRelations, UserSnapshot, userMapper } from './user.mapper';
-import { languageMapper } from './language.mapper';
-import { campusMapper } from './campus.mapper';
-import { testedLanguageMapper } from 'src/providers/persistance/mappers/testedLanguage.mapper';
-import { tandemMapper } from './tandem.mapper';
 
 export const ProfilesRelations = {
   User: {
@@ -90,6 +89,7 @@ export const profileMapper = (instance: ProfileSnapshot): Profile => {
           learningType: LearningType[learningLanguage.learning_type],
           sameAge: learningLanguage.same_age,
           sameGender: learningLanguage.same_gender,
+          sameTandemEmail: learningLanguage.same_tandem_email,
           hasPriority: learningLanguage.has_priority,
           campus:
             learningLanguage.Campus && campusMapper(learningLanguage.Campus),
