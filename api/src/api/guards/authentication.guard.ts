@@ -8,12 +8,12 @@ import {
 } from '@nestjs/common';
 import { Reflector } from '@nestjs/core';
 import { Request } from 'express';
+import { OWNER_ALLOWED_KEY } from '../decorators/owner.decorator';
+import { ROLES_KEY, Role } from '../decorators/roles.decorator';
 import {
   AUTHENTICATOR,
   AuthenticatorInterface,
 } from '../services/authenticator.interface';
-import { ROLES_KEY, Role } from '../decorators/roles.decorator';
-import { OWNER_ALLOWED_KEY } from '../decorators/owner.decorator';
 
 @Injectable()
 export class AuthenticationGuard implements CanActivate {
