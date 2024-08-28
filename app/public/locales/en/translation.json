@@ -44,6 +44,8 @@
         "bottom_bar": {
             "home": "Home",
             "conversations": "Conversations",
+            "learning": "Learning",
+
             "disconnect": "Disconnect",
             "profile": "Profile",
             "settings": "Settings"

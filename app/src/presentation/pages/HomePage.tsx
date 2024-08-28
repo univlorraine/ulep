@@ -28,8 +28,6 @@ const HomePage: React.FC = () => {
         showToast({ message: t(error.message), duration: 5000 });
     }
 
-    const onProfilePressed = () => (isHybrid ? history.push('/profil') : undefined);
-
     const onReportPressed = () => (isHybrid ? history.push('/report') : undefined);
 
     const onTandemPressed = (tandem: Tandem) =>
@@ -46,7 +44,6 @@ const HomePage: React.FC = () => {
         return (
             <IonContent>
                 <HomeContent
-                    onProfilePressed={onProfilePressed}
                     onReportPressed={onReportPressed}
                     onTandemPressed={onTandemPressed}
                     onValidatedTandemPressed={onValidatedTandemPressed}

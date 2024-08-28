@@ -43,7 +43,9 @@
     "navigation": {
         "bottom_bar": {
             "home": "Accueil",
-            "conversations": "Conversations"
+            "conversations": "Conversations",
+            "learning": "Learning",
+            "profile": "Profil"
         },
         "sidebar": {
             "home": "Accueil",

@@ -1,11 +1,10 @@
 import { useTranslation } from 'react-i18next';
 import Masonry, { ResponsiveMasonry } from 'react-responsive-masonry';
 import { useHistory } from 'react-router';
-import { ArrowDownSvg, ReportSvg } from '../../../assets';
+import { ReportSvg } from '../../../assets';
 import Profile from '../../../domain/entities/Profile';
 import Tandem from '../../../domain/entities/Tandem';
 import University from '../../../domain/entities/University';
-import Avatar from '../../components/Avatar';
 import Loader from '../../components/Loader';
 import MyUniversityCard from '../../components/card/MyUniversityCard';
 import PartnerUniversitiesCard from '../../components/card/PartnerUniversitiesCard';
@@ -19,7 +18,6 @@ import styles from './HomeContent.module.css';
 interface HomeContentProps {
     isLoading: boolean;
     profile: Profile;
-    onProfilePressed?: () => void;
     onReportPressed?: () => void;
     onTandemPressed: (tandem: Tandem) => void;
     onValidatedTandemPressed: (tandem: Tandem) => void;
@@ -30,7 +28,6 @@ interface HomeContentProps {
 const HomeContent: React.FC<HomeContentProps> = ({
     isLoading,
     profile,
-    onProfilePressed,
     onReportPressed,
     onTandemPressed,
     onValidatedTandemPressed,
@@ -57,16 +54,6 @@ const HomeContent: React.FC<HomeContentProps> = ({
                         <span className={styles.date}>{formattedDate}</span>
                         <h1 className={styles.hello}>{`${t('global.hello')} ${profile.user.firstname}`}</h1>
                     </div>
-                    {isHybrid && (
-                        <button
-                            aria-label={t('global.change_avatar') as string}
-                            className={styles['avatar-container']}
-                            onClick={onProfilePressed}
-                        >
-                            <Avatar user={profile.user} className={styles.avatar} />
-                            <img alt="" src={ArrowDownSvg} aria-hidden={true} />
-                        </button>
-                    )}
                 </div>
                 {isHybrid && <div className={styles.separator} />}
                 <div className={styles['masonery-content']}>

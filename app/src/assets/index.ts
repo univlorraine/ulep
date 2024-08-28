@@ -28,6 +28,7 @@ import EyeSvg from './eye.svg';
 import HiBubbleSvg from './hi-bubble.svg';
 import InfoSvg from './info.svg';
 import KebabSvg from './kebab.svg';
+import LearningSvg from './learning.svg';
 import ArrowLeftSvg from './left-arrow.svg';
 import LeftChevronSvg from './left-chevron.svg';
 import LogoTextSvg from './logo-text.svg';
@@ -86,6 +87,7 @@ export {
     HomeSvg,
     InfoSvg,
     KebabSvg,
+    LearningSvg,
     LeftChevronSvg,
     LogoSvg,
     LogoTextSvg,

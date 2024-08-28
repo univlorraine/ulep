@@ -14,15 +14,15 @@
 ion-tab-button {
     max-width: none;
 }
-
-ion-tab-button.tab-selected {
-    --background: black;
+ion-tab-button span {
+    margin-top: 2px;
 }
 
-ion-tab-button.tab-selected span,
-ion-tab-button.tab-selected img {
+ion-tab-button.tab-selected span {
     color: white !important;
-    filter: brightness(0) invert(1);
+    background-color: black;
+    border-radius: 12px;
+    padding: 2px 4px;
 }
 
 .ion-background-yellow {
