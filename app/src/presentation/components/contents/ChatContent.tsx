@@ -105,9 +105,11 @@ const Content: React.FC<ChatContentProps> = ({
                             name: Conversation.getMainConversationPartner(conversation, profile.user.id).firstname,
                         })}
                     </h2>
-                    <IonButton fill="clear" className={styles.camera} onClick={onOpenVideoCall}>
-                        <IonIcon icon={videocam} />
-                    </IonButton>
+                    {!isBlocked && (
+                        <IonButton fill="clear" className={styles.camera} onClick={onOpenVideoCall}>
+                            <IonIcon icon={videocam} />
+                        </IonButton>
+                    )}
                 </div>
                 <IonButton
                     fill="clear"
