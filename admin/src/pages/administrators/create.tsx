@@ -34,17 +34,21 @@ const CreateAdministrator = () => {
                         }
 
                         if (error.message === 'User is already an administrator') {
-                            return notify('administrators.create.error_already_admin');
+                            return notify('administrators.create.error_already_admin', { type: 'error' });
                         }
 
-                        return notify('administrators.create.error');
+                        if (error.message === 'email must be an email') {
+                            return notify('administrators.create.error_email', { type: 'error' });
+                        }
+
+                        return notify('administrators.create.error', { type: 'error' });
                     },
                 }
             );
         } catch (err) {
             console.error(err);
 
-            return notify('administrators.create.error');
+            return notify('administrators.create.error', { type: 'error' });
         }
     };
 

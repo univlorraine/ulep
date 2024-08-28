@@ -5,6 +5,7 @@
             "email": "Please enter the email of the new administrator",
             "error": "An error occurred while creating an administrator",
             "error_already_admin": "The user is already an administrator",
+            "error_email": "The email is not valid",
             "password": "Please enter a password for the administrator (1 uppercase, 1 lowercase and 1 number)",
             "title": "Creating an administrator",
             "university": "Please select a university for the administrator",
