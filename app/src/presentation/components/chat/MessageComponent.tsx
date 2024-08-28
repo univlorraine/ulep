@@ -190,7 +190,7 @@ const MessageFile: React.FC<MessageProps> = ({ message, isCurrentUserMessage }) 
     const { t } = useTranslation();
     const [showToast] = useIonToast();
     const messageClass = isCurrentUserMessage ? styles.currentUser : styles.otherUser;
-    const fileName = message.metadata?.originalFilename;
+    const fileName = decodeURI(message.metadata?.originalFilename);
 
     const handleDownload = async (e: React.MouseEvent<HTMLIonButtonElement>) => {
         e.preventDefault();
@@ -205,7 +205,7 @@ const MessageFile: React.FC<MessageProps> = ({ message, isCurrentUserMessage }) 
     return (
         <div className={messageClass}>
             <IonButton fill="clear" className={styles.downloadButton} onClick={handleDownload}>
-                <IonText className={styles.downloadTitle}>{decodeURI(fileName)}</IonText>
+                <IonText className={styles.downloadTitle}>{fileName}</IonText>
                 <IonIcon
                     aria-label={t('chat.ariaLabelFileDownloaded', { filename: fileName }) as string}
                     className={styles.download}
