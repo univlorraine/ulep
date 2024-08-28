@@ -184,6 +184,9 @@ export class PrismaProfileRepository implements ProfileRepository {
               contains: where.user.lastname,
               mode: ModeQuery.INSENSITIVE,
             },
+            NOT: {
+              status: 'BANNED',
+            },
           },
           ...(where.learningLanguage && {
             LearningLanguages: {
