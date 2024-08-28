@@ -22,7 +22,7 @@ export class UploadInstanceDefaultCertificateCommand {
 
 @Injectable()
 export class UploadInstanceDefaultCertificateUsecase {
-  #name = 'certifates/instance/Modèle de certificat.pdf';
+  #name = 'certificates/instance/Modèle de certificat.pdf';
   #bucket = 'assets';
 
   constructor(

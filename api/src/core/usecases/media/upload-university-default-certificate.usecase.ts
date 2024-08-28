@@ -1,4 +1,5 @@
 import { Inject, Injectable } from '@nestjs/common';
+import { UnauthorizedOperation } from 'src/core/errors';
 import { MediaObject, University } from 'src/core/models';
 import {
   UNIVERSITY_REPOSITORY,
@@ -22,7 +23,8 @@ export class UploadUniversityDefaultCertificateCommand {
 
 @Injectable()
 export class UploadUniversityDefaultCertificateUsecase {
-  #name = 'certifates/unversities/Modèle de certificat - {universityName}.pdf';
+  #name =
+    'certificates/unversities/Modèle de certificat - {universityName}.pdf';
   #bucket = 'assets';
 
   constructor(
@@ -35,7 +37,7 @@ export class UploadUniversityDefaultCertificateUsecase {
   ) {}
 
   async execute(command: UploadUniversityDefaultCertificateCommand) {
-    const university = await this.universityRepository.ofId(command.id);
+    const university = await this.tryToFindUniversity(command.id);
     const previousFile = await this.tryToFindTheFile(university);
 
     await this.deletePreviousFile(university, previousFile);
@@ -45,6 +47,15 @@ export class UploadUniversityDefaultCertificateUsecase {
 
   private getFileName(universityName: string) {
     return this.#name.replace('{universityName}', universityName);
+  }
+
+  private async tryToFindUniversity(id: string): Promise<University> {
+    const university = await this.universityRepository.ofId(id);
+    if (!university) {
+      throw new UnauthorizedOperation();
+    }
+
+    return university;
   }
 
   private tryToFindTheFile(
