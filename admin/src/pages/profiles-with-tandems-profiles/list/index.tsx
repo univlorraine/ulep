@@ -1,5 +1,7 @@
 import PeopleAltIcon from '@mui/icons-material/PeopleAlt';
 import { Box, Typography } from '@mui/material';
+import Checkbox from '@mui/material/Checkbox';
+import { useState } from 'react';
 import {
     AutocompleteInput,
     Datagrid,
@@ -22,6 +24,7 @@ import { Role } from '../../../entities/Administrator';
 import { LearningLanguageWithTandemWithPartnerProfile } from '../../../entities/LearningLanguage';
 import { getProfileDisplayName } from '../../../entities/Profile';
 import { ProfileWithTandemsProfiles } from '../../../entities/ProfileWithTandemsProfiles';
+import { TandemStatus } from '../../../entities/Tandem';
 import codeLanguageToFlag from '../../../utils/codeLanguageToFlag';
 import isAgeCriterionMet from '../../../utils/isAgeCriterionMet';
 import hasTandemManagementPermission from '../hasTandemManagementPermission';
@@ -30,10 +33,11 @@ import ProfileTandemDetailLink from '../ui/ProfileTandemDetailLink';
 import ProfileWithTandemLink from '../ui/ProfileTandemLink';
 import useLearningLanguagesStore from '../useLearningLanguagesStore';
 import PairingActions from './PairingActions';
+import SelectedLearningLanguageAction from './SelectedLearningLanguageAction';
 
 import './list.css';
 
-const TandemStatus = ({ status }: { status: string }) => {
+const TandemStatusComponent = ({ status }: { status: string }) => {
     const translate = useTranslate();
 
     const colors: Record<string, ChipsColors> = {
@@ -60,6 +64,7 @@ const LearningLanguageList = () => {
         },
     });
     const { data: universities } = useGetList('universities');
+    const [selectedLearningLanguages, setSelectedLearningLanguages] = useState<string[]>([]);
 
     const adaptedFilters = identity?.isCentralUniversity
         ? [
@@ -108,6 +113,14 @@ const LearningLanguageList = () => {
 
     const filters = universities ? adaptedFilters : [];
 
+    const handleLearningLanguageSelection = (learningLanguageId: string) => {
+        if (selectedLearningLanguages.includes(learningLanguageId)) {
+            setSelectedLearningLanguages(selectedLearningLanguages.filter((id) => id !== learningLanguageId));
+        } else {
+            setSelectedLearningLanguages([...selectedLearningLanguages, learningLanguageId]);
+        }
+    };
+
     if (isLoadingIdentity || !identity) {
         return <Loading />;
     }
@@ -150,7 +163,23 @@ const LearningLanguageList = () => {
                                     if (learningLanguage.tandem) {
                                         return (
                                             <Box key={learningLanguage.code} className="line tandem profile">
-                                                <PeopleAltIcon color="disabled" fontSize="small" />
+                                                {learningLanguage.tandem.status !== TandemStatus.ACTIVE && (
+                                                    <Checkbox
+                                                        checked={selectedLearningLanguages.includes(
+                                                            learningLanguage.id
+                                                        )}
+                                                        onChange={() =>
+                                                            handleLearningLanguageSelection(learningLanguage.id)
+                                                        }
+                                                    />
+                                                )}
+                                                {learningLanguage.tandem.status === TandemStatus.ACTIVE && (
+                                                    <PeopleAltIcon
+                                                        color="disabled"
+                                                        fontSize="small"
+                                                        sx={{ margin: '10px' }}
+                                                    />
+                                                )}
                                                 <Box sx={{ display: 'flex', flexDirection: 'column' }}>
                                                     {getProfileDisplayName(
                                                         learningLanguage.tandem.partnerLearningLanguage.profile
@@ -174,7 +203,10 @@ const LearningLanguageList = () => {
 
                                     return (
                                         <Box key={learningLanguage.code} className="line tandem profile">
-                                            <PeopleAltIcon color="disabled" fontSize="small" />
+                                            <Checkbox
+                                                checked={selectedLearningLanguages.includes(learningLanguage.id)}
+                                                onChange={() => handleLearningLanguageSelection(learningLanguage.id)}
+                                            />
                                             {translate('learning_languages.list.noTandem')}{' '}
                                             {codeLanguageToFlag(learningLanguage.code)}
                                         </Box>
@@ -355,7 +387,7 @@ const LearningLanguageList = () => {
                                         if (learningLanguage.tandem) {
                                             return (
                                                 <Box key={learningLanguage.code} className="line tandem">
-                                                    <TandemStatus status={learningLanguage.tandem.status} />
+                                                    <TandemStatusComponent status={learningLanguage.tandem.status} />
                                                 </Box>
                                             );
                                         }
@@ -449,6 +481,12 @@ const LearningLanguageList = () => {
                     />
                 </Datagrid>
             </List>
+            {selectedLearningLanguages.length > 0 && (
+                <SelectedLearningLanguageAction
+                    selectedLearningLanguages={selectedLearningLanguages}
+                    setSelectedLearningLanguages={setSelectedLearningLanguages}
+                />
+            )}
         </Box>
     );
 };
