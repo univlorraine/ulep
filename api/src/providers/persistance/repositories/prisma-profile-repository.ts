@@ -1,19 +1,19 @@
-import { Injectable } from '@nestjs/common';
 import { Collection, ModeQuery, PrismaService } from '@app/common';
+import { Injectable } from '@nestjs/common';
+import { Profile } from 'src/core/models';
+import { ProfileWithTandemsProfiles } from 'src/core/models/profileWithTandemsProfiles.model';
 import {
   ProfileQueryOrderBy,
   ProfileQueryWhere,
   ProfileRepository,
   ProfileWithTandemsProfilesQueryWhere,
 } from 'src/core/ports/profile.repository';
-import { Profile } from 'src/core/models';
 import {
-  ProfilesRelations,
   profileMapper,
+  ProfilesRelations,
   ProfilesRelationsWithTandemProfile,
   profileWithTandemsProfilesMapper,
 } from '../mappers';
-import { ProfileWithTandemsProfiles } from 'src/core/models/profileWithTandemsProfiles.model';
 
 @Injectable()
 export class PrismaProfileRepository implements ProfileRepository {
