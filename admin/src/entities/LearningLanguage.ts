@@ -2,7 +2,7 @@ import Campus from './Campus';
 // eslint-disable-next-line import/no-cycle
 import { Profile } from './Profile';
 // eslint-disable-next-line import/no-cycle
-import { TandemStatus, Tandem, TandemWithPartnerLearningLanguage } from './Tandem';
+import { Tandem, TandemStatus, TandemWithPartnerLearningLanguage } from './Tandem';
 
 export enum LearningType {
     ETANDEM = 'ETANDEM',
