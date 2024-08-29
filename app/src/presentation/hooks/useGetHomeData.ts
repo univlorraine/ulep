@@ -1,9 +1,8 @@
-import { useState, useEffect } from 'react';
-import Tandem from '../../domain/entities/Tandem';
+import { useEffect, useState } from 'react';
 import { useConfig } from '../../context/ConfigurationContext';
+import Tandem from '../../domain/entities/Tandem';
 import { useStoreState } from '../../store/storeTypes';
 import { LearningType } from '../pages/PairingPedagogyPage';
-import University from '../../domain/entities/University';
 
 const useGetHomeData = (refresh?: boolean) => {
     const { getAllTandems } = useConfig();
@@ -11,12 +10,10 @@ const useGetHomeData = (refresh?: boolean) => {
 
     const [homeResult, setHomeResult] = useState<{
         tandems: Tandem[];
-        partnerUniversities: University[];
         error: Error | undefined;
         isLoading: boolean;
     }>({
         tandems: [],
-        partnerUniversities: [],
         error: undefined,
         isLoading: false,
     });
@@ -31,7 +28,7 @@ const useGetHomeData = (refresh?: boolean) => {
             });
             const tandemsResult = await getAllTandems.execute(profile.id);
             if (tandemsResult instanceof Error) {
-                setHomeResult({ tandems: [], partnerUniversities: [], error: tandemsResult, isLoading: false });
+                setHomeResult({ tandems: [], error: tandemsResult, isLoading: false });
             } else {
                 const waitingLearningLanguages: Tandem[] = [];
                 profile?.learningLanguages.map((learningLanguage) => {
@@ -49,25 +46,8 @@ const useGetHomeData = (refresh?: boolean) => {
                         );
                     }
                 });
-
-                const uniquePartnerUniversitySet = new Set();
-                const uniquePartnerUniversities: University[] = [];
-
-                tandemsResult.forEach((tandem) => {
-                    const universityId = tandem.partner?.user.university.id;
-                    if (
-                        tandem.partner &&
-                        universityId !== profile.user.university.id &&
-                        !uniquePartnerUniversitySet.has(universityId)
-                    ) {
-                        uniquePartnerUniversitySet.add(universityId);
-                        uniquePartnerUniversities.push(tandem.partner.user.university);
-                    }
-                });
-
                 setHomeResult({
                     tandems: [...tandemsResult, ...waitingLearningLanguages],
-                    partnerUniversities: uniquePartnerUniversities,
                     error: undefined,
                     isLoading: false,
                 });
