@@ -1,4 +1,3 @@
-import { IonButton } from '@ionic/react';
 import { useTranslation } from 'react-i18next';
 import Tandem from '../../../domain/entities/Tandem';
 import { codeLanguageToFlag } from '../../utils';
@@ -16,7 +15,7 @@ const ActiveTandemCard: React.FC<ActiveTandemCardProps> = ({ tandem, onTandemPre
     return (
         <div>
             <p className={styles.title}>{t('learning.card.my_tandem')}</p>
-            <IonButton className={styles.container} fill="clear" onClick={onTandemPressed}>
+            <button className={styles.container} onClick={onTandemPressed}>
                 <div className={styles['avatar-container']}>
                     <Avatar className={styles.avatar} user={tandem.partner?.user} />
                     <div className={styles['flag-container']}>
@@ -34,7 +33,7 @@ const ActiveTandemCard: React.FC<ActiveTandemCardProps> = ({ tandem, onTandemPre
                     </p>
                     <p className={styles.informations}>{tandem.partner?.user.university?.name}</p>
                 </div>
-            </IonButton>
+            </button>
         </div>
     );
 };

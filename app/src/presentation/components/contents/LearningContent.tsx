@@ -6,6 +6,7 @@ import { useHistory } from 'react-router';
 import { AddSvg } from '../../../assets';
 import Profile from '../../../domain/entities/Profile';
 import Tandem from '../../../domain/entities/Tandem';
+import UniversityCard from '../card/UniversityCard';
 import ActiveTandemCard from '../tandems/ActiveTandemCard';
 import PendingTandemCard from '../tandems/PendingTandemCard';
 import styles from './LearningContent.module.css';
@@ -79,6 +80,9 @@ const LearningContent: React.FC<LearningContentProps> = ({
                             tandem={currentTandem}
                             onTandemPressed={() => onTandemPressed(currentTandem)}
                         />
+                    )}
+                    {currentTandem && currentTandem.partner?.user.university && (
+                        <UniversityCard university={currentTandem.partner?.user.university} />
                     )}
                 </Masonry>
             </ResponsiveMasonry>
