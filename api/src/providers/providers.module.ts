@@ -57,6 +57,8 @@ import { PrismaUniversityRepository } from './persistance/repositories/prisma-un
 import { PrismaUserRepository } from './persistance/repositories/prisma-user.repository';
 import { UuidProvider } from './services/uuid.provider';
 import { MinioStorage } from './storage/minio.storage';
+import { NEWS_REPOSITORY } from 'src/core/ports/news.repository';
+import { PrismaNewsRepository } from './persistance/repositories/prisma-news-repository';
 
 const providers: Provider[] = [
   { provide: INSTANCE_REPOSITORY, useClass: PrismaInstanceRepository },
@@ -79,6 +81,10 @@ const providers: Provider[] = [
   {
     provide: MEDIA_OBJECT_REPOSITORY,
     useClass: PrismaMediaObjectRepository,
+  },
+  {
+    provide: NEWS_REPOSITORY,
+    useClass: PrismaNewsRepository,
   },
   {
     provide: OBJECTIVE_REPOSITORY,

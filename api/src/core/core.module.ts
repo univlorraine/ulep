@@ -138,6 +138,7 @@ import {
   UploadImageActivityUsecase,
   UploadMediaActivityUsecase,
   UploadUniversityImageUsecase,
+  GetNewsUsecase,
 } from './usecases';
 import { GetJitsiTokenUsecase } from './usecases/jitsi/get-jitsi-token.usecase';
 import { DeleteLearningLanguageUsecase } from './usecases/learningLanguage/delete-learning-langugage.usecase';
@@ -207,6 +208,8 @@ const usecases: Provider[] = [
   UploadMediaActivityUsecase,
   UploadInstanceDefaultCertificateUsecase,
   UploadUniversityDefaultCertificateUsecase,
+  // News
+  GetNewsUsecase,
   // Objectives
   CreateObjectiveUsecase,
   DeleteObjectiveUsecase,

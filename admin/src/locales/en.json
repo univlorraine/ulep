@@ -263,6 +263,10 @@
         "loginError": "Wrong email / password",
         "password": "Password"
     },
+    "news": {
+        "label": "News",
+        "title": "News"
+    },
     "objectives": {
         "edit": {
             "error": "An error occurred while updating the objective"

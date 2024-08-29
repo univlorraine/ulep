@@ -3,6 +3,7 @@ import CheckCircleIcon from '@mui/icons-material/CheckCircle';
 import HelpIcon from '@mui/icons-material/Help';
 import InterestsIcon from '@mui/icons-material/Interests';
 import LanguageIcon from '@mui/icons-material/Language';
+import NewspaperIcon from '@mui/icons-material/Newspaper';
 import PeopleIcon from '@mui/icons-material/People';
 import PersonIcon from '@mui/icons-material/Person';
 import PersonAddIcon from '@mui/icons-material/PersonAdd';
@@ -26,6 +27,7 @@ import instance from './pages/instance';
 import interests from './pages/interests';
 import JitsiPage from './pages/jitsi/JitsiPage';
 import languages from './pages/languages';
+import news from './pages/news';
 import objectives from './pages/objectives';
 import profiles from './pages/profiles';
 import profilesWithTandem from './pages/profiles-with-tandems-profiles';
@@ -69,6 +71,7 @@ const App = () => (
                     {...reports}
                 />
                 <Resource icon={ChatIcon} name="chat" options={{ label: 'chat.label' }} {...chat} />
+                <Resource icon={NewspaperIcon} name="news" options={{ label: 'news.label' }} {...news} />
                 {permissions.checkRole(Role.MANAGER) && (
                     <Resource
                         edit={universities.manager.edit}

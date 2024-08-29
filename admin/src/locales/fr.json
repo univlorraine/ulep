@@ -265,6 +265,10 @@
         "loginError": "Mauvais email ou mot de passe",
         "password": "Mot de passe"
     },
+    "news": {
+        "label": "Actualités",
+        "title": "Actualités"
+    },
     "objectives": {
         "edit": {
             "error": "Une erreur est survenue pendant la mise à jour de l'objectif"
