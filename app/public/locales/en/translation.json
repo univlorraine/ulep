@@ -45,14 +45,16 @@
             "home": "Home",
             "conversations": "Conversations",
             "learning": "Learning",
-
-            "disconnect": "Disconnect",
-            "profile": "Profile",
-            "settings": "Settings"
+            "profile": "Profile"
         },
         "sidebar": {
             "home": "Home",
-            "conversations": "Conversations"
+            "conversations": "Conversations",
+            "learning": "Learning",
+            "profile": "Profile",
+            "settings": "Settings",
+            "disconnect": "Disconnect",
+            "report": "Report"
         }
     },
     "maintenance_page": {

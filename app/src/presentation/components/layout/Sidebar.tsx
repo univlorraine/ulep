@@ -2,7 +2,7 @@ import { IonItem, IonList } from '@ionic/react';
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { useHistory, useLocation } from 'react-router';
-import { ConversationsSvg, DisconnectSvg, HomeSvg, ProfileSvg, SettingsSvg } from '../../../assets';
+import { ConversationsSvg, DisconnectSvg, HomeSvg, LearningSvg, ProfileSvg, SettingsSvg } from '../../../assets';
 import styles from './Sidebar.module.css';
 
 interface SidebarProps {
@@ -25,6 +25,10 @@ const Sidebar: React.FC<SidebarProps> = ({ onDisconnect, onDisplaySettings, onDi
         history.push('/conversations');
     };
 
+    const navigateToLearning = () => {
+        history.push('/learning');
+    };
+
     return (
         <IonList lines="none" className={styles.container}>
             <IonItem
@@ -35,6 +39,15 @@ const Sidebar: React.FC<SidebarProps> = ({ onDisconnect, onDisplaySettings, onDi
             >
                 <img alt="" src={HomeSvg} aria-hidden={true} className={styles.image} />
                 <span className={styles.title}>{t('navigation.sidebar.home')}</span>
+            </IonItem>
+            <IonItem
+                button={true}
+                className={styles.line}
+                onClick={navigateToLearning}
+                color={location.pathname === '/learning' ? 'light' : undefined}
+            >
+                <img alt="" src={LearningSvg} aria-hidden={true} className={styles.image} />
+                <span className={styles.title}>{t('navigation.sidebar.learning')}</span>
             </IonItem>
             <IonItem
                 button={true}
