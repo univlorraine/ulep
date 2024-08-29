@@ -165,6 +165,11 @@
     "conversations": {
         "title": "Ma messagerie"
     },
+    "proficiency_test": {
+        "button": "Faire le test",
+        "subtitle": "Mes langues",
+        "title": "Mon niveau"
+    },
     "home_page": {
         "my_university": {
             "period": "Période d'ouverture",
@@ -172,11 +177,6 @@
         },
         "partner_universities": {
             "title": "Universités partenaires"
-        },
-        "proficiency_test": {
-            "button": "Faire le test",
-            "subtitle": "Mes langues",
-            "title": "Mon niveau"
         },
         "profile": {
             "disconnect": "Se déconnecter",

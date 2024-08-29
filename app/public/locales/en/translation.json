@@ -160,6 +160,11 @@
     "conversations": {
         "title": "My messaging"
     },
+    "proficiency_test": {
+        "button": "Take the test",
+        "subtitle": "My languages",
+        "title": "My level"
+    },
     "home_page": {
         "profile": {
             "disconnect": "Sign out",

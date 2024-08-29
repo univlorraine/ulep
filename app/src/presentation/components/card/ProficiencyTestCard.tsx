@@ -14,34 +14,52 @@ const ProficiencyTestCard: React.FC<ProficiencyTestCardProps> = ({ testedLanguag
     const history = useHistory();
     return (
         <div className="home-card">
-            <span className="home-card-title">{t('home_page.proficiency_test.title')}</span>
+            <span className="home-card-title">{t('proficiency_test.title')}</span>
             <div className={styles.container}>
                 <div className={styles['container-content']}>
                     <div className={styles['container-image']}>
                         <img alt="" className={styles.image} src={AdviceSvg} aria-hidden={true} />
                     </div>
-                    <div>
-                        <span className={styles.subtitle}>{t('home_page.proficiency_test.subtitle')}</span>
-                        <ul className={styles['tested-languages-list']}>
-                            {testedLanguages.map((testedLanguage, index) => (
-                                <li
-                                    className={styles['tested-languages']}
-                                    role="img"
-                                    aria-label={`${testedLanguage.level} ${testedLanguage.name}`}
-                                    key={index}
-                                >{`${codeLanguageToFlag(testedLanguage.code)} ( ${testedLanguage.level} )${
-                                    index !== testedLanguages.length - 1 ? ', ' : ''
-                                }`}</li>
-                            ))}
-                        </ul>
-                    </div>
+                    <TestedLanguageComponent testedLanguages={testedLanguages} />
                 </div>
                 <div className={styles['card-button']}>
                     <button className={`primary-button`} onClick={() => history.push('/cefr/languages')}>
-                        {t('home_page.proficiency_test.button')}
+                        {t('proficiency_test.button')}
                     </button>
                 </div>
             </div>
+        </div>
+    );
+};
+
+const TestedLanguageComponent: React.FC<ProficiencyTestCardProps> = ({ testedLanguages }) => {
+    const { t } = useTranslation();
+
+    if (Array.isArray(testedLanguages) && testedLanguages.length > 1) {
+        return (
+            <div>
+                <span className={styles.subtitle}>{t('proficiency_test.subtitle')}</span>
+                <ul className={styles['tested-languages-list']}>
+                    {testedLanguages.map((testedLanguage, index) => (
+                        <li
+                            className={styles['tested-languages']}
+                            role="img"
+                            aria-label={`${testedLanguage.level} ${testedLanguage.name}`}
+                            key={index}
+                        >{`${codeLanguageToFlag(testedLanguage.code)} ( ${testedLanguage.level} )${
+                            index !== testedLanguages.length - 1 ? ', ' : ''
+                        }`}</li>
+                    ))}
+                </ul>
+            </div>
+        );
+    }
+
+    return (
+        <div className={styles['tested-languages-list']}>
+            <span className={styles.subtitle}>{`${testedLanguages[0].level}  ( ${t(
+                `languages_code.${testedLanguages[0].code}`
+            )} ${codeLanguageToFlag(testedLanguages[0].code)} )`}</span>
         </div>
     );
 };

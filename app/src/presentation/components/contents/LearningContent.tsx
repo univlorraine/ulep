@@ -6,6 +6,8 @@ import { useHistory } from 'react-router';
 import { AddSvg } from '../../../assets';
 import Profile from '../../../domain/entities/Profile';
 import Tandem from '../../../domain/entities/Tandem';
+import { learningLanguagesToTestedLanguages } from '../../utils';
+import ProficiencyTestCard from '../card/ProficiencyTestCard';
 import UniversityCard from '../card/UniversityCard';
 import ActiveTandemCard from '../tandems/ActiveTandemCard';
 import PendingTandemCard from '../tandems/PendingTandemCard';
@@ -84,6 +86,13 @@ const LearningContent: React.FC<LearningContentProps> = ({
                     {currentTandem && currentTandem.partner?.user.university && (
                         <UniversityCard university={currentTandem.partner?.user.university} />
                     )}
+                    <ProficiencyTestCard
+                        testedLanguages={learningLanguagesToTestedLanguages(
+                            profile.learningLanguages,
+                            profile.testedLanguages,
+                            currentTandem?.learningLanguage.code
+                        )}
+                    />
                 </Masonry>
             </ResponsiveMasonry>
         </div>
