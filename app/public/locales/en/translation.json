@@ -102,7 +102,8 @@
         "welcome_subtext": "le meilleur moyen de pratiquer une langue",
         "welcome_btn": "Apprends une nouvelle langue en tandem",
         "close": "Close",
-        "download": "Download"
+        "download": "Download",
+        "years_old": "years old"
     },
     "chat": {
         "ariaLabelFileDownloaded": "Downloading file : {{filename}}",
@@ -225,6 +226,13 @@
             "tandem_unavailable": "Tandem unavailable",
             "tandem_paused": "Tandem paused",
             "title": "My pending requests"
+        }
+    },
+    "learning": {
+        "title": "Learning space",
+        "card": {
+            "my_tandem": "My tandem",
+            "pending_tandem": "Pending tandem"
         }
     },
     "instance": {

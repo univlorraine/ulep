@@ -1,0 +1,70 @@
+.avatar-container {
+    display: inline-flex;
+    flex-direction: row;
+    margin-right: 10px;
+}
+
+.avatar {
+    border-radius: 50%;
+    height: 90px;
+    width: 90px;
+    object-fit: cover;
+}
+
+.container {
+    background-color: var(--secondary-color);
+    padding: 12px;
+    border-radius: 10px;
+    justify-content: flex-start;
+}
+
+.flag {
+    color: #000;
+    text-align: center;
+    font-family: 'Twemoji Country Flags';
+    font-size: 15.58px;
+    font-style: italic;
+    font-weight: 100;
+    line-height: 6.651px;
+}
+
+.flag-container {
+    align-items: center;
+    background-color: white;
+    border-radius: 50%;
+    bottom: 0px;
+    filter: drop-shadow(0px 1.332829475402832px 4.6649041175842285px rgba(0, 0, 0, 0.25));
+    display: flex;
+    height: 30px;
+    justify-content: center;
+    left: -10px;
+    position: absolute;
+    width: 30px;
+}
+
+.name {
+    color: black;
+    font-family: 'Roboto';
+    font-size: 22px;
+    font-weight: 700;
+    text-align: left;
+    margin: 0;
+    text-transform: capitalize;
+}
+
+.informations {
+    color: black;
+    font-family: 'Maven Pro';
+    font-size: 13px;
+    font-weight: 400;
+    text-align: left;
+    margin: 8px 0;
+    text-transform: capitalize;
+}
+
+.title {
+    font-family: 'Roboto';
+    font-size: 20px;
+    font-weight: 700;
+    color: black;
+}

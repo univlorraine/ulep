@@ -107,7 +107,8 @@
         "required_fields_mention_part1": "Les champs suivis d'un",
         "required_fields_mention_part2": "sont obligatoires",
         "close_profile": "Fermer le profil",
-        "download": "Télécharger"
+        "download": "Télécharger",
+        "years_old": "ans"
     },
     "chat": {
         "ariaLabelFileDownloaded": "Téléchargement du fichier : {{filename}}",
@@ -243,6 +244,13 @@
             "tandem_unavailable": "Tandem indisponible",
             "tandem_paused": "Tandem en pause",
             "title": "Mes demandes en attentes"
+        }
+    },
+    "learning": {
+        "title": "Espace apprentissage",
+        "card": {
+            "my_tandem": "Mon tandem",
+            "pending_tandem": "Tandem en attente"
         }
     },
     "instance": {

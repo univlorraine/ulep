@@ -1,4 +1,5 @@
 import FAQPng from './FAQ.png';
+import AddSvg from './add.svg';
 import AdviceSvg from './advice.svg';
 import ArrowDownSvg from './arrow-down.svg';
 import ArrowRightSvg from './arrow-right.svg';
@@ -55,6 +56,7 @@ import AvatarPlaceholderPng from './user_placeholder.png';
 import WritingSkillPng from './writing_skill.png';
 
 export {
+    AddSvg,
     AdviceSvg,
     ArrowDownSvg,
     ArrowLeftSvg,

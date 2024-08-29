@@ -21,7 +21,7 @@ const TandemProfilePage: React.FC = () => {
                 id={tandem.id}
                 language={tandem.learningLanguage}
                 level={tandem.level}
-                onClose={() => history.push('/home')}
+                onClose={() => history.goBack()}
                 partnerLearningLanguage={tandem.partnerLearningLanguage}
                 pedagogy={tandem.pedagogy}
                 profile={tandem.partner}

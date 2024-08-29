@@ -1,0 +1,14 @@
+.content {
+    background-color: var(--secondary-color);
+    display: flex;
+    flex-direction: column;
+    padding: 10px;
+    border-radius: 10px;
+}
+
+.title {
+    font-family: 'Roboto';
+    font-size: 20px;
+    font-weight: 700;
+    color: black;
+}
