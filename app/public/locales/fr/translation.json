@@ -170,6 +170,10 @@
         "subtitle": "Mes langues",
         "title": "Mon niveau"
     },
+    "create_learning_language": {
+        "button": "Faire une nouvelle demande",
+        "title": "Prêt(e) à apprendre une nouvelle langue ?"
+    },
     "home_page": {
         "my_university": {
             "period": "Période d'ouverture",

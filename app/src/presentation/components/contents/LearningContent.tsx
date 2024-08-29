@@ -7,6 +7,7 @@ import { AddSvg } from '../../../assets';
 import Profile from '../../../domain/entities/Profile';
 import Tandem from '../../../domain/entities/Tandem';
 import { learningLanguagesToTestedLanguages } from '../../utils';
+import CreateLearningLanguageCard from '../card/CreateLearningLanguageCard';
 import ProficiencyTestCard from '../card/ProficiencyTestCard';
 import UniversityCard from '../card/UniversityCard';
 import ActiveTandemCard from '../tandems/ActiveTandemCard';
@@ -93,6 +94,7 @@ const LearningContent: React.FC<LearningContentProps> = ({
                             currentTandem?.learningLanguage.code
                         )}
                     />
+                    <CreateLearningLanguageCard onPress={openAddLearningLanguagePressed} />
                 </Masonry>
             </ResponsiveMasonry>
         </div>
