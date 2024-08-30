@@ -267,7 +267,15 @@
     },
     "news": {
         "label": "Actualités",
-        "title": "Actualités"
+        "title": "Actualités",
+        "remove_translation": "Supprimer la traduction",
+        "author": "Auteur",
+        "change_language": "Changer de langue",
+        "illustration": "Illustration",
+        "status": {
+            "label": "Statut",
+            "published": "Publié"
+        }
     },
     "objectives": {
         "edit": {

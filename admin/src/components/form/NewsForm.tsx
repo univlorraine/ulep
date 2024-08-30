@@ -1,8 +1,10 @@
-import { Box, MenuItem, OutlinedInput, Select, Typography } from '@mui/material';
+import { Box, Checkbox, FormControlLabel, FormGroup, MenuItem, OutlinedInput, Select, Typography } from '@mui/material';
 import { RichTextInput } from 'ra-input-rich-text';
 import React, { useEffect, useState } from 'react';
-import { Button, Loading, TabbedForm, useGetIdentity, useGetList } from 'react-admin';
+import { Button, Loading, TabbedForm, useGetIdentity, useGetList, useTranslate } from 'react-admin';
 import University from '../../entities/University';
+import customDataProvider from '../../providers/customDataProvider';
+import ImageUploader from '../ImageUploader';
 
 // const toChoices = (items: string[]) => items.map((item) => ({ id: item, name: item }));
 
@@ -17,16 +19,34 @@ type Translation = {
 };
 
 const NewsForm: React.FC<NewsFormProps> = ({ handleSubmit }) => {
+    const dataProvider = customDataProvider;
     const { data: identity, isLoading: isLoadingIdentity } = useGetIdentity();
+    const translate = useTranslate();
+
+    const [universityData, setUniversityData] = useState<University>();
     const [title, setTitle] = useState<string>('');
     const [content, setContent] = useState<string>('');
-
     const [universitiesLanguages, setUniversitiesLanguages] = useState<string[]>([]);
     const [availableLanguages, setAvailableLanguages] = useState<string[]>([]);
     const [defaultLanguage, setDefaultLanguage] = useState<string>('en');
     const [newTranslationLanguage, setNewTranslationLanguage] = useState<string>('');
     const [translations, setTranslations] = useState<Translation[]>([]);
     const { data: universitiesData } = useGetList<University>('universities');
+
+    useEffect(() => {
+        async function fetchUniversityData(universityId: string) {
+            const result = await dataProvider.getOne('universities', {
+                id: universityId,
+            });
+            if (result.data) {
+                setUniversityData(result.data);
+                setDefaultLanguage(result.data.nativeLanguage.code);
+            }
+        }
+        if (identity) {
+            fetchUniversityData(identity.universityId);
+        }
+    }, [identity]);
 
     useEffect(() => {
         if (universitiesData) {
@@ -56,22 +76,22 @@ const NewsForm: React.FC<NewsFormProps> = ({ handleSubmit }) => {
         return <Loading />;
     }
 
-    console.log({ translations });
-    console.log({ availableLanguages });
-
     return (
         <Box
             sx={{
                 m: 4,
                 display: 'flex',
                 flexDirection: 'column',
-                gap: '20px',
                 '& .MuiToolbar-root': { display: 'none' },
                 '& .MuiDivider-root': { display: 'none' },
             }}
         >
-            <Box sx={{ display: 'flex', gap: 1 }}>
-                <Select onChange={(e) => setNewTranslationLanguage(e.target.value as string)}>
+            <Box sx={{ display: 'flex', gap: 1, marginBottom: '20px' }}>
+                <Select
+                    onChange={(e: any) => setNewTranslationLanguage(e.target.value as string)}
+                    sx={{ width: '200px' }}
+                    value={newTranslationLanguage}
+                >
                     {availableLanguages.map((language) => (
                         <MenuItem key={language} value={language}>
                             {language}
@@ -80,26 +100,30 @@ const NewsForm: React.FC<NewsFormProps> = ({ handleSubmit }) => {
                 </Select>
                 <Button
                     label="Ajouter une traduction"
-                    onClick={() =>
-                        setTranslations([
-                            ...translations,
-                            { languageCode: newTranslationLanguage, title: '', content: '' },
-                        ])
-                    }
+                    onClick={() => {
+                        if (newTranslationLanguage) {
+                            setTranslations([
+                                ...translations,
+                                { languageCode: newTranslationLanguage, title: '', content: '' },
+                            ]);
+                            setNewTranslationLanguage('');
+                        }
+                    }}
                     variant="contained"
                 />
             </Box>
 
             <TabbedForm>
-                <TabbedForm.Tab label={defaultLanguage} sx={{ display: 'flex', flexDirection: 'column', gap: '30px' }}>
+                <TabbedForm.Tab label={defaultLanguage} sx={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>
                     {availableLanguages.length > 0 && (
                         <Box>
-                            <Typography variant="subtitle1">Change language</Typography>
+                            <Typography variant="subtitle1">{translate('news.change_language')}</Typography>
                             <Select
                                 onChange={(e: any) => {
                                     setDefaultLanguage(e.target.value as string);
                                 }}
-                                value={defaultLanguage}
+                                sx={{ width: '200px' }}
+                                value=""
                             >
                                 {availableLanguages.map((language) => (
                                     <MenuItem key={language} value={language}>
@@ -111,25 +135,42 @@ const NewsForm: React.FC<NewsFormProps> = ({ handleSubmit }) => {
                     )}
 
                     <Box>
-                        <Typography variant="subtitle1">Title</Typography>
-                        <Box alignItems="center" display="flex" flexDirection="row">
-                            <OutlinedInput
-                                name="Title"
-                                onChange={(e) => setTitle(e.target.value)}
-                                placeholder="Title"
-                                type="text"
-                                value={title}
-                                required
-                            />
-                        </Box>
+                        <Typography variant="subtitle1">{translate('news.author')}</Typography>
+                        <Typography>{universityData?.name}</Typography>
                     </Box>
 
                     <Box>
+                        <Typography variant="subtitle1">{translate('news.status.label')}</Typography>
+                        <FormGroup>
+                            <FormControlLabel control={<Checkbox />} label={translate('news.status.published')} />
+                        </FormGroup>
+                    </Box>
+
+                    <Box>
+                        <Typography variant="subtitle1">{translate('news.illustration')}</Typography>
+                        <ImageUploader onImageSelect={() => {}} source="image.id" />
+                    </Box>
+
+                    <Box sx={{ width: '100%' }}>
+                        <Typography variant="subtitle1">Title</Typography>
+                        <OutlinedInput
+                            name="Title"
+                            onChange={(e: any) => setTitle(e.target.value)}
+                            placeholder="Title"
+                            type="text"
+                            value={title}
+                            fullWidth
+                            required
+                        />
+                    </Box>
+
+                    <Box sx={{ width: '100%', '& .RaLabeled-label': { display: 'none' } }}>
                         <Typography variant="subtitle1">Content</Typography>
                         <RichTextInput
                             defaultValue={content}
-                            onChange={(e) => setContent(e)}
+                            onChange={(e: any) => setContent(e)}
                             source={defaultLanguage}
+                            fullWidth
                         />
                     </Box>
                 </TabbedForm.Tab>
@@ -149,17 +190,18 @@ const NewsForm: React.FC<NewsFormProps> = ({ handleSubmit }) => {
                                     );
                                     setTranslations(filteredTranslation);
                                 }}
+                                variant="outlined"
                             >
-                                <span>REMOVE TRANSLATION</span>
+                                <span style={{ fontSize: '0.9rem' }}>{translate('news.remove_translation')}</span>
                             </Button>
                         </Box>
 
-                        <Box>
+                        <Box sx={{ width: '100%' }}>
                             <Typography variant="subtitle1">Title</Typography>
                             <Box alignItems="center" display="flex" flexDirection="row">
                                 <OutlinedInput
                                     name="Title"
-                                    onChange={(e) => {
+                                    onChange={(e: any) => {
                                         const filteredTranslation = translations.filter(
                                             (originalTranslation) =>
                                                 translation.languageCode !== originalTranslation.languageCode
@@ -181,10 +223,10 @@ const NewsForm: React.FC<NewsFormProps> = ({ handleSubmit }) => {
                             </Box>
                         </Box>
 
-                        <Box>
+                        <Box sx={{ width: '100%', '& .RaLabeled-label': { display: 'none' } }}>
                             <Typography variant="subtitle1">Content</Typography>
                             <RichTextInput
-                                onChange={(e) => {
+                                onChange={(e: any) => {
                                     const filteredTranslation = translations.filter(
                                         (originalTranslation) =>
                                             translation.languageCode !== originalTranslation.languageCode
@@ -199,12 +241,12 @@ const NewsForm: React.FC<NewsFormProps> = ({ handleSubmit }) => {
                                     ]);
                                 }}
                                 source={translation.languageCode}
+                                fullWidth
                             />
                         </Box>
                     </TabbedForm.Tab>
                 ))}
             </TabbedForm>
-
             <Button
                 color="primary"
                 disabled={false}

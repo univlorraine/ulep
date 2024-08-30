@@ -265,7 +265,15 @@
     },
     "news": {
         "label": "News",
-        "title": "News"
+        "title": "News",
+        "remove_translation": "Remove translation",
+        "author": "Author",
+        "change_language": "Change language",
+        "illustration": "Illustration",
+        "status": {
+            "label": "Status",
+            "published": "Published"
+        }
     },
     "objectives": {
         "edit": {
