@@ -11,8 +11,8 @@ interface PendingTandemCardProps {
 const PendingTandemCard: React.FC<PendingTandemCardProps> = ({ tandem, onTandemPressed }) => {
     const { t } = useTranslation();
     return (
-        <div>
-            <p className={styles.title}>{t('learning.card.pending_tandem')}</p>
+        <div className="home-card">
+            <p className="home-card-title">{t('learning.card.pending_tandem')}</p>
             <div className={styles.content}>
                 <TandemLine language={tandem.learningLanguage} onPressed={onTandemPressed} status={tandem.status} />
             </div>

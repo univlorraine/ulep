@@ -8,8 +8,8 @@ import Profile from '../../../domain/entities/Profile';
 import Tandem from '../../../domain/entities/Tandem';
 import { learningLanguagesToTestedLanguages } from '../../utils';
 import CreateLearningLanguageCard from '../card/CreateLearningLanguageCard';
+import PartnerUniversityCard from '../card/PartnerUniversityCard';
 import ProficiencyTestCard from '../card/ProficiencyTestCard';
-import UniversityCard from '../card/UniversityCard';
 import ActiveTandemCard from '../tandems/ActiveTandemCard';
 import PendingTandemCard from '../tandems/PendingTandemCard';
 import styles from './LearningContent.module.css';
@@ -35,6 +35,10 @@ const LearningContent: React.FC<LearningContentProps> = ({
 
     const openAddLearningLanguagePressed = () => {
         history.push('pairing/languages');
+    };
+
+    const openUniversityInfos = () => {
+        console.log('openUniversityInfos');
     };
 
     // WARNING: this useEffect is a workaround to avoid currentLearningLanguage being undefined sometimes
@@ -85,7 +89,10 @@ const LearningContent: React.FC<LearningContentProps> = ({
                         />
                     )}
                     {currentTandem && currentTandem.partner?.user.university && (
-                        <UniversityCard university={currentTandem.partner?.user.university} />
+                        <PartnerUniversityCard
+                            university={currentTandem.partner?.user.university}
+                            onPress={openUniversityInfos}
+                        />
                     )}
                     <ProficiencyTestCard
                         testedLanguages={learningLanguagesToTestedLanguages(

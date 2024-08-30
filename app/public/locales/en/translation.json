@@ -169,6 +169,13 @@
         "button": "Add a language to learn",
         "title": "Ready to learn a new language?"
     },
+    "partner_university": {
+        "title": "Partner university"
+    },
+    "university_card": {
+        "button": "See the fiche",
+        "period": "Opening period"
+    },
     "home_page": {
         "profile": {
             "disconnect": "Sign out",

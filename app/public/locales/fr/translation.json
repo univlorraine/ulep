@@ -174,14 +174,14 @@
         "button": "Faire une nouvelle demande",
         "title": "Prêt(e) à apprendre une nouvelle langue ?"
     },
+    "partner_university": {
+        "title": "Université partenaire"
+    },
+    "university_card": {
+        "button": "Voir la fiche",
+        "period": "Période d'ouverture"
+    },
     "home_page": {
-        "my_university": {
-            "period": "Période d'ouverture",
-            "title": "Mon université"
-        },
-        "partner_universities": {
-            "title": "Universités partenaires"
-        },
         "profile": {
             "disconnect": "Se déconnecter",
             "edit": "Modifier mon avatar",

@@ -13,8 +13,8 @@ const ActiveTandemCard: React.FC<ActiveTandemCardProps> = ({ tandem, onTandemPre
     const { t } = useTranslation();
     const language = tandem.partnerLearningLanguage;
     return (
-        <div>
-            <p className={styles.title}>{t('learning.card.my_tandem')}</p>
+        <div className="home-card">
+            <p className="home-card-title">{t('learning.card.my_tandem')}</p>
             <button className={styles.container} onClick={onTandemPressed}>
                 <div className={styles['avatar-container']}>
                     <Avatar className={styles.avatar} user={tandem.partner?.user} />
