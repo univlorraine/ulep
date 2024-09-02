@@ -1,35 +1,35 @@
 import {
-  BadRequestException,
-  HttpException,
-  Inject,
-  Injectable,
-  Logger,
+    BadRequestException,
+    HttpException,
+    Inject,
+    Injectable,
+    Logger,
 } from '@nestjs/common';
 import * as jwt from 'jsonwebtoken';
 import { Client, Issuer, TokenSet } from 'openid-client';
 import * as qs from 'querystring';
 import {
-  KEYCLOAK_CONFIGURATION,
-  KeycloakConfiguration,
+    KEYCLOAK_CONFIGURATION,
+    KeycloakConfiguration,
 } from './keycloak.configuration';
 import {
-  InvalidCredentialsException,
-  UnexpectedErrorException,
-  UserPasswordNotValidException,
+    InvalidCredentialsException,
+    UnexpectedErrorException,
+    UserPasswordNotValidException,
 } from './keycloak.errors';
 import RoleRepresentation, {
-  CreateAdministratorProps,
-  CreateUserProps,
-  CredentialRepresentation,
-  GetUsersProps,
-  KeycloakCertsResponse,
-  KeycloakEmailAction,
-  KeycloakUser,
-  OpenIdConfiguration,
-  UpdateAdministratorPayload,
-  UpdateAdministratorProps,
-  UserRepresentation,
-  UserSession,
+    CreateAdministratorProps,
+    CreateUserProps,
+    CredentialRepresentation,
+    GetUsersProps,
+    KeycloakCertsResponse,
+    KeycloakEmailAction,
+    KeycloakUser,
+    OpenIdConfiguration,
+    UpdateAdministratorPayload,
+    UpdateAdministratorProps,
+    UserRepresentation,
+    UserSession,
 } from './keycloak.models';
 
 export interface Credentials {
@@ -417,6 +417,7 @@ export class KeycloakClient {
       lastName: props.lastname,
       attributes: {
         universityId: props.universityId,
+        universityLogin: props.universityLogin,
       },
     };
 
