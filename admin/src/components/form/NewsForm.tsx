@@ -2,6 +2,7 @@ import { Box, Checkbox, FormControlLabel, FormGroup, MenuItem, OutlinedInput, Se
 import { RichTextInput } from 'ra-input-rich-text';
 import React, { useEffect, useState } from 'react';
 import { Button, Loading, TabbedForm, useGetIdentity, useGetList, useTranslate } from 'react-admin';
+import { NewsFormPayload } from '../../entities/News';
 import University from '../../entities/University';
 import customDataProvider from '../../providers/customDataProvider';
 import ImageUploader from '../ImageUploader';
@@ -9,7 +10,7 @@ import ImageUploader from '../ImageUploader';
 // const toChoices = (items: string[]) => items.map((item) => ({ id: item, name: item }));
 
 interface NewsFormProps {
-    handleSubmit: () => void;
+    handleSubmit: (payload: NewsFormPayload) => void;
 }
 
 type Translation = {
@@ -26,6 +27,8 @@ const NewsForm: React.FC<NewsFormProps> = ({ handleSubmit }) => {
     const [universityData, setUniversityData] = useState<University>();
     const [title, setTitle] = useState<string>('');
     const [content, setContent] = useState<string>('');
+    const [image, setImage] = useState<File | undefined>(undefined);
+    const [published, setPublished] = useState<boolean>(false);
     const [universitiesLanguages, setUniversitiesLanguages] = useState<string[]>([]);
     const [availableLanguages, setAvailableLanguages] = useState<string[]>([]);
     const [defaultLanguage, setDefaultLanguage] = useState<string>('en');
@@ -72,6 +75,17 @@ const NewsForm: React.FC<NewsFormProps> = ({ handleSubmit }) => {
         setAvailableLanguages(filteredAvailableLanguages);
     }, [universitiesLanguages, translations, defaultLanguage]);
 
+    const onCreatePressed = () =>
+        handleSubmit({
+            title,
+            content,
+            languageCode: defaultLanguage,
+            translations,
+            published,
+            universityId: identity?.universityId,
+            image,
+        });
+
     if (isLoadingIdentity || !identity) {
         return <Loading />;
     }
@@ -79,7 +93,6 @@ const NewsForm: React.FC<NewsFormProps> = ({ handleSubmit }) => {
     return (
         <Box
             sx={{
-                m: 4,
                 display: 'flex',
                 flexDirection: 'column',
                 '& .MuiToolbar-root': { display: 'none' },
@@ -142,13 +155,17 @@ const NewsForm: React.FC<NewsFormProps> = ({ handleSubmit }) => {
                     <Box>
                         <Typography variant="subtitle1">{translate('news.status.label')}</Typography>
                         <FormGroup>
-                            <FormControlLabel control={<Checkbox />} label={translate('news.status.published')} />
+                            <FormControlLabel
+                                checked={published}
+                                control={<Checkbox onChange={() => setPublished(!published)} />}
+                                label={translate('news.status.published')}
+                            />
                         </FormGroup>
                     </Box>
 
                     <Box>
                         <Typography variant="subtitle1">{translate('news.illustration')}</Typography>
-                        <ImageUploader onImageSelect={() => {}} source="image.id" />
+                        <ImageUploader onImageSelect={setImage} source="image.id" />
                     </Box>
 
                     <Box sx={{ width: '100%' }}>
@@ -250,7 +267,7 @@ const NewsForm: React.FC<NewsFormProps> = ({ handleSubmit }) => {
             <Button
                 color="primary"
                 disabled={false}
-                onClick={handleSubmit}
+                onClick={onCreatePressed}
                 sx={{ mt: 4, width: '100%' }}
                 type="button"
                 variant="contained"
