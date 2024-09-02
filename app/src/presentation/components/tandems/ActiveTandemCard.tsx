@@ -1,6 +1,7 @@
 import { useTranslation } from 'react-i18next';
 import Tandem from '../../../domain/entities/Tandem';
-import { codeLanguageToFlag } from '../../utils';
+import useWindowDimensions from '../../hooks/useWindowDimensions';
+import { codeLanguageToFlag, HYBRID_MAX_WIDTH } from '../../utils';
 import Avatar from '../Avatar';
 import LearningCard from '../card/LearningCard';
 import styles from './ActiveTandemCard.module.css';
@@ -13,6 +14,8 @@ interface ActiveTandemCardProps {
 const ActiveTandemCard: React.FC<ActiveTandemCardProps> = ({ onTandemPressed, tandem }) => {
     const { t } = useTranslation();
     const language = tandem.partnerLearningLanguage;
+    const { width } = useWindowDimensions();
+    const isHybrid = width < HYBRID_MAX_WIDTH;
 
     return (
         <LearningCard
@@ -20,7 +23,7 @@ const ActiveTandemCard: React.FC<ActiveTandemCardProps> = ({ onTandemPressed, ta
             buttonText={t('learning.card.my_tandem.button') as string}
             onButtonPressed={onTandemPressed}
         >
-            <button className={styles.container} onClick={onTandemPressed}>
+            <button className={styles.container} onClick={onTandemPressed} disabled={!isHybrid}>
                 <div className={styles['avatar-container']}>
                     <Avatar className={styles.avatar} user={tandem.partner?.user} />
                     <div className={styles['flag-container']}>
