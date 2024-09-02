@@ -2,7 +2,9 @@ import { useTranslation } from 'react-i18next';
 import { useHistory } from 'react-router';
 import { AdviceSvg } from '../../../assets';
 import TestedLanguage from '../../../domain/entities/TestedLanguage';
-import { codeLanguageToFlag } from '../../utils';
+import useWindowDimensions from '../../hooks/useWindowDimensions';
+import { codeLanguageToFlag, HYBRID_MAX_WIDTH } from '../../utils';
+import LearningCard from './LearningCard';
 import styles from './ProficiencyTestCard.module.css';
 
 interface ProficiencyTestCardProps {
@@ -12,9 +14,15 @@ interface ProficiencyTestCardProps {
 const ProficiencyTestCard: React.FC<ProficiencyTestCardProps> = ({ testedLanguages }) => {
     const { t } = useTranslation();
     const history = useHistory();
+    const { width } = useWindowDimensions();
+    const isHybrid = width < HYBRID_MAX_WIDTH;
+
     return (
-        <div className="home-card">
-            <span className="home-card-title">{t('proficiency_test.title')}</span>
+        <LearningCard
+            title={t('proficiency_test.title')}
+            buttonText={t('proficiency_test.button') as string}
+            onButtonPressed={() => history.push('/cefr/languages')}
+        >
             <div className={styles.container}>
                 <div className={styles['container-content']}>
                     <div className={styles['container-image']}>
@@ -22,13 +30,15 @@ const ProficiencyTestCard: React.FC<ProficiencyTestCardProps> = ({ testedLanguag
                     </div>
                     <TestedLanguageComponent testedLanguages={testedLanguages} />
                 </div>
-                <div className={styles['card-button']}>
-                    <button className={`primary-button`} onClick={() => history.push('/cefr/languages')}>
-                        {t('proficiency_test.button')}
-                    </button>
-                </div>
+                {isHybrid && (
+                    <div className={styles['card-button']}>
+                        <button className={`primary-button`} onClick={() => history.push('/cefr/languages')}>
+                            {t('proficiency_test.button')}
+                        </button>
+                    </div>
+                )}
             </div>
-        </div>
+        </LearningCard>
     );
 };
 

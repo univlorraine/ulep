@@ -170,6 +170,7 @@
         "title": "Ready to learn a new language?"
     },
     "partner_university": {
+        "button": "See the fiche",
         "title": "Partner university"
     },
     "university_card": {
@@ -247,7 +248,10 @@
     "learning": {
         "title": "Learning space",
         "card": {
-            "my_tandem": "My tandem",
+            "my_tandem": {
+                "button": "See the profile",
+                "title": "My tandem"
+            },
             "pending_tandem": "Pending tandem"
         }
     },

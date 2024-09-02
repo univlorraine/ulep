@@ -175,6 +175,7 @@
         "title": "Prêt(e) à apprendre une nouvelle langue ?"
     },
     "partner_university": {
+        "button": "Voir la fiche",
         "title": "Université partenaire"
     },
     "university_card": {
@@ -253,7 +254,10 @@
     "learning": {
         "title": "Espace apprentissage",
         "card": {
-            "my_tandem": "Mon tandem",
+            "my_tandem": {
+                "button": "Voir le profil",
+                "title": "Mon tandem"
+            },
             "pending_tandem": "Tandem en attente"
         }
     },

@@ -35,3 +35,11 @@
     font-size: 48px;
     font-weight: 700;
 }
+
+@media (min-width: 768px) {
+    .content {
+        background-color: #f4f5fe;
+        --ion-background-color: #f4f5fe;
+        height: 100%;
+    }
+}

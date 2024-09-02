@@ -1,5 +1,6 @@
 import { useTranslation } from 'react-i18next';
 import University from '../../../domain/entities/University';
+import LearningCard from './LearningCard';
 import UniversityCard from './UniversityCard';
 
 interface UniversityCardProps {
@@ -11,10 +12,13 @@ const PartnerUniversityCard: React.FC<UniversityCardProps> = ({ university, onPr
     const { t } = useTranslation();
 
     return (
-        <div className="home-card">
-            <span className="home-card-title">{t('partner_university.title')}</span>
+        <LearningCard
+            title={t('partner_university.title')}
+            buttonText={t('partner_university.button') as string}
+            onButtonPressed={onPress}
+        >
             <UniversityCard university={university} onPress={onPress} />
-        </div>
+        </LearningCard>
     );
 };
 
