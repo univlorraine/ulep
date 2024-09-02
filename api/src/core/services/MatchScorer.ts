@@ -372,7 +372,7 @@ export class MatchScorer implements IMatchScorer {
     // Bug 4017 - L'appariement en mode e-tandem seulement devrait se faire avec les universités partenaires
     if (
         learningLanguage1.learningType === LearningType.ETANDEM &&
-        learningLanguage2.learningType === LearningType.ETANDEM &&
+       (learningLanguage2.learningType === LearningType.ETANDEM || learningLanguage2.learningType === LearningType.BOTH) &&
         profile1.user.university.id === profile2.user.university.id
       ) {
         return false;
