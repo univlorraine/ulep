@@ -178,6 +178,13 @@
         "button": "Voir la fiche",
         "title": "Université partenaire"
     },
+    "ressources": {
+        "title": "Ressources & documents",
+        "journal": "Journal d'apprentissage",
+        "vocabulary": "Listes de vocabulaire",
+        "activity": "Fiches d'activités",
+        "game": "Jeux & Quizzs"
+    },
     "university_card": {
         "button": "Voir la fiche",
         "period": "Période d'ouverture"

@@ -10,6 +10,7 @@ import { learningLanguagesToTestedLanguages } from '../../utils';
 import CreateLearningLanguageCard from '../card/CreateLearningLanguageCard';
 import PartnerUniversityCard from '../card/PartnerUniversityCard';
 import ProficiencyTestCard from '../card/ProficiencyTestCard';
+import RessourcesCard from '../card/RessourcesCard';
 import ActiveTandemCard from '../tandems/ActiveTandemCard';
 import PendingTandemCard from '../tandems/PendingTandemCard';
 import styles from './LearningContent.module.css';
@@ -88,6 +89,12 @@ const LearningContent: React.FC<LearningContentProps> = ({
                             onTandemPressed={() => onTandemPressed(currentTandem)}
                         />
                     )}
+                    <RessourcesCard
+                        onLearningJournalPressed={() => console.log('onLearningJournalPressed')}
+                        onVocabularyPressed={() => console.log('onVocabularyPressed')}
+                        onActivityPressed={() => console.log('onActivityPressed')}
+                        onGamePressed={() => console.log('onGamePressed')}
+                    />
                     {currentTandem && currentTandem.partner?.user.university && (
                         <PartnerUniversityCard
                             university={currentTandem.partner?.user.university}

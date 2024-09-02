@@ -173,6 +173,13 @@
         "button": "See the fiche",
         "title": "Partner university"
     },
+    "ressources": {
+        "title": "Ressources & documents",
+        "journal": "Learning journal",
+        "vocabulary": "Vocabulary lists",
+        "activity": "Activity sheets",
+        "game": "Games & Quizzes"
+    },
     "university_card": {
         "button": "See the fiche",
         "period": "Opening period"
