@@ -1,7 +1,8 @@
 import * as Swagger from '@nestjs/swagger';
 import { IsNotEmpty, IsOptional, IsString, IsUUID } from 'class-validator';
 import { Expose } from 'class-transformer';
-import { NewsWithTranslations } from 'src/core/models';
+import { NewsWithTranslations, University } from 'src/core/models';
+import { UniversityResponse } from '../universities';
 
 export class CreateNewsRequest {
   @Swagger.ApiProperty({ type: 'string', format: 'uuid' })
@@ -47,7 +48,11 @@ export class NewsResponse {
 
   @Swagger.ApiProperty({ type: 'string' })
   @Expose({ groups: ['read'] })
-  universityId: string;
+  languageCode: string;
+
+  @Swagger.ApiProperty({ type: 'string' })
+  @Expose({ groups: ['read'] })
+  university: UniversityResponse;
 
   @Swagger.ApiProperty({ type: 'Date' })
   @Expose({ groups: ['read'] })
@@ -68,8 +73,9 @@ export class NewsResponse {
       id: instance.id,
       title: instance.title.content,
       content: instance.content.content,
+      languageCode: instance.languageCode,
       translations: translations,
-      universityId: instance.universityId,
+      university: UniversityResponse.fromUniversity(instance.university),
       createdAt: instance.createdAt,
       updatedAt: instance.updatedAt,
     });

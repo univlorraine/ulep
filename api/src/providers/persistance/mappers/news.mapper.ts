@@ -5,14 +5,21 @@ import {
   textContentMapper,
 } from './translation.mapper';
 import { News, MediaObject } from 'src/core/models';
+import {
+  universityMapper,
+  UniversityRelations,
+  UniversitySnapshot,
+} from './university.mapper';
 
 export const NewsRelations = {
+  Organization: { include: UniversityRelations },
   Image: true,
   TitleTextContent: TextContentRelations,
   ContentTextContent: TextContentRelations,
 };
 
 export type NewsSnapshot = Prisma.News & {
+  Organization: UniversitySnapshot;
   Image: Prisma.MediaObjects;
   TitleTextContent: TextContentSnapshot;
   ContentTextContent: TextContentSnapshot;
@@ -21,7 +28,7 @@ export type NewsSnapshot = Prisma.News & {
 export const newsMapper = (snapshot: NewsSnapshot): News => {
   return {
     id: snapshot.id,
-    universityId: snapshot.university_id,
+    university: universityMapper(snapshot.Organization),
     image:
       snapshot.Image &&
       new MediaObject({

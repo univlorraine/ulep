@@ -1,5 +1,5 @@
 import React from 'react';
-import { List, Datagrid, useTranslate } from 'react-admin';
+import { List, Datagrid, useTranslate, TextField, FunctionField } from 'react-admin';
 import PageTitle from '../../components/PageTitle';
 
 const NewsList = () => {
@@ -9,7 +9,19 @@ const NewsList = () => {
         <>
             <PageTitle>{translate('news.title')}</PageTitle>
             <List exporter={false}>
-                <Datagrid bulkActionButtons={false}>TEST</Datagrid>
+                <Datagrid bulkActionButtons={false}>
+                    <TextField label="news.list.title" source="title" />
+                    <TextField label="news.list.university" source="university.name" />
+                    <TextField label="news.list.defaultLanguage" source="languageCode" />
+                    <FunctionField
+                        label="news.list.translations"
+                        render={(record: any) => {
+                            console.log({ record });
+
+                            return record.translations.map((translation: any) => translation.languageCode).join(', ');
+                        }}
+                    />
+                </Datagrid>
             </List>
         </>
     );

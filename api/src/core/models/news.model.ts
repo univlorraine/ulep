@@ -1,5 +1,6 @@
 import { MediaObject } from './media.model';
 import { TextContent } from './translation.model';
+import { University } from './university.model';
 
 export interface NewsTranslation {
   languageCode: string;
@@ -11,7 +12,8 @@ export interface NewsProps {
   id: string;
   title: TextContent;
   content: TextContent;
-  universityId: string;
+  universityId?: string;
+  university?: University;
   image?: MediaObject;
   createdAt: Date;
   updatedAt: Date;
@@ -22,7 +24,8 @@ export class News {
   readonly title: TextContent;
   readonly content: TextContent;
   readonly image?: MediaObject;
-  readonly universityId: string;
+  readonly university?: University;
+  readonly universityId?: string;
   readonly createdAt: Date;
   readonly updatedAt: Date;
 
@@ -31,6 +34,7 @@ export class News {
     title,
     content,
     image,
+    university,
     universityId,
     createdAt,
     updatedAt,
@@ -39,6 +43,7 @@ export class News {
     this.title = title;
     this.content = content;
     this.image = image;
+    this.university = university;
     this.universityId = universityId;
     this.createdAt = createdAt;
     this.updatedAt = updatedAt;
@@ -47,13 +52,16 @@ export class News {
 
 interface NewsWithTranslationsProps extends NewsProps {
   translations?: string;
+  languageCode?: string;
 }
 
 export class NewsWithTranslations extends News {
+  readonly languageCode?: string;
   readonly translations?: string;
 
   constructor(props: NewsWithTranslationsProps) {
     super(props);
     this.translations = props.translations;
+    this.languageCode = props.languageCode;
   }
 }

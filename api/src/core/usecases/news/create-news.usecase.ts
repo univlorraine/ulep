@@ -1,5 +1,10 @@
 import { Inject, Injectable } from '@nestjs/common';
-import { NewsTranslation, TextContent, Translation } from 'src/core/models';
+import {
+  NewsTranslation,
+  TextContent,
+  Translation,
+  University,
+} from 'src/core/models';
 import {
   NEWS_REPOSITORY,
   NewsRepository,

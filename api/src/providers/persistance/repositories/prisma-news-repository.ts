@@ -14,9 +14,6 @@ export class PrismaNewsRepository implements NewsRepository {
       include: NewsRelations,
     });
 
-    console.log({ prismaNews: news });
-    console.log({ prismaTrad: news[5].ContentTextContent.Translations });
-
     return new Collection<News>({
       items: news.map(newsMapper),
       totalItems: count,
@@ -60,8 +57,6 @@ export class PrismaNewsRepository implements NewsRepository {
       },
       include: NewsRelations,
     });
-
-    console.log({ news });
 
     return newsMapper(news);
   }

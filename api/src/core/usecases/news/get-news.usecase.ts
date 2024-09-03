@@ -12,19 +12,29 @@ export class GetNewsUsecase {
   ) {}
 
   async execute() {
-    const news = await this.newsRepository.findAll();
+    let news = await this.newsRepository.findAll();
 
-    console.log({ newsUsecase: news.items[5].content.translations });
+    // For each item, gather title and content translations
+    // and recover title and content language code
+    news.items = news.items.map((item) => {
+      const translations = [];
+      item.title.translations.forEach((titleTranslation) => {
+        translations.push({
+          languageCode: titleTranslation.language,
+          title: titleTranslation.content,
+          content: item.content.translations.find(
+            (contentTranslation) =>
+              contentTranslation.language === titleTranslation.language,
+          ).content,
+        });
+      });
 
-    /*         const newsWithTranslations = news.items.map((item) => ({
-      item,
-      translations: item.title.map((title) => {
-        languageCode: title.language,
-        title: title.content,
-      })
-    })) */
-
-    // TODO : transform News to NewsWithTranslation
+      return {
+        ...item,
+        languageCode: item.title.language,
+        translations,
+      };
+    });
 
     return news;
   }

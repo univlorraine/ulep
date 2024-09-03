@@ -273,6 +273,10 @@
         "status": {
             "label": "Status",
             "published": "Published"
+        },
+        "list": {
+            "title": "Title",
+            "university": "University"
         }
     },
     "objectives": {

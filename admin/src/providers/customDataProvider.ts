@@ -255,6 +255,15 @@ const customDataProvider = {
             return { data: categoriesWithoutConversation, total: result.totalItems };
         }
 
+        if (resource === 'news') {
+            const news = result.items.map((item: any) => ({
+                ...item,
+                translations: JSON.parse(item.translations),
+            }));
+
+            return { data: news, total: result.totalItems };
+        }
+
         if (!result.items) {
             return { data: result, total: result.length };
         }

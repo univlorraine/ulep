@@ -275,6 +275,10 @@
         "status": {
             "label": "Statut",
             "published": "Publié"
+        },
+        "list": {
+            "title": "Titre",
+            "university": "Université"
         }
     },
     "objectives": {
