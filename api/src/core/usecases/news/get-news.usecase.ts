@@ -12,6 +12,20 @@ export class GetNewsUsecase {
   ) {}
 
   async execute() {
-    return this.newsRepository.findAll();
+    const news = await this.newsRepository.findAll();
+
+    console.log({ newsUsecase: news.items[5].content.translations });
+
+    /*         const newsWithTranslations = news.items.map((item) => ({
+      item,
+      translations: item.title.map((title) => {
+        languageCode: title.language,
+        title: title.content,
+      })
+    })) */
+
+    // TODO : transform News to NewsWithTranslation
+
+    return news;
   }
 }
