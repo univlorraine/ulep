@@ -12,6 +12,67 @@ import { MediaObjectRepository } from 'src/core/ports/media-object.repository';
 export class PrismaMediaObjectRepository implements MediaObjectRepository {
   constructor(private readonly prisma: PrismaService) {}
 
+  async audioTranslatedOfVocabulary(
+    vocabularyId: string,
+    isTranslation: boolean,
+  ): Promise<MediaObject | null> {
+    const where: any = {};
+
+    if (isTranslation) {
+      where.PronunciationTranslation = { id: vocabularyId };
+    } else {
+      where.PronunciationWord = { id: vocabularyId };
+    }
+
+    const mediaObject = await this.prisma.mediaObjects.findFirst({
+      where,
+    });
+
+    if (!mediaObject) {
+      return null;
+    }
+
+    return new MediaObject({
+      id: mediaObject.id,
+      name: mediaObject.name,
+      bucket: mediaObject.bucket,
+      mimetype: mediaObject.mime,
+      size: mediaObject.size,
+    });
+  }
+
+  async saveAudioVocabulary(
+    vocabularyId: string,
+    isTranslation: boolean,
+    object: MediaObject,
+  ): Promise<void> {
+    const data: any = {
+      id: object.id,
+      name: object.name,
+      bucket: object.bucket,
+      mime: object.mimetype,
+      size: object.size,
+    };
+
+    if (isTranslation) {
+      data.PronunciationTranslation = {
+        connect: {
+          id: vocabularyId,
+        },
+      };
+    } else {
+      data.PronunciationWord = {
+        connect: {
+          id: vocabularyId,
+        },
+      };
+    }
+
+    await this.prisma.mediaObjects.create({
+      data,
+    });
+  }
+
   async saveAvatar(user: User, object: MediaObject): Promise<void> {
     await this.prisma.mediaObjects.create({
       data: {

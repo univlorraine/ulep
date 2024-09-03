@@ -1,56 +1,58 @@
-import { Module, Provider } from '@nestjs/common';
 import { PrismaService } from '@app/common';
+import { Module, Provider } from '@nestjs/common';
+import { ConfigModule } from '@nestjs/config';
+import { CAMPUS_REPOSITORY } from 'src/core/ports/campus.repository';
+import { CHAT_SERVICE } from 'src/core/ports/chat.service';
+import { CONTACT_REPOSITORY } from 'src/core/ports/contact.repository';
 import { COUNTRY_REPOSITORY } from 'src/core/ports/country.repository';
-import { PrismaCountryCodeRepository } from './persistance/repositories/prisma-country.repository';
+import { EMAIL_GATEWAY } from 'src/core/ports/email.gateway';
+import { INSTANCE_REPOSITORY } from 'src/core/ports/instance.repository';
 import { INTEREST_REPOSITORY } from 'src/core/ports/interest.repository';
 import { LANGUAGE_REPOSITORY } from 'src/core/ports/language.repository';
-import { PrismaLanguageRepository } from './persistance/repositories/prisma-language.repository';
-import { MEDIA_OBJECT_REPOSITORY } from 'src/core/ports/media-object.repository';
-import { PrismaMediaObjectRepository } from './persistance/repositories/prisma-media-object-repository';
-import { PROFICIENCY_REPOSITORY } from 'src/core/ports/proficiency.repository';
-import { PrismaProficiencyRepository } from './persistance/repositories/prisma-proficiency.repository';
-import { PROFILE_REPOSITORY } from 'src/core/ports/profile.repository';
-import { PrismaProfileRepository } from './persistance/repositories/prisma-profile-repository';
-import { REPORT_REPOSITORY } from 'src/core/ports/report.repository';
-import { PrismaReportRepository } from './persistance/repositories/prisma-report.repository';
-import { STORAGE_INTERFACE } from 'src/core/ports/storage.interface';
-import { MinioStorage } from './storage/minio.storage';
-import { TANDEM_REPOSITORY } from 'src/core/ports/tandem.repository';
-import { PrismaTandemRepository } from './persistance/repositories/prisma-tandem-repository';
-import { UNIVERSITY_REPOSITORY } from 'src/core/ports/university.repository';
-import { PrismaUniversityRepository } from './persistance/repositories/prisma-university.repository';
-import { USER_REPOSITORY } from 'src/core/ports/user.repository';
-import { PrismaUserRepository } from './persistance/repositories/prisma-user.repository';
-import { UUID_PROVIDER } from 'src/core/ports/uuid.provider';
-import { UuidProvider } from './services/uuid.provider';
-import { PrismaInterestRepository } from './persistance/repositories/prisma-interest.repository';
-import { OBJECTIVE_REPOSITORY } from 'src/core/ports/objective.repository';
-import { PrismaObjectiveRepository } from './persistance/repositories/prisma-objective.repository';
-import { CAMPUS_REPOSITORY } from 'src/core/ports/campus.repository';
-import { PrismaCampusRepository } from 'src/providers/persistance/repositories/prisma-campus.repository';
 import { LEARNING_LANGUAGE_REPOSITORY } from 'src/core/ports/learning-language.repository';
-import { PrismaLearningLanguageRepository } from './persistance/repositories/prisma-learning-language-repository';
-import { ROUTINE_EXECUTION_REPOSITORY } from 'src/core/ports/routine-execution.repository';
-import { PrismaRoutineExecutionRepository } from './persistance/repositories/prisma-routine-execution-repository';
-import { REFUSED_TANDEMS_REPOSITORY } from 'src/core/ports/refused-tandems.repository';
-import { PrismaRefusedTandemsRepository } from './persistance/repositories/prisma-refused-tandems.repository';
-import { EMAIL_GATEWAY } from 'src/core/ports/email.gateway';
-import { SmtpEmailGateway } from './gateway/smtp-email.gateway';
-import { INSTANCE_REPOSITORY } from 'src/core/ports/instance.repository';
-import { PrismaInstanceRepository } from 'src/providers/persistance/repositories/prisma-instance.repository';
-import { PURGE_REPOSITORY } from 'src/core/ports/purge.repository';
-import { PrismaPurgeRepository } from './persistance/repositories/prisma-purge.repository';
-import { ConfigModule } from '@nestjs/config';
-import { TANDEM_HISTORY_REPOSITORY } from 'src/core/ports/tandem-history.repository';
-import { PrismaTandemHistoryRepository } from 'src/providers/persistance/repositories/prisma-tandem-history-repository';
-import { TESTED_LANGUAGE_REPOSITORY } from 'src/core/ports/tested-language.repository';
-import { PrismaTestedLanguageRepository } from 'src/providers/persistance/repositories/prisma-tested-language-repository';
-import { FCMNotificationGateway } from 'src/providers/gateway/fcm-notification.gateway';
+import { MEDIA_OBJECT_REPOSITORY } from 'src/core/ports/media-object.repository';
 import { NOTIFICATION_GATEWAY } from 'src/core/ports/notification.gateway';
-import { CONTACT_REPOSITORY } from 'src/core/ports/contact.repository';
+import { OBJECTIVE_REPOSITORY } from 'src/core/ports/objective.repository';
+import { PROFICIENCY_REPOSITORY } from 'src/core/ports/proficiency.repository';
+import { PROFILE_REPOSITORY } from 'src/core/ports/profile.repository';
+import { PURGE_REPOSITORY } from 'src/core/ports/purge.repository';
+import { REFUSED_TANDEMS_REPOSITORY } from 'src/core/ports/refused-tandems.repository';
+import { REPORT_REPOSITORY } from 'src/core/ports/report.repository';
+import { ROUTINE_EXECUTION_REPOSITORY } from 'src/core/ports/routine-execution.repository';
+import { STORAGE_INTERFACE } from 'src/core/ports/storage.interface';
+import { TANDEM_HISTORY_REPOSITORY } from 'src/core/ports/tandem-history.repository';
+import { TANDEM_REPOSITORY } from 'src/core/ports/tandem.repository';
+import { TESTED_LANGUAGE_REPOSITORY } from 'src/core/ports/tested-language.repository';
+import { UNIVERSITY_REPOSITORY } from 'src/core/ports/university.repository';
+import { USER_REPOSITORY } from 'src/core/ports/user.repository';
+import { UUID_PROVIDER } from 'src/core/ports/uuid.provider';
+import { VOCABULARY_REPOSITORY } from 'src/core/ports/vocabulary.repository';
+import { FCMNotificationGateway } from 'src/providers/gateway/fcm-notification.gateway';
+import { PrismaCampusRepository } from 'src/providers/persistance/repositories/prisma-campus.repository';
 import { PrismaContactRepository } from 'src/providers/persistance/repositories/prisma-contact-repository';
-import { CHAT_SERVICE } from 'src/core/ports/chat.service';
+import { PrismaInstanceRepository } from 'src/providers/persistance/repositories/prisma-instance.repository';
+import { PrismaTandemHistoryRepository } from 'src/providers/persistance/repositories/prisma-tandem-history-repository';
+import { PrismaTestedLanguageRepository } from 'src/providers/persistance/repositories/prisma-tested-language-repository';
+import { PrismaVocabularyRepository } from 'src/providers/persistance/repositories/prisma-vocabulary-repository';
 import { ChatService } from 'src/providers/services/chat.service';
+import { SmtpEmailGateway } from './gateway/smtp-email.gateway';
+import { PrismaCountryCodeRepository } from './persistance/repositories/prisma-country.repository';
+import { PrismaInterestRepository } from './persistance/repositories/prisma-interest.repository';
+import { PrismaLanguageRepository } from './persistance/repositories/prisma-language.repository';
+import { PrismaLearningLanguageRepository } from './persistance/repositories/prisma-learning-language-repository';
+import { PrismaMediaObjectRepository } from './persistance/repositories/prisma-media-object-repository';
+import { PrismaObjectiveRepository } from './persistance/repositories/prisma-objective.repository';
+import { PrismaProficiencyRepository } from './persistance/repositories/prisma-proficiency.repository';
+import { PrismaProfileRepository } from './persistance/repositories/prisma-profile-repository';
+import { PrismaPurgeRepository } from './persistance/repositories/prisma-purge.repository';
+import { PrismaRefusedTandemsRepository } from './persistance/repositories/prisma-refused-tandems.repository';
+import { PrismaReportRepository } from './persistance/repositories/prisma-report.repository';
+import { PrismaRoutineExecutionRepository } from './persistance/repositories/prisma-routine-execution-repository';
+import { PrismaTandemRepository } from './persistance/repositories/prisma-tandem-repository';
+import { PrismaUniversityRepository } from './persistance/repositories/prisma-university.repository';
+import { PrismaUserRepository } from './persistance/repositories/prisma-user.repository';
+import { UuidProvider } from './services/uuid.provider';
+import { MinioStorage } from './storage/minio.storage';
 
 const providers: Provider[] = [
   { provide: INSTANCE_REPOSITORY, useClass: PrismaInstanceRepository },
@@ -149,6 +151,10 @@ const providers: Provider[] = [
   {
     provide: CHAT_SERVICE,
     useClass: ChatService,
+  },
+  {
+    provide: VOCABULARY_REPOSITORY,
+    useClass: PrismaVocabularyRepository,
   },
 ];
 
