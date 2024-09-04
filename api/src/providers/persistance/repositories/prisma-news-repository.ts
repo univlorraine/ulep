@@ -20,6 +20,19 @@ export class PrismaNewsRepository implements NewsRepository {
     });
   }
 
+  async ofId(id: string): Promise<News | null> {
+    const news = await this.prisma.news.findUnique({
+      where: { id },
+      include: NewsRelations,
+    });
+
+    if (!news) {
+      return null;
+    }
+
+    return newsMapper(news);
+  }
+
   async create(command: CreateNewsCommand): Promise<News> {
     const titleTranslations: Translation[] = command.translations?.map(
       (translation) => ({

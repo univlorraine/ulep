@@ -6,5 +6,6 @@ export const NEWS_REPOSITORY = 'news.repository';
 
 export interface NewsRepository {
   findAll(): Promise<Collection<News>>;
+  ofId(id: string): Promise<News | null>;
   create(command: CreateNewsCommand): Promise<News>;
 }

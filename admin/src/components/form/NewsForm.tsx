@@ -7,8 +7,6 @@ import University from '../../entities/University';
 import customDataProvider from '../../providers/customDataProvider';
 import ImageUploader from '../ImageUploader';
 
-// const toChoices = (items: string[]) => items.map((item) => ({ id: item, name: item }));
-
 interface NewsFormProps {
     handleSubmit: (payload: NewsFormPayload) => void;
 }
@@ -164,7 +162,7 @@ const NewsForm: React.FC<NewsFormProps> = ({ handleSubmit }) => {
                                         }
                                     />
                                 }
-                                label={translate('news.status.published')}
+                                label={translate(`news.status.${NewsStatus.PUBLISHED}`)}
                             />
                         </FormGroup>
                     </Box>

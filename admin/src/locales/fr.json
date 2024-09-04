@@ -274,11 +274,15 @@
         "illustration": "Illustration",
         "status": {
             "label": "Statut",
-            "published": "Publié"
+            "PUBLISHED": "Publié",
+            "DRAFT": "Brouillon"
         },
         "list": {
             "title": "Titre",
-            "university": "Université"
+            "university": "Université",
+            "defaultLanguage": "Langue par défaut",
+            "translations": "Traductions",
+            "status": "Statut"
         }
     },
     "objectives": {

@@ -272,11 +272,15 @@
         "illustration": "Illustration",
         "status": {
             "label": "Status",
-            "published": "Published"
+            "PUBLISHED": "Published",
+            "DRAFT": "Draft"
         },
         "list": {
             "title": "Title",
-            "university": "University"
+            "university": "University",
+            "defaultLanguage": "Default language",
+            "translations": "Translations",
+            "status": "Status"
         }
     },
     "objectives": {

@@ -12,9 +12,10 @@ import { CreateNewsUsecase } from 'src/core/usecases/news/create-news.usecase';
 import { CreateNewsRequest, NewsResponse } from '../dtos/news';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { ImagesFilePipe } from '../validators';
-import { NewsStatus, NewsTranslation } from 'src/core/models';
+import { News, NewsTranslation } from 'src/core/models';
 import { Collection } from '@app/common';
 import { CollectionResponse } from '../decorators';
+import { UploadNewsImageUsecase } from 'src/core/usecases';
 
 @Controller('news')
 @Swagger.ApiTags('News')
@@ -22,6 +23,7 @@ export class NewsController {
   constructor(
     private readonly getNewsUsecase: GetNewsUsecase,
     private readonly createNewsUsecase: CreateNewsUsecase,
+    private readonly uploadNewsImageUsecase: UploadNewsImageUsecase,
   ) {}
 
   @Get()
@@ -50,10 +52,19 @@ export class NewsController {
   ): Promise<NewsResponse> {
     const translations: NewsTranslation[] = JSON.parse(payload.translations);
 
-    const news = await this.createNewsUsecase.execute({
+    let news = await this.createNewsUsecase.execute({
       ...payload,
       translations,
     });
+
+    if (file) {
+      const upload = await this.uploadNewsImageUsecase.execute({
+        id: news.id,
+        file,
+      });
+
+      news = new News({ ...news, image: upload });
+    }
 
     return NewsResponse.fromDomain(news);
   }

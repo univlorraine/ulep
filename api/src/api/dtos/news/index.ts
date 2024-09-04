@@ -3,6 +3,7 @@ import { IsNotEmpty, IsOptional, IsString, IsUUID } from 'class-validator';
 import { Expose } from 'class-transformer';
 import { UniversityResponse } from '../universities';
 import { News, NewsStatus } from 'src/core/models';
+import { MediaObjectResponse } from '../medias';
 
 export class CreateNewsRequest {
   @Swagger.ApiProperty({ type: 'string', format: 'uuid' })
@@ -27,7 +28,7 @@ export class CreateNewsRequest {
 
   @Swagger.ApiPropertyOptional({ type: 'array' })
   @IsOptional()
-  translations?: string;
+  translations: string;
 
   @Swagger.ApiProperty({ type: 'string' })
   @IsNotEmpty()
@@ -63,6 +64,10 @@ export class NewsResponse {
   @Expose({ groups: ['read'] })
   status: string;
 
+  @Swagger.ApiProperty({ type: MediaObjectResponse })
+  @Expose({ groups: ['read'] })
+  image?: MediaObjectResponse;
+
   @Swagger.ApiProperty({ type: 'Date' })
   @Expose({ groups: ['read'] })
   createdAt: Date;
@@ -83,6 +88,9 @@ export class NewsResponse {
       title: instance.title,
       content: instance.content,
       status: instance.status,
+      image: instance.image
+        ? MediaObjectResponse.fromMediaObject(instance.image)
+        : null,
       languageCode: instance.languageCode,
       translations: translations,
       university: UniversityResponse.fromUniversity(instance.university),

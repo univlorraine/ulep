@@ -18,7 +18,7 @@ const CreateNews = () => {
         formData.append('status', payload.status || '');
         formData.append('universityId', payload.universityId || '');
         formData.append('translations', JSON.stringify(payload.translations || []));
-        if (payload.image) formData.append('image', payload.image);
+        if (payload.image) formData.append('file', payload.image);
 
         try {
             return await create(

@@ -29,8 +29,8 @@ export class News {
   readonly id: string;
   readonly title: string;
   readonly content: string;
-  readonly translations?: NewsTranslation[];
-  readonly languageCode?: string;
+  readonly translations: NewsTranslation[];
+  readonly languageCode: string;
   readonly image?: MediaObject;
   readonly university: University;
   readonly createdAt: Date;
