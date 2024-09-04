@@ -5,10 +5,15 @@ export interface NewsFormPayload {
     content: string;
     languageCode: string;
     image: File | undefined;
-    published: boolean;
+    status: NewsStatus;
     translations: {
         title: string;
         content: string;
         languageCode: string;
     }[];
+}
+
+export enum NewsStatus {
+    DRAFT = 'DRAFT',
+    PUBLISHED = 'PUBLISHED',
 }

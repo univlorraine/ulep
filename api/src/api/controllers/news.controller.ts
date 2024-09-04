@@ -12,8 +12,9 @@ import { CreateNewsUsecase } from 'src/core/usecases/news/create-news.usecase';
 import { CreateNewsRequest, NewsResponse } from '../dtos/news';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { ImagesFilePipe } from '../validators';
-import { NewsTranslation } from 'src/core/models';
+import { NewsStatus, NewsTranslation } from 'src/core/models';
 import { Collection } from '@app/common';
+import { CollectionResponse } from '../decorators';
 
 @Controller('news')
 @Swagger.ApiTags('News')
@@ -27,13 +28,10 @@ export class NewsController {
   @Swagger.ApiOperation({
     summary: 'Retrieve the collection of News ressource.',
   })
-  // @CollectionResponse(NewsResponse)
+  @CollectionResponse(NewsResponse)
   async getCollection(): // @Query() params: GetNewsQueryParams,
   Promise<Collection<NewsResponse>> {
-    // ): Promise<Collection<NewsResponse>> {
     const news = await this.getNewsUsecase.execute();
-
-    console.log({ news });
 
     return new Collection<NewsResponse>({
       items: news.items.map(NewsResponse.fromDomain),

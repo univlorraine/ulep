@@ -4,7 +4,12 @@ import {
   TextContentSnapshot,
   textContentMapper,
 } from './translation.mapper';
-import { News, MediaObject, NewsTranslation } from 'src/core/models';
+import {
+  News,
+  MediaObject,
+  NewsTranslation,
+  NewsStatus,
+} from 'src/core/models';
 import {
   universityMapper,
   UniversityRelations,
@@ -42,6 +47,7 @@ export const newsMapper = (snapshot: NewsSnapshot): News => {
     content: snapshot.ContentTextContent.text,
     languageCode: snapshot.TitleTextContent.LanguageCode.code,
     translations: newsTranslationsMapper(snapshot),
+    status: newsStatusMapper(snapshot.status),
     createdAt: snapshot.created_at,
     updatedAt: snapshot.updated_at,
   };
@@ -64,4 +70,11 @@ export const newsTranslationsMapper = (
   });
 
   return translations;
+};
+export const newsStatusMapper = (status: string): NewsStatus => {
+  if (Object.values(NewsStatus).includes(status as NewsStatus)) {
+    return status as NewsStatus;
+  }
+
+  return NewsStatus.DRAFT;
 };

@@ -66,6 +66,7 @@ export class PrismaNewsRepository implements NewsRepository {
             },
           },
         },
+        status: command.status,
       },
       include: NewsRelations,
     });

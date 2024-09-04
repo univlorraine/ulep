@@ -5,6 +5,7 @@ CREATE TABLE "News" (
     "content_text_content_id" TEXT NOT NULL,
     "university_id" TEXT NOT NULL,
     "image_id" TEXT,
+    "status" TEXT NOT NULL DEFAULT 'DRAFT',
     "created_at" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updated_at" TIMESTAMP(3) NOT NULL,
 
@@ -15,7 +16,7 @@ CREATE TABLE "News" (
 CREATE UNIQUE INDEX "News_image_id_key" ON "News"("image_id");
 
 -- AddForeignKey
-ALTER TABLE "News" ADD CONSTRAINT "News_university_id_fkey" FOREIGN KEY ("university_id") REFERENCES "organizations"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE "News" ADD CONSTRAINT "News_university_id_fkey" FOREIGN KEY ("university_id") REFERENCES "organizations"("id") ON DELETE CASCADE ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE "News" ADD CONSTRAINT "News_image_id_fkey" FOREIGN KEY ("image_id") REFERENCES "media_objects"("id") ON DELETE SET NULL ON UPDATE CASCADE;

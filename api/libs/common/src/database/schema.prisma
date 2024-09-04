@@ -677,9 +677,10 @@ model News {
   content_text_content_id String
   university_id String
   image_id String? @unique
+  status String @default("DRAFT")
   created_at DateTime @default(now())
   updated_at DateTime @updatedAt
-  Organization Organizations @relation(fields: [university_id], references: [id])
+  Organization Organizations @relation(fields: [university_id], references: [id], onDelete: Cascade)
   Image MediaObjects? @relation(fields: [image_id], references: [id])
   TitleTextContent     TextContent   @relation("NewsTitleTextContent", fields: [title_text_content_id], references: [id], onDelete: Cascade)
   ContentTextContent     TextContent   @relation("NewsContentTextContent", fields: [content_text_content_id], references: [id], onDelete: Cascade)

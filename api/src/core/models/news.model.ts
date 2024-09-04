@@ -1,6 +1,11 @@
 import { MediaObject } from './media.model';
 import { University } from './university.model';
 
+export enum NewsStatus {
+  DRAFT = 'DRAFT',
+  PUBLISHED = 'PUBLISHED',
+}
+
 export interface NewsTranslation {
   languageCode: string;
   content: string;
@@ -17,6 +22,7 @@ export interface NewsProps {
   languageCode: string;
   createdAt: Date;
   updatedAt: Date;
+  status: NewsStatus;
 }
 
 export class News {
@@ -29,6 +35,7 @@ export class News {
   readonly university: University;
   readonly createdAt: Date;
   readonly updatedAt: Date;
+  readonly status: NewsStatus;
 
   constructor({
     id,

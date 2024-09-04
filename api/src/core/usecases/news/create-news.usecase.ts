@@ -1,5 +1,10 @@
 import { Inject, Injectable } from '@nestjs/common';
-import { MediaObject, News, NewsTranslation } from 'src/core/models';
+import {
+  MediaObject,
+  News,
+  NewsStatus,
+  NewsTranslation,
+} from 'src/core/models';
 import {
   NEWS_REPOSITORY,
   NewsRepository,
@@ -10,15 +15,13 @@ import {
 } from 'src/core/ports/uuid.provider';
 
 export type CreateNewsCommand = {
-  id: string;
   title: string;
   content: string;
   universityId: string;
   image?: MediaObject;
   translations: NewsTranslation[];
   languageCode: string;
-  createdAt: Date;
-  updatedAt: Date;
+  status: NewsStatus;
 };
 
 @Injectable()

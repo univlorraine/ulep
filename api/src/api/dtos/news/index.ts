@@ -1,8 +1,8 @@
 import * as Swagger from '@nestjs/swagger';
 import { IsNotEmpty, IsOptional, IsString, IsUUID } from 'class-validator';
 import { Expose } from 'class-transformer';
-import { NewsWithTranslations, University } from 'src/core/models';
 import { UniversityResponse } from '../universities';
+import { News, NewsStatus } from 'src/core/models';
 
 export class CreateNewsRequest {
   @Swagger.ApiProperty({ type: 'string', format: 'uuid' })
@@ -28,6 +28,11 @@ export class CreateNewsRequest {
   @Swagger.ApiPropertyOptional({ type: 'array' })
   @IsOptional()
   translations?: string;
+
+  @Swagger.ApiProperty({ type: 'string' })
+  @IsNotEmpty()
+  @IsString()
+  status: NewsStatus;
 }
 export class NewsResponse {
   @Swagger.ApiProperty({ type: 'string', format: 'uuid' })
@@ -54,6 +59,10 @@ export class NewsResponse {
   @Expose({ groups: ['read'] })
   university: UniversityResponse;
 
+  @Swagger.ApiProperty({ type: 'string' })
+  @Expose({ groups: ['read'] })
+  status: string;
+
   @Swagger.ApiProperty({ type: 'Date' })
   @Expose({ groups: ['read'] })
   createdAt: Date;
@@ -66,13 +75,14 @@ export class NewsResponse {
     Object.assign(this, partial);
   }
 
-  static fromDomain(instance: NewsWithTranslations) {
+  static fromDomain(instance: News) {
     const translations = JSON.stringify(instance.translations);
 
     return new NewsResponse({
       id: instance.id,
-      title: instance.title.content,
-      content: instance.content.content,
+      title: instance.title,
+      content: instance.content,
+      status: instance.status,
       languageCode: instance.languageCode,
       translations: translations,
       university: UniversityResponse.fromUniversity(instance.university),

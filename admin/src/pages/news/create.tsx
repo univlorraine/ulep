@@ -15,12 +15,9 @@ const CreateNews = () => {
         formData.append('title', payload.title || '');
         formData.append('content', payload.content || '');
         formData.append('languageCode', payload.languageCode || '');
-        // formData.append('published', payload.published.toString() || 'false');
+        formData.append('status', payload.status || '');
         formData.append('universityId', payload.universityId || '');
         formData.append('translations', JSON.stringify(payload.translations || []));
-        /*         formData.append('group[id]', payload.group.id || '');
-        formData.append('group[name]', payload.group.name || '');
-        formData.append('group[path]', payload.group.path || ''); */
         if (payload.image) formData.append('image', payload.image);
 
         try {

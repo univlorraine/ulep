@@ -2,7 +2,7 @@ import { Box, Checkbox, FormControlLabel, FormGroup, MenuItem, OutlinedInput, Se
 import { RichTextInput } from 'ra-input-rich-text';
 import React, { useEffect, useState } from 'react';
 import { Button, Loading, TabbedForm, useGetIdentity, useGetList, useTranslate } from 'react-admin';
-import { NewsFormPayload } from '../../entities/News';
+import { NewsFormPayload, NewsStatus } from '../../entities/News';
 import University from '../../entities/University';
 import customDataProvider from '../../providers/customDataProvider';
 import ImageUploader from '../ImageUploader';
@@ -28,7 +28,7 @@ const NewsForm: React.FC<NewsFormProps> = ({ handleSubmit }) => {
     const [title, setTitle] = useState<string>('');
     const [content, setContent] = useState<string>('');
     const [image, setImage] = useState<File | undefined>(undefined);
-    const [published, setPublished] = useState<boolean>(false);
+    const [status, setStatus] = useState<NewsStatus>(NewsStatus.DRAFT);
     const [universitiesLanguages, setUniversitiesLanguages] = useState<string[]>([]);
     const [availableLanguages, setAvailableLanguages] = useState<string[]>([]);
     const [defaultLanguage, setDefaultLanguage] = useState<string>('en');
@@ -81,7 +81,7 @@ const NewsForm: React.FC<NewsFormProps> = ({ handleSubmit }) => {
             content,
             languageCode: defaultLanguage,
             translations,
-            published,
+            status,
             universityId: identity?.universityId,
             image,
         });
@@ -156,8 +156,14 @@ const NewsForm: React.FC<NewsFormProps> = ({ handleSubmit }) => {
                         <Typography variant="subtitle1">{translate('news.status.label')}</Typography>
                         <FormGroup>
                             <FormControlLabel
-                                checked={published}
-                                control={<Checkbox onChange={() => setPublished(!published)} />}
+                                checked={status === NewsStatus.PUBLISHED}
+                                control={
+                                    <Checkbox
+                                        onChange={(event: any) =>
+                                            setStatus(event.target.checked ? NewsStatus.PUBLISHED : NewsStatus.DRAFT)
+                                        }
+                                    />
+                                }
                                 label={translate('news.status.published')}
                             />
                         </FormGroup>

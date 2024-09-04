@@ -21,6 +21,7 @@ const NewsList = () => {
                             return record.translations.map((translation: any) => translation.languageCode).join(', ');
                         }}
                     />
+                    <TextField label="news.list.status" source="status" />
                 </Datagrid>
             </List>
         </>
