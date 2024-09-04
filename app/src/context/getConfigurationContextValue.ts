@@ -45,6 +45,14 @@ import SearchMessagesIdsFromConversationUsecase from '../domain/usecases/SearchM
 import SendMessageUsecase from '../domain/usecases/SendMessageUsecase';
 import UpdateAvatarUsecase from '../domain/usecases/UpdateAvatarUsecase';
 import UpdateNotificationPermissionUsecase from '../domain/usecases/UpdateNotificationPermissionUsecase';
+import CreateVocabularyListUsecase from '../domain/usecases/vocabulary/CreateVocabularyListUsecase';
+import CreateVocabularyUsecase from '../domain/usecases/vocabulary/CreateVocabularyUsecase';
+import DeleteVocabularyListUsecase from '../domain/usecases/vocabulary/DeleteVocabularyListUsecase';
+import DeleteVocabularyUsecase from '../domain/usecases/vocabulary/DeleteVocabularyUsecase';
+import GetVocabulariesUsecase from '../domain/usecases/vocabulary/GetVocabulariesUsecase';
+import GetVocabularyListsUsecase from '../domain/usecases/vocabulary/GetVocabularyListsUsecase';
+import UpdateVocabularyListUsecase from '../domain/usecases/vocabulary/UpdateVocabularylISTUsecase';
+import UpdateVocabularyUsecase from '../domain/usecases/vocabulary/UpdateVocabularyUsecase';
 import { ConfigContextValueType } from './configurationContextTypes';
 
 interface GetConfigContextValueProps {
@@ -143,6 +151,16 @@ const getConfigContextValue = ({
     const sendMessage = new SendMessageUsecase(chatHttpAdapter);
     const searchMessagesIdsFromConversation = new SearchMessagesIdsFromConversationUsecase(chatHttpAdapter);
 
+    // Vocabulary
+    const createVocabulary = new CreateVocabularyUsecase(domainHttpAdapter);
+    const updateVocabulary = new UpdateVocabularyUsecase(domainHttpAdapter);
+    const deleteVocabulary = new DeleteVocabularyUsecase(domainHttpAdapter);
+    const getVocabularies = new GetVocabulariesUsecase(domainHttpAdapter);
+    const getVocabularyLists = new GetVocabularyListsUsecase(domainHttpAdapter);
+    const createVocabularyList = new CreateVocabularyListUsecase(domainHttpAdapter);
+    const updateVocabularyList = new UpdateVocabularyListUsecase(domainHttpAdapter);
+    const deleteVocabularyList = new DeleteVocabularyListUsecase(domainHttpAdapter);
+
     return {
         accessToken,
         addDevice,
@@ -192,6 +210,14 @@ const getConfigContextValue = ({
         getTokenFromCodeUsecase,
         getInitialUrlUsecase,
         revokeSessionsUsecase,
+        createVocabulary,
+        updateVocabulary,
+        deleteVocabulary,
+        getVocabularies,
+        getVocabularyLists,
+        createVocabularyList,
+        updateVocabularyList,
+        deleteVocabularyList,
     };
 };
 
