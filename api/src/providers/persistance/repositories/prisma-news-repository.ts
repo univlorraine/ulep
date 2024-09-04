@@ -2,7 +2,7 @@ import { Injectable, Logger } from '@nestjs/common';
 import { Collection, PrismaService } from '@app/common';
 import { NewsRepository } from 'src/core/ports/news.repository';
 import { newsMapper, NewsRelations } from '../mappers/news.mapper';
-import { News } from 'src/core/models';
+import { News, Translation } from 'src/core/models';
 import { CreateNewsCommand } from 'src/core/usecases/news/create-news.usecase';
 
 @Injectable()
@@ -20,7 +20,21 @@ export class PrismaNewsRepository implements NewsRepository {
     });
   }
 
-  async create(command: News): Promise<News> {
+  async create(command: CreateNewsCommand): Promise<News> {
+    const titleTranslations: Translation[] = command.translations?.map(
+      (translation) => ({
+        language: translation.languageCode,
+        content: translation.title,
+      }),
+    );
+
+    const contentTranslations: Translation[] = command.translations?.map(
+      (translation) => ({
+        language: translation.languageCode,
+        content: translation.content,
+      }),
+    );
+
     const news = await this.prisma.news.create({
       data: {
         Organization: {
@@ -30,11 +44,10 @@ export class PrismaNewsRepository implements NewsRepository {
         },
         TitleTextContent: {
           create: {
-            id: command.title.id,
-            text: command.title.content,
-            LanguageCode: { connect: { code: command.title.language } },
+            text: command.title,
+            LanguageCode: { connect: { code: command.languageCode } },
             Translations: {
-              create: command.title.translations?.map((translation) => ({
+              create: titleTranslations.map((translation) => ({
                 text: translation.content,
                 LanguageCode: { connect: { code: translation.language } },
               })),
@@ -43,11 +56,10 @@ export class PrismaNewsRepository implements NewsRepository {
         },
         ContentTextContent: {
           create: {
-            id: command.content.id,
-            text: command.content.content,
-            LanguageCode: { connect: { code: command.content.language } },
+            text: command.content,
+            LanguageCode: { connect: { code: command.languageCode } },
             Translations: {
-              create: command.content.translations?.map((translation) => ({
+              create: contentTranslations.map((translation) => ({
                 text: translation.content,
                 LanguageCode: { connect: { code: translation.language } },
               })),

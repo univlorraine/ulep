@@ -1,5 +1,4 @@
 import { MediaObject } from './media.model';
-import { TextContent } from './translation.model';
 import { University } from './university.model';
 
 export interface NewsTranslation {
@@ -10,22 +9,24 @@ export interface NewsTranslation {
 
 export interface NewsProps {
   id: string;
-  title: TextContent;
-  content: TextContent;
-  universityId?: string;
-  university?: University;
+  title: string;
+  content: string;
+  university: University;
   image?: MediaObject;
+  translations: NewsTranslation[];
+  languageCode: string;
   createdAt: Date;
   updatedAt: Date;
 }
 
 export class News {
   readonly id: string;
-  readonly title: TextContent;
-  readonly content: TextContent;
+  readonly title: string;
+  readonly content: string;
+  readonly translations?: NewsTranslation[];
+  readonly languageCode?: string;
   readonly image?: MediaObject;
-  readonly university?: University;
-  readonly universityId?: string;
+  readonly university: University;
   readonly createdAt: Date;
   readonly updatedAt: Date;
 
@@ -34,8 +35,9 @@ export class News {
     title,
     content,
     image,
+    translations,
+    languageCode,
     university,
-    universityId,
     createdAt,
     updatedAt,
   }: NewsProps) {
@@ -43,25 +45,10 @@ export class News {
     this.title = title;
     this.content = content;
     this.image = image;
+    this.translations = translations;
+    this.languageCode = languageCode;
     this.university = university;
-    this.universityId = universityId;
     this.createdAt = createdAt;
     this.updatedAt = updatedAt;
-  }
-}
-
-interface NewsWithTranslationsProps extends NewsProps {
-  translations?: string;
-  languageCode?: string;
-}
-
-export class NewsWithTranslations extends News {
-  readonly languageCode?: string;
-  readonly translations?: string;
-
-  constructor(props: NewsWithTranslationsProps) {
-    super(props);
-    this.translations = props.translations;
-    this.languageCode = props.languageCode;
   }
 }

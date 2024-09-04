@@ -4,7 +4,7 @@ import {
   TextContentSnapshot,
   textContentMapper,
 } from './translation.mapper';
-import { News, MediaObject } from 'src/core/models';
+import { News, MediaObject, NewsTranslation } from 'src/core/models';
 import {
   universityMapper,
   UniversityRelations,
@@ -38,9 +38,30 @@ export const newsMapper = (snapshot: NewsSnapshot): News => {
         mimetype: snapshot.Image.mime,
         size: snapshot.Image.size,
       }),
-    title: textContentMapper(snapshot.TitleTextContent),
-    content: textContentMapper(snapshot.ContentTextContent),
+    title: snapshot.TitleTextContent.text,
+    content: snapshot.ContentTextContent.text,
+    languageCode: snapshot.TitleTextContent.LanguageCode.code,
+    translations: newsTranslationsMapper(snapshot),
     createdAt: snapshot.created_at,
     updatedAt: snapshot.updated_at,
   };
+};
+
+export const newsTranslationsMapper = (
+  snapshot: NewsSnapshot,
+): NewsTranslation[] => {
+  const translations: NewsTranslation[] = [];
+  snapshot.TitleTextContent.Translations.forEach((titleTranslation) => {
+    translations.push({
+      languageCode: titleTranslation.LanguageCode.code,
+      title: titleTranslation.text,
+      content: snapshot.ContentTextContent.Translations.find(
+        (contentTranslation) =>
+          contentTranslation.LanguageCode.code ===
+          titleTranslation.LanguageCode.code,
+      ).text,
+    });
+  });
+
+  return translations;
 };
