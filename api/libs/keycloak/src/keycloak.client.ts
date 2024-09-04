@@ -421,13 +421,27 @@ export class KeycloakClient {
     };
 
     if (props.password) {
-      payload.credentials = [
+      const passwordResponse = await fetch(
+        `${this.configuration.baseUrl}/admin/realms/${this.configuration.realm}/users/${props.id}/reset-password`,
         {
-          type: 'password',
-          value: props.password,
-          temporary: false,
+          method: 'PUT',
+          headers: {
+            'Content-Type': 'application/json',
+            Authorization: `Bearer ${await this.getAccessToken()}`,
+          },
+          body: JSON.stringify({
+            type: 'password',
+            value: props.password,
+            temporary: false,
+          }),
         },
-      ];
+      );
+
+      if (!passwordResponse.ok) {
+        const result = await passwordResponse.json();
+        this.logger.error(JSON.stringify(result));
+        throw new HttpException({ message: result.error_description }, 500);
+      }
     }
 
     const response = await fetch(
@@ -445,7 +459,7 @@ export class KeycloakClient {
     if (!response.ok) {
       const result = await response.json();
       this.logger.error(JSON.stringify(result));
-      throw new HttpException({ message: result }, 500);
+      throw new HttpException({ message: result.error_description }, 500);
     }
 
     const updatedAdmin = await this.getUserById(props.id, true);
