@@ -36,6 +36,7 @@ import {
     SearchMessagesIdFromConversationIdUsecase,
     UploadMediaUsecase,
 } from 'src/core/usecases';
+import { FilePipe } from '../validators/files.validator';
 
 //TODO: Allow route only for rest api
 @Controller('conversations')
@@ -178,7 +179,7 @@ export class ConversationController {
     async sendMessage(
         @Param('id') conversationId: string,
         @Body() body: SendMessageRequest,
-        @UploadedFile() file?: Express.Multer.File,
+        @UploadedFile(new FilePipe()) file?: Express.Multer.File,
     ): Promise<MessageResponse | undefined> {
         const message = await this.createMessageUsecase.execute({
             content: body.content,
