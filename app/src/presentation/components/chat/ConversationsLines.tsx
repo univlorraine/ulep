@@ -19,7 +19,11 @@ const ConversationsLines: React.FC<ConversationsLinesProps> = ({
 }) => {
     const { t } = useTranslation();
     return (
-        <IonList lines="full" className={styles.container}>
+        <IonList
+            lines="full"
+            className={styles.container}
+            aria-label={t('chat.conversation_menu.conversation_aria_label') as string}
+        >
             {conversations.length > 0 ? (
                 conversations.map((conversation) => (
                     <ConversationLine

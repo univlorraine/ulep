@@ -62,24 +62,20 @@ const ConversationLine: React.FC<ConversationLineProps> = ({
     userId,
 }) => {
     const { t } = useTranslation();
-    const mainParticipant = Conversation.getMainConversationPartner(conversation, userId);
+    const partner = Conversation.getMainConversationPartner(conversation, userId);
     return (
         <IonItem
             className={styles.line}
             button={true}
             onClick={() => onPressed(conversation)}
-            aria-label={t('chat.conversation_menu.aria_label') as string}
+            aria-label={t('chat.conversation_menu.user_aria_label', { name: partner.firstname }) as string}
             color={conversation.id === currentConversation?.id ? 'light' : undefined}
         >
             <div className={styles.container}>
-                <ConversationAvatar
-                    avatar={mainParticipant.avatar}
-                    firstname={mainParticipant.firstname}
-                    lastname={mainParticipant.lastname}
-                />
+                <ConversationAvatar avatar={partner.avatar} firstname={partner.firstname} lastname={partner.lastname} />
                 <div className={styles.content}>
                     <div className={styles['top-line']}>
-                        <span className={styles.name}>{mainParticipant.firstname}</span>
+                        <span className={styles.name}>{partner.firstname}</span>
                         {conversation.lastMessage && (
                             <span className={styles.date}>{`${t(
                                 conversation.lastMessage.getMessageDate()
