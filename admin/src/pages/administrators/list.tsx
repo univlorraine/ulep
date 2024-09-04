@@ -111,7 +111,7 @@ const AdministratorList = (props: ListProps<Administrator>) => {
             <ConfigPagesHeader />
             <List
                 exporter={false}
-                filter={!identity?.isCentralUniversity ? { university: identity.universityId } : undefined}
+                filter={!identity?.isCentralUniversity ? { universityId: identity.universityId } : undefined}
                 pagination={false}
                 title={translate('administrators.label')}
                 {...props}
