@@ -1,6 +1,5 @@
 import * as Swagger from '@nestjs/swagger';
 import { Expose } from 'class-transformer';
-import { MessageResponse } from 'src/api/dtos/chat/message.response';
 import { MediaObjectResponse } from 'src/api/dtos/medias';
 import { Vocabulary } from 'src/core/models/vocabulary.model';
 
@@ -21,12 +20,12 @@ export class VocabularyResponse {
   @Expose({ groups: ['read'] })
   translation: string;
 
-  @Swagger.ApiProperty({ type: MessageResponse })
-  @Expose({ groups: ['chat'] })
+  @Swagger.ApiProperty({ type: () => MediaObjectResponse })
+  @Expose({ groups: ['read'] })
   pronunciationWord?: MediaObjectResponse;
 
-  @Swagger.ApiProperty({ type: 'object' })
-  @Expose({ groups: ['chat'] })
+  @Swagger.ApiProperty({ type: () => MediaObjectResponse })
+  @Expose({ groups: ['read'] })
   pronunciationTranslation?: MediaObjectResponse;
 
   constructor(partial: Partial<VocabularyResponse>) {

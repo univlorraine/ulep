@@ -20,11 +20,11 @@ export class VocabularyListResponse {
   @Expose({ groups: ['read'] })
   symbol: string;
 
-  @Swagger.ApiProperty({ type: LanguageResponse })
+  @Swagger.ApiProperty({ type: () => LanguageResponse })
   @Expose({ groups: ['read'] })
   translationLanguage: LanguageResponse;
 
-  @Swagger.ApiProperty({ type: LanguageResponse })
+  @Swagger.ApiProperty({ type: () => LanguageResponse })
   @Expose({ groups: ['read'] })
   wordLanguage: LanguageResponse;
 

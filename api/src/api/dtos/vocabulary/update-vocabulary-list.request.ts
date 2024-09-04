@@ -1,11 +1,7 @@
 import { ApiPropertyOptional } from '@nestjs/swagger';
-import { IsNotEmpty, IsOptional } from 'class-validator';
+import { IsOptional } from 'class-validator';
 
 export class UpdateVocabularyListRequest {
-  @ApiPropertyOptional({ type: 'string' })
-  @IsNotEmpty()
-  id: string;
-
   @ApiPropertyOptional({ type: 'string' })
   @IsOptional()
   name?: string;

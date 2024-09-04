@@ -96,7 +96,7 @@ export class UserController {
   @UseInterceptors(FileInterceptor('file'))
   @Swagger.ApiOperation({ summary: 'Create a new User ressource.' })
   @Swagger.ApiConsumes('multipart/form-data')
-  @Swagger.ApiCreatedResponse({ type: UserResponse })
+  @Swagger.ApiCreatedResponse({ type: () => UserResponse })
   async create(
     @Body() body: CreateUserRequest,
     @UploadedFile(new ImagesFilePipe()) file?: Express.Multer.File,
@@ -241,7 +241,7 @@ export class UserController {
   @Get('me')
   @UseGuards(AuthenticationGuard)
   @Swagger.ApiOperation({ summary: 'User ressource.' })
-  @Swagger.ApiOkResponse({ type: UserResponse })
+  @Swagger.ApiOkResponse({ type: () => UserResponse })
   async findMe(@CurrentUser() user: KeycloakUser) {
     const id = user.sub;
     const me = await this.getUserUsecase.execute(id);
@@ -281,7 +281,7 @@ export class UserController {
   @Roles(Role.ADMIN)
   @UseGuards(AuthenticationGuard)
   @Swagger.ApiOperation({ summary: 'User ressource.' })
-  @Swagger.ApiOkResponse({ type: UserResponse })
+  @Swagger.ApiOkResponse({ type: () => UserResponse })
   async findOne(@Param('id', ParseUUIDPipe) id: string) {
     const instance = await this.getUserUsecase.execute(id);
 
@@ -295,7 +295,7 @@ export class UserController {
   @Swagger.ApiConsumes('multipart/form-data')
   @UseGuards(AuthenticationGuard)
   @Swagger.ApiOperation({ summary: 'Updates a User ressource.' })
-  @Swagger.ApiOkResponse({ type: UserResponse })
+  @Swagger.ApiOkResponse({ type: () => UserResponse })
   async update(
     @Param('id', ParseUUIDPipe) id: string,
     @Body() body: UpdateUserRequest,

@@ -53,7 +53,7 @@ export class VocabularyController {
 
   @Post('list')
   @Swagger.ApiOperation({ summary: 'Create a new Vocabulary List ressource.' })
-  @Swagger.ApiCreatedResponse({ type: VocabularyListResponse })
+  @Swagger.ApiCreatedResponse({ type: () => VocabularyListResponse })
   async createVocabularyList(@Body() body: CreateVocabularyListRequest) {
     const vocabularyList = await this.createVocabularyListUsecase.execute({
       ...body,
@@ -67,7 +67,7 @@ export class VocabularyController {
   @UseInterceptors(FileInterceptor('pronunciationTranslation'))
   @Swagger.ApiOperation({ summary: 'Create a new Vocabulary ressource.' })
   @Swagger.ApiConsumes('multipart/form-data')
-  @Swagger.ApiCreatedResponse({ type: VocabularyResponse })
+  @Swagger.ApiCreatedResponse({ type: () => VocabularyResponse })
   async createVocabulary(
     @Body() body: CreateVocabularyRequest,
     @UploadedFile(new ImagesFilePipe()) pronunciationWord?: Express.Multer.File,
@@ -101,7 +101,7 @@ export class VocabularyController {
 
   @Get('list/:id')
   @Swagger.ApiOperation({ summary: 'Get a Vocabulary List ressource.' })
-  @Swagger.ApiOkResponse({ type: VocabularyListResponse })
+  @Swagger.ApiOkResponse({ type: () => VocabularyListResponse })
   async getVocabularyList(
     @Param('id') id: string,
     @Query() query: PaginationDto,
@@ -122,7 +122,7 @@ export class VocabularyController {
 
   @Get(':id')
   @Swagger.ApiOperation({ summary: 'Get Vocabularies ressource.' })
-  @Swagger.ApiOkResponse({ type: VocabularyListResponse })
+  @Swagger.ApiOkResponse({ type: () => VocabularyListResponse })
   async getVocabularies(
     @Param('id') id: string,
     @Query() query: GetVocabulariesFromListQuery,
@@ -143,32 +143,36 @@ export class VocabularyController {
     });
   }
 
-  @Put('list')
+  @Put('list/:id')
   @Swagger.ApiOperation({ summary: 'Update a Vocabulary List ressource.' })
-  @Swagger.ApiCreatedResponse({ type: VocabularyListResponse })
-  async updateVocabularyList(@Body() body: UpdateVocabularyListRequest) {
+  @Swagger.ApiCreatedResponse({ type: () => VocabularyListResponse })
+  async updateVocabularyList(
+    @Param('id') id: string,
+    @Body() body: UpdateVocabularyListRequest,
+  ) {
     const vocabularyList = await this.updateVocabularyListUsecase.execute({
-      vocabularyListId: body.id,
+      vocabularyListId: id,
       ...body,
     });
 
     return VocabularyListResponse.from(vocabularyList);
   }
 
-  @Put()
+  @Put(':id')
   @UseInterceptors(FileInterceptor('pronunciationWord'))
   @UseInterceptors(FileInterceptor('pronunciationTranslation'))
   @Swagger.ApiOperation({ summary: 'Update a Vocabulary ressource.' })
   @Swagger.ApiConsumes('multipart/form-data')
-  @Swagger.ApiCreatedResponse({ type: VocabularyResponse })
+  @Swagger.ApiCreatedResponse({ type: () => VocabularyResponse })
   async updateVocabulary(
+    @Param('id') id: string,
     @Body() body: UpdateVocabularyRequest,
     @UploadedFile(new ImagesFilePipe()) pronunciationWord?: Express.Multer.File,
     @UploadedFile(new ImagesFilePipe())
     pronunciationTranslation?: Express.Multer.File,
   ) {
     let vocabulary = await this.updateVocabularyUsecase.execute({
-      vocabularyId: body.id,
+      vocabularyId: id,
       ...body,
     });
 

@@ -76,7 +76,7 @@ export class ProfileController {
   @UseGuards(AuthenticationGuard)
   @SerializeOptions({ groups: ['read', 'profile:read'] })
   @Swagger.ApiOperation({ summary: 'Creates a Profile ressource.' })
-  @Swagger.ApiCreatedResponse({ type: ProfileResponse })
+  @Swagger.ApiCreatedResponse({ type: () => ProfileResponse })
   @Swagger.ApiResponse({ status: 400, description: 'Invalid input' })
   async create(
     @CurrentUser() user: KeycloakUser,
@@ -92,7 +92,7 @@ export class ProfileController {
 
   @Post('edit/:id')
   @Swagger.ApiOperation({ summary: 'Edit profile ressource.' })
-  @Swagger.ApiCreatedResponse({ type: ProfileResponse })
+  @Swagger.ApiCreatedResponse({ type: () => ProfileResponse })
   async edit(
     @Param('id', ParseUUIDPipe) id: string,
     @Body() body: UpdateProfileRequest,
@@ -239,7 +239,7 @@ export class ProfileController {
   @Swagger.ApiOperation({
     summary: 'Retrieve the collection of Tandem ressource.',
   })
-  @Swagger.ApiOkResponse({ type: UserTandemResponse, isArray: true })
+  @Swagger.ApiOkResponse({ type: () => UserTandemResponse, isArray: true })
   async getTandems(
     @Param('id', ParseUUIDPipe) id: string,
     @Headers('Language-code') languageCode?: string,
@@ -259,7 +259,7 @@ export class ProfileController {
   @Swagger.ApiOperation({
     summary: 'Retrieve a Profile from user id.',
   })
-  @Swagger.ApiOkResponse({ type: ProfileResponse })
+  @Swagger.ApiOkResponse({ type: () => ProfileResponse })
   @Swagger.ApiNotFoundResponse({ description: 'Resource not found' })
   async getItemByUserId(
     @CurrentUser() user: KeycloakUser,
@@ -277,7 +277,7 @@ export class ProfileController {
   @UseInterceptors(UserKeycloakContactInterceptor)
   @SerializeOptions({ groups: ['read', 'profile:read'] })
   @Swagger.ApiOperation({ summary: 'Retrieve a Profile ressource.' })
-  @Swagger.ApiOkResponse({ type: ProfileResponse })
+  @Swagger.ApiOkResponse({ type: () => ProfileResponse })
   @Swagger.ApiNotFoundResponse({ description: 'Resource not found' })
   async getItem(
     @Param('id', ParseUUIDPipe) id: string,
@@ -317,7 +317,7 @@ export class ProfileController {
   @UseGuards(AuthenticationGuard)
   @SerializeOptions({ groups: ['read', 'profile:read'] })
   @Swagger.ApiOperation({ summary: 'Add a learning languages to a Profile' })
-  @Swagger.ApiOkResponse({ type: LearningLanguageResponse })
+  @Swagger.ApiOkResponse({ type: () => LearningLanguageResponse })
   @Swagger.ApiNotFoundResponse({ description: 'Resource not found' })
   async addLearningLanguage(
     @Param('id', ParseUUIDPipe) id: string,
@@ -337,7 +337,10 @@ export class ProfileController {
   @Swagger.ApiOperation({
     summary: 'Retrieve the collection of learning languages ressource.',
   })
-  @Swagger.ApiOkResponse({ type: LearningLanguageResponse, isArray: true })
+  @Swagger.ApiOkResponse({
+    type: () => LearningLanguageResponse,
+    isArray: true,
+  })
   @Swagger.ApiNotFoundResponse({ description: 'Resource does not exist' })
   async getLearningLanguage(
     @Param('id', ParseUUIDPipe) id: string,
@@ -356,7 +359,7 @@ export class ProfileController {
   @Swagger.ApiOperation({
     summary: 'Create or update a tested language',
   })
-  @Swagger.ApiOkResponse({ type: ProfileResponse })
+  @Swagger.ApiOkResponse({ type: () => ProfileResponse })
   @Swagger.ApiNotFoundResponse({ description: 'Resource does not exist' })
   async createOrUpdateTestedLanguage(
     @Param('id', ParseUUIDPipe) id: string,

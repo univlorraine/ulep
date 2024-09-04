@@ -1,20 +1,21 @@
+import { KeycloakGroup, UserRepresentation } from '@app/keycloak';
 import * as Swagger from '@nestjs/swagger';
+import { ApiPropertyOptional } from '@nestjs/swagger';
 import { Expose, Transform, Type } from 'class-transformer';
 import {
-  IsString,
-  IsNotEmpty,
-  IsUUID,
+  IsBoolean,
   IsEmail,
   IsInt,
-  Min,
-  Length,
-  IsOptional,
-  IsBoolean,
-  IsObject,
+  IsNotEmpty,
   IsNotEmptyObject,
+  IsObject,
+  IsOptional,
+  IsString,
+  IsUUID,
+  Length,
+  Min,
 } from 'class-validator';
-import { UniversityResponse } from '../universities';
-import { CreateUserCommand } from 'src/core/usecases/user';
+import { MediaObject } from 'src/core/models';
 import {
   AdminGroup,
   Gender,
@@ -22,10 +23,9 @@ import {
   User,
   UserStatus,
 } from 'src/core/models/user.model';
+import { CreateUserCommand } from 'src/core/usecases/user';
 import { MediaObjectResponse } from '../medias';
-import { KeycloakGroup, UserRepresentation } from '@app/keycloak';
-import { MediaObject } from 'src/core/models';
-import { ApiPropertyOptional } from '@nestjs/swagger';
+import { UniversityResponse } from '../universities';
 
 export interface UserRepresentationWithAvatar extends UserRepresentation {
   image?: MediaObject;
@@ -210,7 +210,7 @@ export class AdministratorResponse {
   @Expose({ groups: ['read'] })
   group?: KeycloakGroupResponse;
 
-  @Swagger.ApiPropertyOptional({ type: MediaObjectResponse })
+  @Swagger.ApiPropertyOptional({ type: () => MediaObjectResponse })
   @Expose({ groups: ['read'] })
   image?: MediaObjectResponse;
 
