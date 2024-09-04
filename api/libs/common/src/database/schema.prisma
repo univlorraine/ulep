@@ -211,8 +211,8 @@ model MediaObjects {
   User       Users?
   Goal       LearningObjectives?
   University Organizations?
-  PronunciationWord Vocabulary[] @relation("PronunciationWord")
-  PronunciationTranslation Vocabulary[] @relation("PronunciationTranslation")
+  PronunciationWord Vocabulary? @relation("PronunciationWord")
+  PronunciationTranslation Vocabulary? @relation("PronunciationTranslation")
 
   @@unique([name, bucket])
   @@map("media_objects")
@@ -549,8 +549,8 @@ model  Vocabulary {
   word              String
   translation       String
   vocabulary_list_id String
-  pronunciation_word_id   String?
-  pronunciation_translation_id   String?
+  pronunciation_word_id   String? @unique
+  pronunciation_translation_id   String? @unique
 
 
   VocabularyList VocabularyList @relation(fields: [vocabulary_list_id], references: [id], onDelete: Cascade)

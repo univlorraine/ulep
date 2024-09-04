@@ -30,6 +30,12 @@ CREATE TABLE "_ProfilesToVocabularyList" (
 );
 
 -- CreateIndex
+CREATE UNIQUE INDEX "vocabulary_pronunciation_word_id_key" ON "vocabulary"("pronunciation_word_id");
+
+-- CreateIndex
+CREATE UNIQUE INDEX "vocabulary_pronunciation_translation_id_key" ON "vocabulary"("pronunciation_translation_id");
+
+-- CreateIndex
 CREATE UNIQUE INDEX "_ProfilesToVocabularyList_AB_unique" ON "_ProfilesToVocabularyList"("A", "B");
 
 -- CreateIndex

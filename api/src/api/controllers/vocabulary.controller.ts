@@ -8,11 +8,13 @@ import {
   Post,
   Put,
   Query,
-  UploadedFile,
+  UploadedFiles,
+  UseGuards,
   UseInterceptors,
 } from '@nestjs/common';
-import { FileInterceptor } from '@nestjs/platform-express';
+import { FileFieldsInterceptor } from '@nestjs/platform-express';
 import * as Swagger from '@nestjs/swagger';
+import { AuthenticationGuard } from 'src/api/guards';
 import {
   CreateVocabularyListUsecase,
   CreateVocabularyUsecase,
@@ -34,7 +36,6 @@ import {
   VocabularyListResponse,
   VocabularyResponse,
 } from '../dtos';
-import { ImagesFilePipe } from '../validators/images.validator';
 
 @Controller('vocabulary')
 @Swagger.ApiTags('Vocabulary')
@@ -52,6 +53,7 @@ export class VocabularyController {
   ) {}
 
   @Post('list')
+  @UseGuards(AuthenticationGuard)
   @Swagger.ApiOperation({ summary: 'Create a new Vocabulary List ressource.' })
   @Swagger.ApiCreatedResponse({ type: () => VocabularyListResponse })
   async createVocabularyList(@Body() body: CreateVocabularyListRequest) {
@@ -63,43 +65,52 @@ export class VocabularyController {
   }
 
   @Post()
-  @UseInterceptors(FileInterceptor('pronunciationWord'))
-  @UseInterceptors(FileInterceptor('pronunciationTranslation'))
+  @UseGuards(AuthenticationGuard)
+  @UseInterceptors(
+    FileFieldsInterceptor([
+      { name: 'pronunciationWord', maxCount: 1 },
+      { name: 'pronunciationTranslation', maxCount: 1 },
+    ]),
+  )
   @Swagger.ApiOperation({ summary: 'Create a new Vocabulary ressource.' })
   @Swagger.ApiConsumes('multipart/form-data')
   @Swagger.ApiCreatedResponse({ type: () => VocabularyResponse })
   async createVocabulary(
     @Body() body: CreateVocabularyRequest,
-    @UploadedFile(new ImagesFilePipe()) pronunciationWord?: Express.Multer.File,
-    @UploadedFile(new ImagesFilePipe())
-    pronunciationTranslation?: Express.Multer.File,
+    @UploadedFiles()
+    files?: {
+      pronunciationWord?: Express.Multer.File;
+      pronunciationTranslation?: Express.Multer.File;
+    },
   ) {
     let vocabulary = await this.createVocabularyUsecase.execute({ ...body });
+    const { pronunciationWord, pronunciationTranslation } = files ?? {};
 
-    if (pronunciationWord) {
-      const audio = await this.uploadAudioVocabularyUsecase.execute({
-        file: pronunciationWord,
+    if (pronunciationWord && pronunciationWord[0]) {
+      const audioUrl = await this.uploadAudioVocabularyUsecase.execute({
+        file: pronunciationWord[0],
         vocabularyId: vocabulary.id,
         isTranslation: false,
       });
 
-      vocabulary.pronunciationWord = audio;
+      vocabulary.pronunciationWordUrl = audioUrl;
     }
 
-    if (pronunciationTranslation) {
-      const audio = await this.uploadAudioVocabularyUsecase.execute({
+    if (pronunciationTranslation && pronunciationTranslation[0]) {
+      const audioUrl = await this.uploadAudioVocabularyUsecase.execute({
         file: pronunciationTranslation,
         vocabularyId: vocabulary.id,
         isTranslation: true,
       });
 
-      vocabulary.pronunciationTranslation = audio;
+      vocabulary.pronunciationTranslationUrl = audioUrl;
     }
 
     return VocabularyResponse.from(vocabulary);
   }
 
   @Get('list/:id')
+  @UseGuards(AuthenticationGuard)
   @Swagger.ApiOperation({ summary: 'Get a Vocabulary List ressource.' })
   @Swagger.ApiOkResponse({ type: () => VocabularyListResponse })
   async getVocabularyList(
@@ -121,6 +132,7 @@ export class VocabularyController {
   }
 
   @Get(':id')
+  @UseGuards(AuthenticationGuard)
   @Swagger.ApiOperation({ summary: 'Get Vocabularies ressource.' })
   @Swagger.ApiOkResponse({ type: () => VocabularyListResponse })
   async getVocabularies(
@@ -144,6 +156,7 @@ export class VocabularyController {
   }
 
   @Put('list/:id')
+  @UseGuards(AuthenticationGuard)
   @Swagger.ApiOperation({ summary: 'Update a Vocabulary List ressource.' })
   @Swagger.ApiCreatedResponse({ type: () => VocabularyListResponse })
   async updateVocabularyList(
@@ -159,47 +172,57 @@ export class VocabularyController {
   }
 
   @Put(':id')
-  @UseInterceptors(FileInterceptor('pronunciationWord'))
-  @UseInterceptors(FileInterceptor('pronunciationTranslation'))
+  @UseGuards(AuthenticationGuard)
+  @UseInterceptors(
+    FileFieldsInterceptor([
+      { name: 'pronunciationWord', maxCount: 1 },
+      { name: 'pronunciationTranslation', maxCount: 1 },
+    ]),
+  )
   @Swagger.ApiOperation({ summary: 'Update a Vocabulary ressource.' })
   @Swagger.ApiConsumes('multipart/form-data')
   @Swagger.ApiCreatedResponse({ type: () => VocabularyResponse })
   async updateVocabulary(
     @Param('id') id: string,
     @Body() body: UpdateVocabularyRequest,
-    @UploadedFile(new ImagesFilePipe()) pronunciationWord?: Express.Multer.File,
-    @UploadedFile(new ImagesFilePipe())
-    pronunciationTranslation?: Express.Multer.File,
+    @UploadedFiles()
+    files?: {
+      pronunciationWord?: Express.Multer.File;
+      pronunciationTranslation?: Express.Multer.File;
+    },
   ) {
     let vocabulary = await this.updateVocabularyUsecase.execute({
       vocabularyId: id,
       ...body,
     });
 
-    if (pronunciationWord) {
-      const audio = await this.uploadAudioVocabularyUsecase.execute({
-        file: pronunciationWord,
+    const { pronunciationWord, pronunciationTranslation } = files ?? {};
+
+    if (pronunciationWord && pronunciationWord[0]) {
+      const url = await this.uploadAudioVocabularyUsecase.execute({
+        file: pronunciationWord[0],
         vocabularyId: vocabulary.id,
         isTranslation: false,
       });
 
-      vocabulary.pronunciationWord = audio;
+      vocabulary.pronunciationWordUrl = url;
     }
 
-    if (pronunciationTranslation) {
-      const audio = await this.uploadAudioVocabularyUsecase.execute({
-        file: pronunciationTranslation,
+    if (pronunciationTranslation && pronunciationTranslation[0]) {
+      const url = await this.uploadAudioVocabularyUsecase.execute({
+        file: pronunciationTranslation[0],
         vocabularyId: vocabulary.id,
         isTranslation: true,
       });
 
-      vocabulary.pronunciationTranslation = audio;
+      vocabulary.pronunciationTranslationUrl = url;
     }
 
     return VocabularyResponse.from(vocabulary);
   }
 
   @Delete('list/:id')
+  @UseGuards(AuthenticationGuard)
   @Swagger.ApiOperation({ summary: 'Delete a Vocabulary List ressource.' })
   @Swagger.ApiOkResponse()
   async deleteVocabularyList(@Param('id') id: string) {
@@ -209,6 +232,7 @@ export class VocabularyController {
   }
 
   @Delete(':id')
+  @UseGuards(AuthenticationGuard)
   @Swagger.ApiOperation({ summary: 'Delete a Vocabulary ressource.' })
   @Swagger.ApiOkResponse()
   async deleteVocabulary(@Param('id') id: string) {

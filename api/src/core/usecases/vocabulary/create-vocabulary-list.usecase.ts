@@ -54,8 +54,8 @@ export class CreateVocabularyListUsecase {
     return vocabularyList;
   }
 
-  private async assertLanguageExist(id: string) {
-    const language = await this.languageRepository.ofCode(id);
+  private async assertLanguageExist(code: string) {
+    const language = await this.languageRepository.ofCode(code.toLowerCase());
 
     if (!language) {
       throw new RessourceDoesNotExist('Language does not exist');

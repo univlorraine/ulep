@@ -18,6 +18,8 @@ type VocabularyProps = {
   translation: string;
   pronunciationWord?: MediaObject;
   pronunciationTranslation?: MediaObject;
+  pronunciationWordUrl?: string;
+  pronunciationTranslationUrl?: string;
 };
 
 export class VocabularyList {
@@ -57,11 +59,17 @@ export class Vocabulary {
 
   pronunciationTranslation?: MediaObject;
 
+  pronunciationWordUrl?: string;
+
+  pronunciationTranslationUrl?: string;
+
   constructor(props: VocabularyProps) {
     this.id = props.id;
     this.word = props.word;
     this.translation = props.translation;
     this.pronunciationWord = props.pronunciationWord;
     this.pronunciationTranslation = props.pronunciationTranslation;
+    this.pronunciationWordUrl = props.pronunciationWordUrl;
+    this.pronunciationTranslationUrl = props.pronunciationTranslationUrl;
   }
 }

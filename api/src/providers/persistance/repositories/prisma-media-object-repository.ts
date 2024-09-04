@@ -16,17 +16,16 @@ export class PrismaMediaObjectRepository implements MediaObjectRepository {
     vocabularyId: string,
     isTranslation: boolean,
   ): Promise<MediaObject | null> {
-    const where: any = {};
-
+    let mediaObject: any;
     if (isTranslation) {
-      where.PronunciationTranslation = { id: vocabularyId };
+      mediaObject = await this.prisma.mediaObjects.findFirst({
+        where: { PronunciationTranslation: { id: vocabularyId } },
+      });
     } else {
-      where.PronunciationWord = { id: vocabularyId };
+      mediaObject = await this.prisma.mediaObjects.findFirst({
+        where: { PronunciationWord: { id: vocabularyId } },
+      });
     }
-
-    const mediaObject = await this.prisma.mediaObjects.findFirst({
-      where,
-    });
 
     if (!mediaObject) {
       return null;
@@ -55,22 +54,28 @@ export class PrismaMediaObjectRepository implements MediaObjectRepository {
     };
 
     if (isTranslation) {
-      data.PronunciationTranslation = {
-        connect: {
-          id: vocabularyId,
+      await this.prisma.mediaObjects.create({
+        data: {
+          ...data,
+          PronunciationTranslation: {
+            connect: {
+              id: vocabularyId,
+            },
+          },
         },
-      };
+      });
     } else {
-      data.PronunciationWord = {
-        connect: {
-          id: vocabularyId,
+      await this.prisma.mediaObjects.create({
+        data: {
+          ...data,
+          PronunciationWord: {
+            connect: {
+              id: vocabularyId,
+            },
+          },
         },
-      };
+      });
     }
-
-    await this.prisma.mediaObjects.create({
-      data,
-    });
   }
 
   async saveAvatar(user: User, object: MediaObject): Promise<void> {

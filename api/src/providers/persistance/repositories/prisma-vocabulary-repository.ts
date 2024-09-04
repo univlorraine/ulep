@@ -69,7 +69,7 @@ export class PrismaVocabularyRepository implements VocabularyRepository {
     const vocabularyLists = await this.prisma.vocabularyList.findMany({
       where: {
         Editors: {
-          some: {
+          every: {
             id: profileId,
           },
         },
@@ -123,6 +123,10 @@ export class PrismaVocabularyRepository implements VocabularyRepository {
       ...VocabularyListRelations,
     });
 
+    if (!vocabularyList) {
+      return null;
+    }
+
     return vocabularyListMapper(vocabularyList);
   }
 
@@ -133,6 +137,10 @@ export class PrismaVocabularyRepository implements VocabularyRepository {
       },
       ...VocabularyRelations,
     });
+
+    if (!vocabulary) {
+      return null;
+    }
 
     return vocabularyMapper(vocabulary);
   }

@@ -44,7 +44,13 @@ export class UploadAudioVocabularyUsecase {
       command.isTranslation,
     );
 
-    return audio;
+    const url = this.storageInterface.temporaryUrl(
+      audio.bucket,
+      audio.name,
+      60 * 60 * 24 * 7,
+    );
+
+    return url;
   }
 
   private async upload(
@@ -65,11 +71,9 @@ export class UploadAudioVocabularyUsecase {
         vocabulary,
         isTranslation,
       );
-
     if (previousVocabulary) {
       await this.deletePreviousSound(previousVocabulary);
     }
-
     await this.deletePreviousSound(sound);
     await this.storageInterface.write(sound.bucket, sound.name, file);
     await this.mediaObjectRepository.saveAudioVocabulary(
@@ -77,7 +81,6 @@ export class UploadAudioVocabularyUsecase {
       isTranslation,
       sound,
     );
-
     return sound;
   }
 

@@ -22,11 +22,11 @@ export class VocabularyResponse {
 
   @Swagger.ApiProperty({ type: () => MediaObjectResponse })
   @Expose({ groups: ['read'] })
-  pronunciationWord?: MediaObjectResponse;
+  pronunciationWordUrl?: string;
 
   @Swagger.ApiProperty({ type: () => MediaObjectResponse })
   @Expose({ groups: ['read'] })
-  pronunciationTranslation?: MediaObjectResponse;
+  pronunciationTranslationUrl?: string;
 
   constructor(partial: Partial<VocabularyResponse>) {
     Object.assign(this, partial);
@@ -37,14 +37,8 @@ export class VocabularyResponse {
       id: vocabulary.id,
       word: vocabulary.word,
       translation: vocabulary.translation,
-      pronunciationWord: vocabulary.pronunciationWord
-        ? MediaObjectResponse.fromMediaObject(vocabulary.pronunciationWord)
-        : undefined,
-      pronunciationTranslation: vocabulary.pronunciationTranslation
-        ? MediaObjectResponse.fromMediaObject(
-            vocabulary.pronunciationTranslation,
-          )
-        : undefined,
+      pronunciationWordUrl: vocabulary.pronunciationWordUrl,
+      pronunciationTranslationUrl: vocabulary.pronunciationTranslationUrl,
     });
   }
 }
