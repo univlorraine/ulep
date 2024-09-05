@@ -45,6 +45,16 @@ export class PrismaVocabularyRepository implements VocabularyRepository {
       data: {
         name: props.name,
         symbol: props.symbol,
+        Editors: {
+          connect: {
+            id: props.profileId,
+          },
+        },
+        Creator: {
+          connect: {
+            id: props.profileId,
+          },
+        },
         OriginalLanguage: {
           connect: {
             id: props.translationLanguageId,
@@ -162,7 +172,6 @@ export class PrismaVocabularyRepository implements VocabularyRepository {
   async updateVocabularyList(
     props: UpdateVocabularyListProps,
   ): Promise<VocabularyList> {
-    //Thought: Should we update the editors of the vocabulary list -- remove maybe ?
     const vocabularyList = await this.prisma.vocabularyList.update({
       where: {
         id: props.id,

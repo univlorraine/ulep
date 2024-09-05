@@ -28,6 +28,26 @@ export class VocabularyListResponse {
   @Expose({ groups: ['read'] })
   wordLanguage: LanguageResponse;
 
+  @Swagger.ApiProperty({ type: 'string' })
+  @Expose({ groups: ['read'] })
+  creatorId: string;
+
+  @Swagger.ApiProperty({ type: 'string' })
+  @Expose({ groups: ['read'] })
+  creatorName: string;
+
+  @Swagger.ApiProperty({ type: 'number' })
+  @Expose({ groups: ['read'] })
+  numberOfVocabularies: number;
+
+  @Swagger.ApiProperty({ type: 'number' })
+  @Expose({ groups: ['read'] })
+  missingPronunciationOfWords: number;
+
+  @Swagger.ApiProperty({ type: 'number' })
+  @Expose({ groups: ['read'] })
+  missingPronunciationOfTranslations: number;
+
   constructor(partial: Partial<VocabularyListResponse>) {
     Object.assign(this, partial);
   }
@@ -41,6 +61,15 @@ export class VocabularyListResponse {
       translationLanguage: LanguageResponse.fromLanguage(
         vocabularyList.translationLanguage,
       ),
+      creatorId: vocabularyList.creatorId,
+      creatorName: vocabularyList.creatorName,
+      numberOfVocabularies: vocabularyList.vocabularies.length,
+      missingPronunciationOfWords: vocabularyList.vocabularies.filter(
+        (vocabulary) => !vocabulary.pronunciationWord,
+      ).length,
+      missingPronunciationOfTranslations: vocabularyList.vocabularies.filter(
+        (vocabulary) => !vocabulary.pronunciationTranslation,
+      ).length,
     });
   }
 }

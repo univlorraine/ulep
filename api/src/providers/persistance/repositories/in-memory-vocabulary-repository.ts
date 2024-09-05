@@ -50,6 +50,8 @@ export class InMemoryVocabularyRepository implements VocabularyRepository {
       translationLanguage: null,
       wordLanguage: null,
       id: Date.now().toString(),
+      creatorId: props.profileId,
+      creatorName: 'test',
     });
     this.#vocabularyLists.push(vocabularyList);
     return vocabularyList;

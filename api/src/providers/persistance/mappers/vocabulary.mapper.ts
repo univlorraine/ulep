@@ -48,6 +48,7 @@ export const VocabularyListInclude =
   Prisma.validator<Prisma.VocabularyListInclude>()({
     OriginalLanguage: true,
     TranslationLanguage: true,
+    Creator: { include: ProfilesRelations },
     Editors: { include: ProfilesRelations },
     Vocabulary: VocabularyRelations,
   });
@@ -69,5 +70,7 @@ export const vocabularyListMapper = (
     vocabularies: snapshot.Vocabulary.map(vocabularyMapper),
     wordLanguage: languageMapper(snapshot.OriginalLanguage),
     translationLanguage: languageMapper(snapshot.TranslationLanguage),
+    creatorId: snapshot.Creator?.id,
+    creatorName: snapshot.Creator?.User.firstname,
   });
 };

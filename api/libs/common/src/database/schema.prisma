@@ -336,7 +336,8 @@ model Profiles {
   TestedLanguages   TestedLanguages[]
   Goals             LearningObjectives[]
   Interests         Interests[]
-  VocabularyList    VocabularyList[]
+  CreatorVocabularyList    VocabularyList[] @relation("Creator")
+  EditorVocabularyList    VocabularyList[]  @relation("Editor")
   @@unique([user_id])
   @@index([native_language_code_id], name: "native_language_code")
   @@map("profiles")
@@ -533,12 +534,14 @@ model VocabularyList {
   symbol              String
   created_at          DateTime      @default(now())
   updated_at          DateTime      @updatedAt
+  creator_id          String?
   original_language_code_id String
   translation_language_code_id String
 
-  OriginalLanguage    LanguageCodes @relation("OriginalLanguage", fields: [original_language_code_id], references: [id], onDelete: Cascade)
-  TranslationLanguage    LanguageCodes @relation("TranslationLanguage", fields: [translation_language_code_id], references: [id], onDelete: Cascade)
-  Editors               Profiles[]
+  OriginalLanguage    LanguageCodes         @relation("OriginalLanguage", fields: [original_language_code_id], references: [id], onDelete: Cascade)
+  TranslationLanguage    LanguageCodes      @relation("TranslationLanguage", fields: [translation_language_code_id], references: [id], onDelete: Cascade)
+  Creator               Profiles?            @relation("Creator", fields: [creator_id], references: [id])
+  Editors               Profiles[]          @relation("Editor")
   Vocabulary          Vocabulary[]
 
   @@map("vocabulary_list")
