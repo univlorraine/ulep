@@ -58,7 +58,6 @@ import TrophiePng from './trophie.png';
 import AvatarPlaceholderPng from './user_placeholder.png';
 import VocabularySvg from './vocabulary.svg';
 import WritingSkillPng from './writing_skill.png';
-
 export {
     AddSvg,
     AdviceSvg,

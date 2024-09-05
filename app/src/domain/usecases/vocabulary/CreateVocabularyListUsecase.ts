@@ -16,7 +16,7 @@ class CreateVocabularyListUsecase implements CreateVocabularyListUsecaseInterfac
                 {
                     name: command.name,
                     symbol: command.symbol,
-                    profileIds: command.profileId,
+                    profileId: command.profileId,
                     wordLanguageCode: command.wordLanguageCode,
                     translationLanguageCode: command.translationLanguageCode,
                 }

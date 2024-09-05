@@ -1,14 +1,17 @@
 import VocabularyList from '../domain/entities/VocabularyList';
 import LanguageCommand, { languageCommandToDomain } from './LanguageCommand';
-import ProfileCommand, { profileCommandToDomain } from './ProfileCommand';
 
 interface VocabularyListCommand {
     id: string;
     name: string;
     symbol: string;
-    profiles: ProfileCommand[];
     wordLanguage: LanguageCommand;
     translationLanguage: LanguageCommand;
+    creatorId: string;
+    creatorName: string;
+    missingPronunciationOfWords: number;
+    missingPronunciationOfTranslations: number;
+    numberOfVocabularies: number;
 }
 
 export const vocabularyListCommandToDomain = (command: VocabularyListCommand) => {
@@ -16,9 +19,13 @@ export const vocabularyListCommandToDomain = (command: VocabularyListCommand) =>
         command.id,
         command.name,
         command.symbol,
-        command.profiles.map(profileCommandToDomain),
         languageCommandToDomain(command.wordLanguage),
-        languageCommandToDomain(command.translationLanguage)
+        languageCommandToDomain(command.translationLanguage),
+        command.creatorId,
+        command.creatorName,
+        command.missingPronunciationOfWords,
+        command.missingPronunciationOfTranslations,
+        command.numberOfVocabularies
     );
 };
 
