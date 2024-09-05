@@ -1,6 +1,7 @@
 import {
   Body,
   Controller,
+  Delete,
   Get,
   Param,
   ParseUUIDPipe,
@@ -26,6 +27,8 @@ import { News, NewsTranslation } from 'src/core/models';
 import { Collection } from '@app/common';
 import { CollectionResponse } from '../decorators';
 import {
+  DeleteNewsImageUsecase,
+  DeleteNewsUsecase,
   GetOneNewsUsecase,
   UpdateNewsUsecase,
   UploadNewsImageUsecase,
@@ -40,6 +43,8 @@ export class NewsController {
     private readonly createNewsUsecase: CreateNewsUsecase,
     private readonly updateNewsUsecase: UpdateNewsUsecase,
     private readonly uploadNewsImageUsecase: UploadNewsImageUsecase,
+    private readonly deleteNewsImageUsecase: DeleteNewsImageUsecase,
+    private readonly deleteNewsUsecase: DeleteNewsUsecase,
   ) {}
 
   @Get()
@@ -65,8 +70,6 @@ export class NewsController {
   @Swagger.ApiOkResponse({ type: NewsResponse })
   async findOne(@Param('id', ParseUUIDPipe) id: string) {
     const news = await this.getOneNewsUsecase.execute(id);
-
-    console.log({ news: news.translations });
 
     return NewsResponse.fromDomain(news);
   }
@@ -127,5 +130,18 @@ export class NewsController {
     }
 
     return NewsResponse.fromDomain(news);
+  }
+
+  @Delete(':id')
+  @UseGuards(AuthenticationGuard)
+  @Roles(Role.ADMIN)
+  @Swagger.ApiOperation({ summary: 'Update a News ressource.' })
+  @Swagger.ApiOkResponse()
+  @UseInterceptors(FileInterceptor('file'))
+  async delete(@Param('id', ParseUUIDPipe) id: string): Promise<void> {
+    await this.deleteNewsImageUsecase.execute({ id });
+    await this.deleteNewsUsecase.execute({ id });
+
+    return;
   }
 }

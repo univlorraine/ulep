@@ -10,4 +10,5 @@ export interface NewsRepository {
   ofId(id: string): Promise<News | null>;
   create(command: CreateNewsCommand): Promise<News>;
   update(command: UpdateNewsCommand): Promise<News>;
+  delete(id: string): Promise<void>;
 }

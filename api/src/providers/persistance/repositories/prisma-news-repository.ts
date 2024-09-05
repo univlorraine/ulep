@@ -156,5 +156,23 @@ export class PrismaNewsRepository implements NewsRepository {
     return newsMapper(news);
   }
 
+  async delete(id: string): Promise<void> {
+    const news = await this.prisma.news.findUnique({
+      where: {
+        id: id,
+      },
+      include: NewsRelations,
+    });
+
+    await this.prisma.news.delete({ where: { id } });
+
+    await this.prisma.textContent.delete({
+      where: { id: news.TitleTextContent.id },
+    });
+    await this.prisma.textContent.delete({
+      where: { id: news.ContentTextContent.id },
+    });
+  }
+
   private readonly logger = new Logger(PrismaNewsRepository.name);
 }

@@ -28,7 +28,7 @@ const NewsList = () => {
         <>
             <PageTitle>{translate('news.title')}</PageTitle>
             <List exporter={false}>
-                <Datagrid bulkActionButtons={false} rowClick="edit">
+                <Datagrid rowClick="edit">
                     <TextField label="news.list.title" source="title" />
                     <TextField label="news.list.university" source="university.name" />
                     <FunctionField
@@ -37,13 +37,11 @@ const NewsList = () => {
                     />
                     <FunctionField
                         label="news.list.translations"
-                        render={(record: any) => {
-                            console.log({ record });
-
-                            return record.translations
+                        render={(record: any) =>
+                            record.translations
                                 .map((translation: any) => codeLanguageToFlag(translation.languageCode))
-                                .join(', ');
-                        }}
+                                .join(', ')
+                        }
                     />
                     <FunctionField
                         label="news.list.status"

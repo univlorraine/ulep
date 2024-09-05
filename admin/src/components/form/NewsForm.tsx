@@ -18,8 +18,6 @@ const NewsForm: React.FC<NewsFormProps> = ({ handleSubmit }) => {
 
     const record: News = useRecordContext();
 
-    console.log({ record: record.translations });
-
     const [universityData, setUniversityData] = useState<University>(record?.university || undefined);
     const [title, setTitle] = useState<string>(record?.title || '');
     const [content, setContent] = useState<string>(record?.content || '');
@@ -70,7 +68,7 @@ const NewsForm: React.FC<NewsFormProps> = ({ handleSubmit }) => {
     useEffect(() => {
         const filteredAvailableLanguages = universitiesLanguages.filter(
             (language) =>
-                !translations?.some((translation) => translation.languageCode === language) &&
+                !translations?.some((translation) => translation?.languageCode === language) &&
                 language !== defaultLanguage
         );
         setAvailableLanguages(filteredAvailableLanguages);
@@ -263,7 +261,7 @@ const NewsForm: React.FC<NewsFormProps> = ({ handleSubmit }) => {
                         <Box sx={{ width: '100%', '& .RaLabeled-label': { display: 'none' } }}>
                             <Typography variant="subtitle1">Content</Typography>
                             <RichTextInput
-                                defaultValue={translation.content}
+                                defaultValue={translation.content || ''}
                                 onChange={(e: any) => {
                                     const filteredTranslation = translations?.filter(
                                         (originalTranslation) =>
