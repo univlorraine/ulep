@@ -33,10 +33,10 @@ export class UploadNewsImageUsecase {
 
   async execute(command: UploadNewsImageCommand) {
     const news = await this.tryToFindNews(command.id);
-    /*     const previousImage = await this.tryToFindTheImageOfNews(news);
+    const previousImage = await this.tryToFindTheImageOfNews(news);
     if (news) {
       await this.deletePreviousNewsImage(previousImage);
-    } */
+    }
 
     const image = await this.upload(news, command.file);
 
@@ -52,11 +52,9 @@ export class UploadNewsImageUsecase {
     return instance;
   }
 
-  /*   private tryToFindTheImageOfNews(
-    university: University,
-  ): Promise<MediaObject | null> {
-    return this.mediaObjectRepository.findOne(university.id);
-  } */
+  private tryToFindTheImageOfNews(news: News): Promise<MediaObject | null> {
+    return this.mediaObjectRepository.findOne(news.id);
+  }
 
   private async upload(
     news: News,
@@ -69,9 +67,9 @@ export class UploadNewsImageUsecase {
     return image;
   }
 
-  /*   private async deletePreviousObjectiveImage(image: MediaObject | null) {
+  private async deletePreviousNewsImage(image: MediaObject | null) {
     if (!image) return;
     await this.storageInterface.delete(image.bucket, image.name);
     await this.mediaObjectRepository.remove(image.id);
-  } */
+  }
 }

@@ -35,6 +35,43 @@ export class CreateNewsRequest {
   @IsString()
   status: NewsStatus;
 }
+
+export class UpdateNewsRequest {
+  @Swagger.ApiProperty({ type: 'string', format: 'uuid' })
+  @IsNotEmpty()
+  @IsUUID()
+  id: string;
+
+  @Swagger.ApiProperty({ type: 'string', format: 'uuid' })
+  @IsNotEmpty()
+  @IsUUID()
+  universityId: string;
+
+  @Swagger.ApiProperty({ type: 'string' })
+  @IsNotEmpty()
+  @IsString()
+  title: string;
+
+  @Swagger.ApiProperty({ type: 'string' })
+  @IsNotEmpty()
+  @IsString()
+  content: string;
+
+  @Swagger.ApiProperty({ type: 'string' })
+  @IsNotEmpty()
+  @IsString()
+  languageCode: string;
+
+  @Swagger.ApiPropertyOptional({ type: 'array' })
+  @IsOptional()
+  translations: string;
+
+  @Swagger.ApiProperty({ type: 'string' })
+  @IsNotEmpty()
+  @IsString()
+  status: NewsStatus;
+}
+
 export class NewsResponse {
   @Swagger.ApiProperty({ type: 'string', format: 'uuid' })
   @Expose({ groups: ['read'] })

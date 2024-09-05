@@ -266,6 +266,7 @@
         "password": "Mot de passe"
     },
     "news": {
+        "add_translation": "Ajouter une traduction",
         "label": "Actualités",
         "title": "Actualités",
         "remove_translation": "Supprimer la traduction",
@@ -276,6 +277,12 @@
             "label": "Statut",
             "PUBLISHED": "Publié",
             "DRAFT": "Brouillon"
+        },
+        "create": {
+            "cta": "Créer"
+        },
+        "update": {
+            "cta": "Mettre à jour"
         },
         "list": {
             "title": "Titre",

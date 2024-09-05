@@ -4,6 +4,7 @@ import { NewsRepository } from 'src/core/ports/news.repository';
 import { newsMapper, NewsRelations } from '../mappers/news.mapper';
 import { News, Translation } from 'src/core/models';
 import { CreateNewsCommand } from 'src/core/usecases/news/create-news.usecase';
+import { UpdateNewsCommand } from 'src/core/usecases/news/update-news.usecase';
 
 @Injectable()
 export class PrismaNewsRepository implements NewsRepository {
@@ -80,6 +81,74 @@ export class PrismaNewsRepository implements NewsRepository {
           },
         },
         status: command.status,
+      },
+      include: NewsRelations,
+    });
+
+    return newsMapper(news);
+  }
+
+  async update(command: UpdateNewsCommand): Promise<News> {
+    const titleTranslations: Translation[] = command.translations?.map(
+      (translation) => ({
+        language: translation.languageCode,
+        content: translation.title,
+      }),
+    );
+
+    const contentTranslations: Translation[] = command.translations?.map(
+      (translation) => ({
+        language: translation.languageCode,
+        content: translation.content,
+      }),
+    );
+
+    console.log({ contentTranslations });
+
+    await this.prisma.news.update({
+      where: {
+        id: command.id,
+      },
+      data: {
+        Organization: {
+          connect: {
+            id: command.universityId,
+          },
+        },
+        TitleTextContent: {
+          update: {
+            text: command.title,
+            LanguageCode: { connect: { code: command.languageCode } },
+            Translations: {
+              deleteMany: {},
+              create: titleTranslations.map((translation) => ({
+                text: translation.content,
+                LanguageCode: { connect: { code: translation.language } },
+              })),
+            },
+          },
+        },
+        ContentTextContent: {
+          update: {
+            text: command.content,
+            LanguageCode: { connect: { code: command.languageCode } },
+            Translations: {
+              deleteMany: {},
+              create: contentTranslations.map((translation) => ({
+                text: translation.content,
+                LanguageCode: { connect: { code: translation.language } },
+              })),
+            },
+          },
+        },
+        status: command.status,
+      },
+      include: NewsRelations,
+    });
+
+    const news = await this.prisma.news.findUnique({
+      where: {
+        id: command.id,
       },
       include: NewsRelations,
     });

@@ -28,7 +28,7 @@ const NewsList = () => {
         <>
             <PageTitle>{translate('news.title')}</PageTitle>
             <List exporter={false}>
-                <Datagrid bulkActionButtons={false}>
+                <Datagrid bulkActionButtons={false} rowClick="edit">
                     <TextField label="news.list.title" source="title" />
                     <TextField label="news.list.university" source="university.name" />
                     <FunctionField

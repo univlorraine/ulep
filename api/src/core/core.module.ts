@@ -141,6 +141,8 @@ import {
   GetNewsUsecase,
   CreateNewsUsecase,
   UploadNewsImageUsecase,
+  GetOneNewsUsecase,
+  UpdateNewsUsecase,
 } from './usecases';
 import { GetJitsiTokenUsecase } from './usecases/jitsi/get-jitsi-token.usecase';
 import { DeleteLearningLanguageUsecase } from './usecases/learningLanguage/delete-learning-langugage.usecase';
@@ -212,7 +214,9 @@ const usecases: Provider[] = [
   UploadUniversityDefaultCertificateUsecase,
   // News
   GetNewsUsecase,
+  GetOneNewsUsecase,
   CreateNewsUsecase,
+  UpdateNewsUsecase,
   UploadNewsImageUsecase,
   // Objectives
   CreateObjectiveUsecase,

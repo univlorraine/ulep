@@ -1,8 +1,8 @@
 import { Box, Checkbox, FormControlLabel, FormGroup, MenuItem, OutlinedInput, Select, Typography } from '@mui/material';
 import { RichTextInput } from 'ra-input-rich-text';
 import React, { useEffect, useState } from 'react';
-import { Button, Loading, TabbedForm, useGetIdentity, useGetList, useTranslate } from 'react-admin';
-import { NewsFormPayload, NewsStatus } from '../../entities/News';
+import { Button, Loading, TabbedForm, useGetIdentity, useGetList, useRecordContext, useTranslate } from 'react-admin';
+import { News, NewsFormPayload, NewsStatus, NewsTranslation } from '../../entities/News';
 import University from '../../entities/University';
 import customDataProvider from '../../providers/customDataProvider';
 import ImageUploader from '../ImageUploader';
@@ -11,30 +11,32 @@ interface NewsFormProps {
     handleSubmit: (payload: NewsFormPayload) => void;
 }
 
-type Translation = {
-    languageCode: string;
-    title: string;
-    content: string;
-};
-
 const NewsForm: React.FC<NewsFormProps> = ({ handleSubmit }) => {
     const dataProvider = customDataProvider;
     const { data: identity, isLoading: isLoadingIdentity } = useGetIdentity();
     const translate = useTranslate();
 
-    const [universityData, setUniversityData] = useState<University>();
-    const [title, setTitle] = useState<string>('');
-    const [content, setContent] = useState<string>('');
+    const record: News = useRecordContext();
+
+    console.log({ record: record.translations });
+
+    const [universityData, setUniversityData] = useState<University>(record?.university || undefined);
+    const [title, setTitle] = useState<string>(record?.title || '');
+    const [content, setContent] = useState<string>(record?.content || '');
     const [image, setImage] = useState<File | undefined>(undefined);
-    const [status, setStatus] = useState<NewsStatus>(NewsStatus.DRAFT);
+    const [status, setStatus] = useState<NewsStatus>(record?.status || NewsStatus.DRAFT);
     const [universitiesLanguages, setUniversitiesLanguages] = useState<string[]>([]);
     const [availableLanguages, setAvailableLanguages] = useState<string[]>([]);
-    const [defaultLanguage, setDefaultLanguage] = useState<string>('en');
+    const [defaultLanguage, setDefaultLanguage] = useState<string>(record?.languageCode || 'en');
     const [newTranslationLanguage, setNewTranslationLanguage] = useState<string>('');
-    const [translations, setTranslations] = useState<Translation[]>([]);
+    const [translations, setTranslations] = useState<NewsTranslation[]>(record?.translations || []);
     const { data: universitiesData } = useGetList<University>('universities');
 
     useEffect(() => {
+        if (record) {
+            return;
+        }
+
         async function fetchUniversityData(universityId: string) {
             const result = await dataProvider.getOne('universities', {
                 id: universityId,
@@ -44,6 +46,7 @@ const NewsForm: React.FC<NewsFormProps> = ({ handleSubmit }) => {
                 setDefaultLanguage(result.data.nativeLanguage.code);
             }
         }
+
         if (identity) {
             fetchUniversityData(identity.universityId);
         }
@@ -67,14 +70,27 @@ const NewsForm: React.FC<NewsFormProps> = ({ handleSubmit }) => {
     useEffect(() => {
         const filteredAvailableLanguages = universitiesLanguages.filter(
             (language) =>
-                !translations.some((translation) => translation.languageCode === language) &&
+                !translations?.some((translation) => translation.languageCode === language) &&
                 language !== defaultLanguage
         );
         setAvailableLanguages(filteredAvailableLanguages);
     }, [universitiesLanguages, translations, defaultLanguage]);
 
-    const onCreatePressed = () =>
-        handleSubmit({
+    const onCreatePressed = () => {
+        if (record) {
+            return handleSubmit({
+                id: record.id,
+                title,
+                content,
+                languageCode: defaultLanguage,
+                translations,
+                status,
+                universityId: identity?.universityId,
+                image,
+            });
+        }
+
+        return handleSubmit({
             title,
             content,
             languageCode: defaultLanguage,
@@ -83,6 +99,7 @@ const NewsForm: React.FC<NewsFormProps> = ({ handleSubmit }) => {
             universityId: identity?.universityId,
             image,
         });
+    };
 
     if (isLoadingIdentity || !identity) {
         return <Loading />;
@@ -110,7 +127,7 @@ const NewsForm: React.FC<NewsFormProps> = ({ handleSubmit }) => {
                     ))}
                 </Select>
                 <Button
-                    label="Ajouter une traduction"
+                    label={translate('news.add_translation')}
                     onClick={() => {
                         if (newTranslationLanguage) {
                             setTranslations([
@@ -123,7 +140,6 @@ const NewsForm: React.FC<NewsFormProps> = ({ handleSubmit }) => {
                     variant="contained"
                 />
             </Box>
-
             <TabbedForm>
                 <TabbedForm.Tab label={defaultLanguage} sx={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>
                     {availableLanguages.length > 0 && (
@@ -196,7 +212,7 @@ const NewsForm: React.FC<NewsFormProps> = ({ handleSubmit }) => {
                     </Box>
                 </TabbedForm.Tab>
 
-                {translations.map((translation) => (
+                {translations?.map((translation) => (
                     <TabbedForm.Tab
                         key={translation.languageCode}
                         label={translation.languageCode}
@@ -205,7 +221,7 @@ const NewsForm: React.FC<NewsFormProps> = ({ handleSubmit }) => {
                         <Box sx={{ display: 'flex', width: '100%', justifyContent: 'flex-end' }}>
                             <Button
                                 onClick={() => {
-                                    const filteredTranslation = translations.filter(
+                                    const filteredTranslation = translations?.filter(
                                         (originalTranslation) =>
                                             translation.languageCode !== originalTranslation.languageCode
                                     );
@@ -223,7 +239,7 @@ const NewsForm: React.FC<NewsFormProps> = ({ handleSubmit }) => {
                                 <OutlinedInput
                                     name="Title"
                                     onChange={(e: any) => {
-                                        const filteredTranslation = translations.filter(
+                                        const filteredTranslation = translations?.filter(
                                             (originalTranslation) =>
                                                 translation.languageCode !== originalTranslation.languageCode
                                         );
@@ -247,8 +263,9 @@ const NewsForm: React.FC<NewsFormProps> = ({ handleSubmit }) => {
                         <Box sx={{ width: '100%', '& .RaLabeled-label': { display: 'none' } }}>
                             <Typography variant="subtitle1">Content</Typography>
                             <RichTextInput
+                                defaultValue={translation.content}
                                 onChange={(e: any) => {
-                                    const filteredTranslation = translations.filter(
+                                    const filteredTranslation = translations?.filter(
                                         (originalTranslation) =>
                                             translation.languageCode !== originalTranslation.languageCode
                                     );
@@ -276,7 +293,7 @@ const NewsForm: React.FC<NewsFormProps> = ({ handleSubmit }) => {
                 type="button"
                 variant="contained"
             >
-                <span>CREATE</span>
+                <span>{record ? translate('news.update.cta') : translate('news.create.cta')}</span>
             </Button>
         </Box>
     );

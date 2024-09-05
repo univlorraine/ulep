@@ -154,6 +154,15 @@ const customDataProvider = {
             return { data: { ...data, id: params.id } };
         }
 
+        if (resource === 'news') {
+            return {
+                data: {
+                    ...data,
+                    translations: JSON.parse(data.translations),
+                },
+            };
+        }
+
         return { data };
     },
     delete: async (resource: string, params: DeleteParams) => {

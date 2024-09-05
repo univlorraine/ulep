@@ -264,6 +264,7 @@
         "password": "Password"
     },
     "news": {
+        "add_translation": "Add a translation",
         "label": "News",
         "title": "News",
         "remove_translation": "Remove translation",
@@ -274,6 +275,12 @@
             "label": "Status",
             "PUBLISHED": "Published",
             "DRAFT": "Draft"
+        },
+        "create": {
+            "cta": "Create"
+        },
+        "update": {
+            "cta": "Update"
         },
         "list": {
             "title": "Title",
