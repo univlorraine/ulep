@@ -4,6 +4,25 @@ import { Expose } from 'class-transformer';
 import { UniversityResponse } from '../universities';
 import { News, NewsStatus } from 'src/core/models';
 import { MediaObjectResponse } from '../medias';
+import { ApiPropertyOptional } from '@nestjs/swagger';
+
+export class GetNewsQuery {
+  @ApiPropertyOptional({ type: 'string' })
+  @IsOptional()
+  universityId?: string;
+
+  @ApiPropertyOptional({ type: 'string' })
+  @IsOptional()
+  title?: string;
+
+  @ApiPropertyOptional({ type: 'string' })
+  @IsOptional()
+  status?: NewsStatus;
+
+  @ApiPropertyOptional({ type: 'string' })
+  @IsOptional()
+  languageCode?: string;
+}
 
 export class CreateNewsRequest {
   @Swagger.ApiProperty({ type: 'string', format: 'uuid' })

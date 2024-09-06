@@ -5,14 +5,52 @@ import { newsMapper, NewsRelations } from '../mappers/news.mapper';
 import { News, Translation } from 'src/core/models';
 import { CreateNewsCommand } from 'src/core/usecases/news/create-news.usecase';
 import { UpdateNewsCommand } from 'src/core/usecases/news/update-news.usecase';
+import { GetNewsQuery } from 'src/api/dtos/news';
 
 @Injectable()
 export class PrismaNewsRepository implements NewsRepository {
   constructor(private readonly prisma: PrismaService) {}
-  async findAll(): Promise<Collection<News>> {
-    const count = await this.prisma.news.count({});
+  async findAll(query: GetNewsQuery): Promise<Collection<News>> {
+    const wherePayload: {} = query
+      ? {
+          Organization: {
+            id: query.universityId,
+          },
+          TitleTextContent: {
+            text: {
+              contains: query.title,
+            },
+            ...(query.languageCode && {
+              OR: [
+                {
+                  LanguageCode: {
+                    code: query.languageCode,
+                  },
+                },
+                {
+                  Translations: {
+                    some: {
+                      LanguageCode: { code: query.languageCode },
+                    },
+                  },
+                },
+              ],
+            }),
+          },
+          status: query.status,
+        }
+      : {};
+
     const news = await this.prisma.news.findMany({
+      where: wherePayload,
       include: NewsRelations,
+      orderBy: {
+        updated_at: 'desc',
+      },
+    });
+
+    const count = await this.prisma.news.count({
+      where: wherePayload,
     });
 
     return new Collection<News>({
@@ -102,8 +140,6 @@ export class PrismaNewsRepository implements NewsRepository {
         content: translation.content,
       }),
     );
-
-    console.log({ contentTranslations });
 
     await this.prisma.news.update({
       where: {

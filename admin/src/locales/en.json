@@ -287,7 +287,13 @@
             "university": "University",
             "defaultLanguage": "Default language",
             "translations": "Translations",
-            "status": "Status"
+            "status": "Status",
+            "filters": {
+                "university": "University",
+                "status": "Status",
+                "title": "Title",
+                "language": "Available language"
+            }
         }
     },
     "objectives": {

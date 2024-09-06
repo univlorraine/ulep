@@ -7,6 +7,7 @@ import {
   ParseUUIDPipe,
   Post,
   Put,
+  Query,
   UploadedFile,
   UseGuards,
   UseInterceptors,
@@ -18,6 +19,7 @@ import { GetNewsUsecase } from 'src/core/usecases/news/get-news.usecase';
 import { CreateNewsUsecase } from 'src/core/usecases/news/create-news.usecase';
 import {
   CreateNewsRequest,
+  GetNewsQuery,
   NewsResponse,
   UpdateNewsRequest,
 } from '../dtos/news';
@@ -54,9 +56,10 @@ export class NewsController {
   })
   @Swagger.ApiOkResponse({ type: NewsResponse })
   @CollectionResponse(NewsResponse)
-  async getCollection(): // @Query() params: GetNewsQueryParams,
-  Promise<Collection<NewsResponse>> {
-    const news = await this.getNewsUsecase.execute();
+  async getCollection(
+    @Query() query: GetNewsQuery,
+  ): Promise<Collection<NewsResponse>> {
+    const news = await this.getNewsUsecase.execute(query);
 
     return new Collection<NewsResponse>({
       items: news.items.map(NewsResponse.fromDomain),

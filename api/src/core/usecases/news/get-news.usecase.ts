@@ -1,4 +1,5 @@
 import { Inject, Injectable } from '@nestjs/common';
+import { GetNewsQuery } from 'src/api/dtos/news';
 import {
   NEWS_REPOSITORY,
   NewsRepository,
@@ -11,7 +12,7 @@ export class GetNewsUsecase {
     private readonly newsRepository: NewsRepository,
   ) {}
 
-  async execute() {
-    return this.newsRepository.findAll();
+  async execute(query: GetNewsQuery) {
+    return this.newsRepository.findAll(query);
   }
 }

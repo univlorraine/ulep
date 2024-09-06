@@ -21,6 +21,7 @@ import CountriesQuery from '../queries/CountriesQuery';
 import InterestsQuery from '../queries/InterestsQuery';
 import LanguagesQuery from '../queries/LanguagesQuery';
 import { LearningLanguageMatchesQuery, LearningLanguagesQuery } from '../queries/LearningLanguagesQuery';
+import NewsQuery from '../queries/NewsQuery';
 import ProfilesQuery from '../queries/ProfilesQuery';
 import ProfilesWithTandemsQuery from '../queries/ProfilesWithTandemsQuery';
 import QuestionsQuery from '../queries/QuestionsQuery';
@@ -146,21 +147,20 @@ const customDataProvider = {
 
         const data = await response.json();
 
-        if (resource === 'instance') {
-            return { data: { ...data, id: 'config' } };
-        }
-
-        if (resource === 'chat') {
-            return { data: { ...data, id: params.id } };
-        }
-
-        if (resource === 'news') {
-            return {
-                data: {
-                    ...data,
-                    translations: JSON.parse(data.translations),
-                },
-            };
+        switch (resource) {
+            case 'instance':
+                return { data: { ...data, id: 'config' } };
+            case 'chat':
+                return { data: { ...data, id: params.id } };
+            case 'news':
+                return {
+                    data: {
+                        ...data,
+                        translations: JSON.parse(data.translations),
+                    },
+                };
+            default:
+                break;
         }
 
         return { data };
@@ -233,6 +233,9 @@ const customDataProvider = {
             case 'learning-languages/matches':
                 url = new URL(`${process.env.REACT_APP_API_URL}/learning-languages/${params.filter.id}/matches`);
                 url.search = LearningLanguageMatchesQuery(params);
+                break;
+            case 'news':
+                url.search = NewsQuery(params);
                 break;
             default:
                 break;

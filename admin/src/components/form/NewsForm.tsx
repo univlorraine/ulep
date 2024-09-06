@@ -1,11 +1,12 @@
 import { Box, Checkbox, FormControlLabel, FormGroup, MenuItem, OutlinedInput, Select, Typography } from '@mui/material';
 import { RichTextInput } from 'ra-input-rich-text';
 import React, { useEffect, useState } from 'react';
-import { Button, Loading, TabbedForm, useGetIdentity, useGetList, useRecordContext, useTranslate } from 'react-admin';
+import { Button, Loading, TabbedForm, useGetIdentity, useRecordContext, useTranslate } from 'react-admin';
 import { News, NewsFormPayload, NewsStatus, NewsTranslation } from '../../entities/News';
 import University from '../../entities/University';
 import customDataProvider from '../../providers/customDataProvider';
 import ImageUploader from '../ImageUploader';
+import useGetUniversitiesLanguages from './useGetUniversitiesLanguages';
 
 interface NewsFormProps {
     handleSubmit: (payload: NewsFormPayload) => void;
@@ -15,6 +16,7 @@ const NewsForm: React.FC<NewsFormProps> = ({ handleSubmit }) => {
     const dataProvider = customDataProvider;
     const { data: identity, isLoading: isLoadingIdentity } = useGetIdentity();
     const translate = useTranslate();
+    const universitiesLanguages = useGetUniversitiesLanguages();
 
     const record: News = useRecordContext();
 
@@ -23,12 +25,10 @@ const NewsForm: React.FC<NewsFormProps> = ({ handleSubmit }) => {
     const [content, setContent] = useState<string>(record?.content || '');
     const [image, setImage] = useState<File | undefined>(undefined);
     const [status, setStatus] = useState<NewsStatus>(record?.status || NewsStatus.DRAFT);
-    const [universitiesLanguages, setUniversitiesLanguages] = useState<string[]>([]);
     const [availableLanguages, setAvailableLanguages] = useState<string[]>([]);
     const [defaultLanguage, setDefaultLanguage] = useState<string>(record?.languageCode || 'en');
     const [newTranslationLanguage, setNewTranslationLanguage] = useState<string>('');
     const [translations, setTranslations] = useState<NewsTranslation[]>(record?.translations || []);
-    const { data: universitiesData } = useGetList<University>('universities');
 
     useEffect(() => {
         if (record) {
@@ -49,21 +49,6 @@ const NewsForm: React.FC<NewsFormProps> = ({ handleSubmit }) => {
             fetchUniversityData(identity.universityId);
         }
     }, [identity]);
-
-    useEffect(() => {
-        if (universitiesData) {
-            const languages = new Set<string>(['en']);
-            universitiesData.forEach((university: University) => {
-                languages.add(university.nativeLanguage.code);
-                if (university.specificLanguagesAvailable) {
-                    university.specificLanguagesAvailable.forEach((specificLanguage) => {
-                        languages.add(specificLanguage.code);
-                    });
-                }
-            });
-            setUniversitiesLanguages(Array.from(languages));
-        }
-    }, [universitiesData]);
 
     useEffect(() => {
         const filteredAvailableLanguages = universitiesLanguages.filter(
