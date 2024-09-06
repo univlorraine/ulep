@@ -161,12 +161,8 @@ export class PrismaProfileRepository implements ProfileRepository {
       include: ProfilesRelations,
     });
 
-    const profilesWithLearningLanguages = profiles.filter(
-      (profile) => profile.LearningLanguages.length !== 0,
-    );
-
     return {
-      items: profilesWithLearningLanguages.map(profileMapper),
+      items: profiles.map(profileMapper),
       totalItems: count,
     };
   }

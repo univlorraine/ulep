@@ -1,5 +1,4 @@
-import React from 'react';
-import { useNotify, useRedirect, useCreate, Create, useTranslate } from 'react-admin';
+import { Create, useCreate, useNotify, useRedirect, useTranslate } from 'react-admin';
 import AdministratorForm from '../../components/form/AdministratorForm';
 import ConfigPagesHeader from '../../components/tabs/ConfigPagesHeader';
 import { AdministratorFormPayload } from '../../entities/Administrator';
@@ -39,6 +38,10 @@ const CreateAdministrator = () => {
 
                         if (error.message === 'email must be an email') {
                             return notify('administrators.create.error_email', { type: 'error' });
+                        }
+
+                        if (error.message) {
+                            return notify(error.message, { type: 'error' });
                         }
 
                         return notify('administrators.create.error', { type: 'error' });

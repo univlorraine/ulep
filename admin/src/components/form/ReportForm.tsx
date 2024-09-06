@@ -1,4 +1,4 @@
-import { Box, Typography, Input } from '@mui/material';
+import { Box, Typography, OutlinedInput } from '@mui/material';
 import React, { useState } from 'react';
 import { Button, useTranslate } from 'react-admin';
 import { ReportStatus } from '../../entities/Report';
@@ -20,32 +20,45 @@ const ReportForm: React.FC<ReportProps> = ({ handleSubmit, category, content, st
     const [newComment, setNewComment] = useState<string | undefined>(comment);
 
     return (
-        <Box sx={{ m: 4 }}>
-            <Typography variant="subtitle1">{translate(`global.firstname`)}</Typography>
-            <Typography variant="subtitle2">
-                {user?.firstname ? user.firstname : translate('global.deleted_user')}
-            </Typography>
-            <Typography variant="subtitle1">{translate(`global.lastname`)}</Typography>
-            <Typography variant="subtitle2">
-                {user?.lastname ? user.lastname : translate('global.deleted_user')}
-            </Typography>
-            <Typography variant="subtitle1">{translate(`global.email`)}</Typography>
-            <Typography variant="subtitle2">{user?.email ? user.email : translate('global.deleted_user')}</Typography>
-            <Typography variant="subtitle1">{translate(`reports.update.status`)}</Typography>
-            <ReportStatusPicker onChange={setNewStatus} value={newStatus} />
-            <Typography variant="subtitle1">{translate(`reports.category`)}</Typography>
-            <Typography variant="subtitle2">{category}</Typography>
-            <Typography variant="subtitle1">{translate(`global.content`)}</Typography>
-            <Typography variant="subtitle2">{content}</Typography>
+        <Box sx={{ margin: '32px', display: 'flex', flexDirection: 'column', gap: 2 }}>
+            <Box>
+                <Typography variant="subtitle1">{translate(`global.firstname`)}</Typography>
+                <Typography variant="subtitle2">
+                    {user?.firstname ? user.firstname : translate('global.deleted_user')}
+                </Typography>
+            </Box>
+            <Box>
+                <Typography variant="subtitle1">{translate(`global.lastname`)}</Typography>
+                <Typography variant="subtitle2">
+                    {user?.lastname ? user.lastname : translate('global.deleted_user')}
+                </Typography>
+            </Box>
+            <Box>
+                <Typography variant="subtitle1">{translate(`global.email`)}</Typography>
+                <Typography variant="subtitle2">
+                    {user?.email ? user.email : translate('global.deleted_user')}
+                </Typography>
+            </Box>
+            <Box>
+                <Typography variant="subtitle1">{translate(`reports.update.status`)}</Typography>
+                <ReportStatusPicker onChange={setNewStatus} value={newStatus} />
+            </Box>
+            <Box>
+                <Typography variant="subtitle1">{translate(`reports.category`)}</Typography>
+                <Typography variant="subtitle2">{category}</Typography>
+            </Box>
+            <Box>
+                <Typography variant="subtitle1">{translate(`global.content`)}</Typography>
+                <Typography variant="subtitle2">{content}</Typography>
+            </Box>
 
-            <Typography variant="subtitle1">{translate(`reports.update.comment`)}</Typography>
-            <Box alignItems="center" display="flex" flexDirection="row">
-                <Input
+            <Box>
+                <Typography variant="subtitle1">{translate(`reports.update.comment`)}</Typography>
+                <OutlinedInput
                     name="Content"
                     onChange={(e) => setNewComment(e.target.value)}
                     placeholder={translate('global.content')}
                     value={newComment}
-                    disableUnderline
                     multiline
                     required
                 />

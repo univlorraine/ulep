@@ -16,7 +16,7 @@ interface ChatInputSenderProps {
 
 const ChatInputSender: React.FC<ChatInputSenderProps> = ({ isBlocked, conversation, handleSendMessage }) => {
     const { t } = useTranslation();
-    const { cameraAdapter, fileAdapter, recorderAdapter, sendMessage, socketIoAdapter } = useConfig();
+    const { cameraAdapter, fileAdapter, recorderAdapter } = useConfig();
     const [showToast] = useIonToast();
     const [message, setMessage] = useState('');
     const [isRecording, setIsRecording] = useState<boolean>(false);
@@ -62,6 +62,14 @@ const ChatInputSender: React.FC<ChatInputSenderProps> = ({ isBlocked, conversati
             return;
         }
         const image = await cameraAdapter.getPictureFromGallery();
+
+        if (image && image.size > 10000000) {
+            return showToast({
+                message: t('errors.fileSizeExceed', { maxSize: 10 }),
+                duration: 5000,
+            });
+        }
+
         if (image) {
             setImageToSend(image);
             setMessage('');
@@ -73,6 +81,14 @@ const ChatInputSender: React.FC<ChatInputSenderProps> = ({ isBlocked, conversati
             return;
         }
         const file = await fileAdapter.getFile();
+
+        if (file && file.size > 10000000) {
+            return showToast({
+                message: t('errors.fileSizeExceed', { maxSize: 10 }),
+                duration: 5000,
+            });
+        }
+
         if (file) {
             setFileToSend(file);
         }

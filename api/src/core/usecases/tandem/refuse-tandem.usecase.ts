@@ -1,7 +1,8 @@
-import { EMAIL_GATEWAY, EmailGateway } from 'src/core/ports/email.gateway';
 import { Inject, Injectable, Logger } from '@nestjs/common';
-import { DomainError, RessourceDoesNotExist } from 'src/core/errors';
-import { RefusedTandem, Tandem, TandemStatus } from 'src/core/models';
+import { RessourceDoesNotExist } from 'src/core/errors';
+import { RefusedTandem, Tandem } from 'src/core/models';
+import { CHAT_SERVICE, ChatServicePort } from 'src/core/ports/chat.service';
+import { EMAIL_GATEWAY, EmailGateway } from 'src/core/ports/email.gateway';
 import {
   LEARNING_LANGUAGE_REPOSITORY,
   LearningLanguageRepository,
@@ -20,7 +21,6 @@ import {
 } from 'src/core/ports/university.repository';
 import { UUID_PROVIDER } from 'src/core/ports/uuid.provider';
 import { UuidProvider } from 'src/providers/services/uuid.provider';
-import { CHAT_SERVICE, ChatServicePort } from 'src/core/ports/chat.service';
 
 export type RefuseTandemCommand = {
   learningLanguageIds: string[];
@@ -73,11 +73,6 @@ export class RefuseTandemUsecase {
           ', ',
         )}`,
       );
-      if (existingTandem.status === TandemStatus.INACTIVE) {
-        throw new DomainError({
-          message: `University ${adminUniversityId} Can't refuse inactive tandem ${existingTandem.id}`,
-        });
-      }
 
       await this.tandemRepository.delete(existingTandem.id);
       this.sendTandemCancelledEmails(existingTandem);
