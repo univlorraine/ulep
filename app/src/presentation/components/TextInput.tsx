@@ -74,6 +74,7 @@ interface TextInputProps {
     maxLength?: number;
     fieldInfo?: JSX.Element;
     required?: boolean;
+    beforeInput?: React.ReactNode;
 }
 
 const TextInput: React.FC<TextInputProps> = ({
@@ -89,6 +90,7 @@ const TextInput: React.FC<TextInputProps> = ({
     maxLength,
     fieldInfo = null,
     required = false,
+    beforeInput,
 }) => {
     const [showPasword, setShowPassword] = useState<boolean>(false);
     const inputId = `input-${title}}`;
@@ -103,6 +105,7 @@ const TextInput: React.FC<TextInputProps> = ({
                     lines="none"
                     className={`${style['input-wrapper']} ${errorMessage ? style['input-error'] : style['input-text']}`}
                 >
+                    {beforeInput && <div>{beforeInput}</div>}
                     <IonInput
                         id={inputId}
                         aria-label={title}

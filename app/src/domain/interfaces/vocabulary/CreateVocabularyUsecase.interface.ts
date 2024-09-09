@@ -4,8 +4,8 @@ export type CreateVocabularyCommand = {
     word: string;
     translation: string;
     vocabularyListId: string;
-    pronunciationWord: File;
-    pronunciationTranslation: File;
+    wordPronunciation?: File;
+    translationPronunciation?: File;
 };
 
 interface CreateVocabularyUsecaseInterface {

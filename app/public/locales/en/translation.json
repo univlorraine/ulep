@@ -128,6 +128,31 @@
                 "origin_language_error": "The translation language is required",
                 "target_language_error": "The language to translate is required"
             }
+        },
+        "pair": {
+            "go_back": "Go back",
+            "menu": "Menu",
+            "share": "Share",
+            "export": "Export",
+            "empty": "You haven't created any vocabulary pair for this list yet.",
+            "create": "New word pair",
+            "aria-pressed": "Update vocabulary",
+            "search": "Search",
+            "add": {
+                "cancel": "Cancel",
+                "save": "Save",
+                "pronunciation": "Pronunciation",
+                "add_prounonciation": "Add",
+                "delete_prounonciation": "Delete",
+                "default_word": "Word",
+                "default_translation": "Translation",
+                "title": "New word pair",
+                "edit_title": "Edit word pair"
+            },
+            "update": {
+                "delete": "Delete",
+                "save": "Save"
+            }
         }
     },
     "chat": {

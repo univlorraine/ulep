@@ -133,6 +133,31 @@
                 "origin_language_error": "La langue de traduction est obligatoire",
                 "target_language_error": "La langue à traduire est obligatoire"
             }
+        },
+        "pair": {
+            "go_back": "Retour",
+            "menu": "Menu",
+            "share": "Partager",
+            "export": "Exporter",
+            "empty": "Tu n’as pas encore créé de de paire de vocabulaire pour cette liste",
+            "create": "Nouvelle pair de mots",
+            "search": "Rechercher",
+            "aria-pressed": "Mettre à jour le vocabulaire",
+            "add": {
+                "cancel": "Annuler",
+                "save": "Enregistrer",
+                "pronunciation": "Prononciation",
+                "add_prounonciation": "Ajouter",
+                "delete_prounonciation": "Supprimer",
+                "default_translation": "Traduction",
+                "default_word": "Mot",
+                "title": "Nouvelle pair de mots",
+                "edit_title": "Editer la pair de mots"
+            },
+            "update": {
+                "delete": "Supprimer",
+                "save": "Enregistrer"
+            }
         }
     },
     "chat": {

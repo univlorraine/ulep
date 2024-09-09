@@ -41,6 +41,7 @@ import SignUpLanguagesPage from '../pages/SignUpLanguagesPage';
 import SignUpPage from '../pages/SignUpPage';
 import SuspendedPage from '../pages/SuspendedPage';
 import VocabularyListPage from '../pages/VocabularyListPage';
+import VocabularyPage from '../pages/VocabularyPage';
 import WelcomePage from '../pages/WelcomePage';
 import CEFRQuizzEndPage from '../pages/cefr-quizz/CEFRQuizzEndPage';
 import CEFRQuizzLanguagePage from '../pages/cefr-quizz/CEFRQuizzLanguagePage';
@@ -196,6 +197,9 @@ const OfflineRouter: React.FC = () => {
                 {/* Vocabulary route */}
                 <PrivateRoute exact path="/vocabulary-list">
                     <VocabularyListPage />
+                </PrivateRoute>
+                <PrivateRoute exact path="/vocabulary">
+                    <VocabularyPage />
                 </PrivateRoute>
                 {/* Quizz route */}
                 <PrivateRoute exact path="/cefr/languages">

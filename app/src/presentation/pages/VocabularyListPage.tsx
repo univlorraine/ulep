@@ -3,6 +3,7 @@ import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Redirect, useHistory } from 'react-router';
 import { useConfig } from '../../context/ConfigurationContext';
+import VocabularyList from '../../domain/entities/VocabularyList';
 import { CreateVocabularyListCommand } from '../../domain/interfaces/vocabulary/CreateVocabularyListUsecase.interface';
 import { useStoreState } from '../../store/storeTypes';
 import VocabularyListContent from '../components/contents/VocabularyListContent';
@@ -35,6 +36,10 @@ const VocabularyListPage = () => {
         setShowAddVocabularyListModal(false);
     };
 
+    const onSelectVocabularyList = (vocabularyList: VocabularyList) => {
+        history.push(`/vocabulary`, { vocabularyList });
+    };
+
     if (error) {
         showToast({ message: t(error.message), duration: 5000 });
     }
@@ -50,7 +55,7 @@ const VocabularyListPage = () => {
                     <VocabularyListContent
                         goBack={() => history.goBack()}
                         onAddVocabularyList={() => setShowAddVocabularyListModal(true)}
-                        onSelectVocabularyList={() => console.log('onSelectVocabularyList')}
+                        onSelectVocabularyList={onSelectVocabularyList}
                         profile={profile}
                         vocabularyLists={vocabularyLists}
                         isLoading={isLoading}
@@ -71,18 +76,18 @@ const VocabularyListPage = () => {
             <OnlineWebLayout profile={profile}>
                 <VocabularyListContent
                     vocabularyLists={vocabularyLists}
-                    onAddVocabularyList={() => console.log('onAddVocabularyList')}
-                    onSelectVocabularyList={() => console.log('onSelectVocabularyList')}
+                    onAddVocabularyList={() => setShowAddVocabularyListModal(true)}
+                    onSelectVocabularyList={onSelectVocabularyList}
                     profile={profile}
                     isLoading={isLoading}
                 />
-                <AddVocabularyListModal
-                    isVisible={showAddVocabularyListModal}
-                    onClose={() => setShowAddVocabularyListModal(false)}
-                    onCreateVocabularyList={onCreateVocabularyList}
-                    profile={profile}
-                />
             </OnlineWebLayout>
+            <AddVocabularyListModal
+                isVisible={showAddVocabularyListModal}
+                onClose={() => setShowAddVocabularyListModal(false)}
+                onCreateVocabularyList={onCreateVocabularyList}
+                profile={profile}
+            />
         </>
     );
 };

@@ -8,10 +8,10 @@ import GetVocabulariesUsecaseInterface from '../../interfaces/vocabulary/GetVoca
 class GetVocabulariesUsecase implements GetVocabulariesUsecaseInterface {
     constructor(private readonly domainHttpAdapter: HttpAdapterInterface) {}
 
-    async execute(vocabularyListId: string): Promise<Vocabulary[] | Error> {
+    async execute(vocabularyListId: string, search?: string): Promise<Vocabulary[] | Error> {
         try {
             const httpResponse: HttpResponse<CollectionCommand<VocabularyCommand>> = await this.domainHttpAdapter.get(
-                `/vocabulary/${vocabularyListId}/`
+                `/vocabulary/${vocabularyListId}${search ? `?search=${search}` : ''}`
             );
 
             if (!httpResponse.parsedBody) {

@@ -8,6 +8,7 @@
     flex-direction: column;
     align-items: flex-start;
     width: 100%;
+    text-transform: none;
 }
 
 .title {
@@ -18,6 +19,7 @@
     line-height: 25px;
     text-align: left;
     margin-bottom: 4px;
+    text-transform: none;
 }
 
 .creator {
@@ -28,6 +30,7 @@
     line-height: 20px;
     text-align: left;
     margin-bottom: 4px;
+    text-transform: none;
 }
 
 .pronunciation {

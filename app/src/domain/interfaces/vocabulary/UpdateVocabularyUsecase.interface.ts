@@ -3,8 +3,10 @@ import Vocabulary from '../../entities/Vocabulary';
 export interface UpdateVocabularyCommand {
     word?: string;
     translation?: string;
-    pronunciationWord?: File;
-    pronunciationTranslation?: File;
+    wordPronunciation?: File;
+    translationPronunciation?: File;
+    deletePronunciationWord?: boolean;
+    deletePronunciationTranslation?: boolean;
 }
 
 interface UpdateVocabularyUsecaseInterface {

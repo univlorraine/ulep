@@ -11,16 +11,17 @@ class CreateVocabularyUsecase implements CreateVocabularyUsecaseInterface {
 
     async execute(command: CreateVocabularyCommand): Promise<Vocabulary | Error> {
         try {
-            const formData = new FormData();
-            formData.append('translation', command.translation);
-            formData.append('vocabularyListId', command.vocabularyListId);
-            formData.append('word', command.word);
+            const formData: CreateVocabularyCommand = {
+                translation: command.translation,
+                vocabularyListId: command.vocabularyListId,
+                word: command.word,
+            };
 
-            if (command.pronunciationWord) {
-                formData.append('pronunciationWord', command.pronunciationWord);
+            if (command.wordPronunciation) {
+                formData.wordPronunciation = command.wordPronunciation;
             }
-            if (command.pronunciationTranslation) {
-                formData.append('pronunciationTranslation', command.pronunciationTranslation);
+            if (command.translationPronunciation) {
+                formData.translationPronunciation = command.translationPronunciation;
             }
 
             const httpResponse: HttpResponse<VocabularyCommand> = await this.domainHttpAdapter.post(

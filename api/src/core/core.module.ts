@@ -38,6 +38,7 @@ import {
   CreateVocabularyListUsecase,
   CreateVocabularyUsecase,
   DeleteAdministratorUsecase,
+  DeleteAudioVocabularyUsecase,
   DeleteAvatarUsecase,
   DeleteInterestCategoryUsecase,
   DeleteInterestUsecase,
@@ -158,6 +159,7 @@ const usecases: Provider[] = [
   UpdateLanguageCodeUsecase,
   // Media
   GetMediaObjectUsecase,
+  DeleteAudioVocabularyUsecase,
   DeleteObjectiveImageUsecase,
   UploadAvatarUsecase,
   UploadAdminAvatarUsecase,

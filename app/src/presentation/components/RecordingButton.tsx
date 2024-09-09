@@ -6,7 +6,7 @@ import styles from './RecordingButton.module.css';
 
 interface RecordingButtonProps {
     mode: 'send' | 'record';
-    onSendPressed: () => void;
+    onSendPressed?: () => void;
     handleStartRecord: () => void;
     handleStopRecord: () => void;
     isBlocked: boolean;

@@ -51,7 +51,7 @@ import DeleteVocabularyListUsecase from '../domain/usecases/vocabulary/DeleteVoc
 import DeleteVocabularyUsecase from '../domain/usecases/vocabulary/DeleteVocabularyUsecase';
 import GetVocabulariesUsecase from '../domain/usecases/vocabulary/GetVocabulariesUsecase';
 import GetVocabularyListsUsecase from '../domain/usecases/vocabulary/GetVocabularyListsUsecase';
-import UpdateVocabularyListUsecase from '../domain/usecases/vocabulary/UpdateVocabularylISTUsecase';
+import UpdateVocabularyListUsecase from '../domain/usecases/vocabulary/UpdateVocabularyListUsecase';
 import UpdateVocabularyUsecase from '../domain/usecases/vocabulary/UpdateVocabularyUsecase';
 import { ConfigContextValueType } from './configurationContextTypes';
 

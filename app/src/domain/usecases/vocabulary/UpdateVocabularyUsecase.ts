@@ -11,23 +11,20 @@ class UpdateVocabularyUsecase implements UpdateVocabularyUsecaseInterface {
 
     async execute(id: string, command: UpdateVocabularyCommand): Promise<Vocabulary | Error> {
         try {
-            const formData = new FormData();
-            if (command.translation) {
-                formData.append('translation', command.translation);
+            const formData: UpdateVocabularyCommand = {
+                translation: command.translation,
+                word: command.word,
+                deletePronunciationWord: command.deletePronunciationWord,
+                deletePronunciationTranslation: command.deletePronunciationTranslation,
+            };
+            if (command.wordPronunciation) {
+                formData.wordPronunciation = command.wordPronunciation;
+            }
+            if (command.translationPronunciation) {
+                formData.translationPronunciation = command.translationPronunciation;
             }
 
-            if (command.word) {
-                formData.append('word', command.word);
-            }
-
-            if (command.pronunciationWord) {
-                formData.append('pronunciationWord', command.pronunciationWord);
-            }
-            if (command.pronunciationTranslation) {
-                formData.append('pronunciationTranslation', command.pronunciationTranslation);
-            }
-
-            const httpResponse: HttpResponse<VocabularyCommand> = await this.domainHttpAdapter.put(
+            const httpResponse: HttpResponse<VocabularyCommand> = await this.domainHttpAdapter.post(
                 `/vocabulary/${id}/`,
                 formData,
                 {},

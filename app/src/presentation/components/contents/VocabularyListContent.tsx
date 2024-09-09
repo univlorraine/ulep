@@ -40,14 +40,14 @@ const VocabularyListContent: React.FC<VocabularyListContentProps> = ({
             </div>
             <div className={styles.content}>
                 {!isLoading && vocabularyLists.length === 0 && (
-                    <>
-                        <IonImg alt="" aria-hidden src={VocabularySvg} />
-                        <p>{t('vocabulary.list.empty')}</p>
-                        <IonButton className="secondary-button" fill="clear" onClick={onAddVocabularyList}>
+                    <div className={styles.emptyContainer}>
+                        <IonImg alt="" aria-hidden className={styles.emptyImage} src={VocabularySvg} />
+                        <p className={styles.emptyText}>{t('vocabulary.list.empty')}</p>
+                        <IonButton className="tertiary-button" fill="clear" onClick={onAddVocabularyList}>
                             <IonIcon aria-hidden slot="start" name="add-outline" />
                             {t('vocabulary.list.create')}
                         </IonButton>
-                    </>
+                    </div>
                 )}
                 {!isLoading &&
                     vocabularyLists.length > 0 &&

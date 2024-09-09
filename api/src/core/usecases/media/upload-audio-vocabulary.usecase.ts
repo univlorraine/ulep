@@ -59,8 +59,11 @@ export class UploadAudioVocabularyUsecase {
     isTranslation: boolean,
   ): Promise<MediaObject> {
     const sound = new MediaObject({
-      id: vocabulary.id,
-      name: MediaObject.getFileName(vocabulary.id, file.mimetype),
+      id: `${vocabulary.id}-${isTranslation ? 'translation' : 'word'}`,
+      name: MediaObject.getFileName(
+        `${vocabulary.id}-${isTranslation ? 'translation' : 'word'}`,
+        file.mimetype,
+      ),
       bucket: 'vocabulary',
       mimetype: file.mimetype,
       size: file.size,

@@ -1,3 +1,4 @@
+export * from './delete-audio-vocabulary.usecase';
 export * from './delete-avatar.usecase';
 export * from './delete-objective-image.usecase';
 export * from './get-object.usecase';

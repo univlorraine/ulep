@@ -18,6 +18,7 @@ import { AuthenticationGuard } from 'src/api/guards';
 import {
   CreateVocabularyListUsecase,
   CreateVocabularyUsecase,
+  DeleteAudioVocabularyUsecase,
   DeleteVocabularyListUsecase,
   DeleteVocabularyUsecase,
   FindAllVocabularyFromListIdUsecase,
@@ -50,6 +51,7 @@ export class VocabularyController {
     private readonly updateVocabularyUsecase: UpdateVocabularyUsecase,
     private readonly deleteVocabularyUsecase: DeleteVocabularyUsecase,
     private readonly uploadAudioVocabularyUsecase: UploadAudioVocabularyUsecase,
+    private readonly deleteAudioVocabularyUsecase: DeleteAudioVocabularyUsecase,
   ) {}
 
   @Post('list')
@@ -68,8 +70,8 @@ export class VocabularyController {
   @UseGuards(AuthenticationGuard)
   @UseInterceptors(
     FileFieldsInterceptor([
-      { name: 'pronunciationWord', maxCount: 1 },
-      { name: 'pronunciationTranslation', maxCount: 1 },
+      { name: 'wordPronunciation', maxCount: 1 },
+      { name: 'translationPronunciation', maxCount: 1 },
     ]),
   )
   @Swagger.ApiOperation({ summary: 'Create a new Vocabulary ressource.' })
@@ -79,16 +81,16 @@ export class VocabularyController {
     @Body() body: CreateVocabularyRequest,
     @UploadedFiles()
     files?: {
-      pronunciationWord?: Express.Multer.File;
-      pronunciationTranslation?: Express.Multer.File;
+      wordPronunciation?: Express.Multer.File;
+      translationPronunciation?: Express.Multer.File;
     },
   ) {
     let vocabulary = await this.createVocabularyUsecase.execute({ ...body });
-    const { pronunciationWord, pronunciationTranslation } = files ?? {};
+    const { wordPronunciation, translationPronunciation } = files ?? {};
 
-    if (pronunciationWord && pronunciationWord[0]) {
+    if (wordPronunciation && wordPronunciation[0]) {
       const audioUrl = await this.uploadAudioVocabularyUsecase.execute({
-        file: pronunciationWord[0],
+        file: wordPronunciation[0],
         vocabularyId: vocabulary.id,
         isTranslation: false,
       });
@@ -96,9 +98,9 @@ export class VocabularyController {
       vocabulary.pronunciationWordUrl = audioUrl;
     }
 
-    if (pronunciationTranslation && pronunciationTranslation[0]) {
+    if (translationPronunciation && translationPronunciation[0]) {
       const audioUrl = await this.uploadAudioVocabularyUsecase.execute({
-        file: pronunciationTranslation,
+        file: translationPronunciation[0],
         vocabularyId: vocabulary.id,
         isTranslation: true,
       });
@@ -171,12 +173,12 @@ export class VocabularyController {
     return VocabularyListResponse.from(vocabularyList);
   }
 
-  @Put(':id')
+  @Post(':id')
   @UseGuards(AuthenticationGuard)
   @UseInterceptors(
     FileFieldsInterceptor([
-      { name: 'pronunciationWord', maxCount: 1 },
-      { name: 'pronunciationTranslation', maxCount: 1 },
+      { name: 'wordPronunciation', maxCount: 1 },
+      { name: 'translationPronunciation', maxCount: 1 },
     ]),
   )
   @Swagger.ApiOperation({ summary: 'Update a Vocabulary ressource.' })
@@ -187,8 +189,8 @@ export class VocabularyController {
     @Body() body: UpdateVocabularyRequest,
     @UploadedFiles()
     files?: {
-      pronunciationWord?: Express.Multer.File;
-      pronunciationTranslation?: Express.Multer.File;
+      wordPronunciation?: Express.Multer.File;
+      translationPronunciation?: Express.Multer.File;
     },
   ) {
     let vocabulary = await this.updateVocabularyUsecase.execute({
@@ -196,26 +198,36 @@ export class VocabularyController {
       ...body,
     });
 
-    const { pronunciationWord, pronunciationTranslation } = files ?? {};
+    const { wordPronunciation, translationPronunciation } = files ?? {};
 
-    if (pronunciationWord && pronunciationWord[0]) {
+    if (wordPronunciation && wordPronunciation[0]) {
       const url = await this.uploadAudioVocabularyUsecase.execute({
-        file: pronunciationWord[0],
+        file: wordPronunciation[0],
         vocabularyId: vocabulary.id,
         isTranslation: false,
       });
 
       vocabulary.pronunciationWordUrl = url;
+    } else if (body.deletePronunciationWord) {
+      await this.deleteAudioVocabularyUsecase.execute({
+        vocabularyId: vocabulary.id,
+        isTranslation: false,
+      });
     }
 
-    if (pronunciationTranslation && pronunciationTranslation[0]) {
+    if (translationPronunciation && translationPronunciation[0]) {
       const url = await this.uploadAudioVocabularyUsecase.execute({
-        file: pronunciationTranslation[0],
+        file: translationPronunciation[0],
         vocabularyId: vocabulary.id,
         isTranslation: true,
       });
 
       vocabulary.pronunciationTranslationUrl = url;
+    } else if (body.deletePronunciationTranslation) {
+      await this.deleteAudioVocabularyUsecase.execute({
+        vocabularyId: vocabulary.id,
+        isTranslation: true,
+      });
     }
 
     return VocabularyResponse.from(vocabulary);
