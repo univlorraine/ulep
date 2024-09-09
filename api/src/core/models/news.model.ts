@@ -47,6 +47,7 @@ export class News {
     university,
     createdAt,
     updatedAt,
+    status,
   }: NewsProps) {
     this.id = id;
     this.title = title;
@@ -57,5 +58,6 @@ export class News {
     this.university = university;
     this.createdAt = createdAt;
     this.updatedAt = updatedAt;
+    this.status = status;
   }
 }
