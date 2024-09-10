@@ -43,6 +43,10 @@ export class InMemoryUserRepository implements UserRepository {
     };
   }
 
+  async findByUniversityId(universityId: string): Promise<User[]> {
+    return this.#users.filter((user) => user.university?.id === universityId);
+  }
+
   async ofId(id: string): Promise<User> {
     return this.#users.find((user) => user.id === id);
   }

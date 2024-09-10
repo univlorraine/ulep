@@ -20,6 +20,7 @@ import {
   DeleteUniversityUsecase,
   GetPartnersToUniversityUsecase,
   GetUniversitiesUsecase,
+  GetUniversityDivisionsUsecase,
   GetUniversityUsecase,
   UpdateUniversityUsecase,
 } from '../../core/usecases/university';
@@ -50,6 +51,7 @@ export class UniversityController {
     private readonly updateUniversityUsecase: UpdateUniversityUsecase,
     private readonly deleteUniversityUsecase: DeleteUniversityUsecase,
     private readonly uploadUniversityImageUsecase: UploadUniversityImageUsecase,
+    private readonly getUniversityDivisionsUsecase: GetUniversityDivisionsUsecase,
   ) {}
 
   @Post()
@@ -197,5 +199,13 @@ export class UniversityController {
   @Swagger.ApiOkResponse()
   remove(@Param('id') id: string) {
     return this.deleteUniversityUsecase.execute({ id });
+  }
+
+  @Get(':id/divisions')
+  @SerializeOptions({ groups: ['read', 'university:read'] })
+  @Swagger.ApiOperation({ summary: 'Collection of University ressource.' })
+  @Swagger.ApiOkResponse({ type: String, isArray: true })
+  async getUniversityDivisions(@Param('id') id: string) {
+    return await this.getUniversityDivisionsUsecase.execute(id);
   }
 }

@@ -538,6 +538,10 @@
                 },
                 "learningLanguage": {
                     "label": "Language"
+                },
+                "division": {
+                    "label": "Division",
+                    "fetchError": "An error occured while loading divisions"
                 }
             },
             "globalRoutineModal": {
