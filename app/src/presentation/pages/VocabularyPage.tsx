@@ -1,14 +1,16 @@
 import { IonContent, useIonToast } from '@ionic/react';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Redirect, useHistory, useLocation } from 'react-router';
 import { useConfig } from '../../context/ConfigurationContext';
+import Profile from '../../domain/entities/Profile';
 import Vocabulary from '../../domain/entities/Vocabulary';
 import VocabularyList from '../../domain/entities/VocabularyList';
 import { useStoreState } from '../../store/storeTypes';
 import CreateOrUpdateVocabularyContent from '../components/contents/CreateOrUpdateVocabularyContent';
 import VocabularyContent from '../components/contents/VocabularyContent';
 import OnlineWebLayout from '../components/layout/OnlineWebLayout';
+import ShareVocabularyListModal from '../components/modals/ShareVocabularyListModale';
 import useGetVocabulary from '../hooks/useGetVocabulary';
 import useWindowDimensions from '../hooks/useWindowDimensions';
 import { HYBRID_MAX_WIDTH } from '../utils';
@@ -19,7 +21,7 @@ interface VocabularyPageProps {
 
 const VocabularyPage = () => {
     const { t } = useTranslation();
-    const { createVocabulary, deleteVocabulary, updateVocabulary } = useConfig();
+    const { createVocabulary, getAllTandems, deleteVocabulary, updateVocabulary, updateVocabularyList } = useConfig();
     const history = useHistory();
     const location = useLocation<VocabularyPageProps>();
     const { vocabularyList } = location.state;
@@ -31,6 +33,9 @@ const VocabularyPage = () => {
     const [selectedVocabulary, setSelectedVocabulary] = useState<Vocabulary>();
     const [search, setSearch] = useState('');
     const [refresh, setRefresh] = useState(false);
+    const [profilesTandems, setProfilesTandems] = useState<Profile[]>([]);
+    const [showShareVocabularyListModal, setShowShareVocabularyListModal] = useState(false);
+
     const { vocabulary, error, isLoading } = useGetVocabulary(vocabularyList, search, refresh);
 
     const onAddOrUpdateVocabulary = (vocabulary?: Vocabulary) => {
@@ -121,6 +126,36 @@ const VocabularyPage = () => {
         setAddContent(false);
     };
 
+    const onShareVocabularyList = async (profiles: Profile[]) => {
+        const result = await updateVocabularyList.execute(vocabularyList.id, {
+            profileIds: profiles.map((profile) => profile.id),
+        });
+
+        if (result instanceof Error) {
+            return showToast({ message: t(result.message), duration: 5000 });
+        }
+
+        setRefresh(!refresh);
+        setShowShareVocabularyListModal(false);
+    };
+
+    const getProfilesTandems = async () => {
+        if (!profile) {
+            return [];
+        }
+        const tandems = await getAllTandems.execute(profile.id);
+
+        if (tandems instanceof Error) {
+            return [];
+        }
+
+        setProfilesTandems(tandems.filter((tandem) => tandem.partner).map((tandem) => tandem.partner) as Profile[]);
+    };
+
+    useEffect(() => {
+        getProfilesTandems();
+    }, [profile]);
+
     if (error) {
         showToast({ message: t(error.message), duration: 5000 });
     }
@@ -142,6 +177,7 @@ const VocabularyPage = () => {
                             goBack={() => history.goBack()}
                             onAddVocabulary={onAddOrUpdateVocabulary}
                             onSearch={setSearch}
+                            onShareVocabularyList={() => setShowShareVocabularyListModal(true)}
                         />
                     ) : (
                         <CreateOrUpdateVocabularyContent
@@ -153,6 +189,13 @@ const VocabularyPage = () => {
                         />
                     )}
                 </IonContent>
+                <ShareVocabularyListModal
+                    isVisible={showShareVocabularyListModal}
+                    onClose={() => setShowShareVocabularyListModal(false)}
+                    onShareVocabularyList={onShareVocabularyList}
+                    tandemsProfiles={profilesTandems}
+                    vocabularyList={vocabularyList}
+                />
             </>
         );
     }
@@ -169,6 +212,7 @@ const VocabularyPage = () => {
                         goBack={() => history.goBack()}
                         onAddVocabulary={onAddOrUpdateVocabulary}
                         onSearch={setSearch}
+                        onShareVocabularyList={() => setShowShareVocabularyListModal(true)}
                     />
                 ) : (
                     <CreateOrUpdateVocabularyContent
@@ -180,6 +224,13 @@ const VocabularyPage = () => {
                     />
                 )}
             </OnlineWebLayout>
+            <ShareVocabularyListModal
+                isVisible={showShareVocabularyListModal}
+                onClose={() => setShowShareVocabularyListModal(false)}
+                onShareVocabularyList={onShareVocabularyList}
+                tandemsProfiles={profilesTandems}
+                vocabularyList={vocabularyList}
+            />
         </>
     );
 };

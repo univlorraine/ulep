@@ -127,12 +127,17 @@
                 "name_error": "The name is required",
                 "origin_language_error": "The translation language is required",
                 "target_language_error": "The language to translate is required"
+            },
+            "share": {
+                "cancel": "Cancel",
+                "create": "Validate",
+                "title": "With whom do you want to share?"
             }
         },
         "pair": {
             "go_back": "Go back",
             "menu": "Menu",
-            "share": "Share",
+            "share_button": "Share",
             "export": "Export",
             "empty": "You haven't created any vocabulary pair for this list yet.",
             "create": "New word pair",
@@ -152,7 +157,9 @@
             "update": {
                 "delete": "Delete",
                 "save": "Save"
-            }
+            },
+            "without_pronunciation": "Pronunciation(s) to record",
+            "every_pronunciation": "Every pair"
         }
     },
     "chat": {

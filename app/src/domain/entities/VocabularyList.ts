@@ -5,6 +5,7 @@ class VocabularyList {
         public readonly id: string,
         public readonly name: string,
         public readonly symbol: string,
+        public readonly editorsIds: string[],
         public readonly wordLanguage: Language,
         public readonly translationLanguage: Language,
         public readonly creatorId: string,

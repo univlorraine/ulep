@@ -12,6 +12,7 @@ interface VocabularyListCommand {
     missingPronunciationOfWords: number;
     missingPronunciationOfTranslations: number;
     numberOfVocabularies: number;
+    editorsIds: string[];
 }
 
 export const vocabularyListCommandToDomain = (command: VocabularyListCommand) => {
@@ -19,6 +20,7 @@ export const vocabularyListCommandToDomain = (command: VocabularyListCommand) =>
         command.id,
         command.name,
         command.symbol,
+        command.editorsIds,
         languageCommandToDomain(command.wordLanguage),
         languageCommandToDomain(command.translationLanguage),
         command.creatorId,

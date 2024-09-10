@@ -57,12 +57,12 @@ export class PrismaVocabularyRepository implements VocabularyRepository {
         },
         OriginalLanguage: {
           connect: {
-            id: props.translationLanguageId,
+            id: props.wordLanguageId,
           },
         },
         TranslationLanguage: {
           connect: {
-            id: props.wordLanguageId,
+            id: props.translationLanguageId,
           },
         },
       },
@@ -79,7 +79,7 @@ export class PrismaVocabularyRepository implements VocabularyRepository {
     const vocabularyLists = await this.prisma.vocabularyList.findMany({
       where: {
         Editors: {
-          every: {
+          some: {
             id: profileId,
           },
         },

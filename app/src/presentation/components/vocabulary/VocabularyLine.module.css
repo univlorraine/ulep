@@ -28,7 +28,7 @@
 .translation {
     font-family: Maven Pro;
     font-size: 16px;
-    font-weight: 500;
+    font-weight: 900;
     line-height: 20px;
     text-align: left;
     margin-bottom: 4px;
@@ -37,7 +37,7 @@
 .word {
     font-family: Maven Pro;
     font-size: 16px;
-    font-weight: 400;
+    font-weight: 300;
     line-height: 20px;
     text-align: left;
 }

@@ -132,12 +132,17 @@
                 "name_error": "Le nom est obligatoire",
                 "origin_language_error": "La langue de traduction est obligatoire",
                 "target_language_error": "La langue à traduire est obligatoire"
+            },
+            "share": {
+                "cancel": "Annuler",
+                "create": "Valider",
+                "title": "À qui souhaitez-vous partager ?"
             }
         },
         "pair": {
             "go_back": "Retour",
             "menu": "Menu",
-            "share": "Partager",
+            "share_button": "Partager",
             "export": "Exporter",
             "empty": "Tu n’as pas encore créé de de paire de vocabulaire pour cette liste",
             "create": "Nouvelle pair de mots",
@@ -157,7 +162,9 @@
             "update": {
                 "delete": "Supprimer",
                 "save": "Enregistrer"
-            }
+            },
+            "without_pronunciation": "Prononciation(s) à enregistrer",
+            "every_pronunciation": "Toutes les pairs"
         }
     },
     "chat": {

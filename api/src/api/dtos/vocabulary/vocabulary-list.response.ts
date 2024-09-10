@@ -24,6 +24,10 @@ export class VocabularyListResponse {
   @Expose({ groups: ['read'] })
   translationLanguage: LanguageResponse;
 
+  @Swagger.ApiProperty({ type: 'string' })
+  @Expose({ groups: ['read'] })
+  editorsIds: string[];
+
   @Swagger.ApiProperty({ type: () => LanguageResponse })
   @Expose({ groups: ['read'] })
   wordLanguage: LanguageResponse;
@@ -57,6 +61,7 @@ export class VocabularyListResponse {
       id: vocabularyList.id,
       name: vocabularyList.name,
       symbol: vocabularyList.symbol,
+      editorsIds: vocabularyList.profiles.map((profile) => profile.id),
       wordLanguage: LanguageResponse.fromLanguage(vocabularyList.wordLanguage),
       translationLanguage: LanguageResponse.fromLanguage(
         vocabularyList.translationLanguage,
