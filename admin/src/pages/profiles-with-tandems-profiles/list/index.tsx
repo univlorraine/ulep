@@ -25,6 +25,7 @@ import { LearningLanguageWithTandemWithPartnerProfile } from '../../../entities/
 import { getProfileDisplayName } from '../../../entities/Profile';
 import { ProfileWithTandemsProfiles } from '../../../entities/ProfileWithTandemsProfiles';
 import { TandemStatus } from '../../../entities/Tandem';
+import { UserStatus } from '../../../entities/User';
 import codeLanguageToFlag from '../../../utils/codeLanguageToFlag';
 import isAgeCriterionMet from '../../../utils/isAgeCriterionMet';
 import hasTandemManagementPermission from '../hasTandemManagementPermission';
@@ -180,22 +181,28 @@ const LearningLanguageList = () => {
                                                         sx={{ margin: '10px' }}
                                                     />
                                                 )}
-                                                <Box sx={{ display: 'flex', flexDirection: 'column' }}>
-                                                    {getProfileDisplayName(
-                                                        learningLanguage.tandem.partnerLearningLanguage.profile
-                                                    )}{' '}
-                                                    (
-                                                    {codeLanguageToFlag(
-                                                        learningLanguage.tandem.partnerLearningLanguage.profile
-                                                            .nativeLanguage.code
-                                                    )}
-                                                    )
-                                                    <Typography sx={{ color: '#767676' }}>
-                                                        {
-                                                            learningLanguage.tandem.partnerLearningLanguage.profile.user
-                                                                .university.name
-                                                        }
-                                                    </Typography>
+                                                <Box sx={{ display: 'flex', gap: '20px', alignItems: 'center' }}>
+                                                    <Box sx={{ display: 'flex', flexDirection: 'column' }}>
+                                                        {getProfileDisplayName(
+                                                            learningLanguage.tandem.partnerLearningLanguage.profile
+                                                        )}{' '}
+                                                        (
+                                                        {codeLanguageToFlag(
+                                                            learningLanguage.tandem.partnerLearningLanguage.profile
+                                                                .nativeLanguage.code
+                                                        )}
+                                                        )
+                                                        <Typography sx={{ color: '#767676' }}>
+                                                            {
+                                                                learningLanguage.tandem.partnerLearningLanguage.profile
+                                                                    .user.university.name
+                                                            }
+                                                        </Typography>
+                                                    </Box>
+                                                    {learningLanguage.tandem.partnerLearningLanguage.profile.user
+                                                        .status === UserStatus.BANNED ? (
+                                                        <ColoredChips color="error" label="Banned" />
+                                                    ) : null}
                                                 </Box>
                                             </Box>
                                         );
