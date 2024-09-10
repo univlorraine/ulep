@@ -134,7 +134,9 @@ const TandemCard = ({
             />
 
             {(!partnerLearningLanguage ||
-                (partnerType === PartnerType.BEST_OVERALL && tandem?.status === TandemStatus.INACTIVE)) && (
+                (partnerType === PartnerType.BEST_OVERALL &&
+                    tandem?.status === TandemStatus.INACTIVE &&
+                    partnerLearningLanguage.profile.user.status !== UserStatus.BANNED)) && (
                 <Box>{translate('learning_languages.show.tandems.globalSuggestions.noResult')}</Box>
             )}
 
