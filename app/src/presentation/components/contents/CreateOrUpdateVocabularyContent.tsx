@@ -211,12 +211,12 @@ const CreateOrUpdateVocabularyContent: React.FC<CreateOrUpdateVocabularyContentP
             </div>
             {!vocabulary ? (
                 <div className={`${styles.buttonContainer} ${styles.buttonCreateContainer}`}>
-                    <IonButton fill="clear" className="tertiary-button" onClick={goBack}>
+                    <IonButton fill="clear" className="tertiary-button no-padding" onClick={goBack}>
                         {t('vocabulary.pair.add.cancel')}
                     </IonButton>
                     <IonButton
                         fill="clear"
-                        className={`primary-button ${!word && !translation ? 'disabled' : ''}`}
+                        className={`primary-button no-padding ${!word && !translation ? 'disabled' : ''}`}
                         onClick={() =>
                             onSubmit(word, translation, undefined, wordPronunciation, translationPronunciation)
                         }
@@ -228,7 +228,7 @@ const CreateOrUpdateVocabularyContent: React.FC<CreateOrUpdateVocabularyContentP
                 <div className={styles.buttonContainer}>
                     <IonButton
                         fill="clear"
-                        className="primary-button"
+                        className="primary-button no-padding"
                         onClick={() =>
                             onSubmit(
                                 word,
@@ -243,7 +243,11 @@ const CreateOrUpdateVocabularyContent: React.FC<CreateOrUpdateVocabularyContentP
                     >
                         {t('vocabulary.pair.update.save')}
                     </IonButton>
-                    <IonButton fill="clear" className="secondary-button" onClick={() => onDelete(vocabulary.id)}>
+                    <IonButton
+                        fill="clear"
+                        className="secondary-button no-padding"
+                        onClick={() => onDelete(vocabulary.id)}
+                    >
                         {t('vocabulary.pair.update.delete')}
                     </IonButton>
                 </div>
@@ -253,6 +257,3 @@ const CreateOrUpdateVocabularyContent: React.FC<CreateOrUpdateVocabularyContentP
 };
 
 export default CreateOrUpdateVocabularyContent;
-function useToast(): { showToast: any } {
-    throw new Error('Function not implemented.');
-}

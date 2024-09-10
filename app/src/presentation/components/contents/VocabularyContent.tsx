@@ -8,11 +8,13 @@ import {
     IonList,
     IonPopover,
     IonSearchbar,
+    useIonToast,
 } from '@ionic/react';
 import { arrowRedoOutline, downloadOutline } from 'ionicons/icons';
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { AddSvg, KebabSvg, LeftChevronSvg, VocabularySvg } from '../../../assets';
+import { useConfig } from '../../../context/ConfigurationContext';
 import Profile from '../../../domain/entities/Profile';
 import Vocabulary from '../../../domain/entities/Vocabulary';
 import VocabularyList from '../../../domain/entities/VocabularyList';
@@ -41,11 +43,20 @@ const VocabularyContent: React.FC<VocabularyContentProps> = ({
     onShareVocabularyList,
 }) => {
     const { t } = useTranslation();
+    const [showToast] = useIonToast();
+    const { getVocabularyListPdf } = useConfig();
     const [showMenu, setShowMenu] = useState(false);
     const [search, setSearch] = useState('');
 
-    const exportToPdf = () => {
-        console.log('export to pdf');
+    const exportToPdf = async () => {
+        const result = await getVocabularyListPdf.execute(vocabularyList.id);
+
+        if (result instanceof Error) {
+            return showToast({
+                message: t(result.message),
+                duration: 3000,
+            });
+        }
     };
 
     const onSearchChange = (search: string) => {
@@ -116,7 +127,11 @@ const VocabularyContent: React.FC<VocabularyContentProps> = ({
                     <div className={styles.emptyContainer}>
                         <IonImg alt="" aria-hidden className={styles.emptyImage} src={VocabularySvg} />
                         <p className={styles.emptyText}>{t('vocabulary.pair.empty')}</p>
-                        <IonButton className="tertiary-button" fill="clear" onClick={() => onAddVocabulary()}>
+                        <IonButton
+                            className="tertiary-button no-padding"
+                            fill="clear"
+                            onClick={() => onAddVocabulary()}
+                        >
                             <IonIcon aria-hidden slot="start" name="add-outline" />
                             {t('vocabulary.pair.create')}
                         </IonButton>

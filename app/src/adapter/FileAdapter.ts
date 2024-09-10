@@ -57,6 +57,11 @@ class FileAdapter implements FileAdapterInterface {
         }
     }
 
+    async saveBlob(blob: Blob, filename: string): Promise<void> {
+        const url = window.URL.createObjectURL(blob);
+        await this.saveFile(url, filename);
+    }
+
     private convertBlobToBase64 = async (blob: Blob): Promise<string> => {
         const arrayBuffer = await blob.arrayBuffer();
         const base64String = btoa(String.fromCharCode(...new Uint8Array(arrayBuffer)));

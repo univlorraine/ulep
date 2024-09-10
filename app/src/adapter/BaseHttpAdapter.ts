@@ -49,7 +49,7 @@ class BaseHttpAdapter {
     async http<T>(path: string, args: RequestInit, contentType = 'application/json'): Promise<HttpResponse<T>> {
         const headers: Record<string, string> = {
             ...(args.headers as Record<string, string>),
-            Accept: 'application/json',
+            Accept: 'application/json, application/pdf',
         };
 
         if (contentType !== 'multipart/form-data') {
@@ -79,6 +79,8 @@ class BaseHttpAdapter {
                     const responseContentType = res.headers.get('content-type');
                     if (responseContentType && responseContentType.indexOf('application/json') !== -1) {
                         return res.json();
+                    } else if (responseContentType && responseContentType.indexOf('application/pdf') !== -1) {
+                        return res.blob();
                     }
 
                     return { ok: true };

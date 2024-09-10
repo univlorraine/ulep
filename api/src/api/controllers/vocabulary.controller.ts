@@ -8,12 +8,14 @@ import {
   Post,
   Put,
   Query,
+  Res,
   UploadedFiles,
   UseGuards,
   UseInterceptors,
 } from '@nestjs/common';
 import { FileFieldsInterceptor } from '@nestjs/platform-express';
 import * as Swagger from '@nestjs/swagger';
+import { Response } from 'express';
 import { AuthenticationGuard } from 'src/api/guards';
 import {
   CreateVocabularyListUsecase,
@@ -23,6 +25,7 @@ import {
   DeleteVocabularyUsecase,
   FindAllVocabularyFromListIdUsecase,
   FindAllVocabularyListUsecase,
+  GetVocabularyListPdfUsecase,
   UpdateVocabularyListUsecase,
   UpdateVocabularyUsecase,
   UploadAudioVocabularyUsecase,
@@ -52,6 +55,7 @@ export class VocabularyController {
     private readonly deleteVocabularyUsecase: DeleteVocabularyUsecase,
     private readonly uploadAudioVocabularyUsecase: UploadAudioVocabularyUsecase,
     private readonly deleteAudioVocabularyUsecase: DeleteAudioVocabularyUsecase,
+    private readonly getVocabularyListPdfUsecase: GetVocabularyListPdfUsecase,
   ) {}
 
   @Post('list')
@@ -109,6 +113,23 @@ export class VocabularyController {
     }
 
     return VocabularyResponse.from(vocabulary);
+  }
+
+  @Get('pdf/:id')
+  @UseGuards(AuthenticationGuard)
+  @Swagger.ApiOperation({ summary: 'Get a Vocabulary List PDF ressource.' })
+  @Swagger.ApiOkResponse({ type: () => VocabularyListResponse })
+  async getVocabularyListPdf(@Param('id') id: string, @Res() res: Response) {
+    const pdfBuffer = await this.getVocabularyListPdfUsecase.execute({
+      vocabularyListId: id,
+    });
+
+    res.setHeader('Content-Type', 'application/pdf');
+    res.setHeader(
+      'Content-Disposition',
+      'attachment; filename=vocabulary-list.pdf',
+    );
+    res.send(pdfBuffer);
   }
 
   @Get('list/:id')

@@ -61,10 +61,10 @@ const ShareVocabularyListModal: React.FC<ShareVocabularyListModalProps> = ({
                         </div>
                     ))}
                 </div>
-                <IonButton className="primary-button" fill="clear" onClick={onValidate}>
+                <IonButton className="primary-button no-padding" fill="clear" onClick={onValidate}>
                     {t('vocabulary.list.share.create')}
                 </IonButton>
-                <IonButton className="secondary-button" fill="clear" onClick={onClose}>
+                <IonButton className="secondary-button no-padding" fill="clear" onClick={onClose}>
                     {t('vocabulary.list.share.cancel')}
                 </IonButton>
             </div>
