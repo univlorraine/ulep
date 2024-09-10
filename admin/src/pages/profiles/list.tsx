@@ -26,7 +26,7 @@ import PageTitle from '../../components/PageTitle';
 import { Role } from '../../entities/Administrator';
 import Language from '../../entities/Language';
 import { Profile } from '../../entities/Profile';
-import User from '../../entities/User';
+import User, { UserStatus } from '../../entities/User';
 
 export interface ProfileFilterProps {
     displayAllUniversities: boolean;
@@ -118,7 +118,7 @@ const ProfileList = (props: any) => {
     const refresh = useRefresh();
     const notify = useNotify();
 
-    const onUpdateUserStatus = async (id: string, status: UserStatus) => {
+    const onUpdateUserStatus = async (id: string, status: UserStatus | undefined) => {
         await update(
             'users',
             { id, data: { status } },
