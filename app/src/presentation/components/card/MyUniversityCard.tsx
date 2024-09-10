@@ -11,7 +11,7 @@ const MyUniversityCard: React.FC<MyUniversityCardProps> = ({ university }) => {
     return (
         <div className="home-card">
             <span className="home-card-title">{t('home_page.my_university.title')}</span>
-            <UniversityCard university={university} />
+            <UniversityCard university={university} onPress={() => {}} />
         </div>
     );
 };
