@@ -66,6 +66,17 @@ const ProfileCard = ({ record, learningLanguage, hasActiveTandem }: ProfileCardP
             </div>
 
             <div className="line">
+                <span className="label">{translate('learning_languages.list.tableColumns.campus')}</span>
+                <span>
+                    {learningLanguage.campus ? (
+                        learningLanguage.campus.name
+                    ) : (
+                        <BooleanField record={{ campus: learningLanguage.campus !== null }} source="campus" />
+                    )}
+                </span>
+            </div>
+
+            <div className="line">
                 <span className="label">{translate('learning_languages.show.fields.learnedLanguage')}</span>
                 <span>{codeLanguageToFlag(learningLanguage.code)}</span>
             </div>

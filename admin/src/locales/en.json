@@ -554,6 +554,7 @@
                 "learnedLanguage": "Requested language",
                 "level": "Level",
                 "university": "University",
+                "campus": "Campus",
                 "role": "Role",
                 "age": "Age",
                 "score": "Score",

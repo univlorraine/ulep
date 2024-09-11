@@ -200,6 +200,20 @@ const TandemCard = ({
                     </div>
 
                     <div className="line">
+                        <span className="label">{translate('learning_languages.list.tableColumns.campus')}</span>
+                        <span>
+                            {partnerLearningLanguage.campus ? (
+                                partnerLearningLanguage.campus.name
+                            ) : (
+                                <BooleanField
+                                    record={{ campus: partnerLearningLanguage.campus !== null }}
+                                    source="campus"
+                                />
+                            )}
+                        </span>
+                    </div>
+
+                    <div className="line">
                         <span className="label">{translate('learning_languages.show.fields.learnedLanguage')}</span>
                         <span>{codeLanguageToFlag(partnerLearningLanguage.code)}</span>
                     </div>
