@@ -180,6 +180,9 @@ export class PrismaProfileRepository implements ProfileRepository {
               contains: where.user.lastname,
               mode: ModeQuery.INSENSITIVE,
             },
+            division: {
+              contains: where.user.division,
+            },
             NOT: {
               status: 'BANNED',
             },

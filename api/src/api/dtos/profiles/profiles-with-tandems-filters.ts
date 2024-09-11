@@ -14,4 +14,8 @@ export class ProfileWithTandemsQueryFilter extends PaginationDto {
   @ApiPropertyOptional({ type: 'string' })
   @IsOptional()
   learningLanguage?: string;
+
+  @ApiPropertyOptional({ type: 'string' })
+  @IsOptional()
+  division?: string;
 }
