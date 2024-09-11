@@ -11,6 +11,7 @@ import CreateLearningLanguageCard from '../card/CreateLearningLanguageCard';
 import PartnerUniversityCard from '../card/PartnerUniversityCard';
 import ProficiencyTestCard from '../card/ProficiencyTestCard';
 import RessourcesCard from '../card/RessourcesCard';
+import Loader from '../Loader';
 import ActiveTandemCard from '../tandems/ActiveTandemCard';
 import PendingTandemCard from '../tandems/PendingTandemCard';
 import styles from './LearningContent.module.css';
@@ -75,42 +76,48 @@ const LearningContent: React.FC<LearningContentProps> = ({
                 </IonButton>
             </div>
 
-            <ResponsiveMasonry columnsCountBreakPoints={{ 300: 1, 1024: 2 }}>
-                <Masonry className={styles.masonery} gutter="20px">
-                    {currentTandem && currentTandem.status === 'ACTIVE' && (
-                        <ActiveTandemCard
-                            tandem={currentTandem}
-                            onTandemPressed={() => onValidatedTandemPressed(currentTandem)}
-                        />
-                    )}
-                    {currentTandem && currentTandem.status !== 'ACTIVE' && (
-                        <PendingTandemCard
-                            tandem={currentTandem}
-                            onTandemPressed={() => onTandemPressed(currentTandem)}
-                        />
-                    )}
-                    <RessourcesCard
-                        onLearningJournalPressed={() => console.log('onLearningJournalPressed')}
-                        onVocabularyPressed={() => console.log('onVocabularyPressed')}
-                        onActivityPressed={() => console.log('onActivityPressed')}
-                        onGamePressed={() => console.log('onGamePressed')}
-                    />
-                    {currentTandem && currentTandem.partner?.user.university && (
-                        <PartnerUniversityCard
-                            university={currentTandem.partner?.user.university}
-                            onPress={openUniversityInfos}
-                        />
-                    )}
-                    <ProficiencyTestCard
-                        testedLanguages={learningLanguagesToTestedLanguages(
-                            profile.learningLanguages,
-                            profile.testedLanguages,
-                            currentTandem?.learningLanguage.code
+            {isLoading ? (
+                <div className={styles.loaderContainer}>
+                    <Loader />
+                </div>
+            ) : (
+                <ResponsiveMasonry columnsCountBreakPoints={{ 300: 1, 1024: 2 }}>
+                    <Masonry className={styles.masonery} gutter="20px">
+                        {currentTandem && currentTandem.status === 'ACTIVE' && (
+                            <ActiveTandemCard
+                                tandem={currentTandem}
+                                onTandemPressed={() => onValidatedTandemPressed(currentTandem)}
+                            />
                         )}
-                    />
-                    <CreateLearningLanguageCard onPress={openAddLearningLanguagePressed} />
-                </Masonry>
-            </ResponsiveMasonry>
+                        {currentTandem && currentTandem.status !== 'ACTIVE' && (
+                            <PendingTandemCard
+                                tandem={currentTandem}
+                                onTandemPressed={() => onTandemPressed(currentTandem)}
+                            />
+                        )}
+                        <RessourcesCard
+                            onLearningJournalPressed={() => console.log('onLearningJournalPressed')}
+                            onVocabularyPressed={() => console.log('onVocabularyPressed')}
+                            onActivityPressed={() => console.log('onActivityPressed')}
+                            onGamePressed={() => console.log('onGamePressed')}
+                        />
+                        {currentTandem && currentTandem.partner?.user.university && (
+                            <PartnerUniversityCard
+                                university={currentTandem.partner?.user.university}
+                                onPress={openUniversityInfos}
+                            />
+                        )}
+                        <ProficiencyTestCard
+                            testedLanguages={learningLanguagesToTestedLanguages(
+                                profile.learningLanguages,
+                                profile.testedLanguages,
+                                currentTandem?.learningLanguage.code
+                            )}
+                        />
+                        <CreateLearningLanguageCard onPress={openAddLearningLanguagePressed} />
+                    </Masonry>
+                </ResponsiveMasonry>
+            )}
         </div>
     );
 };
