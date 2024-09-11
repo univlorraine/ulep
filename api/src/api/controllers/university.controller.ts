@@ -203,7 +203,7 @@ export class UniversityController {
 
   @Get(':id/divisions')
   @SerializeOptions({ groups: ['read', 'university:read'] })
-  @Swagger.ApiOperation({ summary: 'Collection of University ressource.' })
+  @Swagger.ApiOperation({ summary: 'Collection of University divisions.' })
   @Swagger.ApiOkResponse({ type: String, isArray: true })
   async getUniversityDivisions(@Param('id') id: string) {
     return await this.getUniversityDivisionsUsecase.execute(id);
