@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { Match } from '../../../../entities/Match';
+import { UserRole } from '../../../../entities/User';
 
 const useTandemMatchesFilters = (matches: Match[]) => {
     const [firstnameFilter, setFirstnameFilter] = useState<string>();

@@ -7,8 +7,6 @@ declare global {
         | 'TWICE_A_MONTH'
         | 'THREE_TIMES_A_MONTH';
     type LanguageStatus = 'PRIMARY' | 'SECONDARY' | 'UNACTIVE';
-    type UserStatus = 'CANCELED' | 'BANNED' | 'REPORTED' | 'ACTIVE' | undefined;
-    type UserRole = 'STUDENT' | 'STAFF';
     type AvailabilitiesOptions = 'UNAVAILABLE' | 'AVAILABLE' | 'VERY_AVAILABLE';
     interface UserIdentity {
         id: Identifier;

@@ -2,6 +2,7 @@ import { Box, FormControl, InputLabel, MenuItem, Select, SelectChangeEvent, Text
 import React from 'react';
 import { useGetList, useTranslate } from 'react-admin';
 import University from '../../../../entities/University';
+import { UserRole } from '../../../../entities/User';
 
 interface TandemFiltersParams {
     firstname?: string;
