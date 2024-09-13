@@ -79,6 +79,11 @@ export class CreateReportMessageRequest
   @Swagger.ApiProperty({ type: 'string' })
   @IsOptional()
   mediaType?: string;
+
+  @Swagger.ApiProperty({ type: 'string' })
+  @IsString()
+  @IsNotEmpty()
+  reportedUserId: string;
 }
 
 export class UpdateReportStatusRequest

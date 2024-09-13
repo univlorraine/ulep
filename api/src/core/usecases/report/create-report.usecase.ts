@@ -1,5 +1,6 @@
 import { Inject, Injectable } from '@nestjs/common';
 import { DomainErrorCode, RessourceDoesNotExist } from 'src/core/errors';
+import { EMAIL_GATEWAY, EmailGateway } from 'src/core/ports/email.gateway';
 import {
   UUID_PROVIDER,
   UuidProviderInterface,
@@ -26,6 +27,8 @@ export class CreateReportUsecase {
     private readonly userRepository: UserRepository,
     @Inject(UUID_PROVIDER)
     private readonly uuidProvider: UuidProviderInterface,
+    @Inject(EMAIL_GATEWAY)
+    private readonly emailGateway: EmailGateway,
   ) {}
 
   async execute(command: CreateReportCommand): Promise<Report> {
@@ -42,7 +45,7 @@ export class CreateReportUsecase {
       throw new RessourceDoesNotExist(`User does not exist`);
     }
 
-    return this.reportRepository.createReport(
+    const report = await this.reportRepository.createReport(
       Report.create({
         id: this.uuidProvider.generate(),
         ...command,
@@ -51,5 +54,23 @@ export class CreateReportUsecase {
         user: owner,
       }),
     );
+
+    await this.sendEmail(report);
+
+    return report;
+  }
+
+  private async sendEmail(report: Report) {
+    if (report.user.university.notificationEmail) {
+      await this.emailGateway.sendNewReportEmail({
+        to: report.user.university.notificationEmail,
+        language: report.user.university.nativeLanguage.code,
+        reportType: report.category.name.content,
+        user: {
+          firstname: report.user.firstname,
+          lastname: report.user.lastname,
+        },
+      });
+    }
   }
 }

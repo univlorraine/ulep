@@ -4,6 +4,8 @@ import {
   EmailGateway,
   NewMessageEmailProps,
   NewPartnerEmail,
+  NewReportEmailProps,
+  NewReportMessageEmailProps,
   NewTandemNoticeEmailProps,
   NewUserRegistrationNoticeEmailProps,
   PasswordChangeDeniedEmailProps,
@@ -89,6 +91,14 @@ export default class InMemoryEmailGateway implements EmailGateway {
   }
 
   sendNewMessageEmail(props: NewMessageEmailProps): Promise<void> {
+    return Promise.resolve();
+  }
+
+  sendNewReportEmail(props: NewReportEmailProps): Promise<void> {
+    return Promise.resolve();
+  }
+
+  sendNewReportMessageEmail(props: NewReportMessageEmailProps): Promise<void> {
     return Promise.resolve();
   }
 }

@@ -1,22 +1,24 @@
+import { I18nService, MailerService } from '@app/common';
 import { Injectable } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { Env } from 'src/configuration';
-import { I18nService, MailerService } from '@app/common';
 
 import {
   AccountBlockedEmailProps,
   EmailGateway,
+  NewMessageEmailProps,
   NewPartnerEmail,
+  NewReportEmailProps,
+  NewReportMessageEmailProps,
   NewTandemNoticeEmailProps,
   NewUserRegistrationNoticeEmailProps,
   PasswordChangeDeniedEmailProps,
   SendWelcomeMailProps,
-  TandemCanceledNoticeEmailProps,
-  TandemValidationNoticeEmailProps,
   TandemCanceledEmailProps,
+  TandemCanceledNoticeEmailProps,
   TandemClosureNoticeEmailProps,
   TandemPausedUnpausedEmailProps,
-  NewMessageEmailProps,
+  TandemValidationNoticeEmailProps,
 } from 'src/core/ports/email.gateway';
 
 @Injectable()
@@ -375,6 +377,44 @@ export class SmtpEmailGateway implements EmailGateway {
       to: props.to,
       subject: translations.title,
       template: 'user',
+      variables: {
+        links: this.links,
+        images: this.images,
+        ...translations,
+        footer: this.footer,
+      },
+    });
+  }
+
+  async sendNewReportEmail(props: NewReportEmailProps): Promise<void> {
+    const translations = this.translate('report', props.language, {
+      ...props,
+    });
+
+    await this.mailer.sendMail({
+      to: props.to,
+      subject: translations.title,
+      template: 'admin',
+      variables: {
+        links: this.links,
+        images: this.images,
+        ...translations,
+        footer: this.footer,
+      },
+    });
+  }
+
+  async sendNewReportMessageEmail(
+    props: NewReportMessageEmailProps,
+  ): Promise<void> {
+    const translations = this.translate('reportMessage', props.language, {
+      ...props,
+    });
+
+    await this.mailer.sendMail({
+      to: props.to,
+      subject: translations.title,
+      template: 'admin',
       variables: {
         links: this.links,
         images: this.images,

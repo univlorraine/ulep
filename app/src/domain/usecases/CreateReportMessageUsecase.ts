@@ -6,12 +6,18 @@ import CreateReportMessageUsecaseInterface from '../interfaces/CreateReportMessa
 class CreateReportMessageUsecase implements CreateReportMessageUsecaseInterface {
     constructor(private readonly domainHttpAdapter: HttpAdapterInterface) {}
 
-    async execute(content: string, filePath?: string, mediaType?: MessageType): Promise<undefined | Error> {
+    async execute(
+        content: string,
+        reportedUserId: string,
+        filePath?: string,
+        mediaType?: MessageType
+    ): Promise<undefined | Error> {
         try {
             const httpResponse: HttpResponse<undefined> = await this.domainHttpAdapter.post(`/reports/message`, {
                 content,
                 filePath,
                 mediaType,
+                reportedUserId,
             });
 
             if (!httpResponse.parsedBody) {
