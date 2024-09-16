@@ -44,13 +44,17 @@
         "bottom_bar": {
             "home": "Home",
             "conversations": "Conversations",
-            "disconnect": "Disconnect",
-            "profile": "Profile",
-            "settings": "Settings"
+            "learning": "Learning",
+            "profile": "Profile"
         },
         "sidebar": {
             "home": "Home",
-            "conversations": "Conversations"
+            "conversations": "Conversations",
+            "learning": "Learning",
+            "profile": "Profile",
+            "settings": "Settings",
+            "disconnect": "Disconnect",
+            "report": "Report"
         }
     },
     "maintenance_page": {
@@ -98,7 +102,8 @@
         "welcome_subtext": "le meilleur moyen de pratiquer une langue",
         "welcome_btn": "Apprends une nouvelle langue en tandem",
         "close": "Close",
-        "download": "Download"
+        "download": "Download",
+        "years_old": "years old"
     },
     "chat": {
         "ariaLabelFileDownloaded": "Downloading file : {{filename}}",
@@ -161,6 +166,30 @@
     },
     "conversations": {
         "title": "My messaging"
+    },
+    "proficiency_test": {
+        "button": "Take the test",
+        "subtitle": "My languages",
+        "title": "My level"
+    },
+    "create_learning_language": {
+        "button": "Add a language to learn",
+        "title": "Ready to learn a new language?"
+    },
+    "partner_university": {
+        "button": "See the fiche",
+        "title": "Partner university"
+    },
+    "ressources": {
+        "title": "Ressources & documents",
+        "journal": "Learning journal",
+        "vocabulary": "Vocabulary lists",
+        "activity": "Activity sheets",
+        "game": "Games & Quizzes"
+    },
+    "university_card": {
+        "button": "See the fiche",
+        "period": "Opening period"
     },
     "home_page": {
         "profile": {
@@ -228,6 +257,16 @@
             "tandem_unavailable": "Tandem unavailable",
             "tandem_paused": "Tandem paused",
             "title": "My pending requests"
+        }
+    },
+    "learning": {
+        "title": "Learning space",
+        "card": {
+            "my_tandem": {
+                "button": "See the profile",
+                "title": "My tandem"
+            },
+            "pending_tandem": "Pending tandem"
         }
     },
     "instance": {

@@ -12,6 +12,7 @@ import ForgotPasswordPage from '../pages/ForgotPasswordPage';
 import ForgotPasswordSentPage from '../pages/ForgotPasswordSentPage';
 import HomePage from '../pages/HomePage';
 import JitsiPage from '../pages/Jitsi';
+import LearningPage from '../pages/LearningPage';
 import LoginPage from '../pages/LoginPage';
 import PairingConfirmLanguagePage from '../pages/PairingConfirmLanguagePage';
 import PairingFinalPage from '../pages/PairingFinalPage';
@@ -210,6 +211,9 @@ const OfflineRouter: React.FC = () => {
                     <>
                         <PrivateRoute exact path="/home">
                             <HomePage />
+                        </PrivateRoute>
+                        <PrivateRoute exact path="/learning">
+                            <LearningPage />
                         </PrivateRoute>
                         <PrivateRoute exact path="/conversations">
                             <ConversationsPage />
