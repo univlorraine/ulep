@@ -82,6 +82,21 @@ export interface NewMessageEmailProps {
   sender: { firstname: string; lastname: string };
 }
 
+export interface NewReportEmailProps {
+  to: string;
+  language: string;
+  reportType: string;
+  user: { firstname: string; lastname: string };
+}
+
+export interface NewReportMessageEmailProps {
+  to: string;
+  language: string;
+  reportType: string;
+  user: { firstname: string; lastname: string };
+  reportedUser: { firstname: string; lastname: string };
+}
+
 export interface EmailGateway {
   // Notifies a user with a welcome email.
   sendWelcomeMail(props: SendWelcomeMailProps): Promise<void>;
@@ -137,4 +152,10 @@ export interface EmailGateway {
 
   // Notifies users about a new message
   sendNewMessageEmail(props: NewMessageEmailProps): Promise<void>;
+
+  // Notifies users about a new report
+  sendNewReportEmail(props: NewReportEmailProps): Promise<void>;
+
+  // Notifies users about a new report message
+  sendNewReportMessageEmail(props: NewReportMessageEmailProps): Promise<void>;
 }
