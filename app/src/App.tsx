@@ -20,6 +20,8 @@ import '@ionic/react/css/typography.css';
 
 /* Theme variables */
 import { polyfillCountryFlagEmojis } from 'country-flag-emoji-polyfill';
+import { SocketContext } from './context/SocketContext';
+import getSocketContextValue from './context/getSocketContextValue';
 import useFetchConfiguration from './presentation/hooks/useFetchConfiguration';
 import useFetchI18NBackend from './presentation/hooks/useFetchI18NBackend';
 import ErrorPage from './presentation/pages/ErrorPage';
@@ -88,7 +90,6 @@ const AppContext = () => {
     const accessToken = useStoreState((state) => state.accessToken);
     const apiUrl = useStoreState((state) => state.apiUrl);
     const chatUrl = useStoreState((state) => state.chatUrl);
-    const socketChatUrl = useStoreState((state) => state.socketChatUrl);
     const language = useStoreState((state) => state.language);
     const refreshToken = useStoreState((state) => state.refreshToken);
     const setProfile = useStoreActions((state) => state.setProfile);
@@ -127,7 +128,6 @@ const AppContext = () => {
             value={getConfigContextValue({
                 apiUrl: import.meta.env.VITE_API_URL || apiUrl,
                 chatUrl: import.meta.env.VITE_CHAT_URL || chatUrl,
-                socketChatUrl: import.meta.env.VITE_SOCKET_CHAT_URL || socketChatUrl,
                 languageCode: i18n.language,
                 accessToken,
                 refreshToken,
@@ -147,6 +147,7 @@ const AppInstance: React.FC = () => {
     const rehydrated = useStoreRehydrated();
     const apiUrl = useStoreState((state) => state.apiUrl);
     const setApiUrl = useStoreActions((state) => state.setApiUrl);
+    const socketChatUrl = useStoreState((state) => state.socketChatUrl);
 
     if (!rehydrated) {
         return null;
@@ -161,7 +162,13 @@ const AppInstance: React.FC = () => {
             />
         );
 
-    return <AppContext />;
+    return (
+        <SocketContext.Provider
+            value={getSocketContextValue({ socketChatUrl: import.meta.env.VITE_SOCKET_CHAT_URL || socketChatUrl })}
+        >
+            <AppContext />
+        </SocketContext.Provider>
+    );
 };
 
 const App: React.FC = () => {
