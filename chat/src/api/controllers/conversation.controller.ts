@@ -14,6 +14,7 @@ import { FileInterceptor } from '@nestjs/platform-express';
 import * as Swagger from '@nestjs/swagger';
 import {
     CreateConversationRequest,
+    DeleteContactConversationRequest,
     GetConversationsQueryParams,
     GetMessagesQueryParams,
 } from 'src/api/dtos/conversation';
@@ -35,6 +36,7 @@ import {
     SearchMessagesIdFromConversationIdUsecase,
     UploadMediaUsecase,
 } from 'src/core/usecases';
+import { FilePipe } from '../validators/files.validator';
 
 //TODO: Allow route only for rest api
 @Controller('conversations')
@@ -105,8 +107,8 @@ export class ConversationController {
             await this.getConversationFromUserIdUsecase.execute({
                 id: userId,
                 pagination: {
-                    limit: query.limit,
-                    offset: query.offset,
+                    limit: query.limit ?? 50,
+                    offset: query.offset ?? 0,
                 },
                 filteredProfilesIds: query.filteredProfilesIds,
             });
@@ -148,13 +150,15 @@ export class ConversationController {
         await this.deleteConversationUsecase.execute({ id: conversationId });
     }
 
-    @Delete('contact/:id')
+    @Post('contact/:id')
     @Swagger.ApiOperation({ summary: 'Delete a conversation' })
     async deleteContactConversation(
         @Param('id') conversationId: string,
+        @Body() body: DeleteContactConversationRequest,
     ): Promise<void> {
         await this.deleteContactConversationUsecase.execute({
             id: conversationId,
+            chatIdsToIgnore: body.chatIdsToIgnore,
         });
     }
 
@@ -175,7 +179,7 @@ export class ConversationController {
     async sendMessage(
         @Param('id') conversationId: string,
         @Body() body: SendMessageRequest,
-        @UploadedFile() file?: Express.Multer.File,
+        @UploadedFile(new FilePipe()) file?: Express.Multer.File,
     ): Promise<MessageResponse | undefined> {
         const message = await this.createMessageUsecase.execute({
             content: body.content,

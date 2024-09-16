@@ -1,5 +1,4 @@
-import React from 'react';
-import { useNotify, useRedirect, Edit, useTranslate, useUpdate, WithRecord } from 'react-admin';
+import { Edit, useNotify, useRedirect, useTranslate, useUpdate, WithRecord } from 'react-admin';
 import AdministratorForm from '../../components/form/AdministratorForm';
 import ConfigPagesHeader from '../../components/tabs/ConfigPagesHeader';
 import Administrator, { AdministratorFormPayload } from '../../entities/Administrator';
@@ -35,17 +34,21 @@ const EditAdministrator = () => {
                         }
 
                         if (error.message === 'Email is already used') {
-                            return notify('administrators.update.error_mail');
+                            return notify('administrators.update.error_mail', { type: 'error' });
                         }
 
-                        return notify('administrators.update.error');
+                        if (error.message) {
+                            return notify(error.message, { type: 'error' });
+                        }
+
+                        return notify('administrators.update.error', { type: 'error' });
                     },
                 }
             );
         } catch (err) {
             console.error(err);
 
-            return notify('administrators.update.error');
+            return notify('administrators.update.error', { type: 'error' });
         }
     };
 

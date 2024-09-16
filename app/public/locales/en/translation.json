@@ -44,13 +44,17 @@
         "bottom_bar": {
             "home": "Home",
             "conversations": "Conversations",
-            "disconnect": "Disconnect",
-            "profile": "Profile",
-            "settings": "Settings"
+            "learning": "Learning",
+            "profile": "Profile"
         },
         "sidebar": {
             "home": "Home",
-            "conversations": "Conversations"
+            "conversations": "Conversations",
+            "learning": "Learning",
+            "profile": "Profile",
+            "settings": "Settings",
+            "disconnect": "Disconnect",
+            "report": "Report"
         }
     },
     "maintenance_page": {
@@ -98,7 +102,8 @@
         "welcome_subtext": "le meilleur moyen de pratiquer une langue",
         "welcome_btn": "Apprends une nouvelle langue en tandem",
         "close": "Close",
-        "download": "Download"
+        "download": "Download",
+        "years_old": "years old"
     },
     "chat": {
         "ariaLabelFileDownloaded": "Downloading file : {{filename}}",
@@ -108,14 +113,17 @@
         "messageReported": "Message reported",
         "mediaReport": "Media sent by {{firstname}} {{lastname}} on {{date}}",
         "noMessages": "There is no message",
+        "title": "Messages with {{name}}",
+        "video_call_aria_label": "Call {{name}}",
         "send_button": {
             "record_aria_label": "Stay pressed to record an audio or write your message to switch to send mode",
             "send_aria_label": "Send message"
         },
         "search": {
-            "placeholder": "Search in conversation"
+            "placeholder": "Search in conversation",
+            "previous": "Go to previous message",
+            "next": "Go to next message"
         },
-        "title": "Messages with {{name}}",
         "input": {
             "placeholder": {
                 "blocked": "The tandem is on pause, you cannot send messages",
@@ -123,7 +131,11 @@
             }
         },
         "conversation_menu": {
-            "aria_label": "Conversation menu",
+            "aria_label": "Conversation menu with {{name}}",
+            "return_to_conversations_aria_label": "Return to conversations list",
+            "return_to_chat_aria_label": "Return to conversation with {{name}}",
+            "conversation_aria_label": "List of conversations",
+            "user_aria_label": "Conversation with {{name}}",
             "search": "Search in conversation",
             "medias": "Show media"
         },
@@ -154,6 +166,30 @@
     },
     "conversations": {
         "title": "My messaging"
+    },
+    "proficiency_test": {
+        "button": "Take the test",
+        "subtitle": "My languages",
+        "title": "My level"
+    },
+    "create_learning_language": {
+        "button": "Add a language to learn",
+        "title": "Ready to learn a new language?"
+    },
+    "partner_university": {
+        "button": "See the fiche",
+        "title": "Partner university"
+    },
+    "ressources": {
+        "title": "Ressources & documents",
+        "journal": "Learning journal",
+        "vocabulary": "Vocabulary lists",
+        "activity": "Activity sheets",
+        "game": "Games & Quizzes"
+    },
+    "university_card": {
+        "button": "See the fiche",
+        "period": "Opening period"
     },
     "home_page": {
         "profile": {
@@ -221,6 +257,16 @@
             "tandem_unavailable": "Tandem unavailable",
             "tandem_paused": "Tandem paused",
             "title": "My pending requests"
+        }
+    },
+    "learning": {
+        "title": "Learning space",
+        "card": {
+            "my_tandem": {
+                "button": "See the profile",
+                "title": "My tandem"
+            },
+            "pending_tandem": "Pending tandem"
         }
     },
     "instance": {

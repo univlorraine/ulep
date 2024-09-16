@@ -7,6 +7,18 @@ export enum Gender {
     OTHER = 'OTHER',
 }
 
+export enum UserStatus {
+    ACTIVE = 'ACTIVE',
+    BANNED = 'BANNED',
+    REPORTED = 'REPORTED',
+    CANCELED = 'CANCELED',
+}
+
+export enum UserRole {
+    STUDENT = 'STUDENT',
+    STAFF = 'STAFF',
+}
+
 type User = {
     id: string;
     status: UserStatus;

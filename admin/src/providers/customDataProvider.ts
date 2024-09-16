@@ -11,6 +11,7 @@ import {
     fetchUtils,
 } from 'react-admin';
 import { MessageType } from '../entities/Message';
+import { CONVERSATION_CATEGORY } from '../entities/Report';
 import { RoutineExecution } from '../entities/RoutineExecution';
 import { TandemStatus } from '../entities/Tandem';
 import User from '../entities/User';
@@ -245,6 +246,15 @@ const customDataProvider = {
             return { data: conversationsWithPartner, total: result.totalItems };
         }
 
+        if (resource === 'reports/categories') {
+            // Category "Conversation" should not be edited, so it is made invisible
+            const categoriesWithoutConversation = result.items.filter(
+                (category: any) => category.name !== CONVERSATION_CATEGORY
+            );
+
+            return { data: categoriesWithoutConversation, total: result.totalItems };
+        }
+
         if (!result.items) {
             return { data: result, total: result.length };
         }
@@ -461,6 +471,16 @@ const customDataProvider = {
     },
     getJitsiToken: async (): Promise<string> => {
         const url = `${process.env.REACT_APP_API_URL}/authentication/jitsi/token`;
+        const response = await fetch(url, httpClientOptions({ method: 'GET' }));
+
+        if (!response.ok) {
+            await throwError(response);
+        }
+
+        return response.json();
+    },
+    getUniversityDivisions: async (universityId: string): Promise<string[]> => {
+        const url = `${process.env.REACT_APP_API_URL}/universities/${universityId}/divisions`;
         const response = await fetch(url, httpClientOptions({ method: 'GET' }));
 
         if (!response.ok) {

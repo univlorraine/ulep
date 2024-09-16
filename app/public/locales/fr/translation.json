@@ -43,11 +43,14 @@
     "navigation": {
         "bottom_bar": {
             "home": "Accueil",
-            "conversations": "Conversations"
+            "conversations": "Conversations",
+            "learning": "Learning",
+            "profile": "Profil"
         },
         "sidebar": {
             "home": "Accueil",
             "conversations": "Conversations",
+            "learning": "Apprentissage",
             "disconnect": "Déconnexion",
             "profile": "Profil",
             "settings": "Paramètres"
@@ -104,7 +107,8 @@
         "required_fields_mention_part1": "Les champs suivis d'un",
         "required_fields_mention_part2": "sont obligatoires",
         "close_profile": "Fermer le profil",
-        "download": "Télécharger"
+        "download": "Télécharger",
+        "years_old": "ans"
     },
     "chat": {
         "ariaLabelFileDownloaded": "Téléchargement du fichier : {{filename}}",
@@ -115,6 +119,7 @@
         "messageReported": "Message signalé",
         "noMessages": "Il n'y a aucun message",
         "title": "Messages avec {{name}}",
+        "video_call_aria_label": "Appeler {{name}}",
         "send_button": {
             "record_aria_label": "Restez appuyé pour enregister un audio ou écrivez votre message pour passer en mode envoie",
             "send_aria_label": "Envoyer le message"
@@ -126,10 +131,16 @@
             }
         },
         "search": {
-            "placeholder": "Rechercher dans la conversation"
+            "placeholder": "Rechercher dans la conversation",
+            "previous": "Aller au message précédent",
+            "next": "Aller au message suivant"
         },
         "conversation_menu": {
-            "aria_label": "Menu de la conversation",
+            "aria_label": "Menu de la conversation avec {{name}}",
+            "return_to_conversations_aria_label": "Retour à la liste des conversations",
+            "return_to_chat_aria_label": "Retour à la conversation avec {{name}}",
+            "conversation_aria_label": "Liste des conversations",
+            "user_aria_label": "Conversation avec {{name}}",
             "search": "Rechercher dans la conversation",
             "medias": "Afficher les médias"
         },
@@ -161,19 +172,31 @@
     "conversations": {
         "title": "Ma messagerie"
     },
+    "proficiency_test": {
+        "button": "Faire le test",
+        "subtitle": "Mes langues",
+        "title": "Mon niveau"
+    },
+    "create_learning_language": {
+        "button": "Faire une nouvelle demande",
+        "title": "Prêt(e) à apprendre une nouvelle langue ?"
+    },
+    "partner_university": {
+        "button": "Voir la fiche",
+        "title": "Université partenaire"
+    },
+    "ressources": {
+        "title": "Ressources & documents",
+        "journal": "Journal d'apprentissage",
+        "vocabulary": "Listes de vocabulaire",
+        "activity": "Fiches d'activités",
+        "game": "Jeux & Quizzs"
+    },
+    "university_card": {
+        "button": "Voir la fiche",
+        "period": "Période d'ouverture"
+    },
     "home_page": {
-        "my_university": {
-            "period": "Période d'ouverture",
-            "title": "Mon université"
-        },
-        "partner_universities": {
-            "title": "Universités partenaires"
-        },
-        "proficiency_test": {
-            "button": "Faire le test",
-            "subtitle": "Mes langues",
-            "title": "Mon niveau"
-        },
         "profile": {
             "disconnect": "Se déconnecter",
             "edit": "Modifier mon avatar",
@@ -240,6 +263,16 @@
             "tandem_unavailable": "Tandem indisponible",
             "tandem_paused": "Tandem en pause",
             "title": "Mes demandes en attentes"
+        }
+    },
+    "learning": {
+        "title": "Espace apprentissage",
+        "card": {
+            "my_tandem": {
+                "button": "Voir le profil",
+                "title": "Mon tandem"
+            },
+            "pending_tandem": "Tandem en attente"
         }
     },
     "instance": {

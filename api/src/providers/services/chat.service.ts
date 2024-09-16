@@ -158,14 +158,18 @@ export class ChatService implements ChatServicePort {
     }
   }
 
-  async deleteConversationByContactId(contactId: string): Promise<any> {
+  async deleteConversationByContactId(
+    contactId: string,
+    chatIdsToIgnore?: string[],
+  ): Promise<any> {
     if (!this.env.get('CHAT_URL')) {
       return;
     }
 
     try {
-      const response = await axios.delete(
+      const response = await axios.post(
         this.env.get('CHAT_URL') + '/conversations/contact/' + contactId,
+        { chatIdsToIgnore },
         { headers: this.headers },
       );
 

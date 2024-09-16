@@ -22,29 +22,16 @@ const HomePage: React.FC = () => {
     const [selectedTandem, setSelectedTandem] = useState<Tandem>();
     const [refresh, setRefresh] = useState<boolean>(false);
 
-    const { tandems, partnerUniversities, error, isLoading } = useGetHomeData(refresh);
+    const { tandems, error, isLoading } = useGetHomeData(refresh);
 
     if (error) {
         showToast({ message: t(error.message), duration: 5000 });
     }
 
-    const onProfilePressed = () => (isHybrid ? history.push('/profil') : undefined);
-
     const onReportPressed = () => (isHybrid ? history.push('/report') : undefined);
 
-    const onTandemPressed = (tandem: Tandem) =>
-        !isHybrid ? setSelectedTandem(tandem) : history.push('/tandem-status', { tandem });
-
     const onValidatedTandemPressed = (tandem: Tandem) =>
-        !isHybrid
-            ? setSelectedTandem(tandem)
-            : history.push('/tandem-profil', {
-                  profile: tandem.partner,
-                  language: tandem.learningLanguage,
-                  level: tandem.level,
-                  pedagogy: tandem.pedagogy,
-                  tandemLearningLanguage: tandem.partnerLearningLanguage,
-              });
+        !isHybrid ? setSelectedTandem(tandem) : history.push('/tandem-profil', { tandem });
 
     if (!profile) {
         return <Redirect to={'/'} />;
@@ -54,14 +41,11 @@ const HomePage: React.FC = () => {
         return (
             <IonContent>
                 <HomeContent
-                    onProfilePressed={onProfilePressed}
                     onReportPressed={onReportPressed}
-                    onTandemPressed={onTandemPressed}
                     onValidatedTandemPressed={onValidatedTandemPressed}
                     isLoading={isLoading}
                     profile={profile}
                     tandems={tandems}
-                    partnerUniversities={partnerUniversities}
                 />
             </IonContent>
         );
@@ -73,10 +57,8 @@ const HomePage: React.FC = () => {
                 <HomeContent
                     isLoading={isLoading}
                     profile={profile}
-                    onTandemPressed={onTandemPressed}
                     onValidatedTandemPressed={onValidatedTandemPressed}
                     tandems={tandems}
-                    partnerUniversities={partnerUniversities}
                 />
             </OnlineWebLayout>
             <TandemStatusModal

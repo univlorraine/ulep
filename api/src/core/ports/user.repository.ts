@@ -17,6 +17,8 @@ export interface UserRepository {
 
   findAll(offset?: number, limit?: number): Promise<Collection<User>>;
 
+  findByUniversityId(universityId: string): Promise<User[]>;
+
   ofId(id: string): Promise<User | null>;
 
   ofIds(ids: string[]): Promise<User[]>;

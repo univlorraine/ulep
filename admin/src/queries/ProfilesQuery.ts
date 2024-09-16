@@ -1,3 +1,4 @@
+import { UserStatus } from '../entities/User';
 import qsAdapter from '../providers/qsAdapter';
 
 export interface ProfilesParams {

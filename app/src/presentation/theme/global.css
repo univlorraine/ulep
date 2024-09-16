@@ -14,15 +14,15 @@
 ion-tab-button {
     max-width: none;
 }
-
-ion-tab-button.tab-selected {
-    --background: black;
+ion-tab-button span {
+    margin-top: 2px;
 }
 
-ion-tab-button.tab-selected span,
-ion-tab-button.tab-selected img {
+ion-tab-button.tab-selected span {
     color: white !important;
-    filter: brightness(0) invert(1);
+    background-color: black;
+    border-radius: 12px;
+    padding: 2px 4px;
 }
 
 .ion-background-yellow {
@@ -83,6 +83,18 @@ input::-webkit-outer-spin-button,
 input::-webkit-inner-spin-button {
     -webkit-appearance: none;
     margin: 0;
+}
+ion-radio::part(container) {
+    width: 20px;
+    height: 20px;
+
+    border-radius: 8px;
+    border: 2px solid #ddd;
+}
+
+ion-radio {
+    --color: #000;
+    --color-checked: #000;
 }
 
 .no-gutters {

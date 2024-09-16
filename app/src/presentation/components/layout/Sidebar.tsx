@@ -1,8 +1,9 @@
-import { IonItem, IonList } from '@ionic/react';
+import { IonIcon, IonItem, IonList } from '@ionic/react';
+import { alertCircleOutline } from 'ionicons/icons';
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { useHistory, useLocation } from 'react-router';
-import { ConversationsSvg, DisconnectSvg, HomeSvg, ProfileSvg, SettingsSvg } from '../../../assets';
+import { ConversationsSvg, DisconnectSvg, HomeSvg, LearningSvg, ProfileSvg, SettingsSvg } from '../../../assets';
 import styles from './Sidebar.module.css';
 
 interface SidebarProps {
@@ -25,6 +26,10 @@ const Sidebar: React.FC<SidebarProps> = ({ onDisconnect, onDisplaySettings, onDi
         history.push('/conversations');
     };
 
+    const navigateToLearning = () => {
+        history.push('/learning');
+    };
+
     return (
         <IonList lines="none" className={styles.container}>
             <IonItem
@@ -35,6 +40,15 @@ const Sidebar: React.FC<SidebarProps> = ({ onDisconnect, onDisplaySettings, onDi
             >
                 <img alt="" src={HomeSvg} aria-hidden={true} className={styles.image} />
                 <span className={styles.title}>{t('navigation.sidebar.home')}</span>
+            </IonItem>
+            <IonItem
+                button={true}
+                className={styles.line}
+                onClick={navigateToLearning}
+                color={location.pathname === '/learning' ? 'light' : undefined}
+            >
+                <img alt="" src={LearningSvg} aria-hidden={true} className={styles.image} />
+                <span className={styles.title}>{t('navigation.sidebar.learning')}</span>
             </IonItem>
             <IonItem
                 button={true}
@@ -59,7 +73,7 @@ const Sidebar: React.FC<SidebarProps> = ({ onDisconnect, onDisplaySettings, onDi
                 <span className={styles.title}>{t('navigation.sidebar.disconnect')}</span>
             </IonItem>
             <IonItem className={styles['report-container']} onClick={onDisplayReport} button>
-                <img alt="" className="margin-right" src={DisconnectSvg} aria-hidden={true} />
+                <IonIcon className="margin-right" icon={alertCircleOutline} size="large" aria-hidden={true} />
                 <span>{t('home_page.report.report_button')}</span>
             </IonItem>
         </IonList>

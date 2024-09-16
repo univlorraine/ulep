@@ -228,7 +228,8 @@ export const isCodeValid = (code: string, codesToCheck: string[]) => {
 
 export const learningLanguagesToTestedLanguages = (
     learningLanguages: LearningLanguage[],
-    testedLanguages: TestedLanguage[]
+    testedLanguages: TestedLanguage[],
+    specificLanguage?: string
 ) => {
     const convertedLearningLanguages = learningLanguages.map(
         (learningLanguage) => new TestedLanguage(learningLanguage.code, learningLanguage.name, learningLanguage.level)
@@ -239,6 +240,11 @@ export const learningLanguagesToTestedLanguages = (
             convertedLearningLanguages.push(testedLanguage);
         }
     });
+
+    if (specificLanguage) {
+        return convertedLearningLanguages.filter((language) => language.code === specificLanguage);
+    }
+
     return convertedLearningLanguages;
 };
 

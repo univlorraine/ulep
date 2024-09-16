@@ -2,12 +2,16 @@
     background-color: var(--primary-color);
 }
 
+.card {
+    padding: 12px;
+    border-radius: 10px;
+}
+
 .container {
     align-items: center;
-    border-radius: 5px;
+    border-radius: 10px;
     display: flex;
     flex-direction: row;
-    margin-top: 12px;
 }
 
 .logo {
@@ -36,7 +40,6 @@
 
 .text-container {
     margin: 24px 0px 24px 10px;
-    padding-right: 10px;
 }
 
 .title {

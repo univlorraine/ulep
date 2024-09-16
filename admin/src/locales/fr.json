@@ -5,6 +5,7 @@
             "email": "Veuillez saisir l'email du nouvel administrateur",
             "error": "Une erreur est survenue lors de la création d'un administrateur",
             "error_already_admin": "L'utilisateur est déjà un administrateur",
+            "error_email": "L'email n'est pas valide",
             "password": "Veuillez saisir un mot de passe pour l'administrateur ( 1 majuscule, 1 minuscule et 1 chiffre )",
             "title": "Création d'un administrateur",
             "university": "Veuillez sélectionner une université pour l'administrateur",
@@ -31,7 +32,11 @@
             "university": "Mettez à jour l'université à administrer",
             "group": "Mettez à jour le(s) rôle(s) de l'administrateur"
         },
-        "confirmDeleteOwnAccount": "Êtes-vous sûr(e) de vouloir supprimer votre utilisateur ?\n Vous êtes actuellement connecté(e) à ce compte, après la suppression vous serez déconnecté(e)."
+        "delete": {
+            "title": "Supprimer %{name}",
+            "confirmDeleteOwnAccount": "Êtes-vous sûr(e) de vouloir supprimer votre utilisateur ?\n Vous êtes actuellement connecté(e) à ce compte, après la suppression vous serez déconnecté(e).",
+            "confirmDeleteAccount": "Êtes-vous sûr(e) de vouloir supprimer cet utilisateur ?"
+        }
     },
     "admin_groups_picker": {
         "animator": "Animateur",
@@ -542,6 +547,10 @@
                 },
                 "learningLanguage": {
                     "label": "Langue demandée"
+                },
+                "division": {
+                    "label": "Département",
+                    "fetchError": "Une erreur est survenue lors du chargement des départements"
                 }
             },
             "globalRoutineModal": {
@@ -558,6 +567,7 @@
                 "learnedLanguage": "Langue demandée",
                 "level": "Niveau",
                 "university": "Université",
+                "campus": "Campus",
                 "role": "Rôle",
                 "age": "Âge",
                 "score": "Score",
@@ -566,7 +576,19 @@
                 "type": "Type"
             },
             "noUniversitySelected": "Merci de sélectionner une ou plusieurs universités pour l'appariement",
-            "noTandem": "Pas de profil proposé pour le tandem"
+            "noTandem": "Pas de profil proposé pour le tandem",
+            "checkboxAction": {
+                "label": "demande(s) sélectionné(s)",
+                "delete": "Supprimer",
+                "dialog": {
+                    "title": "Supprimer les demandes sélectionnées",
+                    "message": "Voulez-vous supprimer les demandes sélectionnées ?",
+                    "ctaLabels": {
+                        "confirm": "Confirmer",
+                        "cancel": "Annuler"
+                    }
+                }
+            }
         },
         "show": {
             "management": {

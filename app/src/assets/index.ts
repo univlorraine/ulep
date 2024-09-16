@@ -1,4 +1,5 @@
 import FAQPng from './FAQ.png';
+import AddSvg from './add.svg';
 import AdviceSvg from './advice.svg';
 import ArrowDownSvg from './arrow-down.svg';
 import ArrowRightSvg from './arrow-right.svg';
@@ -21,13 +22,17 @@ import CloseSvg from './close.svg';
 import CloseBlackSvg from './close_black.svg';
 import CreateAccountPng from './create-account-logo.png';
 import DicePng from './dice.png';
+import DiceSvg from './dice.svg';
 import DisconnectSvg from './disconnect.svg';
 import DownloadSvg from './download.svg';
 import EditPng from './edit.png';
 import EyeSvg from './eye.svg';
+import FicheSvg from './fiche.svg';
 import HiBubbleSvg from './hi-bubble.svg';
 import InfoSvg from './info.svg';
+import JournalSvg from './journal.svg';
 import KebabSvg from './kebab.svg';
+import LearningSvg from './learning.svg';
 import ArrowLeftSvg from './left-arrow.svg';
 import LeftChevronSvg from './left-chevron.svg';
 import LogoTextSvg from './logo-text.svg';
@@ -51,9 +56,11 @@ import TandemPng from './tandem.png';
 import TandemNotFoundPng from './tandem_not_found.png';
 import TrophiePng from './trophie.png';
 import AvatarPlaceholderPng from './user_placeholder.png';
+import VocabularySvg from './vocabulary.svg';
 import WritingSkillPng from './writing_skill.png';
 
 export {
+    AddSvg,
     AdviceSvg,
     ArrowDownSvg,
     ArrowLeftSvg,
@@ -77,15 +84,19 @@ export {
     ConversationsSvg,
     CreateAccountPng,
     DicePng,
+    DiceSvg,
     DisconnectSvg,
     DownloadSvg,
     EditPng,
     EyeSvg,
     FAQPng,
+    FicheSvg,
     HiBubbleSvg,
     HomeSvg,
     InfoSvg,
+    JournalSvg,
     KebabSvg,
+    LearningSvg,
     LeftChevronSvg,
     LogoSvg,
     LogoTextSvg,
@@ -107,5 +118,6 @@ export {
     TandemNotFoundPng,
     TandemPng,
     TrophiePng,
+    VocabularySvg,
     WritingSkillPng,
 };

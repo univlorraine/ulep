@@ -1,4 +1,10 @@
 import { Inject, Injectable } from '@nestjs/common';
+import { RessourceDoesNotExist } from 'src/core/errors';
+import { Translation } from 'src/core/models';
+import {
+  LANGUAGE_REPOSITORY,
+  LanguageRepository,
+} from 'src/core/ports/language.repository';
 import {
   INTEREST_REPOSITORY,
   InterestRepository,
@@ -7,12 +13,6 @@ import {
   UUID_PROVIDER,
   UuidProviderInterface,
 } from '../../ports/uuid.provider';
-import { RessourceDoesNotExist } from 'src/core/errors';
-import {
-  LANGUAGE_REPOSITORY,
-  LanguageRepository,
-} from 'src/core/ports/language.repository';
-import { Translation } from 'src/core/models';
 
 export class CreateInterestCommand {
   category: string;

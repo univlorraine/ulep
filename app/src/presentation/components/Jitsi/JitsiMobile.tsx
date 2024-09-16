@@ -1,6 +1,6 @@
-import React from 'react';
-import { IonButton, IonGrid, IonRow, IonList, IonLabel, isPlatform } from '@ionic/react';
+import { IonButton, IonGrid, IonLabel, IonList, IonRow, isPlatform } from '@ionic/react';
 import { Jitsi } from 'capacitor-jitsi-meet';
+import { useEffect } from 'react';
 import { useHistory } from 'react-router-dom';
 import { JitsiProps } from './VisioContainer';
 
@@ -49,7 +49,7 @@ const JitsiMobile = ({ jitsiDomain, roomName, jitsiToken }: JitsiProps) => {
         history.push('/home');
     };
 
-    React.useEffect(() => {
+    useEffect(() => {
         initialiseJitsi();
     }, []);
 

@@ -1,7 +1,8 @@
 import { Box, Typography } from '@mui/material';
-import { useRefresh, useTranslate } from 'react-admin';
+import { usePermissions, useRefresh, useTranslate } from 'react-admin';
 import { LearningLanguage, LearningLanguageWithTandemWithPartnerProfile } from '../../../entities/LearningLanguage';
 import { TandemWithPartnerLearningLanguage } from '../../../entities/Tandem';
+import hasTandemManagementPermission from '../hasTandemManagementPermission';
 import TandemActions from './Actions/TandemActions';
 
 type TandemInfoProps = {
@@ -14,6 +15,7 @@ type TandemInfoProps = {
 const TandemInfo = ({ tandem, hasActiveTandem, userLearningLanguage, partnerLearningLanguage }: TandemInfoProps) => {
     const translate = useTranslate();
     const refresh = useRefresh();
+    const { permissions } = usePermissions();
 
     return (
         <Box>
@@ -32,16 +34,19 @@ const TandemInfo = ({ tandem, hasActiveTandem, userLearningLanguage, partnerLear
                 </span>
                 <span>{new Date(tandem.updatedAt).toLocaleDateString()}</span>
             </div>
-            {hasActiveTandem && userLearningLanguage && partnerLearningLanguage && (
-                <TandemActions
-                    learningLanguageIds={[userLearningLanguage.id, partnerLearningLanguage.id]}
-                    onTandemAction={refresh}
-                    tandemId={tandem?.id}
-                    tandemStatus={tandem?.status}
-                    disableCreateButton
-                    relaunchGlobalRoutineOnRefuse
-                />
-            )}
+            {hasTandemManagementPermission(permissions) &&
+                hasActiveTandem &&
+                userLearningLanguage &&
+                partnerLearningLanguage && (
+                    <TandemActions
+                        learningLanguageIds={[userLearningLanguage.id, partnerLearningLanguage.id]}
+                        onTandemAction={refresh}
+                        tandemId={tandem?.id}
+                        tandemStatus={tandem?.status}
+                        disableCreateButton
+                        relaunchGlobalRoutineOnRefuse
+                    />
+                )}
         </Box>
     );
 };

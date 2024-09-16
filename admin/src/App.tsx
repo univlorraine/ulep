@@ -61,6 +61,7 @@ const App = () => (
                     options={{ label: 'learning_languages.label' }}
                     {...profilesWithTandem}
                 />
+                <Resource name="learning-languages" />
                 <Resource
                     icon={WarningAmberOutlinedIcon}
                     name="reports"

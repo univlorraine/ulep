@@ -6,7 +6,8 @@ services:
       context: ./api
       target: api_prod
     depends_on:
-      - database
+      database:
+        condition: service_healthy
     restart: unless-stopped
     environment:
       ADMIN_URL: ${ADMIN_URL:-http://0.0.0.0:3001}
@@ -125,7 +126,7 @@ services:
   mongo:
     image: mongo:7-jammy
     command:
-      ['mongod', '--replSet', 'rs0', '--auth', '--keyFile', '/etc/keyfile.key']
+      ["mongod", "--replSet", "rs0", "--auth", "--keyFile", "/etc/keyfile.key"]
     environment:
       MONGO_INITDB_ROOT_USERNAME: ${MONGO_INITDB_ROOT_USERNAME:-root}
       MONGO_INITDB_ROOT_PASSWORD: ${MONGO_INITDB_ROOT_PASSWORD:-!ChangeMe!}
@@ -157,6 +158,12 @@ services:
 
   database:
     image: postgres:${POSTGRES_VERSION:-14}-alpine
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER} -d ${POSTGRES_DB}"]
+      interval: 5s
+      retries: 5
+      start_period: 5s
+      timeout: 10s
     environment:
       POSTGRES_DB: ${POSTGRES_DB:-ulep}
       POSTGRES_USER: ${POSTGRES_USER:-postgres}
@@ -166,6 +173,7 @@ services:
       - db_data:/var/lib/postgresql/data
       # you may use a bind-mounted host directory instead, so that it is harder to accidentally remove the volume and lose all your data!
       # - ./docker/database/data:/var/lib/postgresql/data
+
   minio:
     image: minio/minio:latest
     command: server /data/minio --console-address :9001

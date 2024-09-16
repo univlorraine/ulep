@@ -1,19 +1,19 @@
-import { Injectable } from '@nestjs/common';
 import { Collection, ModeQuery, PrismaService } from '@app/common';
+import { Injectable } from '@nestjs/common';
+import { Profile } from 'src/core/models';
+import { ProfileWithTandemsProfiles } from 'src/core/models/profileWithTandemsProfiles.model';
 import {
   ProfileQueryOrderBy,
   ProfileQueryWhere,
   ProfileRepository,
   ProfileWithTandemsProfilesQueryWhere,
 } from 'src/core/ports/profile.repository';
-import { Profile } from 'src/core/models';
 import {
-  ProfilesRelations,
   profileMapper,
+  ProfilesRelations,
   ProfilesRelationsWithTandemProfile,
   profileWithTandemsProfilesMapper,
 } from '../mappers';
-import { ProfileWithTandemsProfiles } from 'src/core/models/profileWithTandemsProfiles.model';
 
 @Injectable()
 export class PrismaProfileRepository implements ProfileRepository {
@@ -161,12 +161,8 @@ export class PrismaProfileRepository implements ProfileRepository {
       include: ProfilesRelations,
     });
 
-    const profilesWithLearningLanguages = profiles.filter(
-      (profile) => profile.LearningLanguages.length !== 0,
-    );
-
     return {
-      items: profilesWithLearningLanguages.map(profileMapper),
+      items: profiles.map(profileMapper),
       totalItems: count,
     };
   }
@@ -183,6 +179,12 @@ export class PrismaProfileRepository implements ProfileRepository {
             lastname: {
               contains: where.user.lastname,
               mode: ModeQuery.INSENSITIVE,
+            },
+            division: {
+              contains: where.user.division,
+            },
+            NOT: {
+              status: 'BANNED',
             },
           },
           ...(where.learningLanguage && {
