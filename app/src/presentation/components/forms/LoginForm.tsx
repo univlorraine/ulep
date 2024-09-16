@@ -45,7 +45,7 @@ const LoginForm: React.FC<LoginFormProps> = ({ goBack, onLogin }) => {
     };
 
     return (
-        <div className="container">
+        <div className="container content-wrapper">
             <IonHeader className="ion-no-border">
                 <IonButton fill="clear" onClick={goBack}>
                     <img alt={t('global.go_back') as string} src={LeftChevronSvg} />

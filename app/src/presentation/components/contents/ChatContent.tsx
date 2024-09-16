@@ -5,6 +5,7 @@ import { useTranslation } from 'react-i18next';
 import { useHistory } from 'react-router';
 import { KebabSvg, LeftChevronSvg } from '../../../assets';
 import { useConfig } from '../../../context/ConfigurationContext';
+import { useSocket } from '../../../context/SocketContext';
 import Profile from '../../../domain/entities/Profile';
 import Conversation, { MessagePaginationDirection } from '../../../domain/entities/chat/Conversation';
 import { useStoreState } from '../../../store/storeTypes';
@@ -33,7 +34,8 @@ const Content: React.FC<ChatContentProps> = ({
     setImageToDisplay,
 }) => {
     const { t } = useTranslation();
-    const { recorderAdapter, socketIoAdapter } = useConfig();
+    const { socket } = useSocket();
+    const { recorderAdapter } = useConfig();
     const isBlocked = conversation.isBlocked;
     const [showMenu, setShowMenu] = useState(false);
     const [currentMessageSearchId, setCurrentMessageSearchId] = useState<string>();
@@ -79,12 +81,12 @@ const Content: React.FC<ChatContentProps> = ({
 
     useEffect(() => {
         recorderAdapter.requestPermission();
-        socketIoAdapter.connect(accessToken);
-        socketIoAdapter.onMessage(conversation.id, addNewMessage);
+        socket.connect(accessToken);
+        socket.onMessage(conversation.id, addNewMessage);
 
         return () => {
-            socketIoAdapter.disconnect();
-            socketIoAdapter.offMessage();
+            socket.disconnect();
+            socket.offMessage();
         };
     }, [conversation.id]);
 

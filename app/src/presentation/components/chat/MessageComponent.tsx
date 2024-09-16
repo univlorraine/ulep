@@ -44,6 +44,7 @@ const MessageComponent: React.FC<MessageProps> = ({
                     message: message.content,
                 }
             ),
+            message.sender.id,
             message.metadata?.filePath,
             message.type
         );

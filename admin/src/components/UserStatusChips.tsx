@@ -1,4 +1,5 @@
 import { useTranslate } from 'react-admin';
+import { UserStatus } from '../entities/User';
 import ColoredChips from './ColoredChips';
 
 type UserStatusChipsProps = {
@@ -8,11 +9,15 @@ type UserStatusChipsProps = {
 const UserStatusChips = ({ status }: UserStatusChipsProps) => {
     const translate = useTranslate();
 
-    if (!status || status === 'ACTIVE') {
+    if (!status || status === UserStatus.ACTIVE) {
         return null;
     }
 
-    return <ColoredChips color="error" label={translate(`global.userStatus.${status.toLowerCase()}`)} />;
+    if (status === UserStatus.BANNED) {
+        return <ColoredChips color="error" label={translate(`global.userStatus.${status.toLowerCase()}`)} />;
+    }
+
+    return null;
 };
 
 export default UserStatusChips;

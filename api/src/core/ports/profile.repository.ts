@@ -39,6 +39,7 @@ export interface ProfileWithTandemsProfilesQueryWhere {
   user: {
     lastname?: string;
     university?: string;
+    division?: string;
   };
   learningLanguage?: string;
 }

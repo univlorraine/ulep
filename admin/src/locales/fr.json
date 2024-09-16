@@ -538,6 +538,10 @@
                 },
                 "learningLanguage": {
                     "label": "Langue demandée"
+                },
+                "division": {
+                    "label": "Département",
+                    "fetchError": "Une erreur est survenue lors du chargement des départements"
                 }
             },
             "globalRoutineModal": {
@@ -554,6 +558,7 @@
                 "learnedLanguage": "Langue demandée",
                 "level": "Niveau",
                 "university": "Université",
+                "campus": "Campus",
                 "role": "Rôle",
                 "age": "Âge",
                 "score": "Score",

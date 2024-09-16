@@ -2,6 +2,7 @@ import { useIonToast } from '@ionic/react';
 import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useConfig } from '../../context/ConfigurationContext';
+import { useSocket } from '../../context/SocketContext';
 import Conversation, { MessagePaginationDirection } from '../../domain/entities/chat/Conversation';
 import { Message, MessageType, MessageWithConversationId } from '../../domain/entities/chat/Message';
 import { UserChat } from '../../domain/entities/User';
@@ -18,7 +19,8 @@ const useHandleMessagesFromConversation = ({
     typeFilter,
     limit = 10,
 }: UseHandleMessagesFromConversationProps) => {
-    const { getMessagesFromConversation, sendMessage, socketIoAdapter } = useConfig();
+    const { getMessagesFromConversation, sendMessage } = useConfig();
+    const { socket } = useSocket();
     const [lastMessageForwardId, setLastMessageForwardId] = useState<string>();
     const [lastMessageBackwardId, setLastMessageBackwardId] = useState<string>();
     const profile = useStoreState((state) => state.profile);
@@ -68,7 +70,7 @@ const useHandleMessagesFromConversation = ({
             });
         }
 
-        socketIoAdapter.emit(
+        socket.emit(
             new MessageWithConversationId(
                 messageResult.id,
                 messageResult.content,

@@ -538,6 +538,10 @@
                 },
                 "learningLanguage": {
                     "label": "Language"
+                },
+                "division": {
+                    "label": "Division",
+                    "fetchError": "An error occured while loading divisions"
                 }
             },
             "globalRoutineModal": {
@@ -554,6 +558,7 @@
                 "learnedLanguage": "Requested language",
                 "level": "Level",
                 "university": "University",
+                "campus": "Campus",
                 "role": "Role",
                 "age": "Age",
                 "score": "Score",
