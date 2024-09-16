@@ -261,6 +261,7 @@
     },
     "learning": {
         "title": "Learning space",
+        "add_language": "Add learning language",
         "card": {
             "my_tandem": {
                 "button": "See the profile",
