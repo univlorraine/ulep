@@ -1,6 +1,7 @@
 import { IonItem, IonSelect, IonSelectOption } from '@ionic/react';
 import { useEffect, useRef, useState } from 'react';
 import { ArrowDownSvg, ArrowUpSvg } from '../../assets';
+import { useConfig } from '../../context/ConfigurationContext';
 import { compareArrays } from '../utils';
 import styles from './DropDown.module.css';
 import RequiredField from './forms/RequiredField';
@@ -29,6 +30,7 @@ const Dropdown = <T,>({
     required = false,
     ...props
 }: DropdownProps<T>) => {
+    const { deviceAdapter } = useConfig();
     const [selectedOption, setSelectedOption] = useState<DropDownItem<T> | undefined>(
         value ? value : !placeholder ? options[0] : undefined
     );
@@ -53,9 +55,9 @@ const Dropdown = <T,>({
             </span>
             <IonItem lines="none" className={`ion-no-padding ${styles.item}`}>
                 <IonSelect
-                    interface="popover"
+                    interface={deviceAdapter.isIos() ? 'alert' : 'popover'}
                     aria-label={ariaLabel || title || undefined}
-                    class={styles.select}
+                    className={styles.select}
                     placeholder={placeholder ? placeholder : undefined}
                     toggle-icon={ArrowDownSvg}
                     expanded-icon={ArrowUpSvg}
