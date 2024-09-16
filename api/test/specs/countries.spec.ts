@@ -23,6 +23,9 @@ describe('Countries', () => {
   const inMemoryI18n = new InMemoryI18nService();
 
   beforeAll(async () => {
+    // Avoid jest timeout issues
+    jest.useFakeTimers({ legacyFakeTimers: true });
+
     const module = await Test.createTestingModule({
       imports: [AppModule],
     })
