@@ -1,19 +1,20 @@
 import * as Prisma from '@prisma/client';
-import { insertUlData } from './ulDataSeed';
+import { parseArgs } from 'node:util';
+import { createActivityThemes } from './activity';
+import { createCountries } from './countries';
+import { createInstance } from './instance';
+import { createInterests } from './interests';
 import { createLanguageCodes } from './languages';
+import { createLearningObjectives } from './objective';
+import { createProficiencyTests } from './proficiency';
+import { createProfiles } from './profiles';
+import { createReportCategories } from './report';
+import { insertUlData } from './ulDataSeed';
 import {
   createCentralUniversityPlaceholder,
   createUniversities,
 } from './universities';
 import { createUsers } from './users';
-import { createCountries } from './countries';
-import { createProficiencyTests } from './proficiency';
-import { createInterests } from './interests';
-import { createProfiles } from './profiles';
-import { createLearningObjectives } from './objective';
-import { createReportCategories } from './report';
-import { createInstance } from './instance';
-import { parseArgs } from 'node:util';
 
 const prisma = new Prisma.PrismaClient();
 
@@ -40,6 +41,8 @@ const load = async () => {
       await prisma.masteredLanguages.deleteMany();
       await prisma.testedLanguages.deleteMany();
       await prisma.users.deleteMany();
+      await prisma.activityThemeCategories.deleteMany();
+      await prisma.activityThemes.deleteMany();
       await prisma.refusedTandems.deleteMany();
       await prisma.organizations.deleteMany();
       await prisma.translations.deleteMany();
@@ -63,6 +66,7 @@ const load = async () => {
     await createProficiencyTests(prisma);
     await createInterests(prisma);
     await createLearningObjectives(prisma);
+    await createActivityThemes(prisma);
 
     if (seedULDataset || seedRandomDataset) {
       await createUniversities(prisma);
