@@ -1,16 +1,16 @@
-import { Inject, Injectable } from '@nestjs/common';
-import {
-  File,
-  STORAGE_INTERFACE,
-  StorageInterface,
-} from '../../ports/storage.interface';
-import { UnauthorizedOperation } from 'src/core/errors';
 import { KeycloakClient, UserRepresentation } from '@app/keycloak';
+import { Inject, Injectable } from '@nestjs/common';
+import { UnauthorizedOperation } from 'src/core/errors';
 import { MediaObject } from 'src/core/models/media.model';
 import {
   MEDIA_OBJECT_REPOSITORY,
   MediaObjectRepository,
 } from 'src/core/ports/media-object.repository';
+import {
+  File,
+  STORAGE_INTERFACE,
+  StorageInterface,
+} from '../../ports/storage.interface';
 
 export class UploadAdminAvatarCommand {
   userId: string;
@@ -30,9 +30,11 @@ export class UploadAdminAvatarUsecase {
   async execute(command: UploadAdminAvatarCommand) {
     const user = await this.tryToFindTheUserOfId(command.userId);
 
-    const avatar = await this.upload(user, command.file);
+    const previousImage = await this.tryToFindTheAvatarOfUser(user);
 
-    return avatar;
+    await this.deletePreviousAvatar(previousImage);
+
+    return this.upload(user, command.file);
   }
 
   private async upload(
@@ -47,15 +49,8 @@ export class UploadAdminAvatarUsecase {
       size: file.size,
     });
 
-    const previousImage = await this.tryToFindTheAvatarOfUser(user);
-
-    if (previousImage) {
-      await this.deletePreviousAvatar(previousImage);
-    }
-
-    await this.deletePreviousAvatar(image);
     await this.storageInterface.write(image.bucket, image.name, file);
-    await this.mediaObjectRepository.saveAdminAvatar(image);
+    await this.mediaObjectRepository.save(image);
 
     return image;
   }
@@ -72,14 +67,12 @@ export class UploadAdminAvatarUsecase {
   private tryToFindTheAvatarOfUser(
     user: UserRepresentation,
   ): Promise<MediaObject | null> {
-    return this.mediaObjectRepository.avatarOfUser(user.id);
+    return this.mediaObjectRepository.findOne(user.id);
   }
 
   private async deletePreviousAvatar(image: MediaObject | null) {
     if (!image) return;
-    if (await this.storageInterface.fileExists(image.bucket, image.name)) {
-      await this.storageInterface.delete(image.bucket, image.name);
-      await this.mediaObjectRepository.remove(image.id);
-    }
+    await this.storageInterface.delete(image.bucket, image.name);
+    await this.mediaObjectRepository.remove(image.id);
   }
 }

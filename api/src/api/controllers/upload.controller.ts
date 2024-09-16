@@ -91,6 +91,7 @@ export class UploadsController {
           id: instance.id,
           mimeType: instance.mimetype,
           url,
+          name: instance.name,
           expireAt: new Date(now + this.#expirationTime * 1000),
         })
       : null;

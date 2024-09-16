@@ -18,7 +18,7 @@ const NetworkImage: React.FC<NetworkImageProps> = ({ id, placeholder, onErrorCom
         return onErrorComponent();
     }
 
-    return <img src={error ? placeholder : image} {...props} />;
+    return <img src={!image || error ? placeholder : image} {...props} />;
 };
 
 export default NetworkImage;

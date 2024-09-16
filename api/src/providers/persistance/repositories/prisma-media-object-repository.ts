@@ -6,6 +6,7 @@ import {
   University,
   User,
 } from 'src/core/models';
+import { Instance } from 'src/core/models/Instance.model';
 import { MediaObjectRepository } from 'src/core/ports/media-object.repository';
 
 @Injectable()
@@ -29,7 +30,7 @@ export class PrismaMediaObjectRepository implements MediaObjectRepository {
     });
   }
 
-  async saveAdminAvatar(object: MediaObject): Promise<void> {
+  async save(object: MediaObject): Promise<void> {
     await this.prisma.mediaObjects.create({
       data: {
         id: object.id,
@@ -73,6 +74,46 @@ export class PrismaMediaObjectRepository implements MediaObjectRepository {
         mime: object.mimetype,
         size: object.size,
         University: {
+          connect: {
+            id: university.id,
+          },
+        },
+      },
+    });
+  }
+
+  async saveInstanceDefaultCertificate(
+    instance: Instance,
+    object: MediaObject,
+  ): Promise<void> {
+    await this.prisma.mediaObjects.create({
+      data: {
+        id: object.id,
+        name: object.name,
+        bucket: object.bucket,
+        mime: object.mimetype,
+        size: object.size,
+        InstanceDefaultCertificateFile: {
+          connect: {
+            id: instance.id,
+          },
+        },
+      },
+    });
+  }
+
+  async saveUniversityDefaultCertificate(
+    university: University,
+    object: MediaObject,
+  ): Promise<void> {
+    await this.prisma.mediaObjects.create({
+      data: {
+        id: object.id,
+        name: object.name,
+        bucket: object.bucket,
+        mime: object.mimetype,
+        size: object.size,
+        UniversitiesDefaultCertificateFile: {
           connect: {
             id: university.id,
           },

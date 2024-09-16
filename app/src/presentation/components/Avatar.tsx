@@ -8,10 +8,8 @@ interface AvatarProps {
 }
 
 const Avatar: React.FC<AvatarProps> = ({ user, className }) => {
-    if (user?.avatar?.id) {
-        return (
-            <NetworkImage id={user.avatar.id} placeholder={AvatarPlaceholderPng} alt="avatar" className={className} />
-        );
+    if (user?.id) {
+        return <NetworkImage id={user.id} placeholder={AvatarPlaceholderPng} alt="avatar" className={className} />;
     }
 
     return <img alt="avatar" src={AvatarPlaceholderPng} className={className} />;
