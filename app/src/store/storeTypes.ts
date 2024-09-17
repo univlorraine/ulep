@@ -59,6 +59,7 @@ interface ApiUrlPayload {
     apiUrl: string;
     chatUrl: string;
     socketChatUrl: string;
+    jitsiUrl: string;
 }
 
 interface ProfileStorePayload {
@@ -82,6 +83,7 @@ interface StoreInterface {
     apiUrl: string;
     chatUrl: string;
     socketChatUrl: string;
+    jitsiUrl: string;
     language: string;
     logout: Action<StoreInterface>;
     refreshToken: string;

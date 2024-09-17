@@ -156,8 +156,8 @@ const AppInstance: React.FC = () => {
     if (!apiUrl && !import.meta.env.VITE_API_URL)
         return (
             <InstancesPage
-                onValidate={({ apiUrl, chatUrl, socketChatUrl }: ValidateInstance) =>
-                    setApiUrl({ apiUrl, chatUrl, socketChatUrl })
+                onValidate={({ apiUrl, chatUrl, socketChatUrl, jitsiUrl }: ValidateInstance) =>
+                    setApiUrl({ apiUrl, chatUrl, socketChatUrl, jitsiUrl })
                 }
             />
         );

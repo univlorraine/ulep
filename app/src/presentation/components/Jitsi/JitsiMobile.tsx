@@ -4,14 +4,14 @@ import { useEffect } from 'react';
 import { useHistory } from 'react-router-dom';
 import { JitsiProps } from './VisioContainer';
 
-const JitsiMobile = ({ jitsiDomain, roomName, jitsiToken }: JitsiProps) => {
+const JitsiMobile = ({ jitsiUrl, roomName, jitsiToken }: JitsiProps) => {
     const history = useHistory();
 
     const initialiseJitsi = async () => {
         // native device, open jitsi capacitor plugin
         await Jitsi.joinConference({
             roomName: roomName,
-            url: `https://${jitsiDomain}/`,
+            url: `https://${jitsiUrl}/`,
             token: jitsiToken,
 
             channelLastN: '10',

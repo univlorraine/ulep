@@ -9,12 +9,14 @@ const Store = createStore<TokenStoreTypes>(
             apiUrl: '',
             chatUrl: '',
             socketChatUrl: '',
+            jitsiUrl: '',
             language: '',
             refreshToken: '',
             setApiUrl: action((state, payload) => {
                 state.apiUrl = payload.apiUrl;
                 state.chatUrl = payload.chatUrl;
                 state.socketChatUrl = payload.socketChatUrl;
+                state.jitsiUrl = payload.jitsiUrl;
             }),
             setLanguage: action((state, payload) => {
                 state.language = payload.language;
