@@ -5,6 +5,7 @@ export interface ProfilesParams {
         user?: {
             lastname?: string;
             university?: string;
+            division?: string;
         };
         university?: string; // Use to force university filter when admin is from partner university
         learningLanguage?: string;
@@ -20,6 +21,7 @@ const ProfilesQuery = (params: ProfilesParams): string => {
         lastname: params.filter.user?.lastname,
         university: params.filter.university || params.filter.user?.university,
         learningLanguage: params.filter.learningLanguage,
+        division: params.filter.user?.division,
         page: params.pagination.page,
         limit: params.pagination.perPage,
     };

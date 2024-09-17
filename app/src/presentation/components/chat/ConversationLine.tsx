@@ -1,23 +1,24 @@
 import { IonAvatar, IonItem } from '@ionic/react';
 import React from 'react';
 import { useTranslation } from 'react-i18next';
-import MediaObject from '../../../domain/entities/MediaObject';
 import Conversation from '../../../domain/entities/chat/Conversation';
 import { Message } from '../../../domain/entities/chat/Message';
 import NetworkImage from '../NetworkImage';
 import styles from './ConversationLine.module.css';
 
 interface ConversationAvatarProps {
-    avatar?: MediaObject;
+    avatar: string;
     firstname: string;
     lastname: string;
 }
 
 const ConversationAvatar: React.FC<ConversationAvatarProps> = ({ avatar, firstname, lastname }) => {
     return (
-        <>
-            {avatar && <NetworkImage className={styles.image} id={avatar.id} aria-hidden={true} />}
-            {!avatar && (
+        <NetworkImage
+            className={styles.image}
+            id={avatar}
+            aria-hidden={true}
+            onErrorComponent={() => (
                 <IonAvatar className={styles.image} aria-hidden={true}>
                     <span className={styles.avatarLetter}>
                         {firstname[0].toUpperCase()}
@@ -25,7 +26,7 @@ const ConversationAvatar: React.FC<ConversationAvatarProps> = ({ avatar, firstna
                     </span>
                 </IonAvatar>
             )}
-        </>
+        />
     );
 };
 
@@ -62,24 +63,24 @@ const ConversationLine: React.FC<ConversationLineProps> = ({
     userId,
 }) => {
     const { t } = useTranslation();
-    const mainParticipant = Conversation.getMainConversationPartner(conversation, userId);
+    const partner = Conversation.getMainConversationPartner(conversation, userId);
     return (
         <IonItem
             className={styles.line}
             button={true}
             onClick={() => onPressed(conversation)}
-            aria-label={t('chat.conversation_menu.aria_label') as string}
+            aria-label={t('chat.conversation_menu.user_aria_label', { name: partner.firstname }) as string}
             color={conversation.id === currentConversation?.id ? 'light' : undefined}
         >
             <div className={styles.container}>
                 <ConversationAvatar
-                    avatar={mainParticipant.avatar}
-                    firstname={mainParticipant.firstname}
-                    lastname={mainParticipant.lastname}
+                    avatar={partner.avatar?.id || partner.id}
+                    firstname={partner.firstname}
+                    lastname={partner.lastname}
                 />
                 <div className={styles.content}>
                     <div className={styles['top-line']}>
-                        <span className={styles.name}>{mainParticipant.firstname}</span>
+                        <span className={styles.name}>{partner.firstname}</span>
                         {conversation.lastMessage && (
                             <span className={styles.date}>{`${t(
                                 conversation.lastMessage.getMessageDate()

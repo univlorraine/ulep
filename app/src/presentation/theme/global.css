@@ -84,6 +84,18 @@ input::-webkit-inner-spin-button {
     -webkit-appearance: none;
     margin: 0;
 }
+ion-radio::part(container) {
+    width: 20px;
+    height: 20px;
+
+    border-radius: 8px;
+    border: 2px solid #ddd;
+}
+
+ion-radio {
+    --color: #000;
+    --color-checked: #000;
+}
 
 .no-gutters {
     --ion-grid-padding: 0;

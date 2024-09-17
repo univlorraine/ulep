@@ -1,15 +1,14 @@
-import React from 'react';
 import {
-    TopToolbar,
+    ArrayField,
+    Datagrid,
     EditButton,
-    useTranslate,
     Show,
     SimpleShowLayout,
     TextField,
-    ArrayField,
-    Datagrid,
+    TopToolbar,
+    useTranslate,
 } from 'react-admin';
-import ReferenceUploadField from '../../components/field/ReferenceUploadField';
+import ReferenceUploadField from '../../components/field/ReferenceUploadImageField';
 import PageTitle from '../../components/PageTitle';
 
 const ObjectiveShowAction = () => (

@@ -23,6 +23,9 @@ model Instance {
   secondary_dark_color       String
   days_before_closure_notification      Int       @default(30)
   is_in_maintenance          Boolean @default(false)
+  default_certificate_file_id String? @unique
+
+  DefaultCertificateFile          MediaObjects? @relation(fields: [default_certificate_file_id], references: [id])
 }
 
 model CountryCodes {
@@ -85,6 +88,7 @@ model Organizations {
   codes                String[]            @default([])
   domains              String[]            @default([])
   image_id             String?             @unique
+  default_certificate_file_id String?      @unique
   timezone             String
   admissionStartDate   DateTime
   admissionEndDate     DateTime
@@ -107,8 +111,9 @@ model Organizations {
   RefusedTandems       RefusedTandems[]
   SpecificLanguagesAvailable   LanguageCodes[]
   NativeLanguage              LanguageCodes     @relation("NativeLanguageOrganizations", fields: [language_code_id], references: [id])
-  Image                 MediaObjects? @relation(fields: [image_id], references: [id])
+  Image                 MediaObjects? @relation("UniversitiesImage", fields: [image_id], references: [id])
   Contact               Contacts?      @relation(fields: [default_contact_id], references: [id])
+  DefaultCertificateFile MediaObjects? @relation("UniversitiesDefaultCertificateFile", fields: [default_certificate_file_id], references: [id])
 
   @@unique([name])
   @@map("organizations")
@@ -210,9 +215,11 @@ model MediaObjects {
   updated_at DateTime            @updatedAt
   User       Users?
   Goal       LearningObjectives?
-  University Organizations?
+  University Organizations? @relation("UniversitiesImage")
   PronunciationWord Vocabulary? @relation("PronunciationWord")
   PronunciationTranslation Vocabulary? @relation("PronunciationTranslation")
+  InstanceDefaultCertificateFile Instance?
+  UniversitiesDefaultCertificateFile Organizations? @relation("UniversitiesDefaultCertificateFile")
 
   @@unique([name, bucket])
   @@map("media_objects")

@@ -96,6 +96,7 @@ import {
   GetTestUsecase,
   GetTestsUsecase,
   GetUniversitiesUsecase,
+  GetUniversityDivisionsUsecase,
   GetUniversityUsecase,
   GetUserPersonalData,
   GetUserUsecase,
@@ -124,6 +125,8 @@ import {
 import { GetJitsiTokenUsecase } from './usecases/jitsi/get-jitsi-token.usecase';
 import { DeleteLearningLanguageUsecase } from './usecases/learningLanguage/delete-learning-langugage.usecase';
 import { GetLearningLanguageTandemUsecase } from './usecases/learningLanguage/getLearningLanguageTandem.usecase';
+import { UploadInstanceDefaultCertificateUsecase } from './usecases/media/upload-instance-default-certificate.usecase';
+import { UploadUniversityDefaultCertificateUsecase } from './usecases/media/upload-university-default-certificate.usecase';
 import { ArchiveTandemsAndDeleteUsersUsecase } from './usecases/purges/archive-tandems.usecase';
 import { LogoutAllSessionsUsecase } from './usecases/security/logout-all-sessions.usecase';
 import { ResetPasswordUsecase } from './usecases/security/reset-password.usecase';
@@ -167,6 +170,8 @@ const usecases: Provider[] = [
   UploadObjectiveImageUsecase,
   UploadUniversityImageUsecase,
   UploadAudioVocabularyUsecase,
+  UploadInstanceDefaultCertificateUsecase,
+  UploadUniversityDefaultCertificateUsecase,
   // Objectives
   CreateObjectiveUsecase,
   DeleteObjectiveUsecase,
@@ -236,6 +241,7 @@ const usecases: Provider[] = [
   GetUniversitiesUsecase,
   GetUniversityUsecase,
   UpdateUniversityUsecase,
+  GetUniversityDivisionsUsecase,
   // Users
   AddDeviceUsecase,
   CreateAdministratorUsecase,

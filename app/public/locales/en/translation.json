@@ -170,14 +170,17 @@
         "messageReported": "Message reported",
         "mediaReport": "Media sent by {{firstname}} {{lastname}} on {{date}}",
         "noMessages": "There is no message",
+        "title": "Messages with {{name}}",
+        "video_call_aria_label": "Call {{name}}",
         "send_button": {
             "record_aria_label": "Stay pressed to record an audio or write your message to switch to send mode",
             "send_aria_label": "Send message"
         },
         "search": {
-            "placeholder": "Search in conversation"
+            "placeholder": "Search in conversation",
+            "previous": "Go to previous message",
+            "next": "Go to next message"
         },
-        "title": "Messages with {{name}}",
         "input": {
             "placeholder": {
                 "blocked": "The tandem is on pause, you cannot send messages",
@@ -185,7 +188,11 @@
             }
         },
         "conversation_menu": {
-            "aria_label": "Conversation menu",
+            "aria_label": "Conversation menu with {{name}}",
+            "return_to_conversations_aria_label": "Return to conversations list",
+            "return_to_chat_aria_label": "Return to conversation with {{name}}",
+            "conversation_aria_label": "List of conversations",
+            "user_aria_label": "Conversation with {{name}}",
             "search": "Search in conversation",
             "medias": "Show media"
         },

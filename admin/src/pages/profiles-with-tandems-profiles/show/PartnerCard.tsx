@@ -6,6 +6,7 @@ import UserStatusChips from '../../../components/UserStatusChips';
 import { LearningLanguage, LearningLanguageWithTandemWithPartnerProfile } from '../../../entities/LearningLanguage';
 import { ProfileWithTandemsProfiles } from '../../../entities/ProfileWithTandemsProfiles';
 import { TandemStatus, TandemWithPartnerLearningLanguage } from '../../../entities/Tandem';
+import { UserStatus } from '../../../entities/User';
 import codeLanguageToFlag from '../../../utils/codeLanguageToFlag';
 import isAgeCriterionMet from '../../../utils/isAgeCriterionMet';
 import hasTandemManagementPermission from '../hasTandemManagementPermission';
@@ -35,7 +36,7 @@ type ComponentTitleProps = {
     partenerStatus?: UserStatus;
 };
 
-const ComponentTitle = ({ title, status }: { title: string; status: UserStatus }) => (
+const ComponentTitle = ({ title, status }: { title: string; status: UserStatus | undefined }) => (
     <Box className="profile-header">
         <Typography variant="h4">{title}</Typography>
         {status && <UserStatusChips status={status} />}
@@ -133,7 +134,9 @@ const TandemCard = ({
             />
 
             {(!partnerLearningLanguage ||
-                (partnerType === PartnerType.BEST_OVERALL && tandem?.status === TandemStatus.INACTIVE)) && (
+                (partnerType === PartnerType.BEST_OVERALL &&
+                    tandem?.status === TandemStatus.INACTIVE &&
+                    partnerLearningLanguage.profile.user.status !== UserStatus.BANNED)) && (
                 <Box>{translate('learning_languages.show.tandems.globalSuggestions.noResult')}</Box>
             )}
 
@@ -194,6 +197,20 @@ const TandemCard = ({
                     <div className="line">
                         <span className="label">{translate('learning_languages.list.tableColumns.university')}</span>
                         <span>{partnerLearningLanguage.profile.user.university.name}</span>
+                    </div>
+
+                    <div className="line">
+                        <span className="label">{translate('learning_languages.list.tableColumns.campus')}</span>
+                        <span>
+                            {partnerLearningLanguage.campus ? (
+                                partnerLearningLanguage.campus.name
+                            ) : (
+                                <BooleanField
+                                    record={{ campus: partnerLearningLanguage.campus !== null }}
+                                    source="campus"
+                                />
+                            )}
+                        </span>
                     </div>
 
                     <div className="line">

@@ -61,17 +61,24 @@ const RecordingButton = ({
         <div className={styles['container']}>
             {recording && <div className={styles['timer']}>{time}s</div>}
             {mode === 'send' ? (
-                <IonButton
-                    aria-label={t('chat.send_button.send_aria_label') as string}
-                    fill="clear"
-                    className={styles['sender-button']}
-                    disabled={isBlocked}
-                    onClick={onSendPressed}
-                >
-                    <IonIcon className={styles['sender']} icon={SenderSvg} />
-                </IonButton>
+                <>
+                    {/* Fix Accessibility: Use fragmernt to rerender natively the button */}
+                    <IonButton
+                        id="send-button"
+                        title={t('chat.send_button.send_aria_label') as string}
+                        aria-label={t('chat.send_button.send_aria_label') as string}
+                        fill="clear"
+                        className={styles['sender-button']}
+                        disabled={isBlocked}
+                        onClick={onSendPressed}
+                    >
+                        <IonIcon className={styles['sender']} icon={SenderSvg} />
+                    </IonButton>
+                </>
             ) : (
                 <IonButton
+                    id="record-button"
+                    title={t('chat.send_button.record_aria_label') as string}
                     aria-label={t('chat.send_button.record_aria_label') as string}
                     fill="clear"
                     className={styles['sender-button']}

@@ -24,6 +24,7 @@
     flex-direction: column;
     position: relative;
     overflow: hidden;
+    overflow-y: auto;
 }
 
 .content {
@@ -35,7 +36,6 @@
     position: relative;
     padding: 0px 20px;
     z-index: 2;
-    overflow-y: auto;
     width: 100%;
 }
 

@@ -1,11 +1,12 @@
-import { Box, Typography, OutlinedInput } from '@mui/material';
+import { Box, OutlinedInput, Typography } from '@mui/material';
 import { MuiColorInput } from 'mui-color-input';
 import React, { useState } from 'react';
 import { Button, useTranslate } from 'react-admin';
-import Instance from '../../entities/Instance';
+import Instance, { InstanceFormPayload } from '../../entities/Instance';
+import FileUploader from '../FileUploader';
 
 interface InstanceFormProps {
-    handleSubmit: (instance: Instance) => void;
+    handleSubmit: (payload: InstanceFormPayload) => void;
     instance: Instance;
 }
 
@@ -27,6 +28,7 @@ const InstanceForm: React.FC<InstanceFormProps> = ({ handleSubmit, instance }) =
     const [newDaysBeforeClosureNotification, setNewDaysBeforeClosureNotification] = useState<number>(
         instance.daysBeforeClosureNotification
     );
+    const [newDefaultCertificateFile, setNewDefaultCertificateFile] = useState<File>();
 
     const allFieldsFilled =
         newName &&
@@ -41,8 +43,8 @@ const InstanceForm: React.FC<InstanceFormProps> = ({ handleSubmit, instance }) =
         newSecondaryBackgroundColor &&
         newSecondaryDarkColor;
 
-    const onSubmit = () => {
-        const newInstance: Instance = {
+    const onSubmit = () =>
+        handleSubmit({
             name: newName,
             email: newEmail,
             cguUrl: newCgu,
@@ -56,10 +58,8 @@ const InstanceForm: React.FC<InstanceFormProps> = ({ handleSubmit, instance }) =
             secondaryDarkColor: newSecondaryDarkColor,
             isInMaintenance: instance.isInMaintenance,
             daysBeforeClosureNotification: newDaysBeforeClosureNotification,
-        };
-
-        return handleSubmit(newInstance);
-    };
+            defaultCertificateFile: newDefaultCertificateFile,
+        });
 
     return (
         <>
@@ -137,6 +137,16 @@ const InstanceForm: React.FC<InstanceFormProps> = ({ handleSubmit, instance }) =
                                 required
                             />
                         </Box>
+                    </Box>
+
+                    <Box>
+                        <Typography variant="subtitle1">{translate(`instance.edit.defaultCertificateFile`)}</Typography>
+                        <FileUploader
+                            accept="application/pdf"
+                            fileType="PDF"
+                            onFileSelect={setNewDefaultCertificateFile}
+                            source="defaultCertificateFile.id"
+                        />
                     </Box>
                 </Box>
 

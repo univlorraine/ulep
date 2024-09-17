@@ -1,5 +1,4 @@
-import React from 'react';
-import { useTranslate, useNotify, useRedirect, useUpdate, Edit, WithRecord } from 'react-admin';
+import { Edit, useNotify, useRedirect, useTranslate, useUpdate, WithRecord } from 'react-admin';
 import UniversityForm from '../../components/form/UniversityForm';
 import UniversitiesPagesHeader from '../../components/tabs/UniversitiesPagesHeader';
 import Administrator from '../../entities/Administrator';
@@ -32,7 +31,8 @@ const EditUniversity = () => {
         notificationEmail?: string,
         specificLanguagesAvailable?: Language[],
         defaultContact?: Administrator,
-        file?: File
+        file?: File,
+        defaultCertificateFile?: File
     ) => {
         const formData = universityToFormData(
             name,
@@ -51,7 +51,8 @@ const EditUniversity = () => {
             notificationEmail,
             specificLanguagesAvailable,
             defaultContact,
-            file
+            file,
+            defaultCertificateFile
         );
 
         try {
@@ -108,7 +109,8 @@ const EditUniversity = () => {
                                 notificationEmail?: string,
                                 specificLanguagesAvailable?: Language[],
                                 defaultContact?: Administrator,
-                                file?: File
+                                file?: File,
+                                defaultCertificateFile?: File
                             ) =>
                                 handleSubmit(
                                     record.id,
@@ -128,7 +130,8 @@ const EditUniversity = () => {
                                     notificationEmail,
                                     specificLanguagesAvailable,
                                     defaultContact,
-                                    file
+                                    file,
+                                    defaultCertificateFile
                                 )
                             }
                             maxTandemsPerUser={record.maxTandemsPerUser}

@@ -4,7 +4,6 @@ import DeviceAdapterInterface from '../adapter/interfaces/DeviceAdapter.interfac
 import FileAdapterInterface from '../adapter/interfaces/FileAdapter.interface';
 import NotificationAdapterInterface from '../adapter/interfaces/NotificationAdapter.interface';
 import RecorderAdapterInterface from '../adapter/interfaces/RecorderAdapter.interface';
-import SocketIoAdapterInterface from '../adapter/interfaces/SocketIoAdapter.interface';
 import Configuration from '../domain/entities/Confirguration';
 import AddDeviceUsecaseInterface from '../domain/interfaces/AddDeviceUsecase.interface';
 import AskForAccountDeletionUsecaseInterface from '../domain/interfaces/AskForAccountDeletionUsecase.interface';
@@ -97,7 +96,6 @@ export interface ConfigContextValueType {
     resetPassword: ResetPasswordUsecaseInterface;
     sendMessage: SendMessageUsecaseInterface;
     searchMessagesIdsFromConversation: SearchMessagesIdsFromConversationUsecaseInterface;
-    socketIoAdapter: SocketIoAdapterInterface;
     updateAvatar: UpdateAvatarUsecaseInterface;
     updateNotificationPermission: UpdateNotificationPermissionUsecaseInterface;
     retrievePerson: RetrievePersonInfoUsecaseInterface;

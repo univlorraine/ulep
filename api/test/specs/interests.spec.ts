@@ -1,24 +1,24 @@
-import * as request from 'supertest';
-import { Test } from '@nestjs/testing';
-import { AppModule } from 'src/app.module';
 import {
   I18nService,
   InterestCategoryFactory,
   InterestFactory,
   LanguageFactory,
 } from '@app/common';
-import { InMemoryInterestRepository } from 'src/providers/persistance/repositories/in-memory-interest.repository';
-import { INTEREST_REPOSITORY } from 'src/core/ports/interest.repository';
-import { TestServer } from './test.server';
-import { TestAuthGuard } from '../utils/TestAuthGuard';
-import { InMemoryLanguageRepository } from 'src/providers/persistance/repositories/in-memory-language-repository';
-import { LANGUAGE_REPOSITORY } from 'src/core/ports/language.repository';
+import { Test } from '@nestjs/testing';
 import { AuthenticationGuard } from 'src/api/guards';
-import InMemoryEmailGateway from 'src/providers/gateway/in-memory-email.gateway';
+import { AppModule } from 'src/app.module';
 import { EMAIL_GATEWAY } from 'src/core/ports/email.gateway';
-import { InMemoryI18nService } from 'src/providers/services/in-memory.i18n.provider';
-import InMemoryNotificaitonGateway from 'src/providers/gateway/in-memory-notification.gateway';
+import { INTEREST_REPOSITORY } from 'src/core/ports/interest.repository';
+import { LANGUAGE_REPOSITORY } from 'src/core/ports/language.repository';
 import { NOTIFICATION_GATEWAY } from 'src/core/ports/notification.gateway';
+import InMemoryEmailGateway from 'src/providers/gateway/in-memory-email.gateway';
+import InMemoryNotificaitonGateway from 'src/providers/gateway/in-memory-notification.gateway';
+import { InMemoryInterestRepository } from 'src/providers/persistance/repositories/in-memory-interest.repository';
+import { InMemoryLanguageRepository } from 'src/providers/persistance/repositories/in-memory-language-repository';
+import { InMemoryI18nService } from 'src/providers/services/in-memory.i18n.provider';
+import * as request from 'supertest';
+import { TestAuthGuard } from '../utils/TestAuthGuard';
+import { TestServer } from './test.server';
 
 describe('Interests', () => {
   let app: TestServer;
@@ -34,6 +34,9 @@ describe('Interests', () => {
   const inMemoryI18n = new InMemoryI18nService();
 
   beforeAll(async () => {
+    // Avoid jest timeout issues
+    jest.useFakeTimers({ legacyFakeTimers: true });
+
     const language = languageFactory.makeOne({ code: 'fr' });
     languageRepository.init([language]);
 

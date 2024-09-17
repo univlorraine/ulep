@@ -1,35 +1,35 @@
 import {
-  BadRequestException,
-  HttpException,
-  Inject,
-  Injectable,
-  Logger,
+    BadRequestException,
+    HttpException,
+    Inject,
+    Injectable,
+    Logger,
 } from '@nestjs/common';
 import * as jwt from 'jsonwebtoken';
 import { Client, Issuer, TokenSet } from 'openid-client';
 import * as qs from 'querystring';
 import {
-  KEYCLOAK_CONFIGURATION,
-  KeycloakConfiguration,
+    KEYCLOAK_CONFIGURATION,
+    KeycloakConfiguration,
 } from './keycloak.configuration';
 import {
-  InvalidCredentialsException,
-  UnexpectedErrorException,
-  UserPasswordNotValidException,
+    InvalidCredentialsException,
+    UnexpectedErrorException,
+    UserPasswordNotValidException,
 } from './keycloak.errors';
 import RoleRepresentation, {
-  CreateAdministratorProps,
-  CreateUserProps,
-  CredentialRepresentation,
-  GetUsersProps,
-  KeycloakCertsResponse,
-  KeycloakEmailAction,
-  KeycloakUser,
-  OpenIdConfiguration,
-  UpdateAdministratorPayload,
-  UpdateAdministratorProps,
-  UserRepresentation,
-  UserSession,
+    CreateAdministratorProps,
+    CreateUserProps,
+    CredentialRepresentation,
+    GetUsersProps,
+    KeycloakCertsResponse,
+    KeycloakEmailAction,
+    KeycloakUser,
+    OpenIdConfiguration,
+    UpdateAdministratorPayload,
+    UpdateAdministratorProps,
+    UserRepresentation,
+    UserSession,
 } from './keycloak.models';
 
 export interface Credentials {
@@ -417,17 +417,32 @@ export class KeycloakClient {
       lastName: props.lastname,
       attributes: {
         universityId: props.universityId,
+        universityLogin: props.universityLogin,
       },
     };
 
     if (props.password) {
-      payload.credentials = [
+      const passwordResponse = await fetch(
+        `${this.configuration.baseUrl}/admin/realms/${this.configuration.realm}/users/${props.id}/reset-password`,
         {
-          type: 'password',
-          value: props.password,
-          temporary: false,
+          method: 'PUT',
+          headers: {
+            'Content-Type': 'application/json',
+            Authorization: `Bearer ${await this.getAccessToken()}`,
+          },
+          body: JSON.stringify({
+            type: 'password',
+            value: props.password,
+            temporary: false,
+          }),
         },
-      ];
+      );
+
+      if (!passwordResponse.ok) {
+        const result = await passwordResponse.json();
+        this.logger.error(JSON.stringify(result));
+        throw new HttpException({ message: result.error_description }, 500);
+      }
     }
 
     const response = await fetch(
@@ -445,7 +460,7 @@ export class KeycloakClient {
     if (!response.ok) {
       const result = await response.json();
       this.logger.error(JSON.stringify(result));
-      throw new HttpException({ message: result }, 500);
+      throw new HttpException({ message: result.error_description }, 500);
     }
 
     const updatedAdmin = await this.getUserById(props.id, true);

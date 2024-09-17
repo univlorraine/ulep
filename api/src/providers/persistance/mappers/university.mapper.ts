@@ -1,8 +1,8 @@
 import * as Prisma from '@prisma/client';
 import { MediaObject, PairingMode, University } from 'src/core/models';
-import { campusMapper } from './campus.mapper';
 import { countryMapper } from 'src/providers/persistance/mappers/country.mapper';
 import { languageMapper } from 'src/providers/persistance/mappers/language.mapper';
+import { campusMapper } from './campus.mapper';
 
 export const UniversityRelations = {
   Contact: true,
@@ -11,6 +11,7 @@ export const UniversityRelations = {
   Places: true,
   SpecificLanguagesAvailable: true,
   NativeLanguage: true,
+  DefaultCertificateFile: true,
 };
 
 export type UniversitySnapshot = Prisma.Organizations & {
@@ -20,6 +21,7 @@ export type UniversitySnapshot = Prisma.Organizations & {
   Places: Prisma.Places[];
   SpecificLanguagesAvailable: Prisma.LanguageCodes[];
   NativeLanguage: Prisma.LanguageCodes;
+  DefaultCertificateFile: Prisma.MediaObjects;
 };
 
 export const universityMapper = (snapshot: UniversitySnapshot): University => {
@@ -53,6 +55,15 @@ export const universityMapper = (snapshot: UniversitySnapshot): University => {
         bucket: snapshot.Image.bucket,
         mimetype: snapshot.Image.mime,
         size: snapshot.Image.size,
+      }),
+    defaultCertificateFile:
+      snapshot.DefaultCertificateFile &&
+      new MediaObject({
+        id: snapshot.DefaultCertificateFile.id,
+        name: snapshot.DefaultCertificateFile.name,
+        bucket: snapshot.DefaultCertificateFile.bucket,
+        mimetype: snapshot.DefaultCertificateFile.mime,
+        size: snapshot.DefaultCertificateFile.size,
       }),
   });
 };

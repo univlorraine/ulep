@@ -2,7 +2,7 @@ import { Box, Typography } from '@mui/material';
 import Button from '@mui/material/Button';
 import React, { useRef, useState } from 'react';
 import { useTranslate } from 'react-admin';
-import ReferenceUploadField from './field/ReferenceUploadField';
+import ReferenceUploadImageField from './field/ReferenceUploadImageField';
 
 interface ImageUploaderProps {
     source?: string;
@@ -67,7 +67,7 @@ const ImageUploader: React.FC<ImageUploaderProps> = ({ source, onImageSelect }) 
 
             {source && !currentFile && (
                 <Button onClick={() => fileInputRef.current?.click()}>
-                    <ReferenceUploadField source={source} />
+                    <ReferenceUploadImageField source={source} />
                 </Button>
             )}
 

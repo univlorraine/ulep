@@ -5,7 +5,6 @@ import DomainHttpAdapter from '../adapter/DomainHttpAdapter';
 import FileAdapter from '../adapter/FileAdapter';
 import NotificationAdapter from '../adapter/NotificationAdapter';
 import { RecorderAdapter } from '../adapter/RecorderAdapter';
-import SocketIoAdapter from '../adapter/SocketIoAdapter';
 import Configuration from '../domain/entities/Confirguration';
 import AddDeviceUsecase from '../domain/usecases/AddDeviceUsecase';
 import AskForAccountDeletion from '../domain/usecases/AskForAccountDeletionUsecase';
@@ -59,7 +58,6 @@ import { ConfigContextValueType } from './configurationContextTypes';
 interface GetConfigContextValueProps {
     apiUrl: string;
     chatUrl: string;
-    socketChatUrl: string;
     languageCode: string;
     accessToken: string;
     refreshToken: string;
@@ -73,7 +71,6 @@ interface GetConfigContextValueProps {
 const getConfigContextValue = ({
     apiUrl,
     chatUrl,
-    socketChatUrl,
     languageCode,
     accessToken,
     refreshToken,
@@ -104,7 +101,6 @@ const getConfigContextValue = ({
         setTokens,
         logout
     );
-    const socketIoAdapter = new SocketIoAdapter(socketChatUrl);
 
     const addDevice = new AddDeviceUsecase(domainHttpAdapter);
     const askForAccountDeletion = new AskForAccountDeletion(domainHttpAdapter);
@@ -204,7 +200,6 @@ const getConfigContextValue = ({
         resetPassword,
         searchMessagesIdsFromConversation,
         sendMessage,
-        socketIoAdapter,
         updateAvatar,
         updateNotificationPermission,
         recorderAdapter,

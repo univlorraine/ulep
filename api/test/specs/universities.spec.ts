@@ -1,6 +1,3 @@
-import * as request from 'supertest';
-import { Test } from '@nestjs/testing';
-import { AppModule } from 'src/app.module';
 import {
   CountryFactory,
   I18nService,
@@ -9,28 +6,33 @@ import {
   UniversityFactory,
   UserFactory,
 } from '@app/common';
-import { TestServer } from './test.server';
-import { InMemoryLanguageRepository } from 'src/providers/persistance/repositories/in-memory-language-repository';
-import { AUTHENTICATOR, InMemoryAuthenticator } from 'src/api/services';
-import { InMemoryUserRepository } from 'src/providers/persistance/repositories/in-memory-user-repository';
-import { USER_REPOSITORY } from 'src/core/ports/user.repository';
-import { InMemoryUniversityRepository } from 'src/providers/persistance/repositories/in-memory-university-repository';
-import { UNIVERSITY_REPOSITORY } from 'src/core/ports/university.repository';
-import { AuthenticationGuard } from 'src/api/guards';
-import { TestAuthGuard } from '../utils/TestAuthGuard';
-import { InMemoryCountryCodesRepository } from 'src/providers/persistance/repositories/in-memory-country-repository';
-import { COUNTRY_REPOSITORY } from 'src/core/ports/country.repository';
-import { Language, LanguageStatus, PairingMode } from 'src/core/models';
-import { EMAIL_GATEWAY } from 'src/core/ports/email.gateway';
-import InMemoryEmailGateway from 'src/providers/gateway/in-memory-email.gateway';
-import { LEARNING_LANGUAGE_REPOSITORY } from 'src/core/ports/learning-language.repository';
-import { InMemoryLearningLanguageRepository } from 'src/providers/persistance/repositories/in-memory-learning-language-repository';
+import { InstanceFactory } from '@app/common/database/factories/instance.factory';
 import { KeycloakClient } from '@app/keycloak';
-import { InMemoryI18nService } from 'src/providers/services/in-memory.i18n.provider';
+import { Test } from '@nestjs/testing';
+import { AuthenticationGuard } from 'src/api/guards';
+import { AUTHENTICATOR, InMemoryAuthenticator } from 'src/api/services';
+import { AppModule } from 'src/app.module';
+import { PairingMode } from 'src/core/models';
+import { COUNTRY_REPOSITORY } from 'src/core/ports/country.repository';
+import { EMAIL_GATEWAY } from 'src/core/ports/email.gateway';
+import { INSTANCE_REPOSITORY } from 'src/core/ports/instance.repository';
+import { LEARNING_LANGUAGE_REPOSITORY } from 'src/core/ports/learning-language.repository';
 import { NOTIFICATION_GATEWAY } from 'src/core/ports/notification.gateway';
+import { UNIVERSITY_REPOSITORY } from 'src/core/ports/university.repository';
+import { USER_REPOSITORY } from 'src/core/ports/user.repository';
+import InMemoryEmailGateway from 'src/providers/gateway/in-memory-email.gateway';
 import InMemoryNotificaitonGateway from 'src/providers/gateway/in-memory-notification.gateway';
-import { faker } from '@faker-js/faker';
+import { InMemoryCountryCodesRepository } from 'src/providers/persistance/repositories/in-memory-country-repository';
+import { InMemoryInstanceRepository } from 'src/providers/persistance/repositories/in-memory-instance-repository';
+import { InMemoryLanguageRepository } from 'src/providers/persistance/repositories/in-memory-language-repository';
+import { InMemoryLearningLanguageRepository } from 'src/providers/persistance/repositories/in-memory-learning-language-repository';
+import { InMemoryUniversityRepository } from 'src/providers/persistance/repositories/in-memory-university-repository';
+import { InMemoryUserRepository } from 'src/providers/persistance/repositories/in-memory-user-repository';
+import { InMemoryI18nService } from 'src/providers/services/in-memory.i18n.provider';
+import * as request from 'supertest';
 import { LANGUAGE_REPOSITORY } from '../../src/core/ports/language.repository';
+import { TestAuthGuard } from '../utils/TestAuthGuard';
+import { TestServer } from './test.server';
 
 describe('Universities', () => {
   let app: TestServer;
@@ -42,8 +44,11 @@ describe('Universities', () => {
   const userFactory = new UserFactory();
   const user = userFactory.makeOne({ university });
   const { keycloakUser } = new KeycloakUserFactory().makeOne({ user });
+  const instanceFactory = new InstanceFactory();
+  const instance = instanceFactory.makeOne();
   const authenticator = new InMemoryAuthenticator(keycloakUser);
   const learningLanguageRepository = new InMemoryLearningLanguageRepository();
+  const instanceRepository = new InMemoryInstanceRepository();
   const countryFactory = new CountryFactory();
   const country = countryFactory.makeOne();
 
@@ -63,6 +68,7 @@ describe('Universities', () => {
     userRepositoy.init([user]);
     countryRepository.init([country]);
     languageRepository.init(languages);
+    instanceRepository.init(instance);
 
     const keycloak = new KeycloakClient({
       realm: 'test',
@@ -101,6 +107,8 @@ describe('Universities', () => {
       .useValue(languageRepository)
       .overrideProvider(LEARNING_LANGUAGE_REPOSITORY)
       .useValue(learningLanguageRepository)
+      .overrideProvider(INSTANCE_REPOSITORY)
+      .useValue(instanceRepository)
       .overrideProvider(KeycloakClient)
       .useValue(keycloak)
       .compile();
