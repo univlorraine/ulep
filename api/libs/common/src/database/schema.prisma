@@ -584,6 +584,7 @@ model Activity {
   image_id          String?       @unique
   language_level    String
   language_code_id  String
+  activity_theme_id String
   ressource_url     String?
   ressource_file_id String?       @unique
   created_at        DateTime      @default(now())
@@ -595,6 +596,7 @@ model Activity {
   Creator Profiles @relation(fields: [creator_id], references: [id])
   ActivityVocabulary ActivityVocabulary[]
   ActivityExercises ActivityExercises[]
+  ActivityThemes ActivityThemes @relation(fields: [activity_theme_id], references: [id])
 
   @@map("activity")
 }
@@ -607,6 +609,7 @@ model ActivityThemes {
   updated_at      DateTime           @updatedAt
   TextContent     TextContent        @relation(fields: [text_content_id], references: [id], onDelete: Cascade)
   Category        ActivityThemeCategories @relation(fields: [category_id], references: [id], onDelete: Cascade)
+  Activity Activity[]
 
   @@unique([text_content_id])
   @@map("activity_themes")

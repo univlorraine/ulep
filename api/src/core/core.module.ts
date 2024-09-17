@@ -19,6 +19,7 @@ import {
   AddDeviceUsecase,
   AddLanguageRequestUsecase,
   CountAllSuggestedLanguageUsecase,
+  CreateActivityUsecase,
   CreateAdministratorUsecase,
   CreateInterestCategoryUsecase,
   CreateInterestUsecase,
@@ -132,6 +133,8 @@ import { GetKeycloakAdminGroupsUsecase } from './usecases/user/get-keycloak-admi
 import { RevokeSessionsUsecase } from './usecases/user/revoke-sessions.usecase';
 
 const usecases: Provider[] = [
+  // Activity
+  CreateActivityUsecase,
   //Campus
   CreateCampusUsecase,
   DeleteCampusUsecase,

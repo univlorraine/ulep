@@ -1,6 +1,7 @@
 import { PrismaService } from '@app/common';
 import { Module, Provider } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
+import { ACTIVITY_REPOSITORY } from 'src/core/ports/activity.repository';
 import { CAMPUS_REPOSITORY } from 'src/core/ports/campus.repository';
 import { CHAT_SERVICE } from 'src/core/ports/chat.service';
 import { CONTACT_REPOSITORY } from 'src/core/ports/contact.repository';
@@ -29,6 +30,7 @@ import { USER_REPOSITORY } from 'src/core/ports/user.repository';
 import { UUID_PROVIDER } from 'src/core/ports/uuid.provider';
 import { VOCABULARY_REPOSITORY } from 'src/core/ports/vocabulary.repository';
 import { FCMNotificationGateway } from 'src/providers/gateway/fcm-notification.gateway';
+import { PrismaActivityRepository } from 'src/providers/persistance/repositories/prisma-activity-repository';
 import { PrismaCampusRepository } from 'src/providers/persistance/repositories/prisma-campus.repository';
 import { PrismaContactRepository } from 'src/providers/persistance/repositories/prisma-contact-repository';
 import { PrismaInstanceRepository } from 'src/providers/persistance/repositories/prisma-instance.repository';
@@ -161,6 +163,10 @@ const providers: Provider[] = [
   {
     provide: PDF_SERVICE,
     useClass: PdfService,
+  },
+  {
+    provide: ACTIVITY_REPOSITORY,
+    useClass: PrismaActivityRepository,
   },
 ];
 

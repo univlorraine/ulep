@@ -34,12 +34,14 @@ import { TandemHistoryController } from 'src/api/controllers/tandemHistory.contr
 import { NotificationController } from 'src/api/controllers/notification.controller';
 import { ChatController } from 'src/api/controllers/chat.controller';
 import { VocabularyController } from 'src/api/controllers/vocabulary.controller';
+import { ActivityController } from 'src/api/controllers/activity.controller';
 
 //TODO: Change Swagger ApiOperation because when we change the order of imports there is an error
 
 @Module({
   imports: [CoreModule, TerminusModule, HttpModule, ConfigModule],
   controllers: [
+    ActivityController,
     CampusController,
     ChatController,
     CountryController,

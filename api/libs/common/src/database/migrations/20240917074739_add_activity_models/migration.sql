@@ -3,9 +3,15 @@ CREATE TABLE "activity" (
     "id" TEXT NOT NULL,
     "title" TEXT NOT NULL,
     "description" TEXT NOT NULL,
+    "creator_id" TEXT NOT NULL,
+    "status" TEXT NOT NULL DEFAULT 'DRAFT',
     "credit_image" TEXT,
     "image_id" TEXT,
+    "language_level" TEXT NOT NULL,
     "language_code_id" TEXT NOT NULL,
+    "activity_theme_id" TEXT NOT NULL,
+    "ressource_url" TEXT,
+    "ressource_file_id" TEXT,
     "created_at" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updated_at" TIMESTAMP(3) NOT NULL,
 
@@ -61,6 +67,9 @@ CREATE TABLE "activity_exercises" (
 CREATE UNIQUE INDEX "activity_image_id_key" ON "activity"("image_id");
 
 -- CreateIndex
+CREATE UNIQUE INDEX "activity_ressource_file_id_key" ON "activity"("ressource_file_id");
+
+-- CreateIndex
 CREATE UNIQUE INDEX "activity_themes_text_content_id_key" ON "activity_themes"("text_content_id");
 
 -- CreateIndex
@@ -73,7 +82,16 @@ CREATE UNIQUE INDEX "activity_vocabulary_pronunciation_activity_vocabulary_id_ke
 ALTER TABLE "activity" ADD CONSTRAINT "activity_image_id_fkey" FOREIGN KEY ("image_id") REFERENCES "media_objects"("id") ON DELETE SET NULL ON UPDATE CASCADE;
 
 -- AddForeignKey
+ALTER TABLE "activity" ADD CONSTRAINT "activity_ressource_file_id_fkey" FOREIGN KEY ("ressource_file_id") REFERENCES "media_objects"("id") ON DELETE SET NULL ON UPDATE CASCADE;
+
+-- AddForeignKey
 ALTER TABLE "activity" ADD CONSTRAINT "activity_language_code_id_fkey" FOREIGN KEY ("language_code_id") REFERENCES "language_codes"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "activity" ADD CONSTRAINT "activity_creator_id_fkey" FOREIGN KEY ("creator_id") REFERENCES "profiles"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "activity" ADD CONSTRAINT "activity_activity_theme_id_fkey" FOREIGN KEY ("activity_theme_id") REFERENCES "activity_themes"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE "activity_themes" ADD CONSTRAINT "activity_themes_text_content_id_fkey" FOREIGN KEY ("text_content_id") REFERENCES "text_content"("id") ON DELETE CASCADE ON UPDATE CASCADE;
