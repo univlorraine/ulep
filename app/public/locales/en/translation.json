@@ -105,6 +105,63 @@
         "download": "Download",
         "years_old": "years old"
     },
+    "vocabulary": {
+        "list": {
+            "create": "Create a new list",
+            "empty": "You haven't created any vocabulary list for this language yet.",
+            "go_back": "Go back",
+            "title": "Vocabulary lists",
+            "creator": "Created by {{name}}",
+            "missing_pronunciation": "{{count}} pronunciation to record",
+            "number_of_vocabularies": "{{count}} pairs",
+            "me": "me",
+            "add": {
+                "cancel": "Cancel",
+                "create": "Validate",
+                "origin_language": "Translation language",
+                "target_language": "Language to translate",
+                "title": "New vocabulary list",
+                "symbol": "List symbol",
+                "name": "List name",
+                "symbol_error": "The symbol is required",
+                "name_error": "The name is required",
+                "origin_language_error": "The translation language is required",
+                "target_language_error": "The language to translate is required"
+            },
+            "share": {
+                "cancel": "Cancel",
+                "create": "Validate",
+                "title": "With whom do you want to share?"
+            }
+        },
+        "pair": {
+            "go_back": "Go back",
+            "menu": "Menu",
+            "share_button": "Share",
+            "export": "Export",
+            "empty": "You haven't created any vocabulary pair for this list yet.",
+            "create": "New word pair",
+            "aria-pressed": "Update vocabulary",
+            "search": "Search",
+            "add": {
+                "cancel": "Cancel",
+                "save": "Save",
+                "pronunciation": "Pronunciation",
+                "add_prounonciation": "Add",
+                "delete_prounonciation": "Delete",
+                "default_word": "Word",
+                "default_translation": "Translation",
+                "title": "New word pair",
+                "edit_title": "Edit word pair"
+            },
+            "update": {
+                "delete": "Delete",
+                "save": "Save"
+            },
+            "without_pronunciation": "Pronunciation(s) to record",
+            "every_pronunciation": "Every pair"
+        }
+    },
     "chat": {
         "ariaLabelFileDownloaded": "Downloading file : {{filename}}",
         "fileDownloaded": "File downloaded",

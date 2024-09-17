@@ -22,6 +22,7 @@ interface LearningContentProps {
     tandems: Tandem[];
     onTandemPressed: (tandem: Tandem) => void;
     onValidatedTandemPressed: (tandem: Tandem) => void;
+    onVocabularyListPressed: () => void;
 }
 
 const LearningContent: React.FC<LearningContentProps> = ({
@@ -30,6 +31,7 @@ const LearningContent: React.FC<LearningContentProps> = ({
     tandems,
     onTandemPressed,
     onValidatedTandemPressed,
+    onVocabularyListPressed,
 }) => {
     const { t } = useTranslation();
     const history = useHistory();

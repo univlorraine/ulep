@@ -65,6 +65,15 @@ export class MediaObject {
         return '.jpg';
       case 'image/jpeg':
         return '.jpeg';
+      // audio mime types
+      case 'audio/mpeg':
+        return '.mp3';
+      case 'audio/wav':
+        return '.wav';
+      case 'audio/ogg':
+        return '.ogg';
+      case 'audio/mp4':
+        return '.mp4';
       default:
         throw new ContentTypeException(contentType);
     }

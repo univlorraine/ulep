@@ -1,7 +1,4 @@
-import {
-  GetLearningLanguagesUsecase,
-  GetLearningLanguageOfIdUsecase,
-} from 'src/core/usecases/learningLanguage';
+import { Collection } from '@app/common';
 import {
   Controller,
   Delete,
@@ -13,9 +10,15 @@ import {
   UseGuards,
 } from '@nestjs/common';
 import * as Swagger from '@nestjs/swagger';
-import { Role, Roles } from '../decorators/roles.decorator';
-import { AuthenticationGuard } from '../guards';
+import { GetLearningLanguageMatchesUsecase } from 'src/core/usecases';
+import {
+  GetLearningLanguageOfIdUsecase,
+  GetLearningLanguagesUsecase,
+} from 'src/core/usecases/learningLanguage';
+import { DeleteLearningLanguageUsecase } from 'src/core/usecases/learningLanguage/delete-learning-langugage.usecase';
+import { GetLearningLanguageTandemUsecase } from 'src/core/usecases/learningLanguage/getLearningLanguageTandem.usecase';
 import { CollectionResponse } from '../decorators';
+import { Role, Roles } from '../decorators/roles.decorator';
 import {
   GetLearningLanguagesRequest,
   LearningLanguageResponse,
@@ -23,11 +26,8 @@ import {
   MatchResponse,
   UserTandemResponse,
 } from '../dtos';
-import { Collection } from '@app/common';
 import { GetLearningLanguageMatchsRequest } from '../dtos/learning-languages/get-learning-language-matches.request';
-import { GetLearningLanguageMatchesUsecase } from 'src/core/usecases';
-import { GetLearningLanguageTandemUsecase } from 'src/core/usecases/learningLanguage/getLearningLanguageTandem.usecase';
-import { DeleteLearningLanguageUsecase } from 'src/core/usecases/learningLanguage/delete-learning-langugage.usecase';
+import { AuthenticationGuard } from '../guards';
 
 @Controller('learning-languages')
 @Swagger.ApiTags('LearningLanguages')

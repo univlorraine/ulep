@@ -1,7 +1,7 @@
 export * from './countries';
 export * from './interests';
-export * from './languages';
 export * from './language-code';
+export * from './languages';
 export * from './learning-languages';
 export * from './matchs';
 export * from './medias';
@@ -11,6 +11,7 @@ export * from './profiles';
 export * from './reports';
 export * from './security';
 export * from './tandems';
+export * from './tested-languages';
 export * from './universities';
 export * from './users';
-export * from './tested-languages';
+export * from './vocabulary';

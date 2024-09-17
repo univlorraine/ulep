@@ -67,6 +67,8 @@ model LanguageCodes {
   UnmatchedLearningLanguages UnmatchedLearningLanguages[]
   SpecificLanguagesOrganizations          Organizations[]
   NativeLanguageOrganizations          Organizations[]    @relation("NativeLanguageOrganizations")
+  OriginalVocabularyList VocabularyList[] @relation("OriginalLanguage")
+  TranslationVocabularyList VocabularyList[] @relation("TranslationLanguage")
 
   @@unique([name])
   @@unique([code])
@@ -214,6 +216,8 @@ model MediaObjects {
   User       Users?
   Goal       LearningObjectives?
   University Organizations? @relation("UniversitiesImage")
+  PronunciationWord Vocabulary? @relation("PronunciationWord")
+  PronunciationTranslation Vocabulary? @relation("PronunciationTranslation")
   InstanceDefaultCertificateFile Instance?
   UniversitiesDefaultCertificateFile Organizations? @relation("UniversitiesDefaultCertificateFile")
 
@@ -339,7 +343,8 @@ model Profiles {
   TestedLanguages   TestedLanguages[]
   Goals             LearningObjectives[]
   Interests         Interests[]
-
+  CreatorVocabularyList    VocabularyList[] @relation("Creator")
+  EditorVocabularyList    VocabularyList[]  @relation("Editor")
   @@unique([user_id])
   @@index([native_language_code_id], name: "native_language_code")
   @@map("profiles")
@@ -526,4 +531,42 @@ model UnmatchedLearningLanguages {
 
   @@unique([user_id, language_code_id])
   @@map("unmatched_learning_languages")
+}
+//  * ****************************************************
+//  * Vocabulary
+//  * ****************************************************
+model VocabularyList {
+  id                  String        @id @default(uuid())
+  name                String
+  symbol              String
+  created_at          DateTime      @default(now())
+  updated_at          DateTime      @updatedAt
+  creator_id          String?
+  original_language_code_id String
+  translation_language_code_id String
+
+  OriginalLanguage    LanguageCodes         @relation("OriginalLanguage", fields: [original_language_code_id], references: [id], onDelete: Cascade)
+  TranslationLanguage    LanguageCodes      @relation("TranslationLanguage", fields: [translation_language_code_id], references: [id], onDelete: Cascade)
+  Creator               Profiles?            @relation("Creator", fields: [creator_id], references: [id])
+  Editors               Profiles[]          @relation("Editor")
+  Vocabulary          Vocabulary[]
+
+  @@map("vocabulary_list")
+}
+
+model  Vocabulary {
+  id                String        @id @default(uuid())
+  word              String
+  translation       String
+  vocabulary_list_id String
+  pronunciation_word_id   String? @unique
+  pronunciation_translation_id   String? @unique
+
+
+  VocabularyList VocabularyList @relation(fields: [vocabulary_list_id], references: [id], onDelete: Cascade)
+  PronunciationWord MediaObjects? @relation("PronunciationWord", fields: [pronunciation_word_id], references: [id])
+  PronunciationTranslation MediaObjects? @relation("PronunciationTranslation", fields: [pronunciation_translation_id], references: [id])
+
+
+  @@map("vocabulary")
 }

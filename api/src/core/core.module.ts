@@ -12,6 +12,7 @@ import { DeleteObjectiveImageUsecase } from 'src/core/usecases/media/delete-obje
 import { UploadObjectiveImageUsecase } from 'src/core/usecases/media/upload-objective-image.usecase';
 import { SendMessageNotificationUsecase } from 'src/core/usecases/notifications';
 import { UpdateObjectiveUsecase } from 'src/core/usecases/objective/update-objective.usecase';
+import { GetVocabularyListPdfUsecase } from 'src/core/usecases/vocabulary/get-vocabulary-list-pdf.usecase';
 import { ProvidersModule } from 'src/providers/providers.module';
 import { MatchScorer } from './services/MatchScorer';
 import {
@@ -35,7 +36,10 @@ import {
   CreateUniversityUsecase,
   CreateUnsubscribeReportUsecase,
   CreateUserUsecase,
+  CreateVocabularyListUsecase,
+  CreateVocabularyUsecase,
   DeleteAdministratorUsecase,
+  DeleteAudioVocabularyUsecase,
   DeleteAvatarUsecase,
   DeleteInterestCategoryUsecase,
   DeleteInterestUsecase,
@@ -47,8 +51,12 @@ import {
   DeleteTestUsecase,
   DeleteUniversityUsecase,
   DeleteUserUsecase,
+  DeleteVocabularyListUsecase,
+  DeleteVocabularyUsecase,
   FindAllLanguageCodeUsecase,
   FindAllObjectiveUsecase,
+  FindAllVocabularyFromListIdUsecase,
+  FindAllVocabularyListUsecase,
   FindOneObjectiveUsecase,
   GenerateConversationsUsecase,
   GenerateTandemsUsecase,
@@ -88,6 +96,7 @@ import {
   GetTestUsecase,
   GetTestsUsecase,
   GetUniversitiesUsecase,
+  GetUniversityDivisionsUsecase,
   GetUniversityUsecase,
   GetUserPersonalData,
   GetUserUsecase,
@@ -106,10 +115,12 @@ import {
   UpdateTandemUsecase,
   UpdateUniversityUsecase,
   UpdateUserUsecase,
+  UpdateVocabularyListUsecase,
+  UpdateVocabularyUsecase,
   UploadAdminAvatarUsecase,
+  UploadAudioVocabularyUsecase,
   UploadAvatarUsecase,
   UploadUniversityImageUsecase,
-  GetUniversityDivisionsUsecase,
 } from './usecases';
 import { GetJitsiTokenUsecase } from './usecases/jitsi/get-jitsi-token.usecase';
 import { DeleteLearningLanguageUsecase } from './usecases/learningLanguage/delete-learning-langugage.usecase';
@@ -152,11 +163,13 @@ const usecases: Provider[] = [
   UpdateLanguageCodeUsecase,
   // Media
   GetMediaObjectUsecase,
+  DeleteAudioVocabularyUsecase,
   DeleteObjectiveImageUsecase,
   UploadAvatarUsecase,
   UploadAdminAvatarUsecase,
   UploadObjectiveImageUsecase,
   UploadUniversityImageUsecase,
+  UploadAudioVocabularyUsecase,
   UploadInstanceDefaultCertificateUsecase,
   UploadUniversityDefaultCertificateUsecase,
   // Objectives
@@ -258,6 +271,16 @@ const usecases: Provider[] = [
   GenerateConversationsUsecase,
   GetAllConversationsFromUserIdUsecase,
   GetMessagesFromConversationUsecase,
+  // Vocabulary
+  CreateVocabularyUsecase,
+  CreateVocabularyListUsecase,
+  DeleteVocabularyUsecase,
+  DeleteVocabularyListUsecase,
+  FindAllVocabularyFromListIdUsecase,
+  FindAllVocabularyListUsecase,
+  UpdateVocabularyUsecase,
+  UpdateVocabularyListUsecase,
+  GetVocabularyListPdfUsecase,
 ];
 
 const services: Provider[] = [MatchScorer, CronService];

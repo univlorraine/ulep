@@ -12,7 +12,7 @@ import useGetLearningData from '../hooks/useGetLearningData';
 import useWindowDimensions from '../hooks/useWindowDimensions';
 import { HYBRID_MAX_WIDTH } from '../utils';
 
-const HomePage: React.FC = () => {
+const LearningPage = () => {
     const { t } = useTranslation();
     const history = useHistory();
     const [showToast] = useIonToast();
@@ -28,6 +28,8 @@ const HomePage: React.FC = () => {
 
     const onValidatedTandemPressed = (tandem: Tandem) =>
         !isHybrid ? setSelectedTandem(tandem) : history.push('/tandem-profil', { tandem });
+
+    const onVocabularyListPressed = () => history.push('/vocabulary-list');
 
     if (error) {
         showToast({ message: t(error.message), duration: 5000 });
@@ -46,6 +48,7 @@ const HomePage: React.FC = () => {
                     tandems={tandems}
                     onTandemPressed={onTandemPressed}
                     onValidatedTandemPressed={onValidatedTandemPressed}
+                    onVocabularyListPressed={onVocabularyListPressed}
                 />
             </IonContent>
         );
@@ -60,6 +63,7 @@ const HomePage: React.FC = () => {
                     tandems={tandems}
                     onTandemPressed={onTandemPressed}
                     onValidatedTandemPressed={onValidatedTandemPressed}
+                    onVocabularyListPressed={onVocabularyListPressed}
                 />
             </OnlineWebLayout>
             <TandemStatusModal
@@ -87,4 +91,4 @@ const HomePage: React.FC = () => {
     );
 };
 
-export default HomePage;
+export default LearningPage;

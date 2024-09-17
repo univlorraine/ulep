@@ -33,6 +33,9 @@ import { ConfigModule } from '@nestjs/config';
 import { TandemHistoryController } from 'src/api/controllers/tandemHistory.controller';
 import { NotificationController } from 'src/api/controllers/notification.controller';
 import { ChatController } from 'src/api/controllers/chat.controller';
+import { VocabularyController } from 'src/api/controllers/vocabulary.controller';
+
+//TODO: Change Swagger ApiOperation because when we change the order of imports there is an error
 
 @Module({
   imports: [CoreModule, TerminusModule, HttpModule, ConfigModule],
@@ -59,6 +62,7 @@ import { ChatController } from 'src/api/controllers/chat.controller';
     LearningLanguageController,
     RoutineExecutionController,
     UniversityConnectorController,
+    VocabularyController,
   ],
   providers: [
     PrismaService,

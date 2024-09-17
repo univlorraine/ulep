@@ -44,6 +44,15 @@ import GetConversationsUsecaseInterface from '../domain/interfaces/chat/GetConve
 import GetMessagesFromConversationUsecaseInterface from '../domain/interfaces/chat/GetMessagesFromConversationUsecase.interface';
 import SearchMessagesIdsFromConversationUsecaseInterface from '../domain/interfaces/chat/SearchMessagesIdsFromConversationUsecase.interface';
 import SendMessageUsecaseInterface from '../domain/interfaces/chat/SendMessageUsecase.interface';
+import CreateVocabularyListUsecaseInterface from '../domain/interfaces/vocabulary/CreateVocabularyListUsecase.interface';
+import CreateVocabularyUsecaseInterface from '../domain/interfaces/vocabulary/CreateVocabularyUsecase.interface';
+import DeleteVocabularyListUsecaseInterface from '../domain/interfaces/vocabulary/DeleteVocabularyListUsecase.interface';
+import DeleteVocabularyUsecaseInterface from '../domain/interfaces/vocabulary/DeleteVocabularyUsecase.interface';
+import GetVocabulariesUsecaseInterface from '../domain/interfaces/vocabulary/GetVocabulariesUsecase.interface';
+import GetVocabularyListPdfUsecaseInterface from '../domain/interfaces/vocabulary/GetVocabularyListPdfUsecase.interface';
+import GetVocabularyListsUsecaseInterface from '../domain/interfaces/vocabulary/GetVocabularyListsUsecase.interface';
+import UpdateVocabularyListUsecaseInterface from '../domain/interfaces/vocabulary/UpdateVocabularyListUsecase.interface';
+import UpdateVocabularyUsecaseInterface from '../domain/interfaces/vocabulary/UpdateVocabularyUsecase.interface';
 
 export interface ConfigContextValueType {
     accessToken: string;
@@ -93,4 +102,14 @@ export interface ConfigContextValueType {
     getTokenFromCodeUsecase: GetTokenFromCodeUsecaseInterface;
     getInitialUrlUsecase: GetInitialUrlUsecaseInterface;
     revokeSessionsUsecase: RevokeSessionsUsecaseInterface;
+    // Vocabulary
+    createVocabulary: CreateVocabularyUsecaseInterface;
+    updateVocabulary: UpdateVocabularyUsecaseInterface;
+    deleteVocabulary: DeleteVocabularyUsecaseInterface;
+    getVocabularies: GetVocabulariesUsecaseInterface;
+    getVocabularyListPdf: GetVocabularyListPdfUsecaseInterface;
+    createVocabularyList: CreateVocabularyListUsecaseInterface;
+    updateVocabularyList: UpdateVocabularyListUsecaseInterface;
+    deleteVocabularyList: DeleteVocabularyListUsecaseInterface;
+    getVocabularyLists: GetVocabularyListsUsecaseInterface;
 }
