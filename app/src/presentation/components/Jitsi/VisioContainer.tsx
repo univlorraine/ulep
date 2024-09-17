@@ -3,6 +3,7 @@ import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useHistory, useLocation } from 'react-router-dom';
 import { useConfig } from '../../../context/ConfigurationContext';
+import { useStoreState } from '../../../store/storeTypes';
 import JitsiMobile from './JitsiMobile';
 import JitsiWeb from './JitsiWeb';
 
@@ -19,7 +20,7 @@ const VisioContainer = () => {
     const { accessToken, getJitsiToken } = useConfig();
     const history = useHistory();
     const [jitsiToken, setJitsiToken] = useState<string>();
-    const jitsiUrl = import.meta.env.VITE_LOCAL_JITSI_URL;
+    const jitsiUrl = useStoreState((state) => state.jitsiUrl);
 
     const roomName = location.search ? location.search.split('roomName=')[1] : '';
 
