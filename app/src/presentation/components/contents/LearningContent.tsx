@@ -71,8 +71,9 @@ const LearningContent: React.FC<LearningContentProps> = ({
                     fill="clear"
                     className={styles.addLearningLanguageButton}
                     onClick={openAddLearningLanguagePressed}
+                    aria-label={t('learning.add_language') as string}
                 >
-                    <IonIcon icon={AddSvg} />
+                    <IonIcon icon={AddSvg} aria-hidden="true" />
                 </IonButton>
             </div>
 
