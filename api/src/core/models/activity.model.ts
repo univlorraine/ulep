@@ -1,4 +1,4 @@
-import { TextContent } from '@prisma/client';
+import { TextContent } from 'src/core/models';
 import { Language } from 'src/core/models/language.model';
 import { MediaObject } from 'src/core/models/media.model';
 import { ProficiencyLevel } from 'src/core/models/proficiency.model';
@@ -46,7 +46,7 @@ export class Activity {
   readonly createdAt: Date;
   readonly updatedAt: Date;
   readonly activityTheme: ActivityTheme;
-  readonly activityVocabularies: ActivityVocabulary[];
+  activityVocabularies: ActivityVocabulary[];
   readonly activityExercises: ActivityExercise[];
   ressourceFileUrl?: string;
   imageUrl?: string;
@@ -92,35 +92,8 @@ export class Activity {
   }
 }
 
-interface ActivityThemeCategoryProps {
-  id: string;
-  content: TextContent;
-  createdAt: Date;
-  updatedAt: Date;
-}
-
-export class ActivityThemeCategory {
-  readonly id: string;
-  readonly content: TextContent;
-  readonly createdAt: Date;
-  readonly updatedAt: Date;
-
-  constructor({
-    id,
-    content,
-    createdAt,
-    updatedAt,
-  }: ActivityThemeCategoryProps) {
-    this.id = id;
-    this.content = content;
-    this.createdAt = createdAt;
-    this.updatedAt = updatedAt;
-  }
-}
-
 interface ActivityThemeProps {
   id: string;
-  category: ActivityThemeCategory;
   content: TextContent;
   createdAt: Date;
   updatedAt: Date;
@@ -128,21 +101,43 @@ interface ActivityThemeProps {
 
 export class ActivityTheme {
   readonly id: string;
-  readonly category: ActivityThemeCategory;
   readonly content: TextContent;
+  readonly createdAt: Date;
+  readonly updatedAt: Date;
+
+  constructor({ id, content, createdAt, updatedAt }: ActivityThemeProps) {
+    this.id = id;
+    this.content = content;
+    this.createdAt = createdAt;
+    this.updatedAt = updatedAt;
+  }
+}
+
+interface ActivityThemeCategoryProps {
+  id: string;
+  content: TextContent;
+  themes: ActivityTheme[];
+  createdAt: Date;
+  updatedAt: Date;
+}
+
+export class ActivityThemeCategory {
+  readonly id: string;
+  readonly content: TextContent;
+  readonly themes: ActivityTheme[];
   readonly createdAt: Date;
   readonly updatedAt: Date;
 
   constructor({
     id,
-    category,
     content,
+    themes,
     createdAt,
     updatedAt,
-  }: ActivityThemeProps) {
+  }: ActivityThemeCategoryProps) {
     this.id = id;
-    this.category = category;
     this.content = content;
+    this.themes = themes;
     this.createdAt = createdAt;
     this.updatedAt = updatedAt;
   }

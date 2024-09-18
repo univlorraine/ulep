@@ -61,8 +61,10 @@ import {
   FindOneObjectiveUsecase,
   GenerateConversationsUsecase,
   GenerateTandemsUsecase,
+  GetActivityUsecase,
   GetAdministratorUsecase,
   GetAdministratorsUsecase,
+  GetAllActivityThemesUsecase,
   GetAllConversationsFromUserIdUsecase,
   GetCategoriesUsecase,
   GetCountriesUniversitiesUsecase,
@@ -118,8 +120,11 @@ import {
   UpdateVocabularyListUsecase,
   UpdateVocabularyUsecase,
   UploadAdminAvatarUsecase,
+  UploadAudioVocabularyActivityUsecase,
   UploadAudioVocabularyUsecase,
   UploadAvatarUsecase,
+  UploadImageActivityUsecase,
+  UploadMediaActivityUsecase,
   UploadUniversityImageUsecase,
 } from './usecases';
 import { GetJitsiTokenUsecase } from './usecases/jitsi/get-jitsi-token.usecase';
@@ -135,6 +140,8 @@ import { RevokeSessionsUsecase } from './usecases/user/revoke-sessions.usecase';
 const usecases: Provider[] = [
   // Activity
   CreateActivityUsecase,
+  GetAllActivityThemesUsecase,
+  GetActivityUsecase,
   //Campus
   CreateCampusUsecase,
   DeleteCampusUsecase,
@@ -170,6 +177,9 @@ const usecases: Provider[] = [
   UploadObjectiveImageUsecase,
   UploadUniversityImageUsecase,
   UploadAudioVocabularyUsecase,
+  UploadImageActivityUsecase,
+  UploadAudioVocabularyActivityUsecase,
+  UploadMediaActivityUsecase,
   // Objectives
   CreateObjectiveUsecase,
   DeleteObjectiveUsecase,

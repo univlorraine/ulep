@@ -631,7 +631,7 @@ model ActivityVocabulary {
   id                String        @id @default(uuid())
   content           String
   activity_id       String
-  pronunciation_activity_vocabulary_id String @unique
+  pronunciation_activity_vocabulary_id String? @unique
   created_at        DateTime      @default(now())
   updated_at        DateTime      @updatedAt
 

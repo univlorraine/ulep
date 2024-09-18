@@ -8,6 +8,10 @@ import {
   ActivityThemeCategory,
   ActivityVocabulary,
 } from 'src/core/models/activity.model';
+import {
+  textContentMapper,
+  TextContentRelations,
+} from 'src/providers/persistance/mappers';
 import { languageMapper } from 'src/providers/persistance/mappers/language.mapper';
 import {
   profileMapper,
@@ -70,9 +74,32 @@ export const activityExerciseMapper = (
   });
 };
 
+export const ActivityThemeInclude =
+  Prisma.validator<Prisma.ActivityThemesInclude>()({
+    TextContent: TextContentRelations,
+  });
+
+export const ActivityThemeRelations = { include: ActivityThemeInclude };
+
+export type ActivityThemeSnapshot = Prisma.ActivityThemesGetPayload<
+  typeof ActivityThemeRelations
+>;
+
+export const activityThemeMapper = (
+  snapshot: ActivityThemeSnapshot,
+): ActivityTheme => {
+  return new ActivityTheme({
+    id: snapshot.id,
+    content: textContentMapper(snapshot.TextContent),
+    createdAt: snapshot.created_at,
+    updatedAt: snapshot.updated_at,
+  });
+};
+
 export const ActivityThemeCategoryInclude =
   Prisma.validator<Prisma.ActivityThemeCategoriesInclude>()({
-    TextContent: true,
+    TextContent: TextContentRelations,
+    ActivityThemes: ActivityThemeRelations,
   });
 
 export const ActivityThemeCategoryRelations = {
@@ -89,31 +116,8 @@ export const activityThemeCategoryMapper = (
 ): ActivityThemeCategory => {
   return new ActivityThemeCategory({
     id: snapshot.id,
-    content: snapshot.TextContent,
-    createdAt: snapshot.created_at,
-    updatedAt: snapshot.updated_at,
-  });
-};
-
-export const ActivityThemeInclude =
-  Prisma.validator<Prisma.ActivityThemesInclude>()({
-    TextContent: true,
-    Category: ActivityThemeCategoryRelations,
-  });
-
-export const ActivityThemeRelations = { include: ActivityThemeInclude };
-
-export type ActivityThemeSnapshot = Prisma.ActivityThemesGetPayload<
-  typeof ActivityThemeRelations
->;
-
-export const activityThemeMapper = (
-  snapshot: ActivityThemeSnapshot,
-): ActivityTheme => {
-  return new ActivityTheme({
-    id: snapshot.id,
-    category: activityThemeCategoryMapper(snapshot.Category),
-    content: snapshot.TextContent,
+    content: textContentMapper(snapshot.TextContent),
+    themes: snapshot.ActivityThemes?.map(activityThemeMapper),
     createdAt: snapshot.created_at,
     updatedAt: snapshot.updated_at,
   });
@@ -167,9 +171,9 @@ export const activityMapper = (snapshot: ActivitySnapshot): Activity => {
     createdAt: snapshot.created_at,
     updatedAt: snapshot.updated_at,
     activityTheme: activityThemeMapper(snapshot.ActivityThemes),
-    activityVocabularies: snapshot.ActivityVocabulary.map(
+    activityVocabularies: snapshot.ActivityVocabulary?.map(
       activityVocabularyMapper,
     ),
-    activityExercises: snapshot.ActivityExercises.map(activityExerciseMapper),
+    activityExercises: snapshot.ActivityExercises?.map(activityExerciseMapper),
   });
 };

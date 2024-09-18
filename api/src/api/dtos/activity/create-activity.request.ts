@@ -12,12 +12,6 @@ export class CreateActivityExerciseRequest {
   order: number;
 }
 
-export class CreateActivityVocabularyRequest {
-  @ApiProperty({ type: 'string' })
-  @IsNotEmpty()
-  content: string;
-}
-
 export class CreateActivityRequest {
   @ApiProperty({ type: 'string' })
   @IsNotEmpty()
@@ -57,5 +51,5 @@ export class CreateActivityRequest {
 
   @ApiProperty({ type: 'string', isArray: true })
   @IsNotEmpty()
-  vocabularies: CreateActivityVocabularyRequest[];
+  vocabularies: string[];
 }

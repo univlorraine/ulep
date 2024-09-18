@@ -3,6 +3,7 @@ import { Injectable } from '@nestjs/common';
 import {
   Activity,
   ActivityTheme,
+  ActivityThemeCategory,
   ActivityVocabulary,
 } from 'src/core/models/activity.model';
 import {
@@ -12,6 +13,8 @@ import {
 import {
   activityMapper,
   ActivityRelations,
+  activityThemeCategoryMapper,
+  ActivityThemeCategoryRelations,
   activityThemeMapper,
   ActivityThemeRelations,
   activityVocabularyMapper,
@@ -46,7 +49,7 @@ export class PrismaActivityRepository implements ActivityRepository {
         },
         ActivityExercises: {
           create: props.exercises.map((exercise) => ({
-            order: exercise.order,
+            order: Number(exercise.order),
             content: exercise.content,
           })),
         },
@@ -77,6 +80,15 @@ export class PrismaActivityRepository implements ActivityRepository {
     return activityVocabularyMapper(vocabularyActivity);
   }
 
+  async allThemes(): Promise<ActivityThemeCategory[]> {
+    const activityThemesCategories =
+      await this.prisma.activityThemeCategories.findMany({
+        ...ActivityThemeCategoryRelations,
+      });
+
+    return activityThemesCategories.map(activityThemeCategoryMapper);
+  }
+
   async ofId(id: string): Promise<Activity> {
     const activity = await this.prisma.activity.findUnique({
       where: {
@@ -100,6 +112,26 @@ export class PrismaActivityRepository implements ActivityRepository {
       ...ActivityThemeRelations,
     });
 
+    if (!activityTheme) {
+      return null;
+    }
+
     return activityThemeMapper(activityTheme);
+  }
+
+  async ofVocabularyId(vocabularyId: string): Promise<ActivityVocabulary> {
+    const vocabulary = await this.prisma.activityVocabulary.findUnique({
+      where: {
+        id: vocabularyId,
+      },
+
+      ...ActivityVocabularyRelations,
+    });
+
+    if (!vocabulary) {
+      return null;
+    }
+
+    return activityVocabularyMapper(vocabulary);
   }
 }

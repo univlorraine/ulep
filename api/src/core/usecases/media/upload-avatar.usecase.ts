@@ -59,7 +59,7 @@ export class UploadAvatarUsecase {
     user: User,
     file: Express.Multer.File,
   ): Promise<MediaObject> {
-    const image = MediaObject.image(
+    const image = MediaObject.generate(
       file,
       MediaObject.getDefaultBucket(),
       user.id,

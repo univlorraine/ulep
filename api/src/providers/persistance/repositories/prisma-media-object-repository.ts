@@ -6,6 +6,7 @@ import {
   University,
   User,
 } from 'src/core/models';
+import { Activity } from 'src/core/models/activity.model';
 import { MediaObjectRepository } from 'src/core/ports/media-object.repository';
 
 @Injectable()
@@ -26,6 +27,62 @@ export class PrismaMediaObjectRepository implements MediaObjectRepository {
         where: { PronunciationWord: { id: vocabularyId } },
       });
     }
+
+    if (!mediaObject) {
+      return null;
+    }
+
+    return new MediaObject({
+      id: mediaObject.id,
+      name: mediaObject.name,
+      bucket: mediaObject.bucket,
+      mimetype: mediaObject.mime,
+      size: mediaObject.size,
+    });
+  }
+
+  async audioTranslatedOfVocabularyActivity(
+    vocabularyId: string,
+  ): Promise<MediaObject | null> {
+    const mediaObject = await this.prisma.mediaObjects.findFirst({
+      where: { ActivityVocabulary: { id: vocabularyId } },
+    });
+
+    if (!mediaObject) {
+      return null;
+    }
+
+    return new MediaObject({
+      id: mediaObject.id,
+      name: mediaObject.name,
+      bucket: mediaObject.bucket,
+      mimetype: mediaObject.mime,
+      size: mediaObject.size,
+    });
+  }
+
+  async imageOfActivity(activityId: string): Promise<MediaObject | null> {
+    const mediaObject = await this.prisma.mediaObjects.findFirst({
+      where: { Activity: { id: activityId } },
+    });
+
+    if (!mediaObject) {
+      return null;
+    }
+
+    return new MediaObject({
+      id: mediaObject.id,
+      name: mediaObject.name,
+      bucket: mediaObject.bucket,
+      mimetype: mediaObject.mime,
+      size: mediaObject.size,
+    });
+  }
+
+  async ressourceOfActivity(activityId: string): Promise<MediaObject | null> {
+    const mediaObject = await this.prisma.mediaObjects.findFirst({
+      where: { Activity: { id: activityId } },
+    });
 
     if (!mediaObject) {
       return null;
@@ -78,6 +135,26 @@ export class PrismaMediaObjectRepository implements MediaObjectRepository {
     }
   }
 
+  async saveAudioVocabularyActivity(
+    vocabularyId: string,
+    object: MediaObject,
+  ): Promise<void> {
+    await this.prisma.mediaObjects.create({
+      data: {
+        id: object.id,
+        name: object.name,
+        bucket: object.bucket,
+        mime: object.mimetype,
+        size: object.size,
+        ActivityVocabulary: {
+          connect: {
+            id: vocabularyId,
+          },
+        },
+      },
+    });
+  }
+
   async saveAvatar(user: User, object: MediaObject): Promise<void> {
     await this.prisma.mediaObjects.create({
       data: {
@@ -89,6 +166,46 @@ export class PrismaMediaObjectRepository implements MediaObjectRepository {
         User: {
           connect: {
             id: user.id,
+          },
+        },
+      },
+    });
+  }
+
+  async saveImageOfActivity(
+    activity: Activity,
+    object: MediaObject,
+  ): Promise<void> {
+    await this.prisma.mediaObjects.create({
+      data: {
+        id: object.id,
+        name: object.name,
+        bucket: object.bucket,
+        mime: object.mimetype,
+        size: object.size,
+        Activity: {
+          connect: {
+            id: activity.id,
+          },
+        },
+      },
+    });
+  }
+
+  async saveRessourceOfActivity(
+    activity: Activity,
+    object: MediaObject,
+  ): Promise<void> {
+    await this.prisma.mediaObjects.create({
+      data: {
+        id: object.id,
+        name: object.name,
+        bucket: object.bucket,
+        mime: object.mimetype,
+        size: object.size,
+        ActivityRessourceFile: {
+          connect: {
+            id: activity.id,
           },
         },
       },

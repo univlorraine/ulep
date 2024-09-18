@@ -30,7 +30,7 @@ export class MediaObject {
     this.size = props.size;
   }
 
-  static image(
+  static generate(
     file: Express.Multer.File,
     bucketName = DEFAULT_BUCKET,
     preferredId = undefined,
@@ -74,6 +74,19 @@ export class MediaObject {
         return '.ogg';
       case 'audio/mp4':
         return '.mp4';
+      // Document mime types
+      case 'application/pdf':
+        return '.pdf';
+      case 'application/msword':
+        return '.doc';
+      case 'application/vnd.openxmlformats-officedocument.wordprocessingml.document':
+        return '.docx';
+      case 'application/vnd.ms-powerpoint':
+        return '.ppt';
+      case 'application/vnd.openxmlformats-officedocument.presentationml.presentation':
+        return '.pptx';
+      case 'application/vnd.ms-excel':
+        return '.xls';
       default:
         throw new ContentTypeException(contentType);
     }

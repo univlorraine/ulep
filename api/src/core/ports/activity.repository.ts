@@ -2,6 +2,7 @@ import { ProficiencyLevel } from 'src/core/models';
 import {
   Activity,
   ActivityTheme,
+  ActivityThemeCategory,
   ActivityVocabulary,
 } from 'src/core/models/activity.model';
 
@@ -20,6 +21,7 @@ export type CreateActivityProps = {
 };
 
 export interface ActivityRepository {
+  allThemes(): Promise<ActivityThemeCategory[]>;
   createActivity(props: CreateActivityProps): Promise<Activity>;
   createVocabularyForActivity(
     activityId: string,
@@ -27,4 +29,5 @@ export interface ActivityRepository {
   ): Promise<ActivityVocabulary>;
   ofId(id: string): Promise<Activity>;
   ofThemeId(id: string): Promise<ActivityTheme>;
+  ofVocabularyId(id: string): Promise<ActivityVocabulary>;
 }

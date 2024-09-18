@@ -2,7 +2,10 @@ import * as Swagger from '@nestjs/swagger';
 import { Expose } from 'class-transformer';
 import { LanguageResponse, ProfileResponse } from 'src/api/dtos';
 import { MediaObjectResponse } from 'src/api/dtos/medias';
-import { TextContentResponse } from 'src/api/dtos/text-content';
+import {
+  TextContentResponse,
+  textContentTranslationResponse,
+} from 'src/api/dtos/text-content';
 import {
   Activity,
   ActivityExercise,
@@ -12,14 +15,45 @@ import {
   ActivityVocabulary,
 } from 'src/core/models/activity.model';
 
-export class ActivityThemeCategoryResponse {
+export class ActivityThemeResponse {
   @Swagger.ApiProperty({ type: 'string', format: 'uuid' })
   @Expose({ groups: ['read'] })
   id: string;
 
   @Swagger.ApiProperty({ type: () => TextContentResponse })
   @Expose({ groups: ['read'] })
-  content: TextContentResponse;
+  content: string;
+
+  constructor(partial: Partial<ActivityThemeResponse>) {
+    Object.assign(this, partial);
+  }
+
+  static from(
+    activityTheme: ActivityTheme,
+    languageCode?: string,
+  ): ActivityThemeResponse {
+    return new ActivityThemeResponse({
+      id: activityTheme.id,
+      content: textContentTranslationResponse({
+        textContent: activityTheme.content,
+        languageCode,
+      }),
+    });
+  }
+}
+
+export class ActivityThemeCategoryResponse {
+  @Swagger.ApiProperty({ type: 'string', format: 'uuid' })
+  @Expose({ groups: ['read'] })
+  id: string;
+
+  @Swagger.ApiProperty({ type: 'string' })
+  @Expose({ groups: ['read'] })
+  content: string;
+
+  @Swagger.ApiProperty({ type: () => ActivityThemeResponse })
+  @Expose({ groups: ['read'] })
+  themes: ActivityThemeResponse[];
 
   constructor(partial: Partial<ActivityThemeCategoryResponse>) {
     Object.assign(this, partial);
@@ -27,9 +61,17 @@ export class ActivityThemeCategoryResponse {
 
   static from(
     activityThemeCategory: ActivityThemeCategory,
+    languageCode?: string,
   ): ActivityThemeCategoryResponse {
     return new ActivityThemeCategoryResponse({
       id: activityThemeCategory.id,
+      content: textContentTranslationResponse({
+        textContent: activityThemeCategory.content,
+        languageCode: languageCode,
+      }),
+      themes: activityThemeCategory.themes.map((theme) =>
+        ActivityThemeResponse.from(theme, languageCode),
+      ),
     });
   }
 }
@@ -59,30 +101,6 @@ export class ActivityVocabularyResponse {
       content: activityVocabulary.content,
       pronunciationActivityVocabularyUrl:
         activityVocabulary.pronunciationActivityVocabularyUrl,
-    });
-  }
-}
-
-export class ActivityThemeResponse {
-  @Swagger.ApiProperty({ type: 'string', format: 'uuid' })
-  @Expose({ groups: ['read'] })
-  id: string;
-
-  @Swagger.ApiProperty({ type: () => TextContentResponse })
-  @Expose({ groups: ['read'] })
-  content: TextContentResponse;
-
-  @Swagger.ApiProperty({ type: () => ActivityThemeCategoryResponse })
-  @Expose({ groups: ['read'] })
-  category: ActivityThemeCategoryResponse;
-
-  constructor(partial: Partial<ActivityThemeResponse>) {
-    Object.assign(this, partial);
-  }
-
-  static from(activityTheme: ActivityTheme): ActivityThemeResponse {
-    return new ActivityThemeResponse({
-      id: activityTheme.id,
     });
   }
 }
@@ -160,7 +178,7 @@ export class ActivityResponse {
 
   @Swagger.ApiProperty({ type: () => ActivityVocabularyResponse })
   @Expose({ groups: ['read'] })
-  vocabulary: ActivityVocabularyResponse[];
+  vocabularies: ActivityVocabularyResponse[];
 
   @Swagger.ApiProperty({ type: () => ActivityExerciseResponse })
   @Expose({ groups: ['read'] })
@@ -183,7 +201,7 @@ export class ActivityResponse {
       ressourceUrl: activity.ressourceUrl,
       ressourceFileUrl: activity.ressourceFileUrl,
       theme: ActivityThemeResponse.from(activity.activityTheme),
-      vocabulary: activity.activityVocabularies.map(
+      vocabularies: activity.activityVocabularies.map(
         ActivityVocabularyResponse.from,
       ),
       exercises: activity.activityExercises.map(ActivityExerciseResponse.from),

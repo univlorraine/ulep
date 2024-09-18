@@ -1,6 +1,7 @@
 import { Inject, Injectable } from '@nestjs/common';
 import { RessourceDoesNotExist } from 'src/core/errors';
 import { ProficiencyLevel } from 'src/core/models';
+import { ActivityVocabulary } from 'src/core/models/activity.model';
 import {
   ACTIVITY_REPOSITORY,
   ActivityRepository,
@@ -13,7 +14,7 @@ import {
   PROFILE_REPOSITORY,
   ProfileRepository,
 } from 'src/core/ports/profile.repository';
-import { UploadAudioVocabularyUsecase } from 'src/core/usecases/media';
+import { UploadAudioVocabularyActivityUsecase } from 'src/core/usecases/media';
 
 export class CreateActivityCommand {
   title: string;
@@ -37,8 +38,8 @@ export class CreateActivityUsecase {
     private readonly profileRepository: ProfileRepository,
     @Inject(ACTIVITY_REPOSITORY)
     private readonly activityRepository: ActivityRepository,
-    @Inject(UploadAudioVocabularyUsecase)
-    private readonly uploadAudioVocabularyUsecase: UploadAudioVocabularyUsecase,
+    @Inject(UploadAudioVocabularyActivityUsecase)
+    private readonly uploadAudioVocabularyActivityUsecase: UploadAudioVocabularyActivityUsecase,
   ) {}
 
   async execute(command: CreateActivityCommand) {
@@ -56,13 +57,18 @@ export class CreateActivityUsecase {
       languageCode: command.languageCode,
     });
 
+    let activityVocabularies: ActivityVocabulary[] = [];
     for (const vocabulary of command.vocabularies) {
-      await this.createVocabularyForActivity(
-        activity.id,
-        vocabulary.content,
-        vocabulary.pronunciation,
+      activityVocabularies.push(
+        await this.createVocabularyForActivity(
+          activity.id,
+          vocabulary.content,
+          vocabulary.pronunciation,
+        ),
       );
     }
+
+    activity.activityVocabularies = activityVocabularies;
 
     return activity;
   }
@@ -104,13 +110,14 @@ export class CreateActivityUsecase {
         content,
       );
     if (pronunciation) {
-      const audioUrl = await this.uploadAudioVocabularyUsecase.execute({
+      const audioUrl = await this.uploadAudioVocabularyActivityUsecase.execute({
         vocabularyId: vocabulary.id,
         file: pronunciation,
-        isTranslation: false,
       });
 
       vocabulary.pronunciationActivityVocabularyUrl = audioUrl;
     }
+
+    return vocabulary;
   }
 }

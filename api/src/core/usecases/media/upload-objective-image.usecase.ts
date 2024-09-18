@@ -1,4 +1,10 @@
 import { Inject, Injectable } from '@nestjs/common';
+import { UnauthorizedOperation } from 'src/core/errors';
+import { LearningObjective, MediaObject } from 'src/core/models';
+import {
+  LearningObjectiveRepository,
+  OBJECTIVE_REPOSITORY,
+} from 'src/core/ports/objective.repository';
 import {
   MEDIA_OBJECT_REPOSITORY,
   MediaObjectRepository,
@@ -8,12 +14,6 @@ import {
   STORAGE_INTERFACE,
   StorageInterface,
 } from '../../ports/storage.interface';
-import { LearningObjective, MediaObject } from 'src/core/models';
-import { UnauthorizedOperation } from 'src/core/errors';
-import {
-  LearningObjectiveRepository,
-  OBJECTIVE_REPOSITORY,
-} from 'src/core/ports/objective.repository';
 
 export class UploadObjectiveImageCommand {
   id: string;
@@ -62,7 +62,7 @@ export class UploadObjectiveImageUsecase {
     objective: LearningObjective,
     file: Express.Multer.File,
   ): Promise<MediaObject> {
-    const image = MediaObject.image(file, 'objective');
+    const image = MediaObject.generate(file, 'objective');
     await this.storageInterface.write(image.bucket, image.name, file);
     await this.mediaObjectRepository.saveObjectiveImage(objective, image);
 
