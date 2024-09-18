@@ -9,7 +9,7 @@ const Store = createStore<TokenStoreTypes>(
             apiUrl: '',
             chatUrl: '',
             socketChatUrl: '',
-            jitsiUrl: '',
+            jitsiUrl: import.meta.env.VITE_JITSI_URL,
             language: '',
             refreshToken: '',
             setApiUrl: action((state, payload) => {
