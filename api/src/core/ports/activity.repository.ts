@@ -26,7 +26,22 @@ export type CreateActivityThemeCategoryProps = {
   translations: Translation[];
 };
 
+export type CreateActivityThemeProps = {
+  categoryId: string;
+  content: string;
+  languageCode: string;
+  translations: Translation[];
+};
+
 export type UpdateActivityThemeCategoryProps = {
+  id: string;
+  textContentId: string;
+  content: string;
+  languageCode: string;
+  translations: Translation[];
+};
+
+export type UpdateActivityThemeProps = {
   id: string;
   textContentId: string;
   content: string;
@@ -38,6 +53,7 @@ export interface ActivityRepository {
   allThemes(): Promise<ActivityThemeCategory[]>;
   allThemeCategories(): Promise<ActivityThemeCategory[]>;
   createActivity(props: CreateActivityProps): Promise<Activity>;
+  createTheme(props: CreateActivityThemeProps): Promise<ActivityTheme>;
   createThemeCategory(
     props: CreateActivityThemeCategoryProps,
   ): Promise<ActivityThemeCategory>;
@@ -47,11 +63,17 @@ export interface ActivityRepository {
   ): Promise<ActivityVocabulary>;
   ofId(id: string): Promise<Activity>;
   ofThemeId(id: string): Promise<ActivityTheme>;
+  ofThemeNameAndCategoryId(
+    categoryId: string,
+    name: string,
+  ): Promise<ActivityTheme>;
   ofCategoryThemeId(id: string): Promise<ActivityThemeCategory>;
   ofCategoryThemeName(name: string): Promise<ActivityThemeCategory>;
   ofVocabularyId(id: string): Promise<ActivityVocabulary>;
   updateThemeCategory(
     props: UpdateActivityThemeCategoryProps,
   ): Promise<ActivityThemeCategory>;
+  updateTheme(props: UpdateActivityThemeProps): Promise<ActivityTheme>;
   deleteCategoryTheme(id: string): Promise<void>;
+  deleteTheme(id: string): Promise<void>;
 }

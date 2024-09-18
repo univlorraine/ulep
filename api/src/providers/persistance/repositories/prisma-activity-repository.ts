@@ -10,7 +10,9 @@ import {
   ActivityRepository,
   CreateActivityProps,
   CreateActivityThemeCategoryProps,
+  CreateActivityThemeProps,
   UpdateActivityThemeCategoryProps,
+  UpdateActivityThemeProps,
 } from 'src/core/ports/activity.repository';
 import {
   activityMapper,
@@ -232,6 +234,82 @@ export class PrismaActivityRepository implements ActivityRepository {
 
   async deleteCategoryTheme(id: string): Promise<void> {
     await this.prisma.activityThemeCategories.delete({
+      where: { id },
+    });
+  }
+
+  async ofThemeNameAndCategoryId(
+    categoryId: string,
+    name: string,
+  ): Promise<ActivityTheme> {
+    const activityTheme = await this.prisma.activityThemes.findFirst({
+      where: {
+        AND: [
+          { Category: { id: categoryId } },
+          { TextContent: { text: name } },
+        ],
+      },
+      ...ActivityThemeRelations,
+    });
+
+    if (!activityTheme) {
+      return null;
+    }
+
+    return activityThemeMapper(activityTheme);
+  }
+
+  async createTheme(props: CreateActivityThemeProps): Promise<ActivityTheme> {
+    const activityTheme = await this.prisma.activityThemes.create({
+      data: {
+        Category: { connect: { id: props.categoryId } },
+        TextContent: {
+          create: {
+            text: props.content,
+            LanguageCode: { connect: { code: props.languageCode } },
+            Translations: {
+              create: props.translations?.map((translation) => ({
+                text: translation.content,
+                LanguageCode: { connect: { code: translation.language } },
+              })),
+            },
+          },
+        },
+      },
+      ...ActivityThemeRelations,
+    });
+
+    return activityThemeMapper(activityTheme);
+  }
+
+  async updateTheme(props: UpdateActivityThemeProps): Promise<ActivityTheme> {
+    await this.prisma.textContent.update({
+      where: { id: props.textContentId },
+      data: {
+        text: props.content,
+        LanguageCode: { connect: { code: props.languageCode } },
+        Translations: {
+          deleteMany: {},
+          create: props.translations?.map((translation) => ({
+            text: translation.content,
+            LanguageCode: { connect: { code: translation.language } },
+          })),
+        },
+      },
+    });
+
+    const newActivityTheme = await this.prisma.activityThemes.findUnique({
+      where: {
+        id: props.id,
+      },
+      ...ActivityThemeRelations,
+    });
+
+    return activityThemeMapper(newActivityTheme);
+  }
+
+  async deleteTheme(id: string): Promise<void> {
+    await this.prisma.activityThemes.delete({
       where: { id },
     });
   }

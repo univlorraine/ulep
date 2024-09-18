@@ -16,18 +16,24 @@ import * as Swagger from '@nestjs/swagger';
 import {
   ActivityResponse,
   ActivityThemeCategoryResponse,
+  ActivityThemeResponse,
   CreateActivityRequest,
   CreateActivityThemeCategoryRequest,
+  CreateActivityThemeRequest,
   UpdateActivityThemeCategoryRequest,
+  UpdateActivityThemeRequest,
 } from 'src/api/dtos/activity';
 import { AuthenticationGuard } from 'src/api/guards';
 import {
   CreateActivityThemeCategoryUsecase,
+  CreateActivityThemeUsecase,
   CreateActivityUsecase,
   DeleteActivityThemeCategoryUsecase,
+  DeleteActivityThemeUsecase,
   GetActivityUsecase,
   GetAllActivityThemesUsecase,
   UpdateActivityThemeCategoryUsecase,
+  UpdateActivityThemeUsecase,
   UploadImageActivityUsecase,
   UploadMediaActivityUsecase,
 } from 'src/core/usecases';
@@ -38,10 +44,13 @@ export class ActivityController {
   constructor(
     private readonly createActivityUsecase: CreateActivityUsecase,
     private readonly createActivityThemeCategoryUsecase: CreateActivityThemeCategoryUsecase,
+    private readonly createActivityThemeUsecase: CreateActivityThemeUsecase,
     private readonly getActivityUsecase: GetActivityUsecase,
     private readonly getAllActivityThemesUsecase: GetAllActivityThemesUsecase,
     private readonly updateActivityThemeCategoryUsecase: UpdateActivityThemeCategoryUsecase,
+    private readonly updateActivityThemeUsecase: UpdateActivityThemeUsecase,
     private readonly deleteActivityThemeCategoryUsecase: DeleteActivityThemeCategoryUsecase,
+    private readonly deleteActivityThemeUsecase: DeleteActivityThemeUsecase,
     private readonly uploadImageActivityUsecase: UploadImageActivityUsecase,
     private readonly uploadMediaActivityUsecase: UploadMediaActivityUsecase,
   ) {}
@@ -98,6 +107,39 @@ export class ActivityController {
     }
 
     return ActivityResponse.from(activity);
+  }
+
+  @Post('theme')
+  @UseGuards(AuthenticationGuard)
+  @Swagger.ApiOperation({ summary: 'Create a new Activity theme.' })
+  @Swagger.ApiCreatedResponse({ type: () => ActivityThemeCategoryResponse })
+  async createActivityTheme(@Body() body: CreateActivityThemeRequest) {
+    const activityTheme = await this.createActivityThemeUsecase.execute(body);
+
+    return ActivityThemeResponse.from(activityTheme);
+  }
+
+  @Put('theme/:id')
+  @UseGuards(AuthenticationGuard)
+  @Swagger.ApiOperation({ summary: 'Update a Activity theme.' })
+  @Swagger.ApiCreatedResponse({ type: () => ActivityThemeCategoryResponse })
+  async updateActivityTheme(
+    @Param('id') id: string,
+    @Body() body: UpdateActivityThemeRequest,
+  ) {
+    const activityTheme = await this.updateActivityThemeUsecase.execute({
+      id,
+      ...body,
+    });
+
+    return ActivityThemeResponse.from(activityTheme);
+  }
+
+  @Delete('theme/:id')
+  @UseGuards(AuthenticationGuard)
+  @Swagger.ApiOperation({ summary: 'Delete a Activity theme.' })
+  async deleteActivityTheme(@Param('id') id: string) {
+    await this.deleteActivityThemeUsecase.execute(id);
   }
 
   @Post('category')
