@@ -38,7 +38,7 @@ spec:
         env:
           - name: VITE_API_URL
             value: "https://{{ .Values.apiUrl }}.{{ .Values.domain }}"
-          - name: VITE_JITSI_DOMAIN
+          - name: VITE_JITSI_URL
             value: "{{ .Values.jitsiUrl }}.{{ .Values.domain }}"
           - name: VITE_CHAT_URL
             value: "https://{{ .Values.chatUrl }}.{{ .Values.domain }}"
