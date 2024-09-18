@@ -9,6 +9,8 @@ import {
 import {
   ActivityRepository,
   CreateActivityProps,
+  CreateActivityThemeCategoryProps,
+  UpdateActivityThemeCategoryProps,
 } from 'src/core/ports/activity.repository';
 import {
   activityMapper,
@@ -89,6 +91,15 @@ export class PrismaActivityRepository implements ActivityRepository {
     return activityThemesCategories.map(activityThemeCategoryMapper);
   }
 
+  async allThemeCategories(): Promise<ActivityThemeCategory[]> {
+    const activityThemeCategories =
+      await this.prisma.activityThemeCategories.findMany({
+        ...ActivityThemeCategoryRelations,
+      });
+
+    return activityThemeCategories.map(activityThemeCategoryMapper);
+  }
+
   async ofId(id: string): Promise<Activity> {
     const activity = await this.prisma.activity.findUnique({
       where: {
@@ -133,5 +144,95 @@ export class PrismaActivityRepository implements ActivityRepository {
     }
 
     return activityVocabularyMapper(vocabulary);
+  }
+
+  async ofCategoryThemeId(id: string): Promise<ActivityThemeCategory> {
+    const activityThemeCategory =
+      await this.prisma.activityThemeCategories.findUnique({
+        where: {
+          id,
+        },
+        ...ActivityThemeCategoryRelations,
+      });
+
+    if (!activityThemeCategory) {
+      return null;
+    }
+
+    return activityThemeCategoryMapper(activityThemeCategory);
+  }
+
+  async ofCategoryThemeName(name: string): Promise<ActivityThemeCategory> {
+    const activityThemeCategory =
+      await this.prisma.activityThemeCategories.findFirst({
+        where: { TextContent: { text: name } },
+        ...ActivityThemeCategoryRelations,
+      });
+
+    if (!activityThemeCategory) {
+      return null;
+    }
+
+    return activityThemeCategoryMapper(activityThemeCategory);
+  }
+
+  async createThemeCategory(
+    props: CreateActivityThemeCategoryProps,
+  ): Promise<ActivityThemeCategory> {
+    const activityThemeCategory =
+      await this.prisma.activityThemeCategories.create({
+        data: {
+          TextContent: {
+            create: {
+              text: props.content,
+              LanguageCode: { connect: { code: props.languageCode } },
+              Translations: {
+                create: props.translations?.map((translation) => ({
+                  text: translation.content,
+                  LanguageCode: { connect: { code: translation.language } },
+                })),
+              },
+            },
+          },
+        },
+        ...ActivityThemeCategoryRelations,
+      });
+
+    return activityThemeCategoryMapper(activityThemeCategory);
+  }
+
+  async updateThemeCategory(
+    props: UpdateActivityThemeCategoryProps,
+  ): Promise<ActivityThemeCategory> {
+    await this.prisma.textContent.update({
+      where: { id: props.textContentId },
+      data: {
+        text: props.content,
+        LanguageCode: { connect: { code: props.languageCode } },
+        Translations: {
+          deleteMany: {},
+          create: props.translations?.map((translation) => ({
+            text: translation.content,
+            LanguageCode: { connect: { code: translation.language } },
+          })),
+        },
+      },
+    });
+
+    const newActivityThemeCategory =
+      await this.prisma.activityThemeCategories.findUnique({
+        where: {
+          id: props.id,
+        },
+        ...ActivityThemeCategoryRelations,
+      });
+
+    return activityThemeCategoryMapper(newActivityThemeCategory);
+  }
+
+  async deleteCategoryTheme(id: string): Promise<void> {
+    await this.prisma.activityThemeCategories.delete({
+      where: { id },
+    });
   }
 }

@@ -17,12 +17,17 @@ import {
   ActivityResponse,
   ActivityThemeCategoryResponse,
   CreateActivityRequest,
+  CreateActivityThemeCategoryRequest,
+  UpdateActivityThemeCategoryRequest,
 } from 'src/api/dtos/activity';
 import { AuthenticationGuard } from 'src/api/guards';
 import {
+  CreateActivityThemeCategoryUsecase,
   CreateActivityUsecase,
+  DeleteActivityThemeCategoryUsecase,
   GetActivityUsecase,
   GetAllActivityThemesUsecase,
+  UpdateActivityThemeCategoryUsecase,
   UploadImageActivityUsecase,
   UploadMediaActivityUsecase,
 } from 'src/core/usecases';
@@ -32,8 +37,11 @@ import {
 export class ActivityController {
   constructor(
     private readonly createActivityUsecase: CreateActivityUsecase,
-    private readonly getAllActivityThemesUsecase: GetAllActivityThemesUsecase,
+    private readonly createActivityThemeCategoryUsecase: CreateActivityThemeCategoryUsecase,
     private readonly getActivityUsecase: GetActivityUsecase,
+    private readonly getAllActivityThemesUsecase: GetAllActivityThemesUsecase,
+    private readonly updateActivityThemeCategoryUsecase: UpdateActivityThemeCategoryUsecase,
+    private readonly deleteActivityThemeCategoryUsecase: DeleteActivityThemeCategoryUsecase,
     private readonly uploadImageActivityUsecase: UploadImageActivityUsecase,
     private readonly uploadMediaActivityUsecase: UploadMediaActivityUsecase,
   ) {}
@@ -71,8 +79,6 @@ export class ActivityController {
       vocabularies: vocabulariesWithFiles,
     });
 
-    console.log('activity', activity);
-
     if (files.image && files.image[0]) {
       const imageUrl = await this.uploadImageActivityUsecase.execute({
         activityId: activity.id,
@@ -94,7 +100,44 @@ export class ActivityController {
     return ActivityResponse.from(activity);
   }
 
-  @Get('themes')
+  @Post('category')
+  @UseGuards(AuthenticationGuard)
+  @Swagger.ApiOperation({ summary: 'Create a new Activity theme category.' })
+  @Swagger.ApiCreatedResponse({ type: () => ActivityThemeCategoryResponse })
+  async createActivityCategory(
+    @Body() body: CreateActivityThemeCategoryRequest,
+  ) {
+    const activityThemeCategory =
+      await this.createActivityThemeCategoryUsecase.execute(body);
+
+    return ActivityThemeCategoryResponse.from(activityThemeCategory);
+  }
+
+  @Put('category/:id')
+  @UseGuards(AuthenticationGuard)
+  @Swagger.ApiOperation({ summary: 'Update a Activity theme category.' })
+  @Swagger.ApiCreatedResponse({ type: () => ActivityThemeCategoryResponse })
+  async updateActivityCategory(
+    @Param('id') id: string,
+    @Body() body: UpdateActivityThemeCategoryRequest,
+  ) {
+    const activityThemeCategory =
+      await this.updateActivityThemeCategoryUsecase.execute({
+        id,
+        ...body,
+      });
+
+    return ActivityThemeCategoryResponse.from(activityThemeCategory);
+  }
+
+  @Delete('category/:id')
+  @UseGuards(AuthenticationGuard)
+  @Swagger.ApiOperation({ summary: 'Delete a Activity theme category.' })
+  async deleteActivityCategory(@Param('id') id: string) {
+    await this.deleteActivityThemeCategoryUsecase.execute(id);
+  }
+
+  @Get('category')
   @UseGuards(AuthenticationGuard)
   @Swagger.ApiOperation({ summary: 'Get all Activity themes.' })
   @Swagger.ApiOkResponse({ type: () => ActivityThemeCategoryResponse })
@@ -111,9 +154,7 @@ export class ActivityController {
   @Swagger.ApiOperation({ summary: 'Get a Activity ressource.' })
   @Swagger.ApiOkResponse({ type: () => ActivityResponse })
   async getActivity(@Param('id') id: string) {
-    console.log('getActivity', id);
     const activity = await this.getActivityUsecase.execute(id);
-    console.log('activity', activity);
 
     return ActivityResponse.from(activity);
   }

@@ -91,7 +91,7 @@ ALTER TABLE "activity" ADD CONSTRAINT "activity_language_code_id_fkey" FOREIGN K
 ALTER TABLE "activity" ADD CONSTRAINT "activity_creator_id_fkey" FOREIGN KEY ("creator_id") REFERENCES "profiles"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "activity" ADD CONSTRAINT "activity_activity_theme_id_fkey" FOREIGN KEY ("activity_theme_id") REFERENCES "activity_themes"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE "activity" ADD CONSTRAINT "activity_activity_theme_id_fkey" FOREIGN KEY ("activity_theme_id") REFERENCES "activity_themes"("id") ON DELETE CASCADE ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE "activity_themes" ADD CONSTRAINT "activity_themes_text_content_id_fkey" FOREIGN KEY ("text_content_id") REFERENCES "text_content"("id") ON DELETE CASCADE ON UPDATE CASCADE;

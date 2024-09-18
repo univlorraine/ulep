@@ -596,7 +596,7 @@ model Activity {
   Creator Profiles @relation(fields: [creator_id], references: [id])
   ActivityVocabulary ActivityVocabulary[]
   ActivityExercises ActivityExercises[]
-  ActivityThemes ActivityThemes @relation(fields: [activity_theme_id], references: [id])
+  ActivityThemes ActivityThemes @relation(fields: [activity_theme_id], references: [id], onDelete: Cascade)
 
   @@map("activity")
 }
