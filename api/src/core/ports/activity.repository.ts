@@ -1,12 +1,28 @@
 import { ProficiencyLevel, Translation } from 'src/core/models';
 import {
   Activity,
+  ActivityStatus,
   ActivityTheme,
   ActivityThemeCategory,
   ActivityVocabulary,
 } from 'src/core/models/activity.model';
 
 export const ACTIVITY_REPOSITORY = 'activity.repository';
+
+export type ActivityPagination = {
+  limit?: number;
+  page?: number;
+};
+
+export type GetActivitiesProps = {
+  languagesCodes?: string[];
+  languageLevels?: string[];
+  themesIds?: string[];
+  searchTitle?: string;
+  status: ActivityStatus[];
+  profileId?: string;
+  pagination: ActivityPagination;
+};
 
 export type CreateActivityProps = {
   title: string;
@@ -50,6 +66,9 @@ export type UpdateActivityThemeProps = {
 };
 
 export interface ActivityRepository {
+  all(
+    props: GetActivitiesProps,
+  ): Promise<{ items: Activity[]; totalItems: number }>;
   allThemes(): Promise<ActivityThemeCategory[]>;
   allThemeCategories(): Promise<ActivityThemeCategory[]>;
   createActivity(props: CreateActivityProps): Promise<Activity>;

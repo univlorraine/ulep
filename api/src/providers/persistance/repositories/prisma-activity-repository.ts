@@ -1,5 +1,6 @@
 import { PrismaService } from '@app/common';
 import { Injectable } from '@nestjs/common';
+import { Prisma } from '@prisma/client';
 import {
   Activity,
   ActivityTheme,
@@ -11,6 +12,7 @@ import {
   CreateActivityProps,
   CreateActivityThemeCategoryProps,
   CreateActivityThemeProps,
+  GetActivitiesProps,
   UpdateActivityThemeCategoryProps,
   UpdateActivityThemeProps,
 } from 'src/core/ports/activity.repository';
@@ -82,6 +84,79 @@ export class PrismaActivityRepository implements ActivityRepository {
     });
 
     return activityVocabularyMapper(vocabularyActivity);
+  }
+
+  async all(
+    props: GetActivitiesProps,
+  ): Promise<{ items: Activity[]; totalItems: number }> {
+    let where: Prisma.ActivityWhereInput = {};
+
+    if (props.languagesCodes) {
+      where.LanguageCode = {
+        code: {
+          in: props.languagesCodes,
+        },
+      };
+    }
+
+    if (props.themesIds) {
+      where.ActivityThemes = {
+        id: {
+          in: props.themesIds,
+        },
+      };
+    }
+
+    if (props.languageLevels) {
+      where.language_level = {
+        in: props.languageLevels,
+      };
+    }
+
+    if (props.themesIds) {
+      where.ActivityThemes = {
+        id: {
+          in: props.themesIds,
+        },
+      };
+    }
+
+    if (props.searchTitle) {
+      where.title = {
+        contains: props.searchTitle,
+        mode: 'insensitive',
+      };
+    }
+
+    if (props.profileId) {
+      where.Creator = {
+        id: props.profileId,
+      };
+    }
+
+    if (props.status) {
+      where.status = {
+        in: props.status,
+      };
+    }
+
+    const activities = await this.prisma.activity.findMany({
+      where,
+      skip: props.pagination?.page
+        ? (props.pagination.page - 1) * props.pagination.limit
+        : 0,
+      take: props.pagination?.limit,
+      ...ActivityRelations,
+    });
+
+    const totalActivities = await this.prisma.activity.count({
+      where,
+    });
+
+    return {
+      items: activities.map(activityMapper),
+      totalItems: totalActivities,
+    };
   }
 
   async allThemes(): Promise<ActivityThemeCategory[]> {

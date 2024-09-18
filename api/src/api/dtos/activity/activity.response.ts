@@ -188,7 +188,7 @@ export class ActivityResponse {
     Object.assign(this, partial);
   }
 
-  static from(activity: Activity): ActivityResponse {
+  static from(activity: Activity, languageCode?: string): ActivityResponse {
     return new ActivityResponse({
       id: activity.id,
       title: activity.title,
@@ -200,7 +200,7 @@ export class ActivityResponse {
       imageUrl: activity.imageUrl,
       ressourceUrl: activity.ressourceUrl,
       ressourceFileUrl: activity.ressourceFileUrl,
-      theme: ActivityThemeResponse.from(activity.activityTheme),
+      theme: ActivityThemeResponse.from(activity.activityTheme, languageCode),
       vocabularies: activity.activityVocabularies.map(
         ActivityVocabularyResponse.from,
       ),

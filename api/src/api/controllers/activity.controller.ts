@@ -1,3 +1,5 @@
+import { Collection } from '@app/common';
+import { KeycloakUser } from '@app/keycloak';
 import {
   Body,
   Controller,
@@ -7,12 +9,14 @@ import {
   Param,
   Post,
   Put,
+  Query,
   UploadedFiles,
   UseGuards,
   UseInterceptors,
 } from '@nestjs/common';
 import { FileFieldsInterceptor } from '@nestjs/platform-express';
 import * as Swagger from '@nestjs/swagger';
+import { CurrentUser } from 'src/api/decorators';
 import {
   ActivityResponse,
   ActivityThemeCategoryResponse,
@@ -20,16 +24,19 @@ import {
   CreateActivityRequest,
   CreateActivityThemeCategoryRequest,
   CreateActivityThemeRequest,
+  GetActivitiesRequest,
   UpdateActivityThemeCategoryRequest,
   UpdateActivityThemeRequest,
 } from 'src/api/dtos/activity';
 import { AuthenticationGuard } from 'src/api/guards';
+import { ActivityStatus } from 'src/core/models/activity.model';
 import {
   CreateActivityThemeCategoryUsecase,
   CreateActivityThemeUsecase,
   CreateActivityUsecase,
   DeleteActivityThemeCategoryUsecase,
   DeleteActivityThemeUsecase,
+  GetActivitiesUsecase,
   GetActivityUsecase,
   GetAllActivityThemesUsecase,
   UpdateActivityThemeCategoryUsecase,
@@ -46,6 +53,7 @@ export class ActivityController {
     private readonly createActivityThemeCategoryUsecase: CreateActivityThemeCategoryUsecase,
     private readonly createActivityThemeUsecase: CreateActivityThemeUsecase,
     private readonly getActivityUsecase: GetActivityUsecase,
+    private readonly getActivitiesUsecase: GetActivitiesUsecase,
     private readonly getAllActivityThemesUsecase: GetAllActivityThemesUsecase,
     private readonly updateActivityThemeCategoryUsecase: UpdateActivityThemeCategoryUsecase,
     private readonly updateActivityThemeUsecase: UpdateActivityThemeUsecase,
@@ -204,8 +212,40 @@ export class ActivityController {
   @Get()
   @UseGuards(AuthenticationGuard)
   @Swagger.ApiOperation({ summary: 'Get all public Activity ressources.' })
-  @Swagger.ApiOkResponse({ type: () => ActivityResponse })
-  async getPublicActivities() {}
+  @Swagger.ApiOkResponse({ type: () => Collection<ActivityResponse> })
+  async getPublicActivities(
+    @Query() query: GetActivitiesRequest,
+    @CurrentUser() user: KeycloakUser,
+    @Headers('Language-code') languageCode?: string,
+  ) {
+    const status = !query.shouldTakeOnlyMine
+      ? [ActivityStatus.PUBLISHED]
+      : [
+          ActivityStatus.PUBLISHED,
+          ActivityStatus.IN_VALIDATION,
+          ActivityStatus.DRAFT,
+        ];
+
+    const activities = await this.getActivitiesUsecase.execute({
+      status,
+      pagination: {
+        page: query.page,
+        limit: query.limit,
+      },
+      searchTitle: query.searchTitle,
+      themesIds: query.themesIds,
+      languageLevels: query.languageLevels,
+      languagesCodes: query.languagesCodes,
+      userId: query.shouldTakeOnlyMine ? user.sub : undefined,
+    });
+
+    return new Collection<ActivityResponse>({
+      items: activities.items.map((activity) =>
+        ActivityResponse.from(activity, languageCode),
+      ),
+      totalItems: activities.totalItems,
+    });
+  }
 
   @Get('admin')
   @UseGuards(AuthenticationGuard)
