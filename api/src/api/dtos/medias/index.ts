@@ -21,6 +21,10 @@ export class MediaObjectResponse {
   @Expose({ groups: [MEDIA_READ] })
   expireAt?: Date;
 
+  @Swagger.ApiPropertyOptional({ type: 'string' })
+  @Expose({ groups: [MEDIA_READ] })
+  name?: string;
+
   constructor(partial: Partial<MediaObjectResponse>) {
     Object.assign(this, partial);
   }

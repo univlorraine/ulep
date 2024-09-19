@@ -1,7 +1,7 @@
 import PeopleAltIcon from '@mui/icons-material/PeopleAlt';
 import { Box, Typography } from '@mui/material';
 import Checkbox from '@mui/material/Checkbox';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import {
     AutocompleteInput,
     Datagrid,
@@ -12,8 +12,10 @@ import {
     SelectInput,
     TextInput,
     TopToolbar,
+    useDataProvider,
     useGetIdentity,
     useGetList,
+    useNotify,
     usePermissions,
     useRefresh,
     useTranslate,
@@ -25,6 +27,7 @@ import { LearningLanguageWithTandemWithPartnerProfile } from '../../../entities/
 import { getProfileDisplayName } from '../../../entities/Profile';
 import { ProfileWithTandemsProfiles } from '../../../entities/ProfileWithTandemsProfiles';
 import { TandemStatus } from '../../../entities/Tandem';
+import { UserStatus } from '../../../entities/User';
 import codeLanguageToFlag from '../../../utils/codeLanguageToFlag';
 import isAgeCriterionMet from '../../../utils/isAgeCriterionMet';
 import hasTandemManagementPermission from '../hasTandemManagementPermission';
@@ -54,6 +57,8 @@ const TandemStatusComponent = ({ status }: { status: string }) => {
 const LearningLanguageList = () => {
     const translate = useTranslate();
     const refresh = useRefresh();
+    const dataProvider = useDataProvider();
+    const notify = useNotify();
     const { selectedUniversityIds, setSelectedUniversityIds } = useLearningLanguagesStore();
     const { permissions } = usePermissions();
     const { data: identity, isLoading: isLoadingIdentity } = useGetIdentity();
@@ -65,6 +70,23 @@ const LearningLanguageList = () => {
     });
     const { data: universities } = useGetList('universities');
     const [selectedLearningLanguages, setSelectedLearningLanguages] = useState<string[]>([]);
+    const [universityDivisions, setUniversityDivisions] = useState<string[]>([]);
+
+    const fetchUniversityDivisions = async (universityId: string) => {
+        const response = await dataProvider.getUniversityDivisions(universityId);
+
+        if (response instanceof Error) {
+            notify(translate('learning_languages.filters.division.fetchError'));
+        }
+
+        return setUniversityDivisions(response);
+    };
+
+    useEffect(() => {
+        if (identity && identity.isCentralUniversity) {
+            fetchUniversityDivisions(identity.universityId);
+        }
+    }, [identity]);
 
     const adaptedFilters = identity?.isCentralUniversity
         ? [
@@ -73,6 +95,17 @@ const LearningLanguageList = () => {
                   choices={universities}
                   label={translate('learning_languages.list.filters.university.label')}
                   source="user.university"
+                  alwaysOn
+              />,
+              <AutocompleteInput
+                  key="division"
+                  choices={universityDivisions?.map((division) => ({
+                      id: division,
+                      name: division,
+                  }))}
+                  label={translate('learning_languages.list.filters.division.label')}
+                  source="user.division"
+                  sx={{ width: '250px' }}
                   alwaysOn
               />,
               <TextInput
@@ -180,22 +213,28 @@ const LearningLanguageList = () => {
                                                         sx={{ margin: '10px' }}
                                                     />
                                                 )}
-                                                <Box sx={{ display: 'flex', flexDirection: 'column' }}>
-                                                    {getProfileDisplayName(
-                                                        learningLanguage.tandem.partnerLearningLanguage.profile
-                                                    )}{' '}
-                                                    (
-                                                    {codeLanguageToFlag(
-                                                        learningLanguage.tandem.partnerLearningLanguage.profile
-                                                            .nativeLanguage.code
-                                                    )}
-                                                    )
-                                                    <Typography sx={{ color: '#767676' }}>
-                                                        {
-                                                            learningLanguage.tandem.partnerLearningLanguage.profile.user
-                                                                .university.name
-                                                        }
-                                                    </Typography>
+                                                <Box sx={{ display: 'flex', gap: '20px', alignItems: 'center' }}>
+                                                    <Box sx={{ display: 'flex', flexDirection: 'column' }}>
+                                                        {getProfileDisplayName(
+                                                            learningLanguage.tandem.partnerLearningLanguage.profile
+                                                        )}{' '}
+                                                        (
+                                                        {codeLanguageToFlag(
+                                                            learningLanguage.tandem.partnerLearningLanguage.profile
+                                                                .nativeLanguage.code
+                                                        )}
+                                                        )
+                                                        <Typography sx={{ color: '#767676' }}>
+                                                            {
+                                                                learningLanguage.tandem.partnerLearningLanguage.profile
+                                                                    .user.university.name
+                                                            }
+                                                        </Typography>
+                                                    </Box>
+                                                    {learningLanguage.tandem.partnerLearningLanguage.profile.user
+                                                        .status === UserStatus.BANNED ? (
+                                                        <ColoredChips color="error" label="Banned" />
+                                                    ) : null}
                                                 </Box>
                                             </Box>
                                         );

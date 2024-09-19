@@ -162,6 +162,7 @@
         "primaryColor": "Couleur primaire de l'application",
         "primaryBackgroundColor": "Couleur primaire de l'image de fond de l'application",
         "maintenance": "Mise en maintenance",
+        "defaultCertificateFile": "Modèle de certificat",
         "mainteance_update": "L'instance a bien été modifié",
         "primaryDarkColor": "Nuance sombre de la couleur primaire utilisé pour le fond de l'application",
         "secondaryColor": "Couleur secondaire de l'application",
@@ -188,7 +189,8 @@
             "secondaryColor": "Couleur secondaire de l'application",
             "secondaryBackgroundColor": "Couleur secondaire de l'image de fond de l'application",
             "secondaryDarkColor": "Couleur secondaire nuancé en sombre utilisé pour le fond de l'application",
-            "title": "Mise à jour de l'instance"
+            "title": "Mise à jour de l'instance",
+            "defaultCertificateFile": "Modèle de certificat"
         }
     },
     "interests": {
@@ -431,7 +433,9 @@
             "website": "Site web de la nouvelle université partenaire",
             "pairingMode": "Mode d'appariement",
             "max_tandems_per_user": "Nombre maximum de tandems par utilisateur",
-            "notificationEmail": "Email pour les notifications"
+            "notificationEmail": "Email pour les notifications",
+            "defaultCertificateFile": "Modèle de certificat",
+            "exampleDefaultCertificateFile": "Exemple de certificat"
         },
         "language": "Langue",
         "label": "Universités",
@@ -468,7 +472,8 @@
             "id": "ID",
             "pairingMode": "Mode d'appariement",
             "max_tandems_per_user": "Nombre maximum de tandems par utilisateur",
-            "notificationEmail": "Email pour les notifications"
+            "notificationEmail": "Email pour les notifications",
+            "defaultCertificateFile": "Modèle de certificat"
         },
         "specific_language": "Langues spécifiques",
         "status": {
@@ -510,7 +515,11 @@
     "uploader": {
         "drag_drop": "Glissez et déposez une image ou",
         "drop_image": "Lâche l'image ici",
-        "select_image": "Choisissez une image"
+        "select_image": "Choisissez une image",
+        "drag_drop_file": "Glissez et déposez un %{fileType} ou",
+        "drop_file": "Déposer le fichier ici",
+        "select_file": "Choisissez un %{fileType}",
+        "file": "fichier"
     },
     "users": {
         "searchEmail": "Chercher par email",
@@ -538,6 +547,10 @@
                 },
                 "learningLanguage": {
                     "label": "Langue demandée"
+                },
+                "division": {
+                    "label": "Département",
+                    "fetchError": "Une erreur est survenue lors du chargement des départements"
                 }
             },
             "globalRoutineModal": {
@@ -554,6 +567,7 @@
                 "learnedLanguage": "Langue demandée",
                 "level": "Niveau",
                 "university": "Université",
+                "campus": "Campus",
                 "role": "Rôle",
                 "age": "Âge",
                 "score": "Score",

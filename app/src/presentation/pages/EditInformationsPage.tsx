@@ -85,9 +85,9 @@ const EditInformationsPage: React.FC = () => {
 
                 <button className="secondary-button" onClick={() => openGallery()}>
                     {!profilePicture && profile?.user.avatar && (
-                        <NetworkImage id={profile.user.avatar.id} className={styles.image} aria-hidden={true} />
+                        <NetworkImage id={profile.user.id} className={styles.image} aria-hidden={true} />
                     )}
-                    {(profilePicture || !profile?.user.avatar) && (
+                    {(profilePicture || !profile?.user) && (
                         <img
                             alt=""
                             className={styles.image}

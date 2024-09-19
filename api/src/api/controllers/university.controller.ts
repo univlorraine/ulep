@@ -10,16 +10,30 @@ import {
   Put,
   SerializeOptions,
   UploadedFile,
+  UploadedFiles,
   UseGuards,
   UseInterceptors,
 } from '@nestjs/common';
+import {
+  FileFieldsInterceptor,
+  FileInterceptor,
+} from '@nestjs/platform-express';
 import * as Swagger from '@nestjs/swagger';
+import { UniversityKeycloakInterceptor } from 'src/api/interceptors';
+import { ImagesFilePipe } from 'src/api/validators';
+import { University } from 'src/core/models';
+import {
+  GetInstanceUsecase,
+  UploadUniversityImageUsecase,
+} from 'src/core/usecases';
+import { UploadUniversityDefaultCertificateUsecase } from 'src/core/usecases/media/upload-university-default-certificate.usecase';
 import {
   CreatePartnerUniversityUsecase,
   CreateUniversityUsecase,
   DeleteUniversityUsecase,
   GetPartnersToUniversityUsecase,
   GetUniversitiesUsecase,
+  GetUniversityDivisionsUsecase,
   GetUniversityUsecase,
   UpdateUniversityUsecase,
 } from '../../core/usecases/university';
@@ -32,11 +46,6 @@ import {
   UpdateUniversityRequest,
 } from '../dtos';
 import { AuthenticationGuard } from '../guards';
-import { ImagesFilePipe } from 'src/api/validators';
-import { FileInterceptor } from '@nestjs/platform-express';
-import { UploadUniversityImageUsecase } from 'src/core/usecases';
-import { University } from 'src/core/models';
-import { UniversityKeycloakInterceptor } from 'src/api/interceptors';
 
 @Controller('universities')
 @Swagger.ApiTags('Universities')
@@ -50,11 +59,15 @@ export class UniversityController {
     private readonly updateUniversityUsecase: UpdateUniversityUsecase,
     private readonly deleteUniversityUsecase: DeleteUniversityUsecase,
     private readonly uploadUniversityImageUsecase: UploadUniversityImageUsecase,
+    private readonly uploadUniversityDefaultCertificateUsecase: UploadUniversityDefaultCertificateUsecase,
+    private readonly getInstanceUsecase: GetInstanceUsecase,
+    private readonly getUniversityDivisionsUsecase: GetUniversityDivisionsUsecase,
   ) {}
 
   @Post()
   @Roles(Role.ADMIN)
   @UseInterceptors(FileInterceptor('file'))
+  @UseInterceptors(FileInterceptor('defaultCertificateFile'))
   @UseGuards(AuthenticationGuard)
   @Swagger.ApiOperation({ summary: 'Create a new University ressource.' })
   @Swagger.ApiConsumes('multipart/form-data')
@@ -128,8 +141,9 @@ export class UniversityController {
   @Swagger.ApiOkResponse({ type: UniversityResponse })
   async findOne(@Param('id', ParseUUIDPipe) id: string) {
     const university = await this.getUniversityUsecase.execute(id);
+    const instance = await this.getInstanceUsecase.execute();
 
-    return UniversityResponse.fromUniversity(university);
+    return UniversityResponse.fromUniversity(university, instance);
   }
 
   @Get(':id/partners')
@@ -162,7 +176,12 @@ export class UniversityController {
 
   @Put(':id')
   @Roles(Role.ADMIN)
-  @UseInterceptors(FileInterceptor('file'))
+  @UseInterceptors(
+    FileFieldsInterceptor([
+      { name: 'file', maxCount: 1 },
+      { name: 'defaultCertificateFile', maxCount: 1 },
+    ]),
+  )
   @UseInterceptors(UniversityKeycloakInterceptor)
   @UseGuards(AuthenticationGuard)
   @Swagger.ApiOperation({ summary: 'Updates an University ressource.' })
@@ -171,20 +190,31 @@ export class UniversityController {
   async update(
     @Param('id', ParseUUIDPipe) id: string,
     @Body() request: UpdateUniversityRequest,
-    @UploadedFile(new ImagesFilePipe()) file?: Express.Multer.File,
+    @UploadedFiles()
+    files: {
+      file: Express.Multer.File[];
+      defaultCertificateFile: Express.Multer.File[];
+    },
   ) {
     let university: University = await this.updateUniversityUsecase.execute({
       id,
       ...request,
     });
 
-    if (file) {
+    if (files.file) {
       const upload = await this.uploadUniversityImageUsecase.execute({
         id: university.id,
-        file,
+        file: files.file[0],
       });
 
       university = new University({ ...university, logo: upload });
+    }
+
+    if (files.defaultCertificateFile) {
+      await this.uploadUniversityDefaultCertificateUsecase.execute({
+        id: university.id,
+        file: files.defaultCertificateFile[0],
+      });
     }
 
     return UniversityResponse.fromUniversity(university);
@@ -197,5 +227,13 @@ export class UniversityController {
   @Swagger.ApiOkResponse()
   remove(@Param('id') id: string) {
     return this.deleteUniversityUsecase.execute({ id });
+  }
+
+  @Get(':id/divisions')
+  @SerializeOptions({ groups: ['read', 'university:read'] })
+  @Swagger.ApiOperation({ summary: 'Collection of University divisions.' })
+  @Swagger.ApiOkResponse({ type: String, isArray: true })
+  async getUniversityDivisions(@Param('id') id: string) {
+    return await this.getUniversityDivisionsUsecase.execute(id);
   }
 }

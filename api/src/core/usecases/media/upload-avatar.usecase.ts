@@ -21,7 +21,7 @@ export class UploadAvatarCommand {
 export class UploadAvatarUsecase {
   constructor(
     @Inject(STORAGE_INTERFACE)
-    private readonly storageInterface: StorageInterface,
+    private readonly storage: StorageInterface,
     @Inject(MEDIA_OBJECT_REPOSITORY)
     private readonly mediaObjectRepository: MediaObjectRepository,
     @Inject(USER_REPOSITORY)
@@ -33,9 +33,7 @@ export class UploadAvatarUsecase {
 
     const previousImage = await this.tryToFindTheAvatarOfUser(user);
 
-    if (previousImage) {
-      await this.deletePreviousAvatar(previousImage);
-    }
+    await this.tryToDeletePreviousAvatar(previousImage);
 
     const avatar = await this.upload(user, command.file);
 
@@ -52,7 +50,7 @@ export class UploadAvatarUsecase {
   }
 
   private tryToFindTheAvatarOfUser(user: User): Promise<MediaObject | null> {
-    return this.mediaObjectRepository.avatarOfUser(user.id);
+    return this.mediaObjectRepository.findOne(user.id);
   }
 
   private async upload(
@@ -64,15 +62,15 @@ export class UploadAvatarUsecase {
       MediaObject.getDefaultBucket(),
       user.id,
     );
-    await this.storageInterface.write(image.bucket, image.name, file);
+    await this.storage.write(image.bucket, image.name, file);
     await this.mediaObjectRepository.saveAvatar(user, image);
 
     return image;
   }
 
-  private async deletePreviousAvatar(image: MediaObject | null) {
+  private async tryToDeletePreviousAvatar(image: MediaObject | null) {
     if (!image) return;
-    await this.storageInterface.delete(image.bucket, image.name);
+    await this.storage.delete(image.bucket, image.name);
     await this.mediaObjectRepository.remove(image.id);
   }
 }

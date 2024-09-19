@@ -18,6 +18,12 @@
     opacity: 0.4;
 }
 
+.loaderContainer {
+    grid-column: 1 / 3;
+    display: flex;
+    justify-content: center;
+}
+
 .selectedLearningLanguage {
     opacity: 1;
 }

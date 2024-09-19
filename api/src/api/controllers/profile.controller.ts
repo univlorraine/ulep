@@ -186,7 +186,8 @@ export class ProfileController {
   async getCollectionWithTandems(
     @Query() query: ProfileWithTandemsQueryFilter,
   ): Promise<Collection<ProfileWithTandemsProfilesResponse>> {
-    const { lastname, university, learningLanguage, page, limit } = query;
+    const { lastname, university, learningLanguage, division, page, limit } =
+      query;
 
     const profiles = await this.getProfilesWithTandemsProfilesUsecase.execute({
       page,
@@ -195,6 +196,7 @@ export class ProfileController {
         user: {
           lastname: lastname,
           university: university,
+          division: division,
         },
         learningLanguage: learningLanguage,
       },

@@ -24,7 +24,7 @@ export class UploadObjectiveImageCommand {
 export class UploadObjectiveImageUsecase {
   constructor(
     @Inject(STORAGE_INTERFACE)
-    private readonly storageInterface: StorageInterface,
+    private readonly storage: StorageInterface,
     @Inject(MEDIA_OBJECT_REPOSITORY)
     private readonly mediaObjectRepository: MediaObjectRepository,
     @Inject(OBJECTIVE_REPOSITORY)
@@ -55,7 +55,9 @@ export class UploadObjectiveImageUsecase {
   private tryToFindTheImageOfObjective(
     objective: LearningObjective,
   ): Promise<MediaObject | null> {
-    return this.mediaObjectRepository.findOne(objective.id);
+    return objective.image?.id
+      ? this.mediaObjectRepository.findOne(objective.image.id)
+      : null;
   }
 
   private async upload(
@@ -63,7 +65,7 @@ export class UploadObjectiveImageUsecase {
     file: Express.Multer.File,
   ): Promise<MediaObject> {
     const image = MediaObject.generate(file, 'objective');
-    await this.storageInterface.write(image.bucket, image.name, file);
+    await this.storage.write(image.bucket, image.name, file);
     await this.mediaObjectRepository.saveObjectiveImage(objective, image);
 
     return image;
@@ -71,7 +73,7 @@ export class UploadObjectiveImageUsecase {
 
   private async deletePreviousObjectiveImage(image: MediaObject | null) {
     if (!image) return;
-    await this.storageInterface.delete(image.bucket, image.name);
+    await this.storage.delete(image.bucket, image.name);
     await this.mediaObjectRepository.remove(image.id);
   }
 }

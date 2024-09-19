@@ -176,6 +176,7 @@
         "messageReported": "Message signalé",
         "noMessages": "Il n'y a aucun message",
         "title": "Messages avec {{name}}",
+        "video_call_aria_label": "Appeler {{name}}",
         "send_button": {
             "record_aria_label": "Restez appuyé pour enregister un audio ou écrivez votre message pour passer en mode envoie",
             "send_aria_label": "Envoyer le message"
@@ -187,10 +188,16 @@
             }
         },
         "search": {
-            "placeholder": "Rechercher dans la conversation"
+            "placeholder": "Rechercher dans la conversation",
+            "previous": "Aller au message précédent",
+            "next": "Aller au message suivant"
         },
         "conversation_menu": {
-            "aria_label": "Menu de la conversation",
+            "aria_label": "Menu de la conversation avec {{name}}",
+            "return_to_conversations_aria_label": "Retour à la liste des conversations",
+            "return_to_chat_aria_label": "Retour à la conversation avec {{name}}",
+            "conversation_aria_label": "Liste des conversations",
+            "user_aria_label": "Conversation avec {{name}}",
             "search": "Rechercher dans la conversation",
             "medias": "Afficher les médias"
         },
@@ -317,6 +324,7 @@
     },
     "learning": {
         "title": "Espace apprentissage",
+        "add_language": "Ajouter une langue",
         "card": {
             "my_tandem": {
                 "button": "Voir le profil",

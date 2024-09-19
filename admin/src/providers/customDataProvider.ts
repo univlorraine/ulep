@@ -479,6 +479,16 @@ const customDataProvider = {
 
         return response.json();
     },
+    getUniversityDivisions: async (universityId: string): Promise<string[]> => {
+        const url = `${process.env.REACT_APP_API_URL}/universities/${universityId}/divisions`;
+        const response = await fetch(url, httpClientOptions({ method: 'GET' }));
+
+        if (!response.ok) {
+            await throwError(response);
+        }
+
+        return response.json();
+    },
 } as unknown as DataProvider;
 
 export default addRefreshAuthToDataProvider(customDataProvider, refreshAuth);

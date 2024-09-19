@@ -1,9 +1,8 @@
 // eslint-disable-next-line import/no-extraneous-dependencies
 import get from 'lodash/get';
-import React from 'react';
-import { ImageField, useRecordContext, useGetOne, FieldProps } from 'react-admin';
+import { FieldProps, ImageField, useGetOne, useRecordContext } from 'react-admin';
 
-const ReferenceUploadField = <RecordType extends Record<string, any> = Record<string, any>>(
+const ReferenceUploadImageField = <RecordType extends Record<string, any> = Record<string, any>>(
     props: FieldProps<RecordType>
 ) => {
     const { label, source } = props;
@@ -22,4 +21,4 @@ const ReferenceUploadField = <RecordType extends Record<string, any> = Record<st
     return <ImageField label={label} record={data} source="url" title={String(label)} />;
 };
 
-export default ReferenceUploadField;
+export default ReferenceUploadImageField;

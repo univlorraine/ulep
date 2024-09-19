@@ -65,6 +65,19 @@ export class PrismaUserRepository implements UserRepository {
     return { items: users, totalItems: count };
   }
 
+  async findByUniversityId(universityId: string): Promise<User[]> {
+    const instances = await this.prisma.users.findMany({
+      where: {
+        organization_id: universityId,
+      },
+      include: UserRelations,
+    });
+
+    const users: User[] = instances.map((item) => userMapper(item));
+
+    return users;
+  }
+
   async ofId(id: string): Promise<User | null> {
     const instance = await this.prisma.users.findUnique({
       where: {

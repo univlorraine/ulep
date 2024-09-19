@@ -159,7 +159,7 @@ export class ReportController {
   ) {
     const instance = await this.createReportMessageUsecase.execute({
       ...body,
-      owner: user.sub,
+      ownerId: user.sub,
     });
 
     return ReportResponse.fromDomain(instance);

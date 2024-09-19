@@ -18,7 +18,12 @@ interface MediaContentProps {
     setImageToDisplay: (image: string) => void;
 }
 
-const Content: React.FC<Omit<MediaContentProps, 'isHybrid'>> = ({ conversation, goBack, setImageToDisplay }) => {
+const Content: React.FC<Omit<MediaContentProps, 'isHybrid'>> = ({
+    conversation,
+    goBack,
+    setImageToDisplay,
+    profile,
+}) => {
     const { t } = useTranslation();
     const [selectedFilter, setSelectedFilter] = useState<MessageType>(MessageType.Image);
     const { messages, isScrollForwardOver, isLoading, loadMessages } = useHandleMessagesFromConversation({
@@ -26,6 +31,7 @@ const Content: React.FC<Omit<MediaContentProps, 'isHybrid'>> = ({ conversation, 
         typeFilter: selectedFilter,
         limit: 30,
     });
+    const partner = Conversation.getMainConversationPartner(conversation, profile.id);
 
     return (
         <div className={`${styles.container} content-wrapper`}>
@@ -35,7 +41,11 @@ const Content: React.FC<Omit<MediaContentProps, 'isHybrid'>> = ({ conversation, 
                         <IonButton
                             fill="clear"
                             onClick={goBack}
-                            aria-label={t('chat.conversation_menu.aria_label') as string}
+                            aria-label={
+                                t('chat.conversation_menu.return_to_chat_aria_label', {
+                                    name: partner.firstname,
+                                }) as string
+                            }
                         >
                             <IonIcon icon={LeftChevronSvg} size="medium" aria-hidden="true" />
                         </IonButton>

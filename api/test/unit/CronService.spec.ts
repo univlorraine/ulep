@@ -1,10 +1,5 @@
-import InMemoryEmailGateway from 'src/providers/gateway/in-memory-email.gateway';
-import InMemoryNotificaitonGateway from 'src/providers/gateway/in-memory-notification.gateway';
-import { InMemoryUniversityRepository } from 'src/providers/persistance/repositories/in-memory-university-repository';
-import { InMemoryInstanceRepository } from 'src/providers/persistance/repositories/in-memory-instance-repository';
-import { Instance } from 'src/core/models/Instance.model';
-import { InMemoryLearningLanguageRepository } from 'src/providers/persistance/repositories/in-memory-learning-language-repository';
-import { CronService } from 'src/core/services/CronService';
+import { InstanceFactory } from '@app/common/database/factories/instance.factory';
+import { faker } from '@faker-js/faker';
 import {
   CountryCode,
   Gender,
@@ -21,7 +16,12 @@ import {
   University,
   User,
 } from 'src/core/models';
-import { faker } from '@faker-js/faker';
+import { CronService } from 'src/core/services/CronService';
+import InMemoryEmailGateway from 'src/providers/gateway/in-memory-email.gateway';
+import InMemoryNotificaitonGateway from 'src/providers/gateway/in-memory-notification.gateway';
+import { InMemoryInstanceRepository } from 'src/providers/persistance/repositories/in-memory-instance-repository';
+import { InMemoryLearningLanguageRepository } from 'src/providers/persistance/repositories/in-memory-learning-language-repository';
+import { InMemoryUniversityRepository } from 'src/providers/persistance/repositories/in-memory-university-repository';
 
 const country = {
   id: 'fr',
@@ -149,22 +149,8 @@ const tandem = new Tandem({
 
 describe('Cron', () => {
   const daysBeforeClosureNotification = 8;
-  const instance = new Instance({
-    id: '1',
-    name: 'test',
-    email: 'test@test.com',
-    ressourceUrl: 'test',
-    cguUrl: 'test',
-    confidentialityUrl: 'test',
-    primaryColor: 'test',
-    primaryBackgroundColor: 'test',
-    secondaryColor: 'test',
-    secondaryBackgroundColor: 'test',
-    primaryDarkColor: 'test',
-    secondaryDarkColor: 'test',
-    isInMaintenance: false,
-    daysBeforeClosureNotification,
-  });
+  const instanceFactory = new InstanceFactory();
+  const instance = instanceFactory.makeOne();
 
   const instanceRepository = new InMemoryInstanceRepository();
   const learningLanguageRepository = new InMemoryLearningLanguageRepository();

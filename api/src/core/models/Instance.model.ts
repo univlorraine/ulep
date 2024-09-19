@@ -1,3 +1,5 @@
+import { MediaObject } from 'src/core/models/media.model';
+
 interface InstanceProps {
   id: string;
   name: string;
@@ -13,6 +15,7 @@ interface InstanceProps {
   secondaryDarkColor: string;
   isInMaintenance: boolean;
   daysBeforeClosureNotification: number;
+  defaultCertificateFile?: MediaObject;
 }
 
 export class Instance {
@@ -30,6 +33,7 @@ export class Instance {
   readonly secondaryDarkColor: string;
   readonly isInMaintenance: boolean;
   readonly daysBeforeClosureNotification: number;
+  readonly defaultCertificateFile?: MediaObject;
 
   constructor(instance: InstanceProps) {
     this.id = instance.id;
@@ -46,5 +50,6 @@ export class Instance {
     this.secondaryDarkColor = instance.secondaryDarkColor;
     this.isInMaintenance = instance.isInMaintenance;
     this.daysBeforeClosureNotification = instance.daysBeforeClosureNotification;
+    this.defaultCertificateFile = instance.defaultCertificateFile;
   }
 }

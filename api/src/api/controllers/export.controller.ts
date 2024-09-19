@@ -1,5 +1,6 @@
 import { Controller, Get, Res, UseGuards } from '@nestjs/common';
 import * as Swagger from '@nestjs/swagger';
+import { Response } from 'express';
 import { GetProfilesUsecase } from 'src/core/usecases/profiles/get-profiles.usecase';
 import { Role, Roles } from '../decorators/roles.decorator';
 import { AuthenticationGuard } from '../guards';
@@ -12,7 +13,7 @@ export class ExportController {
   @Get('profiles')
   @Roles(Role.ADMIN)
   @UseGuards(AuthenticationGuard)
-  async profiles(@Res() response: any): Promise<any> {
+  async profiles(@Res() response: Response): Promise<any> {
     const data = await this.getProfilesUsecase.execute({
       page: 1,
       limit: 1500,

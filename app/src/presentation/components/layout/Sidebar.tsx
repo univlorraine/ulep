@@ -1,4 +1,5 @@
-import { IonItem, IonList } from '@ionic/react';
+import { IonIcon, IonItem, IonList } from '@ionic/react';
+import { alertCircleOutline } from 'ionicons/icons';
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { useHistory, useLocation } from 'react-router';
@@ -72,7 +73,7 @@ const Sidebar: React.FC<SidebarProps> = ({ onDisconnect, onDisplaySettings, onDi
                 <span className={styles.title}>{t('navigation.sidebar.disconnect')}</span>
             </IonItem>
             <IonItem className={styles['report-container']} onClick={onDisplayReport} button>
-                <img alt="" className="margin-right" src={DisconnectSvg} aria-hidden={true} />
+                <IonIcon className="margin-right" icon={alertCircleOutline} size="large" aria-hidden={true} />
                 <span>{t('home_page.report.report_button')}</span>
             </IonItem>
         </IonList>
