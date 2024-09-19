@@ -1,5 +1,6 @@
 import { Campus } from './campus.model';
 import { Language } from './language.model';
+import { MediaObject } from './media.model';
 import { ProficiencyLevel } from './proficiency.model';
 import { LearningType, Profile } from './profile.model';
 import { Tandem } from './tandem.model';
@@ -18,6 +19,10 @@ interface LearningLanguageProps {
   hasPriority?: boolean;
   sameTandemEmail?: string;
   certificateOption?: boolean;
+  learningJournal?: boolean;
+  consultingInterview?: boolean;
+  sharedCertificate?: boolean;
+  certificateFile?: MediaObject;
   specificProgram?: boolean;
   campus?: Campus;
   tandemLanguage?: Language;
@@ -35,6 +40,10 @@ export class LearningLanguage {
   readonly sameAge: boolean;
   readonly hasPriority?: boolean;
   readonly certificateOption?: boolean;
+  readonly learningJournal?: boolean;
+  readonly consultingInterview?: boolean;
+  readonly sharedCertificate?: boolean;
+  readonly certificateFile?: MediaObject;
   readonly specificProgram?: boolean;
   readonly campus?: Campus;
   tandemLanguage?: Language;
@@ -51,6 +60,10 @@ export class LearningLanguage {
     sameGender,
     sameAge,
     certificateOption,
+    learningJournal,
+    consultingInterview,
+    sharedCertificate,
+    certificateFile,
     specificProgram,
     campus,
     tandemLanguage,
@@ -67,6 +80,10 @@ export class LearningLanguage {
     this.sameGender = sameGender;
     this.sameAge = sameAge;
     this.certificateOption = certificateOption;
+    this.learningJournal = learningJournal;
+    this.consultingInterview = consultingInterview;
+    this.sharedCertificate = sharedCertificate;
+    this.certificateFile = certificateFile;
     this.specificProgram = specificProgram;
     this.campus = campus;
     this.tandemLanguage = tandemLanguage;

@@ -1,10 +1,12 @@
 import { Collection } from '@app/common';
 import {
+  Body,
   Controller,
   Delete,
   Get,
   Param,
   ParseUUIDPipe,
+  Put,
   Query,
   SerializeOptions,
   UseGuards,
@@ -12,11 +14,14 @@ import {
 import * as Swagger from '@nestjs/swagger';
 import { GetLearningLanguageMatchesUsecase } from 'src/core/usecases';
 import {
+  GenerateCertificateUsecase,
   GetLearningLanguageOfIdUsecase,
   GetLearningLanguagesUsecase,
+  UpdateLearningLanguageUsecase,
 } from 'src/core/usecases/learningLanguage';
 import { DeleteLearningLanguageUsecase } from 'src/core/usecases/learningLanguage/delete-learning-langugage.usecase';
 import { GetLearningLanguageTandemUsecase } from 'src/core/usecases/learningLanguage/getLearningLanguageTandem.usecase';
+import { UploadLearningLanguageCertificateUsecase } from 'src/core/usecases/media/upload-learning-language-certificate.usecase';
 import { CollectionResponse } from '../decorators';
 import { Role, Roles } from '../decorators/roles.decorator';
 import {
@@ -26,6 +31,7 @@ import {
   MatchResponse,
   UserTandemResponse,
 } from '../dtos';
+import { GenerateCertificateRequest } from '../dtos/learning-languages/generate-certificate.request';
 import { GetLearningLanguageMatchsRequest } from '../dtos/learning-languages/get-learning-language-matches.request';
 import { AuthenticationGuard } from '../guards';
 
@@ -38,6 +44,9 @@ export class LearningLanguageController {
     private getLearningLanguageMatchesUsecase: GetLearningLanguageMatchesUsecase,
     private getLearningLanguageTandemUseCase: GetLearningLanguageTandemUsecase,
     private deleteLearningLanguageUsecase: DeleteLearningLanguageUsecase,
+    private updateLearningLanguageUsecase: UpdateLearningLanguageUsecase,
+    private generateCertificateUsecase: GenerateCertificateUsecase,
+    private uploadLearningLangugaeCertificateUsecase: UploadLearningLanguageCertificateUsecase,
   ) {}
 
   @Get()
@@ -156,5 +165,31 @@ export class LearningLanguageController {
   @Swagger.ApiOkResponse()
   remove(@Param('id', ParseUUIDPipe) id: string) {
     return this.deleteLearningLanguageUsecase.execute({ id });
+  }
+
+  @Put(':id/generate-certificate')
+  @Roles(Role.ADMIN)
+  @UseGuards(AuthenticationGuard)
+  @Swagger.ApiOperation({ summary: 'Update a learning language ressource.' })
+  @Swagger.ApiCreatedResponse({ type: LearningLanguageResponse })
+  async updateLearningLanguage(
+    @Param('id', ParseUUIDPipe) id: string,
+    @Body() body: GenerateCertificateRequest,
+  ): Promise<LearningLanguageResponse> {
+    const certificate = await this.generateCertificateUsecase.execute(id);
+
+    await this.uploadLearningLangugaeCertificateUsecase.execute({
+      id,
+      file: certificate,
+    });
+
+    const learningLanguage = await this.updateLearningLanguageUsecase.execute(
+      id,
+      {
+        ...body,
+      },
+    );
+
+    return LearningLanguageResponse.fromDomain(learningLanguage);
   }
 }

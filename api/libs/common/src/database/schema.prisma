@@ -226,7 +226,8 @@ model MediaObjects {
   InstanceDefaultCertificateFile Instance?
   UniversitiesDefaultCertificateFile Organizations? @relation("UniversitiesDefaultCertificateFile")
   News       News?
-
+  LearningLanguageCertificateFile LearningLanguages? @relation("LearningLanguageCertificateFile")
+  
   @@unique([name, bucket])
   @@map("media_objects")
 }
@@ -413,6 +414,10 @@ model LearningLanguages {
   certificate_option      Boolean?
   specific_program        Boolean?
   has_priority            Boolean?
+  learning_journal        Boolean?
+  consulting_interview    Boolean?
+  shared_certificate      Boolean?
+  certificate_file_id     String? @unique
   campus_id               String?
   tandem_id               String?
   tandem_language_code_id String?
@@ -425,6 +430,7 @@ model LearningLanguages {
   LanguageCode   LanguageCodes    @relation("LearningLanguageLanguage", fields: [language_code_id], references: [id])
   RefusedTandems RefusedTandems[]
   Campus         Places?          @relation(fields: [campus_id], references: [id])
+  CertificateFile MediaObjects?   @relation("LearningLanguageCertificateFile", fields: [certificate_file_id], references: [id])
 
   @@map("learning_languages")
 }
