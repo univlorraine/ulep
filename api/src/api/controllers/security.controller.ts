@@ -13,6 +13,7 @@ import {
 } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import * as Swagger from '@nestjs/swagger';
+import { Response } from 'express';
 import { Env } from 'src/configuration';
 import { GetJitsiTokenUsecase } from 'src/core/usecases/jitsi/get-jitsi-token.usecase';
 import { LogoutAllSessionsUsecase } from 'src/core/usecases/security/logout-all-sessions.usecase';
@@ -92,7 +93,7 @@ export class SecurityController {
   @Swagger.ApiResponse({ status: 302 })
   async initiateStandardFlow(
     @Query('redirectUri') redirectUri: string,
-    @Res() res,
+    @Res() res: Response,
   ): Promise<void> {
     const redirect = redirectUri || `${this.#appUrl}/auth`;
 

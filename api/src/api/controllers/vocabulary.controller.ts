@@ -89,7 +89,7 @@ export class VocabularyController {
       translationPronunciation?: Express.Multer.File;
     },
   ) {
-    let vocabulary = await this.createVocabularyUsecase.execute({ ...body });
+    const vocabulary = await this.createVocabularyUsecase.execute({ ...body });
     const { wordPronunciation, translationPronunciation } = files ?? {};
 
     if (wordPronunciation && wordPronunciation[0]) {
@@ -214,7 +214,7 @@ export class VocabularyController {
       translationPronunciation?: Express.Multer.File;
     },
   ) {
-    let vocabulary = await this.updateVocabularyUsecase.execute({
+    const vocabulary = await this.updateVocabularyUsecase.execute({
       vocabularyId: id,
       ...body,
     });
