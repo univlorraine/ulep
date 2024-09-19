@@ -6,6 +6,7 @@ import FileAdapter from '../adapter/FileAdapter';
 import NotificationAdapter from '../adapter/NotificationAdapter';
 import { RecorderAdapter } from '../adapter/RecorderAdapter';
 import Configuration from '../domain/entities/Confirguration';
+import CreateActivityUsecase from '../domain/usecases/activity/CreateActivityUsecase';
 import AddDeviceUsecase from '../domain/usecases/AddDeviceUsecase';
 import AskForAccountDeletion from '../domain/usecases/AskForAccountDeletionUsecase';
 import AskForLanguageUsecase from '../domain/usecases/AskForLanguageUsecase';
@@ -159,6 +160,9 @@ const getConfigContextValue = ({
     const updateVocabularyList = new UpdateVocabularyListUsecase(domainHttpAdapter);
     const deleteVocabularyList = new DeleteVocabularyListUsecase(domainHttpAdapter);
 
+    // Activity
+    const createActivity = new CreateActivityUsecase(domainHttpAdapter);
+
     return {
         accessToken,
         addDevice,
@@ -168,6 +172,7 @@ const getConfigContextValue = ({
         browserAdapter,
         cameraAdapter,
         configuration,
+        createActivity,
         createOrUpdateTestedLanguage,
         createProfile,
         createReport,
