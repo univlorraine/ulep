@@ -764,6 +764,12 @@
         "roles": {
             "STAFF": "Personnel",
             "STUDENT": "Etudiant"
+        },
+        "certificateDialog": {
+            "title": "Générer le certificat de %{name}",
+            "editCertificateBtn": "Editer le certificat",
+            "generateCertificateBtn": "Générer le certificat",
+            "certificateGenerated": "Certificat généré"
         }
     },
     "universitiesPicker": {

@@ -1,15 +1,16 @@
 import get from 'lodash/get';
-import { FieldProps, FileField, useGetOne, useRecordContext } from 'react-admin';
+import { FieldProps, FileField, useGetOne, useRecordContext, useTranslate } from 'react-admin';
 
 const ReferenceUploadFileField = <RecordType extends Record<string, any> = Record<string, any>>({
     label,
     source,
 }: FieldProps<RecordType>) => {
     const record = useRecordContext();
+    const translate = useTranslate();
     const sourceValue = get(record, source as string);
 
     if (!sourceValue) {
-        return null;
+        return <>{translate('ra.navigation.no_results')}</>;
     }
 
     const { data, isLoading, error } = useGetOne('uploads', { id: sourceValue });
