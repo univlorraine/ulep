@@ -11,3 +11,9 @@ data:
 {{ .Files.Get "default_data/components.json" | indent 4}}
   api_components.json: |-
 {{ .Files.Get "default_data/api_components.json" | indent 4}}
+  app_components.json: |-
+{{ .Files.Get "default_data/app_components.json" | indent 4}}
+  emails_components.json: |-
+{{ .Files.Get "default_data/emails_components.json" | indent 4}}
+  notifications_components.json: |-
+{{ .Files.Get "default_data/notifications_components.json" | indent 4}}

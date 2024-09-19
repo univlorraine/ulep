@@ -19,9 +19,9 @@ mkdir ./zh
 
 cp /opt/scripts/fr/*.json ./fr/
 cp /opt/scripts/en/*.json ./en/
-cp /opt/scripts/en/*.json ./de/
-cp /opt/scripts/en/*.json ./es/
-cp /opt/scripts/en/*.json ./zh/
+cp /opt/scripts/de/*.json ./de/
+cp /opt/scripts/es/*.json ./es/
+cp /opt/scripts/zh/*.json ./zh/
 
 git config --global user.email "you@example.com"
 git config --global user.name "Your Name"

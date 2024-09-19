@@ -57,7 +57,7 @@ EMAILS_COMPONENT_RESPONSE=$(curl \
 NOTIFICATIONS_COMPONENT_RESPONSE=$(curl \
     -s \
     -k \
-    --data-binary @/opt/scripts/emails_notifications.json \
+    --data-binary @/opt/scripts/notifications_components.json \
     -H "Content-Type: application/json" \
     -H "Authorization: Token $ADMIN_TOKEN" \
     https://$WEBLATE_SITE_DOMAIN/api/projects/ulep/components/)

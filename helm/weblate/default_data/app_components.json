@@ -1,12 +1,12 @@
 {
   "branch": "develop",
   "file_format": "json-nested",
-  "filemask": "*/app.json",
+  "filemask": "*/translation.json",
   "name": "app",
   "slug": "app",
   "repo": "ssh://git@ulep-weblate-git:2222/srv/git/locales.git",
   "push": "ssh://git@ulep-weblate-git:2222/srv/git/locales.git",
-  "template": "en/app.json",
+  "template": "en/translation.json",
   "new_base": "",
   "vcs": "git"
 }
