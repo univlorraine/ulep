@@ -23,7 +23,7 @@ import Language from '../../entities/Language';
 import { LearningLanguage } from '../../entities/LearningLanguage';
 import { Profile } from '../../entities/Profile';
 import User from '../../entities/User';
-import CertifcateModal from './CertificateModal';
+import CertificateModal from './CertificateModal';
 import ProfileExportButton from './Export/ProfileExportButton';
 
 const Title = () => {
@@ -194,7 +194,7 @@ const ProfileTab = () => {
                             source="certificateFile.id"
                         />
 
-                        <CertifcateModal profile={recordContext as Profile} />
+                        <CertificateModal profile={recordContext as Profile} />
                     </Datagrid>
                 </ArrayField>
             </TabbedShowLayout.Tab>

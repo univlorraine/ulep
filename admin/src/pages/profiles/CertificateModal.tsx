@@ -7,11 +7,11 @@ import DialogContent from '@mui/material/DialogContent';
 import DialogTitle from '@mui/material/DialogTitle';
 import * as React from 'react';
 import { useNotify, useRecordContext, useRefresh, useTranslate, useUpdate } from 'react-admin';
-import CertificateForm from '../../../components/form/CertificateForm';
-import { CertificateFormPayload, LearningLanguage } from '../../../entities/LearningLanguage';
-import { Profile } from '../../../entities/Profile';
+import CertificateForm from '../../components/form/CertificateForm';
+import { CertificateFormPayload, LearningLanguage } from '../../entities/LearningLanguage';
+import { Profile } from '../../entities/Profile';
 
-const CertifcateModal = ({ profile }: { profile: Profile }) => {
+const CertificateModal = ({ profile }: { profile: Profile }) => {
     const refresh = useRefresh();
     const [open, setOpen] = React.useState(false);
     const translate = useTranslate();
@@ -103,4 +103,4 @@ const CertifcateModal = ({ profile }: { profile: Profile }) => {
     );
 };
 
-export default CertifcateModal;
+export default CertificateModal;
