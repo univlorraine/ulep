@@ -214,7 +214,6 @@ export class ActivityController {
   @Get()
   @UseGuards(AuthenticationGuard)
   @Swagger.ApiOperation({ summary: 'Get all public Activity ressources.' })
-  @Swagger.ApiOkResponse({ type: () => Collection<ActivityResponse> })
   async getPublicActivities(
     @Query() query: GetActivitiesRequest,
     @CurrentUser() user: KeycloakUser,
