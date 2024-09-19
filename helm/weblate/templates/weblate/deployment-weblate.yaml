@@ -35,7 +35,7 @@ spec:
           command: ["sh", "-c", "chown -R 1000:1000 /app/data"]
           volumeMounts:
           - name: "{{ .Values.weblate.name }}-data"
-            mountPath: /app/data
+            mountPath: /app/data          
       containers:
         - name: {{ .Chart.Name }}
           securityContext:
@@ -97,7 +97,7 @@ spec:
       volumes:
       - name: "{{ .Values.weblate.name }}-data"
         persistentVolumeClaim:
-          claimName:  "{{ .Values.name }}-pvc-{{ .Values.weblate.name }}"     
+          claimName:  "{{ .Values.name }}-pvc-{{ .Values.weblate.name }}"      
       {{- with .Values.nodeSelector }}
       nodeSelector:
         {{- toYaml . | nindent 8 }}

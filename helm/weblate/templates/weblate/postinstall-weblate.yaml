@@ -10,8 +10,7 @@ spec:
     spec:
       containers:
       - name: post-install-weblate-job-{{ .Release.Revision }}
-        image: alpine:3.20
-        imagePullPolicy: IfNotPresent
+        image: alpine:3.20        
         command: [ "/bin/sh", "-c", "/opt/scripts/inject.sh"]
         env:
           - name: WEBLATE_SITE_DOMAIN
@@ -22,6 +21,8 @@ spec:
             value: {{ .Values.global.postgresql.auth.password }}
           - name: PSQL_DATABASE
             value: {{ .Values.global.postgresql.auth.database }}
+          - name: PSQL_HOST
+            value: {{ .Values.name }}-postgresql.{{ .Release.Namespace }}
         volumeMounts:
           - name: config-volume
             mountPath: /opt/scripts
@@ -29,6 +30,7 @@ spec:
         - name: config-volume
           configMap:
             name: {{ .Release.Name }}-postinstall-configmap
-            defaultMode: 0777        
+            defaultMode: 0777
+        
       restartPolicy: Never
       terminationGracePeriodSeconds: 0

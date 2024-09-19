@@ -1,0 +1,15 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: "{{ .Values.name }}-{{ .Values.git.name }}"
+  labels: {{- include "ulep-weblate.labels" . | nindent 4 }}
+spec:
+  type: {{ .Values.git.service.type }}
+  ports:
+    - port: {{ .Values.git.service.port }}
+      targetPort: http
+      protocol: TCP
+      name: http
+  selector:
+    app.kubernetes.io/name: "{{ .Values.name }}-{{ .Values.git.name }}"
+    app.kubernetes.io/instance: "{{ .Release.Name }}"
