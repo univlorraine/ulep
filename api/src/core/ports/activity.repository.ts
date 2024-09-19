@@ -92,6 +92,7 @@ export interface ActivityRepository {
   updateThemeCategory(
     props: UpdateActivityThemeCategoryProps,
   ): Promise<ActivityThemeCategory>;
+  deleteActivity(id: string): Promise<void>;
   updateTheme(props: UpdateActivityThemeProps): Promise<ActivityTheme>;
   deleteCategoryTheme(id: string): Promise<void>;
   deleteTheme(id: string): Promise<void>;

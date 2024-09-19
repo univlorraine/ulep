@@ -3,6 +3,7 @@ export * from './create-activity-theme.usecase';
 export * from './create-activity.usecase';
 export * from './delete-activity-theme-category.usecase';
 export * from './delete-activity-theme.usecase';
+export * from './delete-activity.usecase';
 export * from './get-activity.usecase';
 export * from './get-all-activities.usecase';
 export * from './get-all-activity-themes.usecase';

@@ -278,6 +278,12 @@ export class PrismaActivityRepository implements ActivityRepository {
     return activityThemeCategoryMapper(activityThemeCategory);
   }
 
+  async deleteActivity(id: string): Promise<void> {
+    await this.prisma.activity.delete({
+      where: { id },
+    });
+  }
+
   async updateThemeCategory(
     props: UpdateActivityThemeCategoryProps,
   ): Promise<ActivityThemeCategory> {

@@ -36,6 +36,7 @@ import {
   CreateActivityUsecase,
   DeleteActivityThemeCategoryUsecase,
   DeleteActivityThemeUsecase,
+  DeleteActivityUsecase,
   GetActivitiesUsecase,
   GetActivityUsecase,
   GetAllActivityThemesUsecase,
@@ -59,6 +60,7 @@ export class ActivityController {
     private readonly updateActivityThemeUsecase: UpdateActivityThemeUsecase,
     private readonly deleteActivityThemeCategoryUsecase: DeleteActivityThemeCategoryUsecase,
     private readonly deleteActivityThemeUsecase: DeleteActivityThemeUsecase,
+    private readonly deleteActivityUsecase: DeleteActivityUsecase,
     private readonly uploadImageActivityUsecase: UploadImageActivityUsecase,
     private readonly uploadMediaActivityUsecase: UploadMediaActivityUsecase,
   ) {}
@@ -257,7 +259,9 @@ export class ActivityController {
   @UseGuards(AuthenticationGuard)
   @Swagger.ApiOperation({ summary: 'Delete a Activity ressource.' })
   @Swagger.ApiOkResponse({ type: () => ActivityResponse })
-  async deleteActivity() {}
+  async deleteActivity(@Param('id') id: string) {
+    await this.deleteActivityUsecase.execute(id);
+  }
 
   @Put(':id')
   @UseGuards(AuthenticationGuard)
