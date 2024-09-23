@@ -1,0 +1,64 @@
+.ressourceIcon {
+    margin: 8px;
+    width: 28px;
+    height: 28px;
+}
+
+.ressourceTitle {
+    color: black;
+    font-family: 'Poppins', sans-serif;
+    font-weight: 400;
+    font-size: 12px;
+    text-transform: none;
+}
+
+.ressourceContainer {
+    align-items: center;
+    background-color: var(--primary-color);
+    border-radius: 10px;
+    display: flex;
+    flex-direction: row;
+    margin-right: auto;
+    position: relative;
+    padding: 10px;
+    width: 100%;
+}
+
+.input-label {
+    color: #000;
+    font-family: 'Maven Pro', sans-serif;
+    font-size: 16px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: 20px;
+}
+
+.button-container {
+    color: #000;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-evenly;
+}
+
+.infos {
+    color: #737272;
+    font-family: Maven Pro;
+    font-size: 13px;
+    font-weight: 400;
+    line-height: 16px;
+    text-align: left;
+}
+
+.imageContainer {
+    align-items: center;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    width: 100%;
+}
+
+.closeButton {
+    position: absolute;
+    top: 0;
+    right: 0;
+}

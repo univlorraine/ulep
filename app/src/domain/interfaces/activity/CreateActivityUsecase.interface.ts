@@ -7,12 +7,12 @@ export type CreateActivityCommand = {
     languageCode: string;
     themeId: string;
     image: File;
-    ressourceFile: File;
+    ressource?: File;
     ressourceUrl?: string;
     creditImage?: string;
     profileId: string;
     exercises: { content: string; order: number }[];
-    vocabularies: { content: string; pronunciationActivityVocabulary?: File }[];
+    vocabularies: { content: string; file?: File }[];
 };
 
 interface CreateActivityUsecaseInterface {

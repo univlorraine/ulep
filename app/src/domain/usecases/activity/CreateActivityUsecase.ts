@@ -6,12 +6,27 @@ import CreateActivityUsecaseInterface, {
     CreateActivityCommand,
 } from '../../interfaces/activity/CreateActivityUsecase.interface';
 
+interface ActivityPayload {
+    title: string;
+    description: string;
+    languageLevel: string;
+    languageCode: string;
+    themeId: string;
+    image: File;
+    creditImage?: string;
+    ressource?: File;
+    ressourceUrl?: string;
+    profileId: string;
+    exercises: { content: string; order: number }[];
+    vocabularies: string[];
+    vocabulariesFiles: File[];
+}
 class CreateActivityUsecase implements CreateActivityUsecaseInterface {
     constructor(private readonly domainHttpAdapter: HttpAdapterInterface) {}
 
     async execute(command: CreateActivityCommand): Promise<Activity | Error> {
         try {
-            const formData: any = {
+            const formData: ActivityPayload = {
                 title: command.title,
                 description: command.description,
                 languageLevel: command.languageLevel,
@@ -19,30 +34,30 @@ class CreateActivityUsecase implements CreateActivityUsecaseInterface {
                 themeId: command.themeId,
                 image: command.image,
                 creditImage: command.creditImage,
-                ressourceFile: command.ressourceFile,
                 ressourceUrl: command.ressourceUrl,
                 profileId: command.profileId,
                 exercises: command.exercises,
+                vocabularies: command.vocabularies.map((vocabulary) => vocabulary.content),
+                vocabulariesFiles: [],
             };
 
-            if (command.ressourceFile) {
-                formData.ressourceFile = command.ressourceFile;
+            command.vocabularies.forEach((vocabulary) => {
+                if (vocabulary.file) {
+                    const newFile = new File([vocabulary.file], vocabulary.content, { type: vocabulary.file.type });
+                    formData.vocabulariesFiles.push(newFile);
+                }
+            });
+
+            if (command.ressource) {
+                formData.ressource = command.ressource;
             }
 
             if (command.ressourceUrl) {
                 formData.ressourceUrl = command.ressourceUrl;
             }
 
-            if (command.vocabularies) {
-                command.vocabularies.forEach((vocabulary, index) => {
-                    formData.vocabularies[index].content = vocabulary.content;
-                    formData.vocabularies[index].pronunciationActivityVocabulary =
-                        vocabulary.pronunciationActivityVocabulary;
-                });
-            }
-
             const httpResponse: HttpResponse<ActivityCommand> = await this.domainHttpAdapter.post(
-                `/activities/`,
+                `/activity/`,
                 formData,
                 {},
                 'multipart/form-data'
