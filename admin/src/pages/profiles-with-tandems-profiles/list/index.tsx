@@ -410,9 +410,7 @@ const LearningLanguageList = () => {
 
                             return (
                                 <>
-                                    {/* <Box className="line">{profileLearningTypesTranslated.join(', ')}</Box> */}
                                     <Box className="line" />
-
                                     {record.learningLanguages.map(
                                         (learningLanguage: LearningLanguageWithTandemWithPartnerProfile) => {
                                             if (learningLanguage.tandem) {
