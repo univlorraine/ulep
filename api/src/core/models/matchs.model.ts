@@ -1,6 +1,7 @@
 import { DomainError } from '../errors';
 import { LearningLanguagesMustContainsProfiles } from '../errors/match-exceptions';
 import { LearningLanguage } from './learning-language.model';
+import { LearningType } from './profile.model';
 import { Tandem, TandemStatus } from './tandem.model';
 
 export type CreateMatchProps = {
@@ -92,7 +93,11 @@ export class Match {
       });
     }
 
-    if (total !== 0 && props.scores.level === 0 && props.scores.isExclusive === 0) {
+    if (
+      total !== 0 &&
+      props.scores.level === 0 &&
+      props.scores.isExclusive === 0
+    ) {
       throw new DomainError({
         message: 'Langage score must be not null if total is not null',
       });
@@ -109,6 +114,7 @@ export class Match {
       new Tandem({
         id: '',
         learningLanguages: [this.owner, this.target],
+        learningType: LearningType.ETANDEM,
         status: TandemStatus.DRAFT,
         compatibilityScore: this.total,
       });

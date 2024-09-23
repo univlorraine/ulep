@@ -105,6 +105,7 @@ export const learningLanguageWithTandemMapper = (
         id: instance.Tandem.id,
         status: TandemStatus[instance.Tandem.status],
         compatibilityScore: instance.Tandem.compatibilityScore / 100,
+        learningType: LearningType[instance.Tandem.learning_type],
       }),
   });
 };

@@ -145,6 +145,7 @@ const tandem = new Tandem({
   status: TandemStatus.ACTIVE,
   compatibilityScore: 89,
   learningLanguages: [ll1, ll2],
+  learningType: LearningType.TANDEM,
 });
 
 describe('Cron', () => {

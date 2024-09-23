@@ -20,6 +20,7 @@ export class PrismaTandemRepository implements TandemRepository {
         })),
       },
       status: tandem.status,
+      learning_type: tandem.learningType,
       UniversityValidations: {
         connect: tandem.universityValidations?.map((universityId) => ({
           id: universityId,
