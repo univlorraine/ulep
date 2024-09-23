@@ -1,6 +1,7 @@
 import * as Swagger from '@nestjs/swagger';
 import { Expose } from 'class-transformer';
 import { LanguageResponse, ProfileResponse } from 'src/api/dtos';
+import { OGResponse } from 'src/api/dtos/chat';
 import { MediaObjectResponse } from 'src/api/dtos/medias';
 import {
   TextContentResponse,
@@ -184,6 +185,10 @@ export class ActivityResponse {
   @Expose({ groups: ['read'] })
   exercises: ActivityExerciseResponse[];
 
+  @Swagger.ApiProperty({ type: () => OGResponse })
+  @Expose({ groups: ['read'] })
+  ressourceOgUrl?: OGResponse;
+
   constructor(partial: Partial<ActivityResponse>) {
     Object.assign(this, partial);
   }
@@ -205,6 +210,7 @@ export class ActivityResponse {
         ActivityVocabularyResponse.from,
       ),
       exercises: activity.activityExercises.map(ActivityExerciseResponse.from),
+      ressourceOgUrl: activity.metadata?.openGraph,
     });
   }
 }

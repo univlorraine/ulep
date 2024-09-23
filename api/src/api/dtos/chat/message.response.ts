@@ -23,7 +23,7 @@ class OGImageResponse {
     });
   }
 }
-class OGResponse {
+export class OGResponse {
   @Swagger.ApiProperty({ type: 'string' })
   @Expose({ groups: ['chat'] })
   ogSiteName?: string;

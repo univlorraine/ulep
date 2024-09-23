@@ -46,6 +46,7 @@ export interface ActivityCommand {
     theme: ActivityThemeCommand;
     vocabularies: ActivityVocabularyCommand[];
     exercises: ActivityExercisesCommand[];
+    ressourceOgUrl?: any;
 }
 
 export const activityThemeCommandToDomain = (command: ActivityThemeCommand) => {
@@ -75,6 +76,7 @@ export const activityCommandToDomain = (command: ActivityCommand) => {
         languageLevel: command.languageLevel,
         imageUrl: command.imageUrl,
         ressourceUrl: command.ressourceUrl,
+        ressourceOgUrl: command.ressourceOgUrl,
         ressourceFileUrl: command.ressourceFileUrl,
         activityTheme: activityThemeCommandToDomain(command.theme),
         vocabularies: command.vocabularies.map(activityVocabularyCommandToDomain),

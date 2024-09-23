@@ -29,6 +29,7 @@ interface ActivityProps {
   activityTheme: ActivityTheme;
   activityVocabularies: ActivityVocabulary[];
   activityExercises: ActivityExercise[];
+  metadata?: any;
 }
 
 export class Activity {
@@ -50,6 +51,7 @@ export class Activity {
   readonly activityExercises: ActivityExercise[];
   ressourceFileUrl?: string;
   imageUrl?: string;
+  readonly metadata?: any;
 
   constructor({
     id,
@@ -70,6 +72,7 @@ export class Activity {
     activityTheme,
     activityVocabularies,
     activityExercises,
+    metadata,
   }: ActivityProps) {
     this.id = id;
     this.title = title;
@@ -89,6 +92,7 @@ export class Activity {
     this.activityTheme = activityTheme;
     this.activityVocabularies = activityVocabularies;
     this.activityExercises = activityExercises;
+    this.metadata = metadata;
   }
 }
 

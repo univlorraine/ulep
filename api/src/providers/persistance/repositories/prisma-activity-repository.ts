@@ -38,6 +38,7 @@ export class PrismaActivityRepository implements ActivityRepository {
         description: props.description,
         language_level: props.languageLevel,
         credit_image: props.creditImage,
+        metadata: props.metadata,
         LanguageCode: {
           connect: {
             code: props.languageCode,

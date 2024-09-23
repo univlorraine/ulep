@@ -22,6 +22,7 @@ export type ActivityProps = {
     creditImage?: string;
     ressourceUrl?: string;
     ressourceFileUrl?: string;
+    ressourceOgUrl?: string;
 };
 
 export class Activity {
@@ -39,7 +40,7 @@ export class Activity {
     public readonly creditImage?: string;
     public readonly ressourceUrl?: string;
     public readonly ressourceFileUrl?: string;
-
+    public readonly ressourceOgUrl?: string;
     constructor(props: ActivityProps) {
         this.id = props.id;
         this.title = props.title;
@@ -55,6 +56,7 @@ export class Activity {
         this.creditImage = props.creditImage;
         this.ressourceUrl = props.ressourceUrl;
         this.ressourceFileUrl = props.ressourceFileUrl;
+        this.ressourceOgUrl = props.ressourceOgUrl;
     }
 }
 

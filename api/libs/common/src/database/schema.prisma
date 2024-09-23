@@ -596,6 +596,7 @@ model Activity {
   ressource_file_id String?       @unique
   created_at        DateTime      @default(now())
   updated_at        DateTime      @updatedAt
+  metadata          Json?
 
   Image MediaObjects? @relation("Image", fields: [image_id], references: [id])
   RessourceFile MediaObjects? @relation("RessourceFile", fields: [ressource_file_id], references: [id])

@@ -34,6 +34,7 @@ export type CreateActivityProps = {
   languageCode: string;
   ressourceUrl?: string;
   creditImage?: string;
+  metadata?: any;
 };
 
 export type CreateActivityThemeCategoryProps = {
