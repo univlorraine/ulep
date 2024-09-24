@@ -7,24 +7,10 @@ import { CreateNewsCommand } from 'src/core/usecases/news/create-news.usecase';
 import { UpdateNewsCommand } from 'src/core/usecases/news/update-news.usecase';
 import { GetNewsQuery } from 'src/api/dtos/news';
 
-export type GetNewsRepositoryCommand = {
-  limit: number;
-  offset: number;
-  where: {
-    title: string;
-    universityId: string;
-    status: NewsStatus;
-    languageCode: string;
-  };
-};
 @Injectable()
 export class PrismaNewsRepository implements NewsRepository {
   constructor(private readonly prisma: PrismaService) {}
-  async findAll({
-    limit,
-    offset,
-    where,
-  }: GetNewsRepositoryCommand): Promise<Collection<News>> {
+  async findAll({ limit, offset, where }): Promise<Collection<News>> {
     const wherePayload: {} = where
       ? {
           Organization: {
@@ -94,20 +80,6 @@ export class PrismaNewsRepository implements NewsRepository {
   }
 
   async create(command: CreateNewsCommand): Promise<News> {
-    const titleTranslations: Translation[] = command.translations?.map(
-      (translation) => ({
-        language: translation.languageCode,
-        content: translation.title,
-      }),
-    );
-
-    const contentTranslations: Translation[] = command.translations?.map(
-      (translation) => ({
-        language: translation.languageCode,
-        content: translation.content,
-      }),
-    );
-
     const news = await this.prisma.news.create({
       data: {
         Organization: {
@@ -120,9 +92,9 @@ export class PrismaNewsRepository implements NewsRepository {
             text: command.title,
             LanguageCode: { connect: { code: command.languageCode } },
             Translations: {
-              create: titleTranslations?.map((translation) => ({
-                text: translation.content,
-                LanguageCode: { connect: { code: translation.language } },
+              create: command.translations?.map((translation) => ({
+                text: translation.title,
+                LanguageCode: { connect: { code: translation.languageCode } },
               })),
             },
           },
@@ -132,9 +104,9 @@ export class PrismaNewsRepository implements NewsRepository {
             text: command.content,
             LanguageCode: { connect: { code: command.languageCode } },
             Translations: {
-              create: contentTranslations?.map((translation) => ({
+              create: command.translations?.map((translation) => ({
                 text: translation.content,
-                LanguageCode: { connect: { code: translation.language } },
+                LanguageCode: { connect: { code: translation.languageCode } },
               })),
             },
           },
@@ -148,20 +120,6 @@ export class PrismaNewsRepository implements NewsRepository {
   }
 
   async update(command: UpdateNewsCommand): Promise<News> {
-    const titleTranslations: Translation[] = command.translations?.map(
-      (translation) => ({
-        language: translation.languageCode,
-        content: translation.title,
-      }),
-    );
-
-    const contentTranslations: Translation[] = command.translations?.map(
-      (translation) => ({
-        language: translation.languageCode,
-        content: translation.content,
-      }),
-    );
-
     await this.prisma.news.update({
       where: {
         id: command.id,
@@ -178,9 +136,9 @@ export class PrismaNewsRepository implements NewsRepository {
             LanguageCode: { connect: { code: command.languageCode } },
             Translations: {
               deleteMany: {},
-              create: titleTranslations?.map((translation) => ({
-                text: translation.content,
-                LanguageCode: { connect: { code: translation.language } },
+              create: command.translations?.map((translation) => ({
+                text: translation.title,
+                LanguageCode: { connect: { code: translation.languageCode } },
               })),
             },
           },
@@ -191,9 +149,9 @@ export class PrismaNewsRepository implements NewsRepository {
             LanguageCode: { connect: { code: command.languageCode } },
             Translations: {
               deleteMany: {},
-              create: contentTranslations?.map((translation) => ({
+              create: command.translations?.map((translation) => ({
                 text: translation.content,
-                LanguageCode: { connect: { code: translation.language } },
+                LanguageCode: { connect: { code: translation.languageCode } },
               })),
             },
           },
@@ -230,6 +188,4 @@ export class PrismaNewsRepository implements NewsRepository {
       where: { id: news.ContentTextContent.id },
     });
   }
-
-  private readonly logger = new Logger(PrismaNewsRepository.name);
 }
