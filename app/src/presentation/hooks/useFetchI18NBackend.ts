@@ -1,20 +1,27 @@
+import { Device } from '@capacitor/device';
+import { i18n } from 'i18next';
 import { useEffect, useState } from 'react';
-import i18n, { BackendOptions } from '../../i18n';
+import initI18n from '../../i18n';
+import { useStoreState } from '../../store/storeTypes';
 
-const useFetchI18NBackend = (apiUrl: string) => {
-    const [isReady, setIsReady] = useState<boolean>(false);
+const useFetchI18NBackend = (apiUrl: string): i18n => {
+    const language = useStoreState((state) => state.language);
+    const [i18nInstance, setI18nInstance] = useState<i18n>(initI18n());
     useEffect(() => {
-        const configuredApiUrl = import.meta.env.VITE_API_URL || apiUrl;
-        const newi18nPath = configuredApiUrl
-            ? `${configuredApiUrl}/instance/locales/{{lng}}/translation`
-            : '/locales/{{lng}}/translation.json';
-        (i18n.options.backend as BackendOptions).loadPath = newi18nPath;
-        i18n.reloadResources().finally(() => {
-            setIsReady(true);
-        });
-    }, [apiUrl]);
+        const getLanguage = async () => {
+            const deviceLanguage = await Device.getLanguageCode();
+            const userLanguage = language || deviceLanguage.value;
+            if (import.meta.env.VITE_ENV === 'dev') {
+                setI18nInstance(initI18n());
+            } else {
+                setI18nInstance(initI18n(apiUrl, userLanguage));
+            }
+            document.documentElement.lang = userLanguage;
+        };
+        getLanguage();
+    }, [apiUrl, language]);
 
-    return { isReady }
+    return i18nInstance;
 };
 
 export default useFetchI18NBackend;

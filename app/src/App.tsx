@@ -1,10 +1,9 @@
-import { Device } from '@capacitor/device';
 import { IonApp, setupIonicReact } from '@ionic/react';
 import { IonReactRouter } from '@ionic/react-router';
 import * as Sentry from '@sentry/react';
 import { StoreProvider, useStoreRehydrated } from 'easy-peasy';
-import { useEffect } from 'react';
-import { useTranslation } from 'react-i18next';
+import { Suspense, useEffect } from 'react';
+import { I18nextProvider, useTranslation } from 'react-i18next';
 import { ConfigContext, useConfig } from './context/ConfigurationContext';
 import getConfigContextValue from './context/getConfigurationContextValue';
 import Router from './presentation/router/Router';
@@ -22,6 +21,7 @@ import '@ionic/react/css/typography.css';
 import { polyfillCountryFlagEmojis } from 'country-flag-emoji-polyfill';
 import { SocketContext } from './context/SocketContext';
 import getSocketContextValue from './context/getSocketContextValue';
+import Loader from './presentation/components/Loader';
 import useFetchConfiguration from './presentation/hooks/useFetchConfiguration';
 import useFetchI18NBackend from './presentation/hooks/useFetchI18NBackend';
 import ErrorPage from './presentation/pages/ErrorPage';
@@ -86,30 +86,16 @@ const AppCore = () => {
 };
 
 const AppContext = () => {
-    const { i18n } = useTranslation();
     const accessToken = useStoreState((state) => state.accessToken);
     const apiUrl = useStoreState((state) => state.apiUrl);
     const chatUrl = useStoreState((state) => state.chatUrl);
-    const language = useStoreState((state) => state.language);
     const refreshToken = useStoreState((state) => state.refreshToken);
     const setProfile = useStoreActions((state) => state.setProfile);
     const setTokens = useStoreActions((state) => state.setTokens);
     const logout = useStoreActions((state) => state.logout);
     const setUser = useStoreActions((state) => state.setUser);
-
     const { configuration, error, loading } = useFetchConfiguration(import.meta.env.VITE_API_URL || apiUrl);
-    const { isReady } = useFetchI18NBackend(apiUrl);
-
-    useEffect(() => {
-        const getLanguage = async () => {
-            const deviceLanguage = await Device.getLanguageCode();
-            i18n.changeLanguage(language || deviceLanguage.value);
-            document.documentElement.lang = language || deviceLanguage.value;
-        };
-        if (isReady) {
-            getLanguage();
-        }
-    }, [language, isReady]);
+    const { i18n } = useTranslation();
 
     if (error) {
         return <ErrorPage />;
@@ -148,26 +134,38 @@ const AppInstance: React.FC = () => {
     const apiUrl = useStoreState((state) => state.apiUrl);
     const setApiUrl = useStoreActions((state) => state.setApiUrl);
     const socketChatUrl = useStoreState((state) => state.socketChatUrl);
+    const i18nInstance = useFetchI18NBackend(import.meta.env.VITE_API_URL || apiUrl);
 
     if (!rehydrated) {
         return null;
     }
 
-    if (!apiUrl && !import.meta.env.VITE_API_URL)
+    if (!apiUrl && !import.meta.env.VITE_API_URL) {
         return (
-            <InstancesPage
-                onValidate={({ apiUrl, chatUrl, socketChatUrl, jitsiUrl }: ValidateInstance) =>
-                    setApiUrl({ apiUrl, chatUrl, socketChatUrl, jitsiUrl })
-                }
-            />
+            <Suspense fallback={<Loader />}>
+                <I18nextProvider i18n={i18nInstance}>
+                    <InstancesPage
+                        onValidate={({ apiUrl, chatUrl, socketChatUrl, jitsiUrl }: ValidateInstance) =>
+                            setApiUrl({ apiUrl, chatUrl, socketChatUrl, jitsiUrl })
+                        }
+                    />
+                </I18nextProvider>
+            </Suspense>
         );
+    }
 
     return (
-        <SocketContext.Provider
-            value={getSocketContextValue({ socketChatUrl: import.meta.env.VITE_SOCKET_CHAT_URL || socketChatUrl })}
-        >
-            <AppContext />
-        </SocketContext.Provider>
+        <Suspense fallback={<Loader />}>
+            <I18nextProvider i18n={i18nInstance}>
+                <SocketContext.Provider
+                    value={getSocketContextValue({
+                        socketChatUrl: import.meta.env.VITE_SOCKET_CHAT_URL || socketChatUrl,
+                    })}
+                >
+                    <AppContext />
+                </SocketContext.Provider>
+            </I18nextProvider>
+        </Suspense>
     );
 };
 
