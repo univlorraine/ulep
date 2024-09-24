@@ -11,9 +11,7 @@ const useFetchI18NBackend = (apiUrl: string): i18n => {
         const getLanguage = async () => {
             const deviceLanguage = await Device.getLanguageCode();
             const userLanguage = language || deviceLanguage.value;
-            if (import.meta.env.VITE_ENV === 'dev') {
-                setI18nInstance(initI18n());
-            } else {
+            if (import.meta.env.VITE_ENV !== 'dev') {
                 setI18nInstance(initI18n(apiUrl, userLanguage));
             }
             document.documentElement.lang = userLanguage;
