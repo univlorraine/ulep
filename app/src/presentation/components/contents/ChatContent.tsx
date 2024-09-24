@@ -55,6 +55,7 @@ const Content: React.FC<ChatContentProps> = ({
         conversationId: conversation.id,
     });
     const partner = Conversation.getMainConversationPartner(conversation, profile.id);
+    let disconnectInterval: NodeJS.Timeout;
 
     const setSearchMode = () => {
         setShowMenu(false);
@@ -83,10 +84,21 @@ const Content: React.FC<ChatContentProps> = ({
         recorderAdapter.requestPermission();
         socket.connect(accessToken);
         socket.onMessage(conversation.id, addNewMessage);
+        socket.onDisconnect(() => {
+            disconnectInterval = setInterval(() => {
+                if (!socket.isConnected()) {
+                    socket.connect(accessToken);
+                } else {
+                    clearInterval(disconnectInterval);
+                }
+            }, 3000);
+        });
 
         return () => {
             socket.disconnect();
             socket.offMessage();
+            socket.offDisconnect();
+            clearInterval(disconnectInterval);
         };
     }, [conversation.id]);
 
