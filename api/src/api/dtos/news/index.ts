@@ -2,7 +2,7 @@ import * as Swagger from '@nestjs/swagger';
 import { IsNotEmpty, IsOptional, IsString, IsUUID } from 'class-validator';
 import { Expose } from 'class-transformer';
 import { UniversityResponse } from '../universities';
-import { News, NewsStatus } from 'src/core/models';
+import { News, NewsStatus, NewsTranslation } from 'src/core/models';
 import { MediaObjectResponse } from '../medias';
 import { ApiPropertyOptional } from '@nestjs/swagger';
 
@@ -47,7 +47,7 @@ export class CreateNewsRequest {
 
   @Swagger.ApiPropertyOptional({ type: 'array' })
   @IsOptional()
-  translations: string;
+  translations: NewsTranslation[];
 
   @Swagger.ApiProperty({ type: 'string' })
   @IsNotEmpty()
@@ -83,7 +83,7 @@ export class UpdateNewsRequest {
 
   @Swagger.ApiPropertyOptional({ type: 'array' })
   @IsOptional()
-  translations: string;
+  translations: NewsTranslation[];
 
   @Swagger.ApiProperty({ type: 'string' })
   @IsNotEmpty()
@@ -106,7 +106,7 @@ export class NewsResponse {
 
   @Swagger.ApiProperty({ type: 'string' })
   @Expose({ groups: ['read'] })
-  translations: string;
+  translations: NewsTranslationResponse[];
 
   @Swagger.ApiProperty({ type: 'string' })
   @Expose({ groups: ['read'] })
@@ -148,10 +148,38 @@ export class NewsResponse {
         ? MediaObjectResponse.fromMediaObject(instance.image)
         : null,
       languageCode: instance.languageCode,
-      translations: translations,
+      translations: instance.translations.map(
+        NewsTranslationResponse.fromDomain,
+      ),
       university: UniversityResponse.fromUniversity(instance.university),
       createdAt: instance.createdAt,
       updatedAt: instance.updatedAt,
+    });
+  }
+}
+
+export class NewsTranslationResponse {
+  @Swagger.ApiProperty({ type: 'string' })
+  @Expose({ groups: ['read'] })
+  languageCode: string;
+
+  @Swagger.ApiProperty({ type: 'string' })
+  @Expose({ groups: ['read'] })
+  title: string;
+
+  @Swagger.ApiProperty({ type: 'string' })
+  @Expose({ groups: ['read'] })
+  content: string;
+
+  constructor(partial: Partial<NewsTranslationResponse>) {
+    Object.assign(this, partial);
+  }
+
+  static fromDomain(instance: NewsTranslation) {
+    return new NewsTranslationResponse({
+      languageCode: instance.languageCode,
+      title: instance.title,
+      content: instance.content,
     });
   }
 }

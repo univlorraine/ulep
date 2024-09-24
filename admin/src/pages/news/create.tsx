@@ -10,14 +10,26 @@ const CreateNews = () => {
     const notify = useNotify();
 
     const handleSubmit = async (payload: NewsFormPayload) => {
+        if (!payload.title || !payload.content) {
+            return notify('news.form.error.required', {
+                type: 'error',
+            });
+        }
+
         const formData = new FormData();
 
-        formData.append('title', payload.title || '');
-        formData.append('content', payload.content || '');
-        formData.append('languageCode', payload.languageCode || '');
-        formData.append('status', payload.status || '');
-        formData.append('universityId', payload.universityId || '');
-        formData.append('translations', JSON.stringify(payload.translations || []));
+        formData.append('title', payload.title);
+        formData.append('content', payload.content);
+        formData.append('languageCode', payload.languageCode);
+        formData.append('status', payload.status);
+        formData.append('universityId', payload.universityId);
+
+        payload.translations.forEach((translation, index) => {
+            formData.append(`translations[${index}][title]`, translation.title);
+            formData.append(`translations[${index}][content]`, translation.content);
+            formData.append(`translations[${index}][languageCode]`, translation.languageCode);
+        });
+
         if (payload.image) formData.append('file', payload.image);
 
         try {

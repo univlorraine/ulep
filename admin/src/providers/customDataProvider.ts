@@ -152,13 +152,6 @@ const customDataProvider = {
                 return { data: { ...data, id: 'config' } };
             case 'chat':
                 return { data: { ...data, id: params.id } };
-            case 'news':
-                return {
-                    data: {
-                        ...data,
-                        translations: JSON.parse(data.translations),
-                    },
-                };
             default:
                 break;
         }
@@ -265,15 +258,6 @@ const customDataProvider = {
             );
 
             return { data: categoriesWithoutConversation, total: result.totalItems };
-        }
-
-        if (resource === 'news') {
-            const news = result.items.map((item: any) => ({
-                ...item,
-                translations: JSON.parse(item.translations),
-            }));
-
-            return { data: news, total: result.totalItems };
         }
 
         if (!result.items) {

@@ -61,6 +61,8 @@ export class NewsController {
   ): Promise<Collection<NewsResponse>> {
     const news = await this.getNewsUsecase.execute(query);
 
+    console.log({ news: news.items[0].translations });
+
     return new Collection<NewsResponse>({
       items: news.items.map(NewsResponse.fromDomain),
       totalItems: news.totalItems,
@@ -87,11 +89,8 @@ export class NewsController {
     @Body() payload: CreateNewsRequest,
     @UploadedFile(new ImagesFilePipe()) file?: Express.Multer.File,
   ): Promise<NewsResponse> {
-    const translations: NewsTranslation[] = JSON.parse(payload.translations);
-
     let news = await this.createNewsUsecase.execute({
       ...payload,
-      translations,
     });
 
     if (file) {
@@ -116,11 +115,8 @@ export class NewsController {
     @Body() payload: UpdateNewsRequest,
     @UploadedFile(new ImagesFilePipe()) file?: Express.Multer.File,
   ): Promise<NewsResponse> {
-    const translations: NewsTranslation[] = JSON.parse(payload.translations);
-
     let news = await this.updateNewsUsecase.execute({
       ...payload,
-      translations,
     });
 
     if (file) {

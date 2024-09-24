@@ -11,17 +11,33 @@ const EditNews = () => {
     const refresh = useRefresh();
 
     const handleSubmit = async (payload: NewsFormPayload) => {
+        if (!payload.id) {
+            return notify('news.form.error.notFound', {
+                type: 'error',
+            });
+        }
+
+        if (!payload.title || !payload.content) {
+            return notify('news.form.error.required', {
+                type: 'error',
+            });
+        }
+
         const formData = new FormData();
 
-        console.log({ payload: payload.translations });
+        formData.append('id', payload.id);
+        formData.append('title', payload.title);
+        formData.append('content', payload.content);
+        formData.append('languageCode', payload.languageCode);
+        formData.append('status', payload.status);
+        formData.append('universityId', payload.universityId);
 
-        formData.append('id', payload.id || '');
-        formData.append('title', payload.title || '');
-        formData.append('content', payload.content || '');
-        formData.append('languageCode', payload.languageCode || '');
-        formData.append('status', payload.status || '');
-        formData.append('universityId', payload.universityId || '');
-        formData.append('translations', JSON.stringify(payload.translations || []));
+        payload.translations.forEach((translation, index) => {
+            formData.append(`translations[${index}][title]`, translation.title);
+            formData.append(`translations[${index}][content]`, translation.content);
+            formData.append(`translations[${index}][languageCode]`, translation.languageCode);
+        });
+
         if (payload.image) formData.append('file', payload.image);
 
         try {

@@ -99,7 +99,7 @@ export class PrismaNewsRepository implements NewsRepository {
             text: command.title,
             LanguageCode: { connect: { code: command.languageCode } },
             Translations: {
-              create: titleTranslations.map((translation) => ({
+              create: titleTranslations?.map((translation) => ({
                 text: translation.content,
                 LanguageCode: { connect: { code: translation.language } },
               })),
@@ -111,7 +111,7 @@ export class PrismaNewsRepository implements NewsRepository {
             text: command.content,
             LanguageCode: { connect: { code: command.languageCode } },
             Translations: {
-              create: contentTranslations.map((translation) => ({
+              create: contentTranslations?.map((translation) => ({
                 text: translation.content,
                 LanguageCode: { connect: { code: translation.language } },
               })),
@@ -157,7 +157,7 @@ export class PrismaNewsRepository implements NewsRepository {
             LanguageCode: { connect: { code: command.languageCode } },
             Translations: {
               deleteMany: {},
-              create: titleTranslations.map((translation) => ({
+              create: titleTranslations?.map((translation) => ({
                 text: translation.content,
                 LanguageCode: { connect: { code: translation.language } },
               })),
@@ -170,7 +170,7 @@ export class PrismaNewsRepository implements NewsRepository {
             LanguageCode: { connect: { code: command.languageCode } },
             Translations: {
               deleteMany: {},
-              create: contentTranslations.map((translation) => ({
+              create: contentTranslations?.map((translation) => ({
                 text: translation.content,
                 LanguageCode: { connect: { code: translation.language } },
               })),

@@ -14,7 +14,7 @@ import {
 import ColoredChips, { ChipsColors } from '../../components/ColoredChips';
 import useGetUniversitiesLanguages from '../../components/form/useGetUniversitiesLanguages';
 import PageTitle from '../../components/PageTitle';
-import { NewsStatus } from '../../entities/News';
+import { News, NewsStatus, NewsTranslation } from '../../entities/News';
 import codeLanguageToFlag from '../../utils/codeLanguageToFlag';
 
 const StatusChips = ({ status }: { status: string }) => {
@@ -94,13 +94,13 @@ const NewsList = () => {
                     )}
                     <FunctionField
                         label="news.list.defaultLanguage"
-                        render={(record: any) => codeLanguageToFlag(record.languageCode)}
+                        render={(record: News) => codeLanguageToFlag(record.languageCode)}
                     />
                     <FunctionField
                         label="news.list.translations"
-                        render={(record: any) =>
+                        render={(record: News) =>
                             record.translations
-                                .map((translation: any) => codeLanguageToFlag(translation.languageCode))
+                                ?.map((translation: NewsTranslation) => codeLanguageToFlag(translation.languageCode))
                                 .join(', ')
                         }
                     />

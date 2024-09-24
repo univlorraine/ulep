@@ -266,13 +266,21 @@
         "password": "Mot de passe"
     },
     "news": {
-        "add_translation": "Ajouter une traduction",
         "label": "Actualités",
         "title": "Actualités",
-        "remove_translation": "Supprimer la traduction",
-        "author": "Auteur",
-        "change_language": "Changer de langue",
-        "illustration": "Illustration",
+        "form": {
+            "title": "Titre",
+            "content": "Contenu",
+            "illustration": "Illustration",
+            "author": "Auteur",
+            "change_language": "Changer de langue",
+            "add_translation": "Ajouter une traduction",
+            "remove_translation": "Supprimer la traduction",
+            "error": {
+                "notFound": "Actualité non trouvée",
+                "required": "Les champs titre et contenu sont obligatoires"
+            }
+        },
         "status": {
             "label": "Statut",
             "PUBLISHED": "Publié",

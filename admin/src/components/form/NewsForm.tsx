@@ -31,10 +31,6 @@ const NewsForm: React.FC<NewsFormProps> = ({ handleSubmit }) => {
     const [translations, setTranslations] = useState<NewsTranslation[]>(record?.translations || []);
 
     useEffect(() => {
-        if (record) {
-            return;
-        }
-
         async function fetchUniversityData(universityId: string) {
             const result = await dataProvider.getOne('universities', {
                 id: universityId,
@@ -45,7 +41,7 @@ const NewsForm: React.FC<NewsFormProps> = ({ handleSubmit }) => {
             }
         }
 
-        if (identity) {
+        if (!record && identity) {
             fetchUniversityData(identity.universityId);
         }
     }, [identity]);
@@ -59,21 +55,9 @@ const NewsForm: React.FC<NewsFormProps> = ({ handleSubmit }) => {
         setAvailableLanguages(filteredAvailableLanguages);
     }, [universitiesLanguages, translations, defaultLanguage]);
 
-    const onCreatePressed = () => {
-        if (record) {
-            return handleSubmit({
-                id: record.id,
-                title,
-                content,
-                languageCode: defaultLanguage,
-                translations,
-                status,
-                universityId: identity?.universityId,
-                image,
-            });
-        }
-
-        return handleSubmit({
+    const onCreatePressed = () =>
+        handleSubmit({
+            id: record?.id,
             title,
             content,
             languageCode: defaultLanguage,
@@ -82,7 +66,6 @@ const NewsForm: React.FC<NewsFormProps> = ({ handleSubmit }) => {
             universityId: identity?.universityId,
             image,
         });
-    };
 
     if (isLoadingIdentity || !identity) {
         return <Loading />;
@@ -110,7 +93,7 @@ const NewsForm: React.FC<NewsFormProps> = ({ handleSubmit }) => {
                     ))}
                 </Select>
                 <Button
-                    label={translate('news.add_translation')}
+                    label={translate('news.form.add_translation')}
                     onClick={() => {
                         if (newTranslationLanguage) {
                             setTranslations([
@@ -127,25 +110,28 @@ const NewsForm: React.FC<NewsFormProps> = ({ handleSubmit }) => {
                 <TabbedForm.Tab label={defaultLanguage} sx={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>
                     {availableLanguages.length > 0 && (
                         <Box>
-                            <Typography variant="subtitle1">{translate('news.change_language')}</Typography>
+                            <Typography variant="subtitle1">{translate('news.form.change_language')}</Typography>
                             <Select
                                 onChange={(e: any) => {
                                     setDefaultLanguage(e.target.value as string);
                                 }}
                                 sx={{ width: '200px' }}
-                                value=""
+                                value={defaultLanguage}
                             >
                                 {availableLanguages.map((language) => (
                                     <MenuItem key={language} value={language}>
                                         {language}
                                     </MenuItem>
                                 ))}
+                                <MenuItem key={defaultLanguage} value={defaultLanguage}>
+                                    {defaultLanguage}
+                                </MenuItem>
                             </Select>
                         </Box>
                     )}
 
                     <Box>
-                        <Typography variant="subtitle1">{translate('news.author')}</Typography>
+                        <Typography variant="subtitle1">{translate('news.form.author')}</Typography>
                         <Typography>{universityData?.name}</Typography>
                     </Box>
 
@@ -167,12 +153,12 @@ const NewsForm: React.FC<NewsFormProps> = ({ handleSubmit }) => {
                     </Box>
 
                     <Box>
-                        <Typography variant="subtitle1">{translate('news.illustration')}</Typography>
+                        <Typography variant="subtitle1">{translate('news.form.illustration')}</Typography>
                         <ImageUploader onImageSelect={setImage} source="image.id" />
                     </Box>
 
                     <Box sx={{ width: '100%' }}>
-                        <Typography variant="subtitle1">Title</Typography>
+                        <Typography variant="subtitle1">{translate('news.form.title')}</Typography>
                         <OutlinedInput
                             name="Title"
                             onChange={(e: any) => setTitle(e.target.value)}
@@ -185,7 +171,7 @@ const NewsForm: React.FC<NewsFormProps> = ({ handleSubmit }) => {
                     </Box>
 
                     <Box sx={{ width: '100%', '& .RaLabeled-label': { display: 'none' } }}>
-                        <Typography variant="subtitle1">Content</Typography>
+                        <Typography variant="subtitle1">{translate('news.form.content')}</Typography>
                         <RichTextInput
                             defaultValue={content}
                             onChange={(e: any) => setContent(e)}
@@ -212,12 +198,12 @@ const NewsForm: React.FC<NewsFormProps> = ({ handleSubmit }) => {
                                 }}
                                 variant="outlined"
                             >
-                                <span style={{ fontSize: '0.9rem' }}>{translate('news.remove_translation')}</span>
+                                <span style={{ fontSize: '0.9rem' }}>{translate('news.form.remove_translation')}</span>
                             </Button>
                         </Box>
 
                         <Box sx={{ width: '100%' }}>
-                            <Typography variant="subtitle1">Title</Typography>
+                            <Typography variant="subtitle1">{translate('news.form.title')}</Typography>
                             <Box alignItems="center" display="flex" flexDirection="row">
                                 <OutlinedInput
                                     name="Title"
@@ -244,7 +230,7 @@ const NewsForm: React.FC<NewsFormProps> = ({ handleSubmit }) => {
                         </Box>
 
                         <Box sx={{ width: '100%', '& .RaLabeled-label': { display: 'none' } }}>
-                            <Typography variant="subtitle1">Content</Typography>
+                            <Typography variant="subtitle1">{translate('news.form.content')}</Typography>
                             <RichTextInput
                                 defaultValue={translation.content || ''}
                                 onChange={(e: any) => {

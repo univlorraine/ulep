@@ -264,13 +264,21 @@
         "password": "Password"
     },
     "news": {
-        "add_translation": "Add a translation",
         "label": "News",
         "title": "News",
-        "remove_translation": "Remove translation",
-        "author": "Author",
-        "change_language": "Change language",
-        "illustration": "Illustration",
+        "form": {
+            "title": "Title",
+            "content": "Content",
+            "illustration": "Illustration",
+            "author": "Author",
+            "change_language": "Change language",
+            "add_translation": "Add a translation",
+            "remove_translation": "Remove translation",
+            "error": {
+                "required": "The title and content fields are required",
+                "notFound": "News not found"
+            }
+        },
         "status": {
             "label": "Status",
             "PUBLISHED": "Published",
