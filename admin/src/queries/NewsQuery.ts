@@ -8,6 +8,10 @@ export interface NewsParams {
         status?: NewsStatus;
         languageCode?: string;
     };
+    pagination: {
+        page: string;
+        perPage: string;
+    };
 }
 
 const NewsQuery = (params: NewsParams) => {
@@ -16,6 +20,8 @@ const NewsQuery = (params: NewsParams) => {
         title: params.filter.title,
         status: params.filter.status,
         languageCode: params.filter.languageCode,
+        page: params.pagination.page,
+        limit: params.pagination.perPage,
     };
 
     return new URLSearchParams(qsAdapter().stringify(query)).toString();

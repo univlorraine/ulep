@@ -2,44 +2,67 @@ import { Injectable, Logger } from '@nestjs/common';
 import { Collection, PrismaService } from '@app/common';
 import { NewsRepository } from 'src/core/ports/news.repository';
 import { newsMapper, NewsRelations } from '../mappers/news.mapper';
-import { News, Translation } from 'src/core/models';
+import { News, NewsStatus, Translation } from 'src/core/models';
 import { CreateNewsCommand } from 'src/core/usecases/news/create-news.usecase';
 import { UpdateNewsCommand } from 'src/core/usecases/news/update-news.usecase';
 import { GetNewsQuery } from 'src/api/dtos/news';
 
+export type GetNewsRepositoryCommand = {
+  limit: number;
+  offset: number;
+  where: {
+    title: string;
+    universityId: string;
+    status: NewsStatus;
+    languageCode: string;
+  };
+};
 @Injectable()
 export class PrismaNewsRepository implements NewsRepository {
   constructor(private readonly prisma: PrismaService) {}
-  async findAll(query: GetNewsQuery): Promise<Collection<News>> {
-    const wherePayload: {} = query
+  async findAll({
+    limit,
+    offset,
+    where,
+  }: GetNewsRepositoryCommand): Promise<Collection<News>> {
+    const wherePayload: {} = where
       ? {
           Organization: {
-            id: query.universityId,
+            id: where.universityId,
           },
           TitleTextContent: {
             text: {
-              contains: query.title,
+              contains: where.title,
             },
-            ...(query.languageCode && {
+            ...(where.languageCode && {
               OR: [
                 {
                   LanguageCode: {
-                    code: query.languageCode,
+                    code: where.languageCode,
                   },
                 },
                 {
                   Translations: {
                     some: {
-                      LanguageCode: { code: query.languageCode },
+                      LanguageCode: { code: where.languageCode },
                     },
                   },
                 },
               ],
             }),
           },
-          status: query.status,
+          status: where.status,
         }
       : {};
+
+    const count = await this.prisma.news.count({
+      where: wherePayload,
+    });
+
+    // If skip is out of range, return an empty array
+    if (offset >= count) {
+      return { items: [], totalItems: count };
+    }
 
     const news = await this.prisma.news.findMany({
       where: wherePayload,
@@ -47,10 +70,8 @@ export class PrismaNewsRepository implements NewsRepository {
       orderBy: {
         updated_at: 'desc',
       },
-    });
-
-    const count = await this.prisma.news.count({
-      where: wherePayload,
+      skip: offset,
+      take: limit,
     });
 
     return new Collection<News>({

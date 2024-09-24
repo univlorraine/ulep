@@ -5,8 +5,9 @@ import { UniversityResponse } from '../universities';
 import { News, NewsStatus, NewsTranslation } from 'src/core/models';
 import { MediaObjectResponse } from '../medias';
 import { ApiPropertyOptional } from '@nestjs/swagger';
+import { PaginationDto } from '../pagination';
 
-export class GetNewsQuery {
+export class GetNewsQuery extends PaginationDto {
   @ApiPropertyOptional({ type: 'string' })
   @IsOptional()
   universityId?: string;
