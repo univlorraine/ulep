@@ -6,6 +6,7 @@ import {
   Delete,
   Get,
   Headers,
+  Logger,
   Param,
   Post,
   Put,
@@ -49,6 +50,7 @@ import {
 @Controller('activity')
 @Swagger.ApiTags('Activity')
 export class ActivityController {
+  logger = new Logger(ActivityController.name);
   constructor(
     private readonly createActivityUsecase: CreateActivityUsecase,
     private readonly createActivityThemeCategoryUsecase: CreateActivityThemeCategoryUsecase,
@@ -247,7 +249,9 @@ export class ActivityController {
   @UseGuards(AuthenticationGuard)
   @Swagger.ApiOperation({ summary: 'Get all Activity ressources.' })
   @Swagger.ApiOkResponse({ type: () => ActivityResponse })
-  async getAllSharedActivitiesToAdmin() {}
+  async getAllSharedActivitiesToAdmin() {
+    this.logger.log('getAllSharedActivitiesToAdmin');
+  }
 
   @Delete(':id')
   @UseGuards(AuthenticationGuard)
@@ -261,5 +265,7 @@ export class ActivityController {
   @UseGuards(AuthenticationGuard)
   @Swagger.ApiOperation({ summary: 'Update a Activity ressource.' })
   @Swagger.ApiOkResponse({ type: () => ActivityResponse })
-  async updateActivity() {}
+  async updateActivity() {
+    this.logger.log('updateActivity');
+  }
 }
