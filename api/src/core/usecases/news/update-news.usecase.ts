@@ -22,6 +22,8 @@ export type UpdateNewsCommand = {
   translations: NewsTranslation[];
   languageCode: string;
   status: NewsStatus;
+  startPublicationDate: Date;
+  endPublicationDate: Date;
 };
 
 @Injectable()

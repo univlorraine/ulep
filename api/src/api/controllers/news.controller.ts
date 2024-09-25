@@ -100,6 +100,8 @@ export class NewsController {
   ): Promise<NewsResponse> {
     let news = await this.createNewsUsecase.execute({
       ...payload,
+      startPublicationDate: new Date(payload.startPublicationDate),
+      endPublicationDate: new Date(payload.endPublicationDate),
     });
 
     if (file) {
@@ -126,6 +128,8 @@ export class NewsController {
   ): Promise<NewsResponse> {
     let news = await this.updateNewsUsecase.execute({
       ...payload,
+      startPublicationDate: new Date(payload.startPublicationDate),
+      endPublicationDate: new Date(payload.endPublicationDate),
     });
 
     if (file) {

@@ -275,13 +275,15 @@
             "add_translation": "Add a translation",
             "remove_translation": "Remove translation",
             "error": {
-                "required": "The title and content fields are required",
+                "required": "The publication dates, title and content fields are required",
                 "notFound": "News not found"
-            }
+            },
+            "start_publication_date": "Start publication date",
+            "end_publication_date": "End publication date"
         },
         "status": {
             "label": "Status",
-            "PUBLISHED": "Published",
+            "READY": "Ready",
             "DRAFT": "Draft"
         },
         "create": {

@@ -47,6 +47,8 @@ export const newsMapper = (snapshot: NewsSnapshot): News => {
     languageCode: snapshot.TitleTextContent.LanguageCode.code,
     translations: newsTranslationsMapper(snapshot),
     status: newsStatusMapper(snapshot.status),
+    startPublicationDate: snapshot.start_publication_date,
+    endPublicationDate: snapshot.end_publication_date,
     createdAt: snapshot.created_at,
     updatedAt: snapshot.updated_at,
   };

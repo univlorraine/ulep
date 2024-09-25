@@ -1,5 +1,4 @@
 import { Inject, Injectable } from '@nestjs/common';
-import { GetNewsQuery } from 'src/api/dtos/news';
 import { NewsStatus } from 'src/core/models';
 import {
   NEWS_REPOSITORY,

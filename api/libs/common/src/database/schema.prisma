@@ -678,6 +678,8 @@ model News {
   university_id String
   image_id String? @unique
   status String @default("DRAFT")
+  start_publication_date DateTime?
+  end_publication_date DateTime?
   created_at DateTime @default(now())
   updated_at DateTime @updatedAt
   Organization Organizations @relation(fields: [university_id], references: [id], onDelete: Cascade)

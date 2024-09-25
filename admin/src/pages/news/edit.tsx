@@ -17,7 +17,7 @@ const EditNews = () => {
             });
         }
 
-        if (!payload.title || !payload.content) {
+        if (!payload.title || !payload.content || !payload.startPublicationDate || !payload.endPublicationDate) {
             return notify('news.form.error.required', {
                 type: 'error',
             });
@@ -31,6 +31,8 @@ const EditNews = () => {
         formData.append('languageCode', payload.languageCode);
         formData.append('status', payload.status);
         formData.append('universityId', payload.universityId);
+        formData.append('startPublicationDate', payload.startPublicationDate.toISOString());
+        formData.append('endPublicationDate', payload.endPublicationDate.toISOString());
 
         payload.translations.forEach((translation, index) => {
             formData.append(`translations[${index}][title]`, translation.title);

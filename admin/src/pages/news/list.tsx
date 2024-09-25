@@ -25,7 +25,7 @@ const StatusChips = ({ status }: { status: string }) => {
         case NewsStatus.DRAFT:
             color = 'default';
             break;
-        case NewsStatus.PUBLISHED:
+        case NewsStatus.READY:
             color = 'success';
             break;
     }

@@ -54,6 +54,16 @@ export class CreateNewsRequest {
   @IsNotEmpty()
   @IsString()
   status: NewsStatus;
+
+  @Swagger.ApiProperty({ type: 'string' })
+  @IsNotEmpty()
+  @IsString()
+  startPublicationDate: string;
+
+  @Swagger.ApiProperty({ type: 'string' })
+  @IsNotEmpty()
+  @IsString()
+  endPublicationDate: string;
 }
 
 export class UpdateNewsRequest {
@@ -90,6 +100,16 @@ export class UpdateNewsRequest {
   @IsNotEmpty()
   @IsString()
   status: NewsStatus;
+
+  @Swagger.ApiProperty({ type: 'string' })
+  @IsNotEmpty()
+  @IsString()
+  startPublicationDate: string;
+
+  @Swagger.ApiProperty({ type: 'string' })
+  @IsNotEmpty()
+  @IsString()
+  endPublicationDate: string;
 }
 
 export class NewsResponse {
@@ -133,6 +153,14 @@ export class NewsResponse {
   @Expose({ groups: ['read'] })
   updatedAt: Date;
 
+  @Swagger.ApiProperty({ type: 'Date' })
+  @Expose({ groups: ['read'] })
+  startPublicationDate: Date;
+
+  @Swagger.ApiProperty({ type: 'Date' })
+  @Expose({ groups: ['read'] })
+  endPublicationDate: Date;
+
   constructor(partial: Partial<NewsResponse>) {
     Object.assign(this, partial);
   }
@@ -149,6 +177,8 @@ export class NewsResponse {
         NewsTranslationResponse.fromDomain,
       ),
       university: UniversityResponse.fromUniversity(instance.university),
+      startPublicationDate: instance.startPublicationDate,
+      endPublicationDate: instance.endPublicationDate,
       createdAt: instance.createdAt,
       updatedAt: instance.updatedAt,
     });

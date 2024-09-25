@@ -1,17 +1,16 @@
-import { Injectable, Logger } from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
 import { Collection, PrismaService } from '@app/common';
 import { NewsRepository } from 'src/core/ports/news.repository';
 import { newsMapper, NewsRelations } from '../mappers/news.mapper';
-import { News, NewsStatus, Translation } from 'src/core/models';
+import { News } from 'src/core/models';
 import { CreateNewsCommand } from 'src/core/usecases/news/create-news.usecase';
 import { UpdateNewsCommand } from 'src/core/usecases/news/update-news.usecase';
-import { GetNewsQuery } from 'src/api/dtos/news';
 
 @Injectable()
 export class PrismaNewsRepository implements NewsRepository {
   constructor(private readonly prisma: PrismaService) {}
   async findAll({ limit, offset, where }): Promise<Collection<News>> {
-    const wherePayload: {} = where
+    const wherePayload = where
       ? {
           Organization: {
             id: where.universityId,
@@ -112,6 +111,8 @@ export class PrismaNewsRepository implements NewsRepository {
           },
         },
         status: command.status,
+        start_publication_date: command.startPublicationDate,
+        end_publication_date: command.endPublicationDate,
       },
       include: NewsRelations,
     });
@@ -157,6 +158,8 @@ export class PrismaNewsRepository implements NewsRepository {
           },
         },
         status: command.status,
+        start_publication_date: command.startPublicationDate,
+        end_publication_date: command.endPublicationDate,
       },
       include: NewsRelations,
     });

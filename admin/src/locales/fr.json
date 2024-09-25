@@ -278,12 +278,14 @@
             "remove_translation": "Supprimer la traduction",
             "error": {
                 "notFound": "Actualité non trouvée",
-                "required": "Les champs titre et contenu sont obligatoires"
-            }
+                "required": "Les dates de publication, le titre et le contenu sont obligatoires"
+            },
+            "start_publication_date": "Date de début de publication",
+            "end_publication_date": "Date de fin de publication"
         },
         "status": {
             "label": "Statut",
-            "PUBLISHED": "Publié",
+            "READY": "Prêt",
             "DRAFT": "Brouillon"
         },
         "create": {

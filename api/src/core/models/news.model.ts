@@ -3,7 +3,7 @@ import { University } from './university.model';
 
 export enum NewsStatus {
   DRAFT = 'DRAFT',
-  PUBLISHED = 'PUBLISHED',
+  READY = 'READY',
 }
 
 export interface NewsTranslation {
@@ -21,6 +21,8 @@ export interface NewsProps {
   imageURL?: string;
   translations: NewsTranslation[];
   languageCode: string;
+  startPublicationDate: Date;
+  endPublicationDate: Date;
   createdAt: Date;
   updatedAt: Date;
   status: NewsStatus;
@@ -35,6 +37,8 @@ export class News {
   readonly image?: MediaObject;
   readonly imageURL?: string;
   readonly university: University;
+  readonly startPublicationDate: Date;
+  readonly endPublicationDate: Date;
   readonly createdAt: Date;
   readonly updatedAt: Date;
   readonly status: NewsStatus;
@@ -48,6 +52,8 @@ export class News {
     translations,
     languageCode,
     university,
+    startPublicationDate,
+    endPublicationDate,
     createdAt,
     updatedAt,
     status,
@@ -60,6 +66,8 @@ export class News {
     this.translations = translations;
     this.languageCode = languageCode;
     this.university = university;
+    this.startPublicationDate = startPublicationDate;
+    this.endPublicationDate = endPublicationDate;
     this.createdAt = createdAt;
     this.updatedAt = updatedAt;
     this.status = status;

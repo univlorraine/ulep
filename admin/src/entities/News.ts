@@ -8,6 +8,8 @@ export interface NewsFormPayload {
     languageCode: string;
     image: File | undefined;
     status: NewsStatus;
+    startPublicationDate: Date;
+    endPublicationDate: Date;
     translations: {
         title: string;
         content: string;
@@ -29,10 +31,12 @@ export type News = {
     languageCode: string;
     image: File | undefined;
     status: NewsStatus;
+    startPublicationDate: Date;
+    endPublicationDate: Date;
     translations: NewsTranslation[];
 };
 
 export enum NewsStatus {
     DRAFT = 'DRAFT',
-    PUBLISHED = 'PUBLISHED',
+    READY = 'READY',
 }
