@@ -194,6 +194,33 @@ export class PrismaProfileRepository implements ProfileRepository {
               },
             },
           }),
+          ...(where.learningType && {
+            OR: [
+              {
+                LearningLanguages: {
+                  some: {
+                    AND: [
+                      {
+                        Tandem: null,
+                      },
+                      {
+                        learning_type: where.learningType,
+                      },
+                    ],
+                  },
+                },
+              },
+              {
+                LearningLanguages: {
+                  some: {
+                    Tandem: {
+                      learning_type: where.learningType,
+                    },
+                  },
+                },
+              },
+            ],
+          }),
         }
       : {};
 

@@ -1,5 +1,6 @@
 import { Inject, Injectable, Logger } from '@nestjs/common';
 import {
+  LearningLanguage,
   Match,
   MatchScores,
   PairingMode,
@@ -229,9 +230,15 @@ export class GenerateTandemsUsecase {
           ? TandemStatus.ACTIVE
           : TandemStatus.DRAFT;
 
+      const learningType = LearningLanguage.getLearningType(
+        pair.owner,
+        pair.target,
+      );
+
       const tandem = new Tandem({
         id: this.uuidProvider.generate(),
         learningLanguages: [pair.owner, pair.target],
+        learningType,
         status: tandemStatus,
         compatibilityScore: pair.total,
       });

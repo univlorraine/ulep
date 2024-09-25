@@ -1,7 +1,7 @@
 import * as Swagger from '@nestjs/swagger';
 import { Expose } from 'class-transformer';
 import { Tandem, TandemStatus } from '../../../core/models/tandem.model';
-import { LearningLanguage } from 'src/core/models';
+import { LearningLanguage, LearningType } from 'src/core/models';
 import { LearningLanguageResponse } from '../learning-languages';
 
 export class TandemResponse {
@@ -16,6 +16,10 @@ export class TandemResponse {
   @Swagger.ApiProperty({ type: 'string', enum: TandemStatus })
   @Expose({ groups: ['read'] })
   status: TandemStatus;
+
+  @Swagger.ApiProperty({ type: 'string', enum: LearningType })
+  @Expose({ groups: ['read'] })
+  learningType: LearningType;
 
   @Swagger.ApiProperty({ type: 'number' })
   @Expose({ groups: ['read'] })
@@ -45,6 +49,7 @@ export class TandemResponse {
           LearningLanguageResponse.fromDomain(ll),
         ) || [],
       status: tandem.status,
+      learningType: tandem.learningType,
       compatibilityScore: tandem.compatibilityScore,
       universityValidations: tandem.universityValidations,
       createdAt: tandem.createdAt,
