@@ -3,6 +3,7 @@ import {
   LearningLanguageSnapshot,
 } from 'src/providers/persistance/mappers/learningLanguage.mapper';
 import { LearningLanguage } from './learning-language.model';
+import { LearningType } from './profile.model';
 
 export enum TandemStatus {
   INACTIVE = 'INACTIVE',
@@ -16,6 +17,7 @@ export type CreateTandemWithPartnerLearningLanguageProps = {
   id: string;
   learningLanguages: LearningLanguageSnapshot[];
   status: TandemStatus;
+  learningType: LearningType;
   universityValidations?: string[];
   compatibilityScore: number;
   createdAt?: Date;
@@ -27,6 +29,7 @@ export class TandemWithPartnerLearningLanguage {
   readonly id: string;
   readonly partnerLearningLanguage: LearningLanguage;
   readonly status: TandemStatus;
+  readonly learningType: LearningType;
   readonly universityValidations?: string[];
   readonly compatibilityScore: number;
   readonly createdAt?: Date;
@@ -41,6 +44,7 @@ export class TandemWithPartnerLearningLanguage {
         props.rootProfileId,
       ),
     );
+    this.learningType = props.learningType;
     this.universityValidations = props.universityValidations || [];
     this.compatibilityScore = props.compatibilityScore;
     this.createdAt = props.createdAt;
