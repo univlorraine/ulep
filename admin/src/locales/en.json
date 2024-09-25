@@ -542,6 +542,9 @@
                 "division": {
                     "label": "Division",
                     "fetchError": "An error occured while loading divisions"
+                },
+                "learningType": {
+                    "label": "Learning type"
                 }
             },
             "globalRoutineModal": {

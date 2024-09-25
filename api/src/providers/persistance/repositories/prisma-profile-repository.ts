@@ -181,7 +181,7 @@ export class PrismaProfileRepository implements ProfileRepository {
               mode: ModeQuery.INSENSITIVE,
             },
             division: {
-              contains: where.user.division,
+              equals: where.user.division,
             },
             NOT: {
               status: 'BANNED',
@@ -193,6 +193,33 @@ export class PrismaProfileRepository implements ProfileRepository {
                 LanguageCode: { id: where.learningLanguage },
               },
             },
+          }),
+          ...(where.learningType && {
+            OR: [
+              {
+                LearningLanguages: {
+                  some: {
+                    AND: [
+                      {
+                        Tandem: null,
+                      },
+                      {
+                        learning_type: where.learningType,
+                      },
+                    ],
+                  },
+                },
+              },
+              {
+                LearningLanguages: {
+                  some: {
+                    Tandem: {
+                      learning_type: where.learningType,
+                    },
+                  },
+                },
+              },
+            ],
           }),
         }
       : {};
