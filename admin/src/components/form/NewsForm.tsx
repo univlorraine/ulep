@@ -154,7 +154,7 @@ const NewsForm: React.FC<NewsFormProps> = ({ handleSubmit }) => {
 
                     <Box>
                         <Typography variant="subtitle1">{translate('news.form.illustration')}</Typography>
-                        <ImageUploader onImageSelect={setImage} source="image.id" />
+                        <ImageUploader onImageSelect={setImage} />
                     </Box>
 
                     <Box sx={{ width: '100%' }}>

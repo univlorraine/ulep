@@ -25,7 +25,7 @@ import {
 } from '../dtos/news';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { ImagesFilePipe } from '../validators';
-import { News, NewsTranslation } from 'src/core/models';
+import { News } from 'src/core/models';
 import { Collection } from '@app/common';
 import { CollectionResponse } from '../decorators';
 import {
@@ -103,12 +103,12 @@ export class NewsController {
     });
 
     if (file) {
-      const upload = await this.uploadNewsImageUsecase.execute({
+      const uploadURL = await this.uploadNewsImageUsecase.execute({
         id: news.id,
         file,
       });
 
-      news = new News({ ...news, image: upload });
+      news = new News({ ...news, imageURL: uploadURL });
     }
 
     return NewsResponse.fromDomain(news);
@@ -129,12 +129,12 @@ export class NewsController {
     });
 
     if (file) {
-      const upload = await this.uploadNewsImageUsecase.execute({
+      const uploadURL = await this.uploadNewsImageUsecase.execute({
         id: news.id,
         file,
       });
 
-      news = new News({ ...news, image: upload });
+      news = new News({ ...news, imageURL: uploadURL });
     }
 
     return NewsResponse.fromDomain(news);

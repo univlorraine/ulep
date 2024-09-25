@@ -2,7 +2,6 @@ import * as Prisma from '@prisma/client';
 import {
   TextContentRelations,
   TextContentSnapshot,
-  textContentMapper,
 } from './translation.mapper';
 import {
   News,

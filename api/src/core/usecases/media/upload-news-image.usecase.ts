@@ -40,7 +40,13 @@ export class UploadNewsImageUsecase {
 
     const image = await this.upload(news, command.file);
 
-    return image;
+    const url = this.storageInterface.temporaryUrl(
+      image.bucket,
+      image.name,
+      60 * 60 * 24,
+    );
+
+    return url;
   }
 
   private async tryToFindNews(id: string): Promise<News> {
@@ -53,14 +59,21 @@ export class UploadNewsImageUsecase {
   }
 
   private tryToFindTheImageOfNews(news: News): Promise<MediaObject | null> {
-    return this.mediaObjectRepository.findOne(news.id);
+    return this.mediaObjectRepository.findOne(
+      `${news.university.id}/${news.id}`,
+    );
   }
 
   private async upload(
     news: News,
     file: Express.Multer.File,
   ): Promise<MediaObject> {
-    const image = MediaObject.image(file, 'news');
+    const image = MediaObject.image(
+      file,
+      'news',
+      `${news.university.id}/${news.id}`,
+    );
+
     await this.storageInterface.write(image.bucket, image.name, file);
     await this.mediaObjectRepository.saveNewsImage(news, image);
 

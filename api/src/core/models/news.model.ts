@@ -18,6 +18,7 @@ export interface NewsProps {
   content: string;
   university: University;
   image?: MediaObject;
+  imageURL?: string;
   translations: NewsTranslation[];
   languageCode: string;
   createdAt: Date;
@@ -32,6 +33,7 @@ export class News {
   readonly translations: NewsTranslation[];
   readonly languageCode: string;
   readonly image?: MediaObject;
+  readonly imageURL?: string;
   readonly university: University;
   readonly createdAt: Date;
   readonly updatedAt: Date;
@@ -42,6 +44,7 @@ export class News {
     title,
     content,
     image,
+    imageURL,
     translations,
     languageCode,
     university,
@@ -53,6 +56,7 @@ export class News {
     this.title = title;
     this.content = content;
     this.image = image;
+    this.imageURL = imageURL;
     this.translations = translations;
     this.languageCode = languageCode;
     this.university = university;

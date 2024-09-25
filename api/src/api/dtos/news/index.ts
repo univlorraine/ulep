@@ -123,7 +123,7 @@ export class NewsResponse {
 
   @Swagger.ApiProperty({ type: MediaObjectResponse })
   @Expose({ groups: ['read'] })
-  image?: MediaObjectResponse;
+  imageURL?: string;
 
   @Swagger.ApiProperty({ type: 'Date' })
   @Expose({ groups: ['read'] })
@@ -138,16 +138,12 @@ export class NewsResponse {
   }
 
   static fromDomain(instance: News) {
-    const translations = JSON.stringify(instance.translations);
-
     return new NewsResponse({
       id: instance.id,
       title: instance.title,
       content: instance.content,
       status: instance.status,
-      image: instance.image
-        ? MediaObjectResponse.fromMediaObject(instance.image)
-        : null,
+      imageURL: instance.imageURL,
       languageCode: instance.languageCode,
       translations: instance.translations.map(
         NewsTranslationResponse.fromDomain,
