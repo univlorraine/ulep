@@ -1,19 +1,19 @@
 import { faker } from '@faker-js/faker';
 import {
-    CountryCode,
-    Gender,
-    Language,
-    LanguageStatus,
-    LearningLanguage,
-    LearningType,
-    MeetingFrequency,
-    ProficiencyLevel,
-    Profile,
-    Role,
-    Tandem,
-    TandemStatus,
-    University,
-    User,
+  CountryCode,
+  Gender,
+  Language,
+  LanguageStatus,
+  LearningLanguage,
+  LearningType,
+  MeetingFrequency,
+  ProficiencyLevel,
+  Profile,
+  Role,
+  Tandem,
+  TandemStatus,
+  University,
+  User,
 } from 'src/core/models';
 import { Campus } from 'src/core/models/campus.model';
 import { GenerateTandemsUsecase } from 'src/core/usecases';
@@ -586,6 +586,7 @@ describe('GenerateTandem UC', () => {
             profile: english1,
           }),
         ],
+        learningType: LearningType.TANDEM,
         status: TandemStatus.ACTIVE,
         compatibilityScore: 0.1,
       }),
@@ -601,6 +602,7 @@ describe('GenerateTandem UC', () => {
             profile: spain2,
           }),
         ],
+        learningType: LearningType.TANDEM,
         status: TandemStatus.ACTIVE,
         compatibilityScore: 0.1,
       }),
@@ -926,44 +928,44 @@ describe('GenerateTandem UC', () => {
     });
 
     const frenchPartnerEtandem = new Profile({
-        user: new User({
-          id: 'user3',
-          acceptsEmail: true,
-          email: '',
-          firstname: '',
-          lastname: '',
-          gender: Gender.MALE,
-          age: 19,
-          university: partnerUniversity,
-          role: Role.STUDENT,
-          country,
-          avatar: null,
-          deactivatedReason: '',
+      user: new User({
+        id: 'user3',
+        acceptsEmail: true,
+        email: '',
+        firstname: '',
+        lastname: '',
+        gender: Gender.MALE,
+        age: 19,
+        university: partnerUniversity,
+        role: Role.STUDENT,
+        country,
+        avatar: null,
+        deactivatedReason: '',
+      }),
+      id: 'FR_ETANDEM',
+      nativeLanguage: french,
+      masteredLanguages: [],
+      testedLanguages: [],
+      meetingFrequency: MeetingFrequency.ONCE_A_WEEK,
+      learningLanguages: [
+        new LearningLanguage({
+          id: 'FR_ETANDEM-EN_B2',
+          language: english,
+          level: ProficiencyLevel.B2,
+          learningType: LearningType.ETANDEM,
+          sameGender: false,
+          sameAge: false,
         }),
-        id: 'FR_ETANDEM',
-        nativeLanguage: french,
-        masteredLanguages: [],
-        testedLanguages: [],
-        meetingFrequency: MeetingFrequency.ONCE_A_WEEK,
-        learningLanguages: [
-          new LearningLanguage({
-            id: 'FR_ETANDEM-EN_B2',
-            language: english,
-            level: ProficiencyLevel.B2,
-            learningType: LearningType.ETANDEM,
-            sameGender: false,
-            sameAge: false,
-          }),
-        ],
-        objectives: [],
-        interests: [],
-        biography: {
-          superpower: faker.lorem.sentence(),
-          favoritePlace: faker.lorem.sentence(),
-          experience: faker.lorem.sentence(),
-          anecdote: faker.lorem.sentence(),
-        },
-      });
+      ],
+      objectives: [],
+      interests: [],
+      biography: {
+        superpower: faker.lorem.sentence(),
+        favoritePlace: faker.lorem.sentence(),
+        experience: faker.lorem.sentence(),
+        anecdote: faker.lorem.sentence(),
+      },
+    });
 
     // English learning french in etandem
     const englishEtandem = new Profile({
@@ -1118,18 +1120,18 @@ describe('GenerateTandem UC', () => {
     });
 
     test('Etandem central - Etandem partner', async () => {
-        learningLanguageRepository.init([frenchPartnerEtandem, englishEtandem]);
-        await uc.execute({
-          universityIds: [centralUniversity.id, partnerUniversity.id],
-        });
-        const tandems = await tandemsRepository.getExistingTandems();
-        expect(
-          checkTandemArrayContainsTandem(tandems, {
-            a: frenchPartnerEtandem.learningLanguages[0],
-            b: englishEtandem.learningLanguages[0],
-          }),
-        ).toBeTruthy();
+      learningLanguageRepository.init([frenchPartnerEtandem, englishEtandem]);
+      await uc.execute({
+        universityIds: [centralUniversity.id, partnerUniversity.id],
       });
+      const tandems = await tandemsRepository.getExistingTandems();
+      expect(
+        checkTandemArrayContainsTandem(tandems, {
+          a: frenchPartnerEtandem.learningLanguages[0],
+          b: englishEtandem.learningLanguages[0],
+        }),
+      ).toBeTruthy();
+    });
 
     test('Both - whatever', async () => {
       learningLanguageRepository.init([frenchBoth, englishTandem]);
@@ -2524,5 +2526,306 @@ describe('GenerateTandem UC', () => {
         b: potentialMatch.learningLanguages[0],
       }),
     ).toBeTruthy();
+  });
+
+  test('should generate tandem with Etandem learning type between partner and central university', async () => {
+    const emailA = faker.internet.email();
+    const emailB = faker.internet.email();
+
+    const userA = new Profile({
+      user: new User({
+        id: 'user1',
+        acceptsEmail: true,
+        email: emailA,
+        firstname: '',
+        lastname: '',
+        gender: Gender.MALE,
+        age: 19,
+        university: centralUniversity,
+        role: Role.STUDENT,
+        country,
+        avatar: null,
+        deactivatedReason: '',
+      }),
+      id: 'FR_1',
+      nativeLanguage: french,
+      masteredLanguages: [],
+      testedLanguages: [],
+      meetingFrequency: MeetingFrequency.ONCE_A_WEEK,
+      learningLanguages: [
+        new LearningLanguage({
+          id: 'FR_1-LL_EN_B2',
+          language: english,
+          level: ProficiencyLevel.B2,
+          createdAt: new Date('2023-08-28T10:00:00.000Z'),
+          learningType: LearningType.BOTH,
+          sameGender: false,
+          sameAge: false,
+          sameTandemEmail: emailB,
+        }),
+      ],
+      objectives: [],
+      interests: [],
+      biography: {
+        superpower: faker.lorem.sentence(),
+        favoritePlace: faker.lorem.sentence(),
+        experience: faker.lorem.sentence(),
+        anecdote: faker.lorem.sentence(),
+      },
+    });
+
+    const userB = new Profile({
+      user: new User({
+        id: 'user2',
+        acceptsEmail: true,
+        email: emailB,
+        firstname: '',
+        lastname: '',
+        gender: Gender.MALE,
+        age: 19,
+        university: partnerUniversity,
+        role: Role.STUDENT,
+        country,
+        avatar: null,
+        deactivatedReason: '',
+      }),
+      id: 'FR_JOKER',
+      nativeLanguage: english,
+      masteredLanguages: [],
+      testedLanguages: [],
+      meetingFrequency: MeetingFrequency.ONCE_A_WEEK,
+      learningLanguages: [
+        new LearningLanguage({
+          id: 'FR_1-LL_JOKER',
+          language: joker,
+          level: ProficiencyLevel.B2,
+          createdAt: new Date('2023-08-28T10:00:00.000Z'),
+          learningType: LearningType.ETANDEM,
+          sameGender: false,
+          sameAge: false,
+          sameTandemEmail: emailA,
+        }),
+      ],
+      objectives: [],
+      interests: [],
+      biography: {
+        superpower: faker.lorem.sentence(),
+        favoritePlace: faker.lorem.sentence(),
+        experience: faker.lorem.sentence(),
+        anecdote: faker.lorem.sentence(),
+      },
+    });
+
+    learningLanguageRepository.init([userA, userB]);
+
+    await uc.execute({
+      universityIds: [centralUniversity.id, partnerUniversity.id],
+    });
+
+    const tandems = await tandemsRepository.getExistingTandems();
+
+    expect(tandems[0].learningType).toBe(LearningType.ETANDEM);
+  });
+
+  test('should generate tandem with Etandem learning type between two central university students with different campus', async () => {
+    const emailA = faker.internet.email();
+    const emailB = faker.internet.email();
+
+    const userA = new Profile({
+      user: new User({
+        id: 'user1',
+        acceptsEmail: true,
+        email: emailA,
+        firstname: '',
+        lastname: '',
+        gender: Gender.MALE,
+        age: 19,
+        university: centralUniversity,
+        role: Role.STUDENT,
+        country,
+        avatar: null,
+        deactivatedReason: '',
+      }),
+      id: 'FR_1',
+      nativeLanguage: french,
+      masteredLanguages: [],
+      testedLanguages: [],
+      meetingFrequency: MeetingFrequency.ONCE_A_WEEK,
+      learningLanguages: [
+        new LearningLanguage({
+          id: 'FR_1-LL_EN_B2',
+          language: english,
+          level: ProficiencyLevel.B2,
+          createdAt: new Date('2023-08-28T10:00:00.000Z'),
+          learningType: LearningType.BOTH,
+          sameGender: false,
+          sameAge: false,
+          sameTandemEmail: emailB,
+          campus: lorraineCampus,
+        }),
+      ],
+      objectives: [],
+      interests: [],
+      biography: {
+        superpower: faker.lorem.sentence(),
+        favoritePlace: faker.lorem.sentence(),
+        experience: faker.lorem.sentence(),
+        anecdote: faker.lorem.sentence(),
+      },
+    });
+
+    const userB = new Profile({
+      user: new User({
+        id: 'user2',
+        acceptsEmail: true,
+        email: emailB,
+        firstname: '',
+        lastname: '',
+        gender: Gender.MALE,
+        age: 19,
+        university: centralUniversity,
+        role: Role.STUDENT,
+        country,
+        avatar: null,
+        deactivatedReason: '',
+      }),
+      id: 'FR_JOKER',
+      nativeLanguage: english,
+      masteredLanguages: [],
+      testedLanguages: [],
+      meetingFrequency: MeetingFrequency.ONCE_A_WEEK,
+      learningLanguages: [
+        new LearningLanguage({
+          id: 'FR_1-LL_JOKER',
+          language: joker,
+          level: ProficiencyLevel.B2,
+          createdAt: new Date('2023-08-28T10:00:00.000Z'),
+          learningType: LearningType.BOTH,
+          sameGender: false,
+          sameAge: false,
+          sameTandemEmail: emailA,
+          campus: strasbourgCampus,
+        }),
+      ],
+      objectives: [],
+      interests: [],
+      biography: {
+        superpower: faker.lorem.sentence(),
+        favoritePlace: faker.lorem.sentence(),
+        experience: faker.lorem.sentence(),
+        anecdote: faker.lorem.sentence(),
+      },
+    });
+
+    learningLanguageRepository.init([userA, userB]);
+
+    await uc.execute({
+      universityIds: [centralUniversity.id],
+    });
+
+    const tandems = await tandemsRepository.getExistingTandems();
+
+    expect(tandems[0].learningType).toBe(LearningType.ETANDEM);
+  });
+
+  test('should generate tandem with Tandem learning type between two central university students with same campus', async () => {
+    const emailA = faker.internet.email();
+    const emailB = faker.internet.email();
+
+    const userA = new Profile({
+      user: new User({
+        id: 'user1',
+        acceptsEmail: true,
+        email: emailA,
+        firstname: '',
+        lastname: '',
+        gender: Gender.MALE,
+        age: 19,
+        university: centralUniversity,
+        role: Role.STUDENT,
+        country,
+        avatar: null,
+        deactivatedReason: '',
+      }),
+      id: 'FR_1',
+      nativeLanguage: french,
+      masteredLanguages: [],
+      testedLanguages: [],
+      meetingFrequency: MeetingFrequency.ONCE_A_WEEK,
+      learningLanguages: [
+        new LearningLanguage({
+          id: 'FR_1-LL_EN_B2',
+          language: english,
+          level: ProficiencyLevel.B2,
+          createdAt: new Date('2023-08-28T10:00:00.000Z'),
+          learningType: LearningType.BOTH,
+          sameGender: false,
+          sameAge: false,
+          sameTandemEmail: emailB,
+          campus: lorraineCampus,
+        }),
+      ],
+      objectives: [],
+      interests: [],
+      biography: {
+        superpower: faker.lorem.sentence(),
+        favoritePlace: faker.lorem.sentence(),
+        experience: faker.lorem.sentence(),
+        anecdote: faker.lorem.sentence(),
+      },
+    });
+
+    const userB = new Profile({
+      user: new User({
+        id: 'user2',
+        acceptsEmail: true,
+        email: emailB,
+        firstname: '',
+        lastname: '',
+        gender: Gender.MALE,
+        age: 19,
+        university: centralUniversity,
+        role: Role.STUDENT,
+        country,
+        avatar: null,
+        deactivatedReason: '',
+      }),
+      id: 'FR_JOKER',
+      nativeLanguage: english,
+      masteredLanguages: [],
+      testedLanguages: [],
+      meetingFrequency: MeetingFrequency.ONCE_A_WEEK,
+      learningLanguages: [
+        new LearningLanguage({
+          id: 'FR_1-LL_JOKER',
+          language: joker,
+          level: ProficiencyLevel.B2,
+          createdAt: new Date('2023-08-28T10:00:00.000Z'),
+          learningType: LearningType.BOTH,
+          sameGender: false,
+          sameAge: false,
+          sameTandemEmail: emailA,
+          campus: lorraineCampus,
+        }),
+      ],
+      objectives: [],
+      interests: [],
+      biography: {
+        superpower: faker.lorem.sentence(),
+        favoritePlace: faker.lorem.sentence(),
+        experience: faker.lorem.sentence(),
+        anecdote: faker.lorem.sentence(),
+      },
+    });
+
+    learningLanguageRepository.init([userA, userB]);
+
+    await uc.execute({
+      universityIds: [centralUniversity.id],
+    });
+
+    const tandems = await tandemsRepository.getExistingTandems();
+
+    expect(tandems[0].learningType).toBe(LearningType.TANDEM);
   });
 });

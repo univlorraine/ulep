@@ -1,4 +1,4 @@
-import { TandemStatus } from 'src/core/models';
+import { LearningType, TandemStatus } from 'src/core/models';
 import {
   LearningLanguageRelations,
   LearningLanguageSnapshot,
@@ -26,6 +26,7 @@ export const tandemWithPartnerLearningLanguageMapper = (
     id: instance.id,
     learningLanguages: instance.LearningLanguages,
     status: TandemStatus[instance.status],
+    learningType: LearningType[instance.learning_type],
     universityValidations:
       instance.UniversityValidations?.map((university) => university.id) || [],
     compatibilityScore: instance.compatibilityScore / 100,

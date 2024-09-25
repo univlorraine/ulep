@@ -4,6 +4,7 @@ import {
   LearningLanguagesMustContainsProfilesForTandem,
 } from '../errors/tandem-exceptions';
 import { LearningLanguage } from './learning-language.model';
+import { LearningType } from './profile.model';
 
 export enum TandemStatus {
   INACTIVE = 'INACTIVE',
@@ -16,6 +17,7 @@ export enum TandemStatus {
 export type CreateTandemProps = {
   id: string;
   learningLanguages?: LearningLanguage[];
+  learningType: LearningType;
   status: TandemStatus;
   universityValidations?: string[];
   compatibilityScore: number;
@@ -32,6 +34,9 @@ export class Tandem {
   // Status of the tandem
   readonly status: TandemStatus;
 
+  // Type of learning of the tandem
+  readonly learningType: LearningType;
+
   // ID of universities which has validated the tandem
   readonly universityValidations?: string[];
 
@@ -45,6 +50,7 @@ export class Tandem {
   constructor(props: CreateTandemProps) {
     this.id = props.id;
     this.status = props.status;
+    this.learningType = props.learningType;
     this.universityValidations = props.universityValidations || [];
     this.compatibilityScore = props.compatibilityScore;
     this.createdAt = props.createdAt;

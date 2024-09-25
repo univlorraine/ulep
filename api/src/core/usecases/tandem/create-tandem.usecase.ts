@@ -101,6 +101,11 @@ export class CreateTandemUsecase {
       availableLanguages,
     ).total;
 
+    const learningType = LearningLanguage.getLearningType(
+      learningLanguages[0],
+      learningLanguages[1],
+    );
+
     let tandem: Tandem;
     if (learningLanguagesFromAdminUniversity.length === 0) {
       throw new DomainError({
@@ -112,6 +117,7 @@ export class CreateTandemUsecase {
       tandem = Tandem.create({
         id: this.uuidProvider.generate(),
         learningLanguages,
+        learningType,
         status: TandemStatus.ACTIVE,
         universityValidations: [adminUniversityId],
         compatibilityScore,
@@ -126,6 +132,7 @@ export class CreateTandemUsecase {
           tandem = Tandem.create({
             id: this.uuidProvider.generate(),
             learningLanguages,
+            learningType,
             status: TandemStatus.VALIDATED_BY_ONE_UNIVERSITY,
             universityValidations: [adminUniversityId],
             compatibilityScore,
@@ -136,6 +143,7 @@ export class CreateTandemUsecase {
           tandem = Tandem.create({
             id: this.uuidProvider.generate(),
             learningLanguages,
+            learningType,
             status: TandemStatus.ACTIVE,
             universityValidations: [adminUniversityId],
             compatibilityScore,

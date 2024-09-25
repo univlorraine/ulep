@@ -1,3 +1,4 @@
+import { LearningType } from '../entities/LearningLanguage';
 import qsAdapter from '../providers/qsAdapter';
 
 export interface ProfilesParams {
@@ -9,6 +10,7 @@ export interface ProfilesParams {
         };
         university?: string; // Use to force university filter when admin is from partner university
         learningLanguage?: string;
+        learningType?: LearningType;
     };
     pagination: {
         page: string;
@@ -24,6 +26,7 @@ const ProfilesQuery = (params: ProfilesParams): string => {
         division: params.filter.user?.division,
         page: params.pagination.page,
         limit: params.pagination.perPage,
+        learningType: params.filter.learningType,
     };
 
     return new URLSearchParams(qsAdapter().stringify(query)).toString();
