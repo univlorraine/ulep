@@ -45,4 +45,9 @@ chmod 700 /tmp/git
 
 cat /tmp/weblate/ssh/id_rsa.pub >> /tmp/git/authorized_keys
 
+
+#touch /srv/git/locales.git/hooks/post-receive
+#chmod ug+x /srv/git/locales.git/hooks/post-receive/post-receive
+
+
 echo 'git ready to be used'

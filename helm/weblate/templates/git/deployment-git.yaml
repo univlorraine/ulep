@@ -30,19 +30,20 @@ spec:
         - name: git-weblate-{{ .Chart.Name }}
           securityContext:
             {{- toYaml .Values.securityContext | nindent 12 }}
-          image: "{{ .Values.git.image.repository }}:{{ .Values.git.image.tag }}"
-          command: ["/usr/sbin/sshd", "-D", "-e"]
+          image: "{{ .Values.git.image.repository }}:{{ .Values.git.image.tag }}"          
           command: ["/bin/sh", "-c"]
           args:
             - echo starting;
+              chmod -R 777 /srv;
+              mkdir -p /home/git/.ssh;
               touch /home/git/.ssh/authorized_keys;
               chown git:git /home/git/.ssh;
               chown git:git /home/git/.ssh/authorized_keys;
-              /usr/sbin/sshd -D -e;
+              /usr/sbin/sshd -D -e -p 2222;
           imagePullPolicy: {{ .Values.git.image.pullPolicy }}          
           ports:
             - name: http
-              containerPort: 22
+              containerPort: 2222
               protocol: TCP
           # livenessProbe:
           #   httpGet:
@@ -59,7 +60,9 @@ spec:
             {{- toYaml .Values.resources | nindent 12 }}
           env:
             - name: SSH_AUTH_METHODS
-              value: "publickey"
+              value: "publickey password"
+            - name: GIT_PASSWORD
+              value: "12345"
           volumeMounts:
           - name: "{{ .Values.git.name }}-data"
             mountPath: /srv/git  

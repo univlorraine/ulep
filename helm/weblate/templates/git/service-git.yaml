@@ -7,9 +7,9 @@ spec:
   type: {{ .Values.git.service.type }}
   ports:
     - port: {{ .Values.git.service.port }}
-      targetPort: http
+      targetPort: 2222
       protocol: TCP
-      name: http
+      name: ssh
   selector:
     app.kubernetes.io/name: "{{ .Values.name }}-{{ .Values.git.name }}"
     app.kubernetes.io/instance: "{{ .Release.Name }}"
