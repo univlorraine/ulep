@@ -52,7 +52,7 @@ importers:
         version: 7.78.0
       '@types/pdfkit':
         specifier: ^0.13.4
-        version: 0.13.4
+        version: 0.13.5
       async:
         specifier: ^3.2.5
         version: 3.2.5
@@ -1355,8 +1355,8 @@ packages:
   '@types/parse-json@4.0.0':
     resolution: {integrity: sha512-//oorEZjL6sbPcKUaCdIGlIUeH26mgzimjBB77G6XRgnDl/L5wOnpyBGRe/Mmf5CVW3PwEBE1NjiMZ/ssFh4wA==}
 
-  '@types/pdfkit@0.13.4':
-    resolution: {integrity: sha512-ixGNDHYJCCKuamY305wbfYSphZ2WPe8FPkjn8oF4fHV+PgPV4V+hecPh2VOS2h4RNtpSB3zQcR4sCpNvvrEb1A==}
+  '@types/pdfkit@0.13.5':
+    resolution: {integrity: sha512-cR4gZA3xiMVDUf/O/ijVr6aIguvN72ZmCDLcWwM0ycqn5P8XDSjMX9PixzWEoDnlINoofxo2LCdV4KvdD9Waqg==}
 
   '@types/qs@6.9.7':
     resolution: {integrity: sha512-FGa1F62FT09qcrueBA6qYTrJPVDzah9a+493+o2PCXsesWHIn27G98TsSMs3WPNbZIEj4+VJf6saSFpvD+3Zsw==}
@@ -6253,7 +6253,7 @@ snapshots:
 
   '@types/parse-json@4.0.0': {}
 
-  '@types/pdfkit@0.13.4':
+  '@types/pdfkit@0.13.5':
     dependencies:
       '@types/node': 18.15.11
 
