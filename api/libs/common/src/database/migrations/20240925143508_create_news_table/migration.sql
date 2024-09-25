@@ -6,8 +6,8 @@ CREATE TABLE "News" (
     "university_id" TEXT NOT NULL,
     "image_id" TEXT,
     "status" TEXT NOT NULL DEFAULT 'DRAFT',
-    "start_publication_date" TIMESTAMP(3),
-    "end_publication_date" TIMESTAMP(3),
+    "start_publication_date" TIMESTAMP(3) NOT NULL,
+    "end_publication_date" TIMESTAMP(3) NOT NULL,
     "created_at" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updated_at" TIMESTAMP(3) NOT NULL,
 
