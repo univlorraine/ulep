@@ -40,10 +40,11 @@ class CreateActivityUsecase implements CreateActivityUsecaseInterface {
                 vocabularies: command.vocabularies.map((vocabulary) => vocabulary.content),
                 vocabulariesFiles: [],
             };
-
             command.vocabularies.forEach((vocabulary) => {
                 if (vocabulary.file) {
-                    const newFile = new File([vocabulary.file], vocabulary.content, { type: vocabulary.file.type });
+                    const newFile = new File([vocabulary.file], `${vocabulary.content}.wav`, {
+                        type: vocabulary.file.type,
+                    });
                     formData.vocabulariesFiles.push(newFile);
                 }
             });

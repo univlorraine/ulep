@@ -8,6 +8,7 @@ import { RecorderAdapter } from '../adapter/RecorderAdapter';
 import Configuration from '../domain/entities/Confirguration';
 import CreateActivityUsecase from '../domain/usecases/activity/CreateActivityUsecase';
 import GetActivityThemesUsecase from '../domain/usecases/activity/GetActivityThemesUsecase';
+import GetActivityUsecase from '../domain/usecases/activity/GetActivityUsecase';
 import AddDeviceUsecase from '../domain/usecases/AddDeviceUsecase';
 import AskForAccountDeletion from '../domain/usecases/AskForAccountDeletionUsecase';
 import AskForLanguageUsecase from '../domain/usecases/AskForLanguageUsecase';
@@ -163,6 +164,7 @@ const getConfigContextValue = ({
 
     // Activity
     const createActivity = new CreateActivityUsecase(domainHttpAdapter);
+    const getActivity = new GetActivityUsecase(domainHttpAdapter);
     const getActivityThemes = new GetActivityThemesUsecase(domainHttpAdapter);
 
     return {
@@ -184,6 +186,7 @@ const getConfigContextValue = ({
         editUser,
         fileAdapter,
         deviceAdapter,
+        getActivity,
         getActivityThemes,
         getAllInterestCategories,
         getAllCountries,

@@ -5,6 +5,7 @@ export enum ActivityStatus {
     DRAFT = 'DRAFT',
     PUBLISHED = 'PUBLISHED',
     IN_VALIDATION = 'IN_VALIDATION',
+    REJECTED = 'REJECTED',
 }
 
 export type ActivityProps = {
@@ -22,7 +23,7 @@ export type ActivityProps = {
     creditImage?: string;
     ressourceUrl?: string;
     ressourceFileUrl?: string;
-    ressourceOgUrl?: string;
+    ressourceOgUrl?: any;
 };
 
 export class Activity {
@@ -40,7 +41,7 @@ export class Activity {
     public readonly creditImage?: string;
     public readonly ressourceUrl?: string;
     public readonly ressourceFileUrl?: string;
-    public readonly ressourceOgUrl?: string;
+    public readonly ressourceOgUrl?: OGUrl;
     constructor(props: ActivityProps) {
         this.id = props.id;
         this.title = props.title;

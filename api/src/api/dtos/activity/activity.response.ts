@@ -210,7 +210,9 @@ export class ActivityResponse {
         ActivityVocabularyResponse.from,
       ),
       exercises: activity.activityExercises.map(ActivityExerciseResponse.from),
-      ressourceOgUrl: activity.metadata?.openGraph,
+      ressourceOgUrl: activity.metadata?.openGraph
+        ? OGResponse.from(activity.metadata?.openGraph)
+        : undefined,
     });
   }
 }

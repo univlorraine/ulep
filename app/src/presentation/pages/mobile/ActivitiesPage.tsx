@@ -16,11 +16,9 @@ const ActivitiesPage = () => {
     };
 
     return (
-        <>
-            <IonContent>
-                <ActivitiesContent onAddActivity={() => {}} onBackPressed={goBack} />
-            </IonContent>
-        </>
+        <IonContent>
+            <ActivitiesContent onAddActivity={() => {}} onBackPressed={goBack} />
+        </IonContent>
     );
 };
 

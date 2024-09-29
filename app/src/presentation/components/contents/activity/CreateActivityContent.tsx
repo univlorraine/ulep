@@ -22,6 +22,7 @@ enum CreateActivityMode {
 
 interface CreateActivityContentProps {
     onBackPressed: () => void;
+    onNavigatePressed: (activityId: string) => void;
     profile: Profile;
 }
 
@@ -37,7 +38,11 @@ export interface CreateActivityInformationsOutput {
     ressource?: File;
 }
 
-export const CreateActivityContent: React.FC<CreateActivityContentProps> = ({ onBackPressed, profile }) => {
+export const CreateActivityContent: React.FC<CreateActivityContentProps> = ({
+    onBackPressed,
+    onNavigatePressed,
+    profile,
+}) => {
     const [showToast] = useIonToast();
     const [mode, setMode] = useState<CreateActivityMode>(CreateActivityMode.INFORMATIONS);
     const [informations, setInformations] = useState<CreateActivityInformationsOutput>();
@@ -47,7 +52,6 @@ export const CreateActivityContent: React.FC<CreateActivityContentProps> = ({ on
 
     const onCreateActivity = async (data: CreateActivityCommand) => {
         const result = await createActivity.execute(data);
-        console.log(result);
         if (result instanceof Error) {
             return showToast({
                 message: result.message,
@@ -134,7 +138,13 @@ export const CreateActivityContent: React.FC<CreateActivityContentProps> = ({ on
                     />
                 );
             case CreateActivityMode.SUCCESS:
-                return <CreateActivitySuccessContent onBackPressed={handleBackPressed} activity={activity!} />;
+                return (
+                    <CreateActivitySuccessContent
+                        onBackPressed={handleBackPressed}
+                        activity={activity!}
+                        onNavigatePressed={onNavigatePressed}
+                    />
+                );
         }
     };
 

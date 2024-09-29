@@ -5,11 +5,11 @@ import { MessageWithUser } from 'src/core/ports/chat.service';
 
 class OGImageResponse {
   @Swagger.ApiProperty({ type: 'string' })
-  @Expose({ groups: ['chat'] })
+  @Expose({ groups: ['chat', 'read'] })
   url: string;
 
   @Swagger.ApiProperty({ type: 'string' })
-  @Expose({ groups: ['chat'] })
+  @Expose({ groups: ['chat', 'read'] })
   type: string;
 
   constructor(partial: Partial<OGImageResponse>) {
@@ -25,27 +25,27 @@ class OGImageResponse {
 }
 export class OGResponse {
   @Swagger.ApiProperty({ type: 'string' })
-  @Expose({ groups: ['chat'] })
+  @Expose({ groups: ['chat', 'read'] })
   ogSiteName?: string;
 
   @Swagger.ApiProperty({ type: 'string' })
-  @Expose({ groups: ['chat'] })
+  @Expose({ groups: ['chat', 'read'] })
   ogUrl?: string;
 
   @Swagger.ApiProperty({ type: 'string' })
-  @Expose({ groups: ['chat'] })
+  @Expose({ groups: ['chat', 'read'] })
   ogLocale?: string;
 
   @Swagger.ApiProperty({ type: 'array' })
-  @Expose({ groups: ['chat'] })
+  @Expose({ groups: ['chat', 'read'] })
   ogImage?: OGImageResponse[];
 
   @Swagger.ApiProperty({ type: 'string' })
-  @Expose({ groups: ['chat'] })
+  @Expose({ groups: ['chat', 'read'] })
   ogTitle?: string;
 
   @Swagger.ApiProperty({ type: 'string' })
-  @Expose({ groups: ['chat'] })
+  @Expose({ groups: ['chat', 'read'] })
   ogDescription?: string;
 
   constructor(partial: Partial<OGResponse>) {

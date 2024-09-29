@@ -25,7 +25,9 @@ class BaseHttpAdapter {
                 const value = body[key];
                 if (Array.isArray(value)) {
                     value.forEach((item, index) => {
-                        if (item instanceof Object) {
+                        if (item instanceof File) {
+                            encodedBody.append(`${key}[${index}]`, item);
+                        } else if (item instanceof Object) {
                             Object.keys(item).forEach((subKey) => {
                                 encodedBody.append(`${key}[${index}][${subKey}]`, item[subKey]);
                             });

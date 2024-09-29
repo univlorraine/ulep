@@ -41,8 +41,41 @@
         }
     },
     "activity": {
+        "status": {
+            "in_validation": "In validation",
+            "rejected": "Rejected",
+            "published": "Published"
+        },
         "list": {
             "title": "Activity sheets"
+        },
+        "show": {
+            "status_rejected": "Show the reason for rejection",
+            "back_button": "Back",
+            "kebab_button": "Open the context menu",
+            "creator": "Created by {{name}}",
+            "title": "Activity sheet",
+            "language": "Language",
+            "level": "Level",
+            "theme": "Theme",
+            "created_by": "Created by",
+            "me": "me",
+            "share": "Share my sheet to the community",
+            "exercise": "Exercise {{index}}",
+            "vocabulary": "Vocabulary & expressions",
+            "modal_rejected_title": "Activity sheet rejected",
+            "modal_rejected_description1": "After study by your manager, your activity sheet has been rejected.",
+            "modal_rejected_description2": "There are modifications to be made, contact your manager to find out more.",
+            "modal_rejected_description3": "You can rework your sheet and submit it again",
+            "modal_rejected_close": "I understand",
+            "modal_share_title": "Share with the community",
+            "modal_share_description1": "Your activity sheet must be validated by your manager to check that it meets the needs of the community.",
+            "modal_share_description2": "If it is validated, it will then be accessible to other users (and you will be duly credited) !",
+            "modal_share_description3": "No matter what, you will always have access to your sheet in your personal space.",
+            "modal_share_submit": "Submit my sheet",
+            "modal_share_close": "Close",
+            "ressource_file": "Download the document",
+            "ressource_file_downloaded": "File downloaded"
         },
         "create": {
             "up_excercise_button": "Move the excercise up",

@@ -83,7 +83,7 @@ export class ActivityController {
       pronunciation: files?.find(
         (file) =>
           file.originalname.toLowerCase().includes(vocabulary.toLowerCase()) &&
-          file.fieldname === 'vocabulariesFiles',
+          file.fieldname.includes('vocabulariesFiles'),
       ),
     }));
 

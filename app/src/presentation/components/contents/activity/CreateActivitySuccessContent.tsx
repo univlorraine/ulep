@@ -7,11 +7,16 @@ import SuccessLayout from '../../layout/SuccessLayout';
 import styles from './CreateActivitySuccessContent.module.css';
 
 interface CreateActivitySuccessContentProps {
+    onNavigatePressed: (activityId: string) => void;
     onBackPressed: () => void;
     activity: Activity;
 }
 //TODO: Handle navigation to activity
-const CreateActivitySuccessContent: React.FC<CreateActivitySuccessContentProps> = ({ onBackPressed, activity }) => {
+const CreateActivitySuccessContent: React.FC<CreateActivitySuccessContentProps> = ({
+    onNavigatePressed,
+    onBackPressed,
+    activity,
+}) => {
     const { t } = useTranslation();
     const { configuration } = useConfig();
 
@@ -30,7 +35,7 @@ const CreateActivitySuccessContent: React.FC<CreateActivitySuccessContentProps> 
                     {t('activity.create.success_description_2')}
                 </span>
                 <div className={styles['button-container']}>
-                    <IonButton fill="clear" className="primary-button" onClick={() => undefined}>
+                    <IonButton fill="clear" className="primary-button" onClick={() => onNavigatePressed(activity.id)}>
                         {t('activity.create.success_navigate_button')}
                     </IonButton>
                     <IonButton fill="clear" className="secondary-button" onClick={onBackPressed}>

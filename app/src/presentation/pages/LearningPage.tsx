@@ -6,7 +6,7 @@ import Tandem from '../../domain/entities/Tandem';
 import { useStoreState } from '../../store/storeTypes';
 import LearningContent from '../components/contents/LearningContent';
 import OnlineWebLayout from '../components/layout/OnlineWebLayout';
-import ActivitiesContentModal from '../components/modals/ActivitiesContentModale';
+import ActivitiesContentModal from '../components/modals/ActivitiesContentModal';
 import TandemProfileModal from '../components/modals/TandemProfileModal';
 import TandemStatusModal from '../components/modals/TandemStatusModal';
 import useGetLearningData from '../hooks/useGetLearningData';

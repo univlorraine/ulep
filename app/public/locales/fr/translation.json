@@ -41,8 +41,41 @@
         }
     },
     "activity": {
+        "status": {
+            "in_validation": "Etude en cours",
+            "rejected": "Refusée",
+            "published": "Validée"
+        },
         "list": {
             "title": "Fiches d'activités"
+        },
+        "show": {
+            "status_rejected": "Afficher la raison du rejet",
+            "back_button": "Retour",
+            "kebab_button": "Ouvrir le menu contextuel",
+            "creator": "Créé par {{name}}",
+            "title": "Fiche d'activité",
+            "language": "Langue",
+            "level": "Niveau",
+            "theme": "Thème",
+            "created_by": "Créée par",
+            "me": "moi",
+            "share": "Partager ma fiche à la communauté",
+            "exercise": "Exercice {{index}}",
+            "vocabulary": "Vocabulaire & expressions",
+            "modal_rejected_title": "Fiche d’activité refusée",
+            "modal_rejected_description1": "Après étude par ton gestionnaire, ta fiche d’activité a été refusée. ",
+            "modal_rejected_description2": "Il y a des modifications à lui apporter, contacte ton gestionnaire pour en savoir plus.",
+            "modal_rejected_description3": "Tu peux retravailler ta fiche et la soumettre de nouveau",
+            "modal_rejected_close": "J'ai compris",
+            "modal_share_title": "Partager avec la communauté",
+            "modal_share_description1": "Ta fiche d’activité doit être validée par ton gestionnaire afin de vérifier qu'elle répond aux besoins de la communauté.",
+            "modal_share_description2": "Si elle est validée, elle sera alors accessible par les autres utilisateurs (et tu seras bien sûr créditée) !",
+            "modal_share_description3": "Quoiqu’il arrive, tu auras toujours accès à ta fiche dans ton espace personnel.",
+            "modal_share_submit": "Soumettre ma fiche",
+            "modal_share_close": "Fermer",
+            "ressource_file": "Télécharger le fichier",
+            "ressource_file_downloaded": "Fichier téléchargé"
         },
         "create": {
             "up_excercise_button": "Déplacer l'exercice vers le haut",
