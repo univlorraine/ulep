@@ -69,6 +69,7 @@ model LanguageCodes {
   NativeLanguageOrganizations          Organizations[]    @relation("NativeLanguageOrganizations")
   OriginalVocabularyList VocabularyList[] @relation("OriginalLanguage")
   TranslationVocabularyList VocabularyList[] @relation("TranslationLanguage")
+  Activities Activity[]
 
   @@unique([name])
   @@unique([code])
@@ -218,6 +219,9 @@ model MediaObjects {
   University Organizations? @relation("UniversitiesImage")
   PronunciationWord Vocabulary? @relation("PronunciationWord")
   PronunciationTranslation Vocabulary? @relation("PronunciationTranslation")
+  Activity Activity? @relation("Image")
+  ActivityRessourceFile Activity? @relation("RessourceFile")
+  ActivityVocabulary ActivityVocabulary?
   InstanceDefaultCertificateFile Instance?
   UniversitiesDefaultCertificateFile Organizations? @relation("UniversitiesDefaultCertificateFile")
 
@@ -241,6 +245,8 @@ model TextContent {
   Interests            Interests?
   Goals                LearningObjectives?
   Translations         Translations[]
+  ActivityThemes       ActivityThemes?
+  ActivityThemesCategories ActivityThemeCategories?
 
   @@map("text_content")
 }
@@ -345,6 +351,7 @@ model Profiles {
   Interests         Interests[]
   CreatorVocabularyList    VocabularyList[] @relation("Creator")
   EditorVocabularyList    VocabularyList[]  @relation("Editor")
+  Activities Activity[]
   @@unique([user_id])
   @@index([native_language_code_id], name: "native_language_code")
   @@map("profiles")
@@ -567,6 +574,90 @@ model  Vocabulary {
   PronunciationWord MediaObjects? @relation("PronunciationWord", fields: [pronunciation_word_id], references: [id])
   PronunciationTranslation MediaObjects? @relation("PronunciationTranslation", fields: [pronunciation_translation_id], references: [id])
 
+    @@map("vocabulary")
+}
 
-  @@map("vocabulary")
+
+//  * ****************************************************
+//  * ACTIVITY
+//  * ****************************************************
+model Activity {
+  id                String        @id @default(uuid())
+  title             String
+  description       String
+  creator_id        String
+  status            String       @default("DRAFT")
+  credit_image      String?
+  image_id          String?       @unique
+  language_level    String
+  language_code_id  String
+  activity_theme_id String
+  ressource_url     String?
+  ressource_file_id String?       @unique
+  created_at        DateTime      @default(now())
+  updated_at        DateTime      @updatedAt
+  metadata          Json?
+
+  Image MediaObjects? @relation("Image", fields: [image_id], references: [id])
+  RessourceFile MediaObjects? @relation("RessourceFile", fields: [ressource_file_id], references: [id])
+  LanguageCode LanguageCodes @relation(fields: [language_code_id], references: [id])
+  Creator Profiles @relation(fields: [creator_id], references: [id])
+  ActivityVocabulary ActivityVocabulary[]
+  ActivityExercises ActivityExercises[]
+  ActivityThemes ActivityThemes @relation(fields: [activity_theme_id], references: [id], onDelete: Cascade)
+
+  @@map("activity")
+}
+
+model ActivityThemes {
+  id              String             @id @default(uuid())
+  category_id     String
+  text_content_id String
+  created_at      DateTime           @default(now())
+  updated_at      DateTime           @updatedAt
+  TextContent     TextContent        @relation(fields: [text_content_id], references: [id], onDelete: Cascade)
+  Category        ActivityThemeCategories @relation(fields: [category_id], references: [id], onDelete: Cascade)
+  Activity Activity[]
+
+  @@unique([text_content_id])
+  @@map("activity_themes")
+}
+
+model ActivityThemeCategories {
+  id              String      @id @default(uuid())
+  text_content_id String
+  created_at      DateTime    @default(now())
+  updated_at      DateTime    @updatedAt
+  TextContent     TextContent @relation(fields: [text_content_id], references: [id], onDelete: Cascade)
+  ActivityThemes       ActivityThemes[]
+
+  @@unique([text_content_id])
+  @@map("activity_themes_categories")
+}
+
+model ActivityVocabulary {
+  id                String        @id @default(uuid())
+  content           String
+  activity_id       String
+  pronunciation_activity_vocabulary_id String? @unique
+  created_at        DateTime      @default(now())
+  updated_at        DateTime      @updatedAt
+
+  PronunciationActivityVocabulary MediaObjects? @relation(fields: [pronunciation_activity_vocabulary_id], references: [id])
+  Activity Activity @relation(fields: [activity_id], references: [id])
+
+  @@map("activity_vocabulary")
+}
+
+model ActivityExercises {
+  id                String        @id @default(uuid())
+  content           String
+  order             Int
+  activity_id       String
+  created_at        DateTime      @default(now())
+  updated_at        DateTime      @updatedAt
+
+  Activity Activity @relation(fields: [activity_id], references: [id])
+
+  @@map("activity_exercises")
 }

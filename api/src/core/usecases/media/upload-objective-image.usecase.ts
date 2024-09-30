@@ -64,7 +64,7 @@ export class UploadObjectiveImageUsecase {
     objective: LearningObjective,
     file: Express.Multer.File,
   ): Promise<MediaObject> {
-    const image = MediaObject.image(file, 'objective');
+    const image = MediaObject.generate(file, 'objective');
     await this.storage.write(image.bucket, image.name, file);
     await this.mediaObjectRepository.saveObjectiveImage(objective, image);
 

@@ -179,7 +179,7 @@ export class UserController {
       });
       admin = {
         ...admin,
-        image: MediaObject.image(
+        image: MediaObject.generate(
           file,
           MediaObject.getDefaultBucket(),
           admin.id,
@@ -210,7 +210,7 @@ export class UserController {
       });
       admin = {
         ...admin,
-        image: MediaObject.image(
+        image: MediaObject.generate(
           file,
           MediaObject.getDefaultBucket(),
           admin.id,

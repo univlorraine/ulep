@@ -6,6 +6,7 @@ import Tandem from '../../domain/entities/Tandem';
 import { useStoreState } from '../../store/storeTypes';
 import LearningContent from '../components/contents/LearningContent';
 import OnlineWebLayout from '../components/layout/OnlineWebLayout';
+import ActivitiesContentModal from '../components/modals/ActivitiesContentModal';
 import TandemProfileModal from '../components/modals/TandemProfileModal';
 import TandemStatusModal from '../components/modals/TandemStatusModal';
 import useGetLearningData from '../hooks/useGetLearningData';
@@ -19,6 +20,7 @@ const LearningPage = () => {
     const { width } = useWindowDimensions();
     const isHybrid = width < HYBRID_MAX_WIDTH;
     const [selectedTandem, setSelectedTandem] = useState<Tandem>();
+    const [displayActivitiesContent, setDisplayActivitiesContent] = useState<boolean>(false);
     const profile = useStoreState((state) => state.profile);
 
     const { tandems, error, isLoading } = useGetLearningData();
@@ -30,6 +32,9 @@ const LearningPage = () => {
         !isHybrid ? setSelectedTandem(tandem) : history.push('/tandem-profil', { tandem });
 
     const onVocabularyListPressed = () => history.push('/vocabulary-list');
+
+    const onActivitiesContentPressed = () =>
+        !isHybrid ? setDisplayActivitiesContent(true) : history.push('/activities');
 
     if (error) {
         showToast({ message: t(error.message), duration: 5000 });
@@ -49,6 +54,7 @@ const LearningPage = () => {
                     onTandemPressed={onTandemPressed}
                     onValidatedTandemPressed={onValidatedTandemPressed}
                     onVocabularyListPressed={onVocabularyListPressed}
+                    onActivitiesContentPressed={onActivitiesContentPressed}
                 />
             </IonContent>
         );
@@ -64,6 +70,7 @@ const LearningPage = () => {
                     onTandemPressed={onTandemPressed}
                     onValidatedTandemPressed={onValidatedTandemPressed}
                     onVocabularyListPressed={onVocabularyListPressed}
+                    onActivitiesContentPressed={onActivitiesContentPressed}
                 />
             </OnlineWebLayout>
             <TandemStatusModal
@@ -86,6 +93,11 @@ const LearningPage = () => {
                 partnerLearningLanguage={selectedTandem?.partnerLearningLanguage}
                 pedagogy={selectedTandem?.pedagogy}
                 profile={selectedTandem?.partner}
+            />
+            <ActivitiesContentModal
+                isVisible={displayActivitiesContent}
+                onClose={() => setDisplayActivitiesContent(false)}
+                profile={profile}
             />
         </>
     );

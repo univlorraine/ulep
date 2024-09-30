@@ -1,3 +1,4 @@
+import { Activity } from 'src/core/models/activity.model';
 import { LearningObjective, MediaObject, University, User } from '../models';
 import { Instance } from '../models/Instance.model';
 
@@ -5,6 +6,17 @@ export const MEDIA_OBJECT_REPOSITORY = 'media-object.repository';
 
 export interface MediaObjectRepository {
   avatarOfUser(userId: string): Promise<MediaObject | null>;
+
+  imageOfActivity(activityId: string): Promise<MediaObject | null>;
+
+  saveImageOfActivity(activity: Activity, object: MediaObject): Promise<void>;
+
+  ressourceOfActivity(activityId: string): Promise<MediaObject | null>;
+
+  saveRessourceOfActivity(
+    activity: Activity,
+    object: MediaObject,
+  ): Promise<void>;
 
   audioTranslatedOfVocabulary(
     vocabularyId: string,
@@ -14,6 +26,15 @@ export interface MediaObjectRepository {
   saveAudioVocabulary(
     vocabularyId: string,
     isTranslation: boolean,
+    object: MediaObject,
+  ): Promise<void>;
+
+  audioTranslatedOfVocabularyActivity(
+    vocabularyId: string,
+  ): Promise<MediaObject | null>;
+
+  saveAudioVocabularyActivity(
+    vocabularyId: string,
     object: MediaObject,
   ): Promise<void>;
 

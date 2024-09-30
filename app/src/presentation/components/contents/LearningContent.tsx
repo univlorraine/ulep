@@ -23,6 +23,7 @@ interface LearningContentProps {
     onTandemPressed: (tandem: Tandem) => void;
     onValidatedTandemPressed: (tandem: Tandem) => void;
     onVocabularyListPressed: () => void;
+    onActivitiesContentPressed: () => void;
 }
 
 const LearningContent: React.FC<LearningContentProps> = ({
@@ -32,6 +33,7 @@ const LearningContent: React.FC<LearningContentProps> = ({
     onTandemPressed,
     onValidatedTandemPressed,
     onVocabularyListPressed,
+    onActivitiesContentPressed,
 }) => {
     const { t } = useTranslation();
     const history = useHistory();
@@ -100,8 +102,8 @@ const LearningContent: React.FC<LearningContentProps> = ({
                         )}
                         <RessourcesCard
                             onLearningJournalPressed={() => console.log('onLearningJournalPressed')}
-                            onVocabularyPressed={() => console.log('onVocabularyPressed')}
-                            onActivityPressed={() => console.log('onActivityPressed')}
+                            onVocabularyPressed={onVocabularyListPressed}
+                            onActivityPressed={onActivitiesContentPressed}
                             onGamePressed={() => console.log('onGamePressed')}
                         />
                         {currentTandem && currentTandem.partner?.user.university && (

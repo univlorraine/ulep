@@ -31,7 +31,6 @@ const ShareVocabularyListModal: React.FC<ShareVocabularyListModalProps> = ({
         onClose();
     };
 
-    console.log(vocabularyList);
     useEffect(() => {
         setProfilesToShare(tandemsProfiles.filter((profile) => !vocabularyList.editorsIds.includes(profile.id)));
     }, [isVisible, tandemsProfiles, vocabularyList]);

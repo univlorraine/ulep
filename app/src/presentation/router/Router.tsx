@@ -46,6 +46,7 @@ import WelcomePage from '../pages/WelcomePage';
 import CEFRQuizzEndPage from '../pages/cefr-quizz/CEFRQuizzEndPage';
 import CEFRQuizzLanguagePage from '../pages/cefr-quizz/CEFRQuizzLanguagePage';
 import CEFRQuizzOtherLanguagesPage from '../pages/cefr-quizz/CEFRQuizzOtherLanguagesPage';
+import ActivitiesPage from '../pages/mobile/ActivitiesPage';
 import ChatPage from '../pages/mobile/ChatPage';
 import MediaPage from '../pages/mobile/MediaPage';
 import ProfilePage from '../pages/mobile/ProfilePage';
@@ -106,6 +107,9 @@ const OfflineRouter: React.FC = () => {
                 </MobileRoute>
                 <MobileRoute exact path={'/report'}>
                     <ReportPage />
+                </MobileRoute>
+                <MobileRoute exact path={'/activities'}>
+                    <ActivitiesPage />
                 </MobileRoute>
                 <MobileRoute exact path={'/settings'}>
                     <SettingsPage />

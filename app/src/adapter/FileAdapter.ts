@@ -10,17 +10,20 @@ class FileAdapter implements FileAdapterInterface {
         this.deviceAdapter = deviceAdapter;
     }
 
-    async getFile(): Promise<File | undefined> {
-        const pickedFiles = await FilePicker.pickFiles({
-            types: [
-                'application/pdf',
+    async getFile({ isTypeOnlyPdf }: { isTypeOnlyPdf?: boolean }): Promise<File | undefined> {
+        const types = ['application/pdf'];
+        if (!isTypeOnlyPdf) {
+            types.push(
                 'application/vnd.openxmlformats-officedocument.wordprocessingml.document', // .docx
                 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet', // .xlsx
                 'application/vnd.openxmlformats-officedocument.presentationml.presentation', // .pptx
                 'application/vnd.oasis.opendocument.text', // .odt
                 'application/vnd.oasis.opendocument.spreadsheet', // .ods
-                'application/vnd.oasis.opendocument.presentation', // .odp
-            ],
+                'application/vnd.oasis.opendocument.presentation' // .odp
+            );
+        }
+        const pickedFiles = await FilePicker.pickFiles({
+            types,
             readData: true,
         });
 
