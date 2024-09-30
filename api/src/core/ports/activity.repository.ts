@@ -70,7 +70,6 @@ export interface ActivityRepository {
     props: GetActivitiesProps,
   ): Promise<{ items: Activity[]; totalItems: number }>;
   allThemes(): Promise<ActivityThemeCategory[]>;
-  allThemeCategories(): Promise<ActivityThemeCategory[]>;
   createActivity(props: CreateActivityProps): Promise<Activity>;
   createTheme(props: CreateActivityThemeProps): Promise<ActivityTheme>;
   createThemeCategory(

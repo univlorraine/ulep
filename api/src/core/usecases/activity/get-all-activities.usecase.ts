@@ -60,7 +60,7 @@ export class GetActivitiesUsecase {
       profile = await this.getProfileFromUserId(command.userId);
     }
 
-    const activityThemes = await this.activityRepository.all({
+    const activities = await this.activityRepository.all({
       languageLevels: command.languageLevels,
       languagesCodes: languagesCodes.length > 0 ? languagesCodes : undefined,
       status: command.status,
@@ -70,7 +70,7 @@ export class GetActivitiesUsecase {
       profileId: profile?.id,
     });
 
-    return activityThemes;
+    return activities;
   }
 
   async assertLanguageExist(languageCode: string) {

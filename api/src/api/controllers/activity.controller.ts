@@ -47,7 +47,7 @@ import {
   UploadMediaActivityUsecase,
 } from 'src/core/usecases';
 
-@Controller('activity')
+@Controller('activities')
 @Swagger.ApiTags('Activity')
 export class ActivityController {
   logger = new Logger(ActivityController.name);
@@ -121,7 +121,7 @@ export class ActivityController {
     return ActivityResponse.from(activity);
   }
 
-  @Post('theme')
+  @Post('themes')
   @UseGuards(AuthenticationGuard)
   @Swagger.ApiOperation({ summary: 'Create a new Activity theme.' })
   @Swagger.ApiCreatedResponse({ type: () => ActivityThemeCategoryResponse })
@@ -131,7 +131,7 @@ export class ActivityController {
     return ActivityThemeResponse.from(activityTheme);
   }
 
-  @Put('theme/:id')
+  @Put('themes/:id')
   @UseGuards(AuthenticationGuard)
   @Swagger.ApiOperation({ summary: 'Update a Activity theme.' })
   @Swagger.ApiCreatedResponse({ type: () => ActivityThemeCategoryResponse })
@@ -147,14 +147,14 @@ export class ActivityController {
     return ActivityThemeResponse.from(activityTheme);
   }
 
-  @Delete('theme/:id')
+  @Delete('themes/:id')
   @UseGuards(AuthenticationGuard)
   @Swagger.ApiOperation({ summary: 'Delete a Activity theme.' })
   async deleteActivityTheme(@Param('id') id: string) {
     await this.deleteActivityThemeUsecase.execute(id);
   }
 
-  @Post('category')
+  @Post('categories')
   @UseGuards(AuthenticationGuard)
   @Swagger.ApiOperation({ summary: 'Create a new Activity theme category.' })
   @Swagger.ApiCreatedResponse({ type: () => ActivityThemeCategoryResponse })
@@ -167,7 +167,7 @@ export class ActivityController {
     return ActivityThemeCategoryResponse.from(activityThemeCategory);
   }
 
-  @Put('category/:id')
+  @Put('categories/:id')
   @UseGuards(AuthenticationGuard)
   @Swagger.ApiOperation({ summary: 'Update a Activity theme category.' })
   @Swagger.ApiCreatedResponse({ type: () => ActivityThemeCategoryResponse })
@@ -184,14 +184,14 @@ export class ActivityController {
     return ActivityThemeCategoryResponse.from(activityThemeCategory);
   }
 
-  @Delete('category/:id')
+  @Delete('categories/:id')
   @UseGuards(AuthenticationGuard)
   @Swagger.ApiOperation({ summary: 'Delete a Activity theme category.' })
   async deleteActivityCategory(@Param('id') id: string) {
     await this.deleteActivityThemeCategoryUsecase.execute(id);
   }
 
-  @Get('category')
+  @Get('categories')
   @UseGuards(AuthenticationGuard)
   @Swagger.ApiOperation({ summary: 'Get all Activity themes.' })
   @Swagger.ApiOkResponse({ type: () => ActivityThemeCategoryResponse })

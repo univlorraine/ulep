@@ -168,15 +168,6 @@ export class PrismaActivityRepository implements ActivityRepository {
     return activityThemesCategories.map(activityThemeCategoryMapper);
   }
 
-  async allThemeCategories(): Promise<ActivityThemeCategory[]> {
-    const activityThemeCategories =
-      await this.prisma.activityThemeCategories.findMany({
-        ...ActivityThemeCategoryRelations,
-      });
-
-    return activityThemeCategories.map(activityThemeCategoryMapper);
-  }
-
   async ofId(id: string): Promise<Activity> {
     const activity = await this.prisma.activity.findUnique({
       where: {
