@@ -10,7 +10,7 @@ class GetActivityUsecase implements GetActivityUsecaseInterface {
     async execute(activityId: string): Promise<Activity | Error> {
         try {
             const httpResponse: HttpResponse<ActivityCommand> = await this.domainHttpAdapter.get(
-                `/activity/${activityId}`
+                `/activities/${activityId}`
             );
 
             if (!httpResponse.parsedBody) {
