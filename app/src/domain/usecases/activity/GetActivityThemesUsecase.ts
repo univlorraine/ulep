@@ -10,7 +10,7 @@ class GetActivityThemesUsecase implements GetActivityThemesUsecaseInterface {
     async execute(): Promise<ActivityThemeCategory[] | Error> {
         try {
             const httpResponse: HttpResponse<ActivityThemeCategoryCommand[]> = await this.domainHttpAdapter.get(
-                `/activity/category`
+                `/activities/categories`
             );
 
             if (!httpResponse.parsedBody) {
