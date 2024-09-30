@@ -80,7 +80,7 @@ export class CreateActivityUsecase {
       },
     });
 
-    let activityVocabularies: ActivityVocabulary[] = [];
+    const activityVocabularies: ActivityVocabulary[] = [];
     for (const vocabulary of command.vocabularies) {
       activityVocabularies.push(
         await this.createVocabularyForActivity(
