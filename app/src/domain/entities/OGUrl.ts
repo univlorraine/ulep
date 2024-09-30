@@ -2,7 +2,7 @@ class OGImage {
     constructor(public readonly url: string, public readonly type: string) {}
 }
 
-class OGUrl {
+export class OGUrl {
     constructor(
         public readonly ogSiteName?: string,
         public readonly ogUrl?: string,

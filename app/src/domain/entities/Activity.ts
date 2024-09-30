@@ -1,4 +1,5 @@
 import Language from './Language';
+import { OGUrl } from './OGUrl';
 import Profile from './Profile';
 
 export enum ActivityStatus {

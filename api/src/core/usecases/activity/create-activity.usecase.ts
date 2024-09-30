@@ -1,4 +1,5 @@
 import { Inject, Injectable } from '@nestjs/common';
+import openGraphScraper from 'open-graph-scraper';
 import { RessourceDoesNotExist } from 'src/core/errors';
 import { ProficiencyLevel } from 'src/core/models';
 import { ActivityVocabulary } from 'src/core/models/activity.model';
@@ -15,7 +16,6 @@ import {
   ProfileRepository,
 } from 'src/core/ports/profile.repository';
 import { UploadAudioVocabularyActivityUsecase } from 'src/core/usecases/media';
-const openGraphScraper = require('open-graph-scraper');
 
 export class CreateActivityCommand {
   title: string;
