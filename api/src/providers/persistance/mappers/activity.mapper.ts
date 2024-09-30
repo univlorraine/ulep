@@ -125,7 +125,7 @@ export const activityThemeCategoryMapper = (
 
 export const ActivityInclude = Prisma.validator<Prisma.ActivityInclude>()({
   ActivityExercises: true,
-  ActivityVocabulary: true,
+  ActivityVocabulary: ActivityVocabularyRelations,
   Image: true,
   LanguageCode: true,
   RessourceFile: true,
@@ -175,5 +175,6 @@ export const activityMapper = (snapshot: ActivitySnapshot): Activity => {
       activityVocabularyMapper,
     ),
     activityExercises: snapshot.ActivityExercises?.map(activityExerciseMapper),
+    metadata: snapshot.metadata,
   });
 };

@@ -15,7 +15,7 @@ import {
   UseGuards,
   UseInterceptors,
 } from '@nestjs/common';
-import { FileFieldsInterceptor } from '@nestjs/platform-express';
+import { AnyFilesInterceptor } from '@nestjs/platform-express';
 import * as Swagger from '@nestjs/swagger';
 import { CurrentUser } from 'src/api/decorators';
 import {
@@ -69,29 +69,21 @@ export class ActivityController {
 
   @Post()
   @UseGuards(AuthenticationGuard)
-  @UseInterceptors(
-    FileFieldsInterceptor([
-      { name: 'image', maxCount: 1 },
-      { name: 'ressource', maxCount: 1 },
-      { name: 'vocabulary' },
-    ]),
-  )
+  @UseInterceptors(AnyFilesInterceptor())
   @Swagger.ApiOperation({ summary: 'Create a new Activity ressource.' })
   @Swagger.ApiConsumes('multipart/form-data')
   @Swagger.ApiCreatedResponse({ type: () => ActivityResponse })
   async createActivity(
     @Body() body: CreateActivityRequest,
     @UploadedFiles()
-    files?: {
-      image?: Express.Multer.File[];
-      ressource?: Express.Multer.File[];
-      vocabulary?: Express.Multer.File[];
-    },
+    files?: Express.Multer.File[],
   ) {
     const vocabulariesWithFiles = body.vocabularies.map((vocabulary) => ({
       content: vocabulary,
-      pronunciation: files.vocabulary.find((file) =>
-        file.originalname.toLowerCase().includes(vocabulary.toLowerCase()),
+      pronunciation: files?.find(
+        (file) =>
+          file.originalname.toLowerCase().includes(vocabulary.toLowerCase()) &&
+          file.fieldname.includes('vocabulariesFiles'),
       ),
     }));
 
@@ -100,19 +92,22 @@ export class ActivityController {
       vocabularies: vocabulariesWithFiles,
     });
 
-    if (files.image && files.image[0]) {
+    const imageFile = files?.find((file) => file.fieldname === 'image');
+    const ressourceFile = files?.find((file) => file.fieldname === 'ressource');
+
+    if (imageFile) {
       const imageUrl = await this.uploadImageActivityUsecase.execute({
         activityId: activity.id,
-        file: files.image[0],
+        file: imageFile,
       });
 
       activity.imageUrl = imageUrl;
     }
 
-    if (files.ressource && files.ressource[0]) {
+    if (ressourceFile) {
       const ressourceFileUrl = await this.uploadMediaActivityUsecase.execute({
         activityId: activity.id,
-        file: files.ressource[0],
+        file: ressourceFile,
       });
 
       activity.ressourceFileUrl = ressourceFileUrl;

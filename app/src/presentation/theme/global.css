@@ -106,6 +106,34 @@ ion-radio {
     height: 100%;
 }
 
+.subcontent-container {
+    background-color: white;
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    padding: 20px;
+    overflow-y: auto;
+    width: 50%;
+}
+
+.subcontent-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-direction: row;
+    border-bottom: 1px solid #ebebeb;
+    width: 100%;
+}
+
+.subcontent-title {
+    color: #000;
+    font-family: Roboto;
+    font-size: 17px;
+    font-weight: 700;
+    line-height: 21px;
+    text-align: center;
+}
+
 .subtitle {
     color: #000;
     font-family: 'Maven Pro', sans-serif;

@@ -46,6 +46,22 @@
     width: 100%;
 }
 
+.add-button {
+    background-color: #eeccff;
+    border-radius: 50%;
+    height: 48px;
+    width: 48px;
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+}
+
+.add-button-icon {
+    color: #c266ff;
+    height: 400px;
+    width: 400px;
+}
+
 ion-button.confirm {
     --background: #000;
     --background-focused: #000;

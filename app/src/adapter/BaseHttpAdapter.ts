@@ -22,11 +22,27 @@ class BaseHttpAdapter {
         if (contentType === 'multipart/form-data') {
             encodedBody = new FormData();
             Object.keys(body).forEach((key) => {
-                encodedBody.append(key, body[key]);
+                const value = body[key];
+                if (Array.isArray(value)) {
+                    value.forEach((item, index) => {
+                        if (item instanceof File) {
+                            encodedBody.append(`${key}[${index}]`, item);
+                        } else if (item instanceof Object) {
+                            Object.keys(item).forEach((subKey) => {
+                                encodedBody.append(`${key}[${index}][${subKey}]`, item[subKey]);
+                            });
+                        } else {
+                            encodedBody.append(`${key}[${index}]`, item);
+                        }
+                    });
+                } else {
+                    encodedBody.append(key, value);
+                }
             });
         } else {
             encodedBody = JSON.stringify(body);
         }
+
         return this.http(path, { ...args, method: 'POST', body: encodedBody }, contentType);
     }
 

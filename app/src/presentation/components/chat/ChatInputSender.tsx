@@ -80,7 +80,7 @@ const ChatInputSender: React.FC<ChatInputSenderProps> = ({ isBlocked, conversati
         if (isBlocked) {
             return;
         }
-        const file = await fileAdapter.getFile();
+        const file = await fileAdapter.getFile({ isTypeOnlyPdf: false });
 
         if (file && file.size > 10000000) {
             return showToast({

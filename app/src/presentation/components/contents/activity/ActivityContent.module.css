@@ -1,0 +1,253 @@
+.container {
+    padding: 12px;
+}
+
+.content {
+    overflow-y: auto;
+}
+
+.creator {
+    font-family: Maven Pro;
+    font-size: 13px;
+    font-weight: 700;
+    line-height: 17px;
+    text-align: left;
+}
+
+.creator-prefix {
+    font-family: Maven Pro;
+    font-size: 13px;
+    font-weight: 400;
+    line-height: 17px;
+    text-align: left;
+}
+
+.image-container {
+    position: relative;
+    overflow: hidden;
+}
+
+.image {
+    height: 220px;
+    width: 100%;
+    object-fit: cover;
+    object-position: center;
+    display: block;
+    position: absolute;
+}
+
+.primary-container {
+    position: relative;
+    color: #000;
+    background-color: var(--primary-color);
+    padding: 16px;
+    border-radius: 20px 20px 0 0;
+    margin-top: 200px;
+}
+
+.secondary-container {
+    position: relative;
+    color: #000;
+    background-color: white;
+}
+
+.primary-title {
+    font-family: Roboto;
+    font-size: 37px;
+    font-weight: 700;
+    line-height: 40px;
+    text-align: left;
+}
+
+.primary-subtitle {
+    font-family: Maven Pro;
+    font-size: 16px;
+    font-weight: 400;
+    line-height: 20px;
+    text-align: left;
+}
+
+.information-container {
+    border-top: 1px solid #00000020;
+    border-bottom: 1px solid #00000020;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    gap: 8px;
+}
+
+.information-title {
+    font-family: Maven Pro;
+    font-size: 13px;
+    font-weight: 400;
+    line-height: 17px;
+    text-align: left;
+}
+
+.information-data {
+    color: #000;
+    font-family: Maven Pro;
+    font-size: 13px;
+    font-weight: 700;
+    line-height: 17px;
+    text-align: left;
+}
+
+.status-rejected {
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    height: 20px;
+    color: white;
+}
+
+.status-rejected-icon {
+    background-color: #000;
+    border-radius: 50%;
+    padding: 4px;
+}
+
+.status-container {
+    margin-top: 12px;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 8px;
+}
+
+.creator-container {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.ressource-container,
+.ressource-download {
+    align-items: center;
+    background-color: white;
+    border-radius: 8px;
+    display: flex;
+    flex-direction: row;
+    box-shadow: 0px 5px 15px 0px #00000026;
+    z-index: 100;
+    max-width: 80%;
+    min-width: 60%;
+    margin-top: 8px;
+    padding: 4px;
+}
+
+.ressource-download {
+    color: #000;
+}
+
+.ressource-line {
+    display: flex;
+    justify-content: center;
+    width: 100%;
+}
+
+.ressource-text {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    margin-left: 8px;
+}
+
+.ressource-icon {
+    margin-left: auto;
+}
+
+.ressource-image {
+    width: 78px;
+    height: 44px;
+    object-fit: cover;
+    object-position: center;
+    border-radius: 8px;
+}
+
+.exercise-container {
+    border-bottom: 1px solid #00000020;
+    display: flex;
+    flex-direction: column;
+    padding: 16px;
+}
+
+.exercises-container {
+    display: flex;
+    flex-direction: column;
+    padding: 16px;
+    color: #000;
+}
+
+.exercise {
+    font-family: Roboto;
+    font-size: 20px;
+    font-weight: 700;
+    line-height: 25px;
+    text-align: left;
+}
+
+.exercise-title {
+    font-family: Maven Pro;
+    font-size: 13px;
+    font-weight: 500;
+    line-height: 17px;
+    text-align: left;
+}
+
+.vocabulary-title {
+    font-family: Roboto;
+    font-size: 20px;
+    font-weight: 700;
+    line-height: 25px;
+    text-align: left;
+    color: #000;
+}
+
+.vocabulary {
+    font-family: Maven Pro;
+    font-size: 16px;
+    font-weight: 400;
+    line-height: 20px;
+    text-align: left;
+    color: #000;
+    padding: 0 12px;
+}
+
+.vocabulary-container {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    padding: 16px;
+}
+
+.vocabulary-item {
+    display: flex;
+    flex-direction: row;
+}
+
+.modal-container {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    padding: 16px;
+    color: #000;
+}
+
+.modal-title {
+    font-family: Roboto;
+    font-size: 20px;
+    font-weight: 700;
+    line-height: 25px;
+    letter-spacing: -0.03em;
+    text-align: left;
+}
+
+.modal-description {
+    font-family: Maven Pro;
+    font-size: 16px;
+    font-weight: 400;
+    line-height: 20px;
+    text-align: left;
+}

@@ -1,0 +1,50 @@
+.vocabulary-container {
+    border-radius: 12px;
+    color: #000;
+    background-color: #fafafa;
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    padding: 12px;
+}
+
+.vocabulary-line {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    width: 100%;
+    margin-bottom: 12px;
+}
+
+.player-line {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+}
+
+.pronunciation-container {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+}
+
+.pronunciation {
+    color: #000;
+    font-family: Maven Pro;
+    font-size: 16px;
+    font-weight: 400;
+    line-height: 20px;
+    text-align: left;
+    padding-left: 12px;
+}
+
+.delete-pronunciation {
+    color: #000;
+    font-family: Maven Pro;
+    font-size: 16px;
+    font-weight: 400;
+    line-height: 20px;
+    text-align: left;
+}

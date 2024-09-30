@@ -1,4 +1,5 @@
 import { Inject, Injectable } from '@nestjs/common';
+import openGraphScraper from 'open-graph-scraper';
 import { RessourceDoesNotExist } from 'src/core/errors';
 import { ProficiencyLevel } from 'src/core/models';
 import { ActivityVocabulary } from 'src/core/models/activity.model';
@@ -28,7 +29,9 @@ export class CreateActivityCommand {
   ressourceUrl?: string;
   creditImage?: string;
 }
-//TODO: on url generate scratch infos
+
+const URL_REGEX = /(https?:\/\/[^\s]+)/g;
+
 @Injectable()
 export class CreateActivityUsecase {
   constructor(
@@ -47,6 +50,21 @@ export class CreateActivityUsecase {
     await this.assertProfileExist(command.profileId);
     await this.assertThemeExist(command.themeId);
 
+    let openGraphResult: any;
+    const url = command.ressourceUrl
+      ? command.ressourceUrl.match(URL_REGEX)?.[0]
+      : undefined;
+    if (url) {
+      try {
+        const result = await openGraphScraper({ url });
+        if (result.result.success) {
+          openGraphResult = result.result;
+        }
+      } catch (err) {
+        console.warn('Url not found for open graph', url);
+      }
+    }
+
     const activity = await this.activityRepository.createActivity({
       title: command.title,
       description: command.description,
@@ -55,6 +73,11 @@ export class CreateActivityUsecase {
       exercises: command.exercises,
       languageLevel: command.languageLevel,
       languageCode: command.languageCode,
+      ressourceUrl: command.ressourceUrl,
+      creditImage: command.creditImage,
+      metadata: {
+        openGraph: openGraphResult,
+      },
     });
 
     const activityVocabularies: ActivityVocabulary[] = [];
