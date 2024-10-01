@@ -9,6 +9,10 @@
     color: black;
 }
 
+.filter-icon {
+    margin-right: 6px;
+}
+
 .filter-container {
     display: flex;
     flex-direction: column;

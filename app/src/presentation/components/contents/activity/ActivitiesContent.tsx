@@ -166,7 +166,7 @@ export const ActivitiesContent: React.FC<ActivitiesContentProps> = ({
                             fill="clear"
                             onClick={() => setShowFiltersModal(true)}
                         >
-                            <IonIcon icon={filterOutline} aria-hidden />
+                            <IonIcon icon={filterOutline} className={styles['filter-icon']} aria-hidden />
                             {t('activity.list.filter_title')}
                         </IonButton>
                     </div>
