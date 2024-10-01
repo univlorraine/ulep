@@ -10,6 +10,7 @@ interface Instance {
     image: string;
     name: string;
     socketChatUrl: string;
+    jitsiUrl: string;
 }
 
 const instances: Instance[] = [
@@ -19,6 +20,7 @@ const instances: Instance[] = [
         apiUrl: import.meta.env.VITE_UL_API_URL,
         chatUrl: import.meta.env.VITE_UL_CHAT_URL,
         socketChatUrl: import.meta.env.VITE_UL_SOCKET_CHAT_URL,
+        jitsiUrl: import.meta.env.VITE_UL_JITSI_URL,
     },
 ];
 
@@ -29,6 +31,7 @@ if (import.meta.env.VITE_ENV === 'dev') {
         apiUrl: import.meta.env.VITE_LOCAL_API,
         chatUrl: import.meta.env.VITE_LOCAL_CHAT_URL,
         socketChatUrl: import.meta.env.VITE_LOCAL_SOCKET_CHAT_URL,
+        jitsiUrl: import.meta.env.VITE_LOCAL_JITSI_URL,
     });
 }
 
@@ -36,6 +39,7 @@ export interface ValidateInstance {
     apiUrl: string;
     chatUrl: string;
     socketChatUrl: string;
+    jitsiUrl: string;
 }
 
 interface InstancesPageProps {
@@ -52,6 +56,7 @@ const InstancesPage: React.FC<InstancesPageProps> = ({ onValidate }) => {
                 apiUrl: instances[0].apiUrl,
                 chatUrl: instances[0].chatUrl,
                 socketChatUrl: instances[0].socketChatUrl,
+                jitsiUrl: instances[0].jitsiUrl,
             });
         }
     }, []);
@@ -84,6 +89,7 @@ const InstancesPage: React.FC<InstancesPageProps> = ({ onValidate }) => {
                         apiUrl: selectedInstance!.apiUrl,
                         chatUrl: selectedInstance!.chatUrl,
                         socketChatUrl: selectedInstance!.socketChatUrl,
+                        jitsiUrl: selectedInstance!.jitsiUrl,
                     })
                 }
             >

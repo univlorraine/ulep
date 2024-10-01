@@ -58,7 +58,7 @@ class CreateActivityUsecase implements CreateActivityUsecaseInterface {
             }
 
             const httpResponse: HttpResponse<ActivityCommand> = await this.domainHttpAdapter.post(
-                `/activities/`,
+                `/activities`,
                 formData,
                 {},
                 'multipart/form-data'

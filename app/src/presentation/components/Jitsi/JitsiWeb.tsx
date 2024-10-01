@@ -4,7 +4,7 @@ import { useRef } from 'react';
 import { useHistory } from 'react-router';
 import { JitsiProps } from './VisioContainer';
 
-const JitsiWeb = ({ jitsiDomain, language, roomName, jitsiToken }: JitsiProps) => {
+const JitsiWeb = ({ jitsiUrl, language, roomName, jitsiToken }: JitsiProps) => {
     const history = useHistory();
     const apiRef = useRef<IJitsiMeetExternalApi>();
 
@@ -24,7 +24,7 @@ const JitsiWeb = ({ jitsiDomain, language, roomName, jitsiToken }: JitsiProps) =
     return (
         <div style={{ width: '100%', height: '100%' }}>
             <JitsiMeeting
-                domain={jitsiDomain}
+                domain={jitsiUrl}
                 lang={language}
                 roomName={roomName}
                 jwt={jitsiToken}
