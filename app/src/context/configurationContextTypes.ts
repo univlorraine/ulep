@@ -41,6 +41,7 @@ import RevokeSessionsUsecaseInterface from '../domain/interfaces/RevokeSessionsU
 import UpdateAvatarUsecaseInterface from '../domain/interfaces/UpdateAvatarUsecase.interface';
 import UpdateNotificationPermissionUsecaseInterface from '../domain/interfaces/UpdateNotificationPermissionUsecase.interface';
 import CreateActivityUsecaseInterface from '../domain/interfaces/activity/CreateActivityUsecase.interface';
+import GetActivitiesUsecaseInterface from '../domain/interfaces/activity/GetActivitiesUsecase.interface';
 import GetActivityThemesUsecaseInterface from '../domain/interfaces/activity/GetActivityThemesUsecase.interface';
 import GetActivityUsecaseInterface from '../domain/interfaces/activity/GetActivityUsecase.interface';
 import GetConversationsUsecaseInterface from '../domain/interfaces/chat/GetConversationsUsecase.interface';
@@ -107,6 +108,7 @@ export interface ConfigContextValueType {
     revokeSessionsUsecase: RevokeSessionsUsecaseInterface;
     // Activity
     createActivity: CreateActivityUsecaseInterface;
+    getActivities: GetActivitiesUsecaseInterface;
     getActivity: GetActivityUsecaseInterface;
     getActivityThemes: GetActivityThemesUsecaseInterface;
     // Vocabulary

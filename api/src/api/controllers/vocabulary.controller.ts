@@ -89,6 +89,7 @@ export class VocabularyController {
       translationPronunciation?: Express.Multer.File;
     },
   ) {
+    //TODO: Add Pipe files validators
     const vocabulary = await this.createVocabularyUsecase.execute({ ...body });
     const { wordPronunciation, translationPronunciation } = files ?? {};
 

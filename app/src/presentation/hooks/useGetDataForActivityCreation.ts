@@ -1,6 +1,5 @@
 import { useEffect, useState } from 'react';
-import { useConfig } from '../../context/ConfigurationContext';
-import { ActivityTheme } from '../../domain/entities/Activity';
+import { ActivityTheme, ActivityThemeCategory } from '../../domain/entities/Activity';
 import Language from '../../domain/entities/Language';
 import Profile from '../../domain/entities/Profile';
 import { DropDownItem } from '../components/DropDown';
@@ -8,9 +7,7 @@ import { codeLanguageToFlag } from '../utils';
 
 export const CEFR_VALUES: CEFR[] = ['A0', 'A1', 'A2', 'B1', 'B2', 'C1', 'C2'];
 
-const useGetDataForActivityCreation = (profile: Profile, refresh?: boolean) => {
-    const { getActivityThemes } = useConfig();
-
+const useGetDataForActivityCreation = (themes: ActivityThemeCategory[], profile: Profile, refresh?: boolean) => {
     const [dataForActivityCreation, setDataForActivityCreation] = useState<{
         activityThemesDropDown: DropDownItem<ActivityTheme>[];
         cefrLevelsDropDown: DropDownItem<CEFR>[];
@@ -33,16 +30,8 @@ const useGetDataForActivityCreation = (profile: Profile, refresh?: boolean) => {
                 ...dataForActivityCreation,
                 isLoading: true,
             });
-            const activityThemesResult = await getActivityThemes.execute();
-            if (activityThemesResult instanceof Error) {
-                return setDataForActivityCreation({
-                    ...dataForActivityCreation,
-                    error: activityThemesResult,
-                    isLoading: false,
-                });
-            }
 
-            const activityThemesDropDown = activityThemesResult
+            const activityThemesDropDown = themes
                 .map((activityTheme) => {
                     return activityTheme.themes.map((theme) => ({
                         label: theme.content,
