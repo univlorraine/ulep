@@ -1,6 +1,8 @@
 import { Activity, ActivityTheme } from '../../entities/Activity';
 import Language from '../../entities/Language';
 
+export const DEFAULT_ACTIVITIES_PAGE_SIZE = 10;
+
 export type GetActivitiesFilters = {
     language: Language[];
     proficiency: CEFR[];

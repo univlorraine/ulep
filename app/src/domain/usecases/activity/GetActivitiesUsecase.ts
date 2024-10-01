@@ -4,6 +4,7 @@ import { ActivityCommand, activityCommandToDomain } from '../../../command/Activ
 import { CollectionCommand } from '../../../command/CollectionCommand';
 import { Activity } from '../../entities/Activity';
 import GetActivitiesUsecaseInterface, {
+    DEFAULT_ACTIVITIES_PAGE_SIZE,
     GetActivitiesFilters,
 } from '../../interfaces/activity/GetActivitiesUsecase.interface';
 
@@ -39,6 +40,8 @@ class GetActivitiesUsecase implements GetActivitiesUsecaseInterface {
             if (filters.searchTitle) {
                 queryParams.append('searchTitle', filters.searchTitle);
             }
+
+            queryParams.append('limit', DEFAULT_ACTIVITIES_PAGE_SIZE.toString());
 
             const httpResponse: HttpResponse<CollectionCommand<ActivityCommand>> = await this.domainHttpAdapter.get(
                 `/activities?${queryParams.toString()}`

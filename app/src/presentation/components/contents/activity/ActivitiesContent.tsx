@@ -1,6 +1,6 @@
 import { IonButton, IonIcon, IonImg, IonSearchbar } from '@ionic/react';
 import { arrowBackOutline, closeOutline, filterOutline } from 'ionicons/icons';
-import { useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { AddSvg } from '../../../../assets';
 import { Activity, ActivityTheme, ActivityThemeCategory } from '../../../../domain/entities/Activity';
@@ -46,17 +46,38 @@ export const ActivitiesContent: React.FC<ActivitiesContentProps> = ({
     const [proficiencyFilter, setProficiencyFilter] = useState<CEFR[]>([]);
     const [activityThemeFilter, setActivityThemeFilter] = useState<ActivityTheme[]>([]);
     const [isMeFilter, setIsMeFilter] = useState<boolean>(false);
-    const [page, setPage] = useState<number>(1);
     const [showFiltersModal, setShowFiltersModal] = useState<boolean>(false);
 
-    const { activities, isLoading } = useGetActivities({
+    const contentRef = useRef<HTMLDivElement>(null);
+
+    const { activities, isLoading, handleOnEndReached } = useGetActivities({
         language: languageFilter,
         proficiency: proficiencyFilter,
         activityTheme: activityThemeFilter,
         isMe: isMeFilter,
-        page,
         searchTitle: searchTitle,
     });
+
+    useEffect(() => {
+        const handleScroll = () => {
+            if (contentRef.current) {
+                const { scrollTop, scrollHeight, clientHeight } = contentRef.current;
+                if (scrollTop + clientHeight >= scrollHeight) {
+                    handleOnEndReached();
+                }
+            }
+        };
+
+        const currentRef = contentRef.current;
+        if (currentRef) {
+            currentRef.addEventListener('scroll', handleScroll);
+        }
+        return () => {
+            if (currentRef) {
+                currentRef.removeEventListener('scroll', handleScroll);
+            }
+        };
+    }, [handleOnEndReached]);
 
     const onFilterApplied = (filters: {
         languages: Language[];
@@ -123,7 +144,7 @@ export const ActivitiesContent: React.FC<ActivitiesContentProps> = ({
 
     const allFilters = allFiltersName();
     return (
-        <div className="subcontent-container content-wrapper">
+        <div className="subcontent-container content-wrapper" ref={contentRef}>
             <div className="subcontent-header">
                 <IonButton fill="clear" onClick={onBackPressed}>
                     <IonIcon icon={arrowBackOutline} color="dark" />
@@ -168,17 +189,12 @@ export const ActivitiesContent: React.FC<ActivitiesContentProps> = ({
                             </IonButton>
                         )}
                     </div>
-                    {isLoading ? (
-                        <div>
-                            <Loader />
-                        </div>
-                    ) : (
-                        <div className={styles['activity-list-container']}>
-                            {activities.map((activity) => (
-                                <ActivityCard key={activity.id} activity={activity} onClick={onActivityClick} />
-                            ))}
-                        </div>
-                    )}
+                    <div className={styles['activity-list-container']}>
+                        {activities.map((activity) => (
+                            <ActivityCard key={activity.id} activity={activity} onClick={onActivityClick} />
+                        ))}
+                    </div>
+                    {isLoading && <Loader />}
                 </div>
             </div>
 

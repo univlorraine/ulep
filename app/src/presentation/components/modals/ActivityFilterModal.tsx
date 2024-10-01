@@ -124,7 +124,7 @@ const ActivityFilterModal: React.FC<ActivityFilterModalProps> = ({
                     <div className={styles.line}>
                         {themes.map((category) => {
                             return (
-                                <div className={styles.category}>
+                                <div key={category.id} className={styles.category}>
                                     <p className={styles['category-title']}>{category.content}</p>
                                     <div className={styles.line}>
                                         {category.themes.map((theme) => {

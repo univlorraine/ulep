@@ -4,6 +4,7 @@ import { useStoreState } from '../../../store/storeTypes';
 import ActivitiesContent from '../../components/contents/activity/ActivitiesContent';
 
 const ActivitiesPage = () => {
+    //TODO: Mobile screen
     const history = useHistory();
     const profile = useStoreState((state) => state.profile);
 
@@ -17,7 +18,13 @@ const ActivitiesPage = () => {
 
     return (
         <IonContent>
-            <ActivitiesContent onAddActivity={() => {}} onBackPressed={goBack} />
+            <ActivitiesContent
+                onAddActivity={() => {}}
+                onBackPressed={goBack}
+                profile={profile}
+                onActivityClick={() => {}}
+                themes={[]}
+            />
         </IonContent>
     );
 };
