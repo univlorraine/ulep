@@ -41,7 +41,7 @@ const ActivityCategoriesList = () => {
                     <ArrayField label={translation('activities_categories.themes')} sortable={false}>
                         <FunctionField
                             render={(record: ActivityThemeCategory) => (
-                                <Box style={{ display: 'flex', flexDirection: 'row', gap: '5px' }}>
+                                <Box style={{ display: 'flex', flexDirection: 'row', flexWrap: 'wrap', gap: '5px' }}>
                                     {record.themes.map((theme: any) => (
                                         <Link key={theme.id} to={`/activities/themes/${theme.id}/show`}>
                                             <ColoredChips color="secondary" label={theme.content} />
