@@ -1,4 +1,18 @@
 {
+    "activities_categories": {
+        "tabLabel": "Activities categories",
+        "name": "Name",
+        "themes": "Themes",
+        "create": {
+            "error": "An error occurred while creating the activity theme"
+        },
+        "update": {
+            "error": "An error occurred while updating the activity theme"
+        },
+        "show": {
+            "name": "Name"
+        }
+    },
     "administrators": {
         "all": "All",
         "create": {

@@ -19,9 +19,13 @@ export type GetActivitiesProps = {
   languageLevels?: string[];
   themesIds?: string[];
   searchTitle?: string;
-  status: ActivityStatus[];
+  status?: ActivityStatus[];
   profileId?: string;
-  pagination: ActivityPagination;
+  pagination?: ActivityPagination;
+};
+
+export type GetAllActivityThemesProps = {
+  pagination?: ActivityPagination;
 };
 
 export type CreateActivityProps = {
@@ -70,7 +74,9 @@ export interface ActivityRepository {
   all(
     props: GetActivitiesProps,
   ): Promise<{ items: Activity[]; totalItems: number }>;
-  allThemes(): Promise<ActivityThemeCategory[]>;
+  allThemes(
+    props: GetAllActivityThemesProps,
+  ): Promise<{ items: ActivityThemeCategory[]; totalItems: number }>;
   createActivity(props: CreateActivityProps): Promise<Activity>;
   createTheme(props: CreateActivityThemeProps): Promise<ActivityTheme>;
   createThemeCategory(

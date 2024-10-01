@@ -1,8 +1,13 @@
 import { Inject, Injectable } from '@nestjs/common';
 import {
   ACTIVITY_REPOSITORY,
+  ActivityPagination,
   ActivityRepository,
 } from 'src/core/ports/activity.repository';
+
+type GetAllActivityThemesCommand = {
+  pagination?: ActivityPagination;
+};
 
 @Injectable()
 export class GetAllActivityThemesUsecase {
@@ -11,8 +16,8 @@ export class GetAllActivityThemesUsecase {
     private readonly activityRepository: ActivityRepository,
   ) {}
 
-  async execute() {
-    const activityThemes = await this.activityRepository.allThemes();
+  async execute(command: GetAllActivityThemesCommand) {
+    const activityThemes = await this.activityRepository.allThemes(command);
 
     return activityThemes;
   }

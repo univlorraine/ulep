@@ -58,6 +58,12 @@ export const subMenus: SubMenusType = {
             role: Role.SUPER_ADMIN,
         },
         {
+            resource: 'activities/categories',
+            type: 'list',
+            label: 'activities_categories.tabLabel',
+            role: Role.SUPER_ADMIN,
+        },
+        {
             resource: 'countries',
             type: 'list',
             label: 'countries.tabLabel',

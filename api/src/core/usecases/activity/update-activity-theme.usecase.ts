@@ -12,7 +12,7 @@ import {
 
 export class UpdateActivityThemeCommand {
   id: string;
-  name?: string;
+  content: string;
   languageCode?: string;
   translations?: Translation[];
 }
@@ -26,20 +26,21 @@ export class UpdateActivityThemeUsecase {
   ) {}
 
   async execute(command: UpdateActivityThemeCommand) {
+    console.log({ command });
     const activityTheme = await this.activityRepository.ofThemeId(command.id);
     if (!activityTheme) {
       throw new RessourceDoesNotExist();
     }
 
-    const language = await this.languageRepository.ofCode(command.languageCode);
+    /*     const language = await this.languageRepository.ofCode(command.languageCode);
     if (!language) {
       throw new RessourceDoesNotExist();
-    }
+    } */
 
     return this.activityRepository.updateTheme({
       id: command.id,
       textContentId: activityTheme.content.id,
-      content: command.name || activityTheme.content.content,
+      content: command.content,
       languageCode: command.languageCode,
       translations: command.translations,
     });

@@ -1,4 +1,18 @@
 {
+    "activities_categories": {
+        "tabLabel": "Catégories d'Activités",
+        "name": "Nom",
+        "themes": "Thèmes",
+        "create": {
+            "error": "Une erreur est survenue pendant la création du thème d'activité"
+        },
+        "update": {
+            "error": "Une erreur est survenue pendant la mise à jour du thème d'activité"
+        },
+        "show": {
+            "name": "Nom"
+        }
+    },
     "administrators": {
         "all": "Tout",
         "create": {
@@ -218,7 +232,7 @@
         },
         "interests": "Intérêts",
         "label": "Catégorie d'intérêts",
-        "tabLabel": "Catégorie d'intérêts",
+        "tabLabel": "Catégories d'intérêts",
         "name": "Nom",
         "update": {
             "name": "Nom de la catégorie",
