@@ -56,8 +56,17 @@ export class UpdateActivityUsecase {
   ) {}
 
   async execute(command: UpdateActivityCommand) {
-    await this.assertLanguageExist(command.languageCode);
-    await this.assertThemeExist(command.themeId);
+    //TODO: This function could be optimized; we currently delete a vocabulary for an update ( ex: if we update the title of a vocabulary, we delete the old one)
+    //TODO: We should avoid deletion like that and maybe return from the front another object like {id?: string, content: string, pronunciation?: File, url?: string}
+    //TODO: And add some conditions for vocabulary deletion ex: if there is an id, we must update the vocabulary, if there is a pronunciation, we must upload the audio and link it to the vocabulary
+    //TODO: if there is no id, we must create the vocabulary and finaly we must delete all old vocabularies that are not in the new list of vocabularies
+
+    if (command.languageCode) {
+      await this.assertLanguageExist(command.languageCode);
+    }
+    if (command.themeId) {
+      await this.assertThemeExist(command.themeId);
+    }
 
     const activity = await this.activityRepository.ofId(command.id);
 
@@ -96,10 +105,10 @@ export class UpdateActivityUsecase {
       title: command.title || activity.title,
       status: command.status || activity.status,
       description: command.description || activity.description,
-      themeId: command.themeId || activity.activityTheme.id,
+      themeId: command.themeId,
       exercises: command.exercises || activity.activityExercises,
       languageLevel: command.languageLevel || activity.languageLevel,
-      languageCode: command.languageCode || activity.language.id,
+      languageCode: command.languageCode,
       ressourceUrl: command.ressourceUrl || activity.ressourceUrl,
       creditImage: command.creditImage || activity.creditImage,
       metadata: openGraphResult

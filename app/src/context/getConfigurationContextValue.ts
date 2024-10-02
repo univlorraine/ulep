@@ -10,6 +10,7 @@ import CreateActivityUsecase from '../domain/usecases/activity/CreateActivityUse
 import GetActivitiesUsecase from '../domain/usecases/activity/GetActivitiesUsecase';
 import GetActivityThemesUsecase from '../domain/usecases/activity/GetActivityThemesUsecase';
 import GetActivityUsecase from '../domain/usecases/activity/GetActivityUsecase';
+import UpdateActivityUsecase from '../domain/usecases/activity/UpdateActivityUsecase';
 import AddDeviceUsecase from '../domain/usecases/AddDeviceUsecase';
 import AskForAccountDeletion from '../domain/usecases/AskForAccountDeletionUsecase';
 import AskForLanguageUsecase from '../domain/usecases/AskForLanguageUsecase';
@@ -168,6 +169,7 @@ const getConfigContextValue = ({
     const getActivities = new GetActivitiesUsecase(domainHttpAdapter);
     const getActivity = new GetActivityUsecase(domainHttpAdapter);
     const getActivityThemes = new GetActivityThemesUsecase(domainHttpAdapter);
+    const updateActivity = new UpdateActivityUsecase(domainHttpAdapter);
 
     return {
         accessToken,
@@ -230,6 +232,7 @@ const getConfigContextValue = ({
         createVocabularyList,
         updateVocabularyList,
         deleteVocabularyList,
+        updateActivity,
     };
 };
 

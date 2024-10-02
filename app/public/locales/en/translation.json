@@ -65,7 +65,9 @@
             }
         },
         "show": {
+            "activity_shared": "Your sheet has been shared to your animator",
             "status_rejected": "Show the reason for rejection",
+            "update": "Update my sheet",
             "back_button": "Back",
             "kebab_button": "Open the context menu",
             "creator": "Created by {{name}}",

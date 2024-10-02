@@ -44,6 +44,7 @@ import CreateActivityUsecaseInterface from '../domain/interfaces/activity/Create
 import GetActivitiesUsecaseInterface from '../domain/interfaces/activity/GetActivitiesUsecase.interface';
 import GetActivityThemesUsecaseInterface from '../domain/interfaces/activity/GetActivityThemesUsecase.interface';
 import GetActivityUsecaseInterface from '../domain/interfaces/activity/GetActivityUsecase.interface';
+import UpdateActivityUsecaseInterface from '../domain/interfaces/activity/UpdateActivityUsecase.interface';
 import GetConversationsUsecaseInterface from '../domain/interfaces/chat/GetConversationsUsecase.interface';
 import GetMessagesFromConversationUsecaseInterface from '../domain/interfaces/chat/GetMessagesFromConversationUsecase.interface';
 import SearchMessagesIdsFromConversationUsecaseInterface from '../domain/interfaces/chat/SearchMessagesIdsFromConversationUsecase.interface';
@@ -111,6 +112,7 @@ export interface ConfigContextValueType {
     getActivities: GetActivitiesUsecaseInterface;
     getActivity: GetActivityUsecaseInterface;
     getActivityThemes: GetActivityThemesUsecaseInterface;
+    updateActivity: UpdateActivityUsecaseInterface;
     // Vocabulary
     createVocabulary: CreateVocabularyUsecaseInterface;
     updateVocabulary: UpdateVocabularyUsecaseInterface;

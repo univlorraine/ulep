@@ -46,6 +46,7 @@ const ActivitiesContentModal: React.FC<ActivitiesContentModalProps> = ({ isVisib
                 {activityIdToDisplay && (
                     <ActivityContent
                         onBackPressed={() => setActivityIdToDisplay(undefined)}
+                        onUpdateActivityPressed={() => {}}
                         activityId={activityIdToDisplay}
                         profile={profile}
                     />

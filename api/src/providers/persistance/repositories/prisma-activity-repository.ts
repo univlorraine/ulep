@@ -384,6 +384,24 @@ export class PrismaActivityRepository implements ActivityRepository {
   }
 
   async updateActivity(props: UpdateActivityProps): Promise<Activity> {
+    const data: Prisma.ActivityUpdateInput = {};
+
+    if (props.languageCode) {
+      data.LanguageCode = {
+        connect: {
+          code: props.languageCode,
+        },
+      };
+    }
+
+    if (props.themeId) {
+      data.ActivityThemes = {
+        connect: {
+          id: props.themeId,
+        },
+      };
+    }
+
     await this.prisma.activity.update({
       where: { id: props.id },
       data: {
@@ -394,16 +412,7 @@ export class PrismaActivityRepository implements ActivityRepository {
         metadata: props.metadata,
         ressource_url: props.ressourceUrl,
         status: props.status,
-        LanguageCode: {
-          connect: {
-            code: props.languageCode,
-          },
-        },
-        ActivityThemes: {
-          connect: {
-            id: props.themeId,
-          },
-        },
+        ...data,
         ActivityExercises: {
           deleteMany: {},
           create: props.exercises.map((exercise) => ({

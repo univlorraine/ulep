@@ -3,7 +3,7 @@ import { useConfig } from '../../context/ConfigurationContext';
 import { Activity } from '../../domain/entities/Activity';
 import { useStoreState } from '../../store/storeTypes';
 
-const useGetActivity = (activityId: string) => {
+const useGetActivity = (activityId: string, refreshActivity: boolean) => {
     const { getActivity } = useConfig();
     const profile = useStoreState((state) => state.profile);
 
@@ -34,7 +34,7 @@ const useGetActivity = (activityId: string) => {
         };
 
         fetchData();
-    }, [profile]);
+    }, [profile, refreshActivity]);
 
     return activityResult;
 };
