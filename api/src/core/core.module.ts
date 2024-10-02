@@ -116,6 +116,7 @@ import {
   RefuseTandemUsecase,
   UpdateActivityThemeCategoryUsecase,
   UpdateActivityThemeUsecase,
+  UpdateActivityUsecase,
   UpdateAdministratorUsecase,
   UpdateCountryStatusUsecase,
   UpdateInstanceUsecase,
@@ -164,6 +165,7 @@ const usecases: Provider[] = [
   DeleteActivityThemeUsecase,
   UpdateActivityThemeCategoryUsecase,
   UpdateActivityThemeUsecase,
+  UpdateActivityUsecase,
   //Campus
   CreateCampusUsecase,
   DeleteCampusUsecase,

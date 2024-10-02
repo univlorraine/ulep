@@ -9,3 +9,4 @@ export * from './get-all-activities.usecase';
 export * from './get-all-activity-themes.usecase';
 export * from './update-activity-theme-category.usecase';
 export * from './update-activity-theme.usecase';
+export * from './update-activity.usecase';

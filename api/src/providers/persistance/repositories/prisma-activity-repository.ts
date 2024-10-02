@@ -13,6 +13,7 @@ import {
   CreateActivityThemeCategoryProps,
   CreateActivityThemeProps,
   GetActivitiesProps,
+  UpdateActivityProps,
   UpdateActivityThemeCategoryProps,
   UpdateActivityThemeProps,
 } from 'src/core/ports/activity.repository';
@@ -382,9 +383,60 @@ export class PrismaActivityRepository implements ActivityRepository {
     return activityThemeMapper(newActivityTheme);
   }
 
+  async updateActivity(props: UpdateActivityProps): Promise<Activity> {
+    await this.prisma.activity.update({
+      where: { id: props.id },
+      data: {
+        title: props.title,
+        description: props.description,
+        language_level: props.languageLevel,
+        credit_image: props.creditImage,
+        metadata: props.metadata,
+        ressource_url: props.ressourceUrl,
+        status: props.status,
+        LanguageCode: {
+          connect: {
+            code: props.languageCode,
+          },
+        },
+        ActivityThemes: {
+          connect: {
+            id: props.themeId,
+          },
+        },
+        ActivityExercises: {
+          deleteMany: {},
+          create: props.exercises.map((exercise) => ({
+            order: Number(exercise.order),
+            content: exercise.content,
+          })),
+        },
+      },
+    });
+
+    const updatedActivity = await this.prisma.activity.findUnique({
+      where: { id: props.id },
+      ...ActivityRelations,
+    });
+
+    return activityMapper(updatedActivity);
+  }
+
   async deleteTheme(id: string): Promise<void> {
     await this.prisma.activityThemes.delete({
       where: { id },
+    });
+  }
+
+  async deleteExercise(exerciseId: string): Promise<void> {
+    await this.prisma.activityExercises.delete({
+      where: { id: exerciseId },
+    });
+  }
+
+  async deleteVocabulary(vocabularyId: string): Promise<void> {
+    await this.prisma.activityVocabulary.delete({
+      where: { id: vocabularyId },
     });
   }
 }

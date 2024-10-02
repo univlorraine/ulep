@@ -81,14 +81,16 @@ export class CreateActivityUsecase {
     });
 
     const activityVocabularies: ActivityVocabulary[] = [];
-    for (const vocabulary of command.vocabularies) {
-      activityVocabularies.push(
-        await this.createVocabularyForActivity(
-          activity.id,
-          vocabulary.content,
-          vocabulary.pronunciation,
-        ),
-      );
+    if (command.vocabularies) {
+      for (const vocabulary of command.vocabularies) {
+        activityVocabularies.push(
+          await this.createVocabularyForActivity(
+            activity.id,
+            vocabulary.content,
+            vocabulary.pronunciation,
+          ),
+        );
+      }
     }
 
     activity.activityVocabularies = activityVocabularies;

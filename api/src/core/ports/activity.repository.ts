@@ -66,6 +66,20 @@ export type UpdateActivityThemeProps = {
   translations: Translation[];
 };
 
+export type UpdateActivityProps = {
+  id: string;
+  status: ActivityStatus;
+  title: string;
+  description: string;
+  themeId: string;
+  exercises: { content: string; order: number }[];
+  languageLevel: ProficiencyLevel;
+  languageCode: string;
+  ressourceUrl?: string;
+  creditImage?: string;
+  metadata?: any;
+};
+
 export interface ActivityRepository {
   all(
     props: GetActivitiesProps,
@@ -93,6 +107,9 @@ export interface ActivityRepository {
     props: UpdateActivityThemeCategoryProps,
   ): Promise<ActivityThemeCategory>;
   deleteActivity(id: string): Promise<void>;
+  deleteExercise(exerciseId: string): Promise<void>;
+  deleteVocabulary(vocabularyId: string): Promise<void>;
+  updateActivity(props: UpdateActivityProps): Promise<Activity>;
   updateTheme(props: UpdateActivityThemeProps): Promise<ActivityTheme>;
   deleteCategoryTheme(id: string): Promise<void>;
   deleteTheme(id: string): Promise<void>;

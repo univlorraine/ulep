@@ -18,6 +18,7 @@ import {
 import { AnyFilesInterceptor } from '@nestjs/platform-express';
 import * as Swagger from '@nestjs/swagger';
 import { CurrentUser } from 'src/api/decorators';
+import { Role, Roles } from 'src/api/decorators/roles.decorator';
 import {
   ActivityResponse,
   ActivityThemeCategoryResponse,
@@ -26,6 +27,7 @@ import {
   CreateActivityThemeCategoryRequest,
   CreateActivityThemeRequest,
   GetActivitiesRequest,
+  UpdateActivityRequest,
   UpdateActivityThemeCategoryRequest,
   UpdateActivityThemeRequest,
 } from 'src/api/dtos/activity';
@@ -43,6 +45,7 @@ import {
   GetAllActivityThemesUsecase,
   UpdateActivityThemeCategoryUsecase,
   UpdateActivityThemeUsecase,
+  UpdateActivityUsecase,
   UploadImageActivityUsecase,
   UploadMediaActivityUsecase,
 } from 'src/core/usecases';
@@ -65,6 +68,7 @@ export class ActivityController {
     private readonly deleteActivityUsecase: DeleteActivityUsecase,
     private readonly uploadImageActivityUsecase: UploadImageActivityUsecase,
     private readonly uploadMediaActivityUsecase: UploadMediaActivityUsecase,
+    private readonly updateActivityUsecase: UpdateActivityUsecase,
   ) {}
 
   @Post()
@@ -79,7 +83,7 @@ export class ActivityController {
     files?: Express.Multer.File[],
   ) {
     //TODO: Add Pipe files validators
-    const vocabulariesWithFiles = body.vocabularies.map((vocabulary) => ({
+    const vocabulariesWithFiles = body.vocabularies?.map((vocabulary) => ({
       content: vocabulary,
       pronunciation: files?.find(
         (file) =>
@@ -118,6 +122,7 @@ export class ActivityController {
   }
 
   @Post('themes')
+  @Roles(Role.ADMIN)
   @UseGuards(AuthenticationGuard)
   @Swagger.ApiOperation({ summary: 'Create a new Activity theme.' })
   @Swagger.ApiCreatedResponse({ type: () => ActivityThemeCategoryResponse })
@@ -128,6 +133,7 @@ export class ActivityController {
   }
 
   @Put('themes/:id')
+  @Roles(Role.ADMIN)
   @UseGuards(AuthenticationGuard)
   @Swagger.ApiOperation({ summary: 'Update a Activity theme.' })
   @Swagger.ApiCreatedResponse({ type: () => ActivityThemeCategoryResponse })
@@ -144,6 +150,7 @@ export class ActivityController {
   }
 
   @Delete('themes/:id')
+  @Roles(Role.ADMIN)
   @UseGuards(AuthenticationGuard)
   @Swagger.ApiOperation({ summary: 'Delete a Activity theme.' })
   async deleteActivityTheme(@Param('id') id: string) {
@@ -151,6 +158,7 @@ export class ActivityController {
   }
 
   @Post('categories')
+  @Roles(Role.ADMIN)
   @UseGuards(AuthenticationGuard)
   @Swagger.ApiOperation({ summary: 'Create a new Activity theme category.' })
   @Swagger.ApiCreatedResponse({ type: () => ActivityThemeCategoryResponse })
@@ -164,6 +172,7 @@ export class ActivityController {
   }
 
   @Put('categories/:id')
+  @Roles(Role.ADMIN)
   @UseGuards(AuthenticationGuard)
   @Swagger.ApiOperation({ summary: 'Update a Activity theme category.' })
   @Swagger.ApiCreatedResponse({ type: () => ActivityThemeCategoryResponse })
@@ -181,6 +190,7 @@ export class ActivityController {
   }
 
   @Delete('categories/:id')
+  @Roles(Role.ADMIN)
   @UseGuards(AuthenticationGuard)
   @Swagger.ApiOperation({ summary: 'Delete a Activity theme category.' })
   async deleteActivityCategory(@Param('id') id: string) {
@@ -256,6 +266,7 @@ export class ActivityController {
   }
 
   @Get('admin')
+  @Roles(Role.ADMIN)
   @UseGuards(AuthenticationGuard)
   @Swagger.ApiOperation({ summary: 'Get all Activity ressources.' })
   @Swagger.ApiOkResponse({ type: () => ActivityResponse })
@@ -264,6 +275,7 @@ export class ActivityController {
   }
 
   @Delete(':id')
+  @Roles(Role.ADMIN)
   @UseGuards(AuthenticationGuard)
   @Swagger.ApiOperation({ summary: 'Delete a Activity ressource.' })
   @Swagger.ApiOkResponse({ type: () => ActivityResponse })
@@ -273,9 +285,52 @@ export class ActivityController {
 
   @Put(':id')
   @UseGuards(AuthenticationGuard)
+  @UseInterceptors(AnyFilesInterceptor())
   @Swagger.ApiOperation({ summary: 'Update a Activity ressource.' })
+  @Swagger.ApiConsumes('multipart/form-data')
   @Swagger.ApiOkResponse({ type: () => ActivityResponse })
-  async updateActivity() {
-    this.logger.log('updateActivity');
+  async updateActivity(
+    @Param('id') id: string,
+    @Body() body: UpdateActivityRequest,
+    @UploadedFiles()
+    files?: Express.Multer.File[],
+  ) {
+    const vocabulariesWithFiles = body.vocabularies?.map((vocabulary) => ({
+      content: vocabulary,
+      pronunciation: files?.find(
+        (file) =>
+          file.originalname.toLowerCase().includes(vocabulary.toLowerCase()) &&
+          file.fieldname.includes('vocabulariesFiles'),
+      ),
+    }));
+
+    const activity = await this.updateActivityUsecase.execute({
+      id,
+      ...body,
+      vocabularies: vocabulariesWithFiles,
+    });
+
+    const imageFile = files?.find((file) => file.fieldname === 'image');
+    const ressourceFile = files?.find((file) => file.fieldname === 'ressource');
+
+    if (imageFile) {
+      const imageUrl = await this.uploadImageActivityUsecase.execute({
+        activityId: activity.id,
+        file: imageFile,
+      });
+
+      activity.imageUrl = imageUrl;
+    }
+
+    if (ressourceFile) {
+      const ressourceFileUrl = await this.uploadMediaActivityUsecase.execute({
+        activityId: activity.id,
+        file: ressourceFile,
+      });
+
+      activity.ressourceFileUrl = ressourceFileUrl;
+    }
+
+    return ActivityResponse.from(activity);
   }
 }
