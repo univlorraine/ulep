@@ -12,8 +12,7 @@ export type UpdateActivityCommand = {
     creditImage?: string;
     profileId?: string;
     exercises?: { content: string; order: number }[];
-    vocabularies?: { content: string; file?: File }[];
-    vocabulariesIdsToDelete?: string[];
+    vocabularies?: { id?: string; content: string; file?: File; pronunciationUrl?: string }[];
     status?: ActivityStatus;
 };
 

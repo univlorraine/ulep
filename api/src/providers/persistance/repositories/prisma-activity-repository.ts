@@ -431,6 +431,25 @@ export class PrismaActivityRepository implements ActivityRepository {
     return activityMapper(updatedActivity);
   }
 
+  async updateVocabulary(
+    id: string,
+    content: string,
+  ): Promise<ActivityVocabulary> {
+    await this.prisma.activityVocabulary.update({
+      where: { id },
+      data: {
+        content: content,
+      },
+    });
+
+    const updatedVocabulary = await this.prisma.activityVocabulary.findUnique({
+      where: { id },
+      ...ActivityVocabularyRelations,
+    });
+
+    return activityVocabularyMapper(updatedVocabulary);
+  }
+
   async deleteTheme(id: string): Promise<void> {
     await this.prisma.activityThemes.delete({
       where: { id },

@@ -41,6 +41,7 @@ export interface ActivityCommand {
     language: LanguageCommand;
     languageLevel: CEFR;
     imageUrl: string;
+    creditImage?: string;
     ressourceUrl?: string;
     ressourceFileUrl?: string;
     theme: ActivityThemeCommand;
@@ -75,6 +76,7 @@ export const activityCommandToDomain = (command: ActivityCommand) => {
         language: command.language,
         languageLevel: command.languageLevel,
         imageUrl: command.imageUrl,
+        creditImage: command.creditImage,
         ressourceUrl: command.ressourceUrl,
         ressourceOgUrl: command.ressourceOgUrl,
         ressourceFileUrl: command.ressourceFileUrl,

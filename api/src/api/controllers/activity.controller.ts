@@ -283,7 +283,7 @@ export class ActivityController {
     await this.deleteActivityUsecase.execute(id);
   }
 
-  @Put(':id')
+  @Post(':id/update')
   @UseGuards(AuthenticationGuard)
   @UseInterceptors(AnyFilesInterceptor())
   @Swagger.ApiOperation({ summary: 'Update a Activity ressource.' })
@@ -296,10 +296,14 @@ export class ActivityController {
     files?: Express.Multer.File[],
   ) {
     const vocabulariesWithFiles = body.vocabularies?.map((vocabulary) => ({
-      content: vocabulary,
+      id: vocabulary.id,
+      content: vocabulary.content,
+      pronunciationUrl: vocabulary.pronunciationUrl,
       pronunciation: files?.find(
         (file) =>
-          file.originalname.toLowerCase().includes(vocabulary.toLowerCase()) &&
+          file.originalname
+            .toLowerCase()
+            .includes(vocabulary.content.toLowerCase()) &&
           file.fieldname.includes('vocabulariesFiles'),
       ),
     }));

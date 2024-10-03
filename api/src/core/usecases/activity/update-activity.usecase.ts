@@ -9,6 +9,7 @@ import {
 import {
   ACTIVITY_REPOSITORY,
   ActivityRepository,
+  UpdateActivityVocabularyProps,
 } from 'src/core/ports/activity.repository';
 import {
   LANGUAGE_REPOSITORY,
@@ -30,8 +31,7 @@ export class UpdateActivityCommand {
   description?: string;
   themeId?: string;
   exercises?: { content: string; order: number }[];
-  vocabularies?: { content: string; pronunciation?: Express.Multer.File }[];
-  vocabulariesToDelete?: string[];
+  vocabularies?: UpdateActivityVocabularyProps[];
   languageLevel?: ProficiencyLevel;
   languageCode?: string;
   ressourceUrl?: string;
@@ -56,11 +56,6 @@ export class UpdateActivityUsecase {
   ) {}
 
   async execute(command: UpdateActivityCommand) {
-    //TODO: This function could be optimized; we currently delete a vocabulary for an update ( ex: if we update the title of a vocabulary, we delete the old one)
-    //TODO: We should avoid deletion like that and maybe return from the front another object like {id?: string, content: string, pronunciation?: File, url?: string}
-    //TODO: And add some conditions for vocabulary deletion ex: if there is an id, we must update the vocabulary, if there is a pronunciation, we must upload the audio and link it to the vocabulary
-    //TODO: if there is no id, we must create the vocabulary and finaly we must delete all old vocabularies that are not in the new list of vocabularies
-
     if (command.languageCode) {
       await this.assertLanguageExist(command.languageCode);
     }
@@ -76,13 +71,6 @@ export class UpdateActivityUsecase {
 
     if (activity.status === ActivityStatus.PUBLISHED) {
       throw new ForbiddenException('Activity is already published');
-    }
-
-    if (
-      command.vocabulariesToDelete &&
-      command.vocabulariesToDelete.length > 0
-    ) {
-      await this.deleteVocabularies(command.vocabulariesToDelete);
     }
 
     let openGraphResult: any;
@@ -118,16 +106,23 @@ export class UpdateActivityUsecase {
         : activity.metadata,
     });
 
+    // Remove vocabularies that are not in the command
+    const vocabulariesToDelete = activity.activityVocabularies.filter(
+      (vocabulary) =>
+        vocabulary.id &&
+        !command.vocabularies?.some((v) => v.id === vocabulary.id),
+    );
+
+    for (const vocabulary of vocabulariesToDelete) {
+      await this.deleteVocabulary(vocabulary.id);
+    }
+
     const activityVocabularies: ActivityVocabulary[] =
       activity.activityVocabularies;
     if (command.vocabularies) {
       for (const vocabulary of command.vocabularies) {
         activityVocabularies.push(
-          await this.createVocabularyForActivity(
-            updatedActivity.id,
-            vocabulary.content,
-            vocabulary.pronunciation,
-          ),
+          await this.handleVocabularyUpdate(updatedActivity.id, vocabulary),
         );
       }
     }
@@ -169,18 +164,74 @@ export class UpdateActivityUsecase {
     }
   }
 
-  private async deleteVocabularies(vocabulariesToDelete: string[]) {
-    for (const vocabularyId of vocabulariesToDelete) {
-      const vocabulary = await this.activityRepository.ofVocabularyId(
-        vocabularyId,
+  private async handleVocabularyUpdate(
+    activityId: string,
+    vocabulary: UpdateActivityVocabularyProps,
+  ) {
+    let newVocabulary: ActivityVocabulary;
+    if (vocabulary.id) {
+      newVocabulary = await this.updateVocabulary(
+        vocabulary.id,
+        vocabulary.content,
+        vocabulary.pronunciation,
+        vocabulary.pronunciationUrl,
       );
-      if (vocabulary && vocabulary.pronunciationActivityVocabulary) {
-        await this.deleteAudioVocabularyActivityUsecase.execute({
-          vocabularyId: vocabulary.id,
-        });
-      }
-      await this.activityRepository.deleteVocabulary(vocabularyId);
+    } else {
+      newVocabulary = await this.createVocabularyForActivity(
+        activityId,
+        vocabulary.content,
+        vocabulary.pronunciation,
+      );
     }
+    return newVocabulary;
+  }
+
+  private async updateVocabulary(
+    vocabularyId: string,
+    content: string,
+    pronunciation?: Express.Multer.File,
+    pronunciationUrl?: string,
+  ) {
+    const vocabularyToUpdate = await this.activityRepository.ofVocabularyId(
+      vocabularyId,
+    );
+
+    if (!vocabularyToUpdate) {
+      return;
+    }
+
+    let newVocabulary: ActivityVocabulary;
+    // Update content if it has changed
+    if (content !== vocabularyToUpdate.content) {
+      newVocabulary = await this.activityRepository.updateVocabulary(
+        vocabularyToUpdate.id,
+        content,
+      );
+    } else {
+      newVocabulary = vocabularyToUpdate;
+    }
+
+    // Delete old pronunciation if needed ( no url )
+    if (
+      vocabularyToUpdate.pronunciationActivityVocabulary &&
+      !pronunciationUrl
+    ) {
+      await this.deleteAudioVocabularyActivityUsecase.execute({
+        vocabularyId: newVocabulary.id,
+      });
+    }
+
+    // Upload new   pronunciation if it has changed
+    if (pronunciation) {
+      const audioUrl = await this.uploadAudioVocabularyActivityUsecase.execute({
+        vocabularyId: newVocabulary.id,
+        file: pronunciation,
+      });
+
+      newVocabulary.pronunciationActivityVocabularyUrl = audioUrl;
+    }
+
+    return newVocabulary;
   }
 
   private async createVocabularyForActivity(
@@ -203,5 +254,12 @@ export class UpdateActivityUsecase {
     }
 
     return vocabulary;
+  }
+
+  private async deleteVocabulary(vocabularyId: string) {
+    await this.deleteAudioVocabularyActivityUsecase.execute({
+      vocabularyId,
+    });
+    await this.activityRepository.deleteVocabulary(vocabularyId);
   }
 }

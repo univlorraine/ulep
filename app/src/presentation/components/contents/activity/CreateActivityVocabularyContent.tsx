@@ -3,24 +3,29 @@ import { addSharp, trashBinOutline } from 'ionicons/icons';
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useConfig } from '../../../../context/ConfigurationContext';
+import { Activity } from '../../../../domain/entities/Activity';
 import AudioLine from '../../AudioLine';
 import RecordingButton from '../../RecordingButton';
 import TextInput from '../../TextInput';
 import styles from './CreateActivityVocabularyContent.module.css';
 
 interface CreateActivityVocabularyContentProps {
-    onSubmit: (vocabularies: { content: string; file?: File }[]) => void;
+    onSubmit: (vocabularies: { content: string; file?: File }[], vocabulariesToDelete?: string[]) => void;
     onBackPressed: () => void;
+    activityToUpdate?: Activity;
 }
 
 export const CreateActivityVocabularyContent: React.FC<CreateActivityVocabularyContentProps> = ({
     onSubmit,
     onBackPressed,
+    activityToUpdate,
 }) => {
     const { t } = useTranslation();
     const [showToast] = useIonToast();
     const { recorderAdapter } = useConfig();
-    const [vocabularies, setVocabularies] = useState<{ content: string; file?: File }[]>([]);
+    const [vocabularies, setVocabularies] = useState<
+        { id?: string; content: string; file?: File; pronunciationUrl?: string }[]
+    >(activityToUpdate?.vocabularies ?? []);
     const [isRecording, setIsRecording] = useState<boolean>(false);
 
     const handleDeleteVocabulary = (index: number) => {
@@ -39,6 +44,7 @@ export const CreateActivityVocabularyContent: React.FC<CreateActivityVocabularyC
     const onDeletePronunciation = (index: number) => {
         const newVocabularies = [...vocabularies];
         newVocabularies[index].file = undefined;
+        newVocabularies[index].pronunciationUrl = undefined;
         setVocabularies(newVocabularies);
     };
 
@@ -104,9 +110,15 @@ export const CreateActivityVocabularyContent: React.FC<CreateActivityVocabularyC
                         <div className={styles['pronunciation-container']}>
                             <div className={styles['player-line']}>
                                 <span className={styles['pronunciation']}>{t('activity.create.pronunciation')}</span>
-                                {vocabulary.file && <AudioLine audioFile={vocabulary.file} hideProgressBar small />}
+                                {(vocabulary.file || vocabulary.pronunciationUrl) && (
+                                    <AudioLine
+                                        audioFile={(vocabulary.file || vocabulary.pronunciationUrl)!}
+                                        hideProgressBar
+                                        small
+                                    />
+                                )}
                             </div>
-                            {vocabulary.file ? (
+                            {vocabulary.file || vocabulary.pronunciationUrl ? (
                                 <IonButton
                                     className={styles['delete-pronunciation']}
                                     fill="clear"

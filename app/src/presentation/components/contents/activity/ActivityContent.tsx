@@ -4,7 +4,7 @@ import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { ArrowRightSvg, KebabSvg } from '../../../../assets';
 import { useConfig } from '../../../../context/ConfigurationContext';
-import { ActivityStatus } from '../../../../domain/entities/Activity';
+import { Activity, ActivityStatus } from '../../../../domain/entities/Activity';
 import Profile from '../../../../domain/entities/Profile';
 import useGetActivity from '../../../hooks/useGetActivity';
 import AudioLine from '../../AudioLine';
@@ -16,7 +16,7 @@ import styles from './ActivityContent.module.css';
 interface ActivityContentProps {
     activityId: string;
     onBackPressed: () => void;
-    onUpdateActivityPressed: () => void;
+    onUpdateActivityPressed: (activity: Activity) => void;
     profile: Profile;
 }
 
@@ -101,7 +101,7 @@ export const ActivityContent: React.FC<ActivityContentProps> = ({
                     <IonContent>
                         <IonList lines="none">
                             {activity.status !== ActivityStatus.PUBLISHED && activity.creator.id === profile.id && (
-                                <IonItem button={true} detail={false} onClick={onUpdateActivityPressed}>
+                                <IonItem button={true} detail={false} onClick={() => onUpdateActivityPressed(activity)}>
                                     <IonIcon icon={hammerOutline} aria-hidden="true" />
                                     <IonLabel className={styles['popover-label']}>{t('activity.show.update')}</IonLabel>
                                 </IonItem>
@@ -173,7 +173,7 @@ export const ActivityContent: React.FC<ActivityContentProps> = ({
                             </IonButton>
                         )}
 
-                        {activity.ressourceUrl && (
+                        {activity.ressourceUrl && !activity.ressourceFileUrl && (
                             <div className={styles['ressource-line']}>
                                 <div className={styles['ressource-container']}>
                                     {activity.ressourceOgUrl && (

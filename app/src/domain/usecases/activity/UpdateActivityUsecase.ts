@@ -18,7 +18,7 @@ interface ActivityPayload {
     ressource?: File;
     ressourceUrl?: string;
     exercises?: { content: string; order: number }[];
-    vocabularies: string[];
+    vocabularies: { id?: string; content: string; pronunciationUrl?: string }[];
     vocabulariesFiles?: File[];
     vocabulariesIdsToDelete?: string[];
 }
@@ -29,30 +29,45 @@ class UpdateActivityUsecase implements UpdateActivityUsecaseInterface {
         try {
             const formData: ActivityPayload = {
                 title: command.title,
-                status: command.status,
                 description: command.description,
                 languageLevel: command.languageLevel,
                 languageCode: command.languageCode,
                 themeId: command.themeId,
-                image: command.image,
                 creditImage: command.creditImage,
                 ressourceUrl: command.ressourceUrl,
                 exercises: command.exercises,
                 vocabularies: [],
-                vocabulariesIdsToDelete: command.vocabulariesIdsToDelete || [],
             };
+
+            if (command.image) {
+                formData.image = command.image;
+            }
+
             if (command.vocabularies) {
                 command.vocabularies.forEach((vocabulary) => {
+                    const vocabularyToUpdate: any = { content: vocabulary.content };
+                    if (vocabulary.pronunciationUrl) {
+                        vocabularyToUpdate.pronunciationUrl = vocabulary.pronunciationUrl;
+                    }
+
+                    if (vocabulary.id) {
+                        vocabularyToUpdate.id = vocabulary.id;
+                    }
+
+                    formData.vocabularies.push(vocabularyToUpdate);
                     if (vocabulary.file) {
                         const newFile = new File([vocabulary.file], `${vocabulary.content}.wav`, {
                             type: vocabulary.file.type,
                         });
-                        formData.vocabularies.push(vocabulary.content);
                         formData.vocabulariesFiles
                             ? formData.vocabulariesFiles.push(newFile)
                             : (formData.vocabulariesFiles = [newFile]);
                     }
                 });
+            }
+
+            if (command.status) {
+                formData.status = command.status;
             }
 
             if (command.ressource) {
@@ -63,8 +78,8 @@ class UpdateActivityUsecase implements UpdateActivityUsecaseInterface {
                 formData.ressourceUrl = command.ressourceUrl;
             }
 
-            const httpResponse: HttpResponse<ActivityCommand> = await this.domainHttpAdapter.put(
-                `/activities/${id}`,
+            const httpResponse: HttpResponse<ActivityCommand> = await this.domainHttpAdapter.post(
+                `/activities/${id}/update`,
                 formData,
                 {},
                 'multipart/form-data'

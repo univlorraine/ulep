@@ -4,6 +4,20 @@ import { CreateActivityExerciseRequest } from 'src/api/dtos/activity/create-acti
 import { ProficiencyLevel } from 'src/core/models';
 import { ActivityStatus } from 'src/core/models/activity.model';
 
+class UpdateActivityVocabularyRequest {
+  @ApiProperty({ type: 'string' })
+  @IsOptional()
+  id?: string;
+
+  @ApiProperty({ type: 'string' })
+  @IsOptional()
+  content?: string;
+
+  @ApiProperty({ type: 'string' })
+  @IsOptional()
+  pronunciationUrl?: string;
+}
+
 export class UpdateActivityRequest {
   @ApiProperty({ type: 'string' })
   @IsOptional()
@@ -39,13 +53,9 @@ export class UpdateActivityRequest {
 
   @ApiProperty({ type: 'string', isArray: true })
   @IsOptional()
-  vocabulariesIdsToDelete: string[];
-
-  @ApiProperty({ type: 'string', isArray: true })
-  @IsOptional()
   exercises: CreateActivityExerciseRequest[];
 
   @ApiProperty({ type: 'string', isArray: true })
   @IsOptional()
-  vocabularies: string[];
+  vocabularies: UpdateActivityVocabularyRequest[];
 }

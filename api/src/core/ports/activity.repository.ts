@@ -80,6 +80,13 @@ export type UpdateActivityProps = {
   metadata?: any;
 };
 
+export type UpdateActivityVocabularyProps = {
+  id: string;
+  content: string;
+  pronunciation?: Express.Multer.File;
+  pronunciationUrl?: string;
+};
+
 export interface ActivityRepository {
   all(
     props: GetActivitiesProps,
@@ -94,6 +101,7 @@ export interface ActivityRepository {
     activityId: string,
     vocabulary: string,
   ): Promise<ActivityVocabulary>;
+  updateVocabulary(id: string, content: string): Promise<ActivityVocabulary>;
   ofId(id: string): Promise<Activity>;
   ofThemeId(id: string): Promise<ActivityTheme>;
   ofThemeNameAndCategoryId(
