@@ -113,7 +113,7 @@ ion-radio {
     height: 100%;
     padding: 20px;
     overflow-y: auto;
-    width: 50%;
+    width: 100%;
 }
 
 .subcontent-header {
@@ -156,6 +156,16 @@ ion-radio {
 }
 
 @media (min-width: 768px) {
+    .subcontent-container {
+        background-color: white;
+        display: flex;
+        flex-direction: column;
+        height: 100%;
+        padding: 20px;
+        overflow-y: auto;
+        width: 50%;
+    }
+
     .container {
         min-height: calc(100vh - 64px);
     }

@@ -12,21 +12,6 @@ interface CreateActivityExcerciseContentProps {
     activityToUpdate?: Activity;
 }
 
-const DEFAULT_EXCERCISE = [
-    {
-        content: '',
-        order: 0,
-    },
-    {
-        content: '',
-        order: 1,
-    },
-    {
-        content: '',
-        order: 2,
-    },
-];
-
 export const CreateActivityExcerciseContent: React.FC<CreateActivityExcerciseContentProps> = ({
     onSubmit,
     onBackPressed,
@@ -34,7 +19,20 @@ export const CreateActivityExcerciseContent: React.FC<CreateActivityExcerciseCon
 }) => {
     const { t } = useTranslation();
     const [excercises, setExcercises] = useState<{ content: string; order: number }[]>(
-        activityToUpdate?.exercises ?? DEFAULT_EXCERCISE
+        activityToUpdate?.exercises ?? [
+            {
+                content: '',
+                order: 0,
+            },
+            {
+                content: '',
+                order: 1,
+            },
+            {
+                content: '',
+                order: 2,
+            },
+        ]
     );
 
     const allRequiredFieldsAreFilled = () => {

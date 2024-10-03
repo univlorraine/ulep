@@ -168,46 +168,6 @@ export const CreateActivityContent: React.FC<CreateActivityContentProps> = ({
         }
     };
 
-    const renderContent = () => {
-        switch (mode) {
-            case CreateActivityMode.INFORMATIONS:
-                return (
-                    <CreateActivityInformationsContent
-                        activityThemesDropDown={activityThemesDropDown}
-                        cefrLevelsDropDown={cefrLevelsDropDown}
-                        languagesDropDown={languagesDropDown}
-                        onBackPressed={handleBackPressed}
-                        onSubmit={handleInformationsSubmit}
-                        activityToUpdate={activityToUpdate}
-                    />
-                );
-            case CreateActivityMode.EXERCICES:
-                return (
-                    <CreateActivityExcerciseContent
-                        onSubmit={handleExcerciseSubmit}
-                        onBackPressed={handleBackPressed}
-                        activityToUpdate={activityToUpdate}
-                    />
-                );
-            case CreateActivityMode.VOCABULARY:
-                return (
-                    <CreateActivityVocabularyContent
-                        onBackPressed={handleBackPressed}
-                        onSubmit={handleVocabularySubmit}
-                        activityToUpdate={activityToUpdate}
-                    />
-                );
-            case CreateActivityMode.SUCCESS:
-                return (
-                    <CreateActivitySuccessContent
-                        onBackPressed={handleBackPressed}
-                        activity={activity!}
-                        onNavigatePressed={onNavigatePressed}
-                    />
-                );
-        }
-    };
-
     return (
         <div className="subcontent-container content-wrapper">
             <div className="subcontent-header">
@@ -221,7 +181,39 @@ export const CreateActivityContent: React.FC<CreateActivityContentProps> = ({
                 <p className="subcontent-title">{t('activity.create.title')}</p>
                 <div />
             </div>
-            {renderContent()}
+            {mode === CreateActivityMode.SUCCESS && (
+                <CreateActivitySuccessContent
+                    onBackPressed={handleBackPressed}
+                    activity={activity!}
+                    onNavigatePressed={onNavigatePressed}
+                />
+            )}
+            {mode === CreateActivityMode.VOCABULARY && (
+                <CreateActivityVocabularyContent
+                    onBackPressed={handleBackPressed}
+                    onSubmit={handleVocabularySubmit}
+                    activityToUpdate={activityToUpdate}
+                />
+            )}
+
+            {mode === CreateActivityMode.EXERCICES && (
+                <CreateActivityExcerciseContent
+                    onSubmit={handleExcerciseSubmit}
+                    onBackPressed={handleBackPressed}
+                    activityToUpdate={activityToUpdate}
+                />
+            )}
+
+            {mode === CreateActivityMode.INFORMATIONS && (
+                <CreateActivityInformationsContent
+                    activityThemesDropDown={activityThemesDropDown}
+                    cefrLevelsDropDown={cefrLevelsDropDown}
+                    languagesDropDown={languagesDropDown}
+                    onBackPressed={handleBackPressed}
+                    onSubmit={handleInformationsSubmit}
+                    activityToUpdate={activityToUpdate}
+                />
+            )}
         </div>
     );
 };
