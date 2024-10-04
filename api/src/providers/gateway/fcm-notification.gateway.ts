@@ -1,12 +1,13 @@
+import { FCMService, I18nService } from '@app/common';
 import { Injectable } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { Env } from 'src/configuration';
-import { FCMService, I18nService } from '@app/common';
 import {
   NotificationGateway,
-  SendTandemClosureNoticeNotification,
   NotificationParams,
+  SendActivityStatusChangeNotification,
   SendMessageNotification,
+  SendTandemClosureNoticeNotification,
 } from 'src/core/ports/notification.gateway';
 
 @Injectable()
@@ -137,6 +138,52 @@ export class FCMNotificationGateway implements NotificationGateway {
       const translation = this.translate('message', notification.language, {
         ...props,
       });
+      return {
+        token: notification.token,
+        title: translation.title,
+        body: translation.body,
+        image,
+      };
+    });
+
+    await this.sender.sendNotifications(notifications);
+  }
+
+  async sendActivityPublishedNotification(
+    props: SendActivityStatusChangeNotification,
+  ): Promise<void> {
+    const image = this.images.notification;
+    const notifications = props.to.map((notification) => {
+      const translation = this.translate(
+        'activityPublished',
+        notification.language,
+        {
+          ...props,
+        },
+      );
+      return {
+        token: notification.token,
+        title: translation.title,
+        body: translation.body,
+        image,
+      };
+    });
+
+    await this.sender.sendNotifications(notifications);
+  }
+
+  async sendActivityRejectedNotification(
+    props: SendActivityStatusChangeNotification,
+  ): Promise<void> {
+    const image = this.images.notification;
+    const notifications = props.to.map((notification) => {
+      const translation = this.translate(
+        'activityRejected',
+        notification.language,
+        {
+          ...props,
+        },
+      );
       return {
         token: notification.token,
         title: translation.title,

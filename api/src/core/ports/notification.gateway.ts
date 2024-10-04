@@ -30,6 +30,13 @@ export interface SendMessageNotification {
   };
 }
 
+export interface SendActivityStatusChangeNotification {
+  to: Notification[];
+  activity: {
+    title: string;
+  };
+}
+
 export interface NotificationGateway {
   sendTandemClosureNoticeNotification(
     props: SendTandemClosureNoticeNotification,
@@ -38,4 +45,10 @@ export interface NotificationGateway {
   sendPausedTandemNotification: NotificationFunction;
   sendUnpausedTandemNotification: NotificationFunction;
   sendMessageNotification(props: SendMessageNotification): Promise<void>;
+  sendActivityRejectedNotification(
+    props: SendActivityStatusChangeNotification,
+  ): Promise<void>;
+  sendActivityPublishedNotification(
+    props: SendActivityStatusChangeNotification,
+  ): Promise<void>;
 }

@@ -3,6 +3,7 @@ import openGraphScraper from 'open-graph-scraper';
 import { RessourceDoesNotExist } from 'src/core/errors';
 import { ProficiencyLevel } from 'src/core/models';
 import {
+  Activity,
   ActivityStatus,
   ActivityVocabulary,
 } from 'src/core/models/activity.model';
@@ -11,10 +12,15 @@ import {
   ActivityRepository,
   UpdateActivityVocabularyProps,
 } from 'src/core/ports/activity.repository';
+import { EMAIL_GATEWAY, EmailGateway } from 'src/core/ports/email.gateway';
 import {
   LANGUAGE_REPOSITORY,
   LanguageRepository,
 } from 'src/core/ports/language.repository';
+import {
+  NOTIFICATION_GATEWAY,
+  NotificationGateway,
+} from 'src/core/ports/notification.gateway';
 import {
   STORAGE_INTERFACE,
   StorageInterface,
@@ -53,6 +59,10 @@ export class UpdateActivityUsecase {
     private readonly uploadAudioVocabularyActivityUsecase: UploadAudioVocabularyActivityUsecase,
     @Inject(DeleteAudioVocabularyActivityUsecase)
     private readonly deleteAudioVocabularyActivityUsecase: DeleteAudioVocabularyActivityUsecase,
+    @Inject(NOTIFICATION_GATEWAY)
+    private readonly notificationGateway: NotificationGateway,
+    @Inject(EMAIL_GATEWAY)
+    private readonly emailGateway: EmailGateway,
   ) {}
 
   async execute(command: UpdateActivityCommand) {
@@ -126,6 +136,8 @@ export class UpdateActivityUsecase {
         );
       }
     }
+
+    await this.sendNotifications(updatedActivity, activity);
 
     for (const vocabulary of activity.activityVocabularies) {
       if (
@@ -261,5 +273,69 @@ export class UpdateActivityUsecase {
       vocabularyId,
     });
     await this.activityRepository.deleteVocabulary(vocabularyId);
+  }
+
+  private async sendNotifications(activity: Activity, oldActivity: Activity) {
+    if (activity.status === oldActivity.status) {
+      return;
+    }
+
+    const devices = activity.creator.user.devices.map((device) => ({
+      token: device.token,
+      language: activity.creator.nativeLanguage.code,
+    }));
+
+    const pushAuthorized = activity.creator.user.acceptsEmail;
+    const firstname = activity.creator.user.firstname;
+    const lastname = activity.creator.user.lastname;
+    const nativeLanguage = activity.creator.nativeLanguage.code;
+
+    if (
+      activity.status === ActivityStatus.PUBLISHED &&
+      oldActivity.status !== ActivityStatus.PUBLISHED &&
+      pushAuthorized
+    ) {
+      await this.notificationGateway.sendActivityPublishedNotification({
+        to: devices,
+        activity: { title: activity.title },
+      });
+      await this.emailGateway.sendActivityPublishedEmail({
+        to: activity.creator.user.email,
+        language: nativeLanguage,
+        user: { firstname, lastname },
+        activity: { title: activity.title },
+      });
+    } else if (
+      activity.status === ActivityStatus.REJECTED &&
+      oldActivity.status !== ActivityStatus.REJECTED &&
+      pushAuthorized
+    ) {
+      await this.notificationGateway.sendActivityRejectedNotification({
+        to: devices,
+        activity: { title: activity.title },
+      });
+      await this.emailGateway.sendActivityRejectedEmail({
+        to: activity.creator.user.email,
+        language: nativeLanguage,
+        user: { firstname, lastname },
+        activity: { title: activity.title },
+      });
+    }
+
+    if (
+      activity.status === ActivityStatus.IN_VALIDATION &&
+      oldActivity.status !== ActivityStatus.IN_VALIDATION &&
+      activity.creator.user.university.notificationEmail
+    ) {
+      await this.emailGateway.sendNewActivityProposalEmail({
+        to: activity.creator.user.university.notificationEmail,
+        language: activity.creator.user.university.nativeLanguage.code,
+        user: {
+          firstname,
+          lastname,
+        },
+        activity: { title: activity.title },
+      });
+    }
   }
 }
