@@ -104,6 +104,7 @@ export class Activity {
 interface ActivityThemeProps {
   id: string;
   content: TextContent;
+  category?: ActivityThemeCategory;
   createdAt: Date;
   updatedAt: Date;
 }
@@ -111,12 +112,20 @@ interface ActivityThemeProps {
 export class ActivityTheme {
   readonly id: string;
   readonly content: TextContent;
+  readonly category?: ActivityThemeCategory;
   readonly createdAt: Date;
   readonly updatedAt: Date;
 
-  constructor({ id, content, createdAt, updatedAt }: ActivityThemeProps) {
+  constructor({
+    id,
+    content,
+    category,
+    createdAt,
+    updatedAt,
+  }: ActivityThemeProps) {
     this.id = id;
     this.content = content;
+    this.category = category;
     this.createdAt = createdAt;
     this.updatedAt = updatedAt;
   }

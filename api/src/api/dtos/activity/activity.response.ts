@@ -79,7 +79,7 @@ export class ActivityThemeCategoryResponse {
 
   @Swagger.ApiProperty({ type: () => ActivityThemeResponse })
   @Expose({ groups: ['read'] })
-  themes: ActivityThemeResponse[];
+  themes?: ActivityThemeResponse[];
 
   constructor(partial: Partial<ActivityThemeCategoryResponse>) {
     Object.assign(this, partial);
@@ -95,9 +95,11 @@ export class ActivityThemeCategoryResponse {
         textContent: activityThemeCategory.content,
         languageCode: languageCode,
       }),
-      themes: activityThemeCategory.themes.map((theme) =>
-        ActivityThemeResponse.from(theme, languageCode),
-      ),
+      themes:
+        activityThemeCategory.themes &&
+        activityThemeCategory.themes.map((theme) =>
+          ActivityThemeResponse.from(theme, languageCode),
+        ),
     });
   }
 }

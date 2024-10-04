@@ -16,6 +16,7 @@ import { RoutineExecution } from '../entities/RoutineExecution';
 import { TandemStatus } from '../entities/Tandem';
 import User from '../entities/User';
 import ActivitiesCategoriesQuery from '../queries/ActivitiesCategoriesQuery';
+import ActivitiesQuery from '../queries/ActivitiesQuery';
 import AdministratorsQuery from '../queries/AdministratorsQuery';
 import ChatQuery from '../queries/ChatQuery';
 import CountriesQuery from '../queries/CountriesQuery';
@@ -192,7 +193,10 @@ const customDataProvider = {
         switch (resource) {
             case 'activities':
                 url = new URL(`${process.env.REACT_APP_API_URL}/activities/admin`);
-                // url.search = ActivitiesQuery(params);
+                url.search = ActivitiesQuery(params);
+                break;
+            case 'activities/categories':
+                url.search = ActivitiesCategoriesQuery(params);
                 break;
             case 'activities/categories':
                 url.search = ActivitiesCategoriesQuery(params);
@@ -242,8 +246,6 @@ const customDataProvider = {
                 break;
         }
         const response = await fetch(url, httpClientOptions());
-
-        console.log('response', response);
 
         if (!response.ok) {
             await throwError(response);

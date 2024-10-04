@@ -25,6 +25,22 @@
             "addVocabulary": "Ajouter un vocabulaire",
             "vocabularyPlaceholder": "Entrez un mot ou une phrase",
             "deletePronunciation": "Supprimer la prononciation"
+        },
+        "list": {
+            "language": "Langue",
+            "level": "Niveau",
+            "category": "Catégorie",
+            "theme": "Thème",
+            "university": "Université",
+            "creator": "Auteur",
+            "title": "Titre",
+            "status": "Statut"
+        },
+        "status": {
+            "draft": "Brouillon",
+            "published": "Publié",
+            "in_validation": "En attente de validation",
+            "rejected": "Rejeté"
         }
     },
     "activities_categories": {

@@ -55,6 +55,7 @@ import {
   UploadImageActivityUsecase,
   UploadMediaActivityUsecase,
 } from 'src/core/usecases';
+import { ActivityWithThemeCategoryResponse } from '../dtos/activity/activity-with-theme-category.response';
 import { GetActivitiesByAdminRequest } from '../dtos/activity/get-activities-by-admin.request';
 import { GetActivitiesCategoriesRequest } from '../dtos/activity/get-activity-categories.request';
 
@@ -139,19 +140,23 @@ export class ActivityController {
   @Roles(Role.ADMIN)
   @UseGuards(AuthenticationGuard)
   @Swagger.ApiOperation({ summary: 'Get all Activity ressources for admin.' })
-  @Swagger.ApiOkResponse({ type: () => ActivityResponse })
+  @Swagger.ApiOkResponse({ type: () => ActivityWithThemeCategoryResponse })
   async getAllActivitiesByAdmin(@Query() query: GetActivitiesByAdminRequest) {
-    console.log('query', query);
     const activities = await this.getActivitiesByAdminUsecase.execute({
       pagination: {
         page: query.page,
         limit: query.limit,
       },
+      searchTitle: query.searchTitle,
+      languageCode: query.languageCode,
+      languageLevel: query.languageLevel,
+      category: query.category,
+      status: query.status,
     });
 
-    return new Collection<ActivityResponse>({
+    return new Collection<ActivityWithThemeCategoryResponse>({
       items: activities.items.map((activity) =>
-        ActivityResponse.from(activity),
+        ActivityWithThemeCategoryResponse.from(activity),
       ),
       totalItems: activities.totalItems,
     });

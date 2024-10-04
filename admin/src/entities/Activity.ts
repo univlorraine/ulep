@@ -31,3 +31,10 @@ export type ActivityExercise = {
     content: string;
     order: number;
 };
+
+export enum ActivityStatus {
+    DRAFT = 'DRAFT',
+    PUBLISHED = 'PUBLISHED',
+    IN_VALIDATION = 'IN_VALIDATION',
+    REJECTED = 'REJECTED',
+}

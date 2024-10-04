@@ -6,7 +6,6 @@ import { Box, MenuItem, OutlinedInput, Select, Typography } from '@mui/material'
 import React, { useState } from 'react';
 import { Button, Loading, TabbedForm, useGetIdentity, useGetList, useTranslate } from 'react-admin';
 import { ActivityExercise, ActivityVocabulary } from '../../entities/Activity';
-// import { ActivityTheme } from '../../entities/ActivityTheme';
 import { ActivityTheme } from '../../entities/ActivityTheme';
 import ProficiencyLevel from '../../entities/Proficiency';
 import AudioLine from '../chat/AudioLine';

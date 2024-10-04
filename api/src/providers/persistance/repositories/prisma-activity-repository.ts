@@ -13,6 +13,7 @@ import {
   CreateActivityProps,
   CreateActivityThemeCategoryProps,
   CreateActivityThemeProps,
+  GetActivitiesForAdminProps,
   GetActivitiesProps,
   GetAllActivityThemesProps,
   UpdateActivityProps,
@@ -28,7 +29,15 @@ import {
   ActivityThemeRelations,
   activityVocabularyMapper,
   ActivityVocabularyRelations,
+  activityWithCategoryMapper,
+  ActivityWithThemeWithCategoryInclude,
+  ActivityWithThemeWithCategoryRelations,
 } from 'src/providers/persistance/mappers/activity.mapper';
+import {
+  ProfilesRelations,
+  TextContentRelations,
+  UniversityRelations,
+} from '../mappers';
 
 @Injectable()
 export class PrismaActivityRepository implements ActivityRepository {
@@ -125,14 +134,6 @@ export class PrismaActivityRepository implements ActivityRepository {
       };
     }
 
-    if (props.themesIds) {
-      where.ActivityThemes = {
-        id: {
-          in: props.themesIds,
-        },
-      };
-    }
-
     if (props.searchTitle) {
       where.title = {
         contains: props.searchTitle,
@@ -167,6 +168,65 @@ export class PrismaActivityRepository implements ActivityRepository {
 
     return {
       items: activities.map(activityMapper),
+      totalItems: totalActivities,
+    };
+  }
+
+  async allWithThemeWithCategory(
+    props: GetActivitiesForAdminProps,
+  ): Promise<{ items: Activity[]; totalItems: number }> {
+    const where: Prisma.ActivityWhereInput = {};
+
+    console.log({ props });
+
+    if (props.languageCode) {
+      where.LanguageCode = {
+        id: props.languageCode,
+      };
+    }
+
+    if (props.languageLevel) {
+      where.language_level = {
+        equals: props.languageLevel,
+      };
+    }
+
+    if (props.searchTitle) {
+      where.title = {
+        contains: props.searchTitle,
+        mode: 'insensitive',
+      };
+    }
+
+    if (props.category) {
+      where.ActivityThemes = {
+        Category: {
+          id: props.category,
+        },
+      };
+    }
+
+    if (props.status) {
+      where.status = {
+        equals: props.status,
+      };
+    }
+
+    const activities = await this.prisma.activity.findMany({
+      where,
+      skip: props.pagination?.page
+        ? (props.pagination.page - 1) * props.pagination.limit
+        : 0,
+      take: props.pagination?.limit,
+      ...ActivityWithThemeWithCategoryRelations,
+    });
+
+    const totalActivities = await this.prisma.activity.count({
+      where,
+    });
+
+    return {
+      items: activities.map(activityWithCategoryMapper),
       totalItems: totalActivities,
     };
   }

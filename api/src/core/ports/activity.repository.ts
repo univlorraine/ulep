@@ -21,11 +21,20 @@ export type GetActivitiesProps = {
   searchTitle?: string;
   status?: ActivityStatus[];
   profileId?: string;
-  pagination?: ActivityPagination;
+  pagination: ActivityPagination;
 };
 
 export type GetAllActivityThemesProps = {
   pagination?: ActivityPagination;
+};
+
+export type GetActivitiesForAdminProps = {
+  languageCode?: string;
+  languageLevel?: string;
+  searchTitle?: string;
+  status?: ActivityStatus;
+  category?: string;
+  pagination: ActivityPagination;
 };
 
 export type CreateActivityProps = {
@@ -94,6 +103,9 @@ export type UpdateActivityVocabularyProps = {
 export interface ActivityRepository {
   all(
     props: GetActivitiesProps,
+  ): Promise<{ items: Activity[]; totalItems: number }>;
+  allWithThemeWithCategory(
+    props: GetActivitiesForAdminProps,
   ): Promise<{ items: Activity[]; totalItems: number }>;
   allThemes(
     props: GetAllActivityThemesProps,
