@@ -31,7 +31,8 @@ export type GetAllActivityThemesProps = {
 export type CreateActivityProps = {
   title: string;
   description: string;
-  profileId: string;
+  profileId?: string;
+  universityId: string;
   themeId: string;
   exercises: { content: string; order: number }[];
   languageLevel: ProficiencyLevel;

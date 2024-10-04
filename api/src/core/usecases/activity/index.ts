@@ -13,3 +13,4 @@ export * from './update-activity-status.usecase';
 export * from './update-activity-theme-category.usecase';
 export * from './update-activity-theme.usecase';
 export * from './update-activity.usecase';
+export * from './get-all-activities-by-admin.usecase';

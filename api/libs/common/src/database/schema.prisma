@@ -115,6 +115,7 @@ model Organizations {
   Image                 MediaObjects? @relation("UniversitiesImage", fields: [image_id], references: [id])
   Contact               Contacts?      @relation(fields: [default_contact_id], references: [id])
   DefaultCertificateFile MediaObjects? @relation("UniversitiesDefaultCertificateFile", fields: [default_certificate_file_id], references: [id])
+  Activities            Activity[]
   News                       News[]
 
   @@unique([name])
@@ -591,7 +592,8 @@ model Activity {
   id                String        @id @default(uuid())
   title             String
   description       String
-  creator_id        String
+  university_id     String
+  creator_id        String?
   status            String       @default("DRAFT")
   credit_image      String?
   image_id          String?       @unique
@@ -607,7 +609,8 @@ model Activity {
   Image MediaObjects? @relation("Image", fields: [image_id], references: [id])
   RessourceFile MediaObjects? @relation("RessourceFile", fields: [ressource_file_id], references: [id])
   LanguageCode LanguageCodes @relation(fields: [language_code_id], references: [id])
-  Creator Profiles @relation(fields: [creator_id], references: [id])
+  Creator Profiles? @relation(fields: [creator_id], references: [id])
+  University Organizations? @relation(fields: [university_id], references: [id])
   ActivityVocabulary ActivityVocabulary[]
   ActivityExercises ActivityExercises[]
   ActivityThemes ActivityThemes @relation(fields: [activity_theme_id], references: [id], onDelete: Cascade)

@@ -1,5 +1,6 @@
 import ChatIcon from '@mui/icons-material/Chat';
 import CheckCircleIcon from '@mui/icons-material/CheckCircle';
+import EditNoteIcon from '@mui/icons-material/EditNote';
 import HelpIcon from '@mui/icons-material/Help';
 import InterestsIcon from '@mui/icons-material/Interests';
 import LanguageIcon from '@mui/icons-material/Language';
@@ -17,6 +18,7 @@ import CustomLayout from './components/layout/layout';
 import { Role } from './entities/Administrator';
 import activityCategories from './pages/activity-categories';
 import activityThemes from './pages/activity-themes';
+import activities from './pages/activities';
 import EditAdministratorProfile from './pages/admin-profile/edit';
 import administrators from './pages/administrators';
 import LoginPage from './pages/auth/login';
@@ -80,6 +82,12 @@ const App = () => (
                 />
                 <Resource icon={ChatIcon} name="chat" options={{ label: 'chat.label' }} {...chat} />
                 <Resource icon={NewspaperIcon} name="news" options={{ label: 'news.label' }} {...news} />
+                <Resource
+                    icon={EditNoteIcon}
+                    name="activities"
+                    options={{ label: 'activities.label' }}
+                    {...activities}
+                />
                 {permissions.checkRole(Role.MANAGER) && (
                     <Resource
                         edit={universities.manager.edit}

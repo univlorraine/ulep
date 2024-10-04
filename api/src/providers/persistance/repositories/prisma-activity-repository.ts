@@ -43,16 +43,23 @@ export class PrismaActivityRepository implements ActivityRepository {
         credit_image: props.creditImage,
         metadata: props.metadata,
         ressource_url: props.ressourceUrl,
+        University: {
+          connect: {
+            id: props.universityId,
+          },
+        },
         LanguageCode: {
           connect: {
             code: props.languageCode,
           },
         },
-        Creator: {
-          connect: {
-            id: props.profileId,
+        ...(props.profileId && {
+          Creator: {
+            connect: {
+              id: props.profileId,
+            },
           },
-        },
+        }),
         ActivityThemes: {
           connect: {
             id: props.themeId,

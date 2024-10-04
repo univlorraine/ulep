@@ -1,4 +1,32 @@
 {
+    "activities": {
+        "label": "Activités",
+        "tabLabel": "Activités",
+        "form": {
+            "mainInfos": "Informations principales",
+            "title": "Titre",
+            "image": "Image d'illustration",
+            "imageCredit": "Credit de l'image",
+            "description": "Description",
+            "language": "Langue",
+            "level": "Niveau",
+            "category": "Catégorie",
+            "theme": "Thème",
+            "ressource": "Ressource",
+            "url": "URL",
+            "file": "Fichier",
+            "ressourceURL": "URL",
+            "ressourceFile": "Fichier",
+            "exercices": "Exercices",
+            "exercice": "Exercice",
+            "addExercice": "Ajouter un exercice",
+            "vocabulary": "Vocabulaire",
+            "pronunciation": "Prononciation",
+            "addVocabulary": "Ajouter un vocabulaire",
+            "vocabularyPlaceholder": "Entrez un mot ou une phrase",
+            "deletePronunciation": "Supprimer la prononciation"
+        }
+    },
     "activities_categories": {
         "tabLabel": "Catégories d'Activités",
         "name": "Nom",

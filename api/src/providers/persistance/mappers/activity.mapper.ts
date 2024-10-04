@@ -11,6 +11,8 @@ import {
 import {
   textContentMapper,
   TextContentRelations,
+  universityMapper,
+  UniversityRelations,
 } from 'src/providers/persistance/mappers';
 import { languageMapper } from 'src/providers/persistance/mappers/language.mapper';
 import {
@@ -79,7 +81,9 @@ export const ActivityThemeInclude =
     TextContent: TextContentRelations,
   });
 
-export const ActivityThemeRelations = { include: ActivityThemeInclude };
+export const ActivityThemeRelations = {
+  include: ActivityThemeInclude,
+};
 
 export type ActivityThemeSnapshot = Prisma.ActivityThemesGetPayload<
   typeof ActivityThemeRelations
@@ -131,6 +135,7 @@ export const ActivityInclude = Prisma.validator<Prisma.ActivityInclude>()({
   RessourceFile: true,
   ActivityThemes: ActivityThemeRelations,
   Creator: { include: ProfilesRelations },
+  University: { include: UniversityRelations },
 });
 
 export const ActivityRelations = { include: ActivityInclude };
@@ -144,7 +149,8 @@ export const activityMapper = (snapshot: ActivitySnapshot): Activity => {
     id: snapshot.id,
     title: snapshot.title,
     description: snapshot.description,
-    creator: profileMapper(snapshot.Creator),
+    creator: snapshot.Creator && profileMapper(snapshot.Creator),
+    university: universityMapper(snapshot.University),
     image:
       snapshot.Image &&
       new MediaObject({

@@ -49,13 +49,13 @@ import {
   GetActivityThemeUsecase,
   GetActivityUsecase,
   GetAllActivityThemesUsecase,
-  UpdateActivityStatusUsecase,
   UpdateActivityThemeCategoryUsecase,
   UpdateActivityThemeUsecase,
   UpdateActivityUsecase,
   UploadImageActivityUsecase,
   UploadMediaActivityUsecase,
 } from 'src/core/usecases';
+import { GetActivitiesByAdminRequest } from '../dtos/activity/get-activities-by-admin.request';
 import { GetActivitiesCategoriesRequest } from '../dtos/activity/get-activity-categories.request';
 
 @Controller('activities')
@@ -83,9 +83,78 @@ export class ActivityController {
     private readonly uploadMediaActivityUsecase: UploadMediaActivityUsecase,
     private readonly updateActivityUsecase: UpdateActivityUsecase,
     private readonly updateActivityStatusUsecase: UpdateActivityStatusUsecase,
+    private readonly getActivitiesByAdminUsecase: GetAllActivitiesByAdminUsecase,
     private readonly env: ConfigService<Env, true>,
   ) {
     this.defaultLanguageCode = env.get<string>('DEFAULT_TRANSLATION_LANGUAGE');
+  }
+
+  @Get()
+  @UseGuards(AuthenticationGuard)
+  @Swagger.ApiOperation({ summary: 'Get all public Activity ressources.' })
+  async getPublicActivities(
+    @Query() query: GetActivitiesRequest,
+    @CurrentUser() user: KeycloakUser,
+    @Headers('Language-code') languageCode?: string,
+  ) {
+    const status = !query.shouldTakeOnlyMine
+      ? [ActivityStatus.PUBLISHED]
+      : [
+          ActivityStatus.PUBLISHED,
+          ActivityStatus.IN_VALIDATION,
+          ActivityStatus.DRAFT,
+        ];
+
+    const activities = await this.getActivitiesUsecase.execute({
+      status,
+      pagination: {
+        page: query.page,
+        limit: query.limit,
+      },
+      searchTitle: query.searchTitle,
+      themesIds:
+        typeof query.themesIds === 'string' //Because its query params, we need to convert it to an array if its a string when we have only one element on url
+          ? [query.themesIds]
+          : query.themesIds,
+      languageLevels:
+        typeof query.languageLevels === 'string' //Because its query params, we need to convert it to an array if its a string when we have only one element on url
+          ? [query.languageLevels]
+          : query.languageLevels,
+      languagesCodes:
+        typeof query.languagesCodes === 'string' //Because its query params, we need to convert it to an array if its a string when we have only one element on url
+          ? [query.languagesCodes]
+          : query.languagesCodes,
+      userId: query.shouldTakeOnlyMine ? user.sub : undefined,
+    });
+
+    return new Collection<ActivityResponse>({
+      items: activities.items.map((activity) =>
+        ActivityResponse.from(activity, languageCode),
+      ),
+      totalItems: activities.totalItems,
+    });
+  }
+
+  @Get('admin')
+  @Roles(Role.ADMIN)
+  @UseGuards(AuthenticationGuard)
+  @Swagger.ApiOperation({ summary: 'Get all Activity ressources for admin.' })
+  @Swagger.ApiOkResponse({ type: () => ActivityResponse })
+  async getAllActivitiesByAdmin(@Query() query: GetActivitiesByAdminRequest) {
+    console.log('query', query);
+    const activities = await this.getActivitiesByAdminUsecase.execute({
+      pagination: {
+        page: query.page,
+        limit: query.limit,
+      },
+    });
+
+    return new Collection<ActivityResponse>({
+      items: activities.items.map((activity) =>
+        ActivityResponse.from(activity),
+      ),
+      totalItems: activities.totalItems,
+    });
   }
 
   @Post()
@@ -99,6 +168,7 @@ export class ActivityController {
     @UploadedFiles()
     files?: Express.Multer.File[],
   ) {
+    console.log('files', files);
     //TODO: Add Pipe files validators
     const vocabulariesWithFiles = body.vocabularies?.map((vocabulary) => ({
       content: vocabulary,
@@ -275,61 +345,6 @@ export class ActivityController {
     const activity = await this.getActivityUsecase.execute(id);
 
     return ActivityResponse.from(activity);
-  }
-
-  @Get()
-  @UseGuards(AuthenticationGuard)
-  @Swagger.ApiOperation({ summary: 'Get all public Activity ressources.' })
-  async getPublicActivities(
-    @Query() query: GetActivitiesRequest,
-    @CurrentUser() user: KeycloakUser,
-    @Headers('Language-code') languageCode?: string,
-  ) {
-    const status = !query.shouldTakeOnlyMine
-      ? [ActivityStatus.PUBLISHED]
-      : [
-          ActivityStatus.PUBLISHED,
-          ActivityStatus.IN_VALIDATION,
-          ActivityStatus.DRAFT,
-        ];
-
-    const activities = await this.getActivitiesUsecase.execute({
-      status,
-      pagination: {
-        page: query.page,
-        limit: query.limit,
-      },
-      searchTitle: query.searchTitle,
-      themesIds:
-        typeof query.themesIds === 'string' //Because its query params, we need to convert it to an array if its a string when we have only one element on url
-          ? [query.themesIds]
-          : query.themesIds,
-      languageLevels:
-        typeof query.languageLevels === 'string' //Because its query params, we need to convert it to an array if its a string when we have only one element on url
-          ? [query.languageLevels]
-          : query.languageLevels,
-      languagesCodes:
-        typeof query.languagesCodes === 'string' //Because its query params, we need to convert it to an array if its a string when we have only one element on url
-          ? [query.languagesCodes]
-          : query.languagesCodes,
-      userId: query.shouldTakeOnlyMine ? user.sub : undefined,
-    });
-
-    return new Collection<ActivityResponse>({
-      items: activities.items.map((activity) =>
-        ActivityResponse.from(activity, languageCode),
-      ),
-      totalItems: activities.totalItems,
-    });
-  }
-
-  @Get('admin')
-  @Roles(Role.ADMIN)
-  @UseGuards(AuthenticationGuard)
-  @Swagger.ApiOperation({ summary: 'Get all Activity ressources.' })
-  @Swagger.ApiOkResponse({ type: () => ActivityResponse })
-  async getAllSharedActivitiesToAdmin() {
-    this.logger.log('getAllSharedActivitiesToAdmin');
   }
 
   @Delete(':id')

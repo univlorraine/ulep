@@ -1,4 +1,11 @@
 {
+    "activities": {
+        "label": "Activities",
+        "tabLabel": "Activities",
+        "form": {
+            "mainInfos": "Main informations"
+        }
+    },
     "activities_categories": {
         "tabLabel": "Activities categories",
         "name": "Name",

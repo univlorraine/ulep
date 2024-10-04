@@ -150,6 +150,7 @@ const CustomMenu = () => {
             <Menu.ResourceItem name="profiles/with-tandems-profiles" />
             <Menu.ResourceItem name="chat" />
             <Menu.ResourceItem name="news" />
+            <Menu.ResourceItem name="activities" />
             {permissions.checkRole(Role.MANAGER) && data && data.universityId && (
                 <Menu.Item
                     leftIcon={<SchoolIcon />}
