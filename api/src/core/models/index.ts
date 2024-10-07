@@ -15,3 +15,4 @@ export * from './user.model';
 export * from './learning-language.model';
 export * from './refused-tandem.model';
 export * from './device.model';
+export * from './news.model';

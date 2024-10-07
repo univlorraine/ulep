@@ -3,6 +3,7 @@ import { Injectable } from '@nestjs/common';
 import {
   LearningObjective,
   MediaObject,
+  News,
   University,
   User,
 } from 'src/core/models';
@@ -299,6 +300,23 @@ export class PrismaMediaObjectRepository implements MediaObjectRepository {
         UniversitiesDefaultCertificateFile: {
           connect: {
             id: university.id,
+          },
+        },
+      },
+    });
+  }
+
+  async saveNewsImage(news: News, object: MediaObject): Promise<void> {
+    await this.prisma.mediaObjects.create({
+      data: {
+        id: object.id,
+        name: object.name,
+        bucket: object.bucket,
+        mime: object.mimetype,
+        size: object.size,
+        News: {
+          connect: {
+            id: news.id,
           },
         },
       },

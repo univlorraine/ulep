@@ -138,6 +138,13 @@ import {
   UploadImageActivityUsecase,
   UploadMediaActivityUsecase,
   UploadUniversityImageUsecase,
+  GetNewsUsecase,
+  CreateNewsUsecase,
+  UploadNewsImageUsecase,
+  GetOneNewsUsecase,
+  UpdateNewsUsecase,
+  DeleteNewsImageUsecase,
+  DeleteNewsUsecase,
 } from './usecases';
 import { GetJitsiTokenUsecase } from './usecases/jitsi/get-jitsi-token.usecase';
 import { DeleteLearningLanguageUsecase } from './usecases/learningLanguage/delete-learning-langugage.usecase';
@@ -207,6 +214,14 @@ const usecases: Provider[] = [
   UploadMediaActivityUsecase,
   UploadInstanceDefaultCertificateUsecase,
   UploadUniversityDefaultCertificateUsecase,
+  // News
+  GetNewsUsecase,
+  GetOneNewsUsecase,
+  CreateNewsUsecase,
+  UpdateNewsUsecase,
+  DeleteNewsUsecase,
+  UploadNewsImageUsecase,
+  DeleteNewsImageUsecase,
   // Objectives
   CreateObjectiveUsecase,
   DeleteObjectiveUsecase,

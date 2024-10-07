@@ -26,6 +26,7 @@
         "qs": "^6.12.3",
         "ra-data-simple-rest": "^4.16.19",
         "ra-i18n-polyglot": "^4.16.19",
+        "ra-input-rich-text": "^4.16.19",
         "ra-language-english": "^4.16.19",
         "ra-language-french": "^4.16.19",
         "react": "^18.3.1",

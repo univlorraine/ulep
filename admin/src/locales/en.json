@@ -263,6 +263,51 @@
         "loginError": "Wrong email / password",
         "password": "Password"
     },
+    "news": {
+        "label": "News",
+        "title": "News",
+        "form": {
+            "title": "Title",
+            "content": "Content",
+            "illustration": "Illustration",
+            "author": "Author",
+            "change_language": "Change language",
+            "add_translation": "Add a translation",
+            "remove_translation": "Remove translation",
+            "error": {
+                "required": "The publication dates, title and content fields are required",
+                "notFound": "News not found"
+            },
+            "start_publication_date": "Start publication date",
+            "end_publication_date": "End publication date"
+        },
+        "status": {
+            "label": "Status",
+            "READY": "Ready",
+            "DRAFT": "Draft"
+        },
+        "create": {
+            "cta": "Create"
+        },
+        "update": {
+            "cta": "Update"
+        },
+        "list": {
+            "title": "Title",
+            "university": "University",
+            "defaultLanguage": "Default language",
+            "translations": "Translations",
+            "status": "Status",
+            "startPublicationDate": "Start publication date",
+            "endPublicationDate": "End publication date",
+            "filters": {
+                "university": "University",
+                "status": "Status",
+                "title": "Title",
+                "language": "Available language"
+            }
+        }
+    },
     "objectives": {
         "edit": {
             "error": "An error occurred while updating the objective"

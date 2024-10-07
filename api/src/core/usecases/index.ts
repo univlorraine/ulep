@@ -15,3 +15,4 @@ export * from './tandemHistory';
 export * from './university';
 export * from './user';
 export * from './vocabulary';
+export * from './news';
