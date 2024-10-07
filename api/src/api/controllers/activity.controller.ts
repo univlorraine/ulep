@@ -148,8 +148,6 @@ export class ActivityController {
   @Swagger.ApiOperation({ summary: 'Get an Activity theme.' })
   @Swagger.ApiOkResponse({ type: () => GetActivityThemeResponse })
   async getThemeCategory(@Param('id') id: string) {
-    console.log('getThemeCategory');
-    console.log({ id });
     const activityTheme = await this.getActivityThemeUsecase.execute(id);
 
     return GetActivityThemeResponse.from(activityTheme);

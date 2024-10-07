@@ -26,16 +26,15 @@ export class UpdateActivityThemeUsecase {
   ) {}
 
   async execute(command: UpdateActivityThemeCommand) {
-    console.log({ command });
     const activityTheme = await this.activityRepository.ofThemeId(command.id);
     if (!activityTheme) {
       throw new RessourceDoesNotExist();
     }
 
-    /*     const language = await this.languageRepository.ofCode(command.languageCode);
+    const language = await this.languageRepository.ofCode(command.languageCode);
     if (!language) {
       throw new RessourceDoesNotExist();
-    } */
+    }
 
     return this.activityRepository.updateTheme({
       id: command.id,
