@@ -30,14 +30,8 @@ import {
   activityVocabularyMapper,
   ActivityVocabularyRelations,
   activityWithCategoryMapper,
-  ActivityWithThemeWithCategoryInclude,
   ActivityWithThemeWithCategoryRelations,
 } from 'src/providers/persistance/mappers/activity.mapper';
-import {
-  ProfilesRelations,
-  TextContentRelations,
-  UniversityRelations,
-} from '../mappers';
 
 @Injectable()
 export class PrismaActivityRepository implements ActivityRepository {
@@ -177,8 +171,6 @@ export class PrismaActivityRepository implements ActivityRepository {
   ): Promise<{ items: Activity[]; totalItems: number }> {
     const where: Prisma.ActivityWhereInput = {};
 
-    console.log({ props });
-
     if (props.languageCode) {
       where.LanguageCode = {
         id: props.languageCode,
@@ -268,14 +260,14 @@ export class PrismaActivityRepository implements ActivityRepository {
       where: {
         id,
       },
-      ...ActivityRelations,
+      ...ActivityWithThemeWithCategoryRelations,
     });
 
     if (!activity) {
       return null;
     }
 
-    return activityMapper(activity);
+    return activityWithCategoryMapper(activity as any); // Typescript seems to wrongly infers the type of activity returned by prisma
   }
 
   async ofThemeId(themeId: string): Promise<ActivityTheme> {

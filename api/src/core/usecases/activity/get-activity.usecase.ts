@@ -21,6 +21,8 @@ export class GetActivityUsecase {
   async execute(id: string) {
     const activity = await this.activityRepository.ofId(id);
 
+    console.log({ activity });
+
     if (!activity) {
       throw new RessourceDoesNotExist();
     }

@@ -16,7 +16,9 @@ export type Activity = {
     language: Language;
     level: ProficiencyLevel;
     theme: ActivityTheme;
-    exercices: ActivityExercise[];
+    ressourceUrl: string;
+    ressourceFileUrl: string;
+    exercises: ActivityExercise[];
     vocabulary: ActivityVocabulary[];
 };
 
@@ -24,6 +26,7 @@ export type ActivityVocabulary = {
     id?: string;
     content: string;
     file?: File;
+    pronunciationActivityVocabularyUrl?: string;
 };
 
 export type ActivityExercise = {

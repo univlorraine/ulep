@@ -49,8 +49,6 @@ export class CreateActivityUsecase {
   async execute(command: CreateActivityCommand) {
     await this.assertLanguageExist(command.languageCode);
 
-    console.log({ command });
-
     if (command.profileId) {
       await this.assertProfileExist(command.profileId);
     }

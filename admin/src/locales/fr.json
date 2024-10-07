@@ -36,6 +36,30 @@
             "title": "Titre",
             "status": "Statut"
         },
+        "show": {
+            "mainInfos": {
+                "label": "Informations principales",
+                "title": "Titre",
+                "image": "Image",
+                "credit": "Credit",
+                "description": "Description",
+                "language": "Langue",
+                "level": "Niveau",
+                "category": "Catégorie",
+                "theme": "Thème",
+                "resource": "Ressource (URL ou fichier)",
+                "url": "URL"
+            },
+            "exercices": {
+                "label": "Exercices",
+                "content": "Contenu",
+                "order": "Ordre"
+            },
+            "vocabulary": {
+                "label": "Vocabulaire",
+                "pronunciation": "Prononciation"
+            }
+        },
         "status": {
             "draft": "Brouillon",
             "published": "Publié",

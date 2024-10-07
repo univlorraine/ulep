@@ -156,6 +156,8 @@ const ActivityForm: React.FC<ActivityFormProps> = ({
         setNewVocabulary(vocabularies);
     };
 
+    console.log({ newVocabulary });
+
     const onCreatePressed = () =>
         /*         if (!) {
             return notify(translate('admin_groups_picker.mandatory'));
@@ -454,7 +456,9 @@ const ActivityForm: React.FC<ActivityFormProps> = ({
                     !newLevel ||
                     !newTheme ||
                     (!newResourceFile && !newResourceURL) ||
-                    newExercises.some((exercise) => !exercise.content)
+                    newExercises.some((exercise) => !exercise.content) ||
+                    newVocabulary.length === 0 ||
+                    newVocabulary.some((vocabulary) => !vocabulary.content)
                 }
                 onClick={onCreatePressed}
                 sx={{ mt: 4, width: '100%' }}

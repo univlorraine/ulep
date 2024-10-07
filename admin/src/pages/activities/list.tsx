@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import {
     useTranslate,
     List,
@@ -11,14 +11,12 @@ import {
     SelectInput,
     useGetIdentity,
     Loading,
-    useListContext,
     Filter,
     useRefresh,
 } from 'react-admin';
 import ColoredChips from '../../components/ColoredChips';
 import PageTitle from '../../components/PageTitle';
 import { Activity, ActivityStatus } from '../../entities/Activity';
-import { ActivityTheme } from '../../entities/ActivityTheme';
 import { ActivityThemeCategory } from '../../entities/ActivityThemeCategory';
 import ProficiencyLevel from '../../entities/Proficiency';
 import codeLanguageToFlag from '../../utils/codeLanguageToFlag';
@@ -51,7 +49,6 @@ const ActivityStatusChips = ({ status }: ActivityStatusChipsProps) => {
 
 const Filters = (props: any) => {
     const translate = useTranslate();
-    const listContext = useListContext();
     const { data: identity, isLoading: isLoadingIdentity } = useGetIdentity();
     const { data: universities } = useGetList('universities');
     const { data: languages } = useGetList('languages', {
@@ -67,17 +64,7 @@ const Filters = (props: any) => {
         },
     });
 
-    useEffect(() => {
-        if (listContext.filterValues.category) {
-            const newFilters = listContext.filterValues;
-            delete newFilters.theme;
-            listContext.setFilters(newFilters, []);
-        }
-    }, [listContext.filterValues.category]);
-
-    console.log({ listContext });
-
-    if (isLoadingIdentity || !identity || !categories || !universities || !languages || !listContext) {
+    if (isLoadingIdentity || !identity || !categories || !universities || !languages) {
         return <Loading />;
     }
 
@@ -120,28 +107,9 @@ const Filters = (props: any) => {
                     name: category.content,
                 }))}
                 label={translate('activities.list.category')}
-                onChange={() => {
-                    const newFilters = listContext.filterValues;
-                    delete newFilters.theme;
-                    listContext.setFilters(newFilters, []);
-                }}
                 source="category"
                 alwaysOn
             />
-            {listContext.filterValues.category && (
-                <SelectInput
-                    key="theme"
-                    choices={categories
-                        .find((category) => category.id === listContext.filterValues.category)
-                        ?.themes.map((theme: ActivityTheme) => ({
-                            id: theme.id,
-                            name: theme.content,
-                        }))}
-                    label={translate('activities.list.theme')}
-                    source="theme"
-                    alwaysOn
-                />
-            )}
             <SelectInput
                 key="status"
                 choices={Object.values(ActivityStatus).map((status) => ({
@@ -173,7 +141,7 @@ const ActivityList = () => {
                 filter={!identity?.isCentralUniversity ? { university: identity.universityId } : undefined}
                 filters={<Filters useRefresh={refresh} />}
             >
-                <Datagrid bulkActionButtons={false}>
+                <Datagrid bulkActionButtons={false} rowClick="show">
                     <FunctionField
                         label={translate('activities.list.language')}
                         render={(record: any) => <span>{codeLanguageToFlag(record.language.code)}</span>}

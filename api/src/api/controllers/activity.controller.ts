@@ -175,7 +175,6 @@ export class ActivityController {
     @UploadedFiles()
     files?: Express.Multer.File[],
   ) {
-    console.log('files', files);
     //TODO: Add Pipe files validators
     const vocabulariesWithFiles = body.vocabularies?.map((vocabulary) => ({
       content: vocabulary,
@@ -347,11 +346,11 @@ export class ActivityController {
   @Get(':id')
   @UseGuards(AuthenticationGuard)
   @Swagger.ApiOperation({ summary: 'Get a Activity ressource.' })
-  @Swagger.ApiOkResponse({ type: () => ActivityResponse })
+  @Swagger.ApiOkResponse({ type: () => ActivityWithThemeCategoryResponse })
   async getActivity(@Param('id') id: string) {
     const activity = await this.getActivityUsecase.execute(id);
 
-    return ActivityResponse.from(activity);
+    return ActivityWithThemeCategoryResponse.from(activity);
   }
 
   @Delete(':id')
