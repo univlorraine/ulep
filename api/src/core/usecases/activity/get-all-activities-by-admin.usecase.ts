@@ -12,7 +12,9 @@ interface GetActivitiesCommand {
   languageCode?: string;
   languageLevel?: string;
   category?: string;
+  theme?: string;
   status?: ActivityStatus;
+  university?: string;
 }
 
 @Injectable()
@@ -29,7 +31,9 @@ export class GetAllActivitiesByAdminUsecase {
       languageCode: command.languageCode,
       languageLevel: command.languageLevel,
       category: command.category,
+      theme: command.theme,
       status: command.status,
+      university: command.university,
     });
 
     return activities;

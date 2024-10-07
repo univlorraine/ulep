@@ -151,7 +151,9 @@ export class ActivityController {
       languageCode: query.languageCode,
       languageLevel: query.languageLevel,
       category: query.category,
+      theme: query.theme,
       status: query.status,
+      university: query.university,
     });
 
     return new Collection<ActivityWithThemeCategoryResponse>({

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import {
     useTranslate,
     List,
@@ -9,10 +9,16 @@ import {
     AutocompleteInput,
     useGetList,
     SelectInput,
+    useGetIdentity,
+    Loading,
+    useListContext,
+    Filter,
+    useRefresh,
 } from 'react-admin';
 import ColoredChips from '../../components/ColoredChips';
 import PageTitle from '../../components/PageTitle';
 import { Activity, ActivityStatus } from '../../entities/Activity';
+import { ActivityTheme } from '../../entities/ActivityTheme';
 import { ActivityThemeCategory } from '../../entities/ActivityThemeCategory';
 import ProficiencyLevel from '../../entities/Proficiency';
 import codeLanguageToFlag from '../../utils/codeLanguageToFlag';
@@ -43,8 +49,11 @@ const ActivityStatusChips = ({ status }: ActivityStatusChipsProps) => {
     return null;
 };
 
-const ActivityList = () => {
+const Filters = (props: any) => {
     const translate = useTranslate();
+    const listContext = useListContext();
+    const { data: identity, isLoading: isLoadingIdentity } = useGetIdentity();
+    const { data: universities } = useGetList('universities');
     const { data: languages } = useGetList('languages', {
         pagination: {
             page: 1,
@@ -58,58 +67,112 @@ const ActivityList = () => {
         },
     });
 
-    console.log({ categories });
+    useEffect(() => {
+        if (listContext.filterValues.category) {
+            const newFilters = listContext.filterValues;
+            delete newFilters.theme;
+            listContext.setFilters(newFilters, []);
+        }
+    }, [listContext.filterValues.category]);
 
-    const filters = categories
-        ? [
-              <TextInput key="title" label={translate('activities.list.title')} source="title" alwaysOn />,
-              <AutocompleteInput
-                  key="languageCode"
-                  choices={languages?.map((language) => ({
-                      id: language.id,
-                      name: `${codeLanguageToFlag(language.code)}`,
-                  }))}
-                  label={translate('activities.list.language')}
-                  source="languageCode"
-                  alwaysOn
-              />,
-              <SelectInput
-                  key="languageLevel"
-                  choices={Object.values(ProficiencyLevel).map((level) => ({
-                      id: level,
-                      name: level,
-                  }))}
-                  label={translate('activities.list.level')}
-                  source="languageLevel"
-                  alwaysOn
-              />,
-              <SelectInput
-                  key="category"
-                  choices={categories?.map((category: ActivityThemeCategory) => ({
-                      id: category.id,
-                      name: category.content,
-                  }))}
-                  label={translate('activities.list.category')}
-                  source="category"
-                  alwaysOn
-              />,
-              <SelectInput
-                  key="status"
-                  choices={Object.values(ActivityStatus).map((status) => ({
-                      id: status,
-                      name: translate(`activities.status.${status.toLowerCase()}`),
-                  }))}
-                  label={translate('activities.list.status')}
-                  source="status"
-                  alwaysOn
-              />,
-          ]
-        : [];
+    console.log({ listContext });
+
+    if (isLoadingIdentity || !identity || !categories || !universities || !languages || !listContext) {
+        return <Loading />;
+    }
+
+    return (
+        <Filter {...props}>
+            {identity?.isCentralUniversity && universities && (
+                <SelectInput
+                    key="university"
+                    choices={universities}
+                    label={translate('activities.list.university')}
+                    source="university"
+                    alwaysOn
+                />
+            )}
+            <TextInput key="title" label={translate('activities.list.title')} source="title" alwaysOn />
+            <AutocompleteInput
+                key="languageCode"
+                choices={languages?.map((language) => ({
+                    id: language.id,
+                    name: `${codeLanguageToFlag(language.code)}`,
+                }))}
+                label={translate('activities.list.language')}
+                source="languageCode"
+                alwaysOn
+            />
+            <SelectInput
+                key="languageLevel"
+                choices={Object.values(ProficiencyLevel).map((level) => ({
+                    id: level,
+                    name: level,
+                }))}
+                label={translate('activities.list.level')}
+                source="languageLevel"
+                alwaysOn
+            />
+            <SelectInput
+                key="category"
+                choices={categories?.map((category: ActivityThemeCategory) => ({
+                    id: category.id,
+                    name: category.content,
+                }))}
+                label={translate('activities.list.category')}
+                onChange={() => {
+                    const newFilters = listContext.filterValues;
+                    delete newFilters.theme;
+                    listContext.setFilters(newFilters, []);
+                }}
+                source="category"
+                alwaysOn
+            />
+            {listContext.filterValues.category && (
+                <SelectInput
+                    key="theme"
+                    choices={categories
+                        .find((category) => category.id === listContext.filterValues.category)
+                        ?.themes.map((theme: ActivityTheme) => ({
+                            id: theme.id,
+                            name: theme.content,
+                        }))}
+                    label={translate('activities.list.theme')}
+                    source="theme"
+                    alwaysOn
+                />
+            )}
+            <SelectInput
+                key="status"
+                choices={Object.values(ActivityStatus).map((status) => ({
+                    id: status,
+                    name: translate(`activities.status.${status.toLowerCase()}`),
+                }))}
+                label={translate('activities.list.status')}
+                source="status"
+                alwaysOn
+            />
+        </Filter>
+    );
+};
+
+const ActivityList = () => {
+    const translate = useTranslate();
+    const refresh = useRefresh();
+    const { data: identity, isLoading: isLoadingIdentity } = useGetIdentity();
+
+    if (isLoadingIdentity || !identity) {
+        return <Loading />;
+    }
 
     return (
         <>
             <PageTitle>{translate('activities.label')}</PageTitle>
-            <List exporter={false} filters={filters}>
+            <List
+                exporter={false}
+                filter={!identity?.isCentralUniversity ? { university: identity.universityId } : undefined}
+                filters={<Filters useRefresh={refresh} />}
+            >
                 <Datagrid bulkActionButtons={false}>
                     <FunctionField
                         label={translate('activities.list.language')}
@@ -124,11 +187,13 @@ const ActivityList = () => {
                         source="theme.category.content"
                     />
                     <TextField label={translate('activities.list.theme')} sortable={false} source="theme.content" />
-                    <TextField
-                        label={translate('activities.list.university')}
-                        sortable={false}
-                        source="university.name"
-                    />
+                    {identity?.isCentralUniversity && (
+                        <TextField
+                            label={translate('activities.list.university')}
+                            sortable={false}
+                            source="university.name"
+                        />
+                    )}
                     <FunctionField
                         label={translate('activities.list.creator')}
                         render={(record: Activity) => {

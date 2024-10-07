@@ -22,5 +22,13 @@ export class GetActivitiesByAdminRequest extends PaginationDto {
 
   @ApiPropertyOptional({ type: 'string', isArray: true })
   @IsOptional()
+  theme?: string;
+
+  @ApiPropertyOptional({ type: 'string', isArray: true })
+  @IsOptional()
   status?: ActivityStatus;
+
+  @ApiPropertyOptional({ type: 'string' })
+  @IsOptional()
+  university?: string;
 }

@@ -206,6 +206,18 @@ export class PrismaActivityRepository implements ActivityRepository {
       };
     }
 
+    if (props.theme) {
+      where.ActivityThemes = {
+        id: props.theme,
+      };
+    }
+
+    if (props.university) {
+      where.University = {
+        id: props.university,
+      };
+    }
+
     if (props.status) {
       where.status = {
         equals: props.status,

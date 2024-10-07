@@ -34,6 +34,8 @@ export type GetActivitiesForAdminProps = {
   searchTitle?: string;
   status?: ActivityStatus;
   category?: string;
+  theme?: string;
+  university?: string;
   pagination: ActivityPagination;
 };
 
