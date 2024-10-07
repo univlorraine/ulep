@@ -14,9 +14,9 @@
 
 .content {
     background-color: white;
-    height: 100%;
+    min-height: 100%;
     padding-bottom: 40px;
-    width: 100%;
+    min-width: 100%;
     overflow-y: auto;
 }
 
