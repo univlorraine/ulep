@@ -300,6 +300,8 @@
             "defaultLanguage": "Langue par défaut",
             "translations": "Traductions",
             "status": "Statut",
+            "startPublicationDate": "Début de publication",
+            "endPublicationDate": "Fin de publication",
             "filters": {
                 "university": "Université",
                 "status": "Statut",

@@ -298,6 +298,8 @@
             "defaultLanguage": "Default language",
             "translations": "Translations",
             "status": "Status",
+            "startPublicationDate": "Start publication date",
+            "endPublicationDate": "End publication date",
             "filters": {
                 "university": "University",
                 "status": "Status",

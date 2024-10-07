@@ -10,6 +10,7 @@ import {
     SelectInput,
     useGetList,
     TextInput,
+    DateField,
 } from 'react-admin';
 import ColoredChips, { ChipsColors } from '../../components/ColoredChips';
 import useGetUniversitiesLanguages from '../../components/form/useGetUniversitiesLanguages';
@@ -104,6 +105,8 @@ const NewsList = () => {
                                 .join(', ')
                         }
                     />
+                    <DateField label="news.list.startPublicationDate" source="startPublicationDate" />
+                    <DateField label="news.list.endPublicationDate" source="endPublicationDate" />
                     <FunctionField
                         label="news.list.status"
                         render={(record: any) => <StatusChips status={record.status} />}

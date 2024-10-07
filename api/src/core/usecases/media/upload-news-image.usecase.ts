@@ -68,7 +68,7 @@ export class UploadNewsImageUsecase {
     news: News,
     file: Express.Multer.File,
   ): Promise<MediaObject> {
-    const image = MediaObject.image(
+    const image = MediaObject.generate(
       file,
       'news',
       `${news.university.id}/${news.id}`,
